@@ -1,0 +1,9 @@
+// This Configuration file (/executor/configur/43574c44.ecf) was built by Executor
+Comments = "Carmen World will not run under Executor 2.  Sorry.";
+WindowName = "Carmen World";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 6.0.7;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR, NoWarn32};

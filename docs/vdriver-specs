@@ -1,0 +1,281 @@
+Each host is required to provide a "vdriver" package that presents a
+consistent video interface to the rest of Executor.
+
+The vdriver provides an idealized rectangular frame buffer to
+Executor.  Pixels occupy either 1, 2, 4, or 8 bits and are stored in
+in "packed" format in big endian bit order (MSB on the left).  The
+frame buffer bytes per row may exceed the bytes occupied by the pixels
+on that row, but both sizes will always be multiples of four bytes.
+
+The actual video hardware on the host machine will constrain the
+maximum pixel depths and screen sizes available to Executor, but the
+hardware modes used need not map directly to the format of the
+vdriver's frame buffer.  The vdriver is responsible for selecting
+efficient hardware graphics modes and translating the information in
+the internal frame buffer into bits that appear on the real screen
+when `vdriver_update_screen' is called.  The "internal" frame buffer
+may optionally be one and the same as the actual hardware frame
+buffer, in which case `vdriver_update_screen' does nothing.
+
+For example, consider the case where Executor requests a 4 bpp (bits
+per pixel) frame buffer on a SuperVGA system.  On most SuperVGA
+boards, 4 bpp requires using a complicated and slow "planar mode".
+Therefore, the vdriver might choose to use an available SuperVGA 8 bpp
+mode and use lookup tables to convert from 4 bpp to 8 bpp whenever the
+hardware screen is updated, since this is faster than converting from
+4 bpp "packed" pixels to 4 bpp "planar" pixels.  Executor will still
+only "see" a 4 bpp frame buffer, and the user won't be able to tell
+the difference.
+
+Each vdriver maintains a maximum bits per pixel and a list of
+acceptable screen sizes.  The vdriver must be able to accept any
+power-of-two bits per pixel (up to the maximum) at any allowed screen
+size.  This allows users to always change the pixel depth without
+altering the screen size, and to alter the screen size without
+changing the pixel depth.
+
+Some systems, like X windows, don't have a fixed list of screen sizes
+from which Executor can select.  In those cases, the list of canonical
+sizes will contain two elements, the minimum and the maximum, and
+continuous_range_p will be TRUE.  `vdriver_acceptable_mode' will
+return TRUE for acceptable sizes in between the minimum and the
+maximum.  This is useful when the user wants to resize Executor's
+screen to some arbitrary size by using facilities in the host's window
+system.
+
+The functions in this file are prototyped in "vdriver.h".  vdriver.h
+#include's "host_vdriver.h" before prototyping any of these functions,
+so that host_vdriver.h may replace some of them with macros on systems
+where that is appropriate.  vdriver.h will not prototype any function
+that is defined as a macro by host_vdriver.h.
+
+
+ -- Function: boolean_t vdriver_init (int MAX_WIDTH, int MAX_HEIGHT,
+				      int MAX_BPP, boolean_t FIXED_P,
+				      int *argc, char *argv[])
+     `vdriver_init' must be called exactly once, before any other
+     vdriver routines.  It is responsible for allocating memory to
+     hold the frame buffer (if necessary) and performing any other
+     host-specific initialization.
+
+     The frame buffer's base address can never change, so the
+     parameters to this function are hints that specify the biggest
+     mode that might ever be requested so that sufficient memory can
+     be allocated initially.  The allocated frame buffer should
+     usually be big enough to support either that mode or the biggest
+     mode the hardware can physically support, but it need not be.
+     Each row of the frame buffer must start on a 32-bit boundary
+     (i.e. the starting addresses must be divisible by four).
+
+     If MAX_WIDTH is zero, this function should choose a largest size
+     and bpp in a host-defined way and allocate frame buffer memory
+     appropriately.  For example, if MAX_WIDTH == 0 and the graphics
+     hardware can only support a window at most 800x600 with at most 4
+     bits per pixel, 800x600x4 should be used.  If the hardware can
+     support 3000x3000x8, this function may decide to choose a smaller
+     maximum size and stick with it.
+
+     If FIXED_P is TRUE, then the graphics mode will never be set to
+     any size other than MAX_WIDTHxMAX_HEIGHTxMAX_BPP.  Fixing these
+     parameters can sometimes enable speedups not otherwise available,
+     but at the cost of losing the ability to do dynamic mode sets.
+     It is of course safe to assume this flag is FALSE.  It is an
+     error for MAX_WIDTH to be zero and for FIXED_P to be true.
+
+     ARGC and ARGV specify command line options given to the program.
+     The vdriver can ignore these parameters, but if it wants to process
+     any of these arguments, it should remove them from argv and adjust
+     argc appropriately.
+
+     Frame buffer memory need not be initialized here.  In general,
+     you should avoid touching frame buffer memory that might not end
+     up getting used, since this will be more efficient on systems
+     that lazily allocate memory pages.
+
+     `vdriver_init' should not set up any default graphics mode.
+     `vdriver_set_mode' will take care of that.
+
+     `vdriver_init' should return TRUE if successful, FALSE if
+     it failed to open the display (which will be a fatal error
+     for Executor).
+
+ -- Function: void vdriver_shutdown (void)
+
+     `vdriver_shutdown' is responsible for cleaning up after the
+     vdriver routines and returning the display back to a state
+     appropriate for Executor to exit.  For convenience, this function
+     can be called more than once; however, once it is called, no
+     vdriver routine other than this one should be called.  This
+     routine must be called once before Executor exits.
+
+ -- Function: boolean_t vdriver_acceptable_mode_p (int WIDTH, int HEIGHT,
+						   int BPP,
+						   boolean_t EXACT_MATCH_P)
+     Returns TRUE if the given mode will work if passed to
+     `vdriver_set_mode', else FALSE.  If EXACT_MATCH_P is true, this
+     function will only return TRUE if `vdriver_set_mode' will
+     accept the mode without adjusting the screen size at all.
+     If WIDTH, HEIGHT, or BPP are zero, they are replaced with default
+     values as described in `vdriver_set_mode'.
+
+ -- Function: boolean_t vdriver_set_mode (int WIDTH, int HEIGHT, int BPP)
+     `vdriver_set_mode' does the dirty work of actually setting up a
+     particular graphics mode.  BPP must be a power of two between 1
+     and the maximum bpp returned by vdriver_mode_info, and must be
+     honored.  If WIDTHxHEIGHT is a mode listed as canonical by
+     `vdriver_mode_info', it must be honored exactly.  Otherwise, this
+     function should try to choose the smallest mode which is at least
+     as large as that specified by the caller.  If even that is not
+     large enough, this function should choose the largest available
+     mode.  The actual screen size chosen by this function can and
+     should be determined by calling `vdriver_frame_buffer', since it
+     may not be exactly what was passed in.
+
+     If WIDTH, HEIGHT, or BPP is zero, it is replaced with the current
+     value for that parameter (if a mode has been set) or, if no mode
+     has yet been set, it is replaced with an host-defined default value.
+
+     This function need not redraw the screen, and is entitled to
+     leave the screen in a "garbage" state.  The caller is responsible
+     for properly redrawing the frame buffer after a mode set.
+
+     This function returns TRUE if a mode set was achieved, FALSE
+     otherwise (in which case the mode should remain unchanged).
+
+ -- Function: void vdriver_set_colors (int FIRST_COLOR, int NUM_COLORS,
+				       const ColorSpec *COLOR_ARRAY)
+     `vdriver_set_colors' is called when the color table of the display
+     has changed.  The colors for pixel values:
+          FIRST_COLOR ... FIRST_COLOR + NUM_COLORS - 1
+     are set to the values specified by:
+          COLOR_ARRAY[0] ... COLOR_ARRAY[NUM_COLORS - 1], respectively.
+     NOTE:  For convenience, each ColorSpec is assumed to store its values
+	    in big endian byte order.  That way you can just pass a real
+	    color table to this function.            
+
+     Of course, the graphics hardware may not actually have a color
+     table, but the vdriver must at least provide the illusion of one.
+     All changed color values must be visible to the user before this
+     function returns or after `vdriver_flush_display' is next called.
+
+ -- Function: int vdriver_update_screen (int top, int left, int bottom,
+					 int right, boolean_t cursor_p)
+     `vdriver_update_screen' transfers the specified rectangle from the
+     internal frame buffer to the actual graphics hardware.  If the
+     rectangle exceeds the bounds of the frame buffer, it will be
+     pinned to fit within it.  CURSOR_P should only be TRUE when it
+     is the cursor being drawn to the screen.  Most implementations
+     can ignore this flag, but DOS uses it to tell whether or not the
+     cursor got overwritten by an update and needs to be redisplayed.
+     You almost always want to pass FALSE for this flag when calling
+     this routine.
+
+     The return value is implementation-dependent and should be ignored.
+
+     The transferred information need not be visible to the user by
+     the time this function exits.  `vdriver_update_screen' may only
+     queue up the display with the host's windowing system.  To
+     guarantee that the information is visible to the user, call
+     `vdriver_flush_display'
+
+ -- Function: int vdriver_update_screen_rects (int NUM_RECTS,
+					       const vdriver_rect_t *R,
+			     		       boolean_t CURSOR_P)
+     Like vdriver_update_screen, but can update many rectangles at
+     once.  Calling this may be more efficient than making separate
+     calls to `vdriver_update_screen'.
+
+ -- Function: void vdriver_flush_display (void)
+     This function guarantees that any updates from
+     `vdriver_update_screen' will be made visible to the user "soon",
+     even if no further vdriver calls are made.  The intent of this
+     function is that calling it frequently will make graphics animate
+     smoothly, instead of queueing up with the window server and
+     getting blasted out in chunks.  This is only relevant for hosts
+     that talk to a window server, but it's always safe to call it.
+
+ -- Function: void vdriver_system_busy (int BUSY_P)
+     This function is sometimes called when Executor is busy and wants
+     to inform the user that it is actually doing something and not
+     just hung.  During such times, it may be called extremely frequently,
+     so this function should be very fast.  If BUSY_P is true,
+     the system is still busy.  If it's FALSE, the system is no longer
+     busy.  This function is optional and calls to it may be ignored on
+     any system; if you want calls to be ignored, don't write this
+     function and instead put this line in host_vdriver.h:
+        #define vdriver_system_busy 0
+
+ -- Function: vdriver_accel_result_t
+	      vdriver_accel_rect_fill (int TOP, int LEFT, int BOTTOM,
+				       int RIGHT, uint32 COLOR)
+
+     This function optionally fills in the specified screen rectangle
+     with the given solid COLOR.  COLOR is a pixel for the internal
+     frame buffer (if any), and may not correspond to the host
+     screen's color space.  The vdriver is responsible for making that
+     translation.
+
+     The vdriver is not allowed to update the screen "out of order".
+     All dirty rects must be flushed to the screen before any
+     accelerated drawing can take place.
+
+     This function returns a value indicating what effect it had:
+
+	typedef enum
+	{
+	  VDRIVER_ACCEL_NO_UPDATE,
+	  VDRIVER_ACCEL_FULL_UPDATE,
+	  VDRIVER_ACCEL_HOST_SCREEN_UPDATE_ONLY
+	} vdriver_accel_result_t;
+
+     VDRIVER_ACCEL_NO_UPDATE means no action was performed, and
+       the usual blitting and dirty rect mechanisms should be
+       employed.
+     VDRIVER_ACCEL_FULL_UPDATE means that both the host screen
+       and internal frame buffer have been fully updated, and no
+       more work needs to be done.
+     VDRIVER_ACCEL_HOST_SCREEN_UPDATE_ONLY means that the host screen
+       now has the correct data, but the internal frame buffer still
+       needs to be updated.  The internal frame buffer will be updated
+       by the usual mechanisms, but no dirty rect will be accrued for
+       that update because the screen already has the correct
+       information.
+
+     If the vdriver doesn't support this function, the easiest way
+     to note that is to add this line to host_vdriver.h:
+
+     #define vdriver_accel_rect_fill(t, l, b, r, c) VDRIVER_ACCEL_NO_UPDATE
+
+     It may be advantageous for the vdriver to decide that using an
+     accelerated mechanism is a lose and return
+     VDRIVER_ACCEL_NO_UPDATE.  For example, this might make sense if
+     the rectangle is very small or if it overlaps an existing dirty
+     rectangle.
+
+ -- Function: vdriver_accel_result_t
+	      vdriver_accel_rect_scroll (int TOP, int LEFT, int BOTTOM,
+				         int RIGHT, int DX, int DY)
+
+    The specified rectangle is copied on the screen DX pixels to the
+    right and DY pixels down from its current location.  DX and DY may
+    each be negative, 0, or positive.  Overlapping data must be
+    handled correctly.  The return value and semantics are otherwise
+    analagous to those of `vdriver_accel_rect_fill'.
+
+ -- Function: void vdriver_accel_wait (void)
+
+    This function waits until it is safe to access the frame buffer's
+    pixels directly and then returns.  For example, an accelerated
+    SVGA vdriver might have the SVGA board fill in a rectangle in
+    VRAM.  You are not guaranteed to get the correct pixel values from
+    the frame buffer until this rect fill has completed, so you must
+    wait until the rect fill is done.
+
+    This call is only useful on systems where the bitmap being
+    modified by the accelerator is the same as the bitmap that
+    Executor references directly.  This is not the case under X
+    windows, for example.  Most vdrivers will just want to put:
+
+    #define vdriver_accel_wait()
+
+    in host_vdriver.h.

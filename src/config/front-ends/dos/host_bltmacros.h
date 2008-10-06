@@ -1,0 +1,1 @@
+#define VGA_SCREEN_NEEDS_FAR_PTR

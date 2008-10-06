@@ -1,0 +1,64 @@
+@meta	OPNAME_noshift_mask_SEGSUFF
+	movl	(%esi),%eax
+	MASK_EAX_OP
+@endmeta
+
+
+@meta	OPNAME_noshift_1_SEGSUFF
+	movl	(%esi),%eax
+	FLIP_NP_EAX
+	BITOP	%eax,DST_SEG(%edi)
+@endmeta
+
+
+@meta	OPNAME_noshift_2_SEGSUFF
+	movl	(%esi),%eax
+	movl	4(%esi),%ebx
+	FLIP_EAX
+	FLIP_EBX
+	BITOP	%eax,DST_SEG(%edi)
+	BITOP	%ebx,DST_SEG 4(%edi)
+@endmeta
+
+
+@meta	OPNAME_noshift_3_SEGSUFF
+	movl	(%esi),%eax
+	movl	8(%esi),%ebx
+	FLIP_EAX
+	movl	4(%esi),%ecx
+	FLIP_EBX
+	BITOP	%eax,DST_SEG(%edi)
+	FLIP_ECX
+	BITOP	%ebx,DST_SEG 8(%edi)
+	BITOP	%ecx,DST_SEG 4(%edi)
+@endmeta
+
+
+@meta	OPNAME_noshift_4_SEGSUFF
+	movl	(%esi),%eax
+	movl	8(%esi),%ebx
+	FLIP_EAX
+	movl	4(%esi),%ecx
+	FLIP_EBX
+	movl	12(%esi),%ebp
+	BITOP	%eax,DST_SEG(%edi)
+	FLIP_ECX
+	BITOP	%ebx,DST_SEG 8(%edi)
+	FLIP_EBP
+	BITOP	%ecx,DST_SEG 4(%edi)
+	BITOP	%ebp,DST_SEG 12(%edi)
+@endmeta
+
+
+@meta	OPNAME_noshift_many_mod_0_SEGSUFF
+	MANY_CODE_MOD_0
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta
+
+
+@meta	OPNAME_noshift_many_mod_1_SEGSUFF
+	MANY_CODE_MOD_1
+@lit	leal	MANY_MOD_1_OFFSET(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta

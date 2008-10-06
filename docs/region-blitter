@@ -1,0 +1,378 @@
+[hammer home the distinction between compile-time and run-time]
+
+A Region is a data structure that defines a set of pixels.  ???
+[briefly describe Apple's Region and ARDI's internal Region.  ARDI's
+region doesn't XOR adjacent scanlines, and stores X values in "native
+endian" byte order for speed (y values are still big endian, which can
+be irritating).  Mac programs can never see a special region].
+
+...We wanted to write a blitter that had good performance in the
+common case, but did not want to spend a great deal of time writing
+code to handle special cases...
+
+
+
+One way to write a simple Region blitter is to start with a subroutine
+that parses the start/stop pairs of a Region scanline and draws the
+corresponding pixels.  This subroutine is then called once for each
+row of pixels to be displayed.
+
+Unfortunately, this approach is slow since each scanline gets
+re-parsed every time it is drawn.  The Region for a 300 pixel tall
+rectangle consists of a single scanline with a repeat count of "300";
+this "simple Region blitter" will parse that scanline 300 times!
+That's a lot of redundant work.
+
+There are many possible ways to get away with parsing each scanline
+only once.  One approach is to convert the start/stop pairs into a bit
+mask where the bits in the mask correspond to the bits in the target
+bitmap that are to be changed.  The inner blitting loop then becomes
+an exercise in bitwise arithmetic.  In C, such a loop might look
+something like this:
+
+  for (x = left; x < right; x++)
+    dst[x] = (dst[x] & ~mask[x]) | (pattern_value & mask[x]);
+
+That's not bad, but it's unnecessarily slow in the common case of
+filling a rectangle.  For a rectangular Region, mask[x] is usually all
+one bits, making the bit munging a waste of time.  And even when the
+masks are never solid (e.g. when drawing a thin vertical line), this
+technique is still unnecessarily slow.  As it turns out, even the
+cycles the CPU spends loading mask bits from memory are unnecessary.
+
+Executor's blitter uses the techniques of partial evaluation and
+dynamic code generation to eliminate redundant work.  On the 80x86
+each scanline is quickly translated into executable code, and that
+code gets executed once each time the scanline needs to be drawn.  On
+non-80x86 platforms, each scanline is compiled into threaded code
+which is executed by a machine-generated interpreter to draw the
+scanlines.
+
+
+80x86:
+
+
+Before describing how the dynamic compilation process works, let's
+take a look at an example.  Consider the case where a 401x300
+rectangle is to be filled with white pixels (pixel value zero on the
+Macintosh).  This might happen, for example, when erasing a window.
+Furthermore, let's assume that the target bitmap has four bits per
+pixel, since that's somewhat tricker to handle than 8 bits per pixel.
+Here is the subroutine that Executor dynamically generates to draw
+this rectangle on a Pentium:
+
+loop:	andl	$0xff,0x50(%edi)	# clear leftmost 6 boundary pixels
+	addl	$0x54,%edi		# set up pointer for loop
+	movl	$0x31,%ecx		# set up loop counter
+	rep ; stosl			# slam out 49 aligned longs
+	andl	$0xffff0f00,0x0(%edi)	# clear 3 right boundary pixels
+	addl	$0x28,%edi		# move to next row
+	decl	%edx			# decrement # of rows left
+	jne	loop			# continue looping if appropriate
+	ret				# we're done!
+
+This code, when called with the proper values in its input registers,
+will draw the entire rectangle.  Note how the inner loop is merely a
+"rep ; stosl"...it doesn't get much more concise than that!  The
+astute reader will know that on certain 80x86 processors "rep ; stosl"
+is not the fastest possible way to set a range of memory.  This is
+true, but because our code generation is dynamic, in the future we can
+tailor the specific code sequence generated to the processor on which
+Executor is currently running.  The blitter already does this when it
+needs to emit a byte swap; on the 80486 and up we use the `bswap'
+instruction, and on the 80386 (which doesn't support `bswap') we use a
+sequence of rotates.
+
+One thing you may notice is that the bit masks used to clear the
+boundary pixels look strange.  They are actually correct, since 80x86
+processors are little endian.
+
+Unlike some processors, such as the 68040, the 80x86 instruction and
+data caches are always coherent.  Consequently, no cache flushes need
+to be performed before the dynamically created code can be executed.
+
+Here's another example, this time drawn from a real application.  The
+program "Globe", by Paul Mercer, draws a spinning globe on the screen
+as fast as it can.  Each "globe frame" is a 128x128 Pixmap.  Here is
+the code that Executor generates and runs when Globe uses CopyBits to
+transfer one frame to the screen at 8 bits per pixel:
+
+loop:	movl   $0x20,%ecx		; set up loop counter for 32 longs
+	rep ; movsl			; copy one row (128 bytes)
+	addl   $0xffffff00,%esi		; advance to previous src row
+	addl   $0xfffffd00,%edi		; advance to previous dst row
+	decl   %edx			; decrement # of rows remaining
+	jne    loop
+	ret
+
+Again the inner loop is very tight, just a "rep ; movsl" this time.
+
+No matter how fast the generated code, if Executor spends too much
+time generating that code then any speedup will be negated by the
+increased time required for dynamic compilation.  Consequently, the
+dynamic compilation from Region to 80x86 code needs to be fast.
+We solved this problem with a "meta-assembler" written in Perl.
+
+The blitter operates on aligned longs in the destination bitmap.  As
+the compilation engine strides through the start/stop pairs from left
+to right, it identifies which bits in each long are part of the Region
+and determines which of several cases is appropriate:
+
+	- Some but not all bits in the current long are in the Region.
+	- All bits in the current long are in the Region.
+	- All bits in this long and the next long are in the Region.
+	- All bits in this long and the next two longs are in the Region.
+	- All bits in this long and the next three longs are in the Region.
+	- More than four contiguous longs are completely in the Region,
+	     and the number of longs equals 0 mod 4.
+	- More than four contiguous longs are completely in the Region,
+	     and the number of longs equals 1 mod 4.
+	- More than four contiguous longs are completely in the Region,
+	     and the number of longs equals 2 mod 4.
+	- More than four contiguous longs are completely in the Region,
+	     and the number of longs equals 3 mod 4.
+
+
+The particular case encountered determines which function pointer to
+load from a lookup table corresponding to the current drawing mode.
+For example, the "patCopy" drawing mode has one table of function
+pointers, "patXor" another.  There are also some special case tables
+for drawing patterns that are either all zero bits or all one bits.
+
+The main blitter doesn't care what drawing mode is being used, since
+it does all mode-specific work through the supplied function pointer
+table.
+
+Each function pointer points to a function that generates 80x86 code
+for the appropriate case.  For example, one function generates code
+for a "patCopy" to three contiguous longs, one generates code for
+"patXor" only to certain specified bits within one long, etc.
+
+The blitter compilation engine marches through the Region scanline
+from left to right, calling code generation functions as it goes.  The
+generated code is accrued into a 32-byte aligned buffer on the stack.
+In this way, the blitter constructs a subroutine to draw the Region.
+
+The compilation engine isn't very complicated.  The tricky part is the
+all of code generation subroutines, which need to be fast since they
+are called so often and easy to write since there are so many of them.
+For each drawing mode there's one for each case the compilation engine
+cares about.  For pattern drawing modes, there are separate
+specialized routines for cases like patterns that can be entirely
+expressed in one 32-bit value ("short/narrow") patterns, patterns
+which can be expressed as one 32-bit value for each row, but which
+vary per row ("tall/narrow"), as well as "wide" variants of both.
+Beyond that, there are some versions specialized for 80486 and higher
+processors (which have the "bswap" instruction).
+
+This is where the Perl meta-assembler comes into play.
+
+The meta-assembler takes as input an assembly language template, and
+generates as output Pentium-scheduled assembly code that outputs an
+80x86 binary for the input template.  Got it?  This can be a little
+confusing, so a few examples are in order.
+
+Here is perhaps the simplest template:
+
+  @meta copy_short_narrow_1
+	movl	%eax,@param_offset@(%edi)
+  @endmeta
+
+The meta-assembler processes that into this 80x86 assembly code:
+
+	.align	4,0x90
+	.globl	_xdblt_copy_short_narrow_1
+_xdblt_copy_short_narrow_1:
+	movw	$0x8789,(%edi)
+	movl	%eax,2(%edi)
+	addl	$6,%edi
+	ret
+
+This subroutine, which gets called by the blitter compilation engine,
+generates the binary for the input assembly template.  It writes the
+raw binary for the movl instruction specified in the template to the
+address specified by %edi.
+
+Let's take a look at a far more complicated template.  This template
+handles the case where we want to bitwise OR a pattern to the
+destination bitmap, and the number of longs to transfer equals zero
+mod 4 (e.g. if the blitter wants to OR 36 longs to memory):
+
+@meta or_short_narrow_many_mod_0
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	orl	%eax,(%edi)
+	orl	%eax,4(%edi)
+	orl	%eax,8(%edi)
+	orl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+The meta-assembler compiles that to this:
+
+	.align	4,0x90
+	.globl	_xdblt_or_short_narrow_many_mod_0
+_xdblt_or_short_narrow_many_mod_0:
+	movw	$0xC781,(%edi)
+	movl	%eax,2(%edi)
+	movl	$0x47090709,11(%edi)
+	movb	$0xB9,6(%edi)
+	movl	$0x8470904,15(%edi)
+	movl	$0x754910C7,23(%edi)
+	movl	$0x830C4709,19(%edi)
+	movb	$0xEF,27(%edi)
+	movl	%edx,%ecx
+	shrl	$2,%ecx
+	movl	%ecx,7(%edi)
+	addl	$28,%edi
+	leal	(%eax,%edx,4),%ecx
+	addl	%ecx,edi_offset
+	ret
+
+Again, this mechanically generated subroutine generates the executable
+80x86 binary for the "or_short_narrow_many_mod_0" template.  It gets
+called by the blitter compilation engine when it needs code to OR a
+bunch of longs to memory.
+
+Even though this subroutine is longer than the previous example, it
+still doesn't take very long to execute.  Furthermore, it only gets
+called when the blitter has determined that many longs are to be ORed
+to memory, so the time taken actually blitting to memory will
+typically dwarf the time taken to execute these 15 instructions.
+
+The meta-assembler is a Perl script that works by running numerous
+syntactically modified versions of the assembly template through
+"gas", the GNU assembler, and examining the output bytes to discover
+which bits are fixed opcode bits and which bits correspond to
+operands.  Once it has figured out what goes where, it generates 80x86
+assembly code which writes out the constant bytes and computes and
+writes out the operand bytes.  That code is run through a simple
+Pentium instruction scheduler and the meta-assembler is done.
+
+
+Portable:
+
+
+Although the meta-assembler-based blitter works only on 80x86
+processors, Executor itself can run on non-Intel processors.  On other
+CPUs (such as the 68040 used in the NeXTstation) Executor's blitter
+works somewhat differently.
+
+The basic idea is still the same: translate Region scanlines into an
+efficient form once and then use that efficient form each time the
+scanline gets drawn.  This time, however, the "efficient form" is
+processor independent, and the blitter is written entirely in C.
+
+As is the case with the 80x86-specific blitter, the portable blitter
+compilation engine examines scanline start/stop pairs and identifies
+which of several cases is appropriate.  One case is "output three
+longs", another is "output only certain pixels within the current
+long", and so on.
+
+Like the 80x86-specific blitter, the particular case encountered
+determines which entry in a lookup table will be used.  But there the
+similarity ends.  The lookup tables contain pointers to C code labels
+rather than to routines that generates 80x86 code on the fly.
+
+[FIXME: the following would be best as a footnote]
+
+"What the heck is a pointer to a C code label?", you ask?  gcc (the
+GNU C compiler) has a "pointer to label" extension to the C language
+which makes the statement "&&my_label" evaluate to a "void *" that
+points to the compiled code for "my_label:" within a C function.
+This, combined with gcc's "goto void *" extension, allows C programs
+to execute goto statements whose destinations are not known at compile
+time.
+
+Each scanline gets translated into an array of opcodes for the
+"blitter opcode interpreter" (which will be described below).  Each
+opcode is stored in one of these C structs:
+
+struct
+{
+  const void *label;	/* Pointer to C code to handle this opcode. */
+  int32 offset;		/* Offset into scanline to start.           */
+  int32 arg;		/* Extra operand with different uses.       */
+};
+
+For example, consider the case where the blitter wants to write out
+five contiguous longs from a "simple" pattern starting 64 bytes into
+the current row.  In this case, "label" would equal
+"&&copy_short_narrow_many_5", "offset" would equal 64, and "arg" would
+equal 5.
+
+
+The blitter opcode interpreter
+
+
+The blitter opcode interpreter is machine generated C code created by
+a Perl script when Executor is compiled.  That Perl script takes as
+input C code snippets that tell it how to handle particular drawing
+modes, and produces as output C code for an interpreter.
+
+Here is the template taken as input by the Perl script for the
+"copy_short_narrow" case.  This is the simple case where the pixels
+for the pattern being displayed can be stored entirely within one
+32-bit long (for example, solid white or solid black).
+
+begin_mode copy_short_narrow max_unwrap
+ repeat	@dst@ = v;
+ mask	@dst@ = (@dst@ & ~arg) | (v & arg);
+end_mode
+
+The "repeat" field tells the Perl script what C code to generate for
+the simple case where all pixels in the destination long are to be
+affected.  The "mask" case tells it what to do when it must only
+modify certain bits in the target long and must leave others alone.
+
+The generated interpreter takes as input an array of blitter opcode
+structs, which it then proceeds to interpret once for each row to be
+drawn.
+
+Here is the section of the (machine-generated) interpreter that
+handles the copy_short_narrow cases.  Remember that each "blitter
+opcode" is really just a pointer to one of these C labels.  This code
+would get used when filling a rectangle with a solid color.
+
+	copy_short_narrow_mask:
+	  *dst = (*dst & ~arg) | (v & arg);
+	  JUMP_TO_NEXT;
+	copy_short_narrow_many_loop:
+	  dst += 8;
+	copy_short_narrow_many_8:
+	  dst[0] = v;
+	copy_short_narrow_many_7:
+	  dst[1] = v;
+	copy_short_narrow_many_6:
+	  dst[2] = v;
+	copy_short_narrow_many_5:
+	  dst[3] = v;
+	copy_short_narrow_many_4:
+	  dst[4] = v;
+	copy_short_narrow_many_3:
+	  dst[5] = v;
+	copy_short_narrow_many_2:
+	  dst[6] = v;
+	copy_short_narrow_many_1:
+	  dst[7] = v;
+	  if ((arg -= 8) > 0)
+	      goto copy_short_narrow_many_loop;
+	  JUMP_TO_NEXT;
+
+Note how the inner blitting loop is "unwrapped" for speed.  A blitter
+opcode would specify that 39 longs are to be output by making its
+"arg" field be 39 and the "label" field point to
+"copy_short_narrow_many_3", in the middle of the unwrapped loop.  The
+interpreter would jump there and loop until all of the pixels had been
+written out, at 32 bytes per loop iteration.  This is very fast,
+especially for portable code.
+
+Of course, if any other pixels needed to be drawn, there would be
+additional blitter opcode structs telling the interpreter what to do.
+The interpreter dispatches to the next opcode by executing the
+"JUMP_TO_NEXT" macro, which automatically does a "goto" to the C label
+that handles the next opcode.

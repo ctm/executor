@@ -1,0 +1,32 @@
+
+/* HFS_XFer.c */
+void init_edit_funcs (void);
+void init_all_tables (void);
+void about_HFS_XFer (void);
+INTEGER quitfunc (int rn);
+BOOLEAN caneject (DialogPtr dp);
+void setcurdestname (INTEGER disk, LONGINT dir);
+void updatedestwin (INTEGER disk, LONGINT dir);
+pascal BOOLEAN visiblefilesonly (ParmBlkPtr p);
+pascal BOOLEAN myfilterproc (DialogPtr dp, EventRecord * event, INTEGER * item);
+INTEGER dodelete (DialogPtr dp);
+INTEGER dorename (DialogPtr dp);
+INTEGER docopy (DialogPtr dp);
+INTEGER domove (DialogPtr dp);
+void invaldestwin (void);
+pascal Boolean dirsfilter (DialogPtr dp, EventRecord * ep, INTEGER * itemhit);
+pascal INTEGER DirDlgHook (INTEGER itemhit, DialogPtr dp);
+void getnewdest (void);
+INTEGER hookcommon (INTEGER item, DialogPtr dp, INTEGER (*pp) (DialogPtr dp));
+void hideitem (DialogPtr dp, INTEGER item);
+void setactionbutton (DialogPtr dp, Str255 title);
+void myShowWindow (WindowPtr wp);
+pascal INTEGER copyfileshook (INTEGER item, DialogPtr dp);
+pascal INTEGER copydiskhook (INTEGER item, DialogPtr dp);
+pascal INTEGER movefileshook (INTEGER item, DialogPtr dp);
+pascal INTEGER newdirhook (INTEGER item, DialogPtr dp);
+pascal INTEGER renamefileshook (INTEGER item, DialogPtr dp);
+pascal INTEGER deletefileshook (INTEGER item, DialogPtr dp);
+void init (int rn, DialogPtr * ourwindowp);
+void doitem (long choice, int rn);
+int main (cntrlParam * pb, DCtlPtr dctlp, int n);

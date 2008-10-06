@@ -1,0 +1,9 @@
+// This Configuration file (/us2/mac/Configuration/466c6974.ecf) was built by Executor
+Comments = "Swoop needs System 7 and wants Sound On";
+// WindowName = "Swoop";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 7.0.0;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

@@ -1,0 +1,9 @@
+// This Configuration file (/executor/configur/4444534b.ecf) was built by Executor
+Comments = "Data Desk 5.0 should work fairly well under Executor.";
+WindowName = "Data Desk%A8 5.0";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 6.0.7;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR};

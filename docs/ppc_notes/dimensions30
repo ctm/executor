@@ -1,0 +1,18 @@
+Need glue for 'RemoveTrackingHandler'
+
+i.e. needs DragManager
+
+UPDATE:  HMMM... We're now getting a SEGV.  It's not clear what changed to
+cause this regression
+
+hfsXbar.c:361; trap failure in `PBHOpen': -43
+interfacelib.c:2674; trace info in `HOpen': retval = -43, filename = 'AdobeFnt.lst'
+interfacelib.c:808; trace info in `NewPtr_wrapper': 0x3011ea50
+interfacelib.c:808; trace info in `NewPtr_wrapper': 0x3011f3f4
+
+Program received signal SIGSEGV, Segmentation fault.
+0x3166cbf8 in ?? ()
+(gdb) x/i $pc
+0x3166cbf8:	stb	r5,0(r6)
+(gdb) p/x $r6
+$12 = 0x80000000

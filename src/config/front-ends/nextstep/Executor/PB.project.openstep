@@ -1,0 +1,36 @@
+{
+    APPCLASS = Application; 
+    FILESTABLE = {
+        INTERFACES = (Executor.nib, Executor.project.nib, Info.nib); 
+        M_FILES = (); 
+        OTHER_LIBS = (executor, gccFAT, Indexing_s, kernload, Media_s, NeXT_s); 
+        OTHER_LINKED = (Executor_main.m); 
+        OTHER_RESOURCES = (8kfile, Help); 
+        OTHER_SOURCES = (Makefile.preamble, Makefile, Makefile.postamble); 
+    }; 
+    GENERATEMAIN = YES; 
+    LANGUAGE = English; 
+    LOCALIZABLE_FILES = {
+        Executor.nib = Executor.nib; 
+        Executor.project.nib = Executor.project.nib; 
+        Help = Help; 
+        Info.nib = Info.nib; 
+    }; 
+    MAKEFILEDIR = "$(NEXT_ROOT)/NextDeveloper/Makefiles/pb_makefiles"; 
+    NEXTSTEP_APPICON = Executor.tiff; 
+    NEXTSTEP_DOCUMENTEXTENSIONS = (
+        {Extension = apl; Image = docAppl.tiff; }, 
+        {Extension = msw; Image = docMSW.tiff; }, 
+        {Extension = mxl; Image = docXL.tiff; }
+    ); 
+    NEXTSTEP_INSTALLDIR = "$(HOME)/Apps"; 
+    NEXTSTEP_MAINNIB = Executor; 
+    PDO_UNIX_INSTALLDIR = "$(HOME)/Apps"; 
+    PDO_UNIX_MAINNIB = Executor; 
+    PROJECTNAME = Executor; 
+    PROJECTTYPE = Application; 
+    PROJECTVERSION = 2.6; 
+    SYSTEMEXTENSIONS = (); 
+    WINDOWS_INSTALLDIR = "$(HOME)/Apps"; 
+    WINDOWS_MAINNIB = Executor; 
+}

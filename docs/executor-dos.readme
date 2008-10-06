@@ -1,0 +1,255 @@
+READ THE FAQ
+
+This document includes the bare basics needed to get started.
+However, once you've installed Executor, you should read the file
+"docs\faq".  It contains answers to Frequently Asked Questions,
+including Executor's price (right now $49 for students, faculty and
+staff of educational institutions and $99 for everyone else) as well
+as upgrade policies and how to order.
+
+
+
+1.99<x> DENOTES EXPERIMENTAL VERSIONS OF EXECUTOR
+
+In an effort to keep our customers in the development loop, we are
+periodically releasing experimental versions of Executor.  These
+experimental versions are numbered 1.99a, 1.99b, 1.99c, etc.  We try
+not to break features with new releases, but sometimes that happens,
+so be aware that anything mentioned in these notes may fail to work.
+If you have a previous version of Executor installed, you may not want
+to delete your current version until you're sure the latest version is
+in fact better for you.
+
+In addition to the text files in the doc subdirectory mentioned above,
+another good source of information about Executor is the Usenet
+newsgroup "comp.emulators.mac.executor", or the Executor interest
+mailing list.  The newsgroup and the mailing list are connected via a
+bidirectional gateway.
+
+To join the mailing list, send e-mail to "executor-request@ardi.com"
+or "executor-digest-request@ardi.com" with a blank subject line and a
+body that says "subscribe".  With the first address, you'll receive
+e-mail everytime someone sends anything to the mailing list.  With the
+digest form, you'll receve e-mail only once a day with all the
+previous day's traffic bundled into one digest.
+
+You can then send messages to the entire group by sending to
+"executor@ardi.com".  Some of the people on the list have been using
+Executor under NEXTSTEP for a couple of years and under DOS for a
+year, and of course we closely follow that mailing list, even though
+we don't directly administer it.
+
+
+
+HOW TO INSTALL
+
+This distribution has an installation program which will automatically
+install Executor from two floppies.  To run the installation script,
+make sure that the first floppy (the one with this README.1ST file on
+it) is in your 3.5" floppy drive.  If that drive is drive "A:", all
+you need to do is:
+
+        C:\> A:\INSTALL
+
+The installer program will allow you to install Executor anywhere on
+your hard drive.
+
+    IMPORTANT:
+
+    If you are using disk cacheing you should set it to only do read
+    caches.  Write caches can result in the ".hfv" files being
+    corrupted if Executor dies unexpectedly.  (NOTE: if you forget to
+    turn off your write cache, you may have to reinstall the ".hfv"
+    files after Executor crashes).
+
+
+
+MORE INFORMATION AVAILABLE AFTER YOU INSTALL
+
+The installation process creates a "docs" directory that contains
+other files that may help you to better understand Executor.  The most
+important of these is called "faq", which stands for "answers to
+Frequently Asked Questions".
+
+
+
+EXECUTOR NEEDS A MOUSE DRIVER TO WORK
+
+In addition to needing a mouse to be physically connected to your
+computer, Executor requires a mouse driver to be loaded before it can
+run.  If Executor complains that you don't have a mouse installed,
+even though you have one connected, the problem is that your
+autoexec.bat does not load the mouse driver for use with DOS programs.
+Since many people only use their mouse with Windows, which has its own
+mouse driver, they don't have the mouse driver commands in their
+autoexec.bat.
+
+The exact changes that need to be made to your autoexec.bat varies
+depending on what type of mouse you have, and where the mouse driver
+has been installed on your system.  In general, anyone knowledgeable
+about your particular configuration should be able to give you simple
+instructions for modifying your autoexec.bat, whether that's the
+technical support line of the company that made the machine, or your
+local DOS wizard.
+
+
+
+HOW TO GET STARTED COPYING MACINTOSH FORMATTED FLOPPIES
+
+Executor/DOS can only read High Density (1.4 MB) formatted floppies.
+Most older Macintosh applications were distributed on 800K floppies
+which can't be used with Executor, so MAKE SURE you use 1.4 MB
+Macintosh formatted floppies with Executor/DOS.  Executor/DOS doesn't
+low format floppies for you, but it will reformat a DOS floppy as a
+Macintosh floppy, but only if you insert the floppy into the floppy
+drive *after* Executor has brought up its desktop.
+
+It is important to note that you have three different areas that you
+can copy to/from.  In addition to Macintosh formatted floppies, you
+can copy Macintosh files to your hard disk, either as DOS files, or as
+Macintosh files within a single DOS file which represents a Macintosh
+"volume".  Executor/DOS 1.99<x> also allows you to copy to/from Mac
+formatted SCSI drives (if you have a SCSI adapter) and copy from Mac
+formatted CD ROMs if you have a CD ROM drive (must be seen as drive H:
+or lower).
+
+When you copy Mac files as DOS files, they are broken up in two
+halves.  One half will have the original name of the file, the other
+will have a "%" prepended to the original name.  The file with the
+original name represents the "data fork" of the Macintosh file, and
+that's where data that can be used in both Macintosh and DOS
+environments resides.  The other half, the one with the "%" prepended
+is the "resource fork" and it contains information that only makes
+sense in the Macintosh environment.
+
+Using the DOS filesystem to represent Macintosh files is very awkward.
+In fact, if the names contain funny characters, you might get an "I/O
+error".  The alternative is to store files within a single "Macintosh
+Volume".  This demo version of Executor comes with a 4 MB Mac Volume.
+It should be sufficient to allow you to explore Executor.  While
+Executor is working within a Macintosh volume, files can have upper
+and lower case names with lengths up to 31 characters, but your DOS
+programs can't see the individual files.  More about what's going on
+is in the printed documentation.
+
+
+
+USING MAKEHFV TO CREATE A NEW VOLUME
+
+Although we don't supply documentation with this demo version of
+Executor, you may notice the "MAKEHFV" program in the "\EXECUTOR"
+directory.  If you are adventurous and want to use makehfv, it is
+important that the new volume that you create have the suffix ".HFV".
+If you do not call your new volume "something.HFV", Executor will
+ignore it.
+
+
+
+RUNNING PROGRAMS DIRECTLY OFF FLOPPIES
+
+Running programs directly off floppies is incredibly slow.  You will
+find it much quicker to use HFS_XFer to copy a program from a floppy
+into one of your ".hfv" files and then run the program directly out of
+the ".hfv" file.
+
+
+
+UNIXISMS LEFT IN EXECUTOR
+
+Executor was developed originally under UNIX.  A few "UNIXisms" have
+remained in Executor; they may be gone in 2.0.  Sometimes you will see
+"/" used where "\" would normally be used in DOS.  In addition,
+switches are introduced with a leading "-" instead of "/".  We
+apologize for this annoyance.
+
+
+
+USE WITH WINDOWS
+
+Executor/DOS 1.99<x> will run under Windows 3.1.
+
+You can make a double-clickable icon for Executor by using the Program
+Manager in Windows:
+
+        Choose "New..." from the Program Manager "File" menu
+
+        Click the "Program Item" radio button
+
+        Click "OK"
+
+        Enter "Executor" in the Description field
+
+        Enter "c:\executor\executor" in the Command Line field
+
+        Enter "c:\executor" in the Working Directory field
+
+        Add a Shortcut Key if you wish
+
+        Click on "Change Icon...
+
+        Click on "OK" when the error message comes up
+
+        Find, Select and Click OK on an Icon you like
+
+        Click on "OK" to leave "Program Item Properties"
+
+Remember, Executor is its own windowing system.  It does not need
+Windows to be effective, although the only way you can run two Mac
+programs at once it to do so under Windows.  Once you have one copy of
+Executor running under Windows, you can use "Left_Alternate-Tab" and
+"Right_Alternate-Enter" to hot-key back and forth between different
+programs and screen modes.
+
+
+
+USE WITH OS/2
+
+Executor/DOS 1.99<x> works with OS/2 2.11, but not with previous versions.
+To get E/D 1.99<x> to run you'll need to adjust use these settings:
+
+    DPMI_DOS_API ENABLED
+    DPMI_MEMORY_LIMIT 16
+    EMS_MEMORY_LIMIT 0
+    XMS_MEMORY_LIMIT 0
+
+
+
+USE WITH NT
+
+Currently, Executor/DOS 1.99<x> does not run under Windows NT.
+
+
+
+IF EXECUTOR RUNS SLOWLY
+
+Executor needs about 4 MB of memory to work efficiently.  If it does
+not have enough physical memory, it will make do by writing
+infrequently used parts of itself to your hard disk and only "paging"
+them in when they're actually used.  However, DOS systems can have
+their memory artificially eaten up in too many ways to describe here.
+If think Executor is running slowly, you might want to have a DOS guru
+check to make sure that it's not being memory starved.
+
+
+
+CREDITS
+
+Executor is a product of ARDI (Abacus Research and Development, Inc.).
+The majority of Executor proper was designed and implemented by
+Clifford T. Matthews.  The synthetic CPU and DOS port were done by
+Mathew Hostetter.  Executor was originally written under X-Windows,
+then ported to NEXTSTEP and finally ported to DOS using DJGPP, a port
+of the Free Software Foundation's gcc compiler done by DJ Delorie,
+Charles Sandmann and others.  The 387 emulator that we use was written
+by William Metzenthen.
+
+More information about the Free Software Foundation and DJGPP is
+included in our documentation.
+
+
+
+Thanks!
+
+Clifford T. Matthews    questions@ardi.com
+Founder                 +1 505 766 9115 Phone
+ARDI                    +1 505 247 1899 FAX

@@ -1,0 +1,26 @@
+INSTALLDIR = "$(HOME)/Apps";
+APPICON = Executor.tiff;
+GENERATEMAIN = YES;
+DOCICONFILES = (docAppl.tiff, docMSW.tiff, docXL.tiff);
+FILESTABLE = {
+    OTHER_LIBS = (executor, gccFAT, Indexing_s, kernload, Media_s, NeXT_s);
+    OTHER_RESOURCES = (8kfile, Help);
+    OTHER_SOURCES = (Makefile.preamble, Makefile, Makefile.postamble);
+    INTERFACES = (Executor.nib, Executor.project.nib, Info.nib);
+    OTHER_LINKED = ();
+    M_FILES = (Executor_main.m);
+};
+APPCLASS = Application;
+MAINNIB = Executor;
+DOCEXTENSIONS = (apl, msw, mxl);
+PROJECTTYPE = Application;
+PROJECTVERSION = 1.1;
+LOCALIZABLE_FILES = {
+    Help;
+    Executor.project.nib;
+    Info.nib;
+    Executor.nib;
+};
+PROJECTNAME = Executor;
+SYSTEMEXTENSIONS = ();
+LANGUAGE = English;

@@ -1,0 +1,157 @@
+Newsgroups: comp.emulators.mac.executor
+From: questions@ardi.com
+Subject: comp.emulators.mac.executor mini-FAQ, Please read before posting
+
+Thank you for reading this introduction to comp.emulators.mac.executor.
+
+Last modified: November 9th 1999
+
+What is this newsgroup?  What articles are appropriate here?
+
+	comp.emulators.mac.executor (c.e.m.e.) was created for the
+	discussion of Executor, a commercial Macintosh emulator for
+	PCs.
+
+	Discussions of Executor are welcome.  Please read this
+	mini-FAQ and the complete FAQ (see below) before posting.
+	Both documents answer the questions that come to mind when you
+	first hear about Executor, so by reading the FAQs you can
+	avoid asking questions that most of the readers of this
+	newsgroup are tired of answering.  Reading FAQs before posting
+	on usenet is considered good "netiquette" and will help make
+	c.e.m.e. a useful discussion group and may avoid some of the
+	"flame-wars" found on advocacy groups.
+
+	Please do not post encoded binaries to c.e.m.e.  Such posts
+	are prohibited by c.e.m.e's charter (see below).  Please
+	respect the problems that such posts cause some of c.e.m.e's
+	readership.
+
+	Please do not post requests for Macintosh ROMs or System files
+	here.  Macintosh ROMs and System files are copyrighted by
+	Apple Computer, Inc.  Asking for a copy of them is asking
+	someone to violate copyright laws.  Even if it weren't, it's
+	off-topic because Executor doesn't need Macintosh ROMs or
+	Apple System files.
+	
+	C.e.m.e. is *not* an advocacy group, it's a support group for
+	users of Executor.  It isn't a support group for emulator
+	users in general.  If the discussion isn't about Executor,
+	it's off-topic.
+
+	Different people have different needs, so some people find
+	Executor quite useful, others find it a novelty and some have
+	no need for it at all.  Please accept this and don't try to
+	convince people that Executor is good or that Executor is bad
+	in c.e.m.e.  It's unlikely you'll change anybody's mind, and
+	your time is better spent elsewhere.
+
+	Similarly, some people like Macs, some people dislike them;
+	please don't argue about operating systems in c.e.m.e.  By
+	ignoring off-topic posts, the off-topic poster will always get
+	the last word in.  *That's _OK_*.  In any honest disagreement,
+	proponents of each side will believe they are correct and the
+	other person is mistaken.  That leads to a desire to rebut any
+	incorrect information that one sees, but this is Usenet.
+	Incorrect information will always be plentiful.  Even though
+	it's counter-intuitive, you're more likely to see incorrect
+	off-topic information disappear if you ignore it than if you
+	automatically respond to it.
+
+Where is the complete FAQ?
+
+	The latest version is always available via the World-Wide Web at
+
+	<http://www.ardi.com/executor-faq.html/>
+
+	You may also find it elsewhere, but beware.  In cyberspace, outdated
+	information can live an exceedingly long time.  As such, it's
+	especially useful for Executor users to have WWW access and to refer
+	to the webbed FAQ, rather than looking for it elsewhere.
+
+	If you don't have WWW access, you can get a copy mailed to you
+	by sending email to info@ardi.com with "faq" or "FAQ" in the
+	subject line (not the body) of the message, or by sending
+	email to faq@ardi.com.  Both "info@ardi.com" and "faq@ardi.com"
+	are automated email servers which do not read the contents of
+	the letter that is sent to them.
+
+What is Executor?
+
+	Executor, a commercial product, is an emulator that allows
+	non-Macintosh hardware to run many applications originally
+	written for a Macintosh.  It also lets your PC read and write
+	Mac-formatted high-density floppies and Mac external hard
+	drives, and read Mac CDs.
+
+	Executor for Windows includes both Executor/DOS (E/D) and
+	Executor/Win32 (E/W).  E/D runs under DOS, Windows 3.x and
+	OS/2.  E/W runs under Windows 95, Windows 98 and NT.  Executor
+	for Linux includes the supported Executor/Linux/X and the
+	unsupported Executor/Linux/SVGAlib and Executor/Linux/SDL.
+
+Where can I pick up the Executor demos?
+
+	<http://www.ardi.com/>
+
+What limitations does Executor have?
+
+	See the complete FAQ for more details.
+
+	ARDI has rewritten the OS and Toolbox calls from scratch.
+	This provides a tremendous speed improvement and allows
+	Executor to be sold independently of Apple.  This does cause
+	some limitations, including limited serial port access, no
+	AppleTalk, incomplete System 7 support, no INITs (which means
+	no QuickTime and no ATM), no CDEVs and very little
+	internationalization.
+
+	Due to limitations in PC hardware, Executor can read and write
+	1.4 MB Mac formatted floppy disks, but can *not* read or write
+	Mac formatted 800 KB floppy disks.  Without custom hardware,
+	PCs simply can't read the Mac 800 KB format.  If you think
+	you've seen software that allows this, you're mistaken.  It's
+	possible to read 800 KB formatted floppies that are in a
+	different format, but not 800 KB floppies that are in the Mac
+	800 KB format.
+
+	Executor prints directly to PostScript printers.  If you don't
+	have a PostScript printer, Executor can print to a Postscript
+	file for which you will need a PostScript filter in order to
+	print.
+
+Who makes Executor?
+
+	<http://www.ardi.com/>
+
+	ARDI
+	Suite 4-101
+	1650 University Blvd., NE
+	Albuquerque, NM  87102
+
+	+1 505 766 9115 Phone
+	+1 505 766 5153 FAX
+
+	questions@ardi.com
+
+What is the c.e.m.e. charter?
+
+	CHARTER: comp.emulators.mac.executor
+
+	Comp.emulators.mac.executor is for general discussion of
+	ARDI's Executor software Macintosh emulator.  Executor users
+	and potential users are encouraged to discuss Executor bugs
+	and workarounds and to share tips for getting Executor to work
+	properly with specific hardware and/or software.  ARDI will
+	post announcements of new versions, and provide other help
+	when possible.
+
+	Criticism, advice, and mutual user assistance are all expected
+	and encouraged.  Advertisements and off-topic postings are
+	forbidden, as is the posting of encoded binaries or any
+	information on obtaining pirated software.
+
+	END CHARTER.
+
+Thank you for reading this.  With your cooperation, we can keep a high
+signal-to-noise ratio on c.e.m.e.

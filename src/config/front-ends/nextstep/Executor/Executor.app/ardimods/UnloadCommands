@@ -1,0 +1,5 @@
+#
+# Script used for shutting down the loadable kernel server 
+#
+
+CALL		ardimods_signoff		0

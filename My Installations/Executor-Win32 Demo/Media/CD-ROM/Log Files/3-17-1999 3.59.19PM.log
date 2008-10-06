@@ -1,0 +1,222 @@
+Build started at March 17, 1999 3:59:19 PM.
+Calculating size of cabinet files...
+The following files are missing from the file group link:
+I:\execwin32.demo\hfv16dll.dll
+I:\execwin32.demo\hfv32.dll
+I:\execwin32.demo\makehfv.exe
+I:\execwin32.demo\printdef.ini
+I:\execwin32.demo\printers.ini
+I:\execwin32.demo\readme.txt
+I:\execwin32.demo\tips.txt
+I:\execwin32.demo\executor.exe
+I:\execwin32.demo\SDL-dib.dll
+I:\execwin32.demo\stdout.txt
+I:\execwin32.demo\stderr.txt
+I:\execwin32.demo\fees.txt
+I:\execwin32.demo\dirMap-le
+I:\execwin32.demo\SDL-dx5.dll
+I:\execwin32.demo\configur\32362e32.ecf
+I:\execwin32.demo\configur\3842494d.ecf
+I:\execwin32.demo\configur\3f3f3f3f.ecf
+I:\execwin32.demo\configur\41443344.ecf
+I:\execwin32.demo\configur\414f7163.ecf
+I:\execwin32.demo\configur\41525435.ecf
+I:\execwin32.demo\configur\41527c46.ecf
+I:\execwin32.demo\configur\4154726e.ecf
+I:\execwin32.demo\configur\4164426b.ecf
+I:\execwin32.demo\configur\41706569.ecf
+I:\execwin32.demo\configur\42454132.ecf
+I:\execwin32.demo\configur\424f4c4f.ecf
+I:\execwin32.demo\configur\426163d5.ecf
+I:\execwin32.demo\configur\42646c6d.ecf
+I:\execwin32.demo\configur\426e4871.ecf
+I:\execwin32.demo\configur\43475246.ecf
+I:\execwin32.demo\configur\43504354.ecf
+I:\execwin32.demo\configur\4352534c.ecf
+I:\execwin32.demo\configur\4354494d.ecf
+I:\execwin32.demo\configur\43555341.ecf
+I:\execwin32.demo\configur\43574c44.ecf
+I:\execwin32.demo\configur\43595153.ecf
+I:\execwin32.demo\configur\43764d4d.ecf
+I:\execwin32.demo\configur\4444534b.ecf
+I:\execwin32.demo\configur\44454c49.ecf
+I:\execwin32.demo\configur\44494132.ecf
+I:\execwin32.demo\configur\444f4c4c.ecf
+I:\execwin32.demo\configur\44576174.ecf
+I:\execwin32.demo\configur\44616e47.ecf
+I:\execwin32.demo\configur\454a3035.ecf
+I:\execwin32.demo\configur\45535041.ecf
+I:\execwin32.demo\configur\455544c6.ecf
+I:\execwin32.demo\configur\46424420.ecf
+I:\execwin32.demo\configur\466c6974.ecf
+I:\execwin32.demo\configur\46756e47.ecf
+I:\execwin32.demo\configur\47436f6e.ecf
+I:\execwin32.demo\configur\474f474f.ecf
+I:\execwin32.demo\configur\47534361.ecf
+I:\execwin32.demo\configur\47756e53.ecf
+I:\execwin32.demo\configur\483444c6.ecf
+I:\execwin32.demo\configur\48525630.ecf
+I:\execwin32.demo\configur\48525631.ecf
+I:\execwin32.demo\configur\48734c61.ecf
+I:\execwin32.demo\configur\496d6167.ecf
+I:\execwin32.demo\configur\4a4b5445.ecf
+I:\execwin32.demo\configur\4a524735.ecf
+I:\execwin32.demo\configur\4a70616b.ecf
+I:\execwin32.demo\configur\4b705353.ecf
+I:\execwin32.demo\configur\4c415a48.ecf
+I:\execwin32.demo\configur\4c505243.ecf
+I:\execwin32.demo\configur\4d427264.ecf
+I:\execwin32.demo\configur\4d4b444e.ecf
+I:\execwin32.demo\configur\4d4d4343.ecf
+I:\execwin32.demo\configur\4d4d5042.ecf
+I:\execwin32.demo\configur\4d504e54.ecf
+I:\execwin32.demo\configur\4d535744.ecf
+I:\execwin32.demo\configur\4d61656c.ecf
+I:\execwin32.demo\configur\4d687a75.ecf
+I:\execwin32.demo\configur\4d6f6c54.ecf
+I:\execwin32.demo\configur\50217268.ecf
+I:\execwin32.demo\configur\50474150.ecf
+I:\execwin32.demo\configur\504c5073.ecf
+I:\execwin32.demo\configur\504e4331.ecf
+I:\execwin32.demo\configur\50505456.ecf
+I:\execwin32.demo\configur\50566d74.ecf
+I:\execwin32.demo\configur\50674c67.ecf
+I:\execwin32.demo\configur\506fc450.ecf
+I:\execwin32.demo\configur\50736f64.ecf
+I:\execwin32.demo\configur\51444c58.ecf
+I:\execwin32.demo\configur\522a6368.ecf
+I:\execwin32.demo\configur\52415a5a.ecf
+I:\execwin32.demo\configur\5249534b.ecf
+I:\execwin32.demo\configur\524a4253.ecf
+I:\execwin32.demo\configur\524c4d5a.ecf
+I:\execwin32.demo\configur\52565253.ecf
+I:\execwin32.demo\configur\526a3031.ecf
+I:\execwin32.demo\configur\53414e54.ecf
+I:\execwin32.demo\configur\53495421.ecf
+I:\execwin32.demo\configur\53495478.ecf
+I:\execwin32.demo\configur\534d4c53.ecf
+I:\execwin32.demo\configur\53635246.ecf
+I:\execwin32.demo\configur\5368537a.ecf
+I:\execwin32.demo\configur\53704a4b.ecf
+I:\execwin32.demo\configur\53706563.ecf
+I:\execwin32.demo\configur\5370696e.ecf
+I:\execwin32.demo\configur\54424235.ecf
+I:\execwin32.demo\configur\54424236.ecf
+I:\execwin32.demo\configur\544b4e4f.ecf
+I:\execwin32.demo\configur\54745264.ecf
+I:\execwin32.demo\configur\54775231.ecf
+I:\execwin32.demo\configur\55505550.ecf
+I:\execwin32.demo\configur\556c7433.ecf
+I:\execwin32.demo\configur\57435345.ecf
+I:\execwin32.demo\configur\574f4c46.ecf
+I:\execwin32.demo\configur\57504332.ecf
+I:\execwin32.demo\configur\5843454c.ecf
+I:\execwin32.demo\configur\58505233.ecf
+I:\execwin32.demo\configur\63417244.ecf
+I:\execwin32.demo\configur\674f4c46.ecf
+I:\execwin32.demo\configur\6c6f6733.ecf
+I:\execwin32.demo\configur\6f7a6d35.ecf
+I:\execwin32.demo\configur\72647020.ecf
+I:\execwin32.demo\configur\72706db5.ecf
+I:\execwin32.demo\configur\73506433.ecf
+I:\execwin32.demo\configur\a78ea8a0.ecf
+I:\execwin32.demo\configur\a7bfc2a2.ecf
+I:\execwin32.demo\configur\ac7e5ea0.ecf
+I:\execwin32.demo\configur\f5536b69.ecf
+I:\execwin32.demo\configur\57494c44.ecf
+I:\execwin32.demo\configur\434c4144.ecf
+I:\execwin32.demo\configur\4d917263.ecf
+I:\execwin32.demo\Apps\Freeware\About Freeware
+I:\execwin32.demo\Apps\Freeware\%About Freeware
+I:\execwin32.demo\Apps\Freeware\Risk!
+I:\execwin32.demo\Apps\Freeware\%Risk!
+I:\execwin32.demo\Apps\Demoware\About Demoware
+I:\execwin32.demo\Apps\Demoware\%About Demoware
+I:\execwin32.demo\Apps\Demoware\%MacBreadboard%C4
+I:\execwin32.demo\Apps\Demoware\%PowerGrade 2.3.5g
+I:\execwin32.demo\Apps\Demoware\%StuffIt Expander%AA 4.0.1 Folder
+I:\execwin32.demo\Apps\Demoware\Ultimate Solitaire Demo
+I:\execwin32.demo\Apps\Demoware\%Ultimate Solitaire Demo
+I:\execwin32.demo\Apps\Demoware\MacBreadboard%C4\4-bit Counter
+I:\execwin32.demo\Apps\Demoware\MacBreadboard%C4\%4-bit Counter
+I:\execwin32.demo\Apps\Demoware\MacBreadboard%C4\D Flip%2FFlop Demo
+I:\execwin32.demo\Apps\Demoware\MacBreadboard%C4\%D Flip%2FFlop Demo
+I:\execwin32.demo\Apps\Demoware\MacBreadboard%C4\Decade Counter
+I:\execwin32.demo\Apps\Demoware\MacBreadboard%C4\%Decade Counter
+I:\execwin32.demo\Apps\Demoware\MacBreadboard%C4\MacBreadboard DEMO 1.1
+I:\execwin32.demo\Apps\Demoware\MacBreadboard%C4\%MacBreadboard DEMO 1.1
+I:\execwin32.demo\Apps\Demoware\PowerGrade 2.3.5g\ Other Download Sites
+I:\execwin32.demo\Apps\Demoware\PowerGrade 2.3.5g\% Other Download Sites
+I:\execwin32.demo\Apps\Demoware\PowerGrade 2.3.5g\PowerGrade 2.3.5g Demo
+I:\execwin32.demo\Apps\Demoware\PowerGrade 2.3.5g\%PowerGrade 2.3.5g Demo
+I:\execwin32.demo\Apps\Demoware\PowerGrade 2.3.5g\PowerGrade Help
+I:\execwin32.demo\Apps\Demoware\PowerGrade 2.3.5g\%PowerGrade Help
+I:\execwin32.demo\Apps\Demoware\PowerGrade 2.3.5g\Read me first please!
+I:\execwin32.demo\Apps\Demoware\PowerGrade 2.3.5g\%Read me first please!
+I:\execwin32.demo\Apps\Demoware\PowerGrade 2.3.5g\Sample PowerGrade Class
+I:\execwin32.demo\Apps\Demoware\PowerGrade 2.3.5g\%Sample PowerGrade Class
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Icon%0D
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\%Icon%0D
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\%Read Us First!
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\StuffIt Expander%AA
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\%StuffIt Expander%AA
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\Aladdin Order Form
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%Aladdin Order Form
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\Aladdin Product Overview
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%Aladdin Product Overview
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\Expander Reg. Form
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%Expander Reg. Form
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\Icon%0D
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%Icon%0D
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\License Agreement
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%License Agreement
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\StuffIt Expander%AA Read Me
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%StuffIt Expander%AA Read Me
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\What was installed (and where)
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%What was installed (and where)
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\What's new in StuffIt Expander%AA
+I:\execwin32.demo\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%What's new in StuffIt Expander%AA
+I:\execwin32.demo\Apps\System Folder\Browser
+I:\execwin32.demo\Apps\System Folder\%Browser
+I:\execwin32.demo\Apps\System Folder\%Extensions
+I:\execwin32.demo\Apps\System Folder\godata.sav
+I:\execwin32.demo\Apps\System Folder\%godata.sav
+I:\execwin32.demo\Apps\System Folder\ParamRAM
+I:\execwin32.demo\Apps\System Folder\%ParamRAM
+I:\execwin32.demo\Apps\System Folder\%Preferences
+I:\execwin32.demo\Apps\System Folder\Printer
+I:\execwin32.demo\Apps\System Folder\%Printer
+I:\execwin32.demo\Apps\System Folder\System
+I:\execwin32.demo\Apps\System Folder\%System
+I:\execwin32.demo\Apps\System Folder\system.ard
+I:\execwin32.demo\Apps\System Folder\%system.ard
+I:\execwin32.demo\Apps\Shareware\About Shareware
+I:\execwin32.demo\Apps\Shareware\%About Shareware
+I:\execwin32.demo\Apps\Shareware\%speedometer3.23 Folder
+I:\execwin32.demo\Apps\Shareware\%Tex-Edit
+I:\execwin32.demo\Apps\Shareware\speedometer3.23 Folder\Speedo 3.21%D1%3E3.23 Doc
+I:\execwin32.demo\Apps\Shareware\speedometer3.23 Folder\%Speedo 3.21%D1%3E3.23 Doc
+I:\execwin32.demo\Apps\Shareware\speedometer3.23 Folder\Speedometer 3.23
+I:\execwin32.demo\Apps\Shareware\speedometer3.23 Folder\%Speedometer 3.23
+I:\execwin32.demo\Apps\Shareware\Tex-Edit\Revision History
+I:\execwin32.demo\Apps\Shareware\Tex-Edit\%Revision History
+I:\execwin32.demo\Apps\Shareware\Tex-Edit\Tex-Edit
+I:\execwin32.demo\Apps\Shareware\Tex-Edit\%Tex-Edit
+I:\execwin32.demo\Apps\Shareware\Tex-Edit\Tex-Edit Prefs
+I:\execwin32.demo\Apps\Shareware\Tex-Edit\%Tex-Edit Prefs
+I:\execwin32.demo\Apps\Shareware\Tex-Edit\Tex-Edit Reference
+I:\execwin32.demo\Apps\Shareware\Tex-Edit\%Tex-Edit Reference
+I:\execwin32.demo\Apps\Shareware\Tex-Edit\Welcome to Tex-Edit!
+I:\execwin32.demo\Apps\Shareware\Tex-Edit\%Welcome to Tex-Edit!
+I:\execwin32.demo\cdenable.exe
+I:\execwin32.demo\cdenable.vxd
+I:\execwin32.demo\cdenablent.exe
+I:\execwin32.demo\cdenable.sys
+Copying InstallShield engine files to Disk 1...
+Building system cabinet file '_sys1.cab'...
+Copying uncompressed setup files to Disk 1...
+Building user cabinet file '_user1.cab'...
+Building cabinet file 'data1.cab'...
+Creating disk layout file 'layout.bin'...
+Media 'CD-ROM' created successfully.
+Build completed successfully at March 17, 1999 3:59:22 PM.

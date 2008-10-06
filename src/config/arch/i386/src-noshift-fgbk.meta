@@ -1,0 +1,172 @@
+@meta	copy_noshift_mask_fgbk_SEGSUFF
+	movl	(%esi),%eax
+	movl	DST_SEG(%edi),%ecx
+	movl	%eax,%ebx
+	andl	$@param_fg_color_and_mask@,%eax
+	xorl	$-1,%ebx
+	andl	$@param_not_mask@,%ecx
+	andl	$@param_bk_color_and_mask@,%ebx
+	orl	%ebx,%eax
+	orl	%ecx,%eax
+	movl	%eax,DST_SEG(%edi)
+@endmeta
+
+@meta	copy_noshift_many_fgbk_SEGSUFF
+	movl	$@param_long_count@,%ecx
+1:	lodsl
+	movl	%eax,%ebx
+	andl	$@param_fg_color@,%eax
+	xorl	$-1,%ebx
+	andl	$@param_bk_color@,%ebx
+	orl	%ebx,%eax
+	stosl
+	decl	%ecx
+	jnz	1b
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta
+
+
+@meta	notcopy_noshift_mask_fgbk_SEGSUFF
+	movl	(%esi),%eax
+	movl	DST_SEG(%edi),%ecx
+	movl	%eax,%ebx
+	andl	$@param_bk_color_and_mask@,%eax
+	xorl	$-1,%ebx
+	andl	$@param_not_mask@,%ecx
+	andl	$@param_fg_color_and_mask@,%ebx
+	orl	%ebx,%eax
+	orl	%ecx,%eax
+	movl	%eax,DST_SEG(%edi)
+@endmeta
+
+@meta	notcopy_noshift_many_fgbk_SEGSUFF
+	movl	$@param_long_count@,%ecx
+1:	lodsl
+	movl	%eax,%ebx
+	andl	$@param_bk_color@,%eax
+	xorl	$-1,%ebx
+	andl	$@param_fg_color@,%ebx
+	orl	%ebx,%eax
+	stosl
+	decl	%ecx
+	jnz	1b
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta
+
+
+@meta	or_noshift_mask_fgbk_SEGSUFF
+	movl	(%esi),%eax
+	movl	$-1,%ebx
+	movl	DST_SEG(%edi),%ecx
+	xorl	%eax,%ebx
+	andl	$@param_fg_color_and_mask@,%eax
+	orl	$@param_not_mask@,%ebx
+	andl	%ebx,%ecx
+	orl	%ecx,%eax
+	movl	%eax,DST_SEG(%edi)
+@endmeta
+
+@meta	or_noshift_many_fgbk_SEGSUFF
+	movl	$@param_long_count@,%ebp
+1:	lodsl
+	movl	$-1,%ebx
+	movl	DST_SEG(%edi),%ecx
+	xorl	%eax,%ebx
+	andl	$@param_fg_color@,%eax
+	andl	%ebx,%ecx
+	orl	%ecx,%eax
+	stosl
+	decl	%ebp
+	jnz	1b
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta
+
+
+@meta	notor_noshift_mask_fgbk_SEGSUFF
+	movl	(%esi),%eax
+	movl	$-1,%ebx
+	movl	DST_SEG(%edi),%ecx
+	xorl	%eax,%ebx
+	andl	$@param_fg_color_and_mask@,%ebx
+	orl	$@param_not_mask@,%eax
+	andl	%ecx,%eax
+	orl	%ebx,%eax
+	movl	%eax,DST_SEG(%edi)
+@endmeta
+
+@meta	notor_noshift_many_fgbk_SEGSUFF
+	movl	$@param_long_count@,%ebp
+1:	lodsl
+	movl	$-1,%ebx
+	movl	DST_SEG(%edi),%ecx
+	xorl	%eax,%ebx
+	andl	$@param_fg_color@,%ebx
+	andl	%ecx,%eax
+	orl	%ebx,%eax
+	stosl
+	decl	%ebp
+	jnz	1b
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta
+
+
+@meta	and_noshift_mask_fgbk_SEGSUFF
+	movl	(%esi),%eax
+	movl	$-1,%ebx
+	movl	DST_SEG(%edi),%ecx
+	xorl	%eax,%ebx
+	orl	$@param_not_mask@,%eax
+	andl	$@param_bk_color_and_mask@,%ebx
+	andl	%ecx,%eax
+	orl	%ebx,%eax
+	movl	%eax,DST_SEG(%edi)
+@endmeta
+
+@meta	and_noshift_many_fgbk_SEGSUFF
+	movl	$@param_long_count@,%ebp
+1:	lodsl
+	movl	$-1,%ebx
+	movl	DST_SEG(%edi),%ecx
+	xorl	%eax,%ebx
+	andl	$@param_bk_color@,%ebx
+	andl	%ecx,%eax
+	orl	%ebx,%eax
+	stosl
+	decl	%ebp
+	jnz	1b
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta
+
+
+@meta	notand_noshift_mask_fgbk_SEGSUFF
+	movl	(%esi),%eax
+	movl	$-1,%ebx
+	movl	DST_SEG(%edi),%ecx
+	xorl	%eax,%ebx
+	andl	$@param_bk_color_and_mask@,%eax
+	orl	$@param_not_mask@,%ebx
+	andl	%ecx,%ebx
+	orl	%ebx,%eax
+	movl	%eax,DST_SEG(%edi)
+@endmeta
+
+@meta	notand_noshift_many_fgbk_SEGSUFF
+	movl	$@param_long_count@,%ebp
+1:	lodsl
+	movl	$-1,%ebx
+	movl	DST_SEG(%edi),%ecx
+	xorl	%eax,%ebx
+	andl	$@param_bk_color@,%eax
+	andl	%ecx,%ebx
+	orl	%ebx,%eax
+	stosl
+	decl	%ebp
+	jnz	1b
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta

@@ -1,0 +1,55 @@
+# First define the magic prefix value to be prepended to external symbols
+@define PREFIX srcblt
+
+
+# This first "setup" section tells the meta-assembler how to compute
+# the actual 32-bit values for various @param...@ values, and which
+# register holds the value when it's done.  No register other than the
+# output register can be modified in these setup sections.
+
+@setup	@param_mask@	%edx
+@endsetup
+
+@setup	@param_not_mask@	%ecx
+	movl	%edx,%ecx
+	notl	%ecx
+@endsetup
+
+@setup	@param_long_count@	%edx
+@endsetup
+
+@setup	@param_long_count_div_2@	%ecx
+	movl	%edx,%ecx
+	shrl	$1,%ecx
+@endsetup
+
+@setup	@param_fg_color@	%ecx
+	movl	_srcblt_fg_color,%ecx
+@endsetup
+
+@setup	@param_fg_color_and_mask@	%ecx
+	movl	_srcblt_fg_color,%ecx
+	andl	%edx,%ecx
+@endsetup
+
+@setup	@param_bk_color@	%ecx
+	movl	_srcblt_bk_color,%ecx
+@endsetup
+
+@setup	@param_bk_color_and_mask@	%ecx
+	movl	_srcblt_bk_color,%ecx
+	andl	%edx,%ecx
+@endsetup
+
+
+# Sometimes DST_SEG will come in defined as "%es:", which will cause
+# us to make segment override cases.  If it's not, then the segment
+# override and non-segment override cases will be the same and
+# will automatically get merged together by metaasm.pl...no space
+# will be wasted.
+@define SEGSUFF seg
+@include src-blitters-core.meta
+
+@define DST_SEG
+@define SEGSUFF noseg
+@include src-blitters-core.meta

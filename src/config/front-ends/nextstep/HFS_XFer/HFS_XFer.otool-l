@@ -1,0 +1,473 @@
+iclone# otool -l HFS_XFer-pg
+HFS_XFer-pg:
+Load command 0
+      cmd LC_SEGMENT
+  cmdsize 56
+  segname __PAGEZERO
+   vmaddr 0x00000000
+   vmsize 0x00002000
+  fileoff 0
+ filesize 0
+  maxprot 0x00000000
+ initprot 0x00000000
+   nsects 0
+    flags 4
+Load command 1
+      cmd LC_SEGMENT
+  cmdsize 532
+  segname __TEXT
+   vmaddr 0x00002000
+   vmsize 0x0017a000
+  fileoff 0
+ filesize 1548288
+  maxprot 0x00000007
+ initprot 0x00000005
+   nsects 7
+    flags 0
+Section
+  sectname __text
+   segname __TEXT
+      addr 0x000046c0
+      size 0x0015c674
+    offset 9920
+     align 2^1 (2)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __fvmlib_init0
+   segname __TEXT
+      addr 0x00160d34
+      size 0x00000000
+    offset 1436980
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __fvmlib_init1
+   segname __TEXT
+      addr 0x00160d34
+      size 0x00000000
+    offset 1436980
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __const
+   segname __TEXT
+      addr 0x00160d34
+      size 0x00010788
+    offset 1436980
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __cstring
+   segname __TEXT
+      addr 0x001714bc
+      size 0x0000aa30
+    offset 1504444
+     align 2^0 (1)
+    reloff 0
+    nreloc 0
+     flags 0x00000002
+ reserved1 0
+ reserved2 0
+Section
+  sectname __literal8
+   segname __TEXT
+      addr 0x0017bef0
+      size 0x000000d8
+    offset 1548016
+     align 2^3 (8)
+    reloff 0
+    nreloc 0
+     flags 0x00000004
+ reserved1 0
+ reserved2 0
+Section
+  sectname __literal4
+   segname __TEXT
+      addr 0x0017bfc8
+      size 0x00000034
+    offset 1548232
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000003
+ reserved1 0
+ reserved2 0
+Load command 2
+      cmd LC_SEGMENT
+  cmdsize 260
+  segname __DATA
+   vmaddr 0x0017c000
+   vmsize 0x00016000
+  fileoff 1548288
+ filesize 81920
+  maxprot 0x00000007
+ initprot 0x00000007
+   nsects 3
+    flags 0
+Section
+  sectname __data
+   segname __DATA
+      addr 0x0017c000
+      size 0x000123c8
+    offset 1548288
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __bss
+   segname __DATA
+      addr 0x0018e3c8
+      size 0x00000c64
+    offset 0
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000001
+ reserved1 0
+ reserved2 0
+Section
+  sectname __common
+   segname __DATA
+      addr 0x0018f030
+      size 0x00001c18
+    offset 0
+     align 2^4 (16)
+    reloff 0
+    nreloc 0
+     flags 0x00000001
+ reserved1 0
+ reserved2 0
+Load command 3
+      cmd LC_SEGMENT
+  cmdsize 940
+  segname __OBJC
+   vmaddr 0x00192000
+   vmsize 0x00022000
+  fileoff 1630208
+ filesize 139264
+  maxprot 0x00000007
+ initprot 0x00000007
+   nsects 13
+    flags 0
+Section
+  sectname __class
+   segname __OBJC
+      addr 0x00192000
+      size 0x00000e58
+    offset 1630208
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __meta_class
+   segname __OBJC
+      addr 0x00192e58
+      size 0x00000e58
+    offset 1633880
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __cat_cls_meth
+   segname __OBJC
+      addr 0x00193cb0
+      size 0x0000009c
+    offset 1637552
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __cat_inst_meth
+   segname __OBJC
+      addr 0x00193d4c
+      size 0x00000b70
+    offset 1637708
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __cls_meth
+   segname __OBJC
+      addr 0x001948bc
+      size 0x000011c0
+    offset 1640636
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __inst_meth
+   segname __OBJC
+      addr 0x00195a7c
+      size 0x00009024
+    offset 1645180
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __message_refs
+   segname __OBJC
+      addr 0x0019eaa0
+      size 0x00001c88
+    offset 1682080
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000005
+ reserved1 0
+ reserved2 0
+Section
+  sectname __symbols
+   segname __OBJC
+      addr 0x001a0728
+      size 0x000007e8
+    offset 1689384
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __category
+   segname __OBJC
+      addr 0x001a0f10
+      size 0x000001a0
+    offset 1691408
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __class_vars
+   segname __OBJC
+      addr 0x001a10b0
+      size 0x00000070
+    offset 1691824
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __instance_vars
+   segname __OBJC
+      addr 0x001a1120
+      size 0x000027c0
+    offset 1691936
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __module_info
+   segname __OBJC
+      addr 0x001a38e0
+      size 0x000007e0
+    offset 1702112
+     align 2^2 (4)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname __selector_strs
+   segname __OBJC
+      addr 0x001a40c0
+      size 0x0000f082
+    offset 1704128
+     align 2^0 (1)
+    reloff 0
+    nreloc 0
+     flags 0x00000002
+ reserved1 0
+ reserved2 0
+Load command 4
+      cmd LC_SEGMENT
+  cmdsize 192
+  segname __ICON
+   vmaddr 0x001b4000
+   vmsize 0x00002000
+  fileoff 1769472
+ filesize 8192
+  maxprot 0x00000001
+ initprot 0x00000001
+   nsects 2
+    flags 4
+Section
+  sectname __header
+   segname __ICON
+      addr 0x001b4000
+      size 0x00000020
+    offset 1769472
+     align 2^4 (16)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname app
+   segname __ICON
+      addr 0x001b4020
+      size 0x00000550
+    offset 1769504
+     align 2^4 (16)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Load command 5
+      cmd LC_SEGMENT
+  cmdsize 192
+  segname __NIB
+   vmaddr 0x001b6000
+   vmsize 0x00004000
+  fileoff 1777664
+ filesize 16384
+  maxprot 0x00000001
+ initprot 0x00000001
+   nsects 2
+    flags 4
+Section
+  sectname Info.nib
+   segname __NIB
+      addr 0x001b6000
+      size 0x00000a10
+    offset 1777664
+     align 2^4 (16)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Section
+  sectname MacStuff.nib
+   segname __NIB
+      addr 0x001b6a10
+      size 0x00002170
+    offset 1780240
+     align 2^4 (16)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Load command 6
+      cmd LC_SEGMENT
+  cmdsize 124
+  segname hfs_xfer
+   vmaddr 0x001ba000
+   vmsize 0x00002000
+  fileoff 1794048
+ filesize 8192
+  maxprot 0x00000007
+ initprot 0x00000007
+   nsects 1
+    flags 4
+Section
+  sectname hfs_xfersect
+   segname hfs_xfer
+      addr 0x001ba000
+      size 0x00000960
+    offset 1794048
+     align 2^4 (16)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Load command 7
+      cmd LC_SEGMENT
+  cmdsize 124
+  segname lowseg
+   vmaddr 0x001bc000
+   vmsize 0x00002000
+  fileoff 1802240
+ filesize 8192
+  maxprot 0x00000007
+ initprot 0x00000007
+   nsects 1
+    flags 4
+Section
+  sectname lowsect
+   segname lowseg
+      addr 0x001bc000
+      size 0x00000400
+    offset 1802240
+     align 2^4 (16)
+    reloff 0
+    nreloc 0
+     flags 0x00000000
+ reserved1 0
+ reserved2 0
+Load command 8
+      cmd LC_SEGMENT
+  cmdsize 56
+  segname __LINKEDIT
+   vmaddr 0x001be000
+   vmsize 0x00320000
+  fileoff 1810432
+ filesize 3275909
+  maxprot 0x00000007
+ initprot 0x00000005
+   nsects 0
+    flags 4
+Load command 9
+     cmd LC_SYMTAB
+ cmdsize 24
+  symoff 1810432
+   nsyms 73996
+  stroff 2698384
+ strsize 2387957
+Load command 10
+        cmd LC_UNIXTHREAD
+    cmdsize 88
+     flavor NeXT_THREAD_STATE_REGS
+      count NeXT_THREAD_STATE_REGS_COUNT
+ dregs  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ aregs  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ pad 0x0000 sr 0x0000 pc 0x000046c0

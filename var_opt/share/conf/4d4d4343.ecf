@@ -1,0 +1,9 @@
+// This Configuration file (/executor/configur/4d4d4343.ecf) was built by Executor
+Comments = "MW C/C++ will *not* work under Executor 2.";
+WindowName = "MW C%2FC++ 68K 1.2";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 6.0.7;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

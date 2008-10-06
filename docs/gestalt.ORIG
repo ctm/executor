@@ -1,0 +1,147 @@
+PageMaker 4.2 does a Gestalt call for the AliasMgr and then proceeds
+to use the Alias Manager, even if we say it's not present.  However,
+it will avoid use of the Alias Manager if the Gestalt call itself
+returns an error.  This doesn't appear to be within spec (IMVI), but
+it looks like we should just not know the descriptors that we don't
+support.  Boo.
+
+MacInTax '93 does the same thing with the Edition Manager that
+PageMaker does with the Alias Manager.  It's unclear how widespread
+this problem is.
+
+Claris Works does the same thing with Apple Events... bad!
+
+Because of apps like this, there are a number of selectors that we
+simply fail to recognize, because our support for the functionality
+that is being queried is weak.  Here are the selectors that are likely
+to fit in that category when 2.1 ships:
+
+gestaltAliasMgrAttr
+gestaltApplEventsAttr
+gestaltAppleTalkVersion
+gestaltAUXVersion
+gestaltConnMgrAttr
+gestaltCRMAttr
+gestaltCTBVersion
+gestaltDBAccessMgrAttr
+gestaltEasyAccessAttr
+gestaltEditionMgrAttr
+gestaltFontMgrAttr
+gestaltFXfrMgrAttr
+gestaltHardwareAttr
+gestaltHelpMgrAttr
+gestaltMiscAttr
+gestaltNotificatinMgrAttr
+gestaltNuBusConnectors
+gestaltOSAttr
+gestaltPopupAttr
+gestaltPowerMgrAttr
+gestaltPPCToolboxAttr
+gestaltResourceMgrAttr
+gestaltScriptCount
+gestaltScriptMgrVersion
+gestaltSerialAttr
+gestaltStdNBPAttr
+gestaltTermMgrAttr
+gestaltParityAttr
+gestaltVMAttr
+'icmp'
+'sysa'
+
+These selectors are recognized
+
+gestaltDITLExtAttr
+gestaltFindFolderAttr
+gestaltFSAttr
+gestaltSoundAttr
+gestaltExtToolboxTable
+gestaltToolboxTable
+gestaltOSTable
+gestaltFPUType
+gestaltKeyboardType
+gestaltLogicalPageSize
+gestaltLogicalRAMSize
+gestaltLowMemorySize
+gestaltMMUType
+gestaltPhysicalRAMSize
+gestaltProcessorType
+gestaltQuickdrawVersion
+gestaltQuickdrawFeatures
+gestaltTimeMgrVersion
+gestaltVersion
+gestaltMachineIcon
+gestaltMachineType
+gestaltROMSize
+gestaltROMVersion
+gestaltSystemVersion
+gestaltTextEditVersion
+
+These four will be ignored unless they are specifically enabled by the
+"pretend" options (Pretend Help, Pretend Edition, Pretend Script,
+Pretend Alias) in the preferences panel:
+
+gestaltHelpMgrAttr
+gestaltScriptMgrVersion
+gestaltEditionMgrAttr
+gestaltAliasMgrAttr
+
+Thse two will be recognized if the system version is set to 7.0 or
+higher via the prefs panel:
+
+gestaltStandardFileAttr
+gestaltApplEventsAttr
+
+ARDI has added one special gestalt call, gestaltPHYSICAL ('MUL8')
+which returns the address of a routine that functions just like
+Gestalt, but provides access to a completely different set of tables.
+These tables will contain information about the environment in which
+Executor is running instead the emulated environment that Executor
+provides.
+
+Example:
+
+int PhysicalGestalt (long selector, long *responsep)
+{
+  int retval;
+  pascal int (*physfp) (long sel, long *responsep);
+
+  retval = Gestalt ('MUL8', (void *) &physfp);
+  if (retval == noErr)
+    retval = physfp (selector, responsep);
+  return retval;
+}
+
+...
+
+  OSErr err;
+  long vers;
+
+  err = PhysicalGestalt ('sysv', &vers);
+  /* err should be noErr and vers should be the version of Executor you're
+     running, not the version of the System file we're emulating */
+
+Right now there are only a few PhyscialGestalt selectors recognized:
+
+gestaltSystemVersion,		numeric version of Executor
+gestaltExecutorVersionString,	address of the string version of Executor
+gestaltDemoStatus, 		1, if this is a demo version
+gestaltDemoExpiration,		how many days until the demo expires
+gestaltSerialNumber,		non-demo version: S/N
+gestaltRegisteredName,		non-demo version: name 
+gestaltRegisteredOrg,		non-demo version: organization
+gestaltPhysicalRAMSize,		amount of physical ram on the machine
+gestaltScreenSize,		resolution of the monitor
+gestaltGhostScriptVersion,	win32 only: Ghostscript DLL version
+
+gestaltGhostScriptVersion       = 'gost'
+gestaltExecutorVersionString	= 'xqtr'
+gestaltDemoStatus		= 'demo'
+gestaltDemoExpiration		= 'xpir'
+gestaltSerialNumber		= 's/n '
+gestaltScreenSize               = 'scrn'
+gestaltRegisteredName           = 'name'
+gestaltRegisteredOrg            = 'org '
+
+We are willing to add a variety of other PhysicalGestalt selectors as
+Mac-developers require, including things like amount of memory on the
+system and screen size.

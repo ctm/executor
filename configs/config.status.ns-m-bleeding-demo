@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/ardi/executor/util/configure.sh  '--target=m68k-next-mach3' '--host=m68k-next-mach3' '--front-end=nextstep' '--cflags=-O2 -DNDEBUG -Wall -Wno-import -DRELEASE_DEMO' '--root=/ardi/executor' '--sound=dummy'

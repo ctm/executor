@@ -1,0 +1,1085 @@
+FAQ for Executor [last updated 95-05-16]
+
+This set of answers to Frequently Asked Questions is not designed to
+take the place of our Executor manual.  However, currently our manual
+is not available on-line, so this FAQ does briefly touch on some
+issues that are covered more in depth in our manual.
+
+In addition to this FAQ, there should be README files bundled with
+Executor and there is also an Executor/DOS document that describes how
+to get started with Executor/DOS from a DOS user's point of view,
+which may be useful to users of Executor on other platforms as well.
+That document is called "ERNSTOUD.TXT", since it's hard to come up
+with useful names when constrained by the DOS 8.3 filename limits and
+the author of the document is Ernst J. Oud.
+
+Changes in this issue of the FAQ are denoted with ">>" in the beginning
+of a line.
+
+[1] Executor in General
+
+	[1.1]  What is Executor?
+	[1.2]  On which platforms is Executor available?
+	[1.3]  Who makes Executor?
+	[1.4]  Pronunciation?
+	[1.5]  Does Executor require you to obtain ROMs or System Files
+		from Apple?
+	[1.6]  How long has Executor been in development?
+	[1.7]  What techniques were used to rewrite the OS and Toolbox?
+	[1.8]  What limitations does Executor have?
+	[1.9]  Does Executor run all applications?
+	[1.10]  What do the various Executor version numbers mean?
+	[1.11]  Where can I pick up the Executor demos?
+	[1.12]  Is Executor shareware?
+	[1.13]  How do the demo versions differ from the commercial versions?
+	[1.14]  What's next?
+	[1.15]  When will 2.0 be out?
+	[1.16]  How can I get in ARDI's beta program?
+	[1.17]  Does Executor have networking support?
+	[1.18]  How do you install Fonts and Desk Accessories (DAs)?
+	[1.19]  Will Desk Accessories work under Executor?
+	[1.20]  Does E/D run xxx?
+	[1.21]  What's the best way to keep informed about Executor?
+	[1.22]  Why shouldn't I send e-mail to ctm@ardi.com?
+	[1.23]  What is an ".hfv" file?
+	[1.24]  Can I launch apps directly from the command line?
+>>	[1.25]  What are all the command line switches?
+	[1.26]  Can I have Executor use more than 8Mb for the application zone?
+	[1.27]	An app I'm trying crashes.  What should I do?
+	[1.28]  How do Executor's "license keys" work?
+	[1.29]	Don't your "license keys" allow people to pirate Executor?
+	[1.30]	I want to bundle Executor on a CD-ROM.  Can I do that?
+
+[2] Executor/DOS
+
+	[2.1]  Which FTP sites will carry stable versions of E/D?
+	[2.2]  What are the hardware requirements for Executor/DOS?
+	[2.3]  What do I do if my Super VGA card isn't VESA compliant?
+	[2.4]  Executor crashes with "GrSetMode ; unknown adapter type
+		 in driver."
+	[2.5]  Does E/D require an ASPI driver to access SCSI?
+	[2.6]  Have you released Executor for OS/2 yet?
+	[2.7]  Why won't Executor/DOS work with my Diamond Viper PCI card?
+	[2.8]  Why doesn't my mouse work when I run Executor under OS/2 Warp?
+	[2.9]  Does Executor work under Windows '95?
+
+[3] Executor/Linux
+
+	[3.1]  Can I buy the Linux version now?
+	[3.2]  Why can't the Linux version access floppies with option-shift-2
+	[3.3]  Are we ready to hear about Executor/Linux bugs?
+	[3.4]  Should bug reports be sent one at a time or in a big list?
+	[3.5]  Why is there no Executor for NetBSD or FreeBSD?
+	[3.6]  Where are the bitmaps stored on the Linux version of executor?
+	[3.7]  Will there be an SVGALIB version of E/L in the future?
+	[3.8]  Why do all the non-Executor Windows get creepy colors when
+		Executor is running?
+	[3.9]  How does printing work under Executor/Linux?
+	[3.10] Why does Executor complain that it cannot find 'libXt.so.6'?
+	[3.11] Which FTP sites have E/L
+	[3.12] Why does Lemmings' splash screen take so long to be drawn?
+
+[4] Executor/NEXTSTEP
+
+	[4.1]  Why hasn't there been an Executor/NEXTSTEP release in a while?
+
+
+[1.1]  What is Executor?
+------------------------
+
+	Executor is a commercial emulator that allows non-Macintosh
+	hardware to run some applications originally written on a
+	Macintosh.  Executor has many limitations, see below.
+
+
+[1.2]  On which platforms is Executor available?
+------------------------------------------------
+
+	Executor/DOS (E/D) is an implementation that runs under
+	DOS and Windows.  Executor/NEXTSTEP (E/NS) is an implementation
+	that runs under NEXTSTEP, both on original NeXT hardware
+	and Intel based hardware running NEXTSTEP.  Executor/Linux
+	is an implementation that runs under Linux, using X-Windows.
+
+
+[1.3]  Who makes Executor?
+--------------------------
+
+	ARDI				questions@ardi.com
+	Suite 4-101
+	1650 University Blvd., NE
+	Albuquerque, NM  87102
+
+	+1 505 766 9115 Phone		+1 505 247 1899 FAX
+
+
+[1.4]  Pronunciation?
+---------------------
+
+	Ig-zek'-yu-tor
+
+
+[1.5]  Does Executor require you to obtain ROMs or System Files from Apple?
+---------------------------------------------------------------------------
+
+	No.  Executor reimplements from scratch the Macintosh
+	Operating System and Toolbox.
+
+
+[1.6]  How long has Executor been in development?
+-------------------------------------------------
+
+	Work began in September of 1986.
+
+
+[1.7]  What techniques were used to rewrite the OS and Toolbox?
+---------------------------------------------------------------
+
+	Entirely clean-room techniques.  That is to say none of the
+	Apple ROMs or Apple System File were ever disassembled.
+	Instead ROMlib (the section of Executor that emulates the OS
+	and Toolbox) was written from the manuals "Inside Macintosh",
+	and Tech. notes.  That isn't sufficient to get the degree of
+	compatibility that we need, so tests were written and run on
+	Macs to see what a real Mac would do.  In addition, we run
+	applications under Executor and when they deviate from how
+	they would behave on a Mac, we take a look at what is going on
+	and fix Executor accordingly.
+
+
+[1.8]  What limitations does Executor have?
+-------------------------------------------
+
+	Because the OS and Toolbox have been rewritten from scratch,
+	Executor has many limitations, including no AppleTalk, no
+	sound, no System 7, no INITs, no CDEVs and no
+	Internationalization.  Executor can read and write 1.4 Mb Mac
+	formatted floppy disks, but can not format floppies, nor can
+	it read or write 800 Kb floppy disks.
+
+	E/NS can access the serial ports and can print, E/D and
+	E/L can not access serial ports, but can print to a Postscript
+	file that you can then send to a Postscript printer.
+
+	The reason Executor can't read 800 Kb floppy disks is that physically
+	they're written in a different way than most floppy drives can
+	read, so this limitation won't disappear soon.
+
+
+[1.9]  Does Executor run all applications?
+------------------------------------------
+
+	Currently, no.  In addition to applications that won't run
+	because they require something that we currently don't
+	support (e.g.  System 7), due to our rewriting of the OS
+	and Toolbox, there is room for enough incompatibility that
+	many large programs do not work.  For this reason, we make
+	demo versions of Executor available for potential customers
+	to run before purchasing Executor (see below).
+
+	We are in the process of cataloging what we have tested
+	and will include that as appendix A.
+
+
+[1.10]  What do the various Executor version numbers mean?
+----------------------------------------------------------
+
+	Any 1.x release other than 1.99 is a black and white release.
+	Any release that ends in a lower case letter is technically an
+	"experimental" release.  In general, experimental releases are
+	pre-beta or beta releases that will eventually be released
+	with a higher version number.
+
+	The most recent non-experimental release of Executor/NEXTSTEP
+	is version 1.3.  The most recent non-experimental release of
+	Executor/DOS is 1.2.  There has not yet been a
+	non-experimental release of Executor/Linux.
+
+	Currently, with the recent addition of color support to
+	Executor, Executor is experimental for all platforms.  We are
+	trying to release new versions for all platforms in lockstep,
+	so 1.99b has roughly the same feature set and bug set under
+	DOS, Linux and NEXTSTEP.  Unfortunately, we haven't released
+	a NEXTSTEP release in a while; see [4.1] for an explanation.
+
+
+[1.11]  Where can I pick up the Executor demos?
+-----------------------------------------------
+
+	The canonical place to find Executor demos is ftp.ardi.com.
+	However, ftp.ardi.com is currently only connected to the
+	Internet via a 28.8kb modem, and as such is really only useful
+	to provide data for mirror sites.  When you connect to
+	ftp.ardi.com it will give you a current list of those mirror
+	sites.
+
+	As long as they put up with us, the primary mirror site for
+	ftp.ardi.com is ftp.cs.unm.edu in /pub/ardi.  However,
+	ftp.cs.unm.edu does not have the bandwidth to accept many
+	simultaneous users, so now that we're happy with the stability
+	of our color experimental versions, we also make them
+	available on the traditional sites for commercial demos of the
+	given platform.  See the platform specific answers for a list
+	of these sites.
+
+	We don't mind people making our current experimental versions
+	available on other sites, but *please* be sure to include all
+	the READMEs and FAQs which will allow users to find more
+	current versions of Executor as they're released.
+
+
+[1.12]  Is Executor shareware?
+------------------------------
+
+	No.  Executor is a commercial program available from ARDI.
+	Unregistered demo versions are the only versions that should
+	be found on bulletin boards or FTP sites.  If you find a
+	non-limited version of Executor available to download, it was
+	put there illegally.
+
+
+[1.13]  How do the demo versions differ from the commercial versions?
+---------------------------------------------------------------------
+
+	Prior to Executor 1.99j, ARDI released two separate versions
+	of each Executor/DOS and Executor/Linux release: a
+	time-limited demo, and a full-fledged commercial version.
+	NEXTSTEP versions could be "unlocked" by entering a serial
+	number and registration key purchased from ARDI.
+
+	The E/D, E/L and E/NS "locked" demos are time limited to ten
+	minutes of use.  Once your ten minutes are up, you are thrown
+	out, but you can restart the program again and run for another
+	ten minutes as many times as you want.
+
+	See [1.28] for more information.
+
+
+[1.14]  What's next?
+--------------------
+
+	Our immediate goal is to get Executor 2.0 out.  Back before
+	1.99 was out, we had a set of goals for what would be in 2.0.
+	We have had enough trouble implementing 32-bit color QuickDraw
+	that we have had to pare some features out of what we had
+	orginally proposed for the 2.0 feature set.  Features present
+	in 2.0 are *still* subject to change, but our current plans
+	are to add:
+
+		A file browser -- we've written one in house.  We will
+		be releasing it with source.
+
+		Better documentation
+
+		The ability to change the screen "depth" (number of colors
+		that can be present at one time on the screen) and size
+		on the fly.
+
+		A simpler method for installing fonts and Desk Accessories
+
+		A better set of demo and utility programs
+
+	We also have a set of general and platform specific bugs that
+	we need to have fixed before we can freeze 2.0.
+
+	Beyond 2.0, we want to make Executor compatible with Apple's
+	System 7.5, so you'll be able to purchase a copy of System
+	7.5, install it on top of Executor and get even more
+	compatibility and features.
+
+
+[1.15]  When will 2.0 be out?
+-----------------------------
+
+	The answer here is embarrassing.  Our original target was
+	summer of 1994.
+
+	Here's what is planned between now and when 2.0 ships:
+
+	1.99m will have a significantly faster blitter under DOS,
+		(we're hoping for about a speedup of about a factor
+		of five).  It will also support some screens with 16
+		bpp (thousands of colors) and 32 bpp (millions of colors).
+		We also hope that the remaining
+		DPMI provider bug that we know of will be fixed by
+		then, and we will be paying attention when people find
+		browser bugs.  I don't know if System 7 spoofing will
+		be in "m", but it is my goal (however, of all the ARDI
+		employees, I'm the one who is most likely to not meet
+		my goals).  Floppy disk formatting and the ability to
+		install fonts and DAs by dragging them into the hot
+		band are also tentatively slated for 1.99m, as is a
+		"death certificate" that tells you *why* Executor died
+		when it dies unexpectedly.
+
+	1.99n will have any of the features mentioned above in 1.99m
+		that don't make the cut.  Tentatively, 1.99n will be
+		the last experimental version to have new
+		functionality.
+
+	Beyond 1.99n we plan to fly Cotton out to Albuquerque (he
+		normally works out of Boston) and have a two or
+		three (three is preferred) week "hackathon", where
+		without having to worry about getting a new version
+		out the door, and without any of us having to add new
+		functionality or chase DOS extenders, we'll work
+		exclusively on making more applications run.
+
+	After the "hackathon" is finished, Executor will go into a six
+		week beta period where we only fix major bugs, and
+		document minor bugs.  During this time we'll also be
+		working on our packaging and documentation, working on
+		our list of how well which apps work and which don't,
+		and lining up our distributors, writing our press
+		releases and placing our ads in popular magazines.
+
+	After those six weeks have elapsed, 2.0 will ship.
+
+
+[1.16]  How can I get in ARDI's beta program?
+---------------------------------------------
+	
+	Our beta program is really boring.  The only thing that you
+	get that you can't get over the net is an actual set of
+	floppies that contain installation scripts.  As such, we
+	really don't need new beta members.  Just pick up the
+	experimental versions and keep us informed.
+
+	
+[1.17]  Does Executor have networking support?
+----------------------------------------------
+
+	Currently, no.  Nor, will it be available in Executor 2.0.
+	Networking support is planned for release 3.0, but we do not
+	yet have an estimated date of completion for 3.0.  The first
+	platform to have networking support built in will probably be
+	Linux.
+
+
+[1.18]  How do you install Fonts and Desk Accessories (DAs)?
+------------------------------------------------------------
+
+	The short answer is "wait for our new file browser feature
+	that will allow you to install fonts and DAs via drag and
+	drop."
+
+	However, if you are an old time Macintosh user and you have a
+	copy of Font/DA Mover on a Mac, you can copy the Executor
+	System file over to a Mac, install the Fonts/DAs over there
+	and then bring the System file back to Executor.  This is
+	tricky and not for the faint of heart.
+
+
+[1.19]  Will Desk Accessories work under Executor?
+--------------------------------------------------
+
+	Currently Desk Accessory support is very weak; most will not
+	run.  After we get the browser released that allows easy
+	installation and removal of desk accessories, we'll spruce up
+	our DA code and work on insuring that some of the more popular
+	DAs work.
+
+
+[1.20]  Does E/D run xxx?
+-------------------------
+
+	With all the rush to get 2.0 out the door ASAP, we're
+	putting our testing people to work testing new experimental
+	versions, instead of testing 1.2.  There is plenty that
+	1.2 will not run, and as such, we recommend people try out
+	the demo before purchasing Executor.
+
+	We will be making a list of what runs and what doesn't available
+	as part of this document as Appendix A, but that information is
+	not available in this release of the FAQ.
+
+
+[1.21]  What's the best way to keep informed about Executor?
+------------------------------------------------------------
+
+	Join the Executor mailing list.  Send a message to
+	"executor-request@nacm.com".  Make sure your subject line is blank
+	and your message body says:
+
+	subscribe
+
+	We try to post important events to the net, and send new
+	release information via U.S. mail to our current customers,
+	but the Executor mailing list is where we post news about our
+	experimental versions and where you can send mail to talk with
+	other people who are using Executor.
+
+	If you'd rather get the Executor Interest information in a
+	daily digest form, send the same subscribe message to
+	"executor-digest-request@nacm.com", instead of
+	"executor-request@nacm.com".
+
+	To remove yourself from either mailing list, send a message to
+	the address that you used to subscribe, saying:
+
+	unsubscribe
+
+	This will work only if you send the unsubscribe message from
+	the same account that you used to send the subscribe message.
+	You can also send a message of "help" to executor-request and more
+	information about how to use it will be e-mailed to you.  If
+	you are still having trouble, you can send e-mail to
+	"majordomo-owner@nacm.com" and that will be processed by a
+	person, although it may take a few days for the person to get
+	around to to your request.
+
+	Even after you have unsubscribed to the list, you will
+	continue to get any messages that were posted to the list
+	before you unsubscribed but were not actually sent
+	immediately, but once you have unsubscribed, any new messages
+	that come in will not be sent to you.
+
+	The Executor Interest mailing list is administered by a
+	volunteer.  We do not directly control the list.  Lately there
+	has been a request that we operate a mailing list for
+	announcements only.  Although we can't provide that right now,
+	we're hoping the digestification will make such a separate
+	list much less needed.
+
+
+[1.22]  Why shouldn't I send e-mail to ctm@ardi.com?
+----------------------------------------------------
+
+	Cliff gets tons of e-mail.  E-mail sent to questions@ardi.com
+	is answered much more punctually.
+
+
+[1.23]  What is an ".hfv" file?
+-------------------------------
+
+	Executor has the ability to store an entire Macintosh "volume"
+	(i.e. filesystem corresponding to a disk drive or a partition
+	within a disk drive) in a DOS or UNIX file.  Under DOS, this
+	feature is very handy because there is no way to have files
+	with long names and upper and lower case characters in their
+	names unless you use a ".hfv" file.
+
+
+[1.24]  Can I launch apps directly from the command line?
+---------------------------------------------------------
+
+	Yes.  If an app resides within a UNIX or DOS filesystem, you
+	can specify the name of the app, and documents that you would
+	like the app to open when it starts up, on the command line.
+
+	Apps that reside in ".hfv" files can't currently be launched
+	from the command line.  This will change soon.
+
+
+[1.25]  What are all the command line switches?
+-----------------------------------------------
+
+	NOTE:  we are currently in the process of revamping how executor
+		processes command line switches.  This should allow
+		us to have much less confusing documentation.
+	       
+
+	Switch      Min     Max     Default         Default when switch
+                                                    is present, but with no
+                                                    value specified
+
+	nobrowser
+
+	bpp         1       8       8               8
+	refresh     0       60      0               10
+	shadow      0       1       0               1
+
+	nosplash    0       1       0               1
+
+	noclock     0       1       0               1
+
+	drivecheck  0       1       0               1
+
+	nomouse     0       1       0               1
+
+	applzone    128     8192    1024            2048
+	syszone     128     4096    512             1024
+	stack       64      4096    256             128
+
+	size        512x342 varies  640x480         illegal
+
+	nativecode  0       1       1               1
+
+	Additional Linux/X windows options
+	----------------------------------
+	privatecmap
+	invertedcursorbug
+	geometry
+	synchronous
+
+	The relatively new switch "nobrowser" prevents Executor from trying
+	to run the file browser upon startup.  Sometimes this is a handy
+	to start an appliction a little more quickly and other times it can
+	be useful if the browser save file gets corrupted and the browser
+	refuses to run.
+
+	The switches bpp, refresh and shadow all affect how the screen
+	is emulated.  The number of bits per pixel that the program
+	running under Executor sees is specified by bpp.  If bpp is
+	set to 1, then there are only two "colors" (black and white)
+	available.  If it is set to 8, then 256 colors are available.
+	For Executor/DOS, you need a SVGA board with a VESA compatible
+	driver to get 8 bits per pixel and screen sizes larger
+	than 640x480.
+
+	When Executor first starts up, a "splash screen" is printed.
+	You can omit this splash screen with the nosplash switch.
+
+	One of the hardest things to emulate properly is the internal
+	timing mechanisms of a Macintosh.  Sometimes it is desirable
+	to turn off our clock emulation.  The noclock switch does
+	this.
+
+	When Executor displays a standard "get" or "put" dialog box,
+	there is a button marked "drive" that allows you to cycle
+	through the Macintosh volumes that Executor knows about.  You
+	can use the drivecheck switch to have Executor examine your
+	DOS drives each time you click the "drive" button.  In
+	general, this is more annoying than it is useful.
+
+	The switches applzone, syszone and stack control how much
+	memory is allocated to the application, the system, and the
+	application stack.  In general, if you have more memory,
+	you should override the default applzone and allow Executor
+	to use more memory.
+
+	For X windows users, privatecmap specifies that Executor
+	should use a private colormap.  This is the fastest graphics
+	mode and gives you the most accurate colors, but at the
+	expense of radically changed colors in your other windows
+	whenever the cursor is in the Executor window, and radically
+	changed colors in the Executor window whenever the cursor is
+	outside of it.  Because this is annoying, this mode is not the
+	default. When not in this mode, the pixels in Executor's
+	internal frame buffer are converted to the nearest X colors
+	before being drawn to the screen.
+
+	Executor 1.99<x> uses a new "synthetic CPU" which is much
+	faster than the synthetic CPU in previous releases of
+	Executor.  The speed increase is due to our use of native
+	code; Executor now translates the 68k code being emulated into
+	80x86 code "on the fly" and runs the 80x86 code.  However,
+	like anything that is new, there's a chance that our
+	improvement has some hidden drawbacks.  You can turn off the
+	use of native code by specifying nativecode 0.
+
+	Here is an example of some of those switches:
+
+		executor -applzone 4096 -noclock -nativecode 0
+
+	That would allocate 4 Mb of memory for the applications use,
+	turn off our clock emulation and revert to a slower type of
+	68LC040 emulation -- an unlikely combination of switches.
+
+
+[1.26]  Can I have Executor use more than 8Mb for the application zone?
+-----------------------------------------------------------------------
+
+	Currently, no.  We are reorganizing our memory layout to allow
+	you to do this in the future.
+
+
+[1.27]	An app I'm trying crashes.  What should I do?
+-----------------------------------------------------
+
+	Perhaps the most common avoidable cause of crashes is
+	insufficient memory for the emulated application.  You can fix
+	this by increasing the "applzone" parameter.  For example,
+	many programs which normally die quickly will work with
+	"executor -applzone 4096" (which allocates 4Mb of space for
+	the emulated application; see the list of command line
+	switches and their meanings elsewhere in this document).
+
+	Some programs are unhappy when they discover that Executor
+	does not provide sound support, and crash.  You can turn on
+	the "pretend sound" option before running the application in
+	question and see if this helps.  In addition, some programs
+	have menu items, or preference check boxes that can be used to
+	disable sound.  It is always recommended that you disable
+	sound from within a program in addition to using the Executor
+	sound preferences.
+
+	One example of a program that will have problems with sound is
+	"Ultimate Solitaire".  If you do not disable sound from within
+	Ultimate Solitaire, the game will play fine, until you win.
+	At that point it will tell Executor to start playing a sound
+	and request that Executor notify it when the sound is done
+	playing.  Even with "pretend sound" enabled, this will result
+	in Ultimate Solitaire hanging after you win a game.
+
+	Some programs also save preferences in a file, and if
+	something bad happens to that file, the program can then get
+	confused and will not run properly.  Occasionally this happens
+	to Microsoft Word, and you need to use HFS_XFer to delete the
+	file "Word Preferences" from your "System Folder".
+
+	Although it should not happen, even our file browser keeps a
+	file around that can cause trouble if it becomes corrupt.
+	That file is "godata.sav".  It stores which folders you have
+	open and the contents of your "hot-band".  If that file gets
+	corrupt, the file browser may not run.  In the rare case that
+	the browser won't run, you can use the "-nobrowser" switch
+	when you start Executor to bypass the browser, then you can
+	run a program and from that program you can bring up HFS_XFer
+	and find and rename "godata.sav" and see if that fixes the
+	problem with the browser.
+
+	The "noclock" switch has also been known to help.
+
+
+[1.28]  How do Executor's "license keys" work?
+-------------------------------------------
+
+	We have now added this "unlocking" capability to the DOS and
+	Linux versions.  NEXTSTEP versions have always had license
+	keys.  Now any Executor owner can pick up the latest Executor
+	release from the Internet, "unlock" it with his serial number
+	and registration key, and take advantage of the latest
+	features and bug fixes.  This does not mean that all future
+	upgrades will be available for free in this mode, but we
+	intend to make "minor" upgrades free.
+
+	The "unlocking" process actually modifies your copy of
+	Executor, stamping *your* serial number into it permanently.
+	For this reason, once you have registered a copy of Executor,
+	you may not redistribute it, nor should you leave it on an
+	unprotected machine, where someone may illegally copy it.
+
+
+[1.29]	Don't your "license keys" allow people to pirate Executor?
+------------------------------------------------------------------
+
+	No.  If the proper license fee has not been paid to ARDI, then
+	the use of a fully registered copy of Executor is illegal, no
+	matter how it was acquired.  It is true that since license
+	serial number, authorization key pairs are small bits of text,
+	it is easier to disseminate unauthorized serial key pairs than
+	it is to disseminate unauthorized Executor binaries, but
+	that's beside the point.
+
+	We decided to use serial numbers and authorization keys as a
+	convenience to our customers, especially while we're still
+	pressing toward the release of 2.0 and each new experimental
+	copy is (usually!) much better than the one that preceeded it.
+	We prefer prosecuting the pirates to punishing our patrons.
+
+	Our demo mode allows the honest person to evaluate our product
+	before making the decision to purchase it and become a
+	customer.  The use of an authorization key allows our
+	customers to automatically participate in our beta and even
+	pre-beta testing.  This leads to faster development cycles and
+	a better product.
+
+	
+[1.30]	I want to bundle Executor on a CD-ROM.  Can I do that?
+
+	The short answer is "yes".
+
+	You are able to freely copy and distribute demo versions of
+	Executor, as long as you follow the restrictions set forth in
+	Executor's license panel:
+
+	  Complete, unregistered distributions of Executor may be
+	  copied and redistributed as long as all copies are
+	  unmodified and contain all of the original files in their
+	  entirety.  Once it is registered, Executor may be copied
+	  only for backup purposes.  Licensee may not modify or create
+	  derivative works based on Executor or any part thereof.
+
+	A suggestion: contact us to make sure you have the latest
+	version of Executor.  We can also tell you if a new release is
+	imminent.
+	
+
+[2]  Executor/DOS
+=================
+
+[2.1]  Which FTP sites will carry stable versions of Executor/DOS?
+------------------------------------------------------------------
+
+	E/D is available from the SimTel mirrors.  The primary
+	SimTel mirror is oak.oakland.edu, and you can find the
+	Executor/DOS demo within the "SimTel/msdos/emulator"
+	directory.  Look for exec199?.zip (where ? is a letter,
+	the further into the alphabet the letter, the more recent
+	the experimental release).
+
+        Other SimTel mirrors are:
+
+         St. Louis, MO:  wuarchive.wustl.edu (128.252.135.4)
+                         /systems/ibmpc/msdos
+         Corvallis, OR:  archive.orst.edu (128.193.2.13)
+                         /pub/mirrors/simtel/msdos
+         Australia:  archie.au (139.130.4.6)
+                         /micros/pc/oak
+           England:  src.doc.ic.ac.uk (146.169.2.10)
+                         /pub/packages/simtel
+           Finland:  ftp.funet.fi (128.214.248.6)
+                         /pub/msdos/SimTel
+            France:  ftp.ibp.fr (132.227.60.2)
+                         /pub/msdos
+           Germany:  ftp.uni-paderborn.de (131.234.2.32)
+                         /SimTel/msdos
+         Hong Kong:  ftp.cs.cuhk.hk (137.189.4.57)
+                         /pub/simtel/msdos
+            Israel:  ftp.technion.ac.il (132.68.1.10)
+                         /pub/unsupported/dos/simtel
+            Poland:  ftp.cyf-kr.edu.pl (149.156.1.8)
+                         /pub/mirror/msdos
+            Sweden:  ftp.sunet.se (130.238.127.3)
+                         /pub/pc/mirror/SimTel/msdos
+        Switzerland:  ftp.switch.ch (130.59.1.40)
+                         /mirror/msdos
+            Taiwan:  NCTUCCCA.edu.tw (140.111.1.10)
+                         /PC/simtel
+          Thailand:  ftp.nectec.or.th (192.150.251.32)
+                         /pub/mirrors/msdos
+
+
+	See also [1.11]
+
+
+[2.2]  What are the hardware requirements for Executor/DOS?
+-----------------------------------------------------------
+
+	For Executor/DOS 1.2 you need a '386 or better, VGA, 7 Mb disk
+	space, a 3.5" 1.44 Mb floppy drive, and 4 Mb RAM.  A SCSI
+	Controller is needed only if you want to access external
+	Macintosh hard disks or PowerBooks.
+
+	Executor/DOS 1.99<x> should work in sixteen colors on any VGA,
+	although we do not have the facilities to test more than a few
+	in house.  In addition, if you have a Super VGA that is "VESA
+	compliant", Executor/DOS should be able to provide 256 colors
+	and a range of screen sizes.
+
+
+[2.3]  What do I do if my Super VGA card isn't VESA compliant?
+--------------------------------------------------------------
+
+	There is a shareware SVGA utility that provides VESA compliance
+	for SVGA cards that normally are not VESA compliant.  At the time
+	this FAQ was last modified, univbe50.zip was the most recent
+	release of this extender.
+
+	It is not a product of ARDI, but as a convenience to people
+	picking up experimental versions of Executor, the file
+	univbe50.zip is available in
+	ftp.cs.unm.edu:/pub/ardi/Executor_DOS.  If you use it, you
+	should pay the shareware fee as described in the documentation
+	included in the zip file.  If you have a recent SVGA card you
+	probably don't need univbe.  There may be a more recent
+	version of univbe in oak.oakland.edu:/SimTel/msdos/graphics.
+	This directory also has several other card specific VESA
+	drivers, some of which can be found in vesa-tsr.zip and
+	vesadrv2.zip.
+
+
+[2.4]  Executor crashes with "GrSetMode ; unknown adapter type in driver."
+--------------------------------------------------------------------------
+
+	You must be running an old version of Executor; this error
+	cannot occur in versions >= 1.99h.
+
+	1.99b had problems when Microsoft's display.sys driver is in
+	config.sys.  We have updated the code that had this problem
+	and hope that the problem is now fixed.  If it is not, you
+	must remove display.sys from the config.sys section you use
+	when you're using Executor/DOS.  Please report this bug if you
+	see it in E/D 1.99e or later.
+
+
+[2.5]  Does E/D require an ASPI driver to access SCSI?
+------------------------------------------------------
+
+	If your SCSI drivers patch the "INT 13" BIOS calls, then an
+	ASPI driver is not needed.  As long as "INT 13" can allow Executor
+	to read a SCSI drive, there is no need to use ASPI.
+
+
+[2.6]  Have you released Executor for OS/2 yet?
+-----------------------------------------------
+
+	We plan on making an OS/2 specific version of Executor, but only
+	after we get Executor 2.0 shipping.  However, Executor 1.99l
+	is reported to work well under OS/2 Warp.
+
+
+[2.7]  Why won't Executor/DOS work with my Diamond Viper PCI card?
+------------------------------------------------------------------
+
+	Executor/DOS requires VESA compliant graphics cards.  Many
+	cards are not directly VESA compliant and need a tsr to be run
+	before they will work with Executor/DOS.  On a Gateway
+	computer, you can do this with the "vprmode VESA" command.
+
+
+[2.8]  Why doesn't my mouse work when I run Executor under OS/2 Warp?
+
+	If it's not already there, you may need to add this line:
+
+	DEVICE=C:\OS2\MDOS\VMOUSE.SYS
+
+	to your CONFIG.SYS.  This, and related issues, are described
+	on pages 206-207 of _User's Guide to OS/2 Warp_.  This line
+	should already have been added for you when you installed Warp.
+
+	Also, you may need to load MOUSE.COM in your AUTOEXEC.BAT, for
+	example:
+
+	LOADHIGH C:\OS2\MDOS\MOUSE.COM
+
+	You can also create an AUTOEXEC file specifically for Executor,
+	place it in the same directory as Executor, and configure Warp
+	to execute that file whenever you launch Executor.
+
+[2.9]  Does Executor work under Windows '95?
+
+	Several users have reported that Executor/DOS 1.99l works
+	well under Windows '95.  We have not yet created a version
+	of Executor specifically for Windows '95, but we plan to do
+	so in the future.
+
+
+[3]  Executor/Linux
+===================
+
+[3.1]  Can I buy the Linux version now?
+---------------------------------------
+
+	(Technically, our software is licensed, not sold).  You can
+	now license Executor/Linux and be provided with a serial
+	number and license key from ARDI and "unlock" the experimental
+	Executor 1.99<x> releases as well as Executor/Linux 2.0.*.
+	However, currently there is no printed manual available for
+	Executor/Linux.
+
+
+[3.2]  Why can't the Linux version access floppies with option-shift-2
+----------------------------------------------------------------------
+		(like the DOS version does)?
+		----------------------------
+
+	This problem was fixed in Executor/Linux 1.99j.
+
+
+[3.3]  Are we ready to hear about Executor/Linux bugs?
+------------------------------------------------------
+
+	Yes.  Send them to "bugs@ardi.com" and make sure that you
+	identify what version of Executor you're running (i.e.
+	Executor/Linux 1.99k) as well as what kernel and X-Windows
+	you're using.  Please mention what Mac software you were
+	running when you encountered the bug and explain whether the
+	bug is reproducible or not.  If Executor provides some sort of
+	debug output, please include that as well.  Our NEXTSTEP
+	version has a bug-sending facility that automatically fills in
+	all that information for you.  If we get some time, we'll
+	incorporate that code into Executor/Linux.
+
+	Executor/Linux is bundled with a "send-pr" package that allows
+	you to submit bug reports directly into our "gnats" bug
+	tracking database.  We prefer that you use this tool, although
+	it's not necessary.  See [3.4] for more information.
+
+
+[3.4]  Should bug reports be sent one at a time or in a big list?
+-----------------------------------------------------------------
+
+	In general, it's easier for *us* if you send them one at a
+	time.  Internally we use "gnats", a free bug-tracking tool and
+	we need to separate each bug into a single file for tracking.
+	On the other hand, since by providing us with bug reports
+	you're helping us out, we won't refuse bug reports that are
+	collections.
+
+	In fact, if you're particularly brave, you can pick up the
+	file "send-pr.tar.gz" and install a program "send-pr" which
+	will allow you to send us bug reports pre-formatted for gnats.
+	This will save us time and also give you a bug tracking number
+	that you can refer to in further e-mail to ARDI about the bug.
+
+
+[3.5]  Why is there no Executor for NetBSD or FreeBSD?
+------------------------------------------------------
+
+	We don't currently have the manpower to support it.  The Linux
+	release is a byproduct of the fact that we use Linux in house.
+	After we've cleaned up the Linux version and get some
+	Executor/Linux sales, we'll look into the feasibility of
+	Executor for NetBSD and FreeBSD.
+
+
+[3.6]  Where are the bitmaps stored on the Linux version of executor?
+---------------------------------------------------------------------
+
+	All versions of Executor maintain an internal bitmap
+	corresponding to the actual screen.  We accrue a "dirty rect"
+	as the program draws to what it thinks is the screen via
+	Executor's QuickDraw implementation.  We periodically update
+	the _real_ screen (e.g., the X window) by transferring the
+	"dirty rect" across.  So basically our graphics interface to
+	the host machine consists of nothing more than blitting
+	rectangles to the screen, which aids our portability.  Under
+	X, we use shared memory extensions for speed, but we don't do
+	anything fancy like trying to cache Mac fonts on the X server
+	side.  Spending time trying to do so would be a bad idea for a
+	number of reasons we won't go into.
+
+	"Refresh" mode is useful when the program directly manipulates
+	the frame buffer itself.  In this mode, we periodically
+	analyze the internal screen memory to decide what has been
+	changed, and transfer the changed data to the real screen.
+
+
+[3.7]  Will there be an SVGALIB version of Executor/Linux in the future?
+------------------------------------------------------------------------
+
+	Probably.  Executor/Linux would clearly get a major
+	performance benefit from an SVGALIB implementation.  We are in
+	the process of rewriting our graphics and event handling code
+	so that it will be easy to add this sort of capability, but we
+	don't yet have a timetable for doing so.
+
+
+[3.8]  Why do all the non-Executor Windows get creepy colors when Executor
+--------------------------------------------------------------------------
+		is running?
+		-----------
+
+	This is no longer true for recent versions of Executor.
+	Executor/Linux can run in two modes on 4 or 8-bit X servers.
+
+	  1) "private colormap" mode.  In this mode, Executor "takes
+	     over" all colors on your screen when the cursor is in the
+	     Executor window.  That means that the colors for all your
+	     other windows will suddenly change radically.  This is
+	     the fastest mode, and provides the most accurate colors,
+	     but it can be a real eyesore.  Still, if you're playing
+	     Wolfenstein 3D or some other interactive game, you may
+	     want to maximize performance by using this mode.  You can
+	     enable this mode with "-privatecmap".
+	  2) "non-private colormap" mode.  In this mode (the default),
+	     Executor coexists nicely with other X windows by not
+	     mucking about with the colors they use.  This mode loses
+	     some accuracy and speed, because Executor cannot set the
+	     entire color table to exactly what it wants and it must
+	     convert its internal graphics representation to one
+	     appropriate for the X screen whenever it updates your
+	     display.  We have carefully optimized this conversion
+	     process, so you won't notice the performance penalty most
+	     of the time.
+
+	The "-privatecmap" flag is irrelevant to 16, 24, and 32-bit X
+	servers, since they don't have a color table.
+
+
+[3.9]  How does printing work under Executor/Linux?
+---------------------------------------------------
+
+	Executor expects to print to a PostScript printer, or to send
+	output to a PostScript compatible filter, like GhostScript.
+	When an application prints under Executor, a PostScript stream
+	will be created and sent through the program "executor_filter"
+	which you can create by hand to "do the right thing", or "lpr"
+	if there is no "executor_filter" for Executor to run.
+
+	On our systems, "lpr" automatically does the right thing, so
+	other than occasionally setting our "PRINTER" environment variable,
+	we don't have to do much to print from Executor.
+
+	If you need to write your own filter, you can test it by typing:
+
+		myfilter < myfile.ps
+
+	where "myfile.ps" is some PostScript file you have lying
+	around.  The "<" is VERY important!  Executor does NOT give
+	your filter any command line arguments; it just "pipes" the
+	PostScript file through it.
+
+	CAVEAT #1:  The PostScript that is currently produced relies on
+	some "Encoding" changes that appear not to work with
+	GhostScript.  As such, certain characters are improperly
+	mapped.  Word output for example can not print apostrophes!
+	Yes, we know this is very bad and are looking for a remedy.
+
+	CAVEAT #2:  Different apps running under Executor have different
+	levels of success when printing.  As always, *especially* with the
+	experimental versions, try first to make sure Executor will do what
+	you want it to.
+
+
+[3.10] Why does Executor complain that it cannot find 'libXt.so.6'?
+-------------------------------------------------------------------
+
+	If Executor complains as soon as you start it up, you are either
+	running an old version of Executor (prior to 1.99e, at least) or
+	you are running XFree86 2.x instead of XFree86 3.x.  Currently we
+	do not have the time to create two separate versions of E/L, so
+	use the "current" XFree86 server/libraries.
+
+	It has been reported that you can install the XFree86 3.x shared
+	libraries and still use an XFree86 2.x server.  We have not
+	verified such trickery here at ARDI -- you're on your own.
+
+	When E/L 2.0 is released, we'll reevaluate our "3.x" only policy
+	and if there are a significant number of XFree86 2.x users that
+	would like to run E/L, we'll consider offering a version that links
+	with the XFree86 2.x libraries.
+
+
+
+[3.11] Which FTP sites have E/L?
+--------------------------------
+
+	Other than ftp.ardi.com:/pub/Executor_Linux (too slow) and
+	ftp.cs.unm.edu:/pub/ardi/Executor_Linux, you can also find
+	Executor/Linux in
+	sunsite.unc.edu:/pub/Linux/system/Emulators/executorlinux199?.tar.gz.
+
+	See also [1.11]
+
+
+[3.12] Why does Lemmings' splash screen take so long to be drawn?
+-----------------------------------------------------------------
+
+	As mentioned in [3.8] Executor/Linux by default now tries to
+	cooperate with X-Windows when assigning colors.  That leaves X
+	in charge of "the colormap", which means Executor can't
+	quickly change the colors in the colormap itself.  If you use
+	the "-privatecmap" option when you start Executor, you'll find
+	that Lemmings splash screen will come up much quicker, but
+	you'll also experience the "creepy colors" problem in other
+	windows.
+
+
+
+[4]  Executor/NEXTSTEP
+======================
+
+[4.1]  Why hasn't there been an Executor/NEXTSTEP release in a while?
+---------------------------------------------------------------------
+
+	Recently we've revamped how Executor handles graphics
+	internally.  This broke our NEXTSTEP support, so we have not
+	released a NEXTSTEP version in a while.  Since we have to
+	rewrite that part of Executor anyway, we are looking into some
+	NeXT tools that allow programs to implement very fast
+	graphics.  Before we can use these tools, we need some
+	information from NeXT which thus far has not been forthcoming.
+
+	Howeever, we've now resigned ourselves to the possibility that
+	nobody at NeXT will officially answer our questions.  As such,
+	we're prepared to do the (re-)port of Executor to NEXTSTEP
+	without taking addvantage of these fast screen access methods.
+	We hope to have the port done by the end of May, 1995.
+
+	Perhaps after we have the port done using the standard screen
+	access methods, someone at NeXT will decide that it's worth
+	allowing us to speed things up.
+

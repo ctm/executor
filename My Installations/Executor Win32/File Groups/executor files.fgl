@@ -1,0 +1,278 @@
+[Apps\Shareware\Tex-Edit]
+file0=I:\execwin32.comm\Apps\Shareware\Tex-Edit\Revision History
+file1=I:\execwin32.comm\Apps\Shareware\Tex-Edit\%Revision History
+file2=I:\execwin32.comm\Apps\Shareware\Tex-Edit\Tex-Edit
+file3=I:\execwin32.comm\Apps\Shareware\Tex-Edit\%Tex-Edit
+file4=I:\execwin32.comm\Apps\Shareware\Tex-Edit\Tex-Edit Prefs
+file5=I:\execwin32.comm\Apps\Shareware\Tex-Edit\%Tex-Edit Prefs
+file6=I:\execwin32.comm\Apps\Shareware\Tex-Edit\Tex-Edit Reference
+file7=I:\execwin32.comm\Apps\Shareware\Tex-Edit\%Tex-Edit Reference
+file8=I:\execwin32.comm\Apps\Shareware\Tex-Edit\Welcome to Tex-Edit!
+file9=I:\execwin32.comm\Apps\Shareware\Tex-Edit\%Welcome to Tex-Edit!
+fulldirectory=I:\execwin32.comm\Apps\Shareware\Tex-Edit
+
+[Apps\System Folder\Preferences]
+fulldirectory=I:\execwin32.comm\Apps\System Folder\Preferences
+
+[configur]
+file59=I:\execwin32.comm\configur\50217268.ecf
+file48=I:\execwin32.comm\configur\4c415a48.ecf
+file37=I:\execwin32.comm\configur\47534361.ecf
+file26=I:\execwin32.comm\configur\444f4c4c.ecf
+file15=I:\execwin32.comm\configur\43475246.ecf
+file49=I:\execwin32.comm\configur\4c505243.ecf
+file38=I:\execwin32.comm\configur\47756e53.ecf
+file27=I:\execwin32.comm\configur\44576174.ecf
+file16=I:\execwin32.comm\configur\43504354.ecf
+file0=I:\execwin32.comm\configur\32362e32.ecf
+file39=I:\execwin32.comm\configur\483444c6.ecf
+file28=I:\execwin32.comm\configur\44616e47.ecf
+file17=I:\execwin32.comm\configur\4352534c.ecf
+file1=I:\execwin32.comm\configur\3842494d.ecf
+file29=I:\execwin32.comm\configur\454a3035.ecf
+file18=I:\execwin32.comm\configur\4354494d.ecf
+file2=I:\execwin32.comm\configur\3f3f3f3f.ecf
+file110=I:\execwin32.comm\configur\57494c44.ecf
+file90=I:\execwin32.comm\configur\55505550.ecf
+file19=I:\execwin32.comm\configur\43555341.ecf
+file3=I:\execwin32.comm\configur\41443344.ecf
+file111=I:\execwin32.comm\configur\424f424f.ecf
+file100=I:\execwin32.comm\configur\6f7a6d35.ecf
+file91=I:\execwin32.comm\configur\556c7433.ecf
+file80=I:\execwin32.comm\configur\53635246.ecf
+file4=I:\execwin32.comm\configur\414f7163.ecf
+file112=I:\execwin32.comm\configur\5354775a.ecf
+file101=I:\execwin32.comm\configur\72647020.ecf
+file92=I:\execwin32.comm\configur\57435345.ecf
+file81=I:\execwin32.comm\configur\5368537a.ecf
+file70=I:\execwin32.comm\configur\52415a5a.ecf
+file5=I:\execwin32.comm\configur\41525435.ecf
+file113=I:\execwin32.comm\configur\45474144.ecf
+file102=I:\execwin32.comm\configur\72706db5.ecf
+file93=I:\execwin32.comm\configur\574f4c46.ecf
+file82=I:\execwin32.comm\configur\53704a4b.ecf
+file71=I:\execwin32.comm\configur\5249534b.ecf
+file60=I:\execwin32.comm\configur\50474150.ecf
+file6=I:\execwin32.comm\configur\41527c46.ecf
+file114=I:\execwin32.comm\configur\494e5455.ecf
+file103=I:\execwin32.comm\configur\73506433.ecf
+file94=I:\execwin32.comm\configur\57504332.ecf
+file83=I:\execwin32.comm\configur\53706563.ecf
+file72=I:\execwin32.comm\configur\524a4253.ecf
+file61=I:\execwin32.comm\configur\504c5073.ecf
+file50=I:\execwin32.comm\configur\4d427264.ecf
+file7=I:\execwin32.comm\configur\4154726e.ecf
+file115=I:\execwin32.comm\configur\57696c64.ecf
+file104=I:\execwin32.comm\configur\a78ea8a0.ecf
+file95=I:\execwin32.comm\configur\5843454c.ecf
+file84=I:\execwin32.comm\configur\5370696e.ecf
+file73=I:\execwin32.comm\configur\524c4d5a.ecf
+file62=I:\execwin32.comm\configur\504e4331.ecf
+file51=I:\execwin32.comm\configur\4d4b444e.ecf
+file40=I:\execwin32.comm\configur\48525630.ecf
+file8=I:\execwin32.comm\configur\4164426b.ecf
+file116=I:\execwin32.comm\configur\41324d68.ecf
+file105=I:\execwin32.comm\configur\a7bfc2a2.ecf
+file96=I:\execwin32.comm\configur\58505233.ecf
+file85=I:\execwin32.comm\configur\54424235.ecf
+file74=I:\execwin32.comm\configur\52565253.ecf
+file63=I:\execwin32.comm\configur\50505456.ecf
+file52=I:\execwin32.comm\configur\4d4d4343.ecf
+file41=I:\execwin32.comm\configur\48525631.ecf
+file30=I:\execwin32.comm\configur\45535041.ecf
+file9=I:\execwin32.comm\configur\41706569.ecf
+file117=I:\execwin32.comm\configur\6b616a72.ecf
+file106=I:\execwin32.comm\configur\ac7e5ea0.ecf
+file97=I:\execwin32.comm\configur\63417244.ecf
+file86=I:\execwin32.comm\configur\54424236.ecf
+file75=I:\execwin32.comm\configur\526a3031.ecf
+file64=I:\execwin32.comm\configur\50566d74.ecf
+file53=I:\execwin32.comm\configur\4d4d5042.ecf
+file42=I:\execwin32.comm\configur\48734c61.ecf
+file31=I:\execwin32.comm\configur\455544c6.ecf
+file20=I:\execwin32.comm\configur\43574c44.ecf
+file118=I:\execwin32.comm\configur\484c5832.ecf
+file107=I:\execwin32.comm\configur\f5536b69.ecf
+file98=I:\execwin32.comm\configur\674f4c46.ecf
+file87=I:\execwin32.comm\configur\544b4e4f.ecf
+file76=I:\execwin32.comm\configur\53414e54.ecf
+file65=I:\execwin32.comm\configur\50674c67.ecf
+file54=I:\execwin32.comm\configur\4d504e54.ecf
+file43=I:\execwin32.comm\configur\496d6167.ecf
+file32=I:\execwin32.comm\configur\46424420.ecf
+file21=I:\execwin32.comm\configur\43595153.ecf
+file10=I:\execwin32.comm\configur\42454132.ecf
+fulldirectory=I:\execwin32.comm\configur
+file108=I:\execwin32.comm\configur\434c4144.ecf
+file99=I:\execwin32.comm\configur\6c6f6733.ecf
+file88=I:\execwin32.comm\configur\54745264.ecf
+file77=I:\execwin32.comm\configur\53495421.ecf
+file66=I:\execwin32.comm\configur\506fc450.ecf
+file55=I:\execwin32.comm\configur\4d535744.ecf
+file44=I:\execwin32.comm\configur\4a4b5445.ecf
+file33=I:\execwin32.comm\configur\466c6974.ecf
+file22=I:\execwin32.comm\configur\43764d4d.ecf
+file11=I:\execwin32.comm\configur\424f4c4f.ecf
+file109=I:\execwin32.comm\configur\4d917263.ecf
+file89=I:\execwin32.comm\configur\54775231.ecf
+file78=I:\execwin32.comm\configur\53495478.ecf
+file67=I:\execwin32.comm\configur\50736f64.ecf
+file56=I:\execwin32.comm\configur\4d61656c.ecf
+file45=I:\execwin32.comm\configur\4a524735.ecf
+file34=I:\execwin32.comm\configur\46756e47.ecf
+file23=I:\execwin32.comm\configur\4444534b.ecf
+file12=I:\execwin32.comm\configur\426163d5.ecf
+file79=I:\execwin32.comm\configur\534d4c53.ecf
+file68=I:\execwin32.comm\configur\51444c58.ecf
+file57=I:\execwin32.comm\configur\4d687a75.ecf
+file46=I:\execwin32.comm\configur\4a70616b.ecf
+file35=I:\execwin32.comm\configur\47436f6e.ecf
+file24=I:\execwin32.comm\configur\44454c49.ecf
+file13=I:\execwin32.comm\configur\42646c6d.ecf
+file69=I:\execwin32.comm\configur\522a6368.ecf
+file58=I:\execwin32.comm\configur\4d6f6c54.ecf
+file47=I:\execwin32.comm\configur\4b705353.ecf
+file36=I:\execwin32.comm\configur\474f474f.ecf
+file25=I:\execwin32.comm\configur\44494132.ecf
+file14=I:\execwin32.comm\configur\426e4871.ecf
+
+[Apps\Shareware]
+file0=I:\execwin32.comm\Apps\Shareware\About Shareware
+file1=I:\execwin32.comm\Apps\Shareware\%About Shareware
+file2=I:\execwin32.comm\Apps\Shareware\%speedometer3.23 Folder
+file3=I:\execwin32.comm\Apps\Shareware\%Tex-Edit
+SubDir0=Apps\Shareware\speedometer3.23 Folder
+SubDir1=Apps\Shareware\Tex-Edit
+fulldirectory=I:\execwin32.comm\Apps\Shareware
+
+[Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!]
+file15=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%What's new in StuffIt Expander%AA
+file0=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\Aladdin Order Form
+file1=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%Aladdin Order Form
+file2=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\Aladdin Product Overview
+file3=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%Aladdin Product Overview
+file4=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\Expander Reg. Form
+file5=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%Expander Reg. Form
+file6=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\Icon%0D
+file7=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%Icon%0D
+file8=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\License Agreement
+file9=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%License Agreement
+file10=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\StuffIt Expander%AA Read Me
+fulldirectory=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!
+file11=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%StuffIt Expander%AA Read Me
+file12=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\What was installed (and where)
+file13=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\%What was installed (and where)
+file14=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!\What's new in StuffIt Expander%AA
+
+[Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder]
+file0=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Icon%0D
+file1=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\%Icon%0D
+file2=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\%Read Us First!
+file3=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\StuffIt Expander%AA
+file4=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\%StuffIt Expander%AA
+SubDir0=Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder\Read Us First!
+fulldirectory=I:\execwin32.comm\Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder
+
+[msvcrt]
+file0=I:\execwin32.comm\msvcrt\msvcrt.dll
+file1=I:\execwin32.comm\msvcrt\vc6_eula.txt
+file2=I:\execwin32.comm\msvcrt\vc6_sp3_eula.txt
+file3=I:\execwin32.comm\msvcrt\README.TXT
+fulldirectory=I:\execwin32.comm\msvcrt
+
+[Apps\Demoware\MacBreadboard%C4]
+file0=I:\execwin32.comm\Apps\Demoware\MacBreadboard%C4\4-bit Counter
+file1=I:\execwin32.comm\Apps\Demoware\MacBreadboard%C4\%4-bit Counter
+file2=I:\execwin32.comm\Apps\Demoware\MacBreadboard%C4\D Flip%2FFlop Demo
+file3=I:\execwin32.comm\Apps\Demoware\MacBreadboard%C4\%D Flip%2FFlop Demo
+file4=I:\execwin32.comm\Apps\Demoware\MacBreadboard%C4\Decade Counter
+file5=I:\execwin32.comm\Apps\Demoware\MacBreadboard%C4\%Decade Counter
+file6=I:\execwin32.comm\Apps\Demoware\MacBreadboard%C4\MacBreadboard DEMO 1.1
+file7=I:\execwin32.comm\Apps\Demoware\MacBreadboard%C4\%MacBreadboard DEMO 1.1
+fulldirectory=I:\execwin32.comm\Apps\Demoware\MacBreadboard%C4
+
+[Apps\Commercial]
+fulldirectory=I:\execwin32.comm\Apps\Commercial
+
+[TopDir]
+file0=I:\execwin32.comm\makehfv.exe
+file1=I:\execwin32.comm\printdef.ini
+file2=I:\execwin32.comm\printers.ini
+file3=I:\execwin32.comm\readme.txt
+file4=I:\execwin32.comm\tips.txt
+file5=I:\execwin32.comm\exemove.exe
+file6=I:\execwin32.comm\stderr.txt
+file7=I:\execwin32.comm\stdout.txt
+SubDir0=Apps
+file8=I:\execwin32.comm\dirMap-le
+SubDir1=msvcrt
+file9=I:\execwin32.comm\B2WIN32.dll
+SubDir2=configur
+file10=I:\execwin32.comm\B2WIN16.DLL
+file11=I:\execwin32.comm\README-SDL.txt
+file12=I:\execwin32.comm\SDL.dll
+file13=I:\execwin32.comm\executor.exe
+
+[Apps\Demoware]
+file0=I:\execwin32.comm\Apps\Demoware\About Demoware
+file1=I:\execwin32.comm\Apps\Demoware\%About Demoware
+file2=I:\execwin32.comm\Apps\Demoware\%MacBreadboard%C4
+file3=I:\execwin32.comm\Apps\Demoware\%StuffIt Expander%AA 4.0.1 Folder
+file4=I:\execwin32.comm\Apps\Demoware\Ultimate Solitaire Demo
+file5=I:\execwin32.comm\Apps\Demoware\%Ultimate Solitaire Demo
+SubDir0=Apps\Demoware\MacBreadboard%C4
+SubDir1=Apps\Demoware\StuffIt Expander%AA 4.0.1 Folder
+fulldirectory=I:\execwin32.comm\Apps\Demoware
+
+[Apps\Freeware]
+file0=I:\execwin32.comm\Apps\Freeware\About Freeware
+file1=I:\execwin32.comm\Apps\Freeware\%About Freeware
+file2=I:\execwin32.comm\Apps\Freeware\Risk!
+file3=I:\execwin32.comm\Apps\Freeware\%Risk!
+fulldirectory=I:\execwin32.comm\Apps\Freeware
+
+[General]
+Type=FILELIST
+Version=1.00.000
+
+[Apps\System Folder\Extensions]
+fulldirectory=I:\execwin32.comm\Apps\System Folder\Extensions
+
+[Apps\System Folder]
+file15=I:\execwin32.comm\Apps\System Folder\%windows.rsrc
+file16=I:\execwin32.comm\Apps\System Folder\%mac.rsrc
+file0=I:\execwin32.comm\Apps\System Folder\Browser
+file17=I:\execwin32.comm\Apps\System Folder\windows.rsrc
+file1=I:\execwin32.comm\Apps\System Folder\%Browser
+file2=I:\execwin32.comm\Apps\System Folder\%Extensions
+file3=I:\execwin32.comm\Apps\System Folder\godata.sav
+file4=I:\execwin32.comm\Apps\System Folder\%godata.sav
+file5=I:\execwin32.comm\Apps\System Folder\ParamRAM
+file6=I:\execwin32.comm\Apps\System Folder\%ParamRAM
+file7=I:\execwin32.comm\Apps\System Folder\%Preferences
+SubDir0=Apps\System Folder\Extensions
+file8=I:\execwin32.comm\Apps\System Folder\Printer
+SubDir1=Apps\System Folder\Preferences
+file9=I:\execwin32.comm\Apps\System Folder\%Printer
+file10=I:\execwin32.comm\Apps\System Folder\System
+fulldirectory=I:\execwin32.comm\Apps\System Folder
+file11=I:\execwin32.comm\Apps\System Folder\%System
+file12=I:\execwin32.comm\Apps\System Folder\system.ard
+file13=I:\execwin32.comm\Apps\System Folder\%system.ard
+file14=I:\execwin32.comm\Apps\System Folder\mac.rsrc
+
+[Apps\Shareware\speedometer3.23 Folder]
+file0=I:\execwin32.comm\Apps\Shareware\speedometer3.23 Folder\Speedo 3.21%D1%3E3.23 Doc
+file1=I:\execwin32.comm\Apps\Shareware\speedometer3.23 Folder\%Speedo 3.21%D1%3E3.23 Doc
+file2=I:\execwin32.comm\Apps\Shareware\speedometer3.23 Folder\Speedometer 3.23
+file3=I:\execwin32.comm\Apps\Shareware\speedometer3.23 Folder\%Speedometer 3.23
+fulldirectory=I:\execwin32.comm\Apps\Shareware\speedometer3.23 Folder
+
+[Apps]
+SubDir0=Apps\Freeware
+SubDir1=Apps\Demoware
+SubDir2=Apps\System Folder
+SubDir3=Apps\Shareware
+fulldirectory=I:\execwin32.comm\Apps
+SubDir4=Apps\Commercial
+

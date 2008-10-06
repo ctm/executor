@@ -1,0 +1,9 @@
+// This Configuration file (/executor/configur/41443344.ecf) was built by Executor
+Comments = "Adobe Dimensions needs System 7.0";
+WindowName = "Adobe Dimensions%AA 2.0";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 7.0.0;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR};

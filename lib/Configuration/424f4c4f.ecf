@@ -1,0 +1,9 @@
+// This Configuration file (/us2/mac/Configuration/424f4c4f.ecf) was built by Executor
+Comments = "Bolo";
+// WindowName = "Bolo 0.99.7";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 6.0.7;
+RefreshNumber = 10;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

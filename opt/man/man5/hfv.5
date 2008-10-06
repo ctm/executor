@@ -1,0 +1,23 @@
+.\" (c) 1998 by Abacus Research & Development, Inc. (ARDI)
+.\"
+.\" This man page is part of the commercial Executor package available
+.\" from ARDI <http://www.ardi.com/>.
+
+.TH hfv 5  "April 10, 1998" "Executor 2.0v"
+.SH NAME
+hfv \- File format Executor uses to store Macintosh HFS volumes on
+non-Macintosh filesystems
+.SH DESCRIPTION
+An HFV file is nothing more than an image copy of a Macintosh HFS
+volume.  HFVs can be manipulated by mounting them as HFS
+filesystems (part of the 2.1.x kernel) using the loopback device, or
+by using Rob Leslie's HFS manipulating tools
+<http://www.mars.org/home/rob/proj/hfs/>.
+.SH BUGS
+.B Executor
+doesn't yet support HFS+ volumes.
+.SH FILES
+/var/opt/executor/exsystem.hfv - This HFV used to contain the "System Folder".
+.SH "SEE ALSO"
+\fIexecutor\fP(1),
+\fIAppleDouble\fP(5)

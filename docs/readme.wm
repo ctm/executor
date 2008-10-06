@@ -1,0 +1,63 @@
+ +---------------------------------------------------------------------------+
+ |  wm-FPU-emu   an FPU emulator for 80386 and 80486SX microprocessors.      |
+ |                                                                           |
+ | Copyright (C) 1992,1993,1994                                              |
+ |                       W. Metzenthen, 22 Parker St, Ormond, Vic 3163,      |
+ |                       Australia.  E-mail   billm@vaxc.cc.monash.edu.au    |
+ |                                                                           |
+ |    This program is free software; you can redistribute it and/or modify   |
+ |    it under the terms of the GNU General Public License version 2 as      |
+ |    published by the Free Software Foundation.                             |
+ |                                                                           |
+ |    This program is distributed in the hope that it will be useful,        |
+ |    but WITHOUT ANY WARRANTY; without even the implied warranty of         |
+ |    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          |
+ |    GNU General Public License for more details.                           |
+ |                                                                           |
+ |    You should have received a copy of the GNU General Public License      |
+ |    along with this program; if not, write to the Free Software            |
+ |    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.              |
+ |                                                                           |
+ +---------------------------------------------------------------------------+
+
+This emulator, which I call wm-FPU-emu, is in fact a slightly modified
+wm-FPU-emu which I wrote for the Linux operating system. That emulator
+is based upon an older emulator which I wrote for use with djgpp.
+
+Released versions:
+for djgpp 1.11           wm-FPU-emu version Beta 1.11d   April 1994
+for djgpp 1.11 maint5    wm-FPU-emu version Beta 1.11d2  July 1994
+
+If you merely want to use the FPU emulator, move the file emu387 to
+where go32 expects to find it. See the djgpp documentation for more
+detail on installing and using emu387.
+
+If you want to look at the source for the emulator, you will find it
+in the file wmfpu112.tgz which is a gzip-compressed tar archive. Use
+gunzip and tar to extract the files.
+
+If you wish to compile the emulator, you should be aware that the
+emulator source is set up for compiling on the Linux operating system.
+It is conceivable that it will compile with few problems on other
+operating systems such as OS/2 or even ms-dos. For Linux, I suggest
+moving wmfpu112.tgz to the root directory and then:
+        cd /; tar xpvfz /wmfpu112.tgz '*/wm-FPU-emu/*'
+which assumes that you already have the Linux kernel sources installed,
+otherwise simply do:
+        cd /; tar xpvfz /wmfpu112.tgz
+then:
+        cd /usr/src/djgpp/wm-FPU-emu
+and read the README.
+
+A copy of the GNU General Public License may be found in wmfpu112.tgz
+as the file
+        ./usr/src/djgpp/wm-FPU-emu/COPYING.
+
+A discussion of the performance and limitations of the emulator can
+be found in wmfpu112.tgz in the file
+        ./usr/src/linux/drivers/FPU-emu/README.
+
+
+Bill Metzenthen
+11th July 1994
+

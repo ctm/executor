@@ -1,0 +1,10 @@
+	PS3.0 Installer doesn't run off CD-ROM
+
+		wants to eject CD-ROM, then ask for ATM disk, at least
+		if ATM is one of the things being installed (doesn't
+		eject disk when ATM not installed)
+
+		If I just try to install PS3 itself, the installer
+		runs for a little while and then wants to eject my
+		disk
+

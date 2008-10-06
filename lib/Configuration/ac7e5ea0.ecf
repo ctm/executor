@@ -1,0 +1,4 @@
+// This Configuration file was built by Executor
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitOften, SoundOff, NoWarn32};

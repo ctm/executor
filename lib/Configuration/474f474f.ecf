@@ -1,0 +1,8 @@
+// This Configuration file (474f474f.ecf) was built by Executor
+Comments = "Direct Disk needed to format floppies.";
+// WindowName = "Browser";
+// BitsPerPixel = 8; (use the default)
+// ScreenLocation = { 0, 0 };
+// RefreshNumber = 0;
+// Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR, DirectDiskAccess};

@@ -1,0 +1,206 @@
+This file is designed to help you solve the problems most common to
+beginning Executor users.  Use the search feature of your favorite
+editor to jump directly to the sections which interest you.
+
+	  I. Executor won't install
+
+	 II. Executor won't start
+
+	III. Registration problems
+
+	 IV. Problems reading your Mac floppies or CDs
+
+	  V. Problems using mouse or keyboard
+
+	 VI. Your Macintosh program won't install
+
+	VII. Your Macintosh program won't run
+
+This file assumes that you know how to use Unix-style command line
+switches.  If you don't, see the "Command Line Switches" section of
+the minimanual for instructions.
+
+If your problem is not addressed here, consult the FAQ (Frequently Asked
+Questions) file.  If it does not contain a solution, call +1 505 766 9115
+or write to support@ardi.com with details of the problem.
+
+---------------------------------------------------------------------
+
+		    COMMON PROBLEMS AND SOLUTIONS
+
+---------------------------------------------------------------------
+
+I. Executor won't install
+
+   A. Is there enough disk space free?  Executor needs 10 MB of hard
+      drive space for installation.
+
+   B. If the installation seemed to proceed OK but you don't see an
+      icon, this is normal.  See os_tips.txt or w3x_tips.txt for
+      instructions on how to create an icon for OS/2 or Windows 3.x.
+
+---------------------------------------------------------------------
+
+II. Executor won't start
+
+   A. If you are using OS/2, Windows 3.x, or Windows 95, check out the
+      os2_tips.txt, w3x_tips.txt, or w95_tips.txt files for
+      configuration advice.
+
+   B. Executor/DOS users -- do you have a DOS mouse driver loaded and
+      enabled?  Since Executor/DOS is a DOS-native program, it needs a
+      DOS mouse driver.
+
+   C. Are you running under Windows NT?  If so, you need to start from
+      a FULL-SCREEN DOS prompt rather than a windowed prompt.  You may
+      also need to use the "-vga" switch.  Executor has trouble with
+      SuperVGA video modes on some NT machines.
+
+   D. When all else fails, try starting in so-called desperation mode,
+      with the following command line:
+
+           executor -desperate
+
+      This combines the effects of a variety of troubleshooting
+      switches, to disable (among other things) Executor's usual
+      probing of hardware.  It runs Executor in a minimalist mode.  If
+      this succeeds, then you can begin eliminating switches one by
+      one until you find the problem area.
+
+---------------------------------------------------------------------
+
+III. Registration problems
+
+   A. If the "OK" button doesn't work, it's almost always caused by a
+      typo in the serial number or key.  Check your typing, and use
+      all lower-case letters.  If you used previous versions of
+      Executor, note that you must use the new key which came with
+      Executor 2 and not your old key.
+
+   B. Linux and NEXTSTEP users, are you still running as user root?
+      You must be superuser (root) to register.
+
+   C. If Executor tells you that it's registering, but then asks you
+      to register again when you start it again, it may mean that you
+      have somehow installed two different copies of Executor in two
+      different locations.  Make sure you have only one copy on your
+      hard drive.
+
+   D. Are you trying to run Executor from the CD?  The expanded
+      version of Executor is there in case you want to replace
+      specific files from it -- YOU CAN NOT RUN Executor DIRECTLY FROM
+      THE CD.  You must install Executor on your hard drive in order
+      to run it.
+
+---------------------------------------------------------------------
+
+IV. Problems reading your Mac floppies or CDs
+
+   A. Are your floppies high-density (1.44 MB) floppies?  PCs cannot
+      read Macintosh 400K or 800K floppies.  In fact, PCs cannot read
+      high-density floppies if they've been formatted in 800k format,
+      so even if your floppy says "HD" on it, if it was created on an
+      old Mac (like an SE), it may be in 800K format.  We apologize for
+      the inconvenience this creates, but it's a physical problem that
+      would take special hardware to resolve.
+
+   B. Did you select Check for Disk from the File menu and scroll
+      along the hotband to view all the Volumes icons?
+
+   C. If you were using another disk earlier, did you eject it via the
+      File menu before removing it physically?  Macintoshes do all
+      their floppy ejection via hardware that's controlled by
+      software.  That means that Macintosh programs always know when a
+      floppy has been ejected.  As such, Executor requires you to
+      explicitly tell it before you remove a floppy from the drive.
+      If you just pop a floppy out and put a new one in, Executor will
+      get confused and quite possibly crash, or even worse, corrupt
+      data on the floppy.
+
+   D. Is your CD a hybrid, with both DOS and Macintosh sections?
+      There are different ways that hybrids can be made.  Some hybrids
+      won't work with Executor.
+
+   E. If you are running under Windows '95, and Executor is having
+      trouble reading your Mac CDs, you will have to tell Windows '95 to
+      run MSCDEX (which is what Executor uses to see CDs).  Simply remove
+      the
+
+           rem - By Windows 95 Setup
+
+      portion from fthe mscdex line in your C:\AUTOEXEC.BAT file.  You
+      will also need to edit your C:\CONFIG.SYS file and make sure the
+      CD-ROM driver is also not commented out.  See w95_tips.txt for
+      details.
+
+      CD-ROM problems are so common, that the file "CDINFO.TXT" should be
+      installed in your Executor directory, and it contains even more
+      information about MSCDEX.
+
+---------------------------------------------------------------------
+
+V. Problems using mouse or keyboard
+
+   A. If you are using a non-United States keyboard, type
+
+           executor -keyboards
+
+      (plural) to get a list of keyboard maps Executor can support.
+      Start with the line
+
+           executor -keyboard keyboard_map_name
+
+      (with "keyboard" singular) to invoke that keyboard map.
+
+      If this does not work properly, you may need to set your system
+      software to American keyboard mode and then try the "-keyboard"
+      switch again.
+
+   B. Does your right alt key work as a second command key instead of
+      as an option key?  Linux users, check your .Xdefaults file to
+      make sure that the right_alt line is not commented out.  It is
+      commented out by default in many distributions.
+   
+   C. Are you running on a laptop with only one alt key?  There is yet
+      no easy way to change another key to function as an option key.
+      You will have to use the pull-down menus to access these
+      functions.
+
+---------------------------------------------------------------------
+VI. Your Macintosh program won't install
+
+   A. Does the installer fail to work?  The older version of Apple's
+      Apple Installer will not run under Executor.  See the
+      install.txt file for instructions on installing these programs.
+
+   B. Does the program complain that there is not enough disk space to
+      install?  Make a new Macintosh volume with the makehfv program
+      (see "Making HFV Files" in the minimanual), and install the
+      program there.
+
+---------------------------------------------------------------------
+VII. Your Macintosh program won't run
+
+   A. Are you installing a program?  The older version of Apple's
+      Apple Installer will not run under Executor.  See the
+      install.txt file for instructions on installing these programs.
+
+   A. Does the program need System 7.5 or QuickTime?  Is it an INIT or
+      CDEV?  Does it require a modem or a network?  Executor does not
+      currently support those Macintosh features, and so such programs
+      won't run.
+
+   B. Does it need System 7?  Use the "-system" command line switch to
+      start Executor in System 7 mode.  Then save your preferences in
+      the Preferences Panel (see "Command Line Switches" and "The
+      Preferences Panel" in the minimanual).
+
+   C. Try allocating more memory with the "-memory" switch.
+      Insufficient memory can cause a variety of strange errors.
+
+   D. Try setting Executor to "Pretend" sound (see "The Preferences
+      Panel" in the minimanual), or turning Executor's and the
+      program's sound completely off.  Sound support is new, and some
+      programs will work better without it.
+
+---------------------------------------------------------------------

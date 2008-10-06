@@ -1,0 +1,642 @@
+Low priority wish list.  This is just for random things that you
+notice but don't intend to improve any time soon.
+----------------------------------------------------------------------
+Modify gdb so it assigns labels to branch targets "on the fly" and
+remembers them.
+
+gestalt.c should recognize the gestaltVMAttr selector, but return 0
+for its value.  See the comments preceding gestaltVMAttr in gestalt.c
+for more information.
+
+rsys/glue.h can probably go away.
+
+FAKEASYNC and CALLCOMPLETION are big enough that they should be
+functions, not macros.
+
+Replace all bzero's with memset's.
+
+Make rsys/libcproto.h and rsys/Olibcproto.h go away.
+
+Give some thought to rootless windows during the code restructuring
+phase.  Also mapping Mac menus to Windows menus might be nice, for ISV
+bundling and such.
+
+Use LOCK_HANDLE_EXCURSION_* and THEPORT_SAVE_EXCURSION everywhere
+appropriate.  DrawDialog is one example where it would be handy.
+
+Change slash.c so that DOUBLE_SLASH_ADVANCE just calls a subroutine
+with alloca(strlen(path) + 1) as the first argument and path as the
+second argument.
+
+Fetch and read this document:
+  ftp://ftp.microsoft.com/developr/msdn/unix2n.zip.
+
+Fix code like this:
+      if (Hx(c, contrlVis) &&
+to use HxX and avoid the pointless byte swap.
+
+Fix old Cliff macros that require you to avoid using a semicolon.  Use
+either the "do { } while (0)" trick or the ({ }) gccism.  Avoiding the
+semicolon confuses `indent' and some of these macros are not safe in
+situations involving if/else statements.
+
+Change (*item).p to item->p.
+
+HOOKSAVEREGS() and HOOKRESTOREREGS(), and other old macros, should go
+away.  In general, check all macros in rsys/cruft.h.  Some macros are
+obsoleted by other suggestions in this file.  With the new m68k port,
+TONS of macros (for register calling conventions, preserving a5, etc.)
+are all totally useless.  They should be axed.
+
+Some #if 0's are useful for future reference, but there are many
+#if 0's that are totally dead and just cluttering things up.  Such code
+should go away.
+
+A function "extern GrafPtr setport_return_orig_port(GrafPtr new_port);"
+would make THE_PORT_SAVE_EXCURSION macro a little simpler and smaller,
+especially considering what a mess `thePort' expands to.
+
+Straighten out the whole "ROMlib_hook" thing, e.g. from script.c:
+#if defined (BINCOMPAT)
+    ROMlib_hook(script_notsupported);
+#endif /* BINCOMPAT */
+
+maybe make romlib_stubs go away.
+
+Make a ROMlib global variable for the Point {1, 1}, which we use in
+many places, and perhaps for Point {CWC (1), CWC (1)}.  I think
+with gcc these could actually be macros:
+ #define POINT_1_1	((Point) { 1, 1 })
+ #define POINT_1_1_be	((Point) { CWC (1), CWC (1) })
+This is better than having a global struct because it lets gcc just
+use a 32-bit constant, instead of a variable in memory.  The drawback
+is that taking pointers to this value will result in a new struct for
+each .o file.
+
+Work on making disasm jump the tracks less often.
+
+Write a tool that takes a disasm file as input and can tell you where
+decisions might have been made to get you to a certain point in the
+code.
+
+On the x86 we can add to a swapped 2-byte value with an addb and an
+adcb (we can also subtract).  This works for memory locations and for
+%ax, %bx, %cx, %dx (various combinations of src and dest).  So for a
+memory operand, movw;rorw;addw;rorw;movw becomes addb;adcb.
+
+Write an assembly filter to recognize and optimize this combo, and others?
+
+We should be better about using convenience functions, like SetRect,
+OffsetRect, RECT_WIDTH(), etc. instead of doing it by hand over and
+over again.
+
+Write a RECT_SET(rect, t, l, b, r) that gloms adjacent constant args
+together and writes them out as a single long, etc.  Or just fix
+gcc to do this?
+
+Replace many BlockMove's with memmove's.  memmove is *FAR* faster
+because it doesn't have to do syn68k junk to decompile code.
+
+Axe all ONLY_DESTROY_BETWEEN_CODE_SEGMENTS stuff (it's been replaced
+by syn68k block checksumming).
+
+Use int or long, not INTEGER, for misc. loop counters.  ints are
+generally better on the x86 and RISC chips.
+
+Merge rsys/prefs.h and rsys/flags.h
+
+Make ROMlib_emptyvis go away.
+
+Make ROMlib_installhandle go away (?)
+
+Delete all empty, unused, and otherwise bogus header files, and all
+references to them.
+
+str255assign should probably call memmove instead of BlockMove
+(which has additional baggage).
+
+Clean up #define main oldmain cruft.
+
+Make main() small.
+
+Under DOS we could use the dpmi discard pages call to drastically cut
+down on paging.  For example, we can call this when large blocks of
+memory are freed on the heap, or on our stack.  Sandmann says this can
+be a big win.  It would be easy enough to write a function like:
+  void dispose_memory (void *start, uint32 num_bytes); That would
+dispose any *complete* pages in that range (we couldn't toss the
+partial pages on either end, obviously).  We could call this routine
+at various times to improve paging performance.  This is an especially
+big win because of round-robin Mac heap semantics, which are terrible
+from a virtual memory perspective.
+
+----------------------------------------------------------------------
+Re-indent all the sources.  We need to tell indent about all of our
+types, or it does the wrong thing with:
+
+(StringPtr) &foo
+
+As far as indent knows, StringPtr is an expression, and the & is a
+binary bitwise AND, so indent changes the code to:
+
+(StringPtr) & foo
+
+If you say "indent -T StringPtr" the right thing happens.
+----------------------------------------------------------------------
+
+Answer the question, "why is Executor so big?" and see where that leads.
+
+Get no warnings when compiling with these CFLAGS:
+"-O -Wall -Wstrict-prototypes -Wmissing-prototypes -Wnested-externs"
+
+Use NEXTSTEP gprof to determine a good link order to avoid paging.  Or
+perhaps write a Perl script that can do the same thing based on gprof
+output.
+
+Minimize long include chains.
+
+Add `const' directives everywhere we can, even in A-line trap handlers
+(although there is always the question of what happens if the trap is
+ patched out and the patched out trap modifies the value...)
+
+It would be nice if we could leverage stroked font support from
+windowing systems that support them.  I think we just need an
+interface that allows us to query the server for a list of font names
+and also allows us to have it draw fonts in a bitmap that we can read
+and then store in Executor space.
+
+Modify syn68k to allow more "direct" A-line trap calls (for speed).
+
+Get rid of all CW(constant), CL(constant), and esp. Cx(constant) <--
+evil!  These are easily located with some __builtin_constant_p magic
+in those macros.  In cases where the operand can be either a constant
+or a non-constant (as in a macro def'n containing a CW), use `CWV' or
+`CLV' as appropriate.  Those macros decide at compile time whether to
+swap the input as a constant or not.
+
+Punt PascalToCCall and replace with N machine-generated functions that
+are hardcoded to handle a particular set of arguments.  We'd only
+create one instantiation of each calling convention type and share it
+among all functions with that signature.  That lets us eliminate
+Cliff's hack to handle traps with > 9 arguments and it's substantially
+faster than the current approach.
+
+Use hardcoded functions for all CToPascalCall and PascalToCCall.
+We'll build one instantation of each required function based on the
+types of traps we have *AND* also if we see any calls to
+call_ptoc_[call signature] in the Executor sources we'll make sure
+that exists as well.  We won't need any more ridiculous kludges to get
+flags for ctop calls (like right now we sometimes just use the flags
+for another trap which we know has the same signature...blech!)
+Increase locality of reference by sorting functions by reference count
+(# of traps that use it), so little-used functions tend to go at the
+end and common ones are all lumped together?
+
+Unify syn68k and Executor byteswapping and stuff.  Right now PUSHUL
+does slow byte swapping of constants and stuff...blech.
+
+Eliminate P8(...) etc. macros, and replace with normal C syntax
+(perhaps preceded with magic keywords to indicate a trap...?  keywords
+not necessary if we do scheme-like hack, below) This will let us use
+standard tools like etags and be less baffling for newbies.  We may be
+able to use this in conjunction with some tool that generates
+prototypes (is there a makeproto or something?) to create ptocflags,
+etc.
+
+Have one (scheme-like?) file that describes information about each
+trap, with information like: trap number, name, selector info, C
+function that handles it, and maybe some info about calling convention
+(normal pascal, or 1st arg is in a0, ret val in d0.w, whatever).
+Maybe also throw in an int indicating a guess for how common that trap
+is, for potential locality-of-reference hacks.
+
+We could have a flag that says "even if this trap is patched out, we
+won't call the patched out version inside ROMlib code."  That way we
+could say that if, for example, we call BitAnd, we'll just call BitAnd
+and not check for a patched out version.  This is a speed and space
+improvement, and we can do it for some traps because any program that
+relies on us making a particular sequence of trap calls from within
+another trap will lose anyway.  We'd clearly want to let them patch
+out "big things", but stuff like SetRect, etc. we should just be able
+to call directly.  I think Apple has introduced the notion of traps
+that cannot be patched out, too.  We could also mark traps that say
+"this trap cannot be patched out" (as a speed hack) and then complain
+if the program attempts to patch it out.  We could programmatically
+generate a packed bit array for all traps indicating whether or not it
+can be patched out.
+
+  We can avoid annotating the C code for traps with P8, etc, and
+instead use this list to decide which C functions should be examined
+and processed.
+  If we note information about calling conventions, we may be able to
+machine-generate stubs that call the real C handler with the
+appropriate args plucked from syn68k space, or even generate
+scheme-like code to allow syn68k or vcpu to *directly* call the C
+handler (when not patched out).
+  We could even annotate the scheme entry for each trap with
+information about what logging actions should be taken for that trap
+when in debugging mode; machine-generated glue that sits between the
+trap invocation and the C function can handle the tracing
+appropriately.
+
+Right now we handle patched out traps in a slow and voluminous way,
+with a large ?: expression for each C call to anything which is a trap
+(see rsys/stubify.h).  Instead, we could have a big table of function
+pointers, which by default point to our C handler, but alternately
+point to machine-generated stubs that call the patched out code.  The
+stubs can even be placed in a library (.a) so only the stubs we
+possibly call internally will take any space in the executable.  One
+way to avoid having a separate stub for each trap which we can call is
+to have the function pointer in the table take an extra uint32
+argument at the end.  This argument would be ignored by the "real"
+handler (C calling convention ignores extra args), but the c-to-p stub
+could use that uint32 as the address for the patched out code to call.
+So we'd need one c-to-p stub for each trap call signature (arg types +
+return type), rather than for each trap.
+  The problem with this approach is apps who slime the trap tables
+directly, without calling SetTrapAddress().  Do people do this?  We
+don't handle it now because our tables are in the wrong byte order,
+and (I think) not at the right address (Quark examines address
+0x1008).  We could catch this sliminess by write-protecting the trap
+tables...hmmm.  Even if we don't do that, we could still have stubs
+which check to see if the trap is patched out, and if not then just
+call the real routine.  That would allow us to punt the space taken by
+the ?: for every single invocation of the trap.  We may also be able
+to do other slimy things, like have legitimate C function pointers in
+the trap tables, and tell syn68k to compile jumps to each of those
+addresses specially or something (toss those addresses in its hash
+table).  Byte swapping those function pointers confuses the issue
+though, since a swapped C function address may be legitimate 68k
+code...
+
+Have a scheme-like file describing low globals.  It would describe
+their name, type, address, and even initial contents on bootup,
+launch, whatever.  Some variables of course will have initial contents
+too difficult to describe here...that's fine, just note that and let
+them get set up at runtime with special case C code.  At compile time
+we can figure out what low memory should look like, and PackBits that
+into a C array which gets unpacked at runtime when we initialize mem.
+  We can also put in trace information that describes what should be
+done when these variables are accessed under a debugging vcpu or under
+a debugging Executor with page 0 read/write trapped for logging
+purposes.  This file could generate the appropriate lowglobals.s for a
+given host, and even make a .gdbinit that could print them (or "dump"
+them) in the appropriate byte-swapped format.
+
+Implement code to allow P_ExitToShell (etc.) to be compile-time
+constants, and ask syn68k to put the callback at that address in
+particular.  It should be possible to machine-generate this
+information.  That way we can CLC() them, etc.
+
+----------------------------------------------------------------------
+Implement a "package" interface for things like vdriver, events, etc.
+This would allow us to:
+
+  1) Support multiple vdrivers, etc. simultaneously.  Right now we
+     have separate svgalib and x windows Linux Executors for no good
+     reason.
+  2) Dynamically load packages we need, and leave unused packages on disk.
+  3) Release updates for things like sound, video, etc. without an
+     entire Executor binary.
+  4) Distribute the source to various packages (like the svgalib front end).
+  5) Make it easier for new engineers to implement ports to different
+     systems.  Once they implement the API, Executor should work.
+  6) Load initialization routines that won't be hit again into a
+     separate area of memory, for performance reasons.
+
+Each package class will have a unique name (e.g. "vdriver"), and each
+subclass will also have a unique name (e.g. "vga").  All global
+symbols for that package will be preceded with "vdriver_vga_", etc.
+
+All code outside those packages will just be able to call
+"vdriver_shutdown".  In reality that will be a macro for some entry of
+a function pointer struct (or array?) corresponding to that package.
+The real entry might point to "vdriver_vga_shutdown".  HOWEVER, if
+only one package is compiled in for that particular category (e.g. we
+only build in "arch_i386_") then those macros will point directly to
+that package and no function pointer table will exist.
+
+We'll also need to do something about globally visible symbols,
+e.g. "vdriver_width".  There are a few ways to handle those.  Probably
+they should just be tossed in a struct for that package.
+
+We can support subclassing (useful for different types of vga,
+e.g. svgalib and VESA).
+
+I think we should also facilitate NOPs by allowing packages to request
+a magic function pointer for a function that returns 0 and one that
+returns 1...we'll just share one instantiation of each of those
+functions.
+
+With multiple packages being allowed, we can't use preprocessor
+conditionals in the same way we do now.  For example, right now we
+have VDRIVER_DISPLAYED_IN_WINDOW; this will be #defined for X but not
+for svgalib...in the future we want both packages to be simultaneously
+enabled.  I think the way to handle this may be to have preprocessor
+conditionals that say VDRIVER_{ANY,ALL,NONE}_DISPLAYED_IN_WINDOW,
+based on what subset of vdriver packages installed support that
+feature.  That way we'd know we don't need the "far pointer" special
+case code for either svgalib or X windows, but we do need it for VESA,
+etc.
+
+Each package should be able to report its dependencies so we
+initialize the packages in the proper order.
+
+Executor should have a list of required packages, like `arch', `os',
+`vdriver', `events', so we can tell at compile time if a configuration
+is not legitimate.
+
+I think we want to use the package interface for things like block
+devices, so we can have ASPI, BIOS, mscdex, HFV all be separate
+packages.  This is a little different than the previously described
+model, since we might have several instantiations of this package
+present at once.  How do we handle this gracefully?  If each package
+is a struct full of function pointers and global variables, we can
+just keep a pointer to the struct around, and call functions in that
+struct.  Or, for special packages with multiple simultaneous
+instantiations, we can make the first arg to most calls of that
+package be a pointer to one of those structs with the function
+pointers, e.g. "blockdev_read (dev_info, buf, 0x200);" or whatever,
+which would be a macro for "dev_info->read (buf, 0x200)".  I dunno.
+This is a bit confusing, since the natural approach involves having
+distinct structs for each device (e.g. two HFV's have two different
+structs) even though they use the same package to be processed.  This
+would mean the structs couldn't be exactly the same as the generic
+package struct.  Maybe that's not so bad.
+
+Each package must provide:
+  [package]_init(allow args, or should all be void?)
+  [package]_shutdown (void)
+
+I'm also toying with the idea of a stub function that tells whether
+the rest of the package should be dynamically linked into the
+executable.  For example, an X11 package could see if X is running,
+and if not we wouldn't bother loading up the code for the rest of the
+package.
+
+Should we just use ObjC or C++ for packages?  I'm concerned about the
+portability implications, although maybe ObjC is everywhere gcc is
+these days.
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+[Note: I hacked up some of this stuff in ~mat/x86fetch.c]
+
+A common operation right now is to deference a handle pointing to a
+struct, grab some bytes in that handle, and swap them (an Hx
+operation).  We could make Executor smaller (and faster on i486's) by
+having N machine-generated asm routines which do this for us...we'd
+have to be more consistent about using Hx and HxX then.
+  The chosen asm routines could even use bswap or rorw;rorl;rorw
+depending on whether they were on an i486 or an i386.  We can use
+gcc's register calling convention directive so calls to these routine
+are fast; however, it may be even better to just make these be inline
+asm `call' statements and make sure they smash no registers at all, so
+gcc doesn't have to save any regs when calling the subroutine.
+Question: should the return value come back in a different register
+than the input value?
+  To be more specific: we'll have a slew of tiny routines which take
+as an argument a handle in %eax, and each is hardcoded to return a
+byte, word or long offset N bytes from that dereferenced handle.
+  Each routine can have an alternate entry point right before the main
+function; this entry point would also swap the handle first (useful
+when it was snarfed from a low global or whatever).  So anyway, one of
+these routines might look like:
+
+	.align	4		; .align 16 under Linux, bleah
+_fetch_swaph_offset12_swap32:
+	bswap	%eax		; swap handle itself
+_fetch_offset12_swap32:
+	movl	(%eax),%eax	; dereference handle
+	bswap	%eax		; put that in native order
+	movl	12(%eax),%eax	; fetch a long from that struct
+	bswap	%eax		; byte swap it
+	ret			; and return
+
+and on the i386 it would be generated as the following routine.  The
+first `jmp' is necessary so there are still two bytes between the two
+entry points (bswap takes 2 bytes).
+
+	.align	4		; .align 16 under Linux, bleah
+_fetch_swaph_offset12_swap32:
+	jmp	2f		; need to do it this way, only got 2 bytes
+_fetch_offset12_swap32:
+	movl	(%eax),%eax	; dereference handle
+	call	1f		; byte swap it, who cares about i386 speed
+				; this hack keeps maximum routine size down
+				; although if these are aligned % 16
+				; and we have room, we can just inline
+				; this byte swap.  Right now this takes
+				; 31 bytes, so there's no room.
+	movl	12(%eax),%eax	; fetch a long from that struct
+1:	rorw	$8,%ax		; byte swap it
+	rorl	$16,%eax
+	rorw	$8,%ax
+	ret			; and return
+2:	pushl	$_fetch_offset12_swap32		; fake ret address
+	jmp	1b
+
+Actually this is better done with xchgb on the 80386.
+
+These functions would start out as the following routine with the same
+entry points, and get lazily compiled to either the i386 or the i486
+version:
+
+	.align	4
+_fetch_swaph_offset12_swap32:
+	jmp	2f
+_fetch_offset12_swap32:
+	pushl	$_fetch_offset12_swap32		; fake `ret' address
+1:	pushl	$12				; offset
+	pushl	$4				; value size
+	pushl	$_fetch_swaph_offset12_swap32	; start of code to rewrite
+; WARNING!!!!!!!!!!!!!!  If we do the `asm' hack to call the fetch routine,
+; so gcc doesn't save as many regs, we need to make SURE that
+; setup_x86_fetch_routine saves ALL registers, perhaps with pushal/popal.
+; we can't do that here since we're about to smash our own code.
+; We can call a stub routine which does a pushal/popal around a call
+; to C code to fill in the stub.
+	jmp	_setup_x86_fetch_routine
+2:	pushl	$_fetch_swaph_offset12_swap32	; fake `ret' address
+	jmp	1b
+
+
+Here's one way to write the glue routine that preserves regs and calls
+a routine to create the real routine.  Maybe the entire routine to
+lazily compile the translator should be written in assembly...it
+basically just slams out a few bytes and fills in some holes with the
+supplied operands.
+
+_setup_x86_fetch_routine:
+	pushal				; save all regs
+	pushl	32(%esp)		; copy args to stack
+	pushl	40(%esp)
+	pushl	48(%esp)
+	call	_create_x86_fetch_routine
+	addl	$12,%esp		; pop off old args
+	popal				; restore regs
+	addl	$12,$esp		; pop off old args
+	ret
+
+  We could also have a routine that writes a value to such a
+dereferenced location.
+  We could put these routines in a library so we only link in the ones
+we need.  Their initial code could set itself up appropriately for the
+i386 or i486 (self-modify).  This way we only use the ones we need.
+  I'm not sure how we'd tell gcc to call different functions based on
+offsetof() and sizeof() the field being dereferenced...tricky.
+Actually if we use asm() directive to call this we might just be able
+to make offsetof and sizeof be operands to the asm and have them get
+textually glommed into the called routine name.  Hehheh.  We could
+also easily machine-generate access macros for various structs, I
+guess.
+----------------------------------------------------------------------
+
+Using special macros which call subroutines to access and byte swap
+struct fields should help us keep Executor's size down on
+architectures with strict alignment constraints.  Otherwise each
+struct field reference may involve more inline code to load individual
+bytes and munge them together.  Instead we can store that code in a
+few subroutines.
+
+Machine-generate accessor macros for structs.  Not sure how useful
+this is, and it would take some effort to preserve our naming
+conventions.  OTOH, we'd get consistent naming conventions when done,
+and if we ONLY used accessor macros, we'd be closer to compiling on
+non-gcc compilers.  The code generated to access a struct field would
+be *(long *)((char *)&foo + 14) or whatever...it could do clever
+things when there are alignment problems on the host.
+
+What would happen if we postprocessed our assembly and extracted all
+sequences of 6 insns or more that show up 4 or more times into a
+subroutine, and have everyone just call that?  (Be careful with
+anything that touches the stack, obviously).  We could add magic asm
+directives to mark time-critical code when we shouldn't do this.  And
+we could juke those shared subroutines to self-modify to use bswap
+when necessary...hmmm...
+
+Use hardware acceleration for drawing lines whenever we know the
+accelerated line will be pixel for pixel correct.
+
+Experiment with using pushl in blitter again.  This used to lose when
+interrupts came in and used the screen for stack space, but that may
+have been before we started using V2 for everything (???)...DPMI might
+never use our stack for anything (false under WinNT?)
+
+replace all `NewHandle (...); memset (..., 0, ...); with `NewHandleClear (...)'
+
+Use NewPtrSys() to rewrite code like this (from fileAccess.c):
+        saveZone = TheZone;
+	TheZone = SysZone;
+	cachedir = (char *) NewPtr(dirnamelen+1+MAXNAMLEN+1);
+	TheZone = saveZone;
+NewPtrSysClear() for this code from main.c, etc.:
+  TheZone = SysZone;
+  UTableBase =
+    (DCtlHandlePtr) (long) CL (NewPtr (sizeof (UTableBase[0].p) * NDEVICES));
+  memset (CL (UTableBase), 0, sizeof (UTableBase[0].p) * NDEVICES);
+  UnitNtryCnt = CW (NDEVICES);
+  TheZone = ApplZone;
+
+modify qPicstuff picture drawing engine to run in `debug' mode and
+output readable text for the ops/data in the picture.
+
+Use new consistent syntax for byte swapping and handle dereferencing
+operations, with chains of operations concatenated right-to-left ala
+LISP's CADDR, etc.  So:
+  W = swap 16 bit value and cast back to typeof.
+  L = swap 32 bit value and cast back to typeof.
+  P = swap 32 bit "Point" value (0x12345678 -> 0x34127856).
+  D = dereference and swap
+  F = get struct field (takes additional arg with field name)
+  H = dereference, swap long, and get struct field (equivalent to `FD')
+If the last letter is a `C', that means the input value is a
+compile-time constant.  We might wish to preface each macro with a `C'
+as a standard prefix (for `convert'?)  Otherwise we'd get macros like
+`W', which may be too short.  Examples, mapping old syntax to new:
+  CWC(n)	->	CWC(n)
+  CL(n)		->	CL(n)
+  Hx(h, field)	->	CWH(h, field) or CLH(h, field), depending on size
+  HxX(CL(MainDevice), gdPMap) -> CHL(MainDevice, gdPMap)
+  Hx(CL(MainDevice), gdPMap) -> CLHL(MainDevice, gdPMap)
+  Hx(Hx(CL(MainDevice), gdPMap), baseAddr) -> CLHLHL(MainDevice, gdPMap, baseAddr)
+Any or all of these routines can be inline assembly, if the host
+architecture provides them.  Any not provided will be automatically
+provided or synthesized by nesting low level routines (e.g. CHL can be
+written as CH(CL(...))).  See also the idea above which describes how
+to write Hx (==CLHL for long fields) on the x86 to take advantage of
+the 486 bswap and make Executor smaller.
+
+Need an OS-specific function that hints "now is a good time to yield
+to another process", for busy loops, WaitNextEvent, etc.
+
+Create a routine that makes a new rectangular region, and use it instead
+of separate code to create and then set up the region?
+
+Can the BOOLEANRET type go away now?  What's it for?
+
+PackBits the data in color_wheel_bits.c, and uncompress it on the fly?
+
+A 68k interpreter that had nice debugging features:
+  - 68k breakpoints
+  - 68k watchpoints
+    - reading any memory location or range of memory locations
+    - writing any memory location or range of memory locations
+    - values appearing in registers
+  - single stepping
+  - identifying recent conditional branches that got us here
+  - backtrace facility that logs jsr's and rts's and so can
+    backtrace even when there's no frame pointer
+
+We need a consistent naming convention for variables which hold big
+endian values, perhaps ending such a variable with a "_be" or
+something.  But would this apply to Mac struct fields as well?  Blah.
+Renaming all the Mac struct fields sounds like a bad idea.  But always
+being conscious of endianness is probably a good thing.  Perhaps just
+append a "_be" to variables, but not to struct fields?  Hmmm.  What
+about Mac low globals?  I guess they sorta stand out because they use
+a different capitalization convention anyway.
+
+Use memcpy for code like this (from menu.c), or perhaps a convenience
+function that does a NewHandle+memcpy:
+        h = NewHandle(hsize);
+        sp = (char *) STARH(mh) + soff;
+	dp = (char *) STARH(h);
+	ep = sp + hsize;
+        while (sp != ep)
+            *dp++ = *sp++;
+Gotta be a little careful here, because if we pass STARH(mh) to the
+NewHandle convenience function, that pointer may be invalidated if
+memory moves during the real NewHandle operation.
+
+In many places we have (now) pointless casts to Size.  These should
+go away.
+    BlockMove((Ptr) tm, (Ptr) &tml, (Size) sizeof(tml));
+
+Prune down common.h as much as possible.
+
+This qPicstuff.c macro is bogus:
+#define SE(x) ((x & 0x80) ? x|(~0^0xff) : x & 0xff)	/* sign extend */
+It has no parens, evaluates its argument multiple times, and could
+instead be "#define SE(x) ((int) (int8) (x))"
+
+If we split up the Executor source tree into directories, it might
+make sense to have a separate header file for accessor macros for each
+data type, with the form TypeName_accessors.h, e.g.:
+#include "Region_accessors.h"
+
+Make a RECT_MID_Y and RECT_MID_X that compute the center coordinates of
+a rect.
+
+Make NumToString just call sprintf.
+
+Make StringToNum call atoi, atol, or sscanf...
+
+ROMlib_setuid seems unnecessary now that we don't have the mshort
+hack.  DJGPP has `setuid'.  ROMlib_seteuid can also just be replaced
+with seteuid.
+
+If low globals were done with macros, like (*(INTEGER *)0x3CA) or
+whatever, this would actually generate better code sometimes given
+Mat's recent gcc mods.  The modified gcc can tell that an address is
+long-aligned and do good things.

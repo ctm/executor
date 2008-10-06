@@ -1,0 +1,116 @@
+PLEASE READ THIS DOCUMENT CAREFULLY.  IT'S IMPORTANT TO RECOGNIZE THAT
+SIMPLY CHANGING A FILE TYPE WILL USUALLY NOT HELP.
+
+This is a list of some of the more common Macintosh file types and
+creators.  You can use Executor's Get Info function (under the File
+menu, or Cmd-I for a keyboard shortcut) to set the file type and
+creator, but please read the rest of this description before you do.
+
+This is most useful when working with certain types of downloaded
+files such as StuffIt archives, or when first importing a
+cross-platform file such as a TIFF which was created on a PC.
+
+***********************************************************************
+* NOTE: This will not help you if the file that you transferred had   *
+* important information in its resource fork.  For instance,          *
+* applications will not work when you transfer just the data fork and *
+* then set the type and creator, because applications contain CPU     *
+* instructions in 'CODE' resources, which are not stored in the data  *
+* fork.                                                               *
+***********************************************************************
+
+Some of the entries in this table are known to *not* require any
+information in the resource fork.  StuffIt archives, Compact Pro
+archives, and Word formatted data are three examples, but some of the
+document types listed herein may indeed require information in the
+resource fork.  In those cases, simply changing creator and type is
+unlikely to be beneficial.
+
+In general, it's best to transfer Mac files either by having Executor
+read Mac formatted media (like floppies, zip drives or hard disks), or
+by first converting the Mac files into HQX format, since it is the
+most portable format.  If you're a power user and you can make use of
+the information in this table, that's great, but if not, it's less
+error prone to just always use HQX as an intermediate form.
+
+Note too that Executor directly recognizes only a few file types.
+Others which do not have their own resource fork icons will be
+displayed with the "unknown" icon -- a blue circle with a red question
+mark.  This does not necessarily mean that there is anything wrong
+with the file; it only means that Executor does not have a
+predetermined icon for it.
+
+
+FILE                                    CREATOR   TYPE
+
+4th Dimension data file                 4D02      data
+4th Dimension filter file               4D02      FILT
+4th Dimension index file                4D02      INDX
+4th Dimension settings file             4D02      SETT
+Calendar File data file                 MACS      ZSYS
+Canvas data file                        DAD!      defd
+Clipboard File                          MACS      CLIP
+Compact Pro archives                    CPCT      PACT
+Desk Accessories                        DMOV      DFIL
+Dollars & Sense data file               DAS!      DASD
+Double Helix formatted data             HELX      HEAP
+Double Helix help file                  HELX      HEXT
+Double Helix text-only data file        HELX      TEXT
+Edit data file                          EDIT      TEXT
+Excel chart                             XCEL      MCBN
+Excel text-only data file               XCEL      TEXT
+Excel help file                         XCEL      XHLP
+Excel worksheet                         XCEL      XLBN
+Excel resume file                       XCEL      XLIN
+Excel macro file                        XCEL      XLPG
+Excel plot file                         XCEL      XLPG
+FileMaker data file                     NUTS      NUTD
+FileMaker Plus data file                FMKR      FMKD
+Filevision data file                    TELO      PICB
+Font File                               DMOV      FFIL
+FullPaint painting                      PANT      PNTG
+HyperCard stack                         WILD      STAK
+Lightspeed C library file               KAHL      LIB!
+Lightspeed C project file               KAHL      PROJ
+Lightspeed C source code text           KAHL      TEXT
+MacDraft drawing                        MACD      DRWG
+MacDraw drawing                         MDRW      DRWG
+MacDraw picture file                    MDRW      PICT
+MacDraw II drawing                      MDPL      DRWG
+MacDraw II picture file                 MDPL      PICT
+MacPaint painting                       MPNT      PNTG
+MacProject project data file            MPRJ      MPRD
+MacWrite text-only file                 MACA      TEXT
+MacWrite formatted text file            MACA      WORD
+MacWrite II text-only file              MWII      TEXT
+MacWrite II formatted text file         MWII      WORD
+Multiplan spread sheet                  PLAN      MPBN
+Multiplan text-only data                PLAN      TEXT
+Omnis 3 data file                       OM$$      OM$D
+Omnis 3 library file                    OM$$      OM$L
+PageMaker formatted data                ALDU      PBPT
+PowerPoint slides                       PPNT      SLDS
+QUED text file                          QUED      TEXT
+ReadySetGo data file                    MART      RSGF
+Red Ryder stuff file                    RRYD      PDAT
+Red Ryder macro file                    RRYD      RRMC
+Red Ryder data file                     RRYD      RRRS
+Reflex database file                    SING      SSDB
+Reflex report file                      SING      SSRF
+SuperPaint painting                     SPNT      PNTG
+Switcher data file                      SWIT      SWIT
+Think Tank data                         TANK      TEXT
+Video Works data                        MMVW      DATA
+Video Works data                        MMVW      VWSC
+Word dictionary                         MSWD      DICT
+Word hyphenation file                   MSWD      WPRD
+Word glossary                           WORD      GLOS
+Word file                               WORD      PCOD
+Word text-only file                     WORD      TEXT
+Word formatted data                     WORD      WDBN
+Works resume                            PSIP      AWDT
+Works spreadsheet                       PSIP      AWSS
+Works formatted text                    PSIP      AWWP
+Works text-only data                    PSIP      TEXT
+Write Now data                          nX^n      nX^d
+Write Now data                          nX^n      nX^w

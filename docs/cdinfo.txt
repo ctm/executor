@@ -1,0 +1,62 @@
+Executor 2 can read Mac formatted CD-ROMs, but it needs a way to read
+raw CD-ROM sectors to do so.
+
+If your computer has a SCSI CD-ROM and you have ASPI drivers
+installed, Executor should be able to use them to read Mac formatted
+CD-ROMs.
+
+If not, Executor needs to use the 16-bit version of the Microsoft
+CD-ROM Extensions to read raw CD-ROM extensions.  That means that if
+you're running Windows 3.x, you'll need to install MSCDEX.
+
+If you're running Windows '95, you'll need to adjust your
+configuration so that you use the 16-bit version of MSCDEX (at least
+when you're running Executor), instead of the 32-bit version.
+
+The easiest way to configure your system is to have a Windows Guru do
+it for you.  If you explain that Executor/DOS needs ASPI drivers or
+the old version of MSCDEX, a knowledgeable Windows person can probably
+examine your system and make the mods to your config.sys and
+autoexec.bat to do the right thing.
+
+If you don't have someone you can lean on, you may be able to get
+technical support from wherever you purchased your PC, or if that
+doesn't help, the company that made your CD-ROM drive may be able to
+help you out.
+
+The problem is that installing the old version of MSCDEX is a
+different process on different types of machines.  For instance, on
+our Micron Millennia Transport laptop, we needed to add this line to
+C:\CONFIG.SYS
+
+DEVICE=C:\CDROM\SJCDAPI.SYS /D:MSCD000
+
+and then we needed to add this line to C:\AUTOEXEC.BAT
+
+MSCDEX.EXE /D:MSCD000 /M:40 /L:E
+
+The first line is responsible for loading the 16-bit CD-ROM driver,
+and that's the line that varies from system to system.  The problem is
+that you need to know where your 16-bit CD-ROM driver is, and
+sometimes it can be hard to find.  The "/D:MSCD000" portion of the
+DEVICE line tells DOS/Windows that the device driver will be known as
+"MSCD000".
+
+The second line actually loads MSCDEX, and says to look for the device
+driver "MSCD000", which we installed via the first line.  The "/M:40"
+portion of the line asks DOS/Windows to buffer 40 blocks, and the
+"/L:E" portion tells DOS/Windows that we want the device to be logical
+disk "E:".  In general, you can use the exact same MSCDEX line in your
+autoexec.bat as we have above, as long as you have the right 16-bit
+CD-ROM driver loaded in your config.sys file.
+
+NOTE: Even with those two lines added, we have to reboot our Micron
+Millennia Transport into MS-DOS mode before Executor can access Mac
+formatted CD-ROMs.  You may also experience this restriction.
+
+This configuration problem will go away once Executor has been
+rewritten to be a Win32 program instead of a DOS program.
+
+If Executor 2 is telling you to read this file, and you'd prefer that
+it stop telling you about it, you can rename this file and Executor
+will stop.

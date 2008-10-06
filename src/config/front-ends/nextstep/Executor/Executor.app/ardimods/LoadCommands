@@ -1,0 +1,14 @@
+#
+# Script used for initializing the loadable kernel server to load
+# the ardi mods (Abacus Research and Development, Inc. modifications to
+# support faster A-line dispatching and the use of some privileged instructions
+# from user space).
+#
+
+# Call ardimods_init during loading.
+
+CALL		ardimods_init		0
+
+# Load immediately upon allocation.
+
+START

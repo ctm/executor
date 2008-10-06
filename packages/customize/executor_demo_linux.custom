@@ -1,0 +1,62 @@
+// This is the customization file for the demo version of Executor.
+
+// Checksums aren't supported yet
+// checksum = 0x12345678;
+
+// No limit on the creators
+// creators = { };
+
+// sn_first =         0;
+// sn_last  = 100000000;
+
+splash = "/home/ctm/ardi/trunk/executor/splash/splash.8bp";
+
+license = {
+"Executor Demo Information",
+
+"Executor/Linux is available for $150.  Please read our web pages (<http://www.ardi.com/>) or the file fees.txt for more information.
+
+Please read this entire message.  You will need to use the scroll-bar to see it all.
+
+This is a demo version of Executor.  This demo is available solely so you can evaluate whether or not Executor is worth purchasing.  This demo should expire at the end of the 30th day after you have installed it.  In this demo version, all pages printed will have \"Demo\" written on them.  This demo version of Executor will read Macintosh formatted floppies and hard drives but will not allow you to write to or format them.  The remaining difference between this demo version and the commercial version of Executor is that Command-Key equivalents will not work in this demo version.
+
+To get the most out of this software, please visit our web site frequently <http://www.ardi.com/>.",
+
+
+"License Description",
+
+"Executor is written and copyrighted by Abacus Research and Development, Inc. (ARDI).  Executor is not sold, but is provided under this Software License Agreement.  This license allows for 30 days the licensee to use this demo version of Executor without any licensing fee.  After the 30 day evaluation period licensee no longer has any rights to use this software.",
+
+
+"Duplication and Redistribution",
+
+"Complete distributions of this demo version of Executor may be copied and redistributed as long as all copies are unmodified and contain all of the original files in their entirety.  Licensee may not modify or create derivative works based on Executor or any part thereof.",
+
+
+"ARDI Disclaims Liability",
+
+"In no event will ARDI be liable for indirect, special, incidental, or consequential damages resulting from the use of Executor, even if advised of the possibility of such damages.",
+
+
+"General Terms",
+
+"This license is the entire agreement between Licensee and ARDI. If any provision of this License shall be held to be unenforceable, such holding shall not affect the enforceability of the remaining provisions.  This license shall be governed by and construed under the laws of the State of New Mexico.  Licensee agrees to bring any proceeding concerning this license before a court of the State of New Mexico or a Federal court located in the State of New Mexico.",
+
+
+"U.S. Government Restrictions",
+
+"This Software is licensed only with RESTRICTED RIGHTS.
+
+For civilian agencies:  The use, reproduction, or disclosure of this software is subject to restrictions as set forth in subparagraphs (a) through (d) of the Commercial Computer Software--Restricted Rights clause at 52.227-19 of the Federal Acquisition Regulations. For Department of Defense agencies:  The use, reproduction, or disclosure of this software by the Government is subject to restrictions as set forth in subparagraph (c)(1)(ii) of the Rights in Technical Data and Computer Software clause at DFARS 252.227-7013.",
+};
+
+// Don't register the demo version
+must_register = 0;
+about_box = 1;
+// copyright_info = { "... portions c 1986 - 1996 ARDI" }; // (item 12)
+// thank_you_info = { "Thank you for purchasing ..." }; // (item 14)
+// registration_instructions = { "Your key is where ..." }; // (item 13)
+// magic_volumes = { "/raid1/var/tmp", "Raid", "~", "ctm" };
+mac_cdrom = { "DOS/EXTRA/LIBRARY/MACCDROM.HFV" };
+demo_id = { "474f474f" };
+command_key_disable = 1;

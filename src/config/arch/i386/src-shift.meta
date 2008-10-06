@@ -1,0 +1,76 @@
+@meta	OPNAME_shift_mask_CPUNAME_SEGSUFF
+	movl	(%esi),%eax
+	movl	4(%esi),%ebx
+	BSWAP_EAX
+	BSWAP_EBX
+	shld	%cl,%ebx,%eax
+	BSWAP_EAX
+	FLIP_EAX
+	MASK_EAX_OP
+@endmeta
+
+@meta	OPNAME_shift_1_CPUNAME_SEGSUFF
+	movl	(%esi),%eax
+	movl	4(%esi),%ebx
+	BSWAP_EAX
+	BSWAP_EBX
+	shld	%cl,%ebx,%eax
+	BSWAP_EAX
+	FLIP_EAX
+	BITOP	%eax,DST_SEG(%edi)
+@endmeta
+
+@meta OPNAME_shift_many_mod_0_CPUNAME_SEGSUFF
+	movl	$@param_long_count_div_2@,%ebp
+	movl	(%esi),%eax
+	BSWAP_EAX
+1:	movl	4(%esi),%ebx
+	BSWAP_EBX
+	shld	%cl,%ebx,%eax
+	BSWAP_EAX
+	FLIP_EAX
+	BITOP	%eax,DST_SEG(%edi)
+	movl	8(%esi),%eax
+	BSWAP_EAX
+	shld	%cl,%eax,%ebx
+	BSWAP_EBX
+	FLIP_EBX
+	BITOP	%ebx,DST_SEG 4(%edi)
+	addl	$8,%esi
+	addl	$8,%edi
+	decl	%ebp
+	jnz	1b
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta
+
+
+@meta OPNAME_shift_many_mod_1_CPUNAME_SEGSUFF
+	movl	$@param_long_count_div_2@,%ebp
+	movl	(%esi),%eax
+	BSWAP_EAX
+1:	movl	4(%esi),%ebx
+	BSWAP_EBX
+	shld	%cl,%ebx,%eax
+	BSWAP_EAX
+	FLIP_EAX
+	BITOP	%eax,DST_SEG(%edi)
+	movl	8(%esi),%eax
+	BSWAP_EAX
+	shld	%cl,%eax,%ebx
+	BSWAP_EBX
+	FLIP_EBX
+	BITOP	%ebx,DST_SEG 4(%edi)
+	addl	$8,%esi
+	addl	$8,%edi
+	decl	%ebp
+	jnz	1b
+	movl	4(%esi),%ebx
+	BSWAP_EBX
+	shld	%cl,%ebx,%eax
+	BSWAP_EAX
+	FLIP_EAX
+	BITOP	%eax,DST_SEG(%edi)
+@lit	leal	-4(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta

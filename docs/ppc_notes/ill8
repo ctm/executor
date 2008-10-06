@@ -1,0 +1,47 @@
+It looks like the "Illustrator Formats - Standard/PICT Export" plug-in requires
+these routines from "StdCLib":
+
+	fwrite
+	free
+	memset
+	fclose
+	fseek
+	malloc
+	memmove
+	strcpy
+	strlen
+	vsprintf
+	fopen
+
+This is a bit evil because it's not at all clear where they should
+come from.  A simplistic find/xargs/grep-l search suggests that this
+library isn't supplied anywhere in the Illustrator 8 tryout directory.
+It may even be a bug that someone didn't realize that they were
+requiring this library.
+
+I'll need to write a tool that is better than find/xargs that will
+really tell us which libraries are exported by which files.
+
+Foo.
+
+The biggest problem here may be that vsprintf requires a variable
+number of arguments.  Other than that it would be trivial to glue our
+own StdCLib for at least these functions.
+
+I can probably remove that particular plug-in and get Illustrator 8 to
+run further.
+
+
+UPDATE: Searching for StdCLib on the web shows that StdCLib is present
+on all PowerMacs, so we will indeed have to support it.  Not that big
+of a deal, per-se, but it's one more thing to do.
+
+-------------------------------------------------------------------------
+
+If I get rid of "Illustrator Formats - Standard/PICT Export" then we
+wind up with a segmentation fault.  If I get rid of all the plug-ins,
+then we die as we make a call to a custom CDEF.  I need to look at how
+FAT traps are done, althought this doesn't look like what's going on.
+Grr... would be nice to be able to disassemble 68k code under PPC
+linux gdb.
+

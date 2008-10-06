@@ -1,0 +1,40 @@
+CWSDPMI is Copyright (C) 1995 Charles W Sandmann (sandmann@clio.rice.edu)
+                              102 Hurst Ct, Destrehan, LA 70047
+
+This is the Beta 2 release.  The files in this binary distribution may be 
+redistributed without the source code provided:
+
+* This file (or its contents) must accompany CWSDPMI.EXE
+
+* CWSDPMI.EXE is not modified in any way
+
+* Distribution with commercial or shareware programs is allowed but requires
+  notification of the author by mail or acknowledged email
+
+* Notice to users that they have the right to receive the source code for
+  CWSDPMI.  (Distributors should indicate a site for the source in their
+  documentation, contact address above if source is desired and not available).
+
+-------------------------------------------------------------------------------
+
+CWSDPMI was written to provide DPMI services for V2 of DJGPP.  It currently
+does not support 16-bit DPMI applications or DOOM.  It does support virtual
+memory and hardware interrupt reflection from real mode to protected mode.
+DJGPP V1.1x and RSX applications will also run using this server, which can be
+used to provide enhanced control over hardware interrupts.
+
+Please report any applications which do not work properly to the address above.
+
+Directions for use (server can be used in either of two different ways):
+
+1) "cwsdpmi" alone with no parameters will terminate and stay resident 
+   FOR A SINGLE DPMI PROCESS.  This means it unloads itself when your 
+   DPMI application exits.  This mode is useful in software which needs
+   DPMI services, since CWSDPMI can be exec'ed and then will unload on exit.
+
+2) "cwsdpmi -p" will terminate and stay resident until you remove it.
+   It can be loaded into UMBs with LH.  "cwsdpmi -u" will unload the TSR.
+
+I would like to give special thanks to DJ Delorie who wrote the original 
+GO32 code on which CWSDPMI is based.  Morten Welinder also provided and 
+improved much of the code in this program.

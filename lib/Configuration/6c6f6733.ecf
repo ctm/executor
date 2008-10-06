@@ -1,0 +1,9 @@
+// This Configuration file (/us2/mac/Configuration/6c6f6733.ecf) was built by Executor
+Comments = "Tetris Max wants Sound On";
+// WindowName = "Tetris Max 2.6";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 7.0.0;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitOften, SoundOn, PassPostscript, NewLineToCR};

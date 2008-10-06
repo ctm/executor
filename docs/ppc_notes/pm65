@@ -1,0 +1,15 @@
+Looks like we're getting unaligned memory need to experiment more with
+stmw on a G4
+
+cfm.c:1056; unimplemented feature in `load_loader_section': register preservation, bad init_block
+interfacelib.c:331; trace info in `LMGetApplLimit': 
+interfacelib.c:303; trace info in `LMGetApplZone': 
+interfacelib.c:331; trace info in `LMGetApplLimit': 
+interfacelib.c:345; trace info in `LMGetMBarHeight': 
+
+Program received signal SIGBUS, Bus error.
+0x317df134 in ?? ()
+(gdb) x/i $pc
+0x317df134:	stmw	r13,20(r3)
+(gdb) p/x $r3
+$2 = 0x7ffff0e6

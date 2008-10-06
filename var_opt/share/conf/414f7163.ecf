@@ -1,0 +1,9 @@
+// This Configuration file (/executor/configur/414f7163.ecf) was built by Executor
+Comments = "AOL will not be able to dial out using Executor 2.";
+WindowName = "America Online v2.6";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 7.0.0;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR};

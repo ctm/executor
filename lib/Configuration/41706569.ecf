@@ -1,0 +1,9 @@
+// This Configuration file (/us2/mac/Configuration/41706569.ecf) was built by Executor
+Comments = "Apeiron writes directly to the screen.";
+// WindowName = "Apeiron";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 6.0.7;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

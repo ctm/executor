@@ -1,0 +1,20 @@
+[Data]
+TITLE_MAIN=Executor-Win32 Demo
+COMPANY_NAME=ARDI
+COMPANY_NAME16=ARDI
+ERROR_MOVEDATA=An error occurred during the move data process : %d
+PRODUCT_VERSION=2.1pr9
+UNINST_KEY=Executor-Win32 Demo
+TITLE_CAPTIONBAR=Executor-Win32 Demo Setup
+PRODUCT_NAME16=ExecWinDemo
+ERROR_VGARESOLUTION=This program requires VGA or better resolution.
+PRODUCT_KEY=executor.exe
+UNINST_DISPLAY_NAME=Executor-Win32 Demo
+ERROR_UNINSTSETUP=unInstaller setup failed to initialize.  You may not be able to uninstall this product.
+PRODUCT_NAME=Executor-Win32 Demo
+
+[General]
+Language=0009
+Type=STRINGTABLESPECIFIC
+Version=1.00.000
+

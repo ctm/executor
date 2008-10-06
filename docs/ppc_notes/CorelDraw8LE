@@ -1,0 +1,27 @@
+exits immediately, after it calls GetDiskFragment () which fails.
+The FSSpec that they're handing in is vref==0, parid==0, name[0] == 0.
+It's fairly clear that they're trying to load a fragment from their own data
+fork, but without testing, it's not clear at all whether something's going
+wrong when they try to fill in the name, or whether GetDiskFragment is
+supposed to know about a zero-length name.
+
+I put in a test where we recognize zero-length names, but then Corel
+stopped making the call to GetDiskFragment.  Instead it started
+calling FSpOpenRF with a bizarre name.  That suggests to me that a
+corrupt file is hosing us somewhere (temp file, prefs file).  I didn't
+have time to pursue this -- late for dinner.  It looks like it might
+be the System file itself (nope -- copying that from w2k didn't help).
+
+Interestingly enough, adding that code was what caused the weird call
+to FSpOpenRF.  When that code isn't added, we get passed a null name,
+which apparently FSpOpenRF actually opens.  Weird.  It may be a stray
+memory issue or a case of some function not returning information
+where it should.
+
+If I then manually juke the call to GetDiskFragment, I get:
+
+Need glue for '__register_fragment'
+
+which may be something that comes from InterfaceLib, or may be
+something they expect to pick up elsewhere -- I should be able to tell
+if I watch carefully.

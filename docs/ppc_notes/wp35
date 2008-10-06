@@ -1,0 +1,3 @@
+Installer sends AE and then apparently waits for a reply, which never comes
+
+wp 35 proper seems to spin its wheels -- unclear why

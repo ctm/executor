@@ -1,0 +1,9 @@
+// This Configuration file (/us2/mac/Configuration/32362e32.ecf) was built by Executor
+Comments = "Marathon needs refresh";
+// WindowName = "Marathon Demo";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 6.0.7;
+RefreshNumber = 10;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

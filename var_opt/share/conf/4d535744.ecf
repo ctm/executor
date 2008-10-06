@@ -1,0 +1,9 @@
+// This Configuration file (/executor/configur/4d535744.ecf) was built by Executor
+Comments = "Word will die if you set System to be >= 7";
+WindowName = "Microsoft Word";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 6.0.7;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOff, PassPostscript};

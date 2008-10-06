@@ -1,0 +1,9 @@
+// This Configuration file (/executor/configur/41525435.ecf) was built by Executor
+Comments = "Adobe Illustrator 5.5 needs the four lower left Pretend boxes checked, and System 7.0";
+WindowName = "Adobe Illustrator%AA 5.5";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 7.0.0;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR, PretendHelp, PretendEdition, PretendScript, PretendAlias};

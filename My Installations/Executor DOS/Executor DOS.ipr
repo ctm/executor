@@ -1,0 +1,52 @@
+[Language]
+LanguageSupport0=0009
+
+[OperatingSystem]
+OSSupport=0000000000011011
+
+[Data]
+CurrentMedia=CD-ROM
+CurrentComponentDef=Default.cdf
+ProductName=Executor-DOS
+set_mifserial=
+DevEnvironment=GNU C
+AppExe=
+set_dlldebug=No
+EmailAddresss=
+Instructions=Instructions.txt
+set_testmode=No
+set_mif=No
+SummaryText=
+Department=
+HomeURL=
+Author=
+Type=Macintosh Emulator
+InstallRoot=D:\My Installations\Executor DOS
+Version=2.1pr11
+InstallationGUID=18397aa3-64ea-11d1-962e-00609734111f
+set_level=Level 3
+CurrentFileGroupDef=Default.fdf
+Notes=Notes.txt
+set_maxerr=50
+set_args=
+set_miffile=Status.mif
+set_dllcmdline=
+Copyright=
+set_warnaserr=No
+CurrentPlatform=
+Category=
+set_preproc=
+CurrentLanguage=English
+CompanyName=ARDI
+Description=Description.txt
+set_maxwarn=50
+set_crc=Yes
+
+[MediaInfo]
+mediadata0=Default/Media\Default
+mediadata1=CD-ROM/Media\CD-ROM
+
+[General]
+Type=INSTALLMAIN
+Version=1.00.000
+

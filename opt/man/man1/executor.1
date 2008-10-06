@@ -1,0 +1,251 @@
+.\" (c) 1998 by Abacus Research & Development, Inc. (ARDI)
+.\"
+.\" This man page is part of the commercial Executor package available
+.\" from ARDI <http://www.ardi.com/>.
+
+.TH EXECUTOR 1  "April 10, 1998" "Executor 2.0v"
+.SH NAME
+executor, executor-svga, executor-demo, executor-svga-demo \- Run Macintosh applications
+.SH SYNOPSIS
+.B executor
+[options]
+[mac-application [document1] [document2 ...]]
+.SH COPYRIGHT
+.if n Executor is Copyright (C) 1986 - 1998 by Abacus Research & Development, Inc.
+.if t Executor is Copyright \(co 1986 - 1998 by Abacus Research & Development, Inc.
+.SH DESCRIPTION
+.B Executor
+runs many \fBMacintosh\fR applications.  It neither contains, nor
+requires any code from Apple Computer.  That makes
+.B executor
+a very complex piece of software and it also introduces many
+limitations.
+.B Executor
+does not run Apple's Finder, nor any INITs or CDEVs.  Facilities newer
+than System 7.0 (like QuickTime) are not currently available and even
+some System 7.0 features are not present.
+.B Executor
+has some sound support, very little serial port support and no
+networking support.  Executor's font management and printing
+capabilities are not as sophisticated as those on a modern Macintosh.
+Hardware limitations of the PC floppy controller prevent the use of
+floppies formatted at 800K.  Some programs which use undocumented or
+misdocumented features will fail under
+.B executor.
+.PP
+.B Executor
+is the \fBonly\fR Macintosh emulator available for any platfrom that does not require copying ROMs from
+a Macintosh (a practice that is usually illegal).
+.PP
+Some of the better known applications that people use
+.B executor
+for include \fIMicrosoft Word 5.1\fP, \fIMicrosoft Excel 4.0\fP,
+\fIQuicken 6.0\fP for the Macintosh, \fINIH Image\fP and tons of
+games.  A compatibility database and much more information is
+available on our web-site (<http://www.ardi.com>).
+.SH "SVGA VERSION"
+.B Executor
+is supported as an X application.  In addition to the X version, the binary
+.B executor-svga
+is an svgalib application.  This version is not officially supported and
+will eventually be supplanted by either an X version that uses DGA, or a GGI
+version or both.
+.SH "DEMO VERSION"
+The binaries
+.B executor-demo
+and
+.B executor-svga-demo
+are demo versions which can be used for 30 days to determine the suitability
+of
+.B executor
+to your specific needs.  In addition to only being able to be used for 30
+days before expiring, the demo versions also have a few other limitations:
+all pages printed will have "Demo" written on them; Macintosh formatted
+media can be read but not written; and Command-Key equivalents are not
+supported.
+.SH OPTIONS
+The
+.B \-help
+option causes Executor to print a list of available options and a
+brief description of each option.
+.SH ARGUMENTS
+If there isn't an argument after the options, Executor will run
+"Browser", ARDI's substitute for Apple's Finder.  Browser isn't
+particularly clever, but will at least do a good job of keeping
+AppleDouble files consistent when they're moved or renamed.  We have
+limited resources, so we've put almost all our engineering effort into
+rewriting the Mac OS OS and toolbox calls instead of improving our browser.
+At some point we hope to integrate sufficiently well into the various
+Linux desktop managers that we will be able to do away with our browser
+entirely.
+.PP
+If there is another argument after the options, it's used as the name
+of the Macintosh application to run.  This can either be a UNIX
+pathname (e.g.
+"/tmp/Adobe Illustrator%A8 7.0 Tryout/Adobe Illustrator%A8 7.0 Tryout")
+or a Macintosh path name (e.g. "Demo:Swivel Applications:SwivelPro 2.0.4").
+Further arguments after the application name are interpreted as documents
+that the Macintosh application should open when it is started.
+.SH "BUILT-IN F-KEYS"
+.TP
+.B Cmd-Shift-1
+brings up an "About Box" that lists the Executor version number, the
+number
+of days left in the demo, the total amount of emulated RAM available,
+the amount of System RAM consumed, the amount of Application RAM
+consumed, and five buttons.  The buttons allow you to see the License
+under which you may run
+.B executor,
+the details of
+.B ARDI,
+credits, and the tips file
+(randomly sorted).  The forth button dismisses the "About Box".
+.TP
+.B Cmd-Shift-2
+tells Executor to re-examine /dev/fd0 and /dev/cdrom for Macintosh
+media.  It's imperative that you never remove Mac-formatted media
+while Executor is running unless you have already clicked on an
+"Eject" button or chosen an "Eject" menu option and had Executor
+acknowledge that it's acceptable to remove your Macintosh formatted media.
+.TP
+.B Cmd-Shift-3
+dumps the screen to a file.
+.TP
+.B Cmd-Shift-5
+brings up the "Preferences Panel" which allows you to alter some
+.B Executor
+parameters and save the changes for later on a per-application basis.
+This is especially important if you want to run applications that
+require a System version greater than 6.0.7.
+.TP
+.B Cmd-Shift-6
+tells
+.B Executor
+that when you quit the currently running application that you don't
+want to return to the Browser.
+.TP
+.B Cmd-Shift-7
+requests
+.B executor
+to repaint the screen.  This should never be necessary.
+
+.SH ENVIRONMENT
+.TP
+.B ConfigurationFolder
+the directory where per-application configuration files are saved.  These are
+the files that are created when you click on the "Save" button of the
+"Preferences" panel that comes up when you type Cmd-shift-5.  The default
+value is "/var/opt/executor/share/conf".
+.TP
+.B SystemFolder
+the Macintosh name of the folder which contains the System file.  The System
+file can be stored in an HFV or in an Apple-Double file.  The default is
+for
+.B SystemFolder
+to be "System:System Folder" with System being part of the HFV
+"/var/opt/executor/exsystem.hfv".
+.TP
+.B PublicDirectoryMap
+is the root name of the database, shared with other Executor users, that maps i-numbers
+to names.  This is needed, because unlike under UNIX, Macintosh applications
+can look up directories by number.  The default is
+"/var/opt/executor/directory_map".  The suffix "-le.db" is added to
+the
+root name.
+.TP
+.B PrivateDirectoryMap
+is the root name of the private database that maps i-numbers to names.  The default is
+"~/.executor/directory_map".
+.TP
+.B DefaultFolder
+is the folder that will be displayed whenever the running Macintosh application
+brings up a standard get or put dialog box.  The default is "/home/executor".
+.TP
+.B MacVolumes
+This variable tells
+.B executor
+where it should look for Macintosh volumes.  Directories listed in
+MacVolumes will automatically be scanned for HFVs.  MacVolumes is
+delimited
+by semi-colons (";").  The volume which
+contains the System file must be first in any MacVolumes list.  The
+default value is "/var/opt/executor/exsystem.hfv;/var/opt/executor".
+As such, any HFV created in /var/opt/executor will automatically be
+opened when Executor runs.
+.TP
+.B ScreenDumpFile
+When you type Cmd-Shift-3,
+.B executor
+creates a TIFF file containing a dump of the
+.B executor
+screen.  The default value is "/tmp/excscrn*.tiff".  The "*" tells
+.B executor
+where to place an integer (starting with 0) to make the file unique.
+In other words, if the files "/tmp/exscrn0.tiff" and
+"/tmp/exscrn1.tiff" already exist when a Cmd-Shift-3 is typed,
+.B executor
+will write its dump into "/tmp/exscrn2.tiff".
+.TP
+.B PrintersIni
+is the name of the file that contains the options of the printing
+subsystem.  The default is "/opt/executor/printers.ini".
+.TP
+.B PrintersDef
+is the name of the file that contains the most recently used printer
+options.  The default is "/var/opt/executor/printdef.ini"
+.SH BUGS
+Executor is complex and the man pages are new.  They omit many details.
+.PP
+.B Executor
+works by using the facilities of
+.B ROMlib,
+a rewrite of the MacOS OS and toolbox calls.  ROMlib was created from
+publicly available documentation, but documentation isn't always
+correct.  If an application relies on undocumented or misdocumented
+features of the MacOS, the application may fail under Executor.  One
+way in which Macintosh applications may fail is by referencing memory
+that is not available.  
+.B Executor
+does not currently trap stray memory
+accesses; they cause
+.B executor
+to dump core.
+.SH "SEE ALSO"
+\fIAppleDouble\fP(5),
+\fIdirectory_map\fP (5),
+\fIecf\fP(5),
+\fIhfv\fP(5),
+\fIprinters.ini\fP(5),
+
+.SH FILES
+
+/opt/executor/splash - the directory that contains the splash screen
+that
+.B executor
+presents as it is coming up.  You can disable the splash screen by
+removing the files in this directory.  We have not yet released a tool
+to allow people to build their own splash screens.
+
+/opt/executor/tips.txt - a text file containing a collection of useful
+tidbits that you can read when using Cmd-Shift-1.
+
+/var/opt/executor/share/home - true location of /home/executor (which
+is
+just a symlink).
+
+/home/executor - convenient place to store Macintosh files.
+
+/dev/fd0, /dev/cdrom - floppy drive and CD-ROM drive that are examined
+for Macintosh media when
+.B executor
+is first started and when Cmd-Shift-2 is typed.
+
+/dev/cua0 - serial line that may be accessed when Macintosh programs
+try to use the serial ports.  Serial port access is very weak and will
+continue to be weak, even in release 2.1.
+
+
+.SH DISCLAIMER
+Executor is a registered trademark of Abacus Research and Development,
+Inc.  Macintosh is a registered trademark of Apple Computer, Inc.
+(Those are two separate companies; please don't confuse the two.)

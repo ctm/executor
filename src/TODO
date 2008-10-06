@@ -1,0 +1,100 @@
+DONE	look for all occurences of EM_A in ROMlib code
+
+DONE	look for all occurences of destroy_blocks in ROMlib code
+
+DONE	look for all occurences of -1 used as a pointer (like in NewWindow)
+
+DONE	look at all xDEF code since they tend to cast parameters and return
+	types:
+
+DONE	look at all the code that calls xDEFs
+
+DONE	look for pointers hidden in event manager routines
+		especially message field
+
+DONE	look for all P_ jobbies (convert them to ROMlib addresses and
+					deconvert them appropriately)
+
+DONE	all calls to CALL_EMULATOR
+
+	CToPascalCall -- look hard for arguments that sometimes take a pointer
+			and sometimes take a long
+
+	look for casts between pointers and longs
+
+KNOWN DIFFERENCES:
+
+DONE	Browser complains about not being able to delete its backup
+	state
+
+DONE	Compact Pro dies instantly
+
+DONE	Printing from Compact Pro Users's Guide dies
+
+DONE	Double-clicking on one of the Tex-Edit documents causes a -120
+	error instead of opening the document
+
+DONE	Opening a document with File->Open... causes trouble, too
+
+DONE	Claris Works 3.0 dies immediately
+
+DONE	Claris Works dies when trying to create a Word Processing document
+
+DONE	Compact Pro User's guide "About PostCard..." dialog box is off the
+	upper left hand of the screen
+		MoveWindow has different args
+
+DONE	Cmd-Shift-5 under Browser dies
+
+DONE	Illustrator dies during startup
+
+DONE	Resorcerer Demo dies during startup
+
+DONE	Word has purple buttons
+
+DONE	Marathon demo dies during startup
+
+DONE	FileMaker Pro dies during startup
+
+DONE	Word dies during startup
+
+DONE	Quark dies during startup
+
+DONE	Quark dies while opening file
+
+DONE	Excel dies when you click on "OK" button after asking for help.
+
+DONE	ClarisWorks Tour (Projector dies during startup)
+
+DONE	Risk seems to have problems with Shift keys
+
+DONE	Lemmings Demo has no sound
+
+DONE	Eric's Ultimate wedges at end of game (sound related, likely)
+
+DONE	Rescue died when I turned sound on in the middle of the game
+	(may not be offset memory related)
+
+DONE	Sound turns itself off when running Rescue with prefs that say
+	we want it.
+
+DONE	Fatty Bear is real slow on buy, but that may be sound related
+
+DONE	Ultima III crashes on startup
+
+DONE	Quicken 4 dies (lat one I've tested today, May 2)
+
+DONE	Haven't tested Object Modeler
+
+DONE	Nisus may die earlier w/memory offset
+
+DONE	Apeiron dies
+
+DONE	Claris Works ruler has messed up numbers on top
+	(NOTE: although I just did a bunch of floating point changes, I
+	didn't introduce a bug, per-se, becuase the same code works when
+	ROMlib_offset is zero)
+
+DONE	About Tex-Edit has black bullets under Executor/DOS -offset
+	(but not under /net/buy/usr/local/builds/linux-debug -offset)
+	[Time to try /net/buy/usr/local/builds/linux-temp -offset]

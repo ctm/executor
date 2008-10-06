@@ -1,0 +1,33 @@
+active 1 2; 13 13
+{
+  " x"
+  "             "
+  " xxxxxxxxxxx "
+  " x    x    x "
+  " x x  x  x x "
+  " x  x x x  x "
+  " x         x "
+  " xxxx   xxxx "
+  " x         x "
+  " x  x x x  x "
+  " x x  x  x x "
+  " x    x    x "
+  " xxxxxxxxxxx "
+  "             "
+}
+{
+  " xyz"
+  "             "
+  " zzzzzzzzzzz "
+  " zxxxxzxxxxz "
+  " zxzxxzxxzxz "
+  " zxxzxzxzxxz "
+  " zxxxxxxxxxz "
+  " zzzzxxxzzzz "
+  " zxxxxxxxxxz "
+  " zxxzxzxzxxz "
+  " zxzxxzxxzxz "
+  " zxxxxzxxxxz "
+  " zzzzzzzzzzz "
+  "             "
+}

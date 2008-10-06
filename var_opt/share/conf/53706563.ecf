@@ -1,0 +1,9 @@
+// This Configuration file (/executor/configur/53706563.ecf) was built by Executor
+Comments = "Spectre 1.0 wants sound on";
+WindowName = "Spectre 1.0";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 6.0.7;
+RefreshNumber = 6;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

@@ -1,0 +1,647 @@
+Cleanup goals:
+
+- Consistency
+- Cleanliness
+- Conciseness
+- Modularity
+  - easier to maintain and extend
+  - easier to remove and license/sell parts of Executor (e.g. HFS code)
+- Robustness
+- Portability
+- Debuggability
+- Superior tools
+- Nicer learning curve for newcomers
+- Reduced redundancy in the source
+- A more efficient Executor binary
+  - smaller
+  - faster
+  - better locality of reference
+      - smaller memory footprint
+      - faster load times on demand-paged systems
+
+
+
+----------------------------------------------------------------------
+Coding standards:
+
+We will use the coding conventions described in the GNU coding
+standards, with some extensions:
+
+- You may assume GNU make and gcc.  Gratuitously using features
+  specific to either is a bad idea, but if using a GNU extension is
+  clearly the best (or only) way to write something, don't hesitate to
+  use it.
+
+- Always use full ANSI C prototypes.  When a function takes no arguments,
+  place an explicit "void" in the argument list both in the declaration
+  and in the definition.
+
+- You may assume alloca is present, but do not assume you have a large
+  amount of stack space.  Under djgpp we have only a default stack of
+  256K, which is why the rsys/tempalloc.h package was created.
+
+- You may assume ANSI C libraries.  We will never compile Executor on
+  a system that doesn't have ANSI libraries.  As such, know what ANSI
+  provides and use those library functions when appropriate (instead
+  of hand-rolled loops, etc.)  Use ANSI functions rather than their
+  old Unix counterparts when possible (e.g. memset rather than bzero,
+  and memcpy or memmove rather than bcopy).
+
+- All source files will be maintained with RCS.  This of course does
+  not apply to files which are mechanically generated from other
+  files.  It may sometimes be appropriate to log derived files with
+  RCS, but usually it's not.
+
+- Make functions and "global" variables `static' when possible.
+  This has the following benefits:
+    - gcc can warn about unused static items (which only waste space).
+    - It reduces the chance of an identifier clash with a symbol
+      in another source file.
+
+- Use `gui_assert' and `warning_unexpected' statements liberally.
+  They take little time to add in, but can be an invaluable debugging
+  aid.
+
+- Don't modify function parameters.  This can make debugging confusing
+  as it makes it unclear what the original argument to the function
+  was.
+
+- All functions will have exactly one `return' statement, counting the
+  implicit `return' at the end of a void function.  This is to make
+  debugging easier (e.g. setting a breakpoint to see when a certain
+  value is returned), and to avoid certain kinds of bugs that can
+  happen with early exits.
+
+- `return' statements should never return anything more complex than
+  a single variable or constant.  This is to facilitate setting
+  debugger breakpoints.
+
+- If you are writing a function that returns something by reference,
+  always fill that value in, even in the case of an error when you
+  don't expect that value to be used.  Uninitialized memory errors can
+  be frustrating to track down, and gcc won't warn you about them in
+  this case.  An exception of course would be routines that are
+  explicitly not supposed to modify the return-by-reference memory in
+  the case of an error.
+
+- `goto' is often to be avoided, but don't hesitate to use it if it
+  makes your code simpler.  For example, if you want to return an
+  error code from deep within nested `if' statements, set a variable
+  indicating the return code and `goto' the end of the function where
+  that variable is returned.  kludges involving magic loop variables
+  or smashing loop counters and executing break statements are usually
+  more difficult to understand than a simple goto.  A goto will
+  continue to work even if another nested layer of looping is added
+  outside, or if code is added after the loop that you really didn't
+  want to execute.
+
+- Machine-generated code need not conform to any particular coding
+  standard, although it's more readable if it does.  Such code should
+  at least be run through `indent' (if appropriate) to make it more
+  human-readable.
+
+- Always declare variables in the innermost possible lexical scope.
+
+- Never shadow identifiers in outer scopes.
+
+- Never use the same variable name in two scopes in the same function
+  (it's OK when the variable is a magic temp variable inside a macro).
+
+- Avoid using the same variable for two different purposes.  Use two
+  variables instead.  Reusing a variable can result in subtle bugs and
+  makes optimization more difficult for the compiler (gcc's register
+  allocator still can't do live range splitting).  It sometimes makes
+  debugging more difficult when a value of interest gets clobbered for
+  no good reason.
+
+- When declaring a hidden variable inside a macro, place an underscore
+  both before and after the identifier name.  This is to avoid clashes
+  with local variables in outer scopes, and also to make clear the
+  special nature of the variable.  So for example, SQUARE() could
+  be written as this GNU-style macro:
+    #define SQUARE(a) ({ typeof (a) _x_ = (a); _x_ * _x_; })
+
+- Never use the same variable to hold both big and little endian
+  values.  For example, don't do:
+    return_by_reference (&foo);  /* This is */
+    foo = CL (foo);              /*  bad    */
+  instead, use a temp variable to hold the big endian value,
+  or create a helper function that returns the value in the
+  byte order you want.
+
+- Use functions rather than macros when possible, at least when the
+  expression is non-trivial.  Functions are far easier to debug and do
+  type checking that (simple) macros can't.  There are of course
+  numerous exceptions to this rule; for example, if you want to
+  "return" alloca'd memory you must do it from within a macro.
+
+- Generally avoid macros that modify variables where a function call
+  could not.  When you must modify variables, pass the variables as
+  arguments to the macro so it's at least clear that they are being
+  used.  For example:
+    a = MACRO();  /* Best */
+    MACRO(a);     /* Only if you really need to */
+    MACRO();      /* (where `a' is secretly modified)  Evil! */
+
+- Use `int' for most loop counters, even if a short will suffice.  Old
+  versions of gcc could generate better looping code for shorts on the
+  m68k, but shorts are worse on other architectures, and newer gcc's
+  handle int loop counters well on the m68k.
+
+- In loops, don't use fancy pointer arithmetic instead of a simple
+  array index just because you think it might make your code faster.
+  Unlike the m68k, the x86 and most RISC chips don't have general
+  postincrement and predecrement addressing modes, so this complexity
+  is usually wasted and often counterproductive.
+
+- Strive to avoid preprocessor conditionals, and instead move code to
+  configuration files.  This is not always possible, but often it is.
+  Tangles of #if's are much harder to read and maintain than code
+  which knows that the host implements a well-defined API for
+  system-specific features.
+
+- Use "#if defined (FOO)" rather than "#ifdef FOO".  This makes
+  it easier to add more clauses to the conditional, e.g.
+    "#if 0 && defined (FOO)"
+
+- When you do need to use preprocessor conditionals, try not to use
+  conditionals based on particular operating systems; instead, make
+  the #ifdef's conditional upon the particular feature of interest.
+  For example, test "defined (USE_STRUCT_DIRECT)", rather than
+  "defined (NEXTSTEP)" if you want to see whether to use struct direct
+  or struct dirent.  There are reasonable exceptions to this rule
+  where some feature is so intimately tied to an operating system that
+  there's no reason to bother making a specific macro.  An example
+  would be conditional compilation for an ObjC NEXTSTEP call; there's
+  no reason to waste your time bothering to come up with a specific
+  conditional that only gets defined for NEXTSTEP, because it will
+  never be used elsewhere.  One rule of thumb is to avoid using two
+  conditionals, e.g.:
+    #if defined (NEXTSTEP) || defined (LINUX)
+  In this case you should create a new macro and define it in both the
+  NEXTSTEP and LINUX config headers.
+
+- All internal Executor types will end in `_t', except for
+  u?int{8,16,32}.  Each Macintosh types will have its canonical name.
+
+- For Macintosh struct fields defined in the documentation, use
+  standard Mac data types (e.g. INTEGER, LONGINT, etc.)
+
+- Use enums rather than #define's when possible, because gdb knows
+  about enums.  This is not possible when those values are used in
+  preprocessor conditionals, but that is rare.
+
+- When you want a boolean value, and you're not in a context where
+  you should use the Mac BOOLEAN type, use `boolean_t'.  That's an
+  enum and gdb knows about enums.
+
+- When you specifically want a signed or unsigned N-bit number and
+  you're not in a context where you should use a Mac type, use int8,
+  int16, int32, int64, uint8, uint16, uint32, and uint64.  For
+  example, an array of bytes should be an array of `uint8', not an
+  array of `unsigned char'.  Configuration files will guarantee that
+  those fundamental types will be correct for all architectures and
+  compilers.  If you just want an integer with at least 32 bits, use
+  `int' or `unsigned'.  As per the GNU coding standards, you may
+  assume that ints have at least 32 bits.  It is, however, possible
+  they may have more bits someday, so use `int32' or `uint32' when you
+  want exactly 32 bits.
+
+- When creating an enum or any collection of related constant values,
+  try to use a common naming prefix for the identifiers that groups
+  them all together.  This is not necessary for those rare macros
+  whose lifetime spans only a few lines, but is useful for values in
+  header files.
+
+- Do not assume that pointer types are 32 bits.  This is false on the
+  DEC Alpha, where they are 64 bits.  Cliff modified gcc slightly to
+  allow pointer bitfields to let us typedef Mac structs with the
+  proper size and semantics.  In some situations you will need to
+  assume that only the lower 32 bits of the pointer are significant,
+  since we frequently store pointers in Mac data structures that only
+  allocate 32 bits for pointers.  We can make this happen under OSF on
+  the Alpha by using the `-taso' linker flag.
+
+- If you have an if...else clause, and one consequent is substantially
+  shorter than the other, adjust the sense of the `if' so the shorter
+  code sequence goes first and the longer code sequence goes in the
+  `else' clause.
+
+- Don't hesitate to create new source files if that's the cleanest way
+  to add a new feature or split something up into manageable pieces.
+  Place those files in specific config directories if that's where
+  they belong, to avoid cluttering up the main source tree.
+  Why is this a good idea?
+    - It can be difficult to wade through the RCS diffs for enormous
+      source files to find a change of interest.  The bigger the file,
+      the more changes take place.  As of this writing, main.c is
+      nearly 2000 lines long and has gone through 177 revisions since
+      work on Executor 2 started.
+    - It is sometimes useful to "roll back" files to earlier versions,
+      to track down a regression.  Gigantic files with numerous
+      unrelated changes are almost impossible to roll back without
+      breaking something else.
+    - The more interesting things are in a file, the more likely there
+      is to be resource contention for that file between developers.
+      This problem will only get worse as ARDI gets more programmers.
+    - Small files compile faster (although, to be fair, if a lot
+      of junk gets #included then multiple files can be slower)
+    - Having more .o files gives us more freedom to choose a link
+      ordering that minimizes our memory footprint (NEXTSTEP has tools
+      to do this, and we can make rough-hewn tools for other platforms
+      with gprof and Perl).
+
+- When printing a hexadecimal number in a diagnostic, always preface
+  it with "0x".  Don't make the person reading the diagnostic guess
+  whether "400" really means four hundred or whether it's one thousand
+  twenty four.
+
+UNRESOLVED:
+
+- Infinite loops, when necessary, should be written as:
+     while (1)  /* or should that be while (TRUE)? */
+       {
+       }
+
+- [need naming convention for variables beyond GNU standards, e.g.
+   ..._be suffix for big endian?  What about ROMlib_ prefix,
+   or suffixes indicating type information?]
+
+   - Predicate variables or functions which return boolean will be
+     annotated with "_p".
+   - Variables which are return-by-reference pointers are annotated
+     with "_ref".
+   - Variables which contain big endian values are annotated with "_be".
+     A big endian int would have this suffix.  A byte-swapped pointer
+     to a struct would have it.  A pointer to a byte-swapped struct
+     would *not* have it, because the pointer variable itself is
+     big endian.  A big endian Point struct sitting on the stack would
+     have the "_be" annotation.
+----------------------------------------------------------------------
+
+
+----------------------------------------------------------------------
+There are two classes of transformations to the source tree:
+
+- Those that affect the resulting Executor binary
+- Those that do not
+
+Modifications which do not affect the resulting binary are easy to
+verify for correctness: make the modifications, recompile, and then
+make sure the binary is unchanged.  Consequently, such modifications
+are "safe" only if made independently of mods that change the Executor
+binary.  To be truly safe, Executor binaries for all supported
+platforms should be recompiled and compared before moving on.
+
+It is still possible, of course, that an error can creep in somewhere
+and not get noticed.  A simple case is conditionally compiled code
+that doesn't get compiled during the binary comparison test, but there
+are more complex cases.
+
+Although convenient, it is not essential (or even wise) to do in one
+pass all mods which shouldn't change the Executor binary.  Doing so
+may save verification runs, but will cause extra headaches when the
+verification fails.  Changing several things in one step also makes
+RCS diffs confusing.  That doesn't mean that it is never appropriate
+to group two semi-related sets of changes together; use your judgment.
+----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+Split source tree into subdirectories containing related groups of
+files and utilities?
+
+
+./
+	executor.make
+
+ae/
+	AE.c
+	AE_coercion.c
+	AE_desc.c
+	AE_hdlr.c
+
+print/
+	PSprint.c
+	PSstrings.c
+	prError.c
+	prInit.c
+	prLowLevel.c
+	prPrinting.c
+	prRecords.c
+
+ctl/
+	ctlArrows.c
+	ctlDisplay.c
+	ctlIMIV.c
+	ctlInit.c
+	ctlMiniarrows.c
+	ctlMisc.c
+	ctlMouse.c
+	ctlPopup.c
+	ctlSet.c
+	ctlSize.c
+	ctlStddef.c
+
+dial/ [dlog?]
+	dialAlert.c
+	dialCreate.c
+	dialDispatch.c
+	dialHandle.c
+	dialInit.c
+	dialItem.c
+	dialManip.c
+
+file/
+	fileAccess.c
+	fileCreate.c
+	fileDirs.c
+	fileDouble.c
+	fileHighlevel.c
+	fileInfo.c
+	fileMisc.c
+	fileVolumes.c
+	diskinit.c
+	slash.c
+	disk.c
+
+hfs/ [merged with file?]	
+	hfsBtree.c
+	hfsChanging.c
+	hfsCreate.c
+	hfsFile.c
+	hfsHelper.c
+	hfsHier.c
+	hfsMisc.c
+	hfsVolume.c
+	hfsWorkingdir.c
+	hfsXbar.c
+
+list/
+	listAccess.c
+	listAddDel.c
+	listCreate.c
+	listDisplay.c
+	listMouse.c
+	listOps.c
+	listStdLDEF.c
+
+sane/
+	float4.c
+	float5.c
+	float7.c
+	floatnext.c
+
+menu/
+	menu.c
+	menuColor.c
+	menuV.c
+	stdmbdf.c
+	stdmdef.c
+
+res/
+	resGet.c
+	resGetinfo.c
+	resGettype.c
+	resIMIV.c
+	resInit.c
+	resMisc.c
+	resMod.c
+	resOpen.c
+	resPartial.c
+	resSetcur.c
+
+qd/
+	default_ctab_values.c
+	hintemplate.h
+	makerawblt.pl
+	mkseedtables.c
+	mksspairtable.c
+	mkultable.c
+	qBit.c
+	qCConv.c
+	qCGrafPort.c
+	qCRegular.c
+	qColor.c
+	qColorMgr.c
+	qColorPicker.c
+	qColorutil.c
+	qCursor.c
+	qGDevice.c
+	qGWorld.c
+	qGrafport.c
+	qHooks.c
+	qIMIV.c
+	qIMV.c
+	qIMVI.c
+	qIMVxfer.c
+	qMisc.c
+	qPaletteMgr.c
+	qPen.c
+	qPicstuff.c
+	qPict2.c
+	qPicture.c
+	qPixMapConv.c
+	qPoint.c
+	qPoly.c
+	qRect.c
+	qRegion.c
+	qRegular.c
+	qScale.c
+	qStandard.c
+	qStdArc.c
+	qStdBits.c
+	qStdLine.c
+	qStdOval.c
+	qStdPic.c
+	qStdPoly.c
+	qStdRRect.c
+	qStdRect.c
+	qStdRgn.c
+	qStdText.c
+	qText.c
+	autorefresh.c
+	dirtyrect.c
+	dcconvert.c
+	dcmaketables.c
+	rawpatblt.c
+	rawsrcblt.c
+	refresh.c
+	rgbutil.c
+	pat-blitters.tmpl
+	src-blitters.tmpl
+	srcblt.c
+	xdata.c
+	xdblt.c
+
+serial/
+	serial.c
+
+
+te/
+	teAccess.c
+	teDisplay.c
+	teEdit.c
+	teIMIV.c
+	teIMV.c
+	teInit.c
+	teInsert.c
+	teMisc.c
+	teScrap.c
+
+script/
+	script.c
+
+mman/
+	mman.c
+	mmansubr.c
+
+wind/
+	windColor.c
+	windDisplay.c
+	windDocdef.c
+	windInit.c
+	windMisc.c
+	windMouse.c
+	windSize.c
+	windUpdate.c
+
+sound/
+	sound.c
+	soundIMVI.c
+	snth5.c
+
+map/
+	map_to_c.c
+	active.map
+	apple.map
+	arrow_down_active.map
+	arrow_down_inactive.map
+	arrow_left_active.map
+	arrow_left_inactive.map
+	arrow_right_active.map
+	arrow_right_inactive.map
+	arrow_up_active.map
+	arrow_up_inactive.map
+	go_away.map
+	grow.map
+	ractive.map
+	thumb_horiz.map
+	thumb_vert.map
+	zoom.map
+
+glue/
+	emustubs.c
+	emutrap.c
+	emutraptables.c
+	tooltrap.awk
+	tooltrap2.awk
+
+event/
+	hle.c
+	osevent.c
+	toolevent.c
+	ibm_keycodes.c
+	
+
+debug/
+	error.c
+	dump.c
+
+prefs/
+	option.c
+	parse.y
+	parsenum.c
+	parseopt.c
+
+time/
+	time.c
+	vbl.c
+	syncint.c
+	
+config/arch/m68k
+	priv.c
+
+
+
+OBSOLETE/
+	genctopflags_h.tmpl
+	genctopflags_h.tmpl
+	genfndecls.c
+	genptocflags_h.tmpl
+	genstubify_h.tmpl
+	genstubify_s.tmpl
+	globals.awk
+	globals.c
+	globals.pl
+	mkexpandtables.c
+	mktable2.awk
+	mktable3.awk
+	romlib_stubs.c
+	ostrap.awk
+	setuid.c
+	stubify.awk
+	stubs.s
+	think.c
+	trapinfo
+	
+WTF_IS_THIS?
+	genrand_h.c
+
+Unresolved
+--------------------
+aboutbox.c
+adb.c
+alias.c
+balloon.c
+bindec.c
+color_wheel_bits.c
+config
+crc.c
+desk.c
+device.c
+edition.c
+executor.c
+finder.c
+gensplash.c
+gestalt.c
+icon.c
+image.c
+image_inits.c
+include
+iu.c
+iv-stubs.c
+keycode.c
+launch.c
+license.c
+licensetext.c
+main.c
+mkvol
+notify.c
+osutil.c
+pack.c
+process.c
+protector.c
+scrap.c
+screen-dump.c
+segment.c
+shutdown.c
+sigio_multiplex.c
+splash
+splash.c
+stdfile.c
+string.c
+syserr.c
+system_error.c
+tempmem.c
+toolmath.c
+toolutil.c
+uniquefile.c
+version.c
+vgavdriver.c

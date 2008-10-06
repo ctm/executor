@@ -1,0 +1,8 @@
+// This Configuration file was built by Executor
+WindowName = "lazlife2.0c";
+ScreenSize = { 574, 530 };
+MacSize = { 574, 530 };
+ScreenLocation = { 222, 79 };
+RefreshNumber = 10;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR, NoWarn32};

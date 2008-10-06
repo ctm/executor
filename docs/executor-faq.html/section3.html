@@ -1,0 +1,433 @@
+<html>
+<head><title>
+Executor FAQ - Section 3
+</title>
+<link rev="made" href="mailto:questions@ardi.com">
+</head><body><h1>
+Executor FAQ - Section 3 <br>
+Using Executor
+</h1>
+
+<ul>
+<li><a href="#wherecmd" rel=subdocument>Q3.1. Where are the Cmd (Clover) and Option keys?</a></li>
+<li><a href="#q_3_2" rel=subdocument>Q3.2. What is an image file?</a></li>
+<li><a href="#q_3_3" rel=subdocument>Q3.3. Can I launch applications directly from the command
+line?</a></li>
+<li><a href="#ghostfonts" rel=subdocument>Q3.4. I installed a font in Executor, but I still can't print in it.  What's
+the deal?</a></li>
+<li><a href="#q_3_5" rel=subdocument>Q3.5. Can I have Executor use more than 8 MB for the application
+zone?</a></li>
+<li><a href="#q_3_6" rel=subdocument>Q3.6. An application I'm trying crashes.  What should I
+do?</a></li>
+<li><a href="#q_3_7" rel=subdocument>Q3.7. Why do some applications claim I don't have an
+FPU?</a></li>
+<li><a href="#compact" rel=subdocument>Q3.8. Why does Compact Pro have trouble with multi-volume
+archives?</a></li>
+<li><a href="#internet" rel=subdocument>Q3.9. How can I use Mac software from the internet?</a></li>
+<li><a href="#q_3_10" rel=subdocument>Q3.10. How can I use Mac software from Bulletin
+Boards?</a></li>
+<li><a href="#q_3_11" rel=subdocument>Q3.11. How can I use Mac software from AOL?</a></li>
+<li><a href="#textfiles" rel=subdocument>Q3.12. Why do files which aren't text files look like text
+files?</a></li>
+<li><a href="#q_3_13" rel=subdocument>Q3.13. What does &quot;You may open a 32000 character selection&quot;
+mean?</a></li>
+<li><a href="#q_3_14" rel=subdocument>Q3.14. What is Speedometer?</a></li>
+<li><a href="#q_3_15" rel=subdocument>Q3.15. How can I get a screen dump of Executor?</a></li>
+<li><a href="#q_3_16" rel=subdocument>Q3.16. How does your Browser show file size?</a></li>
+<li><a href="#q_3_17" rel=subdocument>Q3.17. How does your Browser show free space?</a></li>
+<li><a href="#q_3_18" rel=subdocument>Q3.18. Why does Browser display question marks for some
+documents?</a></li>
+</ul><hr>
+
+<A name="wherecmd"><h2>
+Question 3.1.  Where are the Cmd (Clover) and Option
+keys?
+</h2></A>
+
+On a PC keyboard, Executor uses the left &quot;Alt&quot; key as a Cmd
+key and the right &quot;Alt&quot; key as the Option key. 
+
+<A name="q_3_2"><h2>
+Question 3.2.  What is an image file?
+</h2></A>
+
+Some Macintosh sites contain image files that are exact copies of a
+Macintosh Hierarchical FileSystem (HFS) volume with a few bytes of
+header information prepended.  Executor allows you to use image
+files just like HFVs, although they should have the suffix
+&quot;<code>.ima</code>&quot; instead of &quot;<code>.hfv</code>&quot;.  
+<A name="q_3_3"><h2>
+Question 3.3.  Can I launch applications directly from the command
+line?
+</h2></A>
+
+Yes.  If an application resides within a UNIX or DOS filesystem, you
+can specify the name of the application, and documents that you would
+like the application to open when it starts up, on the command line. 
+Applications that reside in HFV files are specified using colons to
+delimit the pathname, e.g. &quot;<code>executor MyVolume:directory:application</code>&quot;.  
+<A name="ghostfonts"><h2>
+Question 3.4.  I installed a font in Executor, but I still can't print
+in it.  What's the deal?
+</h2></A>
+
+You have to install the same font in Ghostscript.  Otherwise,
+Ghostscript will use the default Helvetica font since it can't find
+the one you want.  Don't forget to add the paths to the fonts into
+your fonts pfb file.  
+<A name="q_3_5"><h2>
+Question 3.5.  Can I have Executor use more than 8 MB for the
+application zone?
+</h2></A>
+
+You can use up to 64 MB for the applzone. 
+
+<A name="q_3_6"><h2>
+Question 3.6.  An application I'm trying crashes.  What should I
+do?
+</h2></A>
+
+Perhaps the most common avoidable cause of crashes is insufficient
+memory for the emulated application.  You can fix this by increasing
+the &quot;applzone&quot; parameter.  For example, many programs which
+normally die quickly will work with &quot;executor -applzone 4m&quot; (which
+allocates 4 MB of space for the emulated application; see the list of command line
+switches and their meanings elsewhere in this document). 
+
+<p>
+DOS NOTE: If you run &quot;executor -info&quot;, it will tell you how
+much DPMI memory is available and how much memory is being used by the applzone,
+syszone and stack.  If there is less DPMI memory available than the
+sum of the applzone, syszone and stack memory requirements, then
+Executor will page between DPMI memory and a special
+&quot;paging&quot; disk file.  This paging slows you down and also consumes disk space.  It is
+possible to manually override the applzone, syszone and stack defaults
+with smaller values, but when you do so, you run the risk of not
+having enough memory for an application to run.  Unfortunately,
+Macintosh programs are often not polite at all when they do not have
+enough memory.  The Lemmings demo is an example of such a program; if
+you run that program on a real Mac and only give it 1200k of memory,
+weird errors will occur.  Doing the same under Executor will also
+yield weird errors.  
+<p>
+If Executor needs to make a paging file, and there is not enough disk
+space to create one, you will get an error message during Executor's
+startup.  If you have the environment variable &quot;TEMP&quot; set,
+then Executor will try to place its paging file there, so if TEMP is set to
+point to a small RAM disk, or a disk that is nearly filled, Executor
+may run out of memory too easily.  
+<p>
+Some programs are unhappy with Executor's limited sound support, and
+crash.  You can turn on the &quot;pretend sound&quot; option before
+running the application in question and see if this helps.  In addition, some
+programs have menu items, or preference check boxes that can be used
+to disable sound.  It is always recommended that you disable sound
+from within a program in addition to using the Executor sound
+preferences, if you have to disable sound. 
+
+<p>
+One example of a program that will have problems with sound is
+&quot;Ultimate Solitaire&quot;.  If you do not disable sound from
+within Ultimate Solitaire, the game will play fine, until you win.  At that
+point it will tell Executor to start playing a sound and request that
+Executor notify it when the sound is done playing.  If sound is off,
+this will result in Ultimate Solitaire hanging after you win a game. 
+
+<p>
+Some programs also save preferences in a file, and if something bad
+happens to that file, the program can then get confused and will not
+run properly.  Occasionally this happens to Microsoft Word, and you
+need to use the browser to delete the file &quot;Word
+Preferences&quot; from your &quot;System Folder&quot;.  
+<p>
+Although it should not happen, even our file browser keeps a file
+around that can cause trouble if it becomes corrupt.  That file is
+&quot;godata.sav&quot;.  It stores which folders you have open and the
+contents of your &quot;hot-band&quot;.  If that file gets corrupt, the file
+browser may not run.  In the rare case that the browser won't run, you can use the
+&quot;-nobrowser&quot; switch when you start Executor to bypass the
+browser, but to get the browser back you'll need to either delete
+&quot;godata.sav&quot; somehow or replace exsystem.hfv with one from the original
+distribution.  
+<A name="q_3_7"><h2>
+Question 3.7.  Why do some applications claim I don't have an
+FPU?
+</h2></A>
+
+The problem is probably that the applications you are trying to use
+try to directly manipulate the FPU unit that some Macintoshes have. 
+
+<p>
+The key words are &quot;directly manipulate&quot;.  Apple warned
+software makers to not directly manipulate the FPU, but to instead use their numerics
+library (&quot;SANE&quot; Standard Apple Numerics Environment). 
+Programs that don't use SANE, but directly manipulate the FPU run faster on Macs
+that have FPUs, but don't run at all on Macs that don't have FPUs.  If
+that is actually the source of your problems, then such programs also
+wouldn't run on Apple machines like the Quadra 605.  This limitation
+is also present on Apple's PowerPC based Macs. 
+
+<p>
+One workaround for this problem is an &quot;INIT&quot; called
+&quot;SoftFPU&quot;.  SoftFPU will make a Mac without a co-processor work as though there is
+one there, however the floating point computation will be done very
+slowly.  However, SoftFPU can't be used with Executor until Executor
+supports INITs.  
+<A name="compact"><h2>
+Question 3.8.  Why does Compact Pro have trouble with multi-volume
+archives?
+</h2></A>
+
+Executor takes a short cut that causes trouble for some programs;
+Compact Pro is one of them.  The problem is that a real Macintosh can
+keep track of volumes that are not physically in the drive.  That is
+why Macintoshes sometimes tell you to put one disk in their floppy
+drive, then they eject it and ask for another one, then eject it and
+ask for the first one.  Executor currently isn't so clever.  When a
+disk is ejected, Executor forgets about it.  Few programs count on the
+behavior of a real Mac, but those that do currently won't work with
+Executor.  
+<p>
+In Compact Pro's case you can just copy all of the pieces of the
+archive to your hard disk, then open the last piece from the hard disk
+and everything will work properly.  This workaround requires more hard
+disk space than you'd need if you could just read the pieces off a
+succession of floppies.  
+<p>
+Since this difference affects very few programs, it's not as high
+priority as adding other new features.  
+<A name="internet"><h2>
+Question 3.9.  How can I use Mac software from the
+internet?
+</h2></A>
+
+Find a site that legitimately has Mac software for use.  There is a
+Macintosh FAQ that lists many sites -- here are some of them:
+
+<ul>
+<li><code>www.ardi.com</code> : <A href="ftp://www.ardi.com/pub/samples"><code>/pub/samples</code></A> (USA) </li>
+<li><code>liquify.isca.uiowa.edu</code> : <A href="ftp://liquify.isca.uiowa.edu/mac/infomac"><code>/mac/infomac</code></A> (USA) </li>
+<li><code>wuarchive.wustl.edu</code> : <A href="ftp://wuarchive.wustl.edu/systems/mac/info-mac"><code>/systems/mac/info-mac</code></A> (USA) </li>
+<li><code>ftp.technion.ac.il</code> : <A href="ftp://ftp.technion.ac.il/pub/unsupported/mac"><code>/pub/unsupported/mac</code></A> (Israel) </li>
+<li><code>ftp.sunset.se</code> : <A href="ftp://ftp.sunset.se/pub/mac"><code>/pub/mac</code></A> (Sweden) </li>
+<li><code>src.doc.ic.ac.uk</code> : <A href="ftp://src.doc.ic.ac.uk/packages/info-mac"><code>/packages/info-mac</code></A> (UK) </li>
+<li><code>ftp.is.co.za</code> : <A href="ftp://ftp.is.co.za/info-mac"><code>/info-mac</code></A> (South Africa) </li>
+</ul>
+
+<p>
+Our <A href="ftp://ftp.ardi.com/pub/samples">samples directory</A> is there to give you a few files in a variety of different formats that are known to work with Executor.  If
+you have trouble downloading Mac software from the internet, you may
+want to practice these instructions using the files in our
+<A href="ftp://ftp.ardi.com/pub/samples">samples directory</A> first, so you'll know you're not attempting something impossible.  
+<p>
+Before transferring a large application, you might want to see what
+the requirements of that application are, most sites have a collection
+of small notes about applications that you can look at first. 
+
+<p>
+Use BINARY mode to transfer the files that you want to use.  Files
+whose names end in &quot;.hqx&quot; are usually the easiest to handle.
+ 
+<p>
+In general, StuffIt Expander will do well with many different types of
+files.  However, some of the Web Browsers out there interfere with
+StuffIt Expander by trying to expand the files as you're downloading
+them from the net.  The browser sees that you're not running on a
+Macintosh, so the non-Macintosh information (like the type and
+creator) is thrown away!  One way to avoid this problem with some of
+the web browsers is to hold the shift key down when you click on a
+link that contains a Macintosh file.  There are other ways that
+specific browsers can be configured to tell them to
+<em>not</em> expand Macintosh files as they're picking them up. 
+
+<p>
+Under DOS, you need to make an HFV file [see
+<A href="section6.html#makehfv">Q6.2 `What is makehfv?'</A>] that will be large enough to hold the files as you've downloaded them and also
+hold the files after they've been expanded.  Once you've made the HFV
+file, copy all the files you've downloaded into it, then follow the
+remaining directions.  
+<p>
+Under all operating systems, your next step is to run StuffIt Expander
+and use the &quot;Expand...&quot; menu item from the &quot;File&quot;
+menu to open each of the files you've downloaded.  In general, especially when dealing
+with files whose names end in &quot;.hqx&quot;, StuffIt Expander will
+do the right thing.  However, some sites do not store files in
+&quot;.hqx&quot; format, and StuffIt Expander may fail.  Remember, under DOS, you must do the
+StuffIt Expansion inside an HFV file.  
+<p>
+If StuffIt Expander fails, you can try using the Get Info option of
+Executor's browser to change the creator and type information of the
+file.  If you believe the downloaded file in question is a StuffIt
+Archive, you can change the type and creator each to &quot;SIT!&quot;
+and then try StuffIt Expander again.  If you believe the downloaded file is a
+Compact Pro archive, you can change the creator to &quot;CPCT&quot;
+and the type to &quot;PACT&quot; and then try StuffIt Expander again.  Similarly,
+you can use creator &quot;BnHq&quot; and type &quot;TEXT&quot; if you think that
+the file is a MacBinary file.  StuffIt Expander 4.0 should be much better at
+automatically determining what format an archive is in. 
+
+<A name="q_3_10"><h2>
+Question 3.10.  How can I use Mac software from Bulletin
+Boards?
+</h2></A>
+
+In general, follow the procedure in <A href="#internet">Q3.9 `How can I use Mac software from the internet?'</A> -- know the limitations of what Executor can run, transfer in binary mode and use
+StuffIt Expander to unpack the files you download.  Just like with
+files downloaded from the internet, sometimes you'll need to change
+the file type and creator, first.  
+<A name="q_3_11"><h2>
+Question 3.11.  How can I use Mac software from
+AOL?
+</h2></A>
+
+AOL sometimes (about half the time) uses a format that StuffIt
+Expander under Executor has trouble with.  For DOS/Windows users, use
+this workaround.  Get a copy of unstuff.exe (available on AOL
+compressed as unsitins.exe) and use the -mb tag to convert your
+downloaded files to MacBinary format before ever moving them into
+Executor.  E.g.: <pre>
+unstuff -mb somefile.sit
+</pre>
+<br>
+And you'll get somefile with a different extension. 
+
+<p>
+Then start up Executor and use BinHex's Download --&gt; Application
+function to convert the file to an application and move it into
+an Executor volume simultaneously.  
+<p>
+Note that if the file can be unstuffed in the usual manner, then
+trying to use this workaround will break it.  It's usually best,
+therefore, to try normal unstuffing first. 
+
+<A name="textfiles"><h2>
+Question 3.12.  Why do files which aren't text files look like text
+files?
+</h2></A>
+
+Macintosh files have File Type and File Creator information stored in
+their directory entries on a Macintosh filesystem.  These two pieces
+of information are often lost when the file is put onto a PC. 
+Executor's default is to assume that a file is a text file, because
+text is the most universal of file types.  If the file is not a text
+file you'll probably want to use StuffIt Expander (see
+<A href="#internet">Q3.9 `How can I use Mac software from the internet?'</A>) to expand the archive, or in rare cases you'll have to change the File
+Creator and File Type.  
+<p>
+To change a file's Creator and Type information, run Browser, select
+the file's icon, and choose Get Info from Browser's File menu.  Then
+change File Creator and File Type to the appropriate codes from the
+filetype.txt list in the docs directory of your Executor CD. 
+
+<p>
+NOTE: in addition to having Type and Creator information, Macintosh
+files also often have information in the &quot;Resource Fork&quot;
+portion of the file.  That information is also often lost when a file is
+transferred to a PC, so it's possible that changing the Type and
+Creator information will not be sufficient to allow you to use a Mac
+file on a PC under Executor unless you use some sort of archiving
+program (e.g. StuffIt, Compact Pro) to make sure all the Mac
+information is stored in the &quot;Data Fork&quot; of the file. 
+
+<A name="q_3_13"><h2>
+Question 3.13.  What does &quot;You may open a 32000 character
+selection&quot; mean?
+</h2></A>
+
+As mentioned in <A href="#textfiles">Q3.12 `Why do files which aren't text files look like text
+files?'</A>, files that don't have a file type are assumed to be text files.  That means that if you double-click on
+them, Tex-Edit will try to open up the file, even if the file is in
+some other representation.  Executor does not use filename extensions
+to determine a file's types, so if you download a file named
+&quot;testfile.bin&quot; and then let Executor see the file, it will
+still appear to be a text file, even though the name strongly suggests that
+it's a BinHex file.  
+<p>
+You can use StuffIt Expander (see <A href="#internet">Q3.9 `How can I use Mac software from the internet?'</A>) to expand a variety of different file types, but you'll have to start StuffIt Expander up
+directly, by double-clicking on it and then use the
+&quot;Expand...&quot; item in the &quot;File&quot; menu to select the file you want to expand
+(e.g. &quot;testfile.bin&quot;).  
+<A name="q_3_14"><h2>
+Question 3.14.  What is Speedometer?
+</h2></A>
+
+Speedometer is a shareware application that we have included with
+Executor for demonstrational purposes.  We have done so with
+permission of Speedometer's author, Scott Berfield.  It benchmarks
+Macintoshes (and PCs running Executor) to find out how quickly their
+CPU, graphics, floating point and disk subsystems work.  The current
+version of Speedometer is Speedometer 4.x, but that uses a timing
+mechanism that Executor currently doesn't support.  Speedometer 3.23
+can give you a rough approximation of how quickly your PC is emulating
+a Mac.  Remember, Speedometer is shareware, and ARDI has not paid the
+shareware fee for you.  If you repeatedly use Speedometer, please
+register it with Scott.  
+<p>
+Speedometer will show you that Executor is a very efficient emulator. 
+Please note, ARDI has not put special hooks into Executor to recognize
+Speedometer's code and bypass it; Speedometer is treated just like any
+other application when run under Executor.  Yes, it would be possible
+for us to cheat and make Speedometer return values that are higher
+than you could expect to see in real life, but we don't do that sort
+of thing.  
+<A name="q_3_15"><h2>
+Question 3.15.  How can I get a screen dump of
+Executor?
+</h2></A>
+
+Just type Cmd-Shift-3, just like on a Mac.  The difference is that the
+screen shot will be in TIFF format (uncompressed, for now) and will be
+written in the directory that contains <code>executor.exe</code> under DOS, or in <code>/tmp</code> under Linux.  
+<A name="q_3_16"><h2>
+Question 3.16.  How does your Browser show file
+size?
+</h2></A>
+
+Listing mode will show you the combined size of a file's resource and
+data fork.  There is currently no way to determine the size of a
+folder.  
+<A name="q_3_17"><h2>
+Question 3.17.  How does your Browser show free
+space?
+</h2></A>
+
+Select the volume, then choose &quot;Get Info&quot; from the File
+menu.  
+<A name="q_3_18"><h2>
+Question 3.18.  Why does Browser display question marks for some
+documents?
+</h2></A>
+
+Browser uses the question-mark icon for documents for which it doesn't
+recognize the file type and creator.  Furthermore, Browser isn't good
+about remembering type and creator information. 
+
+<p>
+Here's how Browser works: when Browser starts, it examines each
+application that is either on the hot-band or is in a folder that is
+open on Browser's desktop.  Then, as it is drawing the icons for
+documents, it only uses icons for those applications that it saw upon
+startup.  
+<p>
+So, if the application that creates a document isn't either on the
+hot-band or in an open folder, browser will present a question-mark
+icon.  A real Mac remembers any icons that it has ever seen (until you
+rebuild the desktop).  
+<p>
+If you have the application that corresponds to the document that has
+a question mark, you can get rid of the question mark by dragging the
+application onto the hot-band and then quitting Executor and
+restarting (or by running an application and then quitting the
+application).  When Browser restarts it will see the application in
+the hot-band and then remember the icon that should be used for
+documents of that type.  <hr>
+Next: <a href="section4.html" rel=precedes>Executor/Win32</a>.<br>
+Back: <a href="section2.html" rev=precedes>Executor's Limitations</a>.<br>
+<a href="index.html" rev=subdocument>Return to contents</a>.<p>
+<address>
+
+- 28 February 2002
+</address><br>
+Extracted from Executor Frequently Asked Questions with Answers,
+<A href="section7.html#faqcopyright">Copyright ARDI 2002.</A>
+</body></html>

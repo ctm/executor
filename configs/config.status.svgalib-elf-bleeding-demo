@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/ardi/executor/util/configure.sh  '--target=i486-linux' '--host=i486-linux' '--front-end=svgalib' '--target-gcc=gcc' '--cflags=-O2 -g -DNDEBUG -Wall -DRELEASE_DEMO' '--root=/ardi/executor' '--target-file-format=elf' '--sound=linux'

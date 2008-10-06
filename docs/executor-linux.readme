@@ -1,0 +1,112 @@
+[changes from previous versions are now in docs/Changes.*]
+
+The file elinux199X.tar (where X is a lower case letter optionally
+followed by a digit) contains Executor/Linux, a commercial Macintosh
+emulator which can be used in a 10 minute time limited demo mode.
+Right now we have no linux specific manual, but we have a linux
+section in our FAQ.
+
+To install executor, just type "make install".  You will need to have
+write permission to create /usr/local/bin/executor,
+/usr/local/bin/executor-svga and /usr/local/lib/executor.
+
+Additional information is available in the docs subdirectory of the
+directory that contains this readme file.  Be sure to read the
+"executor_faq.txt" (answers to frequently asked questions) if you have
+trouble with Executor.  The file "ernst_oud.txt" contains information
+about Executor/DOS, written from a DOS users perspective that still
+might be useful to users of Executor/Linux.
+
+If you would like to be able to submit bug reports in the format that
+we use internally, you can use the "send-pr" distribution contained in
+"send-pr.tar" to build the send-pr program.  More information is
+included in that package.
+
+Included in /usr/local/lib/executor/ExecutorVolume are some sample
+programs that you can run.  NOTE: some of these are shareware, and
+ARDI had not paid your shareware fee for them.  If you continue to use
+Executor, you should either delete the shareware items, or register
+them.
+
+Executor assumes your floppy drive is /dev/fd0 and your CD-ROM drive
+is /dev/cdrom and will need permission to access those devices if you
+want Executor to be able to read and write floppies and read CD-ROMs.
+
+If you're bold, you can even hook up a Macintosh formatted SCSI
+disk and access that under Executor by adjusting your "MacVolumes"
+environment variable:
+
+$ export MacVolumes=/dev/sd1
+$ executor
+
+This assumes "/dev/sd1" is a Macintosh formatted SCSI disk and that
+the permissions on /dev/sd1 allow you to read, if you want the volume
+to be read only, or read and write, if that's what you want to do
+under Executor.
+
+If you have permission to access /dev/fd0 and /dev/cdrom, then those
+devices will automatically be examined by Executor to see if they
+contain Macintosh formatted media.  If they do, they will be available
+under Executor.
+
+The 1.99<x> versions of Executor are "experimental".  We hope to have
+Executor in beta in January of 1996 and officially released in
+February or March.
+
+In addition to the text files in the doc subdirectory mentioned above,
+another good source of information about Executor is the Usenet
+newsgroup "comp.emulators.mac.executor", or the Executor interest
+mailing list.  The newsgroup and the mailing list are connected via a
+bidirectional gateway.
+
+To join the mailing list, send e-mail to "executor-request@ardi.com"
+or "executor-digest-request@ardi.com" with a blank subject line and a
+body that says "subscribe".  With the first address, you'll receive
+e-mail everytime someone sends anything to the mailing list.  With the
+digest form, you'll receve e-mail only once a day with all the
+previous day's traffic bundled into one digest.
+
+You can then send messages to the entire group by sending to
+"executor@ardi.com".  Some of the people on the list have been using
+Executor under NEXTSTEP for a couple of years and under DOS for a
+year, and of course we closely follow that mailing list, even though
+we don't directly administer it.
+
+Before 2.0 goes to press, pricing for non time-limited versions of
+Executor/Linux is $49 for students, $49 for educational institutions,
+faculty and staff and $99 for everyone else.  The $49 student fee also
+entitles the student to run Executor/DOS as well.  The educatonal fee
+does not include that.  That price does cover all the 1.99<x> releases
+and the 2.0 CD-ROM release when it's finished.
+
+Again, read "executor_faq.txt" for more information.
+
+The Linux version of Executor now has rudimentary sound support.
+These programs are known to work well with this support (although the
+volume is not adjustable): Apeiron, Maelstrom, Swoop, Rescue, SimAnt,
+KidPix2, Prince of Persia 1, Blood Suckers, Space Madness, and
+Spaceward Ho.  Many of those games are only fun if SVGAlib can
+linearly map your video board into memory.  There are many other
+programs that should work fairly soon.
+
+The primary person to thank is Pat LoPresti <patl@lcs.mit.edu> , and
+the secondary entity to thank is The Jin <jin@atype.com>.  Pat and Jin
+are good friends of Mat Hostetter and Cotton Seed, two of ARDI's most
+talented engineers.  Pat offered to design a nice low-level sound API
+that we can use to implement sound on a variety of platforms and also
+do the Linux implementation, with some help from Jin and Cotton and
+Mat.
+
+In order for sound to work under Executor/Linux, you must be using
+kernel 1.3.45 or greater.  In addition, we've found that the
+svgalib-elf version totally hangs kernel 1.3.45 over here, so you may
+have to use the svgalib-aout version if you have kernel 1.3.45.
+
+Thanks for your interest.
+
+
+	--Cliff
+
+	Please address questions to questions@ardi.com and bug reports
+	to bugs@ardi.com.  Our web site is http://www.ardi.com/ and we
+	accept anonymous ftp connections at ftp.ardi.com.

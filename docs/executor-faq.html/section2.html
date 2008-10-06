@@ -1,0 +1,155 @@
+<html>
+<head><title>
+Executor FAQ - Section 2
+</title>
+<link rev="made" href="mailto:questions@ardi.com">
+</head><body><h1>
+Executor FAQ - Section 2 <br>
+Executor's Limitations
+</h1>
+
+<ul>
+<li><a href="#whatversion" rel=subdocument>Q2.1. What version of the Macintosh operating system does Executor
+emulate?</a></li>
+<li><a href="#limitations" rel=subdocument>Q2.2. What limitations does Executor 2 have?</a></li>
+<li><a href="#q_2_3" rel=subdocument>Q2.3. If I have 800 KB floppies, what can I do?</a></li>
+<li><a href="#q_2_4" rel=subdocument>Q2.4. Does Executor have networking support?</a></li>
+<li><a href="#q_2_5" rel=subdocument>Q2.5. How do you install Fonts and Desk Accessories
+(DAs)?</a></li>
+<li><a href="#q_2_6" rel=subdocument>Q2.6. Will Desk Accessories work under Executor?</a></li>
+<li><a href="#q_2_7" rel=subdocument>Q2.7. Why do some installers not work?</a></li>
+</ul><hr>
+
+<A name="whatversion"><h2>
+Question 2.1.  What version of the Macintosh operating system does
+Executor emulate?
+</h2></A>
+
+Executor knows how to emulate most of System 7.0, but the default
+version that Executor reports to applications is System 6.0.7, because
+some bad programs make calls to undocumented System 7.0 traps if we
+acknowledge that we've implemented System 7.0.  Each time a different
+application is run under Executor, Executor checks an application
+specific configuration file for application specific settings.  Many
+of the configuration files adjust the System to 7.0. 
+
+<p>
+You can manually adjust the system version.  Start Executor and call
+up the Preferences Panel with Cmd-shift-5 [see
+<A href="section3.html#wherecmd">Q3.1 `Where are the Cmd (Clover) and Option keys?'</A>].  Set the System to 7 and click OK (don't save yet; these are just the
+Browser settings).  Now start your application, call up the
+Preferences Panel again, and save it with the System 7 setting.  After
+that, Executor will automatically invoke System 7 support when you run
+that application.  
+<A name="limitations"><h2>
+Question 2.2.  What limitations does Executor 2
+have?
+</h2></A>
+
+Because the OS and Toolbox have been rewritten from scratch, Executor
+2 has limitations, including no serial port access, no modem use, no
+AppleTalk, primitive sound, limited System 7 support, no INITs, no
+CDEVs and no Internationalization.  
+<p>
+Executor can read and write 1.44 MB Mac formatted floppy disks, but
+due to limitations in PC hardware, <em>can't</em> read or write 800 KB floppy disks.  
+<p>
+In the lab we have limited serial port access and we're working on
+improving sound.  
+<A name="q_2_3"><h2>
+Question 2.3.  If I have 800 KB floppies, what can I
+do?
+</h2></A>
+
+Very little.  It is not ARDI's fault and there's nothing we can do
+about it, but the way that Apple squeezed 800 KB onto floppies when
+PCs were only getting 720 KB on floppies was to write more data on the
+floppy tracks far from the center than on the tracks near the center. 
+This was clever, but extremely incompatible. 
+
+<p>
+There <em>are</em> ways to squeeze more information onto PC floppy
+drives than PCs usually use.  However, these methods
+<em>cannot</em> be used to write or even read 800 KB Macintosh formatted floppies. 
+
+<p>
+Luckily, very little is supplied on 800 KB floppies anymore, but if
+you have some, you're almost definitely going to need the use of a
+Macintosh somewhere to copy the contents onto &quot;HD&quot; 1.4 MB
+formatted floppies (PCs and Macs use the same low-level format for 1.4 MB
+floppies).  
+<p>
+One Executor Enthusiast suggested using Kinko's public Macs for this
+purpose, and this description was given:
+<pre>
+1.  Moving 800 KB Mac Files onto 1.44 MB Mac disks.  The easiest thing
+that I have found when working on a real Mac is to preformat the
+Mac disks to 1.44 MB.  Insert the 1.44 MB disk and eject it with
+(Cmd-E).  Then insert the 800 KB mac disk.  Drag the icon of the 800
+KB disk over the 1.44 MB disk.  All the files will be transferred as
+will the file names.  The Mactools fastcopy program can also copy
+between densities.
+
+2.  Kinko's Public Machines.  Kinko's public Macs are equipped with a
+program known as &quot;Desk Tracy&quot; which is designed to stop people from
+pirating Kinko's software from the hard disk.  The problem is that when
+you are copying files between your own disks the program will still
+trigger if the file has a namesake on the Kinko's machine. What you
+will need to do is get a Kinko's employee to shut the program off,
+which is obviously a discretionary call with them.  I didn't have a
+problem and have done it twice, but we obviously will be using
+different Kinko's.
+</pre>
+
+<A name="q_2_4"><h2>
+<br>
+Question 2.4.  Does Executor have networking
+support?
+</h2></A>
+
+Currently, no.  Some Networking support may be included in Executor 3,
+but we do not yet have an estimated date of completion for Executor 3.
+ The first platform to have networking support built in will probably
+be Linux.  NOTE: networking support will most likely first be an
+implementation of Open Transport and/or MacTCP, followed by EtherTalk.
+ Supporting AppleTalk over serial lines is unlikely to happen due to
+differences in PC and Mac hardware.  
+<A name="q_2_5"><h2>
+Question 2.5.  How do you install Fonts and Desk Accessories
+(DAs)?
+</h2></A>
+
+You just drag them into the hot-band and our browser will do the right
+thing.  However, we only support bit-mapped fonts, not Type 1 or
+TrueType fonts.  In addition, there is a bug which causes the hot-band
+to forget which desk accessories have been loaded, which then makes it
+impossible to remove desk accessories.  
+<A name="q_2_6"><h2>
+Question 2.6.  Will Desk Accessories work under
+Executor?
+</h2></A>
+
+Currently Desk Accessory support is very weak; most will not run. 
+When we add support for extensions, we'll also go back and fix some
+desk accessory bugs.  
+<A name="q_2_7"><h2>
+Question 2.7.  Why do some installers not
+work?
+</h2></A>
+
+Currently there is one major class of application installer that is
+known not to work with Executor.  Installers based on Apple's old
+Installer do not work.  An example is Microsoft Word 5's installer. 
+Some installers require that you use Cmd-shift-5 and set the system
+version to 7 and turn on the &quot;Pretend&quot; options before
+they'll work properly.  <hr>
+Next: <a href="section3.html" rel=precedes>Using Executor</a>.<br>
+Back: <a href="section1.html" rev=precedes>Executor in General</a>.<br>
+<a href="index.html" rev=subdocument>Return to contents</a>.<p>
+<address>
+
+- 28 February 2002
+</address><br>
+Extracted from Executor Frequently Asked Questions with Answers,
+<A href="section7.html#faqcopyright">Copyright ARDI 2002.</A>
+</body></html>

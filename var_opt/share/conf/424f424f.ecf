@@ -1,0 +1,4 @@
+// This Configuration file (424f424f.ecf) was built by Executor
+Comments = "Thanks to DaveSueJ";
+Options = {BlitInOSEvent, PretendSound, PassPostscript, NewLineToCR, NoPrefPanel};
+Gestalt('fs  ') = { 0, 1 };

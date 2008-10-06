@@ -1,0 +1,9 @@
+// This Configuration file (/executor/configur/506fc450.ecf) was built by Executor
+Comments = "Prince of Persia needs sound on.  NOTE:  The original PoP runs fine, but PoP 2 requires QuickTime, and hence won't run.";
+WindowName = "Prince of Persia";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 6.0.7;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR, NoWarn32};

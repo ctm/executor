@@ -1,0 +1,38 @@
+////////////////////////////////////////////////////////////////////////////////
+///////////////////InstallShield Media Library Report Summary///////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+Media Name      : CD-ROM
+Report Filename : D:\My Installations\Executor-Win32 Demo\Media\CD-ROM\Report Files\7-28-1998 12.41.26PM.rpt
+Date            : 07/28/1998
+Time            : 12:41PM
+
+Number of Components:                5 
+Number of File Groups:               5 
+Number of Files:                     0 
+Total Size of Files:                 0 (bytes)
+
+==========
+COMPONENTS
+==========
+
+
+     Executor Component
+     CD Enable
+         CD vxd
+     NT CD Enable
+         NT CD sys files
+
+
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////Report Details/////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+================================================================================
+                                 COMPONENT: ""
+================================================================================
+
+SUMMARY:
+    Total Files:                0 (files for this component only)
+    Source Bytes:               0 (files for this component only)

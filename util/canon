@@ -1,0 +1,6 @@
+#! /bin/bash
+root="$1"
+rm -f /tmp/t$$
+awk '{print $1, $2}' "$root"/src/trapinfo > /tmp/t$$
+awk -f "$root"/util/canon.awk < debugtable | sort | join -a1 - /tmp/t$$ | sort +1n
+rm /tmp/t$$

@@ -1,0 +1,29 @@
+; The next four are the lines that appear on the banner.
+BANNER=Executor @executor-version@
+TITLE2=Copyright (C) 1996, Abacus Research and Development, Inc.
+TITLE3=Phone +1 505 766 9115, FAX +1 505 766 5153
+TITLE4=Email info@ardi.com
+; The Main Window Title
+MAINWIN=Executor @executor-version@
+; These three lines are displayed after a successful installation
+END1=Executor @executor-version@ installation completed.
+END2=
+END3=
+; Color constants, as per COLOR.EXE. For the Banner, the Main Window, the
+; Main File copy info window, the crawl bars, the end info, and the
+; drive/directory selection windows. In that order.
+CXBANNER=26
+CXMAIN=30
+CXFILEDATA=62
+CXFILECOPY=36
+CXENDDATA=62
+CXDIRCHOOSE=46
+;Deprecated
+;DEFINDRIVE=*
+;Default Install Drive
+DEFOUTDRIVE=C
+;Deprecated
+;DEFINDIR=*
+;Default Install Directory.
+DEFOUTDIR=\EXECUTOR
+;File Definitions Below

@@ -1,0 +1,108 @@
+		    INSTALLATION UNDER WINDOWS '95
+
+1.) Start your computer and insert the Executor CD in the CD-ROM
+drive.
+
+2.) Run the installation program.  You can do this from a DOS prompt
+by typing
+
+	D:\install
+
+(assuming that your CD-ROM drive is your D: drive), or you can do it
+from within Windows '95:
+
+	Click the Start button, point to Settings, and click Control
+	Panel on the Settings menu which pops up.  Double-click on
+	Add/Remove Programs.  Click the Install button.
+
+	Click Next to have Windows '95 detect the installation program
+	automatically.  If it correctly detects INSTALL.EXE on the CD,
+	then click Finish to have Windows '95 run the installer for
+	you.
+
+3.) Change the destination directory for installation if you do not
+want to install in C:\EXECUTOR.  Press the number 2 when you are ready
+to begin the installation.
+
+
+
+		   CONFIGURATION UNDER WINDOWS '95
+
+
+CD-ROM DRIVE
+
+If you want to use Macintosh CDs with Executor, you'll need to make
+what might be a minor adjustment to the way Windows '95 treats CDs.
+If it's present, find and remove the
+
+rem - By Windows 95 Setup
+
+portion from the mscdex line in your AUTOEXEC.BAT file.  You will also
+need to edit your CONFIG.SYS file and make sure the CD-ROM driver is
+also not commented out.
+
+If this works, this will tell Windows '95 to use the Microsoft CD-ROM
+Extensions -- the standward way to perceive CDs -- instead of the
+unique Windows '95 way.
+
+If you can't find a "rem - By Windows 95 Setup" command, or if you're
+having trouble modifying your CONFIG.SYS file to load your CD-ROM
+driver, please read the file "CDINFO.TXT" that is installed in your
+Executor directory when Executor is installed.  It explains the nature
+of the problem and gives you more information on how you might be able
+to solve it.
+
+
+SYSTEM SETTINGS
+
+To examine the system settings, right-click on the Executor icon and
+then select properties.  Windows '95 will usually select the correct
+settings for your system automatically, but if you're having any
+trouble then you may want to try adjusting them by hand.
+
+
+The Memory tab;
+
+Conventional Memory-Auto
+Initial Environment-Auto
+Expanded(EMS)memory-None
+Extended(XMS)memory-None
+MS-DOS protected-mode(DPMI)memory-12288
+
+Normally, the DPMI setting would be left on Auto as well.  You will
+only want to change it if you are having any trouble with memory.  Try
+running
+
+executor -info
+
+from a DOS prompt to see how much free DPMI Executor is detecting.  If
+it isn't 2/3 (or more) of your total RAM, then Windows '95 may not be
+assigning enough DPMI automatically.
+
+12288 is a safe DPMI setting for a computer with 16 MB RAM or more.
+If you have less, the DPMI setting should probably be less as well.
+6144 would be a good setting for a computer with 8 MB RAM.
+
+
+The Misc tab:
+
+Disable Allow screen saver if you have problems with Executor
+freezing.  Also set Idle sensitivity all the way to Low.
+
+
+The Screen tab:
+
+Set Executor to run Full-screen if Executor starts minimized.  Because
+it is a DOS-native program, Executor cannot be run in a window.
+Windows '95 should maximize Executor automatically, but if it fails
+then turning on Full-screen should fix the problem.
+
+
+The Program tab:
+
+Close on Exit should be selected normally, so that you don't have to
+close the window by hand after you're finished using Executor.  If you
+are having any problems, you may want to deselect this so that
+Executor's DOS window remains visible after Executor itself has
+exited.  Then you'll be able to see any error messages which Executor
+may be printing upon exit.

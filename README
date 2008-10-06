@@ -1,0 +1,25 @@
+Executor has not been actively worked on for many years.
+
+Right now I'm putting it on github (with the original authors' permission)
+as-is.  I haven't even tried building it in the last year or so.
+
+Included are a bunch of auxiliarly files and miscellaneous front-ends.
+It's unlikely anything other than the Linux and win32 ports can be
+made to go.
+
+The DOS port required various other libraries that we had permission
+to use, but that we did not necessarily have the permission to publish
+the source for, so the source to some of the packages that the DOS
+port requires is not present in the github repository.
+
+My email address is still <ctm@ardi.com>, although ARDI itself is
+defunct.  I get a ridiculous amount of spam and will quite possibly
+not see email addressed to me.
+
+For a few years I've been meaning to verify that the code builds,
+write a little documentation, explain a little history, maybe even
+set up a mailing list for people, etc... but other things have always
+taken precedence.
+
+October 5th, 2008
+

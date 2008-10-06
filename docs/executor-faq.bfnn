@@ -1,0 +1,1319 @@
+\comment This is the source for the new Executor FAQ list, in
+\comment the Bizarre Format With No Name.  It is turned into Lout
+\comment input, plain ASCII and an Info document by a Perl script.
+\comment The BFNN constructs here are patterned off of those in the
+\comment Linux FAQ.
+\comment
+\set brieftitle Executor FAQ
+\comment \set author     <A href="http://www.cl.cam.ac.uk/users/iwj10/">Ian Jackson</A> / <A href="http://www.cl.cam.ac.uk/users/iwj10/contact.html">ijackson@nyx.cs.du.edu</A>
+\set authormail questions@ardi.com
+\set title      Executor Frequently Asked Questions with Answers
+\set copyholder ARDI
+\set copyrightref faqcopyright
+\call-lout startup
+\call-html startup executor.refs
+\copyto ASCII
+             EXECUTOR FREQUENTLY ASKED QUESTIONS WITH ANSWERS
+                            `date '+%d %b %Y'`
+                        ARDI Staff <questions@ardi.com>
+               http://www.ardi.com/executor-faq.html
+
+\endcopy
+\comment \copyto POST
+\comment #!/bin/sh
+\comment set -e
+\comment test ian@chiark = `whoami`@`hostname`
+\comment cat <<'END-OF-HEADER' >linux-faq.post-part1
+\comment From: ijackson@nyx.cs.du.edu (Ian Jackson)
+\comment Newsgroups: comp.os.linux.answers,comp.os.linux.setup,comp.os.linux.development.apps,comp.os.linux.misc,comp.os.linux.announce,comp.os.linux.help,comp.answers,news.answers
+\comment Subject: Linux Frequently Asked Questions with Answers (FAQ: 1/2)
+\comment Keywords: FAQ, Linux, part1
+\comment Summary: Please read the whole FAQ before posting to comp.os.linux.help.
+\comment Followup-To: poster
+\comment Approved: *.answers moderation team <news-answers-request@mit.edu>,
+\comment           Matt Welsh <linux-answers-request@news.ornl.gov>
+\comment `./expirydate`
+\comment 
+\comment Archive-Name: linux/faq/part1
+\comment Last-Modified: `date '+%d %b %Y'`
+\comment 
+\comment END-OF-HEADER
+\comment pgp-auto +batchmode +force -fast <<'END-OF-PORTION' >>linux-faq.post-part1
+\comment \endcopy
+\copyto LOUT
+@Doc @Text @Begin
+@CenteredDisplay clines @Break {
++5p @Font Bold @Font { Executor Frequently Asked Questions with Answers }
+-2p @Font {ARDI Staff {0.7 1.0} @Scale {Courier Bold} @Font "<questions@ardi.com>"}
+`date '+%d %B %Y'`
+}
+\endcopy
+\copyto INFO
+START-INFO-DIR-ENTRY
+* Executor FAQ: (executor-faq). Executor Frequently Asked Questions with Answers.
+END-INFO-DIR-ENTRY
+
+
+File: $prefix.info, Node: Top, Next: Question 1.1, Up: (dir)
+
+             EXECUTOR FREQUENTLY ASKED QUESTIONS WITH ANSWERS
+                            `date '+%d %b %Y'`
+                        ARDI Staff <questions@ardi.com>
+
+\endcopy
+
+This is the list of Frequently Asked Questions about Executor, the
+commercial Macintosh emulator for DOS, Windows, OS/2, and Linux.  This set of
+answers to Frequently Asked Questions is not designed to take the
+place of our Executor manual.  However, currently our manual is not
+available on-line, so this FAQ does briefly touch on some issues that
+are covered more in depth in our manual.
+
+In addition to this FAQ, there should be README files bundled with
+Executor and there is also an Executor/DOS document that describes how
+to get started with Executor/DOS from a DOS user's point of view,
+which may be useful to users of Executor on other platforms as well.
+That document is called "ERNSTOUD.TXT", since it's hard to come up
+with useful names when constrained by the DOS 8.3 filename limits and
+the author of the document is Ernst J. Oud.
+
+Please check out these documents and this FAQ, before sending e-mail
+to ARDI or the Executor Interest mailing list.
+
+\only post
+You can skip to a particular question by searching for `Question n.n'.
+
+\comment Note that this posting has been split into two parts because of its
+\comment size.
+\endonly
+
+A new version of this document appears frequently.
+If this copy is more than a month old it may be out of date.
+
+\section  Index
+
+\index
+
+\comment ######################################################################
+
+
+\section Executor in General
+
+
+\question 02jul  What is the correct pronunciation?
+
+Ig-ZEK-yu-tor
+
+
+\section Executor's Limitations
+
+
+\question 14may:whatversion What version of the Macintosh operating system does Executor emulate?
+
+Executor knows how to emulate most of System 7.0, but the default
+version that Executor reports to applications is System 6.0.7, because
+some bad programs make calls to undocumented System 7.0 traps if we
+acknowledge that we've implemented System 7.0.  Each time a different
+application is run under Executor, Executor checks an application
+specific configuration file for application specific settings.  Many
+of the configuration files adjust the System to 7.0.
+
+You can manually adjust the system version.  Start Executor and call
+up the Preferences Panel with Cmd-shift-5 [see \qref wherecmd].  Set
+the System to 7 and click OK (don't save yet; these are just the
+Browser settings).  Now start your application, call up the
+Preferences Panel again, and save it with the System 7 setting.  After
+that, Executor will automatically invoke System 7 support when you run
+that application.
+
+ 
+\question 02jul:limitations  What limitations does Executor 2 have?
+
+Because the OS and Toolbox have been rewritten from scratch, Executor
+2 has limitations, including no serial port access, no modem use, no
+AppleTalk, primitive sound, limited System 7 support, no INITs, no
+CDEVs and no Internationalization.
+
+Executor can read and write 1.44 MB Mac formatted floppy disks, but
+due to limitations in PC hardware, \italic{can't\} read or write 800
+KB floppy disks.
+
+In the lab we have limited serial port access and we're working on
+improving sound.
+
+\question 02jul  If I have 800 KB floppies, what can I do?
+
+Very little.  It is not ARDI's fault and there's nothing we can do
+about it, but the way that Apple squeezed 800 KB onto floppies when
+PCs were only getting 720 KB on floppies was to write more data on the
+floppy tracks far from the center than on the tracks near the center.
+This was clever, but extremely incompatible.
+
+There \italic{are\} ways to squeeze more information onto PC floppy
+drives than PCs usually use.  However, these methods \italic{cannot\}
+be used to write or even read 800 KB Macintosh formatted floppies.
+
+Luckily, very little is supplied on 800 KB floppies anymore, but if
+you have some, you're almost definitely going to need the use of a
+Macintosh somewhere to copy the contents onto "HD" 1.4 MB formatted
+floppies (PCs and Macs use the same low-level format for 1.4 MB
+floppies).
+
+One Executor Enthusiast suggested using Kinko's public Macs for this
+purpose, and this description was given:
+
+\verbatim
+1.  Moving 800 KB Mac Files onto 1.44 MB Mac disks.  The easiest thing
+that I have found when working on a real Mac is to preformat the
+Mac disks to 1.44 MB.  Insert the 1.44 MB disk and eject it with
+(Cmd-E).  Then insert the 800 KB mac disk.  Drag the icon of the 800
+KB disk over the 1.44 MB disk.  All the files will be transferred as
+will the file names.  The Mactools fastcopy program can also copy
+between densities.
+
+2.  Kinko's Public Machines.  Kinko's public Macs are equipped with a
+program known as "Desk Tracy" which is designed to stop people from
+pirating Kinko's software from the hard disk.  The problem is that when
+you are copying files between your own disks the program will still
+trigger if the file has a namesake on the Kinko's machine. What you
+will need to do is get a Kinko's employee to shut the program off,
+which is obviously a discretionary call with them.  I didn't have a
+problem and have done it twice, but we obviously will be using
+different Kinko's.
+\endverbatim
+\nl
+
+\question 02jul  Does Executor have networking support?
+
+Currently, no.  Some Networking support may be included in Executor 3,
+but we do not yet have an estimated date of completion for Executor 3.
+The first platform to have networking support built in will probably
+be Linux.  NOTE: networking support will most likely first be an
+implementation of Open Transport and/or MacTCP, followed by EtherTalk.
+Supporting AppleTalk over serial lines is unlikely to happen due to
+differences in PC and Mac hardware.
+
+
+\question 11jul  How do you install Fonts and Desk Accessories (DAs)?
+
+You just drag them into the hot-band and our browser will do the right
+thing.  However, we only support bit-mapped fonts, not Type 1 or
+TrueType fonts.  In addition, there is a bug which causes the hot-band
+to forget which desk accessories have been loaded, which then makes it
+impossible to remove desk accessories.
+
+
+\question 02jul  Will Desk Accessories work under Executor?
+
+Currently Desk Accessory support is very weak; most will not run.
+When we add support for extensions, we'll also go back and fix some
+desk accessory bugs.
+
+
+\question 12jul  Why do some installers not work?
+
+Currently there is one major class of application installer that is
+known not to work with Executor.  Installers based on Apple's old
+Installer do not work.  An example is Microsoft Word 5's installer.
+Some installers require that you use Cmd-shift-5 and set the system
+version to 7 and turn on the "Pretend" options before they'll work
+properly.
+
+
+\section Using Executor
+
+\question 02jul:wherecmd  Where are the Cmd (Clover) and Option keys?
+
+On a PC keyboard, Executor uses the left "Alt" key as a Cmd key and
+the right "Alt" key as the Option key.
+
+\question 02jul  What is an image file?
+
+Some Macintosh sites contain image files that are exact copies of a
+Macintosh Hierarchical FileSystem (HFS) volume with a few bytes of
+header information prepended.  Executor allows you to use image
+files just like HFVs, although they should have the suffix
+"\courier{.ima\}" instead of "\courier{.hfv\}".
+
+
+
+\question 02jul  Can I launch applications directly from the command line?
+
+Yes.  If an application resides within a UNIX or DOS filesystem, you
+can specify the name of the application, and documents that you would
+like the application to open when it starts up, on the command line.
+Applications that reside in HFV files are specified using colons to
+delimit the pathname,
+e.g. "\courier{executor MyVolume:directory:application\}".
+
+
+\question 26mar:ghostfonts I installed a font in Executor, but I still can't print in it.  What's the deal?
+
+You have to install the same font in Ghostscript.  Otherwise,
+Ghostscript will use the default Helvetica font since it can't find
+the one you want.  Don't forget to add the paths to the fonts into
+your fonts pfb file.
+
+
+\question 02jul  Can I have Executor use more than 8 MB for the application zone?
+
+You can use up to 64 MB for the applzone.
+
+
+\question 02jul  An application I'm trying crashes.  What should I do?
+
+Perhaps the most common avoidable cause of crashes is insufficient
+memory for the emulated application.  You can fix this by increasing
+the "applzone" parameter.  For example, many programs which normally
+die quickly will work with "executor -applzone 4m" (which allocates 4
+MB of space for the emulated application; see the list of command line
+switches and their meanings elsewhere in this document).
+
+DOS NOTE: If you run "executor -info", it will tell you how much DPMI
+memory is available and how much memory is being used by the applzone,
+syszone and stack.  If there is less DPMI memory available than the
+sum of the applzone, syszone and stack memory requirements, then
+Executor will page between DPMI memory and a special "paging" disk
+file.  This paging slows you down and also consumes disk space.  It is
+possible to manually override the applzone, syszone and stack defaults
+with smaller values, but when you do so, you run the risk of not
+having enough memory for an application to run.  Unfortunately,
+Macintosh programs are often not polite at all when they do not have
+enough memory.  The Lemmings demo is an example of such a program; if
+you run that program on a real Mac and only give it 1200k of memory,
+weird errors will occur.  Doing the same under Executor will also
+yield weird errors.
+
+If Executor needs to make a paging file, and there is not enough disk
+space to create one, you will get an error message during Executor's
+startup.  If you have the environment variable "TEMP" set, then
+Executor will try to place its paging file there, so if TEMP is set to
+point to a small RAM disk, or a disk that is nearly filled, Executor
+may run out of memory too easily.
+
+Some programs are unhappy with Executor's limited sound support, and
+crash.  You can turn on the "pretend sound" option before running the
+application in question and see if this helps.  In addition, some
+programs have menu items, or preference check boxes that can be used
+to disable sound.  It is always recommended that you disable sound
+from within a program in addition to using the Executor sound
+preferences, if you have to disable sound.
+
+One example of a program that will have problems with sound is
+"Ultimate Solitaire".  If you do not disable sound from within
+Ultimate Solitaire, the game will play fine, until you win.  At that
+point it will tell Executor to start playing a sound and request that
+Executor notify it when the sound is done playing.  If sound is off,
+this will result in Ultimate Solitaire hanging after you win a game.
+
+Some programs also save preferences in a file, and if something bad
+happens to that file, the program can then get confused and will not
+run properly.  Occasionally this happens to Microsoft Word, and you
+need to use the browser to delete the file "Word Preferences" from
+your "System Folder".
+
+Although it should not happen, even our file browser keeps a file
+around that can cause trouble if it becomes corrupt.  That file is
+"godata.sav".  It stores which folders you have open and the contents
+of your "hot-band".  If that file gets corrupt, the file browser may
+not run.  In the rare case that the browser won't run, you can use the
+"-nobrowser" switch when you start Executor to bypass the browser, but
+to get the browser back you'll need to either delete "godata.sav"
+somehow or replace exsystem.hfv with one from the original
+distribution.
+
+
+\question 02jul  Why do some applications claim I don't have an FPU?
+
+The problem is probably that the applications you are trying to use
+try to directly manipulate the FPU unit that some Macintoshes have.
+
+The key words are "directly manipulate".  Apple warned software makers
+to not directly manipulate the FPU, but to instead use their numerics
+library ("SANE" Standard Apple Numerics Environment).  Programs that
+don't use SANE, but directly manipulate the FPU run faster on Macs
+that have FPUs, but don't run at all on Macs that don't have FPUs.  If
+that is actually the source of your problems, then such programs also
+wouldn't run on Apple machines like the Quadra 605.  This limitation
+is also present on Apple's PowerPC based Macs.
+
+One workaround for this problem is an "INIT" called "SoftFPU".
+SoftFPU will make a Mac without a co-processor work as though there is
+one there, however the floating point computation will be done very
+slowly.  However, SoftFPU can't be used with Executor until Executor
+supports INITs.
+
+
+\question 02jul:compact  Why does Compact Pro have trouble with multi-volume archives?
+
+Executor takes a short cut that causes trouble for some programs;
+Compact Pro is one of them.  The problem is that a real Macintosh can
+keep track of volumes that are not physically in the drive.  That is
+why Macintoshes sometimes tell you to put one disk in their floppy
+drive, then they eject it and ask for another one, then eject it and
+ask for the first one.  Executor currently isn't so clever.  When a
+disk is ejected, Executor forgets about it.  Few programs count on the
+behavior of a real Mac, but those that do currently won't work with
+Executor.
+
+In Compact Pro's case you can just copy all of the pieces of the
+archive to your hard disk, then open the last piece from the hard disk
+and everything will work properly.  This workaround requires more hard
+disk space than you'd need if you could just read the pieces off a
+succession of floppies.
+
+Since this difference affects very few programs, it's not as high
+priority as adding other new features.
+
+\question 04jul:internet  How can I use Mac software from the internet?
+
+Find a site that legitimately has Mac software for use.  There is a
+Macintosh FAQ that lists many sites -- here are some of them:
+
+\call startlist
+\call item
+\ftpon www.ardi.com : \ftpin /pub/samples (USA)
+\call item
+\ftpon liquify.isca.uiowa.edu : \ftpin /mac/infomac (USA)
+\call item
+\ftpon wuarchive.wustl.edu : \ftpin /systems/mac/info-mac (USA)
+\call item
+\ftpon ftp.technion.ac.il : \ftpin /pub/unsupported/mac (Israel)
+\call item
+\ftpon ftp.sunset.se : \ftpin /pub/mac (Sweden)
+\call item
+\ftpon src.doc.ic.ac.uk : \ftpin /packages/info-mac (UK)
+\call item
+\ftpon ftp.is.co.za : \ftpin /info-mac (South Africa)
+\call endlist
+
+Our \docref{samples directory\} is there to give you a few files in a
+variety of different formats that are known to work with Executor.  If
+you have trouble downloading Mac software from the internet, you may
+want to practice these instructions using the files in our
+\docref{samples directory\} first, so you'll know you're not
+attempting something impossible.
+
+Before transferring a large application, you might want to see what
+the requirements of that application are, most sites have a collection
+of small notes about applications that you can look at first.
+
+Use BINARY mode to transfer the files that you want to use.  Files
+whose names end in ".hqx" are usually the easiest to handle.
+
+In general, StuffIt Expander will do well with many different types of
+files.  However, some of the Web Browsers out there interfere with
+StuffIt Expander by trying to expand the files as you're downloading
+them from the net.  The browser sees that you're not running on a
+Macintosh, so the non-Macintosh information (like the type and
+creator) is thrown away!  One way to avoid this problem with some of
+the web browsers is to hold the shift key down when you click on a
+link that contains a Macintosh file.  There are other ways that
+specific browsers can be configured to tell them to \italic{not\}
+expand Macintosh files as they're picking them up.
+
+Under DOS, you need to make an HFV file [see \qref makehfv] that will
+be large enough to hold the files as you've downloaded them and also
+hold the files after they've been expanded.  Once you've made the HFV
+file, copy all the files you've downloaded into it, then follow the
+remaining directions.
+
+Under all operating systems, your next step is to run StuffIt Expander
+and use the "Expand..." menu item from the "File" menu to open each
+of the files you've downloaded.  In general, especially when dealing
+with files whose names end in ".hqx", StuffIt Expander will do the
+right thing.  However, some sites do not store files in ".hqx" format,
+and StuffIt Expander may fail.  Remember, under DOS, you must do the
+StuffIt Expansion inside an HFV file.
+
+If StuffIt Expander fails, you can try using the Get Info option of
+Executor's browser to change the creator and type information of the
+file.  If you believe the downloaded file in question is a StuffIt
+Archive, you can change the type and creator each to "SIT!" and then
+try StuffIt Expander again.  If you believe the downloaded file is a
+Compact Pro archive, you can change the creator to "CPCT" and the type
+to "PACT" and then try StuffIt Expander again.  Similarly, you can use
+creator "BnHq" and type "TEXT" if you think that the file is a
+MacBinary file.  StuffIt Expander 4.0 should be much better at
+automatically determining what format an archive is in.
+
+
+\question 04jul  How can I use Mac software from Bulletin Boards?
+
+In general, follow the procedure in \qref internet -- know the
+limitations of what Executor can run, transfer in binary mode and use
+StuffIt Expander to unpack the files you download.  Just like with
+files downloaded from the internet, sometimes you'll need to change
+the file type and creator, first.
+
+
+\question 04jul  How can I use Mac software from AOL?
+
+AOL sometimes (about half the time) uses a format that StuffIt
+Expander under Executor has trouble with.  For DOS/Windows users, use
+this workaround.  Get a copy of unstuff.exe (available on AOL
+compressed as unsitins.exe) and use the -mb tag to convert your
+downloaded files to MacBinary format before ever moving them into
+Executor.  E.g.:
+
+\verbatim
+unstuff -mb somefile.sit
+\endverbatim
+\nl
+And you'll get somefile with a different extension.
+
+Then start up Executor and use BinHex's Download --> Application
+function to convert the file to an application and move it into
+an Executor volume simultaneously.
+
+Note that if the file can be unstuffed in the usual manner, then
+trying to use this workaround will break it.  It's usually best,
+therefore, to try normal unstuffing first.
+
+
+\question 09sep:textfiles Why do files which aren't text files look like text files?
+
+Macintosh files have File Type and File Creator information stored in
+their directory entries on a Macintosh filesystem.  These two pieces
+of information are often lost when the file is put onto a PC.
+Executor's default is to assume that a file is a text file, because
+text is the most universal of file types.  If the file is not a text
+file you'll probably want to use StuffIt Expander (see \qref internet)
+to expand the archive, or in rare cases you'll have to change the File
+Creator and File Type.
+
+To change a file's Creator and Type information, run Browser, select
+the file's icon, and choose Get Info from Browser's File menu.  Then
+change File Creator and File Type to the appropriate codes from the
+filetype.txt list in the docs directory of your Executor CD.
+
+NOTE: in addition to having Type and Creator information, Macintosh
+files also often have information in the "Resource Fork" portion of
+the file.  That information is also often lost when a file is
+transferred to a PC, so it's possible that changing the Type and
+Creator information will not be sufficient to allow you to use a Mac
+file on a PC under Executor unless you use some sort of archiving
+program (e.g. StuffIt, Compact Pro) to make sure all the Mac
+information is stored in the "Data Fork" of the file.
+
+
+\question 10jun What does "You may open a 32000 character selection" mean?
+
+As mentioned in \qref textfiles, files that don't have a file type are
+assumed to be text files.  That means that if you double-click on
+them, Tex-Edit will try to open up the file, even if the file is in
+some other representation.  Executor does not use filename extensions
+to determine a file's types, so if you download a file named
+"testfile.bin" and then let Executor see the file, it will still
+appear to be a text file, even though the name strongly suggests that
+it's a BinHex file.
+
+You can use StuffIt Expander (see \qref internet) to expand a variety
+of different file types, but you'll have to start StuffIt Expander up
+directly, by double-clicking on it and then use the "Expand..." item
+in the "File" menu to select the file you want to expand
+(e.g. "testfile.bin").
+
+\question 17jul  What is Speedometer?
+
+Speedometer is a shareware application that we have included with
+Executor for demonstrational purposes.  We have done so with
+permission of Speedometer's author, Scott Berfield.  It benchmarks
+Macintoshes (and PCs running Executor) to find out how quickly their
+CPU, graphics, floating point and disk subsystems work.  The current
+version of Speedometer is Speedometer 4.x, but that uses a timing
+mechanism that Executor currently doesn't support.  Speedometer 3.23
+can give you a rough approximation of how quickly your PC is emulating
+a Mac.  Remember, Speedometer is shareware, and ARDI has not paid the
+shareware fee for you.  If you repeatedly use Speedometer, please
+register it with Scott.
+
+Speedometer will show you that Executor is a very efficient emulator.
+Please note, ARDI has not put special hooks into Executor to recognize
+Speedometer's code and bypass it; Speedometer is treated just like any
+other application when run under Executor.  Yes, it would be possible
+for us to cheat and make Speedometer return values that are higher
+than you could expect to see in real life, but we don't do that sort
+of thing.
+
+\question 17jul  How can I get a screen dump of Executor?
+
+Just type Cmd-Shift-3, just like on a Mac.  The difference is that the
+screen shot will be in TIFF format (uncompressed, for now) and will be
+written in the directory that contains \courier{executor.exe\} under
+DOS, or in \courier{/tmp\} under Linux.
+
+
+\question 11jul  How does your Browser show file size?
+
+Listing mode will show you the combined size of a file's resource and
+data fork.  There is currently no way to determine the size of a
+folder.
+
+
+\question 11jul  How does your Browser show free space?
+
+Select the volume, then choose "Get Info" from the File menu.
+
+
+\question 10jun Why does Browser display question marks for some documents?
+
+Browser uses the question-mark icon for documents for which it doesn't
+recognize the file type and creator.  Furthermore, Browser isn't good
+about remembering type and creator information.
+
+Here's how Browser works: when Browser starts, it examines each
+application that is either on the hot-band or is in a folder that is
+open on Browser's desktop.  Then, as it is drawing the icons for
+documents, it only uses icons for those applications that it saw upon
+startup.
+
+So, if the application that creates a document isn't either on the
+hot-band or in an open folder, browser will present a question-mark
+icon.  A real Mac remembers any icons that it has ever seen (until you
+rebuild the desktop).
+
+If you have the application that corresponds to the document that has
+a question mark, you can get rid of the question mark by dragging the
+application onto the hot-band and then quitting Executor and
+restarting (or by running an application and then quitting the
+application).  When Browser restarts it will see the application in
+the hot-band and then remember the icon that should be used for
+documents of that type.
+
+\section Executor/Win32
+
+\question 02jul  How does Executor/Win32 compare to Executor/DOS?
+
+Executor/Win32 is a Win32 application and can run only under Windows
+95 or later and Windows NT 4 or later.  For those platforms,
+Executor/Win32 is preferred, since it will usually have fewer
+compatibility problems and it runs in its own window, or full-screen.
+Some people are still running OS/2, Windows 3.x or even DOS, and they
+can't run Executor/Win32.  Additionally, Executor/Win32 can't be run
+on a SX-class 386 machine.  Such machines are very old and very slow,
+but they can still run Executor/DOS.
+
+Our product, Executor for Windows, includes both Executor/Win32 and
+Executor/DOS, so you don't have to choose one or the other when
+ordering.
+
+\question 10jun How do I use command-line switches with Executor/Win32?
+
+Command-line switches can be used by creating a
+short-cut or by creating the file \courier{commands.txt\}, or a
+combination of both.
+
+To use command-line switches with a short-cut, you need to create a
+short-cut to \courier{executor.exe\}, then select it and choose "Properties..."
+using your right mouse.  The Properties panel has several tabs, one of
+which is labeled "Shortcut".  After selecting the Shortcut tab, you can
+then edit the "Target:" field.  Keep the information that is already
+in there (e.g. "\courier{C:\backslashExecWin32\backslashexecutor.exe\}") and then add a space,
+followed by the command-line option(s) you want to use when you
+double-click on that short-cut (e.g. " -size 800x600 -applzone 4m").
+
+Since you can use command-line switches to specify a Macintosh program
+for Executor to run, you can create individual short-cuts for
+individual programs (e.g. " C:\backslashExecWin32\backslashApps\backslashFreeware\backslashRisk!").
+
+If you have some command-line switches that you want to apply to
+\italic{all\} invocations of Executor, you can create a file called
+\courier{commands.txt\} in the same directory that includes
+\courier{executor.exe\}.  You can put all the switches on one line, or
+use a separate line for each switch.
+
+Switches in commands.txt override the ones that are specified in
+short-cuts.
+
+\question 10jun Why do I get only a black screen when running Executor/Win32?
+
+You've encountered a bug.  The bug may be in your video driver or in
+the screen-accessing DLLs that Executor uses.
+
+To see if it's in your video driver, try adjusting your Display
+settings.  In the Control Panel there's a Display icon.
+Double-clicking that should let you select a panel named "Settings",
+which probably has an "Advanced..." button.  If you click the
+"Advanced..." button, you should be able to select a panel named
+"Performance".  Try turning the Performance down and see if that fixes
+the problem.  You might also want to try downloading a newer driver
+from the maker of your video card.
+
+To see if it's our screen-accessing DLLs, Try renaming the file
+"\courier{SDL-dx5.dll\}" to "\courier{SDL-dx5.dll.SAVE\}".  That will
+prevent Executor from seeing that DLL, so Executor will then use a
+different DLL (\courier{SDL-dib.dll\}) which will cause it to access
+the screen in a different way.  If that solves it, then you may have
+found a bug in \courier{SDL-dx5.dll\}.  If so, please send e-mail to
+\email bugs@ardi.com and let us know.
+
+
+\section Executor/Linux
+
+\question 26mar I can't get the option key to work under X. What should I do?
+
+Executor doesn't map raw keys to Mac modifiers, instead it uses the
+X "Meta" (mod1) modifier to mean command-key and the X "Mode Switch"
+(mod3) modifier to mean option-key.  Many X configurations
+automatically set up the left Alt to be Meta and the right Alt to be
+mode switch, but not all.
+
+If you're using XFree86, check to make sure your XF86Config file
+doesn't have the right-alt function definition commented out.  They
+are commented out by default in some distributions.
+
+If you're not using XFree86, or you don't want to change your
+XF86Config file, you can use xmodmap to make your right Alt key be
+"Mode Switch" (mod3):
+
+xmodmap -e 'remove mod1 = Alt_R' -e 'add mod3 = Alt_R'
+
+\question 02jul  Where are the bitmaps stored on the Linux version of executor?
+
+All versions of Executor maintain an internal bitmap corresponding to
+the actual screen.  We accrue a "dirty rectangle" as the program draws to
+what it thinks is the screen via Executor's QuickDraw implementation.
+We periodically update the _real_ screen (e.g., the X window) by
+transferring the "dirty rect" across.  So basically our graphics
+interface to the host machine consists of nothing more than blitting
+rectangles to the screen, which aids our portability.  Under X, we use
+shared memory extensions for speed, but we don't do anything fancy
+like trying to cache Mac fonts on the X server side.  Spending time
+trying to do so would be a bad idea for a number of reasons we won't
+go into.
+
+"Refresh" mode is useful when the program directly manipulates the
+frame buffer itself.  In this mode, we periodically analyze the
+internal screen memory to decide what has been changed, and transfer
+the changed data to the real screen.
+
+
+\question 22nov:svgamouse My mouse won't work with the SVGALIB version.  What's the deal?
+
+Make sure your mouse works with other SVGAlib programs before you
+suspect there's an Executor specific problem.  Make sure your
+/etc/vga/libvga.config file contains the proper mouse information and
+that /dev/mouse is a symbolic link to the right device.
+
+
+\question 09nov:linuxb How do I get E/L to see my second floppy drive?
+
+Before running Executor, set the MacVolumes environment variable to
+point to the entry in "/dev" that represents your B: drive, as:
+
+Using "sh", "bash" or other Bourne Shell like shell:
+
+\verbatim
+	$ export MacVolumes="/dev/fd1"
+\endverbatim
+
+Using "csh", "t-csh" or other C Shell like shell:
+
+\verbatim
+	% setenv MacVolumes "/dev/fd1"
+\endverbatim
+
+This should work as long as you have permission to access the drive in
+question ("/dev/fd1" in the above example).  If it doesn't, try using
+the -nodrivesearch switch to disable Executor's usual probing for
+devices.
+
+
+\question 02jul Why does Lemmings's splash screen take so long to be drawn?
+
+Executor/Linux tries
+to cooperate with X-Windows when assigning colors.  That leaves X in
+charge of "the colormap", which means Executor can't quickly change
+the colors in the colormap itself.  If you use the "-privatecmap"
+option when you start Executor, you'll find that Lemmings splash
+screen will come up much quicker, but you'll also experience the
+"creepy colors" problem in other windows.
+
+
+\question 02jul  What free projects has ARDI supported?
+
+ARDI sent a copy, with the appropriate legal release, of its HFS
+implementation to Paul Hargrove to aid him with his implementation of
+a true HFS filesystem under Linux.  This saved him considerable time
+reverse engineering various undocumented aspects of HFS.
+
+To build Executor/DOS, ARDI uses \docref DJGPP, a free 32-bit
+programming environment for DOS based mostly on GNU tools.  As users
+of \docref DJGPP, we have contributed bug fixes and some source code
+to the project.  For more information about \docref DJGPP, see
+\courier{<http://www.delorie.com/djgpp/>\}.
+
+ARDI has also done a minor rewrite of Checker to make it much faster
+and fix many bugs.  Unfortunately, the modifications were in the hands
+of one of ARDI's contractors and appear to have slipped through the
+sands of time.
+
+\question 02jul  Is Executor localized for languages other than English?
+
+Not yet.  We recently added international keyboard support, so
+romantic language localization is not difficult, per-se, but we're
+concentrating on building awareness of Executor in English speaking
+countries first.
+
+\question 04jul  Can I Macintosh format disk drives?
+
+Yes, but if you do not consider yourself a UNIX wizard, you probably
+shouldn't do it.  All you have to do is find out the formatted disk
+capacity and then run makehfv [See \qref makehfv] with arguments so it
+writes directly to the disk drive you want formatted.  You can only do
+this if you have write permissions on the drive in question.
+Obviously all data currently residing on that drive will be lost, and
+if you make a typo and inadvertently specify the wrong drive, you'll
+erase the data on the wrong drive.
+
+
+\question 14jul  How can Executor be configured for multiple users?
+
+Executor has a variety of environment variables that can be altered to
+allow individual users to override the default locations Executor
+expects to find key files.  Here are the important environment
+variables and their default values:
+
+\call startlist
+\call item
+ConfigurationFolder "+/Configuration"
+\call item
+SystemFolder "+/ExecutorVolume/System Folder"
+\call item
+PublicDirectoryMap "+/DirectoryMap"
+\call item
+PrivateDirectoryMap "~/.Executor/DirectoryMap"
+\call item
+DefaultFolder "+/ExecutorVolume"
+\call item
+MacVolumes "+/exsystem.hfv;+"
+\call item
+ScreenDumpFolder "/tmp"
+\call endlist
+
+The leading "+/" represents the directory "/usr/local/lib/executor".
+So to allow multiple users to all have their own preferences, you can
+create an executor directory for each potential user like this:
+
+\verbatim
+~/executor/
+    ~/executor/Configuration
+    ~/executor/SystemFolder
+    ~/executor/ScreenDumps
+\endverbatim
+\nl
+Then reassign these environment variables:
+
+\call startlist
+\call item
+ConfigurationFolder "~/executor/Configuration"
+\call item
+SystemFolder "~/executor/SystemFolder"
+\call item
+PublicDirectoryMap "~/DirectoryMap"
+\call item
+DefaultFolder "~/executor"
+\call item
+ScreenDumpFolder "~/executor/ScreenDumps"
+\call endlist
+
+You'll then need to populate the System Folder either with copies of
+what's in "/usr/local/lib/executor/ExecutorVolume/System Folder", or
+with symbolic links to the actual files.  The Desktop Textures program
+actually modifies the System File, so if different users are going to
+want different desktops, or if you want to make sure there's no
+interference between users, then you should use copies rather than
+symbolic links.
+
+\section Executor/DOS
+
+\question 02jul:whatishfv  What is an HFV file?
+
+Executor has the ability to store an entire Macintosh "volume"
+(i.e. filesystem corresponding to a disk drive or a partition within a
+disk drive) in a DOS or UNIX file.  Under DOS, this feature is very
+handy because there is no way to have files with long names and upper
+and lower case characters in their names unless you use an HFV file.
+See \qref makehfv.
+
+
+In general, HFV files should have filenames that end in "\courier{.hfv\}".
+
+
+\question 04jul:makehfv  What is makehfv?
+
+The program makehfv (formerly called mkvol) allows you to create
+virtual Macintosh volumes [see \qref whatishfv].  It is now part of
+all Executor distributions, although it is more useful under DOS than
+under Windows or Linux.
+
+To use makehfv you need to pick a name for the new HFV file, a name
+for the Macintosh volume that your new HFV file will represent and the
+number of kilobytes or megabytes that you want the HFV file to use.
+Here's an example that creates a file named "\courier{bigtest.hfv\}"
+that will appear in Executor as "BigTest" and will have 10 MB of space
+in it.
+
+\verbatim
+makehfv bigtest.hfv BigTest 10m
+\endverbatim
+\nl
+
+Executor/DOS will automatically see HFV files if they are placed in
+the same directory as \courier{executor.exe\}, which is usually
+\courier{C:\backslashEXECUTOR\} and their names have the suffix
+"\courier{.hfv\}".
+
+Executor/Linux will automatically see HFV files if they are placed in
+the same directory as ExecutorVolume (NOTE: \italic{not\} in
+ExecutorVolume itself), which is usually
+\courier{/usr/local/lib/executor\} and their names have the suffix
+"\courier{.hfv\}".
+
+If you're using DOS or Windows, if you use a compressed filesystem or
+if you plan to make a compressed archive containing an HFV file,
+you'll want to use the "-zeros" command line option to makehfv.  That
+tells makehfv to explicitly write zeros in the new hfv which takes a
+little more time but makes the resulting HFV file much more
+compressible.
+
+\question 02jul  What are the hardware requirements for Executor/DOS?
+
+Required: '386 or better, VGA, 15 MB disk space, and 4 MB RAM.  A SCSI
+Controller is needed only if you want to access external Macintosh
+hard disks or PowerBooks.
+
+Recommended: '486 or better, SVGA, 15 MB disk space, and 8 MB RAM.  A
+SCSI Controller is needed only if you want to access external
+Macintosh hard disks or PowerBooks.
+
+Executor/DOS 2 should work in sixteen colors on any VGA.  In addition,
+if you have a Super VGA that is VESA 1.0 compliant, Executor/DOS
+should be able to provide 256 colors and a range of screen sizes.  If
+you have a video card that is VESA 2.0 compliant, Executor's graphics
+will be significantly faster.
+
+
+\question 02jul:vesa  What do I do if my Super VGA card isn't VESA compliant?
+
+There is a shareware SVGA utility that provides VESA compliance for
+SVGA cards that normally are not VESA compliant.  \docref{SciTech Display Doctor\} is available from
+\courier{<http://www.scitechsoft.com/>\}.  If you use it, you should pay
+the shareware fee as described in the documentation.  If you have a
+recent SVGA card you probably don't need SciTech Display Doctor,
+although it may improve Executor's performance.
+
+\question 23sep:white  Why is there a bright white border on the screen?
+
+The problem starts with Macs and PCs using different values to
+represent white and black.  That's not too big of a problem, because
+Executor knows about this difference and translates things
+appropriately.  The rest of the problem has to do with the fact that
+on video screens (unlike on laptop screens) there is a part of the
+screen that is outside the pixel area that is still illuminated by the
+video gun.  That portion of the screen is known as the "overscan"
+area and the VESA 2.0 specs don't provide a way to set what color the
+overscan should be displayed as.  Instead they use the value that is
+used for the binary representation that represents black on PCs.  That
+works well, except we're already mapping that representation to be
+white.
+
+This only happens when Executor detects and can use a "linear
+framebuffer".  That's the fast way that allows Executor to write
+directly to the screen without an intermediate copy to an offscreen
+representation of the Mac screen.  If we can't get access to a linear
+framebuffer then we can use the normal PC color mapping and patch
+things up as we transfer from the offscreen image.  That allows the
+overscan area to be black but it's actually slower (significantly
+slower for some games).
+
+
+\question 02jul:doa  E/D dies during startup.  Why?
+
+The most common cause of E/D not running under DOS is the lack of file
+descriptors that you might get if you don't have the line:
+
+\verbatim
+FILES=30
+\endverbatim
+\nl
+in your config.sys.  If Executor is giving you trouble and you don't
+have such a line in your config.sys file, please add it, or if you
+have a smaller number than 30, please increase your number to 30.
+There is no reason to decrease your number if it is greater than 30.
+
+Windows NT doesn't use config.sys, instead you need to use the
+configuration file that is listed when you get to the "Program"
+portion of "Properties" and click on the WindowsNT button.  The
+default Config Filename is
+
+\verbatim
+%SystemRoot%\SYSTEM32\CONFIG.NT
+\endverbatim
+\nl
+"%SystemRoot%" will automatically be replaced with the
+location of your Windows NT file, which is likely
+
+\verbatim
+C:\WINDOWSNT
+\endverbatim
+\nl
+The default CONFIG.NT file has
+"FILES=20" in it, so you need to either change the contents of
+CONFIG.NT probably
+
+\verbatim
+C:\WINNT\SYSTEM32\CONFIG.NT
+\endverbatim
+\nl
+or use the WindowsNT button on the Program page of the
+Properties panel to use a different configuration file.
+
+When all else fails, you can use the command line option "-desperate"
+to tell Executor to use as few extended features of your computer as
+possible in an attempt to avoid running into a problem.  Under DOS you
+just add "-desperate to the command line, i.e.:
+
+\verbatim
+C:\> executor -desperate
+\endverbatim
+\nl
+Under Windows, you need to make a short-cut to Executor and then use
+the Properties menu item to change the command line to include "-desperate".
+
+
+\question 16feb:winwedge E/D runs under DOS, but not from Windows.  What do I do?
+
+
+There are several things you can check:
+
+\call startlist
+\call item
+Do you have FILES=30 or greater in the appropriate config file [see \qref doa]?
+\call item
+Are you running in 386-enhanced mode?
+\call item
+Is virtual memory turned on?
+\call item
+Is your mouse driver loaded and enabled (not just installed)?
+\call endlist
+
+If this checking produces no insights, write to \email questions@ardi.com
+and we'll try to track down the cause of the problem.
+
+\question 17jul  What causes errors when transferring files?
+
+Error -42 is the error code generated inside a Macintosh when too many
+files are open.  Executor internally generates this error when the
+underlying operating system disallows the opening of a file.  This
+error is usually symptomatic of not properly setting \courier{FILES\}
+in your config.sys [see \qref doa].  
+
+Similar errors may result when you try to copy Macintosh file to a DOS
+disk because many Macintosh file names are illegal under DOS.  You can
+fix this by renaming the file to a normal DOS eight-dot-three name.
+
+Executor versions that are older than 2.0j [available in mid June]
+have trouble with Windows 95's long file names.  Specifically, any
+Macintosh file with a control-character as part of its name will cause
+trouble, and filenames will appear to all be in lower case.  2.0j
+solves these problems.
+
+\question 02jul  Why does my screen look funny when I run Executor?
+
+Your video driver may not be fully VESA compliant.  If Executor
+detects VESA compliance, it will try to use VESA modes.  In general,
+this is a good thing, however, if these modes have bugs in them,
+Executor will invoke the bugs, and Executor may fail.  Try getting a
+newer driver for your video card if this happens [see \qref vesa].
+
+NOTE: If you run Executor with the "-info" switch, Executor will print
+out information it finds out about your video card.  That information
+may be helpful in tracking down your problem.
+
+
+\question 02jul  Does E/D require an ASPI driver to access SCSI?
+
+If your SCSI drivers patch the "INT 13" BIOS calls, then an ASPI
+driver is not needed.  As long as "INT 13" can allow Executor to read
+a SCSI drive, there is no need to use ASPI.  Similarly, if you have a
+16-bit MSCDEX CD-ROM driver installed, Executor will be able to see
+your CD-ROM drive (whether it's SCSI or not) even without ASPI
+drivers.
+
+
+\question 02jul  Why won't Executor/DOS work with my Diamond Viper PCI card?
+
+Executor/DOS requires VESA compliant graphics cards.  Many cards are
+not directly VESA compliant and need a TSR to be run before they will
+work with Executor/DOS.  On a Gateway computer, you can do this with
+the "vprmode VESA" command [see \qref vesa].
+
+
+\question 02jul  Why doesn't my mouse work when I run Executor under OS/2 Warp?
+
+If it's not already there, you may need to add this line:
+\verbatim
+DEVICE=C:\OS2\MDOS\VMOUSE.SYS
+\endverbatim
+\nl
+to your CONFIG.SYS.  This, and related issues, are described on pages 206-207
+of _User's Guide to OS/2 Warp_.  This line should already have been added for
+you when you installed Warp.
+
+Also, you may need to load MOUSE.COM in your AUTOEXEC.BAT, for
+example:
+\verbatim
+LOADHIGH C:\OS2\MDOS\MOUSE.COM
+\endverbatim
+\nl
+You can also create an AUTOEXEC file specifically for Executor, place it in
+the same directory as Executor, and configure Warp to execute that file
+whenever you launch Executor.
+
+
+\question 02jul  Any OS/2 Warp suggestions?
+
+Here is the advice of an Executor Enthusiast:
+
+\verbatim
+I haven't been having any problems with running Executor/DOS in
+OS/2. What he needs to do (assuming he has Warp) is to run "Add
+Programs" object in the "System Setup" folder. This will make a object
+for Executor on his desktop (usually in the "Additional DOS Programs"
+folder). Go into the settings for that object, and select the
+"Session" tab. Set it to "DOS Full Screen", and choose "DOS
+Settings". He wants "All DOS Settings". Primarily, Executor needs the
+"DPMI Memory Limit" set to 16 megs, and "DPMI Memory Limit" set to
+enabled. Since it defaults to 4 megs and automatic, it won't work. For
+additional performance, he should set "DOS High" to on, "EMS Memory
+Limit" to 0, "Video 8514a XGA IOtrap" to off, "Video Retrace
+Emulation" to off, "XMS Memory Limit" to 0, and "XMS Minimum HMA" to
+63. The biggest boost comes from "Session Priority". Set this to at
+least 16, and if he is going to run no other programs, set it
+higher. If he is going to run other programs, this should be left
+at 16, and the "DOS Background Execution" needs to be set to on.
+\endverbatim
+\nl
+
+
+\question 02jul  Does Executor/DOS work under Windows 95?
+
+Yes, Executor/DOS works well under Windows 95.  But you should run
+Executor/Win32 under Windows 95.  It has fewer compatibility problems
+and is just as fast.
+
+
+\question 16feb:dosbugs  Executor/DOS dies, what should I do?
+
+If Executor dies even running the demo applications, try temporarily
+moving your config.sys and autoexec.bat files aside and create minimal
+versions of each, leaving only the lines that you need to initialize
+your mouse driver and the
+\verbatim
+FILES=30
+\endverbatim
+\nl
+line in your config.sys.  Then reboot and try running Executor.  If
+Executor then starts working, you will have to slowly add back the
+things that are in your normal autoexec.bat and config.sys files until
+you know exactly what is causing the problem.  Once you know that, you
+should send information to \email bugs@ardi.com.
+
+If Executor only dies on a particular application, try increasing the
+amount of RAM dedicated to the application by using the "-applzone"
+switch when you run Executor.  Also try turning on "Pretend Sound",
+or if the screen seems to be only partially
+updated, try turning on "Refresh".
+
+Once you've done as much as you can to figure out the problem,
+\docref{send a bug report\} via \courier{<http://www.ardi.com/bugform.html>\}.
+Run Executor with the "-info" switch
+and include that information.  Make sure you also include the version
+of Executor you're running (e.g. Executor/DOS 2), the name and version
+of the application that is dying (e.g. HyperCard 2.1), the name and
+version of the operating system you're running (e.g. DOS 6.22) and
+enough details to reproduce the crash (e.g. "start the application,
+choose the "more Elvis" from the "adjust music" menu and the
+application will crash").  If the application you are running is
+publicly available via anonymous ftp, telling us where we can pick it
+up for testing purposes also helps.
+
+We accept bug reports from everyone, although paid customers' bug
+reports are almost always higher priority than those of potential
+customers.
+
+
+\question 02jul  How does printing work under E/D?
+
+Executor/DOS will print directly to a PostScript-compatible printer if
+started with the switch -printer lpt1 (or lpt2, lpt3, or whatever as
+appropriate).  Otherwise, it prints to a PostScript file.  The first
+time you print, the file will be named \courier{execout1.ps\} and will
+be located in the same directory that \courier{executor.exe\} is
+located in. You can then print this file on a PostScript printer, or
+if you have a PostScript compatible driver, you can use a
+non-PostScript printer.  A popular PostScript compatible printer
+drivers is \docref Ghostscript, available for free
+(\courier{<http://www.cs.wisc.edu/~ghost/>\}).
+
+
+\question 02jul  Why does E/D under Windows 3.x have problems hot-keying?
+
+When you use a hot-key to switch away from Executor, Windows 3.x
+doesn't know how to save the screen, because it only knows about the
+original VGA screen modes, but Executor uses SVGA/VESA screen modes.
+So when you switch back, Windows 3.x doesn't know how to replace the
+screen with what it used to contain.
+
+This problem is further compounded by the fact that Executor has no
+way of knowing when it's been switched out and switched back.  To make
+matters worse, some Windows drivers (ATI Mach 32, for example) don't
+even restore the mode properly, so not only will the screen be
+incorrect, but Executor will die shortly after you switch back.
+
+Luckily this is less frequently a problem in Windows 95 or OS/2.
+
+
+\question 17jul  Why can't I eject or format my DOS formatted floppy?
+
+Executor/DOS allows you to see DOS drives other than the drive you
+install Executor on.  It also allows you to format floppies in the
+Macintosh format (it used to read and write Mac formatted floppies,
+but it wouldn't do the formatting itself).
+
+Currently, the two abilities conflict.  What we do is if a DOS
+formatted floppy is in the drive when E/D starts, we treat that drive
+as a fixed drive from that point on.  You can no longer eject the
+floppy, nor can you convince Executor to consider that floppy as a Mac
+formatted floppy or a candidate for Mac formatting.  This is confusing
+and ugly; but we haven't found a better solution yet.
+
+
+\question 22nov  Do E/D and QEMM fight?
+
+We don't have QEMM in house for testing, but apparently older versions
+of QDPMI are incompatible DPMI providers for Executor.  We have heard
+that QEMM 8.0 works with Executor, but we have not tested it.  DPMI
+providers that are known to work are the supplied CWSDPMI, the DPMI
+provider in Windows 3.x and Windows 95, the DPMI provider in OS/2,
+and 386Max.
+
+For now, if you have lines similar to these two:
+
+\verbatim
+DEVICE=C:\QEMM\LOADHI.SYS /R:1 /SIZE=8880 C:\QEMM\QDPMI.SYS 
+
+SWAPFILE=DPMI.SWP SWAPSIZE=1024.
+\endverbatim
+\nl
+
+in your config.sys file, you should "rem them out" -- i.e. add "rem " to the
+beginning of each line -- at least when using Executor:
+
+\verbatim
+REM DEVICE=C:\QEMM\LOADHI.SYS /R:1 /SIZE=8880 C:\QEMM\QDPMI.SYS 
+REM SWAPFILE=DPMI.SWP SWAPSIZE=1024.
+\endverbatim
+\nl
+
+
+\question 19jul  Does Executor fight with Novell DPMS?
+
+Yes.  Novell DOS and Stacker both use this memory manager, but
+Executor will crash when Novell DPMS (DOS Protected Mode Services) is
+running.  Fortunately, Stacker can be run without it if you are using
+another memory manager such as 386Max.  Additionally, Stacker won't
+use DPMS when run under Windows.
+
+This is another compatibility problem that we're looking into,
+although it has been reported that some other well known programs
+crash under DPMS's DPMI support (PKZIP, Geoworks and Logic Magician's
+Oberon System).
+
+
+\question 17jul  How can I speed up Executor/DOS?
+
+Executor/DOS is of course dependent on the speed and type of CPU in
+your PC.  Obviously you can make E/D run faster if you upgrade your
+386 to a Pentium.  However, there are other, non-obvious ways in which
+sometimes you can dramatically improve Executor's speed.
+
+Use the "-info" switch to see how much DPMI memory you have compared
+to how much physical memory you have.  In general, Executor itself
+will consume approximately 2 MB of memory even if you could have an
+applzone, syszone and stack size of 0 (which you can't).  So on a 4 MB
+system, you can only allocate another 2 MB total to applzone, syszone
+and stack if you want to avoid paging (paging slows Executor down
+considerably), and that's only if you don't have drivers in your
+config.sys file or autoexec.bat tying up more of your memory.  If you
+are low on memory, you should use DOS's "mem" command and see how much
+Extended (XMS) memory DOS thinks you have.  The more you can increase
+that figure before Executor starts up, the more DPMI memory Executor
+will have and the easier it will be for Executor to avoid paging.
+
+\italic{If\} you have plenty of memory, then you can also speed
+Executor up a little bit by running a disk cache.  However, you should
+only run the disk cache in a write-through mode -- in other words you
+should enable the disk cache so that all disk writes are immediately
+sent to the disk.  Failure to do so may result in corrupt HFV files
+after Executor dies.
+
+Executor can access video cards in three different ways.  The slowest
+is by using VGA calls.  This is also the least flexible -- you are
+often limited only to 16 colors when using VGA calls, since the only
+VGA mode that supports 256 colors is too small to use with Executor.
+If your card is VESA compliant, or has a driver that makes it VESA
+compliant, Executor can drive the video card more efficiently.  There
+are two major levels of VESA compliance -- VESA 1.x and VESA 2.x.
+Executor is even more efficient if it can drive your video card using
+a VESA 2.0 driver, \italic{if\} that driver supports "linear mapping".
+The SciTech Display Doctor driver allows many popular video cards to
+be linear mapped.  If you want Executor to run quickly, you should
+probably pick up a copy of SciTech Display Doctor and test it on your
+system to see if it improves things.  You can use "Speedometer" or
+"Globe" to get a rough approximation of how much it helps.  On many
+cards, use of SciTech Display Doctor can double Executor's graphics speed.
+
+\question 24jun How do I make Executor/DOS run faster under VirtualPC
+
+Using the "\courier{-oldtimer\}" switch can speed Executor/DOS up by
+more than a factor of two when it's running under VirtualPC, a PC
+emulator made by \docref Connectix \courier{<http://www.connectix.com/>\}.
+
+\section Esoterica
+
+\question 02jul  May I bundle the DEMO version of Executor on a CD-ROM?
+
+The short answer is "yes".
+
+You are able to freely copy and distribute demo versions of Executor,
+as long as you follow the restrictions set forth in Executor's license
+panel.  Please run the demo version of Executor and choose "About
+Executor..." to see the restrictions that you must follow.
+
+A suggestion: contact us to make sure you have the latest version of
+Executor.  We can tell you if a new release is imminent.
+
+\question 02jul:thanks  Who wrote this FAQ?  Who helped?
+
+This FAQ was written and is maintained by ARDI employees.  After
+learning about them via the old Caldera FAQ, we rewrote our existing
+FAQ to use the same tools that the Linux FAQ is built with.  Those
+tools were written by Ian Jackson \email ijackson@nyx.cs.du.edu.
+
+We've also had contributions from many Executor Enthusiasts worldwide.
+
+Thanks.
+
+
+\question 02jul:faqcopyright  Is this FAQ Disclaimed and Copyrighted?
+
+This document is provided as is.  The information in it is
+\italic{not\} warranted to be correct; you use it at your own risk.
+
+Executor Frequently Asked Questions with Answers is Copyright 1996-1999 by
+ARDI \email info@ardi.com.
+
+\comment This end comment may be necessary to force final paragraph out

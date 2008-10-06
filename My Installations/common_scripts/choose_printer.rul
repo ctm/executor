@@ -1,0 +1,153 @@
+
+function update_print_dot_bat( executor_component_name, subdir_name)
+
+  STRING save_dir, device_name, svString;
+  NUMBER nvFileHandle, error;
+
+begin
+  if (ComponentIsItemSelected(MEDIA, executor_component_name)) then
+    if ((global_printer_name = POSTSCRIPT_PRINTER_NAME) ||
+        (global_printer_name = NO_PRINTER_NAME)) then
+        save_dir = TARGETDIR;
+        TARGETDIR = TARGETDIR ^ subdir_name;
+        error = DeleteFile ( PRINT_BAT_FILE_NAME );
+        if (global_printer_name = POSTSCRIPT_PRINTER_NAME) then
+          error = OpenFileMode ( FILE_MODE_BINARY );
+          error = OpenFile(nvFileHandle, TARGETDIR, "commands.txt");
+          error = SeekBytes(nvFileHandle, 0, FILE_BIN_END);
+// TODO: Check for failure
+          svString = "-printer lpt1\r\n";
+          error = WriteBytes(nvFileHandle, svString, 0, 15);
+          error = CloseFile(nvFileHandle);
+        endif;
+        TARGETDIR = save_dir;
+     else if (global_printer_name = PRINTER_NAME_1) then
+             device_name = DEVICE_NAME_1;
+           elseif (global_printer_name = PRINTER_NAME_2) then
+             device_name = DEVICE_NAME_2;
+           elseif (global_printer_name = PRINTER_NAME_3) then
+             device_name = DEVICE_NAME_3;
+           elseif (global_printer_name = PRINTER_NAME_4) then
+             device_name = DEVICE_NAME_4;
+           elseif (global_printer_name = PRINTER_NAME_5) then
+             device_name = DEVICE_NAME_5;
+         endif;
+         error = BatchSetFileName ( TARGETDIR ^ subdir_name ^ "print.bat" );
+         error = EzBatchReplace ("gs -q -dNOPAUSE -sDEVICE=" + device_name +" -sOutputFile=LPT1 %1 -c quit");
+    endif;
+  endif;
+end;
+
+function include_ghostscript_if_needed( ghostscript_component_name )
+
+begin
+
+    if ((global_printer_name = POSTSCRIPT_PRINTER_NAME) ||
+        (global_printer_name = NO_PRINTER_NAME)) then
+         ComponentSelectItem(MEDIA, ghostscript_component_name, FALSE);
+    else
+         ComponentSelectItem(MEDIA, ghostscript_component_name, TRUE);
+    endif;
+
+end;
+
+function choose_printer()
+  STRING szMsg;
+
+  NUMBER nResult, nValue;
+
+  STRING printers1_name, printers2_name, printers3_name;
+  STRING printers4_name, printers5_name, printers6_name;
+  STRING printers7_name, printers8_name, printers9_name;
+
+  NUMBER printers1_checked, printers2_checked, printers3_checked;
+  NUMBER printers4_checked, printers5_checked, printers6_checked;
+  NUMBER printers7_checked, printers8_checked, printers9_checked;
+
+begin
+    szMsg = "Select your printer type.";
+    printers1_name = NO_PRINTER_NAME;
+    printers2_name = PRINTER_NAME_1;
+    printers3_name = PRINTER_NAME_2;
+    printers4_name = PRINTER_NAME_3;
+    printers5_name = PRINTER_NAME_4;
+    printers6_name = PRINTER_NAME_5;
+    printers7_name = POSTSCRIPT_PRINTER_NAME;
+
+    printers8_name = "Option 8";
+    printers9_name = "Option 9";
+
+    printers1_checked = FALSE;
+    printers2_checked = FALSE;
+    printers3_checked = FALSE;
+    printers4_checked = FALSE;
+    printers5_checked = FALSE;
+    printers6_checked = FALSE;
+    printers7_checked = FALSE;
+    printers8_checked = FALSE;
+    printers9_checked = FALSE;
+
+    if (global_printer_name = printers9_name) then
+        printers9_checked = TRUE;
+    elseif (global_printer_name = printers8_name) then
+        printers8_checked = TRUE;
+     elseif (global_printer_name = printers7_name) then
+        printers7_checked = TRUE;
+     elseif (global_printer_name = printers6_name) then
+        printers6_checked = TRUE;
+     elseif (global_printer_name = printers5_name) then
+        printers5_checked = TRUE;
+     elseif (global_printer_name = printers4_name) then
+        printers4_checked = TRUE;
+     elseif (global_printer_name = printers3_name) then
+        printers3_checked = TRUE;
+     elseif (global_printer_name = printers2_name) then
+        printers2_checked = TRUE;
+     else
+        printers1_checked = TRUE;
+ endif;
+
+    nValue = EXCLUSIVE;
+    SetDialogTitle ( DLG_ASK_OPTIONS , "Which Printer" );
+    nResult = AskOptions(nValue, szMsg
+                ,printers1_name, printers1_checked
+                ,printers2_name, printers2_checked
+                ,printers3_name, printers3_checked
+                ,printers4_name, printers4_checked
+                ,printers5_name, printers5_checked
+                ,printers6_name, printers6_checked
+                ,printers7_name, printers7_checked
+//                ,printers8_name, printers8_checked
+//                ,printers9_name, printers9_checked
+                );
+
+if (printers1_checked) then
+  global_printer_name = printers1_name;
+elseif (printers2_checked) then
+  global_printer_name = printers2_name;
+elseif (printers3_checked) then
+  global_printer_name = printers3_name;
+elseif (printers4_checked) then
+  global_printer_name = printers4_name;
+elseif (printers5_checked) then
+  global_printer_name = printers5_name;
+elseif (printers6_checked) then
+  global_printer_name = printers6_name;
+elseif (printers7_checked) then
+  global_printer_name = printers7_name;
+elseif (printers8_checked) then
+  global_printer_name = printers8_name;
+elseif (printers9_checked) then
+  global_printer_name = printers9_name;
+endif;
+
+return nResult;
+end;
+
+
+
+
+
+
+
+

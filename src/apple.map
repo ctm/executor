@@ -1,0 +1,49 @@
+apple 1 4; 18 18
+{
+  " a"
+  "                  "
+  "                  "
+  "aaaaaaaaaaaaaaaaa "
+  " aaa aaa  a  aaa  "
+  " aaa  a   a   a   "
+  "  a   a  aaa aaa  "
+  "  a  aaa aaa aaa  "
+  "aaaaaaaaaaaaaaaaa "
+  " aaa aaa aaa aaa  "
+  " aaa  a  aaa aaa  "
+  "  a   a  aaa  a   "
+  "  a  aaa  a   a   "
+  " aaa aaa  a  aaa  "
+  " aaa aaa aaa aaa  "
+  "aaaaaaaaaaaaaaaaa "
+  "                  "
+  "                  "
+  "                  "
+}
+{
+  " abc"
+  "                  "
+  "                  "
+  "aaaaaaaaaaaaaaaaa "
+  " bab bab  a  bab  "
+  " bab  a   a   a   "
+  "  a   a  bab bab  "
+  "  a  bab bab bab  "
+  "aaaaaaaaaaaaaaaaa "
+  " cac cac cac cac  "
+  " cac  a  cac cac  "
+  "  a   a  cac  a   "
+  "  a  cac  a   a   "
+  " cac cac  a  cac  "
+  " cac cac cac cac  "
+  "aaaaaaaaaaaaaaaaa "
+  "                  "
+  "                  "
+  "                  "
+  {
+    FFFF:FFFF:FFFF
+    7777:3333:0000
+    0000:FFFF:0000
+    FFFF:0000:0000
+  }
+}

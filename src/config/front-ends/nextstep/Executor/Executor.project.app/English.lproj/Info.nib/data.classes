@@ -1,0 +1,11 @@
+FirstResponder = {
+    ACTIONS = {
+    };
+    SUPERCLASS = Object;
+};
+MacAppClass = {
+    OUTLETS = {
+	infoPanel;
+    };
+    SUPERCLASS = Application;
+};

@@ -1,0 +1,36 @@
+	THINK ABOUT RAMIFICATIONS OF PPC SP and 68k emulator's A7 IDENTITY
+
+	Auto-create glue for everything we have ctopflags for -- this
+		will allow us to track calls made by ppc apps (WP goes
+		off into never-never land; dim3 hits suspicious loop)
+
+	support lower-case glue -- EnergyScheming
+
+	It also may make sense to figure out what bug is preventing
+	browser from opening macos86 after a launch and also look into
+	supporting afpd r/w.
+
+	stub out drag manager -- will help dimensions 3.0 and possibly some
+	68k apps
+
+	Need glue for "HoldMemory" -- ImageReady 2.0 (in PS55 folder)
+
+	glue for StdCLib
+
+	/macos86 is opened correctly when double-clicked, but becomes /
+	after an application has run (this is when using "-afpd" -- it
+	may happen elsewhere, too)
+
+	implement
+
+		CountSymbols
+
+		GetIndSymbol
+
+	Support the init routine
+
+	free resources when processes exit
+
+	look at FreeHand 8's installer's modeswitch
+
+	dump interfacelib symbols and look for ones we can provide easily

@@ -1,0 +1,68 @@
+Differences between the services Executor provides and those available
+with System 7.0
+
+	limited serial port access
+
+	no low-level device access (e.g. SCSI manager, power manager)
+
+	no AppleTalk
+
+	no INITs or CDEVs
+
+	most of AppleEvents unimplemented
+
+	most of ADB traps unimplemented
+
+	most of the AliasManager unimplemented
+
+	no balloon help
+
+	GetStdFilterProc, SetDialogCancelItem,
+		and SetDialogTracksCursor unimplemented
+
+	no Edition Manager
+
+	OutlineMetrics and FlushFonts unimplemented
+
+	PBExchangeFiles unimplemented
+
+	limited support for the icon suite routines
+
+	International Utilities and Script Manager implementation incomplete
+		(and US-specific)
+
+	some missing low level printing calls
+		(e.g. DraftBits, NoDraftBits, GetRotn)
+
+	PrJobMerge unimplemented
+
+	printing is black and white only
+
+	all but trivial process manager routines unimplemented
+
+	AddComp, DelComp unimplemented
+
+	DisposCCursor uimplemented
+
+	NewTempScreenBuffer uninmplemented
+
+	CharExtra unimplemented
+
+	SaveFore, RestoreFore, SaveBack, RestoreBack unimplemented
+
+	DisposePictInfo, RecordPictInfo, RecordPixMapInfo, RetrievePictInfo,
+		NewPictInfo, GetPictInfo, unimplemented
+
+	WritePartialResource, SetResourceSize unimplemented
+
+	ShutDwnInstall, ShutDwnRemove unimplemented
+
+	sound manager only implements sampled sound
+
+	SetStylScrap, TECustomHook, TENumStyles unimplemented
+
+	TempTopMem unimplemented
+
+GDeviceChanged, PortChanged, PixPatChanged and CTabChanged are poorly
+implemented.  GetCPixel doesn't work for bpp > 8.  OpenCPicture just
+calls OpenPicture.  RestoreClutDevice's implementation is shakey.

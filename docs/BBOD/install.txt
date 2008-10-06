@@ -1,0 +1,60 @@
+In the early days of the Macintosh, programs were small enough to fit
+on a single floppy. The MacOS of the time was simple enough that
+installation of new software on a Macintosh consisted of inserting the
+floppy with the new software and using drag and drop to copy the
+application from the floppy to your hard disk.
+
+As software grew and the MacOS became more complex, software
+developers began requiring users to run "installers" to install new
+software.  These installers often used file compression so that more
+software could be put on fewer floppies.  The increasing complexity of
+the MacOS also made the installation procedure more tricky, since
+certain files would need to be copied into the System Folder and the
+machine might need to be rebooted after the System Folder was
+modified.  Installers did all the tricky work. Now, with software very
+large and the MacOS very complex, installers are common even with
+shareware and other software that you might download from the Internet
+or a bulletin board.
+
+Unfortunately, because of the complexity of the MacOS, some installers
+use intimate knowledge of the MacOS to work their wonders. This use of
+intimate knowledge makes it hard for emulators such as Executor to
+work properly with these rogue installers.  In fact, the first release
+of Apple's own "Macintosh Application Environment" (MAE) couldn't run
+some versions of Apple's own installer -- the problem is that bad.
+
+Currently, installers based on that older version of Apple's Installer
+will fail under Executor.  The most popular program that uses Apple's
+old installer is Word 5.
+
+With a little creativity, you can usually install these programs into
+Executor anyway.  Here are some of the methods past users have used:
+
+
+I.  Stuffit Expander, an extremely flexible freeware utility which is
+included with Executor, may be able to unpack the files just as the
+actual installer would.  You can then move them into their proper
+places by hand.  Often there will be a file or folder which will need
+to be moved into the System Folder.  Executor users have successfully
+installed Microsoft Word using Stuffit Expander.
+
+II.  Install the program on a real Macintosh, and move the installed
+program to Executor.  You can do this file-by-file in a pinch, but
+it's usually quicker and easier to compress the installed program
+using Stuffit or Compact Pro.  Don't forget to add to the archive
+anything which the installer might have put into the Macintosh's
+System Folder.
+
+     Once you have the archive, you can move it to Executor and use
+Stuffit Expander to unpack it there.  Again, anything which goes in
+the System Folder on a real Macintosh should also go in the System
+Folder under Executor.
+
+III. Install the program on a real Macintosh which is equipped with an
+external Macintosh hard drive.  Disconnect the external drive and
+connect it to your PC.  Use Executor to run the program from the
+external drive, or to copy it from there to your PC drive.
+
+
+ARDI has been making progress with installers, as has Apple.  In
+general, newer installers are much more likely to work with Executor.

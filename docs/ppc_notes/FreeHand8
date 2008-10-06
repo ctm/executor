@@ -1,0 +1,6 @@
+FreeHand 8.0 installer calls modeswitch from 68k code
+when there doesn't appear to be a cfrg (don't pursue)
+
+FreeHand 8.0 proper has trouble finding a file that is in the same directory
+with it
+

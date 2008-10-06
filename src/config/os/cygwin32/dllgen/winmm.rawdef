@@ -1,0 +1,13 @@
+	timeSetEvent@20
+	timeKillEvent@4
+	waveOutWrite@12
+	waveOutGetErrorTextA@12
+	waveOutReset@4
+	waveOutUnprepareHeader@12
+	waveOutClose@4
+	waveOutOpen@24
+	waveOutGetDevCapsA@12
+	waveOutPrepareHeader@12
+	timeBeginPeriod@4
+	timeEndPeriod@4
+	timeGetTime@0

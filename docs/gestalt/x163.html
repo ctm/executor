@@ -1,0 +1,410 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<HTML
+><HEAD
+><TITLE
+>ARDI selectors</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
+"><LINK
+REL="HOME"
+TITLE="Gestalt under ROMlib"
+HREF="t1.html"><LINK
+REL="PREVIOUS"
+TITLE="Gestalt under ROMlib"
+HREF="t1.html"></HEAD
+><BODY
+CLASS="section"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+><TT
+CLASS="function"
+>Gestalt</TT
+> under ROMlib</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="t1.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+>&nbsp;</TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="section"
+><H1
+CLASS="section"
+><A
+NAME="AEN163">ARDI selectors</H1
+><P
+>&#13;ARDI has added one special <TT
+CLASS="function"
+>gestalt</TT
+> selector,
+<TT
+CLASS="constant"
+>gestaltPHYSICAL</TT
+> ('<TT
+CLASS="literal"
+>MUL8</TT
+>').  It
+returns the address of a routine that behaves just like
+<TT
+CLASS="function"
+>Gestalt</TT
+>, but provides access to a completely
+different set of tables.  These tables contain information about the
+environment in which <TT
+CLASS="application"
+>Executor</TT
+> is running
+instead the emulated environment that
+<TT
+CLASS="application"
+>Executor</TT
+> provides.
+</P
+><P
+>&#13;Example:
+</P
+><TABLE
+BORDER="0"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><PRE
+CLASS="programlisting"
+>&#13;
+int PhysicalGestalt (long selector, long *responsep)
+{
+  int retval;
+  pascal int (*physfp) (long sel, long *responsep);
+
+  retval = Gestalt ('MUL8', (void *) &#38;physfp);
+  if (retval == noErr)
+    retval = physfp (selector, responsep);
+  return retval;
+}
+
+...
+
+  OSErr err;
+  long vers;
+
+  err = PhysicalGestalt ('sysv', &#38;vers);
+  /* err should be noErr and vers should be the version of Executor you're
+     running, not the version of the System file we're emulating */
+
+</PRE
+></TD
+></TR
+></TABLE
+><P
+>&#13;These are the PhysicalGestalt selectors supported:
+</P
+><DIV
+CLASS="table"
+><A
+NAME="AEN175"><P
+><B
+>Table 1. PhysicalGestalt Selectors</B
+></P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+CELLSPACING="0"
+CELLPADDING="4"
+CLASS="CALSTABLE"
+><THEAD
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Name</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Value</TH
+><TH
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>Response</TH
+></TR
+></THEAD
+><TBODY
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>gestaltSystemVersion</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>'<TT
+CLASS="literal"
+>sysv</TT
+>'</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>numeric version of <TT
+CLASS="application"
+>Executor</TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>gestaltExecutorVersionString</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>'<TT
+CLASS="literal"
+>xqtr</TT
+>'</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>address of the string version of <TT
+CLASS="application"
+>Executor</TT
+></TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>gestaltDemoStatus</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>'<TT
+CLASS="literal"
+>demo</TT
+>'</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>1, if this is a demo version</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>gestaltDemoExpiration</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>'<TT
+CLASS="literal"
+>xpir</TT
+>'</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>how many days until the demo expires</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>gestaltSerialNumber</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>'<TT
+CLASS="literal"
+>s/n </TT
+>'</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>non-demo version: serial number</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>gestaltRegisteredName</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>'<TT
+CLASS="literal"
+>name</TT
+>'</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>non-demo version: name </TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>gestaltRegisteredOrg</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>'<TT
+CLASS="literal"
+>org </TT
+>'</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>non-demo version: organization</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>gestaltPhysicalRAMSize</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>'<TT
+CLASS="literal"
+>ram </TT
+>'</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>amount of physical ram on the machine</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>gestaltScreenSize</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>'<TT
+CLASS="literal"
+>scrn</TT
+>'</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>resolution of the monitor</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>gestaltGhostScriptVersion</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>'<TT
+CLASS="literal"
+>gost</TT
+>'</TD
+><TD
+ALIGN="LEFT"
+VALIGN="MIDDLE"
+>win32 only: Ghostscript DLL version</TD
+></TR
+></TBODY
+></TABLE
+></DIV
+><P
+>&#13;ARDI is willing to add PhysicalGestalt selectors as Mac developers require.
+</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="t1.html"
+ACCESSKEY="P"
+>&#60;&#60;&#60; Previous</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="t1.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><TT
+CLASS="function"
+>Gestalt</TT
+> under ROMlib</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>&nbsp;</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

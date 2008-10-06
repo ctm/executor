@@ -1,0 +1,235 @@
+
+disk.c,218
+#define FLOPPYDRIVE	9,145
+#define NAMEVOLDIALOG	10,167
+#define VOLNAMEITEM	11,193
+#define FORMATTEXTITEM	12,215
+checkfordisk 15,246
+format 34,513
+get_HParamBlockRec_from_ControlHandle 156,3610
+goeject 168,3894
+
+display.h,754
+#define MENUBARHEIGHT	1,0
+#define HOTBANDHEIGHT	2,42
+#define HOTBANDBOTTOM	3,85
+#define ICONWIDTHUSED	4,139
+#define ICONHEIGHTUSED	5,164
+#define ICSWIDTHUSED	6,190
+#define ICSHEIGHTUSED	7,215
+#define LISTWIDTHUSED	8,240
+#define LISTHEIGHTUSED	9,266
+#define FIRSTICONX	10,292
+#define	SCROLLITEM	11,316
+#define WIPEBIT	12,338
+#define ICONCONTROL	13,358
+#define DISKICONNUM	15,391
+#define FOLDERICONNUM	16,417
+#define FONTICONNUM	17,444
+#define FONTSCICONNUM	18,470
+#define TTFONTICONNUM	19,497
+#define DAICONNUM	20,524
+#define DASCICONNUM	21,548
+#define DEFAULTAPPLICONNUM	22,574
+#define DEFAULTDOCICONNUM	23,605
+iconentry;iconentry31,712
+enum bandnamesbandnames33,724
+enum sortorderssortorders46,932
+bandinfo;bandinfo60,1110
+
+easymenu.c,106
+nothing 8,77
+aboutgo 13,102
+quitgo 31,581
+gocut 37,622
+gocopy 43,671
+gopaste 49,722
+goclear 56,815
+
+filemanip.c,320
+#define STDFILEWIDTH	17,357
+newfolder 19,387
+openitem 64,1650
+printitem 71,1746
+is_closable 77,1820
+closeitem 84,1932
+saveitem 94,2050
+undolast 100,2087
+duplicatename 106,2124
+duplicate 121,2431
+#define RENAMEDIALOGID	141,2978
+#define NEWNAMEITEM	142,3005
+renameselection 145,3034
+deleteselection 191,3976
+
+go.c,69
+window_state_t;window_state_t20,399
+doevents 23,421
+main 83,1607
+
+go.h,835
+#define NDEBUG	1,0
+#define	MAXDRIVENUM	27,448
+#define DIRBIT	28,472
+#define	ICONTABLESIZE	29,498
+#define SIGARRAYSIZE	30,523
+#define TEXTEDITORPOS	31,547
+#define HOTBANDRESID	32,584
+#define ABOUTDIALOG	33,609
+#define BANDARRAYSIZE	34,634
+#define CREATOR	35,659
+#define GOMBARID	36,684
+#define FIRSTMENU	37,706
+#define FILEMENU	38,729
+#define EDITMENU	39,751
+#define VIEWMENU	40,773
+#define SCROLLBARWIDTH	41,795
+#define SCROLLSPEED	42,821
+#define	DEFAULTEDITORSTRINGID	43,844
+#define COPYCURSORID	45,879
+#define	MOVECURSORID	46,905
+#define	GONAME	48,932
+#define GOSAVEFILE	49,962
+#define GOBACKUPFILE	50,996
+#define NELEM(52,1032
+enum actionsactions54,1079
+identry;identry69,1231
+opendirinfo;opendirinfo82,1432
+typeinfo;typeinfo92,1570
+typedef struct _applist_applist94,1581
+applist;applist102,1709
+
+iconmanip.c,89
+xorrectframe 16,303
+cleanupdrag 48,1088
+updateoutline 69,1492
+followcontrol 151,3589
+
+init.c,174
+checkgrowitemarray 13,216
+tail 30,632
+getname 46,887
+cd 63,1154
+appenddir 85,1522
+getonefileinfo 97,1705
+setupmenus 135,2616
+setdefaulteditor 151,2845
+init 231,4612
+
+initdirs.c,82
+addtolist 11,184
+updatemove 23,477
+removefromlist 39,758
+initopendirs 55,1159
+
+inithotband.c,277
+additemtohotband 20,357
+adjust_ctl_value 53,1249
+checkhotbandcontrol 64,1469
+shiftband 99,2173
+removeitemfromhotband 158,3669
+copycontroltohotband 176,4136
+selectiontohotband 218,5190
+addvolumes 224,5271
+resetvolumes 254,5977
+fillbands 280,6513
+inithotband 317,7274
+
+initicons.c,252
+getnewiconcontrol 28,840
+#define NOTFOUND	53,1443
+localidlookup 55,1469
+dobundle 67,1679
+gettypeinfo 152,3887
+geticons 163,4088
+inithash 183,4512
+gethash 216,5357
+hashicons 232,5713
+setoneicon 328,8390
+seticons 359,9209
+openappres 380,9715
+
+keyboard.c,16
+dokeydown 7,75
+
+launch.c,99
+adjust_sfpvars 12,179
+mylaunch 19,302
+launchapp 43,769
+launchcreator 50,930
+launchda 124,3071
+
+menu.c,155
+typedef void (*onemenu[onemenu12,221
+domenu 83,1151
+showviewmenu 112,1690
+menuchoices 124,1846
+disable_menu_item 150,2345
+enable_menu_item 159,2458
+
+misc.c,380
+#define HELPSCROLLBAR	11,178
+#define HELPPICTITEM	12,202
+#define HELPDIALOGID	13,225
+#define HELPPICT	14,250
+helpscroll 17,286
+drawhelp 60,1222
+helpfilter 85,1940
+help 126,2729
+screensaver 173,4061
+setband 178,4086
+mystrncpy 204,4775
+straightenwindow 213,4892
+#define GETINFOID	277,6578
+getinfo_items_t;getinfo_items_t289,6809
+getinfo 292,6832
+savestate 371,8823
+
+mouse.c,380
+     int is_file 16,306
+is_on_hot_band 25,474
+is_volume 31,557
+#define NON_EJECTABLE_BIT 38,659
+is_ejectable 41,699
+replaceselected 58,1001
+dirwindowexists 87,1671
+windfromicon 104,2082
+activateicon 152,3563
+scrollicons 178,3991
+offsetwindow 210,4564
+windowscroller 240,5197
+actoncontrol 262,5661
+checkcontrol 307,6615
+mouseinhotband 329,7025
+domousedown 367,7783
+
+update.c,128
+drawpartialgrowicon 9,125
+doactivate 25,507
+doupdate 49,992
+changewindow 78,1494
+actiontoband 103,2086
+changehot 129,2475
+
+view.c,225
+changeview 10,134
+iconview 34,645
+icsview 43,760
+listingview 52,871
+sortwin 74,1232
+namecmp 105,2082
+namesort 112,2248
+datecmp 118,2302
+moddatesort 131,2572
+sizecmp 137,2626
+sizesort 150,2890
+defaultsort 156,2939
+
+window.c,152
+setwindowicons 11,175
+executor_p 28,445
+createdirwindow 34,522
+dodragwin 100,2482
+dogrowwin 111,2738
+disposedirwindow 125,3128
+dogoaway 136,3452

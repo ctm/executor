@@ -1,0 +1,55 @@
+[Language]
+LanguageSupport0=0009
+
+[OperatingSystem]
+OSSupport=0000000000010010
+
+[Data]
+CurrentMedia=CD-ROM
+set_mifserial=
+ProductName=Executor-Win32 Demo
+CurrentComponentDef=Default.cdf
+set_dlldebug=No
+AppExe=
+DevEnvironment=GCC
+set_mif=No
+set_testmode=No
+Instructions=Instructions.txt
+EmailAddresss=
+SummaryText=
+Department=
+Type=Macintosh Emulator
+Author=
+HomeURL=
+InstallRoot=D:\My Installations\Executor-Win32 Demo
+set_level=Level 3
+InstallationGUID=69583480-43cd-11d1-962e-00609734111f
+Version=2.1pr11
+set_miffile=Status.mif
+set_args=
+set_maxerr=50
+Notes=Notes.txt
+CurrentFileGroupDef=Default.fdf
+set_dllcmdline=
+set_warnaserr=No
+Copyright=
+set_preproc=
+Category=Accounting
+CurrentPlatform=
+set_crc=Yes
+set_maxwarn=50
+Description=Description.txt
+CompanyName=ARDI
+CurrentLanguage=English
+
+[MediaInfo]
+mediadata0=Default/Media\Default
+mediadata1=CD-ROM/Media\CD-ROM
+
+[General]
+PassData=
+ReadOnly=N
+Type=INSTALLMAIN
+Version=1.00.000
+PassOn=N
+

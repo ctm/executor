@@ -1,0 +1,198 @@
+# No shift cases
+
+@define	_COPY_MASK_OP_NOSHIFT	movl DST_SEG(%edi),%ebx ; FLIP_EAX ; andl $@param_mask@,%eax ; andl $@param_not_mask@,%ebx ; orl %ebx,%eax ; movl %eax,DST_SEG(%edi)
+@define _OR_MASK_OP_NOSHIFT	FLIP_NP_EAX ; andl $@param_mask@,%eax ; orl %eax,DST_SEG(%edi)
+@define _AND_MASK_OP_NOSHIFT	FLIP_NP_EAX ; orl $@param_not_mask@,%eax ; andl %eax,DST_SEG(%edi)
+@define _XOR_MASK_OP_NOSHIFT	FLIP_NP_EAX ; andl $@param_mask@,%eax ; xorl %eax,DST_SEG(%edi)
+
+
+@define	COPY_MANY		movl $@param_long_count@,%ecx ; rep ; movsl
+@define OTHER_MANY_MOD_0	movl $@param_long_count_div_2@,%ecx ; 1: ; movl (%esi),%eax ; movl 4(%esi),%ebx ; FLIP_EAX ; FLIP_EBX ; BITOP %eax,DST_SEG(%edi) ; addl $8,%esi ; BITOP %ebx,DST_SEG 4(%edi) ; addl $8,%edi ; decl %ecx ; jnz 1b
+@define OTHER_MANY_MOD_1	movl $@param_long_count_div_2@,%ecx ; 1: ; movl (%esi),%eax ; movl 4(%esi),%ebx ; FLIP_EAX ; FLIP_EBX ; BITOP %eax,DST_SEG(%edi) ; addl $8,%esi ; BITOP %ebx,DST_SEG 4(%edi) ; addl $8,%edi ; decl %ecx ; jnz 1b ; movl (%esi),%eax ; FLIP_NP_EAX ; BITOP %eax,DST_SEG(%edi)
+
+
+@define	FLIP_EAX
+@define	FLIP_EBX
+@define	FLIP_ECX
+@define	FLIP_EBP
+@define FLIP_NP_EAX
+
+@define	OPNAME	copy
+@define	BITOP	movl
+@define	MASK_EAX_OP	_COPY_MASK_OP_NOSHIFT
+@define MANY_CODE_MOD_0	COPY_MANY
+@define MANY_CODE_MOD_1	COPY_MANY
+@define MANY_MOD_1_OFFSET
+@include src-noshift.meta
+
+@define MANY_CODE_MOD_0	OTHER_MANY_MOD_0
+@define MANY_CODE_MOD_1	OTHER_MANY_MOD_1
+@define MANY_MOD_1_OFFSET -4
+
+@define	OPNAME	or
+@define	BITOP	orl
+@define	MASK_EAX_OP	_OR_MASK_OP_NOSHIFT
+@include src-noshift.meta
+
+@define	OPNAME	and
+@define	BITOP	andl
+@define	MASK_EAX_OP	_AND_MASK_OP_NOSHIFT
+@include src-noshift.meta
+
+@define	OPNAME	xor
+@define	BITOP	xorl
+@define	MASK_EAX_OP	_XOR_MASK_OP_NOSHIFT
+@include src-noshift.meta
+
+
+
+@define	FLIP_EAX	xorl $-1,%eax	# xorl Pentium pairable, notl isn't
+@define	FLIP_EBX	xorl $-1,%ebx
+@define	FLIP_ECX	xorl $-1,%ecx
+@define	FLIP_EBP	xorl $-1,%ebp
+@define FLIP_NP_EAX	notl %eax	# not pairable on Pentium, but shorter
+
+@define	OPNAME	notcopy
+@define	BITOP	movl
+@define	MASK_EAX_OP	_COPY_MASK_OP_NOSHIFT
+@include src-noshift.meta
+
+@define	OPNAME	notor
+@define	BITOP	orl
+@define	MASK_EAX_OP	_OR_MASK_OP_NOSHIFT
+@include src-noshift.meta
+
+@define	OPNAME	notand
+@define	BITOP	andl
+@define	MASK_EAX_OP	_AND_MASK_OP_NOSHIFT
+@include src-noshift.meta
+
+@define	OPNAME	notxor
+@define	BITOP	xorl
+@define	MASK_EAX_OP	_XOR_MASK_OP_NOSHIFT
+@include src-noshift.meta
+
+
+# Handle the wacky fg/bk cases
+@include src-noshift-fgbk.meta
+
+
+
+# Shift cases
+
+@define _COPY_MASK_OP_SHIFT	movl DST_SEG(%edi),%ebx ; andl $@param_mask@,%eax ; andl $@param_not_mask@,%ebx ; orl %ebx,%eax ; movl %eax,DST_SEG(%edi)
+@define _OR_MASK_OP_SHIFT	andl $@param_mask@,%eax ; orl %eax,DST_SEG(%edi)
+@define _AND_MASK_OP_SHIFT	orl $@param_not_mask@,%eax ; andl %eax,DST_SEG(%edi)
+@define _XOR_MASK_OP_SHIFT	andl $@param_mask@,%eax ; xorl %eax,DST_SEG(%edi)
+
+
+@define	CPUNAME		i486
+@define	BSWAP_EAX	bswap	%eax
+@define	BSWAP_EBX	bswap	%ebx
+@define	FLIP_EAX
+@define	FLIP_EBX
+
+
+# Handle the tricky cases for the i486
+@include src-shift-fgbk.meta
+
+
+@define	OPNAME	copy
+@define BITOP	movl
+@define MASK_EAX_OP	_COPY_MASK_OP_SHIFT
+@include src-shift.meta
+
+@define OPNAME	or
+@define	BITOP	orl
+@define MASK_EAX_OP	_OR_MASK_OP_SHIFT
+@include src-shift.meta
+
+@define OPNAME	and
+@define	BITOP	andl
+@define MASK_EAX_OP	_AND_MASK_OP_SHIFT
+@include src-shift.meta
+
+@define OPNAME	xor
+@define	BITOP	xorl
+@define MASK_EAX_OP	_XOR_MASK_OP_SHIFT
+@include src-shift.meta
+
+
+@define	FLIP_EAX	notl	%eax
+@define	FLIP_EBX	notl	%ebx
+
+@define	OPNAME	notcopy
+@define BITOP	movl
+@define MASK_EAX_OP	_COPY_MASK_OP_SHIFT
+@include src-shift.meta
+
+@define OPNAME	notor
+@define	BITOP	orl
+@define MASK_EAX_OP	_OR_MASK_OP_SHIFT
+@include src-shift.meta
+
+@define OPNAME	notand
+@define	BITOP	andl
+@define MASK_EAX_OP	_AND_MASK_OP_SHIFT
+@include src-shift.meta
+
+@define OPNAME	notxor
+@define	BITOP	xorl
+@define MASK_EAX_OP	_XOR_MASK_OP_SHIFT
+@include src-shift.meta
+
+
+@define	CPUNAME		i386
+@define	BSWAP_EAX	rorw $8,%ax ; rorl $16,%eax ; rorw $8,%ax
+@define	BSWAP_EBX	rorw $8,%bx ; rorl $16,%ebx ; rorw $8,%bx
+@define	FLIP_EAX
+@define	FLIP_EBX
+
+
+# Handle the tricky cases for the i386
+@include src-shift-fgbk.meta
+
+
+@define	OPNAME	copy
+@define BITOP	movl
+@define MASK_EAX_OP	_COPY_MASK_OP_SHIFT
+@include src-shift.meta
+
+@define OPNAME	or
+@define	BITOP	orl
+@define MASK_EAX_OP	_OR_MASK_OP_SHIFT
+@include src-shift.meta
+
+@define OPNAME	and
+@define	BITOP	andl
+@define MASK_EAX_OP	_AND_MASK_OP_SHIFT
+@include src-shift.meta
+
+@define OPNAME	xor
+@define	BITOP	xorl
+@define MASK_EAX_OP	_XOR_MASK_OP_SHIFT
+@include src-shift.meta
+
+
+@define	FLIP_EAX	notl	%eax
+@define	FLIP_EBX	notl	%ebx
+
+@define	OPNAME	notcopy
+@define BITOP	movl
+@define MASK_EAX_OP	_COPY_MASK_OP_SHIFT
+@include src-shift.meta
+
+@define OPNAME	notor
+@define	BITOP	orl
+@define MASK_EAX_OP	_OR_MASK_OP_SHIFT
+@include src-shift.meta
+
+@define OPNAME	notand
+@define	BITOP	andl
+@define MASK_EAX_OP	_AND_MASK_OP_SHIFT
+@include src-shift.meta
+
+@define OPNAME	notxor
+@define	BITOP	xorl
+@define MASK_EAX_OP	_XOR_MASK_OP_SHIFT
+@include src-shift.meta

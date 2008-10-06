@@ -1,0 +1,112 @@
+[changes from previous versions are now in docs/Changes.*]
+
+The directory Executor.pkg is a NEXTSTEP installer package that
+installs /LocalApps/Executor.app, which is a pre-beta version
+Executor/NEXTSTEP 2.0, a commercial Macintosh emulator.  Currently
+this pre-beta only supports NEXTSTEP/Intel and NEXTSTEP/Motorola.
+There are no plans for any other architectures to be supported in the
+near future.
+
+Executor expects to be installed in /LocalApps.  The file:
+
+	"Executor.app/ExecutorVolume/System Folder/godata.sav"
+
+contains pathnames that begin with "/LocalApps", so if you install
+Executor anywhere other than /LocalApps, the Browser will not
+automatically have fun things opened and installed on the hot-band.
+You'll have to find ExecutorVolume yourself and adjust the hot-band to
+your liking.
+
+Certain files must have the correct ownership and permissions in order
+for Executor to work properly.  Specifically, the Executor binary
+itself must be owned by root and made setuid.  The directory "System
+Folder" and the files *godata.sav and *system.ard must be writable by
+anyone who will be using Executor.  These permissions will
+automatically be set properly if you install Executor when you are
+logged in as or "su"d as root.
+
+Additional information is available in the docs subdirectory of the
+directory that contains this readme file.  Be sure to read the
+"executor_faq.txt" (answers to frequently asked questions) if you have
+trouble with Executor.  The file "ernst_oud.txt" contains information
+about Executor/DOS, written from a DOS users perspective that still
+might be useful to users of Executor/NEXTSTEP.
+
+Included in /usr/local/lib/executor/ExecutorVolume are some sample
+programs that you can run.  NOTE: some of these are shareware, and
+ARDI had *not* paid your shareware fee for them.  If you continue to
+use Executor, you should either delete the shareware items, or
+register them.
+
+If you want to access Macintosh formatted floppies from within
+Executor, make sure that the floppies are put in the drive AFTER
+Executor has already started.  On non-NeXT hardware, you will then
+need to use Workspace's "Check for Disks" menu item to get Executor to
+realize that there is a Macintosh formatted floppy there.  If you put
+the floppy in *before* Executor starts, then NEXTSTEP will take over
+the floppy drive and Executor will not be able to access all the data
+that it needs.
+
+The 1.99<x> versions of Executor are "experimental".  We hope to have
+Executor in beta in January of 1996 and officially released in
+February or March.
+
+In addition to the text files in the doc subdirectory mentioned above,
+another good source of information about Executor is the Usenet
+newsgroup "comp.emulators.mac.executor", or the Executor interest
+mailing list.  The newsgroup and the mailing list are connected via a
+bidirectional gateway.
+
+To join the mailing list, send e-mail to "executor-request@ardi.com"
+or "executor-digest-request@ardi.com" with a blank subject line and a
+body that says "subscribe".  With the first address, you'll receive
+e-mail everytime someone sends anything to the mailing list.  With the
+digest form, you'll receve e-mail only once a day with all the
+previous day's traffic bundled into one digest.
+
+You can then send messages to the entire group by sending to
+"executor@ardi.com".  Some of the people on the list have been using
+Executor under NEXTSTEP for a couple of years and under DOS for a
+year, and of course we closely follow that mailing list, even though
+we don't directly administer it.
+
+Before 2.0 goes to press, pricing for non time-limited versions of
+Executor/NEXTSTEP is $99 for students, $99 for educational
+institutions, faculty and staff and $199 for everyone else.  That
+price does cover all the 1.99<x> releases and the 2.0 CD-ROM release
+when it's finished.
+
+Again, read "executor_faq.txt" for more information.
+
+NOTE: we have changed the registration procedure and will need to
+issue all our current NEXTSTEP customers new keys.  In the meantime,
+until the end of November, every Executor/NEXTSTEP user (current
+customers and not) has permission to use this serial number and key:
+
+Serial Number = 100
+Key = "c9gm7biez8jf2"
+
+This will only work under Executor/NEXTSTEP and it will only work for
+versions 1.x.  It stops functioning February 1.  We'll either get new
+serial numbers to all our current NEXTSTEP customers by then or we'll
+release another key that everyone can use while we sort things out.
+
+To use this key, start Executor, then click on the "Info" button.  It
+will prsent you with a page of legalese, and the option to click on
+the "Next" button to get another page of legalese.  After you've
+clicked on the Next button about a dozen times, you'll be prompted for
+your name, organization, serial number and authorization key.  Use the
+values supplied above for the last two choices.  You will have to run
+Executor once as root after you've entered the registration
+information.
+
+NOTE: Executor currently does not have any way of bypassing Display
+Postcript, so screen access is slower under NEXTSTEP than under other
+platforms.  We have received help from NeXT and hope to be able to
+speed up our graphics access sometime after 2.0 is released.
+
+	--Cliff
+
+	Please address questions to questions@ardi.com and bug reports
+	to bugs@ardi.com.  Our web site is http://www.ardi.com/ and we
+	accept anonymous ftp connections at ftp.ardi.com.

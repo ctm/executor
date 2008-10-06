@@ -1,0 +1,62 @@
+{\rtf0\ansi{\fonttbl\f0\fnil Times-Roman;\f1\fmodern Courier;\f2\fswiss Helvetica;}
+\paperw9840
+\paperh8400
+\margl120
+\margr120
+\pard\tx533\tx1067\tx1601\tx2135\tx2668\tx3202\tx3736\tx4270\tx4803\tx5337\f0\b0\i0\ulnone\fs32\fc0\cf0 Hi Dr. Petrocelli,\
+\
+I took a look at changing 
+\f1 config.sys
+\f0  under Windows 95.  I suggest you make a copy of 
+\f1 config.sys
+\f0  first by selecting it, and then using copy and paste as mentioned in the other set of instructions.  Then, select 
+\f1 config.sys
+\f0  and choose 
+\b Open With...
+\b0  from the 
+\b File
+\b0  menu.\
+\
+	You'll then be presented with a choice of applications\
+\
+Select 
+\b Notepad
+\b0 \
+\
+	The contents of 
+\f1 config.sys
+\f0  will then be shown in a Notepad\
+	window\
+\
+See if there's already a line in config.sys that says\
+\
+  
+\f1 FILES=
+\f2\i something
+\f0\i0 \
+\
+if there is, and 
+\f2\i something
+\f0\i0  is less than 
+\f1 30
+\f0 , change it to 
+\f1 30
+\f0 , then save the document using the 
+\b Save
+\b0  item from the 
+\b File
+\b0  menu.  If there isn't already a line that mentions 
+\f1 FILES
+\f0 , you can just add one yourself at the end\
+\
+
+\f1   FILES=30
+\f0 \
+\
+is all you need to add.\
+\
+After you've done that, you should be able to reboot and Executor should stop complaining.\
+\
+I hope this helps.  Enjoy your last day at work.\
+
+}

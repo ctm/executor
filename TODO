@@ -1,0 +1,10 @@
+$Id: TODO 121 2005-11-21 21:12:16Z ctm $
+
+	Probably want to do an in-use / marked for deletion fix
+
+		of what data structure?  I didn't write that down when
+		I first put this entry into the TODO file
+
+	Probably should get rid of SDL_bmp.c
+
+		loook at SDL_SaveBMP_RW and SDL_LoadBMP_RW in SDL_video.h

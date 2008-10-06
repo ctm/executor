@@ -1,0 +1,132 @@
+#! /bin/bash
+
+# This script is designed to create a "/home/executor.afpd/System Folder"
+# directory from an existing "/home/executor".
+
+if [ -e "/home/executor.afpd" ]; then
+  echo You already have an executor.afpd -- quitting 1>&2 
+  exit 1
+fi
+
+# map %XX into :xx.  We have to peer into ambiguous filenames, for
+# instance, is %FATHER the apple-double file associated with FATHER,
+# or should %FA be mapped to :fa?  The answer is dependent on file
+# contents.  ugh!
+
+translate_special_characters ()
+{
+  # split directory from filename.  We don't want to change any of the
+  # characters in the directory portion
+
+  if echo "$1" | grep / > /dev/null; then
+    directory=`expr "$1" : '\(.*\)/'`/
+    filename=`basename "$1"`
+  else
+    directory=""
+    filename="$1"
+  fi
+
+  # first we need to see if there's a leading % that we need to preserve
+  # The rule is that we will preserve it if file says we're dealing with
+  # an Apple Double file
+
+  if expr "$filename" : % > /dev/null; then
+    if file "$filename" | grep AppleDouble > /dev/null; then
+      directory=`echo $directory%`
+      filename=`expr "$filename" : '%\(.*\)'`
+    fi
+  fi
+
+  # For lack of string processing facilities, we break the string up into
+  # parts, use tr on the XX part, then put things back
+
+  mid=1
+  until [ x$mid = x ]; do
+    head=`expr "$filename" : '\(.*\)%[0-9a-fA-F][0-9a-fA-F]'`
+    mid=`expr "$filename" : '.*%\([0-9a-fA-F][0-9a-fA-F]\)'`
+    tail=`expr "$filename" : '.*%[0-9a-fA-F][0-9a-fA-F]\(.*\)'`
+
+    if [ x$mid != x ]; then
+      mid=:`echo "$mid" | tr '[A-F]' '[a-f]'`
+      string="$mid$tail$string"
+      filename="$head"
+    fi
+  done
+
+  echo "$directory$filename$string"
+}
+
+# relocate_double expects to read a list of directories that need to
+# be cleaned up.  It would be nice if we could use read0 like xargs -0
+# so we don't get burned by directory names with embedded newlines,
+# but those are fairly rare and probably cause trouble with other shell
+# scripts.
+
+relocate_double ()
+{
+  while read d; do
+    pushd "$d" > /dev/null
+    if [ ! -e .AppleDouble ]; then
+      mkdir .AppleDouble
+    fi
+    chmod --reference=. .AppleDouble
+
+    # first pass, rename all directories and apple-double pairs
+
+    for f in *; do
+      g=`translate_special_characters "$f"`
+      if [ -d "$f" ]; then
+        if [ "$f" != "$g" ]; then
+          mv "$f" "$g"
+        fi
+        if [ -f %"$f" ]; then
+	  \rm %"$f"
+        fi
+      else
+        if [ -f %"$f" ]; then
+          mv -f %"$f" .AppleDouble/"$g"
+	  if [ "$f" != "$g" ]; then
+            mv "$f" "$g"
+	  fi
+        fi
+      fi
+    done
+
+    # second pass, rename all remaining entries
+
+    for f in *; do
+      g=`translate_special_characters "$f"`
+      if [ "$f" != "$g" ]; then
+        mv "$f" "$g"
+      fi
+    done
+
+    popd > /dev/null
+
+    # now rename ourselves
+
+    e=`translate_special_characters "$d"`
+    if [ "$d" != "$e" ]; then
+      mv "$d" "$e"
+    fi
+  done
+}
+
+# Ick.  We assume /home and /home/executor
+
+pushd /home > /dev/null
+mkdir executor.afpd
+cp -pR "executor/System Folder" executor.afpd
+find "executor.afpd/System Folder" -depth -type d -print | relocate_double
+
+# godata.sav will refer to traditionally named AppleDouble files, which
+# will not be understood.
+
+\rm "executor.afpd/System Folder/.AppleDouble/godata.sav"
+> "executor.afpd/System Folder/godata.sav"
+
+# preference files may also refer to old files -- nuke them
+
+find "executor.afpd/System Folder/Preferences" -type f -print0 | xargs -0 rm
+
+popd > /dev/null

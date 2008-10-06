@@ -1,0 +1,9 @@
+// This Configuration file (484c5832.ecf) was built by Executor
+Comments = "";
+// WindowName = "Apple DocViewer";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 7.0.0;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR, PretendHelp, PretendEdition, PretendScript, PretendAlias};

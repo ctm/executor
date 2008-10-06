@@ -1,0 +1,10 @@
+// This Configuration file (41324d68.ecf) was built by Executor
+Comments = "";
+// WindowName = "Quicken 6 Updater 68K";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 7.0.0;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};
+Gestalt('fs  ') = { 0, 1 };

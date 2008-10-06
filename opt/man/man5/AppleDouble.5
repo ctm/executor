@@ -1,0 +1,57 @@
+.\" (c) 1998 by Abacus Research & Development, Inc. (ARDI)
+.\"
+.\" This man page is part of the commercial Executor package available
+.\" from ARDI <http://www.ardi.com/>.
+
+.TH AppleDouble 5  "April 10, 1998" "Executor 2.0v"
+.SH NAME
+AppleDouble \- File format Executor uses to store individual Macintosh files on non-Macintosh filesystems
+.SH DESCRIPTION
+AppleDouble is a specification that allows storing Macintosh files on
+non-Macintosh filesystems.
+.PP
+In Macintosh parlance, files have two
+"forks".  Each fork is effectively an independent file that can be
+grown or shrunk without affecting the other fork.  The "resource fork has a
+pre-defined order built into it.  The "data" fork doesn't.  In
+addition to these two forks, each file has extra meta-data that isn't
+available under UNIX filesystems, including things like the file
+"type" and file "creator".
+.PP
+AppleDouble format uses two UNIX files for each Macintosh file.  One
+file contains the data fork, the other file contains the
+meta-information and the resource fork.  The resource fork filename
+has a "%" prepended to it to denote the resource fork.  Unfortunately,
+special characters in the filename are represented by using "%xx"
+where xx is the hexadecimal representation of the ASCII value of the
+special character.  This leads to an ambiguity.  Is "%father" a data
+fork whose first character is 0xfa, with the remaining characters
+being "ther", or is it the resource fork for the file named "father"?
+.PP
+The Apple spec says that programs should look inside AppleDouble files
+to disambiguate.  Consequently, although ARDI does, very few companies
+actually implement AppleDouble according to the Apple specification.
+Consequently,
+.B executor
+won't work with non-conforming files, like those produced by
+netatalk.  Technically, there's an option to allow
+.B executor
+to use AppleDouble files using the netatalk naming variation, but
+there have been other bugs in netatalk's AppleDouble implementation that
+prevented this from being useful.  As Executor/Linux becomes more
+popular, we'll take the time to work out the bugs on both netatalk's
+and
+.B executor's
+side and then switch to using netatalk conventions as the default
+behavior.  This will be convenient for people who are running
+.B executor
+on machines that also provide filesystems to Macs via netatalk.
+.PP
+Apple's specification for AppleDouble is probably available on their
+web-site.
+.SH FILES
+/home/executor - a symlink to /var/opt/executor/share/home
+
+/var/opt/executor/share/home - good place to store AppleDouble files
+.SH "SEE ALSO"
+\fIexecutor\fP(1)

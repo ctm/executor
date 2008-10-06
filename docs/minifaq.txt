@@ -1,0 +1,179 @@
+What is Executor?
+
+Executor is a commercial emulator that allows non-Macintosh hardware
+to run many applications originally written on a Macintosh.  Executor
+has many limitations, but surprisingly, speed is not one of them.
+
+If your only experience with emulators is Soft-PC or Soft-Windows
+making a Mac emulate a PC, please check out a demo of Executor [see
+below -- `Where can I pick up the Executor demos?'] to see just how
+quickly Executor can do the reverse.
+
+------------------------------------------------------------------
+
+
+How can I get more information about Executor?
+
+The FAQ (Frequently Asked Questions list) is the basic source for
+Executor information.  It's available wherever the Executor demo is,
+with the canonical site being ftp.ardi.com/pub/docs.  See below for
+the addresses of mirror sites, most of which are much faster than
+ARDI.
+
+It's available in HTML at http://www.ardi.com/executor-faq/index.html.
+The FAQ is also included in the docs with each demo.
+
+-----------------------------------------------------------------
+
+On which platforms is Executor available?
+
+Executor/DOS (E/D) is an implementation that runs under DOS, Windows
+3.x, Windows '95 and OS/2.  Executor/NEXTSTEP (E/NS) is an
+implementation that runs under NEXTSTEP, both on original NeXT
+hardware and Intel based hardware running NEXTSTEP.  Executor/Linux
+(E/L) is an implementation that runs under Linux for the PC.
+
+------------------------------------------------------------------
+
+Where can I pick up the Executor demos?
+
+If you have Web access, go to
+
+http://www.ardi.com/
+
+There are links there which will let you automatically download
+whatever version is the latest.  If you only have plain ftp access,
+read on.
+
+The canonical place to find Executor demos is ftp.ardi.com.  However,
+ftp.ardi.com is currently only connected to the Internet via a 28.8kb
+modem, and as such is really only useful to provide data for mirror
+sites. When you connect to ftp.ardi.com it will give you a current
+list of those mirror sites.
+
+	ftp://vorlon.mit.edu/pub/ardi/
+	ftp://ftp.pht.com/pub/linux/ardi/
+	ftp://ka4ybr4.netmha.com/pub/ardi/
+	ftp://ftp.mpik-tueb.mpg.de/pub/phil/ardi/
+
+
+---------------------------------------------------------------
+
+What limitations will Executor 2 have?
+
+Because the OS and Toolbox have been rewritten from scratch, Executor
+2 will have many limitations, including no serial port access, no
+AppleTalk, minimal sound, minimal System 7 support, no INITs, no CDEVs
+and no Internationalization.
+
+Executor can read and write 1.4 MB Mac formatted floppy disks, but due
+to limitations in PC hardware, Executor *can't* read or write 800 KB
+floppy disks.
+
+Executor can print directly only to a PostScript printer.  Otherwise,
+Executor will print to a PostScript file and you can then use an
+interpreter such as GhostScript to print to a printer.
+
+We hope to support full sound and serial port access within six months
+of releasing Executor 2, but currently all our effort is concentrated
+on preparing 2 for release, so that is only speculation.
+---------------------------------------------------------------
+
+
+How much does Executor cost?
+
+The currently shipping version is the Executor 2.0, and it costs US$249.
+
+Shipping is free within the U.S. or to countries participating in the
+Global Priority mail system.  International shipping to other
+countries (USPS International Express) is US$20.
+
+An Executor/Linux license allows you to use either the X-Windows
+version or the SVGAlib version, but you can not use one and let a
+friend use the other at the same time.  Eventually we'll merge the two
+versions, but this may not happen until after Executor 2 is released.
+
+All 1.x owners, even those who bought Executor 1.0 a year and a half
+ago, are entitled to free upgrades through and including 2.0.x, as
+long as the upgrades are picked up electronically.  2.0.x releases
+will fix bugs in 2.0, but will not add new functionality.  Beyond 2.0,
+when new functionality is added, there will be a small upgrade fee if
+you want the the newer versions with the new functionality.
+
+All prices are subject to change.
+
+-------------------------------------------------------------------
+
+Who makes Executor?
+
+ARDI
+Suite 4-101
+1650 University Blvd., NE
+Albuquerque, NM  87102
+
++1 888 BUY ARDI (toll free; for orders only)
++1 505 766 9115 (for tech support)
++1 505 766 5153 fax
+
+<info@ardi.com> general information
+<questions@ardi.com> specific questions and tech support
+<bugs@ardi.com> bug reports
+<sales@ardi.com> information about ordering
+
+------------------------------------------------------------------
+
+How do I order Executor?
+
+Before you order, please read and understand Executor's current
+limitations [see above -- `What limitations does Executor 2.0 have?']
+and Executor's price [see above -- `How much does Executor cost?'].
+While Executor is still in development, we specifically make demo
+versions [see above -- `Where can I pick up the Executor demos?']
+available so you'll know exactly what you're getting.  If you like
+what you see, you can mail us a check [see above -- `Who makes
+Executor?'], FAX us (+1 505 766 5153) credit card information (VISA,
+MasterCard or EuroCard only) or call us up (+1 888 BUY ARDI) so we can
+take down your credit card information.  We do not currently run PGP,
+so sending credit card information via e-mail is not recommended.
+
+We accept domestic purchase orders from most universities and most
+large companies.  We no longer accept non-U.S. purchase orders and we
+reserve the right to refuse U.S. purchase orders as we see fit.  NOTE:
+All checks and money orders must be payable in U.S. funds and be
+written from a U.S. bank.
+
+				   Order Form
+
+
+Name	       ______________________  Name on Card ______________________
+
+Organization   ______________________  Visa or MC   ______________________
+
+Street Address ______________________  Card Number  ______________________
+
+Street Address ______________________  Expiration Date ___________________
+
+City	       ______________________  E-mail Address ____________________
+
+State	       ______________________  FAX Number  _______________________
+
+Postal Code    ______________________  Phone Number ______________________
+
+Country	       ______________________  
+
+
+
+                                    Number of     Cost
+Description              Quantity    Machines     Each
+
+Executor CD		  _____   x   _____   x   $249  =  _____
+
+
+International Shipping (US $20) may be needed if the
+destination address is outside the United States.  We ship
+Global Priority when we can.  Is International Shipping OK
+if necessary?                                              _____
+
+Sales Tax ($14.47; needed if destination is in New Mexico)  _____
+
+Total                                                      _____

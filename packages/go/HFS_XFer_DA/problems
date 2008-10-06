@@ -1,0 +1,10 @@
+If a file is overwritten during a copy, I have no way of detecting it and
+updating windows correctly.
+
+  maybe check each window and see if a control with a given name exists and
+  replace it if it does?
+
+my munger plan won't be sufficient.  I probably need to write a new
+function to go through all the windows, not just the ones with the
+changed directory in them.
+

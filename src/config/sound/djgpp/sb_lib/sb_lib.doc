@@ -1,0 +1,210 @@
+Sound-Blaster
+"DMA-Friendly"
+Queuing
+Library
+
+Created for Abacus Research & Development, Inc.
+by Joel Hunter
+March, 1996
+
+
+
+I. Introduction
+
+  The purpose of this library is to provide sample-playing (and queuing)
+functionality for Sound-Blaster cards with the lowest possible resource
+drain on the system.
+  Traditionally, a Sound-Blaster package generates continuous interrupts,
+playing very small pieces (<100 bytes) of sound at a time. This has two
+undesirable effects. One, the CPU is constantly being interrupted from it's
+current task; in a protected-mode application, that often will mean several
+mode switches to real-mode and back -- a time-consuming operation. Secondly,
+the DMA chip (which is almost always used to feed data to the sound card)
+must use the same data bus as the CPU, so even when not being interrupted
+the CPU may be waiting on the DMA chip for its chance to use the data bus.
+  Therefore a different paradigm has been used for this library. The sound
+card and DMA channel are utilized on a per-need basis. When a sample is
+started, the sound card and DMA chip are programmed, and the sound is
+played. When the sample has finished, the sound card and DMA chip are idle,
+ready to be programmed again or (in the case of the DMA chip) to perform
+other tasks. This has only one drawback: when successive samples need to be
+played back-to-back, the time spent in-between each sample is crucial. If too
+much time elapses between playbacks, a 'pop' or 'click' can be heard. There
+is no remedy for this, save spending as little time possible between
+consecutive sample playbacks (which this library attempts to do.)
+
+
+
+II. Initialization/Deinitialization
+
+  The library must be initialized before it can be used. The initialization
+routine performs necessary memory allocation, checks the Sound-Blaster,
+and generally prepares the library for use. Here is the prototype for the
+initialization function:
+
+sb_status sb_initialize_driver(void (*callback)());
+
+The function takes a single argument, a pointer to another function. This
+defines the 'callback' function, which the library will call at the conclusion
+of each sample playback. Every time a queued sample finishes playing, this
+function will be called: it is up to the calling application to keep track
+of which sample has triggered the call (note the callback function takes no
+arguments.) You may pass 'NULL' as the callback function if none is needed.
+  The initialization functions returns a value of type sb_status. This is
+an enumerated type which is defined in the SB_DEFS.H file. Several common
+error conditions are defined, mostly related to problems finding the sound
+card.
+
+  Deinitialization must be performed before the calling application exits.
+This is to ensure the sound card is left in it's original state, and to
+prevent any memory leaks. Here is the prototype for the deinitialization
+function:
+
+void sb_uninstall_driver(void);
+
+The function takes no arguments and returns no values. Once it is complete,
+the calling application is free to exit as desired. If it is called more than
+once (or if it is called before sb_install_driver()), it silently performs
+no action.
+
+
+
+III. Sound Card Capabilities
+
+  Since different Sound-Blaster cards have different capabilities, the library
+provides a function to retrieve the capabilities of the sound card currently
+installed. Here is its prototype:
+
+int sb_get_capabilities(void);
+
+The value returned will be a logical ORing of binary values representing the
+different possible capabilities. They are:
+
+#define SB_8_BIT        0x01
+#define SB_16_BIT       0x02
+#define SB_MONO         0x04
+#define SB_STEREO       0x08
+
+(Note that all Sound-Blaster cards will have the SB_8_BIT and SB_MONO
+capabilities.)
+The calling application can test for the presence of a given capability by
+logical ANDing the value returned by sb_get_capabilities() with the value of
+the capability desired. For example, to test for the capability of stereo:
+
+int caps=sb_get_capabilities();
+if(caps&SB_STEREO) {    /* If the stereo bit is set, this will be TRUE */
+  /* Do something useful */
+}
+
+In this way the calling application can choose the most appropriate format
+available from the capabilities of the installed sound card.
+
+  The library provides only a single interface function for queuing a sample.
+In other words, there is no special function for queuing a stereo sample, for
+queuing a 16-bit sample, etc. Therefore the calling application must tell the
+library what type of samples will be passed to the queuing function (inter-
+leaved stereo samples, 16-bit samples, etc.) It does this through the
+following function:
+
+int sb_set_format(int);
+
+The argument to this function should be a logical ORing of two of the binary
+capabilities values listed above. There are only four legal values:
+
+SB_8_BIT|SB_MONO
+SB_8_BIT|SB_STEREO
+SB_16_BIT|SB_MONO
+SB_16_BIT|SB_STEREO
+
+Passing a value other than one of these will have unpredictable results.
+  Note that the library is dynamic. That is to say, in between sample
+queuing you may change the library's format using this function. Then, if
+you wish to queue stereo samples sometimes, and mono samples others, simply
+call this function to change your format. 
+  The return value of this function is its error condition. A return value
+of '1' indicates the function was successful. A return value of '0' indicates
+an error condition--for this function, the only possible cause of an error
+is that a sample is currently queued, and therefore the new format could not
+be set.
+
+
+IV. Queuing
+
+  The library has a queue which can hold up to four samples. If more than one
+sample is queued at a time, the library will play each sample consecutively
+in the order in which they were queued. Here is the queuing function's
+prototype:
+
+int sb_enqueue_sample(const void *buffer, int samplesPerChannel);
+
+The function takes two arguments: a pointer to the buffer holding the sample
+data, and an integer holding the number of samples (per channel) in the
+buffer.
+  The buffer will be interpreted by the library in a way consistent with
+the format set by the sb_set_format() function. It is up to the calling
+application to ensure that the buffer is of the proper type. For example,
+stereo buffers should have the left and right channels interleaved.
+  It is important that the calling application pass the correct value for
+'samplesPerChannel' -- as the name of the variable implies, it is NOT for
+passing the size of the sample buffer, but rather the number of SAMPLES in
+the buffer, per channel. You must consider carefully the format of the
+samples you have set (with the sb_set_format() function), and determine the
+correct value to pass based on that format. Here are some hints on
+determining the correct value:
+
+SB_8_BIT|SB_MONO   : 'samplesPerChannel' is simply the size of the sample
+                     buffer, in bytes.
+SB_8_BIT|SB_STEREO : 'samplesPerChannel' should be the size of the sample
+                     buffer divided by two, since the left & right speaker
+                     buffers are interleaved together into a single buffer.
+SB_16_BIT|SB_MONO  : 'samplesPerChannel' should be the size of the sample
+                     buffer divided by two, since each sample takes two
+                     bytes (16-bits).
+SB_16_BIT|SB_STEREO: 'samplesPerChannel' should be the size of the sample
+                     buffer divided by four. Each sample takes 2 bytes, and
+                     the variable is samples per CHANNEL, so the fact that
+                     there are two channels (and therefore double the data)
+                     is irrelevant.
+
+  sb_enqueu_sample() returns an int, which is its error condition. A return
+value of '1' indicates the function was successful, and a return value of
+'0' indicates an error. For this function, the only possible error is that
+the queue is already full -- therefore the calling application could safely
+assume that if this function fails.
+
+
+
+V. Miscellaneous
+
+  At some time it may be useful for the calling application to retrieve how
+many samples are currently in the queue. The library maintains a globally-
+accessible variable for this purpose:
+
+extern volatile int sb_numInQueue;
+
+This variable will always hold a number between 0 (indicating the library is
+idle) and 4 (indicating the queue is full.)
+
+
+  The playing of samples can be 'paused' if necessary, and resumed later.
+Pausing the sound playback halts all library activity. If there is one (or
+more) samples in the queue, they will be frozen in their current state.
+  If there is no sample in the queue, the library still sets a special flag;
+this is because if a sample is queued while playback is paused (and the
+queue is empty), the library stores the sample, but doesn't start it.
+Playback of the newly queued sample will only begin when library playback
+is resumed.
+  Pausing and resuming playback are both done with a single function,
+defined as:
+
+int sb_set_playback_enabled(int);
+
+The single argument to this function is a flag telling it whether to pause or
+resume playback. A '0' indicates playback should be paused, and a non-zero
+indicates playback should be resumed. The function returns the previous state
+of playback (again, '0' means playback WAS paused, '1' means playback WAS
+enabled.)
+  Pausing the library while it was already paused, or resuming while it was
+already enabled, have no effect. Calls to this function aren't cumulative,
+so a single call to pause or resume will always change the state of the
+library, if different than the previous state.

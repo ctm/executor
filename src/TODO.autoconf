@@ -1,0 +1,80 @@
+$Id: TODO.autoconf 63 2004-12-24 18:19:43Z ctm $
+
+Yipes, converting the build system to the latest GNU build system will
+take a little deciphering of what the current build system does.  If I
+had an extended period of time to work on this, it wouldn't be so bad,
+but doing a small amount here and there will require a bunch of notes.
+That's what this file is for, in theory.
+
+util/configure.sh is the tool that builds the Makefile in the old
+system.  It looks like it sets up a few variables, makes some
+substitutions, then cobbles together pieces into some files and make
+some symlinks.
+
+Need to figure out if we can use the simple automake conditionals to handle
+all the variants that we currently handle with different Make fragments
+(seems like it will work, although there may be a better way to do it)
+
+CONFIGURE.SH COMMAND LINE ARGUMENTS
+
+        cflags			unneeded
+        root			unneeded
+        target			unneeded
+        target_gcc		unneeded
+        target_strip		unneeded
+        target_nm		unneeded
+        host			unneeded
+	target_file_format	unneeded
+
+        front_end		true option
+	syn68k_target		quasi option
+	sound			quasi option
+
+
+MAKEFILE fragments
+
+	target_arch_make	
+	target_os_make
+	front_end_make
+	sound_make
+	executor_make
+
+
+VARIABLES
+
+	symbol_prefix
+	target
+	canonical_target
+	target_arch
+	target_os
+	target_gcc
+	target_strip
+	target_file_format
+	host
+	canonical_host
+	host_arch
+	host_os
+	front_end
+	sound
+	front_end_make
+	root
+	syn68k_define
+	syn68k_lib
+	syn68k_target
+	cflags
+	target_arch
+
+
+CONSTRUCTED FILES
+
+	Makefile from Makefile.in
+
+
+SYMLINKS
+
+	front-end-config.h
+	target-arch-config.h
+	target-os-config.h
+	host-arch-config.h
+	host-os-config.h
+	sound-config.h

@@ -1,0 +1,102 @@
+		     INSTALLATION UNDER OS/2 WARP
+
+
+1.) Insert the Executor CD into the CD-ROM drive.
+
+2.) Run the installation program.  You can do this from a DOS prompt
+by typing
+
+	D:\install
+
+(assuming that your CD-ROM drive is your D: drive), or you can do it
+from the OS/2 desktop:
+
+	Right-click the CD object on the Launch Pad, click the arrow
+	next to Open, and choose Icon view.
+
+	A window should pop up showing all the disk's program objects.
+	Double-click on INSTALL.EXE to start the installation program.
+
+3.) Change the destination directory for installation if you do not
+want to install in C:\EXECUTOR.  Press the number 2 when you are ready
+to begin the installation.
+
+4.) When the DOS installation program has finished, double-click
+OS/2's Add Programs object in the System Setup folder.  Press the
+enter key to have OS/2 detect the new Executor program automatically.
+If autodetection fails, click on "Yes" to search for and select the
+new program for the desktop.
+
+5.) Select C:\EXECUTOR\EXECUTOR.EXE and click OK.  There will then be
+a new folder on your desktop containing the Executor object.
+
+
+
+		    CONFIGURATION UNDER OS/2 WARP
+
+The default DOS settings OS/2 assigns for you may work perfectly.  If
+Executor behaves strangely, though, then you might want to adjust the
+settings by hand.  To do this, right-click on the Executor object and
+click Settings.  Then click the notebook's Session tab and click the
+DOS settings button.  Click OK, and the list of DOS settings should be
+displayed.
+
+Here are some settings other OS/2 users have used with success:
+
+DOS_HIGH			On
+DPMI_DOS_API 			ENABLED
+DPMI_MEMORY_LIMIT 		16
+EMS_MEMORY_LIMIT 		0
+HW_ROM_TO_RAM 			On
+HW_TIMER 			On
+INT_DURING_IO 			On
+VIDEO_8514A_XGA_IOTRAP		Off
+VIDEO_FASTPASTE			Off
+VIDEO_MODE_RESTRICTION		NONE        
+VIDEO_ONDEMAND_MEMORY		On
+VIDEO_RETRACE_EMULATION		Off
+VIDEO_ROM_EMULATION		Off
+VIDEO_SWITCH_NOTIFICATION 	Off
+VIDEO_WINDOW_REFRESH		1
+XMS_HANDLES			0
+XMS_MEMORY_LIMIT		0
+
+
+You don't need to find an "OK" or "Save" button to save these
+settings.  The changes take place as soon as you adjust them.
+
+Note that increasing the DPMI memory limit does not automatically
+increase the memory Executor uses.  You must also use Executor's
+"-memory" command line switch, to tell Executor that more memory is
+available.
+
+If after adjusting the settings you still have trouble running
+Executor/DOS under OS/2, write to support@ardi.com with your serial
+number and your system details.  We'll try to figure out a combination
+of settings which will work for you.
+
+Some OS/2 Executor users like to start Executor from a batch file
+instead of starting Executor directly, because on some systems it
+doesn't show up in the task list unless started indirectly.  If you
+want to do this, just make a text file called "executor.bat" which
+contains the following two lines:
+
+@echo off
+executor.exe %1 %2 %3 %4 %5 %6 %7 %8 %9
+
+Then point your desktop object to this batch file rather than to
+executor.exe itself.  If you want to run another program to enhance
+Executor, such as UniVBE (a universal video driver which speeds up
+graphics performance), you can add its command to the Executor batch
+file as well:
+
+@echo off
+univbe
+executor.exe %1 %2 %3 %4 %5 %6 %7 %8 %9
+
+
+
+
+-- 
+Many thanks to Charles Hunter and Pat Gunn for their help with this
+file.

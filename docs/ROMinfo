@@ -1,0 +1,109 @@
+Differences Between PowerPC and 68K
+
+	Synthetic CPU
+
+	PowerPC Numerics
+
+Additions:
+
+	Mixed Mode Manager
+
+	Code Fragment Manager
+
+	Exception Manager
+
+Potential Problems:
+
+	Decompression -- could be tricky to reverse engineer, could
+		technically even be patented
+
+Major sections that haven't been written
+
+	serial port support
+
+	networking
+
+		AppleTalk
+
+		TCP/IP
+	
+	INIT/CDEV support
+
+	Internationalization (Script Manager)
+
+	Edition Manager,
+
+	Process Manager
+
+	Start Manager
+
+	Power Manager
+
+	SCSI Manager
+
+Sections that need improvement
+
+	sound
+
+	AppleEvents
+
+	ADB (Apple Desktop Bus)
+
+	Filesystem
+
+		Alias Manager
+
+		PBExchangeFiles,
+
+	Balloon Help
+
+	Font Manager
+
+		True Type fonts
+
+		OutlineMetrics, FlushFonts,
+
+	some of the icon suite routines,
+
+	Printing
+
+		low level printing calls (DraftBits, NoDraftBits, GetRotn)
+
+		PrJobMerge,
+
+	Color
+
+		AddComp, DelComp
+
+		DisposCCursor
+
+		NewTempScreenBuffer
+
+		CharExtra
+		SaveFore, RestoreFore, SaveBack, RestoreBack
+
+	Picture Utilities
+
+		DisposePictInfo, RecordPictInfo, RecordPixMapInfo,
+		RetrievePictInfo, NewPictInfo, GetPictInfo
+
+Minor work that needs to be done
+
+	GetStdFilterProc, SetDialogCancelItem, SetDialogTracksCursor,
+
+	WritePartialResource, SetResourceSize
+
+	Temporary Memory Manager
+
+	Stylized Text Edit
+
+	GDeviceChanged, PortChanged, PixPatChanged and CTabChanged need work
+
+	GetCPixel doesn't work for bpp > 8.
+
+	OpenCPicture just calls OpenPicture.
+
+	RestoreClutDevice needs work
+
+	inverse color table routines don't do a good job of discriminating
+	between colors that are close to each other.

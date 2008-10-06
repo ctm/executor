@@ -1,0 +1,6 @@
+When you provide it with plug-ins, it dies while trying to load one of
+the extensions.  It looks like it may be jumping into callback space --
+I think I've seen this under a different app before.
+
+The SimpleText that is included will not start -- it appears to be 'dcmp'
+related

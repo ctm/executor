@@ -1,0 +1,9 @@
+// This Configuration file (/executor/configur/51444c58.ecf) was built by Executor
+Comments = "Quicken 6 requires System 7";
+WindowName = "Quicken Deluxe 6";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 7.0.0;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR};

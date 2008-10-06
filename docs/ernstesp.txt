@@ -1,0 +1,643 @@
+NOTAS DEL TRADUCTOR
+
+- Si usted tiene una version 1.99<x> o superior de Executor, parte 
+de las limitaciones aqui mencionadas puede que ya hayan sido solventadas.
+- En muchos casos, no he traducido opciones, comandos y menus, y nombres 
+de programas, ya que actualmente Executor solo existe en Ingles, por lo 
+que traducirlas podria dar pie a confusiones.
+
+*******************************************************************
+
+
+TRADUCCION DE ERNSTOUD.TXT AL CASTELLANO
+
+
+NOTA:  Este documento es obra de un usuario de Executor para
+ayudar a otros usuarios de Executor a solucionar problemas
+comunes.  ARDI lo ha editado ligeramente, pero lo ha dejado
+basicamente como era.  ­Disfrutelo!
+
+
+
+PRIMEROS PASOS CON EXECUTOR
+----------------------------
+
+" Un 'bug' es una funcion indocumentada. Un 'bug' llega a ser
+una funcion al documentarla."
+
+El autor de este documento no tenia conocimientos previos del
+software y la arquitectura Macintosh antes de comprar
+Executor.  Experiencia de PC en abundancia pero totalmente en
+blanco sobre el mundo Mac. Compro Executor para llenar este
+vacio y este ha cumplido totalmente sus expectativas.
+
+Aunque Executor puede ser usado sin ningun conocimiento previo
+de Macintosh (demostracion de que este argumento de venta,
+unico para los Mac, sigue siendo cierto) hay algunos datos que
+habrian ayudado al autor. Algunos de estos se describen mas
+adelante; quiza le ayudaran a usted.
+
+El Macintosh original se introdujo en 1984 con los famosos
+anuncios 1984-Gran Hermano. Fue seguido por una amplia gama de
+maquinas. El procesador Motorola original 68000 (comparable
+al 8086) fue seguido por el 68020 (eq. 80286), 68030 (386DX) y
+68040 (486SX/DX). Executor emula un 68LC040, que es un 68040
+sin un procesador de punto flotante ("LC" significa "bajo
+coste").
+
+ El exito de los Mac no fue debido a las maquinas, si no al
+software, que fue uno de los primeros en utilizar un entorno
+grafico de usuario, GUI. Este GUI es lo que emula Executor.
+
+El sistema Macintosh se llama 'System'. Ha tenido un numero 
+de versiones comparable a MS-DOS; esta es su septima vida y 
+como para un gato, es la ultima; las versiones futuras se 
+llaman MacOS. Aunque que el Sistema 7 ha agregado muchas 
+caracteristicas nuevas, executor emula un Mac que usa 
+Sistema 6.0.7;  ARDI tiene la intencion de hacer posible 
+algun dia que Ud. pueda usar el Sistema 7 de APPLE sobre
+Executor.
+
+Como en Windows, el Sistema soporta aplicaciones al darles un
+entorno en el que ejecutarlas. La interaccion entre el usuario
+y el Sistema se hace con un programa llamado "Finder"
+(buscador); comparable al Administrador de Programas de
+Windows. Es el "Finder" el que genera las metaforas de
+carpetas, escritorio, papelera, y otras. Es el "Finder" quien
+inicia las aplicaciones. Con el "Finder" el usuario puede
+renombrar, copiar y borrar archivos y carpetas.
+
+El "Finder" original permite al usuario ejecutar una aplicacion a
+la vez, MultiFinder, introducido con el Sistema 6, ha hecho
+posible iniciar varias aplicaciones. Executor es un tipo de
+emulador de un solo programa a la vez.
+
+ARDI esta desarrollando su propio sustituto de "Finder" que se
+integrara con executor. Hasta entonces, el programa HFS_XFer,
+descrito en un capitulo aparte de este manual, se usa para
+copiar, borrar y renombrar archivos y carpetas.
+
+El sistema necesita un disco duro con un numero de carpetas
+predefinidas, una de las cuales es la carpeta de Sistema.  En
+ella encontrara un archivo llamado 'System' que contiene la
+mayoria del Sistema Mac.  En un Mac de verdad el archivo
+'Finder' tambien se encuentra en este carpeta. La Carpeta de
+Sistema esta presente en el sistema de archivo de Executor pero
+no contiene un "Finder", y el sistema de archivo de ARDI no es
+compatible con el sistema de archivo de APPLE.  Si trata de usar
+un Macintosh y reemplazar archivo de Sistema de Apple con el de
+ARDI, su Macintosh se estrellara.  Si trata de ejecutar Executor
+usando archivo de Sistema de Apple en vez del de ARDI, executor
+se estrellara.
+
+Esto implica que aunque que Executor emule un Mac muy bien, la
+primera impresion es de que tiene "algo" diferente, porque carece
+del importante interfaz del "Finder". En su lugar Executor
+presenta una caja de dialogo que usa para preguntarle que
+programa iniciar. De todas formas, hay maneras de desactivar el
+"Finder" en un Mac de verdad, lo que ahorra memoria.  ARDI esta
+desarrollando un sustituto "Finder"; puede que este disponible
+ya, mientras lee esto, de lo contrario esta siendo probado por
+los probadores de betas. Busque en su BBS o red preferida.
+
+El sustituto del "Finder" de ARDI tiene una banda bajo la barra
+de menu con iconos de directorios y aplicaciones usadas
+habitualmente y otros objetos. Esta banda se conoce como la
+"Hot Band" (banda caliente). Ud. puede arrastrar objetos hacia y 
+desde esta banda. Cuando hace doble clic sobre un directorio o
+volumen, aparece una ventana con iconos para todo los archivos
+del directorio. Ud. puede arrastrar los archivos desde una
+ventana a otra para moverlos o copiarlos. Para borrar un
+archivo, debe seleccionarlo y escoger borrar; no hay papelera.  
+El doble clic ejecuta una aplicacion. La banda tiene
+seis botones que le permiten escoger que tipo de objetos se
+muestran en la banda caliente (aplicaciones, documentos,
+volumenes, directorios, fuentes, o accesorios de escritorio). 
+Tambien incluye la posibilidad de formatear discos.
+
+Ya que el Mac se suele usar para aplicaciones graficas, utiliza
+fuentes escalables. Estas se almacenan en el archivo 'System'
+usando una herramienta llamada FONT/DA Mover bajo el Sistema 6. 
+Bajo el Sistema 7 uno puede copiar simplemente una fuente en la
+carpeta Sistema y el sistema la reconoce.  El FONT/DA Mover es
+software registrado de Apple.  Esto hace dificil instalar
+fuentes en Executor hasta que el "Browser" (hojeador) de ARDI
+este universalmente disponible.
+
+En un Mac, los archivos se organizan en carpetas, el equivalente
+de directorios MS-DOS. Las carpetas pueden anidarse y contener
+iconos para programas y/o archivos de datos.  Un aspecto notable
+de "Finder"es el alias.  Un alias es una copia de icono de una
+aplicacion que puede usarse para crear grupos de objetos. Es el
+primer paso de Apple hacia la orientacion a objetos. El cambio
+de las propiedades de un icono tambien cambia las del alias, al
+contrario que en Windows.
+
+Ya que Executor viene sin "Finder", y no reconoce alias, puede
+ocurrir que Ud. abra una carpeta de un disquette o CD-ROM y no
+encuentre nada.  En un Mac puede haber habido alias en esas 
+carpetas.
+
+Una diferencia que notara el usuario de Windows es que en un
+Mac el menu esta siempre sobre la linea superior de la pantalla,
+mientras que en Windows el menu activo esta siempre dentro de la
+ventana actual. Un escritorio de Windows con un numero de
+aplicaciones ejecutandose muestra muchos menus, lo que puede
+resultar desconcertante. Windows indica el menu actual cambiando 
+el color. En un Mac, al seleccionar una ventana, automaticamente
+hacemos que su menu asociado aparezca en la linea superior. Ya
+que Executor solo puede ejecutar una aplicacion a la vez esto no
+deberia ser fuente de problemas. Uno se da cuenta usando HFS_XFER 
+(descrito mas adelante).
+
+
+EJECUCION DE SOFTWARE EN EXECUTOR
+----------------------------------
+
+Ahora que ha instalado Executor sobre su sistema y ha comprobado
+que funciona, Ud. esta preparado para probar alguno de los 
+programas de demostracion que vienen con executor. Estos son 
+freeware, shareware o demostraciones totalmente funcionales
+de programas comerciales. Los archivos se ubican en el volumen
+de DOS  EXDEMOS1.HFV  y aparecen despues de la instalacion en
+un volumen de Executor, en las carpetas 'demos' y 'games'. 
+Tambien Executor viene con algunas utilidades practicas,
+incluidas en el volumen DOS EXSYSTEM.HFV que aparece en la
+carpeta 'utils' en su disco de Sistema.
+
+Despus de haber iniciado algunos de estos programas Ud.
+probablemente quiera hacer algo util con Executor.  Esto
+significa conseguir el software que necesite e instalarlo
+adecuadamente.
+
+Antes de comenzar a instalar software hay un par de puntos que
+deben quedar claros. Primero: Ud. ha de tener un volumen
+reservado para contener los archivos que necesita. Tal volumen
+puede crearse con MAKHFV siguiendo las instrucciones la seccion
+apropiada de este manual. Recuerde que a menos que le diga a
+Executor otra cosa, su volumen nuevo ha de tener un sufijo
+".hfv" y tiene que ponerse en el mismo directorio que los otros
+archivos ".hfv" (\EXECUTOR por defecto).
+
+El programa que crea el volumen nuevo se llama "makehfv" (crear
+volumen).  Usa tres argumentos; el nombre del archivo DOS
+donde radica el volumen, el nombre del volumen como es visto por
+cualquier programa que corre bajo Executor y el espacio en bytes
+que el volumen ocupa. Los sufijos "k" y "m" puden ser usados para
+especificar Kilobytes (1024 bytes) y Megabytes (1024 * 1024 = 1048576 
+bytes) 
+
+Por ejemplo, para crear un volumen de 10 Mb, en el archivo DOS
+newvol.hfv, con el nombre interno NewVolume, Ud. ha de
+ejecutar este comando:
+
+c:\> makehfv newvol.hfv NewVolume 10m
+
+Cuando arranque Executor de nuevo y vaya viendo los discos
+disponibles haciendo clic en el boton "DRIVE" (disco) tendra 
+un volumen vacio prepara para albergar sus archivos.
+
+Recuerde que Executor es un programa complejo.  ARDI ha probado
+exhaustivamente a nivel beta este producto, pero la diversidad
+de hardware de PC, combinado con la complejidad de emular un
+sistema totalmente diferente sobre este hardware hace que las
+paradas inesperadas sean posibles. Cuando Executor o su PC se
+"cuelgan", cosas impredecibles pueden suceder. Se recomienda
+desactivar el cache de escritura al usar Executor. La mayoria
+de los sistemas hoy dia usan el SMARTDRIVE de Microsoft, el cual
+desactiva el cache de escritura por defecto solo desde la ver.
+6.2 de DOS. Si Ud. tiene otra version de MS-DOS, o si lo tiene
+activado, haga los siguientes cambios en la linea de SMARTDRV:
+
+   SMARTDRV C
+
+en vez de
+
+   SMARTDRV C +
+
+Como siempre, es recomendable hacer copia de seguridad de sus
+datos frecuentemente.
+
+
+CONSEGUIR SOFTWARE
+------------------
+
+La arquitectura Apple Macintosh es la segunda mas difundida en
+el mundo.  El software para Mac es casi tan facil de encontrar
+como el de PC.  Hay sin embargo unas pocas diferencias.  El
+software comercial tiende a ser mas caro y las actualizaciones
+suelen salir mas tarde que sus eqivalentes para Windows. Antes
+era al reves, pero las cosas han cambiado.
+
+Un punto importante a tener en cuenta es que Executor, debido a
+limitaciones en el equipo PC, solo puede leer disquettes de Alta
+Densidad Macintosh HD (SuperDrive) y CD-ROMS formato Macintosh
+(mas sobre CD-ROMS despues).   Los disquettes SuperDrive son 
+fisicamente identicos a los HD de PC. (todos ellos tienen un 
+segundo agujero en el lado contrario de la muesca de proteccion 
+de escritura). Como los de PC, tienen una capacidad de 1.4 Mb.
+
+Estos discos comparten el mismo formato a bajo nivel, pero tiene
+un  "formato de archivo" diferente . Es decir; el formato fisico
+es igual, es el formato logico el que difiere.
+
+Hay software comercial para Macintosh disponible en muchas
+tiendas. Si Ud. no tiene posibilidad de usar un Macintosh "de
+verdad" entonces asegurese que los discos que consiga son HD. 
+En caso contrario, haga que en la tienda se los pasen a HD.
+
+Ya que no todo el software funciona bajo executor es aconsejable
+conseguir que en la tienda se lo le dejen probar antes de
+comprar.
+
+Busque notas en las que diga que el soft necesita Sistema 7.  Si
+una aplicacion * requiere * Sistema 7, posiblemente no pueda
+funcionar bajo la implementacion actual de Executor.
+
+Buen software para Macintosh puede encontrarse en la mayoria de
+las revistas (recuerde comprobar que vienen en discos HD ), en
+todas las redes comerciales e Internet.
+
+Si quiere usar software de un CD-ROM Mac, su unidad de CD-ROM
+aparecera automaticamente en executor si su controlador de
+CD-ROM se adhiere a los estandares MSCDEX de Microsoft, o ASPI
+de Adaptec.
+
+Si arranca Executor con un CD-ROM, o un disquette HD Mac ya
+insertados, seran reconocidos automaticamente. Si los inserta
+despues, habra de pulsar  May.-Izda-Alt-2 para que sean
+detectados.
+
+Debido a limitaciones de espacio en los disquettes, la mayoria
+de las veces el software estara comprimido.  El proceso es
+similar al de los PCs, donde ZIP, ARC, ARJ y LZH son algunas de
+las extensiones usadas para denotar un archivo comprimido.  
+Sorprendentemente, la variedad de sistemas diferentes de
+compresion usados en Macs es tan amplia como la de los PCs y
+todos ellos son diferentes entre las dos plataformas.  Hay una
+utilidad ZIP para el Mac pero no parece que haya software
+comprimido con este sistema.
+
+Aunque que las convenciones de nomenclatura para archivos Mac
+son mucho menos restrictivas que a la que nos tiene habituados
+el PC (el nombre de 8 caracteres y una extension de 3), la
+mayoria de las veces el nombre de los archivos comprimidos acaba
+en un punto y una extension de tres caracteres.
+
+Considere que el nombre de un archivo Mac, cuando lo encuentra
+en un sistema que tiene una convencion de nomenclatura mas
+limitada (como MS-DOS), puede que no le deje claro el formato
+que tiene.  Sin embargo, cuando lo transforma a formato Mac
+(como veremos mas adelante) su nombre le dira mas.  Por ejemplo
+Ud. podria encontrar un archivo llamado ACMECALC.BIN en
+CompuServe, que cuando llega a su volumen de Executor,
+repentinamente pasa a llamarse 'Acme Super Calculator.sea'.
+
+Los sistemas de compresion mas utilizados y sus extensiones son:
+
+.pit    ; Compresion PackIt
+.sit    ; Compresion Stuffit
+.cpt    ; Compresion Compact Pro
+.dde    ; Compresion DiskDoubler 
+.sea    ; Uno de los anteriores, pero auto-extractor.
+
+Para los primero cuatro tipos necesitara el mencionado programa
+shareware para sacar el contenido (descomprimirlos). El paquete
+completo Stuffit puede manipular los otros formatos.  Compact
+Pro se encuentra en la carpeta 'utils' de su disco de Sistema. 
+Stuffit es un programa shareware excelente, y hay un Stuffit
+Expander 'freeware' (gratuito), programa que como su nombre
+sugiere solo puede 'expandir' un archivo comprimido (Expand
+tambien se usa en ingles para decir descomprimir).  DiskDoubler
+se usa menos que los otros, principalmente porque es software
+comercial.  De todas maneras hay un descompresor gratuito.
+
+Un archivo .sea basicamente consiste en un archivo comprimido
+con un descompresor integrado. Cuando ejecuta un archivo .sea,
+este se decomprime automaticamente.
+
+De los mencionados descompresores hay un numero de versiones
+diferentes;  no todos funcionan con executor. Tambien hay
+archivos auto extractores que tienden a colgar a Executor.  
+Cuando esto sucede hay un simple pero eficaz truco.  Hagase con
+una utilidad llamada 'DeSEA'.  Hace lo que su nombre indica; 
+convierte un archivo .sea en uno .pit, .sit, o .cpt, que puede
+ser descomprimido usando una de las herramientas mencionadas.
+
+Hay un FAQ en Ingles muy bueno sobre los distintos medios de
+compresion, .hqx y BinHex, disponible por FTP anonimo de
+Internet en: 
+
+lugar:   sumex-aim.stanford.edu   
+fichero: /info-mac/comm/info/comp-sys-mac-comm-faq.txt
+
+Cuando el archivo se ha descomprimido, ya estamos listos para
+funcionar. Considere que mucho software que viene sobre CDs lo
+llenan a capacidad al usar audio y video (llamado QuickTime). 
+Estos no pueden usarse en executor.  Un programa con tal
+restriccion probablemente se quejara de que necesita Sistema 7; 
+la version de sistema Mac que soporta video.
+
+
+CONSEGUIR SOFTWARE USANDO SU PC
+--------------------------------
+
+Lo de arriba esta muy bien, pero podria intentar conseguir
+software para Executor descargando archivos desde BBSes y/o
+redes como CompuServe, America Online o el Internet.  Esto es
+posible, aunque una que pizca mas complicado, ya que el PC no es
+un Mac (A lo mejor se ha dado cuenta de esto;  ARDI existe
+gracias a ello).
+
+En el mundo PC cada archivo en su disco duro es una coleccion
+logica de datos, con un comienzo, un medio y un fin.  En el
+Mac cada archivo tiene dos componentes (­no es broma! ), estos
+se llaman los "data fork" (parte de datos) y "resource fork"
+(parte de recursos).  El data fork contiene datos sin un formato
+comprensible por el SO Mac. El "resource fork" contiene datos que
+el Macintosh  comprende y de aqui en adelante pueden usarse
+para especificar parametros diversos, por ejemplo iconos.  Cada
+archivo tiene ambos forks aunque uno (o incluso ambos) puede
+estar vacios.
+
+Para permitir la distribucion de  archivos Macintosh sobre un
+medio no Macintosh, como la mayoria de los BBS, se busco un
+sistema para combinar los dos forks en un archivo.  Dos de estos
+sistemas son conocido como BinHex.  BinHex 4 es frecuentemente
+conocido como "HQX" y combina ambos forks en un archivo ASCII
+unico.  BinHex 5 es frecuentemente conocido como "MacBinary" y
+combina ambos forks en un solo archivo BINARIO.
+
+Ya que Executor en este momento no soporta I/O serie, todos los
+downloads de archivos Mac tienen que hacerse usado su programa
+de comunicacion de PC preferido, y su modem para PC.  Asi, los
+archivos que descargue apareceran en el disco duro de su PC.
+
+Si descripcion del archivo alli donde lo encontro, o su nombre
+en el disco duro de su PC indica que esta en formato  HQX 
+(por ejemplo porque su nombre contiene la extension .hqx) hay un
+paso extra que tomar.
+
+Un archivo con la extension se ha construido usando version 4.0
+de BinHex.  Este programa permite que archivos binarios se
+transporten sobre redes, que de otra manera tendrian problemas
+con ellos, traduciendolos a texto ASCII de 7 bits. Puede ver
+esto con su editor DOS favorito; vera una lista interminable de
+numeros.
+
+BinHex 5.0 convierte ficheros .hqx automaticamente a su formato
+original. Tambien hay un excelente  programa shareware llamado
+DeHQX que ademas da mucha informacion durante el proceso.
+
+Para conseguir que un archivo convertido aparezca sobre un
+volumen Mac de Executor, inicie el programa BinHex en la carpeta
+'utils' de su disco de Sistema.  En su menu de archivo
+encontrara una opcion "Download -> Application".  Le
+mostrara una caja de dialogo donde puede especificar el archivo
+de su volumen PC donde almacenar el resultado.  Si todo sale
+bien encontrara  algun tipo de archivo Mac en el disco de
+destino.  (Recuerde que Executor en su caja de dialogo inicial
+solo le muestra carpetas y programas.  Para abrir un archivo
+.sit habra de iniciar Stuffit, por ejemplo.)
+
+Si un archivo no es HQX BinHex unicamente copiara el fichero y
+creara los forks.  BinHex, para averiguar si necesita tomar el
+paso extra, busca la frase:
+
+   (This file must be converted with BinHex 4.0) 
+
+al principio del archivo.
+
+CompuServe tiene su propio buscador de archivos Macintosh que le
+permite encontrar el archivo que busca entre los aprox. 20,000
+que almacena. Tambien puede encontrarse mucho en Internet. 
+Busque los archivos SimTel ftp.  Otro archivo bueno es el HENSA,
+de la Universidad de Lancaster, GB.
+
+Resumiendo; cuando descargue un archivo Mac, este aparecera 
+como un archivo normal de PC en su disco duro. Ejecute BinHex
+para pasarlo a un volumen de Executor.  BinHex automaticamente
+des-HQX el archivo.  Si se  requiere ejecute un programa
+descompresor.
+
+Si Executor 'toca' un archivo sobre un volumen PC 
+inmediatamente crea un pseudo resource fork para ese archivo,
+que es un archivo aparte con un simbolo de por ciento como
+primer caracter.  Esto puede confundir a BinHex y a otros
+programas, y un fichero 'tocado' podria no ser mostrado nunca mas,
+a menos que desactive el "TEXT filter",  para que todo los
+archivos sean mostrados, en vez de solo los de "TEXT".  En tal
+caso simplemente borre el archivo de resource fork.  Este
+problema es realmente un resultado de un bug en Executor y
+esperamos que se solucione pronto.
+
+Una nota respecto a los archivos de texto.  Cuando adquiera un
+archivo de texto que se produjo sobre un Mac notara que ciertos
+editores DOS tienen problemas con el hecho de que los Mac usan
+solo un caracter LF al final de cada linea, mientras que los PC
+usan un par CR,LF. Por suerte el EDIT de DOS puede leer ambos
+formatos. Cuando abra un documento Mac de texto, cambie un
+caracter y acto seguido guardelo, EDIT lo convertira a formato
+de texto PC.  Existe una programa shareware o freeware para DOS
+llamado MAC2PC80.EXE que hace esto automaticamente.
+
+Si no quiere almacenar un archivo comprimido de texto en un
+volumen de Executor pero lo quiere leer usando un editor PC, 
+hay programas shareware para PC, como UNSTUFF.EXE (gratuito) que
+puede descomprimir estos archivos en su PC.
+
+Aparte de archivos que han pasado por BinHex y/o los comprimidos,
+hay programas mas complejos que vienen con un 'Instalador'; un
+programa que instala el software para que sea copiado
+automaticamente en las carpetas apropiadas.  Un instalador
+normalmente descomprime sus componentes y los esparce por ahi,
+por ejemplo en su carpeta Sistema.
+
+El problema aqui es que la mayoria de las veces los instaladores
+son programas complejos que pueden confundir a Executor. Varios
+instaladores fueron escritos por Apple y tienen informacion
+especial sobre las 'tripas' de los Mac que los autores de
+Executor no tienen (Executor se escribio usando tecnicas de
+'Sala limpia'-- no se desensamblo el Sistema o los ROMs de
+Apple).  En ese caso tendra que instalar el programa sobre un
+Mac de verdad y despues transferir el programa instalado al
+volumen de Executor.  Despues, si no es un programa de libre
+distribucion, borrelo del Mac.  Es ilegal no hacerlo.
+
+Respecto a su carpeta de Sistema;  esta carpeta actua como el
+WIN.INI bajo Windows, es decir, toda aplicacion considera que
+esta en su derecho de  desordenarla.  Una carpeta aparte, 
+'Preferences', la mayoria de las veces contiene archivos que
+guardan cosas como las puntuaciones de los juegos.  Ya que el
+disco de Sistema de Executor esta limitado en tama¤o, conviene
+borrar archivos inutiles de la carpeta Sistema. Sin embargo,
+tenga cuidado con el archivo \TMP\EXECOUT.PS.  Este archivo es 
+necesario para imprimir en Executor.
+
+Nota:  El tama¤o del disco de Sistema de Executor no es
+realmente limitado.  Si se le acaba el espacio tiene
+que crear un segundo volumen mas grande de Sistema con
+MAKEHFV.  No llame al volumen DOS EXSYSTEM.HFV, si no algo
+diferente, como EXSYS1.HFV asegurandose que su nombre logico sea
+System.  La linea de comando de MAKEHFV seria:
+
+	 MAKEHFV EXSYS1.HFV System 2M
+
+para crear un disco de sistema de 2 Mb. Copie todo los
+archivos desde el primer disco al segundo disco con HFS_XFER. 
+Tenga cuidado; ambos discos se llaman System - el vacio
+debe ser el destino.  Cuando todo este copiado borre
+EXSYSTEM.HFV y renombre EXSYS1.HFV a EXSYSTEM.HFV.
+
+Transferir un archivo desde un Mac a Executor mayor de lo que
+cabe en un disquette no es tan facil.  Intente comprimirlo
+primero.  Si todavia no cabe puede usar un cable serie y
+transferirlo usando dos programas de terminal, o intentar
+conseguir un programa que corta archivos en parte.
+
+
+CREADORES DE ARCHIVO Y TIPOS DE ARCHIVO 
+----------------------------------------
+
+En un PC una aplicacion normalmente usa la extension de 3
+caracteres en el nombre de un archivo para denotar quien lo
+creo. Por ejemplo la aplicacion ACMECALC podria crear archivos
+con una  extension .ACM.  La extension tambien puede indicar el
+tipo de archivo, como .TXT, que denota un archivo de texto. Esto
+ha creado mucha confusion, ya que nadie regula el uso de las
+extensiones, y tres letras no dan para mucho.
+
+En los Mac esto esta estandarizado.  El Mac usa un sistema en el
+que cada archivo tiene un creador de 4 caracteres y un tipo de 4
+caracteres.  Apple provee una lista de tipos validos.  (Esto no
+significa que todos sigan las reglas, por supuesto.) El campo de
+creador se usa doblemente.  Primero le dice al finder del Mac
+que aplicacion  cargar cuando el usuario hace doble clic en el
+icono de un archivo de datos. Segundo, permite que una
+aplicacion solo muestre en la caja de dialogo los archivos que
+puede manejar.
+
+Normalmente no tiene que preocuparse por esto, pero a veces un
+archivo que cree que pertenece a una determinada aplicacion no
+puede ser abierto por esta. Si es audaz puede cambiar el tipo y/o 
+el creador usando una herramienta como File Kit.  Viendo la
+cantidad de programas que hay para cambiar los tipos y
+creadores, podemos llegar a la conclusion de que la confusion
+respecto a extensiones es tan grande en los Mac como en los PC.
+
+
+ PROGRAMAS UTILES
+ -----------------
+
+ Aparte de las utilidades ya mencionadas hay un par mas que Ud.
+probablemente podria querer buscar.  Consiga un procesador
+de texto simple como UpWord para editar un archivo ocasional. 
+Para inspeccionar los contenidos de la mayoria de los documentos
+de procesador de texto busque Quill.
+
+Para asegurarse de que los archivos que obtiene no tengan virus
+consiga Disinfectant.  Solo hay unos veinte virus de Mac, pero
+mejor no arriesgar.  Ya que Executor es ligeramente diferente
+por dentro que un Macintosh, debe ser menos susceptible a la
+infeccion de virus que un Mac verdadero, pero mejor no
+tentar a la suerte.
+
+Easy Errors le cuenta lo que un numero de error generado por una
+aplicacion realmente significa.  (¨Quien dijo un Mac era amable
+con el usuario? ) Consiga File Kit para ver atributos de archivo
+como fecha y longitud.
+
+Para formatear disquettes Mac espere a versiones futuras de
+Executor o compre  MacDISK de Insignia.  Alternativamente compre
+discos pre-formateados.  Mejor aun: ya que el formato fisico
+para disquettes Macintosh es igual a el formato PC Ud. puede
+usar DISKCOPY para copiar un disquette Macintosh.  Puede usar
+MAKEHFV para crear un  archivo .hfv con 1440k bytes y despues
+copielo a un disco en blanco, si es que tiene las herramientas
+para ello.
+
+Es mas dificil obtener lenguajes de programacion Shareware y/o 
+freeware para PC. Hay algunos compiladores de C freeware, 
+y ChipMunk Basic es un interprete de Basic simple.
+
+HyperCard de Claris funciona bastante bien, pero algunos stacks 
+no funcionan bajo HyperCard en Executor.  Los stacks de Supercard 
+funcionan tambien, aunque a veces hay problemas con el color en 
+las versiones experimentales de Executor que soportan color.
+
+Si quiere aprender a programar para Mac debe prepararse para
+una sorpresa.  Para comprender como trabaja el Mac necesita
+dominar una serie de libros de Apple, que son muchos y caros, 
+llamados Dentro del Macintosh.  Apple prepara una version CD 
+de estos libros.
+
+Al igual que en Windows, el conocer un lenguaje de programacion no
+es suficiente para escribir una buena aplicacion.  Para Mac uno
+necesita dominar el equivalente de las Windows API, llamado el
+Toolbox.
+
+
+LIMITACIONES SOBRE LO QUE SE EJECUTA BAJO EXECUTOR
+---------------------------------------------------
+
+En un Mac de verdad hay muchas formas de interaccion con la
+maquina.  Aparte de arrancar programas normales, hay 
+
+- Accesorios de Escritorio; estos son programas practicos que
+pueden encontrarse en el Menu de Apple, tal como HFS_XFER.
+
+- Extensiones; estas amplian el Sistema Mac, por ejemplo para
+video.
+
+- Los Paneles de Control; permiten al usuario de Mac controlar
+valores diversos de su sistema.
+
+- Inits; programas peque¤os que un Mac carga para dispositivos
+especiales y/o funcionalidad.
+
+Aparte de el Accesorio de Escritorio HFS_XFER, Executor
+actualmente no puede ejecutar ninguno de los de arriba.
+
+
+TRANSFERIR DATOS ENTRE APLICACIONES MAC Y SUS EQUIVALENTES DOS
+---------------------------------------------------------------
+
+Ud. puede manipular datos en aplicaciones de ambas
+plataformas si las mismas son capaces de leer el formato
+aplicable, p. ej. un documento de Word para Windows puede
+editarse usando Word en Executor.
+
+Si hace que una aplicacion imprima, Executor manda el resultado
+a un fichero en \TMP\EXECOUT.PS si el directorio \TMP existe. 
+Esto es un archivo PostScript que puede imprimirse en una
+impresora que soporte PostScript.  Tambien puede usar el 
+paquete freeware GhostScript para verlo u imprimirlo bajo MS-DOS.
+
+
+Bibliografia
+------------
+
+Sugerencias de lectura para saber mas de estos temas:
+
+Titulo                          Autor               Contenido
+-------------------------------------------------------------------
+
+Insanely Great                  Steven Levy         History of the Mac
+
+Technical Introduction          Apple               THE Source to the 
+Macintosh Family
+
+comp.sys.mac.comm FAQ           D.L. Oppenheimer    Everything on
+datacommunication,
+compression and file formats.
+
+Todos los productos y nombres de compa¤ias aqui mencionados estan
+registrados y son marcas registradas de sus respectivos propietarios.
+
+Ernst J. Oud Compuserve:  100265,3601 Internet: 
+ernstoud@euronet.nl
+
+******************************************************************
+ERNSTOUD.TXT traducido por Juan Negron. 100014.2742@compuserve.com
+Traduccion Rev. 0.99
+******************************************************************

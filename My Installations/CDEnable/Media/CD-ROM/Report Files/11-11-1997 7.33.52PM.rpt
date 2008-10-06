@@ -1,0 +1,68 @@
+////////////////////////////////////////////////////////////////////////////////
+///////////////////InstallShield Media Library Report Summary///////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+Media Name      : CD-ROM
+Report Filename : D:\My Installations\CDEnable\Media\CD-ROM\Report Files\11-11-1997 7.33.52PM.rpt
+Date            : 11/11/1997
+Time            : 7:33PM
+
+Number of Components:                2 
+Number of File Groups:               2 
+Number of Files:                     2 
+Total Size of Files:            35,488 (bytes)
+
+==========
+COMPONENTS
+==========
+
+
+     Program Files
+     Shared DLLs
+
+
+////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////Report Details/////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+
+
+================================================================================
+                           COMPONENT: "Program Files"
+================================================================================
+
+SUMMARY:
+    Total Files:                1 (files for this component only)
+    Source Bytes:          25,600 (files for this component only)
+
+
+                **** File Group: "Program Executable Files" ****
+
+
+<Directory>: I:\cdenable
+
+    Filename                    Date        Time      Size         Version      
+    --------------------------  ----------  --------  -----------  -------------
+    cdenable.exe                11/11/1997  03:19:34       25,600               
+    --------------------------  ----------  --------  -----------  -------------
+    Count=1                                                25,600               
+
+
+================================================================================
+                            COMPONENT: "Shared DLLs"
+================================================================================
+
+SUMMARY:
+    Total Files:                1 (files for this component only)
+    Source Bytes:          35,488 (files for this component only)
+
+
+                      **** File Group: "Shared DLLs" ****
+
+
+<Directory>: I:\cdenable
+
+    Filename                    Date        Time      Size         Version      
+    --------------------------  ----------  --------  -----------  -------------
+    cdenable.vxd                11/10/1997  13:49:22        9,888               
+    --------------------------  ----------  --------  -----------  -------------
+    Count=1                                                 9,888               

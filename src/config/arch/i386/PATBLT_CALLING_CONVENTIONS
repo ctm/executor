@@ -1,0 +1,32 @@
+# INPUTS to <4 byte pattern> code generation function:
+# %eax		offset from %edi to first long
+# %ebx		pattern, if a "tall" pattern, else garbage
+# %edx		repeat count (# longs), mask, or scratch, as appropriate
+# %edi		code pointer
+
+# OUTPUTS from <4 byte pattern> code generation function:
+# %edi		code pointer after new code added
+# %esi		preserved
+# %ebp		preserved
+# %eax		preserved
+# %ebx		preserved
+# %ecx		trashed
+# %edx		preserved
+
+# INPUTS to generated blitter function:
+# %eax		pattern
+# %ebp		points to current pattern entry (*%ebp == %eax)
+# %edi		dest pointer
+# %ds		will refer to the screen, shouldn't be used for anything else
+
+# OUTPUTS from generated blitter function
+# %edi		(%edi - edi_offset) must remain constant
+# %ecx		trashed
+# %edx		preserved
+
+# @param_mask@, @param_not_mask@, @param_offset@, @param_offset_plus_4@,
+# @param_offset_plus_8@, @param_offset_plus_12@,
+# @param_offset_mod_patwidth@, @param_offset_plus_4_mod_patwidth@,
+# @param_offset_plus_8_mod_patwidth@, @param_offset_plus_12_mod_patwidth@,
+# @param_long_count@, @param_long_count_times_4_plus_offset@,
+# @param_patwidth_minus_1@

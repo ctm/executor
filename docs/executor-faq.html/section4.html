@@ -1,0 +1,94 @@
+<html>
+<head><title>
+Executor FAQ - Section 4
+</title>
+<link rev="made" href="mailto:questions@ardi.com">
+</head><body><h1>
+Executor FAQ - Section 4 <br>
+Executor/Win32
+</h1>
+
+<ul>
+<li><a href="#q_4_1" rel=subdocument>Q4.1. How does Executor/Win32 compare to Executor/DOS?</a></li>
+<li><a href="#q_4_2" rel=subdocument>Q4.2. How do I use command-line switches with Executor/Win32?</a></li>
+<li><a href="#q_4_3" rel=subdocument>Q4.3. Why do I get only a black screen when running
+Executor/Win32?</a></li>
+</ul><hr>
+
+<A name="q_4_1"><h2>
+Question 4.1.  How does Executor/Win32 compare to
+Executor/DOS?
+</h2></A>
+
+Executor/Win32 is a Win32 application and can run only under Windows
+95 or later and Windows NT 4 or later.  For those platforms,
+Executor/Win32 is preferred, since it will usually have fewer
+compatibility problems and it runs in its own window, or full-screen. 
+Some people are still running OS/2, Windows 3.x or even DOS, and they
+can't run Executor/Win32.  Additionally, Executor/Win32 can't be run
+on a SX-class 386 machine.  Such machines are very old and very slow,
+but they can still run Executor/DOS.  
+<p>
+Our product, Executor for Windows, includes both Executor/Win32 and
+Executor/DOS, so you don't have to choose one or the other when
+ordering.  
+<A name="q_4_2"><h2>
+Question 4.2.  How do I use command-line switches with
+Executor/Win32?
+</h2></A>
+
+Command-line switches can be used by creating a
+short-cut or by creating the file <code>commands.txt</code>, or a combination of both.  
+<p>
+To use command-line switches with a short-cut, you need to create a
+short-cut to <code>executor.exe</code>, then select it and choose &quot;Properties...&quot;
+using your right mouse.  The Properties panel has several tabs, one of
+which is labeled &quot;Shortcut&quot;.  After selecting the Shortcut
+tab, you can then edit the &quot;Target:&quot; field.  Keep the information that is
+already in there (e.g. &quot;<code>C:\ExecWin32\executor.exe</code>&quot;) and then add a space, followed by the command-line option(s) you want to use when you
+double-click on that short-cut (e.g. &quot; -size 800x600 -applzone
+4m&quot;).  
+<p>
+Since you can use command-line switches to specify a Macintosh program
+for Executor to run, you can create individual short-cuts for
+individual programs (e.g. &quot; C:\ExecWin32\Apps\Freeware\Risk!&quot;).  
+<p>
+If you have some command-line switches that you want to apply to
+<em>all</em> invocations of Executor, you can create a file called
+<code>commands.txt</code> in the same directory that includes <code>executor.exe</code>.  You can put all the switches on one line, or
+use a separate line for each switch.  
+<p>
+Switches in commands.txt override the ones that are specified in
+short-cuts.  
+<A name="q_4_3"><h2>
+Question 4.3.  Why do I get only a black screen when running
+Executor/Win32?
+</h2></A>
+
+You've encountered a bug.  The bug may be in your video driver or in
+the screen-accessing DLLs that Executor uses. 
+
+<p>
+To see if it's in your video driver, try adjusting your Display
+settings.  In the Control Panel there's a Display icon. 
+Double-clicking that should let you select a panel named
+&quot;Settings&quot;, which probably has an &quot;Advanced...&quot; button.  If you click
+the &quot;Advanced...&quot; button, you should be able to select a panel
+named &quot;Performance&quot;.  Try turning the Performance down and see if
+that fixes the problem.  You might also want to try downloading a newer driver
+from the maker of your video card.  
+<p>
+To see if it's our screen-accessing DLLs, Try renaming the file
+&quot;<code>SDL-dx5.dll</code>&quot; to &quot;<code>SDL-dx5.dll.SAVE</code>&quot;.  That will prevent Executor from seeing that DLL, so Executor will then use a
+different DLL (<code>SDL-dib.dll</code>) which will cause it to access the screen in a different way.  If that solves it, then you may have
+found a bug in <code>SDL-dx5.dll</code>.  If so, please send e-mail to <A href="mailto:bugs@ardi.com"><code>bugs@ardi.com</code></A> and let us know.  <hr>
+Next: <a href="section5.html" rel=precedes>Executor/Linux</a>.<br>
+Back: <a href="section3.html" rev=precedes>Using Executor</a>.<br>
+<a href="index.html" rev=subdocument>Return to contents</a>.<p>
+<address>
+
+- 28 February 2002
+</address><br>
+Extracted from Executor Frequently Asked Questions with Answers,
+<A href="section7.html#faqcopyright">Copyright ARDI 2002.</A>
+</body></html>

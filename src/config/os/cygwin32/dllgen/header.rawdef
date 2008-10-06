@@ -1,0 +1,19 @@
+;
+; Contributors:
+;  Created by Sam Lantinga <slouken@devolution.com>
+;
+;  THIS SOFTWARE IS NOT COPYRIGHTED
+;
+;  This source code is offered for use in the public domain. You may
+;  use, modify or distribute it freely.
+;
+;  This code is distributed in the hope that it will be useful but
+;  WITHOUT ANY WARRANTY. ALL WARRENTIES, EXPRESS OR IMPLIED ARE HEREBY
+;  DISCLAMED. This includes but is not limited to warrenties of
+;  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+;
+;
+; There are a lot of exports to type out, so I'm just doing them a few at a
+; time, as necessary for ARDI's port of Executor.
+;
+EXPORTS

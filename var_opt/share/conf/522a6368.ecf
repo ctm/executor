@@ -1,0 +1,9 @@
+// This Configuration file (/us2/mac/Configuration/522a6368.ecf) was built by Executor
+Comments = "BBEdit Lite wants System 6.0.7, but BBEdit demo wants System 7";
+// WindowName = "BBEdit Lite 3.5";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 7.0.0;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

@@ -1,0 +1,113 @@
+*** GOALS
+
+the goals of the new configure was to
+
+1. make it easier to add new platforms/front ends.
+2. allow building objects in a director other than
+the source repository, so it is easy to have several
+builds for a single platform, each being built with
+different options.
+3. make dependencies explicit.
+
+*** CONFIGURING
+to configure a build directory, do:
+
+/.../executor/util/configure.sh [options]
+where options include:
+
+--cflags='flags'; where flags are the default cflags to be used when
+building object files for the target
+
+--root='dir'; where dir is the path to the executor source tree, in
+this case `/.../executor', this defaults to `...'.  `${root}' will
+denote this directory for the rest of this document.
+
+--target='target'; where target is the gnu-style tuple describing the
+target to build executor for.  the build system assumes the toolchain
+for this target can be invoked in the form `<target>-<tool>', ie.,
+`i486-next-ns3-gcc'.
+
+*** TARGETS
+we have a number of aliases for various targets (ie., cliff build
+binutils with a `i486-go32-bsd' configuration to cross compile to dos.
+cotton configured a newer version as `i386-msdos-go32'.  there are
+equal differences in the configuration for other platforms).
+therefore, this target is `canonicalized' to yield the target name for
+selecting various configuration files and syn68k versions.  currently
+three canonical configurations are supported (see the case statement
+in util/configure.sh).
+
+m68k-next-ns3, i486-next-ns3 for nextstep hosts running on black or
+white hardware, respectively.  since they are configured `ns3', it
+assumed executor is backwards compatible with earlier versions, or we
+just don't care about that.
+
+i386-msdos-go32; for dos.
+
+a target configuration, found in ${root}/targets/<target>, has to parts.
+
+<target>.h; the configuration header file, and
+<target>.make; a make configuration file.
+
+currently, configure tests <target>.h to see if it defines `SYN68K',
+in which case it configures the target to build with syn68k (adds
+-DSYN68K to the `DEFINES' make variable, and sets the make variable
+`LIBSYN68K' to point to the appropriate syn68k library for the
+target).  ultimately, putting `-DSYN68K' on the command line should be
+unecessary, as all relevent files should include the target and front
+end configuration header files.
+
+target.make (if it exists) is included in Makefile.in when
+configuring.  it can perform any target-depend make operations it
+wants.  currently, the build system uses the following make
+variables which <target>.make can define:
+
+LOWGLOBAL_LD_OPTION
+TARGET_LIBS
+TARGET_POST_LD_CMD, TARGET_POST_LD_OPTIONS
+
+*** THE FRONT END
+the target describes what type of os/hardware executor will run on,
+the front-end determines what kind of input/output api executor will
+have to interface to.  there are three such front-ends (with more to
+be added later, i'm sure).
+
+x; for x.
+nextstep; for NeXTstep, and
+dos; for vga/dos
+
+each front end has a `<front-end>.make' file which is included in
+Makefile.in druing configure.  this makefile fragment includes
+everything needed to build front-end specific things.
+
+Makefile.in uses the following make variabes which the front end
+makefile fragment can define:
+
+FRONT_END_DEFINES
+FRONT_END_LIBS
+FRONT_END_OBJ
+
+*** Makefile.in
+
+Makefile.in is the main skeleton which configure.sh processes (via sed
+placements to tokens of the form `@foo@') to create the Makefile in
+the build directory.
+
+currently the following tokens are replaced
+
+@target@; the canonicalized target name
+@target_make@; the text of the target makefile fragment
+@target_gcc@; the name of the gnu c compiler targetting
+the target.
+@front_end@; the name of the front end
+@root@; the path to the root directory.
+@syn68k_define@; any syn68k-specific defines, currently just
+`-DSYN68K', empty if the target does not use the synthetic cpu.
+@syn68k_lib@; the path to the syn68k library for this
+target.  empty if the target does not use the synthetic cpu.
+@cflags@; default cflags to be used when compiling object
+files for the target.
+
+currently we include $(ROMLIB_DIR)/romlib.make and
+$(EXECUTOR_DIR)/executor.make.  these should proably be included as
+well, for consistency.

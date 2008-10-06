@@ -1,0 +1,97 @@
+		    INSTALLATION UNDER WINDOWS 3.X
+
+1.) Insert the Executor CD in the CD-ROM drive, either before or after
+you start Windows.
+
+2.) Choose Run from the File menu.  Type
+
+	D:\install.exe
+
+at the prompt (assuming that your CD-ROM drive is your D:\ drive), and
+click OK or press Return.
+
+3.) The installer will bring up a short menu of choices.  Press 2 to
+install in the default C:\EXECUTOR, or 1 to change the destination
+directory.
+
+4.) Installation will begin.  After it has finished, you will be
+returned to the Windows desktop.  
+
+5.) Because Executor is native to DOS, it does not automatically
+create its own Windows icon.  To create an icon for it, open the
+program group where you would like to put Executor (the Accessories
+group is a common choice).  
+
+6.) Choose New from the File menu.  Choose Program Item (unless you
+want to give Executor its own separate group, in which case you should
+choose Program Group first).
+
+7.) Enter this information in the first three fields:
+
+	Executor 
+	(for Program Description)
+
+	executor 
+	(for Command Line)
+
+	C:\EXECUTOR
+	(for Working Directory, unless you changed it during installation)
+
+Leave "none" in the fourth field.  Click OK or press Enter to accept
+Windows' default icon, or click Change Icon to choose your own icon
+and then click OK.  If you ever want to change these settings, you can
+do so by selecting the Executor icon and choosing Properties from the
+File menu.
+
+
+
+		   CONFIGURATION UNDER WINDOWS 3.X
+
+Executor should be run in 386-enhanced mode with virtual memory turned
+on.  This should be the default if you have a 386 or better.  To
+double-check, open the Control Panel from the Main program group and
+double-click on the 386-Enhanced icon.  This will display several
+settings and buttons, including a button to show your virtual memory
+settings.
+
+Executor requires a mouse and a mouse driver.  Many people assume that
+they have a mouse driver because their mouse functions under Windows,
+but actually Windows has a built-in mouse driver.  You will need a DOS
+mouse driver loaded and installed in DOS in order to run Executor.
+
+For most people, Executor will work fine without any additional
+configuration.  If something strange happens, or if you want to run
+Executor with command line switches (see "Command Line Switches" in
+the minimanual), then you may want to create a Program Information
+File with the Windows PIF Editor.
+
+The PIF Editor is found in the Main program group.  Double-click to
+start it, and enter the following information in the fields:
+
+	EXECUTOR.EXE
+	(for Program Filename)
+
+	Executor
+	(for Window Title)
+
+	(leave Optional Parameters blank for now)
+
+	C:\EXECUTOR
+	(for Start-up Directory, unless you changed it during installation)
+
+
+Save the file as "EXECUTOR.PIF".  Then, change the properties of your
+Executor icon (as above) to point it to EXECUTOR.PIF instead of
+C:\EXECUTOR\EXECUTOR.EXE.
+
+Often, creating a PIF is all that's needed to get a DOS-native program
+running under Windows.  If you still have trouble, then you can adjust
+the PIF further.
+
+You may want to add some command line switches to the Optional
+Paramenters line.  See the problems.txt file for advice on which
+switches to use for troubleshooting, or type "executor -help | more"
+at a C:\EXECUTOR> prompt to get a complete list of switches with a
+brief description of each.  You may also want to un-check the PIF's
+"Close Window on Exit" box, so that any error messages Executor may be
+giving you will be retained on the screen.

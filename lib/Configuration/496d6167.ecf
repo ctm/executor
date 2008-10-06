@@ -1,0 +1,9 @@
+// This Configuration file (/us2/mac/Configuration/496d6167.ecf) was built by Executor
+Comments = "NIH Image 1.59 needs System 7";
+// WindowName = "NIH Image 1.59%2Ffat";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 7.0.0;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

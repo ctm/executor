@@ -1,0 +1,8 @@
+	Complains that default destination is in the trash
+
+	When we select a destination it doesn't update the "Select XXX"
+	button at the bottom as we click different folders
+
+	(BTW, they have support for a "New Folder" button)
+
+	their control doesn't update

@@ -1,0 +1,528 @@
+<html>
+<head><title>
+Executor FAQ - Section 6
+</title>
+<link rev="made" href="mailto:questions@ardi.com">
+</head><body><h1>
+Executor FAQ - Section 6 <br>
+Executor/DOS
+</h1>
+
+<ul>
+<li><a href="#whatishfv" rel=subdocument>Q6.1. What is an HFV file?</a></li>
+<li><a href="#makehfv" rel=subdocument>Q6.2. What is makehfv?</a></li>
+<li><a href="#q_6_3" rel=subdocument>Q6.3. What are the hardware requirements for Executor/DOS?</a></li>
+<li><a href="#vesa" rel=subdocument>Q6.4. What do I do if my Super VGA card isn't VESA
+compliant?</a></li>
+<li><a href="#white" rel=subdocument>Q6.5. Why is there a bright white border on the
+screen?</a></li>
+<li><a href="#doa" rel=subdocument>Q6.6. E/D dies during startup.  Why?</a></li>
+<li><a href="#winwedge" rel=subdocument>Q6.7. E/D runs under DOS, but not from Windows.  What do I
+do?</a></li>
+<li><a href="#q_6_8" rel=subdocument>Q6.8. What causes errors when transferring files?</a></li>
+<li><a href="#q_6_9" rel=subdocument>Q6.9. Why does my screen look funny when I run
+Executor?</a></li>
+<li><a href="#q_6_10" rel=subdocument>Q6.10. Does E/D require an ASPI driver to access
+SCSI?</a></li>
+<li><a href="#q_6_11" rel=subdocument>Q6.11. Why won't Executor/DOS work with my Diamond Viper PCI
+card?</a></li>
+<li><a href="#q_6_12" rel=subdocument>Q6.12. Why doesn't my mouse work when I run Executor under OS/2
+Warp?</a></li>
+<li><a href="#q_6_13" rel=subdocument>Q6.13. Any OS/2 Warp suggestions?</a></li>
+<li><a href="#q_6_14" rel=subdocument>Q6.14. Does Executor/DOS work under Windows 95?</a></li>
+<li><a href="#dosbugs" rel=subdocument>Q6.15. Executor/DOS dies, what should I do?</a></li>
+<li><a href="#q_6_16" rel=subdocument>Q6.16. How does printing work under E/D?</a></li>
+<li><a href="#q_6_17" rel=subdocument>Q6.17. Why does E/D under Windows 3.x have problems
+hot-keying?</a></li>
+<li><a href="#q_6_18" rel=subdocument>Q6.18. Why can't I eject or format my DOS formatted
+floppy?</a></li>
+<li><a href="#q_6_19" rel=subdocument>Q6.19. Do E/D and QEMM fight?</a></li>
+<li><a href="#q_6_20" rel=subdocument>Q6.20. Does Executor fight with Novell DPMS?</a></li>
+<li><a href="#q_6_21" rel=subdocument>Q6.21. How can I speed up Executor/DOS?</a></li>
+<li><a href="#q_6_22" rel=subdocument>Q6.22. How do I make Executor/DOS run faster under
+VirtualPC</a></li>
+</ul><hr>
+
+<A name="whatishfv"><h2>
+Question 6.1.  What is an HFV file?
+</h2></A>
+
+Executor has the ability to store an entire Macintosh
+&quot;volume&quot; (i.e. filesystem corresponding to a disk drive or a partition within a
+disk drive) in a DOS or UNIX file.  Under DOS, this feature is very
+handy because there is no way to have files with long names and upper
+and lower case characters in their names unless you use an HFV file. 
+See <A href="#makehfv">Q6.2 `What is makehfv?'</A>.  
+<p>
+In general, HFV files should have filenames that end in
+&quot;<code>.hfv</code>&quot;.  
+<A name="makehfv"><h2>
+Question 6.2.  What is makehfv?
+</h2></A>
+
+The program makehfv (formerly called mkvol) allows you to create
+virtual Macintosh volumes [see <A href="#whatishfv">Q6.1 `What is an HFV file?'</A>].  It is now part of all Executor distributions, although it is more useful under DOS than
+under Windows or Linux.  
+<p>
+To use makehfv you need to pick a name for the new HFV file, a name
+for the Macintosh volume that your new HFV file will represent and the
+number of kilobytes or megabytes that you want the HFV file to use. 
+Here's an example that creates a file named
+&quot;<code>bigtest.hfv</code>&quot; that will appear in Executor as &quot;BigTest&quot; and will have 10
+MB of space in it.  <pre>
+makehfv bigtest.hfv BigTest 10m
+</pre>
+
+<p>
+<br>
+Executor/DOS will automatically see HFV files if they are placed in
+the same directory as <code>executor.exe</code>, which is usually <code>C:\EXECUTOR</code> and their names have the suffix &quot;<code>.hfv</code>&quot;.  
+<p>
+Executor/Linux will automatically see HFV files if they are placed in
+the same directory as ExecutorVolume (NOTE:
+<em>not</em> in ExecutorVolume itself), which is usually
+<code>/usr/local/lib/executor</code> and their names have the suffix &quot;<code>.hfv</code>&quot;.  
+<p>
+If you're using DOS or Windows, if you use a compressed filesystem or
+if you plan to make a compressed archive containing an HFV file,
+you'll want to use the &quot;-zeros&quot; command line option to
+makehfv.  That tells makehfv to explicitly write zeros in the new hfv which takes a
+little more time but makes the resulting HFV file much more
+compressible.  
+<A name="q_6_3"><h2>
+Question 6.3.  What are the hardware requirements for
+Executor/DOS?
+</h2></A>
+
+Required: '386 or better, VGA, 15 MB disk space, and 4 MB RAM.  A SCSI
+Controller is needed only if you want to access external Macintosh
+hard disks or PowerBooks.  
+<p>
+Recommended: '486 or better, SVGA, 15 MB disk space, and 8 MB RAM.  A
+SCSI Controller is needed only if you want to access external
+Macintosh hard disks or PowerBooks.  
+<p>
+Executor/DOS 2 should work in sixteen colors on any VGA.  In addition,
+if you have a Super VGA that is VESA 1.0 compliant, Executor/DOS
+should be able to provide 256 colors and a range of screen sizes.  If
+you have a video card that is VESA 2.0 compliant, Executor's graphics
+will be significantly faster.  
+<A name="vesa"><h2>
+Question 6.4.  What do I do if my Super VGA card isn't VESA
+compliant?
+</h2></A>
+
+There is a shareware SVGA utility that provides VESA compliance for
+SVGA cards that normally are not VESA compliant. 
+<A href="http://www.scitechsoft.com/">SciTech Display Doctor</A> is available from <code>&lt;http://www.scitechsoft.com/&gt;</code>.  If you use it, you should pay the shareware fee as described in the documentation.  If you have a
+recent SVGA card you probably don't need SciTech Display Doctor,
+although it may improve Executor's performance. 
+
+<A name="white"><h2>
+Question 6.5.  Why is there a bright white border on the
+screen?
+</h2></A>
+
+The problem starts with Macs and PCs using different values to
+represent white and black.  That's not too big of a problem, because
+Executor knows about this difference and translates things
+appropriately.  The rest of the problem has to do with the fact that
+on video screens (unlike on laptop screens) there is a part of the
+screen that is outside the pixel area that is still illuminated by the
+video gun.  That portion of the screen is known as the
+&quot;overscan&quot; area and the VESA 2.0 specs don't provide a way to set what color the
+overscan should be displayed as.  Instead they use the value that is
+used for the binary representation that represents black on PCs.  That
+works well, except we're already mapping that representation to be
+white.  
+<p>
+This only happens when Executor detects and can use a &quot;linear
+framebuffer&quot;.  That's the fast way that allows Executor to write
+directly to the screen without an intermediate copy to an offscreen
+representation of the Mac screen.  If we can't get access to a linear
+framebuffer then we can use the normal PC color mapping and patch
+things up as we transfer from the offscreen image.  That allows the
+overscan area to be black but it's actually slower (significantly
+slower for some games).  
+<A name="doa"><h2>
+Question 6.6.  E/D dies during startup. 
+Why?
+</h2></A>
+
+The most common cause of E/D not running under DOS is the lack of file
+descriptors that you might get if you don't have the line:
+<pre>
+FILES=30
+</pre>
+<br>
+in your config.sys.  If Executor is giving you trouble and you don't
+have such a line in your config.sys file, please add it, or if you
+have a smaller number than 30, please increase your number to 30. 
+There is no reason to decrease your number if it is greater than 30. 
+
+<p>
+Windows NT doesn't use config.sys, instead you need to use the
+configuration file that is listed when you get to the
+&quot;Program&quot; portion of &quot;Properties&quot; and click on the WindowsNT button. 
+The default Config Filename is <pre>
+%SystemRoot%\SYSTEM32\CONFIG.NT
+</pre>
+<br>
+&quot;%SystemRoot%&quot; will automatically be replaced with the
+location of your Windows NT file, which is likely
+<pre>
+C:\WINDOWSNT
+</pre>
+<br>
+The default CONFIG.NT file has &quot;FILES=20&quot; in it, so you need to either change the contents
+of CONFIG.NT probably <pre>
+C:\WINNT\SYSTEM32\CONFIG.NT
+</pre>
+<br>
+or use the WindowsNT button on the Program page of the
+Properties panel to use a different configuration file. 
+
+<p>
+When all else fails, you can use the command line option
+&quot;-desperate&quot; to tell Executor to use as few extended features of your computer as
+possible in an attempt to avoid running into a problem.  Under DOS you
+just add &quot;-desperate to the command line, i.e.:
+<pre>
+C:\&gt; executor -desperate
+</pre>
+<br>
+Under Windows, you need to make a short-cut to Executor and then use
+the Properties menu item to change the command line to include
+&quot;-desperate&quot;.  
+<A name="winwedge"><h2>
+Question 6.7.  E/D runs under DOS, but not from Windows.  What do I
+do?
+</h2></A>
+
+There are several things you can check: 
+<ul>
+<li>Do you have FILES=30 or greater in the appropriate config file [see
+<A href="#doa">Q6.6 `E/D dies during startup.  Why?'</A>]? </li>
+<li>Are you running in 386-enhanced mode? </li>
+<li>Is virtual memory turned on? </li>
+<li>Is your mouse driver loaded and enabled (not just installed)?
+</li>
+</ul>
+
+<p>
+If this checking produces no insights, write to
+<A href="mailto:questions@ardi.com"><code>questions@ardi.com</code></A> and we'll try to track down the cause of the problem. 
+
+<A name="q_6_8"><h2>
+Question 6.8.  What causes errors when transferring
+files?
+</h2></A>
+
+Error -42 is the error code generated inside a Macintosh when too many
+files are open.  Executor internally generates this error when the
+underlying operating system disallows the opening of a file.  This
+error is usually symptomatic of not properly setting
+<code>FILES</code> in your config.sys [see <A href="#doa">Q6.6 `E/D dies during startup.  Why?'</A>].   
+<p>
+Similar errors may result when you try to copy Macintosh file to a DOS
+disk because many Macintosh file names are illegal under DOS.  You can
+fix this by renaming the file to a normal DOS eight-dot-three name. 
+
+<p>
+Executor versions that are older than 2.0j [available in mid June]
+have trouble with Windows 95's long file names.  Specifically, any
+Macintosh file with a control-character as part of its name will cause
+trouble, and filenames will appear to all be in lower case.  2.0j
+solves these problems.  
+<A name="q_6_9"><h2>
+Question 6.9.  Why does my screen look funny when I run
+Executor?
+</h2></A>
+
+Your video driver may not be fully VESA compliant.  If Executor
+detects VESA compliance, it will try to use VESA modes.  In general,
+this is a good thing, however, if these modes have bugs in them,
+Executor will invoke the bugs, and Executor may fail.  Try getting a
+newer driver for your video card if this happens [see
+<A href="#vesa">Q6.4 `What do I do if my Super VGA card isn't VESA
+compliant?'</A>].  
+<p>
+NOTE: If you run Executor with the &quot;-info&quot; switch, Executor
+will print out information it finds out about your video card.  That information
+may be helpful in tracking down your problem. 
+
+<A name="q_6_10"><h2>
+Question 6.10.  Does E/D require an ASPI driver to access
+SCSI?
+</h2></A>
+
+If your SCSI drivers patch the &quot;INT 13&quot; BIOS calls, then an
+ASPI driver is not needed.  As long as &quot;INT 13&quot; can allow
+Executor to read a SCSI drive, there is no need to use ASPI.  Similarly, if you have a
+16-bit MSCDEX CD-ROM driver installed, Executor will be able to see
+your CD-ROM drive (whether it's SCSI or not) even without ASPI
+drivers.  
+<A name="q_6_11"><h2>
+Question 6.11.  Why won't Executor/DOS work with my Diamond Viper PCI
+card?
+</h2></A>
+
+Executor/DOS requires VESA compliant graphics cards.  Many cards are
+not directly VESA compliant and need a TSR to be run before they will
+work with Executor/DOS.  On a Gateway computer, you can do this with
+the &quot;vprmode VESA&quot; command [see
+<A href="#vesa">Q6.4 `What do I do if my Super VGA card isn't VESA
+compliant?'</A>].  
+<A name="q_6_12"><h2>
+Question 6.12.  Why doesn't my mouse work when I run Executor under
+OS/2 Warp?
+</h2></A>
+
+If it's not already there, you may need to add this line:
+<pre>
+DEVICE=C:\OS2\MDOS\VMOUSE.SYS
+</pre>
+<br>
+to your CONFIG.SYS.  This, and related issues, are described on pages
+206-207 of _User's Guide to OS/2 Warp_.  This line should already have been
+added for you when you installed Warp.  
+<p>
+Also, you may need to load MOUSE.COM in your AUTOEXEC.BAT, for
+example: <pre>
+LOADHIGH C:\OS2\MDOS\MOUSE.COM
+</pre>
+<br>
+You can also create an AUTOEXEC file specifically for Executor, place
+it in the same directory as Executor, and configure Warp to execute that
+file whenever you launch Executor.  
+<A name="q_6_13"><h2>
+Question 6.13.  Any OS/2 Warp suggestions?
+</h2></A>
+
+Here is the advice of an Executor Enthusiast:
+<pre>
+I haven't been having any problems with running Executor/DOS in
+OS/2. What he needs to do (assuming he has Warp) is to run &quot;Add
+Programs&quot; object in the &quot;System Setup&quot; folder. This will make a object
+for Executor on his desktop (usually in the &quot;Additional DOS Programs&quot;
+folder). Go into the settings for that object, and select the
+&quot;Session&quot; tab. Set it to &quot;DOS Full Screen&quot;, and choose &quot;DOS
+Settings&quot;. He wants &quot;All DOS Settings&quot;. Primarily, Executor needs the
+&quot;DPMI Memory Limit&quot; set to 16 megs, and &quot;DPMI Memory Limit&quot; set to
+enabled. Since it defaults to 4 megs and automatic, it won't work. For
+additional performance, he should set &quot;DOS High&quot; to on, &quot;EMS Memory
+Limit&quot; to 0, &quot;Video 8514a XGA IOtrap&quot; to off, &quot;Video Retrace
+Emulation&quot; to off, &quot;XMS Memory Limit&quot; to 0, and &quot;XMS Minimum HMA&quot; to
+63. The biggest boost comes from &quot;Session Priority&quot;. Set this to at
+least 16, and if he is going to run no other programs, set it
+higher. If he is going to run other programs, this should be left
+at 16, and the &quot;DOS Background Execution&quot; needs to be set to on.
+</pre>
+
+<A name="q_6_14"><h2>
+<br>
+Question 6.14.  Does Executor/DOS work under Windows
+95?
+</h2></A>
+
+Yes, Executor/DOS works well under Windows 95.  But you should run
+Executor/Win32 under Windows 95.  It has fewer compatibility problems
+and is just as fast.  
+<A name="dosbugs"><h2>
+Question 6.15.  Executor/DOS dies, what should I
+do?
+</h2></A>
+
+If Executor dies even running the demo applications, try temporarily
+moving your config.sys and autoexec.bat files aside and create minimal
+versions of each, leaving only the lines that you need to initialize
+your mouse driver and the <pre>
+FILES=30
+</pre>
+<br>
+line in your config.sys.  Then reboot and try running Executor.  If
+Executor then starts working, you will have to slowly add back the
+things that are in your normal autoexec.bat and config.sys files until
+you know exactly what is causing the problem.  Once you know that, you
+should send information to <A href="mailto:bugs@ardi.com"><code>bugs@ardi.com</code></A>.  
+<p>
+If Executor only dies on a particular application, try increasing the
+amount of RAM dedicated to the application by using the
+&quot;-applzone&quot; switch when you run Executor.  Also try turning on &quot;Pretend
+Sound&quot;, or if the screen seems to be only partially
+updated, try turning on &quot;Refresh&quot;. 
+
+<p>
+Once you've done as much as you can to figure out the problem,
+<A href="http://www.ardi.com/bugform.html">send a bug report</A> via <code>&lt;http://www.ardi.com/bugform.html&gt;</code>.  Run Executor with the &quot;-info&quot; switch
+and include that information.  Make sure you also include the version
+of Executor you're running (e.g. Executor/DOS 2), the name and version
+of the application that is dying (e.g. HyperCard 2.1), the name and
+version of the operating system you're running (e.g. DOS 6.22) and
+enough details to reproduce the crash (e.g. &quot;start the
+application, choose the &quot;more Elvis&quot; from the &quot;adjust music&quot;
+menu and the application will crash&quot;).  If the application you are running is
+publicly available via anonymous ftp, telling us where we can pick it
+up for testing purposes also helps.  
+<p>
+We accept bug reports from everyone, although paid customers' bug
+reports are almost always higher priority than those of potential
+customers.  
+<A name="q_6_16"><h2>
+Question 6.16.  How does printing work under
+E/D?
+</h2></A>
+
+Executor/DOS will print directly to a PostScript-compatible printer if
+started with the switch -printer lpt1 (or lpt2, lpt3, or whatever as
+appropriate).  Otherwise, it prints to a PostScript file.  The first
+time you print, the file will be named <code>execout1.ps</code> and will be located in the same directory that <code>executor.exe</code> is located in. You can then print this file on a PostScript printer, or
+if you have a PostScript compatible driver, you can use a
+non-PostScript printer.  A popular PostScript compatible printer
+drivers is <A href="http://www.cs.wisc.edu/~ghost/">Ghostscript</A>, available for free (<code>&lt;http://www.cs.wisc.edu/~ghost/&gt;</code>).  
+<A name="q_6_17"><h2>
+Question 6.17.  Why does E/D under Windows 3.x have problems
+hot-keying?
+</h2></A>
+
+When you use a hot-key to switch away from Executor, Windows 3.x
+doesn't know how to save the screen, because it only knows about the
+original VGA screen modes, but Executor uses SVGA/VESA screen modes. 
+So when you switch back, Windows 3.x doesn't know how to replace the
+screen with what it used to contain.  
+<p>
+This problem is further compounded by the fact that Executor has no
+way of knowing when it's been switched out and switched back.  To make
+matters worse, some Windows drivers (ATI Mach 32, for example) don't
+even restore the mode properly, so not only will the screen be
+incorrect, but Executor will die shortly after you switch back. 
+
+<p>
+Luckily this is less frequently a problem in Windows 95 or OS/2. 
+
+<A name="q_6_18"><h2>
+Question 6.18.  Why can't I eject or format my DOS formatted
+floppy?
+</h2></A>
+
+Executor/DOS allows you to see DOS drives other than the drive you
+install Executor on.  It also allows you to format floppies in the
+Macintosh format (it used to read and write Mac formatted floppies,
+but it wouldn't do the formatting itself). 
+
+<p>
+Currently, the two abilities conflict.  What we do is if a DOS
+formatted floppy is in the drive when E/D starts, we treat that drive
+as a fixed drive from that point on.  You can no longer eject the
+floppy, nor can you convince Executor to consider that floppy as a Mac
+formatted floppy or a candidate for Mac formatting.  This is confusing
+and ugly; but we haven't found a better solution yet. 
+
+<A name="q_6_19"><h2>
+Question 6.19.  Do E/D and QEMM fight?
+</h2></A>
+
+We don't have QEMM in house for testing, but apparently older versions
+of QDPMI are incompatible DPMI providers for Executor.  We have heard
+that QEMM 8.0 works with Executor, but we have not tested it.  DPMI
+providers that are known to work are the supplied CWSDPMI, the DPMI
+provider in Windows 3.x and Windows 95, the DPMI provider in OS/2,
+and 386Max.  
+<p>
+For now, if you have lines similar to these two:
+<pre>
+DEVICE=C:\QEMM\LOADHI.SYS /R:1 /SIZE=8880 C:\QEMM\QDPMI.SYS 
+
+SWAPFILE=DPMI.SWP SWAPSIZE=1024.
+</pre>
+
+<p>
+<br>
+in your config.sys file, you should &quot;rem them out&quot; -- i.e.
+add &quot;rem &quot; to the beginning of each line -- at least when using Executor:
+<pre>
+REM DEVICE=C:\QEMM\LOADHI.SYS /R:1 /SIZE=8880 C:\QEMM\QDPMI.SYS 
+REM SWAPFILE=DPMI.SWP SWAPSIZE=1024.
+</pre>
+
+<A name="q_6_20"><h2>
+<br>
+Question 6.20.  Does Executor fight with Novell
+DPMS?
+</h2></A>
+
+Yes.  Novell DOS and Stacker both use this memory manager, but
+Executor will crash when Novell DPMS (DOS Protected Mode Services) is
+running.  Fortunately, Stacker can be run without it if you are using
+another memory manager such as 386Max.  Additionally, Stacker won't
+use DPMS when run under Windows.  
+<p>
+This is another compatibility problem that we're looking into,
+although it has been reported that some other well known programs
+crash under DPMS's DPMI support (PKZIP, Geoworks and Logic Magician's
+Oberon System).  
+<A name="q_6_21"><h2>
+Question 6.21.  How can I speed up Executor/DOS?
+</h2></A>
+
+Executor/DOS is of course dependent on the speed and type of CPU in
+your PC.  Obviously you can make E/D run faster if you upgrade your
+386 to a Pentium.  However, there are other, non-obvious ways in which
+sometimes you can dramatically improve Executor's speed. 
+
+<p>
+Use the &quot;-info&quot; switch to see how much DPMI memory you have
+compared to how much physical memory you have.  In general, Executor itself
+will consume approximately 2 MB of memory even if you could have an
+applzone, syszone and stack size of 0 (which you can't).  So on a 4 MB
+system, you can only allocate another 2 MB total to applzone, syszone
+and stack if you want to avoid paging (paging slows Executor down
+considerably), and that's only if you don't have drivers in your
+config.sys file or autoexec.bat tying up more of your memory.  If you
+are low on memory, you should use DOS's &quot;mem&quot; command and
+see how much Extended (XMS) memory DOS thinks you have.  The more you can increase
+that figure before Executor starts up, the more DPMI memory Executor
+will have and the easier it will be for Executor to avoid paging. 
+
+<p>
+<em>If</em> you have plenty of memory, then you can also speed
+Executor up a little bit by running a disk cache.  However, you should
+only run the disk cache in a write-through mode -- in other words you
+should enable the disk cache so that all disk writes are immediately
+sent to the disk.  Failure to do so may result in corrupt HFV files
+after Executor dies.  
+<p>
+Executor can access video cards in three different ways.  The slowest
+is by using VGA calls.  This is also the least flexible -- you are
+often limited only to 16 colors when using VGA calls, since the only
+VGA mode that supports 256 colors is too small to use with Executor. 
+If your card is VESA compliant, or has a driver that makes it VESA
+compliant, Executor can drive the video card more efficiently.  There
+are two major levels of VESA compliance -- VESA 1.x and VESA 2.x. 
+Executor is even more efficient if it can drive your video card using
+a VESA 2.0 driver, <em>if</em> that driver supports &quot;linear mapping&quot;. 
+The SciTech Display Doctor driver allows many popular video cards to
+be linear mapped.  If you want Executor to run quickly, you should
+probably pick up a copy of SciTech Display Doctor and test it on your
+system to see if it improves things.  You can use
+&quot;Speedometer&quot; or &quot;Globe&quot; to get a rough approximation of how much it helps. 
+On many cards, use of SciTech Display Doctor can double Executor's graphics
+speed.  
+<A name="q_6_22"><h2>
+Question 6.22.  How do I make Executor/DOS run faster under
+VirtualPC
+</h2></A>
+
+Using the &quot;<code>-oldtimer</code>&quot; switch can speed Executor/DOS up by
+more than a factor of two when it's running under VirtualPC, a PC
+emulator made by <A href="http://www.connectix.com/">Connectix</A> <code>&lt;http://www.connectix.com/&gt;</code>.  <hr>
+Next: <a href="section7.html" rel=precedes>Esoterica</a>.<br>
+Back: <a href="section5.html" rev=precedes>Executor/Linux</a>.<br>
+<a href="index.html" rev=subdocument>Return to contents</a>.<p>
+<address>
+
+- 28 February 2002
+</address><br>
+Extracted from Executor Frequently Asked Questions with Answers,
+<A href="section7.html#faqcopyright">Copyright ARDI 2002.</A>
+</body></html>

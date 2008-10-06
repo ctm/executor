@@ -1,0 +1,102 @@
+"QuickText" = {
+    ACTIONS = {};
+    OUTLETS = {};
+    SUPERCLASS = NSView;
+};
+"SoundGenerator" = {
+    ACTIONS = {
+        "changeAttack:" = id; 
+        "changeDecay:" = id; 
+        "changeFreqMul:" = id; 
+        "changeIndex:" = id; 
+        "changeRatio:" = id; 
+        "changeState:" = id; 
+        "play:" = id; 
+        "showSoundSettings:" = id; 
+    };
+    OUTLETS = {
+        attackInput = id; 
+        attackOutput = id; 
+        decayInput = id; 
+        decayOutput = id; 
+        freqMulInput = id; 
+        freqMulOutput = id; 
+        indexInput = id; 
+        indexOutput = id; 
+        ratioInput = id; 
+        ratioOutput = id; 
+    };
+    SUPERCLASS = Object;
+};
+"MacAppClass" = {
+    ACTIONS = {
+        "displaysettings:" = id; 
+        "mailARDI:" = id; 
+        "modaldone:" = id; 
+        "myregister:" = id; 
+        "printGame:" = id; 
+        "readsettings:" = id; 
+        "savesettings:" = id; 
+        "serialEntered:" = id; 
+        "showInfo:" = id; 
+    };
+    OUTLETS = {
+        commenttext = id; 
+        d0text = id; 
+        deathwindow = id; 
+        debtable = id; 
+        debtext = id; 
+        doneButton = id; 
+        game = id; 
+        gameWindow = id; 
+        myButton = id; 
+        myForm = id; 
+        myMenu = id; 
+        pctext = id; 
+        prefWindow = id; 
+        psltext = id; 
+        registerWindow = id; 
+        registerWindow2 = id; 
+        serialForm = id; 
+        serialText = id; 
+        serialWindow = id; 
+        sigtext = id; 
+        splashScreen = id; 
+        sptext = id; 
+        starpctext = id; 
+        starsptext = id; 
+    };
+    SUPERCLASS = NSApplication;
+};
+"MacWindow" = {
+    ACTIONS = {};
+    OUTLETS = {};
+    SUPERCLASS = NSWindow;
+};
+"MacViewClass" = {
+    ACTIONS = {
+        "abort:" = id; 
+        "go:" = id; 
+        "gotoFirstLevel:" = id; 
+        "mailARDI:" = id; 
+        "pause:" = id; 
+        "step:" = id; 
+        "stop:" = id; 
+        "unpause:" = id; 
+    };
+    OUTLETS = {
+        addressForm = id; 
+        mailPanel = id; 
+        noteBox = id; 
+        reproBox = id; 
+        ruWindow = id; 
+        softwareForm = id; 
+        statusView = id; 
+    };
+    SUPERCLASS = NSView;
+};
+"FirstResponder" = {
+    ACTIONS = {};
+    OUTLETS = {};
+    CATEGORY = LocalActions;
+};

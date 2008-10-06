@@ -1,0 +1,223 @@
+<html>
+<head><title>
+Executor FAQ - Section 5
+</title>
+<link rev="made" href="mailto:questions@ardi.com">
+</head><body><h1>
+Executor FAQ - Section 5 <br>
+Executor/Linux
+</h1>
+
+<ul>
+<li><a href="#q_5_1" rel=subdocument>Q5.1. I can't get the option key to work under X. What should I
+do?</a></li>
+<li><a href="#q_5_2" rel=subdocument>Q5.2. Where are the bitmaps stored on the Linux version of
+executor?</a></li>
+<li><a href="#svgamouse" rel=subdocument>Q5.3. My mouse won't work with the SVGALIB version.  What's the
+deal?</a></li>
+<li><a href="#linuxb" rel=subdocument>Q5.4. How do I get E/L to see my second floppy
+drive?</a></li>
+<li><a href="#q_5_5" rel=subdocument>Q5.5. Why does Lemmings's splash screen take so long to be
+drawn?</a></li>
+<li><a href="#q_5_6" rel=subdocument>Q5.6. What free projects has ARDI supported?</a></li>
+<li><a href="#q_5_7" rel=subdocument>Q5.7. Is Executor localized for languages other than
+English?</a></li>
+<li><a href="#q_5_8" rel=subdocument>Q5.8. Can I Macintosh format disk drives?</a></li>
+<li><a href="#q_5_9" rel=subdocument>Q5.9. How can Executor be configured for multiple
+users?</a></li>
+</ul><hr>
+
+<A name="q_5_1"><h2>
+Question 5.1.  I can't get the option key to work under X. What should
+I do?
+</h2></A>
+
+Executor doesn't map raw keys to Mac modifiers, instead it uses the
+X &quot;Meta&quot; (mod1) modifier to mean command-key and the X
+&quot;Mode Switch&quot; (mod3) modifier to mean option-key.  Many X configurations
+automatically set up the left Alt to be Meta and the right Alt to be
+mode switch, but not all.  
+<p>
+If you're using XFree86, check to make sure your XF86Config file
+doesn't have the right-alt function definition commented out.  They
+are commented out by default in some distributions. 
+
+<p>
+If you're not using XFree86, or you don't want to change your
+XF86Config file, you can use xmodmap to make your right Alt key be
+&quot;Mode Switch&quot; (mod3): 
+<p>
+xmodmap -e 'remove mod1 = Alt_R' -e 'add mod3 = Alt_R'
+
+<A name="q_5_2"><h2>
+Question 5.2.  Where are the bitmaps stored on the Linux version of
+executor?
+</h2></A>
+
+All versions of Executor maintain an internal bitmap corresponding to
+the actual screen.  We accrue a &quot;dirty rectangle&quot; as the
+program draws to what it thinks is the screen via Executor's QuickDraw implementation. 
+We periodically update the _real_ screen (e.g., the X window) by
+transferring the &quot;dirty rect&quot; across.  So basically our
+graphics interface to the host machine consists of nothing more than blitting
+rectangles to the screen, which aids our portability.  Under X, we use
+shared memory extensions for speed, but we don't do anything fancy
+like trying to cache Mac fonts on the X server side.  Spending time
+trying to do so would be a bad idea for a number of reasons we won't
+go into.  
+<p>
+&quot;Refresh&quot; mode is useful when the program directly
+manipulates the frame buffer itself.  In this mode, we periodically analyze the
+internal screen memory to decide what has been changed, and transfer
+the changed data to the real screen.  
+<A name="svgamouse"><h2>
+Question 5.3.  My mouse won't work with the SVGALIB version.  What's
+the deal?
+</h2></A>
+
+Make sure your mouse works with other SVGAlib programs before you
+suspect there's an Executor specific problem.  Make sure your
+/etc/vga/libvga.config file contains the proper mouse information and
+that /dev/mouse is a symbolic link to the right device. 
+
+<A name="linuxb"><h2>
+Question 5.4.  How do I get E/L to see my second floppy
+drive?
+</h2></A>
+
+Before running Executor, set the MacVolumes environment variable to
+point to the entry in &quot;/dev&quot; that represents your B: drive,
+as: 
+<p>
+Using &quot;sh&quot;, &quot;bash&quot; or other Bourne Shell like
+shell: <pre>
+	$ export MacVolumes=&quot;/dev/fd1&quot;
+</pre>
+Using &quot;csh&quot;, &quot;t-csh&quot; or other C Shell like shell:
+<pre>
+	% setenv MacVolumes &quot;/dev/fd1&quot;
+</pre>
+This should work as long as you have permission to access the drive in
+question (&quot;/dev/fd1&quot; in the above example).  If it doesn't,
+try using the -nodrivesearch switch to disable Executor's usual probing for
+devices.  
+<A name="q_5_5"><h2>
+Question 5.5.  Why does Lemmings's splash screen take so long to be
+drawn?
+</h2></A>
+
+Executor/Linux tries to cooperate with X-Windows when assigning colors.  That leaves X in
+charge of &quot;the colormap&quot;, which means Executor can't quickly
+change the colors in the colormap itself.  If you use the
+&quot;-privatecmap&quot; option when you start Executor, you'll find that Lemmings splash
+screen will come up much quicker, but you'll also experience the
+&quot;creepy colors&quot; problem in other windows. 
+
+<A name="q_5_6"><h2>
+Question 5.6.  What free projects has ARDI
+supported?
+</h2></A>
+
+ARDI sent a copy, with the appropriate legal release, of its HFS
+implementation to Paul Hargrove to aid him with his implementation of
+a true HFS filesystem under Linux.  This saved him considerable time
+reverse engineering various undocumented aspects of HFS. 
+
+<p>
+To build Executor/DOS, ARDI uses <A href="http://www.delorie.com/djgpp/">DJGPP</A>, a free 32-bit programming environment for DOS based mostly on GNU tools.  As users
+of <A href="http://www.delorie.com/djgpp/">DJGPP</A>, we have contributed bug fixes and some source code
+to the project.  For more information about
+<A href="http://www.delorie.com/djgpp/">DJGPP</A>, see <code>&lt;http://www.delorie.com/djgpp/&gt;</code>.  
+<p>
+ARDI has also done a minor rewrite of Checker to make it much faster
+and fix many bugs.  Unfortunately, the modifications were in the hands
+of one of ARDI's contractors and appear to have slipped through the
+sands of time.  
+<A name="q_5_7"><h2>
+Question 5.7.  Is Executor localized for languages other than
+English?
+</h2></A>
+
+Not yet.  We recently added international keyboard support, so
+romantic language localization is not difficult, per-se, but we're
+concentrating on building awareness of Executor in English speaking
+countries first.  
+<A name="q_5_8"><h2>
+Question 5.8.  Can I Macintosh format disk
+drives?
+</h2></A>
+
+Yes, but if you do not consider yourself a UNIX wizard, you probably
+shouldn't do it.  All you have to do is find out the formatted disk
+capacity and then run makehfv [See <A href="section6.html#makehfv">Q6.2 `What is makehfv?'</A>] with arguments so it writes directly to the disk drive you want formatted.  You can only do
+this if you have write permissions on the drive in question. 
+Obviously all data currently residing on that drive will be lost, and
+if you make a typo and inadvertently specify the wrong drive, you'll
+erase the data on the wrong drive.  
+<A name="q_5_9"><h2>
+Question 5.9.  How can Executor be configured for multiple
+users?
+</h2></A>
+
+Executor has a variety of environment variables that can be altered to
+allow individual users to override the default locations Executor
+expects to find key files.  Here are the important environment
+variables and their default values: 
+<ul>
+<li>ConfigurationFolder &quot;+/Configuration&quot;
+</li>
+<li>SystemFolder &quot;+/ExecutorVolume/System Folder&quot;
+</li>
+<li>PublicDirectoryMap &quot;+/DirectoryMap&quot;
+</li>
+<li>PrivateDirectoryMap &quot;~/.Executor/DirectoryMap&quot;
+</li>
+<li>DefaultFolder &quot;+/ExecutorVolume&quot;
+</li>
+<li>MacVolumes &quot;+/exsystem.hfv;+&quot; </li>
+<li>ScreenDumpFolder &quot;/tmp&quot; </li>
+</ul>
+
+<p>
+The leading &quot;+/&quot; represents the directory
+&quot;/usr/local/lib/executor&quot;.  So to allow multiple users to all have their own preferences, you can
+create an executor directory for each potential user like this:
+<pre>
+~/executor/
+    ~/executor/Configuration
+    ~/executor/SystemFolder
+    ~/executor/ScreenDumps
+</pre>
+<br>
+Then reassign these environment variables:
+
+<ul>
+<li>ConfigurationFolder &quot;~/executor/Configuration&quot;
+</li>
+<li>SystemFolder &quot;~/executor/SystemFolder&quot;
+</li>
+<li>PublicDirectoryMap &quot;~/DirectoryMap&quot;
+</li>
+<li>DefaultFolder &quot;~/executor&quot; </li>
+<li>ScreenDumpFolder &quot;~/executor/ScreenDumps&quot;
+</li>
+</ul>
+
+<p>
+You'll then need to populate the System Folder either with copies of
+what's in &quot;/usr/local/lib/executor/ExecutorVolume/System
+Folder&quot;, or with symbolic links to the actual files.  The Desktop Textures program
+actually modifies the System File, so if different users are going to
+want different desktops, or if you want to make sure there's no
+interference between users, then you should use copies rather than
+symbolic links.  <hr>
+Next: <a href="section6.html" rel=precedes>Executor/DOS</a>.<br>
+Back: <a href="section4.html" rev=precedes>Executor/Win32</a>.<br>
+<a href="index.html" rev=subdocument>Return to contents</a>.<p>
+<address>
+
+- 28 February 2002
+</address><br>
+Extracted from Executor Frequently Asked Questions with Answers,
+<A href="section7.html#faqcopyright">Copyright ARDI 2002.</A>
+</body></html>

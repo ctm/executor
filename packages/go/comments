@@ -1,0 +1,83 @@
+Bugs:
+
+When an operation fails the windows get updated as if it succeeds.
+
+The scrollbar at the top had some updating problems that fixed
+themselves.  Look for handle moving problems.
+	
+The scrollbars in windows sometimes get messed up.  Pin this down.
+
+Directory sizes are not computed.
+
+moving and deleting files needs to update the hotband
+
+controls get drawn twice when a window is resized.
+
+/* DrawGrowIcon draws the line 15 pixels from the bottom unless the window
+goes off the left edge in which case it's 14. */
+When a window is off the left edge of the screen the grow box messes up.
+
+----------------------------
+Cliff's comments
+read about owned resources (wrt DAs, etc.)
+Make a todo list for Cliff and bother him about it.
+
+TODO now:						/* stuff that really should be done before go ships */
+make the save file invisible
+4 bit icons on 8 bit monitors are the wrong color
+
+TODO:								/* stuff that must be done before go is usable */
+
+ 7  run DAs from hot band
+11  make formatting more robust
+
+Todo:								/* stuff that must be done before go ships */
+
+change asserts to alerts or something
+return to go after program completion
+
+the wrong cursor is displayed in the hotband when something is drug from the hotband
+cosmetic changes to most controls
+make the save file invisible
+drag outlines instead of boxes
+use correct disk icons (floppy vs. hard)
+
+learn more about BNDLs
+make sure I'm closing enough working directories
+Check error return conditions on EVERYTHING
+look into repeated keys
+
+todo:								/* stuff that should be done before go ships */
+
+add get info
+add find file
+cast all pointer assignments to 0
+look into save and undo
+check all comments.  todos in particular.
+
+---------------
+questions:
+
+am I doing constants from resources correctly
+am I getting the color table correctly
+
+---------------
+comments:
+
+Filenames in the hot band can't have newlines in them.
+
+---------------
+format of save file:
+
+complete pathnames of items to be in hotband -- 1/line
+<blank line>
+complete pathnames of open directories 1 line  \  grouped
+rectangle of open directory -- 1 line          /  together
+
+----------------
+Stef's comments
+
+scroll side to side
+Zoom box
+names shouldn't get cut off
+better looking controls at top

@@ -1,0 +1,1158 @@
+# See the PATBLT_CALLING_CONVENTIONS file for more documentation
+
+# First define the magic prefix value to be prepended to externally
+# visible symbols:
+
+@define PREFIX xdblt
+
+# This first "setup" section tells the meta-assembler how to compute
+# the actual 32-bit values for various @param...@ values, and which
+# register holds the value when it's done.  No register other than the
+# output register can be modified in these setup sections.
+
+@setup	@param_mask@	%edx
+@endsetup
+
+@setup	@param_not_mask@	%ecx
+	movl	%edx,%ecx
+	notl	%ecx
+@endsetup
+
+@setup	@param_offset@	%eax
+@endsetup
+
+@setup	@param_offset_plus_4@	%ecx
+	leal	4(%eax),%ecx
+@endsetup
+
+@setup	@param_offset_plus_8@	%ecx
+	leal	8(%eax),%ecx
+@endsetup
+
+@setup	@param_offset_plus_12@	%ecx
+	leal	12(%eax),%ecx
+@endsetup
+
+@setup	@param_long_count@	%edx
+@endsetup
+
+@setup	@param_long_count_div_4@	%ecx
+	movl	%edx,%ecx
+	shrl	$2,%ecx
+@endsetup
+
+@setup	@param_pattern@	%ebx
+@endsetup
+
+@setup	@param_pattern_and_mask@	%ecx
+	movl	%ebx,%ecx
+	andl	%edx,%ecx
+@endsetup
+
+@setup	@param_pattern_or_not_mask@	%ecx
+	movl	%edx,%ecx
+	notl	%ecx
+	orl	%ebx,%ecx
+@endsetup
+
+@setup	@param_patwidth_minus_1@	%ecx
+	movl	pattern_row_bytes_minus_1,%ecx
+@endsetup	
+
+@setup	@param_offset_mod_patwidth@	%ecx
+	movl	edi_offset,%ecx
+	addl	%eax,%ecx
+	andl	pattern_row_bytes_minus_1,%ecx
+@endsetup	
+
+@setup	@param_offset_plus_4_mod_patwidth@	%ecx
+	leal	4(%eax),%ecx
+	addl	edi_offset,%ecx
+	andl	pattern_row_bytes_minus_1,%ecx
+@endsetup	
+
+@setup	@param_offset_plus_8_mod_patwidth@	%ecx
+	leal	8(%eax),%ecx
+	addl	edi_offset,%ecx
+	andl	pattern_row_bytes_minus_1,%ecx
+@endsetup	
+
+@setup	@param_offset_plus_12_mod_patwidth@	%ecx
+	leal	12(%eax),%ecx
+	addl	edi_offset,%ecx
+	andl	pattern_row_bytes_minus_1,%ecx
+@endsetup	
+
+@setup	@param_pattern_end@	%ecx
+	movl	_xdblt_pattern_end,%ecx
+@endsetup
+
+@setup	@param_pattern_baseaddr@	%ecx
+	movl	_xdblt_pattern_baseaddr,%ecx
+@endsetup
+
+@setup	@param_pattern_row_bytes@	%ecx
+	movl	pattern_row_bytes,%ecx
+@endsetup
+
+@setup	@param_insert_bits@	%ecx
+	movl	_xdblt_insert_bits,%ecx
+@endsetup
+
+@setup	@param_not_insert_bits@	%ecx
+	movl	_xdblt_insert_bits,%ecx
+	notl	%ecx
+@endsetup
+
+@setup	@param_pattern_and_mask_and_not_insert_bits@	%ecx
+	movl	_xdblt_insert_bits,%ecx
+	notl	%ecx
+	andl	%edx,%ecx
+	andl	%ebx,%ecx
+@endsetup
+
+@setup	@param_pattern_and_not_insert_bits@	%ecx
+	movl	_xdblt_insert_bits,%ecx
+	notl	%ecx
+	andl	%ebx,%ecx
+@endsetup	
+
+
+# The second section contains the actual assembly templates for
+# blitters for the various cases.
+
+
+# Narrow/tall blitters
+@meta copy_tall_narrow_mask
+	movl	$@param_not_mask@,%ecx
+	andl	$@param_mask@,%eax
+	andl	@param_offset@(%edi),%ecx
+	orl	%eax,%ecx
+	movl	(%ebp),%eax
+	movl	%ecx,@param_offset@(%edi)
+@endmeta
+
+@meta copy_tall_narrow_1
+	movl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta copy_tall_narrow_2
+	movl	%eax,@param_offset@(%edi)
+	movl	%eax,@param_offset_plus_4@(%edi)
+@endmeta
+
+@meta copy_tall_narrow_3
+	movl	%eax,@param_offset@(%edi)
+	movl	%eax,@param_offset_plus_4@(%edi)
+	movl	%eax,@param_offset_plus_8@(%edi)
+@endmeta
+
+@meta copy_tall_narrow_4
+	movl	%eax,@param_offset@(%edi)
+	movl	%eax,@param_offset_plus_4@(%edi)
+	movl	%eax,@param_offset_plus_8@(%edi)
+	movl	%eax,@param_offset_plus_12@(%edi)
+@endmeta
+
+@meta copy_tall_narrow_many
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count@,%ecx
+	rep
+	stosl
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+
+@meta or_tall_narrow_mask
+	andl	$@param_mask@,%eax
+	orl	%eax,@param_offset@(%edi)
+	movl	(%ebp),%eax
+@endmeta
+
+@meta or_tall_narrow_1
+	orl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta or_tall_narrow_2
+	orl	%eax,@param_offset@(%edi)
+	orl	%eax,@param_offset_plus_4@(%edi)
+@endmeta
+
+@meta or_tall_narrow_3
+	orl	%eax,@param_offset@(%edi)
+	orl	%eax,@param_offset_plus_4@(%edi)
+	orl	%eax,@param_offset_plus_8@(%edi)
+@endmeta
+
+@meta or_tall_narrow_4
+	orl	%eax,@param_offset@(%edi)
+	orl	%eax,@param_offset_plus_4@(%edi)
+	orl	%eax,@param_offset_plus_8@(%edi)
+	orl	%eax,@param_offset_plus_12@(%edi)
+@endmeta
+
+@meta or_tall_narrow_many_mod_0
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	orl	%eax,(%edi)
+	orl	%eax,4(%edi)
+	orl	%eax,8(%edi)
+	orl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta or_tall_narrow_many_mod_1
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	orl	%eax,(%edi)
+	orl	%eax,4(%edi)
+	orl	%eax,8(%edi)
+	orl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	orl	%eax,(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta or_tall_narrow_many_mod_2
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	orl	%eax,(%edi)
+	orl	%eax,4(%edi)
+	orl	%eax,8(%edi)
+	orl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	orl	%eax,(%edi)
+	orl	%eax,4(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta or_tall_narrow_many_mod_3
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	orl	%eax,(%edi)
+	orl	%eax,4(%edi)
+	orl	%eax,8(%edi)
+	orl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	orl	%eax,(%edi)
+	orl	%eax,4(%edi)
+	orl	%eax,8(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+
+@meta xor_tall_narrow_mask
+	movl	%eax,%ebx
+	andl	$@param_mask@,%eax
+	xorl	%eax,@param_offset@(%edi)
+	movl	(%ebp),%eax
+@endmeta
+
+@meta xor_tall_narrow_1
+	xorl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta xor_tall_narrow_2
+	xorl	%eax,@param_offset@(%edi)
+	xorl	%eax,@param_offset_plus_4@(%edi)
+@endmeta
+
+@meta xor_tall_narrow_3
+	xorl	%eax,@param_offset@(%edi)
+	xorl	%eax,@param_offset_plus_4@(%edi)
+	xorl	%eax,@param_offset_plus_8@(%edi)
+@endmeta
+
+@meta xor_tall_narrow_4
+	xorl	%eax,@param_offset@(%edi)
+	xorl	%eax,@param_offset_plus_4@(%edi)
+	xorl	%eax,@param_offset_plus_8@(%edi)
+	xorl	%eax,@param_offset_plus_12@(%edi)
+@endmeta
+
+@meta xor_tall_narrow_many_mod_0
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	xorl	%eax,(%edi)
+	xorl	%eax,4(%edi)
+	xorl	%eax,8(%edi)
+	xorl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta xor_tall_narrow_many_mod_1
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	xorl	%eax,(%edi)
+	xorl	%eax,4(%edi)
+	xorl	%eax,8(%edi)
+	xorl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	xorl	%eax,(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta xor_tall_narrow_many_mod_2
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	xorl	%eax,(%edi)
+	xorl	%eax,4(%edi)
+	xorl	%eax,8(%edi)
+	xorl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	xorl	%eax,(%edi)
+	xorl	%eax,4(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta xor_tall_narrow_many_mod_3
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	xorl	%eax,(%edi)
+	xorl	%eax,4(%edi)
+	xorl	%eax,8(%edi)
+	xorl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	xorl	%eax,(%edi)
+	xorl	%eax,4(%edi)
+	xorl	%eax,8(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta and_tall_narrow_mask
+	orl	$@param_not_mask@,%eax
+	andl	%eax,@param_offset@(%edi)
+	movl	(%ebp),%eax
+@endmeta
+
+@meta and_tall_narrow_1
+	andl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta and_tall_narrow_2
+	andl	%eax,@param_offset@(%edi)
+	andl	%eax,@param_offset_plus_4@(%edi)
+@endmeta
+
+@meta and_tall_narrow_3
+	andl	%eax,@param_offset@(%edi)
+	andl	%eax,@param_offset_plus_4@(%edi)
+	andl	%eax,@param_offset_plus_8@(%edi)
+@endmeta
+
+@meta and_tall_narrow_4
+	andl	%eax,@param_offset@(%edi)
+	andl	%eax,@param_offset_plus_4@(%edi)
+	andl	%eax,@param_offset_plus_8@(%edi)
+	andl	%eax,@param_offset_plus_12@(%edi)
+@endmeta
+
+@meta and_tall_narrow_many_mod_0
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	andl	%eax,(%edi)
+	andl	%eax,4(%edi)
+	andl	%eax,8(%edi)
+	andl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta and_tall_narrow_many_mod_1
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	andl	%eax,(%edi)
+	andl	%eax,4(%edi)
+	andl	%eax,8(%edi)
+	andl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	andl	%eax,(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta and_tall_narrow_many_mod_2
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	andl	%eax,(%edi)
+	andl	%eax,4(%edi)
+	andl	%eax,8(%edi)
+	andl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	andl	%eax,(%edi)
+	andl	%eax,4(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta and_tall_narrow_many_mod_3
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	andl	%eax,(%edi)
+	andl	%eax,4(%edi)
+	andl	%eax,8(%edi)
+	andl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	andl	%eax,(%edi)
+	andl	%eax,4(%edi)
+	andl	%eax,8(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+
+@meta insert_tall_narrow_mask
+	movl	@param_offset@(%edi),%ebx
+	andl	$@param_mask@,%eax
+	orl	%eax,%ebx
+	xorl	$-1,%eax
+	orl	$@param_insert_bits@,%eax
+	andl	%eax,%ebx
+	movl	%ebx,@param_offset@(%edi)
+	movl	(%ebp),%eax
+@endmeta
+
+@meta insert_tall_narrow_1
+	movl	@param_offset@(%edi),%ebx
+	orl	%eax,%ebx
+	andl	$@param_not_insert_bits@,%eax
+	xorl	%eax,%ebx
+	movl	(%ebp),%eax
+	movl	%ebx,@param_offset@(%edi)
+@endmeta
+
+@meta insert_tall_narrow_many
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count@,%ecx
+1:	movl	(%edi),%ebx
+	addl	$4,%edi
+	orl	%eax,%ebx
+	andl	$@param_not_insert_bits@,%eax
+	xorl	%eax,%ebx
+	movl	(%ebp),%eax
+	movl	%ebx,-4(%edi)
+	decl	%ecx
+	jnz	1b
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+
+
+# Narrow/short blitters
+@meta copy_ones_short_narrow_mask
+	orl	$@param_mask@,@param_offset@(%edi)
+@endmeta
+
+@meta copy_zeros_short_narrow_mask
+	andl	$@param_not_mask@,@param_offset@(%edi)
+@endmeta
+
+@meta copy_short_narrow_mask
+  	movl	@param_offset@(%edi),%ecx
+	andl	$@param_not_mask@,%ecx
+	orl	$@param_pattern_and_mask@,%ecx
+	movl	%ecx,@param_offset@(%edi)
+@endmeta
+
+@meta copy_short_narrow_1
+	movl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta copy_short_narrow_2
+	movl	%eax,@param_offset@(%edi)
+	movl	%eax,@param_offset_plus_4@(%edi)
+@endmeta
+
+@meta copy_short_narrow_3
+	movl	%eax,@param_offset@(%edi)
+	movl	%eax,@param_offset_plus_4@(%edi)
+	movl	%eax,@param_offset_plus_8@(%edi)
+@endmeta
+
+@meta copy_short_narrow_4
+	movl	%eax,@param_offset@(%edi)
+	movl	%eax,@param_offset_plus_4@(%edi)
+	movl	%eax,@param_offset_plus_8@(%edi)
+	movl	%eax,@param_offset_plus_12@(%edi)
+@endmeta
+
+@meta copy_short_narrow_many
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count@,%ecx
+	rep
+	stosl
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+
+@meta or_ones_short_narrow_mask
+	orl	$@param_mask@,@param_offset@(%edi)
+@endmeta
+
+#@meta or_zeros_short_narrow_mask
+#@endmeta
+
+@meta or_short_narrow_mask
+	orl	$@param_pattern_and_mask@,@param_offset@(%edi)
+@endmeta
+
+@meta or_short_narrow_1
+	orl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta or_short_narrow_2
+	orl	%eax,@param_offset@(%edi)
+	orl	%eax,@param_offset_plus_4@(%edi)
+@endmeta
+
+@meta or_short_narrow_3
+	orl	%eax,@param_offset@(%edi)
+	orl	%eax,@param_offset_plus_4@(%edi)
+	orl	%eax,@param_offset_plus_8@(%edi)
+@endmeta
+
+@meta or_short_narrow_4
+	orl	%eax,@param_offset@(%edi)
+	orl	%eax,@param_offset_plus_4@(%edi)
+	orl	%eax,@param_offset_plus_8@(%edi)
+	orl	%eax,@param_offset_plus_12@(%edi)
+@endmeta
+
+@meta or_short_narrow_many_mod_0
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	orl	%eax,(%edi)
+	orl	%eax,4(%edi)
+	orl	%eax,8(%edi)
+	orl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta or_short_narrow_many_mod_1
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	orl	%eax,(%edi)
+	orl	%eax,4(%edi)
+	orl	%eax,8(%edi)
+	orl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	orl	%eax,(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta or_short_narrow_many_mod_2
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	orl	%eax,(%edi)
+	orl	%eax,4(%edi)
+	orl	%eax,8(%edi)
+	orl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	orl	%eax,(%edi)
+	orl	%eax,4(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta or_short_narrow_many_mod_3
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	orl	%eax,(%edi)
+	orl	%eax,4(%edi)
+	orl	%eax,8(%edi)
+	orl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	orl	%eax,(%edi)
+	orl	%eax,4(%edi)
+	orl	%eax,8(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+
+@meta xor_ones_short_narrow_mask
+	xorl	$@param_mask@,@param_offset@(%edi)
+@endmeta
+
+#@meta xor_zeros_short_narrow_mask
+#@endmeta
+
+@meta xor_short_narrow_mask
+	xorl	$@param_pattern_and_mask@,@param_offset@(%edi)
+@endmeta
+
+@meta xor_short_narrow_1
+	xorl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta xor_short_narrow_2
+	xorl	%eax,@param_offset@(%edi)
+	xorl	%eax,@param_offset_plus_4@(%edi)
+@endmeta
+
+@meta xor_short_narrow_3
+	xorl	%eax,@param_offset@(%edi)
+	xorl	%eax,@param_offset_plus_4@(%edi)
+	xorl	%eax,@param_offset_plus_8@(%edi)
+@endmeta
+
+@meta xor_short_narrow_4
+	xorl	%eax,@param_offset@(%edi)
+	xorl	%eax,@param_offset_plus_4@(%edi)
+	xorl	%eax,@param_offset_plus_8@(%edi)
+	xorl	%eax,@param_offset_plus_12@(%edi)
+@endmeta
+
+@meta xor_short_narrow_many_mod_0
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	xorl	%eax,(%edi)
+	xorl	%eax,4(%edi)
+	xorl	%eax,8(%edi)
+	xorl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta xor_short_narrow_many_mod_1
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	xorl	%eax,(%edi)
+	xorl	%eax,4(%edi)
+	xorl	%eax,8(%edi)
+	xorl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	xorl	%eax,(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta xor_short_narrow_many_mod_2
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	xorl	%eax,(%edi)
+	xorl	%eax,4(%edi)
+	xorl	%eax,8(%edi)
+	xorl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	xorl	%eax,(%edi)
+	xorl	%eax,4(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta xor_short_narrow_many_mod_3
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	xorl	%eax,(%edi)
+	xorl	%eax,4(%edi)
+	xorl	%eax,8(%edi)
+	xorl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	xorl	%eax,(%edi)
+	xorl	%eax,4(%edi)
+	xorl	%eax,8(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+#@meta and_ones_short_narrow_mask
+#@endmeta
+
+@meta and_zeros_short_narrow_mask
+	andl	$@param_not_mask@,@param_offset@(%edi)
+@endmeta
+
+@meta and_short_narrow_mask
+	andl	$@param_pattern_or_not_mask@,@param_offset@(%edi)
+@endmeta
+
+@meta and_short_narrow_1
+	andl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta and_short_narrow_2
+	andl	%eax,@param_offset@(%edi)
+	andl	%eax,@param_offset_plus_4@(%edi)
+@endmeta
+
+@meta and_short_narrow_3
+	andl	%eax,@param_offset@(%edi)
+	andl	%eax,@param_offset_plus_4@(%edi)
+	andl	%eax,@param_offset_plus_8@(%edi)
+@endmeta
+
+@meta and_short_narrow_4
+	andl	%eax,@param_offset@(%edi)
+	andl	%eax,@param_offset_plus_4@(%edi)
+	andl	%eax,@param_offset_plus_8@(%edi)
+	andl	%eax,@param_offset_plus_12@(%edi)
+@endmeta
+
+@meta and_short_narrow_many_mod_0
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	andl	%eax,(%edi)
+	andl	%eax,4(%edi)
+	andl	%eax,8(%edi)
+	andl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta and_short_narrow_many_mod_1
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	andl	%eax,(%edi)
+	andl	%eax,4(%edi)
+	andl	%eax,8(%edi)
+	andl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	andl	%eax,(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta and_short_narrow_many_mod_2
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	andl	%eax,(%edi)
+	andl	%eax,4(%edi)
+	andl	%eax,8(%edi)
+	andl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	andl	%eax,(%edi)
+	andl	%eax,4(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+@meta and_short_narrow_many_mod_3
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count_div_4@,%ecx
+1:	andl	%eax,(%edi)
+	andl	%eax,4(%edi)
+	andl	%eax,8(%edi)
+	andl	%eax,12(%edi)
+	addl	$16,%edi
+	decl	%ecx
+	jnz	1b
+	andl	%eax,(%edi)
+	andl	%eax,4(%edi)
+	andl	%eax,8(%edi)
+@lit	movl	%edx,%ecx
+@lit	andb	$~3,%cl
+@lit	leal	(%eax,%ecx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+
+@meta insert_short_narrow_mask
+	movl	@param_offset@(%edi),%ebx
+	orl	$@param_pattern_and_mask@,%ebx
+	xorl	$@param_pattern_and_mask_and_not_insert_bits@,%ebx
+	movl	%ebx,@param_offset@(%edi)
+@endmeta
+
+@meta insert_short_narrow_1
+	movl	@param_offset@(%edi),%ebx
+	orl	%eax,%ebx
+	xorl	$@param_pattern_and_not_insert_bits@,%ebx
+	movl	%ebx,@param_offset@(%edi)
+@endmeta
+
+@meta insert_short_narrow_many
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count@,%ecx
+1:	movl	(%edi),%ebx
+	addl	$4,%edi
+	orl	%eax,%ebx
+	xorl	$@param_pattern_and_not_insert_bits@,%ebx
+	decl	%ecx
+	movl	%ebx,-4(%edi)
+	jnz	1b
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+
+
+# Wide blitters
+@meta copy_wide_mask
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	$@param_not_mask@,%ecx
+	andl	$@param_mask@,%eax
+	andl	@param_offset@(%edi),%ecx
+	orl	%eax,%ecx
+	movl	%ecx,@param_offset@(%edi)
+@endmeta
+
+@meta copy_wide_1
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta copy_wide_2
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_4_mod_patwidth@(%ebp),%ecx
+	movl	%eax,@param_offset@(%edi)
+	movl	%ecx,@param_offset_plus_4@(%edi)
+@endmeta
+
+@meta copy_wide_3
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_4_mod_patwidth@(%ebp),%ecx
+	movl	%eax,@param_offset@(%edi)
+	movl	@param_offset_plus_8_mod_patwidth@(%ebp),%eax
+	movl	%ecx,@param_offset_plus_4@(%edi)
+	movl	%eax,@param_offset_plus_8@(%edi)
+@endmeta
+
+@meta copy_wide_4
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_4_mod_patwidth@(%ebp),%ecx
+	movl	%eax,@param_offset@(%edi)
+	movl	%ecx,@param_offset_plus_4@(%edi)
+	movl	@param_offset_plus_8_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_12_mod_patwidth@(%ebp),%ecx
+	movl	%eax,@param_offset_plus_8@(%edi)
+	movl	%ecx,@param_offset_plus_12@(%edi)
+@endmeta
+
+@meta copy_wide_many
+	movl	$@param_offset_mod_patwidth@,%ebx
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count@,%ecx
+1:	movl	(%ebp,%ebx),%eax
+	addl	$4,%ebx
+	movl	%eax,(%edi)
+	andl	$@param_patwidth_minus_1@,%ebx
+	addl	$4,%edi
+	decl	%ecx
+	jnz	1b
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+
+@meta or_wide_mask
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	andl	$@param_mask@,%eax
+	orl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta or_wide_1
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	orl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta or_wide_2
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_4_mod_patwidth@(%ebp),%ecx
+	orl	%eax,@param_offset@(%edi)
+	orl	%ecx,@param_offset_plus_4@(%edi)
+@endmeta
+
+@meta or_wide_3
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_4_mod_patwidth@(%ebp),%ecx
+	orl	%eax,@param_offset@(%edi)
+	movl	@param_offset_plus_8_mod_patwidth@(%ebp),%eax
+	orl	%ecx,@param_offset_plus_4@(%edi)
+	orl	%eax,@param_offset_plus_8@(%edi)
+@endmeta
+
+@meta or_wide_4
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_4_mod_patwidth@(%ebp),%ecx
+	orl	%eax,@param_offset@(%edi)
+	orl	%ecx,@param_offset_plus_4@(%edi)
+	movl	@param_offset_plus_8_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_12_mod_patwidth@(%ebp),%ecx
+	orl	%eax,@param_offset_plus_8@(%edi)
+	orl	%ecx,@param_offset_plus_12@(%edi)
+@endmeta
+
+@meta or_wide_many
+	movl	$@param_offset_mod_patwidth@,%ebx
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count@,%ecx
+1:	movl	(%ebp,%ebx),%eax
+	addl	$4,%ebx
+	orl	%eax,(%edi)
+	andl	$@param_patwidth_minus_1@,%ebx
+	addl	$4,%edi
+	decl	%ecx
+	jnz	1b
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+
+@meta xor_wide_mask
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	andl	$@param_mask@,%eax
+	xorl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta xor_wide_1
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	xorl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta xor_wide_2
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_4_mod_patwidth@(%ebp),%ecx
+	xorl	%eax,@param_offset@(%edi)
+	xorl	%ecx,@param_offset_plus_4@(%edi)
+@endmeta
+
+@meta xor_wide_3
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_4_mod_patwidth@(%ebp),%ecx
+	xorl	%eax,@param_offset@(%edi)
+	movl	@param_offset_plus_8_mod_patwidth@(%ebp),%eax
+	xorl	%ecx,@param_offset_plus_4@(%edi)
+	xorl	%eax,@param_offset_plus_8@(%edi)
+@endmeta
+
+@meta xor_wide_4
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_4_mod_patwidth@(%ebp),%ecx
+	xorl	%eax,@param_offset@(%edi)
+	xorl	%ecx,@param_offset_plus_4@(%edi)
+	movl	@param_offset_plus_8_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_12_mod_patwidth@(%ebp),%ecx
+	xorl	%eax,@param_offset_plus_8@(%edi)
+	xorl	%ecx,@param_offset_plus_12@(%edi)
+@endmeta
+
+@meta xor_wide_many
+	movl	$@param_offset_mod_patwidth@,%ebx
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count@,%ecx
+1:	movl	(%ebp,%ebx),%eax
+	addl	$4,%ebx
+	xorl	%eax,(%edi)
+	andl	$@param_patwidth_minus_1@,%ebx
+	addl	$4,%edi
+	decl	%ecx
+	jnz	1b
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+
+@meta and_wide_mask
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	orl	$@param_not_mask@,%eax
+	andl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta and_wide_1
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	andl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta and_wide_2
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_4_mod_patwidth@(%ebp),%ecx
+	andl	%eax,@param_offset@(%edi)
+	andl	%ecx,@param_offset_plus_4@(%edi)
+@endmeta
+
+@meta and_wide_3
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_4_mod_patwidth@(%ebp),%ecx
+	andl	%eax,@param_offset@(%edi)
+	movl	@param_offset_plus_8_mod_patwidth@(%ebp),%eax
+	andl	%ecx,@param_offset_plus_4@(%edi)
+	andl	%eax,@param_offset_plus_8@(%edi)
+@endmeta
+
+@meta and_wide_4
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_4_mod_patwidth@(%ebp),%ecx
+	andl	%eax,@param_offset@(%edi)
+	andl	%ecx,@param_offset_plus_4@(%edi)
+	movl	@param_offset_plus_8_mod_patwidth@(%ebp),%eax
+	movl	@param_offset_plus_12_mod_patwidth@(%ebp),%ecx
+	andl	%eax,@param_offset_plus_8@(%edi)
+	andl	%ecx,@param_offset_plus_12@(%edi)
+@endmeta
+
+@meta and_wide_many
+	movl	$@param_offset_mod_patwidth@,%ebx
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count@,%ecx
+1:	movl	(%ebp,%ebx),%eax
+	addl	$4,%ebx
+	andl	%eax,(%edi)
+	andl	$@param_patwidth_minus_1@,%ebx
+	addl	$4,%edi
+	decl	%ecx
+	jnz	1b
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+
+@meta insert_wide_mask
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset@(%edi),%ebx
+	andl	$@param_mask@,%eax
+	orl	%eax,%ebx
+	xorl	$-1,%eax
+	orl	$@param_insert_bits@,%eax
+	andl	%ebx,%eax
+	movl	%eax,@param_offset@(%edi)
+@endmeta
+
+@meta insert_wide_1
+	movl	@param_offset_mod_patwidth@(%ebp),%eax
+	movl	@param_offset@(%edi),%ebx
+	orl	%eax,%ebx
+	andl	$@param_not_insert_bits@,%eax
+	xorl	%ebx,%eax
+	movl	%eax,@param_offset@(%edi)
+@endmeta
+
+
+@meta insert_wide_many
+	pushl	%esi
+	movl	$@param_offset_mod_patwidth@,%ebx
+	addl	$@param_offset@,%edi
+	movl	$@param_long_count@,%ecx
+1:	movl	(%ebp,%ebx),%eax
+	addl	$4,%ebx
+	movl	(%edi),%esi
+	addl	$4,%edi
+	orl	%eax,%esi
+	andl	$@param_not_insert_bits@,%eax
+	andl	$@param_patwidth_minus_1@,%ebx
+	xorl	%esi,%eax
+	decl	%ecx
+	movl	%eax,-4(%edi)
+	jnz	1b
+	popl	%esi
+@lit	leal	(%eax,%edx,4),%ecx
+@lit	addl	%ecx,edi_offset
+@endmeta
+
+
+# We use this to advance %ebp for tall/narrow patterns
+@meta tall_narrow_setup_pat
+	addl	$4,%ebp
+	cmpl	$@param_pattern_end@,%ebp
+	jnz	1f
+	movl	$@param_pattern_baseaddr@,%ebp
+1:	movl	(%ebp),%eax
+@endmeta
+
+# We use this to advance %ebp for tall/wide patterns
+@meta tall_wide_setup_pat
+	addl	$@param_pattern_row_bytes@,%ebp
+	cmpl	$@param_pattern_end@,%ebp
+	jnz	1f
+	movl	$@param_pattern_baseaddr@,%ebp
+1:	# Don't bother fetching (%ebp) here, since this is a wide pattern
+@endmeta

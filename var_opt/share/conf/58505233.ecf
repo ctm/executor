@@ -1,0 +1,22 @@
+// This Configuration file (58505233.ecf) was hand crafted so we could
+// deal with the fact that Quark 3.3 dies under Executor when the print 
+// driver version is 4.0 or greater, but Quark 4.0 refuses to print when
+// the print driver is less than 7.  Additionally, I believe version 4.0 can
+// use sound, so we enable it.
+
+Comments = "QuarkXPress should run.";
+WindowName = "QuarkXPress%AA";
+
+Version ( 0xf000000 ) : 0x3000000
+{
+  SystemVersion = 6.0.7;
+  Options = {BlitOften, SoundOff, PassPostscript, NewLineToCR, NoPrefPanel};
+  PrVers = 3.0;	
+};
+
+Version ( 0xf000000 ) : 0x4000000
+{
+  SystemVersion = 7.0;
+  Options = {BlitOften, SoundOn, PassPostscript, NewLineToCR, NoPrefPanel};
+  PrVers = 7.0;
+};

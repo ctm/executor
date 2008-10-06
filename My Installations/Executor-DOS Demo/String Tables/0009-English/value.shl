@@ -1,0 +1,20 @@
+[Data]
+TITLE_MAIN=Executor-DOS Demo
+COMPANY_NAME=ARDI
+COMPANY_NAME16=ARDI
+ERROR_MOVEDATA=An error occurred during the move data process : %d
+PRODUCT_VERSION=2.1pr9
+UNINST_KEY=Executor-DOS Demo
+TITLE_CAPTIONBAR=Executor-DOS Demo Setup
+PRODUCT_NAME16=ExecDOSDemo
+ERROR_VGARESOLUTION=This program requires VGA or better resolution.
+PRODUCT_KEY=executor.Exe
+UNINST_DISPLAY_NAME=Executor-DOS Demo
+ERROR_UNINSTSETUP=unInstaller setup failed to initialize.  You may not be able to uninstall this product.
+PRODUCT_NAME=Executor-DOS Demo
+
+[General]
+Language=0009
+Type=STRINGTABLESPECIFIC
+Version=1.00.000
+

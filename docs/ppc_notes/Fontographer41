@@ -1,0 +1,7 @@
+Fontgrapher 4.1 demo appears to add 350 to the stack in order to get
+some memory that it latrer uses with the stmw instruction.  Since the
+stack is 4-byte aligned before 350 is added to it, it's no longer
+4-byte aligned afterward -- why does this work on a Mac?  Perhaps
+older Macs didn't care?  Perhaps this code doesn't get hit.  Perhaps
+the Mac cleans up such accesses.  Perhaps the stack is misaligned
+going into that code.  My guess is the code doesn't get hit.

@@ -1,0 +1,7 @@
+ 	CreateServiceA@52
+ 	CloseServiceHandle@4
+ 	OpenServiceA@12
+ 	DeleteService@4
+ 	StartServiceA@12
+ 	ControlService@12
+ 	OpenSCManagerA@12

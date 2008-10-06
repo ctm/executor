@@ -1,0 +1,10 @@
+// This Configuration file (5354775a.ecf) was built by Executor
+Comments = "Needs a Gestalt fix";
+// WindowName = "System's Twilight v1.0.5";
+BitsPerPixel = 8;
+ScreenLocation = { 0, 0 };
+SystemVersion = 6.0.7;
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR, NoPrefPanel};
+Gestalt('fs  ') = { 0, 1 };

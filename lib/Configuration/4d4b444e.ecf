@@ -1,0 +1,5 @@
+// This Configuration file was built by Executor
+// SuperColumns
+RefreshNumber = 0;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

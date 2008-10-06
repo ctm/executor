@@ -1,0 +1,8 @@
+// This Configuration file (A7BFC2A2.ecf) was built by Executor
+// and hand edited by Cliff Matthews (ctm@ardi.com)
+// WindowName = "Solarian II";
+Comments = "Solarian.  Refresh is important";
+SystemVersion = 6.0.7;
+RefreshNumber = 10;
+Delay = 0;
+Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

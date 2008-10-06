@@ -1,0 +1,266 @@
+@meta	copy_shift_mask_fgbk_CPUNAME_SEGSUFF
+	movl	(%esi),%eax
+	movl	4(%esi),%ebx
+	BSWAP_EAX
+	BSWAP_EBX
+	shld	%cl,%ebx,%eax
+	BSWAP_EAX
+	movl	%eax,%ebx
+	andl	$@param_fg_color_and_mask@,%eax
+	xorl	$-1,%ebx
+	movl	DST_SEG(%edi),%ebp
+	andl	$@param_bk_color_and_mask@,%ebx
+	andl	$@param_not_mask@,%ebp
+	orl	%ebx,%eax
+	orl	%ebp,%eax
+	movl	%eax,DST_SEG(%edi)
+@endmeta
+
+@meta	copy_shift_many_fgbk_CPUNAME_SEGSUFF
+	movl	$@param_long_count@,%ebp
+	movl	(%esi),%ebx
+	addl	$4,%esi
+	BSWAP_EBX
+1:	lodsl
+	BSWAP_EAX
+	shld	%cl,%eax,%ebx
+	BSWAP_EBX
+	pushl	%eax
+	movl	%ebx,%eax
+	xorl	$-1,%ebx
+	andl	$@param_fg_color@,%eax
+	andl	$@param_bk_color@,%ebx
+	orl	%ebx,%eax
+	popl	%ebx
+	stosl
+	decl	%ebp
+	jnz	1b
+	subl	$4,%esi
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta
+
+
+@meta	notcopy_shift_mask_fgbk_CPUNAME_SEGSUFF
+	movl	(%esi),%eax
+	movl	4(%esi),%ebx
+	BSWAP_EAX
+	BSWAP_EBX
+	shld	%cl,%ebx,%eax
+	BSWAP_EAX
+	movl	%eax,%ebx
+	andl	$@param_bk_color_and_mask@,%eax
+	xorl	$-1,%ebx
+	movl	DST_SEG(%edi),%ebp
+	andl	$@param_fg_color_and_mask@,%ebx
+	andl	$@param_not_mask@,%ebp
+	orl	%ebx,%eax
+	orl	%ebp,%eax
+	movl	%eax,DST_SEG(%edi)
+@endmeta
+
+@meta	notcopy_shift_many_fgbk_CPUNAME_SEGSUFF
+	movl	$@param_long_count@,%ebp
+	movl	(%esi),%ebx
+	addl	$4,%esi
+	BSWAP_EBX
+1:	lodsl
+	BSWAP_EAX
+	shld	%cl,%eax,%ebx
+	BSWAP_EBX
+	pushl	%eax
+	movl	%ebx,%eax
+	xorl	$-1,%ebx
+	andl	$@param_bk_color@,%eax
+	andl	$@param_fg_color@,%ebx
+	orl	%ebx,%eax
+	popl	%ebx
+	stosl
+	decl	%ebp
+	jnz	1b
+	subl	$4,%esi
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta
+
+
+@meta	or_shift_mask_fgbk_CPUNAME_SEGSUFF
+	movl	(%esi),%eax
+	movl	4(%esi),%ebx
+	BSWAP_EAX
+	BSWAP_EBX
+	shld	%cl,%ebx,%eax
+	BSWAP_EAX
+	movl	%eax,%ebx
+	andl	$@param_fg_color_and_mask@,%eax
+	xorl	$-1,%ebx
+	movl	DST_SEG(%edi),%ebp
+	orl	$@param_not_mask@,%ebx
+	andl	%ebp,%ebx
+	orl	%ebx,%eax
+	movl	%eax,DST_SEG(%edi)
+@endmeta
+
+@meta	or_shift_many_fgbk_CPUNAME_SEGSUFF
+	pushl	%edx
+	movl	$@param_long_count@,%edx
+	movl	(%esi),%ebx
+	addl	$4,%esi
+	BSWAP_EBX
+1:	lodsl
+	BSWAP_EAX
+	shld	%cl,%eax,%ebx
+	BSWAP_EBX
+	pushl	%eax
+	movl	%ebx,%eax
+	xorl	$-1,%ebx
+	movl	DST_SEG(%edi),%ebp
+	andl	$@param_fg_color@,%eax
+	andl	%ebp,%ebx
+	orl	%ebx,%eax
+	movl	%eax,DST_SEG(%edi)
+	popl	%ebx
+	stosl
+	decl	%edx
+	jnz	1b
+	subl	$4,%esi
+	popl	%edx
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta
+
+
+@meta	notor_shift_mask_fgbk_CPUNAME_SEGSUFF
+	movl	(%esi),%eax
+	movl	4(%esi),%ebx
+	BSWAP_EAX
+	BSWAP_EBX
+	shld	%cl,%ebx,%eax
+	BSWAP_EAX
+	movl	%eax,%ebx
+	xorl	$-1,%eax
+	andl	$@param_fg_color_and_mask@,%eax
+	movl	DST_SEG(%edi),%ebp
+	orl	$@param_not_mask@,%ebx
+	andl	%ebp,%ebx
+	orl	%ebx,%eax
+	movl	%eax,DST_SEG(%edi)
+@endmeta
+
+@meta	notor_shift_many_fgbk_CPUNAME_SEGSUFF
+	pushl	%edx
+	movl	$@param_long_count@,%edx
+	movl	(%esi),%ebx
+	addl	$4,%esi
+	BSWAP_EBX
+1:	lodsl
+	BSWAP_EAX
+	shld	%cl,%eax,%ebx
+	BSWAP_EBX
+	pushl	%eax
+	movl	%ebx,%eax
+	xorl	$-1,%eax
+	movl	DST_SEG(%edi),%ebp
+	andl	$@param_fg_color@,%eax
+	andl	%ebp,%ebx
+	orl	%ebx,%eax
+	movl	%eax,DST_SEG(%edi)
+	popl	%ebx
+	stosl
+	decl	%edx
+	jnz	1b
+	subl	$4,%esi
+	popl	%edx
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta
+
+
+@meta	and_shift_mask_fgbk_CPUNAME_SEGSUFF
+	movl	(%esi),%eax
+	movl	4(%esi),%ebx
+	BSWAP_EAX
+	BSWAP_EBX
+	shld	%cl,%ebx,%eax
+	BSWAP_EAX
+	movl	%eax,%ebx
+	orl	$@param_not_mask@,%eax
+	xorl	$-1,%ebx
+	movl	DST_SEG(%edi),%ebp
+	andl	$@param_bk_color_and_mask@,%ebx
+	andl	%ebp,%eax
+	orl	%ebx,%eax
+	movl	%eax,DST_SEG(%edi)
+@endmeta
+
+@meta	and_shift_many_fgbk_CPUNAME_SEGSUFF
+	pushl	%edx
+	movl	$@param_long_count@,%edx
+	movl	(%esi),%ebx
+	addl	$4,%esi
+	BSWAP_EBX
+1:	lodsl
+	BSWAP_EAX
+	shld	%cl,%eax,%ebx
+	BSWAP_EBX
+	pushl	%eax
+	movl	%ebx,%eax
+	xorl	$-1,%ebx
+	movl	DST_SEG(%edi),%ebp
+	andl	$@param_bk_color@,%ebx
+	andl	%ebp,%eax
+	orl	%ebx,%eax
+	popl	%ebx
+	stosl
+	decl	%edx
+	jnz	1b
+	subl	$4,%esi
+	popl	%edx
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta
+
+
+@meta	notand_shift_mask_fgbk_CPUNAME_SEGSUFF
+	movl	(%esi),%eax
+	movl	4(%esi),%ebx
+	BSWAP_EAX
+	BSWAP_EBX
+	shld	%cl,%ebx,%eax
+	BSWAP_EAX
+	movl	%eax,%ebx
+	xorl	$-1,%eax
+	movl	DST_SEG(%edi),%ebp
+	orl	$@param_not_mask@,%eax
+	andl	$@param_bk_color_and_mask@,%ebx
+	andl	%ebp,%eax
+	orl	%ebx,%eax
+	movl	%eax,DST_SEG(%edi)
+@endmeta
+
+@meta	notand_shift_many_fgbk_CPUNAME_SEGSUFF
+	pushl	%edx
+	movl	$@param_long_count@,%edx
+	movl	(%esi),%ebx
+	addl	$4,%esi
+	BSWAP_EBX
+1:	lodsl
+	BSWAP_EAX
+	shld	%cl,%eax,%ebx
+	BSWAP_EBX
+	pushl	%eax
+	movl	%ebx,%eax
+	andl	$@param_bk_color@,%ebx
+	xorl	$-1,%eax
+	movl	DST_SEG(%edi),%ebp
+	andl	%ebp,%eax
+	orl	%ebx,%eax
+	popl	%ebx
+	stosl
+	decl	%edx
+	jnz	1b
+	subl	$4,%esi
+	popl	%edx
+@lit	leal	(,%edx,4),%ecx
+@lit	addl	%ecx,row_offset
+@endmeta

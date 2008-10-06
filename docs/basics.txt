@@ -1,0 +1,45 @@
+To get started, fire up Executor and take a look at how it's set up.
+It's a lot like a real Mac. To open a folder, just double-click on it.
+To close it again, click on the box in the corner of its window.  To
+start one of the demo programs (Lemmings is a popular choice),
+double-click on it.  It will start just as it would on a real Mac,
+with pull-down menus to control the game and let you quit when you get
+tired of playing.
+
+Executor has a hotband across the top of the screen where you can keep
+the most frequently used files of each type.  It's controlled by the
+set of small boxes on the upper-left-hand corner of the screen.  The
+sideways oval will show you your directory structure from the top,
+including not only your Mac volumes but your DOS drives and any
+floppies or CDs which may be loaded.  The other boxes will bring
+different sets of things into the hotband -- you'll learn what the
+heiroglyphs in the boxes are supposed to represent as you experiment.
+
+After you've goofed around with the demos for a while, you'll probably
+want to install your own games and maybe even do something useful.
+Executor can run programs directly from high-density Mac floppies, but
+this is very slow.  It's quicker to copy the programs to one of the
+simulated Mac volumes on your hard disk.  To do this, put the
+high-density floppy in your drive and select "Check for floppies" from
+the pull-down menu under "File."  Now select the overview of all
+volumes by clicking on the sideways oval as above -- the floppy you
+just inserted should be one of your choices.  Double-click on the
+floppy icon to open it, open the volume you want to put it in, and
+drag the program icon from the floppy window to the window of the hard
+disk volume.  
+
+Sooner or later you'll need to make a new Mac volume or two to contain
+your files.  To do this, you need to use the makehfv.exe utility in
+DOS (or the makehfv utility under Linux).  At your DOS (or shell)
+prompt, type something like this:
+
+makehfv newvol.hfv NewVolume 500k
+
+where newvol.hfv is the name of the DOS file, NewVolume is the name
+Executor will see, and 500k is the size of the volume.  You can also
+specify MB rather than KB by using m instead of k.
+
+Lots of specific questions, such as how to use downloaded software,
+are answered in the FAQ found in your docs subdirectory.  If you have
+any questions which aren't answered there, just write to
+questions@ardi.com or call ARDI at +1 505 766 9115.

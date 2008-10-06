@@ -1,0 +1,74 @@
+Presto (133 MHz Pentium):
+
+Performance Rating:
+				CPU	Graphics	Disk	Math
+      E/Win32 2.0w		34.6	6.284		56.703	58.476
+debug 2.0x DX5 window 8bpp	35.306	3.430		58.884	39.799
+debug 2.0x DIB window 8bpp	36.041	5.566		56.703	41.424
+debug 2.0x DX5 full   8bpp	35.306	6.158		56.703	40.029
+debug 2.0x DX5 full+hw 8bpp	35.306	6.216		49.387	39.341
+debug 2.0x DX5 full+norm 8bpp	35.306	17.154		61.240	41.698
+
+      2.0x DIB norm   8bpp	36.041	31.976		61.240	58.573
+      2.0x DIB window 8bpp	36.041	6.574		63.791	58.621
+      2.0x DX5 full   8bpp	35.306	7.150		58.884	54.418
+      2.0x DX5 full+hw 8bpp	33.921	7.360		63.791	51.996
+
+      E/DOS 2.0w		32.037	17.454		3.866	67.742
+
+
+
+Color QuickDraw
+
+				ABS	Rat.*
+      E/DOS 2.0w		19.050	2.971
+debug 2.0x DIB window 8bpp	23.650	2.393
+debug 2.0x DX5 full   8bpp	21.717	2.606
+debug 2.0x DX5 full+norm 8bpp	 7.967	7.105
+
+      2.0x DIB norm   8bpp	4.533	12.485
+      2.0x DIB window 8bpp	20.050	2.823
+      2.0x DX5 full   8bpp	18.067	3.133
+      2.0x DX5 full+hw 8bpp	16.150	3.504
+==========================================================================
+Uni (300 MHz CeleronA 128k L2)
+
+Performance Rating:
+				CPU	Graphics	Disk	Math
+      2.0x DX5 full   8bpp	115.333	22.840		170.111	210.389
+      2.0x DX5 full+norm 8bpp	115.333	75.415		191.375	210.314
+
+Color QuickDraw
+
+				ABS	Rat.*
+      2.0x DX5 full+norm 8bpp	1.933	29.276
+      2.0x DX5 full      8bpp	5.800	9.759
+
+full+hw locks up the machine
+
+==========================================================================
+OVERCLOCKED Uni (450 MHz CeleronA 128k L2)
+
+Performance Rating:
+				CPU	Graphics	Disk	Math
+      2.0x DX5 full   8bpp	173	35.687		306.200	308.414
+
+Color QuickDraw
+
+				ABS	Rat.*
+      2.0x DX5 full      8bpp	3.750	15.093
+==========================================================================
+Buy Uni (dual 180 MHz PPro)
+
+Performance Rating:
+				CPU	Graphics	Disk	Math
+      E/DOS 2.0w		57.666	12.075		9.509	124.113
+      E/W 2.0w			69.200	4.112		191.375	129.034
+      2.0x DX5 full   8bpp	66.538	4.116		218.714	131.926
+
+Color QuickDraw
+
+				ABS	Rat.*
+      E/DOS 2.0w		44.733	1.265
+      E/W 2.0w			31.600	1.791
+      2.0x DX5 full      8bpp	31.483	1.798

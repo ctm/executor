@@ -1,0 +1,46 @@
+Do not remove floppy disks or CD-ROMs from their drives while Executor
+is running unless you have clicked on an "Eject" button and Executor
+has told you that it's OK to remove it.  Changing removable media
+behind Executor's back will cause Executor to crash, just like pushing
+a paper-clip into a Macintosh floppy drive and changing floppies
+without the Macintosh knowing will cause a Macintosh to crash.
+
+Use the "Alt" key on the left side of your keyboard as a Macintosh
+command key.
+
+Use the "Alt" key on the right side of your keyboard as a Macintosh
+option key.
+
+If a program claims that it needs System 7 to run, use Cmd-Shift-5 to
+bring up the preferences panel.  You can then alter which version of
+the System Executor emulates.  More details are available on pages 19
+and 23 of the Executor 2 manual.
+
+When using the Windows or Linux version of Netscape, make sure you
+hold down the shift key whenever you click on a link to retrieve
+Macintosh software.  If you don't hold the shift key down, Netscape
+will try to help you out by converting the file as it brings it
+across.  However, this conversion makes the resultant file unusable by
+Executor.  Holding down the shift key tells Netscape to bypass the
+conversion process.
+
+Cmd-Shift-3 causes Executor to create a TIFF screen dump.
+
+These tips are stored in the text file /opt/executor/tips.txt.
+You can use a text editor to delete tips that you've already memorized.
+
+After purchasing Executor, send your registration card in.  That will
+entitle you to discounts on future major upgrades to Executor (minor
+upgrades are available for free).
+
+ARDI's web site is <http://www.ardi.com/>.  Experimental versions of
+Executor are made available there periodically.
+
+ARDI offers services to makers of Mac-only software that allows them to
+bundle an application-specific version of Executor with their
+software.  This is a convenient way to allow them to sell their
+software to clients who only have PCs.
+
+If you would like fewer choices in the "Page Setup..." dialog box, you
+can edit the file printers.ini to remove entries that correspond to printers
+that you don't have.

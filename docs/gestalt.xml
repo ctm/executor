@@ -1,0 +1,286 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN">
+<article>
+<articleinfo>
+  <author><firstname>Clifford</firstname><surname>Matthews</surname></author>
+  <authorinitials>ctm</authorinitials>
+  <title><function>Gestalt</function> under ROMlib</title>
+  <abstract>
+
+<para>
+This article provides information about <function>Gestalt</function>
+under ROMlib.  Since <application>Executor</application> and the
+Carbonless Copies Runtime System both use ROMlib, this information
+also applies to them.
+</para>
+
+  </abstract>
+  <copyright>
+    <year>1999</year>
+    <year>2002</year>
+    <holder>Abacus Research & Development, Inc.</holder>
+  </copyright>
+</articleinfo>
+
+<note>
+<para>
+The information in this paper is <emphasis>not</emphasis> built
+directly from the ROMlib source.  It is provided as-is and is subject
+to change.
+</para>
+</note>
+
+<section>
+<title>Apple Selectors</title>
+
+<para>
+PageMaker 4.2 calls <function>Gestalt</function> with the
+<constant>gestaltAliasMgrAttr</constant> selector and if
+<function>Gestalt</function> returns <returnvalue>noErr</returnvalue>,
+proceeds to use the Alias Manager, even the response is
+<returnvalue>0</returnvalue>.  PageMaker 4.2 will not use the Alias
+Manager if in this case <function>Gestalt</function> returns
+<returnvalue>gestaltUndefSelectorErr</returnvalue>.  PageMaker 4.2's
+use of <function>Gestalt</function> doesn't appear to be within spec
+(IMVI), but that's just another difference where ROMlib has to do what
+the Mac does, rather than what the specifications suggest.
+</para>
+
+<para>
+MacInTax '93 does the same thing with the Edition Manager that
+PageMaker does with the Alias Manager.  Claris Works does the same
+thing with Apple Events.  After ARDI saw three instances of this
+behavior ARDI stopped keeping track.  Because of such behavior, there
+are a number of selectors that ROMlib deliberately fails to recognize.
+ROMlib does this when its support for the queried functionality is
+incomplete.  Here are the selectors that ROMlib deliberately fails to
+recognize:
+</para>
+
+<simplelist type="horiz" columns="3">
+<member><constant>gestaltAliasMgrAttr</constant></member>
+<member><constant>gestaltApplEventsAttr</constant></member>
+<member><constant>gestaltAppleTalkVersion</constant></member>
+<member><constant>gestaltAUXVersion</constant></member>
+<member><constant>gestaltConnMgrAttr</constant></member>
+<member><constant>gestaltCRMAttr</constant></member>
+<member><constant>gestaltCTBVersion</constant></member>
+<member><constant>gestaltDBAccessMgrAttr</constant></member>
+<member><constant>gestaltEasyAccessAttr</constant></member>
+<member><constant>gestaltEditionMgrAttr</constant></member>
+<member><constant>gestaltFontMgrAttr</constant></member>
+<member><constant>gestaltFXfrMgrAttr</constant></member>
+<member><constant>gestaltHardwareAttr</constant></member>
+<member><constant>gestaltHelpMgrAttr</constant></member>
+<member><constant>gestaltMiscAttr</constant></member>
+<member><constant>gestaltNotificatinMgrAttr</constant></member>
+<member><constant>gestaltNuBusConnectors</constant></member>
+<member><constant>gestaltOSAttr</constant></member>
+<member><constant>gestaltPopupAttr</constant></member>
+<member><constant>gestaltPowerMgrAttr</constant></member>
+<member><constant>gestaltPPCToolboxAttr</constant></member>
+<member><constant>gestaltResourceMgrAttr</constant></member>
+<member><constant>gestaltScriptCount</constant></member>
+<member><constant>gestaltScriptMgrVersion</constant></member>
+<member><constant>gestaltSerialAttr</constant></member>
+<member><constant>gestaltStdNBPAttr</constant></member>
+<member><constant>gestaltTermMgrAttr</constant></member>
+<member><constant>gestaltParityAttr</constant></member>
+<member><constant>gestaltVMAttr</constant></member>
+<member>'<literal>icmp</literal>'</member>
+<member>'<literal>sysa</literal>'</member>
+</simplelist>
+
+<para>
+ROMlib recognizes and returns information for these selectors:
+</para>
+
+<simplelist type="horiz" columns="3">
+<member><constant>gestaltDITLExtAttr</constant></member>
+<member><constant>gestaltFindFolderAttr</constant></member>
+<member><constant>gestaltFSAttr</constant></member>
+<member><constant>gestaltSoundAttr</constant></member>
+<member><constant>gestaltExtToolboxTable</constant></member>
+<member><constant>gestaltToolboxTable</constant></member>
+<member><constant>gestaltOSTable</constant></member>
+<member><constant>gestaltFPUType</constant></member>
+<member><constant>gestaltKeyboardType</constant></member>
+<member><constant>gestaltLogicalPageSize</constant></member>
+<member><constant>gestaltLogicalRAMSize</constant></member>
+<member><constant>gestaltLowMemorySize</constant></member>
+<member><constant>gestaltMMUType</constant></member>
+<member><constant>gestaltPhysicalRAMSize</constant></member>
+<member><constant>gestaltProcessorType</constant></member>
+<member><constant>gestaltQuickdrawVersion</constant></member>
+<member><constant>gestaltQuickdrawFeatures</constant></member>
+<member><constant>gestaltTimeMgrVersion</constant></member>
+<member><constant>gestaltVersion</constant></member>
+<member><constant>gestaltMachineIcon</constant></member>
+<member><constant>gestaltMachineType</constant></member>
+<member><constant>gestaltROMSize</constant></member>
+<member><constant>gestaltROMVersion</constant></member>
+<member><constant>gestaltSystemVersion</constant></member>
+<member><constant>gestaltTextEditVersion</constant></member>
+</simplelist>
+
+<para>
+ROMlib fails to recognize the following four selectors unless they are
+specifically enabled by the "pretend" options (Pretend Help, Pretend
+Edition, Pretend Script, Pretend Alias).  The pretend options can be
+enabled in the preferences panel or via a configuration file.
+</para>
+
+<simplelist type="horiz" columns="3">
+<member><constant>gestaltHelpMgrAttr</constant></member>
+<member><constant>gestaltScriptMgrVersion</constant></member>
+<member><constant>gestaltEditionMgrAttr</constant></member>
+<member><constant>gestaltAliasMgrAttr</constant></member>
+</simplelist>
+
+<para>
+These two selectors are only recognized if the system version is set
+to 7.0 or higher:
+</para>
+
+<simplelist type="horiz" columns="3">
+<member><constant>gestaltStandardFileAttr</constant></member>
+<member><constant>gestaltApplEventsAttr</constant></member>
+</simplelist>
+</section>
+
+<section>
+<title>ARDI selectors</title> 
+
+<para>
+ARDI has added one special <function>gestalt</function> selector,
+<constant>gestaltPHYSICAL</constant> ('<literal>MUL8</literal>').  It
+returns the address of a routine that behaves just like
+<function>Gestalt</function>, but provides access to a completely
+different set of tables.  These tables contain information about the
+environment in which <application>Executor</application> is running
+instead the emulated environment that
+<application>Executor</application> provides.
+</para>
+
+<para>
+Example:
+</para>
+
+<programlisting>
+<![CDATA[
+int PhysicalGestalt (long selector, long *responsep)
+{
+  int retval;
+  pascal int (*physfp) (long sel, long *responsep);
+
+  retval = Gestalt ('MUL8', (void *) &physfp);
+  if (retval == noErr)
+    retval = physfp (selector, responsep);
+  return retval;
+}
+
+...
+
+  OSErr err;
+  long vers;
+
+  err = PhysicalGestalt ('sysv', &vers);
+  /* err should be noErr and vers should be the version of Executor you're
+     running, not the version of the System file we're emulating */
+]]>
+</programlisting>
+
+<para>
+These are the PhysicalGestalt selectors supported:
+</para>
+
+<table>
+<title>PhysicalGestalt Selectors</title>
+<tgroup cols="3">
+<thead>
+  <row>
+    <entry>Name</entry>
+    <entry>Value</entry>
+    <entry>Response</entry>
+  </row>
+</thead>
+<tbody>
+  <row>
+    <entry>gestaltSystemVersion</entry>
+    <entry>'<literal>sysv</literal>'</entry>
+    <entry>numeric version of <application>Executor</application></entry>
+  </row>
+  <row>
+    <entry>gestaltExecutorVersionString</entry>
+    <entry>'<literal>xqtr</literal>'</entry>
+    <entry>address of the string version of <application>Executor</application></entry>
+  </row>
+  <row>
+    <entry>gestaltDemoStatus</entry>
+    <entry>'<literal>demo</literal>'</entry>
+    <entry>1, if this is a demo version</entry>
+  </row>
+  <row>
+    <entry>gestaltDemoExpiration</entry>
+    <entry>'<literal>xpir</literal>'</entry>
+    <entry>how many days until the demo expires</entry>
+  </row>
+  <row>
+    <entry>gestaltSerialNumber</entry>
+    <entry>'<literal>s/n </literal>'</entry>
+    <entry>non-demo version: serial number</entry>
+  </row>
+  <row>
+    <entry>gestaltRegisteredName</entry>
+    <entry>'<literal>name</literal>'</entry>
+    <entry>non-demo version: name </entry>
+  </row>
+  <row>
+    <entry>gestaltRegisteredOrg</entry>
+    <entry>'<literal>org </literal>'</entry>
+    <entry>non-demo version: organization</entry>
+  </row>
+  <row>
+    <entry>gestaltPhysicalRAMSize</entry>
+    <entry>'<literal>ram </literal>'</entry>
+    <entry>amount of physical ram on the machine</entry>
+  </row>
+  <row>
+    <entry>gestaltScreenSize</entry>
+    <entry>'<literal>scrn</literal>'</entry>
+    <entry>resolution of the monitor</entry>
+  </row>
+  <row>
+    <entry>gestaltGhostScriptVersion</entry>
+    <entry>'<literal>gost</literal>'</entry>
+    <entry>win32 only: Ghostscript DLL version</entry>
+  </row>
+</tbody>
+</tgroup>
+</table>
+
+<para>
+ARDI is willing to add PhysicalGestalt selectors as Mac developers require.
+</para>
+</section>
+
+</article>
+
+<!-- This comment is for emacs users.  Please leave it at the end of the file.
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-namecase-general:t
+sgml-general-insert-case:lower
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:1
+sgml-indent-data:nil
+sgml-parent-document:nil
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+sgml-xml-p:t
+End:
+-->

@@ -1,0 +1,224 @@
+LEA EL "FAQ" (Preguntas Habituales)
+
+Este documento incluye lo necesario para empezar. Sin embargo, una vez
+instalado Executor, deberia leer el archivo "docs\faq".  Contiene
+respuestas a Preguntas Habituales, incluyendo los precios de Executor
+(ahora mismo $49 para estudiantes, profesorado y personal de
+instituciones educativas y $99 para todos los demas) asi como
+politicas de actualizacion y como encargarlo.
+
+
+1.99<x> DENOTA VERSIONES EXPERIMENTALES DE EXECUTOR
+
+En un esfuerzo por mantener a nuestros clientes en el ciclo de
+desarrollo, periodicamente hacemos disponibles versiones
+experimentales de Executor. Estas versiones experimentales se numeran
+1.99a, 1.99b, 1.99c, etc... Tratamos de no estropear lo que ya
+funciona, pero a veces sucede, por lo que ha de ser consciente que
+algunas cosas mencionadas en estas notas pueden no funcionar.  Si
+Ud. tiene una version previa de Executor instalada, puede no querer
+borrar su version actual hasta que este seguro de que la nueva version
+funciona como quiere. Para mantenerse al dia lo mejor es unirse a la
+"Executor Interest Mailing List" de Internet. Para hacerlo, envie un
+e-mail (correo electronico) a "executor-request@nacm.com" con una
+linea de "subject" vacia y un "Texto" que diga "subscribe". De esa
+manera tendra acceso a la mejor linea de informacion respecto a los
+ultimos desarrollos de Executor.
+
+
+COMO INSTALAR EXECUTOR
+
+Esta distribucion tiene un programa de instalacion que automaticamente
+instala Executor desde dos disquettes. Para instalar asegurese de que
+el primer disquette (el que contiene este LEAME.1ER) este en su
+disquetera de 3.5". Si esa disquetera es "A:" todo lo que ha de hacer
+es:
+
+       C:\>A:\INSTALL 
+
+El programa de instalacion le permite instalar Executor donde prefiera
+en su disco duro.
+
+IMPORTANTE:  
+
+Si usa cache de disco debera desactivar el cache de escritura.  El
+cache de escritura puede corromper los ficheros ".HFV" si Executor
+termina inesperadamente. (NOTA: si se olvida de desactivar el cache de
+escritura, puede tener que reinstalar los ficheros ".HFV" despues de
+un fallo de Executor).
+
+
+MAS INFORMACION DISPONIBLE DESPUES DE INSTALAR
+
+El proceso de instalacion crea un directorio "docs" que contiene otros
+archivos que pueden ayudarle a comprender mejor Executor.  El mas
+importante de estos se llama "FAQ", que significa "Frequently Asked
+Questions" (Preguntas Habituales).
+
+
+EXECUTOR NECESITA UN CONTROLADOR DE RATON 
+
+Ademas de necesitar un raton fisicamente conectado a su computadora,
+executor requiere un controlador de raton cargado antes de su
+ejecucion.  Si Executor se queja que Ud. no tiene un raton instalado,
+pero Ud. tiene uno conectado, el problema es que su autoexec.bat no
+carga el controlador de raton para el uso con programas DOS. Ya que
+mucha gente usa el raton solo con Windows, que tiene su controlador
+propio de raton, es posible que no tenga los comandos de controlador
+de raton en su autoexec.bat.
+
+Los cambios exactos a realizar dependen de que tipo de raton tenga, y
+donde se halle el controlador de raton de su sistema.  En general,
+alguien con conocimientos de la configuracion de su sistema debe poder
+guiarle para la instalacion de su raton, ya sea un servicio tecnico, o
+su experto local de DOS
+
+
+INICIACION AL COPIADO DE DISQUETTES CON FORMATO MACINTOSH    
+
+Executor/DOS solo puede leer disquettes de alta densidad "HD" (1.4
+MB).  La mayoria de aplicaciones Macintosh antiguas se distribuyeron
+sobre disquettes de 800K que no pueden usarse con Executor, por lo que
+ha de asegurarse de que usa diquettes para Macintosh de Alta Densidad
+(1.4MB) con Executor/DOS. Executor/DOS no da formato a bajo nivel a un
+disquette, pero puede reformatear un disquette DOS para Macintosh, y
+solo si inserta el disquette *despues* de que Executor haya mostrado
+su escritorio.  Es importante resaltar que tiene tres areas diferentes
+desde las que Ud. puede copiar y a las que puede copiar. Ademas de
+disquettes formato Macintosh, Ud. puede copiar archivos Macintosh a su
+disco duro, bien como archivos DOS, o como archivos Macintosh dentro
+de un unico archivo DOS que representa un "Volumen"
+Macintosh. Executor/DOS 1.99<x> tambien permite copiar a/desde discos
+SCSI formato Mac (si Ud. tiene un adaptador SCSI) y la copia desde
+CD-ROMs formato Mac, siempre que la letra de su CD-ROM sea H: o menor.
+
+Cuando Ud. copia archivos Mac como archivos DOS, estos se "parten" en
+dos mitades. Una mitad tendra el nombre original del archivo, el otro
+tendra un "%" antecediendo al nombre original. El archivo con el
+nombre original representa la data fork" (parte de datos) del archivo
+Macintosh, y son datos que pueden usarse en ambos entornos, Macintosh
+y DOS.  La otra mitad, La que comienza por "%" es la "resource fork"
+(parte de recursos) y contiene informacion que solo tiene sentido en
+el entorno Macintosh.
+
+Usar el sistema de archivos DOS para representar archivos Macintosh es
+muy engorroso. De hecho, si los nombres contienen caracteres raros,
+Ud. podra sufrir un "I/O error". La alternativa es almacenar archivos
+dentro de un unico "Volumen Macintosh". Esta version de demostracion
+de Executor viene con un Volumen Mac de 4 MB Debe ser suficiente para
+permitirle explorar Executor. Mientras Executor trabaja dentro de un
+Volumen Macintosh, los archivos pueden tener nombres en
+mayusculas/minusculas con longitudes de hasta 31 caracteres, pero sus
+programas DOS no pueden ver los archivos individuales. Mas informacion
+al respecto en la documentacion.
+
+
+USO DE MAKEHFV PARA CREAR UN VOLUMEN NUEVO
+
+Aunque que nosotros no suministremos documentacion con esta version de
+demostracion de Executor, puede haber visto el programa "MAKEHFV" en
+el directorio "\EXECUTOR".  Si es audaz y quiere usar makehfv, es
+importante que el volumen nuev oque Ud. cree tenga el sufijo ".HFV".
+Si Ud. no llama a su volumen nuevo "algo.HFV", executor lo ignorara.
+
+
+EJECUCION DE PROGRAMAS DIRECTAMENTE DESDE DISQUETTES 
+
+La ejecucion de programas directamente desde disquette es
+increiblemente lenta. Sera mucho mas rapido usar HFS_XFER para copiar
+un programa desde un disquette a uno de sus volumenes ".HFV" y
+ejecutar el programa directamente desde el volumen ".HFV"
+
+
+UNIXISMOS QUE QUEDAN EN EXECUTOR
+
+Executor se desarrollo originalmente bajo UNIX. Ciertos "UNIXismos"
+han permanecido en Executor; Puede que ya no esten en la ver. 2.0.  A
+veces vera "/" usado donde "\"normalmente se usaria en DOS. Ademas,
+los interruptores se introducen precedidos de "-" en vez de "/".
+Rogamos nos disculpen si esto les causa molestias.
+
+
+EL USO CON WINDOWS
+
+Executor/DOS 1.99<x> funciona bajo Windows 3.1.
+
+Puede crear un icono para Executor usando el Administrador de
+Programas en Windows:
+
+        Escoja "Nuevo..." desde el Menu "Archivo" del "Administrador
+        de Programa".
+        Haga clic en el boton "Elemento de Programa"
+        Haga clic en "Aceptar"
+        Teclee "Executor" en el campo "Descripcion"
+        Introduzca "C:\executor\executor" en el campo "Linea de
+        Comando".
+        Introduzca "C:\executor" en el campo "Directorio de
+        Trabajo"
+        Agregue una "Tecla de metodo abreviado" si lo desea
+        Haga clic sobre "Cambiar de Icono"
+        Acepte al aparecer el mensaje de error
+        Seleccione un Icono que le guste 
+        Haga clic sobre "Aceptar" para salir de "Propiedades de
+        Elemento de Programa" 
+
+Recuerde, Executor es su propio Entorno de Ventanas. No necesita
+Windows para funcionar, aunque que la unica manera de ejecutar dos
+programas Mac a la vez es bajo Windows.  Una vez tenga una copia de
+Executor que corre bajo Windows, puede usar "Alt_Izda.-Tab" y
+"Dcha._Alt-Intro" para saltar entre modos diferentes de pantalla y
+programas.
+
+
+EL USO CON OS/2
+
+Executor/DOS 1.99<x> funciona en OS/2 2.11, pero no con versiones
+previas. Para que E/D 1.99<x> funcione, debera ajustar los siguientes
+parametros:
+
+        DPMI_DOS_API ENABLED   DPMI_MEMORY_LIMIT 16   
+        EMS_MEMORY_LIMIT 0     XMS_MEMORY_LIMIT 0
+
+
+USO CON NT
+
+Actualmente, Executor/DOS 1.99<x> no corre bajo Windows NT.  Esto no
+cambiara pronto, lo sentimos.
+
+
+SI EXECUTOR EJECUTA LENTAMENTE
+
+Executor necesita 4 MB de memoria para trabajar eficientemente.  Si no
+tiene la memoria fisica suficiente, pasara a disco aquellas partes de
+memoria que se usen menos, y las recuperara cuando las necesite.  Sin
+embargo, en DOS los sistemas pueden ver su memoria artificialmente
+reducida de demasiadas maneras para explicar aqui. Si cree que
+Executor funciona lentamente, quiza sea conveniente que un experto le
+compruebe el sistema, para asegurarse que la memoria no esta siendo
+reducida.
+
+
+CREDITOS
+
+Executor es un producto de ARDI (Abacus Research and Development,
+Inc.).  La mayoria de Executor propiamente dicho ha sido dise¤ada e
+implementada por Clifford T. Matthews.  El CPU sintetico y portado a
+DOS son de Mathew Hostetter.  Executor originalmente se escribio bajo
+X-WINDOWS, portado a NEXTSTEP y finalmente a DOS, usando DJGPP, un
+portado del compilador gcc de la Free Software Foundation, hecho por
+DJ Delorie, Charles Sandmann y otros.  El emulador de 387 que usamos
+es obra de William Metzenthen.  Puede encontrar mas informacion sobre
+la Free Software Foundation y DJGPP en nuestra documentacion.
+
+
+
+Gracias!
+
+Clifford T.  Matthews           questions@ardi.com 
+Fundador                        +1505 766 9115 Telefono 
+ARDI                            +1505 247 1899 FAX
+
+
+
+LEAME.1ER traducido por Juan Negron. 100014.2742@compuserve.com
+Traduccion Rev. 0.99.

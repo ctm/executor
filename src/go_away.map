@@ -1,0 +1,33 @@
+go_away 1 2; 13 13
+{
+  " x"
+  "             "
+  " xxxxxxxxxxx "
+  " x         x "
+  " x         x "
+  " x         x "
+  " x         x "
+  " x         x "
+  " x         x "
+  " x         x "
+  " x         x "
+  " x         x "
+  " xxxxxxxxxxx "
+  "             "
+}
+{
+  " xyz"
+  "             "
+  " zzzzzzzzzzz "
+  " zxxxxxxxxxx "
+  " zxyyyyyyyzx "
+  " zxyyyyyyyzx "
+  " zxyyyyyyyzx "
+  " zxyyyyyyyzx "
+  " zxyyyyyyyzx "
+  " zxyyyyyyyzx "
+  " zxyyyyyyyzx "
+  " zxzzzzzzzzx "
+  " zxxxxxxxxxx "
+  "             "
+}
