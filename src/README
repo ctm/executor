@@ -1,3 +1,16 @@
-$Id: README 63 2004-12-24 18:19:43Z ctm $
+Don't be mislead by configure.ac, Executor currently builds using an ancient
+configuration script.  If you want to try to build a version of Executor for
+Linux, try doing this (*After you've done a make install of syn68k):
 
-TODO
+  cd ..
+  mkdir -p build/debug-linux
+  cd build/debug-linux
+  ../../util/configure.sh  '--target=i486-linux' '--host=i486-linux' '--front-end=x' '--target-gcc=gcc' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -DNDEBUG -O0 -finline-functions -g -Wall -DRELEASE_INTERNAL -DERROR_SUPPORTED_MASK="(~0)"' '--root=../..' '--target-file-format=glibc' '--sound=linux' '--syn68k-target=i486-linux-glibc'
+  make
+
+That should leave you with a binary called executor.  Unfortunately, without
+a System Folder, Executor won't even come close to running.
+
+I'll fiddle around a bit and figure out the easiest way to build a
+System Folder for Executor from the git repository and add that info next.
+
