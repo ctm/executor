@@ -13,7 +13,12 @@ endif
 ifneq (,$(SDL_LIB_DIR))
   FRONT_END_LIBS += -L$(SDL_LIB_DIR)
 endif
-FRONT_END_LIBS += -lSDLmain -lSDL
+
+# I'm not sure when the need for -lSDLmain went away, but it's not needed
+# with the version of SDL on Fedora 9 (SDL 1.2.13)
+
+# FRONT_END_LIBS += -lSDLmain -lSDL
+FRONT_END_LIBS += -lSDL
 #
 ifneq (,$(findstring linux,$(TARGET)))
   FRONT_END_LIBS += -ldl -L/usr/X11R6/lib -lX11 -lpthread

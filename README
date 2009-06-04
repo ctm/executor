@@ -20,12 +20,33 @@ install of syn68k):
   make
 
 That should leave you with a binary called executor.  Unfortunately, without
-a System Folder, Executor won't even come close to running.
+a System Folder, Executor won't even come close to running.  If you're using
+a system that can install RPMs and you can dig up and install a copy of
+executor-aux-2.1pr16-1.i386.rpm, then you should be able to run.
 
 I'll fiddle around a bit and figure out the easiest way to build a
-System Folder for Executor from the git repository and add that info next.
+System Folder for Executor from the git repository and add that info
+next.  In the meantime, if anyone is reading this and wants a copy of
+executor-aux-2.1pr16-1.i386.rpm, try messaging me (ctm) at github.
 
 My email address is still <ctm@ardi.com>, although ARDI itself is
 defunct.  I get a ridiculous amount of spam and will quite possibly
 not see email addressed to me.
 
+
+If you're on an x86_64 based machine and you have the ability to compile
+32-bit binaries, you should be able to build a copy of Executor by doing
+something like
+
+  mkdir -p build/debug-linux
+  cd build/debug-linux
+  ../../util/configure.sh  '--target=i486-linux' '--host=i486-linux' '--front-end=x' '--target-gcc=gcc -m32' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -DNDEBUG -O0 -finline-functions -g -Wall -DRELEASE_INTERNAL -DERROR_SUPPORTED_MASK="(~0)"' '--root=../..' '--target-file-format=glibc' '--sound=linux' '--syn68k-target=i486-linux-glibc'
+  make
+
+However, you may find that you need to hand-edit Makefile and change the line
+
+HOST_GCC = gcc
+
+to
+
+HOST_GCC = gcc -m32
