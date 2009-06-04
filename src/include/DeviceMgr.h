@@ -37,7 +37,7 @@ typedef struct {
     INTEGER drvrCtl	PACKED;
     INTEGER drvrStatus	PACKED;
     INTEGER drvrClose	PACKED;
-    char drvrName	PACKED;
+    char drvrName	LPACKED;
 } ramdriver;
 
 typedef ramdriver *ramdriverptr;
@@ -49,7 +49,7 @@ typedef enum { Open, Prime, Ctl, Stat, Close } DriverRoutineType;
 typedef struct {
     umacdriverptr dCtlDriver	PACKED_P;	/* not just Ptr */
     INTEGER       dCtlFlags	PACKED;
-    QHdr          dCtlQHdr	PACKED;
+    QHdr          dCtlQHdr	LPACKED;
     LONGINT       dCtlPosition	PACKED;
     Handle        dCtlStorage	PACKED_P;
     INTEGER       dCtlRefNum	PACKED;

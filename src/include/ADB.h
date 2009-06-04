@@ -10,8 +10,8 @@
 
 typedef struct
 {
-  SignedByte devType PACKED;
-  SignedByte origADBAddr PACKED;
+  SignedByte devType LPACKED;
+  SignedByte origADBAddr LPACKED;
   Ptr dbServiceRtPtr PACKED_P;
   Ptr dbDataAreaAddr PACKED_P;
 } ADBDataBlock;

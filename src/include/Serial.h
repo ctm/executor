@@ -68,23 +68,23 @@ typedef __SignedByte SPortSel;
 #endif /* BINCOMPAT */
 
 typedef struct {
-    __Byte fXOn	PACKED;
-    __Byte fCTS	PACKED;
-    __Byte xOn	PACKED;
-    __Byte xOff	PACKED;
-    __Byte errs	PACKED;
-    __Byte evts	PACKED;
-    __Byte fInX	PACKED;
-    __Byte null	PACKED;
+    __Byte fXOn	LPACKED;
+    __Byte fCTS	LPACKED;
+    __Byte xOn	LPACKED;
+    __Byte xOff	LPACKED;
+    __Byte errs	LPACKED;
+    __Byte evts	LPACKED;
+    __Byte fInX	LPACKED;
+    __Byte null	LPACKED;
 } SerShk;
 
 typedef struct {
-    __Byte cumErrs	PACKED;
-    __Byte xOffSent	PACKED;
-    __Byte rdPend	PACKED;
-    __Byte wrPend	PACKED;
-    __Byte ctsHold	PACKED;
-    __Byte xOffHold	PACKED;
+    __Byte cumErrs	LPACKED;
+    __Byte xOffSent	LPACKED;
+    __Byte rdPend	LPACKED;
+    __Byte wrPend	LPACKED;
+    __Byte ctsHold	LPACKED;
+    __Byte xOffHold	LPACKED;
 } SerStaRec;
 
 #define MODEMINAME	".AIn"

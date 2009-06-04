@@ -132,9 +132,9 @@ typedef INTEGER FormatStatus;
 
 typedef struct
 {
-  Byte fLength PACKED;
-  Byte fVersion PACKED;
-  SignedByte data[253] PACKED;
+  Byte fLength LPACKED;
+  Byte fVersion LPACKED;
+  SignedByte data[253] LPACKED;
 }
 NumFormatStringRec;
 
@@ -156,10 +156,10 @@ typedef struct
 {
   INTEGER version PACKED;
   WideChar data[31] PACKED;
-  WideCharArr pePlus PACKED;
-  WideCharArr peMinus PACKED;
-  WideCharArr peMinusPlus PACKED;
-  WideCharArr altNumTable PACKED;
+  WideCharArr pePlus LPACKED;
+  WideCharArr peMinus LPACKED;
+  WideCharArr peMinusPlus LPACKED;
+  WideCharArr altNumTable LPACKED;
   CHAR reserved[20] PACKED;
 }
 NumberParts;

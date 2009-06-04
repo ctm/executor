@@ -23,8 +23,8 @@ typedef struct
   Ptr ioDTBuffer	PACKED;
   LONGINT ioDTReqCount	PACKED;
   LONGINT ioDTActCount	PACKED;
-  SignedByte filler1	PACKED;
-  SignedByte ioIconType	PACKED;
+  SignedByte filler1	LPACKED;
+  SignedByte ioIconType	LPACKED;
   INTEGER filler2	PACKED;
   LONGINT ioDirID	PACKED;
   OSType ioFileCreator	PACKED;

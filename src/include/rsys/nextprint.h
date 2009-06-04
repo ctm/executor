@@ -93,20 +93,20 @@ typedef unsigned char comPattern[8];
 
 typedef struct {
     short device	PACKED;
-    comBitMap portBits	PACKED;
+    comBitMap portBits	LPACKED;
     comRect portRect	PACKED;
     comRgnHandle visRgn	PACKED_P;
     comRgnHandle clipRgn	PACKED_P;
-    comPattern bkPat	PACKED;
-    comPattern fillPat	PACKED;
+    comPattern bkPat	LPACKED;
+    comPattern fillPat	LPACKED;
     comPoint pnLoc	PACKED;
     comPoint pnSize	PACKED;
     short pnMode	PACKED;
-    comPattern pnPat	PACKED;
+    comPattern pnPat	LPACKED;
     short pnVis	PACKED;
     short txFont	PACKED;
-    char txFace	PACKED;
-    char padding PACKED;
+    char txFace	LPACKED;
+    char padding LPACKED;
     short txMode	PACKED;
     short txSize	PACKED;
     comFixed spExtra	PACKED;

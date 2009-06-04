@@ -26,7 +26,7 @@ typedef struct {
     INTEGER menuHeight	PACKED;
     Handle menuProc	PACKED_P;
     LONGINT enableFlags	PACKED;
-    Str255 menuData	PACKED;
+    Str255 menuData	LPACKED;
 } MenuInfo;
 typedef MenuInfo *MenuPtr;
 typedef struct { MenuPtr p PACKED_P; } HIDDEN_MenuPtr;
@@ -36,10 +36,10 @@ typedef struct MCEntry
 {
   INTEGER mctID		PACKED;
   INTEGER mctItem	PACKED;
-  RGBColor mctRGB1	PACKED;
-  RGBColor mctRGB2	PACKED;
-  RGBColor mctRGB3	PACKED;
-  RGBColor mctRGB4	PACKED;
+  RGBColor mctRGB1	LPACKED;
+  RGBColor mctRGB2	LPACKED;
+  RGBColor mctRGB3	LPACKED;
+  RGBColor mctRGB4	LPACKED;
   INTEGER mctReserved	PACKED;
 } MCEntry, *MCEntryPtr;
 typedef struct { MCEntryPtr p PACKED_P; } HIDDEN_MCEntryPtr;

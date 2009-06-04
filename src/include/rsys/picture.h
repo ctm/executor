@@ -58,15 +58,15 @@ typedef struct {
     LONGINT	picsize	PACKED;	/* 0x04 - 0x07 */
     LONGINT	pichowfar	PACKED;	/* 0x08 - 0x0B */	
     RgnHandle	picclip	PACKED_P;	/* 0x0C - 0x0F */
-    Pattern	picbkpat	PACKED;	/* 0x10 - 0x17 */
+    Pattern	picbkpat	LPACKED;	/* 0x10 - 0x17 */
     INTEGER	picfont	PACKED;	/* 0x18 - 0x19 */
-    Style	picface	PACKED;	/* 0x1A */
-    char	picfiller	PACKED;	/* 0x1B */
+    Style	picface	LPACKED;	/* 0x1A */
+    char	picfiller	LPACKED;	/* 0x1B */
     INTEGER	pictxmode	PACKED;	/* 0x1C - 0x1D */
     INTEGER	pictxsize	PACKED;	/* 0x1E - 0x1F */
     Fixed	picspextra	PACKED;	/* 0x20 - 0x23 */
-    Point	pictxnum	PACKED;	/* 0x24 - 0x27 */
-    Point	pictxden	PACKED;	/* 0x28 - 0x2B */
+    Point	pictxnum	LPACKED;	/* 0x24 - 0x27 */
+    Point	pictxden	LPACKED;	/* 0x28 - 0x2B */
 			
 /*
  * NOTE: After doing:
@@ -83,14 +83,14 @@ typedef struct {
  *	and pictextpnloc.
  */
 
-    Point	picdrawpnloc	PACKED;	/* 0x2C - 0x2F */
-    Point	pictextpnloc	PACKED;	/* 0x30 - 0x33 */
-    Point	picpnsize	PACKED;	/* 0x34 - 0x37 */
+    Point	picdrawpnloc	LPACKED;	/* 0x2C - 0x2F */
+    Point	pictextpnloc	LPACKED;	/* 0x30 - 0x33 */
+    Point	picpnsize	LPACKED;	/* 0x34 - 0x37 */
     INTEGER	picpnmode	PACKED;	/* 0x38 - 0x39 */
-    Pattern	picpnpat	PACKED;	/* 0x3A - 0x41 */
-    Pattern	picfillpat	PACKED;	/* 0x42 - 0x49 */
-    Rect	piclastrect	PACKED;	/* 0x4A - 0x51 */
-    Point	picov	PACKED;		/* 0x52 - 0x55 */
+    Pattern	picpnpat	LPACKED;	/* 0x3A - 0x41 */
+    Pattern	picfillpat	LPACKED;	/* 0x42 - 0x49 */
+    Rect	piclastrect	LPACKED;	/* 0x4A - 0x51 */
+    Point	picov	LPACKED;		/* 0x52 - 0x55 */
 
     INTEGER	picidunno	PACKED;	/* 0x56 - 0x59 ColorBit ? */
 

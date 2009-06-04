@@ -67,7 +67,7 @@ typedef struct {
     INTEGER what	PACKED;
     LONGINT message	PACKED;
     LONGINT when	PACKED;
-    Point where	PACKED;
+    Point where	LPACKED;
     INTEGER modifiers	PACKED;
 } EventRecord;
 

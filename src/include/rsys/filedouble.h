@@ -48,8 +48,8 @@ typedef struct {
 } Single_dates;
 
 typedef struct {
-    FInfo finfo	PACKED;
-    FXInfo fxinfo	PACKED;
+    FInfo finfo	LPACKED;
+    FXInfo fxinfo	LPACKED;
 } Single_finfo;
 
 typedef ULONGINT Single_attribs;

@@ -74,7 +74,7 @@ typedef struct {
     OSType fdType	PACKED;
     OSType fdCreator	PACKED;
     unsigned short fdFlags	PACKED;
-    Point fdLocation	PACKED;
+    Point fdLocation	LPACKED;
     unsigned short fdFldr	PACKED;
 } FInfo;
 
@@ -86,14 +86,14 @@ typedef struct {
 } FXInfo;
 
 typedef struct {
-    Rect frRect	PACKED;
+    Rect frRect	LPACKED;
     unsigned short frFlags	PACKED;
-    Point frLocation	PACKED;
+    Point frLocation	LPACKED;
     unsigned short frView	PACKED;
 } DInfo;
 
 typedef struct {
-    Point frScroll	PACKED;
+    Point frScroll	LPACKED;
     LONGINT frOpenChain	PACKED;
     unsigned short frUnused	PACKED;
     unsigned short frComment	PACKED;
@@ -120,8 +120,8 @@ typedef enum {
 typedef struct {
     COMMONFSQUEUEDEFS	PACKED;
     INTEGER ioRefNum	PACKED;
-    SignedByte ioVersNum	PACKED;
-    SignedByte ioPermssn	PACKED;
+    SignedByte ioVersNum	LPACKED;
+    SignedByte ioPermssn	LPACKED;
     LONGINT ioMisc	PACKED;		/* should be largest of Ptr, LONGINT */
     Ptr ioBuffer	PACKED_P;
     LONGINT ioReqCount	PACKED;
@@ -133,12 +133,12 @@ typedef struct {
 typedef struct {
     COMMONFSQUEUEDEFS	PACKED;
     INTEGER ioFRefNum	PACKED;
-    SignedByte ioFVersNum	PACKED;
-    SignedByte filler1	PACKED;
+    SignedByte ioFVersNum	LPACKED;
+    SignedByte filler1	LPACKED;
     INTEGER ioFDirIndex	PACKED;
-    SignedByte ioFlAttrib	PACKED;
-    SignedByte ioFlVersNum	PACKED;
-    FInfo ioFlFndrInfo	PACKED;
+    SignedByte ioFlAttrib	LPACKED;
+    SignedByte ioFlVersNum	LPACKED;
+    FInfo ioFlFndrInfo	LPACKED;
     LONGINT ioFlNum	PACKED;
     INTEGER ioFlStBlk	PACKED;
     LONGINT ioFlLgLen	PACKED;
@@ -186,8 +186,8 @@ typedef ParamBlockRec *ParmBlkPtr;
 typedef struct {
     COMMONFSQUEUEDEFS	PACKED;
     INTEGER ioRefNum	PACKED;
-    SignedByte ioVersNum	PACKED;
-    SignedByte ioPermssn	PACKED;
+    SignedByte ioVersNum	LPACKED;
+    SignedByte ioPermssn	LPACKED;
     LONGINT ioMisc	PACKED;		/* should be largest of Ptr, LONGINT */
     Ptr ioBuffer	PACKED_P;
     LONGINT ioReqCount	PACKED;
@@ -199,12 +199,12 @@ typedef struct {
 typedef struct {
     COMMONFSQUEUEDEFS	PACKED;
     INTEGER ioFRefNum	PACKED;
-    SignedByte ioFVersNum	PACKED;
-    SignedByte filler1	PACKED;
+    SignedByte ioFVersNum	LPACKED;
+    SignedByte filler1	LPACKED;
     INTEGER ioFDirIndex	PACKED;
-    SignedByte ioFlAttrib	PACKED;
-    SignedByte ioFlVersNum	PACKED;
-    FInfo ioFlFndrInfo	PACKED;
+    SignedByte ioFlAttrib	LPACKED;
+    SignedByte ioFlVersNum	LPACKED;
+    FInfo ioFlFndrInfo	LPACKED;
 /*-->*/ LONGINT ioDirID	PACKED;
     INTEGER ioFlStBlk	PACKED;
     LONGINT ioFlLgLen	PACKED;
@@ -256,15 +256,15 @@ typedef enum { hfileInfo, dirInfo } CInfoType;
 #define COMMONCINFODEFS			\
     COMMONFSQUEUEDEFS		PACKED;	\
     INTEGER ioFRefNum		PACKED;	\
-    SignedByte ioFVersNum	PACKED;	\
-    SignedByte filler1		PACKED;	\
+    SignedByte ioFVersNum	LPACKED;	\
+    SignedByte filler1		LPACKED;	\
     INTEGER ioFDirIndex		PACKED;	\
-    SignedByte ioFlAttrib	PACKED;	\
+    SignedByte ioFlAttrib	LPACKED;	\
     SignedByte ioACUser   /* PACKED gets added in by guys who use this macro. */
 
 typedef struct {
-    COMMONCINFODEFS	PACKED;
-    FInfo ioFlFndrInfo	PACKED;
+    COMMONCINFODEFS	LPACKED;
+    FInfo ioFlFndrInfo	LPACKED;
     LONGINT ioDirID	PACKED;
     INTEGER ioFlStBlk	PACKED;
     LONGINT ioFlLgLen	PACKED;
@@ -275,21 +275,21 @@ typedef struct {
     LONGINT ioFlCrDat	PACKED;
     LONGINT ioFlMdDat	PACKED;
     LONGINT ioFlBkDat	PACKED;
-    FXInfo ioFlXFndrInfo	PACKED;
+    FXInfo ioFlXFndrInfo	LPACKED;
     LONGINT ioFlParID	PACKED;
     LONGINT ioFlClpSiz	PACKED;
 } HFileInfo;
 
 typedef struct {
-    COMMONCINFODEFS	PACKED;
-    DInfo ioDrUsrWds	PACKED;
+    COMMONCINFODEFS	LPACKED;
+    DInfo ioDrUsrWds	LPACKED;
     LONGINT ioDrDirID	PACKED;
     unsigned short ioDrNmFls	PACKED;
     unsigned short filler3[9]	PACKED;
     LONGINT ioDrCrDat	PACKED;
     LONGINT ioDrMdDat	PACKED;
     LONGINT ioDrBkDat	PACKED;
-    DXInfo ioDrFndrInfo	PACKED;
+    DXInfo ioDrFndrInfo	LPACKED;
     LONGINT ioDrParID	PACKED;
 } DirInfo;
 
@@ -356,7 +356,7 @@ typedef struct {
     unsigned short vcbAlBlSt	PACKED;		/* 36 */
     LONGINT vcbNxtCNID	PACKED;		/* 38 */
     unsigned short vcbFreeBks	PACKED;		/* 42 */
-    Byte vcbVN[28]	PACKED;		/* 44 */
+    Byte vcbVN[28]	LPACKED;		/* 44 */
     INTEGER vcbDrvNum	PACKED;		/* 72 */
     INTEGER vcbDRefNum	PACKED;		/* 74 */
     INTEGER vcbFSID	PACKED;		/* 76 */
@@ -407,7 +407,7 @@ struct FSSpec
 {
   INTEGER vRefNum PACKED;
   LONGINT parID PACKED;
-  Str63 name PACKED;
+  Str63 name LPACKED;
 };
 
 typedef struct FSSpec FSSpec;

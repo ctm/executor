@@ -25,10 +25,10 @@
 #define prWrErr		(-87)
 
 typedef struct {
-    Byte valid	PACKED;
-    Byte aTalkA	PACKED;
-    Byte aTalkB	PACKED;
-    Byte config	PACKED;
+    Byte valid	LPACKED;
+    Byte aTalkA	LPACKED;
+    Byte aTalkB	LPACKED;
+    Byte config	LPACKED;
     INTEGER portA	PACKED;
     INTEGER portB	PACKED;
     LONGINT alarm	PACKED;
@@ -65,8 +65,8 @@ typedef struct {
     INTEGER machineType	PACKED;
     INTEGER systemVersion	PACKED;
     INTEGER processor	PACKED;
-    BOOLEAN hasFPU	PACKED;
-    BOOLEAN hasColorQD	PACKED;
+    BOOLEAN hasFPU	LPACKED;
+    BOOLEAN hasColorQD	LPACKED;
     INTEGER keyBoardType	PACKED;
     INTEGER atDrvrVersNum	PACKED;
     INTEGER sysVRefNum	PACKED;

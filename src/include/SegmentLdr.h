@@ -22,7 +22,7 @@ typedef struct {
     INTEGER vRefNum	PACKED;
     OSType fType	PACKED;
     INTEGER versNum	PACKED;
-    Str255 fName	PACKED;
+    Str255 fName	LPACKED;
 } AppFile;
 
 

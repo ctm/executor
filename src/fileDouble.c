@@ -48,8 +48,8 @@ int apple_double_fork_prefix_length;
 #include "rsys/osutil.h"
 
 PRIVATE struct defaulthead {
-    Single_header head	PACKED;
-    Single_descriptor desc[10]	PACKED;	/* we use 4, 6 for spare */
+    Single_header head	LPACKED;
+    Single_descriptor desc[10]	LPACKED;	/* we use 4, 6 for spare */
 } ourdefault
 #if !defined(__alpha)
 = {
@@ -114,8 +114,8 @@ PRIVATE void initialize_ourdefault( void )
 
 PRIVATE struct defaultentries {
     Single_attribs attribs	PACKED;
-    Single_dates   dates	PACKED;
-    Single_finfo   finfo	PACKED;
+    Single_dates   dates	LPACKED;
+    Single_finfo   finfo	LPACKED;
 } ourentries;
 
 PUBLIC void

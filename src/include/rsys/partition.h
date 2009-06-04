@@ -18,8 +18,8 @@ typedef struct {
     ULONGINT pmMapBlkCnt	PACKED;
     ULONGINT pmPyPartStart	PACKED;
     ULONGINT pmPartBlkCnt	PACKED;
-    unsigned char pmPartName[32]	PACKED;	/* NUL terminated */
-    unsigned char pmPartType[32]	PACKED;	/* NUL terminated */
+    unsigned char pmPartName[32]	LPACKED;	/* NUL terminated */
+    unsigned char pmPartType[32]	LPACKED;	/* NUL terminated */
     ULONGINT pmLgDataStart	PACKED;
     ULONGINT pmDataCnt	PACKED;
     ULONGINT pmPartStatus	PACKED;
@@ -30,8 +30,8 @@ typedef struct {
     ULONGINT pmBootEntry	PACKED;
     ULONGINT pmBootEntry2	PACKED;
     ULONGINT pmBootCksum	PACKED;
-    unsigned char pmProcessor[16]	PACKED;	/* NUL terminated */
-    unsigned char bootargs[120]	PACKED;	/* IMV-579 says 128	PACKED, but they probably
+    unsigned char pmProcessor[16]	LPACKED;	/* NUL terminated */
+    unsigned char bootargs[120]	LPACKED;	/* IMV-579 says 128	PACKED, but they probably
 					   mean that the total should be 512 */
 } partmapentry_t;
 
@@ -50,7 +50,7 @@ typedef struct {
 
 typedef struct {
     unsigned short pdSig	PACKED;	/* 0x5453 == 'TS' */
-    oldmapentry_t oldmapentry[NOLDENTRIES]	PACKED;
+    oldmapentry_t oldmapentry[NOLDENTRIES]	LPACKED;
 } oldblock1_t;
 
 #define OLDMAPSIG0	'T'

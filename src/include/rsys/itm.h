@@ -12,9 +12,9 @@
 
 typedef struct {
     Handle itmhand	PACKED_P;
-    Rect itmr	PACKED;
-    unsigned char itmtype	PACKED;
-    unsigned char itmlen	PACKED;
+    Rect itmr	LPACKED;
+    unsigned char itmtype	LPACKED;
+    unsigned char itmlen	LPACKED;
 } itmstr;
 
 typedef itmstr *itmp;
@@ -53,7 +53,7 @@ extern void dialog_compute_rect (Rect *dialog_rect, Rect *dst_rect,
 				 int position);
 
 typedef struct {
-    Rect altr		PACKED;
+    Rect altr		LPACKED;
     INTEGER altiid	PACKED;
     INTEGER altstag	PACKED;
 } altstr;
@@ -64,15 +64,15 @@ typedef HIDDEN_altp *alth;
 
 typedef struct
 {
-    Rect dlgr	PACKED;
+    Rect dlgr	LPACKED;
     INTEGER dlgprocid	PACKED;
-    char dlgvis	PACKED;
-    char dlgfil1	PACKED;
-    char dlggaflag	PACKED;
-    char dlgfil2	PACKED;
+    char dlgvis	LPACKED;
+    char dlgfil1	LPACKED;
+    char dlggaflag	LPACKED;
+    char dlgfil2	LPACKED;
     LONGINT dlgrc	PACKED;
     INTEGER dlgditl	PACKED;
-    char dlglen	PACKED;
+    char dlglen	LPACKED;
 } dlogstr;
 typedef dlogstr *dlogp;
 typedef struct { dlogp p PACKED_P; } HIDDEN_dlogp;
@@ -81,11 +81,11 @@ typedef HIDDEN_dlogp *dlogh;
 typedef struct item_style_info
 {
   int16 font		PACKED;
-  Style face		PACKED;
-  unsigned char filler  PACKED;
+  Style face		LPACKED;
+  unsigned char filler  LPACKED;
   int16 size		PACKED;
-  RGBColor foreground	PACKED;
-  RGBColor background	PACKED;
+  RGBColor foreground	LPACKED;
+  RGBColor background	LPACKED;
   int16 mode		PACKED;
 } item_style_info_t;
 

@@ -31,12 +31,12 @@ typedef struct _SndChannel {
   ProcPtr callBack	PACKED_P;
   LONGINT userInfo	PACKED;
   LONGINT wait	PACKED;
-  SndCommand cmdInProg	PACKED;
+  SndCommand cmdInProg	LPACKED;
   INTEGER flags	PACKED;
   INTEGER qLength	PACKED;
   INTEGER qHead	PACKED;
   INTEGER qTail	PACKED;
-  SndCommand queue[stdQLength]	PACKED;
+  SndCommand queue[stdQLength]	LPACKED;
 } SndChannel, *SndChannelPtr;
 
 #define SND_CHAN_FLAGS_X(c) (c->flags)
@@ -81,7 +81,7 @@ typedef struct {
     LONGINT altbegin	PACKED;
     LONGINT altend	PACKED;
     INTEGER basenote	PACKED;
-    unsigned char buf[1]	PACKED;
+    unsigned char buf[1]	LPACKED;
 } soundbuffer_t;
 
 typedef struct _SoundHeader {
@@ -90,9 +90,9 @@ typedef struct _SoundHeader {
   Fixed sampleRate	PACKED;
   LONGINT loopStart	PACKED;
   LONGINT loopEnd	PACKED;
-  Byte encode		PACKED;
-  Byte baseFrequency	PACKED;
-  Byte sampleArea[0]	PACKED;
+  Byte encode		LPACKED;
+  Byte baseFrequency	LPACKED;
+  Byte sampleArea[0]	LPACKED;
 } SoundHeader, *SoundHeaderPtr;
 
 typedef struct _ExtSoundHeader {
@@ -101,8 +101,8 @@ typedef struct _ExtSoundHeader {
   Fixed sampleRate	PACKED;
   LONGINT loopStart	PACKED;
   LONGINT loopEnd	PACKED;
-  Byte encode		PACKED;
-  Byte baseFrequency	PACKED;
+  Byte encode		LPACKED;
+  Byte baseFrequency	LPACKED;
   LONGINT numFrames	PACKED;
   Extended AIFFSampleRate PACKED;  /* ???  should be Extended80 */
   Ptr MarkerChunk	PACKED;
@@ -113,7 +113,7 @@ typedef struct _ExtSoundHeader {
   LONGINT futureUse2	PACKED;
   LONGINT futureUse3	PACKED;
   LONGINT futureUse4	PACKED;
-  Byte sampleArea[0]	PACKED;
+  Byte sampleArea[0]	LPACKED;
 } ExtSoundHeader, *ExtSoundHeaderPtr;
 
 enum {
@@ -147,7 +147,7 @@ typedef struct
   LONGINT dbNumFrames	PACKED;
   LONGINT dbFlags	PACKED;
   LONGINT dbUserInfo[2]	PACKED;
-  Byte dbSoundData[0]	PACKED;
+  Byte dbSoundData[0]	LPACKED;
 } SndDoubleBuffer, *SndDoubleBufferPtr;
 
 enum {
@@ -170,10 +170,10 @@ typedef struct _SCSTATUS {
   Fixed scStartTime		PACKED;
   Fixed scEndTime		PACKED;
   Fixed scCurrentTime		PACKED;
-  Boolean scChannelBusy		PACKED;
-  Boolean scChannelDisposed	PACKED;
-  Boolean scChannelPaused	PACKED;
-  Boolean scUnused		PACKED;
+  Boolean scChannelBusy		LPACKED;
+  Boolean scChannelDisposed	LPACKED;
+  Boolean scChannelPaused	LPACKED;
+  Boolean scUnused		LPACKED;
   LONGINT scChannelAttributes	PACKED;
   LONGINT scCPULoad		PACKED;
 } SCStatus, *SCStatusPtr;

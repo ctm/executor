@@ -21,7 +21,7 @@ typedef struct
   /* can't use [0];
      make this an unsigned char even tho the mac has SignedByte;
      it is treated as unsigned */
-  unsigned char iTTable[1] PACKED;
+  unsigned char iTTable[1] LPACKED;
 } ITab, *ITabPtr;
 
 typedef struct { ITabPtr p PACKED_P; } HIDDEN_ITabPtr;
@@ -63,7 +63,7 @@ typedef struct GDevice
   PixMapHandle gdPMap		PACKED_P;
   LONGINT gdRefCon		PACKED;
   GDHandle gdNextGD		PACKED_P;
-  Rect gdRect			PACKED;
+  Rect gdRect			LPACKED;
   LONGINT gdMode		PACKED;
   INTEGER gdCCBytes		PACKED;
   INTEGER gdCCDepth		PACKED;
@@ -81,7 +81,7 @@ typedef uint32 DeviceLoopFlags;
 
 typedef struct ColorInfo
 {
-  RGBColor ciRGB	PACKED;
+  RGBColor ciRGB	LPACKED;
   INTEGER ciUsage	PACKED;
   INTEGER ciTolerance	PACKED;
   INTEGER ciFlags	PACKED;
@@ -95,7 +95,7 @@ typedef struct Palette
   INTEGER pmPrivate			PACKED;
   LONGINT /* Handle? */ pmDevices	PACKED;
   Handle pmSeeds			PACKED;
-  ColorInfo pmInfo[1]			PACKED;
+  ColorInfo pmInfo[1]			LPACKED;
 } Palette, *PalettePtr;
 
 typedef enum 
@@ -154,7 +154,7 @@ typedef struct ReqListRec
 
 typedef struct OpenCPicParams
 {
-  Rect srcRect		PACKED;
+  Rect srcRect		LPACKED;
   Fixed hRes		PACKED;
   Fixed vRes		PACKED;
   int16 version		PACKED;
@@ -194,7 +194,7 @@ typedef struct PictInfo
   Fixed hRes			PACKED; /* 14 */
   Fixed vRes			PACKED; /* 18 */
   INTEGER depth                 PACKED; /* 22 */
-  Rect sourceRect		PACKED; /* top24, left26, bottom28, right30 */
+  Rect sourceRect		LPACKED; /* top24, left26, bottom28, right30 */
   int32 textCount		PACKED; /* 32 */
   int32 lineCount		PACKED;
   int32 rectCount		PACKED;

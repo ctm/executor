@@ -548,14 +548,14 @@ P8 (PUBLIC pascal trap, CWindowPtr, NewCWindow,
 }
 
 typedef struct {
-    Rect _wrect		PACKED;
+    Rect _wrect		LPACKED;
     INTEGER _wprocid	PACKED;
-    char _wvisible	PACKED;
-    char _padding1	PACKED;
-    char _wgoaway	PACKED;
-    char _padding2	PACKED;
+    char _wvisible	LPACKED;
+    char _padding1	LPACKED;
+    char _wgoaway	LPACKED;
+    char _padding2	LPACKED;
     LONGINT _wrefcon	PACKED;
-    Byte _wtitle	PACKED;
+    Byte _wtitle	LPACKED;
 } windrestype;
 
 typedef windrestype *windrestypeptr;

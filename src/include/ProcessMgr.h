@@ -50,7 +50,7 @@ typedef struct
   INTEGER launchFileFlags PACKED;
   LaunchFlags launchControlFlags PACKED;
   FSSpecPtr launchAppSpec PACKED;
-  ProcessSerialNumber launchProcessSN PACKED;
+  ProcessSerialNumber launchProcessSN LPACKED;
   LONGINT launchPreferredSize PACKED;
   LONGINT launchMinimumSize PACKED;
   LONGINT launchAvailableSize PACKED;
@@ -71,14 +71,14 @@ typedef struct ProcessInfoRec
 {
   uint32 processInfoLength		PACKED;
   StringPtr processName			PACKED_P;
-  ProcessSerialNumber processNumber	PACKED;
+  ProcessSerialNumber processNumber	LPACKED;
   uint32 processType			PACKED;
   OSType processSignature		PACKED;
   uint32 processMode			PACKED;
   Ptr processLocation			PACKED_P;
   uint32 processSize			PACKED;
   uint32 processFreeMem			PACKED;
-  ProcessSerialNumber processLauncher	PACKED;
+  ProcessSerialNumber processLauncher	LPACKED;
   uint32 processLaunchDate		PACKED;
   uint32 processActiveTime		PACKED;
   FSSpecPtr processAppSpec		PACKED_P;

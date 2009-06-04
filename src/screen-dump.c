@@ -75,7 +75,8 @@ struct directory_entry
 struct ifd
 {
   int16 count				__attribute__ ((packed));
-  struct directory_entry entries[1]	__attribute__ ((packed));
+  /* gcc 4.3.0 warns if we leave the following packed attribute in */
+  struct directory_entry entries[1]	/* __attribute__ ((packed)) */;
 };
 
 static void

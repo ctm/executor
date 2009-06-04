@@ -29,12 +29,12 @@
 #define getScroll	8
 
 typedef struct {
-    BOOLEAN good	PACKED;
-    BOOLEAN copy	PACKED;
+    BOOLEAN good	LPACKED;
+    BOOLEAN copy	LPACKED;
     OSType fType	PACKED;
     INTEGER vRefNum	PACKED;
     INTEGER version	PACKED;
-    Str63 fName		PACKED;
+    Str63 fName		LPACKED;
 } SFReply;
 
 typedef OSType SFTypeList[4];
@@ -46,14 +46,14 @@ extern LONGINT 	CurDirStore;
 
 typedef struct
 {
-  BOOLEAN sfGood	PACKED;
-  BOOLEAN sfReplacing	PACKED;
+  BOOLEAN sfGood	LPACKED;
+  BOOLEAN sfReplacing	LPACKED;
   OSType sfType		PACKED;
-  FSSpec sfFile		PACKED;
+  FSSpec sfFile		LPACKED;
   ScriptCode sfScript	PACKED;
   INTEGER sfFlags	PACKED;
-  BOOLEAN sfIsFolder	PACKED;
-  BOOLEAN sfIsVolume	PACKED;
+  BOOLEAN sfIsFolder	LPACKED;
+  BOOLEAN sfIsVolume	LPACKED;
   LONGINT sfReserved1	PACKED;
   INTEGER sfReserved2	PACKED;
 } StandardFileReply;

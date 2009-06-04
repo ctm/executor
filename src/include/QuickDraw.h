@@ -70,7 +70,7 @@ typedef SignedByte Style;
 
 typedef struct {
     INTEGER rgnSize	PACKED;
-    Rect rgnBBox	PACKED;
+    Rect rgnBBox	LPACKED;
 } Region;
 
 typedef Region *RgnPtr;
@@ -81,7 +81,7 @@ typedef struct { RgnHandle p PACKED_P; } HIDDEN_RgnHandle;
 typedef struct {
     Ptr baseAddr	PACKED_P;
     INTEGER rowBytes	PACKED;
-    Rect bounds	PACKED;
+    Rect bounds	LPACKED;
 } BitMap;
 
 typedef Byte Pattern[8];
@@ -90,7 +90,7 @@ typedef INTEGER Bits16[16];
 typedef struct {
     Bits16 data	PACKED;
     Bits16 mask	PACKED;
-    Point hotSpot	PACKED;
+    Point hotSpot	LPACKED;
 } Cursor;
 
 typedef Cursor *CursPtr;
@@ -106,8 +106,8 @@ typedef SignedByte GrafVerb;
 
 typedef struct {
     INTEGER polySize	PACKED;
-    Rect polyBBox	PACKED;
-    Point polyPoints[1]	PACKED;
+    Rect polyBBox	LPACKED;
+    Point polyPoints[1]	LPACKED;
 } Polygon;
 
 typedef Polygon *PolyPtr;
@@ -145,20 +145,20 @@ typedef QDProcs *QDProcsPtr;
 
 typedef struct {
     INTEGER device	PACKED;
-    BitMap portBits	PACKED;
-    Rect portRect	PACKED;
+    BitMap portBits	LPACKED;
+    Rect portRect	LPACKED;
     RgnHandle visRgn	PACKED_P;
     RgnHandle clipRgn	PACKED_P;
-    Pattern bkPat	PACKED;
-    Pattern fillPat	PACKED;
-    Point pnLoc	PACKED;
-    Point pnSize	PACKED;
+    Pattern bkPat	LPACKED;
+    Pattern fillPat	LPACKED;
+    Point pnLoc	LPACKED;
+    Point pnSize	LPACKED;
     INTEGER pnMode	PACKED;
-    Pattern pnPat	PACKED;
+    Pattern pnPat	LPACKED;
     INTEGER pnVis	PACKED;
     INTEGER txFont	PACKED;
-    Style txFace	PACKED;
-    Byte filler		PACKED;
+    Style txFace	LPACKED;
+    Byte filler		LPACKED;
     INTEGER txMode	PACKED;
     INTEGER txSize	PACKED;
     Fixed spExtra	PACKED;
@@ -177,7 +177,7 @@ typedef struct { GrafPtr p PACKED_P; } HIDDEN_GrafPtr;
 
 typedef struct {
     INTEGER picSize	PACKED;
-    Rect picFrame	PACKED;
+    Rect picFrame	LPACKED;
 } Picture;
 
 typedef Picture *PicPtr;
@@ -185,10 +185,10 @@ typedef struct { PicPtr p PACKED_P; } HIDDEN_PicPtr;
 typedef HIDDEN_PicPtr *PicHandle;
 
 typedef struct {
-    Point pnLoc	PACKED;
-    Point pnSize	PACKED;
+    Point pnLoc	LPACKED;
+    Point pnSize	LPACKED;
     INTEGER pnMode	PACKED;
-    Pattern pnPat	PACKED;
+    Pattern pnPat	LPACKED;
 } PenState;
 
 /* IMV stuff is used when we parse Version 2 pictures, but the IMV calls
@@ -229,7 +229,7 @@ typedef struct {
 typedef struct ColorSpec
 {
   INTEGER	value	PACKED;
-  RGBColor	rgb	PACKED;
+  RGBColor	rgb	LPACKED;
 } ColorSpec;
 
 typedef ColorSpec cSpecArray[1];	/* can't use 0 */
@@ -238,7 +238,7 @@ typedef struct {
     LONGINT    ctSeed	PACKED;
     unsigned short    ctFlags	PACKED;
     INTEGER    ctSize	PACKED;
-    cSpecArray ctTable	PACKED;
+    cSpecArray ctTable	LPACKED;
 } ColorTable, *CTabPtr;
 
 typedef struct { CTabPtr p PACKED_P; } HIDDEN_CTabPtr;
@@ -271,7 +271,7 @@ typedef struct {
 typedef struct {
     Ptr baseAddr	PACKED_P;
     INTEGER rowBytes	PACKED;
-    Rect bounds	PACKED;
+    Rect bounds	LPACKED;
     INTEGER pmVersion	PACKED;
     INTEGER packType	PACKED;
     LONGINT packSize	PACKED;
@@ -305,7 +305,7 @@ typedef struct {
     Handle patXData	PACKED_P;
     INTEGER patXValid	PACKED;
     Handle patXMap	PACKED_P;
-    Pattern pat1Data	PACKED;
+    Pattern pat1Data	LPACKED;
 } PixPat, *PixPatPtr;
 typedef struct { PixPatPtr p PACKED_P; } HIDDEN_PixPatPtr;
 typedef HIDDEN_PixPatPtr *PixPatHandle;
@@ -318,21 +318,21 @@ typedef struct {
     Handle grafVars	PACKED_P;
     INTEGER chExtra	PACKED;
     INTEGER pnLocHFrac	PACKED;
-    Rect portRect	PACKED;
+    Rect portRect	LPACKED;
     RgnHandle visRgn	PACKED_P;
     RgnHandle clipRgn	PACKED_P;
     PixPatHandle bkPixPat	PACKED_P;
-    RGBColor rgbFgColor	PACKED;
-    RGBColor rgbBkColor	PACKED;
-    Point pnLoc	PACKED;
-    Point pnSize	PACKED;
+    RGBColor rgbFgColor	LPACKED;
+    RGBColor rgbBkColor	LPACKED;
+    Point pnLoc	LPACKED;
+    Point pnSize	LPACKED;
     INTEGER pnMode	PACKED;
     PixPatHandle pnPixPat	PACKED_P;
     PixPatHandle fillPixPat	PACKED_P;
     INTEGER pnVis	PACKED;
     INTEGER txFont	PACKED;
-    Style txFace	PACKED;
-    Byte filler		PACKED;
+    Style txFace	LPACKED;
+    Byte filler		LPACKED;
     INTEGER txMode	PACKED;
     INTEGER txSize	PACKED;
     Fixed spExtra	PACKED;
@@ -357,7 +357,7 @@ typedef struct {
     Handle crsrXHandle	PACKED_P;
     Bits16 crsr1Data	PACKED;
     Bits16 crsrMask	PACKED;
-    Point crsrHotSpot	PACKED;
+    Point crsrHotSpot	LPACKED;
     LONGINT crsrXTable	PACKED;
     LONGINT crsrID	PACKED;
 } CCrsr, *CCrsrPtr;

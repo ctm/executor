@@ -52,39 +52,39 @@ PRIVATE struct {
 
     INTEGER	id2	PACKED,
     		len2	PACKED;
-    Point	point2	PACKED;
-    unsigned char str2[52]	PACKED;
+    Point	point2	LPACKED;
+    unsigned char str2[52]	LPACKED;
 
     INTEGER	id3	PACKED,
 		len3	PACKED;
 
-    Rect	rect3	PACKED;
-    char	icon3[32][4]	PACKED;
+    Rect	rect3	LPACKED;
+    char	icon3[32][4]	LPACKED;
 
     INTEGER	id4	PACKED,
 		len4	PACKED;
 
-    Point	point4	PACKED;
-    char	str4[46]	PACKED;
+    Point	point4	LPACKED;
+    char	str4[46]	LPACKED;
 
     INTEGER	id5	PACKED,
    	        len5	PACKED,
 		num5	PACKED,
 		str5	PACKED;
-    Rect	rect5	PACKED;
+    Rect	rect5	LPACKED;
     INTEGER	proc5	PACKED,
     		str5b	PACKED;
-    Rect	rect5b	PACKED;
+    Rect	rect5b	LPACKED;
     INTEGER	proc5b	PACKED;
 
     INTEGER	id6	PACKED,
 		len6	PACKED;
 
-    char	str6[4]	PACKED;
+    char	str6[4]	LPACKED;
 
     INTEGER	id7	PACKED,
 		len7	PACKED;
-    char	str7[6]	PACKED;
+    char	str7[6]	LPACKED;
 
     INTEGER	id8	PACKED,
 		len8	PACKED;
@@ -186,14 +186,14 @@ struct adef {
 struct tdef {
     INTEGER id			PACKED,
 	    alen		PACKED;
-    Point loc			PACKED;
-    char text[1]		PACKED;	/* at least one NUL byte */
+    Point loc			LPACKED;
+    char text[1]		LPACKED;	/* at least one NUL byte */
 };
 
 struct idef {
     INTEGER id		PACKED,
 	    alen	PACKED;
-    Rect loc		PACKED;
+    Rect loc		LPACKED;
     LONGINT ike[32]	PACKED;
 };
 
@@ -210,15 +210,15 @@ struct bdef {
 	    nbut		PACKED;
     struct but {
 	INTEGER butstrid	PACKED;
-	Rect butloc		PACKED;
+	Rect butloc		LPACKED;
 	INTEGER butprocid	PACKED;
-    } buts[1]			PACKED;
+    } buts[1]			LPACKED;
 };
 
 struct sdef {
     INTEGER id		PACKED,
 	    alen	PACKED;
-    char text[1]	PACKED;
+    char text[1]	LPACKED;
 };
 
 A1(PRIVATE, INTEGER *, findid, INTEGER, id)

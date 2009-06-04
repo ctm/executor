@@ -30,7 +30,7 @@ typedef struct
 {
   DescType type			PACKED;
   uint32 size			PACKED;
-  char data[0]			PACKED;
+  char data[0]			LPACKED;
 } inline_desc_t;
 
 typedef struct
@@ -38,7 +38,7 @@ typedef struct
   int32 key			PACKED;
   DescType type			PACKED;
   uint32 size			PACKED;
-  char data[0]			PACKED;
+  char data[0]			LPACKED;
 } inline_key_desc_t;
 
 typedef struct list_header
@@ -62,7 +62,7 @@ typedef struct list_header
   int32 unknown_3		PACKED;
   
    /* offset: 0x18 */
-  char data[0]			PACKED;
+  char data[0]			LPACKED;
 } list_header_t;
 
 typedef struct { list_header_t *p PACKED_P; } hidden_list_header_ptr;
@@ -93,7 +93,7 @@ typedef struct ae_header
   uint32 param_count		PACKED;
   
   /* #### zero pad, use unknown */
-  char pad_1[26]		PACKED;
+  char pad_1[26]		LPACKED;
   
   AEEventClass event_class	PACKED;
   AEEventID event_id		PACKED;
@@ -103,7 +103,7 @@ typedef struct ae_header
   
   /* beginning of target inline descriptor; `target->size' determines
      target's actual size */
-  inline_desc_t target		PACKED;
+  inline_desc_t target		LPACKED;
   
 #if 0
   /* for show */

@@ -58,7 +58,7 @@ typedef struct {
     unsigned short drAlBlSt	PACKED;
     LONGINT drNxtCNID	PACKED;
     unsigned short drFreeBks	PACKED;
-    unsigned char drVN[28]	PACKED;
+    unsigned char drVN[28]	LPACKED;
     LONGINT drVolBkUp	PACKED;
     unsigned short drVSeqNum	PACKED;
     LONGINT drWrCnt	PACKED;
@@ -72,9 +72,9 @@ typedef struct {
     unsigned short drVCBMSize	PACKED;
     unsigned short drCtlCSize	PACKED;
     LONGINT drXTFlSize	PACKED;
-    xtntrec drXTExtRec	PACKED;
+    xtntrec drXTExtRec	LPACKED;
     LONGINT drCTFlSize	PACKED;
-    xtntrec drCTExtRec	PACKED;
+    xtntrec drCTExtRec	LPACKED;
 } volumeinfo, *volumeinfoPtr;
 typedef struct { volumeinfoPtr p PACKED_P; } HIDDEN_volumeinfoPtr;
 typedef HIDDEN_volumeinfoPtr *volumeinfoHandle;
@@ -87,8 +87,8 @@ typedef HIDDEN_volumeinfoPtr *volumeinfoHandle;
 typedef struct {
     LONGINT ndFLink	PACKED;
     LONGINT ndBLink	PACKED;
-    unsigned char ndType	PACKED;
-    char ndLevel	PACKED;
+    unsigned char ndType	LPACKED;
+    char ndLevel	LPACKED;
     short ndNRecs	PACKED;
     unsigned short idunno	PACKED;
 } btnode;
@@ -96,15 +96,15 @@ typedef struct {
 typedef enum { indexnode, mapnode = 2, leafnode = 0xFF } btnodetype;
 
 typedef struct {
-    unsigned char ckrKeyLen	PACKED;
-    char ckrResrv1	PACKED;
+    unsigned char ckrKeyLen	LPACKED;
+    char ckrResrv1	LPACKED;
     LONGINT ckrParID	PACKED;
-    unsigned char ckrCName[32]	PACKED;
+    unsigned char ckrCName[32]	LPACKED;
 } catkey;
 
 typedef struct {
-    unsigned char xkrKeyLen	PACKED;
-    unsigned char xkrFkType	PACKED;
+    unsigned char xkrKeyLen	LPACKED;
+    unsigned char xkrFkType	LPACKED;
     LONGINT xkrFNum	PACKED;
     unsigned short xkrFABN	PACKED;
 } xtntkey;
@@ -118,11 +118,11 @@ typedef union {
 #define FILETYPE    2
 
 typedef struct {
-    char cdrType	PACKED;
-    char cdrResrv2	PACKED;
-    char filFlags	PACKED;
-    char filTyp	PACKED;
-    FInfo filUsrWds	PACKED;    /* not sure what form */
+    char cdrType	LPACKED;
+    char cdrResrv2	LPACKED;
+    char filFlags	LPACKED;
+    char filTyp	LPACKED;
+    FInfo filUsrWds	LPACKED;    /* not sure what form */
     LONGINT filFlNum	PACKED;
     unsigned short filStBlk	PACKED; /* I don't think this is used */
     LONGINT filLgLen	PACKED;
@@ -135,16 +135,16 @@ typedef struct {
     LONGINT filBkDat	PACKED;
     LONGINT filFndrInfo[4]	PACKED;
     unsigned short filClpSize	PACKED;
-    xtntrec filExtRec	PACKED;
-    xtntrec filRExtRec	PACKED;
+    xtntrec filExtRec	LPACKED;
+    xtntrec filRExtRec	LPACKED;
     LONGINT filResrv	PACKED;
 } filerec;
 
 #define DIRTYPE 1
 
 typedef struct {
-    char cdrType	PACKED;
-    char cdrResrv2	PACKED;
+    char cdrType	LPACKED;
+    char cdrResrv2	LPACKED;
     unsigned short dirFlags	PACKED;
     unsigned short dirVal	PACKED;
     LONGINT dirDirID	PACKED;
@@ -159,11 +159,11 @@ typedef struct {
 #define THREADTYPE  3
 
 typedef struct {
-    char cdrType	PACKED;
-    char cdrResrv2	PACKED;
-    char thdResrv[8]	PACKED;
+    char cdrType	LPACKED;
+    char cdrResrv2	LPACKED;
+    char thdResrv[8]	LPACKED;
     LONGINT thdParID	PACKED;
-    unsigned char thdCName[32]	PACKED;
+    unsigned char thdCName[32]	LPACKED;
 } threadrec;
 
 typedef enum { firstisless = -1, same, firstisgreater } compretval;
@@ -178,8 +178,8 @@ typedef compretval (*compfp)(void *first, void *second);
 
 typedef struct {
     LONGINT fcbFlNum	PACKED;
-    Byte fcbMdRByt	PACKED;
-    Byte fcbTypByt	PACKED;
+    Byte fcbMdRByt	LPACKED;
+    Byte fcbTypByt	LPACKED;
     unsigned short fcbSBlk	PACKED;
     LONGINT fcbEOF	PACKED;
     LONGINT fcbPLen	PACKED;
@@ -189,11 +189,11 @@ typedef struct {
     unsigned short fcbFlPos	PACKED;
     LONGINT fcbClmpSize	PACKED;
     LONGINT fcbBTCBPtr	PACKED;
-    xtntrec fcbExtRec	PACKED;
+    xtntrec fcbExtRec	LPACKED;
     LONGINT fcbFType	PACKED;
     ULONGINT fcbCatPos	PACKED;
     LONGINT fcbDirID	PACKED;
-    unsigned char fcbCName[32]	PACKED;
+    unsigned char fcbCName[32]	LPACKED;
 } filecontrolblock;
 
 enum { datafork, resourcefork = 0xFF };
@@ -212,8 +212,8 @@ typedef enum { reading, writing } accesstype;
 typedef struct {
     LONGINT    flink	PACKED;              /* 0 */
     LONGINT    blink	PACKED;              /* 4 */
-    unsigned char type	PACKED;         /* 8 */
-    unsigned char dummy	PACKED;        /* 9 */
+    unsigned char type	LPACKED;         /* 8 */
+    unsigned char dummy	LPACKED;        /* 9 */
     unsigned short   hesthreejim	PACKED;        /* 10 */
     INTEGER macdisk_uses_it PACKED; /* 12 */
     INTEGER    height	PACKED;             /* 14 */
@@ -225,9 +225,9 @@ typedef struct {
     unsigned short   indexkeylen	PACKED;        /* 34 */
     LONGINT    nnodes	PACKED;             /* 36 */
     LONGINT    nfreenodes	PACKED;         /* 40 */
-    unsigned char reserved[72]	PACKED; /* 44 */
-    unsigned char dummy2[132]	PACKED;  /* 116 */
-    unsigned char map[256]	PACKED;     /* 248 */
+    unsigned char reserved[72]	LPACKED; /* 44 */
+    unsigned char dummy2[132]	LPACKED;  /* 116 */
+    unsigned char map[256]	LPACKED;     /* 248 */
     LONGINT unknown2[2]	PACKED;           /* 504 */
 } btblock0;
 
@@ -259,9 +259,9 @@ typedef struct _cacheentry {
     uint16 refnum	PACKED;
     ULONGINT physblock	PACKED;
     ULONGINT logblk	PACKED;
-    unsigned char flags	PACKED;
-    forktype forktype	PACKED;
-    char buf[PHYSBSIZE]	PACKED;
+    unsigned char flags	LPACKED;
+    forktype forktype	LPACKED;
+    char buf[PHYSBSIZE]	LPACKED;
 } cacheentry;
 
 #define CACHEDIRTY  (1 << 7)

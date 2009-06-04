@@ -97,9 +97,9 @@ typedef int16 IconTransformType;
 
 typedef struct CIcon
 {
-  PixMap iconPMap	PACKED;
-  BitMap iconMask	PACKED;
-  BitMap iconBMap	PACKED;
+  PixMap iconPMap	LPACKED;
+  BitMap iconMask	LPACKED;
+  BitMap iconBMap	LPACKED;
   Handle iconData	PACKED_P;
   int16 iconMaskData[1]	PACKED;
 } CIcon, *CIconPtr;

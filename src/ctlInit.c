@@ -107,14 +107,14 @@ P9(PUBLIC pascal trap, ControlHandle, NewControl, WindowPtr, wst, Rect *, r,
 }
 
 typedef struct {
-    Rect _crect		PACKED;
+    Rect _crect		LPACKED;
     INTEGER _cvalue	PACKED;
     INTEGER _cvisible	PACKED;
     INTEGER _cmax	PACKED;
     INTEGER _cmin	PACKED;
     INTEGER _cprocid	PACKED;
     LONGINT _crefcon	PACKED;
-    Byte _ctitle	PACKED;
+    Byte _ctitle	LPACKED;
 } contrlrestype;
 
 P2(PUBLIC pascal trap, ControlHandle, GetNewControl,		/* IMI-321 */

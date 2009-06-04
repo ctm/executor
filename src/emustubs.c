@@ -1790,13 +1790,13 @@ typedef struct comm_toolbox_dispatch_args
         {
 	  int16 n_items		PACKED;
 	  DialogPtr dp		PACKED_P;
-        } shorten_args		PACKED;
+        } shorten_args		LPACKED;
       struct
         {
 	  DITLMethod method	PACKED;
 	  Handle new_items_h	PACKED_P;
 	  DialogPtr dp		PACKED_P;
-        } append_args		PACKED;
+        } append_args		LPACKED;
       struct
         {
 	  DialogPtr dp		PACKED_P;

@@ -128,8 +128,8 @@ typedef struct AE_hdlr_table_elt
 {
   int32 pad_1			PACKED;
   
-  AE_hdlr_selector_t selector	PACKED;
-  AE_hdlr_t hdlr		PACKED;
+  AE_hdlr_selector_t selector	LPACKED;
+  AE_hdlr_t hdlr		LPACKED;
   
   int32 pad_2			PACKED;
 } AE_hdlr_table_elt_t;
@@ -154,7 +154,7 @@ typedef struct AE_hdlr_table
   
   int32 pad_2[10]		PACKED;
   
-  AE_hdlr_table_elt_t elts[0]	PACKED;
+  AE_hdlr_table_elt_t elts[0]	LPACKED;
 } AE_hdlr_table_t;
 
 typedef AE_hdlr_table_t *AE_hdlr_table_ptr;
@@ -167,11 +167,11 @@ typedef struct AE_zone_tables
   AE_hdlr_table_h coercion_hdlr_table	PACKED_P;
   AE_hdlr_table_h special_hdlr_table	PACKED_P;
   
-  char pad_1[28]		PACKED;
+  char pad_1[28]		LPACKED;
   
-  char unknown_appl_value[4]	PACKED;
+  char unknown_appl_value[4]	LPACKED;
   
-  char pad_2[8]			PACKED;
+  char pad_2[8]			LPACKED;
   
   /* points to a 32byte handle of unknown contents (at least,
      sometimes) */
@@ -184,17 +184,17 @@ typedef HIDDEN_AE_zone_tables_ptr *AE_zone_tables_h;
 
 typedef struct AE_info
 {
-  char pad_1[340]			PACKED;
+  char pad_1[340]			LPACKED;
   
   /* offset of `appl_zone_tables' is 340; handle to a `struct tables' */
   AE_zone_tables_h appl_zone_tables	PACKED_P;
   
-  char pad_2[36]			PACKED;
+  char pad_2[36]			LPACKED;
   
   /* offset of `system_zone_tables' is 380; handle to a `struct tables' */
   AE_zone_tables_h system_zone_tables	PACKED_P;
   
-  char pad_3[212]			PACKED;
+  char pad_3[212]			LPACKED;
 } AE_info_t;
 
 typedef AE_info_t *AE_info_ptr;

@@ -64,10 +64,10 @@ typedef struct PEFSectionHeader
   uint32 unpackedSize PACKED;
   uint32 packedSize PACKED;
   uint32 containerOffset PACKED;
-  uint8 sectionKind PACKED;
-  uint8 shareKind PACKED;
-  uint8 alignment PACKED;
-  uint8 reservedA PACKED;
+  uint8 sectionKind LPACKED;
+  uint8 shareKind LPACKED;
+  uint8 alignment LPACKED;
+  uint8 reservedA LPACKED;
 }
 PEFSectionHeader_t;
 
@@ -158,8 +158,8 @@ typedef struct PEFImportedLibrary
   uint32 currentVersion PACKED;
   uint32 importedSymbolCount PACKED;
   uint32 firstImportedSymbol PACKED;
-  uint8 options PACKED;
-  uint8 reservedA PACKED;
+  uint8 options LPACKED;
+  uint8 reservedA LPACKED;
   uint16 reservedB PACKED;
 }
 PEFImportedLibrary_t;

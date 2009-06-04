@@ -14,7 +14,7 @@ typedef union {
   struct {
     ULONGINT hi PACKED;
     ULONGINT lo PACKED;
-  } hilo PACKED;
+  } hilo LPACKED;
   signed long long val PACKED;
 } comp_t;
 
@@ -25,7 +25,7 @@ typedef union {
   struct {
     ULONGINT lo PACKED;
     ULONGINT hi PACKED;
-  } hilo PACKED;
+  } hilo LPACKED;
   signed long long val PACKED;
 } native_comp_t;
 #else /* Not LITTLEENDIAN */
@@ -44,16 +44,16 @@ typedef struct {
     } s PACKED;
 #endif
     unsigned short sgn_and_exp PACKED;
-  } se PACKED;
+  } se LPACKED;
 
   /* Mantissa. */
   union {
     struct {
       ULONGINT man_hi PACKED;
       ULONGINT man_lo PACKED;
-    } hilo PACKED;
+    } hilo LPACKED;
     unsigned long long man PACKED;
-  } man PACKED;
+  } man LPACKED;
 } x80_t;
 
 
@@ -75,10 +75,10 @@ typedef struct {
 #define SIGDIGLEN 20
 
 typedef struct {
-  unsigned char sgn PACKED;
-  unsigned char unused_filler PACKED;
+  unsigned char sgn LPACKED;
+  unsigned char unused_filler LPACKED;
   INTEGER exp PACKED;
-  unsigned char sig[SIGDIGLEN] PACKED;
+  unsigned char sig[SIGDIGLEN] LPACKED;
 } Decimal;
 
 typedef enum { FloatDecimal, FixedDecimal = 256 } toobigdecformstyle_t;

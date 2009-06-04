@@ -33,13 +33,13 @@ typedef struct {
 
 typedef struct {
     LONGINT flags	PACKED;
-    DrvQEl  dq	PACKED;
+    DrvQEl  dq	LPACKED;
     Ptr devicename	PACKED; /* "/usr"	"/dev/rfd0"	whatever */
 #if !defined(__alpha)
     char *filler	PACKED;
 #endif
     INTEGER partition	PACKED;	/* for multiply partitioned drives */
-    hfs_access_t hfs	PACKED; /* currently only for floppies -- ick */
+    hfs_access_t hfs	LPACKED; /* currently only for floppies -- ick */
 } DrvQExtra; 
 
 #define OURUFSDREF	(-102)
@@ -69,8 +69,8 @@ extern boolean_t cd_mounted_by_trickery_p;
 
 typedef struct {
     LONGINT fdfnum	PACKED;	/* LONGINT fcbFlNum */
-    Byte fcflags	PACKED;	/* Byte fcbMdRByt */
-    Byte fcbTypByt	PACKED;
+    Byte fcflags	LPACKED;	/* Byte fcbMdRByt */
+    Byte fcbTypByt	LPACKED;
     INTEGER fcbSBlk	PACKED;
     LONGINT fcleof	PACKED;	/* LONGINT fcbEOF */
     LONGINT fcPLen	PACKED;
@@ -84,21 +84,21 @@ typedef struct {
     LONGINT fcbFType	PACKED;
     LONGINT hiddenfd	PACKED;	/* instead of LONGINT fcbCatPos */
     LONGINT fcparid	PACKED;	/* LONGINT fcbDirID */
-    Byte fcname[32]	PACKED;	/* Str31 fcbCName */
+    Byte fcname[32]	LPACKED;	/* Str31 fcbCName */
 } fcbrec;
 
 #define NFCB 348		/* should be related to NOFILE */
 
 typedef struct {
     INTEGER nbytes	PACKED;
-    fcbrec fc[NFCB]	PACKED;
+    fcbrec fc[NFCB]	LPACKED;
 } fcbhidden;
 
 #define ROMlib_fcblocks	(((fcbhidden *)MR(FCBSPtr))->fc)
 
 typedef struct {	/* add new elements to the beginning of this struct */
     LONGINT magicword	PACKED;
-    FInfo FndrInfo	PACKED;
+    FInfo FndrInfo	LPACKED;
     LONGINT LgLen	PACKED;
     LONGINT RLgLen	PACKED;
     LONGINT CrDat	PACKED;
@@ -202,7 +202,7 @@ typedef struct hashlink_str {
 } hashlink_t;
 
 typedef struct {
-    VCB vcb			PACKED;
+    VCB vcb			LPACKED;
     char *unixname		PACKED;
 #if !defined(__alpha)
     char *filler		PACKED;
@@ -215,9 +215,9 @@ typedef struct {
 #if !defined(__alpha)
 	    char *filler2	PACKED;
 #endif
-	} ufs			PACKED;
-	hfs_access_t hfs	PACKED;
-    } u				PACKED;
+	} ufs			LPACKED;
+	hfs_access_t hfs	LPACKED;
+    } u				LPACKED;
 } VCBExtra;
 
 enum

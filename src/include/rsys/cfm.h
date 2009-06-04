@@ -42,14 +42,14 @@ typedef struct
   uint32 oldest_definition_version PACKED;
   uint32 stack_size PACKED;
   int16 appl_library_dir PACKED;
-  uint8 fragment_type PACKED;
-  uint8 fragment_location PACKED;
+  uint8 fragment_type LPACKED;
+  uint8 fragment_location LPACKED;
   int32 offset_to_fragment PACKED;
   int32 fragment_length PACKED;
   uint32 reserved0 PACKED;
   uint32 reserved1 PACKED;
   uint16 cfir_length PACKED;
-  unsigned char name[1] PACKED;
+  unsigned char name[1] LPACKED;
 }
 cfir_t;
 
@@ -112,7 +112,7 @@ typedef struct MemFragment
 {
   Ptr address PACKED;
   uint32 length PACKED;
-  BOOLEAN inPlace PACKED;
+  BOOLEAN inPlace LPACKED;
 }
 MemFragment; 
 
@@ -141,7 +141,7 @@ typedef struct FragmentLocator
     DiskFragment onDisk;
     SegmentedFragment inSegs;
   }
-  u PACKED;
+  u LPACKED;
 }
 FragmentLocator;
 
@@ -149,7 +149,7 @@ typedef struct InitBlock
 {
   uint32 contextID PACKED;
   uint32 closureID PACKED;
-  FragmentLocator fragLocator PACKED;
+  FragmentLocator fragLocator LPACKED;
   Ptr libName PACKED;
   uint32 reserved4a PACKED;
   uint32 reserved4b PACKED;

@@ -697,8 +697,8 @@ restore (const save_t *sp)
 
 struct lsastr
 {
-  Rect limitRect	PACKED;
-  Rect slopRect		PACKED;
+  Rect limitRect	LPACKED;
+  Rect slopRect		LPACKED;
   INTEGER axis		PACKED;
 };
 

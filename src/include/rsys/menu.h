@@ -30,11 +30,11 @@
 #define MI_TITLE(mi)		(HxX (mi, menuTitle))
 
 typedef struct {
-    Byte micon	PACKED;
-    Byte mkeyeq	PACKED;
-    Byte mmarker	PACKED;
-    Byte mstyle	PACKED;
-    Byte mnextlen	PACKED;
+    Byte micon	LPACKED;
+    Byte mkeyeq	LPACKED;
+    Byte mmarker	LPACKED;
+    Byte mstyle	LPACKED;
+    Byte mnextlen	LPACKED;
 } mext, *mextp;
 
 extern void C_mdef0(INTEGER, MenuHandle, Rect *, Point, INTEGER *);
@@ -122,14 +122,14 @@ typedef struct menu_list
 } menu_list;
 
 typedef menu_list menu_list_ptr;
-typedef struct { menu_list_ptr p PACKED_P; } HIDDEN_menu_list_ptr;
+typedef struct { menu_list_ptr p LPACKED_P; } HIDDEN_menu_list_ptr;
 typedef HIDDEN_menu_list_ptr *menu_list_handle;
 
 typedef struct {
     INTEGER muoff	PACKED;
     INTEGER muright	PACKED;
     INTEGER mufu	PACKED;
-    muelem mulist[MLMAX]	PACKED; /* WILL NEED Cx() */
+    muelem mulist[MLMAX]	LPACKED; /* WILL NEED Cx() */
 } menulist;
 
 typedef menulist *menulistp;
@@ -160,9 +160,9 @@ typedef HIDDEN_menulistp *mlhandle;
 typedef struct {	/* from MPW Private.a */
     INTEGER lastMBSave	PACKED;		/* offset to top most menu saved */
     Handle mbCustomStorage	PACKED_P;	/* for custom jobs (i.e. we don't use) */
-    Rect mbItemRect	PACKED;		/* currently chosen menu */
-    Byte mbMenuDelay	PACKED;		/* MenuDelay from param ram */
-    Byte mbMenuDrag	PACKED;		/* MenuDrag from param ram */
+    Rect mbItemRect	LPACKED;		/* currently chosen menu */
+    Byte mbMenuDelay	LPACKED;		/* MenuDelay from param ram */
+    Byte mbMenuDrag	LPACKED;		/* MenuDrag from param ram */
     INTEGER mbUglyScroll	PACKED;	/* HMenu flag having to do with scrolling?? */
     INTEGER mbIconState	PACKED;	/* ??? NMgr icon state */
 } mbdfheader;
@@ -172,7 +172,7 @@ typedef struct { mbdfheaderptr p PACKED_P; } HIDDEN_mbdfheaderptr;
 typedef HIDDEN_mbdfheaderptr *mbdfheaderhand;
 
 typedef struct {
-    Rect mbRectSave	PACKED;		/* where it is on screen */
+    Rect mbRectSave	LPACKED;		/* where it is on screen */
     Handle mbBitsSave	PACKED_P;		/* where the bits are */
     INTEGER mbMenuDir	PACKED;		/* what direction the menu was placed */
     INTEGER mbMLOffset	PACKED;		/* 6 byte offset into MenuList */

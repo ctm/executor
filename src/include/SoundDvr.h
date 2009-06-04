@@ -17,7 +17,7 @@ typedef Byte FreeWave[30001];
 typedef struct {
     INTEGER mode	PACKED;
     Fixed fcount	PACKED;
-    FreeWave waveBytes	PACKED;
+    FreeWave waveBytes	LPACKED;
 } FFSynthRec;
 typedef FFSynthRec *FFSynthPtr;
 
@@ -30,7 +30,7 @@ typedef Tone Tones[5001];
 
 typedef struct {
     INTEGER mode	PACKED;
-    Tones triplets	PACKED;
+    Tones triplets	LPACKED;
 } SWSynthRec;
 typedef SWSynthRec *SWSynthPtr;
 

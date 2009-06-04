@@ -108,10 +108,10 @@ typedef struct
   INTEGER iError       PACKED;
   LONGINT lReserved    PACKED;
   INTEGER iRgType      PACKED;
-  TRslRg xRslRg        PACKED;
-  TRslRg yRslRg        PACKED;
+  TRslRg xRslRg        LPACKED;
+  TRslRg yRslRg        LPACKED;
   INTEGER iRslRecCnt   PACKED;
-  TRslRec rgRslRec[27] PACKED;
+  TRslRec rgRslRec[27] LPACKED;
 }
 TGetRslBlk;
 
@@ -128,11 +128,11 @@ TSetRslBlk;
 
 typedef struct
 {
-  Byte tJus         PACKED;
-  Byte tFlop        PACKED;
+  Byte tJus         LPACKED;
+  Byte tFlop        LPACKED;
   INTEGER tAngle    PACKED;
-  Byte tLine        PACKED;
-  Byte tCmnt        PACKED;
+  Byte tLine        LPACKED;
+  Byte tCmnt        LPACKED;
   Fixed tAngleFixed PACKED;
 }
 TTxtPicRec, *TTxtPicPtr;

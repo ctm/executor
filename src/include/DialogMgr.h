@@ -32,7 +32,7 @@
 
 typedef struct
  {
-    WindowRecord window	PACKED;
+    WindowRecord window	LPACKED;
     Handle items	PACKED_P;
     TEHandle textH	PACKED_P;
     INTEGER editField	PACKED;
@@ -62,15 +62,15 @@ typedef HIDDEN_WindowPtr HIDDEN_DialogPtr;
 
 typedef struct
 {
-    Rect boundsRect	PACKED;
+    Rect boundsRect	LPACKED;
     INTEGER procID	PACKED;
-    BOOLEAN visible	PACKED;
-    BOOLEAN filler1	PACKED;
-    BOOLEAN goAwayFlag	PACKED;
-    BOOLEAN filler2	PACKED;
+    BOOLEAN visible	LPACKED;
+    BOOLEAN filler1	LPACKED;
+    BOOLEAN goAwayFlag	LPACKED;
+    BOOLEAN filler2	LPACKED;
     LONGINT refCon	PACKED;
     INTEGER itemsID	PACKED;
-    Str255 title	PACKED;
+    Str255 title	LPACKED;
 } DialogTemplate;
 
 typedef DialogTemplate *DialogTPtr;
@@ -93,9 +93,9 @@ typedef struct {
 } StageList;
 
 typedef struct {
-    Rect boundsRect	PACKED;
+    Rect boundsRect	LPACKED;
     INTEGER itemsID	PACKED;
-    StageList stages	PACKED;
+    StageList stages	LPACKED;
 } AlertTemplate;
 typedef AlertTemplate *AlertTPtr;
 typedef struct { AlertTPtr p PACKED_P; } HIDDEN_AlertTPtr;

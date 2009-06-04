@@ -89,12 +89,12 @@ typedef struct {
     INTEGER fSize	PACKED;
     INTEGER face	PACKED;
     INTEGER device	PACKED;
-    Point inNumer	PACKED;
-    Point inDenom	PACKED;
+    Point inNumer	LPACKED;
+    Point inDenom	LPACKED;
     INTEGER aFID	PACKED;
     Handle fHand	PACKED_P;
-    BOOLEAN usedFam	PACKED;
-    Byte aFace	PACKED;
+    BOOLEAN usedFam	LPACKED;
+    Byte aFace	LPACKED;
     INTEGER vOutput	PACKED;
     INTEGER hOutput	PACKED;
     INTEGER vFactor	PACKED;
@@ -107,30 +107,30 @@ typedef struct {
 typedef struct {
     INTEGER family	PACKED;
     INTEGER size	PACKED;
-    Style face	PACKED;
-    BOOLEAN needBits	PACKED;
+    Style face	LPACKED;
+    BOOLEAN needBits	LPACKED;
     INTEGER device	PACKED;
-    Point numer	PACKED;
-    Point denom	PACKED;
+    Point numer	LPACKED;
+    Point denom	LPACKED;
 } FMInput;
 
 typedef struct {
     INTEGER errNum	PACKED;	/* 0x00 */
     Handle fontHandle	PACKED_P;	/* 0x02 */
-    Byte bold	PACKED;		/* 0x06 */
-    Byte italic	PACKED;	/* 0x07 */
-    Byte ulOffset	PACKED;	/* 0x08 */
-    Byte ulShadow	PACKED;	/* 0x09 */
-    Byte ulThick	PACKED;	/* 0x0A */
-    Byte shadow	PACKED;	/* 0x0B */
-    SignedByte extra	PACKED;	/* 0x0C */
-    Byte ascent	PACKED;	/* 0x0D */
-    Byte descent	PACKED;	/* 0x0E */
-    Byte widMax	PACKED;	/* 0x0F */
-    SignedByte leading	PACKED;	/* 0x10 */
-    Byte unused	PACKED;	/* 0x11 */
-    Point numer	PACKED;	/* 0x12 */
-    Point denom	PACKED;	/* 0x16 */
+    Byte bold	LPACKED;		/* 0x06 */
+    Byte italic	LPACKED;	/* 0x07 */
+    Byte ulOffset	LPACKED;	/* 0x08 */
+    Byte ulShadow	LPACKED;	/* 0x09 */
+    Byte ulThick	LPACKED;	/* 0x0A */
+    Byte shadow	LPACKED;	/* 0x0B */
+    SignedByte extra	LPACKED;	/* 0x0C */
+    Byte ascent	LPACKED;	/* 0x0D */
+    Byte descent	LPACKED;	/* 0x0E */
+    Byte widMax	LPACKED;	/* 0x0F */
+    SignedByte leading	LPACKED;	/* 0x10 */
+    Byte unused	LPACKED;	/* 0x11 */
+    Point numer	LPACKED;	/* 0x12 */
+    Point denom	LPACKED;	/* 0x16 */
 } FMOutput;
 
 typedef FMOutput *FMOutPtr;

@@ -1,8 +1,5 @@
 Executor has not been actively worked on for many years.
 
-Right now I'm putting it on github (with the original authors' permission)
-as-is.  I haven't even tried building it in the last year or so.
-
 Included are a bunch of auxiliarly files and miscellaneous front-ends.
 It's unlikely anything other than the Linux and win32 ports can be
 made to go.
@@ -12,14 +9,23 @@ to use, but that we did not necessarily have the permission to publish
 the source for, so the source to some of the packages that the DOS
 port requires is not present in the github repository.
 
+Don't be mislead by configure.ac, Executor currently builds using an
+ancient configuration script.  If you want to try to build a version
+of Executor for Linux, try doing this (*After you've done a make
+install of syn68k):
+
+  mkdir -p build/debug-linux
+  cd build/debug-linux
+  ../../util/configure.sh  '--target=i486-linux' '--host=i486-linux' '--front-end=x' '--target-gcc=gcc' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -DNDEBUG -O0 -finline-functions -g -Wall -DRELEASE_INTERNAL -DERROR_SUPPORTED_MASK="(~0)"' '--root=../..' '--target-file-format=glibc' '--sound=linux' '--syn68k-target=i486-linux-glibc'
+  make
+
+That should leave you with a binary called executor.  Unfortunately, without
+a System Folder, Executor won't even come close to running.
+
+I'll fiddle around a bit and figure out the easiest way to build a
+System Folder for Executor from the git repository and add that info next.
+
 My email address is still <ctm@ardi.com>, although ARDI itself is
 defunct.  I get a ridiculous amount of spam and will quite possibly
 not see email addressed to me.
-
-For a few years I've been meaning to verify that the code builds,
-write a little documentation, explain a little history, maybe even
-set up a mailing list for people, etc... but other things have always
-taken precedence.
-
-October 5th, 2008
 

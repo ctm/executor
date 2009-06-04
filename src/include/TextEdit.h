@@ -51,12 +51,12 @@
 #define teBitTest		(-1)
 
 typedef struct {
-    Rect destRect	PACKED;
-    Rect viewRect	PACKED;
-    Rect selRect	PACKED;
+    Rect destRect	LPACKED;
+    Rect viewRect	LPACKED;
+    Rect selRect	LPACKED;
     INTEGER lineHeight	PACKED;
     INTEGER fontAscent	PACKED;
-    Point selPoint	PACKED;
+    Point selPoint	LPACKED;
     INTEGER selStart	PACKED;
     INTEGER selEnd	PACKED;
     INTEGER active	PACKED;
@@ -74,8 +74,8 @@ typedef struct {
     INTEGER clikStuff	PACKED;
     INTEGER crOnly	PACKED;
     INTEGER txFont	PACKED;
-    Style txFace	PACKED;
-    Byte filler         PACKED;
+    Style txFace	LPACKED;
+    Byte filler         LPACKED;
     INTEGER txMode	PACKED;
     INTEGER txSize	PACKED;
     GrafPtr inPort	PACKED_P;
@@ -99,10 +99,10 @@ typedef struct {
     INTEGER stHeight	PACKED;
     INTEGER stAscent	PACKED;
     INTEGER stFont	PACKED;
-    Style stFace	PACKED;
-    Byte filler		PACKED;
+    Style stFace	LPACKED;
+    Byte filler		LPACKED;
     INTEGER stSize	PACKED;
-    RGBColor stColor	PACKED;
+    RGBColor stColor	LPACKED;
 } STElement;
 
 typedef STElement TEStyleTable[1];
@@ -122,10 +122,10 @@ typedef HIDDEN_LHPtr *LHHandle;
 
 typedef struct {
     INTEGER tsFont	PACKED;
-    Style tsFace	PACKED;
-    Byte filler		PACKED;
+    Style tsFace	LPACKED;
+    Byte filler		LPACKED;
     INTEGER tsSize	PACKED;
-    RGBColor tsColor	PACKED;
+    RGBColor tsColor	LPACKED;
 } TextStyle;
 
 typedef struct {
@@ -133,17 +133,17 @@ typedef struct {
     INTEGER scrpHeight	PACKED;
     INTEGER scrpAscent	PACKED;
     INTEGER scrpFont	PACKED;
-    Style scrpFace	PACKED;
-    Byte filler		PACKED;
+    Style scrpFace	LPACKED;
+    Byte filler		LPACKED;
     INTEGER scrpSize	PACKED;
-    RGBColor scrpColor	PACKED;
+    RGBColor scrpColor	LPACKED;
 } ScrpSTElement;
 
 typedef ScrpSTElement ScrpSTTable[1];
 
 typedef struct {
     INTEGER scrpNStyles	PACKED;
-    ScrpSTTable scrpStyleTab	PACKED;
+    ScrpSTTable scrpStyleTab	LPACKED;
 } StScrpRec;
 
 typedef StScrpRec *StScrpPtr;
@@ -166,7 +166,7 @@ typedef struct {
     LHHandle lhTab	PACKED_P;
     LONGINT teRefCon	PACKED;
     NullSTHandle nullStyle	PACKED_P;
-    StyleRun runs[1]	PACKED;
+    StyleRun runs[1]	LPACKED;
 } TEStyleRec;
 
 typedef TEStyleRec *TEStylePtr;

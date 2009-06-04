@@ -33,8 +33,8 @@ typedef uint8 RDFlagsType;
 typedef struct RoutineRecord
 {
   ProcInfoType procInfo PACKED;
-  uint8 reserved1 PACKED;
-  ISAType ISA PACKED;
+  uint8 reserved1 LPACKED;
+  ISAType ISA LPACKED;
   RoutineFlagsType routineFlags PACKED;
   ProcPtr procDescriptor PACKED;
   uint32 reserved2 PACKED;
@@ -45,13 +45,13 @@ RoutineRecord;
 typedef struct RoutineDescriptor
 {
   uint16 goMixedModeTrap PACKED;
-  uint8 version PACKED;
-  RDFlagsType routineDescriptorFlags PACKED;
+  uint8 version LPACKED;
+  RDFlagsType routineDescriptorFlags LPACKED;
   uint32 reserved1 PACKED;
-  uint8 reserved2 PACKED;
-  uint8 selectorInfo PACKED;
+  uint8 reserved2 LPACKED;
+  uint8 selectorInfo LPACKED;
   uint16 routineCount PACKED;
-  RoutineRecord routineRecords[1] PACKED;
+  RoutineRecord routineRecords[1] LPACKED;
 }
 RoutineDescriptor;
 

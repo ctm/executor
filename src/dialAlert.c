@@ -30,9 +30,9 @@ static struct
 {
   int16 count		PACKED;
   Handle h		PACKED_P;
-  Rect r		PACKED;
-  uint8 type		PACKED;
-  uint8 len		PACKED;
+  Rect r		LPACKED;
+  uint8 type		LPACKED;
+  uint8 len		LPACKED;
   int16 res_id		PACKED;
 } icon_item_template =
 {

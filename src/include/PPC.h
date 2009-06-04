@@ -21,27 +21,27 @@ typedef struct LocationNameRec
   
   union
     {
-      EntityName npbEntity		PACKED;
-      Str32 npbType			PACKED;
-    } u					PACKED;
+      EntityName npbEntity		LPACKED;
+      Str32 npbType			LPACKED;
+    } u					LPACKED;
 } LocationNameRec;
 
 typedef struct PPCPortRec
 {
   ScriptCode nameScript			PACKED;
-  Str32 name				PACKED;
+  Str32 name				LPACKED;
   
   PPCPortKinds portKindsSelector	PACKED;
   
   union
     {
-      Str32 portTypeStr			PACKED;
+      Str32 portTypeStr			LPACKED;
       struct
         {
 	  OSType creator		PACKED;
 	  OSType type			PACKED;
-        } port				PACKED;
-    } u					PACKED;
+        } port				LPACKED;
+    } u					LPACKED;
 } PPCPortRec, *PPCPortPtr;
 
 #endif /* !_PPC_H_ */

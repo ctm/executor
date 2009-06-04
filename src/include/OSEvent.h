@@ -21,7 +21,7 @@ typedef struct {
     INTEGER evtQWhat	PACKED;
     LONGINT evtQMessage	PACKED;
     LONGINT evtQWhen	PACKED;
-    Point evtQWhere	PACKED;
+    Point evtQWhere	LPACKED;
     INTEGER evtQModifiers	PACKED;
 } EvQEl;
 
@@ -121,9 +121,9 @@ extern EvQEl *geteventelem (void);
 typedef struct TargetID
 {
   int32 sessionID		PACKED;
-  PPCPortRec name		PACKED;
-  LocationNameRec location	PACKED;
-  PPCPortRec recvrName		PACKED;
+  PPCPortRec name		LPACKED;
+  LocationNameRec location	LPACKED;
+  PPCPortRec recvrName		LPACKED;
 } TargetID, TargetIDPtr;
 
 typedef struct HighLevelEventMsg
@@ -131,7 +131,7 @@ typedef struct HighLevelEventMsg
   int16 HighLevelEventMsgHeaderlength	PACKED;
   int16 version				PACKED;
   int32 reserved1			PACKED;
-  EventRecord theMsgEvent		PACKED;
+  EventRecord theMsgEvent		LPACKED;
   int32 userRefCon			PACKED;
   int32 postingOptions			PACKED;
   int32 msgLength			PACKED;

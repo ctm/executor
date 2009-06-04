@@ -13,8 +13,8 @@
 
 typedef struct GrafVars
 {
-  RGBColor rgbOpColor		PACKED;
-  RGBColor rgbHiliteColor	PACKED;
+  RGBColor rgbOpColor		LPACKED;
+  RGBColor rgbHiliteColor	LPACKED;
   Handle pmFgColor		PACKED_P;
   INTEGER pmFgIndex		PACKED;
   Handle pmBkColor		PACKED_P;

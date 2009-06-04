@@ -27,10 +27,10 @@ typedef struct block_header
 #endif
   
   /* various flags */
-  uint8 flags			PACKED;
-  uint8 master_ptr_flags	PACKED;
-  uint8 reserved		PACKED;
-  uint8 size_correction		PACKED;
+  uint8 flags			LPACKED;
+  uint8 master_ptr_flags	LPACKED;
+  uint8 reserved		LPACKED;
+  uint8 size_correction		LPACKED;
   
   uint32 size			PACKED;
   

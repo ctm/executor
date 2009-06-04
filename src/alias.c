@@ -387,12 +387,12 @@ typedef struct
   INTEGER length PACKED;
   INTEGER usually_2 PACKED;
   INTEGER usually_0 PACKED;
-  Str27 volumeName PACKED;
+  Str27 volumeName LPACKED;
   LONGINT ioVCrDate PACKED;
   INTEGER ioVSigWord PACKED;
   INTEGER zero_or_one PACKED;
   LONGINT zero_or_neg_one PACKED;
-  Str63 fileName PACKED;
+  Str63 fileName LPACKED;
   LONGINT ioDirID PACKED; /* -1 full */
   LONGINT ioFlCrDat PACKED;
   OSType type_info PACKED;
@@ -404,7 +404,7 @@ alias_head_t;
 typedef struct /* 0x0000 */
 {
   INTEGER parent_length PACKED;
-  unsigned char parent_bytes[1] PACKED;
+  unsigned char parent_bytes[1] LPACKED;
 }
 alias_parent_t;
 
@@ -418,7 +418,7 @@ alias_unknown_000100_t;
 typedef struct /* 0x0002 */
 {
   INTEGER fullpath_length PACKED;
-  unsigned char fullpath_bytes[1] PACKED;
+  unsigned char fullpath_bytes[1] LPACKED;
 }
 alias_fullpath_t;
 
@@ -426,11 +426,11 @@ typedef struct /* 0x0009 */
 {
   INTEGER length PACKED;
   INTEGER weird_info[12] PACKED;
-  Str32 zone PACKED;
-  Str31 server PACKED;
-  Str27 volumeName PACKED;
-  Str32 network_identity_owner_name PACKED;
-  char filler_zeros[18] PACKED;
+  Str32 zone LPACKED;
+  Str31 server LPACKED;
+  Str27 volumeName LPACKED;
+  Str32 network_identity_owner_name LPACKED;
+  char filler_zeros[18] LPACKED;
 }
 alias_tail_t;
 

@@ -87,9 +87,9 @@ typedef struct { ControlHandle p PACKED_P; } HIDDEN_ControlHandle;
 struct __cr {
     ControlHandle nextControl	PACKED_P;	/* actually ControlHandle */
     WindowPtr contrlOwner	PACKED_P;
-    Rect contrlRect	PACKED;
-    Byte contrlVis	PACKED;
-    Byte contrlHilite	PACKED;
+    Rect contrlRect	LPACKED;
+    Byte contrlVis	LPACKED;
+    Byte contrlHilite	LPACKED;
     INTEGER contrlValue	PACKED;
     INTEGER contrlMin	PACKED;
     INTEGER contrlMax	PACKED;
@@ -97,14 +97,14 @@ struct __cr {
     Handle contrlData	PACKED_P;
     ProcPtr contrlAction	PACKED_P;
     LONGINT contrlRfCon	PACKED;
-    Str255 contrlTitle	PACKED;
+    Str255 contrlTitle	LPACKED;
 };
 
 typedef struct {
     LONGINT ccSeed	PACKED;
     INTEGER ccReserved	PACKED;
     INTEGER ctSize	PACKED;
-    cSpecArray ctTable	PACKED;
+    cSpecArray ctTable	LPACKED;
 } CtlCTab, *CCTabPtr;
 typedef struct { CCTabPtr p PACKED_P; } HIDDEN_CCTabPtr;
 typedef HIDDEN_CCTabPtr *CCTabHandle;

@@ -374,9 +374,9 @@ size_info_t size_info;
 #define VERSFMT		"(0x%02x, 0x%02x, 0x%02x, 0x%02x, %d)"
 #define VERSSIZE(vp)	(sizeof(VERSFMT) + (vp)->shortname[0] + 6)
 typedef struct {
-    unsigned char c[4]		PACKED;
+    unsigned char c[4]		LPACKED;
     short loc			PACKED;
-    unsigned char shortname[1]	PACKED;
+    unsigned char shortname[1]	LPACKED;
 } vers_t;
 
 LONGINT ROMlib_creator;

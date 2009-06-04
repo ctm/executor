@@ -35,17 +35,17 @@
 
 typedef struct {
     INTEGER track	PACKED;
-    SignedByte writeProt	PACKED;
-    SignedByte diskInPlace	PACKED;
-    SignedByte installed	PACKED;
-    SignedByte sides	PACKED;
+    SignedByte writeProt	LPACKED;
+    SignedByte diskInPlace	LPACKED;
+    SignedByte installed	LPACKED;
+    SignedByte sides	LPACKED;
     QElemPtr qLink	PACKED_P;
     INTEGER qType	PACKED;
     INTEGER dQDrive	PACKED;
     INTEGER dQRefNum	PACKED;
     INTEGER dQFSID	PACKED;
-    SignedByte twoSideFmt	PACKED;
-    SignedByte needsFlush	PACKED;
+    SignedByte twoSideFmt	LPACKED;
+    SignedByte needsFlush	LPACKED;
     INTEGER diskErrs	PACKED;
 } DrvSts;
 

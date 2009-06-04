@@ -23,14 +23,14 @@ typedef struct HMMessageRecord
   INTEGER hmmHelpType			PACKED;
   union
     {
-      Str255 hmmString			PACKED;
+      Str255 hmmString			LPACKED;
       INTEGER hmmPict			PACKED;
-      HMStringResType hmmStringRes	PACKED;
+      HMStringResType hmmStringRes	LPACKED;
       TEHandle hmmTEHandle		PACKED_P;
       PicHandle hmmPictHandle		PACKED_P;
       INTEGER hmmTERes			PACKED;
       INTEGER hmmSTRRes			PACKED;
-    } u					PACKED;
+    } u					LPACKED;
 } HMMessageRecord, *HMMessageRecPtr;
 
 enum

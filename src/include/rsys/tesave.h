@@ -22,7 +22,7 @@ typedef struct
   Point _tpsize		PACKED;
   INTEGER _tpmode		PACKED;
 #else
-  PenState _tpstate		PACKED_P;
+  PenState _tpstate		LPACKED_P;
 #endif
   
   GrafPtr _tport		PACKED_P;
@@ -32,8 +32,8 @@ typedef struct
   INTEGER _tfont		PACKED;
   INTEGER _tmode		PACKED;
   INTEGER _tsize		PACKED;
-  Style _tstyle			PACKED;
-  Byte filler			PACKED;
+  Style _tstyle			LPACKED;
+  Byte filler			LPACKED;
   RgnHandle _tsaveclip	PACKED_P;
   
   /* ### is tesave mac-visible state?  how is color and whatnot really
@@ -64,10 +64,10 @@ typedef struct generic_elt
   int16 Height		PACKED;
   int16 Ascent		PACKED;
   int16 Font		PACKED;
-  Style Face		PACKED;
-  Byte filler		PACKED;
+  Style Face		LPACKED;
+  Byte filler		LPACKED;
   int16 Size		PACKED;
-  RGBColor Color	PACKED;
+  RGBColor Color	LPACKED;
 } generic_elt_t;
 
 extern void generic_elt_copy (generic_elt_t *dst, generic_elt_t *src);

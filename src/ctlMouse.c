@@ -70,8 +70,8 @@ P3(PUBLIC pascal trap, INTEGER, FindControl, Point, p,	/* IMI-323 */
 }
 
 typedef struct {
-    Rect _tlimit	PACKED;
-    Rect _tslop		PACKED;
+    Rect _tlimit	LPACKED;
+    Rect _tslop		LPACKED;
     INTEGER _taxis	PACKED;
 } thumbstr;
 

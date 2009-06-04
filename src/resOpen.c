@@ -29,9 +29,9 @@ HCreateResFile_helper (INTEGER vrefnum, LONGINT parid, Str255 name,
     INTEGER f;
     LONGINT leof, lc;
     struct {            /* empty resource template */
-        reshead bhead	PACKED;
-        rsrvrec bfill	PACKED;
-        resmap bmap	PACKED;
+        reshead bhead	LPACKED;
+        rsrvrec bfill	LPACKED;
+        resmap bmap	LPACKED;
         INTEGER negone	PACKED;
     } buf;
 

@@ -486,18 +486,18 @@ write_desktop (info_t * infop)
 
   typedef struct
     {
-      char zeros[22] PACKED;
+      char zeros[22] LPACKED;
       INTEGER fileattrs PACKED;
       INTEGER typeoff PACKED;
       INTEGER nameoff PACKED;
       INTEGER ntypesminus1 PACKED;
-      char restype1[4] PACKED;
+      char restype1[4] LPACKED;
       INTEGER ntype1minus1 PACKED;
       INTEGER reflistoff1 PACKED;
       INTEGER resid1 PACKED;
       INTEGER resnamoff1 PACKED;
-      char resattr1 PACKED;
-      unsigned char resdoff1[3] PACKED;
+      char resattr1 LPACKED;
+      unsigned char resdoff1[3] LPACKED;
       LONGINT reszero1 PACKED;
     }
   map_t;
@@ -508,11 +508,11 @@ write_desktop (info_t * infop)
       LONGINT mapoff PACKED;
       LONGINT datlen PACKED;
       LONGINT maplen PACKED;
-      char sysuse[112] PACKED;
-      char appluse[128] PACKED;
+      char sysuse[112] LPACKED;
+      char appluse[128] LPACKED;
       LONGINT datalen1 PACKED;
-      char data1[DATLEN - sizeof (LONGINT)] PACKED;
-      map_t map PACKED;
+      char data1[DATLEN - sizeof (LONGINT)] LPACKED;
+      map_t map LPACKED;
     }
   res_data_t;
 

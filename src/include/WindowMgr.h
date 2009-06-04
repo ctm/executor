@@ -79,12 +79,12 @@ typedef struct { WindowPeek p PACKED_P; } HIDDEN_WindowPeek;
 #include "ControlMgr.h"
 
 struct __wr {
-    GrafPort port	PACKED;
+    GrafPort port	LPACKED;
     INTEGER windowKind	PACKED;
-    BOOLEAN visible	PACKED;
-    BOOLEAN hilited	PACKED;
-    BOOLEAN goAwayFlag	PACKED;
-    BOOLEAN spareFlag	PACKED;
+    BOOLEAN visible	LPACKED;
+    BOOLEAN hilited	LPACKED;
+    BOOLEAN goAwayFlag	LPACKED;
+    BOOLEAN spareFlag	LPACKED;
     RgnHandle strucRgn	PACKED_P;
     RgnHandle contRgn	PACKED_P;
     RgnHandle updateRgn	PACKED_P;
@@ -99,8 +99,8 @@ struct __wr {
 };
 
 typedef struct {
-    Rect userState	PACKED,
-         stdState	PACKED;
+    Rect userState	LPACKED,
+         stdState	LPACKED;
 } WStateData;
 
 #define inZoomIn  7

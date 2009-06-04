@@ -38,11 +38,11 @@
 #define iPrDrvrRef	(-3)
 
 typedef struct {
-    GrafPort gPort	PACKED;
-    QDProcs saveprocs	PACKED;
+    GrafPort gPort	LPACKED;
+    QDProcs saveprocs	LPACKED;
     LONGINT spare[4]	PACKED;
-    BOOLEAN fOurPtr	PACKED;
-    BOOLEAN fOurBits	PACKED;
+    BOOLEAN fOurPtr	LPACKED;
+    BOOLEAN fOurBits	LPACKED;
 } TPrPort;
 typedef TPrPort *TPPrPort;
 
@@ -50,7 +50,7 @@ typedef struct {
     INTEGER iDev	PACKED;
     INTEGER iVRes	PACKED;
     INTEGER iHRes	PACKED;
-    Rect rPage	PACKED;
+    Rect rPage	LPACKED;
 } TPrInfo;
 
 typedef enum {feedCut, feedFanFold, feedMechCut, feedOther} TFeed;
@@ -59,8 +59,8 @@ typedef struct {
     INTEGER wDev	PACKED;
     INTEGER iPageV	PACKED;
     INTEGER iPageH	PACKED;
-    SignedByte bPort	PACKED;
-    char feed	PACKED;
+    SignedByte bPort	LPACKED;
+    char feed	LPACKED;
 } TPrStl;
 
 typedef enum { scanTB,  scanBL,  scanLR,  scanRL } TScan;
@@ -70,35 +70,35 @@ typedef struct {
     INTEGER iBandH	PACKED;
     INTEGER iDevBytes	PACKED;
     INTEGER iBands	PACKED;
-    SignedByte bPatScale	PACKED;
-    SignedByte bULThick	PACKED;
-    SignedByte bULOffset	PACKED;
-    SignedByte bULShadow	PACKED;
-    char scan	PACKED;
-    SignedByte bXInfoX	PACKED;
+    SignedByte bPatScale	LPACKED;
+    SignedByte bULThick	LPACKED;
+    SignedByte bULOffset	LPACKED;
+    SignedByte bULShadow	LPACKED;
+    char scan	LPACKED;
+    SignedByte bXInfoX	LPACKED;
 } TPrXInfo;
 
 typedef struct {
     INTEGER iFstPage	PACKED;
     INTEGER iLstPage	PACKED;
     INTEGER iCopies	PACKED;
-    SignedByte bJDocLoop	PACKED;
-    BOOLEAN fFromUsr	PACKED;
+    SignedByte bJDocLoop	LPACKED;
+    BOOLEAN fFromUsr	LPACKED;
     ProcPtr pIdleProc	PACKED_P;
     StringPtr pFileName	PACKED_P;
     INTEGER iFileVol	PACKED;
-    SignedByte bFileVers	PACKED;
-    SignedByte bJobX	PACKED;
+    SignedByte bFileVers	LPACKED;
+    SignedByte bJobX	LPACKED;
 } TPrJob;
 
 typedef struct {
     INTEGER iPrVersion	PACKED;
-    TPrInfo prInfo	PACKED;
-    Rect rPaper	PACKED;
-    TPrStl prStl	PACKED;
-    TPrInfo prInfoPT	PACKED;
-    TPrXInfo prXInfo	PACKED;
-    TPrJob prJob	PACKED;
+    TPrInfo prInfo	LPACKED;
+    Rect rPaper	LPACKED;
+    TPrStl prStl	LPACKED;
+    TPrInfo prInfoPT	LPACKED;
+    TPrXInfo prXInfo	LPACKED;
+    TPrJob prJob	LPACKED;
     INTEGER printX[19]	PACKED;
 } TPrint;
 typedef TPrint *TPPrint;
@@ -114,8 +114,8 @@ typedef struct {
     INTEGER iCurCopy	PACKED;
     INTEGER iTotBands	PACKED;
     INTEGER iCurBand	PACKED;
-    BOOLEAN fPgDirty	PACKED;
-    BOOLEAN fImaging	PACKED;
+    BOOLEAN fPgDirty	LPACKED;
+    BOOLEAN fImaging	LPACKED;
     THPrint hPrint	PACKED_P;
     TPPrPort pPRPort	PACKED_P;
     PicHandle hPic	PACKED_P;
@@ -123,12 +123,12 @@ typedef struct {
 
 typedef struct {
 /* From Technote 095 */
-    DialogRecord dlg	PACKED;
+    DialogRecord dlg	LPACKED;
     ProcPtr pFltrProc	PACKED_P;
     ProcPtr pItemProc	PACKED_P;
     THPrint hPrintUsr	PACKED_P;
-    BOOLEAN fDoIt	PACKED;
-    BOOLEAN fDone	PACKED;
+    BOOLEAN fDoIt	LPACKED;
+    BOOLEAN fDone	LPACKED;
     LONGINT lUser1	PACKED;
     LONGINT lUser2	PACKED;
     LONGINT lUser3	PACKED;

@@ -23,12 +23,12 @@ typedef struct {
 } reshead;
 
 typedef struct {
-    Byte rsrvsys[112]	PACKED;
-    Byte rsrvapp[128]	PACKED;
+    Byte rsrvsys[112]	LPACKED;
+    Byte rsrvapp[128]	LPACKED;
 } rsrvrec;
 
 typedef struct {
-    reshead rh	PACKED;
+    reshead rh	LPACKED;
     Handle nextmap	PACKED_P;
     INTEGER resfn	PACKED;
     INTEGER resfatr	PACKED;
@@ -61,8 +61,8 @@ typedef struct {
 typedef struct {
     INTEGER rid	PACKED;
     INTEGER noff	PACKED;
-    Byte ratr	PACKED;
-    Byte doff[3]	PACKED;
+    Byte ratr	LPACKED;
+    Byte doff[3]	LPACKED;
     Handle rhand	PACKED_P;
 } resref;
 
@@ -195,8 +195,8 @@ typedef struct
   LONGINT compressedResourceTag PACKED;
   LONGINT typeFlags PACKED;
   LONGINT uncompressedSize PACKED;
-  uint8 workingBufferFractionalRatio PACKED;
-  uint8 expansionBufferSize PACKED;
+  uint8 workingBufferFractionalRatio LPACKED;
+  uint8 expansionBufferSize LPACKED;
   INTEGER dcmpID;
 }
 dcomp_info_t;

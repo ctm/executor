@@ -220,9 +220,9 @@ P2(PUBLIC pascal trap, void, ShieldCursor, Rect *, rp, Point, p) /* IMI-474 */
 
 typedef struct ccrsr_res
 {
-  CCrsr crsr 		PACKED;
-  PixMap crsr_map	PACKED;
-  char data		PACKED;
+  CCrsr crsr 		LPACKED;
+  PixMap crsr_map	LPACKED;
+  char data		LPACKED;
 } ccrsr_res, *ccrsr_res_ptr;
 
 typedef struct { ccrsr_res_ptr p PACKED_P; } HIDDEN_ccrsr_res_ptr;

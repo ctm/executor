@@ -27,11 +27,17 @@ struct splash_screen_header
   int16 button_x_byte		__attribute__ ((packed));
   
   uint16 n_buttons		__attribute__ ((packed));
+
+  /* gcc 4.3.0 will complain about the packed attributes below
+     so they're commented out below.  Most likely they were
+     never needed and should be completely excised from the
+     code. */
+     
   struct splash_screen_rect button_rects[4]
-                                __attribute__ ((packed));
+  /* __attribute__ ((packed)) */;
   
-  uint8 bg_pixel		__attribute__ ((packed));
-  uint8 dummy_1[3]		__attribute__ ((packed));
+  uint8 bg_pixel		/* __attribute__ ((packed)) */;
+  uint8 dummy_1[3]		/* __attribute__ ((packed)) */;
 };
 
 struct splash_screen_color
