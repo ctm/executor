@@ -7,11 +7,6 @@
  * a different way to drive SDL's sound.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_linux_sound[] =
-	    "$Id: sdl-sound.c 115 2005-07-05 22:40:28Z ctm $";
-#endif
-
 #include "rsys/common.h"
 
 #include <sys/soundcard.h>
@@ -30,7 +25,18 @@ char ROMlib_rcsid_linux_sound[] =
 #include "sdl-sound.h"
 
 #define LOGBUFSIZE 11  /* Must be between 7 and 17 decimal */
-#define BUFSIZE (1 << LOGBUFSIZE)
+
+/*
+ * There's what appears to be a bug in some of the SDLs out there that
+ * results in SDL choosing to use one half the number of samples that we ask
+ * for.  As such, we're going to make room for twice the amount we want and
+ * then ask for twice the amount.  If we get it, oh well, it just means
+ * more latency.
+ */
+
+static int num_samples;
+
+#define BUFSIZE (1 << (LOGBUFSIZE+1)) /* +1 as bug workaround */
 
 /* Stack size for child thread */
 #define STACKSIZE 16384
@@ -123,7 +129,7 @@ sound_sdl_stop (sound_driver_t *s)
 static void
 sound_sdl_hunger_start (sound_driver_t *s)
 {
-  t1 += BUFSIZE;
+  t1 += num_samples;
 }
 
 static unsigned char buf[7*BUFSIZE];
@@ -136,10 +142,10 @@ sound_sdl_get_hunger_info (sound_driver_t *s)
   struct hunger_info info;
 
   info.buf = buf;
-  info.bufsize = sizeof (buf) / sizeof (buf[0]);
+  info.bufsize = 7 * num_samples;
 
-  info.t2 = t1 + BUFSIZE;
-  info.t3 = info.t2 + BUFSIZE;
+  info.t2 = t1 + num_samples;
+  info.t3 = info.t2 + num_samples;
   info.t4 = info.t3;
 
   return info;
@@ -171,14 +177,14 @@ sound_sdl_hunger_finish (sound_driver_t *s)
 
   info = sound_sdl_get_hunger_info (s);
 
-  while (sdl_write (info.buf + (info.t2 % info.bufsize), BUFSIZE)
+  while (sdl_write (info.buf + (info.t2 % info.bufsize), num_samples)
 	 < 0)
     {
       if (errno != EINTR)
 	gui_fatal ("Write failed");
     }
 
-  memset (info.buf + (info.t2 % info.bufsize), 0x80, BUFSIZE);
+  memset (info.buf + (info.t2 % info.bufsize), 0x80, num_samples);
 
   patl_signal ();
 }
@@ -267,8 +273,8 @@ sound_sdl_hunger_callback(void *unused, Uint8 *stream, int len)
   //  close (fd);
   //  fprintf (stderr, "callback: stream = %p\n", stream);
 
-  if (len != BUFSIZE)
-    gui_fatal ("len = %d, expected %d", len, BUFSIZE);
+  if (len != num_samples)
+    gui_fatal ("len = %d, expected %d", len, num_samples);
   sdl_stream = stream;
   while (sdl_stream != 0)
     usleep (1);
@@ -341,8 +347,20 @@ sound_sdl_init (sound_driver_t *s)
 	}
     }
 
+  num_samples = spec.samples;
+  if (spec.samples != BUFSIZE / 2) {
+    if (spec.samples == BUFSIZE)
+      fprintf(stderr, "Got number of samples we asked for\n");
+    else if (spec.samples == 0 || spec.samples > BUFSIZE) {
+      fprintf(stderr, "Failing: Got %d samples, asked for %d\n", spec.samples,
+              BUFSIZE);
+      goto fail;
+    } else
+      fprintf(stderr, "Got %d samples\n", spec.samples);
+  }
+
   memset (buf, 0x80, sizeof (buf));
-  sdl_write (buf, BUFSIZE);
+  sdl_write (buf, num_samples);
 
   semid = semget (IPC_PRIVATE, 1, IPC_CREAT | IPC_EXCL | 0666);
   if (semid < 0)
