@@ -1,4 +1,11 @@
-$Id: TODO 121 2005-11-21 21:12:16Z ctm $
+	package up the System Folder and whatnot so that people w/o the
+	old executor-aux can run Executor
+
+	Try building the mingw32 version using the mingw32 toolchain
+	for Fedora 11 (mingw32 has been done before)
+
+	Try compiling a version for Mac OS X using SDL (Mac OS X hasn't been
+	done before, although NEXTSTEP has)
 
 	Probably want to do an in-use / marked for deletion fix
 

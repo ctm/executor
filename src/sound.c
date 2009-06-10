@@ -525,6 +525,7 @@ BOOLEAN callasynth(SndChannelPtr chanp, SndCommand *cmdp, ModifierStubPtr mp)
     return CToPascalCall(MR(mp->code), CTOP_SectRect, chanp, cmdp, mp);
 }
 
+#if defined(OLD_BROKEN_NEXTSTEP_SOUND)
 PRIVATE void recsndcmd(SndChannelPtr chanp, SndCommand *cmdp,
 							    ModifierStubPtr mp)
 {
@@ -544,6 +545,7 @@ PRIVATE void recsndcmd(SndChannelPtr chanp, SndCommand *cmdp,
 	} while (doanother);
     }
 }
+#endif /* defined(OLD_BROKEN_NEXTSTEP_SOUND) */
 
 
 static inline boolean_t

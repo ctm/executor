@@ -2305,13 +2305,13 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
   if (is_normal_dlgid (getorput, dig) && host_has_spfcommon ()) {
     host_spf_reply_block reply;
     char *c_prompt;
-    char *local_name;
+    char *local_name = "currently ignored";
 
     c_prompt = cstring_from_str255 (prompt);
 #if 0
     local_name = ...;
 #else
-#warning TODO
+#warning "TODO: support native file pickers"
 #endif
     reply_valid = host_spfcommon (&reply, c_prompt, local_name, &fp, &filef,
 				  numt, tl, getorput, flavor, activeList,
