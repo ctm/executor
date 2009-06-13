@@ -1218,7 +1218,7 @@ A1(PRIVATE, void, setstartdir, char *, argv0)
 	} else {
 	    close (p[1]);
 	    nread = read(p[0], buf, sizeof(buf)-1);
-	    wait4(pid, (union wait *) 0, 0, (struct rusage *) 0);
+            wait4(pid, 0, 0, (struct rusage *) 0);
 	    if (nread)
 		--nread;	/* get rid of trailing \n */
 	    buf[nread] = 0;

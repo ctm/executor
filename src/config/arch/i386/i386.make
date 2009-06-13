@@ -1,5 +1,11 @@
+TARGET_ARCH_OBJ = i386.o
 
-TARGET_ARCH_OBJ = i386.o x86patblt.o x86srcblt.o xdstubtables.o sbstubtables.o
+# In the first days of the Mac OS X port we can't use the tricked out blitters,
+# quite possibly due to register ebx smashage interfering with PIC.
+
+ifneq (,$(findstring macosx,$(TARGET)))
+  TARGET_ARCH_OBJ += x86patblt.o x86srcblt.o xdstubtables.o sbstubtables.o
+endif
 
 pat-blitters-stamp pat-blitters.h pat-blitters.s: \
 		opfind.c opfind.h metaasm.pl pat-blitters.meta

@@ -229,6 +229,7 @@ srcblt_bitmap (void)
   goto start_scanline;
 
  done_with_scanlines:
+  ;
 }
 
 #endif /* USE_PORTABLE_SRCBLT */

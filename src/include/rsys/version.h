@@ -36,13 +36,15 @@ extern const char ROMlib_executor_build_time[];
 #define VERSION_SIG PLATFORM_CYGWIN32
 #elif defined(LINUX)
 #define VERSION_SIG PLATFORM_LINUX
+#elif defined(MACOSX)
+#define VERSION_SIG PLATFORM_MACOSX
 #else
 #error "Need VERSION_SIG #define"
 #endif
 
 enum { CLASS_COMMERCIAL = 0, CLASS_EDUCATIONAL = 10, CLASS_STUDENT = 20 };
 enum { PLATFORM_NEXTSTEP = 0, PLATFORM_CYGWIN32 = 1, PLATFORM_DOS = 2,
-       PLATFORM_LINUX = 3, PLATFORM_ANY = 4 };
+       PLATFORM_LINUX = 3, PLATFORM_ANY = 4, PLATFORM_MACOSX = 5 };
 
 enum
 {

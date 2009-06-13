@@ -215,6 +215,16 @@ case ${canonical_target} in
       target_file_format='a.out'
     fi
   ;;
+  i[456]86-unknown-macosx)
+    target_os='macosx'
+    target_syn68k='macosx'
+    target_arch='i386'
+    if [ x"${target_file_format}" = x"" ]; then
+      # default linux file format; this may change
+      target_file_format='mach-o'
+    fi
+  ;;
+
 
   *)
     echo "Fatal error: unknown target \`${canonical_target}'.  Exiting."
@@ -250,6 +260,11 @@ case ${canonical_host} in
   i[3456]86-unknown-linux)
     host_os='linux'
     host_arch='i386'
+  ;;
+  i[456]86-unknown-macosx)
+    host_os='macosx'
+    host_arch='i386'
+    objc='yes'
   ;;
 
   *)

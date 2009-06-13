@@ -1,10 +1,19 @@
 INCLUDES += -I/usr/include/SDL
 
 SDL_SRC = sdlwin.c sdlevents.c sdlwm.c sdlscrap.c sdlquit.c \
-          syswm_map.c sdl_mem.c SDL_bmp.c sdlX.c
+          syswm_map.c sdl_mem.c SDL_bmp.c
+
+ifneq (,$(findstring linux,$(TARGET)))
+  SDL_SRC += sdlX.c
+endif
 
 FRONT_END_SRC = $(SDL_SRC)
-FRONT_END_OBJ = $(FRONT_END_SRC:.c=.o)
+FRONT_END_OBJ = $(FRONT_END_SRC:.c=.o) 
+
+ifneq (,$(findstring macosx,$(TARGET)))
+  FRONT_END_OBJ += macosx_main.o
+endif
+
 
 ifneq (,$(findstring mingw,$(TARGET)))
   FRONT_END_LIBS += -lmingw32
@@ -18,11 +27,18 @@ endif
 # with the version of SDL on Fedora 9 (SDL 1.2.13)
 
 # FRONT_END_LIBS += -lSDLmain -lSDL
-FRONT_END_LIBS += -lSDL
+ifeq (,$(findstring macosx,$(TARGET)))
+  FRONT_END_LIBS += -lSDL
+endif
 #
 ifneq (,$(findstring linux,$(TARGET)))
   FRONT_END_LIBS += -ldl -L/usr/X11R6/lib -lX11 -lpthread
   INCLUDES += -I/usr/X11R6/include
+  CFLAGS += -D_REENTRANT
+endif
+
+ifneq (,$(findstring macosx,$(TARGET)))
+  FRONT_END_LIBS += -framework SDL -framework Cocoa
   CFLAGS += -D_REENTRANT
 endif
 

@@ -98,7 +98,12 @@ TARGET_CFLAGS = $(DEFINES) $(INCLUDES) $(CONFIGURE_CFLAGS)
 ifobjc
 # `-traditional-cpp' is needed by NeXT cc to make sense of the
 # global asm a5 decl
-TARGET_OBJCFLAGS = -traditional-cpp $(TARGET_CFLAGS)
+# TARGET_OBJCFLAGS = -traditional-cpp $(TARGET_CFLAGS)
+# Haven't compiled NeXT based Executor in a very long time, but now that
+# we have the beginnings of a Mac OS X port, don't mess it up by requesting
+# -traditional-cpp.  If we ever do support NEXT targets again it will be
+# after moving to a more modern GNU build system.
+TARGET_OBJCFLAGS = $(TARGET_CFLAGS)
 end ifobjc
 
 .SUFFIXES: .map .psw .h .c .m .s .scpp .o

@@ -159,7 +159,8 @@ func_name (const void *raw_table,					    \
 ({									 \
   int smashed_ax_unused;						 \
 									 \
-  asm volatile ("pushl %%ebp\n\t"					 \
+  asm volatile ("pushl %%ebx\n\t"                                        \
+                "pushl %%ebp\n\t"                                        \
 		"movl %5,%%ebp\n\t"					 \
 		"movl %%eax,%%ebx\n\t"					 \
 		"testl $7,%%ebp\n\t"					 \
@@ -244,11 +245,12 @@ func_name (const void *raw_table,					    \
 									 \
 		/* All done! */						 \
 		"3:\n\t"						 \
-		"popl %%ebp"						 \
+		"popl %%ebp\n\t"					 \
+		"popl %%ebx\n\t"					 \
 		: "=S" (inp), "=D" (outp), "=a" (smashed_ax_unused)	 \
 		: "0" (inp), "1" (outp), "g" (byte_width),		 \
 		"2" (table)						 \
-		: "memory", "bx", "cx", "dx", "cc");			 \
+		: "memory", "cx", "dx", "cc");                           \
 })
 
 
@@ -256,7 +258,8 @@ func_name (const void *raw_table,					    \
 ({									\
   int smashed_ax, smashed_cx;						\
 									\
-  asm volatile ("pushl %%ebp\n\t"					\
+  asm volatile ("pushl %%ebx\n\t"                                       \
+                "pushl %%ebp\n\t"					\
 		"xorl %%ebx,%%ebx\n\t"					\
 		"xorl %%edx,%%edx\n\t"					\
 									\
@@ -302,10 +305,11 @@ func_name (const void *raw_table,					    \
 									\
 		"3:\n\t"						\
 		"popl %%ebp\n\t"					\
+		"popl %%ebx\n\t"					\
 		: "=S" (inp), "=D" (outp), "=a" (smashed_ax),		\
 		  "=c" (smashed_cx)					\
 		: "2" (table), "0" (inp), "1" (outp), "3" (byte_width)	\
-		: "bx", "dx", "cc", "memory");				\
+		: "dx", "cc", "memory");				\
 })
 
 
@@ -313,7 +317,8 @@ func_name (const void *raw_table,					    \
 ({									\
   int smashed_ax, smashed_cx;						\
 									\
-  asm volatile ("pushl %%ebp\n\t"					\
+  asm volatile ("pushl %%ebx\n\t"                                       \
+                "pushl %%ebp\n\t"					\
 		"xorl %%ebx,%%ebx\n\t"					\
 		"xorl %%edx,%%edx\n\t"					\
 									\
@@ -361,10 +366,11 @@ func_name (const void *raw_table,					    \
 									\
 		"3:\n\t"						\
 		"popl %%ebp\n\t"					\
+		"popl %%ebx\n\t"					\
 		: "=S" (inp), "=D" (outp), "=a" (smashed_ax),		\
 		  "=c" (smashed_cx)					\
 		: "2" (table), "0" (inp), "1" (outp), "3" (byte_width)	\
-		: "bx", "dx", "cc", "memory");				\
+		: "dx", "cc", "memory");				\
 })
 
 
@@ -372,7 +378,8 @@ func_name (const void *raw_table,					    \
 ({									\
   int smashed_ax, smashed_cx;						\
 									\
-  asm volatile ("pushl %%ebp\n\t"					\
+  asm volatile ("pushl %%ebx\n\t"                                       \
+                "pushl %%ebp\n\t"					\
 		"xorl %%ebx,%%ebx\n\t"					\
 		"xorl %%edx,%%edx\n\t"					\
 									\
@@ -437,10 +444,11 @@ func_name (const void *raw_table,					    \
 									\
 		"3:\n\t"						\
 		"popl %%ebp\n\t"					\
+		"popl %%ebx\n\t"					\
 		: "=S" (inp), "=D" (outp), "=a" (smashed_ax),		\
 		  "=c" (smashed_cx)					\
 		: "2" (table), "0" (inp), "1" (outp), "3" (byte_width)	\
-		: "bx", "dx", "cc", "memory");				\
+		: "dx", "cc", "memory");				\
 })
 
 

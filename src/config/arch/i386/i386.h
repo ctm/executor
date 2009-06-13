@@ -79,7 +79,16 @@ extern arch_type_t arch_type;
 #define I386_CC_OVERFLOW_MASK	(1 << 11)
 
 /* Note that we have an i386 implementation of these routines. */
-#define ARCH_PROVIDES_RAW_PATBLT
-#define ARCH_PROVIDES_RAW_SRCBLT
+
+#if defined(MACOSX)
+/*
+ * When doing the Proof-of-concept port on Mac OS X, the tricked out
+ * blitters were causing Executor to crash.  I haven't figured out
+ * why yet, but most likely they can be rehabilitated.
+ */
+#else /* !defined(MACOSX) */
+#  define ARCH_PROVIDES_RAW_PATBLT
+#  define ARCH_PROVIDES_RAW_SRCBLT
+#endif /* !defined(MACOSX) */
 
 #endif /* !_ARCH_I386_H_ */

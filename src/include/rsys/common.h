@@ -23,7 +23,7 @@
 #undef USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 #endif
 
-#if !defined (LINUX) && !defined (MSDOS) && !defined (NEXT) && !defined(CYGWIN32)
+#if !defined (LINUX) && !defined (MSDOS) && !defined (NEXT) && !defined(CYGWIN32) && !defined (MACOSX)
 # error "Unsupported host"
 #endif
 

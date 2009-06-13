@@ -4,9 +4,6 @@
 	Try building the mingw32 version using the mingw32 toolchain
 	for Fedora 11 (mingw32 has been done before)
 
-	Try compiling a version for Mac OS X using SDL (Mac OS X hasn't been
-	done before, although NEXTSTEP has)
-
 	Probably want to do an in-use / marked for deletion fix
 
 		of what data structure?  I didn't write that down when

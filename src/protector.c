@@ -9,7 +9,7 @@ char ROMlib_rcsid_protector[] =
 
 #include "rsys/common.h"
 
-#if defined(NEXTSTEP) || defined(LINUX)
+#if defined(NEXTSTEP) || defined(LINUX) || defined (MACOSX)
 
 /*
  * TODO: make sure no one interferes with SIGIO

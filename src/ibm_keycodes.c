@@ -10,7 +10,7 @@ char ROMlib_rcsid_ibm_keycodes[] =
 #include "rsys/common.h"
 #include "rsys/keyboard.h"
 
-#if defined (MSDOS) || defined (EVENT_SVGALIB) || defined (CYGWIN32) || (defined (SDL) && defined (LINUX))
+#if defined (MSDOS) || defined (EVENT_SVGALIB) || defined (CYGWIN32) || (defined (SDL) && (defined (LINUX) || defined (MACOSX)))
 
 unsigned char ibm_virt_to_mac_virt[] =
 {

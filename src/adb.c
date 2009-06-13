@@ -10,6 +10,7 @@ char ROMlib_rcsid_adb[] =
 #include "rsys/common.h"
 #include "EventMgr.h"
 #include "OSEvent.h"
+#include "ADB.h"
 #include "rsys/adb.h"
 #include "rsys/osevent.h"
 #include "rsys/pstuff.h"

@@ -74,7 +74,7 @@ AUX_SRC	=								\
   redrawscreen.c ini.c checkpoint.c qt.c cleanup.c paramline.c          \
   fauxdbm.c custom.c commtool.c cfm.c local_charset.c pef_hash.c        \
   mathlib.c interfacelib.c mixed_mode.c suffix_maps.c appearance.c	\
-  lockrange.c
+  lockrange.c unix_like.c
 
 ROMLIB_SRC = $(CTL_SRC) $(DIAL_SRC) $(FILE_SRC) $(HFS_SRC) $(LIST_SRC) \
   $(MENU_SRC) $(PR_SRC) $(QD_SRC) $(RES_SRC) $(TE_SRC) $(WIND_SRC)     \

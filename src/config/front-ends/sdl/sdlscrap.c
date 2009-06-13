@@ -641,3 +641,23 @@ void PutScrapX(LONGINT type, LONGINT length, char *p, int scrap_count)
 }
 
 #endif
+
+#if defined (MACOSX)
+#warning "Need to support clipboard"
+
+PUBLIC boolean_t
+we_lost_clipboard(void)
+{
+  /* TODO */
+}
+
+LONGINT GetScrapX(LONGINT type, char **h)
+{
+  return -1;  /* TODO */
+}
+void PutScrapX(LONGINT type, LONGINT length, char *p, int scrap_count)
+{
+  /* TODO */
+}
+
+#endif

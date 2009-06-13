@@ -15,6 +15,11 @@ char ROMlib_rcsid_serial[] =
 #endif
 
 #include "rsys/common.h"
+
+#if defined (MACOSX)
+#warning "No serial support for now"
+#else /* !defined (MACOSX) */
+
 #include "Serial.h"
 #include "DeviceMgr.h"
 #include "FileMgr.h"
@@ -1032,3 +1037,4 @@ A2(PUBLIC, OSErr, ROMlib_serialclose, ParmBlkPtr, pbp,		/* INTERNAL */
 #endif
     DOCOMPLETION(pbp, err);
 }
+#endif /* !defined (MACOSX) */

@@ -16,6 +16,7 @@ char ROMlib_rcsid_ctlInit[] =
 #include "ToolboxUtil.h"
 #include "ResourceMgr.h"
 #include "MemoryMgr.h"
+#include "OSUtil.h"
 
 #include "rsys/ctl.h"
 #include "rsys/wind.h"

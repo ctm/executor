@@ -2,8 +2,8 @@ LOWGLOBALS_LD_OPTION = lowglobals.o
 
 TARGET_OS_LD_FLAGS = -Wl,-no-keep-memory	# So we don't page so much
 
-TARGET_OS_SRC = lowglobals-mem.c linux.c linux_except.c
-TARGET_OS_OBJ = lowglobals-mem.o linux.o linux_except.o
+TARGET_OS_SRC = lowglobals-mem.c linux.c
+TARGET_OS_OBJ = lowglobals-mem.o linux.o
 
 TARGET_OS_LIBS = @libdb@ -lm @libg@
 

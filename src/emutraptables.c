@@ -10,6 +10,9 @@ char ROMlib_rcsid_emutraptables[] =
 #include "rsys/common.h"
 #include "rsys/everything.h"
 
+#include "OSUtil.h"
+#include "Gestalt.h"
+
 #include "rsys/trapglue.h"
 #include "rsys/ptocflags.h"
 #include "rsys/stdfile.h"

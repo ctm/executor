@@ -126,7 +126,7 @@ PUBLIC void ROMlib_hfsinit( void )
  *	 which is an ARDI written NEXTSTEP atrocity.
  */
 
-#if !defined(LINUX)
+#if !defined(LINUX) && !defined (MACOSX)
 #define EJECTABLE(buf) FALSE
 #else
 /* #warning this is not the proper way to tell if something is ejectable */
@@ -231,7 +231,7 @@ PUBLIC OSErr ROMlib_ejectfloppy( LONGINT floppyfd )
       eject_floppy_notify();
     } else {
 #endif
-#if defined(NEXTSTEP)
+#if defined(NEXTSTEP) || defined (MACOSX)
 	if (floppyfd != -1 && ioctl(floppyfd, DKIOCEJECT, (char *) 0) < 0)  {
 	    fprintf(stderr, "couldn't eject disk\n");
 	    err = ioErr;
@@ -239,7 +239,7 @@ PUBLIC OSErr ROMlib_ejectfloppy( LONGINT floppyfd )
 #endif
 	if (floppyfd != -1)
 	  close(floppyfd);
-#if defined(LINUX)
+#if defined(LINUX) || defined (MACOSX)
 	eject_floppy_notify();
 #endif
 #if defined(MSDOS) || defined (CYGWIN32)
@@ -259,7 +259,7 @@ PUBLIC void ROMlib_OurClose( void )
 	if (Cx(vcbp->vcbCTRef)) {
 	    pbr.ioParam.ioVRefNum = vcbp->vcbVRefNum;
 	    PBUnmountVol(&pbr);
-#if defined (NEXTSTEP)
+#if defined (NEXTSTEP) || defined (MACOSX)
 	    if (!(Cx(vcbp->vcbAtrb) & VNONEJECTABLEBIT) && Cx(vcbp->vcbDrvNum))
 		ROMlib_ejectfloppy(((VCBExtra *) vcbp)->u.hfs.fd);
 #endif
@@ -272,7 +272,7 @@ PUBLIC void ROMlib_OurClose( void )
 PRIVATE BOOLEAN isejectable( const charCx( *dname), LONGINT fd )
 {
     BOOLEAN retval;
-#if defined(NEXTSTEP)
+#if defined(NEXTSTEP) || defined (MACOSX)
     struct scsi_req sr;
     char inqbuf[sizeof(struct inquiry_reply) + 3];
     struct inquiry_replyCx( *inqp);
@@ -281,7 +281,7 @@ PRIVATE BOOLEAN isejectable( const charCx( *dname), LONGINT fd )
 
     /* look for rfd[0-9] */
     retval = FALSE;
-#if defined(NEXTSTEP)
+#if defined(NEXTSTEP) || defined (MACOSX)
     for (p = dname; p = index(p, 'r'); ++p) {
 	if (p[1] == 'f' && p[2] == 'd' && isdigit(p[3])) {
 	    retval = TRUE;
@@ -357,10 +357,10 @@ PRIVATE LONGINT try_to_open_disk( const char *dname,
 	    *bsizep = PHYSBSIZE;
 	    *maxbytesp = 1024L * 1024;
 	}
-#else /* defined(NEXTSTEP) */
+#else
 	*bsizep = PHYSBSIZE;
 	*maxbytesp = 1024L * 1024;
-#endif /* defined(NEXTSTEP) */
+#endif
     }
 
     if (floppyfd >= 0)
@@ -714,7 +714,7 @@ ROMlib_transphysblk (hfs_access_t *hfsp, LONGINT physblock, short nphysblocks,
     if (actp)
 	*actp = pb.ioActCount;
 #else
-#if defined(NEXTSTEP)
+#if defined(NEXTSTEP) || defined (MACOSX)
     if ((LONGINT) bufp & 3) {
 	newbufp = alloca( (LONGINT) nphysblocks * PHYSBSIZE + 4);
 	newbufp = (Ptr) (((LONGINT) newbufp + 3) & ~3);
@@ -729,7 +729,7 @@ ROMlib_transphysblk (hfs_access_t *hfsp, LONGINT physblock, short nphysblocks,
 			   (LONGINT) nphysblocks * PHYSBSIZE,
 			   physblock + hfsp->offset, rw, hfsp->bsize,
 			   hfsp->maxbytes);
-#if defined(NEXTSTEP)
+#if defined(NEXTSTEP) || defined (MACOSX)
 	if (rw == reading && bufp != newbufp && err == noErr)
 	    memmove(bufp, newbufp, (LONGINT) nphysblocks * PHYSBSIZE);
 #endif

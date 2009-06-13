@@ -602,7 +602,7 @@ case $os in
 	      | -hiux* | -386bsd* | -netbsd* | -freebsd* | -riscix* \
 	      | -lynxos* | -bosx* | -nextstep* | -cxux* | -aout* | -elf* \
 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta | -udi \
-	      | -cygwin32 | -mingw32) \
+	      | -cygwin32 | -mingw32 | -macosx) \
 		;;
 	-sunos5*)
 		os=`echo $os | sed -e 's|sunos5|solaris2|'`

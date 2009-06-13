@@ -57,12 +57,22 @@ HOST_GCC = gcc -m32
 
 
 If you have SDL <http://libsdl.org/> installed and would like to use
-the SDL-based version of Executor, you can try:
+the SDL-based version of Executor on Linux, you can try:
 
   mkdir -p build/debug-linux-sdl
   cd build/debug-linux-sdl
   ../../util/configure.sh  '--target=i486-linux' '--host=i486-linux' '--front-end=sdl' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -DNDEBUG -O0 -finline-functions -g -Wall -DRELEASE_INTERNAL -DERROR_SUPPORTED_MASK="(~0)"' '--root=../..' '--target-file-format=glibc' '--sound=sdl' '--syn68k-target=i486-linux-glibc'
   make
+
+If you have SDL <http://libsdl.org/> installed and would like to play with
+the SDL-based version of Executor on Mac OS X Intel, you can try:
+
+  mkdir -p build/debug-macosx-sdl
+  cd build/debug-macosx-sdl
+  ../../util/configure.sh  '--target=i486-macosx' '--host=i486-macosx' '--front-end=sdl' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -DNDEBUG -O0 -finline-functions -g -Wall -DRELEASE_INTERNAL -DERROR_SUPPORTED_MASK="(~0)"' '--root=../..' '--target-file-format=glibc' '--sound=sdl' '--syn68k-target=i486-macosx-glibc'
+  make
+
+The Mac OS X version has problems, especially with quitting.
 
 My email address is still <ctm@ardi.com>, although ARDI itself is
 defunct.  I get a ridiculous amount of spam and will quite possibly

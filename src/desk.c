@@ -20,6 +20,7 @@ char ROMlib_rcsid_desk[] =
 #include "QuickDraw.h"
 #include "OSEvent.h"
 #include "ToolboxEvent.h"
+#include "OSUtil.h"
 
 #include "rsys/cquick.h"
 #include "rsys/wind.h"

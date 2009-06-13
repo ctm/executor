@@ -9,7 +9,7 @@ char ROMlib_rcsid_sigio_multiplex[] =
 
 #include "rsys/common.h"
 
-#if defined (LINUX) || defined (NEXTSTEP)
+#if defined (LINUX) || defined (NEXTSTEP) || defined (MACOSX)
 
 #include <unistd.h>
 #include <sys/types.h>

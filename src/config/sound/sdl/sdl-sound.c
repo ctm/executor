@@ -9,10 +9,8 @@
 
 #include "rsys/common.h"
 
-#include <sys/soundcard.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
-#include <linux/unistd.h>
 #include <sys/ioctl.h>
 #include <signal.h>
 #include <sys/socket.h>
