@@ -67,7 +67,7 @@ extern void *mmap_permanent_memory (unsigned long amount_wanted);
 
 #define HAVE_MMAP
 
-#define CONFIG_OFFSET_P 0 /* don't normally use offset memory */
+#define CONFIG_OFFSET_P 1 /* Use offset memory, at least for the first port */
 
 
 extern int ROMlib_launch_native_app (int n_filenames, char **filenames);
