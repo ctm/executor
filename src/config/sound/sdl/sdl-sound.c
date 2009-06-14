@@ -205,6 +205,8 @@ sound_sdl_shutdown (sound_driver_t *s)
       /* possibly kill the thread here */
       have_sound_p = FALSE;
     }
+
+  sdl_stream = NULL;
 }
 
 static void
