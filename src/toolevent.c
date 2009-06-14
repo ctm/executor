@@ -1319,8 +1319,8 @@ P0 (PUBLIC pascal trap, LONGINT, TickCount)
 				will get set eventually and that will
 				cause trouble */
   new_time = (UNIXTIMETOMACTIME (ROMlib_start_time.tv_sec)
-	      + ((ROMlib_start_time.tv_usec / (1000000.0 / 60) + ticks) / 60));
-  
+	      + (long) ((ROMlib_start_time.tv_usec / (1000000.0 / 60) + ticks) / 60));
+
   Time = CL (new_time);
   return ticks;
 }
