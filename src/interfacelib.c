@@ -2,7 +2,7 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if defined (powerpc)
+#if defined (powerpc) || defined (__ppc__)
 
 #if !defined (OMIT_RCSID_STRINGS)
 char ROMlib_rcsid_interfacelib[] =
@@ -2881,7 +2881,9 @@ interfacelib_map[] =
   { "DisposeHandle", DisposHandle, },
   { "UpdateDialog", C_UpdtDialog, },
   { "TestDeviceAttribute", C_TestDeviceAttribute, },
+#if !defined (CFM_PROBLEMS)
   { "CloseConnection", C_CloseConnection, },
+#endif
   { "GetControlReference", C_GetCRefCon, },
   { "RemoveResource", C_RmveResource, },
   { "EndUpdate", C_EndUpdate, },
@@ -3018,7 +3020,9 @@ interfacelib_map[] =
   //  { "FSRead", C_FSRead, },
   { "SelectDialogItemText", C_SelIText, },
   { "GetIndResource", C_GetIndResource, },
+#if !defined (CFM_PROBLEMS)
   { "GetSharedLibrary", C_GetSharedLibrary, },
+#endif
   //  { "SetEOF", C_SetEOF, },
   { "SystemZone", SystemZone, },
   { "GetWMgrPort", C_GetWMgrPort, },
@@ -3440,7 +3444,9 @@ interfacelib_map[] =
   { "LwrText", LowerText_stub, },
   { "FracSqrt", C_FracSqrt, },
   { "GetDefFontSize", GetDefFontSize, },
+#if !defined(CFM_PROBLEMS)
   { "GetDiskFragment", C_GetDiskFragment, },
+#endif
   { "InvalRgn", C_InvalRgn, },
   { "CloseWindow", C_CloseWindow, },
   { "ShieldCursor", ShieldCursor_PC, },
@@ -3688,7 +3694,9 @@ interfacelib_map[] =
   { "LMSetGrayRgn", LMSetGrayRgn, },
   { "GDeviceChanged", C_GDeviceChanged, },
   { "HSV2RGB", C_HSV2RGB, },
+#if !defined (CFM_PROBLEMS)
   { "GetMemFragment", C_GetMemFragment, },
+#endif
   //  { "GetComponentVersion", C_GetComponentVersion, },
   { "EraseOval", C_EraseOval, },
   { "GetPattern", C_GetPattern, },
@@ -4224,8 +4232,13 @@ ROMlib_GetInterfaceLib (Str63 library, OSType arch, LoadFlags loadflags,
     }
   else
     {
+#if !defined (CFM_PROBLEMS)
       cid = ROMlib_new_connection (1);
-      if (!cidp)
+#else
+#warning "Can't do the right thing without CFM"
+      cid = 0;
+#endif
+      if (!cid)
 	retval = fragNoMem;
       else
 	{

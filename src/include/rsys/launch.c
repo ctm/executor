@@ -390,7 +390,7 @@ cfm_launch (Handle cfrg0, OSType desired_arch, FSSpecPtr fsp)
        --n_descripts, cfirp = (cfir_t *) ((char *) cfirp + CFIR_LENGTH(cfirp)))
     ;
 
-#if defined (powerpc)
+#if defined (powerpc) || defined (__ppc__)
   if (CFIR_ISA_X(cfirp) == desired_arch_x)
     {
       Ptr mainAddr;

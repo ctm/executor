@@ -228,7 +228,7 @@ Executor may die without warning because of this mismatch", 0,
 		    0, "OK", NULL, NULL, NULL, NULL, NULL);
       break;
     case launch_ppc_only:
-#if !defined (powerpc)
+#if !defined (powerpc) && !defined (__ppc__)
       system_error ("That application is PowerPC-only.  This version of "
 		    "Executor doesn't run PowerPC applications.  "
 		    "You need to find an M68k version of that application.",

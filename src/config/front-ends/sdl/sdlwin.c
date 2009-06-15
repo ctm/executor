@@ -19,7 +19,7 @@ char ROMlib_rcsid_sdlwin[] = "$Id: sdlwin.c 63 2004-12-24 18:19:43Z ctm $";
 #include "sdlevents.h"
 #include "syswm_map.h"
 
-#if defined (linux) && !defined (powerpc)
+#if defined (linux) && !defined (powerpc) && !defined (__ppc__)
 #define USE_SDL_EVENT_THREAD
 #include "sdlX.h"
 #endif

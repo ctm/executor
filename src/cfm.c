@@ -1,13 +1,11 @@
 /* Copyright 2000 by Abacus Research and
  * Development, Inc.  All rights reserved.
  */
+#if defined (CFM_PROBLEMS)
 
-#if defined (powerpc)
+#warning "No CFM support for now, even though it limped previously."
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_cfm[] =
-	    "$Id: cfm.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
+#elif defined (powerpc)
 
 /*
  * In addition to fleshing this out, it probably makes sense to use mmap
@@ -1042,7 +1040,7 @@ load_loader_section (const void *addr,
       memset (&init_block, 0xFA, sizeof init_block);
       init_routine = (uint32 (*)(uint32)) SYN68K_TO_US (init_addr[0]);
       init_toc = (uint32) SYN68K_TO_US (init_addr[1]);
-#if defined (powerpc)
+#if defined (powerpc) || defined (__ppc__)
       retval = ppc_call (init_toc, init_routine, (uint32) &init_block);
 #else
       warning_unexpected (NULL_STRING);
@@ -1159,7 +1157,7 @@ typedef enum { ICACHE } flush_type_t;
 PRIVATE void
 cacheflush (void *start, uint32 length, flush_type_t flush)
 {
-#if defined (powerpc)
+#if defined (powerpc) || defined (__ppc__)
   enum { CACHE_LINE_SIZE = 32, };
   char *p, *ep; 
 

@@ -440,7 +440,7 @@ cfm_launch (Handle cfrg0, OSType desired_arch, FSSpecPtr fsp)
   cfirp = ROMlib_find_cfrg (cfrg0, desired_arch, kApplicationCFrag,
 			    (StringPtr) "");
 
-#if defined (powerpc)
+#if (defined (powerpc) || defined (__ppc__)) && !defined (CFM_PROBLEMS)
   if (cfirp)
     {
       Ptr mainAddr;

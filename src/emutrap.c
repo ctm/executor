@@ -42,7 +42,7 @@ PUBLIC syn68k_addr_t PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop)
 {
     unsigned short pth, ptv;
     LONGINT args[11], retval;
-#if defined (powerpc)
+#if defined (powerpc) || defined (__ppc__)
     Point points[11];
     int point_count = 0;
 #endif
@@ -94,7 +94,7 @@ PUBLIC syn68k_addr_t PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop)
 	    ptv = POPSW();
 	    pth = POPSW();
 #if !defined(LITTLEENDIAN)
-#if !defined (powerpc)
+#if !defined (powerpc) && !defined (__ppc__)
 	    args[count++] = (ptv << 16) | pth;
 #else
 	    points[point_count].h = pth;
@@ -221,7 +221,7 @@ CToPascalCall_m68k(void *wheretogo, unsigned long long magic, va_list ap)
 	case 3:
 	    ul = va_arg(ap, ULONGINT);
 #if !defined(LITTLEENDIAN)
-#if !defined (powerpc)
+#if !defined (powerpc) && !defined (__ppc__)
 	    PUSHUW(ul);
 	    PUSHUW(ul >> 16);
 #else
@@ -277,7 +277,7 @@ CToPascalCall_m68k(void *wheretogo, unsigned long long magic, va_list ap)
     return retval;
 }
 
-#if defined (powerpc)
+#if defined (powerpc) || defined (__ppc__)
 
 PRIVATE long
 CToRoutineDescriptorCall (const RoutineDescriptor *p, unsigned long long magic,
@@ -344,7 +344,7 @@ CToRoutineDescriptorCall (const RoutineDescriptor *p, unsigned long long magic,
 	case 3: /* point */
 	  {
 	    arg = (uint32) va_arg (ap, unsigned long);
-#if defined (powerpc)
+#if defined (powerpc) || defined (__ppc__)
 	    arg = *(uint32 *)arg;
 #endif
 	    arg = (CW ((uint16) arg) | 
@@ -483,7 +483,7 @@ PUBLIC long CToPascalCall(void *wheretogo, unsigned long magic_in, ...)
     }
   va_start(ap, magic_in);
 
-#if defined (powerpc)
+#if defined (powerpc) || defined (__ppc__)
   if (is_routine_descriptor_ptr (wheretogo))
     retval = CToRoutineDescriptorCall ((RoutineDescriptor *) wheretogo,
 				       magic, ap);

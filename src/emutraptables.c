@@ -676,7 +676,7 @@ toolstuff_t toolstuff[0x400] = {
     { { _Unimplemented, -1 }, (void *) 0 },
     { { _Unimplemented, -1 }, (void *) 0 },
     { { _Unimplemented, -1 }, (void *) 0 },
-#if !defined (powerpc)
+#if (!defined (powerpc) && !defined (__ppc__)) || defined (CFM_PROBLEMS)
     { { _Unimplemented, -1 }, (void *) 0 },
     { { _Unimplemented, -1 }, (void *) 0 }, /* AA5A */
 #else
@@ -846,7 +846,7 @@ toolstuff_t toolstuff[0x400] = {
     { { _Unimplemented, -1 }, (void *) 0 },
     { { _Unimplemented, -1 }, (void *) 0 },
     { { _Unimplemented, -1 }, (void *) 0 },
-#if defined (powerpc)
+#if defined (powerpc) && !defined (__ppc__)
     { { _modeswitch, -1 }, (void *) 0 },
 #else
     { { _Unimplemented, -1 }, (void *) 0 },
@@ -1194,7 +1194,7 @@ toolstuff_t pstuff[] = {
     { { _Key1Trans,		-1 }, (void *) 0},
     { { _Key2Trans,		-1 }, (void *) 0},
 
-    { { NULL /* was C_ROMlib_licensefilt */,	NULL /* was PTOC_ROMlib_licensefilt */ }, (void *) 0 },
+    { { NULL /* was C_ROMlib_licensefilt */,	0 /* was PTOC_ROMlib_licensefilt */ }, (void *) 0 },
     { { C_unixmount,		PTOC_unixmount }, (void *) 0 },
     { { C_GestaltTablesOnly,	PTOC_GestaltTablesOnly }, (void *) 0 },
     { { C_sound_timer_handler,  0 }, (void *) 0 },

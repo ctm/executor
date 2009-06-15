@@ -36,9 +36,6 @@ static int num_samples;
 
 #define BUFSIZE (1 << (LOGBUFSIZE+1)) /* +1 as bug workaround */
 
-/* Stack size for child thread */
-#define STACKSIZE 16384
-
 static int semid = -1;  /* Semaphore id */
 static int sound_on = 0; /* 1 if we are generating interrupts */
 static boolean_t have_sound_p; /* TRUE if sound is supported */

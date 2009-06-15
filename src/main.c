@@ -434,7 +434,7 @@ capable of color.",
       "your system.",
 	opt_no_arg, NULL },
 
-#if defined (RELEASE_INTERNAL) || defined (powerpc)
+#if defined (powerpc) || defined (__ppc__)
   { "ppc", "try to execute the PPC native code if possible (UNSUPPORTED)", opt_no_arg, NULL },
 #endif
 

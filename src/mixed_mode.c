@@ -2,7 +2,7 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if defined (powerpc)
+#if defined (powerpc) || defined (__ppc__)
 
 #if !defined (OMIT_RCSID_STRINGS)
 char ROMlib_rcsid_mixed_mode[] =

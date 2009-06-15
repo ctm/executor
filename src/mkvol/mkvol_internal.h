@@ -2,11 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-/* #if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_mkvol_h[] =
-		      "$Id: mkvol_internal.h 63 2004-12-24 18:19:43Z ctm $";
-#endif */
-
 #include <stdio.h>
 #include <time.h>
 #include <assert.h>
@@ -20,7 +15,7 @@ char ROMlib_rcsid_mkvol_h[] =
 
 #if defined(__alpha) || defined(i386) || defined(__BORLANDC__)
 #define LITTLEENDIAN
-#elif defined(mc68000) || defined (powerpc)
+#elif defined(mc68000) || defined (powerpc) || defined (__ppc__)
 #else
 #error "I don't know enough about this machine"
 #endif

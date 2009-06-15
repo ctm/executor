@@ -2,7 +2,7 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if defined (powerpc)
+#if defined (powerpc) || defined (__ppc__)
 
 #if !defined (OMIT_RCSID_STRINGS)
 char ROMlib_rcsid_mathlib[] =
@@ -380,8 +380,13 @@ ROMlib_GetMathLib (Str63 library, OSType arch, LoadFlags loadflags,
     }
   else
     {
+#if !defined (CFM_PROBLEMS)
       cid = ROMlib_new_connection (1);
-      if (!cidp)
+#else
+#warning "Will not work until CFM is viable"
+      cid = 0;
+#endif
+      if (!cid)
 	retval = fragNoMem;
       else
 	{

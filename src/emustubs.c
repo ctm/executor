@@ -3047,7 +3047,11 @@ STUB (QuickTime)
 			    NULL, QuickTime);
 }
 
-#if defined (powerpc)
+#if defined (__ppc__)
+
+#warning "Need to get CFM going before we can enable this glue."
+
+#elif defined (powerpc)
 
 /*
  * modeswitch is special; we don't return to from where we came.

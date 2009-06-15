@@ -103,7 +103,7 @@ guess_good_memory_settings (void)
 
   new_appl_size = physical_memory () / 4;
 
-#if defined (powerpc)
+#if defined (powerpc) || defined (__ppc__)
 
   /* This hack prevents Photoshop 5.5 demo from complaining that we don't
      have enough memory when we run on a 64 MB Linux machine.  Our division
@@ -211,10 +211,6 @@ ROMlib_launch_native_app (int n_filenames, char **filenames)
   return 0;
 }
 
-#if !(defined (__GNUC__) && defined (__GNUC_MINOR__) && ((__GNUC__ == 2 && __GNUC_MINOR__ == 7 && defined (__i386__)) || defined (RELEASE_INTERNAL) || defined (powerpc) || defined (__alpha)))
-#warning THIS IS NOT A PRODUCTION BUILD
-#endif
-
 /*
  * There is a very bad problem associated with the use of the db
  * shared libraries under Linux.  Specifically, the calling convention
@@ -306,7 +302,7 @@ mmap_lowglobals (void)
 
 #if !defined (MACOSX)
 
-#if !defined (powerpc)
+#if !defined (powerpc) && !defined (__ppc__)
 PRIVATE caddr_t
 round_up_to_page_size (unsigned long addr)
 {
@@ -412,7 +408,7 @@ mmap_permanent_memory (unsigned long amount_wanted)
 			       / (1024 * 1024) * (1024 * 1024));
   }
 
-#if !defined (powerpc)  
+#if !defined (powerpc) && !defined (__ppc__)
   {
     caddr_t addr_wanted;
 

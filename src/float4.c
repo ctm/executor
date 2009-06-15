@@ -303,7 +303,7 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_Fsetenv, INTEGER *,
     asm ("fldenv %0" : : "m" (i387_env));
   }
 #endif
-#elif defined(__alpha) || defined (powerpc)
+#elif defined(__alpha) || defined (powerpc) || defined (__ppc__)
 #warning ROMlib_Fsetenv not implemented!
     signal(SIGFPE, SIG_IGN);
 #else
@@ -382,7 +382,7 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_Fgetenv, INTEGER *,
   else
     env |= PRECISION_MODE_HIGH_BIT;
 
-#elif defined(__alpha) || defined(powerpc)
+#elif defined(__alpha) || defined(powerpc) || defined (__ppc__)
 #warning ROMlib_Fgetenv not properly implemented!
   env = 0;
 #else

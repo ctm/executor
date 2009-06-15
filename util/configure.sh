@@ -225,6 +225,16 @@ case ${canonical_target} in
     fi
   ;;
 
+  powerpc-unknown-macosx)
+    target_os='macosx'
+    target_syn68k='macosx'
+    target_arch='powerpc' # how we refer to it
+    target_gcc_arch='ppc' # how gcc -arch wants us to call it
+    if [ x"${target_file_format}" = x"" ]; then
+      # default linux file format; this may change
+      target_file_format='mach-o'
+    fi
+  ;;
 
   *)
     echo "Fatal error: unknown target \`${canonical_target}'.  Exiting."
@@ -264,6 +274,12 @@ case ${canonical_host} in
   i[456]86-unknown-macosx)
     host_os='macosx'
     host_arch='i386'
+    objc='yes'
+  ;;
+
+  powerpc-unknown-macosx)
+    host_os='macosx'
+    host_arch='powerpc'
     objc='yes'
   ;;
 
@@ -496,6 +512,10 @@ ${util_dir}/subst.pl				\
  @sound_make@:${sound_make}			\
  @executor_make@:${executor_make} < ${root}/src/config/Makefile.in > ./tmp-Makefile.in
 
+if [ x"${target_gcc_arch}" = x"" ]; then
+  target_gcc_arch = "$target_arch"
+fi
+
 sed -e "s:@symbol_prefix@:${symbol_prefix}:g
 
         s:@target@:${target}:g
@@ -520,7 +540,7 @@ sed -e "s:@symbol_prefix@:${symbol_prefix}:g
         s:@syn68k_target@:${syn68k_target}:g
         s:@cflags@:${cflags}:g
 	s:@egcs_dcconvert_workaround@:${egcs_dcconvert_workaround}:g
-        s:@arch@:${target_arch}:g" < ./tmp-Makefile.in > ./Makefile
+        s:@arch@:${target_gcc_arch}:g" < ./tmp-Makefile.in > ./Makefile
 rm -f ./tmp-Makefile.in
 
 if [ x"${syn68k}" = x"yes" ]; then

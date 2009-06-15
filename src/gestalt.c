@@ -127,7 +127,7 @@ PRIVATE gestaltentry_t gtable[] = {
 						   different info on 030*/ },
 #endif
 
-#if defined (powerpc)
+#if defined (powerpc) || defined(__ppc__)
   { gestaltNativeCPUtype, gestaltCPU750, },
   { gestaltMachineType,		gestaltMacQuadra610, }, /* change this */
 
@@ -349,7 +349,7 @@ gestalt_set_physical_gestalt_callback (void)
 			     (long) US_TO_SYN68K (P_PhysicalGestalt), gtable);
 }
 
-#if defined (powerpc)
+#if defined (powerpc) || defined (__ppc__)
 PUBLIC void
 gestalt_set_cpu_type (uint32 type)
 {

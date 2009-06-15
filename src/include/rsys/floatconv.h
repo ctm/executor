@@ -23,6 +23,12 @@
 #include <string.h>
 #include "rsys/float.h"
 
+/*
+ * Unlike most of the rest of Executor's source, we're not using __ppc__
+ * in our tests below, because the code involved won't compile on Mac OS X
+ * 10.5.7, with gcc 4.0.1.
+ */
+
 #if defined (powerpc)
 #include <ieee754.h>
 #endif

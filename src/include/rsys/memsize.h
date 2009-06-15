@@ -8,7 +8,7 @@
 #define MIN_SYSZONE_SIZE	(128 * 1024)
 #define MAX_SYSZONE_SIZE	(2047 * 1024 * 1024)
 
-#if !defined (powerpc)
+#if !defined (powerpc) && !defined (__ppc__)
 #define DEFAULT_SYSZONE_SIZE	(512 * 1024)
 #else
 
