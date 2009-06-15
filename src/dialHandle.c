@@ -32,7 +32,6 @@ char ROMlib_rcsid_dialHandle[] =
 #include "rsys/pstuff.h"
 #include "rsys/stdfile.h"
 #include "rsys/print.h"
-#include "rsys/license.h"
 #include "rsys/hook.h"
 #include "rsys/executor.h"
 #include "rsys/osevent.h"
@@ -92,8 +91,6 @@ ROMlib_CALLMODALPROC (DialogPtr dp,
     retval =  C_ROMlib_numsonlyfilterproc((DialogPeek) dp, evtp, ip);
   else if (fp == (modalprocp) P_ROMlib_stlfilterproc)
     retval =  C_ROMlib_stlfilterproc((DialogPeek) dp, evtp, ip);
-  else if (fp == (modalprocp) P_ROMlib_licensefilt)
-    retval = C_ROMlib_licensefilt((DialogPeek) dp, evtp, ip);
   else
     {
       ROMlib_hook(dial_modalnumber);

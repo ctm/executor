@@ -86,7 +86,7 @@ A3(PRIVATE, Handle, getindmapresource, resmaphand, map, ResType, typ,
         if (CL(tr->rtyp) == typ) {
             nr = Cx(tr->nres) + 1;
             WALKRR(map, tr, j, rr)
-                if (--*indx == CRACKER_ZERO)
+                if (--*indx == 0)
 /*-->*/             return ROMlib_mgetres(map, rr);
             EWALKRR(rr)
         }

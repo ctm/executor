@@ -1242,14 +1242,3 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fclassx, void *,
     *dp = CW (0 - CW (*dp));
 
 }
-
-#if !defined (NDEBUG)
-
-#undef EXTERN_INLINE
-#define EXTERN_INLINE
-
-#undef _floatconv_h_
-
-#include "rsys/floatconv.h"
-
-#endif

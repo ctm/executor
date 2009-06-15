@@ -103,26 +103,21 @@ get_phoney_name_resource (void)
 {
   if (!ROMlib_phoney_name_string)
     {
+      char *name = "";
+#if defined (linux) || defined (MACOSX)
+      name = getlogin ();
+      if (!name)
+        name = getenv ("LOGNAME");
+      if (!name)
+        name = "";
+#endif
       int len;
 
-      len = strlen (ROMlib_info.name);
+      len = strlen (name);
       ROMlib_phoney_name_string = (StringHandle) NewHandleSys (len+1);
       if (ROMlib_phoney_name_string)
 	{
-	  char *name;
-
-	  name = ROMlib_info.name;
 	  HSetRBit ((Handle) ROMlib_phoney_name_string);
-#if defined (linux)
-	  if (!name[0])
-	    {
-	      name = getlogin ();
-	      if (!name)
-		name = getenv ("LOGNAME");
-	      if (!name)
-		name = "";
-	    }
-#endif
 	  str255_from_c_string (STARH (ROMlib_phoney_name_string), name);
 	}
     }

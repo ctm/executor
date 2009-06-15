@@ -10,8 +10,6 @@ char ROMlib_rcsid_licensetext[] =
 
 #include "rsys/common.h"
 
-#if defined (DISPLAY_SPLASH_INFO_BOX) || defined (SUPPORT_ABOUT_EXECUTOR_BOX)
-
 #include "rsys/licensetext.h"
 
 license_text_page_t ROMlib_license[] =
@@ -246,5 +244,4 @@ license_text_page_t ROMlib_license[] =
       { NULL, NULL },  /* array terminator */
 };
 
-#endif /* DISPLAY_SPLASH_INFO_BOX || SUPPORT_ABOUT_EXECUTOR_BOX */
 #endif

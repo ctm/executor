@@ -504,9 +504,9 @@ static void dumpimage( unsigned char *p, int numrows, int numbytes,
 
     toskip = rowbytes - numbytes;
     context = DPSGetCurrentContext();
-    for (i = CRACKER_ZERO; i < numrows; ++i)
+    for (i = 0; i < numrows; ++i)
       {
-	for (j = CRACKER_ZERO; j < numbytes; ++j)
+	for (j = 0; j < numbytes; ++j)
 	  DPSPrintf(context, "%02X", *p++);
 	DPSPrintf(context, "\n");
 	p += toskip;

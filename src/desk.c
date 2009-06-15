@@ -33,14 +33,12 @@ P1(PUBLIC pascal trap, INTEGER, OpenDeskAcc, Str255, acc)	/* IMI-440 */
     DCtlHandle dctlh;
     WindowPtr wp;
 
-#if defined (SUPPORT_ABOUT_EXECUTOR_BOX)
     if (EqualString (acc, about_box_menu_name_pstr, TRUE, TRUE))
       {
 	do_about_box ();
 	retval = 0;
 	goto done;
       }
-#endif /* SUPPORT_ABOUT_EXECUTOR_BOX */
 
     if (OpenDriver(acc, &retval) == noErr) {
 	retval = CW(retval);
@@ -56,9 +54,7 @@ P1(PUBLIC pascal trap, INTEGER, OpenDeskAcc, Str255, acc)	/* IMI-440 */
 	  }
     }
 
-#if defined (SUPPORT_ABOUT_EXECUTOR_BOX)
   done:
-#endif
 
     SEvtEnb = TRUE;
     return retval;

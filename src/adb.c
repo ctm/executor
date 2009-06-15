@@ -194,7 +194,7 @@ adb_apeiron_hack (boolean_t deltas_p, ...)
 /* begin code for PegLeg */
 
   if (button_is_down)
-    MBState = CRACKER_ZERO;
+    MBState = 0;
   else
     MBState = 0xFF;
 

@@ -221,16 +221,6 @@ const char ROMlib_page_end[] =
 #endif
 "%%%%EndDocument\n"
 
-#if defined (PRINT_DEMO_WATERMARK)
-"gsave\n"
-"/Helvetica findfont2 250 scalefont setfont\n"
-"75 200 moveto\n"
-"1 -1 scale\n"
-"%d rotate\n"
-"(Demo) false charpath 1 setlinewidth stroke\n"
-"grestore\n"
-#endif
-
 "/showpage systemdict begin { showpage } bind end def\n"
 #if !defined (NEXTSTEP)
 "showpage\n"

@@ -1546,22 +1546,8 @@ PUBLIC int linuxfloppy_open(int disk, LONGINT *bsizep,
   *flagsp = 0;
 #define FLOPPY_PREFIX "/dev/fd"
   if (strncmp (dname, FLOPPY_PREFIX, sizeof(FLOPPY_PREFIX)-1) == 0)
-    {
-      *flagsp |= DRIVE_FLAGS_FLOPPY;
-#if defined (DISABLE_FLOPPY_WRITES)
-      force_read_only = TRUE;
-#endif
-    }
+    *flagsp |= DRIVE_FLAGS_FLOPPY;
 
-#if defined (DISABLE_SCSI_WRITES)
-  {
-    struct stat sbuf;
-
-    if (stat (dname, &sbuf) == 0 && !S_ISREG (sbuf.st_mode))
-      force_read_only = TRUE;
-  }
-#endif
-   
   if (!force_read_only)
     retval = Uopen (dname, O_RDWR);
   if (force_read_only || retval < 0)

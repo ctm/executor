@@ -235,17 +235,6 @@ PRIVATE gestaltentry_t phystable[] =
 #else
 #warning gestaltExecutorVersionString not currently available
 #endif
-#if defined (RELEASE_DEMO)
-  { gestaltDemoStatus, 1 },
-#if defined (TIME_OUT_DAYS)
-  { gestaltDemoExpiration,	TO_BE_FILLED_IN },
-#endif
-#else
-  { gestaltDemoStatus, 0 },
-  { gestaltSerialNumber,	TO_BE_FILLED_IN },
-  { gestaltRegisteredName,	TO_BE_FILLED_IN },
-  { gestaltRegisteredOrg,	TO_BE_FILLED_IN },
-#endif
 #if defined (LINUX) || defined (CYGWIN32)
   { gestaltPhysicalRAMSize,	TO_BE_FILLED_IN },
 #endif

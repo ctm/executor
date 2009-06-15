@@ -33,8 +33,13 @@ char ROMlib_rcsid_mman[] =
 #include "dpmilock.h"
 #endif
 
-#if defined (LINUX)
+#if defined (LINUX) || defined (MACOSX)
 #include <sys/mman.h>
+
+#if !defined (MAP_ANONYMOUS)
+#  define MAP_ANONYMOUS MAP_ANON
+#endif
+
 #endif /* LINUX */
 
 #if defined(NEXT) && !defined (STRICT_OPENSTEP)
@@ -768,7 +773,7 @@ _NewHandle_flags (Size size, boolean_t sys_p, boolean_t clear_p)
   newh->p = BLOCK_DATA_X (block);
   
   if (clear_p)
-    memset (BLOCK_DATA (block), CRACKER_ZERO, size - HDRSIZE);
+    memset (BLOCK_DATA (block), 0, size - HDRSIZE);
   
   SET_MEM_ERR (noErr);
   
@@ -1235,7 +1240,7 @@ _NewPtr_flags (Size size, boolean_t sys_p, boolean_t clear_p)
   p = BLOCK_DATA (b);
 
   if (clear_p)
-    memset (p, CRACKER_ZERO, size - HDRSIZE);
+    memset (p, 0, size - HDRSIZE);
 
   TheZone = save_zone;
   SET_MEM_ERR (noErr);

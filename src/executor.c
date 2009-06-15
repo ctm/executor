@@ -50,7 +50,6 @@ char ROMlib_rcsid_executor[] =
 #include "rsys/trapname.h"
 
 #include "rsys/options.h"
-#include "rsys/license.h"
 #include "rsys/suffix_maps.h"
 #include "rsys/string.h"
 #include "rsys/custom.h"
@@ -639,7 +638,6 @@ PUBLIC void executor_main( void )
 #define ALINETRAPNUMBER       0xA
     trap_install_handler( ALINETRAPNUMBER, alinehandler, (void *) 0);
 #endif
-    dolicense();
     if (thefile.fType == CLC(T('A','P','P','L')))
       {
 	ClrAppFiles(1);

@@ -37,6 +37,8 @@ pair_t ROMlib_ScreenLocation = { INITIALPAIRVALUE, INITIALPAIRVALUE };
 unsigned short crcval;
 int ROMlib_AppleChar = 0;
 int ROMlib_right_button_modifier = 0;
+
+void yyerror(const char *str);
 %}
 
 %start configuration
@@ -576,7 +578,7 @@ static long yylex( void ) {
     }
 }
 
-void yyerror(char *str)
+void yyerror(const char *str)
 {
     warning_unexpected ("configuration file parse error (line %ld): %s", linecount, str);
 }

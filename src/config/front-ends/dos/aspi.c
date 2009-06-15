@@ -930,11 +930,7 @@ aspi_disk_read (int disk, void *buf, int num_bytes)
 PUBLIC int 
 aspi_disk_write (int disk, const void *buf, int num_bytes)
 {
-#if defined (DISABLE_SCSI_WRITES)
-  return -1;
-#else
   return aspi_disk_xfer (WRITE_10, disk, (void *) buf, num_bytes);
-#endif
 }
 
 
@@ -1033,9 +1029,6 @@ aspi_try_to_open_and_mount_disk (int disk)
       sprintf (aspi_name, "aspi(%d,%d,%d)",
 	       aspi_info[disk].adaptor, aspi_info[disk].target,
 	       aspi_info[disk].lun);
-#if defined (DISABLE_SCSI_WRITES)
-      flags |= DRIVE_FLAGS_LOCKED;
-#endif
       try_to_mount_disk (aspi_name, disk | ASPIFDBIT, &mess,
 			 blocksize, 16 * PHYSBSIZE, flags, 0);
       mess = CL (mess);

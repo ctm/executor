@@ -62,12 +62,6 @@ P0 (PUBLIC pascal trap, void, InvalMenuBar)
   DrawMenuBar ();
 }
 
-#if defined (DISPLAY_DEMO_ON_MENU_BAR)
-/* Bounding box for "DEMO" text on menu bar. */
-static Rect menu_demo_text_rect;
-#endif
-
-
 P0(PUBLIC pascal trap, void, DrawMenuBar)
 {
   if (MBDFHndl)
@@ -75,57 +69,6 @@ P0(PUBLIC pascal trap, void, DrawMenuBar)
       TheMenu = 0;
       MBDFCALL(mbDraw, 0, 0L);
 
-#if defined (DISPLAY_DEMO_ON_MENU_BAR)
-      if (WWExist == EXIST_YES)
-	{
-	  THEPORT_SAVE_EXCURSION
-	    (MR (wmgr_port),
-	     {
-	       static char demo_string[] = DEMO_PREFIX "DEMO";
-	       FontInfo font_info;
-	       int text_width;
-	       int text_height;
-	       int left;
-	       int top;
-	       RGBColor save_fg;
-	       RGBColor save_bk;
-
-	       save_fg = CPORT_RGB_FG_COLOR (MR (wmgr_port));
-	       save_bk = CPORT_RGB_BK_COLOR (MR (wmgr_port));
-
-	       /* Set up the pen and colors. */
-	       PenNormal ();
-	       if (vdriver_bpp > 2)
-		 ForeColor (redColor);
-	       else
-		 ForeColor (blackColor);
-	       BackColor (whiteColor);
-
-	       /* Set up the font. */
-	       TextFont (0);
-	       TextSize (0);
-	       GetFontInfo (&font_info);
-	       text_width = TextWidth ((Ptr) demo_string,
-				       0, strlen (demo_string));
-	       text_height = (CW (font_info.ascent));
-
-	       left = vdriver_width - 16 - text_width;
-	       top = (CW (MBarHeight) - text_height) / 2 - 2;
-
-	       /* Record the bounding rect. */
-	       SetRect (&menu_demo_text_rect,
-			left, top, left + text_width, top + text_height);
-
-	       /* Draw the demo text. */
-	       MoveTo (left, top + text_height);
-	       DrawText_c_string (demo_string);
-
-	       /* Restore the foreground and background colors. */
-	       RGBForeColor (&save_fg);
-	       RGBBackColor (&save_bk);
-	     });
-	}
-#endif /* DISPLAY_DEMO_ON_MENU_BAR */
     }
 }
 
@@ -539,7 +482,6 @@ P2(PUBLIC pascal trap, void, AddResMenu, MenuHandle, mh, ResType, restype)
 	}
       while (restype == TICK("FONT") && (restype = TICK("FOND")));
 
-#if defined (SUPPORT_ABOUT_EXECUTOR_BOX)
       /* Add an "About Executor..." menu to the Apple menu when they
        * ask for desk accessories.
        */
@@ -550,7 +492,6 @@ P2(PUBLIC pascal trap, void, AddResMenu, MenuHandle, mh, ResType, restype)
 	about_box_menu_name_pstr = (StringPtr) "\016\000About CCRS...";
       if (restype == TICK ("DRVR") && about_box_menu_name_pstr[0])
 	app (about_box_menu_name_pstr, 0, 0, 0, 0, FALSE, &endinf);
-#endif /* defined (SUPPORT_ABOUT_EXECUTOR_BOX) */
 
       n = GetHandleSize(temph);
       sp = (StringPtr) STARH(temph);
@@ -1184,7 +1125,7 @@ int32 ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 		  restoren(nmenusdisplayed, (RgnHandle) 0, 0);
 		  nmenusdisplayed = 0;
 		}
-	      whichmenuhit = CRACKER_ZERO;
+	      whichmenuhit = 0;
 	      if (where == NOTHITINMBAR)
 		{
 		  mh = NULL;
@@ -1233,7 +1174,7 @@ int32 ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 		  item = CW(item);
 		}
 	      else
-		item = CRACKER_ZERO;
+		item = 0;
 	      where = oldwhere;
 	      olditem = 0;
 	    }
@@ -1369,12 +1310,6 @@ P1(PUBLIC pascal trap, LONGINT, MenuSelect, Point, p)
 
     TopMenuItem = MBarHeight;
     retval = ROMlib_menuhelper((MenuHandle) 0, &spooeyr, 0, FALSE, 0);
-
-#if defined (DISPLAY_DEMO_ON_MENU_BAR)
-    if (retval == 0 && PtInRect (p, &menu_demo_text_rect))
-      do_about_box ();
-#endif
-
     return retval;
 }
 
@@ -1394,7 +1329,6 @@ P1(PUBLIC pascal trap, void, FlashMenuBar, INTEGER, mid)
     MBDFCALL(mbHilite, 0, l);
 }
 
-#if 1 || !defined (DISABLE_COMMAND_KEY_EQUIVS)
 A2(PRIVATE, BOOLEAN, findroot, INTEGER, menuid, INTEGER *, root_unswp)
 {
     INTEGER loopcount, i, maxi;
@@ -1438,74 +1372,60 @@ A2(PRIVATE, BOOLEAN, findroot, INTEGER, menuid, INTEGER *, root_unswp)
     }
     return FALSE;
 }
-#endif /* !defined (DISABLE_COMMAND_KEY_EQUIVS) */
 
 P1(PUBLIC pascal trap, LONGINT, MenuKey, CHAR, thec)
 {
-#if defined (DISABLE_COMMAND_KEY_EQUIVS)
-  if (!ROMlib_disable_command_key_equivsp ||
-      !ROMlib_disable_command_key_equivsp->val)
-#endif
+  muelem *mp, *mpend;
+  startendpairs mps;
+  unsigned char *p;
+  MenuHandle mh;
+  int mitem;
+  mextp mxp;
+  LONGINT e, retval;
+  Byte c;
+  INTEGER i, menuid;
+    
+  if (thec >= 0x1B && thec <= 0x1F)
+    /*-->*/	return 0;
+  c = thec;
+  if (c >= 'a' && c <= 'z')
+    c = 'A' + c - 'a';
+    
+  initpairs(mps);
+  for (i = (int) nonhier; i <= (int) hier; i++)
     {
-      muelem *mp, *mpend;
-      startendpairs mps;
-      unsigned char *p;
-      MenuHandle mh;
-      int mitem;
-      mextp mxp;
-      LONGINT e, retval;
-      Byte c;
-      INTEGER i, menuid;
-    
-      if (thec >= 0x1B && thec <= 0x1F)
-	/*-->*/	return 0;
-      c = thec;
-      if (c >= 'a' && c <= 'z')
-        c = 'A' + c - 'a';
-    
-      initpairs(mps);
-      for (i = (int) nonhier; i <= (int) hier; i++)
-	{
-	  for (mpend = mps[i].startp - 1, mp = mps[i].endp - 1; mp != mpend ;
-	       mp--)
-	    {
-	      mh = MR(mp->muhandle);
-	      p = (unsigned char *) STARH(mh) + SIZEOFMINFO +
-		*(unsigned char *)(HxX(mh, menuData));
-	      mitem = 1;
-	      while (*p != 0)
-		{
-		  mxp = (mextp)(p + U(*p) + 1);
-		  if (mxp->mkeyeq == c && ((e = Hx(mh, enableFlags)) & 1) &&
-		      e & ((LONGINT)1 << mitem))
-		    {
-		      if (i == (int) nonhier)
-			menuid = Hx(mh, menuID);
-		      else if (!findroot(Hx(mh, menuID), &menuid))
-/*-->*/			return 0L;
-		      retval = ((LONGINT)Hx(mh, menuID) << 16) |
-			(unsigned short) mitem;
-		      FlashMenuBar(menuid);
-		      if (Hx(mh, menuID) < 0)
-			{
-			  SystemMenu(retval);
-			  retval = 0;
-			}
-/*-->*/		      return retval;
-		    }
-		  mitem++;
-		  p += U(*p) + SIZEOFMEXT;
-		}
-	    }
-	}
+      for (mpend = mps[i].startp - 1, mp = mps[i].endp - 1; mp != mpend ;
+           mp--)
+        {
+          mh = MR(mp->muhandle);
+          p = (unsigned char *) STARH(mh) + SIZEOFMINFO +
+            *(unsigned char *)(HxX(mh, menuData));
+          mitem = 1;
+          while (*p != 0)
+            {
+              mxp = (mextp)(p + U(*p) + 1);
+              if (mxp->mkeyeq == c && ((e = Hx(mh, enableFlags)) & 1) &&
+                  e & ((LONGINT)1 << mitem))
+                {
+                  if (i == (int) nonhier)
+                    menuid = Hx(mh, menuID);
+                  else if (!findroot(Hx(mh, menuID), &menuid))
+                    /*-->*/			return 0L;
+                  retval = ((LONGINT)Hx(mh, menuID) << 16) |
+                    (unsigned short) mitem;
+                  FlashMenuBar(menuid);
+                  if (Hx(mh, menuID) < 0)
+                    {
+                      SystemMenu(retval);
+                      retval = 0;
+                    }
+                  /*-->*/		      return retval;
+                }
+              mitem++;
+              p += U(*p) + SIZEOFMEXT;
+            }
+        }
     }
-#if defined (DISABLE_COMMAND_KEY_EQUIVS)
-  else
-    system_error ("Menu command-key equivalents are disabled in the "
-		  "demo version of Executor.  You must use the mouse "
-		  "to select menu items.",
-		  0, "OK", NULL, NULL, NULL, NULL, NULL);
-#endif /* defined (DISABLE_COMMAND_KEY_EQUIVS) */
   return(0L);
 }
 

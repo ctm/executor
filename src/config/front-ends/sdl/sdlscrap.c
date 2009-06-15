@@ -648,7 +648,7 @@ void PutScrapX(LONGINT type, LONGINT length, char *p, int scrap_count)
 PUBLIC boolean_t
 we_lost_clipboard(void)
 {
-  /* TODO */
+  return false; /* TODO */
 }
 
 LONGINT GetScrapX(LONGINT type, char **h)

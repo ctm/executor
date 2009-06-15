@@ -62,7 +62,6 @@ char ROMlib_rcsid_main[] =
 #include "rsys/blockinterrupts.h"
 #include "rsys/rgbutil.h"
 #include "rsys/refresh.h"
-#include "rsys/license.h"
 #include "rsys/executor.h"
 #include "rsys/wind.h"
 #include "rsys/osevent.h"
@@ -145,22 +144,7 @@ char *ROMlib_xfervmaddr;
 LONGINT ROMlib_xfervmsize = 0;
 #endif /* NEXTSTEP */
 
-infoblock ROMlib_info =
-{
-  INFO_START_STRING,
-  0,
-  "",
-  "",
-  "",
-  0,
-  0,
-};
-
 PUBLIC int ROMlib_noclock = 0;
-
-#if defined (DISPLAY_SPLASH_INFO_BOX)
-PUBLIC int ROMlib_nosplash = 0;
-#endif
 
 #if defined (NOMOUSE_COMMAND_LINE_OPTION)
 PUBLIC int ROMlib_no_mouse = 1;
@@ -313,10 +297,6 @@ static option_t common_opts[] =
 #endif
 #if 0
   { "noclock",     "disable timer",               opt_no_arg,   NULL },
-#endif
-
-#if defined (DISPLAY_SPLASH_INFO_BOX)
-  { "nosplash",    "skip splash screen",          opt_no_arg,   NULL },
 #endif
 
 #if defined (NOMOUSE_COMMAND_LINE_OPTION)
@@ -543,352 +523,7 @@ PUBLIC char *ROMlib_appname;
 
 #define APPWRAP	"/Executor.app"
 
-PRIVATE void maskkey( void )
-{
-    unsigned char *p, *ep;
-
-    for (p = (unsigned char *) &ROMlib_info.info_start_string
-	 + sizeof(ROMlib_info.info_start_string),
-	 ep = (unsigned char *) &ROMlib_info + sizeof(ROMlib_info);
-	 p < ep; *p++ ^= 0xA5)
-      ;
-}
-
-PRIVATE void byteswapinfo(infoblock *infop)
-{
-    infop->serialnumber = CL(infop->serialnumber);
-    infop->inodenumber  = CL(infop->inodenumber);
-    infop->timechanged  = CL(infop->timechanged);
-}
-
-#if !defined (NEXTSTEP)
-enum { N_COOKIES = 1 };
-#else
-enum { N_COOKIES = 2 };
-#endif
-
-PRIVATE void
-copy_with_cookie_substitution (FILE *read_fp, FILE *write_fp)
-{
-  int n_subs_made;
-  int c;
-  
-  for (n_subs_made = 0; n_subs_made < N_COOKIES; ++n_subs_made)
-    {
-      int i;
-
-      i = 0;
-      do
-	{
-	  c = fgetc(read_fp);
-	  if (write_fp != read_fp && c != EOF)
-	    if (fputc(c, write_fp) == EOF)
-	      {
-		fprintf(stderr, "trouble writing\n");
-		exit(3);
-	      }
-	  if (c == ROMlib_info.info_start_string[i])
-	    ++i;
-	  else
-	    i = 0;
-	}
-      while (i != sizeof(ROMlib_info.info_start_string) && c != EOF);
-      
-      if (c == EOF)
-	{
-	  if (n_subs_made == 0)
-	    {
-	      fprintf(stderr, "Couldn't find cookie; unable to register.\n");
-	      exit(3);
-	    }
-	}
-      else
-	{
-	  long offset;
-	  struct stat sbuf;
-      
-	  offset = ftell(write_fp) - sizeof(ROMlib_info.info_start_string);
-      
-	  if (write_fp == read_fp)
-	    {
-
-	      /* This seek may not be needed, but it appears that
-		 NEXTSTEP gets confused if we don't do this */
-
-	      if (fseek(read_fp, (offset
-				  + sizeof(ROMlib_info.info_start_string)),
-			SEEK_SET) == -1)
-		{
-		  fprintf(stderr, "bizarre seek problem\n");
-		  exit(3);
-		}
-	    }
-	  byteswapinfo(&ROMlib_info);
-	  if (fwrite((char *)
-		     &ROMlib_info + sizeof(ROMlib_info.info_start_string),
-		     sizeof(ROMlib_info)
-		     - sizeof(ROMlib_info.info_start_string), 1, write_fp)
-	      != 1)
-	    {
-	      fprintf(stderr, "couldn't fwrite\n");
-	      /* exit(11); */
-	    }
-	  byteswapinfo(&ROMlib_info);
-	  if (fseek(write_fp, offset, SEEK_SET) == -1)
-	    {
-	      fprintf(stderr, "couldn't seek to lowseg\n");
-	      exit(12);
-	    }
-	  if (fflush(write_fp) == EOF)
-	    {
-	      fprintf(stderr, "couldn't fflush\n");
-	      exit(13);
-	    }
-	  fsync(fileno(write_fp));
-	  if (fstat(fileno(write_fp), &sbuf) < 0)
-	    {
-	      fprintf(stderr, "couldn't fstat\n");
-	      exit(14);
-	    }
-	  ROMlib_info.timechanged = sbuf.st_mtime;
-	  ROMlib_info.inodenumber = ST_INO (sbuf);
-	  byteswapinfo(&ROMlib_info);
-	  maskkey();
-	  if (fwrite(&ROMlib_info, sizeof(ROMlib_info), 1, write_fp) != 1)
-	    {
-	      fprintf(stderr, "couldn't fwrite\n");
-	      /* exit(15); */
-	    }
-	  maskkey();
-	  byteswapinfo(&ROMlib_info);
-	  
-	  if (write_fp == read_fp)
-	    {
-
-	      /* This seek may not be needed, but it appears that
-		 NEXTSTEP gets confused if we don't do this */
-
-	      if (fseek(read_fp, (offset
-				  + sizeof(ROMlib_info.info_start_string)),
-			SEEK_SET) == -1)
-		{
-		  fprintf(stderr, "bizarre seek problem\n");
-		  exit(3);
-		}
-	    }
-	  else
-	    {
-	      if (fseek(read_fp,
-			sizeof(ROMlib_info)
-			- sizeof(ROMlib_info.info_start_string), SEEK_CUR)
-		  == -1)
-		{
-		  fprintf(stderr, "bizarre seek problem\n");
-		  exit(3);
-		}
-	    }
-	}
-    }
-  if (write_fp != read_fp)
-    while ((c = fgetc(read_fp)) != EOF)
-      if (fputc(c, write_fp) == EOF)
-	{
-	  fprintf(stderr, "trouble writing\n");
-	  exit(3);
-	}
-}
-
-static void
-complain_and_die_because_not_writeable (const char *verb,
-					const char *file,
-					const char *errno_string)
-{
-  char errmsg[2048];
-
-  sprintf (errmsg,
-	   "Registration failed:  \"%s\".  "
-	   "This application needs to %s %s during the "
-	   "registration process, but is unable to do so.  "
-	   "This means either that you are running this application "
-	   "from a CD-ROM (or other write-protected medium), "
-	   "or that you do not have permission to modify "
-	   "this application.  Make sure this application is installed on "
-	   "a hard drive before you try to run it.",
-	   errno_string, verb, file);
-
-  system_error (errmsg, 0,
-		"Exit", NULL, NULL,
-		NULL, NULL, NULL);
-  exit (-1);
-}
-
-A3(PUBLIC, void, ROMlib_writenameorgkey, char *, name,  char *, org,
-   char *, key)
-{
-  FILE *read_fp, *write_fp;
-  char *orig_file_name, *new_file_name;
-
-#if !defined (CYGWIN32)
-  char *backup_file_name;
-#endif
-  
-/*
- * On Linux Executor can't open itself for writing, so we make a temporary copy
- * of ourselves by putting a '.' before our name.  This won't work on DOS, but
- * I don't think it's needed there, either.
- */
-
-  new_file_name = 0;
-
-  orig_file_name = alloca(ROMlib_startdirlen + 1
-			  + strlen(ROMlib_appname) + 1);
-  sprintf(orig_file_name, "%s/%s", ROMlib_startdir, ROMlib_appname);
-
-#if defined (MSDOS)
-  /* fopen in read/write mode can succeed under MSDOS even when the
-   * file isn't writeable (as when run off the CD-ROM).  This check
-   * works, however.
-   */
-  if (access (orig_file_name, W_OK))
-    complain_and_die_because_not_writeable ("modify", orig_file_name,
-					    strerror (errno));
-#endif
-
-#if !defined(LETGCCWAIL)
-  new_file_name = 0;
-#endif
-  if ((write_fp = Ufopen(orig_file_name, "r+b")))
-    {
-      read_fp = write_fp;
-    }
-  else
-    {
-      if ((read_fp = Ufopen(orig_file_name, "rb")))
-	{
-	  struct stat sbuf;
-
-	  new_file_name = alloca(ROMlib_startdirlen + 1 + 1
-				 + strlen(ROMlib_appname) + 1);
-	  sprintf(new_file_name, "%s/.%s", ROMlib_startdir, ROMlib_appname);
-
-	  /* Fetch original permission bits. */
-	  if (Ustat(orig_file_name, &sbuf))
-	    errno_fatal ("Unable to stat %s", orig_file_name);
-
-	  /* Open the new file for writing. */
-	  write_fp = Ufopen(new_file_name, "wb");
-	  if (write_fp == NULL)
-	    complain_and_die_because_not_writeable ("create",
-						    new_file_name,
-						    strerror (errno));
-
-	  /* Copy permission bits. */
-	  if (Uchmod(new_file_name, sbuf.st_mode))
-	    errno_fatal ("Unable to chmod %s", new_file_name);
-	}
-      else
-	{
-	  errno_fatal ("Couldn't open %s for reading", orig_file_name);
-	}
-    }
-
-  strncpy(ROMlib_info.name, name, sizeof(ROMlib_info.name));
-  strncpy(ROMlib_info.organization, org, sizeof(ROMlib_info.organization));
-  strncpy(ROMlib_info.key, key, sizeof(ROMlib_info.key));
-
-  copy_with_cookie_substitution (read_fp, write_fp);
-
-  fsync(fileno(write_fp));
-  if (fclose(write_fp) == EOF)
-    {
-      if (write_fp != read_fp)
-	{
-	  fclose(read_fp);
-	  unlink(orig_file_name);
-	  fprintf(stderr, "trouble closing file\n");
-	  exit(3);
-	}
-    }
-#if !defined (CYGWIN32)
-  else
-    {
-      if (write_fp != read_fp)
-	{
-	  boolean_t failed_p;
-
-#define BACKUP_SUFFIX ".old"
-	  backup_file_name = alloca(strlen(orig_file_name)
-				    + sizeof(BACKUP_SUFFIX));
-	  sprintf(backup_file_name, "%s%s", orig_file_name, BACKUP_SUFFIX);
-	  unlink(backup_file_name);  /* No need to check for error here. */
-
-	  failed_p = (Ulink (orig_file_name, backup_file_name) != 0);
-	  if (failed_p)
-	    warning_errno ("Unable to link \"%s\" to \"%s\".",
-			   orig_file_name, backup_file_name);
-	  else
-	    {
-	      failed_p = (unlink (orig_file_name) != 0);
-	      if (failed_p)
-		warning_errno ("Unable to unlink \"%s\"\n", orig_file_name);
-	    }
-
-	  if (failed_p)
-	    {
-	      fprintf(stderr, "Unable to move \"%s\" to \"%s\"\n"
-		      "New file left as \"%s\"\n", orig_file_name,
-		      backup_file_name, new_file_name);
-	      exit(3);
-	    }
-	  else
-	    {
-	      if (Ulink (new_file_name, orig_file_name) != 0)
-		{
-		  warning_errno ("Unable to link \"%s\" to \"%s\".\n",
-				 new_file_name, orig_file_name);
-		  Ulink (backup_file_name, orig_file_name);
-		  fprintf(stderr, "Unable to move \"%s\" to \"%s\"\n"
-			  "New file left as \"%s\"\n", new_file_name,
-			  orig_file_name, new_file_name);
-		  exit(3);
-		}
-	      unlink(new_file_name);
-	      /* 	  unlink(backup_file_name); This just doesn't work. */
-	    }
-	}
-    }
-#endif
-
-#if defined (CYGWIN32)
-  if (new_file_name)
-    add_to_cleanup ("\"%s\\exemove\" \"%s\" \"%s\"\n", ROMlib_startdir,
-		    new_file_name, orig_file_name);
-#endif
-
-  /* TODO: explain why Executor is quitting and state that the registration
-     process has succeeded if it has */
-  ROMlib_exit = 1;
-  C_ExitToShell();
-}
-
 ULONGINT ROMlib_ourmtime;
-
-/*
- * TODO: change printf to some sort of alert thing.
- */
-
-PRIVATE void revert_to_demo_mode( const char *stringp )
-{
-#if 0
-#if !defined (REGISTER_BEFORE_USABLE)
-  fprintf(stderr, "Reverting to demo mode: %s\n", stringp);
-#else
-  fprintf(stderr, "Reverting to unregistered mode: %s\n", stringp);
-#endif
-#endif
-
-  ROMlib_info.serialnumber = 0;
-}
 
 #if defined (NEXTSTEP)
 
@@ -1023,144 +658,6 @@ A1(PRIVATE, void, misc_self_examination, char *, us)
 }
 #endif /* defined (NEXTSTEP) */
 
-PRIVATE boolean_t
-valid_sn_for_this_platform (unsigned long sn)
-{
-  boolean_t retval;
-
-  retval = FALSE;
-
-  if (ROMlib_first_snp && ROMlib_last_snp)
-    retval = sn >= ROMlib_first_snp->val && sn <= ROMlib_last_snp->val;
-  else
-    {
-      int platform;
-
-      platform = sn % PLATFORM_MOD;
-
-#if defined(CYGWIN32)
-      if (platform == PLATFORM_DOS)
-	retval = TRUE;
-#endif
-
-#if defined(MSDOS)
-      if (platform == PLATFORM_CYGWIN32)
-	retval = TRUE;
-#endif
-
-      if (platform == VERSION_SIG || platform == PLATFORM_ANY)
-	retval = TRUE;
-    }
-
-  return retval;
-}
-
-static inline void
-info_after_hook (void)
-{
-  /* dummy hook so we can break here in gdb and set
-     `ROMlib_info.serial_number' to fully enable executor */
-
-#if defined (RELEASE_INTERNAL)
-  ROMlib_info.serialnumber = 3;
-#endif
-
-}
-
-A1(PRIVATE, void, readinfo, char *, us)
-{
-  struct stat sbuf;
-  decoded_info_t info;
-
-  if (us[0] == 0)
-    {
-      fprintf (stderr, "don't know where we're being run from\n");
-      exit (10);
-    }
-  if (Ustat(us, &sbuf) < 0)
-    {
-#ifdef CYGWIN32
-#define EXE_SUFFIX ".exe"
-      {
-	char *us_plus_exe;
-
-	us_plus_exe = alloca(strlen(us)+strlen(EXE_SUFFIX)+1);
-	sprintf(us_plus_exe, "%s%s", us, EXE_SUFFIX);
-	if (Ustat(us_plus_exe, &sbuf) < 0)
-	  {
-	    fprintf(stderr, "couldn't stat \"%s\" or \"%s\"\n", us,
-		    us_plus_exe);
-	    exit(10);
-	  }
-      }
-#else
-      fprintf(stderr, "couldn't stat \"%s\"\n", us);
-      exit(10);
-#endif
-    }
-  ROMlib_ourmtime = sbuf.st_mtime;
-  if (ROMlib_info.serialnumber)
-    {
-      maskkey();
-      byteswapinfo(&ROMlib_info);
-      if (decode((unsigned char *) ROMlib_info.key, &info)
-	  && info.serial_number == ROMlib_info.serialnumber)
-	{
-	  struct tm *tmp;
-	  unsigned int this_year, this_month;
-	  time_t t;
-
-	  time(&t);
-	  tmp = localtime(&t);
-	  this_year = tmp->tm_year + 1900;
-	  this_month = tmp->tm_mon + 1;
-	  
-	  if (!valid_sn_for_this_platform(ROMlib_info.serialnumber))
-            revert_to_demo_mode("authorization key not"
-				" valid for this platform");
-	  else if (CL(ROMlib_info.serialnumber) == CLC (2392023)
-		   || CL(ROMlib_info.serialnumber) == CLC (2175023)
-		   || CL(ROMlib_info.serialnumber) == CLC (5958004)
-		   || (info.expires_p
-		       && (info.last_year < this_year
-			   || (info.last_year == this_year
-			       && info.last_month < this_month))))
-	    revert_to_demo_mode("authorization key expired");
-	  else if (info.major_revision < MAJOR_REVISION ||
-		   (info.major_revision == MAJOR_REVISION &&
-		    !info.updates_p && MINOR_REVISION > 0))
-	    revert_to_demo_mode("authorization key not"
-                                " valid for this revision");
-#if !defined(MSDOS) && !defined (CYGWIN32)
-	  else
-            protectus(info.serial_number, info.n_cpu);
-#endif
-	}
-      else
-	revert_to_demo_mode("authorization key vs. serial number"
-			    " mismatch");
-    }
-
-  if (ST_INO (sbuf) != ROMlib_info.inodenumber
-      || (ULONGINT) (sbuf.st_mtime - ROMlib_info.timechanged) > 300)
-    ROMlib_info.key[0] = 0;
-  
-  info_after_hook ();
-}
-
-PRIVATE void
-patch_phys_gestalt_ROMlib_info (void)
-{
-  replace_physgestalt_selector (gestaltSerialNumber,
-				ROMlib_info.serialnumber);
-
-  replace_physgestalt_selector (gestaltRegisteredName,
-				US_TO_SYN68K (ROMlib_info.name));
-
-  replace_physgestalt_selector (gestaltRegisteredOrg,
-				US_TO_SYN68K (ROMlib_info.organization));
-}
-
 #if defined(MSDOS) || defined (CYGWIN32)
 PUBLIC char ROMlib_savecwd[MAXPATHLEN];
 
@@ -1228,7 +725,6 @@ A1(PRIVATE, void, setstartdir, char *, argv0)
 #if defined(NEXTSTEP)
     misc_self_examination (lookhere);
 #endif
-    readinfo(lookhere);
     suffix = rindex(lookhere, '/');
     *suffix = 0;
     getcwd(savedir, sizeof savedir);
@@ -1294,7 +790,6 @@ A1(PRIVATE, void, setstartdir, char *, argv0)
 	strcpy(ROMlib_startdir, ".");
       }
     ROMlib_startdirlen = strlen(ROMlib_startdir);
-    readinfo(argv0);
 #endif /* defined(MSDOS) */
 }
 
@@ -2134,8 +1629,6 @@ A2 (PUBLIC, int, main, int, argc, char **, argv)
   
   ROMlib_InitZones (force_big_offset ? offset_big : offset_none);
 
-  patch_phys_gestalt_ROMlib_info ();
-
   {
     uint32 save_a7;
 
@@ -2214,10 +1707,6 @@ A2 (PUBLIC, int, main, int, argc, char **, argv)
   
 #if defined (NOMOUSE_COMMAND_LINE_OPTION)
   opt_int_val (common_db, "nomouse",     &ROMlib_no_mouse,  &bad_arg_p);
-#endif
-
-#if defined (DISPLAY_SPLASH_INFO_BOX)
-  opt_int_val (common_db, "nosplash",    &ROMlib_nosplash,  &bad_arg_p);
 #endif
 
 #if 0
@@ -2596,15 +2085,6 @@ A2 (PUBLIC, int, main, int, argc, char **, argv)
   set_refresh_rate (ROMlib_refresh);
   
   restore_virtual_ints (int_state);
-
-#if defined (DISPLAY_SPLASH_INFO_BOX)
-  if (!ROMlib_no_windows && ROMlib_startupscreen)
-    SysError (0x28);		/* welcome to m*cintosh */
-#endif /* DISPLAY_SPLASH_INFO_BOX */
-
-  if (!ROMlib_info.serialnumber &&
-      (!ROMlib_must_registerp || ROMlib_must_registerp->val))
-    ROMlib_dolicense = register_only;
 
   WWExist = QDExist = EXIST_NO;
 

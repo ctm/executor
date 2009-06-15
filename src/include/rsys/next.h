@@ -17,19 +17,6 @@
 #define INFO_START_STRING "Run Paiot,-Svp."
                         /* 1234567890123456 */
       
-typedef struct
-{
-  char info_start_string[sizeof(INFO_START_STRING)];
-  LONGINT serialnumber;
-  char name[81];
-  char organization[81];
-  char key[81];
-  LONGINT inodenumber;
-  LONGINT timechanged;
-} infoblock;
-
-extern infoblock ROMlib_info;
-
 #define SETUPA5 LONGINT savea5; savea5 = EM_A5; EM_A5 = CL( (LONGINT) CurrentA5)
 
 #define RESTOREA5 EM_A5 = savea5

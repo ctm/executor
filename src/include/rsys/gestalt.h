@@ -28,23 +28,8 @@ enum { gestaltGhostScriptVersion        = T ('g', 'o', 's', 't') };
 /* Executor Version as string */
 enum { gestaltExecutorVersionString	= T ('x', 'q', 't', 'r') };
 
-/* whether or not we're the demo version */
-enum { gestaltDemoStatus		= T ('d', 'e', 'm', 'o') };
-
-/* expiration date */
-enum { gestaltDemoExpiration		= T ('x', 'p', 'i', 'r') };
-
-/* serial number */
-enum { gestaltSerialNumber		= T ('s', '/', 'n', ' ') };
-
 /* screen size */
 enum { gestaltScreenSize                = T ('s', 'c', 'r', 'n') };
-
-/* registered name */
-enum { gestaltRegisteredName            = T ('n', 'a', 'm', 'e') };
-
-/* registered organization */
-enum { gestaltRegisteredOrg             = T ('o', 'r', 'g', ' ') };
 
 enum { gestaltPHYSICAL                  = T ('M', 'U', 'L', '8') };
 

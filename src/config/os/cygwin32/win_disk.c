@@ -343,10 +343,6 @@ dosdisk_open (int disk, LONGINT *bsizep, drive_flags_t *flagsp)
       }
     }
 
-#if defined (DISABLE_FLOPPY_WRITES)
-  *flagsp |= DRIVE_FLAGS_LOCKED;
-#endif
-
   dcache_invalidate (disk | DOSFDBIT, FALSE);
 
   SetErrorMode (old_err_mode);

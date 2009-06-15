@@ -20,6 +20,7 @@ char ROMlib_rcsid_dump[] =
 #include "DialogMgr.h"
 #include "ControlMgr.h"
 #include "MenuMgr.h"
+#include "FileMgr.h"
 
 #include "rsys/cquick.h"
 #include "rsys/wind.h"

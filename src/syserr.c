@@ -28,16 +28,10 @@ char ROMlib_rcsid_syserr[] =
 #include "rsys/segment.h"
 #include "rsys/flags.h"
 #include "rsys/version.h"
-#include "rsys/license.h"
 #include "rsys/vdriver.h"
 #include "rsys/next.h"
 #include "rsys/osevent.h"
 #include "rsys/options.h"
-
-PRIVATE void mydolicense( void )
-{
-    ROMlib_dolicense = old_license;
-}
 
 PRIVATE struct {
     INTEGER	count	PACKED;
@@ -163,12 +157,7 @@ PRIVATE struct {
 
     CWC(156),	/* 8. Info "procedure" */
     CWC(4),
-#if !defined(LITTLEENDIAN)
-    (void (*)()) mydolicense,
-#else
-    0,	/* dolicense will be filled in later */
-#endif
-
+    0,	/* was mydolicense, which we no longer use */
 };
 
 char syserr_msg[256];
@@ -355,23 +344,6 @@ A4(PRIVATE, void, dobuttons, INTEGER, id, INTEGER, offsetx,
       }
 }
 
-#define DEMO_MODE_VERSION "Time Limited Demo Mode ("
-#define REGISTERED_VERSION "Fully Enabled Version, Do NOT Redistribute ("
-
-#if defined (EXPERIMENTAL)
-#define EXPERIMENTAL_STRING " -- experimental)"
-#else
-#define EXPERIMENTAL_STRING ")"
-#endif
-
-PRIVATE void
-DrawVersion (char *str)
-{
-  DrawText_c_string (str);
-  DrawText_c_string ((char *) ROMlib_executor_version);
-  DrawText_c_string (EXPERIMENTAL_STRING);
-}
-
 /*
  * NOTE: The version of SysError below will only handle natively compiled
  *	 code.  When we want to be able to run arbitrary code we'll need
@@ -395,11 +367,6 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
 
     main_gd_rect = PIXMAP_BOUNDS (GD_PMAP (MR (MainDevice)));
     
-#if defined(LITTLEENDIAN)
-    myalerttab.func8 =
-      (void (*)(void)) (long) CL((LONGINT) (long) mydolicense);
-#endif
-
     if (!DSAlertTab) {
 #if defined (CLIFF_CENTERING_ALGORITHM)
 	DSAlertTab = CL((Ptr) &myalerttab);
@@ -459,101 +426,49 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
 
     /* 5, 6. Draw alert box if the errorcode is >= 0 */
     TRAPBEGIN();
-    if (
-#if defined (DISPLAY_SPLASH_INFO_BOX)
-	!ROMlib_nosplash
-#else
-	0
-#endif
-	) {
-	if (errorcode < 0)
-	    errorcode = -errorcode;
-	else {
-	    r = DSAlertRect;
-	    FillRect(&r, white);
+    if (errorcode < 0)
+      errorcode = -errorcode;
+    else {
+      r = DSAlertRect;
+      FillRect(&r, white);
 #if defined (OLDSTYLEALERT)
-	    r.right = CW(CW(r.right) - (2));
-	    r.bottom = CW(CW(r.bottom) - (2));
-	    FrameRect(&r);
-	    PenSize(2, 2);
-	    MoveTo(CW(r.left)+2, CW(r.bottom));
-	    LineTo(CW(r.right), CW(r.bottom));
-	    LineTo(CW(r.right), CW(r.top)+2);
-	    PenSize(1, 1);
+      r.right = CW(CW(r.right) - (2));
+      r.bottom = CW(CW(r.bottom) - (2));
+      FrameRect(&r);
+      PenSize(2, 2);
+      MoveTo(CW(r.left)+2, CW(r.bottom));
+      LineTo(CW(r.right), CW(r.bottom));
+      LineTo(CW(r.right), CW(r.top)+2);
+      PenSize(1, 1);
 #else /* OLDSTYLEALERT */
-	    FrameRect(&r);
-	    InsetRect(&r, 3, 3);
-	    PenSize(2, 2);
-	    FrameRect(&r);
-	    PenSize(1, 1);
+      FrameRect(&r);
+      InsetRect(&r, 3, 3);
+      PenSize(2, 2);
+      FrameRect(&r);
+      PenSize(1, 1);
 #endif /* OLDSTYLEALERT */
-	}
+    }
 
-	/* find appropriate entry */
+    /* find appropriate entry */
 
-	ap = (struct adef *) findid(errorcode);
-	if (!ap)
-	    ap = (struct adef *) ((INTEGER *) MR(DSAlertTab) + 1);
+    ap = (struct adef *) findid(errorcode);
+    if (!ap)
+      ap = (struct adef *) ((INTEGER *) MR(DSAlertTab) + 1);
 	
-	/* 7. text strings */
-	drawtextstring(CW(ap->primetextid), offsetx, offsety);
-	drawtextstring(CW(ap->secondtextid), offsetx, offsety);
+    /* 7. text strings */
+    drawtextstring(CW(ap->primetextid), offsetx, offsety);
+    drawtextstring(CW(ap->secondtextid), offsetx, offsety);
 
-	/* 8. icon */
-	drawicon(CW(ap->iconid), offsetx, offsety);
+    /* 8. icon */
+    drawicon(CW(ap->iconid), offsetx, offsety);
 
-	/* 9. TODO: figure out what to do with the proc ... */
+    /* 9. TODO: figure out what to do with the proc ... */
 
-#define NTK_LINE_1	"Distributed in Asia by NTK, Inc."
-#define NTK_LINE_2	"+82 2 551 3505 FAX"
-#define NTK_LINE_3	"+82 2 551 8425 Phone"
-
-	if (errorcode == WELCOME_CODE) {
-#if 0
-	    MoveTo((CW(DSAlertRect.left) + CW(DSAlertRect.right)) / 2,
-						  CW(DSAlertRect.bottom) - 48);
-	    DrawText_c_string (NTK_LINE_1);
-	    MoveTo((CW(DSAlertRect.left) + CW(DSAlertRect.right)) / 2,
-						  CW(DSAlertRect.bottom) - 32);
-	    DrawText_c_string (NTK_LINE_2);
-	    MoveTo((CW(DSAlertRect.left) + CW(DSAlertRect.right)) / 2,
-						  CW(DSAlertRect.bottom) - 16);
-	    DrawText_c_string (NTK_LINE_3);
-#endif
-
-	    MoveTo (CW(main_gd_rect.left) + 5,
-		    CW(main_gd_rect.bottom) - 17);
-#if defined (USE_VGAVDRIVER)
-	    TextMode(srcBic);
-#endif
-
-	    if (ROMlib_info.serialnumber)
-	      {
-		Str255 s;
-		
-		DrawVersion (REGISTERED_VERSION);
-		MoveTo(CW(main_gd_rect.left) + 5,
-		       CW(main_gd_rect.bottom) - 33);
-		DrawText_c_string ("SN:");
-		NumToString(ROMlib_info.serialnumber, s);
-		DrawString(s);
-		DrawText_c_string ("  ");
-		DrawText_c_string (ROMlib_info.name);
-		DrawText_c_string (" --- ");
-		DrawText_c_string (ROMlib_info.organization);
-	      }
-	    else
-	      DrawVersion (DEMO_MODE_VERSION);
-	    TextMode(srcOr);
-	}
-
-	/* 10, 11, 12, 13. check for non-zero button id */
+    /* 10, 11, 12, 13. check for non-zero button id */
 /* #warning We blow off ResumeProc until we can properly handle it */
-	if (ap->buttonid)
-	    dobuttons(/* CL(ResumeProc) ? Cx(ap->buttonid) + 1 : */ Cx(ap->buttonid),
-		      offsetx, offsety,
-		      !ROMlib_info.serialnumber && errorcode == WELCOME_CODE);
-      }
+    if (ap->buttonid)
+      dobuttons(/* CL(ResumeProc) ? Cx(ap->buttonid) + 1 : */ Cx(ap->buttonid),
+                offsetx, offsety, false);
 
     TRAPEND();
 }

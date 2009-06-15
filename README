@@ -10,8 +10,6 @@ just like emulation a lot, you probably don't want to spend any time
 with Executor.
 
 Included are a bunch of auxiliarly files and miscellaneous front-ends.
-It's unlikely anything other than the Linux and win32 ports can be
-made to go.
 
 The DOS port required various other libraries that we had permission
 to use, but that we did not necessarily have the permission to publish
@@ -25,7 +23,7 @@ install of syn68k):
 
   mkdir -p build/debug-linux
   cd build/debug-linux
-  ../../util/configure.sh  '--target=i486-linux' '--host=i486-linux' '--front-end=x' '--target-gcc=gcc' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -DNDEBUG -O0 -finline-functions -g -Wall -DRELEASE_INTERNAL -DERROR_SUPPORTED_MASK="(~0)"' '--root=../..' '--target-file-format=glibc' '--sound=linux' '--syn68k-target=i486-linux-glibc'
+  ../../util/configure.sh  '--target=i486-linux' '--host=i486-linux' '--front-end=x' '--target-gcc=gcc' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--target-file-format=glibc' '--sound=linux' '--syn68k-target=i486-linux-glibc'
   make
 
 That should leave you with a binary called executor.  Unfortunately, without
@@ -44,7 +42,7 @@ something like
 
   mkdir -p build/debug-linux
   cd build/debug-linux
-  ../../util/configure.sh  '--target=i486-linux' '--host=i486-linux' '--front-end=x' '--target-gcc=gcc -m32' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -DNDEBUG -O0 -finline-functions -g -Wall -DRELEASE_INTERNAL -DERROR_SUPPORTED_MASK="(~0)"' '--root=../..' '--target-file-format=glibc' '--sound=linux' '--syn68k-target=i486-linux-glibc'
+  ../../util/configure.sh  '--target=i486-linux' '--host=i486-linux' '--front-end=x' '--target-gcc=gcc -m32' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--target-file-format=glibc' '--sound=linux' '--syn68k-target=i486-linux-glibc'
   make
 
 However, you may find that you need to hand-edit Makefile and change the line
@@ -61,7 +59,7 @@ the SDL-based version of Executor on Linux, you can try:
 
   mkdir -p build/debug-linux-sdl
   cd build/debug-linux-sdl
-  ../../util/configure.sh  '--target=i486-linux' '--host=i486-linux' '--front-end=sdl' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -DNDEBUG -O0 -finline-functions -g -Wall -DRELEASE_INTERNAL -DERROR_SUPPORTED_MASK="(~0)"' '--root=../..' '--target-file-format=glibc' '--sound=sdl' '--syn68k-target=i486-linux-glibc'
+  ../../util/configure.sh  '--target=i486-linux' '--host=i486-linux' '--front-end=sdl' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--target-file-format=glibc' '--sound=sdl' '--syn68k-target=i486-linux-glibc'
   make
 
 If you have SDL <http://libsdl.org/> installed and would like to play with
@@ -69,10 +67,13 @@ the SDL-based version of Executor on Mac OS X Intel, you can try:
 
   mkdir -p build/debug-macosx-sdl
   cd build/debug-macosx-sdl
-  ../../util/configure.sh  '--target=i486-macosx' '--host=i486-macosx' '--front-end=sdl' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -DNDEBUG -O0 -finline-functions -g -Wall -DRELEASE_INTERNAL -DERROR_SUPPORTED_MASK="(~0)"' '--root=../..' '--target-file-format=glibc' '--sound=sdl' '--syn68k-target=i486-macosx-glibc'
+  ../../util/configure.sh  '--target=i486-macosx' '--host=i486-macosx' '--front-end=sdl' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--target-file-format=glibc' '--sound=sdl' '--syn68k-target=i486-macosx-glibc'
   make
 
-The Mac OS X version has problems, especially with quitting.
+In the past it was possible to cross-compile a version of Executor for
+Windows using mingw32.  So far that port hasn't been tried since
+putting the code on Github.  It probably doesn't work, but probably
+could be made to work without much effort.
 
 My email address is still <ctm@ardi.com>, although ARDI itself is
 defunct.  I get a ridiculous amount of spam and will quite possibly

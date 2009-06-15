@@ -304,6 +304,8 @@ mmap_lowglobals (void)
     }
 }
 
+#if !defined (MACOSX)
+
 #if !defined (powerpc)
 PRIVATE caddr_t
 round_up_to_page_size (unsigned long addr)
@@ -379,6 +381,7 @@ mmap_conflict (void *start, size_t length)
 
   return retval;
 }
+#endif /* defined (MACOSX) */
 
 /*
  * This code used to try to get us memory that we could use directly (meaning

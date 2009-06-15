@@ -386,10 +386,6 @@ dosdisk_open (int disk, LONGINT *bsizep, drive_flags_t *flagsp)
   d->disk_number       = disk;
   d->is_open           = 1;
 
-#if defined (DISABLE_FLOPPY_WRITES)
-  *flagsp |= DRIVE_FLAGS_LOCKED;
-#endif
-
   dcache_invalidate (disk | DOSFDBIT, FALSE);
 
   lock_media (disk);
@@ -876,9 +872,6 @@ dosdisk_read (int disk, void *buf, int num_bytes)
 int
 dosdisk_write (int disk, const void *buf, int num_bytes)
 {
-#if defined (DISABLE_FLOPPY_WRITES)
-  return -1;
-#else
   dosdisk_info_t *d = disk_number_to_disk_info (disk);
   int orig_num_bytes;
   boolean_t old_slow_clock_p;
@@ -1030,5 +1023,4 @@ dosdisk_write (int disk, const void *buf, int num_bytes)
   if (changed && num_bytes == 0)
     complain_about_changed_media ();
   return orig_num_bytes - num_bytes;
-#endif /* !defined (DISABLE_FLOPPY_WRITES) */
 }

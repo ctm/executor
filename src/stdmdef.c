@@ -396,19 +396,6 @@ draw_item (Rect *rp, struct tableentry *tp, int32 bit, int item, MenuHandle mh,
     }
   RGBBackColor (invert_p ? &title_color : &bk_color);
   
-#if defined (DISABLE_COMMAND_KEY_EQUIVS)
-  if (ROMlib_disable_command_key_equivsp &&
-      ROMlib_disable_command_key_equivsp->val)
-    if (active_p && !dither_cmd_p)
-      {
-	if (!AVERAGE_COLOR (&bk_color, &command_color, 0x8000, &command_color))
-	  {
-	    command_color = ROMlib_black_rgb_color;
-	    dither_cmd_p = TRUE;
-	  }
-      }
-#endif
-
   rtmp.top = CW (top);
   rtmp.bottom = CW (bottom);
   rtmp.left = rp->left;

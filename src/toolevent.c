@@ -246,74 +246,6 @@ PUBLIC void ROMlib_circledefault(DialogPtr dp)
     SetPort(saveport);
 }
 
-#if !defined (SUPPORT_ABOUT_EXECUTOR_BOX)
-
-PRIVATE void substitute(Handle h, const char *findp, const char *replacep)
-{
-    Munger(h, 0, (Ptr) findp, strlen(findp), (Ptr) replacep, strlen(replacep));
-}
-
-/* This is the old, crufty about panel, which should eventually go away.
- * The nice new about box is in aboutbox.c.
- */
-PRIVATE void do_about_box(void)
-{
-  HIDDEN_Handle h;
-  Rect r;
-  INTEGER type;
-  DialogPtr dp;
-  INTEGER ihit;
-  INTEGER offset;
-  typedef Rect *RectPtr;
-  typedef struct { RectPtr p PACKED_P; } HIDDEN_RectPtr;
-  typedef HIDDEN_RectPtr *RectHandle;
-  RectHandle rh;	/* all we're concerned with is the rect, but more follows */
-
-  if (WWExist != EXIST_YES)
-    SysBeep(5);
-  else
-    {
-      static BOOLEAN already_here = FALSE;
-      if (!already_here)
-	{
-	  already_here = TRUE;
-	  rh = (RectHandle) GetResource(TICK("DLOG"), ABOUTDIALID);
-	  offset = (CW(screenBitsX.bounds.right) -
-		    (Hx(rh, right) - Hx(rh, left))) / 2;
-	  offset = offset - Hx(rh, left);
-	  HxX(rh, left ) = CW(Hx(rh, left ) + offset);
-	  HxX(rh, right) = CW(Hx(rh, right) + offset);
-	  dp = GetNewDialog(ABOUTDIALID, (Ptr) 0, (WindowPtr) -1);
-
-	  GetDItem(dp, 2, &type, &h, &r);
-	  h.p = CL(h.p);
-	  substitute(h.p, "m.nnx", ROMlib_executor_version);
-#if defined(LINUX)
-	  substitute(h.p, "DOS", "Linux");
-#elif defined(NEXTSTEP)
-	  substitute(h.p, "DOS", "NEXTSTEP");
-#endif
-	  SetDItem(dp, 2, CW(type), h.p, &r);
-
-	  GetDItem(dp, 2, &type, &h, &r);
-	  h.p = CL(h.p);
-	  substitute(h.p, "License", "Info");
-	  SetDItem(dp, 2, CW(type), h.p, &r);
-
-	  ShowWindow(dp);
-	  ROMlib_circledefault(dp);
-	  do
-	    ModalDialog((ProcPtr) 0, &ihit);
-	  while (ihit != CWC(ABOUTOKITEM));
-	  DisposDialog(dp);
-	  already_here = FALSE;
-	}
-    }
-}
-
-#endif /* !defined (SUPPORT_ABOUT_EXECUTOR_BOX) */
-
-
 PUBLIC void dofloppymount( void )
 {
 #if !defined(MSDOS) && !defined(LINUX) && !defined (CYGWIN32)
@@ -1311,13 +1243,8 @@ P0 (PUBLIC pascal trap, LONGINT, TickCount)
    */
 
   if (ROMlib_clock)
-    Ticks_UL.u = CL (ticks); /* NOTE: we do it this way so that all four
-				bytes are used, even though if SHORT_TICKS
-				is set, we'll expect the top two bytes to
-				always be zero.  If someone cracks out
-				our Time's up test then Ticks upper bytes
-				will get set eventually and that will
-				cause trouble */
+    Ticks_UL.u = CL (ticks);
+
   new_time = (UNIXTIMETOMACTIME (ROMlib_start_time.tv_sec)
 	      + (long) ((ROMlib_start_time.tv_usec / (1000000.0 / 60) + ticks) / 60));
 

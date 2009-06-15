@@ -8,7 +8,6 @@ extern void sendresumeevent(LONGINT cvtclip);
 extern void sendsuspendevent(void);
 extern void ROMlib_writenameorgkey(char *name,  char *org, char *key);
 extern void contextswitch(char **from_spp, char **to_spp);
-extern void protectus(long serialnumber, long max);
 extern LONGINT insertfonttbl(char **op, char doit);
 
 #ifndef OPENSTEP

@@ -26,7 +26,6 @@ char ROMlib_rcsid_emutraptables[] =
 #include "rsys/osutil.h"
 #include "rsys/vbl.h"
 #include "rsys/soundopts.h"
-#include "rsys/license.h"
 #include "rsys/refresh.h"
 #include "rsys/gestalt.h"
 #include "rsys/emustubs.h"
@@ -1195,7 +1194,6 @@ toolstuff_t pstuff[] = {
     { { _Key1Trans,		-1 }, (void *) 0},
     { { _Key2Trans,		-1 }, (void *) 0},
 
-    { { C_ROMlib_licensefilt,	PTOC_ROMlib_licensefilt }, (void *) 0 },
     { { C_unixmount,		PTOC_unixmount }, (void *) 0 },
     { { C_GestaltTablesOnly,	PTOC_GestaltTablesOnly }, (void *) 0 },
     { { C_sound_timer_handler,  0 }, (void *) 0 },

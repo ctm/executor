@@ -9,8 +9,6 @@ char ROMlib_rcsid_aboutbox[] =
 
 #include "rsys/common.h"
 
-#if defined (SUPPORT_ABOUT_EXECUTOR_BOX)
-
 #include "rsys/aboutbox.h"
 #include "rsys/mman.h"
 #include "rsys/vdriver.h"
@@ -35,374 +33,6 @@ char ROMlib_rcsid_aboutbox[] =
 #include "rsys/custom.h"
 #include "rsys/gestalt.h"
 #include "rsys/osevent.h"
-
-#if !defined (TIME_OUT_DAYS)
-
-#define days_left_func() (1)
-
-#else
-
-#include "rsys/cookie.h"
-
-#if defined (LINUX)
-#define COOKIE_FILE "/etc/opt/executor/.xp"
-#endif
-
-
-#if defined (LINUX) || defined (MSDOS)
-
-#if defined (MSDOS)
-
-#define COOKIE_FILE "excook.xp"
-
-PRIVATE char *
-viable_path (char vol, const char *path)
-{
-  char *retval;
-  int path_len, retval_size;
-
-  path_len = strlen (path);
-  retval_size = sizeof vol + sizeof ':' + path_len + 1 + sizeof (COOKIE_FILE);
-  retval = malloc (retval_size);
-  if (retval)
-    {
-      struct stat sbuf;
-
-      sprintf (retval, "%c:%s", vol, path);
-      if (stat (retval, &sbuf) != 0 || !S_ISDIR (sbuf.st_mode))
-	{
-	  free (retval);
-	  retval = NULL;
-	}
-      else
-	{
-	  if (path[1] != 0) /* test for non-root directory */
-	    strcat (retval, "/");
-	  strcat (retval, COOKIE_FILE);
-	}
-    }
-  return retval;
-}
-
-#endif
-
-PRIVATE char *
-cookie_file_name (void)
-{
-  char *retval;
-
-#if defined (LINUX)
-  retval = strdup (COOKIE_FILE);
-#elif defined (MSDOS)
-  static char vols[] =
-  {
-    'C',
-    0, /* to be filled in with ROMlib_start_drive*/
-  };
-  static char *dirs[] =
-  {
-    "/dos",
-    "/windows",
-    "/winnt",
-    "/",
-  };
-  int i, j;
-
-  vols[NELEM (vols)-1] = ROMlib_start_drive;
-  retval = NULL;
-  for (i = 0; !retval && i < (int) NELEM (vols); ++i)
-    for (j = 0; !retval && j < (int) NELEM (dirs); ++j)
-      retval = viable_path (vols[i], dirs[j]);
-
-#else
-#error need cookie file name
-#endif
-  return retval;
-}
-
-#define open_cookie_file ocf
-
-PRIVATE
-FILE *open_cookie_file (const char *mode)
-{
-  FILE *retval;
-  char *file;
-
-  file = cookie_file_name ();
-  retval = file ? fopen (file, mode) : NULL;
-  if (!retval)
-    warning_trace_info ("%s", file ? file : "NULL");
-  if (file)
-    free (file);
-
-  return retval;
-}
-#endif
-
-PRIVATE boolean_t
-retrieve_cookie (cookie_t *cookiep)
-{
-  boolean_t retval;
-
-#if defined (LINUX) || defined (MSDOS)
-  retval = FALSE;
-  {
-    FILE *fp;
-
-    fp = open_cookie_file ("rb");
-    if (fp)
-      {
-	retval = fread (cookiep, sizeof *cookiep, 1, fp) == 1;
-	fclose (fp);
-      }
-  }
-#elif defined (CYGWIN32)
-
-  retval = win_retrieve_cookie (cookiep);
-
-#else
-#warning not implemented
-#endif
-
-  return retval;
-}
-
-PRIVATE long
-today (void)
-{
-  time_t t;
-  struct tm tm;
-  int retval;
-
-  time (&t);
-  tm = *localtime (&t);
-  retval = (long) tm.tm_year * 365 + tm.tm_yday;
-  return retval;
-}
-
-PRIVATE long
-unify_version (int major, int minor)
-{
-  long retval;
-
-  retval = major * 10000 + minor;
-  return retval;
-}
-
-#define leave_cookie lc
-
-PRIVATE boolean_t
-leave_cookie (const cookie_t *cookiep)
-{
-  boolean_t retval;
-
-#if defined (LINUX) || defined (MSDOS)
-  retval = FALSE;
-  {
-    FILE *fp;
-
-    fp = open_cookie_file ("wb");
-    if (fp)
-      {
-	retval = (fwrite (cookiep, sizeof *cookiep, 1, fp) == 1 &&
-		  fclose (fp) == 0);
-      }
-    if (!retval)
-      warning_trace_info ("fp = %p", fp);
-  }
-#elif defined (CYGWIN32)
-  retval = win_leave_cookie (cookiep);
-    if (!retval)
-      warning_trace_info (NULL_STRING);
-#else
-#error "don't know how to leave cookie"
-#endif
-  return retval;
-}
-
-#define COOKIE_RES_TYPE TICK(" xp ")
-enum { COOKIE_RES_ID = 0 };
-
-PRIVATE boolean_t
-retrieve_system_cookie (cookie_t *cookiep)
-{
-  boolean_t retval;
-  Handle h;
-  INTEGER rn;
-
-  rn = CW (CurMap);
-  UseResFile (0);
-  h = GetResource (COOKIE_RES_TYPE, COOKIE_RES_ID);
-  if (!h)
-    retval = FALSE;
-  else
-    {
-      if (cookiep)
-	*cookiep = *(cookie_t *) STARH (h);
-      retval = TRUE;
-    }
-  UseResFile (rn);
-  return retval;
-}
-
-#define leave_system_cookie lsc
-
-PRIVATE boolean_t
-leave_system_cookie (const cookie_t *cookiep)
-{
-  boolean_t retval, need_to_add;
-  Handle h;
-  INTEGER rn;
-
-  retval = TRUE;
-  rn = CW (CurMap);
-  UseResFile (0);
-  h = GetResource (COOKIE_RES_TYPE, COOKIE_RES_ID);
-  if (h)
-    need_to_add = FALSE;
-  else
-    {
-      need_to_add = TRUE;
-      h = NewHandleSys (sizeof *cookiep);
-      if (!h)
-	retval = FALSE;
-    }
-  if (retval)
-    {
-      *(cookie_t *)STARH (h) = *cookiep;
-      if (need_to_add)
-	AddResource (h, COOKIE_RES_TYPE, COOKIE_RES_ID, NULL);
-      else
-	ChangedResource (h);
-      WriteResource (h);
-    }
-  UseResFile (rn);
-  return retval;
-}
-
-PRIVATE boolean_t
-leave_cookies (const cookie_t *cookiep)
-{
-  boolean_t retval;
-
-  retval = leave_cookie (cookiep);
-  if (retval)
-    retval = leave_system_cookie (cookiep);
-  return retval;
-}
-
-enum
-{
-  COOKIE_MAJOR_REVISION = 2,
-  COOKIE_MINOR_REVISION = 12, /* 2.0v was 1 */
-};
-
-PRIVATE void
-setup_cookie (cookie_t *cookiep)
-{
-  cookiep->version = unify_version (COOKIE_MAJOR_REVISION,
-				    COOKIE_MINOR_REVISION);
-  cookiep->day = today () + TIME_OUT_DAYS;
-}
-
-#define days_left_func dlf
-
-#define days_left(expire_day)			\
-({						\
-  typeof (expire_day) _d;			\
-  int retval;					\
-						\
-  _d = expire_day;				\
-  retval = _d - today ();			\
-  if (retval < 0 || retval > TIME_OUT_DAYS)	\
-    retval = 0;					\
-  retval;					\
-})
-
-PRIVATE int
-days_left_func (void)
-{
-  int retval;
-  cookie_t cookie;
-
-  if (retrieve_cookie (&cookie))
-    {
-      if (cookie.version < unify_version (COOKIE_MAJOR_REVISION,
-					  COOKIE_MINOR_REVISION))
-	{
-	  setup_cookie (&cookie);
-	  retval = leave_cookies (&cookie) ? days_left (cookie.day) : 0;
-	  if (retval == 0)
-	    warning_trace_info ("found old, couldn't leave new");
-	}
-      else
-	{
-	  cookie_t cookie2;
-
-	  if (!retrieve_system_cookie (&cookie2))
-	    {
-	      if (leave_system_cookie (&cookie))
-		retval = days_left (cookie.day);
-	      else
-		{
-		  warning_trace_info ("couldn't leave sys");
-		  retval = 0;
-		}
-	    }
-	  else
-	    {
-	      if (cookie.day == cookie2.day)
-		retval = days_left (cookie.day);
-	      else
-		{
-		  retval = 0;
-		  warning_trace_info ("mismatch");
-		}
-	    }
-	}
-    }
-  else if (retrieve_system_cookie (&cookie))
-    {
-      if (cookie.version < unify_version (COOKIE_MAJOR_REVISION,
-					  COOKIE_MINOR_REVISION))
-	{
-	  setup_cookie (&cookie);
-	  retval = leave_cookies (&cookie) ? days_left (cookie.day) : 0;
-	  if (retval == 0)
-	    warning_trace_info ("found old, couldn't leave new");
-	  else
-	    warning_trace_info ("found old, left new");
-	}
-      else
-	{
-	  retval = 0;
-	  warning_trace_info ("unexpected system");
-	}
-    }
-  else 
-    {
-      setup_cookie (&cookie);
-      if (leave_cookies (&cookie))
-	retval = days_left (cookie.day);
-      else
-	{
-	  retval = 0;
-	  warning_trace_info ("couldn't leave");
-	}
-    }
-
-  if (retval <= 0)
-    {
-      ROMlib_exit = TRUE;
-      if (retval < 0)
-	warning_trace_info ("%d", retval);
-    }
-  replace_physgestalt_selector (gestaltDemoExpiration, retval);
-  return retval;
-}
-
-#endif
-
 
 #define ABOUT_BOX_WIDTH  500
 #define ABOUT_BOX_HEIGHT 300
@@ -431,14 +61,6 @@ static struct { char *name, *text; ControlHandle ctl; } about_box_buttons[] = {
   },
   { "Maker",
     "ARDI\r"
-    //    "Suite 4-101\r"
-    //    "1650 University Blvd., NE\r"
-    //    "Albuquerque, NM  87102\r\r"
-
-    //    "+1 505 766 5153 FAX\r"
-    //    "+1 505 766 9115 Phone (M-F 9am-5pm Mountain Time)\r\r"
-
-    //    "E-Mail: questions@ardi.com\r"
     "World Wide Web: <http://www.ardi.com>\r"
     "FTP: <ftp://ftp.ardi.com/pub>\r",
     NULL
@@ -614,13 +236,8 @@ find_license_button (void)
   return retval;
 }
 
-#if defined (TIME_OUT_DAYS)
-#define DAYS_LEFT_MESSAGE "%d DAYS LEFT\r\r"
-#define   EXPIRED_MESSAGE "This demo has EXPIRED.\r\r"
-#endif
-
 static void
-create_license_text (int days_left)
+create_license_text (void)
 {
   int b;
 
@@ -631,13 +248,6 @@ create_license_text (int days_left)
       char *license_text, *p, *q, *licensep;
 
       new_size = 0;
-
-#if defined (TIME_OUT_DAYS)
-#if TIME_OUT_DAYS > 999
-#error string overflow
-#endif
-      new_size += MAX (sizeof DAYS_LEFT_MESSAGE, sizeof EXPIRED_MESSAGE);
-#endif
 
       /* Compute the length of the license string. */
       for (licensep = ROMlib_licensep ? (char *) ROMlib_licensep->chars : "";
@@ -658,13 +268,6 @@ create_license_text (int days_left)
       license_text[0] = '\0';
 
       p = license_text;
-
-#if defined (TIME_OUT_DAYS)
-      if (days_left > 0)
-	p += sprintf (p, DAYS_LEFT_MESSAGE, days_left);
-      else
-	p += sprintf (p, EXPIRED_MESSAGE);
-#endif
 
       for (licensep = ROMlib_licensep ? (char *) ROMlib_licensep->chars : "";
 	   *licensep;)
@@ -860,7 +463,7 @@ dispose_tips_text (void)
 
 
 static void
-create_about_box (int days_left)
+create_about_box ()
 {
   static Rect scroll_bar_bounds = {
     CWC (TE_TOP),
@@ -877,7 +480,7 @@ create_about_box (int days_left)
   Rect about_box_bounds;
   int b;
 
-  create_license_text (days_left);
+  create_license_text ();
   create_tips_text ();
 
   SetRect (&about_box_bounds,
@@ -1190,18 +793,15 @@ do_about_box (void)
 
   if (!busy_p)
     {
-      int days_left;
-
       busy_p = TRUE;  /* Only allow one about box at a time. */
 
       if (scroll_bar_callback == 0)
 	scroll_bar_callback = (ProcPtr) SYN68K_TO_US(callback_install (scroll_stub, NULL));
       
-      days_left = days_left_func ();
       ZONE_SAVE_EXCURSION
 	(SysZone,
 	 {
-	   create_about_box (days_left);
+	   create_about_box ();
        
 	   THEPORT_SAVE_EXCURSION
 	     (about_box,
@@ -1217,9 +817,5 @@ do_about_box (void)
 	 });
 
       busy_p = FALSE;
-      if (days_left <= 0)
-	C_ExitToShell ();
     }
 }
-
-#endif /* SUPPORT_ABOUT_EXECUTOR_BOX */

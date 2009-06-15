@@ -123,7 +123,7 @@ dirty_rect_accrue (int top, int left, int bottom, int right)
       /* Figure out which union adds the least new area. */
       best_area_added = ~0UL;
       best = 0;
-      for (i = ndr - 1; i >= CRACKER_ZERO; i--)
+      for (i = ndr - 1; i >= 0; i--)
 	{
 	  unsigned long added;
 

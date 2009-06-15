@@ -41,7 +41,6 @@ char ROMlib_rcsid_osevent[] =
 #include "rsys/toolevent.h"
 #include "rsys/osevent.h"
 #include "rsys/dirtyrect.h"
-#include "rsys/license.h"
 #include "rsys/stdfile.h"
 #include "rsys/system_error.h"
 
@@ -437,9 +436,6 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
     BOOLEAN retval;
     static Point oldpoint = { -1, -1 };
     LONGINT ticks;
-#if !defined(MSDOS) && !defined(CYGWIN32)
-    static LONGINT protector_ticks;
-#endif
 
     /* We tend to call this routine from various ROMlib modal loops, so this
      * is a good place to check for timer interrupts, etc. */
@@ -524,31 +520,6 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 #endif /* NEXTSTEP */
     ROMlib_memnomove_p = FALSE;	/* this is an icky hack needed for Excel */
     ticks = TickCount();
-
-#if !defined(MSDOS) && !defined (CYGWIN32)
-#define TICKS_PER_MINUTE (60 * 60)
-    if (ticks - protector_ticks > 4 * TICKS_PER_MINUTE)
-      {
-	protectus(0, 0);
-	protector_ticks = ticks;
-      }
-#endif
-
-#if defined (TIME_OUT)
-    {
-      static char in_alert = FALSE;
-
-      if (!ROMlib_info.serialnumber && ticks > TIME_OUT * 60 * 60 && !in_alert)
-	{
-	  in_alert = TRUE;
-	
-	  ROMlib_exit = TRUE;
-	  system_error ("Time's up!", 0, "Exit", NULL, NULL,
-			C_ExitToShell, NULL, NULL);
-	}
-    }
-#endif
-
 
 #if defined (X)
     /* if we are running on a version of linux that doesn't support

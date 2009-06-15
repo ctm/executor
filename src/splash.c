@@ -19,7 +19,6 @@ char ROMlib_rcsid_splash[] =
 
 #include "rsys/splash.h"
 #include "rsys/vdriver.h"
-#include "rsys/license.h"
 #include "rsys/cquick.h"
 #include "rsys/slash.h"
 #include "rsys/notmac.h"

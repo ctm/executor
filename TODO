@@ -1,7 +1,14 @@
-        Get rid of old copy-protection stuff
-
 	package up the System Folder and whatnot so that people w/o the
 	old executor-aux can run Executor
+
+                do this before or after switching to GNU build system?
+
+        probably get rid of most of the customization stuff (don't yet
+        wholesale kill it, since some might be useful as per-user,
+        per-app or command line configuration)
+
+                splash screen stuff: does it even make sense anymore,
+                since the app should come up quickly now
 
 	Try building the mingw32 version using the mingw32 toolchain
 	for Fedora 11 (mingw32 has been done before)

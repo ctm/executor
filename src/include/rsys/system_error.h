@@ -1,8 +1,7 @@
 #if !defined (_SYSTEM_ERROR_H_)
 #define _SYSTEM_ERROR_H_
 
-/* system_error.h
-   $Id: system_error.h 63 2004-12-24 18:19:43Z ctm $ */
+enum { GENERIC_COMPLAINT_ID = -3000 };
 
 typedef void (*system_error_callback_t) (void);
 

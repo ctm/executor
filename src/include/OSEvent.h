@@ -75,30 +75,7 @@ extern INTEGER 	SysEvtMask;
 extern QHdr 	EventQueue;
 #endif
 
-#if !defined (SHORT_TICKS)
-
 #define Ticks	(Ticks_UL.u)
-#define CRACKER_ZERO (0)
-
-#else
-
-#if !defined (SHORT_TICKS_SHIFT)
-#define SHORT_TICKS_SHIFT 0
-#endif
-
-#define Ticks ((ULONGINT) (*(unsigned long *)SYN68K_TO_US(0x16c)) \
-	       & ((1<<(16+SHORT_TICKS_SHIFT))-1))
-
-/* This macro evaluates to *(short *) 0x16a, but the assembly code
- * generated varies depending on what line the macro is invoked!
- */
-
-#define CRACKER_ZERO 				\
-(CW(*(short *) ({ volatile long a = __LINE__ * 17;	\
-       *&a + ((SYN68K_TO_US(0x16a)) - __LINE__ * 17); })) >> SHORT_TICKS_SHIFT)
-
-#endif
-
 
 extern void ROMlib_eventdep( void  ); 
 extern void insertcommonevent( char *xeventp, commonevent *comevtp ); 

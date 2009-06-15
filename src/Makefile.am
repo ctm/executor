@@ -40,13 +40,13 @@ executor_SOURCE = \
   dump.c trapname.c float4.c float5.c float7.c floatnext.c font.c	\
   gestalt.c globals.c							\
   image.c image_inits.c iu.c launch.c main.c mman.c mmansubr.c		\
-  notify.c hle.c osevent.c osutil.c pack.c protector.c scrap.c script.c	\
+  notify.c hle.c osevent.c osutil.c pack.c scrap.c script.c	        \
   segment.c serial.c setuid.c slash.c 					\
   sounddriver.c sound.c soundIMVI.c soundfake.c				\
   stdfile.c romlib_stubs.c						\
   snth5.c syserr.c toolevent.c toolmath.c toolutil.c time.c vbl.c	\
   syncint.c virtualint.c refresh.c autorefresh.c			\
-  license.c aboutbox.c licensetext.c dcmaketables.c			\
+  aboutbox.c licensetext.c dcmaketables.c			        \
   dcconvert.c rgbutil.c keycode.c option.c parseopt.c parsenum.c	\
   desperate.c								\
   version.c shutdown.c uniquefile.c sigio_multiplex.c			\

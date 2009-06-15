@@ -282,7 +282,7 @@ ROMlib_new_dialog_common (DialogPtr dp,
 		itp = (itmp) (ip + 1);
 		i = CW (*ip);
 		item_no = 1;
-		while (i-- >= CRACKER_ZERO)
+		while (i-- >= 0)
 		  {
 		    dialog_create_item ((DialogPeek) dp, itp, itp, item_no,
 					zero_pt);

@@ -35,9 +35,6 @@ P2(PUBLIC pascal trap, INTEGER, DIBadMount, Point, pt, LONGINT, evtmess)
 
 P1(PUBLIC pascal trap, OSErr, DIFormat, INTEGER, dn)
 {
-#if defined (DISABLE_FLOPPY_WRITES)
-  return wPrErr;
-#endif
   return noErr; /* We don't do low-level formats right now */
 }
 

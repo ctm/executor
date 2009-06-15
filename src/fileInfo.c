@@ -235,11 +235,9 @@ quoted_character (unsigned char *name, int length)
 	{
 	  retval = (length > 2 &&
 		    iscandidate_for_quoting (name[1], name[2]));
-#if defined (RELEASE_INTERNAL)
 	  if (!retval)
 	    fprintf (stderr, "*** suspicious colon in '%.*s' ***\n", length,
 		     name);
-#endif
 	}
     }
   return retval;
@@ -304,7 +302,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
     char *pathname, *filename, *endname, *rpathname;
     char savechar;
     struct stat datasbuf, resourcesbuf, parentsbuf;
-    LONGINT longzero = CRACKER_ZERO;
+    LONGINT longzero = 0;
     VCBExtra *vcbp;
     THz savezone;
     struct timeval accessupdatetimes[2];

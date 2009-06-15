@@ -81,7 +81,6 @@ char ROMlib_rcsid_launch[] =
 #include "rsys/print.h"
 #include "rsys/gestalt.h"
 #include "rsys/osevent.h"
-#include "rsys/license.h"
 
 #include "rsys/cfm.h"
 #include "rsys/launch.h"
@@ -952,10 +951,6 @@ PRIVATE void reset_low_globals(void)
 		((char *)&lastlowglobal - (char *)&nilhandle
 		 - 64 * sizeof (ULONGINT)));
 	
-#if defined (SHORT_TICKS)
-        /* CRACKER_ZERO = 0; */
-	*(short *)SYN68K_TO_US(0x16a) = 0;
-#endif
 	AE_info = saveAE_info;
 	
 	JCrsrTask = saveJCrsrTask;
