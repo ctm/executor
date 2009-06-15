@@ -1194,6 +1194,7 @@ toolstuff_t pstuff[] = {
     { { _Key1Trans,		-1 }, (void *) 0},
     { { _Key2Trans,		-1 }, (void *) 0},
 
+    { { NULL /* was C_ROMlib_licensefilt */,	NULL /* was PTOC_ROMlib_licensefilt */ }, (void *) 0 },
     { { C_unixmount,		PTOC_unixmount }, (void *) 0 },
     { { C_GestaltTablesOnly,	PTOC_GestaltTablesOnly }, (void *) 0 },
     { { C_sound_timer_handler,  0 }, (void *) 0 },
