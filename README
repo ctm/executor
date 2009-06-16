@@ -70,6 +70,13 @@ the SDL-based version of Executor on Mac OS X Intel, you can try:
   ../../util/configure.sh  '--target=i486-macosx' '--host=i486-macosx' '--front-end=sdl' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--target-file-format=glibc' '--sound=sdl' '--syn68k-target=i486-macosx-glibc'
   make
 
+If you have SDL installed and would like to build (but not run) the
+SDL-based version of Executor on Mac OS X PPC, you can try:
+
+  mkdir -p build/debug-macosx-sdl
+  cd build/debug-macosx-sdl
+  ../../util/configure.sh  '--target=powerpc-macosx' '--host=powerpc-macosx' '--front-end=sdl' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--target-file-format=glibc' '--sound=sdl' '--syn68k-target=powerpc-macosx-glibc'
+
 In the past it was possible to cross-compile a version of Executor for
 Windows using mingw32.  So far that port hasn't been tried since
 putting the code on Github.  It probably doesn't work, but probably

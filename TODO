@@ -1,3 +1,9 @@
+        Look into fixes for the bad padding we're getting on Mac OS X PPC
+
+                fcbrec definitely kills us, others may too
+
+                further populate check_structs.c
+
 	package up the System Folder and whatnot so that people w/o the
 	old executor-aux can run Executor
 
