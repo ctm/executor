@@ -21,8 +21,6 @@ char ROMlib_rcsid_fileVolumes[] =
 #include "rsys/file.h"
 #include "rsys/glue.h"
 #include "rsys/notmac.h"
-#include "rsys/myabort.h"
-#include "rsys/assert.h"
 #include "rsys/segment.h"
 #include "rsys/string.h"
 
@@ -65,18 +63,6 @@ char ROMlib_rcsid_fileVolumes[] =
  */
 
 #define HASHSIZE	101
-
-typedef struct {
-    LONGINT dirid;
-    INTEGER filesystemlen;
-    unsigned char hostnamelen;
-    char hostnameandroot[1];	/* potentially many more */
-} rkey_t;
-
-typedef struct {
-    LONGINT parid;
-    char path[1];	/* potentially many more */
-} rcontent_t;
 
 A2(PRIVATE, hashlink_t **, hashloc, VCBExtra *, vcbp, LONGINT, dir)
 {

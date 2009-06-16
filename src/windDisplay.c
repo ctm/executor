@@ -17,7 +17,6 @@ char ROMlib_rcsid_windDisplay[] =
 /* get {C}PORT_... accessors */
 #include "rsys/cquick.h"
 #include "rsys/wind.h"
-#include "rsys/screen.h"
 #include "rsys/glue.h"
 
 P2(PUBLIC pascal trap, void, SetWTitle, WindowPtr, w, StringPtr, t)

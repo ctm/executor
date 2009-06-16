@@ -14,7 +14,6 @@ char ROMlib_rcsid_listCreate[] =
 #include "ResourceMgr.h"
 #include "ListMgr.h"
 #include "rsys/list.h"
-#include "rsys/screen.h"
 
 #define STEF_lActivefix
 

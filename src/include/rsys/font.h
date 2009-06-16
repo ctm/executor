@@ -11,6 +11,11 @@ typedef struct {
     INTEGER fontresid	PACKED;
 } fatabentry;
 
+typedef struct {
+    unsigned short style;
+    INTEGER table[1];	/* actually more */
+} widentry_t;
+
 typedef WidthTable *WPtr;
 typedef struct { WPtr p PACKED_P; } HIDDEN_WPtr;
 typedef HIDDEN_WPtr *WHandle;

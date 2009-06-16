@@ -1,8 +1,6 @@
 %{
 #include "rsys/common.h"
 #include "rsys/options.h"
-#include "rsys/debug.h"
-#include "rsys/myabort.h"
 #include "rsys/prefs.h"
 #include "rsys/crc.h"
 #include "rsys/parse.h"

@@ -114,7 +114,7 @@ typedef struct MemFragment
   uint32 length PACKED;
   BOOLEAN inPlace LPACKED;
 }
-MemFragment; 
+MemFragment;
 
 typedef struct DiskFragment
 {

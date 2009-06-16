@@ -18,7 +18,6 @@ char ROMlib_rcsid_resMod[] =
 #include "rsys/glue.h"
 #include "rsys/mman.h"
 #include "rsys/file.h"
-#include "rsys/assert.h"
 
 P3(PUBLIC pascal trap, void, SetResInfo, Handle, res, INTEGER, id,
 							       StringPtr, name)
@@ -329,18 +328,13 @@ A2(PUBLIC, void, ROMlib_wr, resmaphand, map, resref *, rr)	/* INTERNAL */
 	ROMlib_setreserr(noErr);
 }
 
-typedef struct {
-    LONGINT diskoff;
-    resref *rrptr;
-} sorttype;
-
-typedef sorttype *sorttypeptr;
+typedef res_sorttype_t *sorttypeptr;
 typedef struct { sorttypeptr p PACKED_P; } HIDDEN_sorttypeptr;
 typedef HIDDEN_sorttypeptr *sorttypehand;
 
 A3(PRIVATE, void, fillst, sorttypehand, st, resref *, rp, resref *, rep)
 {
-    sorttype *end = STARH(st), *sp;
+    res_sorttype_t *end = STARH(st), *sp;
     LONGINT newoff;
     
     end++->diskoff = -1;    /* real disk offsets are always > 0 */
@@ -352,7 +346,7 @@ A3(PRIVATE, void, fillst, sorttypehand, st, resref *, rp, resref *, rep)
         for (sp = end-1; newoff < sp->diskoff; sp--)
             ;
         sp++;
-        BlockMove((Ptr) sp, (Ptr) (sp+1), (Size)(end - sp) * sizeof(sorttype));
+        BlockMove((Ptr) sp, (Ptr) (sp+1), (Size)(end - sp) * sizeof(res_sorttype_t));
         sp->diskoff = newoff;
         sp->rrptr = rp;
         end++;
@@ -401,7 +395,7 @@ A4(PRIVATE, void, putdat, INTEGER, fn, LONGINT, datoff, LONGINT *, doffp,
     *doffp += sizeof(LONGINT) + size;
 }
 
-A4(PRIVATE, LONGINT, walkst, sorttype *, sp, sorttype *, sep, INTEGER, fn,
+A4(PRIVATE, LONGINT, walkst, res_sorttype_t *, sp, res_sorttype_t *, sep, INTEGER, fn,
 							    LONGINT, datoff)
 {
     LONGINT size;
@@ -462,7 +456,7 @@ A1(PRIVATE, void, compactdata, resmaphand, map)
     resoff = TYPEOFF(map) + sizeof(INTEGER) +
                                 (NUMTMINUS1(map) + 1) * sizeof(typref);
     nres = (NAMEOFF(map) - resoff) / sizeof(resref);
-    st = (sorttypehand) NewHandle((Size)sizeof(sorttype) * (nres + 1));
+    st = (sorttypehand) NewHandle((Size)sizeof(res_sorttype_t) * (nres + 1));
     mapstate = HGetState((Handle) map);
     HLock((Handle) map);
     rr = (resref *)((char *) STARH(map) + resoff);

@@ -17,8 +17,6 @@ char ROMlib_rcsid_mmansubr[] =
 #include "ResourceMgr.h"
 
 #include "rsys/mman_private.h"
-#include "rsys/assert.h"
-#include "rsys/fatal.h"
 #include "rsys/hook.h"
 #include "rsys/system_error.h"
 #include "rsys/vdriver.h"

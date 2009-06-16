@@ -54,6 +54,18 @@ typedef struct {
 
 typedef ULONGINT Single_attribs;
 
+
+typedef struct defaulthead {
+    Single_header head	LPACKED;
+    Single_descriptor desc[10]	LPACKED;	/* we use 4, 6 for spare */
+} defaulthead_t;
+
+typedef struct defaultentries {
+    Single_attribs attribs	PACKED;
+    Single_dates   dates	LPACKED;
+    Single_finfo   finfo	LPACKED;
+} defaultentries_t;
+
 #define SINGLEMAGIC	0x0051600
 #define DOUBLEMAGIC	0x0051607
 

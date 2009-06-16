@@ -15,7 +15,7 @@ char ROMlib_rcsid_process[] =
 #include "ToolboxEvent.h"
 
 #include "rsys/mman.h"
-#include "rsys/fatal.h"
+#include "rsys/process.h"
 
 #define declare_handle_type(type_prefix)				\
   typedef type_prefix ## _t *type_prefix ## _ptr;			\
@@ -24,13 +24,6 @@ char ROMlib_rcsid_process[] =
       type_prefix ## _ptr p PACKED_P;					\
     } hidden_ ## type_prefix ## _ptr;					\
   typedef hidden_ ## type_prefix ## _ptr *type_prefix ## _handle
-
-typedef struct size_resource
-{
-  int16 flags		PACKED;
-  int32 pref_size	PACKED;
-  int32 min_size	PACKED;
-} size_resource_t;
 
 declare_handle_type (size_resource);
 

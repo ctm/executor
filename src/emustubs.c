@@ -226,13 +226,6 @@ STUB(ADBReInit)
   RTS ();
 }
 
-typedef struct
-{
-  Ptr buffer PACKED;
-  ProcPtr proc PACKED;
-  Ptr data PACKED;
-} adbop_t;
-
 STUB(ADBOp)
 {
   adbop_t *p;
@@ -1780,35 +1773,6 @@ STUB (Pack15)
   return do_selector_block (pack15_block, EM_D0 & 0xFF, Pack15);
 }
 
-typedef struct comm_toolbox_dispatch_args
-{
-  int16 selector		PACKED;
-  
-  union
-    {
-      struct
-        {
-	  int16 n_items		PACKED;
-	  DialogPtr dp		PACKED_P;
-        } shorten_args		LPACKED;
-      struct
-        {
-	  DITLMethod method	PACKED;
-	  Handle new_items_h	PACKED_P;
-	  DialogPtr dp		PACKED_P;
-        } append_args		LPACKED;
-      struct
-        {
-	  DialogPtr dp		PACKED_P;
-        } count_args;
-      struct
-        {
-	  QElemPtr qp PACKED_P;
-        } crm_args;
-	
-    } args;
-} comm_toolbox_dispatch_args_t;
-
 STUB (CommToolboxDispatch)
 {
   comm_toolbox_dispatch_args_t *arg_block;
@@ -2600,14 +2564,6 @@ STUB (MoreMasters)
   EM_D0 = CW (MemErr);
   RTS ();
 }
-
-typedef struct
-{
-  void *startPtr	PACKED_P;
-  void *limitPtr	PACKED_P;
-  short cMoreMasters	PACKED;
-  void *pGrowZone	PACKED_P;
-} initzonehiddenargs_t;
 
 STUB (InitZone)
 {

@@ -264,11 +264,6 @@ INTEGER nhappybits(unsigned short want, unsigned short have)
 
 #define WIDTHBIT	(1 << 1)
 
-typedef struct {
-    unsigned short style;
-    INTEGER table[1];	/* actually more */
-} widentry_t;
-
 A0(PRIVATE, INTEGER *, findfondwidths)
 {
     INTEGER *retval, *numentriesminusone;

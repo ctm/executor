@@ -24,8 +24,9 @@ char ROMlib_rcsid_qCursor[] =
 #include "rsys/resource.h"
 #include "rsys/host.h"
 
-#include "rsys/fatal.h"
 #include "rsys/osevent.h"
+
+#include "rsys/quick.h"
 
 #if !defined (CURSOR_DEBUG)
 
@@ -217,13 +218,6 @@ P2(PUBLIC pascal trap, void, ShieldCursor, Rect *, rp, Point, p) /* IMI-474 */
     else
 	wewantpointermovements(-1);
 }
-
-typedef struct ccrsr_res
-{
-  CCrsr crsr 		LPACKED;
-  PixMap crsr_map	LPACKED;
-  char data		LPACKED;
-} ccrsr_res, *ccrsr_res_ptr;
 
 typedef struct { ccrsr_res_ptr p PACKED_P; } HIDDEN_ccrsr_res_ptr;
 typedef HIDDEN_ccrsr_res_ptr *ccrsr_res_handle;

@@ -18,6 +18,17 @@
 #include "rsys/smash.h"
 #include "rsys/pstuff.h"
 
+typedef struct {
+    Rect _wrect		LPACKED;
+    INTEGER _wprocid	PACKED;
+    char _wvisible	LPACKED;
+    char _padding1	LPACKED;
+    char _wgoaway	LPACKED;
+    char _padding2	LPACKED;
+    LONGINT _wrefcon	PACKED;
+    Byte _wtitle	LPACKED;
+} windrestype;
+
 extern LONGINT C_wdef0 (INTEGER, WindowPtr, INTEGER, LONGINT),
 	       C_wdef16(INTEGER, WindowPtr, INTEGER, LONGINT);
 

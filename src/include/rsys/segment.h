@@ -3,7 +3,18 @@
 
 extern char ROMlib_exit;
 
+
 #if !defined (USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
+
+#include <SegmentLdr.h>
+
+typedef struct {
+    INTEGER message;
+    INTEGER count;
+    AppFile files[1];
+} finderinfo;
+
+
 extern int ROMlib_print;
 extern void flushcache( void );
 extern void SFSaveDisk_Update (INTEGER vrefnum, Str255 filename);

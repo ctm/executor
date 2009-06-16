@@ -33,7 +33,6 @@
 #include "MemoryMgr.h"
 #include "rsys/soundopts.h"
 #include "rsys/blockinterrupts.h"
-#include "rsys/screen.h"
 #include "rsys/syn68k_public.h"
 #include "rsys/prefs.h"
 #include "rsys/hfs.h"

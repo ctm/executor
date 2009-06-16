@@ -193,6 +193,14 @@ typedef struct
 }
 zone_info_t;
 
+
+typedef struct {
+  Zone *sp	PACKED_P;
+  Ptr lp	PACKED_P;
+  INTEGER mm	PACKED;
+  ProcPtr gz	PACKED_P;
+} pblock_t;
+
 extern void ROMlib_sledgehammer_zone (THz zone, boolean_t print_p,
 				      const char *fn, const char *file,
 				      int lineno, const char *where,

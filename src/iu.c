@@ -17,7 +17,6 @@ char ROMlib_rcsid_iu[] =
 #include "BinaryDecimal.h"
 #include "rsys/glue.h"
 #include "rsys/resource.h"
-#include "rsys/assert.h"
 #include "rsys/hook.h"
 #include <ctype.h>
 

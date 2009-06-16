@@ -16,8 +16,6 @@ char ROMlib_rcsid_windDocdef[] =
 #include "rsys/cquick.h"
 #include "rsys/wind.h"
 #include "rsys/ctl.h"
-#include "rsys/screen.h"
-#include "rsys/fatal.h"
 
 #include "rsys/image.h"
 

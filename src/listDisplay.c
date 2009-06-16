@@ -14,7 +14,6 @@ char ROMlib_rcsid_listDisplay[] =
 
 #include "rsys/cquick.h"
 #include "rsys/list.h"
-#include "rsys/screen.h"
 #include "rsys/hook.h"
 
 P2(PUBLIC pascal trap, void, LDraw, Cell, cell,			/* IMIV-275 */

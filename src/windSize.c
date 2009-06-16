@@ -20,7 +20,6 @@ char ROMlib_rcsid_windSize[] =
 
 #include "rsys/cquick.h"
 #include "rsys/wind.h"
-#include "rsys/screen.h"
 
 /*
  * Note, the code below probably be rewritten to use XorRgn as much

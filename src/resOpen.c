@@ -28,12 +28,7 @@ HCreateResFile_helper (INTEGER vrefnum, LONGINT parid, Str255 name,
 {
     INTEGER f;
     LONGINT leof, lc;
-    struct {            /* empty resource template */
-        reshead bhead	LPACKED;
-        rsrvrec bfill	LPACKED;
-        resmap bmap	LPACKED;
-        INTEGER negone	PACKED;
-    } buf;
+    empty_resource_template_t buf;
 
     ROMlib_setreserr(HCreate(vrefnum, parid, name, creator, type)); /* ????
 								       might

@@ -8,6 +8,51 @@
  * $Id: emustubs.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+typedef struct
+{
+  Ptr buffer PACKED;
+  ProcPtr proc PACKED;
+  Ptr data PACKED;
+} adbop_t;
+
+typedef struct comm_toolbox_dispatch_args
+{
+  int16 selector		PACKED;
+  
+  union
+    {
+      struct
+        {
+	  int16 n_items		PACKED;
+	  DialogPtr dp		PACKED_P;
+        } shorten_args		LPACKED;
+      struct
+        {
+	  DITLMethod method	PACKED;
+	  Handle new_items_h	PACKED_P;
+	  DialogPtr dp		PACKED_P;
+        } append_args		LPACKED;
+      struct
+        {
+	  DialogPtr dp		PACKED_P;
+        } count_args;
+      struct
+        {
+	  QElemPtr qp PACKED_P;
+        } crm_args;
+	
+    } args;
+} comm_toolbox_dispatch_args_t;
+
+typedef struct
+{
+  void *startPtr	PACKED_P;
+  void *limitPtr	PACKED_P;
+  short cMoreMasters	PACKED;
+  void *pGrowZone	PACKED_P;
+} initzonehiddenargs_t;
+
+
 extern void ROMlib_GetTrapAddress_helper (uint32 *d0p, uint32 d1, uint32 *a0p);
 extern void ROMlib_reset_bad_trap_addresses (void);
 extern void C_pack8_unknown_selector (void);

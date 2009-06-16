@@ -1,8 +1,6 @@
 #if !defined(__safe_alloca__)
 #define __safe_alloca__
 
-#include "rsys/assert.h"
-
 #if !defined(NDEBUG)
 
 #define FIREWALL_START	0x940504FE

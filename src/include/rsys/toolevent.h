@@ -8,6 +8,13 @@
  * $Id: toolevent.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+typedef struct {
+    INTEGER version;
+    INTEGER tableno[256];
+    INTEGER ntables;
+    Byte table[1][128];	/* who knows how many */
+} keymap;
+
 extern void dofloppymount (void);
 extern BOOLEAN ROMlib_beepedonce;
 extern int ROMlib_right_button_modifier;

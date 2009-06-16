@@ -18,9 +18,6 @@ char ROMlib_rcsid_qCGrafport[] =
 #include "rsys/cquick.h"
 #include "rsys/mman.h"
 
-#include "rsys/myabort.h"
-#include "rsys/assert.h"
-
 #include "rsys/xdata.h"
 #include "rsys/evil.h"
 
@@ -416,12 +413,6 @@ P0 (PUBLIC pascal trap, PixPatHandle, NewPixPat)
   
   return pixpat;
 }
-
-struct pixpat_res
-{
-  PixPat pixpat;
-  PixMap patmap;
-};
 
 typedef struct pixpat_res *pixpat_res_ptr;
 typedef struct { pixpat_res_ptr p PACKED_P; } HIDDEN_pixpat_res_ptr;

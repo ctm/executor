@@ -1,17 +1,113 @@
+/*
+ * Check the size of all the structures that we use that correspond to Mac
+ * memory (i.e. layouts imposed by the Mac ABI).  It would be nice if we
+ * checked the size and offset of each member element too, but this is a good
+ * start and something Executor should have done from the beginning, since
+ * if a structure doesn't get packed properly it can be a pain to track the
+ * issue down in a debugger.
+ *
+ * WARNING: The sizes that it is checking against are not known to be correct.
+ *          In most cases they are correct, however, the sizes have been
+ *          gleaned from a port that hasn't been tested much, so there are two
+ *          potential sources of bad sizes.  One is we may have structs that
+ *          we've never used.  The other is we may have structs that have been
+ *          used on our more thoroughly tested ports that have managed to
+ *          become incorrect on the port we generated the numbers on.
+ */
+
 #include <rsys/common.h>
 #include <rsys/check_structs.h>
 
-#include <VRetraceMgr.h>
-
-#if defined(USE_VDRIVER_H)
-#  include <VDriver.h>
-#endif
-
+#include <ADB.h>
+#include <AliasMgr.h>
+#include <AppleEvents.h>
+#include <AppleTalk.h>
+#include <BinaryDecimal.h>
+#include <CommTool.h>
+#include <Components.h>
+#include <ControlMgr.h>
+#include <CQuickDraw.h>
+#include <DeskMgr.h>
+#include <DeviceMgr.h>
+#include <DialogMgr.h>
+#include <Disk.h>
+#include <DiskInit.h>
+#include <EditionMgr.h>
+#include <EventMgr.h>
+#include <FileMgr.h>
+#include <Finder.h>
+#include <FontMgr.h>
+#include <Gestalt.h>
 #include <HelpMgr.h>
+#include <Iconutil.h>
+#include <IntlUtil.h>
+#include <ListMgr.h>
+#include <MacTypes.h>
+#include <MemoryMgr.h>
+#include <MenuMgr.h>
+#include <NotifyMgr.h>
+#include <OSEvent.h>
+#include <OSUtil.h>
+#include <Package.h>
+#include <PPC.h>
+#include <PrintMgr.h>
 #include <ProcessMgr.h>
+#include <QuickDraw.h>
+#include <QuickTime.h>
+#include <ResourceMgr.h>
+#include <SANE.h>
+#include <ScrapMgr.h>
+#include <ScriptMgr.h>
+#include <SegmentLdr.h>
+#include <Serial.h>
+#include <ShutDown.h>
+#include <SoundDvr.h>
 #include <SoundMgr.h>
+#include <StartMgr.h>
+#include <StdFilePkg.h>
+#include <SysErr.h>
+#include <TextEdit.h>
+#include <ThinkC.h>
+#include <TimeMgr.h>
+#include <ToolboxEvent.h>
+#include <ToolboxUtil.h>
+#include <VDriver.h>
+#include <VRetraceMgr.h>
+#include <WindowMgr.h>
 
+#include <rsys/alias.h>
+#include <rsys/apple_events.h>
+#include <rsys/cfm.h>
+#include <rsys/cquick.h>
+#include <rsys/ctl.h>
+#include <rsys/dial.h>
+#include <rsys/filedouble.h>
 #include <rsys/file.h>
+#include <rsys/float.h>
+#include <rsys/font.h>
+#include <rsys/hfs.h>
+#include <rsys/hfs_plus.h>
+#include <rsys/icon.h>
+#include <rsys/itm.h>
+#include <rsys/keyboard.h>
+#include <rsys/launch.h>
+#include <rsys/menu.h>
+#include <rsys/mixed_mode.h>
+#include <rsys/mman_private.h>
+#include <rsys/partition.h>
+#include <rsys/pef.h>
+#include <rsys/picture.h>
+#include <rsys/print.h>
+#include <rsys/process.h>
+#include <rsys/quick.h>
+#include <rsys/resource.h>
+#include <rsys/screen-dump.h>
+#include <rsys/segment.h>
+#include <rsys/serial.h>
+#include <rsys/soundopts.h>
+#include <rsys/tesave.h>
+#include <rsys/toolevent.h>
+#include <rsys/wind.h>
 
 #define check(type, expected_size)                                       \
   do {                                                                   \
@@ -22,25 +118,254 @@
 
 void check_structs(void)
 {
-  check(VBLTask, 14); /* VRetraceMgr.h */
+  /* ADB.h */
+  check (ADBDataBlock, 10);
+  check (ADBSetInfoBlock, 8);
 
-#if defined(USE_VDRIVER_H)
-  check (VDParamBlock, TODO); /* VDriver.h */
-  check (VDEntryRecord, TODO);
-  check (VDGammaRecord, TODO);
-  check (VDPgInfo, TODO);
-  check (VDFlagRec, TODO);
-  check (VDDefModeRec, TODO);
-#endif /* defined(USE_VDRIVER_H) */
+  /* AliasMgr.h has no structs or unions */
 
-  check (HMStringResType, 4); /* HelpMgr.h */
+  /* AppleEvents.h */
+  check (AEDesc, 8);
+  check (AEKeyDesc, 12);
+  check (AE_hdlr_t, 8);
+  check (AE_hdlr_selector_t, 8);
+  check (AE_hdlr_table_elt_t, 24);
+  check (AE_hdlr_table_t, 52);
+  check (AE_zone_tables_t, 56);
+  check (AE_info_t, 596);
+  check (AEArrayData, 12);
+
+  /* AppleTalk.h has no structs or unions */
+
+  /* BinaryDecimal.h has no structs or unions */
+
+  /* CommTool.h */
+  check (CRMRec, 34);
+  check (CRMSerialRecord, 30);
+
+  /* Components.h */
+  check (ComponentRecord, 4);
+  check (ComponentInstanceRecord, 4);
+
+  /* ControlMgr.h */
+  check (ControlRecord, 296);
+  check (CtlCTab, 16);
+  check (AuxCtlRec, 22);
+
+  /* CQuickDraw.h */
+  check (ITab, 7);
+  check (SProcRec, 8);
+  check (CProcRec, 8);
+  check (GDevice, 62);
+  check (ColorInfo, 16);
+  check (Palette, 32);
+  check (ReqListRec, 4);
+  check (OpenCPicParams, 24);
+  check (CommentSpec, 4);
+  check (FontSpec, 26);
+  check (PictInfo, 104);
+
+  /* DeskMgr.h has no structs or unions */
+
+  /* DeviceMgr.h */
+  check (ramdriver, 19);
+  check (DCtlEntry, 40);
+
+  /* DialogMgr.h */
+  check (DialogRecord, 170);
+  check (DialogTemplate, 276);
+  check (StageList, 2);
+  check (AlertTemplate, 12);
+
+  /* Disk.h */
+  check (DrvSts, 22);
+
+  /* DiskInit.h has no structs or unions */
+
+  /* EditionMgr.h */
+  check (struct SectionRecord, 36);
+  check (EditionContainerSpec, 110);
+  check (EditionInfoRecord, 126);
+  check (NewPublisherReply, 122);
+  check (NewSubscriberReply, 112);
+  check (SectionOptionsReply, 10);
+  check (EditionOpenerParamBlock, 148);
+  check (FormatIOParamBlock, 24);
+
+  /* EventMgr.h */
+  check (EventRecord, 16);
+
+  /* FileMgr.h */
+  check (FInfo, 16);
+  check (FXInfo, 16);
+  check (DInfo, 16);
+  check (DXInfo, 16);
+  check (ioParam, 50);
+  check (fileParam, 80);
+  check (volumeParam, 64);
+  check (cntrlParam, 50);
+  check (ParamBlockRec, 80);
+  check (HIoParam, 50);
+  check (HFileParam, 80);
+  check (HVolumeParam, 122);
+  check (HParamBlockRec, 122);
+  check (HFileInfo, 108);
+  check (DirInfo, 104);
+  check (CInfoPBRec, 108);
+  check (CMovePBRec, 52);
+  check (WDPBRec, 52);
+  check (FCBPBRec, 62);
+  check (VCB, 178);
+  check (DrvQEl, 16);
+  check (FSSpec, 70);
+
+  /* Finder.h */
+  check (DTPBRec, 102);
+
+  /* FontMgr.h */
+  check (FMetricRec, 20);
+  check (FamRec, 52);
+  check (WidthTable, 1072);
+  check (FMInput, 16);
+  check (FMOutput, 26);
+  check (FontRec, 26);
+
+  /* Gestalt.h has no structs or unions */
+
+  /* HelpMgr.h */
+  check (HMStringResType, 4);
   check (HMMessageRecord, 258);
 
-  check (ProcessSerialNumber, 8); /* ProcessMgr.h */
+  /* Iconutil.h */
+  check (CIcon, 84);
+
+  /* IntlUtil.h */
+  check (Intl0Rec, 32);
+  check (Intl1Rec, 332);
+
+  /* ListMgr.h */
+  check (ListRec, 88);
+
+  /* MacTypes.h */
+  check (QHdr, 10);
+  check (Point, 4);
+  check (Rect, 8);
+
+  /* MemoryMgr.h */
+  check (Zone, 54);
+
+  /* MenuMgr.h */
+  check (MenuInfo, 270);
+  check (MCEntry, 30);
+
+  /* NotifyMgr.h */
+  check (NMRec, 36);
+
+  /* OSEvent.h */
+  check (EvQEl, 22);
+  check (size_info_t, 20);
+  check (TargetID, 179);
+  check (HighLevelEventMsg, 36);
+
+  /* OSUtil.h */
+  check (SysParmType, 20);
+  check (DateTimeRec, 14);
+  check (SysEnvRec, 16);
+  check (QElem, 178);
+
+  /* Package.h has no structs or unions */
+
+  /* PPC.h */
+  check (LocationNameRec, 35);
+  check (PPCPortRec, 70);
+
+  /* PrintMgr.h */
+  check (TPrPort, 178);
+  check (TPrInfo, 14);
+  check (TPrStl, 8);
+  check (TPrXInfo, 16);
+  check (TPrJob, 20);
+  check (TPrint, 120);
+  check (TPrStatus, 26);
+  check (TPrDlg, 204);
+
+  /* ProcessMgr.h */
+  check (ProcessSerialNumber, 8);
   check (LaunchParamBlockRec, 44);
   check (ProcessInfoRec, 60);
 
-  check (SndCommand, 8); /* SoundMgr.h */
+  /* QuickDraw.h */
+  check (Region, 10);
+  check (BitMap, 14);
+  check (Cursor, 68);
+  check (Polygon, 14);
+  check (FontInfo, 8);
+  check (QDProcs, 52);
+  check (GrafPort, 108);
+  check (Picture, 10);
+  check (PenState, 18);
+  check (RGBColor, 6);
+  check (HSVColor, 6);
+  check (HSLColor, 6);
+  check (CMYColor, 6);
+  check (ColorSpec, 8);
+  check (ColorTable, 16);
+  check (CQDProcs, 80);
+  check (PixMap, 50);
+  check (PixPat, 28);
+  check (CGrafPort, 108);
+  check (CCrsr, 96);
+  check (MatchRec, 10);
+
+  /* QuickTime.h */
+  check (MovieRecord, 4);
+
+  /* ResourceMgr.h has no structs or unions */
+
+  /* SANE.h */
+  check (comp_t, 8);
+  check (native_comp_t, 8);
+  check (x80_t, 10);
+#if defined (mc68000)
+  check (extended96, 12);
+#endif /* defined (mc68000) */
+  check (Decimal, 24);
+  check (DecForm, 4);
+
+  /* ScrapMgr.h */
+  check (ScrapStuff, 16);
+
+  /* ScriptMgr.h */
+  check (DateCacheRec, 512);
+  check (LongDateRec, 28);
+  check (NumFormatStringRec, 255);
+  check (WideChar, 4);
+  check (WideCharArr, 42);
+  check (NumberParts, 334);
+  check (Extended80, 10);
+  check (ToggleResults, 2);
+  check (LongDateField, 1);
+  check (DateDelta, 1);
+  check (TogglePB, 28);
+
+  /* SegmentLdr.h */
+  check (AppFile, 264);
+
+  /* Serial.h */
+  check (SerShk, 8);
+  check (SerStaRec, 6);
+
+  /* ShutDown.h has no structs or unions */
+
+  /* SoundDvr.h */
+  check (FFSynthRec, 30007);
+  check (Tone, 6);
+  check (SWSynthRec, 30008);
+  check (FTSoundRec, 50);
+  check (FTSynthRec, 6);
+
+  /* SoundMgr.h */
+  check (SndCommand, 8);
   check (SndChannel, 1060);
   check (SoundHeader, 22);
   check (ExtSoundHeader, 62);
@@ -48,67 +373,294 @@ void check_structs(void)
   check (SndDoubleBufferHeader, 24);
   check (SCStatus, 24);
 
-  check(fcbrec, 94); /* rsys/file.h */
+  /* StartMgr.h */
+  check (DefStartRec, 4);
+  check (DefVideoRec, 2);
+  check (DefOSRec, 2);
+
+  /* StdFilePkg.h */
+  check (SFReply, 74);
+  check (StandardFileReply, 88);
+
+  /* SysErr.h has no structs or unions */
+
+  /* TextEdit.h */
+  check (TERec, 98);
+  check (StyleRun, 4);
+  check (STElement, 18);
+  check (LHElement, 4);
+  check (TextStyle, 12);
+  check (ScrpSTElement, 20);
+  check (StScrpRec, 22);
+  check (NullSTRec, 8);
+  check (TEStyleRec, 24);
+
+  /* ThinkC.h has no structs or unions */
+
+  /* TimeMgr.h */
+  check (TMTask, 14);
+
+  /* ToolboxEvent.h has no structs or unions */
+
+  /* ToolboxUtil.h */
+  check (Int64Bit, 8);
+
+#if defined(USE_VDRIVER_H)
+  /* VDriver.h */
+  check (VDParamBlock, 0); /* TODO */
+  check (VDEntryRecord, 0); /* TODO */
+  check (VDGammaRecord, 0); /* TODO */
+  check (VDPgInfo, 0); /* TODO */
+  check (VDFlagRec, 0); /* TODO */
+  check (VDDefModeRec, 0); /* TODO */
+#endif /* defined(USE_VDRIVER_H) */
+
+  /* VRetraceMgr.h */
+  check (VBLTask, 14);
+
+  /* WindowMgr.h */
+  check (WindowRecord, 156);
+  check (WStateData, 16);
+  check (AuxWinRec, 28);
+
+  /* rsys/alias.h */
+  check (Str27, 28);
+  check (alias_head_t, 150);
+  check (alias_parent_t, 3);
+  check (alias_unknown_000100_t, 10);
+  check (alias_fullpath_t, 3);
+  check (alias_tail_t, 170);
+  check (alias_parsed_t, 20);
+
+  /* rsys/apple_events.h */
+  check (inline_desc_t, 8);
+  check (inline_key_desc_t, 12);
+  check (list_header_t, 24);
+  check (ae_header_t, 66);
+  check (subdesc_info_t, 20);
+
+  /* rsys/cfm.h */
+  check (cfrg_resource_t, 32);
+  check (cfir_t, 43);
+  check (MemFragment, 9);
+  check (DiskFragment, 12);
+  check (SegmentedFragment, 10);
+  check (FragmentLocator, 16);
+  check (InitBlock, 44);
+  check (section_info_t, 16);
+  check (CFragConnection_t, 28);
+  check (lib_t, 12);
+  check (CFragClosure_t, 4);
+  check (map_entry_t, 8);
+
+  /* rsys/cquick.h */
+  check (GrafVars, 26);
+
+  /* rsys/ctl.h */
+  check (struct popup_data, 12);
+  check (thumbstr, 18);
+  check (contrlrestype, 23);
+  check (struct lsastr, 18);
+
+  /* rsys/dial.h */
+  check (icon_item_template_t, 18);
+
+  /* rsys/filedouble.h */
+  check (Single_descriptor, 12);
+  check (Single_header, 26);
+  check (Single_dates, 16);
+  check (Single_finfo, 32);
+  check (Single_attribs, 4);
+  check (defaulthead_t, 146);
+  check (defaultentries_t, 52);
+
+  /* rsys/file.h */
+  check (hfs_access_t, 16);
+  check (DrvQExtra, 46);
+  check (fcbrec, 94);
+  check (fcbhidden, 32714);
+  check (hiddeninfo, 32);
+  check (VCBExtra, 202);
+  check (getvolparams_info_t, 20);
+
+  /* rsys/float.h */
+#if defined (mc68000)
+  check (m68k_x96_t, 12);
+#endif /* defined (mc68000) */
+
+#if defined (i386)
+  check (i386_x80_t, 10);
+#endif /* defined (i386) */
+
+#if defined(__alpha)
+  check (alpha_x64_t, 8);
+#endif /* defined(__alpha) */
+
+  check (f64_t, 8);
+  check (f32_t, 4);
+  check (native_f32_t, 4);
+
+  /* rsys/font.h */
+  check (fatabentry, 6);
+  check (widentry_t, 4);
+
+  /* rsys/hfs.h */
+  check (xtntdesc, 4);
+  check (volumeinfo, 162);
+  check (btnode, 14);
+  check (catkey, 38);
+  check (xtntkey, 8);
+  check (anykey, 38);
+  check (filerec, 102);
+  check (directoryrec, 70);
+  check (threadrec, 46);
+  check (filecontrolblock, 94);
+  check (btblock0, 512);
+  check (cacheentry, 540);
+  check (cachehead, 12);
+  check (trailentry, 8);
+  check (btparam, 124);
+  check (wdentry, 16);
+
+  /* rsys/hfs_plus.h */
+  check (HFSUniStr255, 512);
+  check (HFSPlusPermissions, 16);
+  check (HFSPlusExtentDescriptor, 8);
+  check (HFSPlusExtentRecord, 64);
+  check (HFSPlusForkData, 80);
+  check (HFSPlusVolumeHeader, 512);
+  check (BTNodeDescriptor, 14);
+  check (BTHeaderRec, 106);
+  check (HFSPlusCatalogKey, 518);
+  check (HFSPlusCatalogFolder, 88);
+  check (HFSPlusCatalogFile, 248);
+  check (HFSPlusCatalogThread, 520);
+  check (HFSPlusExtentKey, 12);
+  check (HFSPlusAttrForkData, 88);
+  check (HFSPlusAttrExtents, 72);
+
+  /* rsys/icon.h */
+  check (cotton_suite_layout_t, 28);
+
+  /* rsys/itm.h */
+  check (itmstr, 14);
+  check (altstr, 12);
+  check (dlogstr, 21);
+  check (item_style_info_t, 20);
+  check (item_color_info_t, 4);
+
+  /* rsys/keyboard.h */
+  check (completer_pair_t, 2);
+  check (completer_t, 2);
+  check (dead_key_rec_t, 6);
+  check (kchr_str, 262);
+
+  /* rsys/launch.h */
+  check (vers_t, 7);
+
+  /* rsys/menu.h */
+  check (mext, 5);
+  check (muelem, 6);
+  check (menu_elt, 8);
+  check (menu_list, 7);
+  check (menulist, 102);
+  check (mbdfheader, 20);
+  check (mbdfentry, 28);
+  check (mct_res_t, 32);
+  check (mbartype, 4);
+  check (startendpairs, 16);
+  check (table, 16);
+
+  /* rsys/mixed_mode.h */
+  check (RoutineRecord, 20);
+  check (RoutineDescriptor, 32);
+
+  /* rsys/mman_private.h */
+  check (block_header_t, 12);
+  check (pblock_t, 14);
+
+  /* rsys/partition.h */
+  check (oldmapentry_t, 12);
+  check (oldblock1_t, 506);
+
+  /* rsys/pef.h */
+  check (PEFContainerHeader_t, 40);
+  check (PEFSectionHeader_t, 28);
+  check (PEFLoaderInfoHeader_t, 56);
+  check (PEFImportedLibrary_t, 24);
+  check (PEFLoaderRelocationHeader_t, 12);
+  check (PEFExportedSymbol, 10);
+
+  /* rsys/picture.h */
+  check (piccache, 96);
+
+  /* rsys/print.h */
+  check (TGnlData, 8);
+  check (TRslRg, 4);
+  check (TRslRec, 4);
+  check (TGetRslBlk, 128);
+  check (TSetRslBlk, 16);
+  check (TTxtPicRec, 10);
+  check (TCenterRec, 8);
+
+  /* rsys/process.h */
+  check (size_resource_t, 10);
+
+  /* rsys/quick.h */
+  check (ccrsr_res, 147);
+
+  /* rsys/resource.h */
+  check (reshead, 16);
+  check (rsrvrec, 240);
+  check (resmap, 28);
+  check (typref, 8);
+  check (resref, 12);
+  check (empty_resource_template_t, 286);
+  check (dcomp_info_t, 16);
+  check (res_sorttype_t, 8);
+
+  /* rsys/screen-dump.h */
+  check (struct header, 8);
+  check (struct directory_entry, 12);
+  check (struct ifd, 14);
+
+  /* rsys/segment.h */
+  check (finderinfo, 268);
+
+  /* rsys/serial.h */
+  check (sersetbuf_t, 8);
+
+  /* rsys/soundopts.h */
+  check (ModifierStub, 52);
+
+  /* rsys/tesave.h */
+  check (tesave, 56);
+  check (generic_elt_t, 16);
+  check (tehidden, 20);
+
+  /* rsys/toolevent.h */
+  check (keymap, 644);
+
+  /* rsys/wind.h */
+  check (windrestype, 19);
+
+  /* config/arch/powerpc/ppc_stubs.h */
+
+  /*
+   * I don't have a machine I can test the aixtosysv4 structs against.
+   * The PPC work used a gcc command line flag that is no longer
+   * present in the gccs that I have access to.
+   */
+
 }
 
-#if false
+/*
 
-TODO: These .c files have structs that refer to Mac memory and should
-      be size checked
+mkvol_internal.h is designed to work without the normal includes, as such
+it can't be easily tested from here.  Instead we should do the testing in
+mkvol itself, since mkvol could be compiled with different compilation flags
+anyway
 
-./font.c:267:typedef struct {
-./segment.c:66:typedef struct {
-./resOpen.c:31:    struct {            /* empty resource template */
-./ctlMouse.c:72:typedef struct {
-./icon.c:352:typedef struct
-./ctlInit.c:110:typedef struct {
-./menu.c:224:typedef struct mct_res
-./menu.c:738:typedef struct {
-./menu.c:806:typedef struct {
-./mkvol/mkvol.c:487:  typedef struct
-./mkvol/mkvol.c:505:  typedef struct
-./mkvol/mkvol.c:519:  static struct
-./stdmdef.c:45:typedef struct
-./ctlArrows.c:698:struct lsastr
-./qCGrafPort.c:420:struct pixpat_res
-./fileDouble.c:50:PRIVATE struct defaulthead {
-./fileDouble.c:115:PRIVATE struct defaultentries {
-./screen-dump.c:60:struct header
-./screen-dump.c:67:struct directory_entry
-./screen-dump.c:75:struct ifd
-./windInit.c:550:typedef struct {
-./process.c:28:typedef struct size_resource
-./syserr.c:36:PRIVATE struct {
-./syserr.c:165:struct adef {
-./syserr.c:175:struct tdef {
-./syserr.c:182:struct idef {
-./syserr.c:189:struct pdef {
-./syserr.c:196:struct bdef {
-./syserr.c:200:    struct but {
-./syserr.c:207:struct sdef {
-./launch.c:375:typedef struct {
-./qCursor.c:221:typedef struct ccrsr_res
-./dialAlert.c:29:static struct
-./toolevent.c:160:typedef struct {
-./alias.c:384:typedef struct
-./alias.c:404:typedef struct /* 0x0000 */
-./alias.c:411:typedef struct /* 0x0001 */
-./alias.c:418:typedef struct /* 0x0002 */
-./alias.c:425:typedef struct /* 0x0009 */
-./alias.c:437:typedef struct
-./resMod.c:332:typedef struct {
-./fileVolumes.c:69:typedef struct {
-./fileVolumes.c:76:typedef struct {
-./emustubs.c:229:typedef struct
-./emustubs.c:1783:typedef struct comm_toolbox_dispatch_args
-./emustubs.c:2604:typedef struct
-./AE_desc.c:29:typedef struct
-./AE_desc.c:36:typedef struct
-./AE_desc.c:44:typedef struct list_header
-./AE_desc.c:82:typedef struct ae_header
-./serial.c:128:    struct {
-
-These .h files have structs that should be size checked
 
 ./mkvol/mkvol_internal.h:80:typedef struct {
 ./mkvol/mkvol_internal.h:89:typedef struct {
@@ -121,397 +673,8 @@ These .h files have structs that should be size checked
 ./mkvol/mkvol_internal.h:194:typedef struct {
 ./mkvol/mkvol_internal.h:210:typedef struct {
 ./mkvol/mkvol_internal.h:224:typedef struct {
-./config/arch/powerpc/ppc_stubs.h:11:typedef struct
-./config/arch/powerpc/ppc_stubs.h:18:typedef struct
-./config/arch/powerpc/ppc_stubs.h:25:typedef struct
-./config/arch/powerpc/ppc_stubs.h:34:typedef struct
-./config/arch/powerpc/ppc_stubs.h:41:typedef struct
-./config/arch/powerpc/ppc_stubs.h:48:typedef struct
-./config/arch/powerpc/ppc_stubs.h:55:typedef struct
-./config/arch/powerpc/ppc_stubs.h:62:typedef struct
-./config/arch/powerpc/ppc_stubs.h:69:typedef struct
-./config/arch/powerpc/ppc_stubs.h:76:typedef struct
-./config/arch/powerpc/ppc_stubs.h:84:typedef struct
+./mkvol/mkvol.c:487:  typedef struct
+./mkvol/mkvol.c:505:  typedef struct
+./mkvol/mkvol.c:519:  static struct
 
-./include/VRetraceMgr.h:14:typedef struct {
-./include/VDriver.h:13:typedef struct
-./include/VDriver.h:24:typedef struct
-./include/VDriver.h:34:typedef struct
-./include/VDriver.h:42:typedef struct
-./include/VDriver.h:53:typedef struct
-./include/VDriver.h:61:typedef struct
-./include/HelpMgr.h:15:typedef struct HMStringResType
-./include/HelpMgr.h:21:typedef struct HMMessageRecord
-./include/ProcessMgr.h:16:typedef struct ProcessSerialNumber
-./include/ProcessMgr.h:32:typedef struct
-./include/ProcessMgr.h:44:typedef struct
-./include/ProcessMgr.h:70:typedef struct ProcessInfoRec
-./include/SoundMgr.h:13:typedef struct {
-./include/SoundMgr.h:28:typedef struct _SndChannel {
-./include/SoundMgr.h:77:typedef struct {
-./include/SoundMgr.h:87:typedef struct _SoundHeader {
-./include/SoundMgr.h:98:typedef struct _ExtSoundHeader {
-./include/SoundMgr.h:145:typedef struct
-./include/SoundMgr.h:158:typedef struct
-./include/SoundMgr.h:169:typedef struct _SCSTATUS {
-./include/FileMgr.h:73:typedef struct {
-./include/FileMgr.h:81:typedef struct {
-./include/FileMgr.h:88:typedef struct {
-./include/FileMgr.h:95:typedef struct {
-./include/FileMgr.h:120:typedef struct {
-./include/FileMgr.h:133:typedef struct {
-./include/FileMgr.h:153:typedef struct {
-./include/FileMgr.h:171:typedef struct {
-./include/FileMgr.h:186:typedef struct {
-./include/FileMgr.h:199:typedef struct {
-./include/FileMgr.h:219:typedef struct {
-./include/FileMgr.h:265:typedef struct {
-./include/FileMgr.h:283:typedef struct {
-./include/FileMgr.h:302:typedef struct {
-./include/FileMgr.h:313:typedef struct {
-./include/FileMgr.h:324:typedef struct {
-./include/FileMgr.h:342:typedef struct {
-./include/FileMgr.h:393:typedef struct {
-./include/FileMgr.h:406:struct FSSpec
-./include/MacTypes.h:58:typedef struct {
-./include/MacTypes.h:71:typedef struct Point
-./include/MacTypes.h:81:typedef struct Rect
-./include/WindowMgr.h:81:struct __wr {
-./include/WindowMgr.h:101:typedef struct {
-./include/WindowMgr.h:117:typedef struct AuxWinRec {
-./include/PPC.h:13:typedef struct EntityName
-./include/PPC.h:18:typedef struct LocationNameRec
-./include/PPC.h:29:typedef struct PPCPortRec
-./include/PPC.h:39:      struct
-./include/FontMgr.h:54:typedef struct {
-./include/FontMgr.h:62:typedef struct {
-./include/FontMgr.h:83:typedef struct {
-./include/FontMgr.h:107:typedef struct {
-./include/FontMgr.h:117:typedef struct {
-./include/FontMgr.h:138:typedef struct {
-./include/DeviceMgr.h:21:typedef struct {
-./include/DeviceMgr.h:30:typedef struct {
-./include/DeviceMgr.h:49:typedef struct {
-./include/DeviceMgr.h:92:typedef struct {
-./include/StartMgr.h:13:    struct {
-./include/StartMgr.h:19:    struct {
-./include/StartMgr.h:26:typedef struct {
-./include/StartMgr.h:31:typedef struct {
-./include/Serial.h:70:typedef struct {
-./include/Serial.h:81:typedef struct {
-./include/ScrapMgr.h:16:typedef struct {
-./include/CQuickDraw.h:7:typedef struct
-./include/CQuickDraw.h:17:typedef struct
-./include/CQuickDraw.h:37:typedef struct SProcRec
-./include/CQuickDraw.h:45:typedef struct CProcRec
-./include/CQuickDraw.h:53:typedef struct GDevice
-./include/CQuickDraw.h:82:typedef struct ColorInfo
-./include/CQuickDraw.h:91:typedef struct Palette
-./include/CQuickDraw.h:147:typedef struct ReqListRec
-./include/CQuickDraw.h:155:typedef struct OpenCPicParams
-./include/CQuickDraw.h:165:typedef struct CommonSpec
-./include/CQuickDraw.h:175:typedef struct FontSpec
-./include/CQuickDraw.h:188:typedef struct PictInfo
-./include/OSUtil.h:27:typedef struct {
-./include/OSUtil.h:53:typedef struct {
-./include/OSUtil.h:63:typedef struct {
-./include/Components.h:11:typedef struct ComponentRecord
-./include/Components.h:19:typedef struct ComponentInstanceRecord
-./include/QuickTime.h:15:typedef struct MovieRecord
-./include/AppleEvents.h:19:typedef struct AEDesc
-./include/AppleEvents.h:34:typedef struct AEKeyDesc
-./include/AppleEvents.h:115:typedef struct AE_hdlr
-./include/AppleEvents.h:121:typedef struct AE_hdlr_selector
-./include/AppleEvents.h:127:typedef struct AE_hdlr_table_elt
-./include/AppleEvents.h:148:typedef struct AE_hdlr_table
-./include/AppleEvents.h:164:typedef struct AE_zone_tables
-./include/AppleEvents.h:185:typedef struct AE_info
-./include/MemoryMgr.h:27:typedef struct Zone
-./include/Disk.h:36:typedef struct {
-./include/ADB.h:11:typedef struct
-./include/ADB.h:19:typedef struct
-./include/ToolboxUtil.h:21:typedef struct {
-./include/CommTool.h:11:typedef struct
-./include/CommTool.h:35:typedef struct
-./include/OSEvent.h:18:typedef struct {
-./include/OSEvent.h:58:typedef struct size_info
-./include/OSEvent.h:98:typedef struct TargetID
-./include/OSEvent.h:106:typedef struct HighLevelEventMsg
-./include/DialogMgr.h:33:typedef struct
-./include/DialogMgr.h:63:typedef struct
-./include/DialogMgr.h:80:typedef struct {
-./include/DialogMgr.h:95:typedef struct {
-./include/NotifyMgr.h:11:typedef struct {
-./include/SegmentLdr.h:21:typedef struct {
-./include/ScriptMgr.h:99:typedef struct DateCacheRec
-./include/ScriptMgr.h:104:typedef struct LongDateRec
-./include/ScriptMgr.h:133:typedef struct
-./include/ScriptMgr.h:148:typedef struct
-./include/ScriptMgr.h:155:typedef struct
-./include/ScriptMgr.h:175:typedef struct
-./include/SoundDvr.h:17:typedef struct {
-./include/SoundDvr.h:24:typedef struct {
-./include/SoundDvr.h:31:typedef struct {
-./include/SoundDvr.h:46:typedef struct {
-./include/SoundDvr.h:64:typedef struct {
-./include/Iconutil.h:98:typedef struct CIcon
-./include/ControlMgr.h:87:struct __cr {
-./include/ControlMgr.h:103:typedef struct {
-./include/ControlMgr.h:117:typedef struct AuxCtlRec {
-./include/IntlUtil.h:57:typedef struct {
-./include/IntlUtil.h:90:typedef struct {
-./include/SANE.h:14:  struct {
-./include/SANE.h:25:  struct {
-./include/SANE.h:37:typedef struct {
-./include/SANE.h:41:    struct {                /* Here for added efficiency when BIGENDIAN. */
-./include/SANE.h:51:    struct {
-./include/SANE.h:68:typedef struct {
-./include/SANE.h:77:typedef struct {
-./include/SANE.h:93:typedef struct {
-./include/StdFilePkg.h:31:typedef struct {
-./include/StdFilePkg.h:47:typedef struct
-./include/TimeMgr.h:12:typedef struct {
-./include/TextEdit.h:53:typedef struct {
-./include/TextEdit.h:92:typedef struct {
-./include/TextEdit.h:97:typedef struct {
-./include/TextEdit.h:113:typedef struct {
-./include/TextEdit.h:123:typedef struct {
-./include/TextEdit.h:131:typedef struct {
-./include/TextEdit.h:144:typedef struct {
-./include/TextEdit.h:153:typedef struct {
-./include/TextEdit.h:162:typedef struct {
-./include/Finder.h:11:typedef struct
-./include/EditionMgr.h:16:typedef struct type ## Record type ## Record;				\
-./include/EditionMgr.h:22:typedef struct type type;						\
-./include/EditionMgr.h:38:struct SectionRecord
-./include/EditionMgr.h:56:struct EditionContainerSpec
-./include/EditionMgr.h:68:struct EditionInfoRecord
-./include/EditionMgr.h:80:struct NewPublisherReply
-./include/EditionMgr.h:94:struct NewSubscriberReply
-./include/EditionMgr.h:104:struct SectionOptionsReply
-./include/EditionMgr.h:123:struct EditionOpenerParamBlock
-./include/EditionMgr.h:145:struct FormatIOParamBlock
-./include/MenuMgr.h:23:typedef struct {
-./include/MenuMgr.h:35:typedef struct MCEntry
-./include/OLDSANE.h:11:typedef struct {
-./include/OLDSANE.h:16:typedef struct {
-./include/OLDSANE.h:22:typedef struct {
-./include/OLDSANE.h:29:typedef struct {
-./include/OLDSANE.h:44:typedef struct {
-./include/PrintMgr.h:40:typedef struct {
-./include/PrintMgr.h:49:typedef struct {
-./include/PrintMgr.h:58:typedef struct {
-./include/PrintMgr.h:67:typedef struct {
-./include/PrintMgr.h:81:typedef struct {
-./include/PrintMgr.h:94:typedef struct {
-./include/PrintMgr.h:110:typedef struct {
-./include/PrintMgr.h:124:typedef struct {
-./include/ListMgr.h:26:typedef struct {
-./include/QuickDraw.h:71:typedef struct {
-./include/QuickDraw.h:81:typedef struct {
-./include/QuickDraw.h:90:typedef struct {
-./include/QuickDraw.h:107:typedef struct {
-./include/QuickDraw.h:117:typedef struct {
-./include/QuickDraw.h:124:typedef struct {
-./include/QuickDraw.h:146:typedef struct {
-./include/QuickDraw.h:178:typedef struct {
-./include/QuickDraw.h:187:typedef struct {
-./include/QuickDraw.h:205:typedef struct {
-./include/QuickDraw.h:211:typedef struct {
-./include/QuickDraw.h:217:typedef struct {
-./include/QuickDraw.h:223:typedef struct { 
-./include/QuickDraw.h:229:typedef struct ColorSpec
-./include/QuickDraw.h:237:typedef struct {
-./include/QuickDraw.h:248:typedef struct {
-./include/QuickDraw.h:271:typedef struct {
-./include/QuickDraw.h:301:typedef struct {
-./include/QuickDraw.h:314:typedef struct {
-./include/QuickDraw.h:351:typedef struct {
-./include/QuickDraw.h:367:typedef struct {
-./include/EventMgr.h:66:typedef struct {
-
-These .h files may have structs that need to be size checked
-
-./include/rsys/common.h:50:typedef struct
-./include/rsys/stdbits.h:4:struct cleanup_info
-./include/rsys/file.h:27:typedef struct {
-./include/rsys/file.h:34:typedef struct {
-./include/rsys/file.h:70:typedef struct {
-./include/rsys/file.h:92:typedef struct {
-./include/rsys/file.h:99:typedef struct {	/* add new elements to the beginning of this struct */
-./include/rsys/file.h:197:typedef struct hashlink_str {
-./include/rsys/file.h:204:typedef struct {
-./include/rsys/file.h:211:	struct {
-./include/rsys/file.h:251:typedef struct
-./include/rsys/float.h:57:  struct {
-./include/rsys/float.h:69:typedef struct {
-./include/rsys/float.h:77:typedef struct {
-./include/rsys/float.h:98:  struct {
-./include/rsys/tempalloc.h:44:typedef struct
-./include/rsys/hfs_plus.h:27:typedef struct HFSUniStr255
-./include/rsys/hfs_plus.h:40:typedef struct HFSPlusPermissions
-./include/rsys/hfs_plus.h:49:typedef struct HFSPlusExtentDescriptor
-./include/rsys/hfs_plus.h:58:typedef struct HFSPlusForkData
-./include/rsys/hfs_plus.h:67:typedef struct HFSPlusVolumeHeader
-./include/rsys/hfs_plus.h:98:typedef struct BTNodeDescriptor
-./include/rsys/hfs_plus.h:109:typedef struct BTHeaderRec
-./include/rsys/hfs_plus.h:129:typedef struct HFSPlusCatalogKey
-./include/rsys/hfs_plus.h:137:typedef struct HFSPlusCatalogFolder
-./include/rsys/hfs_plus.h:156:typedef struct HFSPlusCatalogFile
-./include/rsys/hfs_plus.h:177:typedef struct HFSPlusCatalogThread
-./include/rsys/hfs_plus.h:186:typedef struct HFSPlusExtentKey
-./include/rsys/hfs_plus.h:196:typedef struct HFSPlusAttrForkData
-./include/rsys/hfs_plus.h:204:typedef struct HFSPlusAttrExtents
-./include/rsys/commonevt.h:11:typedef struct {
-./include/rsys/mactype.h:21:typedef struct { int32 l PACKED; } HIDDEN_LONGINT;
-./include/rsys/mactype.h:22:typedef struct { uint32 u PACKED; } HIDDEN_ULONGINT;
-./include/rsys/ini.h:15:typedef struct pair_link_str
-./include/rsys/options.h:11:typedef struct {
-./include/rsys/int386.h:8:  struct
-./include/rsys/int386.h:12:  struct
-./include/rsys/int386.h:22:  struct
-./include/rsys/itm.h:13:typedef struct {
-./include/rsys/itm.h:55:typedef struct {
-./include/rsys/itm.h:65:typedef struct
-./include/rsys/itm.h:81:typedef struct item_style_info
-./include/rsys/itm.h:92:typedef struct item_color_info
-./include/rsys/print.h:83:typedef struct
-./include/rsys/print.h:91:typedef struct
-./include/rsys/print.h:98:typedef struct
-./include/rsys/print.h:105:typedef struct
-./include/rsys/print.h:118:typedef struct
-./include/rsys/print.h:129:typedef struct
-./include/rsys/print.h:168:typedef struct
-./include/rsys/gworld.h:4:typedef struct gw_info
-./include/rsys/mixed_mode.h:33:typedef struct RoutineRecord
-./include/rsys/mixed_mode.h:45:typedef struct RoutineDescriptor
-./include/rsys/mman_private.h:15:typedef struct block_header
-./include/rsys/mman_private.h:186:typedef struct
-./include/rsys/vgavdriver.h:6:typedef struct
-./include/rsys/keyboard.h:15:typedef struct
-./include/rsys/keyboard.h:21:typedef struct
-./include/rsys/keyboard.h:32:typedef struct
-./include/rsys/keyboard.h:56:typedef struct
-./include/rsys/menu.h:32:typedef struct {
-./include/rsys/menu.h:75:typedef struct {
-./include/rsys/menu.h:80:typedef struct menu_elt
-./include/rsys/menu.h:115:typedef struct menu_list
-./include/rsys/menu.h:128:typedef struct {
-./include/rsys/menu.h:160:typedef struct {	/* from MPW Private.a */
-./include/rsys/menu.h:174:typedef struct {
-./include/rsys/menu.h:242:typedef struct icon_info
-./include/rsys/sounddriver.h:6:struct _sound_driver_t
-./include/rsys/font.h:8:typedef struct {
-./include/rsys/fauxdbm.h:6:typedef struct
-./include/rsys/blockdev.h:4:typedef struct _blockdev_t
-./include/rsys/resource.h:18:typedef struct {
-./include/rsys/resource.h:25:typedef struct {
-./include/rsys/resource.h:30:typedef struct {
-./include/rsys/resource.h:55:typedef struct {
-./include/rsys/resource.h:61:typedef struct {
-./include/rsys/resource.h:193:typedef struct
-./include/rsys/cquick.h:14:typedef struct GrafVars
-./include/rsys/cquick.h:564:typedef struct draw_state
-./include/rsys/cquick.h:585:extern struct qd_color_elt
-./include/rsys/cquick.h:591:typedef struct write_back_data
-./include/rsys/depthconv.h:73:typedef struct
-./include/rsys/depthconv.h:81:typedef struct
-./include/rsys/newvga.h:13:typedef struct
-./include/rsys/newvga.h:42:typedef struct
-./include/rsys/newvga.h:52:typedef struct
-./include/rsys/newvga.h:82:typedef struct
-./include/rsys/newvga.h:87:typedef struct
-./include/rsys/licensetext.h:4:typedef struct
-./include/rsys/partition.h:15:typedef struct {
-./include/rsys/partition.h:43:typedef struct {
-./include/rsys/partition.h:51:typedef struct {
-./include/rsys/mmanstubs.h:55:  struct {
-./include/rsys/pef.h:13:typedef struct PEFContainerHeader
-./include/rsys/pef.h:59:typedef struct PEFSectionHeader
-./include/rsys/pef.h:93:typedef struct PEFLoaderInfoHeader
-./include/rsys/pef.h:154:typedef struct PEFImportedLibrary
-./include/rsys/pef.h:174:typedef struct PEFLoaderRelocationHeader
-./include/rsys/pef.h:214:typedef struct PEFExportedSymbol
-./include/rsys/pef.h:248:typedef struct pef_hash
-./include/rsys/hfs.h:42:typedef struct {
-./include/rsys/hfs.h:47:typedef struct {
-./include/rsys/hfs.h:87:typedef struct {
-./include/rsys/hfs.h:98:typedef struct {
-./include/rsys/hfs.h:105:typedef struct {
-./include/rsys/hfs.h:120:typedef struct {
-./include/rsys/hfs.h:145:typedef struct {
-./include/rsys/hfs.h:161:typedef struct {
-./include/rsys/hfs.h:179:typedef struct {
-./include/rsys/hfs.h:212:typedef struct {
-./include/rsys/hfs.h:254:typedef struct _cacheentry {
-./include/rsys/hfs.h:271:typedef struct {
-./include/rsys/hfs.h:282:typedef struct {
-./include/rsys/hfs.h:295:typedef struct {
-./include/rsys/hfs.h:306:typedef struct {    /* from MPW equates */
-./include/rsys/custom.h:44:typedef struct
-./include/rsys/custom.h:51:typedef struct
-./include/rsys/custom.h:59:typedef struct
-./include/rsys/custom.h:66:typedef struct
-./include/rsys/custom.h:73:typedef struct
-./include/rsys/xdata.h:9:typedef struct
-./include/rsys/xdata.h:20:typedef struct _xdata_t
-./include/rsys/rawblt.h:4:typedef struct
-./include/rsys/keycode.h:13:typedef struct
-./include/rsys/splash.h:4:struct splash_screen_rect
-./include/rsys/splash.h:12:struct splash_screen_header
-./include/rsys/splash.h:36:  struct splash_screen_rect button_rects[4]
-./include/rsys/splash.h:43:struct splash_screen_color
-./include/rsys/option.h:20:typedef struct option
-./include/rsys/option.h:55:typedef struct opt_val
-./include/rsys/option.h:68:typedef struct opt_database
-./include/rsys/ctl.h:93:struct popup_data
-./include/rsys/cfm.h:18:typedef struct
-./include/rsys/cfm.h:37:typedef struct
-./include/rsys/cfm.h:111:typedef struct MemFragment
-./include/rsys/cfm.h:119:typedef struct DiskFragment
-./include/rsys/cfm.h:127:typedef struct SegmentedFragment
-./include/rsys/cfm.h:135:typedef struct FragmentLocator
-./include/rsys/cfm.h:148:typedef struct InitBlock
-./include/rsys/cfm.h:180:typedef struct
-./include/rsys/cfm.h:189:typedef struct CFragConnection
-./include/rsys/cfm.h:207:typedef struct
-./include/rsys/cfm.h:224:typedef struct
-./include/rsys/cfm.h:236:typedef struct
-./include/rsys/soundopts.h:54:typedef struct _ModifierStub {
-./include/rsys/soundopts.h:88:struct hunger_info
-./include/rsys/iv.h:13:typedef struct color
-./include/rsys/iv.h:18:typedef struct image_header
-./include/rsys/checkpoint.h:13:typedef struct
-./include/rsys/nextprint.h:24:typedef struct {
-./include/rsys/nextprint.h:31:typedef struct {
-./include/rsys/nextprint.h:36:typedef struct {
-./include/rsys/nextprint.h:42:typedef struct {
-./include/rsys/nextprint.h:60:typedef struct {
-./include/rsys/nextprint.h:67:typedef struct {
-./include/rsys/nextprint.h:73:typedef struct {
-./include/rsys/nextprint.h:94:typedef struct {
-./include/rsys/vdriver.h:5:struct ColorSpec;
-./include/rsys/vdriver.h:21:struct									  \
-./include/rsys/vdriver.h:25:  struct { short width, height; } size[num_entries];			  \
-./include/rsys/vdriver.h:34:typedef struct
-./include/rsys/image.h:4:typedef struct pixel_image
-./include/rsys/image.h:21:typedef struct image_bits_desc
-./include/rsys/image.h:28:typedef struct pixel_image_desc
-./include/rsys/picture.h:56:typedef struct {
-./include/rsys/trapglue.h:4:typedef struct {
-./include/rsys/trapglue.h:10:typedef struct {
-./include/rsys/trapglue.h:15:typedef struct {
-./include/rsys/tesave.h:13:typedef struct
-./include/rsys/tesave.h:62:typedef struct generic_elt
-./include/rsys/tesave.h:128:typedef struct {	/* from MPW: ToolEqu.a */
-./include/rsys/rgbutil.h:8:struct rgb_spec;
-./include/rsys/rgbutil.h:13:typedef struct
-./include/rsys/rgbutil.h:21:typedef void (*rgb_extract_func_t) (const struct rgb_spec *rgb_spec,
-./include/rsys/rgbutil.h:26:typedef struct rgb_spec
-./include/rsys/rgbutil.h:49:  uint32 (*rgbcolor_to_pixel) (const struct rgb_spec *rgb_spec,
-./include/rsys/filedouble.h:30:typedef struct {
-./include/rsys/filedouble.h:36:typedef struct {
-./include/rsys/filedouble.h:43:typedef struct {
-./include/rsys/filedouble.h:50:typedef struct {
-
-#endif
+*/

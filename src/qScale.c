@@ -12,7 +12,6 @@ char ROMlib_rcsid_qScale[] =
 #include "CQuickDraw.h"
 
 #include "rsys/cquick.h"
-#include "rsys/fatal.h"
 
 /* This routine scales old_bitmap and stores the result in dst_bitmap.
  * The only field of dst_bitmap that needs to be valid on entry is

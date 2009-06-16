@@ -17,9 +17,6 @@ char ROMlib_rcsid_ctlArrows[] =
 
 #include "rsys/cquick.h"
 #include "rsys/ctl.h"
-#include "rsys/screen.h"
-
-#include "rsys/fatal.h"
 
 #include "rsys/image.h"
 #include "rsys/host.h"
@@ -694,13 +691,6 @@ restore (const save_t *sp)
   SetPort (sp->port);
   DisposHandle ((Handle) MR (sp->cp.portPixMap));
 }
-
-struct lsastr
-{
-  Rect limitRect	LPACKED;
-  Rect slopRect		LPACKED;
-  INTEGER axis		PACKED;
-};
 
 P4 (PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */
     INTEGER, var, ControlHandle, c, INTEGER, mess, LONGINT, param)

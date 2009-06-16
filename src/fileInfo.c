@@ -21,7 +21,6 @@ char ROMlib_rcsid_fileInfo[] =
 #include "rsys/glue.h"
 #include "rsys/osutil.h"
 #include "rsys/filedouble.h"
-#include "rsys/assert.h"
 #include "rsys/suffix_maps.h"
 
 #include <ctype.h>

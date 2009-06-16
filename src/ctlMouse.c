@@ -69,12 +69,6 @@ P3(PUBLIC pascal trap, INTEGER, FindControl, Point, p,	/* IMI-323 */
   return retval;
 }
 
-typedef struct {
-    Rect _tlimit	LPACKED;
-    Rect _tslop		LPACKED;
-    INTEGER _taxis	PACKED;
-} thumbstr;
-
 typedef pascal void (*actionp)(ControlHandle c, INTEGER part);
 
 A3(PRIVATE inline, void, CALLACTION, ControlHandle, ch, INTEGER, inpart,

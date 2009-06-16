@@ -18,23 +18,15 @@ char ROMlib_rcsid_dialAlert[] =
 
 #include "OSUtil.h"
 #include "rsys/itm.h"
-#include "rsys/screen.h"
 #include "rsys/resource.h"
 #include "rsys/cquick.h"
 #include "rsys/mman.h"
 #include "rsys/options.h"
+#include "rsys/dial.h"
 
 int16 alert_extra_icon_id = -32768;
 
-static struct
-{
-  int16 count		PACKED;
-  Handle h		PACKED_P;
-  Rect r		LPACKED;
-  uint8 type		LPACKED;
-  uint8 len		LPACKED;
-  int16 res_id		PACKED;
-} icon_item_template =
+static icon_item_template_t icon_item_template =
 {
   /* item count - 1 */
   CWC (0),

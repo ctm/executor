@@ -18,7 +18,6 @@ char ROMlib_rcsid_fileCreate[] =
 
 #include "rsys/file.h"
 #include "rsys/glue.h"
-#include "rsys/assert.h"
 #include "rsys/filedouble.h"
 #include "rsys/suffix_maps.h"
 

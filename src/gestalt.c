@@ -16,7 +16,6 @@ char ROMlib_rcsid_gestalt[] =
 #include "rsys/prefs.h"
 #include "rsys/soundopts.h"
 #include "rsys/mman.h"
-#include "rsys/assert.h"
 #include "rsys/gestalt.h"
 #include "rsys/version.h"
 #include "rsys/vdriver.h"

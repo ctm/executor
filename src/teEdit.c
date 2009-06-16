@@ -22,7 +22,6 @@ char ROMlib_rcsid_teEdit[] =
 #include "rsys/mman.h"
 #include "rsys/tesave.h"
 #include "rsys/arrowkeys.h"
-#include "rsys/screen.h"
 #include "rsys/notmac.h"
 #include "rsys/osevent.h"
 

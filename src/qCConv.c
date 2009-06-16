@@ -10,10 +10,6 @@ char ROMlib_rcsid_qCConv[] =
 #include "rsys/common.h"
 #include "QuickDraw.h"
 
-#include "rsys/fatal.h"
-#include "rsys/myabort.h"
-#include "rsys/assert.h"
-
 /* cmy and rgb color spaces are simply complements */
 
 P2 (PUBLIC pascal trap, void, CMY2RGB,

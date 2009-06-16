@@ -42,7 +42,6 @@
 #include "rsys/next.h"
 #include "rsys/setuid.h"
 #include "rsys/blockinterrupts.h"
-#include "rsys/screen.h"
 #include "rsys/syn68k_public.h"
 #include "ourstuff.h"
 #include "contextswitch.h"

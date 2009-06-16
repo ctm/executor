@@ -24,9 +24,6 @@ char ROMlib_rcsid_qStdRgn[] =
 #include "rsys/flags.h"
 #include "rsys/host.h"
 #include "rsys/vdriver.h"
-#include "rsys/fatal.h"
-#include "rsys/assert.h"
-#include "rsys/myabort.h"
 #include "rsys/tempalloc.h"
 
 #include "rsys/xdblt.h"

@@ -66,6 +66,14 @@ typedef struct {
     Handle rhand	PACKED_P;
 } resref;
 
+typedef struct {            /* empty resource template */
+  reshead bhead	LPACKED;
+  rsrvrec bfill	LPACKED;
+  resmap bmap	LPACKED;
+  INTEGER negone	PACKED;
+} empty_resource_template_t;
+
+
 #if !defined (__STDC__)
 extern resmaphand ROMlib_rntohandl();
 extern Handle ROMlib_mgetres();
@@ -201,5 +209,10 @@ typedef struct
 }
 dcomp_info_t;
 						   
+typedef struct {
+    LONGINT diskoff;
+    resref *rrptr;
+} res_sorttype_t;
+
 #define __MYRESOURCE__
 #endif /* __MYRESOURCE__ */

@@ -22,8 +22,6 @@ char ROMlib_rcsid_fileMisc[] =
 #include "rsys/file.h"
 #include "rsys/notmac.h"
 #include "rsys/stdfile.h"
-#include "rsys/debug.h"
-#include "rsys/assert.h"
 #include "rsys/ini.h"
 #include "rsys/string.h"
 #include "rsys/custom.h"

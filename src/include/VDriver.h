@@ -52,7 +52,7 @@ typedef VDPgInfo *VDPgInfoPtr;
 
 typedef struct
 {
-  SignedByte flag	PACKED;
+  SignedByte flag	LPACKED;
 } VDFlagRec;
 
 typedef VDFlagRec *VDFlagPtr;
@@ -60,7 +60,7 @@ typedef VDFlagRec *VDFlagPtr;
 
 typedef struct
 {
-  SignedByte spID;	PACKED;
+  SignedByte spID	LPACKED;
 } VDDefModeRec;
 
 typedef VDDefModeRec *VDDefModePtr;

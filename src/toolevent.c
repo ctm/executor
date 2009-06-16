@@ -157,13 +157,6 @@ A0(PUBLIC, void, ROMlib_alarmoffmbar)
 	ROMlib_togglealarm();
 }
 
-typedef struct {
-    INTEGER version;
-    INTEGER tableno[256];
-    INTEGER ntables;
-    Byte table[1][128];	/* who knows how many */
-} keymap;
-
 P3(PUBLIC pascal trap, LONGINT, KeyTrans, Ptr, mapp, unsigned short, code,
 							      LONGINT *, state)
 {

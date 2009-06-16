@@ -25,13 +25,10 @@ char ROMlib_rcsid_dialCreate[] =
 #include "rsys/wind.h"
 #include "rsys/itm.h"
 #include "rsys/ctl.h"
-#include "rsys/screen.h"
 #include "rsys/glue.h"
 #include "rsys/mman.h"
 #include "rsys/resource.h"
 #include "rsys/host.h"
-
-#include "rsys/fatal.h"
 
 #define _PtrToHand(ptr, hand, len)			\
   ((void)						\

@@ -15,7 +15,6 @@ char ROMlib_rcsid_menuColor[] =
 
 #include "rsys/menu.h"
 #include "rsys/cquick.h"
-#include "rsys/assert.h"
 
 void
 menu_bar_color (RGBColor *bar_color)

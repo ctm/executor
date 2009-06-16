@@ -47,7 +47,6 @@ char ROMlib_rcsid_stdfile[] =
 #include "rsys/file.h"
 #include "rsys/stdfile.h"
 #include "rsys/arrowkeys.h"
-#include "rsys/screen.h"
 #include "rsys/glue.h"
 #include "rsys/resource.h"
 #include "rsys/pstuff.h"

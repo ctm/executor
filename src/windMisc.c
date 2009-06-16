@@ -19,7 +19,6 @@ char ROMlib_rcsid_windMisc[] =
 
 #include "rsys/cquick.h"
 #include "rsys/wind.h"
-#include "rsys/screen.h"
 #include "rsys/hook.h"
 #include "MemoryMgr.h"
 

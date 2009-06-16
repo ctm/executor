@@ -10,8 +10,10 @@
 /* Stubs for calling of register based traps to the memory manager */
 
 #if !defined(BINCOMPAT) || defined(SYN68K)
-	Only valid for bincompat.
+# error "Only valid for bincompat, on real 680x0 (not Syn68k)"
 #endif
+
+#include <rsys/mman_private.h>
 
 extern OSErr MemErr;
 
@@ -52,12 +54,7 @@ static inline void
 InitZone(ProcPtr pGrowZone, INTEGER cMoreMasters, Ptr limitPtr,
 	 Zone *startPtr)
 {
-  struct {
-    Zone *sp	PACKED_P;
-    Ptr lp	PACKED_P;
-    INTEGER mm	PACKED;
-    ProcPtr gz	PACKED_P;
-  } pblock;
+  pblock_t pblock;
 
   pblock.sp = startPtr;
   pblock.lp = limitPtr;

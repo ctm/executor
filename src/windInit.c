@@ -27,7 +27,6 @@ char ROMlib_rcsid_windInit[] =
 
 #include "rsys/cquick.h"
 #include "rsys/wind.h"
-#include "rsys/screen.h"
 #include "rsys/menu.h"
 #include "rsys/resource.h"
 #include "rsys/system_error.h"
@@ -546,17 +545,6 @@ P8 (PUBLIC pascal trap, CWindowPtr, NewCWindow,
 			    go_away_flag, ref_con);
   return (CWindowPtr) w;
 }
-
-typedef struct {
-    Rect _wrect		LPACKED;
-    INTEGER _wprocid	PACKED;
-    char _wvisible	LPACKED;
-    char _padding1	LPACKED;
-    char _wgoaway	LPACKED;
-    char _padding2	LPACKED;
-    LONGINT _wrefcon	PACKED;
-    Byte _wtitle	LPACKED;
-} windrestype;
 
 typedef windrestype *windrestypeptr;
 typedef struct { windrestypeptr p PACKED_P; } HIDDEN_windrestypeptr;

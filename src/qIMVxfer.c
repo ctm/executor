@@ -13,9 +13,6 @@ char ROMlib_rcsid_qIMVxfer[] =
 #include "CQuickDraw.h"
 #include "rsys/cquick.h"
 
-#include "rsys/fatal.h"
-
-
 /* Helper function: creates a new, sorted table so the value is the
  * same as the index (although we don't bother filling in most of the
  * color table fields).

@@ -22,7 +22,6 @@ char ROMlib_rcsid_stdmdef[] =
 #include "rsys/wind.h"
 #include "rsys/host.h"
 
-#include "rsys/fatal.h"
 #include "rsys/custom.h"
 
 static Rect *current_menu_rect;
@@ -41,18 +40,6 @@ typedef enum
 {
   uparrow, downarrow,
 } arrowtype;
-
-typedef struct
-{
-  int32 lasttick	PACKED;
-  int16 count	PACKED;
-  struct tableentry
-  {
-    int16 top	PACKED;
-    StringPtr name	PACKED;
-    mextp options	PACKED;
-  } entry[1];
-} table, *tablePtr, **tableHandle;
 
 /*
  * I think SICNFLAG is correct.  I'm guessing from what I've seen in MacMan

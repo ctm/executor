@@ -105,6 +105,30 @@ typedef popup_data_t *popup_data_ptr;
 typedef struct { popup_data_ptr p PACKED_P; } hidden_popup_data_ptr;
 typedef hidden_popup_data_ptr *popup_data_handle;
 
+typedef struct {
+    Rect _tlimit	LPACKED;
+    Rect _tslop		LPACKED;
+    INTEGER _taxis	PACKED;
+} thumbstr;
+
+typedef struct {
+    Rect _crect		LPACKED;
+    INTEGER _cvalue	PACKED;
+    INTEGER _cvisible	PACKED;
+    INTEGER _cmax	PACKED;
+    INTEGER _cmin	PACKED;
+    INTEGER _cprocid	PACKED;
+    LONGINT _crefcon	PACKED;
+    Byte _ctitle	LPACKED;
+} contrlrestype;
+
+struct lsastr
+{
+  Rect limitRect	LPACKED;
+  Rect slopRect		LPACKED;
+  INTEGER axis		PACKED;
+};
+
 extern BOOLEAN ROMlib_cdef0_is_rectangular;
 
 extern void image_arrow_up_active_init (void);

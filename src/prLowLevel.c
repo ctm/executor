@@ -22,7 +22,6 @@ char ROMlib_rcsid_prLowLevel[] =
 #include "rsys/pstuff.h"
 #include "rsys/print.h"
 #include "rsys/hook.h"
-#include "rsys/debug.h"
 #include "rsys/ctl.h"
 #include "rsys/ini.h"
 #include "rsys/notmac.h"

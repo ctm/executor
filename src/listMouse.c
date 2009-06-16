@@ -19,7 +19,6 @@ char ROMlib_rcsid_listMouse[] =
 
 #include "rsys/cquick.h"
 #include "rsys/list.h"
-#include "rsys/screen.h"
 #include "rsys/pstuff.h"
 #include "rsys/hook.h"
 

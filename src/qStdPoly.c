@@ -18,7 +18,6 @@ char ROMlib_rcsid_qStdPoly[] =
 
 #include "rsys/cquick.h"
 #include "rsys/picture.h"
-#include "rsys/screen.h"
 
 A2(PRIVATE, void, polyrgn, PolyHandle, ph, RgnHandle, rh)
 {

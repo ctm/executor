@@ -10,7 +10,6 @@ char ROMlib_rcsid_fileDouble[] =
 #include "rsys/common.h"
 #include "FileMgr.h"
 #include "rsys/file.h"
-#include "rsys/assert.h"
 
 #if defined (CYGWIN32)
 #include "winfs.h"
@@ -47,10 +46,7 @@ int apple_double_fork_prefix_length;
 #include "rsys/suffix_maps.h"
 #include "rsys/osutil.h"
 
-PRIVATE struct defaulthead {
-    Single_header head	LPACKED;
-    Single_descriptor desc[10]	LPACKED;	/* we use 4, 6 for spare */
-} ourdefault
+PRIVATE defaulthead_t ourdefault
 #if !defined(__alpha)
 = {
     {
@@ -112,11 +108,7 @@ PRIVATE void initialize_ourdefault( void )
 }
 #endif /* defined(__alpha) */
 
-PRIVATE struct defaultentries {
-    Single_attribs attribs	PACKED;
-    Single_dates   dates	LPACKED;
-    Single_finfo   finfo	LPACKED;
-} ourentries;
+PRIVATE defaultentries_t ourentries;
 
 PUBLIC void
 double_dir_op (char *name, double_dir_op_t op)

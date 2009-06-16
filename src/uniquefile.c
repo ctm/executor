@@ -9,7 +9,6 @@ char ROMlib_rcsid_uniquefile[] =
 
 #include "rsys/common.h"
 #include "rsys/uniquefile.h"
-#include "rsys/assert.h"
 #include "rsys/file.h"
 
 

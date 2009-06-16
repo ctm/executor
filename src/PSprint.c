@@ -36,7 +36,6 @@ char ROMlib_rcsid_PSprint[] =
 #include "rsys/nextprint.h"
 #include "rsys/blockinterrupts.h"
 #include "rsys/next.h"
-#include "rsys/myabort.h"
 #include "rsys/PSstrings.h"
 #include "rsys/tempalloc.h"
 

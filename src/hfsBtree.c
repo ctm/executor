@@ -70,7 +70,6 @@ char ROMlib_rcsid_hfsBtree[] =
 #include "MemoryMgr.h"
 #include "ToolboxUtil.h"
 #include "rsys/hfs.h"
-#include "rsys/assert.h"
 #include "rsys/dcache.h"
 
 #include "rsys/hfs_plus.h"

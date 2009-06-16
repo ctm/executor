@@ -13,7 +13,6 @@ char ROMlib_rcsid_listAccess[] =
 #include "ListMgr.h"
 #include "MemoryMgr.h"
 #include "IntlUtil.h"
-#include "rsys/screen.h"
 #include "rsys/list.h"
 #include "rsys/hook.h"
 

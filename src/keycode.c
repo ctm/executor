@@ -55,7 +55,6 @@ char ROMlib_rcsid_keycode[] = "$Id: keycode.c 63 2004-12-24 18:19:43Z ctm $";
 
 #include "rsys/soundopts.h"
 #include "rsys/blockinterrupts.h"
-#include "rsys/screen.h"
 #include "rsys/prefs.h"
 #include <sys/types.h>
 #include "rsys/version.h"

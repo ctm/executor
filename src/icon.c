@@ -19,6 +19,7 @@ char ROMlib_rcsid_icon[] =
 #include "rsys/cquick.h"
 #include "rsys/resource.h"
 #include "rsys/mman.h"
+#include "rsys/icon.h"
 
 #define ICON_RETURN_ERROR(error)					      \
   ({									      \
@@ -341,20 +342,6 @@ P1 (PUBLIC pascal trap, void, DisposeCIcon,
   DisposHandle ((Handle) MR (CICON_PMAP (icon).pmTable));
   DisposHandle ((Handle) icon);
 }
-
-#define N_SUITE_ICONS 6
-
-/* NOTE:  Cotton didn't really use a struct and I'm not about to munch his
-   code, especially since we don't know the real layout and this is subject
-   to change.  I just wanted to paste in the flags field so we can drop a
-   label in there. */
-
-typedef struct
-{
-  Handle icons[N_SUITE_ICONS];
-  INTEGER label;
-}
-cotton_suite_layout_t;
 
 #define large_bw_icon 0
 #define small_bw_icon 3

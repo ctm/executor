@@ -63,12 +63,6 @@ char ROMlib_rcsid_segment[] =
 #include "vga.h"
 #endif /* defined(MSDOS) */
 
-typedef struct {
-    INTEGER message;
-    INTEGER count;
-    AppFile files[1];
-} finderinfo;
-
 typedef finderinfo *finderinfoptr;
 typedef struct { finderinfoptr p PACKED_P; } HIDDEN_finderinfoptr;
 typedef HIDDEN_finderinfoptr *finderinfohand;

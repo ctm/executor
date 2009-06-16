@@ -11,11 +11,11 @@
 typedef struct {
     enum { commonkeypress,      commonkeyrelease, commonbuttonpress,
 	   commonbuttonrelease, commonexpose,     commonenternotify,
-	   commonleavenotify,   commonmotionnotify  } type	PACKED;
-    INTEGER button	PACKED;
-    INTEGER x	PACKED;
-    INTEGER y	PACKED;
-    LONGINT state	PACKED;
+	   commonleavenotify,   commonmotionnotify  } type;
+  INTEGER button;
+  INTEGER x;
+  INTEGER y;
+  LONGINT state;
 } commonevent;
 
 #define commonshiftmask		(1 << 0)

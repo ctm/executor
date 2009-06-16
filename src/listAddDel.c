@@ -13,7 +13,6 @@ char ROMlib_rcsid_listAddDel[] =
 #include "ListMgr.h"
 #include "MemoryMgr.h"
 #include "rsys/list.h"
-#include "rsys/screen.h"
 
 P3(PUBLIC pascal trap, INTEGER, LAddColumn, INTEGER, count,	/* IMIV-271 */
 					      INTEGER, coln, ListHandle, list)

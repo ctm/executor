@@ -24,6 +24,7 @@ char ROMlib_rcsid_screendump[] =
 #include "rsys/uniquefile.h"
 #include "rsys/notmac.h"
 #include "rsys/vdriver.h"
+#include "rsys/screen-dump.h"
 
 #define II_little_endian 0x4949
 #define MM_big_endian 0x4D4D
@@ -56,28 +57,6 @@ char ROMlib_rcsid_screendump[] =
 #define YResolution 283
 #define ResolutionUnit 296
 #define ColorMap 320
-
-struct header
-{
-  int16 byte_order	__attribute__ ((packed));
-  int16 magic_number	__attribute__ ((packed));
-  int32 ifd_offset	__attribute__ ((packed));
-};
-
-struct directory_entry
-{
-  int16 tag		__attribute__ ((packed));
-  int16 type		__attribute__ ((packed));
-  int32 count		__attribute__ ((packed));
-  int32 value_offset	__attribute__ ((packed));
-};
-
-struct ifd
-{
-  int16 count				__attribute__ ((packed));
-  /* gcc 4.3.0 warns if we leave the following packed attribute in */
-  struct directory_entry entries[1]	/* __attribute__ ((packed)) */;
-};
 
 static void
 ifd_add_entry (struct ifd *ifd, int tag, int type, ...)

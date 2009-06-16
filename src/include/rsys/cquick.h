@@ -594,6 +594,12 @@ typedef struct write_back_data
   Rect src_rect, dst_rect;
 } write_back_data_t;
 
+struct pixpat_res
+{
+  PixPat pixpat;
+  PixMap patmap;
+};
+
 void pixmap_free_copy (PixMap *pm);
 void pixmap_copy (const PixMap *src_pm, const Rect *src_rect,
 		  PixMap *return_pm, Rect *return_rect);

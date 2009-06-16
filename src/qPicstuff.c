@@ -22,7 +22,6 @@ char ROMlib_rcsid_qPicstuff[] =
 #include "rsys/toolutil.h"
 #include "rsys/cquick.h"
 #include "rsys/picture.h"
-#include "rsys/screen.h"
 #include "rsys/mman.h"
 #include "rsys/xdata.h"
 #include "rsys/tempalloc.h"

@@ -16,7 +16,6 @@ char ROMlib_rcsid_qIMIV[] =
 #include "rsys/quick.h"
 #include "rsys/cquick.h"
 #include "rsys/stdbits.h"
-#include "rsys/screen.h"
 #include "rsys/safe_alloca.h"
 #include "rsys/tempalloc.h"
 #include "rsys/dirtyrect.h"

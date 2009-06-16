@@ -18,7 +18,6 @@ char ROMlib_rcsid_windMouse[] =
 
 #include "rsys/cquick.h"
 #include "rsys/wind.h"
-#include "rsys/screen.h"
 #include "rsys/menu.h"
 
 #if !defined (No_STEF_zoommods)

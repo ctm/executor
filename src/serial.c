@@ -28,6 +28,7 @@ char ROMlib_rcsid_serial[] =
 
 #include "rsys/file.h"
 #include "rsys/hfs.h"
+#include "rsys/serial.h"
 
 #if defined (MSDOS)
 #include "dosserial.h"
@@ -125,10 +126,7 @@ A2(PUBLIC, OSErr, SerReset, INTEGER, rn, INTEGER, config)	/* IMII-250 */
 
 A3(PUBLIC, OSErr, SerSetBuf, INTEGER, rn, Ptr, p, INTEGER, len)	/* IMII-251 */
 {
-    struct {
-	Ptr p;
-	INTEGER i;
-    } temp;
+    sersetbuf_t temp;
 
     temp.p = RM (p);
     temp.i = CW (len);

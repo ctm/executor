@@ -104,6 +104,18 @@ typedef struct {	/* add new elements to the beginning of this struct */
     LONGINT CrDat	PACKED;
 } hiddeninfo;
 
+typedef struct {
+    LONGINT dirid;
+    INTEGER filesystemlen;
+    unsigned char hostnamelen;
+    char hostnameandroot[1];	/* potentially many more */
+} rkey_t;
+
+typedef struct {
+    LONGINT parid;
+    char path[1];	/* potentially many more */
+} rcontent_t;
+
 #define FILLOCK 1	/* dirflags & FILLOCK tell whether file is locked */
 
 #define VOLCHAR ':'

@@ -31,7 +31,6 @@ char ROMlib_rcsid_menu[] =
 #include "rsys/menu.h"
 #include "rsys/cquick.h"
 #include "rsys/quick.h"
-#include "rsys/screen.h"
 #include "rsys/glue.h"
 #include "rsys/mman.h"
 #include "rsys/smash.h"
@@ -220,12 +219,6 @@ P1(PUBLIC pascal trap, void, CalcMenuSize, MenuHandle, mh)
  *	 whether or not someone has already converted a menuProc
  *	 from a resource id to a handle.
  */
-
-typedef struct mct_res
-{
-  int16 n_entries;
-  MCEntry entries[1];
-} mct_res_t;
 
 P1 (PUBLIC pascal trap, MenuHandle, GetMenu, int16, rid)
 {
@@ -735,11 +728,6 @@ P1 (PUBLIC pascal trap, void, DeleteMenu, int16, mid)
   HIEROFFX = CW (HIEROFF - sizeof (muelem));
 }
 
-typedef struct {
-    INTEGER nmen;
-    INTEGER mrid[1];
-} mbartype;
-
 typedef mbartype *mbarptr;
 typedef struct { mbarptr p PACKED_P; } HIDDEN_mbarptr;
 typedef HIDDEN_mbarptr *mbarhandle;
@@ -802,11 +790,6 @@ P1(PUBLIC pascal trap, void, SetMenuBar, Handle, ml)
     HandToHand(&temph);
     MenuList = RM(temph.p);
 }
-
-typedef struct {
-    muelem *startp;
-    muelem *endp;
-} startendpairs[2];
 
 enum { nonhier = 0, hier = 1 };
 

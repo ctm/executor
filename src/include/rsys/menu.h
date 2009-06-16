@@ -251,6 +251,35 @@ typedef struct icon_info
   int width, height;
 } icon_info_t;
 
+
+typedef struct mct_res
+{
+  int16 n_entries;
+  MCEntry entries[1];
+} mct_res_t;
+
+typedef struct {
+    INTEGER nmen;
+    INTEGER mrid[1];
+} mbartype;
+
+typedef struct {
+    muelem *startp;
+    muelem *endp;
+} startendpairs[2];
+
+typedef struct
+{
+  int32 lasttick	PACKED;
+  int16 count	PACKED;
+  struct tableentry
+  {
+    int16 top	PACKED;
+    StringPtr name	PACKED;
+    mextp options	PACKED;
+  } entry[1];
+} table, *tablePtr, **tableHandle;
+
 extern int ROMlib_sticky_menus_p;
 extern int ROMlib_AppleChar;
 

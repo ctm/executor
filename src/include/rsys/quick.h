@@ -14,6 +14,13 @@
    in inline functions below */
 #include "rsys/trapglue.h"
 
+typedef struct ccrsr_res
+{
+  CCrsr crsr 		LPACKED;
+  PixMap crsr_map	LPACKED;
+  char data		LPACKED;
+} ccrsr_res, *ccrsr_res_ptr;
+
 extern boolean_t ROMlib_text_output_disabled_p;
 
 #define SMALLRGN	sizeof(Region)	/* 0x000A */

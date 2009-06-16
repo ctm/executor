@@ -19,7 +19,6 @@ char ROMlib_rcsid_ctlStddef[] =
 
 #include "rsys/ctl.h"
 #include "rsys/cquick.h"
-#include "rsys/screen.h"
 
 
 enum

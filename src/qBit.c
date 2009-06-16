@@ -19,7 +19,6 @@ char ROMlib_rcsid_qBit[] =
 #include "rsys/cquick.h"
 #include "rsys/stdbits.h"
 #include "rsys/picture.h"
-#include "rsys/screen.h"
 #include "rsys/mman.h"
 
 P6 (PUBLIC pascal trap, void, CopyBits,

@@ -54,7 +54,6 @@ char ROMlib_rcsid_MacViewClass[] =
 #include "rsys/nextprint.h"
 #include "rsys/blockinterrupts.h"
 #include "rsys/next.h"
-#include "rsys/screen.h"
 #include "rsys/myabort.h"
 #include "rsys/trapglue.h"
 #include "rsys/syn68k_public.h"

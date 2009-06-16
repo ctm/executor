@@ -10,7 +10,6 @@ char ROMlib_rcsid_listStdLDEF[] =
 #include "rsys/common.h"
 #include "ListMgr.h"
 #include "MemoryMgr.h"
-#include "rsys/screen.h"
 
 A5(PRIVATE, void, draw, BOOLEAN, sel, Rect *, rect, INTEGER, doff,
 						INTEGER, dl, ListHandle, list)
