@@ -513,7 +513,7 @@ ${util_dir}/subst.pl				\
  @executor_make@:${executor_make} < ${root}/src/config/Makefile.in > ./tmp-Makefile.in
 
 if [ x"${target_gcc_arch}" = x"" ]; then
-  target_gcc_arch = "$target_arch"
+  target_gcc_arch="$target_arch"
 fi
 
 sed -e "s:@symbol_prefix@:${symbol_prefix}:g

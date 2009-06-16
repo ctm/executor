@@ -43,10 +43,10 @@ void check_structs(void)
   check (SndCommand, 8); /* SoundMgr.h */
   check (SndChannel, 1060);
   check (SoundHeader, 22);
-  check (ExtSoundHeader, 0); /* FIXME */
+  check (ExtSoundHeader, 62);
   check (SndDoubleBuffer, 16);
   check (SndDoubleBufferHeader, 24);
-  check (SCStatus, 0); /* FIXME */
+  check (SCStatus, 24);
 
   check(fcbrec, 94); /* rsys/file.h */
 }
