@@ -93,6 +93,8 @@ char ROMlib_rcsid_main[] =
 #include "rsys/appearance.h"
 #include "rsys/hfs_plus.h"
 
+#include "rsys/check_structs.h"
+
 #include "paramline.h"
 
 #if defined (MSDOS)
@@ -1266,6 +1268,8 @@ win_drive_to_bit (const char *drive_namep)
 
 A2 (PUBLIC, int, main, int, argc, char **, argv)
 {
+  check_structs ();
+
   INTEGER i;
   static unsigned short jmpl_to_ResourceStub[3] =
     {

@@ -21,3 +21,6 @@ endif
 
 ppc_stubs.o:	ppc_stubs.c ppc_stubs.h
 	$(TARGET_GCC) $(TARGET_CFLAGS) $(CALL_AIX_FLAG) -c $<
+
+clean::
+	rm -f $(TARGET_ARCH_OBJ)
