@@ -28,13 +28,13 @@
 #define getNmList	7
 #define getScroll	8
 
-typedef struct {
-    BOOLEAN good	LPACKED;
-    BOOLEAN copy	LPACKED;
-    OSType fType	PACKED;
-    INTEGER vRefNum	PACKED;
-    INTEGER version	PACKED;
-    Str63 fName		LPACKED;
+typedef struct PACKED {
+  BOOLEAN good;
+  BOOLEAN copy;
+  OSType fType;
+  INTEGER vRefNum;
+  INTEGER version;
+  Str63 fName;
 } SFReply;
 
 typedef OSType SFTypeList[4];
@@ -44,18 +44,18 @@ extern INTEGER 	SFSaveDisk;
 extern LONGINT 	CurDirStore;
 #endif
 
-typedef struct
+typedef struct PACKED
 {
-  BOOLEAN sfGood	LPACKED;
-  BOOLEAN sfReplacing	LPACKED;
-  OSType sfType		PACKED;
-  FSSpec sfFile		LPACKED;
-  ScriptCode sfScript	PACKED;
-  INTEGER sfFlags	PACKED;
-  BOOLEAN sfIsFolder	LPACKED;
-  BOOLEAN sfIsVolume	LPACKED;
-  LONGINT sfReserved1	PACKED;
-  INTEGER sfReserved2	PACKED;
+  BOOLEAN sfGood;
+  BOOLEAN sfReplacing;
+  OSType sfType;
+  FSSpec sfFile;
+  ScriptCode sfScript;
+  INTEGER sfFlags;
+  BOOLEAN sfIsFolder;
+  BOOLEAN sfIsVolume;
+  LONGINT sfReserved1;
+  INTEGER sfReserved2;
 } StandardFileReply;
 
 typedef ProcPtr FileFilterYDProcPtr;

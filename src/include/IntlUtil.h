@@ -54,32 +54,32 @@
 #define verTurkey	24
 #define verYugoslavia	25
 
-typedef struct {
-    Byte decimalPt	LPACKED;
-    Byte thousSep	LPACKED;
-    Byte listSep	LPACKED;
-    Byte currSym1	LPACKED;
-    Byte currSym2	LPACKED;
-    Byte currSym3	LPACKED;
-    Byte currFmt	LPACKED;
-    Byte dateOrder	LPACKED;
-    Byte shrtDateFmt	LPACKED;
-    Byte dateSep	LPACKED;
-    Byte timeCycle	LPACKED;
-    Byte timeFmt	LPACKED;
-    LONGINT mornStr	PACKED;
-    LONGINT eveStr	PACKED;
-    Byte timeSep	LPACKED;
-    Byte time1Suff	LPACKED;
-    Byte time2Suff	LPACKED;
-    Byte time3Suff	LPACKED;
-    Byte time4Suff	LPACKED;
-    Byte time5Suff	LPACKED;
-    Byte time6Suff	LPACKED;
-    Byte time7Suff	LPACKED;
-    Byte time8Suff	LPACKED;
-    Byte metricSys	LPACKED;
-    INTEGER intl0Vers	PACKED;
+typedef struct PACKED {
+  Byte decimalPt;
+  Byte thousSep;
+  Byte listSep;
+  Byte currSym1;
+  Byte currSym2;
+  Byte currSym3;
+  Byte currFmt;
+  Byte dateOrder;
+  Byte shrtDateFmt;
+  Byte dateSep;
+  Byte timeCycle;
+  Byte timeFmt;
+  LONGINT mornStr;
+  LONGINT eveStr;
+  Byte timeSep;
+  Byte time1Suff;
+  Byte time2Suff;
+  Byte time3Suff;
+  Byte time4Suff;
+  Byte time5Suff;
+  Byte time6Suff;
+  Byte time7Suff;
+  Byte time8Suff;
+  Byte metricSys;
+  INTEGER intl0Vers;
 } Intl0Rec;
 typedef Intl0Rec *Intl0Ptr;
 typedef struct { Intl0Ptr p PACKED_P; } HIDDEN_Intl0Ptr;
@@ -87,20 +87,20 @@ typedef HIDDEN_Intl0Ptr *Intl0Hndl;
 
 typedef Byte STRING15[16];
 
-typedef struct {
-    STRING15 days[7]	LPACKED;
-    STRING15 months[12]	LPACKED;
-    Byte suppressDay	LPACKED;
-    Byte lngDateFmt	LPACKED;
-    Byte dayLeading0	LPACKED;
-    Byte abbrLen	LPACKED;
-    LONGINT st0	PACKED;
-    LONGINT st1	PACKED;
-    LONGINT st2	PACKED;
-    LONGINT st3	PACKED;
-    LONGINT st4	PACKED;
-    INTEGER intl1Vers	PACKED;
-    INTEGER localRtn	PACKED;
+typedef struct PACKED {
+  STRING15 days[7];
+  STRING15 months[12];
+  Byte suppressDay;
+  Byte lngDateFmt;
+  Byte dayLeading0;
+  Byte abbrLen;
+  LONGINT st0;
+  LONGINT st1;
+  LONGINT st2;
+  LONGINT st3;
+  LONGINT st4;
+  INTEGER intl1Vers;
+  INTEGER localRtn;
 } Intl1Rec;
 typedef Intl1Rec *Intl1Ptr;
 typedef struct { Intl1Ptr p PACKED_P; } HIDDEN_Intl1Ptr;

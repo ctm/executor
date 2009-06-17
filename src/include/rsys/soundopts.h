@@ -51,7 +51,7 @@ typedef uint64 snd_time;
 
 typedef LONGINT TimeL;
 
-typedef struct _ModifierStub {
+typedef struct PACKED _ModifierStub {
   struct _ModifierStub *nextStub;
   ProcPtr code;
   LONGINT userInfo;

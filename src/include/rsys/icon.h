@@ -8,7 +8,7 @@
    to change.  I just wanted to paste in the flags field so we can drop a
    label in there. */
 
-typedef struct
+typedef struct PACKED
 {
   Handle icons[N_SUITE_ICONS];
   INTEGER label;

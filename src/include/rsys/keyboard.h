@@ -12,16 +12,16 @@ typedef unsigned char raw_key_t;
 typedef unsigned char virt_key_t;
 typedef unsigned char modifier_table_number_t;
 
-typedef struct
+typedef struct PACKED
 {
-  unsigned char to_look_for	LPACKED;
-  unsigned char replacement	LPACKED;
+  unsigned char to_look_for;
+  unsigned char replacement;
 } completer_pair_t;
 
-typedef struct
+typedef struct PACKED
 {
-  INTEGER n_recs			PACKED;
-  completer_pair_t completer_recs[0]	LPACKED; /* VARIABLE LENGTH */
+  INTEGER n_recs;
+  completer_pair_t completer_recs[0]; /* VARIABLE LENGTH */
 } completer_t;
 
 #define COMPLETER_N_RECS_X(p)		((p)->n_recs)
@@ -29,13 +29,13 @@ typedef struct
 
 #define COMPLETER_N_RECS(p)		(CW (COMPLETER_N_RECS_X (p)))
 
-typedef struct
+typedef struct PACKED
 {
-  modifier_table_number_t table_number	LPACKED;
-  virt_key_t virt_key			LPACKED;
-  completer_t completer			LPACKED; /* VARIABLE LENGTH */
-  unsigned char filler			LPACKED;
-  unsigned char no_match		LPACKED;
+  modifier_table_number_t table_number;
+  virt_key_t virt_key;
+  completer_t completer; /* VARIABLE LENGTH */
+  unsigned char filler;
+ unsigned char no_match;
 } dead_key_rec_t;
 
 #define DEAD_KEY_TABLE_NUMBER_X(p)	((p)->table_number)
@@ -53,14 +53,14 @@ typedef struct
 #define DEAD_KEY_VIRT_KEY(p)		(CB (DEAD_KEY_VIRT_KEY_X (p)))
 #define DEAD_KEY_NO_MATCH(p)		(CB (DEAD_KEY_NO_MATCH_X (p)))
 
-typedef struct
+typedef struct PACKED
 {
-  INTEGER version				PACKED;
-  modifier_table_number_t modifier_table[256]	LPACKED;
-  INTEGER n_tables				PACKED;
-  unsigned char table[0][128]			LPACKED; /* VARIABLE LENGTH */
-  INTEGER n_dead_key_recs			PACKED;
-  dead_key_rec_t dead_key_recs[0]		LPACKED; /* VARIABLE LENGTH */
+  INTEGER version;
+  modifier_table_number_t modifier_table[256];
+  INTEGER n_tables;
+  unsigned char table[0][128]; /* VARIABLE LENGTH */
+  INTEGER n_dead_key_recs;
+  dead_key_rec_t dead_key_recs[0]; /* VARIABLE LENGTH */
 } kchr_str, *kchr_ptr_t;
 
 typedef struct { kchr_ptr_t p PACKED_P; } HIDDEN_kchr_ptr, *kchr_hand;

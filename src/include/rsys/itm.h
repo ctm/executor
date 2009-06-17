@@ -10,11 +10,11 @@
 
 #include "rsys/pstuff.h"
 
-typedef struct {
-    Handle itmhand	PACKED_P;
-    Rect itmr	LPACKED;
-    unsigned char itmtype	LPACKED;
-    unsigned char itmlen	LPACKED;
+typedef struct PACKED {
+  Handle itmhand	PACKED_P;
+  Rect itmr;
+  unsigned char itmtype;
+  unsigned char itmlen;
 } itmstr;
 
 typedef itmstr *itmp;
@@ -52,47 +52,47 @@ typedef HIDDEN_itmp *itmh;
 extern void dialog_compute_rect (Rect *dialog_rect, Rect *dst_rect,
 				 int position);
 
-typedef struct {
-    Rect altr		LPACKED;
-    INTEGER altiid	PACKED;
-    INTEGER altstag	PACKED;
+typedef struct PACKED {
+  Rect altr;
+  INTEGER altiid;
+  INTEGER altstag;
 } altstr;
 
 typedef altstr *altp;
 typedef struct { altp p PACKED_P; } HIDDEN_altp;
 typedef HIDDEN_altp *alth;
 
-typedef struct
+typedef struct PACKED
 {
-    Rect dlgr	LPACKED;
-    INTEGER dlgprocid	PACKED;
-    char dlgvis	LPACKED;
-    char dlgfil1	LPACKED;
-    char dlggaflag	LPACKED;
-    char dlgfil2	LPACKED;
-    LONGINT dlgrc	PACKED;
-    INTEGER dlgditl	PACKED;
-    char dlglen	LPACKED;
+  Rect dlgr;
+  INTEGER dlgprocid;
+  char dlgvis;
+  char dlgfil1;
+  char dlggaflag;
+  char dlgfil2;
+  LONGINT dlgrc;
+  INTEGER dlgditl;
+  char dlglen;
 } dlogstr;
 typedef dlogstr *dlogp;
 typedef struct { dlogp p PACKED_P; } HIDDEN_dlogp;
 typedef HIDDEN_dlogp *dlogh;
 
-typedef struct item_style_info
+typedef struct PACKED item_style_info
 {
-  int16 font		PACKED;
-  Style face		LPACKED;
-  unsigned char filler  LPACKED;
-  int16 size		PACKED;
-  RGBColor foreground	LPACKED;
-  RGBColor background	LPACKED;
-  int16 mode		PACKED;
+  int16 font;
+  Style face;
+  unsigned char filler;
+  int16 size;
+  RGBColor foreground;
+  RGBColor background;
+  int16 mode;
 } item_style_info_t;
 
-typedef struct item_color_info
+typedef struct PACKED item_color_info
 {
-  int16 data		PACKED;
-  int16 offset		PACKED;
+  int16 data;
+  int16 offset;
 } item_color_info_t;
 
 extern itmp ROMlib_dpnotoip (DialogPeek dp, INTEGER itemno, SignedByte *flags);

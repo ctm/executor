@@ -5,15 +5,15 @@
  * $Id: font.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-typedef struct {
-    INTEGER size	PACKED;
-    INTEGER style	PACKED;
-    INTEGER fontresid	PACKED;
+typedef struct PACKED {
+  INTEGER size;
+  INTEGER style;
+  INTEGER fontresid;
 } fatabentry;
 
-typedef struct {
-    unsigned short style;
-    INTEGER table[1];	/* actually more */
+typedef struct PACKED {
+  unsigned short style;
+  INTEGER table[1];	/* actually more */
 } widentry_t;
 
 typedef WidthTable *WPtr;

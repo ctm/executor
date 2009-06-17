@@ -13,10 +13,10 @@
 
 typedef INTEGER LaunchFlags;
 
-typedef struct ProcessSerialNumber
+typedef struct PACKED ProcessSerialNumber
 {
-  uint32 highLongOfPSN		PACKED;
-  uint32 lowLongOfPSN		PACKED;
+  uint32 highLongOfPSN;
+  uint32 lowLongOfPSN;
 } ProcessSerialNumber;
 
 /* for now, anyway */
@@ -41,20 +41,20 @@ enum { APP_PARAMS_MAGIC = 0xd6434a1b, }; /* chosen from /dev/random */
 
 typedef ROMlib_AppParameters_t *AppParametersPtr;
 
-typedef struct
+typedef struct PACKED
 {
-  LONGINT reserved1 PACKED;
-  INTEGER reserved2 PACKED;
-  INTEGER launchBlockID PACKED;
-  LONGINT launchEPBLength PACKED;
-  INTEGER launchFileFlags PACKED;
-  LaunchFlags launchControlFlags PACKED;
-  FSSpecPtr launchAppSpec PACKED;
-  ProcessSerialNumber launchProcessSN LPACKED;
-  LONGINT launchPreferredSize PACKED;
-  LONGINT launchMinimumSize PACKED;
-  LONGINT launchAvailableSize PACKED;
-  AppParametersPtr launchAppParameters PACKED;
+  LONGINT reserved1;
+  INTEGER reserved2;
+  INTEGER launchBlockID;
+  LONGINT launchEPBLength;
+  INTEGER launchFileFlags;
+  LaunchFlags launchControlFlags;
+  FSSpecPtr launchAppSpec;
+  ProcessSerialNumber launchProcessSN;
+  LONGINT launchPreferredSize;
+  LONGINT launchMinimumSize;
+  LONGINT launchAvailableSize;
+  AppParametersPtr launchAppParameters;
 }
 LaunchParamBlockRec;
 
@@ -67,20 +67,20 @@ enum { launchContinue = 0x4000 };
   ((psn0).highLongOfPSN == (psn1).highLongOfPSN		\
    && (psn0).lowLongOfPSN == (psn1).lowLongOfPSN)
 
-typedef struct ProcessInfoRec
+typedef struct PACKED ProcessInfoRec
 {
-  uint32 processInfoLength		PACKED;
+  uint32 processInfoLength;
   StringPtr processName			PACKED_P;
-  ProcessSerialNumber processNumber	LPACKED;
-  uint32 processType			PACKED;
-  OSType processSignature		PACKED;
-  uint32 processMode			PACKED;
+  ProcessSerialNumber processNumber;
+  uint32 processType;
+  OSType processSignature;
+  uint32 processMode;
   Ptr processLocation			PACKED_P;
-  uint32 processSize			PACKED;
-  uint32 processFreeMem			PACKED;
-  ProcessSerialNumber processLauncher	LPACKED;
-  uint32 processLaunchDate		PACKED;
-  uint32 processActiveTime		PACKED;
+  uint32 processSize;
+  uint32 processFreeMem;
+  ProcessSerialNumber processLauncher;
+  uint32 processLaunchDate;
+  uint32 processActiveTime;
   FSSpecPtr processAppSpec		PACKED_P;
 } ProcessInfoRec;
 typedef ProcessInfoRec *ProcessInfoPtr;

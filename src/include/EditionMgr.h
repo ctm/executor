@@ -35,78 +35,78 @@ typedef ProcPtr ExpModalFilterProcPtr;
 typedef ProcPtr FormatIOProcPtr;
 typedef ProcPtr EditionOpenerProcPtr;
 
-struct SectionRecord
+struct PACKED SectionRecord
 {
-  SignedByte version			LPACKED;
-  SectionType kind			LPACKED;
-  UpdateMode mode			PACKED;
-  TimeStamp mdDate			PACKED;
-  int32 sectionID			PACKED;
-  int32 refCon				PACKED;
+  SignedByte version;
+  SectionType kind;
+  UpdateMode mode;
+  TimeStamp mdDate;
+  int32 sectionID;
+  int32 refCon;
   AliasHandle alias			PACKED_P;
 
-  int32 subPart				PACKED;
+  int32 subPart;
   /* ### Section */ Handle nextSection	PACKED_P;
   Handle controlBlock			PACKED_P;
-  EditionRefNum refNum			PACKED;
+  EditionRefNum refNum;
 };
 
 declare_record_subtypes (Section);
 
-struct EditionContainerSpec
+struct PACKED EditionContainerSpec
 {
-  FSSpec theFile			LPACKED;
-  ScriptCode theFileScript		PACKED;
-  int32 thePart				PACKED;
-  Str31 thePartName			LPACKED;
-  ScriptCode thePartScript		PACKED;
+  FSSpec theFile;
+  ScriptCode theFileScript;
+  int32 thePart;
+  Str31 thePartName;
+  ScriptCode thePartScript;
 };
 
 typedef struct EditionContainerSpec EditionContainerSpec;
 typedef EditionContainerSpec *EditionContainerSpecPtr;
 
-struct EditionInfoRecord
+struct PACKED EditionInfoRecord
 {
-  TimeStamp crDate			PACKED;
-  TimeStamp mdDate			PACKED;
-  OSType fdCreator			PACKED;
-  OSType fdType				PACKED;
-  EditionContainerSpec container	LPACKED;
+  TimeStamp crDate;
+  TimeStamp mdDate;
+  OSType fdCreator;
+  OSType fdType;
+  EditionContainerSpec container;
 };
 
 typedef struct EditionInfoRecord EditionInfoRecord;
 typedef EditionInfoRecord *EditionInfoPtr;
 
-struct NewPublisherReply
+struct PACKED NewPublisherReply
 {
-  Boolean canceled			LPACKED;
-  Boolean replacing			LPACKED;
-  Boolean usePart			LPACKED;
+  Boolean canceled;
+  Boolean replacing;
+  Boolean usePart;
   uint8 _filler;
   Handle preview			PACKED_P;
-  FormatType previewFormat		LPACKED;
-  EditionContainerSpec container	LPACKED;
+  FormatType previewFormat;
+  EditionContainerSpec container;
 };
 
 typedef struct NewPublisherReply NewPublisherReply;
 typedef NewPublisherReply *NewPublisherReplyPtr;
 
-struct NewSubscriberReply
+struct PACKED NewSubscriberReply
 {
-  Boolean canceled		       	LPACKED;
-  SignedByte formatsMask		LPACKED;
-  EditionContainerSpec container	LPACKED;
+  Boolean canceled;
+  SignedByte formatsMask;
+  EditionContainerSpec container;
 };
 
 typedef struct NewSubscriberReply NewSubscriberReply;
 typedef NewSubscriberReply *NewSubscriberReplyPtr;
 
-struct SectionOptionsReply
+struct PACKED SectionOptionsReply
 {
-  Boolean canceled			LPACKED;
-  Boolean changed			LPACKED;
+  Boolean canceled;
+  Boolean changed;
   SectionHandle sectionH		PACKED_P;
-  ResType action			PACKED;
+  ResType action;
 };
 
 typedef struct SectionOptionsReply SectionOptionsReply;
@@ -120,16 +120,16 @@ typedef uint8 EditionOpenerVerb;
 #define eoCloseNew	(3)
 #define eoCanSubscribe	(4)
 
-struct EditionOpenerParamBlock
+struct PACKED EditionOpenerParamBlock
 {
-  EditionInfoRecord info		LPACKED;
+  EditionInfoRecord info;
   SectionHandle sectionH		PACKED_P;
   FSSpecPtr document			PACKED_P;
-  OSType fdCreator			PACKED;
-  int32 ioRefNum			PACKED;
+  OSType fdCreator;
+  int32 ioRefNum;
   FormatIOProcPtr ioProc		PACKED_P;
-  Boolean success			LPACKED;
-  SignedByte formatsMask		LPACKED;
+  Boolean success;
+  SignedByte formatsMask;
 };
 
 typedef struct EditionOpenerParamBlock EditionOpenerParamBlock;
@@ -142,14 +142,14 @@ typedef uint8 FormatIOVerb;
 #define ioNewFormat	(2)
 #define ioWtriteFormat	(3)
 
-struct FormatIOParamBlock
+struct PACKED FormatIOParamBlock
 {
-  int32 ioRefNum		PACKED;
-  FormatType format		LPACKED;
-  int32 formatIndex		PACKED;
-  int32 offset			PACKED;
+  int32 ioRefNum;
+  FormatType format;
+  int32 formatIndex;
+  int32 offset;
   Ptr buffPtr			PACKED_P;
-  int32 buffLen			PACKED;
+  int32 buffLen;
 };
 
 typedef struct FormatIOParamBlock FormatIOParamBlock;

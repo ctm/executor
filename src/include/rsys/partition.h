@@ -12,26 +12,26 @@
 typedef unsigned long ULONGINT;
 #endif
 
-typedef struct {
-    unsigned short pmSig	PACKED;	/* 0x504D == 'PM' */
-    unsigned short pmSigPad	PACKED;
-    ULONGINT pmMapBlkCnt	PACKED;
-    ULONGINT pmPyPartStart	PACKED;
-    ULONGINT pmPartBlkCnt	PACKED;
-    unsigned char pmPartName[32]	LPACKED;	/* NUL terminated */
-    unsigned char pmPartType[32]	LPACKED;	/* NUL terminated */
-    ULONGINT pmLgDataStart	PACKED;
-    ULONGINT pmDataCnt	PACKED;
-    ULONGINT pmPartStatus	PACKED;
-    ULONGINT pmLgBootStart	PACKED;
-    ULONGINT pmBootSize	PACKED;
-    ULONGINT pmBootLoad	PACKED;
-    ULONGINT pmBootLoad2	PACKED;
-    ULONGINT pmBootEntry	PACKED;
-    ULONGINT pmBootEntry2	PACKED;
-    ULONGINT pmBootCksum	PACKED;
-    unsigned char pmProcessor[16]	LPACKED;	/* NUL terminated */
-    unsigned char bootargs[120]	LPACKED;	/* IMV-579 says 128	PACKED, but they probably
+typedef struct PACKED {
+  unsigned short pmSig;	/* 0x504D == 'PM' */
+  unsigned short pmSigPad;
+  ULONGINT pmMapBlkCnt;
+  ULONGINT pmPyPartStart;
+  ULONGINT pmPartBlkCnt;
+  unsigned char pmPartName[32];	/* NUL terminated */
+  unsigned char pmPartType[32];	/* NUL terminated */
+  ULONGINT pmLgDataStart;
+  ULONGINT pmDataCnt;
+  ULONGINT pmPartStatus;
+  ULONGINT pmLgBootStart;
+  ULONGINT pmBootSize;
+  ULONGINT pmBootLoad;
+  ULONGINT pmBootLoad2;
+  ULONGINT pmBootEntry;
+  ULONGINT pmBootEntry2;
+  ULONGINT pmBootCksum;
+  unsigned char pmProcessor[16];	/* NUL terminated */
+  unsigned char bootargs[120];	/* IMV-579 says 128, but they probably
 					   mean that the total should be 512 */
 } partmapentry_t;
 
@@ -40,17 +40,17 @@ typedef struct {
 
 #define HFSPARTTYPE	"Apple_HFS"
 
-typedef struct {
-    ULONGINT pdStart	PACKED;
-    ULONGINT pdSize	PACKED;
-    ULONGINT pdFSID	PACKED;
+typedef struct PACKED {
+  ULONGINT pdStart;
+  ULONGINT pdSize;
+  ULONGINT pdFSID;
 } oldmapentry_t;
 
 #define NOLDENTRIES	42
 
-typedef struct {
-    unsigned short pdSig	PACKED;	/* 0x5453 == 'TS' */
-    oldmapentry_t oldmapentry[NOLDENTRIES]	LPACKED;
+typedef struct PACKED {
+  unsigned short pdSig;	/* 0x5453 == 'TS' */
+  oldmapentry_t oldmapentry[NOLDENTRIES];
 } oldblock1_t;
 
 #define OLDMAPSIG0	'T'

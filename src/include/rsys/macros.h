@@ -34,26 +34,13 @@
 
 #if !defined (PACKED)
 # define PACKED	__attribute__((packed))
-
-// We used to blindly use PACKED on all members of a structure, but gcc
-// now (perhaps starting with 4.3) issues warnings when we do this with
-// certain types.  LPACKED stands for Legacy Packed and I'm leaving it in
-// the code for now, just on the off chance that there's an earlier version
-// of gcc where we actually need the __attribute__((packed)) on the members
-// that are now causing warnings.
-//
-// Once testing shows that LPACKED was never needed, someone should remove it.
-
-# define LPACKED /* legacy packed, gcc 4.3 complains */
 #endif
 
 #if !defined (PACKED_P)
 #if !defined (__alpha)
 #define PACKED_P PACKED
-#define LPACKED_P LPACKED
 #else
 #define PACKED_P :32 PACKED
-#define LPACKED_P :32 LPACKED
 #endif
 #endif
 

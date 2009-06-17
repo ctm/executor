@@ -84,27 +84,27 @@ typedef struct { ControlHandle p PACKED_P; } HIDDEN_ControlHandle;
 
 #include "WindowMgr.h"
 
-struct __cr {
-    ControlHandle nextControl	PACKED_P;	/* actually ControlHandle */
-    WindowPtr contrlOwner	PACKED_P;
-    Rect contrlRect	LPACKED;
-    Byte contrlVis	LPACKED;
-    Byte contrlHilite	LPACKED;
-    INTEGER contrlValue	PACKED;
-    INTEGER contrlMin	PACKED;
-    INTEGER contrlMax	PACKED;
-    Handle contrlDefProc	PACKED_P;
-    Handle contrlData	PACKED_P;
-    ProcPtr contrlAction	PACKED_P;
-    LONGINT contrlRfCon	PACKED;
-    Str255 contrlTitle	LPACKED;
+struct PACKED __cr {
+  ControlHandle nextControl	PACKED_P;	/* actually ControlHandle */
+  WindowPtr contrlOwner	PACKED_P;
+  Rect contrlRect;
+  Byte contrlVis;
+  Byte contrlHilite;
+  INTEGER contrlValue;
+  INTEGER contrlMin;
+  INTEGER contrlMax;
+  Handle contrlDefProc	PACKED_P;
+  Handle contrlData	PACKED_P;
+  ProcPtr contrlAction	PACKED_P;
+  LONGINT contrlRfCon;
+  Str255 contrlTitle;
 };
 
-typedef struct {
-    LONGINT ccSeed	PACKED;
-    INTEGER ccReserved	PACKED;
-    INTEGER ctSize	PACKED;
-    cSpecArray ctTable	LPACKED;
+typedef struct PACKED {
+  LONGINT ccSeed;
+  INTEGER ccReserved;
+  INTEGER ctSize;
+  cSpecArray ctTable;
 } CtlCTab, *CCTabPtr;
 typedef struct { CCTabPtr p PACKED_P; } HIDDEN_CCTabPtr;
 typedef HIDDEN_CCTabPtr *CCTabHandle;
@@ -114,13 +114,13 @@ typedef struct { AuxCtlPtr p PACKED_P; } HIDDEN_AuxCtlPtr;
 typedef HIDDEN_AuxCtlPtr *AuxCtlHandle;
 typedef struct { AuxCtlHandle p PACKED_P; } HIDDEN_AuxCtlHandle;
 
-typedef struct AuxCtlRec {
-    AuxCtlHandle acNext		PACKED_P;
-    ControlHandle acOwner	PACKED_P;
-    CCTabHandle acCTable	PACKED_P;
-    INTEGER acFlags		PACKED;
-    LONGINT acReserved		PACKED;
-    LONGINT acRefCon		PACKED;
+typedef struct PACKED AuxCtlRec {
+  AuxCtlHandle acNext		PACKED_P;
+  ControlHandle acOwner	PACKED_P;
+  CCTabHandle acCTable	PACKED_P;
+  INTEGER acFlags;
+  LONGINT acReserved;
+  LONGINT acRefCon;
 } AuxCtlRec;
 
 #if !defined (AuxCtlHead_H)

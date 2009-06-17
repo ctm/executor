@@ -8,40 +8,39 @@
  * $Id: emustubs.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-typedef struct
+typedef struct PACKED
 {
-  Ptr buffer PACKED;
-  ProcPtr proc PACKED;
-  Ptr data PACKED;
+  Ptr buffer PACKED_P;
+  ProcPtr proc PACKED_P;
+  Ptr data PACKED_P;
 } adbop_t;
 
-typedef struct comm_toolbox_dispatch_args
+typedef struct PACKED comm_toolbox_dispatch_args
 {
-  int16 selector		PACKED;
+  int16 selector;
   
   union
+  {
+    struct PACKED
     {
-      struct
-        {
-	  int16 n_items		PACKED;
-	  DialogPtr dp		PACKED_P;
-        } shorten_args		LPACKED;
-      struct
-        {
-	  DITLMethod method	PACKED;
-	  Handle new_items_h	PACKED_P;
-	  DialogPtr dp		PACKED_P;
-        } append_args		LPACKED;
-      struct
-        {
-	  DialogPtr dp		PACKED_P;
-        } count_args;
-      struct
-        {
-	  QElemPtr qp PACKED_P;
-        } crm_args;
-	
-    } args;
+      int16 n_items;
+      DialogPtr dp		PACKED_P;
+    } shorten_args;
+    struct PACKED
+    {
+      DITLMethod method;
+      Handle new_items_h PACKED_P;
+      DialogPtr dp PACKED_P;
+    } append_args;
+    struct PACKED
+    {
+      DialogPtr dp		PACKED_P;
+    } count_args;
+    struct PACKED
+    {
+      QElemPtr qp PACKED_P;
+    } crm_args;
+  } args;
 } comm_toolbox_dispatch_args_t;
 
 typedef struct

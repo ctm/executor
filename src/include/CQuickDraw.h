@@ -14,14 +14,14 @@ typedef struct
 
 #define minSeed 1024
 
-typedef struct
+typedef struct PACKED
 {
-  LONGINT iTabSeed	PACKED;
-  INTEGER iTabRes	PACKED;
+  LONGINT iTabSeed;
+  INTEGER iTabRes;
   /* can't use [0];
      make this an unsigned char even tho the mac has SignedByte;
      it is treated as unsigned */
-  unsigned char iTTable[1] LPACKED;
+  unsigned char iTTable[1];
 } ITab, *ITabPtr;
 
 typedef struct { ITabPtr p PACKED_P; } HIDDEN_ITabPtr;
@@ -34,7 +34,7 @@ typedef struct { GDHandle p PACKED_P; } HIDDEN_GDHandle;
 
 typedef struct { struct SProcRec *p PACKED_P; } HIDDEN_SProcPtr;
 typedef HIDDEN_SProcPtr *SProcHndl;
-typedef struct SProcRec
+typedef struct PACKED SProcRec
 {
   SProcHndl nxtSrch	PACKED_P;
   ProcPtr srchProc	PACKED_P;
@@ -42,7 +42,7 @@ typedef struct SProcRec
 
 typedef struct { struct CProcRec *p PACKED_P; } HIDDEN_CProcPtr;
 typedef HIDDEN_CProcPtr *CProcHndl;
-typedef struct CProcRec
+typedef struct PACKED CProcRec
 {
   CProcHndl nxtComp	PACKED_P;
   ProcPtr compProc	PACKED_P;
@@ -50,26 +50,26 @@ typedef struct CProcRec
 
 typedef void *DeviceLoopDrawingProcPtr;
 
-typedef struct GDevice
+typedef struct PACKED GDevice
 {
-  INTEGER gdRefNum		PACKED;
-  INTEGER gdID			PACKED;
-  INTEGER gdType		PACKED;
+  INTEGER gdRefNum;
+  INTEGER gdID;
+  INTEGER gdType;
   ITabHandle gdITable		PACKED_P;
-  INTEGER gdResPref		PACKED;
+  INTEGER gdResPref;
   SProcHndl gdSearchProc	PACKED_P;
   CProcHndl gdCompProc		PACKED_P;
-  INTEGER gdFlags		PACKED;
+  INTEGER gdFlags;
   PixMapHandle gdPMap		PACKED_P;
-  LONGINT gdRefCon		PACKED;
+  LONGINT gdRefCon;
   GDHandle gdNextGD		PACKED_P;
-  Rect gdRect			LPACKED;
-  LONGINT gdMode		PACKED;
-  INTEGER gdCCBytes		PACKED;
-  INTEGER gdCCDepth		PACKED;
+  Rect gdRect;
+  LONGINT gdMode;
+  INTEGER gdCCBytes;
+  INTEGER gdCCDepth;
   Handle gdCCXData		PACKED_P;
   Handle gdCCXMask		PACKED_P;
-  LONGINT gdReserved		PACKED;
+  LONGINT gdReserved;
 } GDevice;
 
 typedef uint32 DeviceLoopFlags;
@@ -79,23 +79,23 @@ typedef uint32 DeviceLoopFlags;
 #define dontMatchSeeds	(1 << 1)
 #define allDevices	(1 << 2)
 
-typedef struct ColorInfo
+typedef struct PACKED ColorInfo
 {
-  RGBColor ciRGB	LPACKED;
-  INTEGER ciUsage	PACKED;
-  INTEGER ciTolerance	PACKED;
-  INTEGER ciFlags	PACKED;
-  LONGINT ciPrivate	PACKED;
+  RGBColor ciRGB;
+  INTEGER ciUsage;
+  INTEGER ciTolerance;
+  INTEGER ciFlags;
+  LONGINT ciPrivate;
 } ColorInfo;
 
-typedef struct Palette
+typedef struct PACKED Palette
 {
-  INTEGER pmEntries			PACKED;
+  INTEGER pmEntries;
   GrafPtr pmWindow			PACKED_P;
-  INTEGER pmPrivate			PACKED;
-  LONGINT /* Handle? */ pmDevices	PACKED;
-  Handle pmSeeds			PACKED;
-  ColorInfo pmInfo[1]			LPACKED;
+  INTEGER pmPrivate;
+  LONGINT /* Handle? */ pmDevices;
+  Handle pmSeeds PACKED_P;
+  ColorInfo pmInfo[1];
 } Palette, *PalettePtr;
 
 typedef enum 
@@ -144,79 +144,79 @@ typedef LONGINT GWorldFlags;
 
 typedef CGrafPort GWorld, *GWorldPtr;
 
-typedef struct ReqListRec
+typedef struct PACKED ReqListRec
 {
-  INTEGER reqLSize	PACKED;
-  INTEGER reqLData[1]	PACKED;
+  INTEGER reqLSize;
+  INTEGER reqLData[1];
 } ReqListRec;
 
 /* extended version 2 picture datastructures */
 
-typedef struct OpenCPicParams
+typedef struct PACKED OpenCPicParams
 {
-  Rect srcRect		LPACKED;
-  Fixed hRes		PACKED;
-  Fixed vRes		PACKED;
-  int16 version		PACKED;
-  int16 reserved1	PACKED;
-  int32 reserved2	PACKED;
+  Rect srcRect;
+  Fixed hRes;
+  Fixed vRes;
+  int16 version;
+  int16 reserved1;
+  int32 reserved2;
 } OpenCPicParams;
 
-typedef struct CommonSpec
+typedef struct PACKED CommonSpec
 {
-  int16 count		PACKED;
-  int16 ID		PACKED;
+  int16 count;
+  int16 ID;
 } CommentSpec;
 
 typedef CommentSpec *CommentSpecPtr;
 typedef struct { CommentSpecPtr p PACKED_P; } HIDDEN_CommentSpecPtr;
 typedef HIDDEN_CommentSpecPtr *CommentSpecHandle;
 
-typedef struct FontSpec
+typedef struct PACKED FontSpec
 {
-  int16 pictFontID	PACKED;
-  int16 sysFontID	PACKED;
-  int32 size[4]		PACKED;
-  int16 style		PACKED;
-  int32 nameOffset	PACKED;
+  int16 pictFontID;
+  int16 sysFontID;
+  int32 size[4];
+  int16 style;
+  int32 nameOffset;
 } FontSpec;
 
 typedef FontSpec *FontSpecPtr;
 typedef struct { FontSpecPtr p PACKED_P; } HIDDEN_FontSpecPtr;
 typedef HIDDEN_FontSpecPtr *FontSpecHandle;
 
-typedef struct PictInfo
+typedef struct PACKED PictInfo
 {
-  int16 version			PACKED; /* 0 */
-  int32 uniqueColors		PACKED; /* 2 */
+  int16 version; /* 0 */
+  int32 uniqueColors; /* 2 */
   PaletteHandle thePalette	PACKED_P; /* 6 */
   CTabHandle theColorTable	PACKED_P; /* 10 */
-  Fixed hRes			PACKED; /* 14 */
-  Fixed vRes			PACKED; /* 18 */
-  INTEGER depth                 PACKED; /* 22 */
-  Rect sourceRect		LPACKED; /* top24, left26, bottom28, right30 */
-  int32 textCount		PACKED; /* 32 */
-  int32 lineCount		PACKED;
-  int32 rectCount		PACKED;
-  int32 rRectCount		PACKED;
-  int32 ovalCount		PACKED;
-  int32 arcCount		PACKED;
-  int32 polyCount		PACKED;
-  int32 regionCount		PACKED;
-  int32 bitMapCount		PACKED;
-  int32 pixMapCount		PACKED;
-  int32 commentCount		PACKED;
+  Fixed hRes; /* 14 */
+  Fixed vRes; /* 18 */
+  INTEGER depth; /* 22 */
+  Rect sourceRect; /* top24, left26, bottom28, right30 */
+  int32 textCount; /* 32 */
+  int32 lineCount;
+  int32 rectCount;
+  int32 rRectCount;
+  int32 ovalCount;
+  int32 arcCount;
+  int32 polyCount;
+  int32 regionCount;
+  int32 bitMapCount;
+  int32 pixMapCount;
+  int32 commentCount;
   
-  int32 uniqueComments			PACKED;
+  int32 uniqueComments;
   CommentSpecHandle commentHandle	PACKED_P;
   
-  int32 uniqueFonts		PACKED;
+  int32 uniqueFonts;
   FontSpecHandle fontHandle	PACKED_P;
 
   Handle fontNamesHandle	PACKED_P;
 
-  int32 reserved1		PACKED;
-  int32 reserved2		PACKED;
+  int32 reserved1;
+  int32 reserved2;
 } PictInfo;
 
 typedef PictInfo *PictInfoPtr;

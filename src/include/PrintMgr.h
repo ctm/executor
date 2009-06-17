@@ -37,69 +37,69 @@
 #define sPrDrvr		".Print"
 #define iPrDrvrRef	(-3)
 
-typedef struct {
-    GrafPort gPort	LPACKED;
-    QDProcs saveprocs	LPACKED;
-    LONGINT spare[4]	PACKED;
-    BOOLEAN fOurPtr	LPACKED;
-    BOOLEAN fOurBits	LPACKED;
+typedef struct PACKED {
+  GrafPort gPort;
+  QDProcs saveprocs;
+  LONGINT spare[4];
+  BOOLEAN fOurPtr;
+  BOOLEAN fOurBits;
 } TPrPort;
 typedef TPrPort *TPPrPort;
 
-typedef struct {
-    INTEGER iDev	PACKED;
-    INTEGER iVRes	PACKED;
-    INTEGER iHRes	PACKED;
-    Rect rPage	LPACKED;
+typedef struct PACKED {
+  INTEGER iDev;
+  INTEGER iVRes;
+  INTEGER iHRes;
+  Rect rPage;
 } TPrInfo;
 
 typedef enum {feedCut, feedFanFold, feedMechCut, feedOther} TFeed;
 
-typedef struct {
-    INTEGER wDev	PACKED;
-    INTEGER iPageV	PACKED;
-    INTEGER iPageH	PACKED;
-    SignedByte bPort	LPACKED;
-    char feed	LPACKED;
+typedef struct PACKED {
+  INTEGER wDev;
+  INTEGER iPageV;
+  INTEGER iPageH;
+  SignedByte bPort;
+  char feed;
 } TPrStl;
 
 typedef enum { scanTB,  scanBL,  scanLR,  scanRL } TScan;
-typedef struct {
-    INTEGER iRowBytes	PACKED;
-    INTEGER iBandV	PACKED;
-    INTEGER iBandH	PACKED;
-    INTEGER iDevBytes	PACKED;
-    INTEGER iBands	PACKED;
-    SignedByte bPatScale	LPACKED;
-    SignedByte bULThick	LPACKED;
-    SignedByte bULOffset	LPACKED;
-    SignedByte bULShadow	LPACKED;
-    char scan	LPACKED;
-    SignedByte bXInfoX	LPACKED;
+typedef struct PACKED {
+  INTEGER iRowBytes;
+  INTEGER iBandV;
+  INTEGER iBandH;
+  INTEGER iDevBytes;
+  INTEGER iBands;
+  SignedByte bPatScale;
+  SignedByte bULThick;
+  SignedByte bULOffset;
+  SignedByte bULShadow;
+  char scan;
+  SignedByte bXInfoX;
 } TPrXInfo;
 
-typedef struct {
-    INTEGER iFstPage	PACKED;
-    INTEGER iLstPage	PACKED;
-    INTEGER iCopies	PACKED;
-    SignedByte bJDocLoop	LPACKED;
-    BOOLEAN fFromUsr	LPACKED;
-    ProcPtr pIdleProc	PACKED_P;
-    StringPtr pFileName	PACKED_P;
-    INTEGER iFileVol	PACKED;
-    SignedByte bFileVers	LPACKED;
-    SignedByte bJobX	LPACKED;
+typedef struct PACKED {
+  INTEGER iFstPage;
+  INTEGER iLstPage;
+  INTEGER iCopies;
+  SignedByte bJDocLoop;
+  BOOLEAN fFromUsr;
+  ProcPtr pIdleProc	PACKED_P;
+  StringPtr pFileName	PACKED_P;
+  INTEGER iFileVol;
+  SignedByte bFileVers;
+  SignedByte bJobX;
 } TPrJob;
 
-typedef struct {
-    INTEGER iPrVersion	PACKED;
-    TPrInfo prInfo	LPACKED;
-    Rect rPaper	LPACKED;
-    TPrStl prStl	LPACKED;
-    TPrInfo prInfoPT	LPACKED;
-    TPrXInfo prXInfo	LPACKED;
-    TPrJob prJob	LPACKED;
-    INTEGER printX[19]	PACKED;
+typedef struct PACKED {
+  INTEGER iPrVersion;
+  TPrInfo prInfo;
+  Rect rPaper;
+  TPrStl prStl;
+  TPrInfo prInfoPT;
+  TPrXInfo prXInfo;
+  TPrJob prJob;
+  INTEGER printX[19];
 } TPrint;
 typedef TPrint *TPPrint;
 typedef struct { TPPrint p PACKED_P; } HIDDEN_TPPrint;
@@ -107,34 +107,34 @@ typedef HIDDEN_TPPrint *THPrint;
 
 typedef Rect *TPRect;
 
-typedef struct {
-    INTEGER iTotPages	PACKED;
-    INTEGER iCurPage	PACKED;
-    INTEGER iTotCopies	PACKED;
-    INTEGER iCurCopy	PACKED;
-    INTEGER iTotBands	PACKED;
-    INTEGER iCurBand	PACKED;
-    BOOLEAN fPgDirty	LPACKED;
-    BOOLEAN fImaging	LPACKED;
-    THPrint hPrint	PACKED_P;
-    TPPrPort pPRPort	PACKED_P;
-    PicHandle hPic	PACKED_P;
+typedef struct PACKED {
+  INTEGER iTotPages;
+  INTEGER iCurPage;
+  INTEGER iTotCopies;
+  INTEGER iCurCopy;
+  INTEGER iTotBands;
+  INTEGER iCurBand;
+  BOOLEAN fPgDirty;
+  BOOLEAN fImaging;
+  THPrint hPrint	PACKED_P;
+  TPPrPort pPRPort	PACKED_P;
+  PicHandle hPic	PACKED_P;
 } TPrStatus;
 
-typedef struct {
+typedef struct PACKED {
 /* From Technote 095 */
-    DialogRecord dlg	LPACKED;
-    ProcPtr pFltrProc	PACKED_P;
-    ProcPtr pItemProc	PACKED_P;
-    THPrint hPrintUsr	PACKED_P;
-    BOOLEAN fDoIt	LPACKED;
-    BOOLEAN fDone	LPACKED;
-    LONGINT lUser1	PACKED;
-    LONGINT lUser2	PACKED;
-    LONGINT lUser3	PACKED;
-    LONGINT lUser4	PACKED;
-    INTEGER iNumFst	PACKED;
-    INTEGER iNumLst	PACKED;
+  DialogRecord dlg;
+  ProcPtr pFltrProc	PACKED_P;
+  ProcPtr pItemProc	PACKED_P;
+  THPrint hPrintUsr	PACKED_P;
+  BOOLEAN fDoIt;
+  BOOLEAN fDone;
+  LONGINT lUser1;
+  LONGINT lUser2;
+  LONGINT lUser3;
+  LONGINT lUser4;
+  INTEGER iNumFst;
+  INTEGER iNumLst;
     /* more stuff may be here */
 } TPrDlg, *TPPrDlg;
 

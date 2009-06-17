@@ -8,12 +8,11 @@ extern char ROMlib_exit;
 
 #include <SegmentLdr.h>
 
-typedef struct {
+typedef struct PACKED {
     INTEGER message;
     INTEGER count;
     AppFile files[1];
 } finderinfo;
-
 
 extern int ROMlib_print;
 extern void flushcache( void );

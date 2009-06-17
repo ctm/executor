@@ -1,4 +1,3 @@
-
 #if !defined (_MEMORY_MGR_H_)
 #define _MEMORY_MGR_H_
 
@@ -24,26 +23,26 @@ enum { memAZErr	 = -113 };
 #define memBCErr	(-115)
 #define memSCErr	(-116)
 
-typedef struct Zone
+typedef struct PACKED Zone
 {
   Ptr bkLim		PACKED_P;
   Ptr purgePtr		PACKED_P;
   Ptr hFstFree		PACKED_P;
-  LONGINT zcbFree	PACKED;
+  LONGINT zcbFree;
   ProcPtr gzProc	PACKED_P;
-  INTEGER moreMast	PACKED;
-  INTEGER flags		PACKED;
-  INTEGER cntRel	PACKED;
-  INTEGER maxRel	PACKED;
-  INTEGER cntNRel	PACKED;
-  INTEGER maxNRel	PACKED;
-  INTEGER cntEmpty	PACKED;
-  INTEGER cntHandles	PACKED;
-  LONGINT minCBFree	PACKED;
+  INTEGER moreMast;
+  INTEGER flags;
+  INTEGER cntRel;
+  INTEGER maxRel;
+  INTEGER cntNRel;
+  INTEGER maxNRel;
+  INTEGER cntEmpty;
+  INTEGER cntHandles;
+  LONGINT minCBFree;
   ProcPtr purgeProc	PACKED_P;
   Ptr sparePtr		PACKED_P;
   Ptr allocPtr		PACKED_P;
-  INTEGER heapData	PACKED;
+  INTEGER heapData;
 } Zone;
 typedef Zone *THz;
 

@@ -18,9 +18,9 @@
 #define plusCursor	3
 #define watchCursor	4
 
-typedef struct {
-    LONGINT hiLong	PACKED;
-    LONGINT loLong	PACKED;
+typedef struct PACKED {
+  LONGINT hiLong;
+  LONGINT loLong;
 } Int64Bit;
 
 #if 1 || !defined(__alpha)

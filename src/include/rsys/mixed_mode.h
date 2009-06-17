@@ -30,28 +30,28 @@ enum
 
 typedef uint8 RDFlagsType;
 
-typedef struct RoutineRecord
+typedef struct PACKED RoutineRecord
 {
-  ProcInfoType procInfo PACKED;
-  uint8 reserved1 LPACKED;
-  ISAType ISA LPACKED;
-  RoutineFlagsType routineFlags PACKED;
-  ProcPtr procDescriptor PACKED;
-  uint32 reserved2 PACKED;
-  uint32 selector PACKED;
+  ProcInfoType procInfo;
+  uint8 reserved1;
+  ISAType ISA;
+  RoutineFlagsType routineFlags;
+  ProcPtr procDescriptor;
+  uint32 reserved2;
+  uint32 selector;
 }
 RoutineRecord;
 
-typedef struct RoutineDescriptor
+typedef struct PACKED RoutineDescriptor
 {
-  uint16 goMixedModeTrap PACKED;
-  uint8 version LPACKED;
-  RDFlagsType routineDescriptorFlags LPACKED;
-  uint32 reserved1 PACKED;
-  uint8 reserved2 LPACKED;
-  uint8 selectorInfo LPACKED;
-  uint16 routineCount PACKED;
-  RoutineRecord routineRecords[1] LPACKED;
+  uint16 goMixedModeTrap;
+  uint8 version;
+  RDFlagsType routineDescriptorFlags;
+  uint32 reserved1;
+  uint8 reserved2;
+  uint8 selectorInfo;
+  uint16 routineCount;
+  RoutineRecord routineRecords[1];
 }
 RoutineDescriptor;
 

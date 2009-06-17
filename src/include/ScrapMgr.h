@@ -13,12 +13,12 @@
 #define noScrapErr	(-100)
 #define noTypeErr	(-102)
 
-typedef struct {
-    LONGINT scrapSize	PACKED;
-    Handle scrapHandle	PACKED_P;
-    INTEGER scrapCount	PACKED;
-    INTEGER scrapState	PACKED;
-    StringPtr scrapName	PACKED_P;
+typedef struct PACKED {
+  LONGINT scrapSize;
+  Handle scrapHandle	PACKED_P;
+  INTEGER scrapCount;
+  INTEGER scrapState;
+  StringPtr scrapName	PACKED_P;
 } ScrapStuff;
 typedef ScrapStuff *PScrapStuff;
 

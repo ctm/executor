@@ -78,29 +78,29 @@ typedef struct { WindowPeek p PACKED_P; } HIDDEN_WindowPeek;
 
 #include "ControlMgr.h"
 
-struct __wr {
-    GrafPort port	LPACKED;
-    INTEGER windowKind	PACKED;
-    BOOLEAN visible	LPACKED;
-    BOOLEAN hilited	LPACKED;
-    BOOLEAN goAwayFlag	LPACKED;
-    BOOLEAN spareFlag	LPACKED;
-    RgnHandle strucRgn	PACKED_P;
-    RgnHandle contRgn	PACKED_P;
-    RgnHandle updateRgn	PACKED_P;
-    Handle windowDefProc	PACKED_P;
-    Handle dataHandle	PACKED_P;
-    StringHandle titleHandle	PACKED_P;
-    INTEGER titleWidth	PACKED;
-    ControlHandle controlList	PACKED_P;	/* is really a ControlHandle */
-    WindowPeek nextWindow	PACKED_P;	/* is really a WindowPeek */
-    PicHandle windowPic	PACKED_P;
-    LONGINT refCon	PACKED;
+struct PACKED  __wr {
+  GrafPort port;
+  INTEGER windowKind;
+  BOOLEAN visible;
+  BOOLEAN hilited;
+  BOOLEAN goAwayFlag;
+  BOOLEAN spareFlag;
+  RgnHandle strucRgn	PACKED_P;
+  RgnHandle contRgn	PACKED_P;
+  RgnHandle updateRgn	PACKED_P;
+  Handle windowDefProc	PACKED_P;
+  Handle dataHandle	PACKED_P;
+  StringHandle titleHandle	PACKED_P;
+  INTEGER titleWidth;
+  ControlHandle controlList	PACKED_P;	/* is really a ControlHandle */
+  WindowPeek nextWindow	PACKED_P;	/* is really a WindowPeek */
+  PicHandle windowPic	PACKED_P;
+  LONGINT refCon;
 };
 
-typedef struct {
-    Rect userState	LPACKED,
-         stdState	LPACKED;
+typedef struct PACKED {
+  Rect userState;
+  Rect stdState;
 } WStateData;
 
 #define inZoomIn  7
@@ -114,14 +114,14 @@ typedef struct { AuxWinPtr p PACKED_P; } HIDDEN_AuxWinPtr;
 typedef HIDDEN_AuxWinPtr *AuxWinHandle;
 typedef struct { AuxWinHandle p PACKED_P; } HIDDEN_AuxWinHandle;
 
-typedef struct AuxWinRec {
-    AuxWinHandle awNext	PACKED_P;
-    WindowPtr awOwner	PACKED_P;
-    CTabHandle awCTable	PACKED_P;
-    Handle dialogCItem	PACKED_P;
-    LONGINT awFlags	PACKED;
-    CTabHandle awReserved	PACKED_P;
-    LONGINT awRefCon	PACKED;
+typedef struct PACKED AuxWinRec {
+  AuxWinHandle awNext	PACKED_P;
+  WindowPtr awOwner	PACKED_P;
+  CTabHandle awCTable	PACKED_P;
+  Handle dialogCItem	PACKED_P;
+  LONGINT awFlags;
+  CTabHandle awReserved	PACKED_P;
+  LONGINT awRefCon;
 } AuxWinRec;
 
 #if !defined (WindowList_H)

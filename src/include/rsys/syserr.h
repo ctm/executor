@@ -14,39 +14,39 @@ typedef struct {
 
     INTEGER	id2	PACKED,
     		len2	PACKED;
-    Point	point2	LPACKED;
-    unsigned char str2[52]	LPACKED;
+    Point	point2;
+    unsigned char str2[52];
 
     INTEGER	id3	PACKED,
 		len3	PACKED;
 
-    Rect	rect3	LPACKED;
-    char	icon3[32][4]	LPACKED;
+    Rect	rect3;
+    char	icon3[32][4];
 
     INTEGER	id4	PACKED,
 		len4	PACKED;
 
-    Point	point4	LPACKED;
-    char	str4[46]	LPACKED;
+    Point	point4;
+    char	str4[46];
 
     INTEGER	id5	PACKED,
    	        len5	PACKED,
 		num5	PACKED,
 		str5	PACKED;
-    Rect	rect5	LPACKED;
+    Rect	rect5;
     INTEGER	proc5	PACKED,
     		str5b	PACKED;
-    Rect	rect5b	LPACKED;
+    Rect	rect5b;
     INTEGER	proc5b	PACKED;
 
     INTEGER	id6	PACKED,
 		len6	PACKED;
 
-    char	str6[4]	LPACKED;
+    char	str6[4];
 
     INTEGER	id7	PACKED,
 		len7	PACKED;
-    char	str7[6]	LPACKED;
+    char	str7[6];
 
     INTEGER	id8	PACKED,
 		len8	PACKED;
@@ -68,14 +68,14 @@ struct adef {
 struct tdef {
     INTEGER id			PACKED,
 	    alen		PACKED;
-    Point loc			LPACKED;
-    char text[1]		LPACKED;	/* at least one NUL byte */
+    Point loc;
+    char text[1];	/* at least one NUL byte */
 };
 
 struct idef {
     INTEGER id		PACKED,
 	    alen	PACKED;
-    Rect loc		LPACKED;
+    Rect loc;
     LONGINT ike[32]	PACKED;
 };
 
@@ -92,15 +92,15 @@ struct bdef {
 	    nbut		PACKED;
     struct but {
 	INTEGER butstrid	PACKED;
-	Rect butloc		LPACKED;
+	Rect butloc;
 	INTEGER butprocid	PACKED;
-    } buts[1]			LPACKED;
+    } buts[1];
 };
 
 struct sdef {
     INTEGER id		PACKED,
 	    alen	PACKED;
-    char text[1]	LPACKED;
+    char text[1];
 };
 
 #endif /* !defined (__rsys_syserr_h__) */

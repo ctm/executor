@@ -24,18 +24,18 @@
 #define prInitErr	(-88)
 #define prWrErr		(-87)
 
-typedef struct {
-    Byte valid	LPACKED;
-    Byte aTalkA	LPACKED;
-    Byte aTalkB	LPACKED;
-    Byte config	LPACKED;
-    INTEGER portA	PACKED;
-    INTEGER portB	PACKED;
-    LONGINT alarm	PACKED;
-    INTEGER font	PACKED;
-    INTEGER kbdPrint	PACKED;
-    INTEGER volClik	PACKED;
-    INTEGER misc	PACKED;
+typedef struct PACKED {
+  Byte valid;
+  Byte aTalkA;
+  Byte aTalkB;
+  Byte config;
+  INTEGER portA;
+  INTEGER portB;
+  LONGINT alarm;
+  INTEGER font;
+  INTEGER kbdPrint;
+  INTEGER volClik;
+  INTEGER misc;
 } SysParmType;
 typedef SysParmType *SysPPtr;
 
@@ -50,26 +50,26 @@ union __qe {
 };
 typedef union __qe QElem;
 
-typedef struct {
-    INTEGER year	PACKED;
-    INTEGER month	PACKED;
-    INTEGER day	PACKED;
-    INTEGER hour	PACKED;
-    INTEGER minute	PACKED;
-    INTEGER second	PACKED;
-    INTEGER dayOfWeek	PACKED;
+typedef struct PACKED {
+  INTEGER year;
+  INTEGER month;
+  INTEGER day;
+  INTEGER hour;
+  INTEGER minute;
+  INTEGER second;
+  INTEGER dayOfWeek;
 } DateTimeRec;
 
-typedef struct {
-    INTEGER environsVersion	PACKED;
-    INTEGER machineType	PACKED;
-    INTEGER systemVersion	PACKED;
-    INTEGER processor	PACKED;
-    BOOLEAN hasFPU	LPACKED;
-    BOOLEAN hasColorQD	LPACKED;
-    INTEGER keyBoardType	PACKED;
-    INTEGER atDrvrVersNum	PACKED;
-    INTEGER sysVRefNum	PACKED;
+typedef struct PACKED {
+  INTEGER environsVersion;
+  INTEGER machineType;
+  INTEGER systemVersion;
+  INTEGER processor;
+  BOOLEAN hasFPU;
+  BOOLEAN hasColorQD;
+  INTEGER keyBoardType;
+  INTEGER atDrvrVersNum;
+  INTEGER sysVRefNum;
 } SysEnvRec, *SysEnvRecPtr;
 
 #define SYSRECVNUM	2

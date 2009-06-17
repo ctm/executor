@@ -10,28 +10,28 @@
 
 #include "FileMgr.h"
 
-typedef struct
+typedef struct PACKED
 {
-  COMMONFSQUEUEDEFS	PACKED;
-  INTEGER ioRefNum	PACKED;
-  INTEGER csCode	PACKED;
+  COMMONFSQUEUEDEFS;
+  INTEGER ioRefNum;
+  INTEGER csCode;
   Ptr csParam		PACKED_P;
 } VDParamBlock;
 
 typedef VDParamBlock *VDParamBlockPtr;
 
 
-typedef struct
+typedef struct PACKED
 {
   Ptr csTable		PACKED_P;
-  INTEGER csStart	PACKED;
-  INTEGER csCount	PACKED;
+  INTEGER csStart;
+  INTEGER csCount;
 } VDEntryRecord;
 
 typedef VDEntryRecord *VDEntRecPtr;
 
 
-typedef struct
+typedef struct PACKED
 {
   Ptr csGTable	PACKED_P;
 } VDGammaRecord;
@@ -39,28 +39,28 @@ typedef struct
 typedef VDGammaRecord *VDGamRecPtr;
 
 
-typedef struct
+typedef struct PACKED
 {
-  INTEGER csMode	PACKED;
-  LONGINT csData	PACKED;
-  INTEGER csPage	PACKED;
+  INTEGER csMode;
+  LONGINT csData;
+  INTEGER csPage;
   Ptr csBaseAddr	PACKED_P;
 } VDPgInfo;
 
 typedef VDPgInfo *VDPgInfoPtr;
 
 
-typedef struct
+typedef struct PACKED
 {
-  SignedByte flag	LPACKED;
+  SignedByte flag;
 } VDFlagRec;
 
 typedef VDFlagRec *VDFlagPtr;
 
 
-typedef struct
+typedef struct PACKED
 {
-  SignedByte spID	LPACKED;
+  SignedByte spID;
 } VDDefModeRec;
 
 typedef VDDefModeRec *VDDefModePtr;

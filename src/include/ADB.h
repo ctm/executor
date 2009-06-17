@@ -8,15 +8,15 @@
  * $Id: ADB.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-typedef struct
+typedef struct PACKED
 {
-  SignedByte devType LPACKED;
-  SignedByte origADBAddr LPACKED;
+  SignedByte devType;
+  SignedByte origADBAddr;
   Ptr dbServiceRtPtr PACKED_P;
   Ptr dbDataAreaAddr PACKED_P;
 } ADBDataBlock;
 
-typedef struct
+typedef struct PACKED
 {
   Ptr siServiceRtPtr PACKED_P;
   Ptr siDataAreaAddr PACKED_P;

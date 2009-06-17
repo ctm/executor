@@ -10,30 +10,30 @@
 
 #include "rsys/pstuff.h"
 
-typedef struct
+typedef struct PACKED
 {
 #if 0
   /* TRUE if the save pattern is in _tpat, FALSE if it was placed in
      _tpixpat */
   INTEGER _tinpat;
-  Pattern _tpat		PACKED;
+  Pattern _tpat;
   PixPatHandle _tpixpat	PACKED_P;
-  Point _tploc		PACKED;
-  Point _tpsize		PACKED;
-  INTEGER _tpmode		PACKED;
+  Point _tploc;
+  Point _tpsize;
+  INTEGER _tpmode;
 #else
-  PenState _tpstate		LPACKED_P;
+  PenState _tpstate;
 #endif
   
   GrafPtr _tport		PACKED_P;
   
-  INTEGER _tpvis		PACKED;
+  INTEGER _tpvis;
   
-  INTEGER _tfont		PACKED;
-  INTEGER _tmode		PACKED;
-  INTEGER _tsize		PACKED;
-  Style _tstyle			LPACKED;
-  Byte filler			LPACKED;
+  INTEGER _tfont;
+  INTEGER _tmode;
+  INTEGER _tsize;
+  Style _tstyle;
+  Byte filler;
   RgnHandle _tsaveclip	PACKED_P;
   
   /* ### is tesave mac-visible state?  how is color and whatnot really
@@ -59,15 +59,15 @@ typedef struct
 #define GENERIC_ELT_FONT(generic_elt) (CW (GENERIC_ELT_FONT_X (generic_elt)))
 #define GENERIC_ELT_SIZE(generic_elt) (CW (GENERIC_ELT_SIZE_X (generic_elt)))
 
-typedef struct generic_elt
+typedef struct PACKED generic_elt
 {
-  int16 Height		PACKED;
-  int16 Ascent		PACKED;
-  int16 Font		PACKED;
-  Style Face		LPACKED;
-  Byte filler		LPACKED;
-  int16 Size		PACKED;
-  RGBColor Color	LPACKED;
+  int16 Height;
+  int16 Ascent;
+  int16 Font;
+  Style Face;
+  Byte filler;
+  int16 Size;
+  RGBColor Color;
 } generic_elt_t;
 
 extern void generic_elt_copy (generic_elt_t *dst, generic_elt_t *src);
@@ -125,12 +125,12 @@ extern void	ROMlib_teautoloop( TEHandle teh );
 extern int16 ROMlib_call_TEDoText (TEPtr tp, int16 first, int16 last,
 				   int16 what);
 
-typedef struct {	/* from MPW: ToolEqu.a */
+typedef struct PACKED {	/* from MPW: ToolEqu.a */
     ProcPtr EOLHook	PACKED_P;
     ProcPtr DRAWHook	PACKED_P;
     ProcPtr WIDTHHook	PACKED_P;
     ProcPtr HITTESTHook	PACKED_P;
-    LONGINT flags	PACKED;
+    LONGINT flags;
 } tehidden;
 
 typedef tehidden *tehiddenp;

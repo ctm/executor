@@ -10,10 +10,10 @@
 
 #include "QuickDraw.h"
 
-typedef struct {
-    INTEGER cmd	PACKED;
-    INTEGER param1	PACKED;
-    LONGINT param2	PACKED;
+typedef struct PACKED {
+  INTEGER cmd;
+  INTEGER param1;
+  LONGINT param2;
 } SndCommand;
 
 #define stdQLength	128
@@ -25,18 +25,18 @@ enum
   extSH = 0xFF,		/* extended sound header */
 };
 
-typedef struct _SndChannel {
+typedef struct PACKED _SndChannel {
   struct _SndChannel *nextChan	PACKED_P;
   Ptr firstMod	PACKED_P;
   ProcPtr callBack	PACKED_P;
-  LONGINT userInfo	PACKED;
-  LONGINT wait	PACKED;
-  SndCommand cmdInProg	LPACKED;
-  INTEGER flags	PACKED;
-  INTEGER qLength	PACKED;
-  INTEGER qHead	PACKED;
-  INTEGER qTail	PACKED;
-  SndCommand queue[stdQLength]	LPACKED;
+  LONGINT userInfo;
+  LONGINT wait;
+  SndCommand cmdInProg;
+  INTEGER flags;
+  INTEGER qLength;
+  INTEGER qHead;
+  INTEGER qTail;
+  SndCommand queue[stdQLength];
 } SndChannel, *SndChannelPtr;
 
 #define SND_CHAN_FLAGS_X(c) (c->flags)
@@ -74,46 +74,46 @@ enum {
     midiDataCmd = 100,
 };
 
-typedef struct {
-    LONGINT offset	PACKED;
-    LONGINT nsamples	PACKED;
-    LONGINT rate	PACKED;
-    LONGINT altbegin	PACKED;
-    LONGINT altend	PACKED;
-    INTEGER basenote	PACKED;
-    unsigned char buf[1]	LPACKED;
+typedef struct PACKED {
+  LONGINT offset;
+  LONGINT nsamples;
+  LONGINT rate;
+  LONGINT altbegin;
+  LONGINT altend;
+  INTEGER basenote;
+  unsigned char buf[1];
 } soundbuffer_t;
 
-typedef struct _SoundHeader {
+typedef struct PACKED _SoundHeader {
   Ptr samplePtr		PACKED_P;
-  LONGINT length	PACKED;
-  Fixed sampleRate	PACKED;
-  LONGINT loopStart	PACKED;
-  LONGINT loopEnd	PACKED;
-  Byte encode		LPACKED;
-  Byte baseFrequency	LPACKED;
-  Byte sampleArea[0]	LPACKED;
+  LONGINT length;
+  Fixed sampleRate;
+  LONGINT loopStart;
+  LONGINT loopEnd;
+  Byte encode;
+  Byte baseFrequency;
+  Byte sampleArea[0];
 } SoundHeader, *SoundHeaderPtr;
 
-typedef struct _ExtSoundHeader {
+typedef struct PACKED _ExtSoundHeader {
   Ptr samplePtr		PACKED_P;
-  LONGINT numChannels	PACKED;
-  Fixed sampleRate	PACKED;
-  LONGINT loopStart	PACKED;
-  LONGINT loopEnd	PACKED;
-  Byte encode		LPACKED;
-  Byte baseFrequency	LPACKED;
-  LONGINT numFrames	PACKED;
-  Extended AIFFSampleRate PACKED;  /* ???  should be Extended80 */
-  Ptr MarkerChunk	PACKED;
-  Ptr instrumentChunks	PACKED;
-  Ptr AESRecording	PACKED;
-  INTEGER sampleSize	PACKED;
-  INTEGER futureUse1	PACKED;
-  LONGINT futureUse2	PACKED;
-  LONGINT futureUse3	PACKED;
-  LONGINT futureUse4	PACKED;
-  Byte sampleArea[0]	LPACKED;
+  LONGINT numChannels;
+  Fixed sampleRate;
+  LONGINT loopStart;
+  LONGINT loopEnd;
+  Byte encode;
+  Byte baseFrequency;
+  LONGINT numFrames;
+  Extended AIFFSampleRate;  /* ???  should be Extended80 */
+  Ptr MarkerChunk;
+  Ptr instrumentChunks;
+  Ptr AESRecording;
+  INTEGER sampleSize;
+  INTEGER futureUse1;
+  LONGINT futureUse2;
+  LONGINT futureUse3;
+  LONGINT futureUse4;
+  Byte sampleArea[0];
 } ExtSoundHeader, *ExtSoundHeaderPtr;
 
 enum {
@@ -142,12 +142,12 @@ enum {
     soundactivenone   = 0xFF,
 };
 
-typedef struct
+typedef struct PACKED
 {
-  LONGINT dbNumFrames	PACKED;
-  LONGINT dbFlags	PACKED;
-  LONGINT dbUserInfo[2]	PACKED;
-  Byte dbSoundData[0]	LPACKED;
+  LONGINT dbNumFrames;
+  LONGINT dbFlags;
+  LONGINT dbUserInfo[2];
+  Byte dbSoundData[0];
 } SndDoubleBuffer, *SndDoubleBufferPtr;
 
 enum {
@@ -155,27 +155,27 @@ enum {
   dbLastBuffer = 4
 };
 
-typedef struct
+typedef struct PACKED
 {
-  INTEGER dbhNumChannels	PACKED;
-  INTEGER dbhSampleSize		PACKED;
-  INTEGER dbhCompressionID	PACKED;
-  INTEGER dbhPacketSize		PACKED;
-  Fixed dbhSampleRate		PACKED;
-  SndDoubleBufferPtr dbhBufferPtr[2] PACKED;
-  ProcPtr dbhDoubleBack		PACKED;
+  INTEGER dbhNumChannels;
+  INTEGER dbhSampleSize;
+  INTEGER dbhCompressionID;
+  INTEGER dbhPacketSize;
+  Fixed dbhSampleRate;
+  SndDoubleBufferPtr dbhBufferPtr[2];
+  ProcPtr dbhDoubleBack;
 } SndDoubleBufferHeader, *SndDoubleBufferHeaderPtr;
 
-typedef struct _SCSTATUS {
-  Fixed scStartTime		PACKED;
-  Fixed scEndTime		PACKED;
-  Fixed scCurrentTime		PACKED;
-  Boolean scChannelBusy		LPACKED;
-  Boolean scChannelDisposed	LPACKED;
-  Boolean scChannelPaused	LPACKED;
-  Boolean scUnused		LPACKED;
-  LONGINT scChannelAttributes	PACKED;
-  LONGINT scCPULoad		PACKED;
+typedef struct PACKED _SCSTATUS {
+  Fixed scStartTime;
+  Fixed scEndTime;
+  Fixed scCurrentTime;
+  Boolean scChannelBusy;
+  Boolean scChannelDisposed;
+  Boolean scChannelPaused;
+  Boolean scUnused;
+  LONGINT scChannelAttributes;
+  LONGINT scCPULoad;
 } SCStatus, *SCStatusPtr;
 
 #if 1       /* stub definitions */

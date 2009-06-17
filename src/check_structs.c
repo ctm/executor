@@ -81,6 +81,7 @@
 #include <rsys/cquick.h>
 #include <rsys/ctl.h>
 #include <rsys/dial.h>
+#include <rsys/emustubs.h>
 #include <rsys/filedouble.h>
 #include <rsys/file.h>
 #include <rsys/float.h>
@@ -94,6 +95,7 @@
 #include <rsys/menu.h>
 #include <rsys/mixed_mode.h>
 #include <rsys/mman_private.h>
+#include <rsys/nextprint.h>
 #include <rsys/partition.h>
 #include <rsys/pef.h>
 #include <rsys/picture.h>
@@ -105,6 +107,7 @@
 #include <rsys/segment.h>
 #include <rsys/serial.h>
 #include <rsys/soundopts.h>
+#include <rsys/syserr.h>
 #include <rsys/tesave.h>
 #include <rsys/toolevent.h>
 #include <rsys/wind.h>
@@ -125,6 +128,7 @@ void check_structs(void)
   /* AliasMgr.h has no structs or unions */
 
   /* AppleEvents.h */
+  check (AEArrayData, 12);
   check (AEDesc, 8);
   check (AEKeyDesc, 12);
   check (AE_hdlr_t, 8);
@@ -263,7 +267,7 @@ void check_structs(void)
 
   /* OSEvent.h */
   check (EvQEl, 22);
-  check (size_info_t, 20);
+  check (size_info_t, 18);
   check (TargetID, 179);
   check (HighLevelEventMsg, 36);
 
@@ -367,6 +371,7 @@ void check_structs(void)
   /* SoundMgr.h */
   check (SndCommand, 8);
   check (SndChannel, 1060);
+  check (soundbuffer_t, 23);
   check (SoundHeader, 22);
   check (ExtSoundHeader, 62);
   check (SndDoubleBuffer, 16);
@@ -407,7 +412,7 @@ void check_structs(void)
 
 #if defined(USE_VDRIVER_H)
   /* VDriver.h */
-  check (VDParamBlock, 0); /* TODO */
+  check (VDParamBlock, 0); /* TODO*/
   check (VDEntryRecord, 0); /* TODO */
   check (VDGammaRecord, 0); /* TODO */
   check (VDPgInfo, 0); /* TODO */
@@ -437,7 +442,6 @@ void check_structs(void)
   check (inline_key_desc_t, 12);
   check (list_header_t, 24);
   check (ae_header_t, 66);
-  check (subdesc_info_t, 20);
 
   /* rsys/cfm.h */
   check (cfrg_resource_t, 32);
@@ -461,6 +465,11 @@ void check_structs(void)
   check (thumbstr, 18);
   check (contrlrestype, 23);
   check (struct lsastr, 18);
+
+  /* rsys/emustubs.h */
+  check (adbop_t, 12);
+  check (comm_toolbox_dispatch_args_t, 12);
+  check (initzonehiddenargs_t, 14);
 
   /* rsys/dial.h */
   check (icon_item_template_t, 18);
@@ -518,8 +527,6 @@ void check_structs(void)
   check (btblock0, 512);
   check (cacheentry, 540);
   check (cachehead, 12);
-  check (trailentry, 8);
-  check (btparam, 124);
   check (wdentry, 16);
 
   /* rsys/hfs_plus.h */
@@ -540,7 +547,7 @@ void check_structs(void)
   check (HFSPlusAttrExtents, 72);
 
   /* rsys/icon.h */
-  check (cotton_suite_layout_t, 28);
+  check (cotton_suite_layout_t, 26);
 
   /* rsys/itm.h */
   check (itmstr, 14);
@@ -579,7 +586,18 @@ void check_structs(void)
   check (block_header_t, 12);
   check (pblock_t, 14);
 
+  /* rsys/nextprint.h */
+  check (comRect, 8);
+  check (comPoint, 4);
+  check (comBitMap, 14);
+  check (comPixMap, 50);
+  check (comFontInfo, 8);
+  check (struct comPoly, 14);
+  check (struct comRgn, 10);
+  check (comGrafPort, 108);
+
   /* rsys/partition.h */
+  check (partmapentry_t, 256);
   check (oldmapentry_t, 12);
   check (oldblock1_t, 506);
 
@@ -628,10 +646,19 @@ void check_structs(void)
   check (finderinfo, 268);
 
   /* rsys/serial.h */
-  check (sersetbuf_t, 8);
+  check (sersetbuf_t, 6);
 
   /* rsys/soundopts.h */
-  check (ModifierStub, 52);
+  check (ModifierStub, 47); /* was 52 before I PACKED the structure */
+
+  /* rsys/syserr.h */
+  check (myalerttab_t, 326);
+  check (struct adef, 14);
+  check (struct tdef, 9);
+  check (struct idef, 140);
+  check (struct pdef, 8);
+  check (struct bdef, 18);
+  check (struct sdef, 5);
 
   /* rsys/tesave.h */
   check (tesave, 56);

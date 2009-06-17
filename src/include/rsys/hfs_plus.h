@@ -24,10 +24,10 @@ typedef unsigned short UniChar;
 typedef UInt32 HFSCatalogNodeID;
 #endif
 
-typedef struct HFSUniStr255
+typedef struct PACKED HFSUniStr255
 {
-  UInt16 length PACKED;
-  UniChar unicode[255] PACKED;
+  UInt16 length;
+  UniChar unicode[255];
 }
 HFSUniStr255;
 
@@ -37,53 +37,53 @@ typedef const HFSUniStr255 *ConstHFSUniStr255Param;
  * May need a set of textEncoding values here
  */
 
-typedef struct HFSPlusPermissions
+typedef struct PACKED HFSPlusPermissions
 {
-  UInt32 ownerID PACKED;
-  UInt32 groupID PACKED;
-  UInt32 permissions PACKED;
-  UInt32 specialDevice PACKED;
+  UInt32 ownerID;
+  UInt32 groupID;
+  UInt32 permissions;
+  UInt32 specialDevice;
 }
 HFSPlusPermissions;
 
-typedef struct HFSPlusExtentDescriptor
+typedef struct PACKED HFSPlusExtentDescriptor
 {
-  UInt32 startBlock PACKED;
-  UInt32 blockCount PACKED;
+  UInt32 startBlock;
+  UInt32 blockCount;
 }
 HFSPlusExtentDescriptor;
 
 typedef HFSPlusExtentDescriptor HFSPlusExtentRecord[8];
 
-typedef struct HFSPlusForkData
+typedef struct PACKED HFSPlusForkData
 {
-  UInt64 logicalSize PACKED;
-  UInt32 clumpSize PACKED;
-  UInt32 totalBlocks PACKED;
-  HFSPlusExtentRecord extents LPACKED;
+  UInt64 logicalSize;
+  UInt32 clumpSize;
+  UInt32 totalBlocks;
+  HFSPlusExtentRecord extents;
 }
 HFSPlusForkData;
 
-typedef struct HFSPlusVolumeHeader
+typedef struct PACKED HFSPlusVolumeHeader
 {
-  UInt16 signature PACKED;
-  UInt16 version PACKED;
-  UInt32 attributes PACKED;
-  UInt32 lastMountedVersion PACKED;
-  UInt32 reserved PACKED;
-  UInt32 createDate PACKED;
-  UInt32 modifyDate PACKED;
-  UInt32 backupDate PACKED;
-  UInt32 checkedDate PACKED;
-  UInt32 fileCount PACKED;
-  UInt32 folderCount PACKED;
-  UInt32 blockSize PACKED;
-  UInt32 totalBlocks PACKED;
-  UInt32 freeBlocks PACKED;
-  UInt32 nextAllocation PACKED;
-  UInt32 rsrcClumpSize PACKED;
-  UInt32 dataClumpSize PACKED;
-  HFSCatalogNodeID nextCatalogID PACKED;
+  UInt16 signature;
+  UInt16 version;
+  UInt32 attributes;
+  UInt32 lastMountedVersion;
+  UInt32 reserved;
+  UInt32 createDate;
+  UInt32 modifyDate;
+  UInt32 backupDate;
+  UInt32 checkedDate;
+  UInt32 fileCount;
+  UInt32 folderCount;
+  UInt32 blockSize;
+  UInt32 totalBlocks;
+  UInt32 freeBlocks;
+  UInt32 nextAllocation;
+  UInt32 rsrcClumpSize;
+  UInt32 dataClumpSize;
+  HFSCatalogNodeID nextCatalogID;
   UInt32 writeCount;
   UInt64 encodingsBitmap;
   UInt8 finderInfo[32];
@@ -95,117 +95,117 @@ typedef struct HFSPlusVolumeHeader
 }
 HFSPlusVolumeHeader;
 
-typedef struct BTNodeDescriptor
+typedef struct PACKED BTNodeDescriptor
 {
-  UInt32 fLink PACKED;
-  UInt32 bLink PACKED;
-  SInt8 kind LPACKED;
-  UInt8 height LPACKED;
-  UInt16 numRecords PACKED;
-  UInt16 reserved PACKED;
+  UInt32 fLink;
+  UInt32 bLink;
+  SInt8 kind;
+  UInt8 height;
+  UInt16 numRecords;
+  UInt16 reserved;
 }
 BTNodeDescriptor;
 
-typedef struct BTHeaderRec
+typedef struct PACKED BTHeaderRec
 {
-  UInt16 treeDepth PACKED;
-  UInt32 rootNode PACKED;
-  UInt32 leafRecords PACKED;
-  UInt32 firstLeafNode PACKED;
-  UInt32 lastLeafNode PACKED;
-  UInt16 nodeSize PACKED;
-  UInt16 maxKeyLength PACKED;
-  UInt32 totalNodes PACKED;
-  UInt32 freeNodes PACKED;
-  UInt16 reserfed1 PACKED;
-  UInt32 clumpSize PACKED;
-  UInt8 btreeType LPACKED;
-  UInt8 reserfed2 LPACKED;
-  UInt32 attributes PACKED;
-  UInt32 reserved3[16] PACKED;
+  UInt16 treeDepth;
+  UInt32 rootNode;
+  UInt32 leafRecords;
+  UInt32 firstLeafNode;
+  UInt32 lastLeafNode;
+  UInt16 nodeSize;
+  UInt16 maxKeyLength;
+  UInt32 totalNodes;
+  UInt32 freeNodes;
+  UInt16 reserfed1;
+  UInt32 clumpSize;
+  UInt8 btreeType;
+  UInt8 reserfed2;
+  UInt32 attributes;
+  UInt32 reserved3[16];
 }
 BTHeaderRec;
 
-typedef struct HFSPlusCatalogKey
+typedef struct PACKED HFSPlusCatalogKey
 {
-  UInt16 keyLength PACKED;
-  HFSCatalogNodeID parentID PACKED;
-  HFSUniStr255 nodeName LPACKED;
+  UInt16 keyLength;
+  HFSCatalogNodeID parentID;
+  HFSUniStr255 nodeName;
 }
 HFSPlusCatalogKey;
 
-typedef struct HFSPlusCatalogFolder
+typedef struct PACKED HFSPlusCatalogFolder
 {
-  SInt16 recordType PACKED;
-  UInt16 flags PACKED;
-  UInt32 valence PACKED;
+  SInt16 recordType;
+  UInt16 flags;
+  UInt32 valence;
   HFSCatalogNodeID folderID;
-  UInt32 createDate PACKED;
-  UInt32 contentModDate PACKED;
-  UInt32 attributeModDate PACKED;
-  UInt32 accessDate PACKED;
-  UInt32 backupDate PACKED;
-  HFSPlusPermissions permissions LPACKED;
-  DInfo userInfo LPACKED;
-  DXInfo finderInfo LPACKED;
-  UInt32 textEncoding PACKED;
-  UInt32 reserved PACKED;
+  UInt32 createDate;
+  UInt32 contentModDate;
+  UInt32 attributeModDate;
+  UInt32 accessDate;
+  UInt32 backupDate;
+  HFSPlusPermissions permissions;
+  DInfo userInfo;
+  DXInfo finderInfo;
+  UInt32 textEncoding;
+  UInt32 reserved;
 }
 HFSPlusCatalogFolder;
 
-typedef struct HFSPlusCatalogFile
+typedef struct PACKED HFSPlusCatalogFile
 {
-  SInt16 recordType PACKED;
-  UInt16 flags PACKED;
-  UInt32 reserved1 PACKED;
-  HFSCatalogNodeID fileID PACKED;
-  UInt32 createDate PACKED;
-  UInt32 contentModDate PACKED;
-  UInt32 attributeModDate PACKED;
-  UInt32 accessDate PACKED;
-  UInt32 backupDate PACKED;
-  HFSPlusPermissions permissions LPACKED;
-  FInfo userInfo LPACKED;
-  FXInfo finderInfo LPACKED;
-  UInt32 textEncoding PACKED;
-  UInt32 reserved2 PACKED;
-  HFSPlusForkData dataFork LPACKED;
-  HFSPlusForkData resourceFork LPACKED;
+  SInt16 recordType;
+  UInt16 flags;
+  UInt32 reserved1;
+  HFSCatalogNodeID fileID;
+  UInt32 createDate;
+  UInt32 contentModDate;
+  UInt32 attributeModDate;
+  UInt32 accessDate;
+  UInt32 backupDate;
+  HFSPlusPermissions permissions;
+  FInfo userInfo;
+  FXInfo finderInfo;
+  UInt32 textEncoding;
+  UInt32 reserved2;
+  HFSPlusForkData dataFork;
+  HFSPlusForkData resourceFork;
 }
 HFSPlusCatalogFile;
 
-typedef struct HFSPlusCatalogThread
+typedef struct PACKED HFSPlusCatalogThread
 {
-  SInt16 recordType PACKED;
-  SInt16 reserved PACKED;
-  HFSCatalogNodeID parentID PACKED;
-  HFSUniStr255 nodeName LPACKED;
+  SInt16 recordType;
+  SInt16 reserved;
+  HFSCatalogNodeID parentID;
+  HFSUniStr255 nodeName;
 }
 HFSPlusCatalogThread;
 
-typedef struct HFSPlusExtentKey
+typedef struct PACKED HFSPlusExtentKey
 {
-  UInt16 keyLength PACKED;
-  UInt8 forkType LPACKED;
-  UInt8 pad LPACKED;
-  HFSCatalogNodeID fileID PACKED;
-  UInt32 startBlock PACKED;
+  UInt16 keyLength;
+  UInt8 forkType;
+  UInt8 pad;
+  HFSCatalogNodeID fileID;
+  UInt32 startBlock;
 }
 HFSPlusExtentKey;
 
-typedef struct HFSPlusAttrForkData
+typedef struct PACKED HFSPlusAttrForkData
 {
-  UInt32 recordType PACKED;
-  UInt32 reserved PACKED;
-  HFSPlusForkData theFork LPACKED;
+  UInt32 recordType;
+  UInt32 reserved;
+  HFSPlusForkData theFork;
 }
 HFSPlusAttrForkData;
 
-typedef struct HFSPlusAttrExtents
+typedef struct PACKED HFSPlusAttrExtents
 {
-  UInt32 recordType PACKED;
-  UInt32 reserved PACKED;
-  HFSPlusExtentRecord extents LPACKED;
+  UInt32 recordType;
+  UInt32 reserved;
+  HFSPlusExtentRecord extents;
 }
 HFSPlusAttrExtents;
 

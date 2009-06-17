@@ -51,105 +51,105 @@
 
 #define fontWid		((INTEGER) 0xACB0)
 
-typedef struct {
-    Fixed ascent	PACKED;
-    Fixed descent	PACKED;
-    Fixed leading	PACKED;
-    Fixed widMax	PACKED;
-    Handle wTabHandle	PACKED_P;
+typedef struct PACKED {
+  Fixed ascent;
+  Fixed descent;
+  Fixed leading;
+  Fixed widMax;
+  Handle wTabHandle	PACKED_P;
 } FMetricRec;
 
-typedef struct {
-    INTEGER ffFlags	PACKED;
-    INTEGER ffFamID	PACKED;
-    INTEGER ffFirstChar	PACKED;
-    INTEGER ffLastChar	PACKED;
-    INTEGER ffAscent	PACKED;
-    INTEGER ffDescent	PACKED;
-    INTEGER ffLeading	PACKED;
-    INTEGER ffWidMax	PACKED;
-    LONGINT ffWTabOff	PACKED;
-    LONGINT ffKernOff	PACKED;
-    LONGINT ffStylOff	PACKED;
-    INTEGER ffProperty[9]	PACKED;
-    INTEGER ffIntl[2]	PACKED;
-    INTEGER ffVersion	PACKED;
-    /* FontAssoc ffAssoc	PACKED; */
-    /* WidTable ffWidthTab	PACKED; */
-    /* StyleTable ffStyTab	PACKED; */
-    /* KernTable ffKernTab	PACKED; */
+typedef struct PACKED {
+  INTEGER ffFlags;
+  INTEGER ffFamID;
+  INTEGER ffFirstChar;
+  INTEGER ffLastChar;
+  INTEGER ffAscent;
+  INTEGER ffDescent;
+  INTEGER ffLeading;
+  INTEGER ffWidMax;
+  LONGINT ffWTabOff;
+  LONGINT ffKernOff;
+  LONGINT ffStylOff;
+  INTEGER ffProperty[9];
+  INTEGER ffIntl[2];
+  INTEGER ffVersion;
+  /* FontAssoc ffAssoc; */
+  /* WidTable ffWidthTab; */
+  /* StyleTable ffStyTab; */
+  /* KernTable ffKernTab; */
 } FamRec;
 
-typedef struct {
-    Fixed tabData[256]	PACKED;
-    Handle tabFont	PACKED_P;
-    LONGINT sExtra	PACKED;
-    LONGINT style	PACKED;
-    INTEGER fID	PACKED;
-    INTEGER fSize	PACKED;
-    INTEGER face	PACKED;
-    INTEGER device	PACKED;
-    Point inNumer	LPACKED;
-    Point inDenom	LPACKED;
-    INTEGER aFID	PACKED;
-    Handle fHand	PACKED_P;
-    BOOLEAN usedFam	LPACKED;
-    Byte aFace	LPACKED;
-    INTEGER vOutput	PACKED;
-    INTEGER hOutput	PACKED;
-    INTEGER vFactor	PACKED;
-    INTEGER hFactor	PACKED;
-    INTEGER aSize	PACKED;
-    INTEGER tabSize	PACKED;
+typedef struct PACKED {
+  Fixed tabData[256];
+  Handle tabFont	PACKED_P;
+  LONGINT sExtra;
+  LONGINT style;
+  INTEGER fID;
+  INTEGER fSize;
+  INTEGER face;
+  INTEGER device;
+  Point inNumer;
+  Point inDenom;
+  INTEGER aFID;
+  Handle fHand	PACKED_P;
+  BOOLEAN usedFam;
+  Byte aFace;
+  INTEGER vOutput;
+  INTEGER hOutput;
+  INTEGER vFactor;
+  INTEGER hFactor;
+  INTEGER aSize;
+  INTEGER tabSize;
 } WidthTable;
 
 
-typedef struct {
-    INTEGER family	PACKED;
-    INTEGER size	PACKED;
-    Style face	LPACKED;
-    BOOLEAN needBits	LPACKED;
-    INTEGER device	PACKED;
-    Point numer	LPACKED;
-    Point denom	LPACKED;
+typedef struct PACKED {
+  INTEGER family;
+  INTEGER size;
+  Style face;
+  BOOLEAN needBits;
+  INTEGER device;
+  Point numer;
+  Point denom;
 } FMInput;
 
-typedef struct {
-    INTEGER errNum	PACKED;	/* 0x00 */
+typedef struct PACKED {
+    INTEGER errNum;	/* 0x00 */
     Handle fontHandle	PACKED_P;	/* 0x02 */
-    Byte bold	LPACKED;		/* 0x06 */
-    Byte italic	LPACKED;	/* 0x07 */
-    Byte ulOffset	LPACKED;	/* 0x08 */
-    Byte ulShadow	LPACKED;	/* 0x09 */
-    Byte ulThick	LPACKED;	/* 0x0A */
-    Byte shadow	LPACKED;	/* 0x0B */
-    SignedByte extra	LPACKED;	/* 0x0C */
-    Byte ascent	LPACKED;	/* 0x0D */
-    Byte descent	LPACKED;	/* 0x0E */
-    Byte widMax	LPACKED;	/* 0x0F */
-    SignedByte leading	LPACKED;	/* 0x10 */
-    Byte unused	LPACKED;	/* 0x11 */
-    Point numer	LPACKED;	/* 0x12 */
-    Point denom	LPACKED;	/* 0x16 */
+    Byte bold;		/* 0x06 */
+    Byte italic;	/* 0x07 */
+    Byte ulOffset;	/* 0x08 */
+    Byte ulShadow;	/* 0x09 */
+    Byte ulThick;	/* 0x0A */
+    Byte shadow;	/* 0x0B */
+    SignedByte extra;	/* 0x0C */
+    Byte ascent;	/* 0x0D */
+    Byte descent;	/* 0x0E */
+    Byte widMax;	/* 0x0F */
+    SignedByte leading;	/* 0x10 */
+    Byte unused;	/* 0x11 */
+    Point numer;	/* 0x12 */
+    Point denom;	/* 0x16 */
 } FMOutput;
 
 typedef FMOutput *FMOutPtr;
 
-typedef struct {
-    INTEGER fontType	PACKED;
-    INTEGER firstChar	PACKED;
-    INTEGER lastChar	PACKED;
-    INTEGER widMax	PACKED;
-    INTEGER kernMax	PACKED;
-    INTEGER nDescent	PACKED;
-    INTEGER fRectWidth	PACKED;
-    INTEGER fRectHeight	PACKED;
-    INTEGER owTLoc	PACKED;
-    INTEGER ascent	PACKED;
-    INTEGER descent	PACKED;
-    INTEGER leading	PACKED;
-    INTEGER rowWords	PACKED;
-    /* more stuff is usually appended here ... bitImage	PACKED, locTable	PACKED, owTable */
+typedef struct PACKED {
+  INTEGER fontType;
+  INTEGER firstChar;
+  INTEGER lastChar;
+  INTEGER widMax;
+  INTEGER kernMax;
+  INTEGER nDescent;
+  INTEGER fRectWidth;
+  INTEGER fRectHeight;
+  INTEGER owTLoc;
+  INTEGER ascent;
+  INTEGER descent;
+  INTEGER leading;
+  INTEGER rowWords;
+  /* more stuff is usually appended here ... bitImage, locTable, owTable */
 } FontRec;
 
 typedef FamRec *FamRecPtr;

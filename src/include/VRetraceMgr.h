@@ -11,12 +11,12 @@
 #define qErr	(-1)
 #define vTypErr	(-2)
 
-typedef struct {
-    QElemPtr qLink	PACKED_P;
-    INTEGER qType	PACKED;
-    ProcPtr vblAddr	PACKED_P;
-    INTEGER vblCount	PACKED;
-    INTEGER vblPhase	PACKED;
+typedef struct PACKED {
+  QElemPtr qLink	PACKED_P;
+  INTEGER qType;
+  ProcPtr vblAddr	PACKED_P;
+  INTEGER vblCount;
+  INTEGER vblPhase;
 } VBLTask;
 typedef VBLTask *VBLTaskPtr;
 

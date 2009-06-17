@@ -8,18 +8,18 @@
  * $Id: CommTool.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-typedef struct
+typedef struct PACKED
 {
   QElemPtr qLink PACKED_P;
-  INTEGER qType PACKED;
-  INTEGER crmVersion PACKED;
-  LONGINT crmPrivate PACKED;
-  INTEGER crmReserved PACKED;
-  LONGINT crmDeviceType PACKED;
-  LONGINT crmDeviceID PACKED;
-  LONGINT crmAttributes PACKED;
-  LONGINT crmStatus PACKED;
-  LONGINT crmRefCon PACKED;
+  INTEGER qType;
+  INTEGER crmVersion;
+  LONGINT crmPrivate;
+  INTEGER crmReserved;
+  LONGINT crmDeviceType;
+  LONGINT crmDeviceID;
+  LONGINT crmAttributes;
+  LONGINT crmStatus;
+  LONGINT crmRefCon;
 }
 CRMRec, *CRMRecPtr;
 
@@ -32,16 +32,16 @@ enum { crmRecVersion = 1 };
 enum { curCRMSerRecVer = 0 };
 enum { crmSerialDevice = 1 };
 
-typedef struct
+typedef struct PACKED
 {
-  INTEGER version PACKED;
+  INTEGER version;
   StringHandle inputDriverName PACKED_P;
   StringHandle outputDriverName PACKED_P;
   StringHandle name PACKED_P;
-  Handle deviceIcon PACKED;
-  LONGINT ratedSpeed PACKED;
-  LONGINT maxSpeed PACKED;
-  LONGINT reserved PACKED;
+  Handle deviceIcon ;
+  LONGINT ratedSpeed;
+  LONGINT maxSpeed;
+  LONGINT reserved;
 }
 CRMSerialRecord, *CRMSerialPtr;
 

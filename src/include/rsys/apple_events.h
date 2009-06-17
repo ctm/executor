@@ -3,43 +3,43 @@
 
 /* #### internal */
 
-typedef struct
+typedef struct PACKED
 {
-  DescType type			PACKED;
-  uint32 size			PACKED;
-  char data[0]			LPACKED;
+  DescType type;
+  uint32 size;
+  char data[0];
 } inline_desc_t;
 
-typedef struct
+typedef struct PACKED
 {
-  int32 key			PACKED;
-  DescType type			PACKED;
-  uint32 size			PACKED;
-  char data[0]			LPACKED;
+  int32 key;
+  DescType type;
+  uint32 size;
+  char data[0];
 } inline_key_desc_t;
 
-typedef struct list_header
+typedef struct PACKED list_header
 {
   /* #### always zero (?) */
-  uint32 unknown_1		PACKED;
+  uint32 unknown_1;
   
   /* #### contains an applzone address */
-  uint32 unknown_2		PACKED;
+  uint32 unknown_2;
   
-  uint32 param_offset		PACKED;
+  uint32 param_offset;
   
   /* contains a tick that identifies the object, either `list' or
      `reco'; for an apple event, this fiend contains the offset to the
      parameter section */
-  uint32 attribute_count	PACKED;
+  uint32 attribute_count;
   
-  uint32 param_count		PACKED;
+  uint32 param_count;
   
   /* ### always zero (?) */
-  int32 unknown_3		PACKED;
+  int32 unknown_3;
   
    /* offset: 0x18 */
-  char data[0]			LPACKED;
+  char data[0];
 } list_header_t;
 
 typedef struct { list_header_t *p PACKED_P; } hidden_list_header_ptr;
@@ -56,31 +56,31 @@ typedef hidden_list_header_ptr *list_header_h;
 #define PARAM_OFFSET(aggr_desc_h)	(CL (PARAM_OFFSET_X (aggr_desc_h)))
 #define ATTRIBUTE_COUNT(aggr_desc_h)	(CL (ATTRIBUTE_COUNT_X (aggr_desc_h)))
 
-typedef struct ae_header
+typedef struct PACKED ae_header
 {
   /* #### always zero (?) */
-  uint32 unknown_1		PACKED;
+  uint32 unknown_1;
   
   /* #### contains unknown values */
-  uint32 unknown_2		PACKED;
+  uint32 unknown_2;
   
-  uint32 param_offset		PACKED;
+  uint32 param_offset;
   
-  uint32 attribute_count	PACKED;
-  uint32 param_count		PACKED;
+  uint32 attribute_count;
+  uint32 param_count;
   
   /* #### zero pad, use unknown */
-  char pad_1[26]		LPACKED;
+  char pad_1[26];
   
-  AEEventClass event_class	PACKED;
-  AEEventID event_id		PACKED;
+  AEEventClass event_class;
+  AEEventID event_id;
   
   /* #### takes on various values, no idea */
-  uint32 unknown_3		PACKED;
+  uint32 unknown_3;
   
   /* beginning of target inline descriptor; `target->size' determines
      target's actual size */
-  inline_desc_t target		LPACKED;
+  inline_desc_t target;
   
 #if 0
   /* for show */

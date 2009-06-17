@@ -54,31 +54,31 @@ typedef double ieee_t;
 /* 68k 96 bit IEEE FP memory representation. */
 #if defined (mc68000)
 typedef union {
-  struct {
-    unsigned short sgn_and_exp PACKED;
-    unsigned short zero PACKED;
-    unsigned long long man PACKED;
-  } fields PACKED;
-  ieee_t val PACKED;
+  struct PACKED {
+    unsigned short sgn_and_exp;
+    unsigned short zero;
+    unsigned long long man;
+  } fields;
+  ieee_t val;
 } m68k_x96_t;
 #endif
 
 
 /* i386 80 bit IEEE FP memory representation. */
 #if defined (i386)
-typedef struct {
-  ULONGINT man_lo PACKED;        /* Little endian. */
-  ULONGINT man_hi PACKED;        /* Little endian. */
-  unsigned short sgn_and_exp PACKED;  /* Little endian. */
+typedef struct PACKED {
+  ULONGINT man_lo;        /* Little endian. */
+  ULONGINT man_hi;        /* Little endian. */
+  unsigned short sgn_and_exp;  /* Little endian. */
 } i386_x80_t;
 #endif
 
 #if defined(__alpha)
-typedef struct {
-    ULONGINT man_lo PACKED;
-    ULONGINT man_hi:20 PACKED;
-    ULONGINT exp:11 PACKED;
-    ULONGINT sgn:1 PACKED;
+typedef struct PACKED {
+    ULONGINT man_lo;
+    ULONGINT man_hi:20;
+    ULONGINT exp:11;
+    ULONGINT sgn:1;
 } alpha_x64_t;
 #endif
 

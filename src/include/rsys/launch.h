@@ -23,10 +23,10 @@ typedef enum
 }
 launch_failure_t;
 
-typedef struct {
-    unsigned char c[4]		LPACKED;
-    short loc			PACKED;
-    unsigned char shortname[1]	LPACKED;
+typedef struct PACKED {
+  unsigned char c[4];
+  int16_t loc;
+  unsigned char shortname[1];
 } vers_t;
 
 extern launch_failure_t ROMlib_launch_failure;

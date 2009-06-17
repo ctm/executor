@@ -15,14 +15,14 @@
 
 #define evtNotEnb	1
 
-typedef struct {
-    QElemPtr qLink	PACKED_P;
-    INTEGER qType	PACKED;
-    INTEGER evtQWhat	PACKED;
-    LONGINT evtQMessage	PACKED;
-    LONGINT evtQWhen	PACKED;
-    Point evtQWhere	LPACKED;
-    INTEGER evtQModifiers	PACKED;
+typedef struct PACKED {
+  QElemPtr qLink	PACKED_P;
+  INTEGER qType;
+  INTEGER evtQWhat;
+  LONGINT evtQMessage;
+  LONGINT evtQWhen;
+  Point evtQWhere;
+  INTEGER evtQModifiers;
 } EvQEl;
 
 typedef EvQEl *EvQElPtr;
@@ -55,11 +55,17 @@ typedef enum
   SZreserved4			= (1 <<  0)
 } SZ_t;
 
-typedef struct size_info
+
+/*
+ * The first three fields are used to dereference mac memory.  The two
+ * extra booleans are for our own use.
+ */
+
+typedef struct PACKED size_info
 {
-  int16 size_flags		PACKED;
-  int32 preferred_size		PACKED;
-  int32 minimum_size		PACKED;
+  int16 size_flags;
+  int32 preferred_size;
+  int32 minimum_size;
   
   /* extra */
   boolean_t size_resource_present_p;
@@ -95,23 +101,23 @@ extern QHdrPtr GetEvQHdr( void  );
 
 extern EvQEl *geteventelem (void);
 
-typedef struct TargetID
+typedef struct PACKED TargetID
 {
-  int32 sessionID		PACKED;
-  PPCPortRec name		LPACKED;
-  LocationNameRec location	LPACKED;
-  PPCPortRec recvrName		LPACKED;
+  int32 sessionID;
+  PPCPortRec name;
+  LocationNameRec location;
+  PPCPortRec recvrName;
 } TargetID, TargetIDPtr;
 
-typedef struct HighLevelEventMsg
+typedef struct PACKED HighLevelEventMsg
 {
-  int16 HighLevelEventMsgHeaderlength	PACKED;
-  int16 version				PACKED;
-  int32 reserved1			PACKED;
-  EventRecord theMsgEvent		LPACKED;
-  int32 userRefCon			PACKED;
-  int32 postingOptions			PACKED;
-  int32 msgLength			PACKED;
+  int16 HighLevelEventMsgHeaderlength;
+  int16 version;
+  int32 reserved1;
+  EventRecord theMsgEvent;
+  int32 userRefCon;
+  int32 postingOptions;
+  int32 msgLength;
 } HighLevelEventMsg, *HighLevelEventMsgPtr; 
 
 typedef ProcPtr GetSpecificFilterProcPtr;

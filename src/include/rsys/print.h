@@ -80,60 +80,60 @@ extern boolean_t substitute_fonts_p;
 
 enum { GetRslData = 4, SetRsl, DraftBits, NoDraftBits, GetRotn };
 
-typedef struct
+typedef struct PACKED
 {
-  INTEGER iOpCode   PACKED;
-  INTEGER iError    PACKED;
-  LONGINT lReserved PACKED;
+  INTEGER iOpCode;
+  INTEGER iError;
+  LONGINT lReserved;
 }
 TGnlData;
 
-typedef struct
+typedef struct PACKED
 {
-  INTEGER iMin PACKED;
-  INTEGER iMax PACKED;
+  INTEGER iMin;
+  INTEGER iMax;
 }
 TRslRg;
 
-typedef struct
+typedef struct PACKED
 {
-  INTEGER iXRsl PACKED;
-  INTEGER iYRsl PACKED;
+  INTEGER iXRsl;
+  INTEGER iYRsl;
 }
 TRslRec;
 
-typedef struct
+typedef struct PACKED
 {
-  INTEGER iOpCode      PACKED;
-  INTEGER iError       PACKED;
-  LONGINT lReserved    PACKED;
-  INTEGER iRgType      PACKED;
-  TRslRg xRslRg        LPACKED;
-  TRslRg yRslRg        LPACKED;
-  INTEGER iRslRecCnt   PACKED;
-  TRslRec rgRslRec[27] LPACKED;
+  INTEGER iOpCode;
+  INTEGER iError;
+  LONGINT lReserved;
+  INTEGER iRgType;
+  TRslRg xRslRg;
+  TRslRg yRslRg;
+  INTEGER iRslRecCnt;
+  TRslRec rgRslRec[27];
 }
 TGetRslBlk;
 
-typedef struct
+typedef struct PACKED
 {
-  INTEGER iOpCode      PACKED;
-  INTEGER iError       PACKED;
-  LONGINT lReserved    PACKED;
-  THPrint hPrint       PACKED;
-  INTEGER iXRsl        PACKED;
-  INTEGER iYRsl        PACKED;
+  INTEGER iOpCode;
+  INTEGER iError;
+  LONGINT lReserved;
+  THPrint hPrint;
+  INTEGER iXRsl;
+  INTEGER iYRsl;
 }
 TSetRslBlk;
 
-typedef struct
+typedef struct PACKED
 {
-  Byte tJus         LPACKED;
-  Byte tFlop        LPACKED;
-  INTEGER tAngle    PACKED;
-  Byte tLine        LPACKED;
-  Byte tCmnt        LPACKED;
-  Fixed tAngleFixed PACKED;
+  Byte tJus;
+  Byte tFlop;
+  INTEGER tAngle;
+  Byte tLine;
+  Byte tCmnt;
+  Fixed tAngleFixed;
 }
 TTxtPicRec, *TTxtPicPtr;
 
@@ -165,10 +165,10 @@ enum
   tFlipVertical = 2,
 };
 
-typedef struct
+typedef struct PACKED
 {
-  Fixed y PACKED;
-  Fixed x PACKED;
+  Fixed y;
+  Fixed x;
 }
 TCenterRec, *TCenterRecPtr;
 

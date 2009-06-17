@@ -30,14 +30,14 @@
 #define noteIcon	1
 #define cautionIcon	2
 
-typedef struct
+typedef struct PACKED
  {
-    WindowRecord window	LPACKED;
-    Handle items	PACKED_P;
-    TEHandle textH	PACKED_P;
-    INTEGER editField	PACKED;
-    INTEGER editOpen	PACKED;
-    INTEGER aDefItem	PACKED;
+   WindowRecord window;
+   Handle items	PACKED_P;
+   TEHandle textH	PACKED_P;
+   INTEGER editField;
+   INTEGER editOpen;
+   INTEGER aDefItem;
 } DialogRecord;
 typedef DialogRecord *DialogPeek;
 
@@ -60,42 +60,42 @@ typedef HIDDEN_WindowPtr HIDDEN_DialogPtr;
 #define DIALOG_EDIT_OPEN(dialog)	(CW (DIALOG_EDIT_OPEN_X (dialog)))
 #define DIALOG_ADEF_ITEM(dialog)	(CW (DIALOG_ADEF_ITEM_X (dialog)))
 
-typedef struct
+typedef struct PACKED
 {
-    Rect boundsRect	LPACKED;
-    INTEGER procID	PACKED;
-    BOOLEAN visible	LPACKED;
-    BOOLEAN filler1	LPACKED;
-    BOOLEAN goAwayFlag	LPACKED;
-    BOOLEAN filler2	LPACKED;
-    LONGINT refCon	PACKED;
-    INTEGER itemsID	PACKED;
-    Str255 title	LPACKED;
+  Rect boundsRect;
+  INTEGER procID;
+  BOOLEAN visible;
+  BOOLEAN filler1;
+  BOOLEAN goAwayFlag;
+  BOOLEAN filler2;
+  LONGINT refCon;
+  INTEGER itemsID;
+  Str255 title;
 } DialogTemplate;
 
 typedef DialogTemplate *DialogTPtr;
 typedef struct { DialogTPtr p PACKED_P; } HIDDEN_DialogTPtr;
 typedef HIDDEN_DialogTPtr *DialogTHndl;
 
-typedef struct {
-    unsigned boldItm4: 1	PACKED;
-    unsigned boxDrwn4: 1	PACKED;
-    unsigned sound4: 2	PACKED;
-    unsigned boldItm3: 1	PACKED;
-    unsigned boxDrwn3: 1	PACKED;
-    unsigned sound3: 2	PACKED;
-    unsigned boldItm2: 1	PACKED;
-    unsigned boxDrwn2: 1	PACKED;
-    unsigned sound2: 2	PACKED;
-    unsigned boldItm1: 1	PACKED;
-    unsigned boxDrwn1: 1	PACKED;
-    unsigned sound1: 2	PACKED;
+typedef struct PACKED {
+  unsigned boldItm4: 1;
+  unsigned boxDrwn4: 1;
+  unsigned sound4: 2;
+  unsigned boldItm3: 1;
+  unsigned boxDrwn3: 1;
+  unsigned sound3: 2;
+  unsigned boldItm2: 1;
+  unsigned boxDrwn2: 1;
+  unsigned sound2: 2;
+  unsigned boldItm1: 1;
+  unsigned boxDrwn1: 1;
+  unsigned sound1: 2;
 } StageList;
 
-typedef struct {
-    Rect boundsRect	LPACKED;
-    INTEGER itemsID	PACKED;
-    StageList stages	LPACKED;
+typedef struct PACKED {
+  Rect boundsRect;
+  INTEGER itemsID;
+  StageList stages;
 } AlertTemplate;
 typedef AlertTemplate *AlertTPtr;
 typedef struct { AlertTPtr p PACKED_P; } HIDDEN_AlertTPtr;

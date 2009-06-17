@@ -8,8 +8,8 @@
  * $Id: serial.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-typedef struct {
-  Ptr p;
+typedef struct PACKED{
+  Ptr p PACKED_P;
   INTEGER i;
 } sersetbuf_t;
 

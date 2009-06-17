@@ -18,16 +18,14 @@ extern _NORET_1_ pascal trap void C_ExitToShell( void ) _NORET_2_;
 #define appOpen		0
 #define appPrint	1
 
-typedef struct {
-    INTEGER vRefNum	PACKED;
-    OSType fType	PACKED;
-    INTEGER versNum	PACKED;
-    Str255 fName	LPACKED;
+typedef struct PACKED {
+  INTEGER vRefNum;
+  OSType fType;
+  INTEGER versNum;
+  Str255 fName;
 } AppFile;
 
-
 #define hwParamErr (-502)
-
 
 #if !defined (AppParmHandle_H)
 extern HIDDEN_Handle 	AppParmHandle_H;

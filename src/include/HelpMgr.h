@@ -12,25 +12,25 @@
 #include "MenuMgr.h"
 #include "WindowMgr.h"
 
-typedef struct HMStringResType
+typedef struct PACKED HMStringResType
 {
-  INTEGER hmmResID			PACKED;
-  INTEGER hmmIndex			PACKED;
+  INTEGER hmmResID;
+  INTEGER hmmIndex;
 } HMStringResType;
 
-typedef struct HMMessageRecord
+typedef struct PACKED HMMessageRecord
 {
-  INTEGER hmmHelpType			PACKED;
+  INTEGER hmmHelpType;
   union
-    {
-      Str255 hmmString			LPACKED;
-      INTEGER hmmPict			PACKED;
-      HMStringResType hmmStringRes	LPACKED;
-      TEHandle hmmTEHandle		PACKED_P;
-      PicHandle hmmPictHandle		PACKED_P;
-      INTEGER hmmTERes			PACKED;
-      INTEGER hmmSTRRes			PACKED;
-    } u					LPACKED;
+  {
+    Str255 hmmString;
+    INTEGER hmmPict;
+    HMStringResType hmmStringRes;
+    TEHandle hmmTEHandle		PACKED_P;
+    PicHandle hmmPictHandle		PACKED_P;
+    INTEGER hmmTERes;
+    INTEGER hmmSTRRes;
+  } u;
 } HMMessageRecord, *HMMessageRecPtr;
 
 enum

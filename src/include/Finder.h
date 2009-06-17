@@ -8,32 +8,32 @@
  * $Id: Finder.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-typedef struct
+typedef struct PACKED
 {
-  QElemPtr qLink	PACKED;
-  INTEGER qType		PACKED;
-  Ptr ioCmdAddr		PACKED;
-  ProcPtr ioCompletion	PACKED;
-  OSErr ioResult	PACKED;
-  StringPtr ioNamePtr	PACKED;
-  INTEGER ioVRefNum	PACKED;
-  INTEGER ioDTRefNum	PACKED;
-  INTEGER ioIndex	PACKED;
-  LONGINT ioTagInfo	PACKED;
-  Ptr ioDTBuffer	PACKED;
-  LONGINT ioDTReqCount	PACKED;
-  LONGINT ioDTActCount	PACKED;
-  SignedByte filler1	LPACKED;
-  SignedByte ioIconType	LPACKED;
-  INTEGER filler2	PACKED;
-  LONGINT ioDirID	PACKED;
-  OSType ioFileCreator	PACKED;
-  OSType ioFileType	PACKED;
-  LONGINT ioFiller3	PACKED;
-  LONGINT ioDTLgLen	PACKED;
-  LONGINT ioDTPyLen	PACKED;
-  INTEGER ioFiller4[14]	PACKED;
-  LONGINT ioAPPLParID	PACKED;
+  QElemPtr qLink	PACKED_P;
+  INTEGER qType;
+  Ptr ioCmdAddr		PACKED_P;
+  ProcPtr ioCompletion	PACKED_P;
+  OSErr ioResult;
+  StringPtr ioNamePtr	PACKED_P;
+  INTEGER ioVRefNum;
+  INTEGER ioDTRefNum;
+  INTEGER ioIndex;
+  LONGINT ioTagInfo;
+  Ptr ioDTBuffer	PACKED_P;
+  LONGINT ioDTReqCount;
+  LONGINT ioDTActCount;
+  SignedByte filler1;
+  SignedByte ioIconType;
+  INTEGER filler2;
+  LONGINT ioDirID;
+  OSType ioFileCreator;
+  OSType ioFileType;
+  LONGINT ioFiller3;
+  LONGINT ioDTLgLen;
+  LONGINT ioDTPyLen;
+  INTEGER ioFiller4[14];
+  LONGINT ioAPPLParID;
 }
 DTPBRec, *DTPBRecPtr, *DTPBPtr;
 

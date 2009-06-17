@@ -24,22 +24,22 @@ extern char *copystr (const char *name);
 
 #define SYSMACNAME	"\006System"
 
-typedef struct {
-  LONGINT fd		PACKED;
-  LONGINT offset	PACKED;
-  LONGINT bsize		PACKED;
-  LONGINT maxbytes	PACKED;
+typedef struct PACKED {
+  LONGINT fd;
+  LONGINT offset;
+  LONGINT bsize;
+  LONGINT maxbytes;
 } hfs_access_t;
 
-typedef struct {
-    LONGINT flags	PACKED;
-    DrvQEl  dq	LPACKED;
-    Ptr devicename	PACKED; /* "/usr"	"/dev/rfd0"	whatever */
+typedef struct PACKED {
+    LONGINT flags;
+    DrvQEl  dq;
+    Ptr devicename; /* "/usr"	"/dev/rfd0"	whatever */
 #if !defined(__alpha)
-    char *filler	PACKED;
+    char *filler;
 #endif
-    INTEGER partition	PACKED;	/* for multiply partitioned drives */
-    hfs_access_t hfs	LPACKED; /* currently only for floppies -- ick */
+    INTEGER partition;	/* for multiply partitioned drives */
+    hfs_access_t hfs; /* currently only for floppies -- ick */
 } DrvQExtra; 
 
 #define OURUFSDREF	(-102)
@@ -67,41 +67,41 @@ extern boolean_t cd_mounted_by_trickery_p;
 #define fcfisres	(1 << 1)
 #define fcwriteperm	(1 << 0)
 
-typedef struct {
-    LONGINT fdfnum	PACKED;	/* LONGINT fcbFlNum */
-    Byte fcflags	LPACKED;	/* Byte fcbMdRByt */
-    Byte fcbTypByt	LPACKED;
-    INTEGER fcbSBlk	PACKED;
-    LONGINT fcleof	PACKED;	/* LONGINT fcbEOF */
-    LONGINT fcPLen	PACKED;
-    LONGINT fcbCrPs	PACKED;
-    VCB *fcvptr	PACKED_P;	/* VCB *fcbVPtr */
-    Ptr fcbBfAdr	PACKED_P;
-    INTEGER fcbFlPos	PACKED;
-    LONGINT fcbClmpSize	PACKED;
-    LONGINT fcfd	PACKED;		/* instead of: LONGINT fcbBTCBPtr	PACKED; */
-    LONGINT zero[3]	PACKED;	/* these three fields are fcbExtRec */
-    LONGINT fcbFType	PACKED;
-    LONGINT hiddenfd	PACKED;	/* instead of LONGINT fcbCatPos */
-    LONGINT fcparid	PACKED;	/* LONGINT fcbDirID */
-    Byte fcname[32]	LPACKED;	/* Str31 fcbCName */
+typedef struct PACKED {
+  LONGINT fdfnum;	/* LONGINT fcbFlNum */
+  Byte fcflags;	/* Byte fcbMdRByt */
+  Byte fcbTypByt;
+  INTEGER fcbSBlk;
+  LONGINT fcleof;	/* LONGINT fcbEOF */
+  LONGINT fcPLen;
+  LONGINT fcbCrPs;
+  VCB *fcvptr	PACKED_P;	/* VCB *fcbVPtr */
+  Ptr fcbBfAdr	PACKED_P;
+  INTEGER fcbFlPos;
+  LONGINT fcbClmpSize;
+  LONGINT fcfd;		/* instead of: LONGINT fcbBTCBPtr	PACKED; */
+  LONGINT zero[3];	/* these three fields are fcbExtRec */
+  LONGINT fcbFType;
+  LONGINT hiddenfd;	/* instead of LONGINT fcbCatPos */
+  LONGINT fcparid;	/* LONGINT fcbDirID */
+  Byte fcname[32];	/* Str31 fcbCName */
 } fcbrec;
 
 #define NFCB 348		/* should be related to NOFILE */
 
-typedef struct {
-    INTEGER nbytes	PACKED;
-    fcbrec fc[NFCB]	LPACKED;
+typedef struct PACKED {
+  INTEGER nbytes;
+  fcbrec fc[NFCB];
 } fcbhidden;
 
 #define ROMlib_fcblocks	(((fcbhidden *)MR(FCBSPtr))->fc)
 
-typedef struct {	/* add new elements to the beginning of this struct */
-    LONGINT magicword	PACKED;
-    FInfo FndrInfo	LPACKED;
-    LONGINT LgLen	PACKED;
-    LONGINT RLgLen	PACKED;
-    LONGINT CrDat	PACKED;
+typedef struct PACKED {	/* add new elements to the beginning of this struct */
+  LONGINT magicword;
+  FInfo FndrInfo;
+  LONGINT LgLen;
+  LONGINT RLgLen;
+  LONGINT CrDat;
 } hiddeninfo;
 
 typedef struct {
@@ -213,23 +213,23 @@ typedef struct hashlink_str {
     char *dirname;
 } hashlink_t;
 
-typedef struct {
-    VCB vcb			LPACKED;
-    char *unixname		PACKED;
+typedef struct PACKED {
+    VCB vcb;
+    char *unixname;
 #if !defined(__alpha)
-    char *filler		PACKED;
+    char *filler;
 #endif
     union {
-	struct {
-	    LONGINT ino		PACKED;
-	    LONGINT nhashentries	PACKED;
-	    hashlink_t **hashtable	PACKED;
+	struct PACKED {
+	    LONGINT ino;
+	    LONGINT nhashentries;
+	    hashlink_t **hashtable;
 #if !defined(__alpha)
-	    char *filler2	PACKED;
+	    char *filler2;
 #endif
-	} ufs			LPACKED;
-	hfs_access_t hfs	LPACKED;
-    } u				LPACKED;
+	} ufs;
+	hfs_access_t hfs;
+    } u;
 } VCBExtra;
 
 enum
@@ -260,14 +260,14 @@ enum
   bLimitFCBs,
 };
 
-typedef struct
+typedef struct PACKED
 {
-  INTEGER vMVersion		PACKED;
-  ULONGINT vMAttrib		PACKED;
-  LONGINT vMLocalHand		PACKED;
-  LONGINT vMServerAdr		PACKED;
-  LONGINT vMVolumeGrade		PACKED;
-  INTEGER vMForeignPrivID	PACKED;
+  INTEGER vMVersion;
+  ULONGINT vMAttrib;
+  LONGINT vMLocalHand;
+  LONGINT vMServerAdr;
+  LONGINT vMVolumeGrade;
+  INTEGER vMForeignPrivID;
 }
 getvolparams_info_t;
 

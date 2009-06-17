@@ -1,11 +1,11 @@
 #if !defined (__rsys_process_h__)
 #  define __rsys_process_h__
 
-typedef struct size_resource
+typedef struct PACKED size_resource
 {
-  int16 flags		PACKED;
-  int32 pref_size	PACKED;
-  int32 min_size	PACKED;
+  int16 flags;
+  int32 pref_size;
+  int32 min_size;
 } size_resource_t;
 
 #endif /* !defined (__rsys_process_h__) */

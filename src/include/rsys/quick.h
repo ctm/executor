@@ -14,11 +14,11 @@
    in inline functions below */
 #include "rsys/trapglue.h"
 
-typedef struct ccrsr_res
+typedef struct PACKED ccrsr_res
 {
-  CCrsr crsr 		LPACKED;
-  PixMap crsr_map	LPACKED;
-  char data		LPACKED;
+  CCrsr crsr;
+  PixMap crsr_map;
+  char data;
 } ccrsr_res, *ccrsr_res_ptr;
 
 extern boolean_t ROMlib_text_output_disabled_p;

@@ -11,16 +11,15 @@
 #define CLEAR_HILITE_BIT()		\
   (BitClr ((Ptr) &HiliteMode, pHiliteBit))
 
-typedef struct GrafVars
+typedef struct PACKED GrafVars
 {
-  RGBColor rgbOpColor		LPACKED;
-  RGBColor rgbHiliteColor	LPACKED;
+  RGBColor rgbOpColor;
+  RGBColor rgbHiliteColor;
   Handle pmFgColor		PACKED_P;
-  INTEGER pmFgIndex		PACKED;
+  INTEGER pmFgIndex;
   Handle pmBkColor		PACKED_P;
-  INTEGER pmBkIndex		PACKED;  
-  INTEGER pmFlags		PACKED;
-  
+  INTEGER pmBkIndex;
+  INTEGER pmFlags;
 } GrafVars, *GrafVarsPtr;
 typedef struct { GrafVarsPtr p PACKED_P; } HIDDEN_GrafVarsPtr, *GrafVarsHandle;
 

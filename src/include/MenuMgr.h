@@ -20,27 +20,27 @@
 
 #define textMenuProc	0
 
-typedef struct {
-    INTEGER menuID	PACKED;
-    INTEGER menuWidth	PACKED;
-    INTEGER menuHeight	PACKED;
-    Handle menuProc	PACKED_P;
-    LONGINT enableFlags	PACKED;
-    Str255 menuData	LPACKED;
+typedef struct PACKED {
+  INTEGER menuID;
+  INTEGER menuWidth;
+  INTEGER menuHeight;
+  Handle menuProc	PACKED_P;
+  LONGINT enableFlags;
+  Str255 menuData;
 } MenuInfo;
 typedef MenuInfo *MenuPtr;
 typedef struct { MenuPtr p PACKED_P; } HIDDEN_MenuPtr;
 typedef HIDDEN_MenuPtr *MenuHandle;
 
-typedef struct MCEntry
+typedef struct PACKED MCEntry
 {
-  INTEGER mctID		PACKED;
-  INTEGER mctItem	PACKED;
-  RGBColor mctRGB1	LPACKED;
-  RGBColor mctRGB2	LPACKED;
-  RGBColor mctRGB3	LPACKED;
-  RGBColor mctRGB4	LPACKED;
-  INTEGER mctReserved	PACKED;
+  INTEGER mctID;
+  INTEGER mctItem;
+  RGBColor mctRGB1;
+  RGBColor mctRGB2;
+  RGBColor mctRGB3;
+  RGBColor mctRGB4;
+  INTEGER mctReserved;
 } MCEntry, *MCEntryPtr;
 typedef struct { MCEntryPtr p PACKED_P; } HIDDEN_MCEntryPtr;
 

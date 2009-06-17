@@ -1,7 +1,6 @@
 #if !defined (__DISK__)
 #define __DISK__
 
-
 /*
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
@@ -33,20 +32,20 @@
 #define noDriveErr	(-64)
 #define lastDskErr	(-64)
 
-typedef struct {
-    INTEGER track	PACKED;
-    SignedByte writeProt	LPACKED;
-    SignedByte diskInPlace	LPACKED;
-    SignedByte installed	LPACKED;
-    SignedByte sides	LPACKED;
-    QElemPtr qLink	PACKED_P;
-    INTEGER qType	PACKED;
-    INTEGER dQDrive	PACKED;
-    INTEGER dQRefNum	PACKED;
-    INTEGER dQFSID	PACKED;
-    SignedByte twoSideFmt	LPACKED;
-    SignedByte needsFlush	LPACKED;
-    INTEGER diskErrs	PACKED;
+typedef struct PACKED {
+  INTEGER track;
+  SignedByte writeProt;
+  SignedByte diskInPlace;
+  SignedByte installed;
+  SignedByte sides;
+  QElemPtr qLink	PACKED_P;
+  INTEGER qType;
+  INTEGER dQDrive;
+  INTEGER dQRefNum;
+  INTEGER dQFSID;
+  SignedByte twoSideFmt;
+  SignedByte needsFlush;
+  INTEGER diskErrs;
 } DrvSts;
 
 

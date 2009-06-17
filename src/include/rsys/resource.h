@@ -15,25 +15,25 @@
 extern boolean_t ROMlib_ultima_iii_hack;
 #endif
 
-typedef struct {
-    Size rdatoff	PACKED;
-    Size rmapoff	PACKED;
-    Size datlen	PACKED;
-    Size maplen	PACKED;
+typedef struct PACKED {
+  Size rdatoff;
+  Size rmapoff;
+  Size datlen;
+  Size maplen;
 } reshead;
 
-typedef struct {
-    Byte rsrvsys[112]	LPACKED;
-    Byte rsrvapp[128]	LPACKED;
+typedef struct PACKED {
+  Byte rsrvsys[112];
+  Byte rsrvapp[128];
 } rsrvrec;
 
-typedef struct {
-    reshead rh	LPACKED;
-    Handle nextmap	PACKED_P;
-    INTEGER resfn	PACKED;
-    INTEGER resfatr	PACKED;
-    INTEGER typoff	PACKED;
-    INTEGER namoff	PACKED;
+typedef struct PACKED {
+  reshead rh;
+  Handle nextmap	PACKED_P;
+  INTEGER resfn;
+  INTEGER resfatr;
+  INTEGER typoff;
+  INTEGER namoff;
 } resmap;
 
 typedef resmap *resmapptr;
@@ -52,25 +52,25 @@ typedef HIDDEN_resmapptr *resmaphand;
 #define MAPLEN(map)	Hx(map, rh.maplen)
 #define MAPLENX(map)	((STARH(map))->rh.maplen)
 
-typedef struct {
-    ResType rtyp	PACKED;
-    INTEGER nres	PACKED;
-    INTEGER rloff	PACKED;
+typedef struct PACKED {
+  ResType rtyp;
+  INTEGER nres;
+  INTEGER rloff;
 } typref;
 
-typedef struct {
-    INTEGER rid	PACKED;
-    INTEGER noff	PACKED;
-    Byte ratr	LPACKED;
-    Byte doff[3]	LPACKED;
-    Handle rhand	PACKED_P;
+typedef struct PACKED {
+  INTEGER rid;
+  INTEGER noff;
+  Byte ratr;
+  Byte doff[3];
+  Handle rhand	PACKED_P;
 } resref;
 
-typedef struct {            /* empty resource template */
-  reshead bhead	LPACKED;
-  rsrvrec bfill	LPACKED;
-  resmap bmap	LPACKED;
-  INTEGER negone	PACKED;
+typedef struct PACKED {            /* empty resource template */
+  reshead bhead;
+  rsrvrec bfill;
+  resmap bmap;
+  INTEGER negone;
 } empty_resource_template_t;
 
 
@@ -198,18 +198,18 @@ enum
   COMPRESSED_FLAGS = 0x120801,
 };
 
-typedef struct
+typedef struct PACKED
 {
-  LONGINT compressedResourceTag PACKED;
-  LONGINT typeFlags PACKED;
-  LONGINT uncompressedSize PACKED;
-  uint8 workingBufferFractionalRatio LPACKED;
-  uint8 expansionBufferSize LPACKED;
+  LONGINT compressedResourceTag;
+  LONGINT typeFlags;
+  LONGINT uncompressedSize;
+  uint8 workingBufferFractionalRatio;
+  uint8 expansionBufferSize;
   INTEGER dcmpID;
 }
 dcomp_info_t;
 						   
-typedef struct {
+typedef struct PACKED {
     LONGINT diskoff;
     resref *rrptr;
 } res_sorttype_t;

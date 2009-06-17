@@ -29,12 +29,12 @@
 
 #define MI_TITLE(mi)		(HxX (mi, menuTitle))
 
-typedef struct {
-    Byte micon	LPACKED;
-    Byte mkeyeq	LPACKED;
-    Byte mmarker	LPACKED;
-    Byte mstyle	LPACKED;
-    Byte mnextlen	LPACKED;
+typedef struct PACKED {
+  Byte micon;
+  Byte mkeyeq;
+  Byte mmarker;
+  Byte mstyle;
+  Byte mnextlen;
 } mext, *mextp;
 
 extern void C_mdef0(INTEGER, MenuHandle, Rect *, Point, INTEGER *);
@@ -72,9 +72,9 @@ extern LONGINT ROMlib_menuhelper( MenuHandle mh, Rect *saver, LONGINT where,
 
 #define MLMAX   16
 
-typedef struct {
-    MenuHandle muhandle	PACKED_P;
-    INTEGER muleft	PACKED;
+typedef struct PACKED {
+  MenuHandle muhandle	PACKED_P;
+  INTEGER muleft;
 } muelem;
 
 typedef struct menu_elt
@@ -112,24 +112,24 @@ typedef struct menu_elt
 #define ML_LAST_HMENU_OFFSET(ml)	(CW (ML_LAST_HMENU_OFFSET_X (ml)))
 #define ML_MENU_TITLE_SAVE(ml)		(CW (ML_MENU_TITLE_SAVE_X (ml)))
 
-typedef struct menu_list
+typedef struct PACKED menu_list
 {
-  INTEGER last_menu_offset	PACKED;
-  INTEGER last_right		PACKED;
-  INTEGER mb_res_id		PACKED;
+  INTEGER last_menu_offset;
+  INTEGER last_right;
+  INTEGER mb_res_id;
   /* other stuff... */
   char data;
 } menu_list;
 
 typedef menu_list menu_list_ptr;
-typedef struct { menu_list_ptr p LPACKED_P; } HIDDEN_menu_list_ptr;
+typedef struct { menu_list_ptr p PACKED_P; } HIDDEN_menu_list_ptr;
 typedef HIDDEN_menu_list_ptr *menu_list_handle;
 
-typedef struct {
-    INTEGER muoff	PACKED;
-    INTEGER muright	PACKED;
-    INTEGER mufu	PACKED;
-    muelem mulist[MLMAX]	LPACKED; /* WILL NEED Cx() */
+typedef struct PACKED {
+  INTEGER muoff;
+  INTEGER muright;
+  INTEGER mufu;
+  muelem mulist[MLMAX]; /* WILL NEED Cx() */
 } menulist;
 
 typedef menulist *menulistp;
@@ -157,29 +157,29 @@ typedef HIDDEN_menulistp *mlhandle;
 #define DRAWMENUBAR	0
 #define CLEARMENUBAR	(-1)
 
-typedef struct {	/* from MPW Private.a */
-    INTEGER lastMBSave	PACKED;		/* offset to top most menu saved */
+typedef struct PACKED {	/* from MPW Private.a */
+    INTEGER lastMBSave;		/* offset to top most menu saved */
     Handle mbCustomStorage	PACKED_P;	/* for custom jobs (i.e. we don't use) */
-    Rect mbItemRect	LPACKED;		/* currently chosen menu */
-    Byte mbMenuDelay	LPACKED;		/* MenuDelay from param ram */
-    Byte mbMenuDrag	LPACKED;		/* MenuDrag from param ram */
-    INTEGER mbUglyScroll	PACKED;	/* HMenu flag having to do with scrolling?? */
-    INTEGER mbIconState	PACKED;	/* ??? NMgr icon state */
+    Rect mbItemRect;		/* currently chosen menu */
+    Byte mbMenuDelay;		/* MenuDelay from param ram */
+    Byte mbMenuDrag;		/* MenuDrag from param ram */
+    INTEGER mbUglyScroll;	/* HMenu flag having to do with scrolling?? */
+    INTEGER mbIconState;	/* ??? NMgr icon state */
 } mbdfheader;
 
 typedef mbdfheader *mbdfheaderptr;
 typedef struct { mbdfheaderptr p PACKED_P; } HIDDEN_mbdfheaderptr;
 typedef HIDDEN_mbdfheaderptr *mbdfheaderhand;
 
-typedef struct {
-    Rect mbRectSave	LPACKED;		/* where it is on screen */
+typedef struct PACKED {
+    Rect mbRectSave;		/* where it is on screen */
     Handle mbBitsSave	PACKED_P;		/* where the bits are */
-    INTEGER mbMenuDir	PACKED;		/* what direction the menu was placed */
-    INTEGER mbMLOffset	PACKED;		/* 6 byte offset into MenuList */
+    INTEGER mbMenuDir;		/* what direction the menu was placed */
+    INTEGER mbMLOffset;		/* 6 byte offset into MenuList */
     MenuHandle mbMLHandle	PACKED_P;	/* the handle from MenuList */
-    INTEGER mbTopScroll	PACKED;	/* copy of TopMenuItem */
-    INTEGER mbBotScroll	PACKED;	/* copy of AtMenuBottom */
-    LONGINT mbReserved	PACKED;		/* i dunno */
+    INTEGER mbTopScroll;	/* copy of TopMenuItem */
+    INTEGER mbBotScroll;	/* copy of AtMenuBottom */
+    LONGINT mbReserved;		/* i dunno */
 } mbdfentry;
 
 #define NMBDFENTRIES	5
@@ -239,7 +239,7 @@ typedef enum { HILITE, RESTORE } highstate;
 /* menu item icon code */
 
 #define	ICON_PAD	 4	/* space on either side */
-typedef struct icon_info
+typedef struct con_info
 {
   /* true if this is a color icon */
   int color_icon_p;
@@ -252,31 +252,31 @@ typedef struct icon_info
 } icon_info_t;
 
 
-typedef struct mct_res
+typedef struct PACKED mct_res
 {
   int16 n_entries;
   MCEntry entries[1];
 } mct_res_t;
 
-typedef struct {
+typedef struct PACKED {
     INTEGER nmen;
     INTEGER mrid[1];
 } mbartype;
 
-typedef struct {
+typedef struct PACKED {
     muelem *startp;
     muelem *endp;
 } startendpairs[2];
 
-typedef struct
+typedef struct PACKED
 {
-  int32 lasttick	PACKED;
-  int16 count	PACKED;
-  struct tableentry
+  int32 lasttick;
+  int16 count;
+  struct PACKED tableentry
   {
-    int16 top	PACKED;
-    StringPtr name	PACKED;
-    mextp options	PACKED;
+    int16 top;
+    StringPtr name;
+    mextp options;
   } entry[1];
 } table, *tablePtr, **tableHandle;
 

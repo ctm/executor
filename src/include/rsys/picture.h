@@ -53,20 +53,20 @@
  * --ctm Sun Aug  2 19:48:35 MDT 1992
  */
 
-typedef struct {
+typedef struct PACKED {
     PicHandle	pichandle	PACKED_P;	/* 0x00 - 0x03 */
-    LONGINT	picsize	PACKED;	/* 0x04 - 0x07 */
-    LONGINT	pichowfar	PACKED;	/* 0x08 - 0x0B */	
+    LONGINT	picsize;	/* 0x04 - 0x07 */
+    LONGINT	pichowfar;	/* 0x08 - 0x0B */	
     RgnHandle	picclip	PACKED_P;	/* 0x0C - 0x0F */
-    Pattern	picbkpat	LPACKED;	/* 0x10 - 0x17 */
-    INTEGER	picfont	PACKED;	/* 0x18 - 0x19 */
-    Style	picface	LPACKED;	/* 0x1A */
-    char	picfiller	LPACKED;	/* 0x1B */
-    INTEGER	pictxmode	PACKED;	/* 0x1C - 0x1D */
-    INTEGER	pictxsize	PACKED;	/* 0x1E - 0x1F */
-    Fixed	picspextra	PACKED;	/* 0x20 - 0x23 */
-    Point	pictxnum	LPACKED;	/* 0x24 - 0x27 */
-    Point	pictxden	LPACKED;	/* 0x28 - 0x2B */
+    Pattern	picbkpat;	/* 0x10 - 0x17 */
+    INTEGER	picfont;	/* 0x18 - 0x19 */
+    Style	picface;	/* 0x1A */
+    char	picfiller;	/* 0x1B */
+    INTEGER	pictxmode;	/* 0x1C - 0x1D */
+    INTEGER	pictxsize;	/* 0x1E - 0x1F */
+    Fixed	picspextra;	/* 0x20 - 0x23 */
+    Point	pictxnum;	/* 0x24 - 0x27 */
+    Point	pictxden;	/* 0x28 - 0x2B */
 			
 /*
  * NOTE: After doing:
@@ -83,19 +83,19 @@ typedef struct {
  *	and pictextpnloc.
  */
 
-    Point	picdrawpnloc	LPACKED;	/* 0x2C - 0x2F */
-    Point	pictextpnloc	LPACKED;	/* 0x30 - 0x33 */
-    Point	picpnsize	LPACKED;	/* 0x34 - 0x37 */
-    INTEGER	picpnmode	PACKED;	/* 0x38 - 0x39 */
-    Pattern	picpnpat	LPACKED;	/* 0x3A - 0x41 */
-    Pattern	picfillpat	LPACKED;	/* 0x42 - 0x49 */
-    Rect	piclastrect	LPACKED;	/* 0x4A - 0x51 */
-    Point	picov	LPACKED;		/* 0x52 - 0x55 */
+    Point	picdrawpnloc;	/* 0x2C - 0x2F */
+    Point	pictextpnloc;	/* 0x30 - 0x33 */
+    Point	picpnsize;	/* 0x34 - 0x37 */
+    INTEGER	picpnmode;	/* 0x38 - 0x39 */
+    Pattern	picpnpat;	/* 0x3A - 0x41 */
+    Pattern	picfillpat;	/* 0x42 - 0x49 */
+    Rect	piclastrect;	/* 0x4A - 0x51 */
+    Point	picov;		/* 0x52 - 0x55 */
 
-    INTEGER	picidunno	PACKED;	/* 0x56 - 0x59 ColorBit ? */
+    INTEGER	picidunno;	/* 0x56 - 0x59 ColorBit ? */
 
-    LONGINT	picforeColor	PACKED;	/* 0x5A - 0x5D */
-    LONGINT	picbackColor	PACKED;	/* 0x5E - 0x61 */
+    LONGINT	picforeColor;	/* 0x5A - 0x5D */
+    LONGINT	picbackColor;	/* 0x5E - 0x61 */
 } piccache;
 
 extern void ROMlib_textpicupdate( Point num, Point den );

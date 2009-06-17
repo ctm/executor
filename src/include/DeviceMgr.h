@@ -27,17 +27,17 @@ typedef struct {
     Str255  udrvrName;
 } umacdriver, *umacdriverptr;
 
-typedef struct {
-    INTEGER drvrFlags	PACKED;
-    INTEGER drvrDelay	PACKED;
-    INTEGER drvrEMask	PACKED;
-    INTEGER drvrMenu	PACKED;
-    INTEGER drvrOpen	PACKED;
-    INTEGER drvrPrime	PACKED;
-    INTEGER drvrCtl	PACKED;
-    INTEGER drvrStatus	PACKED;
-    INTEGER drvrClose	PACKED;
-    char drvrName	LPACKED;
+typedef struct PACKED {
+  INTEGER drvrFlags;
+  INTEGER drvrDelay;
+  INTEGER drvrEMask;
+  INTEGER drvrMenu;
+  INTEGER drvrOpen;
+  INTEGER drvrPrime;
+  INTEGER drvrCtl;
+  INTEGER drvrStatus;
+  INTEGER drvrClose;
+  char drvrName;
 } ramdriver;
 
 typedef ramdriver *ramdriverptr;
@@ -46,18 +46,18 @@ typedef HIDDEN_ramdriverptr *ramdriverhand;
 
 typedef enum { Open, Prime, Ctl, Stat, Close } DriverRoutineType;
 
-typedef struct {
-    umacdriverptr dCtlDriver	PACKED_P;	/* not just Ptr */
-    INTEGER       dCtlFlags	PACKED;
-    QHdr          dCtlQHdr	LPACKED;
-    LONGINT       dCtlPosition	PACKED;
-    Handle        dCtlStorage	PACKED_P;
-    INTEGER       dCtlRefNum	PACKED;
-    LONGINT       dCtlCurTicks	PACKED;
-    WindowPtr     dCtlWindow	PACKED_P;
-    INTEGER       dCtlDelay	PACKED;
-    INTEGER       dCtlEMask	PACKED;
-    INTEGER       dCtlMenu	PACKED;
+typedef struct PACKED {
+  umacdriverptr dCtlDriver	PACKED_P;	/* not just Ptr */
+  INTEGER       dCtlFlags;
+  QHdr          dCtlQHdr;
+  LONGINT       dCtlPosition;
+  Handle        dCtlStorage	PACKED_P;
+  INTEGER       dCtlRefNum;
+  LONGINT       dCtlCurTicks;
+  WindowPtr     dCtlWindow	PACKED_P;
+  INTEGER       dCtlDelay;
+  INTEGER       dCtlEMask;
+  INTEGER       dCtlMenu;
 } DCtlEntry, *DCtlPtr;
 typedef struct { DCtlPtr p PACKED_P; } HIDDEN_DCtlPtr;
 typedef HIDDEN_DCtlPtr *DCtlHandle;

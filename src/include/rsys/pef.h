@@ -10,19 +10,19 @@
  * $Id: pef.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-typedef struct PEFContainerHeader
+typedef struct PACKED PEFContainerHeader
 {
-  OSType tag1 PACKED;
-  OSType tag2 PACKED;
-  OSType architecture PACKED;
-  uint32 formatVersion PACKED;
-  uint32 dateTimeStamp PACKED;
-  uint32 oldDefVersion PACKED;
-  uint32 oldImpVersion PACKED;
-  uint32 currentVersion PACKED;
-  uint16 sectionCount PACKED;
-  uint16 instSectionCount PACKED;
-  uint32 reservedA PACKED;
+  OSType tag1;
+  OSType tag2;
+  OSType architecture;
+  uint32 formatVersion;
+  uint32 dateTimeStamp;
+  uint32 oldDefVersion;
+  uint32 oldImpVersion;
+  uint32 currentVersion;
+  uint16 sectionCount;
+  uint16 instSectionCount;
+  uint32 reservedA;
 }
 PEFContainerHeader_t;
 
@@ -56,18 +56,18 @@ PEFContainerHeader_t;
 #define PEF_CONTAINER_CURRENT_VERS_X(p) ((p)->currentVersion)
 #define PEF_CONTAINER_CURRENT_VERS(p) (CL (PEF_CONTAINER_CURRENT_VERS_X(p)))
 
-typedef struct PEFSectionHeader
+typedef struct PACKED PEFSectionHeader
 {
-  int32 nameOffset PACKED;
-  uint32 defaultAddress PACKED;
-  uint32 totalSize PACKED;
-  uint32 unpackedSize PACKED;
-  uint32 packedSize PACKED;
-  uint32 containerOffset PACKED;
-  uint8 sectionKind LPACKED;
-  uint8 shareKind LPACKED;
-  uint8 alignment LPACKED;
-  uint8 reservedA LPACKED;
+  int32 nameOffset;
+  uint32 defaultAddress;
+  uint32 totalSize;
+  uint32 unpackedSize;
+  uint32 packedSize;
+  uint32 containerOffset;
+  uint8 sectionKind;
+  uint8 shareKind;
+  uint8 alignment;
+  uint8 reservedA;
 }
 PEFSectionHeader_t;
 
@@ -90,22 +90,22 @@ PEFSectionHeader_t;
 #define PEFSH_SHARE_KIND(p) ((p)->shareKind)
 #define PEFSH_ALIGNMENT(p) (1 << (p)->alignment)
 
-typedef struct PEFLoaderInfoHeader
+typedef struct PACKED PEFLoaderInfoHeader
 {
-  int32 mainSection PACKED;
-  uint32 mainOffset PACKED;
-  int32 initSection PACKED;
-  uint32 initOffset PACKED;
-  int32 termSection PACKED;
-  uint32 termOffset PACKED;
-  uint32 importedLibraryCount PACKED;
-  uint32 totalImportedSymbolCount PACKED;
-  uint32 relocSectionCount PACKED;
-  uint32 relocInstrOffset PACKED;
-  uint32 loaderStringsOffset PACKED;
-  uint32 exportHashOffset PACKED;
-  uint32 exportHashTablePower PACKED;
-  uint32 exportedSymbolCount PACKED;
+  int32 mainSection;
+  uint32 mainOffset;
+  int32 initSection;
+  uint32 initOffset;
+  int32 termSection;
+  uint32 termOffset;
+  uint32 importedLibraryCount;
+  uint32 totalImportedSymbolCount;
+  uint32 relocSectionCount;
+  uint32 relocInstrOffset;
+  uint32 loaderStringsOffset;
+  uint32 exportHashOffset;
+  uint32 exportHashTablePower;
+  uint32 exportedSymbolCount;
 }
 PEFLoaderInfoHeader_t;
 
@@ -151,16 +151,16 @@ PEFLoaderInfoHeader_t;
 #define PEFLIH_SYMBOL_COUNT_X(p)	((p)->exportedSymbolCount)
 #define PEFLIH_SYMBOL_COUNT(p) (CL (PEFLIH_SYMBOL_COUNT_X (p)))
 
-typedef struct PEFImportedLibrary
+typedef struct PACKED PEFImportedLibrary
 {
-  uint32 nameOffset PACKED;
-  uint32 oldImpVersion PACKED;
-  uint32 currentVersion PACKED;
-  uint32 importedSymbolCount PACKED;
-  uint32 firstImportedSymbol PACKED;
-  uint8 options LPACKED;
-  uint8 reservedA LPACKED;
-  uint16 reservedB PACKED;
+  uint32 nameOffset;
+  uint32 oldImpVersion;
+  uint32 currentVersion;
+  uint32 importedSymbolCount;
+  uint32 firstImportedSymbol;
+  uint8 options;
+  uint8 reservedA;
+  uint16 reservedB;
 }
 PEFImportedLibrary_t;
 
@@ -171,12 +171,12 @@ PEFImportedLibrary_t;
 
 #define PEFIL_FIRST_SYMBOL_X(p) ((p)->firstImportedSymbol)
 
-typedef struct PEFLoaderRelocationHeader
+typedef struct PACKED PEFLoaderRelocationHeader
 {
-  uint16 sectionIndex PACKED;
-  uint16 reservedA PACKED;
-  uint32 relocCount PACKED;
-  uint32 firstRelocOffset PACKED;
+  uint16 sectionIndex;
+  uint16 reservedA;
+  uint32 relocCount;
+  uint32 firstRelocOffset;
 }
 PEFLoaderRelocationHeader_t;
 
@@ -211,11 +211,11 @@ enum
   CHAIN_COUNT_MASK = 0x3FFF,
 };
 
-typedef struct PEFExportedSymbol
+typedef struct PACKED PEFExportedSymbol
 {
-  uint32 classAndName PACKED;
-  uint32 symbolValue PACKED;
-  int16 sectionIndex PACKED;
+  uint32 classAndName;
+  uint32 symbolValue;
+  int16 sectionIndex;
 }
 PEFExportedSymbol;
 

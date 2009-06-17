@@ -70,34 +70,34 @@ enum
   diffVolErr = -1303,
 };
 
-typedef struct {
-    OSType fdType	PACKED;
-    OSType fdCreator	PACKED;
-    unsigned short fdFlags	PACKED;
-    Point fdLocation	LPACKED;
-    unsigned short fdFldr	PACKED;
+typedef struct PACKED {
+  OSType fdType;
+  OSType fdCreator;
+  uint16_t fdFlags;
+  Point fdLocation;
+  uint16_t fdFldr;
 } FInfo;
 
-typedef struct {
-    unsigned short fdIconID	PACKED;
-    unsigned short fdUnused[4]	PACKED;
-    unsigned short fdComment	PACKED;
-    LONGINT fdPutAway	PACKED;
+typedef struct PACKED {
+  uint16_t fdIconID;
+  uint16_t fdUnused[4];
+  uint16_t fdComment;
+  LONGINT fdPutAway;
 } FXInfo;
 
-typedef struct {
-    Rect frRect	LPACKED;
-    unsigned short frFlags	PACKED;
-    Point frLocation	LPACKED;
-    unsigned short frView	PACKED;
+typedef struct PACKED {
+  Rect frRect;
+  uint16_t frFlags;
+  Point frLocation;
+  uint16_t frView;
 } DInfo;
 
-typedef struct {
-    Point frScroll	LPACKED;
-    LONGINT frOpenChain	PACKED;
-    unsigned short frUnused	PACKED;
-    unsigned short frComment	PACKED;
-    LONGINT frPutAway	PACKED;
+typedef struct PACKED {
+  Point frScroll;
+  LONGINT frOpenChain;
+  uint16_t frUnused;
+  uint16_t frComment;
+  LONGINT frPutAway;
 } DXInfo;
 
 typedef enum {
@@ -109,70 +109,70 @@ typedef enum {
 
 #define COMMONFSQUEUEDEFS	\
     QElemPtr qLink       PACKED_P;	\
-    INTEGER qType        PACKED;	\
-    INTEGER ioTrap       PACKED;	\
+    INTEGER qType;	\
+    INTEGER ioTrap;	\
     Ptr ioCmdAddr        PACKED_P;	\
     ProcPtr ioCompletion PACKED_P;	\
-    OSErr ioResult       PACKED;	\
+    OSErr ioResult;	\
     StringPtr ioNamePtr  PACKED_P;	\
-    INTEGER ioVRefNum   /* PACKED gets added in by guys who use this macro. */
+    INTEGER ioVRefNum
 
-typedef struct {
-    COMMONFSQUEUEDEFS	PACKED;
-    INTEGER ioRefNum	PACKED;
-    SignedByte ioVersNum	LPACKED;
-    SignedByte ioPermssn	LPACKED;
-    LONGINT ioMisc	PACKED;		/* should be largest of Ptr, LONGINT */
-    Ptr ioBuffer	PACKED_P;
-    LONGINT ioReqCount	PACKED;
-    LONGINT ioActCount	PACKED;
-    INTEGER ioPosMode	PACKED;
-    LONGINT ioPosOffset	PACKED;
+typedef struct PACKED {
+  COMMONFSQUEUEDEFS;
+  INTEGER ioRefNum;
+  SignedByte ioVersNum;
+  SignedByte ioPermssn;
+  LONGINT ioMisc;		/* should be largest of Ptr, LONGINT */
+  Ptr ioBuffer	PACKED_P;
+  LONGINT ioReqCount;
+  LONGINT ioActCount;
+  INTEGER ioPosMode;
+  LONGINT ioPosOffset;
 } ioParam;
 
-typedef struct {
-    COMMONFSQUEUEDEFS	PACKED;
-    INTEGER ioFRefNum	PACKED;
-    SignedByte ioFVersNum	LPACKED;
-    SignedByte filler1	LPACKED;
-    INTEGER ioFDirIndex	PACKED;
-    SignedByte ioFlAttrib	LPACKED;
-    SignedByte ioFlVersNum	LPACKED;
-    FInfo ioFlFndrInfo	LPACKED;
-    LONGINT ioFlNum	PACKED;
-    INTEGER ioFlStBlk	PACKED;
-    LONGINT ioFlLgLen	PACKED;
-    LONGINT ioFlPyLen	PACKED;
-    INTEGER ioFlRStBlk	PACKED;
-    LONGINT ioFlRLgLen	PACKED;
-    LONGINT ioFlRPyLen	PACKED;
-    LONGINT ioFlCrDat	PACKED;
-    LONGINT ioFlMdDat	PACKED;
+typedef struct PACKED {
+  COMMONFSQUEUEDEFS;
+  INTEGER ioFRefNum;
+  SignedByte ioFVersNum;
+  SignedByte filler1;
+  INTEGER ioFDirIndex;
+  SignedByte ioFlAttrib;
+  SignedByte ioFlVersNum;
+  FInfo ioFlFndrInfo;
+  LONGINT ioFlNum;
+  INTEGER ioFlStBlk;
+  LONGINT ioFlLgLen;
+  LONGINT ioFlPyLen;
+  INTEGER ioFlRStBlk;
+  LONGINT ioFlRLgLen;
+  LONGINT ioFlRPyLen;
+  LONGINT ioFlCrDat;
+  LONGINT ioFlMdDat;
 } fileParam;
 
-typedef struct {
-    COMMONFSQUEUEDEFS	PACKED;
-    LONGINT filler2	PACKED;
-    INTEGER ioVolIndex	PACKED;
-    LONGINT ioVCrDate	PACKED;
-    LONGINT ioVLsBkUp	PACKED;
-    unsigned short ioVAtrb	PACKED;
-    unsigned short ioVNmFls	PACKED;
-    unsigned short ioVDirSt	PACKED;
-    unsigned short ioVBlLn	PACKED;
-    unsigned short ioVNmAlBlks	PACKED;
-    LONGINT ioVAlBlkSiz	PACKED;
-    LONGINT ioVClpSiz	PACKED;
-    unsigned short ioAlBlSt	PACKED;
-    LONGINT ioVNxtFNum	PACKED;
-    unsigned short ioVFrBlk	PACKED;
+typedef struct PACKED {
+  COMMONFSQUEUEDEFS;
+  LONGINT filler2;
+  INTEGER ioVolIndex;
+  LONGINT ioVCrDate;
+  LONGINT ioVLsBkUp;
+  uint16_t ioVAtrb;
+  uint16_t ioVNmFls;
+  uint16_t ioVDirSt;
+  uint16_t ioVBlLn;
+  uint16_t ioVNmAlBlks;
+  LONGINT ioVAlBlkSiz;
+  LONGINT ioVClpSiz;
+  uint16_t ioAlBlSt;
+  LONGINT ioVNxtFNum;
+  uint16_t ioVFrBlk;
 } volumeParam;
 
-typedef struct {
-    COMMONFSQUEUEDEFS	PACKED;
-    INTEGER ioCRefNum	PACKED;
-    INTEGER csCode	PACKED;
-    INTEGER csParam[11]	PACKED;
+typedef struct PACKED {
+  COMMONFSQUEUEDEFS;
+  INTEGER ioCRefNum;
+  INTEGER csCode;
+  INTEGER csParam[11];
 } cntrlParam;
 
 typedef union {
@@ -183,65 +183,65 @@ typedef union {
 } ParamBlockRec;
 typedef ParamBlockRec *ParmBlkPtr;
 
-typedef struct {
-    COMMONFSQUEUEDEFS	PACKED;
-    INTEGER ioRefNum	PACKED;
-    SignedByte ioVersNum	LPACKED;
-    SignedByte ioPermssn	LPACKED;
-    LONGINT ioMisc	PACKED;		/* should be largest of Ptr, LONGINT */
-    Ptr ioBuffer	PACKED_P;
-    LONGINT ioReqCount	PACKED;
-    LONGINT ioActCount	PACKED;
-    INTEGER ioPosMode	PACKED;
-    LONGINT ioPosOffset	PACKED;
+typedef struct PACKED {
+  COMMONFSQUEUEDEFS;
+  INTEGER ioRefNum;
+  SignedByte ioVersNum;
+  SignedByte ioPermssn;
+  LONGINT ioMisc;		/* should be largest of Ptr, LONGINT */
+  Ptr ioBuffer	PACKED_P;
+  LONGINT ioReqCount;
+  LONGINT ioActCount;
+  INTEGER ioPosMode;
+  LONGINT ioPosOffset;
 } HIoParam;
 
-typedef struct {
-    COMMONFSQUEUEDEFS	PACKED;
-    INTEGER ioFRefNum	PACKED;
-    SignedByte ioFVersNum	LPACKED;
-    SignedByte filler1	LPACKED;
-    INTEGER ioFDirIndex	PACKED;
-    SignedByte ioFlAttrib	LPACKED;
-    SignedByte ioFlVersNum	LPACKED;
-    FInfo ioFlFndrInfo	LPACKED;
-/*-->*/ LONGINT ioDirID	PACKED;
-    INTEGER ioFlStBlk	PACKED;
-    LONGINT ioFlLgLen	PACKED;
-    LONGINT ioFlPyLen	PACKED;
-    INTEGER ioFlRStBlk	PACKED;
-    LONGINT ioFlRLgLen	PACKED;
-    LONGINT ioFlRPyLen	PACKED;
-    LONGINT ioFlCrDat	PACKED;
-    LONGINT ioFlMdDat	PACKED;
+typedef struct PACKED {
+  COMMONFSQUEUEDEFS;
+  INTEGER ioFRefNum;
+  SignedByte ioFVersNum;
+  SignedByte filler1;
+  INTEGER ioFDirIndex;
+  SignedByte ioFlAttrib;
+  SignedByte ioFlVersNum;
+  FInfo ioFlFndrInfo;
+  /*-->*/ LONGINT ioDirID;
+  INTEGER ioFlStBlk;
+  LONGINT ioFlLgLen;
+  LONGINT ioFlPyLen;
+  INTEGER ioFlRStBlk;
+  LONGINT ioFlRLgLen;
+  LONGINT ioFlRPyLen;
+  LONGINT ioFlCrDat;
+  LONGINT ioFlMdDat;
 } HFileParam;
 
-typedef struct {
-    COMMONFSQUEUEDEFS	PACKED;
-    LONGINT pfiller2	PACKED;
-    INTEGER ioVolIndex	PACKED;
-    LONGINT ioVCrDate	PACKED;
-/*-->*/ LONGINT ioVLsMod	PACKED;
-    INTEGER ioVAtrb	PACKED;
-    unsigned short ioVNmFls	PACKED;
-/*-->*/ unsigned short ioVBitMap	PACKED;
-/*-->*/ unsigned short ioVAllocPtr	PACKED;
-    unsigned short ioVNmAlBlks	PACKED;
-    LONGINT ioVAlBlkSiz	PACKED;
-    LONGINT ioVClpSiz	PACKED;
-    unsigned short ioAlBlSt	PACKED;
-/*-->*/ LONGINT ioVNxtCNID	PACKED;
-    unsigned short ioVFrBlk	PACKED;
-/*-->*/ unsigned short ioVSigWord	PACKED;
-/*-->*/ INTEGER ioVDrvInfo	PACKED;
-/*-->*/ INTEGER ioVDRefNum	PACKED;
-/*-->*/ INTEGER ioVFSID	PACKED;
-/*-->*/ LONGINT ioVBkUp	PACKED;
-/*-->*/ unsigned short ioVSeqNum	PACKED;
-/*-->*/ LONGINT ioVWrCnt	PACKED;
-/*-->*/ LONGINT ioVFilCnt	PACKED;
-/*-->*/ LONGINT ioVDirCnt	PACKED;
-/*-->*/ LONGINT ioVFndrInfo[8]	PACKED;
+typedef struct PACKED {
+  COMMONFSQUEUEDEFS;
+  LONGINT pfiller2;
+  INTEGER ioVolIndex;
+  LONGINT ioVCrDate;
+  /*-->*/ LONGINT ioVLsMod;
+  INTEGER ioVAtrb;
+  uint16_t ioVNmFls;
+  /*-->*/ uint16_t ioVBitMap;
+  /*-->*/ uint16_t ioVAllocPtr;
+  uint16_t ioVNmAlBlks;
+  LONGINT ioVAlBlkSiz;
+  LONGINT ioVClpSiz;
+  uint16_t ioAlBlSt;
+  /*-->*/ LONGINT ioVNxtCNID;
+  uint16_t ioVFrBlk;
+  /*-->*/ uint16_t ioVSigWord;
+  /*-->*/ INTEGER ioVDrvInfo;
+  /*-->*/ INTEGER ioVDRefNum;
+  /*-->*/ INTEGER ioVFSID;
+  /*-->*/ LONGINT ioVBkUp;
+  /*-->*/ uint16_t ioVSeqNum;
+  /*-->*/ LONGINT ioVWrCnt;
+  /*-->*/ LONGINT ioVFilCnt;
+  /*-->*/ LONGINT ioVDirCnt;
+  /*-->*/ LONGINT ioVFndrInfo[8];
 } HVolumeParam;
 
 typedef union {
@@ -254,43 +254,43 @@ typedef HParamBlockRec *HParmBlkPtr;
 typedef enum { hfileInfo, dirInfo } CInfoType;
 
 #define COMMONCINFODEFS			\
-    COMMONFSQUEUEDEFS		PACKED;	\
-    INTEGER ioFRefNum		PACKED;	\
-    SignedByte ioFVersNum	LPACKED;	\
-    SignedByte filler1		LPACKED;	\
-    INTEGER ioFDirIndex		PACKED;	\
-    SignedByte ioFlAttrib	LPACKED;	\
-    SignedByte ioACUser   /* PACKED gets added in by guys who use this macro. */
+    COMMONFSQUEUEDEFS;	\
+    INTEGER ioFRefNum;	\
+    SignedByte ioFVersNum;	\
+    SignedByte filler1;	\
+    INTEGER ioFDirIndex;	\
+    SignedByte ioFlAttrib;	\
+    SignedByte ioACUser
 
-typedef struct {
-    COMMONCINFODEFS	LPACKED;
-    FInfo ioFlFndrInfo	LPACKED;
-    LONGINT ioDirID	PACKED;
-    INTEGER ioFlStBlk	PACKED;
-    LONGINT ioFlLgLen	PACKED;
-    LONGINT ioFlPyLen	PACKED;
-    INTEGER ioFlRStBlk	PACKED;
-    LONGINT ioFlRLgLen	PACKED;
-    LONGINT ioFlRPyLen	PACKED;
-    LONGINT ioFlCrDat	PACKED;
-    LONGINT ioFlMdDat	PACKED;
-    LONGINT ioFlBkDat	PACKED;
-    FXInfo ioFlXFndrInfo	LPACKED;
-    LONGINT ioFlParID	PACKED;
-    LONGINT ioFlClpSiz	PACKED;
+typedef struct PACKED {
+  COMMONCINFODEFS;
+  FInfo ioFlFndrInfo;
+  LONGINT ioDirID;
+  INTEGER ioFlStBlk;
+  LONGINT ioFlLgLen;
+  LONGINT ioFlPyLen;
+  INTEGER ioFlRStBlk;
+  LONGINT ioFlRLgLen;
+  LONGINT ioFlRPyLen;
+  LONGINT ioFlCrDat;
+  LONGINT ioFlMdDat;
+  LONGINT ioFlBkDat;
+  FXInfo ioFlXFndrInfo;
+  LONGINT ioFlParID;
+  LONGINT ioFlClpSiz;
 } HFileInfo;
 
-typedef struct {
-    COMMONCINFODEFS	LPACKED;
-    DInfo ioDrUsrWds	LPACKED;
-    LONGINT ioDrDirID	PACKED;
-    unsigned short ioDrNmFls	PACKED;
-    unsigned short filler3[9]	PACKED;
-    LONGINT ioDrCrDat	PACKED;
-    LONGINT ioDrMdDat	PACKED;
-    LONGINT ioDrBkDat	PACKED;
-    DXInfo ioDrFndrInfo	LPACKED;
-    LONGINT ioDrParID	PACKED;
+typedef struct PACKED {
+  COMMONCINFODEFS;
+  DInfo ioDrUsrWds;
+  LONGINT ioDrDirID;
+  uint16_t ioDrNmFls;
+  uint16_t filler3[9];
+  LONGINT ioDrCrDat;
+  LONGINT ioDrMdDat;
+  LONGINT ioDrBkDat;
+  DXInfo ioDrFndrInfo;
+  LONGINT ioDrParID;
 } DirInfo;
 
 typedef union {
@@ -299,115 +299,115 @@ typedef union {
 } CInfoPBRec;
 typedef CInfoPBRec *CInfoPBPtr;
 
-typedef struct {
-    COMMONFSQUEUEDEFS	PACKED;
-    LONGINT filler1	PACKED;
-    StringPtr ioNewName	PACKED_P;
-    LONGINT filler2	PACKED;
-    LONGINT ioNewDirID	PACKED;
-    LONGINT filler3[2]	PACKED;
-    LONGINT ioDirID	PACKED;
+typedef struct PACKED {
+  COMMONFSQUEUEDEFS;
+  LONGINT filler1;
+  StringPtr ioNewName	PACKED_P;
+  LONGINT filler2;
+  LONGINT ioNewDirID;
+  LONGINT filler3[2];
+  LONGINT ioDirID;
 } CMovePBRec;
 typedef CMovePBRec *CMovePBPtr;
 
-typedef struct {
-    COMMONFSQUEUEDEFS	PACKED;
-    unsigned short filler1	PACKED;	/* should be INTEGER */
-    INTEGER ioWDIndex	PACKED;
-    LONGINT ioWDProcID	PACKED;
-    INTEGER ioWDVRefNum	PACKED;
-    INTEGER filler2[7]	PACKED;
-    LONGINT ioWDDirID	PACKED;
+typedef struct PACKED {
+  COMMONFSQUEUEDEFS;
+  uint16_t filler1;
+  INTEGER ioWDIndex;
+  LONGINT ioWDProcID;
+  INTEGER ioWDVRefNum;
+  INTEGER filler2[7];
+  LONGINT ioWDDirID;
 } WDPBRec;
 typedef WDPBRec *WDPBPtr;
 
-typedef struct {
-    COMMONFSQUEUEDEFS	PACKED;
-    INTEGER ioRefNum	PACKED;
-    unsigned short filler	PACKED;
-    INTEGER ioFCBIndx	PACKED;
-    INTEGER ioFCBobnoxiousfiller	PACKED;	/* ACK! not in IMIV	PACKED, but ThinkC+MPW */
-    LONGINT ioFCBFlNm	PACKED;
-    unsigned short ioFCBFlags	PACKED;
-    INTEGER ioFCBStBlk	PACKED;
-    LONGINT ioFCBEOF	PACKED;
-    LONGINT ioFCBPLen	PACKED;
-    LONGINT ioFCBCrPs	PACKED;
-    INTEGER ioFCBVRefNum	PACKED;
-    LONGINT ioFCBClpSiz	PACKED;
-    LONGINT ioFCBParID	PACKED;
+typedef struct PACKED {
+  COMMONFSQUEUEDEFS;
+  INTEGER ioRefNum;
+  uint16_t filler;
+  INTEGER ioFCBIndx;
+  INTEGER ioFCBobnoxiousfiller;	/* ACK! not in IMIV, but ThinkC+MPW */
+  LONGINT ioFCBFlNm;
+  uint16_t ioFCBFlags;
+  INTEGER ioFCBStBlk;
+  LONGINT ioFCBEOF;
+  LONGINT ioFCBPLen;
+  LONGINT ioFCBCrPs;
+  INTEGER ioFCBVRefNum;
+  LONGINT ioFCBClpSiz;
+  LONGINT ioFCBParID;
 } FCBPBRec;
 typedef FCBPBRec *FCBPBPtr;
 
-typedef struct {
-    QElemPtr qLink	PACKED_P;		/*  0 */
-    INTEGER qType	PACKED;		/*  4 */
-    unsigned short vcbFlags	PACKED;		/*  6 */
-    unsigned short vcbSigWord	PACKED;		/*  8 */
-    LONGINT vcbCrDate	PACKED;		/* 10 */
-    LONGINT vcbLsMod	PACKED;		/* 14 */
-    unsigned short vcbAtrb	PACKED;		/* 18 */
-    unsigned short vcbNmFls	PACKED;		/* 20 */
-    unsigned short vcbVBMSt	PACKED;		/* 22 */
-    unsigned short vcbAllocPtr	PACKED;	/* 24 */
-    unsigned short vcbNmAlBlks	PACKED;	/* 26 */
-    LONGINT vcbAlBlkSiz	PACKED;	/* 28 */
-    LONGINT vcbClpSiz	PACKED;		/* 32 */
-    unsigned short vcbAlBlSt	PACKED;		/* 36 */
-    LONGINT vcbNxtCNID	PACKED;		/* 38 */
-    unsigned short vcbFreeBks	PACKED;		/* 42 */
-    Byte vcbVN[28]	LPACKED;		/* 44 */
-    INTEGER vcbDrvNum	PACKED;		/* 72 */
-    INTEGER vcbDRefNum	PACKED;		/* 74 */
-    INTEGER vcbFSID	PACKED;		/* 76 */
-    INTEGER vcbVRefNum	PACKED;		/* 78 */
-    Ptr vcbMAdr	PACKED_P;
-    Ptr vcbBufAdr	PACKED_P;
-    unsigned short vcbMLen	PACKED;
-    INTEGER vcbDirIndex	PACKED;
-    unsigned short vcbDirBlk	PACKED;
-    LONGINT vcbVolBkUp	PACKED;
-    unsigned short vcbVSeqNum	PACKED;
-    LONGINT vcbWrCnt	PACKED;
-    LONGINT vcbXTClpSiz	PACKED;
-    LONGINT vcbCTClpSiz	PACKED;
-    unsigned short vcbNmRtDirs	PACKED;
-    LONGINT vcbFilCnt	PACKED;
-    LONGINT vcbDirCnt	PACKED;
-    LONGINT vcbFndrInfo[8]	PACKED;
-    unsigned short vcbVCSize	PACKED;
-    unsigned short vcbVBMCSiz	PACKED;
-    unsigned short vcbCtlCSiz	PACKED;
-    unsigned short vcbXTAlBlks	PACKED;
-    unsigned short vcbCTAlBlks	PACKED;
-    INTEGER vcbXTRef	PACKED;
-    INTEGER vcbCTRef	PACKED;
-    Ptr vcbCtlBuf	PACKED_P;
-    LONGINT vcbDirIDM	PACKED;
-    unsigned short vcbOffsM	PACKED;
+typedef struct PACKED {
+  QElemPtr qLink	PACKED_P;		/*  0 */
+  INTEGER qType;		/*  4 */
+  uint16_t vcbFlags;		/*  6 */
+  uint16_t vcbSigWord;		/*  8 */
+  LONGINT vcbCrDate;		/* 10 */
+  LONGINT vcbLsMod;		/* 14 */
+  uint16_t vcbAtrb;		/* 18 */
+  uint16_t vcbNmFls;		/* 20 */
+  uint16_t vcbVBMSt;		/* 22 */
+  uint16_t vcbAllocPtr;	/* 24 */
+  uint16_t vcbNmAlBlks;	/* 26 */
+  LONGINT vcbAlBlkSiz;	/* 28 */
+  LONGINT vcbClpSiz;		/* 32 */
+  uint16_t vcbAlBlSt;		/* 36 */
+  LONGINT vcbNxtCNID;		/* 38 */
+  uint16_t vcbFreeBks;		/* 42 */
+  Byte vcbVN[28];		/* 44 */
+  INTEGER vcbDrvNum;		/* 72 */
+  INTEGER vcbDRefNum;		/* 74 */
+  INTEGER vcbFSID;		/* 76 */
+  INTEGER vcbVRefNum;		/* 78 */
+  Ptr vcbMAdr	PACKED_P;
+  Ptr vcbBufAdr	PACKED_P;
+  uint16_t vcbMLen;
+  INTEGER vcbDirIndex;
+  uint16_t vcbDirBlk;
+  LONGINT vcbVolBkUp;
+  uint16_t vcbVSeqNum;
+  LONGINT vcbWrCnt;
+  LONGINT vcbXTClpSiz;
+  LONGINT vcbCTClpSiz;
+  uint16_t vcbNmRtDirs;
+  LONGINT vcbFilCnt;
+  LONGINT vcbDirCnt;
+  LONGINT vcbFndrInfo[8];
+  uint16_t vcbVCSize;
+  uint16_t vcbVBMCSiz;
+  uint16_t vcbCtlCSiz;
+  uint16_t vcbXTAlBlks;
+  uint16_t vcbCTAlBlks;
+  INTEGER vcbXTRef;
+  INTEGER vcbCTRef;
+  Ptr vcbCtlBuf	PACKED_P;
+  LONGINT vcbDirIDM;
+  uint16_t vcbOffsM;
 } VCB;
 
 typedef VCB *VCBPtr;
 typedef struct { VCBPtr p PACKED_P; } HIDDEN_VCBPtr;
 
-typedef struct {
-    QElemPtr qLink	PACKED_P;
-    INTEGER qType	PACKED;
-    INTEGER dQDrive	PACKED;
-    INTEGER dQRefNum	PACKED;
-    INTEGER dQFSID	PACKED;
-    unsigned short dQDrvSz	PACKED;
-    unsigned short dQDrvSz2	PACKED;
+typedef struct PACKED {
+  QElemPtr qLink	PACKED_P;
+  INTEGER qType;
+  INTEGER dQDrive;
+  INTEGER dQRefNum;
+  INTEGER dQFSID;
+  uint16_t dQDrvSz;
+  uint16_t dQDrvSz2;
 } DrvQEl;
 
 /* data types introduced by the new high level file system dispatch
    traps */
 
-struct FSSpec
+struct PACKED FSSpec
 {
-  INTEGER vRefNum PACKED;
-  LONGINT parID PACKED;
-  Str63 name LPACKED;
+  INTEGER vRefNum;
+  LONGINT parID;
+  Str63 name;
 };
 
 typedef struct FSSpec FSSpec;

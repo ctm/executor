@@ -9,11 +9,11 @@
  */
 
 
-typedef struct {
-    QElemPtr	qLink	PACKED_P;
-    INTEGER	qType	PACKED;
-    ProcPtr	tmAddr	PACKED_P;
-    LONGINT	tmCount	PACKED;	/* I don't trust IMIV-301 */
+typedef struct PACKED {
+  QElemPtr	qLink	PACKED_P;
+  INTEGER	qType;
+  ProcPtr	tmAddr	PACKED_P;
+  LONGINT	tmCount;	/* I don't trust IMIV-301 */
 } TMTask;
 
 

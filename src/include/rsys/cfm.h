@@ -15,16 +15,16 @@ enum
   kUnresolvedCFragSymbolAddress = 0
 };
 
-typedef struct
+typedef struct PACKED
 {
-  uint32 reserved0 PACKED;
-  uint32 reserved1 PACKED;
-  uint32 version PACKED;
-  uint32 reserved2 PACKED;
-  uint32 reserved3 PACKED;
-  uint32 reserved4 PACKED;
-  uint32 reserved5 PACKED;
-  int32 n_descripts PACKED;
+  uint32 reserved0;
+  uint32 reserved1;
+  uint32 version;
+  uint32 reserved2;
+  uint32 reserved3;
+  uint32 reserved4;
+  uint32 reserved5;
+  int32 n_descripts;
 }
 cfrg_resource_t;
 
@@ -34,22 +34,22 @@ cfrg_resource_t;
 #define CFRG_N_DESCRIPTS_X(cfrg) ((cfrg)->n_descripts)
 #define CFRG_N_DESCRIPTS(cfrg) (CL (CFRG_N_DESCRIPTS_X (cfrg)))
 
-typedef struct
+typedef struct PACKED
 {
-  OSType isa PACKED;
-  uint32 update_level PACKED;
-  uint32 current_version PACKED;
-  uint32 oldest_definition_version PACKED;
-  uint32 stack_size PACKED;
-  int16 appl_library_dir PACKED;
-  uint8 fragment_type LPACKED;
-  uint8 fragment_location LPACKED;
-  int32 offset_to_fragment PACKED;
-  int32 fragment_length PACKED;
-  uint32 reserved0 PACKED;
-  uint32 reserved1 PACKED;
-  uint16 cfir_length PACKED;
-  unsigned char name[1] LPACKED;
+  OSType isa;
+  uint32 update_level;
+  uint32 current_version;
+  uint32 oldest_definition_version;
+  uint32 stack_size;
+  int16 appl_library_dir;
+  uint8 fragment_type;
+  uint8 fragment_location;
+  int32 offset_to_fragment;
+  int32 fragment_length;
+  uint32 reserved0;
+  uint32 reserved1;
+  uint16 cfir_length;
+  unsigned char name[1];
 }
 cfir_t;
 
@@ -108,53 +108,52 @@ typedef enum
 }
 LoadFlags;
 
-typedef struct MemFragment
+typedef struct PACKED MemFragment
 {
-  Ptr address PACKED;
-  uint32 length PACKED;
-  BOOLEAN inPlace LPACKED;
+  Ptr address;
+  uint32 length;
+  BOOLEAN inPlace;
 }
 MemFragment;
 
-typedef struct DiskFragment
+typedef struct PACKED DiskFragment
 {
-  FSSpecPtr fileSpec PACKED;
-  uint32 offset PACKED;
-  uint32 length PACKED;
+  FSSpecPtr fileSpec;
+  uint32 offset;
+  uint32 length;
 }
 DiskFragment;
 
-typedef struct SegmentedFragment
+typedef struct PACKED SegmentedFragment
 {
-  FSSpecPtr fileSpec PACKED;
-  OSType rsrcType PACKED;
-  INTEGER rsrcID PACKED;
+  FSSpecPtr fileSpec;
+  OSType rsrcType;
+  INTEGER rsrcID;
 }
 SegmentedFragment;
 
-typedef struct FragmentLocator
+typedef struct PACKED FragmentLocator
 {
-  uint32 where PACKED;
+  uint32 where;
   union
   {
     MemFragment inMem;
     DiskFragment onDisk;
     SegmentedFragment inSegs;
-  }
-  u LPACKED;
+  } u;
 }
 FragmentLocator;
 
-typedef struct InitBlock
+typedef struct PACKED InitBlock
 {
-  uint32 contextID PACKED;
-  uint32 closureID PACKED;
-  FragmentLocator fragLocator LPACKED;
-  Ptr libName PACKED;
-  uint32 reserved4a PACKED;
-  uint32 reserved4b PACKED;
-  uint32 reserved4c PACKED;
-  uint32 reserved4d PACKED;
+  uint32 contextID;
+  uint32 closureID;
+  FragmentLocator fragLocator;
+  Ptr libName;
+  uint32 reserved4a;
+  uint32 reserved4b;
+  uint32 reserved4c;
+  uint32 reserved4d;
 }
 InitBlock;
 
@@ -183,10 +182,12 @@ typedef struct
   uint32 length;
   uint32 ref_count;
   uint8 perms;
+  /* TODO: should probably pad this with three bytes and then PACK the entire
+     structure, but only after verifying that it works that way on a Mac. */
 }
 section_info_t;
 
-typedef struct CFragConnection
+typedef struct PACKED CFragConnection
 {
   FragmentLocator frag;
   struct PEFLoaderInfoHeader *lihp;
@@ -204,7 +205,7 @@ enum
   fragNoMem = -2809
 };
 
-typedef struct
+typedef struct PACKED
 {
   ConnectionID cid;
   int32 n_symbols;
@@ -221,7 +222,7 @@ lib_t;
 #define LIB_FIRST_SYMBOL_X(l) ((l)->first_symbol)
 #define LIB_FIRST_SYMBOL(l) (CL (LIB_FIRST_SYMBOL_X (l)))
 
-typedef struct
+typedef struct PACKED
 {
   uint32 n_libs;
   lib_t libs[0];
@@ -233,7 +234,7 @@ CFragClosure_t;
 
 typedef CFragClosure_t *CFragClosureID;
 
-typedef struct
+typedef struct PACKED
 {
   const char *symbol_name;
   void *value;

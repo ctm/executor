@@ -27,43 +27,42 @@ typedef enum {
     Directory_ID
 } Single_ID;
 
-typedef struct {
-    ULONGINT id		PACKED;
-    ULONGINT offset	PACKED;
-    ULONGINT length	PACKED;
+typedef struct PACKED {
+  ULONGINT id;
+  ULONGINT offset;
+  ULONGINT length;
 } Single_descriptor;
 
-typedef struct {
-    LONGINT magic	PACKED;
-    LONGINT version	PACKED;
-    LONGINT filler[4]	PACKED;
-    INTEGER nentries	PACKED;
+typedef struct PACKED {
+  LONGINT magic;
+  LONGINT version;
+  LONGINT filler[4];
+  INTEGER nentries;
 } Single_header;
 
-typedef struct {
-    LONGINT crdat	PACKED;
-    LONGINT moddat	PACKED;
-    LONGINT backupdat	PACKED;
-    LONGINT accessdat	PACKED;
+typedef struct PACKED {
+  LONGINT crdat;
+  LONGINT moddat;
+  LONGINT backupdat;
+  LONGINT accessdat;
 } Single_dates;
 
-typedef struct {
-    FInfo finfo	LPACKED;
-    FXInfo fxinfo	LPACKED;
+typedef struct PACKED {
+  FInfo finfo;
+  FXInfo fxinfo;
 } Single_finfo;
 
 typedef ULONGINT Single_attribs;
 
-
-typedef struct defaulthead {
-    Single_header head	LPACKED;
-    Single_descriptor desc[10]	LPACKED;	/* we use 4, 6 for spare */
+typedef struct PACKED defaulthead {
+    Single_header head;
+    Single_descriptor desc[10];	/* we use 4, 6 for spare */
 } defaulthead_t;
 
-typedef struct defaultentries {
-    Single_attribs attribs	PACKED;
-    Single_dates   dates	LPACKED;
-    Single_finfo   finfo	LPACKED;
+typedef struct PACKED defaultentries {
+  Single_attribs attribs;
+  Single_dates   dates;
+  Single_finfo   finfo;
 } defaultentries_t;
 
 #define SINGLEMAGIC	0x0051600

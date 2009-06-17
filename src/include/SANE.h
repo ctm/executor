@@ -11,22 +11,22 @@
 
 /* Big-endian 64 bit "comp" data type.  Note that this has a NaN value! */
 typedef union {
-  struct {
-    ULONGINT hi PACKED;
-    ULONGINT lo PACKED;
-  } hilo LPACKED;
-  signed long long val PACKED;
+  struct PACKED {
+    ULONGINT hi;
+    ULONGINT lo;
+  } hilo;
+  signed long long val;
 } comp_t;
 
 
 /* Now we have a version of this in "native" byte order. */
 #if defined (LITTLEENDIAN)
 typedef union {
-  struct {
-    ULONGINT lo PACKED;
-    ULONGINT hi PACKED;
-  } hilo LPACKED;
-  signed long long val PACKED;
+  struct PACKED {
+    ULONGINT lo;
+    ULONGINT hi;
+  } hilo;
+  signed long long val;
 } native_comp_t;
 #else /* Not LITTLEENDIAN */
 typedef comp_t native_comp_t;
@@ -34,26 +34,26 @@ typedef comp_t native_comp_t;
 
 
 /* "Packed" IEEE 80 bit FP representation (zero field omitted). */
-typedef struct {
+typedef struct PACKED {
   /* Sign and exponent. */
   union {
 #if !defined (LITTLEENDIAN)
-    struct {                /* Here for added efficiency when BIGENDIAN. */
+    struct PACKED {           /* Here for added efficiency when BIGENDIAN. */
       unsigned short sgn:1;
       unsigned short exp:15;
-    } s PACKED;
+    } s;
 #endif
-    unsigned short sgn_and_exp PACKED;
-  } se LPACKED;
+    unsigned short sgn_and_exp;
+  } se;
 
   /* Mantissa. */
   union {
-    struct {
-      ULONGINT man_hi PACKED;
-      ULONGINT man_lo PACKED;
-    } hilo LPACKED;
-    unsigned long long man PACKED;
-  } man LPACKED;
+    struct PACKED {
+      ULONGINT man_hi;
+      ULONGINT man_lo;
+    } hilo;
+    unsigned long long man;
+  } man;
 } x80_t;
 
 
@@ -65,20 +65,20 @@ typedef comp_t comp;
 
 /* This only makes sense on the 68k. */
 #if defined (mc68000)
-typedef struct {
-    INTEGER exp	PACKED;
-    INTEGER zero	PACKED;
-    INTEGER man[4]	PACKED;
+typedef struct PACKED {
+  INTEGER exp;
+  INTEGER zero;
+  INTEGER man[4];
 } extended96;
 #endif
 
 #define SIGDIGLEN 20
 
-typedef struct {
-  unsigned char sgn LPACKED;
-  unsigned char unused_filler LPACKED;
-  INTEGER exp PACKED;
-  unsigned char sig[SIGDIGLEN] LPACKED;
+typedef struct PACKED {
+  unsigned char sgn;
+  unsigned char unused_filler;
+  INTEGER exp;
+  unsigned char sig[SIGDIGLEN];
 } Decimal;
 
 typedef enum { FloatDecimal, FixedDecimal = 256 } toobigdecformstyle_t;
@@ -90,9 +90,9 @@ typedef INTEGER DecFormStyle;
 typedef enum {SNaN = 1, QNaN, Infinite, ZeroNum, NormalNum, DenormalNum}
 								      NumClass;
 
-typedef struct {
-    DecFormStyle style	PACKED;
-    INTEGER  digits	PACKED;
+typedef struct PACKED {
+  DecFormStyle style;
+  INTEGER  digits;
 } DecForm;
 
 #define Decstr char *

@@ -68,9 +68,9 @@ typedef enum { bold=1,    italic=2,    underline=4, outline=8,
 
 typedef SignedByte Style;
 
-typedef struct {
-    INTEGER rgnSize	PACKED;
-    Rect rgnBBox	LPACKED;
+typedef struct PACKED {
+  INTEGER rgnSize;
+  Rect rgnBBox;
 } Region;
 
 typedef Region *RgnPtr;
@@ -78,19 +78,19 @@ typedef struct { RgnPtr p PACKED_P; } HIDDEN_RgnPtr;
 typedef HIDDEN_RgnPtr *RgnHandle;
 typedef struct { RgnHandle p PACKED_P; } HIDDEN_RgnHandle;
 
-typedef struct {
-    Ptr baseAddr	PACKED_P;
-    INTEGER rowBytes	PACKED;
-    Rect bounds	LPACKED;
+typedef struct PACKED {
+  Ptr baseAddr	PACKED_P;
+  INTEGER rowBytes;
+  Rect bounds;
 } BitMap;
 
 typedef Byte Pattern[8];
 typedef INTEGER Bits16[16];
 
-typedef struct {
-    Bits16 data	PACKED;
-    Bits16 mask	PACKED;
-    Point hotSpot	LPACKED;
+typedef struct PACKED {
+  Bits16 data;
+  Bits16 mask;
+  Point hotSpot;
 } Cursor;
 
 typedef Cursor *CursPtr;
@@ -104,24 +104,24 @@ typedef SignedByte GrafVerb;
 #define invert	3
 #define fill	4
 
-typedef struct {
-    INTEGER polySize	PACKED;
-    Rect polyBBox	LPACKED;
-    Point polyPoints[1]	LPACKED;
+typedef struct PACKED {
+  INTEGER polySize;
+  Rect polyBBox;
+  Point polyPoints[1];
 } Polygon;
 
 typedef Polygon *PolyPtr;
 typedef struct { PolyPtr p PACKED_P; } HIDDEN_PolyPtr;
 typedef HIDDEN_PolyPtr *PolyHandle;
 
-typedef struct {
-    INTEGER ascent	PACKED;
-    INTEGER descent	PACKED;
-    INTEGER widMax	PACKED;
-    INTEGER leading	PACKED;
+typedef struct PACKED {
+  INTEGER ascent;
+  INTEGER descent;
+  INTEGER widMax;
+  INTEGER leading;
 } FontInfo;
 
-typedef struct {
+typedef struct PACKED {
     pascal trap void (*textProc)(INTEGER bc, Ptr textb, Point num, Point den)	PACKED_P;
     pascal trap void (*lineProc)(Point drawto)	PACKED_P;
     pascal trap void (*rectProc)(GrafVerb verb, Rect *rp)	PACKED_P;
@@ -143,52 +143,52 @@ typedef struct {
 
 typedef QDProcs *QDProcsPtr;
 
-typedef struct {
-    INTEGER device	PACKED;
-    BitMap portBits	LPACKED;
-    Rect portRect	LPACKED;
-    RgnHandle visRgn	PACKED_P;
-    RgnHandle clipRgn	PACKED_P;
-    Pattern bkPat	LPACKED;
-    Pattern fillPat	LPACKED;
-    Point pnLoc	LPACKED;
-    Point pnSize	LPACKED;
-    INTEGER pnMode	PACKED;
-    Pattern pnPat	LPACKED;
-    INTEGER pnVis	PACKED;
-    INTEGER txFont	PACKED;
-    Style txFace	LPACKED;
-    Byte filler		LPACKED;
-    INTEGER txMode	PACKED;
-    INTEGER txSize	PACKED;
-    Fixed spExtra	PACKED;
-    LONGINT fgColor	PACKED;
-    LONGINT bkColor	PACKED;
-    INTEGER colrBit	PACKED;
-    INTEGER patStretch	PACKED;
-    Handle picSave	PACKED_P;
-    Handle rgnSave	PACKED_P;
-    Handle polySave	PACKED_P;
-    QDProcsPtr grafProcs	PACKED_P;
+typedef struct PACKED {
+  INTEGER device;
+  BitMap portBits;
+  Rect portRect;
+  RgnHandle visRgn	PACKED_P;
+  RgnHandle clipRgn	PACKED_P;
+  Pattern bkPat;
+  Pattern fillPat;
+  Point pnLoc;
+  Point pnSize;
+  INTEGER pnMode;
+  Pattern pnPat;
+  INTEGER pnVis;
+  INTEGER txFont;
+  Style txFace;
+  Byte filler;
+  INTEGER txMode;
+  INTEGER txSize;
+  Fixed spExtra;
+  LONGINT fgColor;
+  LONGINT bkColor;
+  INTEGER colrBit;
+  INTEGER patStretch;
+  Handle picSave	PACKED_P;
+  Handle rgnSave	PACKED_P;
+  Handle polySave	PACKED_P;
+  QDProcsPtr grafProcs	PACKED_P;
 } GrafPort;
 
 typedef GrafPort *GrafPtr;
 typedef struct { GrafPtr p PACKED_P; } HIDDEN_GrafPtr;
 
-typedef struct {
-    INTEGER picSize	PACKED;
-    Rect picFrame	LPACKED;
+typedef struct PACKED {
+  INTEGER picSize;
+  Rect picFrame;
 } Picture;
 
 typedef Picture *PicPtr;
 typedef struct { PicPtr p PACKED_P; } HIDDEN_PicPtr;
 typedef HIDDEN_PicPtr *PicHandle;
 
-typedef struct {
-    Point pnLoc	LPACKED;
-    Point pnSize	LPACKED;
-    INTEGER pnMode	PACKED;
-    Pattern pnPat	LPACKED;
+typedef struct PACKED {
+  Point pnLoc;
+  Point pnSize;
+  INTEGER pnMode;
+  Pattern pnPat;
 } PenState;
 
 /* IMV stuff is used when we parse Version 2 pictures, but the IMV calls
@@ -202,50 +202,50 @@ typedef enum { blend=32,    addPin, addOver, subPin,
 
 #define defQDColors	127
 
-typedef struct {
-    unsigned short red		PACKED;
-    unsigned short green	PACKED;
-    unsigned short blue		PACKED;
+typedef struct PACKED {
+  unsigned short red;
+  unsigned short green;
+  unsigned short blue;
 } RGBColor;
 
-typedef struct {
-  SmallFract hue		PACKED;
-  SmallFract saturation		PACKED;
-  SmallFract value		PACKED;
+typedef struct PACKED {
+  SmallFract hue;
+  SmallFract saturation;
+  SmallFract value;
 } HSVColor;
 
-typedef struct {
-  SmallFract hue		PACKED;
-  SmallFract saturation		PACKED;
-  SmallFract lightness		PACKED;
+typedef struct PACKED {
+  SmallFract hue;
+  SmallFract saturation;
+  SmallFract lightness;
 } HSLColor;
 
-typedef struct { 
-  SmallFract cyan		PACKED;
-  SmallFract magenta		PACKED;
-  SmallFract yellow		PACKED;
+typedef struct PACKED { 
+  SmallFract cyan;
+  SmallFract magenta;
+  SmallFract yellow;
 } CMYColor;
 
-typedef struct ColorSpec
+typedef struct PACKED ColorSpec
 {
-  INTEGER	value	PACKED;
-  RGBColor	rgb	LPACKED;
+  INTEGER	value;
+  RGBColor	rgb;
 } ColorSpec;
 
 typedef ColorSpec cSpecArray[1];	/* can't use 0 */
 
-typedef struct {
-    LONGINT    ctSeed	PACKED;
-    unsigned short    ctFlags	PACKED;
-    INTEGER    ctSize	PACKED;
-    cSpecArray ctTable	LPACKED;
+typedef struct PACKED {
+  LONGINT    ctSeed;
+  unsigned short    ctFlags;
+  INTEGER    ctSize;
+  cSpecArray ctTable;
 } ColorTable, *CTabPtr;
 
 typedef struct { CTabPtr p PACKED_P; } HIDDEN_CTabPtr;
 typedef HIDDEN_CTabPtr *CTabHandle;
 typedef struct { CTabHandle p PACKED_P; } HIDDEN_CTabHandle;
 
-typedef struct {
+typedef struct PACKED {
     Ptr textProc	PACKED_P;
     Ptr lineProc	PACKED_P;
     Ptr rectProc	PACKED_P;
@@ -268,22 +268,22 @@ typedef struct {
     Ptr newProc6Proc	PACKED_P;
 } CQDProcs, *CQDProcsPtr;
 
-typedef struct {
-    Ptr baseAddr	PACKED_P;
-    INTEGER rowBytes	PACKED;
-    Rect bounds	LPACKED;
-    INTEGER pmVersion	PACKED;
-    INTEGER packType	PACKED;
-    LONGINT packSize	PACKED;
-    Fixed hRes	PACKED;
-    Fixed vRes	PACKED;
-    INTEGER pixelType	PACKED;
-    INTEGER pixelSize	PACKED;
-    INTEGER cmpCount	PACKED;
-    INTEGER cmpSize	PACKED;
-    LONGINT planeBytes	PACKED;
+typedef struct PACKED {
+  Ptr baseAddr	PACKED_P;
+  INTEGER rowBytes;
+  Rect bounds;
+  INTEGER pmVersion;
+  INTEGER packType;
+  LONGINT packSize;
+  Fixed hRes;
+  Fixed vRes;
+  INTEGER pixelType;
+  INTEGER pixelSize;
+  INTEGER cmpCount;
+  INTEGER cmpSize;
+  LONGINT planeBytes;
     CTabHandle pmTable	PACKED_P;
-    LONGINT pmReserved	PACKED;
+  LONGINT pmReserved;
 } PixMap, *PixMapPtr;
 typedef struct { PixMapPtr p PACKED_P; } HIDDEN_PixMapPtr;
 typedef HIDDEN_PixMapPtr *PixMapHandle;
@@ -298,77 +298,77 @@ enum pixmap_pixel_types
 
 #define ROWMASK	0x1FFF
 
-typedef struct {
-    INTEGER patType	PACKED;
-    PixMapHandle patMap	PACKED_P;
-    Handle patData	PACKED_P;
-    Handle patXData	PACKED_P;
-    INTEGER patXValid	PACKED;
-    Handle patXMap	PACKED_P;
-    Pattern pat1Data	LPACKED;
+typedef struct PACKED {
+  INTEGER patType;
+  PixMapHandle patMap	PACKED_P;
+  Handle patData	PACKED_P;
+  Handle patXData	PACKED_P;
+  INTEGER patXValid;
+  Handle patXMap	PACKED_P;
+  Pattern pat1Data;
 } PixPat, *PixPatPtr;
 typedef struct { PixPatPtr p PACKED_P; } HIDDEN_PixPatPtr;
 typedef HIDDEN_PixPatPtr *PixPatHandle;
 typedef struct { PixPatHandle p PACKED_P; } HIDDEN_PixPatHandle;
 
-typedef struct {
-    INTEGER device	PACKED;
-    PixMapHandle portPixMap	PACKED_P;
-    INTEGER portVersion	PACKED;
-    Handle grafVars	PACKED_P;
-    INTEGER chExtra	PACKED;
-    INTEGER pnLocHFrac	PACKED;
-    Rect portRect	LPACKED;
-    RgnHandle visRgn	PACKED_P;
-    RgnHandle clipRgn	PACKED_P;
-    PixPatHandle bkPixPat	PACKED_P;
-    RGBColor rgbFgColor	LPACKED;
-    RGBColor rgbBkColor	LPACKED;
-    Point pnLoc	LPACKED;
-    Point pnSize	LPACKED;
-    INTEGER pnMode	PACKED;
-    PixPatHandle pnPixPat	PACKED_P;
-    PixPatHandle fillPixPat	PACKED_P;
-    INTEGER pnVis	PACKED;
-    INTEGER txFont	PACKED;
-    Style txFace	LPACKED;
-    Byte filler		LPACKED;
-    INTEGER txMode	PACKED;
-    INTEGER txSize	PACKED;
-    Fixed spExtra	PACKED;
-    LONGINT fgColor	PACKED;
-    LONGINT bkColor	PACKED;
-    INTEGER colrBit	PACKED;
-    INTEGER patStretch	PACKED;
-    Handle picSave	PACKED_P;
-    Handle rgnSave	PACKED_P;
-    Handle polySave	PACKED_P;
-    CQDProcsPtr grafProcs	PACKED_P;
+typedef struct PACKED {
+  INTEGER device;
+  PixMapHandle portPixMap	PACKED_P;
+  INTEGER portVersion;
+  Handle grafVars	PACKED_P;
+  INTEGER chExtra;
+  INTEGER pnLocHFrac;
+  Rect portRect;
+  RgnHandle visRgn	PACKED_P;
+  RgnHandle clipRgn	PACKED_P;
+  PixPatHandle bkPixPat	PACKED_P;
+  RGBColor rgbFgColor;
+  RGBColor rgbBkColor;
+  Point pnLoc;
+  Point pnSize;
+  INTEGER pnMode;
+  PixPatHandle pnPixPat	PACKED_P;
+  PixPatHandle fillPixPat	PACKED_P;
+  INTEGER pnVis;
+  INTEGER txFont;
+  Style txFace;
+  Byte filler;
+  INTEGER txMode;
+  INTEGER txSize;
+  Fixed spExtra;
+  LONGINT fgColor;
+  LONGINT bkColor;
+  INTEGER colrBit;
+  INTEGER patStretch;
+  Handle picSave	PACKED_P;
+  Handle rgnSave	PACKED_P;
+  Handle polySave	PACKED_P;
+  CQDProcsPtr grafProcs	PACKED_P;
 } CGrafPort, *CGrafPtr;
 
 typedef struct { CGrafPtr p PACKED_P; } HIDDEN_CGrafPtr;
 
-typedef struct {
-    INTEGER crsrType	PACKED;
-    PixMapHandle crsrMap	PACKED_P;
-    Handle crsrData	PACKED_P;
-    Handle crsrXData	PACKED_P;
-    INTEGER crsrXValid	PACKED;
-    Handle crsrXHandle	PACKED_P;
-    Bits16 crsr1Data	PACKED;
-    Bits16 crsrMask	PACKED;
-    Point crsrHotSpot	LPACKED;
-    LONGINT crsrXTable	PACKED;
-    LONGINT crsrID	PACKED;
+typedef struct PACKED {
+  INTEGER crsrType;
+  PixMapHandle crsrMap	PACKED_P;
+  Handle crsrData	PACKED_P;
+  Handle crsrXData	PACKED_P;
+  INTEGER crsrXValid;
+  Handle crsrXHandle	PACKED_P;
+  Bits16 crsr1Data;
+  Bits16 crsrMask;
+  Point crsrHotSpot;
+  LONGINT crsrXTable;
+  LONGINT crsrID;
 } CCrsr, *CCrsrPtr;
 typedef struct { CCrsrPtr p PACKED_P; } HIDDEN_CCrsrPtr;
 typedef HIDDEN_CCrsrPtr *CCrsrHandle;
 
-typedef struct {
-    uint16 red	PACKED;
-    uint16 green	PACKED;
-    uint16 blue	PACKED;
-    int32 matchData	PACKED;
+typedef struct PACKED {
+  uint16 red;
+  uint16 green;
+  uint16 blue;
+  int32 matchData;
 } MatchRec;
 
 typedef struct { HIDDEN_GrafPtr *p PACKED_P; } HIDDEN_GrafPtr_Ptr;

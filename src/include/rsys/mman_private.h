@@ -12,7 +12,7 @@
 
 #include "rsys/mman.h"
 
-typedef struct block_header
+typedef struct PACKED block_header
 {
   /* the bogo new IM books implies (via a picture) that the field
      order is `location, size, flags'; and it says that the 24bit
@@ -27,14 +27,14 @@ typedef struct block_header
 #endif
   
   /* various flags */
-  uint8 flags			LPACKED;
-  uint8 master_ptr_flags	LPACKED;
-  uint8 reserved		LPACKED;
-  uint8 size_correction		LPACKED;
+  uint8 flags;
+  uint8 master_ptr_flags;
+  uint8 reserved;
+  uint8 size_correction;
   
-  uint32 size			PACKED;
+  uint32 size;
   
-  uint32 location_u		PACKED; /* sometimes it's a pointer (the zone),
+  uint32 location_u; /* sometimes it's a pointer (the zone),
 					   sometimes it's an offset */
   
 #if defined (MM_RECORD_ALLOCATION_STACK_TRACES)
@@ -47,7 +47,7 @@ typedef struct block_header
 #endif
   
   /* data contained in the block */
-  uint32 data[0]		PACKED;
+  uint32 data[0];
 } block_header_t;
 
 #define BLOCK_LOCATION_OFFSET_X(block)	((block)->location_u)
@@ -194,10 +194,10 @@ typedef struct
 zone_info_t;
 
 
-typedef struct {
+typedef struct PACKED {
   Zone *sp	PACKED_P;
   Ptr lp	PACKED_P;
-  INTEGER mm	PACKED;
+  INTEGER mm;
   ProcPtr gz	PACKED_P;
 } pblock_t;
 

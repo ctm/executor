@@ -8,20 +8,20 @@
  * $Id: NotifyMgr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-typedef struct {
-    QElemPtr qLink	PACKED_P;
-    INTEGER qType	PACKED;
-    INTEGER nmFlags	PACKED;
-    LONGINT nmPrivate	PACKED;
-    INTEGER nmReserved	PACKED;
-    INTEGER nmMark	PACKED;
-    Handle nmIcon	PACKED_P;
-    Handle nmSound	PACKED_P;
-    StringPtr nmStr	PACKED_P;
-    ProcPtr nmResp	PACKED_P;     /* pascal void myresponse(NMRecPtr foo) */
+typedef struct PACKED {
+  QElemPtr qLink	PACKED_P;
+  INTEGER qType;
+  INTEGER nmFlags;
+  LONGINT nmPrivate;
+  INTEGER nmReserved;
+  INTEGER nmMark;
+  Handle nmIcon	PACKED_P;
+  Handle nmSound	PACKED_P;
+  StringPtr nmStr	PACKED_P;
+  ProcPtr nmResp	PACKED_P;     /* pascal void myresponse(NMRecPtr foo) */
                         /* value of -1 means remove queue element
                            automatically */
-    LONGINT nmRefCon	PACKED;
+  LONGINT nmRefCon;
 } NMRec, *NMRecPtr;
 
 extern trap OSErrRET NMInstall( NMRecPtr nmptr );

@@ -63,12 +63,12 @@ enum
   rightControlKey = 0x8000
 };
 
-typedef struct {
-    INTEGER what	PACKED;
-    LONGINT message	PACKED;
-    LONGINT when	PACKED;
-    Point where	LPACKED;
-    INTEGER modifiers	PACKED;
+typedef struct PACKED {
+  INTEGER what;
+  LONGINT message;
+  LONGINT when;
+  Point where;
+  INTEGER modifiers;
 } EventRecord;
 
 #if !defined (KeyMap)

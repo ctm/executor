@@ -8,7 +8,7 @@
  * $Id: toolevent.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-typedef struct {
+typedef struct PACKED {
     INTEGER version;
     INTEGER tableno[256];
     INTEGER ntables;

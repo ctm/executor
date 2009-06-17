@@ -1,6 +1,3 @@
-        Fix the bad padding we're getting on Mac OS X PPC (put PACKED after
-        struct)
-
 	package up the System Folder and whatnot so that people w/o the
 	old executor-aux can run Executor
 

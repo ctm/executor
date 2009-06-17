@@ -1,4 +1,3 @@
-
 #if !defined (_MACTYPES_H_)
 #define _MACTYPES_H_
 
@@ -55,8 +54,8 @@ typedef	LONGINT	INTEGERRET;
 typedef	LONGINT	BOOLEANRET;
 typedef	LONGINT	SignedByteRET;
 
-typedef struct {
-    INTEGER qFlags	PACKED;
+typedef struct PACKED {
+    INTEGER qFlags;
     union __qe *qHead	PACKED_P;	/* actually QElemPtr */
     union __qe *qTail	PACKED_P;	/* actually QElemPtr */
 } QHdr;
@@ -68,22 +67,22 @@ typedef struct { QElemPtr p PACKED_P; } HIDDEN_QElemPtr;
 #define noErr	0
 
 /* from Quickdraw.h */
-typedef struct Point
+typedef struct PACKED Point
 {
-  INTEGER v	PACKED;
-  INTEGER h	PACKED;
+  INTEGER v;
+  INTEGER h;
 } Point;
 
 #define NULL_POINTP ((Point *) NULL)
 
 #define ZEROPOINT(p) (p.v = CWC (0), p.h = CWC (0))
 
-typedef struct Rect
+typedef struct PACKED Rect
 {
-  INTEGER top		PACKED;
-  INTEGER left		PACKED;
-  INTEGER bottom	PACKED;
-  INTEGER right		PACKED;
+  INTEGER top;
+  INTEGER left;
+  INTEGER bottom;
+  INTEGER right;
 } Rect;
 
 typedef Rect *RectPtr;

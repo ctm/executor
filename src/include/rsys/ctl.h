@@ -90,10 +90,10 @@ extern LONGINT ROMlib_ctlcall (ControlHandle c, INTEGER i, LONGINT l);
 #define POPUP_TITLE_WIDTH(popup)	(HxX (popup, title_width))
 #define POPUP_FLAGS(popup)		(HxX (popup, flags))
 
-struct popup_data
+struct PACKED popup_data
 {
   MenuHandle menu	PACKED_P;
-  int16 menu_id		PACKED;
+  int16 menu_id;
   
   /* private fields */
   int16 title_width;
@@ -105,28 +105,28 @@ typedef popup_data_t *popup_data_ptr;
 typedef struct { popup_data_ptr p PACKED_P; } hidden_popup_data_ptr;
 typedef hidden_popup_data_ptr *popup_data_handle;
 
-typedef struct {
-    Rect _tlimit	LPACKED;
-    Rect _tslop		LPACKED;
-    INTEGER _taxis	PACKED;
+typedef struct PACKED {
+  Rect _tlimit;
+  Rect _tslop;
+  INTEGER _taxis;
 } thumbstr;
 
-typedef struct {
-    Rect _crect		LPACKED;
-    INTEGER _cvalue	PACKED;
-    INTEGER _cvisible	PACKED;
-    INTEGER _cmax	PACKED;
-    INTEGER _cmin	PACKED;
-    INTEGER _cprocid	PACKED;
-    LONGINT _crefcon	PACKED;
-    Byte _ctitle	LPACKED;
+typedef struct PACKED {
+  Rect _crect;
+  INTEGER _cvalue;
+  INTEGER _cvisible;
+  INTEGER _cmax;
+  INTEGER _cmin;
+  INTEGER _cprocid;
+  LONGINT _crefcon;
+  Byte _ctitle;
 } contrlrestype;
 
-struct lsastr
+struct PACKED lsastr
 {
-  Rect limitRect	LPACKED;
-  Rect slopRect		LPACKED;
-  INTEGER axis		PACKED;
+  Rect limitRect;
+  Rect slopRect;
+  INTEGER axis;
 };
 
 extern BOOLEAN ROMlib_cdef0_is_rectangular;

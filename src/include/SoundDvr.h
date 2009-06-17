@@ -14,23 +14,23 @@
 #define ffMode	0
 
 typedef Byte FreeWave[30001];
-typedef struct {
-    INTEGER mode	PACKED;
-    Fixed fcount	PACKED;
-    FreeWave waveBytes	LPACKED;
+typedef struct PACKED {
+  INTEGER mode;
+  Fixed fcount;
+  FreeWave waveBytes;
 } FFSynthRec;
 typedef FFSynthRec *FFSynthPtr;
 
-typedef struct {
-    INTEGER tcount	PACKED;
-    INTEGER amplitude	PACKED;
-    INTEGER tduration	PACKED;
+typedef struct PACKED {
+  INTEGER tcount;
+  INTEGER amplitude;
+  INTEGER tduration;
 } Tone;
 typedef Tone Tones[5001];
 
-typedef struct {
-    INTEGER mode	PACKED;
-    Tones triplets	LPACKED;
+typedef struct PACKED {
+  INTEGER mode;
+  Tones triplets;
 } SWSynthRec;
 typedef SWSynthRec *SWSynthPtr;
 
@@ -43,27 +43,27 @@ typedef Byte Wave;
 
 typedef Wave *WavePtr;
 
-typedef struct {
-    INTEGER fduration	PACKED;
-    Fixed sound1Rate	PACKED;
-    LONGINT sound1Phase	PACKED;
-    Fixed sound2Rate	PACKED;
-    LONGINT sound2Phase	PACKED;
-    Fixed sound3Rate	PACKED;
-    LONGINT sound3Phase	PACKED;
-    Fixed sound4Rate	PACKED;
-    LONGINT sound4Phase	PACKED;
-    WavePtr sound1Wave	PACKED_P;
-    WavePtr sound2Wave	PACKED_P;
-    WavePtr sound3Wave	PACKED_P;
-    WavePtr sound4Wave	PACKED_P;
+typedef struct PACKED {
+  INTEGER fduration;
+  Fixed sound1Rate;
+  LONGINT sound1Phase;
+  Fixed sound2Rate;
+  LONGINT sound2Phase;
+  Fixed sound3Rate;
+  LONGINT sound3Phase;
+  Fixed sound4Rate;
+  LONGINT sound4Phase;
+  WavePtr sound1Wave	PACKED_P;
+  WavePtr sound2Wave	PACKED_P;
+  WavePtr sound3Wave	PACKED_P;
+  WavePtr sound4Wave	PACKED_P;
 } FTSoundRec;
 typedef FTSoundRec *FTSndRecPtr;
 typedef struct { FTSndRecPtr p PACKED_P; } HIDDEN_FTSndRecPtr;
 
-typedef struct {
-    INTEGER mode	PACKED;
-    FTSndRecPtr sndRec	PACKED_P;
+typedef struct PACKED {
+  INTEGER mode;
+  FTSndRecPtr sndRec	PACKED_P;
 } FTSynthRec;
 typedef FTSynthRec *FTsynthPtr;
 

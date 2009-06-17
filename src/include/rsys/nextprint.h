@@ -33,46 +33,46 @@ typedef struct {
     short h;
 } comPoint;
 
-typedef struct {
-    char *baseAddr	PACKED_P;
-    short rowBytes	PACKED;
-    comRect bounds	PACKED;
+typedef struct PACKED {
+  char *baseAddr	PACKED_P;
+  short rowBytes;
+  comRect bounds;
 } comBitMap;
 
-typedef struct {
-    char *baseAddr	PACKED_P;
-    short rowBytes	PACKED;
-    comRect bounds	PACKED;
-    short pmVersion	PACKED;
-    short packType	PACKED;
-    LONGINT packSize	PACKED;
-    LONGINT hRes	PACKED;
-    LONGINT vRes	PACKED;
-    short pixelType	PACKED;
-    short pixelSize	PACKED;
-    short cmpCount	PACKED;
-    short cmpSize	PACKED;
-    LONGINT planeBytes	PACKED;
-    LONGINT pmTable	PACKED;	/* really a CTabHandle */
-    LONGINT pmReserved	PACKED;
+typedef struct PACKED {
+  char *baseAddr	PACKED_P;
+  short rowBytes;
+  comRect bounds;
+  short pmVersion;
+  short packType;
+  LONGINT packSize;
+  LONGINT hRes;
+  LONGINT vRes;
+  short pixelType;
+  short pixelSize;
+  short cmpCount;
+  short cmpSize;
+  LONGINT planeBytes;
+  LONGINT pmTable;	/* really a CTabHandle */
+  LONGINT pmReserved;
 } comPixMap;
 
-typedef struct {
-    short ascent	PACKED;
-    short descent	PACKED;
-    short widMax	PACKED;
-    short leading	PACKED;
+typedef struct PACKED {
+  short ascent;
+  short descent;
+  short widMax;
+  short leading;
 } comFontInfo;
 
-typedef struct {
-    short polySize	PACKED;
-    comRect polyBBox	PACKED;
-    comPoint polyPoints[1]	PACKED;
+typedef struct PACKED comPoly {
+  short polySize;
+  comRect polyBBox;
+  comPoint polyPoints[1];
 } **comPolyHandle;
 
-typedef struct {
-    short rgnSize	PACKED;
-    comRect rgnBBox	PACKED;
+typedef struct PACKED comRgn {
+  short rgnSize;
+  comRect rgnBBox;
 } **comRgnHandle;
 
 typedef enum {
@@ -91,33 +91,33 @@ typedef LONGINT comFixed;
 
 typedef unsigned char comPattern[8];
 
-typedef struct {
-    short device	PACKED;
-    comBitMap portBits	LPACKED;
-    comRect portRect	PACKED;
-    comRgnHandle visRgn	PACKED_P;
-    comRgnHandle clipRgn	PACKED_P;
-    comPattern bkPat	LPACKED;
-    comPattern fillPat	LPACKED;
-    comPoint pnLoc	PACKED;
-    comPoint pnSize	PACKED;
-    short pnMode	PACKED;
-    comPattern pnPat	LPACKED;
-    short pnVis	PACKED;
-    short txFont	PACKED;
-    char txFace	LPACKED;
-    char padding LPACKED;
-    short txMode	PACKED;
-    short txSize	PACKED;
-    comFixed spExtra	PACKED;
-    LONGINT fgColor	PACKED;
-    LONGINT bkColor	PACKED;
-    short colrBit	PACKED;
-    short patStretch	PACKED;
-    comHandle picSave	PACKED_P;
-    comHandle rgnSave	PACKED_P;
-    comHandle polySave	PACKED_P;
-    comPtr grafProcs	PACKED_P;
+typedef struct PACKED {
+  short device;
+  comBitMap portBits;
+  comRect portRect;
+  comRgnHandle visRgn	PACKED_P;
+  comRgnHandle clipRgn	PACKED_P;
+  comPattern bkPat;
+  comPattern fillPat;
+  comPoint pnLoc;
+  comPoint pnSize;
+  short pnMode;
+  comPattern pnPat;
+  short pnVis;
+  short txFont;
+  char txFace;
+  char padding;
+  short txMode;
+  short txSize;
+  comFixed spExtra;
+  LONGINT fgColor;
+  LONGINT bkColor;
+  short colrBit;
+  short patStretch;
+  comHandle picSave	PACKED_P;
+  comHandle rgnSave	PACKED_P;
+  comHandle polySave	PACKED_P;
+  comPtr grafProcs	PACKED_P;
 } comGrafPort, *comGrafPtr;
 
 extern void NeXTPrArc(LONGINT verb, comRect *r, LONGINT starta, LONGINT arca,

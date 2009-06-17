@@ -96,27 +96,27 @@ enum { smKCHRCache = 38 };
 
 typedef uint8 StyledLineBreakCode;
 
-typedef struct DateCacheRec
+typedef struct PACKED DateCacheRec
 {
-  int16 hidden[256] 	PACKED;
+  int16 hidden[256];
 } DateCacheRec, *DateCachePtr;
 
-typedef struct LongDateRec
+typedef struct PACKED LongDateRec
 {
-  int16 era	PACKED;
-  int16 year	PACKED;
-  int16 month	PACKED;
-  int16 day	PACKED;
-  int16 hour	PACKED;
-  int16 minute	PACKED;
-  int16 second	PACKED;
-  int16 dayOfWeek	PACKED;
-  int16 dayOfYear	PACKED;
-  int16 weekOfYear	PACKED;
-  int16 pm	PACKED;
-  int16 res1	PACKED;
-  int16 res2	PACKED;
-  int16 res3	PACKED;
+  int16 era;
+  int16 year;
+  int16 month;
+  int16 day;
+  int16 hour;
+  int16 minute;
+  int16 second;
+  int16 dayOfWeek;
+  int16 dayOfYear;
+  int16 weekOfYear;
+  int16 pm;
+  int16 res1;
+  int16 res2;
+  int16 res3;
 } LongDateRec, *LongDatePtr;
 
 typedef INTEGER TruncCode;
@@ -130,11 +130,11 @@ typedef int16 ScriptRunStatus; /* Not sure this is correct, since in IM
 
 typedef INTEGER FormatStatus;
 
-typedef struct
+typedef struct PACKED
 {
-  Byte fLength LPACKED;
-  Byte fVersion LPACKED;
-  SignedByte data[253] LPACKED;
+  Byte fLength;
+  Byte fVersion;
+  SignedByte data[253];
 }
 NumFormatStringRec;
 
@@ -152,15 +152,15 @@ typedef struct
 }
 WideCharArr;
 
-typedef struct
+typedef struct PACKED
 {
-  INTEGER version PACKED;
-  WideChar data[31] PACKED;
-  WideCharArr pePlus LPACKED;
-  WideCharArr peMinus LPACKED;
-  WideCharArr peMinusPlus LPACKED;
-  WideCharArr altNumTable LPACKED;
-  CHAR reserved[20] PACKED;
+  INTEGER version;
+  WideChar data[31];
+  WideCharArr pePlus;
+  WideCharArr peMinus;
+  WideCharArr peMinusPlus;
+  WideCharArr altNumTable;
+  CHAR reserved[20];
 }
 NumberParts;
 
@@ -172,12 +172,12 @@ typedef unsigned char LongDateField;
 
 typedef char DateDelta;
 
-typedef struct
+typedef struct PACKED
 {
-  long togFlags PACKED;
-  ResType amChars PACKED;
-  ResType pmChars PACKED;
-  long reserved[4] PACKED;
+  int32 togFlags;
+  ResType amChars;
+  ResType pmChars;
+  int32 reserved[4];
 }
 TogglePB;
 
