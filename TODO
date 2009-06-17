@@ -1,3 +1,6 @@
+        link with a debugging version of Syn68k and figure out where
+        the Mac OS X PPC port is dieing
+
 	package up the System Folder and whatnot so that people w/o the
 	old executor-aux can run Executor
 

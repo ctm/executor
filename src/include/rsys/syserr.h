@@ -1,106 +1,105 @@
 #if !defined (__rsys_syserr_h__)
 #  define __rsys_syserr_h__
 
-typedef struct {
-    INTEGER	count	PACKED;
+typedef struct PACKED {
+  INTEGER count;
 
-    INTEGER	id1	PACKED,
-		len1	PACKED,
-		prim1	PACKED,
-		sec1	PACKED,
-		icon1	PACKED,
-		proc1	PACKED,
-		but1	PACKED;
+  INTEGER id1;
+  INTEGER len1;
+  INTEGER prim1;
+  INTEGER sec1;
+  INTEGER icon1;
+  INTEGER proc1;
+  INTEGER but1;
 
-    INTEGER	id2	PACKED,
-    		len2	PACKED;
-    Point	point2;
-    unsigned char str2[52];
+  INTEGER id2;
+  INTEGER len2;
+  Point	point2;
+  unsigned char str2[52];
 
-    INTEGER	id3	PACKED,
-		len3	PACKED;
+  INTEGER id3;
+  INTEGER len3;
 
-    Rect	rect3;
-    char	icon3[32][4];
+  Rect rect3;
+  char icon3[32][4];
 
-    INTEGER	id4	PACKED,
-		len4	PACKED;
+  INTEGER id4;
+  INTEGER len4;
 
-    Point	point4;
-    char	str4[46];
+  Point	point4;
+  char	str4[46];
 
-    INTEGER	id5	PACKED,
-   	        len5	PACKED,
-		num5	PACKED,
-		str5	PACKED;
-    Rect	rect5;
-    INTEGER	proc5	PACKED,
-    		str5b	PACKED;
-    Rect	rect5b;
-    INTEGER	proc5b	PACKED;
+  INTEGER id5;
+  INTEGER len5;
+  INTEGER num5;
+  INTEGER str5;
+  Rect	rect5;
+  INTEGER proc5;
+  INTEGER str5b;
+  Rect	rect5b;
+  INTEGER	proc5b	PACKED;
 
-    INTEGER	id6	PACKED,
-		len6	PACKED;
+  INTEGER id6;
+  INTEGER len6;
 
-    char	str6[4];
+  char	str6[4];
 
-    INTEGER	id7	PACKED,
-		len7	PACKED;
-    char	str7[6];
+  INTEGER id7;
+  INTEGER len7;
+  char	str7[6];
 
-    INTEGER	id8	PACKED,
-		len8	PACKED;
-    void	(*func8)(void)	PACKED;
-
+  INTEGER id8;
+  INTEGER len8;
+  void	(*func8)(void)	PACKED;
 } myalerttab_t;
 
 
-struct adef {
-    INTEGER id			PACKED,
-	    alen		PACKED,
-	    primetextid		PACKED,
-	    secondtextid	PACKED,
-	    iconid		PACKED,
-	    procid		PACKED,
-	    buttonid		PACKED;
+struct PACKED adef {
+  INTEGER id;
+  INTEGER alen;
+  INTEGER primetextid;
+  INTEGER secondtextid;
+  INTEGER iconid;
+  INTEGER procid;
+  INTEGER buttonid;
 };
 
-struct tdef {
-    INTEGER id			PACKED,
-	    alen		PACKED;
-    Point loc;
-    char text[1];	/* at least one NUL byte */
+struct PACKED tdef {
+  INTEGER id;
+  INTEGER alen;
+  Point loc;
+  char text[1];	/* at least one NUL byte */
 };
 
-struct idef {
-    INTEGER id		PACKED,
-	    alen	PACKED;
-    Rect loc;
-    LONGINT ike[32]	PACKED;
+struct PACKED idef {
+  INTEGER id;
+  INTEGER alen;
+  Rect loc;
+  LONGINT ike[32];
 };
 
-struct pdef {
-    INTEGER id		PACKED,
-	    alen	PACKED;
-    void (*proc)()	PACKED;
-			/* NOTE:  THIS IS NOT THE WAY IT WORKS IN THE M*C */
+struct PACKED pdef {
+  INTEGER id;
+  INTEGER alen;
+  void (*proc)();
+  /* NOTE:  THIS IS NOT THE WAY IT WORKS IN THE M*C */
 };
 
-struct bdef {
-    INTEGER id			PACKED,
-	    alen		PACKED,
-	    nbut		PACKED;
-    struct but {
-	INTEGER butstrid	PACKED;
-	Rect butloc;
-	INTEGER butprocid	PACKED;
-    } buts[1];
+struct PACKED bdef {
+  INTEGER id;
+  INTEGER  alen;
+  INTEGER  nbut;
+  struct PACKED but {
+    INTEGER butstrid;
+    Rect butloc;
+    INTEGER butprocid;
+  } buts[1];
 };
 
-struct sdef {
-    INTEGER id		PACKED,
-	    alen	PACKED;
-    char text[1];
+struct PACKED sdef {
+  INTEGER id;
+  INTEGER alen;
+  char text[1];
 };
 
 #endif /* !defined (__rsys_syserr_h__) */

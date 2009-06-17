@@ -43,11 +43,11 @@ typedef struct PACKED comm_toolbox_dispatch_args
   } args;
 } comm_toolbox_dispatch_args_t;
 
-typedef struct
+typedef struct PACKED
 {
   void *startPtr	PACKED_P;
   void *limitPtr	PACKED_P;
-  short cMoreMasters	PACKED;
+  short cMoreMasters;
   void *pGrowZone	PACKED_P;
 } initzonehiddenargs_t;
 
