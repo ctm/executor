@@ -22,6 +22,29 @@ char ROMlib_rcsid_emutrap[] =
  *	 to heck with them.
  */
 
+/*
+ * The first time this code was running on a PowerPC was on an old
+ * version of Yellow Dog Linux.  The calling conventions were
+ * different than what we get when compiling on Mac OS X.  As such,
+ * there are some places where we check for the preprocessing macro
+ * "powerpc" and are really concerned with the old calling convention.
+ * There are othe times when we check for either powerpc or __ppc__ in
+ * which case the calling convention shouldn't matter.
+ *
+ * TODO: switch to a modern version of the GNU build system and use it
+ *       to determine calling convention issues.
+ *
+ * The Yellow Dog version was actually able to run a few PPC binaries,
+ * including (IIRC) the demo versions of a couple of Adobe products
+ * (Photoshop and Illustrator?).  However, none of the code fragment
+ * manager or mixed-mode code has been tested in years and never under
+ * Mac OS X.  In the incredibly unlikely circumstance that someone
+ * wants to play with that code and has questions, I'll be happy to
+ * answer them to the best of my ability, but it was a long time ago
+ * and was short-lived, so my memory is a bit weak.
+ *
+ */
+
 #define SYN68K_TO_US_CHECK0_CHECKNEG1(addr)			\
 ({								\
   typeof(addr) __t;						\
@@ -42,7 +65,7 @@ PUBLIC syn68k_addr_t PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop)
 {
     unsigned short pth, ptv;
     LONGINT args[11], retval;
-#if defined (powerpc) || defined (__ppc__)
+#if defined (powerpc)
     Point points[11];
     int point_count = 0;
 #endif
@@ -94,7 +117,7 @@ PUBLIC syn68k_addr_t PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop)
 	    ptv = POPSW();
 	    pth = POPSW();
 #if !defined(LITTLEENDIAN)
-#if !defined (powerpc) && !defined (__ppc__)
+#if !defined (powerpc)
 	    args[count++] = (ptv << 16) | pth;
 #else
 	    points[point_count].h = pth;
@@ -221,7 +244,7 @@ CToPascalCall_m68k(void *wheretogo, unsigned long long magic, va_list ap)
 	case 3:
 	    ul = va_arg(ap, ULONGINT);
 #if !defined(LITTLEENDIAN)
-#if !defined (powerpc) && !defined (__ppc__)
+#if !defined (powerpc)
 	    PUSHUW(ul);
 	    PUSHUW(ul >> 16);
 #else
@@ -344,7 +367,7 @@ CToRoutineDescriptorCall (const RoutineDescriptor *p, unsigned long long magic,
 	case 3: /* point */
 	  {
 	    arg = (uint32) va_arg (ap, unsigned long);
-#if defined (powerpc) || defined (__ppc__)
+#if defined (powerpc)
 	    arg = *(uint32 *)arg;
 #endif
 	    arg = (CW ((uint16) arg) | 

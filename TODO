@@ -1,5 +1,11 @@
-        link with a debugging version of Syn68k and figure out where
-        the Mac OS X PPC port is dieing
+        Look into Mac OS X PPC glitches
+
+                cards don't work right in Eric's Ultimate Solitaire demo
+
+        Yank all the misleading RCS strings
+
+        Update the copyright notices to make it that the code is under
+        an MIT-style license
 
 	package up the System Folder and whatnot so that people w/o the
 	old executor-aux can run Executor
