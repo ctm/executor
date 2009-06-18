@@ -15,14 +15,14 @@
 #define CLV(rhs)	(rhs)
 #define Cx(rhs)		(rhs)
 
-#if 0
+/*
  * Do not use these blindly on big-endian machines.  There's no longer a
  * guarantee that we can get low-memory on all big-endian machines.  It doesn't
  * work, for example, on Mac OS X PPC.
  *
- * #define MR(rhs)		(rhs) /* Mac to ROMlib */
- * #define RM(rhs)		(rhs) /* ROMlib to Mac */
-#endif
+ * #define MR(rhs)		(rhs) / * Mac to ROMlib * /
+ * #define RM(rhs)		(rhs) / * ROMlib to Mac * /
+ */
 
 #define MR(n)  ((typeof (n))({ typeof (n) _t = n; _t ? ((((unsigned long) (_t))) + ROMlib_offset) : 0;}))
 #define RM(n)  ((typeof (n))({ typeof (n) _t = n; _t ? ((((unsigned long) (_t)- ROMlib_offset)) ) : 0;}))

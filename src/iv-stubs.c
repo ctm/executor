@@ -161,7 +161,7 @@ dump_image (BitMap *bogo_bitmap, Rect *rect)
       base_addr = alloca (map_row_bytes * height);
       
       new_pixmap.rowBytes = CW (map_row_bytes);
-      new_pixmap.baseAddr = RM (base_addr);
+      new_pixmap.baseAddr = RM ((Ptr) base_addr);
       
       new_pixmap.pixelSize = CWC (8);
       new_pixmap.cmpCount = CWC (1);
@@ -182,7 +182,7 @@ dump_image (BitMap *bogo_bitmap, Rect *rect)
     {
       map_row_bytes = CW ((unsigned short) pixmap->rowBytes
 			  & ~ROWBYTES_FLAG_BITS_X);
-      base_addr = MR (pixmap->baseAddr);
+      base_addr = MR ((char *) pixmap->baseAddr);
     }
   
   row_bytes = width;
@@ -208,7 +208,7 @@ dump_rgn_as_image (RgnHandle rh)
   row_bytes = ((RECT_WIDTH (&bm.bounds) + 31) / 32) * 4;
   bm.rowBytes = CW (row_bytes);
   baseaddr = alloca (row_bytes * RECT_HEIGHT (&bm.bounds));
-  bm.baseAddr = RM (baseaddr);
+  bm.baseAddr = RM ((Ptr) baseaddr);
   memset (baseaddr, '\377', row_bytes * RECT_HEIGHT (&bm.bounds));
   
   CopyBits (&bm, &bm,

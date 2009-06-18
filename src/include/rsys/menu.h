@@ -121,7 +121,7 @@ typedef struct PACKED menu_list
   char data;
 } menu_list;
 
-typedef menu_list menu_list_ptr;
+typedef menu_list *menu_list_ptr;
 typedef struct { menu_list_ptr p PACKED_P; } HIDDEN_menu_list_ptr;
 typedef HIDDEN_menu_list_ptr *menu_list_handle;
 

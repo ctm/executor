@@ -57,7 +57,6 @@ char ROMlib_rcsid_x[] = "$Id: x.c 89 2005-05-25 04:15:34Z ctm $";
 #include "rsys/cquick.h"
 #include "rsys/prefs.h"
 #include "rsys/mman.h"
-#include "rsys/fatal.h"
 #include "rsys/refresh.h"
 #include "rsys/vdriver.h"
 #include <syn68k_public.h>
