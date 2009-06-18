@@ -23,14 +23,38 @@
 #include <string.h>
 #include "rsys/float.h"
 
-/*
- * Unlike most of the rest of Executor's source, we're not using __ppc__
- * in our tests below, because the code involved won't compile on Mac OS X
- * 10.5.7, with gcc 4.0.1.
- */
-
 #if defined (powerpc)
 #include <ieee754.h>
+#elif defined (__ppc__)
+
+/*
+ * This comes from gcc's ieee754.h,
+ * which does not come with gcc with Apple's XCode.
+ */
+
+union ieee754_double
+{
+  long double d;
+  struct {
+    unsigned int negative:1;
+    unsigned int exponent:11;
+    /* Together these comprise the mantissa.  */
+    unsigned int mantissa0:20;
+    unsigned int mantissa1:32;
+
+  } ieee;
+  struct {
+    unsigned int negative:1;
+    unsigned int exponent:11;
+    unsigned int quiet_nan:1;
+    /* Together these comprise the mantissa.  */
+    unsigned int mantissa0:19;
+    unsigned int mantissa1:32;
+  } ieee_nan;
+};
+
+#define IEEE754_DOUBLE_BIAS	0x3ff /* Added to exponent.  */
+
 #endif
 
 
@@ -92,7 +116,7 @@ x80_to_ieee (const x80_t *x)
   }
   retval = *(double *)&temp64;
 
-#elif defined (powerpc)
+#elif defined (powerpc) || defined (__ppc__)
 
   union ieee754_double d;
   long long f; /* see SANE 2-18 for names */
@@ -103,7 +127,7 @@ x80_to_ieee (const x80_t *x)
   s = GET_X80_SGN (x);
   e = GET_X80_EXP (x);
   i = x->man.man >> 63;
-  f = x->man.man & 0x7fffffffffffffff;
+  f = x->man.man & 0x7fffffffffffffffULL;
 
   if (e == 32767)
     {
@@ -163,7 +187,6 @@ x80_to_ieee (const x80_t *x)
     }
 #warning using 8 byte to represent x80; precision will be lost
   retval = d.d;
-  
 #else 
 # warning x80_to_ieee not yet supported on this architecture.
 #endif
@@ -330,7 +353,7 @@ ieee_to_x80 (ieee_t n, x80_t *x)
   templ              = temp64p->man_lo;
   x->man.hilo.man_hi = CL(0x80000000 | ((temp64p->man_hi) << 11) | (templ >> 21));
   x->man.hilo.man_lo = CL(templ << 11);
-#elif defined (powerpc)
+#elif defined (powerpc) || defined (__ppc__)
   union ieee754_double d;
 
   d.d = n; 

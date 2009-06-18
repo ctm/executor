@@ -71,9 +71,7 @@ the SDL-based version of Executor on Mac OS X Intel, you can try:
   make
 
 If you have SDL installed and would like to play with the SDL-based
-version of Executor on Mac OS X PPC, you can try the following.  Be aware that
-the Mac OS X PPC port is the most recent port and is likely to have problems
-above and beyond those of the other ports.
+version of Executor on Mac OS X PPC, you can try the following.
 
   mkdir -p build/debug-macosx-sdl
   cd build/debug-macosx-sdl
