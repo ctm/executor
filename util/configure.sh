@@ -3,16 +3,16 @@
 # usage: ./configure.sh [options]
 # options:
 # --cflags='flags'		(default "-g")
-# --target='target'		(no default)
-# --target-file-format='format	(no default)
-# --host='host'			(no default)
-# --target-gcc='gcc'		(default "gcc", if host and target are same)
-# --target-strip='strip'	(default "strip")
-# --target-nm='nm'		(default "nm")
+# --host='host'		(no default)
+# --host-file-format='format	(no default)
+# --build='build'			(no default)
+# --host-gcc='gcc'		(default "gcc", if build and host are same)
+# --host-strip='strip'	(default "strip")
+# --host-nm='nm'		(default "nm")
 # --root='dir'			(default "..")
 # --front-end='front-end'
 #    one of `x', `nextstep', `dos', `svgalib', `win32', 'sdl'	(no default)
-# --syn68k-target='target'
+# --syn68k-host='host'
 # --sound='sound'
 
 cflags='-g'
@@ -44,29 +44,29 @@ while [ $# != 0 ]; do
         "root")
           root="${val}"
         ;;
-        "target")
-          target="${val}"
-        ;;
-        "target_gcc")
-          target_gcc="${val}"
-	;;
-        "target_strip")
-          target_strip="${val}"
-        ;;
-        "target_nm")
-          target_nm="${val}"
-        ;;
         "host")
           host="${val}"
+        ;;
+        "host_gcc")
+          host_gcc="${val}"
+	;;
+        "host_strip")
+          host_strip="${val}"
+        ;;
+        "host_nm")
+          host_nm="${val}"
+        ;;
+        "build")
+          build="${val}"
         ;;
         "front_end")
 	  front_end="${val}"
 	;;
-	"target_file_format")
-	  target_file_format="${val}"
+	"host_file_format")
+	  host_file_format="${val}"
 	;;
-	"syn68k_target")
-	  syn68k_target="${val}"
+	"syn68k_host")
+	  syn68k_host="${val}"
 	  ;;
 	"sound")
 	  sound="${val}"
@@ -84,8 +84,8 @@ done
 
 util_dir=${root}/util
 
-if [ "${target}" = "" ]; then
-  echo "Fatal error: you must specify a target.  Exiting."
+if [ "${host}" = "" ]; then
+  echo "Fatal error: you must specify a host.  Exiting."
   exit 1
 fi
 
@@ -94,15 +94,15 @@ if [ "${front_end}" = "" ]; then
   exit 1
 fi  
 
-if [ "${host}" = "" ]; then
-  echo "You did not specify a host.  Taking a guess."
-  host=`${root}/util/config.guess`
+if [ "${build}" = "" ]; then
+  echo "You did not specify a build.  Taking a guess."
+  build=`${root}/util/config.guess`
 
-  if [ "${host}" = "" ]; then
-    echo "config.guess failed to determine the host type.  Exiting."
+  if [ "${build}" = "" ]; then
+    echo "config.guess failed to determine the build type.  Exiting."
     exit 1
   else
-    echo "This appears to be a \`${host}'."
+    echo "This appears to be a \`${build}'."
   fi
 fi
 
@@ -124,56 +124,56 @@ case "${sound}" in
     ;;
 esac
 
-# canonicalize the name of the target; this should
-# give us the name used for tool configuration
-if canonical_target=`${root}/util/config.sub "${target}"` ; then : ; else
-  exit $?
-fi
-
 # canonicalize the name of the host; this should
 # give us the name used for tool configuration
 if canonical_host=`${root}/util/config.sub "${host}"` ; then : ; else
   exit $?
 fi
 
-if [ "${target_gcc}" = "" ]; then
-  if [ "${canonical_target}" = "${canonical_host}" ]; then
-    target_gcc=gcc
+# canonicalize the name of the build; this should
+# give us the name used for tool configuration
+if canonical_build=`${root}/util/config.sub "${build}"` ; then : ; else
+  exit $?
+fi
+
+if [ "${host_gcc}" = "" ]; then
+  if [ "${canonical_host}" = "${canonical_build}" ]; then
+    host_gcc=gcc
   else
-    echo "Fatal error: target and host differ, target gcc must by specified.  Exiting."
+    echo "Fatal error: host and build differ, host gcc must by specified.  Exiting."
     exit 1
   fi
 fi
 
-if [ "${target_nm}" = "" ]; then
-  target_nm=nm
+if [ "${host_nm}" = "" ]; then
+  host_nm=nm
 fi
 
-if [ "${target_strip}" = "" ]; then
-  target_strip=strip
+if [ "${host_strip}" = "" ]; then
+  host_strip=strip
 fi
 
-case ${canonical_target} in
+case ${canonical_host} in
   m68k-next-ns* | m68k-next-bsd* | m68k-next-mach* | m68k-next-nextstep*)
-    target_os='next'
-    target_syn68k='next'
-    target_arch='m68k'
-    target_file_format='mach-o'
+    host_os='next'
+    host_syn68k='next'
+    host_arch='m68k'
+    host_file_format='mach-o'
     objc='yes'
   ;;
   i[3456]86-next-ns* | i[3456]86-next-bsd* | i[3456]86-next-mach* \
 	| i[3456]86-next-nextstep*)
-    target_os='next'
-    target_syn68k='next'
-    target_arch='i386'
-    target_file_format='mach-o'
+    host_os='next'
+    host_syn68k='next'
+    host_arch='i386'
+    host_file_format='mach-o'
     objc='yes'
   ;;
   i[3456]86-msdos-go32 | i[3456]86-go32-bsd | i[3456]86-unknown-msdos)
-    target_os='msdos'
-    target_syn68k='msdos'
-    target_file_format='coff'
-    target_arch='i386'
+    host_os='msdos'
+    host_syn68k='msdos'
+    host_file_format='coff'
+    host_arch='i386'
   ;;
 
 # NOTE: Historically we've used mingw32 but called it cygwin.  The reason
@@ -182,105 +182,58 @@ case ${canonical_target} in
 # cygwin to mingw32 everywhere right now (20031217).
 
   i[3456]86-pc-mingw32)
-    target_os='cygwin32'
-    target_syn68k='mingw32'
-    echo target os set to cygwin32 which is a misnomer.  this really is mingw32
-    target_file_format='pe'
-    target_arch='i386'
+    host_os='cygwin32'
+    host_syn68k='mingw32'
+    echo host os set to cygwin32 which is a misnomer.  this really is mingw32
+    host_file_format='pe'
+    host_arch='i386'
   ;;
   i[3456]86-pc-cygwin32)
-    target_os='cygwin32'
-    target_syn68k='cygwin32'
-    target_file_format='pe'
-    target_arch='i386'
-  ;;
-  alpha-unknown-linux)
-    target_os='linux'
-    target_syn68k='linux'
-    target_file_format='elf'
-    target_arch='alpha'
-  ;;
-  powerpc-unknown-linux)
-    target_os='linux'
-    target_syn68k='linux'
-    target_file_format='elf'
-    target_arch='powerpc'
-  ;;
-  i[3456]86-unknown-linux)
-    target_os='linux'
-    target_syn68k='linux'
-    target_arch='i386'
-    if [ x"${target_file_format}" = x"" ]; then
-      # default linux file format; this may change
-      target_file_format='a.out'
-    fi
-  ;;
-  i[456]86-unknown-macosx)
-    target_os='macosx'
-    target_syn68k='macosx'
-    target_arch='i386'
-    if [ x"${target_file_format}" = x"" ]; then
-      # default linux file format; this may change
-      target_file_format='mach-o'
-    fi
-  ;;
-
-  powerpc-unknown-macosx)
-    target_os='macosx'
-    target_syn68k='macosx'
-    target_arch='powerpc' # how we refer to it
-    target_gcc_arch='ppc' # how gcc -arch wants us to call it
-    if [ x"${target_file_format}" = x"" ]; then
-      # default linux file format; this may change
-      target_file_format='mach-o'
-    fi
-  ;;
-
-  *)
-    echo "Fatal error: unknown target \`${canonical_target}'.  Exiting."
-    exit 1
-  ;;
-esac
-
-case ${canonical_host} in
-  m68k-next-ns* | m68k-next-bsd* | m68k-next-mach* \
-   | m68k-next-nextstep*)
-    host_os='next'
-    host_arch='m68k'
-    objc='yes'
-  ;;
-  i[3456]86-next-ns* | i[3456]86-next-bsd* | i[3456]86-next-mach* \
-   | i[3456]86-next-nextstep*)
-    host_os='next'
-    host_arch='i386'
-    objc='yes'
-  ;;
-  i[3456]86-msdos-go32 | i[3456]86-go32-bsd | i[3456]86-unknown-msdos)
-    host_os='msdos'
+    host_os='cygwin32'
+    host_syn68k='cygwin32'
+    host_file_format='pe'
     host_arch='i386'
   ;;
   alpha-unknown-linux)
     host_os='linux'
+    host_syn68k='linux'
+    host_file_format='elf'
     host_arch='alpha'
   ;;
   powerpc-unknown-linux)
     host_os='linux'
+    host_syn68k='linux'
+    host_file_format='elf'
     host_arch='powerpc'
   ;;
   i[3456]86-unknown-linux)
     host_os='linux'
+    host_syn68k='linux'
     host_arch='i386'
+    if [ x"${host_file_format}" = x"" ]; then
+      # default linux file format; this may change
+      host_file_format='a.out'
+    fi
   ;;
   i[456]86-unknown-macosx)
     host_os='macosx'
+    host_syn68k='macosx'
     host_arch='i386'
-    objc='yes'
+    if [ x"${host_file_format}" = x"" ]; then
+      # default linux file format; this may change
+      host_file_format='mach-o'
+    fi
   ;;
 
   powerpc-unknown-macosx)
     host_os='macosx'
-    host_arch='powerpc'
-    objc='yes'
+    host_syn68k='macosx'
+    host_arch='powerpc' # how we refer to it
+    host_gcc_arch='ppc' # how gcc -arch wants us to call it
+    if [ x"${host_file_format}" = x"" ]; then
+      # default linux file format; this may change
+      host_file_format='mach-o'
+    fi
   ;;
 
   *)
@@ -289,44 +242,91 @@ case ${canonical_host} in
   ;;
 esac
 
-# check for the target directories
-target_arch_dir=${root}/src/config/arch/${target_arch}
-if [ ! -d ${target_arch_dir} ]; then
-  echo "Fatal error: target arch directory \`${target_arch_dir}' not found.  Exiting."
+case ${canonical_build} in
+  m68k-next-ns* | m68k-next-bsd* | m68k-next-mach* \
+   | m68k-next-nextstep*)
+    build_os='next'
+    build_arch='m68k'
+    objc='yes'
+  ;;
+  i[3456]86-next-ns* | i[3456]86-next-bsd* | i[3456]86-next-mach* \
+   | i[3456]86-next-nextstep*)
+    build_os='next'
+    build_arch='i386'
+    objc='yes'
+  ;;
+  i[3456]86-msdos-go32 | i[3456]86-go32-bsd | i[3456]86-unknown-msdos)
+    build_os='msdos'
+    build_arch='i386'
+  ;;
+  alpha-unknown-linux)
+    build_os='linux'
+    build_arch='alpha'
+  ;;
+  powerpc-unknown-linux)
+    build_os='linux'
+    build_arch='powerpc'
+  ;;
+  i[3456]86-unknown-linux)
+    build_os='linux'
+    build_arch='i386'
+  ;;
+  i[456]86-unknown-macosx)
+    build_os='macosx'
+    build_arch='i386'
+    objc='yes'
+  ;;
+
+  powerpc-unknown-macosx)
+    build_os='macosx'
+    build_arch='powerpc'
+    objc='yes'
+  ;;
+
+  *)
+    echo "Fatal error: unknown build \`${canonical_build}'.  Exiting."
+    exit 1
+  ;;
+esac
+
+# check for the host directories
+host_arch_dir=${root}/src/config/arch/${host_arch}
+if [ ! -d ${host_arch_dir} ]; then
+  echo "Fatal error: host arch directory \`${host_arch_dir}' not found.  Exiting."
   exit 1
 fi
 
-target_os_dir=${root}/src/config/os/${target_os}
-if [ ! -d ${target_os_dir} ]; then
-  echo "Fatal error: target os directory \`${target_os_dir}' not found.  Exiting."
+host_os_dir=${root}/src/config/os/${host_os}
+if [ ! -d ${host_os_dir} ]; then
+  echo "Fatal error: host os directory \`${host_os_dir}' not found.  Exiting."
   exit 1
 fi
 
-if [ -r ${root}/src/config/os/${target_os}/${target_os}.make ]; then
+if [ -r ${root}/src/config/os/${host_os}/${host_os}.make ]; then
 
-  if [ -r ${root}/src/config/os/${target_os}/${target_os}.sh ]; then
-    ${root}/src/config/os/${target_os}/${target_os}.sh		\
-     "${target_gcc}"						\
+  if [ -r ${root}/src/config/os/${host_os}/${host_os}.sh ]; then
+    ${root}/src/config/os/${host_os}/${host_os}.sh		\
+     "${host_gcc}"						\
      "${cflags}"						\
-     ${root}/src/config/os/${target_os}/${target_os}.make	\
-     __config__.target_os.make
+     ${root}/src/config/os/${host_os}/${host_os}.make	\
+     __config__.host_os.make
     
     if [ $? != "0" ]; then
-      echo "Fatal error: target os configuration failed.  Exiting."
+      echo "Fatal error: host os configuration failed.  Exiting."
       exit 1
     fi
-    target_os_make=__config__.target_os.make
+    host_os_make=__config__.host_os.make
   else
-    target_os_make=${root}/src/config/os/${target_os}/${target_os}.make
+    host_os_make=${root}/src/config/os/${host_os}/${host_os}.make
   fi
 else
-  target_os_make="/dev/null"
+  host_os_make="/dev/null"
 fi
 
-if [ -r ${root}/src/config/arch/${target_arch}/${target_arch}.make ]; then
-   target_arch_make=${root}/src/config/arch/${target_arch}/${target_arch}.make
+if [ -r ${root}/src/config/arch/${host_arch}/${host_arch}.make ]; then
+   host_arch_make=${root}/src/config/arch/${host_arch}/${host_arch}.make
 else
-  target_arch_make="/dev/null"
+  host_arch_make="/dev/null"
 fi
 
 if [ -r ${root}/src/config/front-ends/${front_end}/${front_end}.sh ]; then
@@ -335,7 +335,7 @@ if [ -r ${root}/src/config/front-ends/${front_end}/${front_end}.sh ]; then
   
   # there must be a front-end makefile fragment
   ${root}/src/config/front-ends/${front_end}/${front_end}.sh	\
-   "${target_gcc}"							\
+   "${host_gcc}"							\
    "${cflags}"								\
    ${root}/src/config/front-ends/${front_end}/${front_end}.make		\
    __config__.front_end.make
@@ -357,13 +357,13 @@ front_end_config_h=${root}/src/config/front-ends/${front_end}/${front_end}.h
 if [ -r ${root}/src/config/sound/${sound}/${sound}.make ]; then
   if [ -r ${root}/src/config/sound/${sound}/${sound}.sh ]; then
     ${root}/src/config/sound/${sound}/${sound}.sh			\
-     "${target_gcc}"							\
+     "${host_gcc}"							\
      "${cflags}"							\
      ${root}/src/config/sound/${sound}/${sound}.make			\
      __config__.sound.make
     
     if [ $? != "0" ]; then
-      echo "Fatal error: target os configuration failed.  Exiting."
+      echo "Fatal error: host os configuration failed.  Exiting."
       exit 1
     fi
     sound_make=__config__.sound.make
@@ -381,15 +381,15 @@ rm -f front-end-config.h
 ln -s ${front_end_config_h} front-end-config.h
 
 # arch determines syn68k usage
-rm -f target-arch-config.h
-if [ -r ${root}/src/config/arch/${target_arch}/${target_arch}.h ]; then
-  target_arch_h=${root}/src/config/arch/${target_arch}/${target_arch}.h
+rm -f host-arch-config.h
+if [ -r ${root}/src/config/arch/${host_arch}/${host_arch}.h ]; then
+  host_arch_h=${root}/src/config/arch/${host_arch}/${host_arch}.h
 
-  ln -s ${target_arch_h} target-arch-config.h
+  ln -s ${host_arch_h} host-arch-config.h
 
   cat > ./test.c.sed << __EOF__
 #include <stdio.h>	
-#include "@target_arch_h@"
+#include "@host_arch_h@"
 
 int main ()
 {
@@ -403,7 +403,7 @@ int main ()
 }
 __EOF__
 
-  sed -e "s:@target_arch_h@:${target_arch_h}:" \
+  sed -e "s:@host_arch_h@:${host_arch_h}:" \
     < ./test.c.sed > ./test.c
 
   gcc -I${root}/src/include -o ./test ./test.c
@@ -415,33 +415,11 @@ __EOF__
 
   rm -f ./test.c.sed ./test.c ./test
 else
-  # create an empty `target-arch-config.h'
-  touch target-arch-config.h
-  
-  target_conf_h=""
-  syn68k=''
-fi
-
-rm -f target-os-config.h
-if [ -r ${root}/src/config/os/${target_os}/${target_os}.h ]; then
-  target_os_h=${root}/src/config/os/${target_os}/${target_os}.h
-
-  ln -s ${target_os_h} target-os-config.h
-else
-  # create an empty `target-os-config.h'
-  touch target-os-config.h
-  target_os_h=""
-fi
-
-rm -f host-arch-config.h
-if [ -r ${root}/src/config/arch/${host_arch}/${host_arch}.h ]; then
-  host_arch_h=${root}/src/config/arch/${host_arch}/${host_arch}.h
-
-  ln -s ${host_arch_h} host-arch-config.h
-else
   # create an empty `host-arch-config.h'
   touch host-arch-config.h
-  host_arch_h=""
+  
+  host_conf_h=""
+  syn68k=''
 fi
 
 rm -f host-os-config.h
@@ -453,6 +431,28 @@ else
   # create an empty `host-os-config.h'
   touch host-os-config.h
   host_os_h=""
+fi
+
+rm -f build-arch-config.h
+if [ -r ${root}/src/config/arch/${build_arch}/${build_arch}.h ]; then
+  build_arch_h=${root}/src/config/arch/${build_arch}/${build_arch}.h
+
+  ln -s ${build_arch_h} build-arch-config.h
+else
+  # create an empty `build-arch-config.h'
+  touch build-arch-config.h
+  build_arch_h=""
+fi
+
+rm -f build-os-config.h
+if [ -r ${root}/src/config/os/${build_os}/${build_os}.h ]; then
+  build_os_h=${root}/src/config/os/${build_os}/${build_os}.h
+
+  ln -s ${build_os_h} build-os-config.h
+else
+  # create an empty `build-os-config.h'
+  touch build-os-config.h
+  build_os_h=""
 fi
 
 rm -f sound-config.h
@@ -470,21 +470,21 @@ if [ x"${syn68k}" = x"yes" ]; then
 #  syn68k_define='-DSYN68K'
   syn68k_define=''
   syn68k_lib='libsyn68k.a'
-  if [ x$syn68k_target = x"" ]; then
-    syn68k_target="${target_arch}-${target_syn68k}-${target_file_format}"
+  if [ x$syn68k_host = x"" ]; then
+    syn68k_host="${host_arch}-${host_syn68k}-${host_file_format}"
   fi
 else
   syn68k_define=''
   syn68k_lib=''
-  syn68k_target=''
+  syn68k_host=''
 fi
 
 cat > ./test.c << __EOF__
 int foo;
 __EOF__
 
-${target_gcc} -c test.c
-symbol=`${target_nm} test.o | awk '/foo/ { print $3; }'`
+${host_gcc} -c test.c
+symbol=`${host_nm} test.o | awk '/foo/ { print $3; }'`
 case ${symbol} in
   _foo)
 	symbol_prefix='_'
@@ -499,37 +499,37 @@ esac
 
 rm -f ./test.c ./test.o
 
-if ${target_gcc} --version | egrep -q 'egcs-2\.91'; then
+if ${host_gcc} --version | egrep -q 'egcs-2\.91'; then
   egcs_dcconvert_workaround=-fno-omit-frame-pointer
 else
   egcs_dcconvert_workaround=
 fi
 
 ${util_dir}/subst.pl				\
- @target_arch_make@:${target_arch_make} 	\
- @target_os_make@:${target_os_make} 		\
+ @host_arch_make@:${host_arch_make} 	\
+ @host_os_make@:${host_os_make} 		\
  @front_end_make@:${front_end_make}		\
  @sound_make@:${sound_make}			\
  @executor_make@:${executor_make} < ${root}/src/config/Makefile.in > ./tmp-Makefile.in
 
-if [ x"${target_gcc_arch}" = x"" ]; then
-  target_gcc_arch="$target_arch"
+if [ x"${host_gcc_arch}" = x"" ]; then
+  host_gcc_arch="$host_arch"
 fi
 
 sed -e "s:@symbol_prefix@:${symbol_prefix}:g
-
-        s:@target@:${target}:g
-        s:@canonical_target@:${canonical_target}:g
-        s:@target_arch@:${target_arch}:g
-        s:@target_os@:${target_os}:g
-        s:@target_gcc@:${target_gcc}:g
-        s:@target_strip@:${target_strip}:g
-	s:@target_file_format@:${target_file_format}:g
 
         s:@host@:${host}:g
         s:@canonical_host@:${canonical_host}:g
         s:@host_arch@:${host_arch}:g
         s:@host_os@:${host_os}:g
+        s:@host_gcc@:${host_gcc}:g
+        s:@host_strip@:${host_strip}:g
+	s:@host_file_format@:${host_file_format}:g
+
+        s:@build@:${build}:g
+        s:@canonical_build@:${canonical_build}:g
+        s:@build_arch@:${build_arch}:g
+        s:@build_os@:${build_os}:g
 
         s:@front_end@:${front_end}:g
 	s:@sound@:${sound}:g
@@ -537,10 +537,10 @@ sed -e "s:@symbol_prefix@:${symbol_prefix}:g
         s:@root@:${root}:g
         s:@syn68k_define@:${syn68k_define}:g
         s:@syn68k_lib@:${syn68k_lib}:g
-        s:@syn68k_target@:${syn68k_target}:g
+        s:@syn68k_host@:${syn68k_host}:g
         s:@cflags@:${cflags}:g
 	s:@egcs_dcconvert_workaround@:${egcs_dcconvert_workaround}:g
-        s:@arch@:${target_gcc_arch}:g" < ./tmp-Makefile.in > ./Makefile
+        s:@arch@:${host_gcc_arch}:g" < ./tmp-Makefile.in > ./Makefile
 rm -f ./tmp-Makefile.in
 
 if [ x"${syn68k}" = x"yes" ]; then
@@ -577,4 +577,4 @@ echo "${root}/util/configure.sh $arguments" >> config.status
 
 chmod +x config.status
 
-echo "Executor is now configured for \`${target_arch}-${target_os}/${front_end}'."
+echo "Executor is now configured for \`${host_arch}-${host_os}/${front_end}'."

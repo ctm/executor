@@ -1,18 +1,18 @@
-TARGET_ARCH_OBJ = i386.o
+HOST_ARCH_OBJ = i386.o
 
 # In the first days of the Mac OS X port we can't use the tricked out blitters,
 # quite possibly due to register ebx smashage interfering with PIC.
 
-ifeq (,$(findstring macosx,$(TARGET)))
-  TARGET_ARCH_OBJ += x86patblt.o x86srcblt.o xdstubtables.o sbstubtables.o
+ifeq (,$(findstring macosx,$(HOST)))
+  HOST_ARCH_OBJ += x86patblt.o x86srcblt.o xdstubtables.o sbstubtables.o
 endif
 
 pat-blitters-stamp pat-blitters.h pat-blitters.s: \
 		opfind.c opfind.h metaasm.pl pat-blitters.meta
-	$(TARGET_ARCH_DIR)/metaasm.pl $(METAASM_ARGS)\
-		$(TARGET_ARCH_DIR)/pat-blitters.meta\
+	$(HOST_ARCH_DIR)/metaasm.pl $(METAASM_ARGS)\
+		$(HOST_ARCH_DIR)/pat-blitters.meta\
 		pat-blitters.s pat-blitters.h\
-		$(TARGET_ARCH_DIR)/opfind.c
+		$(HOST_ARCH_DIR)/opfind.c
 	$(RM) opfind
 	touch pat-blitters-stamp
 
@@ -22,21 +22,21 @@ src-blitters-stamp src-blitters.h src-blitters.s: \
 		opfind.c opfind.h metaasm.pl src-blitters.meta src-shift.meta\
 		src-noshift.meta src-shift-fgbk.meta src-noshift-fgbk.meta\
 		pat-blitters-stamp src-blitters-core.meta
-	$(TARGET_ARCH_DIR)/metaasm.pl -define DST_SEG= $(METAASM_ARGS)\
-		$(TARGET_ARCH_DIR)/src-blitters.meta\
+	$(HOST_ARCH_DIR)/metaasm.pl -define DST_SEG= $(METAASM_ARGS)\
+		$(HOST_ARCH_DIR)/src-blitters.meta\
 		src-blitters.s src-blitters.h\
-		$(TARGET_ARCH_DIR)/opfind.c
+		$(HOST_ARCH_DIR)/opfind.c
 	$(RM) opfind
 	touch src-blitters-stamp
 
 x86patblt.o: x86patblt.S pat-blitters-stamp
-	$(TARGET_AS_CPP) $(TARGET_CFLAGS) -c $(TARGET_ARCH_DIR)/x86patblt.S
+	$(HOST_AS_CPP) $(HOST_CFLAGS) -c $(HOST_ARCH_DIR)/x86patblt.S
 
 x86srcblt.o: x86srcblt.S src-blitters-stamp
-	$(TARGET_AS_CPP) $(TARGET_CFLAGS) -c $(TARGET_ARCH_DIR)/x86srcblt.S
+	$(HOST_AS_CPP) $(HOST_CFLAGS) -c $(HOST_ARCH_DIR)/x86srcblt.S
 
 opfind:	opfind.c opfind.h asmsamples.h
-	$(HOST_GCC) $(HOST_CFLAGS) $(TARGET_ARCH_DIR)/opfind.c -o opfind
+	$(BUILD_GCC) $(BUILD_CFLAGS) $(HOST_ARCH_DIR)/opfind.c -o opfind
 	$(RM) asmsamples.h
 
 xdstubtables.o: xdstubtables.c pat-blitters-stamp
@@ -44,6 +44,6 @@ xdstubtables.o: xdstubtables.c pat-blitters-stamp
 sbstubtables.o: sbstubtables.c src-blitters-stamp
 
 clean::
-	rm -f $(TARGET_ARCH_OBJ) pat-blitters.s pat-blitters.h asmsamples.h\
+	rm -f $(HOST_ARCH_OBJ) pat-blitters.s pat-blitters.h asmsamples.h\
 		pat-blitters-stamp src-blitters.s src-blitters.h\
 		src-blitters-stamp opfind

@@ -94,29 +94,29 @@ MAP_SRC =						\
   active.map go_away.map grow.map ractive.map zoom.map
 MAP_C =	$(MAP_SRC:.map=.c)
 
-$(host_obj_dir)/mksspairtable: $(host_obj_dir_stamp) 
-$(host_obj_dir)/mksspairtable: mksspairtable.c
-	$(HOST_GCC) $(HOST_CFLAGS) -o $(host_obj_dir)/mksspairtable $<
-sspairtable.c: $(host_obj_dir)/mksspairtable
+$(build_obj_dir)/mksspairtable: $(build_obj_dir_stamp) 
+$(build_obj_dir)/mksspairtable: mksspairtable.c
+	$(BUILD_GCC) $(BUILD_CFLAGS) -o $(build_obj_dir)/mksspairtable $<
+sspairtable.c: $(build_obj_dir)/mksspairtable
 	rm -f sspairtable.c
-	$(host_obj_dir)/mksspairtable > sspairtable.c
+	$(build_obj_dir)/mksspairtable > sspairtable.c
 	chmod -w sspairtable.c
 
-$(host_obj_dir)/mkultable: $(host_obj_dir_stamp) 
-$(host_obj_dir)/mkultable: mkultable.c
-	$(HOST_GCC) $(HOST_CFLAGS) -o $(host_obj_dir)/mkultable $<
-ultable.c: $(host_obj_dir)/mkultable
+$(build_obj_dir)/mkultable: $(build_obj_dir_stamp) 
+$(build_obj_dir)/mkultable: mkultable.c
+	$(BUILD_GCC) $(BUILD_CFLAGS) -o $(build_obj_dir)/mkultable $<
+ultable.c: $(build_obj_dir)/mkultable
 	rm -f ultable.c
-	$(host_obj_dir)/mkultable > ultable.c
+	$(build_obj_dir)/mkultable > ultable.c
 	chmod -w ultable.c
 
-$(host_obj_dir)/mkseedtables: $(host_obj_dir_stamp)
-$(host_obj_dir)/mkseedtables: mkseedtables.c
-	$(HOST_GCC) $(HOST_CFLAGS) -o $(host_obj_dir)/mkseedtables $<
+$(build_obj_dir)/mkseedtables: $(build_obj_dir_stamp)
+$(build_obj_dir)/mkseedtables: mkseedtables.c
+	$(BUILD_GCC) $(BUILD_CFLAGS) -o $(build_obj_dir)/mkseedtables $<
 
-seedtables.c: $(host_obj_dir)/mkseedtables
+seedtables.c: $(build_obj_dir)/mkseedtables
 	rm -f seedtables.c
-	$(host_obj_dir)/mkseedtables > seedtables.c
+	$(build_obj_dir)/mkseedtables > seedtables.c
 	chmod -w seedtables.c
 
 rawpatstubs.c: makerawblt.pl pat-blitters.tmpl
@@ -135,33 +135,33 @@ rawsrcblt.o: rawsrcblt.c rawsrcstubs.c
 
 qIMIV.o: seedtables.c
 
-$(host_obj_dir)/mkexpandtables: $(host_obj_dir_stamp)
-$(host_obj_dir)/mkexpandtables: mkexpandtables.c
-	$(HOST_GCC) $(HOST_CFLAGS) -o $(host_obj_dir)/mkexpandtables $<
+$(build_obj_dir)/mkexpandtables: $(build_obj_dir_stamp)
+$(build_obj_dir)/mkexpandtables: mkexpandtables.c
+	$(BUILD_GCC) $(BUILD_CFLAGS) -o $(build_obj_dir)/mkexpandtables $<
 
-expandtables.c: $(host_obj_dir)/mkexpandtables
+expandtables.c: $(build_obj_dir)/mkexpandtables
 	rm -f expandtables.c
-	$(host_obj_dir)/mkexpandtables > expandtables.c
+	$(build_obj_dir)/mkexpandtables > expandtables.c
 	chmod -w expandtables.c
 
 globals.o: globals.c
 	rm -f tmp-globals.c
 	awk -F, '$$5 !~ /false/ && $$5 !~ /true-b/' $< > tmp-globals.c
-	$(TARGET_GCC) $(TARGET_CFLAGS) -c -o globals.o tmp-globals.c
+	$(HOST_GCC) $(HOST_CFLAGS) -c -o globals.o tmp-globals.c
 	rm -f tmp-globals.c
 
-$(host_obj_dir)/map_to_c: $(host_obj_dir_stamp)
-$(host_obj_dir)/map_to_c: map_to_c.c
-	$(HOST_GCC) -O1 $(GEN_CFLAGS) -o $(host_obj_dir)/map_to_c $<
-$(MAP_C): $(host_obj_dir)/map_to_c
+$(build_obj_dir)/map_to_c: $(build_obj_dir_stamp)
+$(build_obj_dir)/map_to_c: map_to_c.c
+	$(BUILD_GCC) -O1 $(GEN_CFLAGS) -o $(build_obj_dir)/map_to_c $<
+$(MAP_C): $(build_obj_dir)/map_to_c
 .map.c: $<
 	rm -f $*.c
-	$(host_obj_dir)/map_to_c > $*.c < $<
+	$(build_obj_dir)/map_to_c > $*.c < $<
 	chmod -w $*.c
 
-$(host_obj_dir)/gensplash: $(host_obj_dir_stamp)
-$(host_obj_dir)/gensplash: gensplash.c
-	$(HOST_GCC) -g -O1 $(GEN_CFLAGS) -o $(host_obj_dir)/gensplash  $<
+$(build_obj_dir)/gensplash: $(build_obj_dir_stamp)
+$(build_obj_dir)/gensplash: gensplash.c
+	$(BUILD_GCC) -g -O1 $(GEN_CFLAGS) -o $(build_obj_dir)/gensplash  $<
 
 # automatically generated c files; used make.depend depends on them
 # since they are inlcluded by other executor source files
@@ -188,44 +188,44 @@ TRAP_SRC = emustubs.c emutrap.c
 EXECUTOR_SRC = crc.c emutraptables.c executor.c priv.c parse.y $(TRAP_SRC)
 EXECUTOR_OBJ = $(strip $(addsuffix .o,$(basename $(EXECUTOR_SRC))))
 
-$(host_obj_dir)/genfndecls: genfndecls.c
-	$(HOST_CC) $(TARGET_CFLAGS) $< -o $(host_obj_dir)/genfndecls
+$(build_obj_dir)/genfndecls: genfndecls.c
+	$(BUILD_CC) $(HOST_CFLAGS) $< -o $(build_obj_dir)/genfndecls
 
-fndecls: $(host_obj_dir)/genfndecls
+fndecls: $(build_obj_dir)/genfndecls
 fndecls: $(ROMLIB_SRC) $(TRAP_SRC)
-	$(host_obj_dir)/genfndecls $(addprefix $(SRC_DIR)/, $(ROMLIB_SRC))	  \
+	$(build_obj_dir)/genfndecls $(addprefix $(SRC_DIR)/, $(ROMLIB_SRC))	  \
                                    $(addprefix $(SRC_DIR)/, $(TRAP_SRC))          \
-                                   $(addprefix $(TARGET_ARCH_DIR)/, $(TARGET_ARCH_SRC))   \
+                                   $(addprefix $(HOST_ARCH_DIR)/, $(HOST_ARCH_SRC))   \
           > fndecls.tmp
 	$(util_dir)/move-if-changed.sh fndecls.tmp fndecls
 
 genptocflags_h.c: genptocflags_h.tmpl fndecls
 	$(util_dir)/subst.pl @fndecls@:fndecls < $< > genptocflags_h.c
-$(host_obj_dir)/genptocflags_h: genptocflags_h.c
-	$(HOST_GCC) $(GEN_CFLAGS) $< -o $(host_obj_dir)/genptocflags_h
-ptocflags.h: $(host_obj_dir)/genptocflags_h
-	$(host_obj_dir)/genptocflags_h > ptocflags.h
+$(build_obj_dir)/genptocflags_h: genptocflags_h.c
+	$(BUILD_GCC) $(GEN_CFLAGS) $< -o $(build_obj_dir)/genptocflags_h
+ptocflags.h: $(build_obj_dir)/genptocflags_h
+	$(build_obj_dir)/genptocflags_h > ptocflags.h
 
 geninterfacelib.c: geninterfacelib.tmpl fndecls
 	$(util_dir)/subst.pl @fndecls@:fndecls < $< > geninterfacelib.c
-$(host_obj_dir)/geninterfacelib: geninterfacelib.c
-	$(HOST_GCC) $(GEN_CFLAGS) $< -o $(host_obj_dir)/geninterfacelib
+$(build_obj_dir)/geninterfacelib: geninterfacelib.c
+	$(BUILD_GCC) $(GEN_CFLAGS) $< -o $(build_obj_dir)/geninterfacelib
 
-newinterfacelib.c:	$(host_obj_dir)/geninterfacelib
-	$(host_obj_dir)/geninterfacelib > newinterfacelib.c
+newinterfacelib.c:	$(build_obj_dir)/geninterfacelib
+	$(build_obj_dir)/geninterfacelib > newinterfacelib.c
 
 genctopflags_h.c: genctopflags_h.tmpl fndecls
 	$(util_dir)/subst.pl @fndecls@:fndecls < $< > genctopflags_h.c
-$(host_obj_dir)/genctopflags_h: genctopflags_h.c
-	$(HOST_GCC) $(GEN_CFLAGS) $< -o $(host_obj_dir)/genctopflags_h
-ctopflags.h: $(host_obj_dir)/genctopflags_h
-	$(host_obj_dir)/genctopflags_h > ctopflags.h
+$(build_obj_dir)/genctopflags_h: genctopflags_h.c
+	$(BUILD_GCC) $(GEN_CFLAGS) $< -o $(build_obj_dir)/genctopflags_h
+ctopflags.h: $(build_obj_dir)/genctopflags_h
+	$(build_obj_dir)/genctopflags_h > ctopflags.h
 
-$(host_obj_dir)/genrand_h: genrand_h.c
-	$(HOST_GCC) $(HOST_CFLAGS) -o $(host_obj_dir)/genrand_h $<
+$(build_obj_dir)/genrand_h: genrand_h.c
+	$(BUILD_GCC) $(BUILD_CFLAGS) -o $(build_obj_dir)/genrand_h $<
 
-rand.h:	$(host_obj_dir)/genrand_h
-	$(host_obj_dir)/genrand_h > rand.h
+rand.h:	$(build_obj_dir)/genrand_h
+	$(build_obj_dir)/genrand_h > rand.h
 
 genstubify_body: $(awk_src_dir)/stubify.awk fndecls ptocflags.h
 	echo atrap > genstubify_tmp
@@ -248,10 +248,10 @@ genstubify_h.c: genstubify_h.tmpl genstubify_body
 p_q_defines.h:	$(util_dir)/mkstubdefns.pl
 	$(util_dir)/mkstubdefns.pl 0 11 > p_q_defines.h
 
-$(host_obj_dir)/genstubify_h: genstubify_h.c p_q_defines.h
-	$(HOST_GCC) $(GEN_CFLAGS) genstubify_h.c -o $(host_obj_dir)/genstubify_h
-stubify.h:  $(host_obj_dir)/genstubify_h
-	$(host_obj_dir)/genstubify_h > stubify.h
+$(build_obj_dir)/genstubify_h: genstubify_h.c p_q_defines.h
+	$(BUILD_GCC) $(GEN_CFLAGS) genstubify_h.c -o $(build_obj_dir)/genstubify_h
+stubify.h:  $(build_obj_dir)/genstubify_h
+	$(build_obj_dir)/genstubify_h > stubify.h
 
 lowglobals.s: $(SRC_DIR)/globals.c $(SRC_DIR)/globals.pl
 	rm -f lowglobals.s
@@ -260,10 +260,10 @@ lowglobals.s: $(SRC_DIR)/globals.c $(SRC_DIR)/globals.pl
 	chmod -w lowglobals.s
 
 licensetext.i: $(SRC_DIR)/licensetext.c
-	$(TARGET_GCC) $(TARGET_CFLAGS) -E -o licensetext.i $<
+	$(HOST_GCC) $(HOST_CFLAGS) -E -o licensetext.i $<
 
 licensetext.o: licensetext.i
-	$(TARGET_GCC) $(TARGET_CFLAGS) -c -o licensetext.o $<
+	$(HOST_GCC) $(HOST_CFLAGS) -c -o licensetext.o $<
 
 extr.c:	$(root)/packages/extr_license/extr.c
 	ln -s $< extr.c
@@ -273,7 +273,7 @@ parse.c: parse.y
 	mv y.tab.c parse.c
 
 executor.o: rand.h executor.c
-	$(TARGET_GCC) $(TARGET_CFLAGS) -DROOT_DIR='"$(root)"' -c -o $*.o $(SRC_DIR)/executor.c
+	$(HOST_GCC) $(HOST_CFLAGS) -DROOT_DIR='"$(root)"' -c -o $*.o $(SRC_DIR)/executor.c
 
 clean::
 	rm -f $(EXECUTOR_OBJ) $(ROMLIB_OBJ) $(MAP_C) lowglobals.s	\
@@ -285,7 +285,7 @@ syserr.o:	include/rsys/version.h
 toolevent.o:	include/rsys/version.h
 
 mkvol.o: $(SRC_DIR)/mkvol/mkvol.c $(SRC_DIR)/mkvol/mkvol.h
-	$(TARGET_GCC) $(TARGET_CFLAGS) $(CFLAGS) -c $(SRC_DIR)/mkvol/mkvol.c
+	$(HOST_GCC) $(HOST_CFLAGS) $(CFLAGS) -c $(SRC_DIR)/mkvol/mkvol.c
 
 dcconvert.o:	dcconvert.c
-	$(TARGET_GCC) $(TARGET_CFLAGS) @egcs_dcconvert_workaround@ -c -o $*.o $(SRC_DIR)/dcconvert.c
+	$(HOST_GCC) $(HOST_CFLAGS) @egcs_dcconvert_workaround@ -c -o $*.o $(SRC_DIR)/dcconvert.c

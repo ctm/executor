@@ -2,26 +2,26 @@ root = @root@
 
 util_dir = $(root)/util
 
-# gnu-style triple identifying the host machine;
+# gnu-style triple identifying the build machine;
 # this is a dynamic value
-# HOST := $(shell $(root)/util/config.guess)
+# BUILD := $(shell $(root)/util/config.guess)
 
-host_obj_dir = $(HOST)
-host_obj_dir_stamp = $(host_obj_dir)/stamp
+build_obj_dir = $(BUILD)
+build_obj_dir_stamp = $(build_obj_dir)/stamp
 
-# gnu-style triple identifying the target machine
-TARGET = @target@
-# canonical triple
-CANONICAL_TARGET = @canonical_target@
-TARGET_ARCH = @target_arch@
-TARGET_OS = @target_os@
-TARGET_FILE_FORMAT = @target_file_format@
-
-# same for the host machine
+# gnu-style triple identifying the host machine
 HOST = @host@
+# canonical triple
 CANONICAL_HOST = @canonical_host@
 HOST_ARCH = @host_arch@
 HOST_OS = @host_os@
+HOST_FILE_FORMAT = @host_file_format@
+
+# same for the build machine
+BUILD = @build@
+CANONICAL_BUILD = @canonical_build@
+BUILD_ARCH = @build_arch@
+BUILD_OS = @build_os@
 
 # front-end for this version of executor;
 # currently one of `nextstep', `x' or `dos'
@@ -33,94 +33,94 @@ SRC_DIR = $(root)/src
 FRONT_END_DIR = $(root)/src/config/front-ends/@front_end@
 SOUND_DIR = $(root)/src/config/sound/@sound@
 
-TARGET_ARCH_DIR = $(root)/src/config/arch/$(TARGET_ARCH)
-TARGET_OS_DIR = $(root)/src/config/os/$(TARGET_OS)
-
 HOST_ARCH_DIR = $(root)/src/config/arch/$(HOST_ARCH)
 HOST_OS_DIR = $(root)/src/config/os/$(HOST_OS)
 
-SYN68K_LIB_DIR = $(root)/syn68k/lib/@syn68k_target@
+BUILD_ARCH_DIR = $(root)/src/config/arch/$(BUILD_ARCH)
+BUILD_OS_DIR = $(root)/src/config/os/$(BUILD_OS)
+
+SYN68K_LIB_DIR = $(root)/syn68k/lib/@syn68k_host@
 INCL_DIR = $(SRC_DIR)/include
 
-# ahh, should HOST_{OS, ARCH}_DIR be added to the VPATH?
-VPATH = $(SRC_DIR):$(TARGET_ARCH_DIR):$(TARGET_OS_DIR):$(FRONT_END_DIR):$(SOUND_DIR)
+# ahh, should BUILD_{OS, ARCH}_DIR be added to the VPATH?
+VPATH = $(SRC_DIR):$(HOST_ARCH_DIR):$(HOST_OS_DIR):$(FRONT_END_DIR):$(SOUND_DIR)
 
-# these are (possibly) cross-tools that run on the target
-# and produce code for the target
-# these names are target-independant
-TARGET_CC = splode    
-TARGET_GCC = @target_gcc@
-TARGET_STRIP = @target_strip@
+# these are (possibly) cross-tools that run on the host
+# and produce code for the host
+# these names are host-independant
+HOST_CC = splode    
+HOST_GCC = @host_gcc@
+HOST_STRIP = @host_strip@
 
-TARGET_AS = $(TARGET_GCC) -c -x assembler-with-cpp
-TARGET_AS_CPP = $(TARGET_GCC) -c -x assembler-with-cpp -P
+HOST_AS = $(HOST_GCC) -c -x assembler-with-cpp
+HOST_AS_CPP = $(HOST_GCC) -c -x assembler-with-cpp -P
 # specifies c-specific -Ldirs
-TARGET_LD = splosion
+HOST_LD = splosion
 
-# these are compilers for the target
-HOST_CC = cc
-HOST_GCC = gcc
+# these are compilers for the host
+BUILD_CC = cc
+BUILD_GCC = gcc
 
 ifobjc
-# currently, objc compilers are only used on NEXTSTEP hosts.
-# the native (host) NeXT c compiler can act as the native objc compiler,
-# as well as the target objc compiler.
-HOST_OBJC = cc
-TARGET_OBJC = cc -arch @arch@
+# currently, objc compilers are only used on NEXTSTEP builds.
+# the native (build) NeXT c compiler can act as the native objc compiler,
+# as well as the host objc compiler.
+BUILD_OBJC = cc
+HOST_OBJC = cc -arch @arch@
 end ifobjc
 
 DEFINES = @syn68k_define@ $(ROMLIB_DEFINES) \
-  $(FRONT_END_DEFINES) $(TARGET_ARCH_DEFINES) $(TARGET_OS_DEFINES)
+  $(FRONT_END_DEFINES) $(HOST_ARCH_DEFINES) $(HOST_OS_DEFINES)
 
-# include in -I$(TARGET_..._DIR) also?
-INCLUDES = -I. -I$(INCL_DIR) -I$(FRONT_END_DIR) -I$(TARGET_OS_DIR) -I$(TARGET_ARCH_DIR) -I$(SOUND_DIR)
+# include in -I$(HOST_..._DIR) also?
+INCLUDES = -I. -I$(INCL_DIR) -I$(FRONT_END_DIR) -I$(HOST_OS_DIR) -I$(HOST_ARCH_DIR) -I$(SOUND_DIR)
 
-# host cflags are those given when compiling for the host
+# build cflags are those given when compiling for the build
 # do not put optimized/debug flags here
-HOST_CFLAGS = $(CFLAGS) -DCOMPILE_FOR_HOST $(DEFINES) $(INCLUDES)
-# GEN_FLAGS is like HOST_FLAGS, but used when building object files
+BUILD_CFLAGS = $(CFLAGS) -DCOMPILE_FOR_BUILD $(DEFINES) $(INCLUDES)
+# GEN_FLAGS is like BUILD_FLAGS, but used when building object files
 # which include ROMlib header files but do not link against ROMlib
 # (so ROMlib headers should define inline functions which reference
 # external romlib functions).
 # this is indicated by `-DNO_ROMLIB'
-GEN_CFLAGS = $(HOST_CFLAGS) -DNO_ROMLIB -Wall
+GEN_CFLAGS = $(BUILD_CFLAGS) -DNO_ROMLIB -Wall
 
 ifobjc
-HOST_OBJCFLAGS = $(CFLAGS) $(DEFINES) $(INCLUDES)
+BUILD_OBJCFLAGS = $(CFLAGS) $(DEFINES) $(INCLUDES)
 end ifobjc
 
 # cflags specified during configuration, defaults to `-g'
 CONFIGURE_CFLAGS = @cflags@
 
-# cflags for target
-TARGET_CFLAGS = $(DEFINES) $(INCLUDES) $(CONFIGURE_CFLAGS)
+# cflags for host
+HOST_CFLAGS = $(DEFINES) $(INCLUDES) $(CONFIGURE_CFLAGS)
 
 ifobjc
 # `-traditional-cpp' is needed by NeXT cc to make sense of the
 # global asm a5 decl
-# TARGET_OBJCFLAGS = -traditional-cpp $(TARGET_CFLAGS)
+# HOST_OBJCFLAGS = -traditional-cpp $(HOST_CFLAGS)
 # Haven't compiled NeXT based Executor in a very long time, but now that
 # we have the beginnings of a Mac OS X port, don't mess it up by requesting
-# -traditional-cpp.  If we ever do support NEXT targets again it will be
+# -traditional-cpp.  If we ever do support NEXT hosts again it will be
 # after moving to a more modern GNU build system.
-TARGET_OBJCFLAGS = $(TARGET_CFLAGS)
+HOST_OBJCFLAGS = $(HOST_CFLAGS)
 end ifobjc
 
 .SUFFIXES: .map .psw .h .c .m .s .scpp .o
 
-# by default, .c files are built by the target gcc compiler,
+# by default, .c files are built by the host gcc compiler,
 # you must make an explicit rule to override this
 .c.o: $<
-	$(TARGET_GCC) $(TARGET_CFLAGS) -c -o $*.o $<
+	$(HOST_GCC) $(HOST_CFLAGS) -c -o $*.o $<
 
 .m.o: $<
-	$(TARGET_OBJC) $(TARGET_OBJCFLAGS) -c -o $*.o $<
+	$(HOST_OBJC) $(HOST_OBJCFLAGS) -c -o $*.o $<
 
 .s.o: $<
-	$(TARGET_AS) -o $*.o $<
+	$(HOST_AS) -o $*.o $<
 
 .scpp.o: $<
-	$(TARGET_AS_CPP) $(DEFINES) $(INCLUDES) -o $*.o $<
+	$(HOST_AS_CPP) $(DEFINES) $(INCLUDES) -o $*.o $<
 
 all:: executor
 
@@ -128,8 +128,8 @@ ifsyn68k
 LIBSYN68K = -L$(SYN68K_LIB_DIR) -lsyn68k
 end ifsyn68k
 
-@target_arch_make@
-@target_os_make@
+@host_arch_make@
+@host_os_make@
 @front_end_make@
 @sound_make@
 @executor_make@
@@ -140,40 +140,40 @@ IV_OBJ = $(IV_SRC:.c=.o)
 
 all:: iv-server
 iv-server: iv-server.o
-	$(TARGET_GCC) -o iv-server iv-server.o $(IV_LIBS) $(FRONT_END_LIBS)
+	$(HOST_GCC) -o iv-server iv-server.o $(IV_LIBS) $(FRONT_END_LIBS)
 
 clean::
 	rm -f iv-server iv-server.o $(IV_OBJ)
 endif
 
-TARGET_OBJ = $(TARGET_ARCH_OBJ) $(TARGET_OS_OBJ) 
-TARGET_LIBS = $(TARGET_ARCH_LIBS) $(TARGET_OS_LIBS) 
-TARGET_LD_FLAGS = $(TARGET_ARCH_LD_FLAGS) $(TARGET_OS_LD_FLAGS)
+HOST_OBJ = $(HOST_ARCH_OBJ) $(HOST_OS_OBJ) 
+HOST_LIBS = $(HOST_ARCH_LIBS) $(HOST_OS_LIBS) 
+HOST_LD_FLAGS = $(HOST_ARCH_LD_FLAGS) $(HOST_OS_LD_FLAGS)
 
 executor: lowglobals.o $(ROMLIB_OBJ) $(EXECUTOR_OBJ) \
-  $(TARGET_OBJ) \
-  $(FRONT_END_OBJ) $(IV_OBJ) $(SOUND_OBJ) $(TARGET_OS_POST_LD_CMD)
+  $(HOST_OBJ) \
+  $(FRONT_END_OBJ) $(IV_OBJ) $(SOUND_OBJ) $(HOST_OS_POST_LD_CMD)
 	echo '#include "rsys/common.h"' > tmp-buildtime.c
 	echo '#include "rsys/version.h"' >> tmp-buildtime.c
 	echo 'const char ROMlib_executor_build_time[] = "'`date`'";' >> tmp-buildtime.c
-	$(TARGET_GCC) $(TARGET_CFLAGS) -c -o buildtime.o tmp-buildtime.c
+	$(HOST_GCC) $(HOST_CFLAGS) -c -o buildtime.o tmp-buildtime.c
 	rm -f tmp-buildtime.c
-	@$(TARGET_GCC) -o executor \
-	  $(LD_FLAGS) $(TARGET_LD_FLAGS) $(LOWGLOBALS_LD_OPTION) \
+	@$(HOST_GCC) -o executor \
+	  $(LD_FLAGS) $(HOST_LD_FLAGS) $(LOWGLOBALS_LD_OPTION) \
 	  $(ROMLIB_OBJ) $(EXECUTOR_OBJ) buildtime.o \
-	  $(TARGET_OBJ) $(FRONT_END_OBJ) $(IV_OBJ) $(SOUND_OBJ) \
-	  $(LIBSYN68K) $(FRONT_END_LIBS) $(TARGET_LIBS) $(SOUND_LIBS)
-	$(TARGET_OS_POST_LD_CMD) $(TARGET_OS_POST_LD_OPTIONS)
+	  $(HOST_OBJ) $(FRONT_END_OBJ) $(IV_OBJ) $(SOUND_OBJ) \
+	  $(LIBSYN68K) $(FRONT_END_LIBS) $(HOST_LIBS) $(SOUND_LIBS)
+	$(HOST_OS_POST_LD_CMD) $(HOST_OS_POST_LD_OPTIONS)
 
-$(host_obj_dir_stamp):
-	if [ ! -d $(host_obj_dir) ]; then \
-	  mkdir $(host_obj_dir); \
+$(build_obj_dir_stamp):
+	if [ ! -d $(build_obj_dir) ]; then \
+	  mkdir $(build_obj_dir); \
 	fi
-	touch $(host_obj_dir_stamp)
+	touch $(build_obj_dir_stamp)
 
 clean::
 	rm -f executor
-	rm -rf $(host_obj_dir) buildtime.o
+	rm -rf $(build_obj_dir) buildtime.o
 
 # We no longer use RCS; we use subversion, so we don't want any automatic
 # checkouts
@@ -181,14 +181,14 @@ clean::
 
 include make.depend
 
-depend-files: $(ROMLIB_SRC) $(EXECUTOR_SRC) $(TARGET_SRC)		\
-	      $(TARGET_OS_SRC) $(FRONT_END_SRC) $(IV_SRC) $(SOUND_SRC)	\
-	      $(MAP_C) $(EXECUTOR_GEN_C) $(TARGET_ARCH_SRC) Makefile
+depend-files: $(ROMLIB_SRC) $(EXECUTOR_SRC) $(HOST_SRC)		\
+	      $(HOST_OS_SRC) $(FRONT_END_SRC) $(IV_SRC) $(SOUND_SRC)	\
+	      $(MAP_C) $(EXECUTOR_GEN_C) $(HOST_ARCH_SRC) Makefile
 	@echo $(filter %.c %.m,$^) > depend-files.tmp
 	$(util_dir)/move-if-changed.sh depend-files.tmp depend-files
 
 make.depend: depend-files
-	-$(TARGET_GCC) $(INCLUDES) -MM `cat depend-files` > make.depend
+	-$(HOST_GCC) $(INCLUDES) -MM `cat depend-files` > make.depend
 
 clean::
 	rm -f depend-files make.depend

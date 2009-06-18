@@ -11,13 +11,13 @@
 /* #include this second, so we know what release type we are. */
 #include "rsys/release.h"
 
-#if defined (COMPILE_FOR_HOST)
+#if defined (COMPILE_FOR_BUILD)
+#include "build-os-config.h"
+#include "build-arch-config.h"
+#else /* !COMPILE_FOR_BUILD */
 #include "host-os-config.h"
 #include "host-arch-config.h"
-#else /* !COMPILE_FOR_HOST */
-#include "target-os-config.h"
-#include "target-arch-config.h"
-#endif /* !COMPILE_FOR_HOST */
+#endif /* !COMPILE_FOR_BUILD */
 
 #if !defined (CYGWIN32) && defined (USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 #undef USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
@@ -43,7 +43,7 @@
 #include "rsys/lowglobals.h"
 #endif
 
-#if !defined (COMPILE_FOR_HOST)
+#if !defined (COMPILE_FOR_BUILD)
 #include "front-end-config.h"
 #endif
 

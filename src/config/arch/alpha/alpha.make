@@ -1,1 +1,1 @@
-TARGET_ARCH_OBJ = alpha.o
+HOST_ARCH_OBJ = alpha.o
