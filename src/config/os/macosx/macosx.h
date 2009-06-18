@@ -85,7 +85,7 @@ extern int ROMlib_launch_native_app (int n_filenames, char **filenames);
 
 #include <ndbm.h>
 
-#if !defined (COMPILE_FOR_HOST)
+#if !defined (COMPILE_FOR_BUILD)
 
 extern void _dbm_fetch (datum *datump, DBM *db, datum datum);
 extern void _dbm_firstkey (datum *datump, DBM *db);

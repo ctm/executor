@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-#if !defined (COMPILE_FOR_HOST)
+#if !defined (COMPILE_FOR_BUILD)
 /* A replacement for stdio in a windowed environment */
 
 #if 0
