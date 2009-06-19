@@ -132,12 +132,6 @@ char ROMlib_rcsid_main[] =
 #include "x.h"
 #endif
 
-#if !defined (__alpha)
-PUBLIC uint32 ROMlib_offset;
-#else
-PUBLIC unsigned long ROMlib_offset;
-#endif
-
 BOOLEAN force_big_offset = CONFIG_OFFSET_P;
 
 #if defined (NEXTSTEP)

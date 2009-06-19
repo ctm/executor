@@ -1,9 +1,7 @@
-DONE?   Where we use "target", the new GNU build system uses "host"
-        Where we use "host", GNU uses "build".  We should clean this up
-        before we do anything else
+        Make it so people can select the front-end and the sound, but that
+        we default to SDL if it's available
 
-        $target_os winds up being darwin9.7.0, while we currently use
-        macosx.  We probably should map into the old name for now
+        Make it so if we don't find libsyn68k, we die properly
 
 	CToPascalCall -- look hard for arguments that sometimes take a pointer
 			and sometimes take a long

@@ -8,12 +8,6 @@
  * $Id: lowglobals.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-#if !defined (__alpha)
-extern uint32 ROMlib_offset;
-#else
-extern unsigned long ROMlib_offset;
-#endif
-
 extern BOOLEAN force_big_offset;
 
 #define nilhandle_H (*(HIDDEN_Ptr *)(0x00 + ROMlib_offset))
