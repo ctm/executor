@@ -23,7 +23,6 @@
 
 extern const char ROMlib_executor_version[];
 extern char *ROMlib_executor_full_name;
-extern const char ROMlib_executor_build_time[];
 
 #define PLATFORM_MOD 10 /* last decimal digit of serial number is platform */
 #define COMPOSITE_MOD 100 /* 2nd to last digit is price class */

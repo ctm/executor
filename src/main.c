@@ -1052,8 +1052,8 @@ parse_drive_opt (const char *opt_name, const char *opt_value)
 static void
 print_info (void)
 {
-  printf ("This is %s, compiled %s.\n",
-	  ROMlib_executor_full_name, ROMlib_executor_build_time);
+  printf ("This is %s, compiled.\n",
+	  ROMlib_executor_full_name);
 
 #if defined (i386)
   /* Print out CPU type. */

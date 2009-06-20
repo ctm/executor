@@ -12,6 +12,7 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 AC_PROG_RANLIB
 AM_PROG_AS
+AC_PROG_YACC
 
 AC_CHECK_PROG([PERL], [perl], [perl])
 AC_ARG_VAR([PERL], [perl for generating blitters])
@@ -22,22 +23,46 @@ AC_SYS_LARGEFILE
 
 AC_CHECK_LIB(syn68k, initialize_68k_emulator)
 
-# TODO: may not want to look for SDL if people have chosen an alternate
-# front-end.
+# Right now we blindly look for the libraries we need for the SDL Linux
+# port since that's the first one I'll get going with the this file.
 
-AC_CHECK_LIB(sdl, SDL_Init)
+AC_CHECK_LIB(SDL, SDL_Init)
+AC_CHECK_LIB(db, __db_ndbm_open)
+AC_CHECK_LIB(X11, XInitThreads)
+AC_CHECK_LIB(m, pow)
 
 AC_CONFIG_FILES([Makefile])
+
+
+# Normalize to our old names
+
+case ${build_cpu} in
+  i[[3456]]86)
+    build_cpu=i386
+  ;;
+esac
+
+case ${host_cpu} in
+  i[[3456]]86)
+    host_cpu=i386
+  ;;
+esac
 
 case ${build_os} in
   darwin*)
     build_os=macosx
+  ;;
+  linux*)
+    build_os=linux
   ;;
 esac
 
 case ${host_os} in
   darwin*)
     host_os=macosx
+  ;;
+  linux*)
+    host_os=linux
   ;;
 esac
 

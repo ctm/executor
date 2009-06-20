@@ -162,8 +162,8 @@ os_init (void)
 void
 msdos_print_info (void)
 {
-  printf ("This is %s, compiled %s.\n",
-	  ROMlib_executor_full_name, ROMlib_executor_build_time);
+  printf ("This is %s.\n",
+	  ROMlib_executor_full_name);
 
   /* Print out CPU type. */
   if (arch_type == ARCH_TYPE_I386)

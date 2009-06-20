@@ -2,7 +2,7 @@
 
 bin_PROGRAMS = executor
 
-noinst_PROGRAMS = map_to_c mkseedtables mkultable mksspairtable
+noinst_PROGRAMS = map_to_c mkseedtables mkultable mksspairtable opfind
 
 ctl_bitmap_c_files = arrow_up_active.c arrow_up_inactive.c       \
                      arrow_down_active.c arrow_down_inactive.c   \
@@ -32,6 +32,10 @@ mkseedtables_SOURCES = mkseedtables.c
 mkultable_SOURCES = mkultable.c
 
 mksspairtable_SOURCES = mksspairtable.c
+
+opfind_SOURCES = config/arch/i386/opfind.c
+
+opfind_CPPFLAGS = -DCOMPILE_FOR_BUILD $(AM_CPPFLAGS)
 
 seedtables.c:	mkseedtables
 	./mkseedtables > $@
@@ -85,7 +89,7 @@ qd_sources = qBit.c qCConv.c qCGrafPort.c qCRegular.c qColor.c qColorMgr.c    \
              qColorutil.c qCursor.c qGrafport.c qIMIV.c qIMV.c qIMVxfer.c     \
              qMisc.c qPaletteMgr.c qPen.c qPicstuff.c qPicture.c              \
              qPixMapConv.c qPoint.c qPoly.c qRect.c qRegion.c qRegular.c      \
-             qScale.c qStandard.c qStdArc.c qStdBits.c qStdLine.cq qStdOval.c \
+             qScale.c qStandard.c qStdArc.c qStdBits.c qStdLine.c qStdOval.c  \
              qStdPic.c qStdPoly.c qStdRRect.c qStdRect.c qStdRgn.c            \
              qStdText.c qText.c qGWorld.c qGDevice.c qIMVI.c qHooks.c         \
              xdata.c xdblt.c rawpatblt.c rawsrcblt.c dirtyrect.c srcblt.c     \
@@ -121,14 +125,70 @@ misc_sources = desk.c device.c disk.c diskinit.c dump.c trapname.c font.c    \
   splash.c icon.c redrawscreen.c ini.c checkpoint.c qt.c cleanup.c           \
   paramline.c fauxdbm.c custom.c commtool.c cfm.c local_charset.c pef_hash.c \
   interfacelib.c mixed_mode.c suffix_maps.c appearance.c lockrange.c         \
-  emutrap.c emutraptables.c emustubs.c
+  emutrap.c emutraptables.c emustubs.c unix_like.c parse.y check_structs.c   \
+  executor.c mkvol/mkvol.c crc.c
 
-executor_SOURCES = $(ctl_sources) $(dial_sources) $(file_sources) \
-                   $(hfs_sources) $(list_sources) $(menu_sources) \
-	           $(print_sources) $(qd_sources) $(res_sources)  \
-		   $(te_sources) $(wind_sources) $(ae_sources)    \
-                   $(sound_sources) $(num_sources) $(misc_sources)
+front_end_sdl_sources = config/front-ends/sdl/SDL_bmp.c \
+                        config/front-ends/sdl/sdlevents.c \
+                        config/front-ends/sdl/sdl_mem.c \
+                        config/front-ends/sdl/sdlquit.c \
+                        config/front-ends/sdl/sdlscrap.c \
+                        config/front-ends/sdl/sdlwin.c \
+                        config/front-ends/sdl/sdlwm.c \
+                        config/front-ends/sdl/sdlX.c \
+                        config/front-ends/sdl/syswm_map.c \
+                        config/front-ends/sdl/winmain.c
 
+sound_sdl_sources = config/sound/sdl/sdl-sound.c
 
+os_linux_sources = config/os/linux/linux.c          \
+                   config/os/linux/linux_except.c   \
+                   config/os/linux/lowglobals-mem.c
+
+arch_i386_sources = config/arch/i386/x86patblt.S    \
+                    config/arch/i386/x86srcblt.S    \
+                    config/arch/i386/xdstubtables.c \
+	            config/arch/i386/sbstubtables.c \
+                    config/arch/i386/i386.c
+
+x86patblt.$(OBJEXT):	pat-blitters.s
+
+x86srcblt.$(OBJEXT):	src-blitters.s
+
+pat-blitters-stamp pat-blitters.h pat-blitters.s:	\
+	config/arch/i386/opfind.c config/arch/i386/opfind.h \
+        config/arch/i386/metaasm.pl config/arch/i386/pat-blitters.meta
+	$(srcdir)/config/arch/i386/metaasm.pl $(METAASM_ARGS)\
+		$(srcdir)/config/arch/i386/pat-blitters.meta\
+		pat-blitters.s pat-blitters.h\
+		config/arch/i386/opfind.c
+	$(RM) opfind asmsamples.h
+	touch pat-blitters-stamp
+
+# We have src-blitters-stamp depend on pat-blitters-stamp so we don't
+# try to do two metaasm's at once.  They would fight over `opfind'.
+src-blitters-stamp src-blitters.h src-blitters.s: \
+		config/arch/i386/opfind.c config/arch/i386/opfind.h \
+                config/arch/i386/metaasm.pl \
+                config/arch/i386/src-blitters.meta \
+                config/arch/i386/src-shift.meta \
+		config/arch/i386/src-noshift.meta \
+                config/arch/i386/src-shift-fgbk.meta \
+                config/arch/i386/src-noshift-fgbk.meta \
+		pat-blitters-stamp config/arch/i386/src-blitters-core.meta
+	$(srcdir)/config/arch/i386/metaasm.pl -define DST_SEG= $(METAASM_ARGS)\
+		$(srcdir)/config/arch/i386/src-blitters.meta\
+		src-blitters.s src-blitters.h\
+		config/arch/i386/opfind.c
+	$(RM) opfind
+	touch src-blitters-stamp
+
+executor_SOURCES = $(ctl_sources) $(dial_sources) $(file_sources)  \
+                   $(hfs_sources) $(list_sources) $(menu_sources)  \
+	           $(print_sources) $(qd_sources) $(res_sources)   \
+		   $(te_sources) $(wind_sources) $(ae_sources)     \
+                   $(sound_sources) $(num_sources) $(misc_sources) \
+                   $(front_end_sdl_sources) $(sound_sdl_sources)   \
+                   $(os_linux_sources) $(arch_i386_sources)
 
 AM_CPPFLAGS=-I$(srcdir)/include -I$(srcdir)/config/front-ends/$(front_end) -I$(srcdir)/config/os/$(host_os) -I$(srcdir)/config/arch/$(host_cpu)

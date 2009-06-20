@@ -1,7 +1,21 @@
-        Make it so people can select the front-end and the sound, but that
-        we default to SDL if it's available
+        GNU build fixes
 
-        Make it so if we don't find libsyn68k, we die properly
+                Make it so people can select the front-end and the
+                sound, but that we default to SDL if it's available
+
+                Make it so if we don't find libsyn68k, we die properly
+                (unless we're on a 68k)
+
+                See if there's a more elegant way to identify the build
+                parameters than our current per-target override using
+                -DCOMPILE_FOR_BUILD
+
+                See if there's a more elegant solution to the blitters
+                code (can we nuke the config/arch/i386 prefixes in the
+                dependencies? should we make it so both source and pattern
+                blitters can be done in parallel?
+
+                test parallel builds
 
 	CToPascalCall -- look hard for arguments that sometimes take a pointer
 			and sometimes take a long
