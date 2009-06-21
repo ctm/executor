@@ -7,6 +7,8 @@ char ROMlib_rcsid_map_to_c[] =
 		"$Id: map_to_c.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
+#define COMPILE_FOR_BUILD
+
 #include "rsys/common.h"
 #include <ctype.h>
 

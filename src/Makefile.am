@@ -15,23 +15,10 @@ wind_bitmap_c_files = zoom.c go_away.c active.c ractive.c grow.c
 CLEANFILES = $(ctl_bitmap_c_files) $(wind_bitmap_c_files)  apple.c \
              seedtables.c ultable.c sspairtable.c rawpatstubs.c rawsrcstubs.c
 
-map_to_c_CPPFLAGS = -DCOMPILE_FOR_BUILD $(AM_CPPFLAGS)
-mkseedtables_CPPFLAGS = -DCOMPILE_FOR_BUILD $(AM_CPPFLAGS)
-mkultable_CPPFLAGS = -DCOMPILE_FOR_BUILD $(AM_CPPFLAGS)
-mksspairtable_CPPFLAGS = -DCOMPILE_FOR_BUILD $(AM_CPPFLAGS)
-
 $(ctl_bitmap_c_files) apple.c $(wind_bitmap_c_files):	map_to_c
 
 .map.c:	map_to_c
 	./map_to_c < $< > $@
-
-map_to_c_SOURCES = map_to_c.c
-
-mkseedtables_SOURCES = mkseedtables.c
-
-mkultable_SOURCES = mkultable.c
-
-mksspairtable_SOURCES = mksspairtable.c
 
 opfind_SOURCES = config/arch/i386/opfind.c
 
@@ -47,10 +34,10 @@ sspairtable.c:	mksspairtable
 	./mksspairtable > $@
 
 rawpatstubs.c:	$(srcdir)/makerawblt.pl $(srcdir)/pat-blitters.tmpl
-	$(srcdir)/makerawblt.pl < $(srcdir)/pat-blitters.tmpl > rawpatstubs.c
+	$(PERL) $(srcdir)/makerawblt.pl < $(srcdir)/pat-blitters.tmpl > rawpatstubs.c
 
 rawsrcstubs.c: $(srcdir)/makerawblt.pl $(srcdir)/src-blitters.tmpl
-	$(srcdir)/makerawblt.pl < $(srcdir)/src-blitters.tmpl > rawsrcstubs.c
+	$(PERL) $(srcdir)/makerawblt.pl < $(srcdir)/src-blitters.tmpl > rawsrcstubs.c
 
 
 ctlArrows.$(OBJEXT):	$(ctl_bitmap_c_files)
@@ -128,14 +115,14 @@ misc_sources = desk.c device.c disk.c diskinit.c dump.c trapname.c font.c    \
   emutrap.c emutraptables.c emustubs.c unix_like.c parse.y check_structs.c   \
   executor.c mkvol/mkvol.c crc.c
 
-front_end_sdl_sources = config/front-ends/sdl/SDL_bmp.c \
+front_end_sdl_sources = config/front-ends/sdl/SDL_bmp.c   \
                         config/front-ends/sdl/sdlevents.c \
-                        config/front-ends/sdl/sdl_mem.c \
-                        config/front-ends/sdl/sdlquit.c \
-                        config/front-ends/sdl/sdlscrap.c \
-                        config/front-ends/sdl/sdlwin.c \
-                        config/front-ends/sdl/sdlwm.c \
-                        config/front-ends/sdl/sdlX.c \
+                        config/front-ends/sdl/sdl_mem.c   \
+                        config/front-ends/sdl/sdlquit.c   \
+                        config/front-ends/sdl/sdlscrap.c  \
+                        config/front-ends/sdl/sdlwin.c    \
+                        config/front-ends/sdl/sdlwm.c     \
+                        config/front-ends/sdl/sdlX.c      \
                         config/front-ends/sdl/syswm_map.c \
                         config/front-ends/sdl/winmain.c
 
@@ -145,11 +132,26 @@ os_linux_sources = config/os/linux/linux.c          \
                    config/os/linux/linux_except.c   \
                    config/os/linux/lowglobals-mem.c
 
+arch_alpha_sources = config/arch/alpha/alpha.c
+
 arch_i386_sources = config/arch/i386/x86patblt.S    \
                     config/arch/i386/x86srcblt.S    \
                     config/arch/i386/xdstubtables.c \
 	            config/arch/i386/sbstubtables.c \
                     config/arch/i386/i386.c
+
+# TODO: If we ever support the m68k target again we'll need to make it so that
+#       we build m68k-callback-stubs.s
+
+arch_m68k_sources = config/arch/m68k/m68k.c                  \
+                    config/arch/m68k/m68k-callback.c         \
+                    config/arch/m68k/m68k-callback-handler.s \
+                    config/arch/m68k/m68k-call-emulator.s    \
+                    config/arch/m68k/m68k-destroy.c          \
+                    config/arch/m68k/m68k-stack.c            \
+                    config/arch/m68k/m68k-trap-handler.s     \
+                    config/arch/m68k/trap.S                  \
+                    config/arch/m68k/m68k-callback-stubs.s
 
 x86patblt.$(OBJEXT):	pat-blitters.s
 
@@ -158,7 +160,7 @@ x86srcblt.$(OBJEXT):	src-blitters.s
 pat-blitters-stamp pat-blitters.h pat-blitters.s:	\
 	config/arch/i386/opfind.c config/arch/i386/opfind.h \
         config/arch/i386/metaasm.pl config/arch/i386/pat-blitters.meta
-	$(srcdir)/config/arch/i386/metaasm.pl $(METAASM_ARGS)\
+	$(PERL) $(srcdir)/config/arch/i386/metaasm.pl $(METAASM_ARGS)\
 		$(srcdir)/config/arch/i386/pat-blitters.meta\
 		pat-blitters.s pat-blitters.h\
 		config/arch/i386/opfind.c
@@ -176,7 +178,7 @@ src-blitters-stamp src-blitters.h src-blitters.s: \
                 config/arch/i386/src-shift-fgbk.meta \
                 config/arch/i386/src-noshift-fgbk.meta \
 		pat-blitters-stamp config/arch/i386/src-blitters-core.meta
-	$(srcdir)/config/arch/i386/metaasm.pl -define DST_SEG= $(METAASM_ARGS)\
+	$(PERL) $(srcdir)/config/arch/i386/metaasm.pl -define DST_SEG= $(METAASM_ARGS)\
 		$(srcdir)/config/arch/i386/src-blitters.meta\
 		src-blitters.s src-blitters.h\
 		config/arch/i386/opfind.c
