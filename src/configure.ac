@@ -44,11 +44,7 @@ AM_PROG_CC_C_O
 AC_PROG_RANLIB
 AM_PROG_AS
 AC_PROG_YACC
-
-if test x$host_os = xmacosx; then
-  AC_PROG_OBJC
-fi
-
+AC_PROG_OBJC
 
 AC_CHECK_PROG([PERL], [perl], [perl])
 AC_ARG_VAR([PERL], [perl for generating blitters])
