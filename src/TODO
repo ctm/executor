@@ -3,8 +3,6 @@
                 can clean up a bunch of repeated partial paths by making
                 things like archdir=config/arch/$host_arch
 
-                figure out how to deal with -framework for mac os x port
-
                 See if there's a more elegant solution to the blitters
                 code (can we nuke the config/arch/i386 prefixes in the
                 dependencies? should we make it so both source and pattern

@@ -158,11 +158,17 @@ src-blitters-stamp src-blitters.h src-blitters.s: \
 	$(RM) opfind
 	touch src-blitters-stamp
 
-arch_sources = config/arch/i386/x86patblt.S    \
-               config/arch/i386/x86srcblt.S    \
-               config/arch/i386/xdstubtables.c \
-	       config/arch/i386/sbstubtables.c \
-               config/arch/i386/i386.c
+arch_sources = config/arch/i386/i386.c
+
+
+if !CONFIG_OS_MACOSX
+
+arch_sources += config/arch/i386/x86patblt.S    \
+                config/arch/i386/x86srcblt.S    \
+                config/arch/i386/xdstubtables.c \
+	        config/arch/i386/sbstubtables.c
+
+endif !CONFIG_OS_MACOSX
 
 endif CONFIG_ARCH_I386
 
@@ -246,9 +252,17 @@ front_end_sources = config/front-ends/sdl/SDL_bmp.c   \
                     config/front-ends/sdl/sdlscrap.c  \
                     config/front-ends/sdl/sdlwin.c    \
                     config/front-ends/sdl/sdlwm.c     \
-                    config/front-ends/sdl/sdlX.c      \
                     config/front-ends/sdl/syswm_map.c \
                     config/front-ends/sdl/winmain.c
+
+if CONFIG_OS_LINUX
+front_end_sources += config/front-ends/sdl/sdlX.c
+endif CONFIG_OS_LINUX
+
+if CONFIG_OS_MACOSX
+front_end_sources += config/front-ends/sdl/macosx_main.m
+endif CONFIG_OS_MACOSX
+
 endif CONFIG_FRONT_END_SDL
 
 if CONFIG_FRONT_END_SVGALIB
@@ -316,6 +330,10 @@ os_sources = config/os/linux/linux.c          \
              config/os/linux/linux_except.c   \
              config/os/linux/lowglobals-mem.c
 endif CONFIG_OS_LINUX
+
+if CONFIG_OS_MACOSX
+executor_LDFLAGS = -framework SDL -framework Cocoa
+endif  CONFIG_OS_MACOSX
 
 if CONFIG_OS_MSDOS
 os_sources = config/os/msdos/msdos.c    \

@@ -5,21 +5,6 @@ AM_INIT_AUTOMAKE([-Wall])
 AC_CONFIG_SRCDIR([executor.c])
 AC_CONFIG_HEADERS([config.h])
 
-# Checks for programs.
-AM_PROG_AS
-AC_PROG_CC
-AM_PROG_CC_C_O
-AC_PROG_RANLIB
-AM_PROG_AS
-AC_PROG_YACC
-
-AC_CHECK_PROG([PERL], [perl], [perl])
-AC_ARG_VAR([PERL], [perl for generating blitters])
-
-AC_GNU_SOURCE
-
-AC_SYS_LARGEFILE
-
 # Normalize to our old names
 
 case ${build_cpu} in
@@ -52,6 +37,26 @@ case ${host_os} in
   ;;
 esac
 
+# Checks for programs.
+AM_PROG_AS
+AC_PROG_CC
+AM_PROG_CC_C_O
+AC_PROG_RANLIB
+AM_PROG_AS
+AC_PROG_YACC
+
+if test x$host_os = xmacosx; then
+  AC_PROG_OBJC
+fi
+
+
+AC_CHECK_PROG([PERL], [perl], [perl])
+AC_ARG_VAR([PERL], [perl for generating blitters])
+
+AC_GNU_SOURCE
+
+AC_SYS_LARGEFILE
+
 # Check for libraries
 
 if test x$host_cpu != xm68k; then
@@ -69,6 +74,8 @@ AC_ARG_WITH(front-end,
                front_end=sdl
              elif test x"$ac_cv_lib_X11_XInitThreads" = xyes; then
                front_end=x
+             elif test x$host_os = xmacosx; then
+               front_end=sdl
              else
                AC_MSG_ERROR([Must use --with-front-end=sdl or --with-front-end=x])
              fi])
@@ -89,6 +96,8 @@ AC_ARG_WITH(sound,
                sound_config=sdl
              elif test x"$host_os" = xxlinux; then
                sound_config=linux
+             elif test x$host_os = xmacosx; then
+               sound_config=sdl
              else
                AC_MSG_ERROR([Must use --with-sound=sdl or --with-sound=x])
              fi])
