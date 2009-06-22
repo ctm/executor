@@ -210,7 +210,9 @@ if CONFIG_ARCH_POWERPC
 #       get the compiler to help us run PPC binaries.  That ability hasn't
 #       worked since we started doing PPC builds on Mac OS X.
 
-arch_sources = powerpc.c ppc_call.c ppc_stubs.c
+arch_sources = config/arch/powerpc/powerpc.c  \
+               config/arch/powerpc/ppc_call.c \
+               config/arch/powerpc/ppc_stubs.c
 AM_CPPFLAGS += -D_GNU_SOURCE
 endif CONFIG_ARCH_POWERPC
 
