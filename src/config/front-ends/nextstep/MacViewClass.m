@@ -754,7 +754,7 @@ vdriver_set_colors (int first_color, int num_colors, const ColorSpec *colors)
 	      num_colors * sizeof colors[0]);
       conversion_func = NULL;  /* Invalidate old conversion stuff. */
       repaint_screen ();
-      vdriver_flush_display ();	/* Make sure changed colors are visible. */
+      vdriver_flush_display();	/* Make sure changed colors are visible. */
     }
 }
 

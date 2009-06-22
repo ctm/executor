@@ -176,7 +176,7 @@ splash_screen_display (boolean_t button_p, char *basename)
   }
   
   vdriver_update_screen (0, 0, vdriver_height, vdriver_width, FALSE);
-  vdriver_flush_display ();
+  vdriver_flush_display();
   
   return TRUE;
 }

@@ -58,7 +58,7 @@ cursor_debug (const uint8 *datap, const uint8 *maskp, int hot_x, int hot_y)
     }
   dirty_rect_accrue (0, 0, 16, 16);
   dirty_rect_update_screen ();
-  vdriver_flush_display ();
+  vdriver_flush_display();
 }
 
 #define HOST_SET_CURSOR(d,m,x,y)		\
