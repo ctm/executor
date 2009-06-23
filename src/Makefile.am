@@ -117,8 +117,10 @@ endif CONFIG_ARCH_ALPHA
 
 if CONFIG_ARCH_I386
 
+noinst_PROGRAMS += opfind
+
 CLEANFILES +=  src-blitters.h src-blitters.s pat-blitters.h pat-blitters.s \
-               asmsamples.h src-blitters-stamp pat-blitters-stamp
+               asmsamples.h src-blitters-stamp pat-blitters-stamp opfind
 
 opfind_SOURCES = config/arch/i386/opfind.c
 
@@ -135,7 +137,7 @@ pat-blitters-stamp pat-blitters.h pat-blitters.s:	\
 		$(srcdir)/config/arch/i386/pat-blitters.meta\
 		pat-blitters.s pat-blitters.h\
 		config/arch/i386/opfind.c
-	$(RM) opfind asmsamples.h
+	$(RM) asmsamples.h
 	touch pat-blitters-stamp
 
 # We have src-blitters-stamp depend on pat-blitters-stamp so we don't
@@ -153,7 +155,6 @@ src-blitters-stamp src-blitters.h src-blitters.s: \
 		$(srcdir)/config/arch/i386/src-blitters.meta\
 		src-blitters.s src-blitters.h\
 		config/arch/i386/opfind.c
-	$(RM) opfind
 	touch src-blitters-stamp
 
 arch_sources = config/arch/i386/i386.c

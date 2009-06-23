@@ -16,22 +16,24 @@ to use, but that we did not necessarily have the permission to publish
 the source for, so the source to some of the packages that the DOS
 port requires is not present in the github repository.
 
-Don't be mislead by configure.ac, Executor currently builds using an
-ancient configuration script.  If you want to try to build a version
-of Executor for Linux, try doing this (*After you've done a make
-install of syn68k):
+If you want to try to build a version of Executor, try this:
 
-  mkdir -p build/debug-linux
-  cd build/debug-linux
-  ../../util/configure.sh  '--host=i486-linux' '--build=i486-linux' '--front-end=x' '--host-gcc=gcc' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--host-file-format=glibc' '--sound=linux' '--syn68k-host=i486-linux-glibc'
+  cd src
+  autoreconf --install
+  cd ..
+  mkdir build
+  cd build
+  ../src/configure
   make
 
-That should leave you with a binary called executor.  Unfortunately, without
-a System Folder, Executor won't even come close to running.  If you're using
-a system that can install RPMs and you can dig up and install a copy of
+That should leave you with a binary called executor (at least on
+32-bit x86 Linux systems, or a Mac (Intel or PowerPC) with XCode 3
+installed).  Unfortunately, without a System Folder, Executor won't
+even come close to running.  If you're using a system that can install
+RPMs and you can dig up and install a copy of
 executor-aux-2.1pr16-1.i386.rpm, then you should be able to run.
 
-I've begun transitioning to the new GNU build system.  My plan is to
+Now that Executor is using a recent GNU build system, my plan is to
 use the datadir related variables as a place to install the template
 for a system volume and to automatically build an ExecutorVolume
 somewhere (based on environment variables and defaults) the first time
@@ -41,8 +43,8 @@ In the meantime, if anyone is reading this and wants a copy of
 executor-aux-2.1pr16-1.i386.rpm, try messaging me (ctm) at github.
 
 If you're on an x86_64 based machine and you have the ability to compile
-32-bit binaries, you should be able to build a copy of Executor by doing
-something like
+32-bit binaries, you may be able to build a copy of Executor by using our
+old build system and doing something like
 
   mkdir -p build/debug-linux
   cd build/debug-linux
@@ -57,39 +59,15 @@ to
 
 BUILD_GCC = gcc -m32
 
-
-If you have SDL <http://libsdl.org/> installed and would like to use
-the SDL-based version of Executor on Linux, you can try:
-
-  mkdir -p build/debug-linux-sdl
-  cd build/debug-linux-sdl
-  ../../util/configure.sh  '--host=i486-linux' '--build=i486-linux' '--front-end=sdl' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--host-file-format=glibc' '--sound=sdl' '--syn68k-host=i486-linux-glibc'
-  make
-
-If you have SDL <http://libsdl.org/> installed and would like to play with
-the SDL-based version of Executor on Mac OS X Intel, you can try:
-
-  mkdir -p build/debug-macosx-sdl
-  cd build/debug-macosx-sdl
-  ../../util/configure.sh  '--host=i486-macosx' '--build=i486-macosx' '--front-end=sdl' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--host-file-format=glibc' '--sound=sdl' '--syn68k-host=i486-macosx-glibc'
-  make
-
-If you have SDL installed and would like to play with the SDL-based
-version of Executor on Mac OS X PPC, you can try the following.
-
-  mkdir -p build/debug-macosx-sdl
-  cd build/debug-macosx-sdl
-  ../../util/configure.sh  '--host=powerpc-macosx' '--build=powerpc-macosx' '--front-end=sdl' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--host-file-format=glibc' '--sound=sdl' '--syn68k-host=powerpc-macosx-glibc'
-
 In the past it was possible to cross-compile a version of Executor for
 Windows using mingw32.  So far that port hasn't been tried since
 putting the code on Github.  It probably doesn't work, but probably
 could be made to work without much effort.
 
-As I work on switching to the gnu build system I may inadvertantly
-push versions that don't build when using the above commands.  Don't
-hesitate to ask me if you're having trouble compiling, linking or
-running any of the above platforms.
+As I continue Executor's transition to a recent gnu build system I may
+inadvertantly push versions that don't build when using the above
+commands.  Don't hesitate to ask me if you're having trouble
+compiling, linking or running any of the above platforms.
 
 My email address is still <ctm@ardi.com>, although ARDI itself is
 defunct.  I get a ridiculous amount of spam and will quite possibly
