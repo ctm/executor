@@ -117,8 +117,6 @@ endif CONFIG_ARCH_ALPHA
 
 if CONFIG_ARCH_I386
 
-noinst_PROGRAMS += opfind
-
 CLEANFILES +=  src-blitters.h src-blitters.s pat-blitters.h pat-blitters.s \
                asmsamples.h src-blitters-stamp pat-blitters-stamp
 
