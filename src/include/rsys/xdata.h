@@ -52,8 +52,9 @@ typedef struct _xdata_t
 } xdata_t;
 
 
-typedef struct { xdata_t *p PACKED_P; } *xdata_handle_t;
-
+typedef xdata_t *xdata_ptr;
+MAKE_HIDDEN(xdata_ptr);
+typedef HIDDEN_xdata_ptr *xdata_handle_t;
 
 extern boolean_t update_xdata_if_needed (xdata_handle_t x, PixPat *pixpat,
 					 PixMapPtr dest);

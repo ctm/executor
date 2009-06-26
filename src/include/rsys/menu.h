@@ -73,7 +73,7 @@ extern LONGINT ROMlib_menuhelper( MenuHandle mh, Rect *saver, LONGINT where,
 #define MLMAX   16
 
 typedef struct PACKED {
-  MenuHandle muhandle	PACKED_P;
+  PACKED_MEMBER(MenuHandle, muhandle);
   INTEGER muleft;
 } muelem;
 
@@ -122,7 +122,7 @@ typedef struct PACKED menu_list
 } menu_list;
 
 typedef menu_list *menu_list_ptr;
-typedef struct { menu_list_ptr p PACKED_P; } HIDDEN_menu_list_ptr;
+MAKE_HIDDEN(menu_list_ptr);
 typedef HIDDEN_menu_list_ptr *menu_list_handle;
 
 typedef struct PACKED {
@@ -133,7 +133,7 @@ typedef struct PACKED {
 } menulist;
 
 typedef menulist *menulistp;
-typedef struct { menulistp p PACKED_P; } HIDDEN_menulistp;
+MAKE_HIDDEN(menulistp);
 typedef HIDDEN_menulistp *mlhandle;
 
 /* Menu Color Entry accessors */
@@ -159,7 +159,7 @@ typedef HIDDEN_menulistp *mlhandle;
 
 typedef struct PACKED {	/* from MPW Private.a */
     INTEGER lastMBSave;		/* offset to top most menu saved */
-    Handle mbCustomStorage	PACKED_P;	/* for custom jobs (i.e. we don't use) */
+  PACKED_MEMBER(Handle, mbCustomStorage);	/* for custom jobs (i.e. we don't use) */
     Rect mbItemRect;		/* currently chosen menu */
     Byte mbMenuDelay;		/* MenuDelay from param ram */
     Byte mbMenuDrag;		/* MenuDrag from param ram */
@@ -168,15 +168,15 @@ typedef struct PACKED {	/* from MPW Private.a */
 } mbdfheader;
 
 typedef mbdfheader *mbdfheaderptr;
-typedef struct { mbdfheaderptr p PACKED_P; } HIDDEN_mbdfheaderptr;
+MAKE_HIDDEN(mbdfheaderptr);
 typedef HIDDEN_mbdfheaderptr *mbdfheaderhand;
 
 typedef struct PACKED {
     Rect mbRectSave;		/* where it is on screen */
-    Handle mbBitsSave	PACKED_P;		/* where the bits are */
+    PACKED_MEMBER(Handle, mbBitsSave);		/* where the bits are */
     INTEGER mbMenuDir;		/* what direction the menu was placed */
     INTEGER mbMLOffset;		/* 6 byte offset into MenuList */
-    MenuHandle mbMLHandle	PACKED_P;	/* the handle from MenuList */
+    PACKED_MEMBER(MenuHandle, mbMLHandle);	/* the handle from MenuList */
     INTEGER mbTopScroll;	/* copy of TopMenuItem */
     INTEGER mbBotScroll;	/* copy of AtMenuBottom */
     LONGINT mbReserved;		/* i dunno */

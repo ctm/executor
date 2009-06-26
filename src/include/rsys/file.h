@@ -75,8 +75,8 @@ typedef struct PACKED {
   LONGINT fcleof;	/* LONGINT fcbEOF */
   LONGINT fcPLen;
   LONGINT fcbCrPs;
-  VCB *fcvptr	PACKED_P;	/* VCB *fcbVPtr */
-  Ptr fcbBfAdr	PACKED_P;
+  PACKED_MEMBER(VCB, *fcvptr);	/* VCB *fcbVPtr */
+  PACKED_MEMBER(Ptr, fcbBfAdr);
   INTEGER fcbFlPos;
   LONGINT fcbClmpSize;
   LONGINT fcfd;		/* instead of: LONGINT fcbBTCBPtr	PACKED; */

@@ -111,7 +111,7 @@ P2(PUBLIC pascal trap, ControlHandle, GetNewControl,		/* IMI-321 */
 					        INTEGER, cid, WindowPtr, wst)
 {
     typedef contrlrestype *wp;
-    typedef struct { wp p PACKED_P; } HIDDEN_wp;
+    MAKE_HIDDEN(wp);
     HIDDEN_wp *wh;
     ControlHandle retval;
     Handle ctab_res_h;
@@ -170,9 +170,9 @@ P2 (PUBLIC pascal trap, void, SetCtlColor, ControlHandle, ctl, CCTabHandle, ctab
 
 P1(PUBLIC pascal trap, void, DisposeControl, ControlHandle, c)	/* IMI-321 */
 {
-    typedef struct { ControlHandle p PACKED_P; } HIDDEN_ControlHandle;
+    MAKE_HIDDEN(ControlHandle);
     HIDDEN_ControlHandle *t;
-    typedef struct { AuxCtlHandle p PACKED_P; } HIDDEN_AuxCtlHandle;
+    MAKE_HIDDEN(AuxCtlHandle);
     HIDDEN_AuxCtlHandle *auxhp;
     AuxCtlHandle saveauxh;
     

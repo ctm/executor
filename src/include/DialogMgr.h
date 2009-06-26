@@ -33,8 +33,8 @@
 typedef struct PACKED
  {
    WindowRecord window;
-   Handle items	PACKED_P;
-   TEHandle textH	PACKED_P;
+   PACKED_MEMBER(Handle, items);
+   PACKED_MEMBER(TEHandle, textH);
    INTEGER editField;
    INTEGER editOpen;
    INTEGER aDefItem;
@@ -74,7 +74,7 @@ typedef struct PACKED
 } DialogTemplate;
 
 typedef DialogTemplate *DialogTPtr;
-typedef struct { DialogTPtr p PACKED_P; } HIDDEN_DialogTPtr;
+MAKE_HIDDEN(DialogTPtr);
 typedef HIDDEN_DialogTPtr *DialogTHndl;
 
 typedef struct PACKED {
@@ -98,7 +98,7 @@ typedef struct PACKED {
   StageList stages;
 } AlertTemplate;
 typedef AlertTemplate *AlertTPtr;
-typedef struct { AlertTPtr p PACKED_P; } HIDDEN_AlertTPtr;
+MAKE_HIDDEN(AlertTPtr);
 typedef HIDDEN_AlertTPtr *AlertTHndl;
 
 #define overlayDITL		0

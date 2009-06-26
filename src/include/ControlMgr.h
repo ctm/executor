@@ -78,24 +78,24 @@ enum
 
 typedef struct __cr ControlRecord;
 typedef ControlRecord *ControlPtr;
-typedef struct { ControlPtr p PACKED_P; } HIDDEN_ControlPtr;
+MAKE_HIDDEN(ControlPtr);
 typedef HIDDEN_ControlPtr *ControlHandle;
-typedef struct { ControlHandle p PACKED_P; } HIDDEN_ControlHandle;
+MAKE_HIDDEN(ControlHandle);
 
 #include "WindowMgr.h"
 
 struct PACKED __cr {
-  ControlHandle nextControl	PACKED_P;	/* actually ControlHandle */
-  WindowPtr contrlOwner	PACKED_P;
+  PACKED_MEMBER(ControlHandle, nextControl);
+  PACKED_MEMBER(WindowPtr, contrlOwner);
   Rect contrlRect;
   Byte contrlVis;
   Byte contrlHilite;
   INTEGER contrlValue;
   INTEGER contrlMin;
   INTEGER contrlMax;
-  Handle contrlDefProc	PACKED_P;
-  Handle contrlData	PACKED_P;
-  ProcPtr contrlAction	PACKED_P;
+  PACKED_MEMBER(Handle, contrlDefProc);
+  PACKED_MEMBER(Handle, contrlData);
+  PACKED_MEMBER(ProcPtr, contrlAction);
   LONGINT contrlRfCon;
   Str255 contrlTitle;
 };
@@ -106,18 +106,18 @@ typedef struct PACKED {
   INTEGER ctSize;
   cSpecArray ctTable;
 } CtlCTab, *CCTabPtr;
-typedef struct { CCTabPtr p PACKED_P; } HIDDEN_CCTabPtr;
+MAKE_HIDDEN(CCTabPtr);
 typedef HIDDEN_CCTabPtr *CCTabHandle;
 
 typedef struct AuxCtlRec *AuxCtlPtr;
-typedef struct { AuxCtlPtr p PACKED_P; } HIDDEN_AuxCtlPtr;
+MAKE_HIDDEN(AuxCtlPtr);
 typedef HIDDEN_AuxCtlPtr *AuxCtlHandle;
-typedef struct { AuxCtlHandle p PACKED_P; } HIDDEN_AuxCtlHandle;
+MAKE_HIDDEN(AuxCtlHandle);
 
 typedef struct PACKED AuxCtlRec {
-  AuxCtlHandle acNext		PACKED_P;
-  ControlHandle acOwner	PACKED_P;
-  CCTabHandle acCTable	PACKED_P;
+  PACKED_MEMBER(AuxCtlHandle, acNext);
+  PACKED_MEMBER(ControlHandle, acOwner);
+  PACKED_MEMBER(CCTabHandle, acCTable);
   INTEGER acFlags;
   LONGINT acReserved;
   LONGINT acRefCon;

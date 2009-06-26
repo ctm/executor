@@ -64,7 +64,7 @@ char ROMlib_rcsid_segment[] =
 #endif /* defined(MSDOS) */
 
 typedef finderinfo *finderinfoptr;
-typedef struct { finderinfoptr p PACKED_P; } HIDDEN_finderinfoptr;
+MAKE_HIDDEN(finderinfoptr);
 typedef HIDDEN_finderinfoptr *finderinfohand;
 
 PUBLIC int ROMlib_cacheheuristic = FALSE;

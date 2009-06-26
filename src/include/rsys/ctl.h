@@ -46,7 +46,7 @@ extern AuxCtlHandle default_aux_ctl;
 #define CTL_MIN(ctl)		(CW (CTL_MIN_X (ctl)))
 #define CTL_MAX(ctl)		(CW (CTL_MAX_X (ctl)))
 #define CTL_DEFPROC(ctl)	(MR (CTL_DEFPROC_X (ctl)))
-#define CTL_DATA(ctl)		((RgnHandle) MR (CTL_DATA_X (ctl)))
+#define CTL_DATA(ctl)		((RgnHandle) PPR (CTL_DATA_X (ctl)))
 #define CTL_ACTION(ctl)		(MR (CTL_ACTION_X (ctl)))
 #define CTL_ACTION_AS_LONG(ctl)	(CL ((LONGINT) CTL_ACTION_X (ctl)))
 #define CTL_REF_CON(ctl)	(CL (CTL_REF_CON_X (ctl)))
@@ -92,7 +92,7 @@ extern LONGINT ROMlib_ctlcall (ControlHandle c, INTEGER i, LONGINT l);
 
 struct PACKED popup_data
 {
-  MenuHandle menu	PACKED_P;
+  PACKED_MEMBER(MenuHandle, menu);
   int16 menu_id;
   
   /* private fields */
@@ -102,8 +102,8 @@ struct PACKED popup_data
 
 typedef struct popup_data popup_data_t;
 typedef popup_data_t *popup_data_ptr;
-typedef struct { popup_data_ptr p PACKED_P; } hidden_popup_data_ptr;
-typedef hidden_popup_data_ptr *popup_data_handle;
+MAKE_HIDDEN(popup_data_ptr);
+typedef HIDDEN_popup_data_ptr *popup_data_handle;
 
 typedef struct PACKED {
   Rect _tlimit;

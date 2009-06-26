@@ -42,8 +42,9 @@ typedef struct PACKED list_header
   char data[0];
 } list_header_t;
 
-typedef struct { list_header_t *p PACKED_P; } hidden_list_header_ptr;
-typedef hidden_list_header_ptr *list_header_h;
+typedef list_header_t *list_header_ptr;
+MAKE_HIDDEN(list_header_ptr);
+typedef HIDDEN_list_header_ptr *list_header_h;
 
 #define PARAM_OFFSET_X(aggr_desc_h)					\
   (HxX ((list_header_h) aggr_desc_h, param_offset))

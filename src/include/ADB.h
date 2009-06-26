@@ -12,14 +12,14 @@ typedef struct PACKED
 {
   SignedByte devType;
   SignedByte origADBAddr;
-  Ptr dbServiceRtPtr PACKED_P;
-  Ptr dbDataAreaAddr PACKED_P;
+  PACKED_MEMBER(Ptr, dbServiceRtPtr);
+  PACKED_MEMBER(Ptr, dbDataAreaAddr);
 } ADBDataBlock;
 
 typedef struct PACKED
 {
-  Ptr siServiceRtPtr PACKED_P;
-  Ptr siDataAreaAddr PACKED_P;
+  PACKED_MEMBER(Ptr, siServiceRtPtr);
+  PACKED_MEMBER(Ptr, siDataAreaAddr);
 } ADBSetInfoBlock;
 
 extern void ADBReInit (void);

@@ -10,17 +10,17 @@
 
 typedef struct PACKED
 {
-  QElemPtr qLink	PACKED_P;
+  PACKED_MEMBER(QElemPtr, qLink);
   INTEGER qType;
-  Ptr ioCmdAddr		PACKED_P;
-  ProcPtr ioCompletion	PACKED_P;
+  PACKED_MEMBER(Ptr, ioCmdAddr);
+  PACKED_MEMBER(ProcPtr, ioCompletion);
   OSErr ioResult;
-  StringPtr ioNamePtr	PACKED_P;
+  PACKED_MEMBER(StringPtr, ioNamePtr);
   INTEGER ioVRefNum;
   INTEGER ioDTRefNum;
   INTEGER ioIndex;
   LONGINT ioTagInfo;
-  Ptr ioDTBuffer	PACKED_P;
+  PACKED_MEMBER(Ptr, ioDTBuffer);
   LONGINT ioDTReqCount;
   LONGINT ioDTActCount;
   SignedByte filler1;

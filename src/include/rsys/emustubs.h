@@ -10,9 +10,9 @@
 
 typedef struct PACKED
 {
-  Ptr buffer PACKED_P;
-  ProcPtr proc PACKED_P;
-  Ptr data PACKED_P;
+  PACKED_MEMBER(Ptr, buffer);
+  PACKED_MEMBER(ProcPtr, proc);
+  PACKED_MEMBER(Ptr, data);
 } adbop_t;
 
 typedef struct PACKED comm_toolbox_dispatch_args
@@ -24,31 +24,33 @@ typedef struct PACKED comm_toolbox_dispatch_args
     struct PACKED
     {
       int16 n_items;
-      DialogPtr dp		PACKED_P;
+      PACKED_MEMBER(DialogPtr, dp);
     } shorten_args;
     struct PACKED
     {
       DITLMethod method;
-      Handle new_items_h PACKED_P;
-      DialogPtr dp PACKED_P;
+      PACKED_MEMBER(Handle, new_items_h);
+      PACKED_MEMBER(DialogPtr, dp);
     } append_args;
     struct PACKED
     {
-      DialogPtr dp		PACKED_P;
+      PACKED_MEMBER(DialogPtr, dp);
     } count_args;
     struct PACKED
     {
-      QElemPtr qp PACKED_P;
+      PACKED_MEMBER(QElemPtr, qp);
     } crm_args;
   } args;
 } comm_toolbox_dispatch_args_t;
 
+typedef void *voidptr;
+
 typedef struct PACKED
 {
-  void *startPtr	PACKED_P;
-  void *limitPtr	PACKED_P;
+  PACKED_MEMBER(voidptr, startPtr);
+  PACKED_MEMBER(voidptr, limitPtr);
   short cMoreMasters;
-  void *pGrowZone	PACKED_P;
+  PACKED_MEMBER(voidptr, pGrowZone);
 } initzonehiddenargs_t;
 
 

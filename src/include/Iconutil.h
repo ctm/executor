@@ -100,10 +100,10 @@ typedef struct PACKED CIcon
   PixMap iconPMap;
   BitMap iconMask;
   BitMap iconBMap;
-  Handle iconData	PACKED_P;
+  PACKED_MEMBER(Handle, iconData);
   int16 iconMaskData[1];
 } CIcon, *CIconPtr;
-typedef struct { CIconPtr p PACKED_P; } HIDDEN_CIconPtr;
+MAKE_HIDDEN(CIconPtr);
 typedef HIDDEN_CIconPtr *CIconHandle;
 
 /* icon utility function prototypes */

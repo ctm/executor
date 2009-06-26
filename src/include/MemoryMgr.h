@@ -25,11 +25,11 @@ enum { memAZErr	 = -113 };
 
 typedef struct PACKED Zone
 {
-  Ptr bkLim		PACKED_P;
-  Ptr purgePtr		PACKED_P;
-  Ptr hFstFree		PACKED_P;
+  PACKED_MEMBER(Ptr, bkLim);
+  PACKED_MEMBER(Ptr, purgePtr);
+  PACKED_MEMBER(Ptr, hFstFree);
   LONGINT zcbFree;
-  ProcPtr gzProc	PACKED_P;
+  PACKED_MEMBER(ProcPtr, gzProc);
   INTEGER moreMast;
   INTEGER flags;
   INTEGER cntRel;
@@ -39,14 +39,14 @@ typedef struct PACKED Zone
   INTEGER cntEmpty;
   INTEGER cntHandles;
   LONGINT minCBFree;
-  ProcPtr purgeProc	PACKED_P;
-  Ptr sparePtr		PACKED_P;
-  Ptr allocPtr		PACKED_P;
+  PACKED_MEMBER(ProcPtr, purgeProc);
+  PACKED_MEMBER(Ptr, sparePtr);
+  PACKED_MEMBER(Ptr, allocPtr);
   INTEGER heapData;
 } Zone;
 typedef Zone *THz;
 
-typedef struct { THz p PACKED_P; } HIDDEN_THz;
+MAKE_HIDDEN(THz);
 
 #if !defined (MemErr)
 extern int16 MemErr;

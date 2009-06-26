@@ -54,10 +54,10 @@
  */
 
 typedef struct PACKED {
-    PicHandle	pichandle	PACKED_P;	/* 0x00 - 0x03 */
+    PACKED_MEMBER(PicHandle, pichandle);	/* 0x00 - 0x03 */
     LONGINT	picsize;	/* 0x04 - 0x07 */
     LONGINT	pichowfar;	/* 0x08 - 0x0B */	
-    RgnHandle	picclip	PACKED_P;	/* 0x0C - 0x0F */
+    PACKED_MEMBER(RgnHandle, picclip);	/* 0x0C - 0x0F */
     Pattern	picbkpat;	/* 0x10 - 0x17 */
     INTEGER	picfont;	/* 0x18 - 0x19 */
     Style	picface;	/* 0x1A */
@@ -235,7 +235,7 @@ extern void ROMlib_drawingverbrectovalpicupdate( GrafVerb v, Rect *rp,
 #define OP_Header		0x0C00
 
 typedef piccache *piccacheptr;
-typedef struct { piccacheptr p PACKED_P; } HIDDEN_piccacheptr;
+MAKE_HIDDEN(piccacheptr);
 typedef HIDDEN_piccacheptr *piccachehand;
 
 extern PicHandle ROMlib_OpenPicture_helper (const Rect *pf,

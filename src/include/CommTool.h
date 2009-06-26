@@ -10,7 +10,7 @@
 
 typedef struct PACKED
 {
-  QElemPtr qLink PACKED_P;
+  PACKED_MEMBER(QElemPtr, qLink);
   INTEGER qType;
   INTEGER crmVersion;
   LONGINT crmPrivate;
@@ -35,9 +35,9 @@ enum { crmSerialDevice = 1 };
 typedef struct PACKED
 {
   INTEGER version;
-  StringHandle inputDriverName PACKED_P;
-  StringHandle outputDriverName PACKED_P;
-  StringHandle name PACKED_P;
+  PACKED_MEMBER(StringHandle, inputDriverName);
+  PACKED_MEMBER(StringHandle, outputDriverName);
+  PACKED_MEMBER(StringHandle, name);
   Handle deviceIcon ;
   LONGINT ratedSpeed;
   LONGINT maxSpeed;

@@ -74,7 +74,7 @@ typedef CGrafPtr CWindowPtr;
 
 typedef struct __wr WindowRecord;
 typedef WindowRecord *WindowPeek;
-typedef struct { WindowPeek p PACKED_P; } HIDDEN_WindowPeek;
+MAKE_HIDDEN(WindowPeek);
 
 #include "ControlMgr.h"
 
@@ -85,16 +85,16 @@ struct PACKED  __wr {
   BOOLEAN hilited;
   BOOLEAN goAwayFlag;
   BOOLEAN spareFlag;
-  RgnHandle strucRgn	PACKED_P;
-  RgnHandle contRgn	PACKED_P;
-  RgnHandle updateRgn	PACKED_P;
-  Handle windowDefProc	PACKED_P;
-  Handle dataHandle	PACKED_P;
-  StringHandle titleHandle	PACKED_P;
+  PACKED_MEMBER(RgnHandle, strucRgn);
+  PACKED_MEMBER(RgnHandle, contRgn);
+  PACKED_MEMBER(RgnHandle, updateRgn);
+  PACKED_MEMBER(Handle, windowDefProc);
+  PACKED_MEMBER(Handle, dataHandle);
+  PACKED_MEMBER(StringHandle, titleHandle);
   INTEGER titleWidth;
-  ControlHandle controlList	PACKED_P;	/* is really a ControlHandle */
-  WindowPeek nextWindow	PACKED_P;	/* is really a WindowPeek */
-  PicHandle windowPic	PACKED_P;
+  PACKED_MEMBER(ControlHandle, controlList);
+  PACKED_MEMBER(WindowPeek, nextWindow);
+  PACKED_MEMBER(PicHandle, windowPic);
   LONGINT refCon;
 };
 
@@ -110,17 +110,17 @@ typedef struct PACKED {
 #define wInZoomOut 6
 
 typedef struct AuxWinRec *AuxWinPtr;
-typedef struct { AuxWinPtr p PACKED_P; } HIDDEN_AuxWinPtr;
+MAKE_HIDDEN(AuxWinPtr);
 typedef HIDDEN_AuxWinPtr *AuxWinHandle;
-typedef struct { AuxWinHandle p PACKED_P; } HIDDEN_AuxWinHandle;
+MAKE_HIDDEN(AuxWinHandle);
 
 typedef struct PACKED AuxWinRec {
-  AuxWinHandle awNext	PACKED_P;
-  WindowPtr awOwner	PACKED_P;
-  CTabHandle awCTable	PACKED_P;
-  Handle dialogCItem	PACKED_P;
+  PACKED_MEMBER(AuxWinHandle, awNext);
+  PACKED_MEMBER(WindowPtr, awOwner);
+  PACKED_MEMBER(CTabHandle, awCTable);
+  PACKED_MEMBER(Handle, dialogCItem);
   LONGINT awFlags;
-  CTabHandle awReserved	PACKED_P;
+  PACKED_MEMBER(CTabHandle, awReserved);
   LONGINT awRefCon;
 } AuxWinRec;
 

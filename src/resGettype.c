@@ -16,7 +16,7 @@ char ROMlib_rcsid_resGettype[] =
 #include "rsys/mman.h"
 
 typedef ResType *restypeptr;
-typedef struct { restypeptr p PACKED_P; } HIDDEN_restypeptr;
+MAKE_HIDDEN(restypeptr);
 
 PRIVATE HIDDEN_restypeptr *ar = 0;
 

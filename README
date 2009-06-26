@@ -64,6 +64,12 @@ Windows using mingw32.  So far that port hasn't been tried since
 putting the code on Github.  It probably doesn't work, but probably
 could be made to work without much effort.
 
+At one time we had Executor running on the Alpha, a 64-bit
+environment.  We actually modified gcc to support "pointer bit-fields"
+and were able to get Executor to run.  Now that 64-bit machines are
+more popular, I've begun an experiment in supporting 64-bit machines
+without modifying the compiler.
+
 As I continue Executor's transition to a recent gnu build system I may
 inadvertantly push versions that don't build when using the above
 commands.  Don't hesitate to ask me if you're having trouble

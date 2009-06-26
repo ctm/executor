@@ -547,7 +547,7 @@ P8 (PUBLIC pascal trap, CWindowPtr, NewCWindow,
 }
 
 typedef windrestype *windrestypeptr;
-typedef struct { windrestypeptr p PACKED_P; } HIDDEN_windrestypeptr;
+MAKE_HIDDEN(windrestypeptr);
 typedef HIDDEN_windrestypeptr *windrestypehand;
 
 P3 (PUBLIC pascal trap, CWindowPtr, GetNewCWindow,
@@ -621,7 +621,7 @@ P1(PUBLIC pascal trap, void, CloseWindow, WindowPtr, w)
 {
     WindowPeek wptmp;
     GrafPtr savgp;
-    typedef struct { AuxWinHandle p PACKED_P; } HIDDEN_AuxWinHandle;
+    MAKE_HIDDEN(AuxWinHandle);
     AuxWinHandle saveauxh;
     HIDDEN_AuxWinHandle *auxhp;
     ControlHandle c, t;

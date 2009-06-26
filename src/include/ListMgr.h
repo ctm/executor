@@ -20,17 +20,17 @@ typedef Byte DataArray;
 #endif /* defined(__alpha) */
 
 typedef DataArray *DataPtr;
-typedef struct { DataPtr p PACKED_P; } HIDDEN_DataPtr;
+MAKE_HIDDEN(DataPtr);
 typedef HIDDEN_DataPtr *DataHandle;
 
 typedef struct PACKED {
   Rect rView;
-  GrafPtr port	PACKED_P;
+  PACKED_MEMBER(GrafPtr, port);
   Point indent;
   Point cellSize;
   Rect visible;
-  ControlHandle vScroll	PACKED_P;
-  ControlHandle hScroll	PACKED_P;
+  PACKED_MEMBER(ControlHandle, vScroll);
+  PACKED_MEMBER(ControlHandle, hScroll);
   SignedByte selFlags;
   BOOLEAN lActive;
   SignedByte lReserved;
@@ -38,18 +38,18 @@ typedef struct PACKED {
   LONGINT clikTime;
   Point clikLoc;
   Point mouseLoc;
-  Ptr lClikLoop	PACKED_P;
+  PACKED_MEMBER(Ptr, lClikLoop);
   Cell lastClick;
   LONGINT refCon;
-  Handle listDefProc	PACKED_P;
-  Handle userHandle	PACKED_P;
+  PACKED_MEMBER(Handle, listDefProc);
+  PACKED_MEMBER(Handle, userHandle);
   Rect dataBounds;
-  DataHandle cells	PACKED_P;
+  PACKED_MEMBER(DataHandle, cells);
   INTEGER maxIndex;
   INTEGER cellArray[1];
 } ListRec;
 typedef ListRec *ListPtr;
-typedef struct { ListPtr p PACKED_P; } HIDDEN_ListPtr;
+MAKE_HIDDEN(ListPtr);
 typedef HIDDEN_ListPtr *ListHandle;
 
 #define lDoVAutoscroll	2

@@ -11,14 +11,14 @@
 #include "rsys/pstuff.h"
 
 typedef struct PACKED {
-  Handle itmhand	PACKED_P;
+  PACKED_MEMBER(Handle, itmhand);
   Rect itmr;
   unsigned char itmtype;
   unsigned char itmlen;
 } itmstr;
 
 typedef itmstr *itmp;
-typedef struct { itmp p PACKED_P; } HIDDEN_itmp;
+MAKE_HIDDEN(itmp);
 typedef HIDDEN_itmp *itmh;
 
 #define DIALOG_RES_HAS_POSITION_P(dlogh)	\
@@ -59,7 +59,7 @@ typedef struct PACKED {
 } altstr;
 
 typedef altstr *altp;
-typedef struct { altp p PACKED_P; } HIDDEN_altp;
+MAKE_HIDDEN(altp);
 typedef HIDDEN_altp *alth;
 
 typedef struct PACKED
@@ -75,7 +75,7 @@ typedef struct PACKED
   char dlglen;
 } dlogstr;
 typedef dlogstr *dlogp;
-typedef struct { dlogp p PACKED_P; } HIDDEN_dlogp;
+MAKE_HIDDEN(dlogp);
 typedef HIDDEN_dlogp *dlogh;
 
 typedef struct PACKED item_style_info

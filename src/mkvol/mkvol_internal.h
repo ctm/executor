@@ -13,7 +13,7 @@
 #if !defined(_MKVOL_INTERNAL_H_)
 #define _MKVOL_INTERNAL_H_
 
-#if defined(__alpha) || defined(i386) || defined(__BORLANDC__)
+#if defined(__alpha) || defined(i386) || defined(__BORLANDC__) || defined (__x86_64__)
 #define LITTLEENDIAN
 #elif defined(mc68000) || defined (powerpc) || defined (__ppc__)
 #else

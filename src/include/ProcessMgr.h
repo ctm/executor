@@ -70,18 +70,18 @@ enum { launchContinue = 0x4000 };
 typedef struct PACKED ProcessInfoRec
 {
   uint32 processInfoLength;
-  StringPtr processName			PACKED_P;
+  PACKED_MEMBER(StringPtr, processName);
   ProcessSerialNumber processNumber;
   uint32 processType;
   OSType processSignature;
   uint32 processMode;
-  Ptr processLocation			PACKED_P;
+  PACKED_MEMBER(Ptr, processLocation);
   uint32 processSize;
   uint32 processFreeMem;
   ProcessSerialNumber processLauncher;
   uint32 processLaunchDate;
   uint32 processActiveTime;
-  FSSpecPtr processAppSpec		PACKED_P;
+  PACKED_MEMBER(FSSpecPtr, processAppSpec);
 } ProcessInfoRec;
 typedef ProcessInfoRec *ProcessInfoPtr;
 

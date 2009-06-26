@@ -41,29 +41,30 @@ typedef struct PACKED {
 } ramdriver;
 
 typedef ramdriver *ramdriverptr;
-typedef struct { ramdriverptr p PACKED_P; } HIDDEN_ramdriverptr;
+MAKE_HIDDEN(ramdriverptr);
 typedef HIDDEN_ramdriverptr *ramdriverhand;
 
 typedef enum { Open, Prime, Ctl, Stat, Close } DriverRoutineType;
 
 typedef struct PACKED {
-  umacdriverptr dCtlDriver	PACKED_P;	/* not just Ptr */
+  PACKED_MEMBER(umacdriverptr, dCtlDriver);	/* not just Ptr */
   INTEGER       dCtlFlags;
   QHdr          dCtlQHdr;
   LONGINT       dCtlPosition;
-  Handle        dCtlStorage	PACKED_P;
+  PACKED_MEMBER(Handle,        dCtlStorage);
   INTEGER       dCtlRefNum;
   LONGINT       dCtlCurTicks;
-  WindowPtr     dCtlWindow	PACKED_P;
+  PACKED_MEMBER(WindowPtr,     dCtlWindow);
   INTEGER       dCtlDelay;
   INTEGER       dCtlEMask;
   INTEGER       dCtlMenu;
 } DCtlEntry, *DCtlPtr;
-typedef struct { DCtlPtr p PACKED_P; } HIDDEN_DCtlPtr;
+
+MAKE_HIDDEN(DCtlPtr);
 typedef HIDDEN_DCtlPtr *DCtlHandle;
-typedef struct { DCtlHandle p PACKED_P; } HIDDEN_DCtlHandle;
+MAKE_HIDDEN(DCtlHandle);
 typedef HIDDEN_DCtlHandle *DCtlHandlePtr;
-typedef struct { DCtlHandlePtr p PACKED_P; } HIDDEN_DCtlHandlePtr;
+MAKE_HIDDEN(DCtlHandlePtr);
 
 #define asyncTrpBit	(1 << 10)
 #define noQueueBit	(1 <<  9)

@@ -38,7 +38,7 @@ typedef struct PACKED {
   SignedByte diskInPlace;
   SignedByte installed;
   SignedByte sides;
-  QElemPtr qLink	PACKED_P;
+  PACKED_MEMBER(QElemPtr, qLink);
   INTEGER qType;
   INTEGER dQDrive;
   INTEGER dQRefNum;

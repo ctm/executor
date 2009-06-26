@@ -74,12 +74,12 @@ typedef struct PACKED {
 } Region;
 
 typedef Region *RgnPtr;
-typedef struct { RgnPtr p PACKED_P; } HIDDEN_RgnPtr;
+MAKE_HIDDEN(RgnPtr);
 typedef HIDDEN_RgnPtr *RgnHandle;
-typedef struct { RgnHandle p PACKED_P; } HIDDEN_RgnHandle;
+MAKE_HIDDEN(RgnHandle);
 
 typedef struct PACKED {
-  Ptr baseAddr	PACKED_P;
+  PACKED_MEMBER(Ptr, baseAddr);
   INTEGER rowBytes;
   Rect bounds;
 } BitMap;
@@ -94,7 +94,7 @@ typedef struct PACKED {
 } Cursor;
 
 typedef Cursor *CursPtr;
-typedef struct { CursPtr p PACKED_P; } HIDDEN_CursPtr;
+MAKE_HIDDEN(CursPtr);
 typedef HIDDEN_CursPtr *CursHandle;
 
 typedef SignedByte GrafVerb;
@@ -111,7 +111,7 @@ typedef struct PACKED {
 } Polygon;
 
 typedef Polygon *PolyPtr;
-typedef struct { PolyPtr p PACKED_P; } HIDDEN_PolyPtr;
+MAKE_HIDDEN(PolyPtr);
 typedef HIDDEN_PolyPtr *PolyHandle;
 
 typedef struct PACKED {
@@ -121,24 +121,38 @@ typedef struct PACKED {
   INTEGER leading;
 } FontInfo;
 
+typedef pascal trap void (*textProc_t)(INTEGER bc, Ptr textb, Point num, Point den);
+typedef pascal trap void (*lineProc_t)(Point drawto);
+typedef pascal trap void (*rectProc_t)(GrafVerb verb, Rect *rp);
+typedef pascal trap void (*rRectProc_t)(GrafVerb verb, Rect *rp, INTEGER ow,
+                                      INTEGER oh);
+typedef pascal trap void (*ovalProc_t)(GrafVerb verb, Rect *rp);
+typedef pascal trap void (*arcProc_t)(GrafVerb verb, Rect *rp, INTEGER ang,
+                                    INTEGER arc);
+typedef pascal trap void (*polyProc_t)(GrafVerb verb, PolyHandle poly);
+typedef pascal trap void (*rgnProc_t)(GrafVerb verb, RgnHandle rgn);
+typedef pascal trap void (*bitsProc_t)(BitMap *srcb, Rect *srcr, Rect *dstr,
+                                     INTEGER mod, RgnHandle mask);
+typedef pascal trap void (*commentProc_t)(INTEGER kind, INTEGER size, Handle data);
+typedef pascal trap INTEGER  (*txMeasProc_t)(INTEGER bc, Ptr texta, Point *numer,
+                                           Point *denom, FontInfo *info);
+typedef pascal trap void (*getPicProc_t)(Ptr data, INTEGER bc);
+typedef pascal trap void (*putPicProc_t)(Ptr data, INTEGER bc);
+
 typedef struct PACKED {
-    pascal trap void (*textProc)(INTEGER bc, Ptr textb, Point num, Point den)	PACKED_P;
-    pascal trap void (*lineProc)(Point drawto)	PACKED_P;
-    pascal trap void (*rectProc)(GrafVerb verb, Rect *rp)	PACKED_P;
-    pascal trap void (*rRectProc)(GrafVerb verb, Rect *rp, INTEGER ow,
-								   INTEGER oh)	PACKED_P;
-    pascal trap void (*ovalProc)(GrafVerb verb, Rect *rp)	PACKED_P;
-    pascal trap void (*arcProc)(GrafVerb verb, Rect *rp, INTEGER ang,
-								  INTEGER arc)	PACKED_P;
-    pascal trap void (*polyProc)(GrafVerb verb, PolyHandle poly)	PACKED_P;
-    pascal trap void (*rgnProc)(GrafVerb verb, RgnHandle rgn)	PACKED_P;
-    pascal trap void (*bitsProc)(BitMap *srcb, Rect *srcr, Rect *dstr,
-						  INTEGER mod, RgnHandle mask)	PACKED_P;
-    pascal trap void (*commentProc)(INTEGER kind, INTEGER size, Handle data)	PACKED_P;
-    pascal trap INTEGER  (*txMeasProc)(INTEGER bc, Ptr texta, Point *numer,
-						 Point *denom, FontInfo *info)	PACKED_P;
-    pascal trap void (*getPicProc)(Ptr data, INTEGER bc)	PACKED_P;
-    pascal trap void (*putPicProc)(Ptr data, INTEGER bc)	PACKED_P;
+  PACKED_MEMBER(textProc_t, textProc);
+  PACKED_MEMBER(lineProc_t, lineProc);
+  PACKED_MEMBER(rectProc_t, rectProc);
+  PACKED_MEMBER(rRectProc_t, rRectProc);
+  PACKED_MEMBER(ovalProc_t, ovalProc);
+  PACKED_MEMBER(arcProc_t, arcProc);
+  PACKED_MEMBER(polyProc_t, polyProc);
+  PACKED_MEMBER(rgnProc_t, rgnProc);
+  PACKED_MEMBER(bitsProc_t, bitsProc);
+  PACKED_MEMBER(commentProc_t, commentProc);
+  PACKED_MEMBER(txMeasProc_t, txMeasProc);
+  PACKED_MEMBER(getPicProc_t, getPicProc);
+  PACKED_MEMBER(putPicProc_t, putPicProc);
 } QDProcs;
 
 typedef QDProcs *QDProcsPtr;
@@ -147,8 +161,8 @@ typedef struct PACKED {
   INTEGER device;
   BitMap portBits;
   Rect portRect;
-  RgnHandle visRgn	PACKED_P;
-  RgnHandle clipRgn	PACKED_P;
+  PACKED_MEMBER(RgnHandle, visRgn);
+  PACKED_MEMBER(RgnHandle,clipRgn);
   Pattern bkPat;
   Pattern fillPat;
   Point pnLoc;
@@ -166,14 +180,14 @@ typedef struct PACKED {
   LONGINT bkColor;
   INTEGER colrBit;
   INTEGER patStretch;
-  Handle picSave	PACKED_P;
-  Handle rgnSave	PACKED_P;
-  Handle polySave	PACKED_P;
-  QDProcsPtr grafProcs	PACKED_P;
+  PACKED_MEMBER(Handle, picSave);
+  PACKED_MEMBER(Handle, rgnSave);
+  PACKED_MEMBER(Handle, polySave);
+  PACKED_MEMBER(QDProcsPtr, grafProcs);
 } GrafPort;
 
 typedef GrafPort *GrafPtr;
-typedef struct { GrafPtr p PACKED_P; } HIDDEN_GrafPtr;
+MAKE_HIDDEN(GrafPtr);
 
 typedef struct PACKED {
   INTEGER picSize;
@@ -181,7 +195,7 @@ typedef struct PACKED {
 } Picture;
 
 typedef Picture *PicPtr;
-typedef struct { PicPtr p PACKED_P; } HIDDEN_PicPtr;
+MAKE_HIDDEN(PicPtr);
 typedef HIDDEN_PicPtr *PicHandle;
 
 typedef struct PACKED {
@@ -241,35 +255,35 @@ typedef struct PACKED {
   cSpecArray ctTable;
 } ColorTable, *CTabPtr;
 
-typedef struct { CTabPtr p PACKED_P; } HIDDEN_CTabPtr;
+MAKE_HIDDEN(CTabPtr);
 typedef HIDDEN_CTabPtr *CTabHandle;
-typedef struct { CTabHandle p PACKED_P; } HIDDEN_CTabHandle;
+MAKE_HIDDEN(CTabHandle);
 
 typedef struct PACKED {
-    Ptr textProc	PACKED_P;
-    Ptr lineProc	PACKED_P;
-    Ptr rectProc	PACKED_P;
-    Ptr rRectProc	PACKED_P;
-    Ptr ovalProc	PACKED_P;
-    Ptr arcProc		PACKED_P;
-    Ptr polyProc	PACKED_P;
-    Ptr rgnProc		PACKED_P;
-    Ptr bitsProc	PACKED_P;
-    Ptr commentProc	PACKED_P;
-    Ptr txMeasProc	PACKED_P;
-    Ptr getPicProc	PACKED_P;
-    Ptr putPicProc	PACKED_P;
-    Ptr opcodeProc	PACKED_P;
-    Ptr newProc1Proc	PACKED_P;
-    Ptr newProc2Proc	PACKED_P;
-    Ptr newProc3Proc	PACKED_P;
-    Ptr newProc4Proc	PACKED_P;
-    Ptr newProc5Proc	PACKED_P;
-    Ptr newProc6Proc	PACKED_P;
+  PACKED_MEMBER(Ptr, textProc);
+  PACKED_MEMBER(Ptr, lineProc);
+  PACKED_MEMBER(Ptr, rectProc);
+  PACKED_MEMBER(Ptr, rRectProc);
+  PACKED_MEMBER(Ptr, ovalProc);
+  PACKED_MEMBER(Ptr, arcProc);
+  PACKED_MEMBER(Ptr, polyProc);
+  PACKED_MEMBER(Ptr, rgnProc);
+  PACKED_MEMBER(Ptr, bitsProc);
+  PACKED_MEMBER(Ptr, commentProc);
+  PACKED_MEMBER(Ptr, txMeasProc);
+  PACKED_MEMBER(Ptr, getPicProc);
+  PACKED_MEMBER(Ptr, putPicProc);
+  PACKED_MEMBER(Ptr, opcodeProc);
+  PACKED_MEMBER(Ptr, newProc1Proc);
+  PACKED_MEMBER(Ptr, newProc2Proc);
+  PACKED_MEMBER(Ptr, newProc3Proc);
+  PACKED_MEMBER(Ptr, newProc4Proc);
+  PACKED_MEMBER(Ptr, newProc5Proc);
+  PACKED_MEMBER(Ptr, newProc6Proc);
 } CQDProcs, *CQDProcsPtr;
 
 typedef struct PACKED {
-  Ptr baseAddr	PACKED_P;
+  PACKED_MEMBER(Ptr, baseAddr);
   INTEGER rowBytes;
   Rect bounds;
   INTEGER pmVersion;
@@ -282,12 +296,12 @@ typedef struct PACKED {
   INTEGER cmpCount;
   INTEGER cmpSize;
   LONGINT planeBytes;
-    CTabHandle pmTable	PACKED_P;
+  PACKED_MEMBER(CTabHandle, pmTable);
   LONGINT pmReserved;
 } PixMap, *PixMapPtr;
-typedef struct { PixMapPtr p PACKED_P; } HIDDEN_PixMapPtr;
+MAKE_HIDDEN(PixMapPtr);
 typedef HIDDEN_PixMapPtr *PixMapHandle;
-typedef struct { PixMapHandle p PACKED_P; } HIDDEN_PixMapHandle;
+MAKE_HIDDEN(PixMapHandle);
 
 enum pixmap_pixel_types
 {
@@ -300,35 +314,35 @@ enum pixmap_pixel_types
 
 typedef struct PACKED {
   INTEGER patType;
-  PixMapHandle patMap	PACKED_P;
-  Handle patData	PACKED_P;
-  Handle patXData	PACKED_P;
+  PACKED_MEMBER(PixMapHandle, patMap);
+  PACKED_MEMBER(Handle, patData);
+  PACKED_MEMBER(Handle, patXData);
   INTEGER patXValid;
-  Handle patXMap	PACKED_P;
+  PACKED_MEMBER(Handle, patXMap);
   Pattern pat1Data;
 } PixPat, *PixPatPtr;
-typedef struct { PixPatPtr p PACKED_P; } HIDDEN_PixPatPtr;
+MAKE_HIDDEN(PixPatPtr);
 typedef HIDDEN_PixPatPtr *PixPatHandle;
-typedef struct { PixPatHandle p PACKED_P; } HIDDEN_PixPatHandle;
+MAKE_HIDDEN(PixPatHandle);
 
 typedef struct PACKED {
   INTEGER device;
-  PixMapHandle portPixMap	PACKED_P;
+  PACKED_MEMBER(PixMapHandle, portPixMap);
   INTEGER portVersion;
-  Handle grafVars	PACKED_P;
+  PACKED_MEMBER(Handle, grafVars);
   INTEGER chExtra;
   INTEGER pnLocHFrac;
   Rect portRect;
-  RgnHandle visRgn	PACKED_P;
-  RgnHandle clipRgn	PACKED_P;
-  PixPatHandle bkPixPat	PACKED_P;
+  PACKED_MEMBER(RgnHandle, visRgn);
+  PACKED_MEMBER(RgnHandle, clipRgn);
+  PACKED_MEMBER(PixPatHandle, bkPixPat);
   RGBColor rgbFgColor;
   RGBColor rgbBkColor;
   Point pnLoc;
   Point pnSize;
   INTEGER pnMode;
-  PixPatHandle pnPixPat	PACKED_P;
-  PixPatHandle fillPixPat	PACKED_P;
+  PACKED_MEMBER(PixPatHandle, pnPixPat);
+  PACKED_MEMBER(PixPatHandle, fillPixPat);
   INTEGER pnVis;
   INTEGER txFont;
   Style txFace;
@@ -340,28 +354,28 @@ typedef struct PACKED {
   LONGINT bkColor;
   INTEGER colrBit;
   INTEGER patStretch;
-  Handle picSave	PACKED_P;
-  Handle rgnSave	PACKED_P;
-  Handle polySave	PACKED_P;
-  CQDProcsPtr grafProcs	PACKED_P;
+  PACKED_MEMBER(Handle, picSave);
+  PACKED_MEMBER(Handle, rgnSave);
+  PACKED_MEMBER(Handle, polySave);
+  PACKED_MEMBER(CQDProcsPtr, grafProcs);
 } CGrafPort, *CGrafPtr;
 
-typedef struct { CGrafPtr p PACKED_P; } HIDDEN_CGrafPtr;
+MAKE_HIDDEN(CGrafPtr);
 
 typedef struct PACKED {
   INTEGER crsrType;
-  PixMapHandle crsrMap	PACKED_P;
-  Handle crsrData	PACKED_P;
-  Handle crsrXData	PACKED_P;
+  PACKED_MEMBER(PixMapHandle, crsrMap);
+  PACKED_MEMBER(Handle, crsrData);
+  PACKED_MEMBER(Handle, crsrXData);
   INTEGER crsrXValid;
-  Handle crsrXHandle	PACKED_P;
+  PACKED_MEMBER(Handle, crsrXHandle);
   Bits16 crsr1Data;
   Bits16 crsrMask;
   Point crsrHotSpot;
   LONGINT crsrXTable;
   LONGINT crsrID;
 } CCrsr, *CCrsrPtr;
-typedef struct { CCrsrPtr p PACKED_P; } HIDDEN_CCrsrPtr;
+MAKE_HIDDEN(CCrsrPtr);
 typedef HIDDEN_CCrsrPtr *CCrsrHandle;
 
 typedef struct PACKED {
@@ -371,11 +385,14 @@ typedef struct PACKED {
   int32 matchData;
 } MatchRec;
 
-typedef struct { HIDDEN_GrafPtr *p PACKED_P; } HIDDEN_GrafPtr_Ptr;
-typedef struct { Byte *p PACKED_P; } HIDDEN_BytePtr;
+typedef HIDDEN_GrafPtr *HIDDEN_GrafPtr_Ptr;
+MAKE_HIDDEN(HIDDEN_GrafPtr_Ptr);
 
-#define thePort		(STARH(STARH((HIDDEN_GrafPtr_Ptr *) (long) SYN68K_TO_US(a5))))
-#define thePortX	((*STARH((HIDDEN_GrafPtr_Ptr *) (long) SYN68K_TO_US(a5))).p)
+typedef Byte *BytePtr;
+MAKE_HIDDEN(BytePtr);
+
+#define thePort		(STARH(STARH((HIDDEN_HIDDEN_GrafPtr_Ptr *) (long) SYN68K_TO_US(a5))))
+#define thePortX	((*STARH((HIDDEN_HIDDEN_GrafPtr_Ptr *) (long) SYN68K_TO_US(a5))).p)
 #define white		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -8)
 #define black		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -16)
 #define gray		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -24)

@@ -17,7 +17,7 @@ typedef struct PACKED
      _tpixpat */
   INTEGER _tinpat;
   Pattern _tpat;
-  PixPatHandle _tpixpat	PACKED_P;
+  PACKED_MEMBER(PixPatHandle, _tpixpat);
   Point _tploc;
   Point _tpsize;
   INTEGER _tpmode;
@@ -25,7 +25,7 @@ typedef struct PACKED
   PenState _tpstate;
 #endif
   
-  GrafPtr _tport		PACKED_P;
+  PACKED_MEMBER(GrafPtr, _tport);
   
   INTEGER _tpvis;
   
@@ -34,7 +34,7 @@ typedef struct PACKED
   INTEGER _tsize;
   Style _tstyle;
   Byte filler;
-  RgnHandle _tsaveclip	PACKED_P;
+  PACKED_MEMBER(RgnHandle, _tsaveclip);
   
   /* ### is tesave mac-visible state?  how is color and whatnot really
      stored? */
@@ -126,17 +126,17 @@ extern int16 ROMlib_call_TEDoText (TEPtr tp, int16 first, int16 last,
 				   int16 what);
 
 typedef struct PACKED {	/* from MPW: ToolEqu.a */
-    ProcPtr EOLHook	PACKED_P;
-    ProcPtr DRAWHook	PACKED_P;
-    ProcPtr WIDTHHook	PACKED_P;
-    ProcPtr HITTESTHook	PACKED_P;
+  PACKED_MEMBER(ProcPtr, EOLHook);
+  PACKED_MEMBER(ProcPtr, DRAWHook);
+  PACKED_MEMBER(ProcPtr, WIDTHHook);
+  PACKED_MEMBER(ProcPtr, HITTESTHook);
     LONGINT flags;
 } tehidden;
 
 typedef tehidden *tehiddenp;
-typedef struct { tehiddenp p PACKED_P; } HIDDEN_tehiddenp;
+MAKE_HIDDEN(tehiddenp);
 typedef HIDDEN_tehiddenp *tehiddenh;
-typedef struct { tehiddenh p PACKED_P; } HIDDEN_tehiddenh;
+MAKE_HIDDEN(tehiddenh);
 
 #define TEAUTOVIEWBIT	1	/* found by dumping the handle
 				   before and after calling TEAutoView */

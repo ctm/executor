@@ -17,15 +17,15 @@ typedef struct PACKED {
 } widentry_t;
 
 typedef WidthTable *WPtr;
-typedef struct { WPtr p PACKED_P; } HIDDEN_WPtr;
+MAKE_HIDDEN(WPtr);
 typedef HIDDEN_WPtr *WHandle;
 
 typedef FamRec *FPtr;
-typedef struct { FPtr p PACKED_P; } HIDDEN_FPtr;
+MAKE_HIDDEN(FPtr);
 typedef HIDDEN_FPtr *FHandle;
 
 typedef WHandle *WHandlePtr;
-typedef struct { WHandlePtr p PACKED_P; } HIDDEN_WHandlePtr;
+MAKE_HIDDEN(WHandlePtr);
 typedef HIDDEN_WHandlePtr *WHandleHandle;
 
 #define FONTRESID(font, size)   (((font) << 7) | (size))

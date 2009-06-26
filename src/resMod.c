@@ -329,7 +329,7 @@ A2(PUBLIC, void, ROMlib_wr, resmaphand, map, resref *, rr)	/* INTERNAL */
 }
 
 typedef res_sorttype_t *sorttypeptr;
-typedef struct { sorttypeptr p PACKED_P; } HIDDEN_sorttypeptr;
+MAKE_HIDDEN(sorttypeptr);
 typedef HIDDEN_sorttypeptr *sorttypehand;
 
 A3(PRIVATE, void, fillst, sorttypehand, st, resref *, rp, resref *, rep)

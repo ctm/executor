@@ -9,7 +9,7 @@
  */
 
 typedef struct PACKED{
-  Ptr p PACKED_P;
+  PACKED_MEMBER(Ptr, p);
   INTEGER i;
 } sersetbuf_t;
 

@@ -15,7 +15,7 @@ typedef struct PACKED
   COMMONFSQUEUEDEFS;
   INTEGER ioRefNum;
   INTEGER csCode;
-  Ptr csParam		PACKED_P;
+  PACKED_MEMBER(Ptr, csParam);
 } VDParamBlock;
 
 typedef VDParamBlock *VDParamBlockPtr;
@@ -23,7 +23,7 @@ typedef VDParamBlock *VDParamBlockPtr;
 
 typedef struct PACKED
 {
-  Ptr csTable		PACKED_P;
+  PACKED_MEMBER(Ptr, csTable);
   INTEGER csStart;
   INTEGER csCount;
 } VDEntryRecord;
@@ -33,7 +33,7 @@ typedef VDEntryRecord *VDEntRecPtr;
 
 typedef struct PACKED
 {
-  Ptr csGTable	PACKED_P;
+  PACKED_MEMBER(Ptr, csGTable);
 } VDGammaRecord;
 
 typedef VDGammaRecord *VDGamRecPtr;
@@ -44,7 +44,7 @@ typedef struct PACKED
   INTEGER csMode;
   LONGINT csData;
   INTEGER csPage;
-  Ptr csBaseAddr	PACKED_P;
+  PACKED_MEMBER(Ptr, csBaseAddr);
 } VDPgInfo;
 
 typedef VDPgInfo *VDPgInfoPtr;

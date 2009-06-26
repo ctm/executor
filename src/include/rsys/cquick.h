@@ -15,13 +15,15 @@ typedef struct PACKED GrafVars
 {
   RGBColor rgbOpColor;
   RGBColor rgbHiliteColor;
-  Handle pmFgColor		PACKED_P;
+  PACKED_MEMBER(Handle, pmFgColor);
   INTEGER pmFgIndex;
-  Handle pmBkColor		PACKED_P;
+  PACKED_MEMBER(Handle, pmBkColor);
   INTEGER pmBkIndex;
   INTEGER pmFlags;
 } GrafVars, *GrafVarsPtr;
-typedef struct { GrafVarsPtr p PACKED_P; } HIDDEN_GrafVarsPtr, *GrafVarsHandle;
+
+MAKE_HIDDEN(GrafVarsPtr);
+typedef HIDDEN_GrafVarsPtr *GrafVarsHandle;
 
 #define SAFE_PTR(ptr)		(gui_assert (ptr))
 #define SAFE_HANDLE(handle)	(gui_assert (handle), gui_assert ((handle)->p))
@@ -84,8 +86,8 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
 #define PORT_CLIP_REGION_X(port)	PORT_FIELD (port, clipRgn)
 #define PORT_PEN_MODE_X(port)		PORT_FIELD (port, pnMode)
 /* native byte order */
-#define PORT_VIS_REGION(port)		(MR (PORT_VIS_REGION_X (port)))
-#define PORT_CLIP_REGION(port)		(MR (PORT_CLIP_REGION_X (port)))
+#define PORT_VIS_REGION(port)		(PPR (PORT_VIS_REGION_X (port)))
+#define PORT_CLIP_REGION(port)		(PPR (PORT_CLIP_REGION_X (port)))
 #define PORT_PEN_MODE(port)		(CW (PORT_PEN_MODE_X (port)))
 
 /* field accessors for members which exist in both types and are in
@@ -120,12 +122,12 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
 #define PORT_BK_COLOR(port)		(CL (PORT_BK_COLOR_X (port)))
 #define PORT_COLR_BIT(port)		(CW (PORT_COLR_BIT_X (port)))
 #define PORT_PAT_STRETCH(port)		(CW (PORT_PAT_STRETCH_X (port)))
-#define PORT_PIC_SAVE(port)		(MR (PORT_PIC_SAVE_X (port)))
-#define PORT_REGION_SAVE(port)		(MR (PORT_REGION_SAVE_X (port)))
-#define PORT_POLY_SAVE(port)		(MR (PORT_POLY_SAVE_X (port)))
+#define PORT_PIC_SAVE(port)		(PPR (PORT_PIC_SAVE_X (port)))
+#define PORT_REGION_SAVE(port)		(PPR (PORT_REGION_SAVE_X (port)))
+#define PORT_POLY_SAVE(port)		(PPR (PORT_POLY_SAVE_X (port)))
 /* NOTE: this returns a different type depending if
    the argument is a CGrafPort or not */
-#define PORT_GRAF_PROCS(port)		(MR (PORT_GRAF_PROCS_X (port)))
+#define PORT_GRAF_PROCS(port)		(PPR (PORT_GRAF_PROCS_X (port)))
 
 /* accessors for fields which exist only in basic quickdraw graphics
    ports */
@@ -166,14 +168,14 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
 #define CPORT_GRAFVARS_X(cport)	     (ASSERT_CPORT(cport)->grafVars)
 
 /* native byte order */
-#define CPORT_PIXMAP(cport)		(MR (CPORT_PIXMAP_X (cport)))
+#define CPORT_PIXMAP(cport)		(PPR (CPORT_PIXMAP_X (cport)))
 #define CPORT_VERSION(cport)		(CW (CPORT_VERSION_X (cport)))
 #define CPORT_CH_EXTRA(cport)		(CW (CPORT_CH_EXTRA_X (cport)))
 #define CPORT_PENLOC_HFRAC(cport)	(CW (CPORT_PENLOC_HFRAC_X (cport)))
-#define CPORT_BK_PIXPAT(cport)		(MR (CPORT_BK_PIXPAT_X (cport)))
-#define CPORT_FILL_PIXPAT(cport)	(MR (CPORT_FILL_PIXPAT_X (cport)))
-#define CPORT_PEN_PIXPAT(cport)		(MR (CPORT_PEN_PIXPAT_X (cport)))
-#define CPORT_GRAFVARS(cport)		((GrafVarsHandle) MR (CPORT_GRAFVARS_X (cport)))
+#define CPORT_BK_PIXPAT(cport)		(PPR (CPORT_BK_PIXPAT_X (cport)))
+#define CPORT_FILL_PIXPAT(cport)	(PPR (CPORT_FILL_PIXPAT_X (cport)))
+#define CPORT_PEN_PIXPAT(cport)		(PPR (CPORT_PEN_PIXPAT_X (cport)))
+#define CPORT_GRAFVARS(cport)		((GrafVarsHandle) PPR (CPORT_GRAFVARS_X (cport)))
 
 #define CPORT_OP_COLOR(cport) \
   (HxX ((GrafVarsHandle) CPORT_GRAFVARS (cport), rgbOpColor))
@@ -191,7 +193,7 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
   (CGrafPort_p (port)					\
    ? PIXMAP_BASEADDR_X (CPORT_PIXMAP ((CGrafPtr) port))	\
    : PORT_BITS ((GrafPtr) port).baseAddr)
-#define PORT_BASEADDR(port)		(MR (PORT_BASEADDR_X (port)))
+#define PORT_BASEADDR(port)		(PPR (PORT_BASEADDR_X (port)))
 
 /* return TRUE if the given bitmap has the same baseAddr, rowBytes and
    bounds as thePort's bits (portBits or portPixMap) */
@@ -275,7 +277,7 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
    compatibility */
 #define PIXMAP_RESERVED_X(pixmap)	(HxX (pixmap, pmReserved))
 /* native byte order */
-#define PIXMAP_BASEADDR(pixmap)		(MR (PIXMAP_BASEADDR_X (pixmap)))
+#define PIXMAP_BASEADDR(pixmap)		(PPR (PIXMAP_BASEADDR_X (pixmap)))
 
 #define PIXMAP_VERSION(pixmap)		(Cx (PIXMAP_VERSION_X (pixmap)))
 #define PIXMAP_PACK_TYPE(pixmap)	(Cx (PIXMAP_PACK_TYPE_X (pixmap)))
@@ -287,7 +289,7 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
 #define PIXMAP_CMP_COUNT(pixmap)	(Cx (PIXMAP_CMP_COUNT_X (pixmap)))
 #define PIXMAP_CMP_SIZE(pixmap)		(Cx (PIXMAP_CMP_SIZE_X (pixmap)))
 #define PIXMAP_PLANE_BYTES(pixmap)	(Cx (PIXMAP_PLANE_BYTES_X (pixmap)))
-#define PIXMAP_TABLE(pixmap)		(MR (PIXMAP_TABLE_X (pixmap)))
+#define PIXMAP_TABLE(pixmap)		(PPR (PIXMAP_TABLE_X (pixmap)))
 #define PIXMAP_TABLE_AS_OFFSET(pixmap)	(CL ((int32) PIXMAP_TABLE_X (pixmap)))
 
 #define WRAPPER_PIXMAP_FOR_COPY(wrapper_decl_name) \
@@ -323,21 +325,21 @@ enum pixpat_pattern_types
 #define PIXPAT_XVALID_X(pixpat)		(HxX (pixpat, patXValid))
 #define PIXPAT_XMAP_X(pixpat)		(HxX (pixpat, patXMap))
 #else
-#define PIXPAT_TYPE_X(pixpat)		(MR ((pixpat)->p)->patType)
-#define PIXPAT_MAP_X(pixpat)		(MR ((pixpat)->p)->patMap)
-#define PIXPAT_DATA_X(pixpat)		(MR ((pixpat)->p)->patData)
-#define PIXPAT_XDATA_X(pixpat)		(MR ((pixpat)->p)->patXData)
-#define PIXPAT_XVALID_X(pixpat)		(MR ((pixpat)->p)->patXValid)
-#define PIXPAT_XMAP_X(pixpat)		(MR ((pixpat)->p)->patXMap)
+#define PIXPAT_TYPE_X(pixpat)		(PPR ((pixpat)->p)->patType)
+#define PIXPAT_MAP_X(pixpat)		(PPR ((pixpat)->p)->patMap)
+#define PIXPAT_DATA_X(pixpat)		(PPR ((pixpat)->p)->patData)
+#define PIXPAT_XDATA_X(pixpat)		(PPR ((pixpat)->p)->patXData)
+#define PIXPAT_XVALID_X(pixpat)		(PPR ((pixpat)->p)->patXValid)
+#define PIXPAT_XMAP_X(pixpat)		(PPR ((pixpat)->p)->patXMap)
 #endif
 /* native byte order */
 #define PIXPAT_TYPE(pixpat)		(CW (PIXPAT_TYPE_X (pixpat)))
-#define PIXPAT_MAP(pixpat)		(MR (PIXPAT_MAP_X (pixpat)))
-#define PIXPAT_DATA(pixpat)		(MR (PIXPAT_DATA_X (pixpat)))
+#define PIXPAT_MAP(pixpat)		(PPR (PIXPAT_MAP_X (pixpat)))
+#define PIXPAT_DATA(pixpat)		(PPR (PIXPAT_DATA_X (pixpat)))
 #define PIXPAT_DATA_AS_OFFSET(pixpat)	(CL ((int32) PIXPAT_DATA_X (pixpat)))
-#define PIXPAT_XDATA(pixpat)		(MR (PIXPAT_XDATA_X (pixpat)))
+#define PIXPAT_XDATA(pixpat)		(PPR (PIXPAT_XDATA_X (pixpat)))
 #define PIXPAT_XVALID(pixpat)		(CW (PIXPAT_XVALID_X (pixpat)))
-#define PIXPAT_XMAP(pixpat)		((PixMapHandle) MR (PIXPAT_XMAP_X (pixpat)))
+#define PIXPAT_XMAP(pixpat)		((PixMapHandle) PPR (PIXPAT_XMAP_X (pixpat)))
 
 /* BitMap accessors
    NOTE: these take `BitMap *'s, not BitMap handles */
@@ -358,7 +360,7 @@ enum pixpat_pattern_types
 			 | BITMAP_FLAGS_X (bitmap)))
 
 #define BITMAP_BASEADDR_X(bitmap)	((bitmap)->baseAddr)
-#define BITMAP_BASEADDR(bitmap)		(MR (BITMAP_BASEADDR_X (bitmap)))
+#define BITMAP_BASEADDR(bitmap)		(PPR (BITMAP_BASEADDR_X (bitmap)))
 
 #define BITMAP_P(bitmap) (! ((bitmap)->rowBytes & PIXMAP_FLAG_BITS_X))
 
@@ -440,20 +442,20 @@ typedef BitMap blt_bitmap_t;
 #define GD_REF_NUM(gdhandle)		(Cx (GD_REF_NUM_X (gdhandle)))
 #define GD_ID(gdhandle)			(Cx (GD_ID_X (gdhandle)))
 #define GD_TYPE(gdhandle)		(Cx (GD_TYPE_X (gdhandle)))
-#define GD_ITABLE(gdhandle)		(MR (GD_ITABLE_X (gdhandle)))
+#define GD_ITABLE(gdhandle)		(PPR (GD_ITABLE_X (gdhandle)))
 #define GD_RES_PREF(gdhandle)		(Cx (GD_RES_PREF_X (gdhandle)))
-#define GD_SEARCH_PROC(gdhandle)	(MR (GD_SEARCH_PROC_X (gdhandle)))
-#define GD_COMP_PROC(gdhandle)		(MR (GD_COMP_PROC_X (gdhandle)))
+#define GD_SEARCH_PROC(gdhandle)	(PPR (GD_SEARCH_PROC_X (gdhandle)))
+#define GD_COMP_PROC(gdhandle)		(PPR (GD_COMP_PROC_X (gdhandle)))
 #define GD_FLAGS(gdhandle)		(Cx (GD_FLAGS_X (gdhandle)))
-#define GD_PMAP(gdhandle)		(MR (GD_PMAP_X (gdhandle)))
+#define GD_PMAP(gdhandle)		(PPR (GD_PMAP_X (gdhandle)))
 #define GD_REF_CON(gdhandle)		(Cx (GD_REF_CON_X (gdhandle)))
-#define GD_NEXT_GD(gdhandle)		(MR (GD_NEXT_GD_X (gdhandle)))
+#define GD_NEXT_GD(gdhandle)		(PPR (GD_NEXT_GD_X (gdhandle)))
 #define GD_MODE(gdhandle)		(Cx (GD_MODE_X (gdhandle)))
 
 #define GD_CCBYTES(gdhandle)		(CW (GD_CCBYTES_X (gdhandle)))
 #define GD_CCDEPTH(gdhandle)		(CW (GD_CCDEPTH_X (gdhandle)))
-#define GD_CCXDATA(gdhandle)		(MR (GD_CCXDATA_X (gdhandle)))
-#define GD_CCXMASK(gdhandle)		(MR (GD_CCXMASK_X (gdhandle)))
+#define GD_CCXDATA(gdhandle)		(PPR (GD_CCXDATA_X (gdhandle)))
+#define GD_CCXMASK(gdhandle)		(PPR (GD_CCXMASK_X (gdhandle)))
 
 /* color icon accessors */
 #define CICON_PMAP(cicon)		(HxX (cicon, iconPMap))
@@ -462,7 +464,7 @@ typedef BitMap blt_bitmap_t;
 #define CICON_MASK_DATA(cicon)		(HxX (cicon, iconMaskData))
 
 #define CICON_DATA_X(cicon)		(HxX (cicon, iconData))
-#define CICON_DATA(cicon)		(MR (CICON_DATA_X (cicon)))
+#define CICON_DATA(cicon)		(PPR (CICON_DATA_X (cicon)))
 
 #define CICON_P(icon)							     \
   ({									     \
@@ -499,10 +501,10 @@ typedef BitMap blt_bitmap_t;
 #define PALETTE_SEEDS_X(palette)	(HxX (palette, pmSeeds))
 
 #define PALETTE_ENTRIES(palette)	(CW (PALETTE_ENTRIES_X (palette)))
-#define PALETTE_WINDOW(palette)		(MR (PALETTE_WINDOW_X (palette)))
+#define PALETTE_WINDOW(palette)		(PPR (PALETTE_WINDOW_X (palette)))
 #define PALETTE_PRIVATE(palette)	(CW (PALETTE_PRIVATE_X (palette)))
-#define PALETTE_DEVICES(palette)	(MR (PALETTE_DEVICES_X (palette)))
-#define PALETTE_SEEDS(palette)		(MR (PALETTE_SEEDS_X (palette)))
+#define PALETTE_DEVICES(palette)	(PPR (PALETTE_DEVICES_X (palette)))
+#define PALETTE_SEEDS(palette)		(PPR (PALETTE_SEEDS_X (palette)))
 
 #define PALETTE_UPDATE_FLAG_BITS_X	(CWC (0xE000))
 #define PALETTE_UPDATE_FLAG_BITS	(0xE000)
@@ -525,11 +527,11 @@ typedef BitMap blt_bitmap_t;
 #define CCRSR_ID_X(ccrsr)		(HxX (ccrsr, crsrID))
 
 #define CCRSR_TYPE(ccrsr)		(CW (CCRSR_TYPE_X (ccrsr)))
-#define CCRSR_MAP(ccrsr)		(MR (CCRSR_MAP_X (ccrsr)))
-#define CCRSR_DATA(ccrsr)		(MR (CCRSR_DATA_X (ccrsr)))
-#define CCRSR_XDATA(ccrsr)		(MR (CCRSR_XDATA_X (ccrsr)))
+#define CCRSR_MAP(ccrsr)		(PPR (CCRSR_MAP_X (ccrsr)))
+#define CCRSR_DATA(ccrsr)		(PPR (CCRSR_DATA_X (ccrsr)))
+#define CCRSR_XDATA(ccrsr)		(PPR (CCRSR_XDATA_X (ccrsr)))
 #define CCRSR_XVALID(ccrsr)		(CW (CCRSR_XVALID_X (ccrsr)))
-#define CCRSR_XHANDLE(ccrsr)		(MR (CCRSR_XHANDLE_X (ccrsr)))
+#define CCRSR_XHANDLE(ccrsr)		(PPR (CCRSR_XHANDLE_X (ccrsr)))
 #define CCRSR_XTABLE(ccrsr)		(CL (CCRSR_XTABLE_X (ccrsr)))
 #define CCRSR_ID(ccrsr)			(CL (CCRSR_ID_X (ccrsr)))
 
@@ -537,7 +539,7 @@ extern void cursor_reset_current_cursor (void);
 
 #define IMV_XFER_MODE_P(mode)		((mode) >= blend && (mode) <= adMin)
 #define active_screen_addr_p(bitmap) \
-  ((bitmap)->baseAddr == PIXMAP_BASEADDR_X (GD_PMAP (MR (MainDevice))))
+  ((bitmap)->baseAddr == PIXMAP_BASEADDR_X (GD_PMAP (PPR (MainDevice))))
 
 /* gd flags */
 #define gdDevType 	0
@@ -730,7 +732,7 @@ extern void canonical_from_bogo_color (uint32 index,
 				       RGBColor *rgb_out);
 
 #define AVERAGE_COLOR(c1, c2, ratio, out) \
-  (average_color (MR (TheGDevice), (c1), (c2), (ratio), (out)))
+  (average_color (PPR (TheGDevice), (c1), (c2), (ratio), (out)))
 
 extern Handle ROMlib_copy_handle (Handle);
 
@@ -744,7 +746,7 @@ extern Handle ROMlib_copy_handle (Handle);
        thePortX = thePort_saveX; } while (0)
 
 #define THEGDEVICE_SAVE_EXCURSION(TheGDevice_new, body)	\
-  do { GDHandle TheGDevice_save = MR (TheGDevice);	\
+  do { GDHandle TheGDevice_save = PPR (TheGDevice);	\
        SetGDevice (TheGDevice_new);			\
        body						\
        SetGDevice (TheGDevice_save); } while (0)

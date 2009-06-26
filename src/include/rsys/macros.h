@@ -36,14 +36,6 @@
 # define PACKED	__attribute__((packed))
 #endif
 
-#if !defined (PACKED_P)
-#if !defined (__alpha)
-#define PACKED_P PACKED
-#else
-#define PACKED_P :32 PACKED
-#endif
-#endif
-
 #if !defined (U)
 # define U(c) ((uint8) (c))
 #endif

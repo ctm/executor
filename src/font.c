@@ -200,7 +200,7 @@ A2(PRIVATE, void, mungfmo, ctrip, cp, FMOutput *, fmop)
 
 A1(PRIVATE, BOOLEAN, widthlistmatch, FMInput *, fmip)
 {
-    typedef struct { WHandle p PACKED_P; } HIDDEN_WHandle;
+    MAKE_HIDDEN(WHandle);
     HIDDEN_WHandle *whp, *ewhp;
 
     for (whp = (HIDDEN_WHandle *) STARH(WIDTHLISTHAND), ewhp = whp + MAXTABLES; whp != ewhp; whp++) {

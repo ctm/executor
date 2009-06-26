@@ -16,7 +16,7 @@
 #define evtNotEnb	1
 
 typedef struct PACKED {
-  QElemPtr qLink	PACKED_P;
+  PACKED_MEMBER(QElemPtr, qLink);
   INTEGER qType;
   INTEGER evtQWhat;
   LONGINT evtQMessage;
@@ -26,7 +26,7 @@ typedef struct PACKED {
 } EvQEl;
 
 typedef EvQEl *EvQElPtr;
-typedef struct { EvQElPtr p PACKED_P; } HIDDEN_EvQElPtr;
+MAKE_HIDDEN(EvQElPtr);
 
 #define osEvt   15
 #define SUSPENDRESUMEBITS       0x01000000

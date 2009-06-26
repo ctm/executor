@@ -26,8 +26,8 @@ typedef struct PACKED HMMessageRecord
     Str255 hmmString;
     INTEGER hmmPict;
     HMStringResType hmmStringRes;
-    TEHandle hmmTEHandle		PACKED_P;
-    PicHandle hmmPictHandle		PACKED_P;
+    PACKED_MEMBER(TEHandle, hmmTEHandle);
+    PACKED_MEMBER(PicHandle, hmmPictHandle);
     INTEGER hmmTERes;
     INTEGER hmmSTRRes;
   } u;

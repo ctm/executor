@@ -15,9 +15,18 @@ typedef int8 SignedByte;
 typedef uint8 Byte;
 typedef int8 *Ptr;
 
-typedef struct { Ptr p PACKED_P; } HIDDEN_Ptr;
+#if (SIZEOF_CHAR_P == 4) || 1 /* always do this for now */
+#define MAKE_HIDDEN(typ) typedef struct { typ p; } HIDDEN_ ## typ
+#else
+#define MAKE_HIDDEN(typ) \
+  typedef union PACKED { uint32 pp; typ type[0];} HIDDEN_ ## typ
+#endif
+
+MAKE_HIDDEN(Ptr);
+
 typedef HIDDEN_Ptr *Handle;
-typedef struct { Handle p PACKED_P; } HIDDEN_Handle;
+
+MAKE_HIDDEN(Handle);
 
 typedef BOOLEAN Boolean;
 
@@ -28,11 +37,13 @@ typedef Byte Str63[64];
 typedef Byte Str255[256];
 typedef Byte *StringPtr;
 
-typedef struct { StringPtr p PACKED_P; } HIDDEN_StringPtr;
+MAKE_HIDDEN(StringPtr);
+
 typedef HIDDEN_StringPtr *StringHandle;
 
 typedef int (*ProcPtr)();
-typedef struct { ProcPtr p PACKED_P; } HIDDEN_ProcPtr;
+
+MAKE_HIDDEN(ProcPtr);
 
 typedef LONGINT Fixed, Fract;
 
@@ -54,15 +65,23 @@ typedef	LONGINT	INTEGERRET;
 typedef	LONGINT	BOOLEANRET;
 typedef	LONGINT	SignedByteRET;
 
+
+#if (SIZEOF_CHAR_P == 4) || 1
+#  define PACKED_MEMBER(typ, name) typ name
+#else
+#  define PACKED_MEMBER(typ, name) \
+                                union PACKED { uint32 pp; typ *type[0]; } name
+#endif
+
 typedef struct PACKED {
-    INTEGER qFlags;
-    union __qe *qHead	PACKED_P;	/* actually QElemPtr */
-    union __qe *qTail	PACKED_P;	/* actually QElemPtr */
+  INTEGER qFlags;
+  PACKED_MEMBER(union __qe *, qHead);	/* actually QElemPtr */
+  PACKED_MEMBER(union __qe *, qTail);	/* actually QElemPtr */
 } QHdr;
 typedef QHdr *QHdrPtr;
 typedef union __qe *QElemPtr;
 
-typedef struct { QElemPtr p PACKED_P; } HIDDEN_QElemPtr;
+MAKE_HIDDEN(QElemPtr);
 
 #define noErr	0
 

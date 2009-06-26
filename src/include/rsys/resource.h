@@ -29,7 +29,7 @@ typedef struct PACKED {
 
 typedef struct PACKED {
   reshead rh;
-  Handle nextmap	PACKED_P;
+  PACKED_MEMBER(Handle, nextmap);
   INTEGER resfn;
   INTEGER resfatr;
   INTEGER typoff;
@@ -37,7 +37,7 @@ typedef struct PACKED {
 } resmap;
 
 typedef resmap *resmapptr;
-typedef struct { resmapptr p PACKED_P; } HIDDEN_resmapptr;
+MAKE_HIDDEN(resmapptr);
 typedef HIDDEN_resmapptr *resmaphand;
 
 #define NAMEOFF(map)	Hx(map, namoff)
@@ -63,7 +63,7 @@ typedef struct PACKED {
   INTEGER noff;
   Byte ratr;
   Byte doff[3];
-  Handle rhand	PACKED_P;
+  PACKED_MEMBER(Handle, rhand);
 } resref;
 
 typedef struct PACKED {            /* empty resource template */

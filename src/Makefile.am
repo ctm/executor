@@ -215,6 +215,11 @@ arch_sources = config/arch/powerpc/powerpc.c  \
 AM_CPPFLAGS += -D_GNU_SOURCE
 endif CONFIG_ARCH_POWERPC
 
+if CONFIG_ARCH_X86_64
+arch_sources = config/arch/x86_64/x86_64.c
+endif CONFIG_ARCH_X86_64
+
+
 if CONFIG_FRONT_END_DOS
 # The DOS port of Executor hasn't ever been built using automake.  Most likely
 # we'll rip all the DOS support out of the code before ever making it go, but

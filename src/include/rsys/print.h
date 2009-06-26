@@ -146,7 +146,7 @@ TTxtPicRec, *TTxtPicPtr;
 #define TEXTPIC_ANGLE_FIXED_X(h) (HxX (h, tAngleFixed))
 #define TEXTPIC_ANGLE_FIXED(h)   (CL (TEXTPIC_ANGLE_FIXED_X (h)))
 
-typedef struct { TTxtPicPtr p PACKED_P; } HIDDEN_TTxtPicPtr;
+MAKE_HIDDEN(TTxtPicPtr);
 typedef HIDDEN_TTxtPicPtr *TTxtPicHdl;
 
 enum
@@ -177,7 +177,7 @@ TCenterRec, *TCenterRecPtr;
 #define TEXTCENTER_X_X(h) (HxX (h, x))
 #define TEXTCENTER_X(h)   (CL (TEXTCENTER_X_X (h)))
 
-typedef struct { TCenterRecPtr p PACKED_P; } HIDDEN_TCenterRecPtr;
+MAKE_HIDDEN(TCenterRecPtr);
 typedef HIDDEN_TCenterRecPtr *TCenterRecHdl;
 
 extern char *ROMlib_document_paper_sizes;

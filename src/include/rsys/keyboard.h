@@ -63,7 +63,8 @@ typedef struct PACKED
   dead_key_rec_t dead_key_recs[0]; /* VARIABLE LENGTH */
 } kchr_str, *kchr_ptr_t;
 
-typedef struct { kchr_ptr_t p PACKED_P; } HIDDEN_kchr_ptr, *kchr_hand;
+MAKE_HIDDEN(kchr_ptr_t);
+typedef HIDDEN_kchr_ptr_t *kchr_hand;
 
 #define KCHR_VERSION_X(p)		((p)->version)
 #define KCHR_MODIFIER_TABLE_X(p)	((p)->modifier_table)

@@ -60,15 +60,15 @@ typedef struct PACKED {
   INTEGER selStart;
   INTEGER selEnd;
   INTEGER active;
-  ProcPtr wordBreak	PACKED_P;
-  ProcPtr clikLoop	PACKED_P;
+  PACKED_MEMBER(ProcPtr, wordBreak);
+  PACKED_MEMBER(ProcPtr, clikLoop);
   LONGINT clickTime;
   INTEGER clickLoc;
   LONGINT caretTime;
   INTEGER caretState;
   INTEGER just;
   INTEGER teLength;
-  Handle hText	PACKED_P;
+  PACKED_MEMBER(Handle, hText);
   INTEGER recalBack;
   INTEGER recalLines;
   INTEGER clikStuff;
@@ -78,15 +78,15 @@ typedef struct PACKED {
   Byte filler;
   INTEGER txMode;
   INTEGER txSize;
-  GrafPtr inPort	PACKED_P;
-  ProcPtr highHook	PACKED_P;
-  ProcPtr caretHook	PACKED_P;
+  PACKED_MEMBER(GrafPtr, inPort);
+  PACKED_MEMBER(ProcPtr, highHook);
+  PACKED_MEMBER(ProcPtr, caretHook);
   INTEGER nLines;
   INTEGER lineStarts[1];
 } TERec;
 
 typedef TERec *TEPtr;
-typedef struct { TEPtr p PACKED_P; } HIDDEN_TEPtr;
+MAKE_HIDDEN(TEPtr);
 typedef HIDDEN_TEPtr *TEHandle;
 
 typedef struct PACKED {
@@ -107,7 +107,7 @@ typedef struct PACKED {
 
 typedef STElement TEStyleTable[1];
 typedef STElement *STPtr;
-typedef struct { STPtr p PACKED_P; } HIDDEN_STPtr;
+MAKE_HIDDEN(STPtr);
 typedef HIDDEN_STPtr *STHandle;
 
 typedef struct PACKED {
@@ -117,7 +117,7 @@ typedef struct PACKED {
 
 typedef LHElement LHTable[1];
 typedef LHElement *LHPtr;
-typedef struct { LHPtr p PACKED_P; } HIDDEN_LHPtr;
+MAKE_HIDDEN(LHPtr);
 typedef HIDDEN_LHPtr *LHHandle;
 
 typedef struct PACKED {
@@ -147,30 +147,30 @@ typedef struct PACKED {
 } StScrpRec;
 
 typedef StScrpRec *StScrpPtr;
-typedef struct { StScrpPtr p PACKED_P; } HIDDEN_StScrpPtr;
+MAKE_HIDDEN(StScrpPtr);
 typedef HIDDEN_StScrpPtr *StScrpHandle;
 
 typedef struct PACKED {
   LONGINT TEReserved;
-  StScrpHandle nullScrap	PACKED_P;
+  PACKED_MEMBER(StScrpHandle, nullScrap);
 } NullSTRec;
 
 typedef NullSTRec *NullSTPtr;
-typedef struct { NullSTPtr p PACKED_P; } HIDDEN_NullSTPtr;
+MAKE_HIDDEN(NullSTPtr);
 typedef HIDDEN_NullSTPtr *NullSTHandle;
 
 typedef struct PACKED {
   INTEGER nRuns;
   INTEGER nStyles;
-  STHandle styleTab	PACKED_P;
-  LHHandle lhTab	PACKED_P;
+  PACKED_MEMBER(STHandle, styleTab);
+  PACKED_MEMBER(LHHandle, lhTab);
   LONGINT teRefCon;
-  NullSTHandle nullStyle	PACKED_P;
+  PACKED_MEMBER(NullSTHandle, nullStyle);
   StyleRun runs[1];
 } TEStyleRec;
 
 typedef TEStyleRec *TEStylePtr;
-typedef struct { TEStylePtr p PACKED_P; } HIDDEN_TEStylePtr;
+MAKE_HIDDEN(TEStylePtr);
 typedef HIDDEN_TEStylePtr *TEStyleHandle;
 
 typedef Byte Chars[1], *CharsPtr, **CharsHandle;

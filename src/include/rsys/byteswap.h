@@ -38,8 +38,29 @@
 #define MR(n)  ((typeof (n))(n ? ((swap32 ((unsigned long) (n))) + ROMlib_offset) : 0))
 #define RM(n)  ((typeof (n))(n ? ((swap32 ((unsigned long) (n)- ROMlib_offset)) ) : 0))
 #else
-#define MR(n)  ((typeof (n))({ typeof (n) _t = n; _t ? ((swap32 ((unsigned long) (_t))) + ROMlib_offset) : 0;}))
+
+#if (SIZEOF_CHAR_P == 4) || 1 /* always do this for now */
+
+#  define MR(n)  ((typeof (n))({ typeof (n) _t = n; _t ? ((swap32 ((unsigned long) (_t))) + ROMlib_offset) : 0;}))
+
+#else
+
+/* YY needs a better name, right now it's just a helper for MR */
+#  define YY(n) (swap32((uint32)(n)) + ROMlib_offset)
+
+#  define MR(n)  ((typeof (n))({ typeof (n) _t = n; _t ? (YY(_t)) : 0;}))
+#endif
+
+
 #define RM(n)  ((typeof (n))({ typeof (n) _t = n; _t ? ((swap32 ((unsigned long) (_t)- ROMlib_offset)) ) : 0;}))
+
+/* Packed Pointer to ROMlib  */
+#if (SIZEOF_CHAR_P == 4) || 1 /* always do this for now */
+#  define PPR(n) MR(n)
+#else
+#  define PPR(n) ((typeof (n.type[0]))({ typeof (n) _t = n; _t.pp ? (YY(_t.pp)) : 0;}))
+#endif
+
 #endif
 
 #define CWC(n) ((typeof (n)) (signed short) ((((n) << 8) & 0xFF00) \
@@ -81,10 +102,17 @@ extern int bad_cx_splosion;
 #define CBC(rhs)	(rhs)
 #define CBV(rhs)	(rhs)
 
-#define STARH(h)		MR ((h)->p)
+#if (SIZEOF_CHAR_P == 4) || 1 /* always do this for now */
+#  define STARH(h)		MR ((h)->p)
+#  define HxP(handle, field)	MR (STARH(handle)->field)
+#  define HxX(handle, field)	(STARH(handle)->field)
+#else
+#  define STARH(h)		((typeof ((h)->type[0])) (YY ((h)->pp)))
+#  define HxP(handle, field)	MR ((STARH(handle)->field).p)
+#  define HxX(handle, field)	((STARH(handle))->field)
+#endif
+
 #define Hx(handle, field)	Cx (STARH(handle)->field)
-#define HxP(handle, field)	MR (STARH(handle)->field)
-#define HxX(handle, field)	(STARH(handle)->field)
 
 #if defined (BIGENDIAN)
 

@@ -107,15 +107,15 @@ typedef enum {
     cntrlParamType
 } ParamBlkType;
 
-#define COMMONFSQUEUEDEFS	\
-    QElemPtr qLink       PACKED_P;	\
-    INTEGER qType;	\
-    INTEGER ioTrap;	\
-    Ptr ioCmdAddr        PACKED_P;	\
-    ProcPtr ioCompletion PACKED_P;	\
-    OSErr ioResult;	\
-    StringPtr ioNamePtr  PACKED_P;	\
-    INTEGER ioVRefNum
+#define COMMONFSQUEUEDEFS	        \
+  PACKED_MEMBER(QElemPtr, qLink);       \
+  INTEGER qType;                        \
+  INTEGER ioTrap;                       \
+  PACKED_MEMBER(Ptr, ioCmdAddr);        \
+  PACKED_MEMBER(ProcPtr, ioCompletion); \
+  OSErr ioResult;                       \
+  PACKED_MEMBER(StringPtr, ioNamePtr);  \
+  INTEGER ioVRefNum
 
 typedef struct PACKED {
   COMMONFSQUEUEDEFS;
@@ -123,7 +123,7 @@ typedef struct PACKED {
   SignedByte ioVersNum;
   SignedByte ioPermssn;
   LONGINT ioMisc;		/* should be largest of Ptr, LONGINT */
-  Ptr ioBuffer	PACKED_P;
+  PACKED_MEMBER(Ptr, ioBuffer);
   LONGINT ioReqCount;
   LONGINT ioActCount;
   INTEGER ioPosMode;
@@ -189,7 +189,7 @@ typedef struct PACKED {
   SignedByte ioVersNum;
   SignedByte ioPermssn;
   LONGINT ioMisc;		/* should be largest of Ptr, LONGINT */
-  Ptr ioBuffer	PACKED_P;
+  PACKED_MEMBER(Ptr, ioBuffer);
   LONGINT ioReqCount;
   LONGINT ioActCount;
   INTEGER ioPosMode;
@@ -302,7 +302,7 @@ typedef CInfoPBRec *CInfoPBPtr;
 typedef struct PACKED {
   COMMONFSQUEUEDEFS;
   LONGINT filler1;
-  StringPtr ioNewName	PACKED_P;
+  PACKED_MEMBER(StringPtr, ioNewName);
   LONGINT filler2;
   LONGINT ioNewDirID;
   LONGINT filler3[2];
@@ -340,7 +340,7 @@ typedef struct PACKED {
 typedef FCBPBRec *FCBPBPtr;
 
 typedef struct PACKED {
-  QElemPtr qLink	PACKED_P;		/*  0 */
+  PACKED_MEMBER(QElemPtr, qLink); /* 0 */
   INTEGER qType;		/*  4 */
   uint16_t vcbFlags;		/*  6 */
   uint16_t vcbSigWord;		/*  8 */
@@ -361,8 +361,8 @@ typedef struct PACKED {
   INTEGER vcbDRefNum;		/* 74 */
   INTEGER vcbFSID;		/* 76 */
   INTEGER vcbVRefNum;		/* 78 */
-  Ptr vcbMAdr	PACKED_P;
-  Ptr vcbBufAdr	PACKED_P;
+  PACKED_MEMBER(Ptr, vcbMAdr);
+  PACKED_MEMBER(Ptr, vcbBufAdr);
   uint16_t vcbMLen;
   INTEGER vcbDirIndex;
   uint16_t vcbDirBlk;
@@ -382,16 +382,16 @@ typedef struct PACKED {
   uint16_t vcbCTAlBlks;
   INTEGER vcbXTRef;
   INTEGER vcbCTRef;
-  Ptr vcbCtlBuf	PACKED_P;
+  PACKED_MEMBER(Ptr, vcbCtlBuf);
   LONGINT vcbDirIDM;
   uint16_t vcbOffsM;
 } VCB;
 
 typedef VCB *VCBPtr;
-typedef struct { VCBPtr p PACKED_P; } HIDDEN_VCBPtr;
+MAKE_HIDDEN(VCBPtr);
 
 typedef struct PACKED {
-  QElemPtr qLink	PACKED_P;
+  PACKED_MEMBER(QElemPtr, qLink);
   INTEGER qType;
   INTEGER dQDrive;
   INTEGER dQRefNum;

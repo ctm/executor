@@ -4,7 +4,7 @@
 typedef struct PACKED
 {
   int16 count;
-  Handle h		PACKED_P;
+  PACKED_MEMBER(Handle, h);
   Rect r;
   uint8 type;
   uint8 len;

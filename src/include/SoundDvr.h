@@ -53,17 +53,17 @@ typedef struct PACKED {
   LONGINT sound3Phase;
   Fixed sound4Rate;
   LONGINT sound4Phase;
-  WavePtr sound1Wave	PACKED_P;
-  WavePtr sound2Wave	PACKED_P;
-  WavePtr sound3Wave	PACKED_P;
-  WavePtr sound4Wave	PACKED_P;
+  PACKED_MEMBER(WavePtr, sound1Wave);
+  PACKED_MEMBER(WavePtr, sound2Wave);
+  PACKED_MEMBER(WavePtr, sound3Wave);
+  PACKED_MEMBER(WavePtr, sound4Wave);
 } FTSoundRec;
 typedef FTSoundRec *FTSndRecPtr;
-typedef struct { FTSndRecPtr p PACKED_P; } HIDDEN_FTSndRecPtr;
+MAKE_HIDDEN(FTSndRecPtr);
 
 typedef struct PACKED {
   INTEGER mode;
-  FTSndRecPtr sndRec	PACKED_P;
+  PACKED_MEMBER(FTSndRecPtr, sndRec);
 } FTSynthRec;
 typedef FTSynthRec *FTsynthPtr;
 

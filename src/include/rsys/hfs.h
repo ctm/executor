@@ -76,7 +76,7 @@ typedef struct PACKED {
   LONGINT drCTFlSize;
   xtntrec drCTExtRec;
 } volumeinfo, *volumeinfoPtr;
-typedef struct { volumeinfoPtr p PACKED_P; } HIDDEN_volumeinfoPtr;
+MAKE_HIDDEN(volumeinfoPtr);
 typedef HIDDEN_volumeinfoPtr *volumeinfoHandle;
 
 #define VOLUMEINFOBLOCKNO   2
@@ -176,6 +176,8 @@ typedef compretval (*compfp)(void *first, void *second);
 #define FLOCKEDBIT  (1<<5)
 #define DIRTYBIT    (1<<7)
 
+typedef HVCB *HVCBPtr;
+
 typedef struct PACKED {
   LONGINT fcbFlNum;
   Byte fcbMdRByt;
@@ -184,8 +186,8 @@ typedef struct PACKED {
   LONGINT fcbEOF;
   LONGINT fcbPLen;
   LONGINT fcbCrPs;
-  HVCB *fcbVPtr	PACKED_P;
-  Ptr fcbBfAdr	PACKED_P;
+  PACKED_MEMBER(HVCBPtr, fcbVPtr);
+  PACKED_MEMBER(Ptr, fcbBfAdr);
   unsigned short fcbFlPos;
   LONGINT fcbClmpSize;
   LONGINT fcbBTCBPtr;
@@ -251,10 +253,12 @@ typedef enum { regular = 1, directory = 2, thread = 4 } filekind;
  
 #define PBRETURN(pb, x) return (((ParmBlkPtr) (pb))->ioParam.ioResult = CW(x), (x))
 
+typedef struct _cacheentry *cacheentry_ptr;
+
 typedef struct PACKED _cacheentry {
-  struct _cacheentry *flink	PACKED_P;
-  struct _cacheentry *blink	PACKED_P;
-  HVCB *vptr	PACKED_P;
+  PACKED_MEMBER(cacheentry_ptr, flink);
+  PACKED_MEMBER(cacheentry_ptr, blink);
+  PACKED_MEMBER(HVCBPtr, vptr);
   LONGINT fileno;
   uint16 refnum;
   ULONGINT physblock;
@@ -269,8 +273,8 @@ typedef struct PACKED _cacheentry {
 #define CACHEFREE   (1 << 5)
 
 typedef struct PACKED {
-  cacheentry *flink	PACKED_P;
-  cacheentry *blink	PACKED_P;
+  PACKED_MEMBER(cacheentry_ptr, flink);
+  PACKED_MEMBER(cacheentry_ptr, blink);
   unsigned short   nitems;
   uint16  flags;
 } cachehead;
@@ -304,7 +308,7 @@ typedef struct {
 } btparam;
 
 typedef struct PACKED {    /* from MPW equates */
-    HVCB *vcbp	PACKED_P;
+    PACKED_MEMBER(HVCBPtr, vcbp);
     LONGINT dirid;
     LONGINT cathint;    /* ??? */
     LONGINT procid;

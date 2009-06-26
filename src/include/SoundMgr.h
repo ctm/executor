@@ -25,10 +25,11 @@ enum
   extSH = 0xFF,		/* extended sound header */
 };
 
+typedef struct PACKED _SndChannel *SndChannelPtr;
 typedef struct PACKED _SndChannel {
-  struct _SndChannel *nextChan	PACKED_P;
-  Ptr firstMod	PACKED_P;
-  ProcPtr callBack	PACKED_P;
+  PACKED_MEMBER(SndChannelPtr, nextChan);
+  PACKED_MEMBER(Ptr, firstMod);
+  PACKED_MEMBER(ProcPtr, callBack);
   LONGINT userInfo;
   LONGINT wait;
   SndCommand cmdInProg;
@@ -37,12 +38,12 @@ typedef struct PACKED _SndChannel {
   INTEGER qHead;
   INTEGER qTail;
   SndCommand queue[stdQLength];
-} SndChannel, *SndChannelPtr;
+} SndChannel;
 
 #define SND_CHAN_FLAGS_X(c) (c->flags)
 #define SND_CHAN_FLAGS(c) (CW (SND_CHAN_FLAGS_X (c)))
 
-typedef struct { SndChannelPtr p PACKED_P; } HIDDEN_SndChannelPtr;
+MAKE_HIDDEN(SndChannelPtr);
 
 enum {
     nullCmd,
@@ -85,7 +86,7 @@ typedef struct PACKED {
 } soundbuffer_t;
 
 typedef struct PACKED _SoundHeader {
-  Ptr samplePtr		PACKED_P;
+  PACKED_MEMBER(Ptr, samplePtr);
   LONGINT length;
   Fixed sampleRate;
   LONGINT loopStart;
@@ -96,7 +97,7 @@ typedef struct PACKED _SoundHeader {
 } SoundHeader, *SoundHeaderPtr;
 
 typedef struct PACKED _ExtSoundHeader {
-  Ptr samplePtr		PACKED_P;
+  PACKED_MEMBER(Ptr, samplePtr);
   LONGINT numChannels;
   Fixed sampleRate;
   LONGINT loopStart;

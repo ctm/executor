@@ -729,7 +729,7 @@ P1 (PUBLIC pascal trap, void, DeleteMenu, int16, mid)
 }
 
 typedef mbartype *mbarptr;
-typedef struct { mbarptr p PACKED_P; } HIDDEN_mbarptr;
+MAKE_HIDDEN(mbarptr);
 typedef HIDDEN_mbarptr *mbarhandle;
 
 P1(PUBLIC pascal trap, Handle, GetNewMBar, INTEGER, mbarid)

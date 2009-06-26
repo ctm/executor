@@ -56,7 +56,7 @@ typedef struct PACKED {
   Fixed descent;
   Fixed leading;
   Fixed widMax;
-  Handle wTabHandle	PACKED_P;
+  PACKED_MEMBER(Handle, wTabHandle);
 } FMetricRec;
 
 typedef struct PACKED {
@@ -82,7 +82,7 @@ typedef struct PACKED {
 
 typedef struct PACKED {
   Fixed tabData[256];
-  Handle tabFont	PACKED_P;
+  PACKED_MEMBER(Handle, tabFont);
   LONGINT sExtra;
   LONGINT style;
   INTEGER fID;
@@ -92,7 +92,7 @@ typedef struct PACKED {
   Point inNumer;
   Point inDenom;
   INTEGER aFID;
-  Handle fHand	PACKED_P;
+  PACKED_MEMBER(Handle, fHand);
   BOOLEAN usedFam;
   Byte aFace;
   INTEGER vOutput;
@@ -116,7 +116,7 @@ typedef struct PACKED {
 
 typedef struct PACKED {
     INTEGER errNum;	/* 0x00 */
-    Handle fontHandle	PACKED_P;	/* 0x02 */
+    PACKED_MEMBER(Handle, fontHandle);	/* 0x02 */
     Byte bold;		/* 0x06 */
     Byte italic;	/* 0x07 */
     Byte ulOffset;	/* 0x08 */
@@ -153,14 +153,14 @@ typedef struct PACKED {
 } FontRec;
 
 typedef FamRec *FamRecPtr;
-typedef struct { FamRecPtr p PACKED_P; } HIDDEN_FamRecPtr;
+MAKE_HIDDEN(FamRecPtr);
 typedef HIDDEN_FamRecPtr *FamRecHandle;
-typedef struct { FamRecHandle p PACKED_P; } HIDDEN_FamRecHandle;
+MAKE_HIDDEN(FamRecHandle);
 
 typedef WidthTable *WidthTablePtr;
-typedef struct { WidthTablePtr p PACKED_P; } HIDDEN_WidthTablePtr;
+MAKE_HIDDEN(WidthTablePtr);
 typedef HIDDEN_WidthTablePtr *WidthTableHandle;
-typedef struct { WidthTableHandle p PACKED_P; } HIDDEN_WidthTableHandle;
+MAKE_HIDDEN(WidthTableHandle);
 
 #if !defined (JSwapFont_H)
 extern HIDDEN_ProcPtr 	JSwapFont_H;

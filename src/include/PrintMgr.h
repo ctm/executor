@@ -84,8 +84,8 @@ typedef struct PACKED {
   INTEGER iCopies;
   SignedByte bJDocLoop;
   BOOLEAN fFromUsr;
-  ProcPtr pIdleProc	PACKED_P;
-  StringPtr pFileName	PACKED_P;
+  PACKED_MEMBER(ProcPtr, pIdleProc);
+  PACKED_MEMBER(StringPtr, pFileName);
   INTEGER iFileVol;
   SignedByte bFileVers;
   SignedByte bJobX;
@@ -102,7 +102,7 @@ typedef struct PACKED {
   INTEGER printX[19];
 } TPrint;
 typedef TPrint *TPPrint;
-typedef struct { TPPrint p PACKED_P; } HIDDEN_TPPrint;
+MAKE_HIDDEN(TPPrint);
 typedef HIDDEN_TPPrint *THPrint;
 
 typedef Rect *TPRect;
@@ -116,17 +116,17 @@ typedef struct PACKED {
   INTEGER iCurBand;
   BOOLEAN fPgDirty;
   BOOLEAN fImaging;
-  THPrint hPrint	PACKED_P;
-  TPPrPort pPRPort	PACKED_P;
-  PicHandle hPic	PACKED_P;
+  PACKED_MEMBER(THPrint, hPrint);
+  PACKED_MEMBER(TPPrPort, pPRPort);
+  PACKED_MEMBER(PicHandle, hPic);
 } TPrStatus;
 
 typedef struct PACKED {
 /* From Technote 095 */
   DialogRecord dlg;
-  ProcPtr pFltrProc	PACKED_P;
-  ProcPtr pItemProc	PACKED_P;
-  THPrint hPrintUsr	PACKED_P;
+  PACKED_MEMBER(ProcPtr, pFltrProc);
+  PACKED_MEMBER(ProcPtr, pItemProc);
+  PACKED_MEMBER(THPrint, hPrintUsr);
   BOOLEAN fDoIt;
   BOOLEAN fDone;
   LONGINT lUser1;

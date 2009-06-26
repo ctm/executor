@@ -82,7 +82,7 @@ typedef struct PACKED {
   INTEGER intl0Vers;
 } Intl0Rec;
 typedef Intl0Rec *Intl0Ptr;
-typedef struct { Intl0Ptr p PACKED_P; } HIDDEN_Intl0Ptr;
+MAKE_HIDDEN(Intl0Ptr);
 typedef HIDDEN_Intl0Ptr *Intl0Hndl;
 
 typedef Byte STRING15[16];
@@ -103,7 +103,7 @@ typedef struct PACKED {
   INTEGER localRtn;
 } Intl1Rec;
 typedef Intl1Rec *Intl1Ptr;
-typedef struct { Intl1Ptr p PACKED_P; } HIDDEN_Intl1Ptr;
+MAKE_HIDDEN(Intl1Ptr);
 typedef HIDDEN_Intl1Ptr *Intl1Hndl;
 
 typedef comp LongDateTime;

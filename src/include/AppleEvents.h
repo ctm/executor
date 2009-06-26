@@ -114,7 +114,7 @@ typedef ProcPtr EventFilterProcPtr;
 
 typedef struct PACKED AE_hdlr
 {
-  ProcPtr fn		PACKED_P;
+  PACKED_MEMBER(ProcPtr, fn);
   int32 refcon;
 } AE_hdlr_t;
 
@@ -158,14 +158,14 @@ typedef struct PACKED AE_hdlr_table
 } AE_hdlr_table_t;
 
 typedef AE_hdlr_table_t *AE_hdlr_table_ptr;
-typedef struct { AE_hdlr_table_ptr p PACKED_P; } HIDDEN_AE_hdlr_table_ptr;
+MAKE_HIDDEN(AE_hdlr_table_ptr);
 typedef HIDDEN_AE_hdlr_table_ptr *AE_hdlr_table_h;
 
 typedef struct PACKED AE_zone_tables
 {
-  AE_hdlr_table_h event_hdlr_table	PACKED_P;
-  AE_hdlr_table_h coercion_hdlr_table	PACKED_P;
-  AE_hdlr_table_h special_hdlr_table	PACKED_P;
+  PACKED_MEMBER(AE_hdlr_table_h, event_hdlr_table);
+  PACKED_MEMBER(AE_hdlr_table_h, coercion_hdlr_table);
+  PACKED_MEMBER(AE_hdlr_table_h, special_hdlr_table);
   
   char pad_1[28];
   
@@ -175,11 +175,11 @@ typedef struct PACKED AE_zone_tables
   
   /* points to a 32byte handle of unknown contents (at least,
      sometimes) */
-  Handle unknown_sys_handle	PACKED_P;
+  PACKED_MEMBER(Handle, unknown_sys_handle);
 } AE_zone_tables_t;
 
 typedef AE_zone_tables_t *AE_zone_tables_ptr;
-typedef struct { AE_zone_tables_ptr p PACKED_P; } HIDDEN_AE_zone_tables_ptr;
+MAKE_HIDDEN(AE_zone_tables_ptr);
 typedef HIDDEN_AE_zone_tables_ptr *AE_zone_tables_h;
 
 typedef struct PACKED AE_info
@@ -187,18 +187,18 @@ typedef struct PACKED AE_info
   char pad_1[340];
   
   /* offset of `appl_zone_tables' is 340; handle to a `struct tables' */
-  AE_zone_tables_h appl_zone_tables	PACKED_P;
+  PACKED_MEMBER(AE_zone_tables_h, appl_zone_tables);
   
   char pad_2[36];
   
   /* offset of `system_zone_tables' is 380; handle to a `struct tables' */
-  AE_zone_tables_h system_zone_tables	PACKED_P;
+  PACKED_MEMBER(AE_zone_tables_h, system_zone_tables);
   
   char pad_3[212];
 } AE_info_t;
 
 typedef AE_info_t *AE_info_ptr;
-typedef struct { AE_info_ptr p PACKED_P; } HIDDEN_AE_info_ptr;
+MAKE_HIDDEN(AE_info_ptr);
 
 extern pascal trap OSErr C__AE_hdlr_table_alloc (int32, int32, int32, int8,
 						 AE_hdlr_table_h *);

@@ -15,13 +15,13 @@
 #define declare_subtypes(type)						\
 typedef struct type ## Record type ## Record;				\
 typedef type ## Record *type ## Ptr;					\
-typedef struct { type ## Ptr p PACKED_P; } HIDDEN_ ## type ## Ptr;	\
+MAKE_HIDDEN(type ## Ptr);                                               \
 typedef HIDDEN_ ## type ## Ptr * type ## Handle
 
 #define declare_record_subtypes(type)					\
 typedef struct type type;						\
 typedef type *type ## Ptr;						\
-typedef struct { type ## Ptr p PACKED_P; } HIDDEN_ ## type ## Ptr;	\
+MAKE_HIDDEN(type ## Ptr);                                               \
 typedef HIDDEN_ ## type ## Ptr * type ## Handle
 
 typedef int32 TimeStamp;
@@ -43,11 +43,11 @@ struct PACKED SectionRecord
   TimeStamp mdDate;
   int32 sectionID;
   int32 refCon;
-  AliasHandle alias			PACKED_P;
+  PACKED_MEMBER(AliasHandle, alias);
 
   int32 subPart;
-  /* ### Section */ Handle nextSection	PACKED_P;
-  Handle controlBlock			PACKED_P;
+  PACKED_MEMBER(/* ### Section */ Handle, nextSection);
+  PACKED_MEMBER(Handle, controlBlock);
   EditionRefNum refNum;
 };
 
@@ -83,7 +83,7 @@ struct PACKED NewPublisherReply
   Boolean replacing;
   Boolean usePart;
   uint8 _filler;
-  Handle preview			PACKED_P;
+  PACKED_MEMBER(Handle, preview);
   FormatType previewFormat;
   EditionContainerSpec container;
 };
@@ -105,7 +105,7 @@ struct PACKED SectionOptionsReply
 {
   Boolean canceled;
   Boolean changed;
-  SectionHandle sectionH		PACKED_P;
+  PACKED_MEMBER(SectionHandle, sectionH);
   ResType action;
 };
 
@@ -123,11 +123,11 @@ typedef uint8 EditionOpenerVerb;
 struct PACKED EditionOpenerParamBlock
 {
   EditionInfoRecord info;
-  SectionHandle sectionH		PACKED_P;
-  FSSpecPtr document			PACKED_P;
+  PACKED_MEMBER(SectionHandle, sectionH);
+  PACKED_MEMBER(FSSpecPtr, document);
   OSType fdCreator;
   int32 ioRefNum;
-  FormatIOProcPtr ioProc		PACKED_P;
+  PACKED_MEMBER(FormatIOProcPtr, ioProc);
   Boolean success;
   SignedByte formatsMask;
 };
@@ -148,7 +148,7 @@ struct PACKED FormatIOParamBlock
   FormatType format;
   int32 formatIndex;
   int32 offset;
-  Ptr buffPtr			PACKED_P;
+  PACKED_MEMBER(Ptr, buffPtr);
   int32 buffLen;
 };
 

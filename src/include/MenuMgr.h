@@ -24,12 +24,12 @@ typedef struct PACKED {
   INTEGER menuID;
   INTEGER menuWidth;
   INTEGER menuHeight;
-  Handle menuProc	PACKED_P;
+  PACKED_MEMBER(Handle, menuProc);
   LONGINT enableFlags;
   Str255 menuData;
 } MenuInfo;
 typedef MenuInfo *MenuPtr;
-typedef struct { MenuPtr p PACKED_P; } HIDDEN_MenuPtr;
+MAKE_HIDDEN(MenuPtr);
 typedef HIDDEN_MenuPtr *MenuHandle;
 
 typedef struct PACKED MCEntry
@@ -42,14 +42,14 @@ typedef struct PACKED MCEntry
   RGBColor mctRGB4;
   INTEGER mctReserved;
 } MCEntry, *MCEntryPtr;
-typedef struct { MCEntryPtr p PACKED_P; } HIDDEN_MCEntryPtr;
+MAKE_HIDDEN(MCEntryPtr);
 
 typedef MCEntry MCTable[1];
 
 typedef MCEntry *MCTablePtr;
-typedef struct { MCTablePtr p PACKED_P; } HIDDEN_MCTablePtr;
+MAKE_HIDDEN(MCTablePtr);
 typedef HIDDEN_MCTablePtr *MCTableHandle;
-typedef struct { MCTableHandle p PACKED_P; } HIDDEN_MCTableHandle;
+MAKE_HIDDEN(MCTableHandle);
 
 #if !defined (MenuList_H)
 extern HIDDEN_Handle 	MenuList_H;

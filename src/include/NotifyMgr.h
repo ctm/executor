@@ -9,16 +9,16 @@
  */
 
 typedef struct PACKED {
-  QElemPtr qLink	PACKED_P;
+  PACKED_MEMBER(QElemPtr, qLink);
   INTEGER qType;
   INTEGER nmFlags;
   LONGINT nmPrivate;
   INTEGER nmReserved;
   INTEGER nmMark;
-  Handle nmIcon	PACKED_P;
-  Handle nmSound	PACKED_P;
-  StringPtr nmStr	PACKED_P;
-  ProcPtr nmResp	PACKED_P;     /* pascal void myresponse(NMRecPtr foo) */
+  PACKED_MEMBER(Handle, nmIcon);
+  PACKED_MEMBER(Handle, nmSound);
+  PACKED_MEMBER(StringPtr, nmStr);
+  PACKED_MEMBER(ProcPtr, nmResp);     /* pascal void myresponse(NMRecPtr foo) */
                         /* value of -1 means remove queue element
                            automatically */
   LONGINT nmRefCon;

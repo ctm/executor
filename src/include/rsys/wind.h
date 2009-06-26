@@ -45,7 +45,7 @@ extern BOOLEAN ROMlib_dirtyvariant;
 
 typedef pascal LONGINT (*windprocp)(INTEGER var, WindowPtr wind, INTEGER mess,
 				    LONGINT param);
-typedef struct { windprocp p PACKED_P; } HIDDEN_windprocp;
+MAKE_HIDDEN(windprocp);
 
 extern void CALLDRAGHOOK (void);
 extern void WINDCALLDESKHOOK (void);

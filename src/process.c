@@ -19,11 +19,8 @@ char ROMlib_rcsid_process[] =
 
 #define declare_handle_type(type_prefix)				\
   typedef type_prefix ## _t *type_prefix ## _ptr;			\
-  typedef struct							\
-    {									\
-      type_prefix ## _ptr p PACKED_P;					\
-    } hidden_ ## type_prefix ## _ptr;					\
-  typedef hidden_ ## type_prefix ## _ptr *type_prefix ## _handle
+  MAKE_HIDDEN(type_prefix ## _ptr);                                     \
+  typedef HIDDEN_ ## type_prefix ## _ptr *type_prefix ## _handle
 
 declare_handle_type (size_resource);
 

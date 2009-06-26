@@ -210,7 +210,7 @@ hidden, *hiddenp;
 
 #endif
 
-typedef struct { hiddenp p PACKED_P; } HIDDEN_hiddenp;
+MAKE_HIDDEN(hiddenp);
 typedef HIDDEN_hiddenp *hiddenh;
 
 

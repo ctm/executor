@@ -15,10 +15,10 @@
 
 typedef struct PACKED {
   LONGINT scrapSize;
-  Handle scrapHandle	PACKED_P;
+  PACKED_MEMBER(Handle, scrapHandle);
   INTEGER scrapCount;
   INTEGER scrapState;
-  StringPtr scrapName	PACKED_P;
+  PACKED_MEMBER(StringPtr, scrapName);
 } ScrapStuff;
 typedef ScrapStuff *PScrapStuff;
 

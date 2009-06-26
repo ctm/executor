@@ -33,14 +33,16 @@ typedef struct {
     short h;
 } comPoint;
 
+typedef char *char_ptr;
+
 typedef struct PACKED {
-  char *baseAddr	PACKED_P;
+  PACKED_MEMBER(char_ptr, baseAddr);
   short rowBytes;
   comRect bounds;
 } comBitMap;
 
 typedef struct PACKED {
-  char *baseAddr	PACKED_P;
+  PACKED_MEMBER(char_ptr, baseAddr);
   short rowBytes;
   comRect bounds;
   short pmVersion;
@@ -84,7 +86,7 @@ typedef enum {
 } comverb_t;
 
 typedef char *comPtr;
-typedef struct { comPtr p PACKED_P; } HIDDEN_comPtr;
+MAKE_HIDDEN(comPtr);
 typedef HIDDEN_comPtr *comHandle;
 
 typedef LONGINT comFixed;
@@ -95,8 +97,8 @@ typedef struct PACKED {
   short device;
   comBitMap portBits;
   comRect portRect;
-  comRgnHandle visRgn	PACKED_P;
-  comRgnHandle clipRgn	PACKED_P;
+  PACKED_MEMBER(comRgnHandle, visRgn);
+  PACKED_MEMBER(comRgnHandle, clipRgn);
   comPattern bkPat;
   comPattern fillPat;
   comPoint pnLoc;
@@ -114,10 +116,10 @@ typedef struct PACKED {
   LONGINT bkColor;
   short colrBit;
   short patStretch;
-  comHandle picSave	PACKED_P;
-  comHandle rgnSave	PACKED_P;
-  comHandle polySave	PACKED_P;
-  comPtr grafProcs	PACKED_P;
+  PACKED_MEMBER(comHandle, picSave);
+  PACKED_MEMBER(comHandle, rgnSave);
+  PACKED_MEMBER(comHandle, polySave);
+  PACKED_MEMBER(comPtr, grafProcs);
 } comGrafPort, *comGrafPtr;
 
 extern void NeXTPrArc(LONGINT verb, comRect *r, LONGINT starta, LONGINT arca,

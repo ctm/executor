@@ -133,6 +133,7 @@ AM_CONDITIONAL([CONFIG_ARCH_ALPHA], [test x$host_cpu = xalpha])
 AM_CONDITIONAL([CONFIG_ARCH_I386], [test x$host_cpu = xi386])
 AM_CONDITIONAL([CONFIG_ARCH_M68K], [test x$host_cpu = xm68k])
 AM_CONDITIONAL([CONFIG_ARCH_POWERPC], [test x$host_cpu = xpowerpc])
+AM_CONDITIONAL([CONFIG_ARCH_X86_64], [test x$host_cpu = xx86_64])
 
 AM_CONDITIONAL([CONFIG_FRONT_END_DOS], [test x$front_end = xdos])
 AM_CONDITIONAL([CONFIG_FRONT_END_NEXTSTEP], [test x$front_end = xnextstep])
@@ -156,6 +157,8 @@ AM_CONDITIONAL([CONFIG_OS_NEXT], [test x$host_os = xnext])
 AM_CONDITIONAL([CONFIG_SOUND_DJGPP], [test x$sound_config = xdjgpp])
 AM_CONDITIONAL([CONFIG_SOUND_LINUX], [test x$sound_config = xlinux])
 AM_CONDITIONAL([CONFIG_SOUND_SDL], [test x$sound_config = xsdl])
+
+AC_CHECK_SIZEOF([char *])
 
 AC_CONFIG_FILES([Makefile])
 

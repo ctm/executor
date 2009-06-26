@@ -4,13 +4,12 @@
 
 #include "WindowMgr.h"
 
-typedef struct
-{
-  HIDDEN_CGrafPtr *p PACKED_P;
-} HIDDEN_CGrafPtr_Ptr;
+typedef HIDDEN_CGrafPtr *HIDDEN_CGrafPtr_Ptr;
+MAKE_HIDDEN(HIDDEN_CGrafPtr_Ptr);
 
-#define theCPort	(STARH (STARH ((HIDDEN_CGrafPtr_Ptr *) SYN68K_TO_US(a5))))
-#define theCPortX	((*STARH ((HIDDEN_CGrafPtr_Ptr *) SYN68K_TO_US(a5))).p)
+
+#define theCPort	(STARH (STARH ((HIDDEN_HIDDEN_CGrafPtr_Ptr *) SYN68K_TO_US(a5))))
+#define theCPortX	((*STARH ((HIDDEN_HIDDEN_CGrafPtr_Ptr *) SYN68K_TO_US(a5))).p)
 
 #define minSeed 1024
 
@@ -24,29 +23,33 @@ typedef struct PACKED
   unsigned char iTTable[1];
 } ITab, *ITabPtr;
 
-typedef struct { ITabPtr p PACKED_P; } HIDDEN_ITabPtr;
+MAKE_HIDDEN(ITabPtr);
 typedef HIDDEN_ITabPtr *ITabHandle;
 
 typedef struct GDevice *GDPtr;
-typedef struct { GDPtr p PACKED_P; } HIDDEN_GDevicePtr;
+typedef GDPtr GDevicePtr;
+MAKE_HIDDEN(GDevicePtr);
 typedef HIDDEN_GDevicePtr *GDHandle;
-typedef struct { GDHandle p PACKED_P; } HIDDEN_GDHandle;
+MAKE_HIDDEN(GDHandle);
 
-typedef struct { struct SProcRec *p PACKED_P; } HIDDEN_SProcPtr;
+typedef struct PACKED SProcRec *SProcPtr;
+MAKE_HIDDEN(SProcPtr);
 typedef HIDDEN_SProcPtr *SProcHndl;
 typedef struct PACKED SProcRec
 {
-  SProcHndl nxtSrch	PACKED_P;
-  ProcPtr srchProc	PACKED_P;
-} SProcRec, *SProcPtr;
+  PACKED_MEMBER(SProcHndl, nxtSrch);
+  PACKED_MEMBER(ProcPtr, srchProc);
+} SProcRec;
 
-typedef struct { struct CProcRec *p PACKED_P; } HIDDEN_CProcPtr;
+typedef struct PACKED CProcRec *CProcPtr;
+MAKE_HIDDEN(CProcPtr);
+
 typedef HIDDEN_CProcPtr *CProcHndl;
 typedef struct PACKED CProcRec
 {
-  CProcHndl nxtComp	PACKED_P;
-  ProcPtr compProc	PACKED_P;
-} CProcRec, *CProcPtr;
+  PACKED_MEMBER(CProcHndl, nxtComp);
+  PACKED_MEMBER(ProcPtr, compProc);
+} CProcRec;
 
 typedef void *DeviceLoopDrawingProcPtr;
 
@@ -55,20 +58,20 @@ typedef struct PACKED GDevice
   INTEGER gdRefNum;
   INTEGER gdID;
   INTEGER gdType;
-  ITabHandle gdITable		PACKED_P;
+  PACKED_MEMBER(ITabHandle, gdITable);
   INTEGER gdResPref;
-  SProcHndl gdSearchProc	PACKED_P;
-  CProcHndl gdCompProc		PACKED_P;
+  PACKED_MEMBER(SProcHndl, gdSearchProc);
+  PACKED_MEMBER(CProcHndl, gdCompProc);
   INTEGER gdFlags;
-  PixMapHandle gdPMap		PACKED_P;
+  PACKED_MEMBER(PixMapHandle, gdPMap);
   LONGINT gdRefCon;
-  GDHandle gdNextGD		PACKED_P;
+  PACKED_MEMBER(GDHandle, gdNextGD);
   Rect gdRect;
   LONGINT gdMode;
   INTEGER gdCCBytes;
   INTEGER gdCCDepth;
-  Handle gdCCXData		PACKED_P;
-  Handle gdCCXMask		PACKED_P;
+  PACKED_MEMBER(Handle, gdCCXData);
+  PACKED_MEMBER(Handle, gdCCXMask);
   LONGINT gdReserved;
 } GDevice;
 
@@ -91,10 +94,10 @@ typedef struct PACKED ColorInfo
 typedef struct PACKED Palette
 {
   INTEGER pmEntries;
-  GrafPtr pmWindow			PACKED_P;
+  PACKED_MEMBER(GrafPtr, pmWindow);
   INTEGER pmPrivate;
   LONGINT /* Handle? */ pmDevices;
-  Handle pmSeeds PACKED_P;
+  PACKED_MEMBER(Handle,pmSeeds);
   ColorInfo pmInfo[1];
 } Palette, *PalettePtr;
 
@@ -129,7 +132,7 @@ typedef enum
 #define pmFgUpdates ((INTEGER) pmFgUpdates_enum)
 #define pmAllUpdates ((INTEGER) pmAllUpdates_enum)
 
-typedef struct { PalettePtr p PACKED_P; } HIDDEN_PalettePtr;
+MAKE_HIDDEN(PalettePtr);
 typedef HIDDEN_PalettePtr *PaletteHandle;
 
 /* return TRUE if `maybe_graphics_world' points to a graphics world,
@@ -169,7 +172,7 @@ typedef struct PACKED CommonSpec
 } CommentSpec;
 
 typedef CommentSpec *CommentSpecPtr;
-typedef struct { CommentSpecPtr p PACKED_P; } HIDDEN_CommentSpecPtr;
+MAKE_HIDDEN(CommentSpecPtr);
 typedef HIDDEN_CommentSpecPtr *CommentSpecHandle;
 
 typedef struct PACKED FontSpec
@@ -182,15 +185,15 @@ typedef struct PACKED FontSpec
 } FontSpec;
 
 typedef FontSpec *FontSpecPtr;
-typedef struct { FontSpecPtr p PACKED_P; } HIDDEN_FontSpecPtr;
+MAKE_HIDDEN(FontSpecPtr);
 typedef HIDDEN_FontSpecPtr *FontSpecHandle;
 
 typedef struct PACKED PictInfo
 {
   int16 version; /* 0 */
   int32 uniqueColors; /* 2 */
-  PaletteHandle thePalette	PACKED_P; /* 6 */
-  CTabHandle theColorTable	PACKED_P; /* 10 */
+  PACKED_MEMBER(PaletteHandle, thePalette); /* 6 */
+  PACKED_MEMBER(CTabHandle, theColorTable); /* 10 */
   Fixed hRes; /* 14 */
   Fixed vRes; /* 18 */
   INTEGER depth; /* 22 */
@@ -208,19 +211,19 @@ typedef struct PACKED PictInfo
   int32 commentCount;
   
   int32 uniqueComments;
-  CommentSpecHandle commentHandle	PACKED_P;
+  PACKED_MEMBER(CommentSpecHandle, commentHandle);
   
   int32 uniqueFonts;
-  FontSpecHandle fontHandle	PACKED_P;
+  PACKED_MEMBER(FontSpecHandle, fontHandle);
 
-  Handle fontNamesHandle	PACKED_P;
+  PACKED_MEMBER(Handle, fontNamesHandle);
 
   int32 reserved1;
   int32 reserved2;
 } PictInfo;
 
 typedef PictInfo *PictInfoPtr;
-typedef struct { PictInfoPtr p PACKED_P; } HIDDEN_PictInfoPtr;
+MAKE_HIDDEN(PictInfoPtr);
 typedef HIDDEN_PictInfoPtr *PictInfoHandle;
 
 typedef int32 PictInfoID;
@@ -452,8 +455,12 @@ extern HIDDEN_GDHandle	MainDevice_H;
 extern HIDDEN_GDHandle	DeviceList_H;
 #endif
 
-#define TheGDevice	(TheGDevice_H.p)
-#define MainDevice	(MainDevice_H.p)
-#define DeviceList	(DeviceList_H.p)
+#  define TheGDevice	(TheGDevice_H.p)
+#  define MainDevice	(MainDevice_H.p)
+#  define DeviceList	(DeviceList_H.p)
+
+#if SIZEOF_CHAR_P == 8
+#  warning "no type info in TheGDevice, MainDevice, DeviceList"
+#endif
 
 #endif /* _CQUICKDRAW_H_ */

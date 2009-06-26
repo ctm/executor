@@ -12,9 +12,9 @@
 #define vTypErr	(-2)
 
 typedef struct PACKED {
-  QElemPtr qLink	PACKED_P;
+  PACKED_MEMBER(QElemPtr, qLink);
   INTEGER qType;
-  ProcPtr vblAddr	PACKED_P;
+  PACKED_MEMBER(ProcPtr, vblAddr);
   INTEGER vblCount;
   INTEGER vblPhase;
 } VBLTask;

@@ -56,13 +56,19 @@ typedef struct PACKED /* 0x0009 */
 }
 alias_tail_t;
 
+typedef alias_head_t *alias_head_ptr;
+typedef alias_parent_t *alias_parent_ptr;
+typedef alias_unknown_000100_t *alias_unknown_000100_ptr;
+typedef alias_fullpath_t *alias_fullpath_ptr;
+typedef alias_tail_t *alias_tail_ptr;
+
 typedef struct PACKED
 {
-  alias_head_t *headp PACKED_P;
-  alias_parent_t *parentp PACKED_P;
-  alias_unknown_000100_t *unknownp PACKED_P;
-  alias_fullpath_t *fullpathp PACKED_P;
-  alias_tail_t *tailp PACKED_P;
+  PACKED_MEMBER(alias_head_ptr, headp);
+  PACKED_MEMBER(alias_parent_ptr, parentp);
+  PACKED_MEMBER(alias_unknown_000100_ptr, unknownp);
+  PACKED_MEMBER(alias_fullpath_ptr, fullpathp);
+  PACKED_MEMBER(alias_tail_ptr, tailp);
 }
 alias_parsed_t;
 

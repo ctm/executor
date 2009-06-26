@@ -30,7 +30,7 @@ typedef char *PatPtr;
 #warning "Bad PatPtr def ... 'cause of problems with my gcc mods -- ctm"
 #endif /* defined(__alpha) */
 
-typedef struct { PatPtr p PACKED_P; } HIDDEN_PatPtr;
+MAKE_HIDDEN(PatPtr);
 typedef HIDDEN_PatPtr *PatHandle;
 
 /* DO NOT DELETE THIS LINE */

@@ -90,7 +90,13 @@ PRIVATE gestaltentry_t gtable[] = {
 /*  gestaltTermMgrAttr,		0,	*/
 /*  gestaltParityAttr,		0,	*/
 
-#if defined(BINCOMPAT) && !defined(__alpha)
+/*
+ * TODO: instead of casting these to LONGINT, shouldn't we be using something
+ *       like US_TO_SYN68K here, or if not, soemthing that takes ROMlib_offset
+ *       into account?
+ */
+
+#if defined(BINCOMPAT) && SIZEOF_CHAR_P == 4
   { gestaltExtToolboxTable,	(LONGINT) (tooltraptable + 0x200), },
   { gestaltToolboxTable,	(LONGINT) tooltraptable, },
   { gestaltOSTable,		(LONGINT) ostraptable, },
@@ -98,9 +104,6 @@ PRIVATE gestaltentry_t gtable[] = {
   { gestaltExtToolboxTable,	UNKNOWN, },
   { gestaltOSTable,		UNKNOWN, },
   { gestaltToolboxTable,	UNKNOWN, },
-#endif
-
-#if defined(__alpha)
 #warning gestalt{ExtToolboxTable,ToolboxTable,OSTable} not initialized
 #endif
 
@@ -229,7 +232,7 @@ gestaltPhysicalRAMSize		'ram '
 PRIVATE gestaltentry_t phystable[] = 
 {
   { gestaltSystemVersion,	EXECUTOR_VERSION_NUMERIC },
-#if !defined (__alpha)
+#if SIZEOF_CHAR_P == 4
   { gestaltExecutorVersionString, (long) EXECUTOR_VERSION },
 #else
 #warning gestaltExecutorVersionString not currently available

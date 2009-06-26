@@ -10,9 +10,9 @@
 
 
 typedef struct PACKED {
-  QElemPtr	qLink	PACKED_P;
+  PACKED_MEMBER(QElemPtr, qLink);
   INTEGER	qType;
-  ProcPtr	tmAddr	PACKED_P;
+  PACKED_MEMBER(ProcPtr, tmAddr);
   LONGINT	tmCount;	/* I don't trust IMIV-301 */
 } TMTask;
 
