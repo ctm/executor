@@ -68,7 +68,7 @@ At one time we had Executor running on the Alpha, a 64-bit
 environment.  We actually modified gcc to support "pointer bit-fields"
 and were able to get Executor to run.  Now that 64-bit machines are
 more popular, I've begun an experiment in supporting 64-bit machines
-without modifying the compiler.
+without modifying the compiler.  See README.64 for more info.
 
 As I continue Executor's transition to a recent gnu build system I may
 inadvertantly push versions that don't build when using the above

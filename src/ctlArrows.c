@@ -154,7 +154,7 @@ validate_colors_for_control (ControlHandle ctl)
     ctl_ctab_colors[i] = default_ctl_colors[i].rgb;
   
   t_aux_c = MR (*lookup_aux_ctl (ctl));
-  if (t_aux_c && HxX (t_aux_c, acCTable))
+  if (t_aux_c && HxZ (t_aux_c, acCTable))
     {
       CTabHandle c_ctab;
       ColorSpec *c_ctab_table;
@@ -667,7 +667,7 @@ save_and_switch_to_color_port_if_needed (save_t *sp)
       sp->cp = * (CGrafPtr) thePort;
       wp = (CGrafPtr) MR (wmgr_port);
       sp->cp.portPixMap = (PixMapHandle) CopyMacHandle ((Handle) wp->portPixMap);
-      PIXMAP_BOUNDS (MR (sp->cp.portPixMap)) = thePort->portBits.bounds;
+      PIXMAP_BOUNDS (PPR (sp->cp.portPixMap)) = thePort->portBits.bounds;
       sp->cp.portVersion = wp->portVersion;
       sp->cp.grafVars = wp->grafVars;
       sp->cp.chExtra = wp->chExtra;
@@ -689,7 +689,7 @@ PRIVATE void
 restore (const save_t *sp)
 {
   SetPort (sp->port);
-  DisposHandle ((Handle) MR (sp->cp.portPixMap));
+  DisposHandle ((Handle) PPR (sp->cp.portPixMap));
 }
 
 P4 (PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */

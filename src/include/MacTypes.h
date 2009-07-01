@@ -15,7 +15,7 @@ typedef int8 SignedByte;
 typedef uint8 Byte;
 typedef int8 *Ptr;
 
-#if (SIZEOF_CHAR_P == 4) || 1 /* always do this for now */
+#if (SIZEOF_CHAR_P == 4) && !FORCE_EXPERIMENTAL_PACKED_MACROS
 #define MAKE_HIDDEN(typ) typedef struct { typ p; } HIDDEN_ ## typ
 #else
 #define MAKE_HIDDEN(typ) \
@@ -66,11 +66,11 @@ typedef	LONGINT	BOOLEANRET;
 typedef	LONGINT	SignedByteRET;
 
 
-#if (SIZEOF_CHAR_P == 4) || 1
+#if (SIZEOF_CHAR_P == 4) && !FORCE_EXPERIMENTAL_PACKED_MACROS
 #  define PACKED_MEMBER(typ, name) typ name
 #else
 #  define PACKED_MEMBER(typ, name) \
-                                union PACKED { uint32 pp; typ *type[0]; } name
+                                union PACKED { uint32 pp; typ type[0]; } name
 #endif
 
 typedef struct PACKED {

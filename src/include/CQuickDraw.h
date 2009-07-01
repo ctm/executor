@@ -455,12 +455,18 @@ extern HIDDEN_GDHandle	MainDevice_H;
 extern HIDDEN_GDHandle	DeviceList_H;
 #endif
 
+#if SIZEOF_CHAR_P == 4 && !FORCE_EXPERIMENTAL_PACKED_MACROS
+
 #  define TheGDevice	(TheGDevice_H.p)
 #  define MainDevice	(MainDevice_H.p)
 #  define DeviceList	(DeviceList_H.p)
 
-#if SIZEOF_CHAR_P == 8
-#  warning "no type info in TheGDevice, MainDevice, DeviceList"
+#else
+
+#  define TheGDevice	((typeof (TheGDevice_H.type[0]))(TheGDevice_H.pp))
+#  define MainDevice	((typeof MainDevice_H.type[0])(MainDevice_H.p))
+#  define DeviceList	((typeof DeviceList_H.type[0])(DeviceList_H.p))
+
 #endif
 
 #endif /* _CQUICKDRAW_H_ */
