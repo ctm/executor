@@ -1,0 +1,24 @@
+Executor THANKS file
+
+Executor was originally written by Clifford T. Matthews, with major
+contributions from Mat Hostetter, Cotton Seed, Bill Goldman and
+Patrick LoPresti.
+
+The MSDOS port included a sound driver from Joel Hunter, DOS Serial port
+support from Samuel Vincint and low-level CD-ROM access from Lauri Pesonen.
+
+Sam Lantinga did the initial port to Windows and created an intermediate
+library that became SDL.
+
+The windows appearance option uses "Jim's CDEFs" copyright Jim Stout
+    and the "Infinity Windoid" copyright Troy Gaul.
+
+Primary Pre-Beta Testers
+
+Jon Abbott              Testing, Icon Design
+Ziv Arazi               Testing
+Edmund Ronald           Advice, Testing
+K. Harrison Liang       Testing
+Hugh Mclenaghan         Testing
+Emilio Moreno           Testing, Spanish Translation + Keyboard, Icon Design
+Ernst Oud               Documentation, Testing

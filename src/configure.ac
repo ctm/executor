@@ -1,4 +1,4 @@
-AC_INIT(executor, 2.1pr17, ctm@ardi.com)
+AC_INIT(executor, 2.1.17, ctm@ardi.com)
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE([-Wall])
 

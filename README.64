@@ -1,0 +1,78 @@
+If you try to build Executor on a 64-bit machine, without telling the
+compiler to use 32-bit pointers, the compilation will fail due to the
+conversion being a work in progress.
+
+This file is a rough dump of what I've been thinking about as I've
+explored building Executor on a 64-bit machine.  I'm about to switch
+to some other projects before I finish this exploration, and am
+writing these notes primarily for myself.  There's no developer's
+guide to Syn68k/ROMlib/Executor, so although it's possible for someone
+else to finish the 64-bit mods up without me, it would take a bit of
+figuring out what we currently do and why, something I don't currently
+have the time to document.
+
+At one point we had Executor running on an Alpha using 64-bit pointers
+for all our native code, but 32-bit pointers for the Mac memory.  We
+did this by altering gcc to allow us to use the ":32" bit-field
+notation with pointers.  This worked OK and could possibly work again,
+but there's another way we can store 32-bits of pointer in a variable
+and still keep the type that the pointer points to, and that's to use
+a union of a 32-bit unsigned and an array of zero of the pointers we
+really want.
+
+For example
+
+        typedef union {
+          uint32_t p_val;
+          SomePointerType p_type[0];
+        } PackedSomePointerType;
+
+        PackedPointerType pp;
+
+Now pp.p_val can be the 32-bit value thats in Mac memory, with
+(typeof pp.p_type[0]) being the type of pointer that pp.p_val can expand to.
+
+I haven't decided exactly how to make use of this type.  I've experimented with
+defining two macros: MAKE_HIDDEN and PACKED_MEMBER that collectively replace
+the two places we used to use ":32".  MAKE_HIDDEN replaces the way we used to
+make 32-bit pointers for Handles and PACKED_MEMBER replaces the way we were
+putting 32-bit pointers in structs.  We then need to rewrite some of the macros
+that we use for dereferencing our 32-bit pointers.
+
+Unfortunately, a combination of having the compiler allow us to mix
+and match 32-bit pointers and 64-bit pointers along with the fact that
+we didn't keep the Alpha port up to date means that the set of macros
+we're using is incomplete and some macros will need to be split into
+different variants for different uses.  For example, HxX dereferences
+a handle and then picks up the field that is pointed to, but does not
+swap the field.  We can make a HxX that does that in general, but code like
+this:
+
+  if (t_aux_c && HxX (t_aux_c, acCTable))
+
+will not work though, since acCTable itself is a PACKED_MEMBER and so the
+test for zero vs. non-zero won't work with the union.  If we introduce HxZ,
+a new macro that can be used for testing zero vs. non-zero, we can change
+the code to work right:
+
+  if (t_aux_c && HxZ (t_aux_c, acCTable))
+
+But that requires that one way or the other we determine when we need
+to change HxX into HxZ.
+
+Some of the other changes that need to be made include:
+
+	defines like  #  define TheGDevice	(TheGDevice_H.p)
+        need to be #  define TheGDevice	((typeof (TheGDevice_H.type[0]))(TheGDevice_H.pp))
+        
+        A bunch(all?) of MR that should be PPR
+
+        A bunch of RM that should be RPP (and intermediate values
+        that are actually unions)
+
+        Assignments to PACKED_MEMBER fields (including things
+        like CopyMacHandle)
+
+Since the only reason to make Executor work on 64-bit machines is for fun, I
+have no idea when I'll have a chance to finish these mods.  If it's something
+that interests you, drop me a note on Github, where my account is "ctm".

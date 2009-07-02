@@ -1,10 +1,12 @@
+	package up the System Folder and whatnot so that people w/o the
+	old executor-aux can run Executor
+
+                /usr/local/share/executor/skel/volume
+
         Yank all the misleading RCS strings
 
         Update the copyright notices to make it that the code is under
         an MIT-style license
-
-	package up the System Folder and whatnot so that people w/o the
-	old executor-aux can run Executor
 
         probably get rid of most of the customization stuff (don't yet
         wholesale kill it, since some might be useful as per-user,
