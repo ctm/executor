@@ -131,7 +131,7 @@ vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
       if (width == 0)
 	{
 	  width = VDRIVER_DEFAULT_SCREEN_WIDTH;
-#if true
+#if 1
 #warning "TODO: fixme so we can use fullscreen in Mac OS X"
 #else
 	  if (ROMlib_fullscreen_p)
@@ -146,7 +146,7 @@ vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
       if (height == 0)
 	{
 	  height = VDRIVER_DEFAULT_SCREEN_HEIGHT;
-#if true
+#if 1
 #warning "TODO: fixme so we can use fullscreen in Mac OS X"
 #else
 	  if (ROMlib_fullscreen_p)

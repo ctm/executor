@@ -39,7 +39,7 @@
 #define RM(n)  ((typeof (n))(n ? ((swap32 ((unsigned long) (n)- ROMlib_offset)) ) : 0))
 #else
 
-#if (SIZEOF_CHAR_P == 4) || 1 /* always do this for now */
+#if (SIZEOF_CHAR_P == 4) && !FORCE_EXPERIMENTAL_PACKED_MACROS
 
 #  define MR(n)  ((typeof (n))({ typeof (n) _t = n; _t ? ((swap32 ((unsigned long) (_t))) + ROMlib_offset) : 0;}))
 
@@ -55,7 +55,7 @@
 #define RM(n)  ((typeof (n))({ typeof (n) _t = n; _t ? ((swap32 ((unsigned long) (_t)- ROMlib_offset)) ) : 0;}))
 
 /* Packed Pointer to ROMlib  */
-#if (SIZEOF_CHAR_P == 4) || 1 /* always do this for now */
+#if (SIZEOF_CHAR_P == 4) && !FORCE_EXPERIMENTAL_PACKED_MACROS
 #  define PPR(n) MR(n)
 #else
 #  define PPR(n) ((typeof (n.type[0]))({ typeof (n) _t = n; _t.pp ? (YY(_t.pp)) : 0;}))
@@ -102,14 +102,21 @@ extern int bad_cx_splosion;
 #define CBC(rhs)	(rhs)
 #define CBV(rhs)	(rhs)
 
-#if (SIZEOF_CHAR_P == 4) || 1 /* always do this for now */
+#if (SIZEOF_CHAR_P == 4) && !FORCE_EXPERIMENTAL_PACKED_MACROS
 #  define STARH(h)		MR ((h)->p)
 #  define HxP(handle, field)	MR (STARH(handle)->field)
 #  define HxX(handle, field)	(STARH(handle)->field)
+#  define HxZ(handle, field) HxX(handle, field)
 #else
 #  define STARH(h)		((typeof ((h)->type[0])) (YY ((h)->pp)))
-#  define HxP(handle, field)	MR ((STARH(handle)->field).p)
+#  define HxP(handle, field)	MR ((STARH(handle)->field).pp)
 #  define HxX(handle, field)	((STARH(handle))->field)
+
+// HxZ is a handle dereference where the member selected is itself some form
+// of packed pointer, but we're only checking to see if it's zero or non-zero
+// (e.g. if (HxZ(hand)) )
+
+#  define HxZ(handle, field)	((STARH(handle))->field.pp)
 #endif
 
 #define Hx(handle, field)	Cx (STARH(handle)->field)
