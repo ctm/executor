@@ -25,22 +25,27 @@ If you want to try to build a version of Executor, try this:
   cd build
   ../src/configure
   make
+  make install
 
-That should leave you with a binary called executor (at least on
+That should leave you with a binary called "executor" (at least on
 32-bit x86 Linux systems, or a Mac (Intel or PowerPC) with XCode 3
-installed).  Unfortunately, without a System Folder, Executor won't
-even come close to running.  If you're using a system that can install
-RPMs and you can dig up and install a copy of
-executor-aux-2.1pr16-1.i386.rpm, then you should be able to run.
+installed) and a directory called "skel".  By default, executor will
+be installed in "/usr/local/bin" and skel will be installed in
+"/usr/local/share/executor".
 
-Now that Executor is using a recent GNU build system, my plan is to
-use the datadir related variables as a place to install the template
-for a system volume and to automatically build an ExecutorVolume
-somewhere (based on environment variables and defaults) the first time
-Executor is run.
+skel itself isn't meant to be written to; it's meant to be copied
+somewhere and for the copy to be read/write.  For example,
 
-In the meantime, if anyone is reading this and wants a copy of
-executor-aux-2.1pr16-1.i386.rpm, try messaging me (ctm) at github.
+  cp -Rp /usr/local/share/executor/skel/volume /tmp/ExecutorVolume
+  export SystemFolder="/tmp/ExecutorVolume/System Folder"
+  executor
+
+The environment variables that drive Executor including where Executor
+looks for the system folder are a bit arcane and meant to fit together
+with installers that we no longer use.  It may make sense to make it
+so that Executor automatically copies the contents of skel/volume to a
+users home-directory the first time Executor is run, but that's an
+exercise left to the reader.
 
 If you're on an x86_64 based machine and you have the ability to compile
 32-bit binaries, you may be able to build a copy of Executor by using our

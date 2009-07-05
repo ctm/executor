@@ -355,7 +355,8 @@ EXTRA_DIST = active.map               \
              ractive.map              \
              thumb_horiz.map          \
              thumb_vert.map           \
-             zoom.map
+             zoom.map                 \
+             skel
 
 other_sources = globals.pl           \
                 makerawblt.pl        \
@@ -736,3 +737,8 @@ executor_SOURCES = $(ctl_sources) $(dial_sources) $(file_sources)       \
                    $(sound_sources) $(num_sources) $(misc_sources)      \
                    $(arch_sources) $(front_end_sources) $(host_sources) \
                    $(os_sources)  $(include_sources) $(other_sources)
+
+pkgdata_DATA =
+
+install-data-hook:
+	cp -Rp $(srcdir)/skel $(pkgdatadir)/skel
