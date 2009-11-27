@@ -48,15 +48,37 @@ users home-directory the first time Executor is run, but that's an
 exercise left to the reader.
 
 If you're on an x86_64 based machine and you have the ability to compile
-32-bit binaries, you may be able to build a copy of Executor by using our
-old build system and doing something like
+32-bit binaries and you have these packages installed (where the ? is 3 for
+Fedora 10, 5 for Fedora 11 and 6 for Fedora 12):
+
+  SDL-devel.i?86
+  libX11-devel.i?86
+  db4-devel.i?86
+  libXext.i?86
+  libXrender.i?86
+  libXrandr.i?86
+
+you may be able to build a copy of Executor by using our old build system
+and doing something like
 
   mkdir -p build/debug-linux
   cd build/debug-linux
   ../../util/configure.sh  '--host=i486-linux' '--build=i486-linux' '--front-end=sdl' '--host-gcc=gcc -m32' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--host-file-format=glibc' '--sound=sdl' '--syn68k-host=i486-linux-glibc'
   make
 
-The above works on Fedora 10 x86_64.
+The above works on Fedora 10, 11 and 12 x86_64.  Unfortunately, you'll have
+to manually copy skel from ../../src, e.g.:
+
+  cp -rp ../../src/skel/volume /tmp/ExecutorVolume
+  export SystemFolder='/tmp/ExecutorVolume/System Folder'
+  ./executor
+
+Yes, the above is pretty messy.  It would be great if someone could make it
+so that we don't need to use the old build system to get the 32-bit version
+to compile on a 64-bit machine and if someone could make the build process
+detect when various 32-bit libraries aren't available, but don't hold your
+breath.
+
 
 In the past it was possible to cross-compile a version of Executor for
 Windows using mingw32.  So far that port hasn't been tried since

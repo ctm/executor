@@ -62,6 +62,11 @@ fi
 AC_CHECK_LIB(SDL, SDL_Init)
 AC_CHECK_LIB(X11, XInitThreads)
 
+
+if test x"$build_os" = xlinux; then
+  AC_CHECK_HEADER([db.h],,[AC_MSG_ERROR([Linux needs db.h, perhaps installing db4-devel will work])])
+fi
+
 AC_ARG_WITH(front-end,
             [AS_HELP_STRING([--with-front-end=arg],
                             [arg must be sdl or x (default is sdl)])],
