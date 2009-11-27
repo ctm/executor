@@ -59,7 +59,7 @@ HOST_LD = splosion
 
 # these are compilers for the host
 BUILD_CC = cc
-BUILD_GCC = gcc
+BUILD_GCC = gcc -m32
 
 ifobjc
 # currently, objc compilers are only used on NEXTSTEP builds.

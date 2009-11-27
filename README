@@ -53,16 +53,10 @@ old build system and doing something like
 
   mkdir -p build/debug-linux
   cd build/debug-linux
-  ../../util/configure.sh  '--host=i486-linux' '--build=i486-linux' '--front-end=x' '--host-gcc=gcc -m32' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--host-file-format=glibc' '--sound=linux' '--syn68k-host=i486-linux-glibc'
+  ../../util/configure.sh  '--host=i486-linux' '--build=i486-linux' '--front-end=sdl' '--host-gcc=gcc -m32' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--host-file-format=glibc' '--sound=sdl' '--syn68k-host=i486-linux-glibc'
   make
 
-However, you may find that you need to hand-edit Makefile and change the line
-
-BUILD_GCC = gcc
-
-to
-
-BUILD_GCC = gcc -m32
+The above works on Fedora 10 x86_64.
 
 In the past it was possible to cross-compile a version of Executor for
 Windows using mingw32.  So far that port hasn't been tried since

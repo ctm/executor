@@ -44,7 +44,7 @@ extern void clear_pending_sounds (void);
 
 extern HIDDEN_SndChannelPtr allchans;
 
-typedef uint64 snd_time;
+typedef uint64_t snd_time;
 
 #define SND_PROMOTE(x) (((snd_time)x) << (4 * sizeof (snd_time)))
 #define SND_DEMOTE(x) (((snd_time)x) >> (4 * sizeof (snd_time)))

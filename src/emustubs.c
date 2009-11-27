@@ -2811,7 +2811,7 @@ STUB (Microseconds)
 {
   unsigned long ms = msecs_elapsed ();
   EM_D0 = ms * 1000;
-  EM_A0 = ((uint64) ms * 1000) >> 32;
+  EM_A0 = ((uint64_t) ms * 1000) >> 32;
   RTS ();
 }
 

@@ -577,4 +577,9 @@ echo "${root}/util/configure.sh $arguments" >> config.status
 
 chmod +x config.status
 
+# If we're using this old configure script, then we're probably not dealing
+# with 64-bit machines.  The new build system constructs config.h for us.
+
+echo '#define SIZEOF_CHAR_P 4' > config.h
+
 echo "Executor is now configured for \`${host_arch}-${host_os}/${front_end}'."

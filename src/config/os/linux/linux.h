@@ -68,7 +68,13 @@ extern void *mmap_permanent_memory (unsigned long amount_wanted);
 
 #define HAVE_MMAP
 
-#define CONFIG_OFFSET_P 0 /* don't normally use offset memory */
+/*
+ * In the bad old days we could allocate page 0 and use it and not have
+ * to offset memory.  These days that's rarely allowed, and machines are
+ * fast enough that it doesn't matter.
+ */
+
+#define CONFIG_OFFSET_P 1 /* don't normally use offset memory */
 
 
 extern int ROMlib_launch_native_app (int n_filenames, char **filenames);

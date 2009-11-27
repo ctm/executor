@@ -2291,10 +2291,10 @@ CallUniversalProc_from_native (UniversalProcPtr proc, ProcInfoType info, ...)
 }
 
 PRIVATE void
-microseconds (uint64 *retp)
+microseconds (uint64_t *retp)
 {
   warning_trace_info (NULL_STRING);
-  *retp = (uint64) (uint32) msecs_elapsed () * 1000;
+  *retp = (uint64_t) (uint32) msecs_elapsed () * 1000;
 }
 
 PRIVATE void

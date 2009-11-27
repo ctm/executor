@@ -50,9 +50,9 @@ header_t;
 
 typedef struct
 {
-  uint64 magic;
+  uint64_t magic;
   header_t headers[0];
-  uint8 filler[CUSTOM_BLOCK_SIZE - sizeof (uint64)];
+  uint8 filler[CUSTOM_BLOCK_SIZE - sizeof (uint64_t)];
 }
 custom_block_t;
 
