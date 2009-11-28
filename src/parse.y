@@ -69,7 +69,7 @@ void yyerror(const char *str);
 %token  MACCDROM
 %token  RIGHT_BUTTON_MODIFIER
 %token  GESTALT
-%token  VERSION
+%token  APP_VERSION
 %token	PRVERSION
 
 %type <cptr> STRINGCONSTANT
@@ -122,7 +122,7 @@ blockbegin:	CRC '(' CHAR4CONSTANT ',' INTEGERCONSTANT ')' ':' HEXCONSTANT
 			printf("CRC('%c%c%c%c', %d) = 0x%04lx\n", (int) $3>>24,
 		 (int) $3>>16, (int) $3>>8, (int) $3, (int) $5, (long) crcval);
 		}
-		| VERSION '(' HEXCONSTANT ')' ':' HEXCONSTANT
+		| APP_VERSION '(' HEXCONSTANT ')' ':' HEXCONSTANT
 		{
 		    $$ = validblock;
 		    validblock = (ROMlib_version_long & $3) == $6;
@@ -370,7 +370,7 @@ struct namevaluestr {
   { "StripAddress",	OPTIONSCONSTANT,	ROMLIB_STRIPADDRESSHACK_BIT },
   { "SystemVersion",	SYSTEMVERSION,          0 },
   { "TextDisableHack",	OPTIONSCONSTANT,	ROMLIB_TEXT_DISABLE_BIT },
-  { "Version",		VERSION,		0 },
+  { "Version",		APP_VERSION,		0 },
   { "Win32Token",       WIN32TOKEN,             0 },
   { "WindowName",	WINDOWNAME,		0 },
 };

@@ -58,27 +58,22 @@ Fedora 10, 5 for Fedora 11 and 6 for Fedora 12):
   libXrender.i?86
   libXrandr.i?86
 
-you may be able to build a copy of Executor by using our old build system
-and doing something like
+you should be able to build a copy of Executor by overriding CC and
+OBJC to be the 32-bit version and explicitly stating that you're
+building on a 32-bit system (which is a little bit untrue, but works):
 
   mkdir -p build/debug-linux
   cd build/debug-linux
-  ../../util/configure.sh  '--host=i486-linux' '--build=i486-linux' '--front-end=sdl' '--host-gcc=gcc -m32' '--cflags=-fno-strict-aliasing -I/usr/X11R6/include -O0 -finline-functions -g -Wall' '--root=../..' '--host-file-format=glibc' '--sound=sdl' '--syn68k-host=i486-linux-glibc'
+  CC='gcc -m32' OBJC='gcc -m32' ../../src/configure --build=i686-pc-linux
   make
 
-The above works on Fedora 10, 11 and 12 x86_64.  Unfortunately, you'll have
-to manually copy skel from ../../src, e.g.:
+The above works on Fedora 10, 11 and 12 x86_64.
 
-  cp -rp ../../src/skel/volume /tmp/ExecutorVolume
-  export SystemFolder='/tmp/ExecutorVolume/System Folder'
-  ./executor
-
-Yes, the above is pretty messy.  It would be great if someone could make it
-so that we don't need to use the old build system to get the 32-bit version
-to compile on a 64-bit machine and if someone could make the build process
-detect when various 32-bit libraries aren't available, but don't hold your
-breath.
-
+Yes, the above is pretty messy.  Since the x86_64 bit native version of
+Executor doesn't build and is likely to anytime soon, it probably makes
+sense to make it so that by default we build the ix86 version of Executor
+when compiling on x86_64, and that we complain if the various 32-bit
+libraries aren't available.
 
 In the past it was possible to cross-compile a version of Executor for
 Windows using mingw32.  So far that port hasn't been tried since
