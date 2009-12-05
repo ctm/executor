@@ -722,10 +722,12 @@ A1(PRIVATE, void, setstartdir, char *, argv0)
     misc_self_examination (lookhere);
 #endif
     suffix = rindex(lookhere, '/');
-    *suffix = 0;
+    if (suffix)
+      *suffix = 0;
     getcwd(savedir, sizeof savedir);
     Uchdir(lookhere);
-    *suffix = '/';
+    if (suffix)
+      *suffix = '/';
     getcwd(ROMlib_startdir, sizeof ROMlib_startdir);
     Uchdir(savedir);
     ROMlib_startdirlen = strlen(ROMlib_startdir) + 1;
