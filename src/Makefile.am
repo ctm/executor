@@ -419,7 +419,16 @@ src-blitters-stamp src-blitters.h src-blitters.s: \
 arch_sources = config/arch/i386/i386.c \
                config/arch/i386/i386.h \
                config/arch/i386/i386_djgpp_version.h \
-               config/arch/i386/opfind.h
+               config/arch/i386/opfind.h \
+               config/arch/i386/metaasm.pl \
+               config/arch/i386/opfind.h \
+               config/arch/i386/pat-blitters.meta \
+               config/arch/i386/src-blitters-core.meta \
+               config/arch/i386/src-blitters.meta \
+               config/arch/i386/src-noshift-fgbk.meta \
+               config/arch/i386/src-noshift.meta \
+               config/arch/i386/src-shift-fgbk.meta \
+               config/arch/i386/src-shift.meta
 
 if !CONFIG_OS_MACOSX
 
@@ -741,4 +750,9 @@ executor_SOURCES = $(ctl_sources) $(dial_sources) $(file_sources)       \
 pkgdata_DATA =
 
 install-data-hook:
-	cp -Rp $(srcdir)/skel $(pkgdatadir)/skel
+	cp -Rp "$(srcdir)/skel" "$(pkgdatadir)/skel"
+
+uninstall-hook:
+	find "$(pkgdatadir)/skel" -type d -print0 | xargs -0 chmod u+w
+	rm -rf "$(pkgdatadir)/skel"
+
