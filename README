@@ -1,3 +1,22 @@
+Sunday April 18th, 2010
+
+I just presented (poorly) a copy of Executor running on the iPad
+simulator.  I have not yet committed my code to GitHub because I
+honestly started the port Friday evening and ... it's a massive hack
+that shouldn't be inflicted on anyone.
+
+However, I've done enough of a proof-of-concept that I'll go ahead and
+commit much cleaner mods "soon" and will also carry the port forward
+so that it can run on an actual (arm) using iPad (rather than the i386
+using simulator).
+
+If you attended iPadDevCamp and would like the source before I push it,
+I can send you a diff and some instructions, but it'll still be rough to
+get it built.  Send me a gentle reminder if I fall behind; Executor is
+kind of a low priority for me this millennium.
+
+========================================================================
+
 Executor is a Macintosh emulator that is able to run many ancient Mac
 OS 680x0 binaries (System 6 era, early System 7) without using any
 intellectual property from Apple Computer.
