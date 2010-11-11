@@ -1,19 +1,12 @@
-Sunday April 18th, 2010
+Mac OS X 10.6.5 notes:
+Xcode: 3.2.3 64-bit Xcode IDE: 1688.0, Xcode Core: 1691.0, ToolSupport: 1591.0
 
-I just presented (poorly) a copy of Executor running on the iPad
-simulator.  I have not yet committed my code to GitHub because I
-honestly started the port Friday evening and ... it's a massive hack
-that shouldn't be inflicted on anyone.
+The configure line I used was:
 
-However, I've done enough of a proof-of-concept that I'll go ahead and
-commit much cleaner mods "soon" and will also carry the port forward
-so that it can run on an actual (arm) using iPad (rather than the i386
-using simulator).
+    CC='gcc -m32 -fno-stack-check -fno-stack-protector' OBJC='gcc -m32 -fno-stack-check -fno-stack-protector' ../../src/configure
 
-If you attended iPadDevCamp and would like the source before I push it,
-I can send you a diff and some instructions, but it'll still be rough to
-get it built.  Send me a gentle reminder if I fall behind; Executor is
-kind of a low priority for me this millennium.
+I'm using the version of syn68k that I built from my ancient_hackage
+branch.
 
 ========================================================================
 

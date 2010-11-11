@@ -15,7 +15,8 @@ typedef signed int int32;
 #if !defined (BOOLEAN_T_TYPEDEFED)
 # undef FALSE
 # undef TRUE
-typedef enum { FALSE, TRUE } boolean_t;
+typedef int boolean_t;
+enum { FALSE, TRUE };
 #else /* BOOLEAN_T_TYPEDEFED */
 # if !defined (FALSE)
 #  define FALSE 0
