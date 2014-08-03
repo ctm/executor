@@ -7,9 +7,9 @@
  *
  * $Id: float_fcw.h 63 2004-12-24 18:19:43Z ctm $
  */
-
+namespace Executor {
 extern uint32 ROMlib_get_fcw_fsw (void);
 extern void ROMlib_set_fcw_fsw (uint32 fcwfsw);
 extern void ROMlib_compare_fcw_fsw (uint32 fcwfsw, const char *func, int line);
-
+}
 #endif

@@ -4,6 +4,7 @@
 
 #include "FileMgr.h"
 
+namespace Executor {
 typedef ProcPtr AliasFilterProcPtr;
 typedef Handle AliasHandle;
 typedef int16 AliasTypeInfo;
@@ -24,43 +25,44 @@ enum
   kFontFolderType		= T('f', 'o', 'n', 't'),
 };
 
-extern pascal trap OSErr C_FindFolder (int16 vRefNum, OSType folderType,
-				       Boolean createFolder,
+extern pascal trap Executor::OSErr C_FindFolder (int16 vRefNum, Executor::OSType folderType,
+				       Executor::Boolean createFolder,
 				       int16 *foundVRefNum,
 				       int32 *foundDirID);
 
-extern pascal trap OSErr C_NewAlias (FSSpecPtr fromFile, FSSpecPtr target,
-				     AliasHandle *alias);
+extern pascal trap Executor::OSErr C_NewAlias (Executor::FSSpecPtr fromFile, Executor::FSSpecPtr target,
+				     Executor::AliasHandle *alias);
 
-extern pascal trap OSErr C_NewAliasMinimal (FSSpecPtr target,
-					    AliasHandle *alias);
+extern pascal trap Executor::OSErr C_NewAliasMinimal (Executor::FSSpecPtr target,
+					    Executor::AliasHandle *alias);
 
-extern pascal trap OSErr C_NewAliasMinimalFromFullPath
-  (int16 fullpathLength, Ptr fullpath,
-   Str32 zoneName, Str31 serverName, AliasHandle *alias);
+extern pascal trap Executor::OSErr C_NewAliasMinimalFromFullPath
+  (int16 fullpathLength, Executor::Ptr fullpath,
+   Executor::Str32 zoneName, Executor::Str31 serverName, Executor::AliasHandle *alias);
 
-extern pascal trap OSErr C_UpdateAlias (FSSpecPtr fromFile, FSSpecPtr target,
-					AliasHandle alias,
-					Boolean *wasChanged);
+extern pascal trap Executor::OSErr C_UpdateAlias (Executor::FSSpecPtr fromFile, Executor::FSSpecPtr target,
+					Executor::AliasHandle alias,
+					Executor::Boolean *wasChanged);
 
-extern pascal trap OSErr C_ResolveAlias (FSSpecPtr fromFile,
-					 AliasHandle alias,
-					 FSSpecPtr target,
-					 Boolean *wasAliased);
+extern pascal trap Executor::OSErr C_ResolveAlias (Executor::FSSpecPtr fromFile,
+					 Executor::AliasHandle alias,
+					 Executor::FSSpecPtr target,
+					 Executor::Boolean *wasAliased);
 
-extern pascal trap OSErr C_ResolveAliasFile (FSSpecPtr theSpec,
-					     Boolean resolveAliasChains,
-					     Boolean *targetIsFolder,
-					     Boolean *wasAliased);
+extern pascal trap Executor::OSErr C_ResolveAliasFile (Executor::FSSpecPtr theSpec,
+					     Executor::Boolean resolveAliasChains,
+					     Executor::Boolean *targetIsFolder,
+					     Executor::Boolean *wasAliased);
 
-extern pascal trap OSErr C_MatchAlias (FSSpecPtr fromFile, int32 rulesMask,
-				       AliasHandle alias, int16 *aliasCount,
-				       FSSpecArrayPtr aliasList,
-				       Boolean *needsUpdate,
-				       AliasFilterProcPtr aliasFilter,
-				       Ptr yourDataPtr);
-extern pascal trap OSErr C_GetAliasInfo (AliasHandle alias,
-					 AliasTypeInfo index,
-					 Str63 theString);
+extern pascal trap Executor::OSErr C_MatchAlias (Executor::FSSpecPtr fromFile, int32 rulesMask,
+				       Executor::AliasHandle alias, int16 *aliasCount,
+				       Executor::FSSpecArrayPtr aliasList,
+				       Executor::Boolean *needsUpdate,
+				       Executor::AliasFilterProcPtr aliasFilter,
+				       Executor::Ptr yourDataPtr);
+extern pascal trap Executor::OSErr C_GetAliasInfo (Executor::AliasHandle alias,
+					 Executor::AliasTypeInfo index,
+					 Executor::Str63 theString);
+}
 
 #endif

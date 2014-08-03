@@ -10,21 +10,13 @@
 
 #include "rsys/time.h"
 
+namespace Executor {
 typedef uint32 real_int_state_t;
 
-#if defined (MSDOS)
-# include <dpmi.h>
-
-# define block_real_ints()	\
-    ((real_int_state_t) __dpmi_get_and_disable_virtual_interrupt_state ())
-# define restore_real_ints(n)	\
-    ((void) __dpmi_get_and_set_virtual_interrupt_state (n))
-#else
 # define block_real_ints()	\
     ((real_int_state_t) sigblock (sigmask (SIGALRM)))
 # define restore_real_ints(n)	\
     ((void) sigsetmask (n))
-#endif
 
 
 #if defined (SYN68K)
@@ -72,10 +64,6 @@ typedef real_int_state_t virtual_int_state_t;
 
 #if defined (SYN68K)
 
-#if defined (MSDOS)
-#include "dosevq.h"
-#endif
-
 extern void do_virtual_interrupt (void);
 #define check_virtual_interrupt()			\
 do							\
@@ -105,5 +93,6 @@ do {							\
   { body }						\
   restore_real_ints (__rstate);				\
 } while (0)
+}
 
 #endif /* !_BLOCKINTERRUPTS_H_ */

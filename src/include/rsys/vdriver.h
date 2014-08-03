@@ -2,10 +2,14 @@
 #if !defined (_VDRIVER_H_)
 #define _VDRIVER_H_
 
+namespace Executor {
 struct ColorSpec;
+}
 
 #include "rsys/rgbutil.h"
 #include "host_bltmacros.h"
+
+namespace Executor {
 
 /* Minimum screen size we'll allow. */
 #define VDRIVER_MIN_SCREEN_WIDTH  512
@@ -42,12 +46,12 @@ typedef enum
   VDRIVER_ACCEL_FULL_UPDATE,
   VDRIVER_ACCEL_HOST_SCREEN_UPDATE_ONLY
 } vdriver_accel_result_t;
-
+}
 
 /* host_vdriver.h can override some of the following with macros. */
 #include "host_vdriver.h"
 
-
+namespace Executor {
 #if !defined (vdriver_init)
 extern boolean_t vdriver_init (int max_width, int max_height, int max_bpp,
 			       boolean_t fixed_p, int *argc, char *argv[]);
@@ -188,5 +192,5 @@ extern boolean_t vdriver_grayscale_p;
 #if !defined (vdriver_fixed_clut_p)
 extern boolean_t vdriver_fixed_clut_p;
 #endif
-
+}
 #endif /* !_VDRIVER_H_ */

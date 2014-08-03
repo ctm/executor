@@ -13,7 +13,7 @@
  * In the meantime, there's still a little cruft in here.
  */
 
-#define DISPLAY_SPLASH_SCREEN
+#undef DISPLAY_SPLASH_SCREEN
 
 /* Set up the bit mask for which classes of debugging information
  * we can generate.  This can be overridden on the command line

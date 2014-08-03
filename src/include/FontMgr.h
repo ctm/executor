@@ -9,7 +9,7 @@
  */
 
 #include "QuickDraw.h"
-
+namespace Executor {
 #define systemFont	0
 #define applFont	1
 #define newYork		2
@@ -218,5 +218,5 @@ extern pascal trap OSErr C_OutlineMetrics (int16 byte_count, Ptr text,
 extern pascal trap void C_SetPreserveGlyph (Boolean preserve_glyph);
 extern pascal trap Boolean C_GetPreserveGlyph (void);
 extern pascal trap OSErr C_FlushFonts (void);
-
+}
 #endif /* _FONTMGR_H_ */

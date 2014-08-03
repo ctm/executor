@@ -24,15 +24,15 @@
  * #define RM(rhs)		(rhs) / * ROMlib to Mac * /
  */
 
-#define MR(n)  ((typeof (n))({ typeof (n) _t = n; _t ? ((((unsigned long) (_t))) + ROMlib_offset) : 0;}))
-#define RM(n)  ((typeof (n))({ typeof (n) _t = n; _t ? ((((unsigned long) (_t)- ROMlib_offset)) ) : 0;}))
+#define MR(n)  ((typeof (n))({ typeof (n) _t = n; _t ? ((((unsigned int) (_t))) + ROMlib_offset) : 0;}))
+#define RM(n)  ((typeof (n))({ typeof (n) _t = n; _t ? ((((unsigned int) (_t)- ROMlib_offset)) ) : 0;}))
 
 #define CLC_NULL NULL
 
 #else /* !defined (BIGENDIAN) */
 
 #define CW(n)  ((typeof (n)) (long) swap16 ((unsigned short) (long) (n)))
-#define CL(n)  ((typeof (n)) swap32 ((unsigned long) ((n)|0)))
+#define CL(n)  ((typeof (n)) swap32 ((unsigned int) ((n)|0)))
 
 #if 0
 #define MR(n)  ((typeof (n))(n ? ((swap32 ((unsigned long) (n))) + ROMlib_offset) : 0))
@@ -41,7 +41,7 @@
 
 #if (SIZEOF_CHAR_P == 4) && !FORCE_EXPERIMENTAL_PACKED_MACROS
 
-#  define MR(n)  ((typeof (n))({ typeof (n) _t = n; _t ? ((swap32 ((unsigned long) (_t))) + ROMlib_offset) : 0;}))
+#  define MR(n)  ((typeof (n))({ typeof (n) _t = n; _t ? ((swap32 ((unsigned int) (_t))) + ROMlib_offset) : 0;}))
 
 #else
 
@@ -65,10 +65,10 @@
 
 #define CWC(n) ((typeof (n)) (signed short) ((((n) << 8) & 0xFF00) \
 					     | (((n) >> 8) & 0x00FF)))
-#define CLC(n) ((typeof (n)) (long) (  (((long) ((n)|0) & 0x000000FF) << 24)   \
-				     | (((long) (n) & 0x0000FF00) <<  8)   \
-				     | (((long) (n) & 0x00FF0000) >>  8)   \
-				     | (((unsigned long) (n) & 0xFF000000) \
+#define CLC(n) ((typeof (n)) (int) (  (((int) ((n)|0) & 0x000000FF) << 24)   \
+				     | (((int) (n) & 0x0000FF00) <<  8)   \
+				     | (((int) (n) & 0x00FF0000) >>  8)   \
+				     | (((unsigned int) (n) & 0xFF000000) \
 					>> 24)))
 
 #define CLC_NULL NULL

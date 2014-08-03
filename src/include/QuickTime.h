@@ -12,6 +12,7 @@
 #include "CQuickDraw.h"
 #include "FileMgr.h"
 
+namespace Executor {
 typedef struct MovieRecord
 {
   LONGINT data[1];
@@ -52,4 +53,5 @@ extern pascal trap ComponentInstance C_NewMovieController (Movie movie,
 extern pascal trap void C_DisposeMovieController (ComponentInstance cntrller);
 extern pascal trap OSErr C_OpenMovieFile (const FSSpec *filespecp,
 					  INTEGER *refnump, uint8 perm);
+}
 #endif

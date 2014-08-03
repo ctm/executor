@@ -8,6 +8,7 @@
  * $Id: Disk.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 #define nsDrvErr	(-56)
 #define paramErr	(-50)
 #define wPrErr		(-44)
@@ -59,4 +60,5 @@ extern OSErr DiskEject( INTEGER rn );
 extern OSErr SetTagBuffer( Ptr bp ); 
 extern OSErr DriveStatus( INTEGER dn, DrvSts *statp ); 
 #endif /* __STDC__ */
+}
 #endif /* __DISK__ */

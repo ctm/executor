@@ -9,7 +9,7 @@
  */
 
 #include "rsys/pstuff.h"
-
+namespace Executor {
 typedef struct PACKED {
   PACKED_MEMBER(Handle, itmhand);
   Rect itmr;
@@ -133,5 +133,5 @@ typedef pascal void (*soundprocp) (INTEGER sound);
 
 extern void BEEPER (INTEGER n);
 #define BEEP(n)	BEEPER(n)
-
+}
 #endif /* _ITM_H_ */

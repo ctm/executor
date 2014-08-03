@@ -17,6 +17,7 @@
 #include "rsys/cquick.h"
 #include "rsys/pstuff.h"
 
+namespace Executor {
 extern const ColorSpec default_ctl_colors[];
 extern CTabHandle default_ctl_ctab;
 extern AuxCtlHandle default_aux_ctl;
@@ -153,4 +154,5 @@ extern void C_new_draw_scroll (INTEGER depth, INTEGER flags, GDHandle target,
 
 extern void C_new_pos_ctl (INTEGER depth, INTEGER flags, GDHandle target,
 			   LONGINT l);
+}
 #endif /* !_CTL_H_ */

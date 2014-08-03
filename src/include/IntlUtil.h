@@ -10,6 +10,7 @@
  * $Id: IntlUtil.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 #define currSymLead	16
 #define currNegSym	32
 #define currTrailingZ	64
@@ -180,5 +181,5 @@ extern pascal trap INTEGER C_IUTextOrder( Ptr ptra, Ptr ptrb, INTEGER lena,
 
 extern pascal trap void C_IUGetItlTable( ScriptCode script, INTEGER tablecode,
 		       Handle *itlhandlep, LONGINT *offsetp, LONGINT *lengthp);
-
+}
 #endif /* _INTLUTIL_H_ */

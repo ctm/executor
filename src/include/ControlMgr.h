@@ -8,7 +8,7 @@
  * $Id: ControlMgr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-
+namespace Executor {
 #define pushButProc	0
 #define checkBoxProc	1
 #define radioButProc	2
@@ -81,9 +81,11 @@ typedef ControlRecord *ControlPtr;
 MAKE_HIDDEN(ControlPtr);
 typedef HIDDEN_ControlPtr *ControlHandle;
 MAKE_HIDDEN(ControlHandle);
+}
 
 #include "WindowMgr.h"
 
+namespace Executor {
 struct PACKED __cr {
   PACKED_MEMBER(ControlHandle, nextControl);
   PACKED_MEMBER(WindowPtr, contrlOwner);
@@ -232,5 +234,6 @@ extern pascal trap void C_SizeControl( ControlHandle c,
  INTEGER width, INTEGER height ); extern pascal trap void P_SizeControl( ControlHandle c, 
  INTEGER width, INTEGER height );
 extern pascal trap void C_SetCtlColor (ControlHandle ctl, CCTabHandle ctab);
+}
 #endif /* __STDC__ */
 #endif /* __CONTROL__ */

@@ -7,7 +7,7 @@
  *
  * $Id: ini.h 87 2005-05-25 01:57:33Z ctm $
  */
-
+namespace Executor {
 typedef char *heading_t;
 typedef char *ini_key_t;
 typedef char *value_t;
@@ -40,5 +40,5 @@ extern boolean_t add_heading_to_file (FILE *fp, heading_t heading);
 extern boolean_t add_key_value_to_file (FILE *fp, ini_key_t key, value_t value);
 extern boolean_t close_ini_file (FILE *fp);
 extern value_t find_key (heading_t heading, ini_key_t key);
-
+}
 #endif

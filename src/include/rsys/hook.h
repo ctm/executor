@@ -1,6 +1,6 @@
 #if !defined (_HOOK_H_)
 #define _HOOK_H_
-
+namespace Executor {
 typedef enum {
   ctl_actionnumber,
   ctl_cdefnumber,
@@ -65,5 +65,5 @@ extern void ROMlib_hook (LONGINT hn);
 
 #define HOOKSAVEREGS()
 #define HOOKRESTOREREGS()
-
+}
 #endif /* !_HOOK_H_ */

@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-typedef size_t (*write_funcp_t) (int user_arg, void *bufp, size_t buf_len);
+typedef size_t (*write_funcp_t) (int user_arg, const void *bufp, size_t buf_len);
 
 extern int
 format_disk(unsigned long timevar, const char *volumename, int nsecs,

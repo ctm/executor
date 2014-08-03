@@ -3,6 +3,10 @@
 
 /* $Id: version.h 94 2005-05-25 15:53:40Z ctm $ */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #if !defined (EXECUTOR_VERSION)
 #define EXECUTOR_VERSION "2.1pr16" /* don't forget EXECUTOR_VERSION_NUMERIC */
 #endif
@@ -35,7 +39,7 @@ extern char *ROMlib_executor_full_name;
 #define VERSION_SIG PLATFORM_CYGWIN32
 #elif defined(LINUX)
 #define VERSION_SIG PLATFORM_LINUX
-#elif defined(MACOSX)
+#elif defined(MACOSX_)
 #define VERSION_SIG PLATFORM_MACOSX
 #else
 #error "Need VERSION_SIG #define"
@@ -54,5 +58,9 @@ enum
 #define EXECUTOR_NAME "executor"
 
 extern void ROMlib_set_system_version (uint32 version);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* !_RSYS_VERSION_H_ */

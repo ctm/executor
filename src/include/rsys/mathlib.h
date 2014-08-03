@@ -3,9 +3,10 @@
 
 #include "rsys/cfm.h"
 
+namespace Executor {
 extern OSErr ROMlib_GetMathLib (Str63 library, OSType arch,
 				LoadFlags loadflags, ConnectionID *cidp,
 				Ptr *mainaddrp, Str255 errName);
-
+}
 
 #endif

@@ -1,8 +1,8 @@
-#if !defined (__HOST__)
-#define __HOST__
+#if !defined (__Exec_HOST__)
+#define __Exec_HOST__
 
 #include "CQuickDraw.h"
-
+namespace Executor {
 extern int host_cursor_depth;
 
 extern void host_set_cursor (char *cursor_data,
@@ -13,5 +13,5 @@ extern boolean_t host_hide_cursor_if_intersects (int top, int left,
 						 int bottom, int right);
 extern void host_beep_at_user (void);
 extern void host_flush_shadow_screen (void);
-
+}
 #endif /* !__HOST__ */

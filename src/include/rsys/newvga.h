@@ -2,7 +2,7 @@
 #define _VGA_H_
 
 #include "QuickDraw.h"
-
+namespace Executor {
 #define NUM_STANDARD_VGA_MODES  2
 #define NUM_VESA_MODES 8
 #define EXTRA_VGA_MODES    16  /* Arbitrary, but allow for extra modes. */
@@ -105,5 +105,5 @@ extern void *vdriver_frame_buffer (int *width, int *height, int *row_bytes,
 extern void vdriver_set_colors (int first_color, int num_colors,
 				const RGBColor *color_array);
 extern int vdriver_set_mode (int width, int height, int bpp);
-
+}
 #endif /* !_VGA_H_ */

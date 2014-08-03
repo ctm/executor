@@ -12,6 +12,7 @@
 #include "FileMgr.h"
 #include "OSEvent.h"
 
+namespace Executor {
 #define macXLMachine	0
 #define macMachine	1
 #define UNIXMachine	1127
@@ -196,9 +197,12 @@ extern trap void Environs( INTEGER *rom, INTEGER *machine );
 extern trap OSErrRET SysEnvirons( INTEGER vers, SysEnvRecPtr p ); 
 extern void Restart( void  ); 
 extern void SetUpA5( void  ); 
-extern void RestoreA5( void  ); 
-extern void GetMMUMode( INTEGER *ip ); 
+extern void RestoreA5( void  );
+#undef GetMMUMode
+#undef SwapMMUMode
+extern void GetMMUMode( INTEGER *ip );
 extern void SwapMMUMode( Byte *bp ); 
 extern LONGINT StripAddress( LONGINT l ); 
 #endif /* __STDC__ */
+}
 #endif /* __OSUTIL__ */

@@ -8,6 +8,7 @@
  * $Id: arch.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 extern boolean_t arch_init (void);
-
+}
 #endif /* !_RSYS_ARCH_H_ */

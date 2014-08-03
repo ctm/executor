@@ -2,7 +2,7 @@
 #define _RSYS_OSEVENT_H_
 
 /* #include "rsys/cruft.h" This include shouldn't be necessary */
-
+namespace Executor {
 extern INTEGER ROMlib_mods;
 
 #if !defined (MBState)
@@ -42,5 +42,5 @@ extern uint16 ROMlib_right_to_left_key_map (uint16 what);
 
 extern boolean_t ROMlib_get_index_and_bit (LONGINT loc, int *indexp,
 					   uint8 *bitp);
-
+}
 #endif

@@ -26,5 +26,6 @@ src/config.status
 src/config.log
 src/config.h
 src/.deps/
-**/.DS_Store
 .DS_Store
+*xcuserdata
+**/project.xcworkspace/

@@ -8,6 +8,7 @@
  * $Id: Finder.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 typedef struct PACKED
 {
   PACKED_MEMBER(QElemPtr, qLink);
@@ -53,5 +54,5 @@ extern OSErr PBDTFlush (DTPBPtr dtp, BOOLEAN async);
 extern OSErr PBDTGetInfo (DTPBPtr dtp, BOOLEAN async);
 extern OSErr PBDTReset (DTPBPtr dtp, BOOLEAN async);
 extern OSErr PBDTDelete (DTPBPtr dtp, BOOLEAN async);
-
+}
 #endif

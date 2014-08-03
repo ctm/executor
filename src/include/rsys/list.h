@@ -13,7 +13,7 @@
 #include "ResourceMgr.h"
 #include "rsys/mman.h"
 #include "rsys/pstuff.h"
-
+namespace Executor {
 extern void
         C_ldef0 (INTEGER, BOOLEAN, Rect *, Cell, INTEGER, INTEGER, ListHandle);
 
@@ -22,7 +22,7 @@ extern void
 #if !defined (BINCOMPAT)
 #if !defined (UNIX)
 #define LISTCALL(msg, sel, rect, cell, doff, dlen, list) \
-    CallPascal((INTEGER) (msg), (sel), (rect), (cell), (doff), (dlen),
+    CallPascal((INTEGER) (msg), (sel), (rect), (cell), (doff), (dlen), \
 						 (list), *(*list)->listDefProc)
 #else /* UNIX */
 
@@ -53,14 +53,8 @@ extern void ROMlib_listcall (INTEGER mess, BOOLEAN sel, Rect *rp, Cell cell,
 
 #define LISTEND(l)	HSetState(HxP(l, listDefProc), liststate)
 
-#if !defined (__STDC__)
-extern void ROMlib_vminmax();
-extern void ROMlib_hminmax();
-extern INTEGER *ROMlib_getoffp();
-#else /* __STDC__ */
 extern void ROMlib_vminmax( INTEGER *minp, INTEGER *maxp, ListPtr lp );
 extern void ROMlib_hminmax( INTEGER *minp, INTEGER *maxp, ListPtr lp );
 extern INTEGER *ROMlib_getoffp( Cell cell, ListHandle list);
-#endif /* __STDC__ */
-
+}
 #endif /* !defined(__RSYS_LIST__) */

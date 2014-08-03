@@ -8,7 +8,7 @@
  * $Id: SoundDvr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-
+namespace Executor {
 #define swMode	(-1)
 #define ftMode	1
 #define ffMode	0
@@ -76,5 +76,6 @@ extern INTEGER 	CurPitch;
 #endif
 
 #define SoundBase	(SoundBase_H.p)
+}
 
 #endif /* __SOUND__ */

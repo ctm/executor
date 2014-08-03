@@ -8,6 +8,7 @@
  * $Id: lockunlock.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 typedef enum
 {
   lock,
@@ -33,5 +34,5 @@ PUBLIC OSErr ROMlib_find_fd_start_count (int fd, uint32 start_byte,
 #define afpRangeNotLocked (-5020)
 #define afpRangeOverlap (-5021)
 #define afpNoMoreLocks (-5015)
-
+}
 #endif

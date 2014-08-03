@@ -1,6 +1,9 @@
 #if !defined(__TRAPGLUE__)
 #define __TRAPGLUE__
 
+#ifdef __cplusplus
+namespace Executor {
+#endif
 typedef struct {
     void *wheretogo;
     ULONGINT magic;
@@ -26,7 +29,9 @@ extern void   *ostraptable[NOSENTRIES];
 
 extern syn68k_addr_t PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop);
 
-
 extern unsigned short mostrecenttrap;
+#ifdef __cplusplus
+}
+#endif
 
 #endif

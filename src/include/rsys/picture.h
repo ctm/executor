@@ -10,6 +10,7 @@
 
 #include "rsys/quick.h"
 
+namespace Executor {
 #define PIC_SHORT_COMMENT	0xA0
 #define PIC_LONG_COMMENT	0xA1
 
@@ -241,4 +242,5 @@ typedef HIDDEN_piccacheptr *piccachehand;
 extern PicHandle ROMlib_OpenPicture_helper (const Rect *pf,
 					    const OpenCPicParams *params);
 
+}
 #endif /* _PICTURE_H_ */

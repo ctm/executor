@@ -1,0 +1,1752 @@
+/* Copyright 1994, 1995, 1996 by Abacus Research and
+ * Development, Inc.  All rights reserved.
+ */
+
+#if !defined (OMIT_RCSID_STRINGS)
+char ROMlib_rcsid_emutraptables[] =
+		"$Id: emutraptables.c 63 2004-12-24 18:19:43Z ctm $";
+#endif
+
+#include "rsys/common.h"
+#include "rsys/everything.h"
+
+#include "OSUtil.h"
+#include "Gestalt.h"
+#include "SysErr.h"
+
+#include "rsys/trapglue.h"
+#include "rsys/ptocflags.h"
+#include "rsys/stdfile.h"
+#include "rsys/tesave.h"
+#include "rsys/resource.h"
+#include "rsys/ctl.h"
+#include "rsys/list.h"
+#include "rsys/menu.h"
+#include "rsys/wind.h"
+#include "rsys/print.h"
+#include "rsys/osutil.h"
+#include "rsys/vbl.h"
+#include "rsys/soundopts.h"
+#include "rsys/refresh.h"
+#include "rsys/gestalt.h"
+#include "rsys/emustubs.h"
+#include "rsys/executor.h"
+
+using namespace Executor;
+
+void *Executor::tooltraptable[0x400];	/* Gets filled in at run time */
+void   *Executor::ostraptable[0x100];	/* Gets filled in at run time */
+
+#define C_Pack9  _Unimplemented /* PPCBrowser */
+#define PTOC_Pack9  static_cast<ULONGINT>(-1)
+#define C_Pack10  _Unimplemented
+#define PTOC_Pack10  static_cast<ULONGINT>(-1)
+
+#define C_Pack13  _Unimplemented /* DB stuff */
+#define PTOC_Pack13  static_cast<ULONGINT>(-1)
+#define C_Pack1  _Unimplemented
+#define PTOC_Pack1  static_cast<ULONGINT>(-1)
+#define C_Chain  _Unimplemented
+#define PTOC_Chain  static_cast<ULONGINT>(-1)
+
+#define _AddDrive _Unimplemented
+#define _RDrvrInstall _Unimplemented
+/* #define (void*)_IMVI_ReadXPRam (void*)_Unimplemented */
+#define _IMVI_WriteXPRam _Unimplemented
+#define _IMVI_MemoryDispatch _Unimplemented
+/* #define (void*)_SlotManager (void*)_Unimplemented */
+/* #define (void*)_SlotVInstall (void*)_Unimplemented */
+/* #define (void*)_SlotVRemove (void*)_Unimplemented */
+#define _AttachVBL _Unimplemented
+#define _DoVBLTask _Unimplemented
+#define _DTInstall _Unimplemented
+#define _SIntRemove _Unimplemented
+#define _InternalWait _Unimplemented
+#define _SIntInstall _Unimplemented
+#define _IMVI_IdleUpdate _Unimplemented
+#define _IMVI_SlpQInstall _Unimplemented
+#define _IMVI_DebugUtil _Unimplemented
+#define _IMVI_DeferUserFn _Unimplemented
+#define _IMVI_Translate24To32 _Unimplemented
+
+#define _GetMaskTable	_Unimplemented
+#define _Debugger	_Unimplemented
+#define _DebugStr	_Unimplemented
+
+
+void C_unknown574 (void)
+{
+}
+
+static const toolstuff_t unimplemented_toolstuff =
+{{ (void*)&_Unimplemented, static_cast<ULONGINT>(-1) }, nullptr };
+
+toolstuff_t Executor::toolstuff[0x400] = {
+    { { (void*)&_SoundDispatch, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_SndDisposeChannel, PTOC_SndDisposeChannel }, nullptr },
+    { { (void*)&C_SndAddModifier, PTOC_SndAddModifier }, nullptr },
+    { { (void*)&C_SndDoCommand, PTOC_SndDoCommand }, nullptr },
+    { { (void*)&C_SndDoImmediate, PTOC_SndDoImmediate }, nullptr },
+    { { (void*)&C_SndPlay, PTOC_SndPlay }, nullptr },
+    { { (void*)&C_SndControl, PTOC_SndControl }, nullptr },
+    { { (void*)&C_SndNewChannel, PTOC_SndNewChannel }, nullptr },
+    { { (void*)&C_InitProcMenu, PTOC_InitProcMenu }, nullptr },
+    { { (void*)&C_GetCVariant, PTOC_GetCVariant }, nullptr },
+    { { (void*)&C_GetWVariant, PTOC_GetWVariant }, nullptr },
+    { { (void*)&C_PopUpMenuSelect, PTOC_PopUpMenuSelect }, nullptr },
+    { { (void*)&C_RGetResource, PTOC_RGetResource }, nullptr },
+    { { (void*)&C_Count1Resources, PTOC_Count1Resources }, nullptr },
+    { { (void*)&C_Get1IndResource, PTOC_Get1IndResource }, nullptr },
+    { { (void*)&C_Get1IndType, PTOC_Get1IndType }, nullptr },
+    { { (void*)&C_Unique1ID, PTOC_Unique1ID }, nullptr },
+    { { (void*)&C_TESelView, PTOC_TESelView }, nullptr },
+    { { (void*)&C_TEPinScroll, PTOC_TEPinScroll }, nullptr },
+    { { (void*)&C_TEAutoView, PTOC_TEAutoView }, nullptr },
+    { { (void*)&C_SetFractEnable, PTOC_SetFractEnable }, nullptr },
+    { { (void*)&_SCSIDispatch, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_Pack8, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_CopyMask, PTOC_CopyMask }, nullptr },
+    { { (void*)&C_FixAtan2, PTOC_FixAtan2 }, nullptr },
+    { { (void*)&_Unimplemented, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_HOpenResFile, PTOC_HOpenResFile }, nullptr },
+    { { (void*)&C_HCreateResFile, PTOC_HCreateResFile }, nullptr },
+    { { (void*)&C_Count1Types, PTOC_Count1Types }, nullptr },
+    { { (void*)&C_InvalMenuBar, PTOC_InvalMenuBar }, nullptr },
+    unimplemented_toolstuff,
+    { { (void*)&C_Get1Resource, PTOC_Get1Resource }, nullptr },
+    { { (void*)&C_Get1NamedResource, PTOC_Get1NamedResource }, nullptr },
+    { { (void*)&C_MaxSizeRsrc, PTOC_MaxSizeRsrc }, nullptr },
+    { { (void*)&_ResourceDispatch, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_AliasDispatch,  static_cast<ULONGINT>(-1) }, nullptr },
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    { { (void*)&C_InsMenuItem, PTOC_InsMenuItem }, nullptr },
+    { { (void*)&C_HideDItem, PTOC_HideDItem }, nullptr },
+    { { (void*)&C_ShowDItem, PTOC_ShowDItem }, nullptr },
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    { { (void*)&C_Pack9, static_cast<ULONGINT>(PTOC_Pack9) }, nullptr },
+    { { (void*)&C_Pack10, static_cast<ULONGINT>(PTOC_Pack10) }, nullptr },
+    { { (void*)&_Pack11, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_Pack12, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_Pack13, static_cast<ULONGINT>(PTOC_Pack13) }, nullptr },
+    { { (void*)&_Pack14, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_Pack15, static_cast<ULONGINT>(-1) }, nullptr },
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    { { (void*)&C_SetFScaleDisable, PTOC_SetFScaleDisable }, nullptr },
+    { { (void*)&C_FontMetrics, PTOC_FontMetrics }, nullptr },
+    { { (void*)&_GetMaskTable, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_MeasureText, PTOC_MeasureText }, nullptr },
+    { { (void*)&C_CalcMask, PTOC_CalcMask }, nullptr },
+    { { (void*)&C_SeedFill, PTOC_SeedFill }, nullptr },
+    { { (void*)&C_ZoomWindow, PTOC_ZoomWindow }, nullptr },
+    { { (void*)&C_TrackBox, PTOC_TrackBox }, nullptr },
+    { { (void*)&C_TEGetOffset, PTOC_TEGetOffset }, nullptr },
+    { { (void*)&_TEDispatch, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_TEStylNew, PTOC_TEStylNew }, nullptr },
+    { { (void*)&C_Long2Fix, PTOC_Long2Fix }, nullptr },
+    { { (void*)&C_Fix2Long, PTOC_Fix2Long }, nullptr },
+    { { (void*)&C_Fix2Frac, PTOC_Fix2Frac }, nullptr },
+    { { (void*)&C_Frac2Fix, PTOC_Frac2Fix }, nullptr },
+    { { (void*)&_Fix2X, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_R_X2Fix, PTOC_R_X2Fix }, nullptr },
+    { { (void*)&_Frac2X, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_R_X2Frac, PTOC_R_X2Frac }, nullptr },
+    { { (void*)&C_FracCos, PTOC_FracCos }, nullptr },
+    { { (void*)&C_FracSin, PTOC_FracSin }, nullptr },
+    { { (void*)&C_FracSqrt, PTOC_FracSqrt }, nullptr },
+    { { (void*)&C_FracMul, PTOC_FracMul }, nullptr },
+    { { (void*)&C_FracDiv, PTOC_FracDiv }, nullptr },
+    unimplemented_toolstuff,
+    { { (void*)&C_FixDiv, PTOC_FixDiv }, nullptr },
+    { { (void*)&C_GetItemCmd, PTOC_GetItemCmd }, nullptr },
+    { { (void*)&C_SetItemCmd, PTOC_SetItemCmd }, nullptr },
+    { { (void*)&C_InitCursor, PTOC_InitCursor }, nullptr },
+    { { (void*)&C_SetCursor, PTOC_SetCursor }, nullptr },
+    { { (void*)&C_HideCursor, PTOC_HideCursor }, nullptr },
+    { { (void*)&C_ShowCursor, PTOC_ShowCursor }, nullptr },
+    { { (void*)&_FontDispatch, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_ShieldCursor, PTOC_ShieldCursor }, nullptr },
+    { { (void*)&C_ObscureCursor, PTOC_ObscureCursor }, nullptr },
+    unimplemented_toolstuff,
+    { { (void*)&C_BitAnd, PTOC_BitAnd }, nullptr },
+    { { (void*)&C_BitXor, PTOC_BitXor }, nullptr },
+    { { (void*)&C_BitNot, PTOC_BitNot }, nullptr },
+    { { (void*)&C_BitOr, PTOC_BitOr }, nullptr },
+    { { (void*)&C_BitShift, PTOC_BitShift }, nullptr },
+    { { (void*)&C_BitTst, PTOC_BitTst }, nullptr },
+    { { (void*)&C_BitSet, PTOC_BitSet }, nullptr },
+    { { (void*)&C_BitClr, PTOC_BitClr }, nullptr },
+    { { (void*)&C_WaitNextEvent, PTOC_WaitNextEvent }, nullptr },
+    { { (void*)&C_Random, PTOC_Random }, nullptr },
+    { { (void*)&C_ForeColor, PTOC_ForeColor }, nullptr },
+    { { (void*)&C_BackColor, PTOC_BackColor }, nullptr },
+    { { (void*)&C_ColorBit, PTOC_ColorBit }, nullptr },
+    { { (void*)&C_GetPixel, PTOC_GetPixel }, nullptr },
+    { { (void*)&C_StuffHex, PTOC_StuffHex }, nullptr },
+    { { (void*)&C_LongMul, PTOC_LongMul }, nullptr },
+    { { (void*)&C_FixMul, PTOC_FixMul }, nullptr },
+    { { (void*)&C_FixRatio, PTOC_FixRatio }, nullptr },
+    { { (void*)&C_HiWord, PTOC_HiWord }, nullptr },
+    { { (void*)&C_LoWord, PTOC_LoWord }, nullptr },
+    { { (void*)&C_FixRound, PTOC_FixRound }, nullptr },
+    { { (void*)&C_InitPort, PTOC_InitPort }, nullptr },
+    { { (void*)&C_InitGraf, PTOC_InitGraf }, nullptr },
+    { { (void*)&C_OpenPort, PTOC_OpenPort }, nullptr },
+    { { (void*)&C_LocalToGlobal, PTOC_LocalToGlobal }, nullptr },
+    { { (void*)&C_GlobalToLocal, PTOC_GlobalToLocal }, nullptr },
+    { { (void*)&C_GrafDevice, PTOC_GrafDevice }, nullptr },
+    { { (void*)&C_SetPort, PTOC_SetPort }, nullptr },
+    { { (void*)&C_GetPort, PTOC_GetPort }, nullptr },
+    { { (void*)&C_SetPortBits, PTOC_SetPortBits }, nullptr },
+    { { (void*)&C_PortSize, PTOC_PortSize }, nullptr },
+    { { (void*)&C_MovePortTo, PTOC_MovePortTo }, nullptr },
+    { { (void*)&C_SetOrigin, PTOC_SetOrigin }, nullptr },
+    { { (void*)&C_SetClip, PTOC_SetClip }, nullptr },
+    { { (void*)&C_GetClip, PTOC_GetClip }, nullptr },
+    { { (void*)&C_ClipRect, PTOC_ClipRect }, nullptr },
+    { { (void*)&C_BackPat, PTOC_BackPat }, nullptr },
+    { { (void*)&C_ClosePort, PTOC_ClosePort }, nullptr },
+    { { (void*)&C_AddPt, PTOC_AddPt }, nullptr },
+    { { (void*)&C_SubPt, PTOC_SubPt }, nullptr },
+    { { (void*)&C_SetPt, PTOC_SetPt }, nullptr },
+    { { (void*)&C_EqualPt, PTOC_EqualPt }, nullptr },
+    { { (void*)&C_StdText, PTOC_StdText }, nullptr },
+    { { (void*)&C_DrawChar, PTOC_DrawChar }, nullptr },
+    { { (void*)&C_DrawString, PTOC_DrawString }, nullptr },
+    { { (void*)&C_DrawText, PTOC_DrawText }, nullptr },
+    { { (void*)&C_TextWidth, PTOC_TextWidth }, nullptr },
+    { { (void*)&C_TextFont, PTOC_TextFont }, nullptr },
+    { { (void*)&C_TextFace, PTOC_TextFace }, nullptr },
+    { { (void*)&C_TextMode, PTOC_TextMode }, nullptr },
+    { { (void*)&C_TextSize, PTOC_TextSize }, nullptr },
+    { { (void*)&C_GetFontInfo, PTOC_GetFontInfo }, nullptr },
+    { { (void*)&C_StringWidth, PTOC_StringWidth }, nullptr },
+    { { (void*)&C_CharWidth, PTOC_CharWidth }, nullptr },
+    { { (void*)&C_SpaceExtra, PTOC_SpaceExtra }, nullptr },
+    { { (void*)&_OSDispatch, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_StdLine, PTOC_StdLine }, nullptr },
+    { { (void*)&C_LineTo, PTOC_LineTo }, nullptr },
+    { { (void*)&C_Line, PTOC_Line }, nullptr },
+    { { (void*)&C_MoveTo, PTOC_MoveTo }, nullptr },
+    { { (void*)&C_Move, PTOC_Move }, nullptr },
+    { { (void*)&_ShutDown, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_HidePen, PTOC_HidePen }, nullptr },
+    { { (void*)&C_ShowPen, PTOC_ShowPen }, nullptr },
+    { { (void*)&C_GetPenState, PTOC_GetPenState }, nullptr },
+    { { (void*)&C_SetPenState, PTOC_SetPenState }, nullptr },
+    { { (void*)&C_GetPen, PTOC_GetPen }, nullptr },
+    { { (void*)&C_PenSize, PTOC_PenSize }, nullptr },
+    { { (void*)&C_PenMode, PTOC_PenMode }, nullptr },
+    { { (void*)&C_PenPat, PTOC_PenPat }, nullptr },
+    { { (void*)&C_PenNormal, PTOC_PenNormal }, nullptr },
+    unimplemented_toolstuff,
+    { { (void*)&C_StdRect, PTOC_StdRect }, nullptr },
+    { { (void*)&C_FrameRect, PTOC_FrameRect }, nullptr },
+    { { (void*)&C_PaintRect, PTOC_PaintRect }, nullptr },
+    { { (void*)&C_EraseRect, PTOC_EraseRect }, nullptr },
+    { { (void*)&C_InvertRect, PTOC_InvertRect }, nullptr },
+    { { (void*)&C_FillRect, PTOC_FillRect }, nullptr },
+    { { (void*)&C_EqualRect, PTOC_EqualRect }, nullptr },
+    { { (void*)&C_SetRect, PTOC_SetRect }, nullptr },
+    { { (void*)&C_OffsetRect, PTOC_OffsetRect }, nullptr },
+    { { (void*)&C_InsetRect, PTOC_InsetRect }, nullptr },
+    { { (void*)&C_SectRect, PTOC_SectRect }, nullptr },
+    { { (void*)&C_UnionRect, PTOC_UnionRect }, nullptr },
+    { { (void*)&C_Pt2Rect, PTOC_Pt2Rect }, nullptr },
+    { { (void*)&C_PtInRect, PTOC_PtInRect }, nullptr },
+    { { (void*)&C_EmptyRect, PTOC_EmptyRect }, nullptr },
+    { { (void*)&C_StdRRect, PTOC_StdRRect }, nullptr },
+    { { (void*)&C_FrameRoundRect, PTOC_FrameRoundRect }, nullptr },
+    { { (void*)&C_PaintRoundRect, PTOC_PaintRoundRect }, nullptr },
+    { { (void*)&C_EraseRoundRect, PTOC_EraseRoundRect }, nullptr },
+    { { (void*)&C_InvertRoundRect, PTOC_InvertRoundRect }, nullptr },
+    { { (void*)&C_FillRoundRect, PTOC_FillRoundRect }, nullptr },
+    { { (void*)&_ScriptUtil, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_StdOval, PTOC_StdOval }, nullptr },
+    { { (void*)&C_FrameOval, PTOC_FrameOval }, nullptr },
+    { { (void*)&C_PaintOval, PTOC_PaintOval }, nullptr },
+    { { (void*)&C_EraseOval, PTOC_EraseOval }, nullptr },
+    { { (void*)&C_InvertOval, PTOC_InvertOval }, nullptr },
+    { { (void*)&C_FillOval, PTOC_FillOval }, nullptr },
+    { { (void*)&C_SlopeFromAngle, PTOC_SlopeFromAngle }, nullptr },
+    { { (void*)&C_StdArc, PTOC_StdArc }, nullptr },
+    { { (void*)&C_FrameArc, PTOC_FrameArc }, nullptr },
+    { { (void*)&C_PaintArc, PTOC_PaintArc }, nullptr },
+    { { (void*)&C_EraseArc, PTOC_EraseArc }, nullptr },
+    { { (void*)&C_InvertArc, PTOC_InvertArc }, nullptr },
+    { { (void*)&C_FillArc, PTOC_FillArc }, nullptr },
+    { { (void*)&C_PtToAngle, PTOC_PtToAngle }, nullptr },
+    { { (void*)&C_AngleFromSlope, PTOC_AngleFromSlope }, nullptr },
+    { { (void*)&C_StdPoly, PTOC_StdPoly }, nullptr },
+    { { (void*)&C_FramePoly, PTOC_FramePoly }, nullptr },
+    { { (void*)&C_PaintPoly, PTOC_PaintPoly }, nullptr },
+    { { (void*)&C_ErasePoly, PTOC_ErasePoly }, nullptr },
+    { { (void*)&C_InvertPoly, PTOC_InvertPoly }, nullptr },
+    { { (void*)&C_FillPoly, PTOC_FillPoly }, nullptr },
+    { { (void*)&C_OpenPoly, PTOC_OpenPoly }, nullptr },
+    { { (void*)&C_ClosePoly, PTOC_ClosePoly }, nullptr },
+    { { (void*)&C_KillPoly, PTOC_KillPoly }, nullptr },
+    { { (void*)&C_OffsetPoly, PTOC_OffsetPoly }, nullptr },
+    { { (void*)&C_PackBits, PTOC_PackBits }, nullptr },
+    { { (void*)&C_UnpackBits, PTOC_UnpackBits }, nullptr },
+    { { (void*)&C_StdRgn, PTOC_StdRgn }, nullptr },
+    { { (void*)&C_FrameRgn, PTOC_FrameRgn }, nullptr },
+    { { (void*)&C_PaintRgn, PTOC_PaintRgn }, nullptr },
+    { { (void*)&C_EraseRgn, PTOC_EraseRgn }, nullptr },
+    { { (void*)&C_InvertRgn, PTOC_InvertRgn }, nullptr },
+    { { (void*)&C_FillRgn, PTOC_FillRgn }, nullptr },
+    { { (void*)&C_BitMapToRegion, PTOC_BitMapToRegion }, nullptr },
+    { { (void*)&C_NewRgn, PTOC_NewRgn }, nullptr },
+    { { (void*)&C_DisposeRgn, PTOC_DisposeRgn }, nullptr },
+    { { (void*)&C_OpenRgn, PTOC_OpenRgn }, nullptr },
+    { { (void*)&C_CloseRgn, PTOC_CloseRgn }, nullptr },
+    { { (void*)&C_CopyRgn, PTOC_CopyRgn }, nullptr },
+    { { (void*)&C_SetEmptyRgn, PTOC_SetEmptyRgn }, nullptr },
+    { { (void*)&C_SetRectRgn, PTOC_SetRectRgn }, nullptr },
+    { { (void*)&C_RectRgn, PTOC_RectRgn }, nullptr },
+    { { (void*)&C_OffsetRgn, PTOC_OffsetRgn }, nullptr },
+    { { (void*)&C_InsetRgn, PTOC_InsetRgn }, nullptr },
+    { { (void*)&C_EmptyRgn, PTOC_EmptyRgn }, nullptr },
+    { { (void*)&C_EqualRgn, PTOC_EqualRgn }, nullptr },
+    { { (void*)&C_SectRgn, PTOC_SectRgn }, nullptr },
+    { { (void*)&C_UnionRgn, PTOC_UnionRgn }, nullptr },
+    { { (void*)&C_DiffRgn, PTOC_DiffRgn }, nullptr },
+    { { (void*)&C_XorRgn, PTOC_XorRgn }, nullptr },
+    { { (void*)&C_PtInRgn, PTOC_PtInRgn }, nullptr },
+    { { (void*)&C_RectInRgn, PTOC_RectInRgn }, nullptr },
+    { { (void*)&C_SetStdProcs, PTOC_SetStdProcs }, nullptr },
+    { { (void*)&C_StdBits, PTOC_StdBits }, nullptr },
+    { { (void*)&C_CopyBits, PTOC_CopyBits }, nullptr },
+    { { (void*)&C_StdTxMeas, PTOC_StdTxMeas }, nullptr },
+    { { (void*)&C_StdGetPic, PTOC_StdGetPic }, nullptr },
+    { { (void*)&C_ScrollRect, PTOC_ScrollRect }, nullptr },
+    { { (void*)&C_StdPutPic, PTOC_StdPutPic }, nullptr },
+    { { (void*)&C_StdComment, PTOC_StdComment }, nullptr },
+    { { (void*)&C_PicComment, PTOC_PicComment }, nullptr },
+    { { (void*)&C_OpenPicture, PTOC_OpenPicture }, nullptr },
+    { { (void*)&C_ClosePicture, PTOC_ClosePicture }, nullptr },
+    { { (void*)&C_KillPicture, PTOC_KillPicture }, nullptr },
+    { { (void*)&C_DrawPicture, PTOC_DrawPicture }, nullptr },
+    unimplemented_toolstuff,
+    { { (void*)&C_ScalePt, PTOC_ScalePt }, nullptr },
+    { { (void*)&C_MapPt, PTOC_MapPt }, nullptr },
+    { { (void*)&C_MapRect, PTOC_MapRect }, nullptr },
+    { { (void*)&C_MapRgn, PTOC_MapRgn }, nullptr },
+    { { (void*)&C_MapPoly, PTOC_MapPoly }, nullptr },
+    { { (void*)&_PrGlue, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_InitFonts, PTOC_InitFonts }, nullptr },
+    { { (void*)&C_GetFontName, PTOC_GetFontName }, nullptr },
+    { { (void*)&C_GetFNum, PTOC_GetFNum }, nullptr },
+    { { (void*)&C_FMSwapFont, PTOC_FMSwapFont }, nullptr },
+    { { (void*)&C_RealFont, PTOC_RealFont }, nullptr },
+    { { (void*)&C_SetFontLock, PTOC_SetFontLock }, nullptr },
+    { { (void*)&C_DrawGrowIcon, PTOC_DrawGrowIcon }, nullptr },
+    { { (void*)&C_DragGrayRgn, PTOC_DragGrayRgn }, nullptr },
+    { { (void*)&C_NewString, PTOC_NewString }, nullptr },
+    { { (void*)&C_SetString, PTOC_SetString }, nullptr },
+    { { (void*)&C_ShowHide, PTOC_ShowHide }, nullptr },
+    { { (void*)&C_CalcVis, PTOC_CalcVis }, nullptr },
+    { { (void*)&C_CalcVisBehind, PTOC_CalcVisBehind }, nullptr },
+    { { (void*)&C_ClipAbove, PTOC_ClipAbove }, nullptr },
+    { { (void*)&C_PaintOne, PTOC_PaintOne }, nullptr },
+    { { (void*)&C_PaintBehind, PTOC_PaintBehind }, nullptr },
+    { { (void*)&C_SaveOld, PTOC_SaveOld }, nullptr },
+    { { (void*)&C_DrawNew, PTOC_DrawNew }, nullptr },
+    { { (void*)&C_GetWMgrPort, PTOC_GetWMgrPort }, nullptr },
+    { { (void*)&C_CheckUpdate, PTOC_CheckUpdate }, nullptr },
+    { { (void*)&C_InitWindows, PTOC_InitWindows }, nullptr },
+    { { (void*)&C_NewWindow, PTOC_NewWindow }, nullptr },
+    { { (void*)&C_DisposeWindow, PTOC_DisposeWindow }, nullptr },
+    { { (void*)&C_ShowWindow, PTOC_ShowWindow }, nullptr },
+    { { (void*)&C_HideWindow, PTOC_HideWindow }, nullptr },
+    { { (void*)&C_GetWRefCon, PTOC_GetWRefCon }, nullptr },
+    { { (void*)&C_SetWRefCon, PTOC_SetWRefCon }, nullptr },
+    { { (void*)&C_GetWTitle, PTOC_GetWTitle }, nullptr },
+    { { (void*)&C_SetWTitle, PTOC_SetWTitle }, nullptr },
+    { { (void*)&C_MoveWindow, PTOC_MoveWindow }, nullptr },
+    { { (void*)&C_HiliteWindow, PTOC_HiliteWindow }, nullptr },
+    { { (void*)&C_SizeWindow, PTOC_SizeWindow }, nullptr },
+    { { (void*)&C_TrackGoAway, PTOC_TrackGoAway }, nullptr },
+    { { (void*)&C_SelectWindow, PTOC_SelectWindow }, nullptr },
+    { { (void*)&C_BringToFront, PTOC_BringToFront }, nullptr },
+    { { (void*)&C_SendBehind, PTOC_SendBehind }, nullptr },
+    { { (void*)&C_BeginUpdate, PTOC_BeginUpdate }, nullptr },
+    { { (void*)&C_EndUpdate, PTOC_EndUpdate }, nullptr },
+    { { (void*)&C_FrontWindow, PTOC_FrontWindow }, nullptr },
+    { { (void*)&C_DragWindow, PTOC_DragWindow }, nullptr },
+    { { (void*)&C_DragTheRgn, PTOC_DragTheRgn }, nullptr },
+    { { (void*)&C_InvalRgn, PTOC_InvalRgn }, nullptr },
+    { { (void*)&C_InvalRect, PTOC_InvalRect }, nullptr },
+    { { (void*)&C_ValidRgn, PTOC_ValidRgn }, nullptr },
+    { { (void*)&C_ValidRect, PTOC_ValidRect }, nullptr },
+    { { (void*)&C_GrowWindow, PTOC_GrowWindow }, nullptr },
+    { { (void*)&C_FindWindow, PTOC_FindWindow }, nullptr },
+    { { (void*)&C_CloseWindow, PTOC_CloseWindow }, nullptr },
+    { { (void*)&C_SetWindowPic, PTOC_SetWindowPic }, nullptr },
+    { { (void*)&C_GetWindowPic, PTOC_GetWindowPic }, nullptr },
+    { { (void*)&C_InitMenus, PTOC_InitMenus }, nullptr },
+    { { (void*)&C_NewMenu, PTOC_NewMenu }, nullptr },
+    { { (void*)&C_DisposeMenu, PTOC_DisposeMenu }, nullptr },
+    { { (void*)&C_AppendMenu, PTOC_AppendMenu }, nullptr },
+    { { (void*)&C_ClearMenuBar, PTOC_ClearMenuBar }, nullptr },
+    { { (void*)&C_InsertMenu, PTOC_InsertMenu }, nullptr },
+    { { (void*)&C_DeleteMenu, PTOC_DeleteMenu }, nullptr },
+    { { (void*)&C_DrawMenuBar, PTOC_DrawMenuBar }, nullptr },
+    { { (void*)&C_HiliteMenu, PTOC_HiliteMenu }, nullptr },
+    { { (void*)&C_EnableItem, PTOC_EnableItem }, nullptr },
+    { { (void*)&C_DisableItem, PTOC_DisableItem }, nullptr },
+    { { (void*)&C_GetMenuBar, PTOC_GetMenuBar }, nullptr },
+    { { (void*)&C_SetMenuBar, PTOC_SetMenuBar }, nullptr },
+    { { (void*)&C_MenuSelect, PTOC_MenuSelect }, nullptr },
+    { { (void*)&C_MenuKey, PTOC_MenuKey }, nullptr },
+    { { (void*)&C_GetItemIcon, PTOC_GetItemIcon }, nullptr },
+    { { (void*)&C_SetItemIcon, PTOC_SetItemIcon }, nullptr },
+    { { (void*)&C_GetItemStyle, PTOC_GetItemStyle }, nullptr },
+    { { (void*)&C_SetItemStyle, PTOC_SetItemStyle }, nullptr },
+    { { (void*)&C_GetItemMark, PTOC_GetItemMark }, nullptr },
+    { { (void*)&C_SetItemMark, PTOC_SetItemMark }, nullptr },
+    { { (void*)&C_CheckItem, PTOC_CheckItem }, nullptr },
+    { { (void*)&C_GetItem, PTOC_GetItem }, nullptr },
+    { { (void*)&C_SetItem, PTOC_SetItem }, nullptr },
+    { { (void*)&C_CalcMenuSize, PTOC_CalcMenuSize }, nullptr },
+    { { (void*)&C_GetMHandle, PTOC_GetMHandle }, nullptr },
+    { { (void*)&C_SetMenuFlash, PTOC_SetMenuFlash }, nullptr },
+    { { (void*)&C_PlotIcon, PTOC_PlotIcon }, nullptr },
+    { { (void*)&C_FlashMenuBar, PTOC_FlashMenuBar }, nullptr },
+    { { (void*)&C_AddResMenu, PTOC_AddResMenu }, nullptr },
+    { { (void*)&C_PinRect, PTOC_PinRect }, nullptr },
+    { { (void*)&C_DeltaPoint, PTOC_DeltaPoint }, nullptr },
+    { { (void*)&C_CountMItems, PTOC_CountMItems }, nullptr },
+    { { (void*)&C_InsertResMenu, PTOC_InsertResMenu }, nullptr },
+    { { (void*)&C_DelMenuItem, PTOC_DelMenuItem }, nullptr },
+    { { (void*)&C_UpdtControl, PTOC_UpdtControl }, nullptr },
+    { { (void*)&C_NewControl, PTOC_NewControl }, nullptr },
+    { { (void*)&C_DisposeControl, PTOC_DisposeControl }, nullptr },
+    { { (void*)&C_KillControls, PTOC_KillControls }, nullptr },
+    { { (void*)&C_ShowControl, PTOC_ShowControl }, nullptr },
+    { { (void*)&C_HideControl, PTOC_HideControl }, nullptr },
+    { { (void*)&C_MoveControl, PTOC_MoveControl }, nullptr },
+    { { (void*)&C_GetCRefCon, PTOC_GetCRefCon }, nullptr },
+    { { (void*)&C_SetCRefCon, PTOC_SetCRefCon }, nullptr },
+    { { (void*)&C_SizeControl, PTOC_SizeControl }, nullptr },
+    { { (void*)&C_HiliteControl, PTOC_HiliteControl }, nullptr },
+    { { (void*)&C_GetCTitle, PTOC_GetCTitle }, nullptr },
+    { { (void*)&C_SetCTitle, PTOC_SetCTitle }, nullptr },
+    { { (void*)&C_GetCtlValue, PTOC_GetCtlValue }, nullptr },
+    { { (void*)&C_GetCtlMin, PTOC_GetCtlMin }, nullptr },
+    { { (void*)&C_GetCtlMax, PTOC_GetCtlMax }, nullptr },
+    { { (void*)&C_SetCtlValue, PTOC_SetCtlValue }, nullptr },
+    { { (void*)&C_SetCtlMin, PTOC_SetCtlMin }, nullptr },
+    { { (void*)&C_SetCtlMax, PTOC_SetCtlMax }, nullptr },
+    { { (void*)&C_TestControl, PTOC_TestControl }, nullptr },
+    { { (void*)&C_DragControl, PTOC_DragControl }, nullptr },
+    { { (void*)&C_TrackControl, PTOC_TrackControl }, nullptr },
+    { { (void*)&C_DrawControls, PTOC_DrawControls }, nullptr },
+    { { (void*)&C_GetCtlAction, PTOC_GetCtlAction }, nullptr },
+    { { (void*)&C_SetCtlAction, PTOC_SetCtlAction }, nullptr },
+    { { (void*)&C_FindControl, PTOC_FindControl }, nullptr },
+    { { (void*)&C_Draw1Control, PTOC_Draw1Control }, nullptr },
+    { { (void*)&_Dequeue, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_Enqueue, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_GetNextEvent, PTOC_GetNextEvent }, nullptr },
+    { { (void*)&C_EventAvail, PTOC_EventAvail }, nullptr },
+    { { (void*)&C_GetMouse, PTOC_GetMouse }, nullptr },
+    { { (void*)&C_StillDown, PTOC_StillDown }, nullptr },
+    { { (void*)&C_Button, PTOC_Button }, nullptr },
+    { { (void*)&C_TickCount, PTOC_TickCount }, nullptr },
+    { { (void*)&C_GetKeys, PTOC_GetKeys }, nullptr },
+    { { (void*)&C_WaitMouseUp, PTOC_WaitMouseUp }, nullptr },
+    { { (void*)&C_UpdtDialog, PTOC_UpdtDialog }, nullptr },
+    { { (void*)&C_CouldDialog, PTOC_CouldDialog }, nullptr },
+    { { (void*)&C_FreeDialog, PTOC_FreeDialog }, nullptr },
+    { { (void*)&C_InitDialogs, PTOC_InitDialogs }, nullptr },
+    { { (void*)&C_GetNewDialog, PTOC_GetNewDialog }, nullptr },
+    { { (void*)&C_NewDialog, PTOC_NewDialog }, nullptr },
+    { { (void*)&C_SelIText, PTOC_SelIText }, nullptr },
+    { { (void*)&C_IsDialogEvent, PTOC_IsDialogEvent }, nullptr },
+    { { (void*)&C_DialogSelect, PTOC_DialogSelect }, nullptr },
+    { { (void*)&C_DrawDialog, PTOC_DrawDialog }, nullptr },
+    { { (void*)&C_CloseDialog, PTOC_CloseDialog }, nullptr },
+    { { (void*)&C_DisposDialog, PTOC_DisposDialog }, nullptr },
+    { { (void*)&C_FindDItem, PTOC_FindDItem }, nullptr },
+    { { (void*)&C_Alert, PTOC_Alert }, nullptr },
+    { { (void*)&C_StopAlert, PTOC_StopAlert }, nullptr },
+    { { (void*)&C_NoteAlert, PTOC_NoteAlert }, nullptr },
+    { { (void*)&C_CautionAlert, PTOC_CautionAlert }, nullptr },
+    { { (void*)&C_CouldAlert, PTOC_CouldAlert }, nullptr },
+    { { (void*)&C_FreeAlert, PTOC_FreeAlert }, nullptr },
+    { { (void*)&C_ParamText, PTOC_ParamText }, nullptr },
+    { { (void*)&C_ErrorSound, PTOC_ErrorSound }, nullptr },
+    { { (void*)&C_GetDItem, PTOC_GetDItem }, nullptr },
+    { { (void*)&C_SetDItem, PTOC_SetDItem }, nullptr },
+    { { (void*)&C_SetIText, PTOC_SetIText }, nullptr },
+    { { (void*)&C_GetIText, PTOC_GetIText }, nullptr },
+    { { (void*)&C_ModalDialog, PTOC_ModalDialog }, nullptr },
+    { { (void*)&C_DetachResource, PTOC_DetachResource }, nullptr },
+    { { (void*)&C_SetResPurge, PTOC_SetResPurge }, nullptr },
+    { { (void*)&C_CurResFile, PTOC_CurResFile }, nullptr },
+    { { (void*)&C_InitResources, PTOC_InitResources }, nullptr },
+    { { (void*)&C_RsrcZoneInit, PTOC_RsrcZoneInit }, nullptr },
+    { { (void*)&C_OpenResFile, PTOC_OpenResFile }, nullptr },
+    { { (void*)&C_UseResFile, PTOC_UseResFile }, nullptr },
+    { { (void*)&C_UpdateResFile, PTOC_UpdateResFile }, nullptr },
+    { { (void*)&C_CloseResFile, PTOC_CloseResFile }, nullptr },
+    { { (void*)&C_SetResLoad, PTOC_SetResLoad }, nullptr },
+    { { (void*)&C_CountResources, PTOC_CountResources }, nullptr },
+    { { (void*)&C_GetIndResource, PTOC_GetIndResource }, nullptr },
+    { { (void*)&C_CountTypes, PTOC_CountTypes }, nullptr },
+    { { (void*)&C_GetIndType, PTOC_GetIndType }, nullptr },
+    { { (void*)&__GetResource, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_GetNamedResource, PTOC_GetNamedResource }, nullptr },
+    { { (void*)&C_LoadResource, PTOC_LoadResource }, nullptr },
+    { { (void*)&C_ReleaseResource, PTOC_ReleaseResource }, nullptr },
+    { { (void*)&C_HomeResFile, PTOC_HomeResFile }, nullptr },
+    { { (void*)&C_SizeResource, PTOC_SizeResource }, nullptr },
+    { { (void*)&C_GetResAttrs, PTOC_GetResAttrs }, nullptr },
+    { { (void*)&C_SetResAttrs, PTOC_SetResAttrs }, nullptr },
+    { { (void*)&C_GetResInfo, PTOC_GetResInfo }, nullptr },
+    { { (void*)&C_SetResInfo, PTOC_SetResInfo }, nullptr },
+    { { (void*)&C_ChangedResource, PTOC_ChangedResource }, nullptr },
+    { { (void*)&C_AddResource, PTOC_AddResource }, nullptr },
+    unimplemented_toolstuff,
+    { { (void*)&C_RmveResource, PTOC_RmveResource }, nullptr },
+    unimplemented_toolstuff,
+    { { (void*)&C_ResError, PTOC_ResError }, nullptr },
+    { { (void*)&C_WriteResource, PTOC_WriteResource }, nullptr },
+    { { (void*)&C_CreateResFile, PTOC_CreateResFile }, nullptr },
+    { { (void*)&C_SystemEvent, PTOC_SystemEvent }, nullptr },
+    { { (void*)&C_SystemClick, PTOC_SystemClick }, nullptr },
+    { { (void*)&C_SystemTask, PTOC_SystemTask }, nullptr },
+    { { (void*)&C_SystemMenu, PTOC_SystemMenu }, nullptr },
+    { { (void*)&C_OpenDeskAcc, PTOC_OpenDeskAcc }, nullptr },
+    { { (void*)&C_CloseDeskAcc, PTOC_CloseDeskAcc }, nullptr },
+    { { (void*)&C_GetPattern, PTOC_GetPattern }, nullptr },
+    { { (void*)&C_GetCursor, PTOC_GetCursor }, nullptr },
+    { { (void*)&C_GetString, PTOC_GetString }, nullptr },
+    { { (void*)&C_GetIcon, PTOC_GetIcon }, nullptr },
+    { { (void*)&C_GetPicture, PTOC_GetPicture }, nullptr },
+    { { (void*)&C_GetNewWindow, PTOC_GetNewWindow }, nullptr },
+    { { (void*)&C_GetNewControl, PTOC_GetNewControl }, nullptr },
+    { { (void*)&C_GetMenu, PTOC_GetMenu }, nullptr },
+    { { (void*)&C_GetNewMBar, PTOC_GetNewMBar }, nullptr },
+    { { (void*)&C_UniqueID, PTOC_UniqueID }, nullptr },
+    { { (void*)&C_SystemEdit, PTOC_SystemEdit }, nullptr },
+    { { (void*)&C_KeyTrans, PTOC_KeyTrans }, nullptr },
+    { { (void*)&C_OpenRFPerm, PTOC_OpenRFPerm }, nullptr },
+    { { (void*)&C_RsrcMapEntry, PTOC_RsrcMapEntry }, nullptr },
+    { { (void*)&_Secs2Date, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_Date2Secs, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_SysBeep, PTOC_SysBeep }, nullptr },
+    { { (void*)&C_SysError, PTOC_SysError }, nullptr },
+    unimplemented_toolstuff,
+    { { (void*)&C_TEGetText, PTOC_TEGetText }, nullptr },
+    { { (void*)&C_TEInit, PTOC_TEInit }, nullptr },
+    { { (void*)&C_TEDispose, PTOC_TEDispose }, nullptr },
+    { { (void*)&C_TextBox, PTOC_TextBox }, nullptr },
+    { { (void*)&C_TESetText, PTOC_TESetText }, nullptr },
+    { { (void*)&C_TECalText, PTOC_TECalText }, nullptr },
+    { { (void*)&C_TESetSelect, PTOC_TESetSelect }, nullptr },
+    { { (void*)&C_TENew, PTOC_TENew }, nullptr },
+    { { (void*)&C_TEUpdate, PTOC_TEUpdate }, nullptr },
+    { { (void*)&C_TEClick, PTOC_TEClick }, nullptr },
+    { { (void*)&C_TECopy, PTOC_TECopy }, nullptr },
+    { { (void*)&C_TECut, PTOC_TECut }, nullptr },
+    { { (void*)&C_TEDelete, PTOC_TEDelete }, nullptr },
+    { { (void*)&C_TEActivate, PTOC_TEActivate }, nullptr },
+    { { (void*)&C_TEDeactivate, PTOC_TEDeactivate }, nullptr },
+    { { (void*)&C_TEIdle, PTOC_TEIdle }, nullptr },
+    { { (void*)&C_TEPaste, PTOC_TEPaste }, nullptr },
+    { { (void*)&C_TEKey, PTOC_TEKey }, nullptr },
+    { { (void*)&C_TEScroll, PTOC_TEScroll }, nullptr },
+    { { (void*)&C_TEInsert, PTOC_TEInsert }, nullptr },
+    { { (void*)&C_TESetJust, PTOC_TESetJust }, nullptr },
+    { { (void*)&C_Munger, PTOC_Munger }, nullptr },
+    { { (void*)&_HandToHand, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_PtrToXHand, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_PtrToHand, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_HandAndHand, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_InitPack, PTOC_InitPack }, nullptr },
+    { { (void*)&C_InitAllPacks, PTOC_InitAllPacks }, nullptr },
+    { { (void*)&_Pack0, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_Pack1, static_cast<ULONGINT>(PTOC_Pack1) }, nullptr },
+    { { (void*)&_Pack2, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_Pack3, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_Pack4, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_Pack5, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_Pack6, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_Pack7, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_PtrAndHand, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_LoadSeg, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_UnloadSeg, PTOC_UnloadSeg }, nullptr },
+    { { (void*)&_Launch, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_Chain, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_ExitToShell, PTOC_ExitToShell }, nullptr },
+    { { (void*)&C_GetAppParms, PTOC_GetAppParms }, nullptr },
+    { { (void*)&C_GetResFileAttrs, PTOC_GetResFileAttrs }, nullptr },
+    { { (void*)&C_SetResFileAttrs, PTOC_SetResFileAttrs }, nullptr },
+    unimplemented_toolstuff,
+    { { (void*)&C_InfoScrap, PTOC_InfoScrap }, nullptr },
+    { { (void*)&C_UnloadScrap, PTOC_UnloadScrap }, nullptr },
+    { { (void*)&C_LoadScrap, PTOC_LoadScrap }, nullptr },
+    { { (void*)&C_ZeroScrap, PTOC_ZeroScrap }, nullptr },
+    { { (void*)&C_GetScrap, PTOC_GetScrap }, nullptr },
+    { { (void*)&C_PutScrap, PTOC_PutScrap }, nullptr },
+    { { (void*)&_Debugger, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_OpenCPort, PTOC_OpenCPort }, nullptr },
+    { { (void*)&C_InitCPort, PTOC_InitCPort }, nullptr },
+    { { (void*)&C_CloseCPort, PTOC_CloseCPort }, nullptr },
+    { { (void*)&C_NewPixMap, PTOC_NewPixMap }, nullptr },
+    { { (void*)&C_DisposPixMap, PTOC_DisposPixMap }, nullptr },
+    { { (void*)&C_CopyPixMap, PTOC_CopyPixMap }, nullptr },
+    { { (void*)&C_SetPortPix, PTOC_SetPortPix }, nullptr },
+    { { (void*)&C_NewPixPat, PTOC_NewPixPat }, nullptr },
+    { { (void*)&C_DisposPixPat, PTOC_DisposPixPat }, nullptr },
+    { { (void*)&C_CopyPixPat, PTOC_CopyPixPat }, nullptr },
+    { { (void*)&C_PenPixPat, PTOC_PenPixPat }, nullptr },
+    { { (void*)&C_BackPixPat, PTOC_BackPixPat }, nullptr },
+    { { (void*)&C_GetPixPat, PTOC_GetPixPat }, nullptr },
+    { { (void*)&C_MakeRGBPat, PTOC_MakeRGBPat }, nullptr },
+    { { (void*)&C_FillCRect, PTOC_FillCRect }, nullptr },
+    { { (void*)&C_FillCOval, PTOC_FillCOval }, nullptr },
+    { { (void*)&C_FillCRoundRect, PTOC_FillCRoundRect }, nullptr },
+    { { (void*)&C_FillCArc, PTOC_FillCArc }, nullptr },
+    { { (void*)&C_FillCRgn, PTOC_FillCRgn }, nullptr },
+    { { (void*)&C_FillCPoly, PTOC_FillCPoly }, nullptr },
+    { { (void*)&C_RGBForeColor, PTOC_RGBForeColor }, nullptr },
+    { { (void*)&C_RGBBackColor, PTOC_RGBBackColor }, nullptr },
+    { { (void*)&C_SetCPixel, PTOC_SetCPixel }, nullptr },
+    { { (void*)&C_GetCPixel, PTOC_GetCPixel }, nullptr },
+    { { (void*)&C_GetCTable, PTOC_GetCTable }, nullptr },
+    { { (void*)&C_GetForeColor, PTOC_GetForeColor }, nullptr },
+    { { (void*)&C_GetBackColor, PTOC_GetBackColor }, nullptr },
+    { { (void*)&C_GetCCursor, PTOC_GetCCursor }, nullptr },
+    { { (void*)&C_SetCCursor, PTOC_SetCCursor }, nullptr },
+    { { (void*)&C_AllocCursor, PTOC_AllocCursor }, nullptr },
+    { { (void*)&C_GetCIcon, PTOC_GetCIcon }, nullptr },
+    { { (void*)&C_PlotCIcon, PTOC_PlotCIcon }, nullptr },
+    { { (void*)&C_OpenCPicture, PTOC_OpenCPicture }, nullptr },
+    { { (void*)&C_OpColor, PTOC_OpColor }, nullptr },
+    { { (void*)&C_HiliteColor, PTOC_HiliteColor }, nullptr },
+    { { (void*)&C_CharExtra, PTOC_CharExtra }, nullptr },
+    { { (void*)&C_DisposCTable, PTOC_DisposCTable }, nullptr },
+    { { (void*)&C_DisposeCIcon, PTOC_DisposeCIcon }, nullptr },
+    { { (void*)&C_DisposCCursor, PTOC_DisposCCursor }, nullptr },
+    { { (void*)&C_GetMaxDevice, PTOC_GetMaxDevice }, nullptr },
+    { { (void*)&C_GetCTSeed, PTOC_GetCTSeed }, nullptr },
+    { { (void*)&C_GetDeviceList, PTOC_GetDeviceList }, nullptr },
+    { { (void*)&C_GetMainDevice, PTOC_GetMainDevice }, nullptr },
+    { { (void*)&C_GetNextDevice, PTOC_GetNextDevice }, nullptr },
+    { { (void*)&C_TestDeviceAttribute, PTOC_TestDeviceAttribute }, nullptr },
+    { { (void*)&C_SetDeviceAttribute, PTOC_SetDeviceAttribute }, nullptr },
+    { { (void*)&C_InitGDevice, PTOC_InitGDevice }, nullptr },
+    { { (void*)&C_NewGDevice, PTOC_NewGDevice }, nullptr },
+    { { (void*)&C_DisposGDevice, PTOC_DisposGDevice }, nullptr },
+    { { (void*)&C_SetGDevice, PTOC_SetGDevice }, nullptr },
+    { { (void*)&C_GetGDevice, PTOC_GetGDevice }, nullptr },
+    { { (void*)&C_Color2Index, PTOC_Color2Index }, nullptr },
+    { { (void*)&C_Index2Color, PTOC_Index2Color }, nullptr },
+    { { (void*)&C_InvertColor, PTOC_InvertColor }, nullptr },
+    { { (void*)&C_RealColor, PTOC_RealColor }, nullptr },
+    { { (void*)&C_GetSubTable, PTOC_GetSubTable }, nullptr },
+    unimplemented_toolstuff,
+    { { (void*)&C_MakeITable, PTOC_MakeITable }, nullptr },
+    { { (void*)&C_AddSearch, PTOC_AddSearch }, nullptr },
+    { { (void*)&C_AddComp, PTOC_AddComp }, nullptr },
+    { { (void*)&C_SetClientID, PTOC_SetClientID }, nullptr },
+    { { (void*)&C_ProtectEntry, PTOC_ProtectEntry }, nullptr },
+    { { (void*)&C_ReserveEntry, PTOC_ReserveEntry }, nullptr },
+    { { (void*)&C_SetEntries, PTOC_SetEntries }, nullptr },
+    { { (void*)&C_QDError, PTOC_QDError }, nullptr },
+    { { (void*)&C_SetWinColor, PTOC_SetWinColor }, nullptr },
+    { { (void*)&C_GetAuxWin, PTOC_GetAuxWin }, nullptr },
+    { { (void*)&C_SetCtlColor, PTOC_SetCtlColor }, nullptr },
+    { { (void*)&C_GetAuxCtl, PTOC_GetAuxCtl }, nullptr },
+    { { (void*)&C_NewCWindow, PTOC_NewCWindow }, nullptr },
+    { { (void*)&C_GetNewCWindow, PTOC_GetNewCWindow }, nullptr },
+    { { (void*)&C_SetDeskCPat, PTOC_SetDeskCPat }, nullptr },
+    { { (void*)&C_GetCWMgrPort, PTOC_GetCWMgrPort }, nullptr },
+    { { (void*)&C_SaveEntries, PTOC_SaveEntries }, nullptr },
+    { { (void*)&C_RestoreEntries, PTOC_RestoreEntries }, nullptr },
+    { { (void*)&C_NewCDialog, PTOC_NewCDialog }, nullptr },
+    { { (void*)&C_DelSearch, PTOC_DelSearch }, nullptr },
+    { { (void*)&C_DelComp, PTOC_DelComp }, nullptr },
+    { { (void*)&C_SetStdCProcs, PTOC_SetStdCProcs }, nullptr },
+    { { (void*)&C_CalcCMask, PTOC_CalcCMask }, nullptr },
+    { { (void*)&C_SeedCFill, PTOC_SeedCFill }, nullptr },
+    { { (void*)&C_IMVI_CopyDeepMask, PTOC_IMVI_CopyDeepMask }, nullptr },
+    { { (void*)&_HighLevelFSDispatch, static_cast<ULONGINT>(-1) }, nullptr }, /* AA52 */
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+#if (!defined (powerpc) && !defined (__ppc__)) || defined (CFM_PROBLEMS)
+    unimplemented_toolstuff,
+    unimplemented_toolstuff, /* AA5A */
+#else
+    { { (void*)&_MixedMode, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&_CodeFragment, static_cast<ULONGINT>(-1) }, nullptr }, /* AA5A */
+#endif
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    { { (void*)&C_DelMCEntries, PTOC_DelMCEntries }, nullptr },
+    { { (void*)&C_GetMCInfo, PTOC_GetMCInfo }, nullptr },
+    { { (void*)&C_SetMCInfo, PTOC_SetMCInfo }, nullptr },
+    { { (void*)&C_DispMCInfo, PTOC_DispMCInfo }, nullptr },
+    { { (void*)&C_GetMCEntry, PTOC_GetMCEntry }, nullptr },
+    { { (void*)&C_SetMCEntries, PTOC_SetMCEntries }, nullptr },
+    { { (void*)&C_MenuChoice, PTOC_MenuChoice }, nullptr },
+    unimplemented_toolstuff,
+    { { (void*)&_DialogDispatch, static_cast<ULONGINT>(-1) }, nullptr },
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    { { (void*)&C_InitPalettes, PTOC_InitPalettes }, nullptr },
+    { { (void*)&C_NewPalette, PTOC_NewPalette }, nullptr },
+    { { (void*)&C_GetNewPalette, PTOC_GetNewPalette }, nullptr },
+    { { (void*)&C_DisposePalette, PTOC_DisposePalette }, nullptr },
+    { { (void*)&C_ActivatePalette, PTOC_ActivatePalette }, nullptr },
+    { { (void*)&C_NSetPalette, PTOC_NSetPalette }, nullptr },
+    { { (void*)&C_GetPalette, PTOC_GetPalette }, nullptr },
+    { { (void*)&C_PmForeColor, PTOC_PmForeColor }, nullptr },
+    { { (void*)&C_PmBackColor, PTOC_PmBackColor }, nullptr },
+    { { (void*)&C_AnimateEntry, PTOC_AnimateEntry }, nullptr },
+    { { (void*)&C_AnimatePalette, PTOC_AnimatePalette }, nullptr },
+    { { (void*)&C_GetEntryColor, PTOC_GetEntryColor }, nullptr },
+    { { (void*)&C_SetEntryColor, PTOC_SetEntryColor }, nullptr },
+    { { (void*)&C_GetEntryUsage, PTOC_GetEntryUsage }, nullptr },
+    { { (void*)&C_SetEntryUsage, PTOC_SetEntryUsage }, nullptr },
+    { { (void*)&C_CTab2Palette, PTOC_CTab2Palette }, nullptr },
+    { { (void*)&C_Palette2CTab, PTOC_Palette2CTab }, nullptr },
+    { { (void*)&C_CopyPalette, PTOC_CopyPalette }, nullptr },
+    { { (void*)&_PaletteDispatch, static_cast<ULONGINT>(-1) }, nullptr },
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    { { (void*)&_QuickTime, static_cast<ULONGINT>(-1) }, nullptr },
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+#if defined (powerpc) && !defined (__ppc__)
+    { { (void*)&_modeswitch, static_cast<ULONGINT>(-1) }, nullptr },
+#else
+    unimplemented_toolstuff,
+#endif
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    { { (void*)&_WackyQD32Trap, static_cast<ULONGINT>(-1) }, nullptr },
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    { { (void*)&_QDExtensions, static_cast<ULONGINT>(-1) }, nullptr },
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    { { (void*)&_IconDispatch, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_DeviceLoop, PTOC_DeviceLoop }, nullptr },
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    unimplemented_toolstuff,
+    { { (void*)&_DebugStr, static_cast<ULONGINT>(-1) }, nullptr },
+};
+
+toolstuff_t Executor::pstuff[] = {
+    { {	(void*)&C_ROMlib_mytrack,	PTOC_ROMlib_mytrack }, nullptr },
+    { { (void*)&C_ROMlib_stdftrack,	PTOC_ROMlib_stdftrack }, nullptr },
+    { { (void*)&C_ROMlib_myfilt,	PTOC_ROMlib_myfilt }, nullptr },
+    { { (void*)&C_ROMlib_stdffilt,	PTOC_ROMlib_stdffilt }, nullptr },
+    { { (void*)&C_ROMlib_numsonlyfilterproc,
+   				PTOC_ROMlib_numsonlyfilterproc }, nullptr },
+    { { (void*)&C_ROMlib_stlfilterproc,	PTOC_ROMlib_stlfilterproc }, nullptr },
+
+/* NOTE: the following four routines don't really use pascal calling
+	 conventions, but we do need pstuff entries for them so we can
+	 look for their addresses and short circuit calls to them.  The
+	 zero is correct because they take no args and return no value */
+
+    { { (void*)&C_ROMlib_wakeup,	0 }, nullptr },
+    { { (void*)&C_ROMlib_vcatch,	0 }, nullptr },
+    { {	(void*)C_ROMlib_dotext,	0 }, nullptr },
+    { { (void*)&C_handle_refresh,       0 }, nullptr },
+
+    { { (void*)&C_ROMlib_mysound,	PTOC_ROMlib_mysound }, nullptr },
+    { { (void*)&C_ROMlib_myjobproc,	PTOC_ROMlib_myjobproc }, nullptr },
+    { { (void*)&C_ROMlib_mystlproc,	PTOC_ROMlib_mystlproc }, nullptr },
+
+    { {	(void*)C_cdef0,		PTOC_cdef0 }, nullptr },
+    { { (void*)&C_cdef16,		PTOC_cdef16 }, nullptr },
+    { { (void*)&C_ldef0,		PTOC_ldef0 }, nullptr },
+    { { (void*)&C_mdef0,		PTOC_mdef0 }, nullptr },
+    { { (void*)&C_mbdf0,		PTOC_mbdf0 }, nullptr },
+    { {	(void*)C_wdef0,		PTOC_wdef0 }, nullptr },
+    { { (void*)&C_wdef16,		PTOC_wdef16 }, nullptr },
+    { { (void*)&C_snth5,		PTOC_snth5 }, nullptr },
+
+    { { (void*)&C_IUMagString,		PTOC_IUMagString }, nullptr },
+    { { (void*)&C_PrStlInit,		PTOC_PrStlInit }, nullptr },
+    { {	(void*)C_PrJobInit,		PTOC_PrJobInit }, nullptr },
+
+    { {	(void*)C_StdText,		PTOC_StdText }, nullptr },
+    { {	(void*)C_StdLine,		PTOC_StdLine }, nullptr },
+    { {	(void*)C_StdRect,		PTOC_StdRect }, nullptr },
+    { { (void*)&C_StdOval,		PTOC_StdOval }, nullptr },
+    { {	(void*)C_StdRRect,		PTOC_StdRRect }, nullptr },
+    { {	(void*)C_StdArc,		PTOC_StdArc }, nullptr },
+    { { (void*)&C_StdRgn,		PTOC_StdRgn }, nullptr },
+    { { (void*)&C_StdPoly,		PTOC_StdPoly }, nullptr },
+    { {	(void*)C_StdBits,		PTOC_StdBits }, nullptr },
+    { { (void*)&C_StdComment,		PTOC_StdComment }, nullptr },
+    { {	(void*)C_StdTxMeas,		PTOC_StdTxMeas }, nullptr },
+    { {	(void*)C_StdPutPic,		PTOC_StdPutPic }, nullptr },
+
+    { { (void*)&C_FMSwapFont,		PTOC_FMSwapFont }, nullptr},
+    { { (void*)&C_InitCursor,		PTOC_InitCursor }, nullptr},
+
+    { { (void*)&C_textasPS,		PTOC_textasPS }, nullptr},
+    { { (void*)&C_PrText,		PTOC_PrText }, nullptr},
+    { { (void*)&C_PrLine,		PTOC_PrLine }, nullptr},
+    { { (void*)&C_PrRect,		PTOC_PrRect }, nullptr},
+    { { (void*)&C_PrRRect,		PTOC_PrRRect }, nullptr},
+    { { (void*)&C_PrOval,		PTOC_PrOval }, nullptr},
+    { { (void*)&C_PrArc,		PTOC_PrArc }, nullptr},
+    { { (void*)&C_PrPoly,		PTOC_PrPoly }, nullptr},
+    { { (void*)&C_PrRgn,		PTOC_PrRgn }, nullptr},
+    { { (void*)&C_PrBits,		PTOC_PrBits }, nullptr},
+    { { (void*)&C_PrComment,		PTOC_PrComment }, nullptr},
+    { { (void*)&C_PrTxMeas,		PTOC_PrTxMeas }, nullptr},
+    { { (void*)&C_PrGetPic,		PTOC_PrGetPic }, nullptr},
+    { { (void*)&C_PrPutPic,		PTOC_PrPutPic }, nullptr},
+    { { (void*)&C_donotPrText,		PTOC_donotPrText }, nullptr},
+    { { (void*)&C_donotPrLine,		PTOC_donotPrLine }, nullptr},
+    { { (void*)&C_donotPrRect,		PTOC_donotPrRect }, nullptr},
+    { { (void*)&C_donotPrRRect,		PTOC_donotPrRRect }, nullptr},
+    { { (void*)&C_donotPrOval,		PTOC_donotPrOval }, nullptr},
+    { { (void*)&C_donotPrArc,		PTOC_donotPrArc }, nullptr},
+    { { (void*)&C_donotPrPoly,		PTOC_donotPrPoly }, nullptr},
+    { { (void*)&C_donotPrRgn,		PTOC_donotPrRgn }, nullptr},
+    { { (void*)&C_donotPrBits,		PTOC_donotPrBits }, nullptr},
+    { { (void*)&C_donotPrGetPic,	PTOC_donotPrGetPic }, nullptr},
+    { { (void*)&C_donotPrPutPic,	PTOC_donotPrPutPic }, nullptr},
+    { { (void*)&C_ROMlib_filebox,	PTOC_ROMlib_filebox }, nullptr},
+    { { (void*)&C_StdGetPic,		PTOC_StdGetPic }, nullptr},
+
+    { { (void*)&_flushcache,		static_cast<ULONGINT>(-1) }, nullptr},
+    { { (void*)&_Key1Trans,		static_cast<ULONGINT>(-1) }, nullptr},
+    { { (void*)&_Key2Trans,		static_cast<ULONGINT>(-1) }, nullptr},
+
+    { { NULL /* was C_ROMlib_licensefilt */,	0 /* was PTOC_ROMlib_licensefilt */ }, nullptr },
+    { { (void*)&C_unixmount,		PTOC_unixmount }, nullptr },
+    { { (void*)&C_GestaltTablesOnly,	PTOC_GestaltTablesOnly }, nullptr },
+    { { (void*)&C_sound_timer_handler,  0 }, nullptr },
+    { { (void*)&C_adb_service_stub, 	0 }, nullptr },
+    { { (void*)&C_cdef1008, 		PTOC_cdef1008 }, nullptr },
+    { { (void*)&_bad_trap_unimplemented, static_cast<ULONGINT>(-1) }, nullptr },
+    { { (void*)&C_pack8_unknown_selector, PTOC_pack8_unknown_selector }, nullptr },
+    { { (void*)&C_PhysicalGestalt,      PTOC_PhysicalGestalt }, nullptr },
+
+    { { (void*)&C_HideCursor, PTOC_HideCursor }, nullptr },
+    { { (void*)&C_ShowCursor, PTOC_ShowCursor }, nullptr },
+    { { (void*)&C_ShieldCursor, PTOC_ShieldCursor }, nullptr },
+    { { (void*)&C_SetCursor, PTOC_SetCursor }, nullptr },
+    { { (void*)&C_ObscureCursor, PTOC_ObscureCursor }, nullptr },
+    { { (void*)&C_unknown574, PTOC_ShowCursor }, nullptr },
+
+    { { (void*)&C_ROMlib_circle_ok,	PTOC_ROMlib_circle_ok }, nullptr},
+    { { (void*)&C_ROMlib_orientation,	PTOC_ROMlib_orientation }, nullptr},
+
+    { { (void*)&C_new_draw_scroll,	PTOC_DeviceLoopDrawingProcTemplate }, nullptr},
+    { { (void*)&C_new_pos_ctl,		PTOC_DeviceLoopDrawingProcTemplate }, nullptr},
+};
+
+static void *fsroutines[][2] = {
+    { /* 0xA000 */  (void*)PBOpen,	(void*)PBHOpen		/*  0 */ },
+#define OPENTRAP	0
+#define OPENINDEX	0
+
+    { /* 0xA001 */  (void*)PBClose,	(void*)PBClose		/*  1 */ },
+#define CLOSETRAP	1
+#define CLOSEINDEX	1
+
+    { /* 0xA002 */  (void*)PBRead,	(void*)PBRead		/*  2 */ },
+#define READTRAP	2
+#define READINDEX	2
+
+    { /* 0xA003 */  (void*)PBWrite,	(void*)PBWrite		/*  3 */ },
+#define WRITETRAP	3
+#define WRITEINDEX	3
+
+    { /* 0xA004 */  (void*)PBControl,	(void*)PBControl	/*  4 */ },
+#define CONTROLTRAP	4
+#define CONTROLINDEX	4
+
+    { /* 0xA005 */  (void*)PBStatus,	(void*)PBStatus	/*  5 */ },
+#define STATUSTRAP	5
+#define STATUSINDEX	5
+
+    { /* 0xA006 */  (void*)PBKillIO,	(void*)PBKillIO	/*  6 */ },
+#define KILLIOTRAP	6
+#define KILLIOINDEX	6
+
+    { /* 0xA007 */  (void*)PBGetVInfo,	(void*)PBHGetVInfo	/*  7 */ },
+#define GETVINFOTRAP	7
+#define GETVINFOINDEX	7
+
+    { /* 0xA008 */  (void*)PBCreate,	(void*)PBHCreate	/*  8 */ },
+#define CREATETRAP	8
+#define CREATEINDEX	8
+
+    { /* 0xA009 */  (void*)PBDelete,	(void*)PBHDelete	/*  9 */ },
+#define DELETETRAP	9
+#define DELETEINDEX	9
+
+    { /* 0xA00A */  (void*)PBOpenRF,	(void*)PBHOpenRF	/* 10 */ },
+#define OPENRFTRAP	0xA
+#define OPENRFINDEX	10
+
+    { /* 0xA00B */  (void*)PBRename,	(void*)PBHRename	/* 11 */ },
+#define RENAMETRAP	0xB
+#define RENAMEINDEX	11
+
+    { /* 0xA00C */  (void*)PBGetFInfo,	(void*)PBHGetFInfo	/* 12 */ },
+#define GETFINFOTRAP	0xC
+#define GETFINFOINDEX	12
+
+    { /* 0xA00D */  (void*)PBSetFInfo,	(void*)PBHSetFInfo	/* 13 */ },
+#define SETFINFOTRAP	0xD
+#define SETFINFOINDEX	13
+
+    { /* 0xA00E */  (void*)PBUnmountVol,	(void*)PBUnmountVol	/* 14 */ },
+#define UNMOUNTVOLTRAP	0xE
+#define UNMOUNTVOLINDEX	14
+
+    { /* 0xA00F */  (void*)PBMountVol,	(void*)PBMountVol	/* 15 */ },
+#define MOUNTVOLTRAP	0xF
+#define MOUNTVOLINDEX	15
+
+    { /* 0xA010 */  (void*)PBAllocate,	(void*)PBAllocate	/* 16 */ },
+#define ALLOCATETRAP	0x10
+#define ALLOCATEINDEX	16
+
+    { /* 0xA011 */  (void*)PBGetEOF,	(void*)PBGetEOF	/* 17 */ },
+#define GETEOFTRAP	0x11
+#define GETEOFINDEX	17
+
+    { /* 0xA012 */  (void*)PBSetEOF,	(void*)PBSetEOF	/* 18 */ },
+#define SETEOFTRAP	0x12
+#define SETEOFINDEX	18
+
+    { /* 0xA013 */  (void*)PBFlushVol,	(void*)PBFlushVol	/* 19 */ },
+#define FLUSHVOLTRAP	0x13
+#define FLUSHVOLINDEX	19
+
+    { /* 0xA014 */  (void*)PBGetVol,	(void*)PBHGetVol	/* 20 */ },
+#define GETVOLTRAP	0x14
+#define GETVOLINDEX	20
+
+    { /* 0xA015 */  (void*)PBSetVol,	(void*)PBHSetVol	/* 21 */ },
+#define SETVOLTRAP	0x15
+#define SETVOLINDEX	21
+
+    { /* 0xA017 */  (void*)PBEject,	(void*)PBEject		/* 22 */ },
+#define EJECTTRAP	0x17
+#define EJECTINDEX	22
+
+    { /* 0xA018 */  (void*)PBGetFPos,	(void*)PBGetFPos	/* 23 */ },
+#define GETFPOSTRAP	0x18
+#define GETFPOSINDEX	23
+
+    { /* 0xA035 */  (void*)PBOffLine,	(void*)PBOffLine	/* 24 */ },
+#define OFFLINETRAP	0x35
+#define OFFLINEINDEX	24
+
+    { /* 0xA041 */  (void*)PBSetFLock,	(void*)PBHSetFLock	/* 25 */ },
+#define SETFLOCKTRAP	0x41
+#define SETFLOCKINDEX	25
+
+    { /* 0xA042 */  (void*)PBRstFLock,	(void*)PBHRstFLock	/* 26 */ },
+#define RSTFLOCKTRAP	0x42
+#define RSTFLOCKINDEX	26
+
+    { /* 0xA043 */  (void*)PBSetFVers,	(void*)PBSetFVers	/* 27 */ },
+#define SETFVERSTRAP	0x43
+#define SETFVERSINDEX	27
+
+    { /* 0xA044 */  (void*)PBSetFPos,	(void*)PBSetFPos	/* 28 */ },
+#define SETFPOSTRAP	0x44
+#define SETFPOSINDEX	28
+
+    { /* 0xA045 */  (void*)PBFlushFile,	(void*)PBFlushFile	/* 29 */ },
+#define FLUSHFILETRAP	0x45
+#define FLUSHFILEINDEX	29
+
+};
+
+osstuff_t Executor::osstuff[0x100] = {
+    { nullptr, (void*)PBOpen },
+    { nullptr, (void*)PBClose },
+    { nullptr, (void*)PBRead },
+    { nullptr, (void*)PBWrite },
+    { nullptr, (void*)PBControl },
+    { nullptr, (void*)PBStatus },
+    { nullptr, (void*)PBKillIO },
+    { nullptr, (void*)PBGetVInfo },
+    { nullptr, (void*)PBCreate },
+    { nullptr, (void*)PBDelete },
+    { nullptr, (void*)PBOpenRF },
+    { nullptr, (void*)PBRename },
+    { nullptr, (void*)PBGetFInfo },
+    { nullptr, (void*)PBSetFInfo },
+    { nullptr, (void*)PBUnmountVol },
+    { nullptr, (void*)PBMountVol },
+    { nullptr, (void*)PBAllocate },
+    { nullptr, (void*)PBGetEOF },
+    { nullptr, (void*)PBSetEOF },
+    { nullptr, (void*)PBFlushVol },
+    { nullptr, (void*)PBGetVol },
+    { nullptr, (void*)PBSetVol },
+    { nullptr, (void*)_FInitQueue },
+    { nullptr, (void*)PBEject },
+    { nullptr, (void*)PBGetFPos },
+    { nullptr, (void*)_InitZone },
+    { nullptr, (void*)_GetZone },
+    { nullptr, (void*)_SetZone },
+    { nullptr, (void*)_FreeMem },
+    { nullptr, (void*)_MaxMem },
+    { nullptr, (void*)_NewPtr },
+    { nullptr, (void*)_DisposPtr },
+    { nullptr, (void*)_SetPtrSize },
+    { nullptr, (void*)_GetPtrSize },
+    { nullptr, (void*)_NewHandle },
+    { nullptr, (void*)_DisposHandle },
+    { nullptr, (void*)_SetHandleSize },
+    { nullptr, (void*)_GetHandleSize },
+    { nullptr, (void*)_HandleZone },
+    { nullptr, (void*)_ReallocHandle },
+    { nullptr, (void*)_RecoverHandle },
+    { nullptr, (void*)_HLock },
+    { nullptr, (void*)_HUnlock },
+    { nullptr, (void*)_EmptyHandle },
+    { nullptr, (void*)_InitApplZone },
+    { nullptr, (void*)_SetApplLimit },
+    { nullptr, (void*)_BlockMove },
+    { nullptr, (void*)_PostEvent },
+    { nullptr, (void*)_OSEventAvail },
+    { nullptr, (void*)_GetOSEvent },
+    { nullptr, (void*)_FlushEvents },
+    { nullptr, (void*)_VInstall },
+    { nullptr, (void*)_VRemove },
+    { nullptr, (void*)PBOffLine },
+    { nullptr, (void*)_MoreMasters },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_WriteParam },
+    { nullptr, (void*)_ReadDateTime },
+    { nullptr, (void*)_SetDateTime },
+    { nullptr, (void*)_Delay },
+    { nullptr, (void*)_EqualString },
+    { nullptr, (void*)_DrvrInstall },
+    { nullptr, (void*)_DrvrRemove },
+    { nullptr, (void*)_InitUtil },
+    { nullptr, (void*)_ResrvMem },
+    { nullptr, (void*)PBSetFLock },
+    { nullptr, (void*)PBRstFLock },
+    { nullptr, (void*)PBSetFVers },
+    { nullptr, (void*)PBSetFPos },
+    { nullptr, (void*)PBFlushFile },
+    { nullptr, (void*)_GetTrapAddress },
+    { nullptr, (void*)_SetTrapAddress },
+    { nullptr, (void*)_PtrZone },
+    { nullptr, (void*)_HPurge },
+    { nullptr, (void*)_HNoPurge },
+    { nullptr, (void*)_SetGrowZone },
+    { nullptr, (void*)_CompactMem },
+    { nullptr, (void*)_PurgeMem },
+    { nullptr, (void*)_AddDrive },
+    { nullptr, (void*)_RDrvrInstall },
+    { nullptr, (void*)_RelString },
+    { nullptr, (void*)_IMVI_ReadXPRam },
+    { nullptr, (void*)_IMVI_WriteXPRam },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_UprString },
+    { nullptr, (void*)_StripAddress },
+    { nullptr, (void*)_IMVI_LowerText },
+    { nullptr, (void*)_SetApplBase },
+    { nullptr, (void*)_InsTime },
+    { nullptr, (void*)_RmvTime },
+    { nullptr, (void*)_PrimeTime },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_IMVI_MemoryDispatch },
+    { nullptr, (void*)_SwapMMUMode },
+    { nullptr, (void*)_NMInstall },
+    { nullptr, (void*)_NMRemove },
+    { nullptr, (void*)_HFSDispatch },
+    { nullptr, (void*)_MaxBlock },
+    { nullptr, (void*)_PurgeSpace },
+    { nullptr, (void*)_MaxApplZone },
+    { nullptr, (void*)_MoveHHi },
+    { nullptr, (void*)_StackSpace },
+    { nullptr, (void*)_NewEmptyHandle },
+    { nullptr, (void*)_HSetRBit },
+    { nullptr, (void*)_HClrRBit },
+    { nullptr, (void*)_HGetState },
+    { nullptr, (void*)_HSetState },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_SlotManager },
+    { nullptr, (void*)_SlotVInstall },
+    { nullptr, (void*)_SlotVRemove },
+    { nullptr, (void*)_AttachVBL },
+    { nullptr, (void*)_DoVBLTask },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_DTInstall },
+    { nullptr, (void*)_SIntRemove },
+    { nullptr, (void*)_CountADBs },
+    { nullptr, (void*)_GetIndADB },
+    { nullptr, (void*)_GetADBInfo },
+    { nullptr, (void*)_SetADBInfo },
+    { nullptr, (void*)_ADBReInit },
+    { nullptr, (void*)_ADBOp },
+    { nullptr, (void*)_GetDefaultStartup },
+    { nullptr, (void*)_SetDefaultStartup },
+    { nullptr, (void*)_InternalWait },
+    { nullptr, (void*)_GetVideoDefault },
+    { nullptr, (void*)_SetVideoDefault },
+    { nullptr, (void*)_SIntInstall },
+    { nullptr, (void*)_SetOSDefault },
+    { nullptr, (void*)_GetOSDefault },
+    { nullptr, (void*)_IMVI_IdleUpdate },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_IMVI_SlpQInstall },
+    { nullptr, (void*)_CommToolboxDispatch },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_IMVI_DebugUtil },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_IMVI_DeferUserFn },
+    { nullptr, (void*)_SysEnvirons },
+    { nullptr, (void*)_IMVI_Translate24To32 },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Microseconds },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_HWPriv },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Gestalt },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_flushcache },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_IMVI_PPC },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_ResourceStub },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+    { nullptr, (void*)_Unimplemented },
+};
+
+PUBLIC void Executor::filltables( void )
+{
+  int i, fsindex;
+  syn68k_addr_t unimpl = 0;
+  
+  unimpl = callback_install( (callback_handler_t) (void*)_Unimplemented,
+							nullptr);
+  
+  for (i = 0; i < (int) NELEM(tooltraptable); ++i)
+	tooltraptable[i] = toolstuff[i].orig = (void *)
+	((toolstuff[i].ptoc.wheretogo == (void*)_Unimplemented) ?
+	 unimpl
+	 :
+	 callback_install( (callback_handler_t)
+					  (toolstuff[i].ptoc.magic != (ULONGINT) -1 ?
+					   (void*)PascalToCCall
+					   :
+					   toolstuff[i].ptoc.wheretogo),
+						 &toolstuff[i].ptoc ));
+  
+  for (i = 0; i < (int) NELEM(pstuff); ++i)
+	pstuff[i].orig = ((void *)
+					  ((pstuff[i].ptoc.wheretogo == (void*)_Unimplemented)
+					   ? SYN68K_TO_US (unimpl)
+					   : SYN68K_TO_US (callback_install((callback_handler_t)
+														((pstuff[i].ptoc.magic
+														  != (ULONGINT) -1)
+														 ? (void*)PascalToCCall
+														 : pstuff[i].ptoc.wheretogo),
+														&pstuff[i].ptoc ))));
+  
+  for (i = 0; i < (int) NELEM(ostraptable); ++i) {
+	switch (i) {
+	  case OPENTRAP:
+		fsindex = OPENINDEX;
+		break;
+	  case CLOSETRAP:
+		fsindex = CLOSEINDEX;
+		break;
+	  case READTRAP:
+		fsindex = READINDEX;
+		break;
+	  case WRITETRAP:
+		fsindex = WRITEINDEX;
+		break;
+	  case CONTROLTRAP:
+		fsindex = CONTROLINDEX;
+		break;
+	  case STATUSTRAP:
+		fsindex = STATUSINDEX;
+		break;
+	  case KILLIOTRAP:
+		fsindex = KILLIOINDEX;
+		break;
+	  case GETVINFOTRAP:
+		fsindex = GETVINFOINDEX;
+		break;
+	  case CREATETRAP:
+		fsindex = CREATEINDEX;
+		break;
+	  case DELETETRAP:
+		fsindex = DELETEINDEX;
+		break;
+	  case OPENRFTRAP:
+		fsindex = OPENRFINDEX;
+		break;
+	  case RENAMETRAP:
+		fsindex = RENAMEINDEX;
+		break;
+	  case GETFINFOTRAP:
+		fsindex = GETFINFOINDEX;
+		break;
+	  case SETFINFOTRAP:
+		fsindex = SETFINFOINDEX;
+		break;
+	  case UNMOUNTVOLTRAP:
+		fsindex = UNMOUNTVOLINDEX;
+		break;
+	  case MOUNTVOLTRAP:
+		fsindex = MOUNTVOLINDEX;
+		break;
+	  case ALLOCATETRAP:
+		fsindex = ALLOCATEINDEX;
+		break;
+	  case GETEOFTRAP:
+		fsindex = GETEOFINDEX;
+		break;
+	  case SETEOFTRAP:
+		fsindex = SETEOFINDEX;
+		break;
+	  case FLUSHVOLTRAP:
+		fsindex = FLUSHVOLINDEX;
+		break;
+	  case GETVOLTRAP:
+		fsindex = GETVOLINDEX;
+		break;
+	  case SETVOLTRAP:
+		fsindex = SETVOLINDEX;
+		break;
+	  case EJECTTRAP:
+		fsindex = EJECTINDEX;
+		break;
+	  case GETFPOSTRAP:
+		fsindex = GETFPOSINDEX;
+		break;
+	  case OFFLINETRAP:
+		fsindex = OFFLINEINDEX;
+		break;
+	  case SETFLOCKTRAP:
+		fsindex = SETFLOCKINDEX;
+		break;
+	  case RSTFLOCKTRAP:
+		fsindex = RSTFLOCKINDEX;
+		break;
+	  case SETFVERSTRAP:
+		fsindex = SETFVERSINDEX;
+		break;
+	  case SETFPOSTRAP:
+		fsindex = SETFPOSINDEX;
+		break;
+	  case FLUSHFILETRAP:
+		fsindex = FLUSHFILEINDEX;
+		break;
+	  default:
+		fsindex = static_cast<ULONGINT>(-1);
+		break;
+	};
+	
+	if (fsindex == static_cast<ULONGINT>(-1))
+	  ostraptable[i] = osstuff[i].orig = (void *)
+	  ((osstuff[i].func == (void*)_Unimplemented) ?
+	   unimpl
+	   :
+	   callback_install((callback_handler_t)osstuff[i].func,
+						osstuff[i].func));
+	else {
+	  osstuff[i].func = (void *) _HFSRoutines;
+	  ostraptable[i] = osstuff[i].orig = (void *)
+	  callback_install((callback_handler_t)_HFSRoutines,
+					   fsroutines[fsindex] );
+	}
+  }
+}

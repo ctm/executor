@@ -3,6 +3,7 @@
 
 #include "rsys/vdriver.h"
 
+namespace Executor {
 typedef struct
 {
   int width;
@@ -111,4 +112,6 @@ extern boolean_t vgahost_unmap_linear_fbuf (unsigned long num_bytes);
 extern void vgahost_set_rw_windows (int win);
 extern void vgahost_set_read_window (int win);
 extern void vgahost_set_write_window (int win);
+}
+
 #endif /* !_VGADRIVER_H_ */

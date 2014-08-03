@@ -1,7 +1,7 @@
 #if !defined (NELEM)
 #define NELEM(s) (sizeof (s) / sizeof (s)[0])
 #endif
-
+namespace Executor {
 #define BASE_REVISION	1    /* revision expiration started with E 1.x */
 #define MONTHS_IN_YEAR	12
 #define BASE_MONTH	1    /* January is typically digitized as 1 */
@@ -26,7 +26,7 @@ extern int n_cpu_bits[16];
 extern int revision_number_bits[4];
 extern int expiration_date_bits[8];
 extern int unassigned_bits[5];
-extern unsigned char key32[32];
+extern unsigned char key32[33];
 
 extern int valid_key_format(const unsigned char *key);
 extern void undes(block_t ciphertext, block_t keyin, block_t plaintext);
@@ -42,3 +42,4 @@ extern ordering_t KeyTr1;
 extern ordering_t FinalTr;
 extern ordering_t swap;
 extern block_t key;
+}

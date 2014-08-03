@@ -15,7 +15,7 @@ PRIVATE
 DECL
 {
     STATEDECL
-    register INTEGER x, x1, x2, y;
+    register INTEGER x = 0, x1 = 0, x2 = 0, y = 0;
     register INTEGER *ip, *op;
     register int rev;
     INTEGER y0, y1;

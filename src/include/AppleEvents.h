@@ -11,6 +11,7 @@
 #include "EventMgr.h"
 #include "NotifyMgr.h"
 
+namespace Executor {
 typedef int32 AEEventClass;
 typedef int32 AEEventID;
 typedef int32 AEKeyword;
@@ -484,6 +485,6 @@ extern pascal trap OSErr C_AESetObjectCallbacks (ProcPtr myCompareProc,
 						 ProcPtr myMarkProc,
 						 ProcPtr myAdjustMarksProc,
 						 ProcPtr myGetErrDescProc);
-
+}
 
 #endif /* ! _AppleEvents_H_ */

@@ -5,13 +5,15 @@
 #include "rsys/cquick.h"
 #include "rsys/vdriver.h"
 
+extern "C" {
+
 #if !defined (ARCH_PROVIDES_RAW_SRCBLT)
 #define USE_PORTABLE_SRCBLT
 #endif
 
-extern boolean_t srcblt_rgn (RgnHandle rh, int mode, int log2_bpp,
-			     const blt_bitmap_t *src, const blt_bitmap_t *dst,
-			     Point *src_origin, Point *dst_origin,
+extern boolean_t srcblt_rgn (Executor::RgnHandle rh, int mode, int log2_bpp,
+			     const Executor::blt_bitmap_t *src, const Executor::blt_bitmap_t *dst,
+			     Executor::Point *src_origin, Executor::Point *dst_origin,
 			     uint32 fg_color, uint32 bk_color)
   asm ("_srcblt_rgn");
 
@@ -47,7 +49,7 @@ extern const void **srcblt_shift_fgbk_i386_stubs SRCBLT_ARRAY[8];
 
 extern int srcblt_log2_bpp asm ("_srcblt_log2_bpp");
 
-extern const INTEGER *srcblt_rgn_start asm ("_srcblt_rgn_start");
+extern const Executor::INTEGER *srcblt_rgn_start asm ("_srcblt_rgn_start");
 
 extern const void **srcblt_stub_table asm ("_srcblt_stub_table");
 
@@ -65,5 +67,5 @@ extern char *srcblt_dst_baseaddr asm ("_srcblt_dst_baseaddr");
 extern int srcblt_shift_offset asm ("_srcblt_shift_offset");
 
 extern boolean_t srcblt_reverse_scanlines_p asm ("_srcblt_reverse_scanlines_p");
-
+}
 #endif /* !_SRCBLT_H_ */

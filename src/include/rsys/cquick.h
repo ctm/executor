@@ -4,7 +4,7 @@
 #include "CQuickDraw.h"
 
 #include "rsys/rgbutil.h"
-
+namespace Executor {
 #define SET_HILITE_BIT()		\
   (BitSet ((Ptr) &HiliteMode, pHiliteBit))
 
@@ -750,5 +750,5 @@ extern Handle ROMlib_copy_handle (Handle);
        SetGDevice (TheGDevice_new);			\
        body						\
        SetGDevice (TheGDevice_save); } while (0)
-
+}
 #endif /* _CQUICK_H_ */

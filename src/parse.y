@@ -2,13 +2,17 @@
 #include "rsys/common.h"
 #include "rsys/options.h"
 #include "rsys/prefs.h"
+#include "rsys/version.h"
+#if 0
 #include "rsys/crc.h"
 #include "rsys/parse.h"
 #include "rsys/parseopt.h"
 #include "rsys/gestalt.h"
 #include "rsys/launch.h"
 #include "rsys/print.h"
-#include "rsys/version.h"
+#else
+#include "rsys/CFriendly.h"
+#endif
 
 /* Copyright 1992 - 2000 by Abacus Research and Development, Inc.
  * All rights reserved.
@@ -21,7 +25,7 @@ char ROMlib_rcsid_parse[] =
 
 static long yylex( void );
 static void freestring( char *string );
-char validblock = 1;
+static char validblock = 1;
 char *ROMlib_win32_token = 0;
 char *ROMlib_WindowName = 0;
 char *ROMlib_DongleFamily = 0;
@@ -32,7 +36,7 @@ static char *ROMlib_mac_cdrom;
 pair_t ROMlib_ScreenSize = { INITIALPAIRVALUE, INITIALPAIRVALUE };
 pair_t ROMlib_MacSize = { INITIALPAIRVALUE, INITIALPAIRVALUE };
 pair_t ROMlib_ScreenLocation = { INITIALPAIRVALUE, INITIALPAIRVALUE };
-unsigned short crcval;
+static unsigned short crcval;
 int ROMlib_AppleChar = 0;
 int ROMlib_right_button_modifier = 0;
 
@@ -169,13 +173,13 @@ sysversassignment:	SYSTEMVERSION '=' number ';'
 prversassignment:	PRVERSION '=' number ';'
 			{ 
 			  if (validblock)
-			    ROMlib_PrDrvrVers = $3 * 10;
+			    ROMlib_PrDrvrVers_Set( $3 * 10);
 			}
 			|
 			PRVERSION '=' number '.' number ';' 
 			{
 			  if (validblock)
-			    ROMlib_PrDrvrVers = $3 * 10 + $5;
+			    ROMlib_PrDrvrVers_Set( $3 * 10 + $5 );
 			}
 	;
 
@@ -206,9 +210,9 @@ stringvar:	WINDOWNAME
 	;
 
 numervar:	RDELAY
-	{ $$ = &ROMlib_delay; }
+	{ $$ = ROMlib_delayp; }
 	| REFRESHNUMBER
-	{ $$ = &ROMlib_refresh; }
+	{ $$ = ROMlib_refreshp; }
 	| BITSNUMBER
 	{ $$ = &ROMlib_desired_bpp; }
 	| APPLECHAR

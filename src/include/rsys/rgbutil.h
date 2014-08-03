@@ -4,6 +4,7 @@
 
 #include "QuickDraw.h"
 
+namespace Executor {
 /* forward decl */
 struct rgb_spec;
 
@@ -60,5 +61,5 @@ extern void make_rgb_spec (rgb_spec_t *rgb_spec,
 			   int num_green_bits, int low_green_bit,
 			   int num_blue_bits, int low_blue_bit,
 			   uint32 seed_x);
-
+}
 #endif /* !_RGBUTIL_H_ */

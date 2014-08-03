@@ -1,4 +1,5 @@
 #if !defined (__NOTMAC__)
+#define __NOTMAC__
 /*
  * Copyright 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
@@ -13,7 +14,7 @@ extern char ROMlib_start_drive;
 #if !defined (USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 
 #include "rsys/commonevt.h"
-
+namespace Executor {
 extern char ROMlib_startdir[];
 
 extern char *ROMlib_ConfigurationFolder;
@@ -32,7 +33,6 @@ extern BOOLEAN ROMlib_shouldalarm();
 extern BOOLEAN ROMlib_shouldalarm( void );
 #endif /* __STDC__ */
 
-#define __NOTMAC__
 /* DO NOT DELETE THIS LINE */
 #if !defined (__STDC__)
 extern void initX();
@@ -58,10 +58,10 @@ extern BOOLEAN checkwindoweventX( char **eventp, commonevent *commonp );
 extern void autorepeatonX( void );
 extern LONGINT lookupkeysymX( char *p );
 extern void bellX( void );
-extern void PutScrapX( LONGINT type, LONGINT length, char *p, int scrap_cnt );
-extern LONGINT GetScrapX( LONGINT type, char **h );
+extern void PutScrapX( OSType type, LONGINT length, char *p, int scrap_cnt );
+extern LONGINT GetScrapX( OSType type, char **h );
 #endif /* __STDC__ */
-
+}
 #endif
 
 #endif /* __NOTMAC__ */

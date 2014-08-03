@@ -8,8 +8,10 @@
  * $Id: uniquefile.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-extern boolean_t unique_file_name (const char *template, 
+namespace Executor {
+extern boolean_t unique_file_name (const char *template1,
 				   const char *default_template,
 				   Str255 result);
+}
 
 #endif /* !_RSYS_UNIQUEFILE_ */

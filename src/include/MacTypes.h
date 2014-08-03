@@ -8,12 +8,21 @@
  * $Id: MacTypes.h 86 2005-05-25 00:47:12Z ctm $
  */
 
+#include "rsys/mactype.h"
 
+#ifdef __cplusplus
+namespace Executor {
+#endif
+	
 #define a5	(EM_A5)
-
+	
+#if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef int8 SignedByte;
+#endif
 typedef uint8 Byte;
+#if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef int8 *Ptr;
+#endif
 
 #if (SIZEOF_CHAR_P == 4) && !FORCE_EXPERIMENTAL_PACKED_MACROS
 #define MAKE_HIDDEN(typ) typedef struct { typ p; } HIDDEN_ ## typ
@@ -21,13 +30,13 @@ typedef int8 *Ptr;
 #define MAKE_HIDDEN(typ) \
   typedef union PACKED { uint32 pp; typ type[0];} HIDDEN_ ## typ
 #endif
-
 MAKE_HIDDEN(Ptr);
 
+#if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef HIDDEN_Ptr *Handle;
+#endif
 
 MAKE_HIDDEN(Handle);
-
 typedef BOOLEAN Boolean;
 
 typedef Byte Str15[16];
@@ -35,18 +44,21 @@ typedef Byte Str31[32];
 typedef Byte Str32[33];
 typedef Byte Str63[64];
 typedef Byte Str255[256];
+#if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef Byte *StringPtr;
-
+#endif
+	
 MAKE_HIDDEN(StringPtr);
 
 typedef HIDDEN_StringPtr *StringHandle;
+#if !defined(__MACTYPES__) || defined(__cplusplus)
 
 typedef int (*ProcPtr)();
-
+#endif
 MAKE_HIDDEN(ProcPtr);
-
+#if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef LONGINT Fixed, Fract;
-
+#endif
 /* SmallFract represnts values between 0 and 65535 */
 typedef unsigned short SmallFract;
 
@@ -83,7 +95,9 @@ typedef union __qe *QElemPtr;
 
 MAKE_HIDDEN(QElemPtr);
 
-#define noErr	0
+	enum {
+		noErr = 0
+	};
 
 /* from Quickdraw.h */
 typedef struct PACKED Point
@@ -138,4 +152,7 @@ typedef INTEGER LangCode;
 /* DO NOT DELETE THIS LINE */
 extern INTEGER 	ROM85;
 extern INTEGER 	DSErrCode;
+#ifdef __cplusplus
+}
+#endif
 #endif /* _MACTYPES_H_ */

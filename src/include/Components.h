@@ -8,6 +8,7 @@
  * $Id: Components.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 typedef struct ComponentRecord
 {
   LONGINT data[1];
@@ -23,5 +24,5 @@ typedef struct ComponentInstanceRecord
 ComponentInstanceRecord;
 
 typedef ComponentInstanceRecord *ComponentInstance;
-
+}
 #endif

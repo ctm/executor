@@ -11,6 +11,7 @@
 #include "QuickDraw.h"
 #include "SANE.h"
 
+namespace Executor {
 #define sysPatListID	0
 
 #define iBeamCursor	1
@@ -85,5 +86,6 @@ extern pascal trap void C_R_Fix2X( Fixed x, extended80 *ret );
 extern pascal trap void C_R_Frac2X( Fract x, extended80 *ret );
 extern pascal trap Fixed C_R_X2Fix( extended80 *x );
 extern pascal trap Fract C_R_X2Frac( extended80 *x );
+}
 
 #endif /* _TOOLBOX_UTIL_H_ */

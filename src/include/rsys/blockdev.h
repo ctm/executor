@@ -1,6 +1,6 @@
 #if !defined (_RSYS_BLOCKDEV_H_)
 #define _RSYS_BLOCKDEV_H_
-
+namespace Executor {
 typedef struct _blockdev_t
 {
   uint32 block_size;
@@ -34,5 +34,5 @@ extern boolean_t blockdev_write (blockdev_t *b, uint32 offset, const void *buf,
 				 uint32 num_bytes);
 extern boolean_t blockdev_seek_set (blockdev_t *b, uint32 offset);
 extern void blockdev_close (blockdev_t *b);
-
+}
 #endif /* !_RSYS_BLOCKDEV_H_ */

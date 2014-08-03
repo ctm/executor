@@ -10,7 +10,7 @@
 
 
 #include "EventMgr.h"
-
+namespace Executor {
 #if !defined (KeyThresh)
 extern INTEGER 	KeyThresh;
 extern INTEGER 	KeyRepThresh;
@@ -54,4 +54,5 @@ extern pascal trap LONGINT C_TickCount( void  ); extern pascal trap LONGINT P_Ti
 extern LONGINT GetDblTime( void  ); 
 extern LONGINT GetCaretTime( void  ); 
 #endif /* __STDC__ */
+}
 #endif /* __TOOLEVENT__ */

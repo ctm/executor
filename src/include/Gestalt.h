@@ -1,6 +1,7 @@
 #if !defined (__GESTALT__)
 #define __GESTALT__
 
+namespace Executor {
 #define gestaltPhysicalRAMSize		T('r','a','m',' ')
 
 #if !defined (USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
@@ -171,5 +172,5 @@ extern trap OSErrRET C_GestaltTablesOnly( OSType selector,
 					 LONGINT *responsep );
 
 #endif
-
+}
 #endif

@@ -1,6 +1,6 @@
 #if !defined (_RSYS_OPTION_H_)
 #define _RSYS_OPTION_H_
-
+namespace Executor {
 typedef enum option_kind
 {
   /* this option has no argument; it evaluates to `def' if provided */
@@ -61,7 +61,7 @@ typedef struct opt_val
   char *t_val;
   priority_t t_pri;
   
-  char *val;
+  const char *val;
   priority_t pri;
 } opt_val_t;
 
@@ -90,15 +90,9 @@ int opt_parse (opt_database_t *db, option_t *opts, int n_opts,
 int opt_int_val (opt_database_t *db, char *opt, int *retval,
 		 boolean_t *parse_error_p);
 
-#if !defined (OPENSTEP)
-int opt_val (opt_database_t *db, char *opt, char **retval);
-void opt_put_val (opt_database_t *db, char *opt, char *value,
-		  priority_t pri, int temp_val_p);
-#else
 int opt_val (opt_database_t *db, char *opt, const char **retval);
 void opt_put_val (opt_database_t *db, char *opt, const char *value,
 		  priority_t pri, int temp_val_p);
-#endif
 
 void opt_put_int_val (opt_database_t *db, char *opt, int value,
 		      priority_t pri, int temp_val_p);
@@ -110,5 +104,5 @@ void opt_register_pre_note (char *note);
 extern uint32 parse_drive_opt (const char *opt_name, const char *opt_value);
 extern FILE * executor_dir_fopen (const char *file, const char *perm);
 extern int executor_dir_remove (const char *file);
-
+}
 #endif /* !_RSYS_OPTION_H_ */

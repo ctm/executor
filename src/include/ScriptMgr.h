@@ -11,6 +11,7 @@
 #include "SANE.h"
 #include "IntlUtil.h"
 
+namespace Executor {
 typedef INTEGER String2DateStatus;
 
 #define smRoman		0
@@ -345,5 +346,6 @@ extern INTEGER C_CharacterType (Ptr textbufp, INTEGER offset,
 
 extern INTEGER C_TransliterateText (Handle srch, Handle dsth, INTEGER target,
 				    LONGINT srcmask, ScriptCode script);
+}
 
 #endif /* _SCRIPTMGR_H_ */

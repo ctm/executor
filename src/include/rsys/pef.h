@@ -9,7 +9,7 @@
  *
  * $Id: pef.h 63 2004-12-24 18:19:43Z ctm $
  */
-
+namespace Executor {
 typedef struct PACKED PEFContainerHeader
 {
   OSType tag1;
@@ -259,5 +259,5 @@ pef_hash_t;
 
 extern PEFLoaderInfoHeader_t *ROMlib_build_pef_hash (const map_entry_t table[],
 						     int count);
-
+}
 #endif

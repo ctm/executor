@@ -1,6 +1,6 @@
 
 #if !defined (__MENU_H_)
-#define _MENU_H_
+#define __MENU_H_
 
 /*
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
@@ -14,6 +14,7 @@
 #include "rsys/mman.h"
 #include "rsys/pstuff.h"
 
+namespace Executor {
 #define MI_ID_X(mi)		(HxX (mi, menuID))
 #define MI_WIDTH_X(mi)		(HxX (mi, menuWidth))
 #define MI_HEIGHT_X(mi)		(HxX (mi, menuHeight))
@@ -280,12 +281,10 @@ typedef struct PACKED
   } entry[1];
 } table, *tablePtr, **tableHandle;
 
-extern int ROMlib_sticky_menus_p;
-extern int ROMlib_AppleChar;
-
 void cleanup_icon_info (icon_info_t *info);
 int get_icon_info (mextp item_info, icon_info_t *info, int need_icon_p);
 
+extern int ROMlib_sticky_menus_p;
 
 void menu_bar_color (RGBColor *bar_color);
 void menu_title_color (int16 id, RGBColor *title_color);
@@ -295,5 +294,9 @@ void menu_item_colors (int16 id, int16 item,
 		       RGBColor *mark_color, RGBColor *command_color);
 
 void menu_delete_entries (int16 menu_id);
+}
+
+extern "C" int ROMlib_AppleChar;
+
 
 #endif /* !_MENU_H_ */

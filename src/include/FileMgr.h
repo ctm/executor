@@ -10,6 +10,88 @@
  * $Id: FileMgr.h 86 2005-05-25 00:47:12Z ctm $
  */
 
+//So as to not conflict with OS X defines
+#undef PBGetVInfo
+#undef PBXGetVolInfo
+#undef PBGetVol
+#undef PBSetVol
+#undef PBFlushVol
+#undef PBCreate
+#undef PBDelete
+#undef PBOpenDF
+#undef PBOpenRF
+#undef PBRename
+#undef PBGetFInfo
+#undef PBSetFInf
+#undef PBSetFLock
+#undef PBRstFLock
+#undef PBSetFVers
+#undef PBAllocate
+#undef PBGetEOF
+#undef PBSetEOF
+#undef PBGetFPos
+#undef PBSetFPos
+#undef PBFlushFile
+#undef PBCatSearch
+#undef PBOpenWD
+#undef PBCloseWD
+#undef PBHSetVol
+#undef PBHGetVol
+#undef PBCatMove
+#undef PBDirCreate
+#undef PBGetWDInfo
+#undef PBGetFCBInfo
+#undef PBGetCatInfo
+#undef PBSetCatInfo
+#undef PBAllocContig
+#undef PBLockRange
+#undef PBUnlockRange
+#undef PBSetVInfo
+#undef PBHGetVInfo
+#undef PBHOpen
+#undef PBHOpenRF
+#undef PBHOpenDF
+#undef PBHCreate
+#undef PBHDelete
+#undef PBHRename
+#undef PBHRstFLock
+#undef PBHSetFLock
+#undef PBHGetFInfo
+#undef PBHSetFInfo
+#undef PBMakeFSSpec
+#undef PBHGetVolParms
+#undef PBHGetLogInInfo
+#undef PBHGetDirAccess
+#undef PBHSetDirAccess
+#undef PBHMapID
+#undef PBHMapName
+#undef PBHCopyFile
+#undef PBHMoveRename
+#undef PBHOpenDeny
+#undef PBHOpenRFDeny
+#undef PBExchangeFiles
+#undef PBCreateFileIDRef
+#undef PBResolveFileIDRef
+#undef PBDeleteFileIDRef
+#undef PBGetForeignPrivs
+#undef PBSetForeignPrivs
+#undef PBDTAddIcon
+#undef PBDTGetIcon
+#undef PBDTGetIconInfo
+#undef PBDTAddAPPL
+#undef PBDTRemoveAPPL
+#undef PBDTGetAPPL
+#undef PBDTSetComment
+#undef PBDTRemoveComment
+#undef PBDTGetComment
+#undef PBDTFlush
+#undef PBDTReset
+#undef PBDTGetInfo
+#undef PBDTDelete
+#undef PBSetFInfo
+#undef PBGetFInfo
+
+namespace Executor {
 #define fOnDesk		1
 #define fHasBundle	8192
 #define fInvisible	16384
@@ -443,8 +525,8 @@ extern OSErr AllocContig( INTEGER rn, LONGINT *count );
 extern OSErr FSClose( INTEGER rn ); 
 extern void ROMlib_rewinddir( void  ); 
 extern char *ROMlib_newunixfrommac( char *ip, INTEGER n ); 
-extern trap OSErrRET OpenDeny( HParmBlkPtr pb, BOOLEAN a ); 
-extern trap OSErrRET PBHGetLogInInfo( HParmBlkPtr pb, BOOLEAN a ); 
+extern trap OSErrRET OpenDeny( HParmBlkPtr pb, BOOLEAN a );
+extern trap OSErrRET PBHGetLogInInfo( HParmBlkPtr pb, BOOLEAN a );
 extern trap OSErrRET PBHGetDirAccess( HParmBlkPtr pb, BOOLEAN a ); 
 extern trap OSErrRET PBHCopyFile( HParmBlkPtr pb, BOOLEAN a ); 
 extern trap OSErrRET PBHMapID( HParmBlkPtr pb, BOOLEAN a ); 
@@ -476,8 +558,8 @@ extern OSErr GetVol( StringPtr voln, INTEGER *vrn );
 extern OSErr SetVol( StringPtr voln, INTEGER vrn ); 
 extern OSErr FlushVol( StringPtr voln, INTEGER vrn ); 
 extern OSErr UnmountVol( StringPtr voln, INTEGER vrn ); 
-extern OSErr Eject( StringPtr voln, INTEGER vrn ); 
-extern trap OSErrRET PBHRename( HParmBlkPtr pb, BOOLEAN async ); 
+extern OSErr Eject( StringPtr voln, INTEGER vrn );
+extern trap OSErrRET PBHRename( HParmBlkPtr pb, BOOLEAN async );
 extern trap OSErrRET PBHCreate( HParmBlkPtr pb, BOOLEAN async ); 
 extern trap OSErrRET PBDirCreate( HParmBlkPtr pb, BOOLEAN async ); 
 extern trap OSErrRET PBHDelete( HParmBlkPtr pb, BOOLEAN async ); 
@@ -573,5 +655,5 @@ extern OSErr HOpenRF (INTEGER vref, LONGINT dirid, Str255 name,
 
 extern OSErr GetWDInfo (INTEGER wd, INTEGER *vrefp, LONGINT *dirp,
 			LONGINT *procp);
-
+}
 #endif /* _FILEMGR_H_ */

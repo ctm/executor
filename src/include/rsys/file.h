@@ -23,7 +23,7 @@ extern char *copystr (const char *name);
 /* relative paths of the system folder */
 
 #define SYSMACNAME	"\006System"
-
+namespace Executor {
 typedef struct PACKED {
   LONGINT fd;
   LONGINT offset;
@@ -168,7 +168,7 @@ do									\
       warning_trap_failure ("%d", err);					\
     BADRETURNHOOK(err);							\
     if (a) {								\
-	register ProcPtr compp;						\
+	ProcPtr compp;						\
 									\
 	if ((compp = MR(((ParmBlkPtr) (pb))->ioParam.ioCompletion))) {	\
 	    CALLCOMPLETION(pb, compp, err);					\
@@ -540,5 +540,5 @@ extern unsigned char ROMlib_fromhex (unsigned char c);
 
 extern char *ROMlib_volumename;
 extern INTEGER ROMlib_nextvrn;
-
+}
 #endif /* !defined(__rsys_file__) */

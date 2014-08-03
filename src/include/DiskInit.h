@@ -21,7 +21,7 @@
 #define paramErr	(-50)
 #define volOnLinErr	(-55)
 
-
+namespace Executor {
 /* DO NOT DELETE THIS LINE */
 #if !defined (__STDC__)
 extern void DILoad(); 
@@ -40,4 +40,5 @@ extern OSErr C_DIFormat( INTEGER dn );
 extern OSErr C_DIVerify( INTEGER dn ); 
 extern OSErr C_DIZero( INTEGER dn, StringPtr vname ); 
 #endif /* __STDC__ */
+}
 #endif /* __DISKINIT__ */

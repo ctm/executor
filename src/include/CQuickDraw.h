@@ -4,6 +4,7 @@
 
 #include "WindowMgr.h"
 
+namespace Executor {
 typedef HIDDEN_CGrafPtr *HIDDEN_CGrafPtr_Ptr;
 MAKE_HIDDEN(HIDDEN_CGrafPtr_Ptr);
 
@@ -127,10 +128,10 @@ typedef enum
   pmAllUpdates_enum = 0xE000,
 } pmUpdates;
 
-#define pmNoUpdates ((INTEGER) pmNoUpdates_enum)
-#define pmBkUpdates ((INTEGER) pmBkUpdates_enum)
-#define pmFgUpdates ((INTEGER) pmFgUpdates_enum)
-#define pmAllUpdates ((INTEGER) pmAllUpdates_enum)
+#define pmNoUpdates ((pmUpdates) pmNoUpdates_enum)
+#define pmBkUpdates ((pmUpdates) pmBkUpdates_enum)
+#define pmFgUpdates ((pmUpdates) pmFgUpdates_enum)
+#define pmAllUpdates ((pmUpdates) pmAllUpdates_enum)
 
 MAKE_HIDDEN(PalettePtr);
 typedef HIDDEN_PalettePtr *PaletteHandle;
@@ -468,5 +469,5 @@ extern HIDDEN_GDHandle	DeviceList_H;
 #  define DeviceList	((typeof DeviceList_H.type[0])(DeviceList_H.p))
 
 #endif
-
+}
 #endif /* _CQUICKDRAW_H_ */

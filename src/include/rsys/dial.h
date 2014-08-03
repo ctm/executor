@@ -1,6 +1,6 @@
 #if !defined (__rsys_dial_h__)
 #  define __rsys_dial_h__
-
+namespace Executor {
 typedef struct PACKED
 {
   int16 count;
@@ -10,5 +10,5 @@ typedef struct PACKED
   uint8 len;
   int16 res_id;
 } icon_item_template_t;
-
+}
 #endif /* !defined (__rsys_dial_h__) */

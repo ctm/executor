@@ -12,6 +12,7 @@
 #define USE_PORTABLE_PATBLT
 #endif
 
+extern "C" {
 extern void xdblt_canon_pattern (void)
 #if !defined (USE_PORTABLE_PATBLT)
      asm ("_xdblt_canon_pattern")
@@ -22,6 +23,7 @@ extern char xdblt_nop asm ("_xdblt_nop");
 extern char xdblt_short_init_ebp asm ("_xdblt_short_init_ebp");
 extern char xdblt_tall_narrow_init_ebp asm ("_xdblt_tall_narrow_init_ebp");
 extern char xdblt_tall_wide_init_ebp asm ("_xdblt_tall_wide_init_ebp");
+}
 
 extern const void *xdblt_nop_table[];
 
@@ -32,6 +34,7 @@ extern const void **xdblt_tall_narrow_stubs[5];
 extern const void **xdblt_short_wide_stubs[5];
 extern const void **xdblt_tall_wide_stubs[5];
 
+namespace Executor {
 extern boolean_t xdblt_xdata_norgb_norotate (RgnHandle rh, int mode,
 					     int pat_x_rotate_count,
 					     int pat_y_rotate_count,
@@ -50,8 +53,9 @@ extern boolean_t xdblt_pattern (RgnHandle rh, int mode,
 				int pat_x_rotate_count, int pat_y_rotate_count,
 				const Pattern pattern, PixMap *dst,
 				uint32 fg_color, uint32 bk_color);
+}
 
-
+extern "C" {
 extern uint32 xdblt_pattern_value asm ("_xdblt_pattern_value");
 extern uint32 xdblt_log2_pattern_row_bytes
 	asm ("_xdblt_log2_pattern_row_bytes");
@@ -62,13 +66,13 @@ extern uint32 *xdblt_pattern_end asm ("_xdblt_pattern_end");
 extern uint32 xdblt_pattern_row_0 asm ("_xdblt_pattern_row_0");
 extern const void **xdblt_stub_table asm ("_xdblt_stub_table");
 extern uint32 xdblt_log2_bpp asm ("_xdblt_log2_bpp");
-extern const INTEGER *xdblt_rgn_start asm ("_xdblt_rgn_start");
+extern const Executor::INTEGER *xdblt_rgn_start asm ("_xdblt_rgn_start");
 extern uint32 xdblt_x_offset asm ("_xdblt_x_offset");
 extern uint32 *xdblt_dst_baseaddr asm ("_xdblt_dst_baseaddr");
 extern uint32 xdblt_dst_row_bytes asm ("_xdblt_dst_row_bytes");
 extern uint32 xdblt_insert_bits asm ("_xdblt_insert_bits");
 extern const uint32 xdblt_mask_array[32] asm ("_xdblt_mask_array");
-
+}
 
 /* This must be a macro instead of a function because it sometimes
  * does an alloca.  This macro is used by both the pattern and source
@@ -93,12 +97,12 @@ do {								\
   else								\
     {								\
       INTEGER *space;						\
-      ptr_name = space = alloca (72 * 1024);			\
+      ptr_name = space = (INTEGER*)alloca (72 * 1024);			\
       nonspecial_rgn_to_special_rgn (RGNP_DATA (r), space);	\
     }								\
 } while (0)
 
-extern INTEGER phony_special_region[7];
+extern Executor::INTEGER phony_special_region[7];
 
 typedef enum
 {

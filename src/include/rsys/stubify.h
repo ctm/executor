@@ -5,6 +5,9 @@
 #include "rsys/ptocflags.h"
 #include "rsys/trapglue.h"
 
+#ifdef __cplusplus
+namespace Executor {
+#endif
 extern long CToPascalCall (void *, unsigned long, ...);
 extern toolstuff_t toolstuff[NTOOLENTRIES];
 
@@ -5492,6 +5495,12 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_AEDeleteItem((A1), (A2))     )
 #define AESizeOfNthItem(A1, A2, A3, A4) \
    (     C_AESizeOfNthItem((A1), (A2), (A3), (A4))     )
+#undef AEGetKeyDesc
+#undef AEPutKeyDesc
+#undef AEGetKeyPtr
+#undef AEPutKeyPtr
+#undef AEDeleteKeyDesc
+#undef AESizeOfKeyDesc
 #define AEGetKeyDesc(A1, A2, A3, A4) \
    (     C_AEGetKeyDesc((A1), (A2), (A3), (A4))     )
 #define AEPutKeyDesc(A1, A2, A3) \
@@ -6600,6 +6609,8 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
     ? C_BitShift(__stub_arg_1, __stub_arg_2)\
     : (LONGINT) CToPascalCall (SYN68K_TO_US(new_addr), CTOP_BitShift ,  __stub_arg_1, __stub_arg_2));\
   })
+#undef HiWord
+#undef LoWord
 #define HiWord(A1) \
  ({ \
    void *new_addr;\
@@ -7126,6 +7137,8 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_GetIndSymbol((A1), (A2), (A3), (A4), (A5))     )
 #define FindSymbol(A1, A2, A3, A4) \
    (     C_FindSymbol((A1), (A2), (A3), (A4))     )
+#undef NewRoutineDescriptor
+#undef DisposeRoutineDescriptor
 #define NewRoutineDescriptor(A1, A2, A3) \
    (     C_NewRoutineDescriptor((A1), (A2), (A3))     )
 #define DisposeRoutineDescriptor(A1) \
@@ -7136,4 +7149,8 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_SaveMixedModeState((A1), (A2))     )
 #define RestoreMixedModeState(A1, A2) \
    (     C_RestoreMixedModeState((A1), (A2))     )
+
+#ifdef __cplusplus
+}
+#endif
 #endif /* !defined(_STUBIFY_H_) */

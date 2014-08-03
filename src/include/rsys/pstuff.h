@@ -1,6 +1,7 @@
 #if !defined (_PSTUFF_H_)
 #define _PSTUFF_H_
 
+namespace Executor {
 extern toolstuff_t pstuff[];
 extern osstuff_t osstuff[];
 
@@ -106,5 +107,5 @@ extern osstuff_t osstuff[];
 
 #define P_new_draw_scroll		(pstuff[85].orig)
 #define P_new_pos_ctl			(pstuff[86].orig)
-
+}
 #endif /* !defined(_PSTUFF_H_) */

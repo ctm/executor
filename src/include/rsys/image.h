@@ -1,6 +1,8 @@
 
 #include "QuickDraw.h"
 
+namespace Executor {
+
 typedef struct pixel_image
 {
   Rect bounds;
@@ -20,7 +22,7 @@ typedef struct pixel_image
 
 typedef struct image_bits_desc
 {
-  char *raw_bits;
+  unsigned char *raw_bits;
   int row_bytes;
   int bpp;
 } image_bits_desc_t;
@@ -39,3 +41,4 @@ extern void image_validate_x_bits (pixel_image_t *image,
 extern void image_update_ctab (pixel_image_t *image,
 			       const RGBColor *new_colors, int max_color);
 extern void image_inits (void);
+}

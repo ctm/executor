@@ -11,6 +11,7 @@
 #include "QuickDraw.h"
 #include "ResourceMgr.h"
 
+namespace Executor {
 #define noMark	0
 
 #define mDrawMsg	0
@@ -201,6 +202,7 @@ extern pascal trap void C_DispMCInfo (MCTableHandle);
 extern pascal trap MCEntryPtr C_GetMCEntry (INTEGER, INTEGER);
 extern pascal trap void C_SetMCEntries (INTEGER, MCTablePtr);
 extern pascal trap void C_InvalMenuBar (void);
+}
 
 #endif /* __STDC__ */
 #endif /* __MENU__ */

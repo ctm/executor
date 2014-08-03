@@ -11,6 +11,7 @@
  * $Id: StdFilePkg.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 #define putDlgID	(-3999)
 
 #define putSave		1
@@ -149,6 +150,6 @@ extern pascal trap void C_CustomGetFile (FileFilterYDProcPtr filefilter,
 					 UNIV Ptr yourdatap);
 
 #endif /* __STDC__ */
-
+}
 
 #endif /* __STDFILE__ */

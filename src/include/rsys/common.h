@@ -27,7 +27,7 @@
 #undef USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 #endif
 
-#if !defined (LINUX) && !defined (MSDOS) && !defined (NEXT) && !defined(CYGWIN32) && !defined (MACOSX)
+#if !defined (LINUX) && !defined (MSDOS) && !defined (NEXT) && !defined(CYGWIN32) && !defined (MACOSX_)
 # error "Unsupported host"
 #endif
 
@@ -51,6 +51,9 @@
 #include "front-end-config.h"
 #endif
 
+#ifdef __cplusplus
+namespace Executor {
+#endif
 typedef struct
 {
 }
@@ -67,5 +70,7 @@ extern boolean_t host_spfcommon (host_spf_reply_block *replyp,
 				 sf_flavor_t flavor,
 				 void *activeList, void *activateproc,
 				 void *yourdatap);
-
+#ifdef __cplusplus
+}
+#endif
 #endif /* !_COMMON_H_ */

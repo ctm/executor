@@ -1,6 +1,6 @@
 #if !defined (_STDBITS_H_)
 #define _STDBITS_H_
-
+namespace Executor {
 struct cleanup_info
 {
   enum
@@ -28,5 +28,5 @@ extern void canonicalize_bogo_map_cleanup (BitMap *bogo_map,
 					   struct cleanup_info *info);
 extern void canonicalize_bogo_map (BitMap *bogo_map, PixMap **canonical_addr,
 				   struct cleanup_info *info);
-
+}
 #endif /* !_STDBITS_H_ */

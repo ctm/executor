@@ -11,6 +11,7 @@
 #include "QuickDraw.h"
 #include "EventMgr.h"
 
+namespace Executor {
 #define documentProc	0
 #define dBoxProc	1
 #define plainDBox	2
@@ -75,9 +76,9 @@ typedef CGrafPtr CWindowPtr;
 typedef struct __wr WindowRecord;
 typedef WindowRecord *WindowPeek;
 MAKE_HIDDEN(WindowPeek);
-
+}
 #include "ControlMgr.h"
-
+namespace Executor {
 struct PACKED  __wr {
   GrafPort port;
   INTEGER windowKind;
@@ -160,55 +161,6 @@ extern Pattern 	DeskPattern;
 #define AuxWinHead	(AuxWinHead_H.p)
 #define DeskCPat (DeskCPat_H.p)
 
-#if !defined (__STDC__)
-extern void SetWTitle(); 
-extern void GetWTitle(); 
-extern WindowPtr FrontWindow(); 
-extern void HiliteWindow(); 
-extern void BringToFront(); 
-extern void SelectWindow(); 
-extern void ShowHide(); 
-extern void HideWindow(); 
-extern void ShowWindow(); 
-extern void SendBehind(); 
-extern void DrawGrowIcon(); 
-extern void InitWindows(); 
-extern void GetWMgrPort(); 
-extern WindowPtr NewWindow(); 
-extern WindowPtr GetNewWindow(); 
-extern void CloseWindow(); 
-extern void DisposeWindow(); 
-extern void SetWRefCon(); 
-extern LONGINT GetWRefCon(); 
-extern void SetWindowPic(); 
-extern PicHandle GetWindowPic(); 
-extern LONGINT PinRect(); 
-extern LONGINT DragTheRgn(); 
-extern LONGINT DragGrayRgn(); 
-extern void ClipAbove(); 
-extern BOOLEAN CheckUpdate(); 
-extern void SaveOld(); 
-extern void PaintOne(); 
-extern void PaintBehind(); 
-extern void CalcVis(); 
-extern void CalcVisBehind(); 
-extern void DrawNew(); 
-extern INTEGER GetWVariant(); 
-extern INTEGER FindWindow(); 
-extern BOOLEAN TrackBox(); 
-extern BOOLEAN TrackGoAway(); 
-extern void ZoomWindow(); 
-extern void MoveWindow(); 
-extern void DragWindow(); 
-extern LONGINT GrowWindow(); 
-extern void SizeWindow(); 
-extern void InvalRect(); 
-extern void InvalRgn(); 
-extern void ValidRect(); 
-extern void ValidRgn(); 
-extern void BeginUpdate(); 
-extern void EndUpdate(); 
-#else /* __STDC__ */
 extern pascal trap void C_SetWTitle( WindowPtr w, StringPtr t ); extern pascal trap void P_SetWTitle( WindowPtr w, StringPtr t); 
 extern pascal trap void C_GetWTitle( WindowPtr w, StringPtr t ); extern pascal trap void P_GetWTitle( WindowPtr w, StringPtr t); 
 extern pascal trap WindowPtr C_FrontWindow( void  ); extern pascal trap WindowPtr P_FrontWindow( void ); 
@@ -281,5 +233,5 @@ extern pascal trap void C_EndUpdate( WindowPtr w ); extern pascal trap void P_En
 extern pascal trap void C_SetWinColor (WindowPtr w, CTabHandle new_w_ctab);
 extern pascal trap void C_SetDeskCPat( PixPatHandle );
 extern pascal trap void P_SetDeskCPat( PixPatHandle );
-#endif /* __STDC__ */
+}
 #endif /* __WINDOW__ */

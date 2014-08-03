@@ -13,6 +13,7 @@
 #include <float.h>
 #include <math.h>
 
+namespace Executor {
 #if !defined (macfpstate)
 extern Byte macfpstate[6];
 #endif
@@ -191,5 +192,5 @@ log1p (double x)
 #endif /* NEED_LOG1P */
 
 #define _romlib_float_h_2_
-
+}
 #endif

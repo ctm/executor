@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include "Palettes.h"
 #endif
-
+namespace Executor {
 extern int dump_verbosity;
 extern FILE *o_fp;
 
@@ -59,3 +59,4 @@ extern void dump_finish (void);
 
 extern void dump_set_field (int field);
 extern void dump_clear_field (int field);
+}

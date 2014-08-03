@@ -8,6 +8,7 @@
  * $Id: serial.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 typedef struct PACKED{
   PACKED_MEMBER(Ptr, p);
   INTEGER i;
@@ -18,5 +19,5 @@ extern OSErr ROMlib_serialprime (ParmBlkPtr pbp, DCtlPtr dcp);
 extern OSErr ROMlib_serialctl (ParmBlkPtr pbp, DCtlPtr dcp);
 extern OSErr ROMlib_serialstatus (ParmBlkPtr pbp, DCtlPtr dcp);
 extern OSErr ROMlib_serialclose (ParmBlkPtr pbp, DCtlPtr dcp);
-
+}
 #endif

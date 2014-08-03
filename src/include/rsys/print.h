@@ -19,7 +19,7 @@
 
 extern win_printp_t ROMlib_wp;
 #endif
-
+namespace Executor {
 enum
 {
   postscriptbegin = 190,
@@ -237,13 +237,8 @@ extern char *cstring_from_str255 (Str255 text);
 extern void disable_stdtext (void);
 extern void enable_stdtext (void);
 
-extern char *ROMlib_win32_token;
 #define WIN32_TOKEN (ROMlib_win32_token ? ROMlib_win32_token : "Win32")
 
-extern uint32 ROMlib_PrDrvrVers;
-
-extern char *ROMlib_new_printer_name;
-extern char *ROMlib_new_label;
 
 extern void ROMlib_rotatebegin (LONGINT flippage, LONGINT angle);
 extern void ROMlib_rotatecenter (double yoffset, double xoffset);
@@ -252,9 +247,15 @@ extern void ROMlib_gsave (void);
 extern void ROMlib_grestore (void);
 
 extern void ROMlib_acknowledge_job_dialog (THPrint thprint);
+}
 
-#if !defined (NEXTSTEP)
+extern "C" {
+extern char *ROMlib_win32_token;
+extern uint32 ROMlib_PrDrvrVers;
+
+extern char *ROMlib_new_printer_name;
+extern char *ROMlib_new_label;
+
 extern FILE *ROMlib_printfile;
-#endif
-
+}
 #endif /* !defined(__RSYS_PRINT__) */

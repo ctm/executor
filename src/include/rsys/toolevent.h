@@ -8,6 +8,7 @@
  * $Id: toolevent.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 typedef struct PACKED {
     INTEGER version;
     INTEGER tableno[256];
@@ -17,7 +18,9 @@ typedef struct PACKED {
 
 extern void dofloppymount (void);
 extern BOOLEAN ROMlib_beepedonce;
-extern int ROMlib_right_button_modifier;
 extern void ROMlib_send_quit (void);
+}
+
+extern "C" int ROMlib_right_button_modifier;
 
 #endif /* !_TOOLEVENT_H_ */

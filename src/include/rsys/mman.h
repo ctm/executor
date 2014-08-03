@@ -11,6 +11,7 @@
  * $Id: mman.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 /* common case handle state accessor; lock the handle and return the
    pre-locked handle state */
 extern SignedByte hlock_return_orig_state (Handle h);
@@ -174,7 +175,7 @@ enum { TRAP_MASK = 0xF9FF };
   _hp->f1 = _v1;							\
   _hp->f2 = _v2;							\
   _hp->f3 = _v3;							\
-  _hp->f4 = _v4;							\
+  _hp->f4 = (typeof(_hp->f4))_v4;							\
   _hp->f5 = _v5;							\
   _hp->f6 = _v6;							\
 })
@@ -249,8 +250,8 @@ enum { TRAP_MASK = 0xF9FF };
   _hp->f6 = _v6;						\
   _hp->f7 = _v7;						\
   _hp->f8 = _v8;						\
-  _hp->f9 = _v9;						\
-  _hp->f10 = _v10;						\
+  _hp->f9 = (typeof (_hp->f9))_v9;						\
+  _hp->f10 = (typeof (_hp->f10))_v10;						\
   _hp->f11 = _v11;						\
 })
 
@@ -479,5 +480,5 @@ enum { TRAP_MASK = 0xF9FF };
     HSetState (handle2, handle2_state);			\
     HSetState (handle1, handle1_state);			\
   } while (FALSE)
-
+}
 #endif /* !_MMAN_PUBLIC_H_ */
