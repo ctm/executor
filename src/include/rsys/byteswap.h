@@ -31,7 +31,7 @@
 
 #else /* !defined (BIGENDIAN) */
 
-#define CW(n)  ((typeof (n)) (long) swap16 ((unsigned short) (long) (n)))
+#define CW(n)  ((typeof (n)) swap16 ((unsigned short)(n)))
 #define CL(n)  ((typeof (n)) swap32 ((unsigned int) ((n)|0)))
 
 #if 0
