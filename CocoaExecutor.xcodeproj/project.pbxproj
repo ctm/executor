@@ -463,6 +463,8 @@
 		559AF4A5198AC9AB00DE8472 /* rsys.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 556062F21988679400D6F0B2 /* rsys.framework */; };
 		559AF4B5198AE0F400DE8472 /* mkexpandtables.c in Sources */ = {isa = PBXBuildFile; fileRef = 559AF4B4198AE0F400DE8472 /* mkexpandtables.c */; };
 		559AF4B8198AF72B00DE8472 /* segment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558B991E1987FCBE00ADF159 /* segment.cpp */; };
+		559D530D198FFA44009E479A /* SpeechManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 559D530B198FFA44009E479A /* SpeechManager.cpp */; };
+		559D5311198FFAE1009E479A /* SpeechManager-MacBridge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 559D530F198FFAE1009E479A /* SpeechManager-MacBridge.cpp */; };
 		55A742A2198D79DD00F1A8A5 /* SoundOSX.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55A742A0198D79DD00F1A8A5 /* SoundOSX.cpp */; };
 		55A742A8198D819E00F1A8A5 /* FileDouble-OSX.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55A742A6198D819E00F1A8A5 /* FileDouble-OSX.cpp */; };
 		55A742AB198DB05100F1A8A5 /* emustubs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558B98851987FCBD00ADF159 /* emustubs.cpp */; };
@@ -1171,6 +1173,10 @@
 		559AF4A1198AC90F00DE8472 /* stub.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = stub.c; sourceTree = "<group>"; };
 		559AF4AD198AE03000DE8472 /* mkexpandtables */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mkexpandtables; sourceTree = BUILT_PRODUCTS_DIR; };
 		559AF4B4198AE0F400DE8472 /* mkexpandtables.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mkexpandtables.c; sourceTree = "<group>"; };
+		559D530B198FFA44009E479A /* SpeechManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpeechManager.cpp; sourceTree = "<group>"; };
+		559D530E198FFA6A009E479A /* SpeechManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeechManager.h; sourceTree = "<group>"; };
+		559D530F198FFAE1009E479A /* SpeechManager-MacBridge.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "SpeechManager-MacBridge.cpp"; sourceTree = "<group>"; };
+		559D5310198FFAE1009E479A /* SpeechManager-MacBridge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SpeechManager-MacBridge.h"; sourceTree = "<group>"; };
 		55A742A0198D79DD00F1A8A5 /* SoundOSX.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundOSX.cpp; sourceTree = "<group>"; };
 		55A742A1198D79DD00F1A8A5 /* SoundOSX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundOSX.h; sourceTree = "<group>"; };
 		55A742A6198D819E00F1A8A5 /* FileDouble-OSX.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "FileDouble-OSX.cpp"; sourceTree = "<group>"; };
@@ -1306,6 +1312,7 @@
 		5500AB611985B31E00FF62C0 /* Executor-Mac headers */ = {
 			isa = PBXGroup;
 			children = (
+				559D530E198FFA6A009E479A /* SpeechManager.h */,
 				5500AB621985B31E00FF62C0 /* ADB.h */,
 				5500AB631985B31E00FF62C0 /* AliasMgr.h */,
 				5500AB641985B31E00FF62C0 /* AppleEvents.h */,
@@ -2086,6 +2093,9 @@
 				558B99481987FCBE00ADF159 /* virtualint.cpp */,
 				551EE33A198D5E1E004A3A41 /* Window Sources */,
 				557F30D419898513009873EB /* CBridge.cpp */,
+				559D530B198FFA44009E479A /* SpeechManager.cpp */,
+				559D5310198FFAE1009E479A /* SpeechManager-MacBridge.h */,
+				559D530F198FFAE1009E479A /* SpeechManager-MacBridge.cpp */,
 			);
 			indentWidth = 2;
 			name = "Executor-Mac sources";
@@ -2879,6 +2889,7 @@
 				558B9A221987FCBF00ADF159 /* snth5.cpp in Sources */,
 				558B996B1987FCBF00ADF159 /* ctlMouse.cpp in Sources */,
 				558B9A3A1987FCBF00ADF159 /* teScrap.cpp in Sources */,
+				559D530D198FFA44009E479A /* SpeechManager.cpp in Sources */,
 				556E0562198584DE00FC4362 /* zoom.map in Sources */,
 				558B99AC1987FCBF00ADF159 /* image_inits.cpp in Sources */,
 				558B9A311987FCBF00ADF159 /* teAccess.cpp in Sources */,
@@ -2898,6 +2909,7 @@
 				558B99821987FCBF00ADF159 /* dump.cpp in Sources */,
 				558B9A371987FCBF00ADF159 /* teInsert.cpp in Sources */,
 				556E0558198584DE00FC4362 /* arrow_down_inactive.map in Sources */,
+				559D5311198FFAE1009E479A /* SpeechManager-MacBridge.cpp in Sources */,
 				558B9A081987FCBF00ADF159 /* qText.cpp in Sources */,
 				558B9A381987FCBF00ADF159 /* teMisc.cpp in Sources */,
 				553B0B6C19888B690041B809 /* hfsHelper.cpp in Sources */,
