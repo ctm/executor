@@ -83,19 +83,19 @@
 #define PACKAGE "executorosx"
 
 /* Define to the address where bug reports for this package should be sent. */
-#define PACKAGE_BUGREPORT "computers57@hotmail.com"
+#define PACKAGE_BUGREPORT "maddthesane@gmail.com"
 
 /* Define to the full name of this package. */
-#define PACKAGE_NAME "CocoaExecutor"
+#define PACKAGE_NAME "NeoClassic"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "executor 2.1.17"
+#define PACKAGE_STRING "executor 2.2.0"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "executor"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.1.17"
+#define PACKAGE_VERSION "2.2.0"
 
 /* The size of `char *', as computed by sizeof. */
 #define SIZEOF_CHAR_P 4
@@ -104,7 +104,7 @@
 /* #undef STDC_HEADERS */
 
 /* Version number of package */
-#define VERSION "2.1.17"
+#define VERSION "2.2.0"
 
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #undef _FILE_OFFSET_BITS */
