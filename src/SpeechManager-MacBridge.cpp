@@ -8,13 +8,27 @@
 
 #include <Carbon/Carbon.h>
 #include "rsys/common.h"
+#include "rsys/hfs.h"
 #include "MemoryMgr.h"
 #include "SpeechManager-MacBridge.h"
 
 Executor::NumVersion MacBridge::SpeechManagerVersion (void)
 {
+#if 0
+  //The NumVersion struct on OS X is Endian-safe, so we can do this.
+#pragma pack(push, 2)
+  union ourNumVers {
+	::NumVersion MacVers;
+	Executor::NumVersion ExecutorVers;
+  } ourNumVersn;
+#pragma pack(pop)
+  
+  ourNumVersn.MacVers = ::SpeechManagerVersion();
+  return ourNumVersn.ExecutorVers;
+#else
   ::NumVersion theVers = ::SpeechManagerVersion();
   return theVers.majorRev << 24 | theVers.minorAndBugRev << 16 | theVers.stage << 8 | theVers.nonRelRev;
+#endif
 }
 
 int16 MacBridge::SpeechBusy (void)
@@ -32,7 +46,7 @@ int16 MacBridge::SpeechBusySystemWide(void)
 Executor::OSErr MacBridge::CountVoices (int16 *numVoices)
 {
   if (!numVoices) {
-    return CW((Executor::OSErr)paramErr);
+    return CWC((Executor::OSErr)paramErr);
   }
   SInt16 voiceCount = 0;
   ::OSErr toRet = ::CountVoices(&voiceCount);
@@ -45,8 +59,9 @@ Executor::OSErr MacBridge::CountVoices (int16 *numVoices)
 
 Executor::OSErr MacBridge::DisposeSpeechChannel (Executor::SpeechChannel chan)
 {
-  return noErr;
+  ::OSErr toRet = ::DisposeSpeechChannel((::SpeechChannel)chan);
 
+  return CW(toRet);
 }
 
 Executor::OSErr MacBridge::SpeakString (Executor::Str255 textToBeSpoken)
@@ -81,7 +96,7 @@ Executor::OSErr MacBridge::GetIndVoice (int16 index, Executor::VoiceSpec *voice)
 {
   ::VoiceSpec macVoice = {0};
   if (!voice) {
-    return CW((Executor::OSErr)paramErr);
+    return CWC((Executor::OSErr)paramErr);
   }
   ::OSErr toRet = ::GetIndVoice(CW(index), &macVoice);
   
@@ -120,7 +135,7 @@ Executor::OSErr MacBridge::SetSpeechRate(Executor::SpeechChannel chan, Executor:
 PUBLIC Executor::OSErr MacBridge::GetSpeechRate (Executor::SpeechChannel chan, Executor::Fixed *rate)
 {
   if (!rate) {
-    return CW((Executor::OSErr)paramErr);
+    return CWC((Executor::OSErr)paramErr);
   }
   ::OSErr toRet;
   ::Fixed ourFixed = CL(*rate);
@@ -140,7 +155,7 @@ Executor::OSErr MacBridge::SetSpeechPitch (Executor::SpeechChannel chan, Executo
 Executor::OSErr MacBridge::GetSpeechPitch (Executor::SpeechChannel chan, Executor::Fixed *pitch)
 {
   if (!pitch) {
-    return CW((Executor::OSErr)paramErr);
+    return CWC((Executor::OSErr)paramErr);
   }
   ::OSErr toRet;
   ::Fixed ourFixed = CL(*pitch);
@@ -163,7 +178,6 @@ Executor::OSErr MacBridge::UseDictionary (Executor::SpeechChannel chan, Executor
   ::DisposeHandle(nativeHandle);
   
   return CW(toRet);
-
 }
 
 Executor::OSErr MacBridge::MakeVoiceSpec (Executor::OSType creator, Executor::OSType id, Executor::VoiceSpec *voice)
@@ -241,7 +255,16 @@ Executor::OSErr MacBridge::SpeakBuffer (
 
 Executor::OSErr MacBridge::TextToPhonemes (Executor::SpeechChannel chan, const void *textBuf, Executor::ULONGINT textBytes, Executor::Handle phonemeBuf, Executor::LONGINT *phonemeBytes)
 {
-  return noErr;
+  ::Size ExecSize = CL(Executor::GetHandleSize(phonemeBuf));
+  ::Handle nativeHandle = ::NewHandle(ExecSize);
+  long tempPhonemes = CL(*phonemeBytes);
+  Executor::LONGINT intPhonemes;
+  memcpy(*nativeHandle, phonemeBuf->p, ExecSize);
+
+  ::OSErr toRet = ::TextToPhonemes((::SpeechChannel)chan, textBuf, CL(textBytes), nativeHandle, &tempPhonemes);
+  intPhonemes = tempPhonemes;
+  *phonemeBytes = CL(intPhonemes);
+  ::DisposeHandle(nativeHandle);
+
+  return CW(toRet);
 }
-
-
