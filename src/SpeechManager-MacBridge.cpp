@@ -207,6 +207,34 @@ Executor::OSErr MacBridge::GetVoiceInfo (const Executor::VoiceSpec *voice, Execu
   // TODO: handle different data types
   ::OSErr toRet = ::GetVoiceInfo((const ::VoiceSpec*)voice, CL(selector), voiceInfo);
 
+  switch (selector) {
+	case CLC(soVoiceFile):
+	{
+	  //TODO: error checking
+	  unsigned char cLocation[PATH_MAX] = {0};
+	  ::VoiceFileInfo *theFile = (::VoiceFileInfo*)voiceInfo;
+	  ::FSSpec tmpSpec = theFile->fileSpec;
+	  ::FSRef tmpRef = {0};
+	  ::CFURLRef tmpURL = NULL;
+	  ::FSpMakeFSRef(&tmpSpec, &tmpRef);
+	  tmpURL = ::CFURLCreateFromFSRef(kCFAllocatorDefault, &tmpRef);
+	  ::CFStringRef fileName = CFURLCopyLastPathComponent(tmpURL);
+	  ::CFURLGetFileSystemRepresentation(tmpURL, false, cLocation, sizeof(cLocation));
+	  Executor::Str255 strName = {0};
+	  CFStringGetPascalString(fileName, strName, sizeof(strName), kCFStringEncodingMacRoman);
+	  Executor::HVCB *customPart = Executor::ROMlib_vcbbybiggestunixname((const char*)cLocation);
+	  Executor::FSSpecPtr tmpSpecPtr = (Executor::FSSpecPtr)&theFile->fileSpec;
+	  Executor::C_FSMakeFSSpec(customPart->vcbDrvNum, customPart->vcbDirIDM, strName, tmpSpecPtr);
+	  
+	  theFile->resID = CW(theFile->resID);
+	  ::CFRelease(tmpURL);
+	  ::CFRelease(fileName);
+	}
+	  break;
+	  
+	default:
+	  break;
+  }
   return CW(toRet);
 }
 
