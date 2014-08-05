@@ -24,6 +24,7 @@ char ROMlib_rcsid_ctlInit[] =
 #include "rsys/resource.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 PUBLIC BOOLEAN Executor::ROMlib_cdef0_is_rectangular = FALSE;
 
@@ -69,7 +70,7 @@ P9(PUBLIC pascal trap, ControlHandle, NewControl, WindowPtr, wst, Rect *, r,
        acNext, RM (tmp),
        acOwner, RM (retval),
        acCTable, (CCTabHandle) RM (GetResource (TICK("cctb"), 0)),
-       acFlags, CW (procid & 0x0F),
+       acFlags, BigEndianValue (procid & 0x0F),
        acReserved, CLC (0),
        acRefCon, CLC (0));
     str255assign (CTL_TITLE (retval), title);
@@ -87,12 +88,12 @@ P9(PUBLIC pascal trap, ControlHandle, NewControl, WindowPtr, wst, Rect *, r,
        contrlOwner, RM (wst),
        contrlVis, vis ? 255 : 0,
        contrlHilite, 0,
-       contrlValue, CW (value),
-       contrlMin, CW (min),
-       contrlMax, CW (max),
+       contrlValue, BigEndianValue (value),
+       contrlMin, BigEndianValue (min),
+       contrlMax, BigEndianValue (max),
        contrlData, CLC_NULL,
        contrlAction, CLC_NULL,
-       contrlRfCon, CL (rc));
+       contrlRfCon, BigEndianValue (rc));
     
     WINDOW_CONTROL_LIST_X (wst) = RM (retval);
     
@@ -128,7 +129,7 @@ P2(PUBLIC pascal trap, ControlHandle, GetNewControl,		/* IMI-321 */
 	    (StringPtr) ((char *) &HxX(wh, _crect) + 22),	/* _ctitle */
             Hx(wh, _cvisible) ? 255 : 0, Hx(wh, _cvalue), Hx(wh, _cmin),
 	    Hx(wh, _cmax), Hx(wh, _cprocid),
-	    CL(*(LONGINT *)((char *)&HxX(wh, _crect) + 18)));	/* _crefcon */
+	    BigEndianValue(*(LONGINT *)((char *)&HxX(wh, _crect) + 18)));	/* _crefcon */
     if (ctab_res_h)
       SetCtlColor (retval, (CCTabHandle) ctab_res_h);
     return retval;

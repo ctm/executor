@@ -52,6 +52,45 @@
 #endif
 
 #ifdef __cplusplus
+namespace ByteSwap {
+template < size_t size >
+inline void sized_byteswap(char* data);
+
+template <>
+inline void sized_byteswap< 2 >(char* data)
+{
+    uint16_t* ptr = reinterpret_cast<uint16_t*>(data);
+    *ptr = __builtin_bswap16(*ptr);
+}
+
+template <>
+inline void sized_byteswap< 4 >(char* data)
+{
+    uint32_t* ptr = reinterpret_cast<uint32_t*>(data);
+    *ptr = __builtin_bswap32(*ptr);
+}
+
+	template <>
+	inline void sized_byteswap< 8 >(char* data)
+	{
+		uint64_t* ptr = reinterpret_cast<uint64_t*>(data);
+		*ptr = __builtin_bswap64(*ptr);
+	}
+
+	
+template < typename T >
+T BigEndianValue(T value)
+{
+    sized_byteswap< sizeof(T) >(reinterpret_cast<char*>(&value));
+    return value;
+}
+
+	template < typename T >
+	void BigEndianInPlace(T &value)
+	{
+		sized_byteswap< sizeof(T) >(reinterpret_cast<char*>(&value));
+	}
+}
 namespace Executor {
 #endif
 typedef struct

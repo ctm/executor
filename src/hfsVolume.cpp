@@ -20,6 +20,7 @@ char ROMlib_rcsid_hfsVolume[] =
 #endif
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /*
  * TODO: support read and write count.  This will make it possible to
@@ -95,20 +96,20 @@ PRIVATE OSErr readvolumebitmap(HVCB *vcbp, volumeinfoPtr vp)
 
 	words = (long *) vp;
 	warning_fs_log ("sigword = 0x%02x (%08lx %08lx %08lx %08lx)",
-			CW (vp->drSigWord), CL (words[0]), CL (words[1]),
-			CL (words[2]), CL (words[3]));
+			BigEndianValue (vp->drSigWord), BigEndianValue (words[0]), BigEndianValue (words[1]),
+			BigEndianValue (words[2]), BigEndianValue (words[3]));
       }
     else {
 	nphysrequired = NPHYSREQ(ROUNDUP8(Cx(vp->drNmAlBlks)) / 8);
 	vcbp->vcbMAdr =
 	   RM(NewPtr_aligned_4(PHYSBSIZE * nphysrequired + MADROFFSET, 0));
-	vcbp->vcbMLen = CW(nphysrequired + MADROFFSET);
+	vcbp->vcbMLen = BigEndianValue(nphysrequired + MADROFFSET);
 						     /*really add MADROFFSET?*/
 	if (!vcbp->vcbMAdr)
 	    err = MemError();
 	else
 	    err = ROMlib_transphysblk (&((VCBExtra *) vcbp)->u.hfs,
-				       CW(vp->drVBMSt) * (ULONGINT) PHYSBSIZE,
+				       BigEndianValue(vp->drVBMSt) * (ULONGINT) PHYSBSIZE,
 				       nphysrequired,
 				       MR(vcbp->vcbMAdr) + MADROFFSET, reading,
 				       (LONGINT *) 0);
@@ -132,7 +133,7 @@ PRIVATE OSErr initcache(HVCB *vcbp)
 	return MemError();
     TheZone  = savezone;
     headp = (cachehead *) MR(vcbp->vcbCtlBuf);
-    headp->nitems = CW(NCACHEENTRIES);
+    headp->nitems = BigEndianValue(NCACHEENTRIES);
     headp->flags = 0;
     headp->flink = RM((cacheentry *)(headp + 1));
     headp->blink = RM(MR(headp->flink) + NCACHEENTRIES - 1);
@@ -176,8 +177,8 @@ check_volume_size (volumeinfoPtr vp)
       unsigned short nmalblks;
       unsigned long dralblksiz;
 
-      nmalblks = CW (vp->drNmAlBlks);
-      dralblksiz = CL (vp->drAlBlkSiz);
+      nmalblks = BigEndianValue (vp->drNmAlBlks);
+      dralblksiz = BigEndianValue (vp->drAlBlkSiz);
       retval =  ((long long) nmalblks * dralblksiz >= 2LL * 1024 * 1024 * 1024
 		 ? paramErr : noErr);
       if (retval != noErr)
@@ -211,7 +212,7 @@ PRIVATE OSErr readvolumeinfo(HVCB *vcbp)    /* call once during mounting */
 }
 
 #define VOLUMEINFOBACKUP(vcbp)  \
-			((CW(vcbp->vcbNmAlBlks) * Cx(vcbp->vcbAlBlkSiz)) + \
+			((BigEndianValue(vcbp->vcbNmAlBlks) * Cx(vcbp->vcbAlBlkSiz)) + \
 					     (Cx(vcbp->vcbAlBlSt) * PHYSBSIZE))
 
 void Executor::vcbsync(HVCB *vcbp)
@@ -264,7 +265,7 @@ OSErr Executor::ROMlib_flushvcbp(HVCB *vcbp)
 	  memmove(&vip->drCTExtRec, &fcbp->fcbExtRec,
 		  (LONGINT) sizeof(fcbp->fcbExtRec));
 	  retval = writevolumeinfo(vcbp, p);
-	  vcbp->vcbFlags &= CW(~VCBDIRTY);
+	  vcbp->vcbFlags &= BigEndianValue(~VCBDIRTY);
 	}
     }
   return retval;
@@ -357,7 +358,7 @@ Executor::ROMlib_dqbydrive (short vrefnum)
   DrvQExtra *retval;
   short swapped_vrefnum;
 
-  swapped_vrefnum = CW (vrefnum);
+  swapped_vrefnum = BigEndianValue (vrefnum);
   retval = 0;
   for (dp = (DrvQEl *) MR (DrvQHdr.qHead);
        dp && (retval = (DrvQExtra *) ((char *) dp - sizeof(LONGINT)),
@@ -404,13 +405,13 @@ PUBLIC HVCB *Executor::ROMlib_findvcb(short vrefnum, StringPtr name, LONGINT *di
 		wdp = WDNUMTOWDP(vrefnum);
 		vcbp = MR(wdp->vcbp);
 		if (diridp)
-		    *diridp = CL(wdp->dirid);
+		    *diridp = BigEndianValue(wdp->dirid);
 	    } else
 		vcbp = ROMlib_vcbbyvrn(vrefnum);
 	} else if (usedefault || (!name && !vrefnum)) {
 	    vcbp = (HVCB *) MR(DefVCBPtr);
 	    if (diridp)
-		*diridp = CL(DefDirID);
+		*diridp = BigEndianValue(DefDirID);
 	}
     }
     return vcbp;
@@ -442,17 +443,17 @@ PRIVATE INTEGER openxtnt(LONGINT filnum, LONGINT clpsize, LONGINT filsize, xtntr
     
     fcbp = ROMlib_getfreefcbp();
     if (fcbp) {
-	fcbp->fcbFlNum = CL(filnum);
+	fcbp->fcbFlNum = BigEndianValue(filnum);
 	fcbp->fcbMdRByt = 0;
 	fcbp->fcbTypByt = 0;
 	fcbp->fcbSBlk = 0;
-	fcbp->fcbEOF = CL(filsize);
-	fcbp->fcbPLen = CL(filsize);
+	fcbp->fcbEOF = BigEndianValue(filsize);
+	fcbp->fcbPLen = BigEndianValue(filsize);
 	fcbp->fcbCrPs = 0;
 	fcbp->fcbVPtr = RM(vcbp);
 	fcbp->fcbBfAdr = 0;
 	fcbp->fcbFlPos = 0;
-	fcbp->fcbClmpSize = CL(clpsize);
+	fcbp->fcbClmpSize = BigEndianValue(clpsize);
 	fcbp->fcbBTCBPtr = 0;
 	memmove(fcbp->fcbExtRec, xtr, (LONGINT) sizeof(xtntrec));
 	fcbp->fcbFType = 0;
@@ -485,7 +486,7 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
 		    "flags = 0x%x", floppyfd, offset, bsize, maxbytes, flags);
     saveZone = TheZone;
     TheZone = SysZone;
-    vcbp = ROMlib_vcbbydrive(CW(pb->volumeParam.ioVRefNum));
+    vcbp = ROMlib_vcbbydrive(BigEndianValue(pb->volumeParam.ioVRefNum));
     if (vcbp)
 	err = volOnLinErr;
     else {
@@ -521,37 +522,37 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
 		    }
 		memmove(&vcbp->vcbSigWord, &vip->drSigWord, (LONGINT) 64);
 
-		nblocks = (CL(vcbp->vcbAlBlkSiz) / PHYSBSIZE) *
-			       CW(vcbp->vcbNmAlBlks) + CW(vcbp->vcbAlBlSt) + 2;
-		dqp->dq.dQDrvSz  = CW(nblocks);
-		dqp->dq.dQDrvSz2 = CW(nblocks >> 16);
+		nblocks = (BigEndianValue(vcbp->vcbAlBlkSiz) / PHYSBSIZE) *
+			       BigEndianValue(vcbp->vcbNmAlBlks) + BigEndianValue(vcbp->vcbAlBlSt) + 2;
+		dqp->dq.dQDrvSz  = BigEndianValue(nblocks);
+		dqp->dq.dQDrvSz2 = BigEndianValue(nblocks >> 16);
 		dqp->dq.qType = 1;
 
 		vcbp->vcbDrvNum = pb->volumeParam.ioVRefNum;
-		vcbp->vcbDRefNum = CW(drvtodref(Cx(pb->volumeParam.ioVRefNum)));
+		vcbp->vcbDRefNum = BigEndianValue(drvtodref(Cx(pb->volumeParam.ioVRefNum)));
 		vcbp->vcbFSID = 0;
 		if (!alreadythere)
-		    vcbp->vcbVRefNum = CW(--ROMlib_nextvrn);
+		    vcbp->vcbVRefNum = BigEndianValue(--ROMlib_nextvrn);
 		vcbp->vcbDirIndex = 0;
 		vcbp->vcbDirBlk = 0;
 		vcbp->vcbFlags = 0;
 		memmove(&vcbp->vcbVolBkUp, &vip->drVolBkUp, (LONGINT) 66);
 		
 		vcbp->vcbXTAlBlks =
-			         CW(Cx(vip->drXTFlSize) / Cx(vip->drAlBlkSiz));
+			         BigEndianValue(Cx(vip->drXTFlSize) / Cx(vip->drAlBlkSiz));
 		vcbp->vcbCTAlBlks =
-				 CW(Cx(vip->drCTFlSize) / Cx(vip->drAlBlkSiz));
+				 BigEndianValue(Cx(vip->drCTFlSize) / Cx(vip->drAlBlkSiz));
 		
-		vcbp->vcbXTRef = CW(openxtnt(XTNUM, Cx(vip->drXTClpSiz),
+		vcbp->vcbXTRef = BigEndianValue(openxtnt(XTNUM, Cx(vip->drXTClpSiz),
 			      Cx(vip->drXTFlSize), vip->drXTExtRec, vcbp));
-		vcbp->vcbCTRef = CW(openxtnt(CTNUM, Cx(vip->drCTClpSiz),
+		vcbp->vcbCTRef = BigEndianValue(openxtnt(CTNUM, Cx(vip->drCTClpSiz),
 			      Cx(vip->drCTFlSize), vip->drCTExtRec, vcbp));
 		
 		vcbp->vcbDirIDM = 0;
 		vcbp->vcbOffsM = 0;
 		vcbp->vcbAtrb = 0;
 		if (flags & DRIVE_FLAGS_FIXED)
-		    vcbp->vcbAtrb |= CW(VNONEJECTABLEBIT);
+		    vcbp->vcbAtrb |= BigEndianValue(VNONEJECTABLEBIT);
 		
 		if (!vcbp->vcbCTRef)
 		    err = tmfoErr;
@@ -582,7 +583,7 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
 			  flags |= DRIVE_FLAGS_LOCKED;
 		      }
 		    if (flags & DRIVE_FLAGS_LOCKED)
-		        vcbp->vcbAtrb |= CW(VHARDLOCKBIT);
+		        vcbp->vcbAtrb |= BigEndianValue(VHARDLOCKBIT);
 		    if (!alreadythere)
 			Enqueue((QElemPtr) vcbp, &VCBQHdr);
 		    pb->volumeParam.ioVRefNum = vcbp->vcbVRefNum;
@@ -602,7 +603,7 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
 
 PRIVATE void goofyclip(unsigned short *up)
 {
-    if (CW(*up) > 0x7C00)   /* IMIV-130 */
+    if (BigEndianValue(*up) > 0x7C00)   /* IMIV-130 */
 	*up = CWC (0x7C00);
 }
 
@@ -617,7 +618,7 @@ PRIVATE LONGINT getworkingdir(INTEGER vrefnum)
     
     if (ISWDNUM(vrefnum)) {
 	wdp = WDNUMTOWDP(vrefnum);
-	retval = CL(wdp->dirid);
+	retval = BigEndianValue(wdp->dirid);
     } else
 	retval = 0;
     return retval;
@@ -677,13 +678,13 @@ PRIVATE OSErr commonGetVInfo(HVolumeParam *pb, BOOLEAN async, fstype fs)
     if (!vcbp)
 /*-->*/ PBRETURN(pb, nsvErr);
 
-    if (/*CW (pb->ioVolIndex) >= 0 &&*/ pb->ioNamePtr)
+    if (/*BigEndianValue (pb->ioVolIndex) >= 0 &&*/ pb->ioNamePtr)
 	str255assign(MR(pb->ioNamePtr), (StringPtr) vcbp->vcbVN);
     pb->ioVCrDate = vcbp->vcbCrDate;
     pb->ioVAtrb = vcbp->vcbAtrb;
     
     if (workingdirnum)
-	pb->ioVNmFls = CW(getnmfls(vcbp, workingdirnum));
+	pb->ioVNmFls = BigEndianValue(getnmfls(vcbp, workingdirnum));
     else
 	pb->ioVNmFls = vcbp->vcbNmFls;
      
@@ -757,14 +758,14 @@ PUBLIC OSErr Executor::hfsPBSetVInfo(HParmBlkPtr pb, BOOLEAN async)
 						MR(pb->volumeParam.ioNamePtr));
 	    vcbp->vcbCrDate  = pb->volumeParam.ioVCrDate;
 	    vcbp->vcbLsMod   = pb->volumeParam.ioVLsMod;
-	    vcbp->vcbAtrb    = CW((Cx(vcbp->vcbAtrb) & ~ATRBMASK) |
+	    vcbp->vcbAtrb    = BigEndianValue((Cx(vcbp->vcbAtrb) & ~ATRBMASK) |
 				 (Cx(pb->volumeParam.ioVAtrb) &  ATRBMASK));
 	    vcbp->vcbClpSiz  = pb->volumeParam.ioVClpSiz;
 	    vcbp->vcbVolBkUp = pb->volumeParam.ioVBkUp;
 	    vcbp->vcbVSeqNum = pb->volumeParam.ioVSeqNum;
 	    memmove(vcbp->vcbFndrInfo, pb->volumeParam.ioVFndrInfo,
 		    (LONGINT) 32);
-	    vcbp->vcbFlags |= CW(VCBDIRTY);
+	    vcbp->vcbFlags |= BigEndianValue(VCBDIRTY);
 	    err = noErr;
 	}
     } else
@@ -852,17 +853,17 @@ PRIVATE OSErr setvolhelper(volumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
 	newDefVCBPtr = RM(vcbp);
 	newDefDirID = CLC(0);
 	if (newdir > 2) {		/* picked up working directory */
-	    newDefDirID   = dirid ? CL(dirid) : CL(newdir);
+	    newDefDirID   = dirid ? BigEndianValue(dirid) : BigEndianValue(newdir);
 	    newDefVRefNum = pb->ioVRefNum;
 	} else if (newdir == 1) {		/* picked up by name */
-	    newDefDirID   = CL(newdir);
+	    newDefDirID   = BigEndianValue(newdir);
 	    newDefVRefNum = vcbp->vcbVRefNum;
 	} else {
 	    newDefVRefNum = pb->ioVRefNum;
 	    if (dirid == 0 && convertzeros)
 		newDefDirID = CLC(2);
 	    else
-		newDefDirID   = CL(dirid);
+		newDefDirID   = BigEndianValue(dirid);
 	}
 
 	if (!convertzeros && pb->ioNamePtr) {	/* this could change things */
@@ -872,7 +873,7 @@ PRIVATE OSErr setvolhelper(volumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
 		cpb.hFileInfo.ioNamePtr   = pb->ioNamePtr;
 	    cpb.hFileInfo.ioVRefNum   = pb->ioVRefNum;
 	    cpb.hFileInfo.ioFDirIndex = CWC (0);
-	    cpb.hFileInfo.ioDirID     = CL(dirid);
+	    cpb.hFileInfo.ioDirID     = BigEndianValue(dirid);
 /*
  * NOTE: the else case was added after seeing Excel 4 Installer do a setvol
  *	 to a file, presumably with the intent to set it to the parent id.
@@ -930,12 +931,12 @@ PRIVATE void closeallvcbfiles(HVCB *vcbp)
     ioParam iopb;
     short length;
     
-    length = CW(*(short *)MR(FCBSPtr));
+    length = BigEndianValue(*(short *)MR(FCBSPtr));
     fcbp = (filecontrolblock *) ((short *)MR(FCBSPtr)+1);
     efcbp = (filecontrolblock *) ((char *)MR(FCBSPtr) + length);
     for (;fcbp < efcbp; fcbp = (filecontrolblock *) ((char *)fcbp + Cx(FSFCBLen)))
 	if (fcbp->fcbFlNum && MR(fcbp->fcbVPtr) == vcbp) {
-	    iopb.ioRefNum = CW((char *) fcbp - (char *) MR(FCBSPtr));
+	    iopb.ioRefNum = BigEndianValue((char *) fcbp - (char *) MR(FCBSPtr));
 	    /* my */PBFlushFile((ParmBlkPtr) &iopb, FALSE);
 	}
 }
@@ -1009,7 +1010,7 @@ PUBLIC OSErr Executor::hfsPBOffLine(ParmBlkPtr pb)
 			  MR(pb->volumeParam.ioNamePtr), (LONGINT *) 0, FALSE);
     if (vcbp) {
 	if (vcbp->vcbDrvNum) {
-	    vcbp->vcbDRefNum = CW(-Cx(vcbp->vcbDrvNum));
+	    vcbp->vcbDRefNum = BigEndianValue(-Cx(vcbp->vcbDrvNum));
 	    err = offlinehelper((volumeParam *) pb, vcbp);
 	} else
 	    err = noErr;
@@ -1033,7 +1034,7 @@ PUBLIC OSErr Executor::hfsPBEject(ParmBlkPtr pb)
 	    err = offlinehelper((volumeParam *) pb, vcbp);
 	} else {
 	    if (Cx(vcbp->vcbDRefNum) < 0)	/* offline */
-		vcbp->vcbDRefNum = CW(Cx(vcbp->vcbDRefNum) * -1);
+		vcbp->vcbDRefNum = BigEndianValue(Cx(vcbp->vcbDRefNum) * -1);
 	    err = noErr;
 	}
     } else
@@ -1057,7 +1058,7 @@ PUBLIC OSErr Executor::ROMlib_pbvolrename(ioParam *pb, StringPtr newnamep)
     Str255 name_copy;
     
     str255assign (name_copy, MR (pb->ioNamePtr));
-    hpb.volumeParam.ioNamePtr = (StringPtr) CL ((long) name_copy);
+    hpb.volumeParam.ioNamePtr = (StringPtr) BigEndianValue ((long) name_copy);
     hpb.volumeParam.ioVRefNum = pb->ioVRefNum;
     hpb.volumeParam.ioVolIndex = CWC(-1);
     err = /* my */PBHGetVInfo((HParmBlkPtr) &hpb, FALSE);

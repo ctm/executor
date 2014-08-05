@@ -17,6 +17,7 @@ char ROMlib_rcsid_qStdOval[] =
 #include "rsys/picture.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P2(PUBLIC pascal trap, void, StdOval, GrafVerb, v, Rect *, rp)
 {
@@ -33,8 +34,8 @@ P2(PUBLIC pascal trap, void, StdOval, GrafVerb, v, Rect *, rp)
 	});
 
 	PAUSERECORDING;
-	if (CW(rp->bottom) - CW(rp->top) < 4 &&
-					      CW(rp->right) - CW(rp->left) < 4)
+	if (BigEndianValue(rp->bottom) - BigEndianValue(rp->top) < 4 &&
+					      BigEndianValue(rp->right) - BigEndianValue(rp->left) < 4)
 	    StdRect(v, rp);
 	else {
 	    rh = ROMlib_circrgn(rp);
@@ -46,11 +47,11 @@ P2(PUBLIC pascal trap, void, StdOval, GrafVerb, v, Rect *, rp)
 			    (RgnHandle) PORT_REGION_SAVE (thePort));
 		if (PORT_PEN_VIS (thePort) >= 0)
 		  {
-		    r.top    = CW (CW (rp->top)    + CW (PORT_PEN_SIZE (thePort).v));
-		    r.left   = CW (CW (rp->left)   + CW (PORT_PEN_SIZE (thePort).h));
-		    r.bottom = CW (CW (rp->bottom) - CW (PORT_PEN_SIZE (thePort).v));
-		    r.right  = CW (CW (rp->right)  - CW (PORT_PEN_SIZE (thePort).h));
-		    if (CW (r.top) < CW (r.bottom) && CW (r.left) < CW (r.right))
+		    r.top    = BigEndianValue (BigEndianValue (rp->top)    + BigEndianValue (PORT_PEN_SIZE (thePort).v));
+		    r.left   = BigEndianValue (BigEndianValue (rp->left)   + BigEndianValue (PORT_PEN_SIZE (thePort).h));
+		    r.bottom = BigEndianValue (BigEndianValue (rp->bottom) - BigEndianValue (PORT_PEN_SIZE (thePort).v));
+		    r.right  = BigEndianValue (BigEndianValue (rp->right)  - BigEndianValue (PORT_PEN_SIZE (thePort).h));
+		    if (BigEndianValue (r.top) < BigEndianValue (r.bottom) && BigEndianValue (r.left) < BigEndianValue (r.right))
 		      {
 			rh2 = ROMlib_circrgn(&r);
 			XorRgn(rh, rh2, rh);

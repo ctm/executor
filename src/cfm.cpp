@@ -35,6 +35,7 @@
 #include "ppc_stubs.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 typedef enum
 {
@@ -84,7 +85,7 @@ try_to_get_memory (void **addrp, syn68k_addr_t default_syn_address,
 		   uint32 total_size, int alignment)
 {
   OSErr retval;
-#if !defined(linux)
+#if !(defined(linux) || defined(MACOSX_))
   retval = paramErr;
 #else
   void *default_address;
@@ -378,7 +379,7 @@ repeatedly_relocate (uint32 count, uint8 **relocAddressp, uint32 val)
   p = (uint32 *) *relocAddressp;
   while (count-- > 0)
     {
-      *p = CL (CL (*p) + val);
+      *p = BigEndianValue (BigEndianValue (*p) + val);
       ++p;
     } 
   *relocAddressp = (uint8 *) p;
@@ -474,15 +475,15 @@ check_vanddir (INTEGER vref, LONGINT dirid, int descend_count, Str63 library,
 
   retval = fragLibNotFound;
   pb.hFileInfo.ioNamePtr = RM (&s[0]);
-  pb.hFileInfo.ioVRefNum = CW (vref);
+  pb.hFileInfo.ioVRefNum = BigEndianValue (vref);
   err = noErr;
   errcount = 0;
   for (dirindex = 1;
        retval != noErr && err != fnfErr && errcount != 3;
        dirindex++)
     {
-      pb.hFileInfo.ioFDirIndex = CW (dirindex);
-      pb.hFileInfo.ioDirID   = CL (dirid);
+      pb.hFileInfo.ioFDirIndex = BigEndianValue (dirindex);
+      pb.hFileInfo.ioDirID   = BigEndianValue (dirid);
       err = PBGetCatInfo(&pb, FALSE);
       if (err)
 	{
@@ -499,7 +500,7 @@ check_vanddir (INTEGER vref, LONGINT dirid, int descend_count, Str63 library,
 	    {
 	      if (descend_count > 0)
 		{
-		  retval = check_vanddir (vref, CL (pb.hFileInfo.ioDirID),
+		  retval = check_vanddir (vref, BigEndianValue (pb.hFileInfo.ioDirID),
 					  descend_count-1, library,
 					  arch, loadflags, cidp, mainaddrp,
 					  errName);
@@ -940,7 +941,7 @@ begin_closure (uint32 n_libs, PEFImportedLibrary_t *libs,
   OSErr err;
 
   retval = (typeof (retval)) NewPtr (sizeof *retval + n_libs * sizeof (lib_t));
-  N_LIBS_X (retval) = CL (n_libs);
+  N_LIBS_X (retval) = BigEndianValue (n_libs);
 
 #warning eventually need to worry about errors  
 
@@ -1438,13 +1439,13 @@ try_to_mmap_file (FSSpecPtr fsp, LONGINT offset, LONGINT length,
 
   retval = noErr;
   /* canonicalize fsp to make sure */
-  vref = CW (fsp->vRefNum);
+  vref = BigEndianValue (fsp->vRefNum);
   if (ISWDNUM (vref) || pstr_index_after (fsp->name, ':', 0))
     {
       FSSpecPtr newfsp;
 
       newfsp = alloca (sizeof *newfsp);
-      retval = FSMakeFSSpec (vref, CL (fsp->parID), fsp->name, newfsp);
+      retval = FSMakeFSSpec (vref, BigEndianValue (fsp->parID), fsp->name, newfsp);
       if (retval == noErr)
 	fsp = newfsp;
     }

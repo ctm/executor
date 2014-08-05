@@ -69,8 +69,8 @@ typedef double Extended;
 typedef LONGINT Size;
 
 typedef INTEGER OSErr;
-typedef LONGINT OSType;
-typedef	LONGINT ResType;
+typedef ULONGINT OSType;
+typedef	ULONGINT ResType;
 
 typedef	LONGINT	OSErrRET;	/* for smashing d0 just like the Mac */
 typedef	LONGINT	INTEGERRET;

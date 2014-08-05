@@ -21,11 +21,12 @@ char ROMlib_rcsid_teDisplay[] =
 #include "rsys/region.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P2 (PUBLIC pascal trap, void, TESetJust, INTEGER, j, TEHandle, teh)
 {
   TE_SLAM (teh);
-  HxX (teh, just) = CW(j);
+  HxX (teh, just) = BigEndianValue(j);
   TECalText (teh);
   TE_SLAM (teh);
 }

@@ -26,6 +26,7 @@ char ROMlib_rcsid_fileInfo[] =
 #include <ctype.h>
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #if 0
 #if defined (CYGWIN32)
@@ -57,7 +58,7 @@ A3 (PUBLIC, OSErr, GetFInfo, StringPtr, filen, INTEGER, vrn,	/* IMIV-113 */
   OSErr temp;
   
   pbr.fileParam.ioNamePtr   = RM (filen);
-  pbr.fileParam.ioVRefNum   = CW (vrn);
+  pbr.fileParam.ioVRefNum   = BigEndianValue (vrn);
   pbr.fileParam.ioFVersNum  = 0;
   pbr.fileParam.ioFDirIndex = CWC (0);
   temp = PBGetFInfo (&pbr, 0);
@@ -80,8 +81,8 @@ PUBLIC OSErr HGetFInfo (INTEGER vref, LONGINT dirid, Str255 name,
 
   memset (&pbr, 0, sizeof pbr);
   pbr.fileParam.ioNamePtr = RM (name);
-  pbr.fileParam.ioVRefNum = CW (vref);
-  pbr.fileParam.ioDirID = CL (dirid);
+  pbr.fileParam.ioVRefNum = BigEndianValue (vref);
+  pbr.fileParam.ioDirID = BigEndianValue (dirid);
   retval = PBHGetFInfo (&pbr, FALSE);
   if (retval == noErr)
     {
@@ -103,7 +104,7 @@ A3(PUBLIC, OSErr, SetFInfo, StringPtr, filen, INTEGER, vrn,	/* IMIV-114 */
     LONGINT t;
 
     pbr.fileParam.ioNamePtr = RM(filen);
-    pbr.fileParam.ioVRefNum = CW(vrn);
+    pbr.fileParam.ioVRefNum = BigEndianValue(vrn);
     pbr.fileParam.ioFVersNum = 0;
     pbr.fileParam.ioFDirIndex = CWC (0);
     temp = PBGetFInfo(&pbr, 0);
@@ -127,7 +128,7 @@ A2(PUBLIC, OSErr, SetFLock, StringPtr, filen, INTEGER, vrn)	/* IMIV-114 */
     ParamBlockRec pbr;
 
     pbr.fileParam.ioNamePtr = RM(filen);
-    pbr.fileParam.ioVRefNum = CW(vrn);
+    pbr.fileParam.ioVRefNum = BigEndianValue(vrn);
     pbr.fileParam.ioFVersNum = 0;
     return(PBSetFLock(&pbr, 0));
 }
@@ -137,7 +138,7 @@ A2(PUBLIC, OSErr, RstFLock, StringPtr, filen, INTEGER, vrn)	/* IMIV-114 */
     ParamBlockRec pbr;
 
     pbr.fileParam.ioNamePtr = RM(filen);
-    pbr.fileParam.ioVRefNum = CW(vrn);
+    pbr.fileParam.ioVRefNum = BigEndianValue(vrn);
     pbr.fileParam.ioFVersNum = 0;
     return(PBRstFLock(&pbr, 0));
 }
@@ -148,7 +149,7 @@ A3(PUBLIC, OSErr, Rename, StringPtr, filen, INTEGER, vrn,	/* IMIV-114 */
     ParamBlockRec pbr;
 
     pbr.ioParam.ioNamePtr = RM(filen);
-    pbr.ioParam.ioVRefNum = CW(vrn);
+    pbr.ioParam.ioVRefNum = BigEndianValue(vrn);
     pbr.ioParam.ioVersNum = 0;
     pbr.ioParam.ioMisc = RM((LONGINT) (long) newf);
     return(PBRename(&pbr, 0));
@@ -280,11 +281,11 @@ Executor::open_attrib_bits (LONGINT file_id, VCB *vcbp, INTEGER *refnump)
   *refnump = 0;
   for (i = 0; i < NFCB; i++)
     {
-      if (CL(ROMlib_fcblocks[i].fdfnum) == file_id
+      if (BigEndianValue(ROMlib_fcblocks[i].fdfnum) == file_id
 	  && MR(ROMlib_fcblocks[i].fcvptr) == vcbp)
 	{
 	  if (*refnump == 0)
-	    *refnump = CW(i * 94 + 2);
+	    *refnump = BigEndianValue(i * 94 + 2);
 	  if (ROMlib_fcblocks[i].fcflags & fcfisres)
 	    retval |= ATTRIB_RESOPEN;
 	  else
@@ -325,15 +326,15 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
     }
 
     if (op == Get) {
-	if (dodirs && (CW(pb->fileParam.ioFDirIndex) < 0))
+	if (dodirs && (BigEndianValue(pb->fileParam.ioFDirIndex) < 0))
 	    indext = IGNORENAME;	/* IMIV-156 */
-	else if (CW(pb->fileParam.ioFDirIndex) > 0)
+	else if (BigEndianValue(pb->fileParam.ioFDirIndex) > 0)
 	    indext = FDirIndex;
 	else
 	    indext = NoIndex;
     } else
 	indext = NoIndex;
-    if ((err = ROMlib_nami(pb, CL(*dir), indext, &pathname, &filename, &endname,
+    if ((err = ROMlib_nami(pb, BigEndianValue(*dir), indext, &pathname, &filename, &endname,
 					  !dodirs, &vcbp, &datasbuf)) != noErr)
 /*-->*/	goto theend;
     rpathname = ROMlib_resname(pathname, filename, endname);
@@ -341,7 +342,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
         LONGINT file_num;
 
 	file_num = ST_INO (datasbuf);
-	pb->fileParam.ioFlNum = CL (file_num);
+	pb->fileParam.ioFlNum = BigEndianValue (file_num);
 
 	if (S_ISDIR (datasbuf.st_mode)) {
 	    LONGINT dirid;
@@ -436,12 +437,12 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 		    ((CInfoPBPtr) pb)->dirInfo.ioDrParID = CLC(1);
 		} else {
 		    *dir = ((CInfoPBPtr) pb)->dirInfo.ioDrDirID =
-		                              CL((LONGINT) ST_INO (datasbuf));
+		                              BigEndianValue((LONGINT) ST_INO (datasbuf));
 		    if (ST_INO (parentsbuf) == vcbp->u.ufs.ino)
 			((CInfoPBPtr) pb)->dirInfo.ioDrParID = CLC(2);
 		    else
 			((CInfoPBPtr) pb)->dirInfo.ioDrParID =
-					    CL((LONGINT) ST_INO (parentsbuf));
+					    BigEndianValue((LONGINT) ST_INO (parentsbuf));
 		}
 	    } else {
 		/* actually what happens here doesn't really matter, since
@@ -450,15 +451,15 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 		if (ST_INO (datasbuf) == vcbp->u.ufs.ino) {
 		    *dir = CLC(2);	/* root directory number */
 		} else
-		    *dir = CL((LONGINT) ST_INO (datasbuf));
-		pb->fileParam.ioFlNum = CL((LONGINT) ST_INO (datasbuf));
+		    *dir = BigEndianValue((LONGINT) ST_INO (datasbuf));
+		pb->fileParam.ioFlNum = BigEndianValue((LONGINT) ST_INO (datasbuf));
 	    }
 	} else {
 	    if (ST_INO (parentsbuf) == vcbp->u.ufs.ino)
 		*dir = CLC(2);	/* root directory number */
 	    else
-		*dir = CL((LONGINT) ST_INO (parentsbuf));
-	    pb->fileParam.ioFlNum = CL((LONGINT) ST_INO (datasbuf));
+		*dir = BigEndianValue((LONGINT) ST_INO (parentsbuf));
+	    pb->fileParam.ioFlNum = BigEndianValue((LONGINT) ST_INO (datasbuf));
 	    if (dodirs) {
 		((CInfoPBPtr) pb)->hFileInfo.ioFlParID = *dir;
 		((CInfoPBPtr) pb)->hFileInfo.ioFlClpSiz = CLC(512);
@@ -479,14 +480,14 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 							 pathname, &creator,
 							 &type))
 		{
-		  pb->fileParam.ioFlFndrInfo.fdCreator = CL (creator);
-		  pb->fileParam.ioFlFndrInfo.fdType = CL (type);
+		  pb->fileParam.ioFlFndrInfo.fdCreator = BigEndianValue (creator);
+		  pb->fileParam.ioFlFndrInfo.fdType = BigEndianValue (type);
 		}
 	    }
-	    pb->fileParam.ioFlLgLen	= CL(datasbuf.st_size);
+	    pb->fileParam.ioFlLgLen	= BigEndianValue(datasbuf.st_size);
 	    pb->fileParam.ioFlRLgLen	= 0;
 	    pb->fileParam.ioFlCrDat	=
-				      CL(UNIXTIMETOMACTIME(datasbuf.st_ctime));
+				      BigEndianValue(UNIXTIMETOMACTIME(datasbuf.st_ctime));
 	    if (dodirs)
 		memset(&((CInfoPBPtr) pb)->hFileInfo.ioFlXFndrInfo, 0,
 			    sizeof(((CInfoPBPtr) pb)->hFileInfo.ioFlXFndrInfo));
@@ -505,7 +506,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 	pb->fileParam.ioFlVersNum = 0;
 	pb->fileParam.ioFlStBlk = -1;	/* NOT SUPPORTED */
 	pb->fileParam.ioFlRStBlk = -1;	/* NOT SUPPORTED */
-	pb->fileParam.ioFlMdDat = CL(UNIXTIMETOMACTIME(
+	pb->fileParam.ioFlMdDat = BigEndianValue(UNIXTIMETOMACTIME(
 			       MAX(resourcesbuf.st_mtime, datasbuf.st_mtime)));
 	if (dodirs)
 	   ((CInfoPBPtr) pb)->hFileInfo.ioFlBkDat = 0;
@@ -520,7 +521,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 	  
 	  if (ROMlib_creator_and_type_from_filename
 	      (strlen (filename), filename, &creator, &type)
-	      && finfo.fdType == CL (type) && finfo.fdCreator == CL (creator))
+	      && finfo.fdType == BigEndianValue (type) && finfo.fdCreator == BigEndianValue (creator))
 	    err = noErr;
 	  else if ((err = ROMlib_hiddenbyname(Set, pathname, rpathname,
 					      &dateinfo, &finfo,
@@ -534,7 +535,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 	accessupdatetimes[0].tv_sec  = datasbuf.st_atime;
 	accessupdatetimes[0].tv_usec = 0;
 	accessupdatetimes[1].tv_sec  =
-				MACTIMETOGUNIXTIME(CL(pb->fileParam.ioFlMdDat));
+				MACTIMETOGUNIXTIME(BigEndianValue(pb->fileParam.ioFlMdDat));
 	accessupdatetimes[1].tv_usec = 0;
 	Uutimes(pathname, accessupdatetimes);
 #endif /* MACBLITZ */
@@ -713,7 +714,7 @@ A2(PUBLIC, OSErr, ufsPBSetFLock, ParmBlkPtr, pb,	/* INTERNAL */
 A2(PUBLIC, OSErr, ufsPBHSetFLock, HParmBlkPtr,		/* INTERNAL */
 						    pb, BOOLEAN, a)
 {
-    return PBLockUnlock((ParmBlkPtr) pb, a, CL(pb->fileParam.ioDirID), Lock);
+    return PBLockUnlock((ParmBlkPtr) pb, a, BigEndianValue(pb->fileParam.ioDirID), Lock);
 }
 
 A2(PUBLIC, OSErr, ufsPBRstFLock, ParmBlkPtr, pb,	/* INTERNAL */
@@ -725,7 +726,7 @@ A2(PUBLIC, OSErr, ufsPBRstFLock, ParmBlkPtr, pb,	/* INTERNAL */
 A2(PUBLIC, OSErr, ufsPBHRstFLock, HParmBlkPtr, pb,	/* INTERNAL */
 							BOOLEAN, a)
 {
-    return PBLockUnlock((ParmBlkPtr) pb, a, CL(pb->fileParam.ioDirID), Unlock);
+    return PBLockUnlock((ParmBlkPtr) pb, a, BigEndianValue(pb->fileParam.ioDirID), Unlock);
 }
 
 A2(PUBLIC, OSErr, ufsPBSetFVers, ParmBlkPtr, pb,	/* INTERNAL */
@@ -745,7 +746,7 @@ A2(PUBLIC, OSErr, ufsPBRename, ParmBlkPtr, pb,		/* INTERNAL */
 A2(PUBLIC, OSErr, ufsPBHRename, HParmBlkPtr, pb,	/* INTERNAL */
 						      BOOLEAN, a)
 {
-    return ROMlib_PBMoveOrRename((ParmBlkPtr) pb, a, CL(pb->fileParam.ioDirID),
-	     CL(pb->fileParam.ioDirID), (char *) (long) MR(pb->ioParam.ioMisc),
+    return ROMlib_PBMoveOrRename((ParmBlkPtr) pb, a, BigEndianValue(pb->fileParam.ioDirID),
+	     BigEndianValue(pb->fileParam.ioDirID), (char *) (long) MR(pb->ioParam.ioMisc),
 								      HRename);
 }

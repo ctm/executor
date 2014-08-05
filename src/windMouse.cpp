@@ -21,6 +21,7 @@ char ROMlib_rcsid_windMouse[] =
 #include "rsys/menu.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #if !defined (No_STEF_zoommods)
 /* WINDOW_ZOOMED returns TRUE if w is currently in stdState (big) */
@@ -84,8 +85,8 @@ A3(PRIVATE, BOOLEAN, xTrackBox, WindowPtr, wp, Point, pt,
        WINDCALL(wp, wDraw, part);
        while (!GetOSEvent(mUpMask, &ev))
 	 {
-	   ev.where.h = CW(ev.where.h);
-	   ev.where.v = CW(ev.where.v);
+	   ev.where.h = BigEndianValue(ev.where.h);
+	   ev.where.v = BigEndianValue(ev.where.v);
 	   CALLDRAGHOOK();
 	   if (pt.h != ev.where.h || pt.v != ev.where.v)
 	     {
@@ -145,13 +146,13 @@ P3(PUBLIC pascal trap, void, ZoomWindow, WindowPtr, wp,		/* IMIV-50 */
 	{
 	  u = &((WStateData *) STARH (WINDOW_DATA (wp)))->userState;
 	  u->top
-	    = CW (CW (PORT_RECT (wp).top) - CW (PORT_BOUNDS (wp).top));
+	    = BigEndianValue (BigEndianValue (PORT_RECT (wp).top) - BigEndianValue (PORT_BOUNDS (wp).top));
 	  u->left
-	    = CW (CW (PORT_RECT (wp).left) - CW (PORT_BOUNDS (wp).left));
+	    = BigEndianValue (BigEndianValue (PORT_RECT (wp).left) - BigEndianValue (PORT_BOUNDS (wp).left));
 	  u->bottom
-	    = CW (CW (PORT_RECT (wp).bottom) - CW(PORT_BOUNDS (wp).top));
+	    = BigEndianValue (BigEndianValue (PORT_RECT (wp).bottom) - BigEndianValue(PORT_BOUNDS (wp).top));
 	  u->right
-	    = CW (CW (PORT_RECT (wp).right) - CW (PORT_BOUNDS (wp).left));
+	    = BigEndianValue (BigEndianValue (PORT_RECT (wp).right) - BigEndianValue (PORT_BOUNDS (wp).left));
 	}
 #endif
       behind = NewRgn();
@@ -163,11 +164,11 @@ P3(PUBLIC pascal trap, void, ZoomWindow, WindowPtr, wp,		/* IMIV-50 */
 	PORT_RECT (wp) =
 	  MR (*(WStateData **) WINDOW_DATA (wp))->stdState;
       OffsetRect (&PORT_BOUNDS (wp),
-		  -CW(PORT_RECT (wp).left) - CW(PORT_BOUNDS (wp).left),
-		  -CW(PORT_RECT (wp).top)  - CW(PORT_BOUNDS (wp).top));
+		  -BigEndianValue(PORT_RECT (wp).left) - BigEndianValue(PORT_BOUNDS (wp).left),
+		  -BigEndianValue(PORT_RECT (wp).top)  - BigEndianValue(PORT_BOUNDS (wp).top));
       
       OffsetRect (&PORT_RECT (wp),
-		  -CW (PORT_RECT (wp).left), -CW (PORT_RECT (wp).top));
+		  -BigEndianValue (PORT_RECT (wp).left), -BigEndianValue (PORT_RECT (wp).top));
       WINDCALL(wp, wCalcRgns, 0);
       UnionRgn(behind, WINDOW_STRUCT_REGION (wp), behind);
       

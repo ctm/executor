@@ -20,6 +20,7 @@ char ROMlib_rcsid_sound[] =
 #include "rsys/mman.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /* TRUE when we want to pretend this host has no sound support. */
 bool Executor::sound_disabled_p;
@@ -58,9 +59,9 @@ PUBLIC int Executor::ROMlib_PretendSound = soundpretend;
 static inline bool
 qfull_p (SndChannelPtr chanp)
 {
-  return ((CW (chanp->qTail) == CW (chanp->qHead) - 1 ||
+  return ((BigEndianValue (chanp->qTail) == BigEndianValue (chanp->qHead) - 1 ||
 	   (chanp->qHead == CWC (0)
-	    && CW (chanp->qTail) == CW (chanp->qLength) - 1)));
+	    && BigEndianValue (chanp->qTail) == BigEndianValue (chanp->qLength) - 1)));
 }
 
 static inline bool
@@ -73,7 +74,7 @@ qempty_p (SndChannelPtr chanp)
    * get 2.0 out the door.
    */
   return (chanp->qHead == chanp->qTail
-	  || CW (chanp->qLength) <= 0);
+	  || BigEndianValue (chanp->qLength) <= 0);
 }
 
 static inline void
@@ -81,9 +82,9 @@ enq (SndChannelPtr chanp, SndCommand cmd)
 {
   unsigned tail;
 
-  tail = CW (chanp->qTail);
+  tail = BigEndianValue (chanp->qTail);
   chanp->queue[tail] = cmd;
-  chanp->qTail = CW ((tail + 1) % CW (chanp->qLength));
+  chanp->qTail = BigEndianValue ((INTEGER)((tail + 1) % BigEndianValue (chanp->qLength)));
 }
 
 static inline SndCommand
@@ -92,9 +93,9 @@ deq (SndChannelPtr chanp)
   SndCommand ret;
   unsigned head;
 
-  head = CW (chanp->qHead);
+  head = BigEndianValue (chanp->qHead);
   ret = chanp->queue[head];
-  chanp->qHead = CW ((head + 1) % CW (chanp->qLength));
+  chanp->qHead = BigEndianValue ((INTEGER)((head + 1) % BigEndianValue (chanp->qLength)));
 
   return ret;
 }
@@ -275,12 +276,12 @@ PUBLIC int Executor::ROMlib_get_snd_cmds (Handle sndh, SndCommand **cmdsp)
   int retval;
 
   p = STARH (sndh);
-  format = CW (*(INTEGER *)p);
+  format = BigEndianValue (*(INTEGER *)p);
   switch (format)
     {
     case 1:
       p += 2;
-      num_formats = CW (*(INTEGER *)p);
+      num_formats = BigEndianValue (*(INTEGER *)p);
       switch (num_formats)
 	{
 	case 0:
@@ -308,7 +309,7 @@ PUBLIC int Executor::ROMlib_get_snd_cmds (Handle sndh, SndCommand **cmdsp)
   
   /* Now p points to "Number of sound commands" field of resource */
 
-  retval = CW (*(INTEGER *)p);
+  retval = BigEndianValue (*(INTEGER *)p);
   *cmdsp = (SndCommand *)(p+2);
 
   return retval;
@@ -329,12 +330,12 @@ P3(PUBLIC, pascal trap OSErr, SndPlay, SndChannelPtr, chanp, Handle, sndh,
     resp = NULL;
 
   if (resp)
-    format = CW (*(INTEGER *)resp);
+    format = BigEndianValue (*(INTEGER *)resp);
   else
     format = 0;
 
   warning_sound_log ("chanp %p fmt %d num_fmts %d async %d",
-		     chanp, format, resp ? CW (*((INTEGER *)(resp+2))) : 0,
+		     chanp, format, resp ? BigEndianValue (*((INTEGER *)(resp+2))) : 0,
 		     async);
 
   warning_sound_log (" sndh %s", (HGetState(sndh) & LOCKBIT)
@@ -374,7 +375,7 @@ P3(PUBLIC, pascal trap OSErr, SndPlay, SndChannelPtr, chanp, Handle, sndh,
            offset */
 	if (cmd.cmd & CWC (0x8000))
 	  {
-	    cmd.param2 = (LONGINT) RM ((resp + CL (cmd.param2)));
+	    cmd.param2 = (LONGINT) RM ((resp + BigEndianValue (cmd.param2)));
 	    cmd.cmd &= CWC (~0x8000);
 	  }
 
@@ -451,11 +452,6 @@ P4(PUBLIC pascal trap, OSErr, SndNewChannel, HIDDEN_SndChannelPtr *, chanpp,
 P4(PUBLIC, pascal trap OSErr, SndAddModifier, SndChannelPtr, chanp,
 				      ProcPtr, mod, INTEGER, id, LONGINT, init)
 {
-#if defined(OLD_BROKEN_NEXTSTEP_SOUND)
-    Handle h;
-    SndCommand cmd;
-    ModifierStubPtr modp;
-#endif /* defined(OLD_BROKEN_NEXTSTEP_SOUND) */
     OSErr retval;
 
     warning_sound_log ("chanp %p", chanp);
@@ -468,52 +464,9 @@ P4(PUBLIC, pascal trap OSErr, SndAddModifier, SndChannelPtr, chanp,
     case soundpretend:
 	retval = noErr;
 	break;
-#if defined(OLD_BROKEN_NEXTSTEP_SOUND)
-    case soundon:
-	if ((unsigned short) chanp->qLength != (unsigned short) CWC(stdQLength))
-	    retval = badChannel;
-	else {
-	    modp = (ModifierStubPtr) NewPtr(sizeof(ModifierStub));
-	    modp->nextStub = chanp->firstMod;
-	    chanp->firstMod = CL(modp);
-	    modp->flags = 0;
-	    if (mod) {
-		modp->code = CL(mod);
-		modp->hState = 0;
-	    } else {
-		h = GetResource(TICK("snth"), id);
-		if (STARH(h) != (Ptr) P_snth5) {	/* ACK; phone handle stuff */
-		    LoadResource(h);
-		    modp->flags = MOD_SYNTH_FLAG;
-		    modp->hState = HGetState(h);
-		    HLock(h);
-		}
-		modp->code = (ProcPtr) h->p;
-	    }
-	    modp->userInfo = 0;
-	    modp->count = 0;
-	    modp->every = 0;
-	    if (modp->code) {
-		cmd.cmd    = CWC(initCmd);
-		cmd.param1 = CWC(0);
-		cmd.param2 = CL(init);
-		retval = SndDoImmediate(chanp, &cmd);
-	    } else
-		retval = resProblem;
-	}
-	break;
-#endif
     }
     return retval;
 }
-
-#if defined(OLD_BROKEN_NEXTSTEP_SOUND)
-static void dumpcmd(SndCommand *cmdp)
-{
-    printf("#%x,1-%x,2-%x.", (LONGINT) CW(cmdp->cmd), (LONGINT) CW(cmdp->param1), (LONGINT) CL(cmdp->param2));
-}
-#endif
-
 
 typedef pascal BOOLEAN (*snthfp)(SndChannelPtr, SndCommand *, ModifierStubPtr);
 
@@ -526,29 +479,6 @@ static BOOLEAN callasynth(SndChannelPtr chanp, SndCommand *cmdp, ModifierStubPtr
     return CToPascalCall((void*)MR(mp->code), CTOP_SectRect, chanp, cmdp, mp);
 }
 
-#if defined(OLD_BROKEN_NEXTSTEP_SOUND)
-PRIVATE void recsndcmd(SndChannelPtr chanp, SndCommand *cmdp,
-							    ModifierStubPtr mp)
-{
-    INTEGER i;
-    BOOLEAN doanother;
-
-    if (mp) {
-	i = 0;
-	do {
-	    doanother = callasynth(chanp, cmdp, mp);
-	    recsndcmd(chanp, cmdp, MR(mp->nextStub));
-	    if (doanother) {
-		cmdp->cmd = CWC(requestNextCmd);
-		cmdp->param1 = CW(++i);
-		cmdp->param2 = 0;
-	    }
-	} while (doanother);
-    }
-}
-#endif /* defined(OLD_BROKEN_NEXTSTEP_SOUND) */
-
-
 static inline boolean_t
 earlier_p (snd_time t1, snd_time t2)
 {
@@ -566,7 +496,7 @@ earlier (snd_time t1, snd_time t2)
 static inline unsigned int
 snd_duration (SoundHeaderPtr hp)
 {
-  return CL (hp->length);
+  return BigEndianValue (hp->length);
 }
 
 #define CMD_DONE(c) (SND_CHAN_FLAGS_X (c) &= CWC (~CHAN_CMDINPROG_FLAG))
@@ -604,8 +534,8 @@ do_current_command (SndChannelPtr chanp, struct hunger_info info)
 	  
 	  warning_sound_log ("bufferCmd dur %d", (int) duration);
 
-	  if (resample (sp, info.buf, CL (hp->length),
-			info.bufsize, CL (hp->sampleRate),
+	  if (resample (sp, info.buf, BigEndianValue (hp->length),
+			info.bufsize, BigEndianValue (hp->sampleRate),
 			SND_RATE << 16,
 			&SND_CHAN_CURRENT_START (chanp),
 			&SND_CHAN_PREV_SAMP (chanp),
@@ -664,11 +594,11 @@ do_current_db (SndChannelPtr chanp, struct hunger_info info)
 		     f2d (SND_CHAN_CURRENT_START (chanp)),
 		     (int) SND_CHAN_TIME (chanp),
 		     (int) info.t3,
-		     CL (dbp->dbNumFrames),
-		     CL (dbhp->dbhSampleRate) / (double) (1 << 16));
+		     BigEndianValue (dbp->dbNumFrames),
+		     BigEndianValue (dbhp->dbhSampleRate) / (double) (1 << 16));
 #endif
-  if (resample (sp, info.buf, CL (dbp->dbNumFrames),
-		info.bufsize, CL (dbhp->dbhSampleRate),
+  if (resample (sp, info.buf, BigEndianValue (dbp->dbNumFrames),
+		info.bufsize, BigEndianValue (dbhp->dbhSampleRate),
 		SND_RATE << 16,
 		&SND_CHAN_CURRENT_START (chanp),
 		&SND_CHAN_PREV_SAMP (chanp),
@@ -687,13 +617,13 @@ do_current_db (SndChannelPtr chanp, struct hunger_info info)
 	}
 #if 0
       warning_sound_log ("dblback %p ch %p bp %p",
-			 CL (dbhp->dbhDoubleBack),
+			 BigEndianValue (dbhp->dbhDoubleBack),
 			 chanp, dbp);
       warning_sound_log (" frs %d flgs %d ui1 %x ui2 %x",
-			 CL (dbp->dbNumFrames),
-			 CL (dbp->dbFlags),
-			 CL (dbp->dbUserInfo[0]),
-			 CL (dbp->dbUserInfo[1]));
+			 BigEndianValue (dbp->dbNumFrames),
+			 BigEndianValue (dbp->dbFlags),
+			 BigEndianValue (dbp->dbUserInfo[0]),
+			 BigEndianValue (dbp->dbUserInfo[1]));
 #endif
       CToPascalCall ((void*)MR (dbhp->dbhDoubleBack), CTOP_SetCTitle,
 		     chanp, dbp);
@@ -811,8 +741,8 @@ P3(PUBLIC, pascal trap OSErr, SndDoCommand, SndChannelPtr, chanp,
     warning_sound_log ("cmdp = NULL");
   else
     warning_sound_log
-      ("cmd %d param1 0x%x param2 0x%x nowait %d", CW (cmdp->cmd),
-       CW (cmdp->param1), CL (cmdp->param2), CW (nowait));
+      ("cmd %d param1 0x%x param2 0x%x nowait %d", BigEndianValue (cmdp->cmd),
+       BigEndianValue (cmdp->param1), BigEndianValue (cmdp->param2), CW (nowait));
 #endif
 
 #if ERROR_SUPPORTED_P (ERROR_SOUND_LOG)
@@ -826,7 +756,7 @@ P3(PUBLIC, pascal trap OSErr, SndDoCommand, SndChannelPtr, chanp,
       else
 	warning_sound_log
 	  (" len %d rate 0x%x encode %d freq %d",
-	   CL (hp->length), CL (hp->sampleRate), hp->encode,
+	   BigEndianValue (hp->length), BigEndianValue (hp->sampleRate), hp->encode,
 	   hp->baseFrequency);
     }
 #endif
@@ -893,7 +823,7 @@ P2 (PUBLIC, pascal trap OSErr, SndDoImmediate, SndChannelPtr, chanp,
 #endif
 	{
 	  cmd = *cmdp;
-	  switch (CW (cmd.cmd))
+	  switch (BigEndianValue (cmd.cmd))
 	    {
 	    case flushCmd:
 	      warning_sound_log ("flushCmd");
@@ -924,7 +854,7 @@ P2 (PUBLIC, pascal trap OSErr, SndDoImmediate, SndChannelPtr, chanp,
 	      break;
 
 	    default:
-	      warning_sound_log ("UNKNOWN CMD %d", CW (cmd.cmd));
+	      warning_sound_log ("UNKNOWN CMD %d", BigEndianValue (cmd.cmd));
 	      retval = noErr;
 	    }
 	}
@@ -1053,13 +983,13 @@ P2(PUBLIC, pascal trap OSErr, SndDisposeChannel, SndChannelPtr, chanp,
 	    block = block_virtual_ints ();
 	}
 	restore_virtual_ints (block);
-	nextmp = CL(chanp->firstMod);
+	nextmp = BigEndianValue(chanp->firstMod);
 	while ((mp = nextmp)) {
-	    nextmp = CL(mp->nextStub);
+	    nextmp = BigEndianValue(mp->nextStub);
 	    cmd.cmd = CWC(freeCmd);
 	    callasynth(chanp, &cmd, mp);
 	    if (mp->flags & MOD_SYNTH_FLAG) {
-		h = RecoverHandle((Ptr) CL(mp->code));
+		h = RecoverHandle((Ptr) BigEndianValue(mp->code));
 		HSetState(h, mp->hState);
 	    }
 	    DisposPtr((Ptr) mp);
@@ -1088,26 +1018,3 @@ P2(PUBLIC, pascal trap OSErr, SndDisposeChannel, SndChannelPtr, chanp,
     }
     return retval;
 }
-
-#if defined(OLD_BROKEN_NEXTSTEP_SOUND)
-void ROMlib_soundcomplete( void *vp )
-{
-    SndChannelPtr chanp;
-    virtual_int_state_t block;
-
-    chanp = vp;
-    block = block_virtual_ints ();
-    if (chanp->flags & CWC(CHAN_IMMEDIATE_FLAG))
-	chanp->flags &= CWC(~CHAN_IMMEDIATE_FLAG);
-    else {
-	chanp->qHead = CW(CW(chanp->qHead) + 1);
-	if ((unsigned short) chanp->qHead == (unsigned short) CWC(stdQLength))
-	    chanp->qHead = CWC(0);
-	if (chanp->qHead == chanp->qTail)
-	    chanp->flags &= CWC(~CHAN_BUSY_FLAG);
-	else
-	    recsndcmd(chanp, &chanp->queue[CW(chanp->qHead)], CL(chanp->firstMod));
-    }
-    restore_virtual_ints (block);
-}
-#endif

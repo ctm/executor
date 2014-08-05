@@ -18,6 +18,7 @@ char ROMlib_rcsid_qIMV[] =
 #include "rsys/tempalloc.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /* these stubs are here to make my Pic V2 code work */
 
@@ -86,10 +87,10 @@ P3 (PUBLIC pascal trap, void, GetCPixel, INTEGER, h, INTEGER, v,
   temp_pm.pmTable = RM (ctab);
   pixmap_set_pixel_fields (&temp_pm, bpp);
   
-  src_rect.top    = CW (v);
-  src_rect.bottom = CW (v + 1);
-  src_rect.left   = CW (h);
-  src_rect.right  = CW (h + 1);
+  src_rect.top    = BigEndianValue (v);
+  src_rect.bottom = BigEndianValue (v + 1);
+  src_rect.left   = BigEndianValue (h);
+  src_rect.right  = BigEndianValue (h + 1);
 
   dst_rect = temp_pm.bounds;
   
@@ -116,7 +117,7 @@ P3 (PUBLIC pascal trap, void, GetCPixel, INTEGER, h, INTEGER, v,
       
 	  /* non-device color tables aren't guaranteed to be sorted, so we
 	     need to hunt for an entry with the specified value */
-	  swapped_pixval = CW (pixval);
+	  swapped_pixval = BigEndianValue (pixval);
 	  for (i = CTAB_SIZE (ctab); i >= 0; i--)
 	    if (cspec[i].value == swapped_pixval)
 	      break;
@@ -142,10 +143,10 @@ P3 (PUBLIC pascal trap, void, SetCPixel, INTEGER, h, INTEGER, v,
   RGBColor save_fg_rgb;
   int32 save_fg;
   
-  temp_rect.top    = CW (v);
-  temp_rect.bottom = CW (v + 1);
-  temp_rect.left   = CW (h);
-  temp_rect.right  = CW (h + 1);
+  temp_rect.top    = BigEndianValue (v);
+  temp_rect.bottom = BigEndianValue (v + 1);
+  temp_rect.left   = BigEndianValue (h);
+  temp_rect.right  = BigEndianValue (h + 1);
   
   port = thePort;
   cgrafport_p = CGrafPort_p (port);
@@ -225,7 +226,7 @@ P8 (PUBLIC pascal trap, void, SeedCFill, BitMap *, srcbp, BitMap *, dstbp,
     }
   else
     {
-      mr.matchData = CL (matchdata);
+      mr.matchData = BigEndianValue (matchdata);
     }
   
   GetCPixel (seedh, seedv, &pixel);
@@ -248,11 +249,11 @@ P8 (PUBLIC pascal trap, void, SeedCFill, BitMap *, srcbp, BitMap *, dstbp,
   height = RECT_HEIGHT (srcrp);
   
   temp_rect.top = temp_rect.left = CWC (0);
-  temp_rect.right = CW (width);
-  temp_rect.bottom = CW (height);
+  temp_rect.right = BigEndianValue (width);
+  temp_rect.bottom = BigEndianValue (height);
 
   row_words = (width + 15) / 16;
-  temp_bitmap1.rowBytes = CW (row_words * 2);
+  temp_bitmap1.rowBytes = BigEndianValue (row_words * 2);
   TEMP_ALLOC_ALLOCATE (t, temp_bitmap1_bits, row_words * 2 * height);
   temp_bitmap1.baseAddr = (Ptr)RM (t);
   memset (MR (temp_bitmap1.baseAddr), '\377', row_words * 2 * height);
@@ -308,7 +309,7 @@ P7 (PUBLIC pascal trap, void, CalcCMask, BitMap *, srcbp, BitMap *, dstbp,
     }
   else
     {
-      mr.matchData = CL (matchdata);
+      mr.matchData = BigEndianValue (matchdata);
     }
   
   mr.red       = seedrgbp->red;
@@ -329,8 +330,8 @@ P7 (PUBLIC pascal trap, void, CalcCMask, BitMap *, srcbp, BitMap *, dstbp,
   height = RECT_HEIGHT (srcrp);
   
   temp_rect.top = temp_rect.left = CWC (0);
-  temp_rect.right = CW (width);
-  temp_rect.bottom = CW (height);
+  temp_rect.right = BigEndianValue (width);
+  temp_rect.bottom = BigEndianValue (height);
 
   row_words = (width + 15) / 16;
   temp_bitmap1.rowBytes = CW (row_words * 2);

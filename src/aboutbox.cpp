@@ -56,6 +56,7 @@ char ROMlib_rcsid_aboutbox[] =
 #define COPYRIGHT_STRING_2 "All rights reserved."
 
 using namespace Executor;
+using namespace ByteSwap;
 
 static struct { const char *name;char *text; ControlHandle ctl; } about_box_buttons[] = {
   { LICENSE_BUTTON_NAME, NULL /* generated on the fly from licensetext.c */,
@@ -511,10 +512,10 @@ create_about_box ()
 	   /* Set up the rectangle enclosing each button. */
 	   r.top    = CWC (ABOUT_BOX_HEIGHT - 30);
 	   r.bottom = CWC (ABOUT_BOX_HEIGHT - 30 + BUTTON_HEIGHT);
-	   r.left   = CW ((b * ABOUT_BOX_WIDTH / NELEM (about_box_buttons))
+	   r.left   = BigEndianValue ((b * ABOUT_BOX_WIDTH / NELEM (about_box_buttons))
 			  + (ABOUT_BOX_WIDTH / NELEM (about_box_buttons)
 			     - BUTTON_WIDTH) / 2);
-	   r.right  = CW (CW (r.left) + BUTTON_WIDTH);
+	   r.right  = BigEndianValue (BigEndianValue (r.left) + BUTTON_WIDTH);
 
 	   str255_from_c_string (str, about_box_buttons[b].name);
 	   about_box_buttons[b].ctl = NewControl (about_box, &r, str, TRUE, 0,
@@ -601,7 +602,7 @@ draw_status_info (boolean_t executor_p)
 #define MB (1024 * 1024U)
   gestalt_success_p = (C_GestaltTablesOnly (gestaltLogicalRAMSize, &total_ram)
 		       == noErr);
-  total_ram = CL (total_ram);
+  total_ram = BigEndianValue (total_ram);
   if (gestalt_success_p)
     sprintf (total_ram_string, "%s%u.%02u MB", ram_tag,
 	     total_ram / MB, (total_ram % MB) * 100 / MB);
@@ -661,7 +662,7 @@ event_loop (boolean_t executor_p)
 
 	TEIdle (about_te);
 
-	switch (CW (evt.what)) {
+	switch (BigEndianValue (evt.what)) {
 	  case updateEvt:
 		BeginUpdate (about_box);
 		PenNormal ();
@@ -692,7 +693,7 @@ event_loop (boolean_t executor_p)
 	  {
 	    char ch;
 
-	    ch = CL (evt.message) & 0xFF;
+	    ch = BigEndianValue (evt.message) & 0xFF;
 	    switch (ch) {
 	      case '\r':
 	      case NUMPAD_ENTER:

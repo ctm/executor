@@ -14,6 +14,7 @@ char ROMlib_rcsid_notify[] =
 #include "rsys/hook.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /* Forward declarations in NotifyMgr.h (DO NOT DELETE THIS LINE) */
 
@@ -52,7 +53,7 @@ A1(PUBLIC trap, OSErrRET, NMInstall, NMRecPtr, nmptr)
 	  savea0 = EM_A0;
 	  savea1 = EM_A1;
 	  PUSHADDR((LONGINT) (long) US_TO_SYN68K(nmptr));
-	  CALL_EMULATOR((syn68k_addr_t) CL((long) nmptr->nmResp));
+	  CALL_EMULATOR((syn68k_addr_t) BigEndianValue((long) nmptr->nmResp));
 	  EM_D0 = saved0;
 	  EM_D1 = saved1;
 	  EM_D2 = saved2;

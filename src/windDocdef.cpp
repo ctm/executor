@@ -20,6 +20,7 @@ char ROMlib_rcsid_windDocdef[] =
 #include "rsys/image.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 namespace Executor {
 #include "zoom.cmap"
@@ -40,8 +41,8 @@ PUBLIC BOOLEAN ROMlib_window_zoomed(WindowPeek wp)
     boundsrp = &PORT_BOUNDS (wp);
 
     retval = (WINDOW_SPARE_FLAG_X (wp)
-	      && CW (portrp->top)  - CW (boundsrp->top)  == CW (staterp->top)
-	      && CW (portrp->left) - CW (boundsrp->left) == CW (staterp->left)
+	      && BigEndianValue (portrp->top)  - BigEndianValue (boundsrp->top)  == BigEndianValue (staterp->top)
+	      && BigEndianValue (portrp->left) - BigEndianValue (boundsrp->left) == BigEndianValue (staterp->left)
 	      && RECT_WIDTH(portrp) == RECT_WIDTH(staterp)
 	      && RECT_HEIGHT(portrp) == RECT_HEIGHT(staterp) );
     return retval;
@@ -160,7 +161,7 @@ Executor::validate_colors_for_window (GrafPtr w)
 	{
 	  /* same content color */
 	  for (i = 0; i <= w_ctab_size; i ++)
-	    if (w_ctab_table[i].value == CW (wContentColor))
+	    if (w_ctab_table[i].value == BigEndianValue (wContentColor))
 	      color_window_colors[wContentColor]
 		= w_ctab_table[i].rgb;
 	}
@@ -172,7 +173,7 @@ Executor::validate_colors_for_window (GrafPtr w)
 	      int w_ctab_entry_index;
 	      
 	      w_ctab_entry = &w_ctab_table[i];
-	      w_ctab_entry_index = CW (w_ctab_entry->value);
+	      w_ctab_entry_index = BigEndianValue (w_ctab_entry->value);
 	      if (w_ctab_entry_index < 0 || w_ctab_entry_index > 12)
 		{
 #if !defined (CYGWIN32) /* just gets in the way of debugging under windows */
@@ -300,10 +301,10 @@ toggle_box_active (enum box_flag which_box, Point origin)
   pixel_image_t *box;
 
   /* compute the destination rectangle */
-  dst_rect.top    = CW (origin.v);
-  dst_rect.left   = CW (origin.h);
-  dst_rect.bottom = CW (origin.v + 13);
-  dst_rect.right  = CW (origin.h + 13);
+  dst_rect.top    = BigEndianValue (origin.v);
+  dst_rect.left   = BigEndianValue (origin.h);
+  dst_rect.bottom = BigEndianValue (origin.v + 13);
+  dst_rect.right  = BigEndianValue (origin.h + 13);
 
   /* set box */
   if (rounded_window_p)
@@ -320,7 +321,7 @@ toggle_box_active (enum box_flag which_box, Point origin)
     {
       /* invert the set bits of the box */
       PORT_FG_COLOR_X (thePort)
-	= CL ((1 << PIXMAP_PIXEL_SIZE (CPORT_PIXMAP (thePort))) - 1);
+	= BigEndianValue ((1 << PIXMAP_PIXEL_SIZE (CPORT_PIXMAP (thePort))) - 1);
       PORT_FG_COLOR_X (thePort) = CLC (0);
     }
   else
@@ -349,7 +350,7 @@ toggle_box_active (enum box_flag which_box, Point origin)
 	target_color = &ROMlib_white_rgb_color;
 
       PORT_FG_COLOR_X (thePort)
-	= CL (Color2Index (target_color) ^ Color2Index (frame));
+	= BigEndianValue (Color2Index (target_color) ^ Color2Index (frame));
     }
 
   image_copy (rounded_window_p ? ractive : active,
@@ -362,8 +363,8 @@ toggle_zoom_box (GrafPtr w)
 {
   Point origin;
   
-  origin.h = CW (PORT_RECT (w).right) - CW (PORT_BOUNDS (w).left) - 21;
-  origin.v = CW (PORT_RECT (w).top)   - CW (PORT_BOUNDS (w).top) - 16;
+  origin.h = BigEndianValue (PORT_RECT (w).right) - BigEndianValue (PORT_BOUNDS (w).left) - 21;
+  origin.v = BigEndianValue (PORT_RECT (w).top)   - BigEndianValue (PORT_BOUNDS (w).top) - 16;
   
   toggle_box_active (zoom_box_flag, origin);
 }
@@ -373,8 +374,8 @@ toggle_go_away_box (GrafPtr w)
 {
   Point origin;
   
-  origin.h = CW (PORT_RECT (w).left) - CW (PORT_BOUNDS (w).left) + 8;
-  origin.v = CW (PORT_RECT (w).top)  - CW (PORT_BOUNDS (w).top) - 16;
+  origin.h = BigEndianValue (PORT_RECT (w).left) - BigEndianValue (PORT_BOUNDS (w).left) + 8;
+  origin.v = BigEndianValue (PORT_RECT (w).top)  - BigEndianValue (PORT_BOUNDS (w).top) - 16;
 
   toggle_box_active (go_away_box_flag, origin);
 }
@@ -434,10 +435,10 @@ draw_title (GrafPtr w,
   int title_start;
   int left_bound;
 
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
 
 /* #warning "clean up this port mess in draw_title ()" */
   GetPort(&tp);
@@ -553,10 +554,10 @@ draw_frame (GrafPtr w, int draw_zoom_p, boolean_t goaway_override)
   int left, top, right, bottom;
   Rect r;
 
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
   
   PenSize (1, 1);
   /* draw with the current foreground color */
@@ -573,7 +574,7 @@ draw_frame (GrafPtr w, int draw_zoom_p, boolean_t goaway_override)
 
   /* draw the frame; these are drawn in the frame_outline_color */
   RGBForeColor (frame_outline);
-  r.bottom = CW (bottom + 1);
+  r.bottom = BigEndianValue (bottom + 1);
   FrameRect (&r);
   MoveTo (left, top - 1);
   LineTo (right, top - 1);
@@ -611,10 +612,10 @@ draw_grow_lines (Rect *bounds)
   int left, top, right, bottom;
   Rect r;
   
-  left   = CW (bounds->left);
-  top    = CW (bounds->top);
-  right  = CW (bounds->right);
-  bottom = CW (bounds->bottom);
+  left   = BigEndianValue (bounds->left);
+  top    = BigEndianValue (bounds->top);
+  right  = BigEndianValue (bounds->right);
+  bottom = BigEndianValue (bounds->bottom);
   
   PenSize (1, 1);
   SetRect (&r, left - 1, top - 19, right + 1, bottom + 1);
@@ -637,10 +638,10 @@ draw_dialog_box (GrafPtr w)
   Rect r;
   RGBColor middle_color;
   
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
 
   PenSize (1, 1);
   PenMode (patCopy);
@@ -721,10 +722,10 @@ draw_plain_dialog_box (GrafPtr w)
   int left, top, right, bottom;
   Rect r;
   
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
 
   PenSize (1, 1);
   PenMode (patCopy);
@@ -739,10 +740,10 @@ draw_alt_dialog_box (GrafPtr w)
   int left, top, right, bottom;
   Rect r;
   
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
   
   PenSize (1, 1);
   PenMode (patCopy);
@@ -765,10 +766,10 @@ draw_grow_icon (GrafPtr w)
 {
   int left, top, right, bottom;
   
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
     
   PenPat (black);
   PenSize (1, 1);
@@ -787,10 +788,10 @@ draw_grow_icon (GrafPtr w)
   {
     Rect rect;
 
-    rect.top = CW (bottom - 14);
-    rect.left = CW (right - 14);
-    rect.bottom  = CW (bottom);
-    rect.right = CW (right);
+    rect.top = BigEndianValue (bottom - 14);
+    rect.left = BigEndianValue (right - 14);
+    rect.bottom  = BigEndianValue (bottom);
+    rect.right = BigEndianValue (right);
     
     image_copy (grow, color_p, &rect, srcCopy);
   }
@@ -802,10 +803,10 @@ erase_grow_icon (GrafPtr w)
   int left, top, right, bottom;
   Rect r;
   
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
   
   PenPat (black);
   PenSize (1, 1);
@@ -825,10 +826,10 @@ hit_doc (WindowPeek w, LONGINT parm, int growable_p,
   Point p;
   int left, top, right, bottom;
     
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
 
   p.v = HiWord (parm);
   p.h = LoWord (parm);
@@ -890,40 +891,40 @@ calc_doc (GrafPtr w)
   INTEGER *ip;
   int left, top, right, bottom;
   
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
 
   SetRectRgn (WINDOW_CONT_REGION (w), left, top, right, bottom);
 
   rh = WINDOW_STRUCT_REGION (w); 
   ReallocHandle ((Handle) rh, (Size) 44);
-  HxX (rh, rgnBBox.left)   = CW (left   -  1); 
-  HxX (rh, rgnBBox.top)    = CW (top    - 19);  
-  HxX (rh, rgnBBox.right)  = CW (right  +  2);   
-  HxX (rh, rgnBBox.bottom) = CW (bottom +  2);
+  HxX (rh, rgnBBox.left)   = BigEndianValue (left   -  1); 
+  HxX (rh, rgnBBox.top)    = BigEndianValue (top    - 19);  
+  HxX (rh, rgnBBox.right)  = BigEndianValue (right  +  2);   
+  HxX (rh, rgnBBox.bottom) = BigEndianValue (bottom +  2);
   HxX (rh, rgnSize) = CWC (44);
   ip = (INTEGER *) STARH (rh) + 5;
 
-  *ip++ = CW(top   - 19); 
-  *ip++ = CW(left  - 1);
-  *ip++ = CW(right + 1);
+  *ip++ = BigEndianValue(top   - 19); 
+  *ip++ = BigEndianValue(left  - 1);
+  *ip++ = BigEndianValue(right + 1);
   *ip++ = CWC(32767);
   
-  *ip++ = CW(top   - 18);
-  *ip++ = CW(right + 1);
-  *ip++ = CW(right + 2);
+  *ip++ = BigEndianValue(top   - 18);
+  *ip++ = BigEndianValue(right + 1);
+  *ip++ = BigEndianValue(right + 2);
   *ip++ = CWC(32767);
   
-  *ip++ = CW(bottom + 1);
-  *ip++ = CW(left   - 1);
-  *ip++ = CW(left);
+  *ip++ = BigEndianValue(bottom + 1);
+  *ip++ = BigEndianValue(left   - 1);
+  *ip++ = BigEndianValue(left);
   *ip++ = CWC(32767);
   
-  *ip++ = CW(bottom + 2);
-  *ip++ = CW(left);
-  *ip++ = CW(right  + 2);
+  *ip++ = BigEndianValue(bottom + 2);
+  *ip++ = BigEndianValue(left);
+  *ip++ = BigEndianValue(right  + 2);
   *ip++ = CWC(32767);
   
   *ip++ = CWC(32767);
@@ -936,41 +937,41 @@ calc_alt_dialog_box (GrafPtr w)
   INTEGER *ip;
   int left, top, right, bottom;
   
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
 
   SetRectRgn (WINDOW_CONT_REGION (w), left, top, right, bottom);
 
   rh = WINDOW_STRUCT_REGION (w); 
 
   ReallocHandle ((Handle) rh, (Size) 44);
-  HxX (rh, rgnBBox.left)   = CW (left   - 1);
-  HxX (rh, rgnBBox.top)    = CW (top    - 1);
-  HxX (rh, rgnBBox.right)  = CW (right  + 3);   
-  HxX (rh, rgnBBox.bottom) = CW (bottom + 3);
+  HxX (rh, rgnBBox.left)   = BigEndianValue (left   - 1);
+  HxX (rh, rgnBBox.top)    = BigEndianValue (top    - 1);
+  HxX (rh, rgnBBox.right)  = BigEndianValue (right  + 3);   
+  HxX (rh, rgnBBox.bottom) = BigEndianValue (bottom + 3);
   HxX (rh, rgnSize) = CWC (44);
   ip = (INTEGER *) STARH (rh) + 5;
   
-  *ip++ = CW(top   - 1);
-  *ip++ = CW(left  - 1);
-  *ip++ = CW(right + 1);
+  *ip++ = BigEndianValue(top   - 1);
+  *ip++ = BigEndianValue(left  - 1);
+  *ip++ = BigEndianValue(right + 1);
   *ip++ = CWC(32767);
   
-  *ip++ = CW(top   + 1);
-  *ip++ = CW(right + 1);
-  *ip++ = CW(right + 3);
+  *ip++ = BigEndianValue(top   + 1);
+  *ip++ = BigEndianValue(right + 1);
+  *ip++ = BigEndianValue(right + 3);
   *ip++ = CWC(32767);
   
-  *ip++ = CW(bottom + 1);
-  *ip++ = CW(left   - 1);
-  *ip++ = CW(left   + 1);
+  *ip++ = BigEndianValue(bottom + 1);
+  *ip++ = BigEndianValue(left   - 1);
+  *ip++ = BigEndianValue(left   + 1);
   *ip++ = CWC(32767);
   
-  *ip++ = CW(bottom + 3);
-  *ip++ = CW(left   + 1);
-  *ip++ = CW(right  + 3);
+  *ip++ = BigEndianValue(bottom + 3);
+  *ip++ = BigEndianValue(left   + 1);
+  *ip++ = BigEndianValue(right  + 3);
   *ip++ = CWC(32767);
   
   *ip++ = CWC(32767);
@@ -981,10 +982,10 @@ calc_dialog_box (GrafPtr w, INTEGER n)
 {
   int left, top, right, bottom;
   
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
 
   SetRectRgn (WINDOW_CONT_REGION (w), left, top, right, bottom);
   SetRectRgn (WINDOW_STRUCT_REGION (w),
@@ -1110,12 +1111,12 @@ P4 (PUBLIC pascal, LONGINT, wdef0,
 	  
 	  wsp->stdState = GD_BOUNDS (MR (TheGDevice));
 	  InsetRect (&wsp->stdState, 3, 3);
-	  wsp->stdState.top = CW (CW (wsp->stdState.top) + 38);
+	  wsp->stdState.top = BigEndianValue (BigEndianValue (wsp->stdState.top) + 38);
 	  wsp->userState = PORT_RECT (w);
 	  
 	  /* local to global */
-	  OffsetRect (&wsp->userState, -CW (PORT_BOUNDS (w).left),
-		                       -CW (PORT_BOUNDS (w).top));
+	  OffsetRect (&wsp->userState, -BigEndianValue (PORT_BOUNDS (w).left),
+		                       -BigEndianValue (PORT_BOUNDS (w).top));
 	  
 	  WINDOW_SPARE_FLAG_X (w) = TRUE;
 	}
@@ -1144,8 +1145,8 @@ P4 (PUBLIC pascal, LONGINT, wdef0,
 		 temp_rgn);
 	
 	OffsetRgn (temp_rgn,
-		   - CW (PORT_BOUNDS (w).left),
-		   - CW (PORT_BOUNDS (w).top));
+		   - BigEndianValue (PORT_BOUNDS (w).left),
+		   - BigEndianValue (PORT_BOUNDS (w).top));
 
 	CopyRgn (PORT_CLIP_REGION (thePort), save_clip);
 	SectRgn (PORT_CLIP_REGION (thePort), temp_rgn,
@@ -1207,10 +1208,10 @@ draw_rounded_doc (GrafPtr w)
   int draw_go_away_p;
   Rect r;
 
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
 
   SetRect (&r, left - 1, top - 19, right + 1, top);
   FillRect (&r, white);
@@ -1239,10 +1240,10 @@ hit_rounded_doc (GrafPtr w, LONGINT param)
   Point p;
   int left, top, right, bottom;
     
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
   
   p.v = HiWord (param);
   p.h = LoWord (param);
@@ -1287,10 +1288,10 @@ calc_rounded_doc (GrafPtr w, INTEGER curve_code)
   RgnHandle rh;
   Rect r;
     
-  left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
-  top    = CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top);
-  right  = CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left);
-  bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
+  left   = BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left);
+  top    = BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top);
+  right  = BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left);
+  bottom = BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top);
   
   SetRectRgn (WINDOW_CONT_REGION (w), left, top, right, bottom);
 
@@ -1299,10 +1300,10 @@ calc_rounded_doc (GrafPtr w, INTEGER curve_code)
   else
     curve = 16;
 
-  r.left   = CW(left   - 1);
-  r.top    = CW(top    - 19);
-  r.right  = CW(right  + 1);
-  r.bottom = CW(bottom + 1);
+  r.left   = BigEndianValue(left   - 1);
+  r.top    = BigEndianValue(top    - 19);
+  r.right  = BigEndianValue(right  + 1);
+  r.bottom = BigEndianValue(bottom + 1);
   OpenRgn ();
   FrameRoundRect (&r, curve, curve);
   CloseRgn (WINDOW_STRUCT_REGION (w));

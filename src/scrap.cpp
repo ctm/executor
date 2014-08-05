@@ -29,6 +29,7 @@ char ROMlib_rcsid_scrap[] =
 #endif
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P0(PUBLIC pascal trap, PScrapStuff, InfoScrap)
 {
@@ -45,12 +46,12 @@ A1(PRIVATE, OSErr, cropen, INTEGER *, fp)
 {
     OSErr retval;
     
-    retval = FSOpen(MR(ScrapName), CW (BootDrive), fp);
+    retval = FSOpen(MR(ScrapName), BigEndianValue (BootDrive), fp);
     if (retval == fnfErr) {
-        retval = Create(MR(ScrapName), CW (BootDrive), TICK("MACS"), TICK("CLIP"));
+        retval = Create(MR(ScrapName), BigEndianValue (BootDrive), TICK("MACS"), TICK("CLIP"));
         if (retval != noErr)
             return(retval);
-        return(FSOpen(MR(ScrapName), CW (BootDrive), fp));
+        return(FSOpen(MR(ScrapName), BigEndianValue (BootDrive), fp));
     }
     return(retval);
 }
@@ -85,7 +86,7 @@ P0(PUBLIC pascal trap, LONGINT, LoadScrap)
     LONGINT l = Cx(ScrapSize);
     
     if (ScrapState == 0) {
-        retval = FSOpen(MR(ScrapName), CW (BootDrive), &f);
+        retval = FSOpen(MR(ScrapName), BigEndianValue (BootDrive), &f);
         if (retval != noErr)
             return(retval);
 
@@ -130,7 +131,7 @@ A0(PUBLIC, LONGINT, ROMlib_ZeroScrap)
     } else if (Cx(ScrapState) > 0)
         SetHandleSize(MR(ScrapHandle), (Size)0);
     ScrapSize = 0;
-    ScrapCount = CW(CW(ScrapCount) + 1);
+    ScrapCount = BigEndianValue(BigEndianValue(ScrapCount) + 1);
     return noErr;
 }
 
@@ -153,18 +154,18 @@ P3(PUBLIC pascal trap, LONGINT, PutScrap, LONGINT, len, ResType, rest, Ptr, p)
 /*-->*/	    return(retval);
     }
 #if defined(X) || defined(MACOSX_) || defined (SDL)
-    PutScrapX(rest, len, (char *) p, CW (ScrapCount));
+    PutScrapX(rest, len, (char *) p, BigEndianValue (ScrapCount));
 #endif /* defined(X) */
     if (Cx(ScrapState) == 0) {
-        retval = FSOpen(MR(ScrapName), CW (BootDrive), &f);
+        retval = FSOpen(MR(ScrapName), BigEndianValue (BootDrive), &f);
         if (retval != noErr)
 /*-->*/     return(retval);
         SetFPos(f, fsFromStart, (LONGINT)Cx(ScrapSize));
         l = 4;
-	rest = CL(rest);
+	rest = BigEndianValue(rest);
         FSWriteAll(f, &l, (Ptr) &rest);
         l = 4;
-	swappedlen = CL(len);
+	swappedlen = BigEndianValue(len);
         FSWriteAll(f, &l, (Ptr) &swappedlen);
         l = len = (len + 1) & -2L;
         FSWriteAll(f, &len, p);
@@ -172,15 +173,15 @@ P3(PUBLIC pascal trap, LONGINT, PutScrap, LONGINT, len, ResType, rest, Ptr, p)
     } else {
         SetHandleSize(MR(ScrapHandle), (Size)Cx(ScrapSize) + 8);
 	if (MemErr != noErr)
-/*-->*/	    return CW(MemErr);
+/*-->*/	    return BigEndianValue(MemErr);
 	/* alignment stuff */
         lp = (LONGINT *)((char *)STARH(MR(ScrapHandle)) + Cx(ScrapSize));
-        *lp++ = CL(rest);
-        *lp++ = CL(len);
+        *lp++ = BigEndianValue(rest);
+        *lp++ = BigEndianValue(len);
         len = (len + 1) & -2L;
         PtrAndHand(p, MR(ScrapHandle), (Size)len);
     }
-    ScrapSize = CL(CL(ScrapSize) + 8 + len);
+    ScrapSize = BigEndianValue(BigEndianValue(ScrapSize) + 8 + len);
     return noErr;
 }
 
@@ -272,15 +273,15 @@ P3(PUBLIC pascal trap, LONGINT, GetScrap, Handle, h, ResType, rest,
 /*-->*/	    RETURN(retval);
     }
     if (ScrapState == 0) {
-        retval = FSOpen(MR(ScrapName), CW (BootDrive), &f);
+        retval = FSOpen(MR(ScrapName), BigEndianValue (BootDrive), &f);
         if (retval != noErr)
 /*-->*/     RETURN(retval);
         found = FALSE;
         while (l < Cx(ScrapSize)  && !found) {
             ltoread = 8;
             FSReadAll(f, &ltoread, (Ptr) restlen);
-	    s = CL(restlen[1]);
-            if (rest == CL(restlen[0]))
+	    s = BigEndianValue(restlen[1]);
+            if (rest == BigEndianValue(restlen[0]))
                 found = TRUE;
             else {
                 incr = (8 + s + 1) & ~1L;
@@ -294,7 +295,7 @@ P3(PUBLIC pascal trap, LONGINT, GetScrap, Handle, h, ResType, rest,
         }
         ReallocHandle(h, s);
 	if (MemErr != noErr)
-/*-->*/	    RETURN(CW(MemErr));
+/*-->*/	    RETURN(BigEndianValue(MemErr));
         HLock(h);
         ltoread = s;
         FSReadAll(f, &ltoread, STARH(h));
@@ -304,9 +305,9 @@ P3(PUBLIC pascal trap, LONGINT, GetScrap, Handle, h, ResType, rest,
         HLock(MR(ScrapHandle));
         p = MR(*(unsigned char **)MR(ScrapHandle));
 #if 1 || !defined(QUADALIGN)
-        while (l < Cx(ScrapSize) && rest != CL(*(LONGINT *)p))
+        while (l < Cx(ScrapSize) && rest != BigEndianValue(*(LONGINT *)p))
 	  {
-	    s = CL (*((LONGINT *) p + 1));
+	    s = BigEndianValue (*((LONGINT *) p + 1));
             incr = (8 + s + 1) & ~1L;
             l += incr;
             p += incr;
@@ -316,7 +317,7 @@ P3(PUBLIC pascal trap, LONGINT, GetScrap, Handle, h, ResType, rest,
 	    HUnlock(MR(ScrapHandle));
 /*-->*/     RETURN(noTypeErr);
 	  }
-	s = CL (*((LONGINT *)p + 1));
+	s = BigEndianValue (*((LONGINT *)p + 1));
 #else /* QUADALIGN */
         while (l < Cx(ScrapSize) && rest != SNAGLONG(p)) {
             incr = 8 + ((s = SNAGLONG(p + sizeof(LONGINT))) + 1) & -2L;
@@ -333,7 +334,7 @@ P3(PUBLIC pascal trap, LONGINT, GetScrap, Handle, h, ResType, rest,
         PtrToXHand((Ptr) (p+8), h, s);
         HUnlock(MR(ScrapHandle));
     }
-    *off = CL(l+8);
+    *off = BigEndianValue(l+8);
     RETURN(s);
 }
 
@@ -443,8 +444,8 @@ ctab_from_surface (SDL_Surface *surfp)
 
   n_colors = SDL_n_colors (surfp);
   retval = (CTabHandle) NewHandle (CTAB_STORAGE_FOR_SIZE (n_colors-1));
-  CTAB_SIZE_X (retval) = CW (n_colors - 1);
-  CTAB_SEED_X (retval) = CL (GetCTSeed ());
+  CTAB_SIZE_X (retval) = BigEndianValue (n_colors - 1);
+  CTAB_SEED_X (retval) = BigEndianValue (GetCTSeed ());
   CTAB_FLAGS_X (retval) = CTAB_GDEVICE_BIT_X;
   
   for (i = 0, ip = SDL_colors (surfp), op = CTAB_TABLE (retval);
@@ -500,8 +501,8 @@ gworld_from_surface (SDL_Surface *surfp)
 
 	  r.top = CWC (0);
 	  r.left = CWC (0);
-	  r.bottom = CW (n_lines);
-	  r.right = CW (pixels_per_line);
+	  r.bottom = BigEndianValue (n_lines);
+	  r.right = BigEndianValue (pixels_per_line);
 	  {
 	    CGrafPtr save_port;
 	    GDHandle save_device;

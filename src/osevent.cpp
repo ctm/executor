@@ -53,6 +53,7 @@ char ROMlib_rcsid_osevent[] =
 #include "SegmentLdr.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #define NEVENT	20
 
@@ -116,7 +117,7 @@ Executor::ROMlib_set_keyboard (const char *keyboardname)
        if (new_h)
 	 {
 	   GetResInfo (new_h, &kchr_id, 0, 0);
-	   kchr_id = CW (kchr_id);
+	   kchr_id = BigEndianValue (kchr_id);
 	   LoadResource (new_h);
 	   if (kchr_ptr)
 	     {
@@ -213,11 +214,11 @@ A1(PUBLIC, void, ROMlib_eventinit, boolean_t, graphics_valid_p)	/* INTERNAL */
 	    
 	    main_gd_bounds = &GD_BOUNDS (MR (MainDevice));
 #if defined (MSDOS)
-	    init_dos_events (CW (main_gd_bounds->right),
-			     CW (main_gd_bounds->bottom));
+	    init_dos_events (BigEndianValue (main_gd_bounds->right),
+			     BigEndianValue (main_gd_bounds->bottom));
 #elif defined (EVENT_SVGALIB)
-	    if (!event_init (CW (main_gd_bounds->right),
-			     CW (main_gd_bounds->bottom)))
+	    if (!event_init (BigEndianValue (main_gd_bounds->right),
+			     BigEndianValue (main_gd_bounds->bottom)))
 	      {
 		fprintf (stderr,
 		  "Unable to initialize svgalib events.\n"
@@ -355,11 +356,11 @@ A3(PUBLIC trap, OSErrRET, PPostEvent, INTEGER, evcode,		/* IMIV-85 */
     if (!((1 << evcode)&Cx(SysEvtMask)))
 /*-->*/	return evtNotEnb;
     qp = geteventelem();
-    qp->evtQWhat      = CW(evcode);
-    qp->evtQMessage   = CL(evmsg);
-    qp->evtQWhen      = CL(tmpticks);
+    qp->evtQWhat      = BigEndianValue(evcode);
+    qp->evtQMessage   = BigEndianValue(evmsg);
+    qp->evtQWhen      = BigEndianValue(tmpticks);
     qp->evtQWhere     = ROMlib_curs;
-    qp->evtQModifiers = CW(ROMlib_mods);
+    qp->evtQModifiers = BigEndianValue(ROMlib_mods);
     Enqueue((QElemPtr) qp, &EventQueue);
     if (qelp)
 	(*qelp).p = qp;
@@ -397,8 +398,8 @@ A3(PRIVATE, OSErrRET, _PPostEvent, INTEGER, evcode,
 A6(PUBLIC, OSErrRET, ROMlib_PPostEvent, INTEGER, evcode, LONGINT, evmsg,
 	HIDDEN_EvQElPtr *, qelp, LONGINT, when, Point, where, INTEGER, butmods)
 {
-    MouseLocation2.h = ROMlib_curs.h = CW(where.h);
-    MouseLocation2.v = ROMlib_curs.v = CW(where.v);
+    MouseLocation2.h = ROMlib_curs.h = BigEndianValue(where.h);
+    MouseLocation2.v = ROMlib_curs.v = BigEndianValue(where.v);
     ROMlib_mods = butmods;
 
     return _PPostEvent(evcode, evmsg, qelp);
@@ -464,7 +465,7 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 			      (Ptr) &psn, sizeof psn, target);
 	  
 	  CountAppFiles (&dummy, &count);
-	  count = CW (count);
+	  count = BigEndianValue (count);
 	  
 	  if (count)
 	    {
@@ -489,7 +490,7 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 			   TEMP_C_STRING_FROM_STR255 (file.fName));
 #endif
 		  
-		  FSMakeFSSpec (CW (file.vRefNum), 0, file.fName, &spec);
+		  FSMakeFSSpec (BigEndianValue (file.vRefNum), 0, file.fName, &spec);
 		  
 		  AEPutPtr (list, i, typeFSS, (Ptr) &spec, sizeof spec);
 		}
@@ -558,7 +559,7 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 	}
 	retval = TRUE;
     } else {
-	eventp->when      = CL(TickCount());
+	eventp->when      = BigEndianValue(TickCount());
 
 	{
 #if defined(X) || defined(MACOSX_)
@@ -567,8 +568,8 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 		LONGINT newmods;
 
 		querypointerX(&x, &y, &newmods);
-		eventp->where.h   = MouseLocation2.h = ROMlib_curs.h = CW(x);
-		eventp->where.v   = MouseLocation2.v = ROMlib_curs.v = CW(y);
+		eventp->where.h   = MouseLocation2.h = ROMlib_curs.h = BigEndianValue(x);
+		eventp->where.v   = MouseLocation2.v = ROMlib_curs.v = BigEndianValue(y);
 	    } else
 #endif
 		MouseLocation2 = eventp->where = ROMlib_curs;
@@ -579,16 +580,16 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 	  LONGINT x, y;
 
 	  querypointerX (&x, &y, NULL);
-	  eventp->where.h = MouseLocation2.h = ROMlib_curs.h = CW (x);
-	  eventp->where.v = MouseLocation2.v = ROMlib_curs.v = CW (y);
+	  eventp->where.h = MouseLocation2.h = ROMlib_curs.h = BigEndianValue (x);
+	  eventp->where.v = MouseLocation2.v = ROMlib_curs.v = BigEndianValue (y);
 	}
 #endif
 
-	eventp->modifiers = CW(ROMlib_mods);
+	eventp->modifiers = BigEndianValue(ROMlib_mods);
 	if ((evmask & autoKeyMask) && lastdown != -1 && ticks > autoticks) {
 	    autoticks = ticks + Cx(KeyRepThresh);
 	    eventp->what = CWC(autoKey);
-	    eventp->message = CL(lastdown);
+	    eventp->message = BigEndianValue(lastdown);
 	    retval = TRUE;
 	} else {
 	    eventp->what = CWC(nullEvent);
@@ -632,7 +633,7 @@ A2(PUBLIC trap, BOOLEANRET, OSEventAvail, INTEGER, evmask,
 
 A1(PUBLIC trap, void, SetEventMask, INTEGER, evmask)
 {
-    SysEvtMask = CW(evmask);
+    SysEvtMask = BigEndianValue(evmask);
 }
 
 A0(PUBLIC, QHdrPtr, GetEvQHdr)

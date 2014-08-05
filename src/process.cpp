@@ -18,6 +18,7 @@ char ROMlib_rcsid_process[] =
 #include "rsys/process.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #define declare_handle_type(type_prefix)				\
   typedef type_prefix ## _t *type_prefix ## _ptr;			\
@@ -27,7 +28,7 @@ using namespace Executor;
 declare_handle_type (size_resource);
 
 #define SIZE_FLAGS_X(size)	(HxX (size, flags))
-#define SIZE_FLAGS(size)	(CW (SIZE_FLAGS_X (size)))
+#define SIZE_FLAGS(size)	(BigEndianValue (SIZE_FLAGS_X (size)))
 
 static size_resource_handle
 get_size_resource ()
@@ -100,8 +101,8 @@ Executor::process_create (boolean_t desk_accessory_p,
 		/* + stack size */);
   info->launch_ticks = TickCount ();
   
-  info->serial_number.highLongOfPSN = CL (-1);
-  info->serial_number.lowLongOfPSN  = CL (next_free_psn ++);
+  info->serial_number.highLongOfPSN = BigEndianValue (-1);
+  info->serial_number.lowLongOfPSN  = BigEndianValue (next_free_psn ++);
   
   info->next = process_info_list;
   process_info_list = info;
@@ -177,21 +178,21 @@ P2 (PUBLIC pascal trap, OSErr, GetProcessInformation,
     return paramErr;
   
   PROCESS_INFO_SERIAL_NUMBER (process_info) = info->serial_number;
-  PROCESS_INFO_TYPE_X (process_info)        = CL (info->type);
-  PROCESS_INFO_SIGNATURE_X (process_info)   = CL (info->signature);
-  PROCESS_INFO_MODE_X (process_info)        = CL (info->mode);
+  PROCESS_INFO_TYPE_X (process_info)        = BigEndianValue (info->type);
+  PROCESS_INFO_SIGNATURE_X (process_info)   = BigEndianValue (info->signature);
+  PROCESS_INFO_MODE_X (process_info)        = BigEndianValue (info->mode);
   PROCESS_INFO_LOCATION_X (process_info)    = (Ptr) ApplZone;
-  PROCESS_INFO_SIZE_X (process_info)        = CL (info->size);
+  PROCESS_INFO_SIZE_X (process_info)        = BigEndianValue (info->size);
 
   /* ### set current zone to applzone? */
   PROCESS_INFO_FREE_MEM_X (process_info)    = FreeMem ();
   
   PROCESS_INFO_LAUNCHER (process_info)      = no_process;
   
-  PROCESS_INFO_LAUNCH_DATE_X (process_info) = CL (info->launch_ticks);
+  PROCESS_INFO_LAUNCH_DATE_X (process_info) = BigEndianValue (info->launch_ticks);
   current_ticks = TickCount ();
   PROCESS_INFO_ACTIVE_TIME_X (process_info)
-    = CL (current_ticks - info->launch_ticks);
+    = BigEndianValue (current_ticks - info->launch_ticks);
   
   return noErr;
 }

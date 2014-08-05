@@ -362,7 +362,7 @@ CToRoutineDescriptorCall (const RoutineDescriptor *p, unsigned long long magic,
 	case 2:
 	  {
 	    arg = (uint16) va_arg (ap, unsigned long);
-	    arg = CW (arg);
+	    arg = BigEndianValue (arg);
 	    procinfo |= STACK_ROUTINE_PARAMETER (n_args, kTwoByteCode);
 	  }
 	  break;
@@ -372,15 +372,15 @@ CToRoutineDescriptorCall (const RoutineDescriptor *p, unsigned long long magic,
 #if defined (powerpc)
 	    arg = *(uint32 *)arg;
 #endif
-	    arg = (CW ((uint16) arg) | 
-		   (CW (arg >> 16) << 16));
+	    arg = (BigEndianValue ((uint16) arg) | 
+		   (BigEndianValue (arg >> 16) << 16));
 	    procinfo |= STACK_ROUTINE_PARAMETER (n_args, kFourByteCode);
 	  }
 	  break;
 	case 4:
 	  {
 	    arg = (uint32) va_arg (ap, unsigned long);
-	    arg = CL (arg);
+	    arg = BigEndianValue (arg);
 	    procinfo |= STACK_ROUTINE_PARAMETER (n_args, kFourByteCode);
 	  }
 	  break;
@@ -466,10 +466,10 @@ CToRoutineDescriptorCall (const RoutineDescriptor *p, unsigned long long magic,
       retval = CB (retval);
       break;
     case 2:
-      retval = CW (retval);
+      retval = BigEndianValue (retval);
       break;
     case 4:
-      retval = CL (retval);
+      retval = BigEndianValue (retval);
       break;
     case 5:
       retval = (long) SYN68K_TO_US_CHECK0_CHECKNEG1 (retval);

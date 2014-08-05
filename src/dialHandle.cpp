@@ -38,6 +38,7 @@ char ROMlib_rcsid_dialHandle[] =
 #include "rsys/osevent.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P3(PUBLIC pascal, BOOLEAN, ROMlib_myfilt, DialogPeek, dp, EventRecord *, evt,
 					    INTEGER *, ith)	/* IMI-415 */
@@ -50,7 +51,7 @@ P3(PUBLIC pascal, BOOLEAN, ROMlib_myfilt, DialogPeek, dp, EventRecord *, evt,
     if (Cx(evt->what) == keyDown &&
 	((Cx(evt->message) & 0xFF) == '\r' ||
 	 (Cx(evt->message) & 0xFF) == NUMPAD_ENTER)) {
-        ip = ROMlib_dpnotoip(dp, CW(*ith = dp->aDefItem), &flags);
+        ip = ROMlib_dpnotoip(dp, BigEndianValue(*ith = dp->aDefItem), &flags);
 	if (ip && (CB(ip->itmtype) & ctrlItem)) {
 	    c = (ControlHandle) MR(ip->itmhand);
 	    if (Hx(c, contrlVis) && U(Hx(c, contrlHilite)) != INACTIVE) {
@@ -168,7 +169,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
        
        dp = (DialogPeek) FrontWindow ();
        if (dp->window.windowKind != CWC (dialogKind) &&
-	   CW (dp->window.windowKind) >= 0)
+	   BigEndianValue (dp->window.windowKind) >= 0)
 	 *item = CWC (-1);
        else
 	 {
@@ -186,10 +187,10 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
 	       if (idle)
 		 TEIdle (idle);
 	       GetNextEvent (DIALOGEVTS, &evt);
-	       whereunswapped.h = CW (evt.where.h);
-	       whereunswapped.v = CW (evt.where.v);
+	       whereunswapped.h = BigEndianValue (evt.where.h);
+	       whereunswapped.v = BigEndianValue (evt.where.v);
 	       
-	       mousedown_p = (CW (evt.what) == mouseDown);
+	       mousedown_p = (BigEndianValue (evt.what) == mouseDown);
 	       
 	       /* dummy initializations to keep gcc happy */
 	       temp_wp = NULL;
@@ -246,7 +247,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
        
        dp = (DialogPeek) FrontWindow ();
        if (dp->window.windowKind != CWC (dialogKind) &&
-	   CW (dp->window.windowKind) >= 0)
+	   BigEndianValue (dp->window.windowKind) >= 0)
 	 *item = CWC (-1);
        else
 	 {
@@ -264,10 +265,10 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
 	       if (idle)
 		 TEIdle (idle);
 	       GetNextEvent (DIALOGEVTS, &evt);
-	       whereunswapped.h = CW (evt.where.h);
-	       whereunswapped.v = CW (evt.where.v);
+	       whereunswapped.h = BigEndianValue (evt.where.h);
+	       whereunswapped.v = BigEndianValue (evt.where.v);
 	       
-	       mousedown_p = (CW (evt.what) == mouseDown);
+	       mousedown_p = (BigEndianValue (evt.what) == mouseDown);
 	       
 	       /* dummy initializations to keep gcc happy */
 	       temp_wp = NULL;
@@ -314,8 +315,8 @@ P1(PUBLIC pascal trap, BOOLEAN, IsDialogEvent,		/* IMI-416 */
     if (dp && dp->window.windowKind == CWC(dialogKind)) {
         if (dp->editField != -1)
             TEIdle(MR(dp->textH));
-	p.h = CW(evt->where.h);
-	p.v = CW(evt->where.v);
+	p.h = BigEndianValue(evt->where.h);
+	p.v = BigEndianValue(evt->where.v);
 /*-->*/ return evt->what != CWC(mouseDown) || (FindWindow(p,
 				&wp) == inContent && MR(wp.p) == (WindowPtr) dp);
     }
@@ -343,8 +344,8 @@ Executor::get_item_style_info (DialogPtr dp, int item_no,
 	  uint16 flags;
 	  int style_info_offset;
 	  
-	  flags = CW (item_color_info->data);
-	  style_info_offset = CW (item_color_info->offset);
+	  flags = BigEndianValue (item_color_info->data);
+	  style_info_offset = BigEndianValue (item_color_info->offset);
 	  
 	  *style_info = *(item_style_info_t *) ((char *) items_color_info
 						+ style_info_offset);
@@ -352,7 +353,7 @@ Executor::get_item_style_info (DialogPtr dp, int item_no,
 	    {
 	      char *font_name;
 	      
-	      font_name = (char *) items_color_info + CW (style_info->font);
+	      font_name = (char *) items_color_info + BigEndianValue (style_info->font);
 	      GetFNum ((StringPtr) font_name, &style_info->font);
 	    }
 	  
@@ -378,11 +379,11 @@ Executor::ROMlib_drawiptext (DialogPtr dp, itmp ip, int item_no)
       restore_draw_state_p = TRUE;
       
       if (flags & TEdoFont)
-	TextFont (CW (style_info.font));
+	TextFont (BigEndianValue (style_info.font));
       if (flags & TEdoFace)
 	TextFace (CB (style_info.face));
       if (flags & TEdoSize)
-	TextSize (CW (style_info.size));
+	TextSize (BigEndianValue (style_info.size));
       if (flags & TEdoColor)
 	RGBForeColor (&style_info.foreground);
 #if 1
@@ -588,8 +589,8 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
       gp = thePort;
       SetPort((GrafPtr) dp);
       GlobalToLocal(&localp); 
-      localp.h = CW(localp.h);
-      localp.v = CW(localp.v);
+      localp.h = BigEndianValue(localp.h);
+      localp.v = BigEndianValue(localp.v);
       SetPort(gp);
       intp = (INTEGER *) STARH(MR(dp->items));
       iend = Cx(*intp) + 2;
@@ -620,7 +621,7 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
         }
       if (itemenabled)
 	{
-	  *itemp = CW(i);
+	  *itemp = BigEndianValue(i);
 	  retval = TRUE;
 	  break;
         }
@@ -640,14 +641,14 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
         default:
 	  TEKey (c, DIALOG_TEXTH (dp));
         }
-      *itemp = CW(CW(dp->editField)+1);
-      ip = ROMlib_dpnotoip(dp, CW(*itemp), &flags);
+      *itemp = BigEndianValue(BigEndianValue(dp->editField)+1);
+      ip = ROMlib_dpnotoip(dp, BigEndianValue(*itemp), &flags);
       if (ip)
 	retval = !(CB(ip->itmtype) & itemDisable);
       else
 	{
 	  warning_unexpected ("couldn't resolve editField -- dp = %p, "
-			      "CW (*itemp) = %d", dp, CW (*itemp));
+			      "BigEndianValue (*itemp) = %d", dp, BigEndianValue (*itemp));
 	  retval = FALSE;
 	}
       HSetState(MR(((DialogPeek) dp)->items), flags);

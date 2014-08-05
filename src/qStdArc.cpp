@@ -19,6 +19,7 @@ char ROMlib_rcsid_qStdArc[] =
 #include "rsys/picture.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #define returnhv(hh, vv)    { ptp->h = hh; ptp->v = vv; return; }
 
@@ -29,8 +30,8 @@ namespace Executor {
 
 A3(PRIVATE, void, getpoint, INTEGER, angle, Rect *, r, Point *, ptp)
 {
-    INTEGER left  = CW(r->left),  top    = CW(r->top),
-            right = CW(r->right), bottom = CW(r->bottom);
+    INTEGER left  = BigEndianValue(r->left),  top    = BigEndianValue(r->top),
+            right = BigEndianValue(r->right), bottom = BigEndianValue(r->bottom);
     INTEGER radh = (right - left) / 2,
             radv = (bottom - top) / 2;
     INTEGER centh = left + radh,
@@ -67,11 +68,11 @@ A3(PRIVATE, void, getpoint, INTEGER, angle, Rect *, r, Point *, ptp)
 
 A3(PRIVATE, INTEGER, findwall, Rect *, r, INTEGER, h, INTEGER, v)
 {
-    if (v == CW(r->top))            /* the order of tests is important */
+    if (v == BigEndianValue(r->top))            /* the order of tests is important */
         return(RTop);           /* don't change them if you don't see */
-    else if (h == CW(r->right))     /* why */
+    else if (h == BigEndianValue(r->right))     /* why */
         return(RRight);
-    else if (v == CW(r->bottom))
+    else if (v == BigEndianValue(r->bottom))
         return(RBottom);
     else
         return(RLeft);
@@ -80,8 +81,8 @@ A3(PRIVATE, INTEGER, findwall, Rect *, r, INTEGER, h, INTEGER, v)
 P4 (PUBLIC pascal trap, void, StdArc, GrafVerb, verb, Rect *, r,
     INTEGER, starta, INTEGER, arca)
 {
-  INTEGER left  = CW(r->left),  top    = CW(r->top),
-          right = CW(r->right), bottom = CW(r->bottom);
+  INTEGER left  = BigEndianValue(r->left),  top    = BigEndianValue(r->top),
+          right = BigEndianValue(r->right), bottom = BigEndianValue(r->bottom);
   INTEGER ewall;
   Point spt, ept;
   register INTEGER h, v;
@@ -107,9 +108,9 @@ P4 (PUBLIC pascal trap, void, StdArc, GrafVerb, verb, Rect *, r,
       ROMlib_drawingverbrectpicupdate( verb, r );
       PICOP(OP_frameArc + (int) verb);
       PICWRITE(r, sizeof(*r));
-      swappedstarta = CW(starta);
+      swappedstarta = BigEndianValue(starta);
       PICWRITE(&swappedstarta, sizeof(swappedstarta));
-      swappedarca = CW(arca);
+      swappedarca = BigEndianValue(arca);
       PICWRITE(&swappedarca, sizeof(swappedarca));
     });
   

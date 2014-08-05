@@ -37,6 +37,7 @@ char ROMlib_rcsid_fileAccess[] =
 #endif
 
 using namespace Executor;
+using namespace ByteSwap;
 
 namespace Executor {
 	PRIVATE OSErr PBLockUnlockRange(ParmBlkPtr, BOOLEAN, lockunlock_t);
@@ -142,12 +143,12 @@ A3(PUBLIC, OSErr, FSOpen, StringPtr, filen, INTEGER, vrn,	/* IMIV-109 */
     OSErr temp;
 
     pbr.ioParam.ioNamePtr = RM(filen);
-    pbr.ioParam.ioVRefNum = CW(vrn);
+    pbr.ioParam.ioVRefNum = BigEndianValue(vrn);
     pbr.ioParam.ioVersNum = 0;
     pbr.ioParam.ioPermssn = fsCurPerm;
     pbr.ioParam.ioMisc = 0;
     temp = PBOpen(&pbr, 0);
-    *rn = CW(pbr.ioParam.ioRefNum);
+    *rn = BigEndianValue(pbr.ioParam.ioRefNum);
     fs_err_hook (temp);
     return(temp);
 }
@@ -159,12 +160,12 @@ A3(PUBLIC, OSErr, OpenRF, StringPtr, filen, INTEGER, vrn,	/* IMIV-109 */
     OSErr temp;
 
     pbr.ioParam.ioNamePtr = RM(filen);
-    pbr.ioParam.ioVRefNum = CW(vrn);
+    pbr.ioParam.ioVRefNum = BigEndianValue(vrn);
     pbr.ioParam.ioVersNum = 0;
     pbr.ioParam.ioPermssn = fsCurPerm;
     pbr.ioParam.ioMisc = 0;
     temp = PBOpenRF(&pbr, 0);
-    *rn = CW(pbr.ioParam.ioRefNum);
+    *rn = BigEndianValue(pbr.ioParam.ioRefNum);
     fs_err_hook (temp);
     return(temp);
 }
@@ -175,12 +176,12 @@ A3(PUBLIC, OSErr, FSRead, INTEGER, rn, LONGINT *, count,	/* IMIV-109 */
     ParamBlockRec pbr;
     OSErr temp;
 
-    pbr.ioParam.ioRefNum = CW(rn);
+    pbr.ioParam.ioRefNum = BigEndianValue(rn);
     pbr.ioParam.ioBuffer = RM(buffp);
-    pbr.ioParam.ioReqCount = CL(*count);
+    pbr.ioParam.ioReqCount = BigEndianValue(*count);
     pbr.ioParam.ioPosMode = CWC(fsAtMark);
     temp = PBRead(&pbr, 0);
-    *count = CL(pbr.ioParam.ioActCount);
+    *count = BigEndianValue(pbr.ioParam.ioActCount);
     fs_err_hook (temp);
     return(temp);
 }
@@ -204,12 +205,12 @@ A3(PUBLIC, OSErr, FSWrite, INTEGER, rn, LONGINT *, count,	/* IMIV-110 */
     ParamBlockRec pbr;
     OSErr temp;
 
-    pbr.ioParam.ioRefNum = CW(rn);
+    pbr.ioParam.ioRefNum = BigEndianValue(rn);
     pbr.ioParam.ioBuffer = RM(buffp);
-    pbr.ioParam.ioReqCount = CL(*count);
+    pbr.ioParam.ioReqCount = BigEndianValue(*count);
     pbr.ioParam.ioPosMode = CWC(fsAtMark);
     temp = PBWrite(&pbr, 0);
-    *count = CL(pbr.ioParam.ioActCount);
+    *count = BigEndianValue(pbr.ioParam.ioActCount);
     fs_err_hook (temp);
     return(temp);
 }
@@ -232,9 +233,9 @@ A2(PUBLIC, OSErr, GetFPos, INTEGER, rn, LONGINT *, filep)	/* IMIV-110 */
     ParamBlockRec pbr;
     OSErr temp;
 
-    pbr.ioParam.ioRefNum = CW(rn);
+    pbr.ioParam.ioRefNum = BigEndianValue(rn);
     temp = PBGetFPos(&pbr, 0);
-    *filep = CL(pbr.ioParam.ioPosOffset);
+    *filep = BigEndianValue(pbr.ioParam.ioPosOffset);
     fs_err_hook (temp);
     return(temp);
 }
@@ -245,8 +246,8 @@ A3(PUBLIC, OSErr, SetFPos, INTEGER, rn, INTEGER, posmode,	/* IMIV-110 */
     ParamBlockRec pbr;
     OSErr err;
 
-    pbr.ioParam.ioRefNum = CW(rn);
-    pbr.ioParam.ioPosMode = CW(posmode);
+    pbr.ioParam.ioRefNum = BigEndianValue(rn);
+    pbr.ioParam.ioPosMode = BigEndianValue(posmode);
     pbr.ioParam.ioPosOffset = Cx(possoff);
     err = PBSetFPos(&pbr, 0);
     fs_err_hook (err);
@@ -260,7 +261,7 @@ A2(PUBLIC, OSErr, GetEOF, INTEGER, rn, LONGINT *, eof)	/* IMIV-111 */
 
     pbr.ioParam.ioRefNum = Cx(rn);
     temp = PBGetEOF(&pbr, 0);
-    *eof = CL(pbr.ioParam.ioMisc);
+    *eof = BigEndianValue(pbr.ioParam.ioMisc);
     fs_err_hook (temp);
     return(temp);
 }
@@ -285,7 +286,7 @@ A2(PUBLIC, OSErr, Allocate, INTEGER, rn, LONGINT *, count)	/* IMIV-112 */
     pbr.ioParam.ioRefNum = Cx(rn);
     pbr.ioParam.ioReqCount = *count;
     temp = PBAllocate(&pbr, 0);
-    *count = CL(pbr.ioParam.ioActCount);
+    *count = BigEndianValue(pbr.ioParam.ioActCount);
     fs_err_hook (temp);
     return(temp);
 }
@@ -298,7 +299,7 @@ A2(PUBLIC, OSErr, AllocContig, INTEGER, rn, LONGINT *, count)
     pbr.ioParam.ioRefNum = Cx(rn);
     pbr.ioParam.ioReqCount = *count;
     temp = PBAllocContig(&pbr, 0);
-    *count = CL(pbr.ioParam.ioActCount);
+    *count = BigEndianValue(pbr.ioParam.ioActCount);
     fs_err_hook (temp);
     return(temp);
 }
@@ -598,7 +599,7 @@ A5(PUBLIC, VCB *, ROMlib_breakoutioname, ParmBlkPtr, pb,	/* INTERNAL */
 	else if (v < 0) {
 	    if (ISWDNUM(v)) {
 		wdp = WDNUMTOWDP(v);
-		*diridp = CL(wdp->dirid);
+		*diridp = BigEndianValue(wdp->dirid);
 		retval  = MR(wdp->vcbp);
 	    } else
 		retval = ROMlib_vcbbyvrn(v);
@@ -606,7 +607,7 @@ A5(PUBLIC, VCB *, ROMlib_breakoutioname, ParmBlkPtr, pb,	/* INTERNAL */
 	if (!retval && (usedefault ||
 			 (!pb->ioParam.ioNamePtr && !pb->ioParam.ioVRefNum))) {
 	    retval  = MR(DefVCBPtr);
-	    *diridp = CL(DefDirID);
+	    *diridp = BigEndianValue(DefDirID);
         }
     }
     return retval;
@@ -1068,7 +1069,7 @@ static int n = 0;
 *pprn = 2 + 94 * n++;
 return noErr;
 #endif
-    length =CW( *(short *)MR(FCBSPtr));
+    length =BigEndianValue( *(short *)MR(FCBSPtr));
     fcbp = (fcbrec *) ((short *)MR(FCBSPtr)+1);
     efcbp = (fcbrec *) ((char *)MR(FCBSPtr) + length);
     for (;fcbp < efcbp && fcbp->fdfnum;
@@ -1114,7 +1115,7 @@ A4(PRIVATE, OSErr, PBOpenForkD, ParmBlkPtr, pb, BOOLEAN, a,
 	err = getprn(&prn);
 	if (err == noErr) {
 	    fp = (fcbrec *) (MR(FCBSPtr) + prn);
-	    fp->fdfnum = CL((LONGINT) ST_INO(sbuf));
+	    fp->fdfnum = BigEndianValue((LONGINT) ST_INO(sbuf));
 	    fp->fcfd = -1;
 	    fp->fcflags = 0;
 	    fp->fcbTypByt = 0;
@@ -1132,7 +1133,7 @@ A4(PRIVATE, OSErr, PBOpenForkD, ParmBlkPtr, pb, BOOLEAN, a,
 		if (ST_INO(sbuf) == vcbp->u.ufs.ino)	/* the stat for us */
 		    fp->fcparid = CLC (2);
 		else
-		    fp->fcparid = CL((LONGINT) ST_INO(sbuf));
+		    fp->fcparid = BigEndianValue((LONGINT) ST_INO(sbuf));
 		filename[save_index] = save_char;
 		if (fork == ResourceFork) {
 		    newname = ROMlib_resname(pathname, filename, endname);
@@ -1190,7 +1191,7 @@ A4(PRIVATE, OSErr, PBOpenForkD, ParmBlkPtr, pb, BOOLEAN, a,
 		    if (err == noErr)
 			err = ROMlib_geteofostype(fp);
 		    fp->fcvptr = RM((VCB *) vcbp);
-		    pb->ioParam.ioRefNum = CW(prn);
+		    pb->ioParam.ioRefNum = BigEndianValue(prn);
 		    namelen = strlen (filename);
 		    namelen -= ROMlib_UNIX7_to_Mac (filename, namelen);
 		    namelen = MIN(namelen, 31);
@@ -1226,7 +1227,7 @@ A2(PUBLIC, OSErr, ufsPBHOpen, HParmBlkPtr, pb,	/* INTERNAL */
 {
   OSErr err;
 
-  err = PBOpenForkD((ParmBlkPtr) pb, a, DataFork, CL(pb->fileParam.ioDirID));
+  err = PBOpenForkD((ParmBlkPtr) pb, a, DataFork, BigEndianValue(pb->fileParam.ioDirID));
   fs_err_hook (err);
   return err;
 }
@@ -1281,7 +1282,7 @@ A2(PUBLIC, OSErr, ufsPBHOpenRF, HParmBlkPtr, pb,	/* INTERNAL */
   OSErr err;
 
   err = PBOpenForkD((ParmBlkPtr) pb, a, ResourceFork,
-						    CL(pb->fileParam.ioDirID));
+						    BigEndianValue(pb->fileParam.ioDirID));
   fs_err_hook (err);
   return err;
 }
@@ -1385,14 +1386,14 @@ A3(PRIVATE, OSErr, PBLockUnlockRange, ParmBlkPtr, pb, BOOLEAN, a,
 		cleanup = ROMlib_fd_remove_range;
 	      }
 
-	    err = verify (fd, toseek, CL (pb->ioParam.ioReqCount));
+	    err = verify (fd, toseek, BigEndianValue (pb->ioParam.ioReqCount));
 	    if (err == noErr && lseek(fd, toseek, L_SET) == -1)
 		err = ROMlib_maperrno();
 	    if (err == noErr)
 	      err = ROMlib_lockunlockrange (fd, toseek,
-					    CL (pb->ioParam.ioReqCount), op);
+					    BigEndianValue (pb->ioParam.ioReqCount), op);
 	    if (err == noErr)
-	      err = cleanup (fd, toseek, CL (pb->ioParam.ioReqCount));
+	      err = cleanup (fd, toseek, BigEndianValue (pb->ioParam.ioReqCount));
 	    lseek(fd, curseek, L_SET);
 	}
     }
@@ -1434,7 +1435,7 @@ pbsetfpos (ParmBlkPtr pb, boolean_t can_go_past_eof)
 	forkoffset = FORKOFFSET(fp);
 	err = pbfpos(pb, &toseek, can_go_past_eof);
 	fd = fp->fcfd;
-	pb->ioParam.ioPosOffset = CL(lseek(fd, toseek, L_SET) - forkoffset);
+	pb->ioParam.ioPosOffset = BigEndianValue(lseek(fd, toseek, L_SET) - forkoffset);
   }
   fs_err_hook (err);
   return err;
@@ -1487,8 +1488,8 @@ A2(PUBLIC, OSErr, ufsPBRead, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
     if (pb->ioParam.ioRefNum == 0x5003)
       {
 	printf ("read IN  mode = %d, offset = %5d, req = %5d\n",
-		CW (pb->ioParam.ioPosMode),
-		CL (pb->ioParam.ioPosOffset), CL (pb->ioParam.ioReqCount));
+		BigEndianValue (pb->ioParam.ioPosMode),
+		BigEndianValue (pb->ioParam.ioPosOffset), BigEndianValue (pb->ioParam.ioReqCount));
       }
 #endif
 
@@ -1517,8 +1518,8 @@ A2(PUBLIC, OSErr, ufsPBRead, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
 		pb->ioParam.ioActCount = 0;
 		err = ioErr;
 	    } else {
-		pb->ioParam.ioActCount = CL(nread);
-		pb->ioParam.ioPosOffset = CL(lseek(fd, 0L, L_INCR) -
+		pb->ioParam.ioActCount = BigEndianValue(nread);
+		pb->ioParam.ioPosOffset = BigEndianValue(lseek(fd, 0L, L_INCR) -
 								   forkoffset);
 		if (rc != Cx(pb->ioParam.ioReqCount))
 		    err = eofErr;
@@ -1530,9 +1531,9 @@ A2(PUBLIC, OSErr, ufsPBRead, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
     if (pb->ioParam.ioRefNum == 0x5003)
       {
 	printf ("read OUT mode = %d, offset = %5d, req = %5d, act = %d, err = %d\n",
-		CW (pb->ioParam.ioPosMode),
-		CL (pb->ioParam.ioPosOffset), CL (pb->ioParam.ioReqCount),
-		CL (pb->ioParam.ioActCount),
+		BigEndianValue (pb->ioParam.ioPosMode),
+		BigEndianValue (pb->ioParam.ioPosOffset), BigEndianValue (pb->ioParam.ioReqCount),
+		BigEndianValue (pb->ioParam.ioActCount),
 		err);
       }
 #endif
@@ -1566,7 +1567,7 @@ A2(PUBLIC, OSErr, ufsPBWrite, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
 #endif /* SUN */
 #endif /* WEHAVEENOUGHSWAPSPACETORUNSUNSGOOFYLITTLERPCTHINGYS */
 	    if (err == noErr && Cx(pb->ioParam.ioPosOffset) + rc > Cx(fp->fcleof)) {
-		fp->fcleof = CL(CL(pb->ioParam.ioPosOffset) + rc);
+		fp->fcleof = BigEndianValue(BigEndianValue(pb->ioParam.ioPosOffset) + rc);
 		err =  ROMlib_seteof(fp);
 	    }
 	    if (err == noErr) {
@@ -1576,8 +1577,8 @@ A2(PUBLIC, OSErr, ufsPBWrite, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
 		    err = ioErr;
 		} else {
 		    err = noErr;
-		    pb->ioParam.ioActCount = CL(nwrite);
-		    pb->ioParam.ioPosOffset = CL(lseek(fd, 0L, L_INCR) -
+		    pb->ioParam.ioActCount = BigEndianValue(nwrite);
+		    pb->ioParam.ioPosOffset = BigEndianValue(lseek(fd, 0L, L_INCR) -
 								   forkoffset);
 		    if (Cx(pb->ioParam.ioPosOffset) > Cx(fp->fcleof)) {
 			fp->fcleof = pb->ioParam.ioPosOffset;
@@ -1606,7 +1607,7 @@ A2(PUBLIC, OSErr, ufsPBGetFPos, ParmBlkPtr, pb,		/* INTERNAL */
     fp = PRNTOFPERR(Cx(pb->ioParam.ioRefNum), &err);
     if (err == noErr) {
 	forkoffset = FORKOFFSET(fp);
-	pb->ioParam.ioPosOffset = CL(lseek(fp->fcfd, 0L, L_INCR) -
+	pb->ioParam.ioPosOffset = BigEndianValue(lseek(fp->fcfd, 0L, L_INCR) -
 								   forkoffset);
 	pb->ioParam.ioReqCount = pb->ioParam.ioActCount =
 						     pb->ioParam.ioPosMode = 0;
@@ -1624,8 +1625,8 @@ A2(PUBLIC, OSErr, ufsPBSetFPos, ParmBlkPtr, pb,		/* INTERNAL */
     if (pb->ioParam.ioRefNum == 0x5003)
       {
 	printf ("seek IN  mode = %d, offset = %5d\n",
-		CW (pb->ioParam.ioPosMode),
-		CL (pb->ioParam.ioPosOffset));
+		BigEndianValue (pb->ioParam.ioPosMode),
+		BigEndianValue (pb->ioParam.ioPosOffset));
       }
 #endif
 
@@ -1636,8 +1637,8 @@ A2(PUBLIC, OSErr, ufsPBSetFPos, ParmBlkPtr, pb,		/* INTERNAL */
     if (pb->ioParam.ioRefNum == 0x5003)
       {
 	printf ("seek OUT mode = %d, offset = %5d, err = %d\n",
-		CW (pb->ioParam.ioPosMode),
-		CL (pb->ioParam.ioPosOffset), err);
+		BigEndianValue (pb->ioParam.ioPosMode),
+		BigEndianValue (pb->ioParam.ioPosOffset), err);
       }
 #endif
     return err;
@@ -1677,7 +1678,7 @@ A2(PUBLIC, OSErr, ufsPBAllocate, ParmBlkPtr, pb,	/* INTERNAL */
 
     fp = PRNTOFPERR(Cx(pb->ioParam.ioRefNum), &err);
     if (err == noErr) {
-	fp->fcleof = CL(CL(fp->fcleof) + CL(pb->ioParam.ioReqCount));
+	fp->fcleof = BigEndianValue(BigEndianValue(fp->fcleof) + BigEndianValue(pb->ioParam.ioReqCount));
 	err = ROMlib_seteof(fp);
 	pb->ioParam.ioActCount = pb->ioParam.ioReqCount;
     }

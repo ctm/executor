@@ -23,6 +23,7 @@ char ROMlib_rcsid_resInit[] =
 #include "rsys/appearance.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /* extracts an int32 from a string of the form [^(]*([0-9]*).*
  * () == 0, any invalid string == -1
@@ -93,7 +94,7 @@ P0(PUBLIC pascal trap, INTEGER, InitResources)
        
        ROMlib_setreserr (noErr);
        str255assign(SysResName, SYSMACNAME);
-       SysMap = CW (OpenRFPerm ((StringPtr) SYSMACNAME, Cx (BootDrive),
+       SysMap = BigEndianValue (OpenRFPerm ((StringPtr) SYSMACNAME, Cx (BootDrive),
 				fsCurPerm));
 
        if (SysMap == CWC (-1))
@@ -123,7 +124,7 @@ P0(PUBLIC pascal trap, INTEGER, InitResources)
 
      });
   
-  return CW(SysMap);
+  return BigEndianValue(SysMap);
 }
 
 P0(PUBLIC pascal trap, void, RsrcZoneInit)	/* no op */

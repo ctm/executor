@@ -53,6 +53,7 @@ char ROMlib_rcsid_serial[] =
 #endif
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #if defined (__alpha) || defined (LINUX)
 #define TERMIO
@@ -125,7 +126,7 @@ A1(PUBLIC, void, RAMSDClose, SPortSel, port)	/* IMII-250 */
 
 A2(PUBLIC, OSErr, SerReset, INTEGER, rn, INTEGER, config)	/* IMII-250 */
 {
-  config = CW (config);
+  config = BigEndianValue (config);
 
   return Control(rn, SERSET, (Ptr) &config);
 }
@@ -137,7 +138,7 @@ A3(PUBLIC, OSErr, SerSetBuf, INTEGER, rn, Ptr, p, INTEGER, len)	/* IMII-251 */
     sersetbuf_t temp;
 
     temp.p = RM (p);
-    temp.i = CW (len);
+    temp.i = BigEndianValue (len);
 
     return Control(rn, SERSETBUF, (Ptr) &temp);
 }
@@ -235,7 +236,7 @@ A1(PRIVATE, DCtlPtr, otherdctl, ParmBlkPtr, pbp)
     DCtlHandle h;
 
     h = 0;
-    switch (CW(pbp->cntrlParam.ioCRefNum)) {
+    switch (BigEndianValue(pbp->cntrlParam.ioCRefNum)) {
         case AINREFNUM:
             h = GetDCtlEntry(AOUTREFNUM);
             break;
@@ -264,7 +265,7 @@ PRIVATE char *specialname(ParmBlkPtr pbp, const char **lockfilep,
 {
     char *retval;
 
-    switch (CW(pbp->cntrlParam.ioCRefNum)) {
+    switch (BigEndianValue(pbp->cntrlParam.ioCRefNum)) {
         case AINREFNUM:
         case AOUTREFNUM:
 #if defined (NEXTSTEP)
@@ -310,9 +311,9 @@ void callcomp(ParmBlkPtr pbp, compfuncp comp, OSErr err)
 }
 
 #define DOCOMPLETION(pbp, err)						      \
-    (pbp)->ioParam.ioResult = CW(err);					      \
+    (pbp)->ioParam.ioResult = BigEndianValue(err);					      \
     if (((pbp)->ioParam.ioTrap & asyncTrpBit) && (pbp)->ioParam.ioCompletion) \
-	callcomp(pbp, (compfuncp) CL((long)(pbp)->ioParam.ioCompletion), err);	      \
+	callcomp(pbp, (compfuncp) BigEndianValue((long)(pbp)->ioParam.ioCompletion), err);	      \
     return err
 
 #else
@@ -320,7 +321,7 @@ void callcomp(ParmBlkPtr pbp, compfuncp comp, OSErr err)
 #warning BINCOMPAT not defined
 
 #define DOCOMPLETION(pbp, err)				\
-    (pbp)->ioParam.ioResult = CW(err);			\
+    (pbp)->ioParam.ioResult = BigEndianValue(err);			\
     if ((pbp)->ioParam.ioTrap & asyncTrpBit)		\
 	(*(compfuncp) (pbp)->ioParam.ioCompletion)();	\
     return err
@@ -402,14 +403,14 @@ A2(PUBLIC, OSErr, ROMlib_serialopen, ParmBlkPtr, pbp,		/* INTERNAL */
 			err = ROMlib_maperrno();
 #endif
 #else
-		    HxX(h, fd) = (CW(pbp->cntrlParam.ioCRefNum) == AINREFNUM ||
-		      CW(pbp->cntrlParam.ioCRefNum) == AOUTREFNUM) ? 0 : 1;
+		    HxX(h, fd) = (BigEndianValue(pbp->cntrlParam.ioCRefNum) == AINREFNUM ||
+		      BigEndianValue(pbp->cntrlParam.ioCRefNum) == AOUTREFNUM) ? 0 : 1;
 #endif
 		    dcp->dCtlFlags |= CWC(OPENBIT);
-		    SerReset(CW(pbp->cntrlParam.ioCRefNum),
-			    (CW(pbp->cntrlParam.ioCRefNum) == AINREFNUM ||
-			     CW(pbp->cntrlParam.ioCRefNum) == AOUTREFNUM) ?
-						    CW(SPPortA) : CW(SPPortB));
+		    SerReset(BigEndianValue(pbp->cntrlParam.ioCRefNum),
+			    (BigEndianValue(pbp->cntrlParam.ioCRefNum) == AINREFNUM ||
+			     BigEndianValue(pbp->cntrlParam.ioCRefNum) == AOUTREFNUM) ?
+						    BigEndianValue(SPPortA) : BigEndianValue(SPPortB));
 #if defined (LINUX) || defined (MACOSX_)
 		}
 #endif
@@ -431,42 +432,42 @@ A2(PUBLIC, OSErr, ROMlib_serialprime, ParmBlkPtr, pbp,		/* INTERNAL */
     size_t req_count;
 
     buf = (char *) MR (pbp->ioParam.ioBuffer);
-    req_count = CL (pbp->ioParam.ioReqCount);
+    req_count = BigEndianValue (pbp->ioParam.ioReqCount);
 
     err = noErr;
     if (!(dcp->dCtlFlags & CWC(OPENBIT)))
 	err = notOpenErr;
     else {
 #if defined(SERIALDEBUG)
-    warning_trace_info ("serial prime code %d", (LONGINT) (CW(pbp->ioParam.ioTrap) & 0xFF));
+    warning_trace_info ("serial prime code %d", (LONGINT) (BigEndianValue(pbp->ioParam.ioTrap) & 0xFF));
 #endif
 	h = (hiddenh) MR(dcp->dCtlStorage);
-	switch (CW(pbp->ioParam.ioTrap) & 0xFF) {
+	switch (BigEndianValue(pbp->ioParam.ioTrap) & 0xFF) {
 	case aRdCmd:
-	    if (CW(pbp->cntrlParam.ioCRefNum) != AINREFNUM &&
-				    CW(pbp->cntrlParam.ioCRefNum) != BINREFNUM)
+	    if (BigEndianValue(pbp->cntrlParam.ioCRefNum) != AINREFNUM &&
+				    BigEndianValue(pbp->cntrlParam.ioCRefNum) != BINREFNUM)
 		err = readErr;
 	    else {
 		/* this may have to be changed since we aren't looking for
 		   parity and framing errors */
 #if defined (LINUX) || defined (MACOSX_)
-		pbp->ioParam.ioActCount = CL(read(HxX(h, fd), buf, req_count));
+		pbp->ioParam.ioActCount = BigEndianValue(read(HxX(h, fd), buf, req_count));
 #elif defined (MSDOS) || defined (CYGWIN32)
-		pbp->ioParam.ioActCount = CL(serial_bios_read(HxX(h, fd), buf,
+		pbp->ioParam.ioActCount = BigEndianValue(serial_bios_read(HxX(h, fd), buf,
 							      req_count));
 #else
 #warning not sure what to do here
 #endif
 #if defined(SERIALDEBUG)
     warning_trace_info ("serial prime read %d bytes, first is 0x%0x",
-					    (LONGINT) CL(pbp->ioParam.ioActCount),
+					    (LONGINT) BigEndianValue(pbp->ioParam.ioActCount),
 			  (LONGINT) (unsigned char) buf[0]);
 #endif
 	    }
 	    break;
 	case aWrCmd:
-	    if (CW(pbp->cntrlParam.ioCRefNum) != AOUTREFNUM &&
-				       CW(pbp->cntrlParam.ioCRefNum) != BOUTREFNUM)
+	    if (BigEndianValue(pbp->cntrlParam.ioCRefNum) != AOUTREFNUM &&
+				       BigEndianValue(pbp->cntrlParam.ioCRefNum) != BOUTREFNUM)
 		err = writErr;
 	    else {
 #if defined(SERIALDEBUG)
@@ -475,10 +476,10 @@ A2(PUBLIC, OSErr, ROMlib_serialprime, ParmBlkPtr, pbp,		/* INTERNAL */
 			      (LONGINT) (unsigned char) buf[0]);
 #endif
 #if defined (LINUX) || defined (MACOSX_)
-		pbp->ioParam.ioActCount = CL(write(HxX(h, fd),
+		pbp->ioParam.ioActCount = BigEndianValue(write(HxX(h, fd),
 			       buf, req_count));
 #elif defined (MSDOS) || defined (CYGWIN32)
-		pbp->ioParam.ioActCount = CL( serial_bios_write(HxX(h, fd),
+		pbp->ioParam.ioActCount = BigEndianValue( serial_bios_write(HxX(h, fd),
 			       buf, req_count));
 #else
 #warning not sure what to do here
@@ -871,16 +872,16 @@ A2(PUBLIC, OSErr, ROMlib_serialctl, ParmBlkPtr, pbp,		/* INTERNAL */
     else {
 #if defined(SERIALDEBUG)
 	warning_trace_info ("serial control code = %d, param0 = 0x%x",
-					 (LONGINT) CW(pbp->cntrlParam.csCode),
-		       (LONGINT) (unsigned short) CW(pbp->cntrlParam.csParam[0]));
+					 (LONGINT) BigEndianValue(pbp->cntrlParam.csCode),
+		       (LONGINT) (unsigned short) BigEndianValue(pbp->cntrlParam.csParam[0]));
 #endif
 	h = (hiddenh) MR(dcp->dCtlStorage);
-	switch (CW(pbp->cntrlParam.csCode)) {
+	switch (BigEndianValue(pbp->cntrlParam.csCode)) {
 	case SERKILLIO:
 	    err = noErr;	/* All I/O done synchronously */
 	    break;
 	case SERSET:
-	    err = serset(HxX(h, fd), CW(pbp->cntrlParam.csParam[0]));
+	    err = serset(HxX(h, fd), BigEndianValue(pbp->cntrlParam.csParam[0]));
 	    break;
 	case SERSETBUF:
 	    err = noErr;	/* ignored */
@@ -896,7 +897,7 @@ A2(PUBLIC, OSErr, ROMlib_serialctl, ParmBlkPtr, pbp,		/* INTERNAL */
 	    err = ctlbrk(HxX(h, fd), SER_STOP);
 	    break;
 	case SERBAUDRATE:
-	    err = setbaud(HxX(h, fd), CW(pbp->cntrlParam.csParam[0]));
+	    err = setbaud(HxX(h, fd), BigEndianValue(pbp->cntrlParam.csParam[0]));
 	    break;
 	case SERMISC:
 #if defined (MSDOS) || defined (CYGWIN32)
@@ -970,10 +971,10 @@ A2(PUBLIC, OSErr, ROMlib_serialstatus, ParmBlkPtr, pbp,		/* INTERNAL */
 	err = notOpenErr;
     else {
 #if defined(SERIALDEBUG)
-    warning_trace_info ("serial status csCode = %d", (LONGINT) CW(pbp->cntrlParam.csCode));
+    warning_trace_info ("serial status csCode = %d", (LONGINT) BigEndianValue(pbp->cntrlParam.csCode));
 #endif
 	h = (hiddenh) MR(dcp->dCtlStorage);
-	switch (CW(pbp->cntrlParam.csCode)) {
+	switch (BigEndianValue(pbp->cntrlParam.csCode)) {
 	case SERGETBUF:
 #if defined (LINUX) || defined (MACOSX_)
 	    if (ioctl(HxX(h, fd), FIONREAD, &n) < 0)
@@ -985,7 +986,7 @@ A2(PUBLIC, OSErr, ROMlib_serialstatus, ParmBlkPtr, pbp,		/* INTERNAL */
 #if defined(SERIALDEBUG)
     warning_trace_info ("serial status getbuf = %d", (LONGINT) n);
 #endif
-		*(LONGINT *) pbp->cntrlParam.csParam = CL(n);
+		*(LONGINT *) pbp->cntrlParam.csParam = BigEndianValue(n);
 		err = noErr;
 	    }
 	    break;

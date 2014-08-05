@@ -38,6 +38,7 @@ char ROMlib_rcsid_osutil[] =
 #endif
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /*
  * NOTE: HandToHand is not directly called by the outside world.
@@ -624,7 +625,7 @@ A1(PUBLIC, void, GetTime, DateTimeRec *, d)
     LONGINT secs;
 	
     GetDateTime(&secs);
-    Secs2Date(CL(secs), d);
+    Secs2Date(BigEndianValue(secs), d);
 }
 
 A1(PUBLIC, void, SetTime, DateTimeRec *, d)
@@ -644,7 +645,7 @@ A0(PRIVATE, void, setdefaults)
     SPValid     = VALID;
     SPAlarm     = SPATalkB = SPATalkA = SPConfig = 0;
     SPPrint     = SPPortB = SPPortA = CW(baud9600 | stop10 | data8 | noParity);
-    SPFont      = CW(geneva - 1);
+    SPFont      = BigEndianValue(geneva - 1);
     SPKbd       = 0x63;
     SPVolCtl    = 3;
     SPClikCaret = 0x88;
@@ -693,11 +694,11 @@ A0(PRIVATE, void, deriveglobals)
         (tmg.tm_min * 60) + tmg.tm_sec;
     ROMlib_GMTcorrect = gmtimenow - ltimenow;
 
-    KeyThresh    = CW((short) ((SPKbd >> 4) & 0xF) * 4);
-    KeyRepThresh = CW((short) (SPKbd & 0xF) * 4);
-    MenuFlash    = CW((short) (SPMisc2 >> 2) & 3);
-    CaretTime    = CL((short) (SPClikCaret & 0xF) * 4);
-    DoubleTime   = CL((short) (SPClikCaret & 0xF0) / 4);
+    KeyThresh    = BigEndianValue((short) ((SPKbd >> 4) & 0xF) * 4);
+    KeyRepThresh = BigEndianValue((short) (SPKbd & 0xF) * 4);
+    MenuFlash    = BigEndianValue((short) (SPMisc2 >> 2) & 3);
+    CaretTime    = BigEndianValue((short) (SPClikCaret & 0xF) * 4);
+    DoubleTime   = BigEndianValue((short) (SPClikCaret & 0xF0) / 4);
 }
 
 A0(PUBLIC trap, OSErrRET, InitUtil)		/* IMII-380 */
@@ -723,10 +724,10 @@ A0(PUBLIC trap, OSErrRET, InitUtil)		/* IMII-380 */
 	    SPPortB	= sp.portB;
 	    SPAlarm	= sp.alarm;
 	    SPFont	= sp.font;
-	    SPKbd	= CW(sp.kbdPrint) >> 8;
-	    SPPrint	= CW(sp.kbdPrint);
-	    SPVolCtl    = CW(sp.volClik)  >> 8;
-	    SPClikCaret = CW(sp.volClik);
+	    SPKbd	= BigEndianValue(sp.kbdPrint) >> 8;
+	    SPPrint	= BigEndianValue(sp.kbdPrint);
+	    SPVolCtl    = BigEndianValue(sp.volClik)  >> 8;
+	    SPClikCaret = BigEndianValue(sp.volClik);
 #if !defined (BIGENDIAN)
 	    SPMisc2	= sp.misc;
 #else
@@ -769,8 +770,8 @@ A0(PUBLIC trap, OSErrRET, WriteParam)		/* IMII-382 */
 	sp.portB    = SPPortB;
 	sp.alarm    = SPAlarm;
 	sp.font     = SPFont;
-	sp.kbdPrint = CW((short) (SPKbd    << 8) | (SPPrint     & 0xff));
-	sp.volClik  = CW((short) (SPVolCtl << 8) | (SPClikCaret & 0xff));
+	sp.kbdPrint = BigEndianValue((short) (SPKbd    << 8) | (SPPrint     & 0xff));
+	sp.volClik  = BigEndianValue((short) (SPVolCtl << 8) | (SPClikCaret & 0xff));
 #if !defined (BIGENDIAN)
 	sp.misc     = SPMisc2;
 #else
@@ -834,9 +835,9 @@ A2(PUBLIC, LONGINT, NGetTrapAddress, INTEGER, n, INTEGER, ttype) /* IMII-384 */
   LONGINT retval;
 
   retval = (LONGINT) ((ttype == OSTrap) ?
-		      (LONGINT) CL((long) ostraptable[n&(NOSENTRIES-1)])
+		      (LONGINT) BigEndianValue((int) ostraptable[n&(NOSENTRIES-1)])
 		      :
-		      (LONGINT) CL((long) tooltraptable[n&(NTOOLENTRIES-1)]));
+		      (LONGINT) BigEndianValue((int) tooltraptable[n&(NTOOLENTRIES-1)]));
   warning_trace_info ("n = 0x%x, ttype = %d, retval = %p", (uint16) n, ttype,
 		      (void *) retval);
   return retval;
@@ -1000,12 +1001,12 @@ A2(PUBLIC trap, OSErrRET, SysEnvirons, INTEGER, vers, SysEnvRecPtr, p)
 
     if (vers <= 0)
 /*-->*/	return envBadVers;
-    p->environsVersion = CW (vers);
+    p->environsVersion = BigEndianValue (vers);
     p->machineType     = CWC (53);
     p->systemVersion   = SysVersion;
 
 #if !defined (SYN68K)
-    p->processor       = CW(ROMlib_processor);
+    p->processor       = BigEndianValue(ROMlib_processor);
     p->hasFPU          = ROMlib_hasFPU;
 #else /* SYN68K */
     p->processor       = CWC(env68040);

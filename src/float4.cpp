@@ -27,6 +27,7 @@ char ROMlib_rcsid_float4[] =
 #include "rsys/float_fcw.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #if !defined (CYGWIN32)
 
@@ -195,7 +196,7 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_Fsetenv, INTEGER *,
    * handling.
    */
 
-  env = CW (*dp);
+  env = BigEndianValue (*dp);
   halts_enabled = env & 0x1F;
   env &= ~0x1F;
 
@@ -309,7 +310,7 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_Fsetenv, INTEGER *,
   gui_abort ();
 #endif
 
-  warning_floating_point ("setenv(0x%04X)", (unsigned) (uint16) CW (*dp));
+  warning_floating_point ("setenv(0x%04X)", (unsigned) (uint16) BigEndianValue (*dp));
 }
 
 
@@ -395,7 +396,7 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_Fgetenv, INTEGER *,
   env = (env & ~0x1F) | halts_enabled;
 
   /* Return the computed environment word. */
-  *(unsigned short *) dp = CW(env);
+  *(unsigned short *) dp = BigEndianValue(env);
   warning_floating_point ("Returning 0x%04X", (unsigned) env);
 }
 
@@ -447,7 +448,7 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_Ftestxcp, INTEGER *,
   warning_floating_point (NULL_STRING);
   /* Fetch the current environment. */
   C_ROMlib_Fgetenv (&env, 0);
-  env = CW (env);
+  env = BigEndianValue (env);
 
   /* Clear dp's high byte. */
   *dp &= CWC (0x00FF);
@@ -477,7 +478,7 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_FscalbX, INTEGER *,
   DECLAREINOUT();
 
   /* FIXME - may lose precision! */
-  scale = CW(*(short *)sp);
+  scale = BigEndianValue(*(short *)sp);
   ieee_to_x80 (out = scalb (in = x80_to_ieee (dp), scale), dp);
 
   warning_floating_point ("scalb(" IEEE_T_FORMAT ", %d) == " IEEE_T_FORMAT "",
@@ -580,10 +581,10 @@ do {									\
     dest op ( in1 = f32_to_ieee ((const f32_t *) sp));			\
     break;								\
   case FI_OPERAND:							\
-    dest op (in1 = CW (*(short *) sp));					\
+    dest op (in1 = BigEndianValue (*(short *) sp));					\
     break;								\
   case FL_OPERAND:							\
-    dest op (in1 = CL (*(long *)(sp)));					\
+    dest op (in1 = BigEndianValue (*(long *)(sp)));					\
     break;								\
   case FC_OPERAND:							\
     dest op (in1 = comp_to_ieee ((const comp_t *) sp));			\
@@ -684,10 +685,10 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_FX2x, x80_t *,
     ieee_to_f32 (val, (f32_t *) dp);
     break;
   case FI_OPERAND:
-    *(short *)dp = CW( (signed short) rint (val));
+    *(short *)dp = BigEndianValue( (signed short) rint (val));
     break;
   case FL_OPERAND:
-    *(long *)dp = CL( (LONGINT) rint (val));
+    *(long *)dp = BigEndianValue( (LONGINT) rint (val));
     break;
   case FC_OPERAND:
     ieee_to_comp (val, (comp_t *) dp);
@@ -721,10 +722,10 @@ P_SAVED1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fremx, void *, sp,
     n2 = f32_to_ieee ((const f32_t *) sp);
     break;
   case FI_OPERAND:
-    n2 = CW(*(short *)sp);
+    n2 = BigEndianValue(*(short *)sp);
     break;
   case FL_OPERAND:
-    n2 = CL(*(long *)sp);
+    n2 = BigEndianValue(*(long *)sp);
     break;
   case FC_OPERAND:
     n2 = comp_to_ieee ((const comp_t *) sp);
@@ -787,10 +788,10 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, FCMP_RETURN_TYPE, ROMlib_Fcmpx,
     n2 = f32_to_ieee ((const f32_t *) sp);
     break;
   case FI_OPERAND:
-    n2 = CW(*(short *)sp);
+    n2 = BigEndianValue(*(short *)sp);
     break;
   case FL_OPERAND:
-    n2 = CL (* (long *)sp);
+    n2 = BigEndianValue (* (long *)sp);
     break;
   case FC_OPERAND:
     n2 = comp_to_ieee ((const comp_t *) sp);
@@ -911,10 +912,10 @@ P_SAVED0D1A0A1_4 (PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
     n = f32_to_ieee ((const f32_t *) sp);
     break;
   case FI_OPERAND:
-    n = CW (*(short *)sp);
+    n = BigEndianValue (*(short *)sp);
     break;
   case FL_OPERAND:
-    n = CL (*(long *)sp);
+    n = BigEndianValue (*(long *)sp);
     break;
   case FC_OPERAND:
     n = comp_to_ieee ((const comp_t *) sp);
@@ -926,7 +927,7 @@ P_SAVED0D1A0A1_4 (PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
   in = n;
 
   /* Fetch the number of digits they are interested in. */
-  digits = CW (*(short *) (&sp2->digits));
+  digits = BigEndianValue (*(short *) (&sp2->digits));
   
   /* Compute sign. */
   if (n < 0)
@@ -1001,7 +1002,7 @@ P_SAVED0D1A0A1_4 (PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
       if (c_string[0] == '\0')
 	strcpy (c_string, "0");
 
-      dp->exp = CW (exponent);
+      dp->exp = BigEndianValue (exponent);
     }
   
   /* See if the generated string is too LONGINT. */
@@ -1016,7 +1017,7 @@ P_SAVED0D1A0A1_4 (PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
       old_len = strlen (c_string);
       c_string[SIGDIGLEN] = 0;
       new_len = SIGDIGLEN;
-      dp->exp = CW (CW (dp->exp) + old_len - new_len);
+      dp->exp = BigEndianValue (BigEndianValue (dp->exp) + old_len - new_len);
     }
 #endif
   
@@ -1027,7 +1028,7 @@ P_SAVED0D1A0A1_4 (PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
 
   warning_floating_point ("Fx2dec(" IEEE_T_FORMAT ", digits=%d) == %s%s * 10**%d",
 			  (IEEE_T_PRINT_CAST) in, digits, dp->sgn ? "-" : "",
-			  c_string, CW (dp->exp));
+			  c_string, BigEndianValue (dp->exp));
 }
 
 #if defined (CYGWIN32)
@@ -1108,10 +1109,10 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fdec2x, Decimal *,
     ieee_to_f32 (n, (f32_t *) dp);
     break;
   case FI_OPERAND:
-    *(short *) dp = CW( (signed short) rint (n));
+    *(short *) dp = BigEndianValue( (signed short) rint (n));
     break;
   case FL_OPERAND:
-    *(long *) dp = CL( (LONGINT) rint (n));
+    *(long *) dp = BigEndianValue( (LONGINT) rint (n));
     break;
   case FC_OPERAND:
     ieee_to_comp (n, (comp_t *) dp);
@@ -1123,7 +1124,7 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fdec2x, Decimal *,
   warning_floating_point ("Fdec2x(%s%.*s * 10**%d) == " IEEE_T_FORMAT "",
 			  sp->sgn ? "-" : "",
 			  (uint8) sp->sig[0], &sp->sig[1],
-			  CW (sp->exp), (IEEE_T_PRINT_CAST) in);
+			  BigEndianValue (sp->exp), (IEEE_T_PRINT_CAST) in);
 }
 
 
@@ -1131,7 +1132,7 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fclassx, void *,
 		  sp, INTEGER *, dp, unsigned short, sel)
 {
   static const unsigned char eight_zeros[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-  unsigned short first_word = CW (*(unsigned short *)sp);
+  unsigned short first_word = BigEndianValue (*(unsigned short *)sp);
 
   warning_floating_point (NULL_STRING);
 
@@ -1197,7 +1198,7 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fclassx, void *,
 #define S_NORMNUM_MASK 0x78000000
 #define S_FRAC_MASK    0x07FFFFFF
 #define S_QNAN_MASK    0x04000000
-      ULONGINT v = CL (*(uint32 *)sp);
+      ULONGINT v = BigEndianValue (*(uint32 *)sp);
       if ((v & S_INF_OR_NAN) == S_INF_OR_NAN)
 	{
 	  if ((v & S_FRAC_MASK) == 0)
@@ -1237,6 +1238,6 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fclassx, void *,
    * sign bit, we only need to check the first byte of the type.
    */
   if (*(signed char *)sp < 0)
-    *dp = CW (0 - CW (*dp));
+    *dp = BigEndianValue (0 - BigEndianValue (*dp));
 
 }

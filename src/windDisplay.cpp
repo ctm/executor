@@ -20,6 +20,7 @@ char ROMlib_rcsid_windDisplay[] =
 #include "rsys/glue.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P2(PUBLIC pascal trap, void, SetWTitle, WindowPtr, w, StringPtr, t)
 {
@@ -30,7 +31,7 @@ P2(PUBLIC pascal trap, void, SetWTitle, WindowPtr, w, StringPtr, t)
     THEPORT_SAVE_EXCURSION
       (MR (wmgr_port),
        {
-	 WINDOW_TITLE_WIDTH_X (w) = CW (StringWidth (t));
+	 WINDOW_TITLE_WIDTH_X (w) = BigEndianValue (StringWidth (t));
 	 
 	 if (WINDOW_VISIBLE_X (w))
 	   {
@@ -319,9 +320,9 @@ P2(PUBLIC pascal trap, void, SendBehind, WindowPtr, w, WindowPtr, behind)
 #if 0
     newfront = (WindowPeek) FrontWindow ();
     if (oldfront != newfront) {
-	CurDeactive = CL((WindowPtr) oldfront);
+	CurDeactive = BigEndianValue((WindowPtr) oldfront);
 	HiliteWindow((WindowPtr) oldfront, FALSE);
-	CurActivate = CL((WindowPtr) newfront);
+	CurActivate = BigEndianValue((WindowPtr) newfront);
 	HiliteWindow((WindowPtr) newfront, TRUE);
     }
 #else /* 0 */
@@ -346,16 +347,16 @@ P1(PUBLIC pascal trap, void, DrawGrowIcon, WindowPtr, w)
        {
 	 SetClip (PORT_CLIP_REGION (w));
 	 OffsetRgn (WINDOW_STRUCT_REGION (w),
-		    CW (PORT_BOUNDS (w).left),
-		    CW (PORT_BOUNDS (w).top));
+		    BigEndianValue (PORT_BOUNDS (w).left),
+		    BigEndianValue (PORT_BOUNDS (w).top));
 	 SectRgn (PORT_CLIP_REGION (thePort), WINDOW_STRUCT_REGION (w),
 		  PORT_CLIP_REGION (thePort));
 	 OffsetRgn (WINDOW_STRUCT_REGION (w),
-		    - CW (PORT_BOUNDS (w).left),
-		    - CW (PORT_BOUNDS (w).top));
+		    - BigEndianValue (PORT_BOUNDS (w).left),
+		    - BigEndianValue (PORT_BOUNDS (w).top));
 	 OffsetRgn (PORT_CLIP_REGION (thePort),
-		    - CW (PORT_BOUNDS (w).left),
-		    - CW (PORT_BOUNDS (w).top));
+		    - BigEndianValue (PORT_BOUNDS (w).left),
+		    - BigEndianValue (PORT_BOUNDS (w).top));
 	 ClipAbove ((WindowPeek) w);
 	 WINDCALL(w, wDrawGIcon, 0);
        });

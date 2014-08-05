@@ -69,6 +69,7 @@ typedef HIDDEN_finderinfoptr *finderinfohand;
 }
 
 using namespace Executor;
+using namespace ByteSwap;
 
 PUBLIC int Executor::ROMlib_cacheheuristic = FALSE;
 
@@ -524,7 +525,7 @@ A2(PUBLIC, void, ROMlib_seginit, LONGINT, argc, char **, argv)	/* INTERNAL */
 
     if (argv_to_appfile(fullpathname, &app)) {
 #if 0
-	CurApRefNum = CW(OpenRFPerm(app.fName, CW(app.vRefNum), fsCurPerm));
+	CurApRefNum = BigEndianValue(OpenRFPerm(app.fName, BigEndianValue(app.vRefNum), fsCurPerm));
 #endif
 	CurApName[0] = MIN(app.fName[0], sizeof(CurApName)-1);
 	BlockMove((Ptr) app.fName+1, (Ptr) CurApName+1, (Size) CurApName[0]);
@@ -552,7 +553,7 @@ A2(PUBLIC, void, ROMlib_seginit, LONGINT, argc, char **, argv)	/* INTERNAL */
 	    ROMlib_startupscreen = FALSE;
 	    ROMlib_exit = TRUE;
 	    newcount = Hx(fh, count) + 1;
-	    HxX(fh, count) = CW(newcount);
+	    HxX(fh, count) = BigEndianValue(newcount);
 	    SetHandleSize((Handle) fh,
 		     (char *) &HxX(fh, files)[newcount] - (char *)STARH(fh));
 	    HxX(fh, files)[Hx(fh, count)-1] = app;
@@ -560,7 +561,7 @@ A2(PUBLIC, void, ROMlib_seginit, LONGINT, argc, char **, argv)	/* INTERNAL */
 	if (ROMlib_toopen) {
 	    if (argv_to_appfile(ROMlib_toopen, &app)) {
 		newcount = Hx(fh, count) + 1;
-		HxX(fh, count) = CW(newcount);
+		HxX(fh, count) = BigEndianValue(newcount);
 		SetHandleSize((Handle) fh,
 		    (char *) &HxX(fh, files)[newcount] - (char *) STARH(fh));
 		HxX(fh, files)[Hx(fh, count)-1] = app;
@@ -574,7 +575,7 @@ A2(PUBLIC, void, ROMlib_seginit, LONGINT, argc, char **, argv)	/* INTERNAL */
 	    ROMlib_startupscreen = FALSE;
 	    ROMlib_exit = TRUE;
 	    newcount = Hx(fh, count) + 1;
-	    HxX(fh, count) = CW(newcount);
+	    HxX(fh, count) = BigEndianValue(newcount);
 	    SetHandleSize((Handle) fh,
 		    (char *) &HxX(fh, files)[newcount] - (char *) STARH(fh));
 	    HxX(fh, files)[Hx(fh, count)-1] = app;
@@ -606,7 +607,7 @@ A1(PUBLIC, void, ClrAppFiles, INTEGER, index)	/* IMII-58 */
     if (STARH((finderinfohand)MR(AppParmHandle))->files[index-1].fType) {
 	STARH((finderinfohand)MR(AppParmHandle))->files[index-1].fType = 0;
 	STARH((finderinfohand)MR(AppParmHandle))->count = 
-		      CW(CW(STARH((finderinfohand)MR(AppParmHandle))->count) - 1);
+		      BigEndianValue(BigEndianValue(STARH((finderinfohand)MR(AppParmHandle))->count) - 1);
     }
 }
 
@@ -653,7 +654,7 @@ PRIVATE BOOLEAN valid_browser( void )
   OSErr err;
   FInfo finfo;
 
-  err = GetFInfo(FinderName, CW(BootDrive), &finfo);
+  err = GetFInfo(FinderName, BigEndianValue(BootDrive), &finfo);
   return !ROMlib_nobrowser && err == noErr && finfo.fdType == TICKX("APPL");
 }
 
@@ -668,7 +669,7 @@ PRIVATE void launch_browser( void )
 	     ? MIN (flag_bpp, vdriver_max_bpp)
 	     : vdriver_max_bpp),
 	    0, 0);
-  Launch(FinderName, CW(BootDrive));
+  Launch(FinderName, BigEndianValue(BootDrive));
 }
 
 P0(PUBLIC pascal trap, void, ExitToShell)
@@ -726,7 +727,7 @@ P0(PUBLIC pascal trap, void, ExitToShell)
 	
 	if (QDExist == EXIST_NO) {
 	    a5 = (LONGINT) US_TO_SYN68K(&tmpA5);
-	    CurrentA5 = (Ptr) CL(a5);
+	    CurrentA5 = (Ptr) BigEndianValue(a5);
 	    InitGraf((Ptr) quickbytes + sizeof(quickbytes) - 4);
 	}
 	InitFonts();
@@ -761,7 +762,7 @@ P0(PUBLIC pascal trap, void, ExitToShell)
 		CurApName[0] = MIN(reply.fName[0], 31);
 		BlockMove((Ptr) reply.fName+1, (Ptr) CurApName+1,
 			  (Size) CurApName[0]);
-		Launch(CurApName, CW(reply.vRefNum));
+		Launch(CurApName, BigEndianValue(reply.vRefNum));
 	      }
 	  }
     }
@@ -850,7 +851,7 @@ P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
     ResLoad = -1;	/* CricketDraw III's behaviour suggested this */
     newcode = GetResource(TICK("CODE"), segno);
     HLock(newcode);
-    taboff   = CW(((INTEGER *) STARH(newcode))[0]);
+    taboff   = BigEndianValue(((INTEGER *) STARH(newcode))[0]);
     if ((uint16) taboff == 0xA89F)  /* magic compressed resource signature */
       {
 	/* We are totally dead here.  We almost certainly can't use
@@ -863,16 +864,16 @@ P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
 				 launch_compressed_lt7); 
 	C_ExitToShell ();
       }
-    savenentries = nentries = CW(((INTEGER *) STARH(newcode))[1]);
+    savenentries = nentries = BigEndianValue(((INTEGER *) STARH(newcode))[1]);
 
     saveptr = ptr = (short *) ((char *) (long) SYN68K_TO_US(a5) + taboff + Cx(CurJTOffset));
     while (--nentries >= 0) {
 	if (ptr[1] != CWC(JMPLINSTR)) {
-	    offbytes = CW(*ptr);
-	    *ptr++ = CW(segno);
+	    offbytes = BigEndianValue(*ptr);
+	    *ptr++ = BigEndianValue(segno);
 	    *ptr++ = CWC(JMPLINSTR);
 	    *(LONGINT *) ptr =
-		 CL((LONGINT) (long) ((char *) US_TO_SYN68K(STARH(newcode)) + offbytes + 4));
+		 BigEndianValue((LONGINT) (long) ((char *) US_TO_SYN68K(STARH(newcode)) + offbytes + 4));
 	    ptr += 2;
 	} else
 	    ptr += 4;
@@ -881,7 +882,7 @@ P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
 			  TRUE);
 }
 
-#define SEGNOOFP(p) (CW(((INTEGER *)p)[-1]))
+#define SEGNOOFP(p) (BigEndianValue(((INTEGER *)p)[-1]))
 
 namespace Executor {
   PRIVATE void unpatch(Ptr, Ptr);
@@ -896,7 +897,7 @@ A2(PRIVATE, void, unpatch, Ptr, segstart, Ptr, p)
 
     firstpc = MR(*(Ptr *)(p + 2));
     ip[1]  = ip[-1];	/* the segment number */
-    ip[-1] = CW(firstpc - segstart - 4);
+    ip[-1] = BigEndianValue(firstpc - segstart - 4);
     ip[0]  = CWC(MOVESPINSTR);
     ip[2]  = CWC(LOADSEGTRAP);
 }

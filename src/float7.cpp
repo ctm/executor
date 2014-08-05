@@ -15,6 +15,7 @@ char ROMlib_rcsid_float7[] =
 #include <ctype.h>
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #define LOWER(x)   ((x) | 0x20)     /* converts to lower case if x is A-Z */
 
@@ -32,8 +33,8 @@ P3(PUBLIC pascal trap, void, ROMlib_Fdec2str, DecForm * volatile, sp2,
     char backwardsexp[MAXEXPSIZE];
 
     warning_floating_point (NULL_STRING);
-    digits = CW (sp2->digits);
-    style = CW (sp2->style);
+    digits = BigEndianValue (sp2->digits);
+    style = BigEndianValue (sp2->style);
 
     switch(style & DECIMALTYPEMASK) {
 	case FloatDecimal:
@@ -54,7 +55,7 @@ P3(PUBLIC pascal trap, void, ROMlib_Fdec2str, DecForm * volatile, sp2,
 		i = 1;
 	    }
 	    dp[i + 2] = 'e';
-	    exponent = CW (sp->exp) + sp->sig[0] - 1;
+	    exponent = BigEndianValue (sp->exp) + sp->sig[0] - 1;
 	    if (exponent < 0) {
 		dp[i+3] = '-';
 		exponent = -exponent;
@@ -81,9 +82,9 @@ P3(PUBLIC pascal trap, void, ROMlib_Fdec2str, DecForm * volatile, sp2,
 		beforedecimal = 0;
 		sp->sig[0] = 0;
 	    } else {
-		beforedecimal = sp->sig[0] + CW (sp->exp);
+		beforedecimal = sp->sig[0] + BigEndianValue (sp->exp);
 	    }
-	    afterdecimal = (-CW (sp->exp) > digits) ? -CW (sp->exp) : digits;
+	    afterdecimal = (-BigEndianValue (sp->exp) > digits) ? -BigEndianValue (sp->exp) : digits;
 	    if (sp->sgn) {
 		dp[1] = '-';
 		i = 1;
@@ -149,7 +150,7 @@ P5(PUBLIC pascal trap, void, ROMlib_Fxstr2dec, Decstr volatile, sp2,
 {
     int index, expsgn, implicitexp;
     
-    index = CW (*sp);
+    index = BigEndianValue (*sp);
     warning_floating_point ("xstr2dec(\"%.*s\")",
 			    lastchar - index + 1, (const char *) sp2 + index);
     while (((sp2[index] == ' ')||(sp2[index] == '\t')) && (index <= lastchar))
@@ -183,7 +184,7 @@ P5(PUBLIC pascal trap, void, ROMlib_Fxstr2dec, Decstr volatile, sp2,
 	dp2->sig[1] = 'N';
 /*-->*/ goto abortlookahead;  /* should I use a break or return instead? */
     }
-    *sp = CW (index);		/* The base is legit.  Check exponent. */
+    *sp = BigEndianValue (index);		/* The base is legit.  Check exponent. */
     dp2->exp =  CWC (0);
     if (LOWER(sp2[index]) == 'e') {
 	index++;
@@ -199,25 +200,25 @@ P5(PUBLIC pascal trap, void, ROMlib_Fxstr2dec, Decstr volatile, sp2,
 /*-->*/     goto abortlookahead;  /* should I use a break or return instead? */
         }
 	while (isdigit(sp2[index]) && (index <= lastchar)) {
-	    INTEGER newexp = CW (dp2->exp);
+	    INTEGER newexp = BigEndianValue (dp2->exp);
 	    newexp *= 10;
 	    newexp += sp2[index] - '0';
-	    dp2->exp = CW (newexp);
+	    dp2->exp = BigEndianValue (newexp);
 	    index++;
 	}
 	if (expsgn)
-	  dp2->exp = CW (-1 * CW (dp2->exp));
+	  dp2->exp = BigEndianValue (-1 * BigEndianValue (dp2->exp));
     }
-    *sp = CW (index);
+    *sp = BigEndianValue (index);
 abortlookahead:
-    dp2->exp = CW (CW (dp2->exp) + implicitexp - dp2->sig[0]);
+    dp2->exp = BigEndianValue (BigEndianValue (dp2->exp) + implicitexp - dp2->sig[0]);
     *dp = CB (!sp2[index] || (index > lastchar));
     while (dp2->sig[0] > 1 && dp2->sig[1] == '0')	/* gunch leading */
 	memmove(dp2->sig+1, dp2->sig+2, --dp2->sig[0]);	/* zeros */
 
     warning_floating_point ("xstr2dec returning %s%.*s * 10**%d",
 			    dp2->sgn ? "-" : "",
-			    dp2->sig[0], dp2->sig + 1, CW (dp2->exp));
+			    dp2->sig[0], dp2->sig + 1, BigEndianValue (dp2->exp));
 }
 
 

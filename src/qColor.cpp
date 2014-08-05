@@ -22,6 +22,7 @@ char ROMlib_rcsid_qColor[] =
 #include "rsys/qcolor.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /* color quickdraw global stuff */
 
@@ -92,7 +93,7 @@ P1(PUBLIC pascal trap, void, ForeColor, LONGINT, c)
       if (CGrafPort_p (the_port))
 	RGBForeColor (ROMlib_qd_color_to_rgb (c));
       else
-	PORT_FG_COLOR_X (the_port) = CL (c);
+	PORT_FG_COLOR_X (the_port) = BigEndianValue (c);
     }
 }
 
@@ -106,13 +107,13 @@ P1(PUBLIC pascal trap, void, BackColor, LONGINT, c)
       if (CGrafPort_p (the_port))
 	RGBBackColor (ROMlib_qd_color_to_rgb (c));
       else
-	PORT_BK_COLOR_X (the_port) = CL (c);
+	PORT_BK_COLOR_X (the_port) = BigEndianValue (c);
     }
 }
 
 P1(PUBLIC pascal trap, void, ColorBit, INTEGER, b)
 {
-  PORT_COLR_BIT_X (thePort) = CW (b);
+  PORT_COLR_BIT_X (thePort) = BigEndianValue (b);
 }
 
 typedef CTabHandle clut_res_handle;
@@ -158,8 +159,8 @@ P1 (PUBLIC pascal trap, CTabHandle, GetCTable,
 	/* if the color table is b/w, set the seed to be the b/w clut
 	   seed */
 	/* #### ctab_id or a new seed? */
-	CTAB_SEED_X (ctab)  = CL (ctab_id == 33 ? 1 : ctab_id);
-	CTAB_SIZE_X (ctab)  = CW (ctab_size);
+	CTAB_SEED_X (ctab)  = BigEndianValue (ctab_id == 33 ? 1 : ctab_id);
+	CTAB_SIZE_X (ctab)  = BigEndianValue (ctab_size);
 	CTAB_FLAGS_X (ctab) = CTAB_GDEVICE_BIT_X;
 	
 	table = CTAB_TABLE (ctab);
@@ -167,13 +168,13 @@ P1 (PUBLIC pascal trap, CTabHandle, GetCTable,
 	stride = 0xFFFF0000UL / ctab_size;
 	for (c = 0xFFFF0000UL, i = 0; i < ctab_size; c -= stride, i ++)
 	  {
-	    table[i].value = CW (i);
+	    table[i].value = BigEndianValue (i);
 	    table[i].rgb.red = table[i].rgb.green = table[i].rgb.blue
-	      = CW ((c + 0x8000) >> 16);
+	      = BigEndianValue ((c + 0x8000) >> 16);
 	  }
 	
 	/* Make sure the last entry is _exactly_ black. */
-	table[ctab_size].value = CW (ctab_size);
+	table[ctab_size].value = BigEndianValue (ctab_size);
 	table[ctab_size].rgb.red = table[ctab_size].rgb.green
 	  = table[ctab_size].rgb.blue = CWC (0);
 	
@@ -203,7 +204,7 @@ P1 (PUBLIC pascal trap, CTabHandle, GetCTable,
 		       ctab_handle_size);
 	    
 	    /* #### ctab_id or a new seed? */
-	    CTAB_SEED_X (ctab) = CL (ctab_id);
+	    CTAB_SEED_X (ctab) = BigEndianValue (ctab_id);
 	  }
 	else if (ctab_id >= 0 && ctab_id <= 8)
 	  {
@@ -214,9 +215,9 @@ P1 (PUBLIC pascal trap, CTabHandle, GetCTable,
 	    ctab_size = (1 << ctab_id) - 1;
 	    ctab = (CTabHandle) NewHandle (CTAB_STORAGE_FOR_SIZE (ctab_size));
 	    
-	    CTAB_SIZE_X (ctab) = CW (ctab_size);
+	    CTAB_SIZE_X (ctab) = BigEndianValue (ctab_size);
 	    CTAB_FLAGS_X (ctab) = CTAB_GDEVICE_BIT_X;
-	    CTAB_SEED_X (ctab) = CL (ctab_id);
+	    CTAB_SEED_X (ctab) = BigEndianValue (ctab_id);
 	    
 	    ctab_table = CTAB_TABLE (ctab);
 	    memcpy (ctab_table, default_ctab_colors[ROMlib_log2[ctab_id]],

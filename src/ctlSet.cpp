@@ -17,6 +17,7 @@ char ROMlib_rcsid_ctlSet[] =
 #include "rsys/ctl.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P2(PUBLIC pascal trap, void, SetCtlValue, ControlHandle, c,	/* IMI-326 */
 								  INTEGER, v)
@@ -30,7 +31,7 @@ P2(PUBLIC pascal trap, void, SetCtlValue, ControlHandle, c,	/* IMI-326 */
        else if (v > Hx(c, contrlMax))
 	 HxX(c, contrlValue) = HxX(c, contrlMax);
        else
-	 HxX(c, contrlValue) = CW(v);
+	 HxX(c, contrlValue) = BigEndianValue(v);
        CTLCALL (c, drawCntl, ALLINDICATORS);
      });
     
@@ -50,9 +51,9 @@ P2(PUBLIC pascal trap, void, SetCtlMin, ControlHandle, c,	/* IMI-326 */
     (c,
      {
        SetPort(HxP(c, contrlOwner));
-       HxX(c, contrlMin) = CW(v);
+       HxX(c, contrlMin) = BigEndianValue(v);
        if (Hx(c, contrlValue) < v)
-	 HxX(c, contrlValue) = CW(v);
+	 HxX(c, contrlValue) = BigEndianValue(v);
        CTLCALL(c, drawCntl, ALLINDICATORS);
      });
 }
@@ -73,9 +74,9 @@ P2(PUBLIC pascal trap, void, SetCtlMax, ControlHandle, c,	/* IMI-327 */
        if (v < Hx(c, contrlMin))
 	 v = Hx(c, contrlMin);
        
-       HxX(c, contrlMax) = CW(v);
+       HxX(c, contrlMax) = BigEndianValue(v);
        if (Hx(c, contrlValue) > v)
-	 HxX(c, contrlValue) = CW(v);
+	 HxX(c, contrlValue) = BigEndianValue(v);
        CTLCALL(c, drawCntl, ALLINDICATORS);
      });
 }

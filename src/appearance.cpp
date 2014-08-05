@@ -21,6 +21,7 @@ char ROMlib_rcsid_appearance[] =
 #include "rsys/options.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 PRIVATE appearance_t appearance = appearance_sys7;
 
@@ -186,7 +187,7 @@ silently_replace_resources (INTEGER master_file_rn, INTEGER from_file_rn)
       INTEGER res_num, res_num_max;
 
       GetIndTypeRN (from_file_rn, &type, type_num);
-      type = CL (type);
+      type = BigEndianValue (type);
       res_num_max = CountResourcesRN (from_file_rn, type);
       for (res_num = 1; res_num <= res_num_max; ++res_num)
 	{
@@ -197,7 +198,7 @@ silently_replace_resources (INTEGER master_file_rn, INTEGER from_file_rn)
 
 	  h = GetIndResourceRN (from_file_rn, type, res_num);
 	  GetResInfo (h, &id, &t, name);
-	  id = CW (id);
+	  id = BigEndianValue (id);
 	  LoadResource (h);
 	  DetachResource (h);
 	  AddResourceRN (master_file_rn, h, type, id, name);
@@ -215,10 +216,10 @@ Executor::ROMlib_set_appearance (void)
   if (appearance < 0 || appearance >= NELEM (res_filenames))
     appearance = (appearance_t)0;
   
-  res_file = OpenRFPerm (res_filenames[appearance], CW (BootDrive), fsRdPerm);
+  res_file = OpenRFPerm (res_filenames[appearance], BigEndianValue (BootDrive), fsRdPerm);
   if (res_file != CWC (-1))
     {
-      silently_replace_resources (CW (SysMap), res_file);
+      silently_replace_resources (BigEndianValue (SysMap), res_file);
       CloseResFile (res_file);
     }
   else if (appearance != 0)

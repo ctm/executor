@@ -14,6 +14,7 @@ char ROMlib_rcsid_hfsChanging[] =
 #include "rsys/hfs.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 typedef enum {
 	GetOp,
@@ -33,7 +34,7 @@ PRIVATE OSErr PBFInfoHelper(changeop op, fileParam *pb, LONGINT dirid,
     filekind kind;
     
     vcbp = 0;
-    if (op == GetOp && (CW(pb->ioFDirIndex) > 0))
+    if (op == GetOp && (BigEndianValue(pb->ioFDirIndex) > 0))
 	err = ROMlib_btpbindex((ioParam *) pb, dirid, &vcbp, &frp, &catkeyp,
 									 TRUE);
     else {
@@ -52,9 +53,9 @@ PRIVATE OSErr PBFInfoHelper(changeop op, fileParam *pb, LONGINT dirid,
     if (err == noErr) {
 	switch (op) {
 	case GetOp:
-	    if (CW(pb->ioFDirIndex) > 0 && pb->ioNamePtr)
+	    if (BigEndianValue(pb->ioFDirIndex) > 0 && pb->ioNamePtr)
 		str255assign(MR(pb->ioNamePtr), catkeyp->ckrCName);
-	    pb->ioFlAttrib = CB (open_attrib_bits (CL (frp->filFlNum), vcbp,
+	    pb->ioFlAttrib = CB (open_attrib_bits (BigEndianValue (frp->filFlNum), vcbp,
 						   &pb->ioFRefNum));
 	    pb->ioFlAttrib |= frp->filFlags & CB (INHERITED_FLAG_BITS);
 	    pb->ioFlVersNum = 0;
@@ -103,7 +104,7 @@ PUBLIC OSErr Executor::hfsPBGetFInfo(ParmBlkPtr pb, BOOLEAN async)
 
 PUBLIC OSErr Executor::hfsPBHGetFInfo(HParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(GetOp, (fileParam *) pb, CL(pb->fileParam.ioDirID), async);
+    return PBFInfoHelper(GetOp, (fileParam *) pb, BigEndianValue(pb->fileParam.ioDirID), async);
 }
 
 PUBLIC OSErr Executor::hfsPBSetFInfo(ParmBlkPtr pb, BOOLEAN async)
@@ -113,7 +114,7 @@ PUBLIC OSErr Executor::hfsPBSetFInfo(ParmBlkPtr pb, BOOLEAN async)
 
 PUBLIC OSErr Executor::hfsPBHSetFInfo(HParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(SetOp, (fileParam *) pb, CL(pb->fileParam.ioDirID), async);
+    return PBFInfoHelper(SetOp, (fileParam *) pb, BigEndianValue(pb->fileParam.ioDirID), async);
 }
 
 PUBLIC OSErr Executor::hfsPBSetFLock(ParmBlkPtr pb, BOOLEAN async)
@@ -123,7 +124,7 @@ PUBLIC OSErr Executor::hfsPBSetFLock(ParmBlkPtr pb, BOOLEAN async)
 
 PUBLIC OSErr Executor::hfsPBHSetFLock(HParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(LockOp, (fileParam *) pb, CL(pb->fileParam.ioDirID), async);
+    return PBFInfoHelper(LockOp, (fileParam *) pb, BigEndianValue(pb->fileParam.ioDirID), async);
 }
 
 PUBLIC OSErr Executor::hfsPBRstFLock(ParmBlkPtr pb, BOOLEAN async)
@@ -134,7 +135,7 @@ PUBLIC OSErr Executor::hfsPBRstFLock(ParmBlkPtr pb, BOOLEAN async)
 PUBLIC OSErr Executor::hfsPBHRstFLock(HParmBlkPtr pb, BOOLEAN async)
 {
     return PBFInfoHelper(UnlockOp, (fileParam *) pb,
-			 CL (pb->fileParam.ioDirID), async);
+			 BigEndianValue (pb->fileParam.ioDirID), async);
 }
 
 PUBLIC OSErr Executor::hfsPBSetFVers(ParmBlkPtr pb, BOOLEAN async)
@@ -151,11 +152,11 @@ ROMlib_fcbrename (HVCB *vcbp, LONGINT swapped_parid, StringPtr oldnamep,
   HVCB *swapped_vcbp;
 
   swapped_vcbp = RM (vcbp);
-  length = CW(*(short *)MR(FCBSPtr));
+  length = BigEndianValue(*(short *)MR(FCBSPtr));
   fcbp = (filecontrolblock *) ((short *)MR(FCBSPtr)+1);
   efcbp = (filecontrolblock *) ((char *)MR(FCBSPtr) + length);
   for (;fcbp < efcbp;
-       fcbp = (filecontrolblock *) ((char *)fcbp + CW(FSFCBLen)))
+       fcbp = (filecontrolblock *) ((char *)fcbp + BigEndianValue(FSFCBLen)))
     {
       if (fcbp->fcbDirID == swapped_parid
 	  && fcbp->fcbVPtr == swapped_vcbp
@@ -194,7 +195,7 @@ renamehelper(ioParam *pb, BOOLEAN async, LONGINT dirid, filekind kind)
 				  btparamrec.tofind.catk.ckrParID,
 				  (StringPtr)
 				  &btparamrec.tofind.catk.ckrCName[0],
-				  (StringPtr) CL (pb->ioMisc));
+				  (StringPtr) BigEndianValue (pb->ioMisc));
 	    }
 	  err1 = ROMlib_cleancache(btparamrec.vcbp);
 	  if (err1 == noErr)
@@ -232,6 +233,6 @@ PUBLIC OSErr Executor::hfsPBRename(ParmBlkPtr pb, BOOLEAN async)
 
 PUBLIC OSErr Executor::hfsPBHRename(HParmBlkPtr pb, BOOLEAN async)
 {
-    return renamehelper((ioParam *) pb, async, CL(pb->fileParam.ioDirID),
+    return renamehelper((ioParam *) pb, async, BigEndianValue(pb->fileParam.ioDirID),
 							    (filekind)(regular|directory));
 }

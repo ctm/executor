@@ -21,6 +21,7 @@ char ROMlib_rcsid_gestalt[] =
 #include "rsys/vdriver.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 typedef struct
 {
@@ -385,7 +386,7 @@ gestalt_helper(OSType selector, LONGINT *responsep, BOOLEAN searchlist,
 	  else
 	    {
 	      retval = noErr;
-	      *responsep = CL (gep->value);
+	      *responsep = BigEndianValue (gep->value);
 	    }
 	}
     }
@@ -396,7 +397,7 @@ gestalt_helper(OSType selector, LONGINT *responsep, BOOLEAN searchlist,
 		      (selector >> 16) & 0xFF,
 		      (selector >>  8) & 0xFF,
 		      (selector) & 0xFF,
-		      CL (*responsep),
+		      BigEndianValue (*responsep),
 		      retval);
 
   return retval;
@@ -464,7 +465,7 @@ Executor::ROMlib_add_to_gestalt_list (OSType selector, OSErr retval, uint32 new_
       entryp = (typeof (entryp)) ((char *) gestalt_listp + listp_size);
       entryp->selector = selector;
       entryp->retval = retval;
-      entryp->value = CL (new_value);
+      entryp->value = BigEndianValue (new_value);
       listp_size += sizeof *gestalt_listp;
     }
 }

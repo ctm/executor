@@ -35,7 +35,9 @@ boolean_t send_application_open_aevt_p;
 										   AEDesc * desc_out);
 
 }
+
 using namespace Executor;
+using namespace ByteSwap;
 
 
 /* dispatching apple events */
@@ -78,7 +80,7 @@ P1 (PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
   if (err != bufferIsSmall)
     AE_RETURN_ERROR (errAEEventNotHandled);
   
-  evt_data = NewHandle (CL (evt_data_size));
+  evt_data = NewHandle (BigEndianValue (evt_data_size));
   if (MemError () != noErr)
     AE_RETURN_ERROR (MemError ());
   
@@ -108,7 +110,7 @@ P1 (PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
       AEDisposeDesc (evt);
       AE_RETURN_ERROR (err);
     }
-  event_class = CL (event_class);
+  BigEndianInPlace (event_class);
   
   err = AEGetAttributePtr (evt, keyEventIDAttr,
 			   typeType, &dummy_type,
@@ -118,7 +120,7 @@ P1 (PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
       AEDisposeDesc (evt);
       AE_RETURN_ERROR (err);
     }
-  event_id = CL (event_id);
+  event_id = BigEndianValue (event_id);
   
   err = AEGetEventHandler (event_class, event_id, &hdlr, &refcon, FALSE);
   if (err != noErr)
@@ -131,7 +133,7 @@ P1 (PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
 	}
     }
   hdlr = MR (hdlr);
-  refcon = CL (refcon);
+  refcon = BigEndianValue (refcon);
   
   {
     AppleEvent *reply = (AppleEvent*)alloca (sizeof *reply);
@@ -185,8 +187,8 @@ P7 (PUBLIC pascal trap, OSErr, AESend,
     /* ### not sure what error we should return here */
     AE_RETURN_ERROR (errAEEventNotHandled);
   
-  target_type = CL (target_type);
-  target_size = CL (target_size);
+  target_type = BigEndianValue (target_type);
+  target_size = BigEndianValue (target_size);
   
   if (err != noErr)
     AE_RETURN_ERROR (err);
@@ -432,7 +434,7 @@ P5 (PUBLIC pascal trap, OSErr, AECoercePtr,
   
   /* swap things to a normal state */
   coercion_hdlr = MR (coercion_hdlr);
-  refcon = CL (refcon);
+  BigEndianInPlace (refcon);
   
   if (is_desc_hdlr_p)
     {
@@ -482,7 +484,7 @@ parse_evt (const AppleEvent *evtp, AEDesc *desc_out)
       LONGINT n;
 
       retval = AECountItems (&d, &n);
-      n = CL (n);
+      n = BigEndianValue (n);
       if (retval == noErr)
 	{
 	  Handle h;
@@ -496,7 +498,7 @@ parse_evt (const AppleEvent *evtp, AEDesc *desc_out)
 	      LONGINT l;
 
 	      p->magic = CLC (APP_PARAMS_MAGIC);
-	      p->n_fsspec = CW (n);
+	      p->n_fsspec = BigEndianValue (n);
 	      for (l = 1; retval == noErr && l <= n; ++l)
 		{
 		  AEDesc d2;
@@ -566,7 +568,7 @@ P3 (PUBLIC pascal trap, OSErr, AECoerceDesc,
   
   /* swap things to a normal state */
   coercion_hdlr = MR (coercion_hdlr);
-  refcon = CL (refcon);
+  refcon = BigEndianValue (refcon);
 
   if (is_desc_hdlr_p)
     {

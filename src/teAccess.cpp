@@ -21,6 +21,7 @@ char ROMlib_rcsid_teAccess[] =
 #include "rsys/mman.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P3 (PUBLIC pascal trap, void, TESetText, Ptr, p, LONGINT, length, TEHandle, teh)
 {
@@ -30,11 +31,11 @@ P3 (PUBLIC pascal trap, void, TESetText, Ptr, p, LONGINT, length, TEHandle, teh)
 #if 0
   HASSIGN_3
     (teh,
-     selStart, CW (length),
-     selEnd, CW (length),
-     teLength, CW (length));
+     selStart, BigEndianValue (length),
+     selEnd, BigEndianValue (length),
+     teLength, BigEndianValue (length));
 #else
-  HxX (teh, teLength) = CW (length);
+  HxX (teh, teLength) = BigEndianValue (length);
 #endif
   /* ### adjust recal* fields? */
   if (TE_STYLIZED_P (teh))
@@ -53,7 +54,7 @@ P3 (PUBLIC pascal trap, void, TESetText, Ptr, p, LONGINT, length, TEHandle, teh)
 		     TE_STYLE_SIZE_FOR_N_RUNS (1));
       HxX (te_style, runs[0].startChar)  = CWC (0);
       HxX (te_style, runs[0].styleIndex) = CWC (0);
-      HxX (te_style, runs[1].startChar)  = CW (length + 1);
+      HxX (te_style, runs[1].startChar)  = BigEndianValue (length + 1);
       HxX (te_style, runs[1].styleIndex) = CWC (-1);
       style_table = TE_STYLE_STYLE_TABLE (te_style);
       SetHandleSize ((Handle) style_table,
@@ -66,9 +67,9 @@ P3 (PUBLIC pascal trap, void, TESetText, Ptr, p, LONGINT, length, TEHandle, teh)
 	 stFace, PORT_TX_FACE (thePort),
 	 stSize, PORT_TX_SIZE_X (thePort),
 	 stColor, ROMlib_black_rgb_color,
-	 stHeight, CW (CW (finfo.ascent)
-		       + CW (finfo.descent)
-		       + CW (finfo.leading)),
+	 stHeight, BigEndianValue (BigEndianValue (finfo.ascent)
+		       + BigEndianValue (finfo.descent)
+		       + BigEndianValue (finfo.leading)),
 	 stAscent, finfo.ascent);
     }
   TECalText (teh);

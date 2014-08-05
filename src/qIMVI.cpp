@@ -21,6 +21,7 @@ char ROMlib_rcsid_qIMVI[] =
 #include "sspairtable.ctable"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /*
  * Basically a region is just a bunch of stop start pairs where the pairs
@@ -74,14 +75,14 @@ P2 (PUBLIC pascal trap, OSErr, BitMapToRegion, RgnHandle, rh,
 	  return rgnTooBigErr;						\
 	}								\
       else								\
-	*outp++ = CW(v);						\
+	*outp++ = BigEndianValue(v);						\
     } while (0)
 
-  top      = CW(bmp->bounds.top);
-  left     = CW(bmp->bounds.left);
-  bottom   = CW(bmp->bounds.bottom);
-  right    = CW(bmp->bounds.right);
-  rowbytes = CW(bmp->rowBytes) & ROWMASK;
+  top      = BigEndianValue(bmp->bounds.top);
+  left     = BigEndianValue(bmp->bounds.left);
+  bottom   = BigEndianValue(bmp->bounds.bottom);
+  right    = BigEndianValue(bmp->bounds.right);
+  rowbytes = BigEndianValue(bmp->rowBytes) & ROWMASK;
   linelen  = (right - left + 7) / 8;
   if (linelen <= 0)
 /*-->*/ goto it_is_empty;
@@ -150,7 +151,7 @@ P2 (PUBLIC pascal trap, OSErr, BitMapToRegion, RgnHandle, rh,
 	HxX(rh, rgnBBox) = bmp->bounds;
 /* #warning we are not setting the bounding box properly */
 #if 1
-	HxX(rh, rgnSize)       = CW(rgnsize);
+	HxX(rh, rgnSize)       = BigEndianValue(rgnsize);
 #else
 	RGN_SET_SMALL (rh);
 #endif

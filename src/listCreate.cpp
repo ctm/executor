@@ -16,28 +16,29 @@ char ROMlib_rcsid_listCreate[] =
 #include "rsys/list.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #define STEF_lActivefix
 
 A3(PUBLIC, void, ROMlib_vminmax, INTEGER *, minp,		/* INTERNAL */
 						 INTEGER *, maxp, ListPtr, lp)
 {
-    *minp = CW(lp->dataBounds.top);
-    *maxp = *minp + CW(lp->dataBounds.bottom) - CW(lp->visible.bottom) +
-                                                CW(lp->visible.top);
-    if (CW(lp->cellSize.v) * (CW(lp->visible.bottom) - CW(lp->visible.top)) > 
-				      CW(lp->rView.bottom) - CW(lp->rView.top))
+    *minp = BigEndianValue(lp->dataBounds.top);
+    *maxp = *minp + BigEndianValue(lp->dataBounds.bottom) - BigEndianValue(lp->visible.bottom) +
+                                                BigEndianValue(lp->visible.top);
+    if (BigEndianValue(lp->cellSize.v) * (BigEndianValue(lp->visible.bottom) - BigEndianValue(lp->visible.top)) > 
+				      BigEndianValue(lp->rView.bottom) - BigEndianValue(lp->rView.top))
 	++*maxp;
 }
 
 A3(PUBLIC, void, ROMlib_hminmax, INTEGER *, minp,		/* INTERNAL */
 						 INTEGER *, maxp, ListPtr, lp)
 {
-    *minp = CW(lp->dataBounds.left);
-    *maxp = *minp + CW(lp->dataBounds.right) - CW(lp->visible.right) +
-                                               CW(lp->visible.left);
-    if (CW(lp->cellSize.h) * (CW(lp->visible.right) - CW(lp->visible.left)) > 
-				      CW(lp->rView.right) - CW(lp->rView.left))
+    *minp = BigEndianValue(lp->dataBounds.left);
+    *maxp = *minp + BigEndianValue(lp->dataBounds.right) - BigEndianValue(lp->visible.right) +
+                                               BigEndianValue(lp->visible.left);
+    if (BigEndianValue(lp->cellSize.h) * (BigEndianValue(lp->visible.right) - BigEndianValue(lp->visible.left)) > 
+				      BigEndianValue(lp->rView.right) - BigEndianValue(lp->rView.left))
 	++*maxp;
 }
 
@@ -119,8 +120,8 @@ P9(PUBLIC pascal trap, ListHandle,  LNew, Rect *, rview,	/* IMIV-270 */
     Handle temph;
     LISTDECL();
 
-    noffs = (CW(bounds->right) - CW(bounds->left)) *
-				     (CW(bounds->bottom) - CW(bounds->top)) +1;
+    noffs = (BigEndianValue(bounds->right) - BigEndianValue(bounds->left)) *
+				     (BigEndianValue(bounds->bottom) - BigEndianValue(bounds->top)) +1;
     retval = (ListHandle) NewHandle(sizeof(ListRec) -
 	         sizeof(HxX(retval, cellArray)) + (noffs+1) * sizeof(INTEGER));
     if (!retval)
@@ -174,10 +175,10 @@ P9(PUBLIC pascal trap, ListHandle,  LNew, Rect *, rview,	/* IMIV-270 */
     lp->listFlags = draw ? DODRAW : 0;
     if (scrollv) {
 	r = lp->rView;
-	r.top = CW(CW(r.top) - 1);
+	r.top = BigEndianValue(BigEndianValue(r.top) - 1);
 	r.left = r.right;
-	r.right = CW(CW(r.right) + (16));
-	r.bottom = CW(CW(r.bottom) + 1);
+	r.right = BigEndianValue(BigEndianValue(r.right) + (16));
+	r.bottom = BigEndianValue(BigEndianValue(r.bottom) + 1);
 	ROMlib_vminmax(&min, &max, lp);
 	lp->vScroll = RM(NewControl((WindowPtr) wind, &r, (StringPtr) "",
 	       draw && lp->lActive, min, min, max, scrollBarProc, (LONGINT) 0));
@@ -187,10 +188,10 @@ P9(PUBLIC pascal trap, ListHandle,  LNew, Rect *, rview,	/* IMIV-270 */
 
     if (scrollh) {
 	r = lp->rView;
-	r.left = CW(CW(r.left) - 1);
+	r.left = BigEndianValue(BigEndianValue(r.left) - 1);
 	r.top = r.bottom;
-	r.bottom = CW(CW(r.bottom) + (16));
-	r.right = CW(CW(r.right) + 1);
+	r.bottom = BigEndianValue(BigEndianValue(r.bottom) + (16));
+	r.right = BigEndianValue(BigEndianValue(r.right) + 1);
 	ROMlib_hminmax(&min, &max, lp);
 	lp->hScroll = RM(NewControl((WindowPtr) wind, &r, (StringPtr) "",
 	       draw && lp->lActive, min, min, max, scrollBarProc, (LONGINT) 0));

@@ -13,6 +13,7 @@ char ROMlib_rcsid_floatnext[] =
 #include "rsys/floatconv.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /* Subtracts one from the given multi-byte big endian unsigned number. */
 static void
@@ -77,9 +78,9 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_FnextX,
 
   /* Determine the classes of both X and Y. */
   ROMlib_Fclassx (x, &x_class_swapped, sel);
-  x_class = CW (x_class_swapped);
+  x_class = BigEndianValue (x_class_swapped);
   ROMlib_Fclassx (y, &y_class_swapped, sel);
-  y_class = CW (y_class_swapped);
+  y_class = BigEndianValue (y_class_swapped);
 
   normalize_x80_p = FALSE;  /* default, avoid gcc warnings. */
 
@@ -102,13 +103,13 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_FnextX,
       byte_size = 4;
       break;
     case FI_OPERAND:
-      xv = CW (*(short *)x);
-      yv = CW (*(short *)y);
+      xv = BigEndianValue (*(short *)x);
+      yv = BigEndianValue (*(short *)y);
       byte_size = 2;
       break;
     case FL_OPERAND:
-      xv = CL(*(long *)x);
-      yv = CL(*(long *)y);
+      xv = BigEndianValue(*(long *)x);
+      yv = BigEndianValue(*(long *)y);
       byte_size = 4;
       break;
     case FC_OPERAND:
@@ -191,10 +192,10 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_FnextX,
 	result = f32_to_ieee ((const f32_t *) x);
 	break;
       case FI_OPERAND:
-	result = CW (*(short *)x);
+	result = BigEndianValue (*(short *)x);
 	break;
       case FL_OPERAND:
-	result = CL (*(long *)x);
+	result = BigEndianValue (*(long *)x);
 	break;
       case FC_OPERAND:
 	result = comp_to_ieee ((const comp_t *) x);

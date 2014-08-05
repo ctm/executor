@@ -21,6 +21,7 @@ char ROMlib_rcsid_diskinit[] =
 #include "rsys/blockinterrupts.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P0(PUBLIC pascal trap, void, DILoad)
 {
@@ -76,17 +77,17 @@ raw_read_write (func_t func, our_file_info_t *op, LONGINT *lengthp,
   ParamBlockRec pbr;
 
   check_virtual_interrupt ();
-  pbr.ioParam.ioVRefNum = CW (op->vref);
-  pbr.ioParam.ioRefNum = CW (op->dref);
+  pbr.ioParam.ioVRefNum = BigEndianValue (op->vref);
+  pbr.ioParam.ioRefNum = BigEndianValue (op->dref);
   pbr.ioParam.ioBuffer = (Ptr) RM (buf);
-  pbr.ioParam.ioReqCount = CL (*lengthp);
+  pbr.ioParam.ioReqCount = BigEndianValue (*lengthp);
   pbr.ioParam.ioPosMode = CWC (fsFromStart);
-  pbr.ioParam.ioPosOffset = CL (op->pos);
+  pbr.ioParam.ioPosOffset = BigEndianValue (op->pos);
   retval = func (&pbr, FALSE);
   if (retval == noErr)
     {
-      *lengthp = CL (pbr.ioParam.ioActCount);
-      op->pos += CL (pbr.ioParam.ioActCount);
+      *lengthp = BigEndianValue (pbr.ioParam.ioActCount);
+      op->pos += BigEndianValue (pbr.ioParam.ioActCount);
     }
   return retval;
 }

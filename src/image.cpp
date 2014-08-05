@@ -17,6 +17,7 @@ char ROMlib_rcsid_image[] =
 #include "rsys/image.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #define MAX_ROWBYTES_FOR_WIDTH(w) ((((w) * 32 + 31) / 32) * 4)
 
@@ -45,15 +46,15 @@ Executor::image_init (pixel_image_desc_t *image_desc)
 	   IMAGE_X_BITS_VALID (retval, i) = -1;
 	   
 	   PIXMAP_BASEADDR_X (bits) = (Ptr) RM (image_desc->bits[i].raw_bits);
-	   PIXMAP_SET_ROWBYTES_X (bits, CW (image_desc->bits[i].row_bytes));
-	   bounds.top    = CW (image_desc->bounds.top);
-	   bounds.left   = CW (image_desc->bounds.left);
-	   bounds.bottom = CW (image_desc->bounds.bottom);
-	   bounds.right  = CW (image_desc->bounds.right);
+	   PIXMAP_SET_ROWBYTES_X (bits, BigEndianValue (image_desc->bits[i].row_bytes));
+	   bounds.top    = BigEndianValue (image_desc->bounds.top);
+	   bounds.left   = BigEndianValue (image_desc->bounds.left);
+	   bounds.bottom = BigEndianValue (image_desc->bounds.bottom);
+	   bounds.right  = BigEndianValue (image_desc->bounds.right);
 	   retval->bounds = bounds;
 	   PIXMAP_BOUNDS (bits) = bounds;
 	   bpp = image_desc->bits[i].bpp;
-	   PIXMAP_CMP_SIZE_X (bits) = PIXMAP_PIXEL_SIZE_X (bits) = CW (bpp);
+	   PIXMAP_CMP_SIZE_X (bits) = PIXMAP_PIXEL_SIZE_X (bits) = BigEndianValue (bpp);
 	   if (i == 0)
 	     {
 	       /* the `zero' image is simply a 1bbp black and white image */
@@ -70,12 +71,12 @@ Executor::image_init (pixel_image_desc_t *image_desc)
 	       bits_ctab = PIXMAP_TABLE (bits);
 	       SetHandleSize ((Handle) bits_ctab,
 			      CTAB_STORAGE_FOR_SIZE ((1 << bpp) - 1));
-	       CTAB_SIZE_X (bits_ctab) = CW ((1 << bpp) - 1);
+	       CTAB_SIZE_X (bits_ctab) = BigEndianValue ((1 << bpp) - 1);
 	       bits_ctab_table = CTAB_TABLE (bits_ctab);
 	       for (j = 0; j <= (1 << bpp) - 1; j ++)
-		 bits_ctab_table[j].value = CW (j);
+		 bits_ctab_table[j].value = BigEndianValue (j);
 	       CTAB_FLAGS_X (bits_ctab) = CWC (0);
-	       CTAB_SEED_X (bits_ctab) = CL (GetCTSeed ());
+	       CTAB_SEED_X (bits_ctab) = BigEndianValue (GetCTSeed ());
 	     }
 
 	   {
@@ -89,7 +90,7 @@ Executor::image_init (pixel_image_desc_t *image_desc)
 	     p = NewPtr (x_row_bytes * height);
 	     memset (p, 0, x_row_bytes * height);
 	     PIXMAP_BASEADDR_X (x_bits) = RM (p);
-	     PIXMAP_SET_ROWBYTES_X (x_bits, CW (x_row_bytes));
+	     PIXMAP_SET_ROWBYTES_X (x_bits, BigEndianValue (x_row_bytes));
 	   }
 	 }
        
@@ -189,5 +190,5 @@ Executor::image_update_ctab (pixel_image_t *image, const RGBColor *new_colors,
     }
 
   if (ctab_changed_p)
-    CTAB_SEED_X (bits_ctab) = CL (GetCTSeed ());
+    CTAB_SEED_X (bits_ctab) = BigEndianValue (GetCTSeed ());
 }

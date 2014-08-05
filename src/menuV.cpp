@@ -23,6 +23,7 @@ char ROMlib_rcsid_menuV[] =
 #include "rsys/prefs.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P1(PUBLIC pascal trap, void, InitProcMenu, INTEGER, mbid)
 {
@@ -43,7 +44,7 @@ P1(PUBLIC pascal trap, void, InitProcMenu, INTEGER, mbid)
      * the bits are not masked off.
      */
     MBDFHndl = RM(GetResource(TICK("MBDF"), mbid));
-    HxX(MENULIST, mufu) = CW(mbid);
+    HxX(MENULIST, mufu) = BigEndianValue(mbid);
     MBDFCALL(mbInit, 0, 0L);
 }
 
@@ -58,7 +59,7 @@ P3(PUBLIC pascal trap, void, GetItemCmd, MenuHandle, mh, INTEGER, item,
     mextp mep;
     
     if ((mep = ROMlib_mitemtop(mh, item, (StringPtr *) 0)))
-        *cmdp = CW((unsigned short) (unsigned char) mep->mkeyeq);
+        *cmdp = BigEndianValue((unsigned short) (unsigned char) mep->mkeyeq);
 }
 
 P3(PUBLIC pascal trap, void, SetItemCmd, MenuHandle, mh, INTEGER, item,
@@ -118,7 +119,7 @@ P4(PUBLIC pascal trap, LONGINT, PopUpMenuSelect, MenuHandle, mh, INTEGER, top,
     THEPORT_SAVE_EXCURSION
       (MR (wmgr_port),
        {
-	 tempi = CW (tempi);
+	 tempi = BigEndianValue (tempi);
 	 MENUCALL (mPopUpRect, mh, &saver, p, &tempi);
 	 TopMenuItem = tempi;
 	 where = ROMlib_mentosix (Hx (mh, menuID));

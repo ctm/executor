@@ -26,6 +26,7 @@ char ROMlib_rcsid_system_error[] =
 #include "rsys/options.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #define N_BUTTONS	(3)
 
@@ -84,7 +85,7 @@ event_loop (void)
 		     | keyDownMask | autoKeyMask), &evt);
       where = SWAP_POINT (evt.where);
       
-      switch (CW (evt.what))
+      switch (BigEndianValue (evt.what))
 	{
 	case mouseDown:
 	  {
@@ -146,7 +147,7 @@ event_loop (void)
 	  {
 	    char ch;
 
-	    ch = CL (evt.message) & 0xFF;
+	    ch = BigEndianValue (evt.message) & 0xFF;
 	    if (ch == '\r' || ch == NUMPAD_ENTER)
 	      {
 		int i;
@@ -245,9 +246,9 @@ Executor::system_error (const char *_message, int _default_button,
 					0, strlen (message));
        
        GetFontInfo (&font_info);
-       text_height = (  CW (font_info.ascent)
-		      + CW (font_info.descent)
-		      + CW (font_info.leading));
+       text_height = (  BigEndianValue (font_info.ascent)
+		      + BigEndianValue (font_info.descent)
+		      + BigEndianValue (font_info.leading));
        
        line_count
 	 /* must be at least one line of text, otherwise we'll get hit
@@ -291,8 +292,8 @@ Executor::system_error (const char *_message, int _default_button,
 	 
 	 /* centered horizontally, with a third of the space above the
 	    window, and two-thirds below */
-	 top  = CW (gd_rect->top)  + (gd_height - height) / 3;
-	 left = CW (gd_rect->left) + (gd_width - width) / 2;
+	 top  = BigEndianValue (gd_rect->top)  + (gd_height - height) / 3;
+	 left = BigEndianValue (gd_rect->left) + (gd_width - width) / 2;
 	 
 	 MoveWindow (msg_window, left, top, TRUE);
        }
@@ -301,8 +302,8 @@ Executor::system_error (const char *_message, int _default_button,
        
        message_rect.top    = CWC (10);
        message_rect.left   = CWC (10);
-       message_rect.bottom = CW (message_height + 10);
-       message_rect.right  = CW (message_width + 10);
+       message_rect.bottom = BigEndianValue (message_height + 10);
+       message_rect.right  = BigEndianValue (message_width + 10);
        
        for (i = 0; i < N_BUTTONS; i ++)
 	 if (buttons[i].text != NULL)
@@ -310,11 +311,11 @@ Executor::system_error (const char *_message, int _default_button,
 	     Rect ctl_rect;
 	     unsigned char buf[256];
 	     
-	     ctl_rect.top    = CW (height - 10 - 20);
-	     ctl_rect.bottom = CW (height - 10);
+	     ctl_rect.top    = BigEndianValue (height - 10 - 20);
+	     ctl_rect.bottom = BigEndianValue (height - 10);
 	     
-	     ctl_rect.right  = CW (  width - 10 - i * (max_button_width + 13));
-	     ctl_rect.left   = CW (  width - 10 - i * (max_button_width + 13)
+	     ctl_rect.right  = BigEndianValue (  width - 10 - i * (max_button_width + 13));
+	     ctl_rect.left   = BigEndianValue (  width - 10 - i * (max_button_width + 13)
 				   - max_button_width);
 	     
 	     *buf = (unsigned char) strlen (buttons[i].text);

@@ -20,6 +20,7 @@ char ROMlib_rcsid_dialInit[] =
 #include "rsys/mman.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P1(PUBLIC, pascal void,  ROMlib_mysound, INTEGER, i)
 {
@@ -61,5 +62,5 @@ P1 (PUBLIC pascal trap, void, InitDialogs, ProcPtr, rp)	/* IMI-411 */
 
 A1(PUBLIC, void, SetDAFont, INTEGER, i)	/* IMI-412 */
 {
-    DlgFont = CW(i);
+    DlgFont = BigEndianValue(i);
 }

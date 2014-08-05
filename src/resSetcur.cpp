@@ -14,6 +14,7 @@ char ROMlib_rcsid_resSetcur[] =
 #include "rsys/resource.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P0(PUBLIC pascal trap, INTEGER, CurResFile)
 {
@@ -83,7 +84,7 @@ P1(PUBLIC pascal trap, void, UseResFile, INTEGER, rn)
         rn = Cx(SysMap);
     ROMlib_invalar();
     if (ROMlib_rntohandl(rn, &map)) {
-        CurMap = CW(rn);
+        CurMap = BigEndianValue(rn);
         ROMlib_setreserr(noErr);
     } else
         ROMlib_setreserr(resFNotFound);

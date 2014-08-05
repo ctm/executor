@@ -25,6 +25,7 @@ char ROMlib_rcsid_dialAlert[] =
 #include "rsys/dial.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 int16 alert_extra_icon_id = -32768;
 
@@ -52,7 +53,7 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
   
   if (id != Cx(ANumber))
     {
-      ANumber = CW(id);
+      ANumber = BigEndianValue(id);
       ACount = 0;
     }
   ah = (alth) GetResource(TICK("ALRT"), id);
@@ -63,9 +64,9 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
     }
   
   LoadResource((Handle) ah);
-  n = (Hx(ah, altstag) >> (4 * CW(ACount))) & 0xF;
-  ACount = CW(CW(ACount) + 1);
-  if (CW(ACount) > 3)
+  n = (Hx(ah, altstag) >> (4 * BigEndianValue(ACount))) & 0xF;
+  ACount = BigEndianValue(BigEndianValue(ACount) + 1);
+  if (BigEndianValue(ACount) > 3)
     ACount = CWC(3);
   BEEP(n & 3);
   if (! (n & 4))
@@ -138,7 +139,7 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
 	   Handle icon_item_h;
 	   
 	   icon_item_h = NewHandle (sizeof icon_item_template);
-	   icon_item_template.res_id = CW (alert_extra_icon_id);
+	   icon_item_template.res_id = BigEndianValue (alert_extra_icon_id);
 	   memcpy (STARH (icon_item_h), &icon_item_template,
 		   sizeof icon_item_template);
 	   
@@ -168,13 +169,13 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
 		else
 		  FrameRect(&r);
 	      }
-	    dp->aDefItem = CW(defbut);
+	    dp->aDefItem = BigEndianValue(defbut);
 	    ModalDialog (fp, &hit);
 	  });
        HSetState (DIALOG_ITEMS (dp), flags);
        DisposDialog ((DialogPtr) dp);
      });
-  return CW (hit);
+  return BigEndianValue (hit);
 }
 
 P2 (PUBLIC pascal trap, INTEGER, StopAlert, INTEGER, id,	/* IMI-419 */
@@ -228,18 +229,18 @@ A2(PRIVATE, void, lockditl, INTEGER, id, BOOLEAN, flag)
     itmp ip;
     
     if((ih = lockres(TICK("DITL"), id, flag))) {
-	nitem = CW(*MR(*(INTEGER **)ih));
+	nitem = BigEndianValue(*MR(*(INTEGER **)ih));
 	ip = (itmp)((INTEGER *) STARH(ih) + 1);
 	while (nitem-- >= 0) {
 	    if ((CB(ip->itmtype) & RESCTL) == RESCTL) {
-		h = lockres(TICK("CNTL"), CW(*(INTEGER *)(&(ip->itmlen)+1)),
+		h = lockres(TICK("CNTL"), BigEndianValue(*(INTEGER *)(&(ip->itmlen)+1)),
 									 flag);
-		procid = CW(*MR(*(INTEGER **)h)) + 8;
+		procid = BigEndianValue(*MR(*(INTEGER **)h)) + 8;
 		lockres(TICK("CDEF"), procid >> 4, flag);
 	    } else if (CB(ip->itmtype) & iconItem)
-		lockres(TICK("ICON"), CW(*(INTEGER *)(&(ip->itmlen)+1)), flag);
+		lockres(TICK("ICON"), BigEndianValue(*(INTEGER *)(&(ip->itmlen)+1)), flag);
 	    else if (CB(ip->itmtype) & picItem)
-		lockres(TICK("PICT"), CW(*(INTEGER *)(&(ip->itmlen)+1)), flag);
+		lockres(TICK("PICT"), BigEndianValue(*(INTEGER *)(&(ip->itmlen)+1)), flag);
 	    BUMPIP(ip);
 	}
     }

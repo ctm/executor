@@ -14,6 +14,7 @@ char ROMlib_rcsid_qIMVxfer[] =
 #include "rsys/cquick.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /* Helper function: creates a new, sorted table so the value is the
  * same as the index (although we don't bother filling in most of the
@@ -25,8 +26,8 @@ sort_table (CTabPtr old, CTabPtr new1, unsigned max_color)
   int i;
 
   memset (&new1->ctTable, 0, (max_color + 1) * sizeof (ColorSpec));
-  for (i = CW (old->ctSize); i >= 0; i--)
-    new1->ctTable[CW (old->ctTable[i].value) & max_color].rgb =
+  for (i = BigEndianValue (old->ctSize); i >= 0; i--)
+    new1->ctTable[BigEndianValue (old->ctTable[i].value) & max_color].rgb =
       old->ctTable[i].rgb;
 
   return new1;
@@ -115,7 +116,7 @@ Executor::convert_transparent (const PixMap *src1, const PixMap *src2,
   boolean_t copy1_p, copy2_p;
   write_back_data_t write_back1, write_back2;
   
-  bits_per_pixel = CW (src1->pixelSize);
+  bits_per_pixel = BigEndianValue (src1->pixelSize);
   rgb_spec = pixmap_rgb_spec (src1);
   
   /* For bits_per_pixel == 1, you are just supposed to use the original
@@ -155,7 +156,7 @@ Executor::convert_transparent (const PixMap *src1, const PixMap *src2,
   src1_rowbytes = BITMAP_ROWBYTES (src1);
   src2_rowbytes = BITMAP_ROWBYTES (src2);
   dst_rowbytes = (width * bits_per_pixel + 31) / 32 * 4;
-  dst->rowBytes = CW (dst_rowbytes);
+  dst->rowBytes = BigEndianValue (dst_rowbytes);
   
   /* We want to run x from 0 to width; adding these offsets gives us
    * the real x for the source bitmaps.
@@ -163,8 +164,8 @@ Executor::convert_transparent (const PixMap *src1, const PixMap *src2,
   if (tile_src1_p)
     src1_deltax = pat_x_offset;
   else
-    src1_deltax = CW (r1->left) - CW (src1->bounds.left);
-  src2_deltax = CW (r2->left) - CW (src2->bounds.left);
+    src1_deltax = BigEndianValue (r1->left) - BigEndianValue (src1->bounds.left);
+  src2_deltax = BigEndianValue (r2->left) - BigEndianValue (src2->bounds.left);
 
   /* Compute a pointer to the base of the first row of each bitmap. */
   if (tile_src1_p)
@@ -177,12 +178,12 @@ Executor::convert_transparent (const PixMap *src1, const PixMap *src2,
     {
       src1_row_base = (unsigned char *)
 	(MR (src1->baseAddr)
-	 + ((CW (r1->top) - CW (src1->bounds.top)) * src1_rowbytes));
+	 + ((BigEndianValue (r1->top) - BigEndianValue (src1->bounds.top)) * src1_rowbytes));
     }
   
   src2_row_base = (unsigned char *)
     (MR (src2->baseAddr)
-     + (CW (r2->top) - CW (src2->bounds.top)) * src2_rowbytes);
+     + (BigEndianValue (r2->top) - BigEndianValue (src2->bounds.top)) * src2_rowbytes);
   dst_row_base = (unsigned char *) MR (dst->baseAddr);
   
 #define RGB_TO_INDIRECT_PIXEL(rgb, pixel)	\
@@ -198,10 +199,10 @@ Executor::convert_transparent (const PixMap *src1, const PixMap *src2,
      switch (bpp)					\
        {						\
        case 16:						\
-	 (pixel) = CW (swapped_pixel);			\
+	 (pixel) = BigEndianValue (swapped_pixel);			\
 	 break;						\
        case 32:						\
-	 (pixel) = CL (swapped_pixel);			\
+	 (pixel) = BigEndianValue (swapped_pixel);			\
 	 break;						\
        default:						\
 	 gui_fatal ("unknown bpp");			\
@@ -389,7 +390,7 @@ Executor::convert_pixmap_with_IMV_mode (const PixMap *src1, const PixMap *src2,
   boolean_t copy1_p, copy2_p;
   write_back_data_t write_back1, write_back2;
   
-  bits_per_pixel = CW (src1->pixelSize);
+  bits_per_pixel = BigEndianValue (src1->pixelSize);
   rgb_spec = pixmap_rgb_spec (src1);
   
   /* For bits_per_pixel == 1, you are just supposed to use the original
@@ -481,7 +482,7 @@ Executor::convert_pixmap_with_IMV_mode (const PixMap *src1, const PixMap *src2,
   src1_rowbytes = BITMAP_ROWBYTES (src1);
   src2_rowbytes = BITMAP_ROWBYTES (src2);
   dst_rowbytes = (width * bits_per_pixel + 31) / 32 * 4;
-  dst->rowBytes = CW (dst_rowbytes);
+  dst->rowBytes = BigEndianValue (dst_rowbytes);
   
   /* We want to run x from 0 to width; adding these offsets gives us
    * the real x for the source bitmaps.
@@ -489,8 +490,8 @@ Executor::convert_pixmap_with_IMV_mode (const PixMap *src1, const PixMap *src2,
   if (tile_src1_p)
     src1_deltax = pat_x_offset;
   else
-    src1_deltax = CW (r1->left) - CW (src1->bounds.left);
-  src2_deltax = CW (r2->left) - CW (src2->bounds.left);
+    src1_deltax = BigEndianValue (r1->left) - BigEndianValue (src1->bounds.left);
+  src2_deltax = BigEndianValue (r2->left) - BigEndianValue (src2->bounds.left);
   
   /* Compute a pointer to the base of the first row of each bitmap. */
   if (tile_src1_p)
@@ -501,17 +502,17 @@ Executor::convert_pixmap_with_IMV_mode (const PixMap *src1, const PixMap *src2,
   else
     {
       src1_row_base = (unsigned char *) (MR (src1->baseAddr)
-		       + ((CW (r1->top) - CW (src1->bounds.top))
+		       + ((BigEndianValue (r1->top) - BigEndianValue (src1->bounds.top))
 			  * src1_rowbytes));
     }
   src2_row_base = (unsigned char *) (MR (src2->baseAddr)
-		   + (CW (r2->top) - CW (src2->bounds.top)) * src2_rowbytes);
+		   + (BigEndianValue (r2->top) - BigEndianValue (src2->bounds.top)) * src2_rowbytes);
   dst_row_base = (unsigned char *) MR (dst->baseAddr);
   
   /* Fetch the "op color" fields, in case they are needed. */
-  op_red   = CW (op_color->red);
-  op_green = CW (op_color->green);
-  op_blue  = CW (op_color->blue);
+  op_red   = BigEndianValue (op_color->red);
+  op_green = BigEndianValue (op_color->green);
+  op_blue  = BigEndianValue (op_color->blue);
   
 #define CONVERT_BITS(read1, read2, write, next1, transform, bpp)	\
 {									\
@@ -554,9 +555,9 @@ Executor::convert_pixmap_with_IMV_mode (const PixMap *src1, const PixMap *src2,
    ({							\
      const RGBColor *color;				\
      color = &ctab->ctTable[pixel].rgb;			\
-     (r)   = CW (color->red);				\
-     (g) = CW (color->green);				\
-     (b)  = CW (color->blue);				\
+     (r)   = BigEndianValue (color->red);				\
+     (g) = BigEndianValue (color->green);				\
+     (b)  = BigEndianValue (color->blue);				\
    }))
 #define DIRECT_PIXEL_TO_RGB(bpp, pixel, red_out, green_out, blue_out,	\
 			    dummy_ctab)					\
@@ -565,9 +566,9 @@ Executor::convert_pixmap_with_IMV_mode (const PixMap *src1, const PixMap *src2,
      RGBColor color;							\
 									\
      (*rgb_spec->pixel_to_rgbcolor) (rgb_spec, (pixel), &color);	\
-     (red_out) = CW (color.red);					\
-     (green_out) = CW (color.green);					\
-     (blue_out) = CW (color.blue);					\
+     (red_out) = BigEndianValue (color.red);					\
+     (green_out) = BigEndianValue (color.green);					\
+     (blue_out) = BigEndianValue (color.blue);					\
    }))
 #define PIXEL_TO_RGB(bpp, pixel, red, green, blue, ctab)	\
   ((void)							\

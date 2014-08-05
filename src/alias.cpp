@@ -28,6 +28,7 @@ char ROMlib_rcsid_alias[] =
 #define paramErr	(-50)
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /* NOTE: if we want to be more like the Mac, we should have a 'fld#',0
    resource that will have in it: type, four bytes of 0, pascal string,
@@ -78,8 +79,8 @@ get_sys_vref_and_dirid (INTEGER *sys_vrefp, LONGINT *sys_diridp)
   err = PBGetWDInfo (&wdp, FALSE);
   if (err == noErr)
     {
-      *sys_vrefp = CW (wdp.ioWDVRefNum);
-      *sys_diridp = CL (wdp.ioWDDirID);
+      *sys_vrefp = BigEndianValue (wdp.ioWDVRefNum);
+      *sys_diridp = BigEndianValue (wdp.ioWDDirID);
     }
   return err;
 }
@@ -111,7 +112,7 @@ try_to_find (INTEGER vref, const char *str, INTEGER *vrefp, LONGINT *diridp)
 	{
 	  warning_trace_info ("ino = %ld, ufs.ino = %ld", (long) ST_INO (sbuf),
 			      (long) vcbextrap->u.ufs.ino);
-	  if (vref != CW (vcbp->vcbVRefNum))
+	  if (vref != BigEndianValue (vcbp->vcbVRefNum))
 	    err = fnfErr;
 	  else
 	    {
@@ -142,7 +143,7 @@ look_for_volume (const char *vol_name, INTEGER *vrefp, LONGINT *diridp)
   retval = PBGetVInfo (&pbr, FALSE);
   if (retval == noErr)
     {
-      *vrefp = CW (pbr.volumeParam.ioVRefNum);
+      *vrefp = BigEndianValue (pbr.volumeParam.ioVRefNum);
       *diridp = 2;
     }
   return retval;
@@ -160,7 +161,7 @@ last_chance_tmp_vref_and_dirid (INTEGER vref, INTEGER *tmp_vrefp,
   OSErr retval;
   HParamBlockRec pb = {0};
   
-  pb.volumeParam.ioVRefNum = CW (vref);
+  pb.volumeParam.ioVRefNum = BigEndianValue (vref);
   retval = PBHGetVInfo (&pb, FALSE);
   if (retval == noErr) {
 	static const unsigned char *top_level_names[] = {
@@ -184,7 +185,7 @@ last_chance_tmp_vref_and_dirid (INTEGER vref, INTEGER *tmp_vrefp,
 	  hpb.dirInfo.ioDrDirID = CLC (2);
 	  err = PBGetCatInfo (&hpb, FALSE);
 	  if (err == noErr && (hpb.hFileInfo.ioFlAttrib & ATTRIB_ISADIR))
-		*tmp_diridp = CL (hpb.dirInfo.ioDrDirID);
+		*tmp_diridp = BigEndianValue (hpb.dirInfo.ioDrDirID);
 	}
 	if (err != noErr)
 	  *tmp_diridp = CLC (2);
@@ -261,14 +262,14 @@ test_directory (INTEGER vref, LONGINT dirid, const char *sub_dirp,
 
   str255_from_c_string (file_name, sub_dirp);
   cpb.hFileInfo.ioNamePtr = (StringPtr) RM ((Ptr) file_name);
-  cpb.hFileInfo.ioVRefNum = CW (vref);
+  cpb.hFileInfo.ioVRefNum = BigEndianValue (vref);
   cpb.hFileInfo.ioFDirIndex = CWC (0);
-  cpb.hFileInfo.ioDirID = CL (dirid);
+  cpb.hFileInfo.ioDirID = BigEndianValue (dirid);
   err = PBGetCatInfo (&cpb, FALSE);
   if (err == noErr && !(cpb.hFileInfo.ioFlAttrib & ATTRIB_ISADIR))
     err = dupFNErr;
   if (err == noErr)
-    *new_idp = CL (cpb.dirInfo.ioDrDirID);
+    *new_idp = BigEndianValue (cpb.dirInfo.ioDrDirID);
   return err;
 }
 
@@ -301,8 +302,8 @@ P5 (PUBLIC pascal trap, OSErr, FindFolder,
 	    retval = create_directory (sys_vref, sys_dirid, sub_dir, &new_id);
 	  if (retval == noErr)
 	    {
-	      *foundVRefNum = CW (sys_vref);
-	      *foundDirID = CL (new_id);
+	      *foundVRefNum = BigEndianValue (sys_vref);
+	      *foundDirID = BigEndianValue (new_id);
 	    }
 	}
     }
@@ -319,8 +320,8 @@ P5 (PUBLIC pascal trap, OSErr, FindFolder,
 	    {
 	    /* NOTE: IMVI 9-44 tells us to not create System Folder if it
 	       doesn't already exist */
-	      *foundVRefNum = CW (sys_vref);
-	      *foundDirID = CL (sys_dirid);
+	      *foundVRefNum = BigEndianValue (sys_vref);
+	      *foundDirID = BigEndianValue (sys_dirid);
 	    }
 	}
 	break;
@@ -340,8 +341,8 @@ P5 (PUBLIC pascal trap, OSErr, FindFolder,
 	    warning_unimplemented ("Didn't attempt to create folder");
 	  if (retval == noErr)
 	    {
-	      *foundVRefNum = CW (tmp_vref);
-	      *foundDirID = CL (tmp_dirid);
+	      *foundVRefNum = BigEndianValue (tmp_vref);
+	      *foundDirID = BigEndianValue (tmp_dirid);
 	    }
 	}
 	break;
@@ -493,14 +494,14 @@ parse2 (AliasHandle ah, const void *addrs[], int count)
 		
       headp = (alias_head_t *) STARH (ah);
       partp = (INTEGER *) (&headp[1]);
-      ep = (INTEGER *) ((char *) headp + MIN (size, CW (headp->length)));
+      ep = (INTEGER *) ((char *) headp + MIN (size, BigEndianValue (headp->length)));
       memset (addrs, 0, count * sizeof addrs[0]);
       for (; partp < ep && *partp != CWC (-1);
-	   partp = (INTEGER *) ((char *) partp + EVENUP (4 + CW (partp[1]))))
+	   partp = (INTEGER *) ((char *) partp + EVENUP (4 + BigEndianValue (partp[1]))))
 	{
 	  int part;
 			
-	  part = CW (*partp);
+	  part = BigEndianValue (*partp);
 	  if (part < count)
 	    addrs[part] = partp + 1;
 	}
@@ -641,9 +642,9 @@ assemble_pieces (AliasHandle *ahp, alias_head_t *headp, INTEGER n_pieces, ...)
 	  void *p;
 		
 	  tag = va_arg (va, int);
-	  tag_x = CW (tag);
+	  tag_x = BigEndianValue (tag);
 	  length = va_arg (va, int);
-	  length_x = CW (length);
+	  length_x = BigEndianValue (length);
 	  p = va_arg (va, void *);
 	  memcpy (op, &tag_x, sizeof tag_x);
 	  op += sizeof tag_x;

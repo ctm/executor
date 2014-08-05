@@ -28,6 +28,7 @@ char ROMlib_rcsid_qStdBits[] =
 #include "rsys/tempalloc.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 static void ROMlib_real_copy_bits (PixMap *src, PixMap *dst,
 				   const Rect *src_rect, const Rect *dst_rect,
@@ -37,10 +38,10 @@ static boolean_t
 src_dst_overlap_and_dst_below_src_p (const Rect *srcr, const Rect *dstr,
 				     int dh, int dv)
 {
-  if (   (CW (dstr->top))       <  (CW (srcr->bottom) + dv)
-      && (CW (srcr->top) + dv)  <= (CW (dstr->top))
-      && (CW (srcr->left) + dh) <  (CW (dstr->right))
-      && (CW (dstr->left))      <  (CW (srcr->right) + dh))
+  if (   (BigEndianValue (dstr->top))       <  (BigEndianValue (srcr->bottom) + dv)
+      && (BigEndianValue (srcr->top) + dv)  <= (BigEndianValue (dstr->top))
+      && (BigEndianValue (srcr->left) + dh) <  (BigEndianValue (dstr->right))
+      && (BigEndianValue (dstr->left))      <  (BigEndianValue (srcr->right) + dh))
     return TRUE;
   else
     return FALSE;
@@ -50,7 +51,7 @@ static inline boolean_t
 dy_zero_p (const Rect *srcr, const Rect *dstr,
 	   int dh, int dv)
 {
-  return (CW (srcr->top) + dv) == CW (dstr->top);
+  return (BigEndianValue (srcr->top) + dv) == BigEndianValue (dstr->top);
 }
 
 void
@@ -89,8 +90,8 @@ void
 Executor::canonicalize_bogo_map (BitMap *bogo_map, PixMap **canonical_addr,
 		       struct cleanup_info *info)
 {
-  int high_bits = ((unsigned short) CW (bogo_map->rowBytes)) >> 14;
-  int low_bit = ((unsigned short) CW (bogo_map->rowBytes)) & 1;
+  int high_bits = ((unsigned short) BigEndianValue (bogo_map->rowBytes)) >> 14;
+  int low_bit = ((unsigned short) BigEndianValue (bogo_map->rowBytes)) & 1;
   
   switch (high_bits)
     {
@@ -198,7 +199,7 @@ Executor::canonicalize_bogo_map (BitMap *bogo_map, PixMap **canonical_addr,
     }
 #if !defined (NDEBUG)
   if (  (RECT_WIDTH (&BITMAP_BOUNDS (*canonical_addr))
-	 * CW ((*canonical_addr)->pixelSize)
+	 * BigEndianValue ((*canonical_addr)->pixelSize)
 	 / 8)
       > BITMAP_ROWBYTES (*canonical_addr))
     warning_unexpected ("unlikely map");
@@ -248,7 +249,7 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
   }
 
   row_bytes = BITMAP_ROWBYTES (src);
-  pixel_size = CW (src->pixelSize);
+  pixel_size = BigEndianValue (src->pixelSize);
   
   direct_bits_p = (pixel_size == 16 || pixel_size == 32);
   if (pixel_size == 32)
@@ -307,7 +308,7 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
 	   PICWRITE (&zero, sizeof zero);
 	   PICWRITE (&ctab->ctFlags, sizeof ctab->ctFlags);
 	   PICWRITE (&ctab->ctSize, sizeof ctab->ctSize);
-	   for (i = 0; i <= CW (ctab->ctSize); i ++)
+	   for (i = 0; i <= BigEndianValue (ctab->ctSize); i ++)
 	     {
 	       ColorSpec *elt;
 
@@ -320,7 +321,7 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
   
   PICWRITE (src_rect, sizeof *src_rect);
   PICWRITE (dst_rect, sizeof *dst_rect);
-  swapped_mode = CW (mode);
+  swapped_mode = BigEndianValue (mode);
   PICWRITE (&swapped_mode, sizeof swapped_mode);
   if (mask)
     {
@@ -390,7 +391,7 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
 	  ip.p = MR (ip.p);
 	  count = op.p - (Ptr) packed_line;
 	  parity += count + countsize;
-	  swappedcount = CW (count);
+	  swappedcount = BigEndianValue (count);
 	  PICWRITE (countloc, countsize);
 	  PICWRITE (packed_line, count);
 	}
@@ -414,8 +415,8 @@ Executor::ROMlib_bogo_stdbits (BitMap *src_bogo_map, BitMap *dst_bogo_map,
   
   struct cleanup_info cleanup_info[2];
   
-  if (CW (dst_rect->bottom) <= CW (dst_rect->top)
-      || CW (dst_rect->right) <= CW (dst_rect->left)
+  if (BigEndianValue (dst_rect->bottom) <= BigEndianValue (dst_rect->top)
+      || BigEndianValue (dst_rect->right) <= BigEndianValue (dst_rect->left)
       || (mask && !SectRect (dst_rect, &HxX (mask, rgnBBox), &dummy_rect)))
     return;
   
@@ -466,8 +467,8 @@ Executor::StdBitsPicSaveFlag (BitMap *src_bogo_map,
 
   struct cleanup_info cleanup_info[2];
 
-  if (CW (dst_rect->bottom) <= CW (dst_rect->top)
-      || CW (dst_rect->right) <= CW (dst_rect->left)
+  if (BigEndianValue (dst_rect->bottom) <= BigEndianValue (dst_rect->top)
+      || BigEndianValue (dst_rect->right) <= BigEndianValue (dst_rect->left)
       || (mask && !SectRect (dst_rect, &HxX (mask, rgnBBox), &dummy_rect)))
     return;
 
@@ -555,7 +556,7 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
 #endif
   
   dst_rgb_spec = pixmap_rgb_spec (dst);
-  dst_depth = CW (dst->pixelSize);
+  dst_depth = BigEndianValue (dst->pixelSize);
   
   switch (dst_depth)
     {
@@ -573,7 +574,7 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
      conversion on the src, so it matches that of the depth */
   if (src->pixelSize != dst->pixelSize
       || (src->pmTable != dst->pmTable &&
-	  (CW (src->pixelSize) < 16
+	  (BigEndianValue (src->pixelSize) < 16
 	   && (CTAB_SEED_X (MR (src->pmTable))
 	       /* we assume the destination has the same color table as
 		  the current graphics device */
@@ -596,7 +597,7 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
 	}
 #endif /* SAVE_CURSOR */
       
-      src_depth = CW (src->pixelSize);
+      src_depth = BigEndianValue (src->pixelSize);
       
       switch (src_depth)
 	{
@@ -614,25 +615,25 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
 	 coordinates; and round down (up) to the byte boundary, and
 	 re-translate to boundary-relative bitmap coords */
       widened_src_rect->left
-	= CW (((CW (src_rect->left) - CW (src->bounds.left))
+	= BigEndianValue (((BigEndianValue (src_rect->left) - BigEndianValue (src->bounds.left))
 	       & ~src_sub_byte_bits)
-	      + CW (src->bounds.left));
+	      + BigEndianValue (src->bounds.left));
       widened_src_rect->right
-	= CW ((((CW (src_rect->right) - CW (src->bounds.left))
+	= BigEndianValue ((((BigEndianValue (src_rect->right) - BigEndianValue (src->bounds.left))
 		+ src_sub_byte_bits)
-	       & ~src_sub_byte_bits) + CW (src->bounds.left));
+	       & ~src_sub_byte_bits) + BigEndianValue (src->bounds.left));
       
       /* the new_src should `be a pixmap' (have the pixmap bits set in
          the rowBytes) only if the dst is a pixmap; convert_pixmap
          does different things if the destination is a bitmap */
       new_src->rowBytes = (  PIXMAP_DEFAULT_ROW_BYTES_X
-			   | CW ((((RECT_WIDTH (widened_src_rect)
+			   | BigEndianValue ((((RECT_WIDTH (widened_src_rect)
 				    * dst_depth) + 31) / 32) * 4));
       
       /* Allocate temporary storage for the new_src_bits bitmap. */
 
       n_bytes_needed = (BITMAP_ROWBYTES (new_src)
-			    * (CW (src_rect->bottom) - CW (src_rect->top)));
+			    * (BigEndianValue (src_rect->bottom) - BigEndianValue (src_rect->top)));
 
       TEMP_ALLOC_ALLOCATE (new_src_bits, temp_depth_bits, n_bytes_needed);
       new_src->baseAddr = (Ptr)RM (new_src_bits);
@@ -670,7 +671,7 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
       new_src_row_bytes
 	= (((RECT_WIDTH (dst_rect) * dst_depth
 	     + /* dst_sub_byte_bits */ 7) / 8) + 3) & ~3;
-      new_src->rowBytes = CW (new_src_row_bytes) | PIXMAP_DEFAULT_ROW_BYTES_X;
+      new_src->rowBytes = BigEndianValue (new_src_row_bytes) | PIXMAP_DEFAULT_ROW_BYTES_X;
       
       TEMP_ALLOC_ALLOCATE (scale_base, temp_scale_bits,
 			   new_src_row_bytes * RECT_HEIGHT (dst_rect));
@@ -702,12 +703,12 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
   if (src->baseAddr == dst->baseAddr
       && (src_dst_overlap_and_dst_below_src_p
 	  (src_rect, dst_rect,
-	   CW (dst->bounds.left) - CW (src->bounds.left),
-	   CW (dst->bounds.top)  - CW (src->bounds.top)))
+	   BigEndianValue (dst->bounds.left) - BigEndianValue (src->bounds.left),
+	   BigEndianValue (dst->bounds.top)  - BigEndianValue (src->bounds.top)))
       && (! RGN_SMALL_P (mask_region)
 	  || dy_zero_p (src_rect, dst_rect,
-			CW (dst->bounds.left) - CW (src->bounds.left),
-			CW (dst->bounds.top)  - CW (src->bounds.top))))
+			BigEndianValue (dst->bounds.left) - BigEndianValue (src->bounds.left),
+			BigEndianValue (dst->bounds.top)  - BigEndianValue (src->bounds.top))))
     {
       PixMap *new_src;
       void *overlap_bits;
@@ -731,10 +732,10 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
       SectRect (&src->bounds, src_rect, &clipped_src_rect);
       
       height = RECT_HEIGHT (&clipped_src_rect);
-      offset = CW (clipped_src_rect.top) - CW (src_rect->top);
+      offset = BigEndianValue (clipped_src_rect.top) - BigEndianValue (src_rect->top);
       
-      copy_rect.top    = CW (CW (src_rect->top) + offset);
-      copy_rect.bottom = CW (CW (src_rect->top) + offset + height);
+      copy_rect.top    = BigEndianValue (BigEndianValue (src_rect->top) + offset);
+      copy_rect.bottom = BigEndianValue (BigEndianValue (src_rect->top) + offset + height);
       copy_rect.left   = src->bounds.left;
       copy_rect.right  = src->bounds.right;
       
@@ -809,12 +810,12 @@ ROMlib_real_copy_bits (PixMap *src, PixMap *dst,
     {
       int default_nbits, new_nbits;
 
-      default_nbits = (RECT_WIDTH (src_rect) * CW (dst->pixelSize) *
+      default_nbits = (RECT_WIDTH (src_rect) * BigEndianValue (dst->pixelSize) *
 		       RECT_HEIGHT (src_rect));
       
-      new_nbits = ((RECT_WIDTH (dst_rect) * CW (src->pixelSize) *
+      new_nbits = ((RECT_WIDTH (dst_rect) * BigEndianValue (src->pixelSize) *
 		    RECT_HEIGHT (dst_rect)) +
-		   (RECT_WIDTH (dst_rect) * CW (dst->pixelSize) *
+		   (RECT_WIDTH (dst_rect) * BigEndianValue (dst->pixelSize) *
 		    RECT_HEIGHT (dst_rect)));
       shrink_first_p = (new_nbits < default_nbits);
     }
@@ -844,14 +845,14 @@ ROMlib_real_copy_bits (PixMap *src, PixMap *dst,
 #endif /* SAVE_CURSOR */
 
       new_src = (PixMap *) alloca (sizeof *new_src);
-      src_depth = CW (src->pixelSize);
+      src_depth = BigEndianValue (src->pixelSize);
       temp_row_bytes = (RECT_WIDTH (dst_rect) * src_depth + 31) / 32 * 4;
       temp_bytes_needed = temp_row_bytes * RECT_HEIGHT (dst_rect);
       TEMP_ALLOC_ALLOCATE (temp_bits, temp_alloc_bits, temp_bytes_needed);
 
       *new_src = *src;
       new_src->baseAddr = (Ptr)RM (temp_bits);
-      new_src->rowBytes = CW (temp_row_bytes | PIXMAP_DEFAULT_ROWBYTES);
+      new_src->rowBytes = BigEndianValue (temp_row_bytes | PIXMAP_DEFAULT_ROWBYTES);
       new_src->bounds = *dst_rect;
 
       scale_blt_bitmap ((blt_bitmap_t *) src, (blt_bitmap_t *) new_src,

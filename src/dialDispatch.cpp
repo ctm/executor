@@ -14,6 +14,7 @@ char ROMlib_rcsid_dialDispatch[] =
 #include "DialogMgr.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /* traps from the DialogDispatch trap */
 
@@ -34,7 +35,7 @@ P2 (PUBLIC pascal trap, OSErr, SetDialogDefaultItem,    DialogPtr, dialog,
 
   dp = (DialogPeek) dialog;
 
-  dp->aDefItem = CW (new_item);
+  dp->aDefItem = BigEndianValue (new_item);
   warning_unimplemented ("no specs");
   return noErr;
 }

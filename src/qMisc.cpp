@@ -22,6 +22,7 @@ char ROMlib_rcsid_qMisc[] =
 #include "rsys/region.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 namespace Executor {
 	static BOOLEAN EquivRect(Rect*, Rect*);
@@ -41,8 +42,8 @@ P0(PUBLIC pascal trap, INTEGER, Random)
 
     RndSeed = Cx(TickCount());	/* what better? */
     if (RANDSEED >= 0x80000000)
-	randSeedX = CL((RANDSEED & 0x7FFFFFFF) + 1);
-    randSeedX = CL((RANDSEED * 16807 +
+	randSeedX = BigEndianValue((RANDSEED & 0x7FFFFFFF) + 1);
+    randSeedX = BigEndianValue((RANDSEED * 16807 +
 		(
 		    (((RANDSEED >> 14) * 16807) +
 		    (((RANDSEED & ((1<<14)-1)) * 16807) >> 14))
@@ -70,10 +71,10 @@ P2 (PUBLIC pascal trap, BOOLEAN, GetPixel, INTEGER, h, INTEGER, v)
   temp_bm.bounds.right  = CWC (1);
   temp_bm.rowBytes      = CWC (4);
   
-  src_rect.top    = CW (v);
-  src_rect.bottom = CW (v + 1);
-  src_rect.left   = CW (h);
-  src_rect.right  = CW (h + 1);
+  src_rect.top    = BigEndianValue (v);
+  src_rect.bottom = BigEndianValue (v + 1);
+  src_rect.left   = BigEndianValue (h);
+  src_rect.right  = BigEndianValue (h + 1);
   
   dst_rect = temp_bm.bounds;
   
@@ -120,12 +121,12 @@ P3(PUBLIC pascal trap, void, ScalePt, Point *, pt, Rect *, srcr, Rect *, dstr)
 	dstdh = Cx(dstr->right)  - Cx(dstr->left);
 	dstdv = Cx(dstr->bottom) - Cx(dstr->top);
 
-	pt->h = CW(((((LONGINT) CW(pt->h) * dstdh) << 1) / srcdh + 1) >> 1);
-	pt->v = CW(((((LONGINT) CW(pt->v) * dstdv) << 1) / srcdv + 1) >> 1);
+	pt->h = BigEndianValue(((((LONGINT) BigEndianValue(pt->h) * dstdh) << 1) / srcdh + 1) >> 1);
+	pt->v = BigEndianValue(((((LONGINT) BigEndianValue(pt->v) * dstdv) << 1) / srcdv + 1) >> 1);
 
-	if (CW(pt->v) < 1)
+	if (BigEndianValue(pt->v) < 1)
 	    pt->v = CWC(1);
-	if (CW(pt->h) < 1)
+	if (BigEndianValue(pt->h) < 1)
 	    pt->h = CWC(1);
     }
 }
@@ -139,12 +140,12 @@ P3(PUBLIC pascal trap, void, MapPt, Point *, pt, Rect *, srcr, Rect *, dstr)
     dstdh = Cx(dstr->right)  - Cx(dstr->left);
     dstdv = Cx(dstr->bottom) - Cx(dstr->top);
 
-    pt->h = CW(CW(pt->h) - (Cx(srcr->left)));
-    pt->v = CW(CW(pt->v) - (Cx(srcr->top)));
-    pt->h = CW((LONGINT) CW(pt->h) * dstdh / srcdh);
-    pt->v = CW((LONGINT) CW(pt->v) * dstdv / srcdv);
-    pt->h = CW(CW(pt->h) + (Cx(dstr->left)));
-    pt->v = CW(CW(pt->v) + (Cx(dstr->top)));
+    pt->h = BigEndianValue(BigEndianValue(pt->h) - (Cx(srcr->left)));
+    pt->v = BigEndianValue(BigEndianValue(pt->v) - (Cx(srcr->top)));
+    pt->h = BigEndianValue((LONGINT) BigEndianValue(pt->h) * dstdh / srcdh);
+    pt->v = BigEndianValue((LONGINT) BigEndianValue(pt->v) * dstdv / srcdv);
+    pt->h = BigEndianValue(BigEndianValue(pt->h) + (Cx(dstr->left)));
+    pt->v = BigEndianValue(BigEndianValue(pt->v) + (Cx(dstr->top)));
 }
 
 P3(PUBLIC pascal trap, void, MapRect, Rect *, r, Rect *, srcr, Rect *, dstr)
@@ -174,10 +175,10 @@ P3(PUBLIC pascal trap, void, MapRgn, RgnHandle, rh, Rect *, srcr, Rect *, dstr)
 	if (RGN_SMALL_P (rh))
 	    MapRect(&HxX(rh, rgnBBox), srcr, dstr);
 	else {
-	    srcdh = CW(srcr->right)  - (xoff1 = CW(srcr->left));
-	    dstdh = CW(dstr->right)  - (xoff2 = CW(dstr->left));
-	    srcdv = CW(srcr->bottom) - (yoff1 = CW(srcr->top) );
-	    dstdv = CW(dstr->bottom) - (yoff2 = CW(dstr->top) );
+	    srcdh = BigEndianValue(srcr->right)  - (xoff1 = BigEndianValue(srcr->left));
+	    dstdh = BigEndianValue(dstr->right)  - (xoff2 = BigEndianValue(dstr->left));
+	    srcdv = BigEndianValue(srcr->bottom) - (yoff1 = BigEndianValue(srcr->top) );
+	    dstdv = BigEndianValue(dstr->bottom) - (yoff2 = BigEndianValue(dstr->top) );
 	    xcoff = FixRatio(dstdh, srcdh);
 	    ycoff = FixRatio(dstdv, srcdv);
 	    ip = op = (INTEGER *) STARH(rh) + 5;
@@ -186,11 +187,11 @@ P3(PUBLIC pascal trap, void, MapRgn, RgnHandle, rh, Rect *, srcr, Rect *, dstr)
 	    mergebuf = buf1;
 	    freebuf  = buf2;
 	    do {
-		done = (newv = CW(*ip++)) == 32767;
+		done = (newv = BigEndianValue(*ip++)) == 32767;
 		MAPV(newv);
 		if (newv != oldv || done) {
 		    if (mergebuf[0] != 32767) {
-			*op++ = CW(oldv);
+			*op++ = BigEndianValue(oldv);
 			saveop = op;
 			hold = IMPOSSIBLE;
 			for (tempp = mergebuf; (x1 = *tempp++) != 32767;) {
@@ -200,12 +201,12 @@ P3(PUBLIC pascal trap, void, MapRgn, RgnHandle, rh, Rect *, srcr, Rect *, dstr)
 			    else if (hold == x1)
 				hold = IMPOSSIBLE;
 			    else {
-				*op++ = CW(hold);
+				*op++ = BigEndianValue(hold);
 				hold = (unsigned short) x1;
 			    }
 			}
 			if (hold != IMPOSSIBLE)
-			    *op++ = CW(hold);
+			    *op++ = BigEndianValue(hold);
 			gui_assert(!((op - saveop)&1));
 			if (op == saveop)
 			    --op;
@@ -218,17 +219,17 @@ P3(PUBLIC pascal trap, void, MapRgn, RgnHandle, rh, Rect *, srcr, Rect *, dstr)
 		}
 		if (!done) {
 		    for (tempp = freebuf, ipe = mergebuf,
-					   x1 = CW(*ip++), x2 = *ipe++;;) {
+					   x1 = BigEndianValue(*ip++), x2 = *ipe++;;) {
 			if (x1 < x2) {
 			    *tempp++ = x1;
-			    x1 = CW(*ip++);
+			    x1 = BigEndianValue(*ip++);
 			} else if (x1 > x2) {
 			    *tempp++ = x2;
 			    x2 = *ipe++;
 			} else {
 			    if (x1 == 32767)
 /*-->*/			        break;
-			    x1 = CW(*ip++);
+			    x1 = BigEndianValue(*ip++);
 			    x2 = *ipe++;
 			}
 		    }

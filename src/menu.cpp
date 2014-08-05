@@ -47,6 +47,7 @@ char ROMlib_rcsid_menu[] =
 #include "rsys/stubify.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 typedef	pascal void	(*menuhookp)( void );
 
@@ -104,7 +105,7 @@ P0(PUBLIC pascal trap, void, DrawMenuBar)
 				     Hx(MENULIST, muoff) + sizeof(muelem) + 4))
 
 #define HIEROFF	\
-       CW(HIEROFFX)
+       BigEndianValue(HIEROFFX)
 
 #define MINMENULISTSIZE	((Size) sizeof(INTEGER) * 4 + sizeof(HIDDEN_Handle))
 
@@ -182,7 +183,7 @@ P0(PUBLIC pascal trap, void, InitMenus)
     {
       int n_entries;
 
-      n_entries = CW (*(uint16 *) STARH (default_mcinfo));
+      n_entries = BigEndianValue (*(uint16 *) STARH (default_mcinfo));
       MenuCInfo = (MCTableHandle) RM (NewHandle (n_entries
 						 * sizeof (MCEntry)));
       BlockMove ((Ptr) (&((uint16 *) STARH (default_mcinfo))[1]),
@@ -206,7 +207,7 @@ P2(PUBLIC pascal trap, MenuHandle, NewMenu, INTEGER, mid, StringPtr, str)
     if (!str)
 	str = (StringPtr) "";
     retval = (MenuHandle) NewHandle((Size) SIZEOFMINFO + U(str[0]) + 1);
-    HxX(retval, menuID) = CW(mid);
+    HxX(retval, menuID) = BigEndianValue(mid);
     HxX(retval, menuWidth) = HxX(retval, menuHeight) = 0;
     /* menuHeight calculated elsewhere */
     SetResLoad(TRUE);
@@ -268,14 +269,14 @@ P1 (PUBLIC pascal trap, MenuHandle, GetMenu, int16, rid)
 	 
 	 entry.mctReserved = 0;
 	 mct_res = (mct_res_t *) STARH (mct_res_h);
-	 for (i = 0; i < CW (mct_res->n_entries); i ++)
+	 for (i = 0; i < BigEndianValue (mct_res->n_entries); i ++)
 	   {
 	     memcpy (&entry, &mct_res->entries[i], sizeof mct_res->entries[i]);
 	     SetMCEntries (1, &entry);
 	   }
 */
 	 mct_res = (mct_res_t *) STARH (mct_res_h);
-	 SetMCEntries (CW (mct_res->n_entries),
+	 SetMCEntries (BigEndianValue (mct_res->n_entries),
 		       &mct_res->entries[0]);
 	 
        });
@@ -291,7 +292,7 @@ P1 (PUBLIC pascal trap, MenuHandle, GetMenu, int16, rid)
 	  
 	  MemErr = CWC (noErr);
 	  temph = GetResource (TICK("MDEF"),
-			       CW (*(int16 *)&HxX(retval, menuProc)));
+			       BigEndianValue (*(int16 *)&HxX(retval, menuProc)));
 	  if (SIZEOFMINFO != 15)
 	    Munger ((Handle) retval, (int32) 6, (Ptr) 0, (int32) 0,
 		    (Ptr) "x", (int32) 2);
@@ -349,9 +350,9 @@ A7(PRIVATE, void, app, StringPtr, str, char, icon, char, marker,
 
     eip->menitem++;
     if (disflag)
-        STARH(eip->menh)->enableFlags &= CL(~((LONGINT)1 << eip->menitem));
+        STARH(eip->menh)->enableFlags &= BigEndianValue(~((LONGINT)1 << eip->menitem));
     else
-        STARH(eip->menh)->enableFlags |= CL((LONGINT)1 << eip->menitem);
+        STARH(eip->menh)->enableFlags |= BigEndianValue((LONGINT)1 << eip->menitem);
     newsize = eip->menoff + SIZEOFMEXT + 1 + U(str[0]);
     SetHandleSize((Handle) eip->menh, newsize);
 /*
@@ -582,7 +583,7 @@ P2(PUBLIC pascal trap, void, DelMenuItem, MenuHandle, mh, 	/* IMIV-56 */
 	if (item < 32) {
 	  unchangedmask = (1L << item) - 1;	/* 2s complement dependent */
 	  HxX(mh, enableFlags) =
-	    CL(((Hx(mh, enableFlags) >> 1) & ~unchangedmask) |
+	    BigEndianValue(((Hx(mh, enableFlags) >> 1) & ~unchangedmask) |
 	       (Hx(mh, enableFlags) & unchangedmask) |
 	       0x80000000);
 	}
@@ -640,7 +641,7 @@ A4(PRIVATE, void, xInsertResMenu, MenuHandle, mh, StringPtr, str,
 	ep = sp + hsize;
 	while (sp != ep)
 	  *dp++ = *sp++;
-	HxX(mh, enableFlags) = CL(Hx(mh, enableFlags) |
+	HxX(mh, enableFlags) = BigEndianValue(Hx(mh, enableFlags) |
 				  oldeflags << (endinf.menitem - after));
 #if 0				/* RagTime suggests that at least for InsMenuItem */
 	/* CalcMenuSize shouldn't be called */
@@ -683,7 +684,7 @@ P2(PUBLIC pascal trap, void, InsertMenu, MenuHandle, mh, INTEGER, before)
 	{
 	  mpend = HxX(MENULIST, mulist) + HIEROFF / sizeof(muelem);
 	  for (mp = FIRSTHIER;
-	       mp != mpend && (CW(STARH(MR(mp->muhandle))->menuID) != mid1);
+	       mp != mpend && (BigEndianValue(STARH(MR(mp->muhandle))->menuID) != mid1);
 	       mp++)
 	    ;
 	  if (mp != mpend)	/* already there */
@@ -699,7 +700,7 @@ P2(PUBLIC pascal trap, void, InsertMenu, MenuHandle, mh, INTEGER, before)
 	  mpend = HxX(MENULIST, mulist) + Hx(MENULIST, muoff) / sizeof(muelem);
 	  for (mp = HxX(MENULIST, mulist); mp != mpend; mp++)
 	    {
-	      if ((mid2 = CW(STARH(MR(mp->muhandle))->menuID)) == mid1)
+	      if ((mid2 = BigEndianValue(STARH(MR(mp->muhandle))->menuID)) == mid1)
 /*-->*/		return;
 	      if (mid2 == before)
 		bindex = mp;
@@ -720,10 +721,10 @@ P2(PUBLIC pascal trap, void, InsertMenu, MenuHandle, mh, INTEGER, before)
 	      Munger(MR(MenuList), binoff, (Ptr) 0, (LONGINT) 0,
 		     (Ptr) &newmuelem, (LONGINT) sizeof(newmuelem));
 	    }
-	  HxX(MENULIST, muoff) = CW(Hx(MENULIST, muoff) + sizeof(muelem));
+	  HxX(MENULIST, muoff) = BigEndianValue(Hx(MENULIST, muoff) + sizeof(muelem));
 	  MBDFCALL(mbCalc, 0, binoff);
 	}
-      HIEROFFX = CW(HIEROFF + sizeof(muelem));
+      HIEROFFX = BigEndianValue(HIEROFF + sizeof(muelem));
     }
 }
 
@@ -736,7 +737,7 @@ P1 (PUBLIC pascal trap, void, DeleteMenu, int16, mid)
   
   mpend = HxX(MENULIST, mulist) + Hx(MENULIST, muoff) / sizeof(muelem);
   for (mp = HxX(MENULIST, mulist);
-       mp != mpend && CW(STARH(MR(mp->muhandle))->menuID) != mid;
+       mp != mpend && BigEndianValue(STARH(MR(mp->muhandle))->menuID) != mid;
        mp++)
     ;
   if (mp != mpend)
@@ -744,14 +745,14 @@ P1 (PUBLIC pascal trap, void, DeleteMenu, int16, mid)
       deleteloc = (LONGINT) ((char *)mp - (char *)STARH(MR(MenuList)));
       Munger (MR (MenuList), deleteloc, (Ptr) 0, (int32) sizeof (muelem),
 	      (Ptr) "", (int32) 0);
-      HxX(MENULIST, muoff) = CW(Hx(MENULIST, muoff) - sizeof(muelem));
+      HxX(MENULIST, muoff) = BigEndianValue(Hx(MENULIST, muoff) - sizeof(muelem));
       MBDFCALL(mbCalc, 0, deleteloc);
     }
   else
     {
       mpend = HxX(MENULIST, mulist) + HIEROFF / sizeof(muelem);
       for (mp = FIRSTHIER;
-	   mp != mpend && (CW(STARH(MR(mp->muhandle))->menuID) != mid);
+	   mp != mpend && (BigEndianValue(STARH(MR(mp->muhandle))->menuID) != mid);
 	   mp++)
 	;
       if (mp == mpend)
@@ -760,7 +761,7 @@ P1 (PUBLIC pascal trap, void, DeleteMenu, int16, mid)
 	     (int32) ((char *)mp - (char *) STARH (MR (MenuList))),
 	     (Ptr) 0, (int32) sizeof(muelem), (Ptr) "", (int32) 0);
     }
-  HIEROFFX = CW (HIEROFF - sizeof (muelem));
+  HIEROFFX = BigEndianValue (HIEROFF - sizeof (muelem));
 }
 
 typedef mbartype *mbarptr;
@@ -847,7 +848,7 @@ menu_id_exists_p (int id)
   initpairs (mps);
   for (mp = mps[nonhier].startp; mp != mps[nonhier].endp; mp ++)
     {
-      if (CW (STARH (MR (mp->muhandle))->menuID) == id)
+      if (BigEndianValue (STARH (MR (mp->muhandle))->menuID) == id)
 	return TRUE;
     }
   return FALSE;
@@ -862,7 +863,7 @@ A1(PUBLIC, INTEGER, ROMlib_mentosix, INTEGER, menuid)
     initpairs(mps);
     for (i = (int) nonhier; i <= (int) hier; i++) {
 	for (mp = mps[i].startp, mpend = mps[i].endp;
-	      mp < mpend && CW(STARH(MR(mp->muhandle))->menuID) != menuid; mp++)
+	      mp < mpend && BigEndianValue(STARH(MR(mp->muhandle))->menuID) != menuid; mp++)
 	    ;
 	if (mp < mpend)
 /*-->*/	    return (char *) mp - (char *) STARH(MR(MenuList));
@@ -885,10 +886,10 @@ A2(PRIVATE, BOOLEAN, mtoggle, INTEGER, mid, highstate, h)
 
 P1 (PUBLIC pascal trap, void, HiliteMenu, INTEGER, mid)
 {
-  if (mid != CW (TheMenu))
+  if (mid != BigEndianValue (TheMenu))
     {
       if (TheMenu)
-	mtoggle (CW (TheMenu), RESTORE);
+	mtoggle (BigEndianValue (TheMenu), RESTORE);
       if (! menu_id_exists_p (mid))
 	mid = 0;
       if (mid)
@@ -898,7 +899,7 @@ P1 (PUBLIC pascal trap, void, HiliteMenu, INTEGER, mid)
 	  mtoggle (mid, HILITE);
 	}
     }
-  TheMenu = CW (mid);
+  TheMenu = BigEndianValue (mid);
 }
 
 A1(static inline, void, ROMlib_CALLMENUHOOK, menuhookp, fp)
@@ -932,10 +933,10 @@ A1(PRIVATE, INTEGER, wheretowhich, LONGINT, offset)
 
 A1(PRIVATE, void, shadowrect, Rect *, rp)
 {
-    rp->top    = CW(CW(rp->top) - 1);
-    rp->left   = CW(CW(rp->left) - 1);
-    rp->bottom = CW(CW(rp->bottom) + 2);
-    rp->right  = CW(CW(rp->right) + 2);
+    rp->top    = BigEndianValue(BigEndianValue(rp->top) - 1);
+    rp->left   = BigEndianValue(BigEndianValue(rp->left) - 1);
+    rp->bottom = BigEndianValue(BigEndianValue(rp->bottom) + 2);
+    rp->right  = BigEndianValue(BigEndianValue(rp->right) + 2);
 }
 
 A3(PRIVATE, void, restoren, INTEGER, ntodrop, RgnHandle, restoredrgn,
@@ -977,7 +978,7 @@ A2(PRIVATE, MenuHandle, menunumtomh, INTEGER, mid, INTEGER *, sixp)
     
     mpend = HxX(MENULIST, mulist) + HIEROFF / sizeof(muelem);
     for (mp = FIRSTHIER; mp != mpend &&
-			       CW(STARH(MR(mp->muhandle))->menuID) != mid; mp++)
+			       BigEndianValue(STARH(MR(mp->muhandle))->menuID) != mid; mp++)
 	    ;
     if (mp != mpend) {
 	*sixp = (char *) mp - (char *)STARH(MR(MenuList));
@@ -1044,8 +1045,8 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
   while (!done)
     {
       GetMouse (&pt);
-      pt.h = CW (pt.h);
-      pt.v = CW (pt.v);
+      pt.h = BigEndianValue (pt.h);
+      pt.v = BigEndianValue (pt.v);
       pointaslong = ((int32) pt.v << 16) | (unsigned short) pt.h;
       where = MBDFCALL (mbHit, 0, pointaslong);
       if (MenuHook)
@@ -1056,9 +1057,9 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 	    {
 	      PORT_TX_FACE_X (MR (wmgr_port)) = (Style) CB (0);
 	      PORT_TX_FONT_X (MR (wmgr_port)) = CWC (0);
-	      item = CW(item);
+	      item = BigEndianValue(item);
 	      MENUCALL (mChooseMsg, mh, &r, pt, &item);
-	      item = CW(item);
+	      item = BigEndianValue(item);
 	      if (item != olditem || changedmenus)
 		{
 		  if (firstitem == -1)
@@ -1082,9 +1083,9 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 		      item = olditem;
 		      PORT_TX_FACE_X (MR (wmgr_port)) = (Style) CB (0);
 		      PORT_TX_FONT_X (MR (wmgr_port)) = CWC (0);
-		      item = CW(item);
+		      item = BigEndianValue(item);
 		      MENUCALL (mChooseMsg, mh, &r, pt, &item);
-		      item = CW(item);
+		      item = BigEndianValue(item);
 		      DisposeRgn (PORT_CLIP_REGION (MR (wmgr_port)));
 		      PORT_CLIP_REGION_X (MR (wmgr_port)) = saveclip;
 		    }
@@ -1176,9 +1177,9 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 		{
 		  MR (wmgr_port)->txFace = (Style) 0;
 		  MR (wmgr_port)->txFont = 0;
-		  item = CW(item);
+		  item = BigEndianValue(item);
 		  MENUCALL(mChooseMsg, mh, &r, pt, &item);
-		  item = CW(item);
+		  item = BigEndianValue(item);
 		}
 	      else
 		item = 0;
@@ -1190,8 +1191,8 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 	      whichmenuhit = wheretowhich(where);
 	      newentry = (mbdfentry *)STARH(MR(MBSaveLoc)) + whichmenuhit;
 	      oldentry = (mbdfentry *)STARH(MR(MBSaveLoc)) + oldwhichmenuhit;
-	      oldentry->mbReserved = CL((ULONGINT)item);
-	      olditem = item = CL(newentry->mbReserved);
+	      oldentry->mbReserved = BigEndianValue((ULONGINT)item);
+	      olditem = item = BigEndianValue(newentry->mbReserved);
 	      changedmenus = TRUE;
 	      mh = MR(((muelem *) ((char *)STARH(MR(MenuList)) + where))->muhandle);
 	      templ = where;
@@ -1244,9 +1245,9 @@ enter:
 	 tempp.h = 0;
 	 PORT_TX_FACE_X (MR (wmgr_port)) = (Style) CB (0);
 	 PORT_TX_FONT_X (MR (wmgr_port)) = CWC (0);
-	 tempi = CW(tempi);
+	 tempi = BigEndianValue(tempi);
 	 MENUCALL(mChooseMsg, mh, &r, tempp, &tempi);
-	 tempi = CW(tempi);
+	 tempi = BigEndianValue(tempi);
 #if !defined(MACOSX_)
 	 if (MenuFlash)
 	   {
@@ -1255,15 +1256,15 @@ enter:
 		 Delay(3L, (LONGINT *) 0);
 		 PORT_TX_FACE_X (MR (wmgr_port)) = (Style) CB (0);
 		 PORT_TX_FONT_X (MR (wmgr_port)) = CWC (0);
-		 tempi = CW(tempi);
+		 tempi = BigEndianValue(tempi);
 		 MENUCALL(mChooseMsg, mh, &r, pt, &tempi);
-		 tempi = CW(tempi);
+		 tempi = BigEndianValue(tempi);
 		 Delay(3L, (LONGINT *) 0);
 		 PORT_TX_FACE_X (MR (wmgr_port)) = (Style) CB (0);
 		 PORT_TX_FONT_X (MR (wmgr_port)) = CWC (0);
-		 tempi = CW(tempi);
+		 tempi = BigEndianValue(tempi);
 		 MENUCALL(mChooseMsg, mh, &r, tempp, &tempi);
-		 tempi = CW(tempi);
+		 tempi = BigEndianValue(tempi);
 	       }
 	     Delay(3L, (LONGINT *) 0);
 	   }
@@ -1331,7 +1332,7 @@ P1(PUBLIC pascal trap, void, FlashMenuBar, INTEGER, mid)
 	TheMenu = 0;
     } else {
 	l |= (LONGINT) HILITE << 16;
-	TheMenu = CW(mid);
+	TheMenu = BigEndianValue(mid);
     }
     MBDFCALL(mbHilite, 0, l);
 }
@@ -1485,13 +1486,13 @@ P3(PUBLIC pascal trap, void, GetItem, MenuHandle, mh, INTEGER, item,
 P2(PUBLIC pascal trap, void, DisableItem, MenuHandle, mh, INTEGER, item)
 {
   if (mh)
-    HxX(mh, enableFlags) = CL(Hx(mh, enableFlags) & ~((LONGINT)1<<item));
+    HxX(mh, enableFlags) = BigEndianValue(Hx(mh, enableFlags) & ~((LONGINT)1<<item));
 }
 
 P2(PUBLIC pascal trap, void, EnableItem, MenuHandle, mh, INTEGER, item)
 {
   if (mh)
-    HxX(mh, enableFlags) = CL(Hx(mh, enableFlags) | (LONGINT)1<<item);
+    HxX(mh, enableFlags) = BigEndianValue(Hx(mh, enableFlags) | (LONGINT)1<<item);
 }
 
 P3(PUBLIC pascal trap, void, CheckItem, MenuHandle, mh, INTEGER, item,
@@ -1521,7 +1522,7 @@ P3(PUBLIC pascal trap, void, GetItemMark, MenuHandle, mh, INTEGER, item,
     mextp mep;
     
     if ((mep = ROMlib_mitemtop(mh, item, (StringPtr *) 0)))
-        *markp = CW((INTEGER) (unsigned char) mep->mmarker);
+        *markp = BigEndianValue((INTEGER) (unsigned char) mep->mmarker);
 }
 
 P3(PUBLIC pascal trap, void, SetItemIcon, MenuHandle, mh, INTEGER, item,
@@ -1541,7 +1542,7 @@ P3(PUBLIC pascal trap, void, GetItemIcon, MenuHandle, mh, INTEGER, item,
     mextp mep;
     
     if ((mep = ROMlib_mitemtop(mh, item, (StringPtr *) 0)))
-        *iconp = CW((INTEGER) (unsigned char) Cx(mep->micon));
+        *iconp = BigEndianValue((INTEGER) (unsigned char) Cx(mep->micon));
 }
 
 P3(PUBLIC pascal trap, void, SetItemStyle, MenuHandle, mh, INTEGER, item,
@@ -1561,7 +1562,7 @@ P3(PUBLIC pascal trap, void, GetItemStyle, MenuHandle, mh, INTEGER, item,
     mextp mep;
     
     if ((mep = ROMlib_mitemtop(mh, item, (StringPtr *) 0)))
-        *stylep = CW((INTEGER) (unsigned char) Cx(mep->mstyle));
+        *stylep = BigEndianValue((INTEGER) (unsigned char) Cx(mep->mstyle));
 }
 
 P1(PUBLIC pascal trap, INTEGER, CountMItems, MenuHandle, mh)
@@ -1587,7 +1588,7 @@ P1(PUBLIC pascal trap, MenuHandle, GetMHandle, INTEGER, mid)
     
       mpend = HxX(MENULIST, mulist) + HIEROFF / sizeof(muelem);
       for (mp = FIRSTHIER;
-	   mp != mpend && CW(STARH(MR(mp->muhandle))->menuID) != mid; mp++)
+	   mp != mpend && BigEndianValue(STARH(MR(mp->muhandle))->menuID) != mid; mp++)
 	;
       if (mp != mpend)
 	retval = MR(mp->muhandle);
@@ -1595,7 +1596,7 @@ P1(PUBLIC pascal trap, MenuHandle, GetMHandle, INTEGER, mid)
 	{
 	  mpend = HxX(MENULIST, mulist) + Hx(MENULIST, muoff) / sizeof(muelem);
 	  for (mp = HxX(MENULIST, mulist);
-	       mp != mpend && CW(STARH(MR(mp->muhandle))->menuID) != mid; mp++)
+	       mp != mpend && BigEndianValue(STARH(MR(mp->muhandle))->menuID) != mid; mp++)
 	    ;
 	  if (mp != mpend)
 	    retval = MR(mp->muhandle);
@@ -1608,7 +1609,7 @@ P1(PUBLIC pascal trap, MenuHandle, GetMHandle, INTEGER, mid)
 
 P1(PUBLIC pascal trap, void, SetMenuFlash, INTEGER, i)
 {
-    MenuFlash = CW(i);
+    MenuFlash = BigEndianValue(i);
 }
 
 A0(PUBLIC, BOOLEAN, ROMlib_shouldalarm)

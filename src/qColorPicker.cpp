@@ -31,6 +31,7 @@ char ROMlib_rcsid_qColorPicker[] =
 #include <math.h>
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /* sanity defines */
 
@@ -219,8 +220,8 @@ compute_bounds (Point maybe_top_left)
       
       /* centered horizontally, with a third of the space above the
 	 window, and two-thirds below */
-      top  = CW (gd_rect->top)  + (gd_height - height) / 3;
-      left = CW (gd_rect->left) + (gd_width - width) / 2;
+      top  = BigEndianValue (gd_rect->top)  + (gd_height - height) / 3;
+      left = BigEndianValue (gd_rect->left) + (gd_width - width) / 2;
     }
   else
     {
@@ -228,10 +229,10 @@ compute_bounds (Point maybe_top_left)
       left = maybe_top_left.h;
     }
   
-  color_picker_window_bounds->top    = CW (top);
-  color_picker_window_bounds->left   = CW (left);
-  color_picker_window_bounds->bottom = CW (top + height);
-  color_picker_window_bounds->right  = CW (left + width);
+  color_picker_window_bounds->top    = BigEndianValue (top);
+  color_picker_window_bounds->left   = BigEndianValue (left);
+  color_picker_window_bounds->bottom = BigEndianValue (top + height);
+  color_picker_window_bounds->right  = BigEndianValue (left + width);
 }
 
 typedef enum miniarrow_hilite
@@ -401,24 +402,24 @@ text_box_init (void)
       *te_bounds = *frame_bounds;
       InsetRect (te_bounds, 4, 4);
       
-      baseline = (  (  CW (frame_bounds->top)
-		     + CW (frame_bounds->bottom)) / 2
+      baseline = (  (  BigEndianValue (frame_bounds->top)
+		     + BigEndianValue (frame_bounds->bottom)) / 2
 		  - font_height / 2 + font_ascent);
       
       title_pt        = &box->title_pt;
       label_pt        = &box->label_pt;
       
       title_pt->v = label_pt->v = baseline;
-      title_pt->h = CW (template_bounds->left) + offset - StringWidth (title);
-      label_pt->h = CW (frame_bounds->right) + space_width / 2;
+      title_pt->h = BigEndianValue (template_bounds->left) + offset - StringWidth (title);
+      label_pt->h = BigEndianValue (frame_bounds->right) + space_width / 2;
       
       miniarrow_bounds = &box->miniarrow_rect;
       
       *miniarrow_bounds       = *frame_bounds;
-      miniarrow_bounds->left  = CW (  label_pt->h
+      miniarrow_bounds->left  = BigEndianValue (  label_pt->h
 				    + label_width
 				    + space_width / 2);
-      miniarrow_bounds->right = CW (  label_pt->h
+      miniarrow_bounds->right = BigEndianValue (  label_pt->h
 				    + label_width
 				    + space_width / 2
 				    + 22);
@@ -565,8 +566,8 @@ text_box_miniarrow_update (struct text_box *box,
   
   miniarrow_rect = &box->miniarrow_rect;
   
-  center_x = (CW (miniarrow_rect->left) + CW (miniarrow_rect->right))  / 2;
-  center_y = (CW (miniarrow_rect->top)  + CW (miniarrow_rect->bottom)) / 2;
+  center_x = (BigEndianValue (miniarrow_rect->left) + BigEndianValue (miniarrow_rect->right))  / 2;
+  center_y = (BigEndianValue (miniarrow_rect->top)  + BigEndianValue (miniarrow_rect->bottom)) / 2;
   
   SetRect (&dst_rect,
 	   center_x - 13 / 2,      center_y - 22 / 2,
@@ -657,13 +658,13 @@ text_box_update_value_1 (struct text_box *box, int newval,
   switch (box->i)
     {
     case red_index:
-      current_color.red   = CW (red);
+      current_color.red   = BigEndianValue (red);
       break;
     case green_index:
-      current_color.green = CW (green);
+      current_color.green = BigEndianValue (green);
       break;
     case blue_index:
-      current_color.blue  = CW (blue);
+      current_color.blue  = BigEndianValue (blue);
       break;
     case hue_index:
     case saturation_index:
@@ -711,18 +712,18 @@ hue_saturation_update (int new_hue, int new_saturation,
   
   if (full_update_p)
     {
-      hsl_color.hue        = CW (hue);
-      hsl_color.saturation = CW (saturation);
-      hsl_color.lightness  = CW (lightness);
+      hsl_color.hue        = BigEndianValue (hue);
+      hsl_color.saturation = BigEndianValue (saturation);
+      hsl_color.lightness  = BigEndianValue (lightness);
       
       HSL2RGB (&hsl_color, &rgb_color);
       
       text_box_update_value_1 (&text_boxes[red_index],
-			       CW (rgb_color.red), TRUE, TRUE);
+			       BigEndianValue (rgb_color.red), TRUE, TRUE);
       text_box_update_value_1 (&text_boxes[green_index],
-			       CW (rgb_color.green), TRUE, TRUE);
+			       BigEndianValue (rgb_color.green), TRUE, TRUE);
       text_box_update_value_1 (&text_boxes[blue_index],
-			       CW (rgb_color.blue), TRUE, TRUE);
+			       BigEndianValue (rgb_color.blue), TRUE, TRUE);
       
       compare_box_update ();
     }
@@ -774,17 +775,17 @@ text_box_update_value (struct text_box *box, int newval,
       {
 	text_box_update_value_1 (box, newval, update_if_p, TRUE);
 	
-	rgb_color.red   = CW (red);
-	rgb_color.green = CW (green);
-	rgb_color.blue  = CW (blue);
+	rgb_color.red   = BigEndianValue (red);
+	rgb_color.green = BigEndianValue (green);
+	rgb_color.blue  = BigEndianValue (blue);
 	
 	RGB2HSL (&rgb_color, &hsl_color);
 	
-	hue_saturation_update (CW (hsl_color.hue), CW (hsl_color.saturation),
+	hue_saturation_update (BigEndianValue (hsl_color.hue), BigEndianValue (hsl_color.saturation),
 			       FALSE);
 	
 	text_box_update_value_1 (&text_boxes[lightness_index],
-				 CW (hsl_color.lightness), TRUE, TRUE);
+				 BigEndianValue (hsl_color.lightness), TRUE, TRUE);
 	break;
       }
       
@@ -794,18 +795,18 @@ text_box_update_value (struct text_box *box, int newval,
       {
 	text_box_update_value_1 (box, newval, update_if_p, TRUE);
 	
-	hsl_color.hue        = CW (hue);
-	hsl_color.saturation = CW (saturation);
-	hsl_color.lightness  = CW (lightness);
+	hsl_color.hue        = BigEndianValue (hue);
+	hsl_color.saturation = BigEndianValue (saturation);
+	hsl_color.lightness  = BigEndianValue (lightness);
 	
 	HSL2RGB (&hsl_color, &rgb_color);
 	
 	text_box_update_value_1 (&text_boxes[red_index],
-				 CW (rgb_color.red), TRUE, TRUE);
+				 BigEndianValue (rgb_color.red), TRUE, TRUE);
 	text_box_update_value_1 (&text_boxes[green_index],
-				 CW (rgb_color.green), TRUE, TRUE);
+				 BigEndianValue (rgb_color.green), TRUE, TRUE);
 	text_box_update_value_1 (&text_boxes[blue_index],
-				 CW (rgb_color.blue), TRUE, TRUE);
+				 BigEndianValue (rgb_color.blue), TRUE, TRUE);
 	break;
       }
     }
@@ -871,7 +872,7 @@ event_loop (void)
       
       TEIdle (te);
       
-      switch (CW (evt.what))
+      switch (BigEndianValue (evt.what))
 	{
 	case mouseDown:
 	  {
@@ -918,8 +919,8 @@ event_loop (void)
 		  {
 		    int center_y;
 		    
-		    center_y = (  CW (box->miniarrow_rect.top)
-				+ CW (box->miniarrow_rect.bottom)) / 2;
+		    center_y = (  BigEndianValue (box->miniarrow_rect.top)
+				+ BigEndianValue (box->miniarrow_rect.bottom)) / 2;
 		    
 		    integer_increment_p = FALSE;
 		    track_kount = 0;
@@ -1038,17 +1039,17 @@ event_loop (void)
 #define current_compare_box_label	((StringPtr) "\005New: ")
 	    
 	    
-	    MoveTo ((  CW (orig_compare_box_bounds->left)
+	    MoveTo ((  BigEndianValue (orig_compare_box_bounds->left)
 		     - StringWidth (orig_compare_box_label)),
-		    (  (  CW (orig_compare_box_bounds->top)
-		        + CW (orig_compare_box_bounds->bottom)) / 2
+		    (  (  BigEndianValue (orig_compare_box_bounds->top)
+		        + BigEndianValue (orig_compare_box_bounds->bottom)) / 2
 		     - font_height / 2 + font_ascent));
 	    DrawString (orig_compare_box_label);
 	    
-	    MoveTo ((  CW (current_compare_box_bounds->left)
+	    MoveTo ((  BigEndianValue (current_compare_box_bounds->left)
 		     - StringWidth (current_compare_box_label)),
-		    (  (  CW (current_compare_box_bounds->top)
-		        + CW (current_compare_box_bounds->bottom)) / 2
+		    (  (  BigEndianValue (current_compare_box_bounds->top)
+		        + BigEndianValue (current_compare_box_bounds->bottom)) / 2
 		     - font_height / 2 + font_ascent));
 	    DrawString (current_compare_box_label);
 	    
@@ -1061,7 +1062,7 @@ event_loop (void)
 	  {
 	    char ch;
 	    
-	    ch = CL (evt.message) & 0xFF;
+	    ch = BigEndianValue (evt.message) & 0xFF;
 	    switch (ch)
 	      {
 	      case '\r':
@@ -1089,7 +1090,7 @@ event_loop (void)
 	  
 	default:
 	  warning_unexpected ("unknown event.what `%d'",
-			      CW (evt.what));
+			      BigEndianValue (evt.what));
 	  break;
 	}
     }
@@ -1115,10 +1116,10 @@ color_wheel_init (void)
   *color_wheel_bounds = *template_color_wheel_bounds;
   OffsetRect (color_wheel_bounds, - StringWidth (label_0_degs), font_height);
   
-  color_wheel_center_y = (  CW (color_wheel_bounds->top)
-			  + CW (color_wheel_bounds->bottom)) / 2;
-  color_wheel_center_x = (  CW (color_wheel_bounds->left)
-			  + CW (color_wheel_bounds->right)) / 2;
+  color_wheel_center_y = (  BigEndianValue (color_wheel_bounds->top)
+			  + BigEndianValue (color_wheel_bounds->bottom)) / 2;
+  color_wheel_center_x = (  BigEndianValue (color_wheel_bounds->left)
+			  + BigEndianValue (color_wheel_bounds->right)) / 2;
   
   /* the colorwheel appears to be 192 pixels on a side, but it is
      really 208 pixels to handle target overlap */
@@ -1130,7 +1131,7 @@ color_wheel_init (void)
 				    : (bpp == 4
 				       ? (intptr_t)&color_wheel_bits_4
 				       : (gui_abort (), NULL)));
-  color_wheel_pixmap.rowBytes = CW ((bpp == 8)
+  color_wheel_pixmap.rowBytes = BigEndianValue ((bpp == 8)
 				    ? 0x80D0
 				    : (bpp == 4
 				       ? 0x8068
@@ -1166,14 +1167,14 @@ color_wheel_target_update (boolean_t short_cut_p)
     return;
   
   /* erase the current target */
-  dst_rect.top    = CW (current_target_y - 7);
-  dst_rect.left   = CW (current_target_x - 7);
-  dst_rect.bottom = CW (current_target_y + 9);
-  dst_rect.right  = CW (current_target_x + 9);
+  dst_rect.top    = BigEndianValue (current_target_y - 7);
+  dst_rect.left   = BigEndianValue (current_target_x - 7);
+  dst_rect.bottom = BigEndianValue (current_target_y + 9);
+  dst_rect.right  = BigEndianValue (current_target_x + 9);
   
   src_rect = dst_rect;
-  OffsetRect (&src_rect, - CW (color_wheel_bounds->left),
-	                 - CW (color_wheel_bounds->top));
+  OffsetRect (&src_rect, - BigEndianValue (color_wheel_bounds->left),
+	                 - BigEndianValue (color_wheel_bounds->top));
   
   CopyBits ((BitMap *) &color_wheel_pixmap, PORT_BITS_FOR_COPY (thePort),
 	    &src_rect, &dst_rect, srcCopy, NULL);
@@ -1258,11 +1259,11 @@ color_wheel_notice_lightness_change (void)
   for (i = 0; i < (int) NELEM (color_desc); i ++)
     {
       /* one half */
-      hsl_color.lightness  = CW (lightness);
-      hsl_color.hue        = CW (  color_desc[i].angle
+      hsl_color.lightness  = BigEndianValue (lightness);
+      hsl_color.hue        = BigEndianValue (  color_desc[i].angle
 				 * 0xFFFF
 				 / 360.0);
-      hsl_color.saturation = CW (  color_desc[i].dist
+      hsl_color.saturation = BigEndianValue (  color_desc[i].dist
 				 * 0xFFFF);
       
       HSL2RGB (&hsl_color, &rgb_color);
@@ -1291,10 +1292,10 @@ P4 (PUBLIC pascal trap, BOOLEAN, GetColor,
     
     GetFontInfo (&font_info);
   
-    font_height = (  CW (font_info.ascent)
-		     + CW (font_info.descent)
-		     + CW (font_info.leading));
-    font_ascent = CW (font_info.ascent);
+    font_height = (  BigEndianValue (font_info.ascent)
+		     + BigEndianValue (font_info.descent)
+		     + BigEndianValue (font_info.leading));
+    font_ascent = BigEndianValue (font_info.ascent);
   
     space_width = CharWidth (' ');
   }
@@ -1302,15 +1303,15 @@ P4 (PUBLIC pascal trap, BOOLEAN, GetColor,
   {
     HSLColor *hsl_color = (HSLColor *)alloca (sizeof *hsl_color);
     
-    red   = CW (in_color->red);
-    green = CW (in_color->green);
-    blue  = CW (in_color->blue);
+    red   = BigEndianValue (in_color->red);
+    green = BigEndianValue (in_color->green);
+    blue  = BigEndianValue (in_color->blue);
     
     RGB2HSL (in_color, hsl_color);
     
-    hue        = CW (hsl_color->hue);
-    saturation = CW (hsl_color->saturation);
-    lightness  = CW (hsl_color->lightness);
+    hue        = BigEndianValue (hsl_color->hue);
+    saturation = BigEndianValue (hsl_color->saturation);
+    lightness  = BigEndianValue (hsl_color->lightness);
     
     color_wheel_noticed_lightness = -1;
     
@@ -1363,7 +1364,7 @@ P4 (PUBLIC pascal trap, BOOLEAN, GetColor,
   LOCK_HANDLE_EXCURSION_1
     (color_wheel_color_table,
      {
-       CTAB_SIZE_X (color_wheel_color_table) = CW (23);
+       CTAB_SIZE_X (color_wheel_color_table) = BigEndianValue (23);
        color_wheel_colors = CTAB_TABLE (color_wheel_color_table);
        
        color_wheel_notice_lightness_change ();

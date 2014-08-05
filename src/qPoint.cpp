@@ -14,23 +14,24 @@ char ROMlib_rcsid_qPoint[] =
 #include "rsys/cquick.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P2(PUBLIC pascal trap, void, AddPt, Point, src, Point *, dst)
 {
-    dst->h = CW(CW(dst->h) + (src.h));
-    dst->v = CW(CW(dst->v) + (src.v));
+    dst->h = BigEndianValue(BigEndianValue(dst->h) + (src.h));
+    dst->v = BigEndianValue(BigEndianValue(dst->v) + (src.v));
 }
 
 P2(PUBLIC pascal trap, void, SubPt, Point, src, Point *, dst)
 {
-    dst->h = CW(CW(dst->h) - (src.h));
-    dst->v = CW(CW(dst->v) - (src.v));
+    dst->h = BigEndianValue(BigEndianValue(dst->h) - (src.h));
+    dst->v = BigEndianValue(BigEndianValue(dst->v) - (src.v));
 }
 
 P3(PUBLIC pascal trap, void, SetPt, Point *, pt, INTEGER, h, INTEGER, v)
 {
-    pt->h = CW (h);
-    pt->v = CW (v);
+    pt->h = BigEndianValue (h);
+    pt->v = BigEndianValue (v);
 }
 
 P2(PUBLIC pascal trap, BOOLEAN, EqualPt, Point, p1, Point, p2)
@@ -41,15 +42,15 @@ P2(PUBLIC pascal trap, BOOLEAN, EqualPt, Point, p1, Point, p2)
 P1(PUBLIC pascal trap, void, LocalToGlobal, Point *, pt)
 {
     if (thePortX) {
-	pt->h = CW(CW(pt->h) - (CW (PORT_BOUNDS (thePort).left)));
-	pt->v = CW(CW(pt->v) - (CW (PORT_BOUNDS (thePort).top)));
+	pt->h = BigEndianValue(BigEndianValue(pt->h) - (BigEndianValue (PORT_BOUNDS (thePort).left)));
+	pt->v = BigEndianValue(BigEndianValue(pt->v) - (BigEndianValue (PORT_BOUNDS (thePort).top)));
     }
 }
 
 P1(PUBLIC pascal trap, void, GlobalToLocal, Point *, pt)
 {
     if (thePortX) {
-	pt->h = CW(CW(pt->h) + (Cx (PORT_BOUNDS (thePort).left)));
-	pt->v = CW(CW(pt->v) + (Cx (PORT_BOUNDS (thePort).top)));
+	pt->h = BigEndianValue(BigEndianValue(pt->h) + (Cx (PORT_BOUNDS (thePort).left)));
+	pt->v = BigEndianValue(BigEndianValue(pt->v) + (Cx (PORT_BOUNDS (thePort).top)));
     }
 }

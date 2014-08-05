@@ -29,6 +29,7 @@ char ROMlib_rcsid_NEXT[] =
 #include "ResourceMgr.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 PUBLIC keyboard_enum_t Executor::ROMlib_keyboard_type;
 
@@ -372,8 +373,8 @@ A0 (PUBLIC, void, sendsuspendevent)
 #endif /* SANE_DEBUGGING */
       )
       {
-	p.h = CW(MouseLocation.h);
-	p.v = CW(MouseLocation.v);
+	p.h = BigEndianValue(MouseLocation.h);
+	p.v = BigEndianValue(MouseLocation.v);
 	ROMlib_PPostEvent(osEvt, SUSPENDRESUMEBITS|SUSPEND|CONVERTCLIPBOARD,
 			  (HIDDEN_EvQElPtr *) 0, TickCount(), p, ROMlib_mods);
       }
@@ -396,8 +397,8 @@ A1 (PUBLIC, void, sendresumeevent, LONGINT, cvtclip)
       what = SUSPENDRESUMEBITS | RESUME;
       if (cvtclip)
 	what |= CONVERTCLIPBOARD;
-      p.h = CW(MouseLocation.h);
-      p.v = CW(MouseLocation.v);
+      p.h = BigEndianValue(MouseLocation.h);
+      p.v = BigEndianValue(MouseLocation.v);
       ROMlib_PPostEvent(osEvt, what, (HIDDEN_EvQElPtr *) 0, TickCount(),
 			p, ROMlib_mods);
     }
@@ -407,8 +408,8 @@ A0(PUBLIC, void, sendcopy)
 {
     Point p;
 
-    p.h = CW(MouseLocation.h);
-    p.v = CW(MouseLocation.v);
+    p.h = BigEndianValue(MouseLocation.h);
+    p.v = BigEndianValue(MouseLocation.v);
     ROMlib_PPostEvent(keyDown, 0x0863,	/* 0x63 == 'c' */
 			        (HIDDEN_EvQElPtr *) 0, TickCount(), p, cmdKey|btnState);
     ROMlib_PPostEvent(keyUp, 0x0863,
@@ -419,8 +420,8 @@ A0(PUBLIC, void, sendpaste)
 {
     Point p;
 
-    p.h = CW(MouseLocation.h);
-    p.v = CW(MouseLocation.v);
+    p.h = BigEndianValue(MouseLocation.h);
+    p.v = BigEndianValue(MouseLocation.v);
     ROMlib_PPostEvent(keyDown, 0x0976,	/* 0x76 == 'v' */
 				(HIDDEN_EvQElPtr *) 0, TickCount(), p, cmdKey|btnState);
     ROMlib_PPostEvent(keyUp, 0x0976,
@@ -430,8 +431,8 @@ A0(PUBLIC, void, sendpaste)
 PRIVATE void pinmouse(INTEGER *hp, INTEGER *vp, BOOLEAN swap)
 {
     if (swap) {
-	*hp = CW(*hp);
-	*vp = CW(*vp);
+	*hp = BigEndianValue(*hp);
+	*vp = BigEndianValue(*vp);
     }
 
     if (*hp < 0)
@@ -445,15 +446,15 @@ PRIVATE void pinmouse(INTEGER *hp, INTEGER *vp, BOOLEAN swap)
 	*vp = vdriver_height - 1;
 
     if (swap) {
-	*hp = CW(*hp);
-	*vp = CW(*vp);
+	*hp = BigEndianValue(*hp);
+	*vp = BigEndianValue(*vp);
     }
 }
 
 A1(PUBLIC, void, ROMlib_updatemouselocation, NSEvent *, neventp) /* INTERNAL */
 {
-    MouseLocation.h = CW ([neventp locationInWindow].x);
-    MouseLocation.v = CW (vdriver_height - [neventp locationInWindow].y);
+    MouseLocation.h = BigEndianValue ([neventp locationInWindow].x);
+    MouseLocation.v = BigEndianValue (vdriver_height - [neventp locationInWindow].y);
     pinmouse(&MouseLocation.h, &MouseLocation.v, TRUE);
 }
 

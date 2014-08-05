@@ -28,6 +28,7 @@ char ROMlib_rcsid_teInsert[] =
 #include "rsys/text.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 int16
 Executor::ROMlib_StyleTextWidth (TEPtr tep,
@@ -180,13 +181,13 @@ Executor::te_char_to_point (const TEPtr tep, int16 sel, Point *p)
     gui_fatal ("unknown justification");
   
   if (on_break_p)
-    left = (CW (dest_rect->left) + left_offset);
+    left = (BigEndianValue (dest_rect->left) + left_offset);
   else
-    left = (CW (dest_rect->left)
+    left = (BigEndianValue (dest_rect->left)
 	    + left_offset
 	    + TEP_TEXT_WIDTH (tep, Text, line_start, sel - line_start));
   
-  for (top = CW (dest_rect->top), lineno_i = 0; lineno_i < lineno; lineno_i ++)
+  for (top = BigEndianValue (dest_rect->top), lineno_i = 0; lineno_i < lineno; lineno_i ++)
     /* ### hoist alot of the internal constants out of this loop */
     top += TEP_HEIGHT_FOR_LINE (tep, lineno_i);
   if (on_break_p)
@@ -332,14 +333,14 @@ P1 (PUBLIC pascal trap, void, TEIdle, TEHandle, teh)
   
   TESAVE (teh);
   TE_SLAM (teh);
-  if ((ticks = TickCount()) > Hx(teh, caretTime) + CL(CaretTime)
+  if ((ticks = TickCount()) > Hx(teh, caretTime) + BigEndianValue(CaretTime)
       && Hx(teh, active)
       && (sel = Hx(teh, selStart)) == Hx(teh, selEnd)
       && (state = Hx(teh, caretState)))
     {
       togglecaret(teh, sel, TRUE);
-      HxX(teh, caretState) = CW (state ^ 0xFF00);
-      HxX(teh, caretTime)  = CL (ticks);
+      HxX(teh, caretState) = BigEndianValue (state ^ 0xFF00);
+      HxX(teh, caretTime)  = BigEndianValue (ticks);
     }
   TE_SLAM (teh);
   TERESTORE ();
@@ -400,13 +401,13 @@ te_draw (TEPtr tep,
   n_lines = TEP_N_LINES (tep);
   
   dest_rect = &TEP_DEST_RECT (tep);
-  dest_rect_left  = CW (dest_rect->left);
-  dest_rect_right = CW (dest_rect->right);
-  dest_rect_top = CW (dest_rect->top);
-  dest_rect_bottom = CW (dest_rect->bottom);
+  dest_rect_left  = BigEndianValue (dest_rect->left);
+  dest_rect_right = BigEndianValue (dest_rect->right);
+  dest_rect_top = BigEndianValue (dest_rect->top);
+  dest_rect_bottom = BigEndianValue (dest_rect->bottom);
   
   view_rect = &TEP_VIEW_RECT (tep);
-  view_rect_bottom  = CW (view_rect->bottom);
+  view_rect_bottom  = BigEndianValue (view_rect->bottom);
   
   {
     int16 height;
@@ -429,8 +430,8 @@ te_draw (TEPtr tep,
     SectRect (view_rect, view_rect, clip_rect);
 #endif    
 
-    clip_rect_top = CW (clip_rect->top);
-    clip_rect_bottom = CW (clip_rect->bottom);
+    clip_rect_top = BigEndianValue (clip_rect->top);
+    clip_rect_bottom = BigEndianValue (clip_rect->bottom);
     
     /* clip the lines to draw by the visible lines */
     for (current_lineno = 0, height = dest_rect_top;; current_lineno ++)
@@ -505,7 +506,7 @@ te_draw (TEPtr tep,
       runs = (StyleRun*)alloca (sizeof *runs * 2);
       RUN_START_CHAR_X  (&runs[0]) = CWC (0);
       RUN_STYLE_INDEX_X (&runs[0]) = CWC (0);
-      RUN_START_CHAR_X  (&runs[1]) = CW (TEP_LENGTH (tep) + 1);
+      RUN_START_CHAR_X  (&runs[1]) = BigEndianValue (TEP_LENGTH (tep) + 1);
       RUN_STYLE_INDEX_X (&runs[1]) = CWC (-1);
       
       n_styles = 1;
@@ -550,10 +551,10 @@ te_draw (TEPtr tep,
 	  
 	  DrawText (Text, current_posn, current_run_end - current_posn);
 #if 0
-	  gui_assert (CW (orig_pn.h)
+	  gui_assert (BigEndianValue (orig_pn.h)
 		      + TextWidth (Text, current_posn,
 				   current_run_end - current_posn)
-		      == CW (PORT_PEN_LOC (thePort).h));
+		      == BigEndianValue (PORT_PEN_LOC (thePort).h));
 #endif
 	  current_run ++;
 	  style_update_port (&styles[RUN_STYLE_INDEX (current_run)]);
@@ -637,8 +638,8 @@ te_hilite (TEPtr tep,
   
   line_starts = TEP_LINE_STARTS (tep);
   dest_rect = &TEP_DEST_RECT (tep);
-  dest_rect_left  = CW (dest_rect->left);
-  dest_rect_right = CW (dest_rect->right);
+  dest_rect_left  = BigEndianValue (dest_rect->left);
+  dest_rect_right = BigEndianValue (dest_rect->right);
   length = TEP_LENGTH (tep);
 
   /* highlight the first line */
@@ -713,15 +714,15 @@ te_find (TEPtr tep, int16 start, int16 end)
   Text = STARH (hText);
   
   dest_rect = &TEP_DEST_RECT (tep);
-  dest_rect_top = CW (dest_rect->top);
-  dest_rect_left = CW (dest_rect->left);
+  dest_rect_top = BigEndianValue (dest_rect->top);
+  dest_rect_left = BigEndianValue (dest_rect->left);
 
   length = TEP_LENGTH (tep);
   n_lines = TEP_N_LINES (tep);
   line_starts = TEP_LINE_STARTS (tep);
   
-  v = CW (TEP_SEL_POINT (tep).v);
-  h = CW (TEP_SEL_POINT (tep).h) - dest_rect_left;
+  v = BigEndianValue (TEP_SEL_POINT (tep).v);
+  h = BigEndianValue (TEP_SEL_POINT (tep).h) - dest_rect_left;
   
   if (! Text)
     {
@@ -848,11 +849,11 @@ double_click_p (TEHandle te, int16 cl)
   
   ticks = TickCount ();
   if (cl == TE_CLICK_LOC (te)
-      && ticks <= TE_CLICK_TIME (te) + CL (DoubleTime))
+      && ticks <= TE_CLICK_TIME (te) + BigEndianValue (DoubleTime))
     return TRUE;
   
-  TE_CLICK_LOC_X (te)   = CW (cl);
-  TE_CLICK_TIME_X (te)  = CL (ticks);
+  TE_CLICK_LOC_X (te)   = BigEndianValue (cl);
+  TE_CLICK_TIME_X (te)  = BigEndianValue (ticks);
   return FALSE;
 }
 
@@ -975,8 +976,8 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
   
   TEP_CLICK_STUFF_X (tep) = CWC (0);
   
-  TEP_SEL_POINT (tep).h = CW (pt.h);
-  TEP_SEL_POINT (tep).v = CW (pt.v);
+  TEP_SEL_POINT (tep).h = BigEndianValue (pt.h);
+  TEP_SEL_POINT (tep).v = BigEndianValue (pt.v);
   click_posn = TEP_DO_TEXT (tep, 0, length, teFind);
   
   state = TEP_CARET_STATE (tep);
@@ -1109,9 +1110,9 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
       }							\
   })
 
-  TEP_SEL_START_X (tep) = CW (start);
-  TEP_SEL_END_X (tep) = CW (end);
-  TEP_CARET_STATE_X (tep) = CW (state);
+  TEP_SEL_START_X (tep) = BigEndianValue (start);
+  TEP_SEL_END_X (tep) = BigEndianValue (end);
+  TEP_CARET_STATE_X (tep) = BigEndianValue (state);
     
   while (Button () && CALLCLIKOK (te))
     {
@@ -1185,9 +1186,9 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
 	    gui_fatal ("origin is neither start nor end");
 	}
       
-      TEP_SEL_START_X (tep) = CW (start);
-      TEP_SEL_END_X (tep) = CW (end);
-      TEP_CARET_STATE_X (tep) = CW (state);
+      TEP_SEL_START_X (tep) = BigEndianValue (start);
+      TEP_SEL_END_X (tep) = BigEndianValue (end);
+      TEP_CARET_STATE_X (tep) = BigEndianValue (state);
     }
   
   /* suck out the up event if it is there */
@@ -1221,8 +1222,8 @@ P3 (PUBLIC pascal trap, void, TESetSelect, int32, start, int32, stop,
 	TE_DO_TEXT (teh, start, stop, teHilite);
       TERESTORE ();
       
-      TE_SEL_START_X (teh) = CW (start);
-      TE_SEL_END_X (teh) = CW (stop);
+      TE_SEL_START_X (teh) = BigEndianValue (start);
+      TE_SEL_END_X (teh) = BigEndianValue (stop);
       if (TE_ACTIVE (teh))
 	TE_CARET_STATE_X (teh) = (start != stop
 				  ? CWC (0)

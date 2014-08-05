@@ -17,6 +17,7 @@ char ROMlib_rcsid_pef_hash[] =
 #include <math.h>
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /*
  *
@@ -155,7 +156,7 @@ update_export_hash_table (uint32 *hashp, int hash_index,  int first_index,
   
   new_value = ((run_count << CHAIN_COUNT_SHIFT) |
 	       (first_index & FIRST_INDEX_MASK));
-  hashp[hash_index] = CL (new_value);
+  hashp[hash_index] = BigEndianValue (new_value);
 }
 
 
@@ -210,10 +211,10 @@ ROMlib_build_pef_hash (const map_entry_t table[], int count)
       PEFLIH_TERM_OFFSET_X (retval)  = CLC (-1);
       /* totalImportedSymbolCount, relocSectionCount, relocInstrOffset
 	 are all already 0 */
-      PEFLIH_STRINGS_OFFSET_X (retval) = CL (string_table_offset);
-      PEFLIH_HASH_OFFSET_X (retval) = CL (hash_offset);
-      PEFLIH_HASH_TABLE_POWER_X (retval) = CL (hash_power);
-      PEFLIH_SYMBOL_COUNT_X (retval) = CL (count);
+      PEFLIH_STRINGS_OFFSET_X (retval) = BigEndianValue (string_table_offset);
+      PEFLIH_HASH_OFFSET_X (retval) = BigEndianValue (hash_offset);
+      PEFLIH_HASH_TABLE_POWER_X (retval) = BigEndianValue (hash_power);
+      PEFLIH_SYMBOL_COUNT_X (retval) = BigEndianValue (count);
 
       hashp = (typeof (hashp)) ((char *) retval + hash_offset);
       exportp = (typeof (exportp)) ((char *) retval + export_offset);
@@ -232,7 +233,7 @@ ROMlib_build_pef_hash (const map_entry_t table[], int count)
 				strlen (table[i].symbol_name));
 	  sorted[i].hash_index = PEFHashTableIndex (sorted[i].hash_word,
 						    hash_power);
-	  sorted[i].class_and_name_x = CL ((kPEFTVectSymbol << 24) |
+	  sorted[i].class_and_name_x = BigEndianValue ((kPEFTVectSymbol << 24) |
 					   name_offset);
 	  sorted[i].value = (uint32) RM (&table[i].value);
 	  length = strlen (table[i].symbol_name);
@@ -286,9 +287,9 @@ lookup_by_index (const pef_hash_t *hashp, int index,
       int name_offset;
 
       retval = &hashp->symbol_table[index];
-      name_offset = CL (retval->classAndName) & NAME_MASK;
+      name_offset = BigEndianValue (retval->classAndName) & NAME_MASK;
       *namep = hashp->symbol_names + name_offset;
-      *namelen = CL (hashp->export_key_table[index]) >> 16;
+      *namelen = BigEndianValue (hashp->export_key_table[index]) >> 16;
     }
   
   return retval;
@@ -341,12 +342,12 @@ lookup_by_name (const ConnectionID connp,
   offset = PEFLIH_STRINGS_OFFSET (lihp);
   string_tablep = (typeof (string_tablep)) ((char *) lihp + offset);
 
-  chain_count_and_first_index = CL (hash_entries[hash_index]);
+  chain_count_and_first_index = BigEndianValue (hash_entries[hash_index]);
   chain_count = ((chain_count_and_first_index >> CHAIN_COUNT_SHIFT)
 		 & CHAIN_COUNT_MASK);
   index = ((chain_count_and_first_index >> FIRST_INDEX_SHIFT)
 	   & FIRST_INDEX_MASK);
-  hash_word_swapped = CL (hash_word);
+  hash_word_swapped = BigEndianValue (hash_word);
   for (past_index = index + chain_count;
        index < past_index &&
 	 (export_key_table[index] != hash_word_swapped ||
@@ -404,19 +405,19 @@ P4 (PUBLIC pascal trap, OSErr, FindSymbol, ConnectionID, connID,
       switch (section_index)
 	{
 	case -2: /* absolute address */
-	  *symAddr = (Ptr) CL (val);
+	  *symAddr = (Ptr) BigEndianValue (val);
 	  break;
 	case -3: /* re-exported */
 	  warning_unimplemented ("name = '%.*s', val = 0x%x", symName[0],
 				 symName+1, val);
-	  *symAddr = (Ptr) CL (val);
+	  *symAddr = (Ptr) BigEndianValue (val);
 	  break;
 	default:
 	  {
 	    uint32 sect_start;
 
 	    sect_start = connID->sects[section_index].start;
-	    *symAddr = (Ptr) CL (val + sect_start);
+	    *symAddr = (Ptr) BigEndianValue (val + sect_start);
 	  }
 	  break;
 	}

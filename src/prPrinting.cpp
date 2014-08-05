@@ -37,6 +37,7 @@ PUBLIC boolean_t deferred_printing_p = FALSE /* TRUE */;
 #endif
 
 using namespace Executor;
+using namespace ByteSwap;
 
 PUBLIC int pageno = 0;	/* This isn't really the way to do it */
 PUBLIC int Executor::ROMlib_passpostscript = TRUE;
@@ -261,14 +262,14 @@ P3(PUBLIC pascal trap, void, PrComment, INTEGER, kind, INTEGER, size,
 	            break;
 		case rotatebegin:
 		    ip = (INTEGER *) STARH(hand);
-		    flippage = CW(ip[0]);
-		    angle = CW(ip[1]);
+		    flippage = BigEndianValue(ip[0]);
+		    angle = BigEndianValue(ip[1]);
 		    ROMlib_rotatebegin(flippage, angle);
 		    break;
 		case rotatecenter:
 		    fp = (Fixed *) STARH(hand);
-		    yoffset = CL(fp[0]);
-		    xoffset = CL(fp[1]);
+		    yoffset = BigEndianValue(fp[0]);
+		    xoffset = BigEndianValue(fp[1]);
 		    ROMlib_rotatecenter( Cx(thePort->pnLoc.v) +
 					       (double) yoffset / (1L << 16),
 					 Cx(thePort->pnLoc.h) +

@@ -27,6 +27,7 @@ char ROMlib_rcsid_teMisc[] =
 #include "rsys/text.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 int16 nextbreak (TEHandle teh, int16 off, int16 len,
 		 int16 max_width);
@@ -321,7 +322,7 @@ int16 Executor::te_char_to_lineno (TEPtr te, int16 sel)
   current = (high + low) / 2;
 
   while (low < high
-	 && (current_elt = CW (line_starts[current])) != sel)
+	 && (current_elt = BigEndianValue (line_starts[current])) != sel)
     {
       if (current_elt < sel)
 	low = current + 1;
@@ -329,7 +330,7 @@ int16 Executor::te_char_to_lineno (TEPtr te, int16 sel)
 	high = current - 1;
       current = (high + low) / 2;
     }
-  if (CW (line_starts[current]) > sel
+  if (BigEndianValue (line_starts[current]) > sel
       || current == n_lines)
     retval = current - 1;
   else
@@ -384,10 +385,10 @@ calclhtab (TEHandle teh)
       if (ST_ELT_ASCENT (current_style) > LH_ASCENT (lh))
 	LH_ASCENT_X (lh) = ST_ELT_ASCENT_X (current_style);
 
-      if (CW (*linestarts) == TE_LENGTH (teh))
+      if (BigEndianValue (*linestarts) == TE_LENGTH (teh))
 	break;
       
-      if (STYLE_RUN_START_CHAR (current_run + 1) > CW (linestarts[1]))
+      if (STYLE_RUN_START_CHAR (current_run + 1) > BigEndianValue (linestarts[1]))
 	{
 	  if (first_changed == -1
 	      && (   LH_HEIGHT (lh) != orig_height
@@ -397,7 +398,7 @@ calclhtab (TEHandle teh)
 	  lh ++;
 	  clear_lh_p = TRUE;
 	}
-      else if (STYLE_RUN_START_CHAR (current_run + 1) < CW (linestarts[1]))
+      else if (STYLE_RUN_START_CHAR (current_run + 1) < BigEndianValue (linestarts[1]))
 	current_run ++;
       else
 	{
@@ -478,7 +479,7 @@ Executor::ROMlib_caltext (TEHandle te,
       int line_start = LINE_START (line_starts, t);
       int new_line_start = line_start + n_added;
       
-      LINE_START_X (line_starts, t) = CW (new_line_start);
+      LINE_START_X (line_starts, t) = BigEndianValue (new_line_start);
     }
   
   /* starting from the first line, recompute all the end lines.  we
@@ -511,7 +512,7 @@ Executor::ROMlib_caltext (TEHandle te,
 	   been relocated */
 	line_starts  = TE_LINE_STARTS (te);
 	orig_current_line_break = LINE_START (line_starts, current_lineno + 1);
-	LINE_START_X (line_starts, current_lineno + 1) = CW (current_line_break);
+	LINE_START_X (line_starts, current_lineno + 1) = BigEndianValue (current_line_break);
 	
 	if (first_changed == -1
 	    && orig_current_line_break != current_line_break)
@@ -524,7 +525,7 @@ Executor::ROMlib_caltext (TEHandle te,
 	    else
 	      n_lines = current_lineno + 1;
 	    
-	    TE_N_LINES_X (te) = CW (n_lines);
+	    TE_N_LINES_X (te) = BigEndianValue (n_lines);
 	    te_set_line_starts_allocation (te, n_lines);
 	    line_starts  = TE_LINE_STARTS (te);
 	    LINE_START_X (line_starts, n_lines + 1) = CWC (0);
@@ -576,7 +577,7 @@ P1 (PUBLIC pascal trap, void, TECalText, TEHandle, te)
   /* don't do this check because people call this caltext when the TE
      has been frobbed and is in a wacky state */
   /* TE_SLAM (te); */
-  TE_LENGTH_X (te) = CW (GetHandleSize (TE_HTEXT (te)));
+  TE_LENGTH_X (te) = BigEndianValue (GetHandleSize (TE_HTEXT (te)));
   ROMlib_caltext (te, 0, 32767, NULL, NULL);
   TE_SLAM (te);
 }
@@ -631,7 +632,7 @@ Executor::ROMlib_call_TEDoText (TEPtr tp, int16 first, int16 last, int16 what)
 	EM_D3 = (LONGINT) first;
 	EM_D4 = (LONGINT) last;
 	EM_D7 = (LONGINT) what;
-	EM_A0 = (LONGINT) (long) CL ((long) TEDoText);
+	EM_A0 = (LONGINT) (long) BigEndianValue ((long) TEDoText);
 	CALL_EMULATOR (EM_A0);
 	myd0 = EM_D0;
 	EM_D2 = saved2;

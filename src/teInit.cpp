@@ -23,6 +23,7 @@ char ROMlib_rcsid_teInit[] =
 #include "rsys/tesave.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P0 (PUBLIC pascal trap, void, TEInit)
 {
@@ -60,9 +61,9 @@ P2 (PUBLIC pascal trap, TEHandle, TENew, Rect *, dst, Rect *, view)
     (teh,
      destRect, *dst,
      viewRect, *view,
-     lineHeight, CW (CW (finfo.ascent)
-		     + CW (finfo.descent)
-		     + CW (finfo.leading)),
+     lineHeight, BigEndianValue (BigEndianValue (finfo.ascent)
+		     + BigEndianValue (finfo.descent)
+		     + BigEndianValue (finfo.leading)),
      fontAscent, finfo.ascent,
      active, FALSE,
      caretState, CWC (caret_invis),

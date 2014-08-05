@@ -47,11 +47,11 @@ splash_screen_display (boolean_t button_p, char *basename)
   
   header = *(struct splash_screen_header *) ROMlib_splashp->chars;
 
-  bpp = CL (header.bpp);
-  log2_bpp = CL (header.log2_bpp);
+  bpp = BigEndianValue (header.bpp);
+  log2_bpp = BigEndianValue (header.log2_bpp);
   
-  memcpy (color_buf, ROMlib_splashp->chars + CL (header.color_offset),
-	  CL (header.color_count) * sizeof *color_buf);
+  memcpy (color_buf, ROMlib_splashp->chars + BigEndianValue (header.color_offset),
+	  BigEndianValue (header.color_count) * sizeof *color_buf);
 
   bg_pixel = ((bpp == vdriver_bpp)
 	      ? header.bg_pixel
@@ -71,7 +71,7 @@ splash_screen_display (boolean_t button_p, char *basename)
     }
 
   if (vdriver_bpp == bpp)
-    vdriver_set_colors (0, CL (header.color_count), (ColorSpec *) color_buf);
+    vdriver_set_colors (0, BigEndianValue (header.color_count), (ColorSpec *) color_buf);
   
   splash_top  = (vdriver_height - SPLASH_SCREEN_HEIGHT) / 2;
   splash_left = (vdriver_width - SPLASH_SCREEN_WIDTH) / 2;
@@ -90,14 +90,14 @@ splash_screen_display (boolean_t button_p, char *basename)
 
 #define ROWS_PER_PASS 32
 
-    p = (char *) ROMlib_splashp->chars + CL (header.splash_bits_offset);
+    p = (char *) ROMlib_splashp->chars + BigEndianValue (header.splash_bits_offset);
 
     splash_row_bytes = SPLASH_SCREEN_WIDTH >> (3 - log2_bpp);
     tmp_buf = alloca (vdriver_row_bytes * ROWS_PER_PASS);
 
     /* Set up phony bitmap for screen. */
     screen_bitmap.baseAddr = (Ptr) RM (vdriver_fbuf);
-    screen_bitmap.rowBytes = CW (vdriver_row_bytes);
+    screen_bitmap.rowBytes = BigEndianValue (vdriver_row_bytes);
     SetRect (&screen_bitmap.bounds, 0, 0, vdriver_width, ROWS_PER_PASS);
 
     src_origin.h = src_origin.v = CWC (0);
@@ -117,7 +117,7 @@ splash_screen_display (boolean_t button_p, char *basename)
       {
 	/* Set up phony bitmap to clear screen. */
 	blank_bitmap.baseAddr = (Ptr) RM (tmp_buf);
-	blank_bitmap.rowBytes = CW (vdriver_row_bytes);
+	blank_bitmap.rowBytes = BigEndianValue (vdriver_row_bytes);
 	SetRect (&blank_bitmap.bounds, 0, 0, vdriver_width, ROWS_PER_PASS);
 	memset (tmp_buf, bg_pixel, vdriver_row_bytes * ROWS_PER_PASS);
 
@@ -126,7 +126,7 @@ splash_screen_display (boolean_t button_p, char *basename)
 	    int num_rows;
 	    
 	    num_rows = MIN (ROWS_PER_PASS, vdriver_height - i);
-	    (RGN_BBOX (row_rgn)).bottom = CW (num_rows);
+	    (RGN_BBOX (row_rgn)).bottom = BigEndianValue (num_rows);
 	    srcblt_rgn (row_rgn, srcCopy, vdriver_log2_bpp,
 			&blank_bitmap, &screen_bitmap,
 			&src_origin, &dst_origin, ~0, 0);
@@ -144,13 +144,13 @@ splash_screen_display (boolean_t button_p, char *basename)
 
     /* Set up phony bitmap for src row. */
     src_row_bitmap.baseAddr = (Ptr) RM (tmp_buf);
-    src_row_bitmap.rowBytes = CW (SPLASH_SCREEN_WIDTH
+    src_row_bitmap.rowBytes = BigEndianValue (SPLASH_SCREEN_WIDTH
 				  >> (3 - vdriver_log2_bpp));
     SetRect (&src_row_bitmap.bounds, 0, 0, SPLASH_SCREEN_WIDTH, ROWS_PER_PASS);
     RGN_BBOX (row_rgn) = src_row_bitmap.bounds;
 
     SWAPPED_OPW (screen_bitmap.bounds.left, -, splash_left);
-    screen_bitmap.bounds.top = CW (-splash_top);
+    screen_bitmap.bounds.top = BigEndianValue (-splash_top);
     screen_bitmap.baseAddr = (Ptr) RM (vdriver_fbuf);
 
     /* Actually read and display the splash screen bits. */
@@ -159,7 +159,7 @@ splash_screen_display (boolean_t button_p, char *basename)
 	int num_rows;
 
 	num_rows = MIN (ROWS_PER_PASS, SPLASH_SCREEN_HEIGHT - i);
-	(RGN_BBOX (row_rgn)).bottom = CW (num_rows);
+	(RGN_BBOX (row_rgn)).bottom = BigEndianValue (num_rows);
 
 	memcpy (tmp_buf, p, splash_row_bytes * num_rows);
 	p += splash_row_bytes * num_rows;

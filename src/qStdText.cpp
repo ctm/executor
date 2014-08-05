@@ -24,6 +24,7 @@ char ROMlib_rcsid_qStdText[] =
 #include "rsys/safe_alloca.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #undef ALLOCABEGIN
 
@@ -58,20 +59,20 @@ A5(PRIVATE, void, charblit, BitMap *, fbmp, BitMap *, tbmp,	/* INTERNAL */
 /*-->*/ return;
 /* Find the first column of pixels to be copied. */
 
-    firstfrom = CW(srect->left) - CW(fbmp->bounds.left);
+    firstfrom = BigEndianValue(srect->left) - BigEndianValue(fbmp->bounds.left);
 
 /* Find the last column of pixels to be copied. */
 
-    lastfrom = CW(srect->right) - CW(fbmp->bounds.left);
+    lastfrom = BigEndianValue(srect->right) - BigEndianValue(fbmp->bounds.left);
 
 /* Find the first column pixels are to be copied to. */
 
-    firstto = CW(drect->left) - CW(tbmp->bounds.left);
+    firstto = BigEndianValue(drect->left) - BigEndianValue(tbmp->bounds.left);
 
 /* Find the last column pixels are to be copied to. */
 
-    lastto = CW(drect->right) - CW(tbmp->bounds.left);
-    numrows = CW(srect->bottom) - CW(srect->top);
+    lastto = BigEndianValue(drect->right) - BigEndianValue(tbmp->bounds.left);
+    numrows = BigEndianValue(srect->bottom) - BigEndianValue(srect->top);
 /* 
  * If it is to be put into italics, start with the characters
  * shifted over and shift them back one pixel at a time later.
@@ -90,10 +91,10 @@ A5(PRIVATE, void, charblit, BitMap *, fbmp, BitMap *, tbmp,	/* INTERNAL */
  */
     firstfromword = (unsigned short *)
 		    (MR(fbmp->baseAddr) + BITMAP_ROWBYTES (fbmp) *
-		(CW(srect->top) - CW(fbmp->bounds.top) - 1)) + firstfrom / 16;
+		(BigEndianValue(srect->top) - BigEndianValue(fbmp->bounds.top) - 1)) + firstfrom / 16;
 
     firsttoword = (unsigned short *) (MR(tbmp->baseAddr) + BITMAP_ROWBYTES (tbmp) *
-		   (CW(drect->top) - CW(tbmp->bounds.top) - 1)) + firstto / 16;
+		   (BigEndianValue(drect->top) - BigEndianValue(tbmp->bounds.top) - 1)) + firstto / 16;
 /*
  * Calculate the number of words to be taken from one bitmap and the
  * number to be put to the other minus one.  The minus one is because
@@ -150,18 +151,18 @@ A5(PRIVATE, void, charblit, BitMap *, fbmp, BitMap *, tbmp,	/* INTERNAL */
 	    nextfromword = firstfromword += numfromwords;		\
 	    nexttoword = firsttoword += numtowords;			\
 /* Read the first two words and mask off the unused bits */		\
-	    nextlong = (((ULONGINT) CW(*nextfromword) << 16) +	\
-				CW(*(nextfromword + 1))) & firstmask;	\
+	    nextlong = (((ULONGINT) BigEndianValue(*nextfromword) << 16) +	\
+				BigEndianValue(*(nextfromword + 1))) & firstmask;	\
 	    nextfromword += 2;						\
 	    for ( j = wordstodo ; --j >= 0 ; ) {			\
 /* Write the next word, calculated by taking the appropriate		\
  * 16 bits from a LONGINT. */						\
-		*nexttoword++ |= CW(nextlong >> shiftsize);		\
+		*nexttoword++ |= BigEndianValue(nextlong >> shiftsize);		\
 /* Prepare the LONGINT for the next pass. */				\
-		nextlong = (nextlong << 16) + CW(*nextfromword++);	\
+		nextlong = (nextlong << 16) + BigEndianValue(*nextfromword++);	\
 	    }								\
 /* Write the last word with the appropriate bits masked out. */		\
-	    *nexttoword |= CW((nextlong & lastmask) >> shiftsize);	\
+	    *nexttoword |= BigEndianValue((nextlong & lastmask) >> shiftsize);	\
 	}
 
 
@@ -277,10 +278,10 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
   PAUSEDECL;
 
   p = (unsigned char *) textbufp;
-  num.h = CW (nump->h);
-  num.v = CW (nump->v);
-  den.h = CW (denp->h);
-  den.v = CW (denp->v);
+  num.h = BigEndianValue (nump->h);
+  num.v = BigEndianValue (nump->v);
+  den.h = BigEndianValue (denp->h);
+  den.v = BigEndianValue (denp->v);
   retval = 0;
   if (action == text_helper_measure)
     {
@@ -309,11 +310,11 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
 	  Point swapped_num;
 	  Point swapped_den;
 
-	  swapped_num.h = CW (num.h);
-	  swapped_num.v = CW (num.v);
-	  swapped_den.h = CW (den.h);
-	  swapped_den.v = CW (den.v);
-	  PORT_PEN_LOC (thePort).h = CW (CW (PORT_PEN_LOC (thePort).h)
+	  swapped_num.h = BigEndianValue (num.h);
+	  swapped_num.v = BigEndianValue (num.v);
+	  swapped_den.h = BigEndianValue (den.h);
+	  swapped_den.v = BigEndianValue (den.v);
+	  PORT_PEN_LOC (thePort).h = BigEndianValue (BigEndianValue (PORT_PEN_LOC (thePort).h)
 					 + (CALLTXMEAS (n, textbufp,
 							&swapped_num,
 							&swapped_den, 0)));
@@ -326,31 +327,31 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
   fmi.size     = PORT_TX_SIZE_X (thePort);
   fmi.face     = PORT_TX_FACE_X (thePort);
   fmi.device   = PORT_DEVICE_X (thePort);
-  fmi.numer.h  = CW(num.h);
-  fmi.numer.v  = CW(num.v);
-  fmi.denom.h  = CW(den.h);
-  fmi.denom.v  = CW(den.v);
+  fmi.numer.h  = BigEndianValue(num.h);
+  fmi.numer.v  = BigEndianValue(num.v);
+  fmi.denom.h  = BigEndianValue(den.h);
+  fmi.denom.v  = BigEndianValue(den.v);
   fmop = FMSwapFont(&fmi);
 
   if (action == text_helper_measure)
     {
       if (fmop->numer.h && fmop->denom.h)
-	nump->h = CW((LONGINT) Cx(fmop->numer.h) << 8 / Cx(fmop->denom.h));
+	nump->h = BigEndianValue((LONGINT) Cx(fmop->numer.h) << 8 / Cx(fmop->denom.h));
       else
 	nump->h = fmop->numer.h;
 
       if (fmop->numer.v && fmop->denom.h)
-	nump->v = CW((LONGINT) Cx(fmop->numer.v) << 8 / Cx(fmop->denom.h));
+	nump->v = BigEndianValue((LONGINT) Cx(fmop->numer.v) << 8 / Cx(fmop->denom.h));
       else
 	nump->v = fmop->numer.v;
       denp->h = WIDTHPTR->hFactor;
       denp->v = WIDTHPTR->hFactor;
       if (finfop)
 	{
-	  finfop->ascent  = CW((unsigned short) CB(fmop->ascent));
-	  finfop->descent = CW((unsigned short) CB(fmop->descent));
-	  finfop->widMax  = CW((unsigned short) CB(fmop->widMax));
-	  finfop->leading = CW((unsigned short) CB(fmop->leading));
+	  finfop->ascent  = BigEndianValue((unsigned short) CB(fmop->ascent));
+	  finfop->descent = BigEndianValue((unsigned short) CB(fmop->descent));
+	  finfop->widMax  = BigEndianValue((unsigned short) CB(fmop->widMax));
+	  finfop->leading = BigEndianValue((unsigned short) CB(fmop->leading));
 	}
     }
 
@@ -368,9 +369,9 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
   HLock(MR(fmop->fontHandle));
   fp = (FontRec *) STARH(MR(fmop->fontHandle));
   fmap.baseAddr = RM((Ptr) (&fp->rowWords + 1));
-  fmap.rowBytes = CW(CW(fp->rowWords) * 2);
+  fmap.rowBytes = BigEndianValue(BigEndianValue(fp->rowWords) * 2);
   fmap.bounds.left = fmap.bounds.top = 0;
-  fmap.bounds.right = CW(CW(fp->rowWords) * 16);
+  fmap.bounds.right = BigEndianValue(BigEndianValue(fp->rowWords) * 16);
   fmap.bounds.bottom = fp->fRectHeight;
   srect.top = misrect.top = 0;
   srect.bottom = misrect.bottom = fp->fRectHeight;
@@ -381,26 +382,26 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
   misrect.left = *(locp + Cx(fp->lastChar) - Cx(fp->firstChar) + 1);
   misrect.right = *(locp + Cx(fp->lastChar) - Cx(fp->firstChar) + 2);
   drect.left = PORT_PEN_LOC (thePort).h;
-  drect.top = CW(CW (PORT_PEN_LOC (thePort).v) - CW(fp->ascent));
-  drect.bottom = CW(CW(drect.top) + Cx(fp->fRectHeight));
+  drect.top = BigEndianValue(BigEndianValue (PORT_PEN_LOC (thePort).v) - BigEndianValue(fp->ascent));
+  drect.bottom = BigEndianValue(BigEndianValue(drect.top) + Cx(fp->fRectHeight));
 
   hOutput = Cx(WIDTHPTR->hOutput);
   vOutput = Cx(WIDTHPTR->vOutput);
   hOutputInverse = FixRatio (1 << 8, hOutput);
 
   space_extra = PORT_SP_EXTRA (thePort);
-  spacewidth = (CL (WIDTHPTR->tabData[' ']) + space_extra
-		- CL (WIDTHPTR->sExtra));
+  spacewidth = (BigEndianValue (WIDTHPTR->tabData[' ']) + space_extra
+		- BigEndianValue (WIDTHPTR->sExtra));
 
   if (action == text_helper_draw)
     {
       Point swapped_num;
       Point swapped_den;
     
-      swapped_num.h = CW (num.h);
-      swapped_num.v = CW (num.v);
-      swapped_den.h = CW (den.h);
-      swapped_den.v = CW (den.v);
+      swapped_num.h = BigEndianValue (num.h);
+      swapped_num.v = BigEndianValue (num.v);
+      swapped_den.h = BigEndianValue (den.h);
+      swapped_den.v = BigEndianValue (den.v);
 
       strwidth = text_helper (n, textbufp, &swapped_num, &swapped_den, 0, 0,
 			       text_helper_measure);
@@ -425,30 +426,30 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
       if (strwidth <= 0)
 /*-->*/	return 0;
 
-      stylemap.rowBytes = CW((strwidth - Cx(fp->kernMax) + leftitalicoffset +
+      stylemap.rowBytes = BigEndianValue((strwidth - Cx(fp->kernMax) + leftitalicoffset +
 			      rightitalicoffset + 31)/32 *  4);
-      stylemap.bounds.top    = CW (CW (PORT_PEN_LOC (thePort).v)
+      stylemap.bounds.top    = BigEndianValue (BigEndianValue (PORT_PEN_LOC (thePort).v)
 				   - CB(fmop->ascent));
 #if 0
-      stylemap.bounds.bottom = CW (CW (PORT_PEN_LOC (thePort).v)
+      stylemap.bounds.bottom = BigEndianValue (BigEndianValue (PORT_PEN_LOC (thePort).v)
 				   + descent);
 #else
       {
 	int height;
 
 	height = MAX (CB(fmop->ascent) + descent, Cx (fp->fRectHeight));
-	stylemap.bounds.bottom = CW (CW (PORT_PEN_LOC (thePort).v)
+	stylemap.bounds.bottom = BigEndianValue (BigEndianValue (PORT_PEN_LOC (thePort).v)
 				   - CB(fmop->ascent) + height);
       }
 #endif
-      stylemap.bounds.left   = CW (CW (PORT_PEN_LOC (thePort).h)
+      stylemap.bounds.left   = BigEndianValue (BigEndianValue (PORT_PEN_LOC (thePort).h)
 				   + Cx(fp->kernMax) - leftitalicoffset);
-      stylemap.bounds.right  = CW(CW(PORT_PEN_LOC (thePort).h)
+      stylemap.bounds.right  = BigEndianValue(BigEndianValue(PORT_PEN_LOC (thePort).h)
 				  + strwidth + rightitalicoffset);
       if (fmop->shadow)
-	stylemap.bounds.left = CW(CW(stylemap.bounds.left) - 1);
-      nbytes = ((CW(stylemap.bounds.bottom) - CW(stylemap.bounds.top)) *
-		CW(stylemap.rowBytes));
+	stylemap.bounds.left = BigEndianValue(BigEndianValue(stylemap.bounds.left) - 1);
+      nbytes = ((BigEndianValue(stylemap.bounds.bottom) - BigEndianValue(stylemap.bounds.top)) *
+		BigEndianValue(stylemap.rowBytes));
       stylemap.baseAddr = RM((Ptr) ALLOCA(nbytes));
       memset(MR(stylemap.baseAddr), 0, nbytes);
       bmp = &stylemap;
@@ -472,30 +473,30 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
   
   first = Cx(fp->firstChar);
   max   = Cx(fp->lastChar) - Cx(fp->firstChar);
-  misintwidth = CW(misrect.right) - CW(misrect.left);
+  misintwidth = BigEndianValue(misrect.right) - BigEndianValue(misrect.left);
   misfixwidth = FIXED(misintwidth);
-  left    = FIXED(CW(PORT_PEN_LOC (thePort).h)) + FIXEDONEHALF;
+  left    = FIXED(BigEndianValue(PORT_PEN_LOC (thePort).h)) + FIXEDONEHALF;
   left_begin = left;
   widths  = WIDTHPTR->tabData;
   kernmax = Cx(fp->kernMax);
   leftmost = left >> 16;
-  WIDTHPTR->tabData[' '] = CL (spacewidth);
-  WIDTHPTR->sExtra = CL (space_extra);
+  WIDTHPTR->tabData[' '] = BigEndianValue (spacewidth);
+  WIDTHPTR->sExtra = BigEndianValue (space_extra);
   if (action == text_helper_draw)
     ASSERT_SAFE(MR(stylemap.baseAddr));
   for (ep = p + n; p != ep; p++)
     {
       if (charlocp)
-	*charlocp++ = CW ((left - left_begin + 0xffff) >> 16);
+	*charlocp++ = BigEndianValue ((left - left_begin + 0xffff) >> 16);
       c = *p;
-      width = CL(widths[c]);
+      width = BigEndianValue(widths[c]);
       if ((c -= Cx(fp->firstChar)) < 0 || c > max
-	  || (wid = CW(widp[c])) == -1)
+	  || (wid = BigEndianValue(widp[c])) == -1)
 	{
-	  drect.left  = CW(left >> 16);
-	  if (CW(drect.left) < leftmost)
-	    leftmost = CW(drect.left);
-	  drect.right = CW(CW(drect.left) + misintwidth);
+	  drect.left  = BigEndianValue(left >> 16);
+	  if (BigEndianValue(drect.left) < leftmost)
+	    leftmost = BigEndianValue(drect.left);
+	  drect.right = BigEndianValue(BigEndianValue(drect.left) + misintwidth);
 	  if (action == text_helper_draw)
 	    {
 	      charblit(&fmap, bmp, &misrect, &drect, TRUE);
@@ -510,11 +511,11 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
 	{
 	  srect.left  = locp[c];
 	  srect.right = locp[c+1];
-	  drect.left  = CW(left >> 16);
-	  drect.left = CW(CW(drect.left) + (offset = (wid >> 8) + kernmax));
-	  if (CW(drect.left) < leftmost)
-	    leftmost = CW(drect.left);
-	  drect.right = CW(CW(drect.left) + CW(srect.right) - CW(srect.left));
+	  drect.left  = BigEndianValue(left >> 16);
+	  drect.left = BigEndianValue(BigEndianValue(drect.left) + (offset = (wid >> 8) + kernmax));
+	  if (BigEndianValue(drect.left) < leftmost)
+	    leftmost = BigEndianValue(drect.left);
+	  drect.right = BigEndianValue(BigEndianValue(drect.left) + BigEndianValue(srect.right) - BigEndianValue(srect.left));
 	  if (action == text_helper_draw)
 	    {
 	      charblit(&fmap, bmp, &srect, &drect, TRUE);
@@ -532,7 +533,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
 	}
     }
   if (charlocp)
-    *charlocp = CW ((left - left_begin + 0xffff) >> 16);
+    *charlocp = BigEndianValue ((left - left_begin + 0xffff) >> 16);
   if (action == text_helper_measure)
     {
       retval = (left - left_begin + 0xFFFF) >> 16;
@@ -540,7 +541,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
   else
     {
       ASSERT_SAFE(MR(stylemap.baseAddr));
-      stylemap.bounds.right = CW((left >> 16) + rightitalicoffset); 
+      stylemap.bounds.right = BigEndianValue((left >> 16) + rightitalicoffset); 
       if (PORT_TX_FACE (thePort) & (int) bold)
 	{
 	  stylemap2 = stylemap;
@@ -557,8 +558,8 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
 	  for (i = 0; i++ < Cx(fmop->bold);)
 	    {
-	      drect.left = CW(CW(drect.left) + 1);
-	      srect.right = CW(CW(srect.right) - 1);
+	      drect.left = BigEndianValue(BigEndianValue(drect.left) + 1);
+	      srect.right = BigEndianValue(BigEndianValue(srect.right) - 1);
 	      charblit(&stylemap2, bmp, &srect, &drect, FALSE);
 	      ASSERT_SAFE(MR(stylemap.baseAddr));
 	    }
@@ -614,22 +615,22 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
 	  srect = stylemap.bounds;
 	  drect = srect;
 
-	  srect.left = CW(CW(srect.left) + 1);
-	  drect.right = CW(CW(drect.right) - 1);
+	  srect.left = BigEndianValue(BigEndianValue(srect.left) + 1);
+	  drect.right = BigEndianValue(BigEndianValue(drect.right) - 1);
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
 	  charblit(&stylemap2, &stylemap3, &srect, &drect, FALSE);
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
-	  srect.left = CW(CW(srect.left) - 1); /* restore */
-	  drect.right = CW(CW(drect.right) + 1);
+	  srect.left = BigEndianValue(BigEndianValue(srect.left) - 1); /* restore */
+	  drect.right = BigEndianValue(BigEndianValue(drect.right) + 1);
 	  for (i = 0; i++ < Cx(fmop->shadow); )
 	    {
-	      drect.left = CW(CW(drect.left) + 1);
-	      srect.right = CW(CW(srect.right) - 1);
+	      drect.left = BigEndianValue(BigEndianValue(drect.left) + 1);
+	      srect.right = BigEndianValue(BigEndianValue(srect.right) - 1);
 	      charblit(&stylemap2, &stylemap3, &srect, &drect, FALSE);
 	    }
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
-	  drect.left  = CW(CW(drect.left)  - Cx(fmop->shadow));	/* restore */
-	  srect.right = CW(CW(srect.right) + Cx(fmop->shadow));
+	  drect.left  = BigEndianValue(BigEndianValue(drect.left)  - Cx(fmop->shadow));	/* restore */
+	  srect.right = BigEndianValue(BigEndianValue(srect.right) + Cx(fmop->shadow));
 
 #if 0
 	  BlockMove(MR(stylemap3.baseAddr), MR(bmp->baseAddr), (Size) nbytes);
@@ -637,40 +638,40 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
 	  memcpy(MR(bmp->baseAddr), MR(stylemap3.baseAddr), (Size) nbytes);
 #endif
 
-	  srect.top = CW(CW(srect.top) + 1);
-	  drect.bottom = CW(CW(drect.bottom) - 1);
+	  srect.top = BigEndianValue(BigEndianValue(srect.top) + 1);
+	  drect.bottom = BigEndianValue(BigEndianValue(drect.bottom) - 1);
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
 	  charblit(&stylemap3, bmp, &srect, &drect, FALSE);
-	  srect.top = CW(CW(srect.top) - 1); /* restore */
-	  drect.bottom = CW(CW(drect.bottom) + 1);
+	  srect.top = BigEndianValue(BigEndianValue(srect.top) - 1); /* restore */
+	  drect.bottom = BigEndianValue(BigEndianValue(drect.bottom) + 1);
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
 	  for (i = 0; i++ < Cx(fmop->shadow); )
 	    {
-	      drect.top = CW(CW(drect.top) + 1);
-	      srect.bottom = CW(CW(srect.bottom) - 1);
+	      drect.top = BigEndianValue(BigEndianValue(drect.top) + 1);
+	      srect.bottom = BigEndianValue(BigEndianValue(srect.bottom) - 1);
 	      charblit(&stylemap3, bmp, &srect, &drect, FALSE);
 	    }
-	  drect.top  = CW(CW(drect.top) - Cx(fmop->shadow)); /* restore */
-	  srect.bottom = CW(CW(srect.bottom) + Cx(fmop->shadow));
+	  drect.top  = BigEndianValue(BigEndianValue(drect.top) - Cx(fmop->shadow)); /* restore */
+	  srect.bottom = BigEndianValue(BigEndianValue(srect.bottom) + Cx(fmop->shadow));
 
 	  ASSERT_SAFE(MR(stylemap3.baseAddr));
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
 	}
       
-      drect.top    = CW(CW(bmp->bounds.top)
+      drect.top    = BigEndianValue(BigEndianValue(bmp->bounds.top)
 			- (FixMul((LONGINT) CB(fmop->ascent) << 16,
 				  (Fixed) (vOutput - 256) << 8) >> 16));
-      drect.left   = CW(leftmost);
-      drect.bottom = CW(CW(drect.top)
-			+ (FixMul((LONGINT) (CW(bmp->bounds.bottom)
-					     - CW(bmp->bounds.top)) << 16,
+      drect.left   = BigEndianValue(leftmost);
+      drect.bottom = BigEndianValue(BigEndianValue(drect.top)
+			+ (FixMul((LONGINT) (BigEndianValue(bmp->bounds.bottom)
+					     - BigEndianValue(bmp->bounds.top)) << 16,
 				  (Fixed) vOutput << 8) >> 16));
-      drect.right  = CW(leftmost +
-			(FixMul((LONGINT) (CW(bmp->bounds.right)
+      drect.right  = BigEndianValue(leftmost +
+			(FixMul((LONGINT) (BigEndianValue(bmp->bounds.right)
 					   - leftmost) << 16,
 				(Fixed) hOutput << 8) >> 16));
       srect = bmp->bounds;
-      srect.left = CW(leftmost);
+      srect.left = BigEndianValue(leftmost);
       ASSERT_SAFE(MR(stylemap.baseAddr));
       StdBits(bmp, &srect, &drect, PORT_TX_MODE (thePort) & 0x37, (RgnHandle)0);
       ASSERT_SAFE(MR(stylemap.baseAddr));
@@ -682,7 +683,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
 	  ASSERT_SAFE (MR (stylemap2.baseAddr));
 	}
       
-      PORT_PEN_LOC (thePort).h = CW(CW(drect.right) - 
+      PORT_PEN_LOC (thePort).h = BigEndianValue(BigEndianValue(drect.right) - 
 				    (FixMul((LONGINT) rightitalicoffset << 16,
 					    (Fixed) hOutput << 8) >> 16));
       ASSERT_SAFE(MR(stylemap.baseAddr));
@@ -720,10 +721,10 @@ P4(PUBLIC pascal trap, void, StdText, INTEGER, n, Ptr, textbufp,
       Point swapped_num;
       Point swapped_den;
   
-      swapped_num.h = CW (num.h);
-      swapped_num.v = CW (num.v);
-      swapped_den.h = CW (den.h);
-      swapped_den.v = CW (den.v);
+      swapped_num.h = BigEndianValue (num.h);
+      swapped_num.v = BigEndianValue (num.v);
+      swapped_den.h = BigEndianValue (den.h);
+      swapped_den.v = BigEndianValue (den.v);
       text_helper (n, textbufp, &swapped_num, &swapped_den, 0, 0,
 		   text_helper_draw);
     }

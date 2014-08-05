@@ -17,6 +17,7 @@ char ROMlib_rcsid_AE_hdlr[] =
 #include "rsys/mman.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #define hdlr_table(system_p, class)					      \
   ({									      \
@@ -130,14 +131,14 @@ hdlr_table_elt (AE_hdlr_table_h table,
     {
       n_elts ++;
       
-      AE_TABLE_N_ELTS_X (table) = CL (n_elts);
+      AE_TABLE_N_ELTS_X (table) = BigEndianValue (n_elts);
       
       SetHandleSize ((Handle) table,
 		     (sizeof (AE_hdlr_table_t)
 		      + n_elts * sizeof (AE_hdlr_table_elt_t)));
       
       if (MemErr != CWC (noErr))
-	AE_RETURN_ERROR (CW (MemErr));
+	AE_RETURN_ERROR (BigEndianValue (MemErr));
       
       elts = AE_TABLE_ELTS (table);
       elt = &elts[n_elts - 1];
@@ -170,7 +171,7 @@ P5 (PUBLIC pascal trap, OSErr, _AE_hdlr_table_alloc,
      first argument */
   table = (AE_hdlr_table_h) NewHandleClear (52);
   if (MemErr != CWC (noErr))
-    AE_RETURN_ERROR (CW (MemErr));
+    AE_RETURN_ERROR (BigEndianValue (MemErr));
   
   AE_TABLE_N_ALLOCATED_BYTES_X (table) = CLC (52);
   AE_TABLE_N_ELTS_X (table) = CLC (0);
@@ -200,7 +201,7 @@ P3 (PUBLIC pascal trap, OSErr, _AE_hdlr_delete,
   memmove (&elts[elt_offset + 1], &elts[elt_offset],
 	   (n_elts - elt_offset - 1) * sizeof *elts);
   
-  AE_TABLE_N_ELTS_X (table) = CL (n_elts - 1);
+  AE_TABLE_N_ELTS_X (table) = BigEndianValue (n_elts - 1);
   
   AE_RETURN_ERROR (noErr);
 }
@@ -257,11 +258,11 @@ P5 (PUBLIC pascal trap, OSErr, AEInstallEventHandler,
   
   table = hdlr_table (system_handler_p, event);
   
-  selector.sel0 = CL (event_class);
-  selector.sel1 = CL (event_id);
+  selector.sel0 = BigEndianValue (event_class);
+  selector.sel1 = BigEndianValue (event_id);
 
   hdlr.fn = RM (hdlr_fn);
-  hdlr.refcon = CL (refcon);
+  hdlr.refcon = BigEndianValue (refcon);
   
   err = hdlr_table_elt (table, &selector, &hdlr, TRUE, &elt);
   if (err != noErr)
@@ -306,8 +307,8 @@ P5 (PUBLIC pascal trap, OSErr, AEGetEventHandler,
   
   table = hdlr_table (system_handler_p, event);
   
-  selector.sel0 = CL (event_class);
-  selector.sel1 = CL (event_id);
+  selector.sel0 = BigEndianValue (event_class);
+  selector.sel1 = BigEndianValue (event_id);
   
   err = hdlr_table_elt (table, &selector, NULL, FALSE, &elt);
   if (err != noErr)
@@ -360,11 +361,11 @@ P6 (PUBLIC pascal trap, OSErr, AEInstallCoercionHandler,
   
   table = hdlr_table (system_handler_p, coercion);
   
-  selector.sel0 = CL (from_type);
-  selector.sel1 = CL (to_type);
+  selector.sel0 = BigEndianValue (from_type);
+  selector.sel1 = BigEndianValue (to_type);
   
   hdlr.fn = RM (hdlr_fn);
-  hdlr.refcon = CL (refcon);
+  hdlr.refcon = BigEndianValue (refcon);
   
   err = hdlr_table_elt (table, &selector, &hdlr, TRUE, &elt);
   if (err != noErr)
@@ -391,8 +392,8 @@ P6 (PUBLIC pascal trap, OSErr, AEGetCoercionHandler,
   
   table = hdlr_table (system_handler_p, coercion);
   
-  selector.sel0 = CL (from_type);
-  selector.sel1 = CL (to_type);
+  selector.sel0 = BigEndianValue (from_type);
+  selector.sel1 = BigEndianValue (to_type);
   
   err = hdlr_table_elt (table, &selector, NULL, FALSE, &elt);
   if (err != noErr)
@@ -451,11 +452,11 @@ P3 (PUBLIC pascal trap, OSErr, AEInstallSpecialHandler,
   
   table = hdlr_table (system_handler_p, special);
   
-  selector.sel0 = CL (function_class);
-  selector.sel1 = CL (k_special_sel1);
+  selector.sel0 = BigEndianValue (function_class);
+  selector.sel1 = BigEndianValue (k_special_sel1);
   
   hdlr.fn = RM (hdlr_fn);
-  hdlr.refcon = CL (-1);
+  hdlr.refcon = BigEndianValue (-1);
   
   err = hdlr_table_elt (table, &selector, &hdlr, TRUE, &elt);
   if (err != noErr)
@@ -478,8 +479,8 @@ P3 (PUBLIC pascal trap, OSErr, AEGetSpecialHandler,
   
   table = hdlr_table (system_handler_p, special);
   
-  selector.sel0 = CL (function_class);
-  selector.sel1 = CL (k_special_sel1);
+  selector.sel0 = BigEndianValue (function_class);
+  selector.sel1 = BigEndianValue (k_special_sel1);
   
   err = hdlr_table_elt (table, &selector, NULL, FALSE, &elt);
   if (err != noErr)
@@ -500,8 +501,8 @@ P3 (PUBLIC pascal trap, OSErr, AERemoveSpecialHandler,
   
   table = hdlr_table (system_handler_p, special);
   
-  selector.sel0 = CL (function_class);
-  selector.sel1 = CL (k_special_sel1);
+  selector.sel0 = BigEndianValue (function_class);
+  selector.sel1 = BigEndianValue (k_special_sel1);
   
   /* #### fail if `hdlr' is not the currently installed handler? */
   AE_RETURN_ERROR (_AE_hdlr_delete (table, 0, &selector));

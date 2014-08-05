@@ -22,6 +22,7 @@ char ROMlib_rcsid_qGrafport[] =
 #include "rsys/picture.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P1(PUBLIC pascal trap, void, InitGraf, Ptr, gp)
 {
@@ -35,7 +36,7 @@ P1(PUBLIC pascal trap, void, InitGraf, Ptr, gp)
 
   /* screenBitsX flag bits must not be set */
   screenBitsX.baseAddr = PIXMAP_BASEADDR_X (main_gd_pixmap);
-  screenBitsX.rowBytes = CW (PIXMAP_ROWBYTES (main_gd_pixmap) /
+  screenBitsX.rowBytes = BigEndianValue (PIXMAP_ROWBYTES (main_gd_pixmap) /
 			     PIXMAP_PIXEL_SIZE (main_gd_pixmap));
   screenBitsX.bounds = PIXMAP_BOUNDS (main_gd_pixmap);
   
@@ -67,7 +68,7 @@ P1(PUBLIC pascal trap, void, InitGraf, Ptr, gp)
        arrowX.hotSpot.h = arrowX.hotSpot.v = CWC(1);
        CrsrState = 0;
     
-       RndSeed = CL (TickCount ());
+       RndSeed = BigEndianValue (TickCount ());
        ScrVRes = ScrHRes = CWC(72);
        ScreenRow = screenBitsX.rowBytes;
        randSeedX = CLC (1);
@@ -186,8 +187,8 @@ P1(PUBLIC pascal trap, void, SetPortBits, BitMap *, bm)
 
 P2(PUBLIC pascal trap, void, PortSize, INTEGER, w, INTEGER, h)
 {
-    PORT_RECT (thePort).bottom = CW (CW (PORT_RECT (thePort).top) + h);
-    PORT_RECT (thePort).right  = CW (CW (PORT_RECT (thePort).left) + w);
+    PORT_RECT (thePort).bottom = BigEndianValue (BigEndianValue (PORT_RECT (thePort).top) + h);
+    PORT_RECT (thePort).right  = BigEndianValue (BigEndianValue (PORT_RECT (thePort).left) + w);
 }
 
 P2 (PUBLIC pascal trap, void, MovePortTo, INTEGER, lg, INTEGER, tg)
@@ -199,8 +200,8 @@ P2 (PUBLIC pascal trap, void, MovePortTo, INTEGER, lg, INTEGER, tg)
   current_port = thePort;
   port_bounds = &PORT_BOUNDS (current_port);
   port_rect = &PORT_RECT (current_port);
-  lg = CW (port_rect->left) - lg;
-  tg = CW (port_rect->top) - tg;
+  lg = BigEndianValue (port_rect->left) - lg;
+  tg = BigEndianValue (port_rect->top) - tg;
   w  = RECT_WIDTH (port_bounds);
   h  = RECT_HEIGHT (port_bounds);
   SetRect (port_bounds, lg, tg, lg + w, tg + h);
@@ -219,9 +220,9 @@ P2 (PUBLIC pascal trap, void, SetOrigin, INTEGER, h, INTEGER, v)
       
       PICOP (OP_Origin);
       
-      swappeddh = CW(dh);
+      swappeddh = BigEndianValue(dh);
       PICWRITE (&swappeddh, sizeof swappeddh);
-      swappeddv = CW(dv);
+      swappeddv = BigEndianValue(dv);
       PICWRITE (&swappeddv, sizeof swappeddv);
     });
   OffsetRect (&PORT_BOUNDS (thePort),   dh, dv);

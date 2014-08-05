@@ -21,6 +21,7 @@ char ROMlib_rcsid_resMod[] =
 
 
 using namespace Executor;
+using namespace ByteSwap;
 
 typedef res_sorttype_t *sorttypeptr;
 MAKE_HIDDEN(sorttypeptr);
@@ -56,7 +57,7 @@ P3(PUBLIC pascal trap, void, SetResInfo, Handle, res, INTEGER, id,
         ROMlib_setreserr(resAttrErr);    /* IV-18 */
         return;
     }
-    rr->rid = CW(id);
+    rr->rid = BigEndianValue(id);
     if (name) {
 	sl = U(name[0]);
         if (U(*(sp = (char *)STARH(map) + Hx(map, namoff) + Cx(rr->noff))) < sl ||
@@ -65,8 +66,8 @@ P3(PUBLIC pascal trap, void, SetResInfo, Handle, res, INTEGER, id,
 	    err = MemError();
             if (ROMlib_setreserr(err))
                 return;
-            rr->noff = CW(Hx(map, rh.maplen) - Hx(map, namoff));
-            HxX(map, rh.maplen) = CL(Hx(map, rh.maplen) + sl + 1);
+            rr->noff = BigEndianValue(Hx(map, rh.maplen) - Hx(map, namoff));
+            HxX(map, rh.maplen) = BigEndianValue(Hx(map, rh.maplen) + sl + 1);
 	    sp = (char *)STARH(map) + Hx(map, namoff) + Cx(rr->noff);
 	    warning_unimplemented ("we leak space here");
         }
@@ -119,20 +120,20 @@ A2(PRIVATE, LONGINT, addtype, resmaphand, map, ResType, typ)
     LONGINT off;
     
     WALKTR(map, i, tr)
-        if (tr->rtyp == CL(typ))
+        if (tr->rtyp == BigEndianValue(typ))
             return((LONGINT)((char *)tr - (char *)STARH(map)));
     EWALKTR(tr)
     ROMlib_invalar();
-    t.rtyp = CL(typ);
+    t.rtyp = BigEndianValue(typ);
     t.nres = CWC(-1);
-    t.rloff = CW(NAMEOFF(map) - TYPEOFF(map));
+    t.rloff = BigEndianValue(NAMEOFF(map) - TYPEOFF(map));
     off = (LONGINT)((char *)tr - (char *) STARH(map));
     Munger((Handle) map, off, (Ptr) "", (LONGINT)0, (Ptr) &t, sizeof(t));
-    NUMTMINUS1X(map) = CW(NUMTMINUS1(map) + 1);
-    MAPLENX(map) = CL(MAPLEN(map) + sizeof(t));
-    NAMEOFFX(map) = CW(NAMEOFF(map) + sizeof(t));
+    NUMTMINUS1X(map) = BigEndianValue(NUMTMINUS1(map) + 1);
+    MAPLENX(map) = BigEndianValue(MAPLEN(map) + sizeof(t));
+    NAMEOFFX(map) = BigEndianValue(NAMEOFF(map) + sizeof(t));
     WALKTR(map, i, tr)
-        tr->rloff = CW(CW(tr->rloff) + sizeof(t));
+        tr->rloff = BigEndianValue(BigEndianValue(tr->rloff) + sizeof(t));
     EWALKTR(tr)
     return(off);
 }
@@ -152,7 +153,7 @@ A2(PRIVATE, LONGINT, addname, resmaphand, map, StringPtr, name)
       Munger((Handle) map, MAPLEN(map), (Ptr) "", (LONGINT)0, (Ptr) name,
 	     namelen);
       retval = MAPLEN(map) - NAMEOFF(map);
-      MAPLENX(map) = CL(MAPLEN(map) + namelen);
+      MAPLENX(map) = BigEndianValue(MAPLEN(map) + namelen);
     }
   return retval;
 }
@@ -182,8 +183,8 @@ P4(PUBLIC pascal trap, void, AddResource, Handle, data, ResType, typ,
     }
     ROMlib_setreserr(noErr);
     toff = addtype(map, typ);
-    r.rid = CW(id);
-    r.noff = CW(addname(map, name));
+    r.rid = BigEndianValue(id);
+    r.noff = BigEndianValue(addname(map, name));
     r.ratr = CB(resChanged);
     r.doff[0] = r.doff[1] = r.doff[2] = 0xff;
     HxX(map, resfatr) |= CWC(mapChanged);
@@ -204,15 +205,15 @@ P4(PUBLIC pascal trap, void, AddResource, Handle, data, ResType, typ,
 							       sizeof(resref));
     roff -= TYPEOFF(map);
     /* roff is from the beginning of the typelist */
-    MAPLENX(map)  = CL(MAPLEN(map) + sizeof(resref));
-    NAMEOFFX(map) = CW(NAMEOFF(map) + sizeof(resref));
+    MAPLENX(map)  = BigEndianValue(MAPLEN(map) + sizeof(resref));
+    NAMEOFFX(map) = BigEndianValue(NAMEOFF(map) + sizeof(resref));
     tr2 = (typref *)((char *)STARH(map) + toff);
-    tr2->nres = CW(CW(tr2->nres) + 1);
+    tr2->nres = BigEndianValue(BigEndianValue(tr2->nres) + 1);
     WALKTR(map, i, tr)
         if (Cx(tr->rloff) >= roff && tr != tr2)
     /*  if (Cx(tr->rloff) > roff)  would probably work, but I'm chicken
 								      -- ctm */
-            tr->rloff = CW(CW(tr->rloff) + sizeof(resref));
+            tr->rloff = BigEndianValue(BigEndianValue(tr->rloff) + sizeof(resref));
     EWALKTR(tr)
 }
 
@@ -252,34 +253,34 @@ P1(PUBLIC pascal trap, void, RmveResource, Handle, res)
         nlen = U(*((char *)STARH(map) + nmoff)) + 1;
         Munger((Handle) map, nmoff, (Ptr)0, nlen, (Ptr) "", (LONGINT) 0);
         nmoff -= NAMEOFF(map);
-        MAPLENX(map) = CL(MAPLEN(map) - nlen);
+        MAPLENX(map) = BigEndianValue(MAPLEN(map) - nlen);
     } else
         nmoff = 0x7fff;
     HxX(map, resfatr) |= CWC(mapChanged|mapCompact);
     Munger((Handle) map, rroff, (Ptr)0, (LONGINT)sizeof(resref),
 						        (Ptr) "", (LONGINT) 0);
     rroff -= TYPEOFF(map);
-    MAPLENX(map) = CL(MAPLEN(map) - sizeof(resref));
-    NAMEOFFX(map) = CW(NAMEOFF(map) - sizeof(resref));
+    MAPLENX(map) = BigEndianValue(MAPLEN(map) - sizeof(resref));
+    NAMEOFFX(map) = BigEndianValue(NAMEOFF(map) - sizeof(resref));
     tr = (typref *)((char *) STARH(map) + troff);
-    tr->nres = CW(CW(tr->nres) - 1);
+    tr->nres = BigEndianValue(BigEndianValue(tr->nres) - 1);
     if (tr->nres == -1) {
         ROMlib_invalar();
-        NUMTMINUS1X(map) = CW(NUMTMINUS1(map) - 1);
+        NUMTMINUS1X(map) = BigEndianValue(NUMTMINUS1(map) - 1);
         Munger((Handle) map, troff, (Ptr)0, (LONGINT)sizeof(typref), (Ptr) "",
                                                             (LONGINT) 0);
         tloss = sizeof(typref);
-        MAPLENX(map)  = CL(MAPLEN(map)  - sizeof(typref));
-        NAMEOFFX(map) = CW(NAMEOFF(map) - sizeof(typref));
+        MAPLENX(map)  = BigEndianValue(MAPLEN(map)  - sizeof(typref));
+        NAMEOFFX(map) = BigEndianValue(NAMEOFF(map) - sizeof(typref));
     } else
         tloss = 0;
     WALKTR(map, i, tr)
         if (Cx(tr->rloff) > rroff)
-            tr->rloff = CW(CW(tr->rloff) - sizeof(resref));
-	tr->rloff = CW(CW(tr->rloff) - tloss);
+            tr->rloff = BigEndianValue(BigEndianValue(tr->rloff) - sizeof(resref));
+	tr->rloff = BigEndianValue(BigEndianValue(tr->rloff) - tloss);
         WALKRR(map, tr, j, rr)
             if (Cx(rr->noff) > nmoff)
-                rr->noff = CW(CW(rr->noff) - nlen);
+                rr->noff = BigEndianValue(BigEndianValue(rr->noff) - nlen);
         EWALKRR(rr)
     EWALKTR(tr)
 }
@@ -323,9 +324,9 @@ A2(PUBLIC, void, ROMlib_wr, resmaphand, map, resref *, rr)	/* INTERNAL */
         if (rr->doff[0] == 0xFF && rr->doff[1] == 0xFF &&
 						         rr->doff[2] == 0xFF) {
             newloc = Hx(map, rh.rmapoff) - Hx(map, rh.rdatoff);
-            HxX(map, rh.rmapoff) = CL(Hx(map, rh.rmapoff) + rsize +
+            HxX(map, rh.rmapoff) = BigEndianValue(Hx(map, rh.rmapoff) + rsize +
 							      sizeof(LONGINT));
-            HxX(map, rh.datlen)  = CL(Hx(map, rh.datlen)  + rsize +
+            HxX(map, rh.datlen)  = BigEndianValue(Hx(map, rh.datlen)  + rsize +
 							      sizeof(LONGINT));
             B3ASSIGN(rr->doff, newloc);
         } else
@@ -335,7 +336,7 @@ A2(PUBLIC, void, ROMlib_wr, resmaphand, map, resref *, rr)	/* INTERNAL */
         if (ResErr != noErr)
             return;
         lc = sizeof(LONGINT);
-	swappedrsize = CL(rsize);
+	swappedrsize = BigEndianValue(rsize);
         ROMlib_setreserr(FSWriteAll(Hx(map, resfn), &lc, (Ptr) &swappedrsize));
         if (ResErr != noErr)
             return;
@@ -380,7 +381,7 @@ A4(PRIVATE, void, getdat, INTEGER, fn, LONGINT, datoff, LONGINT, doff,
     SetFPos(fn, fsFromStart, datoff + doff);
     lc = sizeof(LONGINT);
     FSReadAll(fn, &lc, (Ptr) &size);
-    size = CL(size);
+    size = BigEndianValue(size);
     gui_assert(size >= 0);
     *h = NewHandle(size);
     gui_assert(*h);
@@ -402,7 +403,7 @@ A4(PRIVATE, void, putdat, INTEGER, fn, LONGINT, datoff, LONGINT *, doffp,
     gui_assert(*doffp >= 0);
     SetFPos(fn, fsFromStart, datoff + *doffp);
     lc = sizeof(LONGINT);
-    swappedsize = CL(size);
+    swappedsize = BigEndianValue(size);
     FSWriteAll(fn, &lc, (Ptr) &swappedsize);
     lc = size;
     HLock(h);
@@ -424,15 +425,15 @@ A4(PRIVATE, LONGINT, walkst, res_sorttype_t *, sp, res_sorttype_t *, sep, INTEGE
         B3ASSIGN(sp->rrptr->doff, doff);
 #if 0
         if (sp->rrptr->ratr & resChanged) {
-            putdat(fn, datoff, &doff, (Handle) CL(sp->rrptr->rhand));
-        } else if (!sp->rrptr->rhand || !*(Handle)CL(sp->rrptr->rhand)) {
+            putdat(fn, datoff, &doff, (Handle) BigEndianValue(sp->rrptr->rhand));
+        } else if (!sp->rrptr->rhand || !*(Handle)BigEndianValue(sp->rrptr->rhand)) {
 	    getdat(fn, datoff, sp->diskoff, &h);
 	    putdat(fn, datoff, &doff,  h);
 	    DisposHandle(h);
 	} else if (doff != sp->diskoff)
-	    putdat(fn, datoff, &doff, (Handle) CL(sp->rrptr->rhand));
+	    putdat(fn, datoff, &doff, (Handle) BigEndianValue(sp->rrptr->rhand));
         else
-	    doff += GetHandleSize((Handle) CL(sp->rrptr->rhand)) +
+	    doff += GetHandleSize((Handle) BigEndianValue(sp->rrptr->rhand)) +
 							       sizeof(LONGINT);
 #else
         if (sp->rrptr->ratr & resChanged)
@@ -446,7 +447,7 @@ A4(PRIVATE, LONGINT, walkst, res_sorttype_t *, sp, res_sorttype_t *, sep, INTEGE
 	    lc = sizeof(LONGINT);
 	    FSReadAll(fn, &lc, (Ptr) &size);
 	    gui_assert(lc == sizeof(LONGINT));
-	    size = CL(size);
+	    size = BigEndianValue(size);
 	    gui_assert(size >= 0);
 	    doff += size + sizeof(LONGINT);
 	} else {
@@ -485,8 +486,8 @@ A1(PRIVATE, void, compactdata, resmaphand, map)
     HSetState((Handle) map, mapstate);
     HxX(map, resfatr) |= CWC(mapChanged);
     HxX(map, resfatr) &= CWC(~mapCompact);
-    HxX(map, rh.rmapoff) = CL(sizeof(reshead) + sizeof(rsrvrec) + datlen);
-    HxX(map, rh.datlen) = CL(datlen);
+    HxX(map, rh.rmapoff) = BigEndianValue(sizeof(reshead) + sizeof(rsrvrec) + datlen);
+    HxX(map, rh.datlen) = BigEndianValue(datlen);
     DisposHandle((Handle) st);
 }
 

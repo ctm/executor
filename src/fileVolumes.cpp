@@ -38,6 +38,7 @@ char ROMlib_rcsid_fileVolumes[] =
 #define RETURN(x)	{ err = (x); goto DONE; }
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /*
  * For now we just use 101 entries in our hash table, no matter what.
@@ -421,7 +422,7 @@ PRIVATE BOOLEAN filesystems_match(rkey_t *keyp, VCBExtra *vcbp)
     BOOLEAN retval;
 
     namlen = strlen(vcbp->unixname);
-    if (namlen == CW(keyp->filesystemlen))
+    if (namlen == BigEndianValue(keyp->filesystemlen))
 	retval = strncmp(vcbp->unixname,
 		       keyp->hostnameandroot + keyp->hostnamelen, namlen) == 0;
     else
@@ -564,9 +565,9 @@ PRIVATE void readadbm(const char *dbmname, VCBExtra *vcbp)
 		DBM_FETCH (&content, db, key);
 		if (content.dsize) {
 		    contentp = (rcontent_t *) content.dptr;
-		    dirid = CL(keyp->dirid);
+		    dirid = BigEndianValue(keyp->dirid);
 		    hashinsert(vcbp, extractpathname(contentp), &dirid,
-						     CL(contentp->parid), new1);
+						     BigEndianValue(contentp->parid), new1);
 		}
 	    }
 	}
@@ -600,14 +601,14 @@ PRIVATE void writeadbm(const char *dbmname, VCBExtra *vcbp,
 	    dirnamelen = strlen(deletep->dirname+1);
 	    key.dsize = sizeof(rkey_t) + ROMlib_hostnamelen + unamelen - 1;
 	    content.dsize = sizeof(rcontent_t) + dirnamelen - 1;
-	    keyp->dirid = CL(deletep->dirid);
-	    keyp->filesystemlen = CW(unamelen);
+	    keyp->dirid = BigEndianValue(deletep->dirid);
+	    keyp->filesystemlen = BigEndianValue(unamelen);
 	    keyp->hostnamelen = ROMlib_hostnamelen;
 	    dst = keyp->hostnameandroot;
 	    memcpy(dst, ROMlib_hostname, ROMlib_hostnamelen);
 	    dst += ROMlib_hostnamelen;
 	    memcpy(dst, vcbp->unixname, unamelen);
-	    contentp->parid = CL(deletep->parid);
+	    contentp->parid = BigEndianValue(deletep->parid);
 	    strcpy(contentp->path, deletep->dirname+1);
 	    dbm_store(db, key, content, DBM_REPLACE);
 	    keyp->hostnamelen = 0;
@@ -683,7 +684,7 @@ A1(PUBLIC, OSErr, ufsPBMountVol, ParmBlkPtr, pb)	/* INTERNAL */
     strcpy(vp->unixname, ROMlib_volumename);
     vp->vcb.vcbDrvNum = pb->ioParam.ioVRefNum;
     --ROMlib_nextvrn;
-    vp->vcb.vcbVRefNum = CW(ROMlib_nextvrn);
+    vp->vcb.vcbVRefNum = BigEndianValue(ROMlib_nextvrn);
     vp->u.ufs.ino = ST_INO (sbuf);
     if (strcmp("/", ROMlib_volumename + SLASH_CHAR_OFFSET) == 0) {
 	name = ROMlib_volumename;
@@ -745,11 +746,11 @@ A4(PUBLIC, OSErr, GetVInfo, INTEGER, drv, StringPtr, voln,	/* IMIV-107 */
     OSErr temp;
 
     pbr.volumeParam.ioVolIndex = 0;
-    pbr.volumeParam.ioVRefNum = CW(drv);
+    pbr.volumeParam.ioVRefNum = BigEndianValue(drv);
     pbr.volumeParam.ioNamePtr = RM(voln);
     temp = PBGetVInfo(&pbr, 0);
     *vrn = pbr.volumeParam.ioVRefNum;
-    *freeb = CL(Cx(pbr.volumeParam.ioVFrBlk) * Cx(pbr.volumeParam.ioVAlBlkSiz));
+    *freeb = BigEndianValue(Cx(pbr.volumeParam.ioVFrBlk) * Cx(pbr.volumeParam.ioVAlBlkSiz));
     return(temp);
 }
 
@@ -781,7 +782,7 @@ A2(PUBLIC, OSErr, SetVol, StringPtr, voln, INTEGER, vrn)	/* IMIV-107 */
     ParamBlockRec pbr;
 
     pbr.volumeParam.ioNamePtr = RM(voln);
-    pbr.volumeParam.ioVRefNum = CW(vrn);
+    pbr.volumeParam.ioVRefNum = BigEndianValue(vrn);
     return(PBSetVol(&pbr, 0));
 }
 
@@ -790,7 +791,7 @@ A2(PUBLIC, OSErr, FlushVol, StringPtr, voln, INTEGER, vrn)	/* IMIV-108 */
     ParamBlockRec pbr;
 
     pbr.ioParam.ioNamePtr = RM(voln);
-    pbr.ioParam.ioVRefNum = CW(vrn);
+    pbr.ioParam.ioVRefNum = BigEndianValue(vrn);
     return(PBFlushVol(&pbr, 0));
 }
 
@@ -799,7 +800,7 @@ A2(PUBLIC, OSErr, UnmountVol, StringPtr, voln, INTEGER, vrn)	/* IMIV-108 */
     ParamBlockRec pbr;
 
     pbr.ioParam.ioNamePtr = RM(voln);
-    pbr.ioParam.ioVRefNum = CW(vrn);
+    pbr.ioParam.ioVRefNum = BigEndianValue(vrn);
     return(PBUnmountVol(&pbr));
 }
 
@@ -808,7 +809,7 @@ A2(PUBLIC, OSErr, Eject, StringPtr, voln, INTEGER, vrn)	/* IMIV-108 */
     ParamBlockRec pbr;
 
     pbr.ioParam.ioNamePtr = RM(voln);
-    pbr.ioParam.ioVRefNum = CW(vrn);
+    pbr.ioParam.ioVRefNum = BigEndianValue(vrn);
     return(PBEject(&pbr));
 }
 
@@ -839,7 +840,7 @@ A4(PRIVATE, VCB *, findvcb, StringPtr, sp, INTEGER, vrn, BOOLEAN *, iswd,
 /*-->*/	    return MR(DefVCBPtr);
 	}
 	if (vrn < 0) {
-	    *vrnp = CW(vrn);
+	    *vrnp = BigEndianValue(vrn);
 	    if (ISWDNUM(vrn)) {
 		*iswd = TRUE;
 		vcbptr = WDNUMTOWDP(vrn)->vcbp;
@@ -960,18 +961,18 @@ A1(PRIVATE, VCB *, common, ParmBlkPtr, pb)
 
 	  pseudo_block_size = find_pseudo_block_size (sbuf.f_blocks,
 						      sbuf.f_bsize);
-	  vcbp->vcbAlBlkSiz = CL (pseudo_block_size);
+	  vcbp->vcbAlBlkSiz = BigEndianValue (pseudo_block_size);
 	  nm_al_blks = ((long long) sbuf.f_blocks * sbuf.f_bsize
 			/ pseudo_block_size);
 	  short_nm_al_blks = MIN (nm_al_blks, 65535);
-	  vcbp->vcbNmAlBlks = CW (short_nm_al_blks);
+	  vcbp->vcbNmAlBlks = BigEndianValue (short_nm_al_blks);
 	  effective_free_blocks = geteuid() ? sbuf.f_bavail : sbuf.f_bfree;
 	  free_bks = ((long long) effective_free_blocks * sbuf.f_bsize
 		      / pseudo_block_size);
 
 	  short_free_bks = MIN (free_bks, 65535);
-	  vcbp->vcbFreeBks  = CW (short_free_bks);
-	  vcbp->vcbFilCnt   = CL(sbuf.f_files);
+	  vcbp->vcbFreeBks  = BigEndianValue (short_free_bks);
+	  vcbp->vcbFilCnt   = BigEndianValue(sbuf.f_files);
 	}
 	if (pb->volumeParam.ioNamePtr)
 	    str255assign(MR(pb->volumeParam.ioNamePtr), vcbp->vcbVN);

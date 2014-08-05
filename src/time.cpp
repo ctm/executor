@@ -29,6 +29,7 @@ char ROMlib_rcsid_time[] =
 #endif
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #if defined (SYSV)
 LONGINT 
@@ -185,12 +186,12 @@ A3 (PRIVATE, LONGINT, catchalarm, LONGINT, volatile signo,
 	   qp;
 	   qp = (TMTask *) MR (qp->qLink))
 	{
-	  tm_count = CL (qp->tmCount);
+	  tm_count = BigEndianValue (qp->tmCount);
 
 	  if (tm_count > 0)
 	    {
 	      tm_count -= diff;
-	      qp->tmCount = CL (tm_count);
+	      qp->tmCount = BigEndianValue (tm_count);
 	      if (tm_count <= 0)
 		{
 		  ProcPtr tm_addr;
@@ -225,7 +226,7 @@ A3 (PRIVATE, LONGINT, catchalarm, LONGINT, volatile signo,
 	   qp;
 	   qp = (TMTask *) MR (qp->qLink))
 	{
-	  tm_count = CL (qp->tmCount);
+	  tm_count = BigEndianValue (qp->tmCount);
 	  if (tm_count > 0 && tm_count < min)
 	    min = tm_count;
 	}
@@ -336,7 +337,7 @@ A2 (PRIVATE, void, ROMlib_PrimeTime, QElemPtr, taskp, LONGINT, count)
    * way the extra time subtracted off during the catchalarm will
    * exactly match the extra time we added here.
    */
-  ((TMTask *) taskp)->tmCount = CL (count + now_msecs - last_interrupt_msecs);
+  ((TMTask *) taskp)->tmCount = BigEndianValue (count + now_msecs - last_interrupt_msecs);
 
   if (count < msecs_until_next || msecs_until_next <= 0)
     {

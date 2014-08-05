@@ -23,6 +23,7 @@ char ROMlib_rcsid_ctlArrows[] =
 #include "rsys/wind.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 namespace Executor {
 #include "arrow_up_active.cmap"
@@ -174,7 +175,7 @@ validate_colors_for_control (ControlHandle ctl)
 	  int index;
 
 	  c_ctab_entry = &c_ctab_table[i];
-	  index = CW (c_ctab_entry->value);
+	  index = BigEndianValue (c_ctab_entry->value);
 	  if (index >= 0 && index < NELEM (ctl_ctab_colors))
 	    ctl_ctab_colors[index] = c_ctab_entry->rgb;
 	}
@@ -307,16 +308,16 @@ draw_arrow (ControlHandle ctl, int part)
   if (vert_p)
     {
       if (part == inUpButton)
-	r.bottom = CW (CW (r.top) + width);
+	r.bottom = BigEndianValue (BigEndianValue (r.top) + width);
       else
-	r.top    = CW (CW (r.bottom) - width);
+	r.top    = BigEndianValue (BigEndianValue (r.bottom) - width);
     }
   else
     {
       if (part == inUpButton)
-	r.right = CW (CW (r.left) + height);
+	r.right = BigEndianValue (BigEndianValue (r.left) + height);
       else
-	r.left  = CW (CW (r.right) - height);
+	r.left  = BigEndianValue (BigEndianValue (r.right) - height);
     }
   active_p = (CTL_HILITE (ctl) == part);
 
@@ -340,17 +341,17 @@ draw_page (ControlHandle ctl)
   width  = RECT_WIDTH (&r);
   if (SB_VERT_P (height, width))
     {
-      r.top    = CW (CW (r.top) + width);
-      r.bottom = CW (CW (r.bottom) - width);
-      r.left   = CW (CW (r.left) + 1);
-      r.right  = CW (CW (r.right) - 1);
+      r.top    = BigEndianValue (BigEndianValue (r.top) + width);
+      r.bottom = BigEndianValue (BigEndianValue (r.bottom) - width);
+      r.left   = BigEndianValue (BigEndianValue (r.left) + 1);
+      r.right  = BigEndianValue (BigEndianValue (r.right) - 1);
     } 
   else
     {
-      r.left    = CW (CW (r.left) + height);
-      r.right   = CW (CW (r.right) - height);
-      r.top     = CW (CW (r.top) + 1);
-      r.bottom  = CW (CW (r.bottom) - 1);
+      r.left    = BigEndianValue (BigEndianValue (r.left) + height);
+      r.right   = BigEndianValue (BigEndianValue (r.right) - height);
+      r.top     = BigEndianValue (BigEndianValue (r.top) + 1);
+      r.bottom  = BigEndianValue (BigEndianValue (r.bottom) - 1);
     }
 
   /* page_{fg, bk} colors are dependent on whether or not the sb is
@@ -381,22 +382,22 @@ thumb_rect (ControlHandle ctl, Rect *thumb_rect_out)
       if (SB_VERT_P (height, width))
 	{
 	  thumb_rect_out->top
-	    = CW ((short) (CW (r.top) + width
+	    = BigEndianValue ((short) (BigEndianValue (r.top) + width
 			   + ((val - min)
 			      * ((LONGINT) height - 3 * width) / diff)));
-	  thumb_rect_out->bottom = CW (CW (thumb_rect_out->top) + width);
-	  thumb_rect_out->left   = CW (CW (r.left) + 1);
-	  thumb_rect_out->right  = CW (CW (r.right) - 1);
+	  thumb_rect_out->bottom = BigEndianValue (BigEndianValue (thumb_rect_out->top) + width);
+	  thumb_rect_out->left   = BigEndianValue (BigEndianValue (r.left) + 1);
+	  thumb_rect_out->right  = BigEndianValue (BigEndianValue (r.right) - 1);
 	} 
       else 
 	{
 	  thumb_rect_out->left
-	    = CW ((short) (CW (r.left) + height
+	    = BigEndianValue ((short) (BigEndianValue (r.left) + height
 			   + ((val - min)
 			      * ((LONGINT) width - 3 * height) / diff)));
-	  thumb_rect_out->right  = CW (CW (thumb_rect_out->left) + height);
-	  thumb_rect_out->top    = CW (CW (r.top) + 1);
-	  thumb_rect_out->bottom = CW (CW (r.bottom) - 1);
+	  thumb_rect_out->right  = BigEndianValue (BigEndianValue (thumb_rect_out->left) + height);
+	  thumb_rect_out->top    = BigEndianValue (BigEndianValue (r.top) + 1);
+	  thumb_rect_out->bottom = BigEndianValue (BigEndianValue (r.bottom) - 1);
 	}
     } 
   else
@@ -422,8 +423,8 @@ LocalToGlobalRect (Rect *rp)
 PRIVATE void 
 GlobalToLocalRgn (RgnHandle rgn)
 {
-  OffsetRgn (rgn, CW (PORT_BOUNDS (thePort).left),
-                  CW (PORT_BOUNDS (thePort).top));
+  OffsetRgn (rgn, BigEndianValue (PORT_BOUNDS (thePort).left),
+                  BigEndianValue (PORT_BOUNDS (thePort).top));
 }
 
 typedef struct
@@ -457,15 +458,15 @@ draw_thumb (ControlHandle ctl)
 	    {
 	      dst_rect.top = new_thumb.top;
 	      dst_rect.bottom = new_thumb.bottom;
-	      dst_rect.left = CW (CW (new_thumb.left) - 1);
-	      dst_rect.right = CW (CW (new_thumb.right) + 1);
+	      dst_rect.left = BigEndianValue (BigEndianValue (new_thumb.left) - 1);
+	      dst_rect.right = BigEndianValue (BigEndianValue (new_thumb.right) + 1);
 	    }
 	  else
 	    {
 	      dst_rect.left = new_thumb.left;
 	      dst_rect.right = new_thumb.right;
-	      dst_rect.top = CW (CW (new_thumb.top) - 1);
-	      dst_rect.bottom = CW (CW (new_thumb.bottom) + 1);
+	      dst_rect.top = BigEndianValue (BigEndianValue (new_thumb.top) - 1);
+	      dst_rect.bottom = BigEndianValue (BigEndianValue (new_thumb.bottom) + 1);
 	    }
 
 	  /* if the old_thumb rect is empty, ie., the thumb was not
@@ -557,22 +558,22 @@ where (ControlHandle ctl, Point p)
       width  = RECT_WIDTH (&r);
       if (SB_VERT_P (height, width))
 	{
-	  if (p.v <= CW (r.top) + width)
+	  if (p.v <= BigEndianValue (r.top) + width)
 	    return inUpButton;
-	  else if (p.v >= CW (r.bottom) - width)
+	  else if (p.v >= BigEndianValue (r.bottom) - width)
 	    return inDownButton;
-	  else if (p.v < CW (thumbr.top))
+	  else if (p.v < BigEndianValue (thumbr.top))
 	    return inPageUp;
 	  else
 	    return inPageDown;
 	}
       else
 	{
-	  if (p.h <= CW (r.left) + height)
+	  if (p.h <= BigEndianValue (r.left) + height)
 	    return inUpButton;
-	  else if (p.h >= CW (r.right) - height)
+	  else if (p.h >= BigEndianValue (r.right) - height)
 	    return inDownButton;
-	  else if (p.h < CW (thumbr.left))
+	  else if (p.h < BigEndianValue (thumbr.left))
 	    return inPageUp;
 	  else
 	    return inPageDown;
@@ -597,10 +598,10 @@ P4 (PUBLIC pascal, void, new_pos_ctl, INTEGER, depth, INTEGER, flags,
 
   r = CTL_RECT (ctl);
 
-  top    = CW (r.top);
-  left   = CW (r.left);
-  bottom = CW (r.bottom);
-  right  = CW (r.right);
+  top    = BigEndianValue (r.top);
+  left   = BigEndianValue (r.left);
+  bottom = BigEndianValue (r.bottom);
+  right  = BigEndianValue (r.right);
 
   height = bottom - top;
   width  = right  - left;
@@ -615,8 +616,8 @@ P4 (PUBLIC pascal, void, new_pos_ctl, INTEGER, depth, INTEGER, flags,
   if (SB_VERT_P (height, width))
     {
       a = top + width;
-      thumb_top = CW (thumbr.top) + HiWord (p) - a;
-      CTL_VALUE_X (ctl) = CW (min + (thumb_top
+      thumb_top = BigEndianValue (thumbr.top) + HiWord (p) - a;
+      CTL_VALUE_X (ctl) = BigEndianValue (min + (thumb_top
 				     * ((LONGINT) max - min + 1)
 				     / (bottom - a - (2 * width) + 1)));
       if (CTL_VIS_X (ctl) == 255)
@@ -625,8 +626,8 @@ P4 (PUBLIC pascal, void, new_pos_ctl, INTEGER, depth, INTEGER, flags,
   else
     {
       a = left + height;
-      thumb_left = CW (thumbr.left) + LoWord(p) - a;
-      CTL_VALUE_X (ctl) = CW (min + (thumb_left
+      thumb_left = BigEndianValue (thumbr.left) + LoWord(p) - a;
+      CTL_VALUE_X (ctl) = BigEndianValue (min + (thumb_left
 				     * ((LONGINT) max - min + 1)
 				     / (right - a - (2 * height) + 1)));
       if (CTL_VIS_X (ctl) == 255)
@@ -821,29 +822,29 @@ P4 (PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */
       break;
     case thumbCntl:
       pl = (struct lsastr *) param;
-      p.v = CW (pl->limitRect.top);
-      p.h = CW (pl->limitRect.left);
+      p.v = BigEndianValue (pl->limitRect.top);
+      p.h = BigEndianValue (pl->limitRect.left);
       pl->slopRect = pl->limitRect = CTL_RECT (c);
       thumbr = HxX (CTL_DATA (c), rgnBBox);
       GlobalToLocalRect (&thumbr);
       rp = &thumbr;
-      height = CW (pl->slopRect.bottom) - CW (pl->slopRect.top);
-      width  = CW (pl->slopRect.right)  - CW (pl->slopRect.left);
+      height = BigEndianValue (pl->slopRect.bottom) - BigEndianValue (pl->slopRect.top);
+      width  = BigEndianValue (pl->slopRect.right)  - BigEndianValue (pl->slopRect.left);
       if (SB_VERT_P (height, width))
 	{
 	  pl->axis = CWC (vAxisOnly);
-	  pl->limitRect.top    = CW (CW (pl->limitRect.top)
-				     + (width - (CW (rp->top) - p.v)));
-	  pl->limitRect.bottom = CW (CW (pl->limitRect.bottom)
-				     - (width - (p.v - CW (rp->bottom)) - 1));
+	  pl->limitRect.top    = BigEndianValue (BigEndianValue (pl->limitRect.top)
+				     + (width - (BigEndianValue (rp->top) - p.v)));
+	  pl->limitRect.bottom = BigEndianValue (BigEndianValue (pl->limitRect.bottom)
+				     - (width - (p.v - BigEndianValue (rp->bottom)) - 1));
 	}
       else
 	{
 	  pl->axis = CWC (hAxisOnly);
-	  pl->limitRect.left  = CW (CW (pl->limitRect.left)
-				    + height - (CW (rp->left) - p.h));
-	  pl->limitRect.right = CW (CW (pl->limitRect.right)
-				    - height - (p.h - CW (rp->right)) - 1);
+	  pl->limitRect.left  = BigEndianValue (BigEndianValue (pl->limitRect.left)
+				    + height - (BigEndianValue (rp->left) - p.h));
+	  pl->limitRect.right = BigEndianValue (BigEndianValue (pl->limitRect.right)
+				    - height - (p.h - BigEndianValue (rp->right)) - 1);
 	}
       InsetRect (&pl->slopRect, -20, -20);
       break;

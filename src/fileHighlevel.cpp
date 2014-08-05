@@ -26,6 +26,7 @@ char ROMlib_rcsid_fileHighlevel[] =
 #include "rsys/executor.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /*
  * extract the last component of a name:
@@ -84,7 +85,7 @@ P4 (PUBLIC pascal trap, OSErr, FSMakeFSSpec,
 
   str255assign (local_file_name, file_name);
   hpb.volumeParam.ioNamePtr = (StringPtr) RM ((Ptr) local_file_name);
-  hpb.volumeParam.ioVRefNum = CW (vRefNum);
+  hpb.volumeParam.ioVRefNum = BigEndianValue (vRefNum);
   if (file_name[0])
     hpb.volumeParam.ioVolIndex = CLC (-1);
   else
@@ -98,12 +99,12 @@ P4 (PUBLIC pascal trap, OSErr, FSMakeFSSpec,
       
       str255assign (local_file_name, file_name);
       cpb.hFileInfo.ioNamePtr = (StringPtr) RM ((Ptr) local_file_name);
-      cpb.hFileInfo.ioVRefNum = CW (vRefNum);
+      cpb.hFileInfo.ioVRefNum = BigEndianValue (vRefNum);
       if (file_name[0])
 	cpb.hFileInfo.ioFDirIndex = CWC (0);
       else
 	cpb.hFileInfo.ioFDirIndex = CWC (-1);
-      cpb.hFileInfo.ioDirID = CL (dir_id);
+      cpb.hFileInfo.ioDirID = BigEndianValue (dir_id);
       retval = PBGetCatInfo (&cpb, FALSE);
       if (retval == noErr)
 	{
@@ -116,16 +117,16 @@ P4 (PUBLIC pascal trap, OSErr, FSMakeFSSpec,
 	  OSErr err;
 	  
 	  cpb.hFileInfo.ioNamePtr = (StringPtr)CLC (0);
-	  cpb.hFileInfo.ioVRefNum = CW (vRefNum);
+	  cpb.hFileInfo.ioVRefNum = BigEndianValue (vRefNum);
 	  cpb.hFileInfo.ioFDirIndex = CWC (-1);
-	  cpb.hFileInfo.ioDirID = CL (dir_id);
+	  cpb.hFileInfo.ioDirID = BigEndianValue (dir_id);
 	  err = PBGetCatInfo (&cpb, FALSE);
 	  if (err == noErr)
 	    {
 	      if (cpb.hFileInfo.ioFlAttrib & ATTRIB_ISADIR)
 		{
 		  spec->vRefNum = hpb.volumeParam.ioVRefNum;
-		  spec->parID = CL (dir_id);
+		  spec->parID = BigEndianValue (dir_id);
 		  extract_name ((StringPtr) spec->name, file_name);
 		}
 	      else
@@ -174,18 +175,18 @@ get_fcb_info (FSSpecPtr fsp)
   retval = 0;
 
   swapped_vrefnum = fsp->vRefNum;
-  swapped_fnum = CL (get_file_num (fsp));
+  swapped_fnum = BigEndianValue (get_file_num (fsp));
 
-  fcbsptr = (char *) CL (FCBSPtr);
-  total_length = CW(*(short *)fcbsptr);
-  fcbp = (filecontrolblock *) ((short *)CL(FCBSPtr)+1);
-  efcbp = (filecontrolblock *) ((char *)CL(FCBSPtr) + total_length);
-  fcb_size = CW (FSFCBLen);
+  fcbsptr = (char *) BigEndianValue (FCBSPtr);
+  total_length = BigEndianValue(*(short *)fcbsptr);
+  fcbp = (filecontrolblock *) ((short *)BigEndianValue(FCBSPtr)+1);
+  efcbp = (filecontrolblock *) ((char *)BigEndianValue(FCBSPtr) + total_length);
+  fcb_size = BigEndianValue (FSFCBLen);
   for (;fcbp < efcbp; fcbp = (filecontrolblock *) ((char *)fcbp + fcb_size))
     {
       HVCB *vptr;
 
-      vptr = CL (fcbp->fcbVPtr);
+      vptr = BigEndianValue (fcbp->fcbVPtr);
       if (vptr && vptr->vcbVRefNum == swapped_vrefnum
 	  && fcbp->fcbFlNum == swapped_fnum)
 	{
@@ -253,7 +254,7 @@ restore_fcb (const save_fcb_info_t *infop)
 {
   char *fcbsptr;
 
-  fcbsptr = (char *) CL (FCBSPtr);
+  fcbsptr = (char *) BigEndianValue (FCBSPtr);
   if (infop)
     {
       if (infop->refnum)
@@ -292,7 +293,7 @@ create_temp_name (Str63 name, int i)
   err = GetCurrentProcess (&psn);
   if (err == noErr)
     sprintf ((char *) name+1,
-	     "%x%x.%x", CL (psn.highLongOfPSN), CL (psn.lowLongOfPSN), i);
+	     "%x%x.%x", BigEndianValue (psn.highLongOfPSN), BigEndianValue (psn.lowLongOfPSN), i);
   else
     sprintf ((char *) name+1, "%d.%x", err, i);
   name[0] = strlen ((char *) name+1);
@@ -420,7 +421,7 @@ P4 (PUBLIC pascal trap, OSErr, FSpCreate,
 {
   OSErr retval;
 
-  retval = HCreate (CW (spec->vRefNum), CL (spec->parID), spec->name,
+  retval = HCreate (BigEndianValue (spec->vRefNum), BigEndianValue (spec->parID), spec->name,
 		    creator, file_type);
   return retval;
 }
@@ -556,7 +557,7 @@ P4 (PUBLIC pascal trap, void, FSpCreateResFile,
     FSSpecPtr, spec, OSType, creator, OSType, file_type,
     ScriptCode, script)
 {
-  HCreateResFile_helper (CW (spec->vRefNum), CL (spec->parID),
+  HCreateResFile_helper (BigEndianValue (spec->vRefNum), BigEndianValue (spec->parID),
 			 spec->name, creator, file_type, script);
 }
 
@@ -566,7 +567,7 @@ P2 (PUBLIC pascal trap, INTEGER, FSpOpenResFile,
 {
   INTEGER retval;
 
-  retval = HOpenResFile (CW (spec->vRefNum), CL (spec->parID), spec->name,
+  retval = HOpenResFile (BigEndianValue (spec->vRefNum), BigEndianValue (spec->parID), spec->name,
 			 perms);
   return retval;
 }
@@ -582,8 +583,8 @@ Executor::HCreate (INTEGER vref, LONGINT dirid, Str255 name, OSType creator, OST
   OSErr retval;
 
   hpb.fileParam.ioNamePtr = RM (name);
-  hpb.fileParam.ioVRefNum = CW (vref);
-  hpb.fileParam.ioDirID = CL (dirid);
+  hpb.fileParam.ioVRefNum = BigEndianValue (vref);
+  hpb.fileParam.ioDirID = BigEndianValue (dirid);
   retval = PBHCreate (&hpb, FALSE);
   if (retval == noErr)
     {
@@ -591,9 +592,9 @@ Executor::HCreate (INTEGER vref, LONGINT dirid, Str255 name, OSType creator, OST
       retval = PBHGetFInfo (&hpb, FALSE);
       if (retval == noErr)
 	{
-	  hpb.fileParam.ioFlFndrInfo.fdCreator = CL (creator);
-	  hpb.fileParam.ioFlFndrInfo.fdType = CL (type);
-	  hpb.fileParam.ioDirID = CL (dirid);
+	  hpb.fileParam.ioFlFndrInfo.fdCreator = BigEndianValue (creator);
+	  hpb.fileParam.ioFlFndrInfo.fdType = BigEndianValue (type);
+	  hpb.fileParam.ioDirID = BigEndianValue (dirid);
 	  retval = PBHSetFInfo (&hpb, FALSE);
 	}
     }
@@ -608,12 +609,12 @@ Executor::HOpenRF (INTEGER vref, LONGINT dirid, Str255 name, SignedByte perm,
   OSErr retval;
 
   hpb.fileParam.ioNamePtr = RM (name);
-  hpb.fileParam.ioVRefNum = CW (vref);
+  hpb.fileParam.ioVRefNum = BigEndianValue (vref);
   hpb.ioParam.ioPermssn = CB (perm);
   hpb.ioParam.ioMisc = CLC (0);
-  hpb.fileParam.ioDirID = CL (dirid);
+  hpb.fileParam.ioDirID = BigEndianValue (dirid);
   retval = PBHOpenRF (&hpb, FALSE);
   if (retval == noErr)
-    *refp = CW (hpb.ioParam.ioRefNum);
+    *refp = BigEndianValue (hpb.ioParam.ioRefNum);
   return retval;
 }

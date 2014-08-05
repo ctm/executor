@@ -42,6 +42,7 @@ char ROMlib_rcsid_windInit[] =
 #include "rsys/launch.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 PUBLIC BOOLEAN Executor::ROMlib_dirtyvariant = FALSE;
 
@@ -103,12 +104,12 @@ P0 (PUBLIC pascal trap, void, InitWindows)
 	 FrameRect (&GD_BOUNDS (MR (TheGDevice)));
        CloseRgn (MR (GrayRgn));
        mrgn = NewRgn();
-       SetRectRgn(mrgn, 0, 0, CW (GD_BOUNDS (MR (TheGDevice)).right),
-		  CW(MBarHeight));
+       SetRectRgn(mrgn, 0, 0, BigEndianValue (GD_BOUNDS (MR (TheGDevice)).right),
+		  BigEndianValue(MBarHeight));
        SectRgn(MR(GrayRgn), mrgn, mrgn);
        corners = NewRgn();
-       SetRectRgn(corners, 0, 0, CW (GD_BOUNDS (MR (TheGDevice)).right),
-		  CW (GD_BOUNDS (MR (TheGDevice)).bottom));
+       SetRectRgn(corners, 0, 0, BigEndianValue (GD_BOUNDS (MR (TheGDevice)).right),
+		  BigEndianValue (GD_BOUNDS (MR (TheGDevice)).bottom));
        DiffRgn(corners, MR(GrayRgn), corners);
        PaintRgn(corners);
        CopyRgn (MR (GrayRgn), PORT_VIS_REGION (MR (wmgr_port)));
@@ -116,8 +117,8 @@ P0 (PUBLIC pascal trap, void, InitWindows)
        PenPat(white);
        PaintRgn(mrgn);
        PenPat(black);
-       MoveTo(0, CW(MBarHeight) - 1);
-       Line (CW (GD_BOUNDS (MR (TheGDevice)).right), 0);
+       MoveTo(0, BigEndianValue(MBarHeight) - 1);
+       Line (BigEndianValue (GD_BOUNDS (MR (TheGDevice)).right), 0);
        if ((USE_DESKCPAT_VAR & USE_DESKCPAT_BIT)
 	   && PIXMAP_PIXEL_SIZE (GD_PMAP (MR (MainDevice))) > 2)
 	 FillCRgn(MR(GrayRgn), MR(DeskCPat));
@@ -423,7 +424,7 @@ ROMlib_new_window_common (WindowPeek w,
   HxX (t_aux_w, awOwner)     = (WindowPtr) RM (w);
   HxX (t_aux_w, awCTable) = (CTabHandle) RM (GetResource (TICK("wctb"), 0));
   HxX (t_aux_w, dialogCItem) = 0;
-  HxX (t_aux_w, awFlags)     = CL ((proc_id & 0xF) << 24);
+  HxX (t_aux_w, awFlags)     = BigEndianValue ((proc_id & 0xF) << 24);
   HxX (t_aux_w, awReserved)  = 0;
   HxX (t_aux_w, awRefCon)    = 0;
   AuxWinHead = RM (t_aux_w);
@@ -439,19 +440,19 @@ ROMlib_new_window_common (WindowPeek w,
     OpenCPort ((CGrafPtr) w);
   else
     OpenPort ((GrafPtr) w);
-  OffsetRect (&PORT_BOUNDS (w), -CW (bounds->left), -CW (bounds->top));
+  OffsetRect (&PORT_BOUNDS (w), -BigEndianValue (bounds->left), -BigEndianValue (bounds->top));
   PORT_RECT (w) = *bounds;
-  OffsetRect (&PORT_RECT (w), -CW (bounds->left), -CW (bounds->top));
+  OffsetRect (&PORT_RECT (w), -BigEndianValue (bounds->left), -BigEndianValue (bounds->top));
   LOCK_HANDLE_EXCURSION_1
     (WINDOW_TITLE (w),
      {
-       WINDOW_TITLE_WIDTH_X (w) = CW (StringWidth (STARH (WINDOW_TITLE (w))));
+       WINDOW_TITLE_WIDTH_X (w) = BigEndianValue (StringWidth (STARH (WINDOW_TITLE (w))));
      });
 
   TextFont (applFont);
   WINDOW_CONTROL_LIST_X (w) = (ControlHandle)CWC (0);
   WINDOW_PIC_X (w) = (PicHandle)CWC (0);
-  WINDOW_REF_CON_X (w) = CL (ref_con);
+  WINDOW_REF_CON_X (w) = BigEndianValue (ref_con);
   WINDCALL ((WindowPtr) w, wNew, 0);
   if (WINDOW_VISIBLE_X (w))
     {
@@ -572,7 +573,7 @@ P3 (PUBLIC pascal trap, CWindowPtr, GetNewCWindow,
 			 Hx (win_res, _wvisible) != 0,
 			 Hx (win_res, _wprocid),
 			 behind, Hx (win_res, _wgoaway) != 0,
-			 CL (*(LONGINT *) ((char *) &HxX (win_res, _wrect) + 14)));
+			 BigEndianValue (*(LONGINT *) ((char *) &HxX (win_res, _wrect) + 14)));
 
 
   win_ctab_res = ROMlib_getrestid (TICK ("wctb"), window_id);
@@ -610,7 +611,7 @@ P3(PUBLIC pascal trap, WindowPtr, GetNewWindow, INTEGER, wid, Ptr, wst,
 	    (StringPtr) ((char *) &HxX(wh, _wrect) + 18),
             Hx(wh, _wvisible) != 0, Hx(wh, _wprocid), (WindowPtr) behind,
             Hx(wh, _wgoaway) != 0,
-	    CL(*(LONGINT *)( (char *) &HxX(wh, _wrect) + 14)));
+	    BigEndianValue(*(LONGINT *)( (char *) &HxX(wh, _wrect) + 14)));
     return(tp);
 }
  

@@ -12,6 +12,8 @@
 #include "MemoryMgr.h"
 #include "SpeechManager-MacBridge.h"
 
+using namespace ByteSwap;
+
 Executor::NumVersion MacBridge::SpeechManagerVersion (void)
 {
 #if 0
@@ -34,13 +36,15 @@ Executor::NumVersion MacBridge::SpeechManagerVersion (void)
 int16 MacBridge::SpeechBusy (void)
 {
   SInt16 toRet = ::SpeechBusy();
-  return CW(toRet);
+
+  return BigEndianValue(toRet);
 }
 
 int16 MacBridge::SpeechBusySystemWide(void)
 {
   SInt16 toRet = ::SpeechBusySystemWide();
-  return CW(toRet);
+
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::CountVoices (int16 *numVoices)
@@ -51,31 +55,29 @@ Executor::OSErr MacBridge::CountVoices (int16 *numVoices)
   SInt16 voiceCount = 0;
   ::OSErr toRet = ::CountVoices(&voiceCount);
   
-  *numVoices = CW(voiceCount);
-  return CW(toRet);
-  return noErr;
-
+  *numVoices = BigEndianValue(voiceCount);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::DisposeSpeechChannel (Executor::SpeechChannel chan)
 {
   ::OSErr toRet = ::DisposeSpeechChannel((::SpeechChannel)chan);
 
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::SpeakString (Executor::Str255 textToBeSpoken)
 {
   ::OSErr toRet = ::SpeakString(textToBeSpoken);
 
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::StopSpeech (Executor::SpeechChannel chan)
 {
   ::OSErr toRet = ::StopSpeech((::SpeechChannel)chan);
   
-  return CW(toRet);
+  return BigEndianValue(toRet);
 
 }
 
@@ -83,13 +85,13 @@ Executor::OSErr MacBridge::ContinueSpeech (Executor::SpeechChannel chan)
 {
   ::OSErr toRet = ::StopSpeech((::SpeechChannel)chan);
 
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 static inline void MacVoiceSpecToExecutorVoiceSpec(Executor::VoiceSpec* ExecutorVoice, ::VoiceSpec *MacVoice)
 {
-  ExecutorVoice->creator = CL(MacVoice->creator);
-  ExecutorVoice->id = CL(MacVoice->id);
+  ExecutorVoice->creator = BigEndianValue(MacVoice->creator);
+  ExecutorVoice->id = BigEndianValue(MacVoice->id);
 }
 
 Executor::OSErr MacBridge::GetIndVoice (int16 index, Executor::VoiceSpec *voice)
@@ -98,58 +100,64 @@ Executor::OSErr MacBridge::GetIndVoice (int16 index, Executor::VoiceSpec *voice)
   if (!voice) {
     return CWC((Executor::OSErr)paramErr);
   }
-  ::OSErr toRet = ::GetIndVoice(CW(index), &macVoice);
+  ::OSErr toRet = ::GetIndVoice(BigEndianValue(index), &macVoice);
   
   MacVoiceSpecToExecutorVoiceSpec(voice, &macVoice);
   
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::NewSpeechChannel (Executor::VoiceSpec *voice, Executor::SpeechChannel *chan)
 {
-  return noErr;
+  ::VoiceSpec macVoice = {.creator = (OSType)BigEndianValue(voice->creator),
+  .id = (OSType)BigEndianValue(voice->id)};
 
+  ::OSErr toRet = ::NewSpeechChannel(&macVoice, (::SpeechChannel*)chan);
+  
+  MacVoiceSpecToExecutorVoiceSpec(voice, &macVoice);
+  
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::StopSpeechAt (Executor::SpeechChannel chan, int32 whereToStop)
 {
-  ::OSErr toRet = ::StopSpeechAt((::SpeechChannel)chan, CL(whereToStop));
+  ::OSErr toRet = ::StopSpeechAt((::SpeechChannel)chan, BigEndianValue(whereToStop));
   
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::PauseSpeechAt (Executor::SpeechChannel chan, int32 whereToPause)
 {
-  ::OSErr toRet = ::PauseSpeechAt((::SpeechChannel)chan, CL(whereToPause));
+  ::OSErr toRet = ::PauseSpeechAt((::SpeechChannel)chan, BigEndianValue(whereToPause));
   
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::SetSpeechRate(Executor::SpeechChannel chan, Executor::Fixed rate)
 {
-  ::OSErr toRet = ::SetSpeechRate((::SpeechChannel)chan, CL(rate));
+  ::OSErr toRet = ::SetSpeechRate((::SpeechChannel)chan, BigEndianValue(rate));
   
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
-PUBLIC Executor::OSErr MacBridge::GetSpeechRate (Executor::SpeechChannel chan, Executor::Fixed *rate)
+Executor::OSErr MacBridge::GetSpeechRate (Executor::SpeechChannel chan, Executor::Fixed *rate)
 {
   if (!rate) {
     return CWC((Executor::OSErr)paramErr);
   }
   ::OSErr toRet;
-  ::Fixed ourFixed = CL(*rate);
+  ::Fixed ourFixed = BigEndianValue(*rate);
   toRet = ::GetSpeechRate((::SpeechChannel)chan, &ourFixed);
-  *rate = CL(ourFixed);
+  *rate = BigEndianValue(ourFixed);
   
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::SetSpeechPitch (Executor::SpeechChannel chan, Executor::Fixed pitch)
 {
-  ::OSErr toRet = ::SetSpeechPitch((::SpeechChannel)chan, CL(pitch));
+  ::OSErr toRet = ::SetSpeechPitch((::SpeechChannel)chan, BigEndianValue(pitch));
   
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::GetSpeechPitch (Executor::SpeechChannel chan, Executor::Fixed *pitch)
@@ -158,18 +166,18 @@ Executor::OSErr MacBridge::GetSpeechPitch (Executor::SpeechChannel chan, Executo
     return CWC((Executor::OSErr)paramErr);
   }
   ::OSErr toRet;
-  ::Fixed ourFixed = CL(*pitch);
+  ::Fixed ourFixed = BigEndianValue(*pitch);
   toRet = ::GetSpeechRate((::SpeechChannel)chan, &ourFixed);
-  *pitch = CL(ourFixed);
+  *pitch = BigEndianValue(ourFixed);
   
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 #undef NewHandle
 
 Executor::OSErr MacBridge::UseDictionary (Executor::SpeechChannel chan, Executor::Handle dictionary)
 {
-  ::Size ExecSize = CL(Executor::GetHandleSize(dictionary));
+  ::Size ExecSize = BigEndianValue(Executor::GetHandleSize(dictionary));
   ::Handle nativeHandle = ::NewHandle(ExecSize);
   memcpy(*nativeHandle, dictionary->p, ExecSize);
   
@@ -177,26 +185,25 @@ Executor::OSErr MacBridge::UseDictionary (Executor::SpeechChannel chan, Executor
   
   ::DisposeHandle(nativeHandle);
   
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::MakeVoiceSpec (Executor::OSType creator, Executor::OSType id, Executor::VoiceSpec *voice)
 {
   if (!voice) {
-    return CW((Executor::OSErr)paramErr);
+    return CWC((Executor::OSErr)paramErr);
   }
   ::VoiceSpec nativeSpec = {0};
-  ::OSErr toRet = ::MakeVoiceSpec(CL(creator), CL(id), &nativeSpec);
+  ::OSErr toRet = ::MakeVoiceSpec(BigEndianValue(creator), BigEndianValue(id), &nativeSpec);
   MacVoiceSpecToExecutorVoiceSpec(voice, &nativeSpec);
   
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::GetVoiceDescription (
 											const Executor::VoiceSpec *voice,
 											Executor::VoiceDescription *info,
-											Executor::LONGINT infoLength
-											)
+											Executor::LONGINT infoLength)
 {
   return noErr;
 
@@ -205,7 +212,7 @@ Executor::OSErr MacBridge::GetVoiceDescription (
 Executor::OSErr MacBridge::GetVoiceInfo (const Executor::VoiceSpec *voice, Executor::OSType selector, void *voiceInfo)
 {
   // TODO: handle different data types
-  ::OSErr toRet = ::GetVoiceInfo((const ::VoiceSpec*)voice, CL(selector), voiceInfo);
+  ::OSErr toRet = ::GetVoiceInfo((const ::VoiceSpec*)voice, BigEndianValue(selector), voiceInfo);
 
   switch (selector) {
 	case CLC(soVoiceFile):
@@ -213,6 +220,7 @@ Executor::OSErr MacBridge::GetVoiceInfo (const Executor::VoiceSpec *voice, Execu
 	  //TODO: error checking
 	  unsigned char cLocation[PATH_MAX] = {0};
 	  ::VoiceFileInfo *theFile = (::VoiceFileInfo*)voiceInfo;
+	  //OS X's and Executor's FSSpecs WILL point to different files.
 	  ::FSSpec tmpSpec = theFile->fileSpec;
 	  ::FSRef tmpRef = {0};
 	  ::CFURLRef tmpURL = NULL;
@@ -221,28 +229,46 @@ Executor::OSErr MacBridge::GetVoiceInfo (const Executor::VoiceSpec *voice, Execu
 	  ::CFStringRef fileName = CFURLCopyLastPathComponent(tmpURL);
 	  ::CFURLGetFileSystemRepresentation(tmpURL, false, cLocation, sizeof(cLocation));
 	  Executor::Str255 strName = {0};
-	  CFStringGetPascalString(fileName, strName, sizeof(strName), kCFStringEncodingMacRoman);
+	  CFStringGetPascalString(fileName, strName, sizeof(strName) - 1, kCFStringEncodingMacRoman);
 	  Executor::HVCB *customPart = Executor::ROMlib_vcbbybiggestunixname((const char*)cLocation);
 	  Executor::FSSpecPtr tmpSpecPtr = (Executor::FSSpecPtr)&theFile->fileSpec;
 	  Executor::C_FSMakeFSSpec(customPart->vcbDrvNum, customPart->vcbDirIDM, strName, tmpSpecPtr);
 	  
-	  theFile->resID = CW(theFile->resID);
+	  theFile->resID = BigEndianValue(theFile->resID);
 	  ::CFRelease(tmpURL);
 	  ::CFRelease(fileName);
+	}
+	  break;
+	  
+	  case CLC(soVoiceDescription):
+	{
+	  Executor::VoiceSpec exVSpec = {0};
+	  ::VoiceDescription* voiDesc = (::VoiceDescription*)voiceInfo;
+	  voiDesc->length = BigEndianValue(voiDesc->length);
+	  MacVoiceSpecToExecutorVoiceSpec(&exVSpec, &voiDesc->voice);
+	  memcpy(&voiDesc->voice, &exVSpec, sizeof(exVSpec));
+	  voiDesc->version = BigEndianValue(voiDesc->version);
+	  voiDesc->gender = BigEndianValue(voiDesc->gender);
+	  voiDesc->age = BigEndianValue(voiDesc->age);
+	  voiDesc->script = BigEndianValue(voiDesc->script);
+	  voiDesc->language = BigEndianValue(voiDesc->language);
+	  voiDesc->region = BigEndianValue(voiDesc->region);
+	  //voiDesc->voice.creator
+	  
 	}
 	  break;
 	  
 	default:
 	  break;
   }
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::SpeakText (Executor::SpeechChannel chan, const void *textBuf, Executor::ULONGINT textBytes)
 {
-  ::OSErr toRet = ::SpeakText((::SpeechChannel)chan, textBuf, CL(textBytes));
+  ::OSErr toRet = ::SpeakText((::SpeechChannel)chan, textBuf, BigEndianValue(textBytes));
 
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::SetSpeechInfo (
@@ -252,9 +278,9 @@ Executor::OSErr MacBridge::SetSpeechInfo (
 									  )
 {
   // TODO: handle different data types
-  ::OSErr toRet = ::SetSpeechInfo((::SpeechChannel)chan, CL(selector), speechInfo);
+  ::OSErr toRet = ::SetSpeechInfo((::SpeechChannel)chan, BigEndianValue(selector), speechInfo);
 
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::GetSpeechInfo (
@@ -264,9 +290,9 @@ Executor::OSErr MacBridge::GetSpeechInfo (
 									  )
 {
   // TODO: handle different data types
-  ::OSErr toRet = ::GetSpeechInfo((::SpeechChannel)chan, CL(selector), speechInfo);
+  ::OSErr toRet = ::GetSpeechInfo((::SpeechChannel)chan, BigEndianValue(selector), speechInfo);
 
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::SpeakBuffer (
@@ -276,23 +302,23 @@ Executor::OSErr MacBridge::SpeakBuffer (
 									int32 controlFlags
 									)
 {
-  ::OSErr toRet = ::SpeakBuffer((::SpeechChannel)chan, textBuf, CL(textBytes), CL(controlFlags));
+  ::OSErr toRet = ::SpeakBuffer((::SpeechChannel)chan, textBuf, BigEndianValue(textBytes), BigEndianValue(controlFlags));
 
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }
 
 Executor::OSErr MacBridge::TextToPhonemes (Executor::SpeechChannel chan, const void *textBuf, Executor::ULONGINT textBytes, Executor::Handle phonemeBuf, Executor::LONGINT *phonemeBytes)
 {
-  ::Size ExecSize = CL(Executor::GetHandleSize(phonemeBuf));
+  ::Size ExecSize = BigEndianValue(Executor::GetHandleSize(phonemeBuf));
   ::Handle nativeHandle = ::NewHandle(ExecSize);
-  long tempPhonemes = CL(*phonemeBytes);
+  long tempPhonemes = BigEndianValue(*phonemeBytes);
   Executor::LONGINT intPhonemes;
   memcpy(*nativeHandle, phonemeBuf->p, ExecSize);
 
-  ::OSErr toRet = ::TextToPhonemes((::SpeechChannel)chan, textBuf, CL(textBytes), nativeHandle, &tempPhonemes);
+  ::OSErr toRet = ::TextToPhonemes((::SpeechChannel)chan, textBuf, BigEndianValue(textBytes), nativeHandle, &tempPhonemes);
   intPhonemes = tempPhonemes;
-  *phonemeBytes = CL(intPhonemes);
+  *phonemeBytes = BigEndianValue(intPhonemes);
   ::DisposeHandle(nativeHandle);
 
-  return CW(toRet);
+  return BigEndianValue(toRet);
 }

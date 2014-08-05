@@ -35,6 +35,7 @@ char ROMlib_rcsid_hfsHelper[] =
 #endif
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #if !defined(MAC)
 
@@ -285,7 +286,7 @@ read_driver_block_size (LONGINT fd, LONGINT bsize, LONGINT maxbytes,
     {
       if (aligned_buf[0] == 0x45 && aligned_buf[1] == 0x52)
 	{
-	  retval = (unsigned short) CW (*(unsigned short *) &aligned_buf[2]);
+	  retval = (unsigned short) BigEndianValue (*(unsigned short *) &aligned_buf[2]);
 	  warning_fs_log ("fd = 0x%x, block size = %d", fd, retval);
 	}
     }
@@ -334,9 +335,9 @@ Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, LONGINT *messp
     if (floppyfd < 0)
 /*-->*/return;
 
-    drivenum = CW(dqp->dq.dQDrive);
+    drivenum = BigEndianValue(dqp->dq.dQDrive);
 
-    pb.ioParam.ioVRefNum = CW(drivenum);
+    pb.ioParam.ioVRefNum = BigEndianValue(drivenum);
 
     foundmap = FALSE;
     first    = TRUE;
@@ -356,16 +357,16 @@ Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, LONGINT *messp
 			dqp = ROMlib_addtodq (2048L * 2, dname,
 					      partition, OURHFSDREF, flags,
 					      &hfs);
-			drivenum = CW(dqp->dq.dQDrive);
-			pb.ioParam.ioVRefNum = CW(drivenum);
+			drivenum = BigEndianValue(dqp->dq.dQDrive);
+			pb.ioParam.ioVRefNum = BigEndianValue(drivenum);
 		    }
-		    dqp->hfs.offset = hfs.offset + (CL (partp->pmPyPartStart)
+		    dqp->hfs.offset = hfs.offset + (BigEndianValue (partp->pmPyPartStart)
 				       * driver_block_size);
 		    err = hfsPBMountVol(&pb, floppyfd, dqp->hfs.offset, bsize,
 					maxbytes, flags, dqp);
 		    mess = ((LONGINT) err << 16) | drivenum;
 		    if (first) {
-			*messp = CL(mess);
+			*messp = BigEndianValue(mess);
 			first = FALSE;
 		    } else
 			PPostEvent(diskEvt, mess, (HIDDEN_EvQElPtr *) 0);
@@ -388,17 +389,17 @@ Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, LONGINT *messp
 		    ++partition;
 		    dqp = ROMlib_addtodq (2048L * 2, dname, partition,
 					  OURHFSDREF, flags, &hfs);
-		    drivenum = CW(dqp->dq.dQDrive);
-		    pb.ioParam.ioVRefNum = CW(drivenum);
+		    drivenum = BigEndianValue(dqp->dq.dQDrive);
+		    pb.ioParam.ioVRefNum = BigEndianValue(drivenum);
 		}
 		dqp->hfs.offset = hfs.offset +
-		                  (CL (oldmapp->oldmapentry[i].pdStart)
+		                  (BigEndianValue (oldmapp->oldmapentry[i].pdStart)
 				   * driver_block_size);
 		err = hfsPBMountVol(&pb, floppyfd, dqp->hfs.offset,
 				    bsize, maxbytes, flags, dqp);
 		mess = ((LONGINT) err << 16) | drivenum;
 		if (first) {
-		    *messp = CL(mess);
+		    *messp = BigEndianValue(mess);
 		    first = FALSE;
 		} else 
 		    PPostEvent(diskEvt, mess, (HIDDEN_EvQElPtr *) 0);
@@ -445,7 +446,7 @@ Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, LONGINT *messp
 	    dqp->hfs.offset = offset;
 	    err = hfsPBMountVol(&pb, floppyfd, offset, bsize, maxbytes,
 					      flags, dqp);
-	    *messp = CL(((LONGINT) err << 16) | drivenum);
+	    *messp = BigEndianValue(((LONGINT) err << 16) | drivenum);
 	}
     }
 }
@@ -602,10 +603,10 @@ Executor::ROMlib_transphysblk (hfs_access_t *hfsp, LONGINT physblock, short nphy
     
     pb.ioVRefNum = vcbp->vcbDrvNum;
     pb.ioRefNum = vcbp->vcbDRefNum;
-    pb.ioBuffer = CL(bufp);
-    pb.ioReqCount = CL(PHYSBSIZE * (LONGINT nphysblocks));
-    pb.ioPosMode  = CW(fsFromStart);
-    pb.ioPosOffset = CL(physblock);
+    pb.ioBuffer = BigEndianValue(bufp);
+    pb.ioReqCount = BigEndianValue(PHYSBSIZE * (LONGINT nphysblocks));
+    pb.ioPosMode  = BigEndianValue(fsFromStart);
+    pb.ioPosOffset = BigEndianValue(physblock);
     err = rw == reading ? PBRead ((ParmBlkPtr) &pb, FALSE) :
     PBWrite((ParmBlkPtr) &pb, FALSE);
     if (actp)
@@ -631,7 +632,7 @@ Executor::ROMlib_transphysblk (hfs_access_t *hfsp, LONGINT physblock, short nphy
         memmove(bufp, newbufp, (LONGINT) nphysblocks * PHYSBSIZE);
 #endif
     if (actp)
-        *actp = err != noErr ? 0 : CL((LONGINT) nphysblocks * PHYSBSIZE);
+        *actp = err != noErr ? 0 : BigEndianValue((LONGINT) nphysblocks * PHYSBSIZE);
     
     
 #endif
@@ -667,7 +668,7 @@ PUBLIC void *Executor::ROMlib_indexqueue(QHdr *qp, short index)
     QElemPtr p;
     
 #if 0
-    for (p = CL(qp->qHead); (--index > 0) && p; p = CL(p->qLink))
+    for (p = BigEndianValue(qp->qHead); (--index > 0) && p; p = BigEndianValue(p->qLink))
 	;
 #else
     for (p = MR(qp->qHead); (--index > 0) && p; p = MR(p->vcbQElem.qLink))

@@ -16,6 +16,8 @@ namespace Executor {
 	void C_ldef0(INTEGER, BOOLEAN, Rect*, Cell, INTEGER, INTEGER, ListHandle);
 }
 
+using namespace ByteSwap;
+
 A5(PRIVATE, void, draw, BOOLEAN, sel, Rect *, rect, INTEGER, doff,
 						INTEGER, dl, ListHandle, list)
 {
@@ -25,7 +27,7 @@ A5(PRIVATE, void, draw, BOOLEAN, sel, Rect *, rect, INTEGER, doff,
     savePort = thePort;
     SetPort(HxP(list, port));
     EraseRect(rect);
-    MoveTo(CW(rect->left) + Hx(list, indent.h), CW(rect->top) + Hx(list, indent.v));
+    MoveTo(BigEndianValue(rect->left) + Hx(list, indent.h), BigEndianValue(rect->top) + Hx(list, indent.v));
     HLock((Handle) HxP(list, cells));
     DrawText((Ptr) STARH(HxP(list, cells)) + doff, 0, dl);
     HUnlock((Handle) HxP(list, cells));

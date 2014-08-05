@@ -34,6 +34,7 @@ char ROMlib_rcsid_syserr[] =
 #include "rsys/syserr.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 PRIVATE myalerttab_t myalerttab = {
     CWC(8),
@@ -128,10 +129,10 @@ A1(PRIVATE, INTEGER *, findid, INTEGER, id)
     int i;
     INTEGER *ip;
 
-    for (i = CW(*(INTEGER *) MR(DSAlertTab)),
+    for (i = BigEndianValue(*(INTEGER *) MR(DSAlertTab)),
 					   ip = (INTEGER *) MR(DSAlertTab) + 1;
-						        i > 0 && CW(*ip) != id;
-	 --i, ip = (INTEGER *) ((char *) ip + CW(ip[1]) + 2 * sizeof(INTEGER)))
+						        i > 0 && BigEndianValue(*ip) != id;
+	 --i, ip = (INTEGER *) ((char *) ip + BigEndianValue(ip[1]) + 2 * sizeof(INTEGER)))
     ;
     return i > 0 ? ip : (INTEGER *) 0;
 }
@@ -142,7 +143,7 @@ A3(PRIVATE, void, drawtextstring, INTEGER, id, INTEGER, offsetx,
     struct tdef *tp;
 
     if (id && (tp = (struct tdef *) findid(id))) {
-	MoveTo(CW(tp->loc.h) + offsetx, CW(tp->loc.v) + offsety);
+	MoveTo(BigEndianValue(tp->loc.h) + offsetx, BigEndianValue(tp->loc.v) + offsety);
 	DrawText_c_string (tp->text);
     }
 }
@@ -194,22 +195,22 @@ A4(PRIVATE, void, dobuttons, INTEGER, id, INTEGER, offsetx,
 	     */
 
 	    C_OffsetRect (&bp->buts[i].butloc, offsetx, offsety);
-	    if ((sp = (struct sdef *)findid(CW(bp->buts[i].butstrid)))) {
+	    if ((sp = (struct sdef *)findid(BigEndianValue(bp->buts[i].butstrid)))) {
   	        if (demo_button_p && sp->text[0] == 'O' && sp->text[1] == 'K')
 		    textp = "Demo";
 	        else
 		    textp = sp->text;
 		tcnt = strlen(textp);
 		twid = TextWidth((Ptr) textp, 0, tcnt);
-		MoveTo((CW(bp->buts[i].butloc.left)  +
-		        CW(bp->buts[i].butloc.right) - twid) / 2,
-		       (CW(bp->buts[i].butloc.top)   +
-			CW(bp->buts[i].butloc.bottom)) / 2 + 4);
+		MoveTo((BigEndianValue(bp->buts[i].butloc.left)  +
+		        BigEndianValue(bp->buts[i].butloc.right) - twid) / 2,
+		       (BigEndianValue(bp->buts[i].butloc.top)   +
+			BigEndianValue(bp->buts[i].butloc.bottom)) / 2 + 4);
 		DrawText((Ptr) textp, 0, tcnt);
 	    }
 #if defined (BILLBUTTONS)
-	    h = CW(bp->buts[i].butloc.right) - CW(bp->buts[i].butloc.left);
-	    v = (CW(bp->buts[i].butloc.bottom) - CW(bp->buts[i].butloc.top))/2;
+	    h = BigEndianValue(bp->buts[i].butloc.right) - BigEndianValue(bp->buts[i].butloc.left);
+	    v = (BigEndianValue(bp->buts[i].butloc.bottom) - BigEndianValue(bp->buts[i].butloc.top))/2;
 	    if (h > v)
 		h = v;
 	    if (!(ROMlib_options & ROMLIB_RECT_SCREEN_BIT))
@@ -227,16 +228,16 @@ A4(PRIVATE, void, dobuttons, INTEGER, id, INTEGER, offsetx,
 	for (done = 0; !done;) {
 	    C_GetNextEvent(mDownMask|keyDownMask, &evt);
 	    if (evt.what == CWC(mouseDown) || evt.what == CWC(keyDown)) {
-		p.h = CW(evt.where.h);
-		p.v = CW(evt.where.v);
-		for (i = 0; !done && i < CW(bp->nbut); i++) {
+		p.h = BigEndianValue(evt.where.h);
+		p.v = BigEndianValue(evt.where.v);
+		for (i = 0; !done && i < BigEndianValue(bp->nbut); i++) {
 		    if (PtInRect(p, &bp->buts[i].butloc) ||
 			((evt.what == CWC(keyDown)) &&
-			 (((CL(evt.message) & charCodeMask) == '\r') ||
-			  ((CL(evt.message) & charCodeMask) == NUMPAD_ENTER)))
+			 (((BigEndianValue(evt.message) & charCodeMask) == '\r') ||
+			  ((BigEndianValue(evt.message) & charCodeMask) == NUMPAD_ENTER)))
 			) {
 			if ((pp = (struct pdef *)
-					    findid(CW(bp->buts[i].butprocid))))
+					    findid(BigEndianValue(bp->buts[i].butprocid))))
 			    /* NOTE:  we will have to do a better
 				      job here sometime */
 			    (*(void (*)(void))MR(pp->proc))();
@@ -282,24 +283,24 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
     
     if (!DSAlertTab) {
 #if defined (CLIFF_CENTERING_ALGORITHM)
-	DSAlertTab = CL((Ptr) &myalerttab);
+	DSAlertTab = BigEndianValue((Ptr) &myalerttab);
 	DSAlertRect.top    = CWC(64);
 	DSAlertRect.left   = CWC(32);
 	DSAlertRect.bottom = CWC(190);
 	DSAlertRect.right  = CWC(480);
 #else
-	INTEGER screen_width = CW (main_gd_rect.right);
-	INTEGER screen_height = CW (main_gd_rect.bottom);
+	INTEGER screen_width = BigEndianValue (main_gd_rect.right);
+	INTEGER screen_height = BigEndianValue (main_gd_rect.bottom);
 
 	DSAlertTab = RM((Ptr) &myalerttab);
-	DSAlertRect.top    = CW((screen_height - 126) / 3);
-	DSAlertRect.left   = CW((screen_width - 448) / 2);
-	DSAlertRect.bottom = CW(CW(DSAlertRect.top) + 126);
-	DSAlertRect.right  = CW(CW(DSAlertRect.left) + 448);
+	DSAlertRect.top    = BigEndianValue((screen_height - 126) / 3);
+	DSAlertRect.left   = BigEndianValue((screen_width - 448) / 2);
+	DSAlertRect.bottom = BigEndianValue(BigEndianValue(DSAlertRect.top) + 126);
+	DSAlertRect.right  = BigEndianValue(BigEndianValue(DSAlertRect.left) + 448);
 #endif
 
-	offsetx = CW (DSAlertRect.left) - 32;
-	offsety = CW (DSAlertRect.top) - 64;
+	offsetx = BigEndianValue (DSAlertRect.left) - 32;
+	offsety = BigEndianValue (DSAlertRect.top) - 64;
     }
     else {
       offsetx = offsety = 0;
@@ -310,7 +311,7 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
     /*	  NOT DONE YET... signal handlers sort of do that anyway */
 
     /* 2. Store errorcode in DSErrCode */
-    DSErrCode = CW(errorcode);
+    DSErrCode = BigEndianValue(errorcode);
 
     /* 3. If no Cx(DSAlertTab), bitch */
     if (!DSAlertTab) {
@@ -322,7 +323,7 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
     /* 4. Allocate and re-initialize QuickDraw */
 #if defined (BINCOMPAT)
     a5 = (LONGINT) (long) US_TO_SYN68K (&tmpa5);
-    CurrentA5 = (Ptr) (long) CL(a5);
+    CurrentA5 = (Ptr) (long) BigEndianValue(a5);
 #endif /* BINCOMPAT */
     InitGraf((Ptr) quickbytes + sizeof(quickbytes) - 4);
     ROMlib_initport(&alertport);
@@ -345,13 +346,13 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
       r = DSAlertRect;
       FillRect(&r, white);
 #if defined (OLDSTYLEALERT)
-      r.right = CW(CW(r.right) - (2));
-      r.bottom = CW(CW(r.bottom) - (2));
+      r.right = BigEndianValue(BigEndianValue(r.right) - (2));
+      r.bottom = BigEndianValue(BigEndianValue(r.bottom) - (2));
       FrameRect(&r);
       PenSize(2, 2);
-      MoveTo(CW(r.left)+2, CW(r.bottom));
-      LineTo(CW(r.right), CW(r.bottom));
-      LineTo(CW(r.right), CW(r.top)+2);
+      MoveTo(BigEndianValue(r.left)+2, BigEndianValue(r.bottom));
+      LineTo(BigEndianValue(r.right), BigEndianValue(r.bottom));
+      LineTo(BigEndianValue(r.right), BigEndianValue(r.top)+2);
       PenSize(1, 1);
 #else /* OLDSTYLEALERT */
       FrameRect(&r);
@@ -369,18 +370,18 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
       ap = (struct adef *) ((INTEGER *) MR(DSAlertTab) + 1);
 	
     /* 7. text strings */
-    drawtextstring(CW(ap->primetextid), offsetx, offsety);
-    drawtextstring(CW(ap->secondtextid), offsetx, offsety);
+    drawtextstring(BigEndianValue(ap->primetextid), offsetx, offsety);
+    drawtextstring(BigEndianValue(ap->secondtextid), offsetx, offsety);
 
     /* 8. icon */
-    drawicon(CW(ap->iconid), offsetx, offsety);
+    drawicon(BigEndianValue(ap->iconid), offsetx, offsety);
 
     /* 9. TODO: figure out what to do with the proc ... */
 
     /* 10, 11, 12, 13. check for non-zero button id */
 /* #warning We blow off ResumeProc until we can properly handle it */
     if (ap->buttonid)
-      dobuttons(/* CL(ResumeProc) ? Cx(ap->buttonid) + 1 : */ Cx(ap->buttonid),
+      dobuttons(/* BigEndianValue(ResumeProc) ? Cx(ap->buttonid) + 1 : */ Cx(ap->buttonid),
                 offsetx, offsety, false);
 
     TRAPEND();

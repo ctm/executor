@@ -19,6 +19,7 @@ char ROMlib_rcsid_xdata[] =
 #include "rsys/vdriver.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 boolean_t
 Executor::update_xdata_if_needed (xdata_handle_t xh, PixPat *pixpat,
@@ -29,7 +30,7 @@ Executor::update_xdata_if_needed (xdata_handle_t xh, PixPat *pixpat,
   x = STARH (xh);
 
   if (x->ctab_seed_x != CTAB_SEED_X (MR (dest->pmTable))
-      || (1 << x->log2_bpp) != CW (dest->pixelSize)
+      || (1 << x->log2_bpp) != BigEndianValue (dest->pixelSize)
       || (x->log2_bpp >= 4 && x->rgb_spec != pixmap_rgb_spec (dest)))
     {
       if (x->raw_pat_bits_mem)
@@ -113,10 +114,10 @@ raw_bits_for_pattern (const Pattern pattern, PixMap *target,
   conv_table->ctTable[0].value = CWC (0);
   conv_table->ctTable[1].value = CWC (~0);
   
-  target_depth = CW (target->pixelSize);
+  target_depth = BigEndianValue (target->pixelSize);
   dst_row_bytes = target_depth;  /* old-style Patterns always 8 pixels wide. */
   *row_bytes = dst_row_bytes;
-  dst_pixmap_tmpl.rowBytes = (CW (dst_row_bytes)
+  dst_pixmap_tmpl.rowBytes = (BigEndianValue (dst_row_bytes)
 			      | (target->rowBytes & ROWBYTES_FLAG_BITS_X)
 			      | PIXMAP_DEFAULT_ROWBYTES_X);
   pixmap_set_pixel_fields (&dst_pixmap_tmpl, target_depth);
@@ -151,13 +152,13 @@ raw_bits_for_color_pattern (PixPatPtr pixpat, PixMap *target,
 
        src = STARH (patmap);
        bounds = &src->bounds;
-       target_depth = CW (target->pixelSize);
+       target_depth = BigEndianValue (target->pixelSize);
        row_bytes = ((RECT_WIDTH (bounds) * target_depth) + 7) / 8;
        *row_bytesp = row_bytes;
 
        dst = *target;
        dst.bounds   = *bounds;
-       dst.rowBytes = (CW (row_bytes)
+       dst.rowBytes = (BigEndianValue (row_bytes)
 		       | (target->rowBytes & ROWBYTES_FLAG_BITS_X)
 		       | PIXMAP_DEFAULT_ROWBYTES_X);
        dst.baseAddr = (Ptr) RM (bits);
@@ -188,7 +189,7 @@ raw_bits_for_rgb_pattern (PixPatPtr pixpat, PixMap *target,
    */
   desired_color = CTAB_TABLE (PIXMAP_TABLE (MR (pixpat->patMap)))[4].rgb;
   
-  target_depth = CW (target->pixelSize);
+  target_depth = BigEndianValue (target->pixelSize);
 
   if (target_depth <= 8)
     {
@@ -311,7 +312,7 @@ xdata_for_raw_data (PixMap *target, xdata_t *x, uint32 *raw_bits,
   memset (x, 0, sizeof *x);
   
   x->magic_cookie = XDATA_MAGIC_COOKIE;
-  x->log2_bpp = ROMlib_log2[CW (target->pixelSize)];
+  x->log2_bpp = ROMlib_log2[BigEndianValue (target->pixelSize)];
   x->ctab_seed_x = CTAB_SEED_X (MR (target->pmTable));
   x->rgb_spec = pixmap_rgb_spec (target);
   

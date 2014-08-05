@@ -16,6 +16,7 @@ char ROMlib_rcsid_qColorutil[] =
 #include "rsys/mman.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /* ctab with `zero' as the seed; if StdBits encounters a source pixmap
    with this as its color table, no depth conversion will be
@@ -94,7 +95,7 @@ Executor::validate_fg_bk_ctab (void)
 
   if (memcmp (&old_fg, fg, sizeof old_fg)
       || memcmp (&old_bk, bk, sizeof old_bk))
-    CTAB_SEED_X (ROMlib_fg_bk_ctab) = CL (GetCTSeed ());
+    CTAB_SEED_X (ROMlib_fg_bk_ctab) = BigEndianValue (GetCTSeed ());
   
   return ROMlib_fg_bk_ctab;
 }
@@ -138,7 +139,7 @@ Executor::validate_relative_bw_ctab (void)
   
   if (memcmp (&old_entry0, entry0, sizeof old_entry0)
       || memcmp (&old_entry1, entry1, sizeof old_entry1))
-    CTAB_SEED_X (ROMlib_relative_bw_ctab) = CL (GetCTSeed ());
+    CTAB_SEED_X (ROMlib_relative_bw_ctab) = BigEndianValue (GetCTSeed ());
   
   return ROMlib_relative_bw_ctab;
 }
@@ -167,7 +168,7 @@ Executor::ROMlib_color_init (void)
        /* allocate and initialize ROMlib_bw_ctab */
        ROMlib_bw_ctab = (CTabHandle) NewHandle (CTAB_STORAGE_FOR_SIZE (1));
        CTAB_SIZE_X (ROMlib_bw_ctab) = CWC (1);
-       CTAB_SEED_X (ROMlib_bw_ctab) = CL (GetCTSeed ());
+       CTAB_SEED_X (ROMlib_bw_ctab) = BigEndianValue (GetCTSeed ());
        CTAB_FLAGS_X (ROMlib_bw_ctab) = CWC (0);
        
        bw_ctab_table = CTAB_TABLE (ROMlib_bw_ctab);

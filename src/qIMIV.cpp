@@ -31,6 +31,7 @@ namespace Executor {
 }
 
 using namespace Executor;
+using namespace ByteSwap;
 
 #define DOLEFT  1
 #define DORIGHT 2
@@ -223,14 +224,14 @@ A9 (PRIVATE, void, xSeedFill, unsigned char *, srcp, unsigned char *, dstp,
 								width, Negate);
     if (dstp >= (unsigned char *) MR(screenBitsX.baseAddr)) {
 	byteoff = dstp    - (unsigned char *) MR(screenBitsX.baseAddr);
-	voff    = byteoff / CW(screenBitsX.rowBytes);
-	if (voff < CW(screenBitsX.bounds.bottom) - CW(screenBitsX.bounds.top))
+	voff    = byteoff / BigEndianValue(screenBitsX.rowBytes);
+	if (voff < BigEndianValue(screenBitsX.bounds.bottom) - BigEndianValue(screenBitsX.bounds.top))
 	  {
-	    dirty_rect_accrue (CW (screenBitsX.bounds.top) + voff,
-			       (CW (screenBitsX.bounds.left)
-				+ (byteoff % CW(screenBitsX.rowBytes) * 8L)),
-			       CW (temprect.top) + height,
-			       CW (temprect.left) + (LONGINT) width * 16);
+	    dirty_rect_accrue (BigEndianValue (screenBitsX.bounds.top) + voff,
+			       (BigEndianValue (screenBitsX.bounds.left)
+				+ (byteoff % BigEndianValue(screenBitsX.rowBytes) * 8L)),
+			       BigEndianValue (temprect.top) + height,
+			       BigEndianValue (temprect.left) + (LONGINT) width * 16);
 	  }
       }
     TRAPEND();
@@ -271,10 +272,10 @@ create_scratch_bitmap_if_necessary (uint8 **_fbuf,
       
       offset = fbuf - screen_fbuf;
       
-      src_rect->top    = CW (offset / screen_row_bytes);
-      src_rect->bottom = CW (offset / screen_row_bytes + height);
-      src_rect->left   = CW ((offset % screen_row_bytes) * 8);
-      src_rect->right  = CW ((offset % screen_row_bytes) * 8
+      src_rect->top    = BigEndianValue (offset / screen_row_bytes);
+      src_rect->bottom = BigEndianValue (offset / screen_row_bytes + height);
+      src_rect->left   = BigEndianValue ((offset % screen_row_bytes) * 8);
+      src_rect->right  = BigEndianValue ((offset % screen_row_bytes) * 8
 			     + word_width * 16);
       
       *src_pm = *STARH (gd_pmap);
@@ -388,16 +389,16 @@ copy_mask_1 (BitMap *src_bm, BitMap *mask_bm, BitMap *dst_bm,
       dst_top  = dst_bottom = *dst_rect;
       
       src_bottom.top = src_top.bottom
-	= CW (CW (src_top.bottom) - src_half);
+	= BigEndianValue (BigEndianValue (src_top.bottom) - src_half);
       mask_bottom.top = mask_top.bottom
-	= CW (CW (mask_top.bottom) - mask_half);
+	= BigEndianValue (BigEndianValue (mask_top.bottom) - mask_half);
       dst_bottom.top = dst_top.bottom
-	= CW (CW (dst_top.bottom) - dst_half);
+	= BigEndianValue (BigEndianValue (dst_top.bottom) - dst_half);
       
       mask_top_bm = *mask_bm;
       mask_bottom_bm = *mask_bm;
       mask_bottom_bm.bounds.top = mask_top_bm.bounds.bottom
-	= CW (CW (mask_top_bm.bounds.bottom) - mask_half);
+	= BigEndianValue (BigEndianValue (mask_top_bm.bounds.bottom) - mask_half);
       
       copy_mask_1 (src_bm, &mask_top_bm, dst_bm,
 		   &src_top, &mask_top, &dst_top); 
@@ -426,7 +427,7 @@ P6 (PUBLIC pascal trap, void, CopyMask,		/* IMIV-24 */
   TEMP_ALLOC_ALLOCATE (mask_bits, temp_mask_bits,
 		       row_bytes * RECT_HEIGHT (mask_rect));
   mask_bm.baseAddr = (Ptr)RM (mask_bits);
-  mask_bm.rowBytes = CW (row_bytes);
+  mask_bm.rowBytes = BigEndianValue (row_bytes);
   mask_bm.bounds   = *mask_rect;
   
   CopyBits (mask_bogo_map, &mask_bm,

@@ -13,6 +13,7 @@ char ROMlib_rcsid_hle[] =
 #include "MemoryMgr.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 typedef struct hle_q_elt
 {
@@ -92,12 +93,12 @@ P4 (PUBLIC pascal trap, OSErr, AcceptHighLevelEvent,
   /* #### *sender_id_return = ...; */
   *refcon_return = current_hle_msg->userRefCon;
   
-  if (CL (*msg_buf_length_return) < CL (current_hle_msg->msgLength))
+  if (BigEndianValue (*msg_buf_length_return) < BigEndianValue (current_hle_msg->msgLength))
     retval = bufferIsSmall;
   
   if (retval == noErr)
     memcpy (msg_buf, (Ptr) MR (current_hle_msg->theMsgEvent.when),
-	    CL (current_hle_msg->msgLength));
+	    BigEndianValue (current_hle_msg->msgLength));
   
   *msg_buf_length_return = current_hle_msg->msgLength;
   
@@ -174,9 +175,9 @@ P6 (PUBLIC pascal trap, OSErr, PostHighLevelEvent,
   hle_msg->theMsgEvent.when      = (int32) RM (msg_buf_copy);
   hle_msg->theMsgEvent.modifiers = CWC (-1);
   
-  hle_msg->userRefCon     = CL (refcon);
-  hle_msg->postingOptions = CL (post_options);
-  hle_msg->msgLength      = CL (msg_length);
+  hle_msg->userRefCon     = BigEndianValue (refcon);
+  hle_msg->postingOptions = BigEndianValue (post_options);
+  hle_msg->msgLength      = BigEndianValue (msg_length);
   
   /* stick the new msg */
   elt = (hle_q_elt_t *) NewPtr (sizeof *t);

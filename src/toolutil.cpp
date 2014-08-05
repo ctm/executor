@@ -31,6 +31,7 @@ char ROMlib_rcsid_toolutil[] =
 #include <string>
 
 using namespace Executor;
+using namespace ByteSwap;
 
 namespace Executor {
   PRIVATE Fixed minvert(Fixed);
@@ -398,23 +399,23 @@ P3(PUBLIC pascal trap, void, LongMul, LONGINT, a, LONGINT, b, Int64Bit *, c)
     lb = b & 0xFFFF;
     halb = ha * lb;
     lahb = la * hb;
-    c->hiLong = CL(ha * hb);
-    c->loLong = CL(la * lb);
-    c->hiLong = CL(CL(c->hiLong) + (halb >> 16));
-    c->hiLong = CL(CL(c->hiLong) + (lahb >> 16));
-    carry = CL(c->loLong) >> 31;
-    c->loLong = CL(CL(c->loLong) + (halb << 16));
+    c->hiLong = BigEndianValue(ha * hb);
+    c->loLong = BigEndianValue(la * lb);
+    c->hiLong = BigEndianValue(BigEndianValue(c->hiLong) + (halb >> 16));
+    c->hiLong = BigEndianValue(BigEndianValue(c->hiLong) + (lahb >> 16));
+    carry = BigEndianValue(c->loLong) >> 31;
+    c->loLong = BigEndianValue(BigEndianValue(c->loLong) + (halb << 16));
     carry += (halb >> 15) & 1;
-    c->loLong = CL(CL(c->loLong) + (lahb << 16));
+    c->loLong = BigEndianValue(BigEndianValue(c->loLong) + (lahb << 16));
     carry += (lahb >> 15) & 1;
     carry >>= 1;
-    c->hiLong = CL(CL(c->hiLong) + (carry));
+    c->hiLong = BigEndianValue(BigEndianValue(c->hiLong) + (carry));
     if (sign == -1) {
         c->hiLong = ~c->hiLong;
         if (c->loLong)
-            c->loLong = CL(~CL(c->loLong) + 1);
+            c->loLong = BigEndianValue(~BigEndianValue(c->loLong) + 1);
         else
-            c->hiLong = CL(CL(c->hiLong) + 1);
+            c->hiLong = BigEndianValue(BigEndianValue(c->hiLong) + 1);
     }
 }
 

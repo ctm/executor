@@ -21,6 +21,7 @@ char ROMlib_rcsid_iu[] =
 #include <ctype.h>
 
 using namespace Executor;
+using namespace ByteSwap;
 
 /*
  * outl adds the characters in the four bytes of a longint to the place
@@ -164,19 +165,19 @@ P4(PUBLIC pascal trap, void, IUDatePString, LONGINT, date,	/* IMI-505 */
 	if (h && (int0p = (Intl0Ptr) STARH(h))) {
 	    switch (Cx(int0p->dateOrder)) {
 	    case mdy:
-		month(CW(dtr.month), int0p, Cx(int0p->dateSep), &op);
-		day  (CW(dtr.day),   int0p, Cx(int0p->dateSep), &op);
-		year (CW(dtr.year),  int0p, 0,              &op);
+		month(BigEndianValue(dtr.month), int0p, Cx(int0p->dateSep), &op);
+		day  (BigEndianValue(dtr.day),   int0p, Cx(int0p->dateSep), &op);
+		year (BigEndianValue(dtr.year),  int0p, 0,              &op);
 		break;
 	    case dmy:
-		day  (CW(dtr.day),   int0p, Cx(int0p->dateSep), &op);
-		month(CW(dtr.month), int0p, Cx(int0p->dateSep), &op);
-		year (CW(dtr.year),  int0p, 0,              &op);
+		day  (BigEndianValue(dtr.day),   int0p, Cx(int0p->dateSep), &op);
+		month(BigEndianValue(dtr.month), int0p, Cx(int0p->dateSep), &op);
+		year (BigEndianValue(dtr.year),  int0p, 0,              &op);
 		break;
 	    case ymd:
-		year (CW(dtr.year),  int0p, Cx(int0p->dateSep), &op);
-		month(CW(dtr.month), int0p, Cx(int0p->dateSep), &op);
-		day  (CW(dtr.day),   int0p, 0,              &op);
+		year (BigEndianValue(dtr.year),  int0p, Cx(int0p->dateSep), &op);
+		month(BigEndianValue(dtr.month), int0p, Cx(int0p->dateSep), &op);
+		day  (BigEndianValue(dtr.day),   int0p, 0,              &op);
 		break;
 	    }
 	}
@@ -185,20 +186,20 @@ P4(PUBLIC pascal trap, void, IUDatePString, LONGINT, date,	/* IMI-505 */
 	    abbrev = form == longDate ? 0 : Cx(int1p->abbrLen);
 	    outl(Cx(int1p->st0), &op);
 	    if (!Cx(int1p->suppressDay)) {
-		outs(int1p->days[CW(dtr.dayOfWeek)-1], abbrev, &op);
+		outs(int1p->days[BigEndianValue(dtr.dayOfWeek)-1], abbrev, &op);
 		outl(Cx(int1p->st1), &op);
 	    }
 	    if (Cx(int1p->lngDateFmt)) {
-		outs(int1p->months[CW(dtr.month)-1], abbrev, &op);
+		outs(int1p->months[BigEndianValue(dtr.month)-1], abbrev, &op);
 		outl(Cx(int1p->st2), &op);
-		outn(CW(dtr.day), Cx(int1p->dayLeading0), &op);
+		outn(BigEndianValue(dtr.day), Cx(int1p->dayLeading0), &op);
 	    } else {
-		outn(CW(dtr.day), Cx(int1p->dayLeading0), &op);
+		outn(BigEndianValue(dtr.day), Cx(int1p->dayLeading0), &op);
 		outl(Cx(int1p->st2), &op);
-		outs(int1p->months[CW(dtr.month)-1], abbrev, &op);
+		outs(int1p->months[BigEndianValue(dtr.month)-1], abbrev, &op);
 	    }
 	    outl(Cx(int1p->st3), &op);
-	    outn(CW(dtr.year), FALSE, &op);
+	    outn(BigEndianValue(dtr.year), FALSE, &op);
 	    outl(Cx(int1p->st4), &op);
 	}
     }
@@ -260,20 +261,20 @@ P4(PUBLIC pascal trap, void, IUTimePString, LONGINT, date,	/* IMI-505 */
     if (h && (int0p = (Intl0Ptr) STARH(h))) {
 	Secs2Date(date, &dtr);
         if (int0p->timeCycle)
-            outn((CW(dtr.hour) % 12) == 0 ? 12 : CW(dtr.hour) % 12, 
+            outn((BigEndianValue(dtr.hour) % 12) == 0 ? 12 : BigEndianValue(dtr.hour) % 12, 
                  Cx(int0p->timeFmt) & hrLeadingZ, &op);
         else
-            outn(CW(dtr.hour), Cx(int0p->timeFmt) & hrLeadingZ, &op);
+            outn(BigEndianValue(dtr.hour), Cx(int0p->timeFmt) & hrLeadingZ, &op);
 	*op++ = int0p->timeSep;
-	outn(CW(dtr.minute), Cx(int0p->timeFmt) & minLeadingZ, &op);
+	outn(BigEndianValue(dtr.minute), Cx(int0p->timeFmt) & minLeadingZ, &op);
 	if (secs) {
 	    *op++ = int0p->timeSep;
-	    outn(CW(dtr.second), Cx(int0p->timeFmt) & secLeadingZ, &op);
+	    outn(BigEndianValue(dtr.second), Cx(int0p->timeFmt) & secLeadingZ, &op);
 	}
 /* IMI-499 is misleading about the timenSuff fields.  The first four are
    used for AM, the second four for PM.  Yes, that's dumb.  But that's how
    the Mac works.  Sigh. */
-	if (!int0p->timeCycle && CW(dtr.hour) < 12)
+	if (!int0p->timeCycle && BigEndianValue(dtr.hour) < 12)
 	    for (ip = (char *) &int0p->time1Suff, ep = ip + 4;
 							      ip != ep && *ip;)
 		*op++ = *ip++;
@@ -281,7 +282,7 @@ P4(PUBLIC pascal trap, void, IUTimePString, LONGINT, date,	/* IMI-505 */
             for (ip = (char *) &int0p->time5Suff, ep = ip + 4;
 							      ip != ep && *ip;)
                 *op++ = *ip++;
-	else if (CW(dtr.hour) < 12)
+	else if (BigEndianValue(dtr.hour) < 12)
 	    outl(Cx(int0p->mornStr), &op);
 	else
 	    outl(Cx(int0p->eveStr), &op);

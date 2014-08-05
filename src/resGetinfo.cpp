@@ -20,6 +20,7 @@ char ROMlib_rcsid_resGetinfo[] =
 #define STEF_GetResInfoFix
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P1(PUBLIC pascal trap, INTEGER, UniqueID, ResType, typ)
 {
@@ -149,7 +150,7 @@ A2(PUBLIC, LONGINT, ROMlib_SizeResource, Handle, res, BOOLEAN, usehandle)
 		    return -1;
 		  }
 		else
-		  retval = CL (l[3]);
+		  retval = BigEndianValue (l[3]);
 	      }
 	  }
 	else
@@ -157,7 +158,7 @@ A2(PUBLIC, LONGINT, ROMlib_SizeResource, Handle, res, BOOLEAN, usehandle)
 not_compressed_after_all:	    
 	    lc = sizeof(retval);
 	    ROMlib_setreserr(FSReadAll(Hx(map, resfn), &lc, (Ptr) &retval));
-	    retval = CL(retval);
+	    retval = BigEndianValue(retval);
 	    if (ResErr != noErr)
 /*-->*/	      return -1;
 	  }

@@ -28,6 +28,7 @@ char ROMlib_rcsid_desk[] =
 #include "rsys/aboutbox.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P1(PUBLIC pascal trap, INTEGER, OpenDeskAcc, Str255, acc)	/* IMI-440 */
 {
@@ -43,7 +44,7 @@ P1(PUBLIC pascal trap, INTEGER, OpenDeskAcc, Str255, acc)	/* IMI-440 */
       }
 
     if (OpenDriver(acc, &retval) == noErr) {
-	retval = CW(retval);
+	retval = BigEndianValue(retval);
 	dctlh = GetDCtlEntry(retval);
 	if (dctlh)
 	  {
@@ -75,8 +76,8 @@ P2(PUBLIC pascal trap, void, SystemClick, EventRecord *, evp, WindowPtr, wp)
     LONGINT templ;
 
     if (wp) {
-	p.h = CW(evp->where.h);
-	p.v = CW(evp->where.v);
+	p.h = BigEndianValue(evp->where.h);
+	p.v = BigEndianValue(evp->where.v);
 	if (PtInRgn (p, WINDOW_STRUCT_REGION (wp)))
 	  {
 	    pointaslong = ((LONGINT)p.v << 16)|(unsigned short)p.h;
@@ -91,10 +92,10 @@ P2(PUBLIC pascal trap, void, SystemClick, EventRecord *, evp, WindowPtr, wp)
 		    SelectWindow(wp);
 		break;
 	    case wInDrag:
-		bounds.top    = CW (CW (MBarHeight) + 4);
-		bounds.left   = CW (CW (GD_BOUNDS (MR (TheGDevice)).left) + 4);
-		bounds.bottom = CW (CW (GD_BOUNDS (MR (TheGDevice)).bottom) - 4);
-		bounds.right  = CW (CW (GD_BOUNDS (MR (TheGDevice)).right) - 4);
+		bounds.top    = BigEndianValue (BigEndianValue (MBarHeight) + 4);
+		bounds.left   = BigEndianValue (BigEndianValue (GD_BOUNDS (MR (TheGDevice)).left) + 4);
+		bounds.bottom = BigEndianValue (BigEndianValue (GD_BOUNDS (MR (TheGDevice)).bottom) - 4);
+		bounds.right  = BigEndianValue (BigEndianValue (GD_BOUNDS (MR (TheGDevice)).right) - 4);
 		DragWindow(wp, p, &bounds);
 		break;
 	    case wInGoAway:
@@ -107,7 +108,7 @@ P2(PUBLIC pascal trap, void, SystemClick, EventRecord *, evp, WindowPtr, wp)
 		ROMlib_hook(desk_deskhooknumber);
 		EM_D0 = -1;
 		EM_A0 = (LONGINT) (long) US_TO_SYN68K(evp);
-		CALL_EMULATOR((syn68k_addr_t) (long) CL((long) DeskHook));
+		CALL_EMULATOR((syn68k_addr_t) (long) BigEndianValue((long) DeskHook));
 	    }
 	}
     }
@@ -135,12 +136,12 @@ P0(PUBLIC pascal trap, void, SystemTask)
     DCtlHandle dctlh;
     INTEGER i;
 
-    for (i = 0; i < CW(UnitNtryCnt); ++i) {
+    for (i = 0; i < BigEndianValue(UnitNtryCnt); ++i) {
 	dctlh = MR(MR(UTableBase)[i].p);
 	if ((HxX(dctlh, dCtlFlags) & CWC(NEEDTIMEBIT)) &&
 				      TickCount() >= Hx(dctlh, dCtlCurTicks)) {
 	    Control(itorn(i), accRun, (Ptr) 0);
-	    HxX(dctlh, dCtlCurTicks) = CL(Hx(dctlh, dCtlCurTicks) +
+	    HxX(dctlh, dCtlCurTicks) = BigEndianValue(Hx(dctlh, dCtlCurTicks) +
 							 Hx(dctlh, dCtlDelay));
 	}
     }
@@ -187,7 +188,7 @@ P1(PUBLIC pascal trap, BOOLEAN, SystemEvent, EventRecord *, evp)
 	    rn = WINDOW_KIND (wp);
 	    if ((retval = rn < 0)) {
 		dctlh = rntodctlh(rn);
-		if (Hx(dctlh, dCtlEMask) & (1 << CW(evp->what))) {
+		if (Hx(dctlh, dCtlEMask) & (1 << BigEndianValue(evp->what))) {
 		    templ = (LONGINT) (long) RM(evp);
 		    Control(rn, accEvent, (Ptr) &templ);
 		}
@@ -205,10 +206,10 @@ P1(PUBLIC pascal trap, void, SystemMenu, LONGINT, menu)
     INTEGER i;
     DCtlHandle dctlh;
 
-    for (i = 0; i < CW(UnitNtryCnt); ++i) {
+    for (i = 0; i < BigEndianValue(UnitNtryCnt); ++i) {
 	dctlh = MR(MR(UTableBase)[i].p);
 	if (HxX(dctlh, dCtlMenu) == MBarEnable) {
-	    menu = CL(menu);
+	    menu = BigEndianValue(menu);
 	    Control(itorn(i), accMenu, (Ptr) &menu);
 /*-->*/	    break;
 	}

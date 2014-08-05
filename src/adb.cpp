@@ -43,6 +43,7 @@ char ROMlib_rcsid_adb[] =
  */
 
 using namespace Executor;
+using namespace ByteSwap;
 
 PUBLIC void
 Executor::ADBReInit (void)
@@ -150,7 +151,7 @@ call_patched_adb_vector (char *message)
   save_a0 = EM_A0;
   EM_D0 = SPOOFED_MOUSE_ADDR << 4; /* based on Apeiron's code */
   EM_A0 = (unsigned long) US_TO_SYN68K(message);
-  CALL_EMULATOR ((syn68k_addr_t) CL ((long) adb_service_procp));
+  CALL_EMULATOR ((syn68k_addr_t) BigEndianValue ((long) adb_service_procp));
   EM_D0 = save_d0;
   EM_A0 = save_a0;
 }
@@ -189,8 +190,8 @@ Executor::adb_apeiron_hack (boolean_t deltas_p, ...)
   boolean_t button_is_down;
   char message[3];
 
-  x = CW (MouseLocation.h);
-  y = CW (MouseLocation.v);
+  x = BigEndianValue (MouseLocation.h);
+  y = BigEndianValue (MouseLocation.v);
   button_is_down = !(ROMlib_mods & btnState);
 
 /* begin code for PegLeg */

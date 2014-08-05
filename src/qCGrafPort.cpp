@@ -22,6 +22,7 @@ char ROMlib_rcsid_qCGrafport[] =
 #include "rsys/evil.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 P1 (PUBLIC pascal trap, void, OpenCPort,
     CGrafPtr, port)
@@ -168,7 +169,7 @@ P1 (PUBLIC pascal trap, void, RGBForeColor,
       CPORT_RGB_FG_COLOR (theCPort) = *color;
 
       /* pick the best color and store it into `theCPort->fgColor' */
-      PORT_FG_COLOR_X (theCPort) = CL (Color2Index (color));
+      PORT_FG_COLOR_X (theCPort) = BigEndianValue (Color2Index (color));
     }
   else
     {
@@ -177,9 +178,9 @@ P1 (PUBLIC pascal trap, void, RGBForeColor,
 
       basic_qd_color
 	= high_bits_to_colors
-	  [CW (color->red) >> 15]
-	  [CW (color->green) >> 15]
-	  [CW (color->blue) >> 15];
+	  [BigEndianValue (color->red) >> 15]
+	  [BigEndianValue (color->green) >> 15]
+	  [BigEndianValue (color->blue) >> 15];
       
       ForeColor (basic_qd_color);
     }
@@ -204,7 +205,7 @@ P1 (PUBLIC pascal trap, void, RGBBackColor,
       CPORT_RGB_BK_COLOR (theCPort) = *color;
 
       /* pick the best color and store it into `theCPort->bkColor' */
-      PORT_BK_COLOR_X (theCPort) = CL (Color2Index (color));
+      PORT_BK_COLOR_X (theCPort) = BigEndianValue (Color2Index (color));
     }
   else
     {
@@ -213,9 +214,9 @@ P1 (PUBLIC pascal trap, void, RGBBackColor,
 
       basic_qd_color
 	= high_bits_to_colors
-	  [CW (color->red) >> 15]
-	  [CW (color->green) >> 15]
-	  [CW (color->blue) >> 15];
+	  [BigEndianValue (color->red) >> 15]
+	  [BigEndianValue (color->green) >> 15]
+	  [BigEndianValue (color->blue) >> 15];
 	
       BackColor (basic_qd_color);
     }
@@ -490,7 +491,7 @@ P1 (PUBLIC pascal trap, PixPatHandle, GetPixPat, INTEGER, pixpat_id)
        ctab_ptr = (CTabPtr) ((char *) STARH (pixpat_res)
 			     + (int) PIXMAP_TABLE_AS_OFFSET (patmap));
        ctab_size = (sizeof (ColorTable)
-		    + (sizeof (ColorSpec) * CW (ctab_ptr->ctSize)));
+		    + (sizeof (ColorSpec) * BigEndianValue (ctab_ptr->ctSize)));
        
        /* SetHandleSize ((Handle) PIXMAP_TABLE (patmap), ctab_size); */
        
@@ -502,8 +503,8 @@ P1 (PUBLIC pascal trap, PixPatHandle, GetPixPat, INTEGER, pixpat_id)
 		  (Ptr) STARH (PIXMAP_TABLE (patmap)),
 		  ctab_size);
 
-       /* ctab_ptr->ctSeed = CL (GetCTSeed ()); */
-       CTAB_SEED_X (PIXMAP_TABLE (patmap)) = CL (GetCTSeed ());
+       /* ctab_ptr->ctSeed = BigEndianValue (GetCTSeed ()); */
+       CTAB_SEED_X (PIXMAP_TABLE (patmap)) = BigEndianValue (GetCTSeed ());
      });
   
 #if 0
@@ -570,7 +571,7 @@ P2 (PUBLIC pascal trap, void, MakeRGBPat,
   SetHandleSize ((Handle) PIXMAP_TABLE (patmap),
 		 (Size) (sizeof (ColorTable) + (4 * sizeof (ColorSpec))));
   
-  CTAB_SEED_X (PIXMAP_TABLE (patmap)) = CL (GetCTSeed ());
+  CTAB_SEED_X (PIXMAP_TABLE (patmap)) = BigEndianValue (GetCTSeed ());
   CTAB_SIZE_X (PIXMAP_TABLE (patmap)) = CWC (5);
   CTAB_TABLE (PIXMAP_TABLE (patmap))[4].rgb = *color;
 }

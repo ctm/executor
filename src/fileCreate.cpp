@@ -22,6 +22,7 @@ char ROMlib_rcsid_fileCreate[] =
 #include "rsys/suffix_maps.h"
 
 using namespace Executor;
+using namespace ByteSwap;
 
 A4(PUBLIC, OSErr, Create, StringPtr, filen, INTEGER, vrn,	/* IMIV-112 */
 					      OSType, creator, OSType, filtyp)
@@ -31,15 +32,15 @@ A4(PUBLIC, OSErr, Create, StringPtr, filen, INTEGER, vrn,	/* IMIV-112 */
     LONGINT t;
 
     pbr.fileParam.ioNamePtr = RM(filen);
-    pbr.fileParam.ioVRefNum = CW(vrn);
+    pbr.fileParam.ioVRefNum = BigEndianValue(vrn);
     pbr.fileParam.ioFVersNum = 0;
 
     temp = PBCreate(&pbr, 0);
     if (temp != noErr)
 	return(temp);
 
-    OSASSIGN(pbr.fileParam.ioFlFndrInfo.fdType, CL(filtyp));
-    OSASSIGN(pbr.fileParam.ioFlFndrInfo.fdCreator, CL(creator));
+    OSASSIGN(pbr.fileParam.ioFlFndrInfo.fdType, BigEndianValue(filtyp));
+    OSASSIGN(pbr.fileParam.ioFlFndrInfo.fdCreator, BigEndianValue(creator));
     pbr.fileParam.ioFlFndrInfo.fdFlags = 0;
     ZEROPOINT(pbr.fileParam.ioFlFndrInfo.fdLocation);
     pbr.fileParam.ioFlFndrInfo.fdFldr = 0;
@@ -63,7 +64,7 @@ A2(PUBLIC, OSErr, FSDelete, StringPtr, filen, INTEGER, vrn)	/* IMIV-113 */
     ParamBlockRec pbr;
 
     pbr.fileParam.ioNamePtr = RM(filen);
-    pbr.fileParam.ioVRefNum = CW(vrn);
+    pbr.fileParam.ioVRefNum = BigEndianValue(vrn);
     pbr.fileParam.ioFVersNum = 0;
     return(PBDelete(&pbr, 0));
 }
@@ -95,7 +96,7 @@ A4(PRIVATE, OSErr, PBCreateForD, ParmBlkPtr, pb, BOOLEAN, a,
 	    if (fd >= 0) {
 		dirid = 0;
                 ROMlib_dbm_store(vcbp, pathname, &dirid, TRUE);
-		((HParmBlkPtr) pb)->fileParam.ioDirID = CL(dirid);
+		((HParmBlkPtr) pb)->fileParam.ioDirID = BigEndianValue(dirid);
 	    }
 	}
 
@@ -138,7 +139,7 @@ A4(PRIVATE, OSErr, PBCreateForD, ParmBlkPtr, pb, BOOLEAN, a,
 	       sizeof(newparam.fileParam.ioFlCrDat));
 	memset(&newparam.fileParam.ioFlMdDat, 0,
 	       sizeof(newparam.fileParam.ioFlMdDat));
-	swapped_dir = CL(dir);
+	swapped_dir = BigEndianValue(dir);
 	if (!ROMlib_creator_and_type_from_filename (strlen (pathname), 
 						    pathname, NULL, NULL))
 	  ROMlib_PBGetSetFInfoD(&newparam, FALSE, Set, &swapped_dir, FALSE);
