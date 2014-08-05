@@ -152,7 +152,9 @@ enum
   diffVolErr = -1303,
 };
 
-typedef struct PACKED {
+#pragma pack(push, 2)
+
+typedef struct {
   OSType fdType;
   OSType fdCreator;
   uint16_t fdFlags;
@@ -160,21 +162,21 @@ typedef struct PACKED {
   uint16_t fdFldr;
 } FInfo;
 
-typedef struct PACKED {
+typedef struct {
   uint16_t fdIconID;
   uint16_t fdUnused[4];
   uint16_t fdComment;
   LONGINT fdPutAway;
 } FXInfo;
 
-typedef struct PACKED {
+typedef struct {
   Rect frRect;
   uint16_t frFlags;
   Point frLocation;
   uint16_t frView;
 } DInfo;
 
-typedef struct PACKED {
+typedef struct {
   Point frScroll;
   LONGINT frOpenChain;
   uint16_t frUnused;
@@ -199,7 +201,7 @@ typedef enum {
   PACKED_MEMBER(StringPtr, ioNamePtr);  \
   INTEGER ioVRefNum
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   INTEGER ioRefNum;
   SignedByte ioVersNum;
@@ -212,7 +214,7 @@ typedef struct PACKED {
   LONGINT ioPosOffset;
 } ioParam;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   INTEGER ioFRefNum;
   SignedByte ioFVersNum;
@@ -232,7 +234,7 @@ typedef struct PACKED {
   LONGINT ioFlMdDat;
 } fileParam;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   LONGINT filler2;
   INTEGER ioVolIndex;
@@ -250,7 +252,7 @@ typedef struct PACKED {
   uint16_t ioVFrBlk;
 } volumeParam;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   INTEGER ioCRefNum;
   INTEGER csCode;
@@ -265,7 +267,7 @@ typedef union {
 } ParamBlockRec;
 typedef ParamBlockRec *ParmBlkPtr;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   INTEGER ioRefNum;
   SignedByte ioVersNum;
@@ -278,7 +280,7 @@ typedef struct PACKED {
   LONGINT ioPosOffset;
 } HIoParam;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   INTEGER ioFRefNum;
   SignedByte ioFVersNum;
@@ -298,7 +300,7 @@ typedef struct PACKED {
   LONGINT ioFlMdDat;
 } HFileParam;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   LONGINT pfiller2;
   INTEGER ioVolIndex;
@@ -344,7 +346,7 @@ typedef enum { hfileInfo, dirInfo } CInfoType;
     SignedByte ioFlAttrib;	\
     SignedByte ioACUser
 
-typedef struct PACKED {
+typedef struct {
   COMMONCINFODEFS;
   FInfo ioFlFndrInfo;
   LONGINT ioDirID;
@@ -362,7 +364,7 @@ typedef struct PACKED {
   LONGINT ioFlClpSiz;
 } HFileInfo;
 
-typedef struct PACKED {
+typedef struct {
   COMMONCINFODEFS;
   DInfo ioDrUsrWds;
   LONGINT ioDrDirID;
@@ -381,7 +383,7 @@ typedef union {
 } CInfoPBRec;
 typedef CInfoPBRec *CInfoPBPtr;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   LONGINT filler1;
   PACKED_MEMBER(StringPtr, ioNewName);
@@ -392,7 +394,7 @@ typedef struct PACKED {
 } CMovePBRec;
 typedef CMovePBRec *CMovePBPtr;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   uint16_t filler1;
   INTEGER ioWDIndex;
@@ -403,7 +405,7 @@ typedef struct PACKED {
 } WDPBRec;
 typedef WDPBRec *WDPBPtr;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   INTEGER ioRefNum;
   uint16_t filler;
@@ -421,7 +423,7 @@ typedef struct PACKED {
 } FCBPBRec;
 typedef FCBPBRec *FCBPBPtr;
 
-typedef struct PACKED {
+typedef struct {
   PACKED_MEMBER(QElemPtr, qLink); /* 0 */
   INTEGER qType;		/*  4 */
   uint16_t vcbFlags;		/*  6 */
@@ -472,7 +474,7 @@ typedef struct PACKED {
 typedef VCB *VCBPtr;
 MAKE_HIDDEN(VCBPtr);
 
-typedef struct PACKED {
+typedef struct {
   PACKED_MEMBER(QElemPtr, qLink);
   INTEGER qType;
   INTEGER dQDrive;
@@ -485,7 +487,7 @@ typedef struct PACKED {
 /* data types introduced by the new high level file system dispatch
    traps */
 
-struct PACKED FSSpec
+struct FSSpec
 {
   INTEGER vRefNum;
   LONGINT parID;
@@ -511,6 +513,8 @@ extern INTEGER 	FSFCBLen;
 #define FCBSPtr		(FCBSPtr_H.p)
 #define DefVCBPtr	(DefVCBPtr_H.p)
 #define WDCBsPtr	(WDCBsPtr_H.p)
+
+#pragma pack(pop)
 
 extern OSErr FSOpen( StringPtr filen, INTEGER vrn, INTEGER *rn ); 
 extern OSErr OpenRF( StringPtr filen, INTEGER vrn, INTEGER *rn ); 
