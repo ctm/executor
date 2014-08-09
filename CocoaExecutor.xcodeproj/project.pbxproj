@@ -471,6 +471,7 @@
 		55A742AC198DC09200F1A8A5 /* local_charset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558B98BD1987FCBD00ADF159 /* local_charset.cpp */; };
 		55A742AE198DE07900F1A8A5 /* check_structs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558B98611987FCBD00ADF159 /* check_structs.cpp */; };
 		55A742B0198DE1C100F1A8A5 /* slash.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55A742AF198DE1C100F1A8A5 /* slash.cpp */; };
+		55B9B6D21996903700DBC7A3 /* stdfile-OSXPrivate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55B9B6D01996903700DBC7A3 /* stdfile-OSXPrivate.cpp */; };
 		55D30F53198C1B65009BBB62 /* mkvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55D30F50198C1B65009BBB62 /* mkvol.cpp */; };
 		55D30F55198C1E3C009BBB62 /* parsenum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558B98D41987FCBD00ADF159 /* parsenum.cpp */; };
 		55D30F56198C1FE2009BBB62 /* mkvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55D30F50198C1B65009BBB62 /* mkvol.cpp */; };
@@ -1185,6 +1186,8 @@
 		55A742B1198DE36600F1A8A5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Executor.xib; sourceTree = "<group>"; };
 		55A742B2198DE37D00F1A8A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Executor.strings; sourceTree = "<group>"; };
 		55A742B4198DE48E00F1A8A5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/info.strings; sourceTree = "<group>"; };
+		55B9B6D01996903700DBC7A3 /* stdfile-OSXPrivate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "stdfile-OSXPrivate.cpp"; sourceTree = "<group>"; };
+		55B9B6D11996903700DBC7A3 /* stdfile-OSXPrivate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "stdfile-OSXPrivate.h"; sourceTree = "<group>"; };
 		55D30F48198C1B08009BBB62 /* mkvol */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mkvol; sourceTree = BUILT_PRODUCTS_DIR; };
 		55D30F4F198C1B65009BBB62 /* mkvol_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mkvol_internal.h; sourceTree = "<group>"; };
 		55D30F50198C1B65009BBB62 /* mkvol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.cpp.cpp; path = mkvol.cpp; sourceTree = "<group>"; usesTabs = 0; };
@@ -1439,6 +1442,8 @@
 				558B992B1987FCBE00ADF159 /* stdfile.cpp */,
 				557F308E198967BE009873EB /* stdfile-OSX.h */,
 				557F308D198967BE009873EB /* stdfile-OSX.cpp */,
+				55B9B6D11996903700DBC7A3 /* stdfile-OSXPrivate.h */,
+				55B9B6D01996903700DBC7A3 /* stdfile-OSXPrivate.cpp */,
 			);
 			name = "File access";
 			sourceTree = "<group>";
@@ -2724,6 +2729,7 @@
 				559AF4B8198AF72B00DE8472 /* segment.cpp in Sources */,
 				558B99871987FCBF00ADF159 /* error.cpp in Sources */,
 				558B9A061987FCBF00ADF159 /* qStdText.cpp in Sources */,
+				55B9B6D21996903700DBC7A3 /* stdfile-OSXPrivate.cpp in Sources */,
 				556E0559198584DE00FC4362 /* arrow_left_active.map in Sources */,
 				556E0557198584DE00FC4362 /* arrow_down_active.map in Sources */,
 				558B99861987FCBF00ADF159 /* emutraptables.cpp in Sources */,
