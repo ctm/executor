@@ -22,10 +22,11 @@ char ROMlib_rcsid_option[] =
 #import <Foundation/NSString.h>
 
 using namespace Executor;
+using namespace std;
 
 struct opt_block
 {
-  char *interface;
+  string interface;
   option_t *opts;
   int n_opts;
 } *opt_blocks;
@@ -72,7 +73,7 @@ Executor::opt_shutdown (void)
   }
 }
 
-void
+static void
 strcpy_to_wrap_buf (char *text)
 {
   int text_len;
@@ -93,6 +94,14 @@ strcpy_to_wrap_buf (char *text)
 	src ++;
     }
   *dst = '\0';
+}
+
+static inline void
+strcpy_to_wrap_buf (string text)
+{
+  char *textP = (char *)alloca(text.length() + 10);
+  strcpy(textP, text.c_str());
+  strcpy_to_wrap_buf(textP);
 }
 
 static void
@@ -166,6 +175,12 @@ send_to_help_buf (const char *text, int len, int append_newline_p)
 }
 
 void
+send_to_help_buf (string text, int append_newline_p)
+{
+  send_to_help_buf(text.c_str(), text.length(), append_newline_p);
+}
+
+void
 _generate_help_message (void)
 {
   int i, block_i;
@@ -190,12 +205,12 @@ _generate_help_message (void)
   send_to_help_buf ("", 0, TRUE);
   for (block_i = 0; block_i < n_opt_blocks; block_i ++)
     {
-      char *interface = opt_blocks[block_i].interface;
+      string interface = opt_blocks[block_i].interface;
       option_t *opts = opt_blocks[block_i].opts;
       int n_opts = opt_blocks[block_i].n_opts;
       int opt_i;
 
-      send_to_help_buf (interface, strlen (interface), FALSE);
+      send_to_help_buf (interface, FALSE);
       send_to_help_buf (":", 1, TRUE);
       
       for (opt_i = 0; opt_i < n_opts; opt_i ++)
@@ -207,14 +222,14 @@ _generate_help_message (void)
 	  int opt_text_len;
 	  int same_line_p;
 
-	  if (!opt->desc)
+	  if (opt->desc == "")
 	    continue;
 	  
-	  opt_text_len = strlen (opt->text);
+	  opt_text_len = opt->text.length();
 	  same_line_p = opt_text_len < 14;
 	  
 	  send_to_help_buf ("  -", 3, FALSE);
-	  send_to_help_buf (opt->text, opt_text_len,
+	  send_to_help_buf (opt->text,
 			    !same_line_p);
 	  if (same_line_p)
 	    send_to_help_buf (spaces,
@@ -270,7 +285,7 @@ Executor::opt_register_pre_note (char *note)
 
 
 void
-Executor::opt_register (char *new_interface,
+Executor::opt_register (string new_interface,
 	      option_t *new_opts, int n_new_opts)
 {
   int block_i;
@@ -289,7 +304,7 @@ Executor::opt_register (char *new_interface,
   /* check for conflicting options */
   for (block_i = 0; block_i < n_opt_blocks; block_i ++)
     {
-      char *interface = opt_blocks[block_i].interface;
+      string interface = opt_blocks[block_i].interface;
       option_t *opts = opt_blocks[block_i].opts;
       int n_opts = opt_blocks[block_i].n_opts;
       int opt_i, new_opt_i;
@@ -297,14 +312,14 @@ Executor::opt_register (char *new_interface,
       for (opt_i = 0; opt_i < n_opts; opt_i ++)
 	for (new_opt_i = 0; new_opt_i < n_new_opts; new_opt_i ++)
 	  {
-	    if (!strcmp (opts[opt_i].text,
+	    if ( (opts[opt_i].text ==
 			 new_opts[new_opt_i].text))
 	      {
 		/* conflicting options */
 		fprintf (ERRMSG_STREAM, "\
 %s: opt internal error: `%s' and `%s' both request option `%s'\n",
 			 program_name,
-			 interface, new_interface, opts[opt_i].text);
+			 interface.c_str(), new_interface.c_str(), opts[opt_i].text.c_str());
 		exit (-16);
 	      }
 	  }
@@ -343,7 +358,7 @@ Executor::opt_alloc_db (void)
 }
 
 PRIVATE opt_val_t *
-opt_lookup_helper (opt_database_t *db, char *opt)
+opt_lookup_helper (opt_database_t *db, string &opt)
 {
   opt_val_t *retval;
   int i;  
@@ -353,7 +368,7 @@ opt_lookup_helper (opt_database_t *db, char *opt)
   /* try to find this option in the database */
   for (i = 0; i < db->n_opt_vals; i ++)
     {
-      if (strcmp (db->opt_vals[i].text, opt) == 0)
+      if (db->opt_vals[i].text == opt)
 	{
 	  retval = &db->opt_vals[i];
 	  break;
@@ -363,19 +378,19 @@ opt_lookup_helper (opt_database_t *db, char *opt)
 }
 
 opt_val_t *
-opt_lookup (opt_database_t *db, char *opt)
+opt_lookup (opt_database_t *db, string &opt)
 {
   opt_val_t *retval;
 
   retval = opt_lookup_helper (db, opt);
 
-  if (!retval || !retval->t_val)
+  if (!retval || retval->t_val == "")
     {
       NSUserDefaults *defaults;
       NSString *try1;
 
       defaults = [NSUserDefaults standardUserDefaults];
-      try1 = [defaults stringForKey:@(opt)];
+      try1 = [defaults stringForKey:@(opt.c_str())];
 
       if (try1) {
 	  if (retval) {
@@ -399,7 +414,7 @@ opt_lookup (opt_database_t *db, char *opt)
 }
 
 void
-Executor::opt_put_val (opt_database_t *db, char *opt, const char *val,
+Executor::opt_put_val (opt_database_t *db, string &opt, string val,
 	     priority_t pri, int temp_val_p)
 {
   opt_val_t *opt_val;
@@ -426,13 +441,13 @@ Executor::opt_put_val (opt_database_t *db, char *opt, const char *val,
       opt_val = &db->opt_vals[db->n_opt_vals ++];
       
       opt_val->text = opt;
-      opt_val->val = NULL;
-      opt_val->t_val = NULL;
+      opt_val->val = "";
+      opt_val->t_val = "";
     }
 
   if (temp_val_p)
     {
-      opt_val->t_val = (char*)val;
+      opt_val->t_val = val;
       opt_val->t_pri = pri;
     }
   else
@@ -443,7 +458,7 @@ Executor::opt_put_val (opt_database_t *db, char *opt, const char *val,
 }
 
 void
-Executor::opt_put_int_val (opt_database_t *db, char *opt, int valint,
+Executor::opt_put_int_val (opt_database_t *db, string &opt, int valint,
 		 priority_t pri, int temp_val_p)
 {
   char *val, buf[256];
@@ -455,20 +470,20 @@ Executor::opt_put_int_val (opt_database_t *db, char *opt, int valint,
   opt_put_val (db, opt, val, pri, temp_val_p);
 }
 
-#define option_value(opt_val) ((opt_val)->t_val ?: (opt_val)->val)
+#define option_value(opt_val) ((opt_val)->t_val == "" ? "" : (opt_val)->val)
 
 int
-Executor::opt_val (opt_database_t *db, char *opt, const char **retval)
+Executor::opt_val (opt_database_t *db, string opt, string *retval)
 {
   opt_val_t *opt_val;
-  const char *val = NULL;
+  string val = "";
   boolean_t found_p = FALSE;
 
   opt_val = opt_lookup (db, opt);
   if (opt_val)
     {
       val = option_value (opt_val);
-      if (val)
+      if (val != "")
 	{
 	  if (retval)
 	    *retval = val;
@@ -485,21 +500,21 @@ Executor::opt_val (opt_database_t *db, char *opt, const char **retval)
  * Returns TRUE if a value was found.
  */
 int
-Executor::opt_int_val (opt_database_t *db, char *opt, int *retval,
+Executor::opt_int_val (opt_database_t *db, string opt, int *retval,
 	     boolean_t *parse_error_p)
 {
   opt_val_t *opt_val;
-  const char *val = NULL;
+  string val = "";
 
   opt_val = opt_lookup (db, opt);
-  if (opt_val && (val = option_value (opt_val)) && retval)
+  if (opt_val && (val = option_value (opt_val)) != "" && retval)
     {
       int32 v;
       if (!parse_number (val, &v, 1))
 	{
 	  if (parse_error_p)
 	    {
-	      fprintf (stderr, "Malformed numeric argument to -%s.\n", opt);
+	      fprintf (stderr, "Malformed numeric argument to -%s.\n", opt.c_str());
 	      *parse_error_p = TRUE;
 	    }
 	  return FALSE;
@@ -509,7 +524,7 @@ Executor::opt_int_val (opt_database_t *db, char *opt, int *retval,
 
   /* Do *NOT* touch *parse_error_p if there is no error. */
 
-  return opt_val && val;
+  return opt_val && val != "";
 }
 
 int
@@ -543,9 +558,9 @@ Executor::opt_parse (opt_database_t *db, option_t *opts, int n_opts,
 	      option_t *opt = &opts[opt_i];
 
 	      if (!strcmp (&arg[1],
-			   opt->text))
+			   opt->text.c_str()))
 		{
-		  const char *optval = NULL;
+          string optval = "";
 		  
 		  /* found the option */
 		  switch (opt->kind)
@@ -563,7 +578,7 @@ Executor::opt_parse (opt_database_t *db, option_t *opts, int n_opts,
 			optval = opt->opt_val;
 		      break;
 		    case opt_sticky:
-		      optval = &arg[1 + strlen (opt->text)];
+		      optval = &arg[1 + opt->text.length()];
 		      break;
 		    case opt_sep:
 		      if ((i + 1) < *argc)
@@ -575,7 +590,7 @@ Executor::opt_parse (opt_database_t *db, option_t *opts, int n_opts,
 			{
 			  fprintf (ERRMSG_STREAM, "\
 %s: option `-%s' requires argument\n",
-				   program_name, opt->text);
+				   program_name, opt->text.c_str());
 			  parse_error_p = TRUE;
 			}
 		      break;
@@ -591,7 +606,7 @@ Executor::opt_parse (opt_database_t *db, option_t *opts, int n_opts,
 			{
 			  fprintf (ERRMSG_STREAM, "\
 %s: option `-%s' requires argument\n",
-				   program_name, opt->text);
+				   program_name, opt->text.c_str());
 			  parse_error_p = TRUE;
 			}
 		      goto next_arg;

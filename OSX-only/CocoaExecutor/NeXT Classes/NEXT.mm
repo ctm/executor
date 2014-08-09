@@ -545,10 +545,10 @@ A1(PUBLIC, void, postnextevent, NSEvent *, neventp)	/* INTERNAL */
 }
 
 namespace Executor {
-  static LONGINT addtoop(char*, INTEGER, char**, char);
+  static LONGINT addtoop(const char*, INTEGER, char**, char);
 }
 
-A4(PRIVATE, LONGINT, addtoop, char *, string, INTEGER, size, char **, op,
+A4(PRIVATE, LONGINT, addtoop, const char *, string, INTEGER, size, char **, op,
 								    char, doit)
 {
     if (!doit)

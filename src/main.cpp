@@ -135,6 +135,7 @@ char ROMlib_rcsid_main[] =
 
 using namespace Executor;
 using namespace ByteSwap;
+using namespace std;
 
 BOOLEAN Executor::force_big_offset = CONFIG_OFFSET_P;
 
@@ -1301,7 +1302,7 @@ int main(int argc, char** argv)
       vdriver_opt_register,
       NULL,
     };
-  const char *arg;
+  string arg;
 
 #if defined(PERSONALITY_HACK)
   int pers;
@@ -1747,7 +1748,7 @@ int main(int argc, char** argv)
 #endif
 
   {
-    const char *str;
+    string str;
 
     if (opt_val (common_db, "prvers", &str))
       {
@@ -2003,17 +2004,17 @@ int main(int argc, char** argv)
 #endif
 
   {
-    const char *appearance_str;
+    string appearance_str;
 
     if (opt_val (common_db, "appearance", &appearance_str))
-      bad_arg_p |= !ROMlib_parse_appearance (appearance_str);
+      bad_arg_p |= !ROMlib_parse_appearance (appearance_str.c_str());
   }
 
   InitResources ();
 
   /* parse the `-system' option */
   {
-    const char *system_str;
+    string system_str;
     
     if (opt_val (common_db, "system", &system_str))
       bad_arg_p |= !parse_system_version (system_str);
@@ -2034,9 +2035,9 @@ int main(int argc, char** argv)
     
     if (opt_val (common_db, "keyboard", &arg))
       {
-	keyboard_set_failed = !ROMlib_set_keyboard (arg);
+	keyboard_set_failed = !ROMlib_set_keyboard (arg.c_str());
 	if (keyboard_set_failed)
-	  printf ("``%s'' is not an available keyboard\n", arg);
+	  printf ("``%s'' is not an available keyboard\n", arg.c_str());
       }
     else
       keyboard_set_failed = FALSE;

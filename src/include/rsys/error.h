@@ -14,6 +14,8 @@
 #include "rsys/noreturn.h"
 
 #ifdef __cplusplus
+#include <string>
+bool error_parse_option_string (std::string options);
 extern "C" {
 #endif
 /*

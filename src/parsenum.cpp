@@ -12,6 +12,7 @@ char ROMlib_rcsid_parsenum[] =
 #include <ctype.h>
 
 using namespace Executor;
+using namespace std;
 
 /* If the given string has a 'k', 'K', 'm', or 'M' suffix, returns the
  * log base 2 corresponding to that size (either 10 or 20) and removes
@@ -128,7 +129,7 @@ parse_base_number (const char *s, const char *digits, long long *vp,
  * want rounding, just pass "1" for round_up_to_multiple_of.
  */
 boolean_t
-Executor::parse_number (const char *orig_num, int32 *val,
+Executor::parse_number (string orig_num, int32 *val,
 	      unsigned round_up_to_multiple_of)
 {
   long long orig_raw_val, raw_val, div;
@@ -141,11 +142,11 @@ Executor::parse_number (const char *orig_num, int32 *val,
   *val = 0;
 
   /* Empty string is an error.  We check this here to simplify checks later. */
-  if (orig_num == NULL || orig_num[0] == '\0')
+  if (orig_num == "" || orig_num[0] == '\0')
     return FALSE;
 
-  num = (char *) alloca (strlen (orig_num) + 1);
-  strcpy (num, orig_num);
+  num = (char *) alloca (orig_num.length() + 1);
+  strcpy (num, orig_num.c_str());
 
   /* Check for leading + or -, and advance past it. */
   negate_p = (num[0] == '-');

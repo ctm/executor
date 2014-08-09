@@ -223,14 +223,14 @@ update_orientation (DialogPtr dp, INTEGER button)
   switch (button)
     {
     case LAYOUT_LANDSCAPE_ICON_NO:
-      if (strcmp (ROMlib_paper_orientation, "Landscape") != 0)
+      if (ROMlib_paper_orientation != "Landscape")
 	{
 	  ROMlib_paper_orientation = "Landscape";
 	  add_orientation_icons_to_update_region (dp);
 	}
       break;
     case LAYOUT_PORTRAIT_ICON_NO:
-      if (strcmp (ROMlib_paper_orientation, "Portrait") != 0)
+      if (ROMlib_paper_orientation != "Portrait")
 	{
 	  ROMlib_paper_orientation = "Portrait";
 	  add_orientation_icons_to_update_region (dp);
@@ -307,17 +307,17 @@ Executor::update_printing_globals (void)
     ROMlib_paper_x = 612;
     ROMlib_paper_y = 792;
     dimensions = find_key ("Paper Size", ROMlib_paper);
-    if (dimensions)
-      sscanf (dimensions, "%d %d", &ROMlib_paper_x, &ROMlib_paper_y);
+    if (dimensions != "")
+      sscanf (dimensions.c_str(), "%d %d", &ROMlib_paper_x, &ROMlib_paper_y);
   }
 
-  if ((strcmp (ROMlib_paper_orientation, "Portrait") == 0) ==
+  if ((ROMlib_paper_orientation == "Portrait") ==
       (ROMlib_paper_x > ROMlib_paper_y))
     SWAP (ROMlib_paper_x, ROMlib_paper_y);
 
   ROMlib_document_paper_sizes = "%%DocumentPaperSizes: ";
   ROMlib_paper_size = "%%PaperSize: ";
-  ROMlib_paper_size_name = ROMlib_paper;
+  ROMlib_paper_size_name = ROMlib_paper.c_str();
   ROMlib_paper_size_name_terminator = "\n";
 
   if (ROMlib_paper_x < ROMlib_paper_y)
@@ -337,21 +337,15 @@ Executor::update_printing_globals (void)
 PRIVATE void
 update_ROMlib_printer_vars (TPPrDlg dp)
 {
-  if (ROMlib_printer)
-    free (ROMlib_printer);
   ROMlib_printer = find_item_key ((DialogPtr) dp, LAYOUT_PRINTER_TYPE_NO);
 
-  if (ROMlib_paper)
-    free (ROMlib_paper);
   ROMlib_paper = find_item_key ((DialogPtr) dp, LAYOUT_PAPER_NO);
 
-  if (ROMlib_port)
-    free (ROMlib_port);
   ROMlib_port = find_item_key ((DialogPtr) dp, LAYOUT_PORT_MENU_NO);
 
   ROMlib_set_default_resolution (MR (dp->hPrintUsr), 72, 72);
 
-  if (strcmp (ROMlib_printer, "PostScript File") == 0)
+  if (ROMlib_printer == "PostScript File")
     {
       Handle h;
       Size hs;
@@ -376,16 +370,16 @@ update_ROMlib_printer_vars (TPPrDlg dp)
       if (fp)
 	{
 	  add_heading_to_file (fp, "Defaults");
-	  if (ROMlib_printer)
+	  if (ROMlib_printer != "")
 	    add_key_value_to_file (fp, "Printer", ROMlib_printer);
 
-	if (ROMlib_paper)
+	if (ROMlib_paper != "")
 	  add_key_value_to_file (fp, "Paper Size", ROMlib_paper);
 
-	if (ROMlib_port)
+	if (ROMlib_port != "")
 	  add_key_value_to_file (fp, "Port", ROMlib_port);
 
-	if (ROMlib_paper_orientation)
+	if (ROMlib_paper_orientation != "")
 	  add_key_value_to_file (fp, "Orientation", ROMlib_paper_orientation);
 
 	close_ini_file (fp);
@@ -428,7 +422,7 @@ update_port (DialogPtr dp)
   gp = thePort;
   SetPort (dp);
 
-  keyp = find_item_key (dp, LAYOUT_PRINTER_TYPE_NO);
+  keyp = strdup(find_item_key (dp, LAYOUT_PRINTER_TYPE_NO).c_str());
   if (strcmp (keyp, "PostScript File") == 0)
     {
       if (print_where != PRINT_TO_FILE)
@@ -447,7 +441,7 @@ update_port (DialogPtr dp)
 	    {
 	      Str255 str;
 
-	      unique_file_name (ROMlib_spool_template, "execout*.ps", str);
+	      unique_file_name (ROMlib_spool_template.c_str(), "execout*.ps", str);
 	      SetIText (GetDIText (dp, LAYOUT_FILENAME_NO), str);
 	      filename_chosen_p = TRUE;
 	    }
@@ -637,7 +631,7 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_stlfilterproc, DialogPeek, dp,
       break;
     }
 
-  keyp = find_item_key ((DialogPtr) dp, LAYOUT_PRINTER_TYPE_NO);
+  keyp = strdup(find_item_key ((DialogPtr) dp, LAYOUT_PRINTER_TYPE_NO).c_str());
   if (retval && *ith == CWC (OK) && (strcmp (keyp, "PostScript File") == 0))
     {
       struct stat sbuf;
@@ -736,12 +730,10 @@ adjust_print_range_controls (TPPrDlg dlg, THPrint hPrint)
 PRIVATE ini_key_t
 get_default_key (ini_key_t key, ini_key_t default_if_not_found)
 {
-  ini_key_t retval;
-
-  retval = find_key ("Defaults", key);
+  ini_key_t retval = find_key ("Defaults", key);
 
   /* Verify that the default is legitimate */
-  if (!find_key (key, retval))
+  if (find_key (key, retval) == "")
     {
       pair_link_t *pairp;
 
@@ -749,7 +741,7 @@ get_default_key (ini_key_t key, ini_key_t default_if_not_found)
       if (pairp)
 	retval = pairp->key;
     }
-  if (!retval)
+  if (retval == "")
     retval = default_if_not_found;
   return retval;
 }
@@ -788,12 +780,12 @@ get_all_defaults (void)
   int i;
 
   for (i = 0; i < (int) NELEM (default_table); ++i)
-    if (!*default_table[i].variablep)
+    if (*default_table[i].variablep == "")
       *default_table[i].variablep =
 	get_default_key (default_table[i].key,
 			 default_table[i].default_key);
   ROMlib_spool_template = find_key ("Printer", "PostScript File");
-  if (!ROMlib_spool_template)
+  if (ROMlib_spool_template == "")
     ROMlib_spool_template = "+/execout*.ps";
 }
 
@@ -806,14 +798,14 @@ adjust_print_name (DialogPtr dp)
     {
       Str255 str;
       
-      unique_file_name (ROMlib_spool_template, "execout*.ps", str);
+      unique_file_name (ROMlib_spool_template.c_str(), "execout*.ps", str);
       ROMlib_spool_file = cstring_from_str255 (str);
     }
 
-  if (strcmp (ROMlib_printer, "PostScript File") == 0)
+  if (ROMlib_printer == "PostScript File")
     str255assignc (name, ROMlib_spool_file);
   else
-    str255assignc (name, ROMlib_printer);
+    str255assignc (name, ROMlib_printer.c_str());
   SetIText (GetDIText (dp, 3), name);
 }
 
@@ -876,7 +868,7 @@ P2(PUBLIC, pascal void,  ROMlib_orientation, DialogPeek, dp, INTEGER, which)
   PenSize (1, 1);
   InsetRect (&r, 1, 1);
   if ((which == LAYOUT_PORTRAIT_NO) !=
-      (strcmp (ROMlib_paper_orientation, "Portrait") == 0))
+      (ROMlib_paper_orientation == "Portrait"))
     PenPat (white);
   FrameRect (&r);
   PenPat (black);
@@ -949,9 +941,9 @@ adjust_menu_common (TPPrDlg dlg, INTEGER item, heading_t heading, ini_key_t defk
 		  continue;
 #endif
 		
-		if (strcmp (pairp->key, defkey) == 0)
+		if (pairp->key ==  defkey)
 		  default_index = i;
-		str255assignc (str, pairp->key);
+		str255assignc (str, pairp->key.c_str());
 		AppendMenu (mh, str);
 		wid = StringWidth (str);
 		if (wid > max_wid)
@@ -1012,8 +1004,8 @@ set_default_orientation (TPPrDlg dlg)
   INTEGER orientation_button;
 
   orientation_button =
-    (ROMlib_paper_orientation &&
-     strcmp (ROMlib_paper_orientation, "Landscape") == 0)
+    (ROMlib_paper_orientation != "" &&
+     ROMlib_paper_orientation == "Landscape")
     ?
       LAYOUT_LANDSCAPE_ICON_NO
     :
@@ -1171,7 +1163,7 @@ P2(PUBLIC pascal trap, BOOLEAN, PrDlgMain, THPrint, hPrint, ProcPtr, initfptr)
     if ((prrecptr = CALLPRINITPROC(hPrint, initfptr))) {
       if (!SUNPATH_HACK || (((pritemprocp) MR(prrecptr->pItemProc)
 			     != (pritemprocp) P_ROMlib_myjobproc) ||
-			    strcmp (ROMlib_printer, WIN32_TOKEN) != 0))
+							ROMlib_printer != std::string(WIN32_TOKEN)))
 	{
 	  ShowWindow((WindowPtr) prrecptr);
 	  SelectWindow((WindowPtr) prrecptr);
@@ -1179,7 +1171,7 @@ P2(PUBLIC pascal trap, BOOLEAN, PrDlgMain, THPrint, hPrint, ProcPtr, initfptr)
         do {
 	    if (SUNPATH_HACK && (((pritemprocp) MR(prrecptr->pItemProc)
 				  == (pritemprocp) P_ROMlib_myjobproc) &&
-				 strcmp (ROMlib_printer, WIN32_TOKEN) == 0))
+				 ROMlib_printer == std::string(WIN32_TOKEN)))
 	      item = 1;
 	    else
 	      {

@@ -38,16 +38,17 @@ Executor::new_heading (unsigned char *start, int len)
 
   linkp = (heading_link_t*)malloc (sizeof *linkp);
   if (!linkp)
-    retval = NULL;
+    retval = "";
   else {
-	linkp->heading = (heading_t)malloc (len + 1);
-	if (!linkp->heading) {
-	  retval = NULL;
+	char *p = (char*)alloca(len + 1);
+	if (!p) {
+	  retval = "";
 	  free (linkp);
 	} else {
-	  strncpy (linkp->heading, (char *) start, len);
-	  linkp->heading[len] = 0;
-	  linkp->next = headings;
+	  strncpy (p, (char *) start, len);
+	  p[len] = 0;
+      linkp->heading = p;
+      linkp->next = headings;
 	  linkp->pairs = 0;
 	  headings = linkp;
 	  retval = linkp->heading;
@@ -63,11 +64,11 @@ find_heading (heading_t heading)
   static heading_link_t *cachep;
   heading_link_t *retval;
 
-  if (cachep && strcmp (cachep->heading, heading) == 0)
+  if (cachep && cachep->heading == heading)
     retval = cachep;
   else {
 	for (retval = headings;
-		 retval && strcmp (retval->heading, heading) != 0;
+		 retval && retval->heading != heading;
 		 retval = retval->next)
 	  ;
 	if (retval)
@@ -82,27 +83,27 @@ Executor::new_key_value_pair (heading_t heading, unsigned char *keystart, int ke
 {
   pair_link_t *pairp = (pair_link_t*)malloc (sizeof *pairp);
   if (pairp) {
-	pairp->key = (ini_key_t)malloc (keylen+1);
-	if (!pairp->key)
+	char *keyp;
+	keyp = (char *)alloca(keylen + 1);
+	if (!keyp)
 	  free (pairp);
 	else {
-	  pairp->value = (value_t)malloc (valuelen+1);
-	  if (!pairp->value) {
-		free (pairp->key);
+	  char *valueP = (char*)alloca(valuelen + 1);
+	  if (!valueP) {
 		free (pairp);
 	  } else {
 		heading_link_t *headingp;
 		
-		strncpy (pairp->key, (char *) keystart, keylen);
-		pairp->key[keylen] = 0;
-		strncpy (pairp->value, (char *) valuestart, valuelen);
-		pairp->value[valuelen] = 0;
+		strncpy (keyp, (char *) keystart, keylen);
+		keyp[keylen] = 0;
+		pairp->value = keyp;
+		strncpy (valueP, (char *) valuestart, valuelen);
+		valueP[valuelen] = 0;
+		pairp->value = valueP;
 		headingp = find_heading (heading);
 		pairp->next = 0;
 		if (!headingp) {
-		  warning_unexpected ("couldn't find %s", heading);
-		  free (pairp->key);
-		  free (pairp->value);
+		  warning_unexpected ("couldn't find %s", heading.c_str());
 		  free (pairp);
 		} else {
 		  pair_link_t **pairpp;
@@ -240,7 +241,7 @@ Executor::add_heading_to_file (FILE *fp, heading_t heading)
 {
   boolean_t retval;
 
-  retval = fprintf (fp, "[%s]\n", heading) > 0;
+  retval = fprintf (fp, "[%s]\n", heading.c_str()) > 0;
   return retval;
 }
 
@@ -249,7 +250,7 @@ Executor::add_key_value_to_file (FILE *fp, ini_key_t key, value_t value)
 {
   boolean_t retval;
 
-  retval = fprintf (fp, "%s=%s\n", key, value) > 0;
+  retval = fprintf (fp, "%s=%s\n", key.c_str(), value.c_str()) > 0;
   return retval;
 }
 
@@ -268,14 +269,14 @@ Executor::find_key (heading_t heading, ini_key_t key)
   value_t retval;
   heading_link_t *headingp;
 
-  retval = NULL;
-  if (heading && key) {
+  retval = "";
+  if (heading != "" && key != "") {
 	headingp = find_heading (heading);
 	if (headingp) {
 	  pair_link_t *pairp;
 
 	  for (pairp = headingp->pairs;
-	       pairp && strcmp (pairp->key, key) != 0;
+	       pairp && pairp->key != key;
 	       pairp = pairp->next)
 	    ;
 	  if (pairp)

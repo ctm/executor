@@ -22,7 +22,7 @@ using namespace ByteSwap;
 const char ROMlib_executor_version[] = EXECUTOR_VERSION;
 
 /* A descriptive string like "Executor 1.99q DEMO" */
-char *ROMlib_executor_full_name = "Executor " EXECUTOR_VERSION
+const char *ROMlib_executor_full_name = "Executor " EXECUTOR_VERSION
 #if defined (RELEASE_DEMO)
 " DEMO"
 #elif defined (RELEASE_INTERNAL)

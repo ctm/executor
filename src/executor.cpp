@@ -212,7 +212,7 @@ trap_break_me (void)
 }
 
 void
-trap_dump_bits (char *msg, char *data, int size)
+trap_dump_bits (const char *msg, char *data, int size)
 {
   int i;
 
@@ -281,7 +281,7 @@ PRIVATE void setup28( void )
 
 PUBLIC void Executor::setupsignals( void )
 {
-#if defined (MACOSX_)
+#if defined (NEXT)
     LONGINT tocatch[] = {
 	SIGHUP,
 	SIGINT,

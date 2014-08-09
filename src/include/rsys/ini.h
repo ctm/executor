@@ -7,18 +7,20 @@
  *
  * $Id: ini.h 87 2005-05-25 01:57:33Z ctm $
  */
+
+#include <string>
+
 namespace Executor {
-typedef char *heading_t;
-typedef char *ini_key_t;
-typedef char *value_t;
+typedef std::string heading_t;
+typedef std::string ini_key_t;
+typedef std::string value_t;
 
 typedef struct pair_link_str
 {
   struct pair_link_str *next;
   ini_key_t key;
   value_t value;
-}
-pair_link_t;
+} pair_link_t;
 
 extern char *ROMlib_PrintersIni;
 extern char *ROMlib_PrintDef;

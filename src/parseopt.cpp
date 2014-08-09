@@ -19,6 +19,7 @@ char ROMlib_rcsid_parseopt[] =
 #include <ctype.h>
 
 using namespace Executor;
+using namespace std;
 
 /* Parse version e.g. "executor -system 7.0.2".  Omitted
  * digits will be zero, so "executor -system 7" is equivalent to
@@ -26,7 +27,7 @@ using namespace Executor;
  */
 
 boolean_t
-Executor::ROMlib_parse_version (const char *vers, uint32 *version_out)
+Executor::ROMlib_parse_version (string vers, uint32 *version_out)
 {
   boolean_t success_p;
   int major_version, minor_version, teeny_version;
@@ -34,8 +35,8 @@ Executor::ROMlib_parse_version (const char *vers, uint32 *version_out)
   char *temp_str, *system_str;
 
   /* Copy the version to a temp string we can manipulate. */
-  system_str = (char *) alloca (strlen (vers) + 1);
-  strcpy (system_str, vers);
+  system_str = (char *) alloca (vers.length() + 1);
+  strcpy (system_str, vers.c_str());
 
   major_str = system_str;
   
@@ -80,7 +81,7 @@ Executor::ROMlib_parse_version (const char *vers, uint32 *version_out)
  * "executor -system 7.0.0".  Returns TRUE on success, else FALSE.
  */
 boolean_t
-Executor::parse_system_version (const char *vers)
+Executor::parse_system_version (string vers)
 {
   boolean_t retval;
 
@@ -100,10 +101,11 @@ Executor::parse_system_version (const char *vers)
  * on parse error.
  */
 boolean_t
-Executor::parse_size_opt (const char *opt, const char *arg)
+Executor::parse_size_opt (string opt, string arg1)
 {
   boolean_t success_p;
   int w, h;
+  const char *arg = arg1.c_str();
   
   w = h = 0;
   if (arg != NULL)
@@ -135,7 +137,7 @@ Executor::parse_size_opt (const char *opt, const char *arg)
   if (w == 0 || h == 0)
     {
       fprintf (stderr, "Invalid screen size.  Use something like "
-	       "\"-%s 640x480\".\n", opt);
+	       "\"-%s 640x480\".\n", opt.c_str());
       success_p = FALSE;
     }
   else if (w < VDRIVER_MIN_SCREEN_WIDTH || h < VDRIVER_MIN_SCREEN_HEIGHT)
@@ -159,10 +161,11 @@ Executor::parse_size_opt (const char *opt, const char *arg)
  */
 
 PUBLIC boolean_t
-Executor::parse_prres_opt (INTEGER *outx, INTEGER *outy, const char *arg)
+Executor::parse_prres_opt (INTEGER *outx, INTEGER *outy, string arg1)
 {
   boolean_t retval;
   INTEGER x, y, *p;
+  const char *arg = arg1.c_str();
 
   x = 0;
   y = 0;

@@ -151,6 +151,11 @@ error_parse_option_string (const char *options)
   return success_p;
 }
 
+bool
+error_parse_option_string (std::string options)
+{
+  return error_parse_option_string(options.c_str());
+}
 
 /* Enables or disables the specified error and returns its old enabledness. */
 bool
