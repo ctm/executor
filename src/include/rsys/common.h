@@ -85,11 +85,11 @@ T BigEndianValue(T value)
     return value;
 }
 
-	template < typename T >
-	void BigEndianInPlace(T &value)
-	{
-		sized_byteswap< sizeof(T) >(reinterpret_cast<char*>(&value));
-	}
+template < typename T >
+void BigEndianInPlace(T &value)
+{
+	sized_byteswap< sizeof(T) >(reinterpret_cast<char*>(&value));
+}
 }
 namespace Executor {
 #endif

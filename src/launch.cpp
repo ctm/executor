@@ -613,7 +613,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     ROMlib_MacSize.first    = INITIALPAIRVALUE;
     ROMlib_directdiskaccess = FALSE;
     ROMlib_clear_gestalt_list ();
-    ParseConfigFile ((StringPtr) "\017ExecutorDefault", 0);
+    ParseConfigFile ((StringPtr) "\pExecutorDefault", 0);
     ParseConfigFile (ename, err == noErr ? BigEndianValue(finfo.fdCreator) : 0);
     ROMlib_clockonoff(!ROMlib_noclock);
     if ((ROMlib_ScreenSize.first != INITIALPAIRVALUE

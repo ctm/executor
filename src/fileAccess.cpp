@@ -1435,7 +1435,7 @@ pbsetfpos (ParmBlkPtr pb, boolean_t can_go_past_eof)
 	forkoffset = FORKOFFSET(fp);
 	err = pbfpos(pb, &toseek, can_go_past_eof);
 	fd = fp->fcfd;
-	pb->ioParam.ioPosOffset = BigEndianValue(lseek(fd, toseek, L_SET) - forkoffset);
+	pb->ioParam.ioPosOffset = BigEndianValue((int)(lseek(fd, toseek, L_SET) - forkoffset));
   }
   fs_err_hook (err);
   return err;
@@ -1519,8 +1519,8 @@ A2(PUBLIC, OSErr, ufsPBRead, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
 		err = ioErr;
 	    } else {
 		pb->ioParam.ioActCount = BigEndianValue(nread);
-		pb->ioParam.ioPosOffset = BigEndianValue(lseek(fd, 0L, L_INCR) -
-								   forkoffset);
+		pb->ioParam.ioPosOffset = BigEndianValue((int)(lseek(fd, 0L, L_INCR) -
+								   forkoffset));
 		if (rc != Cx(pb->ioParam.ioReqCount))
 		    err = eofErr;
 	    }
@@ -1578,8 +1578,8 @@ A2(PUBLIC, OSErr, ufsPBWrite, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
 		} else {
 		    err = noErr;
 		    pb->ioParam.ioActCount = BigEndianValue(nwrite);
-		    pb->ioParam.ioPosOffset = BigEndianValue(lseek(fd, 0L, L_INCR) -
-								   forkoffset);
+		    pb->ioParam.ioPosOffset = BigEndianValue((int)(lseek(fd, 0L, L_INCR) -
+								   forkoffset));
 		    if (Cx(pb->ioParam.ioPosOffset) > Cx(fp->fcleof)) {
 			fp->fcleof = pb->ioParam.ioPosOffset;
 			err = ROMlib_seteof(fp);
@@ -1607,8 +1607,8 @@ A2(PUBLIC, OSErr, ufsPBGetFPos, ParmBlkPtr, pb,		/* INTERNAL */
     fp = PRNTOFPERR(Cx(pb->ioParam.ioRefNum), &err);
     if (err == noErr) {
 	forkoffset = FORKOFFSET(fp);
-	pb->ioParam.ioPosOffset = BigEndianValue(lseek(fp->fcfd, 0L, L_INCR) -
-								   forkoffset);
+	pb->ioParam.ioPosOffset = BigEndianValue((int)(lseek(fp->fcfd, 0L, L_INCR) -
+								   forkoffset));
 	pb->ioParam.ioReqCount = pb->ioParam.ioActCount =
 						     pb->ioParam.ioPosMode = 0;
     }

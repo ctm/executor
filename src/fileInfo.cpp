@@ -484,7 +484,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 		  pb->fileParam.ioFlFndrInfo.fdType = BigEndianValue (type);
 		}
 	    }
-	    pb->fileParam.ioFlLgLen	= BigEndianValue(datasbuf.st_size);
+	    pb->fileParam.ioFlLgLen	= BigEndianValue((int)datasbuf.st_size);
 	    pb->fileParam.ioFlRLgLen	= 0;
 	    pb->fileParam.ioFlCrDat	=
 				      BigEndianValue(UNIXTIMETOMACTIME(datasbuf.st_ctime));
