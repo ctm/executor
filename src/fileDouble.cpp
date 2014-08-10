@@ -223,7 +223,7 @@ A5(PRIVATE, BOOLEAN, getsetentry, GetOrSetType, gors, LONGINT, fd,
     INTEGER n;
 
     retval = FALSE;
-    saveloc = lseek(fd, 0L, L_INCR);
+    saveloc = lseek(fd, 0L, SEEK_CUR);
     lseek(fd, 0L, L_SET);
     nread = read(fd, buf, sizeof(buf));
     dfp = (struct defaulthead *) buf;
@@ -285,7 +285,7 @@ A2(PRIVATE, void, writebyteat, LONGINT, fd, LONGINT, loc)
 {
     off_t saveloc;
 
-    saveloc = lseek(fd, 0L, L_INCR);
+    saveloc = lseek(fd, 0L, SEEK_CUR);
     lseek(fd, loc, L_SET);
     write(fd, "", 1);
     lseek(fd, saveloc, L_SET);
@@ -328,7 +328,7 @@ A1(PUBLIC, OSErr, ROMlib_seteof, fcbrec *, fp)	/* INTERNAL */
 	if (leof > peof)
 	    writebyteat(fd, leof-1);
 	else if (leof < peof) {
-	    curloc = lseek(fd, 0L, L_INCR);
+	    curloc = lseek(fd, 0L, SEEK_CUR);
 	    ftruncate(fd, leof);
 	    if (curloc > leof)
 		lseek(fd, leof, L_SET);
@@ -356,7 +356,7 @@ A5(PRIVATE, BOOLEAN, getsetpiece, GetOrSetType, gors, LONGINT, fd,
     off_t saveloc;
     BOOLEAN retval;
 
-    saveloc = lseek(fd, 0L, L_INCR);
+    saveloc = lseek(fd, 0L, SEEK_CUR);
     lseek(fd, Cx(sdp->offset), L_SET);
     switch (gors) {
     case Get:

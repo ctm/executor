@@ -108,7 +108,7 @@ A2(PUBLIC trap, OSErrRET, PBGetFCBInfo, FCBPBPtr, pb, BOOLEAN, async)
 	pb->ioFCBCrPs = fcbp->fcbCrPs;	/* HFS */
 	pb->ioFCBPLen = fcbp->fcbPLen;
     } else {
-	pb->ioFCBCrPs = BigEndianValue((ULONGINT)(lseek(((fcbrec *)fcbp)->fcfd, 0, L_INCR) -    /* UFS */
+	pb->ioFCBCrPs = BigEndianValue((ULONGINT)(lseek(((fcbrec *)fcbp)->fcfd, 0, SEEK_CUR) -    /* UFS */
 						   FORKOFFSET((fcbrec *) fcbp)));
 	pb->ioFCBPLen = fcbp->fcbEOF;
     }

@@ -1,3 +1,5 @@
+#import <Cocoa/Cocoa.h>
+
 #include "rsys/common.h"
 #include "MacTypes.h"
 
@@ -6,7 +8,6 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 
-#import <Cocoa/Cocoa.h>
 #include "rsys/keyboards.h"
 #include "MemoryMgr.h"
 
@@ -23,6 +24,7 @@
 #include <syn68k_public.h>
 #include "ourstuff.h"
 #include "contextswitch.h"
+#include "MacWinClass.h"
 
 #warning "punt this #include"
 #include "rsys/memory_layout.h"
@@ -33,8 +35,6 @@ char *Executor::romlib_sp;
 char *Executor::nextstep_sp;
 
 char ROMlib_040;
-
-extern "C" void ROMlib_dummywincall( void );
 
 void ROMlib_calldummies( void )
 {

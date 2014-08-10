@@ -1158,7 +1158,7 @@ A4(PRIVATE, OSErr, PBOpenForkD, ParmBlkPtr, pb, BOOLEAN, a,
 		      {
 			fp->fcflags |= fcfisres;
 			fp->hiddenfd = fp->fcfd;
-			lseek(fp->fcfd, ROMlib_FORKOFFSET(fp), L_SET);
+			lseek(fp->fcfd, ROMlib_FORKOFFSET(fp), SEEK_SET);
 		      }
 		    else
 		      {
@@ -1307,7 +1307,7 @@ pbfpos (ParmBlkPtr pb, LONGINT *toseekp, boolean_t can_go_past_eof)
 
 	switch (Cx(pb->ioParam.ioPosMode) & POSMASK) {
 	case fsAtMark:
-	    if ((pos = lseek(fd, 0L, L_INCR)) == -1) {
+	    if ((pos = lseek(fd, 0L, SEEK_CUR)) == -1) {
 		switch(errno) {
 		case EBADF:
 		    err = fnOpnErr;
@@ -1373,7 +1373,7 @@ A3(PRIVATE, OSErr, PBLockUnlockRange, ParmBlkPtr, pb, BOOLEAN, a,
 	    OSErr (*cleanup) (int fd, uint32 start, uint32 count);
 
 	    fd = fp->fcfd;
-	    curseek = lseek(fd, 0, L_SET);
+	    curseek = lseek(fd, 0, SEEK_SET);
 
 	    if (op == lock)
 	      {
@@ -1387,14 +1387,14 @@ A3(PRIVATE, OSErr, PBLockUnlockRange, ParmBlkPtr, pb, BOOLEAN, a,
 	      }
 
 	    err = verify (fd, toseek, BigEndianValue (pb->ioParam.ioReqCount));
-	    if (err == noErr && lseek(fd, toseek, L_SET) == -1)
+	    if (err == noErr && lseek(fd, toseek, SEEK_SET) == -1)
 		err = ROMlib_maperrno();
 	    if (err == noErr)
 	      err = ROMlib_lockunlockrange (fd, toseek,
 					    BigEndianValue (pb->ioParam.ioReqCount), op);
 	    if (err == noErr)
 	      err = cleanup (fd, toseek, BigEndianValue (pb->ioParam.ioReqCount));
-	    lseek(fd, curseek, L_SET);
+	    lseek(fd, curseek, SEEK_SET);
 	}
     }
     fs_err_hook (err);
@@ -1435,7 +1435,7 @@ pbsetfpos (ParmBlkPtr pb, boolean_t can_go_past_eof)
 	forkoffset = FORKOFFSET(fp);
 	err = pbfpos(pb, &toseek, can_go_past_eof);
 	fd = fp->fcfd;
-	pb->ioParam.ioPosOffset = BigEndianValue((int)(lseek(fd, toseek, L_SET) - forkoffset));
+	pb->ioParam.ioPosOffset = BigEndianValue((int)(lseek(fd, toseek, SEEK_SET) - forkoffset));
   }
   fs_err_hook (err);
   return err;

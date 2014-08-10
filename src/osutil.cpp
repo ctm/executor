@@ -372,19 +372,19 @@ A1(PUBLIC trap, OSErrRET, SetDateTime, LONGINT, mactime)
 
 
 PRIVATE unsigned long long
-secsinminutes (ULONGINT nminutes)
+secsinminutes (unsigned long long nminutes)
 {
   return nminutes * 60;
 }
 
 PRIVATE unsigned long long
-secsinhours (ULONGINT nhours)
+secsinhours (unsigned long long nhours)
 {
   return nhours * secsinminutes((LONGINT) 60);
 }
 
 PRIVATE unsigned long long
-secsindays (ULONGINT ndays)
+secsindays (unsigned long long ndays)
 {
   return ndays * secsinhours((LONGINT) 24);
 }
@@ -606,11 +606,11 @@ Executor::date_to_swapped_fields (long long mactime, INTEGER *yearp, INTEGER *mo
 
 A2(PUBLIC trap, void, Date2Secs, DateTimeRec *, d, LONGINT *, s)
 {
-    LONGINT l;
+    long long l;
 
     l  = ROMlib_long_long_secs (CW (d->year), CW (d->month), CW (d->day),
 				CW (d->hour), CW (d->minute), CW (d->second));
-    *s = l;
+    *s = (LONGINT)l;
 }
 
 A2(PUBLIC trap, void, Secs2Date, LONGINT, mactime, DateTimeRec *, d)

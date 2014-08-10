@@ -766,8 +766,8 @@ PRIVATE OSErr add_free_nodes(cacheentry *block0cachep, ULONGINT n_new_nodes)
 		newbtp->ndType = CB(mapnode);	/* 2 */
 		newbtp->ndNRecs = CWC(1);
 
-		*((short *) newbtp + 255) = CWC(MAP_PAGE_MAP_BEGIN);
-		*((short *) newbtp + 254) = CWC(MAP_PAGE_MAP_END);
+		*((short *) newbtp + 255) = CWC((short)MAP_PAGE_MAP_BEGIN);
+		*((short *) newbtp + 254) = CWC((short)MAP_PAGE_MAP_END);
 		--n_new_nodes;
 		oldcachep->flags |= CACHEDIRTY;
 		newcachep->flags |= CACHEDIRTY;

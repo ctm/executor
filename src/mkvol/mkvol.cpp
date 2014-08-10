@@ -7,6 +7,8 @@ char ROMlib_rcsid_mkvol[] =
 "$Id: mkvol.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
+#undef _DARWIN_NO_64_BIT_INODE
+
 /* #include "rsys/common.h" */
 #if defined (__MINGW32__)
 #define CYGWIN32
@@ -686,8 +688,8 @@ adjust_hfv_name (char **namepp)
       char *new_namep;
 
       new_namep = (char*)malloc (name_len + 4 + 1);
-      sprintf (new_namep, "%s.hfv", namep);
-      fprintf (stderr, "Adding \".hfv\" to rename \"%s\" to \"%s\"\n",
+      sprintf (new_namep, "%s%s", namep, DEFAULT_SUFFIX);
+      fprintf (stderr, "Adding \"" DEFAULT_SUFFIX "\" to rename \"%s\" to \"%s\"\n",
 	       namep, new_namep);
       namep = new_namep;
     }
@@ -929,7 +931,7 @@ main (int argc, char *argv[])
   time_t now;
   struct tm *tmp;
   int32 years, leaps;
-  int32 nsecs, nbytes;
+  int32 nsecs = 0, nbytes = 0;
   long timevar;
   boolean_t force_p, help_p;
   char *hfv_name, *volume_name, *volume_size;

@@ -538,14 +538,14 @@ PUBLIC OSErr Executor::ROMlib_readwrite(LONGINT fd, char *buffer, LONGINT count,
 	totransfer = MIN(count, remainder);
 	newbuffer = (char *) (((long) alloca(blocksize + 3)+3) & ~3);
 	offset = offset / blocksize * blocksize;
-	JUMPTODONEIF(seekfp(fd, offset, L_SET) < 0)
+	JUMPTODONEIF(seekfp(fd, offset, SEEK_SET) < 0)
 	needlseek = FALSE;
 	JUMPTODONEIF(readfp(fd, newbuffer, blocksize) != blocksize)
 	if (rw == reading) {
 	    memmove(buffer, newbuffer+blocksize-remainder, totransfer);
 	} else {
 	    memmove(newbuffer+blocksize-remainder, buffer, totransfer);
-	    JUMPTODONEIF(seekfp(fd, offset, L_SET) < 0)
+	    JUMPTODONEIF(seekfp(fd, offset, SEEK_SET) < 0)
 	    JUMPTODONEIF(writefp(fd, newbuffer, blocksize) != blocksize)
 	}
 	buffer += totransfer;
@@ -556,7 +556,7 @@ PUBLIC OSErr Executor::ROMlib_readwrite(LONGINT fd, char *buffer, LONGINT count,
 	remainder = count % blocksize;
 	count -= remainder;
 	if (needlseek) {
-	    JUMPTODONEIF(seekfp(fd, offset, L_SET) < 0)
+	    JUMPTODONEIF(seekfp(fd, offset, SEEK_SET) < 0)
 	    needlseek = FALSE;
 	}
 	while (count) {
@@ -576,13 +576,13 @@ PUBLIC OSErr Executor::ROMlib_readwrite(LONGINT fd, char *buffer, LONGINT count,
 	if (!newbuffer)
 	    newbuffer = (char *) (((long) alloca(blocksize+3)+3) & ~3);
 	if (needlseek)
-	    JUMPTODONEIF(seekfp(fd, offset, L_SET) < 0)
+	    JUMPTODONEIF(seekfp(fd, offset, SEEK_SET) < 0)
 	JUMPTODONEIF(readfp(fd, newbuffer, blocksize) != blocksize)
 	if (rw == reading) {
 	    memmove(buffer, newbuffer, count);
 	} else {
 	    memmove(newbuffer, buffer, count);
-	    JUMPTODONEIF(seekfp(fd, offset, L_SET) < 0)
+	    JUMPTODONEIF(seekfp(fd, offset, SEEK_SET) < 0)
 	    JUMPTODONEIF(writefp(fd, newbuffer, blocksize) != blocksize)
 	}
     }

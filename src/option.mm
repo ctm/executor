@@ -24,14 +24,13 @@ char ROMlib_rcsid_option[] =
 using namespace Executor;
 using namespace std;
 
-struct opt_block
+typedef struct opt_block
 {
   string interface;
-  option_t *opts;
-  int n_opts;
-} *opt_blocks;
-static int n_opt_blocks_max;
-static int n_opt_blocks;
+  option_vec opts;
+} opt_block;
+typedef vector<opt_block> optBlocks;
+static optBlocks opt_blocks;
 
 static int max_pre_notes;
 static int n_pre_notes;
@@ -67,10 +66,7 @@ Executor::opt_shutdown (void)
     pre_notes = nullptr;
   }
   
-  if (opt_blocks) {
-    free (opt_blocks);
-    opt_blocks = nullptr;
-  }
+  opt_blocks.clear();
 }
 
 static void
@@ -113,25 +109,22 @@ wrap (char *buf,
 
   buf_len = strlen (buf);
   
-  if (buf_len <= desired_len)
-    {
-      *out_len = buf_len;
-      *next_len = -1;
-    }
-  else
-    {
-      char *t;
+  if (buf_len <= desired_len) {
+    *out_len = buf_len;
+    *next_len = -1;
+  } else {
+    char *t;
 
-      t = &buf[desired_len];
-      while (!isspace (*t))
-	t --;
-      *next_len = (t - buf) + 1;
+    t = &buf[desired_len];
+    while (!isspace (*t))
+      t --;
+    *next_len = (t - buf) + 1;
 
-      while (isspace (*t))
-	t --;
+    while (isspace (*t))
+      t --;
 
-      *out_len = (t - buf) + 1;
-    }
+    *out_len = (t - buf) + 1;
+  }
 }
 
 void
@@ -183,7 +176,7 @@ send_to_help_buf (string text, int append_newline_p)
 void
 _generate_help_message (void)
 {
-  int i, block_i;
+  int i;
   char *buf;
 
   for (i = 0; i < n_pre_notes; i ++)
@@ -203,22 +196,19 @@ _generate_help_message (void)
     }
   /* newline to separate pre-notes and options */
   send_to_help_buf ("", 0, TRUE);
-  for (block_i = 0; block_i < n_opt_blocks; block_i ++)
+  for (optBlocks::iterator block_i = opt_blocks.begin(); block_i != opt_blocks.end(); block_i ++)
     {
-      string interface = opt_blocks[block_i].interface;
-      option_t *opts = opt_blocks[block_i].opts;
-      int n_opts = opt_blocks[block_i].n_opts;
-      int opt_i;
+      string interface = block_i->interface;
+      option_vec *opts = &block_i->opts;
 
       send_to_help_buf (interface, FALSE);
       send_to_help_buf (":", 1, TRUE);
       
-      for (opt_i = 0; opt_i < n_opts; opt_i ++)
+      for (option_vec::iterator opt = opts->begin(); opt != opts->end(); opt ++)
 	{
 	  const char *spaces = "                    ";
 	  int next_len, out_len;
 	  
-	  option_t *opt = &opts[opt_i];
 	  int opt_text_len;
 	  int same_line_p;
 
@@ -286,91 +276,67 @@ Executor::opt_register_pre_note (char *note)
 
 void
 Executor::opt_register (string new_interface,
-	      option_t *new_opts, int n_new_opts)
+	      option_vec new_opts)
 {
-  int block_i;
   struct opt_block *block;
-
+  
   if (help_buf)
-    {
-      /* internal error, must register all options before generating
-	 help message */
-      fprintf (ERRMSG_STREAM, "\
-%s: internal options error: opt register after help message generation.\n",
-	       program_name);
-      exit (-16);
-    }
+  {
+    /* internal error, must register all options before generating
+     help message */
+    fprintf (ERRMSG_STREAM, "\
+             %s: internal options error: opt register after help message generation.\n",
+             program_name);
+    exit (-16);
+  }
   
   /* check for conflicting options */
-  for (block_i = 0; block_i < n_opt_blocks; block_i ++)
-    {
-      string interface = opt_blocks[block_i].interface;
-      option_t *opts = opt_blocks[block_i].opts;
-      int n_opts = opt_blocks[block_i].n_opts;
-      int opt_i, new_opt_i;
-      
-      for (opt_i = 0; opt_i < n_opts; opt_i ++)
-	for (new_opt_i = 0; new_opt_i < n_new_opts; new_opt_i ++)
-	  {
-	    if ( (opts[opt_i].text ==
-			 new_opts[new_opt_i].text))
-	      {
-		/* conflicting options */
-		fprintf (ERRMSG_STREAM, "\
-%s: opt internal error: `%s' and `%s' both request option `%s'\n",
-			 program_name,
-			 interface.c_str(), new_interface.c_str(), opts[opt_i].text.c_str());
-		exit (-16);
-	      }
-	  }
-    }
+  for (optBlocks::iterator blockIt = opt_blocks.begin(); blockIt != opt_blocks.end(); blockIt++)
+  {
+    string interface = blockIt->interface;
+    option_vec *opts = &blockIt->opts;
+    
+    for (option_vec::iterator opt_i = opts->begin(); opt_i != opts->end(); opt_i ++)
+      for (option_vec::iterator new_opt_i = new_opts.begin(); new_opt_i != new_opts.end(); new_opt_i ++)
+      {
+        if ( (opt_i->text ==
+              new_opt_i->text))
+        {
+          /* conflicting options */
+          fprintf (ERRMSG_STREAM, "\
+                   %s: opt internal error: `%s' and `%s' both request option `%s'\n",
+                   program_name,
+                   interface.c_str(), new_interface.c_str(), opt_i->text.c_str());
+          exit (-16);
+        }
+      }
+  }
   
-  if (!opt_blocks)
-    {
-      n_opt_blocks = 0;
-      n_opt_blocks_max = 4;
-      opt_blocks = (struct opt_block*)malloc (n_opt_blocks_max * sizeof *opt_blocks);
-    }
-  else if (n_opt_blocks == n_opt_blocks_max)
-    {
-      n_opt_blocks_max *= 2;
-      opt_blocks = (struct opt_block*)realloc (opt_blocks, n_opt_blocks_max * sizeof *opt_blocks);
-    }
-  
-  block = &opt_blocks[n_opt_blocks ++];
+  block = &opt_blocks.back();
   
   block->interface = new_interface;
   block->opts = new_opts;
-  block->n_opts = n_new_opts;
 }
 
-opt_database_t *
+opt_database_t
 Executor::opt_alloc_db (void)
 {
-  opt_database_t *retval = (opt_database_t*)malloc(sizeof *retval);
+  opt_database_t retval = opt_database_t() ;
 
-  retval->opt_vals = NULL;
-  retval->n_opt_vals = 0;
-  /* default maximum */
-  retval->max_opt_vals = 4;
-  
   return retval;
 }
 
 PRIVATE opt_val_t *
-opt_lookup_helper (opt_database_t *db, string &opt)
+opt_lookup_helper (opt_database_t &db, string &opt)
 {
-  opt_val_t *retval;
-  int i;  
-
-  retval = 0;
+  opt_val_t *retval = nullptr;
 
   /* try to find this option in the database */
-  for (i = 0; i < db->n_opt_vals; i ++)
+  for (opt_database_t::iterator i = db.begin() ; i != db.end(); i ++)
     {
-      if (db->opt_vals[i].text == opt)
+      if (i->text == opt)
 	{
-	  retval = &db->opt_vals[i];
+	  retval = &*i;
 	  break;
 	}
     }
@@ -378,7 +344,7 @@ opt_lookup_helper (opt_database_t *db, string &opt)
 }
 
 opt_val_t *
-opt_lookup (opt_database_t *db, string &opt)
+opt_lookup (opt_database_t &db, string &opt)
 {
   opt_val_t *retval;
 
@@ -414,51 +380,36 @@ opt_lookup (opt_database_t *db, string &opt)
 }
 
 void
-Executor::opt_put_val (opt_database_t *db, string &opt, string val,
+Executor::opt_put_val (opt_database_t &db, string &opt, string val,
 	     priority_t pri, int temp_val_p)
 {
-  opt_val_t *opt_val;
+  opt_val_t *opt_val = opt_lookup_helper (db, opt);
 
-  opt_val = opt_lookup_helper (db, opt);
   if (!opt_val)
-    {
-      if (db->opt_vals)
-	{
-	  /* this option is not yet in the database, add it */
-	  if (db->n_opt_vals == db->max_opt_vals)
-	    {
-	      /* allocate some new ones */
-	      db->max_opt_vals *= 2;
-	      db->opt_vals = (opt_val_t*)realloc (db->opt_vals,
-				      (sizeof *(db->opt_vals)
-				       * db->max_opt_vals));
-	    }
-	}
-      else
-	{
-	  db->opt_vals = (opt_val_t*)malloc (sizeof *(db->opt_vals) * db->max_opt_vals);
-	}
-      opt_val = &db->opt_vals[db->n_opt_vals ++];
-      
-      opt_val->text = opt;
-      opt_val->val = "";
-      opt_val->t_val = "";
-    }
+  {
+    opt_val_t tmpVal;
+    tmpVal.text = opt;
+    tmpVal.val = "";
+    tmpVal.t_val = "";
+    db.push_back(tmpVal);
+    opt_val = &db.back();
+    
+  }
 
   if (temp_val_p)
-    {
-      opt_val->t_val = val;
-      opt_val->t_pri = pri;
-    }
+  {
+    opt_val->t_val = val;
+    opt_val->t_pri = pri;
+  }
   else
-    {
-      opt_val->val = val;
-      opt_val->pri = pri;
-    }
+  {
+    opt_val->val = val;
+    opt_val->pri = pri;
+  }
 }
 
 void
-Executor::opt_put_int_val (opt_database_t *db, string &opt, int valint,
+Executor::opt_put_int_val (opt_database_t &db, string &opt, int valint,
 		 priority_t pri, int temp_val_p)
 {
   char *val, buf[256];
@@ -473,7 +424,7 @@ Executor::opt_put_int_val (opt_database_t *db, string &opt, int valint,
 #define option_value(opt_val) ((opt_val)->t_val == "" ? "" : (opt_val)->val)
 
 int
-Executor::opt_val (opt_database_t *db, string opt, string *retval)
+Executor::opt_val (opt_database_t &db, string opt, string *retval)
 {
   opt_val_t *opt_val;
   string val = "";
@@ -500,7 +451,7 @@ Executor::opt_val (opt_database_t *db, string opt, string *retval)
  * Returns TRUE if a value was found.
  */
 int
-Executor::opt_int_val (opt_database_t *db, string opt, int *retval,
+Executor::opt_int_val (opt_database_t &db, string opt, int *retval,
 	     boolean_t *parse_error_p)
 {
   opt_val_t *opt_val;
@@ -528,7 +479,7 @@ Executor::opt_int_val (opt_database_t *db, string opt, int *retval,
 }
 
 int
-Executor::opt_parse (opt_database_t *db, option_t *opts, int n_opts,
+Executor::opt_parse (opt_database_t &db, option_vec opts,
 	   int *argc, char *argv[])
 {
   int parse_error_p = FALSE;
@@ -550,12 +501,10 @@ Executor::opt_parse (opt_database_t *db, option_t *opts, int n_opts,
       /* option */
       if (*arg == '-')
 	{
-	  int opt_i;
-	  
 	  /* find the option among the options */
-	  for (opt_i = 0; opt_i < n_opts; opt_i ++)
+      for (option_vec::iterator opt_i = opts.begin(); opt_i != opts.end(); opt_i ++)
 	    {
-	      option_t *opt = &opts[opt_i];
+	      option_t *opt = &*opt_i;
 
 	      if (!strcmp (&arg[1],
 			   opt->text.c_str()))

@@ -133,6 +133,8 @@ char ROMlib_rcsid_main[] =
 #include "x.h"
 #endif
 
+#include <vector>
+
 using namespace Executor;
 using namespace ByteSwap;
 using namespace std;
@@ -191,7 +193,7 @@ static boolean_t use_native_code_p = TRUE;
    version A.B.C */
 uint32 Executor::system_version = 0x700; /* keep this in sync with Browser's .ecf file */
 
-static option_t common_opts[] =
+const option_vec Executor::common_opts =
 {
   { "sticky",      "sticky menus",                opt_no_arg,   NULL },
   { "pceditkeys",  "have Delete key delete one character forward",
@@ -450,7 +452,7 @@ capable of color.",
   { "hfsplusro", "unsupported -- do not use", opt_no_arg, NULL },
 };
   
-opt_database_t *Executor::common_db;
+opt_database_t Executor::common_db;
 
 
 /* Prints the specified value in a representation appropriate for command
@@ -1400,7 +1402,7 @@ int main(int argc, char** argv)
 
   opt_init ();
   common_db = opt_alloc_db ();
-  opt_register ("common", common_opts, NELEM (common_opts));
+  opt_register ("common", common_opts);
   
   opt_register_pre_note ("welcome to the executor help message.");
   opt_register_pre_note ("usage: `executor [option...] "
@@ -1410,7 +1412,7 @@ int main(int argc, char** argv)
     (*reg_funcs[i]) ();
 
   if (!bad_arg_p)
-    bad_arg_p = opt_parse (common_db, common_opts, NELEM (common_opts),
+    bad_arg_p = opt_parse (common_db, common_opts,
 			   &argc, argv);
   
   if (opt_val (common_db, "version", NULL))

@@ -13,8 +13,7 @@
         return( NO );
 }
 
-extern void ROMlib_dummywincall( void );
-void ROMlib_dummywincall( void )
+void Executor::ROMlib_dummywincall( void )
 {
 }
 

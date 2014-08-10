@@ -470,7 +470,7 @@ P4(PUBLIC, pascal trap OSErr, SndAddModifier, SndChannelPtr, chanp,
 
 typedef pascal BOOLEAN (*snthfp)(SndChannelPtr, SndCommand *, ModifierStubPtr);
 
-static BOOLEAN callasynth(SndChannelPtr chanp, SndCommand *cmdp, ModifierStubPtr mp)
+BOOLEAN callasynth(SndChannelPtr chanp, SndCommand *cmdp, ModifierStubPtr mp)
 {
 /*
  * NOTE: when we support sound, we'll have to check for known P_routines

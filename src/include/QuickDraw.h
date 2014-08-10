@@ -90,11 +90,13 @@ MAKE_HIDDEN(CursPtr);
 typedef HIDDEN_CursPtr *CursHandle;
 
 typedef SignedByte GrafVerb;
-#define frame	0
-#define paint	1
-#define erase	2
-#define invert	3
-#define fill	4
+enum {
+  frame = 0,
+  paint = 1,
+  erase = 2,
+  invert = 3,
+  fill = 4
+};
 
 typedef struct PACKED {
   INTEGER polySize;

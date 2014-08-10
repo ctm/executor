@@ -111,7 +111,7 @@ A2(PUBLIC, OSErr, ufsPBGetFCBInfo, FCBPBPtr, pb,	/* INTERNAL */
 	pb->ioFCBStBlk   = 0;
 	pb->ioFCBEOF     = fp->fcleof;
 	pb->ioFCBPLen    = fp->fcleof;
-	pb->ioFCBCrPs    = lseek(fp->fcfd, 0, L_INCR) - FORKOFFSET(fp);
+	pb->ioFCBCrPs    = lseek(fp->fcfd, 0, SEEK_CUR) - FORKOFFSET(fp);
 	pb->ioFCBVRefNum = MR(fp->fcvptr)->vcbVRefNum;	/* what's this? */
 	pb->ioFCBClpSiz  = MR(fp->fcvptr)->vcbClpSiz;
 	pb->ioFCBParID   = fp->fcparid;

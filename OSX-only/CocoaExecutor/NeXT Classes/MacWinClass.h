@@ -3,6 +3,10 @@
 
 #import <AppKit/NSWindow.h>
 
+namespace Executor {
+  extern void ROMlib_dummywincall( void );
+}
+
 @interface MacWindow : NSWindow
 
 - (BOOL)commandKey:(NSEvent *)theEvent;

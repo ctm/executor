@@ -1,5 +1,8 @@
 #if !defined (_RSYS_OPTION_H_)
 #define _RSYS_OPTION_H_
+
+#include <vector>
+
 namespace Executor {
 typedef enum option_kind
 {
@@ -42,6 +45,8 @@ typedef struct option
   std::string opt_val;
 } option_t;
 
+typedef std::vector<option_t> option_vec;
+	
 typedef enum priority
 {
   pri_appl_config_file,
@@ -65,36 +70,30 @@ typedef struct opt_val
   priority_t pri;
 } opt_val_t;
 
-typedef struct opt_database
-{
-  opt_val_t *opt_vals;
-  int n_opt_vals;
-  int max_opt_vals;
-} opt_database_t;
-
+typedef std::vector<opt_val_t> opt_database_t;
 /* common options */
-extern option_t opt_common[];
-extern opt_database_t *common_db;
+extern const option_vec common_opts;
+extern opt_database_t common_db;
 
 void opt_init (void);
 void opt_shutdown (void);
 
-void opt_register (std::string new_interface, option_t *opts, int n_opts);
+void opt_register (std::string new_interface, option_vec opts);
 
 /* provide a function to parse specified arguments */
-opt_database_t *opt_alloc_db (void);
-int opt_parse (opt_database_t *db, option_t *opts, int n_opts,
+opt_database_t opt_alloc_db (void);
+int opt_parse (opt_database_t &db, option_vec opts,
 	       int *argc, char *argv[]);
 
 /* returns TRUE if options was specified */
-int opt_int_val (opt_database_t *db, std::string opt, int *retval,
+int opt_int_val (opt_database_t &db, std::string opt, int *retval,
 		 boolean_t *parse_error_p);
 
-int opt_val (opt_database_t *db, std::string opt, std::string *retval);
-void opt_put_val (opt_database_t *db, std::string &opt, std::string value,
+int opt_val (opt_database_t &db, std::string opt, std::string *retval);
+void opt_put_val (opt_database_t &db, std::string &opt, std::string value,
 		  priority_t pri, int temp_val_p);
 
-void opt_put_int_val (opt_database_t *db, std::string &opt, int value,
+void opt_put_int_val (opt_database_t &db, std::string &opt, int value,
 		      priority_t pri, int temp_val_p);
 
 
