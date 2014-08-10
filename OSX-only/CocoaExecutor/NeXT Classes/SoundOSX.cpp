@@ -13,7 +13,8 @@ using namespace Executor;
 
 bool SoundOSX::sound_init()
 {
-  return false;
+	ROMlib_SND_RATE = 22255;
+	return false;
 }
 
 void SoundOSX::sound_shutdown()
@@ -94,11 +95,6 @@ syn68k_addr_t SoundOSX::handle_fake_sound_callback (syn68k_addr_t addr, void *ou
   }
   
   return POPADDR ();
-}
-
-bool SoundOSX::HasSoundClearPending()
-{
-  return false;
 }
 
 void Executor::ROMlib_callcompletion( void *chanp )

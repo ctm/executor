@@ -28,7 +28,7 @@ namespace Executor {
 	virtual struct hunger_info GetHungerInfo();
 	virtual void HungerFinish();
 	virtual void sound_clear_pending();
-	virtual bool HasSoundClearPending();
+	  virtual bool HasSoundClearPending() {return false;}
     
   private:
 	AudioUnit		AudioUnit;
