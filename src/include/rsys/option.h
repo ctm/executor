@@ -99,6 +99,7 @@ void opt_put_int_val (opt_database_t &db, std::string &opt, int value,
 
 char *opt_help_message (void);
 void opt_register_pre_note (char *note);
+void opt_register_pre_note (std::string note);
 
 extern uint32 parse_drive_opt (const char *opt_name, const char *opt_value);
 extern FILE * executor_dir_fopen (const char *file, const char *perm);

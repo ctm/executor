@@ -15,6 +15,10 @@ char ROMlib_rcsid_sounddriver[] =
 #include "SoundOSX.h"
 #endif
 
+#ifdef Sound_SDL_Sound
+#include "sdl-sound.h"
+#endif
+
 using namespace Executor;
 
 /* This is the current sound driver. */
@@ -30,24 +34,41 @@ Executor::sound_init (void)
   /* Try all available sound drivers and keep the first one that works. */
   do {
 #ifdef Sound_MACOSX_
+    {
 	SoundOSX *sndOSX = new SoundOSX;
 	if (!sndOSX->sound_init()) {
 	  delete sndOSX;
 	} else {
 	  found_one_p = true;
-	  sound_driver = (class SoundDriver*)sndOSX;
+	  sound_driver = static_cast<class SoundDriver*>(sndOSX);
 	  break;
 	}
+    }
 #endif
-	
+    
+#ifdef Sound_SDL_Sound
+    {
+    SDLSound *sndSDL = new SDLSound;
+    if (!sndSDL->sound_init()) {
+      delete sndSDL;
+    } else {
+      found_one_p = true;
+      sound_driver = static_cast<class SoundDriver*>(sndSDL);
+      break;
+    }
+    }
+#endif
+
+    {
 	SoundFake *sndFake = new SoundFake;
 	if (!sndFake->sound_init()) {
 	  delete sndFake;
 	} else {
 	  found_one_p = true;
-	  sound_driver = (class SoundDriver*)sndFake;
+	  sound_driver = static_cast<class SoundDriver*>(sndFake);
 	  break;
 	}
+    }
 	
   } while (0);
 

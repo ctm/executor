@@ -97,6 +97,7 @@ void Executor::contextswitch(char **from_spp, char **to_spp)
  *	      or we need to use some thread routines.
  */
 
+#warning This code is too processor-specific!
 #if defined(mc68000)
     asm("movel #cont, sp@-"
 	"\n\tmoveml d2-d7/a2-a6, sp@-"
@@ -109,8 +110,7 @@ void Executor::contextswitch(char **from_spp, char **to_spp)
 	"\n\tmoveml sp@+, d2-d7/a2-a6"
 	"\n\trts"
 	"\n\tcont:" : "=m" (*from_spp) : "m" (*to_spp));
-#warning This code is too processor-specific!
-#elif defined(i386) || defined(i486)
+#elif defined(i386) || defined(i486) || defined(__i386__)
     asm("pushl $cont\n\t"
 	"pushal\n\t"
 	"pushfl\n\t"

@@ -16,7 +16,7 @@
 #include "rsys/sounddriver.h"
 
 namespace Executor {
-  class SoundOSX : SoundDriver {
+  class SoundOSX : public SoundDriver {
   public:
 	virtual bool sound_init();
 	virtual void sound_shutdown();

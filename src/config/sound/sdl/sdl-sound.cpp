@@ -21,24 +21,10 @@
 #include "rsys/sounddriver.h"
 #include "rsys/m68kint.h"
 #include "sdl-sound.h"
+#include <SDL_Audio.h>
 
-#define LOGBUFSIZE 11  /* Must be between 7 and 17 decimal */
-
-/*
- * There's what appears to be a bug in some of the SDLs out there that
- * results in SDL choosing to use one half the number of samples that we ask
- * for.  As such, we're going to make room for twice the amount we want and
- * then ask for twice the amount.  If we get it, oh well, it just means
- * more latency.
- */
-
-static int num_samples;
-
-#define BUFSIZE (1 << (LOGBUFSIZE+1)) /* +1 as bug workaround */
-
-static int semid = -1;  /* Semaphore id */
-static int sound_on = 0; /* 1 if we are generating interrupts */
-static boolean_t have_sound_p; /* TRUE if sound is supported */
+using namespace Executor;
+using namespace ByteSwap;
 
 enum { NON_RUNNING_SOUND_RATE = 22255 };
 
@@ -55,17 +41,10 @@ ROMlib_set_sdl_audio_driver_name (const char *str)
     sdl_audio_driver_name = NULL;
 }
 
-PUBLIC int ROMlib_SND_RATE =
-            NON_RUNNING_SOUND_RATE; /* we need to set this to something,
-				       in case we don't succeed when we
-				       try to initialize.  May as well set
-				       it to the common Mac value. */
-
-
 /* Wait on the semaphore (atomic decrement) */
 
-static void
-patl_wait (void)
+void
+SDLSound::patl_wait (void)
 {
   struct sembuf op_wait[] = {
     { 0, -1, 0 } };
@@ -82,8 +61,8 @@ patl_wait (void)
 
 /* Signal the semaphore (atomic increment) */
 
-static void
-patl_signal (void)
+void
+SDLSound::patl_signal (void)
 {
   struct sembuf op_signal[] = {
     { 0, 1, 0 } };
@@ -96,43 +75,39 @@ patl_signal (void)
     }
 }
 
-static snd_time t1 = 0;
-
-static boolean_t
-sound_sdl_works_p (sound_driver_t *s)
+bool
+SDLSound::sound_works ()
 {
   return have_sound_p;
 }
 
-static void
-sound_sdl_go (sound_driver_t *s)
+void
+SDLSound::sound_go ()
 {
   sound_on = 1;
   patl_signal ();
 
- SDL_PauseAudio(0);
+  SDL_PauseAudio(0);
 }
 
-static void
-sound_sdl_stop (sound_driver_t *s)
+void
+SDLSound::sound_stop ()
 {
   sound_on = 0;
 }
 
 /* Do any bookkeeping needed to start feeding a hungry device */
 
-static void
-sound_sdl_hunger_start (sound_driver_t *s)
+void
+SDLSound::HungerStart()
 {
   t1 += num_samples;
 }
 
-static unsigned char buf[7*BUFSIZE];
-
 /* Figure out how to feed the hungry output device. */
 
-static struct hunger_info
-sound_sdl_get_hunger_info (sound_driver_t *s)
+struct hunger_info
+SDLSound::GetHungerInfo ()
 {
   struct hunger_info info;
 
@@ -146,15 +121,12 @@ sound_sdl_get_hunger_info (sound_driver_t *s)
   return info;
 }
 
-PRIVATE Uint8 *sdl_stream = NULL;
-
-static ssize_t
-sdl_write (const void *buf, size_t len)
+ssize_t
+SDLSound::sdl_write (const void *buf, size_t len)
 {
   //  fprintf (stderr, "sdl_write: stream = %p, len = %d, buf[0]= 0x%02x, buf[1] = 0x%02x\n", sdl_stream, (int) len, ((uint8_t *) buf)[0], ((uint8_t *) buf)[1]);
 
-  if (sdl_stream)
-    {
+  if (sdl_stream) {
       memcpy (sdl_stream, buf, len);
       sdl_stream = NULL;
     }
@@ -165,16 +137,15 @@ sdl_write (const void *buf, size_t len)
 /* Assuming that the information returned by snd_get_hunger_info was
    honored, send the samples off to the device. */
 
-static void
-sound_sdl_hunger_finish (sound_driver_t *s)
+void
+SDLSound::HungerFinish ()
 {
   struct hunger_info info;
 
-  info = sound_sdl_get_hunger_info (s);
+  info = GetHungerInfo();
 
   while (sdl_write (info.buf + (info.t2 % info.bufsize), num_samples)
-	 < 0)
-    {
+	 < 0) {
       if (errno != EINTR)
 	gui_fatal ("Write failed");
     }
@@ -191,11 +162,11 @@ union semun
 };
 #endif
 
-static void
-sound_sdl_shutdown (sound_driver_t *s)
+void
+SDLSound::sound_shutdown ()
 {
   if (semid >= 0)
-    semctl (semid, 0, IPC_RMID, (union semun)0);
+    semctl (semid, 0, IPC_RMID, (union semun){.val = 0});
 
   if (have_sound_p)
     {
@@ -206,25 +177,25 @@ sound_sdl_shutdown (sound_driver_t *s)
   sdl_stream = NULL;
 }
 
-static void
-sound_sdl_clear_pending (sound_driver_t *s)
+void
+SDLSound::sound_clear_pending ()
 {
 }
 
-static boolean_t
-sound_sdl_silent_p (sound_driver_t *s)
+bool
+SDLSound::sound_silent ()
 {
   return FALSE;
 }
 
-static void
-sound_sdl_shutdown_at_exit (void)
+void
+SDLSound::sound_sdl_shutdown_at_exit (void)
 {
-  sound_sdl_shutdown (&sound_driver);
+  SOUND_SHUTDOWN();
 }
 
-PRIVATE void
-sdl_wait_until_callback_has_been_called (void)
+void
+SDLSound::sdl_wait_until_callback_has_been_called (void)
 {
 #warning TODO usleep is not the answer
   while (sdl_stream == 0)
@@ -235,29 +206,29 @@ sdl_wait_until_callback_has_been_called (void)
    is ready to accept input, then set a flag for the emulator
    thread. */
 
-static void *
-loop (void *unused)
+void *
+SDLSound::loop (void *unused)
 {
-  while (TRUE)
-    {
-      patl_wait ();
-      //      fprintf (stderr, "waiting until callback has been called\n");
-      sdl_wait_until_callback_has_been_called ();
-
-      /* Request interrupt */
-      if (sound_on)
-	{
-	  cpu_state.interrupt_pending[M68K_SOUND_PRIORITY] = 1;
-	  cpu_state.interrupt_status_changed = INTERRUPT_STATUS_CHANGED;
-	}
+  while (TRUE) {
+    SDLSound *ourSelf = (SDLSound *)unused;
+    ourSelf->patl_wait ();
+    //      fprintf (stderr, "waiting until callback has been called\n");
+    ourSelf->sdl_wait_until_callback_has_been_called ();
+    
+    /* Request interrupt */
+    if (ourSelf->sound_on) {
+      cpu_state.interrupt_pending[M68K_SOUND_PRIORITY] = 1;
+      cpu_state.interrupt_status_changed = INTERRUPT_STATUS_CHANGED;
     }
+  }
 
   return NULL; /* won't get here */
 }
 
-static void
-sound_sdl_hunger_callback(void *unused, Uint8 *stream, int len)
+void
+SDLSound::hunger_callback(void *unused, Uint8 *stream, int len)
 {
+  SDLSound *ourself = (SDLSound *)unused;
   //  FILE *fp;
   //  int fd;
 
@@ -270,29 +241,38 @@ sound_sdl_hunger_callback(void *unused, Uint8 *stream, int len)
   //  close (fd);
   //  fprintf (stderr, "callback: stream = %p\n", stream);
 
-  if (len != num_samples)
-    gui_fatal ("len = %d, expected %d", len, num_samples);
-  sdl_stream = stream;
-  while (sdl_stream != 0)
+  if (len != ourself->num_samples)
+    gui_fatal ("len = %d, expected %d", len, ourself->num_samples);
+  ourself->sdl_stream = stream;
+  while (ourself->sdl_stream != 0)
     usleep (1);
 #warning TODO signal something to say that we can write
 }
 
-boolean_t
-sound_sdl_init (sound_driver_t *s)
+bool
+SDLSound::sound_init ()
 {
   SDL_AudioSpec spec;
   syn68k_addr_t my_callback;
   int sysret;
+
+  semid = -1;  /* Semaphore id */
+  sound_on = 0; /* 1 if we are generating interrupts */
+  t1 = 0;
+  sdl_stream = NULL;
+  ROMlib_SND_RATE =
+  NON_RUNNING_SOUND_RATE; /* we need to set this to something,
+                           in case we don't succeed when we
+                           try to initialize.  May as well set
+                           it to the common Mac value. */
 
   have_sound_p = FALSE;
 
   if (sound_disabled_p)
     goto fail;
 
-  if (SDL_AudioInit (sdl_audio_driver_name) != 0)
-    {
-      char *err;
+  if (SDL_AudioInit (sdl_audio_driver_name) != 0) {
+      const char *err;
 
       err = SDL_GetError ();
       fprintf (stderr, "SDL_Init(SDL_INIT_AUDIO) failed: '%s'\n",
@@ -310,11 +290,10 @@ sound_sdl_init (sound_driver_t *s)
 	 SDL_AudioDriverName.  It doesn't hurt to add 3 here. */
 
       sanity_len = strlen (sdl_audio_driver_name) + 3;
-      sanity_check_name = alloca (sanity_len);
+      sanity_check_name = (char *)alloca (sanity_len);
       SDL_AudioDriverName (sanity_check_name, sanity_len);
       success = strcmp (sdl_audio_driver_name, sanity_check_name) == 0;
-      if (!success)
-	{
+      if (!success) {
 	  fprintf (stderr, "Wanted '%s', got '%s'", sdl_audio_driver_name,
 		   sanity_check_name);
 	  return FALSE;
@@ -327,8 +306,8 @@ sound_sdl_init (sound_driver_t *s)
   spec.format = AUDIO_U8;
   spec.channels = 1;
   spec.samples = BUFSIZE;
-  spec.callback = sound_sdl_hunger_callback;
-  spec.userdata = NULL;
+  spec.callback = hunger_callback;
+  spec.userdata = this;
 
 #if !defined (HAS_OPENAUDIO_EX)
 #define SDL_OpenAudioEx(a,b,c,d) SDL_OpenAudio (a, b)
@@ -369,7 +348,7 @@ sound_sdl_init (sound_driver_t *s)
   atexit (sound_sdl_shutdown_at_exit); /* make sure semid gets freed */
 
   my_callback = callback_install (sound_callback, NULL);
-  *(syn68k_addr_t *) SYN68K_TO_US(M68K_SOUND_VECTOR * 4) = CL (my_callback);
+  *(syn68k_addr_t *) SYN68K_TO_US(M68K_SOUND_VECTOR * 4) = BigEndianValue (my_callback);
 
   {
     sigset_t all_signals, current_mask;
@@ -379,7 +358,7 @@ sound_sdl_init (sound_driver_t *s)
     sigdelset (&all_signals, SIGIO);
     sigprocmask (SIG_SETMASK, &all_signals, &current_mask);
     //    fprintf (stderr, "about to start thread\n");
-    sysret = pthread_create (&thread, NULL, loop, NULL);
+    sysret = pthread_create (&thread, NULL, loop, this);
     sigprocmask (SIG_SETMASK, &current_mask, 0);
   }
   if (sysret != 0)
@@ -388,17 +367,6 @@ sound_sdl_init (sound_driver_t *s)
   /*patl_signal ();*/
 
   have_sound_p = TRUE;
-
-  s->sound_init            = sound_sdl_init;
-  s->sound_shutdown        = sound_sdl_shutdown;
-  s->sound_works_p         = sound_sdl_works_p;
-  s->sound_silent_p        = sound_sdl_silent_p;
-  s->sound_hunger_finish   = sound_sdl_hunger_finish;
-  s->sound_go              = sound_sdl_go;
-  s->sound_stop            = sound_sdl_stop;
-  s->sound_hunger_start    = sound_sdl_hunger_start;
-  s->sound_get_hunger_info = sound_sdl_get_hunger_info;
-  s->sound_clear_pending   = sound_sdl_clear_pending;
 
   /* Success! */
   return TRUE;

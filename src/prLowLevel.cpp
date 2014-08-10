@@ -207,16 +207,6 @@ add_orientation_icons_to_update_region (DialogPtr dp)
   SetPort (gp);
 }
 
-#define SWAP(a, b) do				\
-{						\
-  typeof (a) __temp;				\
-  						\
-  __temp = a;					\
-  a = b;					\
-  b = __temp;					\
-}						\
-while (FALSE);
-
 PRIVATE void
 update_orientation (DialogPtr dp, INTEGER button)
 {
@@ -258,15 +248,16 @@ Executor::cstring_from_str255 (Str255 text)
   return retval;
 }
 
-PUBLIC  ini_key_t Executor::ROMlib_printer = NULL;
+namespace Executor {
+PUBLIC  ini_key_t ROMlib_printer = NULL;
 PRIVATE ini_key_t ROMlib_paper = NULL;
-PUBLIC ini_key_t Executor::ROMlib_port = NULL;
-PUBLIC ini_key_t Executor::ROMlib_paper_orientation = NULL;
+PUBLIC  ini_key_t ROMlib_port = NULL;
+PUBLIC  ini_key_t ROMlib_paper_orientation = NULL;
 PRIVATE ini_key_t ROMlib_spool_template = NULL;
-
 #if defined (MSDOS) || defined (CYGWIN32)
 PRIVATE ini_key_t ROMlib_print_filter = NULL;
 #endif
+}
 
 PRIVATE MenuHandle
 GetPopUpMenu (ControlHandle ch)
@@ -313,7 +304,7 @@ Executor::update_printing_globals (void)
 
   if ((ROMlib_paper_orientation == "Portrait") ==
       (ROMlib_paper_x > ROMlib_paper_y))
-    SWAP (ROMlib_paper_x, ROMlib_paper_y);
+    std::swap (ROMlib_paper_x, ROMlib_paper_y);
 
   ROMlib_document_paper_sizes = "%%DocumentPaperSizes: ";
   ROMlib_paper_size = "%%PaperSize: ";

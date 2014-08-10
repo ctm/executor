@@ -18,6 +18,11 @@
 		5500AB5B1985A66A00FF62C0 /* NEXTkeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5500AB4A1985A66A00FF62C0 /* NEXTkeyboard.cpp */; };
 		5500AB5C1985A66A00FF62C0 /* NEXTmain.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5500AB4B1985A66A00FF62C0 /* NEXTmain.mm */; };
 		5500AB5D1985A66A00FF62C0 /* NEXTprint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5500AB4C1985A66A00FF62C0 /* NEXTprint.mm */; };
+		553A7ED1199708A300DFF4F6 /* sdl-sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 553A7ECF199708A300DFF4F6 /* sdl-sound.cpp */; };
+		553A7ED6199709EE00DFF4F6 /* SDL_sound.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553A7ED4199709EE00DFF4F6 /* SDL_sound.framework */; };
+		553A7ED7199709EE00DFF4F6 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553A7ED5199709EE00DFF4F6 /* SDL.framework */; };
+		553A7ED9199716E900DFF4F6 /* SDL_sound.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 553A7ED4199709EE00DFF4F6 /* SDL_sound.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		553A7EDA199716E900DFF4F6 /* SDL.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 553A7ED5199709EE00DFF4F6 /* SDL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		553B0B6C19888B690041B809 /* hfsHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558B98A31987FCBD00ADF159 /* hfsHelper.cpp */; };
 		556062EB1988441700D6F0B2 /* xdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558B99511987FCBF00ADF159 /* xdata.cpp */; };
 		556062EC198844B800D6F0B2 /* xdblt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558B99521987FCBF00ADF159 /* xdblt.cpp */; };
@@ -460,7 +465,6 @@
 		559AF49F198ABFE600DE8472 /* Syn68k.c in Sources */ = {isa = PBXBuildFile; fileRef = 559AF49E198ABFE600DE8472 /* Syn68k.c */; };
 		559AF4A0198AC14900DE8472 /* libsyn68k.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 558B9A571988049300ADF159 /* libsyn68k.a */; };
 		559AF4A2198AC90F00DE8472 /* stub.c in Sources */ = {isa = PBXBuildFile; fileRef = 559AF4A1198AC90F00DE8472 /* stub.c */; };
-		559AF4A5198AC9AB00DE8472 /* rsys.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 556062F21988679400D6F0B2 /* rsys.framework */; };
 		559AF4B5198AE0F400DE8472 /* mkexpandtables.c in Sources */ = {isa = PBXBuildFile; fileRef = 559AF4B4198AE0F400DE8472 /* mkexpandtables.c */; };
 		559AF4B8198AF72B00DE8472 /* segment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558B991E1987FCBE00ADF159 /* segment.cpp */; };
 		559D530D198FFA44009E479A /* SpeechManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 559D530B198FFA44009E479A /* SpeechManager.cpp */; };
@@ -566,6 +570,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		553A7ED8199716D500DFF4F6 /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				553A7ED9199716E900DFF4F6 /* SDL_sound.framework in Copy Frameworks */,
+				553A7EDA199716E900DFF4F6 /* SDL.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		557F30A219897619009873EB /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -695,6 +711,10 @@
 		5500AC3F1985B31E00FF62C0 /* VDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VDriver.h; sourceTree = "<group>"; };
 		5500AC401985B31E00FF62C0 /* VRetraceMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VRetraceMgr.h; sourceTree = "<group>"; };
 		5500AC411985B31E00FF62C0 /* WindowMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = WindowMgr.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		553A7ECF199708A300DFF4F6 /* sdl-sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "sdl-sound.cpp"; sourceTree = "<group>"; };
+		553A7ED0199708A300DFF4F6 /* sdl-sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sdl-sound.h"; sourceTree = "<group>"; };
+		553A7ED4199709EE00DFF4F6 /* SDL_sound.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_sound.framework; path = /Library/Frameworks/SDL_sound.framework; sourceTree = "<absolute>"; };
+		553A7ED5199709EE00DFF4F6 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
 		556062F21988679400D6F0B2 /* rsys.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = rsys.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		556062F51988679400D6F0B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5560630F1988680000D6F0B2 /* aboutbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = aboutbox.h; sourceTree = "<group>"; };
@@ -1208,7 +1228,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				559AF4A5198AC9AB00DE8472 /* rsys.framework in Frameworks */,
+				553A7ED6199709EE00DFF4F6 /* SDL_sound.framework in Frameworks */,
+				553A7ED7199709EE00DFF4F6 /* SDL.framework in Frameworks */,
 				559AF4A0198AC14900DE8472 /* libsyn68k.a in Frameworks */,
 				557F308C19895414009873EB /* Carbon.framework in Frameworks */,
 				557F308A1989540D009873EB /* ApplicationServices.framework in Frameworks */,
@@ -1307,10 +1328,10 @@
 				55A742A1198D79DD00F1A8A5 /* SoundOSX.h */,
 				55A742A0198D79DD00F1A8A5 /* SoundOSX.cpp */,
 			);
-			indentWidth = 2;
+			indentWidth = 4;
 			path = "NeXT Classes";
 			sourceTree = "<group>";
-			usesTabs = 0;
+			usesTabs = 1;
 		};
 		5500AB611985B31E00FF62C0 /* Executor-Mac headers */ = {
 			isa = PBXGroup;
@@ -1378,6 +1399,7 @@
 			name = "Executor-Mac headers";
 			path = ../../src/include;
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		551EE33A198D5E1E004A3A41 /* Window Sources */ = {
 			isa = PBXGroup;
@@ -1591,6 +1613,18 @@
 			name = QuickDraw;
 			sourceTree = "<group>";
 		};
+		553A7ECE1997086800DFF4F6 /* SDL Sound */ = {
+			isa = PBXGroup;
+			children = (
+				553A7ECF199708A300DFF4F6 /* sdl-sound.cpp */,
+				553A7ED0199708A300DFF4F6 /* sdl-sound.h */,
+			);
+			indentWidth = 2;
+			name = "SDL Sound";
+			path = ../../src/config/sound/sdl;
+			sourceTree = "<group>";
+			usesTabs = 0;
+		};
 		556062F31988679400D6F0B2 /* rsys */ = {
 			isa = PBXGroup;
 			children = (
@@ -1763,9 +1797,11 @@
 				556062F41988679400D6F0B2 /* Supporting Files */,
 				559AF4A1198AC90F00DE8472 /* stub.c */,
 			);
+			indentWidth = 2;
 			name = rsys;
 			path = src/include/rsys;
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		556062F41988679400D6F0B2 /* Supporting Files */ = {
 			isa = PBXGroup;
@@ -1813,6 +1849,8 @@
 		556E040519856E5700FC4362 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				553A7ED4199709EE00DFF4F6 /* SDL_sound.framework */,
+				553A7ED5199709EE00DFF4F6 /* SDL.framework */,
 				557F308B19895414009873EB /* Carbon.framework */,
 				557F308819895405009873EB /* CoreServices.framework */,
 				558B98511987F5BA00ADF159 /* IOKit.framework */,
@@ -1842,6 +1880,7 @@
 				5500AB371985A66A00FF62C0 /* NeXT Classes */,
 				556E05461985847000FC4362 /* Interface Maps */,
 				557F3090198974E4009873EB /* Templates */,
+				553A7ECE1997086800DFF4F6 /* SDL Sound */,
 				5500AB321985911A00FF62C0 /* x86_64.cpp */,
 				556E041E19856E5700FC4362 /* Images.xcassets */,
 				558B9A511987FCDF00ADF159 /* skel */,
@@ -2106,6 +2145,7 @@
 			name = "Executor-Mac sources";
 			path = ../../src;
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		558B9A5B198804BF00ADF159 /* syn68k */ = {
 			isa = PBXGroup;
@@ -2351,6 +2391,7 @@
 				556E03FF19856E5700FC4362 /* Sources */,
 				556E040019856E5700FC4362 /* Frameworks */,
 				556E040119856E5700FC4362 /* Resources */,
+				553A7ED8199716D500DFF4F6 /* Copy Frameworks */,
 			);
 			buildRules = (
 				5500AB2C19858B8F00FF62C0 /* PBXBuildRule */,
@@ -2917,6 +2958,7 @@
 				556E0558198584DE00FC4362 /* arrow_down_inactive.map in Sources */,
 				559D5311198FFAE1009E479A /* SpeechManager-MacBridge.cpp in Sources */,
 				558B9A081987FCBF00ADF159 /* qText.cpp in Sources */,
+				553A7ED1199708A300DFF4F6 /* sdl-sound.cpp in Sources */,
 				558B9A381987FCBF00ADF159 /* teMisc.cpp in Sources */,
 				553B0B6C19888B690041B809 /* hfsHelper.cpp in Sources */,
 			);
@@ -3234,15 +3276,23 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OSX-only/CocoaExecutor/CocoaExecutor-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					Sound_MACOSX_,
 					_DARWIN_NO_64_BIT_INODE,
 					"$(inherited)",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = (
+					Sound_SDL_Sound,
+					Sound_MACOSX_,
+				);
 				HEADER_SEARCH_PATHS = (
 					"OSX-only/syn68k",
+					/Library/Frameworks/SDL.framework/Headers,
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "OSX-only/CocoaExecutor/CocoaExecutor-Info.plist";
@@ -3259,15 +3309,23 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OSX-only/CocoaExecutor/CocoaExecutor-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
-					Sound_MACOSX_,
 					_DARWIN_NO_64_BIT_INODE,
 					"$(inherited)",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = (
+					Sound_SDL_Sound,
+					Sound_MACOSX_,
+				);
 				HEADER_SEARCH_PATHS = (
 					"OSX-only/syn68k",
+					/Library/Frameworks/SDL.framework/Headers,
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "OSX-only/CocoaExecutor/CocoaExecutor-Info.plist";

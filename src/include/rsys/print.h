@@ -180,11 +180,11 @@ TCenterRec, *TCenterRecPtr;
 MAKE_HIDDEN(TCenterRecPtr);
 typedef HIDDEN_TCenterRecPtr *TCenterRecHdl;
 
-extern char *ROMlib_document_paper_sizes;
+extern std::string ROMlib_document_paper_sizes;
 extern ini_key_t ROMlib_paper_orientation;
-extern char *ROMlib_paper_size;
-extern const char *ROMlib_paper_size_name;
-extern const char *ROMlib_paper_size_name_terminator;
+extern std::string ROMlib_paper_size;
+extern std::string ROMlib_paper_size_name;
+extern std::string ROMlib_paper_size_name_terminator;
 extern int ROMlib_rotation;
 extern int ROMlib_translate_x;
 extern int ROMlib_translate_y;

@@ -38,30 +38,32 @@ PUBLIC boolean_t deferred_printing_p = FALSE /* TRUE */;
 
 using namespace Executor;
 using namespace ByteSwap;
+using namespace std;
 
 PUBLIC int pageno = 0;	/* This isn't really the way to do it */
-PUBLIC int Executor::ROMlib_passpostscript = TRUE;
-PUBLIC int Executor::ROMlib_fontsubstitution = FALSE;
+namespace Executor {
+PUBLIC int ROMlib_passpostscript = TRUE;
+PUBLIC int ROMlib_fontsubstitution = FALSE;
 
-PUBLIC char *Executor::ROMlib_document_paper_sizes;
-PUBLIC char *Executor::ROMlib_paper_size;
-PUBLIC const char *Executor::ROMlib_paper_size_name;
-PUBLIC const char *Executor::ROMlib_paper_size_name_terminator;
-PUBLIC int Executor::ROMlib_rotation;
-PUBLIC int Executor::ROMlib_translate_x;
-PUBLIC int Executor::ROMlib_translate_y;
-PUBLIC int Executor::ROMlib_resolution_x = 72;
-PUBLIC int Executor::ROMlib_resolution_y = 72;
+PUBLIC string ROMlib_document_paper_sizes;
+PUBLIC string ROMlib_paper_size;
+PUBLIC string ROMlib_paper_size_name;
+PUBLIC string ROMlib_paper_size_name_terminator;
+PUBLIC int ROMlib_rotation = 0;
+PUBLIC int ROMlib_translate_x = 0;
+PUBLIC int ROMlib_translate_y = 0;
+PUBLIC int ROMlib_resolution_x = 72;
+PUBLIC int ROMlib_resolution_y = 72;
 
-PUBLIC int Executor::ROMlib_paper_x;
-PUBLIC int Executor::ROMlib_paper_y;
+PUBLIC int ROMlib_paper_x = 0;
+PUBLIC int ROMlib_paper_y = 0;
 
 /* This boolean is here to prevent Energy Scheming from causing trouble.
    ES calls PrPageClose twice at the end.  This fix is sub-optimal, but
    probably won't hurt anything. */
 
 PRIVATE boolean_t page_is_open = FALSE;
-
+}
 #include "rsys/nextprint.h"
 
 #if defined(MACOSX_)
@@ -400,9 +402,7 @@ ourinit (TPPrPort port, BOOLEAN preserve_font)
   NeXTOpenPage();
 }
 
-#if !defined(MACOSX_)
 #include <stdio.h>
-#endif
 
 PRIVATE boolean_t need_pclose;
 

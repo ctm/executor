@@ -249,6 +249,13 @@ Executor::opt_help_message (void)
   return help_buf;
 }
 
+void Executor::opt_register_pre_note (string note)
+{
+  char *aPreNote = strdup(note.c_str());
+  
+  opt_register_pre_note(aPreNote);
+}
+
 void
 Executor::opt_register_pre_note (char *note)
 {
@@ -279,7 +286,7 @@ Executor::opt_register (string new_interface,
 	      option_vec new_opts)
 {
   struct opt_block *block;
-  
+
   if (help_buf)
   {
     /* internal error, must register all options before generating
@@ -295,7 +302,7 @@ Executor::opt_register (string new_interface,
   {
     string interface = blockIt->interface;
     option_vec *opts = &blockIt->opts;
-    
+
     for (option_vec::iterator opt_i = opts->begin(); opt_i != opts->end(); opt_i ++)
       for (option_vec::iterator new_opt_i = new_opts.begin(); new_opt_i != new_opts.end(); new_opt_i ++)
       {

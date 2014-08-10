@@ -473,12 +473,12 @@ print_command_line_value (FILE *fp, int v)
 }
 
 static void
-check_arg (char *argname, int *arg, int min, int max)
+check_arg (string argname, int *arg, int min, int max)
 {
   if (*arg < min || *arg > max)
     {
       fprintf (stderr, "%s: invalid value for `%s': must be between ",
-	       program_name, argname);
+	       program_name, argname.c_str());
       print_command_line_value (stderr, min);
       fputs (" and ", stderr);
       print_command_line_value (stderr, max);
@@ -1288,9 +1288,9 @@ int main(int argc, char** argv)
 
   INTEGER i;
   static unsigned short jmpl_to_ResourceStub[3] =
-    {
-      CWC ((unsigned short)0x4EF9), 0, 0		/* Filled in below. */
-    };
+  {
+    CWC ((unsigned short)0x4EF9), 0, 0		/* Filled in below. */
+  };
   long l;
   ULONGINT save_trap_vectors[64];
   virtual_int_state_t int_state;
@@ -1300,10 +1300,10 @@ int main(int argc, char** argv)
   boolean_t check_files_p;  /* See if FILES= is big enough? */
 #endif
   static void (*reg_funcs[]) (void) =
-    {
-      vdriver_opt_register,
-      NULL,
-    };
+  {
+    vdriver_opt_register,
+    NULL,
+  };
   string arg;
 
 #if defined(PERSONALITY_HACK)
@@ -1311,18 +1311,18 @@ int main(int argc, char** argv)
   
   pers = personality(0xffffffff);
   if ((pers & MMAP_PAGE_ZERO) == 0)
-    {
-      if (personality(pers|MMAP_PAGE_ZERO|READ_IMPLIES_EXEC) == 0)
-	execv(argv[0], argv);
-    }
+  {
+    if (personality(pers|MMAP_PAGE_ZERO|READ_IMPLIES_EXEC) == 0)
+      execv(argv[0], argv);
+  }
 #endif
 
-  
+
   int grayscale_p = FALSE;
 
 #if defined (DISPLAY_SPLASH_SCREEN)
   boolean_t splash_screen_displayed_p;
-#endif  
+#endif
 
 #if defined (VDRIVER_SVGALIB)
   /* We need to do this right away, to give up suid root privileges. */
@@ -1341,21 +1341,19 @@ int main(int argc, char** argv)
   ROMlib_do_custom ();
   ROMlib_command_line = construct_command_line_string (argc, argv);
 
-  if (!arch_init ())
-    {
-      fprintf (stderr, "Unable to initialize CPU information.\n");
-      exit (-100);
-    }
+  if (!arch_init ()) {
+    fprintf (stderr, "Unable to initialize CPU information.\n");
+    exit (-100);
+  }
 
-  if (!os_init ())
-    {
-      fprintf (stderr, "Unable to initialize operating system features.\n");
-      exit (-101);
-    }
-  
+  if (!os_init ()) {
+    fprintf (stderr, "Unable to initialize operating system features.\n");
+    exit (-101);
+  }
+
   {
     char *t;
-    
+
     t = strrchr (*argv, '/');
     if (t)
       program_name = &t[1];
@@ -1376,7 +1374,7 @@ int main(int argc, char** argv)
 
   ROMlib_WriteWhen (WriteInOSEvent);
 
-#if defined (MACOSX_)
+#if defined (MACOSX_) && 0
   ROMlib_seteuid (0);		/* This is necessary because when people copy
 				   setuid-root files from floppies, the setuid
 				   bit stays, but the "root" part doesn't, so
@@ -1406,31 +1404,29 @@ int main(int argc, char** argv)
   
   opt_register_pre_note ("welcome to the executor help message.");
   opt_register_pre_note ("usage: `executor [option...] "
-			 "[program [document1 document2 ...]]'");
+                         "[program [document1 document2 ...]]'");
   
   for (i = 0; reg_funcs[i]; i ++)
     (*reg_funcs[i]) ();
 
   if (!bad_arg_p)
     bad_arg_p = opt_parse (common_db, common_opts,
-			   &argc, argv);
+                           &argc, argv);
   
-  if (opt_val (common_db, "version", NULL))
-    {
-      fprintf (stdout, "%s\n", EXECUTOR_VERSION);
-      exit (0);
-    }
+  if (opt_val (common_db, "version", NULL)) {
+    fprintf (stdout, "%s\n", EXECUTOR_VERSION);
+    exit (0);
+  }
 
 
-/*
- * If they ask for help, it's not an error -- it should go to stdout
- */
+  /*
+   * If they ask for help, it's not an error -- it should go to stdout
+   */
 
-  if (opt_val (common_db, "help", NULL))
-    {
-      fprintf (stdout, "%s", opt_help_message ());
-      exit (0);
-    }
+  if (opt_val (common_db, "help", NULL)) {
+    fprintf (stdout, "%s", opt_help_message ());
+    exit (0);
+  }
 
   /* Verify that the user input a legal bits per pixel.  "0" is a legal
    * value here; that means "use the vdriver's default."
@@ -1439,10 +1435,10 @@ int main(int argc, char** argv)
   if (flag_bpp != 0 && flag_bpp != 1
       && flag_bpp != 2 && flag_bpp != 4 && flag_bpp != 8
       && flag_bpp != 16 && flag_bpp != 32)
-    {
-      fprintf (stderr, "Bits per pixel must be 1, 2, 4, 8, 16 or 32.\n");
-      bad_arg_p = TRUE;
-    }
+  {
+    fprintf (stderr, "Bits per pixel must be 1, 2, 4, 8, 16 or 32.\n");
+    bad_arg_p = TRUE;
+  }
 
 #if defined (SDL)
   if (opt_val (common_db, "fullscreen", NULL))
@@ -1480,7 +1476,7 @@ int main(int argc, char** argv)
 
   if (opt_val (common_db, "prres", &arg))
     bad_arg_p |= !parse_prres_opt (&ROMlib_optional_res_x,
-				   &ROMlib_optional_res_y, arg);
+                                   &ROMlib_optional_res_y, arg);
 
   if (opt_val (common_db, "debug", &arg))
     bad_arg_p |= !error_parse_option_string (arg);
@@ -1488,40 +1484,37 @@ int main(int argc, char** argv)
 #if defined (MSDOS) || defined (CYGWIN32)
   if (opt_val (common_db, "macdrives", &arg))
     ROMlib_macdrives = parse_drive_opt ("macdrives", arg);
-  else
-    {
+  else {
 #if !defined (CYGWIN32)
-      ROMlib_macdrives = 3; /* A: + B: */
-      {
-	int cdrom;
+    ROMlib_macdrives = 3; /* A: + B: */
+    {
+      int cdrom;
 
-	cdrom = dosdisk_find_cdrom ();
-	if (cdrom != -1)
-	  ROMlib_macdrives |= (1 << cdrom);
-      }
+      cdrom = dosdisk_find_cdrom ();
+      if (cdrom != -1)
+        ROMlib_macdrives |= (1 << cdrom);
+    }
 #else
-      char buf[512];
+    char buf[512];
 
-      if (win_GetLogicalDriveStrings (sizeof buf - 1, buf))
-	{
+    if (win_GetLogicalDriveStrings (sizeof buf - 1, buf)) {
 	  char *p;
 
 	  for (p = buf; *p; p += strlen (p) + 1)
-	    if (win_direct_accessible_disk (p))
-	      ROMlib_macdrives |= win_drive_to_bit (p);
+        if (win_direct_accessible_disk (p))
+          ROMlib_macdrives |= win_drive_to_bit (p);
 	}
 #endif
-    }
+  }
 
   if (opt_val (common_db, "dosdrives", &arg))
     ROMlib_dosdrives = parse_drive_opt ("dosdrives", arg);
   
-  if (opt_val (common_db, "skipdrives", &arg))
-    {
-      skipdrives = parse_drive_opt ("skipdrives", arg);
-      ROMlib_macdrives &= ~skipdrives;
-      ROMlib_dosdrives &= ~skipdrives;
-    }
+  if (opt_val (common_db, "skipdrives", &arg)) {
+    skipdrives = parse_drive_opt ("skipdrives", arg);
+    ROMlib_macdrives &= ~skipdrives;
+    ROMlib_dosdrives &= ~skipdrives;
+  }
 
 #endif
 
@@ -1529,10 +1522,10 @@ int main(int argc, char** argv)
   {
     int dangerous_video_p = FALSE;
     opt_int_val (common_db, "dangerousvideospeedup",
-		 &dangerous_video_p, &bad_arg_p);
+                 &dangerous_video_p, &bad_arg_p);
     if (!dangerous_video_p)
       opt_int_val (common_db, "videospeedup",
-		   &dangerous_video_p, &bad_arg_p);
+                   &dangerous_video_p, &bad_arg_p);
     try_to_use_fat_ds_vga_hack_p = dangerous_video_p;
   }
 
@@ -1561,23 +1554,20 @@ int main(int argc, char** argv)
     dcache_set_enabled (!nocache);
   }
 
-#if defined (SYN68K)  
+#if defined (SYN68K)
   use_native_code_p = ! opt_val (common_db, "notnative", NULL);
-#endif  
+#endif
 
   afpd_conventions_p = opt_val (common_db, "afpd", NULL);
   netatalk_conventions_p = (afpd_conventions_p ||
 			    opt_val (common_db, "netatalk", NULL));
-  if (netatalk_conventions_p)
-    {
-      apple_double_quote_char = ':';
-      apple_double_fork_prefix = ".AppleDouble/";
-    }
-  else
-    {
-      apple_double_quote_char = '%';
-      apple_double_fork_prefix = "%";
-    }
+  if (netatalk_conventions_p) {
+    apple_double_quote_char = ':';
+    apple_double_fork_prefix = ".AppleDouble/";
+  } else {
+    apple_double_quote_char = '%';
+    apple_double_fork_prefix = "%";
+  }
   apple_double_fork_prefix_length = strlen (apple_double_fork_prefix);
 
   substitute_fonts_p = !opt_val (common_db, "cities", NULL);
@@ -1600,53 +1590,52 @@ int main(int argc, char** argv)
   /* Parse the "-memory" option. */
   {
     int total_memory;
-    if (opt_int_val (common_db, "memory", &total_memory, &bad_arg_p))
-      {
-	check_arg ("memory", &total_memory,
-		   (MIN_APPLZONE_SIZE + DEFAULT_SYSZONE_SIZE
-		    + DEFAULT_STACK_SIZE),
-		   (MAX_APPLZONE_SIZE + DEFAULT_SYSZONE_SIZE
-		    + DEFAULT_STACK_SIZE));
+    if (opt_int_val (common_db, "memory", &total_memory, &bad_arg_p)) {
+      check_arg ("memory", &total_memory,
+                 (MIN_APPLZONE_SIZE + DEFAULT_SYSZONE_SIZE
+                  + DEFAULT_STACK_SIZE),
+                 (MAX_APPLZONE_SIZE + DEFAULT_SYSZONE_SIZE
+                  + DEFAULT_STACK_SIZE));
 
-	/* Set up the three memory sizes appropriately.  For now we
-	 * just allocate the defaults for syszone and stack, and
-	 * put everything else in -applzone.
-	 */
-	ROMlib_syszone_size  = DEFAULT_SYSZONE_SIZE;
-	ROMlib_stack_size    = DEFAULT_STACK_SIZE;
-	ROMlib_applzone_size = (total_memory - ROMlib_syszone_size
-				- ROMlib_stack_size);
-      }
+      /* Set up the three memory sizes appropriately.  For now we
+       * just allocate the defaults for syszone and stack, and
+       * put everything else in -applzone.
+       */
+      ROMlib_syszone_size  = DEFAULT_SYSZONE_SIZE;
+      ROMlib_stack_size    = DEFAULT_STACK_SIZE;
+      ROMlib_applzone_size = (total_memory - ROMlib_syszone_size
+                              - ROMlib_stack_size);
+    }
   }
-  
+
   /* I bumped the minimal ROMlib_applzone to 512, since Loser needs
-     more than 256.  I guess it's a little unfair to people who bypass
-     Loser, but it will prevent confusion.  */
+   more than 256.  I guess it's a little unfair to people who bypass
+   Loser, but it will prevent confusion.  */
   opt_int_val (common_db, "applzone", &ROMlib_applzone_size, &bad_arg_p);
   if (ROMlib_applzone_size < 65536)
     note_memory_syntax_change ("applzone", ROMlib_applzone_size);
   else
     check_arg ("applzone", &ROMlib_applzone_size, MIN_APPLZONE_SIZE,
-	       MAX_APPLZONE_SIZE);
-  
+               MAX_APPLZONE_SIZE);
+
   opt_int_val (common_db, "syszone", &ROMlib_syszone_size, &bad_arg_p);
   if (ROMlib_syszone_size < 65536)
     note_memory_syntax_change ("syszone", ROMlib_syszone_size);
   else
     check_arg ("syszone", &ROMlib_syszone_size, MIN_SYSZONE_SIZE,
-	       MAX_SYSZONE_SIZE);
+               MAX_SYSZONE_SIZE);
   
   opt_int_val (common_db, "stack", &ROMlib_stack_size, &bad_arg_p);
   if (ROMlib_stack_size < 32768)
     note_memory_syntax_change ("stack", ROMlib_stack_size);
   else
     check_arg ("stack", &ROMlib_stack_size, MIN_STACK_SIZE, MAX_STACK_SIZE);
-  
+
 #if defined (MM_MANY_APPLZONES)
   opt_int_val (common_db, "napplzones", &mm_n_applzones, &bad_arg_p);
   check_arg ("napplzones", &mm_n_applzones, 1, /* random */ 255);
 #endif /* !MM_MANY_APPLZONES */
-  
+
   ROMlib_InitZones (force_big_offset ? offset_big : offset_none);
 
   {
@@ -1690,10 +1679,10 @@ int main(int argc, char** argv)
 #endif
 
   if (graphics_p && !vdriver_init (0, 0, 0, FALSE, &argc, argv))
-    {
-      fprintf (stderr, "Unable to initialize video driver.\n");
-      exit (-12);
-    }
+  {
+    fprintf (stderr, "Unable to initialize video driver.\n");
+    exit (-12);
+  }
 
 #if defined (SYN68K)
   /* Save the trap vectors away. */
@@ -1720,11 +1709,11 @@ int main(int argc, char** argv)
   opt_int_val (common_db, "nobrowser",   &ROMlib_nobrowser, &bad_arg_p);
 
   opt_int_val (common_db, "print",	 &ROMlib_print,     &bad_arg_p);
-  
-#if defined (NEXT) || defined (LINUX)
+
+#if defined (MACOSX_) || defined (LINUX)
   opt_int_val (common_db, "nodotfiles",  &ROMlib_no_dot_files, &bad_arg_p);
 #endif
-  
+
 #if defined (NOMOUSE_COMMAND_LINE_OPTION)
   opt_int_val (common_db, "nomouse",     &ROMlib_no_mouse,  &bad_arg_p);
 #endif
@@ -1732,18 +1721,17 @@ int main(int argc, char** argv)
 #if 0
   opt_int_val (common_db, "noclock",     &ROMlib_noclock,   &bad_arg_p);
 #endif
-  
+
   {
     int no_auto = FALSE;
     opt_int_val (common_db, "noautorefresh",  &no_auto, &bad_arg_p);
     do_autorefresh_p = !no_auto;
   }
-  
+
   opt_int_val (common_db, "refresh",     &ROMlib_refresh,   &bad_arg_p);
   check_arg ("refresh", &ROMlib_refresh, 0, 60);
   
   opt_int_val (common_db, "grayscale",   &grayscale_p,  &bad_arg_p);
-
 
 #if defined (LINUX)
   opt_int_val (common_db, "nodrivesearch", &nodrivesearch_p, &bad_arg_p);
@@ -1752,15 +1740,14 @@ int main(int argc, char** argv)
   {
     string str;
 
-    if (opt_val (common_db, "prvers", &str))
-      {
-	uint32 vers;
+    if (opt_val (common_db, "prvers", &str)) {
+      uint32 vers;
 
-	if (!ROMlib_parse_version (str, &vers))
-	  bad_arg_p = TRUE;
-	else
-	  ROMlib_PrDrvrVers = (vers >> 8) * 10 + ((vers >> 4) & 0xF);
-      }
+      if (!ROMlib_parse_version (str, &vers))
+        bad_arg_p = TRUE;
+      else
+        ROMlib_PrDrvrVers = (vers >> 8) * 10 + ((vers >> 4) & 0xF);
+    }
   }
   
 #if defined (SUPPORT_LOG_ERR_TO_RAM)
@@ -1773,40 +1760,40 @@ int main(int argc, char** argv)
 #endif
   
   if (opt_val (common_db, "info", NULL))
-    {
+  {
 #if defined (MSDOS)
-      msdos_print_info ();
+    msdos_print_info ();
 #else
-      print_info ();
+    print_info ();
 #endif /* MSDOS */
-      exit (0);
-    }
+    exit (0);
+  }
 
 #if defined (MSDOS)
   {
     int port;
-
+    
     if (opt_int_val (common_db, "modemport", &port, &bad_arg_p))
+    {
+      if (port < 1 || port > 4)
       {
-	if (port < 1 || port > 4)
-	  {
-	    fprintf (stderr, "modemport must be 1, 2, 3 or 4.\n");
-	    bad_arg_p = TRUE;
-	  }
-	else
-	  set_modem_port_mapping_to_pc_port (port);
+        fprintf (stderr, "modemport must be 1, 2, 3 or 4.\n");
+        bad_arg_p = TRUE;
       }
-
+      else
+        set_modem_port_mapping_to_pc_port (port);
+    }
+    
     if (opt_int_val (common_db, "printerport", &port, &bad_arg_p))
+    {
+      if (port < 1 || port > 4)
       {
-	if (port < 1 || port > 4)
-	  {
-	    fprintf (stderr, "printerport must be 1, 2, 3 or 4.\n");
-	    bad_arg_p = TRUE;
-	  }
-	else
-	  set_printer_port_mapping_to_pc_port (port);
+        fprintf (stderr, "printerport must be 1, 2, 3 or 4.\n");
+        bad_arg_p = TRUE;
       }
+      else
+        set_printer_port_mapping_to_pc_port (port);
+    }
   }
 #endif
   
@@ -1814,21 +1801,20 @@ int main(int argc, char** argv)
    * I don't think we should call ExitToShell yet because the
    * rest of the system isn't initialized.
    */
-   if (argc >= 2)
-     {
-       int a;
-
-       /* Only complain if we see something with a leading dash; anything
-	* else might be a file to launch.
-	*/
-       for (a = 1; a < argc; a++)
-	 if (argv[a][0] == '-')
-	   {
-	     fprintf (stderr, "%s: unknown option `%s'\n",
-		      program_name, argv[a]);
-	     bad_arg_p = TRUE;
-	   }
-     }
+  if (argc >= 2) {
+	int a;
+	
+	/* Only complain if we see something with a leading dash; anything
+	 * else might be a file to launch.
+	 */
+    for (a = 1; a < argc; a++) {
+	  if (argv[a][0] == '-') {
+		fprintf (stderr, "%s: unknown option `%s'\n",
+				 program_name, argv[a]);
+		bad_arg_p = TRUE;
+	  }
+    }
+  }
 
   filltables ();
 
@@ -1846,7 +1832,6 @@ int main(int argc, char** argv)
   memset (&nilhandle, ~0, (char *) &lastlowglobal - (char *) &nilhandle);
 
   setupsignals ();
-
 
   Ticks_UL.u = 0;
   nilhandle = 0;		/* so nil dereferences "work" */
@@ -1884,24 +1869,21 @@ int main(int argc, char** argv)
   SoundActive = soundactiveoff;
   PortBUse    = 2;			/* configured for Serial driver */
   memset (KeyMap, 0, sizeof_KeyMap);
-  if (vdriver_grayscale_p || grayscale_p)
-    {
-      /* Choose a nice light gray hilite color. */
-      HiliteRGB.red   = CWC (0xAAAA);
-      HiliteRGB.green = CWC (0xAAAA);
-      HiliteRGB.blue  = CWC (0xAAAA);
-    }
-  else
-    {
-      /* how about a nice yellow hilite color? */
-      HiliteRGB.red   = CWC (0xFFFF);
-      HiliteRGB.green = CWC (0xFFFF);
-      HiliteRGB.blue  = CWC (0);
-    }
+  if (vdriver_grayscale_p || grayscale_p) {
+    /* Choose a nice light gray hilite color. */
+    HiliteRGB.red   = CWC ((unsigned short)0xAAAA);
+    HiliteRGB.green = CWC ((unsigned short)0xAAAA);
+    HiliteRGB.blue  = CWC ((unsigned short)0xAAAA);
+  } else {
+    /* how about a nice yellow hilite color? */
+    HiliteRGB.red   = CWC ((unsigned short)0xFFFF);
+    HiliteRGB.green = CWC ((unsigned short)0xFFFF);
+    HiliteRGB.blue  = CWC ((unsigned short)0);
+  }
   
   {
-    static uint16 ret = CWC (0x4E75);
-    
+    static uint16 ret = CWC ((unsigned short)0x4E75);
+
     JCrsrTask = (ProcPtr) RM (&ret);
   }
   
@@ -1936,12 +1918,11 @@ int main(int argc, char** argv)
    * particularly close and then complain about lousy performance and
    * flaky behavior.
    */
-  if (!msdos_check_memory_remaining (768 * 1024))
-    {
-      vdriver_shutdown ();
-      print_mem_full_message ();
-      exit (-50);
-    }
+  if (!msdos_check_memory_remaining (768 * 1024)) {
+    vdriver_shutdown ();
+    print_mem_full_message ();
+    exit (-50);
+  }
 
 #endif
 
@@ -1956,32 +1937,31 @@ int main(int argc, char** argv)
 
   TheZone = SysZone;
   UTableBase =
-    (DCtlHandlePtr) (long) RM (NewPtr (sizeof (UTableBase[0].p) * NDEVICES));
+  (DCtlHandlePtr) (long) RM (NewPtr (sizeof (UTableBase[0].p) * NDEVICES));
   memset (MR (UTableBase), 0, sizeof (UTableBase[0].p) * NDEVICES);
   UnitNtryCnt = BigEndianValue (NDEVICES);
   TheZone = ApplZone;
 
-  if (graphics_p)
-    {
-      /* Set up the current graphics mode appropriately. */
-      if (!vdriver_set_mode (flag_width, flag_height, flag_bpp, grayscale_p))
-	illegal_mode ();
-      
-      /* initialize the mac rgb_spec's */
-      make_rgb_spec (&mac_16bpp_rgb_spec,
+  if (graphics_p) {
+    /* Set up the current graphics mode appropriately. */
+    if (!vdriver_set_mode (flag_width, flag_height, flag_bpp, grayscale_p))
+      illegal_mode ();
+
+    /* initialize the mac rgb_spec's */
+    make_rgb_spec (&mac_16bpp_rgb_spec,
 		     16, TRUE, 0,
 		     5, 10, 5, 5, 5, 0,
 		     BigEndianValue (GetCTSeed ()));
-      
-      make_rgb_spec (&mac_32bpp_rgb_spec,
+
+    make_rgb_spec (&mac_32bpp_rgb_spec,
 		     32, TRUE, 0,
 		     8, 16, 8, 8, 8, 0,
 		     BigEndianValue (GetCTSeed ()));
-      
-      gd_allocate_main_device ();
-    }
 
-#if defined (DISPLAY_SPLASH_SCREEN)  
+    gd_allocate_main_device ();
+  }
+
+#if defined (DISPLAY_SPLASH_SCREEN)
   if (graphics_p)
     splash_screen_displayed_p = splash_screen_display (FALSE, "splash");
 #endif
@@ -1994,14 +1974,14 @@ int main(int argc, char** argv)
   InitUtil ();
   
 #if !defined (X) && !defined (SDL)
-/* #warning "Hack so we don't smash mouse/keyboard m68k interrupt vectors." */
+  /* #warning "Hack so we don't smash mouse/keyboard m68k interrupt vectors." */
 #if defined (M68K_EVENT_VECTOR)
   save_trap_vectors[M68K_EVENT_VECTOR]
-    = *(syn68k_addr_t *)SYN68K_TO_US(M68K_EVENT_VECTOR * 4);
+  = *(syn68k_addr_t *)SYN68K_TO_US(M68K_EVENT_VECTOR * 4);
 #endif
 #if defined (M68K_MOUSE_MOVED_VECTOR)
   save_trap_vectors[M68K_MOUSE_MOVED_VECTOR]
-    = *(syn68k_addr_t *)SYN68K_TO_US(M68K_MOUSE_MOVED_VECTOR * 4);
+  = *(syn68k_addr_t *)SYN68K_TO_US(M68K_MOUSE_MOVED_VECTOR * 4);
 #endif
 #endif
 
@@ -2017,31 +1997,28 @@ int main(int argc, char** argv)
   /* parse the `-system' option */
   {
     string system_str;
-    
+
     if (opt_val (common_db, "system", &system_str))
       bad_arg_p |= !parse_system_version (system_str);
     else
       ROMlib_set_system_version (system_version);
   }
 
-  if (bad_arg_p)
-    {
-      fprintf (stderr,
-	       "Type \"%s -help\" for a list of command-line options.\n",
-	       program_name);
-      exit (-10);
-    }
+  if (bad_arg_p) {
+    fprintf (stderr,
+             "Type \"%s -help\" for a list of command-line options.\n",
+             program_name);
+    exit (-10);
+  }
 
   {
     boolean_t keyboard_set_failed;
-    
-    if (opt_val (common_db, "keyboard", &arg))
-      {
-	keyboard_set_failed = !ROMlib_set_keyboard (arg.c_str());
-	if (keyboard_set_failed)
-	  printf ("``%s'' is not an available keyboard\n", arg.c_str());
-      }
-    else
+
+    if (opt_val (common_db, "keyboard", &arg)) {
+      keyboard_set_failed = !ROMlib_set_keyboard (arg.c_str());
+      if (keyboard_set_failed)
+        printf ("``%s'' is not an available keyboard\n", arg.c_str());
+    } else
       keyboard_set_failed = FALSE;
 
     if (keyboard_set_failed || opt_val (common_db, "keyboards", NULL))
@@ -2049,26 +2026,25 @@ int main(int argc, char** argv)
   }
 
   ROMlib_seginit (argc, argv);
-  
+
   InitFonts ();
-  
-  
+
 #if !defined (NDEBUG)
   dump_init (NULL);
 #endif
-  
+
   /* see qColorutil.c */
   ROMlib_color_init ();
-  
+
   wind_color_init ();
   /* must be called after `ROMlib_color_init ()' */
   image_inits ();
-  
+
   /* must be after `image_inits ()' */
   sb_ctl_init ();
-  
+
   AE_init ();
-  
+
   {
     INTEGER env = 0;
     ROMlib_Fsetenv (&env, 0);
@@ -2091,19 +2067,18 @@ int main(int argc, char** argv)
   /* Set up timer interrupts.  We need to do this after everything else
    * has been initialized.
    */
-  if (!syncint_init ())
-    {
-      vdriver_shutdown ();
-      fputs ("Fatal error:  unable to initialize timer.\n", stderr);
-      exit (-11);
-    }
+  if (!syncint_init ()) {
+    vdriver_shutdown ();
+    fputs ("Fatal error:  unable to initialize timer.\n", stderr);
+    exit (-11);
+  }
 
 #endif /* SYN68K */
 
   sound_init ();
-  
+
   set_refresh_rate (ROMlib_refresh);
-  
+
   restore_virtual_ints (int_state);
 
   WWExist = QDExist = EXIST_NO;
@@ -2111,7 +2086,7 @@ int main(int argc, char** argv)
 #if defined (CYGWIN32)
   complain_if_no_ghostscript ();
 #endif
-  
+
   executor_main ();
 
   if (!ROMlib_no_windows)
@@ -2119,5 +2094,5 @@ int main(int argc, char** argv)
   else
     exit (0);
   /* NOT REACHED */
-  return 0; 
+  return 0;
 }

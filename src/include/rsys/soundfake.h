@@ -5,7 +5,7 @@
 #include "TimeMgr.h"
 
 namespace Executor {
-	class SoundFake: SoundDriver {
+	class SoundFake: public SoundDriver {
 	public:
 		virtual bool sound_init();
 		virtual void sound_shutdown();
