@@ -20,41 +20,41 @@
 int ExecutorArgc;
 const char **ExecutorArgv;
 
-int main(int argc, const char *argv[]) {
+int main(int argc, const char *argv[])
+{
+#if 1	/* THIS IS A TEMPORARY HACK */
 
-#if 0	/* THIS IS A TEMPORARY HACK */
-
-  void *where;
-  kern_return_t r;
+	void *where;
+	kern_return_t r;
 #if defined(i386)
-  struct rlimit rl;
+	struct rlimit rl;
 
-  getrlimit(RLIMIT_STACK, &rl);
-  rl.rlim_cur = NEXT_STACK_SIZE;
-  setrlimit(RLIMIT_STACK, &rl);
+	getrlimit(RLIMIT_STACK, &rl);
+	rl.rlim_cur = NEXT_STACK_SIZE;
+	setrlimit(RLIMIT_STACK, &rl);
 #endif /* defined(i386) */
 
 #if !defined (STRICT_OPENSTEP)
 #define LENGTH	(TEXT_SEGMENT_START - PAGE_ZERO_START)
 
-  if ((r=vm_deallocate(task_self(), 0, LENGTH))!=KERN_SUCCESS) {
-    fprintf(stderr, "Could not deallocate err=%d\n", r);
-    exit(-10);
-  }
+	if ((r=vm_deallocate(mach_task_self(), 0, LENGTH)) != KERN_SUCCESS) {
+		fprintf(stderr, "Could not deallocate err=%d\n", r);
+		exit(-10);
+	}
 
-  where = PAGE_ZERO_START;
-  if ((r=vm_allocate(task_self(), (vm_address_t *)&where, (vm_size_t) LENGTH,
-						     FALSE)) != KERN_SUCCESS) {
-    fprintf(stderr, "Could not allocate err=%d\n", r);
-    exit(-11);
+	where = PAGE_ZERO_START;
+	if ((r = vm_allocate(mach_task_self(), (vm_address_t *)&where, (vm_size_t) LENGTH,
+						 FALSE)) != KERN_SUCCESS) {
+	fprintf(stderr, "Could not allocate err=%d\n", r);
+	exit(-11);
   }
 #endif
 
 #endif
 
-    ExecutorArgc = argc;
-    ExecutorArgv = argv;
-  Executor::nextmain();
+	ExecutorArgc = argc;
+	ExecutorArgv = argv;
+	Executor::nextmain();
 
-    return NSApplicationMain (argc, argv);
+	return NSApplicationMain (argc, argv);
 }

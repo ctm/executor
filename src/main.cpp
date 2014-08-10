@@ -1278,6 +1278,8 @@ win_drive_to_bit (const char *drive_namep)
 namespace Executor {
 	PUBLIC int oldmain(int, char**);
 }
+extern int ExecutorArgc;
+extern char **ExecutorArgv;
 
 A2 (PUBLIC, int, main, int, argc, char **, argv)
 #else
