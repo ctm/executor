@@ -249,13 +249,13 @@ Executor::cstring_from_str255 (Str255 text)
 }
 
 namespace Executor {
-PUBLIC  ini_key_t ROMlib_printer = NULL;
-PRIVATE ini_key_t ROMlib_paper = NULL;
-PUBLIC  ini_key_t ROMlib_port = NULL;
-PUBLIC  ini_key_t ROMlib_paper_orientation = NULL;
-PRIVATE ini_key_t ROMlib_spool_template = NULL;
+PUBLIC  ini_key_t ROMlib_printer = "";
+PRIVATE ini_key_t ROMlib_paper = "";
+PUBLIC  ini_key_t ROMlib_port = "";
+PUBLIC  ini_key_t ROMlib_paper_orientation = "";
+PRIVATE ini_key_t ROMlib_spool_template = "";
 #if defined (MSDOS) || defined (CYGWIN32)
-PRIVATE ini_key_t ROMlib_print_filter = NULL;
+PRIVATE ini_key_t ROMlib_print_filter = "";
 #endif
 }
 
@@ -491,7 +491,6 @@ P2(PUBLIC pascal, void,  ROMlib_mystlproc, DialogPtr, dp, INTEGER, itemno)
       case LAYOUT_OK_NO:
 #if defined(MACOSX_)
 	printstate = seenPageSetUp;
-	contextswitch(&romlib_sp, &nextstep_sp);
 #endif
 	update_ROMlib_printer_vars ((TPPrDlg) dp);
 	break;

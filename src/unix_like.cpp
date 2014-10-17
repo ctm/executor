@@ -301,8 +301,6 @@ mmap_lowglobals (void)
     }
 }
 
-#if !defined (MACOSX_)
-
 #if !defined (powerpc) && !defined (__ppc__)
 PRIVATE caddr_t
 round_up_to_page_size (unsigned long addr)
@@ -378,7 +376,6 @@ mmap_conflict (void *start, size_t length)
 
   return retval;
 }
-#endif /* defined (MACOSX) */
 
 /*
  * This code used to try to get us memory that we could use directly (meaning
@@ -389,10 +386,12 @@ mmap_conflict (void *start, size_t length)
  * emulation isn't an issue, we really shouldn't care.
  */
 
-#if !defined(MACOSX_)
 void *
 mmap_permanent_memory (unsigned long amount_wanted)
 {
+#if defined(MACOSX_)
+  return NULL;
+#else
   caddr_t addr_got;
   caddr_t badness_start;
 
@@ -461,7 +460,7 @@ mmap_permanent_memory (unsigned long amount_wanted)
 #endif
 
   return addr_got;
-}
 #endif
+}
 
 #endif /* defined (LINUX) || defined (MACOSX) */

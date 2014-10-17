@@ -1825,9 +1825,9 @@ void set_malloc_debug (int level)
       break;
     case seenOpenPage:
 	RESTOREA5;
-	do
-	    contextswitch(&nextstep_sp, &romlib_sp);
-	while (printstate != __idle && printstate != seenClosePage);
+	do {
+		
+	} while (printstate != __idle && printstate != seenClosePage);
 	goto avoidrestorea5;
 	break;
     default:
@@ -1848,7 +1848,7 @@ avoidrestorea5:
   [self lockFocus];
   
   do {
-    contextswitch (&nextstep_sp, &romlib_sp);
+	  
   } while (printstate != seenOpenDoc && printstate != seenPageSetUp
          && [NSApp nextEventMatchingMask:NSAnyEventMask
                                untilDate:[NSDate distantPast]
@@ -2039,9 +2039,6 @@ static struct
     sendsuspendevent ();
     RESTOREA5;
   }
-  contextswitch (&nextstep_sp, &romlib_sp);
-  contextswitch (&nextstep_sp, &romlib_sp);
-  contextswitch (&nextstep_sp, &romlib_sp);
   saveROMlib_pasteboard = ROMlib_pasteboard;
   ROMlib_pasteboard = pboard;
   {
@@ -2049,18 +2046,12 @@ static struct
     sendresumeevent (YES);
     RESTOREA5;
   }
-  contextswitch (&nextstep_sp, &romlib_sp);
-  contextswitch (&nextstep_sp, &romlib_sp);
-  contextswitch (&nextstep_sp, &romlib_sp);
   ROMlib_pasteboard = saveROMlib_pasteboard;
   {
     SETUPA5;
     sendpaste ();
     RESTOREA5;
   }
-  contextswitch (&nextstep_sp, &romlib_sp);
-  contextswitch (&nextstep_sp, &romlib_sp);
-  contextswitch (&nextstep_sp, &romlib_sp);
 }
 
 - (BOOL) writeSelectionToPasteboard:(NSPasteboard *) pboard
@@ -2073,9 +2064,6 @@ static struct
     sendcopy ();
     RESTOREA5;
   }
-  contextswitch (&nextstep_sp, &romlib_sp);
-  contextswitch (&nextstep_sp, &romlib_sp);
-  contextswitch (&nextstep_sp, &romlib_sp);
   saveROMlib_pasteboard = ROMlib_pasteboard;
   ROMlib_pasteboard = pboard;
   {
@@ -2083,9 +2071,6 @@ static struct
     sendsuspendevent ();
     RESTOREA5;
   }
-  contextswitch (&nextstep_sp, &romlib_sp);
-  contextswitch (&nextstep_sp, &romlib_sp);
-  contextswitch (&nextstep_sp, &romlib_sp);
   ROMlib_pasteboard = saveROMlib_pasteboard;
   {
     SETUPA5;
@@ -2105,8 +2090,8 @@ static struct
   retval.size = [[NSPrintInfo sharedPrintInfo] paperSize];
   ROMlib_printtimeout = 10000;
   while (printstate != __idle && printstate != seenOpenPage &&
-	 --ROMlib_printtimeout != 0)
-    contextswitch (&nextstep_sp, &romlib_sp);
+		 --ROMlib_printtimeout != 0) {
+	 }
   if (ROMlib_printtimeout == 0)
     printstate = __idle;
   return printstate == __idle ? NSZeroRect : retval;

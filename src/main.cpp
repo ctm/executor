@@ -109,6 +109,12 @@ char ROMlib_rcsid_main[] =
 #include <process.h>
 #endif /* MSDOS */
 
+#if defined(MACOSX_)
+namespace Executor {
+  void NeXTMain();
+}
+#endif
+
 #include <ctype.h>
 
 #if !defined (MSDOS) && !defined(CYGWIN32)
@@ -142,7 +148,7 @@ using namespace std;
 BOOLEAN Executor::force_big_offset = CONFIG_OFFSET_P;
 
 #if defined (MACOSX_)
-#define main oldmain
+//#define main oldmain
 char *ROMlib_xfervmaddr;
 LONGINT ROMlib_xfervmsize = 0;
 #endif /* MACOSX_ */
@@ -195,12 +201,12 @@ uint32 Executor::system_version = 0x700; /* keep this in sync with Browser's .ec
 
 const option_vec Executor::common_opts =
 {
-  { "sticky",      "sticky menus",                opt_no_arg,   NULL },
+  { "sticky",      "sticky menus",                opt_no_arg,   "" },
   { "pceditkeys",  "have Delete key delete one character forward",
-    opt_no_arg, NULL },
-  { "nobrowser",   "don't run Browser",           opt_no_arg,   NULL },
-  { "bpp",         "default screen depth",        opt_sep,      NULL }, 
-  { "size",        "default screen size",         opt_sep,      NULL },
+    opt_no_arg, "" },
+  { "nobrowser",   "don't run Browser",           opt_no_arg,   "" },
+  { "bpp",         "default screen depth",        opt_sep,      "" },
+  { "size",        "default screen size",         opt_sep,      "" },
   { "debug",
       ("enable certain debugging output and consistency checks.  This "
        "is primarily used by ARDI developers, but we are making it "
@@ -221,18 +227,18 @@ const option_vec Executor::common_opts =
        "\"unimplemented\" enables warnings for unimplemented traps.  "
        "Example: \"executor -debug unimp,trace\""),
 
-      opt_sep, NULL },
+      opt_sep, "" },
   { "nodiskcache", "disable internal disk cache.",
-      opt_no_arg, NULL },
+      opt_no_arg, "" },
   { "nosound", "disable any sound hardware",
-      opt_no_arg, NULL },
+      opt_no_arg, "" },
   { "info",        "print information about your system",
-      opt_no_arg, NULL },
+      opt_no_arg, "" },
 #if defined (SUPPORT_LOG_ERR_TO_RAM)
   { "ramlog",
       "log debugging information to RAM; alt-shift-7 dumps the "
       "accrued error log out via the normal mechanism.",
-      opt_no_arg, NULL },
+      opt_no_arg, "" },
 #endif
 
 #if defined (MSDOS)
@@ -240,17 +246,17 @@ const option_vec Executor::common_opts =
       "use old-style 18.2 Hz timer, instead of the newer 1024 Hz "
       "timer.  This will result in less accurate timer emulation, "
       "but may work around problems with certain BIOSes.",
-	opt_no_arg, NULL },
+	opt_no_arg, "" },
   { "vga",
       "use old-style VGA graphics modes only, and don't use SuperVGA.  "
       "This will limit you to a slow 640x480 with 16 colors, but may let "
       "you run Executor even when Executor has problems with your "
       "video driver.",
-	opt_no_arg, NULL },
+	opt_no_arg, "" },
   { "nofilescheck",
       "bypass a startup check that attempts to determine if your FILES= "
       "parameter is large enough.",
-        opt_no_arg, NULL },
+        opt_no_arg, "" },
   { "videospeedup",
       "if you have a linear frame buffer (which requires a VBE 2.0 video "
       "driver like SciTech Display Doctor) this can make graphics much faster "
@@ -262,60 +268,60 @@ const option_vec Executor::common_opts =
       "switch will cause Executor to crash right away; you can't use it "
       "on such systems, and there's nothing that can be done about it.  "
       "Use at your own risk!",
-        opt_no_arg, NULL },
+        opt_no_arg, "" },
   { "nosync",
       "Allow disk data structures to stay in memory until Executor quits.  "
       "This will dramatically speed up Executor's creation and deletion of "
       "many small files, but if Executor crashes the data in memory won't "
       "be written to disk and HFV corruption could result.  "
       "Use at your own risk!",
-        opt_no_arg, NULL },
+        opt_no_arg, "" },
   { "skipaspi", "totally bypass ASPI drivers",
-      opt_no_arg, NULL },
+      opt_no_arg, "" },
 #endif /* MSDOS */
 #if defined (MSDOS) || defined (CYGWIN32)
   { "macdrives", "drive letters that represent Mac formatted media",
-      opt_sep, NULL },
+      opt_sep, "" },
   { "dosdrives", "drive letters that represent DOS formatted media",
-      opt_sep, NULL },
+      opt_sep, "" },
   { "skipdrives", "drive letters that represent drives to avoid",
-      opt_sep, NULL },
+      opt_sep, "" },
 #endif
 #if defined (LINUX)
   { "nodrivesearch",
       "Do not look for a floppy drive, CD-ROM drive or any other drive "
       "except as specified by the MacVolumes environment variable",
-	opt_no_arg,   NULL },
+	opt_no_arg,   "" },
 #endif /* LINUX */
   { "keyboards", "list available keyboard mappings",
-      opt_no_arg, NULL },
-  { "keyboard", "choose a specific keyboard map", opt_sep, NULL },
+      opt_no_arg, "" },
+  { "keyboard", "choose a specific keyboard map", opt_sep, "" },
   { "print",
       "tell program to print file; not useful unless you also "
       "specify a program to run and one or more documents to print.",
-	opt_no_arg, NULL },
-#if defined (NEXT) || defined (LINUX)
+	opt_no_arg, "" },
+#if defined (MACOSX_) || defined (LINUX)
   { "nodotfiles",  "do not display filenames that begin with dot", opt_no_arg,
-      NULL },
+      "" },
 #endif
 #if 0
-  { "noclock",     "disable timer",               opt_no_arg,   NULL },
+  { "noclock",     "disable timer",               opt_no_arg,   "" },
 #endif
 
 #if defined (NOMOUSE_COMMAND_LINE_OPTION)
   /* Hack Dr. Chung wanted */
-  { "nomouse",     "ignore missing mouse",        opt_no_arg,   NULL },
+  { "nomouse",     "ignore missing mouse",        opt_no_arg,   "" },
 #endif
   { "noautorefresh",
       "turns off automatic detection of programs that bypass QuickDraw.",
-      opt_no_arg, NULL },
+      opt_no_arg, "" },
   { "refresh",
       "handle programs that bypass QuickDraw, at a performance penalty.  "
       "Follow -refresh with an number indicating how many 60ths of a second "
       "to wait between each screen refresh, e.g. \"executor -refresh 10\".",
       opt_optional, "10", },
-  { "help",        "print this help message", opt_no_arg, NULL, },
-  { "version", "print the Executor version", opt_no_arg, NULL, },
+  { "help",        "print this help message", opt_no_arg, "", },
+  { "version", "print the Executor version", opt_no_arg, "", },
 #if defined (MALLOC_MAC_MEMORY)
   { "memory",
       "specify the total memory you want reserved for use by the programs "
@@ -324,110 +330,110 @@ const option_vec Executor::common_opts =
       "make five and a half megabytes available to the virtual machine.  "
       "Executor will require extra memory above and beyond this amount "
       "for other uses.",
-      opt_sep, NULL, },
+      opt_sep, "", },
   { "applzone",
       "specify the memory to allocate for the application being run, "
       "e.g. \"executor -applzone 4M\" would make four megabytes "
       "of RAM available to the application.  \"applzone\" stands for "
       "\"application zone\".",
-      opt_sep, NULL, },
+      opt_sep, "", },
   { "stack",
       "like -applzone, but specifies the amount of stack memory to allocate.",
-	opt_sep, NULL, },
+	opt_sep, "", },
   { "syszone", "like -applzone, but specifies the amount of memory to make "
       "available to Executor's internal system software.",
-	opt_sep, NULL, },
+	opt_sep, "", },
 #if defined (MM_MANY_APPLZONES)
   { "napplzones",
     "debugging flag, specifies the number of applzones to use",
-    opt_sep, NULL },
+    opt_sep, "" },
 #endif /* MM_MANY_APPLZONES */
 #endif /* MALLOC_MAC_MEMORY */
   { "system",
       "specify the system version that executor reports to applications",
-    opt_sep, NULL },
+    opt_sep, "" },
 #if defined (SYN68K)
   { "notnative",
       "don't use native code in syn68k",
-    opt_no_arg, NULL },
+    opt_no_arg, "" },
 #endif
 
 #if defined (MSDOS) || defined(VDRIVER_SVGALIB) || defined (CYGWIN32)
   { "logerr", "log diagnostic output to error log file", opt_no_arg,
-    NULL },
+    "" },
 #endif
 
   { "grayscale", "\
 specify that executor should run in grayscale mode even if it is \
 capable of color.",
-    opt_no_arg, NULL },
+    opt_no_arg, "" },
   { "netatalk", "use netatalk naming conventions for AppleDouble files",
-      opt_no_arg, NULL },
+      opt_no_arg, "" },
   { "afpd", "use afpd conventions for AppleDouble files (implies -netatalk)",
-      opt_no_arg, NULL },
+      opt_no_arg, "" },
 
 #if defined (MSDOS)
   { "modemport", "which PC serial port (1, 2, 3 or 4) should be used when"
-    " a Macintosh application access the modem port", opt_sep, NULL,
+    " a Macintosh application access the modem port", opt_sep, "",
   },
   { "printerport", "which PC serial port (1, 2, 3 or 4) should be used when"
     " a Macintosh application *directly* accesses the printer port.  This"
     " option does not affect printing.  It only affects communications type "
-    " programs that do their own serial port management.", opt_sep, NULL,
+    " programs that do their own serial port management.", opt_sep, "",
   },
 #endif
 
 #if CONFIG_OFFSET_P == 0
-  { "offset", "offset Mac memory (i.e. simulate Win32)", opt_no_arg, NULL },
+  { "offset", "offset Mac memory (i.e. simulate Win32)", opt_no_arg, "" },
 #endif
 
   { "cities", "Don't use Helvetica for Geneva, Courier for Monaco and Times "
-    "for New York when generating PostScript", opt_no_arg, NULL },
+    "for New York when generating PostScript", opt_no_arg, "" },
 
 #if defined (CYGWIN32)
   { "die", "allow Executor to die instead of catching trap", opt_no_arg,
-    NULL },
+    "" },
   { "noautoevents", "disable timer driven event checking", opt_no_arg,
-    NULL },
+    "" },
 #endif
 
 #if defined (MSDOS) || defined (CYGWIN32)
   { "nocheckpoint", "disable \"failure.txt\" checkpointing", opt_no_arg,
-    NULL },
+    "" },
 #endif
 
   { "prvers",
       "specify the printer version that executor reports to applications",
-    opt_sep, NULL },
+    opt_sep, "" },
 
   { "prres",
     "specify an additional resolution available for printing, e.g. "
     "\"executor -prres 600x600\" will make 600dpi resolution available "
     "in addition to the standard 72dpi.  Not all apps will be able to use "
-    "this additional resolution.", opt_sep, NULL },
+    "this additional resolution.", opt_sep, "" },
 
 #if defined (SDL)
-  { "fullscreen", "try to run in full-screen mode", opt_no_arg, NULL },
-  { "hwsurface", "UNSUPPORTED", opt_no_arg, NULL },
+  { "fullscreen", "try to run in full-screen mode", opt_no_arg, "" },
+  { "hwsurface", "UNSUPPORTED", opt_no_arg, "" },
 #if defined (CYGWIN)
   { "sdlaudio", "specify the audio driver to attempt to use first, e.g. "
     "\"executor -sdlaudio waveout\" will tell Executor to use the old "
-    "windows sound drivers and not use DirectSound.", opt_sep, NULL, }, 
+    "windows sound drivers and not use DirectSound.", opt_sep, "", },
 #else
   { "sdlaudio", "specify the audio driver to attempt to use first, e.g. "
     "\"executor -sdlaudio esd\" will tell Executor to use esound, "
-    "the Enlightened Sound Daemon instead of /dev/dsp.", opt_sep, NULL, }, 
+    "the Enlightened Sound Daemon instead of /dev/dsp.", opt_sep, "", },
 #endif
 #endif
 
 #if defined (CYGWIN32) && defined (SDL)
-  { "clipleak", "UNSUPPORTED (ignored)", opt_no_arg, NULL },
+  { "clipleak", "UNSUPPORTED (ignored)", opt_no_arg, "" },
 #endif
 
 
 #if defined(X) || defined (SDL)
   { "scancodes", "different form of key mapping (may be useful in "
-                 "conjunction with -keyboard)", opt_no_arg, NULL },
+                 "conjunction with -keyboard)", opt_no_arg, "" },
 #endif
 
   { "desperate", /* Handled specially; here for documentation purposes only. */
@@ -435,21 +441,21 @@ capable of color.",
       "to use as few system features as possible, which is handy for "
       "troubleshooting if Executor is having serious problems with "
       "your system.",
-	opt_no_arg, NULL },
+	opt_no_arg, "" },
 
 #if defined (powerpc) || defined (__ppc__)
-  { "ppc", "try to execute the PPC native code if possible (UNSUPPORTED)", opt_no_arg, NULL },
+  { "ppc", "try to execute the PPC native code if possible (UNSUPPORTED)", opt_no_arg, "" },
 #endif
 
 #if defined (CYGWIN32)
-  { "realmodecd", "try to use real-mode cd-rom driver", opt_no_arg, NULL },
+  { "realmodecd", "try to use real-mode cd-rom driver", opt_no_arg, "" },
 #endif
 
   { "appearance", "(mac or windows) specify the appearance of windows and "
     "menus.  For example \"executor -appearance windows\" will make each "
-    "window have a blue title bar", opt_sep, NULL },
+    "window have a blue title bar", opt_sep, "" },
 
-  { "hfsplusro", "unsupported -- do not use", opt_no_arg, NULL },
+  { "hfsplusro", "unsupported -- do not use", opt_no_arg, "" },
 };
   
 opt_database_t Executor::common_db;
@@ -1274,17 +1280,7 @@ win_drive_to_bit (const char *drive_namep)
 #define READ_IMPLIES_EXEC 0x0400000
 #endif
 
-#ifdef MACOSX_
-namespace Executor {
-	PUBLIC int oldmain(int, char**);
-}
-extern int ExecutorArgc;
-extern char **ExecutorArgv;
-
-A2 (PUBLIC, int, main, int, argc, char **, argv)
-#else
 int main(int argc, char** argv)
-#endif
 {
   check_structs ();
 
@@ -1318,8 +1314,7 @@ int main(int argc, char** argv)
       execv(argv[0], argv);
   }
 #endif
-
-
+  
   int grayscale_p = FALSE;
 
 #if defined (DISPLAY_SPLASH_SCREEN)
@@ -2088,6 +2083,8 @@ int main(int argc, char** argv)
 #if defined (CYGWIN32)
   complain_if_no_ghostscript ();
 #endif
+
+  NeXTMain();
 
   executor_main ();
 

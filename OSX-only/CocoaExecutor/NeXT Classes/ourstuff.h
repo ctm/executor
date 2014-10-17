@@ -29,6 +29,7 @@ extern NSMenu *global_menu;
 extern NSCursor *realcursor, *blankcursor;
 extern NSPasteboard *ROMlib_pasteboard;
 #endif
+void NeXTMain();
 }
 extern NSInteger ROMlib_ourchangecount;
 

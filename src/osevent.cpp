@@ -520,9 +520,6 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
       }
     
     eventp->message = CLC(0);
-#if defined (MACOSX_)
-    contextswitch(&romlib_sp, &nextstep_sp);
-#endif /* MACOSX_ */
     ROMlib_memnomove_p = FALSE;	/* this is an icky hack needed for Excel */
     ticks = TickCount();
 

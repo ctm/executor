@@ -572,7 +572,6 @@ P3(PUBLIC pascal trap, TPPrPort, PrOpenDoc, THPrint, hPrint, TPPrPort, port,
       }
 #else
     printstate = seenOpenDoc;
-    contextswitch(&romlib_sp, &nextstep_sp);
 #endif
     already_open = TRUE;
     return port;
@@ -595,7 +594,6 @@ P2(PUBLIC pascal trap, void, PrOpenPage, TPPrPort, port, TPRect, pPageFrame)
       ROMlib_suppressclip = 0;
 #else
       printstate = seenOpenPage;
-      contextswitch(&romlib_sp, &nextstep_sp);
 #endif
     }
   page_is_open = TRUE;
@@ -613,7 +611,6 @@ P1(PUBLIC pascal trap, void, PrClosePage, TPPrPort, pPrPort)
 		    -55 + (ROMlib_rotation ? 30 : 0));
 #else
 	  printstate = seenClosePage;
-	  contextswitch(&romlib_sp, &nextstep_sp);
 #endif
 	}
     }

@@ -17,12 +17,9 @@
 #define NEXT_STACK_SIZE (512L * 1024)
 #endif /* defined(i386) */
 
-int ExecutorArgc;
-const char **ExecutorArgv;
-
-int main(int argc, const char *argv[])
+void Executor::NeXTMain()
 {
-#if 1	/* THIS IS A TEMPORARY HACK */
+#if 0	/* THIS IS A TEMPORARY HACK */
 
 	void *where;
 	kern_return_t r;
@@ -34,7 +31,7 @@ int main(int argc, const char *argv[])
 	setrlimit(RLIMIT_STACK, &rl);
 #endif /* defined(i386) */
 
-#if !defined (STRICT_OPENSTEP)
+#if 0
 #define LENGTH	(TEXT_SEGMENT_START - PAGE_ZERO_START)
 
 	if ((r=vm_deallocate(mach_task_self(), 0, LENGTH)) != KERN_SUCCESS) {
@@ -42,7 +39,7 @@ int main(int argc, const char *argv[])
 		exit(-10);
 	}
 
-	where = PAGE_ZERO_START;
+	where = (void*)PAGE_ZERO_START;
 	if ((r = vm_allocate(mach_task_self(), (vm_address_t *)&where, (vm_size_t) LENGTH,
 						 FALSE)) != KERN_SUCCESS) {
 	fprintf(stderr, "Could not allocate err=%d\n", r);
@@ -52,9 +49,5 @@ int main(int argc, const char *argv[])
 
 #endif
 
-	ExecutorArgc = argc;
-	ExecutorArgv = argv;
-	Executor::nextmain();
-
-	return NSApplicationMain (argc, argv);
+	NSApplicationLoad();
 }

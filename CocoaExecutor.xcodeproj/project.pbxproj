@@ -16,7 +16,6 @@
 		5500AB591985A66A00FF62C0 /* MacWinClass.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5500AB481985A66A00FF62C0 /* MacWinClass.mm */; };
 		5500AB5A1985A66A00FF62C0 /* NEXT.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5500AB491985A66A00FF62C0 /* NEXT.mm */; };
 		5500AB5B1985A66A00FF62C0 /* NEXTkeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5500AB4A1985A66A00FF62C0 /* NEXTkeyboard.cpp */; };
-		5500AB5C1985A66A00FF62C0 /* NEXTmain.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5500AB4B1985A66A00FF62C0 /* NEXTmain.mm */; };
 		5500AB5D1985A66A00FF62C0 /* NEXTprint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5500AB4C1985A66A00FF62C0 /* NEXTprint.mm */; };
 		553A7ED1199708A300DFF4F6 /* sdl-sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 553A7ECF199708A300DFF4F6 /* sdl-sound.cpp */; };
 		553A7ED6199709EE00DFF4F6 /* SDL_sound.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553A7ED4199709EE00DFF4F6 /* SDL_sound.framework */; };
@@ -2720,7 +2719,6 @@
 				558B99C01987FCBF00ADF159 /* menu.cpp in Sources */,
 				558B99D51987FCBF00ADF159 /* prError.cpp in Sources */,
 				558B9A461987FCBF00ADF159 /* virtualint.cpp in Sources */,
-				5500AB5C1985A66A00FF62C0 /* NEXTmain.mm in Sources */,
 				558B9A0D1987FCBF00ADF159 /* resGet.cpp in Sources */,
 				558B99C91987FCBF00ADF159 /* mmansubr.cpp in Sources */,
 				558B9A151987FCBF00ADF159 /* resPartial.cpp in Sources */,
@@ -3296,6 +3294,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "OSX-only/CocoaExecutor/CocoaExecutor-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks @loader_path/../Frameworks @loader_path/Frameworks $(inherited)";
 				PRODUCT_NAME = NeoClassic;
 				USER_HEADER_SEARCH_PATHS = "OSX-only/CocoaExecutor src/include";
 				WRAPPER_EXTENSION = app;
@@ -3329,6 +3328,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "OSX-only/CocoaExecutor/CocoaExecutor-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks @loader_path/../Frameworks @loader_path/Frameworks $(inherited)";
 				LLVM_LTO = NO;
 				PRODUCT_NAME = NeoClassic;
 				USER_HEADER_SEARCH_PATHS = "OSX-only/CocoaExecutor src/include";
