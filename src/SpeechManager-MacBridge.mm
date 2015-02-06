@@ -7,6 +7,7 @@
 //
 
 #include <Carbon/Carbon.h>
+#import <Cocoa/Cocoa.h>
 #include "rsys/common.h"
 #include "rsys/hfs.h"
 #include "MemoryMgr.h"

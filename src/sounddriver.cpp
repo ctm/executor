@@ -19,15 +19,15 @@ char ROMlib_rcsid_sounddriver[] =
 #include "sdl-sound.h"
 #endif
 
-using namespace Executor;
+namespace Executor {
 
 /* This is the current sound driver. */
-class SoundDriver *Executor::sound_driver;
+class SoundDriver *sound_driver;
 
-int Executor::ROMlib_SND_RATE = 22255;
+int ROMlib_SND_RATE = 22255;
 
 void
-Executor::sound_init (void)
+sound_init (void)
 {
   bool found_one_p = false;
 
@@ -74,4 +74,6 @@ Executor::sound_init (void)
 
   /* At least the fake sound driver must always match! */
   gui_assert (found_one_p);
+}
+  
 }

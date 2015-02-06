@@ -89,6 +89,8 @@ struct hunger_info
   unsigned char *buf;	/* NULL means there is no buffer; just "pretend" */
   int bufsize;		/* to fill it in; (!buf && bufsize) is possible! */
 };
+  
+typedef struct hunger_info HungerInfo;
 
 extern syn68k_addr_t sound_callback (syn68k_addr_t, void *);
 
