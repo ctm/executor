@@ -44,12 +44,13 @@ char ROMlib_rcsid_mman[] =
 
 #include <mach/mach_error.h>
 
-using namespace Executor;
 using namespace ByteSwap;
 
-int Executor::ROMlib_applzone_size = DEFAULT_APPLZONE_SIZE;
-int Executor::ROMlib_syszone_size  = DEFAULT_SYSZONE_SIZE;
-int Executor::ROMlib_stack_size    = DEFAULT_STACK_SIZE;
+namespace Executor {
+
+int ROMlib_applzone_size = DEFAULT_APPLZONE_SIZE;
+int ROMlib_syszone_size  = DEFAULT_SYSZONE_SIZE;
+int ROMlib_stack_size    = DEFAULT_STACK_SIZE;
 
 /* these two variables define, in ROMlib space, the beginning of mac-memory
    and the end of mac memory.  They're purpose is to try to prevent routines
@@ -59,13 +60,13 @@ int Executor::ROMlib_stack_size    = DEFAULT_STACK_SIZE;
    0xFFFF0048 both here and on a Mac.  On a Mac, this doesn't cause a crash.
    */
 
-PUBLIC unsigned long Executor::ROMlib_syszone;
-PUBLIC unsigned long Executor::ROMlib_memtop;
+PUBLIC unsigned long ROMlib_syszone;
+PUBLIC unsigned long ROMlib_memtop;
 
 #if defined (MM_MANY_APPLZONES)
 /* for debugging, we can have multiple applzones which are used
    roundrobin */
-int Executor::mm_n_applzones = 1;
+int mm_n_applzones = 1;
 static int mm_current_applzone;
 #endif
 
@@ -77,7 +78,7 @@ static int mm_current_applzone;
   } while (FALSE)
 
 SignedByte
-Executor::hlock_return_orig_state (Handle h)
+hlock_return_orig_state (Handle h)
 {
   block_header_t *block;
   SignedByte state;
@@ -105,13 +106,13 @@ Executor::hlock_return_orig_state (Handle h)
 }
 
 Size
-Executor::zone_size (THz zone)
+zone_size (THz zone)
 {
   return (char *) ZONE_BK_LIM (zone) - (char *) zone;
 }
 
 SignedByte
-Executor::HGetState (Handle h)
+HGetState (Handle h)
 {
   block_header_t *block;
   
@@ -140,7 +141,7 @@ Executor::HGetState (Handle h)
 }
 
 void
-Executor::HSetState (Handle h, SignedByte flags)
+HSetState (Handle h, SignedByte flags)
 {
   block_header_t *block;
   
@@ -165,7 +166,7 @@ Executor::HSetState (Handle h, SignedByte flags)
 }
 
 void
-Executor::HLock (Handle h)
+HLock (Handle h)
 {
   block_header_t *block;
   
@@ -190,7 +191,7 @@ Executor::HLock (Handle h)
 }
 
 void
-Executor::HUnlock (Handle h)
+HUnlock (Handle h)
 {
   block_header_t *block;
   
@@ -215,7 +216,7 @@ Executor::HUnlock (Handle h)
 }
 
 void
-Executor::HPurge (Handle h)
+HPurge (Handle h)
 {
   block_header_t *block;
   
@@ -240,7 +241,7 @@ Executor::HPurge (Handle h)
 }
 
 void
-Executor::HNoPurge (Handle h)
+HNoPurge (Handle h)
 {
   block_header_t *block;
   
@@ -265,7 +266,7 @@ Executor::HNoPurge (Handle h)
 }
 
 void
-Executor::HSetRBit (Handle h)
+HSetRBit (Handle h)
 {
   block_header_t *block;
   
@@ -290,7 +291,7 @@ Executor::HSetRBit (Handle h)
 }
 
 void
-Executor::HClrRBit (Handle h)
+HClrRBit (Handle h)
 {
   block_header_t *block;
   
@@ -343,7 +344,7 @@ canonicalize_memory_sizes (void)
 
 
 void
-Executor::InitApplZone (void)
+InitApplZone (void)
 {
   /* ApplZone must already be set before getting here */
 
@@ -369,7 +370,7 @@ Executor::InitApplZone (void)
 
 
 void
-Executor::print_mem_full_message (void)
+print_mem_full_message (void)
 {
   fprintf (stderr,
 	   "Executor has run out of memory.  Try specifying "
@@ -382,7 +383,7 @@ Executor::print_mem_full_message (void)
 }
 
 void
-Executor::ROMlib_InitZones (offset_enum which)
+ROMlib_InitZones (offset_enum which)
 {
   static boolean_t beenhere = FALSE;
   static Ptr stack_begin, stack_end;
@@ -545,7 +546,7 @@ Executor::ROMlib_InitZones (offset_enum which)
 }
 
 void
-Executor::SetApplBase (Ptr newbase)
+SetApplBase (Ptr newbase)
 {
   int32 totend;
   
@@ -575,12 +576,12 @@ Executor::SetApplBase (Ptr newbase)
      so we just let the old bkLim stand. */
   ApplZone = RM ((THz) newbase);
   
-  Executor::InitApplZone ();
+  InitApplZone();
   SET_MEM_ERR (noErr);
 }
 
 void
-Executor::MoreMasters (void)
+MoreMasters (void)
 {
   THz current_zone;
   uint32 *handles;
@@ -620,7 +621,7 @@ print_free (void)
 #endif
 
 void
-Executor::InitZone (ProcPtr pGrowZone, int16 cMoreMasters,
+InitZone (ProcPtr pGrowZone, int16 cMoreMasters,
 	  Ptr limitPtr, THz zone)
 {
   block_header_t *last_block;
@@ -681,7 +682,7 @@ Executor::InitZone (ProcPtr pGrowZone, int16 cMoreMasters,
 }
 
 THz
-Executor::GetZone (void)
+GetZone (void)
 {
   MM_SLAM ("entry");
   
@@ -690,7 +691,7 @@ Executor::GetZone (void)
 }
 
 void
-Executor::SetZone (THz hz)
+SetZone (THz hz)
 {
   MM_SLAM ("entry");
   TheZone = RM (hz);
@@ -699,7 +700,7 @@ Executor::SetZone (THz hz)
 
 
 Handle
-Executor::_NewEmptyHandle_flags (boolean_t sys_p)
+_NewEmptyHandle_flags (boolean_t sys_p)
 {
   THz save_zone, current_zone;
   Handle h;
@@ -739,7 +740,7 @@ Executor::_NewEmptyHandle_flags (boolean_t sys_p)
 }
 
 Handle
-Executor::_NewHandle_flags (Size size, boolean_t sys_p, boolean_t clear_p)
+_NewHandle_flags (Size size, boolean_t sys_p, boolean_t clear_p)
 {
   Handle newh;
   block_header_t *block;
@@ -789,7 +790,7 @@ Executor::_NewHandle_flags (Size size, boolean_t sys_p, boolean_t clear_p)
 #define TTS_HACK (ROMlib_options & ROMLIB_DISPOSHANDLE_HACK_BIT)
 
 void
-Executor::DisposHandle (Handle h)
+DisposHandle (Handle h)
 {
   MM_SLAM ("entry");
 
@@ -854,7 +855,7 @@ Executor::DisposHandle (Handle h)
 }
 
 Size
-Executor::GetHandleSize (Handle h)
+GetHandleSize (Handle h)
 {
   block_header_t *block;
   Size retval;
@@ -882,7 +883,7 @@ Executor::GetHandleSize (Handle h)
 }
 
 void
-Executor::SetHandleSize (Handle h, Size newsize)
+SetHandleSize (Handle h, Size newsize)
 {
   block_header_t *block;
   int32 oldpsize;
@@ -982,7 +983,7 @@ Executor::SetHandleSize (Handle h, Size newsize)
    && (unsigned long) (ptr) <=  (unsigned long) ZONE_BK_LIM (MR (z)))
 
 THz
-Executor::HandleZone (Handle h)
+HandleZone (Handle h)
 {
   THz zone;
   block_header_t *block;
@@ -1059,7 +1060,7 @@ Executor::HandleZone (Handle h)
 }
 
 Handle
-Executor::_RecoverHandle_flags (Ptr p, boolean_t sys_p)
+_RecoverHandle_flags (Ptr p, boolean_t sys_p)
 {
   block_header_t *block;
   THz zones[3];
@@ -1103,7 +1104,7 @@ Executor::_RecoverHandle_flags (Ptr p, boolean_t sys_p)
 }
 
 void
-Executor::ReallocHandle (Handle h, Size size)
+ReallocHandle (Handle h, Size size)
 {
   block_header_t *oldb, *newb;
   int32 newsize;
@@ -1190,7 +1191,7 @@ int do_save_alloc = 0;
 #endif
 
 Ptr
-Executor::_NewPtr_flags (Size size, boolean_t sys_p, boolean_t clear_p)
+_NewPtr_flags (Size size, boolean_t sys_p, boolean_t clear_p)
 {
   Ptr p;
   block_header_t *b;
@@ -1250,7 +1251,7 @@ Executor::_NewPtr_flags (Size size, boolean_t sys_p, boolean_t clear_p)
 }
 
 void
-Executor::DisposPtr (Ptr p)
+DisposPtr (Ptr p)
 {
   MM_SLAM ("entry");
   
@@ -1285,7 +1286,7 @@ Executor::DisposPtr (Ptr p)
 
 
 Size
-Executor::GetPtrSize (Ptr p)
+GetPtrSize (Ptr p)
 {
   block_header_t *block;
   
@@ -1305,7 +1306,7 @@ Executor::GetPtrSize (Ptr p)
 }
 
 void
-Executor::SetPtrSize (Ptr p, Size newsize)
+SetPtrSize (Ptr p, Size newsize)
 {
   block_header_t *block;
   LONGINT oldpsize;
@@ -1402,7 +1403,7 @@ legit_zone_p (THz zone)
 }
 
 THz
-Executor::PtrZone (Ptr p)
+PtrZone (Ptr p)
 {
   block_header_t *block;
   THz zone;
@@ -1434,7 +1435,7 @@ Executor::PtrZone (Ptr p)
 }
 
 int32
-Executor::_FreeMem_flags (boolean_t sys_p)
+_FreeMem_flags (boolean_t sys_p)
 {
   uint32 freespace;
   
@@ -1450,7 +1451,7 @@ Executor::_FreeMem_flags (boolean_t sys_p)
 }
 
 Size
-Executor::_MaxMem_flags (Size *growp, boolean_t sys_p)
+_MaxMem_flags (Size *growp, boolean_t sys_p)
 {
   block_header_t *b;
   THz save_zone;
@@ -1555,7 +1556,7 @@ Executor::_MaxMem_flags (Size *growp, boolean_t sys_p)
 
 
 Size
-Executor::_CompactMem_flags (Size sizeneeded, boolean_t sys_p)
+_CompactMem_flags (Size sizeneeded, boolean_t sys_p)
 {
   int32 amtfree;
   block_header_t *src, *target, *ap;
@@ -1664,7 +1665,7 @@ Executor::_CompactMem_flags (Size sizeneeded, boolean_t sys_p)
 }
 
 void
-Executor::_ResrvMem_flags (Size needed, boolean_t sys_p)
+_ResrvMem_flags (Size needed, boolean_t sys_p)
 {
   THz save_zone;
   THz current_zone;
@@ -1725,7 +1726,7 @@ Executor::_ResrvMem_flags (Size needed, boolean_t sys_p)
 }
 
 void
-Executor::_PurgeMem_flags (Size sizeneeded, boolean_t sys_p)
+_PurgeMem_flags (Size sizeneeded, boolean_t sys_p)
 {
   long amount_free, max_free;
   block_header_t *b;
@@ -1800,19 +1801,19 @@ BlockMove_and_possibly_flush_cache (Ptr src, Ptr dst, Size cnt,
 }
 
 void
-Executor::BlockMove (Ptr src, Ptr dst, Size cnt)
+BlockMove (Ptr src, Ptr dst, Size cnt)
 {
   BlockMove_and_possibly_flush_cache (src, dst, cnt, TRUE);
 }
 
 void
-Executor::BlockMoveData (Ptr src, Ptr dst, Size cnt)
+BlockMoveData (Ptr src, Ptr dst, Size cnt)
 {
   BlockMove_and_possibly_flush_cache (src, dst, cnt, FALSE);
 }
 
 void
-Executor::BlockMove_the_trap (Ptr src, Ptr dst, Size cnt, boolean_t flush_p)
+BlockMove_the_trap (Ptr src, Ptr dst, Size cnt, boolean_t flush_p)
 {
   MM_SLAM ("entry");
   BlockMove_and_possibly_flush_cache (src, dst, cnt, flush_p);
@@ -1820,7 +1821,7 @@ Executor::BlockMove_the_trap (Ptr src, Ptr dst, Size cnt, boolean_t flush_p)
 }
 
 void
-Executor::MaxApplZone (void)
+MaxApplZone (void)
 {
   MM_SLAM ("entry");
   
@@ -1829,7 +1830,7 @@ Executor::MaxApplZone (void)
 }
 
 void
-Executor::MoveHHi (Handle h)
+MoveHHi (Handle h)
 {
   MM_SLAM ("entry");
 
@@ -1858,7 +1859,7 @@ Executor::MoveHHi (Handle h)
 }
 
 int32
-Executor::_MaxBlock_flags (boolean_t sys_p)
+_MaxBlock_flags (boolean_t sys_p)
 {
   THz save_zone;
   THz current_zone;
@@ -1899,7 +1900,7 @@ Executor::_MaxBlock_flags (boolean_t sys_p)
 }
 
 void
-Executor::_PurgeSpace_flags (Size *total_out, Size *contig_out, boolean_t sys_p)
+_PurgeSpace_flags (Size *total_out, Size *contig_out, boolean_t sys_p)
 {
   THz save_zone, current_zone;
   int32 total_free;
@@ -1949,7 +1950,7 @@ Executor::_PurgeSpace_flags (Size *total_out, Size *contig_out, boolean_t sys_p)
 }
 
 Size
-Executor::StackSpace (void)
+StackSpace (void)
 {
   int32 fp;
 
@@ -1965,7 +1966,7 @@ Executor::StackSpace (void)
 }
 
 void
-Executor::SetApplLimit (Ptr new_limit)
+SetApplLimit (Ptr new_limit)
 {
   /* NOTE TO CLIFF: 
      We can't do any sanity checks here (not even a brk()), since
@@ -1984,7 +1985,7 @@ Executor::SetApplLimit (Ptr new_limit)
 }
 
 void
-Executor::SetGrowZone (ProcPtr newgz)
+SetGrowZone (ProcPtr newgz)
 {
   MM_SLAM ("entry");
   
@@ -1993,7 +1994,7 @@ Executor::SetGrowZone (ProcPtr newgz)
 }
 
 void
-Executor::EmptyHandle (Handle h)
+EmptyHandle (Handle h)
 {
   THz save_zone, current_zone;
   block_header_t *b;
@@ -2054,7 +2055,7 @@ Executor::EmptyHandle (Handle h)
 
 /* Fluff for Cliff */
 void
-Executor::ROMlib_installhandle (Handle sh, Handle dh)
+ROMlib_installhandle (Handle sh, Handle dh)
 {
   THz save_zone;
   
@@ -2089,7 +2090,7 @@ Executor::ROMlib_installhandle (Handle sh, Handle dh)
 }
 
 OSErr
-Executor::MemError (void)
+MemError (void)
 {
   MM_SLAM ("entry");
   
@@ -2097,7 +2098,7 @@ Executor::MemError (void)
 }
 
 THz
-Executor::SystemZone (void)
+SystemZone (void)
 {
   MM_SLAM ("entry");
   
@@ -2105,7 +2106,7 @@ Executor::SystemZone (void)
 }
 
 THz
-Executor::ApplicZone (void)
+ApplicZone (void)
 {
   MM_SLAM ("entry");
   
@@ -2117,7 +2118,7 @@ Executor::ApplicZone (void)
  * NewHandleSys_copy_ptr macros to access this function.
  */
 Handle
-Executor::_NewHandle_copy_ptr_flags (Size size, const void *data_to_copy,
+_NewHandle_copy_ptr_flags (Size size, const void *data_to_copy,
 			   boolean_t sys_p)
 {
   Handle h;
@@ -2133,7 +2134,7 @@ Executor::_NewHandle_copy_ptr_flags (Size size, const void *data_to_copy,
  * NewHandleSys_copy_handle macros to access this function.
  */
 Handle
-Executor::_NewHandle_copy_handle_flags (Size size, Handle data_to_copy, boolean_t sys_p)
+_NewHandle_copy_handle_flags (Size size, Handle data_to_copy, boolean_t sys_p)
 {
   Handle h;
 
@@ -2150,7 +2151,7 @@ Executor::_NewHandle_copy_handle_flags (Size size, Handle data_to_copy, boolean_
  * NewPtrSys_copy_ptr macros to access this function.
  */
 Ptr
-Executor::_NewPtr_copy_ptr_flags (Size size, const void *data_to_copy,
+_NewPtr_copy_ptr_flags (Size size, const void *data_to_copy,
 			boolean_t sys_p)
 {
   Ptr p;
@@ -2166,7 +2167,7 @@ Executor::_NewPtr_copy_ptr_flags (Size size, const void *data_to_copy,
  * NewPtrSys_copy_handle macros to access this function.
  */
 Ptr
-Executor::_NewPtr_copy_handle_flags (Size size, Handle data_to_copy, boolean_t sys_p)
+_NewPtr_copy_handle_flags (Size size, Handle data_to_copy, boolean_t sys_p)
 {
   Ptr p;
 
@@ -2176,4 +2177,6 @@ Executor::_NewPtr_copy_handle_flags (Size size, Handle data_to_copy, boolean_t s
   if (MemErr == CWC (noErr))
     memcpy (p, STARH (data_to_copy), size);
   return p;
+}
+  
 }
