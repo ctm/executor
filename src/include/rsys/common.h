@@ -70,14 +70,13 @@ inline void sized_byteswap< 4 >(char* data)
     *ptr = __builtin_bswap32(*ptr);
 }
 
-	template <>
-	inline void sized_byteswap< 8 >(char* data)
-	{
-		uint64_t* ptr = reinterpret_cast<uint64_t*>(data);
-		*ptr = __builtin_bswap64(*ptr);
-	}
+template <>
+inline void sized_byteswap< 8 >(char* data)
+{
+    uint64_t* ptr = reinterpret_cast<uint64_t*>(data);
+    *ptr = __builtin_bswap64(*ptr);
+}
 
-	
 template < typename T >
 T BigEndianValue(T value)
 {
