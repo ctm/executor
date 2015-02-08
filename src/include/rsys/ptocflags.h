@@ -1156,3 +1156,7 @@
 #define PTOC_SaveMixedModeState	0x00000162
 #define PTOC_RestoreMixedModeState	0x00000162
 #define PTOC_pack8_unknown_selector	0x00000000
+
+#define PTOC_SpeechManagerVersion	0x00000004
+#define PTOC_SpeechBusy	0x00000004
+#define PTOC_SpeechBusySystemWide	0x00000004

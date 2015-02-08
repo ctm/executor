@@ -38,7 +38,8 @@ long CGet_ROMlib_version_long()
 	return ROMlib_version_long;
 }
 
-uint32 ROMlib_PrDrvrVers_Set(uint32 toSet){
+uint32 ROMlib_PrDrvrVers_Set(uint32 toSet)
+{
 	ROMlib_PrDrvrVers = toSet;
 	return ROMlib_PrDrvrVers;
 }
