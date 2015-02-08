@@ -285,7 +285,7 @@ void
 Executor::opt_register (string new_interface,
 	      option_vec new_opts)
 {
-  struct opt_block *block;
+  struct opt_block block;
 
   if (help_buf)
   {
@@ -319,10 +319,10 @@ Executor::opt_register (string new_interface,
       }
   }
   
-  block = &opt_blocks.back();
+  block.interface = new_interface;
+  block.opts = new_opts;
   
-  block->interface = new_interface;
-  block->opts = new_opts;
+  opt_blocks.push_back(block);
 }
 
 opt_database_t

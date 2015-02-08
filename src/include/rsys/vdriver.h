@@ -186,11 +186,11 @@ extern void vdriver_set_up_internal_screen (void);
 #endif /* VDRIVER_SUPPORTS_REAL_SCREEN_BLITS */
 
 #if !defined (vdriver_grayscale_p)
-extern boolean_t vdriver_grayscale_p;
+extern bool vdriver_grayscale_p;
 #endif
 
 #if !defined (vdriver_fixed_clut_p)
-extern boolean_t vdriver_fixed_clut_p;
+extern bool vdriver_fixed_clut_p;
 #endif
 }
 #endif /* !_VDRIVER_H_ */

@@ -4,7 +4,7 @@
 #include <vector>
 
 namespace Executor {
-typedef enum option_kind
+typedef enum option_kind : int option_kind_t; enum option_kind : int
 {
   /* this option has no argument; it evaluates to `def' if provided */
   opt_no_arg,
@@ -18,7 +18,7 @@ typedef enum option_kind
   opt_ignore,
   /* ignore this option and its argument */
   opt_sep_ignore,
-} option_kind_t;
+};
 
 typedef struct option
 {

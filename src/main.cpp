@@ -737,7 +737,13 @@ A1(PRIVATE, void, setstartdir, char *, argv0)
 	}
       }
 #if defined(MACOSX_)
-    misc_self_examination (lookhere);
+  misc_self_examination (lookhere);
+  std::string filePath = SystemDiskLocation();
+  if (filePath != "") {
+    strcpy(ROMlib_startdir, filePath.c_str());
+    ROMlib_startdirlen = filePath.length();
+    return;
+  }
 #endif
     suffix = rindex(lookhere, '/');
     if (suffix)
@@ -749,14 +755,6 @@ A1(PRIVATE, void, setstartdir, char *, argv0)
     getcwd(ROMlib_startdir, sizeof ROMlib_startdir);
     Uchdir(savedir);
     ROMlib_startdirlen = strlen(ROMlib_startdir) + 1;
-#if defined(MACOSX_)
-    if (strcmp(ROMlib_startdir + ROMlib_startdirlen - sizeof(APPWRAP),
-							       APPWRAP) != 0) {
-	memmove(ROMlib_startdir + ROMlib_startdirlen - 1, APPWRAP,
-		sizeof(APPWRAP));
-	ROMlib_startdirlen += sizeof(APPWRAP) - 1;
-    }
-#endif
 #else /* defined(MSDOS) || defined(CYGWIN32) */
 
 #if defined (MSDOS) || defined (CYGWIN32)

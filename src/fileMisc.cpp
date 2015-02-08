@@ -724,9 +724,9 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
     char *sysname;
     int sysnamelen;
     char *p, *ep, *newp;
-    static struct dangerstr {			/* DANGER DANGER DANGER */
-	  std::string name;		/* this is taken from <defaults.h> */
-	std::string value;		/* instead of us including it ... */
+    static struct dangerstr { /* DANGER DANGER DANGER */
+	  const char *name;       /* this is taken from <defaults.h> */
+      std::string value;      /* instead of us including it ... */
     } defvec[] = {	/* if <defaults.h> changes we're SOL */
 #if defined (LINUX)
 	{"ConfigurationFolder", "/var/opt/executor/share/conf"},
@@ -787,7 +787,6 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
 	{"PRINTERSINI",		"+/printers.ini"},
 	{"PRINTDEF",		"+/printdef.ini"},
 #endif /* defined(MSDOS) */
-	{0, 0},
     };
 
 #if !defined (LINUX)
@@ -796,18 +795,18 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
 #define AFPD(m,n) (afpd_conventions_p ? (n) : (m))
 #endif
 
-#define CONFIGURATIONFOLDER	defvec[0].name.c_str()
-#define SYSTEMFOLDER		defvec[1].name.c_str()
-#define PUBLICDIRECTORYMAP	defvec[2].name.c_str()
-#define PRIVATEDIRECTORYMAP	defvec[3].name.c_str()
-#define DEFAULTFOLDER		defvec[4].name.c_str()
-#define EXCELAPP		defvec[5].name.c_str()
-#define WORDAPP			defvec[6].name.c_str()
-#define MACVOLUMES		defvec[7].name.c_str()
-#define SCREENDUMPFILE		defvec[8].name.c_str()
-#define OFFSETFILE		defvec[9].name.c_str()
-#define PRINTERSINI		defvec[10].name.c_str()
-#define PRINTDEF		defvec[11].name.c_str()
+#define CONFIGURATIONFOLDER	defvec[0].name
+#define SYSTEMFOLDER		defvec[1].name
+#define PUBLICDIRECTORYMAP	defvec[2].name
+#define PRIVATEDIRECTORYMAP	defvec[3].name
+#define DEFAULTFOLDER		defvec[4].name
+#define EXCELAPP            defvec[5].name
+#define WORDAPP             defvec[6].name
+#define MACVOLUMES          defvec[7].name
+#define SCREENDUMPFILE		defvec[8].name
+#define OFFSETFILE          defvec[9].name
+#define PRINTERSINI         defvec[10].name
+#define PRINTDEF            defvec[11].name
 
 #define CONFIGURATIONFOLDER_DEF	defvec[0].value.c_str()
 #define SYSTEMFOLDER_DEF	defvec[AFPD (1, 12)].value.c_str()
@@ -815,7 +814,7 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
 #define PRIVATEDIRECTORYMAP_DEF	defvec[3].value.c_str()
 #define DEFAULTFOLDER_DEF	defvec[AFPD (4, 13)].value.c_str()
 #define EXCELAPP_DEF		defvec[AFPD (5, 14)].value.c_str()
-#define WORDAPP_DEF		defvec[AFPD (6, 15)].value.c_str()
+#define WORDAPP_DEF         defvec[AFPD (6, 15)].value.c_str()
 #define MACVOLUMES_DEF		defvec[7].value.c_str()
 #define SCREENDUMPFILE_DEF	defvec[8].value.c_str()
 #define OFFSETFILE_DEF		defvec[9].value.c_str()

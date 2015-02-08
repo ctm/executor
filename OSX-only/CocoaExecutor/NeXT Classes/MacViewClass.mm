@@ -51,17 +51,6 @@ NSImage *blankcursorimage, *cursorimage;
 NSBitmapImageRep *cursorrep, *blankcursorrep;
 NSTimer *our_timer = nil;
 
-void
-Executor::vdriver_shutdown (void)
-{
-}
-
-
-void
-Executor::vdriver_opt_register (void)
-{
-}
-
 static NSBitmapImageRep *current_screen_bitmap; /* An alias for one of the other three */
 static NSBitmapImageRep *one_bpp_screen_bitmap;
 
@@ -94,37 +83,70 @@ static uint32 fbuf_size;
 
 
 /* These variables are required by the vdriver interface. */
+extern vdriver_nextstep_mode_t vdriver_nextstep_modes;
 
-uint8 *Executor::vdriver_fbuf;
+namespace Executor {
+uint8 *vdriver_fbuf;
 
-int Executor::vdriver_row_bytes;
+int vdriver_row_bytes;
 
-int Executor::vdriver_width = VDRIVER_DEFAULT_SCREEN_WIDTH;
+int vdriver_width = VDRIVER_DEFAULT_SCREEN_WIDTH;
 
-int Executor::vdriver_height = VDRIVER_DEFAULT_SCREEN_HEIGHT;
+int vdriver_height = VDRIVER_DEFAULT_SCREEN_HEIGHT;
 
-int Executor::vdriver_bpp, Executor::vdriver_log2_bpp;
+int vdriver_bpp, vdriver_log2_bpp;
 
-int Executor::vdriver_max_bpp, Executor::vdriver_log2_max_bpp;
+int vdriver_max_bpp, vdriver_log2_max_bpp;
 
-rgb_spec_t *Executor::vdriver_rgb_spec = NULL;
-
+rgb_spec_t *vdriver_rgb_spec = NULL;
 
 static rgb_spec_t ns_rgb_spec;
 
-extern vdriver_nextstep_mode_t vdriver_nextstep_modes;
-
 /* For now, just force black and white cursors. */
-int Executor::host_cursor_depth = 1;
+int host_cursor_depth = 1;
 
 /* True iff our display is two bit grayscale. */
-static boolean_t two_bit_grayscale_display_p;
+static bool two_bit_grayscale_display_p;
 
 /* True if we should be drawing in grayscale. */
-boolean_t Executor::vdriver_grayscale_p;
+bool vdriver_grayscale_p;
 
 /* True if the CLUT cannot be changed. */
-boolean_t Executor::vdriver_fixed_clut_p;
+bool vdriver_fixed_clut_p;
+
+void
+vdriver_shutdown (void)
+{
+}
+
+   std::string SystemDiskLocation()
+   {
+	  const char* fsr = [[[NSBundle mainBundle] resourcePath] fileSystemRepresentation];
+	  if (fsr) {
+		 return fsr;
+	  } else {
+		 return "";
+	  }
+   }
+   
+void
+vdriver_opt_register (void)
+{
+   two_bit_grayscale_display_p
+   = NSBitsPerSampleFromDepth([NSWindow defaultDepthLimit]) == 2;
+   
+   vdriver_fixed_clut_p = two_bit_grayscale_display_p;
+   vdriver_grayscale_p = two_bit_grayscale_display_p;
+   
+   /* Set up our max bpp appropriately. */
+   if (two_bit_grayscale_display_p)
+	  vdriver_max_bpp = 2;
+   else
+	  vdriver_max_bpp = 8;
+   vdriver_log2_max_bpp = ROMlib_log2[vdriver_max_bpp];
+}
+
+}
 
 static void
 create_our_timer (id who)
@@ -1724,19 +1746,6 @@ void set_malloc_debug (int level)
 
   /* Since we will be repeatedly focused on, allocate a gstate. */
   [self allocateGState];
-
-  two_bit_grayscale_display_p
-    = NSBitsPerSampleFromDepth([NSWindow defaultDepthLimit]) == 2;
-
-  vdriver_fixed_clut_p = two_bit_grayscale_display_p;
-  vdriver_grayscale_p = two_bit_grayscale_display_p;
-
-  /* Set up our max bpp appropriately. */
-  if (two_bit_grayscale_display_p)
-    vdriver_max_bpp = 2;
-  else
-    vdriver_max_bpp = 8;
-  vdriver_log2_max_bpp = ROMlib_log2[vdriver_max_bpp];
 
   current_screen_bitmap = nil;
   self_view = self;
