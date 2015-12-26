@@ -1,5 +1,5 @@
 build
-**.o
+*.o
 src/apple.c
 src/active.c
 src/arrow_down_active.c
@@ -25,6 +25,5 @@ src/zoom.c
 src/config.status
 src/config.log
 src/config.h
-src/.deps/
-**/.DS_Store
+.deps/
 .DS_Store
