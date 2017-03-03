@@ -63,11 +63,11 @@
 
 #endif
 
-#define CWC(n) ((typeof (n)) (signed short) ((((n) << 8) & 0xFF00) \
-					     | (((n) >> 8) & 0x00FF)))
-#define CLC(n) ((typeof (n)) (int) (  (((int) ((n)|0) & 0x000000FF) << 24)   \
-				     | (((int) (n) & 0x0000FF00) <<  8)   \
-				     | (((int) (n) & 0x00FF0000) >>  8)   \
+#define CWC(n) ((typeof (n)) (signed short) (((((unsigned short)n) << 8) & 0xFF00) \
+					     | ((((unsigned short)n) >> 8) & 0x00FF)))
+#define CLC(n) ((typeof (n)) (int) (  (((unsigned int) ((n)|0) & 0x000000FF) << 24)   \
+				     | (((unsigned int) (n) & 0x0000FF00) <<  8)   \
+				     | (((unsigned int) (n) & 0x00FF0000) >>  8)   \
 				     | (((unsigned int) (n) & 0xFF000000) \
 					>> 24)))
 

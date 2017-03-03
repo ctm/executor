@@ -16,7 +16,6 @@
 
 namespace MacBridge {
   PUBLIC OSStatus MacCFURLToExecutorFSSpec(CFURLRef inMac, Executor::FSSpec *outExec);
-  PUBLIC OSStatus MacFSSpecToExecutorFSSpec(const ::FSSpec *inMac, Executor::FSSpec *outExec);
 }
 
 #endif /* defined(__CocoaExecutor__stdfile_OSXPrivate__) */

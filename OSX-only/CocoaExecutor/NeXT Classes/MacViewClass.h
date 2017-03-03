@@ -300,8 +300,7 @@
 #define NEXTCHAR_tHORN			252
 #define NEXTCHAR_yDIERESIS		253
 
-#import <AppKit/AppKit.h>
-#import <AppKit/NSView.h>
+#import <Cocoa/Cocoa.h>
 
 @interface MacViewClass : NSView
 

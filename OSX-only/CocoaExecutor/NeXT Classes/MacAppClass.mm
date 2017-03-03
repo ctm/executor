@@ -306,7 +306,7 @@ void ROMlib_updateworkspace( void )
     block = block_virtual_ints ();
     mydelay(1250000);
 
-    [[NSWorkspace sharedWorkspace] noteFileSystemChanged];
+    //[[NSWorkspace sharedWorkspace] noteFileSystemChanged];
 
     restore_virtual_ints (block);
 }
