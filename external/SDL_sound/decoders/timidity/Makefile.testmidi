@@ -1,0 +1,38 @@
+# Silly test makefile
+
+CC = gcc
+
+# Standard SDL_sound debugging
+CFLAGS = -g -I../.. -ansi -pedantic -Wall `sdl-config --cflags` -DDEBUG_CHATTER
+LIBS = `sdl-config --libs`
+
+# Electric Fence debugging
+# CFLAGS = -g -I../.. -ansi -pedantic -Wall `sdl-config --cflags`
+# LIBS = `sdl-config --libs` -lefence
+
+OBJECTS = common.o instrum.o mix.o output.o playmidi.o readmidi.o resample.o \
+	tables.o timidity.o testmidi.o
+
+all: testmidi
+
+testmidi: $(OBJECTS)
+	$(CC) $(OBJECTS) $(CFLAGS) -o testmidi $(LIBS)
+
+clean:
+	$(RM) testmidi *.o *~
+
+common.o: common.c options.h common.h
+instrum.o: instrum.c timidity.h options.h common.h instrum.h resample.h \
+	tables.h
+mix.o: mix.c timidity.h options.h instrum.h playmidi.h output.h tables.h \
+	resample.h mix.h
+output.o: output.c options.h output.h
+playmidi.o: playmidi.c timidity.h options.h instrum.h playmidi.h output.h \
+	mix.h tables.h
+readmidi.o: readmidi.c timidity.h common.h instrum.h playmidi.h
+resample.o: resample.c timidity.h options.h common.h instrum.h playmidi.h \
+	tables.h resample.h
+tables.o: tables.c tables.h
+testmidi.o: testmidi.c common.h timidity.h
+timidity.o: timidity.c options.h common.h instrum.h playmidi.h readmidi.h \
+	output.h timidity.h tables.h

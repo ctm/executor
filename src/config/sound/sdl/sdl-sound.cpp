@@ -282,22 +282,18 @@ SDLSound::sound_init ()
 
   if (sdl_audio_driver_name)
     {
-      char *sanity_check_name;
-      int sanity_len;
-      boolean_t success;
+      const char *sanity_check_name;
+      boolean_t success = FALSE;
 
-      /* we add 3 below due to ambiguity in the documentation for
-	 SDL_AudioDriverName.  It doesn't hurt to add 3 here. */
-
-      sanity_len = strlen (sdl_audio_driver_name) + 3;
-      sanity_check_name = (char *)alloca (sanity_len);
-      SDL_AudioDriverName (sanity_check_name, sanity_len);
-      success = strcmp (sdl_audio_driver_name, sanity_check_name) == 0;
-      if (!success) {
-	  fprintf (stderr, "Wanted '%s', got '%s'", sdl_audio_driver_name,
-		   sanity_check_name);
-	  return FALSE;
-	}
+      sanity_check_name = SDL_GetCurrentAudioDriver();
+      if (sanity_check_name)
+        success = strcmp (sdl_audio_driver_name, sanity_check_name) == 0;
+      if (!success)
+        {
+          fprintf (stderr, "Wanted '%s', got '%s'", sdl_audio_driver_name,
+            sanity_check_name ? sanity_check_name : "NULL");
+          return FALSE;
+        }
     }
 
   memset (&spec, 0, sizeof spec);

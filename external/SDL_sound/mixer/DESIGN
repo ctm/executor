@@ -1,0 +1,42 @@
+- Mixes internally in Float32. This simplifies the code immensely by only
+having one format to screw with. It also makes life easy for end-user
+callbacks. A native Float32 format should be added to SDL, too, so there
+isn't unnecessary conversion if we can avoid it (i.e. - a CoreAudio backend).
+
+- "Chunks" are just Sound_Samples...you can lock the mixer to screw with them
+(i.e. - seeking in a playing Sample, etc). The mixer adds some opaque state
+to Sound_Sample (current play position, how much is decoded, etc), some of
+which can be queried and set.
+
+- There is no "stopped" state. You are either in the playing list or you are
+not, but state doesn't reset, so removing a sample from the list is more like
+pausing it. If you put it back in the playing list without rewinding it, it
+starts where it was.
+
+- Fire and forget mixing is easy; flag a sample as "auto free" and it'll
+delete itself when it's done playing. No need to set up a callback just to
+clean up.
+
+- No channels. You can mix as many samples as you have resources to
+accomodate.
+
+- No groups. This can be layered on top of the library if needed. If you
+need atomic operations, lock the mixer.
+
+- No music channel. Samples are samples. You can mix a MIDI as a sound effect
+if you want, or a WAV file for background music. If you have the horsepower
+to decode multiple compressed files at once, go for it.
+
+- You can prebuffer/predecode as much of a sample as you like.
+
+- Every sample mixes with a per-channel gain, plus a master gain that is
+global to the mixer.
+
+- Can handle non-power of two resampling.
+
+- post mix hook, sample finished hook. Effects callback?
+
+
+
+
+
