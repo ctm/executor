@@ -9,7 +9,7 @@
  */
 
 #define CHECKPOINT_FILE "failure.txt"
-
+namespace Executor {
 typedef struct
 {
   boolean_t sound_fails;
@@ -36,5 +36,5 @@ extern void checkpoint_macdrive (checkpoint_t *cp, checkpoint_option option,
 extern void checkpoint_dosdrives (checkpoint_t *cp, checkpoint_option option,
 				  uint32 drive);
 extern void disable_checkpointing (void);
-
+}
 #endif

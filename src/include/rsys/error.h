@@ -13,7 +13,11 @@
 
 #include "rsys/noreturn.h"
 
-
+#ifdef __cplusplus
+#include <string>
+bool error_parse_option_string (std::string options);
+extern "C" {
+#endif
 /*
  * Classes of warnings:
  *
@@ -188,6 +192,9 @@ extern bool log_err_to_ram_p;
 extern void error_dump_ram_err_buf (const char *separator_message);
 #endif
 
-extern const char NULL_STRING[];
-
+//extern const char NULL_STRING[];
+#define NULL_STRING ""
+#ifdef __cplusplus
+}
+#endif
 #endif /* !_ERROR_H_ */

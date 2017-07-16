@@ -226,7 +226,7 @@ sub process_mode {
 
     $this_label_array .= "   \&\&$mask_label,\n";
     $this_label_array .= "   \&\&done,\n";
-    $this_label_array .= "   $prefix" . "_func_$func_number,\n";
+    $this_label_array .= "  (void*) $prefix" . "_func_$func_number,\n";
 
     if (defined ($label_arrays_seen{$this_label_array})) {
 	$index = $label_arrays_seen{$this_label_array};

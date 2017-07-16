@@ -1,6 +1,7 @@
 #if !defined(_RSYS_GESTALT_H_)
 #define _RSYS_GESTALT_H_
 
+namespace Executor {
 #if defined (USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 typedef uint32 OSType;
 typedef uint32 OSErr;
@@ -42,5 +43,5 @@ extern void gestalt_set_memory_size (uint32 size);
 extern void gestalt_set_cpu_type (uint32 type);
 
 #endif
-
+}
 #endif /* !_RSYS_GESTALT_H_ */

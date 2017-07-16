@@ -13,16 +13,15 @@
   this is just a hack to make it so that end-users can ask for a different
   set of WDEFs, CDEFs, etc. at run time
 */
-
+namespace Executor {
 typedef enum
 {
   appearance_sys7,
   appearance_win3,
-}
-appearance_t;
+} appearance_t;
 
 extern void ROMlib_set_appearance (void);
 extern boolean_t ROMlib_parse_appearance (const char *appearance_str);
 extern appearance_t ROMlib_get_appearance (void);
-
+}
 #endif

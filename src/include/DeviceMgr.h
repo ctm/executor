@@ -18,6 +18,7 @@
  * might expect.
  */
 
+namespace Executor {
 typedef struct {
     ProcPtr udrvrOpen;
     ProcPtr udrvrPrime;	/* read and write */
@@ -142,4 +143,5 @@ extern OSErr Status( INTEGER rn, INTEGER code, Ptr param );
 extern OSErr KillIO( INTEGER rn ); 
 extern DCtlHandle GetDCtlEntry( INTEGER rn ); 
 #endif /* __STDC__ */
+}
 #endif /* __DEVICEMGR__ */

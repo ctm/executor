@@ -14,6 +14,7 @@
    in inline functions below */
 #include "rsys/trapglue.h"
 
+namespace Executor {
 typedef struct PACKED ccrsr_res
 {
   CCrsr crsr;
@@ -170,4 +171,5 @@ extern void ROMlib_PICWRITE (Ptr addr, INTEGER count);
 extern RgnHandle ROMlib_circrgn (Rect *rp);
 extern void ROMlib_initport (GrafPtr p);
 
+}
 #endif /* __QUICK__ */

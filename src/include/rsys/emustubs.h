@@ -7,7 +7,7 @@
  *
  * $Id: emustubs.h 63 2004-12-24 18:19:43Z ctm $
  */
-
+namespace Executor {
 typedef struct PACKED
 {
   PACKED_MEMBER(Ptr, buffer);
@@ -204,5 +204,5 @@ extern syn68k_addr_t _IMVI_PPC (syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _HFSRoutines (syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _CodeFragment (syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _MixedMode (syn68k_addr_t ignoreme, void **ignoreme2);
-
+}
 #endif

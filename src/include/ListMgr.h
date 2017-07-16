@@ -10,6 +10,7 @@
 
 #include "ControlMgr.h"
 
+namespace Executor {
 typedef Point Cell;
 
 #if 1 || !defined(__alpha)
@@ -155,4 +156,5 @@ extern pascal trap void C_LCellSize( Point csize,
 extern pascal trap BOOLEAN C_LGetSelect( BOOLEAN next, 
  Cell *cellp, ListHandle list );
 #endif /* __STDC__ */
+}
 #endif /* __LIST__ */

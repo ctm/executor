@@ -10,6 +10,7 @@
 
 #include "QuickDraw.h"
 
+namespace Executor {
 #define nullEvent	0
 #define mouseDown	1
 #define mouseUp		2
@@ -74,5 +75,6 @@ typedef struct PACKED {
 #if !defined (KeyMap)
 extern unsigned char 	KeyMap[16];
 #endif
+}
 
 #endif /* __EVENT__ */

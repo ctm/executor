@@ -8,6 +8,7 @@
  * $Id: QuickDraw.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 
 enum { grafSize = 206 }; /* number of bytes InitGraf needs */
 
@@ -33,38 +34,29 @@ enum { grafSize = 206 }; /* number of bytes InitGraf needs */
 
 #define hilite		50
 
-#define blackColor	33
-#define whiteColor	30
-#define redColor	205
-#define greenColor	341
-#define blueColor	409
-#define cyanColor	273
-#define magentaColor	137
-#define yellowColor	69
+enum {
+	blackColor = 33,
+	whiteColor = 30,
+	redColor = 205,
+	greenColor = 341,
+	blueColor = 409,
+	cyanColor = 273,
+	magentaColor = 137,
+	yellowColor = 69
+};
 
 #define picLParen	0
 #define picRParen	1
 
-typedef enum { bold=1,    italic=2,    underline=4, outline=8,
-	       shadow=16, condense=32, extend=64 } StyleItem;
-
-#if 0
-/*
- * The enum doesn't suffice since some compilers will complain if you
- * try do bitwise arithmetic with the members of an enum
- *
- * Unfortunately, we can't do the #defines below because there are structures
- * that have fields named "bold".
- */
-
-#define bold		1
-#define italic		2
-#define underline	4
-#define outline		8
-#define shadow		16
-#define condense	32
-#define extend		64
-#endif /* 0 */
+typedef enum {
+	bold = 1,
+	italic = 2,
+	underline = 4,
+	outline = 8,
+	shadow = 16,
+	condense = 32,
+	extend = 64
+} StyleItem;
 
 typedef SignedByte Style;
 
@@ -98,11 +90,13 @@ MAKE_HIDDEN(CursPtr);
 typedef HIDDEN_CursPtr *CursHandle;
 
 typedef SignedByte GrafVerb;
-#define frame	0
-#define paint	1
-#define erase	2
-#define invert	3
-#define fill	4
+enum {
+  frame = 0,
+  paint = 1,
+  erase = 2,
+  invert = 3,
+  fill = 4
+};
 
 typedef struct PACKED {
   INTEGER polySize;
@@ -683,5 +677,5 @@ extern pascal trap void C_IMVI_CopyDeepMask (
     Rect *dstRect,
     INTEGER mode,
     RgnHandle maskRgn);
-
+}
 #endif /* _QUICKDRAW_H_ */

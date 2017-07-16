@@ -11,6 +11,7 @@
  * $Id: ProcessMgr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 typedef INTEGER LaunchFlags;
 
 typedef struct PACKED ProcessSerialNumber
@@ -167,5 +168,5 @@ extern pascal trap OSErr C_GetPortNameFromProcessSerialNumber
 
 extern OSErr NewLaunch( StringPtr appl, INTEGER vrefnum,
 		      LaunchParamBlockRec *lpbp );
-
+}
 #endif

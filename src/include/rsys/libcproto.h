@@ -9,7 +9,7 @@
  */
 
 
-#if	defined(NEXTSTEP) || defined(MSDOS) || defined(SUN) || defined(LINUX)
+#if	defined(MACOSX_) || defined(MSDOS) || defined(SUN) || defined(LINUX)
 
 #if	defined(GO32)
 
@@ -194,7 +194,7 @@ extern int Uutimes(const char *path, struct timeval tvp[2]);
 #define	Uclosedir closedir
 #define	Ureaddir readdir
 
-#else /* NEXTSTEP || MSDOS || SUN || LINUX */
+#else /* MACOSX_ || MSDOS || SUN || LINUX */
 
 #include	<rsys/assert.h>	/* GNU assert produces warning messages */
 #include	"libcconsts.h"

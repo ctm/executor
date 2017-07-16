@@ -10,6 +10,7 @@
 
 #include "QuickDraw.h"
 
+namespace Executor {
 typedef struct PACKED {
   INTEGER cmd;
   INTEGER param1;
@@ -365,4 +366,5 @@ extern long C_DirectorUnknown3 (void);
 extern INTEGER C_DirectorUnknown4 (ResType, INTEGER, Ptr, Ptr);
 
 #endif /* __STDC__ */
+}
 #endif /* __SOUNDMGR__ */

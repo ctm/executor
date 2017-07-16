@@ -12,6 +12,8 @@
 #include "IntlUtil.h"
 #include "AliasMgr.h"
 
+
+namespace Executor {
 #define declare_subtypes(type)						\
 typedef struct type ## Record type ## Record;				\
 typedef type ## Record *type ## Ptr;					\
@@ -273,5 +275,6 @@ extern pascal trap OSErr C_CallFormatIOProc
   (FormatIOVerb selector,
    FormatIOParamBlock *param_block,
    FormatIOProcPtr proc);
+}
 
 #endif /* _EDITIONMGR_H_ */

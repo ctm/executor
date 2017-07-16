@@ -8,6 +8,10 @@
  * $Id: options.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+#ifdef __cplusplus
+using namespace Executor;
+extern "C" {
+#endif
 typedef struct {
     LONGINT first;
     LONGINT second;
@@ -62,5 +66,7 @@ enum
 };
 
 #define INITIALPAIRVALUE	(-1000)
-
+#ifdef __cplusplus
+}
+#endif
 #endif

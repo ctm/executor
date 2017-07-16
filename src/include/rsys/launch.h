@@ -7,7 +7,7 @@
  *
  * $Id: launch.h 63 2004-12-24 18:19:43Z ctm $
  */
-
+namespace Executor {
 extern uint32 ROMlib_version_long;
 extern void ROMlib_set_ppc (boolean_t val);
 extern int ROMlib_uaf;
@@ -31,6 +31,6 @@ typedef struct PACKED {
 
 extern launch_failure_t ROMlib_launch_failure;
 extern INTEGER ROMlib_exevrefnum;
-
+}
 
 #endif

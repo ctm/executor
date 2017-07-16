@@ -23,15 +23,25 @@ extern char *copystr (const char *name);
 /* relative paths of the system folder */
 
 #define SYSMACNAME	"\006System"
+namespace Executor {
 
-typedef struct PACKED {
+typedef struct hashlink_str {
+	struct hashlink_str *next;
+	LONGINT dirid;
+	LONGINT parid;
+	char *dirname;
+} hashlink_t;
+
+#pragma pack(push, 2)
+
+typedef struct {
   LONGINT fd;
   LONGINT offset;
   LONGINT bsize;
   LONGINT maxbytes;
 } hfs_access_t;
 
-typedef struct PACKED {
+typedef struct {
     LONGINT flags;
     DrvQEl  dq;
     Ptr devicename; /* "/usr"	"/dev/rfd0"	whatever */
@@ -67,7 +77,7 @@ extern boolean_t cd_mounted_by_trickery_p;
 #define fcfisres	(1 << 1)
 #define fcwriteperm	(1 << 0)
 
-typedef struct PACKED {
+typedef struct {
   LONGINT fdfnum;	/* LONGINT fcbFlNum */
   Byte fcflags;	/* Byte fcbMdRByt */
   Byte fcbTypByt;
@@ -89,14 +99,14 @@ typedef struct PACKED {
 
 #define NFCB 348		/* should be related to NOFILE */
 
-typedef struct PACKED {
+typedef struct {
   INTEGER nbytes;
   fcbrec fc[NFCB];
 } fcbhidden;
 
 #define ROMlib_fcblocks	(((fcbhidden *)MR(FCBSPtr))->fc)
 
-typedef struct PACKED {	/* add new elements to the beginning of this struct */
+typedef struct {	/* add new elements to the beginning of this struct */
   LONGINT magicword;
   FInfo FndrInfo;
   LONGINT LgLen;
@@ -168,7 +178,7 @@ do									\
       warning_trap_failure ("%d", err);					\
     BADRETURNHOOK(err);							\
     if (a) {								\
-	register ProcPtr compp;						\
+	ProcPtr compp;						\
 									\
 	if ((compp = MR(((ParmBlkPtr) (pb))->ioParam.ioCompletion))) {	\
 	    CALLCOMPLETION(pb, compp, err);					\
@@ -206,21 +216,14 @@ extern fcbrec *PRNTOFPERR (INTEGER prn, OSErr *errp);
 
 #define INODEMAP	"inodemap"
 
-typedef struct hashlink_str {
-    struct hashlink_str *next;
-    LONGINT dirid;
-    LONGINT parid;
-    char *dirname;
-} hashlink_t;
-
-typedef struct PACKED {
+typedef struct {
     VCB vcb;
     char *unixname;
 #if !defined(__alpha)
     char *filler;
 #endif
     union {
-	struct PACKED {
+	struct {
 	    LONGINT ino;
 	    LONGINT nhashentries;
 	    hashlink_t **hashtable;
@@ -260,16 +263,14 @@ enum
   bLimitFCBs,
 };
 
-typedef struct PACKED
-{
+typedef struct {
   INTEGER vMVersion;
   ULONGINT vMAttrib;
   LONGINT vMLocalHand;
   LONGINT vMServerAdr;
   LONGINT vMVolumeGrade;
   INTEGER vMForeignPrivID;
-}
-getvolparams_info_t;
+} getvolparams_info_t;
 
 #define HARDLOCKED (1 << 7)
 #define SOFTLOCKED (1 << 15)
@@ -331,6 +332,8 @@ enum { SLASH_CHAR_OFFSET = 0 };
 extern StringPtr ROMlib_exefname;
 extern char     *ROMlib_exeuname;
 
+#pragma pack(pop)
+	
 #if !defined (__STDC__)
 extern LONGINT	ROMlib_FORKOFFSET();
 extern OSErr	ROMlib_seteof();
@@ -540,5 +543,5 @@ extern unsigned char ROMlib_fromhex (unsigned char c);
 
 extern char *ROMlib_volumename;
 extern INTEGER ROMlib_nextvrn;
-
+}
 #endif /* !defined(__rsys_file__) */

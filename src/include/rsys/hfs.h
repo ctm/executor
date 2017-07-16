@@ -15,7 +15,7 @@
 
 #if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 
-#include <rsys/cruft.h>
+#include "rsys/cruft.h"
 
 #include "OSUtil.h"
 #include "FileMgr.h"
@@ -29,7 +29,7 @@
 #include "ThinkC.h"
 #define HVCB VCB
 
-
+namespace Executor {
 
 #define DEVNAMELEN	50		/* much bigger than necessary */
 
@@ -236,7 +236,7 @@ typedef struct PACKED {
 #define DATAPFROMKEY(p) ((char *)(p) + ((((catkey *)p)->ckrKeyLen + 2) & ~1))
 
 
-typedef enum { mfs, hfs } fstype;
+typedef enum { mfs, hfs, hfsp } fstype;
 typedef enum { regular = 1, directory = 2, thread = 4 } filekind;
 
 #if defined(MAC)
@@ -602,5 +602,5 @@ extern void vcbsync(HVCB *vcbp);
 #endif /* __STDC__ */
 
 #endif
-
+}
 #endif /* !defined(__RSYS_HFS__) */

@@ -10,6 +10,7 @@
 
 #include "rsys/pstuff.h"
 
+namespace Executor {
 typedef struct PACKED
 {
 #if 0
@@ -80,20 +81,6 @@ extern void generic_elt_calc_height_ascent (generic_elt_t *elt);
 #define SCRAP_ELT_TO_GENERIC_ELT(scrap_elt)	\
   ((generic_elt_t *) (&(scrap_elt)->scrpHeight))
 
-#if !defined (__STDC__)
-extern INTEGER	ROMlib_StyleTextWidth();
-extern INTEGER	ROMlib_word();
-extern INTEGER	ROMlib_caltext();
-extern void	ROMlib_togglelite();
-extern void	ROMlib_tesave();
-extern void	ROMlib_terestore();
-extern void	ROMlib_tedoitall();
-extern INTEGER	ROMlib_stylecompare();
-extern void	ROMlib_teinsertstyleinfo();
-extern void	ROMlib_teremovestyleinfo();
-extern INTEGER	C_ROMlib_dotext();
-extern void	ROMlib_teautoloop();
-#else /* __STDC__ */
 extern INTEGER	ROMlib_StyleTextWidth( TEPtr tep, INTEGER start,
 							       INTEGER count );
 extern INTEGER	ROMlib_word( char *p );
@@ -120,7 +107,6 @@ extern int16 te_char_to_run_index (TEStyleHandle te_style, int16 sel);
 extern int16 te_char_to_lineno (TEPtr te, int16 sel);
 
 extern void	ROMlib_teautoloop( TEHandle teh );
-#endif /* __STDC__ */
 
 extern int16 ROMlib_call_TEDoText (TEPtr tp, int16 first, int16 last,
 				   int16 what);
@@ -145,5 +131,5 @@ MAKE_HIDDEN(tehiddenh);
 #define TEHIDDENHX(teh)	((*(HIDDEN_tehiddenh *)&(MR((*teh).p))->recalBack).p)
 
 extern void ROMlib_recompute_caret (TEHandle te);
-
+}
 #endif /* __TESAVE__ */

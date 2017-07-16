@@ -8,7 +8,7 @@
  * $Id: TimeMgr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-
+namespace Executor {
 typedef struct PACKED {
   PACKED_MEMBER(QElemPtr, qLink);
   INTEGER	qType;
@@ -27,4 +27,5 @@ extern void InsTime( QElemPtr taskp );
 extern void RmvTime( QElemPtr taskp ); 
 extern void PrimeTime( QElemPtr taskp, LONGINT count ); 
 #endif /* __STDC__ */
+}
 #endif /* __TIMEMGR__ */

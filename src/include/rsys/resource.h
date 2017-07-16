@@ -10,6 +10,7 @@
 #include "ResourceMgr.h"
 #include "rsys/string.h"
 
+namespace Executor {
 #define ULTIMA_III_HACK
 #if defined (ULTIMA_III_HACK)
 extern boolean_t ROMlib_ultima_iii_hack;
@@ -74,17 +75,6 @@ typedef struct PACKED {            /* empty resource template */
 } empty_resource_template_t;
 
 
-#if !defined (__STDC__)
-extern resmaphand ROMlib_rntohandl();
-extern Handle ROMlib_mgetres();
-extern OSErr ROMlib_findres(),  ROMlib_findmapres(),
-	     ROMlib_typidtop(), ROMlib_maptypidtop();
-extern void ROMlib_invalar();
-extern Handle ROMlib_getrestid();
-extern INTEGER ROMlib_setreserr();
-extern void ROMlib_wr();
-extern LONGINT ROMlib_SizeResource();
-#else /* __STDC__ */
 extern resmaphand ROMlib_rntohandl(INTEGER rn, Handle *pph );
 extern Handle ROMlib_mgetres( resmaphand map, resref *rr );
 extern OSErr ROMlib_findres( Handle r, resmaphand *mapp, typref **trp,
@@ -102,7 +92,6 @@ extern INTEGER ROMlib_setreserr(INTEGER reserr);
 extern void ROMlib_wr(resmaphand map, resref *rr);
 extern LONGINT ROMlib_SizeResource(Handle res, BOOLEAN usehandle);
 extern Handle ROMlib_mgetres2(resmaphand map, resref *rr);
-#endif /* __STDC__ */
 
 #define REF0	0	/* special refrence number signifying system file */
 
@@ -213,6 +202,6 @@ typedef struct PACKED {
     LONGINT diskoff;
     resref *rrptr;
 } res_sorttype_t;
-
+}
 #define __MYRESOURCE__
 #endif /* __MYRESOURCE__ */

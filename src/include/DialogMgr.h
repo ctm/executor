@@ -11,6 +11,7 @@
 #include "WindowMgr.h"
 #include "TextEdit.h"
 
+namespace Executor {
 #define ctrlItem	4
 #define btnCtrl		0
 #define chkCtrl		1
@@ -204,5 +205,6 @@ extern pascal trap OSErr C_SetDialogTracksCursor (DialogPtr dialog,
 extern void AppendDITL (DialogPtr, Handle, DITLMethod);
 extern void ShortenDITL (DialogPtr, int16);
 extern int16 CountDITL (DialogPtr);
+}
 
 #endif /* _DIALOG_H_ */

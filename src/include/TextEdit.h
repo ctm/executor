@@ -10,6 +10,7 @@
 
 #include "QuickDraw.h"
 
+namespace Executor {
 /* new justification defines, accepted by `TESetAlignment ()' and
    `TETextBox ()' */
 #define teFlushDefault	0
@@ -503,7 +504,8 @@ extern INTEGER 	TEScrpLength;
 #define TEDoText	(TEDoText_H.p)
 #define TEScrpHandle	(TEScrpHandle_H.p)
 
-extern pascal trap void C_TESetText( Ptr p, LONGINT ln, TEHandle teh ); extern pascal trap void P_TESetText( Ptr p, LONGINT ln, TEHandle teh); 
+
+extern pascal trap void C_TESetText( Ptr p, LONGINT ln, TEHandle teh ); extern pascal trap void P_TESetText( Ptr p, LONGINT ln, TEHandle teh);
 extern pascal trap CharsHandle C_TEGetText( TEHandle teh ); extern pascal trap CharsHandle P_TEGetText( TEHandle teh); 
 extern pascal trap void C_TESetJust( INTEGER j, TEHandle teh ); extern pascal trap void P_TESetJust( INTEGER j, TEHandle teh); 
 extern pascal trap void C_TEUpdate( Rect *r, TEHandle teh ); extern pascal trap void P_TEUpdate( Rect *r, TEHandle teh); 
@@ -581,8 +583,7 @@ extern OSErr TEToScrap( void  );
 extern Handle TEScrapHandle( void  ); 
 extern LONGINT TEGetScrapLen( void  ); 
 extern void TESetScrapLen( LONGINT ln ); 
-
 extern pascal trap int16 C_TEFeatureFlag (int16 feature, int16 action,
 					  TEHandle te);
-
+}
 #endif /* _TEXTEDIT_H_ */

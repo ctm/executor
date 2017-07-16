@@ -32,41 +32,6 @@
 #define Bool LONGINT
 #endif /* BINCOMPAT */
 
-#if !defined (__STDC__)
-
-extern int XAutoRepeatOff();
-extern int XAutoRepeatOn();
-extern int XBell();
-extern int XChangeProperty();
-extern int XChangeWindowAttributes();
-extern Bool XCheckTypedEvent();
-extern Bool XCheckWindowEvent();
-extern int XClearWindow();
-extern int XConvertSelection();
-extern int XDefineCursor();
-extern int XFree();
-extern int XFreeCursor();
-extern int XFreeGC();
-extern int XFreePixmap();
-extern int XGeometry();
-extern Status XGetGeometry();
-extern Window XGetSelectionOwner();
-extern int XGetWindowProperty();
-extern Atom XInternAtom();
-extern int XMapWindow();
-extern int XNextEvent();
-extern int XPutImage();
-extern Bool XQueryPointer();
-extern int XSelectInput();
-extern Status XSendEvent();
-extern int XSetSelectionOwner();
-extern int XSetStandardProperties();
-extern int XSetWMHints();
-extern int XSync();
-extern int XWarpPointer();
-
-#else /* __STDC__ */
-
 #if !defined (NEXT)
 
 extern LONGINT XAutoRepeatOff( Display *dp );
@@ -181,8 +146,6 @@ extern LONGINT XWarpPointer( Display *dp, Window srcw, Window dstw, LONGINT srcx
 			 ULONGINT srcheight, LONGINT destx, LONGINT desty );
 
 #endif /* NEXT */
-
-#endif /* __STDC__ */
 
 #endif /* !defined(__alpha) */
 

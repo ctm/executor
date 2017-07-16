@@ -9,6 +9,7 @@
  */
 
 
+namespace Executor {
 typedef union {
     struct {
 	SignedByte sdExtDevID;
@@ -37,5 +38,6 @@ typedef struct {
 #if !defined (CPUFlag)
 extern Byte 	CPUFlag;
 #endif
+}
 
 #endif

@@ -4,7 +4,7 @@
 #include "rsys/rgbutil.h"
 #include "CQuickDraw.h"
 
-
+namespace Executor {
 /* Public API */
 typedef void (*depthconv_func_t) (const void *table,
 				  const uint8 *src_base, int src_row_bytes,
@@ -125,6 +125,6 @@ DEPTHCONV_DECL (depthconv_32_16);
 DEPTHCONV_DECL (depthconv_32_32);
 
 #undef DEPTHCONV_DECL
-
+}
 
 #endif /* !_DEPTHCONV_H_ */

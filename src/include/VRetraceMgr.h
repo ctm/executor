@@ -8,6 +8,8 @@
  * $Id: VRetraceMgr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
+
 #define qErr	(-1)
 #define vTypErr	(-2)
 
@@ -30,5 +32,5 @@ extern trap OSErrRET VRemove( VBLTaskPtr vtaskp );
 extern QHdrPtr GetVBLQHdr( void  ); 
 extern trap OSErrRET SlotVInstall( VBLTaskPtr vtaskp, INTEGER slot );
 extern trap OSErrRET SlotVRemove( VBLTaskPtr vtaskp, INTEGER slot );
-
+}
 #endif /* __VRETRACE__ */

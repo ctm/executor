@@ -8,17 +8,19 @@
  * $Id: ini.h 87 2005-05-25 01:57:33Z ctm $
  */
 
-typedef char *heading_t;
-typedef char *ini_key_t;
-typedef char *value_t;
+#include <string>
+
+namespace Executor {
+typedef std::string heading_t;
+typedef std::string ini_key_t;
+typedef std::string value_t;
 
 typedef struct pair_link_str
 {
   struct pair_link_str *next;
   ini_key_t key;
   value_t value;
-}
-pair_link_t;
+} pair_link_t;
 
 extern char *ROMlib_PrintersIni;
 extern char *ROMlib_PrintDef;
@@ -40,5 +42,5 @@ extern boolean_t add_heading_to_file (FILE *fp, heading_t heading);
 extern boolean_t add_key_value_to_file (FILE *fp, ini_key_t key, value_t value);
 extern boolean_t close_ini_file (FILE *fp);
 extern value_t find_key (heading_t heading, ini_key_t key);
-
+}
 #endif

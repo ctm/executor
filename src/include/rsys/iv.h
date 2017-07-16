@@ -7,7 +7,7 @@
 
 #if !defined (_IMAGE_COMMON_H_)
 #define _IMAGE_COMMON_H_
-
+namespace Executor {
 #define PORT (htons (7117))
 
 typedef struct color
@@ -22,5 +22,5 @@ typedef struct image_header
   int row_bytes;
   color_t image_color_map[256];
 } image_header_t;
-
+}
 #endif /* !_IMAGE_COMMON_H_ */

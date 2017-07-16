@@ -8,6 +8,7 @@
  * $Id: DeskMgr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 #define undoCmd		0
 #define cutCmd		2
 #define copyCmd		3
@@ -25,16 +26,7 @@ extern Byte SEvtEnb;
 
 
 /* DO NOT DELETE THIS LINE */
-#if !defined (__STDC__)
-extern INTEGER OpenDeskAcc(); 
-extern void CloseDeskAcc(); 
-extern void SystemClick(); 
-extern BOOLEAN SystemEdit(); 
-extern void SystemTask(); 
-extern BOOLEAN SystemEvent(); 
-extern void SystemMenu(); 
-#else /* __STDC__ */
-extern pascal trap INTEGER C_OpenDeskAcc( 
+extern pascal trap INTEGER C_OpenDeskAcc(
  Str255 acc ); extern pascal trap INTEGER P_OpenDeskAcc( 
  Str255 acc ); 
 extern pascal trap void C_CloseDeskAcc( INTEGER rn ); extern pascal trap void P_CloseDeskAcc( INTEGER rn); 
@@ -42,6 +34,6 @@ extern pascal trap void C_SystemClick( EventRecord *evp, WindowPtr wp ); extern 
 extern pascal trap BOOLEAN C_SystemEdit( INTEGER editcmd ); extern pascal trap BOOLEAN P_SystemEdit( INTEGER editcmd); 
 extern pascal trap void C_SystemTask( void  ); extern pascal trap void P_SystemTask( void ); 
 extern pascal trap BOOLEAN C_SystemEvent( EventRecord *evp ); extern pascal trap BOOLEAN P_SystemEvent( EventRecord *evp); 
-extern pascal trap void C_SystemMenu( LONGINT menu ); extern pascal trap void P_SystemMenu( LONGINT menu); 
-#endif /* __STDC__ */
+extern pascal trap void C_SystemMenu( LONGINT menu ); extern pascal trap void P_SystemMenu( LONGINT menu);
+}
 #endif /* __DESKMGR__ */

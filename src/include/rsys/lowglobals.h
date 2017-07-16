@@ -8,6 +8,9 @@
  * $Id: lowglobals.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+#ifdef __cplusplus
+namespace Executor {
+#endif
 extern BOOLEAN force_big_offset;
 
 #define nilhandle_H (*(HIDDEN_Ptr *)(0x00 + ROMlib_offset))
@@ -255,5 +258,9 @@ extern BOOLEAN force_big_offset;
 #define HiliteRGB (*(RGBColor *)(0xDA0 + ROMlib_offset))
 #define TimeSCSIDB (*(INTEGER *)(0xDA6 + ROMlib_offset))
 #define lastlowglobal (*(LONGINT *)(0x2000 + ROMlib_offset))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

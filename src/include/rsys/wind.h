@@ -1,6 +1,6 @@
 
 #if !defined(__WIND_H_)
-#define _WIND_H_
+#define __WIND_H_
 
 /*
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
@@ -18,6 +18,7 @@
 #include "rsys/smash.h"
 #include "rsys/pstuff.h"
 
+namespace Executor {
 typedef struct PACKED {
     Rect _wrect;
     INTEGER _wprocid;
@@ -116,5 +117,6 @@ extern RGBColor *validate_colors_for_window (GrafPtr w);
 #define WINDOW_NEXT_WINDOW(wp)		(MR (WINDOW_NEXT_WINDOW_X (wp)))
 #define WINDOW_PIC(wp)			(MR (WINDOW_PIC_X (wp)))
 #define WINDOW_REF_CON(wp)		(Cx (WINDOW_REF_CON_X (wp)))
+}
 
 #endif /* !_WIND_H_ */

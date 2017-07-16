@@ -12,6 +12,10 @@
  * misc. quantities needed by both Executor and the customization tool.
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum { CUSTOM_BLOCK_SIZE = 393216, }; /* enough room for splash screen
 					 and license */
 
@@ -99,5 +103,8 @@ extern custom_chars_t *ROMlib_default_appp;
 extern custom_val_t *ROMlib_days_of_demop;
 
 extern void ROMlib_do_custom (void);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

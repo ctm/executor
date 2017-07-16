@@ -13,6 +13,7 @@
  * $Id: OSEvent.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 #define evtNotEnb	1
 
 typedef struct PACKED {
@@ -134,5 +135,6 @@ extern boolean_t hle_get_event (EventRecord *evt, boolean_t remflag);
 extern void hle_init (void);
 extern void hle_reinit (void);
 extern void hle_reset (void);
+}
 
 #endif /* !_OSEVENT_H_ */

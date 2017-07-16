@@ -1,3 +1,4 @@
+namespace Executor {
 /* FALSE if we are blitting straight to screen memory, TRUE if we are
    blitting to a shadow screen */
 extern INTEGER ROMlib_shadow_screen_p;
@@ -49,3 +50,4 @@ extern int ROMlib_newlinetocr;
    the required system version.  set by `InitResources ()', and used
    by `InitWindows ()' */
 extern boolean_t system_file_version_skew_p;
+}

@@ -6,21 +6,22 @@
 /* to get extern for `ROMlib_PretendSound' */
 #include "rsys/prefs.h"
 
+namespace Executor {
 typedef enum {
     soundoff,
     soundpretend,
     soundon
 } sound_t;
 
-#if defined (NEXTSTEP)
+#if defined (MACOSX_)
 extern void ROMlib_outbuffer( char *buf, LONGINT nsamp, LONGINT rate, void *chanp );
 extern void ROMlib_callcompletion( void *chanp );
-#else /* !NEXTSTEP */
+#else /* !MACOSX_ */
 #define ROMlib_outbuffer(buf, nsamp, rate, chanp) \
 	ROMlib_soundcomplete (chanp)
 #define ROMlib_callcompletion(chanp) \
 	ROMlib_soundcomplete (chanp)
-#endif /* !NEXTSTEP */
+#endif /* !MACOSX_ */
 
 extern void ROMlib_soundcomplete( void *chanp );
 
@@ -66,7 +67,6 @@ typedef struct PACKED _ModifierStub {
   int current_db;
 } ModifierStub, *ModifierStubPtr;
 
-extern BOOLEAN C_snth5( SndChannelPtr, SndCommand *, ModifierStubPtr );
 
 #define SND_CHAN_FIRSTMOD(c) MR ((ModifierStubPtr)c->firstMod)
 #define SND_CHAN_CURRENT_START(c) (SND_CHAN_FIRSTMOD (c)->current_start)
@@ -78,12 +78,8 @@ extern BOOLEAN C_snth5( SndChannelPtr, SndCommand *, ModifierStubPtr );
 #define SND_CHAN_CMDINPROG_P(c) (SND_CHAN_FLAGS_X (c) & CWC (CHAN_CMDINPROG_FLAG))
 #define SND_CHAN_DBINPROG_P(c) (SND_CHAN_FLAGS_X (c) & CWC (CHAN_DBINPROG_FLAG))
 
-#if !defined (SDL)
-#define SND_RATE 22255
-#else
 extern int ROMlib_SND_RATE;
 #define SND_RATE ROMlib_SND_RATE
-#endif
 
 struct hunger_info
 {
@@ -93,11 +89,17 @@ struct hunger_info
   unsigned char *buf;	/* NULL means there is no buffer; just "pretend" */
   int bufsize;		/* to fill it in; (!buf && bufsize) is possible! */
 };
+  
+typedef struct hunger_info HungerInfo;
 
 extern syn68k_addr_t sound_callback (syn68k_addr_t, void *);
 
-extern boolean_t sound_disabled_p;
+extern bool sound_disabled_p;
 
 extern int ROMlib_get_snd_cmds (Handle sndh, SndCommand **cmdsp);
+	
+BOOLEAN C_snth5( SndChannelPtr, SndCommand *, ModifierStubPtr );
+}
+
 
 #endif /* !defined(__RSYS_SOUNDOPTS__) */

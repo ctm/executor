@@ -8,6 +8,7 @@
  * X have their own idea of what the type "Cursor" should be.
  */
 
+namespace Executor {
 typedef struct {
     enum { commonkeypress,      commonkeyrelease, commonbuttonpress,
 	   commonbuttonrelease, commonexpose,     commonenternotify,
@@ -28,5 +29,5 @@ typedef struct {
 #define commonbutton1	1
 #define commonbutton2	2
 #define commonbutton3	3
-
+}
 #endif /* !_COMMONEVT_H_ */

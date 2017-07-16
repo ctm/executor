@@ -13,6 +13,7 @@
 #define noScrapErr	(-100)
 #define noTypeErr	(-102)
 
+namespace Executor {
 typedef struct PACKED {
   LONGINT scrapSize;
   PACKED_MEMBER(Handle, scrapHandle);
@@ -34,16 +35,7 @@ extern INTEGER 	ScrapState;
 #define ScrapHandle	(ScrapHandle_H.p)
 #define ScrapName	(ScrapName_H.p)
 
-#if !defined (__STDC__)
-extern PScrapStuff InfoScrap(); 
-extern LONGINT UnloadScrap(); 
-extern LONGINT LoadScrap(); 
-extern LONGINT ROMlib_ZeroScrap(); 
-extern LONGINT ZeroScrap(); 
-extern LONGINT PutScrap(); 
-extern LONGINT GetScrap(); 
-#else /* __STDC__ */
-extern pascal trap PScrapStuff C_InfoScrap( void  ); extern pascal trap PScrapStuff P_InfoScrap( void ); 
+extern pascal trap PScrapStuff C_InfoScrap( void  ); extern pascal trap PScrapStuff P_InfoScrap( void );
 extern pascal trap LONGINT C_UnloadScrap( void  ); extern pascal trap LONGINT P_UnloadScrap( void ); 
 extern pascal trap LONGINT C_LoadScrap( void  ); extern pascal trap LONGINT P_LoadScrap( void ); 
 extern LONGINT ROMlib_ZeroScrap( void  ); 
@@ -51,6 +43,6 @@ extern pascal trap LONGINT C_ZeroScrap( void  ); extern pascal trap LONGINT P_Ze
 extern pascal trap LONGINT C_PutScrap( LONGINT len, ResType rest, Ptr p ); extern pascal trap LONGINT P_PutScrap( LONGINT len, ResType rest, Ptr p); 
 extern pascal trap LONGINT C_GetScrap( Handle h, ResType rest, 
  LONGINT *off ); extern pascal trap LONGINT P_GetScrap( Handle h, ResType rest, 
- LONGINT *off ); 
-#endif /* __STDC__ */
+ LONGINT *off );
+}
 #endif /* __SCRAP__ */

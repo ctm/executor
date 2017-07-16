@@ -1,6 +1,6 @@
 #if !defined(__RSYS_NEW_MMANSTUBS__)
 #define __RSYS_NEW_MMANSTUBS__
-
+namespace Executor {
 extern OSErrRET HSetStateError( Handle h, SignedByte flags );
 #define HSetState(h, flags) \
 			(MemErr = CW(HSetStateError(h, flags)), (void) 0)
@@ -174,5 +174,5 @@ extern Handle NewHandleFlagErrorP( ULONGINT size, short trapno, OSErrRET *errp )
 
 extern Ptr NewPtrFlagErrorP( ULONGINT size, short trapno, OSErrRET *errp );
 #define NewPtr(size)		(NewPtrFlagErrorP(size, 0, 0))
-
+}
 #endif /* !defined(__RSYS_NEW_MMANSTUBS__) */

@@ -8,6 +8,7 @@
  * $Id: SysErr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 typedef enum { EXIST_YES = 0, EXIST_NO = 0xFF } exist_enum_t;
 
 #if !defined (DSAlertTab_H)
@@ -22,5 +23,6 @@ extern Byte 	QDExist;
 extern char syserr_msg[];
 
 extern pascal void C_SysError (short errorcode);
+}
 
 #endif /* !_SYSERR_H_ */

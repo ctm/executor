@@ -9,7 +9,7 @@
  *
  * $Id: filedouble.h 63 2004-12-24 18:19:43Z ctm $
  */
-
+namespace Executor {
 typedef enum {
     Data_Fork_ID = 1,
     Resource_Fork_ID,
@@ -81,5 +81,5 @@ extern const char *apple_double_fork_prefix;
 extern int apple_double_fork_prefix_length;
 
 extern void double_dir_op (char *name, double_dir_op_t op);
-
+}
 #endif

@@ -8,6 +8,7 @@
  * $Id: scrap.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 extern void sendsuspendevent (void);
 extern void sendresumeevent (boolean_t cvtclip);
 
@@ -20,5 +21,6 @@ extern int get_scrap_helper_dib (void *vh, void *lp);
 extern void put_scrap_helper_dib (void *lp);
 #endif
 #endif
+}
 
 #endif

@@ -1,7 +1,10 @@
 #if !defined (_RSYS_OPTION_H_)
 #define _RSYS_OPTION_H_
 
-typedef enum option_kind
+#include <vector>
+
+namespace Executor {
+typedef enum option_kind : int option_kind_t; enum option_kind : int
 {
   /* this option has no argument; it evaluates to `def' if provided */
   opt_no_arg,
@@ -15,15 +18,15 @@ typedef enum option_kind
   opt_ignore,
   /* ignore this option and its argument */
   opt_sep_ignore,
-} option_kind_t;
+};
 
 typedef struct option
 {
   /* text of the option.  does not include the `-' prefix */
-  char *text;
+  std::string text;
 
   /* description of the option */
-  char *desc;
+  std::string desc;
 
   /* kind of argument */
   option_kind_t kind;
@@ -39,9 +42,11 @@ typedef struct option
 #endif
 
   /* value of option if it is specified with no argument */
-  char *opt_val;
+  std::string opt_val;
 } option_t;
 
+typedef std::vector<option_t> option_vec;
+	
 typedef enum priority
 {
   pri_appl_config_file,
@@ -54,61 +59,50 @@ typedef enum priority
 
 typedef struct opt_val
 {
-  char *text;
+  std::string text;
 
   /* temporary value (ie., those specified in by an application
      specific configuration file */
-  char *t_val;
+  std::string  t_val;
   priority_t t_pri;
   
-  char *val;
+  std::string val;
   priority_t pri;
 } opt_val_t;
 
-typedef struct opt_database
-{
-  opt_val_t *opt_vals;
-  int n_opt_vals;
-  int max_opt_vals;
-} opt_database_t;
-
+typedef std::vector<opt_val_t> opt_database_t;
 /* common options */
-extern option_t opt_common[];
-extern opt_database_t *common_db;
+extern const option_vec common_opts;
+extern opt_database_t common_db;
 
 void opt_init (void);
 void opt_shutdown (void);
 
-void opt_register (char *new_interface, option_t *opts, int n_opts);
+void opt_register (std::string new_interface, option_vec opts);
 
 /* provide a function to parse specified arguments */
-opt_database_t *opt_alloc_db (void);
-int opt_parse (opt_database_t *db, option_t *opts, int n_opts,
+opt_database_t opt_alloc_db (void);
+int opt_parse (opt_database_t &db, option_vec opts,
 	       int *argc, char *argv[]);
 
 /* returns TRUE if options was specified */
-int opt_int_val (opt_database_t *db, char *opt, int *retval,
+int opt_int_val (opt_database_t &db, std::string opt, int *retval,
 		 boolean_t *parse_error_p);
 
-#if !defined (OPENSTEP)
-int opt_val (opt_database_t *db, char *opt, char **retval);
-void opt_put_val (opt_database_t *db, char *opt, char *value,
+int opt_val (opt_database_t &db, std::string opt, std::string *retval);
+void opt_put_val (opt_database_t &db, std::string &opt, std::string value,
 		  priority_t pri, int temp_val_p);
-#else
-int opt_val (opt_database_t *db, char *opt, const char **retval);
-void opt_put_val (opt_database_t *db, char *opt, const char *value,
-		  priority_t pri, int temp_val_p);
-#endif
 
-void opt_put_int_val (opt_database_t *db, char *opt, int value,
+void opt_put_int_val (opt_database_t &db, std::string &opt, int value,
 		      priority_t pri, int temp_val_p);
 
 
 char *opt_help_message (void);
 void opt_register_pre_note (char *note);
+void opt_register_pre_note (std::string note);
 
 extern uint32 parse_drive_opt (const char *opt_name, const char *opt_value);
 extern FILE * executor_dir_fopen (const char *file, const char *perm);
 extern int executor_dir_remove (const char *file);
-
+}
 #endif /* !_RSYS_OPTION_H_ */

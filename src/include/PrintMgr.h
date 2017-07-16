@@ -10,6 +10,7 @@
  * $Id: PrintMgr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 #define bDraftLoop	0
 #define bSpoolLoop	1
 
@@ -271,4 +272,5 @@ extern pascal trap BOOLEAN C_PrStlDialog( THPrint hPrint );
 extern pascal trap BOOLEAN C_PrJobDialog( THPrint hPrint );
 extern pascal trap void C_PrJobMerge( THPrint hPrintSrc, THPrint hPrintDst );
 #endif /* __STDC__ */
+}
 #endif /* __PRINTING__ */

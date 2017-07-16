@@ -2,7 +2,7 @@
 #define _mixed_mode_h_
 
 #include <stdarg.h>
-
+namespace Executor {
 typedef uint8 ISAType; 
 typedef uint16 CallingConventionType;
 typedef uint32 ProcInfoType;
@@ -129,5 +129,5 @@ extern UniversalProcPtr C_NewFatRoutineDescriptor (ProcPtr m68k, ProcPtr ppc,
 extern OSErr C_SaveMixedModeState (void *statep, uint32 vers);
 
 extern OSErr C_RestoreMixedModeState (void *statep, uint32 vers);
-
+}
 #endif

@@ -7,7 +7,7 @@
  *
  * $Id: hfs_plus.h 63 2004-12-24 18:19:43Z ctm $
  */
-
+namespace Executor {
 #if 1
 typedef unsigned char UInt8;
 typedef unsigned short UInt16;
@@ -210,5 +210,5 @@ typedef struct PACKED HFSPlusAttrExtents
 HFSPlusAttrExtents;
 
 extern boolean_t ROMlib_hfs_plus_support;
-
+}
 #endif

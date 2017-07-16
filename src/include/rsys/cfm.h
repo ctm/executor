@@ -10,6 +10,7 @@
  * $Id: cfm.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 enum
 {
   kUnresolvedCFragSymbolAddress = 0
@@ -264,5 +265,6 @@ extern OSErr C_GetIndSymbol (ConnectionID id, LONGINT index,
 
 extern ConnectionID ROMlib_new_connection (uint32 n_sects);
 extern void ROMlib_release_tracking_values (void);
+}
 
 #endif

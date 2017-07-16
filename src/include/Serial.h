@@ -8,6 +8,7 @@
  * $Id: Serial.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 #if defined (USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 #define __Byte uint8
 #define __SignedByte int8
@@ -126,5 +127,6 @@ extern __OSErr SerStatus( INTEGER rn, SerStaRec *serstap );
 #undef __OSErr
 #undef __Ptr
 #endif
+}
 
 #endif /* __SERIAL__ */

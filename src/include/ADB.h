@@ -8,6 +8,7 @@
  * $Id: ADB.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 typedef struct PACKED
 {
   SignedByte devType;
@@ -28,5 +29,6 @@ extern INTEGER CountADBs (void);
 extern OSErr GetIndADB (ADBDataBlock *adbp, INTEGER index);
 extern OSErr GetADBInfo (ADBDataBlock *adbp, INTEGER address);
 extern OSErr SetADBInfo (ADBSetInfoBlock *adbp, INTEGER address);
+}
 
 #endif /* !_ADB_H_ */

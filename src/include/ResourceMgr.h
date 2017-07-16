@@ -9,7 +9,7 @@
  * $Id: ResourceMgr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-
+namespace Executor {
 /* resource attribute masks */
 #define resSysHeap	64
 #define resPurgeable	32
@@ -56,9 +56,9 @@ extern Byte 	SysResName[20];
 #define SysMapHndl	(SysMapHndl_H.p)
 #define ResErrProc	(ResErrProc_H.p)
 
-extern BOOLEAN ROMlib_InstallxDEF( ProcPtr thedef, ResType typ, 
- INTEGER id ); 
-extern pascal trap void C_SetResLoad( BOOLEAN load ); extern pascal trap void P_SetResLoad( BOOLEAN load); 
+extern BOOLEAN ROMlib_InstallxDEF( ProcPtr thedef, ResType typ,
+ INTEGER id );
+extern pascal trap void C_SetResLoad( BOOLEAN load ); extern pascal trap void P_SetResLoad( BOOLEAN load);
 extern pascal trap INTEGER C_CountResources( ResType typ ); extern pascal trap INTEGER P_CountResources( ResType typ); 
 extern pascal trap INTEGER C_Count1Resources( 
  ResType typ ); extern pascal trap INTEGER P_Count1Resources( 
@@ -80,7 +80,7 @@ extern pascal trap void C_ReleaseResource( Handle res ); extern pascal trap void
 extern pascal trap void C_DetachResource( Handle res ); extern pascal trap void P_DetachResource( Handle res); 
 extern pascal trap INTEGER C_UniqueID( ResType typ ); extern pascal trap INTEGER P_UniqueID( ResType typ); 
 extern pascal trap INTEGER C_Unique1ID( ResType typ ); extern pascal trap INTEGER P_Unique1ID( ResType typ); 
-extern pascal trap void C_GetResInfo( Handle res, INTEGER *id, 
+extern pascal trap void C_GetResInfo( Handle res, INTEGER *id1,
  ResType *typ, StringPtr name ); extern pascal trap void P_GetResInfo( Handle res, INTEGER *id, 
  ResType *typ, StringPtr name ); 
 extern pascal trap INTEGER C_GetResAttrs( Handle res ); extern pascal trap INTEGER P_GetResAttrs( Handle res); 
@@ -131,5 +131,6 @@ extern pascal trap void C_WritePartialResource (Handle resource,
 extern pascal trap void C_SetResourceSize (Handle resource, int32 size);
 
 extern pascal Handle C_GetNextFOND (Handle fondHandle);
+}
 
 #endif /* _RESOURCE_H_ */

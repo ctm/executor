@@ -12,6 +12,7 @@
 #include "MenuMgr.h"
 #include "WindowMgr.h"
 
+namespace Executor {
 typedef struct PACKED HMStringResType
 {
   INTEGER hmmResID;
@@ -107,5 +108,6 @@ extern OSErr HMGetIndHelpMsg (ResType type, INTEGER resid,
 			      INTEGER *variantp,
 			      HMMessageRecord *helpmsgp,
 			      INTEGER *count);
+}
 
 #endif /* !_HELPMGR_H_ */

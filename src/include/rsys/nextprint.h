@@ -10,7 +10,7 @@
 
 /* cottons: added `__' to idle because it conflits with posix
    function of the same name */
-
+namespace Executor {
 typedef enum { __idle,
 	       seenOpenDoc,
 	       seenOpenPage,
@@ -146,5 +146,5 @@ extern void ROMlib_updatemacpagerect(comRect *rp1, comRect *rp2, comRect *rp3);
 
 extern char **ROMlib_availableFonts(void);
 extern void ROMlib_newFont(char *font, float txSize);
-
+}
 #endif

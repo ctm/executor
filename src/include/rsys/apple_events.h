@@ -1,6 +1,6 @@
 #if !defined (__rsys_apple_events_h__)
 #  define __rsys_apple_events_h__
-
+namespace Executor {
 /* #### internal */
 
 typedef struct PACKED
@@ -108,5 +108,5 @@ typedef struct subdesc_info
   boolean_t key_p;
   int inline_desc_header_size;
 } subdesc_info_t;
-
+}
 #endif /* !defined (__rsys_apple_events_h__) */

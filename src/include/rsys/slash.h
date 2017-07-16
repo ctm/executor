@@ -1,6 +1,10 @@
 #if !defined (_SLASH_H_)
 #define _SLASH_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #if defined (MSDOS) || defined (CYGWIN32)
 
 extern int Uaccess(const char *path, int mode);
@@ -48,5 +52,9 @@ extern int Uopen(const char *path, int flags, int mode);
 extern int Uclose (int fd);
 
 #endif /* !MSDOS && !defined (CYGWIN32) */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* !_SLASH_H_ */

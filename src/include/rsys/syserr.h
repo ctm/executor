@@ -1,6 +1,7 @@
 #if !defined (__rsys_syserr_h__)
 #  define __rsys_syserr_h__
 
+namespace Executor {
 typedef struct PACKED {
   INTEGER count;
 
@@ -21,7 +22,7 @@ typedef struct PACKED {
   INTEGER len3;
 
   Rect rect3;
-  char icon3[32][4];
+  unsigned char icon3[32][4];
 
   INTEGER id4;
   INTEGER len4;
@@ -101,5 +102,6 @@ struct PACKED sdef {
   INTEGER alen;
   char text[1];
 };
+}
 
 #endif /* !defined (__rsys_syserr_h__) */

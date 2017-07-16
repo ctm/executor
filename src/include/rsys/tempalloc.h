@@ -102,7 +102,7 @@ do {							\
  * so there's no need for this complexity.
  */
 #define TEMP_ALLOC_DECL(name)
-#define TEMP_ALLOC_ALLOCATE(ptr_var, name, size) (ptr_var = alloca (size))
+#define TEMP_ALLOC_ALLOCATE(ptr_var, name, size) (ptr_var = (typeof(ptr_var))alloca (size))
 #define TEMP_ALLOC_FREE(name)
 
 #endif /* !MSDOS */

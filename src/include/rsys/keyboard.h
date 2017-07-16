@@ -1,6 +1,6 @@
 #if !defined(_RSYS_KEYBOARD_H_)
 #define _RSYS_KEYBOARD_H_
-
+namespace Executor {
 /*
  * Copyright 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
@@ -205,6 +205,6 @@ typedef HIDDEN_kchr_ptr_t *kchr_hand;
 #define MKV_RESET 0x7f
 
 extern unsigned char ibm_virt_to_mac_virt[];
-
+}
 #endif /* !defined(_RSYS_KEYBOARD_H_) */
 

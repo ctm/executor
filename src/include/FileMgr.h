@@ -10,6 +10,88 @@
  * $Id: FileMgr.h 86 2005-05-25 00:47:12Z ctm $
  */
 
+//So as to not conflict with OS X defines
+#undef PBGetVInfo
+#undef PBXGetVolInfo
+#undef PBGetVol
+#undef PBSetVol
+#undef PBFlushVol
+#undef PBCreate
+#undef PBDelete
+#undef PBOpenDF
+#undef PBOpenRF
+#undef PBRename
+#undef PBGetFInfo
+#undef PBSetFInf
+#undef PBSetFLock
+#undef PBRstFLock
+#undef PBSetFVers
+#undef PBAllocate
+#undef PBGetEOF
+#undef PBSetEOF
+#undef PBGetFPos
+#undef PBSetFPos
+#undef PBFlushFile
+#undef PBCatSearch
+#undef PBOpenWD
+#undef PBCloseWD
+#undef PBHSetVol
+#undef PBHGetVol
+#undef PBCatMove
+#undef PBDirCreate
+#undef PBGetWDInfo
+#undef PBGetFCBInfo
+#undef PBGetCatInfo
+#undef PBSetCatInfo
+#undef PBAllocContig
+#undef PBLockRange
+#undef PBUnlockRange
+#undef PBSetVInfo
+#undef PBHGetVInfo
+#undef PBHOpen
+#undef PBHOpenRF
+#undef PBHOpenDF
+#undef PBHCreate
+#undef PBHDelete
+#undef PBHRename
+#undef PBHRstFLock
+#undef PBHSetFLock
+#undef PBHGetFInfo
+#undef PBHSetFInfo
+#undef PBMakeFSSpec
+#undef PBHGetVolParms
+#undef PBHGetLogInInfo
+#undef PBHGetDirAccess
+#undef PBHSetDirAccess
+#undef PBHMapID
+#undef PBHMapName
+#undef PBHCopyFile
+#undef PBHMoveRename
+#undef PBHOpenDeny
+#undef PBHOpenRFDeny
+#undef PBExchangeFiles
+#undef PBCreateFileIDRef
+#undef PBResolveFileIDRef
+#undef PBDeleteFileIDRef
+#undef PBGetForeignPrivs
+#undef PBSetForeignPrivs
+#undef PBDTAddIcon
+#undef PBDTGetIcon
+#undef PBDTGetIconInfo
+#undef PBDTAddAPPL
+#undef PBDTRemoveAPPL
+#undef PBDTGetAPPL
+#undef PBDTSetComment
+#undef PBDTRemoveComment
+#undef PBDTGetComment
+#undef PBDTFlush
+#undef PBDTReset
+#undef PBDTGetInfo
+#undef PBDTDelete
+#undef PBSetFInfo
+#undef PBGetFInfo
+
+namespace Executor {
 #define fOnDesk		1
 #define fHasBundle	8192
 #define fInvisible	16384
@@ -70,7 +152,9 @@ enum
   diffVolErr = -1303,
 };
 
-typedef struct PACKED {
+#pragma pack(push, 2)
+
+typedef struct {
   OSType fdType;
   OSType fdCreator;
   uint16_t fdFlags;
@@ -78,21 +162,21 @@ typedef struct PACKED {
   uint16_t fdFldr;
 } FInfo;
 
-typedef struct PACKED {
+typedef struct {
   uint16_t fdIconID;
   uint16_t fdUnused[4];
   uint16_t fdComment;
   LONGINT fdPutAway;
 } FXInfo;
 
-typedef struct PACKED {
+typedef struct {
   Rect frRect;
   uint16_t frFlags;
   Point frLocation;
   uint16_t frView;
 } DInfo;
 
-typedef struct PACKED {
+typedef struct {
   Point frScroll;
   LONGINT frOpenChain;
   uint16_t frUnused;
@@ -117,7 +201,7 @@ typedef enum {
   PACKED_MEMBER(StringPtr, ioNamePtr);  \
   INTEGER ioVRefNum
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   INTEGER ioRefNum;
   SignedByte ioVersNum;
@@ -130,7 +214,7 @@ typedef struct PACKED {
   LONGINT ioPosOffset;
 } ioParam;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   INTEGER ioFRefNum;
   SignedByte ioFVersNum;
@@ -150,7 +234,7 @@ typedef struct PACKED {
   LONGINT ioFlMdDat;
 } fileParam;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   LONGINT filler2;
   INTEGER ioVolIndex;
@@ -168,7 +252,7 @@ typedef struct PACKED {
   uint16_t ioVFrBlk;
 } volumeParam;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   INTEGER ioCRefNum;
   INTEGER csCode;
@@ -183,7 +267,7 @@ typedef union {
 } ParamBlockRec;
 typedef ParamBlockRec *ParmBlkPtr;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   INTEGER ioRefNum;
   SignedByte ioVersNum;
@@ -196,7 +280,7 @@ typedef struct PACKED {
   LONGINT ioPosOffset;
 } HIoParam;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   INTEGER ioFRefNum;
   SignedByte ioFVersNum;
@@ -216,7 +300,7 @@ typedef struct PACKED {
   LONGINT ioFlMdDat;
 } HFileParam;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   LONGINT pfiller2;
   INTEGER ioVolIndex;
@@ -262,7 +346,7 @@ typedef enum { hfileInfo, dirInfo } CInfoType;
     SignedByte ioFlAttrib;	\
     SignedByte ioACUser
 
-typedef struct PACKED {
+typedef struct {
   COMMONCINFODEFS;
   FInfo ioFlFndrInfo;
   LONGINT ioDirID;
@@ -280,7 +364,7 @@ typedef struct PACKED {
   LONGINT ioFlClpSiz;
 } HFileInfo;
 
-typedef struct PACKED {
+typedef struct {
   COMMONCINFODEFS;
   DInfo ioDrUsrWds;
   LONGINT ioDrDirID;
@@ -299,7 +383,7 @@ typedef union {
 } CInfoPBRec;
 typedef CInfoPBRec *CInfoPBPtr;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   LONGINT filler1;
   PACKED_MEMBER(StringPtr, ioNewName);
@@ -310,7 +394,7 @@ typedef struct PACKED {
 } CMovePBRec;
 typedef CMovePBRec *CMovePBPtr;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   uint16_t filler1;
   INTEGER ioWDIndex;
@@ -321,7 +405,7 @@ typedef struct PACKED {
 } WDPBRec;
 typedef WDPBRec *WDPBPtr;
 
-typedef struct PACKED {
+typedef struct {
   COMMONFSQUEUEDEFS;
   INTEGER ioRefNum;
   uint16_t filler;
@@ -339,7 +423,7 @@ typedef struct PACKED {
 } FCBPBRec;
 typedef FCBPBRec *FCBPBPtr;
 
-typedef struct PACKED {
+typedef struct {
   PACKED_MEMBER(QElemPtr, qLink); /* 0 */
   INTEGER qType;		/*  4 */
   uint16_t vcbFlags;		/*  6 */
@@ -390,7 +474,7 @@ typedef struct PACKED {
 typedef VCB *VCBPtr;
 MAKE_HIDDEN(VCBPtr);
 
-typedef struct PACKED {
+typedef struct {
   PACKED_MEMBER(QElemPtr, qLink);
   INTEGER qType;
   INTEGER dQDrive;
@@ -403,7 +487,7 @@ typedef struct PACKED {
 /* data types introduced by the new high level file system dispatch
    traps */
 
-struct PACKED FSSpec
+struct FSSpec
 {
   INTEGER vRefNum;
   LONGINT parID;
@@ -430,6 +514,8 @@ extern INTEGER 	FSFCBLen;
 #define DefVCBPtr	(DefVCBPtr_H.p)
 #define WDCBsPtr	(WDCBsPtr_H.p)
 
+#pragma pack(pop)
+
 extern OSErr FSOpen( StringPtr filen, INTEGER vrn, INTEGER *rn ); 
 extern OSErr OpenRF( StringPtr filen, INTEGER vrn, INTEGER *rn ); 
 extern OSErr FSRead( INTEGER rn, LONGINT *count, Ptr buffp ); 
@@ -443,8 +529,8 @@ extern OSErr AllocContig( INTEGER rn, LONGINT *count );
 extern OSErr FSClose( INTEGER rn ); 
 extern void ROMlib_rewinddir( void  ); 
 extern char *ROMlib_newunixfrommac( char *ip, INTEGER n ); 
-extern trap OSErrRET OpenDeny( HParmBlkPtr pb, BOOLEAN a ); 
-extern trap OSErrRET PBHGetLogInInfo( HParmBlkPtr pb, BOOLEAN a ); 
+extern trap OSErrRET OpenDeny( HParmBlkPtr pb, BOOLEAN a );
+extern trap OSErrRET PBHGetLogInInfo( HParmBlkPtr pb, BOOLEAN a );
 extern trap OSErrRET PBHGetDirAccess( HParmBlkPtr pb, BOOLEAN a ); 
 extern trap OSErrRET PBHCopyFile( HParmBlkPtr pb, BOOLEAN a ); 
 extern trap OSErrRET PBHMapID( HParmBlkPtr pb, BOOLEAN a ); 
@@ -476,8 +562,8 @@ extern OSErr GetVol( StringPtr voln, INTEGER *vrn );
 extern OSErr SetVol( StringPtr voln, INTEGER vrn ); 
 extern OSErr FlushVol( StringPtr voln, INTEGER vrn ); 
 extern OSErr UnmountVol( StringPtr voln, INTEGER vrn ); 
-extern OSErr Eject( StringPtr voln, INTEGER vrn ); 
-extern trap OSErrRET PBHRename( HParmBlkPtr pb, BOOLEAN async ); 
+extern OSErr Eject( StringPtr voln, INTEGER vrn );
+extern trap OSErrRET PBHRename( HParmBlkPtr pb, BOOLEAN async );
 extern trap OSErrRET PBHCreate( HParmBlkPtr pb, BOOLEAN async ); 
 extern trap OSErrRET PBDirCreate( HParmBlkPtr pb, BOOLEAN async ); 
 extern trap OSErrRET PBHDelete( HParmBlkPtr pb, BOOLEAN async ); 
@@ -573,5 +659,5 @@ extern OSErr HOpenRF (INTEGER vref, LONGINT dirid, Str255 name,
 
 extern OSErr GetWDInfo (INTEGER wd, INTEGER *vrefp, LONGINT *dirp,
 			LONGINT *procp);
-
+}
 #endif /* _FILEMGR_H_ */

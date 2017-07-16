@@ -7,6 +7,7 @@
  *	  by HFS_XFer.util.c, which doesn't know our Mac stuff
  */
 
+namespace Executor {
 #if !defined(PACKED)
 #define PACKED __attribute__((packed))
 typedef unsigned long ULONGINT;
@@ -57,3 +58,4 @@ typedef struct PACKED {
 #define OLDMAPSIG1	'S'
 
 #define PARTOFFSET	1
+}

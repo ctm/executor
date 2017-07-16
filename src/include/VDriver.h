@@ -10,6 +10,7 @@
 
 #include "FileMgr.h"
 
+namespace Executor {
 typedef struct PACKED
 {
   COMMONFSQUEUEDEFS;
@@ -64,6 +65,6 @@ typedef struct PACKED
 } VDDefModeRec;
 
 typedef VDDefModeRec *VDDefModePtr;
-
+}
 
 #endif /* !__VDRIVER__ */

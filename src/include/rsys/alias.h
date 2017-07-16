@@ -1,6 +1,7 @@
 #if !defined (__rsys_alias_h__)
 #  define __rsys_alias_h__
 
+namespace Executor {
 typedef unsigned char Str27[28];
 
 typedef struct PACKED
@@ -71,6 +72,6 @@ typedef struct PACKED
   PACKED_MEMBER(alias_tail_ptr, tailp);
 }
 alias_parsed_t;
-
+}
 
 #endif /* !defined (__rsys_alias_h__) */

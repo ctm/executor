@@ -1,0 +1,36 @@
+
+/* Class = "NSPanel"; title = "Executor Info"; ObjectID = "13"; */
+"13.title" = "Executor Info";
+
+/* Class = "NSTextFieldCell"; title = "Trademarks"; ObjectID = "19"; */
+"19.title" = "Trademarks";
+
+/* Class = "NSTextFieldCell"; title = "Self Explanatory:  bugs@ardi.com, suggestions@ardi.com, questions@ardi.com\n\nSend a request here to join an Executor users mailing list:  executor-request@nacm.com"; ObjectID = "20"; */
+"20.title" = "Self Explanatory:  bugs@ardi.com, suggestions@ardi.com, questions@ardi.com\n\nSend a request here to join an Executor users mailing list:  executor-request@nacm.com";
+
+/* Class = "NSTextFieldCell"; title = "Limitations in this release:\n\tNo Sound\n\tLimited System 7\n\tNo AppleTalk\n\tNo Script Manager (i.e. No International Localization)"; ObjectID = "21"; */
+"21.title" = "Limitations in this release:\n\tNo Sound\n\tLimited System 7\n\tNo AppleTalk\n\tNo Script Manager (i.e. No International Localization)";
+
+/* Class = "NSTextFieldCell"; title = "Apple, Macintosh and AppleTalk are registered trademarks of Apple Computer, Inc.\nROMlib and Executor are registered trademarks of Abacus Research and Development, Inc."; ObjectID = "22"; */
+"22.title" = "Apple, Macintosh and AppleTalk are registered trademarks of Apple Computer, Inc.\nROMlib and Executor are registered trademarks of Abacus Research and Development, Inc.";
+
+/* Class = "NSTextFieldCell"; title = "Copyright 1991 - 1995 by\t\tARDI\n\t\t\t\t\t\t\tSuite 4-101\n\t\t\t\t\t\t\t1650 University Blvd., NE\n\t\t\t\t\t\t\tAlbuquerque, NM  87102 \n\t\t\t\t\t\t\t\n+1 505 766 9115 Phone \t\t\t+1 505 247 1899 FAX\n\nftp://ftp.ardi.com\t\thttp://www.ardi.com"; ObjectID = "23"; */
+"23.title" = "Copyright 1991 - 1995 by\t\tARDI\n\t\t\t\t\t\t\tSuite 4-101\n\t\t\t\t\t\t\t1650 University Blvd., NE\n\t\t\t\t\t\t\tAlbuquerque, NM  87102 \n\t\t\t\t\t\t\t\n+1 505 766 9115 Phone \t\t\t+1 505 247 1899 FAX\n\nftp://ftp.ardi.com\t\thttp://www.ardi.com";
+
+/* Class = "NSTextFieldCell"; title = "E-mail Addresses"; ObjectID = "24"; */
+"24.title" = "E-mail Addresses";
+
+/* Class = "NSTextFieldCell"; title = "Limitations"; ObjectID = "25"; */
+"25.title" = "Limitations";
+
+/* Class = "NSBox"; title = "Box"; ObjectID = "J5b-Fj-1m8"; */
+"J5b-Fj-1m8.title" = "Box";
+
+/* Class = "NSBox"; title = "Box"; ObjectID = "RM7-un-kVu"; */
+"RM7-un-kVu.title" = "Box";
+
+/* Class = "NSTextFieldCell"; title = "Label"; ObjectID = "Zjh-mp-LhE"; */
+"Zjh-mp-LhE.title" = "Label";
+
+/* Class = "NSBox"; title = "Box"; ObjectID = "lzs-Ts-eaJ"; */
+"lzs-Ts-eaJ.title" = "Box";

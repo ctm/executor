@@ -5,6 +5,7 @@
  * $Id: font.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 typedef struct PACKED {
   INTEGER size;
   INTEGER style;
@@ -38,3 +39,4 @@ extern Fixed font_width_expand (Fixed width, Fixed extra,
 				Fixed hOutputInverse);
 
 extern void ROMlib_shutdown_font_manager (void);
+}

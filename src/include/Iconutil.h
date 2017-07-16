@@ -17,6 +17,7 @@
 #define mini4BitData  (T ('i', 'c', 'm', '4'))
 #define mini8BitData  (T ('i', 'c', 'm', '8'))
 
+namespace Executor {
 /* IconAlignmentType values */
 enum
 {
@@ -209,4 +210,6 @@ extern pascal trap OSErr C_GetIconCacheProc (Handle cache,
 					     IconGetterProcPtr *proc);
 extern pascal trap OSErr C_SetIconCacheProc (Handle cache,
 					     IconGetterProcPtr proc);
+}
+
 #endif /* !_ICON_UTIL_H */

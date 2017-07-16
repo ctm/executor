@@ -8,6 +8,7 @@
  * $Id: NotifyMgr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 typedef struct PACKED {
   PACKED_MEMBER(QElemPtr, qLink);
   INTEGER qType;
@@ -26,5 +27,5 @@ typedef struct PACKED {
 
 extern trap OSErrRET NMInstall( NMRecPtr nmptr );
 extern trap OSErrRET NMRemove( NMRecPtr nmptr );
-
+}
 #endif /* __NOTIFYMGR__ */

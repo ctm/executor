@@ -8,7 +8,12 @@
  * $Id: mactype.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+#include "rsys/macros.h"
+#include "rsys/types.h"
 
+#ifdef __cplusplus
+namespace Executor {
+#endif
 typedef int16 INTEGER;
 typedef int32 LONGINT;
 typedef uint32 ULONGINT;
@@ -20,5 +25,8 @@ typedef int16 CHAR; /* very important not to use this as char */
 
 typedef struct { int32 l PACKED; } HIDDEN_LONGINT;
 typedef struct { uint32 u PACKED; } HIDDEN_ULONGINT;
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _MACTYPE_H_ */

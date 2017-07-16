@@ -8,12 +8,12 @@
  * $Id: MemoryMgr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-
+namespace Executor {
 #define memFullErr	(-108)
 #define memLockedErr	(-117)
 #define memPurErr	(-112)
 #define memWZErr	(-111)
-enum { memAZErr	 = -113 };
+//enum { memAZErr	 = -113 };
 #define nilHandleErr	(-109)
 
 #define memROZErr	(-99)
@@ -197,5 +197,5 @@ extern pascal trap Handle C_TempNewHandle (Size logical_size, OSErr *result_code
 extern pascal trap void C_TempHLock (Handle h, OSErr *result_code);
 extern pascal trap void C_TempHUnlock (Handle h, OSErr *result_code);
 extern pascal trap void C_TempDisposeHandle (Handle h, OSErr *result_code);
-
+}
 #endif /* _MEMORY_MGR_H_ */

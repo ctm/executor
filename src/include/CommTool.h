@@ -8,6 +8,7 @@
  * $Id: CommTool.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
 typedef struct PACKED
 {
   PACKED_MEMBER(QElemPtr, qLink);
@@ -56,5 +57,5 @@ extern OSErr CRMRemove (QElemPtr);
 extern QElemPtr CRMSearch (QElemPtr);
 
 extern CRMErr InitCRM (void);
-
+}
 #endif

@@ -57,7 +57,7 @@ union ieee754_double
 
 #endif
 
-
+namespace Executor {
 EXTERN_INLINE ieee_t
 x80_to_ieee (const x80_t *x) ALWAYS_INLINE;
 
@@ -447,5 +447,5 @@ ieee_to_comp (ieee_t val, comp_t *dest)
 #endif
     }
 }
-
+}
 #endif

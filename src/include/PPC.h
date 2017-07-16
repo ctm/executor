@@ -7,6 +7,8 @@
  * $Id: PPC.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+namespace Executor {
+
 typedef int16 PPCPortKinds;
 typedef int16 PPCLocationKind;
 
@@ -43,5 +45,6 @@ typedef struct PACKED PPCPortRec
     } port;
   } u;
 } PPCPortRec, *PPCPortPtr;
+}
 
 #endif /* !_PPC_H_ */

@@ -8,7 +8,7 @@
  * $Id: SANE.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-
+namespace Executor {
 /* Big-endian 64 bit "comp" data type.  Note that this has a NaN value! */
 typedef union {
   struct PACKED {
@@ -283,4 +283,5 @@ extern pascal trap void C_ROMlib_Fgethv( LONGINT * hvp, unsigned short sel );
 extern pascal trap void C_ROMlib_FnextX (uint8 *x, uint8 *y,
 					 unsigned short sel);
 #endif /* __STDC__ */
+}
 #endif

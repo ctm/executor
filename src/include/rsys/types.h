@@ -2,12 +2,16 @@
 #define _RSYS_TYPES_H_
 
 #if !defined (INT_TYPES_TYPEDEFED)
-typedef unsigned char uint8;
-typedef signed char int8;
-typedef unsigned short uint16;
-typedef signed short int16;
-typedef unsigned int uint32;
-typedef signed int int32;
+#include <stdint.h>
+#include <sys/types.h>
+typedef int8_t int8;
+typedef uint8_t uint8;
+typedef int16_t int16;
+typedef uint16_t uint16;
+typedef int32_t int32;
+typedef uint32_t uint32;
+typedef int64_t int64;
+typedef uint64_t uint64;
 
 #define INT_TYPES_TYPEDEFED
 #endif /* !INT_TYPES_TYPEDEFED */

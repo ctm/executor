@@ -5,7 +5,7 @@
 #include "rsys/rgbutil.h"
 #include "rsys/cquick.h"
 
-
+namespace Executor {
 typedef struct
 {
   uint16 x_rot_count;	/* Number of pixels x-rotated.		     */
@@ -67,5 +67,5 @@ xdata_for_pixpat_with_space (p, d, \
 extern xdata_handle_t xdata_for_pattern (const Pattern pattern,
 					 PixMapPtr target);
 extern void xdata_free (xdata_handle_t x);
-
+}
 #endif /* !defined (_RSYS_XDATA_H_) */

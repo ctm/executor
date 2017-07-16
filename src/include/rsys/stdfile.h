@@ -1,5 +1,5 @@
 #if !defined(__RSYS_STDFILE__)
-#define __RSYS__STDFILE__
+#define __RSYS_STDFILE__
 
 #include "rsys/pstuff.h"
 #include "FileMgr.h"
@@ -8,6 +8,7 @@
 #include "DialogMgr.h"
 #include "rsys/file.h"
 
+namespace Executor {
 /*
  * Copyright 1989 - 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
@@ -44,15 +45,11 @@ extern int linuxfloppy_open(int disk, LONGINT *bsizep,
 			    drive_flags_t *flagsp, const char *dname);
 #endif
 
-extern OSErr C_unixmount( CInfoPBRec *cbp );
-
-#if defined (MSDOS) || defined (CYGWIN32)
-extern uint32 ROMlib_macdrives;
-extern uint32 ROMlib_dosdrives;
-#endif
 
 enum { STANDARD_HEIGHT = 200, STANDARD_WIDTH = 348 };
 
 extern int nodrivesearch_p;
 
+OSErr C_unixmount( CInfoPBRec *cbp );
+}
 #endif /* !defined(__RSYS_STDFILE__) */

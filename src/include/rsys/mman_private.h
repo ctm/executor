@@ -11,7 +11,7 @@
  */
 
 #include "rsys/mman.h"
-
+namespace Executor {
 typedef struct PACKED block_header
 {
   /* the bogo new IM books implies (via a picture) that the field
@@ -117,7 +117,7 @@ extern unsigned long ROMlib_memtop;
   ((block)->master_ptr_flags = (state))
 
 /* set the master pointer of a handle to a given value */
-#define SETMASTER(handle, ptr)	((handle)->p = RM (ptr))
+#define SETMASTER(handle, ptr)	((handle)->p = (Ptr)RM (ptr))
 
 #define BLOCK_NEXT(block)			\
   ((block_header_t *) ((char *) (block) + PSIZE (block)))
@@ -260,5 +260,5 @@ extern void mman_heap_death (const char *func, const char *where);
   _HEAP_DEATH (__PRETTY_FUNCTION__, " in " __FILE__ ":", __LINE__)
 
 #define HEAPEND	(MR(HeapEnd) + MIN_BLOCK_SIZE)	/* temporary ctm hack */
-
+}
 #endif /* _MMAN_PRIVATE_H */
