@@ -18,10 +18,6 @@
 		5500AB5B1985A66A00FF62C0 /* NEXTkeyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5500AB4A1985A66A00FF62C0 /* NEXTkeyboard.cpp */; };
 		5500AB5D1985A66A00FF62C0 /* NEXTprint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5500AB4C1985A66A00FF62C0 /* NEXTprint.mm */; };
 		553A7ED1199708A300DFF4F6 /* sdl-sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 553A7ECF199708A300DFF4F6 /* sdl-sound.cpp */; };
-		553A7ED6199709EE00DFF4F6 /* SDL_sound.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553A7ED4199709EE00DFF4F6 /* SDL_sound.framework */; };
-		553A7ED7199709EE00DFF4F6 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 553A7ED5199709EE00DFF4F6 /* SDL.framework */; };
-		553A7ED9199716E900DFF4F6 /* SDL_sound.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 553A7ED4199709EE00DFF4F6 /* SDL_sound.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		553A7EDA199716E900DFF4F6 /* SDL.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 553A7ED5199709EE00DFF4F6 /* SDL.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		553B0B6C19888B690041B809 /* hfsHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558B98A31987FCBD00ADF159 /* hfsHelper.cpp */; };
 		556062EB1988441700D6F0B2 /* xdata.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558B99511987FCBF00ADF159 /* xdata.cpp */; };
 		556062EC198844B800D6F0B2 /* xdblt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558B99521987FCBF00ADF159 /* xdblt.cpp */; };
@@ -479,6 +475,11 @@
 		55D30F55198C1E3C009BBB62 /* parsenum.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 558B98D41987FCBD00ADF159 /* parsenum.cpp */; };
 		55D30F56198C1FE2009BBB62 /* mkvol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55D30F50198C1B65009BBB62 /* mkvol.cpp */; };
 		55D30F59198C38DB009BBB62 /* info.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55D30F5B198C38DB009BBB62 /* info.xib */; };
+		75EBB2D01F1ABDFD00E2B37F /* audio_convert.c in Sources */ = {isa = PBXBuildFile; fileRef = 75EBB2C91F1ABDFD00E2B37F /* audio_convert.c */; };
+		75EBB2D11F1ABDFD00E2B37F /* extra_rwops.c in Sources */ = {isa = PBXBuildFile; fileRef = 75EBB2CA1F1ABDFD00E2B37F /* extra_rwops.c */; };
+		75EBB2D21F1ABDFD00E2B37F /* SDL_sound.c in Sources */ = {isa = PBXBuildFile; fileRef = 75EBB2CE1F1ABDFD00E2B37F /* SDL_sound.c */; };
+		75EBB2EF1F1ACD3D00E2B37F /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75EBB2ED1F1ACD2F00E2B37F /* SDL2.framework */; };
+		75EBB2F01F1ACD3D00E2B37F /* SDL2.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 75EBB2ED1F1ACD2F00E2B37F /* SDL2.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -569,18 +570,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		553A7ED8199716D500DFF4F6 /* Copy Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				553A7ED9199716E900DFF4F6 /* SDL_sound.framework in Copy Frameworks */,
-				553A7EDA199716E900DFF4F6 /* SDL.framework in Copy Frameworks */,
-			);
-			name = "Copy Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		557F30A219897619009873EB /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -625,6 +614,17 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		75EBB2EC1F1AC97800E2B37F /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				75EBB2F01F1ACD3D00E2B37F /* SDL2.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -712,7 +712,6 @@
 		5500AC411985B31E00FF62C0 /* WindowMgr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = WindowMgr.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		553A7ECF199708A300DFF4F6 /* sdl-sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "sdl-sound.cpp"; sourceTree = "<group>"; };
 		553A7ED0199708A300DFF4F6 /* sdl-sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "sdl-sound.h"; sourceTree = "<group>"; };
-		553A7ED4199709EE00DFF4F6 /* SDL_sound.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL_sound.framework; path = /Library/Frameworks/SDL_sound.framework; sourceTree = "<absolute>"; };
 		553A7ED5199709EE00DFF4F6 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
 		556062F21988679400D6F0B2 /* rsys.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = rsys.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		556062F51988679400D6F0B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1213,6 +1212,14 @@
 		55D30F51198C1B65009BBB62 /* mkvol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mkvol.h; sourceTree = "<group>"; };
 		55D30F52198C1B65009BBB62 /* scsi_dump.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = scsi_dump.c; sourceTree = "<group>"; };
 		55D30F5A198C38DB009BBB62 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/info.xib; sourceTree = "<group>"; };
+		75EBB2C91F1ABDFD00E2B37F /* audio_convert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = audio_convert.c; path = external/SDL_sound/audio_convert.c; sourceTree = "<group>"; };
+		75EBB2CA1F1ABDFD00E2B37F /* extra_rwops.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = extra_rwops.c; path = external/SDL_sound/extra_rwops.c; sourceTree = "<group>"; };
+		75EBB2CB1F1ABDFD00E2B37F /* extra_rwops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = extra_rwops.h; path = external/SDL_sound/extra_rwops.h; sourceTree = "<group>"; };
+		75EBB2CC1F1ABDFD00E2B37F /* filter_templates.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = filter_templates.h; path = external/SDL_sound/filter_templates.h; sourceTree = "<group>"; };
+		75EBB2CD1F1ABDFD00E2B37F /* SDL_sound_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_sound_internal.h; path = external/SDL_sound/SDL_sound_internal.h; sourceTree = "<group>"; };
+		75EBB2CE1F1ABDFD00E2B37F /* SDL_sound.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = SDL_sound.c; path = external/SDL_sound/SDL_sound.c; sourceTree = "<group>"; };
+		75EBB2CF1F1ABDFD00E2B37F /* SDL_sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDL_sound.h; path = external/SDL_sound/SDL_sound.h; sourceTree = "<group>"; };
+		75EBB2ED1F1ACD2F00E2B37F /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = external/MacFrameworks/SDL2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1227,14 +1234,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				553A7ED6199709EE00DFF4F6 /* SDL_sound.framework in Frameworks */,
-				553A7ED7199709EE00DFF4F6 /* SDL.framework in Frameworks */,
 				559AF4A0198AC14900DE8472 /* libsyn68k.a in Frameworks */,
 				557F308C19895414009873EB /* Carbon.framework in Frameworks */,
 				557F308A1989540D009873EB /* ApplicationServices.framework in Frameworks */,
 				557F308919895405009873EB /* CoreServices.framework in Frameworks */,
 				558B98521987F5BA00ADF159 /* IOKit.framework in Frameworks */,
 				556E040719856E5700FC4362 /* Cocoa.framework in Frameworks */,
+				75EBB2EF1F1ACD3D00E2B37F /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1813,6 +1819,7 @@
 		556E03FA19856E5700FC4362 = {
 			isa = PBXGroup;
 			children = (
+				75EBB2C71F1ABDC600E2B37F /* external */,
 				556E040C19856E5700FC4362 /* CocoaExecutor */,
 				556E042A19856E5700FC4362 /* CocoaExecutorTests */,
 				556E05681985854000FC4362 /* map_to_c */,
@@ -1848,7 +1855,6 @@
 		556E040519856E5700FC4362 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				553A7ED4199709EE00DFF4F6 /* SDL_sound.framework */,
 				553A7ED5199709EE00DFF4F6 /* SDL.framework */,
 				557F308B19895414009873EB /* Carbon.framework */,
 				557F308819895405009873EB /* CoreServices.framework */,
@@ -2177,6 +2183,37 @@
 			path = src/mkvol;
 			sourceTree = "<group>";
 		};
+		75EBB2C71F1ABDC600E2B37F /* external */ = {
+			isa = PBXGroup;
+			children = (
+				75EBB2EE1F1ACD3200E2B37F /* MacFrameworks */,
+				75EBB2C81F1ABDD700E2B37F /* SDL_sound */,
+			);
+			name = external;
+			sourceTree = "<group>";
+		};
+		75EBB2C81F1ABDD700E2B37F /* SDL_sound */ = {
+			isa = PBXGroup;
+			children = (
+				75EBB2C91F1ABDFD00E2B37F /* audio_convert.c */,
+				75EBB2CA1F1ABDFD00E2B37F /* extra_rwops.c */,
+				75EBB2CB1F1ABDFD00E2B37F /* extra_rwops.h */,
+				75EBB2CC1F1ABDFD00E2B37F /* filter_templates.h */,
+				75EBB2CD1F1ABDFD00E2B37F /* SDL_sound_internal.h */,
+				75EBB2CE1F1ABDFD00E2B37F /* SDL_sound.c */,
+				75EBB2CF1F1ABDFD00E2B37F /* SDL_sound.h */,
+			);
+			name = SDL_sound;
+			sourceTree = "<group>";
+		};
+		75EBB2EE1F1ACD3200E2B37F /* MacFrameworks */ = {
+			isa = PBXGroup;
+			children = (
+				75EBB2ED1F1ACD2F00E2B37F /* SDL2.framework */,
+			);
+			name = MacFrameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2390,7 +2427,7 @@
 				556E03FF19856E5700FC4362 /* Sources */,
 				556E040019856E5700FC4362 /* Frameworks */,
 				556E040119856E5700FC4362 /* Resources */,
-				553A7ED8199716D500DFF4F6 /* Copy Frameworks */,
+				75EBB2EC1F1AC97800E2B37F /* Embed Frameworks */,
 			);
 			buildRules = (
 				5500AB2C19858B8F00FF62C0 /* PBXBuildRule */,
@@ -2802,6 +2839,7 @@
 				558B9A1E1987FCBF00ADF159 /* setuid.cpp in Sources */,
 				558B9A011987FCBF00ADF159 /* qStdPic.cpp in Sources */,
 				558B99B41987FCBF00ADF159 /* listAccess.cpp in Sources */,
+				75EBB2D01F1ABDFD00E2B37F /* audio_convert.c in Sources */,
 				558B99EA1987FCBF00ADF159 /* qHooks.cpp in Sources */,
 				558B99801987FCBF00ADF159 /* disk.cpp in Sources */,
 				558B99CB1987FCBF00ADF159 /* notify.cpp in Sources */,
@@ -2820,6 +2858,7 @@
 				558B996F1987FCBF00ADF159 /* ctlStddef.cpp in Sources */,
 				558B9A0E1987FCBF00ADF159 /* resGetinfo.cpp in Sources */,
 				558B9A2B1987FCBF00ADF159 /* stdmdef.cpp in Sources */,
+				75EBB2D21F1ABDFD00E2B37F /* SDL_sound.c in Sources */,
 				558B99811987FCBF00ADF159 /* diskinit.cpp in Sources */,
 				558B99971987FCBF00ADF159 /* font.cpp in Sources */,
 				558B99F91987FCBF00ADF159 /* qRegion.cpp in Sources */,
@@ -2951,6 +2990,7 @@
 				558B99661987FCBF00ADF159 /* ctlArrows.cpp in Sources */,
 				558B99A31987FCBF00ADF159 /* hfsHier.cpp in Sources */,
 				558B9A321987FCBF00ADF159 /* teDisplay.cpp in Sources */,
+				75EBB2D11F1ABDFD00E2B37F /* extra_rwops.c in Sources */,
 				558B99821987FCBF00ADF159 /* dump.cpp in Sources */,
 				558B9A371987FCBF00ADF159 /* teInsert.cpp in Sources */,
 				556E0558198584DE00FC4362 /* arrow_down_inactive.map in Sources */,
@@ -3277,6 +3317,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"$(PROJECT_DIR)/external/MacFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OSX-only/CocoaExecutor/CocoaExecutor-Prefix.pch";
@@ -3290,8 +3331,9 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"OSX-only/syn68k",
-					/Library/Frameworks/SDL.framework/Headers,
 					"$(inherited)",
+					external,
+					external/MacFrameworks/SDL2.framework/Headers,
 				);
 				INFOPLIST_FILE = "OSX-only/CocoaExecutor/CocoaExecutor-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks @loader_path/../Frameworks @loader_path/Frameworks $(inherited)";
@@ -3311,6 +3353,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+					"$(PROJECT_DIR)/external/MacFrameworks",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OSX-only/CocoaExecutor/CocoaExecutor-Prefix.pch";
@@ -3324,8 +3367,9 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"OSX-only/syn68k",
-					/Library/Frameworks/SDL.framework/Headers,
 					"$(inherited)",
+					external,
+					external/MacFrameworks/SDL2.framework/Headers,
 				);
 				INFOPLIST_FILE = "OSX-only/CocoaExecutor/CocoaExecutor-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/../Frameworks @loader_path/../Frameworks @loader_path/Frameworks $(inherited)";
