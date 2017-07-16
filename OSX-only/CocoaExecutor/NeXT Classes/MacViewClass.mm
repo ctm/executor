@@ -121,9 +121,9 @@ vdriver_shutdown (void)
 
    std::string SystemDiskLocation()
    {
-	  const char* fsr = [[[NSBundle mainBundle] resourcePath] fileSystemRepresentation];
+	  const char* fsr = [[@"~/Executor/" stringByExpandingTildeInPath] fileSystemRepresentation];// [[[NSBundle mainBundle] resourcePath] fileSystemRepresentation];
 	  if (fsr) {
-		 return fsr;
+		 return std::string(fsr) + "/";
 	  } else {
 		 return "";
 	  }

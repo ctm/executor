@@ -16,6 +16,11 @@ char ROMlib_rcsid_fileDouble[] =
 #endif
 
 namespace Executor {
+  enum rsrcForkConventions {
+    rsrcForkConventionsAFPd,
+    rsrcForkConventionsNetATalk,
+    rsrcForkConventionsMacRsrc
+  };
 int afpd_conventions_p;
 int netatalk_conventions_p;
 

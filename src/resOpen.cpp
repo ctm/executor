@@ -536,7 +536,7 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
     INTEGER i, j;
     typref *tr;
     resref *rr;
-    HParamBlockRec pbr;
+    HParamBlockRec pbr = {0};
     OSErr err;
 
     invalidate_kchr_ptr ();
@@ -546,7 +546,7 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
     /* check for file already opened */
 
     {
-      CInfoPBRec cpb;
+      CInfoPBRec cpb = {0};
       Str255 local_name;
 
       str255assign (local_name, fn);
