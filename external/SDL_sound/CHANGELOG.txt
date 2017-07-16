@@ -1,0 +1,14 @@
+/*
+ * CHANGELOG.
+ */
+
+Not maintaining CHANGELOG.txt by hand any more. This is why we have revision
+ control tools to do it for us.  :)
+
+Take a look at http://hg.icculus.org/icculus/SDL_sound/ for a complete list
+ of changes.
+
+--ryan. (icculus@icculus.org)
+
+/* end of CHANGELOG.txt ... */
+

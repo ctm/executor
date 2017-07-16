@@ -1,0 +1,560 @@
+
+SDL_sound version 2.0: Your Mixer, And Welcome To It.
+
+
+SDL_sound v2's major addition is a software mixer. There are some other new
+features, but this is the Big New Thing.
+
+
+Some notable features of this mixer:
+ - No clamping at mix time. Most SDL-based mixing is done via SDL_MixAudio(),
+   which mixes two samples together, clamping to 16-bits, and then mixes the
+   next sample into this already-clamped buffer. This can lead to audio
+   distortion. SDL_sound mixes all samples into a 32-bit floating point buffer
+   before passing it to the audio device, which means no unnecessary clamping.
+   It also means it can be more optimized for MacOS X's CoreAudio and other
+   next-gen audio subsystems, which require you to feed it float32 data.
+
+ - Optimized mixing: MMX, SSE, 3DNow!, and Altivec are used internally where
+   appropriate. (er...they WILL be, at least!)
+
+ - Multiple "music" files. SDL_mixer is notorious for making a distinction
+   between "sound" and "music" files (that is, things that can be trivially
+   decoded to a waveform without bloating the memory footprint vs. things that
+   can't), and only allows mixing of one music file at a time. SDL_sound
+   doesn't bother with this distinction, which means you are free to mix any
+   combination of audio formats at the same time.
+
+ - No "channels". If you want to mix 1,000 audio files and have the hardware
+   to cover it, you can. You don't have to manage playback channels. There
+   isn't a seperate "music" channel, since "music" isn't treated differently
+   from any other audio.
+
+ - Lots of formats. SDL_sound already decodes a huge number of audio formats.
+   As the mixer is layered on top of this, all of the format support comes
+   for free.
+
+ - Can handle non-power-of-two resampling. If your samples are at 8000Hz
+   and the audio hardware is at 11000Hz, this doesn't cause output problems.
+
+ - Control over buffering and mixing. SDL_sound already lets you control how
+   much audio is prebuffered and predecoded; this carries over to the mixer,
+   so you can customize how your resources are being used on the fly.
+
+ - Flexible enough for those that need to micromanage mixing, but dirt simple
+   to for those that just want to make some noise.
+
+ - It can be compiled out if you just want the 1.0 API for decoding formats.
+   (initializing the mixer subsystem in this case will fail, but for binary
+    compatibility, the entry points will still exist).
+
+A brief tutorial follows.
+
+
+Example #1: Play a sound and get the heck out of there.
+
+#include "SDL_sound.h"
+
+int main(int argc, char **argv)
+{
+    Sound_MixInit(NULL);  // start the mixer; don't care what format.
+    Sound_Sample *hello = Sound_NewSampleFromFile("hello.wav", NULL, 10240);
+    Sound_MixPlay(hello);
+    while (Sound_MixPlaying(hello))
+        SDL_Delay(100);  // wait around; mixing is in a seperate thread!
+    Sound_FreeSample(hello);
+    Sound_MixDeinit();
+    return(0);
+}
+
+Every tutorial needs a "Hello World" example.
+That will play hello.wav, wait for it to finish, and terminate the program.
+But that's not really mixing! To qualify, you'd need to play two sounds at
+once. So let's do that:
+
+
+Example #2: Mixing two sounds.
+
+#include "SDL_sound.h"
+
+int main(int argc, char **argv)
+{
+    Sound_MixInit(NULL);  // start the mixer; don't care what format.
+    Sound_Sample *hello = Sound_NewSampleFromFile("hello.wav", NULL, 10240);
+    Sound_Sample *music = Sound_NewSampleFromFile("icculus.ogg", NULL, 10240);
+    Sound_MixPlay(music);
+    while (Sound_MixPlaying(music))
+    {
+        if (!Sound_MixPlaying(hello))
+        {
+            Sound_Rewind(hello);
+            Sound_MixPlay(hello);
+        }
+        SDL_Delay(100);  // wait around.
+    }
+    Sound_FreeSample(music);
+    Sound_FreeSample(hello);  // will stop if it happens to still be playing.
+    Sound_MixDeinit();
+    return(0);
+}
+
+Same deal, but we play some music ("Icculus in San Jose" from the talented
+Emmett Plant, in this case). We also load our "hello" sound from the previous
+example. While the music is playing, we check if "hello" is playing, and if
+not, we set it up to play again. Note that the two sounds are playing at the
+same time, mixed together. Cool, huh?
+
+You might notice that we called Sound_Rewind() on the hello sample. This isn't
+part of the mixer itself, and is a function from SDL_sound v1, before there
+was a mixer at all. This illustrates that you can use the usual SDL_sound
+methods to manipulate a sample in the mixer, including seeking and predecoding.
+These are safe operations even while the sample is playing.
+
+That's about all you need to know to effectively use the mixer. Everything
+after that is extra credit.
+
+
+Extra credit #1: Mixer Attributes.
+
+An API's got to know its limitations. SDL_sound isn't meant to be a robust 3D
+spatialization library. For that, one should look to the excellent OpenAL API
+at http://www.openal.org/. Still, for many reasons, OpenAL might not be a good
+fit: it doesn't support many audio formats (and all formats except uncompressed
+integer PCM are optional extensions to the API), it is less likely to
+support your platform and audio output target than SDL, and it is more
+complicated to feed it streamed audio. While not as robust as AL's feature
+set, SDL_sound v2 provides a handful of useful attributes you can set on a
+sample to alter its playback.
+
+
+Basic Attribute #1: Looping.
+
+Checking a sample's playing state in a loop just so you know when to restart
+it has two problems: first, it's a pain in the butt, and second, there may
+be a gap in the audio between when the sound starts and when you're able to
+restart it. To remedy this, SDL_sound lets you flag a sample as "looping" so
+you don't have to micromanage it. It will continue to rewind and play until
+you explicitly stop it. Let's take our last example and do this right:
+
+
+Example #3: Mixing two sounds with better looping.
+
+#include "SDL_sound.h"
+
+int main(int argc, char **argv)
+{
+    Sound_MixInit(NULL);  // start the mixer; don't care what format.
+    Sound_Sample *hello = Sound_NewSampleFromFile("hello.wav", NULL, 10240);
+    Sound_Sample *music = Sound_NewSampleFromFile("icculus.ogg", NULL, 10240);
+    Sound_SetAttribute(hello, SOUND_ATTR_LOOPING, 1);  // turn on looping.
+    Sound_MixPlay(music);
+    Sound_MixPlay(hello);
+    while (Sound_MixPlaying(music))
+        SDL_Delay(100);  // wait around.
+    Sound_FreeSample(music);
+    Sound_FreeSample(hello);  // will stop now.
+    Sound_MixDeinit();
+    return(0);
+}
+
+...it's that easy.
+
+
+Basic attribute #2: Fire and forget
+
+You'll notice in previous examples that we are taking the pains to explicitly
+free the resources associated with a sample via the Sound_FreeSample() call.
+In a small program like this, it's easy to be tidy and sweep up after one
+or two hardcoded sounds, but when you are managing a lot of different sounds,
+or a lot of copies of the same sound, this can become tedious. Case in point:
+laser beams.
+
+Let's say you've got a space fighter game, with a bunch of ships flying
+around and shooting at each other. Every time they fire a laser, do you really
+want to take the effort to decide when it is done and clean it up? You want
+to, quite literally in this case, "fire and forget" the sound...that is, you
+want the mixer to playback the audio and then clean it up without further
+action or intervention from you.
+
+So let's take our previous example and adjust it to clean up after us.
+
+
+Example #4: Fire and forget playback.
+
+#include "SDL_sound.h"
+
+int main(int argc, char **argv)
+{
+    Sound_MixInit(NULL);  // start the mixer; don't care what format.
+    Sound_Sample *hello = Sound_NewSampleFromFile("hello.wav", NULL, 10240);
+    Sound_Sample *music = Sound_NewSampleFromFile("icculus.ogg", NULL, 10240);
+    Sound_SetAttribute(hello, SOUND_ATTR_FIREANDFORGET, 1);
+    Sound_SetAttribute(music, SOUND_ATTR_FIREANDFORGET, 1);
+    Sound_MixPlay(music);  // play once, then call Sound_FreeSample() for you.
+    Sound_MixPlay(hello);  // play once, then call Sound_FreeSample() for you.
+    while (Sound_MixPlayingCount() > 0)
+        SDL_Delay(100);  // wait around.
+
+    // Don't need Sound_FreeSample() here anymore!
+
+    Sound_MixDeinit();
+    return(0);
+}
+
+So everything was deallocated automatically, and your mother didn't even have
+to come along and tell you to clean up this pig sty! She is very proud of you
+right now, I assure you.
+
+You'll note that we call Sound_MixPlayingCount() to see if the music finished.
+You have to do this because the "music" sample is invalid once it gets pushed
+through Sound_FreeSample(), which will happen as soon as the mixer is done
+with it. To avoid touching deallocated memory, we just ask the mixer if
+anything is still playing.
+
+Also, common sense dictates that looping sounds never get to the "forget"
+part of "fire and forget", since they don't stop playing. You can either
+manually halt them or turn off the looping, though, and then they'll clean
+themselves up.
+
+
+Basic attribute #3: Per-channel Gain.
+
+If you can tweak the volume of the left or right channel on a sample, you can
+accomplish (or at least fake) a surprising number of simple sound effects.
+Therefore the mixer allows you to do just this, and then builds a few features
+on top of this magic.
+
+This is accomplished by tweaking the "gain" of a given channel. "Gain" is just
+a fancy way of saying "volume". You specify it as a floating point number,
+usually in the range of 0.0f to 2.0f. If you set the gain to 0.0f, it results
+in silence, and 1.0f results in no change at all. 0.5f halves the volume and
+2.0f doubles it. As you might have guessed, the sample gets multiplied by
+this value.
+
+SDL_sound's mixer lets you tweak each channel in a sample individually. Right
+now we're limited to mono (one channel) and stereo (two channel) sounds, but
+this will probably be enhanced at some point. It's worth noting that this
+refers not to the sample itself but to the speakers where they play. This
+means you can set the left and right channels of a sample, even though the
+sample itself only has one. Since a 2-speaker setup will promote a mono sound
+to stereo (same waveform is fed to each speaker), you can tweak it to play at
+different volumes in the left and right.
+
+
+So to rehash our tired hello world example again...
+
+Example #5: Per-channel gain.
+
+#include "SDL_sound.h"
+
+int main(int argc, char **argv)
+{
+    Sound_MixInit(NULL);  // start the mixer; don't care what format.
+    Sound_Sample *hello = Sound_NewSampleFromFile("hello.wav", NULL, 10240);
+
+    // Every channel's gain defaults to 1.0f, or no adjustment.
+
+    Sound_SetAttribute(hello, SOUND_ATTRGAIN0, 0.0f);  // left chan==silence.
+    Sound_MixPlay(hello);  // plays just right channel.
+    while (Sound_MixPlaying(hello))
+        SDL_Delay(100);  // wait around.
+
+    Sound_SetAttribute(hello, SOUND_ATTRGAIN0, 1.0f);  // left chan==normal
+    Sound_SetAttribute(hello, SOUND_ATTRGAIN1, 0.0f);  // right chan==silence
+    Sound_MixPlay(hello);  // plays just left channel.
+    while (Sound_MixPlaying(hello))
+        SDL_Delay(100);  // wait around.
+
+    Sound_FreeSample(hello);
+    Sound_MixDeinit();
+    return(0);
+}
+
+
+This played the hello sound twice, once in each speaker. Simple.
+
+Well, almost simple. If you only have mono output (one speaker), then this
+will play silence the first time (channel 0 set to silence), then the sound
+at normal volume the second time (channel 0, the only speaker, set to normal).
+In a 1-speaker setup, screwing with the second channel is ignored.
+
+If this is going to be a pain for you to track yourself, you can use
+Sound_MixInit() to set up a stereo environment and let it dither everything
+down to one speaker behind the scenes if need be. Generally, this isn't a
+huge concern, though.
+
+
+Extra Credit #2: Fading
+
+Sometimes you want to fade out (or fade in) a sound over time...this is
+handy when ending a game level. It's a nicer effect to silence everything
+over some small amount of time than to abruptly kill all the noise. This is
+more pleasant for the end-user.
+
+You could accomplish this by tweaking each channel of all your samples' gain
+over time, but this is another one of those things that are annoying to
+micromanage. The mixer has to constantly pay attention to these samples anyhow,
+why should you do it, too?
+
+SDL_sound gives you a means to instruct the mixer to take care of this.
+
+
+Example #6: Fading a sound.
+
+#include "SDL_sound.h"
+
+int main(int argc, char **argv)
+{
+    Sound_MixInit(NULL);  // start the mixer; don't care what format.
+    Sound_Sample *music = Sound_NewSampleFromFile("icculus.ogg", NULL, 10240);
+    Sound_MixPlay(music);  // Start music playing.
+    Sound_SetAttribute(music, SOUND_ATTR_FADEOUT, 10000);
+    SDL_Delay(10000);
+    Sound_SetAttribute(music, SOUND_ATTR_FADEIN, 10000);
+    SDL_Delay(10000);
+    Sound_FreeSample(music);
+    Sound_MixDeinit();
+    return(0);
+}
+
+
+So this starts our favorite song playing, and tells it to fade to silence
+smoothly over 10000 milliseconds (that is, 10 seconds). Since we know how
+long we want this to take, we lazily call SDL_Delay() to wait that long; the
+mixer works in another thread, so we have the luxury of doing nothing here.
+Then we fade it back in over another 10 seconds before exiting.
+
+It's worth noting a few things here:
+First, the FADEOUT attribute uses the same mechanism as SetGain() under the
+hood when mixing, but the two attributes exist seperately: if you double the
+gain (2.0f), the sound will drop in volume twice as much each time the fading
+updates, but it's still going to go from twice-as-loud to silence in the
+same amount of time (10000 milliseconds in this case).
+
+When a sample is totally silent, either because it faded out or you set its
+gain to 0.0f, it is still playing! If you were to turn the volume back up
+30 seconds after the fade completes, you'd hear the sound as it would be at
+that 30 second moment as if you hadn't silenced it at all. This has a few
+important ramifications:
+  1) It's still taking CPU time. Maybe not as much, since we can choose not
+     to mix when the gain is 0.0f, but in order to keep the sound "playing"
+     we might need to decode more of it, which means CPU time and memory
+     usage and such. Best to halt a silent sound if you aren't going to need
+     it.
+  2) Sound_MixPlayingCount() might be > 0 even though you don't hear noise.
+  3) A sound might not be where you left it. Keep better track of your things!
+
+You might also notice that we called Sound_FreeSample() on a playing sample.
+This is legal. If a sample is playing when you free it, the mixer knows to
+halt it first.
+
+
+Extra Credit #3: Halting
+
+SDL_sound's mixer is a little different than most, in that there aren't
+seperate playing states. "Halting" a mixing sample means you took it out of
+the mixing list. "Playing" it means you put it back in, and it picks up the
+mixing with the sample as it found it.
+
+If you want something anologous to that "stop" button in WinAmp, you would
+halt the sample and then call Sound_Rewind() on it. Next time you start it
+playing, it'll be playing from the start of the sample. If you didn't call
+Sound_Rewind() first, it'll be playing from where you halted it. That's more
+like clicking WinAmp's "pause" button.
+
+However, there are times when you want everything to stop at once. Just
+looping over every sample and halting them isn't any good, since some might
+play just a tiny bit longer...it's a lovely bug called a "race condition".
+
+And, as I'm sure you've heard me say before, why do a lot of work to manage
+stuff that the mixer has to manage itself anyhow? You should learn to
+delegate more, you control freak.
+
+
+Example #7: Halting.
+
+#include "SDL_sound.h"
+
+int main(int argc, char **argv)
+{
+    Sound_MixInit(NULL);  // start the mixer; don't care what format.
+    Sound_Sample *hello = Sound_NewSampleFromFile("hello.wav", NULL, 10240);
+    Sound_Sample *chatter = Sound_NewSampleFromFile("chatter.wav", NULL, 10240);
+    Sound_Sample *music = Sound_NewSampleFromFile("icculus.ogg", NULL, 10240);
+    Sound_MixPlay(music);
+
+    Sound_MixPlay(hello);
+    while (Sound_MixPlaying(hello)) SDL_Delay(100);  // wait around.
+    Sound_MixPlay(hello);
+    while (Sound_MixPlaying(hello)) SDL_Delay(100);  // wait around.
+    Sound_MixPlay(hello);
+    while (Sound_MixPlaying(hello)) SDL_Delay(100);  // wait around.
+
+    Sound_MixHalt(music);  // halt the music.
+
+    Sound_MixPlay(hello);
+    while (Sound_MixPlaying(hello)) SDL_Delay(100);  // wait around.
+    Sound_MixPlay(hello);
+    while (Sound_MixPlaying(hello)) SDL_Delay(100);  // wait around.
+    Sound_MixPlay(hello);
+    while (Sound_MixPlaying(hello)) SDL_Delay(100);  // wait around.
+
+    Sound_MixPlay(music);  // start the music where it left off.
+    Sound_MixPlay(chatter);  // start the chatter.
+
+    SDL_Delay(3000);  // let them play.
+    Sound_MixHalt(NULL);  // halt _everything_ that's playing.
+    SDL_Delay(3000);  // waste some time.
+    Sound_MixPlay(music);  // start the music where it left off.
+    Sound_MixPlay(chatter);  // start the chatter where it left off.
+    SDL_Delay(3000);  // waste some more time.
+
+    Sound_FreeSample(music);    // clean up and quit.
+    Sound_FreeSample(chatter);
+    Sound_FreeSample(hello);
+    Sound_MixDeinit();
+    return(0);
+}
+
+
+Ok, you following? That plays the music, plays "hello" three times while the
+music is playing, halts the music and plays hello three times without anything
+else, restarts the music where it left off mixed with "chatter" for three
+seconds, stops everything (music and chatter in this case), waits three more
+seconds of silence, restarts the music and chatter where it left off and
+lets them play for three more seconds. Then it shuts it all down and goes
+home.
+
+Fun, huh?
+
+There are some notable exceptions to this rule. When a sound gets to the end
+of its mixing, it either halts or (if set looping) rewinds and starts playing
+again without missing a beat. For these, you don't have to manually halt
+(or manually restart, as it were).
+
+
+You now have everything you need to make a game with robust audio. But for
+some of you, that's not enough. You're never satisfied. You need the section
+of this tutorial written for...
+
+
+THE HARDCORE.
+
+(These sections are brief and lack full examples. If you're hardcore, you
+probably don't read wussy tutorials anyhow.)
+
+
+Hardcore #1: low-overhead copying of a sample.
+
+Let's say you've got a sound file that represents a laser blast. Everytime a
+shot is fired in your game, you don't want to have the overhead of reloading
+it from disk, decoding and mixing it on the fly!
+
+Here are some tips for your efficiency:
+
+    - Opt for an uncompressed format, such as a standard .WAV file or even
+      raw PCM. For small, frequently used sounds, the bigger memory footprint
+      is usually an acceptable tradeoff to constant redecoding. In some cases,
+      we've found that compressing to, say, .ogg format actually makes the
+      file bigger if it's a very short sound.
+
+    - Put your sound into a memory block and point multiple memory RWOPS at
+      it: one per playing sound. There are functions in SDL_sound 2
+      for allocating these from a pool, which reduces allocation overhead
+      and memory fragmentation, and eliminates multiple trips to the disk
+      when you "read" the sound.
+
+    - Sound_Sample structures are allocated in a pool, too, so throwaway
+      sounds (specifically, ones using pooled RWOPS) don't thrash system
+      resources. Good for those fire-and-forget effects.
+
+    - It's trivial to roll a reference-counting RWOPS that lets you use the
+      same memory block for several playing sounds, and when the last one
+      closes it (all related Sound_Samples go through Sound_FreeSample()), it
+      deletes the original memory block. Handy if you only want to loosely
+      manage those buffers.
+
+    - Cull samples if you're playing too many. The app can decide which sounds
+      are important and assign them a priority, and let only the first X
+      highest priority sounds actually mix.
+
+    - Alternately, if you can swallow the memory: take a highly-compressed
+      file and put it into a Sound_Sample, call Sound_DecodeAll. Now, use
+      the sample's "decoded" field as raw PCM for other Sound_Samples using
+      above tricks. When you are done, clean up the other samples first, then
+      call Sound_FreeSample() on this one. This is extremely useful if you
+      want to reduce CPU usage for one sound that is otherwise compressed.
+      Memory usage doesn't grow exponentially with each simulataneous mixing
+      of this sound, because everyone is feeding from the same memory block,
+      so each new sample instance adds some bytes for the structures (which
+      might have been allocated in the pool already anyhow).
+
+
+Hardcore #2: Predecoding and buffer sizes.
+
+Take advantage of the 1.0 API for predecoding and altering the decode buffer
+size. This gives you control over the memory/CPU tradeoff at mix time, as the
+mixer will call Sound_Decode() when it needs more data from a playing sample.
+How much decoding is done at that point depends on how much buffering is
+available. If you predecode the whole thing with Sound_DecodeAll(), then the
+mixer can focus on mixing and not spend time decoding.
+
+
+
+Hardcore #3: Global gain, global fade.
+
+Most attributes that apply to one sample can be applied to all by passing a
+NULL for the first argument to Sound_SetAttribute(). Gain and fade are
+examples of this. If you want everything to fade out at once, this is the
+best, race-condition free way to do it.
+
+Note that global attributes don't override (or overwrite) per-sample
+attributes. If you set a sample's gain to 2.0 and the global gain to 0.5, the
+sound plays at normal (1.0) gain...the sample's gain is still 2.0 when you
+change the global gain thereafter.
+
+
+Hardcore #4: Postmix callbacks.
+
+You can register a callback function per-sample that is called when the mixer
+has finished its work and is about to send the data to the audio hardware.
+These generally run in seperate threads on most platforms, and as such must be
+protected from your main code with mutexes.
+
+These are useful if you are are writing a media player and want to show some
+sort of visual feedback based on the playing audio data, or if you want to
+tweak the sound with your own special effects.
+
+
+Hardcore #5: Sample finished callback.
+
+You can register a callback function per-sample that is called when the mixer
+has completely finished mixing a non-looping sample. This is largely a nod to
+SDL_mixer, where this was the most convenient way to clean up fire-and-forget
+sounds, but most people will want to let SDL_sound handle those. This has
+other good uses: it lets you know when sound events are complete if you are
+adding cinematics/cut-scenes to your program, or perhaps when it's safe for
+characters to speak again (it's strange when one actor is speaking two
+overlapping lines of dialogue, for example).
+
+
+Hardcore #6: Procedural samples.
+!!! WRITEME: Hook up a RAW Sound_Sample to a RWOPS that generates sound on
+!!! WRITEME:  read, so you can mix in a procedural sample instead of just
+!!! WRITEME:  pre/post mixing.
+
+
+
+Hardcore #7: Your suggestion here!
+
+The goal is to try and make audio work fairly painless for the game developer,
+which means that if there is a good way to generalize functionality into the
+mixer layer, we probably should. Comments are welcome!
+
+It's worth noting that this tutorial covers common usage patterns and the Big
+Important Things, so a lot of support API isn't covered here. For example,
+important things like being able to query sample attributes weren't important
+enough to mention here, but that doesn't mean you can't do it).
+
+// end of mixer.txt ...
+

@@ -30,3 +30,5 @@ src/.deps/
 *xcuserdata
 **/project.xcworkspace/
 OSX-only/CocoaExecutor/ExecutorVolume/
+.hg
+.hgtags
