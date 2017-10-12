@@ -17,6 +17,7 @@ char ROMlib_rcsid_parseopt[] =
 #include "rsys/version.h"
 
 #include <ctype.h>
+#include <string.h>
 
 using namespace Executor;
 using namespace std;
@@ -31,7 +32,7 @@ Executor::ROMlib_parse_version (string vers, uint32 *version_out)
 {
   boolean_t success_p;
   int major_version, minor_version, teeny_version;
-  const char *major_str, *minor_str, *teeny_str;
+  char *major_str, *minor_str, *teeny_str;
   char *temp_str, *system_str;
 
   /* Copy the version to a temp string we can manipulate. */
