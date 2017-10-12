@@ -101,17 +101,17 @@ PRIVATE void checkcache(short refnum)
 	return;
     
     printf("\n");
-    fcbp = (filecontrolblock *)((char *)BigEndianValue(FCBSPtr) + refnum);
-    vcbp = BigEndianValue(fcbp->fcbVPtr);
-    headp = (cachehead *) BigEndianValue(vcbp->vcbCtlBuf);
+    fcbp = (filecontrolblock *)((char *)CL(FCBSPtr) + refnum);
+    vcbp = CL(fcbp->fcbVPtr);
+    headp = (cachehead *) CL(vcbp->vcbCtlBuf);
     printf("headp = 0x%lx, nitems = %d, flink = 0x%lx, blink = 0x%lx\n",
-		headp, BigEndianValue(headp->nitems), BigEndianValue(headp->flink), BigEndianValue(headp->blink));
-    for (i = BigEndianValue(headp->nitems), cachep = BigEndianValue(headp->flink); --i >= -3;
-						   cachep = BigEndianValue(cachep->flink))
+		headp, CW(headp->nitems), CL(headp->flink), CL(headp->blink));
+    for (i = CW(headp->nitems), cachep = CL(headp->flink); --i >= -3;
+						   cachep = CL(cachep->flink))
 	printf("0x%lx:0x%x ", cachep, cachep->flags);
     printf("\n\n");
-    for (i = BigEndianValue(headp->nitems), cachep = BigEndianValue(headp->blink); --i >= -3;
-						 cachep = BigEndianValue(cachep->blink))
+    for (i = CW(headp->nitems), cachep = CL(headp->blink); --i >= -3;
+						 cachep = CL(cachep->blink))
 	printf("0x%lx ", cachep);
     printf("\n");
 }
@@ -124,7 +124,7 @@ PUBLIC cacheentry *Executor::ROMlib_addrtocachep(Ptr addr, HVCB *vcbp)
     INTEGER i;
 
     headp = (cachehead *) MR(vcbp->vcbCtlBuf);
-    for (i = BigEndianValue(headp->nitems), retval = MR(headp->flink); --i >= 0 &&
+    for (i = CW(headp->nitems), retval = MR(headp->flink); --i >= 0 &&
 	     (addr < (Ptr) retval || addr > (Ptr) retval + sizeof(cacheentry));
 						    retval = MR(retval->flink))
 	;
@@ -133,7 +133,7 @@ PUBLIC cacheentry *Executor::ROMlib_addrtocachep(Ptr addr, HVCB *vcbp)
 
 #define BTENTRY(btp, n) \
       ((anykey *)((char *) (btp) + \
-      BigEndianValue(((short *)((char *)(btp) + PHYSBSIZE - sizeof(short)))[-(n)])))
+      CW(((short *)((char *)(btp) + PHYSBSIZE - sizeof(short)))[-(n)])))
       
 #define BTOFFSET(btp, n)    \
 		      ((short *)((char *)(btp) + PHYSBSIZE - sizeof(short))-(n))
@@ -165,8 +165,8 @@ PUBLIC OSErr Executor::ROMlib_errortype(btparam *btpb)
     if (retval == dirNFErr)
       warning_trace_info ("catkeyp->ckrParID = %d, "
 			  "btpb->tofind.catk.ckrParID = %d",
-			  BigEndianValue (catkeyp->ckrParID),
-			  BigEndianValue (btpb->tofind.catk.ckrParID));
+			  CL (catkeyp->ckrParID),
+			  CL (btpb->tofind.catk.ckrParID));
     fs_err_hook (retval);
     return retval;
 }
@@ -189,17 +189,17 @@ PRIVATE void checkbtp(btnode *btp)
     INTEGER i;
     char keylen;
     
-    flink = BigEndianValue(btp->ndFLink);
-    blink = BigEndianValue(btp->ndBLink);
+    flink = CL(btp->ndFLink);
+    blink = CL(btp->ndBLink);
     switch (btp->ndType) {
     case indexnode:
 	if (btp->ndLevel > 5)
 	    warning_unexpected ("level(%d) > 5 on indexnode", btp->ndLevel);
 	offsetp = BTOFFSET(btp, 0);
 	expected = sizeof(btnode);
-	for (i = BigEndianValue(btp->ndNRecs)+1; --i >= 0; --offsetp) {
-	    if (BigEndianValue(*offsetp) != expected)
-		if (BigEndianValue(*offsetp) < expected)
+	for (i = CW(btp->ndNRecs)+1; --i >= 0; --offsetp) {
+	    if (CW(*offsetp) != expected)
+		if (CW(*offsetp) < expected)
 		    warning_unexpected ("unexpected offset");
 		else
 		    warning_unexpected ("curiously large offset");
@@ -219,9 +219,9 @@ PRIVATE void checkbtp(btnode *btp)
 	    warning_unexpected ("level != 1 on leafnode");
 	offsetp = BTOFFSET(btp, 0);
 	expected = sizeof(btnode);
-	for (i = BigEndianValue(btp->ndNRecs)+1; --i >= 0; --offsetp) {
-	    if (BigEndianValue(*offsetp) != expected)
-		if (BigEndianValue(*offsetp) < expected)
+	for (i = CW(btp->ndNRecs)+1; --i >= 0; --offsetp) {
+	    if (CW(*offsetp) != expected)
+		if (CW(*offsetp) < expected)
 		    warning_unexpected ("unexpected offset");
 		else
 		    warning_unexpected ("curiously large offset\n");
@@ -263,7 +263,7 @@ PUBLIC BOOLEAN Executor::ROMlib_searchnode(btnode *btp, void *key, compfp fp,
 #if defined (CATFILEDEBUG)
     checkbtp(btp);
 #endif /* CATFILEDEBUG */
-    high = BigEndianValue(btp->ndNRecs)-1;
+    high = CW(btp->ndNRecs)-1;
     totest = BTENTRY(btp, high);        /* test last one by hand then use as sentinel */
     switch ((*fp)(key, totest)) {
     case firstisless:
@@ -345,7 +345,7 @@ PUBLIC OSErr Executor::ROMlib_putcache(cacheentry *cachep)
 	BufTgDate = Time;
 #endif
 	err = ROMlib_transphysblk (&((VCBExtra *)vcbp)->u.hfs,
-				   BigEndianValue(cachep->physblock) * PHYSBSIZE, 1,
+				   CL(cachep->physblock) * PHYSBSIZE, 1,
 				   (Ptr) cachep->buf, writing, (LONGINT *) 0);
 	vcbsync(vcbp);
     }
@@ -388,20 +388,20 @@ PUBLIC OSErr Executor::ROMlib_getcache(cacheentry **retpp, uint16 refnum, ULONGI
     ROMlib_index_cached = FALSE;
     fcbp = (filecontrolblock *)((char *)MR(FCBSPtr) + refnum);
     vcbp = MR(fcbp->fcbVPtr);
-    filenum = BigEndianValue(fcbp->fcbFlNum);
+    filenum = CL(fcbp->fcbFlNum);
     forkwanted = fcbp->fcbMdRByt & RESOURCEBIT ? resourcefork : datafork;
     headp = (cachehead *) MR(vcbp->vcbCtlBuf);
     
-    count = BigEndianValue(headp->nitems);
+    count = CW(headp->nitems);
     lastp = 0;
     lastdirtyp = 0;
     lastfreep = 0;
 #if 1
     badnesscount = 0;
 #endif
-    for (retval = MR(headp->flink); --count >= 0 && (BigEndianValue(retval->logblk) != logbno ||
-		BigEndianValue(retval->refnum) != refnum || MR(retval->vptr) != vcbp ||
-		BigEndianValue(retval->fileno) != filenum || retval->forktype != forkwanted);
+    for (retval = MR(headp->flink); --count >= 0 && (CL(retval->logblk) != logbno ||
+		CW(retval->refnum) != refnum || MR(retval->vptr) != vcbp ||
+		CL(retval->fileno) != filenum || retval->forktype != forkwanted);
 						      retval = MR(retval->flink)) {
 	if (!(retval->flags & CACHEBUSY)) {
 	    if (retval->flags & CACHEDIRTY) {
@@ -439,9 +439,9 @@ PUBLIC OSErr Executor::ROMlib_getcache(cacheentry **retpp, uint16 refnum, ULONGI
     makefirst(headp, retval);
     if (count < 0) {
 	retval->vptr = RM(vcbp);
-	retval->fileno = BigEndianValue(filenum);
-	retval->refnum = BigEndianValue(refnum);
-	retval->logblk = BigEndianValue(logbno);
+	retval->fileno = CL(filenum);
+	retval->refnum = CW(refnum);
+	retval->logblk = CL(logbno);
 	retval->flags = CACHEBUSY;
 	retval->forktype = forkwanted;
 
@@ -452,7 +452,7 @@ PUBLIC OSErr Executor::ROMlib_getcache(cacheentry **retpp, uint16 refnum, ULONGI
 	    fs_err_hook (err);
 	    return err;
 	}
-	retval->physblock = BigEndianValue(physbyte / PHYSBSIZE);
+	retval->physblock = CL(physbyte / PHYSBSIZE);
 	if (!(flags&GETCACHENOREAD))
 	    err = ROMlib_transphysblk(&((VCBExtra *)vcbp)->u.hfs, physbyte, 1,
 				      (Ptr) retval->buf, reading,
@@ -483,7 +483,7 @@ PUBLIC void Executor::ROMlib_checkleaves(INTEGER refnum)
     if (err != noErr)
 	warning_unexpected ("getcache error");
     block0p = (btblock0 *) block0cachep->buf;
-    node = BigEndianValue(block0p->firstleaf);
+    node = CL(block0p->firstleaf);
     expectedblink = 0;
     while (node != 0) {
 	err = ROMlib_getcache(&cachep, refnum, node, 0);
@@ -493,12 +493,12 @@ PUBLIC void Executor::ROMlib_checkleaves(INTEGER refnum)
 #if defined (CATFILEDEBUG)
 	checkbtp(btp);
 #endif /* CATFILEDEBUG */
-	if (BigEndianValue(btp->ndBLink) != expectedblink)
+	if (CL(btp->ndBLink) != expectedblink)
 	    warning_unexpected ("bad blink");
 	expectedblink = node;
-	node = BigEndianValue(btp->ndFLink);
+	node = CL(btp->ndFLink);
     }
-    if (BigEndianValue(block0p->lastleaf) != expectedblink)
+    if (CL(block0p->lastleaf) != expectedblink)
 	warning_unexpected ("bad block0p->blink");
 }
 #endif /* CATFILEDEBUG */
@@ -512,7 +512,7 @@ PUBLIC OSErr Executor::ROMlib_cleancache(HVCB *vcbp)
     
     headp = (cachehead *) MR(vcbp->vcbCtlBuf);
     err = noErr;
-    for (i = BigEndianValue(headp->nitems), cachep = (cacheentry *) (headp + 1); --i >= 0;
+    for (i = CW(headp->nitems), cachep = (cacheentry *) (headp + 1); --i >= 0;
 								    ++cachep) {
 	if (MR(cachep->vptr) == vcbp)
 	    cachep->flags &= ~CACHEBUSY;
@@ -532,7 +532,7 @@ PUBLIC OSErr Executor::ROMlib_flushcachevcbp(HVCB *vcbp)
     err = noErr;
     if (headp)
       {
-	for (i = BigEndianValue(headp->nitems), cachep = (cacheentry *) (headp + 1);
+	for (i = CW(headp->nitems), cachep = (cacheentry *) (headp + 1);
 	     --i >= 0; ++cachep)
 	  {
 	    if (MR(cachep->vptr) == vcbp && (cachep->flags & CACHEDIRTY))
@@ -579,7 +579,7 @@ PUBLIC OSErr Executor::ROMlib_keyfind(btparam *btpb)
         btpb->leafindex = 0;
         return noErr;
     }
-    node = BigEndianValue(((btblock0 *)cachep->buf)->root);
+    node = CL(((btblock0 *)cachep->buf)->root);
     tep->logbno = 0;
     tep++->cachep = cachep;
 #if !defined (LETGCCWAIL)
@@ -604,7 +604,7 @@ PUBLIC OSErr Executor::ROMlib_keyfind(btparam *btpb)
 	found = ROMlib_searchnode((btnode *)cachep->buf, &btpb->tofind,
 			 btpb->fp, &btpb->foundp, (INTEGER *) &tep->after);
 	if (type == indexnode)
-	    node = BigEndianValue(*(LONGINT *) DATAPFROMKEY(btpb->foundp));
+	    node = CL(*(LONGINT *) DATAPFROMKEY(btpb->foundp));
 	else {
 	    btpb->leafindex = tep - btpb->trail;
 	    btpb->success = found;
@@ -633,14 +633,14 @@ PUBLIC OSErr Executor::ROMlib_btnext(anykey **nextpp, anykey *keyp, HVCB *vcbp)
     
     cachep = ROMlib_addrtocachep((Ptr) keyp, vcbp);
     btp = (btnode *) cachep->buf;
-    for (i = BigEndianValue(btp->ndNRecs); --i >= 0 && BTENTRY(btp, i) != keyp;)
+    for (i = CW(btp->ndNRecs); --i >= 0 && BTENTRY(btp, i) != keyp;)
 	;
     if (i < 0)
 	retval = 0;
-    else if (i < BigEndianValue(btp->ndNRecs) - 1)
+    else if (i < CW(btp->ndNRecs) - 1)
 	retval = BTENTRY(btp, i+1);
-    else if ((node = BigEndianValue(btp->ndFLink))) {
-	err = ROMlib_getcache(&cachep, BigEndianValue(cachep->refnum), node, (cacheflagtype)0);
+    else if ((node = CL(btp->ndFLink))) {
+	err = ROMlib_getcache(&cachep, CW(cachep->refnum), node, (cacheflagtype)0);
 	if (err != noErr)
 	  {
 	    fs_err_hook (err);
@@ -673,15 +673,15 @@ PRIVATE OSErr MapBitSetOrClr(cacheentry *block0cachep, LONGINT bit,
     INTEGER nrecs, nmapnodes;
     OSErr err;
 
-    refnum = BigEndianValue(block0cachep->refnum);
+    refnum = CW(block0cachep->refnum);
     cachep = block0cachep;
     block0p = (btblock0 *) block0cachep->buf;
-    nnodes = BigEndianValue(block0p->nnodes);
+    nnodes = CL(block0p->nnodes);
     gui_assert(bit < nnodes);
     btp = (btnode *) block0p;
     done = FALSE;
     do {
-	nrecs = BigEndianValue(btp->ndNRecs);
+	nrecs = CW(btp->ndNRecs);
 	mapstart = (unsigned char *) BTENTRY(btp, nrecs-1);
 	mapend   = (unsigned char *) BTENTRY(btp, nrecs);
 	nmapnodes = (mapend - mapstart) * 8;
@@ -695,7 +695,7 @@ PRIVATE OSErr MapBitSetOrClr(cacheentry *block0cachep, LONGINT bit,
 	} else {
 	    if (btp->ndFLink) {
 		bit -=  nmapnodes;
-		err = ROMlib_getcache(&cachep, refnum, BigEndianValue(btp->ndFLink), (cacheflagtype)0);
+		err = ROMlib_getcache(&cachep, refnum, CL(btp->ndFLink), (cacheflagtype)0);
 		if (err != noErr)
 		  {
 		    fs_err_hook (err);
@@ -728,23 +728,23 @@ PRIVATE OSErr add_free_nodes(cacheentry *block0cachep, ULONGINT n_new_nodes)
     OSErr err;
     cacheentry *oldcachep;
 
-    refnum = BigEndianValue(block0cachep->refnum);
+    refnum = CW(block0cachep->refnum);
     block0p = (btblock0 *) block0cachep->buf;
-    nnodes = BigEndianValue(block0p->nnodes);
+    nnodes = CL(block0p->nnodes);
     first_free_node = nnodes;
     btp = (btnode *) block0p;
     oldcachep = block0cachep;
     done = FALSE;
-    block0p->nnodes = BigEndianValue(nnodes + n_new_nodes);
+    block0p->nnodes = CL(nnodes + n_new_nodes);
     do {
-	nrecs = BigEndianValue(btp->ndNRecs);
+	nrecs = CW(btp->ndNRecs);
 	mapstart = (unsigned char *) BTENTRY(btp, nrecs-1);
 	mapend   = (unsigned char *) BTENTRY(btp, nrecs);
 	nmapnodes = (mapend - mapstart) * 8;
 	if (nnodes + n_new_nodes > nmapnodes) {
 	    if (btp->ndFLink) {
 		nnodes -=  nmapnodes;
-		err = ROMlib_getcache(&newcachep, refnum, BigEndianValue(btp->ndFLink), (cacheflagtype)0);
+		err = ROMlib_getcache(&newcachep, refnum, CL(btp->ndFLink), (cacheflagtype)0);
 		if (err != noErr)
 		  {
 		    fs_err_hook (err);
@@ -761,7 +761,7 @@ PRIVATE OSErr add_free_nodes(cacheentry *block0cachep, ULONGINT n_new_nodes)
 /*-->*/		    return err;
 		  }
 		newbtp = (btnode *) newcachep->buf;
-		btp->ndFLink = BigEndianValue(first_free_node);
+		btp->ndFLink = CL(first_free_node);
 		memset((char *) newbtp, 0, PHYSBSIZE);
 		newbtp->ndType = CB(mapnode);	/* 2 */
 		newbtp->ndNRecs = CWC(1);
@@ -777,7 +777,7 @@ PRIVATE OSErr add_free_nodes(cacheentry *block0cachep, ULONGINT n_new_nodes)
 	} else
 	    done = TRUE;
     } while (!done);
-    block0p->nfreenodes = BigEndianValue(BigEndianValue(block0p->nfreenodes) + n_new_nodes);
+    block0p->nfreenodes = CL(CL(block0p->nfreenodes) + n_new_nodes);
     return noErr;
 
 }
@@ -812,15 +812,15 @@ PRIVATE OSErr MapFindFirstBitAndSet(cacheentry *block0cachep,
     ULONGINT retval;
     ULONGINT n;
 
-    refnum = BigEndianValue(block0cachep->refnum);
+    refnum = CW(block0cachep->refnum);
     cachep = block0cachep;
     block0p = (btblock0 *) block0cachep->buf;
-    nnodes = BigEndianValue(block0p->nnodes);
+    nnodes = CL(block0p->nnodes);
     btp = (btnode *) block0p;
     done = FALSE;
     retval = 0;
     do {
-	nrecs = BigEndianValue(btp->ndNRecs);
+	nrecs = CW(btp->ndNRecs);
 	mapstart = (unsigned char *) BTENTRY(btp, nrecs-1);
 	mapend   = (unsigned char *) BTENTRY(btp, nrecs);
 	nmapnodes = (mapend - mapstart) * 8;
@@ -833,7 +833,7 @@ PRIVATE OSErr MapFindFirstBitAndSet(cacheentry *block0cachep,
 	} else {
 	    if (btp->ndFLink) {
 		retval +=  nmapnodes;
-		err = ROMlib_getcache(&cachep, refnum, BigEndianValue(btp->ndFLink), (cacheflagtype)0);
+		err = ROMlib_getcache(&cachep, refnum, CL(btp->ndFLink), (cacheflagtype)0);
 		if (err != noErr)
 		  {
 		    fs_err_hook (err);
@@ -860,7 +860,7 @@ PRIVATE OSErr deletenode(cacheentry *todeletep)
     OSErr err;
     INTEGER refnum;
     
-    refnum = BigEndianValue(todeletep->refnum);
+    refnum = CW(todeletep->refnum);
     err = ROMlib_getcache(&block0cachep, refnum, 0L, GETCACHESAVE);
     if (err != noErr)
       {
@@ -872,16 +872,16 @@ PRIVATE OSErr deletenode(cacheentry *todeletep)
 #if defined (CATFILEDEBUG)
     checkbtp(btp);
 #endif /* CATFILEDEBUG */
-    node = BigEndianValue(todeletep->logblk);
+    node = CL(todeletep->logblk);
 #if 0
     if (btp->ndType == leafnode) {
 #endif
-	flink = BigEndianValue(btp->ndFLink);
-	blink = BigEndianValue(btp->ndBLink);
-	if (BigEndianValue(block0p->firstleaf) == node)
-	    block0p->firstleaf = BigEndianValue(flink);
-	if (BigEndianValue(block0p->lastleaf) == node)
-	    block0p->lastleaf = BigEndianValue(blink);
+	flink = CL(btp->ndFLink);
+	blink = CL(btp->ndBLink);
+	if (CL(block0p->firstleaf) == node)
+	    block0p->firstleaf = CL(flink);
+	if (CL(block0p->lastleaf) == node)
+	    block0p->lastleaf = CL(blink);
 	if (blink) {
 	    err = ROMlib_getcache(&linkcachep, refnum, blink, (cacheflagtype)0);
 	    if (err != noErr)
@@ -890,7 +890,7 @@ PRIVATE OSErr deletenode(cacheentry *todeletep)
 		return err;
 	      }
 	    linkbtp = (btnode *) linkcachep->buf;
-	    linkbtp->ndFLink = BigEndianValue(flink);
+	    linkbtp->ndFLink = CL(flink);
 	    linkcachep->flags |= CACHEDIRTY;
 	}
 	if (flink) {
@@ -901,13 +901,13 @@ PRIVATE OSErr deletenode(cacheentry *todeletep)
 		return err;
 	      }
 	    linkbtp = (btnode *) linkcachep->buf;
-	    linkbtp->ndBLink = BigEndianValue(blink);
+	    linkbtp->ndBLink = CL(blink);
 	    linkcachep->flags |= CACHEDIRTY;
 	}
 #if 0
     }
 #endif
-    block0p->nfreenodes = BigEndianValue(BigEndianValue(block0p->nfreenodes) + 1);
+    block0p->nfreenodes = CL(CL(block0p->nfreenodes) + 1);
     MapBitSetOrClr(block0cachep, node, FALSE);
     block0cachep->flags |= CACHEDIRTY;
     memset(todeletep->buf, 0, PHYSBSIZE);
@@ -918,8 +918,8 @@ PRIVATE OSErr deletenode(cacheentry *todeletep)
 typedef enum { leavealone, doleft, doright } whichnodetype;
 
 #define FREESIZE(btp)   \
-    (((char *) (btp) + PHYSBSIZE - (BigEndianValue((btp)->ndNRecs)+1)*sizeof(short)) - \
-				   (char *) BTENTRY((btp), BigEndianValue((btp)->ndNRecs)))
+    (((char *) (btp) + PHYSBSIZE - (CW((btp)->ndNRecs)+1)*sizeof(short)) - \
+				   (char *) BTENTRY((btp), CW((btp)->ndNRecs)))
 					
 #define SIZECUTOFF  ((PHYSBSIZE - (int) sizeof(btnode)) / 2)
 
@@ -942,21 +942,21 @@ PRIVATE OSErr merge(cacheentry *leftp, cacheentry *rightp)
     checkbtp(leftbtp);
     checkbtp(rightbtp);
 #endif
-    nrecs = BigEndianValue(rightbtp->ndNRecs);
+    nrecs = CW(rightbtp->ndNRecs);
     datastart = (char *) BTENTRY(rightbtp, 0);
     datastop  = (char *) BTENTRY(rightbtp, nrecs);
     datasize  = datastop - datastart;
     
-    memmove(BTENTRY(leftbtp, BigEndianValue(leftbtp->ndNRecs)), datastart, datasize);
+    memmove(BTENTRY(leftbtp, CW(leftbtp->ndNRecs)), datastart, datasize);
     
-    offsetp = BTOFFSET(leftbtp, BigEndianValue(leftbtp->ndNRecs));
+    offsetp = BTOFFSET(leftbtp, CW(leftbtp->ndNRecs));
     n = 0;
     for (i = nrecs, n = 0; --i >= 0; ++n) {
-	offsetp[-1] = BigEndianValue(BigEndianValue(offsetp[0]) + (char *) BTENTRY(rightbtp, n+1) -
+	offsetp[-1] = CW(CW(offsetp[0]) + (char *) BTENTRY(rightbtp, n+1) -
 					  (char *) BTENTRY(rightbtp, n));
 	--offsetp;
     }
-    leftbtp->ndNRecs = BigEndianValue(BigEndianValue(leftbtp->ndNRecs) + (nrecs));
+    leftbtp->ndNRecs = CW(CW(leftbtp->ndNRecs) + (nrecs));
     if (!(rightp->flags & CACHEBUSY))
 	warning_unexpected ("not busy");
     if (!(leftp->flags & CACHEBUSY))
@@ -995,7 +995,7 @@ PRIVATE OSErr shuffle(cacheentry *leftp, cacheentry *rightp)
     if (leftfreesize < rightfreesize) {
 	/* copy from left to right; almost the same code as below */
 	/* NOTE:  if you find a bug here, look for a similar bug below */
-	n = BigEndianValue(leftbtp->ndNRecs) - 1;
+	n = CW(leftbtp->ndNRecs) - 1;
 	while (rightfreesize > SIZECUTOFF) {
 	    numtocopy++;
 	    recstart = (char *) BTENTRY(leftbtp, n);
@@ -1005,28 +1005,28 @@ PRIVATE OSErr shuffle(cacheentry *leftp, cacheentry *rightp)
 	    rightfreesize -= sizeof(INTEGER) + recsize;
 	    --n;
 	}
-	rightdatasize = (char *) BTENTRY(rightbtp, BigEndianValue(rightbtp->ndNRecs)) -
+	rightdatasize = (char *) BTENTRY(rightbtp, CW(rightbtp->ndNRecs)) -
 								  rightbtentry0;
 	memmove(rightbtentry0+bytestoshift, rightbtentry0, rightdatasize);
 	memmove(rightbtentry0, recstart, bytestoshift);
 	
-	offsetp = BTOFFSET(rightbtp, BigEndianValue(rightbtp->ndNRecs) + numtocopy);
-	for (i = BigEndianValue(rightbtp->ndNRecs); --i >= 0;) {
-	    offsetp[0] = BigEndianValue(BigEndianValue(offsetp[numtocopy]) + bytestoshift);
+	offsetp = BTOFFSET(rightbtp, CW(rightbtp->ndNRecs) + numtocopy);
+	for (i = CW(rightbtp->ndNRecs); --i >= 0;) {
+	    offsetp[0] = CW(CW(offsetp[numtocopy]) + bytestoshift);
 	    ++offsetp;
 	}
 	
 	offsetp = BTOFFSET(rightbtp, 0);
 	++n;
 	for (i = numtocopy; --i >= 0;) {
-	    offsetp[-1] = BigEndianValue(BigEndianValue(offsetp[0]) + (char *) BTENTRY(leftbtp, n+1) -
+	    offsetp[-1] = CW(CW(offsetp[0]) + (char *) BTENTRY(leftbtp, n+1) -
 					      (char *) BTENTRY(leftbtp, n));
 	    --offsetp;
 	    ++n;
 	}
 	
-	leftbtp ->ndNRecs = BigEndianValue(BigEndianValue(leftbtp ->ndNRecs) - (numtocopy));
-	rightbtp->ndNRecs = BigEndianValue(BigEndianValue(rightbtp->ndNRecs) + (numtocopy));
+	leftbtp ->ndNRecs = CW(CW(leftbtp ->ndNRecs) - (numtocopy));
+	rightbtp->ndNRecs = CW(CW(rightbtp->ndNRecs) + (numtocopy));
     } else {
 	/* copy from right to left; almost the same code as above */
 	/* NOTE:  if you find a bug here, look for a similar bug above */
@@ -1040,29 +1040,29 @@ PRIVATE OSErr shuffle(cacheentry *leftp, cacheentry *rightp)
 	    leftfreesize -= sizeof(INTEGER) + recsize;
 	    ++n;
 	}
-	rightdatasize = (char *) BTENTRY(rightbtp, BigEndianValue(rightbtp->ndNRecs)) -
+	rightdatasize = (char *) BTENTRY(rightbtp, CW(rightbtp->ndNRecs)) -
 								  recend;
-	memmove(BTENTRY(leftbtp, BigEndianValue(leftbtp->ndNRecs)),
+	memmove(BTENTRY(leftbtp, CW(leftbtp->ndNRecs)),
 		rightbtentry0, bytestoshift);
 	memmove(rightbtentry0, recend, rightdatasize);
 	
-	offsetp = BTOFFSET(leftbtp, BigEndianValue(leftbtp->ndNRecs));
+	offsetp = BTOFFSET(leftbtp, CW(leftbtp->ndNRecs));
 	n = 0;
 	for (i = numtocopy; --i >= 0;) {
-	    offsetp[-1] = BigEndianValue(BigEndianValue(offsetp[0]) + (char *) BTENTRY(rightbtp, n+1) -
+	    offsetp[-1] = CW(CW(offsetp[0]) + (char *) BTENTRY(rightbtp, n+1) -
 					      (char *) BTENTRY(rightbtp, n));
 	    --offsetp;
 	    ++n;
 	}
 	
 	offsetp = BTOFFSET(rightbtp, 1);
-	for (i = BigEndianValue(rightbtp->ndNRecs) - numtocopy; --i >= 0;) {
-	    offsetp[0] = BigEndianValue(BigEndianValue(offsetp[-numtocopy]) - bytestoshift);
+	for (i = CW(rightbtp->ndNRecs) - numtocopy; --i >= 0;) {
+	    offsetp[0] = CW(CW(offsetp[-numtocopy]) - bytestoshift);
 	    --offsetp;
 	}
 	
-	rightbtp->ndNRecs = BigEndianValue(BigEndianValue(rightbtp->ndNRecs) - (numtocopy));
-	leftbtp ->ndNRecs = BigEndianValue(BigEndianValue(leftbtp->ndNRecs) + (numtocopy));
+	rightbtp->ndNRecs = CW(CW(rightbtp->ndNRecs) - (numtocopy));
+	leftbtp ->ndNRecs = CW(CW(leftbtp->ndNRecs) + (numtocopy));
 	
     }
 #if defined (CATFILEDEBUG)
@@ -1120,7 +1120,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
     modrightkey = FALSE;
     *todeletep = -1;
     btp = (btnode *) selfcachep->buf;
-    if (selfindex < 0 || selfindex >= BigEndianValue(btp->ndNRecs)) {
+    if (selfindex < 0 || selfindex >= CW(btp->ndNRecs)) {
         warning_unexpected ("fried selfindex");
 	err = fsDSIntErr;
 	fs_err_hook (err);
@@ -1135,16 +1135,16 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
     selfcachep->flags |= CACHEDIRTY;
     startp = (char *) BTENTRY(btp, selfindex);
     stopp  = (char *) BTENTRY(btp, selfindex+1);
-    freep  = (char *) BTENTRY(btp, BigEndianValue(btp->ndNRecs));
+    freep  = (char *) BTENTRY(btp, CW(btp->ndNRecs));
     memmove(startp, stopp, freep - stopp);
-    ntoadjust = BigEndianValue(btp->ndNRecs) - selfindex;
+    ntoadjust = CW(btp->ndNRecs) - selfindex;
     offsetp = BTOFFSET(btp, selfindex);
     adjust = stopp - startp;
     while (--ntoadjust >= 0) {
-	*offsetp = BigEndianValue(BigEndianValue(offsetp[-1]) - adjust);
+	*offsetp = CW(CW(offsetp[-1]) - adjust);
 	--offsetp;
     }
-    btp->ndNRecs = BigEndianValue(BigEndianValue(btp->ndNRecs) - 1);
+    btp->ndNRecs = CW(CW(btp->ndNRecs) - 1);
     if (selfindex == 0)
 	modselfkey = TRUE;
     
@@ -1164,11 +1164,11 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 	    checkbtp(parentbtp);
 #endif /* CATFILEDEBUG */
 	    if (parentindex > 0)
-		left = BigEndianValue(*(LONGINT *)DATAPFROMKEY(BTENTRY(parentbtp, parentindex-1)));
+		left = CL(*(LONGINT *)DATAPFROMKEY(BTENTRY(parentbtp, parentindex-1)));
 	    else
 		left = -1;
-	    if (parentindex < BigEndianValue(parentbtp->ndNRecs) - 1)
-		right = BigEndianValue(*(LONGINT *)DATAPFROMKEY(BTENTRY(parentbtp, parentindex+1)));
+	    if (parentindex < CW(parentbtp->ndNRecs) - 1)
+		right = CL(*(LONGINT *)DATAPFROMKEY(BTENTRY(parentbtp, parentindex+1)));
 	    else
 		right = -1;
 	} else {
@@ -1176,7 +1176,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 	    right = -1;
 	}
 	if (left >= 0) {
-	    err = ROMlib_getcache(&leftcachep, BigEndianValue(selfcachep->refnum), left, GETCACHESAVE);
+	    err = ROMlib_getcache(&leftcachep, CW(selfcachep->refnum), left, GETCACHESAVE);
 	    if (err != noErr)
 	      {
 		fs_err_hook (err);
@@ -1201,7 +1201,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 	    }
 	}
 	if (!done && right >= 0) {
-	    err = ROMlib_getcache(&rightcachep, BigEndianValue(selfcachep->refnum), right,
+	    err = ROMlib_getcache(&rightcachep, CW(selfcachep->refnum), right,
 								  GETCACHESAVE);
 	    if (err != noErr)
 	      {
@@ -1292,8 +1292,8 @@ PRIVATE OSErr maketrailentrybusy(trailentry *tep, uint16 refnum)
     HVCB *SWvcbp;
     
     SWvcbp = ((filecontrolblock *)((char *)MR(FCBSPtr) + refnum))->fcbVPtr;
-    if (BigEndianValue(tep->cachep->refnum) != refnum ||
-    	BigEndianValue(tep->cachep->logblk) != tep->logbno || tep->cachep->vptr != SWvcbp)
+    if (CW(tep->cachep->refnum) != refnum ||
+    	CL(tep->cachep->logblk) != tep->logbno || tep->cachep->vptr != SWvcbp)
 	err = ROMlib_getcache(&tep->cachep, refnum, tep->logbno, GETCACHESAVE);
     else {
 	err = noErr;
@@ -1322,7 +1322,7 @@ PRIVATE OSErr deleteroot(cacheentry *oldrootp, cacheentry *block0cachep)
     /* update height, root */
     
     block0p = (btblock0 *) block0cachep->buf;
-    block0p->height = BigEndianValue(BigEndianValue(block0p->height) - 1);
+    block0p->height = CW(CW(block0p->height) - 1);
     block0p->root =
 		 *(ULONGINT *) DATAPFROMKEY(BTENTRY((btnode *) oldrootp->buf, 0));
     if (!(block0cachep->flags & CACHEBUSY))
@@ -1359,7 +1359,7 @@ PRIVATE OSErr updatenumentries(cacheentry *block0cachep, INTEGER adjust)
     btblock0 *block0p;
     
     block0p = (btblock0 *) block0cachep->buf;
-    block0p->numentries = BigEndianValue(BigEndianValue(block0p->numentries) + (adjust));
+    block0p->numentries = CL(CL(block0p->numentries) + (adjust));
     if (!(block0cachep->flags & CACHEBUSY))
 	warning_unexpected ("not busy");
     block0cachep->flags |= CACHEDIRTY;
@@ -1395,7 +1395,7 @@ PUBLIC OSErr Executor::ROMlib_btdelete(btparam *btpb)
     tep = btpb->trail + btpb->leafindex;
     selfindex  = tep->after;
     done = FALSE;
-    refnum = BigEndianValue(btpb->trail[0].cachep->refnum);
+    refnum = CW(btpb->trail[0].cachep->refnum);
     if (((btblock0 *)btpb->trail[0].cachep->buf)->numentries == CLC(1)) {
 	err = maketrailentrybusy(&btpb->trail[1], refnum);
 	if (err != noErr)
@@ -1503,7 +1503,7 @@ PUBLIC OSErr Executor::ROMlib_makecatparam(btparam *btpb, HVCB *vcbp, LONGINT di
   btpb->vcbp = vcbp;
   retval = ROMlib_makecatkey((catkey *) &btpb->tofind, dirid, namelen, namep);
   btpb->fp = ROMlib_catcompare;
-  btpb->refnum = BigEndianValue(vcbp->vcbCTRef);
+  btpb->refnum = CW(vcbp->vcbCTRef);
   btpb->leafindex = -1;
   fs_err_hook (retval);
   return retval;
@@ -1556,32 +1556,32 @@ PRIVATE OSErr valenceadjust(btparam *btpb, INTEGER toadjust, filekind kind)
     }
     if (err == noErr) {
 	err = ROMlib_makecatparam(&btparamblock, btpb->vcbp,
-				   BigEndianValue(btpb->tofind.catk.ckrParID), 0, (Ptr) 0);
+				   CL(btpb->tofind.catk.ckrParID), 0, (Ptr) 0);
 	if (err == noErr)
 	  err = ROMlib_keyfind(&btparamblock);
 	if (err == noErr && btparamblock.success) {
 	    thdp = (threadrec *) DATAPFROMKEY(btparamblock.foundp);
-	    err = ROMlib_makecatkey((catkey *) &btparamblock.tofind, BigEndianValue(thdp->thdParID),
+	    err = ROMlib_makecatkey((catkey *) &btparamblock.tofind, CL(thdp->thdParID),
 				     thdp->thdCName[0], (Ptr) thdp->thdCName+1);
 	    /* don't need to remake btparamblock */
 	    if (err == noErr)
 	      err = ROMlib_keyfind(&btparamblock);
 	    if (err == noErr && btparamblock.success) {
 		drp = (directoryrec *) DATAPFROMKEY(btparamblock.foundp);
-		drp->dirVal = BigEndianValue(BigEndianValue(drp->dirVal) + (toadjust));
+		drp->dirVal = CW(CW(drp->dirVal) + (toadjust));
 		err = ROMlib_dirtyleaf(drp, btpb->vcbp);
 		if (err == noErr) {
-		    *countadj = BigEndianValue(BigEndianValue(*countadj) + (toadjust));
+		    *countadj = CL(CL(*countadj) + (toadjust));
 		    if (drp->dirDirID == CLC(2))
 		      {
 			if (kind == directory)
 			    btpb->vcbp->vcbNmRtDirs =
-				    BigEndianValue(BigEndianValue(btpb->vcbp->vcbNmRtDirs) + toadjust);
+				    CW(CW(btpb->vcbp->vcbNmRtDirs) + toadjust);
 			else
 			    btpb->vcbp->vcbNmFls =
-				       BigEndianValue(BigEndianValue(btpb->vcbp->vcbNmFls) + toadjust);
+				       CW(CW(btpb->vcbp->vcbNmFls) + toadjust);
 		      }
-		    btpb->vcbp->vcbFlags |= BigEndianValue(VCBDIRTY);
+		    btpb->vcbp->vcbFlags |= CW(VCBDIRTY);
 		}
 	    } else {
 		if (err == noErr) {
@@ -1626,7 +1626,7 @@ PUBLIC OSErr Executor::ROMlib_dirdelete(btparam *btpb)
     LONGINT dirid;
     
     drp = (directoryrec *) DATAPFROMKEY(btpb->foundp);
-    dirid = BigEndianValue(drp->dirDirID);
+    dirid = CL(drp->dirDirID);
     err = ROMlib_filedelete(btpb, directory);
     if (err == noErr) { /* nuke the thread record */
 	err = ROMlib_makecatkey((catkey *) &btpb->tofind, dirid, 0, (Ptr) 0);
@@ -1653,7 +1653,7 @@ PRIVATE OSErr savebusybuffers(HVCB *vcbp, saverec_t ***savehandlep)
     OSErr err;
 
     headp = (cachehead *) MR(vcbp->vcbCtlBuf);
-    count = BigEndianValue(headp->nitems);
+    count = CW(headp->nitems);
     
     retval = (saverec_t **) NewHandle((Size) 0);
     if (retval == 0)
@@ -1665,8 +1665,8 @@ PRIVATE OSErr savebusybuffers(HVCB *vcbp, saverec_t ***savehandlep)
     cursize = 0;
     for (cachep = MR(headp->flink); --count >= 0; cachep = MR(cachep->flink)) {
 	if (cachep->flags & CACHEBUSY) {
-	    tempsaverec.refnum = BigEndianValue(cachep->refnum);
-	    tempsaverec.logbno = BigEndianValue(cachep->logblk);
+	    tempsaverec.refnum = CW(cachep->refnum);
+	    tempsaverec.logbno = CL(cachep->logblk);
 	    SetHandleSize((Handle) retval, cursize + sizeof(tempsaverec));
 	    memmove((char *) MR(*retval) + cursize,
 		    &tempsaverec, sizeof(tempsaverec));
@@ -1709,11 +1709,11 @@ PRIVATE OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
     filecontrolblock *fcbp;
     saverec_t **busysave;
     
-    refnum = BigEndianValue(block0cachep->refnum);
+    refnum = CW(block0cachep->refnum);
     block0p = (btblock0 *) block0cachep->buf;
     if (block0p->nfreenodes == CLC(0)) {
 	fcbp = (filecontrolblock *) ((char *)MR(FCBSPtr) + refnum);
-	iop.ioRefNum = BigEndianValue(refnum);
+	iop.ioRefNum = CW(refnum);
 	iop.ioReqCount = fcbp->fcbClmpSize;
 
 	/* We never add more than one extra mapping page, so we need
@@ -1726,7 +1726,7 @@ PRIVATE OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
 
 	  max_bytes_we_can_map = (MAP_PAGE_MAP_END - MAP_PAGE_MAP_BEGIN)
 	    * 8 * PHYSBSIZE;
-	  if (BigEndianValue (iop.ioReqCount) > max_bytes_we_can_map)
+	  if (CL (iop.ioReqCount) > max_bytes_we_can_map)
 	    iop.ioReqCount = CLC (max_bytes_we_can_map);
 	}
 
@@ -1743,7 +1743,7 @@ PRIVATE OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
 	MR(fcbp->fcbVPtr)->vcbFlags |= CWC(VCBDIRTY);
 	ROMlib_flushvcbp(MR(fcbp->fcbVPtr));  /* just setting DIRTY isn't safe */
 	err1 = restorebusybuffers(busysave);
-	if (err == noErr || (err == dskFulErr && BigEndianValue(iop.ioActCount) > 0))
+	if (err == noErr || (err == dskFulErr && CL(iop.ioActCount) > 0))
 	    err = err1;
 	fcbp->fcbMdRByt = flags;
 	if (err != noErr)
@@ -1751,7 +1751,7 @@ PRIVATE OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
 	    fs_err_hook (err);
 	    return err;
 	  }
-	nblocksalloced = BigEndianValue(iop.ioActCount) / PHYSBSIZE;
+	nblocksalloced = CL(iop.ioActCount) / PHYSBSIZE;
 	if (nblocksalloced <= 0) {
 	    warning_unexpected ("nblocksalloced <= 0");
 	    err = fsDSIntErr;
@@ -1771,7 +1771,7 @@ PRIVATE OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
 	fs_err_hook (err);
 /*-->*/	return err;
       }
-    block0p->nfreenodes = BigEndianValue(BigEndianValue(block0p->nfreenodes) - 1);
+    block0p->nfreenodes = CL(CL(block0p->nfreenodes) - 1);
     if (!(block0cachep->flags & CACHEBUSY))
 	warning_unexpected ("not busy");
     block0cachep->flags |= CACHEDIRTY;
@@ -1791,7 +1791,7 @@ PRIVATE OSErr getnewnode(cacheentry **newcachepp, cacheentry *leftp)
     INTEGER refnum;
     ULONGINT newnode, leftnode, flink;
     
-    refnum = BigEndianValue(leftp->refnum);
+    refnum = CW(leftp->refnum);
     err = ROMlib_getcache(&block0cachep, refnum, 0L, GETCACHESAVE);
     if (err != noErr)
       {
@@ -1802,24 +1802,24 @@ PRIVATE OSErr getnewnode(cacheentry **newcachepp, cacheentry *leftp)
     err = getfreenode(&newcachep, block0cachep);
     *newcachepp = newcachep;
     newbtp = (btnode *) newcachep->buf;
-    newnode = BigEndianValue(newcachep->logblk);
+    newnode = CL(newcachep->logblk);
     leftbtp = (btnode *) leftp->buf;
 #if defined (CATFILEDEBUG)
     checkbtp(leftbtp);
 #endif /* CATFILEDEBUG */
-    memmove(newbtp, leftbtp, (sizeof(BigEndianValue(leftbtp->ndFLink))
-			      + sizeof(BigEndianValue(leftbtp->ndBLink))
+    memmove(newbtp, leftbtp, (sizeof(CL(leftbtp->ndFLink))
+			      + sizeof(CL(leftbtp->ndBLink))
 			      + sizeof(leftbtp->ndType)
 			      + sizeof(leftbtp->ndLevel)));
-    leftnode = BigEndianValue(leftp->logblk);
-    if (BigEndianValue(block0p->lastleaf) == leftnode)
-	block0p->lastleaf = BigEndianValue(newnode);
-    leftbtp->ndFLink = BigEndianValue(newnode);
+    leftnode = CL(leftp->logblk);
+    if (CL(block0p->lastleaf) == leftnode)
+	block0p->lastleaf = CL(newnode);
+    leftbtp->ndFLink = CL(newnode);
     if (!(leftp->flags & CACHEBUSY))
 	warning_unexpected ("not busy");
     leftp->flags |= CACHEDIRTY;
-    newbtp->ndBLink = BigEndianValue(leftnode);
-    if ((flink = BigEndianValue(newbtp->ndFLink))) {
+    newbtp->ndBLink = CL(leftnode);
+    if ((flink = CL(newbtp->ndFLink))) {
 	err = ROMlib_getcache(&linkcachep, refnum, flink, (cacheflagtype)0);
 	if (err != noErr)
 	  {
@@ -1827,7 +1827,7 @@ PRIVATE OSErr getnewnode(cacheentry **newcachepp, cacheentry *leftp)
 	    return err;
 	  }
 	linkbtp = (btnode *) linkcachep->buf;
-	linkbtp->ndBLink = BigEndianValue(newnode);
+	linkbtp->ndBLink = CL(newnode);
 	linkcachep->flags |= CACHEDIRTY;
     }
     if (!(block0cachep->flags & CACHEBUSY))
@@ -1870,7 +1870,7 @@ PRIVATE OSErr slipin(cacheentry *cachep, INTEGER after, anykey *keyp,
 #endif /* CATFILEDEBUG */
     vcbp = MR(cachep->vptr);
     firstoffset = (short *)((char *)btp + PHYSBSIZE) - 1;
-    nrecs = BigEndianValue(btp->ndNRecs);
+    nrecs = CW(btp->ndNRecs);
     keysize = EVENUP(((catkey *)keyp)->ckrKeyLen + 1);
     datasize = EVENUP(datasize);
     sizeneeded = keysize + datasize + sizeof(INTEGER);
@@ -1883,10 +1883,10 @@ PRIVATE OSErr slipin(cacheentry *cachep, INTEGER after, anykey *keyp,
 	memmove(keylocp, keyp, keysize);
 	memmove(keylocp + keysize, data, datasize);
 	for (i = nrecs - after, offsetp = &firstoffset[-nrecs - 1]; --i >= 0;) {
-	    offsetp[0] = BigEndianValue(BigEndianValue(offsetp[1]) + datasize + keysize);
+	    offsetp[0] = CW(CW(offsetp[1]) + datasize + keysize);
 	    ++offsetp;
 	}
-	btp->ndNRecs = BigEndianValue(BigEndianValue(btp->ndNRecs) + 1);
+	btp->ndNRecs = CW(CW(btp->ndNRecs) + 1);
 	if (cachepp)
 	    *cachepp = 0;
 	if (!(cachep->flags & CACHEBUSY))
@@ -1905,7 +1905,7 @@ PRIVATE OSErr slipin(cacheentry *cachep, INTEGER after, anykey *keyp,
 	    fs_err_hook (err);
 	    return err;
 	  }
-	newnode = BigEndianValue(newcachep->logblk);
+	newnode = CL(newcachep->logblk);
 	newbtp = (btnode *) newcachep->buf;
 	if (cachepp)
 	    *cachepp = newcachep;
@@ -1934,11 +1934,11 @@ PRIVATE OSErr slipin(cacheentry *cachep, INTEGER after, anykey *keyp,
 	offsetp = (INTEGER *) ((char *)newbtp + PHYSBSIZE); 
 	for (i = noffsets; --i >= 0;) {
 	    --offsetp;
-	    *offsetp = BigEndianValue(BigEndianValue(*offsetp) - shim);
+	    *offsetp = CW(CW(*offsetp) - shim);
 	}
 	
-	newbtp->ndNRecs = BigEndianValue(noffsets - 1);
-	btp->ndNRecs    = BigEndianValue(newfirst);
+	newbtp->ndNRecs = CW(noffsets - 1);
+	btp->ndNRecs    = CW(newfirst);
 	
 #if defined (CATFILEDEBUG)
 	checkbtp(btp);
@@ -1988,8 +1988,8 @@ PRIVATE OSErr makenewroot(cacheentry *leftp, cacheentry *rightp,
     newbtp->ndFLink = 0;
     newbtp->ndBLink = 0;
     newbtp->ndType = indexnode;
-    block0p->height = BigEndianValue(BigEndianValue(block0p->height) + 1);
-    newbtp->ndLevel = BigEndianValue(block0p->height);
+    block0p->height = CW(CW(block0p->height) + 1);
+    newbtp->ndLevel = CW(block0p->height);
     leftbtp  = (btnode *) leftp->buf;
     if (rightp) {
 	rightbtp = (btnode *) rightp->buf;
@@ -2008,22 +2008,22 @@ PRIVATE OSErr makenewroot(cacheentry *leftp, cacheentry *rightp,
     block0p->root = newcachep->logblk;
     block0cachep->flags |= CACHEDIRTY;
     offsetp = BTOFFSET(newbtp, 0);
-    keylen = EVENUP(BigEndianValue(block0p->indexkeylen) + 1);
-    offsetp[ 0] = BigEndianValue(sizeof(btnode));
+    keylen = EVENUP(CW(block0p->indexkeylen) + 1);
+    offsetp[ 0] = CW(sizeof(btnode));
     keydst = (char *) BTENTRY(newbtp, 0);
     memmove(keydst, BTENTRY(leftbtp, 0), keylen);
     *keydst = keylen - 1;
     *(ULONGINT *)(keydst + keylen) = leftp->logblk;
     if (rightp) {
 	--offsetp;
-	offsetp[0] = BigEndianValue(BigEndianValue(offsetp[1]) + keylen + sizeof(ULONGINT));
+	offsetp[0] = CW(CW(offsetp[1]) + keylen + sizeof(ULONGINT));
 	keydst = (char *) BTENTRY(newbtp, 1);
 	memmove(keydst, BTENTRY(rightbtp, 0), keylen);
 	*keydst = keylen-1;
 	*(ULONGINT *)(keydst + keylen) = rightp->logblk;
     }
     --offsetp;
-    offsetp[0] = BigEndianValue(BigEndianValue(offsetp[1]) + keylen + sizeof(ULONGINT));
+    offsetp[0] = CW(CW(offsetp[1]) + keylen + sizeof(ULONGINT));
 #if defined (CATFILEDEBUG)
     checkbtp(newbtp);
     checkbtp(leftbtp);
@@ -2066,7 +2066,7 @@ PRIVATE OSErr makefirstentry(btparam *btpb, char *datap, INTEGER datasize)
     memmove(keydst, &btpb->tofind, keylen);
     memmove(keydst+keylen, datap, datasize);
     --offsetp;
-    offsetp[0] = BigEndianValue(BigEndianValue(offsetp[1]) + keylen + EVENUP(datasize));
+    offsetp[0] = CW(CW(offsetp[1]) + keylen + EVENUP(datasize));
     if (!(leafp->flags & CACHEBUSY))
 	warning_unexpected ("not busy");
     leafp->flags |= CACHEDIRTY;
@@ -2074,9 +2074,9 @@ PRIVATE OSErr makefirstentry(btparam *btpb, char *datap, INTEGER datasize)
     block0p->height = CWC(1);
     block0p->root = leafp->logblk;
     block0p->numentries = CLC(1);
-    newnode = BigEndianValue(leafp->logblk);
-    block0p->firstleaf = BigEndianValue(newnode);
-    block0p->lastleaf  = BigEndianValue(newnode);
+    newnode = CL(leafp->logblk);
+    block0p->firstleaf = CL(newnode);
+    block0p->lastleaf  = CL(newnode);
     if (!(block0cachep->flags & CACHEBUSY))
 	warning_unexpected ("not busy");
     block0cachep->flags |= CACHEDIRTY;
@@ -2106,8 +2106,8 @@ PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
       }
     block0p = (btblock0 *) block0cachep->buf;
     vcbp = MR(block0cachep->vptr);
-    potentialfree = BigEndianValue(block0p->nfreenodes);
-    potentialfree += BigEndianValue(vcbp->vcbFreeBks) * (BigEndianValue(vcbp->vcbAlBlkSiz) / PHYSBSIZE);
+    potentialfree = CL(block0p->nfreenodes);
+    potentialfree += CW(vcbp->vcbFreeBks) * (CL(vcbp->vcbAlBlkSiz) / PHYSBSIZE);
 
 
 /*
@@ -2121,7 +2121,7 @@ PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
  * I think in non-contrived situations this is EXTREMELY unlikely to occur.
  */
 
-    if (potentialfree < (ULONGINT) BigEndianValue(block0p->height)  + 1)
+    if (potentialfree < (ULONGINT) CW(block0p->height)  + 1)
       {
 	err = dskFulErr;
 	fs_err_hook (err);
@@ -2152,7 +2152,7 @@ PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
     datatoinsertp = (char*)datap;
     sizetoinsert = datasize;
     done = FALSE;
-    refnum = BigEndianValue(block0cachep->refnum);
+    refnum = CW(block0cachep->refnum);
     while (!done) {
 	err = maketrailentrybusy(tep, refnum);
 	err = slipin(tep->cachep, tep->after, keytoinsertp, datatoinsertp,
@@ -2181,7 +2181,7 @@ PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
 #if 0
 		keylen = BTENTRY((btnode *)tep->cachep->buf, 0)->keylen;
 #else
-		keylen = BigEndianValue(block0p->indexkeylen);
+		keylen = CW(block0p->indexkeylen);
 #endif
 		keytoinsertp = BTENTRY(newbtp, 0);
 		if (keytoinsertp->keylen < keylen) {
@@ -2259,7 +2259,7 @@ PUBLIC OSErr Executor::ROMlib_dircreate(btparam *btpb, directoryrec *data)
     if (err == noErr) {
 	makethreadrec(&rec, ((catkey *) &btpb->tofind)->ckrParID,
 					  ((catkey *) &btpb->tofind)->ckrCName);
-	err = ROMlib_makecatkey((catkey *) &btpb->tofind, BigEndianValue(data->dirDirID), 0, (Ptr) 0);
+	err = ROMlib_makecatkey((catkey *) &btpb->tofind, CL(data->dirDirID), 0, (Ptr) 0);
 	btpb->leafindex = -1;
 	if (err == noErr)
 	  err = btcreate(btpb, &rec, sizeof(rec));
@@ -2279,7 +2279,7 @@ PUBLIC xtntkey *Executor::ROMlib_newextentrecord(filecontrolblock *fcbp, uint16 
     vcbp = MR(fcbp->fcbVPtr);
     forkwanted = fcbp->fcbMdRByt & RESOURCEBIT ? resourcefork : datafork;
     memset(&rec, 0, sizeof(rec));
-    ROMlib_makextntparam(&btparamrec, vcbp, forkwanted, BigEndianValue(fcbp->fcbFlNum), newabn);
+    ROMlib_makextntparam(&btparamrec, vcbp, forkwanted, CL(fcbp->fcbFlNum), newabn);
     if ((err = btcreate(&btparamrec, rec, sizeof(rec))) != noErr) {
         warning_unexpected ("couldn't create new xtntrec");
         return 0;
@@ -2302,7 +2302,7 @@ PUBLIC OSErr Executor::ROMlib_btrename(btparam *btpb, StringPtr newnamep)
     
     newbtparam = *btpb;
     err = ROMlib_makecatkey((catkey *) &newbtparam.tofind,
-                            BigEndianValue(((catkey *) &btpb->tofind)->ckrParID), newnamep[0],
+                            CL(((catkey *) &btpb->tofind)->ckrParID), newnamep[0],
                             (Ptr) newnamep+1);
     newbtparam.leafindex = -1;	/* I don't think this line does anything */
 				/* useful, but I noticed it the day that */
@@ -2349,7 +2349,7 @@ PUBLIC OSErr Executor::ROMlib_btrename(btparam *btpb, StringPtr newnamep)
     err = ROMlib_btdelete(btpb);
     if (err == noErr && ((filerec *)datap)->cdrType == DIRTYPE) {
         err = ROMlib_makecatkey((catkey *) &newbtparam.tofind,
-                                BigEndianValue(((directoryrec *)datap)->dirDirID), 0, (Ptr) 0);
+                                CL(((directoryrec *)datap)->dirDirID), 0, (Ptr) 0);
         newbtparam.leafindex = -1;
         if (err == noErr)
             err = btlegitimize(&newbtparam);
@@ -2380,12 +2380,12 @@ PUBLIC OSErr Executor::ROMlib_btcreateemptyfile(btparam *btpb)
     rec.cdrType = FILETYPE;
     rec.filFlags = STARTFLAGS;
     rec.filFlNum = vcbp->vcbNxtCNID;
-    vcbp->vcbNxtCNID = BigEndianValue(BigEndianValue(vcbp->vcbNxtCNID) + 1);
+    vcbp->vcbNxtCNID = CL(CL(vcbp->vcbNxtCNID) + 1);
     vcbp->vcbFlags |= CWC(VCBDIRTY);
     rec.filMdDat = rec.filCrDat = Time;
     err = ROMlib_filecreate(btpb, &rec, regular);
 #if defined (CATFILEDEBUG)
-    ROMlib_checkleaves(BigEndianValue(vcbp->vcbCTRef));
+    ROMlib_checkleaves(CW(vcbp->vcbCTRef));
 #endif /* CATFILEDEBUG */
     fs_err_hook (err);
     return err;
@@ -2402,7 +2402,7 @@ PUBLIC OSErr Executor::ROMlib_btcreateemptydir(btparam *btpb, LONGINT *newidp)
     rec.cdrType = DIRTYPE;
     rec.dirFlags = STARTFLAGS;
     *newidp = rec.dirDirID = vcbp->vcbNxtCNID;
-    vcbp->vcbNxtCNID = BigEndianValue(BigEndianValue(vcbp->vcbNxtCNID) + 1);
+    vcbp->vcbNxtCNID = CL(CL(vcbp->vcbNxtCNID) + 1);
     vcbp->vcbFlags |= CWC(VCBDIRTY);
     rec.dirMdDat = rec.dirCrDat = Time;
     err = ROMlib_dircreate(btpb, &rec);
@@ -2440,7 +2440,7 @@ PUBLIC OSErr Executor::ROMlib_btpbindex (IOParam *pb, LONGINT dirid, HVCB **vcbp
 	save_dirid = dirid;
 	save_vRefNum = pb->ioVRefNum;
     }
-    new_count = BigEndianValue(((FileParam *)pb)->ioFDirIndex);
+    new_count = CW(((FileParam *)pb)->ioFDirIndex);
     if (ROMlib_index_cached && new_count >= save_count)
 	count = new_count - save_count;
     else
@@ -2458,7 +2458,7 @@ PUBLIC OSErr Executor::ROMlib_btpbindex (IOParam *pb, LONGINT dirid, HVCB **vcbp
     if (err == noErr) {
 	if (!ROMlib_index_cached) {
 	    save_vcbp = btparamrec.vcbp;
-	    save_dirid = BigEndianValue(btparamrec.foundp->catk.ckrParID);	/* Could have */
+	    save_dirid = CL(btparamrec.foundp->catk.ckrParID);	/* Could have */
 							    /* changed due to */
 							    /* Working Dir ID */
 	}
@@ -2471,13 +2471,13 @@ PUBLIC OSErr Executor::ROMlib_btpbindex (IOParam *pb, LONGINT dirid, HVCB **vcbp
 		save_cachep = btparamrec.trail[btparamrec.leafindex].cachep;
 		save_index = btparamrec.trail[btparamrec.leafindex].after;
 	    }
-	    refnum = BigEndianValue(save_cachep->refnum);
+	    refnum = CW(save_cachep->refnum);
 	    btp = (btnode *) save_cachep->buf;
 	    for (done = count == 0; !done;) {
-		if (++save_index < BigEndianValue(btp->ndNRecs)) {
+		if (++save_index < CW(btp->ndNRecs)) {
 		    ;	/* nothing to do here;
 			    bumping save_index was sufficient */
-		} else if ((flink = BigEndianValue(btp->ndFLink))) {
+		} else if ((flink = CL(btp->ndFLink))) {
 		    save_cachep->flags &= ~CACHEBUSY;
 		    err = ROMlib_getcache(&save_cachep, refnum, flink,
 								 GETCACHESAVE);
@@ -2489,7 +2489,7 @@ PUBLIC OSErr Executor::ROMlib_btpbindex (IOParam *pb, LONGINT dirid, HVCB **vcbp
 		    done = TRUE;
 		save_entryp = BTENTRY(btp, save_index);
 		if (save_dirid != 1 &&
-				  BigEndianValue(save_entryp->catk.ckrParID) != save_dirid)
+				  CL(save_entryp->catk.ckrParID) != save_dirid)
 		    done = TRUE;
 		else if (!done) {
 		    save_frp = (filerec *) DATAPFROMKEY(save_entryp);

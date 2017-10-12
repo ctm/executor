@@ -22,7 +22,6 @@ char ROMlib_rcsid_qBit[] =
 #include "rsys/mman.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P6 (PUBLIC pascal trap, void, CopyBits,
     BitMap *, src_bitmap, BitMap *, dst_bitmap,
@@ -135,7 +134,7 @@ P6 (PUBLIC pascal trap, void, CopyBits,
 
 	  PtrToHand ((Ptr) dst_bitmap, &t, sizeof (PixMap));
 	  bogo_port_pixmap = (PixMapHandle) t.p;
-	  CPORT_PIXMAP_X_NO_ASSERT (theCPort) = BigEndianValue (bogo_port_pixmap);
+	  CPORT_PIXMAP_X_NO_ASSERT (theCPort) = CL (bogo_port_pixmap);
 	  CPORT_VERSION_X_NO_ASSERT (theCPort) = CPORT_FLAG_BITS_X;
 	}
       else
@@ -143,8 +142,8 @@ P6 (PUBLIC pascal trap, void, CopyBits,
       
       big_region = NewRgn ();
       SetRectRgn (big_region, -32767, -32767, 32767, 32767);
-      PORT_VIS_REGION_X (thePort) = BigEndianValue (big_region);
-      PORT_CLIP_REGION_X (thePort) = BigEndianValue (big_region);
+      PORT_VIS_REGION_X (thePort) = CL (big_region);
+      PORT_CLIP_REGION_X (thePort) = CL (big_region);
       SetRect (&PORT_RECT (thePort), -32767, -32767, 32767, 32767);
       
       if (src_bitmap == &thePort->portBits)
@@ -203,38 +202,38 @@ P4 (PUBLIC pascal trap, void, ScrollRect, Rect *, rp, INTEGER, dh, INTEGER, dv,
 
   srcr = *rp;
 #if 0
-  OffsetRect(&srcr, -BigEndianValue (PORT_BOUNDS (thePort).left),
-	     -BigEndianValue (PORT_BOUNDS (thePort).top));   /* loc to glob */
+  OffsetRect(&srcr, -CW (PORT_BOUNDS (thePort).left),
+	     -CW (PORT_BOUNDS (thePort).top));   /* loc to glob */
 #endif
   dstr = srcr;
   updatergn2 = NewRgn();
   RectRgn(updatergn2, &srcr);
   if (dh > 0)
     {
-      dstr.left  = BigEndianValue(BigEndianValue(dstr.left) + dh);
-      srcr.right = BigEndianValue(BigEndianValue(srcr.right) - dh);
+      dstr.left  = CW(CW(dstr.left) + dh);
+      srcr.right = CW(CW(srcr.right) - dh);
     }
   else
     {
-      srcr.left  = BigEndianValue(BigEndianValue(srcr.left) - dh);
-      dstr.right = BigEndianValue(BigEndianValue(dstr.right) + dh);
+      srcr.left  = CW(CW(srcr.left) - dh);
+      dstr.right = CW(CW(dstr.right) + dh);
     }
   if (dv > 0)
     {
-      dstr.top    = BigEndianValue(BigEndianValue(dstr.top) + dv);
-      srcr.bottom = BigEndianValue(BigEndianValue(srcr.bottom) - dv);
+      dstr.top    = CW(CW(dstr.top) + dv);
+      srcr.bottom = CW(CW(srcr.bottom) - dv);
     }
   else
     {
-      srcr.top = BigEndianValue(BigEndianValue(srcr.top) - dv);
-      dstr.bottom = BigEndianValue(BigEndianValue(dstr.bottom) + dv);
+      srcr.top = CW(CW(srcr.top) - dv);
+      dstr.bottom = CW(CW(dstr.bottom) + dv);
     }
   RectRgn(temp = NewRgn(), &dstr);
   DiffRgn(updatergn2, temp, updatergn2);
 #if 0
   OffsetRgn(updatergn2,
-	    BigEndianValue (PORT_BOUNDS (thePort).left),
-	    BigEndianValue (PORT_BOUNDS (thePort).top)); /* glob to loc */
+	    CW (PORT_BOUNDS (thePort).left),
+	    CW (PORT_BOUNDS (thePort).top)); /* glob to loc */
 #endif
   UnionRgn(updatergn2, temp2, updatergn2);
   

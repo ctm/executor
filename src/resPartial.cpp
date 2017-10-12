@@ -15,7 +15,6 @@ char ROMlib_rcsid_resPartial[] =
 #include "rsys/file.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P4 (PUBLIC pascal trap, void, ReadPartialResource,
     Handle, res, int32, offset, Ptr, buffer, int32, count)
@@ -36,7 +35,7 @@ P4 (PUBLIC pascal trap, void, ReadPartialResource,
 	  LONGINT loc;
 	  
 	  cur_size = ROMlib_SizeResource (res, FALSE);
-	  err = BigEndianValue (ResErr);
+	  err = CW (ResErr);
 	  if (err == noErr && (uint32) offset + count > (uint32) cur_size)
 	    err = inputOutOfBounds;
 	  else

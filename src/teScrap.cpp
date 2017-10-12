@@ -18,7 +18,6 @@ char ROMlib_rcsid_teScrap[] =
 #include "rsys/mman.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 A0(PUBLIC, OSErr, TEFromScrap)
 {
@@ -31,7 +30,7 @@ A0(PUBLIC, OSErr, TEFromScrap)
       TEScrpLength = CWC (0);
     }
   else
-    TEScrpLength = BigEndianValue (m);
+    TEScrpLength = CW (m);
   return m < 0 ? m : noErr;
 }
 
@@ -42,7 +41,7 @@ A0 (PUBLIC, OSErr, TEToScrap)
   LOCK_HANDLE_EXCURSION_1
     (MR (TEScrpHandle),
      {
-       m = PutScrap (BigEndianValue (TEScrpLength), TICK ("TEXT"),
+       m = PutScrap (CW (TEScrpLength), TICK ("TEXT"),
 		     STARH (MR (TEScrpHandle)));
      });
   return m < 0 ? m : 0;
@@ -55,10 +54,10 @@ A0 (PUBLIC, Handle, TEScrapHandle)
 
 A0 (PUBLIC, int32, TEGetScrapLen)
 {
-  return BigEndianValue (TEScrpLength);
+  return CW (TEScrpLength);
 }
 
 A1 (PUBLIC, void, TESetScrapLen, int32, ln)
 {
-  TEScrpLength = BigEndianValue (ln);
+  TEScrpLength = CW (ln);
 }

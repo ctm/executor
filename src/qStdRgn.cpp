@@ -31,7 +31,6 @@ char ROMlib_rcsid_qStdRgn[] =
 #include "rsys/dirtyrect.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 PUBLIC WriteWhenType Executor::ROMlib_when = WriteInBltrgn;
 
@@ -131,7 +130,7 @@ Executor::ROMlib_blt_rgn_update_dirty_rect
       bbox_height = RECT_HEIGHT (&bbox);
       
       row_bytes = ((bbox_width * bpp + 31) / 32) * 4;
-      new_src_pm->rowBytes = BigEndianValue (row_bytes);
+      new_src_pm->rowBytes = CW (row_bytes);
       TEMP_ALLOC_ALLOCATE (new_bits, temp_alloc_space,
 			   row_bytes * bbox_height);
       new_src_pm->baseAddr = (Ptr) RM (new_bits);
@@ -140,15 +139,15 @@ Executor::ROMlib_blt_rgn_update_dirty_rect
 
       new_src_pm->pmTable = RM (ROMlib_dont_depthconv_ctab);
       
-      top  = (BigEndianValue (src_rect->top)
-	      + (BigEndianValue (bbox.top) - BigEndianValue (dst_rect->top)));
-      left = (BigEndianValue (src_rect->left)
-	      + (BigEndianValue (bbox.left) - BigEndianValue (dst_rect->left)));
+      top  = (CW (src_rect->top)
+	      + (CW (bbox.top) - CW (dst_rect->top)));
+      left = (CW (src_rect->left)
+	      + (CW (bbox.left) - CW (dst_rect->left)));
       
-      convert_src_rect.top = BigEndianValue (top);
-      convert_src_rect.left = BigEndianValue (left);
-      convert_src_rect.bottom = BigEndianValue (top + bbox_height);
-      convert_src_rect.right = BigEndianValue (left + bbox_width);
+      convert_src_rect.top = CW (top);
+      convert_src_rect.left = CW (left);
+      convert_src_rect.bottom = CW (top + bbox_height);
+      convert_src_rect.right = CW (left + bbox_width);
       
       if (mode == transparent
 	  || mode == hilite)
@@ -218,11 +217,11 @@ Executor::ROMlib_blt_rgn_update_dirty_rect
   if (screen_dst_p && update_dirty_p)
     {
       const Rect *r = &RGN_BBOX (rh);
-      int dst_top = BigEndianValue (dst_pm->bounds.top);
-      int dst_left = BigEndianValue (dst_pm->bounds.left);
+      int dst_top = CW (dst_pm->bounds.top);
+      int dst_left = CW (dst_pm->bounds.left);
       
-      dirty_rect_accrue (BigEndianValue (r->top) - dst_top, BigEndianValue (r->left) - dst_left,
-			 BigEndianValue (r->bottom) - dst_top, BigEndianValue (r->right) - dst_left);
+      dirty_rect_accrue (CW (r->top) - dst_top, CW (r->left) - dst_left,
+			 CW (r->bottom) - dst_top, CW (r->right) - dst_left);
       if (ROMlib_when == WriteInBltrgn)
 	{
 	  dirty_rect_update_screen ();
@@ -352,8 +351,8 @@ blt_pattern_to_bitmap_simple_mode (RgnHandle rh, INTEGER mode,
     }
   
   dst_pixmap.bounds = dst->bounds;
-  dst_top  = BigEndianValue (dst_pixmap.bounds.top);
-  dst_left = BigEndianValue (dst_pixmap.bounds.left);
+  dst_top  = CW (dst_pixmap.bounds.top);
+  dst_left = CW (dst_pixmap.bounds.left);
 
   /* Actually do the blt. */
   update_dirty_p = xdblt_pattern (rh, mode, -dst_left, -dst_top, src,
@@ -363,8 +362,8 @@ blt_pattern_to_bitmap_simple_mode (RgnHandle rh, INTEGER mode,
   if (screen_dst_p && update_dirty_p)
     {
       const Rect *r = &RGN_BBOX (rh);
-      dirty_rect_accrue (BigEndianValue (r->top) - dst_top, BigEndianValue (r->left) - dst_left,
-			 BigEndianValue (r->bottom) - dst_top, BigEndianValue (r->right) - dst_left);
+      dirty_rect_accrue (CW (r->top) - dst_top, CW (r->left) - dst_left,
+			 CW (r->bottom) - dst_top, CW (r->right) - dst_left);
       if (ROMlib_when == WriteInBltrgn)
 	{
 	  dirty_rect_update_screen ();
@@ -391,8 +390,8 @@ blt_pixpat_to_pixmap_simple_mode (RgnHandle rh, INTEGER mode,
 
        screen_dst_p = active_screen_addr_p (dst);
        
-       dst_top  = BigEndianValue (dst->bounds.top);
-       dst_left = BigEndianValue (dst->bounds.left);
+       dst_top  = CW (dst->bounds.top);
+       dst_left = CW (dst->bounds.left);
 
        if (src->patType == CWC (pixpat_old_style_pattern))
 	 {
@@ -476,8 +475,8 @@ blt_pixpat_to_pixmap_simple_mode (RgnHandle rh, INTEGER mode,
   if (screen_dst_p && update_dirty_p)
     {
       const Rect *r = &RGN_BBOX (rh);
-      dirty_rect_accrue (BigEndianValue (r->top) - dst_top, BigEndianValue (r->left) - dst_left,
-			 BigEndianValue (r->bottom) - dst_top, BigEndianValue (r->right) - dst_left);
+      dirty_rect_accrue (CW (r->top) - dst_top, CW (r->left) - dst_left,
+			 CW (r->bottom) - dst_top, CW (r->right) - dst_left);
       if (ROMlib_when == WriteInBltrgn)
 	{
 	  dirty_rect_update_screen ();
@@ -505,7 +504,7 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
   TEMP_ALLOC_DECL (temp_alloc_space);
 
   /* Set up xdata for the thing being blitted. */
-  bpp = BigEndianValue (pixmap->pixelSize);
+  bpp = CW (pixmap->pixelSize);
   log2_bpp = ROMlib_log2[bpp];
 
   if (!pixpat_handle)
@@ -543,9 +542,9 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
   x = STARH (xh);
   pattern_pm.bounds.top    = CWC (0);
   pattern_pm.bounds.left   = CWC (0);
-  pattern_pm.bounds.bottom = BigEndianValue (x->height_minus_1 + 1);
-  pattern_pm.bounds.right  = BigEndianValue ((x->row_bytes << (5 - x->log2_bpp)) >> 2);
-  pattern_pm.rowBytes = BigEndianValue (x->row_bytes);
+  pattern_pm.bounds.bottom = CW (x->height_minus_1 + 1);
+  pattern_pm.bounds.right  = CW ((x->row_bytes << (5 - x->log2_bpp)) >> 2);
+  pattern_pm.rowBytes = CW (x->row_bytes);
   if (x->pat_bits)
     pattern_pm.baseAddr = (Ptr) RM (x->pat_bits);
   else
@@ -584,7 +583,7 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
   bbox = RGN_BBOX (rh);
   converted_pm.bounds = bbox;
   row_bytes = (((RECT_WIDTH (&bbox) << log2_bpp) + 31U) / 32) * 4;
-  converted_pm.rowBytes = BigEndianValue (row_bytes);
+  converted_pm.rowBytes = CW (row_bytes);
   TEMP_ALLOC_ALLOCATE (new_bits, temp_alloc_space,
 		       row_bytes * RECT_HEIGHT (&bbox));
   converted_pm.baseAddr = (Ptr) RM (new_bits);
@@ -636,11 +635,11 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
   if (active_screen_addr_p (pixmap))
     {
       const Rect *r = &RGN_BBOX (rh);
-      int dst_top = BigEndianValue (pixmap->bounds.top);
-      int dst_left = BigEndianValue (pixmap->bounds.left);
+      int dst_top = CW (pixmap->bounds.top);
+      int dst_left = CW (pixmap->bounds.left);
 
-      dirty_rect_accrue (BigEndianValue (r->top) - dst_top, BigEndianValue (r->left) - dst_left,
-			 BigEndianValue (r->bottom) - dst_top, BigEndianValue (r->right) - dst_left);
+      dirty_rect_accrue (CW (r->top) - dst_top, CW (r->left) - dst_left,
+			 CW (r->bottom) - dst_top, CW (r->right) - dst_left);
       if (ROMlib_when == WriteInBltrgn)
 	{
 	  dirty_rect_update_screen ();
@@ -728,7 +727,7 @@ P2 (PUBLIC pascal trap, void, StdRgn,
 	(rgn,
 	 {
 	   RgnPtr rp = STARH (rgn);
-	   PICWRITE (rp, BigEndianValue (rp->rgnSize));
+	   PICWRITE (rp, CW (rp->rgnSize));
 	 });
     });
   
@@ -754,7 +753,7 @@ P2 (PUBLIC pascal trap, void, StdRgn,
 
       /* construct the frame */
 /* #warning "We inset the region AFTER we've clipped it to the port bounds???" */
-      InsetRgn (rh, BigEndianValue (pen_size.h), BigEndianValue (pen_size.v));
+      InsetRgn (rh, CW (pen_size.h), CW (pen_size.v));
       XorRgn (rgn, rh, rh);
       
       /* now `paint' the frame */

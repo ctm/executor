@@ -48,7 +48,6 @@ char ROMlib_rcsid_fileMisc[] =
 #include <ctype.h>
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /* NOTE:  calling most of the routines here is a sign that the user may
 	  be depending on the internal layout of things a bit too much */
@@ -105,7 +104,7 @@ A2(PUBLIC, OSErr, ufsPBGetFCBInfo, FCBPBPtr, pb,	/* INTERNAL */
 	if (pb->ioNamePtr)
 	    str255assign(MR(pb->ioNamePtr), fp->fcname);
 	pb->ioVRefNum    = MR(fp->fcvptr)->vcbVRefNum;
-	pb->ioRefNum     = BigEndianValue(rn);
+	pb->ioRefNum     = CW(rn);
 	pb->ioFCBFlNm    = fp->fdfnum;
 	pb->ioFCBFlags   = (fp->fcflags << 8) | (unsigned char)fp->fcbTypByt;
 	pb->ioFCBStBlk   = 0;
@@ -192,7 +191,7 @@ Executor::ROMlib_addtodq (ULONGINT drvsize, const char *devicename, INTEGER part
     dno = 0;
     for (dp = (DrvQEl *) MR(DrvQHdr.qHead); dp; dp = (DrvQEl *) MR(dp->qLink)) {
 	dqp = (DrvQExtra *) ((char *)dp - sizeof(LONGINT));
-	if (dqp->partition == BigEndianValue(partition) &&
+	if (dqp->partition == CW(partition) &&
 		      slashstrcmp((char *) dqp->devicename, devicename) == 0) {
 	    dno = Cx(dqp->dq.dQDrive);
 /*-->*/	    break;
@@ -212,21 +211,21 @@ Executor::ROMlib_addtodq (ULONGINT drvsize, const char *devicename, INTEGER part
 	      dno = ROMlib_ejdriveno++;
 	  }
 	dqp = (DrvQExtra *) NewPtr(sizeof(DrvQExtra));
-	dqp->flags       = BigEndianValue(1 << 7);	/* is not single sided */
+	dqp->flags       = CL(1 << 7);	/* is not single sided */
 	if (flags & DRIVE_FLAGS_LOCKED)
-	    dqp->flags = BigEndianValue(BigEndianValue(dqp->flags) | 1L << 31);
+	    dqp->flags = CL(CL(dqp->flags) | 1L << 31);
 	if (flags & DRIVE_FLAGS_FIXED)
-	    dqp->flags = BigEndianValue(BigEndianValue(dqp->flags) | 8L << 16);
+	    dqp->flags = CL(CL(dqp->flags) | 8L << 16);
 	else
-	    dqp->flags = BigEndianValue(BigEndianValue(dqp->flags) | 2);	/* IMIV-181 says
+	    dqp->flags = CL(CL(dqp->flags) | 2);	/* IMIV-181 says
 							   it can be 1 or 2 */
 	
 /*	dqp->dq.qLink will be set up when we Enqueue this baby */
-	dqp->dq.dQDrvSz  = BigEndianValue(drvsize);
-	dqp->dq.dQDrvSz2 = BigEndianValue(drvsize>>16);
+	dqp->dq.dQDrvSz  = CW(drvsize);
+	dqp->dq.dQDrvSz2 = CW(drvsize>>16);
 	dqp->dq.qType    = CWC(1);
-	dqp->dq.dQDrive  = BigEndianValue(dno);
-	dqp->dq.dQRefNum = BigEndianValue(drefnum);
+	dqp->dq.dQDrive  = CW(dno);
+	dqp->dq.dQRefNum = CW(drefnum);
 	dqp->dq.dQFSID   = 0;
 	if (!devicename)
 	    dqp->devicename  = 0;
@@ -235,7 +234,7 @@ Executor::ROMlib_addtodq (ULONGINT drvsize, const char *devicename, INTEGER part
 	    dqp->devicename = NewPtr(strl + 1);
 	    strcpy((char *) dqp->devicename, devicename);
 	}
-	dqp->partition = BigEndianValue(partition);
+	dqp->partition = CW(partition);
 	if (hfsp)
 	  dqp->hfs = *hfsp;
 	else
@@ -374,7 +373,7 @@ PRIVATE void ROMlib_automount_helper(char *path, char *aliasp)
 				HVCB *vcbp;
 
 				vcbp =
-				  ROMlib_vcbbyvrn (BigEndianValue (pb.ioParam.ioVRefNum));
+				  ROMlib_vcbbyvrn (CW (pb.ioParam.ioVRefNum));
 				str255_from_c_string (vcbp->vcbVN, aliasp);
 				/* hack in name */
 /*-->*/			        return;
@@ -826,7 +825,7 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
     savezone = TheZone;
     TheZone = SysZone;
     FCBSPtr = RM(NewPtr((Size) sizeof(fcbhidden)));
-    ((fcbhidden *)MR(FCBSPtr))->nbytes = BigEndianValue((short) sizeof(fcbhidden));
+    ((fcbhidden *)MR(FCBSPtr))->nbytes = CW(sizeof(fcbhidden));
 
     for (i = 0 ; i < NFCB ; i++) {
 	ROMlib_fcblocks[i].fdfnum      = 0;
@@ -851,7 +850,7 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
     WDCBsPtr = RM(NewPtr((Size) wdlen));
     TheZone = savezone;
     memset (MR(WDCBsPtr), 0, wdlen);
-    *(INTEGER *)MR(WDCBsPtr) = BigEndianValue(wdlen);
+    *(INTEGER *)MR(WDCBsPtr) = CW(wdlen);
 
     ROMlib_ConfigurationFolder = copystr(getenv(CONFIGURATIONFOLDER));
     ROMlib_SystemFolder        = copystr(getenv(SYSTEMFOLDER));
@@ -986,9 +985,9 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
     if (is_unix_path (ROMlib_DefaultFolder)
 	&& Ustat(ROMlib_DefaultFolder, &sbuf) == 0)
       {
-	CurDirStore = BigEndianValue((LONGINT) ST_INO (sbuf));
+	CurDirStore = CL((LONGINT) ST_INO (sbuf));
 	vcbp = ROMlib_vcbbybiggestunixname(ROMlib_DefaultFolder);
-	SFSaveDisk = BigEndianValue(-BigEndianValue(vcbp->vcbVRefNum));
+	SFSaveDisk = CW(-CW(vcbp->vcbVRefNum));
       }
     if (is_unix_path (ROMlib_SystemFolder)) {
 	if (Ustat(ROMlib_SystemFolder, &sbuf) < 0) {
@@ -997,7 +996,7 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
 	}
 	cpb.hFileInfo.ioNamePtr   = RM((StringPtr) SYSMACNAME);
 	cpb.hFileInfo.ioVRefNum   = -1;
-	cpb.hFileInfo.ioDirID     = BigEndianValue((LONGINT) ST_INO (sbuf));
+	cpb.hFileInfo.ioDirID     = CL((LONGINT) ST_INO (sbuf));
     } else {
 	sysnamelen = 1+strlen(ROMlib_SystemFolder)+1+strlen(SYSMACNAME+1)+1;
 	sysname = (char*)alloca(sysnamelen);
@@ -1167,7 +1166,7 @@ Executor::PRNTOFPERR (INTEGER prn, OSErr *errp)
   fcbrec *retval;
   OSErr err;
 
-  if (prn < 0 || prn >= BigEndianValue(*(short *)MR(FCBSPtr)) || (prn % 94) != 2) {
+  if (prn < 0 || prn >= CW(*(short *)MR(FCBSPtr)) || (prn % 94) != 2) {
     retval = 0;
     err = rfNumErr;
   } else {

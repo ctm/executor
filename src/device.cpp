@@ -24,7 +24,6 @@ char ROMlib_rcsid_device[] =
 #include "rsys/serial.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /*
  * NOTE:  The device manager now executes "native code" and code read
@@ -46,7 +45,7 @@ A4(PUBLIC, OSErr, ROMlib_dispatch, ParmBlkPtr, p,		/* INTERNAL */
 	typedef OSErr (*devfp_t)(ParmBlkPtr, DCtlPtr);
 	devfp_t procp;
 	
-	devicen = -BigEndianValue(p->cntrlParam.ioCRefNum) - 1;
+	devicen = -CW(p->cntrlParam.ioCRefNum) - 1;
 	if (devicen < 0 || devicen >= NDEVICES)
 		retval = badUnitErr;
 	else if (UTableBase == (DCtlHandlePtr) (long) CLC(0xFFFFFFFF) ||
@@ -54,7 +53,7 @@ A4(PUBLIC, OSErr, ROMlib_dispatch, ParmBlkPtr, p,		/* INTERNAL */
 		retval =  unitEmptyErr;
 	else {
 		HLock((Handle) h);
-		p->ioParam.ioTrap = BigEndianValue(trapn);
+		p->ioParam.ioTrap = CW(trapn);
 		if (async)
 			p->ioParam.ioTrap |= CWC(asyncTrpBit);
 		else
@@ -158,7 +157,7 @@ A4(PUBLIC, OSErr, ROMlib_dispatch, ParmBlkPtr, p,		/* INTERNAL */
 			}
 			
 			if (routine < Close)
-				retval = BigEndianValue(p->ioParam.ioResult);	/* see II-193 */
+				retval = CW(p->ioParam.ioResult);	/* see II-193 */
 		}
 	}
 	fs_err_hook (retval);
@@ -209,8 +208,8 @@ A3(PUBLIC, OSErr, Control, INTEGER, rn, INTEGER, code,
     OSErr err;
 
     pb.cntrlParam.ioVRefNum = 0;
-    pb.cntrlParam.ioCRefNum = BigEndianValue(rn);
-    pb.cntrlParam.csCode = BigEndianValue(code);
+    pb.cntrlParam.ioCRefNum = CW(rn);
+    pb.cntrlParam.csCode = CW(code);
     if (param)
 	BlockMove(param, (Ptr) pb.cntrlParam.csParam,
 					 (Size) sizeof(pb.cntrlParam.csParam));
@@ -225,8 +224,8 @@ A3(PUBLIC, OSErr, Status, INTEGER, rn, INTEGER, code, Ptr, param) /* IMII-179 */
     OSErr retval;
 
     pb.cntrlParam.ioVRefNum = 0;
-    pb.cntrlParam.ioCRefNum = BigEndianValue(rn);
-    pb.cntrlParam.csCode = BigEndianValue(code);
+    pb.cntrlParam.ioCRefNum = CW(rn);
+    pb.cntrlParam.csCode = CW(code);
     retval = PBStatus(&pb, FALSE);
     if (param)
 	BlockMove((Ptr) pb.cntrlParam.csParam, param,
@@ -240,7 +239,7 @@ A1(PUBLIC, OSErr, KillIO, INTEGER, rn)	/* IMII-179 */
     ParamBlockRec pb;
     OSErr err;
 
-    pb.cntrlParam.ioCRefNum = BigEndianValue(rn);
+    pb.cntrlParam.ioCRefNum = CW(rn);
     err = PBKillIO(&pb, FALSE);
     fs_err_hook (err);
     return err;
@@ -291,103 +290,103 @@ A2(PUBLIC, OSErr, ROMlib_driveropen, ParmBlkPtr, pbp,		/* INTERNAL */
   ramdriverhand ramdh;
   ResType typ;
   BOOLEAN alreadyopen;
-  
+
   ZONE_SAVE_EXCURSION
-  (SysZone,
-   {
-     err = noErr;
+    (SysZone,
+     {
+       err = noErr;
 	 
-     if ((ramdh =
-          (ramdriverhand) GetNamedResource(TICK("DRVR"),
-                                           MR(pbp->ioParam.ioNamePtr)))) {
-            LoadResource((Handle) ramdh);
-            GetResInfo((Handle) ramdh, &devicen, &typ, (StringPtr) 0);
-            BigEndianInPlace(devicen);
-            h = MR(MR(UTableBase)[devicen].p);
-            alreadyopen = h && (HxX(h, dCtlFlags) & CWC(DRIVEROPENBIT));
-            if (!h && !(h = MR(MR(UTableBase)[devicen].p =
-                               RM((DCtlHandle) NewHandle(sizeof(DCtlEntry))))))
-              err = MemError();
-            else if (!alreadyopen) {
-              memset((char *) STARH(h), 0, sizeof(DCtlEntry));
-              HxX(h, dCtlDriver)   = (umacdriverptr) RM(ramdh);
-              HxX(h, dCtlFlags)    = HxX(ramdh, drvrFlags) | CWC(RAMBASEDBIT);
-              HxX(h, dCtlRefNum)   = BigEndianValue(- (devicen + 1));
-              HxX(h, dCtlDelay)    = HxX(ramdh, drvrDelay);
-              HxX(h, dCtlEMask)    = HxX(ramdh, drvrEMask);
-              HxX(h, dCtlMenu)     = HxX(ramdh, drvrMenu);
-              if (HxX(h, dCtlFlags) & CWC(NEEDTIMEBIT))
-                HxX(h, dCtlCurTicks) = BigEndianValue(TickCount() + Hx(h, dCtlDelay));
-              else
-                HxX(h, dCtlCurTicks) = CLC(0x7FFFFFFF);
-              /*
-               * NOTE: this code doesn't check to see if something is already open.
-               *	 TODO:  fix this
-               */
-              pbp->cntrlParam.ioCRefNum = HxX(h, dCtlRefNum);
-              err = ROMlib_dispatch(pbp, a, Open, 0);
-            } else
-            {
-              pbp->cntrlParam.ioCRefNum = HxX(h, dCtlRefNum);
-              err = noErr;
-            }
-          } else {
-            
-            dip = 0;
-            if (ROMlib_otherdrivers) {
-              for (dip = ROMlib_otherdrivers; dip->open &&
-                   !EqualString(dip->name, MR(pbp->ioParam.ioNamePtr), FALSE, TRUE);
-                   dip++)
-                ;
-              if (!dip->open)
-                dip = 0;
-            }
-            if (!dip) {
-              for (dip = knowndrivers, edip = dip + NELEM(knowndrivers);
-                   dip != edip &&
-                   !EqualString(dip->name, MR(pbp->ioParam.ioNamePtr), FALSE, TRUE);
-                   dip++)
-                ;
-              if (dip == edip)
-                dip = 0;
-            }
-            if (dip) {
-              devicen = -dip->refnum -1;
-              if (devicen < 0 || devicen >= NDEVICES)
-                err = badUnitErr;
-              else if (MR(UTableBase)[devicen].p)
-                err = noErr;	/* note:  if we choose to support desk */
-              /*	  accessories, we will have to */
-              /*	  check to see if this is one and */
-              /*	  call the open routine if it is */
-              else {
-                if (!(h = MR(MR(UTableBase)[devicen].p =
-                             RM((DCtlHandle) NewHandle(sizeof(DCtlEntry))))))
-                  err = MemError();
-                else {
-                  memset((char *) STARH(h), 0, sizeof(DCtlEntry));
-                  up = (umacdriverptr) NewPtr(sizeof(umacdriver));
-                  if (!(HxX(h, dCtlDriver) = RM(up)))
-                    err = MemError();
-                  else {
-                    up->udrvrOpen   = (ProcPtr) RM(dip->open);
-                    up->udrvrPrime  = (ProcPtr) RM(dip->prime);
-                    up->udrvrCtl    = (ProcPtr) RM(dip->ctl);
-                    up->udrvrStatus = (ProcPtr) RM(dip->status);
-                    up->udrvrClose  = (ProcPtr) RM(dip->close);
-                    str255assign(up->udrvrName, dip->name);
-                    err = noErr;
-                  }
-                }
-              }
-              if (err == noErr) {
-                pbp->cntrlParam.ioCRefNum = BigEndianValue(dip->refnum);
-                err = ROMlib_dispatch(pbp, a, Open, 0);
-              }
-            } else
-              err = dInstErr;
-          }
-   });
+       if ((ramdh =
+	    (ramdriverhand) GetNamedResource(TICK("DRVR"),
+					     MR(pbp->ioParam.ioNamePtr)))) {
+	 LoadResource((Handle) ramdh);
+	 GetResInfo((Handle) ramdh, &devicen, &typ, (StringPtr) 0);
+	 devicen = CW(devicen);
+	 h = MR(MR(UTableBase)[devicen].p);
+	 alreadyopen = h && (HxX(h, dCtlFlags) & CWC(DRIVEROPENBIT));
+	 if (!h && !(h = MR(MR(UTableBase)[devicen].p =
+			    RM((DCtlHandle) NewHandle(sizeof(DCtlEntry))))))
+	   err = MemError();
+	 else if (!alreadyopen) {
+	   memset((char *) STARH(h), 0, sizeof(DCtlEntry));
+	   HxX(h, dCtlDriver)   = (umacdriverptr) RM(ramdh);
+	   HxX(h, dCtlFlags)    = HxX(ramdh, drvrFlags) | CWC(RAMBASEDBIT);
+	   HxX(h, dCtlRefNum)   = CW(- (devicen + 1));
+	   HxX(h, dCtlDelay)    = HxX(ramdh, drvrDelay);
+	   HxX(h, dCtlEMask)    = HxX(ramdh, drvrEMask);
+	   HxX(h, dCtlMenu)     = HxX(ramdh, drvrMenu);
+	   if (HxX(h, dCtlFlags) & CWC(NEEDTIMEBIT))
+	     HxX(h, dCtlCurTicks) = CL(TickCount() + Hx(h, dCtlDelay));
+	   else
+	     HxX(h, dCtlCurTicks) = CLC(0x7FFFFFFF);
+	   /*
+	    * NOTE: this code doesn't check to see if something is already open.
+	    *	 TODO:  fix this
+	    */
+	   pbp->cntrlParam.ioCRefNum = HxX(h, dCtlRefNum);
+	   err = ROMlib_dispatch(pbp, a, Open, 0);
+	 } else
+	   {
+	     pbp->cntrlParam.ioCRefNum = HxX(h, dCtlRefNum);
+	     err = noErr;
+	   }
+       } else {
+	   
+	 dip = 0;
+	 if (ROMlib_otherdrivers) {
+	   for (dip = ROMlib_otherdrivers; dip->open &&
+		!EqualString(dip->name, MR(pbp->ioParam.ioNamePtr), FALSE, TRUE);
+		dip++)
+	     ;
+	   if (!dip->open)
+	     dip = 0;
+	 }
+	 if (!dip) {
+	   for (dip = knowndrivers, edip = dip + NELEM(knowndrivers);
+		dip != edip &&
+		!EqualString(dip->name, MR(pbp->ioParam.ioNamePtr), FALSE, TRUE);
+		dip++)
+	     ;
+	   if (dip == edip)
+	     dip = 0;
+	 }
+	 if (dip) {
+	   devicen = -dip->refnum -1;
+	   if (devicen < 0 || devicen >= NDEVICES)
+	     err = badUnitErr;
+	   else if (MR(UTableBase)[devicen].p)
+	     err = noErr;	/* note:  if we choose to support desk */
+	   /*	  accessories, we will have to */
+	   /*	  check to see if this is one and */
+	   /*	  call the open routine if it is */
+	   else {
+	     if (!(h = MR(MR(UTableBase)[devicen].p =
+			  RM((DCtlHandle) NewHandle(sizeof(DCtlEntry))))))
+	       err = MemError();
+	     else {
+	       memset((char *) STARH(h), 0, sizeof(DCtlEntry));
+	       up = (umacdriverptr) NewPtr(sizeof(umacdriver));
+	       if (!(HxX(h, dCtlDriver) = RM(up)))
+		 err = MemError();
+	       else {
+		 up->udrvrOpen   = (ProcPtr) RM(dip->open);
+		 up->udrvrPrime  = (ProcPtr) RM(dip->prime);
+		 up->udrvrCtl    = (ProcPtr) RM(dip->ctl);
+		 up->udrvrStatus = (ProcPtr) RM(dip->status);
+		 up->udrvrClose  = (ProcPtr) RM(dip->close);
+		 str255assign(up->udrvrName, dip->name);
+		 err = noErr;
+	       }
+	     }
+	   }
+	   if (err == noErr) {
+	     pbp->cntrlParam.ioCRefNum = CW(dip->refnum);
+	     err = ROMlib_dispatch(pbp, a, Open, 0);
+	   }
+	 } else
+	   err = dInstErr;
+       }
+     });
   fs_err_hook (err);
   return err;
 }
@@ -411,8 +410,9 @@ A1(PUBLIC, OSErr, CloseDriver, INTEGER, rn)   /* IMII-178 */
     ParamBlockRec pb;
     OSErr err;
 
-    pb.cntrlParam.ioCRefNum = BigEndianValue(rn);
+    pb.cntrlParam.ioCRefNum = CW(rn);
     err = PBClose(&pb, FALSE);
     fs_err_hook (err);
     return err;
 }
+

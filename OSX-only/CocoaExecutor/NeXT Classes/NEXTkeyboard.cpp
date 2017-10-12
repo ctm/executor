@@ -13,12 +13,13 @@ keyboard_enum_t Executor::ROMlib_get_keyboard_type( void )
 {
 	NXEventHandle handle;
 	NXEventSystemDevice	dev[NX_EVS_DEVICE_MAX];
-	unsigned int cnt = NX_EVS_DEVICE_INFO_COUNT, i;
+	unsigned int cnt, i;
 	int interface, id;
 	keyboard_enum_t retval;
 	
 	if ( (handle = NXOpenEventStatus()) == 0 )
 		return no_keyboard;
+	cnt = NX_EVS_DEVICE_INFO_COUNT;
 	NXEventSystemInfo( handle, NX_EVS_DEVICE_INFO, (int *)dev, &cnt );
 	NXCloseEventStatus( handle );
 	interface = -1;

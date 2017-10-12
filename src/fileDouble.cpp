@@ -23,11 +23,11 @@ namespace Executor {
   };
 int afpd_conventions_p;
 int netatalk_conventions_p;
-
 char apple_double_quote_char;
 const char *apple_double_fork_prefix;
 int apple_double_fork_prefix_length;
 }
+
 using namespace Executor;
 using namespace ByteSwap;
 
@@ -251,7 +251,7 @@ A5(PRIVATE, BOOLEAN, getsetentry, GetOrSetType, gors, LONGINT, fd,
 			*lengthp = 0x7FFFFFFF;	/* unlimited */
 		} else
 		    if (lengthp)
-			*lengthp = BigEndianValue(sdp[1].offset) - BigEndianValue(sdp[0].offset);
+			*lengthp = CL(sdp[1].offset) - CL(sdp[0].offset);
 		break;
 	    case Set:
 		*sdp = *savesdp;
@@ -281,7 +281,7 @@ A1(PUBLIC, LONGINT, ROMlib_FORKOFFSET, fcbrec *, fp)	/* INTERNAL */
 /*-->*/	return 0L;
     idwanted = IDWANTED(fp);
     if (getsetentry(Get, fp->fcfd, IDWANTED(fp), &d, NULL))
-	return BigEndianValue(d.offset);
+	return CL(d.offset);
     else
 	return RESOURCEPREAMBLE;
 }
@@ -318,7 +318,7 @@ A1(PUBLIC, OSErr, ROMlib_seteof, fcbrec *, fp)	/* INTERNAL */
 		gui_assert(0);	/* TODO: We need to move stuff around.
 			 	   There are many things we could do */
 	    } else if (leof < peof) {
-		d.length = BigEndianValue(leof);
+		d.length = CL(leof);
 		getsetentry(Set, fd, idwanted, &d, NULL);
 	    }
 	} else
@@ -346,8 +346,8 @@ A1(PUBLIC, OSErr, ROMlib_seteof, fcbrec *, fp)	/* INTERNAL */
 				     ROMlib_fcblocks[i].fcvptr == fp->fcvptr &&
 				     (ROMlib_fcblocks[i].fcflags & fcfisres) ==
 						    (fp->fcflags & fcfisres)) {
-		ROMlib_fcblocks[i].fcleof  = BigEndianValue(leof);
-		ROMlib_fcblocks[i].fcPLen = BigEndianValue(peof);
+		ROMlib_fcblocks[i].fcleof  = CL(leof);
+		ROMlib_fcblocks[i].fcPLen = CL(peof);
 	    }
 	}
     }
@@ -400,7 +400,7 @@ A1(PUBLIC, OSErr, ROMlib_geteofostype, fcbrec *, fp)	/* INTERNAL */
 	    else
 		fp->fcPLen = fp->fcleof = d.length;
 	} else
-	    fp->fcleof = fp->fcPLen = BigEndianValue((int)sbuf.st_size);
+	    fp->fcleof = fp->fcPLen = CL((int)sbuf.st_size);
 	if (err == noErr) {
 	    if (!getsetentry(Get, fd, Finder_Info_ID, &d, NULL) ||
 		   (!getsetpiece(Get, fd, &d, (char *) &finfo, sizeof(finfo))))
@@ -409,7 +409,7 @@ A1(PUBLIC, OSErr, ROMlib_geteofostype, fcbrec *, fp)	/* INTERNAL */
 
 		if (ROMlib_creator_and_type_from_filename
 		    (fp->fcname[0], (char *) fp->fcname+1, NULL, &type))
-		  fp->fcbFType = BigEndianValue (type);
+		  fp->fcbFType = CL (type);
 		else
 		  fp->fcbFType = TICKX("TEXT");
 	      }
@@ -453,7 +453,7 @@ fprintf(stderr, "%s(%d): open '%s' fails\n", __FILE__, __LINE__, rpathname);
 		    memset(datep,   0, sizeof(*datep));
 		    memset(finfop,  0, sizeof(*finfop));
 		    memset(fxinfop, 0, sizeof(*fxinfop));
-		    *lenp = BigEndianValue((int)sbuf.st_size);
+		    *lenp = CL((int)sbuf.st_size);
 		    *rlenp = 0;
 		    break;
 		case Set:
@@ -474,9 +474,9 @@ fprintf(stderr, "%s(%d): open '%s' fails\n", __FILE__, __LINE__, rpathname);
 		  getsetpiece(Get, rfd, &d, (char *) datep, sizeof(*datep));
 		else
 		  {
-		    datep->crdat = BigEndianValue (UNIXTIMETOMACTIME (MIN (sbuf.st_ctime, sbuf.st_mtime)));
-		    datep->moddat = BigEndianValue (UNIXTIMETOMACTIME (sbuf.st_mtime));
-		    datep->accessdat = BigEndianValue (UNIXTIMETOMACTIME (sbuf.st_atime));
+		    datep->crdat = CL (UNIXTIMETOMACTIME (MIN (sbuf.st_ctime, sbuf.st_mtime)));
+		    datep->moddat = CL (UNIXTIMETOMACTIME (sbuf.st_mtime));
+		    datep->accessdat = CL (UNIXTIMETOMACTIME (sbuf.st_atime));
 		    datep->backupdat = 0;
 		  }
 
@@ -491,7 +491,7 @@ fprintf(stderr, "%s(%d): open '%s' fails\n", __FILE__, __LINE__, rpathname);
 		    if (fxinfop)
 		      *fxinfop = sfinfo.fxinfo;
 
-		    *lenp  = BigEndianValue((int)sbuf.st_size);
+		    *lenp  = CL((int)sbuf.st_size);
 		  }
 		if (getsetentry(Get, rfd, Resource_Fork_ID,   &d, NULL))
 		    *rlenp = d.length;

@@ -27,7 +27,6 @@ char ROMlib_rcsid_vbl[] =
 #include "rsys/prefs.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 typedef enum
   {
@@ -83,7 +82,7 @@ A0 (PUBLIC, void, C_ROMlib_vcatch)
   EM_A7 = (EM_A7 - 32) & ~3;  /* Might as well long-align it. */
 
   /* Save the old Ticks value & compute new value. */
-  old_ticks = BigEndianValue (Ticks);
+  old_ticks = CL (Ticks);
   new_ticks = C_TickCount ();
   ticks_elapsed = new_ticks - old_ticks;
 
@@ -108,12 +107,12 @@ A0 (PUBLIC, void, C_ROMlib_vcatch)
 
       /* Account for possible missed ticks by possibly subtracting
        * off more than one tick from the VBL count. */
-      old_vbl_count = BigEndianValue (vp->vblCount);
+      old_vbl_count = CW (vp->vblCount);
       new_vbl_count = old_vbl_count - ticks_elapsed;
       if (old_vbl_count > 0 && new_vbl_count < 0)
 	new_vbl_count = 0;  /* Only compensate for zero crossings. */
 
-      vp->vblCount = BigEndianValue (new_vbl_count);
+      vp->vblCount = CW (new_vbl_count);
       if (new_vbl_count == 0)
 	{
 	  VBLQueue.qFlags |= CWC (VBUSY);
@@ -124,7 +123,7 @@ A0 (PUBLIC, void, C_ROMlib_vcatch)
 	   */
 
 	  EM_A0 = (LONGINT) (long) US_TO_SYN68K_CHECK0(vp);
-	  EM_A1 = (LONGINT) BigEndianValue ((long) vp->vblAddr);
+	  EM_A1 = (LONGINT) CL ((long) vp->vblAddr);
 	  
 	  CALL_EMULATOR ((syn68k_addr_t) EM_A1);
 
@@ -186,7 +185,7 @@ A1 (PUBLIC trap, OSErrRET, VInstall, VBLTaskPtr, vtaskp)
 {
   static unsigned short m68k_rts = CWC (0x4E75);	/* RTS */
 
-  vtaskp->vblCount = BigEndianValue (BigEndianValue (vtaskp->vblCount) + BigEndianValue (vtaskp->vblPhase));
+  vtaskp->vblCount = CW (CW (vtaskp->vblCount) + CW (vtaskp->vblPhase));
   if (vtaskp->qType == CWC ((INTEGER) vType))
     {
       if (!VBLQueue.qHead)

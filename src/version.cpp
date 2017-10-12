@@ -16,7 +16,6 @@ char ROMlib_rcsid_version[] =
 #include "MemoryMgr.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /* A simple version number like "1.99q" */
 const char ROMlib_executor_version[] = EXECUTOR_VERSION;
@@ -94,7 +93,7 @@ ROMlib_set_system_version (uint32 version)
       enum { MINOR_MASK = 0xF, REV_MASK = 0xF };
 
       system_version = version;
-      SysVersion = BigEndianValue (version);
+      SysVersion = CW (version);
 
       major = version >> 8;
       minor = (version >> 4) & MINOR_MASK;

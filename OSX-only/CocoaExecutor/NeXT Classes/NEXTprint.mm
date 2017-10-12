@@ -21,8 +21,6 @@ char ROMlib_rcsid_NEXTprint[] =
  */
 
 namespace Executor {
-using namespace ByteSwap;
-
 void ROMlib_newFont(char *font, float txSize)
 {
     [[NSFont fontWithName:[NSString stringWithCString:font encoding:NSMacOSRomanStringEncoding] size:txSize] set];
@@ -33,8 +31,8 @@ void ROMlib_updatenextpagerect(comRect *rp)
     NSSize new_paper_size;
     virtual_int_state_t block = block_virtual_ints();
 
-    new_paper_size.height = BigEndianValue(rp->bottom) - BigEndianValue(rp->top);
-    new_paper_size.width = BigEndianValue(rp->right) - BigEndianValue(rp->left);
+    new_paper_size.height = CW(rp->bottom) - CW(rp->top);
+    new_paper_size.width = CW(rp->right) - CW(rp->left);
     [[NSPrintInfo sharedPrintInfo] setPaperSize:new_paper_size];
     restore_virtual_ints(block);
 }
@@ -56,17 +54,17 @@ void ROMlib_updatemacpagerect(comRect *paperp, comRect *page1p,
     CGFloat scaling_factor;
 
     new_size = [[NSPrintInfo sharedPrintInfo] paperSize];
-    paperp->top    = BigEndianValue(0 - HALFINCH);
-    paperp->left   = BigEndianValue(0 - HALFINCH);
+    paperp->top    = CW(0 - HALFINCH);
+    paperp->left   = CW(0 - HALFINCH);
 
     scaling_factor = printer_scaling_factor ();
-    paperp->bottom = BigEndianValue(new_size.height * (1 / scaling_factor) - HALFINCH);
-    paperp->right  = BigEndianValue(new_size.width  * (1 / scaling_factor) - HALFINCH);
+    paperp->bottom = CW(new_size.height * (1 / scaling_factor) - HALFINCH);
+    paperp->right  = CW(new_size.width  * (1 / scaling_factor) - HALFINCH);
 
     page1p->top    = page2p->top    = 0;
     page1p->left   = page2p->left   = 0;
-    page1p->bottom = page2p->bottom = BigEndianValue(BigEndianValue(paperp->bottom) - HALFINCH);
-    page1p->right  = page2p->right  = BigEndianValue(BigEndianValue(paperp->right)  - HALFINCH);
+    page1p->bottom = page2p->bottom = CW(CW(paperp->bottom) - HALFINCH);
+    page1p->right  = page2p->right  = CW(CW(paperp->right)  - HALFINCH);
     restore_virtual_ints(block);
 }
 }

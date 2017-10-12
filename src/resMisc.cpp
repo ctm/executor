@@ -15,24 +15,23 @@ char ROMlib_rcsid_resMisc[] =
 #include "rsys/hook.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 A1(PUBLIC, INTEGER, ROMlib_setreserr, INTEGER, reserr)	/* INTERNAL */
 {
-    ResErr = BigEndianValue(reserr);
+    ResErr = CW(reserr);
     if (ResErr != noErr && ResErrProc) {
 	ROMlib_hook(res_reserrprocnumber);
 
 	EM_D0 = (unsigned short) reserr;	/* TODO: is unsigned short
 							 correct? */
-	CALL_EMULATOR((syn68k_addr_t)  BigEndianValue((long) ResErrProc));
+	CALL_EMULATOR((syn68k_addr_t)  CL((long) ResErrProc));
     }
-    return BigEndianValue(ResErr);
+    return CW(ResErr);
 }
 
 P0(PUBLIC pascal trap, INTEGER, ResError)
 {
-    return BigEndianValue(ResErr);
+    return CW(ResErr);
 }
 
 P1(PUBLIC pascal trap, INTEGER, GetResFileAttrs, INTEGER, rn)
@@ -57,5 +56,5 @@ P2(PUBLIC pascal trap, void, SetResFileAttrs, INTEGER, rn, INTEGER, attrs)
     if (!map)
         return;               /* don't set reserr.  I kid you not, see I-127 */
     else
-        HxX(map, resfatr) = BigEndianValue (attrs);
+        HxX(map, resfatr) = CW (attrs);
 }

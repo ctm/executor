@@ -37,7 +37,6 @@ namespace Executor {
 }
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P1(PUBLIC pascal trap, void, SetResLoad, BOOLEAN, load)
 {
@@ -51,7 +50,7 @@ A2(PRIVATE, INTEGER, countmapresources, resmaphand, map, ResType, typ)
 
     retval = 0; 
     WALKTR(map, i, tr)
-        if (BigEndianValue(tr->rtyp) == typ) {
+        if (CL(tr->rtyp) == typ) {
             retval += 1 + Cx(tr->nres);
             break;
         }
@@ -93,7 +92,7 @@ A3(PRIVATE, Handle, getindmapresource, resmaphand, map, ResType, typ,
     resref *rr;
     
     WALKTR(map, i, tr)
-        if (BigEndianValue(tr->rtyp) == typ) {
+        if (CL(tr->rtyp) == typ) {
             nr = Cx(tr->nres) + 1;
             WALKRR(map, tr, j, rr)
                 if (--*indx == 0)
@@ -157,7 +156,7 @@ A4(PUBLIC, OSErr, ROMlib_maptypidtop, resmaphand, map,		/* INTERNAL */
     resref *rr;
     
     WALKTR(map, i, tr)
-        if (BigEndianValue(tr->rtyp) == typ) {
+        if (CL(tr->rtyp) == typ) {
             WALKRR(map, tr, j, rr)
                 if (Cx(rr->rid) == id) {
                     *ptr = rr;
@@ -400,7 +399,7 @@ A3(PRIVATE, Handle, getnamedmapresource, resmaphand, map, ResType, typ,
     resref *rr;
     
     WALKTR(map, i, tr)
-        if (BigEndianValue(tr->rtyp) == typ) {
+        if (CL(tr->rtyp) == typ) {
             WALKRR(map, tr, j, rr)
                 if (Cx(rr->noff) != -1 && EqualString((StringPtr) (
                             (char *)STARH(map) + Hx(map, namoff) + Cx(rr->noff)),

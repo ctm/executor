@@ -18,7 +18,6 @@ char ROMlib_rcsid_qStdRect[] =
 #include "rsys/picture.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P2(PUBLIC pascal trap, void, StdRect, GrafVerb, v, Rect *, rp)
 {
@@ -29,16 +28,16 @@ P2(PUBLIC pascal trap, void, StdRect, GrafVerb, v, Rect *, rp)
 #define MOREINSANECOMPATIBILITY
 #if defined (MOREINSANECOMPATIBILITY)
     if (v == frame && PORT_REGION_SAVE_X (thePort)) {
-	if (BigEndianValue(rp->left) > BigEndianValue(rp->right)) {
+	if (CW(rp->left) > CW(rp->right)) {
 	    patcheduprect = *rp;
 	    patcheduprect.left  = rp->right;
 	    patcheduprect.right = rp->left;
-	    if (BigEndianValue(rp->top) > BigEndianValue(rp->bottom)) {
+	    if (CW(rp->top) > CW(rp->bottom)) {
 		patcheduprect.top    = rp->bottom;
 		patcheduprect.bottom = rp->top;
 	    }
 	    rp = &patcheduprect;
-	} else if (BigEndianValue(rp->top) > BigEndianValue(rp->bottom)) {
+	} else if (CW(rp->top) > CW(rp->bottom)) {
 	    patcheduprect = *rp;
 	    patcheduprect.top    = rp->bottom;
 	    patcheduprect.bottom = rp->top;

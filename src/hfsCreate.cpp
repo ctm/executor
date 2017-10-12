@@ -34,7 +34,7 @@ PRIVATE OSErr freeallblocks(HVCB *vcbp, filerec *frp)
 		(LONGINT) sizeof(frp->filExtRec));
 	fcbp->fcbMdRByt = WRITEBIT;
 	pbr.ioParam.ioMisc = 0;
-	pbr.ioParam.ioRefNum = BigEndianValue((char *) fcbp - (char *) MR(FCBSPtr));
+	pbr.ioParam.ioRefNum = CW((char *) fcbp - (char *) MR(FCBSPtr));
 	retval = ROMlib_allochelper((IOParam *) &pbr, FALSE, seteof, FALSE);
 	if (retval == noErr) {
 	    fcbp->fcbPLen = frp->filRPyLen;
@@ -68,7 +68,7 @@ PRIVATE OSErr createhelper(IOParam *pb, BOOLEAN async, createop op,
 	else {
 	    if (curkind == directory) {
 		drp = (directoryrec *) DATAPFROMKEY(btparamrec.foundp);
-		err = ROMlib_dirbusy(BigEndianValue(drp->dirDirID), vcbp);
+		err = ROMlib_dirbusy(CL(drp->dirDirID), vcbp);
 		if (err == noErr)
 		  {
 		    if (drp->dirVal != 0)
@@ -80,7 +80,7 @@ PRIVATE OSErr createhelper(IOParam *pb, BOOLEAN async, createop op,
 		    err = ROMlib_dirdelete(&btparamrec);
 	    } else {
 		frp = (filerec *) DATAPFROMKEY(btparamrec.foundp);
-		if (ROMlib_alreadyopen(vcbp, BigEndianValue(frp->filFlNum),
+		if (ROMlib_alreadyopen(vcbp, CL(frp->filFlNum),
 			   (SignedByte *) 0, 0, eitherbusy) != noErr)
 		    err = fBsyErr;
 #if 0

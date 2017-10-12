@@ -23,7 +23,6 @@ char ROMlib_rcsid_ctlPopup[] =
 #include "rsys/menu.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #if 0 /* It's not clear why Cotton had all these global variables,
 	 but it is clear that in at least one case he was using one
@@ -59,7 +58,7 @@ init (ControlHandle ctl)
     HandToHand (&hh);
     flags = CTL_VALUE (ctl);
 
-    POPUP_MENU_ID_X (data)     = BigEndianValue (mid);
+    POPUP_MENU_ID_X (data)     = CW (mid);
     POPUP_MENU_X (data)        = RM ((MenuHandle) hh.p);
   }  
   /* private fields */
@@ -71,7 +70,7 @@ init (ControlHandle ctl)
   CTL_ACTION_X (ctl) = (ProcPtr) CLC (-1);
   CTL_VALUE_X (ctl) = CWC (1);
   CTL_MIN_X (ctl) = CWC (1);
-  CTL_MAX_X (ctl) = BigEndianValue (CountMItems (mh));
+  CTL_MAX_X (ctl) = CW (CountMItems (mh));
   CheckItem (mh,  1, TRUE);
 }
 
@@ -172,10 +171,10 @@ draw (ControlHandle ctl, draw_state_t draw_state,
     }
   
   ctl_rect = &CTL_RECT (ctl);
-  top      = BigEndianValue (ctl_rect->top);
-  left     = BigEndianValue (ctl_rect->left);
-  bottom   = BigEndianValue (ctl_rect->bottom);
-  right    = BigEndianValue (ctl_rect->right);
+  top      = CW (ctl_rect->top);
+  left     = CW (ctl_rect->left);
+  bottom   = CW (ctl_rect->bottom);
+  right    = CW (ctl_rect->right);
   
   title = CTL_TITLE (ctl);
   
@@ -191,10 +190,10 @@ draw (ControlHandle ctl, draw_state_t draw_state,
     }
   
   GetFontInfo (&font_info);
-  ascent = BigEndianValue (font_info.ascent);
+  ascent = CW (font_info.ascent);
   height = (  ascent
-	    + BigEndianValue (font_info.descent)
-	    + BigEndianValue (font_info.leading));
+	    + CW (font_info.descent)
+	    + CW (font_info.leading));
   title_width = POPUP_TITLE_WIDTH (data);
   
   icon_p = get_icon_info (item_info, &icon_info, TRUE);
@@ -241,7 +240,7 @@ draw (ControlHandle ctl, draw_state_t draw_state,
     erase_rect.left     = ctl_rect->left;
     erase_rect.bottom   = ctl_rect->bottom;
     if (title_only_p)
-      erase_rect.right  = BigEndianValue (left + title_width);
+      erase_rect.right  = CW (left + title_width);
     else
       erase_rect.right  = ctl_rect->right;
     EraseRect (&erase_rect);
@@ -259,10 +258,10 @@ draw (ControlHandle ctl, draw_state_t draw_state,
      then should probably hilite from
      `center - icon_info.height / 2' to
      `center + icon_info.height / 2' */
-  t_rect.top    = BigEndianValue (baseline - ascent);
-  t_rect.left   = BigEndianValue (left);
-  t_rect.bottom = BigEndianValue (baseline - ascent + height);
-  t_rect.right  = BigEndianValue (left + title_width);
+  t_rect.top    = CW (baseline - ascent);
+  t_rect.left   = CW (left);
+  t_rect.bottom = CW (baseline - ascent + height);
+  t_rect.right  = CW (left + title_width);
   
   PenMode (patCopy);
   EraseRect (&t_rect);
@@ -304,10 +303,10 @@ draw (ControlHandle ctl, draw_state_t draw_state,
   RGBForeColor (&ROMlib_black_rgb_color);
   RGBBackColor (&ROMlib_white_rgb_color);
   
-  t_rect.top    = BigEndianValue (draw_top);
-  t_rect.left   = BigEndianValue (item_left - 1);
-  t_rect.bottom = BigEndianValue (draw_bottom - 1);
-  t_rect.right  = BigEndianValue (right - 1);
+  t_rect.top    = CW (draw_top);
+  t_rect.left   = CW (item_left - 1);
+  t_rect.bottom = CW (draw_bottom - 1);
+  t_rect.right  = CW (right - 1);
 
   EraseRect (&t_rect);
   
@@ -331,10 +330,10 @@ draw (ControlHandle ctl, draw_state_t draw_state,
   
   if (icon_p)
     {
-      t_rect.top    = BigEndianValue (center - icon_info.height / 2);
-      t_rect.left   = BigEndianValue (item_left);
-      t_rect.bottom = BigEndianValue (BigEndianValue (t_rect.top) + (icon_info.height - ICON_PAD));
-      t_rect.right  = BigEndianValue (BigEndianValue (t_rect.left) + (icon_info.width - ICON_PAD));
+      t_rect.top    = CW (center - icon_info.height / 2);
+      t_rect.left   = CW (item_left);
+      t_rect.bottom = CW (CW (t_rect.top) + (icon_info.height - ICON_PAD));
+      t_rect.right  = CW (CW (t_rect.left) + (icon_info.width - ICON_PAD));
       
       if (icon_info.color_icon_p)
 	PlotCIcon (&t_rect, (CIconHandle) icon_info.icon);
@@ -408,10 +407,10 @@ draw (ControlHandle ctl, draw_state_t draw_state,
       arrow_bitmap.rowBytes = CWC (2);
       SetRect (&arrow_bitmap.bounds, 0, 0, /* right, bottom */ 11, 6);
       
-      dst_rect.top    = BigEndianValue (center - 3);
-      dst_rect.left   = BigEndianValue (right - 22);
-      dst_rect.bottom = BigEndianValue (center - 3 + /* arrows are `6' tall */ 6);
-      dst_rect.right  = BigEndianValue (right - 22
+      dst_rect.top    = CW (center - 3);
+      dst_rect.left   = CW (right - 22);
+      dst_rect.bottom = CW (center - 3 + /* arrows are `6' tall */ 6);
+      dst_rect.right  = CW (right - 22
 			    +	/* arrows are `11' wide */ 11);
       CopyBits (&arrow_bitmap, PORT_BITS_FOR_COPY (thePort),
 		&arrow_bitmap.bounds, &dst_rect, srcCopy, NULL);
@@ -516,13 +515,13 @@ P4 (PUBLIC pascal, int32, cdef1008,
 	      TRUE, TRUE, &top, &left);
 	
 	port_bounds = &PORT_BOUNDS (CTL_OWNER (ctl));
-	top  -= BigEndianValue (port_bounds->top);
-	left -= BigEndianValue (port_bounds->left);
+	top  -= CW (port_bounds->top);
+	left -= CW (port_bounds->left);
         CalcMenuSize (mh);
 	value = PopUpMenuSelect (mh, top, left, orig_value);
 	
 	if (value)
-	  CTL_VALUE_X (ctl) = BigEndianValue (value);
+	  CTL_VALUE_X (ctl) = CW (value);
 	draw (ctl, draw_state, window_font, window_size, window_font_p,
 	      FALSE, FALSE, NULL, NULL);
 	

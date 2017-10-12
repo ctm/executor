@@ -14,7 +14,6 @@ char ROMlib_rcsid_rgbutil[] =
 #include "rsys/cquick.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /* This file contains routines useful for manipulating RGB pixels.
  *
@@ -45,7 +44,7 @@ make_component_map (uint16 *map, int num_bits, boolean_t swap_p)
       v = i << (16 - num_bits);
       for (shift = num_bits; shift < 16; shift += num_bits)
 	v |= v >> shift;
-      map[i] = swap_p ? BigEndianValue (v) : v;
+      map[i] = swap_p ? CW (v) : v;
     }
 
   /* Fill out the rest of the table with duplicate entries. */
@@ -81,7 +80,7 @@ rgb_extract_from_swapped_16bpp_pixel (const rgb_spec_t *rgb_spec,
   const rgb_map_t *table;
 
   table = &rgb_spec->map;
-  in = BigEndianValue (in);
+  in = CW (in);
   
   /* NOTE: we & 0xFF here because our lookup tables are built in
    * such a way as to ignore any extraneous high bits.  This way we
@@ -101,7 +100,7 @@ rgb_extract_from_swapped_32bpp_pixel (const rgb_spec_t *rgb_spec,
   const rgb_map_t *table;
 
   table = &rgb_spec->map;
-  in = BigEndianValue (in);
+  in = CL (in);
 
   /* NOTE: we & 0xFF here because our lookup tables are built in
    * such a way as to ignore any extraneous high bits.  This way we
@@ -195,9 +194,9 @@ rgbcolor_to_pixel (const rgb_spec_t *spec,
   if (spec->big_endian_p)
     {
       if (spec->bpp == 16)
-	v = (uint16) BigEndianValue (v);  /* cast masks off extra cruft in high bits. */
+	v = (uint16) CW (v);  /* cast masks off extra cruft in high bits. */
       else
-	v = BigEndianValue (v);
+	v = CL (v);
     }
 
   return v;

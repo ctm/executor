@@ -18,7 +18,6 @@ char ROMlib_rcsid_hfsXbar[] =
 #include "rsys/prefs.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /*
  * TODO: pass the information gleaned by hfsvol and hfsfil into the
@@ -32,7 +31,7 @@ void cachecheck(HVCB *vcbp)
     cachehead *headp;
     INTEGER i;
     
-    headp = (cachehead *) BigEndianValue(vcbp->vcbCtlBuf);
+    headp = (cachehead *) CL(vcbp->vcbCtlBuf);
     for (i = Cx(headp->nitems), cachep = Cx(headp->flink); --i >= 0;
 						    cachep = Cx(cachep->flink))
 	if (Cx(cachep->flags) & CACHEBUSY)
@@ -166,7 +165,7 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 	if (ROMlib_directdiskaccess) {
 	    dqp = ROMlib_dqbydrive(Cx(pb->ioParam.ioVRefNum));
 	    if (!dqp) {
-		pb->ioParam.ioResult = BigEndianValue(nsvErr);
+		pb->ioParam.ioResult = CW(nsvErr);
 		pb->ioParam.ioActCount = 0;
 	    } else {
 	        if (dqp->hfs.fd == -1)
@@ -177,10 +176,10 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 		    pb->ioParam.ioActCount = 0;
 		  }
 		else if (Cx(pb->ioParam.ioPosMode) != fsFromStart) {
-		    pb->ioParam.ioResult = BigEndianValue(paramErr);	/* for now */
+		    pb->ioParam.ioResult = CW(paramErr);	/* for now */
 		    pb->ioParam.ioActCount = 0;
 		} else
-		    pb->ioParam.ioResult = BigEndianValue(ROMlib_transphysblk(&dqp->hfs,
+		    pb->ioParam.ioResult = CW(ROMlib_transphysblk(&dqp->hfs,
 						   Cx(pb->ioParam.ioPosOffset),
 					Cx(pb->ioParam.ioReqCount) / PHYSBSIZE,
 					     MR(pb->ioParam.ioBuffer), reading,
@@ -188,7 +187,7 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 
 	    }
 	} else {
-	    pb->ioParam.ioResult = BigEndianValue(vLckdErr);
+	    pb->ioParam.ioResult = CW(vLckdErr);
 	    pb->ioParam.ioActCount = 0;
 	}
 	retval = Cx(pb->ioParam.ioResult);
@@ -203,17 +202,17 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 	    ParamBlockRec pbr;
 
 	    pbr = *pb;
-	    to_find = BigEndianValue (pb->ioParam.ioPosMode) >> 8;
+	    to_find = CW (pb->ioParam.ioPosMode) >> 8;
 	    pbr.ioParam.ioPosMode &= CWC (0x7F);
 
-	    buf = (char*)alloca (BigEndianValue (pb->ioParam.ioReqCount));
+	    buf = (char*)alloca (CL (pb->ioParam.ioReqCount));
 
 	    pbr.ioParam.ioBuffer = (Ptr) RM (buf);
 	    retval = PBRead (&pbr, FALSE);
 	    pb->ioParam.ioActCount  = pbr.ioParam.ioActCount;
 	    pb->ioParam.ioPosOffset = pbr.ioParam.ioPosOffset;
 
-	    act_count = BigEndianValue (pb->ioParam.ioActCount);
+	    act_count = CL (pb->ioParam.ioActCount);
 	    p_to_find = (char*)memchr (buf, to_find, act_count);
 
 	    if (to_find == '\r' && ROMlib_newlinetocr)
@@ -242,7 +241,7 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 
 		  newpb.ioParam.ioRefNum = pb->ioParam.ioRefNum;
 		  newpb.ioParam.ioPosMode = CWC (fsFromMark);
-		  newpb.ioParam.ioPosOffset = BigEndianValue (- to_backup);
+		  newpb.ioParam.ioPosOffset = CL (- to_backup);
 		  newerr = PBSetFPos (&newpb, FALSE);
 		  if (newerr != noErr)
 		    warning_unexpected ("err = %d", newerr);
@@ -252,10 +251,10 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 		  *p = '\r';
 	      }
 	    memcpy (MR (pb->ioParam.ioBuffer), MR (pbr.ioParam.ioBuffer),
-		    BigEndianValue (pb->ioParam.ioActCount));
+		    CL (pb->ioParam.ioActCount));
 	    ROMlib_destroy_blocks ((syn68k_addr_t) (long)
 				   US_TO_SYN68K(MR (pb->ioParam.ioBuffer)),
-				   BigEndianValue (pb->ioParam.ioActCount), TRUE);
+				   CL (pb->ioParam.ioActCount), TRUE);
 	  }
 	else
 	  {
@@ -281,22 +280,22 @@ A2(PUBLIC trap, OSErrRET, PBWrite, ParmBlkPtr, pb, BOOLEAN, async)
     switch (Cx(pb->ioParam.ioRefNum)) {
     case OURHFSDREF:
 	if (!ROMlib_directdiskaccess)
-	    pb->ioParam.ioResult = BigEndianValue(vLckdErr);
+	    pb->ioParam.ioResult = CW(vLckdErr);
 	else {
 	    dqp = ROMlib_dqbydrive(Cx(pb->ioParam.ioVRefNum));
 	    if (dqp && dqp->hfs.fd == -1)
 	      try_to_reopen (dqp);
 	    vcbp = ROMlib_vcbbydrive (Cx(pb->ioParam.ioVRefNum));
 	    if (!dqp)
-		pb->ioParam.ioResult = BigEndianValue(nsvErr);
+		pb->ioParam.ioResult = CW(nsvErr);
 	    else if (vcbp && (Cx(vcbp->vcbAtrb) & VSOFTLOCKBIT))
-		pb->ioParam.ioResult = BigEndianValue(vLckdErr);
+		pb->ioParam.ioResult = CW(vLckdErr);
 	    else if (vcbp && (Cx(vcbp->vcbAtrb) & VHARDLOCKBIT))
-		pb->ioParam.ioResult = BigEndianValue(wPrErr);
+		pb->ioParam.ioResult = CW(wPrErr);
 	    else if (Cx(pb->ioParam.ioPosMode) != fsFromStart)
-		    pb->ioParam.ioResult = BigEndianValue(paramErr);	/* for now */
+		    pb->ioParam.ioResult = CW(paramErr);	/* for now */
 	    else
-		pb->ioParam.ioResult = BigEndianValue(ROMlib_transphysblk(&dqp->hfs,
+		pb->ioParam.ioResult = CW(ROMlib_transphysblk(&dqp->hfs,
 						   Cx(pb->ioParam.ioPosOffset),
 					Cx(pb->ioParam.ioReqCount) / PHYSBSIZE,
 					     MR(pb->ioParam.ioBuffer), writing,
@@ -311,7 +310,7 @@ A2(PUBLIC trap, OSErrRET, PBWrite, ParmBlkPtr, pb, BOOLEAN, async)
 #if 0
     case SOUND_DRIVER_REF:
 	p = (char *) Cx(pb->ioParam.ioBuffer);
-	if (BigEndianValue(*(short *)p) == ffMode) {
+	if (CW(*(short *)p) == ffMode) {
 	    n = Cx(pb->ioParam.ioReqCount);
 	    ROMlib_dosound(p + 4, n - 4, (void (*)(void)) 0);
 	}
@@ -414,7 +413,7 @@ A2(PUBLIC trap, OSErrRET, PBGetCatInfo, CInfoPBPtr, pb, BOOLEAN, async)
     BOOLEAN ishfs;
     StringPtr savep;
 
-    if (BigEndianValue(pb->dirInfo.ioFDirIndex) < 0 && pb->hFileInfo.ioDirID == CLC (1))
+    if (CW(pb->dirInfo.ioFDirIndex) < 0 && pb->hFileInfo.ioDirID == CLC (1))
 	retval = -43; /* perhaps we should check for a valid volume
 			 first */
     else
@@ -517,7 +516,7 @@ A2(PUBLIC trap, OSErrRET, PBHGetFInfo, HParmBlkPtr, pb, BOOLEAN, async)
     StringPtr savep;
 
     savep = pb->ioParam.ioNamePtr;
-    if (BigEndianValue(pb->fileParam.ioFDirIndex) > 0)	/* IMIV-155, 156 */
+    if (CW(pb->fileParam.ioFDirIndex) > 0)	/* IMIV-155, 156 */
 	pb->ioParam.ioNamePtr = 0;
     ishfs = hfsvol((IOParam *) pb);
     pb->ioParam.ioNamePtr = savep;
@@ -706,7 +705,7 @@ A2(PUBLIC trap, OSErrRET, PBGetFInfo, ParmBlkPtr, pb, BOOLEAN, async)
     OSErr retval;
 
     savep = pb->ioParam.ioNamePtr;
-    if (BigEndianValue(pb->fileParam.ioFDirIndex) > 0)	/* IMIV-155, 156 */
+    if (CW(pb->fileParam.ioFDirIndex) > 0)	/* IMIV-155, 156 */
 	pb->ioParam.ioNamePtr = 0;
     ishfs = hfsvol((IOParam *) pb);
     pb->ioParam.ioNamePtr = savep;
@@ -838,7 +837,7 @@ A1(PUBLIC trap, OSErr, PBMountVol, ParmBlkPtr, pb)
     INTEGER vref;
     OSErr retval;
 
-    vref = BigEndianValue(pb->ioParam.ioVRefNum);
+    vref = CW(pb->ioParam.ioVRefNum);
     if (vref == 1 || vref == 2)
       retval = noErr;
     else
@@ -887,7 +886,7 @@ A2(PUBLIC trap, OSErrRET, PBHGetVolParms, HParmBlkPtr, pb, BOOLEAN, async)
   if (vcbp)
     {
       infop = (getvolparams_info_t *) MR (pb->ioParam.ioBuffer);
-      rc     = BigEndianValue (pb->ioParam.ioReqCount);
+      rc     = CL (pb->ioParam.ioReqCount);
       nused  = 0;
       if (roomfor (infop, vMVersion, rc))
 	{
@@ -914,7 +913,7 @@ A2(PUBLIC trap, OSErrRET, PBHGetVolParms, HParmBlkPtr, pb, BOOLEAN, async)
 	  infop->vMForeignPrivID = CWC (2); /* fsUnixPriv + 1 */
 	  nused += sizeof (infop->vMForeignPrivID);
 	}
-      pb->ioParam.ioActCount = BigEndianValue((LONGINT) nused);
+      pb->ioParam.ioActCount = CL((LONGINT) nused);
       err = noErr;
     }
   else

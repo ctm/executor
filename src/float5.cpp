@@ -16,7 +16,6 @@ char ROMlib_rcsid_float5[] =
 #include "rsys/floatconv.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P_SAVED0D1A0A1_1 (PUBLIC pascal trap, void, ROMlib_FlnX, x80_t *, dp)
 {
@@ -104,7 +103,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fxpwri, INTEGER *, sp,
   DECLAREIN2OUT();
 
   /* FIXME - may lose precision! */
-  ieee_to_x80 (out = pow (in1 = x80_to_ieee (dp), in2 = BigEndianValue(*(short *)sp)), dp);
+  ieee_to_x80 (out = pow (in1 = x80_to_ieee (dp), in2 = CW(*(short *)sp)), dp);
   warning_floating_point ("xpwri(%f, %f) == %f",
 			  (double) in1, (double) in2, (double) out);
 }

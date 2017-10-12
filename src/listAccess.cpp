@@ -17,7 +17,6 @@ char ROMlib_rcsid_listAccess[] =
 #include "rsys/hook.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P4(PUBLIC pascal trap, void, LFind, INTEGER *, offsetp,		/* IMIV-274 */
 				INTEGER *, lenp, Cell, cell, ListHandle, list)
@@ -26,7 +25,7 @@ P4(PUBLIC pascal trap, void, LFind, INTEGER *, offsetp,		/* IMIV-274 */
 
     if ((ip = ROMlib_getoffp(cell, list))) {
 	*offsetp =  *ip++ & CWC(0x7FFF);
-	*lenp    = BigEndianValue((BigEndianValue(*ip)   & 0x7FFF) - BigEndianValue(*offsetp));
+	*lenp    = CW((CW(*ip)   & 0x7FFF) - CW(*offsetp));
     } else
 	*offsetp = *lenp = CWC(-1);
 }
@@ -38,8 +37,8 @@ P4(PUBLIC pascal trap, BOOLEAN, LNextCell, BOOLEAN, hnext,	/* IMIV-274 */
     Cell scratch;
     INTEGER right, bottom;
 
-    scratch.v = BigEndianValue(cellp->v);
-    scratch.h = BigEndianValue(cellp->h);
+    scratch.v = CW(cellp->v);
+    scratch.h = CW(cellp->h);
     right   = Hx(list, dataBounds.right);
     bottom  = Hx(list, dataBounds.bottom);
     if (hnext) {
@@ -58,8 +57,8 @@ P4(PUBLIC pascal trap, BOOLEAN, LNextCell, BOOLEAN, hnext,	/* IMIV-274 */
 	    retval = FALSE;
     }
     if (retval) {
-	cellp->v = BigEndianValue(scratch.v);
-	cellp->h = BigEndianValue(scratch.h);
+	cellp->v = CW(scratch.v);
+	cellp->h = CW(scratch.h);
     }
     return retval;
 }
@@ -74,14 +73,14 @@ P3(PUBLIC pascal trap, void, LRect, Rect *, cellrect,		/* IMIV-274 */
 	csize.h = Hx(list, cellSize.h);
 	csize.v = Hx(list, cellSize.v);
 	*cellrect = HxX(list, rView);
-	cellrect->top = BigEndianValue(BigEndianValue(cellrect->top) +
+	cellrect->top = CW(CW(cellrect->top) +
 			        ((cell.v - Hx(list, visible.top))  * csize.v));
-	cellrect->left = BigEndianValue(BigEndianValue(cellrect->left) +
+	cellrect->left = CW(CW(cellrect->left) +
 				((cell.h - Hx(list, visible.left)) * csize.h));
-	if ((temp = BigEndianValue(cellrect->top)  + csize.v) < BigEndianValue(cellrect->bottom))
-	    cellrect->bottom = BigEndianValue(temp);
-	if ((temp = BigEndianValue(cellrect->left) + csize.h) < BigEndianValue(cellrect->right))
-	    cellrect->right = BigEndianValue(temp);
+	if ((temp = CW(cellrect->top)  + csize.v) < CW(cellrect->bottom))
+	    cellrect->bottom = CW(temp);
+	if ((temp = CW(cellrect->left) + csize.h) < CW(cellrect->right))
+	    cellrect->right = CW(temp);
     } else {
 	cellrect->top    = cellrect->left =
 	cellrect->bottom = cellrect->right = CWC(0);
@@ -142,27 +141,27 @@ P5(PUBLIC pascal trap, BOOLEAN, LSearch, Ptr, dp,		/* IMIV-274 */
     HLock((Handle) HxP(list, cells));
 
     fp = proc ? (cmpf) proc : (cmpf) P_IUMagString;
-    cell.h = BigEndianValue(cellp->h);
-    cell.v = BigEndianValue(cellp->v);
+    cell.h = CW(cellp->h);
+    cell.v = CW(cellp->v);
     swappedcell = *cellp;
     /* TODO: SPEEDUP:  the following is a stupid way to do the loop, instead ip
 		 and ep should be used! */
-    while ((C_LFind(&off, &len, cell, list), len = BigEndianValue (len), off = BigEndianValue (off),
+    while ((C_LFind(&off, &len, cell, list), len = CW (len), off = CW (off),
 	    len != -1) &&
 	       CALLCMP(dp, (Ptr) STARH(HxP(list, cells)) + off, dl, len, fp) != 0)
 	if (!C_LNextCell(TRUE, TRUE, &swappedcell, list)) {
 	    cell.h = Hx(list, dataBounds.right);
 	    cell.v = Hx(list, dataBounds.bottom);
 	} else {
-	    cell.h = BigEndianValue (swappedcell.h);
-	    cell.v = BigEndianValue (swappedcell.v);
+	    cell.h = CW (swappedcell.h);
+	    cell.v = CW (swappedcell.v);
 	}
 
     HUnlock((Handle) HxP(list, cells));
     HUnlock((Handle) list);
     if (len != -1) {
-	cellp->h = BigEndianValue(cell.h);
-	cellp->v = BigEndianValue(cell.v);
+	cellp->h = CW(cell.h);
+	cellp->v = CW(cell.v);
 /*-->*/	return TRUE;
     } else
 	return FALSE;
@@ -182,9 +181,9 @@ P3(PUBLIC pascal trap, void, LSize, INTEGER, width,		/* IMIV-274 */
     oldright  = Hx(list, rView.right);
     oldbottom = Hx(list, rView.bottom);
     newright  = Hx(list, rView.left) + width;
-    HxX(list, rView.right) = BigEndianValue(newright);
+    HxX(list, rView.right) = CW(newright);
     newbottom = Hx(list, rView.top)  + height;
-    HxX(list, rView.bottom) = BigEndianValue(newbottom);
+    HxX(list, rView.bottom) = CW(newbottom);
     ch        = HxP(list, hScroll);
     cv        = HxP(list, vScroll);
 
@@ -204,12 +203,12 @@ P3(PUBLIC pascal trap, void, LSize, INTEGER, width,		/* IMIV-274 */
 		MoveControl(cv, newright, Hx(list, rView.top) - 1);
 		SizeControl(cv, 16, newbottom - Hx(list, rView.top) + 2);
 	    }
-	    r.top    = BigEndianValue(MIN(oldbottom, newbottom));
-	    r.bottom = BigEndianValue(MAX(oldbottom, newbottom));
-	    r.left   = BigEndianValue(Hx(list, rView.left) - 1);
-	    r.right  = BigEndianValue(MAX(oldright, newright));
+	    r.top    = CW(MIN(oldbottom, newbottom));
+	    r.bottom = CW(MAX(oldbottom, newbottom));
+	    r.left   = CW(Hx(list, rView.left) - 1);
+	    r.right  = CW(MAX(oldright, newright));
 	    if (ch)
-		r.bottom = BigEndianValue(BigEndianValue(r.bottom) + (16));
+		r.bottom = CW(CW(r.bottom) + (16));
 	    RectRgn(rectrgn, &r);
 	    UnionRgn(rectrgn, updatergn, updatergn);
 	} else {	/* just right different */
@@ -219,12 +218,12 @@ P3(PUBLIC pascal trap, void, LSize, INTEGER, width,		/* IMIV-274 */
 	    if (cv)
 		MoveControl(cv, newright, Hx(list, rView.top) - 1);
 	}
-	r.left   = BigEndianValue(MIN(oldright, newright));
-	r.right	 = BigEndianValue(MAX(oldright, newright));
-	r.top    = BigEndianValue(Hx(list, rView.top) - 1);
-	r.bottom = BigEndianValue(MAX(oldbottom, newbottom));
+	r.left   = CW(MIN(oldright, newright));
+	r.right	 = CW(MAX(oldright, newright));
+	r.top    = CW(Hx(list, rView.top) - 1);
+	r.bottom = CW(MAX(oldbottom, newbottom));
 	if (cv)
-	    r.right = BigEndianValue(BigEndianValue(r.right) + (16));
+	    r.right = CW(CW(r.right) + (16));
 	RectRgn(rectrgn, &r);
 	UnionRgn(rectrgn, updatergn, updatergn);
     } else if (newbottom != oldbottom) {	/* just bottom different */
@@ -233,12 +232,12 @@ P3(PUBLIC pascal trap, void, LSize, INTEGER, width,		/* IMIV-274 */
 	if (cv) {
 	    SizeControl(cv, 16, newbottom - Hx(list, rView.top) + 2);
 	}
-	r.top    = BigEndianValue(MIN(oldbottom, newbottom));
-	r.bottom = BigEndianValue(MAX(oldbottom, newbottom));
-	r.left   = BigEndianValue(Hx(list, rView.left) - 1);
-	r.right  = BigEndianValue(MAX(oldright, newright));
+	r.top    = CW(MIN(oldbottom, newbottom));
+	r.bottom = CW(MAX(oldbottom, newbottom));
+	r.left   = CW(Hx(list, rView.left) - 1);
+	r.right  = CW(MAX(oldright, newright));
 	if (ch)
-	    r.bottom = BigEndianValue(BigEndianValue(r.bottom) + (16));
+	    r.bottom = CW(CW(r.bottom) + (16));
 	RectRgn(rectrgn, &r);
 	UnionRgn(rectrgn, updatergn, updatergn);
     }

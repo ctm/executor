@@ -14,14 +14,13 @@ char ROMlib_rcsid_prError[] =
 #include "PrintMgr.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P0(PUBLIC pascal trap, INTEGER, PrError)
 {
-    return BigEndianValue(PrintErr);
+    return CW(PrintErr);
 }
 
 P1(PUBLIC pascal trap, void, PrSetError, INTEGER, iErr)
 {
-    PrintErr = BigEndianValue(iErr);
+    PrintErr = CW(iErr);
 }

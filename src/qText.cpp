@@ -19,12 +19,11 @@ char ROMlib_rcsid_qText[] =
 #include "rsys/glue.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P1(PUBLIC pascal trap, void, TextFont, INTEGER, f)
 {
   if (thePort)
-    PORT_TX_FONT_X (thePort) = BigEndianValue(f);
+    PORT_TX_FONT_X (thePort) = CW(f);
 }
 
 P1(PUBLIC pascal trap, void, TextFace, INTEGER, thef)
@@ -36,19 +35,19 @@ P1(PUBLIC pascal trap, void, TextFace, INTEGER, thef)
 P1(PUBLIC pascal trap, void, TextMode, INTEGER, m)
 {
   if (thePort)
-    PORT_TX_MODE_X (thePort) = BigEndianValue(m);
+    PORT_TX_MODE_X (thePort) = CW(m);
 }
 
 P1(PUBLIC pascal trap, void, TextSize, INTEGER, s)
 {
   if (thePort)
-    PORT_TX_SIZE_X (thePort) = BigEndianValue(s);
+    PORT_TX_SIZE_X (thePort) = CW(s);
 }
 
 P1(PUBLIC pascal trap, void, SpaceExtra, Fixed, e)
 {
   if (thePort)
-    PORT_SP_EXTRA_X (thePort) = BigEndianValue(e);
+    PORT_SP_EXTRA_X (thePort) = CL(e);
 }
 
 P1(PUBLIC pascal trap, void, DrawChar, CHAR, thec)
@@ -99,7 +98,7 @@ P1(PUBLIC pascal trap, INTEGER, CharWidth, CHAR, thec)
     c = thec;
     np.h = np.v = dp.h = dp.v = CWC(256);
     retval =  CALLTXMEAS(1, (Ptr) &c, &np, &dp, &fi);
-    return FixMul((LONGINT) retval << 16, (Fixed) BigEndianValue(np.h) << 8) / ((LONGINT) BigEndianValue(dp.h) << 8);
+    return FixMul((LONGINT) retval << 16, (Fixed) CW(np.h) << 8) / ((LONGINT) CW(dp.h) << 8);
 }
 
 P1(PUBLIC pascal trap, INTEGER, StringWidth, StringPtr, s)
@@ -111,7 +110,7 @@ P1(PUBLIC pascal trap, INTEGER, StringWidth, StringPtr, s)
   np.h = np.v = dp.h = dp.v = CWC (256);
   retval =  CALLTXMEAS((INTEGER)U(s[0]), (Ptr) s+1, &np, &dp, &fi);
   return FixMul ((LONGINT) retval << 16,
-		 (Fixed) BigEndianValue (np.h) << 8) / ((LONGINT) BigEndianValue (dp.h) << 8);
+		 (Fixed) CW (np.h) << 8) / ((LONGINT) CW (dp.h) << 8);
 }
 
 P3(PUBLIC pascal trap, INTEGER, TextWidth, Ptr, tb, INTEGER, fb, INTEGER, bc)
@@ -123,7 +122,7 @@ P3(PUBLIC pascal trap, INTEGER, TextWidth, Ptr, tb, INTEGER, fb, INTEGER, bc)
   np.h = np.v = dp.h = dp.v = CWC(256);
   retval =  CALLTXMEAS(bc, tb+fb, &np, &dp, &fi);
   return FixMul ((LONGINT) retval << 16,
-		 (Fixed) BigEndianValue(np.h) << 8) / ((LONGINT) BigEndianValue(dp.h) << 8);
+		 (Fixed) CW(np.h) << 8) / ((LONGINT) CW(dp.h) << 8);
 }
 
 P1(PUBLIC pascal trap, void, GetFontInfo, FontInfo *, ip)
@@ -135,7 +134,7 @@ P1(PUBLIC pascal trap, void, GetFontInfo, FontInfo *, ip)
     pd.v = CWC(1);
     pd.h = CWC(1);
     CALLTXMEAS(0, (Ptr) "", &pn, &pd, ip);
-    ip->ascent  = BigEndianValue(BigEndianValue(ip->ascent ) * BigEndianValue(pn.v) / BigEndianValue(pd.v));
-    ip->descent = BigEndianValue(BigEndianValue(ip->descent) * BigEndianValue(pn.v) / BigEndianValue(pd.v));
-    ip->leading = BigEndianValue(BigEndianValue(ip->leading) * BigEndianValue(pn.v) / BigEndianValue(pd.v));
+    ip->ascent  = CW(CW(ip->ascent ) * CW(pn.v) / CW(pd.v));
+    ip->descent = CW(CW(ip->descent) * CW(pn.v) / CW(pd.v));
+    ip->leading = CW(CW(ip->leading) * CW(pn.v) / CW(pd.v));
 }

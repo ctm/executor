@@ -88,7 +88,6 @@ char ROMlib_rcsid_launch[] =
 #include "rsys/appearance.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 PRIVATE boolean_t ppc_launch_p = FALSE;
 
@@ -362,7 +361,7 @@ PRIVATE void beginexecutingat( LONGINT startpc )
     EM_A2 = EM_D3;
     EM_A3 = 0;
     EM_A4 = 0;
-    EM_A5 = BigEndianValue((LONGINT) CurrentA5);	/* was smashed when we
+    EM_A5 = CL((LONGINT) CurrentA5);	/* was smashed when we
 					   initialized above */
     EM_A6 = 0x1EF;
 
@@ -389,9 +388,9 @@ PUBLIC void Executor::SFSaveDisk_Update (INTEGER vrefnum, Str255 filename)
   str255assign (save_name, filename);
   pbr.volumeParam.ioNamePtr = (StringPtr) RM ((long) save_name);
   pbr.volumeParam.ioVolIndex = CWC (-1);
-  pbr.volumeParam.ioVRefNum = BigEndianValue (vrefnum);
+  pbr.volumeParam.ioVRefNum = CW (vrefnum);
   PBGetVInfo (&pbr, FALSE);
-  SFSaveDisk = BigEndianValue (-BigEndianValue (pbr.volumeParam.ioVRefNum));
+  SFSaveDisk = CW (-CW (pbr.volumeParam.ioVRefNum));
 }
 
 PUBLIC uint32 Executor::ROMlib_version_long;
@@ -420,7 +419,7 @@ Executor::ROMlib_find_cfrg (Handle cfrg, OSType arch, uint8 type, Str255 name)
 
   cfrgp = (cfrg_resource_t *) STARH (cfrg);
   cfirp = (cfir_t *) ((char *) cfrgp + sizeof *cfrgp);
-  desired_arch_x = BigEndianValue (arch);
+  desired_arch_x = CL (arch);
   type_x = CB (type);
   for (n_descripts = CFRG_N_DESCRIPTS (cfrgp);
        n_descripts > 0 && !cfrg_match (cfirp, desired_arch_x, type_x, name);
@@ -528,11 +527,11 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	CInfoPBRec hpb;
 
 	hpb.hFileInfo.ioNamePtr   = RM(&fName[0]);
-	hpb.hFileInfo.ioVRefNum   = BigEndianValue(vRefNum);
+	hpb.hFileInfo.ioVRefNum   = CW(vRefNum);
 	hpb.hFileInfo.ioFDirIndex = CWC (0);
 	hpb.hFileInfo.ioDirID     = 0;
 	PBGetCatInfo(&hpb, FALSE);
-	wdpb.ioVRefNum = BigEndianValue(vRefNum);
+	wdpb.ioVRefNum = CW(vRefNum);
 	wdpb.ioWDDirID = hpb.hFileInfo.ioFlParID;
       }
     else
@@ -547,7 +546,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     wdpb.ioWDProcID = T('X','c','t','r');
     wdpb.ioNamePtr = 0;
     PBOpenWD(&wdpb, FALSE);
-    ROMlib_exevrefnum = BigEndianValue(wdpb.ioVRefNum);
+    ROMlib_exevrefnum = CW(wdpb.ioVRefNum);
     ROMlib_exefname = CurApName;
 #if 0
 /* I'm skeptical that this is correct */
@@ -555,7 +554,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	CloseResFile(CurMap);
 #endif
     SetVol((StringPtr) 0, ROMlib_exevrefnum);
-    CurApRefNum = BigEndianValue(OpenResFile(ROMlib_exefname));
+    CurApRefNum = CW(OpenResFile(ROMlib_exefname));
 
     /* setupsignals(); */
 
@@ -572,19 +571,19 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     BlockMove((Ptr) ROMlib_exeuname, (Ptr) ename+1, elen);
     ename[0] = elen;
 
-    ROMlib_creator = BigEndianValue(finfo.fdCreator);
+    ROMlib_creator = CL(finfo.fdCreator);
 
 #define LEMMINGSHACK
 #if defined(LEMMINGSHACK)
     {
-      if (finfo.fdCreator == BigEndianValue(TICK("Psyg"))
-	  || finfo.fdCreator == BigEndianValue(TICK("Psod")))
+      if (finfo.fdCreator == CL(TICK("Psyg"))
+	  || finfo.fdCreator == CL(TICK("Psod")))
 	ROMlib_flushoften = TRUE;
     }
 #endif /* defined(LEMMINGSHACK) */
 
 #if defined (ULTIMA_III_HACK)
-      ROMlib_ultima_iii_hack = (finfo.fdCreator == BigEndianValue(TICK("Ult3")));
+      ROMlib_ultima_iii_hack = (finfo.fdCreator == CL(TICK("Ult3")));
 #endif
 
     h = GetResource(T('v','e','r','s'), 2);
@@ -614,7 +613,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     ROMlib_directdiskaccess = FALSE;
     ROMlib_clear_gestalt_list ();
     ParseConfigFile ((StringPtr) "\017ExecutorDefault", 0);
-    ParseConfigFile (ename, err == noErr ? BigEndianValue(finfo.fdCreator) : 0);
+    ParseConfigFile (ename, err == noErr ? CL(finfo.fdCreator) : 0);
     ROMlib_clockonoff(!ROMlib_noclock);
     if ((ROMlib_ScreenSize.first != INITIALPAIRVALUE
 	 || ROMlib_MacSize.first != INITIALPAIRVALUE))
@@ -658,9 +657,9 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	  size_info_t *size_resource;
 	  
 	  size_resource = (size_info_t *) STARH (size_resource_h);
-	  size_info.size_flags = BigEndianValue (size_resource->size_flags);
-	  size_info.preferred_size = BigEndianValue (size_resource->preferred_size);
-	  size_info.minimum_size = BigEndianValue (size_resource->minimum_size);
+	  size_info.size_flags = CW (size_resource->size_flags);
+	  size_info.preferred_size = CL (size_resource->preferred_size);
+	  size_info.minimum_size = CL (size_resource->minimum_size);
 	  size_info.size_resource_present_p = TRUE;
 	}
       else
@@ -680,7 +679,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	      == SZisHighLevelEventAware);
     }
     
-    h = GetResource(BigEndianValue(finfo.fdCreator), 0);
+    h = GetResource(CL(finfo.fdCreator), 0);
     if (h) {
 	namelen = *MR(*(unsigned char **)h);
 	namebuf = (char*)alloca(namelen+1);
@@ -694,7 +693,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	lp = 0; /* just to shut GCC up */
 	jumplen = jumpoff = 0; /* just to shut GCC up */
 	a5 = (LONGINT) (long) US_TO_SYN68K (&tmpa5);
-	CurrentA5 = (Ptr) BigEndianValue (a5);
+	CurrentA5 = (Ptr) CL (a5);
 	InitGraf ((Ptr) quickbytes + grafSize - 4);
       }
     else
@@ -702,10 +701,10 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	HLock(code0);
 
 	lp = (LONGINT *) STARH(code0);
-	abovea5 = BigEndianValue(*lp++);
-	belowa5 = BigEndianValue(*lp++);
-	jumplen = BigEndianValue(*lp++);
-	jumpoff = BigEndianValue(*lp++);
+	abovea5 = CL(*lp++);
+	belowa5 = CL(*lp++);
+	jumplen = CL(*lp++);
+	jumpoff = CL(*lp++);
 
 	/*
 	 * NOTE: The stack initialization code that was here has been moved
@@ -715,17 +714,17 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 
 #if defined(SYN68K)
 	EM_A7 -= abovea5 + belowa5;
-	CurStackBase = (Ptr) BigEndianValue(EM_A7);
+	CurStackBase = (Ptr) CL(EM_A7);
 #else /* !defined(SYN68K) */
 	ROMlib_foolgcc = alloca(abovea5 + belowa5);
 	CurStackBase
-	  = BigEndianValue(MAC_STACK_START + MAC_STACK_SIZE - (abovea5 + belowa5));
+	  = CL(MAC_STACK_START + MAC_STACK_SIZE - (abovea5 + belowa5));
 #endif /* !defined(SYN68K) */
 
 	CurrentA5 = RM(MR(CurStackBase) + belowa5); /* set CurrentA5 */
 	BufPtr = RM(MR(CurrentA5) + abovea5);
-	CurJTOffset = BigEndianValue(jumpoff);
-	a5 = BigEndianValue((LONGINT) CurrentA5);
+	CurJTOffset = CW(jumpoff);
+	a5 = CL((LONGINT) CurrentA5);
       }
 
     GetDateTime((LONGINT *) &Time);
@@ -770,7 +769,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     ROMlib_uaf = 0;
 
     if (code0)
-      beginexecutingat(BigEndianValue((LONGINT) CurrentA5) + BigEndianValue(CurJTOffset) + 2);
+      beginexecutingat(CL((LONGINT) CurrentA5) + CW(CurJTOffset) + 2);
     else
       {
 	FSSpec fs;
@@ -1063,7 +1062,7 @@ PRIVATE void reset_low_globals(void)
     MBSaveLoc   = 0;
     SysFontFam  = 0;
 
-    SysVersion  = BigEndianValue (system_version);
+    SysVersion  = CW (system_version);
     FSFCBLen    = CWC (94);
 
 /*
@@ -1162,7 +1161,7 @@ PRIVATE void reset_low_globals(void)
     }
     SysEvtMask = CWC(~(1L<< keyUp)); /* EVERYTHING except keyUp */
     SdVolume = 7; /* for Beebop 2 */
-    CurrentA5 = (Ptr) BigEndianValue (EM_A5);
+    CurrentA5 = (Ptr) CL (EM_A5);
 }
 
 PRIVATE void reset_traps(void)
@@ -1263,18 +1262,18 @@ PRIVATE void reinitialize_things(void)
 	  }
     }
 
-    length = BigEndianValue(*(short *)MR(FCBSPtr));
+    length = CW(*(short *)MR(FCBSPtr));
     fcbp = (filecontrolblock *) ((short *)MR(FCBSPtr)+1);
     efcbp = (filecontrolblock *) ((char *)MR(FCBSPtr) + length);
     for (;fcbp < efcbp;
-		     fcbp = (filecontrolblock *) ((char *)fcbp + BigEndianValue(FSFCBLen)))
+		     fcbp = (filecontrolblock *) ((char *)fcbp + CW(FSFCBLen)))
       {
 	INTEGER rn;
 
 	rn = (char *) fcbp - (char *) MR(FCBSPtr);
 	if (fcbp->fcbCName[0]
 	    /* && rn != Param_ram_rn */
-	    && rn != BigEndianValue (SysMap)
+	    && rn != CW (SysMap)
 	    && rn != special_fn)
 	  FSClose((char *) fcbp - (char *) MR(FCBSPtr));
       }
@@ -1313,7 +1312,7 @@ ROMlib_filename_from_fsspec (char **strp, FSSpec *fsp)
   memset (&pbr, 0, sizeof pbr);
   pbr.ioParam.ioVRefNum = fsp->vRefNum;
   pbr.ioParam.ioNamePtr = (StringPtr) RM ((Ptr) fsp->name);
-  retval = ROMlib_nami (&pbr, BigEndianValue (fsp->parID), NoIndex, strp, &filename,
+  retval = ROMlib_nami (&pbr, CL (fsp->parID), NoIndex, strp, &filename,
 			&endname, FALSE, &vcbp, &sbuf);
   return retval;
 }
@@ -1359,7 +1358,7 @@ Executor::NewLaunch (StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockR
 	if (lpbp->launchAppParameters)
 	  {
 	    ap = MR (lpbp->launchAppParameters);
-	    n_filenames += BigEndianValue (ap->n_fsspec);
+	    n_filenames += CW (ap->n_fsspec);
 	  }
 	n_filename_bytes = n_filenames * sizeof *filenames;
 	filenames = (char**)alloca (n_filename_bytes);

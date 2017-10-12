@@ -20,7 +20,6 @@ char ROMlib_rcsid_qStdPoly[] =
 #include "rsys/picture.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 namespace Executor {
   PRIVATE void polyrgn(PolyHandle, RgnHandle);
@@ -38,16 +37,16 @@ A2(PRIVATE, void, polyrgn, PolyHandle, ph, RgnHandle, rh)
     ep = (Point *) ((char *) STARH(ph) + Hx(ph, polySize));
     firstp.h = Hx(ph, polyPoints[0].h);
     firstp.v = Hx(ph, polyPoints[0].v);
-    if (BigEndianValue(ep[-1].h) == firstp.h && BigEndianValue(ep[-1].v) == firstp.v)
+    if (CW(ep[-1].h) == firstp.h && CW(ep[-1].v) == firstp.v)
         ep--;
 
     tmpvis = PORT_PEN_VIS_X (thePort);
     PORT_PEN_VIS_X (thePort) = CWC (0);
     OpenRgn();
-	MoveTo(BigEndianValue(pp->h), BigEndianValue(pp->v));
+	MoveTo(CW(pp->h), CW(pp->v));
 	pp++;
 	while (pp != ep) {
-	    LineTo(BigEndianValue(pp->h), BigEndianValue(pp->v));
+	    LineTo(CW(pp->h), CW(pp->v));
 	    pp++;
 	}
 	LineTo(firstp.h, firstp.v);
@@ -92,13 +91,13 @@ P2(PUBLIC pascal trap, void, StdPoly, GrafVerb, verb, PolyHandle, ph)
 	TRAPBEGIN ();
         pp = HxX(ph, polyPoints);
         ep = (Point *) ((char *) STARH(ph) + Hx(ph, polySize));
-        firstp.h = BigEndianValue(pp[0].h);
-        firstp.v = BigEndianValue(pp[0].v);
+        firstp.h = CW(pp[0].h);
+        firstp.v = CW(pp[0].v);
         MoveTo (firstp.h, firstp.v);
         for (++pp; pp != ep; pp++)
 	  {
-	    p.h = BigEndianValue(pp[0].h);
-	    p.v = BigEndianValue(pp[0].v);
+	    p.h = CW(pp[0].h);
+	    p.v = CW(pp[0].v);
             StdLine(p);
 	    PORT_PEN_LOC (thePort) = pp[0];
 	  }

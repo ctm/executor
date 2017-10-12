@@ -15,7 +15,6 @@ char ROMlib_rcsid_listOps[] =
 #include "rsys/list.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 A2(PUBLIC, INTEGER *, ROMlib_getoffp, Cell, cell,		/* INTERNAL */
 							     ListHandle, list)
@@ -24,9 +23,9 @@ A2(PUBLIC, INTEGER *, ROMlib_getoffp, Cell, cell,		/* INTERNAL */
     INTEGER ncols, *retval;
 
     if (list && PtInRect(cell, rp = &HxX(list, dataBounds))) {
-	ncols = BigEndianValue(rp->right) - BigEndianValue(rp->left);
-	retval = HxX(list, cellArray) + ncols * (cell.v - BigEndianValue(rp->top)) +
-						       (cell.h - BigEndianValue(rp->left));
+	ncols = CW(rp->right) - CW(rp->left);
+	retval = HxX(list, cellArray) + ncols * (cell.v - CW(rp->top)) +
+						       (cell.h - CW(rp->left));
     } else
 	retval = 0;
     return retval;
@@ -53,9 +52,9 @@ A5(PRIVATE, void, cellhelper, AddOrRep, addorrep, Ptr, dp, INTEGER, dl,
 	ep = ROMlib_getoffp(temp, list) + 1;
 	ip_offset = (char *) ip - (char *) STARH (list);
 	ep_offset = (char *) ep - (char *) STARH (list);
-	off0 = BigEndianValue(ip[0]) & 0x7FFF;
-	off1 = BigEndianValue(ip[1]) & 0x7FFF;
-	off2 = BigEndianValue(ep[0]) & 0x7FFF;
+	off0 = CW(ip[0]) & 0x7FFF;
+	off1 = CW(ip[1]) & 0x7FFF;
+	off2 = CW(ep[0]) & 0x7FFF;
 	len = off1 - off0;
 
 /*
@@ -107,7 +106,7 @@ A5(PRIVATE, void, cellhelper, AddOrRep, addorrep, Ptr, dp, INTEGER, dl,
 
 	if (delta) {
 	    while (++ip <= ep)
-		*ip = BigEndianValue(BigEndianValue(*ip) + (delta));
+		*ip = CW(CW(*ip) + (delta));
 	}
 	if (Hx(list, listFlags) & DODRAW)
 	    C_LDraw(cell, list);
@@ -133,13 +132,13 @@ P4(PUBLIC pascal trap, void, LGetCell, Ptr, dp, INTEGER *, dlp,	/* IMIV-272 */
     INTEGER ntomove;
 
     if ((ip = ROMlib_getoffp(cell, list))) {
-	off1 = BigEndianValue(*ip++) & 0x7fff;
-	off2 = BigEndianValue(*ip)   & 0x7fff;
+	off1 = CW(*ip++) & 0x7fff;
+	off2 = CW(*ip)   & 0x7fff;
 	ntomove = off2 - off1;
-	if (ntomove > BigEndianValue(*dlp))
-	    ntomove = BigEndianValue(*dlp);
+	if (ntomove > CW(*dlp))
+	    ntomove = CW(*dlp);
 	BlockMove((Ptr) STARH(HxP(list, cells)) + off1, dp, (Size) ntomove);
-	*dlp = BigEndianValue(ntomove);
+	*dlp = CW(ntomove);
     }
 }
 
@@ -158,29 +157,29 @@ P2(PUBLIC pascal trap, void, LCellSize, Point, csize,		/* IMIV-273 */
     INTEGER nh, nv;
 
     lp = STARH(list);
-    if (!(lp->cellSize.h = BigEndianValue(csize.h)))
-	lp->cellSize.h = BigEndianValue((BigEndianValue(lp->rView.right) - BigEndianValue(lp->rView.left)) /
-			    MAX(1, (BigEndianValue(lp->dataBounds.right)
-				    - BigEndianValue(lp->dataBounds.left))));
-    if (!(lp->cellSize.v = BigEndianValue(csize.v))) {
+    if (!(lp->cellSize.h = CW(csize.h)))
+	lp->cellSize.h = CW((CW(lp->rView.right) - CW(lp->rView.left)) /
+			    MAX(1, (CW(lp->dataBounds.right)
+				    - CW(lp->dataBounds.left))));
+    if (!(lp->cellSize.v = CW(csize.v))) {
 	gp = thePort;
 	SetPort(MR(lp->port));
 	GetFontInfo(&fi);
 	lp = STARH(list);	/* could have moved */
-	lp->cellSize.v = BigEndianValue(BigEndianValue(fi.ascent) + BigEndianValue(fi.descent) + BigEndianValue(fi.leading));
+	lp->cellSize.v = CW(CW(fi.ascent) + CW(fi.descent) + CW(fi.leading));
 	SetPort(gp);
     }
     lp->visible.right  = lp->dataBounds.right;
     lp->visible.bottom = lp->dataBounds.bottom;
-    nh = (BigEndianValue(lp->rView.right) - BigEndianValue(lp->rView.left) + BigEndianValue(lp->cellSize.h) - 1) /
-							    BigEndianValue(lp->cellSize.h);
-    nv = (BigEndianValue(lp->rView.bottom) - BigEndianValue(lp->rView.top) + BigEndianValue(lp->cellSize.v) - 1) /
-							    BigEndianValue(lp->cellSize.v);
-    if (BigEndianValue(lp->visible.right) - BigEndianValue(lp->visible.left) > nh)
-	lp->visible.right = BigEndianValue(BigEndianValue(lp->visible.left) + nh);
+    nh = (CW(lp->rView.right) - CW(lp->rView.left) + CW(lp->cellSize.h) - 1) /
+							    CW(lp->cellSize.h);
+    nv = (CW(lp->rView.bottom) - CW(lp->rView.top) + CW(lp->cellSize.v) - 1) /
+							    CW(lp->cellSize.v);
+    if (CW(lp->visible.right) - CW(lp->visible.left) > nh)
+	lp->visible.right = CW(CW(lp->visible.left) + nh);
 
-    if (BigEndianValue(lp->visible.bottom) - BigEndianValue(lp->visible.top) > nv)
-	lp->visible.bottom = BigEndianValue(BigEndianValue(lp->visible.top) + nv);
+    if (CW(lp->visible.bottom) - CW(lp->visible.top) > nv)
+	lp->visible.bottom = CW(CW(lp->visible.top) + nv);
     {
       ControlHandle control;
 
@@ -216,11 +215,11 @@ P3(PUBLIC pascal trap, BOOLEAN, LGetSelect, BOOLEAN, next,	/* IMIV-273 */
     if (!list || !cellp)
         retval = FALSE;
     else if (next) {
-	c.h = BigEndianValue(cellp->h);
-	c.v = BigEndianValue(cellp->v);
+	c.h = CW(cellp->h);
+	c.v = CW(cellp->v);
 	if (!(ip = ROMlib_getoffp(c, list))) {
 	    temp.h = 0;
-	    temp.h = BigEndianValue(cellp->v) + 1;
+	    temp.h = CW(cellp->v) + 1;
 	    ip = ROMlib_getoffp(temp, list);
 	}
 	if (!ip)
@@ -229,7 +228,7 @@ P3(PUBLIC pascal trap, BOOLEAN, LGetSelect, BOOLEAN, next,	/* IMIV-273 */
 	    temp.h = Hx(list, dataBounds.right)  - 1;
 	    temp.v = Hx(list, dataBounds.bottom) - 1;
 	    ep = ROMlib_getoffp(temp, list) + 1;
-	    while (ip != ep && !(BigEndianValue(*ip) & 0x8000))
+	    while (ip != ep && !(CW(*ip) & 0x8000))
 		ip++;
 	    if (ip == ep)
 		retval = FALSE;
@@ -238,18 +237,18 @@ P3(PUBLIC pascal trap, BOOLEAN, LGetSelect, BOOLEAN, next,	/* IMIV-273 */
 		ncols = Hx(list, dataBounds.right) - Hx(list, dataBounds.left);
 		rown = nint / ncols;
 		coln = nint % ncols;
-		cellp->v = BigEndianValue(Hx(list, dataBounds.top)  + rown);
-		cellp->h = BigEndianValue(Hx(list, dataBounds.left) + coln);
+		cellp->v = CW(Hx(list, dataBounds.top)  + rown);
+		cellp->h = CW(Hx(list, dataBounds.left) + coln);
 		retval = TRUE;
 	    }
 	}
     } else {
-	p.h = BigEndianValue(cellp->h);
-	p.v = BigEndianValue(cellp->v);
+	p.h = CW(cellp->h);
+	p.v = CW(cellp->v);
 	if (!(ip = ROMlib_getoffp(p, list)))
 	    retval = FALSE;
 	else
-	    retval = (BigEndianValue(*ip) & 0x8000) ? TRUE : FALSE;
+	    retval = (CW(*ip) & 0x8000) ? TRUE : FALSE;
     }
     return retval;
 }

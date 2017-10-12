@@ -42,7 +42,7 @@ P3 (PUBLIC pascal trap, UniversalProcPtr, NewRoutineDescriptor, ProcPtr, proc,
       p->reserved2 = CBC (0);
       p->selectorInfo = CBC (0);
       p->routineCount = CWC (0);
-      p->routineRecords[0].procInfo = BigEndianValue (info);
+      p->routineRecords[0].procInfo = CL (info);
       p->routineRecords[0].reserved1 = CBC (0);
       p->routineRecords[0].ISA = CB (isa);
       p->routineRecords[0].routineFlags = CWC (kSelectorsAreNotIndexable);

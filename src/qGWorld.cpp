@@ -20,7 +20,6 @@ char ROMlib_rcsid_qGWorld[] =
 #include "rsys/qcolor.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 gw_info_t *gw_info_head, *gw_info_free;
 
@@ -157,8 +156,8 @@ P6 (PUBLIC pascal trap, QDErr, NewGWorld,
 	{
 	  Rect *temp_bounds = (Rect*)alloca (sizeof *temp_bounds);
 	  
-	  temp_bounds->bottom = BigEndianValue (RECT_HEIGHT (bounds));
-	  temp_bounds->right = BigEndianValue (RECT_WIDTH (bounds));
+	  temp_bounds->bottom = CW (RECT_HEIGHT (bounds));
+	  temp_bounds->right = CW (RECT_WIDTH (bounds));
 	  
 	  temp_bounds->top = temp_bounds->left = CWC (0);
 	  
@@ -191,7 +190,7 @@ P6 (PUBLIC pascal trap, QDErr, NewGWorld,
       gd_pixmap = GD_PMAP (gw_gd);
       
       row_bytes = ((RECT_WIDTH (bounds) * depth + 31) / 32) * 4;
-      PIXMAP_SET_ROWBYTES_X (gd_pixmap, BigEndianValue (row_bytes));
+      PIXMAP_SET_ROWBYTES_X (gd_pixmap, CW (row_bytes));
       
       gd_pixmap_baseaddr = NewHandle (row_bytes * RECT_HEIGHT (bounds));
       if (MemError () != noErr)
@@ -220,9 +219,9 @@ P6 (PUBLIC pascal trap, QDErr, NewGWorld,
 	{
 	  PIXMAP_PIXEL_TYPE_X (gd_pixmap) = CWC (0);
 	  PIXMAP_CMP_COUNT_X (gd_pixmap) = CWC (1);
-	  PIXMAP_CMP_SIZE_X (gd_pixmap) = BigEndianValue (depth);
+	  PIXMAP_CMP_SIZE_X (gd_pixmap) = CW (depth);
 	}
-      PIXMAP_PIXEL_SIZE_X (gd_pixmap) = BigEndianValue (depth);
+      PIXMAP_PIXEL_SIZE_X (gd_pixmap) = CW (depth);
       if (ctab == NULL && depth <= 8)
 	{
 	  int ctab_max_elt = (1 << depth) - 1;
@@ -231,8 +230,8 @@ P6 (PUBLIC pascal trap, QDErr, NewGWorld,
 	  
 	  SetHandleSize ((Handle) ctab,
 			 CTAB_STORAGE_FOR_SIZE (ctab_max_elt));
-	  CTAB_SIZE_X (ctab) = BigEndianValue (ctab_max_elt);
-	  CTAB_SEED_X (ctab) = BigEndianValue ((int32) depth);
+	  CTAB_SIZE_X (ctab) = CW (ctab_max_elt);
+	  CTAB_SEED_X (ctab) = CL ((int32) depth);
 	  CTAB_FLAGS_X (ctab) = CTAB_GDEVICE_BIT_X;
 	  memcpy (CTAB_TABLE (ctab),
 		  default_ctab_colors[ROMlib_log2[depth]],
@@ -276,7 +275,7 @@ P6 (PUBLIC pascal trap, QDErr, NewGWorld,
 	      which may not match `depth' */
 	   row_bytes = ((RECT_WIDTH (bounds) * depth + 31) / 32) * 4;
 	   
-	   PIXMAP_SET_ROWBYTES_X (gw_pixmap, BigEndianValue (row_bytes));
+	   PIXMAP_SET_ROWBYTES_X (gw_pixmap, CW (row_bytes));
 	   
 	   gw_pixmap_baseaddr = NewHandle (row_bytes * RECT_HEIGHT (bounds));
 	   if (MemError () != noErr)
@@ -414,7 +413,7 @@ P6 (PUBLIC pascal trap, GWorldFlags, UpdateGWorld,
 	  
 	  *temp_bounds = *bounds;
 	  OffsetRect (temp_bounds,
-		      - BigEndianValue (temp_bounds->left), - BigEndianValue (temp_bounds->top));
+		      - CW (temp_bounds->left), - CW (temp_bounds->top));
 	  bounds = temp_bounds;
 	}
     }
@@ -475,17 +474,17 @@ P6 (PUBLIC pascal trap, GWorldFlags, UpdateGWorld,
 	      dst_rect = *gw_bounds_ret;
 	      
 	      OffsetRect (&src_rect,
-			  - BigEndianValue (src_rect.left), - BigEndianValue (src_rect.top));
+			  - CW (src_rect.left), - CW (src_rect.top));
 	      OffsetRect (&dst_rect,
-			  - BigEndianValue (dst_rect.left), - BigEndianValue (dst_rect.top));
+			  - CW (dst_rect.left), - CW (dst_rect.top));
 	  
 	      SectRect (&src_rect, &dst_rect, &temp_rect);
 	      src_rect = dst_rect = temp_rect;
 	  
 	      OffsetRect (&src_rect,
-			  BigEndianValue (gw_bounds->left), BigEndianValue (gw_bounds->top));
+			  CW (gw_bounds->left), CW (gw_bounds->top));
 	      OffsetRect (&dst_rect,
-			  BigEndianValue (gw_bounds_ret->left), BigEndianValue (gw_bounds_ret->top));
+			  CW (gw_bounds_ret->left), CW (gw_bounds_ret->top));
 	    }
       
 	  CopyBits (PORT_BITS_FOR_COPY (gw),
@@ -723,7 +722,7 @@ P4 (PUBLIC pascal trap, QDErr, NewScreenBuffer,
   
   rowbytes = ((width * bpp + 31) / 32) * 4;
   
-  PIXMAP_SET_ROWBYTES_X (pixels, BigEndianValue (rowbytes));
+  PIXMAP_SET_ROWBYTES_X (pixels, CW (rowbytes));
 
   /* not clear if we should be allocating a ptr or a handle for the
      pixmap baseaddr */

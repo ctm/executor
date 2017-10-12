@@ -24,7 +24,6 @@ char ROMlib_rcsid_ctlMisc[] =
    macros */
 
 using namespace Executor;
-using namespace ByteSwap;
 
 AuxCtlHandle Executor::default_aux_ctl;
 
@@ -107,7 +106,7 @@ Executor::lookup_aux_ctl (ControlHandle ctl)
 P2(PUBLIC pascal trap, void, SetCRefCon, ControlHandle, c,	/* IMI-327 */
 							       LONGINT, data)
 {
-    HxX(c, contrlRfCon) = BigEndianValue(data);
+    HxX(c, contrlRfCon) = CL(data);
 }
 
 P1(PUBLIC pascal trap, LONGINT, GetCRefCon, ControlHandle, c)	/* IMI-327 */

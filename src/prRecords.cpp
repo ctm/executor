@@ -19,7 +19,6 @@ char ROMlib_rcsid_prRecords[] =
 #include "rsys/print.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 PRIVATE void
 set_wDev (THPrint hPrint)
@@ -33,18 +32,18 @@ Executor::ROMlib_set_default_resolution (THPrint hPrint, INTEGER vres, INTEGER h
   printer_init ();
   update_printing_globals ();
 
-  HxX(hPrint, prInfo.iVRes) = BigEndianValue (vres);
-  HxX(hPrint, prInfo.iHRes) = BigEndianValue (hres);
+  HxX(hPrint, prInfo.iVRes) = CW (vres);
+  HxX(hPrint, prInfo.iHRes) = CW (hres);
   HxX(hPrint, prInfo.rPage.top)    = CWC (0);
   HxX(hPrint, prInfo.rPage.left)   = CWC (0);
-  HxX(hPrint, prInfo.rPage.bottom) = BigEndianValue ((ROMlib_paper_y - 72) * vres / 72);
-  HxX(hPrint, prInfo.rPage.right)  = BigEndianValue ((ROMlib_paper_x - 72) * hres / 72);
+  HxX(hPrint, prInfo.rPage.bottom) = CW ((ROMlib_paper_y - 72) * vres / 72);
+  HxX(hPrint, prInfo.rPage.right)  = CW ((ROMlib_paper_x - 72) * hres / 72);
 
-  HxX(hPrint, rPaper.top)    = BigEndianValue ((INTEGER) (-0.5 * vres));
-  HxX(hPrint, rPaper.bottom) = BigEndianValue ((INTEGER)
+  HxX(hPrint, rPaper.top)    = CW ((INTEGER) (-0.5 * vres));
+  HxX(hPrint, rPaper.bottom) = CW ((INTEGER)
 				   ((ROMlib_paper_y - 36) * vres / 72));
-  HxX(hPrint, rPaper.left)   = BigEndianValue ((INTEGER) (-0.5 * hres));
-  HxX(hPrint, rPaper.right)  = BigEndianValue ((INTEGER)
+  HxX(hPrint, rPaper.left)   = CW ((INTEGER) (-0.5 * hres));
+  HxX(hPrint, rPaper.right)  = CW ((INTEGER)
 				   ((ROMlib_paper_x - 36) * hres / 72));
 
   ROMlib_resolution_x = hres;
@@ -59,7 +58,7 @@ P1(PUBLIC pascal trap, void, PrintDefault, THPrint, hPrint)
        LaserWriter we're using wants */
 
     memset((char *) STARH(hPrint), 0, sizeof(TPrint));
-    HxX(hPrint, iPrVersion) = BigEndianValue (ROMlib_PrDrvrVers);
+    HxX(hPrint, iPrVersion) = CW (ROMlib_PrDrvrVers);
 
     ROMlib_set_default_resolution (hPrint, 72, 72);
     
@@ -76,7 +75,7 @@ P1(PUBLIC pascal trap, void, PrintDefault, THPrint, hPrint)
     HxX(hPrint, prInfoPT.iHRes)        = CWC(72);
     HxX(hPrint, prInfoPT.rPage)	     = HxX(hPrint, prInfo.rPage);
 
-    HxX(hPrint, prXInfo.iRowBytes) = BigEndianValue((Hx(hPrint, prXInfo.iBandH) + 7) / 8);
+    HxX(hPrint, prXInfo.iRowBytes) = CW((Hx(hPrint, prXInfo.iBandH) + 7) / 8);
     /* TODO: what about the rest of prXInfo? (is zero for now) */
 
     HxX(hPrint, prJob.iFstPage)  =  CWC(1);

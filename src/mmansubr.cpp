@@ -24,7 +24,6 @@ char ROMlib_rcsid_mmansubr[] =
 #include <stdarg.h>
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /* Attempts to notify the user of a catastrophic heap failure then exits. */
 void
@@ -298,7 +297,7 @@ addr_info (char *addr)
 	  return;
 	
 	/* blah */
-	id = BigEndianValue (id);
+	id = CW (id);
 	type = MR (type);
 	
 	res_name[res_name[0] + 1] = '\0';
@@ -602,10 +601,10 @@ Executor::ROMlib_setupblock (block_header_t *block,
 #endif
 
   if (olduse == FREE)
-    ZONE_ZCB_FREE_X (current_zone) = BigEndianValue (ZONE_ZCB_FREE (current_zone)
+    ZONE_ZCB_FREE_X (current_zone) = CL (ZONE_ZCB_FREE (current_zone)
 					 - PSIZE (block));
   else
-    ZONE_ZCB_FREE_X (current_zone) = BigEndianValue (ZONE_ZCB_FREE (current_zone)
+    ZONE_ZCB_FREE_X (current_zone) = CL (ZONE_ZCB_FREE (current_zone)
 					 + oldsize - asize);
 }
 
@@ -643,7 +642,7 @@ Executor::ROMlib_freeblock (block_header_t *block)
   THz current_zone;
   
   current_zone = MR (TheZone);
-  ZONE_ZCB_FREE_X (current_zone) = BigEndianValue (ZONE_ZCB_FREE (current_zone)
+  ZONE_ZCB_FREE_X (current_zone) = CL (ZONE_ZCB_FREE (current_zone)
 				       + PSIZE (block));
   
   mm_set_block_fields_offset (block, FREE_BLOCK_STATE, FREE, 0, PSIZE (block),
@@ -983,7 +982,7 @@ Executor::ROMlib_relalloc (Size size, block_header_t ** newblk)
 	  SETSIZEC (b, 0);
 	  SET_BLOCK_STATE (b, FREE_BLOCK_STATE);
 	  
-	  ZONE_ZCB_FREE_X (current_zone) = BigEndianValue (ZONE_ZCB_FREE (current_zone)
+	  ZONE_ZCB_FREE_X (current_zone) = CL (ZONE_ZCB_FREE (current_zone)
 					       + newsize);
 	  HeapEnd = (Ptr) ZONE_BK_LIM (current_zone);
 	  return noErr;

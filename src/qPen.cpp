@@ -18,18 +18,17 @@ char ROMlib_rcsid_qPen[] =
 #include "rsys/picture.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P0(PUBLIC pascal trap, void, HidePen)
 {
   if (thePortX)
-    PORT_PEN_VIS_X (thePort) = BigEndianValue (PORT_PEN_VIS (thePort) - 1);
+    PORT_PEN_VIS_X (thePort) = CW (PORT_PEN_VIS (thePort) - 1);
 }
 
 P0(PUBLIC pascal trap, void, ShowPen)
 {
   if (thePortX)
-    PORT_PEN_VIS_X (thePort) = BigEndianValue (PORT_PEN_VIS (thePort) + 1);
+    PORT_PEN_VIS_X (thePort) = CW (PORT_PEN_VIS (thePort) + 1);
 }
 
 P1(PUBLIC pascal trap, void, GetPen, Point *, ptp)
@@ -139,15 +138,15 @@ P2(PUBLIC pascal trap, void, PenSize, INTEGER, w, INTEGER, h)
 {
   if (thePortX)
     {
-      PORT_PEN_SIZE (thePort).h = BigEndianValue (w);
-      PORT_PEN_SIZE (thePort).v = BigEndianValue (h);
+      PORT_PEN_SIZE (thePort).h = CW (w);
+      PORT_PEN_SIZE (thePort).v = CW (h);
     }
 }
 
 P1(PUBLIC pascal trap, void, PenMode, INTEGER, m)
 {
   if (thePortX)
-    PORT_PEN_MODE_X (thePort) = BigEndianValue (m);
+    PORT_PEN_MODE_X (thePort) = CW (m);
 }
 
 P1(PUBLIC pascal trap, void, PenPat, Pattern, pp)
@@ -190,8 +189,8 @@ P2(PUBLIC pascal trap, void, MoveTo, INTEGER, h, INTEGER, v)
 {
   if (thePortX)
     {
-      PORT_PEN_LOC (thePort).h = BigEndianValue (h);
-      PORT_PEN_LOC (thePort).v = BigEndianValue (v);
+      PORT_PEN_LOC (thePort).h = CW (h);
+      PORT_PEN_LOC (thePort).v = CW (v);
     }
 }
 
@@ -199,8 +198,8 @@ P2(PUBLIC pascal trap, void, Move, INTEGER, dh, INTEGER, dv)
 {
   if (thePortX)
     {
-      PORT_PEN_LOC (thePort).h = BigEndianValue (BigEndianValue (PORT_PEN_LOC (thePort).h) + (dh));
-      thePort->pnLoc.v = BigEndianValue (BigEndianValue (PORT_PEN_LOC (thePort).v) + (dv));
+      PORT_PEN_LOC (thePort).h = CW (CW (PORT_PEN_LOC (thePort).h) + (dh));
+      thePort->pnLoc.v = CW (CW (PORT_PEN_LOC (thePort).v) + (dv));
     }
 }
 
@@ -212,8 +211,8 @@ P2(PUBLIC pascal trap, void, LineTo, INTEGER, h, INTEGER, v)
 	p.h = h;
 	p.v = v;
 	CALLLINE(p);
-	PORT_PEN_LOC (thePort).h = BigEndianValue(p.h);
-	PORT_PEN_LOC (thePort).v = BigEndianValue(p.v);
+	PORT_PEN_LOC (thePort).h = CW(p.h);
+	PORT_PEN_LOC (thePort).v = CW(p.v);
     }
 }
 
@@ -222,11 +221,11 @@ P2(PUBLIC pascal trap, void, Line, INTEGER, dh, INTEGER, dv)
     Point p;
     
     if (thePortX) {
-	p.h = BigEndianValue (PORT_PEN_LOC (thePort).h) + dh;
-	p.v = BigEndianValue (PORT_PEN_LOC (thePort).v) + dv;
+	p.h = CW (PORT_PEN_LOC (thePort).h) + dh;
+	p.v = CW (PORT_PEN_LOC (thePort).v) + dv;
 	CALLLINE(p);
-	PORT_PEN_LOC (thePort).h = BigEndianValue(p.h);
-	PORT_PEN_LOC (thePort).v = BigEndianValue(p.v);
+	PORT_PEN_LOC (thePort).h = CW(p.h);
+	PORT_PEN_LOC (thePort).v = CW(p.v);
     }
 }
 

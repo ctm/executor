@@ -18,7 +18,6 @@ char ROMlib_rcsid_qPicture[] =
 #include "rsys/mman.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 PUBLIC PicHandle Executor::ROMlib_OpenPicture_helper (const Rect *pf,
 					    const OpenCPicParams *params)
@@ -37,7 +36,7 @@ PUBLIC PicHandle Executor::ROMlib_OpenPicture_helper (const Rect *pf,
     HxX(ph, picSize) = CWC(10 + 16 * sizeof(INTEGER));
     HxX(ph, picFrame) = *pf;
     ip = &HxX(ph, picSize) + 5;
-    ip[0] = BigEndianValue(OP_Version);
+    ip[0] = CW(OP_Version);
     ip[1] = CWC (0x2FF);	/* see the explanation in IM-V p. 93 */
 
     ip[2] = CWC (0x0c00); /* see IM:Imaging with QuickDraw A-22 - A-24 */
@@ -69,7 +68,7 @@ PUBLIC PicHandle Executor::ROMlib_OpenPicture_helper (const Rect *pf,
     ip[15] = CWC (0x001e);
 
     HxX(pch, picsize)		= CLC(INITIALPICSIZE);
-    HxX(pch, pichowfar)		= BigEndianValue((LONGINT) Hx(ph, picSize));
+    HxX(pch, pichowfar)		= CL((LONGINT) Hx(ph, picSize));
     temprh		        = RM(NewRgn());
     HxX(pch, picclip)		= temprh;
     /* -32766 below is an attempt to force a reload */
@@ -152,7 +151,7 @@ PRIVATE void updateapat( Pattern srcpat, Pattern dstpat, INTEGER opcode)
 
 PRIVATE void updateaninteger( INTEGER src, INTEGER *dstp, INTEGER opcode)
 {
-    src = BigEndianValue(src);
+    src = CW(src);
     if (*dstp != src) {
 	*dstp = src;
 	PICOP(opcode);
@@ -296,16 +295,16 @@ PRIVATE void updatetxnumtxden( Point num, Point den )
     pch = (piccachehand) PORT_PIC_SAVE (thePort);
     if (Hx(pch, pictxnum.h) != num.h || Hx(pch, pictxnum.v) != num.v ||
 		  Hx(pch, pictxden.v) != den.v || Hx(pch, pictxden.h) != den.h) {
-	HxX(pch, pictxnum.h) = BigEndianValue(num.h);
-	HxX(pch, pictxnum.v) = BigEndianValue(num.v);
-	HxX(pch, pictxden.h) = BigEndianValue(den.h);
-	HxX(pch, pictxden.v) = BigEndianValue(den.v);
+	HxX(pch, pictxnum.h) = CW(num.h);
+	HxX(pch, pictxnum.v) = CW(num.v);
+	HxX(pch, pictxden.h) = CW(den.h);
+	HxX(pch, pictxden.v) = CW(den.v);
 	PICOP(OP_TxRatio);
-	num.h = BigEndianValue(num.h);
-	num.v = BigEndianValue(num.v);
+	num.h = CW(num.h);
+	num.v = CW(num.v);
         PICWRITE(&num, sizeof(num));
-	den.h = BigEndianValue(den.h);
-	den.v = BigEndianValue(den.v);
+	den.h = CW(den.h);
+	den.v = CW(den.v);
         PICWRITE(&den, sizeof(den));
     }
 }

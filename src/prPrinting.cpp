@@ -266,14 +266,14 @@ P3(PUBLIC pascal trap, void, PrComment, INTEGER, kind, INTEGER, size,
 	            break;
 		case rotatebegin:
 		    ip = (INTEGER *) STARH(hand);
-		    flippage = BigEndianValue(ip[0]);
-		    angle = BigEndianValue(ip[1]);
+		    flippage = CW(ip[0]);
+		    angle = CW(ip[1]);
 		    ROMlib_rotatebegin(flippage, angle);
 		    break;
 		case rotatecenter:
 		    fp = (Fixed *) STARH(hand);
-		    yoffset = BigEndianValue(fp[0]);
-		    xoffset = BigEndianValue(fp[1]);
+		    yoffset = CL(fp[0]);
+		    xoffset = CL(fp[1]);
 		    ROMlib_rotatecenter( Cx(thePort->pnLoc.v) +
 					       (double) yoffset / (1L << 16),
 					 Cx(thePort->pnLoc.h) +

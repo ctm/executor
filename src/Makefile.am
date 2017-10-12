@@ -94,7 +94,8 @@ wind_sources = windColor.cpp windDisplay.cpp windDocdef.cpp windInit.cpp windMis
 
 ae_sources = AE.cpp AE_desc.cpp AE_hdlr.cpp AE_coercion.cpp
 
-sound_sources = sounddriver.cpp sound.cpp soundIMVI.cpp soundfake.cpp snth5.cpp
+sound_sources = sounddriver.cpp sound.cpp soundIMVI.cpp soundfake.cpp snth5.cpp \
+                SpeechManager.cpp
 
 num_sources = bindec.cpp float4.cpp float5.cpp float7.cpp floatnext.cpp toolmath.cpp \
               mathlib.cpp

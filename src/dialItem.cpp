@@ -18,7 +18,6 @@ char ROMlib_rcsid_dialItem[] =
 #include "rsys/mman.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #define _GetDItem(dp, item_no, item_type, item_h, item_rect)		\
   ({									\
@@ -54,8 +53,8 @@ Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
       _GetDItem (dp, method, &item_type, &item_h, &item_rect);
 
       resize_p = FALSE;
-      base_pt.v = BigEndianValue (item_rect.top);
-      base_pt.h = BigEndianValue (item_rect.left);
+      base_pt.v = CW (item_rect.top);
+      base_pt.h = CW (item_rect.left);
     }
   else
     {
@@ -70,12 +69,12 @@ Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
 	case appendDITLRight:
 	  resize_p = TRUE;
 	  base_pt.v = 0;
-	  base_pt.h = BigEndianValue (dp_port_rect->right);
+	  base_pt.h = CW (dp_port_rect->right);
 	  break;
       
 	case appendDITLBottom:
 	  resize_p = TRUE;
-	  base_pt.v = BigEndianValue (dp_port_rect->bottom);
+	  base_pt.v = CW (dp_port_rect->bottom);
 	  base_pt.h = 0;
 	  break;
 	}
@@ -93,7 +92,7 @@ Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
     int i;
     
     base_itemp = (char *) STARH (items_h);
-    item_count = BigEndianValue (*(int16 *) base_itemp) + 1;
+    item_count = CW (*(int16 *) base_itemp) + 1;
     itemp = (itmp) ((int16 *) STARH (items_h) + 1);
     
     for (i = 0; i < item_count; i ++)
@@ -126,14 +125,14 @@ Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
        int i;
        
        base_itemp = (char *) STARH (items_h);
-       item_count = BigEndianValue (*(int16 *) base_itemp) + 1;
+       item_count = CW (*(int16 *) base_itemp) + 1;
        
        base_new_itemp = (char *) STARH (new_items_h);
        new_itemp = (itmp) ((int16 *) STARH (new_items_h) + 1);
-       new_item_count = BigEndianValue (*(int16 *) base_new_itemp) + 1;
+       new_item_count = CW (*(int16 *) base_new_itemp) + 1;
        
        /* update the count for the new items */
-       *(int16 *) base_itemp = BigEndianValue (item_count + new_item_count - 1);
+       *(int16 *) base_itemp = CW (item_count + new_item_count - 1);
        
        THEPORT_SAVE_EXCURSION
 	 (dp,
@@ -152,8 +151,8 @@ Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
 	   
 		InvalRect (&itemp->itmr);
 		
-		width  = MAX (width,  BigEndianValue (itemp->itmr.left));
-		height = MAX (height, BigEndianValue (itemp->itmr.bottom));
+		width  = MAX (width,  CW (itemp->itmr.left));
+		height = MAX (height, CW (itemp->itmr.bottom));
 		
 		BUMPIP (new_itemp);
 	      }
@@ -187,7 +186,7 @@ Executor::ShortenDITL (DialogPtr dp, int16 n_items)
      {  
        base_itemp = (char *) STARH (item_h);
        itemp = (itmp) ((int16 *) STARH (item_h) + 1);
-       count = BigEndianValue (*(int16 *) base_itemp) + 1;
+       count = CW (*(int16 *) base_itemp) + 1;
        
        if (count < n_items)
 	 n_items = count;
@@ -262,7 +261,7 @@ Executor::ShortenDITL (DialogPtr dp, int16 n_items)
 		 }
 	     }
 	 }
-       *(int16 *) base_itemp = BigEndianValue (first_item_to_dispose - 1);
+       *(int16 *) base_itemp = CW (first_item_to_dispose - 1);
      });
   
   SetHandleSize ((Handle) item_h, item_h_size);
@@ -275,7 +274,7 @@ Executor::CountDITL (DialogPtr dp)
   int16 count;
   
   items = DIALOG_ITEMS (dp);
-  count = BigEndianValue (*(int16 *) STARH (items)) + 1;
+  count = CW (*(int16 *) STARH (items)) + 1;
   
   return count;
 }

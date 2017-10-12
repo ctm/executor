@@ -14,7 +14,6 @@ char ROMlib_rcsid_qScale[] =
 #include "rsys/cquick.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /* This routine scales old_bitmap and stores the result in dst_bitmap.
  * The only field of dst_bitmap that needs to be valid on entry is
@@ -60,8 +59,8 @@ Executor::scale_blt_bitmap (const blt_bitmap_t *src_bitmap, blt_bitmap_t *dst_bi
   src_rowbytes = BITMAP_ROWBYTES (src_bitmap);
   dst_row_base = (uint8 *) MR (dst_bitmap->baseAddr);
   src_base = (uint8 *) (MR (src_bitmap->baseAddr)
-	      + ((BigEndianValue (old_rect->top) - BigEndianValue (src_bitmap->bounds.top)) * src_rowbytes));
-  left_x = (BigEndianValue (old_rect->left) - BigEndianValue (src_bitmap->bounds.left)) << 16;
+	      + ((CW (old_rect->top) - CW (src_bitmap->bounds.top)) * src_rowbytes));
+  left_x = (CW (old_rect->left) - CW (src_bitmap->bounds.left)) << 16;
   old_v = -1;
 
 /* This macro expresses the main horizontal scaling loop.  The bits
@@ -190,6 +189,6 @@ Executor::scale_blt_bitmap (const blt_bitmap_t *src_bitmap, blt_bitmap_t *dst_bi
 		   (1 << log2_bits_per_pixel));
     }
 
-  BITMAP_SET_ROWBYTES_X (dst_bitmap, BigEndianValue (dst_rowbytes));
+  BITMAP_SET_ROWBYTES_X (dst_bitmap, CW (dst_rowbytes));
   dst_bitmap->bounds = *new_rect;
 }

@@ -18,16 +18,15 @@ char ROMlib_rcsid_qStdRRect[] =
 #include "rsys/picture.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #define TERM (*ip++ = RGNSTOPX)
 
 #define ADD4(y, x1, x2)						\
-    (*ip++ = BigEndianValue((y)), *ip++ = BigEndianValue((x1)), *ip++ = BigEndianValue((x2)), TERM)
+    (*ip++ = CW((y)), *ip++ = CW((x1)), *ip++ = CW((x2)), TERM)
 
 #define ADD6(y, x1, x2, x3, x4)					\
-    (*ip++ = BigEndianValue((y)), *ip++ = BigEndianValue((x1)), *ip++ = BigEndianValue((x2)),	\
-                  *ip++ = BigEndianValue((x3)), *ip++ = BigEndianValue((x4)), TERM)
+    (*ip++ = CW((y)), *ip++ = CW((x1)), *ip++ = CW((x2)),	\
+                  *ip++ = CW((x3)), *ip++ = CW((x4)), TERM)
 
 A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r)		/* INTERNAL */
 {
@@ -47,10 +46,10 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r)		/* INTERNAL */
     ox = 0;
 #endif /* LETGCCWAIL */
             
-    top    = BigEndianValue(r->top);
-    bottom = BigEndianValue(r->bottom);
+    top    = CW(r->top);
+    bottom = CW(r->bottom);
     dv = bottom - top;
-    dh = (right = BigEndianValue(r->right)) - (left = BigEndianValue(r->left));
+    dh = (right = CW(r->right)) - (left = CW(r->left));
 
     maxsize = 10 + (6 * dv + 1) * sizeof(INTEGER);
     rh = (RgnHandle) NewHandle(maxsize);
@@ -75,7 +74,7 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r)		/* INTERNAL */
 		TERM;
 	    }
 	}
-	HxX(rh, rgnSize) = BigEndianValue((char *) ip - (char *) STARH(rh));
+	HxX(rh, rgnSize) = CW((char *) ip - (char *) STARH(rh));
 	SetHandleSize((Handle) rh, (Size) Hx(rh, rgnSize));
 /*-->*/	return rh;
     }
@@ -94,8 +93,8 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r)		/* INTERNAL */
         rad = dv;
     }
     
-    centl = BigEndianValue(r->left) + dh / 2;
-    centr = BigEndianValue(r->left) + (dh + 1) / 2;
+    centl = CW(r->left) + dh / 2;
+    centr = CW(r->left) + (dh + 1) / 2;
     centt = top + dv / 2;
     first = TRUE;
     
@@ -133,19 +132,19 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r)		/* INTERNAL */
                 else
                     nx = savex / 2;
                 if (first) {
-                    *op++ = BigEndianValue(top);
-                    *op++ = BigEndianValue(centl - nx);
-                    *op++ = BigEndianValue(centr + nx);
+                    *op++ = CW(top);
+                    *op++ = CW(centl - nx);
+                    *op++ = CW(centr + nx);
                     *op++ = RGNSTOPX;
                     ox = nx;
                     first = FALSE;
                 } else {
                     if (nx != ox) {
-                        *op++ = BigEndianValue(centt - oy);
-                        *op++ = BigEndianValue(centl - nx);
-                        *op++ = BigEndianValue(centl - ox);
-                        *op++ = BigEndianValue(centr + ox);
-                        *op++ = BigEndianValue(centr + nx);
+                        *op++ = CW(centt - oy);
+                        *op++ = CW(centl - nx);
+                        *op++ = CW(centl - ox);
+                        *op++ = CW(centr + ox);
+                        *op++ = CW(centr + nx);
                         *op++ = RGNSTOPX;
                         ox = nx;
                     }
@@ -161,7 +160,7 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r)		/* INTERNAL */
         while (ip != ep && *ip != RGNSTOPX)
             ip -= 2;
         ip2 = ip + 1;
-        *op++ = BigEndianValue(bottom - (BigEndianValue(*ip2++) - top));
+        *op++ = CW(bottom - (CW(*ip2++) - top));
         while ((*op++ = *ip2++) != RGNSTOPX)
             ;
     }
@@ -172,7 +171,7 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r)		/* INTERNAL */
       SetEmptyRgn (rh);
     else
       {
-	HxX(rh, rgnSize) = BigEndianValue(sizeof(INTEGER) * (op - (INTEGER *) STARH(rh)));
+	HxX(rh, rgnSize) = CW(sizeof(INTEGER) * (op - (INTEGER *) STARH(rh)));
 	SetHandleSize((Handle) rh, (Size) Hx(rh, rgnSize));
       }
 
@@ -194,8 +193,8 @@ P4(PUBLIC pascal trap, void, StdRRect, GrafVerb, verb, Rect *, r,
 
     PIC_SAVE_EXCURSION
       ({
-	p.h = BigEndianValue (width);
-	p.v = BigEndianValue (height);
+	p.h = CW (width);
+	p.v = CW (height);
 	ROMlib_drawingverbrectovalpicupdate (verb, r, &p);
 	PICOP (OP_frameRRect + (int) verb);
 	PICWRITE (r, sizeof(*r));
@@ -206,13 +205,13 @@ P4(PUBLIC pascal trap, void, StdRRect, GrafVerb, verb, Rect *, r,
 /*-->*/ return;
 
     PAUSERECORDING;
-    ovaldx = BigEndianValue(r->right)  - BigEndianValue(r->left) - width;
-    ovaldy = BigEndianValue(r->bottom) - BigEndianValue(r->top)  - height;
+    ovaldx = CW(r->right)  - CW(r->left) - width;
+    ovaldy = CW(r->bottom) - CW(r->top)  - height;
     if (width < 4 && height < 4)
 	StdRect(verb, r);
     else {
-	rectdx = BigEndianValue(r->right)  - BigEndianValue(r->left) - width/2;
-	rectdy = BigEndianValue(r->bottom) - BigEndianValue(r->top)  - height/2;
+	rectdx = CW(r->right)  - CW(r->left) - width/2;
+	rectdy = CW(r->bottom) - CW(r->top)  - height/2;
 	    
 	rh = NewRgn();
 	corner = NewRgn();
@@ -220,12 +219,12 @@ P4(PUBLIC pascal trap, void, StdRRect, GrafVerb, verb, Rect *, r,
 
 	RectRgn(rh, r);
 	
-	SetRect(&tempr, BigEndianValue(r->left), BigEndianValue(r->top),
-					 BigEndianValue(r->left)+width, BigEndianValue(r->top)+height);
+	SetRect(&tempr, CW(r->left), CW(r->top),
+					 CW(r->left)+width, CW(r->top)+height);
 	oval = ROMlib_circrgn(&tempr);
 
-	SetRect(&tempr, BigEndianValue(r->left), BigEndianValue(r->top),
-				     BigEndianValue(r->left)+width/2, BigEndianValue(r->top)+height/2);
+	SetRect(&tempr, CW(r->left), CW(r->top),
+				     CW(r->left)+width/2, CW(r->top)+height/2);
 	RectRgn(smallr, &tempr);
 	
 	DiffRgn(smallr, oval, corner);

@@ -19,7 +19,6 @@ char ROMlib_rcsid_teIMIV[] =
 #include "rsys/mman.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P3 (PUBLIC pascal trap, void, TEPinScroll, int16, dh,		/* IMIV-57 */
     int16, dv, TEHandle, te)
@@ -38,8 +37,8 @@ P3 (PUBLIC pascal trap, void, TEPinScroll, int16, dh,		/* IMIV-57 */
   
   if (dv > 0)
     {
-      int view_rect_top = BigEndianValue (view_rect -> top);
-      int dest_rect_top = BigEndianValue (dest_rect -> top);
+      int view_rect_top = CW (view_rect -> top);
+      int dest_rect_top = CW (dest_rect -> top);
       
       /* `destRect.top' must stay below `viewRect.bottom' */
       
@@ -49,7 +48,7 @@ P3 (PUBLIC pascal trap, void, TEPinScroll, int16, dh,		/* IMIV-57 */
   else
     {
       Point end_pt;
-      int view_rect_bottom = BigEndianValue (view_rect -> bottom);
+      int view_rect_bottom = CW (view_rect -> bottom);
       int dest_rect_bottom;
       
       {
@@ -77,7 +76,7 @@ P3 (PUBLIC pascal trap, void, TEPinScroll, int16, dh,		/* IMIV-57 */
       
       if (dh > 0)
 	{
-	  maxshift = BigEndianValue (view_rect->left) - BigEndianValue (dest_rect->left);
+	  maxshift = CW (view_rect->left) - CW (dest_rect->left);
 	  if (maxshift > 0)
 	    dh = MIN (maxshift, dh);
 	  else
@@ -85,7 +84,7 @@ P3 (PUBLIC pascal trap, void, TEPinScroll, int16, dh,		/* IMIV-57 */
 	}
       else
 	{
-	  maxshift = BigEndianValue (view_rect->left) - BigEndianValue (dest_rect->left);
+	  maxshift = CW (view_rect->left) - CW (dest_rect->left);
 	  if (maxshift < 0)
 	    dh = MAX (maxshift, dh);
 	  else
@@ -109,9 +108,9 @@ A1 (PUBLIC, void, ROMlib_teautoloop, TEHandle, teh)
   Point pt;
   
   GetMouse(&pt);
-  if (BigEndianValue(pt.v) < Hx(teh, viewRect.top))
+  if (CW(pt.v) < Hx(teh, viewRect.top))
     TEPinScroll(0, Hx(teh, lineHeight), teh);
-  else if (BigEndianValue(pt.v) > Hx(teh, viewRect.bottom))
+  else if (CW(pt.v) > Hx(teh, viewRect.bottom))
     TEPinScroll(0, -Hx(teh, lineHeight), teh);
 }
 

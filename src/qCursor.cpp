@@ -31,7 +31,6 @@ char ROMlib_rcsid_qCursor[] =
 #if !defined (CURSOR_DEBUG)
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #define HOST_SET_CURSOR(d,m,x,y) host_set_cursor (d,m,x,y)
 
@@ -129,7 +128,7 @@ P1(PUBLIC pascal trap, void, SetCursor, Cursor *, cp)
   if (host_cursor_depth == 1)
     {
       HOST_SET_CURSOR ((char *) cp->data, (unsigned short *) cp->mask,
-		       BigEndianValue (cp->hotSpot.h), BigEndianValue (cp->hotSpot.v));
+		       CW (cp->hotSpot.h), CW (cp->hotSpot.v));
     }
   else
     {
@@ -155,7 +154,7 @@ P1(PUBLIC pascal trap, void, SetCursor, Cursor *, cp)
       target_pixmap.cmpCount = CWC (1);
       target_pixmap.pixelType = CWC (0);
       target_pixmap.pixelSize = target_pixmap.cmpSize 
-	= BigEndianValue (host_cursor_depth);
+	= CW (host_cursor_depth);
       /* the target pixmap colortable is not used by `convert_pixmap ()'
 	 target_pixmap.pmTable = ...; */
       
@@ -163,7 +162,7 @@ P1(PUBLIC pascal trap, void, SetCursor, Cursor *, cp)
 		      &ROMlib_cursor_rect, NULL);
       
       HOST_SET_CURSOR (data_baseaddr, (unsigned short *) cp->mask,
-		       BigEndianValue (cp->hotSpot.h), BigEndianValue (cp->hotSpot.v));
+		       CW (cp->hotSpot.h), CW (cp->hotSpot.v));
     }
   
   current_crsr = *cp;
@@ -188,14 +187,14 @@ P0(PUBLIC pascal trap, void, InitCursor)
 P0(PUBLIC pascal trap, void, HideCursor)	/* IMI-168 */
 {
     ROMlib_restorecursor();
-    CrsrState = BigEndianValue(BigEndianValue(CrsrState) - 1);
+    CrsrState = CW(CW(CrsrState) - 1);
 }
 
 P0(PUBLIC pascal trap, void, ShowCursor)	/* IMI-168 */
 {
-    if ( (CrsrState = BigEndianValue(BigEndianValue(CrsrState) + 1)) == 0 )
+    if ( (CrsrState = CW(CW(CrsrState) + 1)) == 0 )
 	ROMlib_showcursor();
-    if (BigEndianValue(CrsrState) > 0)
+    if (CW(CrsrState) > 0)
 	CrsrState = 0;
 }
 
@@ -205,7 +204,7 @@ namespace Executor {
 
 A1(PRIVATE, void, wewantpointermovements, INTEGER, x)
 {
-    CrsrState = BigEndianValue(BigEndianValue(CrsrState) + x);
+    CrsrState = CW(CW(CrsrState) + x);
     ROMlib_bewaremovement = TRUE;
 }
 
@@ -220,8 +219,8 @@ P2(PUBLIC pascal trap, void, ShieldCursor, Rect *, rp, Point, p) /* IMI-474 */
     EventRecord evt;
 
     GetOSEvent(0, &evt);
-    evt.where.v = BigEndianValue(evt.where.v) + p.v;
-    evt.where.h = BigEndianValue(evt.where.h) + p.h;
+    evt.where.v = CW(evt.where.v) + p.v;
+    evt.where.h = CW(evt.where.h) + p.h;
     if (PtInRect(evt.where, rp))
 	HideCursor();
     else
@@ -265,10 +264,10 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
        BlockMove ((Ptr) &resource->crsr, (Ptr) ccrsr,
 		  sizeof (CCrsr));
        
-       /* NOTE: use BigEndianValue below instead of MR because they're overloading
+       /* NOTE: use CL below instead of MR because they're overloading
 	  crsrMap to have an offset rather than a handle */
 
-       cursor_pixel_map_offset = BigEndianValue ((uint32) ccrsr->crsrMap);
+       cursor_pixel_map_offset = CL ((uint32) ccrsr->crsrMap);
        cursor_pixel_map_resource
 	 = (PixMapPtr) ((char *) resource + cursor_pixel_map_offset);
        
@@ -278,7 +277,7 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
 		  (Ptr) STARH (cursor_pixel_map),
 		  sizeof *cursor_pixel_map_resource);
        
-       ccrsr_data_offset = BigEndianValue ((long) ccrsr->crsrData);
+       ccrsr_data_offset = CL ((long) ccrsr->crsrData);
        
        ccrsr_ctab_offset = (int) PIXMAP_TABLE_AS_OFFSET (MR (ccrsr->crsrMap));
        ccrsr_data_size = ccrsr_ctab_offset - ccrsr_data_offset;
@@ -289,7 +288,7 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
 		  ccrsr_data_size);
        
        tmp_ctab = (CTabPtr) ((char *) resource + ccrsr_ctab_offset);
-       ccrsr_ctab_size = CTAB_STORAGE_FOR_SIZE (BigEndianValue (tmp_ctab->ctSize));
+       ccrsr_ctab_size = CTAB_STORAGE_FOR_SIZE (CW (tmp_ctab->ctSize));
        h = RM (NewHandle (ccrsr_ctab_size));
        PIXMAP_TABLE_X (MR (ccrsr->crsrMap)) = (CTabHandle) h;
        BlockMove ((Ptr) tmp_ctab,
@@ -391,8 +390,8 @@ P1 (PUBLIC pascal trap, void, SetCCursor,
 		    /* only fields used by `convert_pixmap ()',
 		       baseAddr is filled in below */
 		    memset (&ccrsr_xmap, 0, sizeof ccrsr_xmap);
-		    ccrsr_xmap.rowBytes = BigEndianValue (2 * host_cursor_depth);
-		    ccrsr_xmap.pixelSize = BigEndianValue (host_cursor_depth);
+		    ccrsr_xmap.rowBytes = CW (2 * host_cursor_depth);
+		    ccrsr_xmap.pixelSize = CW (host_cursor_depth);
 		    
 		    src = *STARH (CCRSR_MAP (ccrsr));
 		    src.baseAddr = CCRSR_DATA (ccrsr)->p;
@@ -404,7 +403,7 @@ P1 (PUBLIC pascal trap, void, SetCCursor,
 					 &ROMlib_cursor_rect, NULL);
 		       });
 		  });
-	       CCRSR_XVALID_X (ccrsr) = BigEndianValue (host_cursor_depth);
+	       CCRSR_XVALID_X (ccrsr) = CW (host_cursor_depth);
 	       CCRSR_ID_X (ccrsr) = CTAB_SEED_X (PIXMAP_TABLE (gd_pmap));
 	     }
       
@@ -414,14 +413,14 @@ P1 (PUBLIC pascal trap, void, SetCCursor,
 	      {
 		HOST_SET_CURSOR ((char *) STARH (ccrsr_xdata),
 				 (unsigned short *) CCRSR_MASK (ccrsr),
-				 BigEndianValue (hot_spot->h), BigEndianValue (hot_spot->v));
+				 CW (hot_spot->h), CW (hot_spot->v));
 	      });
 	 }
        else
 	 {
 	   HOST_SET_CURSOR ((char *) CCRSR_1DATA (ccrsr),
 			    (unsigned short *) CCRSR_MASK (ccrsr),
-			    BigEndianValue (hot_spot->h), BigEndianValue (hot_spot->v));
+			    CW (hot_spot->h), CW (hot_spot->v));
 	 }
      });
 

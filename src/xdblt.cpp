@@ -28,7 +28,6 @@ char ROMlib_rcsid_xdblt[] =
 #include "rsys/autorefresh.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /* Holds the four-byte pattern value, for "short & narrow" patterns. */
 uint32 xdblt_pattern_value asm ("_xdblt_pattern_value");
@@ -129,14 +128,14 @@ hide_cursor_if_necessary (RgnHandle rh, const PixMap *dst, boolean_t *old_vis)
   int top, left;
   RgnPtr rp;
 
-  top = BigEndianValue (dst->bounds.top);
-  left = BigEndianValue (dst->bounds.left);
+  top = CW (dst->bounds.top);
+  left = CW (dst->bounds.left);
   rp = STARH (rh);
 
-  *old_vis = host_hide_cursor_if_intersects (BigEndianValue (rp->rgnBBox.top) - top,
-					     BigEndianValue (rp->rgnBBox.left) - left,
-					     BigEndianValue (rp->rgnBBox.bottom) - top,
-					     BigEndianValue (rp->rgnBBox.right) - left);
+  *old_vis = host_hide_cursor_if_intersects (CW (rp->rgnBBox.top) - top,
+					     CW (rp->rgnBBox.left) - left,
+					     CW (rp->rgnBBox.bottom) - top,
+					     CW (rp->rgnBBox.right) - left);
 
   return TRUE;
 }
@@ -173,13 +172,13 @@ setup_dst_bitmap (int log2_bpp, PixMap *dst_pixmap)
 #endif
     }
 
-  dst -= row_bytes * BigEndianValue (dst_pixmap->bounds.top);
+  dst -= row_bytes * CW (dst_pixmap->bounds.top);
   xdblt_dst_row_bytes = row_bytes;
   byte_slop = (unsigned long) dst & 3;
   xdblt_dst_baseaddr = (uint32 *) (dst - byte_slop);
 
   xdblt_x_offset = ((byte_slop << 3)
-		    - (BigEndianValue (dst_pixmap->bounds.left) << log2_bpp));
+		    - (CW (dst_pixmap->bounds.left) << log2_bpp));
 
   return xdblt_x_offset << 3;
 }
@@ -242,17 +241,17 @@ Executor::xdblt_xdata_norgb_norotate (RgnHandle rh, int mode,
     {
       int top, left;
 
-      top = BigEndianValue (dst->bounds.top);
-      left = BigEndianValue (dst->bounds.left);
+      top = CW (dst->bounds.top);
+      left = CW (dst->bounds.left);
 
       accel_result = vdriver_accel_rect_fill
-	(BigEndianValue (r->rgnBBox.top) - top, BigEndianValue (r->rgnBBox.left) - left,
-	 BigEndianValue (r->rgnBBox.bottom) - top, BigEndianValue (r->rgnBBox.right) - left,
+	(CW (r->rgnBBox.top) - top, CW (r->rgnBBox.left) - left,
+	 CW (r->rgnBBox.bottom) - top, CW (r->rgnBBox.right) - left,
 	 xdblt_pattern_value & ROMlib_pixel_size_mask[x->log2_bpp]);
 
       if (accel_result != VDRIVER_ACCEL_NO_UPDATE)
-	note_executor_changed_screen (BigEndianValue (r->rgnBBox.top) - top,
-				      BigEndianValue (r->rgnBBox.bottom) - top);
+	note_executor_changed_screen (CW (r->rgnBBox.top) - top,
+				      CW (r->rgnBBox.bottom) - top);
     }
   else
     accel_result = VDRIVER_ACCEL_NO_UPDATE;
@@ -680,17 +679,17 @@ do_short_narrow_pattern (RgnHandle rh, int mode, uint32 v, PixMap *dst,
     {
       int top, left;
 
-      top = BigEndianValue (dst->bounds.top);
-      left = BigEndianValue (dst->bounds.left);
+      top = CW (dst->bounds.top);
+      left = CW (dst->bounds.left);
 
       accel_result = vdriver_accel_rect_fill
-	(BigEndianValue (r->rgnBBox.top) - top, BigEndianValue (r->rgnBBox.left) - left,
-	 BigEndianValue (r->rgnBBox.bottom) - top, BigEndianValue (r->rgnBBox.right) - left,
+	(CW (r->rgnBBox.top) - top, CW (r->rgnBBox.left) - left,
+	 CW (r->rgnBBox.bottom) - top, CW (r->rgnBBox.right) - left,
 	 xdblt_pattern_value & ROMlib_pixel_size_mask[log2_bpp]);
 
       if (accel_result != VDRIVER_ACCEL_NO_UPDATE)
-	note_executor_changed_screen (BigEndianValue (r->rgnBBox.top) - top,
-				      BigEndianValue (r->rgnBBox.bottom) - top);
+	note_executor_changed_screen (CW (r->rgnBBox.top) - top,
+				      CW (r->rgnBBox.bottom) - top);
     }
   else
     accel_result = VDRIVER_ACCEL_NO_UPDATE;
@@ -778,7 +777,7 @@ Executor::xdblt_pattern (RgnHandle rh, int mode,
   rgb_spec = pixmap_rgb_spec (dst);
 
   /* Tile fg and bk colors out to 32bpp. */
-  log2_bpp = ROMlib_log2[BigEndianValue (dst->pixelSize)];
+  log2_bpp = ROMlib_log2[CW (dst->pixelSize)];
   mask = ROMlib_pixel_size_mask[log2_bpp];
   tile = ROMlib_pixel_tile_scale[log2_bpp];
   fg_color = (fg_color & mask) * tile;

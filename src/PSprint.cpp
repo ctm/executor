@@ -37,7 +37,6 @@ char ROMlib_rcsid_PSprint[] =
 #include <ctype.h>
 
 using namespace Executor;
-using namespace ByteSwap;
 
 typedef struct
 {
@@ -600,8 +599,8 @@ graymatch(unsigned char patp[8], INTEGER pnMode,
     { 1.0000, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } },
   };
 
-  gray_fore = mac_old_color_to_ps_gray (BigEndianValue (thePortp->fgColor));
-  gray_back = mac_old_color_to_ps_gray (BigEndianValue (thePortp->bkColor));
+  gray_fore = mac_old_color_to_ps_gray (CL (thePortp->fgColor));
+  gray_back = mac_old_color_to_ps_gray (CL (thePortp->bkColor));
 
   pl = (uint32 *) patp;
   pat_is_black = ((gray_fore == 0 && gray_back == 0) ||
@@ -618,8 +617,8 @@ graymatch(unsigned char patp[8], INTEGER pnMode,
     long fg, bk;
     const char *fgs, *bks;
 
-    fg = BigEndianValue (thePortp->fgColor);
-    bk = BigEndianValue (thePortp->bkColor);
+    fg = CL (thePortp->fgColor);
+    bk = CL (thePortp->bkColor);
     if (fg == whiteColor)
       fgs = "white";
     else if (fg == blackColor)
@@ -691,7 +690,7 @@ static void doimage(LONGINT verb, comRect *rp, comGrafPtr thePortp)
     short pnMode;
     TEMP_ALLOC_DECL (temp_alloc_space);
 
-    pnMode = BigEndianValue (thePortp->pnMode);
+    pnMode = CW (thePortp->pnMode);
     switch (verb) {
     default:
     case paintVerb:
@@ -717,28 +716,28 @@ static void doimage(LONGINT verb, comRect *rp, comGrafPtr thePortp)
 	PSsetgray(gray_val);
 	PSfill();
     } else {
-	PSmoveto(BigEndianValue(rp->left), BigEndianValue(rp->bottom));
-	PSlineto(BigEndianValue(rp->left), BigEndianValue(rp->top));
-	PSlineto(BigEndianValue(rp->right), BigEndianValue(rp->top));
-	PSlineto(BigEndianValue(rp->right), BigEndianValue(rp->bottom));
+	PSmoveto(CW(rp->left), CW(rp->bottom));
+	PSlineto(CW(rp->left), CW(rp->top));
+	PSlineto(CW(rp->right), CW(rp->top));
+	PSlineto(CW(rp->right), CW(rp->bottom));
 	PSclosepath();
-	PSmoveto(BigEndianValue(rp->left)-1, BigEndianValue(rp->bottom)+1);
-	PSlineto(BigEndianValue(rp->right)+1, BigEndianValue(rp->bottom)+1);
-	PSlineto(BigEndianValue(rp->right)+1, BigEndianValue(rp->top)-1);
-	PSlineto(BigEndianValue(rp->left)-1, BigEndianValue(rp->top)-1);
+	PSmoveto(CW(rp->left)-1, CW(rp->bottom)+1);
+	PSlineto(CW(rp->right)+1, CW(rp->bottom)+1);
+	PSlineto(CW(rp->right)+1, CW(rp->top)-1);
+	PSlineto(CW(rp->left)-1, CW(rp->top)-1);
 	PSclip();
-	rowbytes = ((BigEndianValue(rp->right) - BigEndianValue(rp->left)) * 72 + 72 * 8 - 1)/ 72 / 8;
-	numrows = ((BigEndianValue(rp->bottom) - BigEndianValue(rp->top)) * 72 + 71) / 72;
+	rowbytes = ((CW(rp->right) - CW(rp->left)) * 72 + 72 * 8 - 1)/ 72 / 8;
+	numrows = ((CW(rp->bottom) - CW(rp->top)) * 72 + 71) / 72;
 	if (rowbytes > 0 && numrows > 0)
 	  {
 	    numbytesneeded = rowbytes * numrows;
 	    TEMP_ALLOC_ALLOCATE (bytes, temp_alloc_space, numbytesneeded);
-	    toshift = (BigEndianValue(rp->left) - BigEndianValue(thePortp->portBits.bounds.left)) & 7;
+	    toshift = (CW(rp->left) - CW(thePortp->portBits.bounds.left)) & 7;
 	    for (i = 0; i < 8; ++i)
 	      pat[i] = (patp[i] << toshift) | (patp[i]>>(8 - toshift));
 	    p = bytes;
-	    for (i = BigEndianValue(rp->top) - BigEndianValue(thePortp->portBits.bounds.top);
-		 i < BigEndianValue(rp->top) + numrows - BigEndianValue(thePortp->portBits.bounds.top);
+	    for (i = CW(rp->top) - CW(thePortp->portBits.bounds.top);
+		 i < CW(rp->top) + numrows - CW(thePortp->portBits.bounds.top);
 		 ++i)
 	      {
 		c = pat[i&7];
@@ -747,7 +746,7 @@ static void doimage(LONGINT verb, comRect *rp, comGrafPtr thePortp)
 		for (j = rowbytes; --j >= 0;)
 		  *p++ = c;
 	      }
-	    PStranslate(BigEndianValue(rp->left), BigEndianValue(rp->top));
+	    PStranslate(CW(rp->left), CW(rp->top));
 #if !defined(DONTSENDBIGARRAYS)
 	    PSsendchararray((char *) bytes, numbytesneeded);
 #endif /* DONTSENDBIGARRAYS */
@@ -867,8 +866,8 @@ static void NeXTClip(comRect *rp)
       (rp->top  != CWC (-32767) && rp->top  != CWC (-32768)) ||
       rp->right != CWC (32767) ||
       rp->bottom != CWC (32767))
-    PSrectclip (BigEndianValue (rp->left), BigEndianValue (rp->top),
-		BigEndianValue (rp->right) - BigEndianValue(rp->left), BigEndianValue (rp->bottom) - BigEndianValue (rp->top));
+    PSrectclip (CW (rp->left), CW (rp->top),
+		CW (rp->right) - CW(rp->left), CW (rp->bottom) - CW (rp->top));
   restore_virtual_ints (block);
 }
 
@@ -890,8 +889,8 @@ static void commonupdate(comGrafPtr thePortp)
 
     if (thePortp->portBits.bounds.top  != printport.portBits.bounds.top ||
         thePortp->portBits.bounds.left != printport.portBits.bounds.left) {
-	dx = BigEndianValue(printport.portBits.bounds.left) - BigEndianValue(thePortp->portBits.bounds.left);
-	dy = BigEndianValue(printport.portBits.bounds.top)  - BigEndianValue(thePortp->portBits.bounds.top);
+	dx = CW(printport.portBits.bounds.left) - CW(thePortp->portBits.bounds.left);
+	dy = CW(printport.portBits.bounds.top)  - CW(thePortp->portBits.bounds.top);
 	PStranslate(dx, dy);
 	printport.portBits.bounds = thePortp->portBits.bounds;
     }
@@ -906,7 +905,7 @@ static void commonupdate(comGrafPtr thePortp)
 				    
     if (thePortp->pnLoc.h != printport.pnLoc.h ||
 	thePortp->pnLoc.v != printport.pnLoc.v) {
-	PSmoveto(BigEndianValue(thePortp->pnLoc.h), BigEndianValue(thePortp->pnLoc.v));
+	PSmoveto(CW(thePortp->pnLoc.h), CW(thePortp->pnLoc.v));
 	printport.pnLoc = thePortp->pnLoc;
     }
 
@@ -1271,11 +1270,11 @@ void NeXTSetText(StringPtr fname, LONGINT txFace, LONGINT txSize,
 PRIVATE void
 SmartGetFontName (comGrafPtr thePortp, StringPtr fname)
 {
-  C_GetFontName (BigEndianValue (thePortp->txFont), fname);
+  C_GetFontName (CW (thePortp->txFont), fname);
   if (!fname[0])
-    C_GetFontName (BigEndianValue (ApFontID), fname);
+    C_GetFontName (CW (ApFontID), fname);
   if (!fname[0])
-    C_GetFontName (BigEndianValue (SysFontFam), fname);
+    C_GetFontName (CW (SysFontFam), fname);
 }
 
 /*
@@ -1295,8 +1294,8 @@ static void txupdate(comGrafPtr thePortp)
 	thePortp->txSize != printport.txSize ||
 	thePortp->spExtra != printport.spExtra) {
 	SmartGetFontName(thePortp, fname);
-	NeXTSetText(fname, thePortp->txFace, BigEndianValue(thePortp->txSize),
-		    BigEndianValue(thePortp->spExtra));
+	NeXTSetText(fname, thePortp->txFace, CW(thePortp->txSize),
+		    CL(thePortp->spExtra));
 	printport.txFont = thePortp->txFont;
 	printport.txFace = thePortp->txFace;
 	printport.txSize = thePortp->txSize;
@@ -1310,7 +1309,7 @@ void pnupdate(comGrafPtr thePortp)
 #if 0
     if (thePortp->pnSize.h != printport.pnSize.h ||
 	thePortp->pnSize.v != printport.pnSize.v) {
-	NeXTSetWidth(BigEndianValue(thePortp->pnSize));
+	NeXTSetWidth(CW(thePortp->pnSize));
 	printport.pnSize = thePortp->pnSize;
     }
 #endif
@@ -1339,18 +1338,18 @@ void Executor::NeXTPrArc(LONGINT verb, comRect *rp, LONGINT starta, LONGINT arca
 	froma = -90 + starta + arca;
 	toa = -90 + starta;
       }
-      midx = ((float)BigEndianValue(rp->left) + BigEndianValue(rp->right ))/2;
-      midy = ((float)BigEndianValue(rp->top)  + BigEndianValue(rp->bottom))/2;
-      xdiam = BigEndianValue(rp->right)  - BigEndianValue(rp->left);
-      ydiam = BigEndianValue(rp->bottom) - BigEndianValue(rp->top);
+      midx = ((float)CW(rp->left) + CW(rp->right ))/2;
+      midy = ((float)CW(rp->top)  + CW(rp->bottom))/2;
+      xdiam = CW(rp->right)  - CW(rp->left);
+      ydiam = CW(rp->bottom) - CW(rp->top);
       PStranslate(midx, (midy));
       PSnewpath();
       PSscale(1, ydiam/xdiam);
       PSarc(0, 0, xdiam/2, froma, toa);
 
       if (verb == frameVerb) {
-	psh = BigEndianValue(thePortp->pnSize.h);
-	psv = BigEndianValue(thePortp->pnSize.v);
+	psh = CW(thePortp->pnSize.h);
+	psv = CW(thePortp->pnSize.v);
 	if (ydiam > (2 * psv) && xdiam > (2 * psh)) {
 	  PSscale(1, xdiam/ydiam * (ydiam - 2*psv) / (xdiam - 2*psh));
 	  PSarcn(0, 0, xdiam/2 - psh, toa, froma);
@@ -1423,10 +1422,10 @@ void Executor::NeXTPrBits(comBitMap *srcbmp, comRect *srcrp, comRect *dstrp,
   indexed_color_p = FALSE;
   block = block_virtual_ints ();
   commonupdate(thePortp);
-  srcwidth  = BigEndianValue(srcrp->right)  - BigEndianValue(srcrp->left);
-  srcheight = BigEndianValue(srcrp->bottom) - BigEndianValue(srcrp->top);
-  dstwidth  = BigEndianValue(dstrp->right)  - BigEndianValue(dstrp->left);
-  dstheight = BigEndianValue(dstrp->bottom) - BigEndianValue(dstrp->top);
+  srcwidth  = CW(srcrp->right)  - CW(srcrp->left);
+  srcheight = CW(srcrp->bottom) - CW(srcrp->top);
+  dstwidth  = CW(dstrp->right)  - CW(dstrp->left);
+  dstheight = CW(dstrp->bottom) - CW(dstrp->top);
   if (srcwidth && srcheight && dstwidth && dstheight) /* put in for output */
     {						      /* from Tex-Edit 2.5 */
       /* see the comment at the grestore below */
@@ -1438,7 +1437,7 @@ void Executor::NeXTPrBits(comBitMap *srcbmp, comRect *srcrp, comRect *dstrp,
       if (srcbmp->rowBytes & CWC(0x8000))
 	{
 	  srcpmp = (comPixMap *) srcbmp;
-	  pixelsize = BigEndianValue(srcpmp->pixelSize);
+	  pixelsize = CW(srcpmp->pixelSize);
 	  if (pixelsize != 1 && mode != srcCopy)
 /*-->*/	    goto DONE;
 	  direct_color_p = pixelsize > 8;
@@ -1450,11 +1449,11 @@ void Executor::NeXTPrBits(comBitMap *srcbmp, comRect *srcrp, comRect *dstrp,
 	  srcpmp = 0;
 	  pixelsize = 1;
 	}
-      rowbytes = BigEndianValue(srcbmp->rowBytes) & ROWMASK;
+      rowbytes = CW(srcbmp->rowBytes) & ROWMASK;
 
-      PStranslate(BigEndianValue(dstrp->left), BigEndianValue(dstrp->top));
+      PStranslate(CW(dstrp->left), CW(dstrp->top));
       baseaddr = (unsigned char *)MR(srcbmp->baseAddr)
-	+ (BigEndianValue(srcrp->top) - BigEndianValue(srcbmp->bounds.top)) * (LONGINT) rowbytes;
+	+ (CW(srcrp->top) - CW(srcbmp->bounds.top)) * (LONGINT) rowbytes;
 
       /* NOTE: now that we don't send big arrays, I believe that doing
 	 the transformation below is a memory waste... Shouldn't we
@@ -1478,7 +1477,7 @@ void Executor::NeXTPrBits(comBitMap *srcbmp, comRect *srcrp, comRect *dstrp,
       matrix[1] = 0;
       matrix[2] = 0;
       matrix[3] = 1 / scaley;
-      matrix[4] = BigEndianValue(srcrp->left) - BigEndianValue(srcbmp->bounds.left);
+      matrix[4] = CW(srcrp->left) - CW(srcbmp->bounds.left);
       matrix[5] = 0;
 
       numbytes = ((int) srcwidth * pixelsize + 7) / 8;
@@ -1544,15 +1543,15 @@ void Executor::NeXTPrBits(comBitMap *srcbmp, comRect *srcrp, comRect *dstrp,
 	      unsigned char g;
 	      unsigned char b;
 
-	      if (BigEndianValue (ctab[i].value) != i && !has_warned_p)
+	      if (CW (ctab[i].value) != i && !has_warned_p)
 		{
 		  warning_unexpected ("value = %d, i = %d",
-				      BigEndianValue (ctab[i].value), i);
+				      CW (ctab[i].value), i);
 		  has_warned_p = TRUE;
 		}
-	      r = BigEndianValue (ctab[i].rgb.red  ) >> 8;
-	      g = BigEndianValue (ctab[i].rgb.green) >> 8;
-	      b = BigEndianValue (ctab[i].rgb.blue ) >> 8;
+	      r = CW (ctab[i].rgb.red  ) >> 8;
+	      g = CW (ctab[i].rgb.green) >> 8;
+	      b = CW (ctab[i].rgb.blue ) >> 8;
 	      DPSPrintf (DPSGetCurrentContext (),
 			 "%02x%02x%02x%c", r, g, b, (i % 8) == 7 ? '\n' : ' ');
 	    }
@@ -1601,9 +1600,9 @@ void Executor::NeXTPrLine(comPoint to, comGrafPtr thePortp)
 
     block = block_virtual_ints ();
     pnupdate(thePortp);
-    if (BigEndianValue(thePortp->pnSize.h) || BigEndianValue(thePortp->pnSize.v)) {
-	fromh = BigEndianValue(thePortp->pnLoc.h);
-	fromv = BigEndianValue(thePortp->pnLoc.v);
+    if (CW(thePortp->pnSize.h) || CW(thePortp->pnSize.v)) {
+	fromh = CW(thePortp->pnLoc.h);
+	fromv = CW(thePortp->pnLoc.v);
 	toh   = to.h;
 	tov   = to.v;
 
@@ -1615,24 +1614,24 @@ void Executor::NeXTPrLine(comPoint to, comGrafPtr thePortp)
 	    fromv = tov;
 	    tov = temp;
 	}
-	psh = BigEndianValue(thePortp->pnSize.h);
-	psv = BigEndianValue(thePortp->pnSize.v);
-	r.right = BigEndianValue(toh + psh);
-	r.left = BigEndianValue(fromh);
+	psh = CW(thePortp->pnSize.h);
+	psv = CW(thePortp->pnSize.v);
+	r.right = CW(toh + psh);
+	r.left = CW(fromh);
 	PSgsave();
 	PSnewpath();
 	PSmoveto(fromh, fromv);
 	if (fromv < tov) {
-	    r.top = BigEndianValue(fromv);
-	    r.bottom = BigEndianValue(tov + psv);
+	    r.top = CW(fromv);
+	    r.bottom = CW(tov + psv);
 	    PSlineto(fromh + psh, fromv);
 	    PSlineto(toh + psh, tov);
 	    PSlineto(toh + psh, tov + psv);
 	    PSlineto(toh, tov + psv);
 	    PSlineto(fromh, fromv + psv);
 	} else {
-	    r.top = BigEndianValue(tov);
-	    r.bottom = BigEndianValue(fromv + psv);
+	    r.top = CW(tov);
+	    r.bottom = CW(fromv + psv);
 	    PSlineto(toh, tov);
 	    PSlineto(toh + psh, tov);
 	    PSlineto(toh + psh, tov + psv);
@@ -1673,19 +1672,19 @@ void Executor::NeXTPrPoly(LONGINT verb, comPolyHandle ph, comGrafPtr thePortp)
     block = block_virtual_ints ();
     pnupdate(thePortp);
     pp = MR(*ph)->polyPoints;
-    ep = (comPoint *) ((char *)MR(*ph) + BigEndianValue((MR(*ph))->polySize));
-    firstp.h = BigEndianValue(pp[0].h);
-    firstp.v = BigEndianValue(pp[0].v);
+    ep = (comPoint *) ((char *)MR(*ph) + CW((MR(*ph))->polySize));
+    firstp.h = CW(pp[0].h);
+    firstp.v = CW(pp[0].v);
     thePortp->pnLoc = pp[0];
-    if (BigEndianValue(ep[-1].h) == firstp.h && BigEndianValue(ep[-1].v) == firstp.v)
+    if (CW(ep[-1].h) == firstp.h && CW(ep[-1].v) == firstp.v)
 	ep--;
     if (ep > pp)
       {
 	if (verb == frameVerb) {
 	  PSmoveto(firstp.h, firstp.v);
 	  for (++pp; pp < ep; pp++) {
-	    pt.h = BigEndianValue(pp[0].h);
-	    pt.v = BigEndianValue(pp[0].v);
+	    pt.h = CW(pp[0].h);
+	    pt.v = CW(pp[0].v);
 	    NeXTPrLine(pt, thePortp);
 	    thePortp->pnLoc = pp[0];
 	  }
@@ -1695,7 +1694,7 @@ void Executor::NeXTPrPoly(LONGINT verb, comPolyHandle ph, comGrafPtr thePortp)
 	  PSnewpath();
 	  PSmoveto(firstp.h, firstp.v);
 	  for (++pp; pp < ep; pp++) {
-	    PSlineto(BigEndianValue(pp->h), BigEndianValue(pp->v));
+	    PSlineto(CW(pp->h), CW(pp->v));
 	  }
 	  PSlineto(firstp.h, firstp.v);
 	  PSclosepath();
@@ -1722,29 +1721,29 @@ void Executor::NeXTPrRRect(LONGINT verb, comRect *rp, LONGINT width, LONGINT hei
 	block = block_virtual_ints ();
 	pnupdate(thePortp);
 	sfactor = (float)height/width;
-	midy = ((float)BigEndianValue(rp->top) + BigEndianValue(rp->bottom))/2;
+	midy = ((float)CW(rp->top) + CW(rp->bottom))/2;
 
 	PSgsave();
 	PSnewpath();
 	PSscale(1, sfactor);
-	PSmoveto(BigEndianValue(rp->left), midy/sfactor);
-	rl = BigEndianValue(rp->left);
-	rr = BigEndianValue(rp->right);
-	rt = BigEndianValue(rp->top)/sfactor;
-	rb = BigEndianValue(rp->bottom)/sfactor;
+	PSmoveto(CW(rp->left), midy/sfactor);
+	rl = CW(rp->left);
+	rr = CW(rp->right);
+	rt = CW(rp->top)/sfactor;
+	rb = CW(rp->bottom)/sfactor;
 	PSarct(rl, rb, rr, rb, (float)width / 2);
 	PSarct(rr, rb, rr, rt, (float)width / 2);
 	PSarct(rr, rt, rl, rt, (float)width / 2);
 	PSarct(rl, rt, rl, rb, (float)width / 2);
 	PSclosepath();
 	if (verb == frameVerb) {
-	  psh = BigEndianValue(thePortp->pnSize.h);
-	  psv = BigEndianValue(thePortp->pnSize.v);
+	  psh = CW(thePortp->pnSize.h);
+	  psv = CW(thePortp->pnSize.v);
 	  sfactor2 = ((float)height - 2*psv) / (width - 2*psh) / sfactor;
-	  rl = BigEndianValue(rp->left) + psh;
-	  rr = BigEndianValue(rp->right) - psh;
-	  rt = BigEndianValue(rp->top) + psv/sfactor2;
-	  rb = BigEndianValue(rp->bottom) - psv/sfactor2;
+	  rl = CW(rp->left) + psh;
+	  rr = CW(rp->right) - psh;
+	  rt = CW(rp->top) + psv/sfactor2;
+	  rb = CW(rp->bottom) - psv/sfactor2;
 
 	  PSscale(1, sfactor2);
 	  PSmoveto(rl, midy/sfactor);
@@ -1774,18 +1773,18 @@ void Executor::NeXTPrRect(LONGINT verb, comRect *rp, comGrafPtr thePortp)
     pnupdate(thePortp);
     PSgsave();
     PSnewpath();
-    PSmoveto(BigEndianValue(rp->left) , BigEndianValue(rp->top));
-    PSlineto(BigEndianValue(rp->left) , BigEndianValue(rp->bottom));
-    PSlineto(BigEndianValue(rp->right), BigEndianValue(rp->bottom));
-    PSlineto(BigEndianValue(rp->right), BigEndianValue(rp->top));
+    PSmoveto(CW(rp->left) , CW(rp->top));
+    PSlineto(CW(rp->left) , CW(rp->bottom));
+    PSlineto(CW(rp->right), CW(rp->bottom));
+    PSlineto(CW(rp->right), CW(rp->top));
     PSclosepath();
     if (verb == frameVerb) {
-	psh = BigEndianValue(thePortp->pnSize.h);
-	psv = BigEndianValue(thePortp->pnSize.v);
-	PSmoveto(BigEndianValue(rp->left)  + psh, BigEndianValue(rp->top)    + psv);
-	PSlineto(BigEndianValue(rp->right) - psh, BigEndianValue(rp->top)    + psv);
-	PSlineto(BigEndianValue(rp->right) - psh, BigEndianValue(rp->bottom) - psv);
-	PSlineto(BigEndianValue(rp->left)  + psh, BigEndianValue(rp->bottom) - psv);
+	psh = CW(thePortp->pnSize.h);
+	psv = CW(thePortp->pnSize.v);
+	PSmoveto(CW(rp->left)  + psh, CW(rp->top)    + psv);
+	PSlineto(CW(rp->right) - psh, CW(rp->top)    + psv);
+	PSlineto(CW(rp->right) - psh, CW(rp->bottom) - psv);
+	PSlineto(CW(rp->left)  + psh, CW(rp->bottom) - psv);
 	PSclosepath();
     }
     PSclip();
@@ -1815,7 +1814,7 @@ short Executor::NeXTPrTxMeas(LONGINT n, comPtr p, comPoint *nump, comPoint *denp
 			       (Ptr) p, &num, &den, NULL);
     restore_virtual_ints (block);
     RESTOREA5;
-    return (float) retval * BigEndianValue (num.h) / BigEndianValue (den.h);
+    return (float) retval * CW (num.h) / CW (den.h);
 }
 
 static int numspacesin(const char *str)
@@ -1857,9 +1856,9 @@ static void dopsunderline(comGrafPtr thePortp, short total,
       substitute_font_if_needed (&font, 0, &need_to_free);
       PSgsave();
       PSnewpath();
-      PSsendfloat(BigEndianValue(thePortp->pnLoc.h));
-      PSsendfloat(BigEndianValue(thePortp->pnLoc.v));
-      PSsendfloat(BigEndianValue(thePortp->txSize));
+      PSsendfloat(CW(thePortp->pnLoc.h));
+      PSsendfloat(CW(thePortp->pnLoc.v));
+      PSsendfloat(CW(thePortp->txSize));
       PSsendchararray(font, strlen(font));
       if (need_to_free)
 	free (font);
@@ -2139,8 +2138,8 @@ void Executor::NeXTPrText(LONGINT n, comPtr textbufp, comPoint num, comPoint den
 	      {
 		PSgsave ();
 		DPSPrintf (DPSGetCurrentContext (), "initclip\n");
-		PStranslate (BigEndianValue (thePortp->pnLoc.h) + rotation.center_x,
-			     BigEndianValue (thePortp->pnLoc.v) + rotation.center_y);
+		PStranslate (CW (thePortp->pnLoc.h) + rotation.center_x,
+			     CW (thePortp->pnLoc.v) + rotation.center_y);
 		PSrotate (rotation.angle);
 		PSmoveto (-rotation.center_x, -rotation.center_y);
 	      }
@@ -2178,7 +2177,7 @@ void Executor::NeXTPrText(LONGINT n, comPtr textbufp, comPoint num, comPoint den
 				substitute_fonts_p
 				&& (thePortp->txFont == CWC (geneva)),
 				translated, n);
-		thePortp->pnLoc.h = BigEndianValue(BigEndianValue(thePortp->pnLoc.h) + total);
+		thePortp->pnLoc.h = CW(CW(thePortp->pnLoc.h) + total);
 		printport.pnLoc.h = thePortp->pnLoc.h;
 	      }
 	    if (rotation.rotated_p)

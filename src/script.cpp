@@ -30,7 +30,6 @@ char ROMlib_rcsid_script[] =
 #include <ctype.h>
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /*
  * NOTE: these are stubs to help me make FileMaker Pro go.
@@ -217,10 +216,10 @@ P7 (PUBLIC pascal trap, void, NMeasureJust, Ptr, text, int32, length,
   
   warning_unimplemented ("slop = %d, run_pos = %d", slop, run_pos);
   
-  numerx.v = BigEndianValue (numer.v);
-  numerx.h = BigEndianValue (numer.h);
-  denomx.v = BigEndianValue (denomx.v);
-  denomx.h = BigEndianValue (denomx.h);
+  numerx.v = CW (numer.v);
+  numerx.h = CW (numer.h);
+  denomx.v = CW (denomx.v);
+  denomx.h = CW (denomx.h);
   
   xStdTxMeas (length, (uint8 *) text, &numerx, &denomx,
 	      NULL, (int16 *) charLocs);
@@ -324,8 +323,8 @@ P6(PUBLIC pascal trap, void, FindWord, Ptr, textbufp, INTEGER, length,
 	 ++stop)
       ;
 
-    offsets[0] = BigEndianValue(start);
-    offsets[1] = BigEndianValue(stop);
+    offsets[0] = CW(start);
+    offsets[1] = CW(stop);
     offsets[2] = 0; /* Testing on Brute shows we should zero this memory */
     offsets[3] = 0;
     offsets[4] = 0;
@@ -339,8 +338,8 @@ P4(PUBLIC pascal trap, void, HiliteText, Ptr, textbufp, INTEGER, firstoffset,
 #if defined (BINCOMPAT)
     ROMlib_hook(script_notsupported);
 #endif /* BINCOMPAT */
-    offsets[0] = BigEndianValue(firstoffset);
-    offsets[1] = BigEndianValue(secondoffset);
+    offsets[0] = CW(firstoffset);
+    offsets[1] = CW(secondoffset);
     offsets[2] = 0;
     offsets[3] = 0;
     offsets[4] = 0;
@@ -372,8 +371,8 @@ P3 (PUBLIC pascal trap, void, DrawJust, Ptr, textbufp,
     {
       Fixed extra;
 
-      extra = BigEndianValue (save_sp_extra_x) + FixRatio (slop, n_spaces);
-      PORT_SP_EXTRA_X (thePort) = BigEndianValue (extra);
+      extra = CL (save_sp_extra_x) + FixRatio (slop, n_spaces);
+      PORT_SP_EXTRA_X (thePort) = CL (extra);
     }
   DrawText (textbufp, 0, length);
   PORT_SP_EXTRA_X (thePort) = save_sp_extra_x;
@@ -414,7 +413,7 @@ this_date_rec(DateTimeRec *p)
   LONGINT now;
 
   GetDateTime (&now);
-  now = BigEndianValue (now);
+  now = CL (now);
   Secs2Date (now, p);
 }
 
@@ -425,7 +424,7 @@ this_century (void)
   int retval;
 
   this_date_rec (&d);
-  retval = BigEndianValue (d.year) / 100 * 100;
+  retval = CW (d.year) / 100 * 100;
   return retval;
 }
 
@@ -462,14 +461,14 @@ P5 (PUBLIC pascal trap, String2DateStatus, String2Date,
       else if (year_length < 3)
 	year += this_century ();
 
-      *length_used_ret = BigEndianValue (offset);
+      *length_used_ret = CL (offset);
 
       /* not clear what we should do with other fields, some should probably
 	 be zeroed */
 
-      date_time->year = BigEndianValue (year);
-      date_time->month = BigEndianValue (month);
-      date_time->day = BigEndianValue (day);
+      date_time->year = CW (year);
+      date_time->month = CW (month);
+      date_time->day = CW (day);
       retval = longDateFound;
     }
   else
@@ -498,7 +497,7 @@ P7 (PUBLIC pascal trap, StyledLineBreakCode, StyledLineBreak,
   int width = 0;
   
   /* ### are we losing information here? */
-  text_width = Fix2Long (BigEndianValue (*text_width_fp));
+  text_width = Fix2Long (CL (*text_width_fp));
   
   for (current_index = text_start, current_char = text[current_index];
        current_index < text_end;
@@ -507,7 +506,7 @@ P7 (PUBLIC pascal trap, StyledLineBreakCode, StyledLineBreak,
       /* ### do we do this? */
       if (current_char == '\r')
 	{
-	  *text_offset = BigEndianValue (current_index + 1);
+	  *text_offset = CL (current_index + 1);
 	  return smBreakWord;
 	}
 	  
@@ -529,23 +528,23 @@ P7 (PUBLIC pascal trap, StyledLineBreakCode, StyledLineBreak,
 	      if (*text_offset)
 		{
 		  /* beginning of the line, break here */
-		  *text_offset = BigEndianValue (current_index - 1);
+		  *text_offset = CL (current_index - 1);
 		  return smBreakChar;
 		}
-	      *text_offset = BigEndianValue (current_index - 1);
+	      *text_offset = CL (current_index - 1);
 	      return smBreakWord;
 	    }
 	  else
 	    {
-	      *text_offset = BigEndianValue (last_word_break);
+	      *text_offset = CL (last_word_break);
 	      return smBreakWord;
 	    }
 	}
     }
   /* if we got here, that means the run did not extend past the end of
      the current line */
-  *text_width_fp = BigEndianValue (Long2Fix (text_width - width));
-  *text_offset = BigEndianValue (current_index);
+  *text_width_fp = CL (Long2Fix (text_width - width));
+  *text_offset = CL (current_index);
   return smBreakOverflow;
 }
 
@@ -681,17 +680,17 @@ P2 (PUBLIC pascal trap, void, LongDate2Secs, LongDateRec *, ldatep,
   LONGINT high, low;
   INTEGER hour;
 
-  hour = BigEndianValue (ldatep->hour);
+  hour = CW (ldatep->hour);
   if (ldatep->pm && hour < 12)
     hour += 12;
     
-  secs = ROMlib_long_long_secs (BigEndianValue (ldatep->year), BigEndianValue (ldatep->month),
-				BigEndianValue (ldatep->day), hour,
-				BigEndianValue (ldatep->minute), BigEndianValue (ldatep->second));
+  secs = ROMlib_long_long_secs (CW (ldatep->year), CW (ldatep->month),
+				CW (ldatep->day), hour,
+				CW (ldatep->minute), CW (ldatep->second));
   high = secs >> 32;
   low = secs;
-  secs_outp[0] = BigEndianValue (high);
-  secs_outp[1] = BigEndianValue (low);
+  secs_outp[0] = CL (high);
+  secs_outp[1] = CL (low);
 }
 
 P2 (PUBLIC pascal trap, void, LongSecs2Date, ULONGINT *, secs_inp,
@@ -701,14 +700,14 @@ P2 (PUBLIC pascal trap, void, LongSecs2Date, ULONGINT *, secs_inp,
   long long secs;
   INTEGER pm;
   
-  secs = ((long long) BigEndianValue (secs_inp[0]) << 32) | BigEndianValue (secs_inp[1]);
+  secs = ((long long) CL (secs_inp[0]) << 32) | CL (secs_inp[1]);
   date_to_swapped_fields (secs, &ldatep->year, &ldatep->month, &ldatep->day,
 			  &ldatep->hour, &ldatep->minute, &ldatep->second,
 			  &ldatep->dayOfWeek, &ldatep->dayOfYear,
 			  &ldatep->weekOfYear);
 
-  pm = (BigEndianValue (ldatep->hour) > 12) ? 1 : 0;
-  ldatep->pm = BigEndianValue (pm);
+  pm = (CW (ldatep->hour) > 12) ? 1 : 0;
+  ldatep->pm = CW (pm);
 }
 
 /*
@@ -767,7 +766,7 @@ GetFormatOrder
 
 A0(PUBLIC, INTEGER, GetAppFont)
 {
-    return BigEndianValue (ApFontID);
+    return CW (ApFontID);
 }
 
 #if 0
@@ -841,10 +840,10 @@ P6(PUBLIC pascal trap, void, DrawJustified,
   Point swapped_denom;
   
   warning_unimplemented ("poorly implemented");
-  swapped_numer.h = BigEndianValue (numer.h);
-  swapped_numer.v = BigEndianValue (numer.v);
-  swapped_denom.h = BigEndianValue (denom.h);
-  swapped_denom.v = BigEndianValue (denom.v);
+  swapped_numer.h = CW (numer.h);
+  swapped_numer.v = CW (numer.v);
+  swapped_denom.h = CW (denom.h);
+  swapped_denom.v = CW (denom.v);
   text_helper (textLength, textPtr, &swapped_numer, &swapped_denom, 0, 0,
 	       text_helper_draw);
 }
@@ -880,10 +879,10 @@ P9(PUBLIC pascal trap, INTEGER, PixelToChar,
 
   locs = (INTEGER*)alloca( sizeof(INTEGER) * (textLen + 1));
 
-  swapped_numer.h = BigEndianValue (numer.h);
-  swapped_numer.v = BigEndianValue (numer.v);
-  swapped_denom.h = BigEndianValue (denom.h);
-  swapped_denom.v = BigEndianValue (denom.v);
+  swapped_numer.h = CW (numer.h);
+  swapped_numer.v = CW (numer.v);
+  swapped_denom.h = CW (denom.h);
+  swapped_denom.v = CW (denom.v);
 
   int_pix_width = pixelWidth >> 16;
 
@@ -894,19 +893,19 @@ P9(PUBLIC pascal trap, INTEGER, PixelToChar,
      to account for slop (probably better in the long run).  Right now,
      we do neither.  Ick. */
 
-  if (int_pix_width >= BigEndianValue(locs[textLen]))
+  if (int_pix_width >= CW(locs[textLen]))
     {
       retval = textLen;
       *leadingEdgep = FALSE;
-      *widthRemainingp = pixelWidth - (BigEndianValue(locs[textLen]) << 16);
+      *widthRemainingp = pixelWidth - (CW(locs[textLen]) << 16);
     }
   else
     {
       *widthRemainingp = CLC (-1);
-      for (i = 0; int_pix_width > BigEndianValue(locs[i]); ++i)
+      for (i = 0; int_pix_width > CW(locs[i]); ++i)
 	;
       if ((i > 0) &&
-	  ((int_pix_width - BigEndianValue(locs[i-1])) > (BigEndianValue(locs[i]) - int_pix_width)))
+	  ((int_pix_width - CW(locs[i-1])) > (CW(locs[i]) - int_pix_width)))
 	{
 	  retval = i - 1;
 	  *leadingEdgep = FALSE;
@@ -935,10 +934,10 @@ P8(PUBLIC pascal trap, INTEGER, CharToPixel,
 
   warning_unimplemented ("poorly implemented");
 
-  swapped_numer.h = BigEndianValue (numer.h);
-  swapped_numer.v = BigEndianValue (numer.v);
-  swapped_denom.h = BigEndianValue (denom.h);
-  swapped_denom.v = BigEndianValue (denom.v);
+  swapped_numer.h = CW (numer.h);
+  swapped_numer.v = CW (numer.v);
+  swapped_denom.h = CW (denom.h);
+  swapped_denom.v = CW (denom.v);
   retval = text_helper (offset, textBuf, &swapped_numer, &swapped_denom,
 			0, 0, text_helper_measure);
   retval += (slop / textLen) >> 16;

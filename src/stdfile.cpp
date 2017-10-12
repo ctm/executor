@@ -77,7 +77,6 @@ PUBLIC int Executor::nodrivesearch_p = FALSE;
 #include "rsys/system_error.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 typedef	pascal BOOLEAN (*filtp)(DialogPtr dp, EventRecord *evp, INTEGER *ith);
 
@@ -201,12 +200,12 @@ A1(PRIVATE, INTEGER, movealert, INTEGER, id)
     if (!(*h).p)
 	LoadResource(h);
     rp = (Rect *) STARH(h);
-    dh = BigEndianValue(rp->right)  - BigEndianValue(rp->left);
-    dv = BigEndianValue(rp->bottom) - BigEndianValue(rp->top);
+    dh = CW(rp->right)  - CW(rp->left);
+    dv = CW(rp->bottom) - CW(rp->top);
     rp->left   = CWC(150);
     rp->top    = CWC(30);
-    rp->right  = BigEndianValue(150 + dh);
-    rp->bottom = BigEndianValue(30 + dv);
+    rp->right  = CW(150 + dh);
+    rp->bottom = CW(30 + dv);
     return(Alert(id, (ProcPtr)0));
 }
 
@@ -228,8 +227,8 @@ A1(PRIVATE, void, drawminiicon, INTEGER, icon)
     bm.bounds.right = bm.bounds.bottom = CWC(16);
     r.top  = PORT_PEN_LOC (thePort).v;
     r.left = PORT_PEN_LOC (thePort).h;
-    r.bottom = BigEndianValue(BigEndianValue(r.top)  + 16);
-    r.right  = BigEndianValue(BigEndianValue(r.left) + 16);
+    r.bottom = CW(CW(r.top)  + 16);
+    r.right  = CW(CW(r.left) + 16);
     CopyBits(&bm, PORT_BITS_FOR_COPY (thePort),
 	     &bm.bounds, &r, srcCopy, NULL);
     HUnlock(h);
@@ -253,9 +252,9 @@ A3(PRIVATE, void, drawinboxwithicon, StringPtr, str, Rect *, rp, INTEGER, icon)
      *	      ok.
      */
 
-    MoveTo(BigEndianValue(rp->left) + 2, BigEndianValue(rp->top));
+    MoveTo(CW(rp->left) + 2, CW(rp->top));
     drawminiicon(icon);
-    MoveTo(BigEndianValue(rp->left) + 2 + 16 + 3 , BigEndianValue(rp->top) + BigEndianValue(rp->bottom)-1); /* see note above */
+    MoveTo(CW(rp->left) + 2 + 16 + 3 , CW(rp->top) + CW(rp->bottom)-1); /* see note above */
     r.left   = rp->left;
     r.right  = rp->right;
     r.top    = rp->top;
@@ -263,14 +262,14 @@ A3(PRIVATE, void, drawinboxwithicon, StringPtr, str, Rect *, rp, INTEGER, icon)
     ClipRect(&r);
     strlen = *str;
     MeasureText(strlen, (Ptr) (str + 1), (Ptr) strwidths);
-    lengthavail = BigEndianValue(rp->right) - (BigEndianValue(rp->left) + 2 + 16 + 3);
-    if (BigEndianValue(strwidths[strlen]) > lengthavail) {
+    lengthavail = CW(rp->right) - (CW(rp->left) + 2 + 16 + 3);
+    if (CW(strwidths[strlen]) > lengthavail) {
 	width = StringWidth((StringPtr) ellipsis);
 /* 4 might be the space on the right of the ellipsis. */
 /* TODO: figure out exactly what the number is. */
     	lengthavail -= (width + 4);
 	widp = strwidths;
-	while (BigEndianValue(*++widp) < lengthavail)
+	while (CW(*++widp) < lengthavail)
 	    DrawChar(*++str);
 	DrawString((StringPtr) ellipsis);
     } else
@@ -289,8 +288,8 @@ A2(PRIVATE, void, safeflflip, fltype *, f, INTEGER, sel)
     if (sel >= fltop && sel < fltop + f->flnmlin) {
 	r.left   = f->flrect.left;
 	r.right  = f->flrect.right;
-	r.top    = BigEndianValue(BigEndianValue(f->flrect.top) + (sel - fltop) * f->fllinht);
-	r.bottom = BigEndianValue(BigEndianValue(r.top) + f->fllinht);
+	r.top    = CW(CW(f->flrect.top) + (sel - fltop) * f->fllinht);
+	r.bottom = CW(CW(r.top) + f->fllinht);
 	if (EmptyRgn(MR(((WindowPeek)thePort)->updateRgn))) /* stuff to draw? */
 	    InvertRect(&r);	/* no: we can flip */
 	else
@@ -310,8 +309,8 @@ A3(PRIVATE, void, flupdate, fltype *, f, INTEGER, st, INTEGER, n)
     Rect r;
 
     fltop = GetCtlValue(f->flsh);
-    r.top    = BigEndianValue(BigEndianValue(f->flrect.top) + (st - fltop) * f->fllinht);
-    r.bottom = BigEndianValue(f->flascent);
+    r.top    = CW(CW(f->flrect.top) + (st - fltop) * f->fllinht);
+    r.bottom = CW(f->flascent);
     r.left   = f->flrect.left;
     r.right  = f->flrect.right;
 
@@ -321,16 +320,16 @@ A3(PRIVATE, void, flupdate, fltype *, f, INTEGER, st, INTEGER, n)
 	drawinboxwithicon((StringPtr) (MR(*f->flstrs) + ip->floffs), &r,
 							ip->flicns & ICONMASK);
 	if (ip->flicns & GRAYBIT) {
-	    r.bottom = BigEndianValue(BigEndianValue(r.top) + f->fllinht);
+	    r.bottom = CW(CW(r.top) + f->fllinht);
 	    PenMode(notPatBic);
 	    PenPat(gray);
 	    PaintRect(&r);
 	    PenPat(black);
 	    PenMode(patCopy);
-	    r.bottom = BigEndianValue(f->flascent);
+	    r.bottom = CW(f->flascent);
 	}
 	ip++;
-	r.top = BigEndianValue(BigEndianValue(r.top) + (f->fllinht));
+	r.top = CW(CW(r.top) + (f->fllinht));
     }
     HUnlock((Handle) f->flstrs);
     if (sel >= st && sel < st + n)
@@ -452,7 +451,7 @@ A2(PRIVATE, StringPtr, getdiskname, BOOLEAN *, ejectablep,
 
 	pbr.volumeParam.ioNamePtr = RM(&retval[0]);
 	pbr.volumeParam.ioVolIndex = 0;
-	pbr.volumeParam.ioVRefNum = BigEndianValue(-BigEndianValue(SFSaveDisk));
+	pbr.volumeParam.ioVRefNum = CW(-CW(SFSaveDisk));
 	err = PBGetVInfo(&pbr, FALSE);
 	cachedvrn = SFSaveDisk;
 	if (err == noErr)
@@ -488,7 +487,7 @@ A1(PRIVATE, void, drawjobberattop, DialogPeek, dp)
 
     GetPenState(&ps);
     PenNormal();
-    if (BigEndianValue(CurDirStore) == 2) {
+    if (CL(CurDirStore) == 2) {
 #if 1
 /* TODO: ask cliff about a better way to do this */
     /* unused = */ getdiskname( &ejectable, NULL );
@@ -501,15 +500,15 @@ A1(PRIVATE, void, drawjobberattop, DialogPeek, dp)
     flp = WINDFL(dp);
     rp = &flp->flcurdirrect;
     savebottom = rp->bottom;
-    rp->bottom = BigEndianValue(flp->flascent);
-    rp->left = BigEndianValue(BigEndianValue(rp->left) + (2));
+    rp->bottom = CW(flp->flascent);
+    rp->left = CW(CW(rp->left) + (2));
     drawinboxwithicon(flp->flcurdirname, rp, icon);
-    rp->left = BigEndianValue(BigEndianValue(rp->left) - (2));
+    rp->left = CW(CW(rp->left) - (2));
     rp->bottom = savebottom;
     FrameRect(rp);
-    MoveTo(BigEndianValue(rp->left)+1, BigEndianValue(rp->bottom));
-    LineTo(BigEndianValue(rp->right),  BigEndianValue(rp->bottom));
-    LineTo(BigEndianValue(rp->right),  BigEndianValue(rp->top)+1);
+    MoveTo(CW(rp->left)+1, CW(rp->bottom));
+    LineTo(CW(rp->right),  CW(rp->bottom));
+    LineTo(CW(rp->right),  CW(rp->top)+1);
     SetPenState(&ps);
 }
 
@@ -521,12 +520,12 @@ A1(PRIVATE, LONGINT, getdirid, StringPtr, fname)
 
     hpb.dirInfo.ioCompletion = 0;
     hpb.dirInfo.ioNamePtr    = RM(fname);
-    hpb.dirInfo.ioVRefNum    = BigEndianValue(-BigEndianValue(SFSaveDisk));
+    hpb.dirInfo.ioVRefNum    = CW(-CW(SFSaveDisk));
     hpb.dirInfo.ioFDirIndex  = CWC (0);
     hpb.dirInfo.ioDrDirID    = CurDirStore;
     err = PBGetCatInfo(&hpb, FALSE);
     if (err == noErr)
-      retval = BigEndianValue (hpb.dirInfo.ioDrDirID);
+      retval = CL (hpb.dirInfo.ioDrDirID);
     else
       {
 	warning_unexpected ("PBGetCatInfo return value err = %d\n", err);
@@ -543,12 +542,12 @@ set_type_and_name (fltype *f, OSType type, Str255 name)
   switch (f->flavor)
     {
     case original_sf:
-      f->flreplyp.oreplyp->fType = BigEndianValue (type);
+      f->flreplyp.oreplyp->fType = CL (type);
       str31assign (f->flreplyp.oreplyp->fName, name);
       break;
     case new_sf:
     case new_custom_sf:
-      f->flreplyp.nreplyp->sfType = BigEndianValue (type);
+      f->flreplyp.nreplyp->sfType = CL (type);
       str31assign (f->flreplyp.nreplyp->sfFile.name, name);
       f->flreplyp.nreplyp->sfIsFolder = !!type;
       break;
@@ -576,9 +575,9 @@ A2(PRIVATE, INTEGER, flwhich, fltype *, f, Point, p)
     
     if (!PtInRect(p, &f->flrect)) {
 	bump = 0;
-	if (p.v < BigEndianValue(f->flrect.top))
+	if (p.v < CW(f->flrect.top))
 	    bump = -1;
-	else if (p.v >= BigEndianValue(f->flrect.bottom))
+	else if (p.v >= CW(f->flrect.bottom))
 	    bump =  1;
 	if (bump) {
 	    from = GetCtlValue(f->flsh);
@@ -587,7 +586,7 @@ A2(PRIVATE, INTEGER, flwhich, fltype *, f, Point, p)
 	}
 /*-->*/ return(-1);
     }
-    retval = (p.v - BigEndianValue(f->flrect.top)) / f->fllinht + GetCtlValue(f->flsh);
+    retval = (p.v - CW(f->flrect.top)) / f->fllinht + GetCtlValue(f->flsh);
     if (retval >= f->flnmfil || MR(*f->flinfo)[retval].flicns & GRAYBIT)
 /*-->*/ retval = -1;
     return(retval);
@@ -601,8 +600,8 @@ A3(PRIVATE, void, flmouse, fltype *, f, Point, p, ControlHandle, ch)
     evt.where = p;
     do {
 	GlobalToLocal(&evt.where);
-	p.h = BigEndianValue(evt.where.h);
-	p.v = BigEndianValue(evt.where.v);
+	p.h = CW(evt.where.h);
+	p.v = CW(evt.where.v);
 	if ((newsel = flwhich(f, p)) != f->flsel) {
 	    if (f->flsel != -1) {
 		safeflflip(f, f->flsel);
@@ -673,7 +672,7 @@ A1(PRIVATE, void, getcurname, fltype *, f)
     hpb.dirInfo.ioCompletion = 0;
     hpb.dirInfo.ioNamePtr    = RM(&f->flcurdirname[0]);
     f->flcurdirname[0] = 0;
-    hpb.dirInfo.ioVRefNum    = BigEndianValue(-BigEndianValue(SFSaveDisk));
+    hpb.dirInfo.ioVRefNum    = CW(-CW(SFSaveDisk));
     hpb.dirInfo.ioFDirIndex  = CWC(-1);
     hpb.dirInfo.ioDrDirID    = CurDirStore;
     err = PBGetCatInfo(&hpb, FALSE);
@@ -685,16 +684,16 @@ A1(PRIVATE, void, getcurname, fltype *, f)
     r = &f->flrect;
     w = StringWidth(f->flcurdirname) + 2 + 16 + 3 + 2 + 2 + 4;
 #if 1
-    if (w > BigEndianValue(r->right) - BigEndianValue(r->left) + 17) {
+    if (w > CW(r->right) - CW(r->left) + 17) {
 	f->flcurdirrect.left   = r->left;
-	f->flcurdirrect.right  = BigEndianValue(BigEndianValue(r->right) + 17);
+	f->flcurdirrect.right  = CW(CW(r->right) + 17);
     } else {
-	f->flcurdirrect.left   = BigEndianValue((BigEndianValue(r->left) + BigEndianValue(r->right) + 17 - w) / 2 - 2);
-	f->flcurdirrect.right  = BigEndianValue(BigEndianValue(f->flcurdirrect.left) + w);
+	f->flcurdirrect.left   = CW((CW(r->left) + CW(r->right) + 17 - w) / 2 - 2);
+	f->flcurdirrect.right  = CW(CW(f->flcurdirrect.left) + w);
     }
 #else /* 1 */
-    f->flcurdirrect.left   = (BigEndianValue(r->left) + BigEndianValue(r->right) + 17 - w) / 2 - 2;
-    f->flcurdirrect.right  = BigEndianValue(BigEndianValue(f->flcurdirrect.left) + w);
+    f->flcurdirrect.left   = (CW(r->left) + CW(r->right) + 17 - w) / 2 - 2;
+    f->flcurdirrect.right  = CW(CW(f->flcurdirrect.left) + w);
 #endif /* 1 */
 }
 
@@ -820,11 +819,11 @@ A1(PRIVATE, void, flfill, fltype *, f)
     SetCursor(STARH((watchh = GetCursor(watchCursor))));
 
     pb.hFileInfo.ioNamePtr  = RM(&s[0]);
-    pb.hFileInfo.ioVRefNum  = BigEndianValue(-BigEndianValue(SFSaveDisk));
+    pb.hFileInfo.ioVRefNum  = CW(-CW(SFSaveDisk));
     err = noErr;
     errcount = 0;
     for (dirindex = 1; err != fnfErr && errcount != 3; dirindex++) {
-	pb.hFileInfo.ioFDirIndex = BigEndianValue(dirindex);
+	pb.hFileInfo.ioFDirIndex = CW(dirindex);
 	pb.hFileInfo.ioDirID    = CurDirStore;
 	err = PBGetCatInfo(&pb, FALSE);
 	if (err) {
@@ -894,7 +893,7 @@ P2(PUBLIC, pascal void,  ROMlib_filebox, DialogPeek, dp, INTEGER, which)
     
     h.p = NULL;
     GetDItem((DialogPtr) dp, which, &i, &h, &r);
-/*    h.p = BigEndianValue(h.p); we don't really use h */
+/*    h.p = CL(h.p); we don't really use h */
     switch (which) {
     case getNmList:
     case putNmList:
@@ -909,7 +908,7 @@ P2(PUBLIC, pascal void,  ROMlib_filebox, DialogPeek, dp, INTEGER, which)
     case getDiskName:
 /*  case putDiskName:	getDiskName and putDiskName are the same */
 	EraseRect(&r);
-	width = BigEndianValue(r.right) - BigEndianValue(r.left);
+	width = CW(r.right) - CW(r.left);
 	diskname = getdiskname( &ejectable, NULL );
 	GetDItem((DialogPtr) dp, putEject, &i, &ejhand, &r2);
 	ejhand.p = MR(ejhand.p);
@@ -920,10 +919,10 @@ P2(PUBLIC, pascal void,  ROMlib_filebox, DialogPeek, dp, INTEGER, which)
 	strwidth = StringWidth(diskname) + 2 + 16 + 3;
 	offset = (width - strwidth) / 2;
 	if (offset < 3)
-	    r.left = BigEndianValue(BigEndianValue(r.left) + (3));
+	    r.left = CW(CW(r.left) + (3));
 	else
-	    r.left = BigEndianValue(BigEndianValue(r.left) + (offset));
-	r.bottom = BigEndianValue(WINDFL(dp)->flascent);
+	    r.left = CW(CW(r.left) + (offset));
+	r.bottom = CW(WINDFL(dp)->flascent);
 	drawinboxwithicon(diskname, &r, ejectable ? MICONFLOPPY : MICONDISK);
 	break;
     }
@@ -935,7 +934,7 @@ A2(PRIVATE, void, realcd, DialogPeek, dp, LONGINT, dir)
 {
     fltype *fp;
 
-    CurDirStore = BigEndianValue(dir);
+    CurDirStore = CL(dir);
     fp = WINDFL(dp);
     SetHandleSize((Handle) fp->flinfo, (Size) 0);
     SetHandleSize((Handle) fp->flstrs, (Size) 0);
@@ -943,11 +942,11 @@ A2(PRIVATE, void, realcd, DialogPeek, dp, LONGINT, dir)
     fp->flsel = -1;
     set_type_and_name (fp, 0, (StringPtr) "");
     flfill(fp);
-    fp->flcurdirrect.right  = BigEndianValue(BigEndianValue(fp->flcurdirrect.right ) + 1);
-    fp->flcurdirrect.bottom = BigEndianValue(BigEndianValue(fp->flcurdirrect.bottom) + 1);
+    fp->flcurdirrect.right  = CW(CW(fp->flcurdirrect.right ) + 1);
+    fp->flcurdirrect.bottom = CW(CW(fp->flcurdirrect.bottom) + 1);
     EraseRect(&fp->flcurdirrect);
     getcurname(fp);
-    fp->flcurdirrect.bottom = BigEndianValue(BigEndianValue(fp->flcurdirrect.bottom) - 1);
+    fp->flcurdirrect.bottom = CW(CW(fp->flcurdirrect.bottom) - 1);
 				  /* don't need to do right; getcurname does */
     drawjobberattop(dp);
     C_ROMlib_filebox(dp, getDiskName);
@@ -966,12 +965,12 @@ A1(PRIVATE, LONGINT, getparent, LONGINT, dirid)
 
     cb.dirInfo.ioCompletion = 0;
     cb.dirInfo.ioNamePtr = 0;
-    cb.dirInfo.ioVRefNum = BigEndianValue(-BigEndianValue(SFSaveDisk));
+    cb.dirInfo.ioVRefNum = CW(-CW(SFSaveDisk));
     cb.dirInfo.ioFDirIndex = CWC (-1);
-    cb.dirInfo.ioDrDirID = BigEndianValue(dirid);
+    cb.dirInfo.ioDrDirID = CL(dirid);
     err = PBGetCatInfo(&cb, FALSE);
     if (err == noErr)
-      retval = BigEndianValue(cb.dirInfo.ioDrParID);
+      retval = CL(cb.dirInfo.ioDrParID);
     else
       {
 	warning_unexpected ("PBGetCatInfo return = %d\n", err);
@@ -988,7 +987,7 @@ PRIVATE BOOLEAN findparent(INTEGER *vrefp, LONGINT *diridp)
     char *namecpy, *slashp;
     INTEGER namelen;
 
-    vcbp = ROMlib_vcbbyvrn(BigEndianValue(*vrefp));
+    vcbp = ROMlib_vcbbyvrn(CW(*vrefp));
     retval = FALSE;
     if (!vcbp->vcbCTRef) {
 	namelen = strlen(((VCBExtra *) vcbp)->unixname);
@@ -1004,7 +1003,7 @@ PRIVATE BOOLEAN findparent(INTEGER *vrefp, LONGINT *diridp)
 	    if (Ustat(namecpy, &sbuf) == 0 &&
 			       (vcbp = ROMlib_vcbbybiggestunixname(namecpy))) {
 		*vrefp = vcbp->vcbVRefNum;
-		*diridp = BigEndianValue((LONGINT) ST_INO (sbuf));
+		*diridp = CL((LONGINT) ST_INO (sbuf));
 		retval = TRUE;
 	    }
 	}
@@ -1018,14 +1017,14 @@ A1(PRIVATE, BOOLEAN, moveuponedir, DialogPtr, dp)
     INTEGER vrn;
     BOOLEAN retval;
 
-    parent = getparent(BigEndianValue(CurDirStore));
-    if (parent != BigEndianValue(CurDirStore) && parent != 1) {
-	CurDirStore = BigEndianValue(parent);
+    parent = getparent(CL(CurDirStore));
+    if (parent != CL(CurDirStore) && parent != 1) {
+	CurDirStore = CL(parent);
 	retval = TRUE;
     } else {
-	vrn = BigEndianValue(-BigEndianValue(SFSaveDisk));
+	vrn = CW(-CW(SFSaveDisk));
 	retval = findparent(&vrn, &CurDirStore);
-	SFSaveDisk = BigEndianValue(-BigEndianValue(vrn));
+	SFSaveDisk = CW(-CW(vrn));
     }
     return retval;
 }
@@ -1157,19 +1156,19 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
     fl = WINDFL(dp);
     opentoken = getOpen;	/* getOpen and putSave are both 1 */
     retval = FALSE;
-    switch (BigEndianValue(evt->what)) {
+    switch (CW(evt->what)) {
     case keyDown:
-	*ith = BigEndianValue((BigEndianValue(evt->message) & 0xFF) + keydownbit);
-	switch (BigEndianValue(evt->message) & 0xFF) {
+	*ith = CW((CL(evt->message) & 0xFF) + keydownbit);
+	switch (CL(evt->message) & 0xFF) {
 	case NUMPAD_ENTER:
 	case '\r' :
-	    GetDItem((DialogPtr) dp, BigEndianValue(dp->aDefItem), &i, (HIDDEN_Handle *) &h, &r);
+	    GetDItem((DialogPtr) dp, CW(dp->aDefItem), &i, (HIDDEN_Handle *) &h, &r);
 	    h.p = MR(h.p);
 	    if (Hx(h.p, contrlVis) && U(Hx(h.p, contrlHilite)) != 255)
 	      {
 		prefix[0] = 0;
 		oldticks = -1000;
-		*ith = BigEndianValue(opentoken);
+		*ith = CW(opentoken);
 		retval = -1;
 //#if !defined(MACOSX_)
 		HiliteControl(h.p, inButton);
@@ -1179,14 +1178,14 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 	      }
 	    break;
 	case ASCIIUPARROW:
-	    if (BigEndianValue(evt->modifiers) & cmdKey)
+	    if (CW(evt->modifiers) & cmdKey)
 		*ith = CWC(getDiskName);	/* the same as putDiskName */
 	    else
 		keyarrow(fl, -1);
 	    retval = -1;
 	    break;
 	case ASCIIDOWNARROW:
-	    if ((BigEndianValue(evt->modifiers) & cmdKey) && fl->flsel != -1 &&
+	    if ((CW(evt->modifiers) & cmdKey) && fl->flsel != -1 &&
 			   (MR(*fl->flinfo) + fl->flsel)->flicns == MICONCFOLDER) {
 		prefix[0] = 0;
 		oldticks = -1000;
@@ -1202,7 +1201,7 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
         case '.':
 	    if (evt->modifiers & CWC(cmdKey))
 	      {
-		*ith = BigEndianValue(fl->fl_cancel_item);
+		*ith = CW(fl->fl_cancel_item);
 		retval = -1;
 		break;
 	      }
@@ -1214,14 +1213,14 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
  */
 	    if (!fl->flgraynondirs && dp->editField == -1) {
 		flep = MR(*fl->flinfo) + fl->flnmfil - 1;
-		if (BigEndianValue(evt->when) > lastkeydowntime + BigEndianValue(DoubleTime)) {
+		if (CL(evt->when) > lastkeydowntime + CL(DoubleTime)) {
 		    flp = MR(*fl->flinfo);
 		    prefix[0] = 0;
 		    oldticks = -1000;
 		} else
 		    flp = MR(*fl->flinfo) + ((fl->flsel) == -1 ? 0 : fl->flsel);
-		lastkeydowntime = BigEndianValue(evt->when);
-		prefix[++prefix[0]] = BigEndianValue(evt->message) & 0xff;
+		lastkeydowntime = CL(evt->when);
+		prefix[++prefix[0]] = CL(evt->message) & 0xff;
 		while (flp < flep &&
 			    RelString((StringPtr) (MR(*fl->flstrs) +
 					flp->floffs), prefix, FALSE, TRUE) < 0)
@@ -1245,15 +1244,15 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
     case mouseDown:
 	p = evt->where;
 	GlobalToLocal(&p);
-	p.h = BigEndianValue(p.h);
-	p.v = BigEndianValue(p.v);
+	p.h = CW(p.h);
+	p.v = CW(p.v);
 	if (PtInRect(p, &fl->flrect)) {
 	    GetDItem((DialogPtr) dp, getOpen, &i, (HIDDEN_Handle *) &h, &r);
 	    h.p = MR(h.p);
 	    flmouse(fl, evt->where, h.p);
 	    ticks = TickCount();
 	    if (fl->flsel != -1 && savesel == fl->flsel &&
-					 (ticks < oldticks + BigEndianValue(DoubleTime))) {
+					 (ticks < oldticks + CL(DoubleTime))) {
 		prefix[0] = 0;
 		*ith = CWC(opentoken);
 		oldticks = -1000;
@@ -1310,14 +1309,14 @@ A3(PRIVATE, void, flinit, fltype *, f, Rect *, r, ControlHandle, sh)
     
     f->flsh = sh;
     f->flrect = *r;
-    f->fllinht = BigEndianValue(fi.ascent) + BigEndianValue(fi.descent) + BigEndianValue(fi.leading);
+    f->fllinht = CW(fi.ascent) + CW(fi.descent) + CW(fi.leading);
 
-    f->flcurdirrect.top    = BigEndianValue(BigEndianValue(r->top) - f->fllinht - 5);
-    f->flcurdirrect.bottom = BigEndianValue(BigEndianValue(f->flcurdirrect.top) + f->fllinht);
+    f->flcurdirrect.top    = CW(CW(r->top) - f->fllinht - 5);
+    f->flcurdirrect.bottom = CW(CW(f->flcurdirrect.top) + f->fllinht);
     getcurname(f);
 
-    f->flascent = BigEndianValue(fi.ascent);
-    f->flnmlin = (BigEndianValue(r->bottom) - BigEndianValue(r->top)) / f->fllinht;
+    f->flascent = CW(fi.ascent);
+    f->flnmlin = (CW(r->bottom) - CW(r->top)) / f->fllinht;
     f->flnmfil = 0;
     f->flsel = -1;
     savezone = TheZone;
@@ -1331,8 +1330,8 @@ A3(PRIVATE, void, stdfflip, Rect *, rp, INTEGER, n, INTEGER, height)
 {
     INTEGER savetop = rp->top;
 	
-    rp->top = BigEndianValue(BigEndianValue(rp->top) + (n * height + 1));
-    rp->bottom = BigEndianValue(BigEndianValue(rp->top) + height - 2);
+    rp->top = CW(CW(rp->top) + (n * height + 1));
+    rp->bottom = CW(CW(rp->top) + height - 2);
     InvertRect(rp);   
     rp->top = savetop;
 }
@@ -1371,7 +1370,7 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
        hpb.dirInfo.ioCompletion = 0;
        hpb.dirInfo.ioNamePtr    = RM (&next->name[0]);
        next->name[0] = 0;
-       hpb.dirInfo.ioVRefNum    = BigEndianValue (-BigEndianValue(SFSaveDisk));
+       hpb.dirInfo.ioVRefNum    = CW (-CW(SFSaveDisk));
        hpb.dirInfo.ioFDirIndex  = CWC (-1);
        hpb.dirInfo.ioDrDirID    = CurDirStore;
        max_width = 0;
@@ -1388,8 +1387,8 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
 	       warning_unexpected ("PBGetCatInfo returns err = %d\n", err);
 	       done = TRUE;
 	     }
-	   id = next->dirid = BigEndianValue (hpb.dirInfo.ioDrDirID);
-	   next->vrefnum = BigEndianValue (hpb.dirInfo.ioVRefNum);
+	   id = next->dirid = CL (hpb.dirInfo.ioDrDirID);
+	   next->vrefnum = CW (hpb.dirInfo.ioVRefNum);
 	   next->next = (struct link *) ALLOCA (sizeof (struct link));
 	   gui_assert (next->next);
 	   str_width = StringWidth (next->name);
@@ -1407,12 +1406,12 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
 	     }
 	 } while (!done);
        fl = WINDFL(dp);
-       therect.top  = BigEndianValue (BigEndianValue (fl->flcurdirrect.top)
-			  - BigEndianValue (PORT_BOUNDS (dp).top));
-       therect.left = BigEndianValue (BigEndianValue (fl->flcurdirrect.left)
-			  - BigEndianValue (PORT_BOUNDS (dp).left));
-       therect.bottom = BigEndianValue (BigEndianValue (therect.top) + count * fl->fllinht + 1);
-       therect.right  = BigEndianValue (BigEndianValue (therect.left) + 2 + 16 + 3 + max_width + 4 + 2 + 3);
+       therect.top  = CW (CW (fl->flcurdirrect.top)
+			  - CW (PORT_BOUNDS (dp).top));
+       therect.left = CW (CW (fl->flcurdirrect.left)
+			  - CW (PORT_BOUNDS (dp).left));
+       therect.bottom = CW (CW (therect.top) + count * fl->fllinht + 1);
+       therect.right  = CW (CW (therect.left) + 2 + 16 + 3 + max_width + 4 + 2 + 3);
        ClipRect(&therect);
 
        {
@@ -1428,18 +1427,18 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
 	 bounds = &PIXMAP_BOUNDS (save_bits);
 	 bounds->top    = CWC (0);
 	 bounds->left   = CWC (0);
-	 bounds->bottom = BigEndianValue (RECT_HEIGHT (&therect));
-	 bounds->right  = BigEndianValue (RECT_WIDTH (&therect));
+	 bounds->bottom = CW (RECT_HEIGHT (&therect));
+	 bounds->right  = CW (RECT_WIDTH (&therect));
 	 PIXMAP_PIXEL_SIZE_X (save_bits) = save_bpp_x
 	   = PIXMAP_PIXEL_SIZE_X (port_pixmap);
 	 ROMlib_copy_ctab (PIXMAP_TABLE (port_pixmap),
 			   PIXMAP_TABLE (save_bits));
-	 row_bytes = ((BigEndianValue (bounds->right) * BigEndianValue (save_bpp_x) + 31) /  32) * 4;
-	 PIXMAP_SET_ROWBYTES_X (save_bits, BigEndianValue (row_bytes));
+	 row_bytes = ((CW (bounds->right) * CW (save_bpp_x) + 31) /  32) * 4;
+	 PIXMAP_SET_ROWBYTES_X (save_bits, CW (row_bytes));
 
 	 /* Allocate potentially large temporary pixmap space. */
 	 TEMP_ALLOC_ALLOCATE (save_bits_mem, temp_save_bits,
-			      BigEndianValue (bounds->bottom) * row_bytes);
+			      CW (bounds->bottom) * row_bytes);
 	 PIXMAP_BASEADDR_X (save_bits) = (Ptr)RM (save_bits_mem);
 	 WRAPPER_SET_PIXMAP_X (wrapper, RM (save_bits));
 	 
@@ -1453,8 +1452,8 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
        /* highlite the appropriate box, etc. */
        
        fillinrect.top    = therect.top;
-       fillinrect.left   = BigEndianValue(BigEndianValue(therect.left) + 2);
-       fillinrect.bottom = BigEndianValue(fl->flascent);
+       fillinrect.left   = CW(CW(therect.left) + 2);
+       fillinrect.bottom = CW(fl->flascent);
        fillinrect.right  = therect.right;
        
        for (i = count, next = &first; --i >= 0; next = next->next)
@@ -1469,31 +1468,31 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
 	   drawinboxwithicon(next->name, &fillinrect,
 			     i ? MICONCFOLDER : MICONDISK);
 */
-	   fillinrect.top = BigEndianValue(BigEndianValue(fillinrect.top) + (fl->fllinht));
+	   fillinrect.top = CW(CW(fillinrect.top) + (fl->fllinht));
 	 }
        
-       therect.right = BigEndianValue(BigEndianValue(therect.right) - (1));
-       therect.bottom = BigEndianValue(BigEndianValue(therect.bottom) - (1));
+       therect.right = CW(CW(therect.right) - (1));
+       therect.bottom = CW(CW(therect.bottom) - (1));
        FrameRect(&therect);
-       MoveTo(BigEndianValue(therect.left)+1,  BigEndianValue(therect.bottom));
-       LineTo(BigEndianValue(therect.right), BigEndianValue(therect.bottom));
-       LineTo(BigEndianValue(therect.right),   BigEndianValue(therect.top)+1);
-       therect.right = BigEndianValue(BigEndianValue(therect.right) + (1));
+       MoveTo(CW(therect.left)+1,  CW(therect.bottom));
+       LineTo(CW(therect.right), CW(therect.bottom));
+       LineTo(CW(therect.right),   CW(therect.top)+1);
+       therect.right = CW(CW(therect.right) + (1));
        
        sel = 0;
        fillinrect.top = therect.top;
-       fillinrect.left = BigEndianValue (BigEndianValue (fillinrect.left) - 1);
-       fillinrect.right = BigEndianValue (BigEndianValue (fillinrect.right) - 2);
+       fillinrect.left = CW (CW (fillinrect.left) - 1);
+       fillinrect.right = CW (CW (fillinrect.right) - 2);
        stdfflip (&fillinrect, sel, fl->fllinht);
        done = FALSE;
        seen_up_already = FALSE;
        firstsel = -1;
        while (!done)
 	 {
-	   evt.where.h = BigEndianValue (evt.where.h);
-	   evt.where.v = BigEndianValue (evt.where.v);
+	   evt.where.h = CW (evt.where.h);
+	   evt.where.v = CW (evt.where.v);
 	   if (PtInRect (evt.where, &therect))
-	     newsel = (evt.where.v - BigEndianValue(therect.top)) / fl->fllinht;
+	     newsel = (evt.where.v - CW(therect.top)) / fl->fllinht;
 	   else
 	     newsel = -1;
 	   if (newsel != sel)
@@ -1528,7 +1527,7 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
 	     }
 	 }
        
-       therect.bottom = BigEndianValue (BigEndianValue (therect.bottom) + 1);
+       therect.bottom = CW (CW (therect.bottom) + 1);
 
        /* restore the rect and clean up after ourselves */
        CopyBits(wrapper, PORT_BITS_FOR_COPY (thePort),
@@ -1539,8 +1538,8 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
     {
       for (i = 0, next = &first; i != sel; ++i, next = next->next)
 	;
-      CurDirStore = BigEndianValue(next->dirid);
-      SFSaveDisk  = BigEndianValue(-next->vrefnum);
+      CurDirStore = CL(next->dirid);
+      SFSaveDisk  = CW(-next->vrefnum);
       return TRUE;
     }
   ALLOCAEND
@@ -1561,7 +1560,7 @@ makeworking (fltype *f)
 	WDPBRec wdpb;
 	OSErr err;
 	
-	wdpb.ioVRefNum  = BigEndianValue(-BigEndianValue(SFSaveDisk));
+	wdpb.ioVRefNum  = CW(-CW(SFSaveDisk));
 	wdpb.ioWDDirID  = CurDirStore;
 	wdpb.ioWDProcID = TICKX("STDF");
 	wdpb.ioNamePtr  = 0;
@@ -1574,7 +1573,7 @@ makeworking (fltype *f)
       break;
     case new_sf:
     case new_custom_sf:
-      f->flreplyp.nreplyp->sfFile.vRefNum = BigEndianValue(-BigEndianValue(SFSaveDisk));
+      f->flreplyp.nreplyp->sfFile.vRefNum = CW(-CW(SFSaveDisk));
       f->flreplyp.nreplyp->sfFile.parID = CurDirStore;
       break;
     default:
@@ -1599,7 +1598,7 @@ PRIVATE boolean_t single_tree_fs_p(HParmBlkPtr pb)
 #if defined(MSDOS) || defined (CYGWIN32)
   return FALSE;
 #else
-    HVCB *vcbp = ROMlib_vcbbyvrn(BigEndianValue(pb->volumeParam.ioVRefNum));
+    HVCB *vcbp = ROMlib_vcbbyvrn(CW(pb->volumeParam.ioVRefNum));
 	
     return vcbp && !vcbp->vcbCTRef;
 #endif
@@ -1773,7 +1772,7 @@ PUBLIC void Executor::futzwithdosdisks( void )
 	      try_to_mount_disk( DRIVE_NAME_OF (i), fd|MARKER, &mess,
 				blocksize, 16 * PHYSBSIZE,
 				flags, 0);
-	      mess = BigEndianValue(mess);
+	      mess = CL(mess);
 	      if (mess) {
 		if (mess >> 16 == 0) {
 		  DRIVE_LOADED(i) = TRUE;
@@ -1815,14 +1814,14 @@ A2(PRIVATE, void, bumpsavedisk, DialogPtr, dp, BOOLEAN, always)
 /*      beenhere = TRUE; */
     }
 #endif
-    pb.volumeParam.ioVRefNum = BigEndianValue(-BigEndianValue(SFSaveDisk));
+    pb.volumeParam.ioVRefNum = CW(-CW(SFSaveDisk));
     pb.volumeParam.ioNamePtr = 0;
     pb.volumeParam.ioVolIndex = 0;
     err = PBHGetVInfo(&pb, FALSE);
     if (err != noErr)
       warning_unexpected ("PBHGetVInfo returns %d", err);
-    else if (!SFSaveDisk || ISWDNUM(-BigEndianValue(SFSaveDisk)))
-	SFSaveDisk = BigEndianValue(-BigEndianValue(pb.volumeParam.ioVRefNum));
+    else if (!SFSaveDisk || ISWDNUM(-CW(SFSaveDisk)))
+	SFSaveDisk = CW(-CW(pb.volumeParam.ioVRefNum));
     if (always || pb.ioParam.ioResult != noErr || ejected(&pb)) {
 	current = pb.volumeParam.ioVRefNum;
 	is_single_tree_fs = single_tree_fs_p(&pb);
@@ -1830,7 +1829,7 @@ A2(PRIVATE, void, bumpsavedisk, DialogPtr, dp, BOOLEAN, always)
 	seenus = FALSE;
 	vref = 0;
 	do {
-	    pb.volumeParam.ioVolIndex = BigEndianValue(BigEndianValue(pb.volumeParam.ioVolIndex) + 1);
+	    pb.volumeParam.ioVolIndex = CW(CW(pb.volumeParam.ioVolIndex) + 1);
 	    err = PBHGetVInfo(&pb, FALSE);
 	    if (err != noErr && !seenus)
 	      warning_unexpected ("PBHGetVInfo = %d\n", err);
@@ -1840,14 +1839,14 @@ A2(PRIVATE, void, bumpsavedisk, DialogPtr, dp, BOOLEAN, always)
 		else if (!ejected(&pb) &&
 			 (!is_single_tree_fs || !single_tree_fs_p(&pb))) {
 		    if (!vref || seenus)
-			vref = BigEndianValue(pb.volumeParam.ioVRefNum);
+			vref = CW(pb.volumeParam.ioVRefNum);
 		    if (seenus)
 /*-->*/			break;
 		}
 	    }
 	} while (err == noErr);
 	if (vref) {
-	    SFSaveDisk = BigEndianValue(-vref);
+	    SFSaveDisk = CW(-vref);
 	    CurDirStore = CLC(2);
 	}
     }
@@ -1925,30 +1924,30 @@ A4(PRIVATE, void, transformsfpdialog, DialogPtr, dp, Point *, offset,
 	extrasizeneeded = 110;
 	SetRect(scrollrect, 16, 24, 231, 106);
 	tep = STARH(MR(((DialogPeek)dp)->textH));
-	tep->destRect.top = BigEndianValue(BigEndianValue(tep->destRect.top) + (extrasizeneeded));
-	tep->destRect.bottom = BigEndianValue(BigEndianValue(tep->destRect.bottom) + (extrasizeneeded));
-	tep->viewRect.top = BigEndianValue(BigEndianValue(tep->viewRect.top) + (extrasizeneeded));
-	tep->viewRect.bottom = BigEndianValue(BigEndianValue(tep->viewRect.bottom) + (extrasizeneeded));
+	tep->destRect.top = CW(CW(tep->destRect.top) + (extrasizeneeded));
+	tep->destRect.bottom = CW(CW(tep->destRect.bottom) + (extrasizeneeded));
+	tep->viewRect.top = CW(CW(tep->viewRect.top) + (extrasizeneeded));
+	tep->viewRect.bottom = CW(CW(tep->viewRect.bottom) + (extrasizeneeded));
     }
-    numitems = BigEndianValue(*(INTEGER *)STARH((MR(((DialogPeek)dp)->items)))) + 1;
+    numitems = CW(*(INTEGER *)STARH((MR(((DialogPeek)dp)->items)))) + 1;
     for (j = 1 ; j <= numitems ; j++) {
 	GetDItem(dp, j, &i, &h, &r);
-	i = BigEndianValue(i);
+	i = CW(i);
 	h.p = MR(h.p);
-	if (!getting || BigEndianValue(r.bottom) > BigEndianValue(scrollrect->top)) {
-	    r.top = BigEndianValue(BigEndianValue(r.top) + (extrasizeneeded));
-	    r.bottom = BigEndianValue(BigEndianValue(r.bottom) + (extrasizeneeded));
+	if (!getting || CW(r.bottom) > CW(scrollrect->top)) {
+	    r.top = CW(CW(r.top) + (extrasizeneeded));
+	    r.bottom = CW(CW(r.bottom) + (extrasizeneeded));
 	    if (i <= 7 && i >= 4)	/* It's a control */
-		MoveControl((ControlHandle) h.p, BigEndianValue(r.left), BigEndianValue(r.top));
+		MoveControl((ControlHandle) h.p, CW(r.left), CW(r.top));
 	    SetDItem(dp, j, i, h.p, &r);
 	}
     }
-    windheight = BigEndianValue(dp->portRect.bottom) - BigEndianValue(dp->portRect.top) + extrasizeneeded;
-    SizeWindow( (WindowPtr) dp, BigEndianValue(dp->portRect.right) - BigEndianValue(dp->portRect.left),
+    windheight = CW(dp->portRect.bottom) - CW(dp->portRect.top) + extrasizeneeded;
+    SizeWindow( (WindowPtr) dp, CW(dp->portRect.right) - CW(dp->portRect.left),
 						       windheight, FALSE);
     if (getting) {
-	scrollrect->top = BigEndianValue(BigEndianValue(scrollrect->top) + (extrasizeneeded));
-	scrollrect->bottom = BigEndianValue(BigEndianValue(scrollrect->bottom) + (extrasizeneeded));
+	scrollrect->top = CW(CW(scrollrect->top) + (extrasizeneeded));
+	scrollrect->bottom = CW(CW(scrollrect->bottom) + (extrasizeneeded));
     }
     InvalRect(&dp->portRect);
     offset->v -= extrasizeneeded / 2;
@@ -1984,7 +1983,7 @@ void adjustdrivebutton(DialogPtr dp)
 
 A1(PRIVATE, void, doeject, DialogPtr, dp)
 {
-    Eject((StringPtr) "", -BigEndianValue(SFSaveDisk));
+    Eject((StringPtr) "", -CW(SFSaveDisk));
     adjustdrivebutton(dp);
     bumpsavedisk(dp, TRUE);
 }
@@ -1996,10 +1995,10 @@ A3(PRIVATE, OSType, gettypeX, StringPtr, name, INTEGER, vref, LONGINT, dirid)
   HParamBlockRec pbr;
 
   pbr.fileParam.ioNamePtr = RM (name);
-  pbr.fileParam.ioVRefNum = BigEndianValue (vref);
+  pbr.fileParam.ioVRefNum = CW (vref);
   pbr.fileParam.ioFVersNum = 0;
   pbr.fileParam.ioFDirIndex = CWC (0);
-  pbr.fileParam.ioDirID = BigEndianValue (dirid);
+  pbr.fileParam.ioDirID = CL (dirid);
   err = PBHGetFInfo (&pbr, FALSE);
   if (err == noErr)
     retval = pbr.fileParam.ioFlFndrInfo.fdType;
@@ -2029,7 +2028,7 @@ unixcore (StringPtr namep, INTEGER *vrefnump, LONGINT *diridp)
   vcbp = ROMlib_vcbbyvrn(vrefnum);
 #else
   pbr.ioParam.ioNamePtr = (StringPtr)CLC(0);
-  pbr.ioParam.ioVRefNum = BigEndianValue(vrefnum);
+  pbr.ioParam.ioVRefNum = CW(vrefnum);
   vcbp = ROMlib_breakoutioname(&pbr, &templ, &tempcp, (BOOLEAN *) 0, TRUE);
   free (tempcp);
 #endif
@@ -2053,7 +2052,7 @@ unixcore (StringPtr namep, INTEGER *vrefnump, LONGINT *diridp)
 	  vcbextrap = ROMlib_vcbbyunixname(newname);
 	  if (vcbextrap)
 	    {
-	      *vrefnump = BigEndianValue(vcbextrap->vcb.vcbVRefNum);
+	      *vrefnump = CW(vcbextrap->vcb.vcbVRefNum);
 	      if (*diridp == vcbextrap->u.ufs.ino)
 		*diridp = 2;
 	    }
@@ -2081,13 +2080,13 @@ P1(PUBLIC pascal trap, OSErr, unixmount, CInfoPBRec *, cbp)
       INTEGER vrefnum;
       LONGINT dirid;
 
-      vrefnum = BigEndianValue(cbp->hFileInfo.ioVRefNum);
-      dirid = BigEndianValue (cbp->hFileInfo.ioDirID);
+      vrefnum = CW(cbp->hFileInfo.ioVRefNum);
+      dirid = CL (cbp->hFileInfo.ioDirID);
       err = unixcore(MR(cbp->hFileInfo.ioNamePtr), &vrefnum, &dirid);
       if (err == noErr)
 	{
-	  cbp->hFileInfo.ioVRefNum = BigEndianValue (vrefnum);
-	  cbp->hFileInfo.ioDirID   = BigEndianValue (dirid);
+	  cbp->hFileInfo.ioVRefNum = CW (vrefnum);
+	  cbp->hFileInfo.ioDirID   = CW (dirid);
 	}
     }
   return err;
@@ -2100,12 +2099,12 @@ PRIVATE void unixcd(fltype *f)
     LONGINT dirid;
 
     name = (StringPtr) (MR(*f->flstrs) + MR(*f->flinfo)[f->flsel].floffs);
-    vrefnum = -BigEndianValue(SFSaveDisk);
-    dirid = BigEndianValue (CurDirStore);
+    vrefnum = -CW(SFSaveDisk);
+    dirid = CL (CurDirStore);
     if (unixcore(name, &vrefnum, &dirid) == noErr)
       {
-	SFSaveDisk = BigEndianValue (-vrefnum);
-	CurDirStore = BigEndianValue (dirid);
+	SFSaveDisk = CW (-vrefnum);
+	CurDirStore = CL (dirid);
       }
 }
 
@@ -2121,8 +2120,8 @@ get_starting_point (Point *pp)
   Rect main_gd_rect;
 
   main_gd_rect = PIXMAP_BOUNDS (GD_PMAP (MR (MainDevice)));
-  screen_width = BigEndianValue (main_gd_rect.right);
-  screen_height = BigEndianValue (main_gd_rect.bottom);
+  screen_width = CW (main_gd_rect.right);
+  screen_height = CW (main_gd_rect.bottom);
   pp->h = (screen_width - STANDARD_WIDTH) / 2;
   pp->v = (screen_height - STANDARD_HEIGHT) / 2;
 }
@@ -2174,13 +2173,13 @@ destroy_new_folder_button (DialogPtr dp, ControlHandle ch)
 			  ? (fp)->flreplyp.oreplyp->vRefNum \
 			  : (fp)->flreplyp.nreplyp->sfFile.vRefNum)
 
-#define SF_VREFNUM(fp) (BigEndianValue (SF_VREFNUM_X (fp)))
+#define SF_VREFNUM(fp) (CW (SF_VREFNUM_X (fp)))
 
 #define SF_DIRID_X(fp) ((fp)->flavor == original_sf \
 			  ? 0 \
 			  : (fp)->flreplyp.nreplyp->sfFile.parID)
 
-#define SF_DIRID(fp) (BigEndianValue (SF_DIRID_X (fp)))
+#define SF_DIRID(fp) (CL (SF_DIRID_X (fp)))
 
 PRIVATE void
 getditext (DialogPtr dp, INTEGER item, StringPtr text)
@@ -2241,7 +2240,7 @@ new_folder_from_dp (DialogPtr dp, fltype *f)
   boolean_t retval;
 	  
   getditext (dp, 3, str);
-  hpb.ioParam.ioVRefNum = BigEndianValue (-BigEndianValue (SFSaveDisk));
+  hpb.ioParam.ioVRefNum = CW (-CW (SFSaveDisk));
   hpb.fileParam.ioDirID = CurDirStore;
   if (str[0] > 31)
     str[0] = 31;
@@ -2370,7 +2369,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
     f.flavor = flavor;
     f.flreplyp = rep;
 
-    if (p.h < 2 || p.v < BigEndianValue(MBarHeight) + 7)
+    if (p.h < 2 || p.v < CW(MBarHeight) + 7)
       get_starting_point (&p);
 
     *SF_GOOD_XP(&f) = CBC (FALSE);
@@ -2469,7 +2468,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	if (f.flavor == original_sf)
 	  {
 	    putname = putName;
-	    transform = BigEndianValue(scrollrect.right) - BigEndianValue(scrollrect.left) == 1;
+	    transform = CW(scrollrect.right) - CW(scrollrect.left) == 1;
 	  }
 	else
 	  {
@@ -2487,7 +2486,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	{
 	  GetDItem(dp, getScroll, &i, &h, &r);
 	  h.p = MR(h.p);
-	  transform = BigEndianValue(r.right) - BigEndianValue(r.left) == 16;
+	  transform = CW(r.right) - CW(r.left) == 16;
 	  GetDItem(dp, getDotted, &i, &h, &r);
 	  h.p = MR(h.p);
 	  SetDItem(dp, getDotted, userItem, (Handle) P_ROMlib_filebox, &r);
@@ -2505,11 +2504,11 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
     h.p = MR(h.p);
     SetDItem(dp, diskname, userItem, (Handle) P_ROMlib_filebox, &r);
 
-    r.left   = BigEndianValue(BigEndianValue(scrollrect.left) + 1);
-    r.right  = BigEndianValue(BigEndianValue(scrollrect.right) - 16);
-    r.top    = BigEndianValue(BigEndianValue(scrollrect.top) + 1);
-    r.bottom = BigEndianValue(BigEndianValue(scrollrect.bottom) - 1);
-    scrollrect.left = BigEndianValue(BigEndianValue(scrollrect.right) - 16);
+    r.left   = CW(CW(scrollrect.left) + 1);
+    r.right  = CW(CW(scrollrect.right) - 16);
+    r.top    = CW(CW(scrollrect.top) + 1);
+    r.bottom = CW(CW(scrollrect.bottom) - 1);
+    scrollrect.left = CW(CW(scrollrect.right) - 16);
     scrollh = NewControl((WindowPtr) dp, &scrollrect, (StringPtr) "", TRUE,
 						   0, 0, 0, scrollBarProc, 0L);
     flinit(&f, &r, scrollh);
@@ -2529,10 +2528,10 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	    (SF_NAME (&f))[0] = 0;
     }
     SetWRefCon((WindowPtr) dp, (LONGINT)(long)US_TO_SYN68K(&f));
-    if (BigEndianValue(dp->portRect.bottom) + p.v  + 7 > BigEndianValue(screenBitsX.bounds.bottom))
-	p.v = BigEndianValue(screenBitsX.bounds.bottom) - BigEndianValue(dp->portRect.bottom) - 7;
-    if (p.v < BigEndianValue(MBarHeight) + 7)
-	p.v = BigEndianValue(MBarHeight) + 7;
+    if (CW(dp->portRect.bottom) + p.v  + 7 > CW(screenBitsX.bounds.bottom))
+	p.v = CW(screenBitsX.bounds.bottom) - CW(dp->portRect.bottom) - 7;
+    if (p.v < CW(MBarHeight) + 7)
+	p.v = CW(MBarHeight) + 7;
     MoveWindow((WindowPtr) dp, p.h, p.v, FALSE);
 
     ihit = -1;
@@ -2546,7 +2545,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
     SelectWindow((WindowPtr) dp);
     while (!done) {
 	ModalDialog((ProcPtr) P_ROMlib_stdffilt, &ihit);
-	ihit = BigEndianValue(ihit);
+	ihit = CW(ihit);
 	if (getorput == put)
 	    GetIText(pnhand.p, SF_NAME (&f));
 	if (dh.odh)
@@ -2641,18 +2640,18 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 					(evt.message & CLC(0xFFFF0000)) == 0) {
 	    pbr.volumeParam.ioNamePtr = 0;
 	    pbr.volumeParam.ioVolIndex = 0;
-	    pbr.volumeParam.ioVRefNum = BigEndianValue(BigEndianValue(evt.message) & 0xFFFF);
+	    pbr.volumeParam.ioVRefNum = CW(CL(evt.message) & 0xFFFF);
 	    err = PBGetVInfo(&pbr, FALSE);
 	    gui_assert(err == noErr);
 	    if (err == noErr) {
 		adjustdrivebutton(dp);
-		SFSaveDisk = BigEndianValue(-BigEndianValue(pbr.volumeParam.ioVRefNum));
+		SFSaveDisk = CW(-CW(pbr.volumeParam.ioVRefNum));
 		CurDirStore = CLC(2);
 		ihit = FAKEREDRAW;
 	    }
 	}
 	if (ihit == FAKEREDRAW)
-	    realcd((DialogPeek) dp, BigEndianValue(CurDirStore));
+	    realcd((DialogPeek) dp, CL(CurDirStore));
     }
     if (f.flavor != original_sf && dh.odh)
       ihit = ROMlib_CALLDHOOK(&f, -2, dp, dh);	/* the mac does this */

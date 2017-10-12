@@ -15,7 +15,6 @@ char ROMlib_rcsid_hfsWorkingdir[] =
 #include "MemoryMgr.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /*
  * TODO: use this working directory stuff in ROMlib
@@ -26,8 +25,8 @@ PUBLIC OSErr Executor::ROMlib_dirbusy(LONGINT dirid, HVCB *vcbp)
 #if defined(MAC)
     wdentry *wdp, *ewdp;
     
-    for (wdp = (wdentry *) (BigEndianValue(WDCBsPtr) + sizeof(INTEGER)),
-	    ewdp = (wdentry *) (BigEndianValue(WDCBsPtr) + BigEndianValue(*(INTEGER *)BigEndianValue(WDCBsPtr)));
+    for (wdp = (wdentry *) (CL(WDCBsPtr) + sizeof(INTEGER)),
+	    ewdp = (wdentry *) (CL(WDCBsPtr) + CW(*(INTEGER *)CL(WDCBsPtr)));
 							    wdp != ewdp; wdp++)
 	;
     return wdp == ewdp ? noErr : fBsyErr;
@@ -46,18 +45,18 @@ PUBLIC OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid, LONGIN
 
     firstfreep = 0;
     for (wdp = (wdentry *) (MR(WDCBsPtr) + sizeof(INTEGER)),
-	       ewdp = (wdentry *) (MR(WDCBsPtr) +BigEndianValue(*(INTEGER *)MR(WDCBsPtr)));
+	       ewdp = (wdentry *) (MR(WDCBsPtr) +CW(*(INTEGER *)MR(WDCBsPtr)));
 							  wdp != ewdp; wdp++) {
 	if (!firstfreep && !wdp->vcbp)
 	    firstfreep = wdp;
-	if (MR(wdp->vcbp) == vcbp && BigEndianValue(wdp->dirid) == dirid &&
-						   BigEndianValue(wdp->procid) == procid) {
-	    pb->ioVRefNum = BigEndianValue((short) WDPTOWDNUM(wdp));
+	if (MR(wdp->vcbp) == vcbp && CL(wdp->dirid) == dirid &&
+						   CL(wdp->procid) == procid) {
+	    pb->ioVRefNum = CW(WDPTOWDNUM(wdp));
 /*-->*/	    return noErr;
 	}
     }
     if (!firstfreep) {
-	n_wd_bytes = BigEndianValue(*(INTEGER *) MR(WDCBsPtr));
+	n_wd_bytes = CW(*(INTEGER *) MR(WDCBsPtr));
 	new_n_wd_bytes = (n_wd_bytes - sizeof(INTEGER)) * 2 + sizeof(INTEGER);
 	saveZone = TheZone;
 	TheZone = SysZone;
@@ -69,7 +68,7 @@ PUBLIC OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid, LONGIN
 	    BlockMove( MR(WDCBsPtr), newptr, n_wd_bytes);
 	    DisposPtr( MR(WDCBsPtr) );
 	    WDCBsPtr = RM(newptr);
-	    *(INTEGER *) newptr = BigEndianValue(new_n_wd_bytes);
+	    *(INTEGER *) newptr = CW(new_n_wd_bytes);
 	    firstfreep = (wdentry *) (newptr + n_wd_bytes);
 	    retval = noErr;
 	}
@@ -77,9 +76,9 @@ PUBLIC OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid, LONGIN
 	retval = noErr;
     if (retval == noErr) {
 	firstfreep->vcbp = RM(vcbp);
-	firstfreep->dirid = BigEndianValue(dirid);
-	firstfreep->procid = BigEndianValue(procid);
-	pb->ioVRefNum = BigEndianValue((short) WDPTOWDNUM(firstfreep));
+	firstfreep->dirid = CL(dirid);
+	firstfreep->procid = CL(procid);
+	pb->ioVRefNum = CW(WDPTOWDNUM(firstfreep));
 	retval = noErr;
     }
     return retval;
@@ -106,10 +105,10 @@ PUBLIC OSErr Executor::hfsPBOpenWD(WDPBPtr pb, BOOLEAN async)
     namep = MR (pb->ioNamePtr);
     if (kind == directory && namep && namep[0])
 	dirid =
-	      BigEndianValue(((directoryrec *) DATAPFROMKEY(btparamrec.foundp))->dirDirID);
+	      CL(((directoryrec *) DATAPFROMKEY(btparamrec.foundp))->dirDirID);
     else
-	dirid = BigEndianValue(pb->ioWDDirID);
-    retval = ROMlib_mkwd(pb, vcbp, dirid, BigEndianValue(pb->ioWDProcID));
+	dirid = CL(pb->ioWDDirID);
+    retval = ROMlib_mkwd(pb, vcbp, dirid, CL(pb->ioWDProcID));
 
     PBRETURN(pb, retval);
 }
@@ -144,7 +143,7 @@ PUBLIC OSErr Executor::hfsPBGetWDInfo(WDPBPtr pb, BOOLEAN async)
     if (Cx(pb->ioWDIndex) > 0) {
 	i = Cx(pb->ioWDIndex);
 	wdp = (wdentry *) (MR(WDCBsPtr) + sizeof(INTEGER));
-	ewdp = (wdentry *) (MR(WDCBsPtr) + BigEndianValue(*(INTEGER *)MR(WDCBsPtr)));
+	ewdp = (wdentry *) (MR(WDCBsPtr) + CW(*(INTEGER *)MR(WDCBsPtr)));
 	if (Cx(pb->ioVRefNum) < 0) {
 	    for (;wdp != ewdp; wdp++)
 		if (wdp->vcbp && MR(wdp->vcbp)->vcbVRefNum == pb->ioVRefNum && --i <= 0)
@@ -170,7 +169,7 @@ PUBLIC OSErr Executor::hfsPBGetWDInfo(WDPBPtr pb, BOOLEAN async)
 		str255assign(MR(pb->ioNamePtr), (StringPtr) vcbp->vcbVN);
 	    pb->ioWDProcID  = 0;
 	    pb->ioVRefNum   = pb->ioWDVRefNum = vcbp->vcbVRefNum;
-	    pb->ioWDDirID   = BigEndianValue((vcbp == MR(DefVCBPtr)) ? DefDirID : 2);
+	    pb->ioWDDirID   = CL((vcbp == MR(DefVCBPtr)) ? DefDirID : 2);
 	    foundelsewhere = TRUE;
 	}
     }
@@ -199,7 +198,7 @@ Executor::GetWDInfo (INTEGER wd, INTEGER *vrefp, LONGINT *dirp, LONGINT *procp)
 
   WDPBRec wdp;
   memset (&wdp, 0, sizeof wdp);
-  wdp.ioVRefNum = BigEndianValue (wd);
+  wdp.ioVRefNum = CW (wd);
   retval = PBGetWDInfo (&wdp, FALSE);
   if (retval == noErr)
     {
@@ -217,9 +216,9 @@ PUBLIC void Executor::ROMlib_adjustdirid(LONGINT *diridp, HVCB *vcbp, INTEGER vr
     if (*(ULONGINT *) diridp <= 1 && ISWDNUM(vrefnum)) {
 	wdp = WDNUMTOWDP(vrefnum);
 	if (MR(wdp->vcbp) == vcbp)
-	    *diridp = BigEndianValue(wdp->dirid);
-    } else if (*diridp == 0 && !vrefnum /* vcbp == BigEndianValue(DefVCBPtr) */)
-	*diridp = BigEndianValue(DefDirID);
+	    *diridp = CL(wdp->dirid);
+    } else if (*diridp == 0 && !vrefnum /* vcbp == CL(DefVCBPtr) */)
+	*diridp = CL(DefDirID);
     if (*diridp == 0)
 	*diridp = 2;
 }

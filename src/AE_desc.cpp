@@ -16,7 +16,6 @@ char ROMlib_rcsid_AE_desc[] =
 #include "rsys/apple_events.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #define LIST_CLASS_P(desc) \
   (   DESC_TYPE_X (desc) == CLC (typeAEList)	\
@@ -65,7 +64,7 @@ get_subdesc_info (Handle aggr_desc_h, subdesc_info_t *info,
 	  info->base_offset = (offsetof (ae_header_t, target)
 			       /* type, key, size */
 			       + 12
-			       + BigEndianValue (inline_target_desc->size)
+			       + CL (inline_target_desc->size)
 			       /* two unknown longs */
 			       + 8);
 	}
@@ -102,7 +101,7 @@ desc_offset (Handle aggr_desc_h, int index, subdesc_info_t *info,
       else
 	desc = (inline_desc_t *) t;
       
-      t += (BigEndianValue (desc->size)
+      t += (CL (desc->size)
 	    /* inline key desc header size */ 
 	    + info->inline_desc_header_size);
     }
@@ -189,7 +188,7 @@ aggr_desc_get_addr (Handle aggr_desc_h,
       if (index == info.count + 1)
 	old_size = 0;
       else
-	old_size = BigEndianValue (inline_desc->size) + info.inline_desc_header_size;
+	old_size = CL (inline_desc->size) + info.inline_desc_header_size;
       
       if (delete_p)
 	new_size = 0;
@@ -205,7 +204,7 @@ aggr_desc_get_addr (Handle aggr_desc_h,
 	  
 	  SetHandleSize (aggr_desc_h, aggr_desc_size + diff);
 	  if (MemErr != CWC (noErr))
-	    AE_RETURN_ERROR (BigEndianValue (MemErr));
+	    AE_RETURN_ERROR (CW (MemErr));
 	  aggr_desc_p = (char *) STARH (aggr_desc_h);
 	  if (aggr_desc_size < offset + old_size)
 	    abort ();
@@ -224,7 +223,7 @@ aggr_desc_get_addr (Handle aggr_desc_h,
 		   aggr_desc_size - offset - old_size);
 	  SetHandleSize (aggr_desc_h, aggr_desc_size - diff);
 	  if (MemErr != CWC (noErr))
-	    AE_RETURN_ERROR (BigEndianValue (MemErr));
+	    AE_RETURN_ERROR (CW (MemErr));
 	  aggr_desc_p = (char *) STARH (aggr_desc_h);
 	}
       memset (aggr_desc_p + offset, '\000', new_size);
@@ -241,7 +240,7 @@ aggr_desc_get_addr (Handle aggr_desc_h,
       if (attribute_p)
 	{
 	  PARAM_OFFSET_X (aggr_desc_h)
-	    = BigEndianValue (PARAM_OFFSET (aggr_desc_h) - old_size + new_size);
+	    = CL (PARAM_OFFSET (aggr_desc_h) - old_size + new_size);
 	}
       
       if (! delete_p)
@@ -249,22 +248,22 @@ aggr_desc_get_addr (Handle aggr_desc_h,
 	  if (index == info.count + 1)
 	    {
 	      info.count ++;
-	      *(info.count_p) = BigEndianValue (info.count);
+	      *(info.count_p) = CL (info.count);
 	    }
 	  
-	  inline_desc->size = BigEndianValue (*size_return);
+	  inline_desc->size = CL (*size_return);
 	}
       else
 	{
 	  info.count --;
-	  *(info.count_p) = BigEndianValue (info.count);
+	  *(info.count_p) = CL (info.count);
 	}
     }
   
   if (! delete_p)
     {  
       *addr_return = (aggr_desc_p + offset);
-      *size_return = BigEndianValue (inline_desc->size);
+      *size_return = CL (inline_desc->size);
     }
   
   AE_RETURN_ERROR (noErr);
@@ -287,13 +286,13 @@ find_key_index (Handle aggr_desc_h, int32 keyword, boolean_t attribute_p,
       
       inline_key_desc = (inline_key_desc_t *) t;
       
-      if (BigEndianValue (inline_key_desc->key) == keyword)
+      if (CL (inline_key_desc->key) == keyword)
 	{
 	  *index_return = count;
 	  return TRUE;
 	}
       
-      t += (BigEndianValue (inline_key_desc->size)
+      t += (CL (inline_key_desc->size)
 	    /* inline key desc header size */ 
 	    + 12);
     }
@@ -345,7 +344,7 @@ aggr_put_nth_desc (Handle aggr_handle,
       return FALSE;
     }
   
-  inline_desc->type = BigEndianValue (in_desc_type);
+  inline_desc->type = CL (in_desc_type);
   memcpy (inline_desc->data, STARH (in_desc_data), size);
   
   *out_failcode = noErr;
@@ -378,7 +377,7 @@ aggr_get_nth_desc (Handle aggr_handle,
       LOCK_HANDLE_EXCURSION_1
 	(aggr_handle,
 	 {
-	   err = AECreateDesc (BigEndianValue (inline_out_desc->type),
+	   err = AECreateDesc (CL (inline_out_desc->type),
 			       (Ptr) inline_out_desc->data, size,
 			       out_desc);
 	 });
@@ -396,7 +395,7 @@ aggr_get_nth_desc (Handle aggr_handle,
 	LOCK_HANDLE_EXCURSION_1
 	  (aggr_handle,
 	   {
-	     err = AECreateDesc (BigEndianValue (inline_out_desc->type),
+	     err = AECreateDesc (CL (inline_out_desc->type),
 				 (Ptr) inline_out_desc->data, size,
 				 out_desc);
 	   });
@@ -439,8 +438,8 @@ aggr_put_key_desc (Handle aggr_handle,
   if (err != noErr)
     return FALSE;
   
-  inline_key_desc->key = BigEndianValue (keyword);
-  inline_key_desc->type = BigEndianValue (in_desc_type);
+  inline_key_desc->key = CL (keyword);
+  inline_key_desc->type = CL (in_desc_type);
   memcpy (inline_key_desc->data, STARH (in_desc_data), size);
   
   return TRUE;
@@ -475,8 +474,8 @@ aggr_get_key_desc (Handle aggr_handle,
 	    LOCK_HANDLE_EXCURSION_1
 	      (aggr_handle,
 	       {
-		 err = AECreateDesc (BigEndianValue (target->type),
-				     (Ptr) target->data, BigEndianValue (target->size),
+		 err = AECreateDesc (CL (target->type),
+				     (Ptr) target->data, CL (target->size),
 				     out_desc);
 	       });
 	    if (err != noErr)
@@ -527,7 +526,7 @@ aggr_get_key_desc (Handle aggr_handle,
   LOCK_HANDLE_EXCURSION_1
     (aggr_handle,
      {
-       err = AECreateDesc (BigEndianValue (inline_key_desc->type),
+       err = AECreateDesc (CL (inline_key_desc->type),
 			   (Ptr) inline_key_desc->data, size,
 			   out_desc);
      });
@@ -582,7 +581,7 @@ ae_desc_to_ptr (descriptor_t *desc,
   
   memcpy (data, STARH (desc_data), copy_size);
   
-  *size_out = BigEndianValue (copy_size);
+  *size_out = CL (copy_size);
 }
 
 #if 0
@@ -620,7 +619,7 @@ dump_union_desc (union desc *foo, boolean_t key_pair_p)
 	       (type >>  0) & 0xFF);
   
   ae_desc_to_ptr (desc, (Ptr) data, 1024, &size);
-  size = BigEndianValue (size);
+  size = CL (size);
   
   switch (type)
     {
@@ -704,13 +703,13 @@ P6 (PUBLIC pascal trap, OSErr, AECreateAppleEvent,
   event_data = (ae_header_t *)alloca (event_size);
   memset (event_data, '\000', event_size);
   
-  event_data->param_offset = BigEndianValue (event_size + 2);
+  event_data->param_offset = CL (event_size + 2);
   
-  event_data->event_class = BigEndianValue (event_class);
-  event_data->event_id = BigEndianValue (event_id);
+  event_data->event_class = CL (event_class);
+  event_data->event_id = CL (event_id);
   
-  event_data->target.size = BigEndianValue (target_size);
-  event_data->target.type = BigEndianValue (target_type);
+  event_data->target.size = CL (target_size);
+  event_data->target.type = CL (target_type);
   memcpy (&event_data->target.data[0], STARH (target_data), target_size);
   
   {
@@ -758,7 +757,7 @@ P4 (PUBLIC pascal trap, OSErr, AECreateDesc,
       memset (STARH (h), 0, data_size);
     }
   
-  DESC_TYPE_X (desc_out) = BigEndianValue (type);
+  DESC_TYPE_X (desc_out) = CL (type);
   DESC_DATA_X (desc_out) = RM (h);
   
   AE_RETURN_ERROR (noErr);
@@ -806,7 +805,7 @@ P4 (PUBLIC pascal trap, OSErr, AECreateList,
   
   memset (&header, '\000', sizeof header);
   
-  header.attribute_count = BigEndianValue (type);
+  header.attribute_count = CL (type);
   header.param_offset = CLC (0x18);
   
   AE_RETURN_ERROR (AECreateDesc (type,
@@ -826,7 +825,7 @@ P2 (PUBLIC pascal trap, OSErr, AECountItems,
   if (err != noErr)
     AE_RETURN_ERROR (err);
   
-  *count_out = BigEndianValue (info.count);
+  *count_out = CL (info.count);
   
   AE_RETURN_ERROR (noErr);
 }
@@ -931,7 +930,7 @@ P4 (PUBLIC pascal trap, OSErr, AESizeOfNthItem,
     AE_RETURN_ERROR (errAEIllegalIndex);
   
   *type_out = DESC_TYPE_X (desc);
-  *size_out = BigEndianValue (GetHandleSize ((Handle) DESC_DATA (desc)));
+  *size_out = CL (GetHandleSize ((Handle) DESC_DATA (desc)));
 
   AE_RETURN_ERROR (noErr);
 }
@@ -1041,7 +1040,7 @@ P4 (PUBLIC pascal trap, OSErr, AESizeOfKeyDesc,
     AE_RETURN_ERROR (errAEDescNotFound);
   
   *type_out = DESC_TYPE_X (desc);
-  *size_out = BigEndianValue (GetHandleSize ((Handle) DESC_DATA (desc)));
+  *size_out = CL (GetHandleSize ((Handle) DESC_DATA (desc)));
 
   AE_RETURN_ERROR (noErr);
 }
@@ -1155,7 +1154,7 @@ P4 (PUBLIC pascal trap, OSErr, AESizeOfAttribute,
     AE_RETURN_ERROR (errAEDescNotFound);
   
   *type_out = DESC_TYPE_X (desc);
-  *size_out = BigEndianValue (GetHandleSize ((Handle) DESC_DATA (desc)));
+  *size_out = CL (GetHandleSize ((Handle) DESC_DATA (desc)));
   
   AE_RETURN_ERROR (noErr);
 }

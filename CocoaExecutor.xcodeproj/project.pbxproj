@@ -973,7 +973,7 @@
 		558B98751987FCBD00ADF159 /* default_ctab_values.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = default_ctab_values.cpp; sourceTree = "<group>"; };
 		558B98761987FCBD00ADF159 /* desk.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = desk.cpp; sourceTree = "<group>"; };
 		558B98771987FCBD00ADF159 /* desperate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = desperate.cpp; sourceTree = "<group>"; };
-		558B98781987FCBD00ADF159 /* device.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = device.cpp; sourceTree = "<group>"; usesTabs = 0; };
+		558B98781987FCBD00ADF159 /* device.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = device.cpp; sourceTree = "<group>"; };
 		558B98791987FCBD00ADF159 /* dialAlert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialAlert.cpp; sourceTree = "<group>"; };
 		558B987A1987FCBD00ADF159 /* dialCreate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialCreate.cpp; sourceTree = "<group>"; };
 		558B987B1987FCBD00ADF159 /* dialDispatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dialDispatch.cpp; sourceTree = "<group>"; };

@@ -16,7 +16,6 @@ char ROMlib_rcsid_windUpdate[] =
 #include "rsys/wind.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P1(PUBLIC pascal trap, void, InvalRect, Rect *, r)
 {
@@ -28,8 +27,8 @@ P1(PUBLIC pascal trap, void, InvalRect, Rect *, r)
       r_copy = *r;  /* Just in case NewRgn moves memory */
       rh = NewRgn();
       RectRgn(rh, &r_copy);
-      OffsetRgn(rh, -BigEndianValue (PORT_BOUNDS (thePort).left),
-		-BigEndianValue (PORT_BOUNDS (thePort).top));
+      OffsetRgn(rh, -CW (PORT_BOUNDS (thePort).left),
+		-CW (PORT_BOUNDS (thePort).top));
       UnionRgn(rh, WINDOW_UPDATE_REGION (thePort),
 	       WINDOW_UPDATE_REGION (thePort));
       DisposeRgn(rh);
@@ -43,8 +42,8 @@ P1 (PUBLIC pascal trap, void, InvalRgn, RgnHandle, r)
   int top, left;
   
   current_port = thePort;
-  top  = BigEndianValue (PORT_BOUNDS (current_port).top);
-  left = BigEndianValue (PORT_BOUNDS (current_port).left);
+  top  = CW (PORT_BOUNDS (current_port).top);
+  left = CW (PORT_BOUNDS (current_port).left);
   
   OffsetRgn (r, -left, -top);
   
@@ -60,8 +59,8 @@ P1(PUBLIC pascal trap, void, ValidRect, Rect *, r)
 
     rh = NewRgn();
     RectRgn(rh, r);
-    OffsetRgn(rh, -BigEndianValue (PORT_BOUNDS (thePort).left),
-                  -BigEndianValue (PORT_BOUNDS (thePort).top));
+    OffsetRgn(rh, -CW (PORT_BOUNDS (thePort).left),
+                  -CW (PORT_BOUNDS (thePort).top));
     DiffRgn (WINDOW_UPDATE_REGION (thePort), rh,
 	     WINDOW_UPDATE_REGION (thePort));
     DisposeRgn(rh);
@@ -69,12 +68,12 @@ P1(PUBLIC pascal trap, void, ValidRect, Rect *, r)
 
 P1(PUBLIC pascal trap, void, ValidRgn, RgnHandle, r)
 {
-    OffsetRgn(r, -BigEndianValue (PORT_BOUNDS (thePort).left),
-                 -BigEndianValue (PORT_BOUNDS (thePort).top));
+    OffsetRgn(r, -CW (PORT_BOUNDS (thePort).left),
+                 -CW (PORT_BOUNDS (thePort).top));
     DiffRgn (WINDOW_UPDATE_REGION (thePort), r,
 	     WINDOW_UPDATE_REGION (thePort));
-    OffsetRgn (r, BigEndianValue (PORT_BOUNDS (thePort).left),
-                  BigEndianValue (PORT_BOUNDS (thePort).top));
+    OffsetRgn (r, CW (PORT_BOUNDS (thePort).left),
+                  CW (PORT_BOUNDS (thePort).top));
 }
 
 PUBLIC int Executor::ROMlib_emptyvis = 0;
@@ -96,8 +95,8 @@ P1(PUBLIC pascal trap, void, BeginUpdate, WindowPtr, w)
     {
       CopyRgn (WINDOW_UPDATE_REGION (w), PORT_VIS_REGION (w));
       OffsetRgn (PORT_VIS_REGION (w),
-		 BigEndianValue (PORT_BOUNDS (w).left),
-		 BigEndianValue (PORT_BOUNDS (w).top));
+		 CW (PORT_BOUNDS (w).left),
+		 CW (PORT_BOUNDS (w).top));
       SectRgn (PORT_VIS_REGION (w), MR (SaveVisRgn), PORT_VIS_REGION (w));
       SetEmptyRgn (WINDOW_UPDATE_REGION (w));
       ROMlib_emptyvis = EmptyRgn (PORT_VIS_REGION (w));
@@ -109,7 +108,7 @@ P1(PUBLIC pascal trap, void, EndUpdate, WindowPtr, w)
   CopyRgn(MR(SaveVisRgn), PORT_VIS_REGION (w));
   CopyRgn (WINDOW_CONT_REGION (w), MR (SaveVisRgn));
   OffsetRgn (MR (SaveVisRgn),
-	     BigEndianValue (PORT_BOUNDS (w).left),
-	     BigEndianValue (PORT_BOUNDS (w).top));
+	     CW (PORT_BOUNDS (w).left),
+	     CW (PORT_BOUNDS (w).top));
   ROMlib_emptyvis = 0;
 }

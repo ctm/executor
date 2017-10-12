@@ -19,27 +19,26 @@ char ROMlib_rcsid_ctlSize[] =
 #include "rsys/ctl.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P3(PUBLIC pascal trap, void, MoveControl, ControlHandle, c,	/* IMI-325 */
 						      INTEGER, h, INTEGER, v)
 {
     if (Hx(c, contrlVis)) {
         HideControl(c);
-        HxX(c, contrlRect.right)  = BigEndianValue(Hx(c, contrlRect.right)
+        HxX(c, contrlRect.right)  = CW(Hx(c, contrlRect.right)
 						 + h - Hx(c, contrlRect.left));
-        HxX(c, contrlRect.bottom) = BigEndianValue(Hx(c, contrlRect.bottom)
+        HxX(c, contrlRect.bottom) = CW(Hx(c, contrlRect.bottom)
 						  + v - Hx(c, contrlRect.top));
-        HxX(c, contrlRect.left) = BigEndianValue(h);
-        HxX(c, contrlRect.top)  = BigEndianValue(v);
+        HxX(c, contrlRect.left) = CW(h);
+        HxX(c, contrlRect.top)  = CW(v);
         ShowControl(c);
     } else {
-        HxX(c, contrlRect.right) = BigEndianValue(Hx(c, contrlRect.right) +
+        HxX(c, contrlRect.right) = CW(Hx(c, contrlRect.right) +
 						   h - Hx(c, contrlRect.left));
-        HxX(c, contrlRect.bottom) = BigEndianValue(Hx(c, contrlRect.bottom) +
+        HxX(c, contrlRect.bottom) = CW(Hx(c, contrlRect.bottom) +
 						    v - Hx(c, contrlRect.top));
-        HxX(c, contrlRect.left) = BigEndianValue(h);
-        HxX(c, contrlRect.top)  = BigEndianValue(v);
+        HxX(c, contrlRect.left) = CW(h);
+        HxX(c, contrlRect.top)  = CW(v);
     }
 }
 
@@ -72,11 +71,11 @@ P3(PUBLIC pascal trap, void, SizeControl, ControlHandle, c,	/* IMI-326 */
 {
     if (Hx(c, contrlVis)) {
         HideControl(c);
-        HxX(c, contrlRect.right)  = BigEndianValue(Hx(c, contrlRect.left) + width);
-        HxX(c, contrlRect.bottom) = BigEndianValue(Hx(c, contrlRect.top)  + height);
+        HxX(c, contrlRect.right)  = CW(Hx(c, contrlRect.left) + width);
+        HxX(c, contrlRect.bottom) = CW(Hx(c, contrlRect.top)  + height);
         ShowControl(c);
     } else {
-        HxX(c, contrlRect.right)  = BigEndianValue(Hx(c, contrlRect.left) + width);
-        HxX(c, contrlRect.bottom) = BigEndianValue(Hx(c, contrlRect.top)  + height);
+        HxX(c, contrlRect.right)  = CW(Hx(c, contrlRect.left) + width);
+        HxX(c, contrlRect.bottom) = CW(Hx(c, contrlRect.top)  + height);
     }
 }

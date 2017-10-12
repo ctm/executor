@@ -106,9 +106,9 @@ ppm_read_write_bits (int height, int width, int row_bytes,
 		
 		    fscanf (fp, "%d %d %d", &red, &green, &blue);
 		
-		    color.red   = BigEndianValue ((red * 65535) / max_cmp_value);
-		    color.green = BigEndianValue ((green * 65535) / max_cmp_value);
-		    color.blue  = BigEndianValue ((blue * 65535) / max_cmp_value);
+		    color.red   = CW ((red * 65535) / max_cmp_value);
+		    color.green = CW ((green * 65535) / max_cmp_value);
+		    color.blue  = CW ((blue * 65535) / max_cmp_value);
 		
 		    pixel = (pixel << bpp) | color_pixel (&color);
 		  }
@@ -248,13 +248,13 @@ output file `%s'\n",
 		&top, &left, &bottom, &right);
 	rect = &header.button_rects[i];
 	
-	rect->top = BigEndianValue (top);
-	rect->left = BigEndianValue (left);
-	rect->bottom = BigEndianValue (bottom);
-	rect->right = BigEndianValue (right);
+	rect->top = CW (top);
+	rect->left = CW (left);
+	rect->bottom = CW (bottom);
+	rect->right = CW (right);
       }
     
-    header.n_buttons = BigEndianValue (n_buttons);
+    header.n_buttons = CW (n_buttons);
   }
   
   init_color_buf ();
@@ -265,9 +265,9 @@ output file `%s'\n",
     
     fscanf (paramfp, "bk_color %d %d %d", &red, &green, &blue);
     
-    color.red   = BigEndianValue (red);
-    color.green = BigEndianValue (green);
-    color.blue  = BigEndianValue (blue);
+    color.red   = CW (red);
+    color.green = CW (green);
+    color.blue  = CW (blue);
     
     header.bg_pixel = color_pixel (&color);
   }
@@ -343,20 +343,20 @@ output file `%s'\n",
   ppm_read_write_bits (button_height, button_width, button_row_bytes,
 		       buttonfp, button_bits);
   
-  header.button_height = BigEndianValue (button_height);
-  header.button_y = BigEndianValue (splash_height - 12 - button_height);
-  header.button_x_byte = BigEndianValue ((splash_width - 16 - button_width)
+  header.button_height = CW (button_height);
+  header.button_y = CW (splash_height - 12 - button_height);
+  header.button_x_byte = CW ((splash_width - 16 - button_width)
 			     >> (3 - log2_bpp));
-  header.button_row_bytes = BigEndianValue (button_row_bytes);
+  header.button_row_bytes = CL (button_row_bytes);
   
-  header.bpp = BigEndianValue (bpp);
-  header.log2_bpp = BigEndianValue (log2_bpp);
+  header.bpp = CL (bpp);
+  header.log2_bpp = CL (log2_bpp);
   
-  header.color_count = BigEndianValue (1 << bpp);
+  header.color_count = CL (1 << bpp);
   
-  header.color_offset = BigEndianValue (sizeof header);
-  header.splash_bits_offset = BigEndianValue (sizeof header + (sizeof *color_buf << bpp));
-  header.button_bits_offset = BigEndianValue (BigEndianValue (header.splash_bits_offset)
+  header.color_offset = CL (sizeof header);
+  header.splash_bits_offset = CL (sizeof header + (sizeof *color_buf << bpp));
+  header.button_bits_offset = CL (CL (header.splash_bits_offset)
 				  + splash_row_bytes * splash_height);
   
   retval = write (outfd, &header, sizeof header);

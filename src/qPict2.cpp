@@ -18,7 +18,6 @@ char ROMlib_rcsid_qPic2[] =
 #include "rsys/rgbutil.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P1 (PUBLIC pascal trap, OSErr, DisposePictInfo,
     PictInfoID, pict_info_id)
@@ -72,9 +71,9 @@ P6 (PUBLIC pascal trap, OSErr, GetPictInfo,
    ({									      \
      const RGBColor *color;						      \
      color = &CTAB_TABLE (color_table)[pixel].rgb;			      \
-     (r)   = BigEndianValue (color->red);						      \
-     (g) = BigEndianValue (color->green);						      \
-     (b)  = BigEndianValue (color->blue);						      \
+     (r)   = CW (color->red);						      \
+     (g) = CW (color->green);						      \
+     (b)  = CW (color->blue);						      \
    }))
 #define DIRECT_PIXEL_TO_RGB(bpp, pixel, red_out, green_out, blue_out,	      \
 			    dummy_color_table)				      \
@@ -83,9 +82,9 @@ P6 (PUBLIC pascal trap, OSErr, GetPictInfo,
      RGBColor color;							      \
 									      \
      (*rgb_spec->pixel_to_rgbcolor) (rgb_spec, (pixel), &color);	      \
-     (red_out) = BigEndianValue (color.red);					      \
-     (green_out) = BigEndianValue (color.green);					      \
-     (blue_out) = BigEndianValue (color.blue);					      \
+     (red_out) = CW (color.red);					      \
+     (green_out) = CW (color.green);					      \
+     (blue_out) = CW (color.blue);					      \
    }))
 #define PIXEL_TO_RGB(bpp, pixel, red, green, blue, color_table)		      \
   ((void)								      \
@@ -194,10 +193,10 @@ P6 (PUBLIC pascal trap, OSErr, GetPixMapInfo,
     bank_index								      \
       = ((red & mask) >> 1) | ((green & mask) >> 6) | ((blue & mask) >> 11);  \
     									      \
-    count = BigEndianValue (bank[bank_index]);					      \
+    count = CW (bank[bank_index]);					      \
     if (! count)							      \
       unique_colors ++;							      \
-    bank[bank_index] = BigEndianValue (count + 1);					      \
+    bank[bank_index] = CW (count + 1);					      \
   })
   
   switch (bpp)
@@ -308,9 +307,9 @@ P6 (PUBLIC pascal trap, OSErr, GetPixMapInfo,
       color_table
 	= (CTabHandle) NewHandle (CTAB_STORAGE_FOR_SIZE (colors_requested));
       
-      CTAB_SEED_X (color_table) = BigEndianValue (GetCTSeed ());
-      CTAB_FLAGS_X (color_table) = BigEndianValue (0);
-      CTAB_SIZE_X (color_table) = BigEndianValue (colors_requested);
+      CTAB_SEED_X (color_table) = CL (GetCTSeed ());
+      CTAB_FLAGS_X (color_table) = CW (0);
+      CTAB_SIZE_X (color_table) = CW (colors_requested);
       
       table = CTAB_TABLE (color_table);
 
@@ -319,7 +318,7 @@ P6 (PUBLIC pascal trap, OSErr, GetPixMapInfo,
 	
 	for (i = 0, t = head; i < colors_requested && t; i ++, t = t->next)
 	  {
-	    table[i].value     = BigEndianValue (i);
+	    table[i].value     = CW (i);
 	    
 #define TILE(x) (((uint32) (x) * 0x8421UL) >> 4)
 	  
@@ -334,7 +333,7 @@ P6 (PUBLIC pascal trap, OSErr, GetPixMapInfo,
 	 popular colors in the pixmap */
       memset (pict_info, '\000', sizeof *pict_info);
       
-      pict_info->uniqueColors = BigEndianValue (unique_colors);
+      pict_info->uniqueColors = CL (unique_colors);
       
       if (verb & returnPalette)
 	{

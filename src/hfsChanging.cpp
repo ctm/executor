@@ -53,9 +53,9 @@ PRIVATE OSErr PBFInfoHelper(changeop op, FileParam *pb, LONGINT dirid,
     if (err == noErr) {
 	switch (op) {
 	case GetOp:
-	    if (BigEndianValue(pb->ioFDirIndex) > 0 && pb->ioNamePtr)
+	    if (CW(pb->ioFDirIndex) > 0 && pb->ioNamePtr)
 		str255assign(MR(pb->ioNamePtr), catkeyp->ckrCName);
-	    pb->ioFlAttrib = CB (open_attrib_bits (BigEndianValue (frp->filFlNum), vcbp,
+	    pb->ioFlAttrib = CB (open_attrib_bits (CL (frp->filFlNum), vcbp,
 						   &pb->ioFRefNum));
 	    pb->ioFlAttrib |= frp->filFlags & CB (INHERITED_FLAG_BITS);
 	    pb->ioFlVersNum = 0;
@@ -152,11 +152,11 @@ ROMlib_fcbrename (HVCB *vcbp, LONGINT swapped_parid, StringPtr oldnamep,
   HVCB *swapped_vcbp;
 
   swapped_vcbp = RM (vcbp);
-  length = BigEndianValue(*(short *)MR(FCBSPtr));
+  length = CW(*(short *)MR(FCBSPtr));
   fcbp = (filecontrolblock *) ((short *)MR(FCBSPtr)+1);
   efcbp = (filecontrolblock *) ((char *)MR(FCBSPtr) + length);
   for (;fcbp < efcbp;
-       fcbp = (filecontrolblock *) ((char *)fcbp + BigEndianValue(FSFCBLen)))
+       fcbp = (filecontrolblock *) ((char *)fcbp + CW(FSFCBLen)))
     {
       if (fcbp->fcbDirID == swapped_parid
 	  && fcbp->fcbVPtr == swapped_vcbp
@@ -195,7 +195,7 @@ renamehelper(IOParam *pb, BOOLEAN async, LONGINT dirid, filekind kind)
 				  btparamrec.tofind.catk.ckrParID,
 				  (StringPtr)
 				  &btparamrec.tofind.catk.ckrCName[0],
-				  (StringPtr) BigEndianValue (pb->ioMisc));
+				  (StringPtr) CL (pb->ioMisc));
 	    }
 	  err1 = ROMlib_cleancache(btparamrec.vcbp);
 	  if (err1 == noErr)

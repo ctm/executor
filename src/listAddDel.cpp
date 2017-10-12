@@ -15,7 +15,6 @@ char ROMlib_rcsid_listAddDel[] =
 #include "rsys/list.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P3(PUBLIC pascal trap, INTEGER, LAddColumn, INTEGER, count,	/* IMIV-271 */
 					      INTEGER, coln, ListHandle, list)
@@ -36,7 +35,7 @@ P3(PUBLIC pascal trap, INTEGER, LAddColumn, INTEGER, count,	/* IMIV-271 */
     if (coln < Hx(list, dataBounds.left))
 	coln = Hx(list, dataBounds.left);
 
-    HxX(list, dataBounds.right) = BigEndianValue(Hx(list, dataBounds.right) + count);
+    HxX(list, dataBounds.right) = CW(Hx(list, dataBounds.right) + count);
 
     if (noffsets) {
 	TRAPBEGIN();
@@ -55,11 +54,11 @@ P3(PUBLIC pascal trap, INTEGER, LAddColumn, INTEGER, count,	/* IMIV-271 */
 	    ip -= nafter;
 	    op -= nafter;
 	    BlockMove(ip, op, nafter);
-	    offset = BigEndianValue(*(INTEGER *)op) & 0x7FFF;
+	    offset = CW(*(INTEGER *)op) & 0x7FFF;
 	    for (i = 0; ++i <= count; )
 	      {
 		op -= sizeof(INTEGER);
-		*(INTEGER *)op = BigEndianValue(offset);
+		*(INTEGER *)op = CW(offset);
 	      }
 	    ip -= nbefore;
 	    op -= nbefore;
@@ -72,10 +71,10 @@ P3(PUBLIC pascal trap, INTEGER, LAddColumn, INTEGER, count,	/* IMIV-271 */
 
 	if (Hx(list, listFlags) & DODRAW) {
 	    todraw = HxX(list, dataBounds);
-	    todraw.left = BigEndianValue(coln);
+	    todraw.left = CW(coln);
 	    SectRect(&todraw, &HxX(list, visible), &todraw);
-	    for (c.v = BigEndianValue(todraw.top) ; c.v < BigEndianValue(todraw.bottom); c.v++)
-		for (c.h = BigEndianValue(todraw.left) ; c.h < BigEndianValue(todraw.right); c.h++)
+	    for (c.v = CW(todraw.top) ; c.v < CW(todraw.bottom); c.v++)
+		for (c.h = CW(todraw.left) ; c.h < CW(todraw.right); c.h++)
 		    C_LDraw(c, list);
 	}
 	TRAPEND();
@@ -101,7 +100,7 @@ P3(PUBLIC pascal trap, INTEGER, LAddRow, INTEGER, count,	/* IMIV-271 */
     if (rown < Hx(list, dataBounds.top))
       rown = Hx(list, dataBounds.top);
 
-    HxX(list, dataBounds.bottom) = BigEndianValue(Hx(list, dataBounds.bottom) + count);
+    HxX(list, dataBounds.bottom) = CW(Hx(list, dataBounds.bottom) + count);
 
     if (noffsets) {
 	TRAPBEGIN();
@@ -115,11 +114,11 @@ P3(PUBLIC pascal trap, INTEGER, LAddRow, INTEGER, count,	/* IMIV-271 */
 	*--op = *--ip;	/* sentinel */
 	ip -= nafter;
 	op -= nafter;
-	offset = BigEndianValue(*ip) & 0x7FFF;
+	offset = CW(*ip) & 0x7FFF;
 	BlockMove((Ptr) ip, (Ptr) op, nafter * sizeof(INTEGER));
 						    /* move the after rows */
 	while (--noffsets >= 0)
-	    *--op = BigEndianValue(offset);
+	    *--op = CW(offset);
 
 	p.h = Hx(list, cellSize.h);
 	p.v = Hx(list, cellSize.v);
@@ -127,10 +126,10 @@ P3(PUBLIC pascal trap, INTEGER, LAddRow, INTEGER, count,	/* IMIV-271 */
 
 	if (Hx(list, listFlags) & DODRAW) {
 	    todraw = HxX(list, dataBounds);
-	    todraw.top = BigEndianValue(rown);
+	    todraw.top = CW(rown);
 	    SectRect(&todraw, &HxX(list, visible), &todraw);
-	    for (c.v = BigEndianValue(todraw.top) ; c.v < BigEndianValue(todraw.bottom); c.v++)
-		for (c.h = BigEndianValue(todraw.left) ; c.h < BigEndianValue(todraw.right); c.h++)
+	    for (c.v = CW(todraw.top) ; c.v < CW(todraw.bottom); c.v++)
+		for (c.h = CW(todraw.left) ; c.h < CW(todraw.right); c.h++)
 		    C_LDraw(c, list);
 	}
 	TRAPEND();
@@ -153,10 +152,10 @@ compute_visible_rect (Rect *rp, ListHandle list, INTEGER top, INTEGER left,
   new_bottom = new_top  + (bottom - top ) * v;
   new_right  = new_left + (right  - left) * h;
 
-  rp->top    = BigEndianValue (new_top);
-  rp->left   = BigEndianValue (new_left);
-  rp->bottom = BigEndianValue (new_bottom);
-  rp->right  = BigEndianValue (new_right);
+  rp->top    = CW (new_top);
+  rp->left   = CW (new_left);
+  rp->bottom = CW (new_bottom);
+  rp->right  = CW (new_right);
 
   SectRect (rp, &HxX (list, rView), rp);
 }
@@ -203,7 +202,7 @@ P3(PUBLIC pascal trap, void, LDelColumn, INTEGER, count,	/* IMIV-271 */
     if (coln > Hx(list, dataBounds.right))
 	coln = Hx(list, dataBounds.right);
 
-    HxX(list, dataBounds.right) = BigEndianValue(Hx(list, dataBounds.right) - count);
+    HxX(list, dataBounds.right) = CW(Hx(list, dataBounds.right) - count);
 
     if (noffsets) {
         INTEGER visible_right, bounds_right;
@@ -218,11 +217,11 @@ P3(PUBLIC pascal trap, void, LDelColumn, INTEGER, count,	/* IMIV-271 */
 	/* SPEEDUP:  partial loop unrolling ... combine things and don't
 		     bother adding delta when we know that it's zero */
 	while (--nrows >= 0) {
-	    off1 = BigEndianValue(*ip) & 0x7FFF;
+	    off1 = CW(*ip) & 0x7FFF;
 	    for (i = nbefore; --i >= 0; )	/* copy before-offsets */
-		*op++ = BigEndianValue(BigEndianValue(*ip++) - delta);
+		*op++ = CW(CW(*ip++) - delta);
 
-	    off2 = BigEndianValue(*ip) & 0x7FFF;
+	    off2 = CW(*ip) & 0x7FFF;
 	    ntomove = off2 - off1;
 	    BlockMove(dataip, dataop, ntomove);	/* copy before-data */
 	    dataip += ntomove;
@@ -230,22 +229,22 @@ P3(PUBLIC pascal trap, void, LDelColumn, INTEGER, count,	/* IMIV-271 */
 
 	    ip += count;			/* skip count offsets */
 
-	    off3 = BigEndianValue(*ip) & 0x7FFF;
+	    off3 = CW(*ip) & 0x7FFF;
 	    ntomove = off3 - off2;
 	    dataip += ntomove;			/* skip appropriate data */
 	    delta  += ntomove;			/* note this */
 
-	    off4 = BigEndianValue(*ip) & 0x7FFF;
+	    off4 = CW(*ip) & 0x7FFF;
 	    for (i = nafter; --i >= 0; )	/* copy after-offsets */
-		*op++ = BigEndianValue(BigEndianValue(*ip++) - delta);
+		*op++ = CW(CW(*ip++) - delta);
 
-	    off5 = BigEndianValue(*ip) & 0x7FFF;
+	    off5 = CW(*ip) & 0x7FFF;
 	    ntomove = off5 - off4;
 	    BlockMove(dataip, dataop, ntomove);	/* copy before-data */
 	    dataip += ntomove;
 	    dataop += ntomove;
 	}
-	*op++ = BigEndianValue(BigEndianValue(*ip++) - delta);	/* sentinel */
+	*op++ = CW(CW(*ip++) - delta);	/* sentinel */
 	SetHandleSize((Handle) list,
 		    GetHandleSize((Handle) list) - noffsets * sizeof(INTEGER));
 	SetHandleSize((Handle) HxP(list, cells),
@@ -273,7 +272,7 @@ P3(PUBLIC pascal trap, void, LDelColumn, INTEGER, count,	/* IMIV-271 */
 
 	    if (visible_left > 0 && visible_right > bounds_right) {
 	      --visible_left;
-	      HxX(list, visible.left) = BigEndianValue (visible_left);
+	      HxX(list, visible.left) = CW (visible_left);
 	      coln = visible_left;
 	    }
 	}
@@ -288,10 +287,10 @@ P3(PUBLIC pascal trap, void, LDelColumn, INTEGER, count,	/* IMIV-271 */
 	    EraseRect (&eraser);
 
 	    todraw = HxX(list, dataBounds);
-	    todraw.left = BigEndianValue(coln);
+	    todraw.left = CW(coln);
 	    SectRect(&todraw, &HxX(list, visible), &todraw);
-	    for (c.v = BigEndianValue(todraw.top) ; c.v < BigEndianValue(todraw.bottom); c.v++)
-		for (c.h = BigEndianValue(todraw.left) ; c.h < BigEndianValue(todraw.right); c.h++)
+	    for (c.v = CW(todraw.top) ; c.v < CW(todraw.bottom); c.v++)
+		for (c.h = CW(todraw.left) ; c.h < CW(todraw.right); c.h++)
 		    C_LDraw(c, list);
 	}
 	TRAPEND();
@@ -337,7 +336,7 @@ P3(PUBLIC pascal trap, void, LDelRow, INTEGER, count,		/* IMIV-272 */
     ncols = Hx(list, dataBounds.right) - Hx(list, dataBounds.left);
     noffsets = count * ncols;
 
-    HxX(list, dataBounds.bottom) = BigEndianValue(Hx(list, dataBounds.bottom) - count);
+    HxX(list, dataBounds.bottom) = CW(Hx(list, dataBounds.bottom) - count);
 
     if (noffsets) {
         INTEGER visible_bottom, bounds_bottom;
@@ -348,14 +347,14 @@ P3(PUBLIC pascal trap, void, LDelRow, INTEGER, count,		/* IMIV-272 */
 	nafter  = nrows * ncols  - nbefore;
 	ip = op = (unsigned short int *) HxX(list, cellArray) + nbefore;
 	ip += noffsets;
-	off1 = BigEndianValue(*op) & 0x7FFF;
-	off2 = BigEndianValue(*ip) & 0x7FFF;
+	off1 = CW(*op) & 0x7FFF;
+	off2 = CW(*ip) & 0x7FFF;
 	delta = off2 - off1;
 
 	while (--nafter >= 0)
-	    *op++ = BigEndianValue(BigEndianValue(*ip++) - delta);
-	off3 = BigEndianValue(*ip) & 0x7FFF;
-	*op = BigEndianValue(BigEndianValue(*ip) - delta);	/* sentinel */
+	    *op++ = CW(CW(*ip++) - delta);
+	off3 = CW(*ip) & 0x7FFF;
+	*op = CW(CW(*ip) - delta);	/* sentinel */
 
 	ntomove = off3 - off2;
 	BlockMove((Ptr) STARH(HxP(list, cells)) + off2,
@@ -387,7 +386,7 @@ P3(PUBLIC pascal trap, void, LDelRow, INTEGER, count,		/* IMIV-272 */
 
 	    if (visible_top > 0 && visible_bottom > bounds_bottom) {
 	      --visible_top;
-	      HxX(list, visible.top) = BigEndianValue (visible_top);
+	      HxX(list, visible.top) = CW (visible_top);
 	      rown = visible_top;
 	    }
 	}
@@ -401,11 +400,11 @@ P3(PUBLIC pascal trap, void, LDelRow, INTEGER, count,		/* IMIV-272 */
 	    EraseRect (&eraser);
 
 	    todraw = HxX(list, dataBounds);
-	    todraw.top = BigEndianValue(rown);
+	    todraw.top = CW(rown);
 	    SectRect(&todraw, &HxX(list, visible), &todraw);
 
-	    for (c.v = BigEndianValue(todraw.top) ; c.v < BigEndianValue(todraw.bottom); c.v++)
-		for (c.h = BigEndianValue(todraw.left) ; c.h < BigEndianValue(todraw.right); c.h++)
+	    for (c.v = CW(todraw.top) ; c.v < CW(todraw.bottom); c.v++)
+		for (c.h = CW(todraw.left) ; c.h < CW(todraw.right); c.h++)
 		    C_LDraw(c, list);
 	}
 	TRAPEND();

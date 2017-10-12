@@ -20,7 +20,6 @@ char ROMlib_rcsid_qStdPic[] =
 #include "rsys/text.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P3(PUBLIC pascal trap, void, StdComment, INTEGER, kind, INTEGER, size,
 								  Handle, hand)
@@ -38,11 +37,11 @@ P3(PUBLIC pascal trap, void, StdComment, INTEGER, kind, INTEGER, size,
 	break;
       }
 
-    kind = BigEndianValue(kind);
+    kind = CW(kind);
     if (size) {
 	PICSAVEBEGIN(OP_LongComment);
 	PICWRITE(&kind, sizeof(kind));
-	swappedsize = BigEndianValue(size);
+	swappedsize = CW(size);
 	PICWRITE(&swappedsize, sizeof(swappedsize));
 	state = HGetState(hand);
 	HLock(hand);
@@ -76,16 +75,16 @@ P2(PUBLIC pascal trap, void, StdPutPic, Ptr, sp, INTEGER, bc)
 	oldhowfar = Hx(pch, pichowfar);
 	ph = HxP(pch, pichandle);
 	newhowfar = Hx(pch, pichowfar) + bc;
-	HxX(pch, pichowfar) = BigEndianValue(newhowfar);
+	HxX(pch, pichowfar) = CL(newhowfar);
 	if (newhowfar > 32766)
 	  HxX(ph, picSize) = CWC (32766);
 	else
-	  HxX(ph, picSize) = BigEndianValue (newhowfar);
+	  HxX(ph, picSize) = CW (newhowfar);
 
 	if (Hx(pch, pichowfar) > Hx(pch, picsize)) {
 	    newsize = (Hx(pch, pichowfar) + 0xFF) & ~(LONGINT) 0xFF;
 	    SetHandleSize((Handle) ph, newsize);
-	    HxX(pch, picsize) = BigEndianValue(newsize);
+	    HxX(pch, picsize) = CL(newsize);
 	}
 	memmove((char *) STARH(ph) + oldhowfar, sp, bc);
     }

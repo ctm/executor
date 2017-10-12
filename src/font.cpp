@@ -22,7 +22,6 @@ char ROMlib_rcsid_font[] =
 #include "rsys/glue.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #define MAXTABLES	12
 
@@ -49,7 +48,7 @@ P0(PUBLIC pascal trap, void, InitFonts)	/* IMI-222 */
 	TheZone = saveZone;
 	beenhere = TRUE;
     }
-    ApFontID = BigEndianValue(Cx(SPFont) + 1);
+    ApFontID = CW(Cx(SPFont) + 1);
     SysFontSiz = CWC(12);
     SysFontFam = 0;
 #if 0
@@ -100,9 +99,9 @@ P2(PUBLIC pascal trap, void, GetFontName, INTEGER, fnum,	/* IMI-223 */
     ResType rest;
     
     if (fnum == systemFont)
-	fnum = BigEndianValue(SysFontFam);
+	fnum = CW(SysFontFam);
     else if (fnum == applFont)
-	fnum = BigEndianValue(ApFontID);
+	fnum = CW(ApFontID);
     SetResLoad(FALSE);
     h = GetResource(TICK("FONT"), FONTRESID(fnum, 0));
     if (!h)
@@ -148,7 +147,7 @@ P2(PUBLIC pascal trap, void, GetFNum, StringPtr, fnam,		/* IMI-223 */
     if (ResError())
 	*fnum = 0;
     else if (shift)
-	*fnum =BigEndianValue( BigEndianValue(*(unsigned short *) fnum) >> 7);
+	*fnum =CW( CW(*(unsigned short *) fnum) >> 7);
     SetResLoad(TRUE);
 }
 
@@ -293,15 +292,15 @@ A0(PRIVATE, INTEGER *, findfondwidths)
 
     retval = 0;
     if (STARH((FHandle) MR(LastFOND))->ffFamID == WIDTHPTR->aFID &&
-		    (offset = BigEndianValue(STARH((FHandle)MR(LastFOND))->ffWTabOff))) {
+		    (offset = CL(STARH((FHandle)MR(LastFOND))->ffWTabOff))) {
 	bitsmatched = -1;
 	want = Cx(WIDTHPTR->aFace);
 /*
  * NOTE: we add 3 to lastchar - firstchar to include the missing character
  *	 entry and what appears to be a zero entry located thereafter.
  */
-	tabsize = (BigEndianValue(STARH((FHandle)MR(LastFOND))->ffLastChar) -
-		   BigEndianValue(STARH((FHandle)MR(LastFOND))->ffFirstChar) + 3)
+	tabsize = (CW(STARH((FHandle)MR(LastFOND))->ffLastChar) -
+		   CW(STARH((FHandle)MR(LastFOND))->ffFirstChar) + 3)
 					   * sizeof(INTEGER) + sizeof(INTEGER);
 	numentriesminusone = (INTEGER *)
 		    ((char *) &STARH((FHandle)MR(LastFOND))->ffFlags + offset);
@@ -350,7 +349,7 @@ PRIVATE void buildtabdata(howtobuild_t howtobuild, INTEGER extra,
 	WIDTHPTR->usedFam = 0;	/* don't really know what this should be */
 	widp = &fp->owTLoc + Cx(fp->owTLoc) + (lastchar - firstchar + 2);
 	fixed_extra = FIXED(extra);
-	misswidth = FIXED8(BigEndianValue(widp[lastchar - firstchar + 1])) + fixed_extra;
+	misswidth = FIXED8(CW(widp[lastchar - firstchar + 1])) + fixed_extra;
 
 /* NOTE: this assumes missing characters have the missing width in the
 	 table.  If this is wrong we need to look for missing characters
@@ -358,23 +357,23 @@ PRIVATE void buildtabdata(howtobuild_t howtobuild, INTEGER extra,
 	 
 	for (c = 0, p = WIDTHPTR->tabData, ep = p + 256;  p < ep; c++) {
 	    if (c < firstchar || c > lastchar)
-		*p++ = BigEndianValue(misswidth);
+		*p++ = CL(misswidth);
 	    else
-		*p++ = BigEndianValue(FIXED8(BigEndianValue(*widp++)) + fixed_extra);
+		*p++ = CL(FIXED8(CW(*widp++)) + fixed_extra);
 	}
 	break;
     case FontInt:
 	WIDTHPTR->usedFam = 0;
 	widp      = &fp->owTLoc + Cx(fp->owTLoc);
-	misswidth = FIXED((BigEndianValue(widp[lastchar - firstchar + 1]) & 0xFF) + extra);
+	misswidth = FIXED((CW(widp[lastchar - firstchar + 1]) & 0xFF) + extra);
 	for (c = 0, p = WIDTHPTR->tabData, ep = p + 256;  p < ep; c++) {
 	    if (c < firstchar || c > lastchar)
-		*p++ = BigEndianValue(misswidth);
+		*p++ = CL(misswidth);
 	    else {
 		*p++ = (width = *widp++) == -1 ?
-				     BigEndianValue(misswidth)
+				     CL(misswidth)
 				 :
-				     BigEndianValue(FIXED((BigEndianValue(width) & 0xFF) + extra));
+				     CL(FIXED((CW(width) & 0xFF) + extra));
 	    }
 	}
 	break;
@@ -383,20 +382,20 @@ PRIVATE void buildtabdata(howtobuild_t howtobuild, INTEGER extra,
 	hOutputInverse = FixRatio(1<<8, Cx(WIDTHPTR->hOutput));
 	widp = fondwidthtable;
 	fixed_extra = FIXED(extra);
-	misswidth = FIXED4 (BigEndianValue (widp[lastchar - firstchar + 1]));
+	misswidth = FIXED4 (CW (widp[lastchar - firstchar + 1]));
 	misswidth = font_width_expand (misswidth, fixed_extra, hOutputInverse);
 	for (c = 0, p = WIDTHPTR->tabData, ep = p + 256;  p < ep; c++) {
 	    if (c < firstchar || c > lastchar)
-		*p++ = BigEndianValue(misswidth);
+		*p++ = CL(misswidth);
 	    else {
-		*p++ = BigEndianValue(FixMul(FIXED4(BigEndianValue(*widp)) + fixed_extra,
+		*p++ = CL(FixMul(FIXED4(CW(*widp)) + fixed_extra,
 							      hOutputInverse));
 		widp++;
 	    }
 	}
 	break;
     }
-    WIDTHPTR->tabData[' '] = BigEndianValue(Cx(WIDTHPTR->tabData[' ']) +
+    WIDTHPTR->tabData[' '] = CL(Cx(WIDTHPTR->tabData[' ']) +
 				Cx(WIDTHPTR->sExtra));
 }
 
@@ -439,25 +438,25 @@ A1(PRIVATE, void, buildtable, INTEGER, extra)
     denomh = Cx(WIDTHPTR->inDenom.h);
     denomv = Cx(WIDTHPTR->inDenom.v);
     if (WIDTHPTR->fSize == WIDTHPTR->aSize) {
-	WIDTHPTR->hOutput = BigEndianValue(FixRatio(numerh, denomh) >> 8);
-	WIDTHPTR->vOutput = BigEndianValue(FixRatio(numerv, denomv) >> 8);
+	WIDTHPTR->hOutput = CW(FixRatio(numerh, denomh) >> 8);
+	WIDTHPTR->vOutput = CW(FixRatio(numerv, denomv) >> 8);
 	WIDTHPTR->hFactor =
 	WIDTHPTR->vFactor = CWC(256);
     } else if (Cx(WIDTHPTR->fSize) < Cx(WIDTHPTR->aSize) && FScaleDisable) {
-	WIDTHPTR->hOutput = BigEndianValue(FixRatio(numerh, denomh) >> 8);
-	WIDTHPTR->vOutput = BigEndianValue(FixRatio(numerv, denomv) >> 8);
+	WIDTHPTR->hOutput = CW(FixRatio(numerh, denomh) >> 8);
+	WIDTHPTR->vOutput = CW(FixRatio(numerv, denomv) >> 8);
 	WIDTHPTR->hFactor =
-	WIDTHPTR->vFactor = BigEndianValue(FixRatio(Cx(WIDTHPTR->aSize),
+	WIDTHPTR->vFactor = CW(FixRatio(Cx(WIDTHPTR->aSize),
 						    Cx(WIDTHPTR->fSize)) >> 8);
     } else {
 	tempfix	   = FixRatio(Cx(WIDTHPTR->aSize), Cx(WIDTHPTR->fSize));
-	WIDTHPTR->hOutput = BigEndianValue(FixMul(tempfix, FixRatio(numerh, denomh)) >> 8);
-	WIDTHPTR->vOutput = BigEndianValue(FixMul(tempfix, FixRatio(numerv, denomv)) >> 8);
+	WIDTHPTR->hOutput = CW(FixMul(tempfix, FixRatio(numerh, denomh)) >> 8);
+	WIDTHPTR->vOutput = CW(FixMul(tempfix, FixRatio(numerv, denomv)) >> 8);
 	WIDTHPTR->hFactor =
 	WIDTHPTR->vFactor = CWC(256);
     }
 #if 0	/* WTF is going on here? */
-    WIDTHPTR->style = BigEndianValue(extra);
+    WIDTHPTR->style = CW(extra);
 #endif
 
     buildtabdata(howtobuild, extra, fondwidthtable);
@@ -565,7 +564,7 @@ A0(PRIVATE, INTEGER, closestface)	/* no args, uses WIDTHPTR */
     ip = &STARH((FHandle)MR(LastFOND))->ffVersion + 1;
     nmatch = -1;
     want = Cx(WIDTHPTR->aFace);
-    for (p = (fatabentry *) (ip + 1), ep = p + BigEndianValue(*ip) + 1;
+    for (p = (fatabentry *) (ip + 1), ep = p + CW(*ip) + 1;
 					  p < ep && Cx(p->size) <= size; p++) {
 	if (!bestp)
 	    bestp = p;	/* pick something */
@@ -604,7 +603,7 @@ at_least_one_fond_entry (INTEGER family)
  * TODO:  NFNT below
  */
 
-#define AVAILABLE(x) (WIDTHPTR->fSize = BigEndianValue((x)), WIDTHPTR->tabFont = \
+#define AVAILABLE(x) (WIDTHPTR->fSize = CW((x)), WIDTHPTR->tabFont = \
 		         RM(GetResource(TICK("FONT"), FONTRESID(family, (x)))))
 
 A1(PRIVATE, void, newwidthtable, FMInput *, fmip)
@@ -682,25 +681,25 @@ A1(PRIVATE, void, newwidthtable, FMInput *, fmip)
     WIDTHPTR->tabFont = 0;
   while (!WIDTHPTR->tabFont && n_tried_sys_font < 2) {
     WIDTHPTR->fHand = RM((Handle) fh);
-    WIDTHPTR->fID = BigEndianValue(family);
+    WIDTHPTR->fID = CW(family);
     if (fh) {
 	LastFOND = RM((FamRecHandle) fh);
 
 	findclosestfond(fh, Cx(fmip->size), &powerof2, &lesser, &greater);
 	if (powerof2 == Cx(fmip->size))
-	    WIDTHPTR->fSize = BigEndianValue(powerof2);
+	    WIDTHPTR->fSize = CW(powerof2);
 	else {
 	    if (FScaleDisable)
-		WIDTHPTR->fSize   = lesser ? BigEndianValue(lesser) : BigEndianValue(greater);
+		WIDTHPTR->fSize   = lesser ? CW(lesser) : CW(greater);
 	    else {
 		if (powerof2)
-		    WIDTHPTR->fSize = BigEndianValue(powerof2);
+		    WIDTHPTR->fSize = CW(powerof2);
 		else {
 		    if (!greater || (lesser && 
 			  Cx(fmip->size) - lesser <= greater - Cx(fmip->size)))
-			WIDTHPTR->fSize = BigEndianValue(lesser);
+			WIDTHPTR->fSize = CW(lesser);
 		    else
-			WIDTHPTR->fSize = BigEndianValue(greater);
+			WIDTHPTR->fSize = CW(greater);
 		}
 	    }
 	}
@@ -722,7 +721,7 @@ A1(PRIVATE, void, newwidthtable, FMInput *, fmip)
 	if (!AVAILABLE(Cx(fmip->size))) {
 	    if (FScaleDisable) {
 		findclosestfont(family, Cx(fmip->size), &lesser, &greater);
-		WIDTHPTR->fSize   = lesser ? BigEndianValue(lesser) : BigEndianValue(greater);
+		WIDTHPTR->fSize   = lesser ? CW(lesser) : CW(greater);
 		WIDTHPTR->tabFont = RM(GetResource(TICK("FONT"),
 				      FONTRESID(family, Cx(WIDTHPTR->fSize))));
 	    } else {
@@ -731,9 +730,9 @@ A1(PRIVATE, void, newwidthtable, FMInput *, fmip)
 		    findclosestfont(family, Cx(fmip->size), &lesser, &greater);
 		    if (lesser &&
 			 (Cx(fmip->size) - lesser <= greater - Cx(fmip->size)))
-			WIDTHPTR->fSize = BigEndianValue(lesser);
+			WIDTHPTR->fSize = CW(lesser);
 		    else
-			WIDTHPTR->fSize = BigEndianValue(greater);
+			WIDTHPTR->fSize = CW(greater);
 		    WIDTHPTR->tabFont = RM(GetResource(TICK("FONT"),
 				      FONTRESID(family, Cx(WIDTHPTR->fSize))));
 		}
@@ -819,10 +818,10 @@ P1(PUBLIC pascal trap, FMOutPtr, FMSwapFont, FMInput *, fmip)	/* IMI-223 */
 	ROMlib_fmo.ulThick    = 0;
 	ROMlib_fmo.shadow     = 0;
 	ROMlib_fmo.extra      = 0;
-	ROMlib_fmo.numer.h = BigEndianValue(
+	ROMlib_fmo.numer.h = CW(
 			    (LONGINT) Cx(fmip->numer.h) * 256 * Cx(fmip->size) /
 				      Cx(fmip->denom.h) / Cx(WIDTHPTR->fSize));
-	ROMlib_fmo.numer.v = BigEndianValue(
+	ROMlib_fmo.numer.v = CW(
 			    (LONGINT) Cx(fmip->numer.v) * 256 * Cx(fmip->size) /
 				      Cx(fmip->denom.v) / Cx(WIDTHPTR->fSize));
 	ROMlib_fmo.denom.h    = CWC(256);
@@ -856,11 +855,11 @@ P1(PUBLIC pascal trap, FMOutPtr, FMSwapFont, FMInput *, fmip)	/* IMI-223 */
 	 *	  characters.  This will cause serious trouble when we allocate
 	 *	  too small a bitmap
 	 */
-	ROMlib_fmo.ascent  = BigEndianValue(fp->ascent)  + !!ROMlib_fmo.shadow;
-	ROMlib_fmo.descent = BigEndianValue(fp->descent) +   ROMlib_fmo.shadow;
-	ROMlib_fmo.widMax  = BigEndianValue(fp->widMax)  + !!ROMlib_fmo.shadow +
+	ROMlib_fmo.ascent  = CW(fp->ascent)  + !!ROMlib_fmo.shadow;
+	ROMlib_fmo.descent = CW(fp->descent) +   ROMlib_fmo.shadow;
+	ROMlib_fmo.widMax  = CW(fp->widMax)  + !!ROMlib_fmo.shadow +
 				 ROMlib_fmo.shadow + ROMlib_fmo.bold;
-	ROMlib_fmo.leading = BigEndianValue(fp->leading);
+	ROMlib_fmo.leading = CW(fp->leading);
     } else {
 	LoadResource(MR(ROMlib_fmo.fontHandle));
 	WidthPtr = (*MR(WidthTabHandle)).p;
@@ -872,7 +871,7 @@ P1(PUBLIC pascal trap, FMOutPtr, FMSwapFont, FMInput *, fmip)	/* IMI-223 */
     return &ROMlib_fmo;
 }
 
-#define SCALE(x) FixRatio(x *  BigEndianValue(fmop->numer.v), BigEndianValue(fmop->denom.v))
+#define SCALE(x) FixRatio(x *  CW(fmop->numer.v), CW(fmop->denom.v))
 
 P1(PUBLIC pascal trap, void, FontMetrics, FMetricRec *, metrp)	/* IMIV-32 */
 {
@@ -894,10 +893,10 @@ P1(PUBLIC pascal trap, void, FontMetrics, FMetricRec *, metrp)	/* IMIV-32 */
     /* TODO:  check out thePort->device and use the FOND stuff if not
 	      going to the screen */
 
-    metrp->ascent     = BigEndianValue(SCALE(Cx(fmop->ascent)));
-    metrp->descent    = BigEndianValue(SCALE(Cx(fmop->descent)));
-    metrp->leading    = BigEndianValue(SCALE(Cx(fmop->leading)));
-    metrp->widMax     = BigEndianValue(SCALE(Cx(fmop->widMax)));
+    metrp->ascent     = CL(SCALE(Cx(fmop->ascent)));
+    metrp->descent    = CL(SCALE(Cx(fmop->descent)));
+    metrp->leading    = CL(SCALE(Cx(fmop->leading)));
+    metrp->widMax     = CL(SCALE(Cx(fmop->widMax)));
     metrp->wTabHandle = (Handle) WidthTabHandle;
 }
 

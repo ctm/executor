@@ -106,7 +106,7 @@ PRIVATE int32
 LMGetLastSPExtra (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (LastSPExtra);
+  return CW (LastSPExtra);
 }
 
 PRIVATE GDHandle
@@ -134,14 +134,14 @@ PRIVATE INTEGER
 LMGetResErr (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (ResErr);
+  return CW (ResErr);
 }
 
 PRIVATE INTEGER
 LMGetPrintErr (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (PrintErr);
+  return CW (PrintErr);
 }
 
 PRIVATE Ptr
@@ -155,7 +155,7 @@ PRIVATE uint32
 LMGetCaretTime (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (CaretTime);
+  return CL (CaretTime);
 }
 
 #if 0
@@ -178,7 +178,7 @@ PRIVATE INTEGER
 LMGetAtMenuBottom (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (AtMenuBottom);
+  return CW (AtMenuBottom);
 }
 
 PRIVATE uint8
@@ -210,14 +210,14 @@ PRIVATE INTEGER
 LMGetTopMenuItem (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (TopMenuItem);
+  return CW (TopMenuItem);
 }
 
 PRIVATE uint32
 LMGetDoubleTime (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (DoubleTime);
+  return CL (DoubleTime);
 }
 
 PRIVATE StringHandle
@@ -245,7 +245,7 @@ PRIVATE int16
 LMGetROM85 (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (ROM85);
+  return CW (ROM85);
 }
 
 PRIVATE uint8
@@ -259,7 +259,7 @@ PRIVATE INTEGER
 LMGetScrHRes (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (ScrHRes);
+  return CW (ScrHRes);
 }
 
 PRIVATE StringPtr
@@ -273,7 +273,7 @@ PRIVATE INTEGER
 LMGetSysMap (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (SysMap);
+  return CW (SysMap);
 }
 
 PRIVATE THz
@@ -308,7 +308,7 @@ PRIVATE uint32
 LMGetTicks (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (Ticks);
+  return CL (Ticks);
 }
 
 PRIVATE uint8
@@ -343,7 +343,7 @@ PRIVATE INTEGER
 LMGetMBarHeight (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (MBarHeight);
+  return CW (MBarHeight);
 }
 
 PRIVATE Handle
@@ -357,35 +357,35 @@ PRIVATE INTEGER
 LMGetScrVRes (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (ScrVRes);
+  return CW (ScrVRes);
 }
 
 PRIVATE void
 LMSetMenuDisable (int32 val)
 {
   warning_trace_info (NULL_STRING);
-  MenuDisable = BigEndianValue (val);
+  MenuDisable = CL (val);
 }
 
 PRIVATE void
 LMSetAtMenuBottom (INTEGER val)
 {
   warning_trace_info (NULL_STRING);
-  AtMenuBottom = BigEndianValue (val);
+  AtMenuBottom = CW (val);
 }
 
 PRIVATE void
 LMSetTopMenuItem (INTEGER val)
 {
   warning_trace_info (NULL_STRING);
-  TopMenuItem = BigEndianValue (val);
+  TopMenuItem = CW (val);
 }
 
 PRIVATE void
 LMSetSFSaveDisk (INTEGER val)
 {
   warning_trace_info (NULL_STRING);
-  SFSaveDisk = BigEndianValue (val);
+  SFSaveDisk = CW (val);
 }
 
 PRIVATE void
@@ -420,7 +420,7 @@ PRIVATE void
 LMSetResErr (INTEGER val)
 {
   warning_trace_info (NULL_STRING);
-  ResErr = BigEndianValue (val);
+  ResErr = CW (val);
 }
 
 PRIVATE void
@@ -434,21 +434,21 @@ PRIVATE void
 LMSetCurDirStore (INTEGER val)
 {
   warning_trace_info (NULL_STRING);
-  CurDirStore = BigEndianValue (val);
+  CurDirStore = CW (val);
 }
 
 PRIVATE INTEGER
 LMGetCurApRefNum (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (CurApRefNum);
+  return CW (CurApRefNum);
 }
 
 PRIVATE LONGINT
 LMGetCurDirStore (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (CurDirStore);
+  return CL (CurDirStore);
 }
 
 PRIVATE uint8
@@ -462,7 +462,7 @@ PRIVATE INTEGER
 LMGetSysFontSize (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (SysFontSiz);
+  return CW (SysFontSiz);
 }
 
 PRIVATE INTEGER
@@ -481,14 +481,14 @@ PRIVATE INTEGER
 LMGetSFSaveDisk (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (SFSaveDisk);
+  return CW (SFSaveDisk);
 }
 
 PRIVATE INTEGER
 LMGetSysFontFam (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (SysFontFam);
+  return CW (SysFontFam);
 }
 
 PRIVATE Handle
@@ -502,14 +502,14 @@ PRIVATE void
 LMSetSysFontFam (INTEGER val)
 {
   warning_trace_info (NULL_STRING);
-  SysFontFam = BigEndianValue (val);
+  SysFontFam = CW (val);
 }
 
 PRIVATE void
 LMSetSysFontSize (INTEGER val)
 {
   warning_trace_info (NULL_STRING);
-  SysFontSiz = BigEndianValue (val);
+  SysFontSiz = CW (val);
 }
 
 PRIVATE WindowPtr
@@ -523,14 +523,14 @@ PRIVATE INTEGER
 LMGetCurJTOffset (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (CurJTOffset);
+  return CW (CurJTOffset);
 }
 
 PRIVATE INTEGER
 LMGetCurMap (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (CurMap);
+  return CW (CurMap);
 }
 
 PRIVATE Ptr
@@ -544,7 +544,7 @@ PRIVATE INTEGER
 LMGetFSFCBLen (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (FSFCBLen);
+  return CW (FSFCBLen);
 }
 
 PRIVATE Handle
@@ -566,7 +566,7 @@ PRIVATE INTEGER
 LMGetHWCfgFlags (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (SCSIFlags);
+  return CW (SCSIFlags);
 }
 
 PRIVATE Byte
@@ -587,21 +587,21 @@ PRIVATE INTEGER
 LMGetKeyThresh (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (KeyThresh);
+  return CW (KeyThresh);
 }
 
 PRIVATE INTEGER
 LMGetSysEvtMask (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (SysEvtMask);
+  return CW (SysEvtMask);
 }
 
 PRIVATE INTEGER
 LMGetTEScrpLength (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (TEScrpLength);
+  return CW (TEScrpLength);
 }
 
 PRIVATE uint32
@@ -609,7 +609,7 @@ LMGetTime (void)
 {
   warning_trace_info (NULL_STRING);
   GetDateTime (&Time);
-  return  BigEndianValue (Time);
+  return  CL (Time);
 }
 
 PRIVATE WindowPeek
@@ -623,14 +623,14 @@ PRIVATE INTEGER
 LMGetTESysJust (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (TESysJust);
+  return CW (TESysJust);
 }
 
 PRIVATE INTEGER
 LMGetBootDrive (void)
 {
   warning_trace_info (NULL_STRING);
-  return BigEndianValue (BootDrive);
+  return CW (BootDrive);
 }
 
 PRIVATE Byte
@@ -659,7 +659,7 @@ PRIVATE void
 LMSetTESysJust (INTEGER val)
 {
   warning_trace_info (NULL_STRING);
-  TESysJust = BigEndianValue (val);
+  TESysJust = CW (val);
 }
 
 PRIVATE void
@@ -680,7 +680,7 @@ PRIVATE void
 LMSetCurMap (INTEGER val)
 {
   warning_trace_info (NULL_STRING);
-  CurMap = BigEndianValue (val);
+  CurMap = CW (val);
 }
 
 PRIVATE void
@@ -702,14 +702,14 @@ LMSetLastSPExtra (LONGINT val)
 {
   warning_trace_info (NULL_STRING);
   warning_unimplemented ("val = 0x%x", val);
-  LastSPExtra = BigEndianValue (val);
+  LastSPExtra = CL (val);
 }
 
 PRIVATE void
 LMSetMBarHeight (INTEGER val)
 {
   warning_trace_info (NULL_STRING);
-  MBarHeight = BigEndianValue (val);
+  MBarHeight = CW (val);
 }
 
 PRIVATE void
@@ -724,7 +724,7 @@ PRIVATE void
 LMSetTEScrpLength (INTEGER val)
 {
   warning_trace_info (NULL_STRING);
-  TEScrpLength = BigEndianValue (val);
+  TEScrpLength = CW (val);
 }
 
 PRIVATE void
@@ -960,7 +960,7 @@ CloseWD (INTEGER wdref)
   WDPBRec pb;
 
   memset (&pb, 0, sizeof pb);
-  pb.ioVRefNum = BigEndianValue (wdref);
+  pb.ioVRefNum = CW (wdref);
   retval = PBCloseWD (&pb, FALSE);
   warning_trace_info ("retval = %d", retval);
   return retval;
@@ -1008,8 +1008,8 @@ HRstFLock (INTEGER vref, LONGINT dirid, Str255 file)
   HParamBlockRec pb;
 
   memset (&pb, 0, sizeof pb);
-  pb.ioParam.ioVRefNum = BigEndianValue (vref);
-  pb.fileParam.ioDirID = BigEndianValue (dirid);
+  pb.ioParam.ioVRefNum = CW (vref);
+  pb.fileParam.ioDirID = CL (dirid);
   pb.ioParam.ioNamePtr = file;
   warning_trace_info (NULL_STRING);
   retval = PBHRstFLock (&pb, FALSE);
@@ -1023,8 +1023,8 @@ HDelete (INTEGER vrefnum, LONGINT dirid, Str255 filename)
   HParamBlockRec pb;
 
   memset (&pb, 0, sizeof pb);
-  pb.ioParam.ioVRefNum = BigEndianValue (vrefnum);
-  pb.fileParam.ioDirID = BigEndianValue (dirid);
+  pb.ioParam.ioVRefNum = CW (vrefnum);
+  pb.fileParam.ioDirID = CL (dirid);
   pb.ioParam.ioNamePtr = filename;
   retval = PBHDelete (&pb, FALSE);
   warning_trace_info ("HDelete(%d, %d, %.*s) = %d", vrefnum, dirid,
@@ -1039,8 +1039,8 @@ HOpenDF (INTEGER vref, LONGINT dirid, Str255 file, int8 perm, INTEGER *refp)
   HParamBlockRec pb;
 
   memset (&pb, 0, sizeof pb);
-  pb.ioParam.ioVRefNum = BigEndianValue (vref);
-  pb.fileParam.ioDirID = BigEndianValue (dirid);
+  pb.ioParam.ioVRefNum = CW (vref);
+  pb.fileParam.ioDirID = CL (dirid);
   pb.ioParam.ioNamePtr = file;
   pb.ioParam.ioPermssn = perm;
   warning_trace_info (NULL_STRING);
@@ -2361,7 +2361,7 @@ SetCurrentA5 (void)
   uint32 retval;
 
   retval = (uint32) SYN68K_TO_US (EM_A5);
-  EM_A5 = (uint32) BigEndianValue (CurrentA5);
+  EM_A5 = (uint32) CL (CurrentA5);
   warning_trace_info ("old = 0x%x, new = 0x%x", retval, EM_A5);
   return retval;
 }
@@ -2485,9 +2485,9 @@ OpenWD (INTEGER vref, LONGINT dirid, LONGINT procid, INTEGER *wdrefp)
   OSErr retval;
 
   memset (&wdpb, 0, sizeof wdpb);
-  wdpb.ioVRefNum = BigEndianValue (vref);
-  wdpb.ioWDDirID = BigEndianValue (dirid);
-  wdpb.ioWDProcID = BigEndianValue (procid);
+  wdpb.ioVRefNum = CW (vref);
+  wdpb.ioWDDirID = CL (dirid);
+  wdpb.ioWDProcID = CL (procid);
   retval = PBOpenWD (&wdpb, FALSE);
   if (retval == noErr)
     *wdrefp = wdpb.ioVRefNum;
@@ -2502,8 +2502,8 @@ DirCreate (INTEGER vref, LONGINT parid, Str255 dirname, LONGINT *outdir)
   HParamBlockRec hpb;
 
   memset (&hpb, 0, sizeof hpb);
-  hpb.ioParam.ioVRefNum = BigEndianValue (vref);
-  hpb.fileParam.ioDirID = BigEndianValue (parid);
+  hpb.ioParam.ioVRefNum = CW (vref);
+  hpb.fileParam.ioDirID = CL (parid);
   hpb.ioParam.ioNamePtr = RM ((Ptr) dirname);
   retval = PBDirCreate (&hpb, FALSE);
   if (retval == noErr)
@@ -2735,8 +2735,8 @@ HSetVol (StringPtr volName, INTEGER vref, LONGINT dirid)
   WDPBRec wdp;
 
   wdp.ioNamePtr = RM (volName);
-  wdp.ioVRefNum = BigEndianValue (vref);
-  wdp.ioWDDirID = BigEndianValue (dirid);
+  wdp.ioVRefNum = CW (vref);
+  wdp.ioWDDirID = CL (dirid);
   retval = PBHSetVol (&wdp, FALSE);
   warning_trace_info ("retval = %d", retval);
   return retval;
@@ -2749,8 +2749,8 @@ HOpen (INTEGER vref, LONGINT dirid, Str255 filename, SignedByte perm,
   OSErr retval;
   HParamBlockRec hpb;
 
-  hpb.ioParam.ioVRefNum = BigEndianValue (vref);
-  hpb.fileParam.ioDirID = BigEndianValue (dirid);
+  hpb.ioParam.ioVRefNum = CW (vref);
+  hpb.fileParam.ioDirID = CL (dirid);
   hpb.ioParam.ioNamePtr = RM (filename);
   hpb.ioParam.ioPermssn = CB (perm);
   retval = PBHOpen (&hpb, FALSE);
@@ -2768,8 +2768,8 @@ HSetFInfo (INTEGER vref, LONGINT dirid, Str255 filename, FInfo *finfop)
   OSErr retval;
   HParamBlockRec hpb;
 
-  hpb.ioParam.ioVRefNum = BigEndianValue (vref);
-  hpb.fileParam.ioDirID = BigEndianValue (dirid);
+  hpb.ioParam.ioVRefNum = CW (vref);
+  hpb.fileParam.ioDirID = CL (dirid);
   hpb.ioParam.ioNamePtr = RM (filename);
   hpb.fileParam.ioFlFndrInfo = *finfop;
   retval = PBHSetFInfo (&hpb, FALSE);
@@ -2812,7 +2812,7 @@ MPPOpen_stub (void)
 PRIVATE void
 SetDialogFont (INTEGER font)
 {
-  DlgFont = BigEndianValue (font);
+  DlgFont = CW (font);
   warning_trace_info (NULL_STRING);
 }
 

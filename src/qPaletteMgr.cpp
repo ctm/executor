@@ -25,7 +25,6 @@ char ROMlib_rcsid_qPaletteMgr[] =
 #include "rsys/dirtyrect.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #define GD_CLUT_P(gd)	(GD_TYPE_X (gd) == CWC (clutType))
 
@@ -33,17 +32,17 @@ using namespace ByteSwap;
 
 #define CI_ALLOCATED_ENTRY_P(entry) ((entry)->ciPrivate & CI_ALLOCATED_BIT_X)
 #define CI_SET_ALLOCATED_ENTRY(entry, index)	\
-  ((entry)->ciPrivate = CI_ALLOCATED_BIT_X | BigEndianValue (((index) & 0xFF) << 16))
+  ((entry)->ciPrivate = CI_ALLOCATED_BIT_X | CL (((index) & 0xFF) << 16))
 #define CI_DEALLOCATE_ENTRY(entry)		\
   ((entry)->ciPrivate = CLC (0))
 #define CI_ENTRY_INDEX(entry)			\
-  ((BigEndianValue ((entry)->ciPrivate) >> 16) & 0xFF)
+  ((CL ((entry)->ciPrivate) >> 16) & 0xFF)
 #define CI_ENTRY_INDEX_X(entry)			\
-  (BigEndianValue (CI_ENTRY_INDEX (entry)))
+  (CL (CI_ENTRY_INDEX (entry)))
 #define CI_USAGE_X(entry) ((entry)->ciUsage)
-#define CI_USAGE(entry) (BigEndianValue (CI_USAGE_X (entry)))
+#define CI_USAGE(entry) (CW (CI_USAGE_X (entry)))
 #define CI_TOLERANCE_X(entry) ((entry)->ciTolerance)
-#define CI_TOLERANCE(entry) (BigEndianValue (CI_TOLERANCE_X (entry)))
+#define CI_TOLERANCE(entry) (CW (CI_TOLERANCE_X (entry)))
 #define CI_USAGE_HAS_BITS_P(entry, bits)	\
   ((CI_USAGE (entry) & 0xF) == (bits))
 #define CI_RGB(entry) ((entry)->ciRGB)
@@ -221,9 +220,9 @@ P0 (PUBLIC pascal trap, INTEGER, PMgrVersion)
 static inline int
 rgb_delta (RGBColor *c1, RGBColor *c2)
 {
-  return MAX (MAX (ABS (BigEndianValue (c1->red) - BigEndianValue (c2->red)),
-		   ABS (BigEndianValue (c1->green) - BigEndianValue (c2->green))),
-	      ABS (BigEndianValue (c1->blue) - BigEndianValue (c2->blue)));
+  return MAX (MAX (ABS (CW (c1->red) - CW (c2->red)),
+		   ABS (CW (c1->green) - CW (c2->green))),
+	      ABS (CW (c1->blue) - CW (c2->blue)));
 }
 
 int
@@ -581,7 +580,7 @@ pm_do_updates_gd_changed (void)
   gd_pixmap = GD_PMAP (gd);
   gd_ctab = PIXMAP_TABLE (gd_pixmap);
   
-  CTAB_SEED_X (gd_ctab) = BigEndianValue (GetCTSeed ());
+  CTAB_SEED_X (gd_ctab) = CL (GetCTSeed ());
   
   PaintWhite = 0;
   front_w = FrontWindow ();
@@ -868,7 +867,7 @@ P4 (PUBLIC pascal trap, PaletteHandle, NewPalette,
   PALETTE_SEEDS_X (new_palette) = RM (NewHandle (sizeof (int)));
   PALETTE_SET_MODIFIED (new_palette);
   
-  PALETTE_ENTRIES_X (new_palette) = BigEndianValue (entries);
+  PALETTE_ENTRIES_X (new_palette) = CW (entries);
   info = PALETTE_INFO (new_palette);
   
   i = 0;
@@ -881,16 +880,16 @@ P4 (PUBLIC pascal trap, PaletteHandle, NewPalette,
       for (; i < entries && i <= max_colors; i ++)
 	{
 	  info[i].ciRGB = colors[i].rgb;
-	  info[i].ciUsage = BigEndianValue (src_usage);
-	  info[i].ciTolerance = BigEndianValue (src_tolerance);
+	  info[i].ciUsage = CW (src_usage);
+	  info[i].ciTolerance = CW (src_tolerance);
 	}
     }
   
   for (; i < entries; i ++)
     {
       info[i].ciRGB = ROMlib_black_rgb_color;
-      info[i].ciUsage = BigEndianValue (src_usage);
-      info[i].ciTolerance = BigEndianValue (src_tolerance);
+      info[i].ciUsage = CW (src_usage);
+      info[i].ciTolerance = CW (src_tolerance);
     }
 
   return new_palette;
@@ -1134,7 +1133,7 @@ set_palette_common (WindowPtr dst_window, PaletteHandle src_palette,
 #if 0
   /* clear the palette bits, and set the new update */
   PALETTE_PRIVATE_X (src_palette) &= ~PALETTE_UPDATE_FLAG_BITS_X;
-  PALETTE_PRIVATE_X (src_palette) |= BigEndianValue (c_update);
+  PALETTE_PRIVATE_X (src_palette) |= CW (c_update);
 #else
   elt->c_update = c_update;
 #endif
@@ -1165,7 +1164,7 @@ P2 (PUBLIC pascal trap, void, SetPaletteUpdates,
     PaletteHandle, palette, INTEGER, update)
 {
   PALETTE_PRIVATE_X (palette) &= ~PALETTE_UPDATE_FLAG_BITS_X;
-  PALETTE_PRIVATE_X (palette) |= BigEndianValue (update);
+  PALETTE_PRIVATE_X (palette) |= CW (update);
 }
 
 P1 (PUBLIC pascal trap, INTEGER, GetPaletteUpdates,
@@ -1205,7 +1204,7 @@ P1 (PUBLIC pascal trap, PaletteHandle, GetPalette,
       int gd_index_mask;						    \
 									    \
       gd_index_mask = CTAB_SIZE (PIXMAP_TABLE (GD_PMAP (MR (TheGDevice)))); \
-      index_macro_x (thePort) = BigEndianValue ((entry) & gd_index_mask);		    \
+      index_macro_x (thePort) = CL ((entry) & gd_index_mask);		    \
     }									    \
   else if (CI_USAGE_X (info) & CWC (pmAnimated))			    \
     {									    \
@@ -1267,7 +1266,7 @@ P1 (PUBLIC pascal trap, void, RestoreFore, ColorSpec *, cp)
       goto USE_RGB_ANYWAY;
       break;
     default:
-      warning_unexpected ("value = 0x%x (using rgb)", BigEndianValue (cp->value));
+      warning_unexpected ("value = 0x%x (using rgb)", CW (cp->value));
       /* FALL THROUGH */
     case CWC (useRGB):
 USE_RGB_ANYWAY:
@@ -1293,7 +1292,7 @@ P1 (PUBLIC pascal trap, void, RestoreBack, ColorSpec *, cp)
       goto USE_RGB_ANYWAY;
       break;
     default:
-      warning_unexpected ("value = 0x%x (using rgb)", BigEndianValue (cp->value));
+      warning_unexpected ("value = 0x%x (using rgb)", CW (cp->value));
       /* FALL THROUGH */
     case CWC (useRGB):
 USE_RGB_ANYWAY:
@@ -1379,7 +1378,7 @@ P5 (PUBLIC pascal trap, void, AnimatePalette,
 
   /* Compute the number of entries in the table to modify. */
   dst_length = MIN ((CTAB_SIZE (src_ctab) + 1) - src_index, dst_length);
-  dst_length = MIN (BigEndianValue (palette->pmEntries) - dst_entry, dst_length);
+  dst_length = MIN (CW (palette->pmEntries) - dst_entry, dst_length);
   
   src_cspec = &CTAB_TABLE (src_ctab)[src_index];
   
@@ -1452,8 +1451,8 @@ P4 (PUBLIC pascal trap, void, SetEntryUsage,
     }
   entry = &PALETTE_INFO (dst_palette)[entry_index];
   
-  CI_USAGE_X (entry) = BigEndianValue (src_usage);
-  CI_TOLERANCE_X (entry) = BigEndianValue (src_tolerance);
+  CI_USAGE_X (entry) = CW (src_usage);
+  CI_TOLERANCE_X (entry) = CW (src_tolerance);
   
   pm_deallocate_entry (entry, FALSE);
   
@@ -1480,7 +1479,7 @@ P4 (PUBLIC pascal trap, void, CTab2Palette,
   /* resize the palette */
   SetHandleSize ((Handle) dst_palette,
 		 PALETTE_STORAGE_FOR_ENTRIES (ctab_size + 1));
-  PALETTE_ENTRIES_X (dst_palette) = BigEndianValue (ctab_size + 1);
+  PALETTE_ENTRIES_X (dst_palette) = CW (ctab_size + 1);
   
   ctab_table = CTAB_TABLE (src_ctab);
   palette_info = PALETTE_INFO (dst_palette);
@@ -1492,8 +1491,8 @@ P4 (PUBLIC pascal trap, void, CTab2Palette,
       pm_deallocate_entry (entry, FALSE);
       
       entry->ciRGB = ctab_table[i].rgb;
-      entry->ciUsage = BigEndianValue (src_usage);
-      entry->ciTolerance = BigEndianValue (src_tolerance);
+      entry->ciUsage = CW (src_usage);
+      entry->ciTolerance = CW (src_tolerance);
     }
   PALETTE_SET_MODIFIED (dst_palette);
 }
@@ -1517,13 +1516,13 @@ P2 (PUBLIC pascal trap, void, Palette2CTab,
 
   CTAB_SEED_X (dst_ctab) = CLC (0);
   CTAB_FLAGS_X (dst_ctab) = CWC (0);
-  CTAB_SIZE_X (dst_ctab) = BigEndianValue (palette_entries - 1);
+  CTAB_SIZE_X (dst_ctab) = CW (palette_entries - 1);
 
   palette_info = PALETTE_INFO (src_palette);
   ctab_table = CTAB_TABLE (dst_ctab);
   for (i = 0; i < palette_entries; i ++)
     {
-      ctab_table[i].value = BigEndianValue (i);
+      ctab_table[i].value = CW (i);
       
       ctab_table[i].rgb = palette_info[i].ciRGB;
     }
@@ -1561,7 +1560,7 @@ P1 (PUBLIC pascal trap, LONGINT, Entry2Index, INTEGER, entry_index)
       return CI_ENTRY_INDEX (entry);
     }
   else
-    gui_fatal ("unhandled entry usage `%d'", BigEndianValue (entry->ciUsage));
+    gui_fatal ("unhandled entry usage `%d'", CW (entry->ciUsage));
 }
 
 P5 (PUBLIC pascal trap, void, CopyPalette,

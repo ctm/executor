@@ -31,7 +31,6 @@ char ROMlib_rcsid_dialCreate[] =
 #include "rsys/host.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #define _PtrToHand(ptr, hand, len)			\
   ((void)						\
@@ -59,7 +58,7 @@ Executor::dialog_create_item (DialogPeek dp, itmp dst, itmp src,
   
   /* many items have a resource id at the beginning of the resource
      data */
-  res_id = BigEndianValue (*data);
+  res_id = CW (*data);
   
   if (CB (dst->itmtype) & ctrlItem)
     {
@@ -68,11 +67,11 @@ Executor::dialog_create_item (DialogPeek dp, itmp dst, itmp src,
       ControlHandle ctl;
       
       r = dst->itmr;
-      if (BigEndianValue (r.left) > 8192)
+      if (CW (r.left) > 8192)
 	{
 	  visible_p = FALSE;
-	  r.left = BigEndianValue (BigEndianValue (r.left) - 16384);
-	  r.right = BigEndianValue (BigEndianValue (r.right) - 16384);
+	  r.left = CW (CW (r.left) - 16384);
+	  r.right = CW (CW (r.right) - 16384);
 	}
       
       if ((CB (dst->itmtype) & resCtrl) == resCtrl)
@@ -88,7 +87,7 @@ Executor::dialog_create_item (DialogPeek dp, itmp dst, itmp src,
 	      top = ctl_rect->top;
 	      left = ctl_rect->left;
 	      if (r.top != top || r.left != left)
-		MoveControl (ctl, BigEndianValue (r.left), BigEndianValue (r.top));
+		MoveControl (ctl, CW (r.left), CW (r.top));
 	    }
 	}
       else
@@ -127,8 +126,8 @@ Executor::dialog_create_item (DialogPeek dp, itmp dst, itmp src,
 		    
 		    CCTabHandle color_table;
 		    
-		    color_table_bytes = BigEndianValue (ctl_color_info->data);
-		    color_table_offset = BigEndianValue (ctl_color_info->offset);
+		    color_table_bytes = CW (ctl_color_info->data);
+		    color_table_offset = CW (ctl_color_info->offset);
 		    
 		    color_table_base = ((char *) item_color_info
 					+ color_table_offset);
@@ -234,10 +233,10 @@ ROMlib_new_dialog_common (DialogPtr dp,
      {
        Rect newr;
        
-       TextFont (BigEndianValue (DlgFont));
+       TextFont (CW (DlgFont));
        newr.top = newr.left = CWC (0);
-       newr.bottom = BigEndianValue (BigEndianValue (bounds->bottom) - BigEndianValue (bounds->top));
-       newr.right = BigEndianValue (BigEndianValue (bounds->right) - BigEndianValue (bounds->left));
+       newr.bottom = CW (CW (bounds->bottom) - CW (bounds->top));
+       newr.right = CW (CW (bounds->right) - CW (bounds->left));
        InvalRect (&newr);
        WINDOW_KIND_X (dp) = CWC (dialogKind);
        
@@ -280,7 +279,7 @@ ROMlib_new_dialog_common (DialogPtr dp,
 		
 		ip = (INTEGER *) STARH (items);
 		itp = (itmp) (ip + 1);
-		i = BigEndianValue (*ip);
+		i = CW (*ip);
 		item_no = 1;
 		while (i-- >= 0)
 		  {
@@ -358,9 +357,9 @@ Executor::dialog_compute_rect (Rect *dialog_rect, Rect *dst_rect,
 
 	    parent_rect = &PORT_RECT (parent);
 
-	    top  = BigEndianValue (parent_rect->top) + 16;
-	    left = (  (  BigEndianValue (parent_rect->left)
-		       + BigEndianValue (parent_rect->right)) / 2
+	    top  = CW (parent_rect->top) + 16;
+	    left = (  (  CW (parent_rect->left)
+		       + CW (parent_rect->right)) / 2
 		    + dialog_width / 2);
 		     
 	    SetRect (dst_rect,
@@ -449,7 +448,7 @@ P1(PUBLIC pascal trap, void, CloseDialog, DialogPtr, dp)	/* IMI-413 */
     {
       /* #### should `items' be locked? */
       ip = (INTEGER *) STARH (items);
-      i = BigEndianValue(*ip);
+      i = CW(*ip);
       itp = (itmp)(ip + 1);
       while (i-- >= 0)
 	{

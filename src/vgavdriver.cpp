@@ -2031,12 +2031,12 @@ host_set_cursor (char *cursor_data,
       mask_baseaddr = alloca (16 * row_bytes);
       
       target_pixmap.baseAddr  = RM (mask_baseaddr);
-      target_pixmap.rowBytes  = BigEndianValue (row_bytes);
+      target_pixmap.rowBytes  = CW (row_bytes);
       target_pixmap.bounds    = ROMlib_cursor_rect;
       target_pixmap.cmpCount  = CWC (1);
       target_pixmap.pixelType = CWC (0);
       target_pixmap.pixelSize = target_pixmap.cmpSize
-	= BigEndianValue (1 << vdriver_log2_bpp);
+	= CW (1 << vdriver_log2_bpp);
       /* The target pixmap colortable is not used by `convert_pixmap ()'
        * target_pixmap.pmTable = ...;
        */
@@ -2061,12 +2061,12 @@ host_set_cursor (char *cursor_data,
 	for (xmod = 0; xmod < 8; xmod++)
 	  for (y = 0; y < 16; y++)
 	    {
-	      and = ~(BigEndianValue (m[y]) << (16 - xmod));
+	      and = ~(CW (m[y]) << (16 - xmod));
 	      cursor_masks.bpp1[xmod][y][0].and_mask = and >> 24;
 	      cursor_masks.bpp1[xmod][y][1].and_mask = and >> 16;
 	      cursor_masks.bpp1[xmod][y][2].and_mask = and >> 8;
 
-	      xor = BigEndianValue (d[y]) << (16 - xmod);
+	      xor = CW (d[y]) << (16 - xmod);
 	      cursor_masks.bpp1[xmod][y][0].xor_mask = xor >> 24;
 	      cursor_masks.bpp1[xmod][y][1].xor_mask = xor >> 16;
 	      cursor_masks.bpp1[xmod][y][2].xor_mask = xor >> 8;
@@ -2084,21 +2084,21 @@ host_set_cursor (char *cursor_data,
 	for (xmod = 0; xmod < 4; xmod++)
 	  for (y = 0; y < 16; y++)
 	    {
-	      and = ~(BigEndianValue (m[y]) >> (xmod * 2));
+	      and = ~(CL (m[y]) >> (xmod * 2));
 	      cursor_masks.bpp2[xmod][y][0].and_mask = and >> 24;
 	      cursor_masks.bpp2[xmod][y][1].and_mask = and >> 16;
 	      cursor_masks.bpp2[xmod][y][2].and_mask = and >> 8;
 	      cursor_masks.bpp2[xmod][y][3].and_mask = and;
 	      cursor_masks.bpp2[xmod][y][4].and_mask =
-		~(BigEndianValue (m[y]) << (8 - (xmod * 2)));
+		~(CL (m[y]) << (8 - (xmod * 2)));
 
-	      xor = BigEndianValue (d[y]) >> (xmod * 2);
+	      xor = CL (d[y]) >> (xmod * 2);
 	      cursor_masks.bpp2[xmod][y][0].xor_mask = xor >> 24;
 	      cursor_masks.bpp2[xmod][y][1].xor_mask = xor >> 16;
 	      cursor_masks.bpp2[xmod][y][2].xor_mask = xor >> 8;
 	      cursor_masks.bpp2[xmod][y][3].xor_mask = xor;
 	      cursor_masks.bpp2[xmod][y][4].xor_mask =
-		BigEndianValue (d[y]) << (8 - (xmod * 2));
+		CL (d[y]) << (8 - (xmod * 2));
 	    }
 	break;
       }

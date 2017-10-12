@@ -22,7 +22,6 @@ char ROMlib_rcsid_icon[] =
 #include "rsys/icon.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #define ICON_RETURN_ERROR(error)					      \
   ({									      \
@@ -276,8 +275,8 @@ P1 (PUBLIC pascal trap, CIconHandle, GetCIcon,
   
   cicon_res = STARH (cicon_res_handle);
   height = RECT_HEIGHT (&cicon_res->iconPMap.bounds);
-  mask_data_size  = BigEndianValue (cicon_res->iconMask.rowBytes) * height;
-  bmap_data_size  = BigEndianValue (cicon_res->iconBMap.rowBytes) * height;
+  mask_data_size  = CW (cicon_res->iconMask.rowBytes) * height;
+  bmap_data_size  = CW (cicon_res->iconBMap.rowBytes) * height;
   new_size = sizeof(CIcon) - sizeof(INTEGER) + mask_data_size + bmap_data_size;
 
   cicon_handle = (CIconHandle) NewHandle (new_size);
@@ -305,11 +304,11 @@ P1 (PUBLIC pascal trap, CIconHandle, GetCIcon,
        pmap_ctab_offset = bmap_data_offset + bmap_data_size;
        tmp_ctab = (CTabPtr) ((char *) &cicon_res->iconMaskData +
 							     pmap_ctab_offset);
-       pmap_ctab_size   = sizeof (ColorTable) + (BigEndianValue (tmp_ctab->ctSize)
+       pmap_ctab_size   = sizeof (ColorTable) + (CW (tmp_ctab->ctSize)
 						 * sizeof (ColorSpec));
        
        pmap_data_offset = pmap_ctab_offset + pmap_ctab_size;
-       pmap_data_size   = (BigEndianValue (cicon->iconPMap.rowBytes)
+       pmap_data_size   = (CW (cicon->iconPMap.rowBytes)
 			   & ROWBYTES_VALUE_BITS) * height;
        
        cicon->iconMask.baseAddr = CLC_NULL;
@@ -324,7 +323,7 @@ P1 (PUBLIC pascal trap, CIconHandle, GetCIcon,
 	 BlockMove ((Ptr) &cicon_res->iconMaskData + pmap_ctab_offset,
 		    (Ptr) STARH (color_table),
 		    pmap_ctab_size);
-	 CTAB_SEED_X (color_table) = BigEndianValue (GetCTSeed ());
+	 CTAB_SEED_X (color_table) = CL (GetCTSeed ());
 	 cicon->iconPMap.pmTable = RM (color_table);
 	 
 	 cicon->iconPMap.baseAddr = CLC_NULL;
@@ -565,19 +564,19 @@ P4 (PUBLIC pascal trap, OSErr, PlotIconSuite,
        memset (&icon_rect, '\000', sizeof icon_rect);
        
        icon_size = (little_icon_p ? 16 : 32);
-       icon_rect.bottom = icon_rect.right = BigEndianValue (icon_size);
+       icon_rect.bottom = icon_rect.right = CW (icon_size);
        
        icon_pm.baseAddr = icon_data->p;
-       icon_pm.rowBytes = BigEndianValue (  (icon_size * icon_bpp / 8)
+       icon_pm.rowBytes = CW (  (icon_size * icon_bpp / 8)
 			      | PIXMAP_DEFAULT_ROW_BYTES);
        icon_pm.bounds = icon_rect;
-       icon_pm.pixelSize = icon_pm.cmpSize = BigEndianValue (icon_bpp);
+       icon_pm.pixelSize = icon_pm.cmpSize = CW (icon_bpp);
        icon_pm.cmpCount = CWC (1);
        icon_pm.pmTable = RM (color_table);
        
        mask_bm.baseAddr = (Ptr) RM ((char *) STARH (icon_mask)
 			      + icon_size * icon_size / 8);
-       mask_bm.rowBytes = BigEndianValue (icon_size / 8);
+       mask_bm.rowBytes = CW (icon_size / 8);
        mask_bm.bounds = icon_rect;
        
        CopyMask ((BitMap *) &icon_pm, &mask_bm,
@@ -607,7 +606,7 @@ P1 (PUBLIC pascal trap, short, GetSuiteLabel,
   cotton_suite_layout_t *suitep;
 
   suitep = (cotton_suite_layout_t *) STARH (suite);
-  retval = BigEndianValue (suitep->label);
+  retval = CW (suitep->label);
   return retval;
 }
 
@@ -618,7 +617,7 @@ P2 (PUBLIC pascal trap, OSErr, SetSuiteLabel,
   cotton_suite_layout_t *suitep;
 
   suitep = (cotton_suite_layout_t *) STARH (suite);
-  suitep->label = BigEndianValue (label);
+  suitep->label = CW (label);
   retval = noErr;
 
   return retval;

@@ -619,7 +619,7 @@ MoreMasters (void)
 void
 print_free (void)
 {
-  printf ("%d %d\n", BigEndianValue (MR(ApplZone)->zcbFree), BigEndianValue (MR(SysZone)->zcbFree));
+  printf ("%d %d\n", CL (MR(ApplZone)->zcbFree), CL (MR(SysZone)->zcbFree));
 }
 #endif
 
@@ -642,9 +642,9 @@ InitZone (ProcPtr pGrowZone, int16 cMoreMasters,
   zone->bkLim     = RM ((Ptr) last_block);
   zone->purgePtr  = CLC_NULL;
   zone->hFstFree  = CLC_NULL;
-  zone->zcbFree   = BigEndianValue ((uint32) limitPtr - (uint32) zone - 64);
+  zone->zcbFree   = CL ((uint32) limitPtr - (uint32) zone - 64);
   zone->gzProc    = RM (pGrowZone);
-  zone->moreMast  = BigEndianValue (cMoreMasters);
+  zone->moreMast  = CW (cMoreMasters);
   zone->flags     = CWC (0);
   zone->minCBFree = CWC (0);
   zone->purgeProc = CLC_NULL;
@@ -798,7 +798,7 @@ DisposHandle (Handle h)
   MM_SLAM ("entry");
 
   if (TTS_HACK && 
-      h == (Handle) (BigEndianValue (*(long *)SYN68K_TO_US (256)) + ROMlib_offset))
+      h == (Handle) (CL (*(long *)SYN68K_TO_US (256)) + ROMlib_offset))
     h = 0;
   
   if (h)
@@ -940,7 +940,7 @@ SetHandleSize (Handle h, Size newsize)
 	  ROMlib_memnomove_p = save_memnomove_p;
 	  ZONE_ZCB_FREE_X (current_zone)
 
-	    = BigEndianValue (ZONE_ZCB_FREE (current_zone) - PSIZE (nextblock));
+	    = CL (ZONE_ZCB_FREE (current_zone) - PSIZE (nextblock));
 	  
 	  SETPSIZE (block, oldpsize + PSIZE (nextblock));
 	  SETSIZEC (block, 0);
@@ -1163,7 +1163,7 @@ ReallocHandle (Handle h, Size size)
 	    {
 	      SETPSIZE (oldb, newsize);
 	      ZONE_ZCB_FREE_X (current_zone)
-		= BigEndianValue (ZONE_ZCB_FREE (current_zone) - PSIZE (newb));
+		= CL (ZONE_ZCB_FREE (current_zone) - PSIZE (newb));
 	      ROMlib_setupblock (oldb, size, REL, h, state);
 	      goto done;
 	    }
@@ -1356,7 +1356,7 @@ SetPtrSize (Ptr p, Size newsize)
 	  if (ROMlib_makespace (&nextblock, newsize - oldpsize))
 	    {
 	      ZONE_ZCB_FREE_X (current_zone)
-		= BigEndianValue (ZONE_ZCB_FREE_X (current_zone) - PSIZE (nextblock));
+		= CL (ZONE_ZCB_FREE_X (current_zone) - PSIZE (nextblock));
 
 	      SETPSIZE (block, oldpsize + PSIZE (nextblock));
 	      SETSIZEC (block, 0);
@@ -2084,7 +2084,7 @@ ROMlib_installhandle (Handle sh, Handle dh)
       block_header_t *sb = HANDLE_TO_BLOCK (sh);
       ROMlib_freeblock (db);
       SETMASTER (dh, STARH (sh));
-      BLOCK_LOCATION_OFFSET_X (sb) = BigEndianValue ((uint32) dh - (uint32) MR (TheZone));
+      BLOCK_LOCATION_OFFSET_X (sb) = CL ((uint32) dh - (uint32) MR (TheZone));
       sh->p = (Ptr) ZONE_HFST_FREE_X (MR (TheZone));
       ZONE_HFST_FREE_X (MR (TheZone)) = RM ((Ptr) sh);
     }
@@ -2097,7 +2097,7 @@ MemError (void)
 {
   MM_SLAM ("entry");
   
-  return BigEndianValue (MemErr);
+  return CW (MemErr);
 }
 
 THz

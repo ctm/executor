@@ -27,7 +27,6 @@ char ROMlib_rcsid_teEdit[] =
 #include "rsys/text.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 static void
 tedoinserttext (TEHandle te, int16 hlen, int16 len,
@@ -46,9 +45,9 @@ tedoinserttext (TEHandle te, int16 hlen, int16 len,
   
   HASSIGN_3
     (te,
-     selEnd, BigEndianValue (TE_SEL_END (te) + len),
-     selStart, BigEndianValue (TE_SEL_START (te) + len),
-     teLength, BigEndianValue (TE_LENGTH (te) + len));
+     selEnd, CW (TE_SEL_END (te) + len),
+     selStart, CW (TE_SEL_START (te) + len),
+     teLength, CW (TE_LENGTH (te) + len));
 }
 
 void
@@ -107,13 +106,13 @@ Executor::ROMlib_teremovestyleinfo (TEStyleHandle te_style,
       
       current_run = &runs[current_run_index];
       STYLE_RUN_START_CHAR_X (current_run)
-	= BigEndianValue (STYLE_RUN_START_CHAR (current_run) - shift);
+	= CW (STYLE_RUN_START_CHAR (current_run) - shift);
     }
   
   memmove (&runs[start_run_index], &runs[end_run_index],
 	   (n_runs - end_run_index + 1) * sizeof *runs);
   n_runs -= end_run_index - start_run_index;
-  TE_STYLE_N_RUNS_X (te_style) = BigEndianValue (n_runs);
+  TE_STYLE_N_RUNS_X (te_style) = CW (n_runs);
   SetHandleSize ((Handle) te_style,
 		 TE_STYLE_SIZE_FOR_N_RUNS (n_runs));
   
@@ -144,8 +143,8 @@ tereplaceselection (TEHandle teh, int16 start, int16 stop, int16 len,
   BlockMove (ptr, STARH (hText) + start, len);
   
   TE_SEL_END_X (teh) = TE_SEL_START_X (teh)
-    = BigEndianValue (TE_SEL_START (teh) + len);
-  TE_LENGTH_X (teh) = BigEndianValue (hlen + nchar);
+    = CW (TE_SEL_START (teh) + len);
+  TE_LENGTH_X (teh) = CW (hlen + nchar);
   TE_CARET_STATE_X (teh) = CWC (-1);	/* will be highlit below */
 }
 
@@ -168,7 +167,7 @@ te_style_insert_runs (TEStyleHandle te_style,
       StyleRun *run = &runs[run_i];
       
       STYLE_RUN_START_CHAR_X (run)
-	= BigEndianValue (STYLE_RUN_START_CHAR (run) + len);
+	= CW (STYLE_RUN_START_CHAR (run) + len);
     }
   
   for (run_i = 0; run_i < n_new_runs; run_i ++)
@@ -200,10 +199,10 @@ te_style_insert_runs (TEStyleHandle te_style,
 	  
 	  new_style = ST_ELT (style_table, new_style_index);
 	  
-	  ST_ELT_COUNT_X (new_style) = BigEndianValue (ST_ELT_COUNT (new_style) + 1);
+	  ST_ELT_COUNT_X (new_style) = CW (ST_ELT_COUNT (new_style) + 1);
 	  release_style_index (te_style, style_index);
 	  
-	  STYLE_RUN_STYLE_INDEX_X (run) = BigEndianValue (new_style_index);
+	  STYLE_RUN_STYLE_INDEX_X (run) = CW (new_style_index);
 	}
     }
   stabilize_style_info (te_style);
@@ -273,14 +272,14 @@ Executor::ROMlib_teinsertstyleinfo (TEHandle te,
 				     FALSE);
       
       /* must swap here, the elt start char is a `int32' */
-      STYLE_RUN_START_CHAR_X (new_run) = BigEndianValue (SCRAP_ELT_START_CHAR (scrap_elt));
-      STYLE_RUN_STYLE_INDEX_X (new_run) = BigEndianValue (style_index);
+      STYLE_RUN_START_CHAR_X (new_run) = CW (SCRAP_ELT_START_CHAR (scrap_elt));
+      STYLE_RUN_STYLE_INDEX_X (new_run) = CW (style_index);
     }
   {
     StyleRun *new_run;
     
     new_run = &new_runs[scrap_n_styles];
-    STYLE_RUN_START_CHAR_X (new_run) = BigEndianValue (len);
+    STYLE_RUN_START_CHAR_X (new_run) = CW (len);
     STYLE_RUN_STYLE_INDEX_X (new_run) = CWC (-1);
   }
   
@@ -319,7 +318,7 @@ Executor::ROMlib_tedoitall (TEHandle teh, Ptr ptr,      /* INTERNAL */
       && TE_LINE_HEIGHT (teh) == -1)
     {
       lht = TE_STYLE_LH_TABLE (te_style);
-      oldlh = BigEndianValue ((STARH(lht) + Hx(teh, nLines) - 1)->lhHeight);
+      oldlh = CW ((STARH(lht) + Hx(teh, nLines) - 1)->lhHeight);
     }
   else
     {
@@ -367,21 +366,21 @@ Executor::ROMlib_tedoitall (TEHandle teh, Ptr ptr,      /* INTERNAL */
   if (start > hlen)
     {
       warning_unexpected ("start = %d, hlen = %d", start, hlen);
-      TE_SEL_START_X (teh) = BigEndianValue (hlen);
+      TE_SEL_START_X (teh) = CW (hlen);
       start = hlen;
     }
 
   if (stop > hlen)
     {
       warning_unexpected ("stop = %d, hlen = %d", stop, hlen);
-      TE_SEL_END_X (teh) = BigEndianValue (hlen);
+      TE_SEL_END_X (teh) = CW (hlen);
       stop = hlen;
     }
 
   if (start > stop)
     {
       warning_unexpected ("start = %d, stop = %d", start, stop);
-      TE_SEL_START_X (teh) = BigEndianValue (stop);
+      TE_SEL_START_X (teh) = CW (stop);
       start = stop;
     }
 
@@ -405,14 +404,14 @@ Executor::ROMlib_tedoitall (TEHandle teh, Ptr ptr,      /* INTERNAL */
 	    {
 	      if (*ptr == '\010' || !ROMlib_forward_del_p)
 		{
-		  HxX(teh, selStart) = BigEndianValue(Hx(teh, selStart) - 1);
+		  HxX(teh, selStart) = CW(Hx(teh, selStart) - 1);
 		  start = Hx(teh, selStart);
 		}
 	      else
 		{
 		  if (stop < hlen)
 		    {
-		      HxX(teh, selEnd) = BigEndianValue(Hx(teh, selEnd) + 1);
+		      HxX(teh, selEnd) = CW(Hx(teh, selEnd) + 1);
 		      stop = Hx(teh, selEnd);
 		    }
 		}
@@ -429,37 +428,37 @@ Executor::ROMlib_tedoitall (TEHandle teh, Ptr ptr,      /* INTERNAL */
   ROMlib_caltext (teh, start, nchar, &calstart, &calend);
   TE_CHAR_TO_POINT (teh, TE_LENGTH (teh), &newend);
   if (TE_STYLIZED_P (teh) && TE_LINE_HEIGHT (teh) == -1)
-    newlh = BigEndianValue ((STARH (lht) + TE_N_LINES (teh) - 1)->lhHeight);
+    newlh = CW ((STARH (lht) + TE_N_LINES (teh) - 1)->lhHeight);
   
   if (oldend.v > newend.v)
     {
-      eraser.top  = BigEndianValue(newend.v);
-      eraser.left = BigEndianValue(newend.h);
-      eraser.bottom = BigEndianValue(newend.v + newlh);
+      eraser.top  = CW(newend.v);
+      eraser.left = CW(newend.h);
+      eraser.bottom = CW(newend.v + newlh);
       eraser.right = HxX(teh, viewRect.right);
       SectRect(&HxX(teh, viewRect), &eraser, &eraser);
       EraseRect(&eraser);
       eraser.top = eraser.bottom;
       eraser.left = HxX(teh, viewRect.left);
-      if (eraser.top != BigEndianValue(oldend.v))
+      if (eraser.top != CW(oldend.v))
 	{
-	  eraser.bottom = BigEndianValue(oldend.v);
+	  eraser.bottom = CW(oldend.v);
 	  eraser.right  = HxX(teh, viewRect.right);
 	  SectRect(&HxX(teh, viewRect), &eraser, &eraser);
 	  EraseRect(&eraser);
-	  eraser.top = BigEndianValue(oldend.v);
+	  eraser.top = CW(oldend.v);
 	}
-      eraser.bottom = BigEndianValue(oldend.v + oldlh);
-      eraser.right = BigEndianValue(oldend.h);
+      eraser.bottom = CW(oldend.v + oldlh);
+      eraser.right = CW(oldend.h);
       SectRect(&HxX(teh, viewRect), &eraser, &eraser);
       EraseRect(&eraser);
     }
   else if (oldend.v == newend.v && oldend.h > newend.h)
     {
-      eraser.top    = BigEndianValue(oldend.v);
-      eraser.left   = BigEndianValue(newend.h);
-      eraser.bottom = BigEndianValue(oldend.v + oldlh);
-      eraser.right  = BigEndianValue(oldend.h);
+      eraser.top    = CW(oldend.v);
+      eraser.left   = CW(newend.h);
+      eraser.bottom = CW(oldend.v + oldlh);
+      eraser.right  = CW(oldend.h);
       SectRect(&HxX(teh, viewRect), &eraser, &eraser);
       EraseRect(&eraser);
     }
@@ -535,15 +534,15 @@ static void doarrow (TEHandle te, CHAR thec)
 	  pt.v -= offset;
 	else
 	  pt.v += offset;
-	TEP_SEL_POINT (tep).h = BigEndianValue (pt.h);
-	TEP_SEL_POINT (tep).v = BigEndianValue (pt.v);
+	TEP_SEL_POINT (tep).h = CW (pt.h);
+	TEP_SEL_POINT (tep).v = CW (pt.v);
 	sel_start = TEP_DO_TEXT (tep, 0, length, teFind);
 	break;
       }
     }
   
-  TEP_SEL_START_X (tep) = BigEndianValue (sel_start);
-  TEP_SEL_END_X (tep) = BigEndianValue (sel_start);
+  TEP_SEL_START_X (tep) = CW (sel_start);
+  TEP_SEL_END_X (tep) = CW (sel_start);
   if (TEP_CARET_STATE (tep))
     TEP_CARET_STATE_X (tep) = CWC (caret_vis);
   ROMlib_togglelite (te);
@@ -655,9 +654,9 @@ P1 (PUBLIC pascal trap, void, TECopy, TEHandle, te)
 	  run_start = RUN_START_CHAR (current_run);
 	  SCRAP_ELT_START_CHAR_X (scrap_elt) = (run_start < start
 						? CLC (0)
-						: BigEndianValue (run_start - start));
+						: CL (run_start - start));
 	}
-      SCRAP_N_STYLES_X (scrap) = BigEndianValue (n_scrap_styles);
+      SCRAP_N_STYLES_X (scrap) = CW (n_scrap_styles);
       
       LOCK_HANDLE_EXCURSION_1
 	(scrap,
@@ -669,11 +668,11 @@ P1 (PUBLIC pascal trap, void, TECopy, TEHandle, te)
       
       HSetState ((Handle) te_style, te_style_flags);
     }
-  TEScrpLength = BigEndianValue (len);
+  TEScrpLength = CW (len);
 #if defined(X) || defined(MACOSX_) || defined(SDL)
   /* ### should this lock `TEScrpHandle'? */
-  PutScrapX (TICK("TEXT"), BigEndianValue (TEScrpLength),
-	     (char *) STARH (MR (TEScrpHandle)), BigEndianValue(ScrapCount));
+  PutScrapX (TICK("TEXT"), CW (TEScrpLength),
+	     (char *) STARH (MR (TEScrpHandle)), CW(ScrapCount));
 #endif /* defined(X) */
 
   HSetState (hText, hText_flags);
@@ -692,12 +691,12 @@ P1(PUBLIC pascal trap, void, TEPaste, TEHandle, teh)
   
   s = GetScrapX (TICK("TEXT"), (char **) MR (TEScrpHandle));
   if (s >= 0)
-    TEScrpLength = BigEndianValue (s);
+    TEScrpLength = CW (s);
 #endif /* defined(X) */
   LOCK_HANDLE_EXCURSION_1
     (MR (TEScrpHandle),
      {
-       ROMlib_tedoitall (teh, STARH (MR (TEScrpHandle)), BigEndianValue (TEScrpLength),
+       ROMlib_tedoitall (teh, STARH (MR (TEScrpHandle)), CW (TEScrpLength),
 			 FALSE, NULL);
      });
 }

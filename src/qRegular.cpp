@@ -19,7 +19,6 @@ char ROMlib_rcsid_qRegular[] =
 #include "rsys/wind.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P1(PUBLIC pascal trap, void, FrameRect, Rect *, r)
 {
@@ -88,8 +87,8 @@ rect_matches_control_item (WindowPtr w, Rect *rp)
       Rect r;
 
       r = CTL_RECT (c);
-      retval = ((BigEndianValue (r.top) - BigEndianValue (rp->top) == BigEndianValue (rp->bottom) - BigEndianValue (r.bottom)) &&
-		(BigEndianValue (r.left) - BigEndianValue (rp->left) == BigEndianValue (rp->right) - BigEndianValue (r.right)));
+      retval = ((CW (r.top) - CW (rp->top) == CW (rp->bottom) - CW (r.bottom)) &&
+		(CW (r.left) - CW (rp->left) == CW (rp->right) - CW (r.right)));
     }
 
   return retval;

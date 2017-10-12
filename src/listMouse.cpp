@@ -23,7 +23,6 @@ char ROMlib_rcsid_listMouse[] =
 #include "rsys/hook.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #if defined (BINCOMPAT)
 typedef pascal BOOLEAN (*clickproc)( void );
@@ -44,14 +43,14 @@ namespace Executor {
 
 A2(PRIVATE, void, findcell, Cell *, cp, ListHandle, list)
 {
-    cp->h = BigEndianValue((BigEndianValue(cp->h) - Hx(list, rView.left)) / Hx(list, cellSize.h) +
+    cp->h = CW((CW(cp->h) - Hx(list, rView.left)) / Hx(list, cellSize.h) +
 						       Hx(list, visible.left));
-    cp->v = BigEndianValue((BigEndianValue(cp->v) - Hx(list, rView.top))  / Hx(list, cellSize.v) +
+    cp->v = CW((CW(cp->v) - Hx(list, rView.top))  / Hx(list, cellSize.v) +
 						        Hx(list, visible.top));
 
-    if (BigEndianValue(cp->h) >= Hx(list, visible.right))
+    if (CW(cp->h) >= Hx(list, visible.right))
 	cp->h  = CWC(32767);
-    if (BigEndianValue(cp->v) >= Hx(list, visible.bottom))
+    if (CW(cp->v) >= Hx(list, visible.bottom))
 	cp->v  = CWC(32767);
 }
 
@@ -65,15 +64,15 @@ A4(PRIVATE, void, setselectnilflag, BOOLEAN, setit, Cell, cell,
     LISTDECL();
 
     if ((ip = ROMlib_getoffp(cell, list))) {
-	off0wbit = BigEndianValue(*ip);
+	off0wbit = CW(*ip);
 	if (setit)
-	    *ip = BigEndianValue(off0wbit | 0x8000);
+	    *ip = CW(off0wbit | 0x8000);
 	else
-	    *ip = BigEndianValue(off0wbit & 0x7FFF);
+	    *ip = CW(off0wbit & 0x7FFF);
 	if (PtInRect(cell, &HxX(list, visible)) &&
 					     (!(off0wbit & 0x8000) ^ !setit)) {
 	    off0 = off0wbit & 0x7FFF;
-	    off1 =    BigEndianValue(ip[1]) & 0x7FFF;
+	    off1 =    CW(ip[1]) & 0x7FFF;
 	    if (hiliteempty || off0 != off1) {
 
 		C_LRect(&r, cell, list);
@@ -108,12 +107,12 @@ A4(PRIVATE, void, rectvalue, register Rect *, rp, register INTEGER, value,
     LISTDECL();
 
     LISTBEGIN(list);
-    for (c.v = BigEndianValue(rp->top) ; c.v < BigEndianValue(rp->bottom); c.v++) {
-	c.h = BigEndianValue(rp->left);
+    for (c.v = CW(rp->top) ; c.v < CW(rp->bottom); c.v++) {
+	c.h = CW(rp->left);
 	if ((sp = ip = ROMlib_getoffp(c, list))) {
-	    for (ep = ip + (BigEndianValue(rp->right) - BigEndianValue(rp->left)); ip != ep; ip++)
-		if (!(BigEndianValue(*ip) & 0x8000) ^ !value) {
-		    c.h = BigEndianValue(rp->left) + (ip - sp);
+	    for (ep = ip + (CW(rp->right) - CW(rp->left)); ip != ep; ip++)
+		if (!(CW(*ip) & 0x8000) ^ !value) {
+		    c.h = CW(rp->left) + (ip - sp);
 		    setselectnilflag(value, c, list, hiliteempty);
 		}
 	}
@@ -128,10 +127,10 @@ A5(PRIVATE, void, rect2value, register Rect *, in, register Rect *, butnotin,
     register INTEGER *ip;
     Cell c;
 
-    for (c.v = BigEndianValue(in->top) ; c.v < BigEndianValue(in->bottom); c.v++)
-	for (c.h = BigEndianValue(in->left) ; c.h < BigEndianValue(in->right); c.h++)
+    for (c.v = CW(in->top) ; c.v < CW(in->bottom); c.v++)
+	for (c.h = CW(in->left) ; c.h < CW(in->right); c.h++)
 	    if (!PtInRect(c, butnotin) && (ip = ROMlib_getoffp(c, list)))
-		if (!(BigEndianValue(*ip) & 0x8000) ^ !value)
+		if (!(CW(*ip) & 0x8000) ^ !value)
 		    setselectnilflag(value, c, list, hiliteempty);
 }
 
@@ -144,8 +143,8 @@ A1(PRIVATE, void, scrollbyvalues, ListHandle, list)
     h = (ch = HxP(list, hScroll)) ? GetCtlValue(ch) : Hx(list, visible.left);
     v = (ch = HxP(list, vScroll)) ? GetCtlValue(ch) : Hx(list, visible.top);
     C_LScroll(h - Hx(list, visible.left), v - Hx(list, visible.top), list);
-    HxX(list, visible.left) = BigEndianValue(h);
-    HxX(list, visible.top)  = BigEndianValue(v);
+    HxX(list, visible.left) = CW(h);
+    HxX(list, visible.top)  = CW(v);
     p.h = Hx(list, cellSize.h);
     p.v = Hx(list, cellSize.v);
     C_LCellSize(p, list);
@@ -159,9 +158,9 @@ P2(PUBLIC, pascal void,  ROMlib_mytrack, ControlHandle, ch, INTEGER, part)
     lp = (ListPtr) (long) STARH((Handle) (long) MR(HxX(ch, contrlRfCon)));
 
     page = ch == MR(lp->hScroll) ?
-		     BigEndianValue(lp->visible.right)  - BigEndianValue(lp->visible.left) - 1
+		     CW(lp->visible.right)  - CW(lp->visible.left) - 1
 		 :
-		     BigEndianValue(lp->visible.bottom) - BigEndianValue(lp->visible.top)  - 1;
+		     CW(lp->visible.bottom) - CW(lp->visible.top)  - 1;
 
     switch (part) {
     case inUpButton:
@@ -224,12 +223,12 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
     if (PtInRect(pt, &HxX(list, rView))) {
 	TRAPBEGIN();
 	flags = Hx(list, selFlags);
-	newcell.h = BigEndianValue(pt.h);
-	newcell.v = BigEndianValue(pt.v);
+	newcell.h = CW(pt.h);
+	newcell.v = CW(pt.v);
 	findcell(&newcell, list);
 	if (newcell.h == HxX(list, lastClick.h) &&
 	    newcell.v == HxX(list, lastClick.v) &&
-			     TickCount() < Hx(list, clikTime) + BigEndianValue(DoubleTime))
+			     TickCount() < Hx(list, clikTime) + CL(DoubleTime))
 	    doubleclick = TRUE;
 	HxX(list, lastClick) = newcell;
 	hiliteempty = !(flags & lNoNilHilite);
@@ -263,113 +262,113 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
 	    anchor.top = anchor.bottom = 0;
 	    if (extend) {
 		rswapped = HxX(list, dataBounds);
-		r.top    = BigEndianValue(rswapped.top);
-		r.left   = BigEndianValue(rswapped.left);
-		r.bottom = BigEndianValue(rswapped.bottom);
-		r.right  = BigEndianValue(rswapped.right);
+		r.top    = CW(rswapped.top);
+		r.left   = CW(rswapped.left);
+		r.bottom = CW(rswapped.bottom);
+		r.right  = CW(rswapped.right);
 		for (c.h = r.left; c.h < r.right ; c.h++)
 		    for (c.v = r.top; c.v < r.bottom ; c.v++) {
-			cswapped.h = BigEndianValue(c.h);
-			cswapped.v = BigEndianValue(c.v);
+			cswapped.h = CW(c.h);
+			cswapped.v = CW(c.v);
 			if (C_LGetSelect(FALSE, &cswapped, list))
 			    goto out1;
 		    }
 		out1:
-		c.h = BigEndianValue(cswapped.h);
-		c.v = BigEndianValue(cswapped.v);
+		c.h = CW(cswapped.h);
+		c.v = CW(cswapped.v);
 		if (c.h != r.right) {
-		    anchor.left = BigEndianValue(c.h);
+		    anchor.left = CW(c.h);
 
 		    for (c.h = r.right-1; c.h >= r.left ; c.h--)
 			for (c.v = r.top; c.v < r.bottom ; c.v++) {
-			    cswapped.h = BigEndianValue(c.h);
-			    cswapped.v = BigEndianValue(c.v);
+			    cswapped.h = CW(c.h);
+			    cswapped.v = CW(c.v);
 			    if (C_LGetSelect(FALSE, &cswapped, list))
 				goto out2;
 		    }
 		    out2:
-		    c.h = BigEndianValue(cswapped.h);
-		    c.v = BigEndianValue(cswapped.v);
-		    anchor.right = BigEndianValue(c.h + 1);
+		    c.h = CW(cswapped.h);
+		    c.v = CW(cswapped.v);
+		    anchor.right = CW(c.h + 1);
 
-		    cswapped.h = BigEndianValue(r.left);
-		    cswapped.v = BigEndianValue(r.top);
+		    cswapped.h = CW(r.left);
+		    cswapped.v = CW(r.top);
 		    C_LGetSelect(TRUE, &cswapped, list);
 		    anchor.top = cswapped.v;
 
 		    for (c.v = r.bottom - 1; c.v >= r.top ; c.v--)
 			for (c.h = r.left; c.h < r.right ; c.h++) {
-			    cswapped.h = BigEndianValue(c.h);
-			    cswapped.v = BigEndianValue(c.v);
+			    cswapped.h = CW(c.h);
+			    cswapped.v = CW(c.v);
 			    if (C_LGetSelect(FALSE, &cswapped, list))
 				goto out3;
 		    }
 		    out3:
-		    anchor.bottom = BigEndianValue(BigEndianValue(cswapped.v) + 1);
+		    anchor.bottom = CW(CW(cswapped.v) + 1);
 		}
 	    }
 	    if (anchor.top == anchor.bottom) {
 		anchor.top    = newcell.v;
 		anchor.left   = newcell.h;
-		anchor.bottom = BigEndianValue(BigEndianValue(anchor.top)  + 1);
-		anchor.right  = BigEndianValue(BigEndianValue(anchor.left) + 1);
+		anchor.bottom = CW(CW(anchor.top)  + 1);
+		anchor.right  = CW(CW(anchor.left) + 1);
 	    }
-	    c.h = BigEndianValue(anchor.left);
-	    c.v = BigEndianValue(anchor.top);
+	    c.h = CW(anchor.left);
+	    c.v = CW(anchor.top);
 	    C_LRect(&rswapped, c, list);
-	    if (pt.h < BigEndianValue(rswapped.right) && pt.v < BigEndianValue(rswapped.bottom)) {
-		anchor.top  = BigEndianValue(BigEndianValue(anchor.bottom) - 1);
-		anchor.left = BigEndianValue(BigEndianValue(anchor.right)  - 1);
+	    if (pt.h < CW(rswapped.right) && pt.v < CW(rswapped.bottom)) {
+		anchor.top  = CW(CW(anchor.bottom) - 1);
+		anchor.left = CW(CW(anchor.right)  - 1);
 	    } else {
-		anchor.bottom = BigEndianValue(BigEndianValue(anchor.top)  + 1);
-		anchor.right  = BigEndianValue(BigEndianValue(anchor.left) + 1);
+		anchor.bottom = CW(CW(anchor.top)  + 1);
+		anchor.right  = CW(CW(anchor.left) + 1);
 	    }
 	    oldselrect = (flags & lUseSense) ? anchor : HxX(list, dataBounds);
 	}
 
-	HxX(list, clikTime) = BigEndianValue(TickCount());
-	HxX(list, clikLoc.h)  = BigEndianValue(pt.h);
-	HxX(list, clikLoc.v)  = BigEndianValue(pt.v);
+	HxX(list, clikTime) = CL(TickCount());
+	HxX(list, clikLoc.h)  = CW(pt.h);
+	HxX(list, clikLoc.v)  = CW(pt.v);
 	oldcell.h = CWC(32767);
 
-        evt.where.h = BigEndianValue(pt.h);
-        evt.where.v = BigEndianValue(pt.v);
+        evt.where.h = CW(pt.h);
+        evt.where.v = CW(pt.v);
 	pinrect = HxX(list, rView);
-	pinrect.left = BigEndianValue(BigEndianValue(pinrect.left) - 1);
-	pinrect.bottom = BigEndianValue(BigEndianValue(pinrect.bottom) - 1);
+	pinrect.left = CW(CW(pinrect.left) - 1);
+	pinrect.bottom = CW(CW(pinrect.bottom) - 1);
 	do {
 	    HxX(list, mouseLoc) = evt.where;
 	    if (HxP(list, lClikLoop))
 		if (CALLCLICK(HxP(list, lClikLoop)))
 /*-->*/		    break;
-	    p.h = BigEndianValue(evt.where.h);
-	    p.v = BigEndianValue(evt.where.v);
+	    p.h = CW(evt.where.h);
+	    p.v = CW(evt.where.v);
 	    if (!PtInRect(p, &HxX(list, rView))) {
 		ctlchanged = FALSE;
 		scrollh = HxP(list, hScroll);
 		scrollv = HxP(list, vScroll);
 		dh = 0;
 		dv = 0;
-		if (BigEndianValue(evt.where.h) < Hx(list, rView.left)) {
+		if (CW(evt.where.h) < Hx(list, rView.left)) {
 		    if (scrollh) {
 			SetCtlValue(scrollh, GetCtlValue(scrollh)-1);
 			ctlchanged = TRUE;
 		    } else
 			dh = -1;
-		} else if (BigEndianValue(evt.where.h) > Hx(list, rView.right)) {
+		} else if (CW(evt.where.h) > Hx(list, rView.right)) {
 		    if (scrollh) {
 			SetCtlValue(scrollh, GetCtlValue(scrollh)+1);
 			ctlchanged = TRUE;
 		    } else
 			dh = 1;
 		}
-		if (BigEndianValue(evt.where.v) < Hx(list, rView.top)) {
+		if (CW(evt.where.v) < Hx(list, rView.top)) {
 		    if (scrollv) {
 			SetCtlValue(scrollv, GetCtlValue(scrollv)-1);
 			ctlchanged = TRUE;
 		    } else
 			dv = -1;
-		} else if (BigEndianValue(evt.where.v) > Hx(list, rView.bottom)) {
+		} else if (CW(evt.where.v) > Hx(list, rView.bottom)) {
 		    if (scrollv) {
 			SetCtlValue(scrollv, GetCtlValue(scrollv)+1);
 			ctlchanged = TRUE;
@@ -381,17 +380,17 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
 		else
 		    C_LScroll(dh, dv, list);
 	    }
-	    p.h = BigEndianValue(evt.where.h);
-	    p.v = BigEndianValue(evt.where.v);
+	    p.h = CW(evt.where.h);
+	    p.v = CW(evt.where.v);
 	    l = PinRect(&pinrect, p);
-	    newcell.h = BigEndianValue(LoWord(l));
-	    newcell.v = BigEndianValue(HiWord(l));
+	    newcell.h = CW(LoWord(l));
+	    newcell.v = CW(HiWord(l));
 	    findcell(&newcell, list);
 	    if (userects) {
 		newcellr.top    = newcell.v;
 		newcellr.left   = newcell.h;
-		newcellr.bottom = BigEndianValue(BigEndianValue(newcellr.top)  + 1);
-		newcellr.right  = BigEndianValue(BigEndianValue(newcellr.left) + 1);
+		newcellr.bottom = CW(CW(newcellr.top)  + 1);
+		newcellr.right  = CW(CW(newcellr.left) + 1);
 		UnionRect(&anchor, &newcellr, &newselrect);
 		rect2value(&oldselrect, &newselrect, !cellvalue, list,
 								  hiliteempty);
@@ -401,13 +400,13 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
 		if (newcell.h != oldcell.h ||
 		    newcell.v != oldcell.v) {
 		    if (onlyone && oldcell.h != 32767) {
-			oldcellunswapped.h = BigEndianValue(oldcell.h);
-			oldcellunswapped.v = BigEndianValue(oldcell.v);
+			oldcellunswapped.h = CW(oldcell.h);
+			oldcellunswapped.v = CW(oldcell.v);
 			setselectnilflag(FALSE, oldcellunswapped, list,
 								  hiliteempty);
 		    }
-		    newcellunswapped.h = BigEndianValue(newcell.h);
-		    newcellunswapped.v = BigEndianValue(newcell.v);
+		    newcellunswapped.h = CW(newcell.h);
+		    newcellunswapped.v = CW(newcell.v);
 		    setselectnilflag(cellvalue, newcellunswapped, list,
 								  hiliteempty);
 		    oldcell = newcell;

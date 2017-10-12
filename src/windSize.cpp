@@ -22,7 +22,6 @@ char ROMlib_rcsid_windSize[] =
 #include "rsys/wind.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /*
  * Note, the code below probably be rewritten to use XorRgn as much
@@ -64,8 +63,8 @@ P4(PUBLIC pascal trap, void, MoveWindow, WindowPtr, wp, INTEGER, h, INTEGER, v,
 	  RgnHandle last_three_pixels;
 
 	  tmpr = GD_BOUNDS (MR (TheGDevice));
-	  tmpr.top = BigEndianValue (BigEndianValue (tmpr.bottom) - 1);
-	  tmpr.left = BigEndianValue (BigEndianValue (tmpr.right) - 3);
+	  tmpr.top = CW (CW (tmpr.bottom) - 1);
+	  tmpr.left = CW (CW (tmpr.right) - 3);
 	  last_three_pixels = NewRgn ();
 	  RectRgn (last_three_pixels, &tmpr);
 	  DiffRgn (movepart, last_three_pixels, movepart);
@@ -92,11 +91,11 @@ P4(PUBLIC pascal trap, void, MoveWindow, WindowPtr, wp, INTEGER, h, INTEGER, v,
  *	 Picture editting window come up in the wrong place.
  *	 (That could be due to other inconsistencies though, like the
  */
-    h += BigEndianValue (PORT_BOUNDS (w).left) - BigEndianValue (PORT_RECT (w).left);
-    v += BigEndianValue (PORT_BOUNDS (w).top)  - BigEndianValue (PORT_RECT (w).top);
+    h += CW (PORT_BOUNDS (w).left) - CW (PORT_RECT (w).left);
+    v += CW (PORT_BOUNDS (w).top)  - CW (PORT_RECT (w).top);
 #else
-    h += BigEndianValue (PORT_BOUNDS (w).left);
-    v += BigEndianValue (PORT_BOUNDS (w).top);
+    h += CW (PORT_BOUNDS (w).left);
+    v += CW (PORT_BOUNDS (w).top);
 #endif
     if (WINDOW_VISIBLE_X (w))
       {
@@ -182,15 +181,15 @@ P3 (PUBLIC pascal trap, void, DragWindow, WindowPtr, wp, Point, p, Rect *, rp)
        rh = NewRgn ();
        CopyRgn (WINDOW_STRUCT_REGION (wp), rh);
        r = *rp;
-       if (BigEndianValue (r.top) < 24)
+       if (CW (r.top) < 24)
 	 r.top = CWC (24);
        l = DragGrayRgn (rh, p, &r, &r, noConstraint, (ProcPtr) 0);
        if ((uint32) l != 0x80008000)
 	 MoveWindow(wp,
-		    (- BigEndianValue (PORT_BOUNDS (wp).left)
-		     + LoWord (l) + BigEndianValue (PORT_RECT (wp).left)),
-		    (- BigEndianValue (PORT_BOUNDS (wp).top)
-		     + HiWord (l) + BigEndianValue (PORT_RECT (wp).top)),
+		    (- CW (PORT_BOUNDS (wp).left)
+		     + LoWord (l) + CW (PORT_RECT (wp).left)),
+		    (- CW (PORT_BOUNDS (wp).top)
+		     + HiWord (l) + CW (PORT_RECT (wp).top)),
 		    !cmddown);
     
        DisposeRgn (rh);
@@ -228,31 +227,31 @@ P3(PUBLIC pascal trap, LONGINT, GrowWindow, WindowPtr, w, Point, startp,
     p.h = startp.h;
     p.v = startp.v;
 #if 0
-    r.left   = BigEndianValue (- BigEndianValue (PORT_BOUNDS (w).left));
-    r.top    = BigEndianValue (- BigEndianValue (PORT_BOUNDS (w).top));
-    r.right  = BigEndianValue (BigEndianValue (r.left) + RECT_WIDTH (&PORT_RECT (w)));
-    r.bottom = BigEndianValue (BigEndianValue (r.top)  + RECT_HEIGHT (&PORT_RECT (w)));
+    r.left   = CW (- CW (PORT_BOUNDS (w).left));
+    r.top    = CW (- CW (PORT_BOUNDS (w).top));
+    r.right  = CW (CW (r.left) + RECT_WIDTH (&PORT_RECT (w)));
+    r.bottom = CW (CW (r.top)  + RECT_HEIGHT (&PORT_RECT (w)));
 #else
-    r.left   = BigEndianValue (BigEndianValue (PORT_RECT (w).left)   - BigEndianValue (PORT_BOUNDS (w).left));
-    r.top    = BigEndianValue (BigEndianValue (PORT_RECT (w).top)    - BigEndianValue (PORT_BOUNDS (w).top));
-    r.right  = BigEndianValue (BigEndianValue (PORT_RECT (w).right)  - BigEndianValue (PORT_BOUNDS (w).left));
-    r.bottom = BigEndianValue (BigEndianValue (PORT_RECT (w).bottom) - BigEndianValue (PORT_BOUNDS (w).top));
+    r.left   = CW (CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left));
+    r.top    = CW (CW (PORT_RECT (w).top)    - CW (PORT_BOUNDS (w).top));
+    r.right  = CW (CW (PORT_RECT (w).right)  - CW (PORT_BOUNDS (w).left));
+    r.bottom = CW (CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top));
 #endif
 
-    pinr.left = BigEndianValue(BigEndianValue(r.left) + BigEndianValue(rp->left));
-    if (BigEndianValue(pinr.left) <= BigEndianValue(r.left) && BigEndianValue(rp->left) > 0)
+    pinr.left = CW(CW(r.left) + CW(rp->left));
+    if (CW(pinr.left) <= CW(r.left) && CW(rp->left) > 0)
       pinr.left = CWC(32767);
 
-    pinr.top = BigEndianValue(BigEndianValue(r.top) + BigEndianValue(rp->top));
-    if (BigEndianValue(pinr.top) <= BigEndianValue(r.top) && BigEndianValue(rp->top) > 0)
+    pinr.top = CW(CW(r.top) + CW(rp->top));
+    if (CW(pinr.top) <= CW(r.top) && CW(rp->top) > 0)
       pinr.top = CWC(32767);
 
-    pinr.right = BigEndianValue(BigEndianValue(r.left) + BigEndianValue(rp->right));
-    if (BigEndianValue(pinr.right) <= BigEndianValue(r.left) && BigEndianValue(rp->right) > 0)
+    pinr.right = CW(CW(r.left) + CW(rp->right));
+    if (CW(pinr.right) <= CW(r.left) && CW(rp->right) > 0)
       pinr.right = CWC(32767);
 
-    pinr.bottom = BigEndianValue(BigEndianValue(r.top) + BigEndianValue(rp->bottom));
-    if (BigEndianValue(pinr.bottom) <= BigEndianValue(r.top) && BigEndianValue(rp->bottom) > 0)
+    pinr.bottom = CW(CW(r.top) + CW(rp->bottom));
+    if (CW(pinr.bottom) <= CW(r.top) && CW(rp->bottom) > 0)
       pinr.bottom = CWC(32767);
 
     gp = thePort;
@@ -263,16 +262,16 @@ P3(PUBLIC pascal trap, LONGINT, GrowWindow, WindowPtr, w, Point, startp,
     WINDCALL((WindowPtr) w, wGrow, (LONGINT) (long) &r);
     while (!GetOSEvent(mUpMask, &ev))
       {
-	ev.where.h = BigEndianValue(ev.where.h);
-	ev.where.v = BigEndianValue(ev.where.v);
+	ev.where.h = CW(ev.where.h);
+	ev.where.v = CW(ev.where.v);
         l = PinRect (&pinr, ev.where);
 	ev.where.v = HiWord(l);
 	ev.where.h = LoWord(l);
         if (p.h != ev.where.h || p.v != ev.where.v)
 	  {
             WINDCALL((WindowPtr) w, wGrow, (LONGINT) (long) &r);
-            r.right = BigEndianValue(BigEndianValue(r.right) + (ev.where.h - p.h));
-            r.bottom = BigEndianValue(BigEndianValue(r.bottom) + (ev.where.v - p.v));
+            r.right = CW(CW(r.right) + (ev.where.h - p.h));
+            r.bottom = CW(CW(r.bottom) + (ev.where.v - p.v));
             WINDCALL((WindowPtr) w, wGrow, (LONGINT) (long) &r);
             p.h = ev.where.h;
             p.v = ev.where.v;
@@ -283,8 +282,8 @@ P3(PUBLIC pascal trap, LONGINT, GrowWindow, WindowPtr, w, Point, startp,
     RESTORE_PORT (MR ((GrafPtr) WMgrPort));
     RESTORE_PORT (gp);
     if (p.h != startp.h || p.v != startp.v)
-/*-->*/ return(((LONGINT)(BigEndianValue(r.bottom) - BigEndianValue(r.top)) << 16)|
-	        (unsigned short)(BigEndianValue(r.right) - BigEndianValue(r.left)));
+/*-->*/ return(((LONGINT)(CW(r.bottom) - CW(r.top)) << 16)|
+	        (unsigned short)(CW(r.right) - CW(r.left)));
     else
         return(0L);
 }
@@ -299,8 +298,8 @@ P4 (PUBLIC pascal trap, void, SizeWindow, WindowPtr, w,
       if (WINDOW_VISIBLE_X (w))
 	SaveOld ((WindowPeek) w);
       
-      PORT_RECT (w).right  = BigEndianValue (BigEndianValue (PORT_RECT (w).left) + width);
-      PORT_RECT (w).bottom = BigEndianValue (BigEndianValue (PORT_RECT (w).top)  + height);
+      PORT_RECT (w).right  = CW (CW (PORT_RECT (w).left) + width);
+      PORT_RECT (w).bottom = CW (CW (PORT_RECT (w).top)  + height);
       
       THEPORT_SAVE_EXCURSION
 	(MR (wmgr_port),

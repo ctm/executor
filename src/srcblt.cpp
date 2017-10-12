@@ -18,7 +18,6 @@ char ROMlib_rcsid_srcblt[] =
 #warning This seems unsafe...
 
 using namespace Executor;
-using namespace ByteSwap;
 
 int srcblt_log2_bpp asm ("_srcblt_log2_bpp");
 
@@ -111,7 +110,7 @@ srcblt_rgn (RgnHandle rh, int mode, int log2_bpp,
 	}
       else
 	{
-	  srcblt_src_row_bytes = BigEndianValue (src->rowBytes) & ROWBYTES_VALUE_BITS;
+	  srcblt_src_row_bytes = CW (src->rowBytes) & ROWBYTES_VALUE_BITS;
 	  src_baseaddr = (char *) MR (src->baseAddr);
 #if defined (VGA_SCREEN_NEEDS_FAR_PTR)
 	  asm ("movw %%ds,%0" : "=m" (srcblt_src_selector));
@@ -124,20 +123,20 @@ srcblt_rgn (RgnHandle rh, int mode, int log2_bpp,
 #if defined (VGA_SCREEN_NEEDS_FAR_PTR)
 	  srcblt_dst_selector = vga_screen_selector;
 #endif
-	  top = BigEndianValue (dst->bounds.top);
-	  left = BigEndianValue (dst->bounds.left);
+	  top = CW (dst->bounds.top);
+	  left = CW (dst->bounds.left);
 
 	  /* Hide the cursor if necessary. */
 	  old_vis_p |= (host_hide_cursor_if_intersects
-			(BigEndianValue (rp->rgnBBox.top) - top,
-			 BigEndianValue (rp->rgnBBox.left) - left,
-			 BigEndianValue (rp->rgnBBox.bottom) - top,
-			 BigEndianValue (rp->rgnBBox.right) - left));
+			(CW (rp->rgnBBox.top) - top,
+			 CW (rp->rgnBBox.left) - left,
+			 CW (rp->rgnBBox.bottom) - top,
+			 CW (rp->rgnBBox.right) - left));
 	  cursor_maybe_changed_p = TRUE;
 	}
       else
 	{
-	  srcblt_dst_row_bytes = BigEndianValue (dst->rowBytes) & ROWBYTES_VALUE_BITS;
+	  srcblt_dst_row_bytes = CW (dst->rowBytes) & ROWBYTES_VALUE_BITS;
 	  dst_baseaddr = (char *) MR (dst->baseAddr);
 #if defined (VGA_SCREEN_NEEDS_FAR_PTR)
 	  asm ("movw %%ds,%0" : "=m" (srcblt_dst_selector));
@@ -148,8 +147,8 @@ srcblt_rgn (RgnHandle rh, int mode, int log2_bpp,
 #endif /* VDRIVER_SUPPORTS_REAL_SCREEN_BLITS */
     {
       /* Default to values for non-screen blit. */
-      srcblt_src_row_bytes = BigEndianValue (src->rowBytes) & ROWBYTES_VALUE_BITS;
-      srcblt_dst_row_bytes = BigEndianValue (dst->rowBytes) & ROWBYTES_VALUE_BITS;
+      srcblt_src_row_bytes = CW (src->rowBytes) & ROWBYTES_VALUE_BITS;
+      srcblt_dst_row_bytes = CW (dst->rowBytes) & ROWBYTES_VALUE_BITS;
       src_baseaddr = (char *) MR (src->baseAddr);
       dst_baseaddr = (char *) MR (dst->baseAddr);
 #if defined (VGA_SCREEN_NEEDS_FAR_PTR)
@@ -160,10 +159,10 @@ srcblt_rgn (RgnHandle rh, int mode, int log2_bpp,
     }
 
   /* Compute the offset to map dst y coords to src bitmap coords.*/
-  src_y_offset = (BigEndianValue (src_origin->v) - BigEndianValue (src->bounds.top)
-		  - BigEndianValue (dst_origin->v));
+  src_y_offset = (CW (src_origin->v) - CW (src->bounds.top)
+		  - CW (dst_origin->v));
   src_baseaddr += src_y_offset * srcblt_src_row_bytes;
-  dst_baseaddr -= BigEndianValue (dst->bounds.top) * srcblt_dst_row_bytes;
+  dst_baseaddr -= CW (dst->bounds.top) * srcblt_dst_row_bytes;
 
   /* Handle the common case of flipped fg/bk colors and a copy xfer mode. */
   if ((mode & 3) == (srcCopy & 3)  /* either srcCopy or notSrcCopy */
@@ -174,10 +173,10 @@ srcblt_rgn (RgnHandle rh, int mode, int log2_bpp,
       srcblt_fg_color = ~0;
     }
 
-  srcblt_x_offset = -(BigEndianValue (dst->bounds.left) << log2_bpp);
+  srcblt_x_offset = -(CW (dst->bounds.left) << log2_bpp);
 
-  src_x_offset = (((BigEndianValue (src_origin->h) - BigEndianValue (src->bounds.left))
-		   - (BigEndianValue (dst_origin->h) - BigEndianValue (dst->bounds.left)))
+  src_x_offset = (((CW (src_origin->h) - CW (src->bounds.left))
+		   - (CW (dst_origin->h) - CW (dst->bounds.left)))
 		  << log2_bpp);
   src_baseaddr += (src_x_offset >> 3);
   left_shift = src_x_offset & 7;

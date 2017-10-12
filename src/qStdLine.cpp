@@ -19,7 +19,6 @@ char ROMlib_rcsid_qStdLine[] =
 #include "rsys/picture.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /*
  * eight scan convert routines... all very similar.
@@ -85,9 +84,9 @@ A8(PRIVATE, void, scodydxx1x2, register LONGINT, y1, register INTEGER, x1,
     *opp2 = op2;
 }
 
-#define OUT2(y, x1, x2)	(*op++ = BigEndianValue(y),		\
-			 *op++ = BigEndianValue(x1),	\
-			 *op++ = BigEndianValue(x2),	\
+#define OUT2(y, x1, x2)	(*op++ = CW(y),		\
+			 *op++ = CW(x1),	\
+			 *op++ = CW(x2),	\
 			 *op++ = RGNSTOPX)
 
 A5(PRIVATE, INTEGER *, scrdydxx1x2, register LONGINT, y1, register INTEGER, x1,
@@ -206,7 +205,7 @@ A5(PRIVATE, INTEGER *, scrdxdyx1x2, register INTEGER, y1, register LONGINT, x1,
 	OUT2(y1++, x1 >> 16, ox);
 	ox = x1 >> 16;
     }
-    op[-3] = BigEndianValue(x2-1);
+    op[-3] = CW(x2-1);
     return op;
 }
 
@@ -276,7 +275,7 @@ A3(PRIVATE, void, regionify1, register INTEGER *, ip1,
 	if (y1 < y2) {
 	    x1 = *ip1++;
 	    gui_assert(x1 < x2 || (x1 == 32767 && x2 == 32767));
-	    *op++ = BigEndianValue(y1);
+	    *op++ = CW(y1);
 	    *op++ = x1;
 	    if (x1 == 32767)
 /*-->*/		break;
@@ -286,7 +285,7 @@ A3(PRIVATE, void, regionify1, register INTEGER *, ip1,
 	} else if (y1 > y2) {
 	    x2 = *ip2++;
 	    gui_assert(x1 < x2 || (x1 == 32767 && x2 == 32767));
-	    *op++ = BigEndianValue(y2);
+	    *op++ = CW(y2);
 	    *op++ = x1;
 	    if (x1 == 32767)
 /*-->*/		break;
@@ -299,7 +298,7 @@ A3(PRIVATE, void, regionify1, register INTEGER *, ip1,
 	    x1 = *ip1++;
 	    x2 = *ip2++;
 	    gui_assert(x1 < x2 || (x1 == 32767 && x2 == 32767));
-	    *op++ = BigEndianValue(y1);
+	    *op++ = CW(y1);
 	    *op++ = x1;
 	    if (x1 == 32767)
 /*-->*/		break;
@@ -310,7 +309,7 @@ A3(PRIVATE, void, regionify1, register INTEGER *, ip1,
 	}
     }
     *op++ = CWC(32767);
-    rp->rgnSize = BigEndianValue(-32768 + (op - (INTEGER *) rp) * sizeof(INTEGER));
+    rp->rgnSize = CW(-32768 + (op - (INTEGER *) rp) * sizeof(INTEGER));
 }
 
 #define SWAP std::swap
@@ -332,13 +331,13 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
   PAUSEDECL;
   
   r32767 = 32767;
-  x1 = BigEndianValue (PORT_PEN_LOC (thePort).h);
-  y1 = BigEndianValue (PORT_PEN_LOC (thePort).v);
+  x1 = CW (PORT_PEN_LOC (thePort).h);
+  y1 = CW (PORT_PEN_LOC (thePort).v);
   x2 = p.h;
   y2 = p.v;
   
-  px = BigEndianValue (PORT_PEN_SIZE (thePort).h);
-  py = BigEndianValue (PORT_PEN_SIZE (thePort).v);
+  px = CW (PORT_PEN_SIZE (thePort).h);
+  py = CW (PORT_PEN_SIZE (thePort).v);
   
   if (PORT_POLY_SAVE_X (thePort) && (x1 != x2 || y1 != y2)) {
 	ph = (PolyHandle) PORT_POLY_SAVE (thePort);
@@ -346,16 +345,16 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
 	if (psize == SMALLPOLY) {
 	  SetHandleSize((Handle) ph, psize + 2 * sizeof(Point));
 	  oip = (INTEGER *)((char *) STARH(ph) + psize);
-	  *oip++ = BigEndianValue(y1);
-	  *oip++ = BigEndianValue(x1);
-	  HxX(ph, polySize) = BigEndianValue(Hx(ph, polySize) + 2 * sizeof(Point));
+	  *oip++ = CW(y1);
+	  *oip++ = CW(x1);
+	  HxX(ph, polySize) = CW(Hx(ph, polySize) + 2 * sizeof(Point));
 	} else {
 	  SetHandleSize((Handle) ph, psize + sizeof(Point));
 	  oip = (INTEGER *)((char *) STARH(ph) + psize);
-	  HxX(ph, polySize) = BigEndianValue(Hx(ph, polySize) + sizeof(Point));
+	  HxX(ph, polySize) = CW(Hx(ph, polySize) + sizeof(Point));
 	}
-	*oip++ = BigEndianValue(y2);
-	*oip++ = BigEndianValue(x2);
+	*oip++ = CW(y2);
+	*oip++ = CW(x2);
   }
   
   PIC_SAVE_EXCURSION
@@ -363,8 +362,8 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
 	ROMlib_drawingpicupdate();
 	PICOP(OP_Line);
 	PICWRITE(&PORT_PEN_LOC (thePort), sizeof (PORT_PEN_LOC (thePort)));
-	swappedp.h = BigEndianValue(p.h);
-	swappedp.v = BigEndianValue(p.v);
+	swappedp.h = CW(p.h);
+	swappedp.v = CW(p.v);
 	PICWRITE(&swappedp, sizeof(swappedp));
   })
   
@@ -390,15 +389,15 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
 	}
 	if (PORT_REGION_SAVE_X (thePort) && y1 == y2 && x1 != x2) {
 	  rp.p = (RgnPtr) ALLOCA(SMALLRGN + 5 * sizeof(INTEGER));
-	  (rp.p)->rgnBBox.top    = BigEndianValue(y1);
-	  (rp.p)->rgnBBox.left   = BigEndianValue(x1);
-	  (rp.p)->rgnBBox.bottom = BigEndianValue(y2);
-	  (rp.p)->rgnBBox.right  = BigEndianValue(x1);
+	  (rp.p)->rgnBBox.top    = CW(y1);
+	  (rp.p)->rgnBBox.left   = CW(x1);
+	  (rp.p)->rgnBBox.bottom = CW(y2);
+	  (rp.p)->rgnBBox.right  = CW(x1);
 	  (rp.p)->rgnSize = CWC(SMALLRGN + 5 * sizeof(INTEGER));
 	  oip = (INTEGER *) ((char *)rp.p + SMALLRGN);
-	  *oip++ = BigEndianValue(y1);
-	  *oip++ = BigEndianValue(x1);
-	  *oip++ = BigEndianValue(x2);
+	  *oip++ = CW(y1);
+	  *oip++ = CW(x1);
+	  *oip++ = CW(x2);
 	  *oip++ = RGNSTOPX;
 	  *oip++ = RGNSTOPX;
 	  rp.p = RM(rp.p);
@@ -420,10 +419,10 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
 	/* size allocated below is overkill */
 	rp.p = (RgnPtr) ALLOCA(SMALLRGN + (dy + 1) * sizeof(INTEGER) * 6 +
 						   sizeof(INTEGER));
-	(rp.p)->rgnBBox.top    = BigEndianValue(y1);
-	(rp.p)->rgnBBox.left   = BigEndianValue(MIN(x1, x2));
-	(rp.p)->rgnBBox.bottom = BigEndianValue(y2);
-	(rp.p)->rgnBBox.right  = BigEndianValue(MAX(x1, x2));
+	(rp.p)->rgnBBox.top    = CW(y1);
+	(rp.p)->rgnBBox.left   = CW(MIN(x1, x2));
+	(rp.p)->rgnBBox.bottom = CW(y2);
+	(rp.p)->rgnBBox.right  = CW(MAX(x1, x2));
 	
 	if (dy >= dx)
 	  if (x2 > x1)
@@ -436,7 +435,7 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
 		else
 		  op = scrdxdyx1x2(y1, x1+1, dy, dx, (INTEGER *)rp.p + 5);
 	*op++ = RGNSTOPX;
-	(rp.p)->rgnSize = BigEndianValue((char *) op - (char *) rp.p);
+	(rp.p)->rgnSize = CW((char *) op - (char *) rp.p);
 	rp.p = RM(rp.p);
 	XorRgn (&rp,
 			(RgnHandle) PORT_REGION_SAVE (thePort),
@@ -451,10 +450,10 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
   rp.p = (RgnPtr) ALLOCA(SMALLRGN + (dy + py + 1) * sizeof(LONGINT) * 4 +
 						 3 * 2 * sizeof(LONGINT));
   /* Cx(rp->rgnSize) gets filled in later */
-  (rp.p)->rgnBBox.top    = BigEndianValue(y1);
-  (rp.p)->rgnBBox.left   = BigEndianValue(MIN(x1, x2));
-  (rp.p)->rgnBBox.bottom = BigEndianValue(y2 + py);
-  (rp.p)->rgnBBox.right  = BigEndianValue(MAX(x1, x2) + px);
+  (rp.p)->rgnBBox.top    = CW(y1);
+  (rp.p)->rgnBBox.left   = CW(MIN(x1, x2));
+  (rp.p)->rgnBBox.bottom = CW(y2 + py);
+  (rp.p)->rgnBBox.right  = CW(MAX(x1, x2) + px);
   op  = destpoints   = (INTEGER *) ALLOCA(MAXNPOINTS(dy) * sizeof(INTEGER));
   op2 = destpoints2  = (INTEGER *) ALLOCA(MAXNPOINTS(dy) * sizeof(INTEGER));
   

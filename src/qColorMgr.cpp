@@ -25,7 +25,6 @@ char ROMlib_rcsid_qColorMgr[] =
 #include "rsys/dirtyrect.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 INTEGER ROMlib_qd_error;
 
@@ -65,9 +64,9 @@ itable_hash (RGBColor *rgbp, int resolution)
   int retval;
   uint16 red, green, blue;
 
-  red   = BigEndianValue (rgbp->red)   >> (16 - resolution);
-  green = BigEndianValue (rgbp->green) >> (16 - resolution);
-  blue  = BigEndianValue (rgbp->blue)  >> (16 - resolution);
+  red   = CW (rgbp->red)   >> (16 - resolution);
+  green = CW (rgbp->green) >> (16 - resolution);
+  blue  = CW (rgbp->blue)  >> (16 - resolution);
 
   switch (resolution)
     {
@@ -117,9 +116,9 @@ rgb_diff (RGBColor *rgb1p, RGBColor *rgb2p)
    */
 
 
-  retval = (ABS (BigEndianValue (rgb1p->red   & 0xff) - BigEndianValue (rgb2p->red   & 0xff)) +
-	    ABS (BigEndianValue (rgb1p->green & 0xff) - BigEndianValue (rgb2p->green & 0xff)) +
-	    ABS (BigEndianValue (rgb1p->blue  & 0xff) - BigEndianValue (rgb2p->blue  & 0xff)));
+  retval = (ABS (CW (rgb1p->red   & 0xff) - CW (rgb2p->red   & 0xff)) +
+	    ABS (CW (rgb1p->green & 0xff) - CW (rgb2p->green & 0xff)) +
+	    ABS (CW (rgb1p->blue  & 0xff) - CW (rgb2p->blue  & 0xff)));
 
   return retval;
 }
@@ -127,9 +126,9 @@ rgb_diff (RGBColor *rgb1p, RGBColor *rgb2p)
 
 /* FIXME: may have to round instead of cleave off the low bits */
 #define RGB_TO_ITAB_INDEX(rgb, resolution)				\
-  (((BigEndianValue ((rgb)->red) >> (16 - (resolution))) << (2 * (resolution)))	\
-   | ((BigEndianValue ((rgb)->green) >> (16 - (resolution))) << (resolution))	\
-   | ((BigEndianValue ((rgb)->blue) >> (16 - (resolution)))))
+  (((CW ((rgb)->red) >> (16 - (resolution))) << (2 * (resolution)))	\
+   | ((CW ((rgb)->green) >> (16 - (resolution))) << (resolution))	\
+   | ((CW ((rgb)->blue) >> (16 - (resolution)))))
 
 static uint32
 ROMlib_search_proc (RGBColor *rgb)
@@ -148,9 +147,9 @@ ROMlib_search_proc (RGBColor *rgb)
 	                          : &mac_32bpp_rgb_spec;
       retval = (*rgb_spec->rgbcolor_to_pixel) (rgb_spec, rgb, TRUE);
       if (pixel_size == 16)
-	retval = BigEndianValue (retval);
+	retval = CW (retval);
       else if (pixel_size == 32)
-	retval = BigEndianValue (retval);
+	retval = CL (retval);
       else
 	gui_fatal ("unknown pixel size `%d'", pixel_size);
     }
@@ -258,7 +257,7 @@ P1 (PUBLIC pascal trap, LONGINT, Color2Index,
   if (! success_p)
     position = ROMlib_search_proc (rgb);
   else
-    position = BigEndianValue (position);  /* They filled this in in big endian order. */
+    position = CL (position);  /* They filled this in in big endian order. */
   return position;
 }
 
@@ -307,7 +306,7 @@ P1 (PUBLIC pascal trap, BOOLEAN, RealColor,
   closest = &(CTAB_TABLE (table)[index].rgb);
 
   /* high `resolution' bits */
-  mask = BigEndianValue (((1 << resolution) - 1) << (16 - resolution));
+  mask = CW (((1 << resolution) - 1) << (16 - resolution));
   
   return !(((rgb->red ^ closest->red) & mask)
 	   || ((rgb->green ^ closest->green) & mask)
@@ -396,12 +395,12 @@ P3 (PUBLIC pascal trap, void, GetSubTable,
 	      color table */
 /*	   
 	   if (gd_ctab_p)
-	     color->value = BigEndianValue (ctab_index);
+	     color->value = CW (ctab_index);
 	   else
 	     color->value = target_ctab_table[ctab_index].value;
 	   color->rgb   = target_ctab_table[ctab_index].rgb;
 */
-	   color->value = BigEndianValue (ctab_index);
+	   color->value = CW (ctab_index);
 	 }
        
        PIXMAP_TABLE_X (gd_pmap) = gdev_ctab_save;
@@ -423,12 +422,12 @@ Executor::average_color (GDHandle gd,
   gd_pmap = GD_PMAP (gd);
   gd_pixel_size = PIXMAP_PIXEL_SIZE (gd_pmap);
   
-  in_between.red   = BigEndianValue (((BigEndianValue (c1->red) * ratio)
-			  + (BigEndianValue (c2->red) * (65535 - ratio))) / 65535);
-  in_between.green = BigEndianValue (((BigEndianValue (c1->green) * ratio)
-			  + (BigEndianValue (c2->green) * (65535 - ratio))) / 65535);
-  in_between.blue  = BigEndianValue (((BigEndianValue (c1->blue) * ratio)
-			  + (BigEndianValue (c2->blue) * (65535 - ratio))) / 65535);
+  in_between.red   = CW (((CW (c1->red) * ratio)
+			  + (CW (c2->red) * (65535 - ratio))) / 65535);
+  in_between.green = CW (((CW (c1->green) * ratio)
+			  + (CW (c2->green) * (65535 - ratio))) / 65535);
+  in_between.blue  = CW (((CW (c1->blue) * ratio)
+			  + (CW (c2->blue) * (65535 - ratio))) / 65535);
   if (gd_pixel_size <= 8)
     {
       CTabHandle gd_ctab;
@@ -698,7 +697,7 @@ P3 (PUBLIC pascal trap, void, MakeITable,
 #endif
     SetHandleSize ((Handle) inverse_table, new_size);
   }
-  ITAB_RES_X (inverse_table) = BigEndianValue (resolution);
+  ITAB_RES_X (inverse_table) = CW (resolution);
   
   itab_table = ITAB_TABLE (inverse_table);
   
@@ -740,12 +739,12 @@ P3 (PUBLIC pascal trap, void, MakeITable,
       if (CTAB_FLAGS_X (color_table) & CTAB_GDEVICE_BIT_X)
 	new_value = i;
       else
-	new_value = BigEndianValue (color->value);
+	new_value = CW (color->value);
 
       /* Save away the color for this index, in native endian byte order. */
-      color_for_index[new_value].rgb.red   = BigEndianValue (color->rgb.red);
-      color_for_index[new_value].rgb.green = BigEndianValue (color->rgb.green);
-      color_for_index[new_value].rgb.blue  = BigEndianValue (color->rgb.blue);
+      color_for_index[new_value].rgb.red   = CW (color->rgb.red);
+      color_for_index[new_value].rgb.green = CW (color->rgb.green);
+      color_for_index[new_value].rgb.blue  = CW (color->rgb.blue);
 
       current_red   = color_for_index[new_value].rgb.red;
       current_blue  = color_for_index[new_value].rgb.blue;
@@ -917,7 +916,7 @@ P2 (PUBLIC pascal trap, void, ReserveEntry,
 
   /* Only change the seed when necessary. */
   if (old_value != entry->value)
-    CTAB_SEED_X (ctab) = BigEndianValue (GetCTSeed ());
+    CTAB_SEED_X (ctab) = CL (GetCTSeed ());
 }
 
 P3 (PUBLIC pascal trap, void, SetEntries,
@@ -967,7 +966,7 @@ P3 (PUBLIC pascal trap, void, SetEntries,
 
       for (i = 0; i <= count; i ++)
 	{
-	  int index = BigEndianValue (atable[i].value);
+	  int index = CW (atable[i].value);
 
 	  if (index < min)
 	    min = index;
@@ -997,7 +996,7 @@ P3 (PUBLIC pascal trap, void, SetEntries,
   
   if (ctab_changed_p)
     {
-      CTAB_SEED_X (ctab) = BigEndianValue (GetCTSeed ());
+      CTAB_SEED_X (ctab) = CL (GetCTSeed ());
       if (gd == MR (MainDevice))
 	{
 	  if (num_colors > 0)
@@ -1073,7 +1072,7 @@ P1 (PUBLIC pascal trap, void, DelComp,
 P1 (PUBLIC pascal trap, void, SetClientID,
     INTEGER, id)
 {
-  GD_ID_X (MR (TheGDevice)) = BigEndianValue (id);
+  GD_ID_X (MR (TheGDevice)) = CW (id);
 }
 
 P3 (PUBLIC pascal trap, void, SaveEntries, CTabHandle, src, CTabHandle, result,
@@ -1087,18 +1086,18 @@ P3 (PUBLIC pascal trap, void, SaveEntries, CTabHandle, src, CTabHandle, result,
     src = PIXMAP_TABLE (GD_PMAP (MR (TheGDevice)));
   
   src_ctab_size = CTAB_SIZE (src);
-  req_size = BigEndianValue (selection->reqLSize);
+  req_size = CW (selection->reqLSize);
   
   SetHandleSize ((Handle) result,
 		 CTAB_STORAGE_FOR_SIZE (req_size));
-  CTAB_SIZE_X (result)  = BigEndianValue (req_size);
+  CTAB_SIZE_X (result)  = CW (req_size);
   /* #### should this set the color table seed? */
-  CTAB_SEED_X (result)  = BigEndianValue (GetCTSeed ());
-  CTAB_FLAGS_X (result) = BigEndianValue (0);
+  CTAB_SEED_X (result)  = CL (GetCTSeed ());
+  CTAB_FLAGS_X (result) = CW (0);
   
   for (i = 0; i <= req_size; i ++)
     {
-      int req_index = BigEndianValue (selection->reqLData[i]);
+      int req_index = CW (selection->reqLData[i]);
       
       if (req_index >= 0
 	  && req_index <= src_ctab_size)
@@ -1127,11 +1126,11 @@ P3 (PUBLIC pascal trap, void, RestoreEntries, CTabHandle, src, CTabHandle, dst,
     dst = PIXMAP_TABLE (GD_PMAP (MR (TheGDevice)));
 
   dst_ctab_size = CTAB_SIZE (dst);
-  req_size = BigEndianValue (selection->reqLSize);
+  req_size = CW (selection->reqLSize);
   
   for (i = 0; i < req_size; i ++)
     {
-      int req_index = BigEndianValue (selection->reqLData[i]);
+      int req_index = CW (selection->reqLData[i]);
 
       if (req_index >= 0
 	  && req_index <= dst_ctab_size)

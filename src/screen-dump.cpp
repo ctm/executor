@@ -27,7 +27,6 @@ char ROMlib_rcsid_screendump[] =
 #include "rsys/screen-dump.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #define II_little_endian 0x4949
 #define MM_big_endian 0x4D4D
@@ -143,7 +142,7 @@ dump_indirect_pm (PixMap *pm)
   height = RECT_HEIGHT (&pm->bounds);
   width  = RECT_WIDTH (&pm->bounds);
   
-  bpp = BigEndianValue (pm->pixelSize);
+  bpp = CW (pm->pixelSize);
   
   if (   (bpp != 8 && bpp != 4)
       || VDRIVER_BYPASS_INTERNAL_FBUF_P ())
@@ -158,7 +157,7 @@ dump_indirect_pm (PixMap *pm)
       row_bytes = (width * bpp + 31) / 32 * 4;
       
       tiff_pm->baseAddr = (Ptr)RM (fbuf);
-      tiff_pm->rowBytes = BigEndianValue (row_bytes | PIXMAP_DEFAULT_ROW_BYTES);
+      tiff_pm->rowBytes = CW (row_bytes | PIXMAP_DEFAULT_ROW_BYTES);
       tiff_pm->bounds   = pm->bounds;
       
       pixmap_set_pixel_fields (tiff_pm, bpp);
@@ -247,9 +246,9 @@ dump_indirect_pm (PixMap *pm)
     
     for (i = 0; i <= color_table_size; i ++)
       {
-	color_map[i             ] = BigEndianValue (color_table[i].rgb.red);
-	color_map[i + (1 << bpp)] = BigEndianValue (color_table[i].rgb.green);
-	color_map[i + (2 << bpp)] = BigEndianValue (color_table[i].rgb.blue);
+	color_map[i             ] = CW (color_table[i].rgb.red);
+	color_map[i + (1 << bpp)] = CW (color_table[i].rgb.green);
+	color_map[i + (2 << bpp)] = CW (color_table[i].rgb.blue);
       }
   }
   
@@ -322,7 +321,7 @@ Executor::do_dump_screen (void)
        int log2_bpp;
        
        gd_pm = STARH (gd_pmh);
-       log2_bpp = ROMlib_log2[BigEndianValue (gd_pm->pixelSize)];
+       log2_bpp = ROMlib_log2[CW (gd_pm->pixelSize)];
        
        (*dump_fns[log2_bpp]) (gd_pm);
      });

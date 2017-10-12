@@ -25,7 +25,6 @@ char ROMlib_rcsid_teIMV[] =
 #include "rsys/hook.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 void
 Executor::generic_elt_copy (generic_elt_t *dst, generic_elt_t *src)
@@ -47,9 +46,9 @@ Executor::generic_elt_calc_height_ascent (generic_elt_t *elt)
   TextFont (GENERIC_ELT_FONT (elt));
   TextFace (GENERIC_ELT_FACE (elt));
   GetFontInfo (&font_info);
-  GENERIC_ELT_HEIGHT_X (elt) = BigEndianValue (  BigEndianValue (font_info.ascent)
-				   + BigEndianValue (font_info.descent)
-				   + BigEndianValue (font_info.leading));
+  GENERIC_ELT_HEIGHT_X (elt) = CW (  CW (font_info.ascent)
+				   + CW (font_info.descent)
+				   + CW (font_info.leading));
   GENERIC_ELT_ASCENT_X (elt) = font_info.ascent;
   TextSize (savesize);
   TextFace (saveface);
@@ -86,7 +85,7 @@ Executor::adjust_attrs (TextStyle *orig_attrs, TextStyle *new_attrs,
     TS_FACE (dst_attrs) = TS_FACE (orig_attrs);
   
   if (mode & addSize)
-    TS_SIZE_X (dst_attrs) = BigEndianValue (TS_SIZE (new_attrs) + TS_SIZE (orig_attrs));
+    TS_SIZE_X (dst_attrs) = CW (TS_SIZE (new_attrs) + TS_SIZE (orig_attrs));
   else if (mode & doSize)
     TS_SIZE_X (dst_attrs) = TS_SIZE_X (new_attrs);
   else
@@ -126,7 +125,7 @@ Executor::make_style_run_at (TEStyleHandle te_style, int16 sel)
     
     /* split the current style into two */
     n_runs = TE_STYLE_N_RUNS (te_style) + 1;
-    TE_STYLE_N_RUNS_X (te_style) = BigEndianValue (n_runs);
+    TE_STYLE_N_RUNS_X (te_style) = CW (n_runs);
     SetHandleSize ((Handle) te_style,
 		   TE_STYLE_SIZE_FOR_N_RUNS (n_runs));
     runs = TE_STYLE_RUNS (te_style);
@@ -141,10 +140,10 @@ Executor::make_style_run_at (TEStyleHandle te_style, int16 sel)
     style_table = TE_STYLE_STYLE_TABLE (te_style);
     style = ST_ELT (style_table, style_index);
     
-    ST_ELT_COUNT_X (style) = BigEndianValue (ST_ELT_COUNT (style) + 1);
+    ST_ELT_COUNT_X (style) = CW (ST_ELT_COUNT (style) + 1);
     
-    STYLE_RUN_START_CHAR_X (&runs[run_index + 1])  = BigEndianValue (sel);
-    STYLE_RUN_STYLE_INDEX_X (&runs[run_index + 1]) = BigEndianValue (style_index);
+    STYLE_RUN_START_CHAR_X (&runs[run_index + 1])  = CW (sel);
+    STYLE_RUN_STYLE_INDEX_X (&runs[run_index + 1]) = CW (style_index);
     
     return run_index + 1;
   }
@@ -186,7 +185,7 @@ Executor::get_style_index (TEStyleHandle te_style, TextStyle *attrs, int incr_co
 		  && TS_COLOR (attrs).blue == ST_ELT_COLOR (st_elt).blue))
 	    {
 	      if (incr_count_p)
-		ST_ELT_COUNT_X (st_elt) = BigEndianValue (ST_ELT_COUNT (st_elt) + 1);
+		ST_ELT_COUNT_X (st_elt) = CW (ST_ELT_COUNT (st_elt) + 1);
 	      return st_i;
 	    }
 	  else if (!cache_filled_p)
@@ -200,7 +199,7 @@ Executor::get_style_index (TEStyleHandle te_style, TextStyle *attrs, int incr_co
 
   /* a style not already in the style table was asked for.  create it */
   n_styles ++;
-  TE_STYLE_N_STYLES_X (te_style) = BigEndianValue (n_styles);
+  TE_STYLE_N_STYLES_X (te_style) = CW (n_styles);
   SetHandleSize ((Handle) style_table,
 		 STYLE_TABLE_SIZE_FOR_N_STYLES (n_styles));
   st_elt = ST_ELT (style_table, n_styles - 1);
@@ -234,7 +233,7 @@ Executor::release_style_index (TEStyleHandle te_style, int16 style_index)
   style_table = TE_STYLE_STYLE_TABLE (te_style);
   st_elt = ST_ELT (style_table, style_index);
   gui_assert (ST_ELT_COUNT (st_elt) > 0);
-  ST_ELT_COUNT_X (st_elt) = BigEndianValue (ST_ELT_COUNT (st_elt) - 1);
+  ST_ELT_COUNT_X (st_elt) = CW (ST_ELT_COUNT (st_elt) - 1);
 }
 
 /* `release_style_index ()' only decreases the reference count, so
@@ -257,7 +256,7 @@ Executor::stabilize_style_info (TEStyleHandle te_style)
   index_map = (int16*)alloca (n_styles * sizeof *index_map);
   
   for (i = 0; i < n_styles; i ++)
-    index_map[i] = BigEndianValue (i);
+    index_map[i] = CW (i);
   
   for (i = 0; i < n_styles; i ++)
     {
@@ -285,7 +284,7 @@ Executor::stabilize_style_info (TEStyleHandle te_style)
 	     index to the last style in the style table, and shrink
 	     the style table by 1 */
 	  *ST_ELT (style_table, i) = *ST_ELT (style_table, n_styles - 1);
-	  index_map[n_styles - 1] = BigEndianValue (i);
+	  index_map[n_styles - 1] = CW (i);
 
 	  /* so that we can verify, when we change the run style
 	     indexes, that noone refers to this map index */
@@ -296,7 +295,7 @@ Executor::stabilize_style_info (TEStyleHandle te_style)
     }
  done:
   
-  TE_STYLE_N_STYLES_X (te_style) = BigEndianValue (n_styles);
+  TE_STYLE_N_STYLES_X (te_style) = CW (n_styles);
   SetHandleSize ((Handle) style_table,
 		 STYLE_TABLE_SIZE_FOR_N_STYLES (n_styles));
   
@@ -331,14 +330,14 @@ combine_run_with_next (TEStyleHandle te_style, int16 run_index)
 	   (n_runs - run_index - 1) * sizeof *runs);
   
   n_runs --;
-  TE_STYLE_N_RUNS_X (te_style) = BigEndianValue (n_runs);
+  TE_STYLE_N_RUNS_X (te_style) = CW (n_runs);
   SetHandleSize ((Handle) te_style,
 		 TE_STYLE_SIZE_FOR_N_RUNS (n_runs));
   
   style_index = STYLE_RUN_STYLE_INDEX (&runs[run_index]);
   style_table = TE_STYLE_STYLE_TABLE (te_style);
   style = ST_ELT (style_table, style_index);
-  ST_ELT_COUNT_X (style) = BigEndianValue (ST_ELT_COUNT (style) - 1);
+  ST_ELT_COUNT_X (style) = CW (ST_ELT_COUNT (style) - 1);
 }
 
 void
@@ -430,7 +429,7 @@ te_add_attrs_to_range (TEHandle te,
 	   new_style_index = get_style_index (te_style, &new_attrs, TRUE);
 	   release_style_index (te_style, orig_style_index);
 	   
-	   STYLE_RUN_STYLE_INDEX_X (current_run) = BigEndianValue (new_style_index);
+	   STYLE_RUN_STYLE_INDEX_X (current_run) = CW (new_style_index);
 	 }
      });
   
@@ -471,9 +470,9 @@ P2 (PUBLIC pascal trap, TEHandle, TEStylNew, Rect *, dst, Rect *, view)
   
   /* font info used to fill in the fisrt style element */
   GetFontInfo (&font_info);
-  font_height = (BigEndianValue (font_info.ascent)
-		 + BigEndianValue (font_info.descent)
-		 + BigEndianValue (font_info.leading));
+  font_height = (CW (font_info.ascent)
+		 + CW (font_info.descent)
+		 + CW (font_info.leading));
   style_table = (STHandle) NewHandle (sizeof (STElement));
   HASSIGN_7
     (style_table,
@@ -482,7 +481,7 @@ P2 (PUBLIC pascal trap, TEHandle, TEStylNew, Rect *, dst, Rect *, view)
      stFace, PORT_TX_FACE (thePort),
      stSize, PORT_TX_SIZE_X (thePort),
      stColor, ROMlib_black_rgb_color,
-     stHeight, BigEndianValue (font_height),
+     stHeight, CW (font_height),
      stAscent, font_info.ascent);
   
   TE_STYLE_STYLE_TABLE_X (te_style) = RM (style_table);
@@ -512,7 +511,7 @@ P2 (PUBLIC pascal trap, TEHandle, TEStylNew, Rect *, dst, Rect *, view)
   stp->scrpColor.blue = 0;		/* black ? */
   stp->scrpStartChar = CLC(0);
   
-  stp->scrpHeight = BigEndianValue (font_height);
+  stp->scrpHeight = CW (font_height);
   stp->scrpAscent = font_info.ascent;
   
   SetStylHandle (te_style, teh);
@@ -570,7 +569,7 @@ P1 (PUBLIC pascal trap, StScrpHandle, GetStylScrap, TEHandle, te)
   
   scrap_n_styles = MAX (end_run_index - start_run_index, 1);
   scrap = (StScrpHandle) NewHandle (SCRAP_SIZE_FOR_N_STYLES (scrap_n_styles));
-  SCRAP_N_STYLES_X (scrap) = BigEndianValue (scrap_n_styles);
+  SCRAP_N_STYLES_X (scrap) = CW (scrap_n_styles);
   
   if (start == end)
     warning_unimplemented ("should check null scrap, first");
@@ -590,7 +589,7 @@ P1 (PUBLIC pascal trap, StScrpHandle, GetStylScrap, TEHandle, te)
       generic_elt_copy (SCRAP_ELT_TO_GENERIC_ELT (scrap_elt),
 			ST_ELT_TO_GENERIC_ELT (style));
       SCRAP_ELT_START_CHAR_X (scrap_elt)
-	= BigEndianValue (RUN_START_CHAR (current_run) - start);
+	= CL (RUN_START_CHAR (current_run) - start);
     }
   te_style_combine_runs (te_style);
   
@@ -611,8 +610,8 @@ P2 (PUBLIC pascal trap, INTEGER, TEGetOffset, Point, pt, TEHandle, te)
   Point sp;
   
   sp = TE_SEL_POINT (te);
-  TE_SEL_POINT (te).h = BigEndianValue (pt.h);
-  TE_SEL_POINT (te).v = BigEndianValue (pt.v);
+  TE_SEL_POINT (te).h = CW (pt.h);
+  TE_SEL_POINT (te).v = CW (pt.v);
   retval = TE_DO_TEXT (te, 0, TE_LENGTH (te), teFind);
   TE_SEL_POINT (te) = sp;
   
@@ -678,7 +677,7 @@ P3 (PUBLIC pascal trap, int32, TEGetHeight,
       l = STARH (MR (STARH (te_style)->lhTab)) + startLine;
       le = l + endLine - startLine;
       for ( ; l <= le ; l++)
-	retval += BigEndianValue (l->lhHeight);
+	retval += CW (l->lhHeight);
     }
   else
     retval = TE_LINE_HEIGHT (teh) * (endLine - startLine + 1);
@@ -915,7 +914,7 @@ P5 (PUBLIC pascal trap, void, TEReplaceStyle, int16, mode,
 	  new_style_index = get_style_index (te_style, new_attrs, TRUE);
 	  release_style_index (te_style, orig_style_index);
 	  
-	  RUN_STYLE_INDEX_X (run) = BigEndianValue (new_style_index);
+	  RUN_STYLE_INDEX_X (run) = CW (new_style_index);
 	}
     }
   HSetState ((Handle) te_style, te_style_flags);

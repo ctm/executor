@@ -26,7 +26,6 @@ char ROMlib_rcsid_windMisc[] =
 #include "rsys/executor.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 PRIVATE boolean_t
 is_window_ptr (WindowPeek w)
@@ -51,7 +50,7 @@ is_window_ptr (WindowPeek w)
 P2(PUBLIC pascal trap, void, SetWRefCon, WindowPtr, w, LONGINT, data)
 {
   if (is_window_ptr ((WindowPeek) w))
-    WINDOW_REF_CON_X (w) = BigEndianValue(data);
+    WINDOW_REF_CON_X (w) = CL(data);
 }
 
 /*
@@ -106,14 +105,14 @@ P1(PUBLIC pascal trap, PicHandle, GetWindowPic, WindowPtr, w)
 
 P2(PUBLIC pascal trap, LONGINT, PinRect, Rect *, r, Point, p)
 {
-    if (p.h < BigEndianValue(r->left))
-        p.h = BigEndianValue(r->left);
-    else if (p.h >= BigEndianValue(r->right))
-        p.h = BigEndianValue(r->right) - 1;
-    if (p.v < BigEndianValue(r->top))
-        p.v = BigEndianValue(r->top);
-    else if (p.v >= BigEndianValue(r->bottom))
-        p.v = BigEndianValue(r->bottom) - 1;
+    if (p.h < CW(r->left))
+        p.h = CW(r->left);
+    else if (p.h >= CW(r->right))
+        p.h = CW(r->right) - 1;
+    if (p.v < CW(r->top))
+        p.v = CW(r->top);
+    else if (p.v >= CW(r->bottom))
+        p.v = CW(r->bottom) - 1;
         
     return(((LONGINT)p.v << 16) | (unsigned short) p.h);
 }
@@ -144,8 +143,8 @@ P6 (PUBLIC pascal trap, LONGINT, DragTheRgn,
   while (!GetOSEvent(mUpMask, &ev))
     {
       GlobalToLocal (&ev.where);
-      ev.where.h = BigEndianValue (ev.where.h);
-      ev.where.v = BigEndianValue (ev.where.v);
+      ev.where.h = CW (ev.where.h);
+      ev.where.v = CW (ev.where.v);
       if (PtInRect(ev.where, slop))
 	{
 	  l = PinRect (limit, ev.where);
@@ -248,7 +247,7 @@ P1(PUBLIC pascal trap, BOOLEAN, CheckUpdate, EventRecord *, ev)
 	       });
 	  else
 	    {
-	      ev->what = BigEndianValue(updateEvt);
+	      ev->what = CW(updateEvt);
 	      ev->message = (long) RM(wp);
 	      return TRUE;
 	    }
@@ -369,8 +368,8 @@ P1(PUBLIC pascal trap, void, CalcVis, WindowPeek, w)
 	    DiffRgn (PORT_VIS_REGION (w), WINDOW_STRUCT_REGION (wp),
 		     PORT_VIS_REGION (w));
         OffsetRgn (PORT_VIS_REGION (w),
-		   BigEndianValue (PORT_BOUNDS (w).left),
-		   BigEndianValue (PORT_BOUNDS (w).top));
+		   CW (PORT_BOUNDS (w).left),
+		   CW (PORT_BOUNDS (w).top));
     }
 }
 
@@ -461,7 +460,7 @@ Executor::CALLDRAGHOOK (void)
     savea2 = EM_A2;
     savea3 = EM_A3;
     EM_D0 = 0;
-    CALL_EMULATOR((syn68k_addr_t) BigEndianValue((long)DragHook));
+    CALL_EMULATOR((syn68k_addr_t) CL((long)DragHook));
     EM_D0 = saved0;
     EM_D1 = saved1;
     EM_D2 = saved2;
@@ -488,7 +487,7 @@ Executor::WINDCALLDESKHOOK (void)
   savea2 = EM_A2;
   savea3 = EM_A3;
   EM_D0 = 0;
-  CALL_EMULATOR((syn68k_addr_t) BigEndianValue((long) DeskHook));
+  CALL_EMULATOR((syn68k_addr_t) CL((long) DeskHook));
   EM_D0 = saved0;
   EM_D1 = saved1;
   EM_D2 = saved2;

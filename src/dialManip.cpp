@@ -23,7 +23,6 @@ char ROMlib_rcsid_dialManip[] =
 #include "rsys/mman.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 namespace Executor {
   PRIVATE itmp htoip(Handle h,
@@ -62,7 +61,7 @@ A3 (PUBLIC, itmp, ROMlib_dpnotoip, DialogPeek, dp,		/* INTERNAL */
   items = DIALOG_ITEMS (dp);
   *flags = hlock_return_orig_state (items);
   intp = (INTEGER *) STARH (items);
-  if (itemno <= 0 || itemno > BigEndianValue (*intp) + 1)
+  if (itemno <= 0 || itemno > CW (*intp) + 1)
     retval = 0;
   else
     {
@@ -94,7 +93,7 @@ A4 (PRIVATE, itmp, htoip, Handle, h,
 	  
 	  ip = (int16 *) STARH (items);
 	  retval = (itmp) (ip + 1);
-	  for (i = BigEndianValue (*ip) + 1, nop = 1; i --; BUMPIP (retval))
+	  for (i = CW (*ip) + 1, nop = 1; i --; BUMPIP (retval))
 	    {
 	      if (MR (retval->itmhand) == h)
 		{
@@ -120,14 +119,14 @@ P5(PUBLIC pascal trap, void, GetDItem, DialogPtr, dp,	/* IMI-421 */
     if (ip)
       {
 	if (itype)
-	  *itype = BigEndianValue((INTEGER) ip->itmtype);
+	  *itype = CW((INTEGER) ip->itmtype);
 	else
 	  {
 	    /* test on Mac shows unconditional write of *itype */
 	    /* of course this is very rude, but that's what the Mac did
 	       when we tested it.  Perhaps they've fixed that now and we
 	       too should fix it.  ARGH! */
-	   *(INTEGER *) (US_TO_SYN68K(itype)) = BigEndianValue((INTEGER) ip->itmtype);
+	   *(INTEGER *) (US_TO_SYN68K(itype)) = CW((INTEGER) ip->itmtype);
 	  }
 	if (item) /* We didn't test what happens when item is 0 on Mac */
 	  (*item).p = ip->itmhand;
@@ -160,7 +159,7 @@ settexth (DialogPeek dp, itmp ip, int item_no)
   
   item_text_h = ITEM_H (ip);
   length = GetHandleSize (item_text_h);
-  TEP_LENGTH_X (tep) = BigEndianValue (length);
+  TEP_LENGTH_X (tep) = CW (length);
   /* this is not a leak, always a duplicate */
   TEP_HTEXT_X (tep) = RM (item_text_h);
   
@@ -182,11 +181,11 @@ settexth (DialogPeek dp, itmp ip, int item_no)
     if (get_item_style_info ((DialogPtr) dp, item_no, &flags, &style_info))
       {
 	if (flags & TEdoFont)
-	  te_style_font = BigEndianValue (style_info.font);
+	  te_style_font = CW (style_info.font);
 	if (flags & TEdoFace)
 	  te_style_face = CB (style_info.face);
 	if (flags & TEdoSize)
-	  te_style_size = BigEndianValue (style_info.size);
+	  te_style_size = CW (style_info.size);
 	
 	if (flags & TEdoColor)
 	  te_style_color = style_info.foreground;
@@ -218,7 +217,7 @@ settexth (DialogPeek dp, itmp ip, int item_no)
 		       TE_STYLE_SIZE_FOR_N_RUNS (1));
 	HxX (te_style, runs[0].startChar)  = CWC (0);
 	HxX (te_style, runs[0].styleIndex) = CWC (0);
-	HxX (te_style, runs[1].startChar)  = BigEndianValue (length + 1);
+	HxX (te_style, runs[1].startChar)  = CW (length + 1);
 	HxX (te_style, runs[1].styleIndex) = CWC (-1);
 	style_table = TE_STYLE_STYLE_TABLE (te_style);
 	SetHandleSize ((Handle) style_table,
@@ -228,8 +227,8 @@ settexth (DialogPeek dp, itmp ip, int item_no)
 	tx_size_save_x = PORT_TX_SIZE_X (current_port);
 	tx_face_save = PORT_TX_FACE (current_port);
 	
-	PORT_TX_FONT_X (current_port) = BigEndianValue (te_style_font);
-	PORT_TX_SIZE_X (current_port) = BigEndianValue (te_style_size);
+	PORT_TX_FONT_X (current_port) = CW (te_style_font);
+	PORT_TX_SIZE_X (current_port) = CW (te_style_size);
 	PORT_TX_FACE (current_port)   = CB (te_style_face);
 	
 	GetFontInfo (&finfo);
@@ -241,19 +240,19 @@ settexth (DialogPeek dp, itmp ip, int item_no)
 	HASSIGN_7
 	  (style_table,
 	   stCount, CWC (1),
-	   stFont, BigEndianValue (te_style_font),
+	   stFont, CW (te_style_font),
 	   stFace, te_style_face,
-	   stSize, BigEndianValue (te_style_size),
+	   stSize, CW (te_style_size),
 	   stColor, te_style_color,
-	   stHeight, BigEndianValue (BigEndianValue (finfo.ascent)
-			 + BigEndianValue (finfo.descent)
-			 + BigEndianValue (finfo.leading)),
+	   stHeight, CW (CW (finfo.ascent)
+			 + CW (finfo.descent)
+			 + CW (finfo.leading)),
 	   stAscent, finfo.ascent);
       }
     else
       {
-	TEP_TX_FONT_X (tep) = BigEndianValue (te_style_font);
-	TEP_TX_SIZE_X (tep) = BigEndianValue (te_style_size);
+	TEP_TX_FONT_X (tep) = CW (te_style_font);
+	TEP_TX_SIZE_X (tep) = CW (te_style_size);
 	TEP_TX_FACE (tep)   = CB (te_style_face);
       }
   }
@@ -264,7 +263,7 @@ settexth (DialogPeek dp, itmp ip, int item_no)
   if (WINDOW_VISIBLE_X (dp))
     TEActivate (te);
   
-  DIALOG_EDIT_FIELD_X (dp) = BigEndianValue (item_no - 1);
+  DIALOG_EDIT_FIELD_X (dp) = CW (item_no - 1);
   DIALOG_EDIT_OPEN_X (dp)  = CW (! (ITEM_TYPE (ip) & itemDisable));
 }
 
@@ -424,11 +423,11 @@ P2 (PUBLIC pascal trap, void, HideDItem, DialogPtr, dp,		/* IMIV-59 */
   SignedByte flags;
     
   ip = ROMlib_dpnotoip((DialogPeek) dp, item, &flags);
-  if (ip && BigEndianValue (ip->itmr.left) < 8192)
+  if (ip && CW (ip->itmr.left) < 8192)
     {
       r = ip->itmr;
-      ip->itmr.left   = BigEndianValue (BigEndianValue (ip->itmr.left)  + 16384);
-      ip->itmr.right  = BigEndianValue (BigEndianValue (ip->itmr.right) + 16384);
+      ip->itmr.left   = CW (CW (ip->itmr.left)  + 16384);
+      ip->itmr.right  = CW (CW (ip->itmr.right) + 16384);
       if (CB (ip->itmtype) & editText)
 	{
 	  InsetRect (&r, -3, -3);
@@ -466,10 +465,10 @@ P2 (PUBLIC pascal trap, void, ShowDItem, DialogPtr, dp,		/* IMIV-59 */
   SignedByte flags;
   
   ip = ROMlib_dpnotoip ((DialogPeek) dp, item, &flags);
-  if (ip && BigEndianValue (ip->itmr.left) > 8192)
+  if (ip && CW (ip->itmr.left) > 8192)
     {
-      ip->itmr.left  = BigEndianValue (BigEndianValue (ip->itmr.left) - 16384);
-      ip->itmr.right = BigEndianValue (BigEndianValue (ip->itmr.right) - 16384);
+      ip->itmr.left  = CW (CW (ip->itmr.left) - 16384);
+      ip->itmr.right = CW (CW (ip->itmr.right) - 16384);
       r = ip->itmr;
       if (CB (ip->itmtype) & editText)
 	{

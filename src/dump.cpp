@@ -47,17 +47,17 @@ char ROMlib_rcsid_dump[] =
 
 #define deref(x) (*(x))
 #define Cx(x) (x)
-#define BigEndianValue(x) (x)
+#define CW(x) (x)
 #define CWC(x) (x)
-#define BigEndianValue(x) (x)
+#define CL(x) (x)
 #define CLC(x) (x)
 #define theCPort ((CGrafPtr) thePort)
 #define CGrafPort_p(port) (((char *)(port))[6] & 0xC0)
 
 #define ROWBYTES_VALUE_BITS (0x3FFF)
 
-#define RECT_HEIGHT(r) (BigEndianValue ((r)->bottom) - BigEndianValue ((r)->top))
-#define RECT_WIDTH(r) (BigEndianValue ((r)->right) - BigEndianValue ((r)->left))
+#define RECT_HEIGHT(r) (CW ((r)->bottom) - CW ((r)->top))
+#define RECT_WIDTH(r) (CW ((r)->right) - CW ((r)->left))
 
 /* window accessors */
 #define WINDOW_PORT(wp)			(&((WindowPeek) (wp))->port)
@@ -110,11 +110,11 @@ char ROMlib_rcsid_dump[] =
 #define DIALOG_EDIT_OPEN_X(dialog)	(((DialogPeek) (dialog))->editOpen)
 #define DIALOG_ADEF_ITEM_X(dialog)	(((DialogPeek) (dialog))->aDefItem)
 
-#define DIALOG_ITEMS(dialog)		(BigEndianValue (DIALOG_ITEMS_X (dialog)))
-#define DIALOG_TEXTH(dialog)		(BigEndianValue (DIALOG_TEXTH_X (dialog)))
-#define DIALOG_EDIT_FIELD(dialog)	(BigEndianValue (DIALOG_EDIT_FIELD_X (dialog)))
-#define DIALOG_EDIT_OPEN(dialog)	(BigEndianValue (DIALOG_EDIT_OPEN_X (dialog)))
-#define DIALOG_ADEF_ITEM(dialog)	(BigEndianValue (DIALOG_ADEF_ITEM_X (dialog)))
+#define DIALOG_ITEMS(dialog)		(CL (DIALOG_ITEMS_X (dialog)))
+#define DIALOG_TEXTH(dialog)		(CL (DIALOG_TEXTH_X (dialog)))
+#define DIALOG_EDIT_FIELD(dialog)	(CW (DIALOG_EDIT_FIELD_X (dialog)))
+#define DIALOG_EDIT_OPEN(dialog)	(CW (DIALOG_EDIT_OPEN_X (dialog)))
+#define DIALOG_ADEF_ITEM(dialog)	(CW (DIALOG_ADEF_ITEM_X (dialog)))
 
 enum pixpat_pattern_types
 {
@@ -140,7 +140,6 @@ enum pixpat_pattern_types
 #include <string.h>
 
 using namespace Executor;
-using namespace ByteSwap;
 
 FILE *Executor::o_fp = NULL;
 
@@ -251,9 +250,9 @@ void
 Executor::dump_rect (Rect *r)
 {
   iprintf ((o_fp, "%s(Rect *%p) {\n", field_name.c_str(), r));  indent += 2;
-  iprintf ((o_fp, "top 0x%x; left 0x%x;\n", BigEndianValue (r->top), BigEndianValue (r->left)));
+  iprintf ((o_fp, "top 0x%x; left 0x%x;\n", CW (r->top), CW (r->left)));
   iprintf ((o_fp, "bottom 0x%x; right 0x%x; }\n", 
-	    BigEndianValue (r->bottom), BigEndianValue (r->right)));  indent -= 2;
+	    CW (r->bottom), CW (r->right)));  indent -= 2;
   fflush (o_fp);
 }
 
@@ -270,7 +269,7 @@ void
 Executor::dump_point (Point x)
 {
   iprintf ((o_fp, "%s(Point) { v 0x%x; h 0x%x; }\n",
-	    field_name.c_str(), BigEndianValue (x.v), BigEndianValue (x.h)));
+	    field_name.c_str(), CW (x.v), CW (x.h)));
   fflush (o_fp);
 }
 
@@ -287,10 +286,10 @@ Executor::dump_bitmap_data (BitMap *x, int depth, Rect *rect)
   if (!rect)
     rect = &x->bounds;
   
-  row_bytes = BigEndianValue (x->rowBytes) & ROWBYTES_VALUE_BITS;
+  row_bytes = CW (x->rowBytes) & ROWBYTES_VALUE_BITS;
   addr = (char *)
-    &MR (x->baseAddr)[(BigEndianValue (rect->top) - BigEndianValue (x->bounds.top)) * row_bytes
-			   + ((BigEndianValue (rect->left) - BigEndianValue (x->bounds.left))
+    &MR (x->baseAddr)[(CW (rect->top) - CW (x->bounds.top)) * row_bytes
+			   + ((CW (rect->left) - CW (x->bounds.left))
 			      * depth) / 8];
   rows = RECT_HEIGHT (&x->bounds);
   bytes_per_row = (RECT_WIDTH (&x->bounds) * depth + 7) / 8;
@@ -345,7 +344,7 @@ Executor::dump_bitmap (BitMap *x, Rect *rect)
   iprintf ((o_fp, "baseAddr %p;\n", MR (x->baseAddr)));
   if (dump_verbosity >= 3)
     dump_bitmap_data (x, 1, rect);
-  iprintf ((o_fp, "rowBytes 0x%hx;\n", (unsigned short) BigEndianValue (x->rowBytes)));
+  iprintf ((o_fp, "rowBytes 0x%hx;\n", (unsigned short) CW (x->rowBytes)));
   dump_field (dump_rect, &x->bounds, "bounds");
   indent -= 2; iprintf ((o_fp, "}\n")); 
   fflush (o_fp);
@@ -397,7 +396,7 @@ void
 Executor::dump_grafport_real (GrafPtr x)
 {
   iprintf ((o_fp, "%s(GrafPort *%p) {\n", field_name.c_str(), x));  indent += 2;
-  iprintf ((o_fp, "device %d;\n", BigEndianValue (x->device)));
+  iprintf ((o_fp, "device %d;\n", CW (x->device)));
   dump_field (dump_bitmap_null_rect, &x->portBits, "portBits");
   dump_field (dump_rect, &x->portRect, "portRect");
   dump_field (dump_handle, MR (x->visRgn), "visRgn");
@@ -406,18 +405,18 @@ Executor::dump_grafport_real (GrafPtr x)
   dump_field (dump_pattern, x->fillPat, "fillPat");
   dump_field (dump_point, x->pnLoc, "pnLoc");
   dump_field (dump_point, x->pnSize, "pnSize");
-  iprintf ((o_fp, "pnMode %d;\n", BigEndianValue (x->pnMode)));
+  iprintf ((o_fp, "pnMode %d;\n", CW (x->pnMode)));
   dump_field (dump_pattern, x->pnPat, "pnPat");
-  iprintf ((o_fp, "pnVis %d;\n", BigEndianValue (x->pnVis)));
-  iprintf ((o_fp, "txFont %d;\n", BigEndianValue (x->txFont)));
+  iprintf ((o_fp, "pnVis %d;\n", CW (x->pnVis)));
+  iprintf ((o_fp, "txFont %d;\n", CW (x->txFont)));
   iprintf ((o_fp, "txFace %d;\n", x->txFace));
-  iprintf ((o_fp, "txMode %d;\n", BigEndianValue (x->txMode)));
-  iprintf ((o_fp, "txSize %d;\n", BigEndianValue (x->txSize)));
-  iprintf ((o_fp, "spExtra %d;\n", BigEndianValue (x->spExtra)));
-  iprintf ((o_fp, "fgColor 0x%x;\n", BigEndianValue (x->fgColor)));
-  iprintf ((o_fp, "bkColor 0x%x;\n", BigEndianValue (x->bkColor)));
-  iprintf ((o_fp, "colrBit %d;\n", BigEndianValue (x->colrBit)));
-  iprintf ((o_fp, "patStretch %d;\n", BigEndianValue (x->patStretch)));
+  iprintf ((o_fp, "txMode %d;\n", CW (x->txMode)));
+  iprintf ((o_fp, "txSize %d;\n", CW (x->txSize)));
+  iprintf ((o_fp, "spExtra %d;\n", CL (x->spExtra)));
+  iprintf ((o_fp, "fgColor 0x%x;\n", CL (x->fgColor)));
+  iprintf ((o_fp, "bkColor 0x%x;\n", CL (x->bkColor)));
+  iprintf ((o_fp, "colrBit %d;\n", CW (x->colrBit)));
+  iprintf ((o_fp, "patStretch %d;\n", CW (x->patStretch)));
   dump_field (dump_handle, MR (x->picSave), "picSave");
   dump_field (dump_handle, MR (x->rgnSave), "rgnSave");
   dump_field (dump_handle, MR (x->polySave), "polySave");
@@ -443,9 +442,9 @@ Executor::dump_rgb_color (RGBColor *x)
 {
   iprintf ((o_fp, "%s(RGBColor) { red 0x%lx; green 0x%lx, blue 0x%lx; }\n",
 	    field_name.c_str(),
-	    (long) BigEndianValue (x->red), 
-	    (long) BigEndianValue (x->green), 
-	    (long) BigEndianValue (x->blue)));
+	    (long) CW (x->red), 
+	    (long) CW (x->green), 
+	    (long) CW (x->blue)));
   fflush (o_fp);
 }
 
@@ -455,21 +454,21 @@ Executor::dump_ctab (CTabHandle ctab)
   CTabPtr x = deref (ctab);
 
   iprintf ((o_fp, "%s(ColorTable **%p) {\n", field_name.c_str(), ctab));  indent += 2;
-  iprintf ((o_fp, "ctSeed 0x%x;\n", BigEndianValue (x->ctSeed)));
-  iprintf ((o_fp, "ctFlags 0x%x;\n", BigEndianValue (x->ctFlags)));
-  iprintf ((o_fp, "ctSize %d;\n", BigEndianValue (x->ctSize)));
+  iprintf ((o_fp, "ctSeed 0x%x;\n", CL (x->ctSeed)));
+  iprintf ((o_fp, "ctFlags 0x%x;\n", CW (x->ctFlags)));
+  iprintf ((o_fp, "ctSize %d;\n", CW (x->ctSize)));
   if (dump_verbosity >= 2)
     {
       int i;
 
       iprintf ((o_fp, "ctTable\n"));
-      for (i = 0; i <= BigEndianValue (x->ctSize); i ++)
+      for (i = 0; i <= CW (x->ctSize); i ++)
 	{
 	  iprintf ((o_fp, "%d:[0x%x] { 0x%lx, 0x%lx, 0x%lx }\n",
-		    i, BigEndianValue (x->ctTable[i].value), 
-		    (long) BigEndianValue (x->ctTable[i].rgb.red),
-		    (long) BigEndianValue (x->ctTable[i].rgb.green),
-		    (long) BigEndianValue (x->ctTable[i].rgb.blue)));
+		    i, CW (x->ctTable[i].value), 
+		    (long) CW (x->ctTable[i].rgb.red),
+		    (long) CW (x->ctTable[i].rgb.green),
+		    (long) CW (x->ctTable[i].rgb.blue)));
 	}
       indent -= 2; iprintf ((o_fp, "}\n"));
     }
@@ -486,8 +485,8 @@ Executor::dump_itab (ITabHandle itab)
   ITabPtr x = deref (itab);
 
   iprintf ((o_fp, "%s(ITab **%p) {\n", field_name.c_str(), itab));  indent += 2;
-  iprintf ((o_fp, "iTabSeed 0x%x;\n", BigEndianValue (x->iTabSeed)));
-  iprintf ((o_fp, "iTabRes %d;\n", BigEndianValue (x->iTabRes)));
+  iprintf ((o_fp, "iTabSeed 0x%x;\n", CL (x->iTabSeed)));
+  iprintf ((o_fp, "iTabRes %d;\n", CW (x->iTabRes)));
   
   /* we always omit the inverse table... */
   iprintf ((o_fp, "[iTTable field omitted]; }\n"));  indent -= 2;
@@ -523,7 +522,7 @@ Executor::dump_pixpat (PixPatHandle pixpat)
       iprintf ((o_fp, "[pat{Map, Data} field omitted]; }\n"));
     }
   dump_field (dump_handle, MR (x->patXData), "patXData");
-  iprintf ((o_fp, "patXValid %d;\n", BigEndianValue (x->patXValid)));
+  iprintf ((o_fp, "patXValid %d;\n", CW (x->patXValid)));
   if (dump_verbosity
       && x->patXMap
       && !x->patXValid)
@@ -546,20 +545,20 @@ dump_pixmap_ptr (PixMapPtr x, Rect *rect)
     {
       if (!rect)
 	  rect = &x->bounds;
-      dump_bitmap_data ((BitMap *) x, BigEndianValue (x->pixelSize), rect);
+      dump_bitmap_data ((BitMap *) x, CW (x->pixelSize), rect);
     }
-  iprintf ((o_fp, "rowBytes 0x%hx;\n", (unsigned short) BigEndianValue (x->rowBytes)));
+  iprintf ((o_fp, "rowBytes 0x%hx;\n", (unsigned short) CW (x->rowBytes)));
   dump_field (dump_rect, &x->bounds, "bounds");
-  iprintf ((o_fp, "pmVersion 0x%x;\n", BigEndianValue (x->pmVersion)));
-  iprintf ((o_fp, "packType 0x%x;\n", BigEndianValue (x->packType)));
-  iprintf ((o_fp, "packSize 0x%x;\n", BigEndianValue (x->packSize)));
+  iprintf ((o_fp, "pmVersion 0x%x;\n", CW (x->pmVersion)));
+  iprintf ((o_fp, "packType 0x%x;\n", CW (x->packType)));
+  iprintf ((o_fp, "packSize 0x%x;\n", CW (x->packSize)));
   iprintf ((o_fp, "hRes 0x%x, vRes 0x%x;\n", 
-	    BigEndianValue (x->hRes), BigEndianValue (x->vRes)));
-  iprintf ((o_fp, "pixelType 0x%x;\n", BigEndianValue (x->pixelType)));
-  iprintf ((o_fp, "pixelSize %d;\n", BigEndianValue (x->pixelSize)));
-  iprintf ((o_fp, "cmpCount %d;\n", BigEndianValue (x->cmpCount)));
-  iprintf ((o_fp, "cmpSize %d;\n", BigEndianValue (x->cmpSize)));
-  iprintf ((o_fp, "planeBytes 0x%x;\n", BigEndianValue (x->planeBytes)));
+	    CW (x->hRes), CW (x->vRes)));
+  iprintf ((o_fp, "pixelType 0x%x;\n", CW (x->pixelType)));
+  iprintf ((o_fp, "pixelSize %d;\n", CW (x->pixelSize)));
+  iprintf ((o_fp, "cmpCount %d;\n", CW (x->cmpCount)));
+  iprintf ((o_fp, "cmpSize %d;\n", CW (x->cmpSize)));
+  iprintf ((o_fp, "planeBytes 0x%x;\n", CL (x->planeBytes)));
   if (dump_verbosity
       && x->pmTable)
     dump_field (dump_ctab, MR (x->pmTable), "pmTable");
@@ -587,20 +586,20 @@ Executor::dump_pixmap (PixMapHandle pixmap, Rect *rect)
     {
       if (!rect)
 	  rect = &x->bounds;
-      dump_bitmap_data ((BitMap *) x, BigEndianValue (x->pixelSize), rect);
+      dump_bitmap_data ((BitMap *) x, CW (x->pixelSize), rect);
     }
-  iprintf ((o_fp, "rowBytes 0x%hx;\n", (unsigned short) BigEndianValue (x->rowBytes)));
+  iprintf ((o_fp, "rowBytes 0x%hx;\n", (unsigned short) CW (x->rowBytes)));
   dump_field (dump_rect, &x->bounds, "bounds");
-  iprintf ((o_fp, "pmVersion 0x%x;\n", BigEndianValue (x->pmVersion)));
-  iprintf ((o_fp, "packType 0x%x;\n", BigEndianValue (x->packType)));
-  iprintf ((o_fp, "packSize 0x%x;\n", BigEndianValue (x->packSize)));
+  iprintf ((o_fp, "pmVersion 0x%x;\n", CW (x->pmVersion)));
+  iprintf ((o_fp, "packType 0x%x;\n", CW (x->packType)));
+  iprintf ((o_fp, "packSize 0x%x;\n", CW (x->packSize)));
   iprintf ((o_fp, "hRes 0x%x, vRes 0x%x;\n", 
-	    BigEndianValue (x->hRes), BigEndianValue (x->vRes)));
-  iprintf ((o_fp, "pixelType 0x%x;\n", BigEndianValue (x->pixelType)));
-  iprintf ((o_fp, "pixelSize %d;\n", BigEndianValue (x->pixelSize)));
-  iprintf ((o_fp, "cmpCount %d;\n", BigEndianValue (x->cmpCount)));
-  iprintf ((o_fp, "cmpSize %d;\n", BigEndianValue (x->cmpSize)));
-  iprintf ((o_fp, "planeBytes 0x%x;\n", BigEndianValue (x->planeBytes)));
+	    CW (x->hRes), CW (x->vRes)));
+  iprintf ((o_fp, "pixelType 0x%x;\n", CW (x->pixelType)));
+  iprintf ((o_fp, "pixelSize %d;\n", CW (x->pixelSize)));
+  iprintf ((o_fp, "cmpCount %d;\n", CW (x->cmpCount)));
+  iprintf ((o_fp, "cmpSize %d;\n", CW (x->cmpSize)));
+  iprintf ((o_fp, "planeBytes 0x%x;\n", CL (x->planeBytes)));
   if (dump_verbosity
       && x->pmTable)
     dump_field (dump_ctab, MR (x->pmTable), "pmTable");
@@ -646,16 +645,16 @@ void
 Executor::dump_cgrafport_real (CGrafPtr x)
 {
   iprintf ((o_fp, "%s(CGrafPort *%p) {\n", field_name.c_str(), x));  indent += 2;
-  iprintf ((o_fp, "device 0x%x;\n", BigEndianValue (x->device)));
+  iprintf ((o_fp, "device 0x%x;\n", CW (x->device)));
   if (dump_verbosity
       && x->portPixMap)
     dump_field (dump_pixmap_null_rect, MR (x->portPixMap), "portPixMap");
   else
     dump_field (dump_handle, MR (x->portPixMap), "portPixMap");
-  iprintf ((o_fp, "portVersion 0x%x;\n", BigEndianValue (x->portVersion)));
+  iprintf ((o_fp, "portVersion 0x%x;\n", CW (x->portVersion)));
   dump_field (dump_handle, MR (x->grafVars), "grafVars");
-  iprintf ((o_fp, "chExtra %d;\n", BigEndianValue (x->chExtra)));
-  iprintf ((o_fp, "pnLocHFrac 0x%x;\n", BigEndianValue (x->pnLocHFrac)));
+  iprintf ((o_fp, "chExtra %d;\n", CW (x->chExtra)));
+  iprintf ((o_fp, "pnLocHFrac 0x%x;\n", CW (x->pnLocHFrac)));
   dump_field (dump_rect, &x->portRect, "portRect");
   dump_field (dump_handle, MR (x->visRgn), "visRgn");
   dump_field (dump_handle, MR (x->clipRgn), "clipRgn");
@@ -668,7 +667,7 @@ Executor::dump_cgrafport_real (CGrafPtr x)
   dump_field (dump_rgb_color, &x->rgbBkColor, "rgbBkColor");
   dump_field (dump_point, x->pnLoc, "pnLoc");
   dump_field (dump_point, x->pnSize, "pnSize");
-  iprintf ((o_fp, "pnMode %d;\n", BigEndianValue (x->pnMode)));
+  iprintf ((o_fp, "pnMode %d;\n", CW (x->pnMode)));
   if (dump_verbosity
       && x->pnPixPat)
     dump_field (dump_pixpat, MR (x->pnPixPat), "pnPixPat");
@@ -679,16 +678,16 @@ Executor::dump_cgrafport_real (CGrafPtr x)
     dump_field (dump_pixpat, MR (x->fillPixPat), "fillPixPat");
   else
     dump_field (dump_handle, MR (x->fillPixPat), "fillPixPat");
-  iprintf ((o_fp, "pnVis %d;\n", BigEndianValue (x->pnVis)));
-  iprintf ((o_fp, "txFont %d;\n", BigEndianValue (x->txFont)));
+  iprintf ((o_fp, "pnVis %d;\n", CW (x->pnVis)));
+  iprintf ((o_fp, "txFont %d;\n", CW (x->txFont)));
   iprintf ((o_fp, "txFace %d;\n", x->txFace));
-  iprintf ((o_fp, "txMode %d;\n", BigEndianValue (x->txMode)));
-  iprintf ((o_fp, "txSize %d;\n", BigEndianValue (x->txSize)));
-  iprintf ((o_fp, "spExtra %d;\n", BigEndianValue (x->spExtra)));
-  iprintf ((o_fp, "fgColor 0x%x;\n", BigEndianValue (x->fgColor)));
-  iprintf ((o_fp, "bkColor 0x%x;\n", BigEndianValue (x->bkColor)));
-  iprintf ((o_fp, "colrBit %d;\n", BigEndianValue (x->colrBit)));
-  iprintf ((o_fp, "patStretch %x;\n", BigEndianValue (x->patStretch)));
+  iprintf ((o_fp, "txMode %d;\n", CW (x->txMode)));
+  iprintf ((o_fp, "txSize %d;\n", CW (x->txSize)));
+  iprintf ((o_fp, "spExtra %d;\n", CL (x->spExtra)));
+  iprintf ((o_fp, "fgColor 0x%x;\n", CL (x->fgColor)));
+  iprintf ((o_fp, "bkColor 0x%x;\n", CL (x->bkColor)));
+  iprintf ((o_fp, "colrBit %d;\n", CW (x->colrBit)));
+  iprintf ((o_fp, "patStretch %x;\n", CW (x->patStretch)));
   dump_field (dump_handle, MR (x->picSave), "picSave");
   dump_field (dump_handle, MR (x->rgnSave), "rgnSave");
   dump_field (dump_handle, MR (x->polySave), "polySave");
@@ -704,16 +703,16 @@ Executor::dump_gdevice (GDHandle gdev)
   SProcHndl proc;
   
   iprintf ((o_fp, "%s(GDevice **%p) {\n", field_name.c_str(), gdev));  indent += 2;
-  iprintf ((o_fp, "gdID 0x%x;\n", BigEndianValue (x->gdID)));
-  iprintf ((o_fp, "gdType 0x%x;\n", BigEndianValue (x->gdType)));
+  iprintf ((o_fp, "gdID 0x%x;\n", CW (x->gdID)));
+  iprintf ((o_fp, "gdType 0x%x;\n", CW (x->gdType)));
   if (dump_verbosity
       && x->gdITable)
     dump_field (dump_itab, MR (x->gdITable), "gdITable");
   else
     dump_field (dump_handle, MR (x->gdITable), "gdITable");
-  iprintf ((o_fp, "gdResPref 0x%x;\n", BigEndianValue (x->gdResPref)));
+  iprintf ((o_fp, "gdResPref 0x%x;\n", CW (x->gdResPref)));
 #if 0
-  dump_field (dump_handle, BigEndianValue (x->gdSearchProc), "gdSearchProc");
+  dump_field (dump_handle, CL (x->gdSearchProc), "gdSearchProc");
 #else
   iprintf ((o_fp, "gdSearchProc %p;\n", MR (x->gdSearchProc)));
   for (proc = MR (x->gdSearchProc); proc; proc = HxP (proc, nxtSrch))
@@ -721,20 +720,20 @@ Executor::dump_gdevice (GDHandle gdev)
 	      proc, HxP (proc, nxtSrch), HxP (proc, srchProc)));
 #endif
   dump_field (dump_handle, MR (x->gdCompProc), "gdCompProc");
-  iprintf ((o_fp, "gdFlags 0x%hx;\n", (unsigned short) BigEndianValue (x->gdFlags)));
+  iprintf ((o_fp, "gdFlags 0x%hx;\n", (unsigned short) CW (x->gdFlags)));
   if (dump_verbosity
       && x->gdPMap)
     dump_field (dump_pixmap_null_rect, MR (x->gdPMap), "gdPMap");
   else
     dump_field (dump_handle, MR (x->gdPMap), "gdPMap");
-  iprintf ((o_fp, "gdRefCon 0x%x;\n", BigEndianValue (x->gdRefCon)));
+  iprintf ((o_fp, "gdRefCon 0x%x;\n", CL (x->gdRefCon)));
   if (dump_verbosity
       && x->gdNextGD)
     dump_field (dump_gdevice, (GDHandle) MR (x->gdNextGD), "gdNextGD");
   else
     dump_field (dump_handle, MR (x->gdNextGD), "gdNextGD");
   dump_field (dump_rect, &x->gdRect, "gdRect");
-  iprintf ((o_fp, "gdMode 0x%x;\n", BigEndianValue (x->gdMode)));
+  iprintf ((o_fp, "gdMode 0x%x;\n", CW (x->gdMode)));
   iprintf ((o_fp, "[CC, Reserved fields omitted]; }\n")); indent -= 2;
   fflush (o_fp);
 }
@@ -772,34 +771,34 @@ Executor::dump_palette (PaletteHandle palette)
 
   iprintf ((o_fp, "%s(PaletteHandle **%p) {\n", field_name.c_str(), palette));
   indent += 2;
-  iprintf ((o_fp, "pmEntries 0x%x;\n", BigEndianValue (x->pmEntries)));
+  iprintf ((o_fp, "pmEntries 0x%x;\n", CW (x->pmEntries)));
   if (pmWindow (x)
       && dump_verbosity >= 2
       && 0)
     dump_grafport ((GrafPtr) MR (pmWindow (x)));
   else
     dump_field (dump_handle, MR (pmWindow (x)), "pmWindow");
-  iprintf ((o_fp, "pmPrivate 0x%x\n", BigEndianValue (pmPrivate (x))));
-  iprintf ((o_fp, "pmDevices 0x%lx\n", (long) BigEndianValue (pmDevices (x))));
+  iprintf ((o_fp, "pmPrivate 0x%x\n", CW (pmPrivate (x))));
+  iprintf ((o_fp, "pmDevices 0x%lx\n", (long) CL (pmDevices (x))));
   iprintf ((o_fp, "pmSeeds 0x%lx\n", (long) MR (pmSeeds (x))));
   if (dump_verbosity >= 2)
     {
       int i;
       
       iprintf ((o_fp, "pmInfo\n"));
-      for (i = 0; i < BigEndianValue (x->pmEntries); i ++)
+      for (i = 0; i < CW (x->pmEntries); i ++)
 	{
 	  iprintf ((o_fp, "%3x { rgb { 0x%lx, 0x%lx, 0x%lx }\n",
 		    i,
-		    (long) BigEndianValue (x->pmInfo[i].ciRGB.red),
-		    (long) BigEndianValue (x->pmInfo[i].ciRGB.green),
-		    (long) BigEndianValue (x->pmInfo[i].ciRGB.blue)));
+		    (long) CW (x->pmInfo[i].ciRGB.red),
+		    (long) CW (x->pmInfo[i].ciRGB.green),
+		    (long) CW (x->pmInfo[i].ciRGB.blue)));
 	  iprintf ((o_fp, "      usage 0x%x; tolerance 0x%x;\n",
-		    BigEndianValue (x->pmInfo[i].ciUsage),
-		    BigEndianValue (x->pmInfo[i].ciTolerance)));
+		    CW (x->pmInfo[i].ciUsage),
+		    CW (x->pmInfo[i].ciTolerance)));
 	  iprintf ((o_fp, "      flags 0x%x; private 0x%lx; };\n",
-		    BigEndianValue (ciFlags (&x->pmInfo[i])),
-		    (unsigned long) BigEndianValue (ciPrivate (&x->pmInfo[i]))));
+		    CW (ciFlags (&x->pmInfo[i])),
+		    (unsigned long) CL (ciPrivate (&x->pmInfo[i]))));
 	}
       indent -= 2; iprintf ((o_fp, "}\n"));
     }
@@ -817,7 +816,7 @@ Executor::dump_ccrsr (CCrsrHandle ccrsr)
 
   iprintf ((o_fp, "%s(CCrsrHandle **%p) {\n", field_name.c_str(), ccrsr));
   indent += 2;
-  iprintf ((o_fp, "crsrType 0x%hx;\n", BigEndianValue (x->crsrType)));
+  iprintf ((o_fp, "crsrType 0x%hx;\n", CW (x->crsrType)));
   if (x->crsrMap
       && dump_verbosity >= 1)
     dump_field (dump_pixmap_null_rect, MR (x->crsrMap), "crsrMap");
@@ -832,9 +831,9 @@ Executor::dump_ccrsr (CCrsrHandle ccrsr)
       int depth;
       /* dump the expanded pixel data */
 
-      depth = BigEndianValue (x->crsrXValid);
+      depth = CW (x->crsrXValid);
       bm.baseAddr = RM (deref (MR (x->crsrXData)));
-      bm.rowBytes = BigEndianValue (2 * depth);
+      bm.rowBytes = CW (2 * depth);
       bm.bounds.top = bm.bounds.left = CWC (0);
       bm.bounds.bottom = CWC (16);
       bm.bounds.right = CWC (16);
@@ -846,13 +845,13 @@ Executor::dump_ccrsr (CCrsrHandle ccrsr)
     }
   else
     dump_field (dump_handle, MR (x->crsrXData), "crsrXData");
-  iprintf ((o_fp, "crsrXValid %d;\n", BigEndianValue (x->crsrXValid)));
+  iprintf ((o_fp, "crsrXValid %d;\n", CW (x->crsrXValid)));
   dump_field (dump_handle, MR (x->crsrXHandle), "crsrXHandle");
   dump_field (dump_bits16, x->crsr1Data, "crsr1Data");
   dump_field (dump_bits16, x->crsrMask, "crsrMask");
   dump_field (dump_point, x->crsrHotSpot, "crsrHotSpot");
-  iprintf ((o_fp, "crsrXTable %x\n", BigEndianValue (x->crsrXTable)));
-  iprintf ((o_fp, "crsrID 0x%x; }\n", BigEndianValue (x->crsrID)));  indent -= 2;
+  iprintf ((o_fp, "crsrXTable %x\n", CW (x->crsrXTable)));
+  iprintf ((o_fp, "crsrID 0x%x; }\n", CW (x->crsrID)));  indent -= 2;
   fflush (o_fp);
 }
 
@@ -943,7 +942,7 @@ dump_dialog_items (DialogPeek dp)
   int i;
  
   item_data = (int16 *) STARH (DIALOG_ITEMS (dp));
-  n_items = BigEndianValue (*item_data);
+  n_items = CW (*item_data);
   items = (itmp) &item_data[1];
   fprintf (o_fp, "%d items:\n", n_items);
   for (i = 0; i < n_items; i ++)
@@ -952,10 +951,10 @@ dump_dialog_items (DialogPeek dp)
        
       item = items;
       fprintf (o_fp, "item %d; type %d, hand %p, (%d, %d, %d, %d)\n",
- 	       i, BigEndianValue ((int16) item->itmtype),
+ 	       i, CW ((int16) item->itmtype),
  	       MR (item->itmhand),
- 	       BigEndianValue (item->itmr.top), BigEndianValue (item->itmr.left), 
- 	       BigEndianValue (item->itmr.bottom), BigEndianValue (item->itmr.right));
+ 	       CW (item->itmr.top), CW (item->itmr.left), 
+ 	       CW (item->itmr.bottom), CW (item->itmr.right));
       BUMPIP (items);
     }
 }
@@ -982,9 +981,9 @@ Executor::dump_aux_win (AuxWinHandle awh)
   iprintf ((o_fp, "awOwner %p;\n", MR (aw->awOwner)));
   dump_field (dump_ctab, MR (aw->awCTable), "awCTable");
   dump_field (dump_handle, MR (aw->dialogCItem), "dialogCItem");
-  iprintf ((o_fp, "awFlags 0x%lx;\n", (long) BigEndianValue (aw->awFlags)));
+  iprintf ((o_fp, "awFlags 0x%lx;\n", (long) CL (aw->awFlags)));
   iprintf ((o_fp, "awReserved 0x%lx;\n", (long) MR (aw->awReserved)));
-  iprintf ((o_fp, "awRefCon 0x%lx; }\n", (long) BigEndianValue (aw->awRefCon)));
+  iprintf ((o_fp, "awRefCon 0x%lx; }\n", (long) CL (aw->awRefCon)));
   indent -= 2;
 
   fflush (o_fp);
@@ -1019,7 +1018,7 @@ Executor::dump_rgn (RgnHandle rgn)
   
   iprintf ((o_fp, "%s(RgnHandle **%p) {\n", field_name.c_str(), rgn)); indent += 2;
   x = deref (rgn);
-  iprintf ((o_fp, "rgnSize %d\n", BigEndianValue (x->rgnSize)));
+  iprintf ((o_fp, "rgnSize %d\n", CW (x->rgnSize)));
   dump_field (dump_rect, &x->rgnBBox, "rgnBBox");
   iprintf ((o_fp, "[special data omitted]; }\n")); indent -= 2;
   fflush (o_fp);
@@ -1182,7 +1181,7 @@ dump_te (TEHandle te)
     line_starts = TE_LINE_STARTS (te);
     
     for (i = 0; i <= n_lines; i ++)
-      iprintf ((o_fp, "lineStart[%d]: %d\n", i, BigEndianValue (line_starts[i])));
+      iprintf ((o_fp, "lineStart[%d]: %d\n", i, CW (line_starts[i])));
   }
 
   {
@@ -1258,7 +1257,7 @@ CountResourcesRN (LONGINT type, INTEGER rn)
   INTEGER retval;
   
   MAP_SAVE_EXCURSION
-    (BigEndianValue (rn),
+    (CW (rn),
      {
        retval = Count1Resources (type);
      });
@@ -1272,7 +1271,7 @@ GetIndResourceRN (LONGINT type, INTEGER i, INTEGER rn)
   Handle retval;
 
   MAP_SAVE_EXCURSION
-    (BigEndianValue (rn),
+    (CW (rn),
      {
        retval = Get1IndResource (type, i);
      });
@@ -1284,7 +1283,7 @@ static void
 AddResourceRN (Handle h, LONGINT type, INTEGER id, Str255 name, INTEGER rn)
 {
   MAP_SAVE_EXCURSION
-    (BigEndianValue (rn),
+    (CW (rn),
      {
        AddResource (h, type, id, name);
      });
@@ -1305,11 +1304,11 @@ copy_resources (INTEGER new_rn, INTEGER old_rn, LONGINT type)
       Handle h;
       INTEGER id;
       Str255 name;
-      ULONGINT ignored;
+      LONGINT ignored;
 
       h = GetIndResourceRN (type, i, old_rn);
       GetResInfo (h, &id, &ignored, name);
-      id = BigEndianValue (id);
+      id = CW (id);
       DetachResource (h);
       AddResourceRN (h, type, id, name, new_rn);
     }

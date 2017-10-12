@@ -20,7 +20,6 @@ char ROMlib_rcsid_windColor[] =
 #include "rsys/wind.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /* return a pointer to the auxilary window record
    associated with `w' */
@@ -138,7 +137,7 @@ P2 (PUBLIC pascal trap, void, SetWinColor,
 	  /* FIXME: copy? */
 	  HxX (aux_w, awCTable)    = RM (new_w_ctab);
 	  HxX (aux_w, dialogCItem) = 0;
-	  HxX (aux_w, awFlags)     = /* BigEndianValue (proc_id & 0x0F) */ 0;
+	  HxX (aux_w, awFlags)     = /* CL (proc_id & 0x0F) */ 0;
 	  HxX (aux_w, awReserved)  = 0;
 	  HxX (aux_w, awRefCon)    = 0;
 	}
@@ -157,7 +156,7 @@ P2 (PUBLIC pascal trap, void, SetWinColor,
 	  
 	  /* pick the best color and store it into window's port's
 	     bkColor field */
-	  PORT_BK_COLOR_X (w) = BigEndianValue (Color2Index (color));
+	  PORT_BK_COLOR_X (w) = CL (Color2Index (color));
 
 	  if (WINDOW_VISIBLE_X (w))
 	    THEPORT_SAVE_EXCURSION
@@ -168,8 +167,8 @@ P2 (PUBLIC pascal trap, void, SetWinColor,
 		 
 		 CopyRgn (WINDOW_CONT_REGION (w), t);
 		 OffsetRgn (t,
-			    BigEndianValue (PORT_BOUNDS (w).left),
-			    BigEndianValue (PORT_BOUNDS (w).top));
+			    CW (PORT_BOUNDS (w).left),
+			    CW (PORT_BOUNDS (w).top));
 		 EraseRgn (t);
 		 DisposeRgn (t);
 	       });

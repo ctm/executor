@@ -25,14 +25,13 @@ char ROMlib_rcsid_stdmdef[] =
 #include "rsys/custom.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 static Rect *current_menu_rect;
 
 #define TOP_ARROW_P()					\
-  (BigEndianValue (TopMenuItem) < BigEndianValue (current_menu_rect->top))
+  (CW (TopMenuItem) < CW (current_menu_rect->top))
 #define BOTTOM_ARROW_P()				\
-  (BigEndianValue (AtMenuBottom) > BigEndianValue (current_menu_rect->bottom))
+  (CW (AtMenuBottom) > CW (current_menu_rect->bottom))
 
 static int16 checksize, cloversize, lineheight, ascent;
 
@@ -161,7 +160,7 @@ size_menu (MenuHandle mh, tablePtr tablep)
   
   width = height = actual_height = 0;
   /* the 32 is just a guess */
-  max_height = BigEndianValue (screenBitsX.bounds.bottom) - 32;
+  max_height = CW (screenBitsX.bounds.bottom) - 32;
   for (tp = tablep->entry, ep = tp + tablep->count;  tp != ep; tp++)
     {
       icon_info_t icon_info;
@@ -185,8 +184,8 @@ size_menu (MenuHandle mh, tablePtr tablep)
 	width = w;
     }
   TextFace(0);
-  HxX (mh, menuWidth)  = BigEndianValue (width);
-  HxX (mh, menuHeight) = BigEndianValue (actual_height);
+  HxX (mh, menuWidth)  = CW (width);
+  HxX (mh, menuHeight) = CW (actual_height);
 }
     
 static void
@@ -214,13 +213,13 @@ draw_right_arrow (Rect *menu_rect, MenuHandle mh, int item, int invert_p)
   arrow_bitmap.rowBytes = CWC (1);
   SetRect (&arrow_bitmap.bounds, 0, 0, /* right, bottom */ 6, 11);
   
-  y = BigEndianValue (menu_rect->top) + 2;
-  x = BigEndianValue (menu_rect->right) - 14;
+  y = CW (menu_rect->top) + 2;
+  x = CW (menu_rect->right) - 14;
   
-  dst_rect.top = BigEndianValue (y);
-  dst_rect.left = BigEndianValue (x);
-  dst_rect.bottom = BigEndianValue (y + 11);
-  dst_rect.right = BigEndianValue (x + 6);
+  dst_rect.top = CW (y);
+  dst_rect.left = CW (x);
+  dst_rect.bottom = CW (y + 11);
+  dst_rect.right = CW (x + 6);
   
   CopyBits (&arrow_bitmap, PORT_BITS_FOR_COPY (thePort),
 	    &arrow_bitmap.bounds, &dst_rect, srcCopy, NULL);
@@ -258,7 +257,7 @@ draw_arrow (Rect *menu_rect, MenuHandle mh, arrowtype arrdir)
       arrow_bitmap.rowBytes = CWC (2);
       SetRect (&arrow_bitmap.bounds, 0, 0, /* right, bottom */ 11, 6);
       
-      top_of_item = BigEndianValue (menu_rect->top);
+      top_of_item = CW (menu_rect->top);
     }
   else if (arrdir == downarrow)
     {
@@ -266,7 +265,7 @@ draw_arrow (Rect *menu_rect, MenuHandle mh, arrowtype arrdir)
       arrow_bitmap.rowBytes = CWC (2);
       SetRect (&arrow_bitmap.bounds, 0, 0, /* right, bottom */ 11, 6);
 
-      top_of_item = BigEndianValue (menu_rect->bottom) - lineheight;
+      top_of_item = CW (menu_rect->bottom) - lineheight;
     }
   else
     gui_abort ();
@@ -279,14 +278,14 @@ draw_arrow (Rect *menu_rect, MenuHandle mh, arrowtype arrdir)
   
   erase_rect.left = menu_rect->left;
   erase_rect.right = menu_rect->right;
-  erase_rect.top = BigEndianValue (top_of_item);
-  erase_rect.bottom = BigEndianValue (top_of_item + lineheight);
+  erase_rect.top = CW (top_of_item);
+  erase_rect.bottom = CW (top_of_item + lineheight);
   EraseRect (&erase_rect);
 
-  dst_rect.top    = BigEndianValue (top_of_item + 5);
-  dst_rect.left   = BigEndianValue (BigEndianValue (menu_rect->left) + checksize);
-  dst_rect.bottom = BigEndianValue (top_of_item + 5 + /* arrows are `6' tall */ 6);
-  dst_rect.right  = BigEndianValue (BigEndianValue (menu_rect->left) + checksize
+  dst_rect.top    = CW (top_of_item + 5);
+  dst_rect.left   = CW (CW (menu_rect->left) + checksize);
+  dst_rect.bottom = CW (top_of_item + 5 + /* arrows are `6' tall */ 6);
+  dst_rect.right  = CW (CW (menu_rect->left) + checksize
 			+ /* arrows are `11' wide */ 11);
   CopyBits (&arrow_bitmap, PORT_BITS_FOR_COPY (thePort),
 	    &arrow_bitmap.bounds, &dst_rect, srcCopy, NULL);
@@ -307,15 +306,15 @@ A3(PRIVATE, void, erasearrow, Rect *, rp, tablePtr, tablep, BOOLEAN, upordown)
     Rect r;
     INTEGER x, y;
 
-    x = BigEndianValue(rp->left) + checksize;
+    x = CW(rp->left) + checksize;
     if (upordown == UP)
-	y = BigEndianValue(rp->top) + 5;
+	y = CW(rp->top) + 5;
     else
-	y = BigEndianValue(rp->bottom) - lineheight + 5;
-    r.top    = BigEndianValue(y);
-    r.left   = BigEndianValue(x);
-    r.bottom = BigEndianValue(y+6);
-    r.right  = BigEndianValue(x+11);
+	y = CW(rp->bottom) - lineheight + 5;
+    r.top    = CW(y);
+    r.left   = CW(x);
+    r.bottom = CW(y+6);
+    r.right  = CW(x+11);
     EraseRect(&r);
 }
 
@@ -342,8 +341,8 @@ draw_item (Rect *rp, struct table::tableentry *tp, int32 bit, int item, MenuHand
   active_p = ! ((MI_ENABLE_FLAGS (mh) & bit) != bit
 		|| divider_p);
   
-  top    = tp[0].top + BigEndianValue (TopMenuItem);
-  bottom = tp[1].top + BigEndianValue (TopMenuItem);
+  top    = tp[0].top + CW (TopMenuItem);
+  bottom = tp[1].top + CW (TopMenuItem);
   
   v = top + ascent;
   
@@ -392,8 +391,8 @@ draw_item (Rect *rp, struct table::tableentry *tp, int32 bit, int item, MenuHand
     }
   RGBBackColor (invert_p ? &title_color : &bk_color);
   
-  rtmp.top = BigEndianValue (top);
-  rtmp.bottom = BigEndianValue (bottom);
+  rtmp.top = CW (top);
+  rtmp.bottom = CW (bottom);
   rtmp.left = rp->left;
   rtmp.right = rp->right;
 
@@ -404,7 +403,7 @@ draw_item (Rect *rp, struct table::tableentry *tp, int32 bit, int item, MenuHand
       && !draw_right_arrow_p)
     {
       RGBForeColor (invert_p ? &bk_color : &mark_color);
-      MoveTo (BigEndianValue (rp->left) + 2, v);
+      MoveTo (CW (rp->left) + 2, v);
       DrawChar(tp->options->mmarker);
     }
 
@@ -414,10 +413,10 @@ draw_item (Rect *rp, struct table::tableentry *tp, int32 bit, int item, MenuHand
   /* draw the icon */
   if (draw_icon_p)
     {
-      rtmp.top    = BigEndianValue (top + ICON_PAD / 2);
-      rtmp.left   = BigEndianValue (BigEndianValue (rp->left) + checksize + 2);
-      rtmp.bottom = BigEndianValue (BigEndianValue (rtmp.top) + (icon_info.height - ICON_PAD));
-      rtmp.right  = BigEndianValue (BigEndianValue (rtmp.left) + (icon_info.width - ICON_PAD));
+      rtmp.top    = CW (top + ICON_PAD / 2);
+      rtmp.left   = CW (CW (rp->left) + checksize + 2);
+      rtmp.bottom = CW (CW (rtmp.top) + (icon_info.height - ICON_PAD));
+      rtmp.right  = CW (CW (rtmp.left) + (icon_info.width - ICON_PAD));
       
       if (icon_info.color_icon_p)
 	PlotCIcon (&rtmp, (CIconHandle) icon_info.icon);
@@ -428,22 +427,22 @@ draw_item (Rect *rp, struct table::tableentry *tp, int32 bit, int item, MenuHand
   if (divider_p)
     {
       RGBForeColor (&title_color);
-      MoveTo (BigEndianValue (rp->left),  v - 4);
-      LineTo (BigEndianValue (rp->right), v - 4);
+      MoveTo (CW (rp->left),  v - 4);
+      LineTo (CW (rp->right), v - 4);
     }
   else
     {
       RGBForeColor (invert_p ? &bk_color : &title_color);
       
-      MoveTo (BigEndianValue (rp->left) + icon_info.width + checksize + 2, v);
+      MoveTo (CW (rp->left) + icon_info.width + checksize + 2, v);
       TextFace (tp->options->mstyle);
       DrawString (tp->name);
       TextFace (0);
     }
   rtmp.left   = rp->left;
   rtmp.right  = rp->right;
-  rtmp.top    = BigEndianValue (top);
-  rtmp.bottom = BigEndianValue (bottom);
+  rtmp.top    = CW (top);
+  rtmp.bottom = CW (bottom);
   if ((iskeyequiv(tp) || draw_right_arrow_p)
       && !divider_p)
     {
@@ -458,7 +457,7 @@ draw_item (Rect *rp, struct table::tableentry *tp, int32 bit, int item, MenuHand
 
 	  RGBForeColor (invert_p ? &bk_color : &command_color);
 	  
-	  new_left = BigEndianValue(rp->right) - (2 * cloversize + 1);
+	  new_left = CW(rp->right) - (2 * cloversize + 1);
 	  MoveTo (new_left, v);
 	  DrawChar (commandMark);
 	  DrawChar (tp->options->mkeyeq);
@@ -467,7 +466,7 @@ draw_item (Rect *rp, struct table::tableentry *tp, int32 bit, int item, MenuHand
 	      Rect r;
 
 	      r = rtmp;
-	      r.left = BigEndianValue (new_left);
+	      r.left = CW (new_left);
 	      PenMode(notPatBic);
 	      PenPat(gray);
 	      PaintRect(&r);
@@ -498,13 +497,13 @@ draw_menu (MenuHandle mh, Rect *rp, tablePtr tablep)
   struct table::tableentry *tp, *ep;
   int16 topcutoff, bottomcutoff;
 
-  if (BigEndianValue (TopMenuItem) < BigEndianValue(rp->top))
-    topcutoff = BigEndianValue(rp->top) - BigEndianValue (TopMenuItem) + lineheight;
+  if (CW (TopMenuItem) < CW(rp->top))
+    topcutoff = CW(rp->top) - CW (TopMenuItem) + lineheight;
   else
     topcutoff = 0;
 
-  if (BigEndianValue (AtMenuBottom) > BigEndianValue (rp->bottom))
-    bottomcutoff = BigEndianValue (rp->bottom) - BigEndianValue (TopMenuItem) - lineheight;
+  if (CW (AtMenuBottom) > CW (rp->bottom))
+    bottomcutoff = CW (rp->bottom) - CW (TopMenuItem) - lineheight;
   else
     bottomcutoff = 32767;
 
@@ -520,9 +519,9 @@ draw_menu (MenuHandle mh, Rect *rp, tablePtr tablep)
 	bit = 1 << nitem;
 	draw_item (rp, tp, bit, nitem, mh, FALSE);
       }
-  if (BigEndianValue(rp->top) > BigEndianValue (TopMenuItem))
+  if (CW(rp->top) > CW (TopMenuItem))
     draw_arrow (rp, mh, uparrow);
-  if (BigEndianValue (rp->bottom) < BigEndianValue(AtMenuBottom))
+  if (CW (rp->bottom) < CW(AtMenuBottom))
     draw_arrow (rp, mh, downarrow);
   HxX (MBSAVELOC, mbUglyScroll) = CWC (0);
 }
@@ -535,8 +534,8 @@ fliprect (Rect *rp, int16 i, tablePtr tablep, Rect *flipr)
   tp = &tablep->entry[i-1];
   flipr->left   = rp->left;
   flipr->right  = rp->right;
-  flipr->top    = BigEndianValue(tp[0].top + BigEndianValue(TopMenuItem));
-  flipr->bottom = BigEndianValue(tp[1].top + BigEndianValue(TopMenuItem));
+  flipr->top    = CW(tp[0].top + CW(TopMenuItem));
+  flipr->bottom = CW(tp[1].top + CW(TopMenuItem));
 }
 
 static void
@@ -551,9 +550,9 @@ doupdown (MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
 
   if (*itemp)
     {
-      /* flip (rp, BigEndianValue (*itemp), tablep); */
-      draw_item (rp, &tablep->entry[BigEndianValue (*itemp) - 1], 1 << BigEndianValue (*itemp),
-		 BigEndianValue (*itemp), mh, FALSE);
+      /* flip (rp, CW (*itemp), tablep); */
+      draw_item (rp, &tablep->entry[CW (*itemp) - 1], 1 << CW (*itemp),
+		 CW (*itemp), mh, FALSE);
       *itemp = CWC (0);
     }
   if (HxX (MBSAVELOC, mbUglyScroll))
@@ -561,43 +560,43 @@ doupdown (MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
       /* don't sroll the scroll arrows */
       scrollr = *rp;
       if (TOP_ARROW_P ())
-	scrollr.top    = BigEndianValue (BigEndianValue (scrollr.top)    + lineheight);
+	scrollr.top    = CW (CW (scrollr.top)    + lineheight);
       if (BOTTOM_ARROW_P ())
-	scrollr.bottom = BigEndianValue (BigEndianValue (scrollr.bottom) - lineheight);
+	scrollr.bottom = CW (CW (scrollr.bottom) - lineheight);
       
       updater = *rp;
       
       if (upordown == UP)
 	{
-	  offset = MIN (lineheight, BigEndianValue (rp->top) - BigEndianValue (TopMenuItem));
-	  TopMenuItem  = BigEndianValue (BigEndianValue (TopMenuItem)  + offset);
-	  AtMenuBottom = BigEndianValue (BigEndianValue (AtMenuBottom) + offset);
+	  offset = MIN (lineheight, CW (rp->top) - CW (TopMenuItem));
+	  TopMenuItem  = CW (CW (TopMenuItem)  + offset);
+	  AtMenuBottom = CW (CW (AtMenuBottom) + offset);
 	  if (TOP_ARROW_P ())
 	    {
 	      updater.top = scrollr.top;
-	      updater.bottom  =  BigEndianValue (BigEndianValue (updater.top) + lineheight);
+	      updater.bottom  =  CW (CW (updater.top) + lineheight);
 	    }
 	  else
 	    {
 	      updater.top = rp->top;
-	      updater.bottom  =  BigEndianValue (BigEndianValue (updater.top) + 2 * lineheight);
+	      updater.bottom  =  CW (CW (updater.top) + 2 * lineheight);
 	      erasearrow (rp, tablep, UP);
 	    }
 	}
       else
 	{
-	  offset = MAX (-lineheight, BigEndianValue (rp->bottom) - BigEndianValue (AtMenuBottom));
-	  TopMenuItem  = BigEndianValue (BigEndianValue (TopMenuItem)  + offset);
-	  AtMenuBottom = BigEndianValue (BigEndianValue (AtMenuBottom) + offset);
+	  offset = MAX (-lineheight, CW (rp->bottom) - CW (AtMenuBottom));
+	  TopMenuItem  = CW (CW (TopMenuItem)  + offset);
+	  AtMenuBottom = CW (CW (AtMenuBottom) + offset);
 	  if (BOTTOM_ARROW_P ())
 	    {
 	      updater.bottom = scrollr.bottom;
-	      updater.top = BigEndianValue (BigEndianValue (updater.bottom) - lineheight);
+	      updater.top = CW (CW (updater.bottom) - lineheight);
 	    }
 	  else
 	    {
 	      updater.bottom = rp->bottom;
-	      updater.top = BigEndianValue (BigEndianValue (updater.bottom) - 2 * lineheight);
+	      updater.top = CW (CW (updater.bottom) - 2 * lineheight);
 	      erasearrow (rp, tablep, DOWN);
 	    }
 	}
@@ -606,9 +605,9 @@ doupdown (MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
       DisposeRgn (updatergn);
       ClipRect (&updater);
       for (tp = tablep->entry, ep = tp + tablep->count, bit = 1 << 1;
-	   tp[0].top < BigEndianValue(updater.bottom) - BigEndianValue(TopMenuItem) && tp != ep;
+	   tp[0].top < CW(updater.bottom) - CW(TopMenuItem) && tp != ep;
 	   tp++, bit <<= 1)
-	if (tp[1].top > BigEndianValue (updater.top) - BigEndianValue (TopMenuItem))
+	if (tp[1].top > CW (updater.top) - CW (TopMenuItem))
 	  draw_item (rp, tp, tp - tablep->entry + 1, bit, mh, FALSE);
       rtmp.top = rtmp.left = CWC(-32767);
       rtmp.bottom = rtmp.right = CWC(32767);
@@ -618,12 +617,12 @@ doupdown (MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
     HxX(MBSAVELOC, mbUglyScroll) = CWC (1);
   if (upordown == DOWN)
     {
-      if (BigEndianValue(AtMenuBottom) >= BigEndianValue (rp->bottom))
+      if (CW(AtMenuBottom) >= CW (rp->bottom))
 	draw_arrow (rp, mh, downarrow);
     }
   else
     {
-      if (BigEndianValue(TopMenuItem) <= BigEndianValue (rp->top))
+      if (CW(TopMenuItem) <= CW (rp->top))
 	draw_arrow (rp, mh, uparrow);
     }
 }
@@ -640,51 +639,51 @@ choose_menu (MenuHandle mh, Rect *rp, Point p, int16 *itemp, tablePtr tablep)
 
   valid_rect.left   = rp->left;
   valid_rect.right  = rp->right;
-  valid_rect.top    = BigEndianValue (MAX (BigEndianValue (rp->top), BigEndianValue (TopMenuItem)));
-  valid_rect.bottom = BigEndianValue (MIN (BigEndianValue (rp->bottom), BigEndianValue (AtMenuBottom)));
+  valid_rect.top    = CW (MAX (CW (rp->top), CW (TopMenuItem)));
+  valid_rect.bottom = CW (MIN (CW (rp->bottom), CW (AtMenuBottom)));
 
   clip_rect.left   = rp->left;
   clip_rect.right  = rp->right;
-  clip_rect.top    = BigEndianValue (TOP_ARROW_P () ? BigEndianValue (rp->top) + lineheight
-			                : BigEndianValue (rp->top));
-  clip_rect.bottom = BigEndianValue (BOTTOM_ARROW_P () ? BigEndianValue (rp->bottom) - lineheight
-			                   : BigEndianValue (rp->bottom));
+  clip_rect.top    = CW (TOP_ARROW_P () ? CW (rp->top) + lineheight
+			                : CW (rp->top));
+  clip_rect.bottom = CW (BOTTOM_ARROW_P () ? CW (rp->bottom) - lineheight
+			                   : CW (rp->bottom));
   ClipRect (&clip_rect);
   
-  if (BigEndianValue (*itemp) < 0)
+  if (CW (*itemp) < 0)
     *itemp = CWC (0);
   if (PtInRect (p, &valid_rect))
     {
       if (BOTTOM_ARROW_P ()
-	       && p.v >= BigEndianValue(rp->bottom) - lineheight)
+	       && p.v >= CW(rp->bottom) - lineheight)
 	doupdown (mh, rp, tablep, DOWN, itemp);
       else if (TOP_ARROW_P ()
-	       && p.v <  BigEndianValue(rp->top)    + lineheight)
+	       && p.v <  CW(rp->top)    + lineheight)
 	doupdown (mh, rp, tablep, UP, itemp);
       else
 	{
 	  int32 bit;
 	  
 	  for (tp = tablep->entry, ep = tp + tablep->count;
-	       tp != ep && p.v >= tp->top + BigEndianValue (TopMenuItem);
+	       tp != ep && p.v >= tp->top + CW (TopMenuItem);
 	       tp++)
 	    ;
 	  nitem = tp - tablep->entry;
-	  MenuDisable = BigEndianValue ((menu_id<<16) | (uint16) nitem);
+	  MenuDisable = CL ((menu_id<<16) | (uint16) nitem);
 
 	  bit = (1 << nitem) | 1;
 	  if ((MI_ENABLE_FLAGS (mh) & bit) != bit
 	      || (tp[-1].name[0] && tp[-1].name[1] == '-'))
 	    nitem = 0;
-	  if (BigEndianValue (*itemp) != nitem)
+	  if (CW (*itemp) != nitem)
 	    {
 	      if (*itemp)
 		/* redraw this guy normally */
-		draw_item (rp, &tablep->entry[BigEndianValue (*itemp) - 1], 1 << BigEndianValue (*itemp),
-			   BigEndianValue (*itemp), mh, FALSE);
+		draw_item (rp, &tablep->entry[CW (*itemp) - 1], 1 << CW (*itemp),
+			   CW (*itemp), mh, FALSE);
 	      if (nitem)
 		draw_item (rp, &tablep->entry[nitem - 1], 1 << nitem, nitem, mh, TRUE);
-	      *itemp = BigEndianValue (nitem);
+	      *itemp = CW (nitem);
 	    }
 	  if (nitem)
 	    fliprect (rp, nitem, tablep, &HxX(MBSAVELOC, mbItemRect));
@@ -692,7 +691,7 @@ choose_menu (MenuHandle mh, Rect *rp, Point p, int16 *itemp, tablePtr tablep)
     }
   else if (*itemp)
     {
-      nitem = BigEndianValue (*itemp);
+      nitem = CW (*itemp);
       draw_item (rp, &tablep->entry[nitem - 1], 1 << nitem, nitem, mh, FALSE);
       *itemp = CWC (0);
     }
@@ -709,22 +708,22 @@ A5 (PRIVATE, void, popuprect, MenuHandle, mh, Rect *, rp, Point, p,
   
   if (Hx(mh, menuWidth) == -1 || Hx(mh, menuHeight) == -1)
     CalcMenuSize(mh);
-  rp->top    = BigEndianValue (p.v - tablep->entry[BigEndianValue (*itemp) - 1].top);
-  rp->left   = BigEndianValue (p.h);
-  rp->right  = BigEndianValue (BigEndianValue (rp->left) + Hx (mh, menuWidth));
+  rp->top    = CW (p.v - tablep->entry[CW (*itemp) - 1].top);
+  rp->left   = CW (p.h);
+  rp->right  = CW (CW (rp->left) + Hx (mh, menuWidth));
   *itemp     = rp->top;
 
-  for (tp = tablep->entry; BigEndianValue(rp->top) < BigEndianValue(MBarHeight); tp++)
-    rp->top = BigEndianValue(BigEndianValue(rp->top) + (tp[1].top - tp[0].top));
+  for (tp = tablep->entry; CW(rp->top) < CW(MBarHeight); tp++)
+    rp->top = CW(CW(rp->top) + (tp[1].top - tp[0].top));
   
-  rp->bottom = BigEndianValue(BigEndianValue(rp->top)  + Hx(mh, menuHeight));
+  rp->bottom = CW(CW(rp->top)  + Hx(mh, menuHeight));
   
-  vmax = BigEndianValue (screenBitsX.bounds.bottom) - 2; /* subtract 2 for frame */
-  for (tp = tablep->entry + tablep->count - 1; BigEndianValue(rp->bottom) > vmax; --tp)
-    rp->bottom = BigEndianValue(BigEndianValue(rp->bottom) - (tp[1].top - tp[0].top));
-  rp->top = BigEndianValue(BigEndianValue(rp->bottom) - Hx(mh, menuHeight));
-  for (tp = tablep->entry; BigEndianValue(rp->top) < BigEndianValue(MBarHeight); tp++)
-    rp->top = BigEndianValue(BigEndianValue(rp->top) + (tp[1].top - tp[0].top));
+  vmax = CW (screenBitsX.bounds.bottom) - 2; /* subtract 2 for frame */
+  for (tp = tablep->entry + tablep->count - 1; CW(rp->bottom) > vmax; --tp)
+    rp->bottom = CW(CW(rp->bottom) - (tp[1].top - tp[0].top));
+  rp->top = CW(CW(rp->bottom) - Hx(mh, menuHeight));
+  for (tp = tablep->entry; CW(rp->top) < CW(MBarHeight); tp++)
+    rp->top = CW(CW(rp->top) + (tp[1].top - tp[0].top));
 }
 
 
@@ -754,8 +753,8 @@ P5(PUBLIC, pascal void, mdef0, INTEGER, mess, MenuHandle, mh, Rect *, rp,
 
   GetFontInfo(&fi);
   checksize = CharWidth(checkMark) + 1;     /* used to use widMax - 1 here */
-  lineheight = BigEndianValue(fi.ascent) + BigEndianValue(fi.descent) + BigEndianValue(fi.leading);
-  ascent = BigEndianValue(fi.ascent);
+  lineheight = CW(fi.ascent) + CW(fi.descent) + CW(fi.leading);
+  ascent = CW(fi.ascent);
   cloversize = CharWidth(commandMark);
 
   for (sp = (char *) STARH(mh) + SIZEOFMINFO + Hx(mh, menuData[0]), count = 0;
@@ -782,7 +781,7 @@ P5(PUBLIC, pascal void, mdef0, INTEGER, mess, MenuHandle, mh, Rect *, rp,
       v += icon_info.height ? MAX (icon_info.height, lineheight) : lineheight;
     }
   tabp->top = v;
-  AtMenuBottom = BigEndianValue(BigEndianValue(TopMenuItem) + v);
+  AtMenuBottom = CW(CW(TopMenuItem) + v);
   
   switch (mess)
     {

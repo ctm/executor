@@ -59,7 +59,6 @@ char ROMlib_rcsid_executor[] =
 #define PUBLIC
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #define FASTALINETRAPS
 
@@ -592,7 +591,7 @@ PUBLIC void Executor::executor_main( void )
 
     SoundBase = RM(NewPtr(370 * sizeof(INTEGER)));
 #if 0
-    memset(BigEndianValue(SoundBase), 0, (LONGINT) 370 * sizeof(INTEGER));
+    memset(CL(SoundBase), 0, (LONGINT) 370 * sizeof(INTEGER));
 #else /* !0 */
     for (i = 0; i < 370; ++i)
 	((INTEGER *) MR(SoundBase))[i] = CWC (0x8000);	/* reference 0 sound */
@@ -603,7 +602,7 @@ PUBLIC void Executor::executor_main( void )
     ROM85 = CWC(0x3FFF);
 
     a5 = US_TO_SYN68K((LONGINT) &tmpA5);
-    CurrentA5 = (Ptr) BigEndianValue(a5);
+    CurrentA5 = (Ptr) CL(a5);
     InitGraf((Ptr) quickbytes + sizeof(quickbytes) - 4);
     InitFonts();
     InitCRM ();
@@ -625,7 +624,7 @@ PUBLIC void Executor::executor_main( void )
     memcpy(FinderName+1, BROWSER_NAME, FinderName[0]);
     
     CountAppFiles(&mess, &count);
-    count = BigEndianValue (count);
+    count = CW (count);
     if (count > 0)
 	GetAppFiles(1, &thefile);
     else
@@ -662,8 +661,8 @@ PUBLIC void Executor::executor_main( void )
 	if (count > 0)
 	  {
 	    p = ROMlib_find_best_creator_type_match
-	      (BigEndianValue (hpb.hFileInfo.ioFlFndrInfo.fdCreator),
-	       BigEndianValue (hpb.hFileInfo.ioFlFndrInfo.fdType));
+	      (CL (hpb.hFileInfo.ioFlFndrInfo.fdCreator),
+	       CL (hpb.hFileInfo.ioFlFndrInfo.fdType));
 	  }
 	else
 	  {
@@ -709,11 +708,11 @@ PUBLIC void Executor::executor_main( void )
 
     wdpb.ioVRefNum = hpb.hFileInfo.ioVRefNum;
     wdpb.ioWDDirID = hpb.hFileInfo.ioFlParID;
-    SFSaveDisk_Update (BigEndianValue (hpb.hFileInfo.ioVRefNum), fName);
+    SFSaveDisk_Update (CW (hpb.hFileInfo.ioVRefNum), fName);
     CurDirStore = hpb.hFileInfo.ioFlParID;
     wdpb.ioWDProcID = CLC (T('X','c','t','r'));
     wdpb.ioNamePtr = 0;
     PBOpenWD(&wdpb, FALSE);
-    exevrefnum = BigEndianValue(wdpb.ioVRefNum);
+    exevrefnum = CW(wdpb.ioVRefNum);
     Launch (CurApName, exevrefnum);  
 }

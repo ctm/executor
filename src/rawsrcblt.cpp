@@ -32,7 +32,6 @@ namespace Executor {
 }
 
 using namespace Executor;
-using namespace ByteSwap;
 
 const void **srcblt_noshift_stubs[8] = {
   srcblt_copy_noshift_labels,
@@ -107,7 +106,7 @@ srcblt_bitmap (void)
   log2_bpp = srcblt_log2_bpp;
 
   rgn = srcblt_rgn_start;
-  y = BigEndianValue (*rgn++);
+  y = CW (*rgn++);
   if (y == RGNSTOP)
     goto done_with_scanlines;
 
@@ -197,7 +196,7 @@ srcblt_bitmap (void)
   * so we have to look two bytes farther to find the next y
   * value.  Special regions store y's as big endian.
   */
-  next_y = BigEndianValue (rgn[1]);
+  next_y = CW (rgn[1]);
   rgn += 2;
   if (next_y == RGNSTOP)
     goto done_with_scanlines;

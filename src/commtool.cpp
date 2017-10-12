@@ -18,7 +18,6 @@ char ROMlib_rcsid_commtool[] =
 #include "rsys/mman.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 PUBLIC INTEGER
 Executor::CRMGetCRMVersion (void)
@@ -53,7 +52,7 @@ Executor::CRMInstall (QElemPtr qp)
       CRMRecPtr prevp;
 
       prevp = (CRMRecPtr) MR (commtool_head.qTail);
-      ((CRMRecPtr)qp)->crmDeviceID = BigEndianValue (BigEndianValue (prevp->crmDeviceID) + 1);
+      ((CRMRecPtr)qp)->crmDeviceID = CL (CL (prevp->crmDeviceID) + 1);
     }
 
   Enqueue (qp, &commtool_head);
@@ -77,11 +76,11 @@ Executor::CRMSearch (QElemPtr qp)
   CRMRecPtr p;
   LONGINT min;
 	
-  min = BigEndianValue (((CRMRecPtr)qp)->crmDeviceID) + 1;
+  min = CL (((CRMRecPtr)qp)->crmDeviceID) + 1;
   block = block_virtual_ints ();
 
   for (p = (CRMRecPtr) MR (commtool_head.qHead);
-       p && BigEndianValue (p->crmDeviceID) < min;
+       p && CL (p->crmDeviceID) < min;
        p = (CRMRecPtr) MR (p->qLink))
     ;
   restore_virtual_ints (block);

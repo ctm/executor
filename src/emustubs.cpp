@@ -68,7 +68,6 @@ char ROMlib_rcsid_emustubs[] =
 #include "rsys/mixed_mode.h"
 
 namespace Executor {
-  using namespace ByteSwap;
 
 #define PUBLIC
 #undef PRIVATE
@@ -1792,20 +1791,20 @@ STUB (CommToolboxDispatch)
 
   arg_block = (comm_toolbox_dispatch_args_t *) SYN68K_TO_US(EM_A0);
 
-  selector = BigEndianValue (arg_block->selector);
+  selector = CW (arg_block->selector);
   switch (selector)
     {
     case 0x0402:
       AppendDITL (MR (arg_block->args.append_args.dp),
 		  MR (arg_block->args.append_args.new_items_h),
-		  BigEndianValue (arg_block->args.append_args.method));
+		  CW (arg_block->args.append_args.method));
       break;
     case 0x0403:
       EM_D0 = CountDITL (MR (arg_block->args.count_args.dp));
       break;
     case 0x0404:
       ShortenDITL (MR (arg_block->args.shorten_args.dp),
-		   BigEndianValue (arg_block->args.shorten_args.n_items));
+		   CW (arg_block->args.shorten_args.n_items));
       break;
     case 1286:
       EM_D0 = CRMGetCRMVersion ();
@@ -2438,7 +2437,7 @@ STUB(Gestalt)
     default:
       l = 0;
       EM_D0 = Gestalt(EM_D0, &l);
-      EM_A0 = BigEndianValue (l);
+      EM_A0 = CL (l);
       break;
     case 0xA3AD:
       if (EM_D0 == DONGLE_GESTALT)
@@ -2510,70 +2509,70 @@ STUB (HGetState)
 STUB(HSetState)
 {
   HSetState ((Handle) SYN68K_TO_US_CHECK0(EM_A0), EM_D0);
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (HLock)
 {
   HLock ((Handle) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (HUnlock)
 {
   HUnlock ((Handle) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (HPurge)
 {
   HPurge ((Handle) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (HNoPurge)
 {
   HNoPurge ((Handle) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (HSetRBit)
 {
   HSetRBit ((Handle) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (HClrRBit)
 {
   HClrRBit ((Handle) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (InitApplZone)
 {
   InitApplZone ();
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (SetApplBase)
 {
   SetApplBase ((Ptr) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (MoreMasters)
 {
   MoreMasters ();
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
@@ -2582,67 +2581,67 @@ STUB (InitZone)
   initzonehiddenargs_t *ip;
   
   ip = (initzonehiddenargs_t *) SYN68K_TO_US(EM_A0);
-  InitZone ((ProcPtr)MR (ip->pGrowZone), BigEndianValue (ip->cMoreMasters),
+  InitZone ((ProcPtr)MR (ip->pGrowZone), CW (ip->cMoreMasters),
 	    (Ptr)MR (ip->limitPtr), (THz)MR (ip->startPtr));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (SetZone)
 {
   SetZone ((THz) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (DisposHandle)
 {
   DisposHandle ((Handle) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (GetHandleSize)
 {
   EM_D0 = GetHandleSize ((Handle) SYN68K_TO_US_CHECK0(EM_A0));
-  if (BigEndianValue (MemErr) < 0)
-    EM_D0 = BigEndianValue (MemErr);
+  if (CW (MemErr) < 0)
+    EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (SetHandleSize)
 {
   SetHandleSize ((Handle) SYN68K_TO_US_CHECK0(EM_A0), EM_D0);
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (ReallocHandle)
 {
   ReallocHandle ((Handle) SYN68K_TO_US_CHECK0(EM_A0), EM_D0);
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (DisposPtr)
 {
   DisposPtr ((Ptr) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (GetPtrSize)
 {
   EM_D0 = GetPtrSize ((Ptr) SYN68K_TO_US_CHECK0(EM_A0));
-  if (BigEndianValue (MemErr) < 0)
-    EM_D0 = BigEndianValue (MemErr);
+  if (CW (MemErr) < 0)
+    EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (SetPtrSize)
 {
   SetPtrSize ((Ptr) SYN68K_TO_US_CHECK0(EM_A0), EM_D0);
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
@@ -2661,14 +2660,14 @@ STUB (CompactMem)
 STUB (ResrvMem)
 {
   _ResrvMem_flags (EM_D0, SYS_P (EM_D1, 0xA040));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS();
 }
 
 STUB (PurgeMem)
 {
   _PurgeMem_flags (EM_D0, SYS_P (EM_D1, 0xA04D));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
@@ -2677,21 +2676,21 @@ STUB (BlockMove)
   BlockMove_the_trap ((Ptr) SYN68K_TO_US_CHECK0(EM_A0),
 		      (Ptr) SYN68K_TO_US_CHECK0(EM_A1), EM_D0,
 		      !(EM_D1 & 0x200));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (MaxApplZone)
 {
   MaxApplZone ();
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (MoveHHi)
 {
   MoveHHi ((Handle) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
@@ -2710,21 +2709,21 @@ STUB (StackSpace)
 STUB (SetApplLimit)
 {
   SetApplLimit ((Ptr) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (SetGrowZone)
 {
   SetGrowZone ((ProcPtr) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS();
 }
 
 STUB (GetZone)
 {
   EM_A0 = (uint32) US_TO_SYN68K_CHECK0(GetZone ());
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
@@ -2732,7 +2731,7 @@ STUB (NewEmptyHandle)
 {
   EM_A0 = (uint32)
     US_TO_SYN68K_CHECK0(_NewEmptyHandle_flags (SYS_P (EM_D1, 0xA166)));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
@@ -2742,7 +2741,7 @@ STUB (NewHandle)
 
   EM_A0 = (uint32) US_TO_SYN68K_CHECK0(_NewHandle_flags (EM_D0, SYS_P (EM_D1, 0xA122),
 				     CLEAR_P (EM_D1, 0xA122)));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
@@ -2750,7 +2749,7 @@ STUB (HandleZone)
 {
   EM_A0 = (uint32)
     US_TO_SYN68K_CHECK0(HandleZone ((Handle) SYN68K_TO_US_CHECK0(EM_A0)));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
@@ -2759,7 +2758,7 @@ STUB (RecoverHandle)
   EM_A0 = (uint32) US_TO_SYN68K_CHECK0(
 			_RecoverHandle_flags ((Ptr) SYN68K_TO_US_CHECK0(EM_A0),
 					      SYS_P (EM_D1, 0xA128)));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
@@ -2767,14 +2766,14 @@ STUB (NewPtr)
 {
   EM_A0 = (uint32) US_TO_SYN68K_CHECK0(_NewPtr_flags (EM_D0, SYS_P (EM_D1, 0xA11E),
 				  CLEAR_P (EM_D1, 0xA11E)));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (PtrZone)
 {
   EM_A0 = (uint32) US_TO_SYN68K_CHECK0(PtrZone ((Ptr) SYN68K_TO_US_CHECK0(EM_A0)));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
@@ -2797,7 +2796,7 @@ STUB (PurgeSpace)
 STUB (EmptyHandle)
 {
   EmptyHandle ((Handle) SYN68K_TO_US_CHECK0(EM_A0));
-  EM_D0 = BigEndianValue (MemErr);
+  EM_D0 = CW (MemErr);
   RTS ();
 }
 
@@ -3047,7 +3046,7 @@ STUB (modeswitch)
   retaddr = POPADDR ();
   rp = (RoutineDescriptor *)((char *)ignoreme); /* UGH! */
 
-  n_routines = BigEndianValue (rp->routineCount) + 1;
+  n_routines = CW (rp->routineCount) + 1;
   for (i = 0;
        i < n_routines && rp->routineRecords[i].ISA != CBC (kPowerPCISA);
        ++i)
@@ -3058,7 +3057,7 @@ STUB (modeswitch)
       return retaddr;
     }
 
-  procinfo = BigEndianValue (rp->routineRecords[i].procInfo);
+  procinfo = CL (rp->routineRecords[i].procInfo);
   convention = procinfo & 0xf;
 
   if (convention == kRegisterBased)

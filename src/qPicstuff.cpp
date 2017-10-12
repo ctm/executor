@@ -29,7 +29,6 @@ char ROMlib_rcsid_qPicstuff[] =
 #include "rsys/executor.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /*
  * Hooray for static variables.  We have to do something like this because
@@ -216,22 +215,22 @@ A2(PRIVATE, void, txratio, Point, num, Point, den)
 
 A2(PRIVATE, void, line, Point, op, Point, np)
 {
-  PORT_PEN_LOC (thePort).h = BigEndianValue (op.h);
-  PORT_PEN_LOC (thePort).v = BigEndianValue (op.v);
+  PORT_PEN_LOC (thePort).h = CW (op.h);
+  PORT_PEN_LOC (thePort).v = CW (op.v);
   CALLLINE(np);
-  PORT_PEN_LOC (thePort).h = BigEndianValue (np.h);
-  PORT_PEN_LOC (thePort).v = BigEndianValue (np.v);
+  PORT_PEN_LOC (thePort).h = CW (np.h);
+  PORT_PEN_LOC (thePort).v = CW (np.v);
 }
 
 A3(PRIVATE, void, shrtline, Point, op, SignedByte, dh, SignedByte, dv)
 {
-  PORT_PEN_LOC (thePort).h = BigEndianValue(op.h);
-  PORT_PEN_LOC (thePort).v = BigEndianValue(op.v);
+  PORT_PEN_LOC (thePort).h = CW(op.h);
+  PORT_PEN_LOC (thePort).v = CW(op.v);
   op.h += dh;
   op.v += dv;
   CALLLINE (op);
-  PORT_PEN_LOC (thePort).h = BigEndianValue(op.h);
-  PORT_PEN_LOC (thePort).v = BigEndianValue(op.v);
+  PORT_PEN_LOC (thePort).h = CW(op.h);
+  PORT_PEN_LOC (thePort).v = CW(op.v);
 }
 
 PRIVATE void setnumerdenom(Point *nump, Point *denp)
@@ -292,10 +291,10 @@ A3(PRIVATE, void, longtext, Point, pt, StringPtr, s, Point *, pp)
     Point save, numer, denom;
 
     save = PORT_PEN_LOC (thePort);
-    pp->h = BigEndianValue (pt.h);
-    pp->v = BigEndianValue (pt.v);
-    PORT_PEN_LOC (thePort).h = BigEndianValue (pt.h);
-    PORT_PEN_LOC (thePort).v = BigEndianValue (pt.v);
+    pp->h = CW (pt.h);
+    pp->v = CW (pt.v);
+    PORT_PEN_LOC (thePort).h = CW (pt.h);
+    PORT_PEN_LOC (thePort).v = CW (pt.v);
     setnumerdenom (&numer, &denom);
     CALLTEXT ((INTEGER) U(s[0]), (Ptr) (s+1), numer, denom);
     PORT_PEN_LOC (thePort) = save;
@@ -305,7 +304,7 @@ A3(PRIVATE, void, dhtext, unsigned char, dh, StringPtr, s, Point *, pp)
 {
     Point save, numer, denom;
 
-    pp->h = BigEndianValue(BigEndianValue(pp->h) + (dh));
+    pp->h = CW(CW(pp->h) + (dh));
     save = PORT_PEN_LOC (thePort);
     PORT_PEN_LOC (thePort) = *pp;
     setnumerdenom (&numer, &denom);
@@ -317,7 +316,7 @@ A3(PRIVATE, void, dvtext, unsigned char, dv, StringPtr, s, Point *, pp)
 {
   Point save, numer, denom;
 
-  pp->v = BigEndianValue (BigEndianValue (pp->v) + (dv));
+  pp->v = CW (CW (pp->v) + (dv));
   save = PORT_PEN_LOC (thePort);
   PORT_PEN_LOC (thePort) = *pp;
   setnumerdenom (&numer, &denom);
@@ -330,8 +329,8 @@ A4(PRIVATE, void, dhdvtext, Byte, dh, Byte, dv,
 {
     Point save, numer, denom;
 
-    pp->h = BigEndianValue(BigEndianValue(pp->h) + (dh));
-    pp->v = BigEndianValue(BigEndianValue(pp->v) + (dv));
+    pp->h = CW(CW(pp->h) + (dh));
+    pp->v = CW(CW(pp->v) + (dv));
     save = PORT_PEN_LOC (thePort);
     PORT_PEN_LOC (thePort) = *pp;
     setnumerdenom(&numer, &denom);
@@ -375,8 +374,8 @@ A2 (PRIVATE, void, origin, INTEGER, dh, INTEGER, dv)
 {
   OffsetRect (&srcpicframe, dh, dv);
   
-  txtpoint.h = BigEndianValue (BigEndianValue (txtpoint.h) - dh);
-  txtpoint.v = BigEndianValue (BigEndianValue (txtpoint.v) - dv);
+  txtpoint.h = CW (CW (txtpoint.h) - dh);
+  txtpoint.v = CW (CW (txtpoint.v) - dv);
 }
 
 A1(PRIVATE, void, pnlochfrac, INTEGER, f)
@@ -416,10 +415,10 @@ A2(PRIVATE, void, pnsize, INTEGER, pv, INTEGER, ph)
 {
     Point p;
 
-    p.h = BigEndianValue(ph);
-    p.v = BigEndianValue(pv);
+    p.h = CW(ph);
+    p.v = CW(pv);
     ScalePt(&p, &srcpicframe, &dstpicframe);
-    PenSize(BigEndianValue(p.h), BigEndianValue(p.v));
+    PenSize(CW(p.h), CW(p.v));
 }
 
 A1(PRIVATE, void, textface, Byte, f)
@@ -551,7 +550,7 @@ PRIVATE void W_TextFont( INTEGER f )
       INTEGER new_f;
       GetFNum (sp, &new_f);
       if (new_f)
-	f = BigEndianValue (new_f);
+	f = CW (new_f);
     }
   TextFont( f );
 }
@@ -778,7 +777,7 @@ fontname (INTEGER hsize, Handle hand)
   StringPtr sp;
 
   p = (char *) STARH (hand);
-  i = BigEndianValue (*(INTEGER *)p);
+  i = CW (*(INTEGER *)p);
   sp = (StringPtr) p + 2;
   add_assoc (i, sp);
 }
@@ -1020,7 +1019,7 @@ PRIVATE INTEGER eatINTEGER()
     INTEGER retval;
 
     retval = eatINTEGERX();
-    return BigEndianValue(retval);
+    return CW(retval);
 }
 
 PRIVATE LONGINT eatLONGINTX()
@@ -1040,7 +1039,7 @@ PRIVATE LONGINT eatLONGINT()
     LONGINT retval;
 
     retval = eatLONGINTX();
-    return BigEndianValue(retval);
+    return CL(retval);
 }
 
 PRIVATE void eatString(Str255 str)
@@ -1080,7 +1079,7 @@ A2(PRIVATE, void, eatRegion, RgnHandle, rh, Size, hs)
     } else
         BlockMove((Ptr) nextbytep, (Ptr) STARH(rh) + sizeof(INTEGER),
 							 hs - sizeof(INTEGER));
-    HxX(rh, rgnSize) = BigEndianValue(hs);
+    HxX(rh, rgnSize) = CW(hs);
     nextbytep += hs - sizeof(INTEGER);
 }
 
@@ -1097,7 +1096,7 @@ A2(PRIVATE, void, eatPixMap, register PixMapPtr, pixp, INTEGER, rowb)
     /* TODO:  byte swapping stuff, testing */
 
     /* x(pixp->baseAddr)   = 0; will be set later */
-    pixp->rowBytes   = rowb ? BigEndianValue(rowb) : eatINTEGERX();
+    pixp->rowBytes   = rowb ? CW(rowb) : eatINTEGERX();
     eatRect(&pixp->bounds);
     pixp->pmVersion  = eatINTEGERX();
     pixp->packType   = eatINTEGERX();
@@ -1118,7 +1117,7 @@ A2(PRIVATE, void, eatPixMap, register PixMapPtr, pixp, INTEGER, rowb)
 A2(PRIVATE, void, eatBitMap, BitMap *, bp, INTEGER, rowb)
 {
     bp->baseAddr = 0;
-    bp->rowBytes = rowb ? BigEndianValue(rowb) : eatINTEGERX();
+    bp->rowBytes = rowb ? CW(rowb) : eatINTEGERX();
     eatRect(&bp->bounds);
 }
 
@@ -1304,8 +1303,8 @@ A2(PRIVATE, void, eatbitdata, register BitMap *, bp, BOOLEAN, packed)
     INTEGER length;
     Handle temph;
 
-    rowb = BigEndianValue(bp->rowBytes) & ROWMASK;
-    datasize = (LONGINT) rowb * (BigEndianValue(bp->bounds.bottom) - BigEndianValue(bp->bounds.top));
+    rowb = CW(bp->rowBytes) & ROWMASK;
+    datasize = (LONGINT) rowb * (CW(bp->bounds.bottom) - CW(bp->bounds.top));
     if (!packed) {
 	if (procp) {
 	    h = NewHandle(datasize);
@@ -1383,7 +1382,7 @@ A1(PRIVATE, void, eatColorTable, register PixMapPtr, pixmap)
     ch = MR(pixmap->pmTable);
     cp = STARH(ch);
     /* cp->ctSeed = */  eatLONGINTX();
-    cp->ctSeed = BigEndianValue (GetCTSeed ());
+    cp->ctSeed = CL (GetCTSeed ());
     cp->ctFlags = eatINTEGERX();
     cp->ctSize  = eatINTEGERX();
     SetHandleSize((Handle) ch, (Size)sizeof(ColorTable) - sizeof(cp->ctTable) +
@@ -1555,8 +1554,8 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
 #endif /* LETGCCWAIL */
 
 #if 0
-    if (!pic || (BigEndianValue (destrp->top) == BigEndianValue (destrp->bottom)
-		 && BigEndianValue (destrp->left) == BigEndianValue (destrp->right)))
+    if (!pic || (CW (destrp->top) == CW (destrp->bottom)
+		 && CW (destrp->left) == CW (destrp->right)))
       return;
 #else
     if (!pic || !pic->p || EmptyRect(destrp) || EmptyRect(&HxX(pic, picFrame)))
@@ -1628,8 +1627,8 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
     /* this will fail if we are actually drawing to a
        color graph port; we'll get spew colors instead of
        b/w, so let ForeColor or BackColor do the work */
-    the_port->fgColor = BigEndianValue(blackColor);
-    the_port->bkColor = BigEndianValue(whiteColor);
+    the_port->fgColor = CL(blackColor);
+    the_port->bkColor = CL(whiteColor);
 #else
     ForeColor (blackColor);
     BackColor (whiteColor);
@@ -1671,8 +1670,8 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
     reduce(&picnumh, &picdenh);
     reduce(&picnumv, &picdenv);
 
-    txtpoint.h = BigEndianValue(BigEndianValue(dstpicframe.left) - BigEndianValue(srcpicframe.left));
-    txtpoint.v = BigEndianValue(BigEndianValue(dstpicframe.top)  - BigEndianValue(srcpicframe.top));
+    txtpoint.h = CW(CW(dstpicframe.left) - CW(srcpicframe.left));
+    txtpoint.v = CW(CW(dstpicframe.top)  - CW(srcpicframe.top));
 
     scaleh = FixRatio (RECT_WIDTH (&dstpicframe), RECT_WIDTH (&srcpicframe));
     scalev = FixRatio (RECT_HEIGHT (&dstpicframe), RECT_HEIGHT (&srcpicframe));
@@ -1719,8 +1718,8 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
 		    pp->h = eatINTEGERX();
 		    if (sc & SCALEIT)
 			MapPt(pp, &srcpicframe, destrp);
-		    pp->h = BigEndianValue(pp->h);
-		    pp->v = BigEndianValue(pp->v);
+		    pp->h = CW(pp->h);
+		    pp->v = CW(pp->v);
 		    ++pp;
 		    break;
 		case RCT:
@@ -1918,11 +1917,11 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
 	    }
 	  }
 	if (opcode == OP_OvSize) {
-	    points[0].h = BigEndianValue(points[0].h);
-	    points[0].v = BigEndianValue(points[0].v);
+	    points[0].h = CW(points[0].h);
+	    points[0].v = CW(points[0].v);
 	    ScalePt(&points[0], &srcpicframe, &dstpicframe);
-	    points[0].h = BigEndianValue(points[0].h);
-	    points[0].v = BigEndianValue(points[0].v);
+	    points[0].h = CW(points[0].h);
+	    points[0].v = CW(points[0].v);
 	    ovh = points[0].v;
 	    ovw = points[0].h;
 	} else if (opcode == OP_Version) {

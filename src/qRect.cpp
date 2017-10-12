@@ -14,15 +14,14 @@ char ROMlib_rcsid_qRect[] =
 #include "ToolboxUtil.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P5(PUBLIC pascal trap, void, SetRect, Rect *, r, INTEGER, left, INTEGER, top,
 					    INTEGER, right, INTEGER, bottom)
 {
-    r->top    = BigEndianValue(top);
-    r->left   = BigEndianValue(left);
-    r->bottom = BigEndianValue(bottom);
-    r->right  = BigEndianValue(right);
+    r->top    = CW(top);
+    r->left   = CW(left);
+    r->bottom = CW(bottom);
+    r->right  = CW(right);
 }
 
 P3(PUBLIC pascal trap, void, OffsetRect, Rect *, r, INTEGER, dh, INTEGER, dv)
@@ -41,7 +40,7 @@ P3(PUBLIC pascal trap, void, InsetRect, Rect *, r, INTEGER, dh, INTEGER, dv)
   SWAPPED_OPW (r->right,  -, dh);
 
 #if defined (INCOMPATIBLEBUTSANE)
-  if (BigEndianValue(r->top) >= BigEndianValue(r->bottom) || BigEndianValue(r->left) >= BigEndianValue(r->right))
+  if (CW(r->top) >= CW(r->bottom) || CW(r->left) >= CW(r->right))
     RECT_ZERO (r);
 #endif /* INCOMPATIBLEBUTSANE */
 }
@@ -49,15 +48,15 @@ P3(PUBLIC pascal trap, void, InsetRect, Rect *, r, INTEGER, dh, INTEGER, dv)
 P3(PUBLIC pascal trap, BOOLEAN, SectRect, const Rect *, s1, const Rect *, s2,
    Rect *, dest)
 {
-  if (   BigEndianValue (s1->top)  < BigEndianValue (s2->bottom)
-      && BigEndianValue (s2->top)  < BigEndianValue (s1->bottom)
-      && BigEndianValue (s1->left) < BigEndianValue (s2->right)
-      && BigEndianValue (s2->left) < BigEndianValue (s1->right))
+  if (   CW (s1->top)  < CW (s2->bottom)
+      && CW (s2->top)  < CW (s1->bottom)
+      && CW (s1->left) < CW (s2->right)
+      && CW (s2->left) < CW (s1->right))
     {
-      dest->top    = BigEndianValue (MAX (BigEndianValue (s1->top),    BigEndianValue (s2->top)));
-      dest->left   = BigEndianValue (MAX (BigEndianValue (s1->left),   BigEndianValue (s2->left)));
-      dest->bottom = BigEndianValue (MIN (BigEndianValue (s1->bottom), BigEndianValue (s2->bottom)));
-      dest->right  = BigEndianValue (MIN (BigEndianValue (s1->right),  BigEndianValue (s2->right)));
+      dest->top    = CW (MAX (CW (s1->top),    CW (s2->top)));
+      dest->left   = CW (MAX (CW (s1->left),   CW (s2->left)));
+      dest->bottom = CW (MIN (CW (s1->bottom), CW (s2->bottom)));
+      dest->right  = CW (MIN (CW (s1->right),  CW (s2->right)));
       return !EmptyRect (dest);
     }
   else
@@ -69,8 +68,8 @@ P3(PUBLIC pascal trap, BOOLEAN, SectRect, const Rect *, s1, const Rect *, s2,
 
 P1(PUBLIC pascal trap, BOOLEAN, EmptyRect, Rect *, r)
 {
-    return(BigEndianValue(r->top) >= BigEndianValue(r->bottom) ||
-           BigEndianValue(r->left) >= BigEndianValue(r->right));
+    return(CW(r->top) >= CW(r->bottom) ||
+           CW(r->left) >= CW(r->right));
 }
 
 P3(PUBLIC pascal trap, void, UnionRect, Rect *, s1, Rect *, s2, Rect *, dest)
@@ -80,10 +79,10 @@ P3(PUBLIC pascal trap, void, UnionRect, Rect *, s1, Rect *, s2, Rect *, dest)
     else if (EmptyRect(s2))
 	*dest = *s1;
     else {
-	dest->top    = BigEndianValue(MIN (BigEndianValue(s1->top),    BigEndianValue(s2->top)));
-	dest->left   = BigEndianValue(MIN (BigEndianValue(s1->left),   BigEndianValue(s2->left)));
-	dest->bottom = BigEndianValue(MAX (BigEndianValue(s1->bottom), BigEndianValue(s2->bottom)));
-	dest->right  = BigEndianValue(MAX (BigEndianValue(s1->right),  BigEndianValue(s2->right)));
+	dest->top    = CW(MIN (CW(s1->top),    CW(s2->top)));
+	dest->left   = CW(MIN (CW(s1->left),   CW(s2->left)));
+	dest->bottom = CW(MAX (CW(s1->bottom), CW(s2->bottom)));
+	dest->right  = CW(MAX (CW(s1->right),  CW(s2->right)));
     }
 }
 
@@ -91,19 +90,19 @@ P2(PUBLIC pascal trap, BOOLEAN, PtInRect, Point, p, Rect *, r)
 {
   BOOLEAN retval;
 
-  retval = (   p.h >= BigEndianValue(r->left)
-	    && p.h <  BigEndianValue(r->right)
-	    && p.v >= BigEndianValue(r->top)
-	    && p.v <  BigEndianValue(r->bottom));
+  retval = (   p.h >= CW(r->left)
+	    && p.h <  CW(r->right)
+	    && p.v >= CW(r->top)
+	    && p.v <  CW(r->bottom));
   return retval;
 }
 
 P3(PUBLIC pascal trap, void, Pt2Rect, Point, p1, Point, p2, Rect *, dest)
 {
-    dest->top    = BigEndianValue(MIN (p1.v, p2.v));
-    dest->left   = BigEndianValue(MIN (p1.h, p2.h));
-    dest->bottom = BigEndianValue(MAX (p1.v, p2.v));
-    dest->right  = BigEndianValue(MAX (p1.h, p2.h));
+    dest->top    = CW(MIN (p1.v, p2.v));
+    dest->left   = CW(MIN (p1.h, p2.h));
+    dest->bottom = CW(MAX (p1.v, p2.v));
+    dest->right  = CW(MAX (p1.h, p2.h));
 }
 
 P3(PUBLIC pascal trap, void, PtToAngle, Rect *, rp, Point, p, INTEGER *, angle)
@@ -117,8 +116,8 @@ P3(PUBLIC pascal trap, void, PtToAngle, Rect *, rp, Point, p, INTEGER *, angle)
    * just call atan2()?
    */
 
-  dx = p.h - (BigEndianValue (rp->left) + BigEndianValue (rp->right)) / 2;
-  dy = p.v - (BigEndianValue (rp->top) + BigEndianValue (rp->bottom)) / 2;
+  dx = p.h - (CW (rp->left) + CW (rp->right)) / 2;
+  dy = p.v - (CW (rp->top) + CW (rp->bottom)) / 2;
 
   if (dx != 0)
     {
@@ -137,7 +136,7 @@ P3(PUBLIC pascal trap, void, PtToAngle, Rect *, rp, Point, p, INTEGER *, angle)
 	a = 180;
     }
 
-  *angle = BigEndianValue (a);
+  *angle = CW (a);
 }
 
 P2 (PUBLIC pascal trap, BOOLEAN, EqualRect, const Rect *, r1, const Rect *, r2)

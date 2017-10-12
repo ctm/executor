@@ -26,7 +26,6 @@ char ROMlib_rcsid_gdev[] =
 #include "rsys/executor.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /*
  * determined experimentally -- this fix is needed for Energy Scheming because
@@ -95,13 +94,13 @@ Executor::gd_allocate_main_device (void)
 		   vdriver_bpp);
        
        gd_pixmap = GD_PMAP (graphics_device);
-       PIXMAP_SET_ROWBYTES_X (gd_pixmap, BigEndianValue (vdriver_row_bytes));
+       PIXMAP_SET_ROWBYTES_X (gd_pixmap, CW (vdriver_row_bytes));
        PIXMAP_BASEADDR_X (gd_pixmap) = (Ptr) RM (vdriver_fbuf);
 
        gd_rect = &GD_RECT (graphics_device);
        gd_rect->top = gd_rect->left = CWC (0);
-       gd_rect->bottom = BigEndianValue (vdriver_height);
-       gd_rect->right = BigEndianValue (vdriver_width);
+       gd_rect->bottom = CW (vdriver_height);
+       gd_rect->right = CW (vdriver_width);
        PIXMAP_BOUNDS (gd_pixmap) = *gd_rect;
 
        /* add ourselves to the device list */
@@ -156,8 +155,8 @@ P2 (PUBLIC pascal trap, GDHandle, NewGDevice,
        CTAB_FLAGS_X (PIXMAP_TABLE (GD_PMAP (this2))) |= CTAB_GDEVICE_BIT_X;
   
        GD_REF_CON_X (this2) = CWC (0);  /* ??? */
-       GD_REF_NUM_X (this2) = BigEndianValue (ref_num);  /* ??? */
-       GD_MODE_X (this2) = BigEndianValue (mode);  /* ??? */
+       GD_REF_NUM_X (this2) = CW (ref_num);  /* ??? */
+       GD_MODE_X (this2) = CL (mode);  /* ??? */
 
        GD_NEXT_GD_X (this2) = (GDHandle)RM (NULL);
 
@@ -219,11 +218,11 @@ Executor::gd_set_bpp (GDHandle gd, boolean_t color_p, boolean_t fixed_p, int bpp
 	      gd_color_table = PIXMAP_TABLE (gd_pixmap);
 	      SetHandleSize ((Handle) gd_color_table,
 			     CTAB_STORAGE_FOR_SIZE ((1 << bpp) - 1));
-	      CTAB_SIZE_X (gd_color_table) = BigEndianValue ((1 << bpp) - 1);
+	      CTAB_SIZE_X (gd_color_table) = CW ((1 << bpp) - 1);
 	      vdriver_get_colors (0, 1 << bpp,
 				  CTAB_TABLE (gd_color_table));
 
-	      CTAB_SEED_X (gd_color_table) = BigEndianValue (GetCTSeed ());
+	      CTAB_SEED_X (gd_color_table) = CL (GetCTSeed ());
 	    }
 	}
       else
@@ -267,9 +266,9 @@ P3 (PUBLIC pascal trap, void, SetDeviceAttribute,
     BOOLEAN, value)
 {
   if (value)
-    GD_FLAGS_X (gdh) |= BigEndianValue (1 << attribute);
+    GD_FLAGS_X (gdh) |= CW (1 << attribute);
   else
-    GD_FLAGS_X (gdh) &= BigEndianValue (~(1 << attribute));
+    GD_FLAGS_X (gdh) &= CW (~(1 << attribute));
 }
 
 P1 (PUBLIC pascal trap, void, SetGDevice,
@@ -372,8 +371,8 @@ P4 (PUBLIC pascal trap, void, DeviceLoop,
 	    gd_rect = GD_RECT (gd);
 	    port_bounds = &(PORT_BOUNDS (thePort));
 	    OffsetRect (&gd_rect,
-			BigEndianValue (port_bounds->left),
-			BigEndianValue (port_bounds->top));
+			CW (port_bounds->left),
+			CW (port_bounds->top));
 
 	    /* Intersect GDevice rect with the specified region. */
 	    RectRgn (gd_rect_rgn, &gd_rect);
@@ -491,8 +490,8 @@ P4 (PUBLIC pascal trap, OSErr, SetDepth,
     gui_fatal ("vdriver not initialized, unable to change bpp");
   gd_set_bpp (gdh, !vdriver_grayscale_p, vdriver_fixed_clut_p, bpp);
   
-  PIXMAP_SET_ROWBYTES_X (gd_pixmap, BigEndianValue (vdriver_row_bytes));
-  screenBitsX.rowBytes = BigEndianValue (vdriver_row_bytes);
+  PIXMAP_SET_ROWBYTES_X (gd_pixmap, CW (vdriver_row_bytes));
+  screenBitsX.rowBytes = CW (vdriver_row_bytes);
   
   cursor_reset_current_cursor ();
   

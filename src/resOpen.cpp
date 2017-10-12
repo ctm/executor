@@ -23,7 +23,6 @@ char ROMlib_rcsid_resOpen[] =
 #include "rsys/prefs.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 PUBLIC void
 Executor::HCreateResFile_helper (INTEGER vrefnum, LONGINT parid, Str255 name,
@@ -51,7 +50,7 @@ Executor::HCreateResFile_helper (INTEGER vrefnum, LONGINT parid, Str255 name,
         FSClose(f);
         return;
     }
-    buf.bhead.rdatoff = buf.bhead.rmapoff = BigEndianValue(sizeof(reshead) +
+    buf.bhead.rdatoff = buf.bhead.rmapoff = CL(sizeof(reshead) +
 							      sizeof(rsrvrec));
     buf.bhead.datlen = CLC(0);   /* No data */
     buf.bhead.maplen = CLC(sizeof(resmap) + sizeof(INTEGER));
@@ -101,7 +100,7 @@ Handle Executor::ROMlib_mgetres(resmaphand map, resref *rr)
 	EM_A2 = (LONGINT) (long) US_TO_SYN68K(rr);
 #define TEMPORARYHACKUNTILWESWAPTABLES
 #if !defined(TEMPORARYHACKUNTILWESWAPTABLES)	
-	EM_A0 = (LONGINT) BigEndianValue(ostraptable[0xFC]);
+	EM_A0 = (LONGINT) CL(ostraptable[0xFC]);
 #else /* defined(TEMPORARYHACKUNTILWESWAPTABLES) */
 	EM_A0 = (LONGINT) (long) ostraptable[0xFC];
 #endif
@@ -182,7 +181,7 @@ decompress_setup (INTEGER rn, int32 *dlenp, int32 *final_sizep, int32 *offsetp,
       LONGINT save_pos;
 
       GetFPos (rn, &save_pos);
-      *dcmp_handlep = GetResource (TICK("dcmp"), BigEndianValue (info.dcmpID));
+      *dcmp_handlep = GetResource (TICK("dcmp"), CW (info.dcmpID));
       SetFPos (rn, fsFromStart, save_pos);
 
       if (!*dcmp_handlep)
@@ -193,7 +192,7 @@ decompress_setup (INTEGER rn, int32 *dlenp, int32 *final_sizep, int32 *offsetp,
 	  int32 working_size;
 
 	  LoadResource (*dcmp_handlep);
-	  final_size = BigEndianValue (info.uncompressedSize);
+	  final_size = CL (info.uncompressedSize);
 
 	  /* 
 	   * The MacTech article says that the workingBufferFractionalSize
@@ -370,7 +369,7 @@ Executor::ROMlib_mgetres2 (resmaphand map, resref *rr)
 	    retval = NULL;
 	  else
 	    {
-	      dlen = BigEndianValue (dlen);
+	      dlen = CL (dlen);
 	      if (ResLoad)
 		retval = mgetres_helper (map, rr, dlen, retval);
 	      else if (!rr->rhand)
@@ -551,7 +550,7 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
 
       str255assign (local_name, fn);
       pbr.volumeParam.ioNamePtr = (StringPtr) RM ((Ptr) local_name);
-      pbr.volumeParam.ioVRefNum = BigEndianValue (vref);
+      pbr.volumeParam.ioVRefNum = CW (vref);
       pbr.volumeParam.ioVolIndex = CLC (-1);
       err = PBHGetVInfo (&pbr, FALSE);
       if (err)
@@ -561,9 +560,9 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
 	}
 
       cpb.hFileInfo.ioNamePtr = RM (fn);
-      cpb.hFileInfo.ioVRefNum = BigEndianValue (vref);
+      cpb.hFileInfo.ioVRefNum = CW (vref);
       cpb.hFileInfo.ioFDirIndex = CWC (0);
-      cpb.hFileInfo.ioDirID = BigEndianValue (dirid);
+      cpb.hFileInfo.ioDirID = CL (dirid);
       if ((ROMlib_setreserr(PBGetCatInfo(&cpb, 0))) == noErr
 	  && perm > fsRdPerm)
 	{
@@ -573,7 +572,7 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
 					cpb.hFileInfo.ioDirID);
 	  if (fref != -1)
 	    {
-	      CurMap = BigEndianValue (fref);
+	      CurMap = CW (fref);
 /*-->*/       return fref;
 	    }
 	}
@@ -584,22 +583,22 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
 
     ROMlib_invalar();
     pbr.ioParam.ioNamePtr = RM (fn);
-    pbr.ioParam.ioVRefNum = BigEndianValue (vref);
+    pbr.ioParam.ioVRefNum = CW (vref);
     pbr.fileParam.ioFDirIndex = CWC (0);
     pbr.ioParam.ioPermssn = CB (perm);
     pbr.ioParam.ioMisc = CLC (0);
-    pbr.fileParam.ioDirID = BigEndianValue (dirid);
+    pbr.fileParam.ioDirID = CL (dirid);
     ROMlib_setreserr(PBHOpenRF(&pbr, FALSE));
     if (ResErr != noErr)
         return(-1);
-    f = BigEndianValue(pbr.ioParam.ioRefNum);
+    f = CW(pbr.ioParam.ioRefNum);
     lc = sizeof(hd);
     ROMlib_setreserr(FSReadAll(f, &lc, (Ptr)&hd));
     if (ResErr != noErr) {
         FSClose(f);
         return(-1);
     }
-    map = (resmaphand) NewHandle(BigEndianValue(hd.maplen));
+    map = (resmaphand) NewHandle(CL(hd.maplen));
     err = MemError();
     if (ROMlib_setreserr(err)) {
         FSClose(f);
@@ -612,7 +611,7 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
         FSClose(f);
         return(-1);
     }
-    lc = BigEndianValue(hd.maplen);
+    lc = CL(hd.maplen);
     ROMlib_setreserr(FSReadAll(f, &lc, (Ptr) STARH(map)));
     if (ResErr != noErr) {
         DisposHandle((Handle) map);
@@ -654,9 +653,9 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
     }
     
     HxX(map, nextmap) = TopMapHndl;
-    HxX(map, resfn) = BigEndianValue(f);
+    HxX(map, resfn) = CW(f);
     TopMapHndl = RM((Handle) map);
-    CurMap = BigEndianValue(f);
+    CurMap = CW(f);
 
     /* check for resprload bits */
 

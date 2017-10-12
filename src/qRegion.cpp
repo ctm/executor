@@ -21,7 +21,6 @@ char ROMlib_rcsid_qRegion[] =
 #include "rsys/safe_alloca.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #undef ALLOCABEGIN
 #define ALLOCABEGIN     SAFE_DECL();
@@ -57,7 +56,7 @@ ROMlib_sledgehammer_rgn (RgnHandle rgn)
   start_ip = ip = RGN_DATA (rgn);
   
   /* #### verify that `y's are increasing also */
-  for (y = BigEndianValue (*ip++); y != RGN_STOP; y = BigEndianValue (*ip++))
+  for (y = CW (*ip++); y != RGN_STOP; y = CW (*ip++))
     {
       /* #### verify that there are an even numbers of `x's */
       if (special_rgn_p)
@@ -71,7 +70,7 @@ ROMlib_sledgehammer_rgn (RgnHandle rgn)
 	{
 	  int32 prev_x = INT32_MIN;
 	  
-	  for (x = BigEndianValue (*ip++); x != RGN_STOP; x = BigEndianValue (*ip++))
+	  for (x = CW (*ip++); x != RGN_STOP; x = CW (*ip++))
 	    gui_assert (x > prev_x);
 	}
     }
@@ -135,7 +134,7 @@ Executor::ROMlib_sizergn (RgnHandle rh, boolean_t special_p) /* INTERNAL */
     {
       while (*ip != RGN_STOP_X)
 	{
-	  y = BigEndianValue (*ip++);
+	  y = CW (*ip++);
 	  while ((i = *ip++) != RGN_STOP)
 	    {
 	      if (i < left)	/* testing every element is a waste here */
@@ -149,8 +148,8 @@ Executor::ROMlib_sizergn (RgnHandle rh, boolean_t special_p) /* INTERNAL */
     {
       while (*ip != RGN_STOP_X)
 	{
-	  y = BigEndianValue (*ip++);
-	  while ((i = BigEndianValue (*ip++)) != RGN_STOP)
+	  y = CW (*ip++);
+	  while ((i = CW (*ip++)) != RGN_STOP)
 	    {
 	      if (i < left)	/* testing every element is a waste here */
 		left = i;
@@ -188,9 +187,9 @@ Executor::ROMlib_sizergn (RgnHandle rh, boolean_t special_p) /* INTERNAL */
       
       HASSIGN_3
 	(rh,
-	 rgnBBox.left,   BigEndianValue (left),
-	 rgnBBox.bottom, BigEndianValue (y),
-	 rgnBBox.right,  BigEndianValue (right));
+	 rgnBBox.left,   CW (left),
+	 rgnBBox.bottom, CW (y),
+	 rgnBBox.right,  CW (right));
     }
 }
 
@@ -267,13 +266,13 @@ P3 (PUBLIC pascal trap, void, OffsetRgn, RgnHandle, rh,
 	     ep = (INTEGER *) ((char *) ip + RGNP_SIZE (rp)) - 6;
 	   ip < ep; ip++)
 	{
-	  *ip = BigEndianValue (BigEndianValue (*ip) + (dv));
+	  *ip = CW (CW (*ip) + (dv));
 	  ++ip;
 	  do
 	    {
-	      *ip = BigEndianValue (BigEndianValue (*ip) + (dh));
+	      *ip = CW (CW (*ip) + (dh));
 	      ++ip;
-	      *ip = BigEndianValue (BigEndianValue (*ip) + (dh));
+	      *ip = CW (CW (*ip) + (dh));
 	      ++ip;
 	    }
 	  while (*ip != RGN_STOP_X);
@@ -301,7 +300,7 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
       *endpoints = RGN_STOP;
       ipe = endpoints;
       op = endpoints + NHPAIR;
-      while ((v = BigEndianValue (*ipr++)) != RGN_STOP)
+      while ((v = CW (*ipr++)) != RGN_STOP)
 	{
 	  if (v > p.v)
 	    {
@@ -312,9 +311,9 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
 	    }
 	  while (*ipr != RGN_STOP_X || *ipe != RGN_STOP)
 	    {
-	      if (BigEndianValue (*ipr) < *ipe)
-		*op++ = BigEndianValue (*ipr++);
-	      else if (*ipe < BigEndianValue (*ipr))
+	      if (CW (*ipr) < *ipe)
+		*op++ = CW (*ipr++);
+	      else if (*ipe < CW (*ipr))
 		*op++ = *ipe++;
 	      else
 		{
@@ -353,9 +352,9 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
   op = freebuf;								\
   while (*ipr != RGN_STOP_X || *ipe != RGN_STOP)			\
     {									\
-      if (BigEndianValue (*ipr) < *ipe)						\
-	*op++ = BigEndianValue (*ipr++);						\
-      else if (*ipe < BigEndianValue (*ipr))					\
+      if (CW (*ipr) < *ipe)						\
+	*op++ = CW (*ipr++);						\
+      else if (*ipe < CW (*ipr))					\
 	*op++ = *ipe++;							\
       else								\
 	{								\
@@ -395,14 +394,14 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
 						\
   ipe = cur;					\
   ipr = new;					\
-  *out++ = BigEndianValue (vx);				\
+  *out++ = CW (vx);				\
   hold = (LONGINT) (long) out;			\
   while (*ipr != RGN_STOP || *ipe != RGN_STOP)	\
     {						\
       if (*ipr < *ipe)				\
-	*out++ = BigEndianValue (*ipr++);			\
+	*out++ = CW (*ipr++);			\
       else if (*ipe < *ipr)			\
-	*out++ = BigEndianValue (*ipe++);			\
+	*out++ = CW (*ipe++);			\
       else					\
 	{					\
 	  ipr++;				\
@@ -413,7 +412,7 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
     --out;					\
   else						\
     {						\
-      *out++ = BigEndianValue (RGN_STOP);			\
+      *out++ = CW (RGN_STOP);			\
     }						\
   ipe = cur;					\
   cur = new;					\
@@ -477,7 +476,7 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
     sp2 = src2;						\
     newsource						\
     newdest						\
-    *outp++ = BigEndianValue(y);					\
+    *outp++ = CW(y);					\
     outptr = outp;					\
     while (sstart != RGN_STOP && dstart != RGN_STOP) {	\
         if (sstop <= dstart)				\
@@ -691,8 +690,8 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
     *src1ep = *src2ep = *sectsegep = *sectcurep = *freeep = 
       *(src1ep+1) = *(src2ep+1) = RGN_STOP;
 
-    v1 = BigEndianValue(*ipr1++);
-    v2 = BigEndianValue(*ipr2++);
+    v1 = CW(*ipr1++);
+    v2 = CW(*ipr2++);
     wehavepairs = FALSE;	/* whether or not scan lines have stuff */
     switch (nspecial) {
     case 0:
@@ -700,17 +699,17 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
 	    if (v1 < v2) {
 		merge(ipr1, src1ep, freeep) /* no semi ... macro */
 		vx = v1;
-		v1 = BigEndianValue(*ipr1++);
+		v1 = CW(*ipr1++);
 	    } else if (v2 < v1) {
 		merge(ipr2, src2ep, freeep)
 		vx = v2;
-		v2 = BigEndianValue(*ipr2++);
+		v2 = CW(*ipr2++);
 	    } else {    /* equal */
 		merge(ipr1, src1ep, freeep)
 		merge(ipr2, src2ep, freeep)
 		vx = v1;
-		v1 = BigEndianValue(*ipr1++);
-		v2 = BigEndianValue(*ipr2++);
+		v1 = CW(*ipr1++);
+		v2 = CW(*ipr2++);
 	    }
 	    sect(src1ep, src2ep, sectsegep)
 	    outputrgn(vx, sectcurep, sectsegep, tptr);
@@ -722,17 +721,17 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
 	    if (v1 < v2) {
 		nextline(ipr1, src1ep) /* no semi ... macro */
 		vx = v1;
-		v1 = BigEndianValue(*ipr1++);
+		v1 = CW(*ipr1++);
 	    } else if (v2 < v1) {
 		merge(ipr2, src2ep, freeep)
 		vx = v2;
-		v2 = BigEndianValue(*ipr2++);
+		v2 = CW(*ipr2++);
 	    } else {    /* equal */
 		nextline(ipr1, src1ep)
 		merge(ipr2, src2ep, freeep)
 		vx = v1;
-		v1 = BigEndianValue(*ipr1++);
-		v2 = BigEndianValue(*ipr2++);
+		v1 = CW(*ipr1++);
+		v2 = CW(*ipr2++);
 	    }
 #if !defined (NDEBUG)
 	    assertincreasing(src1ep);
@@ -747,17 +746,17 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
 	    if (v1 < v2) {
 		nextline(ipr1, src1ep) /* no semi ... macro */
 		vx = v1;
-		v1 = BigEndianValue(*ipr1++);
+		v1 = CW(*ipr1++);
 	    } else if (v2 < v1) {
 		nextline(ipr2, src2ep)
 		vx = v2;
-		v2 = BigEndianValue(*ipr2++);
+		v2 = CW(*ipr2++);
 	    } else {    /* equal */
 		nextline(ipr1, src1ep)
 		nextline(ipr2, src2ep)
 		vx = v1;
-		v1 = BigEndianValue(*ipr1++);
-		v2 = BigEndianValue(*ipr2++);
+		v1 = CW(*ipr1++);
+		v2 = CW(*ipr2++);
 	    }
 	    sectline(src1ep, src2ep, tptr, vx)
 	}
@@ -817,11 +816,11 @@ A4(PRIVATE, void, binop, optype, op, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
         rp = &(RGN_BBOX (srcrgn1));
         r1[0] = rp->top;
         r1[1] = rp->left;
-        r1[2] = rp->right  != RGN_STOP_X ? rp->right  : BigEndianValue(RGN_STOP - 1);
+        r1[2] = rp->right  != RGN_STOP_X ? rp->right  : CW(RGN_STOP - 1);
         r1[3] = RGN_STOP_X;
-        r1[4] = rp->bottom != RGN_STOP_X ? rp->bottom : BigEndianValue(RGN_STOP - 1);
+        r1[4] = rp->bottom != RGN_STOP_X ? rp->bottom : CW(RGN_STOP - 1);
         r1[5] = rp->left;
-        r1[6] = rp->right  != RGN_STOP_X ? rp->right  : BigEndianValue(RGN_STOP - 1);
+        r1[6] = rp->right  != RGN_STOP_X ? rp->right  : CW(RGN_STOP - 1);
         r1[7] = RGN_STOP_X;
         r1[8] = RGN_STOP_X;
         ipr1 = r1;
@@ -831,11 +830,11 @@ A4(PRIVATE, void, binop, optype, op, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
         rp = &(RGN_BBOX (srcrgn2));
         r2[0] = rp->top;
         r2[1] = rp->left;
-        r2[2] = rp->right  != RGN_STOP ? rp->right  : BigEndianValue(RGN_STOP - 1);
+        r2[2] = rp->right  != RGN_STOP ? rp->right  : CW(RGN_STOP - 1);
         r2[3] = RGN_STOP_X;
-        r2[4] = rp->bottom != RGN_STOP ? rp->bottom : BigEndianValue(RGN_STOP - 1);
+        r2[4] = rp->bottom != RGN_STOP ? rp->bottom : CW(RGN_STOP - 1);
         r2[5] = rp->left;
-        r2[6] = rp->right  != RGN_STOP ? rp->right  : BigEndianValue(RGN_STOP - 1);
+        r2[6] = rp->right  != RGN_STOP ? rp->right  : CW(RGN_STOP - 1);
         r2[7] = RGN_STOP_X;
         r2[8] = RGN_STOP_X;
         ipr2 = r2;
@@ -844,23 +843,23 @@ A4(PRIVATE, void, binop, optype, op, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
     *src1ep = *src2ep = *sectsegep = *sectcurep = *freeep = 
     *(src1ep+1) = *(src2ep+1) =  RGN_STOP;
 
-    v1 = BigEndianValue(*ipr1++);
-    v2 = BigEndianValue(*ipr2++);
+    v1 = CW(*ipr1++);
+    v2 = CW(*ipr2++);
     while (v1 != RGN_STOP || v2 != RGN_STOP) {
         if (v1 < v2) {
             merge(ipr1, src1ep, freeep) /* no semi ... macro */
             vx = v1;
-            v1 = BigEndianValue(*ipr1++);
+            v1 = CW(*ipr1++);
         } else if (v2 < v1) {
             merge(ipr2, src2ep, freeep)
             vx = v2;
-            v2 = BigEndianValue(*ipr2++);
+            v2 = CW(*ipr2++);
         } else {    /* equal */
             merge(ipr1, src1ep, freeep)
             merge(ipr2, src2ep, freeep)
             vx = v1;
-            v1 = BigEndianValue(*ipr1++);
-            v2 = BigEndianValue(*ipr2++);
+            v1 = CW(*ipr1++);
+            v2 = CW(*ipr2++);
         }
         switch (op) {
         case sectop:
@@ -878,7 +877,7 @@ A4(PRIVATE, void, binop, optype, op, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
     *tptr++ = RGN_STOP_X;
     gui_assert(sizeof(INTEGER) * (tptr - temppoints) <=
        2 * (Hx(srcrgn1, rgnSize) + Hx(srcrgn2, rgnSize) + 18 * sizeof(INTEGER)));
-    HxX(dstrgn, rgnSize) = BigEndianValue(RGN_SMALL_SIZE + sizeof(INTEGER) * (tptr - temppoints));
+    HxX(dstrgn, rgnSize) = CW(RGN_SMALL_SIZE + sizeof(INTEGER) * (tptr - temppoints));
     /* TODO fix rgnBBox here */
     ReallocHandle((Handle) dstrgn,
 		  RGN_SMALL_SIZE + sizeof(INTEGER) * (tptr - temppoints));
@@ -909,7 +908,7 @@ Executor::nonspecial_rgn_to_special_rgn (const INTEGER *src, INTEGER *dst)
       INTEGER *next_prev;
       
       /* Fetch the first X on this new scanline. */
-      srcx = BigEndianValue (src[1]);
+      srcx = CW (src[1]);
       if (srcx == RGN_STOP)
 	{
 	  /* The row with which to XOR is empty, so just extend the
@@ -928,8 +927,8 @@ Executor::nonspecial_rgn_to_special_rgn (const INTEGER *src, INTEGER *dst)
       prevx = prev[1];
       if (prevx == RGN_STOP)
 	{
-	  for (; (dst[1] = BigEndianValue (src[1])) != RGN_STOP; src += 2, dst += 2)
-	    dst[2] = BigEndianValue (src[2]);
+	  for (; (dst[1] = CW (src[1])) != RGN_STOP; src += 2, dst += 2)
+	    dst[2] = CW (src[2]);
 	  src += 2;
 	  dst += 2;
 	  prev = next_prev;
@@ -954,7 +953,7 @@ Executor::nonspecial_rgn_to_special_rgn (const INTEGER *src, INTEGER *dst)
 	  if (srcx < prevx)
 	    {
 	      *dst++ = srcx;
-	      srcx = BigEndianValue (*src++);
+	      srcx = CW (*src++);
 	      if (srcx == RGN_STOP)
 		goto read_prev_only;
 	    }
@@ -967,7 +966,7 @@ Executor::nonspecial_rgn_to_special_rgn (const INTEGER *src, INTEGER *dst)
 	    }
 	  else /* srcx == prevx */
 	    {
-	      srcx = BigEndianValue (*src++);
+	      srcx = CW (*src++);
 	      prevx = *prev++;
 	      if (srcx == RGN_STOP)
 		goto read_prev_only;
@@ -994,7 +993,7 @@ Executor::nonspecial_rgn_to_special_rgn (const INTEGER *src, INTEGER *dst)
       while (srcx != RGN_STOP)
 	{
 	  *dst++ = srcx;
-	  srcx = BigEndianValue (*src++);
+	  srcx = CW (*src++);
 	}
       
     do_next:
@@ -1017,10 +1016,10 @@ static INTEGER npairs;
 #define DECL void rhtopandinseth(RgnHandle rh, INTEGER *p, register INTEGER dh)
 
 #define STATEDECL SignedByte state;
-#define SETIO ip = &HxX(rh, rgnSize) + 5; op = p; y = BigEndianValue(*ip++); npairs = 0; \
+#define SETIO ip = &HxX(rh, rgnSize) + 5; op = p; y = CW(*ip++); npairs = 0; \
 					      state = HGetState((Handle) rh); \
 							     HLock((Handle) rh)
-#define NEXTPAIR (x = BigEndianValue(*ip++)) == RGN_STOP ? (y = BigEndianValue(*ip++), 0) : 1
+#define NEXTPAIR (x = CW(*ip++)) == RGN_STOP ? (y = CW(*ip++), 0) : 1
 #define INCLXY(x, y) *op++ = y, *op++ = x, npairs++
 #define UNSETIO HSetState((Handle) rh, state); INCLXY(RGN_STOP, RGN_STOP)
 
@@ -1104,16 +1103,16 @@ A2(PRIVATE, void, ptorh, INTEGER *, p, RgnHandle, rh)
     
     op = RGN_DATA (rh);
     if (npairs) {	/* decrement one 'cause of the 32767 sentinel */
-	*op++ = BigEndianValue(oy = *p);
+	*op++ = CW(oy = *p);
 	for (;npairs; npairs -= 2) {
 	    if ((y = *p++) != oy) {
 		*op++ = RGN_STOP_X;
-		*op++ = BigEndianValue(y);
+		*op++ = CW(y);
 		oy = y;
 	    }
-	    *op++ = BigEndianValue(*p++);
+	    *op++ = CW(*p++);
 	    ++p;			/* if Cx((*ip)++ != oy) error! */
-	    *op++ = BigEndianValue(*p++);
+	    *op++ = CW(*p++);
 	}
     }
     *op++ = RGN_STOP_X;	/* need one or two? */
@@ -1132,7 +1131,7 @@ P3(PUBLIC pascal trap, void, InsetRgn, RgnHandle, rh, INTEGER, dh, INTEGER, dv)
 #define INSANEBUTNECESSARY
 #if defined (INSANEBUTNECESSARY)
 	rp = &RGN_BBOX (rh);
-	if (BigEndianValue(rp->top) >= BigEndianValue(rp->bottom) || BigEndianValue(rp->left) >= BigEndianValue(rp->right))
+	if (CW(rp->top) >= CW(rp->bottom) || CW(rp->left) >= CW(rp->right))
 	  RECT_ZERO (rp);
 #endif /* INSANEBUTNECESSARY */
     } else {
@@ -1159,10 +1158,10 @@ justone (const Rect *rp, RgnHandle rgn, RgnHandle dest)
 {
   const Rect *rp2 = &RGN_BBOX (rgn);
   
-  if (   BigEndianValue (rp->left) <= BigEndianValue (rp2->left)
-      && BigEndianValue (rp->top) <= BigEndianValue (rp2->top)
-      && BigEndianValue (rp->right) >= BigEndianValue (rp2->right)
-      && BigEndianValue (rp->bottom) >= BigEndianValue (rp2->bottom))
+  if (   CW (rp->left) <= CW (rp2->left)
+      && CW (rp->top) <= CW (rp2->top)
+      && CW (rp->right) >= CW (rp2->right)
+      && CW (rp->bottom) >= CW (rp2->bottom))
     {
       CopyRgn (rgn, dest);
       return TRUE;
@@ -1252,7 +1251,7 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
     if (RGN_SMALL_P (s1)) {
 	temp2.p = (RgnPtr) ALLOCA( RGN_SMALL_SIZE + 9 * sizeof(INTEGER) );
 #if 0
-	BlockMove(BigEndianValue(*(Ptr *) s1), (Ptr) temp2.p, RGN_SMALL_SIZE);
+	BlockMove(CL(*(Ptr *) s1), (Ptr) temp2.p, RGN_SMALL_SIZE);
 #else
 	memcpy((Ptr) temp2.p, MR(*(Ptr *) s1), RGN_SMALL_SIZE);
 #endif
@@ -1274,7 +1273,7 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
     if (RGN_SMALL_P (s2)) {
 	temp3.p = (RgnPtr) ALLOCA (RGN_SMALL_SIZE + 9 * sizeof (INTEGER));
 #if 0
-	BlockMove(BigEndianValue(*(Ptr *) s2), (Ptr) temp3.p, RGN_SMALL_SIZE);
+	BlockMove(CL(*(Ptr *) s2), (Ptr) temp3.p, RGN_SMALL_SIZE);
 #else
 	memcpy((Ptr) temp3.p, STARH (s2), RGN_SMALL_SIZE);
 #endif
@@ -1298,73 +1297,73 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
     op  = RGN_DATA (dest);
     left = RGN_STOP; right = -32768;
     bottom = -32768;
-    for (y1 = BigEndianValue(*ip1++), y2 = BigEndianValue(*ip2++); y1 != RGN_STOP || y2 != RGN_STOP;) {
+    for (y1 = CW(*ip1++), y2 = CW(*ip2++); y1 != RGN_STOP || y2 != RGN_STOP;) {
 	if (y1 < y2) {
 	    bottom = y1;
-	    *op++ = BigEndianValue(y1);
+	    *op++ = CW(y1);
 	    while ((*op++ = *ip1++) != RGN_STOP_X) {
-		x1 = BigEndianValue(op[-1]);
+		x1 = CW(op[-1]);
 		if (x1 < left)
 		    left = x1;
 		if (x1 > right)
 		    right = x1;
 	    }
-	    y1 = BigEndianValue(*ip1++);
+	    y1 = CW(*ip1++);
 	} else if (y2 < y1) {
 	    bottom = y2;
-	    *op++ = BigEndianValue(y2);
+	    *op++ = CW(y2);
 	    while ((*op++ = *ip2++) != RGN_STOP_X) {
-		x2 = BigEndianValue(op[-1]);
+		x2 = CW(op[-1]);
 		if (x2 < left)
 		    left = x2;
 		if (x2 > right)
 		    right = x2;
 	    }
-	    y2 = BigEndianValue(*ip2++);
+	    y2 = CW(*ip2++);
 	} else {
 	    cnt = 0;
-	    for (x1 = BigEndianValue(*ip1++), x2 = BigEndianValue(*ip2++);
+	    for (x1 = CW(*ip1++), x2 = CW(*ip2++);
 		 x1 != RGN_STOP || x2 != RGN_STOP;) {
 		if (x1 < x2) {
 		    if (!cnt) {
 			bottom = y1;
-			*op++ = BigEndianValue(y1);
+			*op++ = CW(y1);
 			if (x1 < left)
 			    left = x1;
 		    } else if (x1 > right)
 			right = x1;
-		    *op++ = BigEndianValue(x1);
+		    *op++ = CW(x1);
 		    cnt++;
-		    x1 = BigEndianValue(*ip1++);
+		    x1 = CW(*ip1++);
 		} else if (x2 < x1) {
 		    if (!cnt) {
 			bottom = y1;
-			*op++ = BigEndianValue(y1);
+			*op++ = CW(y1);
 			if (x2 < left)
 			    left = x2;
 		    } else if (x2 > right)
 			right = x2;
-		    *op++ = BigEndianValue(x2);
+		    *op++ = CW(x2);
 		    cnt++;
-		    x2 = BigEndianValue(*ip2++);
+		    x2 = CW(*ip2++);
 		} else {
-		    x1 = BigEndianValue(*ip1++);
-		    x2 = BigEndianValue(*ip2++);
+		    x1 = CW(*ip1++);
+		    x2 = CW(*ip2++);
 		}
 	    }
 	    if (cnt)
 		*op++ = RGN_STOP_X;
-	    y1 = BigEndianValue(*ip1++);
-	    y2 = BigEndianValue(*ip2++);
+	    y1 = CW(*ip1++);
+	    y2 = CW(*ip2++);
 	}
     }
     *op++ = RGN_STOP_X;
     HASSIGN_5 (dest,
 	       rgnBBox.top,    *RGN_DATA (dest),
-	       rgnBBox.left,   BigEndianValue (left),
-	       rgnBBox.bottom, BigEndianValue (bottom),
-	       rgnBBox.right,  BigEndianValue (right),
-	       rgnSize,        BigEndianValue ((char *) op - (char *) STARH (dest)));
+	       rgnBBox.left,   CW (left),
+	       rgnBBox.bottom, CW (bottom),
+	       rgnBBox.right,  CW (right),
+	       rgnSize,        CW ((char *) op - (char *) STARH (dest)));
     if (rgn_is_rect_p (dest))
       RGN_SET_SMALL (dest);
     if (finalrestingplace) {
@@ -1429,7 +1428,7 @@ A1(PUBLIC, void, ROMlib_printrgn, RgnHandle, h)
        if (!RGN_SMALL_P (h))
 	 {
 	   ip = RGN_DATA (h);
-	   while ((y = BigEndianValue (*ip++)) != RGN_STOP)
+	   while ((y = CW (*ip++)) != RGN_STOP)
 	     {
 	       printf ("%ld:", (long) y);
 	       if (special)
@@ -1439,7 +1438,7 @@ A1(PUBLIC, void, ROMlib_printrgn, RgnHandle, h)
 		 }
 	       else
 		 {
-		   while ((x = BigEndianValue (*ip++)) != RGN_STOP)
+		   while ((x = CW (*ip++)) != RGN_STOP)
 		     printf (" %ld", (long) x);
 		 }
 	       printf (" 32767\n");

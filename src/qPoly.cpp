@@ -19,7 +19,6 @@ char ROMlib_rcsid_qPoly[] =
 #include "rsys/cquick.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P0(PUBLIC pascal trap, PolyHandle, OpenPoly)
 {
@@ -42,21 +41,21 @@ P0(PUBLIC pascal trap, void, ClosePoly)
     for (ip = (INTEGER *)((char *)STARH(ph) + SMALLPOLY),
          ep = (INTEGER *)((char *)STARH(ph) + Hx(ph, polySize));
          ip != ep;) {
-        if ((i = BigEndianValue(*ip)) <= top)
+        if ((i = CW(*ip)) <= top)
             top = i;
 	++ip;
         if (i >= bottom)
             bottom = i;
-        if ((i = BigEndianValue(*ip)) <= left)
+        if ((i = CW(*ip)) <= left)
             left = i;
 	++ip;
         if (i >= right)
             right = i;
     }
-    HxX(ph, polyBBox.top)    = BigEndianValue(top);
-    HxX(ph, polyBBox.left)   = BigEndianValue(left);
-    HxX(ph, polyBBox.bottom) = BigEndianValue(bottom);
-    HxX(ph, polyBBox.right)  = BigEndianValue(right);
+    HxX(ph, polyBBox.top)    = CW(top);
+    HxX(ph, polyBBox.left)   = CW(left);
+    HxX(ph, polyBBox.bottom) = CW(bottom);
+    HxX(ph, polyBBox.right)  = CW(right);
     PORT_POLY_SAVE_X (thePort) = (Handle)CWC (0);
     ShowPen();
 }
@@ -72,15 +71,15 @@ P3(PUBLIC pascal trap, void, OffsetPoly, PolyHandle, poly,
     Point *pp, *ep;
     
     if (dh || dv) {
-	HxX(poly, polyBBox.top)    = BigEndianValue(Hx(poly, polyBBox.top)    + dv);
-	HxX(poly, polyBBox.bottom) = BigEndianValue(Hx(poly, polyBBox.bottom) + dv);
-	HxX(poly, polyBBox.left)   = BigEndianValue(Hx(poly, polyBBox.left)   + dh);
-	HxX(poly, polyBBox.right)  = BigEndianValue(Hx(poly, polyBBox.right)  + dh);
+	HxX(poly, polyBBox.top)    = CW(Hx(poly, polyBBox.top)    + dv);
+	HxX(poly, polyBBox.bottom) = CW(Hx(poly, polyBBox.bottom) + dv);
+	HxX(poly, polyBBox.left)   = CW(Hx(poly, polyBBox.left)   + dh);
+	HxX(poly, polyBBox.right)  = CW(Hx(poly, polyBBox.right)  + dh);
 	pp = HxX(poly, polyPoints);
 	ep = (Point *) (((char *) STARH(poly)) + Hx(poly, polySize));
 	while (pp != ep) {
-	    pp->h = BigEndianValue(BigEndianValue(pp->h) + (dh));
-	    pp->v = BigEndianValue(BigEndianValue(pp->v) + (dv));
+	    pp->h = CW(CW(pp->h) + (dh));
+	    pp->v = CW(CW(pp->v) + (dv));
 	    pp++;
 	}
     }

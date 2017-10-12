@@ -17,7 +17,6 @@ char ROMlib_rcsid_listDisplay[] =
 #include "rsys/hook.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 P2(PUBLIC pascal trap, void, LDraw, Cell, cell,			/* IMIV-275 */
 					        ListHandle, list)
@@ -30,9 +29,9 @@ P2(PUBLIC pascal trap, void, LDraw, Cell, cell,			/* IMIV-275 */
     LISTDECL();
 
     if ((ip = ROMlib_getoffp(cell, list))) {
-	off0  =  BigEndianValue(ip[0]) & 0x7FFF;
-	off1  =  BigEndianValue(ip[1]) & 0x7FFF;
-	setit = (BigEndianValue(ip[0]) & 0x8000) && Hx(list, lActive);
+	off0  =  CW(ip[0]) & 0x7FFF;
+	off1  =  CW(ip[1]) & 0x7FFF;
+	setit = (CW(ip[0]) & 0x8000) && Hx(list, lActive);
 	saveport = thePort;
 	SetPort(HxP(list, port));
 	saveclip = PORT_CLIP_REGION_X (thePort);
@@ -104,8 +103,8 @@ P3(PUBLIC pascal trap, void, LScroll, INTEGER, ncol,		/* IMIV-275 */
 	    ncol = tmpi;
     }
 
-    HxX(list, visible.top)  = BigEndianValue(Hx(list, visible.top)  + nrow);
-    HxX(list, visible.left) = BigEndianValue(Hx(list, visible.left) + ncol);
+    HxX(list, visible.top)  = CW(Hx(list, visible.top)  + nrow);
+    HxX(list, visible.left) = CW(Hx(list, visible.left) + ncol);
 
     p.h = Hx(list, cellSize.h);
     p.v = Hx(list, cellSize.v);
@@ -133,8 +132,8 @@ P1(PUBLIC pascal trap, void, LAutoScroll, ListHandle, list)	/* IMIV-275 */
     cell.h = HxX(list, dataBounds.left);
     cell.v = HxX(list, dataBounds.top);
     if (C_LGetSelect(TRUE, &cell, list)) {
-	cell.h = BigEndianValue(cell.h);
-	cell.v = BigEndianValue(cell.v);
+	cell.h = CW(cell.h);
+	cell.v = CW(cell.v);
 	if (!PtInRect(cell, &HxX(list, visible))) {
 	    C_LScroll(cell.h - Hx(list, visible.left),
 		      cell.v - Hx(list, visible.top), list);
@@ -157,24 +156,24 @@ P2(PUBLIC pascal trap, void, LUpdate, RgnHandle, rgn,		/* IMIV-275 */
     csize.h = Hx(list, cellSize.h);
     csize.v = Hx(list, cellSize.v);
     C_LRect(&r, c, list);
-    top    = BigEndianValue(r.top);
-    left   = BigEndianValue(r.left);
+    top    = CW(r.top);
+    left   = CW(r.left);
     bottom = top + (Hx(list, visible.bottom) - Hx(list, visible.top))  * csize.v;
     right  = left + (Hx(list, visible.right) - Hx(list, visible.left)) * csize.h;
-    while (BigEndianValue(r.top) < bottom) {
-	while (BigEndianValue(r.left) < right) {
+    while (CW(r.top) < bottom) {
+	while (CW(r.left) < right) {
 	    if (RectInRgn(&r, rgn))
 		C_LDraw(c, list);
-	    r.left  = BigEndianValue(BigEndianValue(r.left ) + (csize.h));
-	    r.right = BigEndianValue(BigEndianValue(r.right) + (csize.h));
+	    r.left  = CW(CW(r.left ) + (csize.h));
+	    r.right = CW(CW(r.right) + (csize.h));
 	    c.h++;
 	}
 	c.h = cleft;
 	c.v++;
-	r.top     = BigEndianValue(BigEndianValue(r.top)    + (csize.v));
-	r.bottom  = BigEndianValue(BigEndianValue(r.bottom) + (csize.v));
-	r.left    = BigEndianValue(left);
-	r.right   = BigEndianValue(left + csize.h);
+	r.top     = CW(CW(r.top)    + (csize.v));
+	r.bottom  = CW(CW(r.bottom) + (csize.v));
+	r.left    = CW(left);
+	r.right   = CW(left + csize.h);
     }
     if ((ch = HxP(list, hScroll))) {
 	if (RectInRgn(&HxX(ch, contrlRect), rgn))
@@ -218,9 +217,9 @@ P2(PUBLIC pascal trap, void, LActivate, BOOLEAN, act,		/* IMIV-276 */
 								       c.v++) {
 	    for (c.h = Hx(list, visible.left); c.h < Hx(list, visible.right);
 								       c.h++) {
-		if ((ip = ROMlib_getoffp(c, list)) && (BigEndianValue(*ip) & 0x8000)) {
-		    off0 = BigEndianValue(ip[0]) & 0x7FFF;
-		    off1 = BigEndianValue(ip[1]) & 0x7FFF;
+		if ((ip = ROMlib_getoffp(c, list)) && (CW(*ip) & 0x8000)) {
+		    off0 = CW(ip[0]) & 0x7FFF;
+		    off1 = CW(ip[1]) & 0x7FFF;
 		    saveclip = PORT_CLIP_REGION_X (thePort);
 		    PORT_CLIP_REGION_X (thePort) = RM (NewRgn ());
 		    C_LRect(&r, c, list);

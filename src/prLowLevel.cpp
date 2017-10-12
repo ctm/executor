@@ -42,7 +42,6 @@ char ROMlib_rcsid_prLowLevel[] =
 #endif
 
 using namespace Executor;
-using namespace ByteSwap;
 
 PUBLIC uint32 ROMlib_PrDrvrVers = 70;
 
@@ -143,13 +142,13 @@ P2(PUBLIC pascal, void,  ROMlib_myjobproc, DialogPtr, dp, INTEGER, itemno)
 
 	    first = GetDILong (dp, PRINT_FIRST_BOX_NO, 1);
 	    last  = GetDILong (dp, PRINT_LAST_BOX_NO, 9999);
-	    HxX(hPrint, prJob.iFstPage) = BigEndianValue (first);
-	    HxX(hPrint, prJob.iLstPage) = BigEndianValue (last);
+	    HxX(hPrint, prJob.iFstPage) = CW (first);
+	    HxX(hPrint, prJob.iLstPage) = CW (last);
 	  }
 	{
 
 	  num_copies = GetDILong (dp, PRINT_COPIES_BOX_NO, 1);
-	  HxX(hPrint, prJob.iCopies) = BigEndianValue (num_copies);
+	  HxX(hPrint, prJob.iCopies) = CW (num_copies);
 	}
 #if defined (CYGWIN32)
 #warning TODO use better x and y coords
@@ -387,8 +386,8 @@ get_popup_bounding_box (Rect *rp, DialogPtr dp, INTEGER itemno)
   INTEGER unused;
 
   GetDItem (dp, itemno, &unused, NULL, rp);
-  rp->left = BigEndianValue (BigEndianValue (rp->left) - 1);
-  rp->bottom = BigEndianValue (BigEndianValue (rp->bottom) + 3);
+  rp->left = CW (CW (rp->left) - 1);
+  rp->bottom = CW (CW (rp->bottom) + 3);
 }
 #endif
 
@@ -581,7 +580,7 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_stlfilterproc, DialogPeek, dp,
       {
 	char c;
 
-	c = BigEndianValue (evt->message) & 0xFF;
+	c = CL (evt->message) & 0xFF;
 	if (c == '\r' || c == NUMPAD_ENTER)
 	  {
 	    maybe_wait_for_keyup ();
@@ -602,8 +601,8 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_stlfilterproc, DialogPeek, dp,
 	gp = thePort;
 	SetPort((GrafPtr) dp);
 	GlobalToLocal(&localp); 
-	localp.h = BigEndianValue(localp.h);
-	localp.v = BigEndianValue(localp.v);
+	localp.h = CW(localp.h);
+	localp.v = CW(localp.v);
 	SetPort(gp);
 	GetDItem ((DialogPtr) dp, OK, &unused, &h, &r);
 	if (PtInRect (localp, &r))
@@ -672,7 +671,7 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_numsonlyfilterproc, DialogPeek, dp,
 	    case '\r':
 	    case NUMPAD_ENTER:
 	        maybe_wait_for_keyup ();
-		*ith = BigEndianValue(OK);
+		*ith = CW(OK);
 		return TRUE;
 		break;
 	    default:
@@ -948,10 +947,10 @@ adjust_menu_common (TPPrDlg dlg, INTEGER item, heading_t heading, ini_key_t defk
 		INTEGER unused;
 
 		GetDItem ((DialogPtr) dlg, item, &unused, &h, &r);
-		r.right = BigEndianValue (BigEndianValue (r.left) + max_wid + 38);
+		r.right = CW (CW (r.left) + max_wid + 38);
 		SetDItem ((DialogPtr) dlg, item, ctrlItem, MR (h.p), &r);
-		SizeControl (ch, BigEndianValue (r.right) - BigEndianValue (r.left), 
-			         BigEndianValue (r.bottom) - BigEndianValue (r.top));
+		SizeControl (ch, CW (r.right) - CW (r.left), 
+			         CW (r.bottom) - CW (r.top));
 	      }
 	    SetCtlMax (ch, i);
 	    if (default_index > -1)
@@ -1103,9 +1102,9 @@ P1(PUBLIC pascal trap, TPPrDlg, PrStlInit, THPrint, hPrint)
 	    new1 = StringWidth (new_type_label);
 	    HUnlock (h);
 
-	    r.left = BigEndianValue (BigEndianValue(r.left) + orig - new1);
+	    r.left = CW (CW(r.left) + orig - new1);
 	    SetDItem ((DialogPtr) retval, LAYOUT_PRINTER_TYPE_LABEL_NO,
-		      BigEndianValue (item_type), h, &r);
+		      CW (item_type), h, &r);
 	    SetIText (GetDIText ((DialogPtr) retval, LAYOUT_PRINTER_NAME_NO),
 		      new_printer_name);
 	    SetIText (GetDIText ((DialogPtr) retval,
@@ -1164,7 +1163,7 @@ P2(PUBLIC pascal trap, BOOLEAN, PrDlgMain, THPrint, hPrint, ProcPtr, initfptr)
 	    else
 	      {
 		ModalDialog((ProcPtr) MR(prrecptr->pFltrProc), &item);
-		item = BigEndianValue(item);
+		item = CW(item);
 	      }
 	    CALLPRITEMPROC(prrecptr, item, MR(prrecptr->pItemProc));
 
@@ -1211,7 +1210,7 @@ P1(PUBLIC pascal trap, void, PrGeneral, Ptr, pData)	/* IMV-410 */
     tgp = (TGnlData *) pData;
 
     ((TGnlData *) pData)->iError = CWC(OpNotImpl);
-    switch (BigEndianValue(tgp->iOpCode)) {
+    switch (CW(tgp->iOpCode)) {
     case GetRslData:
       {
 	TGetRslBlk *resolp;
@@ -1231,8 +1230,8 @@ P1(PUBLIC pascal trap, void, PrGeneral, Ptr, pData)	/* IMV-410 */
 	else
 	  {
 	    resolp->iRslRecCnt = CWC (2);
-	    resolp->rgRslRec[1].iXRsl = BigEndianValue (ROMlib_optional_res_x);
-	    resolp->rgRslRec[1].iYRsl = BigEndianValue (ROMlib_optional_res_y);
+	    resolp->rgRslRec[1].iXRsl = CW (ROMlib_optional_res_x);
+	    resolp->rgRslRec[1].iYRsl = CW (ROMlib_optional_res_y);
 	  }
       }
       break;
@@ -1242,15 +1241,15 @@ P1(PUBLIC pascal trap, void, PrGeneral, Ptr, pData)	/* IMV-410 */
 
 	resolp = (TSetRslBlk *) pData;
 	if (!((resolp->iXRsl == CWC (72) && resolp->iYRsl == CWC (72)) ||
-	      (resolp->iXRsl == BigEndianValue (ROMlib_optional_res_x) &&
-	       resolp->iYRsl == BigEndianValue (ROMlib_optional_res_y))))
+	      (resolp->iXRsl == CW (ROMlib_optional_res_x) &&
+	       resolp->iYRsl == CW (ROMlib_optional_res_y))))
 	  resolp->iError = CWC (NoSuchRsl);
 	else
 	  {
 	    resolp->iError = CWC (noErr);
 	    ROMlib_set_default_resolution (MR (resolp->hPrint),
-					   BigEndianValue (resolp->iYRsl),
-					   BigEndianValue (resolp->iXRsl));
+					   CW (resolp->iYRsl),
+					   CW (resolp->iXRsl));
 	  }
       }
       break;

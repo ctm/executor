@@ -57,7 +57,6 @@ char ROMlib_rcsid_toolevent[] =
 #include <sys/socket.h>
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /* #define	EVENTTRACE */
 
@@ -146,7 +145,7 @@ A0(PRIVATE, void, ROMlib_togglealarm)
 	      src_alarm_bitmap.baseAddr = (*alarmh).p;
 	    else
 	      /* once again, we need to move the (Ptr) cast
-		 inside the BigEndianValue () because it confuses gcc */
+		 inside the CL () because it confuses gcc */
 	      src_alarm_bitmap.baseAddr = RM ((Ptr) hard_coded_alarm);
 
 	    /* save the screen to save_alarm_bitmap */
@@ -720,7 +719,7 @@ PRIVATE void mod_item_enableness( DialogPtr dp, INTEGER item,
   Rect r;
 
   GetDItem(dp, item, &type, &h, &r);
-  type = BigEndianValue(type);
+  type = CW(type);
   h.p = MR(h.p);
   if (((type & itemDisable) && enableness_wanted == enable)
       || (!(type & itemDisable) && enableness_wanted == disable))
@@ -838,7 +837,7 @@ PRIVATE void dopreferences( void )
 	      do
 		{
 		  ModalDialog((ProcPtr) 0, &ihit);
-		  ihit = BigEndianValue(ihit);
+		  ihit = CW(ihit);
 		  switch (ihit)
 		    {
 		    case PREFNORMALITEM:
@@ -928,7 +927,7 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
     if (SPVolCtl & 0x80) {
 	TRACE(3);
 	GetDateTime(&now);
-	now = BigEndianValue(now);
+	now = CL(now);
 	TRACE(4);
 	if ((ULONGINT) now >= (ULONGINT) Cx(SPAlarm)) {
 	    TRACE(5);
@@ -957,7 +956,7 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
 	    TRACE(12);
             GetOSEvent(0, evt);
 	    TRACE(13);
-            evt->what = BigEndianValue(activateEvt);
+            evt->what = CW(activateEvt);
             evt->message = (LONGINT) (long) CurDeactive;
             if (remflag)
                 CurDeactive = (WindowPtr) 0;
@@ -968,9 +967,9 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
 	    TRACE(14);
             GetOSEvent(0, evt);
 	    TRACE(15);
-            evt->what = BigEndianValue(activateEvt);
+            evt->what = CW(activateEvt);
             evt->message = (LONGINT) (long) CurActivate;
-            evt->modifiers |= BigEndianValue(activeFlag);
+            evt->modifiers |= CW(activeFlag);
             if (remflag)
                 CurActivate = (WindowPtr) 0;
 	    retval = TRUE;
@@ -1043,7 +1042,7 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
 #endif
 	    }
 	    if (!retval)
-		evt->what = BigEndianValue(nullEvent);
+		evt->what = CW(nullEvent);
 /*-->*/	    goto done;
 	}
     } else {
@@ -1067,7 +1066,7 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
             nread = read(ns, device, sizeof(device));
 	    ROMlib_updateworkspace();
             ROMlib_openfloppy(device, &evt->message);
-            evt->what = BigEndianValue(diskEvt);
+            evt->what = CW(diskEvt);
             retval = TRUE;
         } else {
             gui_assert(errno == EWOULDBLOCK);
@@ -1078,7 +1077,7 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
 		ROMlib_openharddisk("/tmp/testvol\0\0", &evt->message);
 		if (evt->message) {
 		    TRACE(27);
-		    evt->what = BigEndianValue(diskEvt);
+		    evt->what = CW(diskEvt);
 		    retval = TRUE;
 		}
 	    }
@@ -1149,8 +1148,8 @@ P4(PUBLIC pascal trap, BOOLEAN, WaitNextEvent, INTEGER, mask,
 	    static INTEGER saved_h, saved_v;
 
 /* TODO: see what PtInRgn does with 0 as a RgnHandle */
-	    p.h = BigEndianValue(evp->where.h);
-	    p.v = BigEndianValue(evp->where.v);
+	    p.h = CW(evp->where.h);
+	    p.v = CW(evp->where.v);
             if (mousergn && !EmptyRgn(mousergn) && !PtInRgn(p, mousergn)
 		&& (p.h != saved_h || p.v != saved_v)) {
 		evp->what = CWC(osEvt);
@@ -1248,12 +1247,12 @@ P0 (PUBLIC pascal trap, LONGINT, TickCount)
    */
 
   if (ROMlib_clock)
-    Ticks_UL.u = BigEndianValue (ticks);
+    Ticks_UL.u = CL (ticks);
 
   new_time = (UNIXTIMETOMACTIME (ROMlib_start_time.tv_sec)
 	      + (long) ((ROMlib_start_time.tv_usec / (1000000.0 / 60) + ticks) / 60));
 
-  Time = BigEndianValue (new_time);
+  Time = CL (new_time);
   return ticks;
 }
 
@@ -1305,8 +1304,8 @@ Executor::sendsuspendevent (void)
 	  !(size_info.size_flags & SZcanBackground) */ )
       )
       {
-	p.h = BigEndianValue(MouseLocation.h);
-	p.v = BigEndianValue(MouseLocation.v);
+	p.h = CW(MouseLocation.h);
+	p.v = CW(MouseLocation.v);
 	ROMlib_PPostEvent(osEvt, SUSPENDRESUMEBITS|SUSPEND|CONVERTCLIPBOARD,
 			  (HIDDEN_EvQElPtr *) 0, TickCount(), p, ROMlib_mods);
       }
@@ -1331,8 +1330,8 @@ Executor::sendresumeevent (boolean_t cvtclip)
       what = SUSPENDRESUMEBITS | RESUME;
       if (cvtclip)
 	what |= CONVERTCLIPBOARD;
-      p.h = BigEndianValue(MouseLocation.h);
-      p.v = BigEndianValue(MouseLocation.v);
+      p.h = CW(MouseLocation.h);
+      p.v = CW(MouseLocation.v);
       ROMlib_PPostEvent(osEvt, what, (HIDDEN_EvQElPtr *) 0, TickCount(),
 			p, ROMlib_mods);
     }
@@ -1343,8 +1342,8 @@ sendcopy (void)
 {
     Point p;
 
-    p.h = BigEndianValue(MouseLocation.h);
-    p.v = BigEndianValue(MouseLocation.v);
+    p.h = CW(MouseLocation.h);
+    p.v = CW(MouseLocation.v);
     ROMlib_PPostEvent(keyDown, 0x0863,	/* 0x63 == 'c' */
 		      (HIDDEN_EvQElPtr *) 0, TickCount(), p, cmdKey|btnState);
     ROMlib_PPostEvent(keyUp, 0x0863,
@@ -1356,8 +1355,8 @@ sendpaste (void)
 {
     Point p;
 
-    p.h = BigEndianValue(MouseLocation.h);
-    p.v = BigEndianValue(MouseLocation.v);
+    p.h = CW(MouseLocation.h);
+    p.v = CW(MouseLocation.v);
     ROMlib_PPostEvent(keyDown, 0x0976,	/* 0x76 == 'v' */
 		      (HIDDEN_EvQElPtr *) 0, TickCount(), p, cmdKey|btnState);
     ROMlib_PPostEvent(keyUp, 0x0976,
@@ -1377,8 +1376,8 @@ post_helper (INTEGER code, uint8 raw, uint8 mapped, INTEGER mods)
 {
   Point p;
 
-  p.h = BigEndianValue(MouseLocation.h);
-  p.v = BigEndianValue(MouseLocation.v);
+  p.h = CW(MouseLocation.h);
+  p.v = CW(MouseLocation.v);
 
   ROMlib_PPostEvent(code, (raw << 8)|mapped, (HIDDEN_EvQElPtr *) 0,
 		    TickCount(), p, btnState|mods);
