@@ -42,7 +42,8 @@ extern void ROMlib_init_stdfile(void);
 
 #if defined(LINUX)
 extern int linuxfloppy_open(int disk, LONGINT *bsizep,
-			    drive_flags_t *flagsp, const char *dname);
+				drive_flags_t *flagsp, const char *dname);
+extern int linuxfloppy_close(int disk);
 #endif
 
 
