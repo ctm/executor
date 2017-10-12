@@ -2,7 +2,7 @@ AC_INIT(executor, 2.1.17, ctm@ardi.com)
 AC_CANONICAL_SYSTEM
 AM_INIT_AUTOMAKE([-Wall])
 
-AC_CONFIG_SRCDIR([executor.c])
+AC_CONFIG_SRCDIR([executor.cpp])
 AC_CONFIG_HEADERS([config.h])
 
 # Normalize to our old names
@@ -40,7 +40,7 @@ esac
 # Checks for programs.
 AM_PROG_AS
 AC_PROG_CC
-AM_PROG_CC_C_O
+AC_PROG_CXX
 AC_PROG_RANLIB
 AM_PROG_AS
 AC_PROG_YACC

@@ -4,110 +4,115 @@ bin_PROGRAMS = executor
 
 noinst_PROGRAMS = map_to_c mkseedtables mkultable mksspairtable
 
-ctl_bitmap_c_files = arrow_up_active.c arrow_up_inactive.c       \
-                     arrow_down_active.c arrow_down_inactive.c   \
-                     arrow_right_active.c arrow_right_inactive.c \
-                     arrow_left_active.c arrow_left_inactive.c   \
-                     thumb_horiz.c thumb_vert.c
+ctl_bitmap_c_files = arrow_up_active.cmap arrow_up_inactive.cmap       \
+                     arrow_down_active.cmap arrow_down_inactive.cmap   \
+                     arrow_right_active.cmap arrow_right_inactive.cmap \
+                     arrow_left_active.cmap arrow_left_inactive.cmap   \
+                     thumb_horiz.cmap thumb_vert.cmap
 
-wind_bitmap_c_files = zoom.c go_away.c active.c ractive.c grow.c
+wind_bitmap_c_files = zoom.cmap go_away.cmap active.cmap ractive.cmap grow.cmap
 
-CLEANFILES = $(ctl_bitmap_c_files) $(wind_bitmap_c_files)  apple.c \
-             seedtables.c ultable.c sspairtable.c rawpatstubs.c rawsrcstubs.c
+CLEANFILES = $(ctl_bitmap_c_files) $(wind_bitmap_c_files)  apple.cmap \
+             seedtables.ctable ultable.ctable sspairtable.ctable rawpatstubs.cpp rawsrcstubs.cpp
 
-$(ctl_bitmap_c_files) apple.c $(wind_bitmap_c_files):	map_to_c
+$(ctl_bitmap_c_files) apple.cpp $(wind_bitmap_c_files):	map_to_c
 
-.map.c:	map_to_c
+map_to_c_SOURCES = map_to_c/map_to_c.cpp
+mkseedtables_SOURCES = mkseedtables/mkseedtables.c
+mkultable_SOURCES = mkultable/mkultable.c
+mksspairtable_SOURCES = mksspairtable/mksspairtable.c
+
+.map.cmap:	map_to_c
 	./map_to_c < $< > $@
 
-seedtables.c:	mkseedtables
+seedtables.ctable:	mkseedtables
 	./mkseedtables > $@
 
-ultable.c:	mkultable
+ultable.ctable:	mkultable
 	./mkultable > $@
 
-sspairtable.c:	mksspairtable
+sspairtable.ctable:	mksspairtable
 	./mksspairtable > $@
 
-rawpatstubs.c:	$(srcdir)/makerawblt.pl $(srcdir)/pat-blitters.tmpl
-	$(PERL) $(srcdir)/makerawblt.pl < $(srcdir)/pat-blitters.tmpl > rawpatstubs.c
+rawpatstubs.cpp:	$(srcdir)/makerawblt.pl $(srcdir)/pat-blitters.tmpl
+	$(PERL) $(srcdir)/makerawblt.pl < $(srcdir)/pat-blitters.tmpl > rawpatstubs.cpp
 
-rawsrcstubs.c: $(srcdir)/makerawblt.pl $(srcdir)/src-blitters.tmpl
-	$(PERL) $(srcdir)/makerawblt.pl < $(srcdir)/src-blitters.tmpl > rawsrcstubs.c
+rawsrcstubs.cpp: $(srcdir)/makerawblt.pl $(srcdir)/src-blitters.tmpl
+	$(PERL) $(srcdir)/makerawblt.pl < $(srcdir)/src-blitters.tmpl > rawsrcstubs.cpp
 
 ctlArrows.$(OBJEXT):	$(ctl_bitmap_c_files)
-stdmbdf.$(OBJEXT):	apple.c
-qIMIV.$(OBJEXT):	seedtables.c
-qStdText.$(OBJEXT):	ultable.c
-qIMVI.$(OBJEXT):	sspairtable.c
-rawpatblt.$(OBJEXT):	rawpatstubs.c
-rawsrcblt.$(OBJEXT):	rawsrcstubs.c
+stdmbdf.$(OBJEXT):	apple.cmap
+qIMIV.$(OBJEXT):	seedtables.ctable
+qStdText.$(OBJEXT):	ultable.ctable
+qIMVI.$(OBJEXT):	sspairtable.ctable
+rawpatblt.$(OBJEXT):	rawpatstubs.cpp
+rawsrcblt.$(OBJEXT):	rawsrcstubs.cpp
 windDocdef.$(OBJEXT):	$(wind_bitmap_c_files)
 
 # These helper variables break the source into logical groups, but there's
 # no actual significance to them.
 
-ctl_sources = ctlArrows.c ctlDisplay.c ctlIMIV.c ctlInit.c ctlMisc.c \
-              ctlMouse.c ctlSet.c ctlSize.c ctlStddef.c ctlPopup.c
+ctl_sources = ctlArrows.cpp ctlDisplay.cpp ctlIMIV.cpp ctlInit.cpp ctlMisc.cpp \
+              ctlMouse.cpp ctlSet.cpp ctlSize.cpp ctlStddef.cpp ctlPopup.cpp
 
-dial_sources = dialAlert.c dialCreate.c dialHandle.c dialInit.c dialManip.c \
-               dialDispatch.c dialItem.c
+dial_sources = dialAlert.cpp dialCreate.cpp dialHandle.cpp dialInit.cpp dialManip.cpp \
+               dialDispatch.cpp dialItem.cpp
 
-file_sources = fileAccess.c fileCreate.c fileDirs.c fileDouble.c fileInfo.c \
-               fileMisc.c fileVolumes.c fileHighlevel.c dcache.c
+file_sources = fileAccess.cpp fileCreate.cpp fileDirs.cpp fileDouble.cpp fileInfo.cpp \
+               fileMisc.cpp fileVolumes.cpp fileHighlevel.cpp dcache.cpp
 
-hfs_sources = hfsBtree.c hfsChanging.c hfsCreate.c hfsFile.c hfsHelper.c \
-              hfsHier.c hfsMisc.c hfsVolume.c hfsWorkingdir.c hfsXbar.c
+hfs_sources = hfsBtree.cpp hfsChanging.cpp hfsCreate.cpp hfsFile.cpp hfsHelper.cpp \
+              hfsHier.cpp hfsMisc.cpp hfsVolume.cpp hfsWorkingdir.cpp hfsXbar.cpp
 
-list_sources = listAccess.c listAddDel.c listCreate.c listDisplay.c \
-               listMouse.c listOps.c listStdLDEF.c
+list_sources = listAccess.cpp listAddDel.cpp listCreate.cpp listDisplay.cpp \
+               listMouse.cpp listOps.cpp listStdLDEF.cpp
 
-menu_sources = menu.c menuColor.c menuV.c stdmdef.c stdmbdf.c
+menu_sources = menu.cpp menuColor.cpp menuV.cpp stdmdef.cpp stdmbdf.cpp
 
-print_sources = PSprint.c PSstrings.c prError.c prInit.c prLowLevel.c \
-                prPrinting.c prRecords.c
+print_sources = PSprint.cpp PSstrings.cpp prError.cpp prInit.cpp prLowLevel.cpp \
+                prPrinting.cpp prRecords.cpp
 
-qd_sources = qBit.c qCConv.c qCGrafPort.c qCRegular.c qColor.c qColorMgr.c    \
-             qColorutil.c qCursor.c qGrafport.c qIMIV.c qIMV.c qIMVxfer.c     \
-             qMisc.c qPaletteMgr.c qPen.c qPicstuff.c qPicture.c              \
-             qPixMapConv.c qPoint.c qPoly.c qRect.c qRegion.c qRegular.c      \
-             qScale.c qStandard.c qStdArc.c qStdBits.c qStdLine.c qStdOval.c  \
-             qStdPic.c qStdPoly.c qStdRRect.c qStdRect.c qStdRgn.c            \
-             qStdText.c qText.c qGWorld.c qGDevice.c qIMVI.c qHooks.c         \
-             xdata.c xdblt.c rawpatblt.c rawsrcblt.c dirtyrect.c srcblt.c     \
-             qColorPicker.c qPict2.c image.c image_inits.c                    \
-             default_ctab_values.c dcconvert.c rgbutil.c dcmaketables.c
+qd_sources = qBit.cpp qCConv.cpp qCGrafPort.cpp qCRegular.cpp qColor.cpp qColorMgr.cpp    \
+             qColorutil.cpp qCursor.cpp qGrafport.cpp qIMIV.cpp qIMV.cpp qIMVxfer.cpp     \
+             qMisc.cpp qPaletteMgr.cpp qPen.cpp qPicstuff.cpp qPicture.cpp              \
+             qPixMapConv.cpp qPoint.cpp qPoly.cpp qRect.cpp qRegion.cpp qRegular.cpp      \
+             qScale.cpp qStandard.cpp qStdArc.cpp qStdBits.cpp qStdLine.cpp qStdOval.cpp  \
+             qStdPic.cpp qStdPoly.cpp qStdRRect.cpp qStdRect.cpp qStdRgn.cpp            \
+             qStdText.cpp qText.cpp qGWorld.cpp qGDevice.cpp qIMVI.cpp qHooks.cpp         \
+             xdata.cpp xdblt.cpp rawpatblt.cpp rawsrcblt.cpp dirtyrect.cpp srcblt.cpp     \
+             qColorPicker.cpp qPict2.cpp image.cpp image_inits.cpp                    \
+             default_ctab_values.cpp dcconvert.cpp rgbutil.cpp dcmaketables.cpp
 
-res_sources = resGet.c resGetinfo.c resGettype.c resIMIV.c resInit.c \
-              resMisc.c resMod.c resOpen.c resSetcur.c resPartial.c
+res_sources = resGet.cpp resGetinfo.cpp resGettype.cpp resIMIV.cpp resInit.cpp \
+              resMisc.cpp resMod.cpp resOpen.cpp resSetcur.cpp resPartial.cpp
 
-te_sources = teAccess.c teDisplay.c teEdit.c teIMIV.c teIMV.c teInit.c \
-             teInsert.c teMisc.c teScrap.c
+te_sources = teAccess.cpp teDisplay.cpp teEdit.cpp teIMIV.cpp teIMV.cpp teInit.cpp \
+             teInsert.cpp teMisc.cpp teScrap.cpp
 
-wind_sources = windColor.c windDisplay.c windDocdef.c windInit.c windMisc.c \
-               windMouse.c windSize.c windUpdate.c
+wind_sources = windColor.cpp windDisplay.cpp windDocdef.cpp windInit.cpp windMisc.cpp \
+               windMouse.cpp windSize.cpp windUpdate.cpp
 
-ae_sources = AE.c AE_desc.c AE_hdlr.c AE_coercion.c
+ae_sources = AE.cpp AE_desc.cpp AE_hdlr.cpp AE_coercion.cpp
 
-sound_sources = sounddriver.c sound.c soundIMVI.c soundfake.c snth5.c
+sound_sources = sounddriver.cpp sound.cpp soundIMVI.cpp soundfake.cpp snth5.cpp
 
-num_sources = bindec.c float4.c float5.c float7.c floatnext.c toolmath.c \
-              mathlib.c
+num_sources = bindec.cpp float4.cpp float5.cpp float7.cpp floatnext.cpp toolmath.cpp \
+              mathlib.cpp
 
-misc_sources = desk.c device.c disk.c diskinit.c dump.c trapname.c font.c    \
-  gestalt.c globals.c iu.c launch.c main.c mman.c mmansubr.c notify.c hle.c  \
-  osevent.c osutil.c pack.c scrap.c script.c segment.c serial.c setuid.c     \
-  slash.c stdfile.c romlib_stubs.c syserr.c toolevent.c toolutil.c time.c    \
-  vbl.c syncint.c virtualint.c refresh.c autorefresh.c aboutbox.c            \
-  licensetext.c keycode.c option.c parseopt.c parsenum.c desperate.c         \
-  version.c shutdown.c uniquefile.c sigio_multiplex.c screen-dump.c          \
-  process.c alias.c string.c tempmem.c edition.c fontIMVI.c balloon.c        \
-  error.c adb.c color_wheel_bits.c finder.c system_error.c ibm_keycodes.c    \
-  splash.c icon.c redrawscreen.c ini.c checkpoint.c qt.c cleanup.c           \
-  paramline.c fauxdbm.c custom.c commtool.c cfm.c local_charset.c pef_hash.c \
-  interfacelib.c mixed_mode.c suffix_maps.c appearance.c lockrange.c         \
-  emutrap.c emutraptables.c emustubs.c unix_like.c parse.y check_structs.c   \
-  executor.c mkvol/mkvol.c crc.c
+misc_sources = desk.cpp device.cpp disk.cpp diskinit.cpp dump.cpp trapname.cpp font.cpp    \
+  gestalt.cpp globals.cpp iu.cpp launch.cpp main.cpp mman.cpp mmansubr.cpp notify.cpp hle.cpp  \
+  osevent.cpp osutil.cpp pack.cpp scrap.cpp script.cpp segment.cpp serial.cpp setuid.cpp     \
+  slash.cpp stdfile.cpp romlib_stubs.cpp syserr.cpp toolevent.cpp toolutil.cpp time.cpp    \
+  vbl.cpp syncint.cpp virtualint.cpp refresh.cpp autorefresh.cpp aboutbox.cpp            \
+  keycode.cpp option.cpp parseopt.cpp parsenum.cpp desperate.cpp         \
+  version.cpp shutdown.cpp uniquefile.cpp sigio_multiplex.cpp screen-dump.cpp          \
+  process.cpp alias.cpp string.cpp tempmem.cpp edition.cpp fontIMVI.cpp balloon.cpp        \
+  error.cpp adb.cpp color_wheel_bits.cpp finder.cpp system_error.cpp ibm_keycodes.cpp    \
+  splash.cpp icon.cpp redrawscreen.cpp ini.cpp checkpoint.cpp qt.cpp cleanup.cpp           \
+  paramline.c fauxdbm.cpp custom.cpp commtool.cpp cfm.cpp local_charset.cpp pef_hash.cpp \
+  interfacelib.cpp mixed_mode.cpp suffix_maps.cpp appearance.cpp lockrange.cpp         \
+  emutrap.cpp emutraptables.cpp emustubs.cpp unix_like.cpp parse.y check_structs.cpp   \
+  executor.cpp mkvol/mkvol.cpp crc.cpp CBridge.cpp
 
 include_sources = hintemplate.h \
                   include/ADB.h \
@@ -373,7 +378,7 @@ AM_CPPFLAGS=-I$(srcdir)/include -I$(srcdir)/config/front-ends/$(front_end) -I$(s
 nodist_executor_SOURCES =
 
 if CONFIG_ARCH_ALPHA
-arch_sources = config/arch/alpha/alpha.c config/arch/alpha/alpha.h
+arch_sources = config/arch/alpha/alpha.cpp config/arch/alpha/alpha.h
 endif CONFIG_ARCH_ALPHA
 
 if CONFIG_ARCH_I386
@@ -381,7 +386,7 @@ if CONFIG_ARCH_I386
 CLEANFILES +=  src-blitters.h src-blitters.s pat-blitters.h pat-blitters.s \
                asmsamples.h src-blitters-stamp pat-blitters-stamp opfind
 
-opfind_SOURCES = config/arch/i386/opfind.c
+opfind_SOURCES = config/arch/i386/opfind.cpp
 
 opfind_CPPFLAGS = -DCOMPILE_FOR_BUILD $(AM_CPPFLAGS)
 
@@ -390,19 +395,19 @@ x86patblt.$(OBJEXT):	pat-blitters.s
 x86srcblt.$(OBJEXT):	src-blitters.s
 
 pat-blitters-stamp pat-blitters.h pat-blitters.s:	\
-	config/arch/i386/opfind.c config/arch/i386/opfind.h \
+	config/arch/i386/opfind.cpp config/arch/i386/opfind.h \
         config/arch/i386/metaasm.pl config/arch/i386/pat-blitters.meta
 	$(PERL) $(srcdir)/config/arch/i386/metaasm.pl $(METAASM_ARGS)\
 		$(srcdir)/config/arch/i386/pat-blitters.meta\
 		pat-blitters.s pat-blitters.h\
-		config/arch/i386/opfind.c
+		config/arch/i386/opfind.cpp
 	$(RM) asmsamples.h
 	touch pat-blitters-stamp
 
 # We have src-blitters-stamp depend on pat-blitters-stamp so we don't
 # try to do two metaasm's at once.  They would fight over `opfind'.
 src-blitters-stamp src-blitters.h src-blitters.s: \
-		config/arch/i386/opfind.c config/arch/i386/opfind.h \
+		config/arch/i386/opfind.cpp config/arch/i386/opfind.h \
                 config/arch/i386/metaasm.pl \
                 config/arch/i386/src-blitters.meta \
                 config/arch/i386/src-shift.meta \
@@ -413,10 +418,10 @@ src-blitters-stamp src-blitters.h src-blitters.s: \
 	$(PERL) $(srcdir)/config/arch/i386/metaasm.pl -define DST_SEG= $(METAASM_ARGS)\
 		$(srcdir)/config/arch/i386/src-blitters.meta\
 		src-blitters.s src-blitters.h\
-		config/arch/i386/opfind.c
+		config/arch/i386/opfind.cpp
 	touch src-blitters-stamp
 
-arch_sources = config/arch/i386/i386.c \
+arch_sources = config/arch/i386/i386.cpp \
                config/arch/i386/i386.h \
                config/arch/i386/i386_djgpp_version.h \
                config/arch/i386/opfind.h \
@@ -436,8 +441,8 @@ noinst_PROGRAMS += opfind
 
 arch_sources += config/arch/i386/x86patblt.S    \
                 config/arch/i386/x86srcblt.S    \
-                config/arch/i386/xdstubtables.c \
-	        config/arch/i386/sbstubtables.c \
+                config/arch/i386/xdstubtables.cpp \
+	        config/arch/i386/sbstubtables.cpp \
                 config/arch/i386/metaasm.pl
 
 endif !CONFIG_OS_MACOSX
@@ -448,12 +453,12 @@ if CONFIG_ARCH_M68K
 
 nodist_executor_SOURCES += m68k-callback-stubs.s
 
-arch_sources = config/arch/m68k/m68k.c                  \
-               config/arch/m68k/m68k-callback.c         \
+arch_sources = config/arch/m68k/m68k.cpp                  \
+               config/arch/m68k/m68k-callback.cpp         \
                config/arch/m68k/m68k-callback-handler.s \
                config/arch/m68k/m68k-call-emulator.s    \
-               config/arch/m68k/m68k-destroy.c          \
-               config/arch/m68k/m68k-stack.c            \
+               config/arch/m68k/m68k-destroy.cpp          \
+               config/arch/m68k/m68k-stack.cpp            \
                config/arch/m68k/m68k-trap-handler.s     \
                config/arch/m68k/trap.S                  \
                config/arch/m68k/m68k-stack.h            \
@@ -475,9 +480,9 @@ m68k-callback-stubs.s:	config/arch/m68k/make_callback_stubs.pl \
 # code from our old build system here, but commented out.  This will fail, but
 # at least it will give anyone playing with the 68k build a hint.
 #
-# m68k-callback.o:	m68k-callback.c
+# m68k-callback.o:	m68k-callback.cpp
 # 	$(BUILD_GCC) $(BUILD_CFLAGS) -DNUM_CALLBACK_SLOTS=$(max_callbacks)\
-#		$(HOST_ARCH_DIR)/m68k-callback.c -c -o m68k-callback.o
+#		$(HOST_ARCH_DIR)/m68k-callback.cpp -c -o m68k-callback.o
 
 endif CONFIG_ARCH_M68K
 
@@ -487,9 +492,9 @@ if CONFIG_ARCH_POWERPC
 #       get the compiler to help us run PPC binaries.  That ability hasn't
 #       worked since we started doing PPC builds on Mac OS X.
 
-arch_sources = config/arch/powerpc/powerpc.c   \
-               config/arch/powerpc/ppc_call.c  \
-               config/arch/powerpc/ppc_stubs.c \
+arch_sources = config/arch/powerpc/powerpc.cpp   \
+               config/arch/powerpc/ppc_call.cpp  \
+               config/arch/powerpc/ppc_stubs.cpp \
                config/arch/powerpc/powerpc.h
                config/arch/powerpc/ppc_stubs.h
 
@@ -497,7 +502,7 @@ AM_CPPFLAGS += -D_GNU_SOURCE
 endif CONFIG_ARCH_POWERPC
 
 if CONFIG_ARCH_X86_64
-arch_sources = config/arch/x86_64/x86_64.c config/arch/x86_64/x86_64.h
+arch_sources = config/arch/x86_64/x86_64.cpp config/arch/x86_64/x86_64.h
 endif CONFIG_ARCH_X86_64
 
 
@@ -506,16 +511,16 @@ if CONFIG_FRONT_END_DOS
 # we'll rip all the DOS support out of the code before ever making it go, but
 # if you're adventurous and want to play, feel free.
 
-front_end_sources = config/front-ends/dos/dosclip.c        \
-	            config/front-ends/dos/dosdisk.c        \
-	            config/front-ends/dos/dosevents.c      \
-	            config/front-ends/dos/vga.c            \
-	            config/front-ends/dos/aspi.c           \
-	            config/front-ends/dos/dosevq.c         \
-	            config/front-ends/dos/dpmilock.c       \
+front_end_sources = config/front-ends/dos/dosclip.cpp        \
+	            config/front-ends/dos/dosdisk.cpp        \
+	            config/front-ends/dos/dosevents.cpp      \
+	            config/front-ends/dos/vga.cpp            \
+	            config/front-ends/dos/aspi.cpp           \
+	            config/front-ends/dos/dosevq.cpp         \
+	            config/front-ends/dos/dpmilock.cpp       \
 	            config/front-ends/dos/deintr.S         \
-	            config/front-ends/dos/dosmem.c         \
-	            config/front-ends/dos/dosserial.c      \
+	            config/front-ends/dos/dosmem.cpp         \
+	            config/front-ends/dos/dosserial.cpp      \
                     config/front-ends/dos/aspi.h           \
                     config/front-ends/dos/dos.h            \
                     config/front-ends/dos/dosdisk.h        \
@@ -530,7 +535,7 @@ front_end_sources = config/front-ends/dos/dosclip.c        \
                     config/front-ends/dos/itimer.h         \
                     config/front-ends/dos/vga.h            \
                     config/front-ends/dos/vgatables.h      \
-	            vgavdriver.c
+	            vgavdriver.cpp
 
 METAASM_ARGS = -define 'DST_SEG=%es:'
 
@@ -546,15 +551,15 @@ endif CONFIG_FRONT_END_NEXTSTEP
 
 if CONFIG_FRONT_END_SDL
 
-front_end_sources = config/front-ends/sdl/SDL_bmp.c        \
-                    config/front-ends/sdl/sdlevents.c      \
-                    config/front-ends/sdl/sdl_mem.c        \
-                    config/front-ends/sdl/sdlquit.c        \
-                    config/front-ends/sdl/sdlscrap.c       \
-                    config/front-ends/sdl/sdlwin.c         \
-                    config/front-ends/sdl/sdlwm.c          \
-                    config/front-ends/sdl/syswm_map.c      \
-                    config/front-ends/sdl/winmain.c        \
+front_end_sources = config/front-ends/sdl/SDL_bmp.cpp        \
+                    config/front-ends/sdl/sdlevents.cpp      \
+                    config/front-ends/sdl/sdl_mem.cpp        \
+                    config/front-ends/sdl/sdlquit.cpp        \
+                    config/front-ends/sdl/sdlscrap.cpp       \
+                    config/front-ends/sdl/sdlwin.cpp         \
+                    config/front-ends/sdl/sdlwm.cpp          \
+                    config/front-ends/sdl/syswm_map.cpp      \
+                    config/front-ends/sdl/winmain.cpp        \
 		    config/front-ends/sdl/for_sam.h        \
 		    config/front-ends/sdl/host_bltmacros.h \
 		    config/front-ends/sdl/host_vdriver.h   \
@@ -571,7 +576,7 @@ front_end_sources = config/front-ends/sdl/SDL_bmp.c        \
 		    config/front-ends/sdl/syswm_vars.h
 
 if CONFIG_OS_LINUX
-front_end_sources += config/front-ends/sdl/sdlX.c
+front_end_sources += config/front-ends/sdl/sdlX.cpp
 endif CONFIG_OS_LINUX
 
 if CONFIG_OS_MACOSX
@@ -584,12 +589,12 @@ if CONFIG_FRONT_END_SVGALIB
 # This is unlikely to work.  Nobody has built the svgalib version of Executor
 # in a long time.
 
-front_end_sources = config/front-ends/svgalib/svgalib.c        \
-                    config/front-ends/svgalib/svgalibevent.c   \
+front_end_sources = config/front-ends/svgalib/svgalib.cpp        \
+                    config/front-ends/svgalib/svgalibevent.cpp   \
                     config/front-ends/svgalib/host_bltmacros.h \
                     config/front-ends/svgalib/host_vdriver.h   \
                     config/front-ends/svgalib/svgalib.h        \
-                    vgavdriver.c
+                    vgavdriver.cpp
 
 endif CONFIG_FRONT_END_SVGALIB
 
@@ -597,9 +602,9 @@ if CONFIG_FRONT_END_WIN32
 # This too is unlikely to work.  I believe we stopped working on the win32
 # port when Sam created SDL.
 
-front_end_sources = config/front-ends/win32/winevents.c      \
-                    config/front-ends/win32/wincursor.c      \
-                    config/front-ends/win32/windriver.c      \
+front_end_sources = config/front-ends/win32/winevents.cpp      \
+                    config/front-ends/win32/wincursor.cpp      \
+                    config/front-ends/win32/windriver.cpp      \
 		    config/front-ends/win32/host_bltmacros.h \
 		    config/front-ends/win32/host_vdriver.h   \
 		    config/front-ends/win32/vk_to_mkv.h      \
@@ -610,8 +615,8 @@ endif CONFIG_FRONT_END_WIN32
 
 if CONFIG_FRONT_END_X
 
-front_end_sources = config/front-ends/x/x.c              \
-                    config/front-ends/x/x_keycodes.c     \
+front_end_sources = config/front-ends/x/x.cpp              \
+                    config/front-ends/x/x_keycodes.cpp     \
 		    config/front-ends/x/host_bltmacros.h \
 		    config/front-ends/x/host_vdriver.h   \
 		    config/front-ends/x/x.h              \
@@ -622,32 +627,32 @@ HAVE_IV = yes
 endif CONFIG_FRONT_END_X
 
 if CONFIG_HOST_ALPHA_DEC_OSF
-host_sources = config/hosts/alpha-dec-osf/alpha-lowglobals-mem.c
+host_sources = config/hosts/alpha-dec-osf/alpha-lowglobals-mem.cpp
 else !CONFIG_HOST_ALPHA_DEC_OSF
 host_sources =
 endif !CONFIG_HOST_ALPHA_DEC_OSF
 
 if CONFIG_OS_CYGWIN32
-os_sources = config/os/cygwin32/cygwin32.c          \
-             config/os/cygwin32/winfs.c             \
-             config/os/cygwin32/win_disk.c          \
-             config/os/cygwin32/win_stat.c          \
-             config/os/cygwin32/win_memory.c        \
-             config/os/cygwin32/win_serial.c        \
-             config/os/cygwin32/win_ntcd.c          \
-             config/os/cygwin32/win_print.c         \
-             config/os/cygwin32/win_beep.c          \
-             config/os/cygwin32/win_clip.c          \
-             config/os/cygwin32/win_temp.c          \
-             config/os/cygwin32/win_except.c        \
-             config/os/cygwin32/win_time.c          \
-             config/os/cygwin32/win_dongle.c        \
-             config/os/cygwin32/win_queue.c         \
-             config/os/cygwin32/win_screen.c        \
-             config/os/cygwin32/win_vxdiface.c      \
-             config/os/cygwin32/win_keyboard.c      \
-             config/os/cygwin32/win_launch.c        \
-             config/os/cygwin32/win_stdfile.c       \
+os_sources = config/os/cygwin32/cygwin32.cpp          \
+             config/os/cygwin32/winfs.cpp             \
+             config/os/cygwin32/win_disk.cpp          \
+             config/os/cygwin32/win_stat.cpp          \
+             config/os/cygwin32/win_memory.cpp        \
+             config/os/cygwin32/win_serial.cpp        \
+             config/os/cygwin32/win_ntcd.cpp          \
+             config/os/cygwin32/win_print.cpp         \
+             config/os/cygwin32/win_beep.cpp          \
+             config/os/cygwin32/win_clip.cpp          \
+             config/os/cygwin32/win_temp.cpp          \
+             config/os/cygwin32/win_except.cpp        \
+             config/os/cygwin32/win_time.cpp          \
+             config/os/cygwin32/win_dongle.cpp        \
+             config/os/cygwin32/win_queue.cpp         \
+             config/os/cygwin32/win_screen.cpp        \
+             config/os/cygwin32/win_vxdiface.cpp      \
+             config/os/cygwin32/win_keyboard.cpp      \
+             config/os/cygwin32/win_launch.cpp        \
+             config/os/cygwin32/win_stdfile.cpp       \
 	     config/os/cygwin32/aspi.h              \
              config/os/cygwin32/cdenable.h          \
 	     config/os/cygwin32/cygwin32.h          \
@@ -682,14 +687,14 @@ os_sources = config/os/cygwin32/cygwin32.c          \
 	     config/os/cygwin32/winfs.h
 
 bin_PROGRAMS += exemove
-exemove_SOURCES = config/os/cygwin32/exemove.c
+exemove_SOURCES = config/os/cygwin32/exemove.cpp
 endif CONFIG_OS_CYGWIN32
 
 
 if CONFIG_OS_LINUX
-os_sources = config/os/linux/linux.c          \
-             config/os/linux/linux_except.c   \
-             config/os/linux/lowglobals-mem.c \
+os_sources = config/os/linux/linux.cpp          \
+             config/os/linux/linux_except.cpp   \
+             config/os/linux/lowglobals-mem.cpp \
              config/os/linux/linux.h          \
              config/os/linux/linux_except.h
 
@@ -701,10 +706,10 @@ executor_LDFLAGS = -framework SDL -framework Cocoa
 endif  CONFIG_OS_MACOSX
 
 if CONFIG_OS_MSDOS
-os_sources = config/os/msdos/msdos.c     \
-             config/os/msdos/dpmimem.c   \
-             config/os/msdos/dpmicall.c  \
-             config/os/msdos/openmany.c  \
+os_sources = config/os/msdos/msdos.cpp     \
+             config/os/msdos/dpmimem.cpp   \
+             config/os/msdos/dpmicall.cpp  \
+             config/os/msdos/openmany.cpp  \
              config/os/msdos/rmint70.S   \
              config/os/msdos/dpmicall.h  \
              config/os/msdos/dpmimem.h   \
@@ -715,11 +720,11 @@ os_sources = config/os/msdos/msdos.c     \
 endif CONFIG_OS_MSDOS
 
 if CONFIG_OS_NEXT
-os_sources = config/os/next/next.c config/os/next/next.h
+os_sources = config/os/next/next.cpp config/os/next/next.h
 endif CONFIG_OS_NEXT
 
 if CONFIG_SOUND_DJGPP
-sound_sources += config/sound/djgpp/djgpp-sound.c     \
+sound_sources += config/sound/djgpp/djgpp-sound.cpp     \
                  config/sound/djgpp/djgpp-sound.h     \
                  config/sound/djgpp/sb_lib/sb_defs.h  \
                  config/sound/djgpp/sb_lib/sb_dma.h   \
@@ -729,13 +734,13 @@ sound_sources += config/sound/djgpp/djgpp-sound.c     \
 endif CONFIG_SOUND_DJGPP
 
 if CONFIG_SOUND_LINUX
-sound_sources += config/sound/linux/linux-sound.c \
+sound_sources += config/sound/linux/linux-sound.cpp \
                  config/sound/linux/linux-sound.h
 
 endif CONFIG_SOUND_LINUX
 
 if CONFIG_SOUND_SDL
-sound_sources += config/sound/sdl/sdl-sound.c \
+sound_sources += config/sound/sdl/sdl-sound.cpp \
                  config/sound/sdl/sdl-sound.h
 endif CONFIG_SOUND_SDL
 
