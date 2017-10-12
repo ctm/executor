@@ -116,8 +116,8 @@ P3 (PUBLIC pascal trap, INTEGER, TrackControl,	/* IMI-323 */
        if (!partstart)
 	 {
 	   GetMouse (&p);
-	   BigEndianInPlace(p.h);
-	   BigEndianInPlace(p.v);
+	   p.h = BigEndianValue(p.h);
+	   p.v = BigEndianValue(p.v);
 	   partstart = inpart = TestControl (c, p);
 	 }
        
