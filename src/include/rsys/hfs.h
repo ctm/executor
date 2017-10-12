@@ -199,7 +199,7 @@ typedef struct PACKED {
 } filecontrolblock;
 
 enum { datafork, resourcefork = 0xFF };
-typedef unsigned char forktype;
+typedef unsigned char Forktype;
 
 typedef enum { databusy, resourcebusy, eitherbusy } busyconcern_t;
 
@@ -264,7 +264,7 @@ typedef struct PACKED _cacheentry {
   ULONGINT physblock;
   ULONGINT logblk;
   unsigned char flags;
-  forktype forktype;
+  Forktype forktype;
   char buf[PHYSBSIZE];
 } cacheentry;
 
@@ -400,7 +400,7 @@ extern xtntkey *ROMlib_newextentrecord(filecontrolblock *fcbp, uint16 newabn);
 extern OSErr ROMlib_btrename(btparam *btpb, StringPtr newnamep);
 extern OSErr ROMlib_btcreateemptyfile(btparam *btpb);
 extern OSErr ROMlib_btcreateemptydir(btparam *btpb, LONGINT *newidp);
-extern OSErr ROMlib_btpbindex (ioParam *pb, LONGINT dirid, HVCB **vcbpp,
+extern OSErr ROMlib_btpbindex (IOParam *pb, LONGINT dirid, HVCB **vcbpp,
 			  filerec **frpp, catkey **catkeypp, BOOLEAN onlyfiles);
 extern OSErr ROMlib_cleancache(HVCB *vcbp);
 extern OSErr ROMlib_flushcachevcbp(HVCB *vcbp);
@@ -415,18 +415,18 @@ extern filecontrolblock *ROMlib_getfreefcbp( void );
 extern filecontrolblock *ROMlib_refnumtofcbp(uint16 refnum);
 extern compretval ROMlib_xtntcompare(void *firstp, void *secondp);
 extern compretval ROMlib_catcompare(void *firstp, void *secondp);
-extern void ROMlib_makextntkey(xtntkey *keyp, forktype forkwanted, LONGINT flnum,
+extern void ROMlib_makextntkey(xtntkey *keyp, Forktype forkwanted, LONGINT flnum,
 								    uint16 bno);
-extern void ROMlib_makextntparam(btparam *btpb, HVCB *vcbp, forktype forkwanted,
+extern void ROMlib_makextntparam(btparam *btpb, HVCB *vcbp, Forktype forkwanted,
 						     LONGINT flnum, uint16 bno);
 extern LONGINT ROMlib_logtophys(filecontrolblock *fcbp, LONGINT absoffset,
 							   LONGINT *nphyscontigp);
 extern OSErr ROMlib_makecatkey(catkey *keyp, LONGINT dirid, INTEGER namelen, Ptr namep);
-extern OSErr ROMlib_findvcbandfile(ioParam *pb, LONGINT dirid, btparam *btpb,
+extern OSErr ROMlib_findvcbandfile(IOParam *pb, LONGINT dirid, btparam *btpb,
 					   filekind *kindp, BOOLEAN ignorename);
 extern OSErr ROMlib_alreadyopen(HVCB *vcbp, LONGINT flnum, SignedByte *permp,
 					 INTEGER *refnump, busyconcern_t busy);
-extern OSErr ROMlib_allochelper(ioParam *pb, BOOLEAN async, alloctype alloc,
+extern OSErr ROMlib_allochelper(IOParam *pb, BOOLEAN async, alloctype alloc,
 						     BOOLEAN ROMlib_writefcbp);
 
 /* public entries in helper.c */
@@ -457,7 +457,7 @@ extern HVCB *ROMlib_findvcb(short vrefnum, StringPtr name, LONGINT *diridp,
 							   BOOLEAN usedefault);
 extern OSErr ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid,
 							        LONGINT procid);
-extern OSErr ROMlib_pbvolrename(ioParam *pb, StringPtr newnamep);
+extern OSErr ROMlib_pbvolrename(IOParam *pb, StringPtr newnamep);
 extern OSErr ROMlib_flushvcbp(HVCB *vcbp);
 extern HVCB *ROMlib_vcbbyvrn(short vrefnum);
 extern VCBExtra *ROMlib_vcbbyunixname(char *uname);

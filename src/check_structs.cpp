@@ -206,10 +206,10 @@ void Executor::check_structs(void)
   check (FXInfo, 16);
   check (DInfo, 16);
   check (DXInfo, 16);
-  check (ioParam, 50);
-  check (fileParam, 80);
-  check (volumeParam, 64);
-  check (cntrlParam, 50);
+  check (IOParam, 50);
+  check (FileParam, 80);
+  check (VolumeParam, 64);
+  check (CntrlParam, 50);
   check (ParamBlockRec, 80);
   check (HIoParam, 50);
   check (HFileParam, 80);

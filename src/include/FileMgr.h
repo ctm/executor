@@ -212,7 +212,7 @@ typedef struct {
   LONGINT ioActCount;
   INTEGER ioPosMode;
   LONGINT ioPosOffset;
-} ioParam;
+} IOParam;
 
 typedef struct {
   COMMONFSQUEUEDEFS;
@@ -232,7 +232,7 @@ typedef struct {
   LONGINT ioFlRPyLen;
   LONGINT ioFlCrDat;
   LONGINT ioFlMdDat;
-} fileParam;
+} FileParam;
 
 typedef struct {
   COMMONFSQUEUEDEFS;
@@ -250,20 +250,20 @@ typedef struct {
   uint16_t ioAlBlSt;
   LONGINT ioVNxtFNum;
   uint16_t ioVFrBlk;
-} volumeParam;
+} VolumeParam;
 
 typedef struct {
   COMMONFSQUEUEDEFS;
   INTEGER ioCRefNum;
   INTEGER csCode;
   INTEGER csParam[11];
-} cntrlParam;
+} CntrlParam;
 
 typedef union {
-    ioParam ioParam;
-    fileParam fileParam;
-    volumeParam volumeParam;
-    cntrlParam cntrlParam;
+    IOParam ioParam;
+    FileParam fileParam;
+    VolumeParam volumeParam;
+    CntrlParam cntrlParam;
 } ParamBlockRec;
 typedef ParamBlockRec *ParmBlkPtr;
 

@@ -500,7 +500,7 @@ P1(PUBLIC pascal trap, void, UpdateResFile, INTEGER, rn)
     BOOLEAN needtowalk;
     fcbrec *fp;
     OSErr err;
-    ioParam iopb;
+    IOParam iopb;
 
     map = ROMlib_rntohandl(rn, (Handle *)0);
     if (!map) {

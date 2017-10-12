@@ -380,7 +380,7 @@ PUBLIC OSErr Executor::ROMlib_getcache(cacheentry **retpp, uint16 refnum, ULONGI
     OSErr err;
     ULONGINT physbyte;
     LONGINT filenum;
-    forktype forkwanted;
+    Forktype forkwanted;
 #if 1
     INTEGER badnesscount;
 #endif
@@ -1704,7 +1704,7 @@ PRIVATE OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
     cacheentry *newcachep;
     btblock0 *block0p;
     ULONGINT nblocksalloced, newblock;
-    ioParam iop;
+    IOParam iop;
     INTEGER refnum, flags;
     filecontrolblock *fcbp;
     saverec_t **busysave;
@@ -2274,7 +2274,7 @@ PUBLIC xtntkey *Executor::ROMlib_newextentrecord(filecontrolblock *fcbp, uint16 
     HVCB *vcbp;
     btparam btparamrec;
     OSErr err;
-    forktype forkwanted;
+    Forktype forkwanted;
     
     vcbp = MR(fcbp->fcbVPtr);
     forkwanted = fcbp->fcbMdRByt & RESOURCEBIT ? resourcefork : datafork;
@@ -2414,10 +2414,10 @@ PUBLIC OSErr Executor::ROMlib_btcreateemptydir(btparam *btpb, LONGINT *newidp)
  * NOTE: ROMlib_getcache clears the ROMlib_index_cached flag
  */
  
-PUBLIC OSErr Executor::ROMlib_btpbindex (ioParam *pb, LONGINT dirid, HVCB **vcbpp,
+PUBLIC OSErr Executor::ROMlib_btpbindex (IOParam *pb, LONGINT dirid, HVCB **vcbpp,
 			   filerec **frpp, catkey **catkeypp, BOOLEAN filesonly)
 {
-    ioParam newpb;
+    IOParam newpb;
     btparam btparamrec;
     filekind kind;
     OSErr err;
@@ -2440,7 +2440,7 @@ PUBLIC OSErr Executor::ROMlib_btpbindex (ioParam *pb, LONGINT dirid, HVCB **vcbp
 	save_dirid = dirid;
 	save_vRefNum = pb->ioVRefNum;
     }
-    new_count = BigEndianValue(((fileParam *)pb)->ioFDirIndex);
+    new_count = BigEndianValue(((FileParam *)pb)->ioFDirIndex);
     if (ROMlib_index_cached && new_count >= save_count)
 	count = new_count - save_count;
     else

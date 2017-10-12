@@ -23,7 +23,7 @@ typedef enum {
 	UnlockOp
 } changeop;
 
-PRIVATE OSErr PBFInfoHelper(changeop op, fileParam *pb, LONGINT dirid,
+PRIVATE OSErr PBFInfoHelper(changeop op, FileParam *pb, LONGINT dirid,
 								  BOOLEAN async)
 {
     OSErr err, err1;
@@ -35,11 +35,11 @@ PRIVATE OSErr PBFInfoHelper(changeop op, fileParam *pb, LONGINT dirid,
     
     vcbp = 0;
     if (op == GetOp && (BigEndianValue(pb->ioFDirIndex) > 0))
-	err = ROMlib_btpbindex((ioParam *) pb, dirid, &vcbp, &frp, &catkeyp,
+	err = ROMlib_btpbindex((IOParam *) pb, dirid, &vcbp, &frp, &catkeyp,
 									 TRUE);
     else {
 	kind = regular;
-	err = ROMlib_findvcbandfile((ioParam *) pb, dirid, &btparamrec, &kind,
+	err = ROMlib_findvcbandfile((IOParam *) pb, dirid, &btparamrec, &kind,
 									FALSE);
 	if (err == noErr) {
 	    if (btparamrec.success) {
@@ -99,48 +99,48 @@ PRIVATE OSErr PBFInfoHelper(changeop op, fileParam *pb, LONGINT dirid,
 
 PUBLIC OSErr Executor::hfsPBGetFInfo(ParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(GetOp, (fileParam *) pb, 0L, async);
+    return PBFInfoHelper(GetOp, (FileParam *) pb, 0L, async);
 }
 
 PUBLIC OSErr Executor::hfsPBHGetFInfo(HParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(GetOp, (fileParam *) pb, BigEndianValue(pb->fileParam.ioDirID), async);
+    return PBFInfoHelper(GetOp, (FileParam *) pb, BigEndianValue(pb->fileParam.ioDirID), async);
 }
 
 PUBLIC OSErr Executor::hfsPBSetFInfo(ParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(SetOp, (fileParam *) pb, 0L, async);
+    return PBFInfoHelper(SetOp, (FileParam *) pb, 0L, async);
 }
 
 PUBLIC OSErr Executor::hfsPBHSetFInfo(HParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(SetOp, (fileParam *) pb, BigEndianValue(pb->fileParam.ioDirID), async);
+    return PBFInfoHelper(SetOp, (FileParam *) pb, BigEndianValue(pb->fileParam.ioDirID), async);
 }
 
 PUBLIC OSErr Executor::hfsPBSetFLock(ParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(LockOp, (fileParam *) pb, 0L, async);
+    return PBFInfoHelper(LockOp, (FileParam *) pb, 0L, async);
 }
 
 PUBLIC OSErr Executor::hfsPBHSetFLock(HParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(LockOp, (fileParam *) pb, BigEndianValue(pb->fileParam.ioDirID), async);
+    return PBFInfoHelper(LockOp, (FileParam *) pb, BigEndianValue(pb->fileParam.ioDirID), async);
 }
 
 PUBLIC OSErr Executor::hfsPBRstFLock(ParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(UnlockOp, (fileParam *) pb, 0L, async);
+    return PBFInfoHelper(UnlockOp, (FileParam *) pb, 0L, async);
 }
 
 PUBLIC OSErr Executor::hfsPBHRstFLock(HParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(UnlockOp, (fileParam *) pb,
+    return PBFInfoHelper(UnlockOp, (FileParam *) pb,
 			 BigEndianValue (pb->fileParam.ioDirID), async);
 }
 
 PUBLIC OSErr Executor::hfsPBSetFVers(ParmBlkPtr pb, BOOLEAN async)
 {
-    PBRETURN((ioParam *)pb, wrgVolTypErr);
+    PBRETURN((IOParam *)pb, wrgVolTypErr);
 }
 
 PUBLIC void
@@ -166,11 +166,11 @@ ROMlib_fcbrename (HVCB *vcbp, LONGINT swapped_parid, StringPtr oldnamep,
 }
     
 PRIVATE OSErr
-renamehelper(ioParam *pb, BOOLEAN async, LONGINT dirid, filekind kind)
+renamehelper(IOParam *pb, BOOLEAN async, LONGINT dirid, filekind kind)
 {
   OSErr err, err1;
   btparam btparamrec, btparamrec2;
-  ioParam npb;
+  IOParam npb;
 
   err = ROMlib_findvcbandfile(pb, dirid, &btparamrec, &kind, FALSE);
   if (err == noErr)
@@ -228,11 +228,11 @@ renamehelper(ioParam *pb, BOOLEAN async, LONGINT dirid, filekind kind)
 
 PUBLIC OSErr Executor::hfsPBRename(ParmBlkPtr pb, BOOLEAN async)
 {
-    return renamehelper((ioParam *) pb, async, 0L, regular);
+    return renamehelper((IOParam *) pb, async, 0L, regular);
 }
 
 PUBLIC OSErr Executor::hfsPBHRename(HParmBlkPtr pb, BOOLEAN async)
 {
-    return renamehelper((ioParam *) pb, async, BigEndianValue(pb->fileParam.ioDirID),
+    return renamehelper((IOParam *) pb, async, BigEndianValue(pb->fileParam.ioDirID),
 							    (filekind)(regular|directory));
 }

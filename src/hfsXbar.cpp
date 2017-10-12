@@ -40,7 +40,7 @@ void cachecheck(HVCB *vcbp)
 }
 #endif /* defined(CACHECHECK) */
 
-PRIVATE BOOLEAN hfsvol(ioParam *pb)
+PRIVATE BOOLEAN hfsvol(IOParam *pb)
 {
     HVCB *vcbp;
     LONGINT dir;
@@ -61,7 +61,7 @@ PRIVATE BOOLEAN hfsvol(ioParam *pb)
 	return FALSE;
 }
 
-PRIVATE BOOLEAN hfsIvol(volumeParam *pb)	/* potentially Indexed vol */
+PRIVATE BOOLEAN hfsIvol(VolumeParam *pb)	/* potentially Indexed vol */
 {
     BOOLEAN retval;
     HVCB *vcbp;
@@ -72,11 +72,11 @@ PRIVATE BOOLEAN hfsIvol(volumeParam *pb)	/* potentially Indexed vol */
 	if (vcbp && vcbp->vcbCTRef)
 	    retval = TRUE;
     } else
-	retval = hfsvol((ioParam *) pb);
+	retval = hfsvol((IOParam *) pb);
     return retval;
 }
 
-PRIVATE BOOLEAN hfsfil(ioParam *pb)
+PRIVATE BOOLEAN hfsfil(IOParam *pb)
 {
     filecontrolblock *fcbp;
     HVCB *vcbp;
@@ -99,7 +99,7 @@ A2(PUBLIC trap, OSErrRET, PBHRename, HParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBHRename(pb, async);
     else
 	retval = ufsPBHRename(pb, async);
@@ -110,7 +110,7 @@ A2(PUBLIC trap, OSErrRET, PBHCreate, HParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBHCreate(pb, async);
     else
 	retval = ufsPBHCreate(pb, async);
@@ -121,7 +121,7 @@ A2(PUBLIC trap, OSErrRET, PBDirCreate, HParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBDirCreate(pb, async);
     else
 	retval = ufsPBDirCreate(pb, async);
@@ -132,7 +132,7 @@ A2(PUBLIC trap, OSErrRET, PBHDelete, HParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBHDelete(pb, async);
     else
 	retval = ufsPBHDelete(pb, async);
@@ -259,7 +259,7 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 	  }
 	else
 	  {
-	    if (hfsfil((ioParam *) pb))
+	    if (hfsfil((IOParam *) pb))
 	      retval = hfsPBRead(pb, async);
 	    else
 	      retval = ufsPBRead(pb, async);
@@ -319,7 +319,7 @@ A2(PUBLIC trap, OSErrRET, PBWrite, ParmBlkPtr, pb, BOOLEAN, async)
 	break;
 #endif
     default:
-	if (hfsfil((ioParam *) pb))
+	if (hfsfil((IOParam *) pb))
 	    retval = hfsPBWrite(pb, async);
 	else
 	    retval = ufsPBWrite(pb, async);
@@ -332,7 +332,7 @@ A2(PUBLIC trap, OSErrRET, PBClose, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsfil((ioParam *) pb))
+    if (hfsfil((IOParam *) pb))
 	retval = hfsPBClose(pb, async);
     else
 	retval = ufsPBClose(pb, async);
@@ -358,7 +358,7 @@ A2(PUBLIC trap, OSErrRET, PBHOpen, HParmBlkPtr, pb, BOOLEAN, async)
 	pb->ioParam.ioNamePtr && MR(pb->ioParam.ioNamePtr)[0]
 			      && MR(pb->ioParam.ioNamePtr)[1] == '.')
         retval = ROMlib_driveropen((ParmBlkPtr) pb, async);
-    else if (hfsvol((ioParam *) pb))
+    else if (hfsvol((IOParam *) pb))
 	retval = hfsPBHOpen(pb, async);
     else
 	retval = ufsPBHOpen(pb, async);
@@ -369,7 +369,7 @@ A2(PUBLIC trap, OSErrRET, PBOpenDF, HParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBHOpen(pb, async);
     else
 	retval = ufsPBHOpen(pb, async);
@@ -380,7 +380,7 @@ A2(PUBLIC trap, OSErrRET, PBHOpenRF, HParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBHOpenRF(pb, async);
     else
 	retval = ufsPBHOpenRF(pb, async);
@@ -422,7 +422,7 @@ A2(PUBLIC trap, OSErrRET, PBGetCatInfo, CInfoPBPtr, pb, BOOLEAN, async)
 	savep = pb->dirInfo.ioNamePtr;
 	if (pb->dirInfo.ioFDirIndex != CWC (0))	/* IMIV-155, 156 */
 	  pb->dirInfo.ioNamePtr = 0;
-	ishfs = hfsvol((ioParam *) pb);
+	ishfs = hfsvol((IOParam *) pb);
 	pb->dirInfo.ioNamePtr = savep;
 	
 	if (ishfs)
@@ -437,7 +437,7 @@ A2(PUBLIC trap, OSErrRET, PBSetCatInfo, CInfoPBPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBSetCatInfo(pb, async);
     else
 	retval = ufsPBSetCatInfo(pb, async);
@@ -448,7 +448,7 @@ A2(PUBLIC trap, OSErrRET, PBCatMove, CMovePBPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBCatMove(pb, async);
     else
 	retval = ufsPBCatMove(pb, async);
@@ -459,7 +459,7 @@ A2(PUBLIC trap, OSErrRET, PBGetVInfo, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsIvol((volumeParam *) pb))
+    if (hfsIvol((VolumeParam *) pb))
 	retval = hfsPBGetVInfo(pb, async);
     else
 	retval = ufsPBGetVInfo(pb, async);
@@ -470,7 +470,7 @@ A1(PUBLIC trap, OSErrRET, PBUnmountVol, ParmBlkPtr, pb)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBUnmountVol(pb);
     else
 	retval = ufsPBUnmountVol(pb);
@@ -481,7 +481,7 @@ A1(PUBLIC trap, OSErrRET, PBEject, ParmBlkPtr, pb)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBEject(pb);
     else
 	retval = ufsPBEject(pb);
@@ -492,7 +492,7 @@ A2(PUBLIC trap, OSErrRET, PBAllocate, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsfil((ioParam *) pb))
+    if (hfsfil((IOParam *) pb))
 	retval = hfsPBAllocate(pb, async);
     else
 	retval = ufsPBAllocate(pb, async);
@@ -503,7 +503,7 @@ A2(PUBLIC trap, OSErrRET, PBAllocContig, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsfil((ioParam *) pb))
+    if (hfsfil((IOParam *) pb))
 	retval = hfsPBAllocContig(pb, async);
     else
 	retval = ufsPBAllocContig(pb, async);
@@ -519,7 +519,7 @@ A2(PUBLIC trap, OSErrRET, PBHGetFInfo, HParmBlkPtr, pb, BOOLEAN, async)
     savep = pb->ioParam.ioNamePtr;
     if (BigEndianValue(pb->fileParam.ioFDirIndex) > 0)	/* IMIV-155, 156 */
 	pb->ioParam.ioNamePtr = 0;
-    ishfs = hfsvol((ioParam *) pb);
+    ishfs = hfsvol((IOParam *) pb);
     pb->ioParam.ioNamePtr = savep;
 
     if (ishfs)
@@ -533,7 +533,7 @@ A2(PUBLIC trap, OSErrRET, PBSetEOF, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsfil((ioParam *) pb))
+    if (hfsfil((IOParam *) pb))
 	retval = hfsPBSetEOF(pb, async);
     else
 	retval = ufsPBSetEOF(pb, async);
@@ -547,7 +547,7 @@ A2(PUBLIC trap, OSErrRET, PBOpen, ParmBlkPtr, pb, BOOLEAN, async)
     if (pb->ioParam.ioNamePtr && MR(pb->ioParam.ioNamePtr)[0]
 			      && MR(pb->ioParam.ioNamePtr)[1] == '.')
 	retval = ROMlib_driveropen(pb, async);
-    else if (hfsvol((ioParam *) pb))
+    else if (hfsvol((IOParam *) pb))
 	retval = hfsPBOpen(pb, async);
     else
 	retval = ufsPBOpen(pb, async);
@@ -577,7 +577,7 @@ A2(PUBLIC trap, OSErrRET, PBOpenRF, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBOpenRF(pb, async);
     else
 	retval = ufsPBOpenRF(pb, async);
@@ -588,7 +588,7 @@ A2(PUBLIC trap, OSErrRET, PBLockRange, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsfil((ioParam *) pb))
+    if (hfsfil((IOParam *) pb))
 	retval = hfsPBLockRange(pb, async);
     else
 	retval = ufsPBLockRange(pb, async);
@@ -599,7 +599,7 @@ A2(PUBLIC trap, OSErrRET, PBUnlockRange, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsfil((ioParam *) pb))
+    if (hfsfil((IOParam *) pb))
 	retval = hfsPBUnlockRange(pb, async);
     else
 	retval = ufsPBUnlockRange(pb, async);
@@ -610,7 +610,7 @@ A2(PUBLIC trap, OSErrRET, PBGetFPos, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsfil((ioParam *) pb))
+    if (hfsfil((IOParam *) pb))
 	retval = hfsPBGetFPos(pb, async);
     else
 	retval = ufsPBGetFPos(pb, async);
@@ -621,7 +621,7 @@ A2(PUBLIC trap, OSErrRET, PBSetFPos, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsfil((ioParam *) pb))
+    if (hfsfil((IOParam *) pb))
 	retval = hfsPBSetFPos(pb, async);
     else
 	retval = ufsPBSetFPos(pb, async);
@@ -632,7 +632,7 @@ A2(PUBLIC trap, OSErrRET, PBGetEOF, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsfil((ioParam *) pb))
+    if (hfsfil((IOParam *) pb))
 	retval = hfsPBGetEOF(pb, async);
     else
 	retval = ufsPBGetEOF(pb, async);
@@ -643,7 +643,7 @@ A2(PUBLIC trap, OSErrRET, PBFlushFile, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsfil((ioParam *) pb))
+    if (hfsfil((IOParam *) pb))
 	retval = hfsPBFlushFile(pb, async);
     else
 	retval = ufsPBFlushFile(pb, async);
@@ -654,7 +654,7 @@ A2(PUBLIC trap, OSErrRET, PBCreate, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBCreate(pb, async);
     else
 	retval = ufsPBCreate(pb, async);
@@ -665,7 +665,7 @@ A2(PUBLIC trap, OSErrRET, PBDelete, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBDelete(pb, async);
     else
 	retval = ufsPBDelete(pb, async);
@@ -676,7 +676,7 @@ A2(PUBLIC trap, OSErrRET, PBOpenWD, WDPBPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBOpenWD(pb, async);
     else
 	retval = ufsPBOpenWD(pb, async);
@@ -708,7 +708,7 @@ A2(PUBLIC trap, OSErrRET, PBGetFInfo, ParmBlkPtr, pb, BOOLEAN, async)
     savep = pb->ioParam.ioNamePtr;
     if (BigEndianValue(pb->fileParam.ioFDirIndex) > 0)	/* IMIV-155, 156 */
 	pb->ioParam.ioNamePtr = 0;
-    ishfs = hfsvol((ioParam *) pb);
+    ishfs = hfsvol((IOParam *) pb);
     pb->ioParam.ioNamePtr = savep;
 
     if (ishfs)
@@ -722,7 +722,7 @@ A2(PUBLIC trap, OSErrRET, PBSetFInfo, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBSetFInfo(pb, async);
     else
 	retval = ufsPBSetFInfo(pb, async);
@@ -733,7 +733,7 @@ A2(PUBLIC trap, OSErrRET, PBHSetFInfo, HParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBHSetFInfo(pb, async);
     else
 	retval = ufsPBHSetFInfo(pb, async);
@@ -744,7 +744,7 @@ A2(PUBLIC trap, OSErrRET, PBSetFLock, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBSetFLock(pb, async);
     else
 	retval = ufsPBSetFLock(pb, async);
@@ -755,7 +755,7 @@ A2(PUBLIC trap, OSErrRET, PBHSetFLock, HParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBHSetFLock(pb, async);
     else
 	retval = ufsPBHSetFLock(pb, async);
@@ -766,7 +766,7 @@ A2(PUBLIC trap, OSErrRET, PBRstFLock, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBRstFLock(pb, async);
     else
 	retval = ufsPBRstFLock(pb, async);
@@ -777,7 +777,7 @@ A2(PUBLIC trap, OSErrRET, PBHRstFLock, HParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBHRstFLock(pb, async);
     else
 	retval = ufsPBHRstFLock(pb, async);
@@ -788,7 +788,7 @@ A2(PUBLIC trap, OSErrRET, PBSetFVers, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBSetFVers(pb, async);
     else
 	retval = ufsPBSetFVers(pb, async);
@@ -799,7 +799,7 @@ A2(PUBLIC trap, OSErrRET, PBRename, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBRename(pb, async);
     else
 	retval = ufsPBRename(pb, async);
@@ -830,7 +830,7 @@ A2(PUBLIC trap, OSErrRET, PBRename, ParmBlkPtr, pb, BOOLEAN, async)
 A1(PUBLIC trap, OSErr, PBMountVol, ParmBlkPtr, pb)
 {
 #if 0
-    if (hfsfil((ioParam *) pb))
+    if (hfsfil((IOParam *) pb))
 	return hfsPBMountVol(pb);
     else
 	return ufsPBMountVol(pb);
@@ -851,7 +851,7 @@ A2(PUBLIC trap, OSErrRET, PBHGetVInfo, HParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsIvol((volumeParam *) pb))
+    if (hfsIvol((VolumeParam *) pb))
 	retval = hfsPBHGetVInfo(pb, async);
     else
 	retval = ufsPBHGetVInfo(pb, async);
@@ -929,7 +929,7 @@ A2(PUBLIC trap, OSErrRET, PBSetVInfo, HParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBSetVInfo(pb, async);
     else
 	retval = ufsPBSetVInfo(pb, async);
@@ -972,7 +972,7 @@ A2(PUBLIC trap, OSErrRET, PBFlushVol, ParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBFlushVol(pb, async);
     else
 	retval = ufsPBFlushVol(pb, async);
@@ -983,7 +983,7 @@ A1(PUBLIC trap, OSErrRET, PBOffLine, ParmBlkPtr, pb)
 {
     OSErr retval;
 
-    if (hfsvol((ioParam *) pb))
+    if (hfsvol((IOParam *) pb))
 	retval = hfsPBOffLine(pb);
     else
 	retval = ufsPBOffLine(pb);

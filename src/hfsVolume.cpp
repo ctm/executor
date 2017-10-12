@@ -598,7 +598,7 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
     }
     TheZone = saveZone;
     warning_fs_log ("err = %d", err);
-    PBRETURN((volumeParam *) pb, err);
+    PBRETURN((VolumeParam *) pb, err);
 }
 
 PRIVATE void goofyclip(unsigned short *up)
@@ -696,9 +696,9 @@ PRIVATE OSErr commonGetVInfo(HVolumeParam *pb, BOOLEAN async, fstype fs)
     pb->ioVFrBlk = vcbp->vcbFreeBks;
     switch (fs) {
     case mfs:
-	((volumeParam *) pb)->ioVLsBkUp = vcbp->vcbVolBkUp;
-	((volumeParam *) pb)->ioVDirSt = 0;
-	((volumeParam *) pb)->ioVBlLn = 0;
+	((VolumeParam *) pb)->ioVLsBkUp = vcbp->vcbVolBkUp;
+	((VolumeParam *) pb)->ioVDirSt = 0;
+	((VolumeParam *) pb)->ioVBlLn = 0;
 	if (!workingdirnum)
 	    pb->ioVRefNum = vcbp->vcbVRefNum;
 	goofyclip((unsigned short *) &pb->ioVNmAlBlks);
@@ -770,10 +770,10 @@ PUBLIC OSErr Executor::hfsPBSetVInfo(HParmBlkPtr pb, BOOLEAN async)
 	}
     } else
 	err = nsvErr;
-    PBRETURN((volumeParam *) pb, err);
+    PBRETURN((VolumeParam *) pb, err);
 }
 
-PRIVATE OSErr getvolcommon(volumeParam *pb)
+PRIVATE OSErr getvolcommon(VolumeParam *pb)
 {
     OSErr err;
 
@@ -792,8 +792,8 @@ PUBLIC OSErr Executor::hfsPBGetVol(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr err;
 
-    err = getvolcommon((volumeParam *) pb);
-    PBRETURN((volumeParam *) pb, err);
+    err = getvolcommon((VolumeParam *) pb);
+    PBRETURN((VolumeParam *) pb, err);
 }
 
 PUBLIC LONGINT Executor::DefDirID = CLC(2);
@@ -803,7 +803,7 @@ PUBLIC OSErr Executor::hfsPBHGetVol(WDPBPtr pb, BOOLEAN async)
     wdentry *wdp;
     OSErr err;
     
-    err = getvolcommon((volumeParam *) pb);
+    err = getvolcommon((VolumeParam *) pb);
     pb->ioWDDirID = DefDirID;
     if (err == noErr) {
 	if (ISWDNUM(Cx(DefVRefNum))) {
@@ -827,7 +827,7 @@ PUBLIC OSErr Executor::hfsPBHGetVol(WDPBPtr pb, BOOLEAN async)
  *
  */
 
-PRIVATE OSErr setvolhelper(volumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
+PRIVATE OSErr setvolhelper(VolumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
 							  BOOLEAN convertzeros)
 {
     HVCB *vcbp, *newDefVCBPtr;
@@ -903,12 +903,12 @@ PRIVATE OSErr setvolhelper(volumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
 
 PUBLIC OSErr Executor::hfsPBSetVol(ParmBlkPtr pb, BOOLEAN async)
 {
-    return setvolhelper((volumeParam *) pb, async, 0, TRUE);
+    return setvolhelper((VolumeParam *) pb, async, 0, TRUE);
 }
 
 PUBLIC OSErr Executor::hfsPBHSetVol(WDPBPtr pb, BOOLEAN async)
 {
-    return setvolhelper((volumeParam *) pb, async, Cx(pb->ioWDDirID), FALSE);
+    return setvolhelper((VolumeParam *) pb, async, Cx(pb->ioWDDirID), FALSE);
 }
 
 PUBLIC OSErr Executor::hfsPBFlushVol(ParmBlkPtr pb, BOOLEAN async)
@@ -922,13 +922,13 @@ PUBLIC OSErr Executor::hfsPBFlushVol(ParmBlkPtr pb, BOOLEAN async)
 	err = ROMlib_flushvcbp(vcbp);
     else
 	err = nsvErr;
-    PBRETURN((volumeParam *) pb, err);
+    PBRETURN((VolumeParam *) pb, err);
 }
 
 PRIVATE void closeallvcbfiles(HVCB *vcbp)
 {
     filecontrolblock *fcbp, *efcbp;
-    ioParam iopb;
+    IOParam iopb;
     short length;
     
     length = BigEndianValue(*(short *)MR(FCBSPtr));
@@ -958,13 +958,13 @@ PUBLIC OSErr Executor::hfsPBUnmountVol(ParmBlkPtr pb)
 	DisposPtr((Ptr) vcbp);
     } else
 	err = nsvErr;
-    PBRETURN((volumeParam *) pb, err);
+    PBRETURN((VolumeParam *) pb, err);
 }
 
-PRIVATE OSErr offlinehelper(volumeParam *pb, HVCB *vcbp)
+PRIVATE OSErr offlinehelper(VolumeParam *pb, HVCB *vcbp)
 {
     OSErr err, err1, err2;
-    ioParam iop;
+    IOParam iop;
     
     err = /* my */PBFlushVol((ParmBlkPtr) pb, FALSE);
     err1 = 0;
@@ -1011,12 +1011,12 @@ PUBLIC OSErr Executor::hfsPBOffLine(ParmBlkPtr pb)
     if (vcbp) {
 	if (vcbp->vcbDrvNum) {
 	    vcbp->vcbDRefNum = BigEndianValue(-Cx(vcbp->vcbDrvNum));
-	    err = offlinehelper((volumeParam *) pb, vcbp);
+	    err = offlinehelper((VolumeParam *) pb, vcbp);
 	} else
 	    err = noErr;
     } else
 	err = nsvErr;
-    PBRETURN((volumeParam *) pb, err);
+    PBRETURN((VolumeParam *) pb, err);
 }
 
 PUBLIC OSErr Executor::hfsPBEject(ParmBlkPtr pb)
@@ -1031,7 +1031,7 @@ PUBLIC OSErr Executor::hfsPBEject(ParmBlkPtr pb)
     if (vcbp) {
 	if (Cx(vcbp->vcbDrvNum)) {
 	    vcbp->vcbDRefNum = vcbp->vcbDrvNum;
-	    err = offlinehelper((volumeParam *) pb, vcbp);
+	    err = offlinehelper((VolumeParam *) pb, vcbp);
 	} else {
 	    if (Cx(vcbp->vcbDRefNum) < 0)	/* offline */
 		vcbp->vcbDRefNum = BigEndianValue(Cx(vcbp->vcbDRefNum) * -1);
@@ -1048,10 +1048,10 @@ PUBLIC OSErr Executor::hfsPBEject(ParmBlkPtr pb)
     if (err == noErr)
 	err = ROMlib_ejectfloppy(vcbp ? ((VCBExtra *) vcbp)->u.hfs.fd : -1);
 #endif
-    PBRETURN((volumeParam *) pb, err);
+    PBRETURN((VolumeParam *) pb, err);
 }
 
-PUBLIC OSErr Executor::ROMlib_pbvolrename(ioParam *pb, StringPtr newnamep)
+PUBLIC OSErr Executor::ROMlib_pbvolrename(IOParam *pb, StringPtr newnamep)
 {
     OSErr err;
     HParamBlockRec hpb;

@@ -95,7 +95,7 @@ PUBLIC OSErr Executor::hfsPBOpenWD(WDPBPtr pb, BOOLEAN async)
     StringPtr namep;
     
     kind = (filekind)(regular|directory);
-    retval = ROMlib_findvcbandfile((ioParam *)pb, Cx(pb->ioWDDirID),
+    retval = ROMlib_findvcbandfile((IOParam *)pb, Cx(pb->ioWDDirID),
 						    &btparamrec, &kind, FALSE);
     if (retval != noErr)
 	PBRETURN(pb, retval);

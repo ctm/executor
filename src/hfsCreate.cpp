@@ -35,20 +35,20 @@ PRIVATE OSErr freeallblocks(HVCB *vcbp, filerec *frp)
 	fcbp->fcbMdRByt = WRITEBIT;
 	pbr.ioParam.ioMisc = 0;
 	pbr.ioParam.ioRefNum = BigEndianValue((char *) fcbp - (char *) MR(FCBSPtr));
-	retval = ROMlib_allochelper((ioParam *) &pbr, FALSE, seteof, FALSE);
+	retval = ROMlib_allochelper((IOParam *) &pbr, FALSE, seteof, FALSE);
 	if (retval == noErr) {
 	    fcbp->fcbPLen = frp->filRPyLen;
 	    memmove((char *) fcbp->fcbExtRec, (char *) frp->filRExtRec,
 		    (LONGINT) sizeof(frp->filRExtRec));
 	    fcbp->fcbMdRByt = WRITEBIT|RESOURCEBIT;
-	    retval = ROMlib_allochelper((ioParam *) &pbr, FALSE, seteof, FALSE);
+	    retval = ROMlib_allochelper((IOParam *) &pbr, FALSE, seteof, FALSE);
 	}
     }
     fcbp->fcbFlNum = 0;
     return retval;
 }
 
-PRIVATE OSErr createhelper(ioParam *pb, BOOLEAN async, createop op,
+PRIVATE OSErr createhelper(IOParam *pb, BOOLEAN async, createop op,
 						   LONGINT dirid, filekind kind)
 {
     OSErr err, err1;
@@ -125,29 +125,29 @@ PRIVATE OSErr createhelper(ioParam *pb, BOOLEAN async, createop op,
 
 PUBLIC OSErr Executor::hfsPBCreate(ParmBlkPtr pb, BOOLEAN async)
 {
-    return createhelper((ioParam *) pb, async, create, (LONGINT) 0, regular);
+    return createhelper((IOParam *) pb, async, create, (LONGINT) 0, regular);
 }
 
 PUBLIC OSErr Executor::hfsPBHCreate(HParmBlkPtr pb, BOOLEAN async)
 {
-    return createhelper((ioParam *)pb, async, create, BigEndianValue(pb->fileParam.ioDirID),
+    return createhelper((IOParam *)pb, async, create, BigEndianValue(pb->fileParam.ioDirID),
 								      regular);
 }
 
 PUBLIC OSErr Executor::hfsPBDirCreate(HParmBlkPtr pb, BOOLEAN async)
 {
-    return createhelper((ioParam *)pb, async, create, BigEndianValue(pb->fileParam.ioDirID),
+    return createhelper((IOParam *)pb, async, create, BigEndianValue(pb->fileParam.ioDirID),
 								    directory);
 }
 
 PUBLIC OSErr Executor::hfsPBDelete(ParmBlkPtr pb, BOOLEAN async)
 {
-    return createhelper((ioParam *) pb, async, delete1, (LONGINT) 0,
+    return createhelper((IOParam *) pb, async, delete1, (LONGINT) 0,
 							    (filekind)(regular | directory));
 }
 
 PUBLIC OSErr Executor::hfsPBHDelete(HParmBlkPtr pb, BOOLEAN async)
 {
-    return createhelper((ioParam *)pb, async, delete1, BigEndianValue(pb->fileParam.ioDirID),
+    return createhelper((IOParam *)pb, async, delete1, BigEndianValue(pb->fileParam.ioDirID),
 							    (filekind)(regular | directory));
 }

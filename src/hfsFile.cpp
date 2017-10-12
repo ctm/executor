@@ -47,7 +47,7 @@ PUBLIC filecontrolblock *Executor::ROMlib_refnumtofcbp(uint16 refnum)
     return retval;
 }
 
-PRIVATE LONGINT pbabsoffset(ioParam *pb, filecontrolblock *fcbp)
+PRIVATE LONGINT pbabsoffset(IOParam *pb, filecontrolblock *fcbp)
 {
     switch (BigEndianValue(pb->ioPosMode) & 0x3) {
     case fsAtMark:
@@ -131,7 +131,7 @@ PUBLIC compretval Executor::ROMlib_catcompare(void *firstp, void *secondp)
 								   FALSE, TRUE);
 }
 
-PUBLIC void Executor::ROMlib_makextntkey(xtntkey *keyp, forktype forkwanted, LONGINT flnum,
+PUBLIC void Executor::ROMlib_makextntkey(xtntkey *keyp, Forktype forkwanted, LONGINT flnum,
 								     uint16 bno)
 {
     keyp->xkrKeyLen = 7;
@@ -140,7 +140,7 @@ PUBLIC void Executor::ROMlib_makextntkey(xtntkey *keyp, forktype forkwanted, LON
     keyp->xkrFABN = BigEndianValue(bno);
 }
 
-PUBLIC void Executor::ROMlib_makextntparam(btparam *btpb, HVCB *vcbp, forktype forkwanted,
+PUBLIC void Executor::ROMlib_makextntparam(btparam *btpb, HVCB *vcbp, Forktype forkwanted,
 						      LONGINT flnum, uint16 bno)
 {
     btpb->vcbp = vcbp;
@@ -152,7 +152,7 @@ PUBLIC void Executor::ROMlib_makextntparam(btparam *btpb, HVCB *vcbp, forktype f
 
 PRIVATE xtntkey *fcbpbnotoxkeyp(filecontrolblock *fcbp, uint16 bno)
 {
-    forktype forkwanted;
+    Forktype forkwanted;
     xtntkey *xkeyp;
     btparam btparamblock;
     OSErr err;
@@ -201,7 +201,7 @@ PUBLIC LONGINT Executor::ROMlib_logtophys(filecontrolblock *fcbp, LONGINT absoff
     return Cx(vcbp->vcbAlBlSt) * (LONGINT) PHYSBSIZE + retblock * alblksiz + skip;
 }
 
-PRIVATE OSErr pbtofcbp(ioParam *pb, filecontrolblock **fcbpp, accesstype rw)
+PRIVATE OSErr pbtofcbp(IOParam *pb, filecontrolblock **fcbpp, accesstype rw)
 {
     OSErr retval;
     
@@ -438,7 +438,7 @@ PRIVATE void smokexpvcbp(ULONGINT tosmoke, xtntdesc *xp, HVCB *vcbp)
     }
 }
 
-PUBLIC OSErr Executor::ROMlib_allochelper(ioParam *pb, BOOLEAN async, alloctype alloc,
+PUBLIC OSErr Executor::ROMlib_allochelper(IOParam *pb, BOOLEAN async, alloctype alloc,
 							     BOOLEAN writefcbp)
 {
     filecontrolblock *fcbp;
@@ -659,7 +659,7 @@ done:
 PUBLIC OSErr Executor::hfsPBSetEOF(ParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
-  err = ROMlib_allochelper((ioParam *) pb, async, seteof, TRUE);
+  err = ROMlib_allochelper((IOParam *) pb, async, seteof, TRUE);
   fs_err_hook (err);
   return err;
 }
@@ -667,7 +667,7 @@ PUBLIC OSErr Executor::hfsPBSetEOF(ParmBlkPtr pb, BOOLEAN async)
 PUBLIC OSErr Executor::hfsPBAllocate(ParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
-  err = ROMlib_allochelper((ioParam *) pb, async, allocany, TRUE);
+  err = ROMlib_allochelper((IOParam *) pb, async, allocany, TRUE);
   fs_err_hook (err);
   return err;
 }
@@ -676,14 +676,14 @@ PUBLIC OSErr Executor::hfsPBAllocContig(ParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
 
-  err = ROMlib_allochelper((ioParam *) pb, async, alloccontig, TRUE);
+  err = ROMlib_allochelper((IOParam *) pb, async, alloccontig, TRUE);
   fs_err_hook (err);
   return err;
 }
 
 #define RETURN(x)   do { pb->ioResult = BigEndianValue(x); goto DONE; } while (0)
 
-PRIVATE OSErr PBReadWrite(ioParam *pb, BOOLEAN async, accesstype rw)
+PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
 {
     filecontrolblock *fcbp;
     LONGINT absoffset, totransfer, neweot, templ, physblock, actl;
@@ -931,7 +931,7 @@ DONE:
 PUBLIC OSErr Executor::hfsPBRead(ParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
-  err = PBReadWrite((ioParam *) pb, async, reading);
+  err = PBReadWrite((IOParam *) pb, async, reading);
   fs_err_hook (err);
   return err;
 }
@@ -940,7 +940,7 @@ PUBLIC OSErr Executor::hfsPBWrite(ParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
 
-  err = PBReadWrite((ioParam *) pb, async, writing);
+  err = PBReadWrite((IOParam *) pb, async, writing);
   fs_err_hook (err);
   return err;
 }
@@ -1052,7 +1052,7 @@ PUBLIC OSErr Executor::hfsPBFlushFile(ParmBlkPtr pb, BOOLEAN async)
 	err = ROMlib_flushvcbp (MR(fcbp->fcbVPtr));
 
     fs_err_hook (err);
-    PBRETURN((ioParam *) pb, err);
+    PBRETURN((IOParam *) pb, err);
 }
 
 PUBLIC OSErr Executor::hfsPBClose(ParmBlkPtr pb, BOOLEAN async)
@@ -1069,7 +1069,7 @@ PUBLIC OSErr Executor::hfsPBClose(ParmBlkPtr pb, BOOLEAN async)
 	fcbp->fcbFlNum = 0;
       }
     fs_err_hook (err);
-    PBRETURN((ioParam *) pb, err);
+    PBRETURN((IOParam *) pb, err);
 }
 
 PUBLIC OSErr Executor::ROMlib_makecatkey(catkey *keyp, LONGINT dirid, INTEGER namelen,
@@ -1272,7 +1272,7 @@ PRIVATE BOOLEAN dir_prefixes_volume(StringPtr dirnamep, StringPtr volnamep)
   return dirnamep[volnamep[0]+1] == ':';
 }
 
-PUBLIC OSErr Executor::ROMlib_findvcbandfile(ioParam *pb, LONGINT dirid, btparam *btpb,
+PUBLIC OSErr Executor::ROMlib_findvcbandfile(IOParam *pb, LONGINT dirid, btparam *btpb,
 				   filekind *kindp, BOOLEAN ignorename)
 {
   OSErr err;
@@ -1408,7 +1408,7 @@ PUBLIC OSErr Executor::ROMlib_alreadyopen(HVCB *vcbp, LONGINT flnum, SignedByte 
     return noErr;
 }
 
-PRIVATE OSErr PBOpenHelper(ioParam *pb, forktype ft, LONGINT dirid, BOOLEAN async)
+PRIVATE OSErr PBOpenHelper(IOParam *pb, Forktype ft, LONGINT dirid, BOOLEAN async)
 {
     filecontrolblock *fcbp;
     OSErr err;
@@ -1536,7 +1536,7 @@ PRIVATE OSErr PBOpenHelper(ioParam *pb, forktype ft, LONGINT dirid, BOOLEAN asyn
 PUBLIC OSErr Executor::hfsPBOpen(ParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
-  err = PBOpenHelper((ioParam *) pb, datafork, 0L, async);
+  err = PBOpenHelper((IOParam *) pb, datafork, 0L, async);
   fs_err_hook (err);
   return err;
 }
@@ -1544,7 +1544,7 @@ PUBLIC OSErr Executor::hfsPBOpen(ParmBlkPtr pb, BOOLEAN async)
 PUBLIC OSErr Executor::hfsPBOpenRF(ParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
-  err = PBOpenHelper((ioParam *) pb, resourcefork, 0L, async);
+  err = PBOpenHelper((IOParam *) pb, resourcefork, 0L, async);
   fs_err_hook (err);
   return err;
 }
@@ -1553,7 +1553,7 @@ PUBLIC OSErr Executor::hfsPBHOpen(HParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
 
-  err = PBOpenHelper((ioParam *) pb, datafork, BigEndianValue(pb->fileParam.ioDirID),
+  err = PBOpenHelper((IOParam *) pb, datafork, BigEndianValue(pb->fileParam.ioDirID),
 									async);
   fs_err_hook (err);
   return err;
@@ -1563,7 +1563,7 @@ PUBLIC OSErr Executor::hfsPBHOpenRF(HParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
 
-  err = PBOpenHelper((ioParam *) pb, resourcefork, BigEndianValue(pb->fileParam.ioDirID),
+  err = PBOpenHelper((IOParam *) pb, resourcefork, BigEndianValue(pb->fileParam.ioDirID),
 								        async);
   fs_err_hook (err);
   return err;
@@ -1579,12 +1579,12 @@ PUBLIC OSErr Executor::hfsPBHOpenRF(HParmBlkPtr pb, BOOLEAN async)
  
 PUBLIC OSErr Executor::hfsPBLockRange(ParmBlkPtr pb, BOOLEAN async)
 {
-    PBRETURN((ioParam *) pb, noErr);
+    PBRETURN((IOParam *) pb, noErr);
 }
 
 PUBLIC OSErr Executor::hfsPBUnlockRange(ParmBlkPtr pb, BOOLEAN async)
 {
-    PBRETURN((ioParam *) pb, noErr);
+    PBRETURN((IOParam *) pb, noErr);
 }
 
 PUBLIC OSErr Executor::hfsPBGetFPos(ParmBlkPtr pb, BOOLEAN async)
@@ -1597,14 +1597,14 @@ PUBLIC OSErr Executor::hfsPBGetFPos(ParmBlkPtr pb, BOOLEAN async)
       {
 	err = rfNumErr;
 	fs_err_hook (err);
-/*-->*/ PBRETURN((ioParam *) pb, err);
+/*-->*/ PBRETURN((IOParam *) pb, err);
       }
     pb->ioParam.ioReqCount = 0;
     pb->ioParam.ioActCount = 0;
     pb->ioParam.ioPosMode = 0;
     pb->ioParam.ioPosOffset = fcbp->fcbCrPs;
 
-    PBRETURN((ioParam *) pb, noErr);
+    PBRETURN((IOParam *) pb, noErr);
 }
 
 PUBLIC OSErr Executor::hfsPBSetFPos(ParmBlkPtr pb, BOOLEAN async)
@@ -1618,10 +1618,10 @@ PUBLIC OSErr Executor::hfsPBSetFPos(ParmBlkPtr pb, BOOLEAN async)
       {
 	retval = rfNumErr;
 	fs_err_hook (retval);
-/*-->*/ PBRETURN((ioParam *) pb, retval);
+/*-->*/ PBRETURN((IOParam *) pb, retval);
       }
     retval = noErr;
-    newpos = pbabsoffset((ioParam *) pb, fcbp);
+    newpos = pbabsoffset((IOParam *) pb, fcbp);
     if (newpos < 0)
 	retval = posErr;
     else if (newpos > Cx(fcbp->fcbEOF)) {
@@ -1631,7 +1631,7 @@ PUBLIC OSErr Executor::hfsPBSetFPos(ParmBlkPtr pb, BOOLEAN async)
 	fcbp->fcbCrPs = BigEndianValue(newpos);
     pb->ioParam.ioPosOffset = fcbp->fcbCrPs;
     fs_err_hook (retval);
-    PBRETURN((ioParam *) pb, retval);
+    PBRETURN((IOParam *) pb, retval);
 }
 
 PUBLIC OSErr Executor::hfsPBGetEOF(ParmBlkPtr pb, BOOLEAN async)
@@ -1644,7 +1644,7 @@ PUBLIC OSErr Executor::hfsPBGetEOF(ParmBlkPtr pb, BOOLEAN async)
       {
 	err = rfNumErr;
 	fs_err_hook (err);
-/*-->*/ PBRETURN((ioParam *) pb, err);
+/*-->*/ PBRETURN((IOParam *) pb, err);
       }
 #if defined(MAC)
     pb->ioParam.ioMisc = (Ptr) fcbp->fcbEOF;
@@ -1652,5 +1652,5 @@ PUBLIC OSErr Executor::hfsPBGetEOF(ParmBlkPtr pb, BOOLEAN async)
     pb->ioParam.ioMisc = fcbp->fcbEOF;
 #endif /* !defined(MAC) */
 
-    PBRETURN((ioParam *) pb, noErr);
+    PBRETURN((IOParam *) pb, noErr);
 }
