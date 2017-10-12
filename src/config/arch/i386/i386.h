@@ -26,7 +26,7 @@
 
 
 #define SWAP16_FUNC_DEFN				\
-extern inline uint16					\
+inline uint16					\
 swap16 (uint16 n)					\
 {							\
   return (n >> 8) | (n << 8);				\
@@ -35,7 +35,7 @@ swap16 (uint16 n)					\
 
 #if defined (ALWAYS_ON_I486)
 #define SWAP32_FUNC_DEFN					\
-extern inline uint32						\
+inline uint32						\
 swap32 (uint32 n)						\
 {								\
   /* We can use bswap on the i486, but never on the i386. */	\
@@ -44,7 +44,7 @@ swap32 (uint32 n)						\
 }
 #else  /* !ALWAYS_ON_I486 */
 #define SWAP32_FUNC_DEFN				\
-extern inline uint32 					\
+inline uint32 					\
 swap32 (uint32 n)					\
 {							\
   __asm__ ("rorw $8,%w0\n\t"				\
