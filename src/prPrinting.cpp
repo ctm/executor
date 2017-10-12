@@ -422,13 +422,13 @@ open_ps_file (boolean_t *need_pclosep)
   *need_pclosep = FALSE;
 
 #if defined (LINUX)
-  if (strcmp (ROMlib_printer, "PostScript File") != 0)
+  if (ROMlib_printer != "PostScript File")
     {
       value_t prog;
 
       prog = find_key ("Printer", ROMlib_printer);
-      if (prog)
-	retval = popen (prog, "w");
+      if (prog != "")
+	retval = popen (prog.c_str(), "w");
       if (retval)
 	{
 	  old_pipe_signal = signal (SIGPIPE, SIG_IGN);
@@ -438,13 +438,13 @@ open_ps_file (boolean_t *need_pclosep)
 #endif
 
 #if defined (MSDOS) || defined (CYGWIN32)
-  if (strcmp (ROMlib_printer, "Direct To Port") == 0)
+  if (ROMlib_printer == "Direct To Port")
     {
       value_t port;
 
       port = find_key ("Port", ROMlib_port);
-      if (port)
-	retval = fopen (port, "w");
+      if (port != "")
+	retval = fopen (port.c_str(), "w");
     }
 #endif
 
@@ -456,7 +456,7 @@ open_ps_file (boolean_t *need_pclosep)
   if (!retval)
     {
 #if !defined (MSDOS) && !defined (CYGWIN32)
-      if (strcmp (ROMlib_printer, "PostScript File") == 0)
+      if (ROMlib_printer == "PostScript File")
 #endif
 	{
 	  if (!ROMlib_spool_file)

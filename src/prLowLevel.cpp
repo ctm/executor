@@ -982,11 +982,7 @@ adjust_port (TPPrDlg dlg)
 #else
   HideDItem ((DialogPtr) dlg, LAYOUT_PORT_LABEL_NO);
   HideDItem ((DialogPtr) dlg, LAYOUT_PORT_MENU_NO);
-  if (ROMlib_port)
-    {
-      free (ROMlib_port);
-      ROMlib_port = NULL;
-    }
+  ROMlib_port = "";
 #endif
 }
 

@@ -4,7 +4,7 @@
 #include <vector>
 
 namespace Executor {
-typedef enum option_kind : int option_kind_t; enum option_kind : int
+typedef enum option_kind
 {
   /* this option has no argument; it evaluates to `def' if provided */
   opt_no_arg,
@@ -18,7 +18,7 @@ typedef enum option_kind : int option_kind_t; enum option_kind : int
   opt_ignore,
   /* ignore this option and its argument */
   opt_sep_ignore,
-};
+} option_kind_t;
 
 typedef struct option
 {
@@ -90,10 +90,10 @@ int opt_int_val (opt_database_t &db, std::string opt, int *retval,
 		 boolean_t *parse_error_p);
 
 int opt_val (opt_database_t &db, std::string opt, std::string *retval);
-void opt_put_val (opt_database_t &db, std::string &opt, std::string value,
+void opt_put_val (opt_database_t &db, const std::string &opt, std::string value,
 		  priority_t pri, int temp_val_p);
 
-void opt_put_int_val (opt_database_t &db, std::string &opt, int value,
+void opt_put_int_val (opt_database_t &db, const std::string &opt, int value,
 		      priority_t pri, int temp_val_p);
 
 
