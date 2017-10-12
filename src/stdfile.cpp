@@ -59,6 +59,7 @@ char ROMlib_rcsid_stdfile[] =
 #include "rsys/string.h"
 #include "rsys/dcache.h"
 #include "rsys/menu.h"
+#include "rsys/stdfile.h"
 
 #include "rsys/executor.h"
 
@@ -1605,7 +1606,7 @@ PRIVATE boolean_t single_tree_fs_p(HParmBlkPtr pb)
 }
 
 #if defined(LINUX)
-PUBLIC int linuxfloppy_open(int disk, LONGINT *bsizep,
+PUBLIC int Executor::linuxfloppy_open(int disk, LONGINT *bsizep,
 			     drive_flags_t *flagsp, const char *dname)
 {
   int retval;
@@ -1656,7 +1657,7 @@ PUBLIC int linuxfloppy_open(int disk, LONGINT *bsizep,
   return retval;
 }
 
-PRIVATE int linuxfloppy_close(int disk)
+int Executor::linuxfloppy_close(int disk)
 {
   return close(disk);
 }

@@ -52,6 +52,7 @@ char ROMlib_rcsid_toolevent[] =
 #include "rsys/custom.h"
 #include "rsys/toolevent.h"
 #include "rsys/nextprint.h"
+#include "rsys/scrap.h"
 
 #include <sys/socket.h>
 
@@ -1282,7 +1283,7 @@ static int sane_debugging_on = 0; /* Leave this off and let the person doing the
 #endif /* SANE_DEBUGGING */
 
 PUBLIC void
-sendsuspendevent (void)
+Executor::sendsuspendevent (void)
 {
   Point p;
 
@@ -1312,7 +1313,7 @@ sendsuspendevent (void)
 }
 
 PUBLIC void
-sendresumeevent (boolean_t cvtclip)
+Executor::sendresumeevent (boolean_t cvtclip)
 {
   LONGINT what;
   Point p;
