@@ -48,8 +48,10 @@ char ROMlib_rcsid_keycode[] = "$Id: keycode.c 63 2004-12-24 18:19:43Z ctm $";
 #include "rsys/common.h"
 #include "rsys/next.h"
 
+#ifdef MACOSX_
 #import "MacAppClass.h"
 #import "MacViewClass.h"
+#endif
 
 #include "rsys/soundopts.h"
 #include "rsys/blockinterrupts.h"

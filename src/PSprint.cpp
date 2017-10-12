@@ -14,8 +14,10 @@ char ROMlib_rcsid_PSprint[] =
 	    "$Id: PSprint.c 87 2005-05-25 01:57:33Z ctm $";
 #endif
 
+#ifdef MACOSX_
 #import <Foundation/NSString.h>
 #import <AppKit/NSFontManager.h>
+#endif
 
 #include "MemoryMgr.h"
 #include "QuickDraw.h"
@@ -50,6 +52,9 @@ PRIVATE rotation_t rotation;
 
 PUBLIC FILE *ROMlib_printfile;
 #define DPSContext		long
+#if !defined(MACOSX_)
+typedef enum { NO, YES } boolean;
+#endif
 
 PRIVATE DPSContext DPSGetCurrentContext(void)
 {
@@ -1139,6 +1144,7 @@ void Executor::ROMlib_trytomatch(char *retval, LONGINT index)
     restore_virtual_ints (block);
 }
 }
+#endif
 
 static char *fnametofont(StringPtr fname, LONGINT txFace)
 {
@@ -1147,7 +1153,9 @@ static char *fnametofont(StringPtr fname, LONGINT txFace)
 
     index = txFace & (bold|italic);
     findpreferred(fname, index, retval);
+#ifdef MACOSX_
     ROMlib_trytomatch(retval, index);
+#endif
     if (txFace & outline)
 	strcat(retval, "-Outline");
 
@@ -1243,7 +1251,9 @@ void NeXTSetText(StringPtr fname, LONGINT txFace, LONGINT txSize,
 
     font_size = substitute_font_if_needed (&font, txSize, &need_to_free);
       
+#ifdef MACOSX_
     ROMlib_newFont(font, font_size);
+#endif
     PSsendchararray(font, strlen(font));
     matrix[0] = font_size;
     matrix[1] = 0;
@@ -2229,4 +2239,3 @@ Executor::do_textend (void)
     }
 }
   
-#endif

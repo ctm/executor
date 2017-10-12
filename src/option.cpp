@@ -18,8 +18,10 @@ char ROMlib_rcsid_option[] =
 #include "rsys/parsenum.h"
 #include "rsys/notmac.h"
 
+#ifdef MACOSX_
 #import <Foundation/NSUserDefaults.h>
 #import <Foundation/NSString.h>
+#endif
 
 using namespace Executor;
 using namespace std;
@@ -334,7 +336,7 @@ Executor::opt_alloc_db (void)
 }
 
 PRIVATE opt_val_t *
-opt_lookup_helper (opt_database_t &db, string &opt)
+opt_lookup_helper (opt_database_t &db, const string &opt)
 {
   opt_val_t *retval = nullptr;
 
@@ -351,12 +353,12 @@ opt_lookup_helper (opt_database_t &db, string &opt)
 }
 
 opt_val_t *
-opt_lookup (opt_database_t &db, string &opt)
+opt_lookup (opt_database_t &db, const string &opt)
 {
   opt_val_t *retval;
 
   retval = opt_lookup_helper (db, opt);
-
+#ifdef MACOSX_
   if (!retval || retval->t_val == "")
     {
       NSUserDefaults *defaults;
@@ -382,12 +384,12 @@ opt_lookup (opt_database_t &db, string &opt)
 	    }
 	}
     }
-
+#endif
   return retval;
 }
 
 void
-Executor::opt_put_val (opt_database_t &db, string &opt, string val,
+Executor::opt_put_val (opt_database_t &db, const string &opt, string val,
 	     priority_t pri, int temp_val_p)
 {
   opt_val_t *opt_val = opt_lookup_helper (db, opt);
@@ -416,7 +418,7 @@ Executor::opt_put_val (opt_database_t &db, string &opt, string val,
 }
 
 void
-Executor::opt_put_int_val (opt_database_t &db, string &opt, int valint,
+Executor::opt_put_int_val (opt_database_t &db, const string &opt, int valint,
 		 priority_t pri, int temp_val_p)
 {
   char *val, buf[256];
