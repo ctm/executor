@@ -52,7 +52,7 @@ PUBLIC OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid, LONGIN
 	    firstfreep = wdp;
 	if (MR(wdp->vcbp) == vcbp && BigEndianValue(wdp->dirid) == dirid &&
 						   BigEndianValue(wdp->procid) == procid) {
-	    pb->ioVRefNum = BigEndianValue(WDPTOWDNUM(wdp));
+	    pb->ioVRefNum = BigEndianValue((short) WDPTOWDNUM(wdp));
 /*-->*/	    return noErr;
 	}
     }
@@ -79,7 +79,7 @@ PUBLIC OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid, LONGIN
 	firstfreep->vcbp = RM(vcbp);
 	firstfreep->dirid = BigEndianValue(dirid);
 	firstfreep->procid = BigEndianValue(procid);
-	pb->ioVRefNum = BigEndianValue(WDPTOWDNUM(firstfreep));
+	pb->ioVRefNum = BigEndianValue((short) WDPTOWDNUM(firstfreep));
 	retval = noErr;
     }
     return retval;

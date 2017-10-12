@@ -826,7 +826,7 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
     savezone = TheZone;
     TheZone = SysZone;
     FCBSPtr = RM(NewPtr((Size) sizeof(fcbhidden)));
-    ((fcbhidden *)MR(FCBSPtr))->nbytes = BigEndianValue(sizeof(fcbhidden));
+    ((fcbhidden *)MR(FCBSPtr))->nbytes = BigEndianValue((short) sizeof(fcbhidden));
 
     for (i = 0 ; i < NFCB ; i++) {
 	ROMlib_fcblocks[i].fdfnum      = 0;
