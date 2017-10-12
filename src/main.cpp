@@ -1195,10 +1195,10 @@ zap_comments (char *buf, int n_left)
   char *s;					\
   char *retval;					\
 						\
-  s = alloca (2 + strlen(filename) + 1);	\
+  s = (char*)alloca (2 + strlen(filename) + 1);	\
   sprintf (s, "+/%s", filename);		\
   s = copystr (s);				\
-  retval = alloca (strlen (s) + 1);		\
+  retval = (char*)alloca (strlen (s) + 1);		\
   strcpy (retval, s);				\
   free (s);					\
   retval;					\

@@ -153,7 +153,7 @@ recsetdp (VCBExtra * vcbp, datum *dp, hashlink_t *hlp, chain_t *therest)
       
       ourlen = strlen (hlp->dirname+1);	/* don't count flag byte */
       dp->dsize = ourlen + chaincount(therest) + 1;
-      dp->dptr = malloc(dp->dsize);
+      dp->dptr = (char*)malloc(dp->dsize);
       strcpy((char*)dp->dptr, hlp->dirname+1);
       chainfill((char*)((uintptr_t)dp->dptr + ourlen), therest);
     }

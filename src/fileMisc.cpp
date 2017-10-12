@@ -470,7 +470,7 @@ substr (const char *source_string,
 	       source_substring_len * dest_substring_len) + 1;
   else
     max_len = source_string_len + 1;
-  retval = malloc (max_len);
+  retval = (char*)malloc (max_len);
   if (retval)
     {
       const char *ip;
@@ -505,7 +505,7 @@ convert_executors_to_appnames (char *str)
   else
     {
       appname_len = strlen (ROMlib_appname);
-      appname = alloca (appname_len + 1);
+      appname = (char*)alloca (appname_len + 1);
       memcpy (appname, ROMlib_appname, appname_len + 1);
       dash = strchr (appname, '-');
       if (dash)
