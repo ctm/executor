@@ -20,7 +20,7 @@
 using namespace Executor;
 
 extern "C" {
-#include "CFriendly.h"
+#include "rsys/CFriendly.h"
 }
 
 #undef getthecrc
