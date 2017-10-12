@@ -114,6 +114,10 @@ namespace Executor {
   void NeXTMain();
 }
 #endif
+namespace Executor {
+	PRIVATE void setstartdir(char *);
+}
+
 
 #include <ctype.h>
 
@@ -543,7 +547,6 @@ extern void willsetperms( void );
 extern void badfilesystem( void );
 namespace Executor {
 	PRIVATE void misc_self_examination(char*);
-	PRIVATE void setstartdir(char *);
 }
 
 A1(PRIVATE, void, misc_self_examination, char *, us)
@@ -1448,7 +1451,7 @@ int main(int argc, char** argv)
     ROMlib_set_use_scancodes (TRUE);
 #endif
 
-#if defined (SDL)
+#if defined (Sound_SDL_Sound)
 
   if (opt_val (common_db, "sdlaudio", &arg))
     ROMlib_set_sdl_audio_driver_name (arg);
@@ -2082,7 +2085,9 @@ int main(int argc, char** argv)
   complain_if_no_ghostscript ();
 #endif
 
+#ifdef MACOSX_
   NeXTMain();
+#endif
 
   executor_main ();
 

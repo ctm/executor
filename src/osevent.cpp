@@ -47,7 +47,9 @@ char ROMlib_rcsid_osevent[] =
 #include "rsys/string.h"
 #include "rsys/keyboard.h"
 
+#if defined(MACOSX_)
 #include "contextswitch.h"
+#endif
 
 #include "DialogMgr.h"
 #include "SegmentLdr.h"
@@ -188,7 +190,7 @@ Executor::ROMlib_xlate (INTEGER virt, INTEGER modifiers, boolean_t down_p)
   return retval;
 }
 
-extern char ROMlib_started;
+char ROMlib_started;	/* flag used by Mac frontend */
 
 A1(PUBLIC, void, ROMlib_eventinit, boolean_t, graphics_valid_p)	/* INTERNAL */
 {

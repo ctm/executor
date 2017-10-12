@@ -33,7 +33,9 @@ char ROMlib_rcsid_prLowLevel[] =
 #include "rsys/options.h"
 #include "rsys/string.h"
 #include "rsys/osevent.h"
+#ifdef MACOSX_
 #include "contextswitch.h"
+#endif
 
 #if defined (CYGWIN32)
 #include "win_print.h"

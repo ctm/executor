@@ -31,7 +31,9 @@ char ROMlib_rcsid_hfsHelper[] =
 #include <sys/socket.h>
 #include <net/route.h>
 #include <net/if.h>
+#if defined(MACOSX_)
 #include <sys/disk.h>
+#endif
 #endif
 
 using namespace Executor;

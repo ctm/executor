@@ -42,7 +42,10 @@ char ROMlib_rcsid_mman[] =
 
 #endif /* LINUX */
 
+#ifdef MACOSX_
 #include <mach/mach_error.h>
+#endif
+
 
 using namespace ByteSwap;
 
