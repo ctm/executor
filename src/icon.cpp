@@ -633,13 +633,13 @@ label_info_t;
 
 PRIVATE label_info_t labels[7] =
 {
-  { { 0, 0, 0,}, "\pEssential", },
-  { { 0, 0, 0,}, "\pHot", },
-  { { 0, 0, 0,}, "\pIn Progress", },
-  { { 0, 0, 0,}, "\pCool", },
-  { { 0, 0, 0,}, "\pPersonal", },
-  { { 0, 0, 0,}, "\pProject 1", },
-  { { 0, 0, 0,}, "\pProject 2", },
+  { { 0, 0, 0,}, "\011Essential", },
+  { { 0, 0, 0,}, "\03Hot", },
+  { { 0, 0, 0,}, "\013In Progress", },
+  { { 0, 0, 0,}, "\04Cool", },
+  { { 0, 0, 0,}, "\010Personal", },
+  { { 0, 0, 0,}, "\011Project 1", },
+  { { 0, 0, 0,}, "\011Project 2", },
 };
 
 P3 (PUBLIC pascal trap, OSErr, GetLabel,

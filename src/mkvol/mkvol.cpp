@@ -461,7 +461,7 @@ write_catalog (info_t * infop)
 }
 
 #define STR_ID    0
-#define STR_NAME  "\pFinder 1.0"
+#define STR_NAME  "\012Finder 1.0"
 
 /*
  * NOTE: the "-1" below is because both the byte count and the null zero
@@ -526,7 +526,8 @@ write_desktop (info_t * infop)
       }
       ,
       CLC (DATLEN - sizeof (LONGINT)),
-      STR_NAME,
+      //STR_NAME,
+      { 10, 'F','i','n','d','e','r',' ','1','.','0'},
       {
         {
           0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,

@@ -31,8 +31,8 @@ PRIVATE appearance_t appearance = appearance_sys7;
 
 PRIVATE StringPtr res_filenames[] =
 {
-  (StringPtr) "\pmac.rsrc",
-  (StringPtr) "\pwindows.rsrc",
+  (StringPtr) "\010mac.rsrc",
+  (StringPtr) "\014windows.rsrc",
 };
 
 /* Exactly the same as CountTypes, except only the resource file with the

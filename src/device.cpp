@@ -267,16 +267,16 @@ PUBLIC driverinfo *ROMlib_otherdrivers = 0;	/* for extensibility */
 PRIVATE driverinfo knowndrivers[] = {
 #if defined (LINUX) || defined (MACOSX_) || defined (MSDOS) || defined (CYGWIN32)
   { (OSErr(*)())ROMlib_serialopen, (OSErr(*)())ROMlib_serialprime, (OSErr(*)())ROMlib_serialctl,
-    (OSErr(*)())ROMlib_serialstatus, (OSErr(*)())ROMlib_serialclose, (StringPtr) "\p.AIn",  -6, },
+    (OSErr(*)())ROMlib_serialstatus, (OSErr(*)())ROMlib_serialclose, (StringPtr) "\04.AIn",  -6, },
 
   { (OSErr(*)())ROMlib_serialopen, (OSErr(*)())ROMlib_serialprime, (OSErr(*)())ROMlib_serialctl,
-    (OSErr(*)())ROMlib_serialstatus, (OSErr(*)())ROMlib_serialclose, (StringPtr) "\p.AOut", -7, },
+    (OSErr(*)())ROMlib_serialstatus, (OSErr(*)())ROMlib_serialclose, (StringPtr) "\05.AOut", -7, },
 
   { (OSErr(*)())ROMlib_serialopen, (OSErr(*)())ROMlib_serialprime, (OSErr(*)())ROMlib_serialctl,
-    (OSErr(*)())ROMlib_serialstatus, (OSErr(*)())ROMlib_serialclose, (StringPtr) "\p.BIn",  -8, },
+    (OSErr(*)())ROMlib_serialstatus, (OSErr(*)())ROMlib_serialclose, (StringPtr) "\04.BIn",  -8, },
 
   { (OSErr(*)())ROMlib_serialopen, (OSErr(*)())ROMlib_serialprime, (OSErr(*)())ROMlib_serialctl,
-    (OSErr(*)())ROMlib_serialstatus, (OSErr(*)())ROMlib_serialclose, (StringPtr) "\p.BOut", -9, },
+    (OSErr(*)())ROMlib_serialstatus, (OSErr(*)())ROMlib_serialclose, (StringPtr) "\05.BOut", -9, },
 #endif
 };
 

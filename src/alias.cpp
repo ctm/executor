@@ -164,9 +164,10 @@ last_chance_tmp_vref_and_dirid (INTEGER vref, INTEGER *tmp_vrefp,
   pb.volumeParam.ioVRefNum = BigEndianValue (vref);
   retval = PBHGetVInfo (&pb, FALSE);
   if (retval == noErr) {
-	static const unsigned char *top_level_names[] = {
-	  "\ptmp",
-	  "\ptemp",
+	static char *top_level_names[] =
+	{
+	    "\3tmp",
+	    "\4temp",
 	};
 	int i;
 	OSErr err;

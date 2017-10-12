@@ -357,7 +357,7 @@ draw (ControlHandle ctl, draw_state_t draw_state,
     if (title_right - title_left < StringWidth (item_title))
       {
 	int i, width;
-	Str15 ellipsis = "\p...";
+	Str15 ellipsis = "\03...";
 	
 	title_right -= StringWidth ((StringPtr) ellipsis);
 	
