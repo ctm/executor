@@ -69,6 +69,7 @@ char ROMlib_rcsid_x[] = "$Id: x.c 89 2005-05-25 04:15:34Z ctm $";
 #include "rsys/x.h"
 #include "rsys/parse.h"
 #include "rsys/osevent.h"
+#include "rsys/notmac.h"
 
 #include "x_keycodes.h"
 
@@ -82,6 +83,8 @@ ROMlib_set_use_scancodes (boolean_t val)
 
 /* These variables are required by the vdriver interface. */
 
+namespace Executor
+{
 uint8 *vdriver_fbuf;
 
 int vdriver_row_bytes;
@@ -96,7 +99,10 @@ int vdriver_max_bpp, vdriver_log2_max_bpp;
 
 rgb_spec_t *vdriver_rgb_spec;
 
-boolean_t vdriver_grayscale_p;
+bool vdriver_grayscale_p;
+}
+
+using namespace Executor;
 
 /* save the original sigio flag; used when we shutdown */
 static int orig_sigio_flag;
@@ -191,18 +197,17 @@ static XrmOptionDescRec opts[] =
   { "-debug", ".debug", XrmoptionSepArg, 0 },
 };
 
-static option_t x_opts[] =
+void
+Executor::vdriver_opt_register (void)
 {
+  opt_register ("vdriver", {
   { "synchronous", "run in synchronous mode", opt_no_arg },
   { "geometry", "specify the executor window geometry", opt_sep },
   { "privatecmap", "have executor use a private x colormap", opt_no_arg },
   { "truecolor", "have executor use a TrueColor visual", opt_no_arg },
-};
+});
 
-void
-vdriver_opt_register (void)
-{
-  opt_register ("vdriver", x_opts, NELEM (x_opts));
+//x_opts, NELEM (x_opts));
 }
 
 static XrmDatabase xdb;
@@ -339,7 +344,7 @@ alloc_x_image (int bpp, int width, int height,
       XShmSegmentInfo *shminfo;
 
       /* note: this memory doesn't get reclaimed */
-      shminfo = malloc (sizeof *shminfo);
+      shminfo = (XShmSegmentInfo*)malloc (sizeof *shminfo);
       memset (shminfo, '\0', sizeof *shminfo);
       
       x_image = XShmCreateImage (x_dpy, visual->visual,
@@ -361,7 +366,7 @@ alloc_x_image (int bpp, int width, int height,
 	  else
 	    {
 	      fbuf = (unsigned char *) (shminfo->shmaddr = x_image->data
-					= shmat (shminfo->shmid, 0, 0));
+					= (char*)shmat (shminfo->shmid, 0, 0));
 	      if (fbuf == (unsigned char *) -1)
 		{
 		  /* do we need to delete the shmid here? */
@@ -400,7 +405,7 @@ alloc_x_image (int bpp, int width, int height,
     {
       warning_unexpected ("not using shared memory");
       row_bytes = ((width * bpp + 31) / 32) * 4;
-      fbuf = calloc (row_bytes * height, 1);
+      fbuf = (unsigned char*)calloc (row_bytes * height, 1);
       x_image = XCreateImage (x_dpy, visual->visual, bpp, ZPixmap, 0,
 			      (char *) fbuf, width, height, 8, row_bytes);
       resultant_bpp = x_image->bits_per_pixel;
@@ -1194,12 +1199,12 @@ x_event_handler (int signo)
 }
 
 boolean_t
-vdriver_init (int _max_width, int _max_height, int _max_bpp,
+Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
 	      boolean_t fixed_p, int *argc, char *argv[])
 {
   int i;
       
-  XVisualInfo *visuals, template;
+  XVisualInfo *visuals, vistemplate;
   int n_visuals;
   int dummy_int;
   unsigned int geom_width, geom_height;
@@ -1278,10 +1283,10 @@ vdriver_init (int _max_width, int _max_height, int _max_bpp,
   vdriver_x_modes.size[1].height = max_height;
   
   /* first attempt to find a 8bpp pseudocolor visual */
-  template.screen = x_screen;
-  template.depth = 8;
-  template.class = PseudoColor;
-  template.colormap_size = 256;
+  vistemplate.screen = x_screen;
+  vistemplate.depth = 8;
+  vistemplate.c_class = PseudoColor;
+  vistemplate.colormap_size = 256;
 
   visual = NULL;
 
@@ -1290,7 +1295,7 @@ vdriver_init (int _max_width, int _max_height, int _max_bpp,
       visuals = XGetVisualInfo (x_dpy,
 				(  VisualScreenMask | VisualDepthMask
 				 | VisualClassMask | VisualColormapSizeMask),
-				&template, &n_visuals);
+				&vistemplate, &n_visuals);
       if (n_visuals)
 	{
 	  /* just use the first visual that came up */
@@ -1301,13 +1306,13 @@ vdriver_init (int _max_width, int _max_height, int _max_bpp,
       if (visual == NULL)
 	{
 	  /* now try for 4bpp */
-	  template.depth = 4;
-	  template.colormap_size = 16;
+	  vistemplate.depth = 4;
+	  vistemplate.colormap_size = 16;
 	  visuals = XGetVisualInfo (x_dpy,
 				    (  VisualScreenMask | VisualDepthMask
 				     | VisualClassMask
 				     | VisualColormapSizeMask),
-				    &template, &n_visuals);
+				    &vistemplate, &n_visuals);
 	  if (n_visuals)
 	    {
 	      /* just use the first visual that came up */
@@ -1319,12 +1324,12 @@ vdriver_init (int _max_width, int _max_height, int _max_bpp,
       if (visual == NULL)
 	{
 	  /*  now try for 1bpp */
-	  template.depth = 1;
-	  template.class = StaticGray;
+	  vistemplate.depth = 1;
+	  vistemplate.c_class = StaticGray;
 	  visuals = XGetVisualInfo (x_dpy,
 				    (  VisualScreenMask | VisualDepthMask
 				     | VisualClassMask),
-				    &template, &n_visuals);
+				    &vistemplate, &n_visuals);
 	  if (n_visuals)
 	    {
 	      /* just use the first visual that came up */
@@ -1336,12 +1341,12 @@ vdriver_init (int _max_width, int _max_height, int _max_bpp,
   
   if (visual == NULL)
     {
-      template.screen = x_screen;
-      template.class = TrueColor;
+      vistemplate.screen = x_screen;
+      vistemplate.c_class = TrueColor;
       
       visuals = XGetVisualInfo (x_dpy,
 				(VisualScreenMask | VisualClassMask),
-				&template, &n_visuals);
+				&vistemplate, &n_visuals);
       if (n_visuals)
 	{
 	  for (i = 0; i < n_visuals; i ++)
@@ -1439,7 +1444,7 @@ vdriver_init (int _max_width, int _max_height, int _max_bpp,
 
 
 void
-vdriver_flush_display (void)
+Executor::vdriver_flush_display (void)
 {
   XFlush (x_dpy);
 }
@@ -1605,7 +1610,7 @@ alloc_x_window (int width, int height, int bpp, boolean_t grayscale_p)
   XFlush (x_dpy);
 }
 
-int host_cursor_depth = 1;
+int Executor::host_cursor_depth = 1;
 
 Cursor
 create_x_cursor (char *data, char *mask,
@@ -1616,7 +1621,10 @@ create_x_cursor (char *data, char *mask,
   int i;
   
   static XColor x_black = {  0,  0,  0,  0 },
-                x_white = { ~0, ~0, ~0, ~0 };
+                x_white = { (unsigned long)~0,
+			    (unsigned short)~0,
+ 			    (unsigned short)~0,
+			    (unsigned short)~0 };
 
   for (i = 0; i < 32; i++)
     {
@@ -1649,7 +1657,7 @@ create_x_cursor (char *data, char *mask,
 }
 
 void
-host_set_cursor (char *cursor_data,
+Executor::host_set_cursor (char *cursor_data,
 		 unsigned short cursor_mask[16],
 		 int hotspot_x, int hotspot_y)
 {
@@ -1667,7 +1675,7 @@ host_set_cursor (char *cursor_data,
 }
 
 int
-host_set_cursor_visible (int show_p)
+Executor::host_set_cursor_visible (int show_p)
 {
   int orig_cursor_visible_p = cursor_visible_p;
 
@@ -2022,7 +2030,7 @@ static ColorSpec cmap[256];
 static uint8 depth_table_space[DEPTHCONV_MAX_TABLE_SIZE];
 
 void
-vdriver_get_colors (int first_color, int num_colors,
+Executor::vdriver_get_colors (int first_color, int num_colors,
 		    ColorSpec *colors)
 {
   gui_fatal ("`!vdriver_fixed_clut_p' and `vdriver_get_colors ()' called");
@@ -2030,7 +2038,7 @@ vdriver_get_colors (int first_color, int num_colors,
 
 
 void
-vdriver_set_colors (int first_color, int num_colors,
+Executor::vdriver_set_colors (int first_color, int num_colors,
 		    const ColorSpec *colors)
 {
   int i;
@@ -2107,7 +2115,7 @@ vdriver_set_colors (int first_color, int num_colors,
 }
 
 int
-vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
+Executor::vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
 			     boolean_t cursor_p)
 {
   boolean_t convert_p;
@@ -2165,7 +2173,7 @@ vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
 }
 
 int
-vdriver_update_screen (int top, int left, int bottom, int right,
+Executor::vdriver_update_screen (int top, int left, int bottom, int right,
 		       boolean_t cursor_p)
 {
   vdriver_rect_t r;
@@ -2189,7 +2197,7 @@ vdriver_update_screen (int top, int left, int bottom, int right,
 }
 
 void
-vdriver_shutdown (void)
+Executor::vdriver_shutdown (void)
 {
   if (x_dpy == NULL)
     return;
@@ -2218,7 +2226,7 @@ vdriver_x_mode_t vdriver_x_modes =
 
 
 boolean_t
-vdriver_acceptable_mode_p (int width, int height, int bpp,
+Executor::vdriver_acceptable_mode_p (int width, int height, int bpp,
 			   boolean_t grayscale_p,
 			   boolean_t exact_match_p)
 {
@@ -2243,7 +2251,7 @@ vdriver_acceptable_mode_p (int width, int height, int bpp,
 }
 
 boolean_t
-vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
+Executor::vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
 {
   if (!x_window)
     {
@@ -2319,7 +2327,7 @@ vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
   
   /* Compute the rgb spec. */
   vdriver_rgb_spec = (conversion_func == NULL
-		      ? (visual->class == TrueColor
+		      ? (visual->c_class == TrueColor
 			 ? &x_rgb_spec
 			 : NULL)
 		      : (vdriver_bpp == 32
@@ -2332,7 +2340,7 @@ vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
 }
 
 vdriver_accel_result_t
-vdriver_accel_rect_fill (int top, int left, int bottom,
+Executor::vdriver_accel_rect_fill (int top, int left, int bottom,
 			 int right, uint32 color)
 {
   XGCValues gc_values;
@@ -2386,20 +2394,20 @@ vdriver_accel_rect_fill (int top, int left, int bottom,
 /* stuff from x.c */
 
 void
-host_beep_at_user ( void )
+Executor::host_beep_at_user ( void )
 {
   /* 50 for now */
   XBell (x_dpy, 0);
 }
 
 void
-PutScrapX (int type, int length, char *p, int scrap_count)
+Executor::PutScrapX (OSType type, LONGINT length, char *p, int scrap_count)
 {
   if (type == TICK ("TEXT"))
     {
       if (selectiontext)
 	free (selectiontext);
-      selectiontext = malloc (length);
+      selectiontext = (char*)malloc (length);
       if (selectiontext)
 	{
 	  selectionlength = length;
@@ -2423,7 +2431,7 @@ WeOwnScrapX (void)
 }
 
 int
-GetScrapX (int type, char **h)
+Executor::GetScrapX (OSType type, char **h)
 {
   int retval;
   
@@ -2484,7 +2492,7 @@ ROMlib_SetTitle (char *newtitle)
 
   memset (&xsh, 0, sizeof xsh);
   XSetStandardProperties (x_dpy, x_window, newtitle, newtitle, None,
-			  (void *) 0, 0, &xsh);
+			  nullptr, 0, &xsh);
 }
 
 char *
@@ -2509,14 +2517,14 @@ lookupkeysymX (char *evt)
 }
 
 void
-autorepeatonX (void)
+Executor::autorepeatonX (void)
 {
   XAutoRepeatOn (x_dpy);
   XSync (x_dpy, 0);
 }
 
 void
-querypointerX (int *xp, int *yp, int *modp)
+Executor::querypointerX (int *xp, int *yp, int *modp)
 {
   Window dummy_window;
   Window child_window;
@@ -2532,7 +2540,7 @@ querypointerX (int *xp, int *yp, int *modp)
 /* host functions that should go away */
 
 void
-host_flush_shadow_screen (void)
+Executor::host_flush_shadow_screen (void)
 {
   int top_long, left_long, bottom_long, right_long;
 
@@ -2541,7 +2549,7 @@ host_flush_shadow_screen (void)
    */
   if (shadow_fbuf == NULL)
     {
-      shadow_fbuf = malloc (fbuf_size);
+      shadow_fbuf = (unsigned char*) malloc (fbuf_size);
       memcpy (shadow_fbuf, vdriver_fbuf, vdriver_row_bytes * vdriver_height);
       vdriver_update_screen (0, 0, vdriver_height, vdriver_width, FALSE);
     }

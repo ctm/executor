@@ -550,7 +550,7 @@ main (int argc, char *argv[])
   code_size = compute_code_size ();
 
   /* Figure out which bytes vary. */
-  vary_mask = alloca (code_size);
+  vary_mask = (unsigned char*) alloca (code_size);
   compute_vary_mask (vary_mask, code_size);
 
   if (!strcmp (argv[2], "-genasm"))

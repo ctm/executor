@@ -18,7 +18,7 @@ arch_type_t arch_type;
 
 
 boolean_t
-arch_init (void)
+Executor::arch_init (void)
 {
 #if !defined (ALWAYS_ON_I486)
   uint32 scratch1, scratch2;
