@@ -40,6 +40,8 @@ rawpatstubs.cpp:	$(srcdir)/makerawblt.pl $(srcdir)/pat-blitters.tmpl
 rawsrcstubs.cpp: $(srcdir)/makerawblt.pl $(srcdir)/src-blitters.tmpl
 	$(PERL) $(srcdir)/makerawblt.pl < $(srcdir)/src-blitters.tmpl > rawsrcstubs.cpp
 
+parse.o: parse.cpp
+
 ctlArrows.$(OBJEXT):	$(ctl_bitmap_c_files)
 stdmbdf.$(OBJEXT):	apple.cmap
 qIMIV.$(OBJEXT):	seedtables.ctable
@@ -112,8 +114,8 @@ misc_sources = desk.cpp device.cpp disk.cpp diskinit.cpp dump.cpp trapname.cpp f
   splash.cpp icon.cpp redrawscreen.cpp ini.cpp checkpoint.cpp qt.cpp cleanup.cpp           \
   paramline.c fauxdbm.cpp custom.cpp commtool.cpp cfm.cpp local_charset.cpp pef_hash.cpp \
   interfacelib.cpp mixed_mode.cpp suffix_maps.cpp appearance.cpp lockrange.cpp         \
-  emutrap.cpp emutraptables.cpp emustubs.cpp unix_like.cpp parse.y check_structs.cpp   \
-  executor.cpp mkvol/mkvol.cpp crc.cpp CBridge.cpp
+  emutrap.cpp emutraptables.cpp emustubs.cpp unix_like.cpp parse.ypp check_structs.cpp   \
+  executor.cpp mkvol/mkvol.cpp crc.cpp
 
 include_sources = hintemplate.h \
                   include/ADB.h \

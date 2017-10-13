@@ -3,16 +3,12 @@
 #include "rsys/options.h"
 #include "rsys/prefs.h"
 #include "rsys/version.h"
-#if 0
 #include "rsys/crc.h"
 #include "rsys/parse.h"
 #include "rsys/parseopt.h"
 #include "rsys/gestalt.h"
 #include "rsys/launch.h"
 #include "rsys/print.h"
-#else
-#include "rsys/CFriendly.h"
-#endif
 
 /* Copyright 1992 - 2000 by Abacus Research and Development, Inc.
  * All rights reserved.
@@ -173,13 +169,13 @@ sysversassignment:	SYSTEMVERSION '=' number ';'
 prversassignment:	PRVERSION '=' number ';'
 			{ 
 			  if (validblock)
-			    ROMlib_PrDrvrVers_Set( $3 * 10);
+			    ROMlib_PrDrvrVers = $3 * 10;
 			}
 			|
 			PRVERSION '=' number '.' number ';' 
 			{
 			  if (validblock)
-			    ROMlib_PrDrvrVers_Set( $3 * 10 + $5 );
+			    ROMlib_PrDrvrVers = $3 * 10 + $5;
 			}
 	;
 
@@ -210,9 +206,9 @@ stringvar:	WINDOWNAME
 	;
 
 numervar:	RDELAY
-	{ $$ = ROMlib_delayp; }
+	{ $$ = &ROMlib_delay; }
 	| REFRESHNUMBER
-	{ $$ = ROMlib_refreshp; }
+	{ $$ = &ROMlib_refresh; }
 	| BITSNUMBER
 	{ $$ = &ROMlib_desired_bpp; }
 	| APPLECHAR
