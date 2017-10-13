@@ -96,7 +96,7 @@ ROMlib_CALLMODALPROC (DialogPtr dp,
     {
       ROMlib_hook(dial_modalnumber);
       HOOKSAVEREGS();
-      retval = CToPascalCall(&fp, CTOP_ROMlib_myfilt, dp, evtp, ip);
+      retval = CToPascalCall((void*)fp, CTOP_ROMlib_myfilt, dp, evtp, ip);
       HOOKRESTOREREGS();
     }
   return retval;
@@ -120,7 +120,7 @@ ROMlib_CALLUSERITEM (DialogPtr dp,
   else
     {
       ROMlib_hook(dial_usernumber);
-      CToPascalCall(&temph, CTOP_ROMlib_filebox, dp, inum);
+      CToPascalCall((void*)temph, CTOP_ROMlib_filebox, dp, inum);
     }
 }
 

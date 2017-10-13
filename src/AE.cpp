@@ -149,7 +149,7 @@ P1 (PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
 			      /* dummy */ -1, /* dummy */ -1,
 			      reply);
     
-    retval = CToPascalCall (&hdlr,
+    retval = CToPascalCall ((void*)hdlr,
 			    CTOP_EventHandlerTemplate,
 			    evt, reply, refcon);
     
@@ -442,14 +442,14 @@ P5 (PUBLIC pascal trap, OSErr, AECoercePtr,
       if (err != noErr)
 	return memFullErr;
 
-      err = CToPascalCall (&coercion_hdlr, PTOC_CoerceDescTemplate,
+      err = CToPascalCall ((void*)coercion_hdlr, PTOC_CoerceDescTemplate,
 			   desc, result_type, refcon, desc_out);
       
       AEDisposeDesc (desc);
     }
   else
     {
-      err = CToPascalCall (&coercion_hdlr, PTOC_CoercePtrTemplate,
+      err = CToPascalCall ((void*)coercion_hdlr, PTOC_CoercePtrTemplate,
 			   data_type, data, data_size, result_type,
 			   refcon, desc_out);
     }
@@ -570,7 +570,7 @@ P3 (PUBLIC pascal trap, OSErr, AECoerceDesc,
 
   if (is_desc_hdlr_p)
     {
-      err = CToPascalCall (&coercion_hdlr, PTOC_CoerceDescTemplate,
+      err = CToPascalCall((void*)coercion_hdlr, PTOC_CoerceDescTemplate,
 			   desc, result_type, refcon, desc_out);
     }
   else
@@ -582,7 +582,7 @@ P3 (PUBLIC pascal trap, OSErr, AECoerceDesc,
       LOCK_HANDLE_EXCURSION_1
 	(desc_data,
 	 {
-	   err = CToPascalCall (&coercion_hdlr, PTOC_CoercePtrTemplate,
+	   err = CToPascalCall((void*)coercion_hdlr, PTOC_CoercePtrTemplate,
 				desc_type, STARH (desc_data),
 				GetHandleSize (desc_data),
 				result_type, refcon, desc_out);

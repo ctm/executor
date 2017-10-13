@@ -371,7 +371,7 @@ gestalt_helper(OSType selector, LONGINT *responsep, BOOLEAN searchlist,
   *responsep = CLC (0);	/* better safe than sorry */
 
   if (searchlist && (gp = find_selector_on_list(selector)))
-    retval = CToPascalCall(&gp->selectorFunction, CTOP_GestaltTablesOnly,
+    retval = CToPascalCall((void*)gp->selectorFunction, CTOP_GestaltTablesOnly,
 			   selector, responsep);
   else
     {

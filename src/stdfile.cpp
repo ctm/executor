@@ -632,7 +632,7 @@ A4(static inline, BOOLEAN, ROMlib_CALLFILTERPROC, DialogPtr, dp,
     SetWRefCon (dp, TICK("stdf"));
     ROMlib_hook(stdfile_filtnumber);
     HOOKSAVEREGS();
-	retval = CToPascalCall(&fp, CTOP_SectRect, dp, evtp, ith);
+	retval = CToPascalCall((void*)fp, CTOP_SectRect, dp, evtp, ith);
     HOOKRESTOREREGS();
     SetWRefCon (dp, save_ref_con);
     return retval;
@@ -656,7 +656,7 @@ ROMlib_CALL_NEW_FILTER_PROC (DialogPtr dp, EventRecord *evtp, INTEGER *ith,
     SetWRefCon (dp, TICK("stdf"));
     ROMlib_hook(stdfile_filtnumber);
     HOOKSAVEREGS();
-	retval = Executor::CToPascalCall(&fp, CTOP_unused_stdfile, dp, evtp, ith, data);
+	retval = Executor::CToPascalCall((void*)fp, CTOP_unused_stdfile, dp, evtp, ith, data);
     HOOKRESTOREREGS();
     SetWRefCon (dp, save_ref_con);
     return retval;
@@ -755,7 +755,7 @@ A2(static inline, BOOLEAN, ROMlib_CALLFILEFILT, ParmBlkPtr, pbp, filefiltp, fp)
 
     ROMlib_hook(stdfile_filefiltnumber);
     HOOKSAVEREGS();
-    retval = CToPascalCall(&fp, CTOP_SystemEvent, pbp);
+    retval = CToPascalCall((void*)fp, CTOP_SystemEvent, pbp);
     HOOKRESTOREREGS();
     return retval;
 }
@@ -768,7 +768,7 @@ ROMlib_CALL_CUSTOM_FILE_FILT (ParmBlkPtr pbp, UNIV Ptr data,
 
     ROMlib_hook(stdfile_filefiltnumber);
     HOOKSAVEREGS();
-    retval = CToPascalCall(&fp, CTOP_GetAuxCtl, pbp, data);
+    retval = CToPascalCall((void*)fp, CTOP_GetAuxCtl, pbp, data);
     HOOKRESTOREREGS();
     return retval;
 }
@@ -1894,10 +1894,10 @@ ROMlib_CALLDHOOK (fltype *fl, INTEGER ihit, DialogPtr dp, dialog_hook_u dhu)
     {
     case original_sf:
     case new_sf:
-      retval = CToPascalCall (&dhu.odh, CTOP_Alert, ihit, dp);
+      retval = CToPascalCall((void*)dhu.odh, CTOP_Alert, ihit, dp);
       break;
     case new_custom_sf:
-      retval = CToPascalCall (&dhu.cdh, CTOP_unused_stdfile_2, ihit, dp,
+      retval = CToPascalCall((void*)dhu.cdh, CTOP_unused_stdfile_2, ihit, dp,
 			      fl->mydata);
       break;
     default:

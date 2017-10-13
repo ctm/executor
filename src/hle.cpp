@@ -114,7 +114,7 @@ P3 (PUBLIC pascal trap, Boolean, GetSpecificHighLevelEvent,
       Boolean evt_handled_p;
       
       evt_handled_p
-	= CToPascalCall (&fn, CTOP_GetSpecificHighLevelEventProcTemplate,
+	= CToPascalCall((void*)fn, CTOP_GetSpecificHighLevelEventProcTemplate,
 			 t->hle_msg,
 			 /* ##### target id */
 			 NULL);

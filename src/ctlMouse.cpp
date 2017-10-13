@@ -89,7 +89,7 @@ A3(PRIVATE inline, void, CALLACTION, ControlHandle, ch, INTEGER, inpart,
     else if (a == (ProcPtr) P_ROMlib_stdftrack)
 	C_ROMlib_stdftrack(ch, inpart);
     else
-	CToPascalCall(&a, CTOP_ROMlib_mytrack, ch, inpart);
+	CToPascalCall((void*)a, CTOP_ROMlib_mytrack, ch, inpart);
     HOOKRESTOREREGS();
 }
 

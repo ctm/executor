@@ -198,7 +198,7 @@ A0 (PUBLIC, void, C_sound_timer_handler)
       start_playing (call_back_info.chanp, call_back_info.headp,
 		     current_buffer ^ 1);
       dbp->dbFlags &= CLC (~dbBufferReady);
-      CToPascalCall (&pp, CTOP_SetCTitle, call_back_info.chanp, dbp);
+      CToPascalCall((void*)pp, CTOP_SetCTitle, call_back_info.chanp, dbp);
     }
 }
 

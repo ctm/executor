@@ -19,7 +19,7 @@ using namespace Executor;
 
 P1 (PUBLIC pascal trap, OSErr, GetStdFilterProc, ProcPtr *, proc)
 {
-  *proc = (ProcPtr)RM (&P_ROMlib_myfilt);
+  *proc = (ProcPtr) RM (P_ROMlib_myfilt);
   warning_unimplemented ("no specs"); /* i.e. no documentation on how this
 					 routine is *supposed* to work, so
 					 we may be blowing off something

@@ -312,7 +312,7 @@ PRIVATE Handle mgetres_helper (resmaphand map, resref *rr, int32 dlen,
 	      state = hlock_return_orig_state (dcmp_handle);
 	      dcmp = (typeof (dcmp)) STARH (dcmp_handle);
 	      HLock (retval);
-	      CToPascalCall (&dcmp, CTOP_dcmp_template,
+	      CToPascalCall((void*)dcmp, CTOP_dcmp_template,
 			     xxx,
 			     STARH (retval), dcmp_workspace, dlen);
 	      HUnlock (retval);

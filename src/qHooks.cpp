@@ -46,7 +46,7 @@ Executor::ROMlib_CALLTEXT (INTEGER bc, Ptr bufp, Point num, Point den)
 	{
 	  ROMlib_hook (q_textprocnumber);
 	  HOOKSAVEREGS ();
-	  CToPascalCall (&pp, CTOP_StdText, bc, bufp, num, den);
+	  CToPascalCall((void*)pp, CTOP_StdText, bc, bufp, num, den);
 	  HOOKRESTOREREGS ();
 	}
       else
@@ -66,7 +66,7 @@ Executor::ROMlib_CALLLINE (Point p)
     {
       ROMlib_hook (q_lineprocnumber);
       HOOKSAVEREGS ();
-      CToPascalCall (&pp, CTOP_StdLine, p);
+      CToPascalCall((void*)pp, CTOP_StdLine, p);
       HOOKRESTOREREGS ();
     }
   else
@@ -85,7 +85,7 @@ Executor::ROMlib_CALLRECT (GrafVerb v, Rect * rp)
     {
       ROMlib_hook (q_rectprocnumber);
       HOOKSAVEREGS ();
-      CToPascalCall (&pp, CTOP_StdRect, v, rp);
+      CToPascalCall((void*)pp, CTOP_StdRect, v, rp);
       HOOKRESTOREREGS ();
     }
   else
@@ -104,7 +104,7 @@ Executor::ROMlib_CALLOVAL (GrafVerb v, Rect * rp)
     {
       ROMlib_hook (q_ovalprocnumber);
       HOOKSAVEREGS ();
-      CToPascalCall (&pp, CTOP_StdOval, v, rp);
+      CToPascalCall((void*)pp, CTOP_StdOval, v, rp);
       HOOKRESTOREREGS ();
     }
   else
@@ -123,7 +123,7 @@ Executor::ROMlib_CALLRRECT (GrafVerb v, Rect * rp, INTEGER ow, INTEGER oh)
     {
       ROMlib_hook (q_rrectprocnumber);
       HOOKSAVEREGS ();
-      CToPascalCall (&pp, CTOP_StdRRect, v, rp, ow, oh);
+      CToPascalCall((void*)pp, CTOP_StdRRect, v, rp, ow, oh);
       HOOKRESTOREREGS ();
     }
   else
@@ -142,7 +142,7 @@ Executor::ROMlib_CALLARC (GrafVerb v, Rect * rp, INTEGER starta, INTEGER arca)
     {
       ROMlib_hook (q_arcprocnumber);
       HOOKSAVEREGS ();
-      CToPascalCall (&pp, CTOP_StdArc, v, rp, starta, arca);
+      CToPascalCall((void*)pp, CTOP_StdArc, v, rp, starta, arca);
       HOOKRESTOREREGS ();
     }
   else
@@ -162,7 +162,7 @@ Executor::ROMlib_CALLRGN (GrafVerb v, RgnHandle rh)
     {
       ROMlib_hook (q_rgnprocnumber);
       HOOKSAVEREGS ();
-      CToPascalCall (&pp, CTOP_StdRgn, v, rh);
+      CToPascalCall((void*)pp, CTOP_StdRgn, v, rh);
       HOOKRESTOREREGS ();
     }
   else
@@ -181,7 +181,7 @@ Executor::ROMlib_CALLPOLY (GrafVerb v, PolyHandle rh)
     {
       ROMlib_hook (q_polyprocnumber);
       HOOKSAVEREGS ();
-      CToPascalCall (&pp, CTOP_StdPoly, v, rh);
+      CToPascalCall((void*)pp, CTOP_StdPoly, v, rh);
       HOOKRESTOREREGS ();
     }
   else
@@ -201,7 +201,7 @@ Executor::ROMlib_CALLBITS (BitMap * bmp, const Rect *srcrp, const Rect *dstrp,
     {
       ROMlib_hook (q_bitsprocnumber);
       HOOKSAVEREGS ();
-      CToPascalCall (&pp, CTOP_StdBits, bmp, srcrp, dstrp, mode, maskrh);
+      CToPascalCall((void*)pp, CTOP_StdBits, bmp, srcrp, dstrp, mode, maskrh);
       HOOKRESTOREREGS ();
     }
   else
@@ -220,7 +220,7 @@ Executor::ROMlib_CALLCOMMENT (INTEGER kind, INTEGER size, Handle datah)
     {
       ROMlib_hook (q_commentprocnumber);
       HOOKSAVEREGS ();
-      CToPascalCall (&pp, CTOP_StdComment, kind, size, datah);
+      CToPascalCall((void*)pp, CTOP_StdComment, kind, size, datah);
       HOOKRESTOREREGS ();
     }
   else
@@ -241,7 +241,7 @@ Executor::ROMlib_CALLTXMEAS (INTEGER bc, Ptr bufp, Point * nump, Point * denp,
     {
       ROMlib_hook (q_txmeasprocnumber);
       HOOKSAVEREGS ();
-      retval = CToPascalCall (&pp, CTOP_StdTxMeas, bc, bufp,
+      retval = CToPascalCall((void*)pp, CTOP_StdTxMeas, bc, bufp,
 			      nump, denp, fip);
       HOOKRESTOREREGS ();
     }
@@ -262,7 +262,7 @@ Executor::ROMlib_PICWRITE (Ptr addr, INTEGER count)
     {
       ROMlib_hook (q_putpicprocnumber);
       HOOKSAVEREGS ();
-      CToPascalCall (&pp, CTOP_StdPutPic, addr, count);
+      CToPascalCall((void*)pp, CTOP_StdPutPic, addr, count);
       HOOKRESTOREREGS ();
     }
   else
