@@ -39,7 +39,7 @@ Executor::scale_blt_bitmap (const blt_bitmap_t *src_bitmap, blt_bitmap_t *dst_bi
   old_height = RECT_HEIGHT (old_rect);
   new_height = RECT_HEIGHT (new_rect);
 
-  /* If the old bitmap was empty, just create a new1, empty bitmap.  We
+  /* If the old bitmap was empty, just create a new, empty bitmap.  We
    * do this to avoid dividing by zero.
    */
   if (new_width == 0 || new_height == 0)

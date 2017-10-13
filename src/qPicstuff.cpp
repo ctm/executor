@@ -275,12 +275,12 @@ namespace Executor {
   PRIVATE void setpicclip(RgnHandle rh);
   PRIVATE void eatRegion(RgnHandle rh, Size hs);
   PRIVATE void eatRect(Rect *rp);
-  PRIVATE void eatPixMap(register PixMapPtr pixp, INTEGER rowb);
+  PRIVATE void eatPixMap(PixMapPtr pixp, INTEGER rowb);
   PRIVATE void eatBitMap(BitMap * bp, INTEGER rowb);
   PRIVATE Size eatpixdata(PixMapPtr pixmap, BOOLEAN * freep);
-  PRIVATE void eatbitdata(register BitMap * bp, BOOLEAN packed);
+  PRIVATE void eatbitdata(BitMap * bp, BOOLEAN packed);
   PRIVATE void eatRGBColor(RGBColor * rgbp);
-  PRIVATE void eatColorTable(register PixMapPtr pixmap);
+  PRIVATE void eatColorTable(PixMapPtr pixmap);
   PRIVATE void eatPattern(Pattern pat);
   PRIVATE void eatPixPat(PixPatHandle pixpat);
   PRIVATE unsigned short nextop(INTEGER vers);
@@ -1091,7 +1091,7 @@ A1(PRIVATE, void, eatRect, Rect *, rp)
     rp->right  = eatINTEGERX();
 }
 
-A2(PRIVATE, void, eatPixMap, register PixMapPtr, pixp, INTEGER, rowb)
+A2(PRIVATE, void, eatPixMap, PixMapPtr, pixp, INTEGER, rowb)
 {
     /* TODO:  byte swapping stuff, testing */
 
@@ -1292,7 +1292,7 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
     return final_data_size;
 }
 
-A2(PRIVATE, void, eatbitdata, register BitMap *, bp, BOOLEAN, packed)
+A2(PRIVATE, void, eatbitdata, BitMap *, bp, BOOLEAN, packed)
 {
     INTEGER rowb;
     Size datasize;
@@ -1373,11 +1373,11 @@ A1(PRIVATE, void, eatRGBColor, RGBColor *, rgbp)
     rgbp->blue  = eatINTEGERX();
 }
 
-A1(PRIVATE, void, eatColorTable, register PixMapPtr, pixmap)
+A1(PRIVATE, void, eatColorTable, PixMapPtr, pixmap)
 {
-    register CTabPtr cp;
-    register ColorSpec *cspecp, *cspecep;
-    register CTabHandle ch;
+    CTabPtr cp;
+    ColorSpec *cspecp, *cspecep;
+    CTabHandle ch;
 
     ch = MR(pixmap->pmTable);
     cp = STARH(ch);
@@ -1504,10 +1504,10 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
     INTEGER hsize;
     void (*f)();
     INTEGER vers;
-    Fixed scaleh, scalev, tempf;	/* "auto":  cc -a bug avoidance */
+    Fixed scaleh, scalev, tempf;
     RGBColor rgb;
     BitMap bm;
-    PixMap pm;	/* "auto":  cc -a bug avoidance */
+    PixMap pm;
     BOOLEAN packed;
     GrafPort saveport, *the_port;
     CGrafPtr the_cport;

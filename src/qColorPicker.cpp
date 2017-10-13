@@ -1126,10 +1126,10 @@ color_wheel_init (void)
   
   bpp = PIXMAP_PIXEL_SIZE (GD_PMAP (MR (MainDevice)));
   color_wheel_pixmap.baseAddr = (Ptr)RM ((bpp == 8)
-				    ? (intptr_t)&color_wheel_bits_8
+				    ? color_wheel_bits_8
 				    : (bpp == 4
-				       ? (intptr_t)&color_wheel_bits_4
-				       : (gui_abort (), NULL)));
+				       ? color_wheel_bits_4
+				       : (gui_abort (), nullptr)));
   color_wheel_pixmap.rowBytes = CW ((bpp == 8)
 				    ? 0x80D0
 				    : (bpp == 4

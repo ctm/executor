@@ -83,11 +83,11 @@ Executor::gd_allocate_main_device (void)
 						 GDevices with noDriver
 						 set.  Looking around
 						 Apple's site shows that
-						 people set this2 bit when
+						 people set this bit when
 						 they're creating offscreen
 						 gDevices.  It's not clear
 						 whether or not we should
-						 be setting this2 bit.
+						 be setting this bit.
 					    | (1 << noDriver) */ );
        
        gd_set_bpp (graphics_device, !vdriver_grayscale_p, vdriver_fixed_clut_p,
@@ -461,7 +461,7 @@ P4 (PUBLIC pascal trap, OSErr, SetDepth,
   if (gdh != MR (MainDevice))
     {
       warning_unexpected ("Setting the depth of a device not the screen; "
-			  "this2 violates bogus assumptions in SetDepth.");
+			  "this violates bogus assumptions in SetDepth.");
     }
 
   gd_pixmap = GD_PMAP (gdh);

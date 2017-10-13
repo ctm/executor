@@ -2339,7 +2339,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 #endif
     reply_valid = host_spfcommon (&reply, c_prompt, local_name, &fp, &filef,
 				  numt, tl, getorput, flavor, activeList,
-				  &activateproc, yourdatap);
+				  (void*)activateproc, yourdatap);
     free (c_prompt);
     if (reply_valid)
       rep_from_host_reply_block (&rep, &reply);
