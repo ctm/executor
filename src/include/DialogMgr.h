@@ -31,7 +31,7 @@ namespace Executor {
 #define noteIcon	1
 #define cautionIcon	2
 
-typedef struct PACKED
+struct DialogRecord : GuestStruct
 {
    WindowRecord window;
    //PACKED_MEMBER(Handle, items);
@@ -41,7 +41,7 @@ typedef struct PACKED
    GUEST<INTEGER> editField;
    INTEGER editOpen;
    INTEGER aDefItem;
-} DialogRecord;
+};
 typedef DialogRecord *DialogPeek;
 
 typedef CWindowPtr CDialogPtr;
@@ -63,7 +63,7 @@ typedef HIDDEN_WindowPtr HIDDEN_DialogPtr;
 #define DIALOG_EDIT_OPEN(dialog)	(CW (DIALOG_EDIT_OPEN_X (dialog)))
 #define DIALOG_ADEF_ITEM(dialog)	(CW (DIALOG_ADEF_ITEM_X (dialog)))
 
-struct DialogTemplate : GuestStruct /*PACKED*/
+struct DialogTemplate : GuestStruct
 {
   Rect boundsRect;
   GUEST<INTEGER> procID;
