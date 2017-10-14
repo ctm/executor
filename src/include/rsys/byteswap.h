@@ -100,10 +100,17 @@ TT* RM(TT* p)
         return nullptr;
 }
 
+template<typename TT>
+TT* MR(Executor::GuestPointerWrapper<TT> p)
+{
+    return MR(p.unwrap());
+}
+
 inline std::nullptr_t RM(std::nullptr_t p) { return nullptr; }
 
 inline void* MR(uint32_t p) { return MR((void*)p); }
 inline void* MR(int32_t p) { return MR((void*)p); }
+
 
 #  define PPR(n) MR(n)
 

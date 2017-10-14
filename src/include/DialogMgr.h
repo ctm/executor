@@ -32,10 +32,12 @@ namespace Executor {
 #define cautionIcon	2
 
 typedef struct PACKED
- {
+{
    WindowRecord window;
-   PACKED_MEMBER(Handle, items);
-   PACKED_MEMBER(TEHandle, textH);
+   //PACKED_MEMBER(Handle, items);
+   //PACKED_MEMBER(TEHandle, textH);
+   GUEST<Handle> items;
+   GUEST<TEHandle> textH;
    GUEST<INTEGER> editField;
    INTEGER editOpen;
    INTEGER aDefItem;
@@ -61,18 +63,18 @@ typedef HIDDEN_WindowPtr HIDDEN_DialogPtr;
 #define DIALOG_EDIT_OPEN(dialog)	(CW (DIALOG_EDIT_OPEN_X (dialog)))
 #define DIALOG_ADEF_ITEM(dialog)	(CW (DIALOG_ADEF_ITEM_X (dialog)))
 
-typedef struct PACKED
+struct DialogTemplate : GuestStruct /*PACKED*/
 {
   Rect boundsRect;
-  INTEGER procID;
-  BOOLEAN visible;
-  BOOLEAN filler1;
-  BOOLEAN goAwayFlag;
-  BOOLEAN filler2;
-  LONGINT refCon;
-  INTEGER itemsID;
-  Str255 title;
-} DialogTemplate;
+  GUEST<INTEGER> procID;
+  GUEST<BOOLEAN> visible;
+  GUEST<BOOLEAN> filler1;
+  GUEST<BOOLEAN> goAwayFlag;
+  GUEST<BOOLEAN> filler2;
+  GUEST<LONGINT> refCon;
+  GUEST<INTEGER> itemsID;
+  GUEST<Str255> title;
+};
 
 typedef DialogTemplate *DialogTPtr;
 MAKE_HIDDEN(DialogTPtr);

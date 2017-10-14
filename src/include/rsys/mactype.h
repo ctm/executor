@@ -39,19 +39,34 @@ struct PACKED GuestWrapper
         uint8_t data[sizeof(TT)];
     } x;
     
-public:
     using WrappedType = TT;
     
     const TT unwrap() const { return *(const TT*)x.data; }
     TT& unwrap() { return *(TT*)x.data; }
 
-    GuestWrapper() {}
-    GuestWrapper(TT x) { unwrap() = x; }
+    GuestWrapper() = default;
     GuestWrapper(const GuestWrapper<TT>& y) = default;
 
-    operator TT() const { return unwrap(); }
-    GuestWrapper<TT>& operator=(TT y) { unwrap() = y; return *this; }
     GuestWrapper<TT>& operator=(const GuestWrapper<TT>& y) = default;
+
+        // Things that should go away at some point
+    GuestWrapper(TT x) { unwrap() = x; }
+    GuestWrapper<TT>& operator=(TT y) { this->unwrap() = y; return *this; }
+    operator TT() const { return this->unwrap(); }
+};
+
+template<typename TT>
+struct GuestPointerWrapper : public GuestWrapper<TT*>
+{
+    GuestPointerWrapper() = default;
+    GuestPointerWrapper(const GuestPointerWrapper<TT>&) = default;
+    GuestPointerWrapper<TT>& operator=(const GuestPointerWrapper<TT>& y) = default;
+    
+
+    operator TT*() const { return this->unwrap(); }
+
+    GuestPointerWrapper<TT>& operator=(TT *y) { this->unwrap() = y; return *this; }
+    
 };
 
 struct GuestStruct
@@ -83,6 +98,17 @@ struct GuestType<uint8_t>
     using type = uint8_t;
 };
 
+template<typename TT>
+struct GuestType<TT*>
+{
+    using type = GuestPointerWrapper<TT>;
+};
+
+template<typename TT, int n>
+struct GuestType<TT[n]>
+{
+    using type = TT[n];
+};
 
 
 }
