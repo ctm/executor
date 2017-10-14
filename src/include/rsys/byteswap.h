@@ -182,7 +182,7 @@ extern int bad_cx_splosion;
 #define CBC(rhs)	(rhs)
 #define CBV(rhs)	(rhs)
 
-#if (SIZEOF_CHAR_P == 4) && !FORCE_EXPERIMENTAL_PACKED_MACROS
+#if 1
 #  define STARH(h)		MR ((h)->p)
 #  define HxP(handle, field)	MR (STARH(handle)->field)
 #  define HxX(handle, field)	(STARH(handle)->field)

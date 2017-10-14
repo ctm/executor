@@ -31,6 +31,22 @@ typedef struct { int32 l PACKED; } HIDDEN_LONGINT;
 typedef struct { uint32 u PACKED; } HIDDEN_ULONGINT;
 
 template<typename TT>
+
+
+
+
+
+    // Things that should go away at some point
+// ### Struct needs manual conversion to GUEST<...>
+//     union
+
+
+
+
+
+    // Things that should go away at some point
+// ### Struct needs manual conversion to GUEST<...>
+//     union
 struct PACKED GuestWrapper
 {
     union
@@ -83,6 +99,18 @@ struct GuestType
         >::type;
 };
 
+// forward declare.
+// uses template specialization to bypass the above,
+// so a ": GuestStruct" on the actual declaration is redundant (but still fine)
+#define GUEST_STRUCT(CLS)   \
+    struct CLS;\
+    template<>  \
+    struct GuestType<CLS>    \
+    {   \
+        using type = CLS;    \
+    }
+    
+
 template<typename TT>
 using GUEST = typename GuestType<TT>::type;
 
@@ -101,15 +129,28 @@ struct GuestType<uint8_t>
 template<typename TT>
 struct GuestType<TT*>
 {
-    using type = GuestPointerWrapper<TT>;
+    using type = GuestPointerWrapper<GUEST<TT>>;
 };
 
 template<typename TT, int n>
 struct GuestType<TT[n]>
 {
-    using type = TT[n];
+    using type = GUEST<TT>[n];
 };
 
+
+
+
+#define MAKE_HIDDEN(typ) struct  HIDDEN_ ## typ : GuestStruct { typ p; }
+// Roadmap:
+// 1. switch to
+//  #define MAKE_HIDDEN(typ) using  HIDDEN_ ## typ = GUEST<p>
+//  (adapt STARH, other uses of ->P)
+// 2. remove
+
+#  define PACKED_MEMBER(typ, name) typ name
+// Roadmap:
+// 1. remove
 
 }
 

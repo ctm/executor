@@ -24,12 +24,6 @@ typedef uint8 Byte;
 typedef int8 *Ptr;
 #endif
 
-#if (SIZEOF_CHAR_P == 4) && !FORCE_EXPERIMENTAL_PACKED_MACROS
-#define MAKE_HIDDEN(typ) typedef struct { typ p; } HIDDEN_ ## typ
-#else
-#define MAKE_HIDDEN(typ) \
-  typedef union PACKED { uint32 pp; typ type[0];} HIDDEN_ ## typ
-#endif
 MAKE_HIDDEN(Ptr);
 
 #if !defined(__MACTYPES__) || defined(__cplusplus)
@@ -78,18 +72,12 @@ typedef	LONGINT	BOOLEANRET;
 typedef	LONGINT	SignedByteRET;
 
 
-#if (SIZEOF_CHAR_P == 4) && !FORCE_EXPERIMENTAL_PACKED_MACROS
-#  define PACKED_MEMBER(typ, name) typ name
-#else
-#  define PACKED_MEMBER(typ, name) \
-                                union PACKED { uint32 pp; typ type[0]; } name
-#endif
 
-typedef struct PACKED {
-  INTEGER qFlags;
-  PACKED_MEMBER(union __qe *, qHead);	/* actually QElemPtr */
-  PACKED_MEMBER(union __qe *, qTail);	/* actually QElemPtr */
-} QHdr;
+struct QHdr : GuestStruct {
+    GUEST< INTEGER> qFlags;
+    GUEST< union __qe*> qHead;    /* actually QElemPtr */
+    GUEST< union __qe*> qTail;    /* actually QElemPtr */
+};
 typedef QHdr *QHdrPtr;
 typedef union __qe *QElemPtr;
 
@@ -100,23 +88,21 @@ MAKE_HIDDEN(QElemPtr);
 	};
 
 /* from Quickdraw.h */
-typedef struct PACKED Point
-{
-  INTEGER v;
-  INTEGER h;
-} Point;
+struct Point : GuestStruct {
+    GUEST< INTEGER> v;
+    GUEST< INTEGER> h;
+};
 
 #define NULL_POINTP ((Point *) NULL)
 
 #define ZEROPOINT(p) (p.v = CWC (0), p.h = CWC (0))
 
-typedef struct PACKED Rect
-{
-  INTEGER top;
-  INTEGER left;
-  INTEGER bottom;
-  INTEGER right;
-} Rect;
+struct Rect : GuestStruct {
+    GUEST< INTEGER> top;
+    GUEST< INTEGER> left;
+    GUEST< INTEGER> bottom;
+    GUEST< INTEGER> right;
+};
 
 typedef Rect *RectPtr;
 
