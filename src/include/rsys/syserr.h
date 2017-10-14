@@ -2,6 +2,32 @@
 #  define __rsys_syserr_h__
 
 namespace Executor {
+
+
+
+
+
+
+
+
+
+
+
+// ### Struct needs manual conversion to GUEST<...>
+//   void	(*func8)(void)	PACKED;
+
+
+
+
+
+
+
+
+
+
+
+// ### Struct needs manual conversion to GUEST<...>
+//   void	(*func8)(void)	PACKED;
 typedef struct PACKED {
   INTEGER count;
 
@@ -55,30 +81,36 @@ typedef struct PACKED {
 } myalerttab_t;
 
 
-struct PACKED adef {
-  INTEGER id;
-  INTEGER alen;
-  INTEGER primetextid;
-  INTEGER secondtextid;
-  INTEGER iconid;
-  INTEGER procid;
-  INTEGER buttonid;
+struct adef : GuestStruct {
+    GUEST< INTEGER> id;
+    GUEST< INTEGER> alen;
+    GUEST< INTEGER> primetextid;
+    GUEST< INTEGER> secondtextid;
+    GUEST< INTEGER> iconid;
+    GUEST< INTEGER> procid;
+    GUEST< INTEGER> buttonid;
 };
 
-struct PACKED tdef {
-  INTEGER id;
-  INTEGER alen;
-  Point loc;
-  char text[1];	/* at least one NUL byte */
+struct tdef : GuestStruct {
+    GUEST< INTEGER> id;
+    GUEST< INTEGER> alen;
+    GUEST< Point> loc;
+    GUEST< char[1]> text;    /* at least one NUL byte */
 };
 
-struct PACKED idef {
-  INTEGER id;
-  INTEGER alen;
-  Rect loc;
-  LONGINT ike[32];
+struct idef : GuestStruct {
+    GUEST< INTEGER> id;
+    GUEST< INTEGER> alen;
+    GUEST< Rect> loc;
+    GUEST< LONGINT[32]> ike;
 };
 
+    /* NOTE:  THIS IS NOT THE WAY IT WORKS IN THE M*C */
+// ### Struct needs manual conversion to GUEST<...>
+//   void (*proc)();
+    /* NOTE:  THIS IS NOT THE WAY IT WORKS IN THE M*C */
+// ### Struct needs manual conversion to GUEST<...>
+//   void (*proc)();
 struct PACKED pdef {
   INTEGER id;
   INTEGER alen;
@@ -86,6 +118,11 @@ struct PACKED pdef {
   /* NOTE:  THIS IS NOT THE WAY IT WORKS IN THE M*C */
 };
 
+// ### Struct needs manual conversion to GUEST<...>
+
+// ### Struct needs manual conversion to GUEST<...>
+// struct PACKED bdef {
+//   struct PACKED but {
 struct PACKED bdef {
   INTEGER id;
   INTEGER  alen;
@@ -97,10 +134,10 @@ struct PACKED bdef {
   } buts[1];
 };
 
-struct PACKED sdef {
-  INTEGER id;
-  INTEGER alen;
-  char text[1];
+struct sdef : GuestStruct {
+    GUEST< INTEGER> id;
+    GUEST< INTEGER> alen;
+    GUEST< char[1]> text;
 };
 }
 

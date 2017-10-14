@@ -21,28 +21,27 @@ namespace Executor {
 
 #define textMenuProc	0
 
-typedef struct PACKED {
-  INTEGER menuID;
-  INTEGER menuWidth;
-  INTEGER menuHeight;
-  PACKED_MEMBER(Handle, menuProc);
-  LONGINT enableFlags;
-  Str255 menuData;
-} MenuInfo;
+struct MenuInfo : GuestStruct {
+    GUEST< INTEGER> menuID;
+    GUEST< INTEGER> menuWidth;
+    GUEST< INTEGER> menuHeight;
+    GUEST< Handle> menuProc;
+    GUEST< LONGINT> enableFlags;
+    GUEST< Str255> menuData;
+};
 typedef MenuInfo *MenuPtr;
 MAKE_HIDDEN(MenuPtr);
 typedef HIDDEN_MenuPtr *MenuHandle;
 
-typedef struct PACKED MCEntry
-{
-  INTEGER mctID;
-  INTEGER mctItem;
-  RGBColor mctRGB1;
-  RGBColor mctRGB2;
-  RGBColor mctRGB3;
-  RGBColor mctRGB4;
-  INTEGER mctReserved;
-} MCEntry, *MCEntryPtr;
+typedef struct MCEntry : GuestStruct {
+    GUEST< INTEGER> mctID;
+    GUEST< INTEGER> mctItem;
+    GUEST< RGBColor> mctRGB1;
+    GUEST< RGBColor> mctRGB2;
+    GUEST< RGBColor> mctRGB3;
+    GUEST< RGBColor> mctRGB4;
+    GUEST< INTEGER> mctReserved;
+} *MCEntryPtr;
 MAKE_HIDDEN(MCEntryPtr);
 
 typedef MCEntry MCTable[1];

@@ -13,12 +13,13 @@
 #include "WindowMgr.h"
 
 namespace Executor {
-typedef struct PACKED HMStringResType
-{
-  INTEGER hmmResID;
-  INTEGER hmmIndex;
-} HMStringResType;
+struct HMStringResType : GuestStruct {
+    GUEST< INTEGER> hmmResID;
+    GUEST< INTEGER> hmmIndex;
+};
 
+// ### Struct needs manual conversion to GUEST<...>
+//   union
 typedef struct PACKED HMMessageRecord
 {
   INTEGER hmmHelpType;

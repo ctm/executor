@@ -19,16 +19,16 @@
 #include "rsys/pstuff.h"
 
 namespace Executor {
-typedef struct PACKED {
-    Rect _wrect;
-    INTEGER _wprocid;
-    char _wvisible;
-    char _padding1;
-    char _wgoaway;
-    char _padding2;
-    LONGINT _wrefcon;
-    Byte _wtitle;
-} windrestype;
+struct windrestype : GuestStruct {
+    GUEST< Rect> _wrect;
+    GUEST< INTEGER> _wprocid;
+    GUEST< char> _wvisible;
+    GUEST< char> _padding1;
+    GUEST< char> _wgoaway;
+    GUEST< char> _padding2;
+    GUEST< LONGINT> _wrefcon;
+    GUEST< Byte> _wtitle;
+};
 
 extern LONGINT C_wdef0 (INTEGER, WindowPtr, INTEGER, LONGINT),
 	       C_wdef16(INTEGER, WindowPtr, INTEGER, LONGINT);

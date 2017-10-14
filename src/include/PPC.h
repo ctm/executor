@@ -17,6 +17,9 @@ typedef struct EntityName
   /* #### bogus */
 } EntityName;
 
+
+// ### Struct needs manual conversion to GUEST<...>
+//   union
 typedef struct PACKED LocationNameRec
 {
   PPCLocationKind locationKindSelector;
@@ -28,6 +31,10 @@ typedef struct PACKED LocationNameRec
   } u;
 } LocationNameRec;
 
+
+
+// ### Struct needs manual conversion to GUEST<...>
+//   union
 typedef struct PACKED PPCPortRec
 {
   ScriptCode nameScript;

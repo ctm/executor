@@ -16,18 +16,16 @@ enum
   kUnresolvedCFragSymbolAddress = 0
 };
 
-typedef struct PACKED
-{
-  uint32 reserved0;
-  uint32 reserved1;
-  uint32 version;
-  uint32 reserved2;
-  uint32 reserved3;
-  uint32 reserved4;
-  uint32 reserved5;
-  int32 n_descripts;
-}
-cfrg_resource_t;
+struct cfrg_resource_t : GuestStruct {
+    GUEST< uint32> reserved0;
+    GUEST< uint32> reserved1;
+    GUEST< uint32> version;
+    GUEST< uint32> reserved2;
+    GUEST< uint32> reserved3;
+    GUEST< uint32> reserved4;
+    GUEST< uint32> reserved5;
+    GUEST< int32> n_descripts;
+};
 
 #define CFRG_VERSION_X(cfrg) ((cfgr)->version)
 #define CFRG_VERSION(cfrg) (CL (CFRG_VERSION_X (cfgr)))
@@ -35,24 +33,22 @@ cfrg_resource_t;
 #define CFRG_N_DESCRIPTS_X(cfrg) ((cfrg)->n_descripts)
 #define CFRG_N_DESCRIPTS(cfrg) (CL (CFRG_N_DESCRIPTS_X (cfrg)))
 
-typedef struct PACKED
-{
-  OSType isa;
-  uint32 update_level;
-  uint32 current_version;
-  uint32 oldest_definition_version;
-  uint32 stack_size;
-  int16 appl_library_dir;
-  uint8 fragment_type;
-  uint8 fragment_location;
-  int32 offset_to_fragment;
-  int32 fragment_length;
-  uint32 reserved0;
-  uint32 reserved1;
-  uint16 cfir_length;
-  unsigned char name[1];
-}
-cfir_t;
+struct cfir_t : GuestStruct {
+    GUEST< OSType> isa;
+    GUEST< uint32> update_level;
+    GUEST< uint32> current_version;
+    GUEST< uint32> oldest_definition_version;
+    GUEST< uint32> stack_size;
+    GUEST< int16> appl_library_dir;
+    GUEST< uint8> fragment_type;
+    GUEST< uint8> fragment_location;
+    GUEST< int32> offset_to_fragment;
+    GUEST< int32> fragment_length;
+    GUEST< uint32> reserved0;
+    GUEST< uint32> reserved1;
+    GUEST< uint16> cfir_length;
+    GUEST< unsigned char[1]> name;
+};
 
 #define CFIR_ISA_X(cfir) ((cfir)->isa)
 #define CFIR_ISA(cfir) (CL (CFIR_ISA_X (cfir)))
@@ -109,30 +105,28 @@ typedef enum
 }
 LoadFlags;
 
-typedef struct PACKED MemFragment
-{
-  Ptr address;
-  uint32 length;
-  BOOLEAN inPlace;
-}
-MemFragment;
+struct MemFragment : GuestStruct {
+    GUEST< Ptr> address;
+    GUEST< uint32> length;
+    GUEST< BOOLEAN> inPlace;
+};
 
-typedef struct PACKED DiskFragment
-{
-  FSSpecPtr fileSpec;
-  uint32 offset;
-  uint32 length;
-}
-DiskFragment;
+struct DiskFragment : GuestStruct {
+    GUEST< FSSpecPtr> fileSpec;
+    GUEST< uint32> offset;
+    GUEST< uint32> length;
+};
 
-typedef struct PACKED SegmentedFragment
-{
-  FSSpecPtr fileSpec;
-  OSType rsrcType;
-  INTEGER rsrcID;
-}
-SegmentedFragment;
+struct SegmentedFragment : GuestStruct {
+    GUEST< FSSpecPtr> fileSpec;
+    GUEST< OSType> rsrcType;
+    GUEST< INTEGER> rsrcID;
+};
 
+// ### Struct needs manual conversion to GUEST<...>
+//   union
+// ### Struct needs manual conversion to GUEST<...>
+//   union
 typedef struct PACKED FragmentLocator
 {
   uint32 where;
@@ -145,18 +139,16 @@ typedef struct PACKED FragmentLocator
 }
 FragmentLocator;
 
-typedef struct PACKED InitBlock
-{
-  uint32 contextID;
-  uint32 closureID;
-  FragmentLocator fragLocator;
-  Ptr libName;
-  uint32 reserved4a;
-  uint32 reserved4b;
-  uint32 reserved4c;
-  uint32 reserved4d;
-}
-InitBlock;
+struct InitBlock : GuestStruct {
+    GUEST< uint32> contextID;
+    GUEST< uint32> closureID;
+    GUEST< FragmentLocator> fragLocator;
+    GUEST< Ptr> libName;
+    GUEST< uint32> reserved4a;
+    GUEST< uint32> reserved4b;
+    GUEST< uint32> reserved4c;
+    GUEST< uint32> reserved4d;
+};
 
 typedef struct CFragConnection *ConnectionID;
 
@@ -188,15 +180,13 @@ typedef struct
 }
 section_info_t;
 
-typedef struct PACKED CFragConnection
-{
-  FragmentLocator frag;
-  struct PEFLoaderInfoHeader *lihp;
-  uint32 ref_count;
-  uint32 n_sects;
-  section_info_t sects[0];
-}
-CFragConnection_t;
+typedef struct CFragConnection : GuestStruct {
+    GUEST< FragmentLocator> frag;
+    GUEST< struct PEFLoaderInfoHeader*> lihp;
+    GUEST< uint32> ref_count;
+    GUEST< uint32> n_sects;
+    GUEST< section_info_t[0]> sects;
+} CFragConnection_t;
 
 enum
 {
@@ -206,13 +196,11 @@ enum
   fragNoMem = -2809
 };
 
-typedef struct PACKED
-{
-  ConnectionID cid;
-  int32 n_symbols;
-  int32 first_symbol;
-}
-lib_t;
+struct lib_t : GuestStruct {
+    GUEST< ConnectionID> cid;
+    GUEST< int32> n_symbols;
+    GUEST< int32> first_symbol;
+};
 
 #define LIB_CID_X(l)  ((l)->cid)
 #define LIB_CID(l)    (CL (LIB_CID_X (l)))
@@ -223,24 +211,20 @@ lib_t;
 #define LIB_FIRST_SYMBOL_X(l) ((l)->first_symbol)
 #define LIB_FIRST_SYMBOL(l) (CL (LIB_FIRST_SYMBOL_X (l)))
 
-typedef struct PACKED
-{
-  uint32 n_libs;
-  lib_t libs[0];
-}
-CFragClosure_t;
+struct CFragClosure_t : GuestStruct {
+    GUEST< uint32> n_libs;
+    GUEST< lib_t[0]> libs;
+};
 
 #define N_LIBS_X(c)  ((c)->n_libs)
 #define N_LIBS(c) (CL (N_LIBS_X (c)))
 
 typedef CFragClosure_t *CFragClosureID;
 
-typedef struct PACKED
-{
-  const char *symbol_name;
-  void *value;
-}
-map_entry_t;
+struct map_entry_t : GuestStruct {
+    GUEST< const char*> symbol_name;
+    GUEST< void*> value;
+};
 
 extern cfir_t *ROMlib_find_cfrg (Handle cfrg, OSType arch, uint8 type,
 				 Str255 name);

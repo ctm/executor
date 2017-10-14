@@ -86,28 +86,28 @@ MAKE_HIDDEN(ControlHandle);
 #include "WindowMgr.h"
 
 namespace Executor {
-struct PACKED __cr {
-  PACKED_MEMBER(ControlHandle, nextControl);
-  PACKED_MEMBER(WindowPtr, contrlOwner);
-  Rect contrlRect;
-  Byte contrlVis;
-  Byte contrlHilite;
-  INTEGER contrlValue;
-  INTEGER contrlMin;
-  INTEGER contrlMax;
-  PACKED_MEMBER(Handle, contrlDefProc);
-  PACKED_MEMBER(Handle, contrlData);
-  PACKED_MEMBER(ProcPtr, contrlAction);
-  LONGINT contrlRfCon;
-  Str255 contrlTitle;
+struct __cr : GuestStruct {
+    GUEST< ControlHandle> nextControl;
+    GUEST< WindowPtr> contrlOwner;
+    GUEST< Rect> contrlRect;
+    GUEST< Byte> contrlVis;
+    GUEST< Byte> contrlHilite;
+    GUEST< INTEGER> contrlValue;
+    GUEST< INTEGER> contrlMin;
+    GUEST< INTEGER> contrlMax;
+    GUEST< Handle> contrlDefProc;
+    GUEST< Handle> contrlData;
+    GUEST< ProcPtr> contrlAction;
+    GUEST< LONGINT> contrlRfCon;
+    GUEST< Str255> contrlTitle;
 };
 
-typedef struct PACKED {
-  LONGINT ccSeed;
-  INTEGER ccReserved;
-  INTEGER ctSize;
-  cSpecArray ctTable;
-} CtlCTab, *CCTabPtr;
+typedef struct CtlCTab : GuestStruct {
+    GUEST< LONGINT> ccSeed;
+    GUEST< INTEGER> ccReserved;
+    GUEST< INTEGER> ctSize;
+    GUEST< cSpecArray> ctTable;
+} *CCTabPtr;
 MAKE_HIDDEN(CCTabPtr);
 typedef HIDDEN_CCTabPtr *CCTabHandle;
 
@@ -116,14 +116,14 @@ MAKE_HIDDEN(AuxCtlPtr);
 typedef HIDDEN_AuxCtlPtr *AuxCtlHandle;
 MAKE_HIDDEN(AuxCtlHandle);
 
-typedef struct PACKED AuxCtlRec {
-  PACKED_MEMBER(AuxCtlHandle, acNext);
-  PACKED_MEMBER(ControlHandle, acOwner);
-  PACKED_MEMBER(CCTabHandle, acCTable);
-  INTEGER acFlags;
-  LONGINT acReserved;
-  LONGINT acRefCon;
-} AuxCtlRec;
+struct AuxCtlRec : GuestStruct {
+    GUEST< AuxCtlHandle> acNext;
+    GUEST< ControlHandle> acOwner;
+    GUEST< CCTabHandle> acCTable;
+    GUEST< INTEGER> acFlags;
+    GUEST< LONGINT> acReserved;
+    GUEST< LONGINT> acRefCon;
+};
 
 #if !defined (AuxCtlHead_H)
 extern HIDDEN_AuxCtlHandle AuxCtlHead_H;

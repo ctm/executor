@@ -54,22 +54,8 @@ namespace Executor {
  * --ctm Sun Aug  2 19:48:35 MDT 1992
  */
 
-typedef struct PACKED {
-    PACKED_MEMBER(PicHandle, pichandle);	/* 0x00 - 0x03 */
-    LONGINT	picsize;	/* 0x04 - 0x07 */
-    LONGINT	pichowfar;	/* 0x08 - 0x0B */	
-    PACKED_MEMBER(RgnHandle, picclip);	/* 0x0C - 0x0F */
-    Pattern	picbkpat;	/* 0x10 - 0x17 */
-    INTEGER	picfont;	/* 0x18 - 0x19 */
-    Style	picface;	/* 0x1A */
-    char	picfiller;	/* 0x1B */
-    INTEGER	pictxmode;	/* 0x1C - 0x1D */
-    INTEGER	pictxsize;	/* 0x1E - 0x1F */
-    Fixed	picspextra;	/* 0x20 - 0x23 */
-    Point	pictxnum;	/* 0x24 - 0x27 */
-    Point	pictxden;	/* 0x28 - 0x2B */
-			
-/*
+
+    /*
  * NOTE: After doing:
  *	MoveTo(120	PACKED, 121)	PACKED;
  *	Line(3	PACKED, 5)	PACKED;
@@ -84,20 +70,34 @@ typedef struct PACKED {
  *	and pictextpnloc.
  */
 
-    Point	picdrawpnloc;	/* 0x2C - 0x2F */
-    Point	pictextpnloc;	/* 0x30 - 0x33 */
-    Point	picpnsize;	/* 0x34 - 0x37 */
-    INTEGER	picpnmode;	/* 0x38 - 0x39 */
-    Pattern	picpnpat;	/* 0x3A - 0x41 */
-    Pattern	picfillpat;	/* 0x42 - 0x49 */
-    Rect	piclastrect;	/* 0x4A - 0x51 */
-    Point	picov;		/* 0x52 - 0x55 */
 
-    INTEGER	picidunno;	/* 0x56 - 0x59 ColorBit ? */
 
-    LONGINT	picforeColor;	/* 0x5A - 0x5D */
-    LONGINT	picbackColor;	/* 0x5E - 0x61 */
-} piccache;
+struct piccache : GuestStruct {
+    GUEST< PicHandle> pichandle;    /* 0x00 - 0x03 */
+    GUEST< LONGINT> picsize;    /* 0x04 - 0x07 */
+    GUEST< LONGINT> pichowfar;    /* 0x08 - 0x0B */
+    GUEST< RgnHandle> picclip;    /* 0x0C - 0x0F */
+    GUEST< Pattern> picbkpat;    /* 0x10 - 0x17 */
+    GUEST< INTEGER> picfont;    /* 0x18 - 0x19 */
+    GUEST< Style> picface;    /* 0x1A */
+    GUEST< char> picfiller;    /* 0x1B */
+    GUEST< INTEGER> pictxmode;    /* 0x1C - 0x1D */
+    GUEST< INTEGER> pictxsize;    /* 0x1E - 0x1F */
+    GUEST< Fixed> picspextra;    /* 0x20 - 0x23 */
+    GUEST< Point> pictxnum;    /* 0x24 - 0x27 */
+    GUEST< Point> pictxden;    /* 0x28 - 0x2B */
+    GUEST< Point> picdrawpnloc;    /* 0x2C - 0x2F */
+    GUEST< Point> pictextpnloc;    /* 0x30 - 0x33 */
+    GUEST< Point> picpnsize;    /* 0x34 - 0x37 */
+    GUEST< INTEGER> picpnmode;    /* 0x38 - 0x39 */
+    GUEST< Pattern> picpnpat;    /* 0x3A - 0x41 */
+    GUEST< Pattern> picfillpat;    /* 0x42 - 0x49 */
+    GUEST< Rect> piclastrect;    /* 0x4A - 0x51 */
+    GUEST< Point> picov;    /* 0x52 - 0x55 */
+    GUEST< INTEGER> picidunno;    /* 0x56 - 0x59 ColorBit ? */
+    GUEST< LONGINT> picforeColor;    /* 0x5A - 0x5D */
+    GUEST< LONGINT> picbackColor;    /* 0x5E - 0x61 */
+};
 
 extern void ROMlib_textpicupdate( Point num, Point den );
 extern void ROMlib_drawingpicupdate( void );

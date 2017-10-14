@@ -11,6 +11,28 @@
 #include "rsys/pstuff.h"
 
 namespace Executor {
+    /* TRUE if the save pattern is in _tpat, FALSE if it was placed in
+     _tpixpat */
+
+
+
+
+    /* ### is tesave mac-visible state?  how is color and whatnot really
+     stored? */
+    /* only filled if `CGrafPort_p ()' */
+// ### Struct needs manual conversion to GUEST<...>
+//   int32 fg_color, bk_color;
+    /* TRUE if the save pattern is in _tpat, FALSE if it was placed in
+     _tpixpat */
+
+
+
+
+    /* ### is tesave mac-visible state?  how is color and whatnot really
+     stored? */
+    /* only filled if `CGrafPort_p ()' */
+// ### Struct needs manual conversion to GUEST<...>
+//   int32 fg_color, bk_color;
 typedef struct PACKED
 {
 #if 0
@@ -60,15 +82,14 @@ typedef struct PACKED
 #define GENERIC_ELT_FONT(generic_elt) (CW (GENERIC_ELT_FONT_X (generic_elt)))
 #define GENERIC_ELT_SIZE(generic_elt) (CW (GENERIC_ELT_SIZE_X (generic_elt)))
 
-typedef struct PACKED generic_elt
-{
-  int16 Height;
-  int16 Ascent;
-  int16 Font;
-  Style Face;
-  Byte filler;
-  int16 Size;
-  RGBColor Color;
+typedef struct generic_elt : GuestStruct {
+    GUEST< int16> Height;
+    GUEST< int16> Ascent;
+    GUEST< int16> Font;
+    GUEST< Style> Face;
+    GUEST< Byte> filler;
+    GUEST< int16> Size;
+    GUEST< RGBColor> Color;
 } generic_elt_t;
 
 extern void generic_elt_copy (generic_elt_t *dst, generic_elt_t *src);
@@ -111,13 +132,13 @@ extern void	ROMlib_teautoloop( TEHandle teh );
 extern int16 ROMlib_call_TEDoText (TEPtr tp, int16 first, int16 last,
 				   int16 what);
 
-typedef struct PACKED {	/* from MPW: ToolEqu.a */
-  PACKED_MEMBER(ProcPtr, EOLHook);
-  PACKED_MEMBER(ProcPtr, DRAWHook);
-  PACKED_MEMBER(ProcPtr, WIDTHHook);
-  PACKED_MEMBER(ProcPtr, HITTESTHook);
-    LONGINT flags;
-} tehidden;
+struct tehidden : GuestStruct {
+    GUEST< ProcPtr> EOLHook;
+    GUEST< ProcPtr> DRAWHook;
+    GUEST< ProcPtr> WIDTHHook;
+    GUEST< ProcPtr> HITTESTHook;
+    GUEST< LONGINT> flags;
+};
 
 typedef tehidden *tehiddenp;
 MAKE_HIDDEN(tehiddenp);

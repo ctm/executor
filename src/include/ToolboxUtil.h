@@ -19,10 +19,10 @@ namespace Executor {
 #define plusCursor	3
 #define watchCursor	4
 
-typedef struct PACKED {
-  LONGINT hiLong;
-  LONGINT loLong;
-} Int64Bit;
+struct Int64Bit : GuestStruct {
+    GUEST< LONGINT> hiLong;
+    GUEST< LONGINT> loLong;
+};
 
 #if 1 || !defined(__alpha)
 typedef Pattern *PatPtr;

@@ -13,13 +13,13 @@ namespace Executor {
 #define qErr	(-1)
 #define vTypErr	(-2)
 
-typedef struct PACKED {
-  PACKED_MEMBER(QElemPtr, qLink);
-  INTEGER qType;
-  PACKED_MEMBER(ProcPtr, vblAddr);
-  INTEGER vblCount;
-  INTEGER vblPhase;
-} VBLTask;
+struct VBLTask : GuestStruct {
+    GUEST< QElemPtr> qLink;
+    GUEST< INTEGER> qType;
+    GUEST< ProcPtr> vblAddr;
+    GUEST< INTEGER> vblCount;
+    GUEST< INTEGER> vblPhase;
+};
 typedef VBLTask *VBLTaskPtr;
 
 #if !defined (VBLQueue)

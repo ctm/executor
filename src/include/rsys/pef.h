@@ -10,21 +10,19 @@
  * $Id: pef.h 63 2004-12-24 18:19:43Z ctm $
  */
 namespace Executor {
-typedef struct PACKED PEFContainerHeader
-{
-  OSType tag1;
-  OSType tag2;
-  OSType architecture;
-  uint32 formatVersion;
-  uint32 dateTimeStamp;
-  uint32 oldDefVersion;
-  uint32 oldImpVersion;
-  uint32 currentVersion;
-  uint16 sectionCount;
-  uint16 instSectionCount;
-  uint32 reservedA;
-}
-PEFContainerHeader_t;
+typedef struct PEFContainerHeader : GuestStruct {
+    GUEST< OSType> tag1;
+    GUEST< OSType> tag2;
+    GUEST< OSType> architecture;
+    GUEST< uint32> formatVersion;
+    GUEST< uint32> dateTimeStamp;
+    GUEST< uint32> oldDefVersion;
+    GUEST< uint32> oldImpVersion;
+    GUEST< uint32> currentVersion;
+    GUEST< uint16> sectionCount;
+    GUEST< uint16> instSectionCount;
+    GUEST< uint32> reservedA;
+} PEFContainerHeader_t;
 
 #define PEF_CONTAINER_TAG1_X(p) ((p)->tag1)
 #define PEF_CONTAINER_TAG1(p) (CL (PEF_CONTAINER_TAG1_X (p)))
@@ -56,20 +54,18 @@ PEFContainerHeader_t;
 #define PEF_CONTAINER_CURRENT_VERS_X(p) ((p)->currentVersion)
 #define PEF_CONTAINER_CURRENT_VERS(p) (CL (PEF_CONTAINER_CURRENT_VERS_X(p)))
 
-typedef struct PACKED PEFSectionHeader
-{
-  int32 nameOffset;
-  uint32 defaultAddress;
-  uint32 totalSize;
-  uint32 unpackedSize;
-  uint32 packedSize;
-  uint32 containerOffset;
-  uint8 sectionKind;
-  uint8 shareKind;
-  uint8 alignment;
-  uint8 reservedA;
-}
-PEFSectionHeader_t;
+typedef struct PEFSectionHeader : GuestStruct {
+    GUEST< int32> nameOffset;
+    GUEST< uint32> defaultAddress;
+    GUEST< uint32> totalSize;
+    GUEST< uint32> unpackedSize;
+    GUEST< uint32> packedSize;
+    GUEST< uint32> containerOffset;
+    GUEST< uint8> sectionKind;
+    GUEST< uint8> shareKind;
+    GUEST< uint8> alignment;
+    GUEST< uint8> reservedA;
+} PEFSectionHeader_t;
 
 #define PEFSH_DEFAULT_ADDRESS_X(p) ((p)->defaultAddress)
 #define PEFSH_DEFAULT_ADDRESS(p) (CL (PEFSH_DEFAULT_ADDRESS_X (p)))
@@ -90,24 +86,22 @@ PEFSectionHeader_t;
 #define PEFSH_SHARE_KIND(p) ((p)->shareKind)
 #define PEFSH_ALIGNMENT(p) (1 << (p)->alignment)
 
-typedef struct PACKED PEFLoaderInfoHeader
-{
-  int32 mainSection;
-  uint32 mainOffset;
-  int32 initSection;
-  uint32 initOffset;
-  int32 termSection;
-  uint32 termOffset;
-  uint32 importedLibraryCount;
-  uint32 totalImportedSymbolCount;
-  uint32 relocSectionCount;
-  uint32 relocInstrOffset;
-  uint32 loaderStringsOffset;
-  uint32 exportHashOffset;
-  uint32 exportHashTablePower;
-  uint32 exportedSymbolCount;
-}
-PEFLoaderInfoHeader_t;
+typedef struct PEFLoaderInfoHeader : GuestStruct {
+    GUEST< int32> mainSection;
+    GUEST< uint32> mainOffset;
+    GUEST< int32> initSection;
+    GUEST< uint32> initOffset;
+    GUEST< int32> termSection;
+    GUEST< uint32> termOffset;
+    GUEST< uint32> importedLibraryCount;
+    GUEST< uint32> totalImportedSymbolCount;
+    GUEST< uint32> relocSectionCount;
+    GUEST< uint32> relocInstrOffset;
+    GUEST< uint32> loaderStringsOffset;
+    GUEST< uint32> exportHashOffset;
+    GUEST< uint32> exportHashTablePower;
+    GUEST< uint32> exportedSymbolCount;
+} PEFLoaderInfoHeader_t;
 
 #define PEFLIH_MAIN_SECTION_X(p) ((p)->mainSection)
 #define PEFLIH_MAIN_SECTION(p) (CL (PEFLIH_MAIN_SECTION_X(p)))
@@ -151,18 +145,16 @@ PEFLoaderInfoHeader_t;
 #define PEFLIH_SYMBOL_COUNT_X(p)	((p)->exportedSymbolCount)
 #define PEFLIH_SYMBOL_COUNT(p) (CL (PEFLIH_SYMBOL_COUNT_X (p)))
 
-typedef struct PACKED PEFImportedLibrary
-{
-  uint32 nameOffset;
-  uint32 oldImpVersion;
-  uint32 currentVersion;
-  uint32 importedSymbolCount;
-  uint32 firstImportedSymbol;
-  uint8 options;
-  uint8 reservedA;
-  uint16 reservedB;
-}
-PEFImportedLibrary_t;
+typedef struct PEFImportedLibrary : GuestStruct {
+    GUEST< uint32> nameOffset;
+    GUEST< uint32> oldImpVersion;
+    GUEST< uint32> currentVersion;
+    GUEST< uint32> importedSymbolCount;
+    GUEST< uint32> firstImportedSymbol;
+    GUEST< uint8> options;
+    GUEST< uint8> reservedA;
+    GUEST< uint16> reservedB;
+} PEFImportedLibrary_t;
 
 #define PEFIL_NAME_OFFSET_X(p) ((p)->nameOffset)
 #define PEFIL_NAME_OFFSET(p) (CL (PEFIL_NAME_OFFSET_X (p)))
@@ -171,14 +163,12 @@ PEFImportedLibrary_t;
 
 #define PEFIL_FIRST_SYMBOL_X(p) ((p)->firstImportedSymbol)
 
-typedef struct PACKED PEFLoaderRelocationHeader
-{
-  uint16 sectionIndex;
-  uint16 reservedA;
-  uint32 relocCount;
-  uint32 firstRelocOffset;
-}
-PEFLoaderRelocationHeader_t;
+typedef struct PEFLoaderRelocationHeader : GuestStruct {
+    GUEST< uint16> sectionIndex;
+    GUEST< uint16> reservedA;
+    GUEST< uint32> relocCount;
+    GUEST< uint32> firstRelocOffset;
+} PEFLoaderRelocationHeader_t;
 
 #define PEFRLH_RELOC_COUNT_X(p) ((p)->relocCount)
 #define PEFRLH_RELOC_COUNT(p) (CL (PEFRLH_RELOC_COUNT_X(p)))
@@ -211,13 +201,11 @@ enum
   CHAIN_COUNT_MASK = 0x3FFF,
 };
 
-typedef struct PACKED PEFExportedSymbol
-{
-  uint32 classAndName;
-  uint32 symbolValue;
-  int16 sectionIndex;
-}
-PEFExportedSymbol;
+struct PEFExportedSymbol : GuestStruct {
+    GUEST< uint32> classAndName;
+    GUEST< uint32> symbolValue;
+    GUEST< int16> sectionIndex;
+};
 
 #define PEFEXS_CLASS_AND_NAME_X(p) ((p)->classAndName)
 #define PEFEXS_CLASS_AND_NAME(p) (CL (PEFEXS_CLASS_AND_NAME_X (p)))

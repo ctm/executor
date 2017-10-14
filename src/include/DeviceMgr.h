@@ -28,18 +28,18 @@ typedef struct {
     Str255  udrvrName;
 } umacdriver, *umacdriverptr;
 
-typedef struct PACKED {
-  INTEGER drvrFlags;
-  INTEGER drvrDelay;
-  INTEGER drvrEMask;
-  INTEGER drvrMenu;
-  INTEGER drvrOpen;
-  INTEGER drvrPrime;
-  INTEGER drvrCtl;
-  INTEGER drvrStatus;
-  INTEGER drvrClose;
-  char drvrName;
-} ramdriver;
+struct ramdriver : GuestStruct {
+    GUEST< INTEGER> drvrFlags;
+    GUEST< INTEGER> drvrDelay;
+    GUEST< INTEGER> drvrEMask;
+    GUEST< INTEGER> drvrMenu;
+    GUEST< INTEGER> drvrOpen;
+    GUEST< INTEGER> drvrPrime;
+    GUEST< INTEGER> drvrCtl;
+    GUEST< INTEGER> drvrStatus;
+    GUEST< INTEGER> drvrClose;
+    GUEST< char> drvrName;
+};
 
 typedef ramdriver *ramdriverptr;
 MAKE_HIDDEN(ramdriverptr);
@@ -47,19 +47,19 @@ typedef HIDDEN_ramdriverptr *ramdriverhand;
 
 typedef enum { Open, Prime, Ctl, Stat, Close } DriverRoutineType;
 
-typedef struct PACKED {
-  PACKED_MEMBER(umacdriverptr, dCtlDriver);	/* not just Ptr */
-  INTEGER       dCtlFlags;
-  QHdr          dCtlQHdr;
-  LONGINT       dCtlPosition;
-  PACKED_MEMBER(Handle,        dCtlStorage);
-  INTEGER       dCtlRefNum;
-  LONGINT       dCtlCurTicks;
-  PACKED_MEMBER(WindowPtr,     dCtlWindow);
-  INTEGER       dCtlDelay;
-  INTEGER       dCtlEMask;
-  INTEGER       dCtlMenu;
-} DCtlEntry, *DCtlPtr;
+typedef struct DCtlEntry : GuestStruct {
+    GUEST< umacdriverptr> dCtlDriver;    /* not just Ptr */
+    GUEST< INTEGER> dCtlFlags;
+    GUEST< QHdr> dCtlQHdr;
+    GUEST< LONGINT> dCtlPosition;
+    GUEST< Handle> dCtlStorage;
+    GUEST< INTEGER> dCtlRefNum;
+    GUEST< LONGINT> dCtlCurTicks;
+    GUEST< WindowPtr> dCtlWindow;
+    GUEST< INTEGER> dCtlDelay;
+    GUEST< INTEGER> dCtlEMask;
+    GUEST< INTEGER> dCtlMenu;
+} *DCtlPtr;
 
 MAKE_HIDDEN(DCtlPtr);
 typedef HIDDEN_DCtlPtr *DCtlHandle;

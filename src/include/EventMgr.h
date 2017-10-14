@@ -64,13 +64,13 @@ enum
   rightControlKey = 0x8000
 };
 
-typedef struct PACKED {
-  INTEGER what;
-  LONGINT message;
-  LONGINT when;
-  Point where;
-  INTEGER modifiers;
-} EventRecord;
+struct EventRecord : GuestStruct {
+    GUEST< INTEGER> what;
+    GUEST< LONGINT> message;
+    GUEST< LONGINT> when;
+    GUEST< Point> where;
+    GUEST< INTEGER> modifiers;
+};
 
 #if !defined (KeyMap)
 extern unsigned char 	KeyMap[16];

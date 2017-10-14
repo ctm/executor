@@ -60,30 +60,30 @@ typedef enum {
 
 typedef SignedByte Style;
 
-typedef struct PACKED {
-  INTEGER rgnSize;
-  Rect rgnBBox;
-} Region;
+struct Region : GuestStruct {
+    GUEST< INTEGER> rgnSize;
+    GUEST< Rect> rgnBBox;
+};
 
 typedef Region *RgnPtr;
 MAKE_HIDDEN(RgnPtr);
 typedef HIDDEN_RgnPtr *RgnHandle;
 MAKE_HIDDEN(RgnHandle);
 
-typedef struct PACKED {
-  PACKED_MEMBER(Ptr, baseAddr);
-  INTEGER rowBytes;
-  Rect bounds;
-} BitMap;
+struct BitMap : GuestStruct {
+    GUEST< Ptr> baseAddr;
+    GUEST< INTEGER> rowBytes;
+    GUEST< Rect> bounds;
+};
 
 typedef Byte Pattern[8];
 typedef INTEGER Bits16[16];
 
-typedef struct PACKED {
-  Bits16 data;
-  Bits16 mask;
-  Point hotSpot;
-} Cursor;
+struct Cursor : GuestStruct {
+    GUEST< Bits16> data;
+    GUEST< Bits16> mask;
+    GUEST< Point> hotSpot;
+};
 
 typedef Cursor *CursPtr;
 MAKE_HIDDEN(CursPtr);
@@ -98,22 +98,22 @@ enum {
   fill = 4
 };
 
-typedef struct PACKED {
-  INTEGER polySize;
-  Rect polyBBox;
-  Point polyPoints[1];
-} Polygon;
+struct Polygon : GuestStruct {
+    GUEST< INTEGER> polySize;
+    GUEST< Rect> polyBBox;
+    GUEST< Point[1]> polyPoints;
+};
 
 typedef Polygon *PolyPtr;
 MAKE_HIDDEN(PolyPtr);
 typedef HIDDEN_PolyPtr *PolyHandle;
 
-typedef struct PACKED {
-  INTEGER ascent;
-  INTEGER descent;
-  INTEGER widMax;
-  INTEGER leading;
-} FontInfo;
+struct FontInfo : GuestStruct {
+    GUEST< INTEGER> ascent;
+    GUEST< INTEGER> descent;
+    GUEST< INTEGER> widMax;
+    GUEST< INTEGER> leading;
+};
 
 typedef pascal trap void (*textProc_t)(INTEGER bc, Ptr textb, Point num, Point den);
 typedef pascal trap void (*lineProc_t)(Point drawto);
@@ -133,71 +133,71 @@ typedef pascal trap INTEGER  (*txMeasProc_t)(INTEGER bc, Ptr texta, Point *numer
 typedef pascal trap void (*getPicProc_t)(Ptr data, INTEGER bc);
 typedef pascal trap void (*putPicProc_t)(Ptr data, INTEGER bc);
 
-typedef struct PACKED {
-  PACKED_MEMBER(textProc_t, textProc);
-  PACKED_MEMBER(lineProc_t, lineProc);
-  PACKED_MEMBER(rectProc_t, rectProc);
-  PACKED_MEMBER(rRectProc_t, rRectProc);
-  PACKED_MEMBER(ovalProc_t, ovalProc);
-  PACKED_MEMBER(arcProc_t, arcProc);
-  PACKED_MEMBER(polyProc_t, polyProc);
-  PACKED_MEMBER(rgnProc_t, rgnProc);
-  PACKED_MEMBER(bitsProc_t, bitsProc);
-  PACKED_MEMBER(commentProc_t, commentProc);
-  PACKED_MEMBER(txMeasProc_t, txMeasProc);
-  PACKED_MEMBER(getPicProc_t, getPicProc);
-  PACKED_MEMBER(putPicProc_t, putPicProc);
-} QDProcs;
+struct QDProcs : GuestStruct {
+    GUEST< textProc_t> textProc;
+    GUEST< lineProc_t> lineProc;
+    GUEST< rectProc_t> rectProc;
+    GUEST< rRectProc_t> rRectProc;
+    GUEST< ovalProc_t> ovalProc;
+    GUEST< arcProc_t> arcProc;
+    GUEST< polyProc_t> polyProc;
+    GUEST< rgnProc_t> rgnProc;
+    GUEST< bitsProc_t> bitsProc;
+    GUEST< commentProc_t> commentProc;
+    GUEST< txMeasProc_t> txMeasProc;
+    GUEST< getPicProc_t> getPicProc;
+    GUEST< putPicProc_t> putPicProc;
+};
 
 typedef QDProcs *QDProcsPtr;
 
-typedef struct PACKED {
-  INTEGER device;
-  BitMap portBits;
-  Rect portRect;
-  PACKED_MEMBER(RgnHandle, visRgn);
-  PACKED_MEMBER(RgnHandle,clipRgn);
-  Pattern bkPat;
-  Pattern fillPat;
-  Point pnLoc;
-  Point pnSize;
-  INTEGER pnMode;
-  Pattern pnPat;
-  INTEGER pnVis;
-  INTEGER txFont;
-  Style txFace;
-  Byte filler;
-  INTEGER txMode;
-  INTEGER txSize;
-  Fixed spExtra;
-  LONGINT fgColor;
-  LONGINT bkColor;
-  INTEGER colrBit;
-  INTEGER patStretch;
-  PACKED_MEMBER(Handle, picSave);
-  PACKED_MEMBER(Handle, rgnSave);
-  PACKED_MEMBER(Handle, polySave);
-  PACKED_MEMBER(QDProcsPtr, grafProcs);
-} GrafPort;
+struct GrafPort : GuestStruct {
+    GUEST< INTEGER> device;
+    GUEST< BitMap> portBits;
+    GUEST< Rect> portRect;
+    GUEST< RgnHandle> visRgn;
+    GUEST< RgnHandle> clipRgn;
+    GUEST< Pattern> bkPat;
+    GUEST< Pattern> fillPat;
+    GUEST< Point> pnLoc;
+    GUEST< Point> pnSize;
+    GUEST< INTEGER> pnMode;
+    GUEST< Pattern> pnPat;
+    GUEST< INTEGER> pnVis;
+    GUEST< INTEGER> txFont;
+    GUEST< Style> txFace;
+    GUEST< Byte> filler;
+    GUEST< INTEGER> txMode;
+    GUEST< INTEGER> txSize;
+    GUEST< Fixed> spExtra;
+    GUEST< LONGINT> fgColor;
+    GUEST< LONGINT> bkColor;
+    GUEST< INTEGER> colrBit;
+    GUEST< INTEGER> patStretch;
+    GUEST< Handle> picSave;
+    GUEST< Handle> rgnSave;
+    GUEST< Handle> polySave;
+    GUEST< QDProcsPtr> grafProcs;
+};
 
 typedef GrafPort *GrafPtr;
 MAKE_HIDDEN(GrafPtr);
 
-typedef struct PACKED {
-  INTEGER picSize;
-  Rect picFrame;
-} Picture;
+struct Picture : GuestStruct {
+    GUEST< INTEGER> picSize;
+    GUEST< Rect> picFrame;
+};
 
 typedef Picture *PicPtr;
 MAKE_HIDDEN(PicPtr);
 typedef HIDDEN_PicPtr *PicHandle;
 
-typedef struct PACKED {
-  Point pnLoc;
-  Point pnSize;
-  INTEGER pnMode;
-  Pattern pnPat;
-} PenState;
+struct PenState : GuestStruct {
+    GUEST< Point> pnLoc;
+    GUEST< Point> pnSize;
+    GUEST< INTEGER> pnMode;
+    GUEST< Pattern> pnPat;
+};
 
 /* IMV stuff is used when we parse Version 2 pictures, but the IMV calls
    are not supported in V1.0 */
@@ -210,89 +210,88 @@ typedef enum { blend=32,    addPin, addOver, subPin,
 
 #define defQDColors	127
 
-typedef struct PACKED {
-  unsigned short red;
-  unsigned short green;
-  unsigned short blue;
-} RGBColor;
+struct RGBColor : GuestStruct {
+    GUEST< unsigned short> red;
+    GUEST< unsigned short> green;
+    GUEST< unsigned short> blue;
+};
 
-typedef struct PACKED {
-  SmallFract hue;
-  SmallFract saturation;
-  SmallFract value;
-} HSVColor;
+struct HSVColor : GuestStruct {
+    GUEST< SmallFract> hue;
+    GUEST< SmallFract> saturation;
+    GUEST< SmallFract> value;
+};
 
-typedef struct PACKED {
-  SmallFract hue;
-  SmallFract saturation;
-  SmallFract lightness;
-} HSLColor;
+struct HSLColor : GuestStruct {
+    GUEST< SmallFract> hue;
+    GUEST< SmallFract> saturation;
+    GUEST< SmallFract> lightness;
+};
 
-typedef struct PACKED { 
-  SmallFract cyan;
-  SmallFract magenta;
-  SmallFract yellow;
-} CMYColor;
+struct CMYColor : GuestStruct {
+    GUEST< SmallFract> cyan;
+    GUEST< SmallFract> magenta;
+    GUEST< SmallFract> yellow;
+};
 
-typedef struct PACKED ColorSpec
-{
-  INTEGER	value;
-  RGBColor	rgb;
-} ColorSpec;
+struct ColorSpec : GuestStruct {
+    GUEST< INTEGER> value;
+    GUEST< RGBColor> rgb;
+};
 
 typedef ColorSpec cSpecArray[1];	/* can't use 0 */
 
-typedef struct PACKED {
-  LONGINT    ctSeed;
-  unsigned short    ctFlags;
-  INTEGER    ctSize;
-  cSpecArray ctTable;
-} ColorTable, *CTabPtr;
+typedef struct ColorTable : GuestStruct {
+    GUEST< LONGINT> ctSeed;
+    GUEST< unsigned short> ctFlags;
+    GUEST< INTEGER> ctSize;
+    GUEST< cSpecArray> ctTable;
+} *CTabPtr;
 
 MAKE_HIDDEN(CTabPtr);
 typedef HIDDEN_CTabPtr *CTabHandle;
 MAKE_HIDDEN(CTabHandle);
 
-typedef struct PACKED {
-  PACKED_MEMBER(Ptr, textProc);
-  PACKED_MEMBER(Ptr, lineProc);
-  PACKED_MEMBER(Ptr, rectProc);
-  PACKED_MEMBER(Ptr, rRectProc);
-  PACKED_MEMBER(Ptr, ovalProc);
-  PACKED_MEMBER(Ptr, arcProc);
-  PACKED_MEMBER(Ptr, polyProc);
-  PACKED_MEMBER(Ptr, rgnProc);
-  PACKED_MEMBER(Ptr, bitsProc);
-  PACKED_MEMBER(Ptr, commentProc);
-  PACKED_MEMBER(Ptr, txMeasProc);
-  PACKED_MEMBER(Ptr, getPicProc);
-  PACKED_MEMBER(Ptr, putPicProc);
-  PACKED_MEMBER(Ptr, opcodeProc);
-  PACKED_MEMBER(Ptr, newProc1Proc);
-  PACKED_MEMBER(Ptr, newProc2Proc);
-  PACKED_MEMBER(Ptr, newProc3Proc);
-  PACKED_MEMBER(Ptr, newProc4Proc);
-  PACKED_MEMBER(Ptr, newProc5Proc);
-  PACKED_MEMBER(Ptr, newProc6Proc);
-} CQDProcs, *CQDProcsPtr;
+typedef struct CQDProcs : GuestStruct {
+    GUEST< Ptr> textProc;
+    GUEST< Ptr> lineProc;
+    GUEST< Ptr> rectProc;
+    GUEST< Ptr> rRectProc;
+    GUEST< Ptr> ovalProc;
+    GUEST< Ptr> arcProc;
+    GUEST< Ptr> polyProc;
+    GUEST< Ptr> rgnProc;
+    GUEST< Ptr> bitsProc;
+    GUEST< Ptr> commentProc;
+    GUEST< Ptr> txMeasProc;
+    GUEST< Ptr> getPicProc;
+    GUEST< Ptr> putPicProc;
+    GUEST< Ptr> opcodeProc;
+    GUEST< Ptr> newProc1Proc;
+    GUEST< Ptr> newProc2Proc;
+    GUEST< Ptr> newProc3Proc;
+    GUEST< Ptr> newProc4Proc;
+    GUEST< Ptr> newProc5Proc;
+    GUEST< Ptr> newProc6Proc;
+} *CQDProcsPtr;
 
-typedef struct PACKED {
-  PACKED_MEMBER(Ptr, baseAddr);
-  INTEGER rowBytes;
-  Rect bounds;
-  INTEGER pmVersion;
-  INTEGER packType;
-  LONGINT packSize;
-  Fixed hRes;
-  Fixed vRes;
-  INTEGER pixelType;
-  INTEGER pixelSize;
-  INTEGER cmpCount;
-  INTEGER cmpSize;
-  LONGINT planeBytes;
-  PACKED_MEMBER(CTabHandle, pmTable);
-  LONGINT pmReserved;
-} PixMap, *PixMapPtr;
+typedef struct PixMap : GuestStruct {
+    GUEST< Ptr> baseAddr;
+    GUEST< INTEGER> rowBytes;
+    GUEST< Rect> bounds;
+    GUEST< INTEGER> pmVersion;
+    GUEST< INTEGER> packType;
+    GUEST< LONGINT> packSize;
+    GUEST< Fixed> hRes;
+    GUEST< Fixed> vRes;
+    GUEST< INTEGER> pixelType;
+    GUEST< INTEGER> pixelSize;
+    GUEST< INTEGER> cmpCount;
+    GUEST< INTEGER> cmpSize;
+    GUEST< LONGINT> planeBytes;
+    GUEST< CTabHandle> pmTable;
+    GUEST< LONGINT> pmReserved;
+} *PixMapPtr;
 MAKE_HIDDEN(PixMapPtr);
 typedef HIDDEN_PixMapPtr *PixMapHandle;
 MAKE_HIDDEN(PixMapHandle);
@@ -306,78 +305,78 @@ enum pixmap_pixel_types
 
 #define ROWMASK	0x1FFF
 
-typedef struct PACKED {
-  INTEGER patType;
-  PACKED_MEMBER(PixMapHandle, patMap);
-  PACKED_MEMBER(Handle, patData);
-  PACKED_MEMBER(Handle, patXData);
-  INTEGER patXValid;
-  PACKED_MEMBER(Handle, patXMap);
-  Pattern pat1Data;
-} PixPat, *PixPatPtr;
+typedef struct PixPat : GuestStruct {
+    GUEST< INTEGER> patType;
+    GUEST< PixMapHandle> patMap;
+    GUEST< Handle> patData;
+    GUEST< Handle> patXData;
+    GUEST< INTEGER> patXValid;
+    GUEST< Handle> patXMap;
+    GUEST< Pattern> pat1Data;
+} *PixPatPtr;
 MAKE_HIDDEN(PixPatPtr);
 typedef HIDDEN_PixPatPtr *PixPatHandle;
 MAKE_HIDDEN(PixPatHandle);
 
-typedef struct PACKED {
-  INTEGER device;
-  PACKED_MEMBER(PixMapHandle, portPixMap);
-  INTEGER portVersion;
-  PACKED_MEMBER(Handle, grafVars);
-  INTEGER chExtra;
-  INTEGER pnLocHFrac;
-  Rect portRect;
-  PACKED_MEMBER(RgnHandle, visRgn);
-  PACKED_MEMBER(RgnHandle, clipRgn);
-  PACKED_MEMBER(PixPatHandle, bkPixPat);
-  RGBColor rgbFgColor;
-  RGBColor rgbBkColor;
-  Point pnLoc;
-  Point pnSize;
-  INTEGER pnMode;
-  PACKED_MEMBER(PixPatHandle, pnPixPat);
-  PACKED_MEMBER(PixPatHandle, fillPixPat);
-  INTEGER pnVis;
-  INTEGER txFont;
-  Style txFace;
-  Byte filler;
-  INTEGER txMode;
-  INTEGER txSize;
-  Fixed spExtra;
-  LONGINT fgColor;
-  LONGINT bkColor;
-  INTEGER colrBit;
-  INTEGER patStretch;
-  PACKED_MEMBER(Handle, picSave);
-  PACKED_MEMBER(Handle, rgnSave);
-  PACKED_MEMBER(Handle, polySave);
-  PACKED_MEMBER(CQDProcsPtr, grafProcs);
-} CGrafPort, *CGrafPtr;
+typedef struct CGrafPort : GuestStruct {
+    GUEST< INTEGER> device;
+    GUEST< PixMapHandle> portPixMap;
+    GUEST< INTEGER> portVersion;
+    GUEST< Handle> grafVars;
+    GUEST< INTEGER> chExtra;
+    GUEST< INTEGER> pnLocHFrac;
+    GUEST< Rect> portRect;
+    GUEST< RgnHandle> visRgn;
+    GUEST< RgnHandle> clipRgn;
+    GUEST< PixPatHandle> bkPixPat;
+    GUEST< RGBColor> rgbFgColor;
+    GUEST< RGBColor> rgbBkColor;
+    GUEST< Point> pnLoc;
+    GUEST< Point> pnSize;
+    GUEST< INTEGER> pnMode;
+    GUEST< PixPatHandle> pnPixPat;
+    GUEST< PixPatHandle> fillPixPat;
+    GUEST< INTEGER> pnVis;
+    GUEST< INTEGER> txFont;
+    GUEST< Style> txFace;
+    GUEST< Byte> filler;
+    GUEST< INTEGER> txMode;
+    GUEST< INTEGER> txSize;
+    GUEST< Fixed> spExtra;
+    GUEST< LONGINT> fgColor;
+    GUEST< LONGINT> bkColor;
+    GUEST< INTEGER> colrBit;
+    GUEST< INTEGER> patStretch;
+    GUEST< Handle> picSave;
+    GUEST< Handle> rgnSave;
+    GUEST< Handle> polySave;
+    GUEST< CQDProcsPtr> grafProcs;
+} *CGrafPtr;
 
 MAKE_HIDDEN(CGrafPtr);
 
-typedef struct PACKED {
-  INTEGER crsrType;
-  PACKED_MEMBER(PixMapHandle, crsrMap);
-  PACKED_MEMBER(Handle, crsrData);
-  PACKED_MEMBER(Handle, crsrXData);
-  INTEGER crsrXValid;
-  PACKED_MEMBER(Handle, crsrXHandle);
-  Bits16 crsr1Data;
-  Bits16 crsrMask;
-  Point crsrHotSpot;
-  LONGINT crsrXTable;
-  LONGINT crsrID;
-} CCrsr, *CCrsrPtr;
+typedef struct CCrsr : GuestStruct {
+    GUEST< INTEGER> crsrType;
+    GUEST< PixMapHandle> crsrMap;
+    GUEST< Handle> crsrData;
+    GUEST< Handle> crsrXData;
+    GUEST< INTEGER> crsrXValid;
+    GUEST< Handle> crsrXHandle;
+    GUEST< Bits16> crsr1Data;
+    GUEST< Bits16> crsrMask;
+    GUEST< Point> crsrHotSpot;
+    GUEST< LONGINT> crsrXTable;
+    GUEST< LONGINT> crsrID;
+} *CCrsrPtr;
 MAKE_HIDDEN(CCrsrPtr);
 typedef HIDDEN_CCrsrPtr *CCrsrHandle;
 
-typedef struct PACKED {
-  uint16 red;
-  uint16 green;
-  uint16 blue;
-  int32 matchData;
-} MatchRec;
+struct MatchRec : GuestStruct {
+    GUEST< uint16> red;
+    GUEST< uint16> green;
+    GUEST< uint16> blue;
+    GUEST< int32> matchData;
+};
 
 typedef HIDDEN_GrafPtr *HIDDEN_GrafPtr_Ptr;
 MAKE_HIDDEN(HIDDEN_GrafPtr_Ptr);

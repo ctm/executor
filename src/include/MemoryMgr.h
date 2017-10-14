@@ -23,27 +23,26 @@ namespace Executor {
 #define memBCErr	(-115)
 #define memSCErr	(-116)
 
-typedef struct PACKED Zone
-{
-  PACKED_MEMBER(Ptr, bkLim);
-  PACKED_MEMBER(Ptr, purgePtr);
-  PACKED_MEMBER(Ptr, hFstFree);
-  LONGINT zcbFree;
-  PACKED_MEMBER(ProcPtr, gzProc);
-  INTEGER moreMast;
-  INTEGER flags;
-  INTEGER cntRel;
-  INTEGER maxRel;
-  INTEGER cntNRel;
-  INTEGER maxNRel;
-  INTEGER cntEmpty;
-  INTEGER cntHandles;
-  LONGINT minCBFree;
-  PACKED_MEMBER(ProcPtr, purgeProc);
-  PACKED_MEMBER(Ptr, sparePtr);
-  PACKED_MEMBER(Ptr, allocPtr);
-  INTEGER heapData;
-} Zone;
+struct Zone : GuestStruct {
+    GUEST< Ptr> bkLim;
+    GUEST< Ptr> purgePtr;
+    GUEST< Ptr> hFstFree;
+    GUEST< LONGINT> zcbFree;
+    GUEST< ProcPtr> gzProc;
+    GUEST< INTEGER> moreMast;
+    GUEST< INTEGER> flags;
+    GUEST< INTEGER> cntRel;
+    GUEST< INTEGER> maxRel;
+    GUEST< INTEGER> cntNRel;
+    GUEST< INTEGER> maxNRel;
+    GUEST< INTEGER> cntEmpty;
+    GUEST< INTEGER> cntHandles;
+    GUEST< LONGINT> minCBFree;
+    GUEST< ProcPtr> purgeProc;
+    GUEST< Ptr> sparePtr;
+    GUEST< Ptr> allocPtr;
+    GUEST< INTEGER> heapData;
+};
 typedef Zone *THz;
 
 MAKE_HIDDEN(THz);

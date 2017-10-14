@@ -39,43 +39,43 @@ namespace Executor {
 
 #define MADROFFSET	40
 
-typedef struct PACKED {
-  unsigned short blockstart;
-  unsigned short blockcount;
-} xtntdesc, xtntrec[3];	/* WILL NEED Cx() */
+typedef struct xtntdesc : GuestStruct {
+    GUEST< unsigned short> blockstart;
+    GUEST< unsigned short> blockcount;
+} xtntrec[3];
 
-typedef struct PACKED {
-  unsigned short drSigWord;	/* 0 */
-  LONGINT drCrDate;		/* 2 */
-  LONGINT drLsMod;		/* 6 */
-  unsigned short drAtrb;	/* 10 */
-  unsigned short drNmFls;	/* 12 */
-  unsigned short drVBMSt;	/* 14 */
-  unsigned short drAllocPtr;	/* 16 */
-  unsigned short drNmAlBlks;	/* 18 */
-  LONGINT drAlBlkSiz;		/* 20 */
-  LONGINT drClpSiz;
-  unsigned short drAlBlSt;
-  LONGINT drNxtCNID;
-  unsigned short drFreeBks;
-  unsigned char drVN[28];
-  LONGINT drVolBkUp;
-  unsigned short drVSeqNum;
-  LONGINT drWrCnt;
-  LONGINT drXTClpSiz;
-  LONGINT drCTClpSiz;
-  unsigned short drNmRtDirs;
-  LONGINT drFilCnt;
-  LONGINT drDirCnt;
-  LONGINT drFndrInfo[8];
-  unsigned short drVCSize;
-  unsigned short drVCBMSize;
-  unsigned short drCtlCSize;
-  LONGINT drXTFlSize;
-  xtntrec drXTExtRec;
-  LONGINT drCTFlSize;
-  xtntrec drCTExtRec;
-} volumeinfo, *volumeinfoPtr;
+typedef struct volumeinfo : GuestStruct {
+    GUEST< unsigned short> drSigWord;    /* 0 */
+    GUEST< LONGINT> drCrDate;    /* 2 */
+    GUEST< LONGINT> drLsMod;    /* 6 */
+    GUEST< unsigned short> drAtrb;    /* 10 */
+    GUEST< unsigned short> drNmFls;    /* 12 */
+    GUEST< unsigned short> drVBMSt;    /* 14 */
+    GUEST< unsigned short> drAllocPtr;    /* 16 */
+    GUEST< unsigned short> drNmAlBlks;    /* 18 */
+    GUEST< LONGINT> drAlBlkSiz;    /* 20 */
+    GUEST< LONGINT> drClpSiz;
+    GUEST< unsigned short> drAlBlSt;
+    GUEST< LONGINT> drNxtCNID;
+    GUEST< unsigned short> drFreeBks;
+    GUEST< unsigned char[28]> drVN;
+    GUEST< LONGINT> drVolBkUp;
+    GUEST< unsigned short> drVSeqNum;
+    GUEST< LONGINT> drWrCnt;
+    GUEST< LONGINT> drXTClpSiz;
+    GUEST< LONGINT> drCTClpSiz;
+    GUEST< unsigned short> drNmRtDirs;
+    GUEST< LONGINT> drFilCnt;
+    GUEST< LONGINT> drDirCnt;
+    GUEST< LONGINT[8]> drFndrInfo;
+    GUEST< unsigned short> drVCSize;
+    GUEST< unsigned short> drVCBMSize;
+    GUEST< unsigned short> drCtlCSize;
+    GUEST< LONGINT> drXTFlSize;
+    GUEST< xtntrec> drXTExtRec;
+    GUEST< LONGINT> drCTFlSize;
+    GUEST< xtntrec> drCTExtRec;
+} *volumeinfoPtr;
 MAKE_HIDDEN(volumeinfoPtr);
 typedef HIDDEN_volumeinfoPtr *volumeinfoHandle;
 
@@ -84,30 +84,30 @@ typedef HIDDEN_volumeinfoPtr *volumeinfoHandle;
 #define ROUNDUP8(x) ((x+7)/8*8)
 #define NPHYSREQ(x) ((x+PHYSBSIZE-1)/PHYSBSIZE)
 
-typedef struct PACKED {
-  LONGINT ndFLink;
-  LONGINT ndBLink;
-  unsigned char ndType;
-  char ndLevel;
-  short ndNRecs;
-  unsigned short idunno;
-} btnode;
+struct btnode : GuestStruct {
+    GUEST< LONGINT> ndFLink;
+    GUEST< LONGINT> ndBLink;
+    GUEST< unsigned char> ndType;
+    GUEST< char> ndLevel;
+    GUEST< short> ndNRecs;
+    GUEST< unsigned short> idunno;
+};
 
 typedef enum { indexnode, mapnode = 2, leafnode = 0xFF } btnodetype;
 
-typedef struct PACKED {
-  unsigned char ckrKeyLen;
-  char ckrResrv1;
-  LONGINT ckrParID;
-  unsigned char ckrCName[32];
-} catkey;
+struct catkey : GuestStruct {
+    GUEST< unsigned char> ckrKeyLen;
+    GUEST< char> ckrResrv1;
+    GUEST< LONGINT> ckrParID;
+    GUEST< unsigned char[32]> ckrCName;
+};
 
-typedef struct PACKED {
-  unsigned char xkrKeyLen;
-  unsigned char xkrFkType;
-  LONGINT xkrFNum;
-  unsigned short xkrFABN;
-} xtntkey;
+struct xtntkey : GuestStruct {
+    GUEST< unsigned char> xkrKeyLen;
+    GUEST< unsigned char> xkrFkType;
+    GUEST< LONGINT> xkrFNum;
+    GUEST< unsigned short> xkrFABN;
+};
 
 typedef union {
     unsigned char keylen;
@@ -117,54 +117,54 @@ typedef union {
 
 #define FILETYPE    2
 
-typedef struct PACKED {
-  char cdrType;
-  char cdrResrv2;
-  char filFlags;
-  char filTyp;
-  FInfo filUsrWds;    /* not sure what form */
-  LONGINT filFlNum;
-  unsigned short filStBlk; /* I don't think this is used */
-  LONGINT filLgLen;
-  LONGINT filPyLen;
-  unsigned short filRStBlk;    /* not used? */
-  LONGINT filRLgLen;
-  LONGINT filRPyLen;
-  LONGINT filCrDat;
-  LONGINT filMdDat;
-  LONGINT filBkDat;
-  LONGINT filFndrInfo[4];
-  unsigned short filClpSize;
-  xtntrec filExtRec;
-  xtntrec filRExtRec;
-  LONGINT filResrv;
-} filerec;
+struct filerec : GuestStruct {
+    GUEST< char> cdrType;
+    GUEST< char> cdrResrv2;
+    GUEST< char> filFlags;
+    GUEST< char> filTyp;
+    GUEST< FInfo> filUsrWds;    /* not sure what form */
+    GUEST< LONGINT> filFlNum;
+    GUEST< unsigned short> filStBlk;    /* I don't think this is used */
+    GUEST< LONGINT> filLgLen;
+    GUEST< LONGINT> filPyLen;
+    GUEST< unsigned short> filRStBlk;    /* not used? */
+    GUEST< LONGINT> filRLgLen;
+    GUEST< LONGINT> filRPyLen;
+    GUEST< LONGINT> filCrDat;
+    GUEST< LONGINT> filMdDat;
+    GUEST< LONGINT> filBkDat;
+    GUEST< LONGINT[4]> filFndrInfo;
+    GUEST< unsigned short> filClpSize;
+    GUEST< xtntrec> filExtRec;
+    GUEST< xtntrec> filRExtRec;
+    GUEST< LONGINT> filResrv;
+};
 
 #define DIRTYPE 1
 
-typedef struct PACKED {
-  char cdrType;
-  char cdrResrv2;
-  unsigned short dirFlags;
-  unsigned short dirVal;
-  LONGINT dirDirID;
-  LONGINT dirCrDat;
-  LONGINT dirMdDat;
-  LONGINT dirBkDat;
-  LONGINT dirUsrInfo[4];
-  LONGINT dirFndrInfo[4];
-  LONGINT dirResrv[4];
-} directoryrec;
+struct directoryrec : GuestStruct {
+    GUEST< char> cdrType;
+    GUEST< char> cdrResrv2;
+    GUEST< unsigned short> dirFlags;
+    GUEST< unsigned short> dirVal;
+    GUEST< LONGINT> dirDirID;
+    GUEST< LONGINT> dirCrDat;
+    GUEST< LONGINT> dirMdDat;
+    GUEST< LONGINT> dirBkDat;
+    GUEST< LONGINT[4]> dirUsrInfo;
+    GUEST< LONGINT[4]> dirFndrInfo;
+    GUEST< LONGINT[4]> dirResrv;
+};
 
 #define THREADTYPE  3
 
-typedef struct PACKED {
-  char cdrType;
-  char cdrResrv2;
-  char thdResrv[8];
-  LONGINT thdParID;
-  unsigned char thdCName[32];
-} threadrec;
+struct threadrec : GuestStruct {
+    GUEST< char> cdrType;
+    GUEST< char> cdrResrv2;
+    GUEST< char[8]> thdResrv;
+    GUEST< LONGINT> thdParID;
+    GUEST< unsigned char[32]> thdCName;
+};
 
 typedef enum { firstisless = -1, same, firstisgreater } compretval;
 
@@ -178,25 +178,25 @@ typedef compretval (*compfp)(void *first, void *second);
 
 typedef HVCB *HVCBPtr;
 
-typedef struct PACKED {
-  LONGINT fcbFlNum;
-  Byte fcbMdRByt;
-  Byte fcbTypByt;
-  unsigned short fcbSBlk;
-  LONGINT fcbEOF;
-  LONGINT fcbPLen;
-  LONGINT fcbCrPs;
-  PACKED_MEMBER(HVCBPtr, fcbVPtr);
-  PACKED_MEMBER(Ptr, fcbBfAdr);
-  unsigned short fcbFlPos;
-  LONGINT fcbClmpSize;
-  LONGINT fcbBTCBPtr;
-  xtntrec fcbExtRec;
-  LONGINT fcbFType;
-  ULONGINT fcbCatPos;
-  LONGINT fcbDirID;
-  unsigned char fcbCName[32];
-} filecontrolblock;
+struct filecontrolblock : GuestStruct {
+    GUEST< LONGINT> fcbFlNum;
+    GUEST< Byte> fcbMdRByt;
+    GUEST< Byte> fcbTypByt;
+    GUEST< unsigned short> fcbSBlk;
+    GUEST< LONGINT> fcbEOF;
+    GUEST< LONGINT> fcbPLen;
+    GUEST< LONGINT> fcbCrPs;
+    GUEST< HVCBPtr> fcbVPtr;
+    GUEST< Ptr> fcbBfAdr;
+    GUEST< unsigned short> fcbFlPos;
+    GUEST< LONGINT> fcbClmpSize;
+    GUEST< LONGINT> fcbBTCBPtr;
+    GUEST< xtntrec> fcbExtRec;
+    GUEST< LONGINT> fcbFType;
+    GUEST< ULONGINT> fcbCatPos;
+    GUEST< LONGINT> fcbDirID;
+    GUEST< unsigned char[32]> fcbCName;
+};
 
 enum { datafork, resourcefork = 0xFF };
 typedef unsigned char Forktype;
@@ -211,27 +211,27 @@ typedef enum { reading, writing } accesstype;
 #define FSOFTLOCKBIT    (1<<0)
 #define FILEFLAGSUSERSETTABLEMASK   FSOFTLOCKBIT
 
-typedef struct PACKED {
-    LONGINT    flink;              /* 0 */
-    LONGINT    blink;              /* 4 */
-    unsigned char type;         /* 8 */
-    unsigned char dummy;        /* 9 */
-    unsigned short   hesthreejim;        /* 10 */
-    INTEGER macdisk_uses_it; /* 12 */
-    INTEGER    height;             /* 14 */
-    LONGINT    root;               /* 16 */
-    LONGINT    numentries;         /* 20 */
-    ULONGINT    firstleaf;          /* 24 */
-    ULONGINT    lastleaf;           /* 28 */
-    unsigned short   btnodesize;         /* 32 */
-    unsigned short   indexkeylen;        /* 34 */
-    LONGINT    nnodes;             /* 36 */
-    LONGINT    nfreenodes;         /* 40 */
-    unsigned char reserved[72]; /* 44 */
-    unsigned char dummy2[132];  /* 116 */
-    unsigned char map[256];     /* 248 */
-    LONGINT unknown2[2];           /* 504 */
-} btblock0;
+struct btblock0 : GuestStruct {
+    GUEST< LONGINT> flink;    /* 0 */
+    GUEST< LONGINT> blink;    /* 4 */
+    GUEST< unsigned char> type;    /* 8 */
+    GUEST< unsigned char> dummy;    /* 9 */
+    GUEST< unsigned short> hesthreejim;    /* 10 */
+    GUEST< INTEGER> macdisk_uses_it;    /* 12 */
+    GUEST< INTEGER> height;    /* 14 */
+    GUEST< LONGINT> root;    /* 16 */
+    GUEST< LONGINT> numentries;    /* 20 */
+    GUEST< ULONGINT> firstleaf;    /* 24 */
+    GUEST< ULONGINT> lastleaf;    /* 28 */
+    GUEST< unsigned short> btnodesize;    /* 32 */
+    GUEST< unsigned short> indexkeylen;    /* 34 */
+    GUEST< LONGINT> nnodes;    /* 36 */
+    GUEST< LONGINT> nfreenodes;    /* 40 */
+    GUEST< unsigned char[72]> reserved;    /* 44 */
+    GUEST< unsigned char[132]> dummy2;    /* 116 */
+    GUEST< unsigned char[256]> map;    /* 248 */
+    GUEST< LONGINT[2]> unknown2;    /* 504 */
+};
 
 #define DATAPFROMKEY(p) ((char *)(p) + ((((catkey *)p)->ckrKeyLen + 2) & ~1))
 
@@ -255,29 +255,29 @@ typedef enum { regular = 1, directory = 2, thread = 4 } filekind;
 
 typedef struct _cacheentry *cacheentry_ptr;
 
-typedef struct PACKED _cacheentry {
-  PACKED_MEMBER(cacheentry_ptr, flink);
-  PACKED_MEMBER(cacheentry_ptr, blink);
-  PACKED_MEMBER(HVCBPtr, vptr);
-  LONGINT fileno;
-  uint16 refnum;
-  ULONGINT physblock;
-  ULONGINT logblk;
-  unsigned char flags;
-  Forktype forktype;
-  char buf[PHYSBSIZE];
+typedef struct _cacheentry : GuestStruct {
+    GUEST< cacheentry_ptr> flink;
+    GUEST< cacheentry_ptr> blink;
+    GUEST< HVCBPtr> vptr;
+    GUEST< LONGINT> fileno;
+    GUEST< uint16> refnum;
+    GUEST< ULONGINT> physblock;
+    GUEST< ULONGINT> logblk;
+    GUEST< unsigned char> flags;
+    GUEST< Forktype> forktype;
+    GUEST< char[PHYSBSIZE]> buf;
 } cacheentry;
 
 #define CACHEDIRTY  (1 << 7)
 #define CACHEBUSY   (1 << 6)
 #define CACHEFREE   (1 << 5)
 
-typedef struct PACKED {
-  PACKED_MEMBER(cacheentry_ptr, flink);
-  PACKED_MEMBER(cacheentry_ptr, blink);
-  unsigned short   nitems;
-  uint16  flags;
-} cachehead;
+struct cachehead : GuestStruct {
+    GUEST< cacheentry_ptr> flink;
+    GUEST< cacheentry_ptr> blink;
+    GUEST< unsigned short> nitems;
+    GUEST< uint16> flags;
+};
 
 #define NCACHEENTRIES   16
 
@@ -307,12 +307,12 @@ typedef struct {
     trailentry trail[MAXTRAILS];    /* out */
 } btparam;
 
-typedef struct PACKED {    /* from MPW equates */
-    PACKED_MEMBER(HVCBPtr, vcbp);
-    LONGINT dirid;
-    LONGINT cathint;    /* ??? */
-    LONGINT procid;
-} wdentry;
+struct wdentry : GuestStruct {
+    GUEST< HVCBPtr> vcbp;
+    GUEST< LONGINT> dirid;
+    GUEST< LONGINT> cathint;    /* ??? */
+    GUEST< LONGINT> procid;
+};
 
 #if defined(MAC)
 extern Ptr WDCBsPtr : 0x372;

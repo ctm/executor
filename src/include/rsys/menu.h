@@ -30,13 +30,13 @@ namespace Executor {
 
 #define MI_TITLE(mi)		(HxX (mi, menuTitle))
 
-typedef struct PACKED {
-  Byte micon;
-  Byte mkeyeq;
-  Byte mmarker;
-  Byte mstyle;
-  Byte mnextlen;
-} mext, *mextp;
+typedef struct mext : GuestStruct {
+    GUEST< Byte> micon;
+    GUEST< Byte> mkeyeq;
+    GUEST< Byte> mmarker;
+    GUEST< Byte> mstyle;
+    GUEST< Byte> mnextlen;
+} *mextp;
 
 extern void C_mdef0(INTEGER, MenuHandle, Rect *, Point, INTEGER *);
 extern int32 C_mbdf0(int16, int16, int16, int32);
@@ -73,10 +73,10 @@ extern LONGINT ROMlib_menuhelper( MenuHandle mh, Rect *saver, LONGINT where,
 
 #define MLMAX   16
 
-typedef struct PACKED {
-  PACKED_MEMBER(MenuHandle, muhandle);
-  INTEGER muleft;
-} muelem;
+struct muelem : GuestStruct {
+    GUEST< MenuHandle> muhandle;
+    GUEST< INTEGER> muleft;
+};
 
 typedef struct menu_elt
 {
@@ -113,25 +113,24 @@ typedef struct menu_elt
 #define ML_LAST_HMENU_OFFSET(ml)	(CW (ML_LAST_HMENU_OFFSET_X (ml)))
 #define ML_MENU_TITLE_SAVE(ml)		(CW (ML_MENU_TITLE_SAVE_X (ml)))
 
-typedef struct PACKED menu_list
-{
-  INTEGER last_menu_offset;
-  INTEGER last_right;
-  INTEGER mb_res_id;
-  /* other stuff... */
-  char data;
-} menu_list;
+    /* other stuff... */
+struct menu_list : GuestStruct {
+    GUEST< INTEGER> last_menu_offset;
+    GUEST< INTEGER> last_right;
+    GUEST< INTEGER> mb_res_id;
+    GUEST< char> data;
+};
 
 typedef menu_list *menu_list_ptr;
 MAKE_HIDDEN(menu_list_ptr);
 typedef HIDDEN_menu_list_ptr *menu_list_handle;
 
-typedef struct PACKED {
-  INTEGER muoff;
-  INTEGER muright;
-  INTEGER mufu;
-  muelem mulist[MLMAX]; /* WILL NEED Cx() */
-} menulist;
+struct menulist : GuestStruct {
+    GUEST< INTEGER> muoff;
+    GUEST< INTEGER> muright;
+    GUEST< INTEGER> mufu;
+    GUEST< muelem[MLMAX]> mulist;    /* WILL NEED Cx() */
+};
 
 typedef menulist *menulistp;
 MAKE_HIDDEN(menulistp);
@@ -158,30 +157,30 @@ typedef HIDDEN_menulistp *mlhandle;
 #define DRAWMENUBAR	0
 #define CLEARMENUBAR	(-1)
 
-typedef struct PACKED {	/* from MPW Private.a */
-    INTEGER lastMBSave;		/* offset to top most menu saved */
-  PACKED_MEMBER(Handle, mbCustomStorage);	/* for custom jobs (i.e. we don't use) */
-    Rect mbItemRect;		/* currently chosen menu */
-    Byte mbMenuDelay;		/* MenuDelay from param ram */
-    Byte mbMenuDrag;		/* MenuDrag from param ram */
-    INTEGER mbUglyScroll;	/* HMenu flag having to do with scrolling?? */
-    INTEGER mbIconState;	/* ??? NMgr icon state */
-} mbdfheader;
+struct mbdfheader : GuestStruct {
+    GUEST< INTEGER> lastMBSave;    /* offset to top most menu saved */
+    GUEST< Handle> mbCustomStorage;    /* for custom jobs (i.e. we don't use) */
+    GUEST< Rect> mbItemRect;    /* currently chosen menu */
+    GUEST< Byte> mbMenuDelay;    /* MenuDelay from param ram */
+    GUEST< Byte> mbMenuDrag;    /* MenuDrag from param ram */
+    GUEST< INTEGER> mbUglyScroll;    /* HMenu flag having to do with scrolling?? */
+    GUEST< INTEGER> mbIconState;    /* ??? NMgr icon state */
+};
 
 typedef mbdfheader *mbdfheaderptr;
 MAKE_HIDDEN(mbdfheaderptr);
 typedef HIDDEN_mbdfheaderptr *mbdfheaderhand;
 
-typedef struct PACKED {
-    Rect mbRectSave;		/* where it is on screen */
-    PACKED_MEMBER(Handle, mbBitsSave);		/* where the bits are */
-    INTEGER mbMenuDir;		/* what direction the menu was placed */
-    INTEGER mbMLOffset;		/* 6 byte offset into MenuList */
-    PACKED_MEMBER(MenuHandle, mbMLHandle);	/* the handle from MenuList */
-    INTEGER mbTopScroll;	/* copy of TopMenuItem */
-    INTEGER mbBotScroll;	/* copy of AtMenuBottom */
-    LONGINT mbReserved;		/* i dunno */
-} mbdfentry;
+struct mbdfentry : GuestStruct {
+    GUEST< Rect> mbRectSave;    /* where it is on screen */
+    GUEST< Handle> mbBitsSave;    /* where the bits are */
+    GUEST< INTEGER> mbMenuDir;    /* what direction the menu was placed */
+    GUEST< INTEGER> mbMLOffset;    /* 6 byte offset into MenuList */
+    GUEST< MenuHandle> mbMLHandle;    /* the handle from MenuList */
+    GUEST< INTEGER> mbTopScroll;    /* copy of TopMenuItem */
+    GUEST< INTEGER> mbBotScroll;    /* copy of AtMenuBottom */
+    GUEST< LONGINT> mbReserved;    /* i dunno */
+};
 
 #define NMBDFENTRIES	5
 #define MBDFSTRUCTBYTES ((NMBDFENTRIES+1)*sizeof(mbdfentry))
@@ -253,32 +252,32 @@ typedef struct con_info
 } icon_info_t;
 
 
-typedef struct PACKED mct_res
-{
-  int16 n_entries;
-  MCEntry entries[1];
+typedef struct mct_res : GuestStruct {
+    GUEST< int16> n_entries;
+    GUEST< MCEntry[1]> entries;
 } mct_res_t;
 
-typedef struct PACKED {
-    INTEGER nmen;
-    INTEGER mrid[1];
-} mbartype;
+struct mbartype : GuestStruct {
+    GUEST< INTEGER> nmen;
+    GUEST< INTEGER[1]> mrid;
+};
 
-typedef struct PACKED {
-    muelem *startp;
-    muelem *endp;
+typedef struct  : GuestStruct {
+    GUEST< muelem*> startp;
+    GUEST< muelem*> endp;
 } startendpairs[2];
 
-typedef struct PACKED
+// ### Struct needs manual conversion to GUEST<...>
+struct tableentry : GuestStruct {
+};
 {
   int32 lasttick;
   int16 count;
-  struct PACKED tableentry
-  {
-    int16 top;
-    StringPtr name;
-    mextp options;
-  } entry[1];
+struct tableentry : GuestStruct {
+    GUEST< int16> top;
+    GUEST< StringPtr> name;
+    GUEST< mextp> options;
+};
 } table, *tablePtr, **tableHandle;
 
 void cleanup_icon_info (icon_info_t *info);

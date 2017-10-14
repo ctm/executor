@@ -73,36 +73,36 @@ typedef HIDDEN_GrafPtr HIDDEN_WindowPtr;
 
 typedef CGrafPtr CWindowPtr;
 
-typedef struct __wr WindowRecord;
+GUEST_STRUCT(WindowRecord);
 typedef WindowRecord *WindowPeek;
 MAKE_HIDDEN(WindowPeek);
 }
 #include "ControlMgr.h"
 namespace Executor {
-struct PACKED  __wr {
-  GrafPort port;
-  INTEGER windowKind;
-  BOOLEAN visible;
-  BOOLEAN hilited;
-  BOOLEAN goAwayFlag;
-  BOOLEAN spareFlag;
-  PACKED_MEMBER(RgnHandle, strucRgn);
-  PACKED_MEMBER(RgnHandle, contRgn);
-  PACKED_MEMBER(RgnHandle, updateRgn);
-  PACKED_MEMBER(Handle, windowDefProc);
-  PACKED_MEMBER(Handle, dataHandle);
-  PACKED_MEMBER(StringHandle, titleHandle);
-  INTEGER titleWidth;
-  PACKED_MEMBER(ControlHandle, controlList);
-  PACKED_MEMBER(WindowPeek, nextWindow);
-  PACKED_MEMBER(PicHandle, windowPic);
-  LONGINT refCon;
+struct WindowRecord : GuestStruct {
+    GUEST< GrafPort> port;
+    GUEST< INTEGER> windowKind;
+    GUEST< BOOLEAN> visible;
+    GUEST< BOOLEAN> hilited;
+    GUEST< BOOLEAN> goAwayFlag;
+    GUEST< BOOLEAN> spareFlag;
+    GUEST< RgnHandle> strucRgn;
+    GUEST< RgnHandle> contRgn;
+    GUEST< RgnHandle> updateRgn;
+    GUEST< Handle> windowDefProc;
+    GUEST< Handle> dataHandle;
+    GUEST< StringHandle> titleHandle;
+    GUEST< INTEGER> titleWidth;
+    GUEST< ControlHandle> controlList;
+    GUEST< WindowPeek> nextWindow;
+    GUEST< PicHandle> windowPic;
+    GUEST< LONGINT> refCon;
 };
 
-typedef struct PACKED {
-  Rect userState;
-  Rect stdState;
-} WStateData;
+struct WStateData : GuestStruct {
+    GUEST< Rect> userState;
+    GUEST< Rect> stdState;
+};
 
 #define inZoomIn  7
 #define inZoomOut 8
@@ -115,15 +115,15 @@ MAKE_HIDDEN(AuxWinPtr);
 typedef HIDDEN_AuxWinPtr *AuxWinHandle;
 MAKE_HIDDEN(AuxWinHandle);
 
-typedef struct PACKED AuxWinRec {
-  PACKED_MEMBER(AuxWinHandle, awNext);
-  PACKED_MEMBER(WindowPtr, awOwner);
-  PACKED_MEMBER(CTabHandle, awCTable);
-  PACKED_MEMBER(Handle, dialogCItem);
-  LONGINT awFlags;
-  PACKED_MEMBER(CTabHandle, awReserved);
-  LONGINT awRefCon;
-} AuxWinRec;
+struct AuxWinRec : GuestStruct {
+    GUEST< AuxWinHandle> awNext;
+    GUEST< WindowPtr> awOwner;
+    GUEST< CTabHandle> awCTable;
+    GUEST< Handle> dialogCItem;
+    GUEST< LONGINT> awFlags;
+    GUEST< CTabHandle> awReserved;
+    GUEST< LONGINT> awRefCon;
+};
 
 #if !defined (WindowList_H)
 extern HIDDEN_WindowPeek 	WindowList_H;

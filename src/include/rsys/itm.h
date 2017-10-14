@@ -10,12 +10,12 @@
 
 #include "rsys/pstuff.h"
 namespace Executor {
-typedef struct PACKED {
-  PACKED_MEMBER(Handle, itmhand);
-  Rect itmr;
-  unsigned char itmtype;
-  unsigned char itmlen;
-} itmstr;
+struct itmstr : GuestStruct {
+    GUEST< Handle> itmhand;
+    GUEST< Rect> itmr;
+    GUEST< unsigned char> itmtype;
+    GUEST< unsigned char> itmlen;
+};
 
 typedef itmstr *itmp;
 MAKE_HIDDEN(itmp);
@@ -52,47 +52,44 @@ typedef HIDDEN_itmp *itmh;
 extern void dialog_compute_rect (Rect *dialog_rect, Rect *dst_rect,
 				 int position);
 
-typedef struct PACKED {
-  Rect altr;
-  INTEGER altiid;
-  INTEGER altstag;
-} altstr;
+struct altstr : GuestStruct {
+    GUEST< Rect> altr;
+    GUEST< INTEGER> altiid;
+    GUEST< INTEGER> altstag;
+};
 
 typedef altstr *altp;
 MAKE_HIDDEN(altp);
 typedef HIDDEN_altp *alth;
 
-typedef struct PACKED
-{
-  Rect dlgr;
-  INTEGER dlgprocid;
-  char dlgvis;
-  char dlgfil1;
-  char dlggaflag;
-  char dlgfil2;
-  LONGINT dlgrc;
-  INTEGER dlgditl;
-  char dlglen;
-} dlogstr;
+struct dlogstr : GuestStruct {
+    GUEST< Rect> dlgr;
+    GUEST< INTEGER> dlgprocid;
+    GUEST< char> dlgvis;
+    GUEST< char> dlgfil1;
+    GUEST< char> dlggaflag;
+    GUEST< char> dlgfil2;
+    GUEST< LONGINT> dlgrc;
+    GUEST< INTEGER> dlgditl;
+    GUEST< char> dlglen;
+};
 typedef dlogstr *dlogp;
 MAKE_HIDDEN(dlogp);
 typedef HIDDEN_dlogp *dlogh;
 
-typedef struct PACKED item_style_info
-{
-  int16 font;
-  Style face;
-  unsigned char filler;
-  int16 size;
-  RGBColor foreground;
-  RGBColor background;
-  int16 mode;
+typedef struct item_style_info : GuestStruct {
+    GUEST< int16> font;
+    GUEST< Style> face;
+    GUEST< unsigned char> filler;
+    GUEST< int16> size;
+    GUEST< RGBColor> foreground;
+    GUEST< RGBColor> background;
+    GUEST< int16> mode;
 } item_style_info_t;
 
-typedef struct PACKED item_color_info
-{
-  int16 data;
-  int16 offset;
+typedef struct item_color_info : GuestStruct {
+    GUEST< int16> data;
+    GUEST< int16> offset;
 } item_color_info_t;
 
 extern itmp ROMlib_dpnotoip (DialogPeek dp, INTEGER itemno, SignedByte *flags);

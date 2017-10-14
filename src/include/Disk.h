@@ -33,21 +33,21 @@ namespace Executor {
 #define noDriveErr	(-64)
 #define lastDskErr	(-64)
 
-typedef struct PACKED {
-  INTEGER track;
-  SignedByte writeProt;
-  SignedByte diskInPlace;
-  SignedByte installed;
-  SignedByte sides;
-  PACKED_MEMBER(QElemPtr, qLink);
-  INTEGER qType;
-  INTEGER dQDrive;
-  INTEGER dQRefNum;
-  INTEGER dQFSID;
-  SignedByte twoSideFmt;
-  SignedByte needsFlush;
-  INTEGER diskErrs;
-} DrvSts;
+struct DrvSts : GuestStruct {
+    GUEST< INTEGER> track;
+    GUEST< SignedByte> writeProt;
+    GUEST< SignedByte> diskInPlace;
+    GUEST< SignedByte> installed;
+    GUEST< SignedByte> sides;
+    GUEST< QElemPtr> qLink;
+    GUEST< INTEGER> qType;
+    GUEST< INTEGER> dQDrive;
+    GUEST< INTEGER> dQRefNum;
+    GUEST< INTEGER> dQFSID;
+    GUEST< SignedByte> twoSideFmt;
+    GUEST< SignedByte> needsFlush;
+    GUEST< INTEGER> diskErrs;
+};
 
 
 /* DO NOT DELETE THIS LINE */

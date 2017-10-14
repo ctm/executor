@@ -1,25 +1,22 @@
 #if !defined (__rsys_screen_dump_h__)
 #  define __rsys_screen_dump_h__
 
-struct PACKED header
-{
-  int16 byte_order;
-  int16 magic_number;
-  int32 ifd_offset;
+struct header : GuestStruct {
+    GUEST< int16> byte_order;
+    GUEST< int16> magic_number;
+    GUEST< int32> ifd_offset;
 };
 
-struct PACKED directory_entry
-{
-  int16 tag;
-  int16 type;
-  int32 count;
-  int32 value_offset;
+struct directory_entry : GuestStruct {
+    GUEST< int16> tag;
+    GUEST< int16> type;
+    GUEST< int32> count;
+    GUEST< int32> value_offset;
 };
 
-struct PACKED ifd
-{
-  int16 count;
-  struct directory_entry entries[1];
+struct ifd : GuestStruct {
+    GUEST< int16> count;
+    GUEST< struct directory_entry[1]> entries;
 };
 
 #endif /* !defined (__rsys_screen_dump_h__) */

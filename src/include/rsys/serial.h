@@ -9,10 +9,10 @@
  */
 
 namespace Executor {
-typedef struct PACKED{
-  PACKED_MEMBER(Ptr, p);
-  INTEGER i;
-} sersetbuf_t;
+struct sersetbuf_t : GuestStruct {
+    GUEST< Ptr> p;
+    GUEST< INTEGER> i;
+};
 
 extern OSErr ROMlib_serialopen (ParmBlkPtr pbp, DCtlPtr dcp);
 extern OSErr ROMlib_serialprime (ParmBlkPtr pbp, DCtlPtr dcp);

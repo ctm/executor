@@ -14,13 +14,13 @@
 #define noTypeErr	(-102)
 
 namespace Executor {
-typedef struct PACKED {
-  LONGINT scrapSize;
-  PACKED_MEMBER(Handle, scrapHandle);
-  INTEGER scrapCount;
-  INTEGER scrapState;
-  PACKED_MEMBER(StringPtr, scrapName);
-} ScrapStuff;
+struct ScrapStuff : GuestStruct {
+    GUEST< LONGINT> scrapSize;
+    GUEST< Handle> scrapHandle;
+    GUEST< INTEGER> scrapCount;
+    GUEST< INTEGER> scrapState;
+    GUEST< StringPtr> scrapName;
+};
 typedef ScrapStuff *PScrapStuff;
 
 

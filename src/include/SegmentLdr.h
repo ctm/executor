@@ -19,12 +19,12 @@ extern _NORET_1_ pascal trap void C_ExitToShell( void ) _NORET_2_;
 #define appOpen		0
 #define appPrint	1
 
-typedef struct PACKED {
-  INTEGER vRefNum;
-  OSType fType;
-  INTEGER versNum;
-  Str255 fName;
-} AppFile;
+struct AppFile : GuestStruct {
+    GUEST< INTEGER> vRefNum;
+    GUEST< OSType> fType;
+    GUEST< INTEGER> versNum;
+    GUEST< Str255> fName;
+};
 
 #define hwParamErr (-502)
 

@@ -25,19 +25,19 @@ namespace Executor {
 #define prInitErr	(-88)
 #define prWrErr		(-87)
 
-typedef struct PACKED {
-  Byte valid;
-  Byte aTalkA;
-  Byte aTalkB;
-  Byte config;
-  INTEGER portA;
-  INTEGER portB;
-  LONGINT alarm;
-  INTEGER font;
-  INTEGER kbdPrint;
-  INTEGER volClik;
-  INTEGER misc;
-} SysParmType;
+struct SysParmType : GuestStruct {
+    GUEST< Byte> valid;
+    GUEST< Byte> aTalkA;
+    GUEST< Byte> aTalkB;
+    GUEST< Byte> config;
+    GUEST< INTEGER> portA;
+    GUEST< INTEGER> portB;
+    GUEST< LONGINT> alarm;
+    GUEST< INTEGER> font;
+    GUEST< INTEGER> kbdPrint;
+    GUEST< INTEGER> volClik;
+    GUEST< INTEGER> misc;
+};
 typedef SysParmType *SysPPtr;
 
 typedef enum { dummyType, vType, ioQType, drvQType, evType, fsQType } QTypes;
@@ -51,27 +51,27 @@ union __qe {
 };
 typedef union __qe QElem;
 
-typedef struct PACKED {
-  INTEGER year;
-  INTEGER month;
-  INTEGER day;
-  INTEGER hour;
-  INTEGER minute;
-  INTEGER second;
-  INTEGER dayOfWeek;
-} DateTimeRec;
+struct DateTimeRec : GuestStruct {
+    GUEST< INTEGER> year;
+    GUEST< INTEGER> month;
+    GUEST< INTEGER> day;
+    GUEST< INTEGER> hour;
+    GUEST< INTEGER> minute;
+    GUEST< INTEGER> second;
+    GUEST< INTEGER> dayOfWeek;
+};
 
-typedef struct PACKED {
-  INTEGER environsVersion;
-  INTEGER machineType;
-  INTEGER systemVersion;
-  INTEGER processor;
-  BOOLEAN hasFPU;
-  BOOLEAN hasColorQD;
-  INTEGER keyBoardType;
-  INTEGER atDrvrVersNum;
-  INTEGER sysVRefNum;
-} SysEnvRec, *SysEnvRecPtr;
+typedef struct SysEnvRec : GuestStruct {
+    GUEST< INTEGER> environsVersion;
+    GUEST< INTEGER> machineType;
+    GUEST< INTEGER> systemVersion;
+    GUEST< INTEGER> processor;
+    GUEST< BOOLEAN> hasFPU;
+    GUEST< BOOLEAN> hasColorQD;
+    GUEST< INTEGER> keyBoardType;
+    GUEST< INTEGER> atDrvrVersNum;
+    GUEST< INTEGER> sysVRefNum;
+} *SysEnvRecPtr;
 
 #define SYSRECVNUM	2
 

@@ -30,30 +30,26 @@ enum
 
 typedef uint8 RDFlagsType;
 
-typedef struct PACKED RoutineRecord
-{
-  ProcInfoType procInfo;
-  uint8 reserved1;
-  ISAType ISA;
-  RoutineFlagsType routineFlags;
-  ProcPtr procDescriptor;
-  uint32 reserved2;
-  uint32 selector;
-}
-RoutineRecord;
+struct RoutineRecord : GuestStruct {
+    GUEST< ProcInfoType> procInfo;
+    GUEST< uint8> reserved1;
+    GUEST< ISAType> ISA;
+    GUEST< RoutineFlagsType> routineFlags;
+    GUEST< ProcPtr> procDescriptor;
+    GUEST< uint32> reserved2;
+    GUEST< uint32> selector;
+};
 
-typedef struct PACKED RoutineDescriptor
-{
-  uint16 goMixedModeTrap;
-  uint8 version;
-  RDFlagsType routineDescriptorFlags;
-  uint32 reserved1;
-  uint8 reserved2;
-  uint8 selectorInfo;
-  uint16 routineCount;
-  RoutineRecord routineRecords[1];
-}
-RoutineDescriptor;
+struct RoutineDescriptor : GuestStruct {
+    GUEST< uint16> goMixedModeTrap;
+    GUEST< uint8> version;
+    GUEST< RDFlagsType> routineDescriptorFlags;
+    GUEST< uint32> reserved1;
+    GUEST< uint8> reserved2;
+    GUEST< uint8> selectorInfo;
+    GUEST< uint16> routineCount;
+    GUEST< RoutineRecord[1]> routineRecords;
+};
 
 enum { MIXED_MODE_TRAP = 0xAAFE };
 enum { kRoutineDescriptorVersion = 7 };

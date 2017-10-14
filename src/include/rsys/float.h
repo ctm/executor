@@ -55,11 +55,11 @@ typedef double ieee_t;
 /* 68k 96 bit IEEE FP memory representation. */
 #if defined (mc68000)
 typedef union {
-  struct PACKED {
-    unsigned short sgn_and_exp;
-    unsigned short zero;
-    unsigned long long man;
-  } fields;
+struct  : GuestStruct {
+    GUEST< unsigned short> sgn_and_exp;
+    GUEST< unsigned short> zero;
+    GUEST< unsigned long long> man;
+};
   ieee_t val;
 } m68k_x96_t;
 #endif
@@ -67,14 +67,18 @@ typedef union {
 
 /* i386 80 bit IEEE FP memory representation. */
 #if defined (i386)
-typedef struct PACKED {
-  ULONGINT man_lo;        /* Little endian. */
-  ULONGINT man_hi;        /* Little endian. */
-  unsigned short sgn_and_exp;  /* Little endian. */
-} i386_x80_t;
+struct PACKED i386_x80_t {
+    uint32_t man_lo;    /* Little endian. */
+    uint32_t man_hi;    /* Little endian. */
+    uint16_t sgn_and_exp;    /* Little endian. */
+};
 #endif
 
 #if defined(__alpha)
+// ### Struct needs manual conversion to GUEST<...>
+//     ULONGINT man_hi:20;
+// ### Struct needs manual conversion to GUEST<...>
+//     ULONGINT man_hi:20;
 typedef struct PACKED {
     ULONGINT man_lo;
     ULONGINT man_hi:20;

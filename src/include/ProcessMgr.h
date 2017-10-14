@@ -14,11 +14,10 @@
 namespace Executor {
 typedef INTEGER LaunchFlags;
 
-typedef struct PACKED ProcessSerialNumber
-{
-  uint32 highLongOfPSN;
-  uint32 lowLongOfPSN;
-} ProcessSerialNumber;
+struct ProcessSerialNumber : GuestStruct {
+    GUEST< uint32> highLongOfPSN;
+    GUEST< uint32> lowLongOfPSN;
+};
 
 /* for now, anyway */
 
@@ -42,22 +41,20 @@ enum { APP_PARAMS_MAGIC = 0xd6434a1b, }; /* chosen from /dev/random */
 
 typedef ROMlib_AppParameters_t *AppParametersPtr;
 
-typedef struct PACKED
-{
-  LONGINT reserved1;
-  INTEGER reserved2;
-  INTEGER launchBlockID;
-  LONGINT launchEPBLength;
-  INTEGER launchFileFlags;
-  LaunchFlags launchControlFlags;
-  FSSpecPtr launchAppSpec;
-  ProcessSerialNumber launchProcessSN;
-  LONGINT launchPreferredSize;
-  LONGINT launchMinimumSize;
-  LONGINT launchAvailableSize;
-  AppParametersPtr launchAppParameters;
-}
-LaunchParamBlockRec;
+struct LaunchParamBlockRec : GuestStruct {
+    GUEST< LONGINT> reserved1;
+    GUEST< INTEGER> reserved2;
+    GUEST< INTEGER> launchBlockID;
+    GUEST< LONGINT> launchEPBLength;
+    GUEST< INTEGER> launchFileFlags;
+    GUEST< LaunchFlags> launchControlFlags;
+    GUEST< FSSpecPtr> launchAppSpec;
+    GUEST< ProcessSerialNumber> launchProcessSN;
+    GUEST< LONGINT> launchPreferredSize;
+    GUEST< LONGINT> launchMinimumSize;
+    GUEST< LONGINT> launchAvailableSize;
+    GUEST< AppParametersPtr> launchAppParameters;
+};
 
 enum { extendedBlock = 0x4C43 };
 enum { extendedBlockLen = sizeof (LaunchParamBlockRec) - 12 };
@@ -68,22 +65,21 @@ enum { launchContinue = 0x4000 };
   ((psn0).highLongOfPSN == (psn1).highLongOfPSN		\
    && (psn0).lowLongOfPSN == (psn1).lowLongOfPSN)
 
-typedef struct PACKED ProcessInfoRec
-{
-  uint32 processInfoLength;
-  PACKED_MEMBER(StringPtr, processName);
-  ProcessSerialNumber processNumber;
-  uint32 processType;
-  OSType processSignature;
-  uint32 processMode;
-  PACKED_MEMBER(Ptr, processLocation);
-  uint32 processSize;
-  uint32 processFreeMem;
-  ProcessSerialNumber processLauncher;
-  uint32 processLaunchDate;
-  uint32 processActiveTime;
-  PACKED_MEMBER(FSSpecPtr, processAppSpec);
-} ProcessInfoRec;
+struct ProcessInfoRec : GuestStruct {
+    GUEST< uint32> processInfoLength;
+    GUEST< StringPtr> processName;
+    GUEST< ProcessSerialNumber> processNumber;
+    GUEST< uint32> processType;
+    GUEST< OSType> processSignature;
+    GUEST< uint32> processMode;
+    GUEST< Ptr> processLocation;
+    GUEST< uint32> processSize;
+    GUEST< uint32> processFreeMem;
+    GUEST< ProcessSerialNumber> processLauncher;
+    GUEST< uint32> processLaunchDate;
+    GUEST< uint32> processActiveTime;
+    GUEST< FSSpecPtr> processAppSpec;
+};
 typedef ProcessInfoRec *ProcessInfoPtr;
 
 #define PROCESS_INFO_SERIAL_NUMBER(info)	((info)->processNumber)

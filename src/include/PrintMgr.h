@@ -38,106 +38,106 @@ namespace Executor {
 #define sPrDrvr		".Print"
 #define iPrDrvrRef	(-3)
 
-typedef struct PACKED {
-  GrafPort gPort;
-  QDProcs saveprocs;
-  LONGINT spare[4];
-  BOOLEAN fOurPtr;
-  BOOLEAN fOurBits;
-} TPrPort;
+struct TPrPort : GuestStruct {
+    GUEST< GrafPort> gPort;
+    GUEST< QDProcs> saveprocs;
+    GUEST< LONGINT[4]> spare;
+    GUEST< BOOLEAN> fOurPtr;
+    GUEST< BOOLEAN> fOurBits;
+};
 typedef TPrPort *TPPrPort;
 
-typedef struct PACKED {
-  INTEGER iDev;
-  INTEGER iVRes;
-  INTEGER iHRes;
-  Rect rPage;
-} TPrInfo;
+struct TPrInfo : GuestStruct {
+    GUEST< INTEGER> iDev;
+    GUEST< INTEGER> iVRes;
+    GUEST< INTEGER> iHRes;
+    GUEST< Rect> rPage;
+};
 
 typedef enum {feedCut, feedFanFold, feedMechCut, feedOther} TFeed;
 
-typedef struct PACKED {
-  INTEGER wDev;
-  INTEGER iPageV;
-  INTEGER iPageH;
-  SignedByte bPort;
-  char feed;
-} TPrStl;
+struct TPrStl : GuestStruct {
+    GUEST< INTEGER> wDev;
+    GUEST< INTEGER> iPageV;
+    GUEST< INTEGER> iPageH;
+    GUEST< SignedByte> bPort;
+    GUEST< char> feed;
+};
 
 typedef enum { scanTB,  scanBL,  scanLR,  scanRL } TScan;
-typedef struct PACKED {
-  INTEGER iRowBytes;
-  INTEGER iBandV;
-  INTEGER iBandH;
-  INTEGER iDevBytes;
-  INTEGER iBands;
-  SignedByte bPatScale;
-  SignedByte bULThick;
-  SignedByte bULOffset;
-  SignedByte bULShadow;
-  char scan;
-  SignedByte bXInfoX;
-} TPrXInfo;
+struct TPrXInfo : GuestStruct {
+    GUEST< INTEGER> iRowBytes;
+    GUEST< INTEGER> iBandV;
+    GUEST< INTEGER> iBandH;
+    GUEST< INTEGER> iDevBytes;
+    GUEST< INTEGER> iBands;
+    GUEST< SignedByte> bPatScale;
+    GUEST< SignedByte> bULThick;
+    GUEST< SignedByte> bULOffset;
+    GUEST< SignedByte> bULShadow;
+    GUEST< char> scan;
+    GUEST< SignedByte> bXInfoX;
+};
 
-typedef struct PACKED {
-  INTEGER iFstPage;
-  INTEGER iLstPage;
-  INTEGER iCopies;
-  SignedByte bJDocLoop;
-  BOOLEAN fFromUsr;
-  PACKED_MEMBER(ProcPtr, pIdleProc);
-  PACKED_MEMBER(StringPtr, pFileName);
-  INTEGER iFileVol;
-  SignedByte bFileVers;
-  SignedByte bJobX;
-} TPrJob;
+struct TPrJob : GuestStruct {
+    GUEST< INTEGER> iFstPage;
+    GUEST< INTEGER> iLstPage;
+    GUEST< INTEGER> iCopies;
+    GUEST< SignedByte> bJDocLoop;
+    GUEST< BOOLEAN> fFromUsr;
+    GUEST< ProcPtr> pIdleProc;
+    GUEST< StringPtr> pFileName;
+    GUEST< INTEGER> iFileVol;
+    GUEST< SignedByte> bFileVers;
+    GUEST< SignedByte> bJobX;
+};
 
-typedef struct PACKED {
-  INTEGER iPrVersion;
-  TPrInfo prInfo;
-  Rect rPaper;
-  TPrStl prStl;
-  TPrInfo prInfoPT;
-  TPrXInfo prXInfo;
-  TPrJob prJob;
-  INTEGER printX[19];
-} TPrint;
+struct TPrint : GuestStruct {
+    GUEST< INTEGER> iPrVersion;
+    GUEST< TPrInfo> prInfo;
+    GUEST< Rect> rPaper;
+    GUEST< TPrStl> prStl;
+    GUEST< TPrInfo> prInfoPT;
+    GUEST< TPrXInfo> prXInfo;
+    GUEST< TPrJob> prJob;
+    GUEST< INTEGER[19]> printX;
+};
 typedef TPrint *TPPrint;
 MAKE_HIDDEN(TPPrint);
 typedef HIDDEN_TPPrint *THPrint;
 
 typedef Rect *TPRect;
 
-typedef struct PACKED {
-  INTEGER iTotPages;
-  INTEGER iCurPage;
-  INTEGER iTotCopies;
-  INTEGER iCurCopy;
-  INTEGER iTotBands;
-  INTEGER iCurBand;
-  BOOLEAN fPgDirty;
-  BOOLEAN fImaging;
-  PACKED_MEMBER(THPrint, hPrint);
-  PACKED_MEMBER(TPPrPort, pPRPort);
-  PACKED_MEMBER(PicHandle, hPic);
-} TPrStatus;
+struct TPrStatus : GuestStruct {
+    GUEST< INTEGER> iTotPages;
+    GUEST< INTEGER> iCurPage;
+    GUEST< INTEGER> iTotCopies;
+    GUEST< INTEGER> iCurCopy;
+    GUEST< INTEGER> iTotBands;
+    GUEST< INTEGER> iCurBand;
+    GUEST< BOOLEAN> fPgDirty;
+    GUEST< BOOLEAN> fImaging;
+    GUEST< THPrint> hPrint;
+    GUEST< TPPrPort> pPRPort;
+    GUEST< PicHandle> hPic;
+};
 
-typedef struct PACKED {
-/* From Technote 095 */
-  DialogRecord dlg;
-  PACKED_MEMBER(ProcPtr, pFltrProc);
-  PACKED_MEMBER(ProcPtr, pItemProc);
-  PACKED_MEMBER(THPrint, hPrintUsr);
-  BOOLEAN fDoIt;
-  BOOLEAN fDone;
-  LONGINT lUser1;
-  LONGINT lUser2;
-  LONGINT lUser3;
-  LONGINT lUser4;
-  INTEGER iNumFst;
-  INTEGER iNumLst;
+    /* From Technote 095 */
     /* more stuff may be here */
-} TPrDlg, *TPPrDlg;
+typedef struct TPrDlg : GuestStruct {
+    GUEST< DialogRecord> dlg;
+    GUEST< ProcPtr> pFltrProc;
+    GUEST< ProcPtr> pItemProc;
+    GUEST< THPrint> hPrintUsr;
+    GUEST< BOOLEAN> fDoIt;
+    GUEST< BOOLEAN> fDone;
+    GUEST< LONGINT> lUser1;
+    GUEST< LONGINT> lUser2;
+    GUEST< LONGINT> lUser3;
+    GUEST< LONGINT> lUser4;
+    GUEST< INTEGER> iNumFst;
+    GUEST< INTEGER> iNumLst;
+} *TPPrDlg;
 
 
 #if !defined (PrintErr)

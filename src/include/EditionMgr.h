@@ -37,78 +37,72 @@ typedef ProcPtr ExpModalFilterProcPtr;
 typedef ProcPtr FormatIOProcPtr;
 typedef ProcPtr EditionOpenerProcPtr;
 
-struct PACKED SectionRecord
-{
-  SignedByte version;
-  SectionType kind;
-  UpdateMode mode;
-  TimeStamp mdDate;
-  int32 sectionID;
-  int32 refCon;
-  PACKED_MEMBER(AliasHandle, alias);
 
-  int32 subPart;
-  PACKED_MEMBER(/* ### Section */ Handle, nextSection);
-  PACKED_MEMBER(Handle, controlBlock);
-  EditionRefNum refNum;
+struct SectionRecord : GuestStruct {
+    GUEST< SignedByte> version;
+    GUEST< SectionType> kind;
+    GUEST< UpdateMode> mode;
+    GUEST< TimeStamp> mdDate;
+    GUEST< int32> sectionID;
+    GUEST< int32> refCon;
+    GUEST< AliasHandle> alias;
+    GUEST< int32> subPart;
+    GUEST< Handle> nextSection;    /* ### Section */
+    GUEST< Handle> controlBlock;
+    GUEST< EditionRefNum> refNum;
 };
 
 declare_record_subtypes (Section);
 
-struct PACKED EditionContainerSpec
-{
-  FSSpec theFile;
-  ScriptCode theFileScript;
-  int32 thePart;
-  Str31 thePartName;
-  ScriptCode thePartScript;
+struct EditionContainerSpec : GuestStruct {
+    GUEST< FSSpec> theFile;
+    GUEST< ScriptCode> theFileScript;
+    GUEST< int32> thePart;
+    GUEST< Str31> thePartName;
+    GUEST< ScriptCode> thePartScript;
 };
 
 typedef struct EditionContainerSpec EditionContainerSpec;
 typedef EditionContainerSpec *EditionContainerSpecPtr;
 
-struct PACKED EditionInfoRecord
-{
-  TimeStamp crDate;
-  TimeStamp mdDate;
-  OSType fdCreator;
-  OSType fdType;
-  EditionContainerSpec container;
+struct EditionInfoRecord : GuestStruct {
+    GUEST< TimeStamp> crDate;
+    GUEST< TimeStamp> mdDate;
+    GUEST< OSType> fdCreator;
+    GUEST< OSType> fdType;
+    GUEST< EditionContainerSpec> container;
 };
 
 typedef struct EditionInfoRecord EditionInfoRecord;
 typedef EditionInfoRecord *EditionInfoPtr;
 
-struct PACKED NewPublisherReply
-{
-  Boolean canceled;
-  Boolean replacing;
-  Boolean usePart;
-  uint8 _filler;
-  PACKED_MEMBER(Handle, preview);
-  FormatType previewFormat;
-  EditionContainerSpec container;
+struct NewPublisherReply : GuestStruct {
+    GUEST< Boolean> canceled;
+    GUEST< Boolean> replacing;
+    GUEST< Boolean> usePart;
+    GUEST< uint8> _filler;
+    GUEST< Handle> preview;
+    GUEST< FormatType> previewFormat;
+    GUEST< EditionContainerSpec> container;
 };
 
 typedef struct NewPublisherReply NewPublisherReply;
 typedef NewPublisherReply *NewPublisherReplyPtr;
 
-struct PACKED NewSubscriberReply
-{
-  Boolean canceled;
-  SignedByte formatsMask;
-  EditionContainerSpec container;
+struct NewSubscriberReply : GuestStruct {
+    GUEST< Boolean> canceled;
+    GUEST< SignedByte> formatsMask;
+    GUEST< EditionContainerSpec> container;
 };
 
 typedef struct NewSubscriberReply NewSubscriberReply;
 typedef NewSubscriberReply *NewSubscriberReplyPtr;
 
-struct PACKED SectionOptionsReply
-{
-  Boolean canceled;
-  Boolean changed;
-  PACKED_MEMBER(SectionHandle, sectionH);
-  ResType action;
+struct SectionOptionsReply : GuestStruct {
+    GUEST< Boolean> canceled;
+    GUEST< Boolean> changed;
+    GUEST< SectionHandle> sectionH;
+    GUEST< ResType> action;
 };
 
 typedef struct SectionOptionsReply SectionOptionsReply;
@@ -122,16 +116,15 @@ typedef uint8 EditionOpenerVerb;
 #define eoCloseNew	(3)
 #define eoCanSubscribe	(4)
 
-struct PACKED EditionOpenerParamBlock
-{
-  EditionInfoRecord info;
-  PACKED_MEMBER(SectionHandle, sectionH);
-  PACKED_MEMBER(FSSpecPtr, document);
-  OSType fdCreator;
-  int32 ioRefNum;
-  PACKED_MEMBER(FormatIOProcPtr, ioProc);
-  Boolean success;
-  SignedByte formatsMask;
+struct EditionOpenerParamBlock : GuestStruct {
+    GUEST< EditionInfoRecord> info;
+    GUEST< SectionHandle> sectionH;
+    GUEST< FSSpecPtr> document;
+    GUEST< OSType> fdCreator;
+    GUEST< int32> ioRefNum;
+    GUEST< FormatIOProcPtr> ioProc;
+    GUEST< Boolean> success;
+    GUEST< SignedByte> formatsMask;
 };
 
 typedef struct EditionOpenerParamBlock EditionOpenerParamBlock;
@@ -144,14 +137,13 @@ typedef uint8 FormatIOVerb;
 #define ioNewFormat	(2)
 #define ioWtriteFormat	(3)
 
-struct PACKED FormatIOParamBlock
-{
-  int32 ioRefNum;
-  FormatType format;
-  int32 formatIndex;
-  int32 offset;
-  PACKED_MEMBER(Ptr, buffPtr);
-  int32 buffLen;
+struct FormatIOParamBlock : GuestStruct {
+    GUEST< int32> ioRefNum;
+    GUEST< FormatType> format;
+    GUEST< int32> formatIndex;
+    GUEST< int32> offset;
+    GUEST< Ptr> buffPtr;
+    GUEST< int32> buffLen;
 };
 
 typedef struct FormatIOParamBlock FormatIOParamBlock;

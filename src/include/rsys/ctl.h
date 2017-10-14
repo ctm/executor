@@ -91,14 +91,13 @@ extern LONGINT ROMlib_ctlcall (ControlHandle c, INTEGER i, LONGINT l);
 #define POPUP_TITLE_WIDTH(popup)	(HxX (popup, title_width))
 #define POPUP_FLAGS(popup)		(HxX (popup, flags))
 
-struct PACKED popup_data
-{
-  PACKED_MEMBER(MenuHandle, menu);
-  int16 menu_id;
-  
-  /* private fields */
-  int16 title_width;
-  int flags;
+
+    /* private fields */
+struct popup_data : GuestStruct {
+    GUEST< MenuHandle> menu;
+    GUEST< int16> menu_id;
+    GUEST< int16> title_width;
+    GUEST< int> flags;
 };
 
 typedef struct popup_data popup_data_t;
@@ -106,28 +105,27 @@ typedef popup_data_t *popup_data_ptr;
 MAKE_HIDDEN(popup_data_ptr);
 typedef HIDDEN_popup_data_ptr *popup_data_handle;
 
-typedef struct PACKED {
-  Rect _tlimit;
-  Rect _tslop;
-  INTEGER _taxis;
-} thumbstr;
+struct thumbstr : GuestStruct {
+    GUEST< Rect> _tlimit;
+    GUEST< Rect> _tslop;
+    GUEST< INTEGER> _taxis;
+};
 
-typedef struct PACKED {
-  Rect _crect;
-  INTEGER _cvalue;
-  INTEGER _cvisible;
-  INTEGER _cmax;
-  INTEGER _cmin;
-  INTEGER _cprocid;
-  LONGINT _crefcon;
-  Byte _ctitle;
-} contrlrestype;
+struct contrlrestype : GuestStruct {
+    GUEST< Rect> _crect;
+    GUEST< INTEGER> _cvalue;
+    GUEST< INTEGER> _cvisible;
+    GUEST< INTEGER> _cmax;
+    GUEST< INTEGER> _cmin;
+    GUEST< INTEGER> _cprocid;
+    GUEST< LONGINT> _crefcon;
+    GUEST< Byte> _ctitle;
+};
 
-struct PACKED lsastr
-{
-  Rect limitRect;
-  Rect slopRect;
-  INTEGER axis;
+struct lsastr : GuestStruct {
+    GUEST< Rect> limitRect;
+    GUEST< Rect> slopRect;
+    GUEST< INTEGER> axis;
 };
 
 extern BOOLEAN ROMlib_cdef0_is_rectangular;

@@ -11,16 +11,15 @@ namespace Executor {
 #define CLEAR_HILITE_BIT()		\
   (BitClr ((Ptr) &HiliteMode, pHiliteBit))
 
-typedef struct PACKED GrafVars
-{
-  RGBColor rgbOpColor;
-  RGBColor rgbHiliteColor;
-  PACKED_MEMBER(Handle, pmFgColor);
-  INTEGER pmFgIndex;
-  PACKED_MEMBER(Handle, pmBkColor);
-  INTEGER pmBkIndex;
-  INTEGER pmFlags;
-} GrafVars, *GrafVarsPtr;
+typedef struct GrafVars : GuestStruct {
+    GUEST< RGBColor> rgbOpColor;
+    GUEST< RGBColor> rgbHiliteColor;
+    GUEST< Handle> pmFgColor;
+    GUEST< INTEGER> pmFgIndex;
+    GUEST< Handle> pmBkColor;
+    GUEST< INTEGER> pmBkIndex;
+    GUEST< INTEGER> pmFlags;
+} *GrafVarsPtr;
 
 MAKE_HIDDEN(GrafVarsPtr);
 typedef HIDDEN_GrafVarsPtr *GrafVarsHandle;

@@ -113,26 +113,23 @@ typedef ProcPtr EventFilterProcPtr;
 
 /* #### internal */
 
-typedef struct PACKED AE_hdlr
-{
-  PACKED_MEMBER(ProcPtr, fn);
-  int32 refcon;
+typedef struct AE_hdlr : GuestStruct {
+    GUEST< ProcPtr> fn;
+    GUEST< int32> refcon;
 } AE_hdlr_t;
 
-typedef struct PACKED AE_hdlr_selector
-{
-  int32 sel0;
-  int32 sel1;
+typedef struct AE_hdlr_selector : GuestStruct {
+    GUEST< int32> sel0;
+    GUEST< int32> sel1;
 } AE_hdlr_selector_t;
 
-typedef struct PACKED AE_hdlr_table_elt
-{
-  int32 pad_1;
-  
-  AE_hdlr_selector_t selector;
-  AE_hdlr_t hdlr;
-  
-  int32 pad_2;
+
+
+typedef struct AE_hdlr_table_elt : GuestStruct {
+    GUEST< int32> pad_1;
+    GUEST< AE_hdlr_selector_t> selector;
+    GUEST< AE_hdlr_t> hdlr;
+    GUEST< int32> pad_2;
 } AE_hdlr_table_elt_t;
 
 #define AE_TABLE_ELTS(table)			(HxX (table, elts))
@@ -146,56 +143,53 @@ typedef struct PACKED AE_hdlr_table_elt
 #define AE_TABLE_N_ALLOCATED_BYTES(table)	\
   (CL (AE_TABLE_N_ALLOCATED_BYTES_X (table)))
 
-typedef struct PACKED AE_hdlr_table
-{
-  int32 pad_1;
-  
-  int32 n_allocated_bytes;
-  int32 n_elts;
-  
-  int32 pad_2[10];
-  
-  AE_hdlr_table_elt_t elts[0];
+
+
+
+typedef struct AE_hdlr_table : GuestStruct {
+    GUEST< int32> pad_1;
+    GUEST< int32> n_allocated_bytes;
+    GUEST< int32> n_elts;
+    GUEST< int32[10]> pad_2;
+    GUEST< AE_hdlr_table_elt_t[0]> elts;
 } AE_hdlr_table_t;
 
 typedef AE_hdlr_table_t *AE_hdlr_table_ptr;
 MAKE_HIDDEN(AE_hdlr_table_ptr);
 typedef HIDDEN_AE_hdlr_table_ptr *AE_hdlr_table_h;
 
-typedef struct PACKED AE_zone_tables
-{
-  PACKED_MEMBER(AE_hdlr_table_h, event_hdlr_table);
-  PACKED_MEMBER(AE_hdlr_table_h, coercion_hdlr_table);
-  PACKED_MEMBER(AE_hdlr_table_h, special_hdlr_table);
-  
-  char pad_1[28];
-  
-  char unknown_appl_value[4];
-  
-  char pad_2[8];
-  
-  /* points to a 32byte handle of unknown contents (at least,
+
+
+
+
+    /* points to a 32byte handle of unknown contents (at least,
      sometimes) */
-  PACKED_MEMBER(Handle, unknown_sys_handle);
+typedef struct AE_zone_tables : GuestStruct {
+    GUEST< AE_hdlr_table_h> event_hdlr_table;
+    GUEST< AE_hdlr_table_h> coercion_hdlr_table;
+    GUEST< AE_hdlr_table_h> special_hdlr_table;
+    GUEST< char[28]> pad_1;
+    GUEST< char[4]> unknown_appl_value;
+    GUEST< char[8]> pad_2;
+    GUEST< Handle> unknown_sys_handle;
 } AE_zone_tables_t;
 
 typedef AE_zone_tables_t *AE_zone_tables_ptr;
 MAKE_HIDDEN(AE_zone_tables_ptr);
 typedef HIDDEN_AE_zone_tables_ptr *AE_zone_tables_h;
 
-typedef struct PACKED AE_info
-{
-  char pad_1[340];
-  
-  /* offset of `appl_zone_tables' is 340; handle to a `struct tables' */
-  PACKED_MEMBER(AE_zone_tables_h, appl_zone_tables);
-  
-  char pad_2[36];
-  
-  /* offset of `system_zone_tables' is 380; handle to a `struct tables' */
-  PACKED_MEMBER(AE_zone_tables_h, system_zone_tables);
-  
-  char pad_3[212];
+
+    /* offset of `appl_zone_tables' is 340; handle to a `struct tables' */
+
+
+    /* offset of `system_zone_tables' is 380; handle to a `struct tables' */
+
+typedef struct AE_info : GuestStruct {
+    GUEST< char[340]> pad_1;
+    GUEST< AE_zone_tables_h> appl_zone_tables;
+    GUEST< char[36]> pad_2;
+    GUEST< AE_zone_tables_h> system_zone_tables;
+    GUEST< char[212]> pad_3;
 } AE_info_t;
 
 typedef AE_info_t *AE_info_ptr;

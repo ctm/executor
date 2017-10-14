@@ -68,25 +68,25 @@ typedef __SignedByte SPortSel;
 
 #endif /* BINCOMPAT */
 
-typedef struct PACKED {
-  __Byte fXOn;
-  __Byte fCTS;
-  __Byte xOn;
-  __Byte xOff;
-  __Byte errs;
-  __Byte evts;
-  __Byte fInX;
-  __Byte null;
-} SerShk;
+struct SerShk : GuestStruct {
+    GUEST< __Byte> fXOn;
+    GUEST< __Byte> fCTS;
+    GUEST< __Byte> xOn;
+    GUEST< __Byte> xOff;
+    GUEST< __Byte> errs;
+    GUEST< __Byte> evts;
+    GUEST< __Byte> fInX;
+    GUEST< __Byte> null;
+};
 
-typedef struct PACKED {
-  __Byte cumErrs;
-  __Byte xOffSent;
-  __Byte rdPend;
-  __Byte wrPend;
-  __Byte ctsHold;
-  __Byte xOffHold;
-} SerStaRec;
+struct SerStaRec : GuestStruct {
+    GUEST< __Byte> cumErrs;
+    GUEST< __Byte> xOffSent;
+    GUEST< __Byte> rdPend;
+    GUEST< __Byte> wrPend;
+    GUEST< __Byte> ctsHold;
+    GUEST< __Byte> xOffHold;
+};
 
 #define MODEMINAME	".AIn"
 #define MODEMONAME	".AOut"

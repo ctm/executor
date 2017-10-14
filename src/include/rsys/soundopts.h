@@ -52,19 +52,19 @@ typedef uint64_t snd_time;
 
 typedef LONGINT TimeL;
 
-typedef struct PACKED _ModifierStub {
-  struct _ModifierStub *nextStub;
-  ProcPtr code;
-  LONGINT userInfo;
-  TimeL count;
-  TimeL every;
-  SignedByte flags;
-  SignedByte hState;
-  snd_time current_start;
-  snd_time time;
-  uint8 prev_samp;
-  SndDoubleBufferHeader *dbhp;
-  int current_db;
+typedef struct _ModifierStub : GuestStruct {
+    GUEST< struct _ModifierStub*> nextStub;
+    GUEST< ProcPtr> code;
+    GUEST< LONGINT> userInfo;
+    GUEST< TimeL> count;
+    GUEST< TimeL> every;
+    GUEST< SignedByte> flags;
+    GUEST< SignedByte> hState;
+    GUEST< snd_time> current_start;
+    GUEST< snd_time> time;
+    GUEST< uint8> prev_samp;
+    GUEST< SndDoubleBufferHeader*> dbhp;
+    GUEST< int> current_db;
 } ModifierStub, *ModifierStubPtr;
 
 

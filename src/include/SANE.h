@@ -11,10 +11,10 @@
 namespace Executor {
 /* Big-endian 64 bit "comp" data type.  Note that this has a NaN value! */
 typedef union {
-  struct PACKED {
+struct {
     ULONGINT hi;
     ULONGINT lo;
-  } hilo;
+};
   signed long long val;
 } comp_t;
 
@@ -22,10 +22,10 @@ typedef union {
 /* Now we have a version of this in "native" byte order. */
 #if defined (LITTLEENDIAN)
 typedef union {
-  struct PACKED {
+struct {
     ULONGINT lo;
     ULONGINT hi;
-  } hilo;
+};
   signed long long val;
 } native_comp_t;
 #else /* Not LITTLEENDIAN */
@@ -34,6 +34,11 @@ typedef comp_t native_comp_t;
 
 
 /* "Packed" IEEE 80 bit FP representation (zero field omitted). */
+    /* Sign and exponent. */
+
+    /* Mantissa. */
+// ### Struct needs manual conversion to GUEST<...>
+//   union {
 typedef struct PACKED {
   /* Sign and exponent. */
   union {
@@ -65,21 +70,21 @@ typedef comp_t comp;
 
 /* This only makes sense on the 68k. */
 #if defined (mc68000)
-typedef struct PACKED {
-  INTEGER exp;
-  INTEGER zero;
-  INTEGER man[4];
-} extended96;
+struct extended96 : GuestStruct {
+    GUEST< INTEGER> exp;
+    GUEST< INTEGER> zero;
+    GUEST< INTEGER[4]> man;
+};
 #endif
 
 #define SIGDIGLEN 20
 
-typedef struct PACKED {
-  unsigned char sgn;
-  unsigned char unused_filler;
-  INTEGER exp;
-  unsigned char sig[SIGDIGLEN];
-} Decimal;
+struct Decimal : GuestStruct {
+    GUEST< unsigned char> sgn;
+    GUEST< unsigned char> unused_filler;
+    GUEST< INTEGER> exp;
+    GUEST< unsigned char[SIGDIGLEN]> sig;
+};
 
 typedef enum { FloatDecimal, FixedDecimal = 256 } toobigdecformstyle_t;
 
@@ -90,10 +95,10 @@ typedef INTEGER DecFormStyle;
 typedef enum {SNaN = 1, QNaN, Infinite, ZeroNum, NormalNum, DenormalNum}
 								      NumClass;
 
-typedef struct PACKED {
-  DecFormStyle style;
-  INTEGER  digits;
-} DecForm;
+struct DecForm : GuestStruct {
+    GUEST< DecFormStyle> style;
+    GUEST< INTEGER> digits;
+};
 
 #define Decstr char *
 

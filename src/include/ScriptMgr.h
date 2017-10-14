@@ -97,28 +97,26 @@ enum { smKCHRCache = 38 };
 
 typedef uint8 StyledLineBreakCode;
 
-typedef struct PACKED DateCacheRec
-{
-  int16 hidden[256];
-} DateCacheRec, *DateCachePtr;
+typedef struct DateCacheRec : GuestStruct {
+    GUEST< int16[256]> hidden;
+} *DateCachePtr;
 
-typedef struct PACKED LongDateRec
-{
-  int16 era;
-  int16 year;
-  int16 month;
-  int16 day;
-  int16 hour;
-  int16 minute;
-  int16 second;
-  int16 dayOfWeek;
-  int16 dayOfYear;
-  int16 weekOfYear;
-  int16 pm;
-  int16 res1;
-  int16 res2;
-  int16 res3;
-} LongDateRec, *LongDatePtr;
+typedef struct LongDateRec : GuestStruct {
+    GUEST< int16> era;
+    GUEST< int16> year;
+    GUEST< int16> month;
+    GUEST< int16> day;
+    GUEST< int16> hour;
+    GUEST< int16> minute;
+    GUEST< int16> second;
+    GUEST< int16> dayOfWeek;
+    GUEST< int16> dayOfYear;
+    GUEST< int16> weekOfYear;
+    GUEST< int16> pm;
+    GUEST< int16> res1;
+    GUEST< int16> res2;
+    GUEST< int16> res3;
+} *LongDatePtr;
 
 typedef INTEGER TruncCode;
 typedef int16 JustStyleCode;
@@ -131,13 +129,11 @@ typedef int16 ScriptRunStatus; /* Not sure this is correct, since in IM
 
 typedef INTEGER FormatStatus;
 
-typedef struct PACKED
-{
-  Byte fLength;
-  Byte fVersion;
-  SignedByte data[253];
-}
-NumFormatStringRec;
+struct NumFormatStringRec : GuestStruct {
+    GUEST< Byte> fLength;
+    GUEST< Byte> fVersion;
+    GUEST< SignedByte[253]> data;
+};
 
 typedef union
 {
@@ -153,17 +149,15 @@ typedef struct
 }
 WideCharArr;
 
-typedef struct PACKED
-{
-  INTEGER version;
-  WideChar data[31];
-  WideCharArr pePlus;
-  WideCharArr peMinus;
-  WideCharArr peMinusPlus;
-  WideCharArr altNumTable;
-  CHAR reserved[20];
-}
-NumberParts;
+struct NumberParts : GuestStruct {
+    GUEST< INTEGER> version;
+    GUEST< WideChar[31]> data;
+    GUEST< WideCharArr> pePlus;
+    GUEST< WideCharArr> peMinus;
+    GUEST< WideCharArr> peMinusPlus;
+    GUEST< WideCharArr> altNumTable;
+    GUEST< CHAR[20]> reserved;
+};
 
 typedef extended80 Extended80;
 
@@ -173,14 +167,12 @@ typedef unsigned char LongDateField;
 
 typedef char DateDelta;
 
-typedef struct PACKED
-{
-  int32 togFlags;
-  ResType amChars;
-  ResType pmChars;
-  int32 reserved[4];
-}
-TogglePB;
+struct TogglePB : GuestStruct {
+    GUEST< int32> togFlags;
+    GUEST< ResType> amChars;
+    GUEST< ResType> pmChars;
+    GUEST< int32[4]> reserved;
+};
 
 
 enum { smSystemScript = -1 };

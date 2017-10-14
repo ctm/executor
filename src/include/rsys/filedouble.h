@@ -27,42 +27,42 @@ typedef enum {
     Directory_ID
 } Single_ID;
 
-typedef struct PACKED {
-  ULONGINT id;
-  ULONGINT offset;
-  ULONGINT length;
-} Single_descriptor;
+struct Single_descriptor : GuestStruct {
+    GUEST< ULONGINT> id;
+    GUEST< ULONGINT> offset;
+    GUEST< ULONGINT> length;
+};
 
-typedef struct PACKED {
-  LONGINT magic;
-  LONGINT version;
-  LONGINT filler[4];
-  INTEGER nentries;
-} Single_header;
+struct Single_header : GuestStruct {
+    GUEST< LONGINT> magic;
+    GUEST< LONGINT> version;
+    GUEST< LONGINT[4]> filler;
+    GUEST< INTEGER> nentries;
+};
 
-typedef struct PACKED {
-  LONGINT crdat;
-  LONGINT moddat;
-  LONGINT backupdat;
-  LONGINT accessdat;
-} Single_dates;
+struct Single_dates : GuestStruct {
+    GUEST< LONGINT> crdat;
+    GUEST< LONGINT> moddat;
+    GUEST< LONGINT> backupdat;
+    GUEST< LONGINT> accessdat;
+};
 
-typedef struct PACKED {
-  FInfo finfo;
-  FXInfo fxinfo;
-} Single_finfo;
+struct Single_finfo : GuestStruct {
+    GUEST< FInfo> finfo;
+    GUEST< FXInfo> fxinfo;
+};
 
 typedef ULONGINT Single_attribs;
 
-typedef struct PACKED defaulthead {
-    Single_header head;
-    Single_descriptor desc[10];	/* we use 4, 6 for spare */
+typedef struct defaulthead : GuestStruct {
+    GUEST< Single_header> head;
+    GUEST< Single_descriptor[10]> desc;    /* we use 4, 6 for spare */
 } defaulthead_t;
 
-typedef struct PACKED defaultentries {
-  Single_attribs attribs;
-  Single_dates   dates;
-  Single_finfo   finfo;
+typedef struct defaultentries : GuestStruct {
+    GUEST< Single_attribs> attribs;
+    GUEST< Single_dates> dates;
+    GUEST< Single_finfo> finfo;
 } defaultentries_t;
 
 #define SINGLEMAGIC	0x0051600

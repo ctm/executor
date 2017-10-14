@@ -14,15 +14,14 @@ MAKE_HIDDEN(HIDDEN_CGrafPtr_Ptr);
 
 #define minSeed 1024
 
-typedef struct PACKED
-{
-  LONGINT iTabSeed;
-  INTEGER iTabRes;
-  /* can't use [0];
+    /* can't use [0];
      make this an unsigned char even tho the mac has SignedByte;
      it is treated as unsigned */
-  unsigned char iTTable[1];
-} ITab, *ITabPtr;
+typedef struct ITab : GuestStruct {
+    GUEST< LONGINT> iTabSeed;
+    GUEST< INTEGER> iTabRes;
+    GUEST< unsigned char[1]> iTTable;
+} *ITabPtr;
 
 MAKE_HIDDEN(ITabPtr);
 typedef HIDDEN_ITabPtr *ITabHandle;
@@ -36,45 +35,42 @@ MAKE_HIDDEN(GDHandle);
 typedef struct PACKED SProcRec *SProcPtr;
 MAKE_HIDDEN(SProcPtr);
 typedef HIDDEN_SProcPtr *SProcHndl;
-typedef struct PACKED SProcRec
-{
-  PACKED_MEMBER(SProcHndl, nxtSrch);
-  PACKED_MEMBER(ProcPtr, srchProc);
-} SProcRec;
+struct SProcRec : GuestStruct {
+    GUEST< SProcHndl> nxtSrch;
+    GUEST< ProcPtr> srchProc;
+};
 
 typedef struct PACKED CProcRec *CProcPtr;
 MAKE_HIDDEN(CProcPtr);
 
 typedef HIDDEN_CProcPtr *CProcHndl;
-typedef struct PACKED CProcRec
-{
-  PACKED_MEMBER(CProcHndl, nxtComp);
-  PACKED_MEMBER(ProcPtr, compProc);
-} CProcRec;
+struct CProcRec : GuestStruct {
+    GUEST< CProcHndl> nxtComp;
+    GUEST< ProcPtr> compProc;
+};
 
 typedef void *DeviceLoopDrawingProcPtr;
 
-typedef struct PACKED GDevice
-{
-  INTEGER gdRefNum;
-  INTEGER gdID;
-  INTEGER gdType;
-  PACKED_MEMBER(ITabHandle, gdITable);
-  INTEGER gdResPref;
-  PACKED_MEMBER(SProcHndl, gdSearchProc);
-  PACKED_MEMBER(CProcHndl, gdCompProc);
-  INTEGER gdFlags;
-  PACKED_MEMBER(PixMapHandle, gdPMap);
-  LONGINT gdRefCon;
-  PACKED_MEMBER(GDHandle, gdNextGD);
-  Rect gdRect;
-  LONGINT gdMode;
-  INTEGER gdCCBytes;
-  INTEGER gdCCDepth;
-  PACKED_MEMBER(Handle, gdCCXData);
-  PACKED_MEMBER(Handle, gdCCXMask);
-  LONGINT gdReserved;
-} GDevice;
+struct GDevice : GuestStruct {
+    GUEST< INTEGER> gdRefNum;
+    GUEST< INTEGER> gdID;
+    GUEST< INTEGER> gdType;
+    GUEST< ITabHandle> gdITable;
+    GUEST< INTEGER> gdResPref;
+    GUEST< SProcHndl> gdSearchProc;
+    GUEST< CProcHndl> gdCompProc;
+    GUEST< INTEGER> gdFlags;
+    GUEST< PixMapHandle> gdPMap;
+    GUEST< LONGINT> gdRefCon;
+    GUEST< GDHandle> gdNextGD;
+    GUEST< Rect> gdRect;
+    GUEST< LONGINT> gdMode;
+    GUEST< INTEGER> gdCCBytes;
+    GUEST< INTEGER> gdCCDepth;
+    GUEST< Handle> gdCCXData;
+    GUEST< Handle> gdCCXMask;
+    GUEST< LONGINT> gdReserved;
+};
 
 typedef uint32 DeviceLoopFlags;
 
@@ -83,24 +79,22 @@ typedef uint32 DeviceLoopFlags;
 #define dontMatchSeeds	(1 << 1)
 #define allDevices	(1 << 2)
 
-typedef struct PACKED ColorInfo
-{
-  RGBColor ciRGB;
-  INTEGER ciUsage;
-  INTEGER ciTolerance;
-  INTEGER ciFlags;
-  LONGINT ciPrivate;
-} ColorInfo;
+struct ColorInfo : GuestStruct {
+    GUEST< RGBColor> ciRGB;
+    GUEST< INTEGER> ciUsage;
+    GUEST< INTEGER> ciTolerance;
+    GUEST< INTEGER> ciFlags;
+    GUEST< LONGINT> ciPrivate;
+};
 
-typedef struct PACKED Palette
-{
-  INTEGER pmEntries;
-  PACKED_MEMBER(GrafPtr, pmWindow);
-  INTEGER pmPrivate;
-  LONGINT /* Handle? */ pmDevices;
-  PACKED_MEMBER(Handle,pmSeeds);
-  ColorInfo pmInfo[1];
-} Palette, *PalettePtr;
+typedef struct Palette : GuestStruct {
+    GUEST< INTEGER> pmEntries;
+    GUEST< GrafPtr> pmWindow;
+    GUEST< INTEGER> pmPrivate;
+    GUEST< LONGINT> pmDevices;    /* Handle? */
+    GUEST< Handle> pmSeeds;
+    GUEST< ColorInfo[1]> pmInfo;
+} *PalettePtr;
 
 typedef enum 
 {
@@ -148,80 +142,75 @@ typedef LONGINT GWorldFlags;
 
 typedef CGrafPort GWorld, *GWorldPtr;
 
-typedef struct PACKED ReqListRec
-{
-  INTEGER reqLSize;
-  INTEGER reqLData[1];
-} ReqListRec;
+struct ReqListRec : GuestStruct {
+    GUEST< INTEGER> reqLSize;
+    GUEST< INTEGER[1]> reqLData;
+};
 
 /* extended version 2 picture datastructures */
 
-typedef struct PACKED OpenCPicParams
-{
-  Rect srcRect;
-  Fixed hRes;
-  Fixed vRes;
-  int16 version;
-  int16 reserved1;
-  int32 reserved2;
-} OpenCPicParams;
+struct OpenCPicParams : GuestStruct {
+    GUEST< Rect> srcRect;
+    GUEST< Fixed> hRes;
+    GUEST< Fixed> vRes;
+    GUEST< int16> version;
+    GUEST< int16> reserved1;
+    GUEST< int32> reserved2;
+};
 
-typedef struct PACKED CommonSpec
-{
-  int16 count;
-  int16 ID;
+typedef struct CommonSpec : GuestStruct {
+    GUEST< int16> count;
+    GUEST< int16> ID;
 } CommentSpec;
 
 typedef CommentSpec *CommentSpecPtr;
 MAKE_HIDDEN(CommentSpecPtr);
 typedef HIDDEN_CommentSpecPtr *CommentSpecHandle;
 
-typedef struct PACKED FontSpec
-{
-  int16 pictFontID;
-  int16 sysFontID;
-  int32 size[4];
-  int16 style;
-  int32 nameOffset;
-} FontSpec;
+struct FontSpec : GuestStruct {
+    GUEST< int16> pictFontID;
+    GUEST< int16> sysFontID;
+    GUEST< int32[4]> size;
+    GUEST< int16> style;
+    GUEST< int32> nameOffset;
+};
 
 typedef FontSpec *FontSpecPtr;
 MAKE_HIDDEN(FontSpecPtr);
 typedef HIDDEN_FontSpecPtr *FontSpecHandle;
 
-typedef struct PACKED PictInfo
-{
-  int16 version; /* 0 */
-  int32 uniqueColors; /* 2 */
-  PACKED_MEMBER(PaletteHandle, thePalette); /* 6 */
-  PACKED_MEMBER(CTabHandle, theColorTable); /* 10 */
-  Fixed hRes; /* 14 */
-  Fixed vRes; /* 18 */
-  INTEGER depth; /* 22 */
-  Rect sourceRect; /* top24, left26, bottom28, right30 */
-  int32 textCount; /* 32 */
-  int32 lineCount;
-  int32 rectCount;
-  int32 rRectCount;
-  int32 ovalCount;
-  int32 arcCount;
-  int32 polyCount;
-  int32 regionCount;
-  int32 bitMapCount;
-  int32 pixMapCount;
-  int32 commentCount;
-  
-  int32 uniqueComments;
-  PACKED_MEMBER(CommentSpecHandle, commentHandle);
-  
-  int32 uniqueFonts;
-  PACKED_MEMBER(FontSpecHandle, fontHandle);
 
-  PACKED_MEMBER(Handle, fontNamesHandle);
 
-  int32 reserved1;
-  int32 reserved2;
-} PictInfo;
+
+
+struct PictInfo : GuestStruct {
+    GUEST< int16> version;    /* 0 */
+    GUEST< int32> uniqueColors;    /* 2 */
+    GUEST< PaletteHandle> thePalette;    /* 6 */
+    GUEST< CTabHandle> theColorTable;    /* 10 */
+    GUEST< Fixed> hRes;    /* 14 */
+    GUEST< Fixed> vRes;    /* 18 */
+    GUEST< INTEGER> depth;    /* 22 */
+    GUEST< Rect> sourceRect;    /* top24, left26, bottom28, right30 */
+    GUEST< int32> textCount;    /* 32 */
+    GUEST< int32> lineCount;
+    GUEST< int32> rectCount;
+    GUEST< int32> rRectCount;
+    GUEST< int32> ovalCount;
+    GUEST< int32> arcCount;
+    GUEST< int32> polyCount;
+    GUEST< int32> regionCount;
+    GUEST< int32> bitMapCount;
+    GUEST< int32> pixMapCount;
+    GUEST< int32> commentCount;
+    GUEST< int32> uniqueComments;
+    GUEST< CommentSpecHandle> commentHandle;
+    GUEST< int32> uniqueFonts;
+    GUEST< FontSpecHandle> fontHandle;
+    GUEST< Handle> fontNamesHandle;
+    GUEST< int32> reserved1;
+    GUEST< int32> reserved2;
+};
 
 typedef PictInfo *PictInfoPtr;
 MAKE_HIDDEN(PictInfoPtr);

@@ -16,26 +16,26 @@ namespace Executor {
 extern boolean_t ROMlib_ultima_iii_hack;
 #endif
 
-typedef struct PACKED {
-  Size rdatoff;
-  Size rmapoff;
-  Size datlen;
-  Size maplen;
-} reshead;
+struct reshead : GuestStruct {
+    GUEST< Size> rdatoff;
+    GUEST< Size> rmapoff;
+    GUEST< Size> datlen;
+    GUEST< Size> maplen;
+};
 
-typedef struct PACKED {
-  Byte rsrvsys[112];
-  Byte rsrvapp[128];
-} rsrvrec;
+struct rsrvrec : GuestStruct {
+    GUEST< Byte[112]> rsrvsys;
+    GUEST< Byte[128]> rsrvapp;
+};
 
-typedef struct PACKED {
-  reshead rh;
-  PACKED_MEMBER(Handle, nextmap);
-  INTEGER resfn;
-  INTEGER resfatr;
-  INTEGER typoff;
-  INTEGER namoff;
-} resmap;
+struct resmap : GuestStruct {
+    GUEST< reshead> rh;
+    GUEST< Handle> nextmap;
+    GUEST< INTEGER> resfn;
+    GUEST< INTEGER> resfatr;
+    GUEST< INTEGER> typoff;
+    GUEST< INTEGER> namoff;
+};
 
 typedef resmap *resmapptr;
 MAKE_HIDDEN(resmapptr);
@@ -53,26 +53,26 @@ typedef HIDDEN_resmapptr *resmaphand;
 #define MAPLEN(map)	Hx(map, rh.maplen)
 #define MAPLENX(map)	((STARH(map))->rh.maplen)
 
-typedef struct PACKED {
-  ResType rtyp;
-  INTEGER nres;
-  INTEGER rloff;
-} typref;
+struct typref : GuestStruct {
+    GUEST< ResType> rtyp;
+    GUEST< INTEGER> nres;
+    GUEST< INTEGER> rloff;
+};
 
-typedef struct PACKED {
-  INTEGER rid;
-  INTEGER noff;
-  Byte ratr;
-  Byte doff[3];
-  PACKED_MEMBER(Handle, rhand);
-} resref;
+struct resref : GuestStruct {
+    GUEST< INTEGER> rid;
+    GUEST< INTEGER> noff;
+    GUEST< Byte> ratr;
+    GUEST< Byte[3]> doff;
+    GUEST< Handle> rhand;
+};
 
-typedef struct PACKED {            /* empty resource template */
-  reshead bhead;
-  rsrvrec bfill;
-  resmap bmap;
-  INTEGER negone;
-} empty_resource_template_t;
+struct empty_resource_template_t : GuestStruct {
+    GUEST< reshead> bhead;
+    GUEST< rsrvrec> bfill;
+    GUEST< resmap> bmap;
+    GUEST< INTEGER> negone;
+};
 
 
 extern resmaphand ROMlib_rntohandl(INTEGER rn, Handle *pph );
@@ -187,21 +187,19 @@ enum
   COMPRESSED_FLAGS = 0x120801,
 };
 
-typedef struct PACKED
-{
-  LONGINT compressedResourceTag;
-  LONGINT typeFlags;
-  LONGINT uncompressedSize;
-  uint8 workingBufferFractionalRatio;
-  uint8 expansionBufferSize;
-  INTEGER dcmpID;
-}
-dcomp_info_t;
+struct dcomp_info_t : GuestStruct {
+    GUEST< LONGINT> compressedResourceTag;
+    GUEST< LONGINT> typeFlags;
+    GUEST< LONGINT> uncompressedSize;
+    GUEST< uint8> workingBufferFractionalRatio;
+    GUEST< uint8> expansionBufferSize;
+    GUEST< INTEGER> dcmpID;
+};
 						   
-typedef struct PACKED {
-    LONGINT diskoff;
-    resref *rrptr;
-} res_sorttype_t;
+struct res_sorttype_t : GuestStruct {
+    GUEST< LONGINT> diskoff;
+    GUEST< resref*> rrptr;
+};
 }
 #define __MYRESOURCE__
 #endif /* __MYRESOURCE__ */

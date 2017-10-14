@@ -51,106 +51,106 @@ namespace Executor {
 
 #define fontWid		((INTEGER) 0xACB0)
 
-typedef struct PACKED {
-  Fixed ascent;
-  Fixed descent;
-  Fixed leading;
-  Fixed widMax;
-  PACKED_MEMBER(Handle, wTabHandle);
-} FMetricRec;
+struct FMetricRec : GuestStruct {
+    GUEST< Fixed> ascent;
+    GUEST< Fixed> descent;
+    GUEST< Fixed> leading;
+    GUEST< Fixed> widMax;
+    GUEST< Handle> wTabHandle;
+};
 
-typedef struct PACKED {
-  INTEGER ffFlags;
-  INTEGER ffFamID;
-  INTEGER ffFirstChar;
-  INTEGER ffLastChar;
-  INTEGER ffAscent;
-  INTEGER ffDescent;
-  INTEGER ffLeading;
-  INTEGER ffWidMax;
-  LONGINT ffWTabOff;
-  LONGINT ffKernOff;
-  LONGINT ffStylOff;
-  INTEGER ffProperty[9];
-  INTEGER ffIntl[2];
-  INTEGER ffVersion;
-  /* FontAssoc ffAssoc; */
-  /* WidTable ffWidthTab; */
-  /* StyleTable ffStyTab; */
-  /* KernTable ffKernTab; */
-} FamRec;
+    /* FontAssoc ffAssoc; */
+    /* WidTable ffWidthTab; */
+    /* StyleTable ffStyTab; */
+    /* KernTable ffKernTab; */
+struct FamRec : GuestStruct {
+    GUEST< INTEGER> ffFlags;
+    GUEST< INTEGER> ffFamID;
+    GUEST< INTEGER> ffFirstChar;
+    GUEST< INTEGER> ffLastChar;
+    GUEST< INTEGER> ffAscent;
+    GUEST< INTEGER> ffDescent;
+    GUEST< INTEGER> ffLeading;
+    GUEST< INTEGER> ffWidMax;
+    GUEST< LONGINT> ffWTabOff;
+    GUEST< LONGINT> ffKernOff;
+    GUEST< LONGINT> ffStylOff;
+    GUEST< INTEGER[9]> ffProperty;
+    GUEST< INTEGER[2]> ffIntl;
+    GUEST< INTEGER> ffVersion;
+};
 
-typedef struct PACKED {
-  Fixed tabData[256];
-  PACKED_MEMBER(Handle, tabFont);
-  LONGINT sExtra;
-  LONGINT style;
-  INTEGER fID;
-  INTEGER fSize;
-  INTEGER face;
-  INTEGER device;
-  Point inNumer;
-  Point inDenom;
-  INTEGER aFID;
-  PACKED_MEMBER(Handle, fHand);
-  BOOLEAN usedFam;
-  Byte aFace;
-  INTEGER vOutput;
-  INTEGER hOutput;
-  INTEGER vFactor;
-  INTEGER hFactor;
-  INTEGER aSize;
-  INTEGER tabSize;
-} WidthTable;
+struct WidthTable : GuestStruct {
+    GUEST< Fixed[256]> tabData;
+    GUEST< Handle> tabFont;
+    GUEST< LONGINT> sExtra;
+    GUEST< LONGINT> style;
+    GUEST< INTEGER> fID;
+    GUEST< INTEGER> fSize;
+    GUEST< INTEGER> face;
+    GUEST< INTEGER> device;
+    GUEST< Point> inNumer;
+    GUEST< Point> inDenom;
+    GUEST< INTEGER> aFID;
+    GUEST< Handle> fHand;
+    GUEST< BOOLEAN> usedFam;
+    GUEST< Byte> aFace;
+    GUEST< INTEGER> vOutput;
+    GUEST< INTEGER> hOutput;
+    GUEST< INTEGER> vFactor;
+    GUEST< INTEGER> hFactor;
+    GUEST< INTEGER> aSize;
+    GUEST< INTEGER> tabSize;
+};
 
 
-typedef struct PACKED {
-  INTEGER family;
-  INTEGER size;
-  Style face;
-  BOOLEAN needBits;
-  INTEGER device;
-  Point numer;
-  Point denom;
-} FMInput;
+struct FMInput : GuestStruct {
+    GUEST< INTEGER> family;
+    GUEST< INTEGER> size;
+    GUEST< Style> face;
+    GUEST< BOOLEAN> needBits;
+    GUEST< INTEGER> device;
+    GUEST< Point> numer;
+    GUEST< Point> denom;
+};
 
-typedef struct PACKED {
-    INTEGER errNum;	/* 0x00 */
-    PACKED_MEMBER(Handle, fontHandle);	/* 0x02 */
-    Byte bold;		/* 0x06 */
-    Byte italic;	/* 0x07 */
-    Byte ulOffset;	/* 0x08 */
-    Byte ulShadow;	/* 0x09 */
-    Byte ulThick;	/* 0x0A */
-    Byte shadow;	/* 0x0B */
-    SignedByte extra;	/* 0x0C */
-    Byte ascent;	/* 0x0D */
-    Byte descent;	/* 0x0E */
-    Byte widMax;	/* 0x0F */
-    SignedByte leading;	/* 0x10 */
-    Byte unused;	/* 0x11 */
-    Point numer;	/* 0x12 */
-    Point denom;	/* 0x16 */
-} FMOutput;
+struct FMOutput : GuestStruct {
+    GUEST< INTEGER> errNum;    /* 0x00 */
+    GUEST< Handle> fontHandle;    /* 0x02 */
+    GUEST< Byte> bold;    /* 0x06 */
+    GUEST< Byte> italic;    /* 0x07 */
+    GUEST< Byte> ulOffset;    /* 0x08 */
+    GUEST< Byte> ulShadow;    /* 0x09 */
+    GUEST< Byte> ulThick;    /* 0x0A */
+    GUEST< Byte> shadow;    /* 0x0B */
+    GUEST< SignedByte> extra;    /* 0x0C */
+    GUEST< Byte> ascent;    /* 0x0D */
+    GUEST< Byte> descent;    /* 0x0E */
+    GUEST< Byte> widMax;    /* 0x0F */
+    GUEST< SignedByte> leading;    /* 0x10 */
+    GUEST< Byte> unused;    /* 0x11 */
+    GUEST< Point> numer;    /* 0x12 */
+    GUEST< Point> denom;    /* 0x16 */
+};
 
 typedef FMOutput *FMOutPtr;
 
-typedef struct PACKED {
-  INTEGER fontType;
-  INTEGER firstChar;
-  INTEGER lastChar;
-  INTEGER widMax;
-  INTEGER kernMax;
-  INTEGER nDescent;
-  INTEGER fRectWidth;
-  INTEGER fRectHeight;
-  INTEGER owTLoc;
-  INTEGER ascent;
-  INTEGER descent;
-  INTEGER leading;
-  INTEGER rowWords;
-  /* more stuff is usually appended here ... bitImage, locTable, owTable */
-} FontRec;
+    /* more stuff is usually appended here ... bitImage, locTable, owTable */
+struct FontRec : GuestStruct {
+    GUEST< INTEGER> fontType;
+    GUEST< INTEGER> firstChar;
+    GUEST< INTEGER> lastChar;
+    GUEST< INTEGER> widMax;
+    GUEST< INTEGER> kernMax;
+    GUEST< INTEGER> nDescent;
+    GUEST< INTEGER> fRectWidth;
+    GUEST< INTEGER> fRectHeight;
+    GUEST< INTEGER> owTLoc;
+    GUEST< INTEGER> ascent;
+    GUEST< INTEGER> descent;
+    GUEST< INTEGER> leading;
+    GUEST< INTEGER> rowWords;
+};
 
 typedef FamRec *FamRecPtr;
 MAKE_HIDDEN(FamRecPtr);

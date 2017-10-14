@@ -80,6 +80,8 @@ typedef DialogTemplate *DialogTPtr;
 MAKE_HIDDEN(DialogTPtr);
 typedef HIDDEN_DialogTPtr *DialogTHndl;
 
+// ### Struct needs manual conversion to GUEST<...>
+//   unsigned boldItm4: 1;
 typedef struct PACKED {
   unsigned boldItm4: 1;
   unsigned boxDrwn4: 1;
@@ -95,11 +97,11 @@ typedef struct PACKED {
   unsigned sound1: 2;
 } StageList;
 
-typedef struct PACKED {
-  Rect boundsRect;
-  INTEGER itemsID;
-  StageList stages;
-} AlertTemplate;
+struct AlertTemplate : GuestStruct {
+    GUEST< Rect> boundsRect;
+    GUEST< INTEGER> itemsID;
+    GUEST< StageList> stages;
+};
 typedef AlertTemplate *AlertTPtr;
 MAKE_HIDDEN(AlertTPtr);
 typedef HIDDEN_AlertTPtr *AlertTHndl;

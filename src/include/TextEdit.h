@@ -51,124 +51,124 @@ namespace Executor {
 #define teBitSet		(1)
 #define teBitTest		(-1)
 
-typedef struct PACKED {
-  Rect destRect;
-  Rect viewRect;
-  Rect selRect;
-  INTEGER lineHeight;
-  INTEGER fontAscent;
-  Point selPoint;
-  INTEGER selStart;
-  INTEGER selEnd;
-  INTEGER active;
-  PACKED_MEMBER(ProcPtr, wordBreak);
-  PACKED_MEMBER(ProcPtr, clikLoop);
-  LONGINT clickTime;
-  INTEGER clickLoc;
-  LONGINT caretTime;
-  INTEGER caretState;
-  INTEGER just;
-  INTEGER teLength;
-  PACKED_MEMBER(Handle, hText);
-  INTEGER recalBack;
-  INTEGER recalLines;
-  INTEGER clikStuff;
-  INTEGER crOnly;
-  INTEGER txFont;
-  Style txFace;
-  Byte filler;
-  INTEGER txMode;
-  INTEGER txSize;
-  PACKED_MEMBER(GrafPtr, inPort);
-  PACKED_MEMBER(ProcPtr, highHook);
-  PACKED_MEMBER(ProcPtr, caretHook);
-  INTEGER nLines;
-  INTEGER lineStarts[1];
-} TERec;
+struct TERec : GuestStruct {
+    GUEST< Rect> destRect;
+    GUEST< Rect> viewRect;
+    GUEST< Rect> selRect;
+    GUEST< INTEGER> lineHeight;
+    GUEST< INTEGER> fontAscent;
+    GUEST< Point> selPoint;
+    GUEST< INTEGER> selStart;
+    GUEST< INTEGER> selEnd;
+    GUEST< INTEGER> active;
+    GUEST< ProcPtr> wordBreak;
+    GUEST< ProcPtr> clikLoop;
+    GUEST< LONGINT> clickTime;
+    GUEST< INTEGER> clickLoc;
+    GUEST< LONGINT> caretTime;
+    GUEST< INTEGER> caretState;
+    GUEST< INTEGER> just;
+    GUEST< INTEGER> teLength;
+    GUEST< Handle> hText;
+    GUEST< INTEGER> recalBack;
+    GUEST< INTEGER> recalLines;
+    GUEST< INTEGER> clikStuff;
+    GUEST< INTEGER> crOnly;
+    GUEST< INTEGER> txFont;
+    GUEST< Style> txFace;
+    GUEST< Byte> filler;
+    GUEST< INTEGER> txMode;
+    GUEST< INTEGER> txSize;
+    GUEST< GrafPtr> inPort;
+    GUEST< ProcPtr> highHook;
+    GUEST< ProcPtr> caretHook;
+    GUEST< INTEGER> nLines;
+    GUEST< INTEGER[1]> lineStarts;
+};
 
 typedef TERec *TEPtr;
 MAKE_HIDDEN(TEPtr);
 typedef HIDDEN_TEPtr *TEHandle;
 
-typedef struct PACKED {
-  INTEGER startChar;
-  INTEGER styleIndex;
-} StyleRun;
+struct StyleRun : GuestStruct {
+    GUEST< INTEGER> startChar;
+    GUEST< INTEGER> styleIndex;
+};
 
-typedef struct PACKED {
-  INTEGER stCount;
-  INTEGER stHeight;
-  INTEGER stAscent;
-  INTEGER stFont;
-  Style stFace;
-  Byte filler;
-  INTEGER stSize;
-  RGBColor stColor;
-} STElement;
+struct STElement : GuestStruct {
+    GUEST< INTEGER> stCount;
+    GUEST< INTEGER> stHeight;
+    GUEST< INTEGER> stAscent;
+    GUEST< INTEGER> stFont;
+    GUEST< Style> stFace;
+    GUEST< Byte> filler;
+    GUEST< INTEGER> stSize;
+    GUEST< RGBColor> stColor;
+};
 
 typedef STElement TEStyleTable[1];
 typedef STElement *STPtr;
 MAKE_HIDDEN(STPtr);
 typedef HIDDEN_STPtr *STHandle;
 
-typedef struct PACKED {
-  INTEGER lhHeight;
-  INTEGER lhAscent;
-} LHElement;
+struct LHElement : GuestStruct {
+    GUEST< INTEGER> lhHeight;
+    GUEST< INTEGER> lhAscent;
+};
 
 typedef LHElement LHTable[1];
 typedef LHElement *LHPtr;
 MAKE_HIDDEN(LHPtr);
 typedef HIDDEN_LHPtr *LHHandle;
 
-typedef struct PACKED {
-  INTEGER tsFont;
-  Style tsFace;
-  Byte filler;
-  INTEGER tsSize;
-  RGBColor tsColor;
-} TextStyle;
+struct TextStyle : GuestStruct {
+    GUEST< INTEGER> tsFont;
+    GUEST< Style> tsFace;
+    GUEST< Byte> filler;
+    GUEST< INTEGER> tsSize;
+    GUEST< RGBColor> tsColor;
+};
 
-typedef struct PACKED {
-  LONGINT scrpStartChar;
-  INTEGER scrpHeight;
-  INTEGER scrpAscent;
-  INTEGER scrpFont;
-  Style scrpFace;
-  Byte filler;
-  INTEGER scrpSize;
-  RGBColor scrpColor;
-} ScrpSTElement;
+struct ScrpSTElement : GuestStruct {
+    GUEST< LONGINT> scrpStartChar;
+    GUEST< INTEGER> scrpHeight;
+    GUEST< INTEGER> scrpAscent;
+    GUEST< INTEGER> scrpFont;
+    GUEST< Style> scrpFace;
+    GUEST< Byte> filler;
+    GUEST< INTEGER> scrpSize;
+    GUEST< RGBColor> scrpColor;
+};
 
 typedef ScrpSTElement ScrpSTTable[1];
 
-typedef struct PACKED {
-    INTEGER scrpNStyles;
-    ScrpSTTable scrpStyleTab;
-} StScrpRec;
+struct StScrpRec : GuestStruct {
+    GUEST< INTEGER> scrpNStyles;
+    GUEST< ScrpSTTable> scrpStyleTab;
+};
 
 typedef StScrpRec *StScrpPtr;
 MAKE_HIDDEN(StScrpPtr);
 typedef HIDDEN_StScrpPtr *StScrpHandle;
 
-typedef struct PACKED {
-  LONGINT TEReserved;
-  PACKED_MEMBER(StScrpHandle, nullScrap);
-} NullSTRec;
+struct NullSTRec : GuestStruct {
+    GUEST< LONGINT> TEReserved;
+    GUEST< StScrpHandle> nullScrap;
+};
 
 typedef NullSTRec *NullSTPtr;
 MAKE_HIDDEN(NullSTPtr);
 typedef HIDDEN_NullSTPtr *NullSTHandle;
 
-typedef struct PACKED {
-  INTEGER nRuns;
-  INTEGER nStyles;
-  PACKED_MEMBER(STHandle, styleTab);
-  PACKED_MEMBER(LHHandle, lhTab);
-  LONGINT teRefCon;
-  PACKED_MEMBER(NullSTHandle, nullStyle);
-  StyleRun runs[1];
-} TEStyleRec;
+struct TEStyleRec : GuestStruct {
+    GUEST< INTEGER> nRuns;
+    GUEST< INTEGER> nStyles;
+    GUEST< STHandle> styleTab;
+    GUEST< LHHandle> lhTab;
+    GUEST< LONGINT> teRefCon;
+    GUEST< NullSTHandle> nullStyle;
+    GUEST< StyleRun[1]> runs;
+};
 
 typedef TEStyleRec *TEStylePtr;
 MAKE_HIDDEN(TEStylePtr);

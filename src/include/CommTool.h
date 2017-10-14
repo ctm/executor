@@ -9,20 +9,18 @@
  */
 
 namespace Executor {
-typedef struct PACKED
-{
-  PACKED_MEMBER(QElemPtr, qLink);
-  INTEGER qType;
-  INTEGER crmVersion;
-  LONGINT crmPrivate;
-  INTEGER crmReserved;
-  LONGINT crmDeviceType;
-  LONGINT crmDeviceID;
-  LONGINT crmAttributes;
-  LONGINT crmStatus;
-  LONGINT crmRefCon;
-}
-CRMRec, *CRMRecPtr;
+typedef struct CRMRec : GuestStruct {
+    GUEST< QElemPtr> qLink;
+    GUEST< INTEGER> qType;
+    GUEST< INTEGER> crmVersion;
+    GUEST< LONGINT> crmPrivate;
+    GUEST< INTEGER> crmReserved;
+    GUEST< LONGINT> crmDeviceType;
+    GUEST< LONGINT> crmDeviceID;
+    GUEST< LONGINT> crmAttributes;
+    GUEST< LONGINT> crmStatus;
+    GUEST< LONGINT> crmRefCon;
+} *CRMRecPtr;
 
 typedef OSErr CRMErr;
 
@@ -33,18 +31,16 @@ enum { crmRecVersion = 1 };
 enum { curCRMSerRecVer = 0 };
 enum { crmSerialDevice = 1 };
 
-typedef struct PACKED
-{
-  INTEGER version;
-  PACKED_MEMBER(StringHandle, inputDriverName);
-  PACKED_MEMBER(StringHandle, outputDriverName);
-  PACKED_MEMBER(StringHandle, name);
-  Handle deviceIcon ;
-  LONGINT ratedSpeed;
-  LONGINT maxSpeed;
-  LONGINT reserved;
-}
-CRMSerialRecord, *CRMSerialPtr;
+typedef struct CRMSerialRecord : GuestStruct {
+    GUEST< INTEGER> version;
+    GUEST< StringHandle> inputDriverName;
+    GUEST< StringHandle> outputDriverName;
+    GUEST< StringHandle> name;
+    GUEST< Handle> deviceIcon;
+    GUEST< LONGINT> ratedSpeed;
+    GUEST< LONGINT> maxSpeed;
+    GUEST< LONGINT> reserved;
+} *CRMSerialPtr;
 
 extern INTEGER CRMGetCRMVersion (void);
 

@@ -15,12 +15,11 @@
 #include "rsys/trapglue.h"
 
 namespace Executor {
-typedef struct PACKED ccrsr_res
-{
-  CCrsr crsr;
-  PixMap crsr_map;
-  char data;
-} ccrsr_res, *ccrsr_res_ptr;
+typedef struct ccrsr_res : GuestStruct {
+    GUEST< CCrsr> crsr;
+    GUEST< PixMap> crsr_map;
+    GUEST< char> data;
+} *ccrsr_res_ptr;
 
 extern boolean_t ROMlib_text_output_disabled_p;
 

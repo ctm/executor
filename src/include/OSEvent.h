@@ -16,15 +16,15 @@
 namespace Executor {
 #define evtNotEnb	1
 
-typedef struct PACKED {
-  PACKED_MEMBER(QElemPtr, qLink);
-  INTEGER qType;
-  INTEGER evtQWhat;
-  LONGINT evtQMessage;
-  LONGINT evtQWhen;
-  Point evtQWhere;
-  INTEGER evtQModifiers;
-} EvQEl;
+struct EvQEl : GuestStruct {
+    GUEST< QElemPtr> qLink;
+    GUEST< INTEGER> qType;
+    GUEST< INTEGER> evtQWhat;
+    GUEST< LONGINT> evtQMessage;
+    GUEST< LONGINT> evtQWhen;
+    GUEST< Point> evtQWhere;
+    GUEST< INTEGER> evtQModifiers;
+};
 
 typedef EvQEl *EvQElPtr;
 MAKE_HIDDEN(EvQElPtr);
@@ -62,15 +62,14 @@ typedef enum
  * extra booleans are for our own use.
  */
 
-typedef struct PACKED size_info
-{
-  int16 size_flags;
-  int32 preferred_size;
-  int32 minimum_size;
-  
-  /* extra */
-  boolean_t size_resource_present_p;
-  boolean_t application_p;
+
+    /* extra */
+typedef struct size_info : GuestStruct {
+    GUEST< int16> size_flags;
+    GUEST< int32> preferred_size;
+    GUEST< int32> minimum_size;
+    GUEST< boolean_t> size_resource_present_p;
+    GUEST< boolean_t> application_p;
 } size_info_t;
 
 extern size_info_t size_info;
@@ -102,24 +101,22 @@ extern QHdrPtr GetEvQHdr( void  );
 
 extern EvQEl *geteventelem (void);
 
-typedef struct PACKED TargetID
-{
-  int32 sessionID;
-  PPCPortRec name;
-  LocationNameRec location;
-  PPCPortRec recvrName;
-} TargetID, TargetIDPtr;
+typedef struct TargetID : GuestStruct {
+    GUEST< int32> sessionID;
+    GUEST< PPCPortRec> name;
+    GUEST< LocationNameRec> location;
+    GUEST< PPCPortRec> recvrName;
+} TargetIDPtr;
 
-typedef struct PACKED HighLevelEventMsg
-{
-  int16 HighLevelEventMsgHeaderlength;
-  int16 version;
-  int32 reserved1;
-  EventRecord theMsgEvent;
-  int32 userRefCon;
-  int32 postingOptions;
-  int32 msgLength;
-} HighLevelEventMsg, *HighLevelEventMsgPtr; 
+typedef struct HighLevelEventMsg : GuestStruct {
+    GUEST< int16> HighLevelEventMsgHeaderlength;
+    GUEST< int16> version;
+    GUEST< int32> reserved1;
+    GUEST< EventRecord> theMsgEvent;
+    GUEST< int32> userRefCon;
+    GUEST< int32> postingOptions;
+    GUEST< int32> msgLength;
+} *HighLevelEventMsgPtr;
 
 typedef ProcPtr GetSpecificFilterProcPtr;
 

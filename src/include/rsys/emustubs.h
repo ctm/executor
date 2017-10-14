@@ -8,13 +8,18 @@
  * $Id: emustubs.h 63 2004-12-24 18:19:43Z ctm $
  */
 namespace Executor {
-typedef struct PACKED
-{
-  PACKED_MEMBER(Ptr, buffer);
-  PACKED_MEMBER(ProcPtr, proc);
-  PACKED_MEMBER(Ptr, data);
-} adbop_t;
+struct adbop_t : GuestStruct {
+    GUEST< Ptr> buffer;
+    GUEST< ProcPtr> proc;
+    GUEST< Ptr> data;
+};
 
+
+// ### Struct needs manual conversion to GUEST<...>
+//   union
+
+// ### Struct needs manual conversion to GUEST<...>
+//   union
 typedef struct PACKED comm_toolbox_dispatch_args
 {
   int16 selector;
@@ -45,13 +50,12 @@ typedef struct PACKED comm_toolbox_dispatch_args
 
 typedef void *voidptr;
 
-typedef struct PACKED
-{
-  PACKED_MEMBER(voidptr, startPtr);
-  PACKED_MEMBER(voidptr, limitPtr);
-  short cMoreMasters;
-  PACKED_MEMBER(voidptr, pGrowZone);
-} initzonehiddenargs_t;
+struct initzonehiddenargs_t : GuestStruct {
+    GUEST< voidptr> startPtr;
+    GUEST< voidptr> limitPtr;
+    GUEST< short> cMoreMasters;
+    GUEST< voidptr> pGrowZone;
+};
 
 
 extern void ROMlib_GetTrapAddress_helper (uint32 *d0p, uint32 d1, uint32 *a0p);

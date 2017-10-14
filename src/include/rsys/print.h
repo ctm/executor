@@ -80,62 +80,50 @@ extern boolean_t substitute_fonts_p;
 
 enum { GetRslData = 4, SetRsl, DraftBits, NoDraftBits, GetRotn };
 
-typedef struct PACKED
-{
-  INTEGER iOpCode;
-  INTEGER iError;
-  LONGINT lReserved;
-}
-TGnlData;
+struct TGnlData : GuestStruct {
+    GUEST< INTEGER> iOpCode;
+    GUEST< INTEGER> iError;
+    GUEST< LONGINT> lReserved;
+};
 
-typedef struct PACKED
-{
-  INTEGER iMin;
-  INTEGER iMax;
-}
-TRslRg;
+struct TRslRg : GuestStruct {
+    GUEST< INTEGER> iMin;
+    GUEST< INTEGER> iMax;
+};
 
-typedef struct PACKED
-{
-  INTEGER iXRsl;
-  INTEGER iYRsl;
-}
-TRslRec;
+struct TRslRec : GuestStruct {
+    GUEST< INTEGER> iXRsl;
+    GUEST< INTEGER> iYRsl;
+};
 
-typedef struct PACKED
-{
-  INTEGER iOpCode;
-  INTEGER iError;
-  LONGINT lReserved;
-  INTEGER iRgType;
-  TRslRg xRslRg;
-  TRslRg yRslRg;
-  INTEGER iRslRecCnt;
-  TRslRec rgRslRec[27];
-}
-TGetRslBlk;
+struct TGetRslBlk : GuestStruct {
+    GUEST< INTEGER> iOpCode;
+    GUEST< INTEGER> iError;
+    GUEST< LONGINT> lReserved;
+    GUEST< INTEGER> iRgType;
+    GUEST< TRslRg> xRslRg;
+    GUEST< TRslRg> yRslRg;
+    GUEST< INTEGER> iRslRecCnt;
+    GUEST< TRslRec[27]> rgRslRec;
+};
 
-typedef struct PACKED
-{
-  INTEGER iOpCode;
-  INTEGER iError;
-  LONGINT lReserved;
-  THPrint hPrint;
-  INTEGER iXRsl;
-  INTEGER iYRsl;
-}
-TSetRslBlk;
+struct TSetRslBlk : GuestStruct {
+    GUEST< INTEGER> iOpCode;
+    GUEST< INTEGER> iError;
+    GUEST< LONGINT> lReserved;
+    GUEST< THPrint> hPrint;
+    GUEST< INTEGER> iXRsl;
+    GUEST< INTEGER> iYRsl;
+};
 
-typedef struct PACKED
-{
-  Byte tJus;
-  Byte tFlop;
-  INTEGER tAngle;
-  Byte tLine;
-  Byte tCmnt;
-  Fixed tAngleFixed;
-}
-TTxtPicRec, *TTxtPicPtr;
+typedef struct TTxtPicRec : GuestStruct {
+    GUEST< Byte> tJus;
+    GUEST< Byte> tFlop;
+    GUEST< INTEGER> tAngle;
+    GUEST< Byte> tLine;
+    GUEST< Byte> tCmnt;
+    GUEST< Fixed> tAngleFixed;
+} *TTxtPicPtr;
 
 #define TEXTPIC_JUST(h)          (HxX (h, tJus))
 #define TEXTPIC_FLOP(h)          (HxX (h, tFlop))
@@ -165,12 +153,10 @@ enum
   tFlipVertical = 2,
 };
 
-typedef struct PACKED
-{
-  Fixed y;
-  Fixed x;
-}
-TCenterRec, *TCenterRecPtr;
+typedef struct TCenterRec : GuestStruct {
+    GUEST< Fixed> y;
+    GUEST< Fixed> x;
+} *TCenterRecPtr;
 
 #define TEXTCENTER_Y_X(h) (HxX (h, y))
 #define TEXTCENTER_Y(h)   (CL (TEXTCENTER_Y_X (h)))

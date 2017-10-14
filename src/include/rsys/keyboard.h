@@ -12,31 +12,28 @@ typedef unsigned char raw_key_t;
 typedef unsigned char virt_key_t;
 typedef unsigned char modifier_table_number_t;
 
-typedef struct PACKED
-{
-  unsigned char to_look_for;
-  unsigned char replacement;
-} completer_pair_t;
+struct completer_pair_t : GuestStruct {
+    GUEST< unsigned char> to_look_for;
+    GUEST< unsigned char> replacement;
+};
 
-typedef struct PACKED
-{
-  INTEGER n_recs;
-  completer_pair_t completer_recs[0]; /* VARIABLE LENGTH */
-} completer_t;
+struct completer_t : GuestStruct {
+    GUEST< INTEGER> n_recs;
+    GUEST< completer_pair_t[0]> completer_recs;    /* VARIABLE LENGTH */
+};
 
 #define COMPLETER_N_RECS_X(p)		((p)->n_recs)
 #define COMPLETER_COMPLETER_RECS_X(p)	((p)->completer_recs)
 
 #define COMPLETER_N_RECS(p)		(CW (COMPLETER_N_RECS_X (p)))
 
-typedef struct PACKED
-{
-  modifier_table_number_t table_number;
-  virt_key_t virt_key;
-  completer_t completer; /* VARIABLE LENGTH */
-  unsigned char filler;
- unsigned char no_match;
-} dead_key_rec_t;
+struct dead_key_rec_t : GuestStruct {
+    GUEST< modifier_table_number_t> table_number;
+    GUEST< virt_key_t> virt_key;
+    GUEST< completer_t> completer;    /* VARIABLE LENGTH */
+    GUEST< unsigned char> filler;
+    GUEST< unsigned char> no_match;
+};
 
 #define DEAD_KEY_TABLE_NUMBER_X(p)	((p)->table_number)
 #define DEAD_KEY_VIRT_KEY_X(p)		((p)->virt_key)
@@ -53,15 +50,14 @@ typedef struct PACKED
 #define DEAD_KEY_VIRT_KEY(p)		(CB (DEAD_KEY_VIRT_KEY_X (p)))
 #define DEAD_KEY_NO_MATCH(p)		(CB (DEAD_KEY_NO_MATCH_X (p)))
 
-typedef struct PACKED
-{
-  INTEGER version;
-  modifier_table_number_t modifier_table[256];
-  INTEGER n_tables;
-  unsigned char table[0][128]; /* VARIABLE LENGTH */
-  INTEGER n_dead_key_recs;
-  dead_key_rec_t dead_key_recs[0]; /* VARIABLE LENGTH */
-} kchr_str, *kchr_ptr_t;
+typedef struct kchr_str : GuestStruct {
+    GUEST< INTEGER> version;
+    GUEST< modifier_table_number_t[256]> modifier_table;
+    GUEST< INTEGER> n_tables;
+    GUEST< unsigned char[0][128]> table;    /* VARIABLE LENGTH */
+    GUEST< INTEGER> n_dead_key_recs;
+    GUEST< dead_key_rec_t[0]> dead_key_recs;    /* VARIABLE LENGTH */
+} *kchr_ptr_t;
 
 MAKE_HIDDEN(kchr_ptr_t);
 typedef HIDDEN_kchr_ptr_t *kchr_hand;

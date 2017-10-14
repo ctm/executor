@@ -14,24 +14,24 @@ namespace Executor {
 #define ffMode	0
 
 typedef Byte FreeWave[30001];
-typedef struct PACKED {
-  INTEGER mode;
-  Fixed fcount;
-  FreeWave waveBytes;
-} FFSynthRec;
+struct FFSynthRec : GuestStruct {
+    GUEST< INTEGER> mode;
+    GUEST< Fixed> fcount;
+    GUEST< FreeWave> waveBytes;
+};
 typedef FFSynthRec *FFSynthPtr;
 
-typedef struct PACKED {
-  INTEGER tcount;
-  INTEGER amplitude;
-  INTEGER tduration;
-} Tone;
+struct Tone : GuestStruct {
+    GUEST< INTEGER> tcount;
+    GUEST< INTEGER> amplitude;
+    GUEST< INTEGER> tduration;
+};
 typedef Tone Tones[5001];
 
-typedef struct PACKED {
-  INTEGER mode;
-  Tones triplets;
-} SWSynthRec;
+struct SWSynthRec : GuestStruct {
+    GUEST< INTEGER> mode;
+    GUEST< Tones> triplets;
+};
 typedef SWSynthRec *SWSynthPtr;
 
 #if 1|| !defined(__alpha)
@@ -43,28 +43,28 @@ typedef Byte Wave;
 
 typedef Wave *WavePtr;
 
-typedef struct PACKED {
-  INTEGER fduration;
-  Fixed sound1Rate;
-  LONGINT sound1Phase;
-  Fixed sound2Rate;
-  LONGINT sound2Phase;
-  Fixed sound3Rate;
-  LONGINT sound3Phase;
-  Fixed sound4Rate;
-  LONGINT sound4Phase;
-  PACKED_MEMBER(WavePtr, sound1Wave);
-  PACKED_MEMBER(WavePtr, sound2Wave);
-  PACKED_MEMBER(WavePtr, sound3Wave);
-  PACKED_MEMBER(WavePtr, sound4Wave);
-} FTSoundRec;
+struct FTSoundRec : GuestStruct {
+    GUEST< INTEGER> fduration;
+    GUEST< Fixed> sound1Rate;
+    GUEST< LONGINT> sound1Phase;
+    GUEST< Fixed> sound2Rate;
+    GUEST< LONGINT> sound2Phase;
+    GUEST< Fixed> sound3Rate;
+    GUEST< LONGINT> sound3Phase;
+    GUEST< Fixed> sound4Rate;
+    GUEST< LONGINT> sound4Phase;
+    GUEST< WavePtr> sound1Wave;
+    GUEST< WavePtr> sound2Wave;
+    GUEST< WavePtr> sound3Wave;
+    GUEST< WavePtr> sound4Wave;
+};
 typedef FTSoundRec *FTSndRecPtr;
 MAKE_HIDDEN(FTSndRecPtr);
 
-typedef struct PACKED {
-  INTEGER mode;
-  PACKED_MEMBER(FTSndRecPtr, sndRec);
-} FTSynthRec;
+struct FTSynthRec : GuestStruct {
+    GUEST< INTEGER> mode;
+    GUEST< FTSndRecPtr> sndRec;
+};
 typedef FTSynthRec *FTsynthPtr;
 
 

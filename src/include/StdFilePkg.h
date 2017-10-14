@@ -29,14 +29,14 @@ namespace Executor {
 #define getNmList	7
 #define getScroll	8
 
-typedef struct PACKED {
-  BOOLEAN good;
-  BOOLEAN copy;
-  OSType fType;
-  INTEGER vRefNum;
-  INTEGER version;
-  Str63 fName;
-} SFReply;
+struct SFReply : GuestStruct {
+    GUEST< BOOLEAN> good;
+    GUEST< BOOLEAN> copy;
+    GUEST< OSType> fType;
+    GUEST< INTEGER> vRefNum;
+    GUEST< INTEGER> version;
+    GUEST< Str63> fName;
+};
 
 typedef OSType SFTypeList[4];
 
@@ -45,19 +45,18 @@ extern INTEGER 	SFSaveDisk;
 extern LONGINT 	CurDirStore;
 #endif
 
-typedef struct PACKED
-{
-  BOOLEAN sfGood;
-  BOOLEAN sfReplacing;
-  OSType sfType;
-  FSSpec sfFile;
-  ScriptCode sfScript;
-  INTEGER sfFlags;
-  BOOLEAN sfIsFolder;
-  BOOLEAN sfIsVolume;
-  LONGINT sfReserved1;
-  INTEGER sfReserved2;
-} StandardFileReply;
+struct StandardFileReply : GuestStruct {
+    GUEST< BOOLEAN> sfGood;
+    GUEST< BOOLEAN> sfReplacing;
+    GUEST< OSType> sfType;
+    GUEST< FSSpec> sfFile;
+    GUEST< ScriptCode> sfScript;
+    GUEST< INTEGER> sfFlags;
+    GUEST< BOOLEAN> sfIsFolder;
+    GUEST< BOOLEAN> sfIsVolume;
+    GUEST< LONGINT> sfReserved1;
+    GUEST< INTEGER> sfReserved2;
+};
 
 typedef ProcPtr FileFilterYDProcPtr;
 typedef ProcPtr DlgHookYDProcPtr;

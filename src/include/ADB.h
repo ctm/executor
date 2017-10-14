@@ -9,19 +9,17 @@
  */
 
 namespace Executor {
-typedef struct PACKED
-{
-  SignedByte devType;
-  SignedByte origADBAddr;
-  PACKED_MEMBER(Ptr, dbServiceRtPtr);
-  PACKED_MEMBER(Ptr, dbDataAreaAddr);
-} ADBDataBlock;
+struct ADBDataBlock : GuestStruct {
+    GUEST< SignedByte> devType;
+    GUEST< SignedByte> origADBAddr;
+    GUEST< Ptr> dbServiceRtPtr;
+    GUEST< Ptr> dbDataAreaAddr;
+};
 
-typedef struct PACKED
-{
-  PACKED_MEMBER(Ptr, siServiceRtPtr);
-  PACKED_MEMBER(Ptr, siDataAreaAddr);
-} ADBSetInfoBlock;
+struct ADBSetInfoBlock : GuestStruct {
+    GUEST< Ptr> siServiceRtPtr;
+    GUEST< Ptr> siDataAreaAddr;
+};
 
 extern void ADBReInit (void);
 extern OSErr ADBOp (Ptr data, ProcPtr procp, Ptr buffer, INTEGER command);

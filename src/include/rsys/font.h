@@ -6,16 +6,16 @@
  */
 
 namespace Executor {
-typedef struct PACKED {
-  INTEGER size;
-  INTEGER style;
-  INTEGER fontresid;
-} fatabentry;
+struct fatabentry : GuestStruct {
+    GUEST< INTEGER> size;
+    GUEST< INTEGER> style;
+    GUEST< INTEGER> fontresid;
+};
 
-typedef struct PACKED {
-  unsigned short style;
-  INTEGER table[1];	/* actually more */
-} widentry_t;
+struct widentry_t : GuestStruct {
+    GUEST< unsigned short> style;
+    GUEST< INTEGER[1]> table;    /* actually more */
+};
 
 typedef WidthTable *WPtr;
 MAKE_HIDDEN(WPtr);

@@ -96,14 +96,13 @@ typedef uint32 IconSelectorValue;
 typedef int16 IconAlignmentType;
 typedef int16 IconTransformType;
 
-typedef struct PACKED CIcon
-{
-  PixMap iconPMap;
-  BitMap iconMask;
-  BitMap iconBMap;
-  PACKED_MEMBER(Handle, iconData);
-  int16 iconMaskData[1];
-} CIcon, *CIconPtr;
+typedef struct CIcon : GuestStruct {
+    GUEST< PixMap> iconPMap;
+    GUEST< BitMap> iconMask;
+    GUEST< BitMap> iconBMap;
+    GUEST< Handle> iconData;
+    GUEST< int16[1]> iconMaskData;
+} *CIconPtr;
 MAKE_HIDDEN(CIconPtr);
 typedef HIDDEN_CIconPtr *CIconHandle;
 

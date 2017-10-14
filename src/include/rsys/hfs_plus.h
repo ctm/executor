@@ -24,12 +24,10 @@ typedef unsigned short UniChar;
 typedef UInt32 HFSCatalogNodeID;
 #endif
 
-typedef struct PACKED HFSUniStr255
-{
-  UInt16 length;
-  UniChar unicode[255];
-}
-HFSUniStr255;
+struct HFSUniStr255 : GuestStruct {
+    GUEST< UInt16> length;
+    GUEST< UniChar[255]> unicode;
+};
 
 typedef const HFSUniStr255 *ConstHFSUniStr255Param;
 
@@ -37,177 +35,151 @@ typedef const HFSUniStr255 *ConstHFSUniStr255Param;
  * May need a set of textEncoding values here
  */
 
-typedef struct PACKED HFSPlusPermissions
-{
-  UInt32 ownerID;
-  UInt32 groupID;
-  UInt32 permissions;
-  UInt32 specialDevice;
-}
-HFSPlusPermissions;
+struct HFSPlusPermissions : GuestStruct {
+    GUEST< UInt32> ownerID;
+    GUEST< UInt32> groupID;
+    GUEST< UInt32> permissions;
+    GUEST< UInt32> specialDevice;
+};
 
-typedef struct PACKED HFSPlusExtentDescriptor
-{
-  UInt32 startBlock;
-  UInt32 blockCount;
-}
-HFSPlusExtentDescriptor;
+struct HFSPlusExtentDescriptor : GuestStruct {
+    GUEST< UInt32> startBlock;
+    GUEST< UInt32> blockCount;
+};
 
 typedef HFSPlusExtentDescriptor HFSPlusExtentRecord[8];
 
-typedef struct PACKED HFSPlusForkData
-{
-  UInt64 logicalSize;
-  UInt32 clumpSize;
-  UInt32 totalBlocks;
-  HFSPlusExtentRecord extents;
-}
-HFSPlusForkData;
+struct HFSPlusForkData : GuestStruct {
+    GUEST< UInt64> logicalSize;
+    GUEST< UInt32> clumpSize;
+    GUEST< UInt32> totalBlocks;
+    GUEST< HFSPlusExtentRecord> extents;
+};
 
-typedef struct PACKED HFSPlusVolumeHeader
-{
-  UInt16 signature;
-  UInt16 version;
-  UInt32 attributes;
-  UInt32 lastMountedVersion;
-  UInt32 reserved;
-  UInt32 createDate;
-  UInt32 modifyDate;
-  UInt32 backupDate;
-  UInt32 checkedDate;
-  UInt32 fileCount;
-  UInt32 folderCount;
-  UInt32 blockSize;
-  UInt32 totalBlocks;
-  UInt32 freeBlocks;
-  UInt32 nextAllocation;
-  UInt32 rsrcClumpSize;
-  UInt32 dataClumpSize;
-  HFSCatalogNodeID nextCatalogID;
-  UInt32 writeCount;
-  UInt64 encodingsBitmap;
-  UInt8 finderInfo[32];
-  HFSPlusForkData allocationFile;
-  HFSPlusForkData extentsFile;
-  HFSPlusForkData catalogFile;
-  HFSPlusForkData attributesFile;
-  HFSPlusForkData startupFile;
-}
-HFSPlusVolumeHeader;
+struct HFSPlusVolumeHeader : GuestStruct {
+    GUEST< UInt16> signature;
+    GUEST< UInt16> version;
+    GUEST< UInt32> attributes;
+    GUEST< UInt32> lastMountedVersion;
+    GUEST< UInt32> reserved;
+    GUEST< UInt32> createDate;
+    GUEST< UInt32> modifyDate;
+    GUEST< UInt32> backupDate;
+    GUEST< UInt32> checkedDate;
+    GUEST< UInt32> fileCount;
+    GUEST< UInt32> folderCount;
+    GUEST< UInt32> blockSize;
+    GUEST< UInt32> totalBlocks;
+    GUEST< UInt32> freeBlocks;
+    GUEST< UInt32> nextAllocation;
+    GUEST< UInt32> rsrcClumpSize;
+    GUEST< UInt32> dataClumpSize;
+    GUEST< HFSCatalogNodeID> nextCatalogID;
+    GUEST< UInt32> writeCount;
+    GUEST< UInt64> encodingsBitmap;
+    GUEST< UInt8[32]> finderInfo;
+    GUEST< HFSPlusForkData> allocationFile;
+    GUEST< HFSPlusForkData> extentsFile;
+    GUEST< HFSPlusForkData> catalogFile;
+    GUEST< HFSPlusForkData> attributesFile;
+    GUEST< HFSPlusForkData> startupFile;
+};
 
-typedef struct PACKED BTNodeDescriptor
-{
-  UInt32 fLink;
-  UInt32 bLink;
-  SInt8 kind;
-  UInt8 height;
-  UInt16 numRecords;
-  UInt16 reserved;
-}
-BTNodeDescriptor;
+struct BTNodeDescriptor : GuestStruct {
+    GUEST< UInt32> fLink;
+    GUEST< UInt32> bLink;
+    GUEST< SInt8> kind;
+    GUEST< UInt8> height;
+    GUEST< UInt16> numRecords;
+    GUEST< UInt16> reserved;
+};
 
-typedef struct PACKED BTHeaderRec
-{
-  UInt16 treeDepth;
-  UInt32 rootNode;
-  UInt32 leafRecords;
-  UInt32 firstLeafNode;
-  UInt32 lastLeafNode;
-  UInt16 nodeSize;
-  UInt16 maxKeyLength;
-  UInt32 totalNodes;
-  UInt32 freeNodes;
-  UInt16 reserfed1;
-  UInt32 clumpSize;
-  UInt8 btreeType;
-  UInt8 reserfed2;
-  UInt32 attributes;
-  UInt32 reserved3[16];
-}
-BTHeaderRec;
+struct BTHeaderRec : GuestStruct {
+    GUEST< UInt16> treeDepth;
+    GUEST< UInt32> rootNode;
+    GUEST< UInt32> leafRecords;
+    GUEST< UInt32> firstLeafNode;
+    GUEST< UInt32> lastLeafNode;
+    GUEST< UInt16> nodeSize;
+    GUEST< UInt16> maxKeyLength;
+    GUEST< UInt32> totalNodes;
+    GUEST< UInt32> freeNodes;
+    GUEST< UInt16> reserfed1;
+    GUEST< UInt32> clumpSize;
+    GUEST< UInt8> btreeType;
+    GUEST< UInt8> reserfed2;
+    GUEST< UInt32> attributes;
+    GUEST< UInt32[16]> reserved3;
+};
 
-typedef struct PACKED HFSPlusCatalogKey
-{
-  UInt16 keyLength;
-  HFSCatalogNodeID parentID;
-  HFSUniStr255 nodeName;
-}
-HFSPlusCatalogKey;
+struct HFSPlusCatalogKey : GuestStruct {
+    GUEST< UInt16> keyLength;
+    GUEST< HFSCatalogNodeID> parentID;
+    GUEST< HFSUniStr255> nodeName;
+};
 
-typedef struct PACKED HFSPlusCatalogFolder
-{
-  SInt16 recordType;
-  UInt16 flags;
-  UInt32 valence;
-  HFSCatalogNodeID folderID;
-  UInt32 createDate;
-  UInt32 contentModDate;
-  UInt32 attributeModDate;
-  UInt32 accessDate;
-  UInt32 backupDate;
-  HFSPlusPermissions permissions;
-  DInfo userInfo;
-  DXInfo finderInfo;
-  UInt32 textEncoding;
-  UInt32 reserved;
-}
-HFSPlusCatalogFolder;
+struct HFSPlusCatalogFolder : GuestStruct {
+    GUEST< SInt16> recordType;
+    GUEST< UInt16> flags;
+    GUEST< UInt32> valence;
+    GUEST< HFSCatalogNodeID> folderID;
+    GUEST< UInt32> createDate;
+    GUEST< UInt32> contentModDate;
+    GUEST< UInt32> attributeModDate;
+    GUEST< UInt32> accessDate;
+    GUEST< UInt32> backupDate;
+    GUEST< HFSPlusPermissions> permissions;
+    GUEST< DInfo> userInfo;
+    GUEST< DXInfo> finderInfo;
+    GUEST< UInt32> textEncoding;
+    GUEST< UInt32> reserved;
+};
 
-typedef struct PACKED HFSPlusCatalogFile
-{
-  SInt16 recordType;
-  UInt16 flags;
-  UInt32 reserved1;
-  HFSCatalogNodeID fileID;
-  UInt32 createDate;
-  UInt32 contentModDate;
-  UInt32 attributeModDate;
-  UInt32 accessDate;
-  UInt32 backupDate;
-  HFSPlusPermissions permissions;
-  FInfo userInfo;
-  FXInfo finderInfo;
-  UInt32 textEncoding;
-  UInt32 reserved2;
-  HFSPlusForkData dataFork;
-  HFSPlusForkData resourceFork;
-}
-HFSPlusCatalogFile;
+struct HFSPlusCatalogFile : GuestStruct {
+    GUEST< SInt16> recordType;
+    GUEST< UInt16> flags;
+    GUEST< UInt32> reserved1;
+    GUEST< HFSCatalogNodeID> fileID;
+    GUEST< UInt32> createDate;
+    GUEST< UInt32> contentModDate;
+    GUEST< UInt32> attributeModDate;
+    GUEST< UInt32> accessDate;
+    GUEST< UInt32> backupDate;
+    GUEST< HFSPlusPermissions> permissions;
+    GUEST< FInfo> userInfo;
+    GUEST< FXInfo> finderInfo;
+    GUEST< UInt32> textEncoding;
+    GUEST< UInt32> reserved2;
+    GUEST< HFSPlusForkData> dataFork;
+    GUEST< HFSPlusForkData> resourceFork;
+};
 
-typedef struct PACKED HFSPlusCatalogThread
-{
-  SInt16 recordType;
-  SInt16 reserved;
-  HFSCatalogNodeID parentID;
-  HFSUniStr255 nodeName;
-}
-HFSPlusCatalogThread;
+struct HFSPlusCatalogThread : GuestStruct {
+    GUEST< SInt16> recordType;
+    GUEST< SInt16> reserved;
+    GUEST< HFSCatalogNodeID> parentID;
+    GUEST< HFSUniStr255> nodeName;
+};
 
-typedef struct PACKED HFSPlusExtentKey
-{
-  UInt16 keyLength;
-  UInt8 forkType;
-  UInt8 pad;
-  HFSCatalogNodeID fileID;
-  UInt32 startBlock;
-}
-HFSPlusExtentKey;
+struct HFSPlusExtentKey : GuestStruct {
+    GUEST< UInt16> keyLength;
+    GUEST< UInt8> forkType;
+    GUEST< UInt8> pad;
+    GUEST< HFSCatalogNodeID> fileID;
+    GUEST< UInt32> startBlock;
+};
 
-typedef struct PACKED HFSPlusAttrForkData
-{
-  UInt32 recordType;
-  UInt32 reserved;
-  HFSPlusForkData theFork;
-}
-HFSPlusAttrForkData;
+struct HFSPlusAttrForkData : GuestStruct {
+    GUEST< UInt32> recordType;
+    GUEST< UInt32> reserved;
+    GUEST< HFSPlusForkData> theFork;
+};
 
-typedef struct PACKED HFSPlusAttrExtents
-{
-  UInt32 recordType;
-  UInt32 reserved;
-  HFSPlusExtentRecord extents;
-}
-HFSPlusAttrExtents;
+struct HFSPlusAttrExtents : GuestStruct {
+    GUEST< UInt32> recordType;
+    GUEST< UInt32> reserved;
+    GUEST< HFSPlusExtentRecord> extents;
+};
 
 extern boolean_t ROMlib_hfs_plus_support;
 }

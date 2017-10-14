@@ -23,11 +23,11 @@ typedef enum
 }
 launch_failure_t;
 
-typedef struct PACKED {
-  unsigned char c[4];
-  int16_t loc;
-  unsigned char shortname[1];
-} vers_t;
+struct vers_t : GuestStruct {
+    GUEST< unsigned char[4]> c;
+    GUEST< int16_t> loc;
+    GUEST< unsigned char[1]> shortname;
+};
 
 extern launch_failure_t ROMlib_launch_failure;
 extern INTEGER ROMlib_exevrefnum;

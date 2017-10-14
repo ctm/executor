@@ -35,46 +35,46 @@ typedef struct {
 
 typedef char *char_ptr;
 
-typedef struct PACKED {
-  PACKED_MEMBER(char_ptr, baseAddr);
-  short rowBytes;
-  comRect bounds;
-} comBitMap;
+struct comBitMap : GuestStruct {
+    GUEST< char_ptr> baseAddr;
+    GUEST< short> rowBytes;
+    GUEST< comRect> bounds;
+};
 
-typedef struct PACKED {
-  PACKED_MEMBER(char_ptr, baseAddr);
-  short rowBytes;
-  comRect bounds;
-  short pmVersion;
-  short packType;
-  LONGINT packSize;
-  LONGINT hRes;
-  LONGINT vRes;
-  short pixelType;
-  short pixelSize;
-  short cmpCount;
-  short cmpSize;
-  LONGINT planeBytes;
-  LONGINT pmTable;	/* really a CTabHandle */
-  LONGINT pmReserved;
-} comPixMap;
+struct comPixMap : GuestStruct {
+    GUEST< char_ptr> baseAddr;
+    GUEST< short> rowBytes;
+    GUEST< comRect> bounds;
+    GUEST< short> pmVersion;
+    GUEST< short> packType;
+    GUEST< LONGINT> packSize;
+    GUEST< LONGINT> hRes;
+    GUEST< LONGINT> vRes;
+    GUEST< short> pixelType;
+    GUEST< short> pixelSize;
+    GUEST< short> cmpCount;
+    GUEST< short> cmpSize;
+    GUEST< LONGINT> planeBytes;
+    GUEST< LONGINT> pmTable;    /* really a CTabHandle */
+    GUEST< LONGINT> pmReserved;
+};
 
-typedef struct PACKED {
-  short ascent;
-  short descent;
-  short widMax;
-  short leading;
-} comFontInfo;
+struct comFontInfo : GuestStruct {
+    GUEST< short> ascent;
+    GUEST< short> descent;
+    GUEST< short> widMax;
+    GUEST< short> leading;
+};
 
-typedef struct PACKED comPoly {
-  short polySize;
-  comRect polyBBox;
-  comPoint polyPoints[1];
+typedef struct comPoly : GuestStruct {
+    GUEST< short> polySize;
+    GUEST< comRect> polyBBox;
+    GUEST< comPoint[1]> polyPoints;
 } **comPolyHandle;
 
-typedef struct PACKED comRgn {
-  short rgnSize;
-  comRect rgnBBox;
+typedef struct comRgn : GuestStruct {
+    GUEST< short> rgnSize;
+    GUEST< comRect> rgnBBox;
 } **comRgnHandle;
 
 typedef enum {
@@ -93,34 +93,34 @@ typedef LONGINT comFixed;
 
 typedef unsigned char comPattern[8];
 
-typedef struct PACKED {
-  short device;
-  comBitMap portBits;
-  comRect portRect;
-  PACKED_MEMBER(comRgnHandle, visRgn);
-  PACKED_MEMBER(comRgnHandle, clipRgn);
-  comPattern bkPat;
-  comPattern fillPat;
-  comPoint pnLoc;
-  comPoint pnSize;
-  short pnMode;
-  comPattern pnPat;
-  short pnVis;
-  short txFont;
-  char txFace;
-  char padding;
-  short txMode;
-  short txSize;
-  comFixed spExtra;
-  LONGINT fgColor;
-  LONGINT bkColor;
-  short colrBit;
-  short patStretch;
-  PACKED_MEMBER(comHandle, picSave);
-  PACKED_MEMBER(comHandle, rgnSave);
-  PACKED_MEMBER(comHandle, polySave);
-  PACKED_MEMBER(comPtr, grafProcs);
-} comGrafPort, *comGrafPtr;
+typedef struct comGrafPort : GuestStruct {
+    GUEST< short> device;
+    GUEST< comBitMap> portBits;
+    GUEST< comRect> portRect;
+    GUEST< comRgnHandle> visRgn;
+    GUEST< comRgnHandle> clipRgn;
+    GUEST< comPattern> bkPat;
+    GUEST< comPattern> fillPat;
+    GUEST< comPoint> pnLoc;
+    GUEST< comPoint> pnSize;
+    GUEST< short> pnMode;
+    GUEST< comPattern> pnPat;
+    GUEST< short> pnVis;
+    GUEST< short> txFont;
+    GUEST< char> txFace;
+    GUEST< char> padding;
+    GUEST< short> txMode;
+    GUEST< short> txSize;
+    GUEST< comFixed> spExtra;
+    GUEST< LONGINT> fgColor;
+    GUEST< LONGINT> bkColor;
+    GUEST< short> colrBit;
+    GUEST< short> patStretch;
+    GUEST< comHandle> picSave;
+    GUEST< comHandle> rgnSave;
+    GUEST< comHandle> polySave;
+    GUEST< comPtr> grafProcs;
+} *comGrafPtr;
 
 extern void NeXTPrArc(LONGINT verb, comRect *r, LONGINT starta, LONGINT arca,
 							        comGrafPtr gp);

@@ -9,12 +9,12 @@
  */
 
 namespace Executor {
-typedef struct PACKED {
-    INTEGER version;
-    INTEGER tableno[256];
-    INTEGER ntables;
-    Byte table[1][128];	/* who knows how many */
-} keymap;
+struct keymap : GuestStruct {
+    GUEST< INTEGER> version;
+    GUEST< INTEGER[256]> tableno;
+    GUEST< INTEGER> ntables;
+    GUEST< Byte[1][128]> table;    /* who knows how many */
+};
 
 extern void dofloppymount (void);
 extern BOOLEAN ROMlib_beepedonce;

@@ -11,11 +11,11 @@
 #include "QuickDraw.h"
 
 namespace Executor {
-typedef struct PACKED {
-  INTEGER cmd;
-  INTEGER param1;
-  LONGINT param2;
-} SndCommand;
+struct SndCommand : GuestStruct {
+    GUEST< INTEGER> cmd;
+    GUEST< INTEGER> param1;
+    GUEST< LONGINT> param2;
+};
 
 #define stdQLength	128
 
@@ -27,18 +27,18 @@ enum
 };
 
 typedef struct PACKED _SndChannel *SndChannelPtr;
-typedef struct PACKED _SndChannel {
-  PACKED_MEMBER(SndChannelPtr, nextChan);
-  PACKED_MEMBER(Ptr, firstMod);
-  PACKED_MEMBER(ProcPtr, callBack);
-  LONGINT userInfo;
-  LONGINT wait;
-  SndCommand cmdInProg;
-  INTEGER flags;
-  INTEGER qLength;
-  INTEGER qHead;
-  INTEGER qTail;
-  SndCommand queue[stdQLength];
+typedef struct _SndChannel : GuestStruct {
+    GUEST< SndChannelPtr> nextChan;
+    GUEST< Ptr> firstMod;
+    GUEST< ProcPtr> callBack;
+    GUEST< LONGINT> userInfo;
+    GUEST< LONGINT> wait;
+    GUEST< SndCommand> cmdInProg;
+    GUEST< INTEGER> flags;
+    GUEST< INTEGER> qLength;
+    GUEST< INTEGER> qHead;
+    GUEST< INTEGER> qTail;
+    GUEST< SndCommand[stdQLength]> queue;
 } SndChannel;
 
 #define SND_CHAN_FLAGS_X(c) (c->flags)
@@ -76,46 +76,46 @@ enum {
     midiDataCmd = 100,
 };
 
-typedef struct PACKED {
-  LONGINT offset;
-  LONGINT nsamples;
-  LONGINT rate;
-  LONGINT altbegin;
-  LONGINT altend;
-  INTEGER basenote;
-  unsigned char buf[1];
-} soundbuffer_t;
+struct soundbuffer_t : GuestStruct {
+    GUEST< LONGINT> offset;
+    GUEST< LONGINT> nsamples;
+    GUEST< LONGINT> rate;
+    GUEST< LONGINT> altbegin;
+    GUEST< LONGINT> altend;
+    GUEST< INTEGER> basenote;
+    GUEST< unsigned char[1]> buf;
+};
 
-typedef struct PACKED _SoundHeader {
-  PACKED_MEMBER(Ptr, samplePtr);
-  LONGINT length;
-  Fixed sampleRate;
-  LONGINT loopStart;
-  LONGINT loopEnd;
-  Byte encode;
-  Byte baseFrequency;
-  Byte sampleArea[0];
+typedef struct _SoundHeader : GuestStruct {
+    GUEST< Ptr> samplePtr;
+    GUEST< LONGINT> length;
+    GUEST< Fixed> sampleRate;
+    GUEST< LONGINT> loopStart;
+    GUEST< LONGINT> loopEnd;
+    GUEST< Byte> encode;
+    GUEST< Byte> baseFrequency;
+    GUEST< Byte[0]> sampleArea;
 } SoundHeader, *SoundHeaderPtr;
 
-typedef struct PACKED _ExtSoundHeader {
-  PACKED_MEMBER(Ptr, samplePtr);
-  LONGINT numChannels;
-  Fixed sampleRate;
-  LONGINT loopStart;
-  LONGINT loopEnd;
-  Byte encode;
-  Byte baseFrequency;
-  LONGINT numFrames;
-  Extended AIFFSampleRate;  /* ???  should be Extended80 */
-  Ptr MarkerChunk;
-  Ptr instrumentChunks;
-  Ptr AESRecording;
-  INTEGER sampleSize;
-  INTEGER futureUse1;
-  LONGINT futureUse2;
-  LONGINT futureUse3;
-  LONGINT futureUse4;
-  Byte sampleArea[0];
+typedef struct _ExtSoundHeader : GuestStruct {
+    GUEST< Ptr> samplePtr;
+    GUEST< LONGINT> numChannels;
+    GUEST< Fixed> sampleRate;
+    GUEST< LONGINT> loopStart;
+    GUEST< LONGINT> loopEnd;
+    GUEST< Byte> encode;
+    GUEST< Byte> baseFrequency;
+    GUEST< LONGINT> numFrames;
+    GUEST< Extended> AIFFSampleRate;    /* ???  should be Extended80 */
+    GUEST< Ptr> MarkerChunk;
+    GUEST< Ptr> instrumentChunks;
+    GUEST< Ptr> AESRecording;
+    GUEST< INTEGER> sampleSize;
+    GUEST< INTEGER> futureUse1;
+    GUEST< LONGINT> futureUse2;
+    GUEST< LONGINT> futureUse3;
+    GUEST< LONGINT> futureUse4;
+    GUEST< Byte[0]> sampleArea;
 } ExtSoundHeader, *ExtSoundHeaderPtr;
 
 enum {
@@ -144,40 +144,38 @@ enum {
     soundactivenone   = 0xFF,
 };
 
-typedef struct PACKED
-{
-  LONGINT dbNumFrames;
-  LONGINT dbFlags;
-  LONGINT dbUserInfo[2];
-  Byte dbSoundData[0];
-} SndDoubleBuffer, *SndDoubleBufferPtr;
+typedef struct SndDoubleBuffer : GuestStruct {
+    GUEST< LONGINT> dbNumFrames;
+    GUEST< LONGINT> dbFlags;
+    GUEST< LONGINT[2]> dbUserInfo;
+    GUEST< Byte[0]> dbSoundData;
+} *SndDoubleBufferPtr;
 
 enum {
   dbBufferReady = 1,
   dbLastBuffer = 4
 };
 
-typedef struct PACKED
-{
-  INTEGER dbhNumChannels;
-  INTEGER dbhSampleSize;
-  INTEGER dbhCompressionID;
-  INTEGER dbhPacketSize;
-  Fixed dbhSampleRate;
-  SndDoubleBufferPtr dbhBufferPtr[2];
-  ProcPtr dbhDoubleBack;
-} SndDoubleBufferHeader, *SndDoubleBufferHeaderPtr;
+typedef struct SndDoubleBufferHeader : GuestStruct {
+    GUEST< INTEGER> dbhNumChannels;
+    GUEST< INTEGER> dbhSampleSize;
+    GUEST< INTEGER> dbhCompressionID;
+    GUEST< INTEGER> dbhPacketSize;
+    GUEST< Fixed> dbhSampleRate;
+    GUEST< SndDoubleBufferPtr[2]> dbhBufferPtr;
+    GUEST< ProcPtr> dbhDoubleBack;
+} *SndDoubleBufferHeaderPtr;
 
-typedef struct PACKED _SCSTATUS {
-  Fixed scStartTime;
-  Fixed scEndTime;
-  Fixed scCurrentTime;
-  Boolean scChannelBusy;
-  Boolean scChannelDisposed;
-  Boolean scChannelPaused;
-  Boolean scUnused;
-  LONGINT scChannelAttributes;
-  LONGINT scCPULoad;
+typedef struct _SCSTATUS : GuestStruct {
+    GUEST< Fixed> scStartTime;
+    GUEST< Fixed> scEndTime;
+    GUEST< Fixed> scCurrentTime;
+    GUEST< Boolean> scChannelBusy;
+    GUEST< Boolean> scChannelDisposed;
+    GUEST< Boolean> scChannelPaused;
+    GUEST< Boolean> scUnused;
+    GUEST< LONGINT> scChannelAttributes;
+    GUEST< LONGINT> scCPULoad;
 } SCStatus, *SCStatusPtr;
 
 #if 1       /* stub definitions */

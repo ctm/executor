@@ -7,11 +7,11 @@ extern char ROMlib_exit;
 #include "SegmentLdr.h"
 
 namespace Executor {
-typedef struct PACKED {
-    INTEGER message;
-    INTEGER count;
-    AppFile files[1];
-} finderinfo;
+struct finderinfo : GuestStruct {
+    GUEST< INTEGER> message;
+    GUEST< INTEGER> count;
+    GUEST< AppFile[1]> files;
+};
 
 extern int ROMlib_print;
 extern void flushcache( void );

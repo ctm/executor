@@ -12,42 +12,41 @@
 
 #include "rsys/mman.h"
 namespace Executor {
-typedef struct PACKED block_header
-{
-  /* the bogo new IM books implies (via a picture) that the field
+    /* the bogo new IM books implies (via a picture) that the field
      order is `location, size, flags'; and it says that the 24bit
      header is `location, size'.  but IMII implies that the 24bit
      header order is `size, location'; testing shows this is the
      correct order */
-  /* or, as mat would like me to say: `testing shows that good things
+    /* or, as mat would like me to say: `testing shows that good things
      are better than bad things' */
-  
+
+
+    /* various flags */
+
+
+
+
+
+    /* data contained in the block */
+typedef struct block_header : GuestStruct {
 #if defined (MM_BLOCK_HEADER_SENTINEL)
-  uint8 pre_sentinel[SENTINEL_SIZE];
+    GUEST< uint8[SENTINEL_SIZE]> pre_sentinel;
 #endif
-  
-  /* various flags */
-  uint8 flags;
-  uint8 master_ptr_flags;
-  uint8 reserved;
-  uint8 size_correction;
-  
-  uint32 size;
-  
-  uint32 location_u; /* sometimes it's a pointer (the zone),
+    GUEST< uint8> flags;
+    GUEST< uint8> master_ptr_flags;
+    GUEST< uint8> reserved;
+    GUEST< uint8> size_correction;
+    GUEST< uint32> size;
+    GUEST< uint32> location_u;    /* sometimes it's a pointer (the zone),
 					   sometimes it's an offset */
-  
 #if defined (MM_RECORD_ALLOCATION_STACK_TRACES)
-  int alloc_debug_number;
-  void *alloc_pcs[MM_MAX_STACK_TRACE_DEPTH];
+    GUEST< int> alloc_debug_number;
+    GUEST< void*[MM_MAX_STACK_TRACE_DEPTH]> alloc_pcs;
 #endif
-  
 #if defined (MM_BLOCK_HEADER_SENTINEL)
-  uint8 post_sentinel[SENTINEL_SIZE];
+    GUEST< uint8[SENTINEL_SIZE]> post_sentinel;
 #endif
-  
-  /* data contained in the block */
-  uint32 data[0];
+    GUEST< uint32[0]> data;
 } block_header_t;
 
 #define BLOCK_LOCATION_OFFSET_X(block)	((block)->location_u)
@@ -196,12 +195,12 @@ zone_info_t;
 
 typedef Zone *ZonePtr;
 
-typedef struct PACKED {
-  PACKED_MEMBER(ZonePtr, sp);
-  PACKED_MEMBER(Ptr, lp);
-  INTEGER mm;
-  PACKED_MEMBER(ProcPtr, gz);
-} pblock_t;
+struct pblock_t : GuestStruct {
+    GUEST< ZonePtr> sp;
+    GUEST< Ptr> lp;
+    GUEST< INTEGER> mm;
+    GUEST< ProcPtr> gz;
+};
 
 extern void ROMlib_sledgehammer_zone (THz zone, boolean_t print_p,
 				      const char *fn, const char *file,

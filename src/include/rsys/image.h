@@ -27,9 +27,14 @@ typedef struct image_bits_desc
   int bpp;
 } image_bits_desc_t;
 
+struct NativeRect
+{
+  short top, left, bottom, right;
+};
+
 typedef struct pixel_image_desc
 {
-  Rect bounds;
+  NativeRect bounds;
   image_bits_desc_t bits[5];
 } pixel_image_desc_t;
 

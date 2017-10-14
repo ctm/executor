@@ -9,12 +9,12 @@
  */
 
 namespace Executor {
-typedef struct PACKED {
-  PACKED_MEMBER(QElemPtr, qLink);
-  INTEGER	qType;
-  PACKED_MEMBER(ProcPtr, tmAddr);
-  LONGINT	tmCount;	/* I don't trust IMIV-301 */
-} TMTask;
+struct TMTask : GuestStruct {
+    GUEST< QElemPtr> qLink;
+    GUEST< INTEGER> qType;
+    GUEST< ProcPtr> tmAddr;
+    GUEST< LONGINT> tmCount;    /* I don't trust IMIV-301 */
+};
 
 
 /* DO NOT DELETE THIS LINE */

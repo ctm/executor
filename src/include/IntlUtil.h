@@ -55,54 +55,54 @@ namespace Executor {
 #define verTurkey	24
 #define verYugoslavia	25
 
-typedef struct PACKED {
-  Byte decimalPt;
-  Byte thousSep;
-  Byte listSep;
-  Byte currSym1;
-  Byte currSym2;
-  Byte currSym3;
-  Byte currFmt;
-  Byte dateOrder;
-  Byte shrtDateFmt;
-  Byte dateSep;
-  Byte timeCycle;
-  Byte timeFmt;
-  LONGINT mornStr;
-  LONGINT eveStr;
-  Byte timeSep;
-  Byte time1Suff;
-  Byte time2Suff;
-  Byte time3Suff;
-  Byte time4Suff;
-  Byte time5Suff;
-  Byte time6Suff;
-  Byte time7Suff;
-  Byte time8Suff;
-  Byte metricSys;
-  INTEGER intl0Vers;
-} Intl0Rec;
+struct Intl0Rec : GuestStruct {
+    GUEST< Byte> decimalPt;
+    GUEST< Byte> thousSep;
+    GUEST< Byte> listSep;
+    GUEST< Byte> currSym1;
+    GUEST< Byte> currSym2;
+    GUEST< Byte> currSym3;
+    GUEST< Byte> currFmt;
+    GUEST< Byte> dateOrder;
+    GUEST< Byte> shrtDateFmt;
+    GUEST< Byte> dateSep;
+    GUEST< Byte> timeCycle;
+    GUEST< Byte> timeFmt;
+    GUEST< LONGINT> mornStr;
+    GUEST< LONGINT> eveStr;
+    GUEST< Byte> timeSep;
+    GUEST< Byte> time1Suff;
+    GUEST< Byte> time2Suff;
+    GUEST< Byte> time3Suff;
+    GUEST< Byte> time4Suff;
+    GUEST< Byte> time5Suff;
+    GUEST< Byte> time6Suff;
+    GUEST< Byte> time7Suff;
+    GUEST< Byte> time8Suff;
+    GUEST< Byte> metricSys;
+    GUEST< INTEGER> intl0Vers;
+};
 typedef Intl0Rec *Intl0Ptr;
 MAKE_HIDDEN(Intl0Ptr);
 typedef HIDDEN_Intl0Ptr *Intl0Hndl;
 
 typedef Byte STRING15[16];
 
-typedef struct PACKED {
-  STRING15 days[7];
-  STRING15 months[12];
-  Byte suppressDay;
-  Byte lngDateFmt;
-  Byte dayLeading0;
-  Byte abbrLen;
-  LONGINT st0;
-  LONGINT st1;
-  LONGINT st2;
-  LONGINT st3;
-  LONGINT st4;
-  INTEGER intl1Vers;
-  INTEGER localRtn;
-} Intl1Rec;
+struct Intl1Rec : GuestStruct {
+    GUEST< STRING15[7]> days;
+    GUEST< STRING15[12]> months;
+    GUEST< Byte> suppressDay;
+    GUEST< Byte> lngDateFmt;
+    GUEST< Byte> dayLeading0;
+    GUEST< Byte> abbrLen;
+    GUEST< LONGINT> st0;
+    GUEST< LONGINT> st1;
+    GUEST< LONGINT> st2;
+    GUEST< LONGINT> st3;
+    GUEST< LONGINT> st4;
+    GUEST< INTEGER> intl1Vers;
+    GUEST< INTEGER> localRtn;
+};
 typedef Intl1Rec *Intl1Ptr;
 MAKE_HIDDEN(Intl1Ptr);
 typedef HIDDEN_Intl1Ptr *Intl1Hndl;
