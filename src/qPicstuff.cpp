@@ -1459,7 +1459,7 @@ A1 (PRIVATE, void, eatPixPat, PixPatHandle, pixpat)
 		  (pixpat,
 		   patXMap, (Handle)RM (NULL),
 		   patXData, RM (NewHandleClear (sizeof (xdata_t))),
-		   patXValid, RM (-1));
+		   patXValid, CWC (-1));
 	      });
 	 }
    });

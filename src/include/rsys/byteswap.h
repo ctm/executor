@@ -5,6 +5,12 @@
 # error "One of BIGENDIAN or LITTLEENDIAN must be #defined"
 #endif
 
+#include <stdint.h>
+#include <cstddef>
+#include <type_traits>
+#include "rsys/mactype.h"
+#include <syn68k_public.h> /* for ROMlib_offset */
+
 #if defined (BIGENDIAN)
 
 #define CW(rhs)		(rhs)
@@ -31,12 +37,78 @@
 
 #else /* !defined (BIGENDIAN) */
 
-#define CW(n)  ((typeof (n)) swap16 ((unsigned short)(n)))
-#define CL(n)  ((typeof (n)) swap32 ((unsigned int) ((n)|0)))
+// #define CW_MACRO(n)  ((typeof (n)) swap16 ((unsigned short)(n)))
+// #define CL_MACRO(n)  ((typeof (n)) swap32 ((unsigned int) ((n)|0)))
+
+
+template<class TT> inline int16_t CW(TT x) { return swap16((uint16_t)x); }
+inline uint16_t CW(uint16_t x) { return swap16(x); }
+inline int16_t CW(int16_t x) { return swap16((uint16_t)x); }
+
+inline uint16_t CW(unsigned int x) { return swap16((uint16_t)x); }
+
+template<class TT, typename = typename std::enable_if<sizeof(TT) == 2,void>::type>
+TT CW(Executor::GuestWrapper<TT> x) { return swap16((uint16_t)x.unwrap()); }
+
+
+template<class TT> inline int32_t CL(TT x) { return swap32((uint32_t)x); }
+inline uint32_t CL(uint32_t x) { return swap32(x); }
+inline int32_t CL(int32_t x) { return swap32((uint32_t)x); }
+
+template<class TT, typename = typename std::enable_if<sizeof(TT) == 4,void>::type>
+TT CL(Executor::GuestWrapper<TT> x) { return swap32((uint32_t)x.unwrap()); }
+
+
+inline unsigned char Cx(unsigned char x) { return x; }
+inline signed char Cx(signed char x) { return x; }
+inline char Cx(char x) { return x; }
+
+inline uint16_t Cx(uint16_t x) { return swap16(x); }
+inline int16_t Cx(int16_t x) { return swap16((uint16_t)x); }
+
+inline uint32_t Cx(uint32_t x) { return swap32(x); }
+inline int32_t Cx(int32_t x) { return swap32((uint32_t)x); }
+
+template<class TT>
+TT Cx(Executor::GuestWrapper<TT> x) { return Cx(x.unwrap()); }
+
+
+template<class TT>
+TT Cx(TT x);    // no definition. Make sure we get a linker error if an unexpected version of Cx is used.
+
 
 #if 0
 #define MR(n)  ((typeof (n))(n ? ((swap32 ((unsigned long) (n))) + ROMlib_offset) : 0))
 #define RM(n)  ((typeof (n))(n ? ((swap32 ((unsigned long) (n)- ROMlib_offset)) ) : 0))
+#elif 1
+
+template<typename TT>
+TT* MR(TT* p)
+{
+    if(p)
+        return (TT*) (swap32((uint32_t)p) + ROMlib_offset);
+    else
+        return nullptr;
+}
+
+template<typename TT>
+TT* RM(TT* p)
+{
+    if(p)
+        return (TT*) swap32( (uint32_t) ((uintptr_t)p - ROMlib_offset)) ;
+    else
+        return nullptr;
+}
+
+inline std::nullptr_t RM(std::nullptr_t p) { return nullptr; }
+
+inline void* MR(uint32_t p) { return MR((void*)p); }
+inline void* MR(int32_t p) { return MR((void*)p); }
+
+#  define PPR(n) MR(n)
+
+#define PTR_MINUSONE ((void*)-1)
+
 #else
 
 #if (SIZEOF_CHAR_P == 4) && !FORCE_EXPERIMENTAL_PACKED_MACROS
@@ -81,6 +153,7 @@
 #define CLV(n) \
 ((typeof (n)) (__builtin_constant_p ((long) (n)) ? CLC (n) : CL (n)))
 
+#if 0
 /* This will cause a link error for an invalid Cx. */
 extern int bad_cx_splosion;
 
@@ -94,7 +167,7 @@ extern int bad_cx_splosion;
 			    CL ((rhs)|0)				\
 			:						\
 			    (typeof (rhs)) bad_cx_splosion)
-
+#endif
 
 #endif  /* !defined (BIGENDIAN) */
 

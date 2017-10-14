@@ -386,7 +386,7 @@ PUBLIC void Executor::SFSaveDisk_Update (INTEGER vrefnum, Str255 filename)
   Str255 save_name;
 
   str255assign (save_name, filename);
-  pbr.volumeParam.ioNamePtr = (StringPtr) RM ((long) save_name);
+  pbr.volumeParam.ioNamePtr = (StringPtr) RM (save_name);
   pbr.volumeParam.ioVolIndex = CWC (-1);
   pbr.volumeParam.ioVRefNum = CW (vrefnum);
   PBGetVInfo (&pbr, FALSE);
@@ -1438,8 +1438,8 @@ Executor::NewLaunch (StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockR
 		     && lp != (long) SYN68K_TO_US(0x82a)
 		     && lp != (long) SYN68K_TO_US(0x16c)
 		     )
-		if (MR(*(int32 *)lp) >= (int32) MR(ApplZone)
-		    && MR(*(int32 *)lp) < (int32) MR(MR(ApplZone)->bkLim))
+		if (MR(*(int32 *)lp) >= MR(ApplZone)
+		    && MR(*(int32 *)lp) < MR(MR(ApplZone)->bkLim))
 		  warning_unexpected ("Low global at 0x%lx may point into "
 				      "ApplZone and probably shouldn't.",
 				      (unsigned long) US_TO_SYN68K (lp));

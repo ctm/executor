@@ -36,7 +36,7 @@ typedef struct PACKED
    WindowRecord window;
    PACKED_MEMBER(Handle, items);
    PACKED_MEMBER(TEHandle, textH);
-   INTEGER editField;
+   GUEST<INTEGER> editField;
    INTEGER editOpen;
    INTEGER aDefItem;
 } DialogRecord;

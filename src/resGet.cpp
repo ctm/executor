@@ -219,16 +219,16 @@ PRIVATE BOOLEAN acceptable( unsigned long addr )
 PRIVATE void ROMlib_init_xdefs( void )
 {
 #if !defined(MAELSTROM_HACK)
-    ROMlib_defs[0]  = RM((long) P_cdef0);
-    ROMlib_defs[1]  = RM((long) P_cdef16);
-    ROMlib_defs[2]  = RM((long) P_wdef0);
-    ROMlib_defs[3]  = RM((long) P_wdef16);
-    ROMlib_defs[4]  = RM((long) P_mdef0);
-    ROMlib_defs[5]  = RM((long) P_ldef0);
-    ROMlib_defs[6]  = RM((long) P_mbdf0);
-    ROMlib_defs[7]  = RM((long) P_snth5);
-    ROMlib_defs[8]  = RM((long) P_unixmount);
-    ROMlib_defs[9]  = RM((long) P_cdef1008);
+    ROMlib_defs[0]  = (LONGINT) RM(P_cdef0);
+    ROMlib_defs[1]  = (LONGINT) RM(P_cdef16);
+    ROMlib_defs[2]  = (LONGINT) RM(P_wdef0);
+    ROMlib_defs[3]  = (LONGINT) RM(P_wdef16);
+    ROMlib_defs[4]  = (LONGINT) RM(P_mdef0);
+    ROMlib_defs[5]  = (LONGINT) RM(P_ldef0);
+    ROMlib_defs[6]  = (LONGINT) RM(P_mbdf0);
+    ROMlib_defs[7]  = (LONGINT) RM(P_snth5);
+    ROMlib_defs[8]  = (LONGINT) RM(P_unixmount);
+    ROMlib_defs[9]  = (LONGINT) RM(P_cdef1008);
 
     *(LONGINT *)SYN68K_TO_US(0x58) = RM((LONGINT) ROMlib_defs);
 #else
@@ -254,16 +254,16 @@ PRIVATE void ROMlib_init_xdefs( void )
 #endif
     HLock(newhandle);
     ROMlib_defs = (LONGINT *) STARH(newhandle);
-    ROMlib_defs[0]  = RM((long) P_cdef0);
-    ROMlib_defs[1]  = RM((long) P_cdef16);
-    ROMlib_defs[2]  = RM((long) P_wdef0);
-    ROMlib_defs[3]  = RM((long) P_wdef16);
-    ROMlib_defs[4]  = RM((long) P_mdef0);
-    ROMlib_defs[5]  = RM((long) P_ldef0);
-    ROMlib_defs[6]  = RM((long) P_mbdf0);
-    ROMlib_defs[7]  = RM((long) P_snth5);
-    ROMlib_defs[8]  = RM((long) P_unixmount);
-    ROMlib_defs[9]  = RM((long) P_cdef1008);
+    ROMlib_defs[0]  = (LONGINT) RM(P_cdef0);
+    ROMlib_defs[1]  = (LONGINT) RM(P_cdef16);
+    ROMlib_defs[2]  = (LONGINT) RM(P_wdef0);
+    ROMlib_defs[3]  = (LONGINT) RM(P_wdef16);
+    ROMlib_defs[4]  = (LONGINT) RM(P_mdef0);
+    ROMlib_defs[5]  = (LONGINT) RM(P_ldef0);
+    ROMlib_defs[6]  = (LONGINT) RM(P_mbdf0);
+    ROMlib_defs[7]  = (LONGINT) RM(P_snth5);
+    ROMlib_defs[8]  = (LONGINT) RM(P_unixmount);
+    ROMlib_defs[9]  = (LONGINT) RM(P_cdef1008);
     *(LONGINT *)SYN68K_TO_US(0x58) = (LONGINT) newhandle->p;
     TheZone = save_zone;
 #endif

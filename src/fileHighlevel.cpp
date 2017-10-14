@@ -527,7 +527,7 @@ P2 (PUBLIC pascal trap, OSErr, FSpRename,
   hpb.fileParam.ioVRefNum = spec->vRefNum;
   hpb.fileParam.ioDirID = spec->parID;
   hpb.fileParam.ioNamePtr = (StringPtr) RM ((Ptr) spec->name);
-  hpb.ioParam.ioMisc = RM ((LONGINT) new_name);
+  hpb.ioParam.ioMisc = (LONGINT) RM ( new_name);
   retval = PBHRename (&hpb, FALSE);
   return retval;
 }

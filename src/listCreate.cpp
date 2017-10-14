@@ -181,7 +181,7 @@ P9(PUBLIC pascal trap, ListHandle,  LNew, Rect *, rview,	/* IMIV-270 */
 	ROMlib_vminmax(&min, &max, lp);
 	lp->vScroll = RM(NewControl((WindowPtr) wind, &r, (StringPtr) "",
 	       draw && lp->lActive, min, min, max, scrollBarProc, (LONGINT) 0));
-	STARH(MR(lp->vScroll))->contrlRfCon = RM((LONGINT) (long) retval);
+	STARH(MR(lp->vScroll))->contrlRfCon = (LONGINT) RM(retval);
 	lp->listFlags |= lDoVAutoscroll;
     }
 
@@ -194,7 +194,7 @@ P9(PUBLIC pascal trap, ListHandle,  LNew, Rect *, rview,	/* IMIV-270 */
 	ROMlib_hminmax(&min, &max, lp);
 	lp->hScroll = RM(NewControl((WindowPtr) wind, &r, (StringPtr) "",
 	       draw && lp->lActive, min, min, max, scrollBarProc, (LONGINT) 0));
-	STARH(MR(lp->hScroll))->contrlRfCon = RM((LONGINT) (long) retval);
+	STARH(MR(lp->hScroll))->contrlRfCon = (LONGINT) RM(retval);
 	lp->listFlags |= lDoHAutoscroll;
     }
 

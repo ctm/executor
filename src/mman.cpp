@@ -518,7 +518,7 @@ ROMlib_InitZones (offset_enum which)
 		  applzone_memory_segment_size) == -1)
 	warning_errno ("unable to `munmap ()' previous applzone");
   
-      ApplZone = (THz) RM ((long) MR (SysZone)
+      ApplZone = (THz) RM ((char*) MR (SysZone)
 			   + INIT_SYSZONE_SIZE
 			   + (mm_current_applzone * INIT_APPLZONE_SIZE));
       mm_current_applzone = (mm_current_applzone + 1) % mm_n_applzones;
@@ -529,14 +529,14 @@ ROMlib_InitZones (offset_enum which)
 	errno_fatal ("unable to `mmap ()' new applzone");
     }
   else
-    ApplZone = (THz) RM ((long) MR (SysZone) + INIT_SYSZONE_SIZE);
+    ApplZone = (THz) RM ((Ptr) MR (SysZone) + INIT_SYSZONE_SIZE);
 #else /* !MM_MANY_APPLZONES */
-  ApplZone = (THz) RM ((long) MR (SysZone) + INIT_SYSZONE_SIZE);
+  ApplZone = (THz) RM ((Ptr) MR (SysZone) + INIT_SYSZONE_SIZE);
 #endif
   
   Executor::InitApplZone ();
   
-  ApplLimit = RM ((Ptr) ((long) MR (ApplZone)
+  ApplLimit = RM (((Ptr) MR (ApplZone)
 			 + INIT_APPLZONE_SIZE));
   
   EM_A7 = (long) US_TO_SYN68K(stack_end - 16 - MANDELSLOP);
@@ -608,7 +608,7 @@ MoreMasters (void)
     = RM ((Ptr) &handles[ZONE_MORE_MAST (current_zone) - 1]);
 
   for (i = ZONE_MORE_MAST (current_zone) - 1; i > 0; i--)
-    handles[i] = RM ((uint32) &handles[i - 1]);
+    handles[i] = (uint32) RM (&handles[i - 1]);
   
   MM_SLAM ("exit");
   SET_MEM_ERR (noErr);

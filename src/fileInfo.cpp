@@ -150,7 +150,7 @@ A3(PUBLIC, OSErr, Rename, StringPtr, filen, INTEGER, vrn,	/* IMIV-114 */
     pbr.ioParam.ioNamePtr = RM(filen);
     pbr.ioParam.ioVRefNum = CW(vrn);
     pbr.ioParam.ioVersNum = 0;
-    pbr.ioParam.ioMisc = RM((LONGINT) (long) newf);
+    pbr.ioParam.ioMisc = (LONGINT) RM( newf);
     return(PBRename(&pbr, 0));
 }
 

@@ -298,7 +298,7 @@ addr_info (char *addr)
 	
 	/* blah */
 	id = CW (id);
-	type = MR (type);
+	type = CL (type);
 	
 	res_name[res_name[0] + 1] = '\0';
 	
@@ -498,7 +498,7 @@ void
 Executor::mm_set_block_fields_zone (block_header_t *block,
 		     unsigned state, unsigned use,
 		     unsigned size_correction,
-		     uint32 physical_size, uint32 location)
+		     uint32 physical_size, THz location)
 {
   mm_set_block_fields_common (block, state, use, size_correction,
 			      physical_size);
@@ -578,7 +578,7 @@ Executor::ROMlib_setupblock (block_header_t *block,
     case NREL:
       mm_set_block_fields_zone (block, EMPTY_STATE, use,
 				size_correction, physical_size,
-				(uint32) current_zone);
+				current_zone);
 
       break;
     case REL:

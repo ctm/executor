@@ -133,7 +133,7 @@ extern unsigned long ROMlib_memtop;
 #define BLOCK_SET_LOCATION_OFFSET(block, loc)	\
   ((block)->location_u = CL (loc))
 #define BLOCK_SET_LOCATION_ZONE(block, loc)	\
-  ((block)->location_u = RM (loc))
+  ((block)->location_u = (uint32_t) RM (loc))
 #define BLOCK_SET_RESERVED(block)
 
 /* Zone record accessor macros */
@@ -177,7 +177,7 @@ void mm_set_block_fields_offset (block_header_t *block,
 void mm_set_block_fields_zone (block_header_t *block,
 			  unsigned state, unsigned use,
 			  unsigned size_correction,
-			  uint32 physical_size, uint32 location);
+			  uint32 physical_size, THz location);
 
 extern void checkallocptr (void);
 

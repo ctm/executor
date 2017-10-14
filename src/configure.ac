@@ -45,6 +45,7 @@ AC_PROG_RANLIB
 AM_PROG_AS
 AC_PROG_YACC
 AC_PROG_OBJC
+AX_CXX_COMPILE_STDCXX_14()
 
 AC_CHECK_PROG([PERL], [perl], [perl])
 AC_ARG_VAR([PERL], [perl for generating blitters])
