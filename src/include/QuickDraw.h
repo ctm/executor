@@ -396,7 +396,7 @@ MAKE_HIDDEN(BytePtr);
 #define randSeed	CL(* (LONGINT *) (STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5))-126))
 #define randSeedX	((* (LONGINT *) (STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5))-126)))
 
-#if !defined (RndSeed_L)
+#if 0
 extern HIDDEN_LONGINT RndSeed_L;
 extern Byte HiliteMode;	/* not really supported in ROMlib-V1.0 */
 extern RGBColor HiliteRGB;	/* not really supported in ROMlib-V1.0 */
@@ -426,6 +426,7 @@ extern LONGINT 	mouseoffset;
 extern Byte 	HiliteMode;
 #endif
 
+#if 0
 #define RndSeed	(RndSeed_L.l)
 #define JInitCrsr	(JInitCrsr_H.p)
 #define JHideCursor	(JHideCursor_H.p)
@@ -438,6 +439,7 @@ extern Byte 	HiliteMode;
 #define ScrnBase	(ScrnBase_H.p)
 #define Key1Trans	(Key1Trans_H.p)
 #define Key2Trans	(Key2Trans_H.p)
+#endif
 
 extern trap void C_CopyBits (BitMap *src_bitmap, BitMap *dst_bitmap,
 				    const Rect *src_rect, const Rect *dst_rect,

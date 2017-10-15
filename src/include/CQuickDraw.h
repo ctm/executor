@@ -439,6 +439,7 @@ extern pascal trap OSErr C_GetPixMapInfo (PixMapHandle, PictInfo *, int16, int16
 
 extern pascal trap PicHandle C_OpenCPicture (OpenCPicParams *newheaderp);
 
+#if 0
 #if !defined (TheGDevice_H)
 extern HIDDEN_GDHandle	TheGDevice_H;
 extern HIDDEN_GDHandle	MainDevice_H;
@@ -458,5 +459,7 @@ extern HIDDEN_GDHandle	DeviceList_H;
 #  define DeviceList	((typeof DeviceList_H.type[0])(DeviceList_H.p))
 
 #endif
+#endif
+
 }
 #endif /* _CQUICKDRAW_H_ */

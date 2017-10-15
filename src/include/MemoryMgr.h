@@ -47,6 +47,7 @@ typedef Zone *THz;
 
 MAKE_HIDDEN(THz);
 
+#if 0
 #if !defined (MemErr)
 extern int16 MemErr;
 extern HIDDEN_Ptr 	MemTop_H;
@@ -86,7 +87,7 @@ extern Byte 	ApplScratch[12];
 #define IAZNotify	(IAZNotify_H.p)
 #define CurrentA5	(CurrentA5_H.p)
 #define CurStackBase	(CurStackBase_H.p)
-
+#endif
 /* traps which can have a `sys' or `clear' bit set */
 
 #define NewEmptyHandle()	(_NewEmptyHandle_flags (FALSE))

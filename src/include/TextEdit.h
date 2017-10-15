@@ -495,6 +495,7 @@ extern void  release_style_index (TEStyleHandle te_style, int16 style_index);
 extern void stabilize_style_info (TEStyleHandle te_style);
 extern void te_style_combine_runs (TEStyleHandle te_style);
 
+#if 0
 #if !defined (TEDoText_H)
 extern HIDDEN_ProcPtr 	TEDoText_H;
 extern HIDDEN_Handle 	TEScrpHandle_H;
@@ -503,7 +504,7 @@ extern INTEGER 	TEScrpLength;
 
 #define TEDoText	(TEDoText_H.p)
 #define TEScrpHandle	(TEScrpHandle_H.p)
-
+#endif
 
 extern pascal trap void C_TESetText( Ptr p, LONGINT ln, TEHandle teh ); extern pascal trap void P_TESetText( Ptr p, LONGINT ln, TEHandle teh);
 extern pascal trap CharsHandle C_TEGetText( TEHandle teh ); extern pascal trap CharsHandle P_TEGetText( TEHandle teh); 

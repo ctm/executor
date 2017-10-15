@@ -125,12 +125,6 @@ struct AuxCtlRec : GuestStruct {
     GUEST< LONGINT> acRefCon;
 };
 
-#if !defined (AuxCtlHead_H)
-extern HIDDEN_AuxCtlHandle AuxCtlHead_H;
-#endif
-
-#define AuxCtlHead	(AuxCtlHead_H.p)
-
 #if !defined (__STDC__)
 extern void SetCTitle(); 
 extern void GetCTitle(); 

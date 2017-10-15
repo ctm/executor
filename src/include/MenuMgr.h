@@ -51,6 +51,7 @@ MAKE_HIDDEN(MCTablePtr);
 typedef HIDDEN_MCTablePtr *MCTableHandle;
 MAKE_HIDDEN(MCTableHandle);
 
+#if 0
 #if !defined (MenuList_H)
 extern HIDDEN_Handle 	MenuList_H;
 extern HIDDEN_ProcPtr 	MBarHook_H;
@@ -73,6 +74,7 @@ extern INTEGER 	MBarHeight;
 #define MBDFHndl	(MBDFHndl_H.p)
 #define MBSaveLoc	(MBSaveLoc_H.p)
 #define MenuCInfo	(MenuCInfo_H.p)
+#endif
 
 #if !defined (__STDC__)
 extern void DrawMenuBar(); 

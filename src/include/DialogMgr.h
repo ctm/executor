@@ -124,6 +124,7 @@ typedef int16 DITLMethod;
 #define doMode 		16384
 #define doFontName 	32768
 
+#if 0
 #if !defined (ResumeProc_H)
 extern HIDDEN_ProcPtr 	ResumeProc_H;
 extern HIDDEN_ProcPtr 	DABeeper_H;
@@ -135,6 +136,7 @@ extern INTEGER 	DlgFont;
 
 #define ResumeProc	(ResumeProc_H.p)
 #define DABeeper	(DABeeper_H.p)
+#endif
 
 extern pascal trap INTEGER C_Alert( INTEGER id, 
  ProcPtr fp );

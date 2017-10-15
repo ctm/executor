@@ -110,7 +110,7 @@ typedef struct {
 
 extern driverinfo *__ROMlib_otherdrivers;
 
-
+#if 0
 #if !defined (UTableBase_H)
 extern HIDDEN_DCtlHandlePtr UTableBase_H;
 extern HIDDEN_Ptr 	VIA_H;
@@ -120,6 +120,7 @@ extern INTEGER 	UnitNtryCnt;
 
 #define UTableBase	(UTableBase_H.p)
 #define VIA		(VIA_H.p)
+#endif
 
 #if !defined (__STDC__)
 extern OSErr PBControl(); 

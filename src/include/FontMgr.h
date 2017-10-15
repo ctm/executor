@@ -162,6 +162,7 @@ MAKE_HIDDEN(WidthTablePtr);
 typedef HIDDEN_WidthTablePtr *WidthTableHandle;
 MAKE_HIDDEN(WidthTableHandle);
 
+#if 0
 #if !defined (JSwapFont_H)
 extern HIDDEN_ProcPtr 	JSwapFont_H;
 extern HIDDEN_Handle 	WidthListHand_H;
@@ -186,6 +187,7 @@ extern Byte 	FractEnable;
 #define WidthPtr	(WidthPtr_H.p)
 #define WidthTabHandle	(WidthTabHandle_H.p)
 #define LastFOND	(LastFOND_H.p)
+#endif
 
 extern pascal trap void C_InitFonts( void  ); extern pascal trap void P_InitFonts( void ); 
 extern pascal trap void C_GetFontName( INTEGER fnum, 

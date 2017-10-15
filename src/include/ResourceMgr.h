@@ -41,6 +41,7 @@ enum { resourceInMemory = -188, inputOutOfBounds = -190 };
 #define mapCompact	 64
 #define mapChanged	 32
 
+#if 0
 #if !defined (TopMapHndl_H)
 extern HIDDEN_Handle 	TopMapHndl_H;
 extern HIDDEN_Handle 	SysMapHndl_H;
@@ -55,6 +56,7 @@ extern Byte 	SysResName[20];
 #define TopMapHndl	(TopMapHndl_H.p)
 #define SysMapHndl	(SysMapHndl_H.p)
 #define ResErrProc	(ResErrProc_H.p)
+#endif
 
 extern BOOLEAN ROMlib_InstallxDEF( ProcPtr thedef, ResType typ,
  INTEGER id );

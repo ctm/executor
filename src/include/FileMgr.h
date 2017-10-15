@@ -498,6 +498,7 @@ typedef struct FSSpec FSSpec;
 typedef FSSpec *FSSpecPtr;
 typedef FSSpecPtr FSSpecArrayPtr;
 
+#if 0
 #if !defined (FCBSPtr_H)
 extern HIDDEN_Ptr 	FCBSPtr_H;
 extern HIDDEN_VCBPtr 	DefVCBPtr_H;
@@ -513,6 +514,7 @@ extern INTEGER 	FSFCBLen;
 #define FCBSPtr		(FCBSPtr_H.p)
 #define DefVCBPtr	(DefVCBPtr_H.p)
 #define WDCBsPtr	(WDCBsPtr_H.p)
+#endif
 
 #pragma pack(pop)
 

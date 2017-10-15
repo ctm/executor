@@ -74,6 +74,7 @@ typedef struct size_info : GuestStruct {
 
 extern size_info_t size_info;
 
+#if 0
 #if !defined (Ticks_UL)
 extern HIDDEN_ULONGINT Ticks_UL;
 extern INTEGER 	monkeylives;
@@ -82,6 +83,7 @@ extern QHdr 	EventQueue;
 #endif
 
 #define Ticks	(Ticks_UL.u)
+#endif
 
 extern void ROMlib_eventdep( void  ); 
 extern void insertcommonevent( char *xeventp, commonevent *comevtp ); 

@@ -125,6 +125,7 @@ struct AuxWinRec : GuestStruct {
     GUEST< LONGINT> awRefCon;
 };
 
+#if 0
 #if !defined (WindowList_H)
 extern HIDDEN_WindowPeek 	WindowList_H;
 extern HIDDEN_GrafPtr 		WMgrPort_H;
@@ -160,6 +161,7 @@ extern Pattern 	DeskPattern;
 #define GhostWindow	(GhostWindow_H.p)
 #define AuxWinHead	(AuxWinHead_H.p)
 #define DeskCPat (DeskCPat_H.p)
+#endif
 
 extern pascal trap void C_SetWTitle( WindowPtr w, StringPtr t ); extern pascal trap void P_SetWTitle( WindowPtr w, StringPtr t); 
 extern pascal trap void C_GetWTitle( WindowPtr w, StringPtr t ); extern pascal trap void P_GetWTitle( WindowPtr w, StringPtr t); 
