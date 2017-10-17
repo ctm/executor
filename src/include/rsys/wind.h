@@ -70,7 +70,8 @@ extern RGBColor *validate_colors_for_window (GrafPtr w);
 
    of course, our definition files use only the WMgrCPort */
 
-#define wmgr_port ((GrafPtr) (WMgrCPort))
+//#define wmgr_port ((GrafPtr) (WMgrCPort))
+#define wmgr_port (guest_cast<GrafPtr>(WMgrCPort))
 
 /* WindowPeek accessors;
    note these functions cast thier argument to type (WindowPeek),

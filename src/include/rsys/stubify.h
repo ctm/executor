@@ -5747,7 +5747,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
  ({ \
    void *new_addr;\
    StringPtr __stub_arg_1 = (A1);\
-   INTEGER * __stub_arg_2 = (A2);\
+   GUEST<INTEGER> * __stub_arg_2 = (A2);\
  \
    new_addr = tooltraptable[0x0100];\
    ((new_addr == toolstuff[0x0100].orig)\

@@ -124,7 +124,7 @@ A2(PUBLIC, void, ROMlib_GetFontName, LONGINT, fnum, char *, fnam)
 }
 
 P2(PUBLIC pascal trap, void, GetFNum, StringPtr, fnam,		/* IMI-223 */
-						       INTEGER *, fnum)
+						       GUEST<INTEGER> *, fnum)
 {
     Handle h;
     ResType rest;

@@ -195,8 +195,7 @@ extern pascal trap void C_GetFontName( INTEGER fnum,
  StringPtr fnam ); 
 extern void ROMlib_GetFontName( LONGINT fnum, char *fnam ); 
 extern pascal trap void C_GetFNum( StringPtr fnam, 
- INTEGER *fnum ); extern pascal trap void P_GetFNum( StringPtr fnam, 
- INTEGER *fnum ); 
+ GUEST<INTEGER> *fnum );
 extern pascal trap BOOLEAN C_RealFont( INTEGER fnum, 
  INTEGER sz ); extern pascal trap BOOLEAN P_RealFont( INTEGER fnum, 
  INTEGER sz ); 

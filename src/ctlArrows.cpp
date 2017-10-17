@@ -670,7 +670,7 @@ save_and_switch_to_color_port_if_needed (save_t *sp)
       sp->port = thePort;
       sp->cp = * (CGrafPtr) thePort;
       wp = (CGrafPtr) MR (wmgr_port);
-      sp->cp.portPixMap = (PixMapHandle) CopyMacHandle ((Handle) wp->portPixMap);
+      sp->cp.portPixMap = RM( (PixMapHandle) CopyMacHandle ((Handle) MR(wp->portPixMap)) );
       PIXMAP_BOUNDS (PPR (sp->cp.portPixMap)) = thePort->portBits.bounds;
       sp->cp.portVersion = wp->portVersion;
       sp->cp.grafVars = wp->grafVars;

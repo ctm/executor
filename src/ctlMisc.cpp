@@ -90,10 +90,10 @@ Executor::ctl_color_init (void)
   HxX (default_aux_ctl, acRefCon)   = CLC (0);
 }
 
-AuxCtlHandle *
+GUEST<AuxCtlHandle> *
 Executor::lookup_aux_ctl (ControlHandle ctl)
 {
-  AuxCtlHandle *t;
+  GUEST<AuxCtlHandle> *t;
 
   for (t = &AuxCtlHead;
        *t && HxP (MR (*t), acOwner) != ctl;

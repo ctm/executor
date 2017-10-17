@@ -547,7 +547,7 @@ PRIVATE void W_TextFont( INTEGER f )
   sp = assoc (f);
   if (sp)
     {
-      INTEGER new_f;
+      GUEST<INTEGER> new_f;
       GetFNum (sp, &new_f);
       if (new_f)
 	f = CW (new_f);

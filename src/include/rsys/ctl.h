@@ -49,11 +49,11 @@ extern AuxCtlHandle default_aux_ctl;
 #define CTL_DEFPROC(ctl)	(MR (CTL_DEFPROC_X (ctl)))
 #define CTL_DATA(ctl)		((RgnHandle) PPR (CTL_DATA_X (ctl)))
 #define CTL_ACTION(ctl)		(MR (CTL_ACTION_X (ctl)))
-#define CTL_ACTION_AS_LONG(ctl)	(CL ((LONGINT) CTL_ACTION_X (ctl)))
+#define CTL_ACTION_AS_LONG(ctl)	(CL (guest_cast<LONGINT>(CTL_ACTION_X (ctl))))
 #define CTL_REF_CON(ctl)	(CL (CTL_REF_CON_X (ctl)))
 
 extern CTabHandle default_ctl_ctab;
-extern AuxCtlHandle *lookup_aux_ctl (ControlHandle ctl);
+extern GUEST<AuxCtlHandle> *lookup_aux_ctl (ControlHandle ctl);
 
 extern int32 C_cdef0    (int16 var, ControlHandle ctl, int16 mess,
 			 int32 param);
