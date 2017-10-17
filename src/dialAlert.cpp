@@ -28,17 +28,6 @@ using namespace Executor;
 
 int16 alert_extra_icon_id = -32768;
 
-static icon_item_template_t icon_item_template =
-{
-  /* item count - 1 */
-  CWC (0),
-  CLC_NULL,
-  { CWC (10), CWC (20), CWC (42), CWC (52), },
-  CBC ((1 << 7) | (iconItem)),
-  CBC (2),
-  
-  /* to be filled in later */ CWC ((short)-1),
-};
 
 P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
     ProcPtr, fp)
@@ -137,10 +126,21 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
 	 {
 	   Handle icon_item_h;
 	   
-	   icon_item_h = NewHandle (sizeof icon_item_template);
-	   icon_item_template.res_id = CW (alert_extra_icon_id);
-	   memcpy (STARH (icon_item_h), &icon_item_template,
-		   sizeof icon_item_template);
+	//   icon_item_h = NewHandle (sizeof icon_item_template);
+	//   icon_item_template.res_id = CW (alert_extra_icon_id);
+        //   memcpy (STARH (icon_item_h), &icon_item_template,
+           icon_item_h = NewHandle (18);
+       
+           Ptr ptr = MR(icon_item_h->p);
+           *(short*)(ptr + 0) = CWC(0);    // count: item count - 1
+           *(long*)(ptr + 2) = 0;          // h = NULL
+           *(short*)(ptr + 6) = CWC(10);   // r.top
+           *(short*)(ptr + 8) = CWC(20);   // r.left
+           *(short*)(ptr + 10) = CWC(42);   // r.bottom
+           *(short*)(ptr + 12) = CWC(52);   // r.right
+           *(ptr + 14) = CBC ((1 << 7) | (iconItem));   // type
+           *(ptr + 15) = CBC (2);       // len
+           *(short*)(ptr + 16) = CW (alert_extra_icon_id);      // res_id
 	   
 	   AppendDITL ((DialogPtr) dp, icon_item_h, overlayDITL);
 	   
