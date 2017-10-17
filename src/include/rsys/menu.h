@@ -113,11 +113,12 @@ typedef struct menu_elt
 #define ML_LAST_HMENU_OFFSET(ml)	(CW (ML_LAST_HMENU_OFFSET_X (ml)))
 #define ML_MENU_TITLE_SAVE(ml)		(CW (ML_MENU_TITLE_SAVE_X (ml)))
 
-    /* other stuff... */
+   
 struct menu_list : GuestStruct {
     GUEST< INTEGER> last_menu_offset;
     GUEST< INTEGER> last_right;
     GUEST< INTEGER> mb_res_id;
+     /* other stuff... */
     GUEST< char> data;
 };
 
@@ -189,6 +190,7 @@ struct mbdfentry : GuestStruct {
 #define MBRIGHTDIR	0
 #define MBLEFTDIR	1
 
+#if 0
 #if !defined (MBSaveLoc_H)
 extern HIDDEN_Handle MBSaveLoc_H;
 extern HIDDEN_Handle MBDFHndl_H;
@@ -196,6 +198,7 @@ extern HIDDEN_Handle MBDFHndl_H;
 
 #define MBSaveLoc	(MBSaveLoc_H.p)
 #define MBDFHndl	(MBDFHndl_H.p)
+#endif
 
 #define MBSAVELOC ((mbdfheaderhand) MR(MBSaveLoc))
 
@@ -267,18 +270,15 @@ typedef struct  : GuestStruct {
     GUEST< muelem*> endp;
 } startendpairs[2];
 
-// ### Struct needs manual conversion to GUEST<...>
-struct tableentry : GuestStruct {
-};
-{
-  int32 lasttick;
-  int16 count;
-struct tableentry : GuestStruct {
-    GUEST< int16> top;
-    GUEST< StringPtr> name;
-    GUEST< mextp> options;
-};
-} table, *tablePtr, **tableHandle;
+struct table : GuestStruct {
+    GUEST<int32> lasttick;
+    GUEST<int16> count;
+    struct tableentry : GuestStruct {
+        GUEST< int16> top;
+        GUEST< StringPtr> name;
+        GUEST< mextp> options;
+    } entry[1];
+} *tablePtr, **tableHandle;
 
 void cleanup_icon_info (icon_info_t *info);
 int get_icon_info (mextp item_info, icon_info_t *info, int need_icon_p);
