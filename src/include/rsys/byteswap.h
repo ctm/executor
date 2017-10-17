@@ -101,9 +101,9 @@ TT* RM(TT* p)
 }
 
 template<typename TT>
-TT* MR(Executor::GuestPointerWrapper<TT> p)
+TT* MR(Executor::GuestWrapper<TT*> p)
 {
-    return MR(p.unwrap());
+    return MR((TT*)p.unwrap());
 }
 
 inline std::nullptr_t RM(std::nullptr_t p) { return nullptr; }
@@ -150,7 +150,7 @@ inline void* MR(int32_t p) { return MR((void*)p); }
 				     | (((unsigned int) (n) & 0xFF000000) \
 					>> 24)))
 
-#define CLC_NULL NULL
+#define CLC_NULL nullptr
 
 /* These are better versions of CW and CL, but should not be nested
  * because of exponential growth in the preprocessed code size.

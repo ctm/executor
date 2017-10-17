@@ -31,23 +31,7 @@ typedef struct { int32 l PACKED; } HIDDEN_LONGINT;
 typedef struct { uint32 u PACKED; } HIDDEN_ULONGINT;
 
 template<typename TT>
-
-
-
-
-
-    // Things that should go away at some point
-// ### Struct needs manual conversion to GUEST<...>
-//     union
-
-
-
-
-
-    // Things that should go away at some point
-// ### Struct needs manual conversion to GUEST<...>
-//     union
-struct PACKED GuestWrapper
+struct GuestWrapper
 {
     union
     {
@@ -56,6 +40,7 @@ struct PACKED GuestWrapper
     } x;
     
     using WrappedType = TT;
+    using RawGuestType = TT;
     
     const TT unwrap() const { return *(const TT*)x.data; }
     TT& unwrap() { return *(TT*)x.data; }
@@ -65,6 +50,26 @@ struct PACKED GuestWrapper
 
     GuestWrapper<TT>& operator=(const GuestWrapper<TT>& y) = default;
 
+    /*WrappedType get() const
+    {
+    }
+
+    void set(WrappedType x)
+    {
+    }
+
+    RawGuestType raw() const
+    {
+
+    }
+
+    void raw(RawGuestType)
+    {
+
+    }*/
+
+
+
         // Things that should go away at some point
     GuestWrapper(TT x) { unwrap() = x; }
     GuestWrapper<TT>& operator=(TT y) { this->unwrap() = y; return *this; }
@@ -72,17 +77,31 @@ struct PACKED GuestWrapper
 };
 
 template<typename TT>
-struct GuestPointerWrapper : public GuestWrapper<TT*>
+struct GuestWrapper<TT*>
 {
-    GuestPointerWrapper() = default;
-    GuestPointerWrapper(const GuestPointerWrapper<TT>&) = default;
-    GuestPointerWrapper<TT>& operator=(const GuestPointerWrapper<TT>& y) = default;
+    union
+    {
+        uint16_t align;
+        uint8_t data[4];
+    } x;
     
+    using WrappedType = TT*;
+    using RawGuestType = uint32_t;
 
-    operator TT*() const { return this->unwrap(); }
+    const RawGuestType unwrap() const { return *(const RawGuestType*)x.data; }
+    RawGuestType& unwrap() { return *(RawGuestType*)x.data; }
 
-    GuestPointerWrapper<TT>& operator=(TT *y) { this->unwrap() = y; return *this; }
-    
+    GuestWrapper() = default;
+    GuestWrapper(const GuestWrapper<WrappedType>& y) = default;
+
+    GuestWrapper<WrappedType>& operator=(const GuestWrapper<WrappedType>& y) = default;
+
+        // Things that should go away at some point
+    GuestWrapper(TT* x) { unwrap() = (uint32_t)x; }
+    GuestWrapper<WrappedType>& operator=(TT* y) { this->unwrap() = (uint32_t)y; return *this; }
+    operator TT*() const { return (TT*)this->unwrap(); }
+
+    GuestWrapper(std::nullptr_t) { unwrap() = 0; }    
 };
 
 struct GuestStruct
@@ -126,11 +145,20 @@ struct GuestType<uint8_t>
     using type = uint8_t;
 };
 
+/*
 template<typename TT>
 struct GuestType<TT*>
 {
     using type = GuestPointerWrapper<GUEST<TT>>;
 };
+
+
+template<typename RT, typename... Args>
+struct GuestType<RT (*)(Args...)>
+{
+    using type = GuestPointerWrapper<void>;
+};
+*/
 
 template<typename TT, int n>
 struct GuestType<TT[n]>
@@ -138,8 +166,17 @@ struct GuestType<TT[n]>
     using type = GUEST<TT>[n];
 };
 
-
-
+/*
+template<typename TO, typename FROM>
+GUEST<TO*> guest_ptr_cast(GUEST<FROM*> p)
+{
+    return GUEST<TO*>((FROM*)p);
+}*/
+template<typename TO, typename FROM>
+GUEST<TO> guest_cast(GuestWrapper<FROM> p)
+{
+    return GUEST<TO>((TO)(FROM)p);
+}
 
 #define MAKE_HIDDEN(typ) struct  HIDDEN_ ## typ : GuestStruct { typ p; }
 // Roadmap:
