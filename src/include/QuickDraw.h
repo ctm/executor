@@ -214,6 +214,10 @@ struct RGBColor : GuestStruct {
     GUEST< unsigned short> red;
     GUEST< unsigned short> green;
     GUEST< unsigned short> blue;
+
+    RGBColor() = default;
+    RGBColor(GUEST<unsigned short> r, GUEST<unsigned short> g, GUEST<unsigned short> b)
+        : red(r), green(g), blue(b) {}
 };
 
 struct HSVColor : GuestStruct {
@@ -237,6 +241,10 @@ struct CMYColor : GuestStruct {
 struct ColorSpec : GuestStruct {
     GUEST< INTEGER> value;
     GUEST< RGBColor> rgb;
+
+    ColorSpec() = default;
+    ColorSpec(GUEST<INTEGER> v, const RGBColor& c)
+        : value(v), rgb(c) {}
 };
 
 typedef ColorSpec cSpecArray[1];	/* can't use 0 */
