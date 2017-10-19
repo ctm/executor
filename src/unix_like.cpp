@@ -389,6 +389,7 @@ mmap_conflict (void *start, size_t length)
 void *
 mmap_permanent_memory (unsigned long amount_wanted)
 {
+        return NULL;
 #if defined(MACOSX_)
   return NULL;
 #else
