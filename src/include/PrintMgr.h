@@ -103,8 +103,8 @@ struct TPrint { GUEST_STRUCT;
     GUEST< INTEGER[19]> printX;
 };
 typedef TPrint *TPPrint;
-MAKE_HIDDEN(TPPrint);
-typedef HIDDEN_TPPrint *THPrint;
+
+typedef GUEST<TPPrint> *THPrint;
 
 typedef Rect *TPRect;
 

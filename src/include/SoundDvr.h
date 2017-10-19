@@ -59,7 +59,7 @@ struct FTSoundRec { GUEST_STRUCT;
     GUEST< WavePtr> sound4Wave;
 };
 typedef FTSoundRec *FTSndRecPtr;
-MAKE_HIDDEN(FTSndRecPtr);
+
 
 struct FTSynthRec { GUEST_STRUCT;
     GUEST< INTEGER> mode;
@@ -69,7 +69,7 @@ typedef FTSynthRec *FTsynthPtr;
 
 #if 0
 #if !defined (SoundBase_H)
-extern HIDDEN_Ptr 	SoundBase_H;
+extern GUEST<Ptr> 	SoundBase_H;
 extern Byte 	SdVolume;
 extern Byte 	SoundActive;
 extern INTEGER 	CurPitch;

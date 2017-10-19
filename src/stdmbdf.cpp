@@ -608,7 +608,7 @@ P4 (PUBLIC, pascal int32, mbdf0, int16, sel, int16, mess,
 	int16, param1, int32, param2)
 {
 	int32 retval;
-	HIDDEN_GrafPtr saveport;
+	GUEST<GrafPtr> saveport;
 	
 	retval = 0;
 	if (mess != mbInit) /* fun w/ Word 6 */

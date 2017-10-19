@@ -400,7 +400,7 @@ snag_date_part (Ptr text, int *offsetp, LONGINT len)
 enum { longDateFound = 1, dateTimeNotFound = 0x8400 };
 
 P5(PUBLIC pascal trap, String2DateStatus, String2Time, Ptr, textp,
-       LONGINT, len, Ptr, cachep, LONGINT *, lenusedp, HIDDEN_Ptr *, datetimep)
+       LONGINT, len, Ptr, cachep, LONGINT *, lenusedp, GUEST<Ptr> *, datetimep)
 {
   warning_unimplemented (NULL_STRING);
   *lenusedp = CLC (0);

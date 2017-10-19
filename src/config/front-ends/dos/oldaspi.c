@@ -565,7 +565,7 @@ PUBLIC void aspi_init( void )
 	    mess = CL(mess);
 	    if (mess) {
 		if (mess >> 16 == 0) {
-		    PPostEvent(diskEvt, mess, (HIDDEN_EvQElPtr *) 0);
+		    PPostEvent(diskEvt, mess, (GUEST<EvQElPtr> *) 0);
 		    /* TODO: we probably should post if mess returns an
 			     error, but I think we get confused if we do */
 		} else {

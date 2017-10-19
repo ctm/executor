@@ -1149,7 +1149,7 @@ post_pending_x_events (syn68k_addr_t interrupt_addr, void *unused)
 	    else
 	      button_state |= btnState;
 	    ROMlib_PPostEvent ((evt.type == ButtonRelease) ? mouseUp : mouseDown,
-			       0, (HIDDEN_EvQElPtr *) 0,
+			       0, (GUEST<EvQElPtr> *) 0,
 			       when, where,
 			       button_state);
 	    adb_apeiron_hack (FALSE);

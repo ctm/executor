@@ -302,12 +302,12 @@ Executor may die without warning because of this mismatch", 0,
     }
 }
 
-P1 (PUBLIC pascal trap, void, GetWMgrPort, HIDDEN_GrafPtr *, wp)
+P1 (PUBLIC pascal trap, void, GetWMgrPort, GUEST<GrafPtr> *, wp)
 {
   *wp = WMgrPort;
 }
 
-P1 (PUBLIC pascal trap, void, GetCWMgrPort, HIDDEN_CGrafPtr *, wp)
+P1 (PUBLIC pascal trap, void, GetCWMgrPort, GUEST<CGrafPtr> *, wp)
 {
   *wp = WMgrCPort;
 }
@@ -549,8 +549,8 @@ P8 (PUBLIC pascal trap, CWindowPtr, NewCWindow,
 }
 
 typedef windrestype *windrestypeptr;
-MAKE_HIDDEN(windrestypeptr);
-typedef HIDDEN_windrestypeptr *windrestypehand;
+
+typedef GUEST<windrestypeptr> *windrestypehand;
 
 P3 (PUBLIC pascal trap, CWindowPtr, GetNewCWindow,
     INTEGER, window_id,
@@ -623,9 +623,9 @@ P1(PUBLIC pascal trap, void, CloseWindow, WindowPtr, w)
 {
     WindowPeek wptmp;
     GrafPtr savgp;
-    MAKE_HIDDEN(AuxWinHandle);
+    
     AuxWinHandle saveauxh;
-    HIDDEN_AuxWinHandle *auxhp;
+    GUEST<AuxWinHandle> *auxhp;
     ControlHandle c, t;
 
     if (FrontWindow () == w)
@@ -673,9 +673,9 @@ P1(PUBLIC pascal trap, void, CloseWindow, WindowPtr, w)
     DisposeRgn (WINDOW_CONT_REGION (w));
     DisposeRgn (WINDOW_UPDATE_REGION (w));
     DisposHandle ((Handle) WINDOW_TITLE (w));
-    for (auxhp = (HIDDEN_AuxWinHandle *) &AuxWinHead;
+    for (auxhp = (GUEST<AuxWinHandle> *) &AuxWinHead;
 	 *auxhp && STARH(STARH(auxhp))->awOwner != RM(w);
-	 auxhp = (HIDDEN_AuxWinHandle *) &STARH(STARH(auxhp))->awNext)
+	 auxhp = (GUEST<AuxWinHandle> *) &STARH(STARH(auxhp))->awNext)
 	;
     if (*auxhp)
       {

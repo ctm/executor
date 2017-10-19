@@ -30,8 +30,8 @@ struct MenuInfo { GUEST_STRUCT;
     GUEST< Str255> menuData;
 };
 typedef MenuInfo *MenuPtr;
-MAKE_HIDDEN(MenuPtr);
-typedef HIDDEN_MenuPtr *MenuHandle;
+
+typedef GUEST<MenuPtr> *MenuHandle;
 
 typedef struct MCEntry { GUEST_STRUCT;
     GUEST< INTEGER> mctID;
@@ -60,23 +60,23 @@ typedef struct MCEntry { GUEST_STRUCT;
     {
     }
 } *MCEntryPtr;
-MAKE_HIDDEN(MCEntryPtr);
+
 
 typedef MCEntry MCTable[1];
 
 typedef MCEntry *MCTablePtr;
-MAKE_HIDDEN(MCTablePtr);
-typedef HIDDEN_MCTablePtr *MCTableHandle;
-MAKE_HIDDEN(MCTableHandle);
+
+typedef GUEST<MCTablePtr> *MCTableHandle;
+
 
 #if 0
 #if !defined (MenuList_H)
-extern HIDDEN_Handle 	MenuList_H;
-extern HIDDEN_ProcPtr 	MBarHook_H;
-extern HIDDEN_ProcPtr 	MenuHook_H;
-extern HIDDEN_Handle 	MBDFHndl_H;
-extern HIDDEN_Handle 	MBSaveLoc_H;
-extern HIDDEN_MCTableHandle MenuCInfo_H;
+extern GUEST<Handle> 	MenuList_H;
+extern GUEST<ProcPtr> 	MBarHook_H;
+extern GUEST<ProcPtr> 	MenuHook_H;
+extern GUEST<Handle> 	MBDFHndl_H;
+extern GUEST<Handle> 	MBSaveLoc_H;
+extern GUEST<MCTableHandle> MenuCInfo_H;
 extern INTEGER 	TopMenuItem;
 extern INTEGER 	AtMenuBottom;
 extern INTEGER 	MBarEnable;

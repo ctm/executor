@@ -106,7 +106,7 @@ P0(PUBLIC pascal trap, void, DrawMenuBar)
 #define HIEROFF	\
        CW(HIEROFFX)
 
-#define MINMENULISTSIZE	((Size) sizeof(INTEGER) * 4 + sizeof(HIDDEN_Handle))
+#define MINMENULISTSIZE	((Size) sizeof(INTEGER) * 4 + sizeof(GUEST<Handle>))
 
 P0(PUBLIC pascal trap, void, ClearMenuBar)
 {
@@ -118,7 +118,7 @@ P0(PUBLIC pascal trap, void, ClearMenuBar)
     HxX(MENULIST, muright) = CWC(MENULEFT);			/* int 2 */
 
     (&STARH(MENULIST)->mufu)[3] = CWC(sizeof(muelem)); /* lastHMenu: int 6 */
-    (*(HIDDEN_Handle *)&(&STARH(MENULIST)->mufu)[1]) = (Handle)CLC(0);/* menuTitleSave: int 4,5 */
+    (*(GUEST<Handle> *)&(&STARH(MENULIST)->mufu)[1]) = (Handle)CLC(0);/* menuTitleSave: int 4,5 */
 }
 
 #define BLACK_RGB { CWC (0), CWC (0), CWC (0) }
@@ -764,8 +764,8 @@ P1 (PUBLIC pascal trap, void, DeleteMenu, int16, mid)
 }
 
 typedef mbartype *mbarptr;
-MAKE_HIDDEN(mbarptr);
-typedef HIDDEN_mbarptr *mbarhandle;
+
+typedef GUEST<mbarptr> *mbarhandle;
 
 P1(PUBLIC pascal trap, Handle, GetNewMBar, INTEGER, mbarid)
 {
@@ -1016,7 +1016,7 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
   RgnHandle saveclip, restoredrgn;
   BOOLEAN changedmenus;
   INTEGER oldwhichmenuhit, whichmenuhit;
-  HIDDEN_GrafPtr saveport;
+  GUEST<GrafPtr> saveport;
   EventRecord ev;
   Point pt;
   LONGINT myd0;

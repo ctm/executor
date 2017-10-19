@@ -1840,11 +1840,11 @@ STUB (SysEnvirons)
 
 STUB(PostEvent)
 {
-    HIDDEN_EvQElPtr qelemp;
+    GUEST<EvQElPtr> qelemp;
 
 #warning the first argument to PPostEvent looks suspicious
     EM_D0 = PPostEvent(EM_A0, EM_D0,
-		       (HIDDEN_EvQElPtr *) &qelemp);
+		       (GUEST<EvQElPtr> *) &qelemp);
     EM_A0 = qelemp.raw();
     RTS();
 }

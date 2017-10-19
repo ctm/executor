@@ -708,7 +708,7 @@ event_loop (boolean_t executor_p)
 #define _FindControl(arg0, arg1, arg2)		\
 ({						\
 int16 retval;				\
-HIDDEN_ControlHandle bogo_c;		\
+GUEST<ControlHandle> bogo_c;		\
 \
 retval = FindControl (arg0, arg1, &bogo_c);	\
 *(arg2) = MR (bogo_c);			\

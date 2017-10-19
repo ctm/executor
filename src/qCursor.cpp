@@ -228,8 +228,8 @@ P2(PUBLIC pascal trap, void, ShieldCursor, Rect *, rp, Point, p) /* IMI-474 */
 	wewantpointermovements(-1);
 }
 
-MAKE_HIDDEN(ccrsr_res_ptr);
-typedef HIDDEN_ccrsr_res_ptr *ccrsr_res_handle;
+
+typedef GUEST<ccrsr_res_ptr> *ccrsr_res_handle;
 
 P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
 {

@@ -102,8 +102,8 @@ struct popup_data { GUEST_STRUCT;
 
 typedef struct popup_data popup_data_t;
 typedef popup_data_t *popup_data_ptr;
-MAKE_HIDDEN(popup_data_ptr);
-typedef HIDDEN_popup_data_ptr *popup_data_handle;
+
+typedef GUEST<popup_data_ptr> *popup_data_handle;
 
 struct thumbstr { GUEST_STRUCT;
     GUEST< Rect> _tlimit;

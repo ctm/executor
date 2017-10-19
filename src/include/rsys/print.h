@@ -134,8 +134,8 @@ typedef struct TTxtPicRec { GUEST_STRUCT;
 #define TEXTPIC_ANGLE_FIXED_X(h) (HxX (h, tAngleFixed))
 #define TEXTPIC_ANGLE_FIXED(h)   (CL (TEXTPIC_ANGLE_FIXED_X (h)))
 
-MAKE_HIDDEN(TTxtPicPtr);
-typedef HIDDEN_TTxtPicPtr *TTxtPicHdl;
+
+typedef GUEST<TTxtPicPtr> *TTxtPicHdl;
 
 enum
 {
@@ -163,8 +163,8 @@ typedef struct TCenterRec { GUEST_STRUCT;
 #define TEXTCENTER_X_X(h) (HxX (h, x))
 #define TEXTCENTER_X(h)   (CL (TEXTCENTER_X_X (h)))
 
-MAKE_HIDDEN(TCenterRecPtr);
-typedef HIDDEN_TCenterRecPtr *TCenterRecHdl;
+
+typedef GUEST<TCenterRecPtr> *TCenterRecHdl;
 
 extern std::string ROMlib_document_paper_sizes;
 extern ini_key_t ROMlib_paper_orientation;

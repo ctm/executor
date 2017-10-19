@@ -38,7 +38,7 @@ using namespace ByteSwap;
 
 INTEGER
 find_control_helper (Point p, ControlHandle c,
-		     HIDDEN_ControlHandle *cp)
+		     GUEST<ControlHandle> *cp)
 {
   INTEGER retval;
   ControlHandle next;
@@ -62,7 +62,7 @@ find_control_helper (Point p, ControlHandle c,
 }
 
 P3(PUBLIC pascal trap, INTEGER, FindControl, Point, p,	/* IMI-323 */
-   WindowPtr, w, HIDDEN_ControlHandle *, cp)
+   WindowPtr, w, GUEST<ControlHandle> *, cp)
 {
   INTEGER retval;
 

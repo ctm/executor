@@ -40,8 +40,8 @@ typedef struct list_header { GUEST_STRUCT;
 } list_header_t;
 
 typedef list_header_t *list_header_ptr;
-MAKE_HIDDEN(list_header_ptr);
-typedef HIDDEN_list_header_ptr *list_header_h;
+
+typedef GUEST<list_header_ptr> *list_header_h;
 
 #define PARAM_OFFSET_X(aggr_desc_h)					\
   (HxX ((list_header_h) aggr_desc_h, param_offset))

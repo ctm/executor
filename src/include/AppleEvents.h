@@ -155,8 +155,8 @@ typedef struct AE_hdlr_table { GUEST_STRUCT;
 } AE_hdlr_table_t;
 
 typedef AE_hdlr_table_t *AE_hdlr_table_ptr;
-MAKE_HIDDEN(AE_hdlr_table_ptr);
-typedef HIDDEN_AE_hdlr_table_ptr *AE_hdlr_table_h;
+
+typedef GUEST<AE_hdlr_table_ptr> *AE_hdlr_table_h;
 
 
 
@@ -175,8 +175,8 @@ typedef struct AE_zone_tables { GUEST_STRUCT;
 } AE_zone_tables_t;
 
 typedef AE_zone_tables_t *AE_zone_tables_ptr;
-MAKE_HIDDEN(AE_zone_tables_ptr);
-typedef HIDDEN_AE_zone_tables_ptr *AE_zone_tables_h;
+
+typedef GUEST<AE_zone_tables_ptr> *AE_zone_tables_h;
 
 
     /* offset of `appl_zone_tables' is 340; handle to a `struct tables' */
@@ -193,7 +193,7 @@ typedef struct { GUEST_STRUCT;
 } AE_info_t;
 
 typedef AE_info_t *AE_info_ptr;
-MAKE_HIDDEN(AE_info_ptr);
+
 
 extern pascal trap OSErr C__AE_hdlr_table_alloc (int32, int32, int32, int8,
 						 GUEST<AE_hdlr_table_h> *);
@@ -443,7 +443,7 @@ extern pascal trap OSErr C_AEManagerInfo (LONGINT *resultp);
 
 #if 0
 #if !defined (AE_info_H)
-extern HIDDEN_AE_info_ptr AE_info_H;
+extern GUEST<AE_info_ptr> AE_info_H;
 #endif
 
 #define AE_info (AE_info_H.p)

@@ -30,7 +30,7 @@ struct AppFile { GUEST_STRUCT;
 
 #if 0
 #if !defined (AppParmHandle_H)
-extern HIDDEN_Handle 	AppParmHandle_H;
+extern GUEST<Handle> 	AppParmHandle_H;
 extern Byte 	loadtrap;
 extern Byte 	FinderName[16];
 extern INTEGER 	CurApRefNum;
@@ -54,8 +54,8 @@ extern pascal trap void Launch( StringPtr appl, INTEGER vrefnum );
 extern pascal trap void Chain( StringPtr appl, INTEGER vrefnum );
 
 extern pascal trap void C_GetAppParms( StringPtr namep,
- INTEGER *rnp, HIDDEN_Handle *aphandp ); extern pascal trap void P_GetAppParms( StringPtr namep,
- INTEGER *rnp, HIDDEN_Handle *aphandp ); 
+ INTEGER *rnp, GUEST<Handle> *aphandp ); extern pascal trap void P_GetAppParms( StringPtr namep,
+ INTEGER *rnp, GUEST<Handle> *aphandp ); 
 extern pascal trap void P_ExitToShell( void ); 
 extern pascal trap void C_UnloadSeg( Ptr addr ); extern pascal trap void P_UnloadSeg( Ptr addr); 
 extern pascal trap void C_LoadSeg( INTEGER volatile segno ); extern pascal trap void P_LoadSeg( INTEGER volatile segno); 

@@ -58,7 +58,7 @@ extern int ROMlib_nosync;
 
 #if !defined (VCBQHdr)
 extern QHdr VCBQHdr, DrvQHdr;
-extern HIDDEN_VCBPtr DefVCBPtr_H;
+extern GUEST<VCBPtr> DefVCBPtr_H;
 #endif
 
 extern LONGINT DefDirID;

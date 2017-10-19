@@ -17,14 +17,12 @@ namespace Executor {
 #define declare_subtypes(type)						\
 typedef struct type ## Record type ## Record;				\
 typedef type ## Record *type ## Ptr;					\
-MAKE_HIDDEN(type ## Ptr);                                               \
-typedef HIDDEN_ ## type ## Ptr * type ## Handle
+typedef GUEST<type ## Ptr> * type ## Handle
 
 #define declare_record_subtypes(type)					\
 typedef struct type type;						\
 typedef type *type ## Ptr;						\
-MAKE_HIDDEN(type ## Ptr);                                               \
-typedef HIDDEN_ ## type ## Ptr * type ## Handle
+typedef GUEST<type ## Ptr> * type ## Handle
 
 typedef int32 TimeStamp;
 typedef Handle EditionRefNum;

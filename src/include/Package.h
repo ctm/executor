@@ -18,7 +18,7 @@ namespace Executor {
 
 #if 0
 #if !defined (AppPacks_H)
-extern HIDDEN_Handle AppPacks_H[8];
+extern GUEST<Handle> AppPacks_H[8];
 #endif
 #endif
 

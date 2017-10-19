@@ -23,8 +23,8 @@ char ROMlib_rcsid_resMod[] =
 using namespace Executor;
 
 typedef res_sorttype_t *sorttypeptr;
-MAKE_HIDDEN(sorttypeptr);
-typedef HIDDEN_sorttypeptr *sorttypehand;
+
+typedef GUEST<sorttypeptr> *sorttypehand;
 
 
 namespace Executor {

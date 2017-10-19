@@ -357,7 +357,7 @@ P3(PUBLIC, pascal trap OSErr, SndPlay, SndChannelPtr, chanp, Handle, sndh,
 
     if (need_allocate)
       {
-	HIDDEN_SndChannelPtr foo;
+	GUEST<SndChannelPtr> foo;
 
 	foo = (SndChannelPtr)CLC (0);
 	SndNewChannel (&foo, sampledSynth, 0, 0);
@@ -399,9 +399,9 @@ P3(PUBLIC, pascal trap OSErr, SndPlay, SndChannelPtr, chanp, Handle, sndh,
   return retval;
 }
 
-HIDDEN_SndChannelPtr Executor::allchans;
+GUEST<SndChannelPtr> Executor::allchans;
 
-P4(PUBLIC pascal trap, OSErr, SndNewChannel, HIDDEN_SndChannelPtr *, chanpp,
+P4(PUBLIC pascal trap, OSErr, SndNewChannel, GUEST<SndChannelPtr> *, chanpp,
    INTEGER, synth, LONGINT, init, ProcPtr, userroutinep)
 {
   SndChannelPtr chanp;
@@ -1017,7 +1017,7 @@ P2(PUBLIC, pascal trap OSErr, SndDisposeChannel, SndChannelPtr, chanp,
 {
     OSErr retval;
     SndCommand cmd;
-    HIDDEN_SndChannelPtr *pp;
+    GUEST<SndChannelPtr> *pp;
 
     warning_sound_log ("chanp %p quitnow %d", chanp, quitnow);
 
@@ -1068,7 +1068,7 @@ P2(PUBLIC, pascal trap OSErr, SndDisposeChannel, SndChannelPtr, chanp,
 
 	for (pp = &allchans;
 	     *pp && MR(*pp) != chanp;
-	     pp = (HIDDEN_SndChannelPtr *) &MR(*pp)->nextChan)
+	     pp = (GUEST<SndChannelPtr> *) &MR(*pp)->nextChan)
 	    ;
 	if (*pp)
 	  {

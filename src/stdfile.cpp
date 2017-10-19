@@ -878,7 +878,7 @@ A1(PRIVATE, void, flfill, fltype *, f)
 
 P2(PUBLIC, pascal void,  ROMlib_filebox, DialogPeek, dp, INTEGER, which)
 {
-    HIDDEN_Handle h;
+    GUEST<Handle> h;
     Rect r, r2;
     INTEGER i;
     int width, strwidth, offset;
@@ -1142,7 +1142,7 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 {
     LONGINT ticks;
     INTEGER i, from;
-    HIDDEN_ControlHandle h;
+    GUEST<ControlHandle> h;
     Rect r;
     GUEST<Point> gp;
     Point p;
@@ -1163,7 +1163,7 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 	switch (CL(evt->message) & 0xFF) {
 	case NUMPAD_ENTER:
 	case '\r' :
-	    GetDItem((DialogPtr) dp, CW(dp->aDefItem), &i, (HIDDEN_Handle *) &h, &r);
+	    GetDItem((DialogPtr) dp, CW(dp->aDefItem), &i, (GUEST<Handle> *) &h, &r);
 	    h = MR(h);
 	    if (Hx(h, contrlVis) && U(Hx(h, contrlHilite)) != 255)
 	      {
@@ -1247,7 +1247,7 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 	GlobalToLocal(&gp);
 	p = gp.get();
 	if (PtInRect(p, &fl->flrect)) {
-	    GetDItem((DialogPtr) dp, getOpen, &i, (HIDDEN_Handle *) &h, &r);
+	    GetDItem((DialogPtr) dp, getOpen, &i, (GUEST<Handle> *) &h, &r);
 	    h = MR(h);
 	    flmouse(fl, evt->where.get(), h);
 	    ticks = TickCount();
@@ -1271,7 +1271,7 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 	    *ith = CWC(FAKECURDIR);
 	    retval = -1;
 	} else {
-	    GetDItem((DialogPtr) dp, getOpen, &i, (HIDDEN_Handle *) &h, &r);
+	    GetDItem((DialogPtr) dp, getOpen, &i, (GUEST<Handle> *) &h, &r);
 	    h = MR(h);
 	    if ((part = TestControl(h, p)) &&
 			     TrackControl(h, p, (ProcPtr) 0)) {
@@ -1776,7 +1776,7 @@ PUBLIC void Executor::futzwithdosdisks( void )
 	      if (mess) {
 		if (mess >> 16 == 0) {
 		  DRIVE_LOADED(i) = TRUE;
-		  PPostEvent(diskEvt, mess, (HIDDEN_EvQElPtr *) 0);
+		  PPostEvent(diskEvt, mess, (GUEST<EvQElPtr> *) 0);
 		  /* TODO: we probably should post if mess returns an
 		     error, but I think we get confused if we do */
 		} else {
@@ -2140,7 +2140,7 @@ create_new_folder_button (DialogPtr dp)
   else
     {
       INTEGER i;
-      HIDDEN_Handle h;
+      GUEST<Handle> h;
       Rect r;
 
       GetDItem (dp, sfItemNewFolderUser, &i, &h, &r);
@@ -2187,7 +2187,7 @@ PRIVATE void
 getditext (DialogPtr dp, INTEGER item, StringPtr text)
 {
   INTEGER i;
-  HIDDEN_Handle h;
+  GUEST<Handle> h;
   Rect r;
 
   h = 0;

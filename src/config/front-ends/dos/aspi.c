@@ -1034,7 +1034,7 @@ aspi_try_to_open_and_mount_disk (int disk)
       mess = CL (mess);
       if (mess && mess >> 16 == 0)
 	{
-	  PPostEvent (diskEvt, mess, (HIDDEN_EvQElPtr *) 0);
+	  PPostEvent (diskEvt, mess, (GUEST<EvQElPtr> *) 0);
 	  /* TODO: we probably should post if mess returns an
 	     error, but I think we get confused if we do */
 	}

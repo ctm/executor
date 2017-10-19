@@ -1147,7 +1147,7 @@ DragWindow_PC (WindowPtr wp, PointAsLong pal, Rect *rp)
 }
 
 PRIVATE INTEGER
-FindWindow_PC (PointAsLong pal, HIDDEN_WindowPtr *wpp)
+FindWindow_PC (PointAsLong pal, GUEST<WindowPtr> *wpp)
 {
   Point p;
   INTEGER retval;
@@ -1174,7 +1174,7 @@ MenuSelect_PC (PointAsLong pal)
 }
 
 PRIVATE INTEGER
-FindControl_PC (PointAsLong pal, WindowPtr w, HIDDEN_ControlHandle *cp)
+FindControl_PC (PointAsLong pal, WindowPtr w, GUEST<ControlHandle> *cp)
 {
   Point p;
 

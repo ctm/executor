@@ -13,7 +13,7 @@ typedef enum { EXIST_YES = 0, EXIST_NO = 0xFF } exist_enum_t;
 
 #if 0
 #if !defined (DSAlertTab_H)
-extern HIDDEN_Ptr DSAlertTab_H;
+extern GUEST<Ptr> DSAlertTab_H;
 extern Rect DSAlertRect;
 extern Byte 	WWExist;
 extern Byte 	QDExist;

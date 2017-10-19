@@ -46,7 +46,6 @@ typedef DialogRecord *DialogPeek;
 
 typedef CWindowPtr CDialogPtr;
 typedef WindowPtr DialogPtr;
-typedef HIDDEN_WindowPtr HIDDEN_DialogPtr;
 
 /* dialog record accessors */
 #define DIALOG_WINDOW(dialog)		((WindowPtr) &((DialogPeek) dialog)->window)
@@ -76,8 +75,8 @@ struct DialogTemplate { GUEST_STRUCT;
 };
 
 typedef DialogTemplate *DialogTPtr;
-MAKE_HIDDEN(DialogTPtr);
-typedef HIDDEN_DialogTPtr *DialogTHndl;
+
+typedef GUEST<DialogTPtr> *DialogTHndl;
 
 // This has a 50% chance of being right.
 // It does not seem to be used, however.
@@ -102,8 +101,8 @@ struct AlertTemplate { GUEST_STRUCT;
     GUEST< StageList> stages;
 };
 typedef AlertTemplate *AlertTPtr;
-MAKE_HIDDEN(AlertTPtr);
-typedef HIDDEN_AlertTPtr *AlertTHndl;
+
+typedef GUEST<AlertTPtr> *AlertTHndl;
 
 #define overlayDITL		0
 #define appendDITLRight 	1
@@ -125,9 +124,9 @@ typedef int16 DITLMethod;
 
 #if 0
 #if !defined (ResumeProc_H)
-extern HIDDEN_ProcPtr 	ResumeProc_H;
-extern HIDDEN_ProcPtr 	DABeeper_H;
-extern HIDDEN_Handle 	DAStrings_H[4];
+extern GUEST<ProcPtr> 	ResumeProc_H;
+extern GUEST<ProcPtr> 	DABeeper_H;
+extern GUEST<Handle> 	DAStrings_H[4];
 extern INTEGER 	ANumber;
 extern INTEGER 	ACount;
 extern INTEGER 	DlgFont;
@@ -169,7 +168,7 @@ extern pascal trap INTEGER C_FindDItem( DialogPtr dp,
 extern pascal trap void C_UpdtDialog( DialogPtr dp, 
  RgnHandle rgn );
 extern pascal trap BOOLEAN C_DialogSelect( 
- EventRecord *evt, HIDDEN_DialogPtr *dpp, INTEGER *item );
+ EventRecord *evt, GUEST<DialogPtr> *dpp, INTEGER *item );
 extern void DlgCut( DialogPtr dp );
 extern void DlgCopy( DialogPtr dp );
 extern void DlgPaste( DialogPtr dp );
@@ -181,7 +180,7 @@ extern void SetDAFont( INTEGER i );
 extern pascal trap void C_ParamText( StringPtr p0, 
  StringPtr p1, StringPtr p2, StringPtr p3 );
 extern pascal trap void C_GetDItem( DialogPtr dp, 
- INTEGER itemno, INTEGER *itype, HIDDEN_Handle *item, Rect *r );
+ INTEGER itemno, INTEGER *itype, GUEST<Handle> *item, Rect *r );
 extern pascal trap void C_SetDItem( DialogPtr dp, 
  INTEGER itemno, INTEGER itype, Handle item, Rect *r );
 extern pascal trap void C_GetIText( Handle item, 

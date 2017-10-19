@@ -472,7 +472,7 @@ struct VCB { GUEST_STRUCT;
 };
 
 typedef VCB *VCBPtr;
-MAKE_HIDDEN(VCBPtr);
+
 
 struct DrvQEl {
     GUEST_STRUCT;
@@ -502,9 +502,9 @@ typedef FSSpecPtr FSSpecArrayPtr;
 
 #if 0
 #if !defined (FCBSPtr_H)
-extern HIDDEN_Ptr 	FCBSPtr_H;
-extern HIDDEN_VCBPtr 	DefVCBPtr_H;
-extern HIDDEN_Ptr 	WDCBsPtr_H;
+extern GUEST<Ptr> 	FCBSPtr_H;
+extern GUEST<VCBPtr> 	DefVCBPtr_H;
+extern GUEST<Ptr> 	WDCBsPtr_H;
 extern INTEGER 	BootDrive;
 extern QHdr 	DrvQHdr;
 extern QHdr 	VCBQHdr;

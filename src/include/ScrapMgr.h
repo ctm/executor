@@ -25,8 +25,8 @@ typedef ScrapStuff *PScrapStuff;
 
 #if 0
 #if !defined (ScrapHandle_H)
-extern HIDDEN_Handle 	ScrapHandle_H;
-extern HIDDEN_StringPtr 	ScrapName_H;
+extern GUEST<Handle> 	ScrapHandle_H;
+extern GUEST<StringPtr> 	ScrapName_H;
 extern LONGINT 	ScrapSize;
 extern INTEGER 	ScrapCount;
 extern INTEGER 	ScrapState;

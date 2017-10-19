@@ -237,7 +237,7 @@ A1(PUBLIC, void, ROMlib_eventinit, boolean_t, graphics_valid_p)	/* INTERNAL */
 namespace Executor {
   PRIVATE void dropevent(EvQEl*);
   PRIVATE OSErrRET _PPostEvent(INTEGER evcode,
-							   LONGINT evmsg, HIDDEN_EvQElPtr *qelpp);
+							   LONGINT evmsg, GUEST<EvQElPtr> *qelpp);
   PRIVATE BOOLEAN OSEventCommon(INTEGER evmask, EventRecord *eventp,
 								BOOLEAN dropit);
 }
@@ -309,7 +309,7 @@ key_down (uint8 loc)
 }
 
 A3(PUBLIC trap, OSErrRET, PPostEvent, INTEGER, evcode,		/* IMIV-85 */
-				      LONGINT, evmsg, HIDDEN_EvQElPtr *, qelp)
+				      LONGINT, evmsg, GUEST<EvQElPtr> *, qelp)
 {
     EvQEl *qp;
     LONGINT tmpticks;
@@ -370,11 +370,11 @@ A3(PUBLIC trap, OSErrRET, PPostEvent, INTEGER, evcode,		/* IMIV-85 */
 }
 
 A3(PRIVATE, OSErrRET, _PPostEvent, INTEGER, evcode,
-				      LONGINT, evmsg, HIDDEN_EvQElPtr *, qelpp)
+				      LONGINT, evmsg, GUEST<EvQElPtr> *, qelpp)
 {
     OSErrRET ret;
     ProcPtr proc;
-    HIDDEN_EvQElPtr retquelp;
+    GUEST<EvQElPtr> retquelp;
 
     proc = (ProcPtr) ostraptable[0x2F];
 
@@ -398,7 +398,7 @@ A3(PRIVATE, OSErrRET, _PPostEvent, INTEGER, evcode,
 }
 
 A6(PUBLIC, OSErrRET, ROMlib_PPostEvent, INTEGER, evcode, LONGINT, evmsg,
-	HIDDEN_EvQElPtr *, qelp, LONGINT, when, Point, where, INTEGER, butmods)
+	GUEST<EvQElPtr> *, qelp, LONGINT, when, Point, where, INTEGER, butmods)
 {
     MouseLocation2.h = ROMlib_curs.h = CW(where.h);
     MouseLocation2.v = ROMlib_curs.v = CW(where.v);
@@ -409,7 +409,7 @@ A6(PUBLIC, OSErrRET, ROMlib_PPostEvent, INTEGER, evcode, LONGINT, evmsg,
 
 A2(PUBLIC trap, OSErrRET, PostEvent, INTEGER, evcode, LONGINT, evmsg)
 {
-    return _PPostEvent(evcode, evmsg, (HIDDEN_EvQElPtr *) 0);
+    return _PPostEvent(evcode, evmsg, (GUEST<EvQElPtr> *) 0);
 }
 
 A2(PUBLIC trap, void, FlushEvents, INTEGER, evmask,

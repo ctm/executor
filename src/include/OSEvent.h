@@ -27,7 +27,7 @@ struct EvQEl { GUEST_STRUCT;
 };
 
 typedef EvQEl *EvQElPtr;
-MAKE_HIDDEN(EvQElPtr);
+
 
 #define osEvt   15
 #define SUSPENDRESUMEBITS       0x01000000
@@ -76,7 +76,7 @@ extern size_info_t size_info;
 
 #if 0
 #if !defined (Ticks_UL)
-extern HIDDEN_ULONGINT Ticks_UL;
+extern GUEST<ULONGINT> Ticks_UL;
 extern INTEGER 	monkeylives;
 extern INTEGER 	SysEvtMask;
 extern QHdr 	EventQueue;
@@ -89,9 +89,9 @@ extern void ROMlib_eventdep( void  );
 extern void insertcommonevent( char *xeventp, commonevent *comevtp ); 
 extern void ROMlib_zapmap( LONGINT loc, LONGINT val ); 
 extern trap OSErrRET PPostEvent( INTEGER evcode, 
- LONGINT evmsg, HIDDEN_EvQElPtr *qelp ); 
+ LONGINT evmsg, GUEST<EvQElPtr> *qelp ); 
 extern OSErrRET ROMlib_PPostEvent( INTEGER evcode, LONGINT evmsg, 
- HIDDEN_EvQElPtr *qelp, LONGINT when, Point where, INTEGER butmods ); 
+ GUEST<EvQElPtr> *qelp, LONGINT when, Point where, INTEGER butmods ); 
 extern trap OSErrRET PostEvent( INTEGER evcode, LONGINT evmsg ); 
 extern trap void FlushEvents( INTEGER evmask, 
  INTEGER stopmask ); 

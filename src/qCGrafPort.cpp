@@ -417,8 +417,8 @@ P0 (PUBLIC pascal trap, PixPatHandle, NewPixPat)
 }
 
 typedef struct pixpat_res *pixpat_res_ptr;
-MAKE_HIDDEN(pixpat_res_ptr);
-typedef HIDDEN_pixpat_res_ptr *pixpat_res_handle;
+
+typedef GUEST<pixpat_res_ptr> *pixpat_res_handle;
 
 
 P1 (PUBLIC pascal trap, PixPatHandle, GetPixPat, INTEGER, pixpat_id)

@@ -232,7 +232,7 @@ P3(PUBLIC pascal trap, LONGINT, KeyTrans, Ptr, mapp, unsigned short, code,
 PUBLIC void Executor::ROMlib_circledefault(DialogPtr dp)
 {
     INTEGER type;
-    HIDDEN_Handle h;
+    GUEST<Handle> h;
     Rect r;
     GrafPtr saveport;
 
@@ -268,10 +268,10 @@ typedef enum { SETSTATE, CLEARSTATE, FLIPSTATE } modstate_t;
 void modstate(DialogPtr dp, INTEGER tomod, modstate_t mod)
 {
     INTEGER type, newvalue;
-    HIDDEN_ControlHandle ch;
+    GUEST<ControlHandle> ch;
     Rect r;
 
-    GetDItem(dp, tomod, &type, (HIDDEN_Handle *) &ch, &r);
+    GetDItem(dp, tomod, &type, (GUEST<Handle> *) &ch, &r);
     ch = MR(ch);
     if (type & CWC(ctrlItem)) {
 	switch (mod) {
@@ -301,10 +301,10 @@ void modstate(DialogPtr dp, INTEGER tomod, modstate_t mod)
 INTEGER getvalue(DialogPtr dp, INTEGER toget)
 {
     INTEGER type;
-    HIDDEN_ControlHandle ch;
+    GUEST<ControlHandle> ch;
     Rect r;
 
-    GetDItem(dp, toget, &type, (HIDDEN_Handle *) &ch, &r);
+    GetDItem(dp, toget, &type, (GUEST<Handle> *) &ch, &r);
     ch = MR(ch);
     return type & CWC(ctrlItem) ? GetCtlValue(ch) : 0;
 }
@@ -368,7 +368,7 @@ setedittext (DialogPtr dp, INTEGER itemno, StringPtr str)
 {
   INTEGER type;
   Rect r;
-  HIDDEN_Handle h;
+  GUEST<Handle> h;
 
   GetDItem (dp, itemno, &type, &h, &r);
   h = MR (h);
@@ -403,7 +403,7 @@ setedittextcstr (DialogPtr dp, INTEGER itemno, char *strp)
 INTEGER getedittext(DialogPtr dp, INTEGER itemno)
 {
     Str255 str;
-    HIDDEN_Handle h;
+    GUEST<Handle> h;
     INTEGER type;
     Rect r;
     LONGINT l;
@@ -515,7 +515,7 @@ void
 update_string_from_edit_text (char **strp, DialogPtr dp, INTEGER itemno)
 {
   Str255 str;
-  HIDDEN_Handle h;
+  GUEST<Handle> h;
   INTEGER type;
   Rect r;
   
@@ -741,7 +741,7 @@ set_sound_on_string (DialogPtr dp)
 {
   Str255 sound_string;
   INTEGER junk1;
-  HIDDEN_Handle h;
+  GUEST<Handle> h;
   Rect junk2;
     
   str255_from_c_string (sound_string,
@@ -1308,7 +1308,7 @@ Executor::sendsuspendevent (void)
 	p.h = CW(MouseLocation.h);
 	p.v = CW(MouseLocation.v);
 	ROMlib_PPostEvent(osEvt, SUSPENDRESUMEBITS|SUSPEND|CONVERTCLIPBOARD,
-			  (HIDDEN_EvQElPtr *) 0, TickCount(), p, ROMlib_mods);
+			  (GUEST<EvQElPtr> *) 0, TickCount(), p, ROMlib_mods);
       }
 }
 
@@ -1333,7 +1333,7 @@ Executor::sendresumeevent (boolean_t cvtclip)
 	what |= CONVERTCLIPBOARD;
       p.h = CW(MouseLocation.h);
       p.v = CW(MouseLocation.v);
-      ROMlib_PPostEvent(osEvt, what, (HIDDEN_EvQElPtr *) 0, TickCount(),
+      ROMlib_PPostEvent(osEvt, what, (GUEST<EvQElPtr> *) 0, TickCount(),
 			p, ROMlib_mods);
     }
 }
@@ -1346,9 +1346,9 @@ sendcopy (void)
     p.h = CW(MouseLocation.h);
     p.v = CW(MouseLocation.v);
     ROMlib_PPostEvent(keyDown, 0x0863,	/* 0x63 == 'c' */
-		      (HIDDEN_EvQElPtr *) 0, TickCount(), p, cmdKey|btnState);
+		      (GUEST<EvQElPtr> *) 0, TickCount(), p, cmdKey|btnState);
     ROMlib_PPostEvent(keyUp, 0x0863,
-		      (HIDDEN_EvQElPtr *) 0, TickCount(), p, cmdKey|btnState);
+		      (GUEST<EvQElPtr> *) 0, TickCount(), p, cmdKey|btnState);
 }
 
 PUBLIC void
@@ -1359,9 +1359,9 @@ sendpaste (void)
     p.h = CW(MouseLocation.h);
     p.v = CW(MouseLocation.v);
     ROMlib_PPostEvent(keyDown, 0x0976,	/* 0x76 == 'v' */
-		      (HIDDEN_EvQElPtr *) 0, TickCount(), p, cmdKey|btnState);
+		      (GUEST<EvQElPtr> *) 0, TickCount(), p, cmdKey|btnState);
     ROMlib_PPostEvent(keyUp, 0x0976,
-		      (HIDDEN_EvQElPtr *) 0, TickCount(), p, cmdKey|btnState);
+		      (GUEST<EvQElPtr> *) 0, TickCount(), p, cmdKey|btnState);
 }
 
 /*
@@ -1380,7 +1380,7 @@ post_helper (INTEGER code, uint8 raw, uint8 mapped, INTEGER mods)
   p.h = CW(MouseLocation.h);
   p.v = CW(MouseLocation.v);
 
-  ROMlib_PPostEvent(code, (raw << 8)|mapped, (HIDDEN_EvQElPtr *) 0,
+  ROMlib_PPostEvent(code, (raw << 8)|mapped, (GUEST<EvQElPtr> *) 0,
 		    TickCount(), p, btnState|mods);
 }
 

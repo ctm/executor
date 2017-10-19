@@ -736,7 +736,7 @@ P5(PUBLIC, pascal void, mdef0, INTEGER, mess, MenuHandle, mh, Rect *, rp,
   tableHandle th;
   tablePtr tp;
   struct table::tableentry *tabp;
-  HIDDEN_GrafPtr saveport;
+  GUEST<GrafPtr> saveport;
 
   GetPort(&saveport);
   saveport = MR(saveport);

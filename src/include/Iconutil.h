@@ -103,8 +103,8 @@ typedef struct CIcon { GUEST_STRUCT;
     GUEST< Handle> iconData;
     GUEST< int16[1]> iconMaskData;
 } *CIconPtr;
-MAKE_HIDDEN(CIconPtr);
-typedef HIDDEN_CIconPtr *CIconHandle;
+
+typedef GUEST<CIconPtr> *CIconHandle;
 
 /* icon utility function prototypes */
 

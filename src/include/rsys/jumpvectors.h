@@ -3,7 +3,7 @@
 namespace Executor {
 #if 0
 #if !defined (JFLUSH_H)
-extern HIDDEN_ProcPtr JFLUSH_H, JResUnknown1_H, JResUnknown2_H;
+extern GUEST<ProcPtr> JFLUSH_H, JResUnknown1_H, JResUnknown2_H;
 #endif
 
 #define JFLUSH		(JFLUSH_H.p)

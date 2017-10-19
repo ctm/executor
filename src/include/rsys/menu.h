@@ -95,7 +95,7 @@ typedef struct menu_elt
 		 + ML_LAST_MENU_OFFSET (ml)	\
 		 + sizeof (menu_elt)))
 #define ML_MENU_TITLE_SAVE_X(ml)					\
-  ((*(HIDDEN_PixMapHandle *) ((char *) STARH (ml)			\
+  ((*(GUEST<PixMapHandle> *) ((char *) STARH (ml)			\
 			      + ML_LAST_MENU_OFFSET (ml)		\
 			      + sizeof (menu_elt)			\
 			      + sizeof (INTEGER) /* lastHMenu */)).p)
@@ -116,8 +116,8 @@ struct menu_list { GUEST_STRUCT;
 };
 
 typedef menu_list *menu_list_ptr;
-MAKE_HIDDEN(menu_list_ptr);
-typedef HIDDEN_menu_list_ptr *menu_list_handle;
+
+typedef GUEST<menu_list_ptr> *menu_list_handle;
 
 struct menulist { GUEST_STRUCT;
     GUEST< INTEGER> muoff;
@@ -127,8 +127,8 @@ struct menulist { GUEST_STRUCT;
 };
 
 typedef menulist *menulistp;
-MAKE_HIDDEN(menulistp);
-typedef HIDDEN_menulistp *mlhandle;
+
+typedef GUEST<menulistp> *mlhandle;
 
 /* Menu Color Entry accessors */
 #define MCENTRY_RGB1(entry)		((entry)->mctRGB1)
@@ -162,8 +162,8 @@ struct mbdfheader { GUEST_STRUCT;
 };
 
 typedef mbdfheader *mbdfheaderptr;
-MAKE_HIDDEN(mbdfheaderptr);
-typedef HIDDEN_mbdfheaderptr *mbdfheaderhand;
+
+typedef GUEST<mbdfheaderptr> *mbdfheaderhand;
 
 struct mbdfentry { GUEST_STRUCT;
     GUEST< Rect> mbRectSave;    /* where it is on screen */
@@ -185,8 +185,8 @@ struct mbdfentry { GUEST_STRUCT;
 
 #if 0
 #if !defined (MBSaveLoc_H)
-extern HIDDEN_Handle MBSaveLoc_H;
-extern HIDDEN_Handle MBDFHndl_H;
+extern GUEST<Handle> MBSaveLoc_H;
+extern GUEST<Handle> MBDFHndl_H;
 #endif
 
 #define MBSaveLoc	(MBSaveLoc_H.p)

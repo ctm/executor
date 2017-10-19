@@ -9,8 +9,8 @@
  */
 #if 0
 #if !defined (nilhandle_H)
-extern HIDDEN_Ptr nilhandle_H;
-extern HIDDEN_Ptr dodusesit_H;
+extern GUEST<Ptr> nilhandle_H;
+extern GUEST<Ptr> dodusesit_H;
 extern LONGINT trapvectors;
 extern LONGINT hyperlong;
 extern LONGINT mathones;

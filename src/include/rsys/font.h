@@ -18,16 +18,16 @@ struct widentry_t { GUEST_STRUCT;
 };
 
 typedef WidthTable *WPtr;
-MAKE_HIDDEN(WPtr);
-typedef HIDDEN_WPtr *WHandle;
+
+typedef GUEST<WPtr> *WHandle;
 
 typedef FamRec *FPtr;
-MAKE_HIDDEN(FPtr);
-typedef HIDDEN_FPtr *FHandle;
+
+typedef GUEST<FPtr> *FHandle;
 
 typedef WHandle *WHandlePtr;
-MAKE_HIDDEN(WHandlePtr);
-typedef HIDDEN_WHandlePtr *WHandleHandle;
+
+typedef GUEST<WHandlePtr> *WHandleHandle;
 
 #define FONTRESID(font, size)   (((font) << 7) | (size))
 

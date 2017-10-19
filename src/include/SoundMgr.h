@@ -44,7 +44,7 @@ typedef struct _SndChannel { GUEST_STRUCT;
 #define SND_CHAN_FLAGS_X(c) (c->flags)
 #define SND_CHAN_FLAGS(c) (CW (SND_CHAN_FLAGS_X (c)))
 
-MAKE_HIDDEN(SndChannelPtr);
+
 
 enum {
     nullCmd,
@@ -342,8 +342,8 @@ extern void SetSoundVol( INTEGER vol );
 extern trap OSErr C_SndPlay( SndChannelPtr chanp, Handle sndh, 
  BOOLEAN async ); extern pascal trap OSErr P_SndPlay( SndChannelPtr chanp, Handle sndh, 
  BOOLEAN async ); 
-extern trap OSErr C_SndNewChannel( HIDDEN_SndChannelPtr *chanpp, 
- INTEGER synth, LONGINT init, ProcPtr userroutinep ); extern pascal trap OSErr P_SndNewChannel( HIDDEN_SndChannelPtr *chanpp, 
+extern trap OSErr C_SndNewChannel( GUEST<SndChannelPtr> *chanpp, 
+ INTEGER synth, LONGINT init, ProcPtr userroutinep ); extern pascal trap OSErr P_SndNewChannel( GUEST<SndChannelPtr> *chanpp, 
  INTEGER synth, LONGINT init, ProcPtr userroutinep ); 
 extern trap OSErr C_SndAddModifier( SndChannelPtr chanp, 
  ProcPtr mod, INTEGER id, LONGINT init ); extern pascal trap OSErr P_SndAddModifier( SndChannelPtr chanp, 

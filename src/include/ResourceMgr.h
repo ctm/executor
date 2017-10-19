@@ -43,9 +43,9 @@ enum { resourceInMemory = -188, inputOutOfBounds = -190 };
 
 #if 0
 #if !defined (TopMapHndl_H)
-extern HIDDEN_Handle 	TopMapHndl_H;
-extern HIDDEN_Handle 	SysMapHndl_H;
-extern HIDDEN_ProcPtr 	ResErrProc_H;
+extern GUEST<Handle> 	TopMapHndl_H;
+extern GUEST<Handle> 	SysMapHndl_H;
+extern GUEST<ProcPtr> 	ResErrProc_H;
 extern INTEGER 	SysMap;
 extern INTEGER 	CurMap;
 extern BOOLEAN 	ResLoad;

@@ -38,8 +38,8 @@ struct resmap { GUEST_STRUCT;
 };
 
 typedef resmap *resmapptr;
-MAKE_HIDDEN(resmapptr);
-typedef HIDDEN_resmapptr *resmaphand;
+
+typedef GUEST<resmapptr> *resmaphand;
 
 #define NAMEOFF(map)	Hx(map, namoff)
 #define NAMEOFFX(map)	((STARH(map))->namoff)

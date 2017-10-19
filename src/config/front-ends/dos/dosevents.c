@@ -342,13 +342,13 @@ post_dos_event (dosevq_record_t *event)
 
     case EVTYPE_MOUSE_DOWN:
       button_mods &= ~btnState;
-      ROMlib_PPostEvent (mouseDown, 0, (HIDDEN_EvQElPtr *) 0, when, where,
+      ROMlib_PPostEvent (mouseDown, 0, (GUEST<EvQElPtr> *) 0, when, where,
 			 button_mods);
       adb_apeiron_hack (TRUE, 0, 0);
       break;
     case EVTYPE_MOUSE_UP:
       button_mods |= btnState;
-      ROMlib_PPostEvent (mouseUp, 0, (HIDDEN_EvQElPtr *) 0, when, where,
+      ROMlib_PPostEvent (mouseUp, 0, (GUEST<EvQElPtr> *) 0, when, where,
 			 button_mods);
       adb_apeiron_hack (TRUE, 0, 0);
       break;

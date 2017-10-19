@@ -43,8 +43,8 @@ P0(PUBLIC pascal trap, void, InitFonts)	/* IMI-222 */
 	TheZone = SysZone;
 	SetResLoad(TRUE);
 	ROMFont0 = RM(GetResource(TICK("FONT"), FONTRESID(systemFont, 12)));
-	WidthListHand = RM(NewHandle(MAXTABLES * sizeof(HIDDEN_Handle)));
-	memset(STARH(MR(WidthListHand)), 0, MAXTABLES * sizeof(HIDDEN_Handle));
+	WidthListHand = RM(NewHandle(MAXTABLES * sizeof(GUEST<Handle>)));
+	memset(STARH(MR(WidthListHand)), 0, MAXTABLES * sizeof(GUEST<Handle>));
 	TheZone = saveZone;
 	beenhere = TRUE;
     }
@@ -70,13 +70,13 @@ PRIVATE void
 invalidate_all_widths (void)
 {
   int i, n_entries;
-  HIDDEN_Handle *hp;
+  GUEST<Handle> *hp;
   Handle wlh;
 
   wlh = MR (WidthListHand);
   HLock (wlh);
-  n_entries = GetHandleSize (wlh) / sizeof (HIDDEN_Handle);
-  hp = (HIDDEN_Handle *) STARH (wlh);
+  n_entries = GetHandleSize (wlh) / sizeof (GUEST<Handle>);
+  hp = (GUEST<Handle> *) STARH (wlh);
   for (i = 0; i < n_entries; ++i)
     {
       DisposHandle (MR (hp[i]));
@@ -216,10 +216,10 @@ A2(PRIVATE, void, mungfmo, ctrip, cp, FMOutput *, fmop)
 
 A1(PRIVATE, BOOLEAN, widthlistmatch, FMInput *, fmip)
 {
-    MAKE_HIDDEN(WHandle);
-    HIDDEN_WHandle *whp, *ewhp;
+    
+    GUEST<WHandle> *whp, *ewhp;
 
-    for (whp = (HIDDEN_WHandle *) STARH(WIDTHLISTHAND), ewhp = whp + MAXTABLES; whp != ewhp; whp++) {
+    for (whp = (GUEST<WHandle> *) STARH(WIDTHLISTHAND), ewhp = whp + MAXTABLES; whp != ewhp; whp++) {
 	if (*whp && (LONGINT) (*whp).raw() != (LONGINT) -1) {
 	    WidthPtr = *(MR(*whp));
 	    if (WIDTHPTR->aFID  == fmip->family &&
@@ -636,7 +636,7 @@ A1(PRIVATE, void, newwidthtable, FMInput *, fmip)
  */
 
     if (GetHandleSize((Handle) MR(WidthListHand)) >
-			(int) sizeof(HIDDEN_Handle) * MAXTABLES) {
+			(int) sizeof(GUEST<Handle>) * MAXTABLES) {
 	todelete = 0;
 	if (Munger((Handle) MR(WidthListHand), (LONGINT) 0, (Ptr) &todelete,
 					  sizeof(todelete), (Ptr) "", 0) < 0) {
@@ -645,7 +645,7 @@ A1(PRIVATE, void, newwidthtable, FMInput *, fmip)
 					  sizeof(todelete), (Ptr) "", 0) < 0) {
 		DisposHandle((Handle) MR(STARH(WIDTHLISTHAND)[MAXTABLES]));
 		SetHandleSize(MR(WidthListHand),
-				    (Size) sizeof(HIDDEN_Handle) * MAXTABLES);
+				    (Size) sizeof(GUEST<Handle>) * MAXTABLES);
 	    }
 	}
     }

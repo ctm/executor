@@ -1129,7 +1129,7 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
 {
     int rowb;
     Size pic_data_size, final_data_size;
-    HIDDEN_Ptr temp_pp, dp;
+    GUEST<Ptr> temp_pp, dp;
     Handle h;
     Byte *inp;
     Handle temph;

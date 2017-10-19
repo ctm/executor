@@ -21,7 +21,7 @@ using namespace Executor;
 
 #define _GetDItem(dp, item_no, item_type, item_h, item_rect)		\
   ({									\
-    HIDDEN_Handle __item_handle;					\
+    GUEST<Handle> __item_handle;					\
 									\
     GetDItem (dp, item_no, item_type, &__item_handle, item_rect);	\
     *(item_h) = MR (__item_handle);					\

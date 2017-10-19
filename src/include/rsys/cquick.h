@@ -21,8 +21,8 @@ typedef struct GrafVars { GUEST_STRUCT;
     GUEST< INTEGER> pmFlags;
 } *GrafVarsPtr;
 
-MAKE_HIDDEN(GrafVarsPtr);
-typedef HIDDEN_GrafVarsPtr *GrafVarsHandle;
+
+typedef GUEST<GrafVarsPtr> *GrafVarsHandle;
 
 #define SAFE_PTR(ptr)		(gui_assert (ptr))
 #define SAFE_HANDLE(handle)	(gui_assert (handle), gui_assert ((handle)->p))

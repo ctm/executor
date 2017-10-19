@@ -103,7 +103,7 @@ A4 (PRIVATE, itmp, htoip, Handle, h,
 }
 
 P5(PUBLIC pascal trap, void, GetDItem, DialogPtr, dp,	/* IMI-421 */
-	   INTEGER, itemno, INTEGER *, itype, HIDDEN_Handle *, item, Rect *, r)
+	   INTEGER, itemno, INTEGER *, itype, GUEST<Handle> *, item, Rect *, r)
 {
     SignedByte flags;
     itmp ip = ROMlib_dpnotoip((DialogPeek) dp, itemno, &flags);

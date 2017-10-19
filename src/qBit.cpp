@@ -130,7 +130,7 @@ P6 (PUBLIC pascal trap, void, CopyBits,
       if ((dst_bitmap->rowBytes & CWC (1 << 15))
 	  && ! (dst_bitmap->rowBytes & CWC (1 << 14)))
 	{
-	  HIDDEN_Handle t;
+	  GUEST<Handle> t;
 
 	  PtrToHand ((Ptr) dst_bitmap, &t, sizeof (PixMap));
 	  bogo_port_pixmap = (PixMapHandle) t;

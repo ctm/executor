@@ -1094,7 +1094,7 @@ P5 (PUBLIC pascal trap, void, SetStylScrap, int32, start, int32, stop,
   warning_unimplemented (NULL_STRING);
 }
 
-P3 (PUBLIC pascal trap, void, TECustomHook, int16, sel, HIDDEN_ProcPtr *,
+P3 (PUBLIC pascal trap, void, TECustomHook, int16, sel, GUEST<ProcPtr> *,
     addr, TEHandle, te)
 {
   ROMlib_hook (te_notsupported);

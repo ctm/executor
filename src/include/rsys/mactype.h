@@ -28,10 +28,6 @@ typedef int8 BOOLEAN;
 typedef int16 CHAR; /* very important not to use this as char */
 #endif
 
-typedef struct { int32 l PACKED; } HIDDEN_LONGINT;
-typedef struct { uint32 u PACKED; } HIDDEN_ULONGINT;
-
-
 // Define alignment.
 
 // Most things are two-byte aligned.
@@ -362,13 +358,6 @@ GUEST<TO> guest_cast(GuestWrapper<FROM> p)
     return result;
 }
 
-//#define MAKE_HIDDEN(typ) struct  HIDDEN_ ## typ { GUEST_STRUCT; using HiddenType = typ; typ p; }
-#define MAKE_HIDDEN(typ) using  HIDDEN_ ## typ = GUEST<typ>
-// Roadmap:
-// 1. switch to
-// [done] #define MAKE_HIDDEN(typ) using  HIDDEN_ ## typ = GUEST<typ>
-//  (adapt STARH, other uses of ->P)
-// 2. remove
 
 #  define PACKED_MEMBER(typ, name) typ name
 // Roadmap:

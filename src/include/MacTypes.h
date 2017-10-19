@@ -24,13 +24,13 @@ typedef uint8 Byte;
 typedef int8 *Ptr;
 #endif
 
-MAKE_HIDDEN(Ptr);
+
 
 #if !defined(__MACTYPES__) || defined(__cplusplus)
-typedef HIDDEN_Ptr *Handle;
+typedef GUEST<Ptr> *Handle;
 #endif
 
-MAKE_HIDDEN(Handle);
+
 typedef BOOLEAN Boolean;
 
 typedef Byte Str15[16];
@@ -42,14 +42,14 @@ typedef Byte Str255[256];
 typedef Byte *StringPtr;
 #endif
 	
-MAKE_HIDDEN(StringPtr);
 
-typedef HIDDEN_StringPtr *StringHandle;
+
+typedef GUEST<StringPtr> *StringHandle;
 #if !defined(__MACTYPES__) || defined(__cplusplus)
 
 typedef int (*ProcPtr)();
 #endif
-MAKE_HIDDEN(ProcPtr);
+
 #if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef LONGINT Fixed, Fract;
 #endif
@@ -81,7 +81,7 @@ struct QHdr { GUEST_STRUCT;
 typedef QHdr *QHdrPtr;
 typedef union __qe *QElemPtr;
 
-MAKE_HIDDEN(QElemPtr);
+
 
 	enum {
 		noErr = 0

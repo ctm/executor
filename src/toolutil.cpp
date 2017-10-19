@@ -239,7 +239,7 @@ P6(PUBLIC pascal trap, LONGINT, Munger, Handle, h, LONGINT, off, Ptr, p1,
 }
 #undef RETURN
 
-P3(PUBLIC pascal trap, void, PackBits, HIDDEN_Ptr *, sp, HIDDEN_Ptr *, dp, INTEGER, len)
+P3(PUBLIC pascal trap, void, PackBits, GUEST<Ptr> *, sp, GUEST<Ptr> *, dp, INTEGER, len)
 {
   char *ip, *op, *ep, *erp, *markp, c;
   
@@ -310,13 +310,13 @@ do {									 \
 
 
 void
-Executor::unpack_int16_bits (HIDDEN_Ptr *sp, HIDDEN_Ptr *dp, INTEGER len)
+Executor::unpack_int16_bits (GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
 {
   /* This is used when unpacking 16 bpp PICT bitmaps. */
   UNPACK_BITS_BODY (int16);
 }
 
-P3(PUBLIC pascal trap, void, UnpackBits, HIDDEN_Ptr *, sp, HIDDEN_Ptr *, dp, INTEGER, len)
+P3(PUBLIC pascal trap, void, UnpackBits, GUEST<Ptr> *, sp, GUEST<Ptr> *, dp, INTEGER, len)
 {
   UNPACK_BITS_BODY (int8);
 }

@@ -218,8 +218,8 @@ hidden, *hiddenp;
 
 #endif
 
-MAKE_HIDDEN(hiddenp);
-typedef HIDDEN_hiddenp *hiddenh;
+
+typedef GUEST<hiddenp> *hiddenh;
 
 namespace Executor {
     PRIVATE DCtlPtr otherdctl(ParmBlkPtr);

@@ -211,7 +211,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
  ({ \
    void *new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
-   HIDDEN_AuxCtlHandle * __stub_arg_2 = (A2);\
+   GUEST<AuxCtlHandle> * __stub_arg_2 = (A2);\
  \
    new_addr = tooltraptable[0x0244];\
    ((new_addr == toolstuff[0x0244].orig)\
@@ -223,7 +223,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    void *new_addr;\
    Point __stub_arg_1 = (A1);\
    WindowPtr __stub_arg_2 = (A2);\
-   HIDDEN_ControlHandle * __stub_arg_3 = (A3);\
+   GUEST<ControlHandle> * __stub_arg_3 = (A3);\
  \
    new_addr = tooltraptable[0x016c];\
    ((new_addr == toolstuff[0x016c].orig)\
@@ -563,7 +563,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
  ({ \
    void *new_addr;\
    EventRecord * __stub_arg_1 = (A1);\
-   HIDDEN_DialogPtr * __stub_arg_2 = (A2);\
+   GUEST<DialogPtr> * __stub_arg_2 = (A2);\
    INTEGER * __stub_arg_3 = (A3);\
  \
    new_addr = tooltraptable[0x0180];\
@@ -610,7 +610,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    DialogPtr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER * __stub_arg_3 = (A3);\
-   HIDDEN_Handle * __stub_arg_4 = (A4);\
+   GUEST<Handle> * __stub_arg_4 = (A4);\
    Rect * __stub_arg_5 = (A5);\
  \
    new_addr = tooltraptable[0x018d];\
@@ -2034,7 +2034,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define GetPort(A1) \
  ({ \
    void *new_addr;\
-   HIDDEN_GrafPtr * __stub_arg_1 = (A1);\
+   GUEST<GrafPtr> * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0074];\
    ((new_addr == toolstuff[0x0074].orig)\
@@ -4856,7 +4856,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
  ({ \
    void *new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
-   HIDDEN_AuxWinHandle * __stub_arg_2 = (A2);\
+   GUEST<AuxWinHandle> * __stub_arg_2 = (A2);\
  \
    new_addr = tooltraptable[0x0242];\
    ((new_addr == toolstuff[0x0242].orig)\
@@ -4989,7 +4989,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define GetWMgrPort(A1) \
  ({ \
    void *new_addr;\
-   HIDDEN_GrafPtr * __stub_arg_1 = (A1);\
+   GUEST<GrafPtr> * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0110];\
    ((new_addr == toolstuff[0x0110].orig)\
@@ -4999,7 +4999,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define GetCWMgrPort(A1) \
  ({ \
    void *new_addr;\
-   HIDDEN_CGrafPtr * __stub_arg_1 = (A1);\
+   GUEST<CGrafPtr> * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0248];\
    ((new_addr == toolstuff[0x0248].orig)\
@@ -5275,7 +5275,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
  ({ \
    void *new_addr;\
    Point __stub_arg_1 = (A1);\
-   HIDDEN_WindowPtr * __stub_arg_2 = (A2);\
+   GUEST<WindowPtr> * __stub_arg_2 = (A2);\
  \
    new_addr = tooltraptable[0x012c];\
    ((new_addr == toolstuff[0x012c].orig)\
@@ -6043,7 +6043,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    void *new_addr;\
    StringPtr __stub_arg_1 = (A1);\
    INTEGER * __stub_arg_2 = (A2);\
-   HIDDEN_Handle * __stub_arg_3 = (A3);\
+   GUEST<Handle> * __stub_arg_3 = (A3);\
  \
    new_addr = tooltraptable[0x01f5];\
    ((new_addr == toolstuff[0x01f5].orig)\
@@ -6084,7 +6084,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define SndNewChannel(A1, A2, A3, A4) \
  ({ \
    void *new_addr;\
-   HIDDEN_SndChannelPtr * __stub_arg_1 = (A1);\
+   GUEST<SndChannelPtr> * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    LONGINT __stub_arg_3 = (A3);\
    ProcPtr __stub_arg_4 = (A4);\
@@ -6501,8 +6501,8 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define PackBits(A1, A2, A3) \
  ({ \
    void *new_addr;\
-   HIDDEN_Ptr * __stub_arg_1 = (A1);\
-   HIDDEN_Ptr * __stub_arg_2 = (A2);\
+   GUEST<Ptr> * __stub_arg_1 = (A1);\
+   GUEST<Ptr> * __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
  \
    new_addr = tooltraptable[0x00cf];\
@@ -6513,8 +6513,8 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define UnpackBits(A1, A2, A3) \
  ({ \
    void *new_addr;\
-   HIDDEN_Ptr * __stub_arg_1 = (A1);\
-   HIDDEN_Ptr * __stub_arg_2 = (A2);\
+   GUEST<Ptr> * __stub_arg_1 = (A1);\
+   GUEST<Ptr> * __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
  \
    new_addr = tooltraptable[0x00d0];\

@@ -790,12 +790,12 @@ A0(PUBLIC trap, OSErrRET, WriteParam)		/* IMII-382 */
 
 A2(PUBLIC trap, void, Enqueue, QElemPtr, e, QHdrPtr, h)
 {
-    HIDDEN_QElemPtr *qpp;
+    GUEST<QElemPtr> *qpp;
     virtual_int_state_t block;
 
     block = block_virtual_ints ();
-    for (qpp = (HIDDEN_QElemPtr *) &h->qHead; *qpp && MR(*qpp) != e;
-					qpp = (HIDDEN_QElemPtr *) MR(*qpp))
+    for (qpp = (GUEST<QElemPtr> *) &h->qHead; *qpp && MR(*qpp) != e;
+					qpp = (GUEST<QElemPtr> *) MR(*qpp))
 	;
     if (!*qpp) {
 	e->evQElem.qLink = 0;
@@ -810,19 +810,19 @@ A2(PUBLIC trap, void, Enqueue, QElemPtr, e, QHdrPtr, h)
 
 A2(PUBLIC trap, OSErrRET, Dequeue, QElemPtr, e, QHdrPtr, h)
 {
-    HIDDEN_QElemPtr *qpp;
+    GUEST<QElemPtr> *qpp;
     OSErr retval;
     virtual_int_state_t block;
 	
     retval = qErr;
     block = block_virtual_ints ();
-    for (qpp = (HIDDEN_QElemPtr *) &h->qHead; *qpp && MR(*qpp) != e;
-					qpp = (HIDDEN_QElemPtr *) MR(*qpp))
+    for (qpp = (GUEST<QElemPtr> *) &h->qHead; *qpp && MR(*qpp) != e;
+					qpp = (GUEST<QElemPtr> *) MR(*qpp))
 	;
     if (*qpp) {
 	*qpp = e->evQElem.qLink;
 	if (MR(h->qTail) == e)
-	    h->qTail = qpp == (HIDDEN_QElemPtr *) &h->qHead ? (QElemPtr) 0 : RM((QElemPtr) qpp);
+	    h->qTail = qpp == (GUEST<QElemPtr> *) &h->qHead ? (QElemPtr) 0 : RM((QElemPtr) qpp);
 	retval = noErr;
     }
     restore_virtual_ints (block);

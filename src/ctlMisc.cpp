@@ -141,7 +141,7 @@ P1(PUBLIC pascal trap, INTEGER, GetCVariant, ControlHandle, c)	/* IMV-222 */
    `GetAuxiliaryControlRecord ()', possibly because of the
    inconsistency below, i can only assume they have the same trap word */
 P2 (PUBLIC pascal trap, BOOLEAN, GetAuxCtl, ControlHandle, ctl,	/* IMV-222 */
-    HIDDEN_AuxCtlHandle *, aux_ctl)
+    GUEST<AuxCtlHandle> *, aux_ctl)
 {
   /* according to testing on the Mac+
      `GetAuxCtl ()' returns FALSE (not TRUE) and leaves

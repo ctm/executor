@@ -370,7 +370,7 @@ Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, GUEST<LONGINT>
 			*messp = CL(mess);
 			first = FALSE;
 		    } else
-			PPostEvent(diskEvt, mess, (HIDDEN_EvQElPtr *) 0);
+			PPostEvent(diskEvt, mess, (GUEST<EvQElPtr> *) 0);
 		}
 		offset += driver_block_size;
 	    } while (ROMlib_readwrite(floppyfd, buf, PHYSBSIZE, offset,
@@ -403,7 +403,7 @@ Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, GUEST<LONGINT>
 		    *messp = CL(mess);
 		    first = FALSE;
 		} else 
-		    PPostEvent(diskEvt, mess, (HIDDEN_EvQElPtr *) 0);
+		    PPostEvent(diskEvt, mess, (GUEST<EvQElPtr> *) 0);
 	    }
 	    foundmap = TRUE;
 	}

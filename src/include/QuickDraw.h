@@ -66,9 +66,9 @@ struct Region { GUEST_STRUCT;
 };
 
 typedef Region *RgnPtr;
-MAKE_HIDDEN(RgnPtr);
-typedef HIDDEN_RgnPtr *RgnHandle;
-MAKE_HIDDEN(RgnHandle);
+
+typedef GUEST<RgnPtr> *RgnHandle;
+
 
 struct BitMap {
     GUEST_STRUCT;
@@ -87,8 +87,8 @@ struct Cursor { GUEST_STRUCT;
 };
 
 typedef Cursor *CursPtr;
-MAKE_HIDDEN(CursPtr);
-typedef HIDDEN_CursPtr *CursHandle;
+
+typedef GUEST<CursPtr> *CursHandle;
 
 typedef SignedByte GrafVerb;
 enum {
@@ -106,8 +106,8 @@ struct Polygon { GUEST_STRUCT;
 };
 
 typedef Polygon *PolyPtr;
-MAKE_HIDDEN(PolyPtr);
-typedef HIDDEN_PolyPtr *PolyHandle;
+
+typedef GUEST<PolyPtr> *PolyHandle;
 
 struct FontInfo { GUEST_STRUCT;
     GUEST< INTEGER> ascent;
@@ -182,7 +182,7 @@ struct GrafPort { GUEST_STRUCT;
 };
 
 typedef GrafPort *GrafPtr;
-MAKE_HIDDEN(GrafPtr);
+
 
 struct Picture { GUEST_STRUCT;
     GUEST< INTEGER> picSize;
@@ -190,8 +190,8 @@ struct Picture { GUEST_STRUCT;
 };
 
 typedef Picture *PicPtr;
-MAKE_HIDDEN(PicPtr);
-typedef HIDDEN_PicPtr *PicHandle;
+
+typedef GUEST<PicPtr> *PicHandle;
 
 struct PenState { GUEST_STRUCT;
     GUEST< Point> pnLoc;
@@ -257,9 +257,9 @@ typedef struct ColorTable { GUEST_STRUCT;
     GUEST< cSpecArray> ctTable;
 } *CTabPtr;
 
-MAKE_HIDDEN(CTabPtr);
-typedef HIDDEN_CTabPtr *CTabHandle;
-MAKE_HIDDEN(CTabHandle);
+
+typedef GUEST<CTabPtr> *CTabHandle;
+
 
 typedef struct CQDProcs { GUEST_STRUCT;
     GUEST< Ptr> textProc;
@@ -301,9 +301,9 @@ typedef struct PixMap { GUEST_STRUCT;
     GUEST< CTabHandle> pmTable;
     GUEST< LONGINT> pmReserved;
 } *PixMapPtr;
-MAKE_HIDDEN(PixMapPtr);
-typedef HIDDEN_PixMapPtr *PixMapHandle;
-MAKE_HIDDEN(PixMapHandle);
+
+typedef GUEST<PixMapPtr> *PixMapHandle;
+
 
 enum pixmap_pixel_types
 {
@@ -323,9 +323,9 @@ typedef struct PixPat { GUEST_STRUCT;
     GUEST< Handle> patXMap;
     GUEST< Pattern> pat1Data;
 } *PixPatPtr;
-MAKE_HIDDEN(PixPatPtr);
-typedef HIDDEN_PixPatPtr *PixPatHandle;
-MAKE_HIDDEN(PixPatHandle);
+
+typedef GUEST<PixPatPtr> *PixPatHandle;
+
 
 typedef struct CGrafPort { GUEST_STRUCT;
     GUEST< INTEGER> device;
@@ -362,7 +362,7 @@ typedef struct CGrafPort { GUEST_STRUCT;
     GUEST< CQDProcsPtr> grafProcs;
 } *CGrafPtr;
 
-MAKE_HIDDEN(CGrafPtr);
+
 
 typedef struct CCrsr { GUEST_STRUCT;
     GUEST< INTEGER> crsrType;
@@ -377,8 +377,8 @@ typedef struct CCrsr { GUEST_STRUCT;
     GUEST< LONGINT> crsrXTable;
     GUEST< LONGINT> crsrID;
 } *CCrsrPtr;
-MAKE_HIDDEN(CCrsrPtr);
-typedef HIDDEN_CCrsrPtr *CCrsrHandle;
+
+typedef GUEST<CCrsrPtr> *CCrsrHandle;
 
 struct MatchRec { GUEST_STRUCT;
     GUEST< uint16> red;
@@ -387,41 +387,38 @@ struct MatchRec { GUEST_STRUCT;
     GUEST< int32> matchData;
 };
 
-typedef HIDDEN_GrafPtr *HIDDEN_GrafPtr_Ptr;
-MAKE_HIDDEN(HIDDEN_GrafPtr_Ptr);
-
 typedef Byte *BytePtr;
-MAKE_HIDDEN(BytePtr);
 
-#define thePort		(STARH(STARH((HIDDEN_HIDDEN_GrafPtr_Ptr *) (long) SYN68K_TO_US(a5))))
-#define thePortX	((*STARH((HIDDEN_HIDDEN_GrafPtr_Ptr *) (long) SYN68K_TO_US(a5))))
-#define white		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -8)
-#define black		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -16)
-#define gray		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -24)
-#define ltGray		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -32)
-#define dkGray		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -40)
-#define arrowX		(* (Cursor  *) (STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5))-108))
-#define screenBitsX	(* (BitMap  *) (STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5))-122))
-#define randSeed	CL(* (LONGINT *) (STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5))-126))
-#define randSeedX	((* (LONGINT *) (STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5))-126)))
+
+#define thePort		(STARH(STARH((GUEST<GUEST<GrafPtr>*> *) (long) SYN68K_TO_US(a5))))
+#define thePortX	((*STARH((GUEST<GUEST<GrafPtr>*> *) (long) SYN68K_TO_US(a5))))
+#define white		(STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5)) -8)
+#define black		(STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5)) -16)
+#define gray		(STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5)) -24)
+#define ltGray		(STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5)) -32)
+#define dkGray		(STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5)) -40)
+#define arrowX		(* (Cursor  *) (STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5))-108))
+#define screenBitsX	(* (BitMap  *) (STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5))-122))
+#define randSeed	CL(* (LONGINT *) (STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5))-126))
+#define randSeedX	((* (LONGINT *) (STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5))-126)))
 
 #if 0
-extern HIDDEN_LONGINT RndSeed_L;
+extern GUEST<LONGINT> RndSeed_L;
 extern Byte HiliteMode;	/* not really supported in ROMlib-V1.0 */
 extern RGBColor HiliteRGB;	/* not really supported in ROMlib-V1.0 */
-extern HIDDEN_ProcPtr 	JInitCrsr_H;
+extern GUEST<ProcPtr> 	JInitCrsr_H;
 
-extern HIDDEN_ProcPtr JHideCursor_H;
-extern HIDDEN_ProcPtr JShowCursor_H;
-extern HIDDEN_ProcPtr JShieldCursor_H;
-extern HIDDEN_ProcPtr JSetCrsr_H;
-extern HIDDEN_ProcPtr JCrsrObscure_H;
-extern HIDDEN_ProcPtr JUnknown574_H;
+extern GUEST<ProcPtr> JHideCursor_H;
+extern GUEST<ProcPtr> JShowCursor_H;
+extern GUEST<ProcPtr> JShieldCursor_H;
+extern GUEST<ProcPtr> JSetCrsr_H;
+extern GUEST<ProcPtr> JCrsrObscure_H;
+extern GUEST<ProcPtr> JUnknown574_H;
 
-extern HIDDEN_Ptr 	ScrnBase_H;
-extern HIDDEN_ProcPtr	JCrsrTask_H;
-extern HIDDEN_Ptr	Key1Trans_H;
-extern HIDDEN_Ptr	Key2Trans_H;
+extern GUEST<Ptr> 	ScrnBase_H;
+extern GUEST<ProcPtr>	JCrsrTask_H;
+extern GUEST<Ptr>	Key1Trans_H;
+extern GUEST<Ptr>	Key2Trans_H;
 extern INTEGER 	ScrVRes;
 extern INTEGER 	ScrHRes;
 extern INTEGER 	ScreenRow;
@@ -470,7 +467,7 @@ extern pascal trap void C_SetPort( GrafPtr p );
 extern pascal trap void C_InitPort( GrafPtr p ); 
 extern pascal trap void C_OpenPort( GrafPtr p ); 
 extern pascal trap void C_ClosePort( GrafPtr p ); 
-extern pascal trap void C_GetPort( HIDDEN_GrafPtr *pp ); 
+extern pascal trap void C_GetPort( GUEST<GrafPtr> *pp ); 
 extern pascal trap void C_GrafDevice( INTEGER d ); 
 extern pascal trap void C_SetPortBits( BitMap *bm ); 
 extern pascal trap void C_PortSize( INTEGER w, INTEGER h ); 

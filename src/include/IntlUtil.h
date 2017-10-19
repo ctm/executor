@@ -83,8 +83,8 @@ struct Intl0Rec { GUEST_STRUCT;
     GUEST< INTEGER> intl0Vers;
 };
 typedef Intl0Rec *Intl0Ptr;
-MAKE_HIDDEN(Intl0Ptr);
-typedef HIDDEN_Intl0Ptr *Intl0Hndl;
+
+typedef GUEST<Intl0Ptr> *Intl0Hndl;
 
 typedef Byte STRING15[16];
 
@@ -104,8 +104,8 @@ struct Intl1Rec { GUEST_STRUCT;
     GUEST< INTEGER> localRtn;
 };
 typedef Intl1Rec *Intl1Ptr;
-MAKE_HIDDEN(Intl1Ptr);
-typedef HIDDEN_Intl1Ptr *Intl1Hndl;
+
+typedef GUEST<Intl1Ptr> *Intl1Hndl;
 
 typedef comp LongDateTime;
 

@@ -209,7 +209,7 @@ LONG CALLBACK AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	w32_mousedown_p = (msg == WM_LBUTTONDOWN);
 	button_state = Keyboard_State ();
 	ROMlib_PPostEvent(w32_mousedown_p ? mouseDown : mouseUp,
-			  0, (HIDDEN_EvQElPtr *) 0,
+			  0, (GUEST<EvQElPtr> *) 0,
 			  when, where, button_state);
 	adb_apeiron_hack (FALSE);
 	break;

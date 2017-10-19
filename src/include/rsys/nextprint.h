@@ -91,8 +91,8 @@ typedef enum {
 } comverb_t;
 
 typedef char *comPtr;
-MAKE_HIDDEN(comPtr);
-typedef HIDDEN_comPtr *comHandle;
+
+typedef GUEST<comPtr> *comHandle;
 
 typedef LONGINT comFixed;
 

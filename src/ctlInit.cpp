@@ -113,12 +113,12 @@ P2(PUBLIC pascal trap, ControlHandle, GetNewControl,		/* IMI-321 */
 					        INTEGER, cid, WindowPtr, wst)
 {
     typedef contrlrestype *wp;
-    MAKE_HIDDEN(wp);
-    HIDDEN_wp *wh;
+    
+    GUEST<wp> *wh;
     ControlHandle retval;
     Handle ctab_res_h;
 
-    wh = (HIDDEN_wp *) GetResource(TICK("CNTL"), cid);
+    wh = (GUEST<wp> *) GetResource(TICK("CNTL"), cid);
     if (!wh)
         return 0;
     if (!(*wh))
@@ -172,10 +172,10 @@ P2 (PUBLIC pascal trap, void, SetCtlColor, ControlHandle, ctl, CCTabHandle, ctab
 
 P1(PUBLIC pascal trap, void, DisposeControl, ControlHandle, c)	/* IMI-321 */
 {
-    MAKE_HIDDEN(ControlHandle);
-    HIDDEN_ControlHandle *t;
-    MAKE_HIDDEN(AuxCtlHandle);
-    HIDDEN_AuxCtlHandle *auxhp;
+    
+    GUEST<ControlHandle> *t;
+    
+    GUEST<AuxCtlHandle> *auxhp;
     AuxCtlHandle saveauxh;
     
     HideControl(c);
@@ -185,13 +185,13 @@ P1(PUBLIC pascal trap, void, DisposeControl, ControlHandle, c)	/* IMI-321 */
 	 CTLCALL(c, dispCntl, 0);
        });
     
-    for (t = (HIDDEN_ControlHandle *) &(((WindowPeek)(HxP(c, contrlOwner)))->controlList);
-	      (*t) && STARH(t) != c; t = (HIDDEN_ControlHandle *) &((STARH(STARH(t)))->nextControl))
+    for (t = (GUEST<ControlHandle> *) &(((WindowPeek)(HxP(c, contrlOwner)))->controlList);
+	      (*t) && STARH(t) != c; t = (GUEST<ControlHandle> *) &((STARH(STARH(t)))->nextControl))
         ;
     if ((*t))
         (*t) = HxX(c, nextControl);
-    for (auxhp = (HIDDEN_AuxCtlHandle *) &AuxCtlHead; (*auxhp) && (STARH(STARH(auxhp)))->acOwner != c;
-					auxhp = (HIDDEN_AuxCtlHandle *) &(STARH(STARH(auxhp)))->acNext)
+    for (auxhp = (GUEST<AuxCtlHandle> *) &AuxCtlHead; (*auxhp) && (STARH(STARH(auxhp)))->acOwner != c;
+					auxhp = (GUEST<AuxCtlHandle> *) &(STARH(STARH(auxhp)))->acNext)
 	;
     if ((*auxhp)) {
 	saveauxh = STARH(auxhp);

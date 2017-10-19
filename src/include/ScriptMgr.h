@@ -222,8 +222,8 @@ extern pascal trap void C_DrawJust( Ptr textbufp, INTEGER length,
  INTEGER slop ); extern pascal trap void P_DrawJust( Ptr textbufp, INTEGER length, 
  INTEGER slop ); 
 extern pascal trap String2DateStatus C_String2Time( Ptr textp, 
- LONGINT len, Ptr cachep, LONGINT *lenusedp, HIDDEN_Ptr *datetimep ); extern pascal trap String2DateStatus P_String2Time( Ptr textp, 
- LONGINT len, Ptr cachep, LONGINT *lenusedp, HIDDEN_Ptr *datetimep ); 
+ LONGINT len, Ptr cachep, LONGINT *lenusedp, GUEST<Ptr> *datetimep ); extern pascal trap String2DateStatus P_String2Time( Ptr textp, 
+ LONGINT len, Ptr cachep, LONGINT *lenusedp, GUEST<Ptr> *datetimep ); 
 extern INTEGER GetSysFont( void  ); 
 extern INTEGER GetAppFont( void  ); 
 extern INTEGER GetMBarHeight( void  ); 

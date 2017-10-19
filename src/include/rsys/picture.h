@@ -236,8 +236,8 @@ extern void ROMlib_drawingverbrectovalpicupdate( GrafVerb v, Rect *rp,
 #define OP_Header		0x0C00
 
 typedef piccache *piccacheptr;
-MAKE_HIDDEN(piccacheptr);
-typedef HIDDEN_piccacheptr *piccachehand;
+
+typedef GUEST<piccacheptr> *piccachehand;
 
 extern PicHandle ROMlib_OpenPicture_helper (const Rect *pf,
 					    const OpenCPicParams *params);

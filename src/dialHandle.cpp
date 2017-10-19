@@ -127,7 +127,7 @@ ROMlib_CALLUSERITEM (DialogPtr dp,
 
 #define _FindWindow(pt, wp)			\
   ({						\
-    HIDDEN_WindowPtr __wp;			\
+    GUEST<WindowPtr> __wp;			\
     int retval;					\
     						\
     retval = FindWindow (pt, &__wp);		\
@@ -160,7 +160,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
      {
        EventRecord evt;
        DialogPeek dp;
-       HIDDEN_DialogPtr ndp;
+       GUEST<DialogPtr> ndp;
        TEHandle idle;
        ProcPtr fp2;
        Point whereunswapped;
@@ -238,7 +238,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
      {
        EventRecord evt;
        DialogPeek dp;
-       HIDDEN_DialogPtr ndp;
+       GUEST<DialogPtr> ndp;
        TEHandle idle;
        ProcPtr fp2;
        Point whereunswapped;
@@ -304,7 +304,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
 P1(PUBLIC pascal trap, BOOLEAN, IsDialogEvent,		/* IMI-416 */
 						  EventRecord *, evt)
 {
-    HIDDEN_WindowPtr wp;
+    GUEST<WindowPtr> wp;
     DialogPeek dp;
     Point p;
     
@@ -567,7 +567,7 @@ P2(PUBLIC pascal trap, void, UpdtDialog, DialogPtr, dp,		/* IMIV-60 */
 }
 
 P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
-    EventRecord *, evt, HIDDEN_DialogPtr *, dpp, INTEGER *, itemp)
+    EventRecord *, evt, GUEST<DialogPtr> *, dpp, INTEGER *, itemp)
 {
   DialogPeek dp;
   Byte c;

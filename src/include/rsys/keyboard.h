@@ -59,8 +59,8 @@ typedef struct kchr_str { GUEST_STRUCT;
     GUEST< dead_key_rec_t[0]> dead_key_recs;    /* VARIABLE LENGTH */
 } *kchr_ptr_t;
 
-MAKE_HIDDEN(kchr_ptr_t);
-typedef HIDDEN_kchr_ptr_t *kchr_hand;
+
+typedef GUEST<kchr_ptr_t> *kchr_hand;
 
 #define KCHR_VERSION_X(p)		((p)->version)
 #define KCHR_MODIFIER_TABLE_X(p)	((p)->modifier_table)

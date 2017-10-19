@@ -76,8 +76,8 @@ typedef struct volumeinfo { GUEST_STRUCT;
     GUEST< LONGINT> drCTFlSize;
     GUEST< xtntrec> drCTExtRec;
 } *volumeinfoPtr;
-MAKE_HIDDEN(volumeinfoPtr);
-typedef HIDDEN_volumeinfoPtr *volumeinfoHandle;
+
+typedef GUEST<volumeinfoPtr> *volumeinfoHandle;
 
 #define VOLUMEINFOBLOCKNO   2
 #define InternalDrive   1
@@ -326,7 +326,7 @@ extern LONGINT TFSTagData1 : 0x38E;
 #else
 
 #if !defined (WDCBsPtr_H)
-extern HIDDEN_Ptr WDCBsPtr_H;
+extern GUEST<Ptr> WDCBsPtr_H;
 extern LONGINT BufTgFNum;
 extern INTEGER BufTgFFlag;
 extern INTEGER BufTgFBkNum;

@@ -1521,7 +1521,7 @@ void Executor::NeXTPrBits(comBitMap *srcbmp, comRect *srcrp, comRect *dstrp,
 	{
 	  Executor::ColorSpec *ctab;
 	  int i;
-	  HIDDEN_PixMapPtr pxp;
+	  GUEST<PixMapPtr> pxp;
 	  boolean_t has_warned_p;
 
 	  pxp = (Executor::PixMapPtr) RM (srcpmp);

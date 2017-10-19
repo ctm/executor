@@ -45,24 +45,24 @@ struct Zone { GUEST_STRUCT;
 };
 typedef Zone *THz;
 
-MAKE_HIDDEN(THz);
+
 
 #if 0
 #if !defined (MemErr)
 extern int16 MemErr;
-extern HIDDEN_Ptr 	MemTop_H;
-extern HIDDEN_Ptr 	BufPtr_H;
-extern HIDDEN_Ptr 	HeapEnd_H;
-extern HIDDEN_THz 	TheZone_H;
-extern HIDDEN_Ptr 	ApplLimit_H;
-extern HIDDEN_THz 	SysZone_H;
-extern HIDDEN_THz 	ApplZone_H;
-extern HIDDEN_Ptr 	ROMBase_H;
-extern HIDDEN_Ptr 	heapcheck_H;
-extern HIDDEN_Handle 	GZRootHnd_H;
-extern HIDDEN_ProcPtr 	IAZNotify_H;
-extern HIDDEN_Ptr 	CurrentA5_H;
-extern HIDDEN_Ptr 	CurStackBase_H;
+extern GUEST<Ptr> 	MemTop_H;
+extern GUEST<Ptr> 	BufPtr_H;
+extern GUEST<Ptr> 	HeapEnd_H;
+extern GUEST<THz> 	TheZone_H;
+extern GUEST<Ptr> 	ApplLimit_H;
+extern GUEST<THz> 	SysZone_H;
+extern GUEST<THz> 	ApplZone_H;
+extern GUEST<Ptr> 	ROMBase_H;
+extern GUEST<Ptr> 	heapcheck_H;
+extern GUEST<Handle> 	GZRootHnd_H;
+extern GUEST<ProcPtr> 	IAZNotify_H;
+extern GUEST<Ptr> 	CurrentA5_H;
+extern GUEST<Ptr> 	CurStackBase_H;
 extern Byte 	Scratch20[20];
 extern LONGINT 	Lo3Bytes;
 extern LONGINT 	MinStack;

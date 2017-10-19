@@ -43,7 +43,7 @@ extern void clear_pending_sounds (void);
 
 /* patl stuff */
 
-extern HIDDEN_SndChannelPtr allchans;
+extern GUEST<SndChannelPtr> allchans;
 
 typedef uint64_t snd_time;
 

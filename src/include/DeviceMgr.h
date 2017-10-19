@@ -42,8 +42,8 @@ struct ramdriver { GUEST_STRUCT;
 };
 
 typedef ramdriver *ramdriverptr;
-MAKE_HIDDEN(ramdriverptr);
-typedef HIDDEN_ramdriverptr *ramdriverhand;
+
+typedef GUEST<ramdriverptr> *ramdriverhand;
 
 typedef enum { Open, Prime, Ctl, Stat, Close } DriverRoutineType;
 
@@ -61,11 +61,11 @@ typedef struct DCtlEntry { GUEST_STRUCT;
     GUEST< INTEGER> dCtlMenu;
 } *DCtlPtr;
 
-MAKE_HIDDEN(DCtlPtr);
-typedef HIDDEN_DCtlPtr *DCtlHandle;
-MAKE_HIDDEN(DCtlHandle);
-typedef HIDDEN_DCtlHandle *DCtlHandlePtr;
-MAKE_HIDDEN(DCtlHandlePtr);
+
+typedef GUEST<DCtlPtr> *DCtlHandle;
+
+typedef GUEST<DCtlHandle> *DCtlHandlePtr;
+
 
 #define asyncTrpBit	(1 << 10)
 #define noQueueBit	(1 <<  9)
@@ -112,8 +112,8 @@ extern driverinfo *__ROMlib_otherdrivers;
 
 #if 0
 #if !defined (UTableBase_H)
-extern HIDDEN_DCtlHandlePtr UTableBase_H;
-extern HIDDEN_Ptr 	VIA_H;
+extern GUEST<DCtlHandlePtr> UTableBase_H;
+extern GUEST<Ptr> 	VIA_H;
 extern INTEGER UnitNtryCnt;
 extern INTEGER 	UnitNtryCnt;
 #endif

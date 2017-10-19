@@ -844,7 +844,7 @@ PRIVATE void reset_low_globals(void)
     LONGINT saveCaretTime;
     LONGINT saveDoubleTime;
     LONGINT saveDefDirID;
-    HIDDEN_Handle saveDAStrings[4];
+    GUEST<Handle> saveDAStrings[4];
     Ptr saveMemTop;
     DCtlHandlePtr saveUTableBase;
     INTEGER saveUnitNtryCnt;

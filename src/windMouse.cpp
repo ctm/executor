@@ -29,7 +29,7 @@ using namespace Executor;
 
 #endif
 
-P2(PUBLIC pascal trap, INTEGER, FindWindow, Point, p, HIDDEN_WindowPtr *, wpp)
+P2(PUBLIC pascal trap, INTEGER, FindWindow, Point, p, GUEST<WindowPtr> *, wpp)
 {
     WindowPeek wp;
     LONGINT pointaslong, val;

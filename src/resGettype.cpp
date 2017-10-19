@@ -17,9 +17,9 @@ char ROMlib_rcsid_resGettype[] =
 
 namespace Executor {
   typedef ResType *restypeptr;
-  MAKE_HIDDEN(restypeptr);
   
-  PRIVATE HIDDEN_restypeptr *ar = 0;
+  
+  PRIVATE GUEST<restypeptr> *ar = 0;
   PRIVATE INTEGER inserttypes(resmaphand, INTEGER, BOOLEAN);
   PRIVATE INTEGER initar(INTEGER);
 }
@@ -90,7 +90,7 @@ A1(PRIVATE, INTEGER, initar, INTEGER, rn)
 	    ZONE_SAVE_EXCURSION
 	      (SysZone,
 	       {
-		 ar = (HIDDEN_restypeptr *) NewHandle(mostbytesneeded);
+		 ar = (GUEST<restypeptr> *) NewHandle(mostbytesneeded);
 	       });
 	  }
 	ninserted = 0;

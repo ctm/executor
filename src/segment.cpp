@@ -64,8 +64,8 @@ char ROMlib_rcsid_segment[] =
 #endif /* defined(MSDOS) */
 namespace Executor {
 typedef finderinfo *finderinfoptr;
-MAKE_HIDDEN(finderinfoptr);
-typedef HIDDEN_finderinfoptr *finderinfohand;
+
+typedef GUEST<finderinfoptr> *finderinfohand;
 }
 
 using namespace Executor;
@@ -611,7 +611,7 @@ A1(PUBLIC, void, ClrAppFiles, INTEGER, index)	/* IMII-58 */
 }
 
 P3(PUBLIC pascal trap, void, GetAppParms, StringPtr, namep,	/* IMII-58 */
-				      INTEGER *, rnp, HIDDEN_Handle *, aphandp)
+				      INTEGER *, rnp, GUEST<Handle> *, aphandp)
 {
     str255assign(namep, CurApName);
     *rnp = CurApRefNum;

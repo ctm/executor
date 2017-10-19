@@ -319,7 +319,7 @@ handle_sdl_events(syn68k_addr_t interrupt_addr, void *unused)
 	    where.h = event.button.x;
 	    where.v = event.button.y;
 	    ROMlib_PPostEvent(down_p ? mouseDown : mouseUp,
-			      0, (HIDDEN_EvQElPtr *) 0, when, where,
+			      0, (GUEST<EvQElPtr> *) 0, when, where,
 			      keymod | right_button_keymod);
 	    adb_apeiron_hack (FALSE);
 	  }

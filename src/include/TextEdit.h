@@ -87,8 +87,8 @@ struct TERec { GUEST_STRUCT;
 };
 
 typedef TERec *TEPtr;
-MAKE_HIDDEN(TEPtr);
-typedef HIDDEN_TEPtr *TEHandle;
+
+typedef GUEST<TEPtr> *TEHandle;
 
 struct StyleRun { GUEST_STRUCT;
     GUEST< INTEGER> startChar;
@@ -108,8 +108,8 @@ struct STElement { GUEST_STRUCT;
 
 typedef STElement TEStyleTable[1];
 typedef STElement *STPtr;
-MAKE_HIDDEN(STPtr);
-typedef HIDDEN_STPtr *STHandle;
+
+typedef GUEST<STPtr> *STHandle;
 
 struct LHElement { GUEST_STRUCT;
     GUEST< INTEGER> lhHeight;
@@ -118,8 +118,8 @@ struct LHElement { GUEST_STRUCT;
 
 typedef LHElement LHTable[1];
 typedef LHElement *LHPtr;
-MAKE_HIDDEN(LHPtr);
-typedef HIDDEN_LHPtr *LHHandle;
+
+typedef GUEST<LHPtr> *LHHandle;
 
 struct TextStyle { GUEST_STRUCT;
     GUEST< INTEGER> tsFont;
@@ -148,8 +148,8 @@ struct StScrpRec { GUEST_STRUCT;
 };
 
 typedef StScrpRec *StScrpPtr;
-MAKE_HIDDEN(StScrpPtr);
-typedef HIDDEN_StScrpPtr *StScrpHandle;
+
+typedef GUEST<StScrpPtr> *StScrpHandle;
 
 struct NullSTRec { GUEST_STRUCT;
     GUEST< LONGINT> TEReserved;
@@ -157,8 +157,8 @@ struct NullSTRec { GUEST_STRUCT;
 };
 
 typedef NullSTRec *NullSTPtr;
-MAKE_HIDDEN(NullSTPtr);
-typedef HIDDEN_NullSTPtr *NullSTHandle;
+
+typedef GUEST<NullSTPtr> *NullSTHandle;
 
 struct TEStyleRec { GUEST_STRUCT;
     GUEST< INTEGER> nRuns;
@@ -171,8 +171,8 @@ struct TEStyleRec { GUEST_STRUCT;
 };
 
 typedef TEStyleRec *TEStylePtr;
-MAKE_HIDDEN(TEStylePtr);
-typedef HIDDEN_TEStylePtr *TEStyleHandle;
+
+typedef GUEST<TEStylePtr> *TEStyleHandle;
 
 typedef Byte Chars[1], *CharsPtr, **CharsHandle;
 
@@ -497,8 +497,8 @@ extern void te_style_combine_runs (TEStyleHandle te_style);
 
 #if 0
 #if !defined (TEDoText_H)
-extern HIDDEN_ProcPtr 	TEDoText_H;
-extern HIDDEN_Handle 	TEScrpHandle_H;
+extern GUEST<ProcPtr> 	TEDoText_H;
+extern GUEST<Handle> 	TEScrpHandle_H;
 extern INTEGER 	TEScrpLength;
 #endif
 
@@ -560,8 +560,8 @@ extern pascal trap BOOLEAN C_TEContinuousStyle( INTEGER *modep,
 extern pascal trap void C_SetStylScrap( LONGINT start, LONGINT stop, 
  StScrpHandle newstyles, BOOLEAN redraw, TEHandle teh ); extern pascal trap void P_SetStylScrap( LONGINT start, LONGINT stop, 
  StScrpHandle newstyles, BOOLEAN redraw, TEHandle teh ); 
-extern pascal trap void C_TECustomHook( INTEGER sel, HIDDEN_ProcPtr *addr, 
- TEHandle teh ); extern pascal trap void P_TECustomHook( INTEGER sel, HIDDEN_ProcPtr *addr, 
+extern pascal trap void C_TECustomHook( INTEGER sel, GUEST<ProcPtr> *addr, 
+ TEHandle teh ); extern pascal trap void P_TECustomHook( INTEGER sel, GUEST<ProcPtr> *addr, 
  TEHandle teh ); 
 extern pascal trap LONGINT C_TENumStyles( LONGINT start, LONGINT stop, 
  TEHandle teh ); extern pascal trap LONGINT P_TENumStyles( LONGINT start, LONGINT stop, 

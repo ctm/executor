@@ -21,8 +21,7 @@ using namespace Executor;
 
 #define declare_handle_type(type_prefix)				\
   typedef type_prefix ## _t *type_prefix ## _ptr;			\
-  MAKE_HIDDEN(type_prefix ## _ptr);                                     \
-  typedef HIDDEN_ ## type_prefix ## _ptr *type_prefix ## _handle
+  typedef GUEST<type_prefix ## _ptr> *type_prefix ## _handle
 
 declare_handle_type (size_resource);
 

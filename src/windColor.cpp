@@ -207,7 +207,7 @@ P2 (PUBLIC pascal trap, void, SetWinColor,
 
 P2 (PUBLIC pascal trap, BOOLEAN, GetAuxWin,
     WindowPtr, w,
-    HIDDEN_AuxWinHandle *, aux_win_out)
+    GUEST<AuxWinHandle> *, aux_win_out)
 {
   if (! w)
     {

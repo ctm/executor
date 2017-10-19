@@ -21,8 +21,8 @@ typedef Byte DataArray;
 #endif /* defined(__alpha) */
 
 typedef DataArray *DataPtr;
-MAKE_HIDDEN(DataPtr);
-typedef HIDDEN_DataPtr *DataHandle;
+
+typedef GUEST<DataPtr> *DataHandle;
 
 struct ListRec { GUEST_STRUCT;
     GUEST< Rect> rView;
@@ -50,8 +50,8 @@ struct ListRec { GUEST_STRUCT;
     GUEST< INTEGER[1]> cellArray;
 };
 typedef ListRec *ListPtr;
-MAKE_HIDDEN(ListPtr);
-typedef HIDDEN_ListPtr *ListHandle;
+
+typedef GUEST<ListPtr> *ListHandle;
 
 #define lDoVAutoscroll	2
 #define lDoHAutoscroll	1

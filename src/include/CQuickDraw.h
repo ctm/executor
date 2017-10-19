@@ -5,12 +5,8 @@
 #include "WindowMgr.h"
 
 namespace Executor {
-typedef HIDDEN_CGrafPtr *HIDDEN_CGrafPtr_Ptr;
-MAKE_HIDDEN(HIDDEN_CGrafPtr_Ptr);
-
-
-#define theCPort	(STARH (STARH ((HIDDEN_HIDDEN_CGrafPtr_Ptr *) SYN68K_TO_US(a5))))
-#define theCPortX	((*STARH ((HIDDEN_HIDDEN_CGrafPtr_Ptr *) SYN68K_TO_US(a5))))
+#define theCPort	(STARH (STARH ((GUEST<GUEST<CGrafPtr>*> *) SYN68K_TO_US(a5))))
+#define theCPortX	((*STARH ((GUEST<GUEST<CGrafPtr>*> *) SYN68K_TO_US(a5))))
 
 #define minSeed 1024
 
@@ -23,27 +19,27 @@ typedef struct ITab { GUEST_STRUCT;
     GUEST< unsigned char[1]> iTTable;
 } *ITabPtr;
 
-MAKE_HIDDEN(ITabPtr);
-typedef HIDDEN_ITabPtr *ITabHandle;
+
+typedef GUEST<ITabPtr> *ITabHandle;
 
 typedef struct GDevice *GDPtr;
 typedef GDPtr GDevicePtr;
-MAKE_HIDDEN(GDevicePtr);
-typedef HIDDEN_GDevicePtr *GDHandle;
-MAKE_HIDDEN(GDHandle);
+
+typedef GUEST<GDevicePtr> *GDHandle;
+
 
 typedef struct PACKED SProcRec *SProcPtr;
-MAKE_HIDDEN(SProcPtr);
-typedef HIDDEN_SProcPtr *SProcHndl;
+
+typedef GUEST<SProcPtr> *SProcHndl;
 struct SProcRec { GUEST_STRUCT;
     GUEST< SProcHndl> nxtSrch;
     GUEST< ProcPtr> srchProc;
 };
 
 typedef struct PACKED CProcRec *CProcPtr;
-MAKE_HIDDEN(CProcPtr);
 
-typedef HIDDEN_CProcPtr *CProcHndl;
+
+typedef GUEST<CProcPtr> *CProcHndl;
 struct CProcRec { GUEST_STRUCT;
     GUEST< CProcHndl> nxtComp;
     GUEST< ProcPtr> compProc;
@@ -128,8 +124,8 @@ typedef enum
 #define pmFgUpdates ((pmUpdates) pmFgUpdates_enum)
 #define pmAllUpdates ((pmUpdates) pmAllUpdates_enum)
 
-MAKE_HIDDEN(PalettePtr);
-typedef HIDDEN_PalettePtr *PaletteHandle;
+
+typedef GUEST<PalettePtr> *PaletteHandle;
 
 /* return TRUE if `maybe_graphics_world' points to a graphics world,
    and not a graf port or cgraf port */
@@ -165,8 +161,8 @@ typedef struct CommonSpec { GUEST_STRUCT;
 } CommentSpec;
 
 typedef CommentSpec *CommentSpecPtr;
-MAKE_HIDDEN(CommentSpecPtr);
-typedef HIDDEN_CommentSpecPtr *CommentSpecHandle;
+
+typedef GUEST<CommentSpecPtr> *CommentSpecHandle;
 
 struct FontSpec { GUEST_STRUCT;
     GUEST< int16> pictFontID;
@@ -177,8 +173,8 @@ struct FontSpec { GUEST_STRUCT;
 };
 
 typedef FontSpec *FontSpecPtr;
-MAKE_HIDDEN(FontSpecPtr);
-typedef HIDDEN_FontSpecPtr *FontSpecHandle;
+
+typedef GUEST<FontSpecPtr> *FontSpecHandle;
 
 
 
@@ -214,8 +210,8 @@ struct PictInfo { GUEST_STRUCT;
 };
 
 typedef PictInfo *PictInfoPtr;
-MAKE_HIDDEN(PictInfoPtr);
-typedef HIDDEN_PictInfoPtr *PictInfoHandle;
+
+typedef GUEST<PictInfoPtr> *PictInfoHandle;
 
 typedef int32 PictInfoID;
 
@@ -391,9 +387,9 @@ extern pascal trap void C_CopyPalette (PaletteHandle src_palette,
 				       int16 n_entries);
 
 extern pascal trap void C_SetWinColor (WindowPtr, CTabHandle);
-extern pascal trap BOOLEAN C_GetAuxWin (WindowPtr, HIDDEN_AuxWinHandle *);
+extern pascal trap BOOLEAN C_GetAuxWin (WindowPtr, GUEST<AuxWinHandle> *);
 
-extern pascal trap void C_GetCWMgrPort (HIDDEN_CGrafPtr *);
+extern pascal trap void C_GetCWMgrPort (GUEST<CGrafPtr> *);
 
 /* QDExtensions trap */
 extern pascal trap QDErr C_NewGWorld (GWorldPtr *, INTEGER, Rect *, CTabHandle, GDHandle, GWorldFlags);
@@ -442,9 +438,9 @@ extern pascal trap PicHandle C_OpenCPicture (OpenCPicParams *newheaderp);
 
 #if 0
 #if !defined (TheGDevice_H)
-extern HIDDEN_GDHandle	TheGDevice_H;
-extern HIDDEN_GDHandle	MainDevice_H;
-extern HIDDEN_GDHandle	DeviceList_H;
+extern GUEST<GDHandle>	TheGDevice_H;
+extern GUEST<GDHandle>	MainDevice_H;
+extern GUEST<GDHandle>	DeviceList_H;
 #endif
 
 #if SIZEOF_CHAR_P == 4 && !FORCE_EXPERIMENTAL_PACKED_MACROS

@@ -258,7 +258,7 @@ P1(PUBLIC pascal trap, void, ShowWindow, WindowPtr, w)
 
 P2(PUBLIC pascal trap, void, SendBehind, WindowPtr, w, WindowPtr, behind)
 {
-  HIDDEN_WindowPeek *wpp;
+  GUEST<WindowPeek> *wpp;
   WindowPeek oldfront, newfront, oldbehind;
   RgnHandle temprgn;
   Rect r;
@@ -279,9 +279,9 @@ P2(PUBLIC pascal trap, void, SendBehind, WindowPtr, w, WindowPtr, behind)
   if ((!WINDOW_NEXT_WINDOW (w) && !behind)
       || WINDOW_NEXT_WINDOW (w) == (WindowPeek) w)
 /*-->*/ return;
-  for (wpp = (HIDDEN_WindowPeek *) &WindowList;
+  for (wpp = (GUEST<WindowPeek> *) &WindowList;
        *wpp && STARH(wpp) != (WindowPeek) w;
-       wpp = (HIDDEN_WindowPeek *) &WINDOW_NEXT_WINDOW_X (STARH (wpp)))
+       wpp = (GUEST<WindowPeek> *) &WINDOW_NEXT_WINDOW_X (STARH (wpp)))
     ;
   if (! *wpp)
 /*-->*/	return;
@@ -297,9 +297,9 @@ P2(PUBLIC pascal trap, void, SendBehind, WindowPtr, w, WindowPtr, behind)
 #define SEND_BEHIND
 #if defined (SEND_BEHIND)
 	if (!*wpp) /* what if 'w' is the only window? */
-	  wpp = (HIDDEN_WindowPeek *) &WindowList;
+	  wpp = (GUEST<WindowPeek> *) &WindowList;
     	for (; WINDOW_NEXT_WINDOW_X (STARH (wpp));
-	     wpp = (HIDDEN_WindowPeek *) &WINDOW_NEXT_WINDOW_X (STARH (wpp)))
+	     wpp = (GUEST<WindowPeek> *) &WINDOW_NEXT_WINDOW_X (STARH (wpp)))
 	  ;
 	if (STARH (wpp) != (WindowPeek) w) 
 	  WINDOW_NEXT_WINDOW_X (STARH (wpp)) = (WindowPeek) RM (w);

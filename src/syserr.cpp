@@ -267,7 +267,7 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
 {
     GrafPort alertport;
     Region viscliprgn;
-    HIDDEN_RgnPtr rp;
+    GUEST<RgnPtr> rp;
     Rect r;
     struct adef *ap;
     char quickbytes[grafSize];

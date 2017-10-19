@@ -78,9 +78,9 @@ enum
 
 typedef struct __cr ControlRecord;
 typedef ControlRecord *ControlPtr;
-MAKE_HIDDEN(ControlPtr);
-typedef HIDDEN_ControlPtr *ControlHandle;
-MAKE_HIDDEN(ControlHandle);
+
+typedef GUEST<ControlPtr> *ControlHandle;
+
 }
 
 #include "WindowMgr.h"
@@ -108,13 +108,13 @@ typedef struct CtlCTab { GUEST_STRUCT;
     GUEST< INTEGER> ctSize;
     GUEST< cSpecArray> ctTable;
 } *CCTabPtr;
-MAKE_HIDDEN(CCTabPtr);
-typedef HIDDEN_CCTabPtr *CCTabHandle;
+
+typedef GUEST<CCTabPtr> *CCTabHandle;
 
 typedef struct AuxCtlRec *AuxCtlPtr;
-MAKE_HIDDEN(AuxCtlPtr);
-typedef HIDDEN_AuxCtlPtr *AuxCtlHandle;
-MAKE_HIDDEN(AuxCtlHandle);
+
+typedef GUEST<AuxCtlPtr> *AuxCtlHandle;
+
 
 struct AuxCtlRec { GUEST_STRUCT;
     GUEST< AuxCtlHandle> acNext;
@@ -193,11 +193,11 @@ extern pascal trap void C_SetCtlAction( ControlHandle c,
 extern pascal trap ProcPtr C_GetCtlAction( ControlHandle c ); extern pascal trap ProcPtr P_GetCtlAction( ControlHandle c); 
 extern pascal trap INTEGER C_GetCVariant( ControlHandle c ); extern pascal trap INTEGER P_GetCVariant( ControlHandle c); 
 extern pascal trap BOOLEAN C_GetAuxCtl( ControlHandle c, 
- HIDDEN_AuxCtlHandle *acHndl ); extern pascal trap BOOLEAN P_GetAuxCtl( ControlHandle c, 
+ GUEST<AuxCtlHandle> *acHndl ); extern pascal trap BOOLEAN P_GetAuxCtl( ControlHandle c, 
  AuxCtlHandle acHndl ); 
 extern pascal trap INTEGER C_FindControl( Point p, 
- WindowPtr w, HIDDEN_ControlHandle *cp ); extern pascal trap INTEGER P_FindControl( Point p, 
- WindowPtr w, HIDDEN_ControlHandle *cp ); 
+ WindowPtr w, GUEST<ControlHandle> *cp ); extern pascal trap INTEGER P_FindControl( Point p, 
+ WindowPtr w, GUEST<ControlHandle> *cp ); 
 extern pascal trap INTEGER C_TrackControl( 
  ControlHandle c, Point p, ProcPtr a ); extern pascal trap INTEGER P_TrackControl( 
  ControlHandle c, Point p, ProcPtr a ); 

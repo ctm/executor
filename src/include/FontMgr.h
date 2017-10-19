@@ -153,30 +153,30 @@ struct FontRec { GUEST_STRUCT;
 };
 
 typedef FamRec *FamRecPtr;
-MAKE_HIDDEN(FamRecPtr);
-typedef HIDDEN_FamRecPtr *FamRecHandle;
-MAKE_HIDDEN(FamRecHandle);
+
+typedef GUEST<FamRecPtr> *FamRecHandle;
+
 
 typedef WidthTable *WidthTablePtr;
-MAKE_HIDDEN(WidthTablePtr);
-typedef HIDDEN_WidthTablePtr *WidthTableHandle;
-MAKE_HIDDEN(WidthTableHandle);
+
+typedef GUEST<WidthTablePtr> *WidthTableHandle;
+
 
 #if 0
 #if !defined (JSwapFont_H)
-extern HIDDEN_ProcPtr 	JSwapFont_H;
-extern HIDDEN_Handle 	WidthListHand_H;
-extern HIDDEN_Handle 	ROMFont0_H;
+extern GUEST<ProcPtr> 	JSwapFont_H;
+extern GUEST<Handle> 	WidthListHand_H;
+extern GUEST<Handle> 	ROMFont0_H;
 extern INTEGER 	ApFontID;
 extern FMInput 	ROMlib_myfmi;
 extern FMOutput 	ROMlib_fmo;
 extern Byte 	FScaleDisable;
-extern HIDDEN_WidthTablePtr WidthPtr_H;
-extern HIDDEN_WidthTableHandle WidthTabHandle_H;
+extern GUEST<WidthTablePtr> WidthPtr_H;
+extern GUEST<WidthTableHandle> WidthTabHandle_H;
 extern LONGINT 	IntlSpec;
 extern INTEGER 	SysFontFam;
 extern INTEGER 	SysFontSiz;
-extern HIDDEN_FamRecHandle LastFOND_H;
+extern GUEST<FamRecHandle> LastFOND_H;
 extern INTEGER 	fondid;
 extern Byte 	FractEnable;
 #endif

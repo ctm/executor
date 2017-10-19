@@ -69,7 +69,6 @@ namespace Executor {
 
 
 typedef GrafPtr WindowPtr;
-typedef HIDDEN_GrafPtr HIDDEN_WindowPtr;
 
 typedef CGrafPtr CWindowPtr;
 
@@ -97,7 +96,7 @@ struct WindowRecord {
     GUEST< LONGINT> refCon;
 };
 typedef WindowRecord *WindowPeek;
-MAKE_HIDDEN(WindowPeek);
+
 
 
 struct WStateData { GUEST_STRUCT;
@@ -112,9 +111,9 @@ struct WStateData { GUEST_STRUCT;
 #define wInZoomOut 6
 
 typedef struct AuxWinRec *AuxWinPtr;
-MAKE_HIDDEN(AuxWinPtr);
-typedef HIDDEN_AuxWinPtr *AuxWinHandle;
-MAKE_HIDDEN(AuxWinHandle);
+
+typedef GUEST<AuxWinPtr> *AuxWinHandle;
+
 
 struct AuxWinRec { GUEST_STRUCT;
     GUEST< AuxWinHandle> awNext;
@@ -128,20 +127,20 @@ struct AuxWinRec { GUEST_STRUCT;
 
 #if 0
 #if !defined (WindowList_H)
-extern HIDDEN_WindowPeek 	WindowList_H;
-extern HIDDEN_GrafPtr 		WMgrPort_H;
-extern HIDDEN_CGrafPtr 		WMgrCPort_H;
-extern HIDDEN_RgnHandle 	OldStructure_H;
-extern HIDDEN_RgnHandle 	OldContent_H;
-extern HIDDEN_RgnHandle 	GrayRgn_H;
-extern HIDDEN_RgnHandle 	SaveVisRgn_H;
-extern HIDDEN_ProcPtr 		DragHook_H;
-extern HIDDEN_WindowPtr 	CurActivate_H;
-extern HIDDEN_WindowPtr 	CurDeactive_H;
-extern HIDDEN_ProcPtr 		DeskHook_H;
-extern HIDDEN_WindowPtr 	GhostWindow_H;
-extern HIDDEN_AuxWinHandle	AuxWinHead_H;
-extern HIDDEN_PixPatHandle DeskCPat_H;
+extern GUEST<WindowPeek> 	WindowList_H;
+extern GUEST<GrafPtr> 		WMgrPort_H;
+extern GUEST<CGrafPtr> 		WMgrCPort_H;
+extern GUEST<RgnHandle> 	OldStructure_H;
+extern GUEST<RgnHandle> 	OldContent_H;
+extern GUEST<RgnHandle> 	GrayRgn_H;
+extern GUEST<RgnHandle> 	SaveVisRgn_H;
+extern GUEST<ProcPtr> 		DragHook_H;
+extern GUEST<WindowPtr> 	CurActivate_H;
+extern GUEST<WindowPtr> 	CurDeactive_H;
+extern GUEST<ProcPtr> 		DeskHook_H;
+extern GUEST<WindowPtr> 	GhostWindow_H;
+extern GUEST<AuxWinHandle>	AuxWinHead_H;
+extern GUEST<PixPatHandle> DeskCPat_H;
 extern INTEGER 	SaveUpdate;
 extern INTEGER 	PaintWhite;
 extern Pattern 	DragPattern;
@@ -176,7 +175,7 @@ extern pascal trap void C_ShowWindow( WindowPtr w ); extern pascal trap void P_S
 extern pascal trap void C_SendBehind( WindowPtr w, WindowPtr behind ); extern pascal trap void P_SendBehind( WindowPtr w, WindowPtr behind); 
 extern pascal trap void C_DrawGrowIcon( WindowPtr w ); extern pascal trap void P_DrawGrowIcon( WindowPtr w); 
 extern pascal trap void C_InitWindows( void  ); extern pascal trap void P_InitWindows( void ); 
-extern pascal trap void C_GetWMgrPort( HIDDEN_GrafPtr *wp ); extern pascal trap void P_GetWMgrPort( HIDDEN_GrafPtr *wp); 
+extern pascal trap void C_GetWMgrPort( GUEST<GrafPtr> *wp ); extern pascal trap void P_GetWMgrPort( GUEST<GrafPtr> *wp); 
 extern pascal trap WindowPtr C_NewWindow( Ptr wst, Rect *r, 
  StringPtr title, BOOLEAN vis, INTEGER procid, WindowPtr behind, 
  BOOLEAN gaflag, LONGINT rc );extern pascal trap WindowPtr P_NewWindow( Ptr wst, Rect *r, 
@@ -209,7 +208,7 @@ extern pascal trap void C_CalcVisBehind( WindowPeek w,
  RgnHandle clobbered ); 
 extern pascal trap void C_DrawNew( WindowPeek w, BOOLEAN flag ); extern pascal trap void P_DrawNew( WindowPeek w, BOOLEAN flag); 
 extern pascal trap INTEGER C_GetWVariant( WindowPtr w ); extern pascal trap INTEGER P_GetWVariant( WindowPtr w); 
-extern pascal trap INTEGER C_FindWindow( Point p, HIDDEN_WindowPtr *wpp ); extern pascal trap INTEGER P_FindWindow( Point p, HIDDEN_WindowPtr *wpp); 
+extern pascal trap INTEGER C_FindWindow( Point p, GUEST<WindowPtr> *wpp ); extern pascal trap INTEGER P_FindWindow( Point p, GUEST<WindowPtr> *wpp); 
 extern pascal trap BOOLEAN C_TrackBox( WindowPtr wp, 
  Point pt, INTEGER part ); extern pascal trap BOOLEAN P_TrackBox( WindowPtr wp, 
  Point pt, INTEGER part ); 

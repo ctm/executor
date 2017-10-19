@@ -18,8 +18,8 @@ struct itmstr { GUEST_STRUCT;
 };
 
 typedef itmstr *itmp;
-MAKE_HIDDEN(itmp);
-typedef HIDDEN_itmp *itmh;
+
+typedef GUEST<itmp> *itmh;
 
 #define DIALOG_RES_HAS_POSITION_P(dlogh)	\
   ((  20					\
@@ -59,8 +59,8 @@ struct altstr { GUEST_STRUCT;
 };
 
 typedef altstr *altp;
-MAKE_HIDDEN(altp);
-typedef HIDDEN_altp *alth;
+
+typedef GUEST<altp> *alth;
 
 struct dlogstr { GUEST_STRUCT;
     GUEST< Rect> dlgr;
@@ -74,8 +74,8 @@ struct dlogstr { GUEST_STRUCT;
     GUEST< char> dlglen;
 };
 typedef dlogstr *dlogp;
-MAKE_HIDDEN(dlogp);
-typedef HIDDEN_dlogp *dlogh;
+
+typedef GUEST<dlogp> *dlogh;
 
 typedef struct item_style_info { GUEST_STRUCT;
     GUEST< int16> font;

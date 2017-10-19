@@ -77,7 +77,7 @@ P0(PUBLIC pascal trap, INTEGER, PrDrvrVers)
 PRIVATE ControlHandle
 GetDControl (DialogPtr dp, INTEGER itemno)
 {
-  HIDDEN_Handle h;
+  GUEST<Handle> h;
   ControlHandle retval;
   INTEGER unused;
 
@@ -89,7 +89,7 @@ GetDControl (DialogPtr dp, INTEGER itemno)
 PRIVATE Handle
 GetDIText (DialogPtr dp, INTEGER itemno)
 {
-  HIDDEN_Handle h;
+  GUEST<Handle> h;
   Handle retval;
   INTEGER unused;
 
@@ -595,7 +595,7 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_stlfilterproc, DialogPeek, dp,
 	Point localp;
 	GrafPtr gp;
 	Rect r;
-	HIDDEN_Handle h;
+	GUEST<Handle> h;
 	INTEGER unused;
 
 	glocalp = evt->where;
@@ -942,7 +942,7 @@ adjust_menu_common (TPPrDlg dlg, INTEGER item, heading_t heading, ini_key_t defk
 	      }
 	    if (max_wid)
 	      {
-		HIDDEN_Handle h;
+		GUEST<Handle> h;
 		Rect r;
 		INTEGER unused;
 
@@ -1077,7 +1077,7 @@ P1(PUBLIC pascal trap, TPPrDlg, PrStlInit, THPrint, hPrint)
 	  if (ROMlib_new_printer_name || ROMlib_new_label) {
 	    Rect r;
 	    INTEGER item_type;
-	    HIDDEN_Handle hh;
+	    GUEST<Handle> hh;
 	    Handle h;
 	    Str255 str;
 	    int orig, new1;

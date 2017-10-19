@@ -31,8 +31,8 @@ typedef char *PatPtr;
 #warning "Bad PatPtr def ... 'cause of problems with my gcc mods -- ctm"
 #endif /* defined(__alpha) */
 
-MAKE_HIDDEN(PatPtr);
-typedef HIDDEN_PatPtr *PatHandle;
+
+typedef GUEST<PatPtr> *PatHandle;
 
 /* DO NOT DELETE THIS LINE */
 extern pascal trap Fract C_FracSqrt( Fract x ); extern pascal trap Fract P_FracSqrt( Fract x); 
@@ -50,8 +50,8 @@ extern void GetIndString( StringPtr s, INTEGER sid, INTEGER index );
 extern pascal trap LONGINT C_Munger( Handle h, LONGINT off, Ptr p1, 
  LONGINT len1, Ptr p2, LONGINT len2 ); extern pascal trap LONGINT P_Munger( Handle h, LONGINT off, Ptr p1, 
  LONGINT len1, Ptr p2, LONGINT len2 ); 
-extern pascal trap void C_PackBits( HIDDEN_Ptr *sp, HIDDEN_Ptr *dp, INTEGER len ); extern pascal trap void P_PackBits( HIDDEN_Ptr *sp, HIDDEN_Ptr *dp, INTEGER len); 
-extern pascal trap void C_UnpackBits( HIDDEN_Ptr *sp, HIDDEN_Ptr *dp, INTEGER len ); extern pascal trap void P_UnpackBits( HIDDEN_Ptr *sp, HIDDEN_Ptr *dp, INTEGER len); 
+extern pascal trap void C_PackBits( GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len ); extern pascal trap void P_PackBits( GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len); 
+extern pascal trap void C_UnpackBits( GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len ); extern pascal trap void P_UnpackBits( GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len); 
 extern pascal trap BOOLEAN C_BitTst( Ptr bp, LONGINT bn ); extern pascal trap BOOLEAN P_BitTst( Ptr bp, LONGINT bn); 
 extern pascal trap void C_BitSet( Ptr bp, LONGINT bn ); extern pascal trap void P_BitSet( Ptr bp, LONGINT bn); 
 extern pascal trap void C_BitClr( Ptr bp, LONGINT bn ); extern pascal trap void P_BitClr( Ptr bp, LONGINT bn); 

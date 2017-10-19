@@ -6,7 +6,7 @@
 namespace Executor {
 extern StringHandle ROMlib_phoney_name_string;
 
-extern void unpack_int16_bits (HIDDEN_Ptr *sp, HIDDEN_Ptr *dp, INTEGER len);
+extern void unpack_int16_bits (GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len);
 extern trap void R_Fix2X (void *dummyretpc, Fixed x, extended80 *ret);
 extern trap void R_Frac2X(void *dummyretpc, Fract x, extended80 *ret);
 }

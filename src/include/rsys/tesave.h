@@ -120,15 +120,15 @@ struct tehidden { GUEST_STRUCT;
 };
 
 typedef tehidden *tehiddenp;
-MAKE_HIDDEN(tehiddenp);
-typedef HIDDEN_tehiddenp *tehiddenh;
-MAKE_HIDDEN(tehiddenh);
+
+typedef GUEST<tehiddenp> *tehiddenh;
+
 
 #define TEAUTOVIEWBIT	1	/* found by dumping the handle
 				   before and after calling TEAutoView */
 
-#define TEHIDDENH(teh)	(STARH((HIDDEN_tehiddenh *)&(MR(*teh))->recalBack))
-#define TEHIDDENHX(teh)	((*(HIDDEN_tehiddenh *)&(MR(*teh))->recalBack))
+#define TEHIDDENH(teh)	(STARH((GUEST<tehiddenh> *)&(MR(*teh))->recalBack))
+#define TEHIDDENHX(teh)	((*(GUEST<tehiddenh> *)&(MR(*teh))->recalBack))
 
 extern void ROMlib_recompute_caret (TEHandle te);
 }
