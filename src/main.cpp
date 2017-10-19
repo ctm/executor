@@ -1831,7 +1831,7 @@ int main(int argc, char** argv)
 
   setupsignals ();
 
-  Ticks_UL.u = 0;
+  Ticks = 0;
   nilhandle = 0;		/* so nil dereferences "work" */
 
   memset (&EventQueue, 0, sizeof (EventQueue));

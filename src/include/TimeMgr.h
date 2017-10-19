@@ -9,7 +9,7 @@
  */
 
 namespace Executor {
-struct TMTask : GuestStruct {
+struct TMTask { GUEST_STRUCT;
     GUEST< QElemPtr> qLink;
     GUEST< INTEGER> qType;
     GUEST< ProcPtr> tmAddr;

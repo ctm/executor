@@ -747,12 +747,12 @@ STUB(Frac2X)
 
 STUB(HandToHand)
 {
-    HIDDEN_Handle vp;
+    Handle vp;
 
     SAVE_A1_D1_D2();
-    vp.p = (Handle) SYN68K_TO_US_CHECK0(EM_A0);
-    EM_D0 = HandToHand((HIDDEN_Handle *) &vp);
-    EM_A0 = (long) US_TO_SYN68K_CHECK0(vp.p);
+    vp = (Handle) SYN68K_TO_US_CHECK0(EM_A0);
+    EM_D0 = HandToHand(&vp);
+    EM_A0 = (long) US_TO_SYN68K_CHECK0(vp);
     RESTORE_A1_D1_D2();
     ADJUST_CC_BASED_ON_D0();
     RTS();
@@ -760,12 +760,12 @@ STUB(HandToHand)
 
 STUB(PtrToHand)
 {
-    HIDDEN_Handle dsthand;
+    Handle dsthand;
 
     SAVE_A1_D1_D2();
     EM_D0 = PtrToHand((Ptr) SYN68K_TO_US_CHECK0(EM_A0),
-		      (HIDDEN_Handle *) &dsthand, EM_D0);
-    EM_A0 = US_TO_SYN68K_CHECK0 ((long) dsthand.p);
+		      &dsthand, EM_D0);
+    EM_A0 = US_TO_SYN68K_CHECK0 ((long) dsthand);
     RESTORE_A1_D1_D2();
     ADJUST_CC_BASED_ON_D0();
     RTS();

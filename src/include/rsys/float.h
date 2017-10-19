@@ -55,7 +55,7 @@ typedef double ieee_t;
 /* 68k 96 bit IEEE FP memory representation. */
 #if defined (mc68000)
 typedef union {
-struct  : GuestStruct {
+struct  { GUEST_STRUCT;
     GUEST< unsigned short> sgn_and_exp;
     GUEST< unsigned short> zero;
     GUEST< unsigned long long> man;
@@ -75,10 +75,6 @@ struct PACKED i386_x80_t {
 #endif
 
 #if defined(__alpha)
-// ### Struct needs manual conversion to GUEST<...>
-//     ULONGINT man_hi:20;
-// ### Struct needs manual conversion to GUEST<...>
-//     ULONGINT man_hi:20;
 typedef struct PACKED {
     ULONGINT man_lo;
     ULONGINT man_hi:20;

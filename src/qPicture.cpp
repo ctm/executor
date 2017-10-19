@@ -24,7 +24,7 @@ PUBLIC PicHandle Executor::ROMlib_OpenPicture_helper (const Rect *pf,
 {
     piccachehand pch;
     PicHandle ph;
-    INTEGER *ip;
+    GUEST<INTEGER> *ip;
     RgnHandle temprh;
     
     HidePen();
@@ -149,17 +149,17 @@ PRIVATE void updateapat( Pattern srcpat, Pattern dstpat, INTEGER opcode)
     }
 }
 
-PRIVATE void updateaninteger( INTEGER src, INTEGER *dstp, INTEGER opcode)
+PRIVATE void updateaninteger( INTEGER src, GUEST<INTEGER> *dstp, INTEGER opcode)
 {
-    src = CW(src);
-    if (*dstp != src) {
-	*dstp = src;
+    GUEST<INTEGER> gsrc = CW(src);
+    if (*dstp != gsrc) {
+	*dstp = gsrc;
 	PICOP(opcode);
-	PICWRITE(&src, sizeof(INTEGER));
+	PICWRITE(&gsrc, sizeof(INTEGER));
     }
 }
 
-PRIVATE void updatealongint( const LONGINT *srcp, LONGINT *dstp,
+PRIVATE void updatealongint( const GUEST<LONGINT> *srcp, GUEST<LONGINT> *dstp,
 								INTEGER opcode)
 {
     if (*dstp != *srcp) {
@@ -314,8 +314,8 @@ PRIVATE void updatepnsize( void )
     piccachehand pch;
 
     pch = (piccachehand) PORT_PIC_SAVE (thePort);
-    updatealongint((LONGINT *) &thePort->pnSize,
-				   (LONGINT *) &HxX(pch, picpnsize), OP_PnSize);
+    updatealongint((GUEST<LONGINT> *) &thePort->pnSize,
+				   (GUEST<LONGINT> *) &HxX(pch, picpnsize), OP_PnSize);
 }
 
 PRIVATE void updatetxface( void )
@@ -335,7 +335,7 @@ PRIVATE void updatetxface( void )
     }
 }
 
-PRIVATE void updateoval( Point *ovp )
+PRIVATE void updateoval( GUEST<Point> *ovp )
 {
     piccachehand pch;
     
@@ -404,7 +404,7 @@ PUBLIC void Executor::ROMlib_drawingverbrectpicupdate( GrafVerb v, Rect *rp )
 }
 
 PUBLIC void Executor::ROMlib_drawingverbrectovalpicupdate( GrafVerb v, Rect *rp,
-								   Point *ovp )
+								   GUEST<Point> *ovp )
 {
     ROMlib_drawingverbrectpicupdate( v, rp );
     updateoval( ovp );

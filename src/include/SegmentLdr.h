@@ -19,7 +19,7 @@ extern _NORET_1_ pascal trap void C_ExitToShell( void ) _NORET_2_;
 #define appOpen		0
 #define appPrint	1
 
-struct AppFile : GuestStruct {
+struct AppFile { GUEST_STRUCT;
     GUEST< INTEGER> vRefNum;
     GUEST< OSType> fType;
     GUEST< INTEGER> versNum;
@@ -28,6 +28,7 @@ struct AppFile : GuestStruct {
 
 #define hwParamErr (-502)
 
+#if 0
 #if !defined (AppParmHandle_H)
 extern HIDDEN_Handle 	AppParmHandle_H;
 extern Byte 	loadtrap;
@@ -39,6 +40,7 @@ extern INTEGER 	CurPageOption;
 #endif
 
 #define AppParmHandle	(AppParmHandle_H.p)
+#endif
 
 extern void flushcache (void); 
 

@@ -95,8 +95,8 @@ P2(PUBLIC pascal trap, void, GetFontName, INTEGER, fnum,	/* IMI-223 */
 							     StringPtr, fnam)
 {
     Handle h;
-    INTEGER i;
-    ResType rest;
+    GUEST<INTEGER> i;
+    GUEST<ResType> rest;
     
     if (fnum == systemFont)
 	fnum = CW(SysFontFam);
@@ -127,7 +127,7 @@ P2(PUBLIC pascal trap, void, GetFNum, StringPtr, fnam,		/* IMI-223 */
 						       GUEST<INTEGER> *, fnum)
 {
     Handle h;
-    ResType rest;
+    GUEST<ResType> rest;
     BOOLEAN shift;
     
     SetResLoad(FALSE);
@@ -186,7 +186,7 @@ namespace Executor {
   PRIVATE void mungfmo(ctrip,FMOutput*);
   PRIVATE BOOLEAN widthlistmatch(FMInput *);
   PRIVATE int countones(unsigned short);
-  PRIVATE INTEGER *findfondwidths();
+  PRIVATE GUEST<INTEGER> *findfondwidths();
   PRIVATE void buildtable(INTEGER);
   PRIVATE void findclosestfont(INTEGER family, INTEGER size,
 							   INTEGER *lesserp, INTEGER *greaterp);
@@ -280,9 +280,9 @@ static INTEGER nhappybits(unsigned short want, unsigned short have)
 
 #define WIDTHBIT	(1 << 1)
 
-A0(PRIVATE, INTEGER *, findfondwidths)
+A0(PRIVATE, GUEST<INTEGER> *, findfondwidths)
 {
-    INTEGER *retval, *numentriesminusone;
+    GUEST<INTEGER> *retval, *numentriesminusone;
     LONGINT offset;
     INTEGER bitsmatched, newbits;
     INTEGER want;
@@ -302,7 +302,7 @@ A0(PRIVATE, INTEGER *, findfondwidths)
 	tabsize = (CW(STARH((FHandle)MR(LastFOND))->ffLastChar) -
 		   CW(STARH((FHandle)MR(LastFOND))->ffFirstChar) + 3)
 					   * sizeof(INTEGER) + sizeof(INTEGER);
-	numentriesminusone = (INTEGER *)
+	numentriesminusone = (GUEST<INTEGER> *)
 		    ((char *) &STARH((FHandle)MR(LastFOND))->ffFlags + offset);
 	i =Cx( *numentriesminusone) + 1;
 	widp = (widentry_t *) (numentriesminusone + 1);
@@ -334,10 +334,12 @@ Executor::font_width_expand (Fixed width, Fixed fixed_extra, Fixed hOutputInvers
 typedef enum { FontFract, FontInt, FondFract } howtobuild_t;
 
 PRIVATE void buildtabdata(howtobuild_t howtobuild, INTEGER extra,
-						       INTEGER *fondwidthtable)
+						       GUEST<INTEGER> *fondwidthtable)
 {
-    INTEGER c, firstchar, lastchar, *widp, width;
-    Fixed *p, *ep, misswidth, hOutputInverse, fixed_extra;
+    INTEGER c, firstchar, lastchar, width;
+    GUEST<INTEGER> *widp;
+    GUEST<Fixed> *p, *ep;
+    Fixed misswidth, hOutputInverse, fixed_extra;
     FontRec *fp;
     
     fp = MR( *(FontRec **)MR(WIDTHPTR->tabFont));
@@ -402,7 +404,7 @@ PRIVATE void buildtabdata(howtobuild_t howtobuild, INTEGER extra,
 A1(PRIVATE, void, buildtable, INTEGER, extra)
 {
     howtobuild_t howtobuild;
-    INTEGER *fondwidthtable;
+    GUEST<INTEGER> *fondwidthtable;
     Fixed tempfix;
     INTEGER numerh, numerv, denomh, denomv;
 
@@ -465,8 +467,9 @@ A1(PRIVATE, void, buildtable, INTEGER, extra)
 A4(PRIVATE, void, findclosestfont, INTEGER, family, INTEGER, size,
 				       INTEGER *, lesserp, INTEGER *, greaterp)
 {
-    INTEGER i, lesser, greater, id, newsize, nres;
-    ResType rest;
+    INTEGER i, lesser, greater, newsize, nres;
+    GUEST<ResType> rest;
+    GUEST<INTEGER> id_s;
     Handle h;
 
     lesser = 0;
@@ -475,8 +478,9 @@ A4(PRIVATE, void, findclosestfont, INTEGER, family, INTEGER, size,
     nres = CountResources(TICK("FONT"));	/* how about NFNT? */
     for (i = 1; i <= nres; i++) {
 	h = GetIndResource(TICK("FONT"), i);
-	GetResInfo(h, &id, &rest, (StringPtr) 0);
-	if (((unsigned short) id >> 7) == family) {
+        GetResInfo(h, &id_s, &rest, (StringPtr) 0);
+        INTEGER id = id_s.get();
+	if (((unsigned short) id >> 7) == family) {     // ### WTF ENDIAN
 	    if ((newsize = id & ((1 << 7) - 1)) <= size) {
 		if (newsize > lesser)
 		    lesser = newsize;
@@ -496,7 +500,8 @@ A5(PRIVATE, void, findclosestfond, FHandle, fh, INTEGER, size,
 {
     fatabentry *p, *ep;
     INTEGER newsize;
-    INTEGER powerof2, lesser, greater, *ip;
+    INTEGER powerof2, lesser, greater;
+    GUEST<INTEGER> *ip;
 
     powerof2 = 0;
     lesser = 0;
@@ -557,7 +562,8 @@ A0(PRIVATE, INTEGER, closestface)	/* no args, uses WIDTHPTR */
 {
     fatabentry *p, *ep, *bestp;
     INTEGER size;
-    INTEGER *ip, nmatch, want, newmatch;
+    GUEST<INTEGER> *ip;
+    INTEGER nmatch, want, newmatch;
 
     bestp = 0;
     size = Cx(WIDTHPTR->fSize);
@@ -867,7 +873,7 @@ P1(PUBLIC pascal trap, FMOutPtr, FMSwapFont, FMInput *, fmip)	/* IMI-223 */
     fmip->size   = savesize;
     fmip->family = savefamily;
     HUnlock((Handle) MR(WidthTabHandle));
-    LastFOND = (FamRecHandle) WIDTHPTR->fHand;
+    LastFOND = guest_cast<FamRecHandle>(WIDTHPTR->fHand);
     return &ROMlib_fmo;
 }
 
@@ -897,7 +903,7 @@ P1(PUBLIC pascal trap, void, FontMetrics, FMetricRec *, metrp)	/* IMIV-32 */
     metrp->descent    = CL(SCALE(Cx(fmop->descent)));
     metrp->leading    = CL(SCALE(Cx(fmop->leading)));
     metrp->widMax     = CL(SCALE(Cx(fmop->widMax)));
-    metrp->wTabHandle = (Handle) WidthTabHandle;
+    metrp->wTabHandle = guest_cast<Handle>( WidthTabHandle );
 }
 
 P1(PUBLIC pascal trap, void, SetFScaleDisable,			/* IMIV-32 */

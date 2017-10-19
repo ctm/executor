@@ -24,7 +24,7 @@ typedef unsigned short UniChar;
 typedef UInt32 HFSCatalogNodeID;
 #endif
 
-struct HFSUniStr255 : GuestStruct {
+struct HFSUniStr255 { GUEST_STRUCT;
     GUEST< UInt16> length;
     GUEST< UniChar[255]> unicode;
 };
@@ -35,28 +35,28 @@ typedef const HFSUniStr255 *ConstHFSUniStr255Param;
  * May need a set of textEncoding values here
  */
 
-struct HFSPlusPermissions : GuestStruct {
+struct HFSPlusPermissions { GUEST_STRUCT;
     GUEST< UInt32> ownerID;
     GUEST< UInt32> groupID;
     GUEST< UInt32> permissions;
     GUEST< UInt32> specialDevice;
 };
 
-struct HFSPlusExtentDescriptor : GuestStruct {
+struct HFSPlusExtentDescriptor { GUEST_STRUCT;
     GUEST< UInt32> startBlock;
     GUEST< UInt32> blockCount;
 };
 
 typedef HFSPlusExtentDescriptor HFSPlusExtentRecord[8];
 
-struct HFSPlusForkData : GuestStruct {
+struct HFSPlusForkData { GUEST_STRUCT;
     GUEST< UInt64> logicalSize;
     GUEST< UInt32> clumpSize;
     GUEST< UInt32> totalBlocks;
     GUEST< HFSPlusExtentRecord> extents;
 };
 
-struct HFSPlusVolumeHeader : GuestStruct {
+struct HFSPlusVolumeHeader { GUEST_STRUCT;
     GUEST< UInt16> signature;
     GUEST< UInt16> version;
     GUEST< UInt32> attributes;
@@ -85,7 +85,7 @@ struct HFSPlusVolumeHeader : GuestStruct {
     GUEST< HFSPlusForkData> startupFile;
 };
 
-struct BTNodeDescriptor : GuestStruct {
+struct BTNodeDescriptor { GUEST_STRUCT;
     GUEST< UInt32> fLink;
     GUEST< UInt32> bLink;
     GUEST< SInt8> kind;
@@ -94,7 +94,7 @@ struct BTNodeDescriptor : GuestStruct {
     GUEST< UInt16> reserved;
 };
 
-struct BTHeaderRec : GuestStruct {
+struct BTHeaderRec { GUEST_STRUCT;
     GUEST< UInt16> treeDepth;
     GUEST< UInt32> rootNode;
     GUEST< UInt32> leafRecords;
@@ -112,13 +112,13 @@ struct BTHeaderRec : GuestStruct {
     GUEST< UInt32[16]> reserved3;
 };
 
-struct HFSPlusCatalogKey : GuestStruct {
+struct HFSPlusCatalogKey { GUEST_STRUCT;
     GUEST< UInt16> keyLength;
     GUEST< HFSCatalogNodeID> parentID;
     GUEST< HFSUniStr255> nodeName;
 };
 
-struct HFSPlusCatalogFolder : GuestStruct {
+struct HFSPlusCatalogFolder { GUEST_STRUCT;
     GUEST< SInt16> recordType;
     GUEST< UInt16> flags;
     GUEST< UInt32> valence;
@@ -135,7 +135,7 @@ struct HFSPlusCatalogFolder : GuestStruct {
     GUEST< UInt32> reserved;
 };
 
-struct HFSPlusCatalogFile : GuestStruct {
+struct HFSPlusCatalogFile { GUEST_STRUCT;
     GUEST< SInt16> recordType;
     GUEST< UInt16> flags;
     GUEST< UInt32> reserved1;
@@ -154,14 +154,14 @@ struct HFSPlusCatalogFile : GuestStruct {
     GUEST< HFSPlusForkData> resourceFork;
 };
 
-struct HFSPlusCatalogThread : GuestStruct {
+struct HFSPlusCatalogThread { GUEST_STRUCT;
     GUEST< SInt16> recordType;
     GUEST< SInt16> reserved;
     GUEST< HFSCatalogNodeID> parentID;
     GUEST< HFSUniStr255> nodeName;
 };
 
-struct HFSPlusExtentKey : GuestStruct {
+struct HFSPlusExtentKey { GUEST_STRUCT;
     GUEST< UInt16> keyLength;
     GUEST< UInt8> forkType;
     GUEST< UInt8> pad;
@@ -169,13 +169,13 @@ struct HFSPlusExtentKey : GuestStruct {
     GUEST< UInt32> startBlock;
 };
 
-struct HFSPlusAttrForkData : GuestStruct {
+struct HFSPlusAttrForkData { GUEST_STRUCT;
     GUEST< UInt32> recordType;
     GUEST< UInt32> reserved;
     GUEST< HFSPlusForkData> theFork;
 };
 
-struct HFSPlusAttrExtents : GuestStruct {
+struct HFSPlusAttrExtents { GUEST_STRUCT;
     GUEST< UInt32> recordType;
     GUEST< UInt32> reserved;
     GUEST< HFSPlusExtentRecord> extents;

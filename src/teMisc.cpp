@@ -42,7 +42,7 @@ Executor::ROMlib_sledgehammer_te (TEHandle te)
   Handle hText;
   char *Text;
   int16 current_lineno;
-  int16 *line_starts;
+  GUEST<int16> *line_starts;
   LHHandle lh_table;
   int te_size;
   int i;
@@ -306,7 +306,7 @@ int16 Executor::te_char_to_run_index (TEStyleHandle te_style, int16 sel)
 int16 Executor::te_char_to_lineno (TEPtr te, int16 sel)
 {
   int16 n_lines;
-  int16 *line_starts;
+  GUEST<int16> *line_starts;
   int16 high, low, current;
   int16 retval;
   int16 current_elt;
@@ -343,7 +343,7 @@ calclhtab (TEHandle teh)
 {
   int16 n_lines;
   StyleRun *current_run;
-  int16 *linestarts;
+  GUEST<int16> *linestarts;
   int16 first_changed;
   int16 orig_height = -1, orig_ascent = -1;
   LHHandle lh_table;
@@ -449,7 +449,7 @@ Executor::ROMlib_caltext (TEHandle te,
 		int16 *first_changed_out, int16 *last_changed_out)
 {
   int16 n_lines;
-  int16 *line_starts;
+  GUEST<int16> *line_starts;
   int16 first_lineno;
   int16 t;
   int16 width;
@@ -631,7 +631,7 @@ Executor::ROMlib_call_TEDoText (TEPtr tp, int16 first, int16 last, int16 what)
 	EM_D3 = (LONGINT) first;
 	EM_D4 = (LONGINT) last;
 	EM_D7 = (LONGINT) what;
-	EM_A0 = (LONGINT) (long) CL ((long) TEDoText);
+	EM_A0 = (LONGINT) (long) CL ((long) TEDoText.raw());
 	CALL_EMULATOR (EM_A0);
 	myd0 = EM_D0;
 	EM_D2 = saved2;

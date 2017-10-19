@@ -12,12 +12,12 @@ typedef unsigned char raw_key_t;
 typedef unsigned char virt_key_t;
 typedef unsigned char modifier_table_number_t;
 
-struct completer_pair_t : GuestStruct {
+struct completer_pair_t { GUEST_STRUCT;
     GUEST< unsigned char> to_look_for;
     GUEST< unsigned char> replacement;
 };
 
-struct completer_t : GuestStruct {
+struct completer_t { GUEST_STRUCT;
     GUEST< INTEGER> n_recs;
     GUEST< completer_pair_t[0]> completer_recs;    /* VARIABLE LENGTH */
 };
@@ -27,7 +27,7 @@ struct completer_t : GuestStruct {
 
 #define COMPLETER_N_RECS(p)		(CW (COMPLETER_N_RECS_X (p)))
 
-struct dead_key_rec_t : GuestStruct {
+struct dead_key_rec_t { GUEST_STRUCT;
     GUEST< modifier_table_number_t> table_number;
     GUEST< virt_key_t> virt_key;
     GUEST< completer_t> completer;    /* VARIABLE LENGTH */
@@ -50,7 +50,7 @@ struct dead_key_rec_t : GuestStruct {
 #define DEAD_KEY_VIRT_KEY(p)		(CB (DEAD_KEY_VIRT_KEY_X (p)))
 #define DEAD_KEY_NO_MATCH(p)		(CB (DEAD_KEY_NO_MATCH_X (p)))
 
-typedef struct kchr_str : GuestStruct {
+typedef struct kchr_str { GUEST_STRUCT;
     GUEST< INTEGER> version;
     GUEST< modifier_table_number_t[256]> modifier_table;
     GUEST< INTEGER> n_tables;

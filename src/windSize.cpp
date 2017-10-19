@@ -262,19 +262,18 @@ P3(PUBLIC pascal trap, LONGINT, GrowWindow, WindowPtr, w, Point, startp,
     WINDCALL((WindowPtr) w, wGrow, (LONGINT) (long) &r);
     while (!GetOSEvent(mUpMask, &ev))
       {
-	ev.where.h = CW(ev.where.h);
-	ev.where.v = CW(ev.where.v);
-        l = PinRect (&pinr, ev.where);
-	ev.where.v = HiWord(l);
-	ev.where.h = LoWord(l);
-        if (p.h != ev.where.h || p.v != ev.where.v)
+        Point ep = ev.where.get();
+	l = PinRect (&pinr, ep);
+	ep.v = HiWord(l);
+	ep.h = LoWord(l);
+        if (p.h != ep.h || p.v != ep.v)
 	  {
             WINDCALL((WindowPtr) w, wGrow, (LONGINT) (long) &r);
-            r.right = CW(CW(r.right) + (ev.where.h - p.h));
-            r.bottom = CW(CW(r.bottom) + (ev.where.v - p.v));
+            r.right = CW(CW(r.right) + (ep.h - p.h));
+            r.bottom = CW(CW(r.bottom) + (ep.v - p.v));
             WINDCALL((WindowPtr) w, wGrow, (LONGINT) (long) &r);
-            p.h = ev.where.h;
-            p.v = ev.where.v;
+            p.h = ep.h;
+            p.v = ep.v;
 	  }
 	CALLDRAGHOOK();
       }

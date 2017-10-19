@@ -217,11 +217,12 @@ P0(PUBLIC pascal trap, void, ObscureCursor)	/* IMI-168 */
 P2(PUBLIC pascal trap, void, ShieldCursor, Rect *, rp, Point, p) /* IMI-474 */
 {
     EventRecord evt;
+    Point ep;
 
     GetOSEvent(0, &evt);
-    evt.where.v = CW(evt.where.v) + p.v;
-    evt.where.h = CW(evt.where.h) + p.h;
-    if (PtInRect(evt.where, rp))
+    ep.v = CW(evt.where.v) + p.v;
+    ep.h = CW(evt.where.h) + p.h;
+    if (PtInRect(ep, rp))
 	HideCursor();
     else
 	wewantpointermovements(-1);
@@ -267,7 +268,7 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
        /* NOTE: use CL below instead of MR because they're overloading
 	  crsrMap to have an offset rather than a handle */
 
-       cursor_pixel_map_offset = CL ((uint32) ccrsr->crsrMap);
+       cursor_pixel_map_offset = CL ((uint32) ccrsr->crsrMap.raw());
        cursor_pixel_map_resource
 	 = (PixMapPtr) ((char *) resource + cursor_pixel_map_offset);
        
@@ -277,7 +278,7 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
 		  (Ptr) STARH (cursor_pixel_map),
 		  sizeof *cursor_pixel_map_resource);
        
-       ccrsr_data_offset = CL ((long) ccrsr->crsrData);
+       ccrsr_data_offset = CL ((long) ccrsr->crsrData.raw());
        
        ccrsr_ctab_offset = (int) PIXMAP_TABLE_AS_OFFSET (MR (ccrsr->crsrMap));
        ccrsr_data_size = ccrsr_ctab_offset - ccrsr_data_offset;
@@ -357,7 +358,7 @@ P1 (PUBLIC pascal trap, void, SetCCursor,
      {
        GDHandle gdev;
        PixMapHandle gd_pmap;
-       Point *hot_spot;
+       GUEST<Point> *hot_spot;
 
        gdev = MR (MainDevice);
        gd_pmap = GD_PMAP (gdev);

@@ -9,7 +9,7 @@
  */
 
 namespace Executor {
-struct keymap : GuestStruct {
+struct keymap { GUEST_STRUCT;
     GUEST< INTEGER> version;
     GUEST< INTEGER[256]> tableno;
     GUEST< INTEGER> ntables;

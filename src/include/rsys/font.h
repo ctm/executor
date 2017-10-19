@@ -6,13 +6,13 @@
  */
 
 namespace Executor {
-struct fatabentry : GuestStruct {
+struct fatabentry { GUEST_STRUCT;
     GUEST< INTEGER> size;
     GUEST< INTEGER> style;
     GUEST< INTEGER> fontresid;
 };
 
-struct widentry_t : GuestStruct {
+struct widentry_t { GUEST_STRUCT;
     GUEST< unsigned short> style;
     GUEST< INTEGER[1]> table;    /* actually more */
 };

@@ -181,7 +181,7 @@ A3 (PRIVATE, LONGINT, catchalarm, LONGINT, volatile signo,
       diff = msecs - last_interrupt_msecs;
       last_interrupt_msecs = msecs;
 
-      for (qp = MR ((TMTask *) ROMlib_timehead.qHead);
+      for (qp = (TMTask *) MR (ROMlib_timehead.qHead);
 	   qp;
 	   qp = (TMTask *) MR (qp->qLink))
 	{
@@ -221,7 +221,7 @@ A3 (PRIVATE, LONGINT, catchalarm, LONGINT, volatile signo,
       
       /* Find the next imminent timer event in the queue. */
       min = REALLONGTIME;
-      for (qp = MR ((TMTask *) ROMlib_timehead.qHead);
+      for (qp = (TMTask *) MR (ROMlib_timehead.qHead);
 	   qp;
 	   qp = (TMTask *) MR (qp->qLink))
 	{

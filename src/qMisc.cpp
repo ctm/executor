@@ -110,9 +110,9 @@ P2 (PUBLIC pascal trap, void, StuffHex, Ptr, p, StringPtr, s)
     *p = (*p & 0xF) | (fromhex (*sp) << 4);
 }
 
-P3(PUBLIC pascal trap, void, ScalePt, Point *, pt, Rect *, srcr, Rect *, dstr)
+P3(PUBLIC pascal trap, void, ScalePt, GUEST<Point> *, pt, Rect *, srcr, Rect *, dstr)
 {
-    register INTEGER srcdh, srcdv, dstdh, dstdv;
+    INTEGER srcdh, srcdv, dstdh, dstdv;
 
     if (pt->h || pt->v) {
 	srcdh = Cx(srcr->right)  - Cx(srcr->left);
@@ -130,9 +130,9 @@ P3(PUBLIC pascal trap, void, ScalePt, Point *, pt, Rect *, srcr, Rect *, dstr)
     }
 }
 
-P3(PUBLIC pascal trap, void, MapPt, Point *, pt, Rect *, srcr, Rect *, dstr)
+P3(PUBLIC pascal trap, void, MapPt, GUEST<Point> *, pt, Rect *, srcr, Rect *, dstr)
 {
-    register INTEGER srcdh, srcdv, dstdh, dstdv;
+    INTEGER srcdh, srcdv, dstdh, dstdv;
 
     srcdh = Cx(srcr->right)  - Cx(srcr->left);
     srcdv = Cx(srcr->bottom) - Cx(srcr->top);
@@ -149,8 +149,8 @@ P3(PUBLIC pascal trap, void, MapPt, Point *, pt, Rect *, srcr, Rect *, dstr)
 
 P3(PUBLIC pascal trap, void, MapRect, Rect *, r, Rect *, srcr, Rect *, dstr)
 {
-    MapPt((Point *) &r->top,    srcr, dstr);
-    MapPt((Point *) &r->bottom, srcr, dstr);
+    MapPt((GUEST<Point> *) &r->top,    srcr, dstr);
+    MapPt((GUEST<Point> *) &r->bottom, srcr, dstr);
 }
 
 #define IMPOSSIBLE -1
@@ -248,14 +248,14 @@ P3(PUBLIC pascal trap, void, MapRgn, RgnHandle, rh, Rect *, srcr, Rect *, dstr)
 P3(PUBLIC pascal trap, void, MapPoly, PolyHandle, poly, Rect *, srcr,
 								  Rect *, dstr)
 {
-    Point *ip, *ep;
+    GUEST<Point> *ip, *ep;
     
     if (EquivRect(srcr, dstr))
 	OffsetPoly(poly, Cx(dstr->left) - Cx(srcr->left),
 					        Cx(dstr->top) - Cx(srcr->top));
     else {
-	MapPt((Point *) &HxX(poly, polyBBox.top),    srcr, dstr);
-	MapPt((Point *) &HxX(poly, polyBBox.bottom), srcr, dstr);
+	MapPt((GUEST<Point> *) &HxX(poly, polyBBox.top),    srcr, dstr);
+	MapPt((GUEST<Point> *) &HxX(poly, polyBBox.bottom), srcr, dstr);
 	for (ip = HxX(poly, polyPoints),
 	     ep = ip + (Hx(poly, polySize) - SMALLPOLY)/sizeof(Point);
 	     ip != ep;)

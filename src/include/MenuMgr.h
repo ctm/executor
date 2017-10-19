@@ -21,7 +21,7 @@ namespace Executor {
 
 #define textMenuProc	0
 
-struct MenuInfo : GuestStruct {
+struct MenuInfo { GUEST_STRUCT;
     GUEST< INTEGER> menuID;
     GUEST< INTEGER> menuWidth;
     GUEST< INTEGER> menuHeight;
@@ -33,7 +33,7 @@ typedef MenuInfo *MenuPtr;
 MAKE_HIDDEN(MenuPtr);
 typedef HIDDEN_MenuPtr *MenuHandle;
 
-typedef struct MCEntry : GuestStruct {
+typedef struct MCEntry { GUEST_STRUCT;
     GUEST< INTEGER> mctID;
     GUEST< INTEGER> mctItem;
     GUEST< RGBColor> mctRGB1;
@@ -41,6 +41,24 @@ typedef struct MCEntry : GuestStruct {
     GUEST< RGBColor> mctRGB3;
     GUEST< RGBColor> mctRGB4;
     GUEST< INTEGER> mctReserved;
+
+    MCEntry() = default;
+    MCEntry(GUEST< INTEGER> mctID,
+            GUEST< INTEGER> mctItem,
+            GUEST< RGBColor> mctRGB1,
+            GUEST< RGBColor> mctRGB2,
+            GUEST< RGBColor> mctRGB3,
+            GUEST< RGBColor> mctRGB4,
+            GUEST< INTEGER> mctReserved)
+        : mctID     (mctID),
+          mctItem   (mctItem),
+          mctRGB1   (mctRGB1),
+          mctRGB2   (mctRGB2),
+          mctRGB3   (mctRGB3),
+          mctRGB4   (mctRGB4),
+          mctReserved(mctReserved)
+    {
+    }
 } *MCEntryPtr;
 MAKE_HIDDEN(MCEntryPtr);
 

@@ -68,7 +68,7 @@ P1(PUBLIC pascal trap, void, KillPoly, PolyHandle, poly)
 P3(PUBLIC pascal trap, void, OffsetPoly, PolyHandle, poly,
 		    INTEGER, dh, INTEGER, dv)   /* Note: IM I-191 is wrong */
 {
-    Point *pp, *ep;
+    GUEST<Point> *pp, *ep;
     
     if (dh || dv) {
 	HxX(poly, polyBBox.top)    = CW(Hx(poly, polyBBox.top)    + dv);
@@ -76,7 +76,7 @@ P3(PUBLIC pascal trap, void, OffsetPoly, PolyHandle, poly,
 	HxX(poly, polyBBox.left)   = CW(Hx(poly, polyBBox.left)   + dh);
 	HxX(poly, polyBBox.right)  = CW(Hx(poly, polyBBox.right)  + dh);
 	pp = HxX(poly, polyPoints);
-	ep = (Point *) (((char *) STARH(poly)) + Hx(poly, polySize));
+	ep = (GUEST<Point> *) (((char *) STARH(poly)) + Hx(poly, polySize));
 	while (pp != ep) {
 	    pp->h = CW(CW(pp->h) + (dh));
 	    pp->v = CW(CW(pp->v) + (dv));

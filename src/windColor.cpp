@@ -103,10 +103,10 @@ Executor::wind_color_init (void)
      });
 }
 
-AuxWinHandle *
+GUEST<AuxWinHandle> *
 Executor::lookup_aux_win (WindowPtr w)
 {
-  AuxWinHandle *t;
+  GUEST<AuxWinHandle> *t;
 
   for (t = &AuxWinHead;
        *t && HxP (MR (*t), awOwner) != w;

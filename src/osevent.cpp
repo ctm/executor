@@ -117,8 +117,9 @@ Executor::ROMlib_set_keyboard (const char *keyboardname)
        new_h = GetNamedResource (TICK ("KCHR"), pkeyboardname);
        if (new_h)
 	 {
-	   GetResInfo (new_h, &kchr_id, 0, 0);
-	   kchr_id = CW (kchr_id);
+           GUEST<INTEGER> tmpid;
+	   GetResInfo (new_h, &tmpid, 0, 0);
+	   kchr_id = CW (tmpid);
 	   LoadResource (new_h);
 	   if (kchr_ptr)
 	     {
@@ -595,8 +596,8 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 	}
     }
     restore_virtual_ints (block);
-    if (eventp->where.h != oldpoint.h || eventp->where.v != oldpoint.v) {
-	oldpoint = eventp->where;
+    if (eventp->where.h.get() != oldpoint.h || eventp->where.v.get() != oldpoint.v) {
+	oldpoint = eventp->where.get();
 	if (ROMlib_bewaremovement) {
 	    ROMlib_showhidecursor();
 	    ROMlib_bewaremovement = FALSE;

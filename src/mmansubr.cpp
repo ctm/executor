@@ -288,17 +288,19 @@ addr_info (char *addr)
     if (state & RSRCBIT)
       {
 	INTEGER id;
-	ResType type;
+        ResType type;
+        GUEST<INTEGER> id_s;
+        GUEST<ResType> type_s;
 	char res_name[257];
 	
-	GetResInfo (handle, &id, &type, (StringPtr) res_name);
+	GetResInfo (handle, &id_s, &type_s, (StringPtr) res_name);
 	
 	if (ResErr)
 	  return;
 	
 	/* blah */
-	id = CW (id);
-	type = CL (type);
+	id = CW (id_s);
+	type = CL (type_s);
 	
 	res_name[res_name[0] + 1] = '\0';
 	

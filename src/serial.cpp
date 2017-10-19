@@ -312,7 +312,7 @@ void callcomp(ParmBlkPtr pbp, compfuncp comp, OSErr err)
 #define DOCOMPLETION(pbp, err)						      \
     (pbp)->ioParam.ioResult = CW(err);					      \
     if (((pbp)->ioParam.ioTrap & asyncTrpBit) && (pbp)->ioParam.ioCompletion) \
-	callcomp(pbp, (compfuncp) CL((long)(pbp)->ioParam.ioCompletion), err);	      \
+	callcomp(pbp, (compfuncp) CL((long)(pbp)->ioParam.ioCompletion.raw()), err);	      \
     return err
 
 #else
@@ -351,7 +351,7 @@ A2(PUBLIC, OSErr, ROMlib_serialopen, ParmBlkPtr, pbp,		/* INTERNAL */
 	otherp = otherdctl(pbp);
 	if (otherp && (otherp->dCtlFlags & CWC(OPENBIT))) {
 	    *STARH(h) = *STARH((hiddenh) (long) MR(otherp->dCtlStorage));
-	    dcp->dCtlFlags |= CWC(OPENBIT);
+	    dcp->dCtlFlags.raw_or( CWC(OPENBIT) );
 	} else {
 #if defined (LINUX) || defined (MACOSX_)
 	    err = permErr;
@@ -405,7 +405,7 @@ A2(PUBLIC, OSErr, ROMlib_serialopen, ParmBlkPtr, pbp,		/* INTERNAL */
 		    HxX(h, fd) = (CW(pbp->cntrlParam.ioCRefNum) == AINREFNUM ||
 		      CW(pbp->cntrlParam.ioCRefNum) == AOUTREFNUM) ? 0 : 1;
 #endif
-		    dcp->dCtlFlags |= CWC(OPENBIT);
+		    dcp->dCtlFlags.raw_or( CWC(OPENBIT) );
 		    SerReset(CW(pbp->cntrlParam.ioCRefNum),
 			    (CW(pbp->cntrlParam.ioCRefNum) == AINREFNUM ||
 			     CW(pbp->cntrlParam.ioCRefNum) == AOUTREFNUM) ?
@@ -1042,7 +1042,7 @@ A2(PUBLIC, OSErr, ROMlib_serialclose, ParmBlkPtr, pbp,		/* INTERNAL */
     if (dcp->dCtlFlags & CWC(OPENBIT)) {
 	h = (hiddenh) MR(dcp->dCtlStorage);
 	restorecloseanddispose(h);
-	dcp->dCtlFlags &= CWC(~OPENBIT);
+	dcp->dCtlFlags.raw_and( CWC(~OPENBIT) );
 	err = noErr;
     } else
 	err = notOpenErr;

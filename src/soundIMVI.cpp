@@ -197,7 +197,7 @@ A0 (PUBLIC, void, C_sound_timer_handler)
       call_back_info.busy = FALSE;
       start_playing (call_back_info.chanp, call_back_info.headp,
 		     current_buffer ^ 1);
-      dbp->dbFlags &= CLC (~dbBufferReady);
+      dbp->dbFlags.raw_and( CLC (~dbBufferReady) );
       CToPascalCall((void*)pp, CTOP_SetCTitle, call_back_info.chanp, dbp);
     }
 }
@@ -233,7 +233,7 @@ P2(PUBLIC, pascal trap OSErr, SndPlayDoubleBuffer, SndChannelPtr, chanp,
       */
       SND_CHAN_TIME (chanp) = 0;
       SND_CHAN_CURRENT_START (chanp) = 0;
-      SND_CHAN_FLAGS_X (chanp) |= CWC (CHAN_DBINPROG_FLAG);
+      SND_CHAN_FLAGS_X (chanp).raw_or( CWC (CHAN_DBINPROG_FLAG) );
       SOUND_GO ();
       retval = noErr;
       break;

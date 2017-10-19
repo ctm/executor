@@ -89,10 +89,10 @@ P1(PUBLIC pascal trap, INTEGER, FixRound, Fixed, x)
 
 P1(PUBLIC pascal trap, StringHandle, NewString, StringPtr, s)
 {
-    HIDDEN_Handle retval;
+    Handle retval;
     
     PtrToHand((Ptr) s, &retval, (LONGINT)U(s[0]) + 1);
-    return((StringHandle) retval.p);
+    return((StringHandle) retval);
 }
 
 P2(PUBLIC pascal trap, void, SetString, StringHandle, h, StringPtr, s)

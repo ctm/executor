@@ -76,7 +76,7 @@ Executor::gd_allocate_main_device (void)
        TheGDevice = MainDevice = RM (graphics_device);
 
        /* set gd flags reflective of the main device */
-       GD_FLAGS_X (graphics_device) |= CWC (  (1 << mainScreen)
+       GD_FLAGS_X (graphics_device).raw_or( CWC (  (1 << mainScreen)
 					    | (1 << screenDevice)
 					    | (1 << screenActive)
 					      /* PacMan Deluxe avoids
@@ -88,7 +88,7 @@ Executor::gd_allocate_main_device (void)
 						 gDevices.  It's not clear
 						 whether or not we should
 						 be setting this bit.
-					    | (1 << noDriver) */ );
+					    | (1 << noDriver) */ ) );
        
        gd_set_bpp (graphics_device, !vdriver_grayscale_p, vdriver_fixed_clut_p,
 		   vdriver_bpp);
@@ -148,11 +148,11 @@ P2 (PUBLIC pascal trap, GDHandle, NewGDevice,
        GD_FLAGS_X (this2) = CWC (0);
        /* mode_from_bpp (1)  indicates b/w hardware */
        if (mode != mode_from_bpp (1))
-	 GD_FLAGS_X (this2) |= CWC (1 << gdDevType);
+	 GD_FLAGS_X (this2).raw_or(CWC (1 << gdDevType));
     
        pmh = RM (NewPixMap ());
        GD_PMAP_X (this2) = pmh;
-       CTAB_FLAGS_X (PIXMAP_TABLE (GD_PMAP (this2))) |= CTAB_GDEVICE_BIT_X;
+       CTAB_FLAGS_X (PIXMAP_TABLE (GD_PMAP (this2))).raw_or(CTAB_GDEVICE_BIT_X);
   
        GD_REF_CON_X (this2) = CWC (0);  /* ??? */
        GD_REF_NUM_X (this2) = CW (ref_num);  /* ??? */
@@ -190,9 +190,9 @@ Executor::gd_set_bpp (GDHandle gd, boolean_t color_p, boolean_t fixed_p, int bpp
   
   /* set the color bit, all other flag bits should be the same */
   if (color_p)
-    GD_FLAGS_X (gd) |= CWC (1 << gdDevType);
+    GD_FLAGS_X (gd).raw_or(CWC (1 << gdDevType));
   else
-    GD_FLAGS_X (gd) &= CWC (~(1 << gdDevType));
+    GD_FLAGS_X (gd).raw_and(CWC (~(1 << gdDevType)));
   
   GD_TYPE_X (gd) = (bpp > 8
  		    ? directType
@@ -266,9 +266,9 @@ P3 (PUBLIC pascal trap, void, SetDeviceAttribute,
     BOOLEAN, value)
 {
   if (value)
-    GD_FLAGS_X (gdh) |= CW (1 << attribute);
+    GD_FLAGS_X (gdh).raw_or(CW (1 << attribute));
   else
-    GD_FLAGS_X (gdh) &= CW (~(1 << attribute));
+    GD_FLAGS_X (gdh).raw_and(CW (~(1 << attribute)));
 }
 
 P1 (PUBLIC pascal trap, void, SetGDevice,
@@ -312,9 +312,9 @@ P0 (PUBLIC pascal trap, GDHandle, GetMainDevice)
      trouble if that bit is set. */
 	  
   if (ROMlib_creator == TICK ("RLMZ"))
-    GD_FLAGS_X (retval) |= CWC (1 << noDriver);
+    GD_FLAGS_X (retval).raw_or(CWC (1 << noDriver));
   else
-    GD_FLAGS_X (retval) &= ~CWC (1 << noDriver);
+    GD_FLAGS_X (retval).raw_and(~CWC (1 << noDriver));
 
   return retval;
 }

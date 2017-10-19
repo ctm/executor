@@ -321,7 +321,7 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
   INTEGER *oip;
   INTEGER *op, *op2, *destpoints, *destpoints2;
   Size psize;
-  HIDDEN_RgnPtr rp;
+  GUEST<RgnPtr> rp;
   Rect r;
   register INTEGER r32767;
   RgnHandle rh;
@@ -388,19 +388,20 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
 	  RESUMERECORDING;
 	}
 	if (PORT_REGION_SAVE_X (thePort) && y1 == y2 && x1 != x2) {
-	  rp.p = (RgnPtr) ALLOCA(SMALLRGN + 5 * sizeof(INTEGER));
-	  (rp.p)->rgnBBox.top    = CW(y1);
-	  (rp.p)->rgnBBox.left   = CW(x1);
-	  (rp.p)->rgnBBox.bottom = CW(y2);
-	  (rp.p)->rgnBBox.right  = CW(x1);
-	  (rp.p)->rgnSize = CWC(SMALLRGN + 5 * sizeof(INTEGER));
-	  oip = (INTEGER *) ((char *)rp.p + SMALLRGN);
+          RgnPtr tmpRP;
+	  tmpRP = (RgnPtr) ALLOCA(SMALLRGN + 5 * sizeof(INTEGER));
+	  tmpRP->rgnBBox.top    = CW(y1);
+	  tmpRP->rgnBBox.left   = CW(x1);
+	  tmpRP->rgnBBox.bottom = CW(y2);
+	  tmpRP->rgnBBox.right  = CW(x1);
+	  tmpRP->rgnSize = CWC(SMALLRGN + 5 * sizeof(INTEGER));
+	  oip = (INTEGER *) ((char *)tmpRP + SMALLRGN);
 	  *oip++ = CW(y1);
 	  *oip++ = CW(x1);
 	  *oip++ = CW(x2);
 	  *oip++ = RGNSTOPX;
 	  *oip++ = RGNSTOPX;
-	  rp.p = RM(rp.p);
+	  rp = RM(tmpRP);
 	  XorRgn (&rp,
 			  (RgnHandle) PORT_REGION_SAVE (thePort),
 			  (RgnHandle) PORT_REGION_SAVE (thePort));
@@ -416,27 +417,28 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
   dx = ABS(x2 - x1);
   
   if (PORT_REGION_SAVE_X (thePort)) {
-	/* size allocated below is overkill */
-	rp.p = (RgnPtr) ALLOCA(SMALLRGN + (dy + 1) * sizeof(INTEGER) * 6 +
+        /* size allocated below is overkill */
+        RgnPtr tmpRP;
+	tmpRP = (RgnPtr) ALLOCA(SMALLRGN + (dy + 1) * sizeof(INTEGER) * 6 +
 						   sizeof(INTEGER));
-	(rp.p)->rgnBBox.top    = CW(y1);
-	(rp.p)->rgnBBox.left   = CW(MIN(x1, x2));
-	(rp.p)->rgnBBox.bottom = CW(y2);
-	(rp.p)->rgnBBox.right  = CW(MAX(x1, x2));
+	tmpRP->rgnBBox.top    = CW(y1);
+	tmpRP->rgnBBox.left   = CW(MIN(x1, x2));
+	tmpRP->rgnBBox.bottom = CW(y2);
+	tmpRP->rgnBBox.right  = CW(MAX(x1, x2));
 	
 	if (dy >= dx)
 	  if (x2 > x1)
-		op = scrdydxx2x1(y1, x1,   dy, dx, (INTEGER *)rp.p + 5);
+		op = scrdydxx2x1(y1, x1,   dy, dx, (INTEGER *)tmpRP + 5);
 	  else
-		op = scrdydxx1x2(y1, x1,   dy, dx, (INTEGER *)rp.p + 5);
+		op = scrdydxx1x2(y1, x1,   dy, dx, (INTEGER *)tmpRP + 5);
 	  else
 		if (x2 > x1)
-		  op = scrdxdyx2x1(y1, x1,   dy, dx, (INTEGER *)rp.p + 5);
+		  op = scrdxdyx2x1(y1, x1,   dy, dx, (INTEGER *)tmpRP + 5);
 		else
-		  op = scrdxdyx1x2(y1, x1+1, dy, dx, (INTEGER *)rp.p + 5);
+		  op = scrdxdyx1x2(y1, x1+1, dy, dx, (INTEGER *)tmpRP + 5);
 	*op++ = RGNSTOPX;
-	(rp.p)->rgnSize = CW((char *) op - (char *) rp.p);
-	rp.p = RM(rp.p);
+	tmpRP->rgnSize = CW((char *) op - (char *) tmpRP);
+	rp = RM(tmpRP);
 	XorRgn (&rp,
 			(RgnHandle) PORT_REGION_SAVE (thePort),
 			(RgnHandle) PORT_REGION_SAVE (thePort));
@@ -447,13 +449,14 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
 	/*-->*/	return;
   }
   
-  rp.p = (RgnPtr) ALLOCA(SMALLRGN + (dy + py + 1) * sizeof(LONGINT) * 4 +
+  RgnPtr tmpRP;
+  tmpRP = (RgnPtr) ALLOCA(SMALLRGN + (dy + py + 1) * sizeof(LONGINT) * 4 +
 						 3 * 2 * sizeof(LONGINT));
   /* Cx(rp->rgnSize) gets filled in later */
-  (rp.p)->rgnBBox.top    = CW(y1);
-  (rp.p)->rgnBBox.left   = CW(MIN(x1, x2));
-  (rp.p)->rgnBBox.bottom = CW(y2 + py);
-  (rp.p)->rgnBBox.right  = CW(MAX(x1, x2) + px);
+  tmpRP->rgnBBox.top    = CW(y1);
+  tmpRP->rgnBBox.left   = CW(MIN(x1, x2));
+  tmpRP->rgnBBox.bottom = CW(y2 + py);
+  tmpRP->rgnBBox.right  = CW(MAX(x1, x2) + px);
   op  = destpoints   = (INTEGER *) ALLOCA(MAXNPOINTS(dy) * sizeof(INTEGER));
   op2 = destpoints2  = (INTEGER *) ALLOCA(MAXNPOINTS(dy) * sizeof(INTEGER));
   
@@ -516,14 +519,14 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
   }
   gui_assert((op  - destpoints  + 1)  <=  ((dy+3)*2 + 1));
   gui_assert((op2 - destpoints2 + 1)  <=  ((dy+3)*2 + 1));
-  regionify1(destpoints, destpoints2, rp.p);
+  regionify1(destpoints, destpoints2, tmpRP);
   
   rh = NewRgn ();
   SectRect (&PORT_BOUNDS (thePort), &PORT_RECT (thePort), &r);
   RectRgn (rh, &r);
   SectRgn (rh, PORT_VIS_REGION (thePort),  rh);
   SectRgn (rh, PORT_CLIP_REGION (thePort), rh);
-  rp.p = RM (rp.p);
+  rp = RM (tmpRP);
   SectRgn (&rp, rh, rh);
   
   if (GWorld_p (thePort))

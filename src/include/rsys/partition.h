@@ -13,7 +13,7 @@ namespace Executor {
 typedef unsigned long ULONGINT;
 #endif
 
-struct partmapentry_t : GuestStruct {
+struct partmapentry_t { GUEST_STRUCT;
     GUEST< unsigned short> pmSig;    /* 0x504D == 'PM' */
     GUEST< unsigned short> pmSigPad;
     GUEST< ULONGINT> pmMapBlkCnt;
@@ -41,7 +41,7 @@ struct partmapentry_t : GuestStruct {
 
 #define HFSPARTTYPE	"Apple_HFS"
 
-struct oldmapentry_t : GuestStruct {
+struct oldmapentry_t { GUEST_STRUCT;
     GUEST< ULONGINT> pdStart;
     GUEST< ULONGINT> pdSize;
     GUEST< ULONGINT> pdFSID;
@@ -49,7 +49,7 @@ struct oldmapentry_t : GuestStruct {
 
 #define NOLDENTRIES	42
 
-struct oldblock1_t : GuestStruct {
+struct oldblock1_t { GUEST_STRUCT;
     GUEST< unsigned short> pdSig;    /* 0x5453 == 'TS' */
     GUEST< oldmapentry_t[NOLDENTRIES]> oldmapentry;
 };

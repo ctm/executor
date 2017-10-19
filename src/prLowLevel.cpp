@@ -591,18 +591,18 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_stlfilterproc, DialogPeek, dp,
       break;
     case CWC (mouseDown):
       {
+	GUEST<Point> glocalp;
 	Point localp;
 	GrafPtr gp;
 	Rect r;
 	HIDDEN_Handle h;
 	INTEGER unused;
 
-	localp = evt->where;
+	glocalp = evt->where;
 	gp = thePort;
 	SetPort((GrafPtr) dp);
-	GlobalToLocal(&localp); 
-	localp.h = CW(localp.h);
-	localp.v = CW(localp.v);
+	GlobalToLocal(&glocalp); 
+	localp = glocalp.get();
 	SetPort(gp);
 	GetDItem ((DialogPtr) dp, OK, &unused, &h, &r);
 	if (PtInRect (localp, &r))

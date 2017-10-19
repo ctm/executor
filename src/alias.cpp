@@ -158,7 +158,7 @@ last_chance_tmp_vref_and_dirid (INTEGER vref, INTEGER *tmp_vrefp,
 				LONGINT *tmp_diridp)
 {
   OSErr retval;
-  HParamBlockRec pb = {0};
+  HParamBlockRec pb = {};
   
   pb.volumeParam.ioVRefNum = CW (vref);
   retval = PBHGetVInfo (&pb, FALSE);

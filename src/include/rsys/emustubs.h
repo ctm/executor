@@ -8,49 +8,45 @@
  * $Id: emustubs.h 63 2004-12-24 18:19:43Z ctm $
  */
 namespace Executor {
-struct adbop_t : GuestStruct {
+struct adbop_t { GUEST_STRUCT;
     GUEST< Ptr> buffer;
     GUEST< ProcPtr> proc;
     GUEST< Ptr> data;
 };
 
 
-// ### Struct needs manual conversion to GUEST<...>
-//   union
-
-// ### Struct needs manual conversion to GUEST<...>
-//   union
-typedef struct PACKED comm_toolbox_dispatch_args
+typedef struct comm_toolbox_dispatch_args
 {
-  int16 selector;
+  GUEST_STRUCT;
+  GUEST<int16> selector;
   
   union
   {
-    struct PACKED
+    struct
     {
-      int16 n_items;
-      PACKED_MEMBER(DialogPtr, dp);
+      GUEST<int16> n_items;
+      GUEST<DialogPtr> dp;
     } shorten_args;
-    struct PACKED
+    struct
     {
-      DITLMethod method;
-      PACKED_MEMBER(Handle, new_items_h);
-      PACKED_MEMBER(DialogPtr, dp);
+      GUEST<DITLMethod> method;
+      GUEST<Handle> new_items_h;
+      GUEST<DialogPtr> dp;
     } append_args;
-    struct PACKED
+    struct
     {
-      PACKED_MEMBER(DialogPtr, dp);
+      GUEST<DialogPtr> dp;
     } count_args;
-    struct PACKED
+    struct
     {
-      PACKED_MEMBER(QElemPtr, qp);
+      GUEST<QElemPtr> qp;
     } crm_args;
   } args;
 } comm_toolbox_dispatch_args_t;
 
 typedef void *voidptr;
 
-struct initzonehiddenargs_t : GuestStruct {
+struct initzonehiddenargs_t { GUEST_STRUCT;
     GUEST< voidptr> startPtr;
     GUEST< voidptr> limitPtr;
     GUEST< short> cMoreMasters;

@@ -11,7 +11,7 @@
 #include "QuickDraw.h"
 
 namespace Executor {
-struct SndCommand : GuestStruct {
+struct SndCommand { GUEST_STRUCT;
     GUEST< INTEGER> cmd;
     GUEST< INTEGER> param1;
     GUEST< LONGINT> param2;
@@ -27,7 +27,7 @@ enum
 };
 
 typedef struct PACKED _SndChannel *SndChannelPtr;
-typedef struct _SndChannel : GuestStruct {
+typedef struct _SndChannel { GUEST_STRUCT;
     GUEST< SndChannelPtr> nextChan;
     GUEST< Ptr> firstMod;
     GUEST< ProcPtr> callBack;
@@ -76,7 +76,7 @@ enum {
     midiDataCmd = 100,
 };
 
-struct soundbuffer_t : GuestStruct {
+struct soundbuffer_t { GUEST_STRUCT;
     GUEST< LONGINT> offset;
     GUEST< LONGINT> nsamples;
     GUEST< LONGINT> rate;
@@ -86,7 +86,7 @@ struct soundbuffer_t : GuestStruct {
     GUEST< unsigned char[1]> buf;
 };
 
-typedef struct _SoundHeader : GuestStruct {
+typedef struct _SoundHeader { GUEST_STRUCT;
     GUEST< Ptr> samplePtr;
     GUEST< LONGINT> length;
     GUEST< Fixed> sampleRate;
@@ -97,7 +97,7 @@ typedef struct _SoundHeader : GuestStruct {
     GUEST< Byte[0]> sampleArea;
 } SoundHeader, *SoundHeaderPtr;
 
-typedef struct _ExtSoundHeader : GuestStruct {
+typedef struct _ExtSoundHeader { GUEST_STRUCT;
     GUEST< Ptr> samplePtr;
     GUEST< LONGINT> numChannels;
     GUEST< Fixed> sampleRate;
@@ -144,7 +144,7 @@ enum {
     soundactivenone   = 0xFF,
 };
 
-typedef struct SndDoubleBuffer : GuestStruct {
+typedef struct SndDoubleBuffer { GUEST_STRUCT;
     GUEST< LONGINT> dbNumFrames;
     GUEST< LONGINT> dbFlags;
     GUEST< LONGINT[2]> dbUserInfo;
@@ -156,7 +156,7 @@ enum {
   dbLastBuffer = 4
 };
 
-typedef struct SndDoubleBufferHeader : GuestStruct {
+typedef struct SndDoubleBufferHeader { GUEST_STRUCT;
     GUEST< INTEGER> dbhNumChannels;
     GUEST< INTEGER> dbhSampleSize;
     GUEST< INTEGER> dbhCompressionID;
@@ -166,7 +166,7 @@ typedef struct SndDoubleBufferHeader : GuestStruct {
     GUEST< ProcPtr> dbhDoubleBack;
 } *SndDoubleBufferHeaderPtr;
 
-typedef struct _SCSTATUS : GuestStruct {
+typedef struct _SCSTATUS { GUEST_STRUCT;
     GUEST< Fixed> scStartTime;
     GUEST< Fixed> scEndTime;
     GUEST< Fixed> scCurrentTime;

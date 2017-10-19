@@ -29,7 +29,7 @@ typedef pascal BOOLEAN (*clickproc)( void );
 #endif
 
 namespace Executor {
-  PRIVATE void findcell(Cell*,ListHandle);
+  PRIVATE void findcell(GUEST<Cell>*,ListHandle);
   PRIVATE void setselectnilflag(BOOLEAN setit, Cell cell,
 	 ListHandle list, BOOLEAN hiliteempty);
   static inline BOOLEAN ROMlib_CALLCLICK(clickproc);
@@ -41,7 +41,7 @@ namespace Executor {
 						 register ListHandle list, BOOLEAN hiliteempty);
 }
 
-A2(PRIVATE, void, findcell, Cell *, cp, ListHandle, list)
+A2(PRIVATE, void, findcell, GUEST<Cell> *, cp, ListHandle, list)
 {
     cp->h = CW((CW(cp->h) - Hx(list, rView.left)) / Hx(list, cellSize.h) +
 						       Hx(list, visible.left));
@@ -60,7 +60,8 @@ A4(PRIVATE, void, setselectnilflag, BOOLEAN, setit, Cell, cell,
     GrafPtr saveport;
     RgnHandle saveclip;
     Rect r;
-    INTEGER *ip, off0wbit, off0, off1;
+    GUEST<INTEGER> *ip;
+    INTEGER off0wbit, off0, off1;
     LISTDECL();
 
     if ((ip = ROMlib_getoffp(cell, list))) {
@@ -101,8 +102,8 @@ A4(PRIVATE, void, setselectnilflag, BOOLEAN, setit, Cell, cell,
 A4(PRIVATE, void, rectvalue, register Rect *, rp, register INTEGER, value,
 			       register ListHandle, list, BOOLEAN, hiliteempty)
 {
-    register INTEGER *ip, *ep;
-    register INTEGER *sp;
+    GUEST<INTEGER> *ip, *ep;
+    GUEST<INTEGER> *sp;
     Cell c;
     LISTDECL();
 
@@ -120,11 +121,11 @@ A4(PRIVATE, void, rectvalue, register Rect *, rp, register INTEGER, value,
     LISTEND(list);
 }
 
-A5(PRIVATE, void, rect2value, register Rect *, in, register Rect *, butnotin,
-	    register INTEGER, value, register ListHandle, list,
+A5(PRIVATE, void, rect2value, Rect *, in, Rect *, butnotin,
+	    INTEGER, value, ListHandle, list,
 							BOOLEAN, hiliteempty)
 {
-    register INTEGER *ip;
+    GUEST<INTEGER> *ip;
     Cell c;
 
     for (c.v = CW(in->top) ; c.v < CW(in->bottom); c.v++)
@@ -214,7 +215,8 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
     Byte flags;
     EventRecord evt;
     Rect anchor, oldselrect, newselrect, newcellr, pinrect;
-    Cell oldcell, newcell, c, cswapped, oldcellunswapped, newcellunswapped;
+    Cell c, oldcellunswapped, newcellunswapped;
+    GUEST<Cell> newcell,oldcell, cswapped;
     LONGINT l;
     INTEGER dh, dv;
     Point p;

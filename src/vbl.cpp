@@ -115,7 +115,7 @@ A0 (PUBLIC, void, C_ROMlib_vcatch)
       vp->vblCount = CW (new_vbl_count);
       if (new_vbl_count == 0)
 	{
-	  VBLQueue.qFlags |= CWC (VBUSY);
+	  VBLQueue.qFlags.raw_or(CWC (VBUSY));
 	  ROMlib_hook (vbl_number);
 
 	  /* No need to save/restore syn68k regs here; we do that
@@ -123,11 +123,11 @@ A0 (PUBLIC, void, C_ROMlib_vcatch)
 	   */
 
 	  EM_A0 = (LONGINT) (long) US_TO_SYN68K_CHECK0(vp);
-	  EM_A1 = (LONGINT) CL ((long) vp->vblAddr);
+	  EM_A1 = (LONGINT) CL ((long) vp->vblAddr.raw());
 	  
 	  CALL_EMULATOR ((syn68k_addr_t) EM_A1);
 
-	  VBLQueue.qFlags &= CWC (~VBUSY);
+	  VBLQueue.qFlags.raw_and(CWC (~VBUSY));
 	  if (vp->vblCount == CWC (0))
 	    Dequeue ((QElemPtr) vp, &VBLQueue);
 	}

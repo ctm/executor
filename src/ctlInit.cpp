@@ -45,8 +45,8 @@ P9(PUBLIC pascal trap, ControlHandle, NewControl, WindowPtr, wst, Rect *, r,
 
     if ((procid>>4) == 0)
       {
-	INTEGER id;
-	ResType type;
+	GUEST<INTEGER> id;
+	GUEST<ResType> type;
 	Str255 name;
 
 	GetResInfo (MR (temph), &id, &type, name);

@@ -266,7 +266,7 @@ Executor::dump_pattern (Pattern x)
 }
 
 void
-Executor::dump_point (Point x)
+Executor::dump_point (GUEST<Point> x)
 {
   iprintf ((o_fp, "%s(Point) { v 0x%x; h 0x%x; }\n",
 	    field_name.c_str(), CW (x.v), CW (x.h)));
@@ -318,7 +318,7 @@ Executor::dump_bitmap_data (BitMap *x, int depth, Rect *rect)
 }
 
 void
-Executor::dump_bits16 (Bits16 data)
+Executor::dump_bits16 (GUEST<Bits16> data)
 {
   if (dump_verbosity >= 3)
     {
@@ -1175,7 +1175,8 @@ dump_te (TEHandle te)
   }
 
   {
-    int16 n_lines, *line_starts;
+    int16 n_lines;
+    GUEST<int16> *line_starts;
     
     n_lines = TE_N_LINES (te);
     line_starts = TE_LINE_STARTS (te);
@@ -1302,15 +1303,14 @@ copy_resources (INTEGER new_rn, INTEGER old_rn, LONGINT type)
   for (i = 1; i <= num_res; ++i)
     {
       Handle h;
-      INTEGER id;
+      GUEST<INTEGER> id;
       Str255 name;
-      LONGINT ignored;
+      GUEST<LONGINT> ignored;
 
       h = GetIndResourceRN (type, i, old_rn);
       GetResInfo (h, &id, &ignored, name);
-      id = CW (id);
       DetachResource (h);
-      AddResourceRN (h, type, id, name, new_rn);
+      AddResourceRN (h, type, CW (id), name, new_rn);
     }
   ResLoad = save_res_load;
   return noErr;

@@ -334,26 +334,7 @@ extern char     *ROMlib_exeuname;
 
 #pragma pack(pop)
 	
-#if !defined (__STDC__)
-extern LONGINT	ROMlib_FORKOFFSET();
-extern OSErr	ROMlib_seteof();
-extern OSErr	ROMlib_geteofostype();
-extern OSErr	ROMlib_nami();
-extern int	ROMlib_mkresdir();
-extern OSErr	ROMlib_maperrno();
-extern VCB	*ROMlib_breakoutioname();
-extern void	ROMlib_fillkeycontent();
-extern OSErr	ROMlib_PBMoveOrRename();
-extern OSErr	ROMlib_PBGetSetFInfoD();
-extern OSErr	ROMlib_driveropen();
-extern OSErr	ROMlib_dispatch();
-extern char	*ROMlib_resname();
-extern datum	ROMlib_dbm_fetch();
-extern BOOLEAN	ROMlib_dbm_store();
-extern void	ROMlib_dbm_open();
-extern void	ROMlib_dbm_close();
-extern DrvQExtra *ROMlib_addtodq();
-#else /* __STDC__ */
+
 extern LONGINT	ROMlib_FORKOFFSET( fcbrec *fp );
 extern OSErr	ROMlib_seteof( fcbrec *fp );
 extern OSErr	ROMlib_geteofostype( fcbrec *fp );
@@ -378,7 +359,7 @@ extern void	ROMlib_dbm_close( VCBExtra *vcbp );
 extern OSErr	ROMlib_PBMoveOrRename( ParmBlkPtr pb, BOOLEAN a, LONGINT dir,
 			  LONGINT newdir, char *newname, MoveOrRenameType op );
 extern OSErr	ROMlib_PBGetSetFInfoD( ParmBlkPtr pb, BOOLEAN a,
-			       GetOrSetType op, LONGINT *dir, BOOLEAN dodirs );
+			       GetOrSetType op, GUEST<LONGINT> *dir, BOOLEAN dodirs );
 extern OSErr	ROMlib_driveropen(ParmBlkPtr pbp, BOOLEAN a);
 extern OSErr	ROMlib_dispatch(ParmBlkPtr p, BOOLEAN async,
 				    DriverRoutineType routine, INTEGER trap);
@@ -392,65 +373,12 @@ extern unsigned long ROMlib_destroy_blocks(syn68k_addr_t start, uint32 count,
 					   BOOLEAN flush_only_faulty_checksums);
 extern void ROMlib_automount( char *path );
 
-extern Byte open_attrib_bits (LONGINT file_id, VCB *vcbp, INTEGER *refnump);
+extern Byte open_attrib_bits (LONGINT file_id, VCB *vcbp, GUEST<INTEGER> *refnump);
 
 extern VCB *vlookupbyname (const char *namep, const char *endp);
 
-#endif /* __STDC__ */
 
-#if !defined(__STDC__)
-extern OSErr ufsPBOpen(); 
-extern OSErr ufsPBHOpen(); 
-extern OSErr ufsPBOpenRF(); 
-extern OSErr ufsPBHOpenRF();
-extern OSErr ufsPBLockRange();
-extern OSErr ufsPBUnlockRange();
-extern OSErr ufsPBRead(); 
-extern OSErr ufsPBWrite(); 
-extern OSErr ufsPBGetFPos();
-extern OSErr ufsPBSetFPos();
-extern OSErr ufsPBGetEOF(); 
-extern OSErr ufsPBSetEOF(); 
-extern OSErr ufsPBAllocate();
-extern OSErr ufsPBAllocContig();
-extern OSErr ufsPBFlushFile();
-extern OSErr ufsPBClose(); 
-extern OSErr ufsPBCreate(); 
-extern OSErr ufsPBHCreate();
-extern OSErr ufsPBDirCreate();
-extern OSErr ufsPBDelete(); 
-extern OSErr ufsPBHDelete();
-extern OSErr ufsPBGetCatInfo();
-extern OSErr ufsPBSetCatInfo();
-extern OSErr ufsPBCatMove();
-extern OSErr ufsPBOpenWD(); 
-extern OSErr ufsPBCloseWD(); 
-extern OSErr ufsPBGetWDInfo(); 
-extern OSErr ufsPBGetFInfo();
-extern OSErr ufsPBHGetFInfo();
-extern OSErr ufsPBSetFInfo();
-extern OSErr ufsPBHSetFInfo();
-extern OSErr ufsPBSetFLock();
-extern OSErr ufsPBHSetFLock();
-extern OSErr ufsPBRstFLock();
-extern OSErr ufsPBHRstFLock();
-extern OSErr ufsPBSetFVers();
-extern OSErr ufsPBRename();
-extern OSErr ufsPBHRename();
-extern OSErr ufsPBGetFCBInfo();
-extern OSErr ufsPBMountVol(); 
-extern OSErr ufsPBGetVInfo();
-extern OSErr ufsPBHGetVInfo();
-extern OSErr ufsPBSetVInfo();
-extern OSErr ufsPBGetVol(); 
-extern OSErr ufsPBHGetVol(); 
-extern OSErr ufsPBSetVol(); 
-extern OSErr ufsPBHSetVol(); 
-extern OSErr ufsPBFlushVol();
-extern OSErr ufsPBUnmountVol(); 
-extern OSErr ufsPBOffLine(); 
-extern OSErr ufsPBEject(); 
-#else
+
 extern OSErr ufsPBOpen( ParmBlkPtr ufsPB, BOOLEAN a ); 
 extern OSErr ufsPBHOpen( HParmBlkPtr ufsPB, BOOLEAN a ); 
 extern OSErr ufsPBOpenRF( ParmBlkPtr ufsPB, BOOLEAN a ); 
@@ -502,7 +430,6 @@ extern OSErr ufsPBFlushVol( ParmBlkPtr ufsPB, BOOLEAN a );
 extern OSErr ufsPBUnmountVol( ParmBlkPtr ufsPB ); 
 extern OSErr ufsPBOffLine( ParmBlkPtr ufsPB ); 
 extern OSErr ufsPBEject( ParmBlkPtr ufsPB ); 
-#endif
 
 extern void ROMlib_fileinit (void);
 extern BOOLEAN ROMlib_isresourcefork (const char *fullname);
@@ -532,7 +459,7 @@ extern void convert_slashs_to_backslashs (char *p);
 extern OSErr ROMlib_hiddenbyname (GetOrSetType gors, char *pathname,
 				  char *rpathname, Single_dates *datep,
 				  FInfo *finfop, FXInfo *fxinfop,
-				  LONGINT *lenp, LONGINT *rlenp);
+				  GUEST<LONGINT> *lenp, GUEST<LONGINT> *rlenp);
 
 extern unsigned char ROMlib_fromhex (unsigned char c);
 #endif

@@ -400,33 +400,33 @@ Executor::ROMlib_drawiptext (DialogPtr dp, itmp ip, int item_no)
   r = ip->itmr;
   if (CB (ip->itmtype) & statText)
     {
-      HIDDEN_Handle nh;
+      Handle nh;
       LONGINT l;
       char subsrc[2], *sp;
-      HIDDEN_Handle *hp;
+      GUEST<Handle> *hp;
       
       *subsrc = '^';
       sp = subsrc + 1;
-      nh.p = (Handle) MR (ip->itmhand);
+      nh = (Handle) MR (ip->itmhand);
       
       HandToHand (&nh);
       
-      for (*sp = '0', hp = (HIDDEN_Handle *) DAStrings_H;
+      for (*sp = '0', hp = (GUEST<Handle> *) DAStrings;
 	   *sp != '4'; ++*sp, hp++)
 	{
-	  if (hp->p)
+	  if (hp)
 	    {
 	      for (l = 0; l >= 0;
-		   l = Munger (nh.p, l,
+		   l = Munger (nh, l,
 			  (Ptr) subsrc, (LONGINT) 2, STARH (STARH (hp)) + 1,
 			     (LONGINT) (unsigned char) *STARH (STARH (hp))))
 		;
 	    }
 	}
-      HLock (nh.p);
-      TextBox (STARH (nh.p), GetHandleSize (nh.p), &r, teFlushDefault);
-      HUnlock (nh.p);
-      DisposHandle (nh.p);
+      HLock (nh);
+      TextBox (STARH (nh), GetHandleSize (nh), &r, teFlushDefault);
+      HUnlock (nh);
+      DisposHandle (nh);
     }
   else if (CB (ip->itmtype) & editText)
     {
@@ -574,6 +574,7 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
   itmp ip;
   INTEGER *intp, i, iend;
   Point localp;
+  GUEST<Point> glocalp;
   GrafPtr gp;
   BOOLEAN itemenabled, retval;
   SignedByte flags;
@@ -584,12 +585,11 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
   switch (Cx(evt->what))
     {
     case mouseDown:
-      localp = evt->where;
+      glocalp = evt->where;
       gp = thePort;
       SetPort((GrafPtr) dp);
-      GlobalToLocal(&localp); 
-      localp.h = CW(localp.h);
-      localp.v = CW(localp.v);
+      GlobalToLocal(&glocalp); 
+      localp = glocalp.get();
       SetPort(gp);
       intp = (INTEGER *) STARH(MR(dp->items));
       iend = Cx(*intp) + 2;

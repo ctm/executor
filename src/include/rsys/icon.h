@@ -8,7 +8,7 @@ namespace Executor {
    to change.  I just wanted to paste in the flags field so we can drop a
    label in there. */
 
-struct cotton_suite_layout_t : GuestStruct {
+struct cotton_suite_layout_t { GUEST_STRUCT;
     GUEST< Handle[N_SUITE_ICONS]> icons;
     GUEST< INTEGER> label;
 };

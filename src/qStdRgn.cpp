@@ -742,7 +742,7 @@ P2 (PUBLIC pascal trap, void, StdRgn,
   if (verb == frame)
     {
       RgnHandle rsave;
-      Point pen_size;
+      GUEST<Point> pen_size;
       
       /* remove the current region from rgnSave */
 /* #warning "How does XOR remove it?  e.g. two framerects in a row." */

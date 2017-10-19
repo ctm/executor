@@ -34,13 +34,13 @@ P4(PUBLIC pascal trap, void, ParamText, StringPtr, p0,		/* IMI-421 */
 				 StringPtr, p1, StringPtr, p2, StringPtr, p3)
 {
 	if (p0)
-			PtrToXHand((Ptr) p0, MR(DAStrings_H[0].p), (LONGINT)U(p0[0])+1);
+			PtrToXHand((Ptr) p0, MR(DAStrings[0]), (LONGINT)U(p0[0])+1);
 	if (p1)
-			PtrToXHand((Ptr) p1, MR(DAStrings_H[1].p), (LONGINT)U(p1[0])+1);
+			PtrToXHand((Ptr) p1, MR(DAStrings[1]), (LONGINT)U(p1[0])+1);
 	if (p2)
-			PtrToXHand((Ptr) p2, MR(DAStrings_H[2].p), (LONGINT)U(p2[0])+1);
+			PtrToXHand((Ptr) p2, MR(DAStrings[2]), (LONGINT)U(p2[0])+1);
 	if (p3)
-			PtrToXHand((Ptr) p3, MR(DAStrings_H[3].p), (LONGINT)U(p3[0])+1);
+			PtrToXHand((Ptr) p3, MR(DAStrings[3]), (LONGINT)U(p3[0])+1);
 }
 
 A3 (PUBLIC, itmp, ROMlib_dpnotoip, DialogPeek, dp,		/* INTERNAL */

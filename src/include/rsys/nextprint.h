@@ -1,6 +1,9 @@
 #if !defined (__RSYS_NEXTPRINT_H__)
 #define __RSYS_NEXTPRINT_H__
 
+#include "rsys/mactype.h"
+#include "QuickDraw.h"
+
 /*
  * Copyright 1992 by Abacus Research and Development, Inc.
  * All rights reserved.
@@ -21,27 +24,29 @@ typedef LONGINT printstate_t;
 
 extern printstate_t printstate;
 
-typedef struct {
-    short top;
-    short left;
-    short bottom;
-    short right;
+// ###autc04 TODO: why are these redefined here??
+
+typedef struct { GUEST_STRUCT;
+    GUEST<short> top;
+    GUEST<short> left;
+    GUEST<short> bottom;
+    GUEST<short> right;
 } comRect;
 
-typedef struct {
-    short v;
-    short h;
+typedef struct { GUEST_STRUCT;
+    GUEST<short> v;
+    GUEST<short> h;
 } comPoint;
 
 typedef char *char_ptr;
 
-struct comBitMap : GuestStruct {
+struct comBitMap { GUEST_STRUCT;
     GUEST< char_ptr> baseAddr;
     GUEST< short> rowBytes;
     GUEST< comRect> bounds;
 };
 
-struct comPixMap : GuestStruct {
+struct comPixMap { GUEST_STRUCT;
     GUEST< char_ptr> baseAddr;
     GUEST< short> rowBytes;
     GUEST< comRect> bounds;
@@ -59,20 +64,20 @@ struct comPixMap : GuestStruct {
     GUEST< LONGINT> pmReserved;
 };
 
-struct comFontInfo : GuestStruct {
+struct comFontInfo { GUEST_STRUCT;
     GUEST< short> ascent;
     GUEST< short> descent;
     GUEST< short> widMax;
     GUEST< short> leading;
 };
 
-typedef struct comPoly : GuestStruct {
+typedef struct comPoly { GUEST_STRUCT;
     GUEST< short> polySize;
     GUEST< comRect> polyBBox;
     GUEST< comPoint[1]> polyPoints;
 } **comPolyHandle;
 
-typedef struct comRgn : GuestStruct {
+typedef struct comRgn { GUEST_STRUCT;
     GUEST< short> rgnSize;
     GUEST< comRect> rgnBBox;
 } **comRgnHandle;
@@ -93,7 +98,7 @@ typedef LONGINT comFixed;
 
 typedef unsigned char comPattern[8];
 
-typedef struct comGrafPort : GuestStruct {
+typedef struct comGrafPort { GUEST_STRUCT;
     GUEST< short> device;
     GUEST< comBitMap> portBits;
     GUEST< comRect> portRect;

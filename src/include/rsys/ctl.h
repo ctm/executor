@@ -93,7 +93,7 @@ extern LONGINT ROMlib_ctlcall (ControlHandle c, INTEGER i, LONGINT l);
 
 
     /* private fields */
-struct popup_data : GuestStruct {
+struct popup_data { GUEST_STRUCT;
     GUEST< MenuHandle> menu;
     GUEST< int16> menu_id;
     GUEST< int16> title_width;
@@ -105,13 +105,13 @@ typedef popup_data_t *popup_data_ptr;
 MAKE_HIDDEN(popup_data_ptr);
 typedef HIDDEN_popup_data_ptr *popup_data_handle;
 
-struct thumbstr : GuestStruct {
+struct thumbstr { GUEST_STRUCT;
     GUEST< Rect> _tlimit;
     GUEST< Rect> _tslop;
     GUEST< INTEGER> _taxis;
 };
 
-struct contrlrestype : GuestStruct {
+struct contrlrestype { GUEST_STRUCT;
     GUEST< Rect> _crect;
     GUEST< INTEGER> _cvalue;
     GUEST< INTEGER> _cvisible;
@@ -122,7 +122,7 @@ struct contrlrestype : GuestStruct {
     GUEST< Byte> _ctitle;
 };
 
-struct lsastr : GuestStruct {
+struct lsastr { GUEST_STRUCT;
     GUEST< Rect> limitRect;
     GUEST< Rect> slopRect;
     GUEST< INTEGER> axis;

@@ -80,23 +80,23 @@ extern boolean_t substitute_fonts_p;
 
 enum { GetRslData = 4, SetRsl, DraftBits, NoDraftBits, GetRotn };
 
-struct TGnlData : GuestStruct {
+struct TGnlData { GUEST_STRUCT;
     GUEST< INTEGER> iOpCode;
     GUEST< INTEGER> iError;
     GUEST< LONGINT> lReserved;
 };
 
-struct TRslRg : GuestStruct {
+struct TRslRg { GUEST_STRUCT;
     GUEST< INTEGER> iMin;
     GUEST< INTEGER> iMax;
 };
 
-struct TRslRec : GuestStruct {
+struct TRslRec { GUEST_STRUCT;
     GUEST< INTEGER> iXRsl;
     GUEST< INTEGER> iYRsl;
 };
 
-struct TGetRslBlk : GuestStruct {
+struct TGetRslBlk { GUEST_STRUCT;
     GUEST< INTEGER> iOpCode;
     GUEST< INTEGER> iError;
     GUEST< LONGINT> lReserved;
@@ -107,7 +107,7 @@ struct TGetRslBlk : GuestStruct {
     GUEST< TRslRec[27]> rgRslRec;
 };
 
-struct TSetRslBlk : GuestStruct {
+struct TSetRslBlk { GUEST_STRUCT;
     GUEST< INTEGER> iOpCode;
     GUEST< INTEGER> iError;
     GUEST< LONGINT> lReserved;
@@ -116,7 +116,7 @@ struct TSetRslBlk : GuestStruct {
     GUEST< INTEGER> iYRsl;
 };
 
-typedef struct TTxtPicRec : GuestStruct {
+typedef struct TTxtPicRec { GUEST_STRUCT;
     GUEST< Byte> tJus;
     GUEST< Byte> tFlop;
     GUEST< INTEGER> tAngle;
@@ -153,7 +153,7 @@ enum
   tFlipVertical = 2,
 };
 
-typedef struct TCenterRec : GuestStruct {
+typedef struct TCenterRec { GUEST_STRUCT;
     GUEST< Fixed> y;
     GUEST< Fixed> x;
 } *TCenterRecPtr;

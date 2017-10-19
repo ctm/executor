@@ -14,7 +14,7 @@
 #define noTypeErr	(-102)
 
 namespace Executor {
-struct ScrapStuff : GuestStruct {
+struct ScrapStuff { GUEST_STRUCT;
     GUEST< LONGINT> scrapSize;
     GUEST< Handle> scrapHandle;
     GUEST< INTEGER> scrapCount;
@@ -23,7 +23,7 @@ struct ScrapStuff : GuestStruct {
 };
 typedef ScrapStuff *PScrapStuff;
 
-
+#if 0
 #if !defined (ScrapHandle_H)
 extern HIDDEN_Handle 	ScrapHandle_H;
 extern HIDDEN_StringPtr 	ScrapName_H;
@@ -34,6 +34,7 @@ extern INTEGER 	ScrapState;
 
 #define ScrapHandle	(ScrapHandle_H.p)
 #define ScrapName	(ScrapName_H.p)
+#endif
 
 extern pascal trap PScrapStuff C_InfoScrap( void  ); extern pascal trap PScrapStuff P_InfoScrap( void );
 extern pascal trap LONGINT C_UnloadScrap( void  ); extern pascal trap LONGINT P_UnloadScrap( void ); 

@@ -17,7 +17,7 @@ MAKE_HIDDEN(HIDDEN_CGrafPtr_Ptr);
     /* can't use [0];
      make this an unsigned char even tho the mac has SignedByte;
      it is treated as unsigned */
-typedef struct ITab : GuestStruct {
+typedef struct ITab { GUEST_STRUCT;
     GUEST< LONGINT> iTabSeed;
     GUEST< INTEGER> iTabRes;
     GUEST< unsigned char[1]> iTTable;
@@ -35,7 +35,7 @@ MAKE_HIDDEN(GDHandle);
 typedef struct PACKED SProcRec *SProcPtr;
 MAKE_HIDDEN(SProcPtr);
 typedef HIDDEN_SProcPtr *SProcHndl;
-struct SProcRec : GuestStruct {
+struct SProcRec { GUEST_STRUCT;
     GUEST< SProcHndl> nxtSrch;
     GUEST< ProcPtr> srchProc;
 };
@@ -44,14 +44,14 @@ typedef struct PACKED CProcRec *CProcPtr;
 MAKE_HIDDEN(CProcPtr);
 
 typedef HIDDEN_CProcPtr *CProcHndl;
-struct CProcRec : GuestStruct {
+struct CProcRec { GUEST_STRUCT;
     GUEST< CProcHndl> nxtComp;
     GUEST< ProcPtr> compProc;
 };
 
 typedef void *DeviceLoopDrawingProcPtr;
 
-struct GDevice : GuestStruct {
+struct GDevice { GUEST_STRUCT;
     GUEST< INTEGER> gdRefNum;
     GUEST< INTEGER> gdID;
     GUEST< INTEGER> gdType;
@@ -79,7 +79,8 @@ typedef uint32 DeviceLoopFlags;
 #define dontMatchSeeds	(1 << 1)
 #define allDevices	(1 << 2)
 
-struct ColorInfo : GuestStruct {
+struct ColorInfo {
+    GUEST_STRUCT;
     GUEST< RGBColor> ciRGB;
     GUEST< INTEGER> ciUsage;
     GUEST< INTEGER> ciTolerance;
@@ -87,7 +88,7 @@ struct ColorInfo : GuestStruct {
     GUEST< LONGINT> ciPrivate;
 };
 
-typedef struct Palette : GuestStruct {
+typedef struct Palette { GUEST_STRUCT;
     GUEST< INTEGER> pmEntries;
     GUEST< GrafPtr> pmWindow;
     GUEST< INTEGER> pmPrivate;
@@ -142,14 +143,14 @@ typedef LONGINT GWorldFlags;
 
 typedef CGrafPort GWorld, *GWorldPtr;
 
-struct ReqListRec : GuestStruct {
+struct ReqListRec { GUEST_STRUCT;
     GUEST< INTEGER> reqLSize;
     GUEST< INTEGER[1]> reqLData;
 };
 
 /* extended version 2 picture datastructures */
 
-struct OpenCPicParams : GuestStruct {
+struct OpenCPicParams { GUEST_STRUCT;
     GUEST< Rect> srcRect;
     GUEST< Fixed> hRes;
     GUEST< Fixed> vRes;
@@ -158,7 +159,7 @@ struct OpenCPicParams : GuestStruct {
     GUEST< int32> reserved2;
 };
 
-typedef struct CommonSpec : GuestStruct {
+typedef struct CommonSpec { GUEST_STRUCT;
     GUEST< int16> count;
     GUEST< int16> ID;
 } CommentSpec;
@@ -167,7 +168,7 @@ typedef CommentSpec *CommentSpecPtr;
 MAKE_HIDDEN(CommentSpecPtr);
 typedef HIDDEN_CommentSpecPtr *CommentSpecHandle;
 
-struct FontSpec : GuestStruct {
+struct FontSpec { GUEST_STRUCT;
     GUEST< int16> pictFontID;
     GUEST< int16> sysFontID;
     GUEST< int32[4]> size;
@@ -183,7 +184,7 @@ typedef HIDDEN_FontSpecPtr *FontSpecHandle;
 
 
 
-struct PictInfo : GuestStruct {
+struct PictInfo { GUEST_STRUCT;
     GUEST< int16> version;    /* 0 */
     GUEST< int32> uniqueColors;    /* 2 */
     GUEST< PaletteHandle> thePalette;    /* 6 */

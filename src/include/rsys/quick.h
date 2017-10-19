@@ -15,7 +15,7 @@
 #include "rsys/trapglue.h"
 
 namespace Executor {
-typedef struct ccrsr_res : GuestStruct {
+typedef struct ccrsr_res { GUEST_STRUCT;
     GUEST< CCrsr> crsr;
     GUEST< PixMap> crsr_map;
     GUEST< char> data;

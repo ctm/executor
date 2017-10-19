@@ -11,28 +11,7 @@
 #include "rsys/pstuff.h"
 
 namespace Executor {
-    /* TRUE if the save pattern is in _tpat, FALSE if it was placed in
-     _tpixpat */
 
-
-
-
-    /* ### is tesave mac-visible state?  how is color and whatnot really
-     stored? */
-    /* only filled if `CGrafPort_p ()' */
-// ### Struct needs manual conversion to GUEST<...>
-//   int32 fg_color, bk_color;
-    /* TRUE if the save pattern is in _tpat, FALSE if it was placed in
-     _tpixpat */
-
-
-
-
-    /* ### is tesave mac-visible state?  how is color and whatnot really
-     stored? */
-    /* only filled if `CGrafPort_p ()' */
-// ### Struct needs manual conversion to GUEST<...>
-//   int32 fg_color, bk_color;
 typedef struct PACKED
 {
 #if 0
@@ -45,25 +24,25 @@ typedef struct PACKED
   Point _tpsize;
   INTEGER _tpmode;
 #else
-  PenState _tpstate;
+  GUEST<PenState> _tpstate;
 #endif
   
-  PACKED_MEMBER(GrafPtr, _tport);
+  GUEST<GrafPtr> _tport;
   
-  INTEGER _tpvis;
+  GUEST<INTEGER> _tpvis;
   
-  INTEGER _tfont;
-  INTEGER _tmode;
-  INTEGER _tsize;
-  Style _tstyle;
-  Byte filler;
-  PACKED_MEMBER(RgnHandle, _tsaveclip);
+  GUEST<INTEGER> _tfont;
+  GUEST<INTEGER> _tmode;
+  GUEST<INTEGER> _tsize;
+  GUEST<Style> _tstyle;
+  GUEST<Byte> filler;
+  GUEST<RgnHandle> _tsaveclip;
   
   /* ### is tesave mac-visible state?  how is color and whatnot really
      stored? */
-  int32 fg_color, bk_color;
+  GUEST<int32> fg_color, bk_color;
   /* only filled if `CGrafPort_p ()' */
-  RGBColor rgb_fg_color, rgb_bk_color;
+  GUEST<RGBColor> rgb_fg_color, rgb_bk_color;
 } tesave;
 
 #define TESAVE(x)	tesave _txx; ROMlib_tesave(&_txx, x);
@@ -82,7 +61,7 @@ typedef struct PACKED
 #define GENERIC_ELT_FONT(generic_elt) (CW (GENERIC_ELT_FONT_X (generic_elt)))
 #define GENERIC_ELT_SIZE(generic_elt) (CW (GENERIC_ELT_SIZE_X (generic_elt)))
 
-typedef struct generic_elt : GuestStruct {
+typedef struct generic_elt { GUEST_STRUCT;
     GUEST< int16> Height;
     GUEST< int16> Ascent;
     GUEST< int16> Font;
@@ -132,7 +111,7 @@ extern void	ROMlib_teautoloop( TEHandle teh );
 extern int16 ROMlib_call_TEDoText (TEPtr tp, int16 first, int16 last,
 				   int16 what);
 
-struct tehidden : GuestStruct {
+struct tehidden { GUEST_STRUCT;
     GUEST< ProcPtr> EOLHook;
     GUEST< ProcPtr> DRAWHook;
     GUEST< ProcPtr> WIDTHHook;

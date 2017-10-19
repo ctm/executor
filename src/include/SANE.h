@@ -14,7 +14,7 @@ typedef union {
 struct {
     ULONGINT hi;
     ULONGINT lo;
-};
+} hilo;
   signed long long val;
 } comp_t;
 
@@ -25,7 +25,7 @@ typedef union {
 struct {
     ULONGINT lo;
     ULONGINT hi;
-};
+} hilo;
   signed long long val;
 } native_comp_t;
 #else /* Not LITTLEENDIAN */
@@ -37,8 +37,6 @@ typedef comp_t native_comp_t;
     /* Sign and exponent. */
 
     /* Mantissa. */
-// ### Struct needs manual conversion to GUEST<...>
-//   union {
 typedef struct PACKED {
   /* Sign and exponent. */
   union {
@@ -70,7 +68,7 @@ typedef comp_t comp;
 
 /* This only makes sense on the 68k. */
 #if defined (mc68000)
-struct extended96 : GuestStruct {
+struct extended96 { GUEST_STRUCT;
     GUEST< INTEGER> exp;
     GUEST< INTEGER> zero;
     GUEST< INTEGER[4]> man;
@@ -79,7 +77,7 @@ struct extended96 : GuestStruct {
 
 #define SIGDIGLEN 20
 
-struct Decimal : GuestStruct {
+struct Decimal { GUEST_STRUCT;
     GUEST< unsigned char> sgn;
     GUEST< unsigned char> unused_filler;
     GUEST< INTEGER> exp;
@@ -95,7 +93,7 @@ typedef INTEGER DecFormStyle;
 typedef enum {SNaN = 1, QNaN, Infinite, ZeroNum, NormalNum, DenormalNum}
 								      NumClass;
 
-struct DecForm : GuestStruct {
+struct DecForm { GUEST_STRUCT;
     GUEST< DecFormStyle> style;
     GUEST< INTEGER> digits;
 };

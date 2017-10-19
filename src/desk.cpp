@@ -107,7 +107,7 @@ P2(PUBLIC pascal trap, void, SystemClick, EventRecord *, evp, WindowPtr, wp)
 		ROMlib_hook(desk_deskhooknumber);
 		EM_D0 = -1;
 		EM_A0 = (LONGINT) (long) US_TO_SYN68K(evp);
-		CALL_EMULATOR((syn68k_addr_t) (long) CL((long) DeskHook));
+		CALL_EMULATOR((syn68k_addr_t) (long) CL((long) DeskHook.raw()));
 	    }
 	}
     }

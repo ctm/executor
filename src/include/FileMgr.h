@@ -154,34 +154,34 @@ enum
 
 #pragma pack(push, 2)
 
-typedef struct {
-  OSType fdType;
-  OSType fdCreator;
-  uint16_t fdFlags;
+typedef struct { GUEST_STRUCT;
+  GUEST<OSType> fdType;
+  GUEST<OSType> fdCreator;
+  GUEST<uint16_t> fdFlags;
   Point fdLocation;
-  uint16_t fdFldr;
+  GUEST<uint16_t> fdFldr;
 } FInfo;
 
-typedef struct {
-  uint16_t fdIconID;
-  uint16_t fdUnused[4];
-  uint16_t fdComment;
-  LONGINT fdPutAway;
+typedef struct { GUEST_STRUCT;
+    GUEST<uint16_t> fdIconID;
+    GUEST<uint16_t> fdUnused[4];
+    GUEST<uint16_t> fdComment;
+    GUEST<LONGINT> fdPutAway;
 } FXInfo;
 
-typedef struct {
+typedef struct { GUEST_STRUCT;
   Rect frRect;
-  uint16_t frFlags;
+  GUEST<uint16_t> frFlags;
   Point frLocation;
-  uint16_t frView;
+  GUEST<uint16_t> frView;
 } DInfo;
 
-typedef struct {
+typedef struct { GUEST_STRUCT;
   Point frScroll;
-  LONGINT frOpenChain;
-  uint16_t frUnused;
-  uint16_t frComment;
-  LONGINT frPutAway;
+  GUEST<LONGINT> frOpenChain;
+  GUEST<uint16_t> frUnused;
+  GUEST<uint16_t> frComment;
+  GUEST<LONGINT> frPutAway;
 } DXInfo;
 
 typedef enum {
@@ -192,71 +192,71 @@ typedef enum {
 } ParamBlkType;
 
 #define COMMONFSQUEUEDEFS	        \
-  PACKED_MEMBER(QElemPtr, qLink);       \
-  INTEGER qType;                        \
-  INTEGER ioTrap;                       \
-  PACKED_MEMBER(Ptr, ioCmdAddr);        \
-  PACKED_MEMBER(ProcPtr, ioCompletion); \
-  OSErr ioResult;                       \
-  PACKED_MEMBER(StringPtr, ioNamePtr);  \
-  INTEGER ioVRefNum
+    GUEST<QElemPtr> qLink;       \
+    GUEST<INTEGER> qType;                        \
+    GUEST<INTEGER> ioTrap;                       \
+    GUEST<Ptr> ioCmdAddr;        \
+    GUEST<ProcPtr> ioCompletion; \
+    GUEST<OSErr> ioResult;                       \
+    GUEST<StringPtr> ioNamePtr;  \
+    GUEST<INTEGER> ioVRefNum
 
-typedef struct {
+typedef struct { GUEST_STRUCT;
   COMMONFSQUEUEDEFS;
-  INTEGER ioRefNum;
-  SignedByte ioVersNum;
-  SignedByte ioPermssn;
-  LONGINT ioMisc;		/* should be largest of Ptr, LONGINT */
-  PACKED_MEMBER(Ptr, ioBuffer);
-  LONGINT ioReqCount;
-  LONGINT ioActCount;
-  INTEGER ioPosMode;
-  LONGINT ioPosOffset;
+    GUEST< INTEGER> ioRefNum;
+    GUEST< SignedByte> ioVersNum;
+    GUEST< SignedByte> ioPermssn;
+    GUEST< LONGINT> ioMisc;    /* should be largest of Ptr, LONGINT */
+    GUEST< Ptr> ioBuffer;
+    GUEST< LONGINT> ioReqCount;
+    GUEST< LONGINT> ioActCount;
+    GUEST< INTEGER> ioPosMode;
+    GUEST< LONGINT> ioPosOffset;
 } IOParam;
 
-typedef struct {
+typedef struct { GUEST_STRUCT;
   COMMONFSQUEUEDEFS;
-  INTEGER ioFRefNum;
-  SignedByte ioFVersNum;
-  SignedByte filler1;
-  INTEGER ioFDirIndex;
-  SignedByte ioFlAttrib;
-  SignedByte ioFlVersNum;
-  FInfo ioFlFndrInfo;
-  LONGINT ioFlNum;
-  INTEGER ioFlStBlk;
-  LONGINT ioFlLgLen;
-  LONGINT ioFlPyLen;
-  INTEGER ioFlRStBlk;
-  LONGINT ioFlRLgLen;
-  LONGINT ioFlRPyLen;
-  LONGINT ioFlCrDat;
-  LONGINT ioFlMdDat;
+    GUEST< INTEGER> ioFRefNum;
+    GUEST< SignedByte> ioFVersNum;
+    GUEST< SignedByte> filler1;
+    GUEST< INTEGER> ioFDirIndex;
+    GUEST< SignedByte> ioFlAttrib;
+    GUEST< SignedByte> ioFlVersNum;
+    GUEST< FInfo> ioFlFndrInfo;
+    GUEST< LONGINT> ioFlNum;
+    GUEST< INTEGER> ioFlStBlk;
+    GUEST< LONGINT> ioFlLgLen;
+    GUEST< LONGINT> ioFlPyLen;
+    GUEST< INTEGER> ioFlRStBlk;
+    GUEST< LONGINT> ioFlRLgLen;
+    GUEST< LONGINT> ioFlRPyLen;
+    GUEST< LONGINT> ioFlCrDat;
+    GUEST< LONGINT> ioFlMdDat;
 } FileParam;
 
-typedef struct {
+typedef struct { GUEST_STRUCT;
   COMMONFSQUEUEDEFS;
-  LONGINT filler2;
-  INTEGER ioVolIndex;
-  LONGINT ioVCrDate;
-  LONGINT ioVLsBkUp;
-  uint16_t ioVAtrb;
-  uint16_t ioVNmFls;
-  uint16_t ioVDirSt;
-  uint16_t ioVBlLn;
-  uint16_t ioVNmAlBlks;
-  LONGINT ioVAlBlkSiz;
-  LONGINT ioVClpSiz;
-  uint16_t ioAlBlSt;
-  LONGINT ioVNxtFNum;
-  uint16_t ioVFrBlk;
+    GUEST< LONGINT> filler2;
+    GUEST< INTEGER> ioVolIndex;
+    GUEST< LONGINT> ioVCrDate;
+    GUEST< LONGINT> ioVLsBkUp;
+    GUEST< uint16_t> ioVAtrb;
+    GUEST< uint16_t> ioVNmFls;
+    GUEST< uint16_t> ioVDirSt;
+    GUEST< uint16_t> ioVBlLn;
+    GUEST< uint16_t> ioVNmAlBlks;
+    GUEST< LONGINT> ioVAlBlkSiz;
+    GUEST< LONGINT> ioVClpSiz;
+    GUEST< uint16_t> ioAlBlSt;
+    GUEST< LONGINT> ioVNxtFNum;
+    GUEST< uint16_t> ioVFrBlk;
 } VolumeParam;
 
-typedef struct {
+typedef struct { GUEST_STRUCT;
   COMMONFSQUEUEDEFS;
-  INTEGER ioCRefNum;
-  INTEGER csCode;
-  INTEGER csParam[11];
+    GUEST< INTEGER> ioCRefNum;
+    GUEST< INTEGER> csCode;
+    GUEST< INTEGER[11]> csParam;
 } CntrlParam;
 
 typedef union {
@@ -267,65 +267,65 @@ typedef union {
 } ParamBlockRec;
 typedef ParamBlockRec *ParmBlkPtr;
 
-typedef struct {
+typedef struct { GUEST_STRUCT;
   COMMONFSQUEUEDEFS;
-  INTEGER ioRefNum;
-  SignedByte ioVersNum;
-  SignedByte ioPermssn;
-  LONGINT ioMisc;		/* should be largest of Ptr, LONGINT */
-  PACKED_MEMBER(Ptr, ioBuffer);
-  LONGINT ioReqCount;
-  LONGINT ioActCount;
-  INTEGER ioPosMode;
-  LONGINT ioPosOffset;
+    GUEST< INTEGER> ioRefNum;
+    GUEST< SignedByte> ioVersNum;
+    GUEST< SignedByte> ioPermssn;
+    GUEST< LONGINT> ioMisc;    /* should be largest of Ptr, LONGINT */
+    GUEST< Ptr> ioBuffer;
+    GUEST< LONGINT> ioReqCount;
+    GUEST< LONGINT> ioActCount;
+    GUEST< INTEGER> ioPosMode;
+    GUEST< LONGINT> ioPosOffset;
 } HIoParam;
 
-typedef struct {
+typedef struct { GUEST_STRUCT;
   COMMONFSQUEUEDEFS;
-  INTEGER ioFRefNum;
-  SignedByte ioFVersNum;
-  SignedByte filler1;
-  INTEGER ioFDirIndex;
-  SignedByte ioFlAttrib;
-  SignedByte ioFlVersNum;
-  FInfo ioFlFndrInfo;
-  /*-->*/ LONGINT ioDirID;
-  INTEGER ioFlStBlk;
-  LONGINT ioFlLgLen;
-  LONGINT ioFlPyLen;
-  INTEGER ioFlRStBlk;
-  LONGINT ioFlRLgLen;
-  LONGINT ioFlRPyLen;
-  LONGINT ioFlCrDat;
-  LONGINT ioFlMdDat;
+    GUEST< INTEGER> ioFRefNum;
+    GUEST< SignedByte> ioFVersNum;
+    GUEST< SignedByte> filler1;
+    GUEST< INTEGER> ioFDirIndex;
+    GUEST< SignedByte> ioFlAttrib;
+    GUEST< SignedByte> ioFlVersNum;
+    GUEST< FInfo> ioFlFndrInfo;
+    GUEST< LONGINT> ioDirID;    /*-->*/
+    GUEST< INTEGER> ioFlStBlk;
+    GUEST< LONGINT> ioFlLgLen;
+    GUEST< LONGINT> ioFlPyLen;
+    GUEST< INTEGER> ioFlRStBlk;
+    GUEST< LONGINT> ioFlRLgLen;
+    GUEST< LONGINT> ioFlRPyLen;
+    GUEST< LONGINT> ioFlCrDat;
+    GUEST< LONGINT> ioFlMdDat;
 } HFileParam;
 
-typedef struct {
+typedef struct { GUEST_STRUCT;
   COMMONFSQUEUEDEFS;
-  LONGINT pfiller2;
-  INTEGER ioVolIndex;
-  LONGINT ioVCrDate;
-  /*-->*/ LONGINT ioVLsMod;
-  INTEGER ioVAtrb;
-  uint16_t ioVNmFls;
-  /*-->*/ uint16_t ioVBitMap;
-  /*-->*/ uint16_t ioVAllocPtr;
-  uint16_t ioVNmAlBlks;
-  LONGINT ioVAlBlkSiz;
-  LONGINT ioVClpSiz;
-  uint16_t ioAlBlSt;
-  /*-->*/ LONGINT ioVNxtCNID;
-  uint16_t ioVFrBlk;
-  /*-->*/ uint16_t ioVSigWord;
-  /*-->*/ INTEGER ioVDrvInfo;
-  /*-->*/ INTEGER ioVDRefNum;
-  /*-->*/ INTEGER ioVFSID;
-  /*-->*/ LONGINT ioVBkUp;
-  /*-->*/ uint16_t ioVSeqNum;
-  /*-->*/ LONGINT ioVWrCnt;
-  /*-->*/ LONGINT ioVFilCnt;
-  /*-->*/ LONGINT ioVDirCnt;
-  /*-->*/ LONGINT ioVFndrInfo[8];
+    GUEST< LONGINT> pfiller2;
+    GUEST< INTEGER> ioVolIndex;
+    GUEST< LONGINT> ioVCrDate;
+    GUEST< LONGINT> ioVLsMod;    /*-->*/
+    GUEST< INTEGER> ioVAtrb;
+    GUEST< uint16_t> ioVNmFls;
+    GUEST< uint16_t> ioVBitMap;    /*-->*/
+    GUEST< uint16_t> ioVAllocPtr;    /*-->*/
+    GUEST< uint16_t> ioVNmAlBlks;
+    GUEST< LONGINT> ioVAlBlkSiz;
+    GUEST< LONGINT> ioVClpSiz;
+    GUEST< uint16_t> ioAlBlSt;
+    GUEST< LONGINT> ioVNxtCNID;    /*-->*/
+    GUEST< uint16_t> ioVFrBlk;
+    GUEST< uint16_t> ioVSigWord;    /*-->*/
+    GUEST< INTEGER> ioVDrvInfo;    /*-->*/
+    GUEST< INTEGER> ioVDRefNum;    /*-->*/
+    GUEST< INTEGER> ioVFSID;    /*-->*/
+    GUEST< LONGINT> ioVBkUp;    /*-->*/
+    GUEST< uint16_t> ioVSeqNum;    /*-->*/
+    GUEST< LONGINT> ioVWrCnt;    /*-->*/
+    GUEST< LONGINT> ioVFilCnt;    /*-->*/
+    GUEST< LONGINT> ioVDirCnt;    /*-->*/
+    GUEST< LONGINT[8]> ioVFndrInfo;    /*-->*/
 } HVolumeParam;
 
 typedef union {
@@ -339,42 +339,42 @@ typedef enum { hfileInfo, dirInfo } CInfoType;
 
 #define COMMONCINFODEFS			\
     COMMONFSQUEUEDEFS;	\
-    INTEGER ioFRefNum;	\
-    SignedByte ioFVersNum;	\
-    SignedByte filler1;	\
-    INTEGER ioFDirIndex;	\
-    SignedByte ioFlAttrib;	\
-    SignedByte ioACUser
+    GUEST<INTEGER> ioFRefNum;	\
+    GUEST<SignedByte> ioFVersNum;	\
+    GUEST<SignedByte> filler1;	\
+    GUEST<INTEGER> ioFDirIndex;	\
+    GUEST<SignedByte> ioFlAttrib;	\
+    GUEST<SignedByte> ioACUser
 
-typedef struct {
+typedef struct { GUEST_STRUCT;
   COMMONCINFODEFS;
-  FInfo ioFlFndrInfo;
-  LONGINT ioDirID;
-  INTEGER ioFlStBlk;
-  LONGINT ioFlLgLen;
-  LONGINT ioFlPyLen;
-  INTEGER ioFlRStBlk;
-  LONGINT ioFlRLgLen;
-  LONGINT ioFlRPyLen;
-  LONGINT ioFlCrDat;
-  LONGINT ioFlMdDat;
-  LONGINT ioFlBkDat;
-  FXInfo ioFlXFndrInfo;
-  LONGINT ioFlParID;
-  LONGINT ioFlClpSiz;
+    GUEST< FInfo> ioFlFndrInfo;
+    GUEST< LONGINT> ioDirID;
+    GUEST< INTEGER> ioFlStBlk;
+    GUEST< LONGINT> ioFlLgLen;
+    GUEST< LONGINT> ioFlPyLen;
+    GUEST< INTEGER> ioFlRStBlk;
+    GUEST< LONGINT> ioFlRLgLen;
+    GUEST< LONGINT> ioFlRPyLen;
+    GUEST< LONGINT> ioFlCrDat;
+    GUEST< LONGINT> ioFlMdDat;
+    GUEST< LONGINT> ioFlBkDat;
+    GUEST< FXInfo> ioFlXFndrInfo;
+    GUEST< LONGINT> ioFlParID;
+    GUEST< LONGINT> ioFlClpSiz;
 } HFileInfo;
 
-typedef struct {
+typedef struct { GUEST_STRUCT;
   COMMONCINFODEFS;
-  DInfo ioDrUsrWds;
-  LONGINT ioDrDirID;
-  uint16_t ioDrNmFls;
-  uint16_t filler3[9];
-  LONGINT ioDrCrDat;
-  LONGINT ioDrMdDat;
-  LONGINT ioDrBkDat;
-  DXInfo ioDrFndrInfo;
-  LONGINT ioDrParID;
+    GUEST< DInfo> ioDrUsrWds;
+    GUEST< LONGINT> ioDrDirID;
+    GUEST< uint16_t> ioDrNmFls;
+    GUEST< uint16_t[9]> filler3;
+    GUEST< LONGINT> ioDrCrDat;
+    GUEST< LONGINT> ioDrMdDat;
+    GUEST< LONGINT> ioDrBkDat;
+    GUEST< DXInfo> ioDrFndrInfo;
+    GUEST< LONGINT> ioDrParID;
 } DirInfo;
 
 typedef union {
@@ -383,115 +383,117 @@ typedef union {
 } CInfoPBRec;
 typedef CInfoPBRec *CInfoPBPtr;
 
-typedef struct {
+typedef struct { GUEST_STRUCT;
   COMMONFSQUEUEDEFS;
-  LONGINT filler1;
-  PACKED_MEMBER(StringPtr, ioNewName);
-  LONGINT filler2;
-  LONGINT ioNewDirID;
-  LONGINT filler3[2];
-  LONGINT ioDirID;
+    GUEST< LONGINT> filler1;
+    GUEST< StringPtr> ioNewName;
+    GUEST< LONGINT> filler2;
+    GUEST< LONGINT> ioNewDirID;
+    GUEST< LONGINT[2]> filler3;
+    GUEST< LONGINT> ioDirID;
 } CMovePBRec;
 typedef CMovePBRec *CMovePBPtr;
 
-typedef struct {
+struct WDPBRec { GUEST_STRUCT;
   COMMONFSQUEUEDEFS;
-  uint16_t filler1;
-  INTEGER ioWDIndex;
-  LONGINT ioWDProcID;
-  INTEGER ioWDVRefNum;
-  INTEGER filler2[7];
-  LONGINT ioWDDirID;
-} WDPBRec;
+    GUEST< uint16_t> filler1;
+    GUEST< INTEGER> ioWDIndex;
+    GUEST< LONGINT> ioWDProcID;
+    GUEST< INTEGER> ioWDVRefNum;
+    GUEST< INTEGER[7]> filler2;
+    GUEST< LONGINT> ioWDDirID;
+};
 typedef WDPBRec *WDPBPtr;
 
-typedef struct {
+struct FCBPBRec { GUEST_STRUCT;
   COMMONFSQUEUEDEFS;
-  INTEGER ioRefNum;
-  uint16_t filler;
-  INTEGER ioFCBIndx;
-  INTEGER ioFCBobnoxiousfiller;	/* ACK! not in IMIV, but ThinkC+MPW */
-  LONGINT ioFCBFlNm;
-  uint16_t ioFCBFlags;
-  INTEGER ioFCBStBlk;
-  LONGINT ioFCBEOF;
-  LONGINT ioFCBPLen;
-  LONGINT ioFCBCrPs;
-  INTEGER ioFCBVRefNum;
-  LONGINT ioFCBClpSiz;
-  LONGINT ioFCBParID;
-} FCBPBRec;
+    GUEST< INTEGER> ioRefNum;
+    GUEST< uint16_t> filler;
+    GUEST< INTEGER> ioFCBIndx;
+    GUEST< INTEGER> ioFCBobnoxiousfiller;    /* ACK! not in IMIV, but ThinkC+MPW */
+    GUEST< LONGINT> ioFCBFlNm;
+    GUEST< uint16_t> ioFCBFlags;
+    GUEST< INTEGER> ioFCBStBlk;
+    GUEST< LONGINT> ioFCBEOF;
+    GUEST< LONGINT> ioFCBPLen;
+    GUEST< LONGINT> ioFCBCrPs;
+    GUEST< INTEGER> ioFCBVRefNum;
+    GUEST< LONGINT> ioFCBClpSiz;
+    GUEST< LONGINT> ioFCBParID;
+};
 typedef FCBPBRec *FCBPBPtr;
 
-typedef struct {
-  PACKED_MEMBER(QElemPtr, qLink); /* 0 */
-  INTEGER qType;		/*  4 */
-  uint16_t vcbFlags;		/*  6 */
-  uint16_t vcbSigWord;		/*  8 */
-  LONGINT vcbCrDate;		/* 10 */
-  LONGINT vcbLsMod;		/* 14 */
-  uint16_t vcbAtrb;		/* 18 */
-  uint16_t vcbNmFls;		/* 20 */
-  uint16_t vcbVBMSt;		/* 22 */
-  uint16_t vcbAllocPtr;	/* 24 */
-  uint16_t vcbNmAlBlks;	/* 26 */
-  LONGINT vcbAlBlkSiz;	/* 28 */
-  LONGINT vcbClpSiz;		/* 32 */
-  uint16_t vcbAlBlSt;		/* 36 */
-  LONGINT vcbNxtCNID;		/* 38 */
-  uint16_t vcbFreeBks;		/* 42 */
-  Byte vcbVN[28];		/* 44 */
-  INTEGER vcbDrvNum;		/* 72 */
-  INTEGER vcbDRefNum;		/* 74 */
-  INTEGER vcbFSID;		/* 76 */
-  INTEGER vcbVRefNum;		/* 78 */
-  PACKED_MEMBER(Ptr, vcbMAdr);
-  PACKED_MEMBER(Ptr, vcbBufAdr);
-  uint16_t vcbMLen;
-  INTEGER vcbDirIndex;
-  uint16_t vcbDirBlk;
-  LONGINT vcbVolBkUp;
-  uint16_t vcbVSeqNum;
-  LONGINT vcbWrCnt;
-  LONGINT vcbXTClpSiz;
-  LONGINT vcbCTClpSiz;
-  uint16_t vcbNmRtDirs;
-  LONGINT vcbFilCnt;
-  LONGINT vcbDirCnt;
-  LONGINT vcbFndrInfo[8];
-  uint16_t vcbVCSize;
-  uint16_t vcbVBMCSiz;
-  uint16_t vcbCtlCSiz;
-  uint16_t vcbXTAlBlks;
-  uint16_t vcbCTAlBlks;
-  INTEGER vcbXTRef;
-  INTEGER vcbCTRef;
-  PACKED_MEMBER(Ptr, vcbCtlBuf);
-  LONGINT vcbDirIDM;
-  uint16_t vcbOffsM;
-} VCB;
+struct VCB { GUEST_STRUCT;
+    GUEST< QElemPtr> qLink;    /* 0 */
+    GUEST< INTEGER> qType;    /*  4 */
+    GUEST< uint16_t> vcbFlags;    /*  6 */
+    GUEST< uint16_t> vcbSigWord;    /*  8 */
+    GUEST< LONGINT> vcbCrDate;    /* 10 */
+    GUEST< LONGINT> vcbLsMod;    /* 14 */
+    GUEST< uint16_t> vcbAtrb;    /* 18 */
+    GUEST< uint16_t> vcbNmFls;    /* 20 */
+    GUEST< uint16_t> vcbVBMSt;    /* 22 */
+    GUEST< uint16_t> vcbAllocPtr;    /* 24 */
+    GUEST< uint16_t> vcbNmAlBlks;    /* 26 */
+    GUEST< LONGINT> vcbAlBlkSiz;    /* 28 */
+    GUEST< LONGINT> vcbClpSiz;    /* 32 */
+    GUEST< uint16_t> vcbAlBlSt;    /* 36 */
+    GUEST< LONGINT> vcbNxtCNID;    /* 38 */
+    GUEST< uint16_t> vcbFreeBks;    /* 42 */
+    GUEST< Byte[28]> vcbVN;    /* 44 */
+    GUEST< INTEGER> vcbDrvNum;    /* 72 */
+    GUEST< INTEGER> vcbDRefNum;    /* 74 */
+    GUEST< INTEGER> vcbFSID;    /* 76 */
+    GUEST< INTEGER> vcbVRefNum;    /* 78 */
+    GUEST< Ptr> vcbMAdr;
+    GUEST< Ptr> vcbBufAdr;
+    GUEST< uint16_t> vcbMLen;
+    GUEST< INTEGER> vcbDirIndex;
+    GUEST< uint16_t> vcbDirBlk;
+    GUEST< LONGINT> vcbVolBkUp;
+    GUEST< uint16_t> vcbVSeqNum;
+    GUEST< LONGINT> vcbWrCnt;
+    GUEST< LONGINT> vcbXTClpSiz;
+    GUEST< LONGINT> vcbCTClpSiz;
+    GUEST< uint16_t> vcbNmRtDirs;
+    GUEST< LONGINT> vcbFilCnt;
+    GUEST< LONGINT> vcbDirCnt;
+    GUEST< LONGINT[8]> vcbFndrInfo;
+    GUEST< uint16_t> vcbVCSize;
+    GUEST< uint16_t> vcbVBMCSiz;
+    GUEST< uint16_t> vcbCtlCSiz;
+    GUEST< uint16_t> vcbXTAlBlks;
+    GUEST< uint16_t> vcbCTAlBlks;
+    GUEST< INTEGER> vcbXTRef;
+    GUEST< INTEGER> vcbCTRef;
+    GUEST< Ptr> vcbCtlBuf;
+    GUEST< LONGINT> vcbDirIDM;
+    GUEST< uint16_t> vcbOffsM;
+};
 
 typedef VCB *VCBPtr;
 MAKE_HIDDEN(VCBPtr);
 
-typedef struct {
-  PACKED_MEMBER(QElemPtr, qLink);
-  INTEGER qType;
-  INTEGER dQDrive;
-  INTEGER dQRefNum;
-  INTEGER dQFSID;
-  uint16_t dQDrvSz;
-  uint16_t dQDrvSz2;
-} DrvQEl;
+struct DrvQEl {
+    GUEST_STRUCT;
+    GUEST< QElemPtr> qLink;
+    GUEST< INTEGER> qType;
+    GUEST< INTEGER> dQDrive;
+    GUEST< INTEGER> dQRefNum;
+    GUEST< INTEGER> dQFSID;
+    GUEST< uint16_t> dQDrvSz;
+    GUEST< uint16_t> dQDrvSz2;
+};
 
 /* data types introduced by the new high level file system dispatch
    traps */
 
 struct FSSpec
 {
-  INTEGER vRefNum;
-  LONGINT parID;
-  Str63 name;
+    GUEST_STRUCT;
+    GUEST< INTEGER> vRefNum;
+    GUEST< LONGINT> parID;
+    GUEST< Str63> name;
 };
 
 typedef struct FSSpec FSSpec;
@@ -518,6 +520,9 @@ extern INTEGER 	FSFCBLen;
 
 #pragma pack(pop)
 
+        // the output parameters point to NATIVE values
+        // there are no traps for these functions,
+        // they are implemented again in glue code in Mac apps
 extern OSErr FSOpen( StringPtr filen, INTEGER vrn, INTEGER *rn ); 
 extern OSErr OpenRF( StringPtr filen, INTEGER vrn, INTEGER *rn ); 
 extern OSErr FSRead( INTEGER rn, LONGINT *count, Ptr buffp ); 
@@ -529,6 +534,8 @@ extern OSErr SetEOF( INTEGER rn, LONGINT eof );
 extern OSErr Allocate( INTEGER rn, LONGINT *count ); 
 extern OSErr AllocContig( INTEGER rn, LONGINT *count ); 
 extern OSErr FSClose( INTEGER rn ); 
+
+
 extern void ROMlib_rewinddir( void  ); 
 extern char *ROMlib_newunixfrommac( char *ip, INTEGER n ); 
 extern trap OSErrRET OpenDeny( HParmBlkPtr pb, BOOLEAN a );
@@ -558,9 +565,9 @@ extern trap QHdrPtr GetFSQHdr( void  );
 extern trap QHdrPtr GetVCBQHdr( void  ); 
 extern trap QHdrPtr GetDrvQHdr( void  ); 
 extern OSErr GetVInfo( INTEGER drv, StringPtr voln, 
- INTEGER *vrn, LONGINT *freeb ); 
-extern OSErr GetVRefNum( INTEGER prn, INTEGER *vrn ); 
-extern OSErr GetVol( StringPtr voln, INTEGER *vrn ); 
+ GUEST<INTEGER> *vrn, GUEST<LONGINT> *freeb ); 
+extern OSErr GetVRefNum( INTEGER prn, GUEST<INTEGER> *vrn ); 
+extern OSErr GetVol( StringPtr voln, GUEST<INTEGER> *vrn ); 
 extern OSErr SetVol( StringPtr voln, INTEGER vrn ); 
 extern OSErr FlushVol( StringPtr voln, INTEGER vrn ); 
 extern OSErr UnmountVol( StringPtr voln, INTEGER vrn ); 
@@ -629,14 +636,14 @@ extern pascal trap OSErr C_FSMakeFSSpec (int16 vRefNum, int32 dir_id,
 					 Str255 file_name, FSSpecPtr spec);
 extern pascal trap OSErr C_FSpExchangeFiles (FSSpecPtr src, FSSpecPtr dst);
 extern pascal trap OSErr C_FSpOpenDF (FSSpecPtr spec, SignedByte perms,
-				      int16 *refNum_out);
+				      GUEST<int16> *refNum_out);
 extern pascal trap OSErr C_FSpOpenRF (FSSpecPtr spec, SignedByte perms,
-				      int16 *refNum_out);
+				      GUEST<int16> *refNum_out);
 extern pascal trap OSErr C_FSpCreate (FSSpecPtr spec,
 				      OSType creator, OSType file_type,
 				      ScriptCode script);
 extern pascal trap OSErr C_FSpDirCreate (FSSpecPtr spec, ScriptCode script,
-					 int32 *created_dir_id);
+					 GUEST<int32> *created_dir_id);
 extern pascal trap OSErr C_FSpDelete (FSSpecPtr spec);
 
 extern pascal trap OSErr C_FSpGetFInfo (FSSpecPtr spec, FInfo *fndr_info);
@@ -657,9 +664,9 @@ extern pascal trap void C_HCreateResFile (INTEGER vrefnum, LONGINT parid,
 extern OSErr HCreate (INTEGER vref, LONGINT dirid, Str255 name, OSType creator,
 		      OSType type);
 extern OSErr HOpenRF (INTEGER vref, LONGINT dirid, Str255 name,
-		      SignedByte perm, INTEGER *refp);
+		      SignedByte perm, /*NATIVE*/ INTEGER *refp); 
 
-extern OSErr GetWDInfo (INTEGER wd, INTEGER *vrefp, LONGINT *dirp,
-			LONGINT *procp);
+extern OSErr GetWDInfo (INTEGER wd, GUEST<INTEGER> *vrefp, GUEST<LONGINT> *dirp,
+			GUEST<LONGINT> *procp);
 }
 #endif /* _FILEMGR_H_ */

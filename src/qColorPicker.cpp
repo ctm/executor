@@ -883,10 +883,11 @@ event_loop (void)
 	    
 	    /* ### beep if the mousedown is not in
                `color_picker_window' */
-	    
-	    local_pt = evt.where;
-	    GlobalToLocal (&local_pt);
-	    local_pt = SWAP_POINT (local_pt);
+            
+            GUEST<Point> tmpPt;
+	    tmpPt = evt.where;
+	    GlobalToLocal (&tmpPt);
+	    local_pt = tmpPt.get();
 	    
 	    control_p = _FindControl (local_pt, color_picker_window, &c);
 	    if (control_p)
@@ -929,11 +930,12 @@ event_loop (void)
 		    while (! GetOSEvent (mUpMask, &evt))
 		      {
 			miniarrow_hilite_t _hilite;
-			
-			local_pt = evt.where;
-			GlobalToLocal (&local_pt);
-			local_pt = SWAP_POINT (local_pt);
-			
+                        
+                        {
+                            GUEST<Point> tmpPt = evt.where;
+                            GlobalToLocal (&tmpPt);
+                            local_pt = tmpPt.get();
+                        }
 		       handle_pt_1:
 			if (PtInRect (local_pt, &box->miniarrow_rect))
 			  {
@@ -960,10 +962,12 @@ event_loop (void)
 		  {
 		    int x, y;
 		    double saturation_fp;
-		    
-		    local_pt = evt.where;
-		    GlobalToLocal (&local_pt);
-		    local_pt = SWAP_POINT (local_pt);
+                    
+                    {
+                        GUEST<Point> tmpPt = evt.where;
+                        GlobalToLocal (&tmpPt);
+                        local_pt = tmpPt.get();
+                    }
 
 		   handle_pt_2:
 		    x = local_pt.h - color_wheel_center_x;

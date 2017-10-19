@@ -46,9 +46,9 @@
      RgnPtr __rgnp = (rgnp);			\
      						\
      if (special_p)				\
-       __rgnp->rgnSize |= RGN_SPECIAL_FLAG_X;	\
+       __rgnp->rgnSize.raw_or( RGN_SPECIAL_FLAG_X );	\
      else					\
-       __rgnp->rgnSize &= ~RGN_SPECIAL_FLAG_X;	\
+       __rgnp->rgnSize.raw_and( ~RGN_SPECIAL_FLAG_X);	\
    }))
 
 

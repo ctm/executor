@@ -4,7 +4,7 @@
 namespace Executor {
 typedef unsigned char Str27[28];
 
-struct alias_head_t : GuestStruct {
+struct alias_head_t { GUEST_STRUCT;
     GUEST< OSType> type;
     GUEST< INTEGER> length;
     GUEST< INTEGER> usually_2;
@@ -22,22 +22,22 @@ struct alias_head_t : GuestStruct {
     GUEST< INTEGER[10]> mystery_words;
 };
 
-struct alias_parent_t : GuestStruct {
+struct alias_parent_t { GUEST_STRUCT;
     GUEST< INTEGER> parent_length;
     GUEST< unsigned char[1]> parent_bytes;
 };
 
-struct alias_unknown_000100_t : GuestStruct {
+struct alias_unknown_000100_t { GUEST_STRUCT;
     GUEST< INTEGER> eight;
     GUEST< LONGINT[2]> mystery_longs;
 };
 
-struct alias_fullpath_t : GuestStruct {
+struct alias_fullpath_t { GUEST_STRUCT;
     GUEST< INTEGER> fullpath_length;
     GUEST< unsigned char[1]> fullpath_bytes;
 };
 
-struct alias_tail_t : GuestStruct {
+struct alias_tail_t { GUEST_STRUCT;
     GUEST< INTEGER> length;
     GUEST< INTEGER[12]> weird_info;
     GUEST< Str32> zone;
@@ -53,7 +53,7 @@ typedef alias_unknown_000100_t *alias_unknown_000100_ptr;
 typedef alias_fullpath_t *alias_fullpath_ptr;
 typedef alias_tail_t *alias_tail_ptr;
 
-struct alias_parsed_t : GuestStruct {
+struct alias_parsed_t { GUEST_STRUCT;
     GUEST< alias_head_ptr> headp;
     GUEST< alias_parent_ptr> parentp;
     GUEST< alias_unknown_000100_ptr> unknownp;

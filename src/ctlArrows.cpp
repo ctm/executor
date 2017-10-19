@@ -408,15 +408,15 @@ thumb_rect (ControlHandle ctl, Rect *thumb_rect_out)
 PRIVATE void
 GlobalToLocalRect (Rect *rp)
 {
-  GlobalToLocal ((Point *) &rp->top);
-  GlobalToLocal ((Point *) &rp->bottom);
+  GlobalToLocal ((GUEST<Point> *) &rp->top);
+  GlobalToLocal ((GUEST<Point> *) &rp->bottom);
 }
 
 PRIVATE void
 LocalToGlobalRect (Rect *rp)
 {
-  LocalToGlobal ((Point *) &rp->top);
-  LocalToGlobal ((Point *) &rp->bottom);
+  LocalToGlobal ((GUEST<Point> *) &rp->top);
+  LocalToGlobal ((GUEST<Point> *) &rp->bottom);
 }
 
 PRIVATE void 

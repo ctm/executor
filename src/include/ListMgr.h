@@ -24,7 +24,7 @@ typedef DataArray *DataPtr;
 MAKE_HIDDEN(DataPtr);
 typedef HIDDEN_DataPtr *DataHandle;
 
-struct ListRec : GuestStruct {
+struct ListRec { GUEST_STRUCT;
     GUEST< Rect> rView;
     GUEST< GrafPtr> port;
     GUEST< Point> indent;
@@ -71,44 +71,15 @@ typedef HIDDEN_ListPtr *ListHandle;
 #define lCloseMsg	3
 
 
-/* DO NOT DELETE THIS LINE */
-#if !defined (__STDC__)
-extern void LFind(); 
-extern BOOLEAN LNextCell(); 
-extern void LRect(); 
-extern BOOLEAN LSearch(); 
-extern void LSize(); 
-extern INTEGER LAddColumn(); 
-extern INTEGER LAddRow(); 
-extern void LDelColumn(); 
-extern void LDelRow(); 
-extern ListHandle LNew(); 
-extern void LDispose(); 
-extern void LDraw(); 
-extern void LDoDraw(); 
-extern void LScroll(); 
-extern void LAutoScroll(); 
-extern void LUpdate(); 
-extern void LActivate(); 
-extern pascal void ROMlib_mytrack(); 
-extern BOOLEAN LClick(); 
-extern LONGINT LLastClick(); 
-extern void LSetSelect(); 
-extern void LAddToCell(); 
-extern void LClrCell(); 
-extern void LGetCell(); 
-extern void LSetCell(); 
-extern void LCellSize(); 
-extern BOOLEAN LGetSelect(); 
-#else /* __STDC__ */
-extern pascal trap void C_LFind( INTEGER *offsetp, 
- INTEGER *lenp, Cell cell, ListHandle list );
+extern pascal trap void C_LFind( GUEST<INTEGER> *offsetp, 
+ GUEST<INTEGER> *lenp, Cell cell, ListHandle list );
 extern pascal trap BOOLEAN C_LNextCell( BOOLEAN hnext, 
- BOOLEAN vnext, Cell *cellp, ListHandle list );
+ BOOLEAN vnext, GUEST<Cell> *cellp, ListHandle list );
 extern pascal trap void C_LRect( Rect *cellrect, 
  Cell cell, ListHandle list );
-extern pascal trap BOOLEAN C_LSearch( Ptr dp, 
- INTEGER dl, Ptr proc, Cell *cellp, ListHandle list );
+extern pascal trap BOOLEAN 
+C_LSearch( Ptr dp, 
+ INTEGER dl, Ptr proc, GUEST<Cell> *cellp, ListHandle list );
 extern pascal trap void C_LSize( INTEGER width, 
  INTEGER height, ListHandle list );
 extern pascal trap INTEGER C_LAddColumn( INTEGER count, 
@@ -154,7 +125,7 @@ extern pascal trap void C_LSetCell( Ptr dp, INTEGER dl,
 extern pascal trap void C_LCellSize( Point csize, 
  ListHandle list );
 extern pascal trap BOOLEAN C_LGetSelect( BOOLEAN next, 
- Cell *cellp, ListHandle list );
-#endif /* __STDC__ */
+ GUEST<Cell> *cellp, ListHandle list );
+
 }
 #endif /* __LIST__ */

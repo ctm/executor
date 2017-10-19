@@ -120,9 +120,9 @@ AddResourceRN (INTEGER rn, Handle h, ResType type, INTEGER id, Str255 name)
   else
     {
       INTEGER savern;
-      HIDDEN_Handle hh;
+      Handle hh;
 
-      hh.p = h; 
+      hh = h; 
       if (HandleZone (h) != SysZone)
 	{
 	  Handle save_hand;
@@ -133,7 +133,7 @@ AddResourceRN (INTEGER rn, Handle h, ResType type, INTEGER id, Str255 name)
 	}
       savern = CurResFile ();
       UseResFile (rn);
-      AddResource (hh.p, type, id, name);
+      AddResource (hh, type, id, name);
       UseResFile (savern);
     }
 }
@@ -191,13 +191,15 @@ silently_replace_resources (INTEGER master_file_rn, INTEGER from_file_rn)
       for (res_num = 1; res_num <= res_num_max; ++res_num)
 	{
 	  Handle h;
-	  INTEGER id;
-	  ResType t;
+          INTEGER id;
+          GUEST<INTEGER> id_s;
+          GUEST<ResType> t;
+          
 	  Str255 name;
 
 	  h = GetIndResourceRN (from_file_rn, type, res_num);
-	  GetResInfo (h, &id, &t, name);
-	  id = CW (id);
+	  GetResInfo (h, &id_s, &t, name);
+	  id = CW (id_s);
 	  LoadResource (h);
 	  DetachResource (h);
 	  AddResourceRN (master_file_rn, h, type, id, name);

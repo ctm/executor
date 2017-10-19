@@ -282,7 +282,7 @@ PRIVATE Handle mgetres_helper (resmaphand map, resref *rr, int32 dlen,
 	{
 	  TheZone = ((rr->ratr & resSysHeap)
 		     ? SysZone
-		     : RM (HandleZone ((Handle) map)));
+		     : (GUEST<THz>) RM (HandleZone ((Handle) map)));
 	  retval = NewHandle (uncompressed_size + dcmp_offset);
 	  rr->rhand = RM (retval);
 	}
@@ -376,7 +376,7 @@ Executor::ROMlib_mgetres2 (resmaphand map, resref *rr)
 		{
 		  TheZone = ((rr->ratr & resSysHeap)
 			     ? SysZone
-			     : RM (HandleZone ((Handle) map)));
+			     : (GUEST<THz>) RM (HandleZone ((Handle) map)));
 		  retval = NewEmptyHandle ();
 		  rr->rhand = RM (retval);
 		}
@@ -473,6 +473,7 @@ P1(PUBLIC pascal trap, void, CloseResFile, INTEGER, rn)
 
 	if (Cx(CurMap) == rn)
 	  {
+//                printf("curmap %02x topmaphndl %08x\n", (int) CurMap.raw(), (int)TopMapHndl.raw());
 	    if (TopMapHndl)
 		CurMap = STARH((resmaphand)MR(TopMapHndl))->resfn;
 	    else
@@ -535,7 +536,7 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
     INTEGER i, j;
     typref *tr;
     resref *rr;
-    HParamBlockRec pbr = {0};
+    HParamBlockRec pbr = {};
     OSErr err;
 
     invalidate_kchr_ptr ();
@@ -545,7 +546,7 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
     /* check for file already opened */
 
     {
-      CInfoPBRec cpb = {0};
+      CInfoPBRec cpb = {};
       Str255 local_name;
 
       str255assign (local_name, fn);

@@ -51,7 +51,7 @@ namespace Executor {
 #define teBitSet		(1)
 #define teBitTest		(-1)
 
-struct TERec : GuestStruct {
+struct TERec { GUEST_STRUCT;
     GUEST< Rect> destRect;
     GUEST< Rect> viewRect;
     GUEST< Rect> selRect;
@@ -90,12 +90,12 @@ typedef TERec *TEPtr;
 MAKE_HIDDEN(TEPtr);
 typedef HIDDEN_TEPtr *TEHandle;
 
-struct StyleRun : GuestStruct {
+struct StyleRun { GUEST_STRUCT;
     GUEST< INTEGER> startChar;
     GUEST< INTEGER> styleIndex;
 };
 
-struct STElement : GuestStruct {
+struct STElement { GUEST_STRUCT;
     GUEST< INTEGER> stCount;
     GUEST< INTEGER> stHeight;
     GUEST< INTEGER> stAscent;
@@ -111,7 +111,7 @@ typedef STElement *STPtr;
 MAKE_HIDDEN(STPtr);
 typedef HIDDEN_STPtr *STHandle;
 
-struct LHElement : GuestStruct {
+struct LHElement { GUEST_STRUCT;
     GUEST< INTEGER> lhHeight;
     GUEST< INTEGER> lhAscent;
 };
@@ -121,7 +121,7 @@ typedef LHElement *LHPtr;
 MAKE_HIDDEN(LHPtr);
 typedef HIDDEN_LHPtr *LHHandle;
 
-struct TextStyle : GuestStruct {
+struct TextStyle { GUEST_STRUCT;
     GUEST< INTEGER> tsFont;
     GUEST< Style> tsFace;
     GUEST< Byte> filler;
@@ -129,7 +129,7 @@ struct TextStyle : GuestStruct {
     GUEST< RGBColor> tsColor;
 };
 
-struct ScrpSTElement : GuestStruct {
+struct ScrpSTElement { GUEST_STRUCT;
     GUEST< LONGINT> scrpStartChar;
     GUEST< INTEGER> scrpHeight;
     GUEST< INTEGER> scrpAscent;
@@ -142,7 +142,7 @@ struct ScrpSTElement : GuestStruct {
 
 typedef ScrpSTElement ScrpSTTable[1];
 
-struct StScrpRec : GuestStruct {
+struct StScrpRec { GUEST_STRUCT;
     GUEST< INTEGER> scrpNStyles;
     GUEST< ScrpSTTable> scrpStyleTab;
 };
@@ -151,7 +151,7 @@ typedef StScrpRec *StScrpPtr;
 MAKE_HIDDEN(StScrpPtr);
 typedef HIDDEN_StScrpPtr *StScrpHandle;
 
-struct NullSTRec : GuestStruct {
+struct NullSTRec { GUEST_STRUCT;
     GUEST< LONGINT> TEReserved;
     GUEST< StScrpHandle> nullScrap;
 };
@@ -160,7 +160,7 @@ typedef NullSTRec *NullSTPtr;
 MAKE_HIDDEN(NullSTPtr);
 typedef HIDDEN_NullSTPtr *NullSTHandle;
 
-struct TEStyleRec : GuestStruct {
+struct TEStyleRec { GUEST_STRUCT;
     GUEST< INTEGER> nRuns;
     GUEST< INTEGER> nStyles;
     GUEST< STHandle> styleTab;

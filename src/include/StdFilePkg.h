@@ -29,7 +29,7 @@ namespace Executor {
 #define getNmList	7
 #define getScroll	8
 
-struct SFReply : GuestStruct {
+struct SFReply { GUEST_STRUCT;
     GUEST< BOOLEAN> good;
     GUEST< BOOLEAN> copy;
     GUEST< OSType> fType;
@@ -45,7 +45,7 @@ extern INTEGER 	SFSaveDisk;
 extern LONGINT 	CurDirStore;
 #endif
 
-struct StandardFileReply : GuestStruct {
+struct StandardFileReply { GUEST_STRUCT;
     GUEST< BOOLEAN> sfGood;
     GUEST< BOOLEAN> sfReplacing;
     GUEST< OSType> sfType;

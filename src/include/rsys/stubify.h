@@ -2309,7 +2309,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define ScalePt(A1, A2, A3) \
  ({ \
    void *new_addr;\
-   Point * __stub_arg_1 = (A1);\
+   GUEST<Point> * __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
  \
@@ -2321,7 +2321,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define MapPt(A1, A2, A3) \
  ({ \
    void *new_addr;\
-   Point * __stub_arg_1 = (A1);\
+   GUEST<Point> * __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
  \
@@ -2782,7 +2782,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
  ({ \
    void *new_addr;\
    Point __stub_arg_1 = (A1);\
-   Point * __stub_arg_2 = (A2);\
+   GUEST<Point> * __stub_arg_2 = (A2);\
  \
    new_addr = tooltraptable[0x007e];\
    ((new_addr == toolstuff[0x007e].orig)\
@@ -2793,7 +2793,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
  ({ \
    void *new_addr;\
    Point __stub_arg_1 = (A1);\
-   Point * __stub_arg_2 = (A2);\
+   GUEST<Point> * __stub_arg_2 = (A2);\
  \
    new_addr = tooltraptable[0x007f];\
    ((new_addr == toolstuff[0x007f].orig)\
@@ -2803,7 +2803,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define SetPt(A1, A2, A3) \
  ({ \
    void *new_addr;\
-   Point * __stub_arg_1 = (A1);\
+   GUEST<Point> * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
  \
@@ -2826,7 +2826,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define LocalToGlobal(A1) \
  ({ \
    void *new_addr;\
-   Point * __stub_arg_1 = (A1);\
+   GUEST<Point> * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0070];\
    ((new_addr == toolstuff[0x0070].orig)\
@@ -2836,7 +2836,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define GlobalToLocal(A1) \
  ({ \
    void *new_addr;\
-   Point * __stub_arg_1 = (A1);\
+   GUEST<Point> * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0071];\
    ((new_addr == toolstuff[0x0071].orig)\
@@ -2983,7 +2983,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    void *new_addr;\
    Rect * __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
-   INTEGER * __stub_arg_3 = (A3);\
+   GUEST<INTEGER> * __stub_arg_3 = (A3);\
  \
    new_addr = tooltraptable[0x00c3];\
    ((new_addr == toolstuff[0x00c3].orig)\
@@ -4192,8 +4192,8 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
  ({ \
    void *new_addr;\
    Handle __stub_arg_1 = (A1);\
-   INTEGER * __stub_arg_2 = (A2);\
-   ResType * __stub_arg_3 = (A3);\
+   GUEST<INTEGER> * __stub_arg_2 = (A2);\
+   GUEST<ResType> * __stub_arg_3 = (A3);\
    StringPtr __stub_arg_4 = (A4);\
  \
    new_addr = tooltraptable[0x01a8];\
@@ -6326,7 +6326,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define GetMouse(A1) \
  ({ \
    void *new_addr;\
-   Point * __stub_arg_1 = (A1);\
+   GUEST<Point> * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0172];\
    ((new_addr == toolstuff[0x0172].orig)\

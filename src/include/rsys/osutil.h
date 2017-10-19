@@ -12,11 +12,11 @@ extern long long ROMlib_long_long_secs (Executor::INTEGER year, Executor::INTEGE
 					Executor::INTEGER day, Executor::INTEGER hour,
 					Executor::INTEGER minute, Executor::INTEGER second);
 
-extern void date_to_swapped_fields (long long mactime, Executor::INTEGER *yearp,
-				    Executor::INTEGER *monthp, Executor::INTEGER *dayp,
-				    Executor::INTEGER *hourp, Executor::INTEGER *minutep,
-				    Executor::INTEGER *secondp, Executor::INTEGER *dayofweekp,
-				    Executor::INTEGER *dayofyearp, Executor::INTEGER *weekofyearp);
+extern void date_to_swapped_fields (long long mactime, GUEST<INTEGER> *yearp,
+        GUEST<INTEGER> *monthp, GUEST<INTEGER> *dayp,
+        GUEST<INTEGER> *hourp, GUEST<INTEGER> *minutep,
+        GUEST<INTEGER> *secondp, GUEST<INTEGER> *dayofweekp,
+        GUEST<INTEGER> *dayofyearp, GUEST<INTEGER> *weekofyearp);
 
 extern void C_ROMlib_wakeup( void );
 

@@ -19,7 +19,7 @@
 #include "rsys/pstuff.h"
 
 namespace Executor {
-struct windrestype : GuestStruct {
+struct windrestype { GUEST_STRUCT;
     GUEST< Rect> _wrect;
     GUEST< INTEGER> _wprocid;
     GUEST< char> _wvisible;

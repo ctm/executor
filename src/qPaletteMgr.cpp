@@ -52,9 +52,9 @@ using namespace Executor;
 #define PALETTE_MODIFIED_P(palette)		\
   (HxX (palette, pmPrivate) & PALETTE_MODIFIED_BIT_X)
 #define PALETTE_SET_MODIFIED(palette)		\
-  (HxX (palette, pmPrivate) |= PALETTE_MODIFIED_BIT_X)
+  (HxX (palette, pmPrivate).raw_or(PALETTE_MODIFIED_BIT_X))
 #define PALETTE_CLEAR_MODIFIED(palette)		\
-  (HxX (palette, pmPrivate) &= ~PALETTE_MODIFIED_BIT_X)
+  (HxX (palette, pmPrivate).raw_and(~PALETTE_MODIFIED_BIT_X))
 
 #define PALETTE_SEED_X(palette)			\
   (*(int *) STARH (HxP (palette, pmSeeds)))
@@ -1163,8 +1163,8 @@ P3 (PUBLIC pascal trap, void, NSetPalette,
 P2 (PUBLIC pascal trap, void, SetPaletteUpdates,
     PaletteHandle, palette, INTEGER, update)
 {
-  PALETTE_PRIVATE_X (palette) &= ~PALETTE_UPDATE_FLAG_BITS_X;
-  PALETTE_PRIVATE_X (palette) |= CW (update);
+  PALETTE_PRIVATE_X (palette).raw_and(~PALETTE_UPDATE_FLAG_BITS_X);
+  PALETTE_PRIVATE_X (palette).raw_or(CW (update));
 }
 
 P1 (PUBLIC pascal trap, INTEGER, GetPaletteUpdates,

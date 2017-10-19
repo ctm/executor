@@ -52,23 +52,25 @@ typedef uint64_t snd_time;
 
 typedef LONGINT TimeL;
 
-typedef struct _ModifierStub : GuestStruct {
-    GUEST< struct _ModifierStub*> nextStub;
-    GUEST< ProcPtr> code;
-    GUEST< LONGINT> userInfo;
-    GUEST< TimeL> count;
-    GUEST< TimeL> every;
-    GUEST< SignedByte> flags;
-    GUEST< SignedByte> hState;
-    GUEST< snd_time> current_start;
-    GUEST< snd_time> time;
+// ###autc04 TODO: snd_time? 64 bit values on the mac?
+//                 is this an internal executor-only struct?
+typedef struct _ModifierStub {
+    GUEST<struct _ModifierStub*> nextStub;
+    ProcPtr code;
+    LONGINT userInfo;
+    TimeL count;
+    TimeL every;
+    SignedByte flags;
+    SignedByte hState;
+    snd_time current_start;
+    snd_time time;
     GUEST< uint8> prev_samp;
-    GUEST< SndDoubleBufferHeader*> dbhp;
-    GUEST< int> current_db;
+    SndDoubleBufferHeader* dbhp;
+    int current_db;
 } ModifierStub, *ModifierStubPtr;
 
 
-#define SND_CHAN_FIRSTMOD(c) MR ((ModifierStubPtr)c->firstMod)
+#define SND_CHAN_FIRSTMOD(c) ((ModifierStubPtr)MR (c->firstMod))
 #define SND_CHAN_CURRENT_START(c) (SND_CHAN_FIRSTMOD (c)->current_start)
 #define SND_CHAN_TIME(c) (SND_CHAN_FIRSTMOD (c)->time)
 #define SND_CHAN_PREV_SAMP(c) (SND_CHAN_FIRSTMOD (c)->prev_samp)

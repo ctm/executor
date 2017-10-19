@@ -15,13 +15,14 @@ PRIVATE
 DECL
 {
     STATEDECL
-    register INTEGER x = 0, x1 = 0, x2 = 0, y = 0;
-    register INTEGER *ip, *op;
-    register int rev;
+    INTEGER x = 0, x1 = 0, x2 = 0, y = 0;
+    ITYPE *ip;
+    INTEGER *op;
+    int rev;
     INTEGER y0, y1;
 
     INTEGER ends[3][100];
-    register INTEGER *oldinset, *oldunset, *newunset;
+    INTEGER *oldinset, *oldunset, *newunset;
 
     rev = -1;
     ends[0][0] = ends[1][0] = 32767;

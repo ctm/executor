@@ -30,7 +30,7 @@ namespace Executor {
 
 #define MI_TITLE(mi)		(HxX (mi, menuTitle))
 
-typedef struct mext : GuestStruct {
+typedef struct mext { GUEST_STRUCT;
     GUEST< Byte> micon;
     GUEST< Byte> mkeyeq;
     GUEST< Byte> mmarker;
@@ -44,18 +44,11 @@ extern int32 C_mbdf0(int16, int16, int16, int32);
 #define SIZEOFMEXT 5
 #define SIZEOFMINFO (sizeof(MenuInfo) - sizeof(Str255) + 1)
 
-#if !defined (__STDC__)
-extern void ROMlib_alarmoffmbar();
-extern mextp ROMlib_mitemtop();
-extern INTEGER ROMlib_mentosix();
-extern LONGINT ROMlib_menuhelper();
-#else /* __STDC__ */
 extern void ROMlib_alarmoffmbar( void );
 extern mextp ROMlib_mitemtop( MenuHandle mh, INTEGER item, StringPtr *ssp );
 extern INTEGER ROMlib_mentosix( INTEGER mid );
 extern LONGINT ROMlib_menuhelper( MenuHandle mh, Rect *saver, LONGINT where,
 					 BOOLEAN ispopup, INTEGER ndisplayed );
-#endif /* __STDC__ */
 
 #define mbDraw		0
 #define mbHit		1
@@ -73,7 +66,7 @@ extern LONGINT ROMlib_menuhelper( MenuHandle mh, Rect *saver, LONGINT where,
 
 #define MLMAX   16
 
-struct muelem : GuestStruct {
+struct muelem { GUEST_STRUCT;
     GUEST< MenuHandle> muhandle;
     GUEST< INTEGER> muleft;
 };
@@ -114,7 +107,7 @@ typedef struct menu_elt
 #define ML_MENU_TITLE_SAVE(ml)		(CW (ML_MENU_TITLE_SAVE_X (ml)))
 
    
-struct menu_list : GuestStruct {
+struct menu_list { GUEST_STRUCT;
     GUEST< INTEGER> last_menu_offset;
     GUEST< INTEGER> last_right;
     GUEST< INTEGER> mb_res_id;
@@ -126,7 +119,7 @@ typedef menu_list *menu_list_ptr;
 MAKE_HIDDEN(menu_list_ptr);
 typedef HIDDEN_menu_list_ptr *menu_list_handle;
 
-struct menulist : GuestStruct {
+struct menulist { GUEST_STRUCT;
     GUEST< INTEGER> muoff;
     GUEST< INTEGER> muright;
     GUEST< INTEGER> mufu;
@@ -158,7 +151,7 @@ typedef HIDDEN_menulistp *mlhandle;
 #define DRAWMENUBAR	0
 #define CLEARMENUBAR	(-1)
 
-struct mbdfheader : GuestStruct {
+struct mbdfheader { GUEST_STRUCT;
     GUEST< INTEGER> lastMBSave;    /* offset to top most menu saved */
     GUEST< Handle> mbCustomStorage;    /* for custom jobs (i.e. we don't use) */
     GUEST< Rect> mbItemRect;    /* currently chosen menu */
@@ -172,7 +165,7 @@ typedef mbdfheader *mbdfheaderptr;
 MAKE_HIDDEN(mbdfheaderptr);
 typedef HIDDEN_mbdfheaderptr *mbdfheaderhand;
 
-struct mbdfentry : GuestStruct {
+struct mbdfentry { GUEST_STRUCT;
     GUEST< Rect> mbRectSave;    /* where it is on screen */
     GUEST< Handle> mbBitsSave;    /* where the bits are */
     GUEST< INTEGER> mbMenuDir;    /* what direction the menu was placed */
@@ -255,28 +248,28 @@ typedef struct con_info
 } icon_info_t;
 
 
-typedef struct mct_res : GuestStruct {
+typedef struct mct_res { GUEST_STRUCT;
     GUEST< int16> n_entries;
     GUEST< MCEntry[1]> entries;
 } mct_res_t;
 
-struct mbartype : GuestStruct {
+struct mbartype { GUEST_STRUCT;
     GUEST< INTEGER> nmen;
     GUEST< INTEGER[1]> mrid;
 };
 
-typedef struct  : GuestStruct {
+typedef struct  { GUEST_STRUCT;
     GUEST< muelem*> startp;
     GUEST< muelem*> endp;
 } startendpairs[2];
 
-struct table : GuestStruct {
-    GUEST<int32> lasttick;
-    GUEST<int16> count;
-    struct tableentry : GuestStruct {
-        GUEST< int16> top;
-        GUEST< StringPtr> name;
-        GUEST< mextp> options;
+typedef struct table {
+    int32 lasttick;
+    int16 count;
+    struct tableentry {
+        int16 top;
+        StringPtr name;
+        mextp options;
     } entry[1];
 } *tablePtr, **tableHandle;
 

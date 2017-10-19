@@ -250,13 +250,13 @@ PRIVATE void setnumerdenom(Point *nump, Point *denp)
 }
 
 namespace Executor {
-  PRIVATE void longtext(Point,StringPtr,Point*);
-  PRIVATE void dhtext(unsigned char, StringPtr, Point*);
+  PRIVATE void longtext(Point,StringPtr,GUEST<Point>*);
+  PRIVATE void dhtext(unsigned char, StringPtr, GUEST<Point>*);
   PRIVATE void defhilite();
-  PRIVATE void dvtext(unsigned char, StringPtr, Point*);
+  PRIVATE void dvtext(unsigned char, StringPtr, GUEST<Point>*);
   PRIVATE void fillrct(Rect *r);
   PRIVATE void dhdvtext(Byte dh, Byte dv,
-						StringPtr s, Point *pp);
+						StringPtr s, GUEST<Point> *pp);
   PRIVATE void fillrrct(Rect *r, INTEGER ow, INTEGER oh);
   PRIVATE void fillovl(Rect *r);
   PRIVATE void fillarc(Rect *r, INTEGER stang, INTEGER arcang);
@@ -286,9 +286,10 @@ namespace Executor {
   PRIVATE unsigned short nextop(INTEGER vers);
 }
 
-A3(PRIVATE, void, longtext, Point, pt, StringPtr, s, Point *, pp)
+A3(PRIVATE, void, longtext, Point, pt, StringPtr, s, GUEST<Point> *, pp)
 {
-    Point save, numer, denom;
+    GUEST<Point> save;
+    Point numer, denom;
 
     save = PORT_PEN_LOC (thePort);
     pp->h = CW (pt.h);
@@ -300,9 +301,10 @@ A3(PRIVATE, void, longtext, Point, pt, StringPtr, s, Point *, pp)
     PORT_PEN_LOC (thePort) = save;
 }
 
-A3(PRIVATE, void, dhtext, unsigned char, dh, StringPtr, s, Point *, pp)
+A3(PRIVATE, void, dhtext, unsigned char, dh, StringPtr, s, GUEST<Point> *, pp)
 {
-    Point save, numer, denom;
+    GUEST<Point> save;
+    Point numer, denom;
 
     pp->h = CW(CW(pp->h) + (dh));
     save = PORT_PEN_LOC (thePort);
@@ -312,9 +314,10 @@ A3(PRIVATE, void, dhtext, unsigned char, dh, StringPtr, s, Point *, pp)
     PORT_PEN_LOC (thePort) = save;
 }
 
-A3(PRIVATE, void, dvtext, unsigned char, dv, StringPtr, s, Point *, pp)
+A3(PRIVATE, void, dvtext, unsigned char, dv, StringPtr, s, GUEST<Point> *, pp)
 {
-  Point save, numer, denom;
+    GUEST<Point> save;
+  Point numer, denom;
 
   pp->v = CW (CW (pp->v) + (dv));
   save = PORT_PEN_LOC (thePort);
@@ -325,9 +328,10 @@ A3(PRIVATE, void, dvtext, unsigned char, dv, StringPtr, s, Point *, pp)
 }
 
 A4(PRIVATE, void, dhdvtext, Byte, dh, Byte, dv,
-						    StringPtr, s, Point *, pp)
+						    StringPtr, s, GUEST<Point> *, pp)
 {
-    Point save, numer, denom;
+    GUEST<Point> save;
+    Point numer, denom;
 
     pp->h = CW(CW(pp->h) + (dh));
     pp->v = CW(CW(pp->v) + (dv));
@@ -405,7 +409,7 @@ A1(PRIVATE, void, fillpixpat, PixPatHandle, ph)
 {
   if (CGrafPort_p (thePort))
     {
-      HandToHand ((HIDDEN_Handle *) &ph);
+      HandToHand ((Handle *) &ph);
       
       CPORT_FILL_PIXPAT_X (theCPort) = RM (ph);
     }
@@ -413,7 +417,7 @@ A1(PRIVATE, void, fillpixpat, PixPatHandle, ph)
 
 A2(PRIVATE, void, pnsize, INTEGER, pv, INTEGER, ph)
 {
-    Point p;
+    GUEST<Point> p;
 
     p.h = CW(ph);
     p.v = CW(pv);
@@ -1297,7 +1301,8 @@ A2(PRIVATE, void, eatbitdata, BitMap *, bp, BOOLEAN, packed)
     INTEGER rowb;
     Size datasize;
     Ptr ep;
-    HIDDEN_Ptr dp, temp_pp;
+    Ptr dp;
+    GUEST<Ptr> temp_pp, temp_dp;
     Handle h;
     Byte *inp;
     INTEGER length;
@@ -1336,7 +1341,7 @@ A2(PRIVATE, void, eatbitdata, BitMap *, bp, BOOLEAN, packed)
 	  }
 	HLock(h);
 	bp->baseAddr = (*h).p;	/* can't use STARH */
-	for (dp.p = MR(bp->baseAddr), ep = dp.p + datasize; dp.p < ep; ) {
+	for (dp = MR(bp->baseAddr), ep = dp + datasize; dp < ep; ) {
 	    length = rowb > 250 ? eatINTEGER() : eatByte();
 	    if (procp) {
 		temph = NewHandle(length);
@@ -1349,13 +1354,11 @@ A2(PRIVATE, void, eatbitdata, BitMap *, bp, BOOLEAN, packed)
 		temph = 0;
 #endif
 	    }
-	    inp = RM(inp);
-	    dp.p = RM(dp.p);
-	    temp_pp.p = (Ptr) inp;
-	    UnpackBits(&temp_pp, &dp, rowb);
-	    inp = (unsigned char *) temp_pp.p;
-	    dp.p = MR(dp.p);
-	    inp = MR(inp);
+	    temp_dp = RM(dp);
+	    temp_pp = RM((Ptr)inp);
+	    UnpackBits(&temp_pp, &temp_dp, rowb);
+	    inp = (Byte*)MR(temp_pp);
+	    dp = MR(temp_dp);
 	    if (!procp)
 		nextbytep = inp;
 	    else {
@@ -1714,12 +1717,15 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
 		    lng = eatLONGINT();
 		    break;
 		case PNT:
-		    pp->v = eatINTEGERX();
-		    pp->h = eatINTEGERX();
-		    if (sc & SCALEIT)
-			MapPt(pp, &srcpicframe, destrp);
-		    pp->h = CW(pp->h);
-		    pp->v = CW(pp->v);
+		    pp->v = eatINTEGER();
+		    pp->h = eatINTEGER();
+                    if (sc & SCALEIT)
+                    {
+                        GUEST<Point> tempPoint;
+                        tempPoint.set(*pp);
+                        MapPt(&tempPoint, &srcpicframe, destrp);
+                        *pp = tempPoint.get();
+                    }
 		    ++pp;
 		    break;
 		case RCT:
@@ -1917,11 +1923,10 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
 	    }
 	  }
 	if (opcode == OP_OvSize) {
-	    points[0].h = CW(points[0].h);
-	    points[0].v = CW(points[0].v);
-	    ScalePt(&points[0], &srcpicframe, &dstpicframe);
-	    points[0].h = CW(points[0].h);
-	    points[0].v = CW(points[0].v);
+            GUEST<Point> tempPoint;
+            ScalePt(&tempPoint, &srcpicframe, &dstpicframe);
+	    tempPoint.set(points[0]);
+            points[0] = tempPoint.get();
 	    ovh = points[0].v;
 	    ovw = points[0].h;
 	} else if (opcode == OP_Version) {

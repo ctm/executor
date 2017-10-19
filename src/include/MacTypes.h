@@ -73,7 +73,7 @@ typedef	LONGINT	SignedByteRET;
 
 
 
-struct QHdr : GuestStruct {
+struct QHdr { GUEST_STRUCT;
     GUEST< INTEGER> qFlags;
     GUEST< union __qe*> qHead;    /* actually QElemPtr */
     GUEST< union __qe*> qTail;    /* actually QElemPtr */
@@ -87,21 +87,32 @@ MAKE_HIDDEN(QElemPtr);
 		noErr = 0
 	};
 
+#if 0
+// custom case in mactype.h
 /* from Quickdraw.h */
-struct Point : GuestStruct {
+struct Point { GUEST_STRUCT;
     GUEST< INTEGER> v;
     GUEST< INTEGER> h;
 };
 
-#define NULL_POINTP ((Point *) NULL)
+struct NativePoint {
+    INTEGER v;
+    INTEGER h;
+};
+#endif
 
 #define ZEROPOINT(p) (p.v = CWC (0), p.h = CWC (0))
 
-struct Rect : GuestStruct {
-    GUEST< INTEGER> top;
-    GUEST< INTEGER> left;
-    GUEST< INTEGER> bottom;
-    GUEST< INTEGER> right;
+struct Rect { GUEST_STRUCT;
+    GUEST<INTEGER> top;
+    GUEST<INTEGER> left;
+    GUEST<INTEGER> bottom;
+    GUEST<INTEGER> right;
+
+    Rect() = default;
+    Rect(GUEST<INTEGER> t, GUEST<INTEGER> l, GUEST<INTEGER> b, GUEST<INTEGER> r)
+        : top(t), left(l), bottom(b), right(r) {}
+
 };
 
 typedef Rect *RectPtr;

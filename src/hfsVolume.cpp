@@ -111,7 +111,7 @@ PRIVATE OSErr readvolumebitmap(HVCB *vcbp, volumeinfoPtr vp)
 				       CW(vp->drVBMSt) * (ULONGINT) PHYSBSIZE,
 				       nphysrequired,
 				       MR(vcbp->vcbMAdr) + MADROFFSET, reading,
-				       (LONGINT *) 0);
+				       nullptr);
     }
     return err;
 }
@@ -198,7 +198,7 @@ PRIVATE OSErr readvolumeinfo(HVCB *vcbp)    /* call once during mounting */
 	err = ROMlib_transphysblk (&((VCBExtra *)vcbp)->u.hfs,
 				   (ULONGINT) VOLUMEINFOBLOCKNO * PHYSBSIZE,
 				   1, MR(vcbp->vcbBufAdr), reading,
-				   (LONGINT *) 0);
+				   nullptr);
 	if (err == noErr)
 	  err = check_volume_size ((volumeinfoPtr) MR (vcbp->vcbBufAdr));
 	if (err == noErr) {
@@ -226,11 +226,11 @@ PRIVATE OSErr writevolumeinfo(HVCB *vcbp, Ptr p)
     
     err = ROMlib_transphysblk (&((VCBExtra *)vcbp)->u.hfs,
 			       (ULONGINT) VOLUMEINFOBLOCKNO * PHYSBSIZE,
-			       1, p, writing, (LONGINT *) 0);
+			       1, p, writing, nullptr);
     if (err == noErr)
 	err = ROMlib_transphysblk (&((VCBExtra *)vcbp)->u.hfs,
 				   (ULONGINT) VOLUMEINFOBACKUP(vcbp), 1, p,
-				   writing, (LONGINT *) 0);
+				   writing, nullptr);
     vcbsync(vcbp);
     return err;
 }
@@ -264,7 +264,7 @@ OSErr Executor::ROMlib_flushvcbp(HVCB *vcbp)
 	  memmove(&vip->drCTExtRec, &fcbp->fcbExtRec,
 		  (LONGINT) sizeof(fcbp->fcbExtRec));
 	  retval = writevolumeinfo(vcbp, p);
-	  vcbp->vcbFlags &= CW(~VCBDIRTY);
+	  vcbp->vcbFlags.raw_and(CW(~VCBDIRTY));
 	}
     }
   return retval;
@@ -551,7 +551,7 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
 		vcbp->vcbOffsM = 0;
 		vcbp->vcbAtrb = 0;
 		if (flags & DRIVE_FLAGS_FIXED)
-		    vcbp->vcbAtrb |= CW(VNONEJECTABLEBIT);
+		    vcbp->vcbAtrb.raw_or( CW(VNONEJECTABLEBIT) );
 		
 		if (!vcbp->vcbCTRef)
 		    err = tmfoErr;
@@ -567,14 +567,14 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
 			  ROMlib_transphysblk (&((VCBExtra *)vcbp)->u.hfs,
 					       (ULONGINT) VOLUMEINFOBLOCKNO
 					       * PHYSBSIZE, 1, buf, reading,
-					       (LONGINT *) 0);
+					       nullptr);
 			if (err2 == noErr)
 			  {
 			    err2 =
 			      ROMlib_transphysblk (&((VCBExtra *)vcbp)->u.hfs,
 						   (ULONGINT) VOLUMEINFOBLOCKNO
 						   * PHYSBSIZE, 1, buf,
-						   writing, (LONGINT *) 0);
+						   writing, nullptr);
 			    if (err2 == noErr)
 			      err2 = ROMlib_flushvcbp (vcbp);
 			  }
@@ -582,7 +582,7 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
 			  flags |= DRIVE_FLAGS_LOCKED;
 		      }
 		    if (flags & DRIVE_FLAGS_LOCKED)
-		        vcbp->vcbAtrb |= CW(VHARDLOCKBIT);
+		        vcbp->vcbAtrb.raw_or( CW(VHARDLOCKBIT) );
 		    if (!alreadythere)
 			Enqueue((QElemPtr) vcbp, &VCBQHdr);
 		    pb->volumeParam.ioVRefNum = vcbp->vcbVRefNum;
@@ -764,7 +764,7 @@ PUBLIC OSErr Executor::hfsPBSetVInfo(HParmBlkPtr pb, BOOLEAN async)
 	    vcbp->vcbVSeqNum = pb->volumeParam.ioVSeqNum;
 	    memmove(vcbp->vcbFndrInfo, pb->volumeParam.ioVFndrInfo,
 		    (LONGINT) 32);
-	    vcbp->vcbFlags |= CW(VCBDIRTY);
+	    vcbp->vcbFlags.raw_or(CW(VCBDIRTY));
 	    err = noErr;
 	}
     } else

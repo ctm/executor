@@ -584,8 +584,8 @@ PUBLIC void Executor::executor_main( void )
 
 #define SCC_SIZE 1024
 
-    SCCRd_H.p = RM(NewPtrSysClear (SCC_SIZE));
-    SCCWr_H.p = RM(NewPtrSysClear (SCC_SIZE));
+    SCCRd = RM(NewPtrSysClear (SCC_SIZE));
+    SCCWr = RM(NewPtrSysClear (SCC_SIZE));
     
     setup28();
 

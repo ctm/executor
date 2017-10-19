@@ -1,58 +1,69 @@
 level = 0
+raw = true
+
 while line = gets
-    if line =~ /struct PACKED/ then
-        if line =~ /;/ then
+    if raw or line =~ /struct PACKED/ then
+        if not raw and line =~ /;/ then
             #$stderr.puts(line);
             $stdout.puts(line);
         else
-            head = line
-            level = head.count('{')
-            if level == 0 then
-                line2 = gets
-                head += line2
-                level = line2.count('{')
-            end
-
-            lines = []
-            while level != 0 && line = gets
-                level += line.count('{') - line.count('}')
-                if level != 0 then
+            head = nil
+            foot = nil
+            names = nil
+            if raw then
+                lines = [line]
+                while line = gets
                     lines << line
                 end
-            end
+            else
+                head = line
+                level = head.count('{')
+                if level == 0 then
+                    line2 = gets
+                    head += line2
+                    level = line2.count('{')
+                end
 
-            foot = line
+                lines = []
+                while level != 0 && line = gets
+                    level += line.count('{') - line.count('}')
+                    if level != 0 then
+                        lines << line
+                    end
+                end
 
-            names = []
-            if head =~ /struct\s+PACKED\s+([_0-9A-Za-z]+)/ then
-                names << $1
-            end
-            
-            if head =~ /typedef/ then
-                if foot =~ /\}\s*([^;]*);/ then
-                    names.concat($1.split(/,\s*/))
-                elsif foot =~ /^\s*\}\s*$/ then
-                    foot += gets
+                foot = line
+
+                names = []
+                if head =~ /struct\s+PACKED\s+([_0-9A-Za-z]+)/ then
+                    names << $1
+                end
+                
+                if head =~ /typedef/ then
                     if foot =~ /\}\s*([^;]*);/ then
                         names.concat($1.split(/,\s*/))
+                    elsif foot =~ /^\s*\}\s*$/ then
+                        foot += gets
+                        if foot =~ /\}\s*([^;]*);/ then
+                            names.concat($1.split(/,\s*/))
+                        else
+                            $stderr.puts("FOOT PROBLEMS: " + foot)
+                        end                        
                     else
-                        $stderr.puts("FOOT PROBLEMS: " + foot)
-                    end                        
-                else
-                   $stderr.puts("FOOT PROBLEMS: " + foot)
+                    $stderr.puts("FOOT PROBLEMS: " + foot)
+                    end
                 end
-            end
-            
-            
-            name = nil
-            if names[0] =~ /^([_0-9A-Za-z])+$/ then
-                name = names.shift
                 
-                if names[0] == name then
-                    names.shift
+                
+                name = nil
+                if names[0] =~ /^([_0-9A-Za-z])+$/ then
+                    name = names.shift
+                    
+                    if names[0] == name then
+                        names.shift
+                    end
                 end
             end
-
 
             ok = true
 
@@ -144,22 +155,25 @@ while line = gets
 
             if ok then
 
-                if names.count > 0 then
-                    $stdout.puts("typedef struct #{name} : GuestStruct {")
-                else
-                    $stdout.puts("struct #{name} : GuestStruct {")
+                if not raw then
+                    if names.count > 0 then
+                        $stdout.puts("typedef struct #{name} : GuestStruct {")
+                    else
+                        $stdout.puts("struct #{name} : GuestStruct {")
+                    end
                 end
 
                 converted.each do |l|
                     $stdout.puts(l)
                 end
                 # $stderr.puts(foot)
-                if names.count > 0 then
-                    $stdout.puts("} " + names.join(", ") + ";")
-                else
-                    $stdout.puts("};");
+                if not raw then
+                    if names.count > 0 then
+                        $stdout.puts("} " + names.join(", ") + ";")
+                    else
+                        $stdout.puts("};");
+                    end
                 end
-
             else
                 str = ""
                 str += "// ### Struct needs manual conversion to GUEST<...>\n"
@@ -178,4 +192,5 @@ while line = gets
     else
         $stdout.puts(line)
     end
+    break if raw
 end

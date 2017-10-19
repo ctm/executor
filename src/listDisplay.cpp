@@ -24,7 +24,8 @@ P2(PUBLIC pascal trap, void, LDraw, Cell, cell,			/* IMIV-275 */
     GrafPtr saveport;
     RgnHandle saveclip;
     Rect r;
-    INTEGER *ip, off0, off1;
+    GUEST<INTEGER> *ip;
+    INTEGER off0, off1;
     BOOLEAN setit;
     LISTDECL();
 
@@ -127,13 +128,13 @@ P3(PUBLIC pascal trap, void, LScroll, INTEGER, ncol,		/* IMIV-275 */
 
 P1(PUBLIC pascal trap, void, LAutoScroll, ListHandle, list)	/* IMIV-275 */
 {
+    GUEST<Cell> gcell;
     Cell cell;
 
-    cell.h = HxX(list, dataBounds.left);
-    cell.v = HxX(list, dataBounds.top);
-    if (C_LGetSelect(TRUE, &cell, list)) {
-	cell.h = CW(cell.h);
-	cell.v = CW(cell.v);
+    gcell.h = HxX(list, dataBounds.left);
+    gcell.v = HxX(list, dataBounds.top);
+    if (C_LGetSelect(TRUE, &gcell, list)) {
+        cell = gcell.get();
 	if (!PtInRect(cell, &HxX(list, visible))) {
 	    C_LScroll(cell.h - Hx(list, visible.left),
 		      cell.v - Hx(list, visible.top), list);
@@ -193,7 +194,8 @@ P2(PUBLIC pascal trap, void, LActivate, BOOLEAN, act,		/* IMIV-276 */
     Rect r;
     ControlHandle ch;
     BOOLEAN sel;
-    INTEGER *ip, off0, off1;
+    GUEST<INTEGER> *ip;
+    INTEGER off0, off1;
     RgnHandle saveclip;
     LISTDECL();
 

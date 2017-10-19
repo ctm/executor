@@ -295,7 +295,7 @@ read_driver_block_size (LONGINT fd, LONGINT bsize, LONGINT maxbytes,
 }
 
 PUBLIC void
-Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, LONGINT *messp,
+Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, GUEST<LONGINT> *messp,
 		   LONGINT bsize, LONGINT maxbytes, drive_flags_t flags,
 		   uint32 offset_in)
 {
@@ -452,7 +452,7 @@ Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, LONGINT *messp
     }
 }
 
-PUBLIC void Executor::ROMlib_openfloppy( const char *dname, LONGINT *messp)
+PUBLIC void Executor::ROMlib_openfloppy( const char *dname, GUEST<LONGINT> *messp)
 {
     LONGINT floppyfd;
     LONGINT bsize, maxbytes;
@@ -466,7 +466,7 @@ PUBLIC void Executor::ROMlib_openfloppy( const char *dname, LONGINT *messp)
 			   offset);
 }
 
-PUBLIC void Executor::ROMlib_openharddisk( const char *dname, LONGINT *messp )
+PUBLIC void Executor::ROMlib_openharddisk( const char *dname, GUEST<LONGINT> *messp )
 {
     char *newbuf;
     long len;
@@ -593,7 +593,7 @@ DONE:
 
 PUBLIC OSErr
 Executor::ROMlib_transphysblk (hfs_access_t *hfsp, LONGINT physblock, short nphysblocks,
-		     Ptr bufp, accesstype rw, LONGINT *actp)
+		     Ptr bufp, accesstype rw, GUEST<LONGINT> *actp)
 {
     LONGINT fd;
     OSErr err;

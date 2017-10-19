@@ -30,7 +30,7 @@ using namespace Executor;
 A2(PUBLIC, OSErr, ufsPBGetCatInfo, CInfoPBPtr, pb,	/* INTERNAL */
 						        BOOLEAN, a)
 {
-  LONGINT swapped_dir;
+  GUEST<LONGINT> swapped_dir;
   OSErr retval;
 
   swapped_dir = pb->hFileInfo.ioDirID;
@@ -55,7 +55,7 @@ A2(PUBLIC, OSErr, ufsPBGetCatInfo, CInfoPBPtr, pb,	/* INTERNAL */
 A2(PUBLIC, OSErr, ufsPBSetCatInfo, CInfoPBPtr, pb,	/* INTERNAL */
 							BOOLEAN, a)
 {
-  LONGINT swapped_dir;
+  GUEST<LONGINT> swapped_dir;
   OSErr retval;
 
   swapped_dir = pb->hFileInfo.ioDirID;

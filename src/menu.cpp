@@ -349,9 +349,9 @@ A7(PRIVATE, void, app, StringPtr, str, char, icon, char, marker,
 
     eip->menitem++;
     if (disflag)
-        STARH(eip->menh)->enableFlags &= CL(~((LONGINT)1 << eip->menitem));
+        STARH(eip->menh)->enableFlags.raw( STARH(eip->menh)->enableFlags.raw() & CL(~((LONGINT)1 << eip->menitem)) );
     else
-        STARH(eip->menh)->enableFlags |= CL((LONGINT)1 << eip->menitem);
+        STARH(eip->menh)->enableFlags.raw( STARH(eip->menh)->enableFlags.raw() | CL((LONGINT)1 << eip->menitem) );
     newsize = eip->menoff + SIZEOFMEXT + 1 + U(str[0]);
     SetHandleSize((Handle) eip->menh, newsize);
 /*
@@ -487,8 +487,8 @@ P2(PUBLIC pascal trap, void, AddResMenu, MenuHandle, mh, ResType, restype)
     {
       int nres, n;
       Handle h;
-      INTEGER i;
-      ResType t;
+      GUEST<INTEGER> i;
+      GUEST<ResType> t;
       Str255 str;
       endinfo endinf;
       Handle temph;
@@ -771,7 +771,7 @@ P1(PUBLIC pascal trap, Handle, GetNewMBar, INTEGER, mbarid)
 {
     mbarhandle mb;
     mlhandle saveml;
-    INTEGER *ip, *ep;
+    GUEST<INTEGER> *ip, *ep;
     MenuHandle mh;
     Handle retval;
     
@@ -809,21 +809,21 @@ P1(PUBLIC pascal trap, Handle, GetNewMBar, INTEGER, mbarid)
 
 P0(PUBLIC pascal trap, Handle, GetMenuBar)
 {
-    HIDDEN_Handle retval;
+    Handle retval;
 
-    retval.p = MR(MenuList);
+    retval = MR(MenuList);
     HandToHand(&retval);
-    return retval.p;
+    return retval;
 }
 
 P1(PUBLIC pascal trap, void, SetMenuBar, Handle, ml)
 {
-    HIDDEN_Handle temph;
+    Handle temph;
 
     DisposHandle(MR(MenuList));
-    temph.p = ml;
+    temph = ml;
     HandToHand(&temph);
-    MenuList = RM(temph.p);
+    MenuList = RM(temph);
 }
 
 enum { nonhier = 0, hier = 1 };
@@ -1043,9 +1043,9 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
   goto enter;
   while (!done)
     {
-      GetMouse (&pt);
-      pt.h = CW (pt.h);
-      pt.v = CW (pt.v);
+      GUEST<Point> ptTmp;
+      GetMouse (&ptTmp);
+      pt = ptTmp.get();
       pointaslong = ((int32) pt.v << 16) | (unsigned short) pt.h;
       where = MBDFCALL (mbHit, 0, pointaslong);
       if (MenuHook)

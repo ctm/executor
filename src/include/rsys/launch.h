@@ -23,7 +23,7 @@ typedef enum
 }
 launch_failure_t;
 
-struct vers_t : GuestStruct {
+struct vers_t { GUEST_STRUCT;
     GUEST< unsigned char[4]> c;
     GUEST< int16_t> loc;
     GUEST< unsigned char[1]> shortname;

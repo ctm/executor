@@ -17,7 +17,7 @@
 #define INFO_START_STRING "Run Paiot,-Svp."
                         /* 1234567890123456 */
       
-#define SETUPA5 LONGINT savea5; savea5 = EM_A5; EM_A5 = CL( (LONGINT) CurrentA5)
+#define SETUPA5 LONGINT savea5; savea5 = EM_A5; EM_A5 = CL(CurrentA5.raw())
 
 #define RESTOREA5 EM_A5 = savea5
 

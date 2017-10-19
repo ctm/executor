@@ -39,12 +39,12 @@ namespace Executor {
 
 #define MADROFFSET	40
 
-typedef struct xtntdesc : GuestStruct {
+typedef struct xtntdesc { GUEST_STRUCT;
     GUEST< unsigned short> blockstart;
     GUEST< unsigned short> blockcount;
 } xtntrec[3];
 
-typedef struct volumeinfo : GuestStruct {
+typedef struct volumeinfo { GUEST_STRUCT;
     GUEST< unsigned short> drSigWord;    /* 0 */
     GUEST< LONGINT> drCrDate;    /* 2 */
     GUEST< LONGINT> drLsMod;    /* 6 */
@@ -84,7 +84,7 @@ typedef HIDDEN_volumeinfoPtr *volumeinfoHandle;
 #define ROUNDUP8(x) ((x+7)/8*8)
 #define NPHYSREQ(x) ((x+PHYSBSIZE-1)/PHYSBSIZE)
 
-struct btnode : GuestStruct {
+struct btnode { GUEST_STRUCT;
     GUEST< LONGINT> ndFLink;
     GUEST< LONGINT> ndBLink;
     GUEST< unsigned char> ndType;
@@ -95,14 +95,14 @@ struct btnode : GuestStruct {
 
 typedef enum { indexnode, mapnode = 2, leafnode = 0xFF } btnodetype;
 
-struct catkey : GuestStruct {
+struct catkey { GUEST_STRUCT;
     GUEST< unsigned char> ckrKeyLen;
     GUEST< char> ckrResrv1;
     GUEST< LONGINT> ckrParID;
     GUEST< unsigned char[32]> ckrCName;
 };
 
-struct xtntkey : GuestStruct {
+struct xtntkey { GUEST_STRUCT;
     GUEST< unsigned char> xkrKeyLen;
     GUEST< unsigned char> xkrFkType;
     GUEST< LONGINT> xkrFNum;
@@ -117,7 +117,7 @@ typedef union {
 
 #define FILETYPE    2
 
-struct filerec : GuestStruct {
+struct filerec { GUEST_STRUCT;
     GUEST< char> cdrType;
     GUEST< char> cdrResrv2;
     GUEST< char> filFlags;
@@ -142,7 +142,7 @@ struct filerec : GuestStruct {
 
 #define DIRTYPE 1
 
-struct directoryrec : GuestStruct {
+struct directoryrec { GUEST_STRUCT;
     GUEST< char> cdrType;
     GUEST< char> cdrResrv2;
     GUEST< unsigned short> dirFlags;
@@ -158,7 +158,7 @@ struct directoryrec : GuestStruct {
 
 #define THREADTYPE  3
 
-struct threadrec : GuestStruct {
+struct threadrec { GUEST_STRUCT;
     GUEST< char> cdrType;
     GUEST< char> cdrResrv2;
     GUEST< char[8]> thdResrv;
@@ -178,7 +178,7 @@ typedef compretval (*compfp)(void *first, void *second);
 
 typedef HVCB *HVCBPtr;
 
-struct filecontrolblock : GuestStruct {
+struct filecontrolblock { GUEST_STRUCT;
     GUEST< LONGINT> fcbFlNum;
     GUEST< Byte> fcbMdRByt;
     GUEST< Byte> fcbTypByt;
@@ -211,7 +211,7 @@ typedef enum { reading, writing } accesstype;
 #define FSOFTLOCKBIT    (1<<0)
 #define FILEFLAGSUSERSETTABLEMASK   FSOFTLOCKBIT
 
-struct btblock0 : GuestStruct {
+struct btblock0 { GUEST_STRUCT;
     GUEST< LONGINT> flink;    /* 0 */
     GUEST< LONGINT> blink;    /* 4 */
     GUEST< unsigned char> type;    /* 8 */
@@ -255,7 +255,7 @@ typedef enum { regular = 1, directory = 2, thread = 4 } filekind;
 
 typedef struct _cacheentry *cacheentry_ptr;
 
-typedef struct _cacheentry : GuestStruct {
+typedef struct _cacheentry { GUEST_STRUCT;
     GUEST< cacheentry_ptr> flink;
     GUEST< cacheentry_ptr> blink;
     GUEST< HVCBPtr> vptr;
@@ -272,7 +272,7 @@ typedef struct _cacheentry : GuestStruct {
 #define CACHEBUSY   (1 << 6)
 #define CACHEFREE   (1 << 5)
 
-struct cachehead : GuestStruct {
+struct cachehead { GUEST_STRUCT;
     GUEST< cacheentry_ptr> flink;
     GUEST< cacheentry_ptr> blink;
     GUEST< unsigned short> nitems;
@@ -307,13 +307,14 @@ typedef struct {
     trailentry trail[MAXTRAILS];    /* out */
 } btparam;
 
-struct wdentry : GuestStruct {
+struct wdentry { GUEST_STRUCT;
     GUEST< HVCBPtr> vcbp;
     GUEST< LONGINT> dirid;
     GUEST< LONGINT> cathint;    /* ??? */
     GUEST< LONGINT> procid;
 };
 
+#if 0
 #if defined(MAC)
 extern Ptr WDCBsPtr : 0x372;
 extern LONGINT BufTgFNum : 0x2FC;
@@ -337,6 +338,7 @@ extern INTEGER SCSIFlags;
 
 #define WDCBsPtr	(WDCBsPtr_H.p)
 
+#endif
 #endif
 
 #define WDMASK  0xC001
@@ -399,7 +401,7 @@ extern OSErr ROMlib_dircreate(btparam *btpb, directoryrec *data);
 extern xtntkey *ROMlib_newextentrecord(filecontrolblock *fcbp, uint16 newabn);
 extern OSErr ROMlib_btrename(btparam *btpb, StringPtr newnamep);
 extern OSErr ROMlib_btcreateemptyfile(btparam *btpb);
-extern OSErr ROMlib_btcreateemptydir(btparam *btpb, LONGINT *newidp);
+extern OSErr ROMlib_btcreateemptydir(btparam *btpb, GUEST<LONGINT> *newidp);
 extern OSErr ROMlib_btpbindex (IOParam *pb, LONGINT dirid, HVCB **vcbpp,
 			  filerec **frpp, catkey **catkeypp, BOOLEAN onlyfiles);
 extern OSErr ROMlib_cleancache(HVCB *vcbp);
@@ -425,7 +427,7 @@ extern OSErr ROMlib_makecatkey(catkey *keyp, LONGINT dirid, INTEGER namelen, Ptr
 extern OSErr ROMlib_findvcbandfile(IOParam *pb, LONGINT dirid, btparam *btpb,
 					   filekind *kindp, BOOLEAN ignorename);
 extern OSErr ROMlib_alreadyopen(HVCB *vcbp, LONGINT flnum, SignedByte *permp,
-					 INTEGER *refnump, busyconcern_t busy);
+					GUEST<INTEGER> *refnump, busyconcern_t busy);
 extern OSErr ROMlib_allochelper(IOParam *pb, BOOLEAN async, alloctype alloc,
 						     BOOLEAN ROMlib_writefcbp);
 
@@ -434,7 +436,7 @@ extern OSErr ROMlib_allochelper(IOParam *pb, BOOLEAN async, alloctype alloc,
 extern void OurExit( void );
 extern OSErr ROMlib_transphysblk(hfs_access_t *hfsp, LONGINT physblock,
 				 short nphysblocks,
-				 Ptr bufp, accesstype rw, LONGINT *actp);
+				 Ptr bufp, accesstype rw, GUEST<LONGINT> *actp);
 extern char *ROMlib_indexn(char *str, char tofind, INTEGER length);
 #if defined(MAC)
 extern void str255assign(StringPtr dstp, StringPtr srcp);
@@ -442,8 +444,8 @@ extern void str255assign(StringPtr dstp, StringPtr srcp);
 extern void *ROMlib_indexqueue(QHdr *qp, short index);
 extern OSErr ROMlib_writefcbp(filecontrolblock *fcbp);
 extern OSErr ROMlib_writevcbp(HVCB *vcbp);
-extern void ROMlib_openfloppy( const char *dname, LONGINT *messp );
-extern void ROMlib_openharddisk( const char *dname, LONGINT *messp );
+extern void ROMlib_openfloppy( const char *dname, GUEST<LONGINT> *messp );
+extern void ROMlib_openharddisk( const char *dname, GUEST<LONGINT> *messp );
 extern void ROMlib_hfsinit( void );
 extern OSErr ROMlib_ejectfloppy( LONGINT floppyfd );
 extern OSErr ROMlib_readwrite( LONGINT fd, char *buffer, LONGINT count, LONGINT off,
@@ -590,7 +592,7 @@ extern OSErr hfsPBOffLine( ParmBlkPtr ufsPB );
 extern OSErr hfsPBEject( ParmBlkPtr ufsPB ); 
 
 extern void try_to_mount_disk( const char *dname, LONGINT floppyfd,
-			       LONGINT *messp, LONGINT bsize,
+			       GUEST<LONGINT> *messp, LONGINT bsize,
 			       LONGINT maxbytes, drive_flags_t flags,
 			       uint32 offset );
 

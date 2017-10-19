@@ -18,10 +18,10 @@ char ROMlib_rcsid_listAccess[] =
 
 using namespace Executor;
 
-P4(PUBLIC pascal trap, void, LFind, INTEGER *, offsetp,		/* IMIV-274 */
-				INTEGER *, lenp, Cell, cell, ListHandle, list)
+P4(PUBLIC pascal trap, void, LFind, GUEST<INTEGER> *, offsetp,		/* IMIV-274 */
+				GUEST<INTEGER> *, lenp, Cell, cell, ListHandle, list)
 {
-    INTEGER *ip;
+    GUEST<INTEGER> *ip;
 
     if ((ip = ROMlib_getoffp(cell, list))) {
 	*offsetp =  *ip++ & CWC(0x7FFF);
@@ -31,10 +31,10 @@ P4(PUBLIC pascal trap, void, LFind, INTEGER *, offsetp,		/* IMIV-274 */
 }
 
 P4(PUBLIC pascal trap, BOOLEAN, LNextCell, BOOLEAN, hnext,	/* IMIV-274 */
-			      BOOLEAN, vnext, Cell *, cellp, ListHandle, list)
+			      BOOLEAN, vnext, GUEST<Cell> *, cellp, ListHandle, list)
 {
     BOOLEAN retval;
-    Cell scratch;
+    Point scratch;
     INTEGER right, bottom;
 
     scratch.v = CW(cellp->v);
@@ -131,10 +131,13 @@ A5(static inline, INTEGER, ROMlib_CALLCMP, Ptr, p1, Ptr, p2, INTEGER, l1,
 #endif /* __STDC__ */
 
 P5(PUBLIC pascal trap, BOOLEAN, LSearch, Ptr, dp,		/* IMIV-274 */
-		      INTEGER, dl, Ptr, proc, Cell *, cellp, ListHandle, list)
+		      INTEGER, dl, Ptr, proc, GUEST<Cell> *, cellp, ListHandle, list)
 {
+    GUEST<INTEGER> offS, lenS;
     INTEGER off, len;
-    Cell cell, swappedcell;
+    
+    Cell cell;
+    GUEST<Cell> swappedcell;
     cmpf fp;
 
     HLock((Handle) list);
@@ -146,7 +149,7 @@ P5(PUBLIC pascal trap, BOOLEAN, LSearch, Ptr, dp,		/* IMIV-274 */
     swappedcell = *cellp;
     /* TODO: SPEEDUP:  the following is a stupid way to do the loop, instead ip
 		 and ep should be used! */
-    while ((C_LFind(&off, &len, cell, list), len = CW (len), off = CW (off),
+    while ((C_LFind(&offS, &lenS, cell, list), len = CW (lenS), off = CW (offS),
 	    len != -1) &&
 	       CALLCMP(dp, (Ptr) STARH(HxP(list, cells)) + off, dl, len, fp) != 0)
 	if (!C_LNextCell(TRUE, TRUE, &swappedcell, list)) {

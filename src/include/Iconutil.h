@@ -96,7 +96,7 @@ typedef uint32 IconSelectorValue;
 typedef int16 IconAlignmentType;
 typedef int16 IconTransformType;
 
-typedef struct CIcon : GuestStruct {
+typedef struct CIcon { GUEST_STRUCT;
     GUEST< PixMap> iconPMap;
     GUEST< BitMap> iconMask;
     GUEST< BitMap> iconBMap;

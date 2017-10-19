@@ -7,7 +7,7 @@
  *
  * $Id: misc.h 63 2004-12-24 18:19:43Z ctm $
  */
-
+#if 0
 #if !defined (nilhandle_H)
 extern HIDDEN_Ptr nilhandle_H;
 extern HIDDEN_Ptr dodusesit_H;
@@ -24,5 +24,6 @@ extern INTEGER MCLKPCmiss2;
 
 #define nilhandle	(nilhandle_H.p)
 #define dodusesit	(dodusesit_H.p)
+#endif
 
 #endif /* !defined(__RSYS_MISC__) */

@@ -101,12 +101,12 @@ P1(PUBLIC pascal trap, void, ChangedResource, Handle, res)
         return;
     }
     rr->ratr |= resChanged;
-    HxX(map, resfatr) |= CWC(mapChanged);
+    HxX(map, resfatr).raw_or(CWC(mapChanged));
     if (rr->doff[0] != 0xff || rr->doff[1] != 0xff || rr->doff[2] != 0xff) {
 	oldsize = ROMlib_SizeResource(res, FALSE);
 	newsize = GetHandleSize((Handle) MR(rr->rhand));
 	if (newsize > oldsize) {
-	    HxX(map, resfatr) |= CWC(mapCompact);
+	    HxX(map, resfatr).raw_or(CWC(mapCompact));
 	    rr->doff[0] = rr->doff[1] = rr->doff[2] = 0xff;
 	}
     }
@@ -186,7 +186,7 @@ P4(PUBLIC pascal trap, void, AddResource, Handle, data, ResType, typ,
     r.noff = CW(addname(map, name));
     r.ratr = CB(resChanged);
     r.doff[0] = r.doff[1] = r.doff[2] = 0xff;
-    HxX(map, resfatr) |= CWC(mapChanged);
+    HxX(map, resfatr).raw_or(CWC(mapChanged));
     r.rhand = RM(data);
     HSetRBit (data);
     tr = (typref *)((char *)STARH(map) + toff);
@@ -255,7 +255,7 @@ P1(PUBLIC pascal trap, void, RmveResource, Handle, res)
         MAPLENX(map) = CL(MAPLEN(map) - nlen);
     } else
         nmoff = 0x7fff;
-    HxX(map, resfatr) |= CWC(mapChanged|mapCompact);
+    HxX(map, resfatr).raw_or(CWC(mapChanged|mapCompact));
     Munger((Handle) map, rroff, (Ptr)0, (LONGINT)sizeof(resref),
 						        (Ptr) "", (LONGINT) 0);
     rroff -= TYPEOFF(map);
@@ -304,7 +304,7 @@ A1(PRIVATE, OSErr, writemap, resmaphand, map)
     lc = Hx(map, rh.maplen);
     terr = FSWriteAll(Hx(map, resfn), &lc, (Ptr) STARH(map));
     if (terr == noErr)
-        HxX(map, resfatr) &= CWC(~(mapChanged));
+        HxX(map, resfatr).raw_and(CWC(~(mapChanged)));
     return(terr);
 }
 
@@ -483,8 +483,8 @@ A1(PRIVATE, void, compactdata, resmaphand, map)
                                              Hx(map, rh.rdatoff));
     HSetState((Handle) st, ststate);
     HSetState((Handle) map, mapstate);
-    HxX(map, resfatr) |= CWC(mapChanged);
-    HxX(map, resfatr) &= CWC(~mapCompact);
+    HxX(map, resfatr).raw_or(CWC(mapChanged));
+    HxX(map, resfatr).raw_and(CWC(~mapCompact));
     HxX(map, rh.rmapoff) = CL(sizeof(reshead) + sizeof(rsrvrec) + datlen);
     HxX(map, rh.datlen) = CL(datlen);
     DisposHandle((Handle) st);

@@ -180,7 +180,7 @@ P2 (PUBLIC pascal trap, OSErr, GetProcessInformation,
   PROCESS_INFO_TYPE_X (process_info)        = CL (info->type);
   PROCESS_INFO_SIGNATURE_X (process_info)   = CL (info->signature);
   PROCESS_INFO_MODE_X (process_info)        = CL (info->mode);
-  PROCESS_INFO_LOCATION_X (process_info)    = (Ptr) ApplZone;
+  PROCESS_INFO_LOCATION_X (process_info)    = guest_cast<Ptr> (ApplZone);
   PROCESS_INFO_SIZE_X (process_info)        = CL (info->size);
 
   /* ### set current zone to applzone? */

@@ -459,7 +459,7 @@ P1 (PUBLIC pascal trap, PixPatHandle, GetPixPat, INTEGER, pixpat_id)
       }
   }
   
-  gui_assert ((int) PIXPAT_MAP_X (pixpat) == CLC (sizeof (PixPat)));
+  gui_assert ((int) (PIXPAT_MAP_X (pixpat).raw()) == CLC (sizeof (PixPat)));
   
   PIXPAT_MAP_X (pixpat) = RM (patmap);
   

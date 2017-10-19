@@ -13,25 +13,24 @@
 #include "WindowMgr.h"
 
 namespace Executor {
-struct HMStringResType : GuestStruct {
+struct HMStringResType { GUEST_STRUCT;
     GUEST< INTEGER> hmmResID;
     GUEST< INTEGER> hmmIndex;
 };
 
-// ### Struct needs manual conversion to GUEST<...>
-//   union
-typedef struct PACKED HMMessageRecord
+typedef struct HMMessageRecord
 {
-  INTEGER hmmHelpType;
+  GUEST_STRUCT;
+  GUEST<INTEGER> hmmHelpType;
   union
   {
-    Str255 hmmString;
-    INTEGER hmmPict;
-    HMStringResType hmmStringRes;
-    PACKED_MEMBER(TEHandle, hmmTEHandle);
-    PACKED_MEMBER(PicHandle, hmmPictHandle);
-    INTEGER hmmTERes;
-    INTEGER hmmSTRRes;
+        GUEST<Str255> hmmString;
+        GUEST<INTEGER> hmmPict;
+        GUEST<HMStringResType> hmmStringRes;
+        GUEST<TEHandle> hmmTEHandle;
+        GUEST<PicHandle> hmmPictHandle;
+        GUEST<INTEGER> hmmTERes;
+        GUEST<INTEGER> hmmSTRRes;
   } u;
 } HMMessageRecord, *HMMessageRecPtr;
 

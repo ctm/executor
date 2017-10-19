@@ -33,7 +33,7 @@ namespace Executor {
 #define noDriveErr	(-64)
 #define lastDskErr	(-64)
 
-struct DrvSts : GuestStruct {
+struct DrvSts { GUEST_STRUCT;
     GUEST< INTEGER> track;
     GUEST< SignedByte> writeProt;
     GUEST< SignedByte> diskInPlace;

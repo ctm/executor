@@ -203,7 +203,7 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 
 	    pbr = *pb;
 	    to_find = CW (pb->ioParam.ioPosMode) >> 8;
-	    pbr.ioParam.ioPosMode &= CWC (0x7F);
+	    pbr.ioParam.ioPosMode.raw_and( CWC (0x7F) );
 
 	    buf = (char*)alloca (CL (pb->ioParam.ioReqCount));
 

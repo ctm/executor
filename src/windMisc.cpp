@@ -143,28 +143,27 @@ P6 (PUBLIC pascal trap, LONGINT, DragTheRgn,
   while (!GetOSEvent(mUpMask, &ev))
     {
       GlobalToLocal (&ev.where);
-      ev.where.h = CW (ev.where.h);
-      ev.where.v = CW (ev.where.v);
-      if (PtInRect(ev.where, slop))
+      Point ep = ev.where.get();
+      if (PtInRect(ep, slop))
 	{
-	  l = PinRect (limit, ev.where);
+	  l = PinRect (limit, ep);
 	  if (axis == hAxisOnly)
-	    ev.where.v = p.v;
+	    ep.v = p.v;
 	  else
-	    ev.where.v = HiWord(l);
+	    ep.v = HiWord(l);
 	  if (axis == vAxisOnly)
-	    ev.where.h = p.h;
+	    ep.h = p.h;
 	  else
-	    ev.where.h = LoWord(l);
-	  if (p.h != ev.where.h || p.v != ev.where.v)
+	    ep.h = LoWord(l);
+	  if (p.h != ep.h || p.v != ep.v)
 	    {
 	      if (drawn)
 		PaintRgn(rgn);
 	      drawn = TRUE;
-	      OffsetRgn(rgn, ev.where.h - p.h, ev.where.v - p.v);
+	      OffsetRgn(rgn, ep.h - p.h, ep.v - p.v);
 	      PaintRgn(rgn);
-	      p.h = ev.where.h;
-	      p.v = ev.where.v;
+	      p.h = ep.h;
+	      p.v = ep.v;
             }
 	}
       else
@@ -460,7 +459,7 @@ Executor::CALLDRAGHOOK (void)
     savea2 = EM_A2;
     savea3 = EM_A3;
     EM_D0 = 0;
-    CALL_EMULATOR((syn68k_addr_t) CL((long)DragHook));
+    CALL_EMULATOR((syn68k_addr_t) CL((long)DragHook.raw()));
     EM_D0 = saved0;
     EM_D1 = saved1;
     EM_D2 = saved2;
@@ -487,7 +486,7 @@ Executor::WINDCALLDESKHOOK (void)
   savea2 = EM_A2;
   savea3 = EM_A3;
   EM_D0 = 0;
-  CALL_EMULATOR((syn68k_addr_t) CL((long) DeskHook));
+  CALL_EMULATOR((syn68k_addr_t) CL((long) DeskHook.raw()));
   EM_D0 = saved0;
   EM_D1 = saved1;
   EM_D2 = saved2;

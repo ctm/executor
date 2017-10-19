@@ -51,7 +51,7 @@ namespace Executor {
 
 #define fontWid		((INTEGER) 0xACB0)
 
-struct FMetricRec : GuestStruct {
+struct FMetricRec { GUEST_STRUCT;
     GUEST< Fixed> ascent;
     GUEST< Fixed> descent;
     GUEST< Fixed> leading;
@@ -63,7 +63,7 @@ struct FMetricRec : GuestStruct {
     /* WidTable ffWidthTab; */
     /* StyleTable ffStyTab; */
     /* KernTable ffKernTab; */
-struct FamRec : GuestStruct {
+struct FamRec { GUEST_STRUCT;
     GUEST< INTEGER> ffFlags;
     GUEST< INTEGER> ffFamID;
     GUEST< INTEGER> ffFirstChar;
@@ -80,7 +80,7 @@ struct FamRec : GuestStruct {
     GUEST< INTEGER> ffVersion;
 };
 
-struct WidthTable : GuestStruct {
+struct WidthTable { GUEST_STRUCT;
     GUEST< Fixed[256]> tabData;
     GUEST< Handle> tabFont;
     GUEST< LONGINT> sExtra;
@@ -104,7 +104,7 @@ struct WidthTable : GuestStruct {
 };
 
 
-struct FMInput : GuestStruct {
+struct FMInput { GUEST_STRUCT;
     GUEST< INTEGER> family;
     GUEST< INTEGER> size;
     GUEST< Style> face;
@@ -114,7 +114,7 @@ struct FMInput : GuestStruct {
     GUEST< Point> denom;
 };
 
-struct FMOutput : GuestStruct {
+struct FMOutput { GUEST_STRUCT;
     GUEST< INTEGER> errNum;    /* 0x00 */
     GUEST< Handle> fontHandle;    /* 0x02 */
     GUEST< Byte> bold;    /* 0x06 */
@@ -136,7 +136,7 @@ struct FMOutput : GuestStruct {
 typedef FMOutput *FMOutPtr;
 
     /* more stuff is usually appended here ... bitImage, locTable, owTable */
-struct FontRec : GuestStruct {
+struct FontRec { GUEST_STRUCT;
     GUEST< INTEGER> fontType;
     GUEST< INTEGER> firstChar;
     GUEST< INTEGER> lastChar;

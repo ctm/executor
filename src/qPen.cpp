@@ -31,7 +31,7 @@ P0(PUBLIC pascal trap, void, ShowPen)
     PORT_PEN_VIS_X (thePort) = CW (PORT_PEN_VIS (thePort) + 1);
 }
 
-P1(PUBLIC pascal trap, void, GetPen, Point *, ptp)
+P1(PUBLIC pascal trap, void, GetPen, GUEST<Point> *, ptp)
 {
   if (thePortX)
     *ptp = PORT_PEN_LOC (thePort);
@@ -62,7 +62,7 @@ P1(PUBLIC pascal trap, void, GetPenState, PenState *, ps)
 	{
 	  /* high bit indicates there is a pixpat (not a pattern)
 	     stored in the pnPat field */
-	  ps->pnMode |= CWC (0x8000);
+	  ps->pnMode.raw_or( CWC (0x8000) );
 	  *(PixPatHandle *) &ps->pnPat[0] = pen_pixpat;
 	}
     }

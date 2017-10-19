@@ -86,7 +86,7 @@ MAKE_HIDDEN(ControlHandle);
 #include "WindowMgr.h"
 
 namespace Executor {
-struct __cr : GuestStruct {
+struct __cr { GUEST_STRUCT;
     GUEST< ControlHandle> nextControl;
     GUEST< WindowPtr> contrlOwner;
     GUEST< Rect> contrlRect;
@@ -102,7 +102,7 @@ struct __cr : GuestStruct {
     GUEST< Str255> contrlTitle;
 };
 
-typedef struct CtlCTab : GuestStruct {
+typedef struct CtlCTab { GUEST_STRUCT;
     GUEST< LONGINT> ccSeed;
     GUEST< INTEGER> ccReserved;
     GUEST< INTEGER> ctSize;
@@ -116,7 +116,7 @@ MAKE_HIDDEN(AuxCtlPtr);
 typedef HIDDEN_AuxCtlPtr *AuxCtlHandle;
 MAKE_HIDDEN(AuxCtlHandle);
 
-struct AuxCtlRec : GuestStruct {
+struct AuxCtlRec { GUEST_STRUCT;
     GUEST< AuxCtlHandle> acNext;
     GUEST< ControlHandle> acOwner;
     GUEST< CCTabHandle> acCTable;

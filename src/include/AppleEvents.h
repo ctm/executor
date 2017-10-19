@@ -113,19 +113,19 @@ typedef ProcPtr EventFilterProcPtr;
 
 /* #### internal */
 
-typedef struct AE_hdlr : GuestStruct {
+typedef struct AE_hdlr { GUEST_STRUCT;
     GUEST< ProcPtr> fn;
     GUEST< int32> refcon;
 } AE_hdlr_t;
 
-typedef struct AE_hdlr_selector : GuestStruct {
+typedef struct AE_hdlr_selector { GUEST_STRUCT;
     GUEST< int32> sel0;
     GUEST< int32> sel1;
 } AE_hdlr_selector_t;
 
 
 
-typedef struct AE_hdlr_table_elt : GuestStruct {
+typedef struct AE_hdlr_table_elt { GUEST_STRUCT;
     GUEST< int32> pad_1;
     GUEST< AE_hdlr_selector_t> selector;
     GUEST< AE_hdlr_t> hdlr;
@@ -146,7 +146,7 @@ typedef struct AE_hdlr_table_elt : GuestStruct {
 
 
 
-typedef struct AE_hdlr_table : GuestStruct {
+typedef struct AE_hdlr_table { GUEST_STRUCT;
     GUEST< int32> pad_1;
     GUEST< int32> n_allocated_bytes;
     GUEST< int32> n_elts;
@@ -164,7 +164,7 @@ typedef HIDDEN_AE_hdlr_table_ptr *AE_hdlr_table_h;
 
     /* points to a 32byte handle of unknown contents (at least,
      sometimes) */
-typedef struct AE_zone_tables : GuestStruct {
+typedef struct AE_zone_tables { GUEST_STRUCT;
     GUEST< AE_hdlr_table_h> event_hdlr_table;
     GUEST< AE_hdlr_table_h> coercion_hdlr_table;
     GUEST< AE_hdlr_table_h> special_hdlr_table;
@@ -184,7 +184,7 @@ typedef HIDDEN_AE_zone_tables_ptr *AE_zone_tables_h;
 
     /* offset of `system_zone_tables' is 380; handle to a `struct tables' */
 
-typedef struct AE_info : GuestStruct {
+typedef struct { GUEST_STRUCT;
     GUEST< char[340]> pad_1;
     GUEST< AE_zone_tables_h> appl_zone_tables;
     GUEST< char[36]> pad_2;
@@ -196,7 +196,7 @@ typedef AE_info_t *AE_info_ptr;
 MAKE_HIDDEN(AE_info_ptr);
 
 extern pascal trap OSErr C__AE_hdlr_table_alloc (int32, int32, int32, int8,
-						 AE_hdlr_table_h *);
+						 GUEST<AE_hdlr_table_h> *);
 extern pascal trap OSErr C__AE_hdlr_delete (AE_hdlr_table_h, int32,
 					    AE_hdlr_selector_t *);
 extern pascal trap OSErr C__AE_hdlr_lookup (AE_hdlr_table_h, int32,
@@ -441,12 +441,13 @@ extern void AE_reinit (void);
 
 extern pascal trap OSErr C_AEManagerInfo (LONGINT *resultp);
 
-
+#if 0
 #if !defined (AE_info_H)
 extern HIDDEN_AE_info_ptr AE_info_H;
 #endif
 
 #define AE_info (AE_info_H.p)
+#endif
 
 extern pascal trap OSErr C_AEDisposeToken (AEDesc *theToken);
 extern pascal trap OSErr C_AEREesolve (AEDesc *objectSpecifier,

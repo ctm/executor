@@ -739,7 +739,7 @@ DONE:
 #undef RETURN
 
 A4(PUBLIC, OSErr, GetVInfo, INTEGER, drv, StringPtr, voln,	/* IMIV-107 */
-					     INTEGER *, vrn, LONGINT *, freeb)
+					     GUEST<INTEGER> *, vrn, GUEST<LONGINT> *, freeb)
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -753,7 +753,7 @@ A4(PUBLIC, OSErr, GetVInfo, INTEGER, drv, StringPtr, voln,	/* IMIV-107 */
     return(temp);
 }
 
-A2(PUBLIC, OSErr, GetVRefNum, INTEGER, prn, INTEGER *, vrn)	/* IMIV-107 */
+A2(PUBLIC, OSErr, GetVRefNum, INTEGER, prn, GUEST<INTEGER> *, vrn)	/* IMIV-107 */
 {
     OSErr err;
     fcbrec *fp;
@@ -765,7 +765,7 @@ A2(PUBLIC, OSErr, GetVRefNum, INTEGER, prn, INTEGER *, vrn)	/* IMIV-107 */
     return(err);
 }
 
-A2(PUBLIC, OSErr, GetVol, StringPtr, voln, INTEGER *, vrn)	/* IMIV-107 */
+A2(PUBLIC, OSErr, GetVol, StringPtr, voln, GUEST<INTEGER> *, vrn)	/* IMIV-107 */
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -814,7 +814,7 @@ A2(PUBLIC, OSErr, Eject, StringPtr, voln, INTEGER, vrn)	/* IMIV-108 */
 
 namespace Executor {
   static VCB *findvcb(StringPtr, INTEGER, BOOLEAN*, INTEGER*);
-  static VCB *grabvcb(ParmBlkPtr, INTEGER *);
+  static VCB *grabvcb(ParmBlkPtr, GUEST<INTEGER> *);
 }
 
 A4(PRIVATE, VCB *, findvcb, StringPtr, sp, INTEGER, vrn, BOOLEAN *, iswd,
@@ -859,7 +859,7 @@ A4(PRIVATE, VCB *, findvcb, StringPtr, sp, INTEGER, vrn, BOOLEAN *, iswd,
     return vcbptr;
 }
 
-A2(PRIVATE, VCB *, grabvcb, ParmBlkPtr, pb, INTEGER *, vrefnump)
+A2(PRIVATE, VCB *, grabvcb, ParmBlkPtr, pb, GUEST<INTEGER> *, vrefnump)
 {
     INTEGER i;
     VCB *vcbp;

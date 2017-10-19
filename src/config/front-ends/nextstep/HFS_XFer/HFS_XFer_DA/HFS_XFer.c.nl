@@ -646,7 +646,8 @@ void doitem(long choice, int rn)
 		break;
 	case 1:
 		infop = file_funcs + LoWord(choice) - 1 ;
-		SetPt(&pt, infop->h, infop->v);
+		pt.h = infop->h;
+        pt.v = infop->v;
 		if (infop->dlgHook == 0)
 			quitfunc(rn);
 		else

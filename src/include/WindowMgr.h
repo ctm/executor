@@ -73,13 +73,11 @@ typedef HIDDEN_GrafPtr HIDDEN_WindowPtr;
 
 typedef CGrafPtr CWindowPtr;
 
-GUEST_STRUCT(WindowRecord);
-typedef WindowRecord *WindowPeek;
-MAKE_HIDDEN(WindowPeek);
 }
 #include "ControlMgr.h"
 namespace Executor {
-struct WindowRecord : GuestStruct {
+struct WindowRecord {
+    GUEST_STRUCT;
     GUEST< GrafPort> port;
     GUEST< INTEGER> windowKind;
     GUEST< BOOLEAN> visible;
@@ -94,12 +92,15 @@ struct WindowRecord : GuestStruct {
     GUEST< StringHandle> titleHandle;
     GUEST< INTEGER> titleWidth;
     GUEST< ControlHandle> controlList;
-    GUEST< WindowPeek> nextWindow;
+    GUEST< WindowRecord* > nextWindow;
     GUEST< PicHandle> windowPic;
     GUEST< LONGINT> refCon;
 };
+typedef WindowRecord *WindowPeek;
+MAKE_HIDDEN(WindowPeek);
 
-struct WStateData : GuestStruct {
+
+struct WStateData { GUEST_STRUCT;
     GUEST< Rect> userState;
     GUEST< Rect> stdState;
 };
@@ -115,7 +116,7 @@ MAKE_HIDDEN(AuxWinPtr);
 typedef HIDDEN_AuxWinPtr *AuxWinHandle;
 MAKE_HIDDEN(AuxWinHandle);
 
-struct AuxWinRec : GuestStruct {
+struct AuxWinRec { GUEST_STRUCT;
     GUEST< AuxWinHandle> awNext;
     GUEST< WindowPtr> awOwner;
     GUEST< CTabHandle> awCTable;

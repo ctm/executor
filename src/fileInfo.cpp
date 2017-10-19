@@ -271,7 +271,7 @@ A2(PUBLIC, INTEGER, ROMlib_UNIX7_to_Mac, char *, cname, INTEGER, length)
 }
 
 PUBLIC Byte
-Executor::open_attrib_bits (LONGINT file_id, VCB *vcbp, INTEGER *refnump)
+Executor::open_attrib_bits (LONGINT file_id, VCB *vcbp, GUEST<INTEGER> *refnump)
 {
   Byte retval;
   int i;
@@ -297,13 +297,13 @@ Executor::open_attrib_bits (LONGINT file_id, VCB *vcbp, INTEGER *refnump)
 }
 
 A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
-		BOOLEAN, a, GetOrSetType, op, LONGINT *, dir, BOOLEAN, dodirs)
+		BOOLEAN, a, GetOrSetType, op, GUEST<LONGINT> *, dir, BOOLEAN, dodirs)
 {
     OSErr err;
     char *pathname, *filename, *endname, *rpathname;
     char savechar;
     struct stat datasbuf, resourcesbuf, parentsbuf;
-    LONGINT longzero = 0;
+    GUEST<LONGINT> longzero = 0;
     VCBExtra *vcbp;
     THz savezone;
     struct timeval accessupdatetimes[2];
@@ -321,7 +321,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 
     if (!dir) {
 	dir = &longzero;
-	longzero = dodirs ? pb->fileParam.ioFlNum : 0;
+	longzero = dodirs ? pb->fileParam.ioFlNum : GUEST<LONGINT>(0);
     }
 
     if (op == Get) {
@@ -525,7 +525,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 	  else if ((err = ROMlib_hiddenbyname(Set, pathname, rpathname,
 					      &dateinfo, &finfo,
 					      dodirs ? &fxinfo : (FXInfo *) 0,
-					      (LONGINT *) 0, (LONGINT *) 0))
+					      (GUEST<LONGINT> *) 0, (GUEST<LONGINT> *) 0))
 		   != noErr)
 	    goto theend;
 	}
@@ -552,13 +552,13 @@ theend:
 A2(PUBLIC, OSErr, ufsPBGetFInfo, ParmBlkPtr, pb,	/* INTERNAL */
 						      BOOLEAN, a)
 {
-    return ROMlib_PBGetSetFInfoD(pb, a, Get, (LONGINT *)0, FALSE);
+    return ROMlib_PBGetSetFInfoD(pb, a, Get, (GUEST<LONGINT> *)0, FALSE);
 }
 
 A2(PUBLIC, OSErr, ufsPBHGetFInfo, HParmBlkPtr, pb,	/* INTERNAL */
 							BOOLEAN, a)
 {
-    LONGINT d;
+    GUEST<LONGINT> d;
     OSErr err;
     ProcPtr compsave;
 
@@ -574,13 +574,13 @@ A2(PUBLIC, OSErr, ufsPBHGetFInfo, HParmBlkPtr, pb,	/* INTERNAL */
 A2(PUBLIC, OSErr, ufsPBSetFInfo, ParmBlkPtr, pb,	/* INTERNAL */
 						      BOOLEAN, a)
 {
-    return ROMlib_PBGetSetFInfoD(pb, a, Set, (LONGINT *)0, FALSE);
+    return ROMlib_PBGetSetFInfoD(pb, a, Set, (GUEST<LONGINT> *)0, FALSE);
 }
 
 A2(PUBLIC, OSErr, ufsPBHSetFInfo, HParmBlkPtr, pb,	/* INTERNAL */
 						        BOOLEAN, a)
 {
-    LONGINT d;
+    GUEST<LONGINT> d;
 
     d = pb->fileParam.ioDirID;
     return ROMlib_PBGetSetFInfoD((ParmBlkPtr) pb, a, Set, &d, FALSE);

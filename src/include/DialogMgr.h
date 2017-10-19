@@ -31,8 +31,8 @@ namespace Executor {
 #define noteIcon	1
 #define cautionIcon	2
 
-struct DialogRecord : GuestStruct
-{
+struct DialogRecord {
+   GUEST_STRUCT;
    WindowRecord window;
    //PACKED_MEMBER(Handle, items);
    //PACKED_MEMBER(TEHandle, textH);
@@ -63,8 +63,7 @@ typedef HIDDEN_WindowPtr HIDDEN_DialogPtr;
 #define DIALOG_EDIT_OPEN(dialog)	(CW (DIALOG_EDIT_OPEN_X (dialog)))
 #define DIALOG_ADEF_ITEM(dialog)	(CW (DIALOG_ADEF_ITEM_X (dialog)))
 
-struct DialogTemplate : GuestStruct
-{
+struct DialogTemplate { GUEST_STRUCT;
   Rect boundsRect;
   GUEST<INTEGER> procID;
   GUEST<BOOLEAN> visible;
@@ -80,8 +79,8 @@ typedef DialogTemplate *DialogTPtr;
 MAKE_HIDDEN(DialogTPtr);
 typedef HIDDEN_DialogTPtr *DialogTHndl;
 
-// ### Struct needs manual conversion to GUEST<...>
-//   unsigned boldItm4: 1;
+// This has a 50% chance of being right.
+// It does not seem to be used, however.
 typedef struct PACKED {
   unsigned boldItm4: 1;
   unsigned boxDrwn4: 1;
@@ -97,7 +96,7 @@ typedef struct PACKED {
   unsigned sound1: 2;
 } StageList;
 
-struct AlertTemplate : GuestStruct {
+struct AlertTemplate { GUEST_STRUCT;
     GUEST< Rect> boundsRect;
     GUEST< INTEGER> itemsID;
     GUEST< StageList> stages;

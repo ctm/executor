@@ -27,14 +27,14 @@ namespace Executor {
 
 A2(PRIVATE, void, polyrgn, PolyHandle, ph, RgnHandle, rh)
 {
-    Point *pp, *ep;
+    GUEST<Point> *pp, *ep;
     Point firstp;
     INTEGER tmpvis, state;
 
     state = HGetState((Handle) ph);
     HLock((Handle) ph);  
     pp = HxX(ph, polyPoints);
-    ep = (Point *) ((char *) STARH(ph) + Hx(ph, polySize));
+    ep = (GUEST<Point> *) ((char *) STARH(ph) + Hx(ph, polySize));
     firstp.h = Hx(ph, polyPoints[0].h);
     firstp.v = Hx(ph, polyPoints[0].v);
     if (CW(ep[-1].h) == firstp.h && CW(ep[-1].v) == firstp.v)
@@ -58,7 +58,8 @@ A2(PRIVATE, void, polyrgn, PolyHandle, ph, RgnHandle, rh)
 P2(PUBLIC pascal trap, void, StdPoly, GrafVerb, verb, PolyHandle, ph)
 {
     RgnHandle rh;
-    Point p, *pp, *ep;
+    Point p;
+    GUEST<Point> *pp, *ep;
     Point firstp;
     INTEGER state;
     PAUSEDECL;
@@ -90,7 +91,7 @@ P2(PUBLIC pascal trap, void, StdPoly, GrafVerb, verb, PolyHandle, ph)
 	   testing on the mac shows that is incorrect */
 	TRAPBEGIN ();
         pp = HxX(ph, polyPoints);
-        ep = (Point *) ((char *) STARH(ph) + Hx(ph, polySize));
+        ep = (GUEST<Point> *) ((char *) STARH(ph) + Hx(ph, polySize));
         firstp.h = CW(pp[0].h);
         firstp.v = CW(pp[0].v);
         MoveTo (firstp.h, firstp.v);

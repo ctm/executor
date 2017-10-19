@@ -717,7 +717,7 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
     WDPBRec wpb;
     INTEGER wdlen;
     HVCB *vcbp;
-    LONGINT m;
+    GUEST<LONGINT> m;
     THz savezone;
     struct stat sbuf;
     char *sysname;

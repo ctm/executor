@@ -55,6 +55,6 @@ extern void ROMlib_listcall (INTEGER mess, BOOLEAN sel, Rect *rp, Cell cell,
 
 extern void ROMlib_vminmax( INTEGER *minp, INTEGER *maxp, ListPtr lp );
 extern void ROMlib_hminmax( INTEGER *minp, INTEGER *maxp, ListPtr lp );
-extern INTEGER *ROMlib_getoffp( Cell cell, ListHandle list);
+extern GUEST<INTEGER> *ROMlib_getoffp( Cell cell, ListHandle list);
 }
 #endif /* !defined(__RSYS_LIST__) */

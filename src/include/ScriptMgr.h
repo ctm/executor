@@ -97,11 +97,11 @@ enum { smKCHRCache = 38 };
 
 typedef uint8 StyledLineBreakCode;
 
-typedef struct DateCacheRec : GuestStruct {
+typedef struct DateCacheRec { GUEST_STRUCT;
     GUEST< int16[256]> hidden;
 } *DateCachePtr;
 
-typedef struct LongDateRec : GuestStruct {
+typedef struct LongDateRec { GUEST_STRUCT;
     GUEST< int16> era;
     GUEST< int16> year;
     GUEST< int16> month;
@@ -129,7 +129,7 @@ typedef int16 ScriptRunStatus; /* Not sure this is correct, since in IM
 
 typedef INTEGER FormatStatus;
 
-struct NumFormatStringRec : GuestStruct {
+struct NumFormatStringRec { GUEST_STRUCT;
     GUEST< Byte> fLength;
     GUEST< Byte> fVersion;
     GUEST< SignedByte[253]> data;
@@ -149,7 +149,7 @@ typedef struct
 }
 WideCharArr;
 
-struct NumberParts : GuestStruct {
+struct NumberParts { GUEST_STRUCT;
     GUEST< INTEGER> version;
     GUEST< WideChar[31]> data;
     GUEST< WideCharArr> pePlus;
@@ -167,7 +167,7 @@ typedef unsigned char LongDateField;
 
 typedef char DateDelta;
 
-struct TogglePB : GuestStruct {
+struct TogglePB { GUEST_STRUCT;
     GUEST< int32> togFlags;
     GUEST< ResType> amChars;
     GUEST< ResType> pmChars;

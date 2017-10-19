@@ -361,7 +361,7 @@ PRIVATE void beginexecutingat( LONGINT startpc )
     EM_A2 = EM_D3;
     EM_A3 = 0;
     EM_A4 = 0;
-    EM_A5 = CL((LONGINT) CurrentA5);	/* was smashed when we
+    EM_A5 = CL((LONGINT) CurrentA5.raw());	/* was smashed when we
 					   initialized above */
     EM_A6 = 0x1EF;
 
@@ -724,7 +724,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	CurrentA5 = RM(MR(CurStackBase) + belowa5); /* set CurrentA5 */
 	BufPtr = RM(MR(CurrentA5) + abovea5);
 	CurJTOffset = CW(jumpoff);
-	a5 = CL((LONGINT) CurrentA5);
+	a5 = CL((LONGINT) CurrentA5.raw());
       }
 
     GetDateTime((LONGINT *) &Time);
@@ -769,7 +769,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     ROMlib_uaf = 0;
 
     if (code0)
-      beginexecutingat(CL((LONGINT) CurrentA5) + CW(CurJTOffset) + 2);
+      beginexecutingat(CL((LONGINT) CurrentA5.raw()) + CW(CurJTOffset) + 2);
     else
       {
 	FSSpec fs;
@@ -848,7 +848,7 @@ PRIVATE void reset_low_globals(void)
     Ptr saveMemTop;
     DCtlHandlePtr saveUTableBase;
     INTEGER saveUnitNtryCnt;
-    Point saveMouseLocation;
+    GUEST<Point> saveMouseLocation;
     CGrafPtr saveWMgrCPort;
     Handle saveMBDFHndl;
     ProcPtr saveJCrsrTask;
@@ -872,8 +872,8 @@ PRIVATE void reset_low_globals(void)
 	save58            = *(LONGINT *) SYN68K_TO_US(0x58);
 	save5C            = *(LONGINT *) SYN68K_TO_US(0x5C);
 	saveVIA           = VIA;
-	saveSCCRd	  = SCCRd_H.p;
-	saveSCCWr	  = SCCWr_H.p;
+	saveSCCRd	  = SCCRd;
+	saveSCCWr	  = SCCWr;
 	saveSoundBase     = SoundBase;
 	saveAppParmHandle = AppParmHandle;
 	saveVCBQHdr       = VCBQHdr;
@@ -923,10 +923,10 @@ PRIVATE void reset_low_globals(void)
         saveTheGDevice = TheGDevice;
         saveMainDevice = MainDevice;
         saveDeviceList = DeviceList;    
-	saveDAStrings[0]  = DAStrings_H[0];
-	saveDAStrings[1]  = DAStrings_H[1];
-	saveDAStrings[2]  = DAStrings_H[2];
-	saveDAStrings[3]  = DAStrings_H[3];
+	saveDAStrings[0]  = DAStrings[0];
+	saveDAStrings[1]  = DAStrings[1];
+	saveDAStrings[2]  = DAStrings[2];
+	saveDAStrings[3]  = DAStrings[3];
 	saveMemTop = MemTop;
 	saveUTableBase = UTableBase;
 	saveUnitNtryCnt = UnitNtryCnt;
@@ -965,10 +965,10 @@ PRIVATE void reset_low_globals(void)
 	UTableBase   = saveUTableBase;
 	UnitNtryCnt  = saveUnitNtryCnt;
 	MemTop = saveMemTop;
-	DAStrings_H[3]  = saveDAStrings[3];
-	DAStrings_H[2]  = saveDAStrings[2];
-	DAStrings_H[1]  = saveDAStrings[1];
-	DAStrings_H[0]  = saveDAStrings[0];
+	DAStrings[3]  = saveDAStrings[3];
+	DAStrings[2]  = saveDAStrings[2];
+	DAStrings[1]  = saveDAStrings[1];
+	DAStrings[0]  = saveDAStrings[0];
 	DefDirID      = saveDefDirID;
         DoubleTime    = saveDoubleTime;
         CaretTime     = saveCaretTime;
@@ -1013,10 +1013,10 @@ PRIVATE void reset_low_globals(void)
 	VCBQHdr       = saveVCBQHdr;
 	Lo3Bytes      = saveLo3Bytes;
 	VIA           = saveVIA;
-	SCCRd_H.p     = saveSCCRd;
-	SCCWr_H.p     = saveSCCWr;
+	SCCRd     = saveSCCRd;
+	SCCWr     = saveSCCWr;
 	SoundBase     = saveSoundBase;
-	Ticks_UL.u    = saveTicks;
+	Ticks    = saveTicks;
 	SysZone       = saveSysZone;
 	BootDrive     = saveBootDrive;
 	AppParmHandle = saveAppParmHandle;
@@ -1156,8 +1156,8 @@ PRIVATE void reset_low_globals(void)
     {
       int i;
       
-      for (i = 0; i < (int) NELEM (AppPacks_H); ++i)
-	AppPacks_H[i].p = 0;
+      for (i = 0; i < (int) NELEM (AppPacks); ++i)
+	AppPacks[i].p = 0;
     }
     SysEvtMask = CWC(~(1L<< keyUp)); /* EVERYTHING except keyUp */
     SdVolume = 7; /* for Beebop 2 */
@@ -1215,7 +1215,7 @@ Executor::empty_timer_queues (void)
       nextvp = (VBLTaskPtr) MR (vp->qLink);
       VRemove (vp);
     }
-  for (tp = MR ((TMTask *) ROMlib_timehead.qHead); tp; tp = nexttp)
+  for (tp = (TMTask *)MR ( ROMlib_timehead.qHead); tp; tp = nexttp)
     {
       nexttp = (TMTask *) MR (tp->qLink);
       RmvTime ((QElemPtr) tp);
@@ -1403,9 +1403,9 @@ Executor::NewLaunch (StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockR
 	  {
 	    long lp;
 
-	    for (lp = (long) &nilhandle_H; lp <= (long) &lastlowglobal; lp += 2)
-	      if (   lp != (long) &TheZone_H
-		     && lp != (long) &ApplZone_H
+	    for (lp = (long) &nilhandle; lp <= (long) &lastlowglobal; lp += 2)
+	      if (   lp != (long) &TheZone
+		     && lp != (long) &ApplZone
 		     && lp != (long) &FSFCBLen
 		     && lp != (long) &SysMap
 		     && lp != (long) SYN68K_TO_US(0x2f6)

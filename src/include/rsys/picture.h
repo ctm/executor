@@ -72,7 +72,7 @@ namespace Executor {
 
 
 
-struct piccache : GuestStruct {
+struct piccache { GUEST_STRUCT;
     GUEST< PicHandle> pichandle;    /* 0x00 - 0x03 */
     GUEST< LONGINT> picsize;    /* 0x04 - 0x07 */
     GUEST< LONGINT> pichowfar;    /* 0x08 - 0x0B */
@@ -104,7 +104,7 @@ extern void ROMlib_drawingpicupdate( void );
 extern void ROMlib_drawingverbpicupdate( GrafVerb v );
 extern void ROMlib_drawingverbrectpicupdate( GrafVerb v, Rect *rp );
 extern void ROMlib_drawingverbrectovalpicupdate( GrafVerb v, Rect *rp,
-								  Point *ovp );
+								  GUEST<Point> *ovp );
 
 #define INITIALPICSIZE 0x100
 

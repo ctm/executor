@@ -68,7 +68,7 @@ typedef __SignedByte SPortSel;
 
 #endif /* BINCOMPAT */
 
-struct SerShk : GuestStruct {
+struct SerShk { GUEST_STRUCT;
     GUEST< __Byte> fXOn;
     GUEST< __Byte> fCTS;
     GUEST< __Byte> xOn;
@@ -79,7 +79,7 @@ struct SerShk : GuestStruct {
     GUEST< __Byte> null;
 };
 
-struct SerStaRec : GuestStruct {
+struct SerStaRec { GUEST_STRUCT;
     GUEST< __Byte> cumErrs;
     GUEST< __Byte> xOffSent;
     GUEST< __Byte> rdPend;

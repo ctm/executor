@@ -9,14 +9,14 @@
  */
 
 namespace Executor {
-struct ADBDataBlock : GuestStruct {
+struct ADBDataBlock { GUEST_STRUCT;
     GUEST< SignedByte> devType;
     GUEST< SignedByte> origADBAddr;
     GUEST< Ptr> dbServiceRtPtr;
     GUEST< Ptr> dbDataAreaAddr;
 };
 
-struct ADBSetInfoBlock : GuestStruct {
+struct ADBSetInfoBlock { GUEST_STRUCT;
     GUEST< Ptr> siServiceRtPtr;
     GUEST< Ptr> siDataAreaAddr;
 };

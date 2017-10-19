@@ -25,7 +25,7 @@ namespace Executor {
 #define prInitErr	(-88)
 #define prWrErr		(-87)
 
-struct SysParmType : GuestStruct {
+struct SysParmType { GUEST_STRUCT;
     GUEST< Byte> valid;
     GUEST< Byte> aTalkA;
     GUEST< Byte> aTalkB;
@@ -51,7 +51,7 @@ union __qe {
 };
 typedef union __qe QElem;
 
-struct DateTimeRec : GuestStruct {
+struct DateTimeRec { GUEST_STRUCT;
     GUEST< INTEGER> year;
     GUEST< INTEGER> month;
     GUEST< INTEGER> day;
@@ -61,7 +61,7 @@ struct DateTimeRec : GuestStruct {
     GUEST< INTEGER> dayOfWeek;
 };
 
-typedef struct SysEnvRec : GuestStruct {
+typedef struct SysEnvRec { GUEST_STRUCT;
     GUEST< INTEGER> environsVersion;
     GUEST< INTEGER> machineType;
     GUEST< INTEGER> systemVersion;
@@ -125,45 +125,8 @@ extern Byte MMUType;
 extern Byte KbdType;
 #endif
 
-#if !defined (__STDC__)
-extern OSErrRET HandToHand(); 
-extern OSErrRET PtrToHand(); 
-extern OSErrRET PtrToXHand(); 
-extern OSErrRET HandAndHand(); 
-extern OSErrRET PtrAndHand(); 
-extern LONGINT ROMlib_RelString(); 
-extern INTEGERRET RelString(); 
-extern BOOLEANRET EqualString(); 
-extern void ROMlib_UprString(); 
-extern void UprString(); 
-extern void GetDateTime(); 
-extern OSErrRET ReadDateTime(); 
-extern OSErrRET SetDateTime(); 
-extern void Date2Secs(); 
-extern void Secs2Date(); 
-extern void GetTime(); 
-extern void SetTime(); 
-extern OSErrRET InitUtil(); 
-extern SysPPtr GetSysPPtr(); 
-extern OSErrRET WriteParam(); 
-extern void Enqueue(); 
-extern OSErrRET Dequeue(); 
-extern LONGINT GetTrapAddress(); 
-extern LONGINT NGetTrapAddress(); 
-extern void SetTrapAddress(); 
-extern void Delay(); 
-extern void SysBeep(); 
-extern void Environs(); 
-extern OSErrRET SysEnvirons(); 
-extern void Restart(); 
-extern void SetUpA5(); 
-extern void RestoreA5(); 
-extern void GetMMUMode(); 
-extern void SwapMMUMode(); 
-extern LONGINT StripAddress(); 
-#else /* __STDC__ */
-extern trap OSErrRET HandToHand( HIDDEN_Handle *h ); 
-extern trap OSErrRET PtrToHand( Ptr p, HIDDEN_Handle *h, LONGINT s ); 
+extern trap OSErrRET HandToHand( Handle *h ); 
+extern trap OSErrRET PtrToHand( Ptr p, Handle *h, LONGINT s ); 
 extern trap OSErrRET PtrToXHand( Ptr p, Handle h, LONGINT s ); 
 extern trap OSErrRET HandAndHand( Handle h1, Handle h2 ); 
 extern trap OSErrRET PtrAndHand( Ptr p, Handle h, LONGINT s1 ); 
@@ -203,6 +166,5 @@ extern void RestoreA5( void  );
 extern void GetMMUMode( INTEGER *ip );
 extern void SwapMMUMode( Byte *bp ); 
 extern LONGINT StripAddress( LONGINT l ); 
-#endif /* __STDC__ */
 }
 #endif /* __OSUTIL__ */

@@ -7,7 +7,7 @@ extern char ROMlib_exit;
 #include "SegmentLdr.h"
 
 namespace Executor {
-struct finderinfo : GuestStruct {
+struct finderinfo { GUEST_STRUCT;
     GUEST< INTEGER> message;
     GUEST< INTEGER> count;
     GUEST< AppFile[1]> files;

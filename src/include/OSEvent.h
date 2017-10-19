@@ -16,7 +16,7 @@
 namespace Executor {
 #define evtNotEnb	1
 
-struct EvQEl : GuestStruct {
+struct EvQEl { GUEST_STRUCT;
     GUEST< QElemPtr> qLink;
     GUEST< INTEGER> qType;
     GUEST< INTEGER> evtQWhat;
@@ -64,7 +64,7 @@ typedef enum
 
 
     /* extra */
-typedef struct size_info : GuestStruct {
+typedef struct size_info { GUEST_STRUCT;
     GUEST< int16> size_flags;
     GUEST< int32> preferred_size;
     GUEST< int32> minimum_size;
@@ -103,14 +103,14 @@ extern QHdrPtr GetEvQHdr( void  );
 
 extern EvQEl *geteventelem (void);
 
-typedef struct TargetID : GuestStruct {
+typedef struct TargetID { GUEST_STRUCT;
     GUEST< int32> sessionID;
     GUEST< PPCPortRec> name;
     GUEST< LocationNameRec> location;
     GUEST< PPCPortRec> recvrName;
 } TargetIDPtr;
 
-typedef struct HighLevelEventMsg : GuestStruct {
+typedef struct HighLevelEventMsg { GUEST_STRUCT;
     GUEST< int16> HighLevelEventMsgHeaderlength;
     GUEST< int16> version;
     GUEST< int32> reserved1;

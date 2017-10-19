@@ -14,21 +14,21 @@ namespace Executor {
 #define ffMode	0
 
 typedef Byte FreeWave[30001];
-struct FFSynthRec : GuestStruct {
+struct FFSynthRec { GUEST_STRUCT;
     GUEST< INTEGER> mode;
     GUEST< Fixed> fcount;
     GUEST< FreeWave> waveBytes;
 };
 typedef FFSynthRec *FFSynthPtr;
 
-struct Tone : GuestStruct {
+struct Tone { GUEST_STRUCT;
     GUEST< INTEGER> tcount;
     GUEST< INTEGER> amplitude;
     GUEST< INTEGER> tduration;
 };
 typedef Tone Tones[5001];
 
-struct SWSynthRec : GuestStruct {
+struct SWSynthRec { GUEST_STRUCT;
     GUEST< INTEGER> mode;
     GUEST< Tones> triplets;
 };
@@ -43,7 +43,7 @@ typedef Byte Wave;
 
 typedef Wave *WavePtr;
 
-struct FTSoundRec : GuestStruct {
+struct FTSoundRec { GUEST_STRUCT;
     GUEST< INTEGER> fduration;
     GUEST< Fixed> sound1Rate;
     GUEST< LONGINT> sound1Phase;
@@ -61,13 +61,13 @@ struct FTSoundRec : GuestStruct {
 typedef FTSoundRec *FTSndRecPtr;
 MAKE_HIDDEN(FTSndRecPtr);
 
-struct FTSynthRec : GuestStruct {
+struct FTSynthRec { GUEST_STRUCT;
     GUEST< INTEGER> mode;
     GUEST< FTSndRecPtr> sndRec;
 };
 typedef FTSynthRec *FTsynthPtr;
 
-
+#if 0
 #if !defined (SoundBase_H)
 extern HIDDEN_Ptr 	SoundBase_H;
 extern Byte 	SdVolume;
@@ -76,6 +76,7 @@ extern INTEGER 	CurPitch;
 #endif
 
 #define SoundBase	(SoundBase_H.p)
+#endif
 }
 
 #endif /* __SOUND__ */

@@ -3,13 +3,13 @@
 namespace Executor {
 /* #### internal */
 
-struct inline_desc_t : GuestStruct {
+struct inline_desc_t { GUEST_STRUCT;
     GUEST< DescType> type;
     GUEST< uint32> size;
     GUEST< char[0]> data;
 };
 
-struct inline_key_desc_t : GuestStruct {
+struct inline_key_desc_t { GUEST_STRUCT;
     GUEST< int32> key;
     GUEST< DescType> type;
     GUEST< uint32> size;
@@ -29,7 +29,7 @@ struct inline_key_desc_t : GuestStruct {
     /* ### always zero (?) */
 
     /* offset: 0x18 */
-typedef struct list_header : GuestStruct {
+typedef struct list_header { GUEST_STRUCT;
     GUEST< uint32> unknown_1;
     GUEST< uint32> unknown_2;
     GUEST< uint32> param_offset;
@@ -76,7 +76,7 @@ typedef HIDDEN_list_header_ptr *list_header_h;
 
     /* marker containing tick `;;;;' */
 
-typedef struct ae_header : GuestStruct {
+typedef struct ae_header { GUEST_STRUCT;
     GUEST< uint32> unknown_1;
     GUEST< uint32> unknown_2;
     GUEST< uint32> param_offset;
@@ -100,7 +100,7 @@ typedef struct subdesc_info
 {
   int count;
   int base_offset;
-  uint32 *count_p;
+  GUEST<uint32> *count_p;
   boolean_t key_p;
   int inline_desc_header_size;
 } subdesc_info_t;

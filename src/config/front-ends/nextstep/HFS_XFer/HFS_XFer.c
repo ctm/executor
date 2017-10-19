@@ -280,7 +280,7 @@ void getnewdest()
     SFTypeList tl;
     LONGINT savedestdir, dir;
     INTEGER disk, savedestdisk;
-    Point where;
+    Point where = { 40, 82 };
     HParamBlockRec pb;
 
     disk = SFSaveDisk;
@@ -292,7 +292,7 @@ void getnewdest()
     tl[1] = 0x00000000;
     tl[2] = 0x00000000;
     tl[3] = 0x00000000;
-    SetPt(&where, 82, 40);
+
     SFPGetFile(where, (StringPtr) "\pSelect Directory",
 	    (ProcPtr) visiblefilesonly, 1, tl, (ProcPtr) DirDlgHook, &reply,
 					    DIRSONLYDLG, (ProcPtr) dirsfilter);

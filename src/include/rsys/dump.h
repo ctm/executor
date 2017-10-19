@@ -17,8 +17,8 @@ extern void dump_ptr_real (Ptr x);
 
 extern void dump_rect (Rect *r);
 extern void dump_pattern (Pattern x);
-extern void dump_point (Point x);
-extern void dump_bits16 (Bits16 data);
+extern void dump_point (GUEST<Point> x);
+extern void dump_bits16 (GUEST<Bits16> data);
 extern void dump_bitmap (BitMap *x, Rect *rect);
 extern void dump_bitmap_null_rect (BitMap *x);
 extern void dump_bitmap_data (BitMap *x, int depth, Rect *rect);

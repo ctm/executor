@@ -380,7 +380,7 @@ P2 (PUBLIC pascal trap, OSErr, FSpExchangeFiles,
 typedef OSErrRET (*open_procp) (HParmBlkPtr pb, BOOLEAN sync);
 
 PRIVATE OSErr
-open_helper (FSSpecPtr spec, SignedByte perms, int16 *refoutp,
+open_helper (FSSpecPtr spec, SignedByte perms, GUEST<int16> *refoutp,
 	     open_procp procp)
 {
   OSErr retval;
@@ -403,13 +403,13 @@ open_helper (FSSpecPtr spec, SignedByte perms, int16 *refoutp,
 }
 
 P3 (PUBLIC pascal trap, OSErr, FSpOpenDF,
-    FSSpecPtr, spec, SignedByte, perms, int16 *, refoutp)
+    FSSpecPtr, spec, SignedByte, perms, GUEST<int16> *, refoutp)
 {
   return open_helper (spec, perms, refoutp, PBHOpen);
 }
 
 P3 (PUBLIC pascal trap, OSErr, FSpOpenRF,
-    FSSpecPtr, spec, SignedByte, perms, int16 *, refoutp)
+    FSSpecPtr, spec, SignedByte, perms, GUEST<int16> *, refoutp)
 {
   return open_helper (spec, perms, refoutp, PBHOpenRF);
 }
@@ -427,7 +427,7 @@ P4 (PUBLIC pascal trap, OSErr, FSpCreate,
 
 P3 (PUBLIC pascal trap, OSErr, FSpDirCreate,
     FSSpecPtr, spec, ScriptCode, script,
-    int32 *, created_dir_id)
+    GUEST<int32> *, created_dir_id)
 {
   OSErr retval;
   HParamBlockRec hpb;

@@ -487,7 +487,7 @@ ROMlib_InitZones (offset_enum which)
 	  ROMlib_offset = (uint32) memory;
 	  {
 	    int low_global_room = (char *) &lastlowglobal -
-	                          (char *) &nilhandle_H;
+	                          (char *) &nilhandle;
 #if defined (MSDOS)
 	    dpmi_lock_memory (&nilhandle_H, low_global_room);
 #endif
@@ -587,14 +587,14 @@ void
 MoreMasters (void)
 {
   THz current_zone;
-  uint32 *handles;
+  GUEST<Ptr> *handles;
   int i;
   
   MM_SLAM ("entry");
   
   current_zone = MR (TheZone);
 
-  handles = (uint32 *) NewPtr (ZONE_MORE_MAST (current_zone)
+  handles = (GUEST<Ptr> *) NewPtr (ZONE_MORE_MAST (current_zone)
 			       * sizeof (uint32));
   
   if (handles == NULL)
@@ -603,12 +603,12 @@ MoreMasters (void)
       return;
     }
   
-  handles[0] = (uint32) ZONE_HFST_FREE_X (current_zone);
+  handles[0] = ZONE_HFST_FREE_X (current_zone);
   ZONE_HFST_FREE_X (current_zone)
     = RM ((Ptr) &handles[ZONE_MORE_MAST (current_zone) - 1]);
 
   for (i = ZONE_MORE_MAST (current_zone) - 1; i > 0; i--)
-    handles[i] = (uint32) RM (&handles[i - 1]);
+    handles[i] = RM ((Ptr) &handles[i - 1]);
   
   MM_SLAM ("exit");
   SET_MEM_ERR (noErr);
@@ -1199,9 +1199,6 @@ _NewPtr_flags (Size size, boolean_t sys_p, boolean_t clear_p)
   Ptr p;
   block_header_t *b;
   THz save_zone, current_zone;
-#if 1
-  block_header_t *save_alloc_ptr;
-#endif
   
   MM_SLAM ("entry");
   
@@ -1214,7 +1211,7 @@ _NewPtr_flags (Size size, boolean_t sys_p, boolean_t clear_p)
   size += HDRSIZE;
 
 #if 1
-  save_alloc_ptr = (typeof (save_alloc_ptr)) ZONE_ALLOC_PTR_X (current_zone);
+  auto save_alloc_ptr = ZONE_ALLOC_PTR_X (current_zone);
 #endif
 
   ZONE_ALLOC_PTR_X (current_zone) = CLC_NULL;
@@ -1234,7 +1231,7 @@ _NewPtr_flags (Size size, boolean_t sys_p, boolean_t clear_p)
 #if 1 && !defined(NDEBUG)
   if (do_save_alloc)
     ZONE_ALLOC_PTR_X (current_zone)
-      = (typeof (ZONE_ALLOC_PTR_X (current_zone))) save_alloc_ptr;
+      = save_alloc_ptr;
   else
     checkallocptr ();
 #endif
@@ -1399,7 +1396,7 @@ legit_zone_p (THz zone)
       block_header_t *blockp;
 
       blockp = ZONE_HEAP_DATA (zone);
-      retval = (THz) blockp->location_u == RM (zone);
+      retval = (THz) blockp->location_u.get() == zone;
     }
 
   return retval;

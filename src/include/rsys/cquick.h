@@ -11,7 +11,7 @@ namespace Executor {
 #define CLEAR_HILITE_BIT()		\
   (BitClr ((Ptr) &HiliteMode, pHiliteBit))
 
-typedef struct GrafVars : GuestStruct {
+typedef struct GrafVars { GUEST_STRUCT;
     GUEST< RGBColor> rgbOpColor;
     GUEST< RGBColor> rgbHiliteColor;
     GUEST< Handle> pmFgColor;
@@ -289,7 +289,7 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
 #define PIXMAP_CMP_SIZE(pixmap)		(Cx (PIXMAP_CMP_SIZE_X (pixmap)))
 #define PIXMAP_PLANE_BYTES(pixmap)	(Cx (PIXMAP_PLANE_BYTES_X (pixmap)))
 #define PIXMAP_TABLE(pixmap)		(PPR (PIXMAP_TABLE_X (pixmap)))
-#define PIXMAP_TABLE_AS_OFFSET(pixmap)	(CL ((int32) PIXMAP_TABLE_X (pixmap)))
+#define PIXMAP_TABLE_AS_OFFSET(pixmap)	(CL ((int32) PIXMAP_TABLE_X (pixmap).raw()))
 
 #define WRAPPER_PIXMAP_FOR_COPY(wrapper_decl_name) \
   BitMap *wrapper_decl_name = (BitMap *) alloca (sizeof (BitMap))
@@ -298,7 +298,7 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
   do						\
     {						\
       (wrapper)->rowBytes = CWC (3 << 14);	\
-      (wrapper)->baseAddr = (Ptr) (pixmap_h);	\
+      (wrapper)->baseAddr = guest_cast<Ptr> (pixmap_h);	\
     }						\
   while (0)
 
@@ -335,7 +335,7 @@ enum pixpat_pattern_types
 #define PIXPAT_TYPE(pixpat)		(CW (PIXPAT_TYPE_X (pixpat)))
 #define PIXPAT_MAP(pixpat)		(PPR (PIXPAT_MAP_X (pixpat)))
 #define PIXPAT_DATA(pixpat)		(PPR (PIXPAT_DATA_X (pixpat)))
-#define PIXPAT_DATA_AS_OFFSET(pixpat)	(CL ((int32) PIXPAT_DATA_X (pixpat)))
+#define PIXPAT_DATA_AS_OFFSET(pixpat)	(CL ((int32) PIXPAT_DATA_X (pixpat).raw()))
 #define PIXPAT_XDATA(pixpat)		(PPR (PIXPAT_XDATA_X (pixpat)))
 #define PIXPAT_XVALID(pixpat)		(CW (PIXPAT_XVALID_X (pixpat)))
 #define PIXPAT_XMAP(pixpat)		((PixMapHandle) PPR (PIXPAT_XMAP_X (pixpat)))
@@ -636,7 +636,7 @@ extern const uint32 ROMlib_pixel_size_mask[];
 
 extern CTabHandle default_w_ctab;
 extern AuxWinHandle default_aux_win;
-extern AuxWinHandle *lookup_aux_win (WindowPtr w);
+extern GUEST<AuxWinHandle> *lookup_aux_win (WindowPtr w);
 
 extern void ROMlib_color_init ();
 

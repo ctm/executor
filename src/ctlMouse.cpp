@@ -115,9 +115,9 @@ P3 (PUBLIC pascal trap, INTEGER, TrackControl,	/* IMI-323 */
 	  this mod, we get hosed */
        if (!partstart)
 	 {
-	   GetMouse (&p);
-	   p.h = BigEndianValue(p.h);
-	   p.v = BigEndianValue(p.v);
+           GUEST<Point> ptmp;
+	   GetMouse (&ptmp);
+	   p = ptmp.get();
 	   partstart = inpart = TestControl (c, p);
 	 }
        

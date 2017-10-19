@@ -28,7 +28,7 @@ typedef struct {
     Str255  udrvrName;
 } umacdriver, *umacdriverptr;
 
-struct ramdriver : GuestStruct {
+struct ramdriver { GUEST_STRUCT;
     GUEST< INTEGER> drvrFlags;
     GUEST< INTEGER> drvrDelay;
     GUEST< INTEGER> drvrEMask;
@@ -47,7 +47,7 @@ typedef HIDDEN_ramdriverptr *ramdriverhand;
 
 typedef enum { Open, Prime, Ctl, Stat, Close } DriverRoutineType;
 
-typedef struct DCtlEntry : GuestStruct {
+typedef struct DCtlEntry { GUEST_STRUCT;
     GUEST< umacdriverptr> dCtlDriver;    /* not just Ptr */
     GUEST< INTEGER> dCtlFlags;
     GUEST< QHdr> dCtlQHdr;

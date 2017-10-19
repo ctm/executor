@@ -88,7 +88,7 @@ P4 (PUBLIC pascal trap, void, StdArc, GrafVerb, verb, Rect *, r,
   INTEGER enda;
   INTEGER done;
   RgnHandle saveclip, rh;
-  Point saveloc;
+  GUEST<Point> saveloc;
   INTEGER tmpvis;
   INTEGER swappedarca, swappedstarta;
   PAUSEDECL;

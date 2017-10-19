@@ -38,7 +38,7 @@ namespace Executor {
 #define sPrDrvr		".Print"
 #define iPrDrvrRef	(-3)
 
-struct TPrPort : GuestStruct {
+struct TPrPort { GUEST_STRUCT;
     GUEST< GrafPort> gPort;
     GUEST< QDProcs> saveprocs;
     GUEST< LONGINT[4]> spare;
@@ -47,7 +47,7 @@ struct TPrPort : GuestStruct {
 };
 typedef TPrPort *TPPrPort;
 
-struct TPrInfo : GuestStruct {
+struct TPrInfo { GUEST_STRUCT;
     GUEST< INTEGER> iDev;
     GUEST< INTEGER> iVRes;
     GUEST< INTEGER> iHRes;
@@ -56,7 +56,7 @@ struct TPrInfo : GuestStruct {
 
 typedef enum {feedCut, feedFanFold, feedMechCut, feedOther} TFeed;
 
-struct TPrStl : GuestStruct {
+struct TPrStl { GUEST_STRUCT;
     GUEST< INTEGER> wDev;
     GUEST< INTEGER> iPageV;
     GUEST< INTEGER> iPageH;
@@ -65,7 +65,7 @@ struct TPrStl : GuestStruct {
 };
 
 typedef enum { scanTB,  scanBL,  scanLR,  scanRL } TScan;
-struct TPrXInfo : GuestStruct {
+struct TPrXInfo { GUEST_STRUCT;
     GUEST< INTEGER> iRowBytes;
     GUEST< INTEGER> iBandV;
     GUEST< INTEGER> iBandH;
@@ -79,7 +79,7 @@ struct TPrXInfo : GuestStruct {
     GUEST< SignedByte> bXInfoX;
 };
 
-struct TPrJob : GuestStruct {
+struct TPrJob { GUEST_STRUCT;
     GUEST< INTEGER> iFstPage;
     GUEST< INTEGER> iLstPage;
     GUEST< INTEGER> iCopies;
@@ -92,7 +92,7 @@ struct TPrJob : GuestStruct {
     GUEST< SignedByte> bJobX;
 };
 
-struct TPrint : GuestStruct {
+struct TPrint { GUEST_STRUCT;
     GUEST< INTEGER> iPrVersion;
     GUEST< TPrInfo> prInfo;
     GUEST< Rect> rPaper;
@@ -108,7 +108,7 @@ typedef HIDDEN_TPPrint *THPrint;
 
 typedef Rect *TPRect;
 
-struct TPrStatus : GuestStruct {
+struct TPrStatus { GUEST_STRUCT;
     GUEST< INTEGER> iTotPages;
     GUEST< INTEGER> iCurPage;
     GUEST< INTEGER> iTotCopies;
@@ -124,7 +124,7 @@ struct TPrStatus : GuestStruct {
 
     /* From Technote 095 */
     /* more stuff may be here */
-typedef struct TPrDlg : GuestStruct {
+typedef struct TPrDlg { GUEST_STRUCT;
     GUEST< DialogRecord> dlg;
     GUEST< ProcPtr> pFltrProc;
     GUEST< ProcPtr> pItemProc;

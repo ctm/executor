@@ -64,7 +64,7 @@ enum
   rightControlKey = 0x8000
 };
 
-struct EventRecord : GuestStruct {
+struct EventRecord { GUEST_STRUCT;
     GUEST< INTEGER> what;
     GUEST< LONGINT> message;
     GUEST< LONGINT> when;

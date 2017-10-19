@@ -375,7 +375,7 @@ P3(PUBLIC, pascal trap OSErr, SndPlay, SndChannelPtr, chanp, Handle, sndh,
 	if (cmd.cmd & CWC (0x8000))
 	  {
 	    cmd.param2 = (LONGINT) RM ((resp + CL (cmd.param2)));
-	    cmd.cmd &= CWC (~0x8000);
+	    cmd.cmd.raw_and( CWC (~0x8000) );
 	  }
 
 	/* Need to figure this out properly; FIXME */
@@ -569,7 +569,7 @@ snd_duration (SoundHeaderPtr hp)
   return CL (hp->length);
 }
 
-#define CMD_DONE(c) (SND_CHAN_FLAGS_X (c) &= CWC (~CHAN_CMDINPROG_FLAG))
+#define CMD_DONE(c) (SND_CHAN_FLAGS_X (c).raw_and( CWC (~CHAN_CMDINPROG_FLAG) ))
 
 static void
 do_current_command (SndChannelPtr chanp, struct hunger_info info)
@@ -582,7 +582,7 @@ do_current_command (SndChannelPtr chanp, struct hunger_info info)
   switch (CW (chanp->cmdInProg.cmd))
     {
     case bufferCmd:
-      hp = MR ((SoundHeaderPtr) chanp->cmdInProg.param2);
+      hp = (SoundHeaderPtr) MR ( chanp->cmdInProg.param2);
       
       if (hp->encode != stdSH)
 	{
@@ -599,7 +599,7 @@ do_current_command (SndChannelPtr chanp, struct hunger_info info)
 	{
 	  duration = snd_duration (hp);
 	  
-	  sp = (hp->samplePtr ? MR ((unsigned char *) hp->samplePtr)
+	  sp = (hp->samplePtr ? (unsigned char *) MR ( hp->samplePtr)
 		: hp->sampleArea);
 	  
 	  warning_sound_log ("bufferCmd dur %d", (int) duration);
@@ -637,7 +637,7 @@ do_current_command (SndChannelPtr chanp, struct hunger_info info)
     }
 }
 
-#define SND_DB_DONE(c) (SND_CHAN_FLAGS_X(c) &= CWC (~CHAN_DBINPROG_FLAG))
+#define SND_DB_DONE(c) (SND_CHAN_FLAGS_X(c).raw_and( CWC (~CHAN_DBINPROG_FLAG) ))
 
 static void
 do_current_db (SndChannelPtr chanp, struct hunger_info info)
@@ -676,8 +676,8 @@ do_current_db (SndChannelPtr chanp, struct hunger_info info)
 		info.t3))
     {
       /* We are done with this buffer */
-      dbp->dbFlags &= CLC (~dbBufferReady);
-      if (dbp->dbFlags & CLC (dbLastBuffer))
+      dbp->dbFlags.raw_and( CLC (~dbBufferReady) );
+      if (dbp->dbFlags.raw() & CLC (dbLastBuffer))
 	/* We are completely done */
 	SND_DB_DONE (chanp);
       else
@@ -766,7 +766,7 @@ Executor::sound_callback (syn68k_addr_t interrupt_addr, void *unused)
 	  else if (!qempty_p (chanp))
 	    {
 	      chanp->cmdInProg = deq (chanp);
-	      SND_CHAN_FLAGS_X (chanp) |= CWC (CHAN_CMDINPROG_FLAG);
+	      SND_CHAN_FLAGS_X (chanp).raw_or( CWC (CHAN_CMDINPROG_FLAG) );
 	      did_something = 1;
 	    }
 	  else
@@ -820,7 +820,7 @@ P3(PUBLIC, pascal trap OSErr, SndDoCommand, SndChannelPtr, chanp,
     {
       SoundHeaderPtr hp;
 
-      hp = MR ((SoundHeaderPtr) cmdp->param2);
+      hp = (SoundHeaderPtr) MR (cmdp->param2);
       if (!hp)
 	warning_sound_log ("hp = NULL");
       else
@@ -860,7 +860,7 @@ P3(PUBLIC, pascal trap OSErr, SndDoCommand, SndChannelPtr, chanp,
 	}
       if (retval == noErr) {
 	enq (chanp, *cmdp);
-	chanp->flags |= CWC(CHAN_BUSY_FLAG);
+	chanp->flags.raw_or( CWC(CHAN_BUSY_FLAG) );
       }
       break;
     }
@@ -917,7 +917,7 @@ P2 (PUBLIC, pascal trap OSErr, SndDoImmediate, SndChannelPtr, chanp,
 	    case bufferCmd:
 	      warning_sound_log ("bufferCmd");
 	      chanp->cmdInProg = cmd;
-	      SND_CHAN_FLAGS_X (chanp) |= CWC (CHAN_CMDINPROG_FLAG);
+	      SND_CHAN_FLAGS_X (chanp).raw_or( CWC (CHAN_CMDINPROG_FLAG) );
 	      SND_CHAN_CURRENT_START (chanp) =
 		SND_PROMOTE (SND_CHAN_TIME (chanp));
 	      retval = noErr;

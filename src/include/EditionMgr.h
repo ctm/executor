@@ -38,7 +38,7 @@ typedef ProcPtr FormatIOProcPtr;
 typedef ProcPtr EditionOpenerProcPtr;
 
 
-struct SectionRecord : GuestStruct {
+struct SectionRecord { GUEST_STRUCT;
     GUEST< SignedByte> version;
     GUEST< SectionType> kind;
     GUEST< UpdateMode> mode;
@@ -54,7 +54,7 @@ struct SectionRecord : GuestStruct {
 
 declare_record_subtypes (Section);
 
-struct EditionContainerSpec : GuestStruct {
+struct EditionContainerSpec { GUEST_STRUCT;
     GUEST< FSSpec> theFile;
     GUEST< ScriptCode> theFileScript;
     GUEST< int32> thePart;
@@ -65,7 +65,7 @@ struct EditionContainerSpec : GuestStruct {
 typedef struct EditionContainerSpec EditionContainerSpec;
 typedef EditionContainerSpec *EditionContainerSpecPtr;
 
-struct EditionInfoRecord : GuestStruct {
+struct EditionInfoRecord { GUEST_STRUCT;
     GUEST< TimeStamp> crDate;
     GUEST< TimeStamp> mdDate;
     GUEST< OSType> fdCreator;
@@ -76,7 +76,7 @@ struct EditionInfoRecord : GuestStruct {
 typedef struct EditionInfoRecord EditionInfoRecord;
 typedef EditionInfoRecord *EditionInfoPtr;
 
-struct NewPublisherReply : GuestStruct {
+struct NewPublisherReply { GUEST_STRUCT;
     GUEST< Boolean> canceled;
     GUEST< Boolean> replacing;
     GUEST< Boolean> usePart;
@@ -89,7 +89,7 @@ struct NewPublisherReply : GuestStruct {
 typedef struct NewPublisherReply NewPublisherReply;
 typedef NewPublisherReply *NewPublisherReplyPtr;
 
-struct NewSubscriberReply : GuestStruct {
+struct NewSubscriberReply { GUEST_STRUCT;
     GUEST< Boolean> canceled;
     GUEST< SignedByte> formatsMask;
     GUEST< EditionContainerSpec> container;
@@ -98,7 +98,7 @@ struct NewSubscriberReply : GuestStruct {
 typedef struct NewSubscriberReply NewSubscriberReply;
 typedef NewSubscriberReply *NewSubscriberReplyPtr;
 
-struct SectionOptionsReply : GuestStruct {
+struct SectionOptionsReply { GUEST_STRUCT;
     GUEST< Boolean> canceled;
     GUEST< Boolean> changed;
     GUEST< SectionHandle> sectionH;
@@ -116,7 +116,7 @@ typedef uint8 EditionOpenerVerb;
 #define eoCloseNew	(3)
 #define eoCanSubscribe	(4)
 
-struct EditionOpenerParamBlock : GuestStruct {
+struct EditionOpenerParamBlock { GUEST_STRUCT;
     GUEST< EditionInfoRecord> info;
     GUEST< SectionHandle> sectionH;
     GUEST< FSSpecPtr> document;
@@ -137,7 +137,7 @@ typedef uint8 FormatIOVerb;
 #define ioNewFormat	(2)
 #define ioWtriteFormat	(3)
 
-struct FormatIOParamBlock : GuestStruct {
+struct FormatIOParamBlock { GUEST_STRUCT;
     GUEST< int32> ioRefNum;
     GUEST< FormatType> format;
     GUEST< int32> formatIndex;

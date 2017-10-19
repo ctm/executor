@@ -30,7 +30,7 @@ enum
 
 typedef uint8 RDFlagsType;
 
-struct RoutineRecord : GuestStruct {
+struct RoutineRecord { GUEST_STRUCT;
     GUEST< ProcInfoType> procInfo;
     GUEST< uint8> reserved1;
     GUEST< ISAType> ISA;
@@ -40,7 +40,7 @@ struct RoutineRecord : GuestStruct {
     GUEST< uint32> selector;
 };
 
-struct RoutineDescriptor : GuestStruct {
+struct RoutineDescriptor { GUEST_STRUCT;
     GUEST< uint16> goMixedModeTrap;
     GUEST< uint8> version;
     GUEST< RDFlagsType> routineDescriptorFlags;

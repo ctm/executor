@@ -9,7 +9,7 @@
  */
 
 namespace Executor {
-typedef struct CRMRec : GuestStruct {
+typedef struct CRMRec { GUEST_STRUCT;
     GUEST< QElemPtr> qLink;
     GUEST< INTEGER> qType;
     GUEST< INTEGER> crmVersion;
@@ -31,7 +31,7 @@ enum { crmRecVersion = 1 };
 enum { curCRMSerRecVer = 0 };
 enum { crmSerialDevice = 1 };
 
-typedef struct CRMSerialRecord : GuestStruct {
+typedef struct CRMSerialRecord { GUEST_STRUCT;
     GUEST< INTEGER> version;
     GUEST< StringHandle> inputDriverName;
     GUEST< StringHandle> outputDriverName;

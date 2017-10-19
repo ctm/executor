@@ -55,33 +55,10 @@ using namespace ByteSwap;
 #include "rsys/suffix_maps.h"
 #include "rsys/osutil.h"
 
-PRIVATE defaulthead_t ourdefault
-#if !defined(__alpha)
-= {
-    {
-	CLC(DOUBLEMAGIC),
-	CLC(SINGLEVERSION),
-	{ 0L, 0L, 0L, 0L, },
-	CWC(4),
-    },
-    {
-#define LEN0	(sizeof(struct defaulthead))
-	{ CLC(Macintosh_File_Info_ID), CLC(LEN0), CLC(sizeof(Single_attribs)) },
-#define LEN1	(LEN0 + sizeof(Single_attribs))
-	{ CLC(File_Dates_Info_ID),     CLC(LEN1), CLC(sizeof(Single_dates)) },
-#define LEN2	(LEN1 + sizeof(Single_dates))
-	{ CLC(Finder_Info_ID),         CLC(LEN2), CLC(sizeof(Single_finfo)) },
-	{ CLC(Resource_Fork_ID),       CLC(512), 0L },
-    }
-};
-
-#define initialize_ourdefault()
-
-#else /* defined(__alpha) */
-;
+PRIVATE defaulthead_t ourdefault;
 
 /*
- * compiler bug forces us to do this
+ * Fill it in by hand, writing a proper constructor would be as much work
  */
 
 #define LEN0	(sizeof(struct defaulthead))
@@ -115,7 +92,6 @@ PRIVATE void initialize_ourdefault( void )
 	ourdefault.desc[3].length = CLC(0L);
     }
 }
-#endif /* defined(__alpha) */
 
 PRIVATE defaultentries_t ourentries;
 
@@ -423,8 +399,8 @@ A1(PUBLIC, OSErr, ROMlib_geteofostype, fcbrec *, fp)	/* INTERNAL */
 
 A8(PUBLIC, OSErr,  ROMlib_hiddenbyname, GetOrSetType, gors,	/* INTERNAL */
 		   char *, pathname, char *, rpathname, Single_dates *, datep,
-		   FInfo *, finfop, FXInfo *, fxinfop, LONGINT *, lenp,
-							      LONGINT *, rlenp)
+		   FInfo *, finfop, FXInfo *, fxinfop, GUEST<LONGINT> *, lenp,
+							      GUEST<LONGINT> *, rlenp)
 {
     LONGINT rfd;
     struct stat sbuf;

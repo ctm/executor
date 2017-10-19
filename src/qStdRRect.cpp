@@ -188,7 +188,7 @@ P4(PUBLIC pascal trap, void, StdRRect, GrafVerb, verb, Rect *, r,
     RgnHandle rh, oval, corner, smallr;
     Rect tempr;
     INTEGER ovaldx, ovaldy, rectdx, rectdy;
-    Point p;
+    GUEST<Point> p;
     PAUSEDECL;
 
     PIC_SAVE_EXCURSION

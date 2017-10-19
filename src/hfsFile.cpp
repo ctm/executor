@@ -231,7 +231,7 @@ PRIVATE void setbits(HVCB *vcbp, ULONGINT bno, ULONGINT ntoset, unsigned char lo
     	vcbp->vcbFreeBks = CW(CW(vcbp->vcbFreeBks) - (ntoset));
     else
     	vcbp->vcbFreeBks = CW(CW(vcbp->vcbFreeBks) + (ntoset));
-    vcbp->vcbFlags |= CW(VCBDIRTY);
+    vcbp->vcbFlags.raw_or( CW(VCBDIRTY) );
     /* bno -= Cx(vcbp->vcbAlBlSt); not sure about this */
     ebno = bno + ntoset;
     cp  = (unsigned char *) MR(vcbp->vcbMAdr) +  bno / 8 + MADROFFSET;
@@ -269,7 +269,7 @@ PRIVATE void setbits(HVCB *vcbp, ULONGINT bno, ULONGINT ntoset, unsigned char lo
 		    (Cx(vcbp->vcbVBMSt) + first_map_block) * (ULONGINT) PHYSBSIZE,
 					  last_map_block - first_map_block + 1,
 	          MR(vcbp->vcbMAdr) + MADROFFSET + first_map_block * PHYSBSIZE,
-							  writing, (LONGINT *) 0);
+							  writing, (GUEST<LONGINT> *) 0);
     vcbsync(vcbp);
 }
 
@@ -763,7 +763,7 @@ PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
 	}
 	newerr = ROMlib_transphysblk (&((VCBExtra *)vcbp)->u.hfs, physblock, 1,
 				      (Ptr) tempbuf,
-				      reading, (LONGINT *) 0);
+				      reading, (GUEST<LONGINT> *) 0);
 	if (newerr != noErr)
 	  {
 	    fs_err_hook (newerr);
@@ -776,7 +776,7 @@ PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
 	    memmove((char *) tempbuf + ntoskip, bufp, (LONGINT) ntocopy);
 	    newerr = ROMlib_transphysblk (&((VCBExtra *)vcbp)->u.hfs, physblock, 1,
 					  (Ptr) tempbuf, writing,
-					  (LONGINT *) 0);
+					  (GUEST<LONGINT> *) 0);
 	    if (newerr != noErr)
 	      {
 		fs_err_hook (newerr);
@@ -840,11 +840,13 @@ PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
 	    save1 = bufp[1];
 	    save2 = bufp[2];
 	    if (ntoslide && rw == writing)
-		BlockMove(bufp + ntoslide,  bufp, thisrun * PHYSBSIZE);
+                BlockMove(bufp + ntoslide,  bufp, thisrun * PHYSBSIZE);
+        
+            GUEST<LONGINT> tmpActl;
 	    newerr = ROMlib_transphysblk (&((VCBExtra *) vcbp)->u.hfs, physblock, thisrun,
 					  bufp,
-					  rw, &actl);
-	    actl = CL(actl);
+					  rw, &tmpActl);
+	    actl = tmpActl.get();
 	    if (ntoslide) {
 		BlockMove(bufp, bufp + ntoslide,  actl);
 		switch (ntoslide) {
@@ -892,7 +894,7 @@ PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
 	}
 	newerr = ROMlib_transphysblk (&((VCBExtra *)vcbp)->u.hfs, physblock, 1,
 				      (Ptr) tempbuf,
-				      reading, (LONGINT *) 0);
+				      reading, nullptr);
 	if (newerr != noErr)
 	  {
 	    fs_err_hook (newerr);
@@ -904,7 +906,7 @@ PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
 	    memmove((char *) tempbuf, bufp, (LONGINT) totransfer);
 	    newerr = ROMlib_transphysblk (&((VCBExtra *)vcbp)->u.hfs, physblock, 1,
 					  (Ptr) tempbuf, writing,
-					  (LONGINT *) 0);
+					  nullptr);
 	    if (newerr != noErr)
 	      {
 		fs_err_hook (newerr);
@@ -1025,7 +1027,7 @@ PRIVATE OSErr dirtyfcbp(filecontrolblock *fcbp)
 	    cachep->flags |= CACHEDIRTY;
 	} else if (refnum == Cx(vcbp->vcbXTRef) || refnum == Cx(vcbp->vcbCTRef)) {
 	    err = noErr;
-	    vcbp->vcbFlags |= CW(VCBDIRTY);
+	    vcbp->vcbFlags.raw_or( CW(VCBDIRTY) );
 	} else {
 	    warning_unexpected ("no catpos (nor are we XTRef or CTRef)");
 	    err = fsDSIntErr;
@@ -1353,12 +1355,12 @@ PUBLIC OSErr Executor::ROMlib_findvcbandfile(IOParam *pb, LONGINT dirid, btparam
  */
  
 PUBLIC OSErr Executor::ROMlib_alreadyopen(HVCB *vcbp, LONGINT flnum, SignedByte *permp,
-				INTEGER *refnump, busyconcern_t busy)
+				GUEST<INTEGER> *refnump, busyconcern_t busy)
 {
     short length;
     filecontrolblock *fcbp, *efcbp;
     SignedByte temp;
-    INTEGER tempshort;
+    GUEST<INTEGER> tempshort;
     Byte busybit;
     OSErr err;
     

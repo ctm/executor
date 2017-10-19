@@ -266,7 +266,8 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
   INTEGER i;
   INTEGER carryforward;
   INTEGER first, max, misintwidth, kernmax, hOutput, vOutput;
-  Fixed hOutputInverse, *widths, width, left, misfixwidth, spacewidth;
+  GUEST<Fixed> *widths;
+  Fixed hOutputInverse, width, left, misfixwidth, spacewidth;
   Fixed left_begin;
   Fixed space_extra;
   INTEGER lineabove, linebelow, descent, leftmost;

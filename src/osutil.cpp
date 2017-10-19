@@ -44,19 +44,19 @@ using namespace Executor;
  *	 Hence, the handle that hp points to is not swapped.
  */
 
-A1(PUBLIC trap, OSErrRET, HandToHand, HIDDEN_Handle *, hp)
+A1(PUBLIC trap, OSErrRET, HandToHand, Handle *, hp)
 {
     Handle nh;
     Size s;
     OSErr err;
 	
-    if (!hp->p)
+    if (!*hp)
       {
 	warning_unexpected ("hp = %p", hp);
 /*-->*/ return nilHandleErr;
       }
 
-    s = GetHandleSize((*hp).p);
+    s = GetHandleSize(*hp);
     if ((err = MemError()))
 /*-->*/	return(err);
 
@@ -64,8 +64,8 @@ A1(PUBLIC trap, OSErrRET, HandToHand, HIDDEN_Handle *, hp)
     if ((err = MemError()))
 /*-->*/	return(err);
 
-    BlockMove(STARH((*hp).p), STARH(nh), s);
-    (*hp).p = nh;
+    BlockMove(STARH(*hp), STARH(nh), s);
+    *hp = nh;
     return noErr;
 }
 
@@ -74,7 +74,7 @@ A1(PUBLIC trap, OSErrRET, HandToHand, HIDDEN_Handle *, hp)
  *	 h points to isn't swapped.
  */
 
-A3(PUBLIC trap, OSErrRET, PtrToHand, Ptr, p, HIDDEN_Handle *, h, LONGINT, s)
+A3(PUBLIC trap, OSErrRET, PtrToHand, Ptr, p, Handle *, h, LONGINT, s)
 {
     Handle nh;
     OSErr err;
@@ -85,7 +85,7 @@ A3(PUBLIC trap, OSErrRET, PtrToHand, Ptr, p, HIDDEN_Handle *, h, LONGINT, s)
     BlockMove(p, STARH(nh), s);
     if ((err = MemError()))
 	return(err);
-    (*h).p = nh;
+    *h = nh;
     return(noErr);
 }
 
@@ -503,10 +503,10 @@ init_cutoffs (void)
 }
 
 PUBLIC void
-Executor::date_to_swapped_fields (long long mactime, INTEGER *yearp, INTEGER *monthp,
-			INTEGER *dayp, INTEGER *hourp, INTEGER *minutep,
-			INTEGER *secondp, INTEGER *dayofweekp,
-			INTEGER *dayofyearp, INTEGER *weekofyearp)
+Executor::date_to_swapped_fields (long long mactime, GUEST<INTEGER> *yearp, GUEST<INTEGER> *monthp,
+        GUEST<INTEGER> *dayp, GUEST<INTEGER> *hourp, GUEST<INTEGER> *minutep,
+        GUEST<INTEGER> *secondp, GUEST<INTEGER> *dayofweekp,
+        GUEST<INTEGER> *dayofyearp, GUEST<INTEGER> *weekofyearp)
 {
 
 /*

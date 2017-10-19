@@ -16,16 +16,13 @@ namespace Executor {
 #define intUtil	6
 #define bdConv	7
 
+#if 0
 #if !defined (AppPacks_H)
 extern HIDDEN_Handle AppPacks_H[8];
 #endif
+#endif
 
-#if !defined (__STDC__)
-extern void InitPack(); 
-extern void InitAllPacks(); 
-#else /* __STDC__ */
 extern pascal trap void C_InitPack( INTEGER packid ); extern pascal trap void P_InitPack( INTEGER packid); 
 extern pascal trap void C_InitAllPacks( void  ); extern pascal trap void P_InitAllPacks( void ); 
-#endif /* __STDC__ */
 }
 #endif /* __PACKAGE__ */

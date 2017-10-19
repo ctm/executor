@@ -82,9 +82,8 @@ extern pascal trap void C_ReleaseResource( Handle res ); extern pascal trap void
 extern pascal trap void C_DetachResource( Handle res ); extern pascal trap void P_DetachResource( Handle res); 
 extern pascal trap INTEGER C_UniqueID( ResType typ ); extern pascal trap INTEGER P_UniqueID( ResType typ); 
 extern pascal trap INTEGER C_Unique1ID( ResType typ ); extern pascal trap INTEGER P_Unique1ID( ResType typ); 
-extern pascal trap void C_GetResInfo( Handle res, INTEGER *id1,
- ResType *typ, StringPtr name ); extern pascal trap void P_GetResInfo( Handle res, INTEGER *id, 
- ResType *typ, StringPtr name ); 
+extern pascal trap void C_GetResInfo( Handle res, GUEST<INTEGER> *id1,
+ GUEST<ResType> *typ, StringPtr name );
 extern pascal trap INTEGER C_GetResAttrs( Handle res ); extern pascal trap INTEGER P_GetResAttrs( Handle res); 
 extern LONGINT ROMlib_SizeResource( Handle res, BOOLEAN usehandle ); 
 extern pascal trap LONGINT C_SizeResource( Handle res ); extern pascal trap LONGINT P_SizeResource( Handle res); 

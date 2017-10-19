@@ -234,7 +234,7 @@ P7 (PUBLIC pascal trap, OSErr, AESend,
 	    EventRecord evt_rec;
 	    Handle desc_data;
 	    int desc_data_size;
-	    Point bogo_event_id;
+	    GUEST<Point> bogo_event_id;
 	    
 	    desc_data = DESC_DATA (evt);
 	    desc_data_size = GetHandleSize (desc_data);

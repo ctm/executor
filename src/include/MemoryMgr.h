@@ -23,7 +23,7 @@ namespace Executor {
 #define memBCErr	(-115)
 #define memSCErr	(-116)
 
-struct Zone : GuestStruct {
+struct Zone { GUEST_STRUCT;
     GUEST< Ptr> bkLim;
     GUEST< Ptr> purgePtr;
     GUEST< Ptr> hFstFree;

@@ -607,7 +607,7 @@ P4 (PUBLIC pascal trap, void, TEStylInsert, Ptr, text, LONGINT, length,
 P2 (PUBLIC pascal trap, INTEGER, TEGetOffset, Point, pt, TEHandle, te)
 {
   int16 retval;
-  Point sp;
+  GUEST<Point> sp;
   
   sp = TE_SEL_POINT (te);
   TE_SEL_POINT (te).h = CW (pt.h);

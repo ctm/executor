@@ -105,7 +105,7 @@ P3(PUBLIC pascal trap, void, Pt2Rect, Point, p1, Point, p2, Rect *, dest)
     dest->right  = CW(MAX (p1.h, p2.h));
 }
 
-P3(PUBLIC pascal trap, void, PtToAngle, Rect *, rp, Point, p, INTEGER *, angle)
+P3(PUBLIC pascal trap, void, PtToAngle, Rect *, rp, Point, p, GUEST<INTEGER> *, angle)
 {
   int a, dx, dy;
 

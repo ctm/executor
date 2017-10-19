@@ -105,7 +105,7 @@ P3 (PUBLIC pascal trap, void, TEPinScroll, int16, dh,		/* IMIV-57 */
 
 A1 (PUBLIC, void, ROMlib_teautoloop, TEHandle, teh)
 {
-  Point pt;
+  GUEST<Point> pt;
   
   GetMouse(&pt);
   if (CW(pt.v) < Hx(teh, viewRect.top))
@@ -157,7 +157,7 @@ P2 (PUBLIC pascal trap, void, TEAutoView, BOOLEAN, autoflag,	/* IMIV-57 */
     TEHandle, teh)
 {
   if (autoflag)
-    STARH(TEHIDDENH(teh))->flags |=  CLC(TEAUTOVIEWBIT);
+    STARH(TEHIDDENH(teh))->flags.raw_or( CLC(TEAUTOVIEWBIT));
   else
-    STARH(TEHIDDENH(teh))->flags &= CLC(~TEAUTOVIEWBIT);
+    STARH(TEHIDDENH(teh))->flags.raw_and(CLC(~TEAUTOVIEWBIT));
 }

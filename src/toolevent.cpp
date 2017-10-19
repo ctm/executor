@@ -957,7 +957,7 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
             GetOSEvent(0, evt);
 	    TRACE(13);
             evt->what = CW(activateEvt);
-            evt->message = (LONGINT) (long) CurDeactive;
+            evt->message = guest_cast<LONGINT>(CurDeactive);
             if (remflag)
                 CurDeactive = (WindowPtr) 0;
 	    retval = TRUE;
@@ -968,8 +968,8 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
             GetOSEvent(0, evt);
 	    TRACE(15);
             evt->what = CW(activateEvt);
-            evt->message = (LONGINT) (long) CurActivate;
-            evt->modifiers |= CW(activeFlag);
+            evt->message = guest_cast<LONGINT>(CurActivate);
+            evt->modifiers.raw_or( CW(activeFlag) );
             if (remflag)
                 CurActivate = (WindowPtr) 0;
 	    retval = TRUE;
@@ -1183,7 +1183,7 @@ P2(PUBLIC pascal trap, BOOLEAN, EventAvail, INTEGER, em, EventRecord *, evt)
     return(doevent(em, evt, FALSE));
 }
 
-P1(PUBLIC pascal trap, void, GetMouse, Point *, p)
+P1(PUBLIC pascal trap, void, GetMouse, GUEST<Point> *, p)
 {
     EventRecord evt;
 
@@ -1247,7 +1247,7 @@ P0 (PUBLIC pascal trap, LONGINT, TickCount)
    */
 
   if (ROMlib_clock)
-    Ticks_UL.u = CL (ticks);
+    Ticks = CL (ticks);
 
   new_time = (UNIXTIMETOMACTIME (ROMlib_start_time.tv_sec)
 	      + (long) ((ROMlib_start_time.tv_usec / (1000000.0 / 60) + ticks) / 60));

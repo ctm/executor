@@ -353,7 +353,8 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
     }
   else
     {
-      HIDDEN_Ptr ip, op;
+      Ptr ip;
+      
       int parity;
       uint8 *packed_line;
       int8 *countloc;
@@ -366,7 +367,7 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
       /* #### why the extra 5 bytes? */
       packed_line = (uint8 *)alloca (row_bytes + 5);
       baseaddr = (uint8 *) MR (src->baseAddr);
-      ip.p = (Ptr) baseaddr;
+      ip = (Ptr) baseaddr;
       parity = 0;
       
       if (row_bytes > 250)
@@ -382,13 +383,12 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
 
       for (i = 0; i < height; i ++)
 	{
-	  op.p = (Ptr) RM (packed_line);
-	  gui_assert ((uint8 *) ip.p == &baseaddr[row_bytes * i]);
-	  ip.p = RM (ip.p);
-	  PackBits (&ip, &op, row_bytes);
-	  op.p = MR (op.p);
-	  ip.p = MR (ip.p);
-	  count = op.p - (Ptr) packed_line;
+          GUEST<Ptr> op = RM ((Ptr) packed_line);
+	  gui_assert ((uint8 *) ip == &baseaddr[row_bytes * i]);
+	  GUEST<Ptr> ip2 = RM (ip);
+	  PackBits (&ip2, &op, row_bytes);
+	  ip = MR (ip2);
+	  count = MR(op) - (Ptr) packed_line;
 	  parity += count + countsize;
 	  swappedcount = CW (count);
 	  PICWRITE (countloc, countsize);

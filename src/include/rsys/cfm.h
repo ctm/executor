@@ -16,7 +16,7 @@ enum
   kUnresolvedCFragSymbolAddress = 0
 };
 
-struct cfrg_resource_t : GuestStruct {
+struct cfrg_resource_t { GUEST_STRUCT;
     GUEST< uint32> reserved0;
     GUEST< uint32> reserved1;
     GUEST< uint32> version;
@@ -33,7 +33,7 @@ struct cfrg_resource_t : GuestStruct {
 #define CFRG_N_DESCRIPTS_X(cfrg) ((cfrg)->n_descripts)
 #define CFRG_N_DESCRIPTS(cfrg) (CL (CFRG_N_DESCRIPTS_X (cfrg)))
 
-struct cfir_t : GuestStruct {
+struct cfir_t { GUEST_STRUCT;
     GUEST< OSType> isa;
     GUEST< uint32> update_level;
     GUEST< uint32> current_version;
@@ -105,31 +105,31 @@ typedef enum
 }
 LoadFlags;
 
-struct MemFragment : GuestStruct {
+struct MemFragment {
+    GUEST_STRUCT;
     GUEST< Ptr> address;
     GUEST< uint32> length;
     GUEST< BOOLEAN> inPlace;
 };
 
-struct DiskFragment : GuestStruct {
+struct DiskFragment {
+    GUEST_STRUCT;
     GUEST< FSSpecPtr> fileSpec;
     GUEST< uint32> offset;
     GUEST< uint32> length;
 };
 
-struct SegmentedFragment : GuestStruct {
+struct SegmentedFragment {
+    GUEST_STRUCT;
     GUEST< FSSpecPtr> fileSpec;
     GUEST< OSType> rsrcType;
     GUEST< INTEGER> rsrcID;
 };
 
-// ### Struct needs manual conversion to GUEST<...>
-//   union
-// ### Struct needs manual conversion to GUEST<...>
-//   union
-typedef struct PACKED FragmentLocator
+typedef struct FragmentLocator
 {
-  uint32 where;
+  GUEST_STRUCT;
+  GUEST<uint32> where;
   union
   {
     MemFragment inMem;
@@ -139,7 +139,8 @@ typedef struct PACKED FragmentLocator
 }
 FragmentLocator;
 
-struct InitBlock : GuestStruct {
+struct InitBlock {
+    GUEST_STRUCT;
     GUEST< uint32> contextID;
     GUEST< uint32> closureID;
     GUEST< FragmentLocator> fragLocator;
@@ -169,18 +170,19 @@ extern char *ROMlib_p2cstr (StringPtr str);
    use.  They are not going to be compatible with what is really on a
    Macintosh, but they may be good enough to get PS5.5 limping. */
 
-typedef struct
+struct section_info_t
 {
-  syn68k_addr_t start;
-  uint32 length;
-  uint32 ref_count;
-  uint8 perms;
+    GUEST_STRUCT;
+    GUEST<syn68k_addr_t> start;
+    GUEST<uint32> length;
+    GUEST<uint32> ref_count;
+    GUEST<uint8> perms;
   /* TODO: should probably pad this with three bytes and then PACK the entire
      structure, but only after verifying that it works that way on a Mac. */
-}
-section_info_t;
+};
 
-typedef struct CFragConnection : GuestStruct {
+
+typedef struct CFragConnection { GUEST_STRUCT;
     GUEST< FragmentLocator> frag;
     GUEST< struct PEFLoaderInfoHeader*> lihp;
     GUEST< uint32> ref_count;
@@ -196,7 +198,7 @@ enum
   fragNoMem = -2809
 };
 
-struct lib_t : GuestStruct {
+struct lib_t { GUEST_STRUCT;
     GUEST< ConnectionID> cid;
     GUEST< int32> n_symbols;
     GUEST< int32> first_symbol;
@@ -211,7 +213,7 @@ struct lib_t : GuestStruct {
 #define LIB_FIRST_SYMBOL_X(l) ((l)->first_symbol)
 #define LIB_FIRST_SYMBOL(l) (CL (LIB_FIRST_SYMBOL_X (l)))
 
-struct CFragClosure_t : GuestStruct {
+struct CFragClosure_t { GUEST_STRUCT;
     GUEST< uint32> n_libs;
     GUEST< lib_t[0]> libs;
 };
@@ -221,9 +223,9 @@ struct CFragClosure_t : GuestStruct {
 
 typedef CFragClosure_t *CFragClosureID;
 
-struct map_entry_t : GuestStruct {
-    GUEST< const char*> symbol_name;
-    GUEST< void*> value;
+struct map_entry_t { GUEST_STRUCT;
+    const char* symbol_name;
+    void* value;
 };
 
 extern cfir_t *ROMlib_find_cfrg (Handle cfrg, OSType arch, uint8 type,

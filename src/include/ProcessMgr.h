@@ -14,7 +14,8 @@
 namespace Executor {
 typedef INTEGER LaunchFlags;
 
-struct ProcessSerialNumber : GuestStruct {
+struct ProcessSerialNumber {
+    GUEST_STRUCT;
     GUEST< uint32> highLongOfPSN;
     GUEST< uint32> lowLongOfPSN;
 };
@@ -41,7 +42,7 @@ enum { APP_PARAMS_MAGIC = 0xd6434a1b, }; /* chosen from /dev/random */
 
 typedef ROMlib_AppParameters_t *AppParametersPtr;
 
-struct LaunchParamBlockRec : GuestStruct {
+struct LaunchParamBlockRec { GUEST_STRUCT;
     GUEST< LONGINT> reserved1;
     GUEST< INTEGER> reserved2;
     GUEST< INTEGER> launchBlockID;
@@ -65,7 +66,7 @@ enum { launchContinue = 0x4000 };
   ((psn0).highLongOfPSN == (psn1).highLongOfPSN		\
    && (psn0).lowLongOfPSN == (psn1).lowLongOfPSN)
 
-struct ProcessInfoRec : GuestStruct {
+struct ProcessInfoRec { GUEST_STRUCT;
     GUEST< uint32> processInfoLength;
     GUEST< StringPtr> processName;
     GUEST< ProcessSerialNumber> processNumber;

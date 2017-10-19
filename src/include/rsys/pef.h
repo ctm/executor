@@ -10,7 +10,7 @@
  * $Id: pef.h 63 2004-12-24 18:19:43Z ctm $
  */
 namespace Executor {
-typedef struct PEFContainerHeader : GuestStruct {
+typedef struct PEFContainerHeader { GUEST_STRUCT;
     GUEST< OSType> tag1;
     GUEST< OSType> tag2;
     GUEST< OSType> architecture;
@@ -54,7 +54,7 @@ typedef struct PEFContainerHeader : GuestStruct {
 #define PEF_CONTAINER_CURRENT_VERS_X(p) ((p)->currentVersion)
 #define PEF_CONTAINER_CURRENT_VERS(p) (CL (PEF_CONTAINER_CURRENT_VERS_X(p)))
 
-typedef struct PEFSectionHeader : GuestStruct {
+typedef struct PEFSectionHeader { GUEST_STRUCT;
     GUEST< int32> nameOffset;
     GUEST< uint32> defaultAddress;
     GUEST< uint32> totalSize;
@@ -86,7 +86,7 @@ typedef struct PEFSectionHeader : GuestStruct {
 #define PEFSH_SHARE_KIND(p) ((p)->shareKind)
 #define PEFSH_ALIGNMENT(p) (1 << (p)->alignment)
 
-typedef struct PEFLoaderInfoHeader : GuestStruct {
+typedef struct PEFLoaderInfoHeader { GUEST_STRUCT;
     GUEST< int32> mainSection;
     GUEST< uint32> mainOffset;
     GUEST< int32> initSection;
@@ -145,7 +145,7 @@ typedef struct PEFLoaderInfoHeader : GuestStruct {
 #define PEFLIH_SYMBOL_COUNT_X(p)	((p)->exportedSymbolCount)
 #define PEFLIH_SYMBOL_COUNT(p) (CL (PEFLIH_SYMBOL_COUNT_X (p)))
 
-typedef struct PEFImportedLibrary : GuestStruct {
+typedef struct PEFImportedLibrary { GUEST_STRUCT;
     GUEST< uint32> nameOffset;
     GUEST< uint32> oldImpVersion;
     GUEST< uint32> currentVersion;
@@ -163,7 +163,7 @@ typedef struct PEFImportedLibrary : GuestStruct {
 
 #define PEFIL_FIRST_SYMBOL_X(p) ((p)->firstImportedSymbol)
 
-typedef struct PEFLoaderRelocationHeader : GuestStruct {
+typedef struct PEFLoaderRelocationHeader { GUEST_STRUCT;
     GUEST< uint16> sectionIndex;
     GUEST< uint16> reservedA;
     GUEST< uint32> relocCount;
@@ -201,7 +201,7 @@ enum
   CHAIN_COUNT_MASK = 0x3FFF,
 };
 
-struct PEFExportedSymbol : GuestStruct {
+struct PEFExportedSymbol { GUEST_STRUCT;
     GUEST< uint32> classAndName;
     GUEST< uint32> symbolValue;
     GUEST< int16> sectionIndex;

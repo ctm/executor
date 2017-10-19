@@ -156,7 +156,7 @@ hdlr_table_elt (AE_hdlr_table_h table,
 P5 (PUBLIC pascal trap, OSErr, _AE_hdlr_table_alloc,
     int32, unknown_1, int32, unknown_2, int32, unknown_3,
     int8, unknown_p,
-    AE_hdlr_table_h *, table_return)
+    GUEST<AE_hdlr_table_h> *, table_return)
 {
   AE_hdlr_table_h table;
   
@@ -175,7 +175,7 @@ P5 (PUBLIC pascal trap, OSErr, _AE_hdlr_table_alloc,
   AE_TABLE_N_ALLOCATED_BYTES_X (table) = CLC (52);
   AE_TABLE_N_ELTS_X (table) = CLC (0);
   
-  *table_return = RM (table);
+  *table_return = RM2 (table);
   AE_RETURN_ERROR (noErr);
 }
 

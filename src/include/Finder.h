@@ -9,7 +9,7 @@
  */
 
 namespace Executor {
-typedef struct DTPBRec : GuestStruct {
+typedef struct DTPBRec { GUEST_STRUCT;
     GUEST< QElemPtr> qLink;
     GUEST< INTEGER> qType;
     GUEST< Ptr> ioCmdAddr;

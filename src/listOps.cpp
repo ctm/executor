@@ -16,11 +16,12 @@ char ROMlib_rcsid_listOps[] =
 
 using namespace Executor;
 
-A2(PUBLIC, INTEGER *, ROMlib_getoffp, Cell, cell,		/* INTERNAL */
+A2(PUBLIC, GUEST<INTEGER> *, ROMlib_getoffp, Cell, cell,		/* INTERNAL */
 							     ListHandle, list)
 {
     Rect *rp;
-    INTEGER ncols, *retval;
+    INTEGER ncols;
+    GUEST<INTEGER> *retval;
 
     if (list && PtInRect(cell, rp = &HxX(list, dataBounds))) {
 	ncols = CW(rp->right) - CW(rp->left);
@@ -40,7 +41,8 @@ namespace Executor {
 A5(PRIVATE, void, cellhelper, AddOrRep, addorrep, Ptr, dp, INTEGER, dl,
 						Cell, cell, ListHandle, list)
 {
-    INTEGER *ip, *ep, off0, off1, off2, delta, len;
+    GUEST<INTEGER> *ip, *ep;
+    INTEGER off0, off1, off2, delta, len;
     Ptr sp;
     Cell temp;
     LONGINT ip_offset, ep_offset;
@@ -101,8 +103,8 @@ A5(PRIVATE, void, cellhelper, AddOrRep, addorrep, Ptr, dp, INTEGER, dl,
 	BlockMove(dp, (Ptr) STARH(HxP(list, cells)) + off0 +
 				      (addorrep == Add ? len : 0) , (Size)dl);
 
-	ip = (INTEGER *) ((char *) STARH (list) + ip_offset);
-	ep = (INTEGER *) ((char *) STARH (list) + ep_offset);
+	ip = (GUEST<INTEGER> *) ((char *) STARH (list) + ip_offset);
+	ep = (GUEST<INTEGER> *) ((char *) STARH (list) + ep_offset);
 
 	if (delta) {
 	    while (++ip <= ep)
@@ -128,7 +130,8 @@ P2(PUBLIC pascal trap, void, LClrCell, Cell, cell,		/* IMIV-272 */
 P4(PUBLIC pascal trap, void, LGetCell, Ptr, dp, INTEGER *, dlp,	/* IMIV-272 */
 						 Cell, cell, ListHandle, list)
 {
-    INTEGER *ip, off1, off2;
+    GUEST<INTEGER> *ip;
+    INTEGER off1, off2;
     INTEGER ntomove;
 
     if ((ip = ROMlib_getoffp(cell, list))) {
@@ -205,9 +208,10 @@ P2(PUBLIC pascal trap, void, LCellSize, Point, csize,		/* IMIV-273 */
 }
 
 P3(PUBLIC pascal trap, BOOLEAN, LGetSelect, BOOLEAN, next,	/* IMIV-273 */
-					      Cell *, cellp, ListHandle, list)
+					      GUEST<Cell> *, cellp, ListHandle, list)
 {
-    INTEGER *ip, *ep, nint, ncols, rown, coln;
+    GUEST<INTEGER> *ip, *ep;
+    INTEGER nint, ncols, rown, coln;
     BOOLEAN retval;
     Cell temp, c;
     Point p;

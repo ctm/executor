@@ -42,7 +42,7 @@ P2 (PUBLIC pascal trap, TEHandle, TENew, Rect *, dst, Rect *, view)
   FontInfo finfo;
   Handle hText;
   tehiddenh temptehiddenh;
-  int16 *tehlinestarts;
+  GUEST<int16> *tehlinestarts;
   int te_size;
   
   te_size = ((sizeof (TERec)

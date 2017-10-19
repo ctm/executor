@@ -58,7 +58,10 @@ draw_menu_title (muelem *elt,
 	dstr.top = CW (hilite_p ? 1 : 0);
 	dstr.bottom = CW (CW (MBarHeight) - 1);
 	dstr.left = elt->muleft;
-	dstr.right = last_menu_p ? CW (muright) : elt[1].muleft;
+    if(last_menu_p)
+        dstr.right = CW (muright);
+    else
+        dstr.right = elt[1].muleft;
 	
 	RGBForeColor (hilite_p ? &bar_color : &title_color);
 	RGBBackColor (hilite_p ? &title_color : &bar_color);
@@ -439,8 +442,7 @@ done:;						\
 	   {
 		   WRAPPER_PIXMAP_FOR_COPY (wrapper);
 		   
-		   WRAPPER_SET_PIXMAP_X (wrapper,
-								 RM (save_pmh));
+		   WRAPPER_SET_PIXMAP_X (wrapper, RM2 (save_pmh));
 		   
 		   CopyBits (PORT_BITS_FOR_COPY (thePort), wrapper,
 					 &save_rect, &save_rect, srcCopy, NULL);
@@ -509,7 +511,7 @@ restore (void)
 	   {
 		   WRAPPER_PIXMAP_FOR_COPY (wrapper);
 		   
-		   WRAPPER_SET_PIXMAP_X (wrapper, RM (save_pmh));
+		   WRAPPER_SET_PIXMAP_X (wrapper, RM2 (save_pmh));
 		   CopyBits (wrapper, PORT_BITS_FOR_COPY (thePort),
 					 &save_rect, &save_rect, srcCopy, NULL);
 	   }

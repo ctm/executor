@@ -16,19 +16,19 @@ namespace Executor {
 extern boolean_t ROMlib_ultima_iii_hack;
 #endif
 
-struct reshead : GuestStruct {
+struct reshead { GUEST_STRUCT;
     GUEST< Size> rdatoff;
     GUEST< Size> rmapoff;
     GUEST< Size> datlen;
     GUEST< Size> maplen;
 };
 
-struct rsrvrec : GuestStruct {
+struct rsrvrec { GUEST_STRUCT;
     GUEST< Byte[112]> rsrvsys;
     GUEST< Byte[128]> rsrvapp;
 };
 
-struct resmap : GuestStruct {
+struct resmap { GUEST_STRUCT;
     GUEST< reshead> rh;
     GUEST< Handle> nextmap;
     GUEST< INTEGER> resfn;
@@ -53,13 +53,13 @@ typedef HIDDEN_resmapptr *resmaphand;
 #define MAPLEN(map)	Hx(map, rh.maplen)
 #define MAPLENX(map)	((STARH(map))->rh.maplen)
 
-struct typref : GuestStruct {
+struct typref { GUEST_STRUCT;
     GUEST< ResType> rtyp;
     GUEST< INTEGER> nres;
     GUEST< INTEGER> rloff;
 };
 
-struct resref : GuestStruct {
+struct resref { GUEST_STRUCT;
     GUEST< INTEGER> rid;
     GUEST< INTEGER> noff;
     GUEST< Byte> ratr;
@@ -67,7 +67,7 @@ struct resref : GuestStruct {
     GUEST< Handle> rhand;
 };
 
-struct empty_resource_template_t : GuestStruct {
+struct empty_resource_template_t { GUEST_STRUCT;
     GUEST< reshead> bhead;
     GUEST< rsrvrec> bfill;
     GUEST< resmap> bmap;
@@ -187,7 +187,7 @@ enum
   COMPRESSED_FLAGS = 0x120801,
 };
 
-struct dcomp_info_t : GuestStruct {
+struct dcomp_info_t { GUEST_STRUCT;
     GUEST< LONGINT> compressedResourceTag;
     GUEST< LONGINT> typeFlags;
     GUEST< LONGINT> uncompressedSize;
@@ -196,9 +196,9 @@ struct dcomp_info_t : GuestStruct {
     GUEST< INTEGER> dcmpID;
 };
 						   
-struct res_sorttype_t : GuestStruct {
-    GUEST< LONGINT> diskoff;
-    GUEST< resref*> rrptr;
+struct res_sorttype_t {
+    LONGINT diskoff;
+    resref* rrptr;
 };
 }
 #define __MYRESOURCE__

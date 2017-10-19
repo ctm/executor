@@ -663,11 +663,11 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
         rp = &RGN_BBOX (srcrgn1);
         r1[0] = rp->top;
         r1[1] = rp->left;
-        r1[2] = rp->right  != RGN_STOP_X ? rp->right  : CWC(RGN_STOP - 1);
+        r1[2] = rp->right  != RGN_STOP_X ? rp->right  : GUEST<INTEGER>(CWC(RGN_STOP - 1));
         r1[3] = RGN_STOP_X;
-        r1[4] = rp->bottom != RGN_STOP_X ? rp->bottom : CWC(RGN_STOP - 1);
+        r1[4] = rp->bottom != RGN_STOP_X ? rp->bottom : GUEST<INTEGER>(CWC(RGN_STOP - 1));
         r1[5] = rp->left;
-        r1[6] = rp->right  != RGN_STOP_X ? rp->right  : CWC(RGN_STOP - 1);
+        r1[6] = rp->right  != RGN_STOP_X ? rp->right  : GUEST<INTEGER>(CWC(RGN_STOP - 1));
         r1[7] = RGN_STOP_X;
         r1[8] = RGN_STOP_X;
         ipr1 = r1;
@@ -677,11 +677,11 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
         rp = &RGN_BBOX (srcrgn2);
         r2[0] = rp->top;
         r2[1] = rp->left;
-        r2[2] = rp->right  != RGN_STOP_X ? rp->right  : CWC(RGN_STOP - 1);
+        r2[2] = rp->right  != RGN_STOP_X ? rp->right  : GUEST<INTEGER>(CWC(RGN_STOP - 1));
         r2[3] = RGN_STOP_X;
-        r2[4] = rp->bottom != RGN_STOP_X ? rp->bottom : CWC(RGN_STOP - 1);
+        r2[4] = rp->bottom != RGN_STOP_X ? rp->bottom : GUEST<INTEGER>(CWC(RGN_STOP - 1));
         r2[5] = rp->left;
-        r2[6] = rp->right  != RGN_STOP_X ? rp->right  : CWC(RGN_STOP - 1);
+        r2[6] = rp->right  != RGN_STOP_X ? rp->right  : GUEST<INTEGER>(CWC(RGN_STOP - 1));
         r2[7] = RGN_STOP_X;
         r2[8] = RGN_STOP_X;
         ipr2 = r2;
@@ -816,11 +816,11 @@ A4(PRIVATE, void, binop, optype, op, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
         rp = &(RGN_BBOX (srcrgn1));
         r1[0] = rp->top;
         r1[1] = rp->left;
-        r1[2] = rp->right  != RGN_STOP_X ? rp->right  : CW(RGN_STOP - 1);
+        r1[2] = rp->right  != RGN_STOP_X ? rp->right  : GUEST<INTEGER>(CW(RGN_STOP - 1));
         r1[3] = RGN_STOP_X;
-        r1[4] = rp->bottom != RGN_STOP_X ? rp->bottom : CW(RGN_STOP - 1);
+        r1[4] = rp->bottom != RGN_STOP_X ? rp->bottom : GUEST<INTEGER>(CW(RGN_STOP - 1));
         r1[5] = rp->left;
-        r1[6] = rp->right  != RGN_STOP_X ? rp->right  : CW(RGN_STOP - 1);
+        r1[6] = rp->right  != RGN_STOP_X ? rp->right  : GUEST<INTEGER>(CW(RGN_STOP - 1));
         r1[7] = RGN_STOP_X;
         r1[8] = RGN_STOP_X;
         ipr1 = r1;
@@ -830,11 +830,11 @@ A4(PRIVATE, void, binop, optype, op, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
         rp = &(RGN_BBOX (srcrgn2));
         r2[0] = rp->top;
         r2[1] = rp->left;
-        r2[2] = rp->right  != RGN_STOP ? rp->right  : CW(RGN_STOP - 1);
+        r2[2] = rp->right  != RGN_STOP ? rp->right  : GUEST<INTEGER>(CW(RGN_STOP - 1));
         r2[3] = RGN_STOP_X;
-        r2[4] = rp->bottom != RGN_STOP ? rp->bottom : CW(RGN_STOP - 1);
+        r2[4] = rp->bottom != RGN_STOP ? rp->bottom : GUEST<INTEGER>(CW(RGN_STOP - 1));
         r2[5] = rp->left;
-        r2[6] = rp->right  != RGN_STOP ? rp->right  : CW(RGN_STOP - 1);
+        r2[6] = rp->right  != RGN_STOP ? rp->right  : GUEST<INTEGER>(CW(RGN_STOP - 1));
         r2[7] = RGN_STOP_X;
         r2[8] = RGN_STOP_X;
         ipr2 = r2;
@@ -1016,6 +1016,7 @@ static INTEGER npairs;
 #define DECL void rhtopandinseth(RgnHandle rh, INTEGER *p, register INTEGER dh)
 
 #define STATEDECL SignedByte state;
+#define ITYPE GUEST<INTEGER>
 #define SETIO ip = &HxX(rh, rgnSize) + 5; op = p; y = CW(*ip++); npairs = 0; \
 					      state = HGetState((Handle) rh); \
 							     HLock((Handle) rh)
@@ -1028,6 +1029,7 @@ static INTEGER npairs;
 #define DECL void hinset(INTEGER *p, INTEGER dh)
 
 #define STATEDECL
+#define ITYPE INTEGER
 #define SETIO ip = p; op = p; y = *(ip+1); npairs = 0
 #define NEXTPAIR y == *(ip+1) ? (x = *ip++, ip++, 1) : (y = *(ip+1), 0)
 #define INCLXY(x, y) *op++ = x, *op++ = y, npairs++
@@ -1232,7 +1234,8 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
     INTEGER left, right, bottom;
     INTEGER cnt;
     RgnHandle finalrestingplace;
-    HIDDEN_RgnPtr temp2, temp3;
+    GUEST<RgnPtr> temp2, temp3;
+    RgnPtr temp;
     ALLOCABEGIN
 
     /* the +36 below is necessary because small regions have size of 10
@@ -1249,13 +1252,13 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
     }
 
     if (RGN_SMALL_P (s1)) {
-	temp2.p = (RgnPtr) ALLOCA( RGN_SMALL_SIZE + 9 * sizeof(INTEGER) );
+	temp = (RgnPtr) ALLOCA( RGN_SMALL_SIZE + 9 * sizeof(INTEGER) );
 #if 0
-	BlockMove(CL(*(Ptr *) s1), (Ptr) temp2.p, RGN_SMALL_SIZE);
+	BlockMove(CL(*(Ptr *) s1), (Ptr) temp, RGN_SMALL_SIZE);
 #else
-	memcpy((Ptr) temp2.p, MR(*(Ptr *) s1), RGN_SMALL_SIZE);
+	memcpy((Ptr) temp, MR(*(Ptr *) s1), RGN_SMALL_SIZE);
 #endif
-	op = (INTEGER *) ((char *)temp2.p + RGN_SMALL_SIZE);
+	op = (INTEGER *) ((char *)temp + RGN_SMALL_SIZE);
 	*op++ = HxX(s1, rgnBBox.top);
 	*op++ = HxX(s1, rgnBBox.left);
 	*op++ = HxX(s1, rgnBBox.right);
@@ -1265,19 +1268,19 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
 	*op++ = HxX(s1, rgnBBox.right);
 	*op++ = RGN_STOP_X;
 	*op++ = RGN_STOP_X;
-	ASSERT_SAFE (temp2.p);
-	temp2.p = RM(temp2.p);
+	ASSERT_SAFE (temp);
+	temp2 = RM(temp);
 	s1 = &temp2;
     }
 
     if (RGN_SMALL_P (s2)) {
-	temp3.p = (RgnPtr) ALLOCA (RGN_SMALL_SIZE + 9 * sizeof (INTEGER));
+	temp = (RgnPtr) ALLOCA (RGN_SMALL_SIZE + 9 * sizeof (INTEGER));
 #if 0
-	BlockMove(CL(*(Ptr *) s2), (Ptr) temp3.p, RGN_SMALL_SIZE);
+	BlockMove(CL(*(Ptr *) s2), (Ptr) temp, RGN_SMALL_SIZE);
 #else
-	memcpy((Ptr) temp3.p, STARH (s2), RGN_SMALL_SIZE);
+	memcpy((Ptr) temp, STARH (s2), RGN_SMALL_SIZE);
 #endif
-	op = (INTEGER *) ((char *)temp3.p + RGN_SMALL_SIZE);
+	op = (INTEGER *) ((char *)temp + RGN_SMALL_SIZE);
 	*op++ = HxX(s2, rgnBBox.top);
 	*op++ = HxX(s2, rgnBBox.left);
 	*op++ = HxX(s2, rgnBBox.right);
@@ -1287,8 +1290,8 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
 	*op++ = HxX(s2, rgnBBox.right);
 	*op++ = RGN_STOP_X;
 	*op++ = RGN_STOP_X;
-	ASSERT_SAFE (temp3.p);	
-	temp3.p = RM(temp3.p);
+	ASSERT_SAFE (temp);	
+	temp3 = RM(temp);
 	s2 = &temp3;
     }
 

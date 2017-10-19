@@ -28,7 +28,7 @@ namespace Executor {
 
 
     /* data contained in the block */
-typedef struct block_header : GuestStruct {
+typedef struct block_header { GUEST_STRUCT;
 #if defined (MM_BLOCK_HEADER_SENTINEL)
     GUEST< uint8[SENTINEL_SIZE]> pre_sentinel;
 #endif
@@ -138,7 +138,7 @@ extern unsigned long ROMlib_memtop;
 /* Zone record accessor macros */
 #define ZONE_HEAP_DATA(zone)	((block_header_t *) &(zone)->heapData)
 
-#define ZONE_BK_LIM_X(zone)	((block_header_t *) ((zone)->bkLim))
+#define ZONE_BK_LIM_X(zone)	(guest_cast<block_header_t*> ((zone)->bkLim))
 #define ZONE_PURGE_PTR_X(zone)	((zone)->purgePtr)
 #define ZONE_HFST_FREE_X(zone)	((zone)->hFstFree)
 #define ZONE_ZCB_FREE_X(zone)	((zone)->zcbFree)
@@ -195,7 +195,7 @@ zone_info_t;
 
 typedef Zone *ZonePtr;
 
-struct pblock_t : GuestStruct {
+struct pblock_t { GUEST_STRUCT;
     GUEST< ZonePtr> sp;
     GUEST< Ptr> lp;
     GUEST< INTEGER> mm;

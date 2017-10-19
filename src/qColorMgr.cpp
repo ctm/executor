@@ -908,7 +908,7 @@ P2 (PUBLIC pascal trap, void, ReserveEntry,
   else
     {
       /* clear the entry */
-      entry->value &= ~CTAB_RESERVED_BIT_X;
+      entry->value.raw( entry->value.raw() & ~CTAB_RESERVED_BIT_X );
     }
 
   /* success */

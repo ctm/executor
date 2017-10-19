@@ -60,7 +60,7 @@ typedef enum {
 
 typedef SignedByte Style;
 
-struct Region : GuestStruct {
+struct Region { GUEST_STRUCT;
     GUEST< INTEGER> rgnSize;
     GUEST< Rect> rgnBBox;
 };
@@ -70,7 +70,8 @@ MAKE_HIDDEN(RgnPtr);
 typedef HIDDEN_RgnPtr *RgnHandle;
 MAKE_HIDDEN(RgnHandle);
 
-struct BitMap : GuestStruct {
+struct BitMap {
+    GUEST_STRUCT;
     GUEST< Ptr> baseAddr;
     GUEST< INTEGER> rowBytes;
     GUEST< Rect> bounds;
@@ -79,7 +80,7 @@ struct BitMap : GuestStruct {
 typedef Byte Pattern[8];
 typedef INTEGER Bits16[16];
 
-struct Cursor : GuestStruct {
+struct Cursor { GUEST_STRUCT;
     GUEST< Bits16> data;
     GUEST< Bits16> mask;
     GUEST< Point> hotSpot;
@@ -98,7 +99,7 @@ enum {
   fill = 4
 };
 
-struct Polygon : GuestStruct {
+struct Polygon { GUEST_STRUCT;
     GUEST< INTEGER> polySize;
     GUEST< Rect> polyBBox;
     GUEST< Point[1]> polyPoints;
@@ -108,7 +109,7 @@ typedef Polygon *PolyPtr;
 MAKE_HIDDEN(PolyPtr);
 typedef HIDDEN_PolyPtr *PolyHandle;
 
-struct FontInfo : GuestStruct {
+struct FontInfo { GUEST_STRUCT;
     GUEST< INTEGER> ascent;
     GUEST< INTEGER> descent;
     GUEST< INTEGER> widMax;
@@ -133,7 +134,7 @@ typedef pascal trap INTEGER  (*txMeasProc_t)(INTEGER bc, Ptr texta, Point *numer
 typedef pascal trap void (*getPicProc_t)(Ptr data, INTEGER bc);
 typedef pascal trap void (*putPicProc_t)(Ptr data, INTEGER bc);
 
-struct QDProcs : GuestStruct {
+struct QDProcs { GUEST_STRUCT;
     GUEST< textProc_t> textProc;
     GUEST< lineProc_t> lineProc;
     GUEST< rectProc_t> rectProc;
@@ -151,7 +152,7 @@ struct QDProcs : GuestStruct {
 
 typedef QDProcs *QDProcsPtr;
 
-struct GrafPort : GuestStruct {
+struct GrafPort { GUEST_STRUCT;
     GUEST< INTEGER> device;
     GUEST< BitMap> portBits;
     GUEST< Rect> portRect;
@@ -183,7 +184,7 @@ struct GrafPort : GuestStruct {
 typedef GrafPort *GrafPtr;
 MAKE_HIDDEN(GrafPtr);
 
-struct Picture : GuestStruct {
+struct Picture { GUEST_STRUCT;
     GUEST< INTEGER> picSize;
     GUEST< Rect> picFrame;
 };
@@ -192,7 +193,7 @@ typedef Picture *PicPtr;
 MAKE_HIDDEN(PicPtr);
 typedef HIDDEN_PicPtr *PicHandle;
 
-struct PenState : GuestStruct {
+struct PenState { GUEST_STRUCT;
     GUEST< Point> pnLoc;
     GUEST< Point> pnSize;
     GUEST< INTEGER> pnMode;
@@ -210,7 +211,7 @@ typedef enum { blend=32,    addPin, addOver, subPin,
 
 #define defQDColors	127
 
-struct RGBColor : GuestStruct {
+struct RGBColor { GUEST_STRUCT;
     GUEST< unsigned short> red;
     GUEST< unsigned short> green;
     GUEST< unsigned short> blue;
@@ -220,25 +221,25 @@ struct RGBColor : GuestStruct {
         : red(r), green(g), blue(b) {}
 };
 
-struct HSVColor : GuestStruct {
+struct HSVColor { GUEST_STRUCT;
     GUEST< SmallFract> hue;
     GUEST< SmallFract> saturation;
     GUEST< SmallFract> value;
 };
 
-struct HSLColor : GuestStruct {
+struct HSLColor { GUEST_STRUCT;
     GUEST< SmallFract> hue;
     GUEST< SmallFract> saturation;
     GUEST< SmallFract> lightness;
 };
 
-struct CMYColor : GuestStruct {
+struct CMYColor { GUEST_STRUCT;
     GUEST< SmallFract> cyan;
     GUEST< SmallFract> magenta;
     GUEST< SmallFract> yellow;
 };
 
-struct ColorSpec : GuestStruct {
+struct ColorSpec { GUEST_STRUCT;
     GUEST< INTEGER> value;
     GUEST< RGBColor> rgb;
 
@@ -249,7 +250,7 @@ struct ColorSpec : GuestStruct {
 
 typedef ColorSpec cSpecArray[1];	/* can't use 0 */
 
-typedef struct ColorTable : GuestStruct {
+typedef struct ColorTable { GUEST_STRUCT;
     GUEST< LONGINT> ctSeed;
     GUEST< unsigned short> ctFlags;
     GUEST< INTEGER> ctSize;
@@ -260,7 +261,7 @@ MAKE_HIDDEN(CTabPtr);
 typedef HIDDEN_CTabPtr *CTabHandle;
 MAKE_HIDDEN(CTabHandle);
 
-typedef struct CQDProcs : GuestStruct {
+typedef struct CQDProcs { GUEST_STRUCT;
     GUEST< Ptr> textProc;
     GUEST< Ptr> lineProc;
     GUEST< Ptr> rectProc;
@@ -283,7 +284,7 @@ typedef struct CQDProcs : GuestStruct {
     GUEST< Ptr> newProc6Proc;
 } *CQDProcsPtr;
 
-typedef struct PixMap : GuestStruct {
+typedef struct PixMap { GUEST_STRUCT;
     GUEST< Ptr> baseAddr;
     GUEST< INTEGER> rowBytes;
     GUEST< Rect> bounds;
@@ -313,7 +314,7 @@ enum pixmap_pixel_types
 
 #define ROWMASK	0x1FFF
 
-typedef struct PixPat : GuestStruct {
+typedef struct PixPat { GUEST_STRUCT;
     GUEST< INTEGER> patType;
     GUEST< PixMapHandle> patMap;
     GUEST< Handle> patData;
@@ -326,7 +327,7 @@ MAKE_HIDDEN(PixPatPtr);
 typedef HIDDEN_PixPatPtr *PixPatHandle;
 MAKE_HIDDEN(PixPatHandle);
 
-typedef struct CGrafPort : GuestStruct {
+typedef struct CGrafPort { GUEST_STRUCT;
     GUEST< INTEGER> device;
     GUEST< PixMapHandle> portPixMap;
     GUEST< INTEGER> portVersion;
@@ -363,7 +364,7 @@ typedef struct CGrafPort : GuestStruct {
 
 MAKE_HIDDEN(CGrafPtr);
 
-typedef struct CCrsr : GuestStruct {
+typedef struct CCrsr { GUEST_STRUCT;
     GUEST< INTEGER> crsrType;
     GUEST< PixMapHandle> crsrMap;
     GUEST< Handle> crsrData;
@@ -379,7 +380,7 @@ typedef struct CCrsr : GuestStruct {
 MAKE_HIDDEN(CCrsrPtr);
 typedef HIDDEN_CCrsrPtr *CCrsrHandle;
 
-struct MatchRec : GuestStruct {
+struct MatchRec { GUEST_STRUCT;
     GUEST< uint16> red;
     GUEST< uint16> green;
     GUEST< uint16> blue;
@@ -501,15 +502,15 @@ extern pascal trap void C_DisposPixPat( PixPatHandle pph );
 extern pascal trap INTEGER C_Random( void  ); 
 extern pascal trap BOOLEAN C_GetPixel( INTEGER h, INTEGER v ); 
 extern pascal trap void C_StuffHex( register Ptr p, StringPtr s ); 
-extern pascal trap void C_ScalePt( Point *pt, Rect *srcr, Rect *dstr ); 
-extern pascal trap void C_MapPt( Point *pt, Rect *srcr, Rect *dstr ); 
+extern pascal trap void C_ScalePt( GUEST<Point> *pt, Rect *srcr, Rect *dstr ); 
+extern pascal trap void C_MapPt( GUEST<Point> *pt, Rect *srcr, Rect *dstr ); 
 extern pascal trap void C_MapRect( Rect *r, Rect *srcr, Rect *dstr ); 
 extern pascal trap void C_MapRgn( RgnHandle rh, Rect *srcr, Rect *dstr ); 
 extern pascal trap void C_MapPoly( PolyHandle poly, Rect *srcr, 
  Rect *dstr ); 
 extern pascal trap void C_HidePen( void  ); 
 extern pascal trap void C_ShowPen( void  ); 
-extern pascal trap void C_GetPen( Point *ptp ); 
+extern pascal trap void C_GetPen( GUEST<Point> *ptp ); 
 extern pascal trap void C_GetPenState( PenState *ps ); 
 extern pascal trap void C_SetPenState( PenState *ps ); 
 extern pascal trap void C_PenSize( INTEGER w, INTEGER h ); 
@@ -528,12 +529,12 @@ extern pascal trap void C_PicComment( INTEGER kind, INTEGER size,
 extern pascal trap void C_ReadComment( INTEGER kind, INTEGER size, 
  Handle hand ); 
 extern pascal trap void C_KillPicture( PicHandle pic ); 
-extern pascal trap void C_AddPt( Point src, Point *dst ); 
-extern pascal trap void C_SubPt( Point src, Point *dst ); 
-extern pascal trap void C_SetPt( Point *pt, INTEGER h, INTEGER v ); 
+extern pascal trap void C_AddPt( Point src, GUEST<Point> *dst ); 
+extern pascal trap void C_SubPt( Point src, GUEST<Point> *dst ); 
+extern pascal trap void C_SetPt( GUEST<Point> *pt, INTEGER h, INTEGER v ); 
 extern pascal trap BOOLEAN C_EqualPt( Point p1, Point p2 ); 
-extern pascal trap void C_LocalToGlobal( Point *pt ); 
-extern pascal trap void C_GlobalToLocal( Point *pt ); 
+extern pascal trap void C_LocalToGlobal( GUEST<Point> *pt ); 
+extern pascal trap void C_GlobalToLocal( GUEST<Point> *pt ); 
 extern pascal trap PolyHandle C_OpenPoly( void  ); 
 extern pascal trap void C_ClosePoly( void  ); 
 extern pascal trap void C_KillPoly( PolyHandle poly ); 
@@ -552,7 +553,7 @@ extern pascal trap BOOLEAN C_SectRect (const Rect *s1, const Rect *s2, Rect *des
 extern pascal trap void C_UnionRect( Rect *s1, Rect *s2, Rect *dest ); 
 extern pascal trap BOOLEAN C_PtInRect( Point p, Rect *r ); 
 extern pascal trap void C_Pt2Rect( Point p1, Point p2, Rect *dest ); 
-extern pascal trap void C_PtToAngle( Rect *rp, Point p, INTEGER *angle ); 
+extern pascal trap void C_PtToAngle( Rect *rp, Point p, GUEST<INTEGER> *angle ); 
 extern pascal trap BOOLEAN C_EqualRect( const Rect *r1, const Rect *r2 ); 
 extern pascal trap RgnHandle C_NewRgn( void  ); 
 extern pascal trap void C_OpenRgn( void  ); 

@@ -361,7 +361,7 @@ A3(PRIVATE, void, flscroll, fltype *, f, INTEGER, from, INTEGER, to)
 }
 
 #define CTLFL(sh) \
-	((fltype *)(long) MR(MR((WindowPeek)STARH((sh))->contrlOwner)->refCon))
+	((fltype *)(long) MR(((WindowPeek)MR(STARH((sh))->contrlOwner))->refCon))
 
 /*
  * this hack is necessary because Excel 4 can bring up a dialog on top of
@@ -597,12 +597,11 @@ A3(PRIVATE, void, flmouse, fltype *, f, Point, p, ControlHandle, ch)
     INTEGER newsel;
     EventRecord evt;
     
-    evt.where = p;
+    evt.where.set(p);
     do {
 	GlobalToLocal(&evt.where);
-	p.h = CW(evt.where.h);
-	p.v = CW(evt.where.v);
-	if ((newsel = flwhich(f, p)) != f->flsel) {
+        p = evt.where.get();
+        if ((newsel = flwhich(f, p)) != f->flsel) {
 	    if (f->flsel != -1) {
 		safeflflip(f, f->flsel);
 		if (newsel == -1) {
@@ -979,7 +978,7 @@ A1(PRIVATE, LONGINT, getparent, LONGINT, dirid)
     return retval;
 }
 
-PRIVATE BOOLEAN findparent(INTEGER *vrefp, LONGINT *diridp)
+PRIVATE BOOLEAN findparent(GUEST<INTEGER> *vrefp, GUEST<LONGINT> *diridp)
 {
     HVCB *vcbp;
     BOOLEAN retval;
@@ -1014,7 +1013,7 @@ PRIVATE BOOLEAN findparent(INTEGER *vrefp, LONGINT *diridp)
 A1(PRIVATE, BOOLEAN, moveuponedir, DialogPtr, dp)
 {
     LONGINT parent;
-    INTEGER vrn;
+    GUEST<INTEGER> vrn;
     BOOLEAN retval;
 
     parent = getparent(CL(CurDirStore));
@@ -1144,6 +1143,7 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
     INTEGER i, from;
     HIDDEN_ControlHandle h;
     Rect r;
+    GUEST<Point> gp;
     Point p;
     INTEGER t;
     fltype *fl;
@@ -1242,14 +1242,13 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 	}
 	break;
     case mouseDown:
-	p = evt->where;
-	GlobalToLocal(&p);
-	p.h = CW(p.h);
-	p.v = CW(p.v);
+	gp = evt->where;
+	GlobalToLocal(&gp);
+	p = gp.get();
 	if (PtInRect(p, &fl->flrect)) {
 	    GetDItem((DialogPtr) dp, getOpen, &i, (HIDDEN_Handle *) &h, &r);
 	    h.p = MR(h.p);
-	    flmouse(fl, evt->where, h.p);
+	    flmouse(fl, evt->where.get(), h.p);
 	    ticks = TickCount();
 	    if (fl->flsel != -1 && savesel == fl->flsel &&
 					 (ticks < oldticks + CL(DoubleTime))) {
@@ -1440,7 +1439,7 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
 	 TEMP_ALLOC_ALLOCATE (save_bits_mem, temp_save_bits,
 			      CW (bounds->bottom) * row_bytes);
 	 PIXMAP_BASEADDR_X (save_bits) = (Ptr)RM (save_bits_mem);
-	 WRAPPER_SET_PIXMAP_X (wrapper, RM (save_bits));
+	 WRAPPER_SET_PIXMAP_X (wrapper, RM2 (save_bits));
 	 
 	 CopyBits (PORT_BITS_FOR_COPY (thePort), wrapper,
 		   &therect, bounds, srcCopy, NULL);
@@ -1489,10 +1488,10 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
        firstsel = -1;
        while (!done)
 	 {
-	   evt.where.h = CW (evt.where.h);
-	   evt.where.v = CW (evt.where.v);
-	   if (PtInRect (evt.where, &therect))
-	     newsel = (evt.where.v - CW(therect.top)) / fl->fllinht;
+           Point p = evt.where.get();
+	   
+	   if (PtInRect (p, &therect))
+	     newsel = (p.v - CW(therect.top)) / fl->fllinht;
 	   else
 	     newsel = -1;
 	   if (newsel != sel)
@@ -1722,7 +1721,7 @@ PUBLIC void Executor::futzwithdosdisks( void )
 {
 #if defined (MSDOS) || defined (LINUX) || defined(CYGWIN32)
     int i, fd;
-    LONGINT mess;
+    GUEST<LONGINT> mess;
     LONGINT blocksize;
     drive_flags_t flags;
 #if defined(MSDOS) || defined (CYGWIN32)
@@ -2176,7 +2175,7 @@ destroy_new_folder_button (DialogPtr dp, ControlHandle ch)
 #define SF_VREFNUM(fp) (CW (SF_VREFNUM_X (fp)))
 
 #define SF_DIRID_X(fp) ((fp)->flavor == original_sf \
-			  ? 0 \
+			  ? (GUEST<LONGINT>) 0 \
 			  : (fp)->flreplyp.nreplyp->sfFile.parID)
 
 #define SF_DIRID(fp) (CL (SF_DIRID_X (fp)))

@@ -13,7 +13,8 @@ namespace Executor {
 #define qErr	(-1)
 #define vTypErr	(-2)
 
-struct VBLTask : GuestStruct {
+struct VBLTask {
+    GUEST_STRUCT;
     GUEST< QElemPtr> qLink;
     GUEST< INTEGER> qType;
     GUEST< ProcPtr> vblAddr;
@@ -22,8 +23,10 @@ struct VBLTask : GuestStruct {
 };
 typedef VBLTask *VBLTaskPtr;
 
+#if 0
 #if !defined (VBLQueue)
 extern QHdr 	VBLQueue;
+#endif
 #endif
 
 extern void ROMlib_clockonoff( LONGINT onoroff ); 

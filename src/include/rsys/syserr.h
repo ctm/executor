@@ -3,85 +3,62 @@
 
 namespace Executor {
 
+struct myalerttab_t  {
+        GUEST_STRUCT;
+  GUEST<INTEGER> count;
+
+  GUEST<INTEGER> id1;
+  GUEST<INTEGER> len1;
+  GUEST<INTEGER> prim1;
+  GUEST<INTEGER> sec1;
+  GUEST<INTEGER> icon1;
+  GUEST<INTEGER> proc1;
+  GUEST<INTEGER> but1;
+
+  GUEST<INTEGER> id2;
+  GUEST<INTEGER> len2;
+  GUEST<Point>	point2;
+  GUEST<unsigned char[52]> str2;
+
+  GUEST<INTEGER> id3;
+  GUEST<INTEGER> len3;
+
+  GUEST<Rect> rect3;
+  GUEST<unsigned char[32][4]> icon3;
+
+  GUEST<INTEGER> id4;
+  GUEST<INTEGER> len4;
+
+  GUEST<Point>	point4;
+  GUEST<char[46]> str4;
+
+  GUEST<INTEGER> id5;
+  GUEST<INTEGER> len5;
+  GUEST<INTEGER> num5;
+  GUEST<INTEGER> str5;
+  GUEST<Rect>	rect5;
+  GUEST<INTEGER> proc5;
+  GUEST<INTEGER> str5b;
+  GUEST<Rect>	rect5b;
+  GUEST<INTEGER>	proc5b;
+
+  GUEST<INTEGER> id6;
+  GUEST<INTEGER> len6;
+
+  GUEST<char[4]>	str6;
+
+  GUEST<INTEGER> id7;
+  GUEST<INTEGER> len7;
+  GUEST<char[6]>	str7;
+
+  GUEST<INTEGER> id8;
+  GUEST<INTEGER> len8;
+  GUEST<void (*)(void)> func8;
+};
 
 
-
-
-
-
-
-
-
-
-// ### Struct needs manual conversion to GUEST<...>
-//   void	(*func8)(void)	PACKED;
-
-
-
-
-
-
-
-
-
-
-
-// ### Struct needs manual conversion to GUEST<...>
-//   void	(*func8)(void)	PACKED;
-typedef struct PACKED {
-  INTEGER count;
-
-  INTEGER id1;
-  INTEGER len1;
-  INTEGER prim1;
-  INTEGER sec1;
-  INTEGER icon1;
-  INTEGER proc1;
-  INTEGER but1;
-
-  INTEGER id2;
-  INTEGER len2;
-  Point	point2;
-  unsigned char str2[52];
-
-  INTEGER id3;
-  INTEGER len3;
-
-  Rect rect3;
-  unsigned char icon3[32][4];
-
-  INTEGER id4;
-  INTEGER len4;
-
-  Point	point4;
-  char	str4[46];
-
-  INTEGER id5;
-  INTEGER len5;
-  INTEGER num5;
-  INTEGER str5;
-  Rect	rect5;
-  INTEGER proc5;
-  INTEGER str5b;
-  Rect	rect5b;
-  INTEGER	proc5b	PACKED;
-
-  INTEGER id6;
-  INTEGER len6;
-
-  char	str6[4];
-
-  INTEGER id7;
-  INTEGER len7;
-  char	str7[6];
-
-  INTEGER id8;
-  INTEGER len8;
-  void	(*func8)(void)	PACKED;
-} myalerttab_t;
-
-
-struct adef : GuestStruct {
+struct adef {
+    GUEST_STRUCT;
     GUEST< INTEGER> id;
     GUEST< INTEGER> alen;
     GUEST< INTEGER> primetextid;
@@ -91,50 +68,43 @@ struct adef : GuestStruct {
     GUEST< INTEGER> buttonid;
 };
 
-struct tdef : GuestStruct {
+struct tdef {
+    GUEST_STRUCT;
     GUEST< INTEGER> id;
     GUEST< INTEGER> alen;
     GUEST< Point> loc;
     GUEST< char[1]> text;    /* at least one NUL byte */
 };
 
-struct idef : GuestStruct {
+struct idef {
+    GUEST_STRUCT;
     GUEST< INTEGER> id;
     GUEST< INTEGER> alen;
     GUEST< Rect> loc;
     GUEST< LONGINT[32]> ike;
 };
 
-    /* NOTE:  THIS IS NOT THE WAY IT WORKS IN THE M*C */
-// ### Struct needs manual conversion to GUEST<...>
-//   void (*proc)();
-    /* NOTE:  THIS IS NOT THE WAY IT WORKS IN THE M*C */
-// ### Struct needs manual conversion to GUEST<...>
-//   void (*proc)();
-struct PACKED pdef {
-  INTEGER id;
-  INTEGER alen;
-  void (*proc)();
+struct pdef {
+  GUEST_STRUCT;
+  GUEST<INTEGER> id;
+  GUEST<INTEGER> alen;
+  GUEST<void (*)()> proc;
   /* NOTE:  THIS IS NOT THE WAY IT WORKS IN THE M*C */
 };
 
-// ### Struct needs manual conversion to GUEST<...>
-
-// ### Struct needs manual conversion to GUEST<...>
-// struct PACKED bdef {
-//   struct PACKED but {
-struct PACKED bdef {
-  INTEGER id;
-  INTEGER  alen;
-  INTEGER  nbut;
+struct bdef {
+  GUEST_STRUCT;
+  GUEST<INTEGER> id;
+  GUEST<INTEGER>  alen;
+  GUEST<INTEGER>  nbut;
   struct PACKED but {
-    INTEGER butstrid;
-    Rect butloc;
-    INTEGER butprocid;
+    GUEST<INTEGER> butstrid;
+    GUEST<Rect> butloc;
+    GUEST<INTEGER> butprocid;
   } buts[1];
 };
 
-struct sdef : GuestStruct {
+struct sdef { GUEST_STRUCT;
     GUEST< INTEGER> id;
     GUEST< INTEGER> alen;
     GUEST< char[1]> text;

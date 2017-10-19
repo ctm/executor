@@ -348,7 +348,8 @@ copy_mask_1 (BitMap *src_bm, BitMap *mask_bm, BitMap *dst_bm,
   mask_rgn = NewRgn ();
   if (BitMapToRegion (mask_rgn, mask_bm) == noErr)
     {
-      Handle save_pic_handle, save_graf_procs;
+      GUEST<Handle> save_pic_handle;
+      GUEST<QDProcsPtr> save_graf_procs;
       RgnHandle mask_rect_rgn;
       
       mask_rect_rgn = NewRgn ();
@@ -358,15 +359,15 @@ copy_mask_1 (BitMap *src_bm, BitMap *mask_bm, BitMap *dst_bm,
       MapRgn (mask_rgn, mask_rect, dst_rect);
       
       save_pic_handle = PORT_PIC_SAVE_X (thePort);
-      save_graf_procs = (Handle) PORT_GRAF_PROCS_X (thePort);
+      save_graf_procs = PORT_GRAF_PROCS_X (thePort);
       
-      PORT_PIC_SAVE_X (thePort)   = (Handle)RM (NULL);
-      PORT_GRAF_PROCS_X (thePort) = (QDProcsPtr)RM (NULL);
+      PORT_PIC_SAVE_X (thePort)   = RM(nullptr);
+      PORT_GRAF_PROCS_X (thePort) = RM(nullptr);
       
       CopyBits (src_bm, dst_bm, src_rect, dst_rect, srcCopy, mask_rgn);
       
       PORT_PIC_SAVE_X (thePort)   = save_pic_handle;
-      PORT_GRAF_PROCS_X (thePort) = (QDProcsPtr) save_graf_procs;
+      PORT_GRAF_PROCS_X (thePort) = save_graf_procs;
       
       DisposeRgn (mask_rect_rgn);
       DisposeRgn (mask_rgn);

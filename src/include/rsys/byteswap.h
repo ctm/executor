@@ -48,7 +48,7 @@ inline int16_t CW(int16_t x) { return swap16((uint16_t)x); }
 inline uint16_t CW(unsigned int x) { return swap16((uint16_t)x); }
 
 template<class TT, typename = typename std::enable_if<sizeof(TT) == 2,void>::type>
-TT CW(Executor::GuestWrapper<TT> x) { return swap16((uint16_t)x.unwrap()); }
+TT CW(Executor::GuestWrapper<TT> x) { return x.get(); }
 
 
 template<class TT> inline int32_t CL(TT x) { return swap32((uint32_t)x); }
@@ -56,7 +56,7 @@ inline uint32_t CL(uint32_t x) { return swap32(x); }
 inline int32_t CL(int32_t x) { return swap32((uint32_t)x); }
 
 template<class TT, typename = typename std::enable_if<sizeof(TT) == 4,void>::type>
-TT CL(Executor::GuestWrapper<TT> x) { return swap32((uint32_t)x.unwrap()); }
+TT CL(Executor::GuestWrapper<TT> x) { return x.get(); }
 
 
 inline unsigned char Cx(unsigned char x) { return x; }
@@ -70,7 +70,7 @@ inline uint32_t Cx(uint32_t x) { return swap32(x); }
 inline int32_t Cx(int32_t x) { return swap32((uint32_t)x); }
 
 template<class TT>
-TT Cx(Executor::GuestWrapper<TT> x) { return Cx(x.unwrap()); }
+TT Cx(Executor::GuestWrapper<TT> x) { return x.get(); }
 
 
 template<class TT>
@@ -91,6 +91,13 @@ TT* MR(TT* p)
         return nullptr;
 }
 
+template <class P, class TT = typename P::HiddenType>
+TT MR(const P& p)
+{
+    return MR(p.p);
+}
+
+
 template<typename TT>
 TT* RM(TT* p)
 {
@@ -100,11 +107,30 @@ TT* RM(TT* p)
         return nullptr;
 }
 
+// in the future, we will make RM look like RM2
+// and when no old-fashioned RM is left, we can switch to automatic conversion
+template<typename TT>
+Executor::GUEST<TT*> RM2(TT* p)
+{
+    if(p)
+        return (TT*) swap32( (uint32_t) ((uintptr_t)p - ROMlib_offset)) ;
+    else
+        return nullptr;
+}
+
+
 template<typename TT>
 TT* MR(Executor::GuestWrapper<TT*> p)
 {
-    return MR((TT*)p.unwrap());
+    return p.get();
 }
+
+template<typename TT>
+TT* MR(Executor::HiddenValue<uint32_t, TT*> p)
+{
+    return MR((TT*) p);
+}
+
 
 inline std::nullptr_t RM(std::nullptr_t p) { return nullptr; }
 
@@ -183,7 +209,8 @@ extern int bad_cx_splosion;
 #define CBV(rhs)	(rhs)
 
 #if 1
-#  define STARH(h)		MR ((h)->p)
+//#  define STARH(h)		MR ((h)->p)
+#  define STARH(h)		MR (*h)
 #  define HxP(handle, field)	MR (STARH(handle)->field)
 #  define HxX(handle, field)	(STARH(handle)->field)
 #  define HxZ(handle, field) HxX(handle, field)
@@ -226,6 +253,7 @@ extern int bad_cx_splosion;
    __pt_;					\
 })
 
+#if 0
 #define SWAPPED_OPW(big_endian_lvalue, op, v)				  \
   ((void)								  \
    (((#op[0] == '&' || #op[0] == '|' || #op[0] == '^') && #op[1] == '\0') \
@@ -236,7 +264,12 @@ extern int bad_cx_splosion;
    (((#op[0] == '&' || #op[0] == '|' || #op[0] == '^') && #op[1] == '\0') \
     ? ((big_endian_lvalue) op##= CLV (v))				  \
     : ((big_endian_lvalue) = CL (CL (big_endian_lvalue) op (v)))))
+#else
 
+#define SWAPPED_OPW(bevalue, op, v) (bevalue).set((bevalue).get() op (v))
+#define SWAPPED_OPL(bevalue, op, v) (bevalue).set((bevalue).get() op (v))
+
+#endif
 /* This compares a big endian 16 bit value to a native endian value,
  * using the specified operator.  The operator must be one of
  * ==, !=, <, >, <=, >=.

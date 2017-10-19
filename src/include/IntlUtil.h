@@ -55,7 +55,7 @@ namespace Executor {
 #define verTurkey	24
 #define verYugoslavia	25
 
-struct Intl0Rec : GuestStruct {
+struct Intl0Rec { GUEST_STRUCT;
     GUEST< Byte> decimalPt;
     GUEST< Byte> thousSep;
     GUEST< Byte> listSep;
@@ -88,7 +88,7 @@ typedef HIDDEN_Intl0Ptr *Intl0Hndl;
 
 typedef Byte STRING15[16];
 
-struct Intl1Rec : GuestStruct {
+struct Intl1Rec { GUEST_STRUCT;
     GUEST< STRING15[7]> days;
     GUEST< STRING15[12]> months;
     GUEST< Byte> suppressDay;

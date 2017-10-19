@@ -52,8 +52,8 @@ P1(PUBLIC pascal trap, INTEGER, Unique1ID, ResType, typ)  /* IMIV-16 */
     return(startid);
 }
 
-P4(PUBLIC pascal trap, void, GetResInfo, Handle, res, INTEGER *, id,
-					       ResType *, typ, StringPtr, name)
+P4(PUBLIC pascal trap, void, GetResInfo, Handle, res, GUEST<INTEGER> *, id,
+					       GUEST<ResType> *, typ, StringPtr, name)
 {
     resmaphand map;
     typref *tr;
@@ -68,7 +68,7 @@ P4(PUBLIC pascal trap, void, GetResInfo, Handle, res, INTEGER *, id,
     if (ResErr != noErr)
       {
 	if (id)
-	  *id = -1;
+	  *id = CWC(-1);
 	if (typ)
 	  *typ = (ResType) 0;
 	if (name)

@@ -123,7 +123,8 @@ Executor::te_char_to_point (const TEPtr tep, int16 sel, Point *p)
   SignedByte hText_flags;
   Handle hText;
   Ptr Text;
-  int16 *line_starts, line_start, line_end;
+  GUEST<int16> *line_starts;
+  int16 line_start, line_end;
   int16 just;
   /* offset from the left edge of the dest rect to the beginning of
      text for this line */
@@ -378,7 +379,8 @@ te_draw (TEPtr tep,
   /* all drawing is done per-line; before any drawing we erase the
      entire target rectangle */
   Point start_pt, end_pt;
-  int16 start_lineno, end_lineno, current_lineno, *line_starts;
+  int16 start_lineno, end_lineno, current_lineno;
+  GUEST<int16> *line_starts;
   int16 first_visible_lineno, last_visible_lineno;
   int16 start_line_start;
   Rect *dest_rect, r;
@@ -618,7 +620,8 @@ te_hilite (TEPtr tep,
   Ptr Text;
   
   Point start_pt, end_pt;
-  int16 start_lineno, end_lineno, lineno_i, *line_starts;
+  int16 start_lineno, end_lineno, lineno_i;
+  GUEST<int16> *line_starts;
   int16 top, left, bottom, right;
   Rect *dest_rect, r;
   int16 dest_rect_left, dest_rect_right;
@@ -700,7 +703,8 @@ te_find (TEPtr tep, int16 start, int16 end)
   int16 dest_rect_top, dest_rect_left;
   Rect *dest_rect;
   
-  int16 line_start, line_end, end_limit, lineno, *line_starts;
+  int16 line_start, line_end, end_limit, lineno;
+  GUEST<int16> *line_starts;
   int16 current_posn;
   int height, width, char_width = 0;
   int16 n_lines;

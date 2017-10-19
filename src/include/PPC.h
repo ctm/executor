@@ -18,40 +18,37 @@ typedef struct EntityName
 } EntityName;
 
 
-// ### Struct needs manual conversion to GUEST<...>
-//   union
-typedef struct PACKED LocationNameRec
+struct LocationNameRec
 {
-  PPCLocationKind locationKindSelector;
+  GUEST_STRUCT;
+  GUEST<PPCLocationKind> locationKindSelector;
   
   union
     {
-      EntityName npbEntity;
-      Str32 npbType;
+      GUEST<EntityName> npbEntity;
+      GUEST<Str32> npbType;
   } u;
-} LocationNameRec;
+};
 
 
 
-// ### Struct needs manual conversion to GUEST<...>
-//   union
-typedef struct PACKED PPCPortRec
+typedef struct PPCPortRec
 {
-  ScriptCode nameScript;
-  Str32 name;
+  GUEST<ScriptCode> nameScript;
+  GUEST<Str32> name;
   
-  PPCPortKinds portKindsSelector;
+  GUEST<PPCPortKinds> portKindsSelector;
   
   union
   {
-    Str32 portTypeStr;
-    struct PACKED
+    GUEST<Str32> portTypeStr;
+    struct
     {
-      OSType creator;
-      OSType type;
+      GUEST<OSType> creator;
+      GUEST<OSType> type;
     } port;
   } u;
-} PPCPortRec, *PPCPortPtr;
+} *PPCPortPtr;
 }
 
 #endif /* !_PPC_H_ */

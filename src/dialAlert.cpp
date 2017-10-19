@@ -33,7 +33,7 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
     ProcPtr, fp)
 {
   alth ah;
-  HIDDEN_Handle h;
+  Handle h;
   Handle ih;
   INTEGER n, hit, defbut;
   Handle alert_ctab_res_h;
@@ -66,7 +66,7 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
   LoadResource (ih);
   alert_ctab_res_h = ROMlib_getrestid (TICK ("actb"), Hx (ah, altiid));
   item_ctab_res_h = ROMlib_getrestid (TICK ("ictb"), Hx (ah, altiid));
-  h.p = ih;
+  h = ih;
   HandToHand (&h);
   
   THEGDEVICE_SAVE_EXCURSION
@@ -95,12 +95,12 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
 	 dp = ((DialogPeek)
 	       NewCDialog  (NULL, &adjusted_rect,
 			    (StringPtr) "", FALSE, dBoxProc,
-			    (WindowPtr) -1, FALSE, 0L, h.p));
+			    (WindowPtr) -1, FALSE, 0L, h));
        else
 	 dp = ((DialogPeek)
 	       NewDialog  (NULL, &adjusted_rect,
 			   (StringPtr) "", FALSE, dBoxProc,
-			   (WindowPtr) -1, FALSE, 0L, h.p));
+			   (WindowPtr) -1, FALSE, 0L, h));
        
        if (color_p)
 	 {

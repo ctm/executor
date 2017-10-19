@@ -473,8 +473,8 @@ void Executor::check_structs(void)
   check (comm_toolbox_dispatch_args_t, 12);
   check (initzonehiddenargs_t, 14);
 
-  /* rsys/dial.h */
-  check (icon_item_template_t, 18);
+  ///* rsys/dial.h */
+  //check (icon_item_template_t, 18);
 
   /* rsys/filedouble.h */
   check (Single_descriptor, 12);

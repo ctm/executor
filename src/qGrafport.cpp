@@ -55,7 +55,7 @@ P1(PUBLIC pascal trap, void, InitGraf, Ptr, gp)
        WMgrCPort = (CWindowPtr) RM (NewPtr (sizeof (CGrafPort)));
        OpenCPort (MR (WMgrCPort));
     
-       thePortX = (GrafPtr) WMgrCPort;
+       thePortX = guest_cast<GrafPtr>(WMgrCPort);
        ScrnBase = screenBitsX.baseAddr;
     
        StuffHex((Ptr) arrowX.data,

@@ -129,7 +129,7 @@ A4(PRIVATE, OSErr, PBCreateForD, ParmBlkPtr, pb, BOOLEAN, a,
     if (err == noErr)
 	ROMlib_rewinddir();
     if (err == noErr) {
-        LONGINT swapped_dir;
+        GUEST<LONGINT> swapped_dir;
 
 	TRANSFER_ASSIGN (newparam.fileParam, pb->fileParam);
 	memset(&newparam.fileParam.ioFlFndrInfo, 0,

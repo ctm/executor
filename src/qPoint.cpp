@@ -15,19 +15,19 @@ char ROMlib_rcsid_qPoint[] =
 
 using namespace Executor;
 
-P2(PUBLIC pascal trap, void, AddPt, Point, src, Point *, dst)
+P2(PUBLIC pascal trap, void, AddPt, Point, src, GUEST<Point> *, dst)
 {
     dst->h = CW(CW(dst->h) + (src.h));
     dst->v = CW(CW(dst->v) + (src.v));
 }
 
-P2(PUBLIC pascal trap, void, SubPt, Point, src, Point *, dst)
+P2(PUBLIC pascal trap, void, SubPt, Point, src, GUEST<Point> *, dst)
 {
     dst->h = CW(CW(dst->h) - (src.h));
     dst->v = CW(CW(dst->v) - (src.v));
 }
 
-P3(PUBLIC pascal trap, void, SetPt, Point *, pt, INTEGER, h, INTEGER, v)
+P3(PUBLIC pascal trap, void, SetPt, GUEST<Point> *, pt, INTEGER, h, INTEGER, v)
 {
     pt->h = CW (h);
     pt->v = CW (v);
@@ -38,7 +38,7 @@ P2(PUBLIC pascal trap, BOOLEAN, EqualPt, Point, p1, Point, p2)
     return(p1.h == p2.h && p1.v == p2.v);
 }
 
-P1(PUBLIC pascal trap, void, LocalToGlobal, Point *, pt)
+P1(PUBLIC pascal trap, void, LocalToGlobal, GUEST<Point> *, pt)
 {
     if (thePortX) {
 	pt->h = CW(CW(pt->h) - (CW (PORT_BOUNDS (thePort).left)));
@@ -46,7 +46,7 @@ P1(PUBLIC pascal trap, void, LocalToGlobal, Point *, pt)
     }
 }
 
-P1(PUBLIC pascal trap, void, GlobalToLocal, Point *, pt)
+P1(PUBLIC pascal trap, void, GlobalToLocal, GUEST<Point> *, pt)
 {
     if (thePortX) {
 	pt->h = CW(CW(pt->h) + (Cx (PORT_BOUNDS (thePort).left)));

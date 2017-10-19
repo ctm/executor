@@ -9,7 +9,7 @@
  */
 
 namespace Executor {
-struct sersetbuf_t : GuestStruct {
+struct sersetbuf_t { GUEST_STRUCT;
     GUEST< Ptr> p;
     GUEST< INTEGER> i;
 };

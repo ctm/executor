@@ -55,9 +55,9 @@ A4(PUBLIC, OSErr, ROMlib_dispatch, ParmBlkPtr, p,		/* INTERNAL */
 		HLock((Handle) h);
 		p->ioParam.ioTrap = CW(trapn);
 		if (async)
-			p->ioParam.ioTrap |= CWC(asyncTrpBit);
+			p->ioParam.ioTrap.raw_or(CWC(asyncTrpBit));
 		else
-			p->ioParam.ioTrap |= CWC(noQueueBit);
+			p->ioParam.ioTrap.raw_or(CWC(noQueueBit));
 		if (!(HxX(h, dCtlFlags) & CWC(RAMBASEDBIT))) {
 			switch (routine) {
 				case Open:
@@ -144,9 +144,9 @@ A4(PUBLIC, OSErr, ROMlib_dispatch, ParmBlkPtr, p,		/* INTERNAL */
 			} else
 				retval = fsDSIntErr;
 			if (routine == Open)
-				HxX(h, dCtlFlags) |= CWC(DRIVEROPENBIT);
+				HxX(h, dCtlFlags).raw_or(CWC(DRIVEROPENBIT));
 			else if (routine == Close) {
-				HxX(h, dCtlFlags) &= ~CWC(DRIVEROPENBIT);
+				HxX(h, dCtlFlags).raw_and(~CWC(DRIVEROPENBIT));
 				HUnlock((Handle) h);
 				HUnlock((Handle) ramdh);
 				MBarEnable = 0;
@@ -288,7 +288,7 @@ A2(PUBLIC, OSErr, ROMlib_driveropen, ParmBlkPtr, pbp,		/* INTERNAL */
   umacdriverptr up;
   DCtlHandle h;
   ramdriverhand ramdh;
-  ResType typ;
+  GUEST<ResType> typ;
   BOOLEAN alreadyopen;
 
   ZONE_SAVE_EXCURSION
@@ -299,9 +299,10 @@ A2(PUBLIC, OSErr, ROMlib_driveropen, ParmBlkPtr, pbp,		/* INTERNAL */
        if ((ramdh =
 	    (ramdriverhand) GetNamedResource(TICK("DRVR"),
 					     MR(pbp->ioParam.ioNamePtr)))) {
-	 LoadResource((Handle) ramdh);
-	 GetResInfo((Handle) ramdh, &devicen, &typ, (StringPtr) 0);
-	 devicen = CW(devicen);
+         LoadResource((Handle) ramdh);
+         GUEST<INTEGER> resid;
+	 GetResInfo((Handle) ramdh, &resid, &typ, (StringPtr) 0);
+	 devicen = CW(resid);
 	 h = MR(MR(UTableBase)[devicen].p);
 	 alreadyopen = h && (HxX(h, dCtlFlags) & CWC(DRIVEROPENBIT));
 	 if (!h && !(h = MR(MR(UTableBase)[devicen].p =

@@ -11,20 +11,20 @@
 #include "FileMgr.h"
 
 namespace Executor {
-// ### Struct needs manual conversion to GUEST<...>
-//   COMMONFSQUEUEDEFS;
-typedef struct PACKED
+struct VDParamBlock
 {
+  GUEST_STRUCT;
   COMMONFSQUEUEDEFS;
-  INTEGER ioRefNum;
-  INTEGER csCode;
-  PACKED_MEMBER(Ptr, csParam);
-} VDParamBlock;
+  GUEST<INTEGER> ioRefNum;
+  GUEST<INTEGER> csCode;
+  GUEST<Ptr> csParam;
+};
 
 typedef VDParamBlock *VDParamBlockPtr;
 
 
-struct VDEntryRecord : GuestStruct {
+struct VDEntryRecord {
+    GUEST_STRUCT;
     GUEST< Ptr> csTable;
     GUEST< INTEGER> csStart;
     GUEST< INTEGER> csCount;
@@ -33,14 +33,14 @@ struct VDEntryRecord : GuestStruct {
 typedef VDEntryRecord *VDEntRecPtr;
 
 
-struct VDGammaRecord : GuestStruct {
+struct VDGammaRecord { GUEST_STRUCT;
     GUEST< Ptr> csGTable;
 };
 
 typedef VDGammaRecord *VDGamRecPtr;
 
 
-struct VDPgInfo : GuestStruct {
+struct VDPgInfo { GUEST_STRUCT;
     GUEST< INTEGER> csMode;
     GUEST< LONGINT> csData;
     GUEST< INTEGER> csPage;
@@ -50,14 +50,14 @@ struct VDPgInfo : GuestStruct {
 typedef VDPgInfo *VDPgInfoPtr;
 
 
-struct VDFlagRec : GuestStruct {
+struct VDFlagRec { GUEST_STRUCT;
     GUEST< SignedByte> flag;
 };
 
 typedef VDFlagRec *VDFlagPtr;
 
 
-struct VDDefModeRec : GuestStruct {
+struct VDDefModeRec { GUEST_STRUCT;
     GUEST< SignedByte> spID;
 };
 

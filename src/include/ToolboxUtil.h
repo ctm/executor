@@ -19,7 +19,7 @@ namespace Executor {
 #define plusCursor	3
 #define watchCursor	4
 
-struct Int64Bit : GuestStruct {
+struct Int64Bit { GUEST_STRUCT;
     GUEST< LONGINT> hiLong;
     GUEST< LONGINT> loLong;
 };

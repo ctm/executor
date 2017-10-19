@@ -10,7 +10,7 @@
 
 #include "rsys/pstuff.h"
 namespace Executor {
-struct itmstr : GuestStruct {
+struct itmstr { GUEST_STRUCT;
     GUEST< Handle> itmhand;
     GUEST< Rect> itmr;
     GUEST< unsigned char> itmtype;
@@ -52,7 +52,7 @@ typedef HIDDEN_itmp *itmh;
 extern void dialog_compute_rect (Rect *dialog_rect, Rect *dst_rect,
 				 int position);
 
-struct altstr : GuestStruct {
+struct altstr { GUEST_STRUCT;
     GUEST< Rect> altr;
     GUEST< INTEGER> altiid;
     GUEST< INTEGER> altstag;
@@ -62,7 +62,7 @@ typedef altstr *altp;
 MAKE_HIDDEN(altp);
 typedef HIDDEN_altp *alth;
 
-struct dlogstr : GuestStruct {
+struct dlogstr { GUEST_STRUCT;
     GUEST< Rect> dlgr;
     GUEST< INTEGER> dlgprocid;
     GUEST< char> dlgvis;
@@ -77,7 +77,7 @@ typedef dlogstr *dlogp;
 MAKE_HIDDEN(dlogp);
 typedef HIDDEN_dlogp *dlogh;
 
-typedef struct item_style_info : GuestStruct {
+typedef struct item_style_info { GUEST_STRUCT;
     GUEST< int16> font;
     GUEST< Style> face;
     GUEST< unsigned char> filler;
@@ -87,7 +87,7 @@ typedef struct item_style_info : GuestStruct {
     GUEST< int16> mode;
 } item_style_info_t;
 
-typedef struct item_color_info : GuestStruct {
+typedef struct item_color_info { GUEST_STRUCT;
     GUEST< int16> data;
     GUEST< int16> offset;
 } item_color_info_t;

@@ -20,7 +20,7 @@ P3(PUBLIC pascal trap, INTEGER, LAddColumn, INTEGER, count,	/* IMIV-271 */
 					      INTEGER, coln, ListHandle, list)
 {
     Rect todraw;
-    Cell c;
+    Point c;
     INTEGER ncols, nrows, noffsets, offset;
     Size nbefore, nafter;
     Ptr ip, op;
@@ -89,7 +89,7 @@ P3(PUBLIC pascal trap, INTEGER, LAddRow, INTEGER, count,	/* IMIV-271 */
     Cell c;
     INTEGER ncols, nrows, noffsets, offset;
     Size nbefore, nafter;
-    INTEGER *ip, *op;
+    GUEST<INTEGER> *ip, *op;
     Point p;
 
     ncols = Hx(list, dataBounds.right) - Hx(list, dataBounds.left);

@@ -429,10 +429,10 @@ ROMlib_new_window_common (WindowPeek w,
   AuxWinHead = RM (t_aux_w);
 
   {
-    HIDDEN_Handle t;
+    Handle t;
 
     PtrToHand ((Ptr) title, &t, (LONGINT) title[0] + 1);
-    WINDOW_TITLE_X (w) = (StringHandle) RM (t.p);
+    WINDOW_TITLE_X (w) = RM ((StringHandle) t);
   }
 
   if (cwindow_p)

@@ -35,10 +35,10 @@ using namespace Executor;
 #define _PtrToHand(ptr, hand, len)			\
   ((void)						\
    ({							\
-     HIDDEN_Handle __temp_handle;			\
+     Handle __temp_handle;			\
 							\
      PtrToHand ((Ptr) (ptr), &__temp_handle, len);	\
-     *(hand) = RM (__temp_handle.p);			\
+     *(hand) = RM (__temp_handle);			\
    }))
 
 void

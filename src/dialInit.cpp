@@ -42,15 +42,16 @@ P1 (PUBLIC pascal trap, void, InitDialogs, ProcPtr, rp)	/* IMI-411 */
        DlgFont = CWC (systemFont);
        ResumeProc = RM (rp);
        ErrorSound ((ProcPtr) P_ROMlib_mysound);
-       PtrToHand (nothing, &DAStrings_H[0], (LONGINT) 1);
-       DAStrings_H[0].p = RM (DAStrings_H[0].p);
-       PtrToHand (nothing, &DAStrings_H[1], (LONGINT) 1);
-       DAStrings_H[1].p = RM (DAStrings_H[1].p);
-       PtrToHand (nothing, &DAStrings_H[2], (LONGINT) 1);
-       DAStrings_H[2].p = RM (DAStrings_H[2].p);
-       PtrToHand (nothing, &DAStrings_H[3], (LONGINT) 1);
-       DAStrings_H[3].p = RM (DAStrings_H[3].p);
-     });
+       Handle tmp;
+       PtrToHand (nothing, &tmp, (LONGINT) 1);
+       DAStrings[0] = RM (tmp);
+       PtrToHand (nothing, &tmp, (LONGINT) 1);
+       DAStrings[1] = RM (tmp);
+       PtrToHand (nothing, &tmp, (LONGINT) 1);
+       DAStrings[2] = RM (tmp);
+       PtrToHand (nothing, &tmp, (LONGINT) 1);
+       DAStrings[3] = RM (tmp);
+    });
 }
 
 A1(PUBLIC, void, SetDAFont, INTEGER, i)	/* IMI-412 */

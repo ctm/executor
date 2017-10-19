@@ -721,10 +721,10 @@ retval;					\
 	    Point local_pt;
 	    boolean_t control_p;
 	    ControlHandle c;
-	    
-	    local_pt = evt.where;
-	    GlobalToLocal (&local_pt);
-	    local_pt = SWAP_POINT (local_pt);
+            
+            GUEST<Point> tmpPt = evt.where;
+	    GlobalToLocal (&tmpPt);
+	    local_pt = tmpPt.get();
 	    
 	    control_p = _FindControl (local_pt, about_box, &c);
 	    if (!control_p)

@@ -11,7 +11,7 @@
 namespace Executor {
     /* value of -1 means remove queue element
                            automatically */
-typedef struct NMRec : GuestStruct {
+typedef struct NMRec { GUEST_STRUCT;
     GUEST< QElemPtr> qLink;
     GUEST< INTEGER> qType;
     GUEST< INTEGER> nmFlags;
