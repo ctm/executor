@@ -1,13 +1,29 @@
-Mac OS X 10.6.5 notes:
-Xcode: 3.2.3 64-bit Xcode IDE: 1688.0, Xcode Core: 1691.0, ToolSupport: 1591.0
+Current Status
+==============
 
-The configure line I used was:
+Major hacking is happening here.
+If you want to *use* Executor, go to the "original" version at github.com/ctm/executor.
 
-    CC='gcc -m32 -fno-stack-check -fno-stack-protector' OBJC='gcc -m32 -fno-stack-check -fno-stack-protector' ../../src/configure
+I am trying here to modernize the code base (based on MaddTheSane's C++ port)
+by inserting type-safe templates for all Big-Endian values.
 
-I'm using the version of syn68k that I built from my ancient_hackage
-branch.
+This should have three benefits:
 
+1. More type safety, which means fewer bugs once the bugs I add have been fixed again
+2. 64 bit support
+3. Easier-to-read code, because we can hopyfully automate most byte swapping.
+
+
+Compilation Notes
+=================
+
+Current configure line:
+
+```
+CXX='g++ -m32' CC='gcc -m32' ../src/configure --with-front-end=x --with-sound=dummy --host=i686-unknown-linux
+```
+
+Original Readme
 ========================================================================
 
 Executor is a Macintosh emulator that is able to run many ancient Mac
