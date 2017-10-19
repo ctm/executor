@@ -160,8 +160,9 @@ struct GuestWrapperBase
 template<typename TT>
 struct GuestWrapperBase<TT*>
 {
+private:
     HiddenValue<uint32_t, TT*> p;
-    
+public:
     using WrappedType = TT*;
     using RawGuestType = uint32_t;
     
@@ -191,6 +192,8 @@ struct GuestWrapperBase<TT*>
     {
         p.raw(x);
     }
+
+    
 };
 
 
@@ -208,13 +211,26 @@ struct GuestWrapper : GuestWrapperBase<TT>
     GuestWrapper(TT x) { this->raw((typename GuestWrapper<TT>::RawGuestType)x); }
     GuestWrapper<TT>& operator=(TT y) { this->raw((typename GuestWrapper<TT>::RawGuestType)y); return *this; }
     operator TT() const { return (TT)this->raw(); }
+
+    explicit operator bool()
+    {
+        return this->raw() != 0;
+    }
 };
 
-#define GUEST_STRUCT using is_guest_struct = GuestStruct
-struct GuestStruct
+template<typename TT>
+bool operator==(GuestWrapper<TT> a, GuestWrapper<TT> b)
 {
-    GUEST_STRUCT;
-};
+        return a.raw() == b.raw();
+}
+
+template<typename TT>
+bool operator!=(GuestWrapper<TT> a, GuestWrapper<TT> b)
+{
+        return a.raw() != b.raw();
+}
+
+#define GUEST_STRUCT struct is_guest_struct {}
 
 struct Point {
     INTEGER v;
@@ -340,7 +356,10 @@ GUEST<TO*> guest_ptr_cast(GUEST<FROM*> p)
 template<typename TO, typename FROM>
 GUEST<TO> guest_cast(GuestWrapper<FROM> p)
 {
-    return GUEST<TO>((TO)(FROM)p);
+    //return GUEST<TO>((TO)(FROM)p);
+    GUEST<TO> result;
+    result.raw( p.raw() );
+    return result;
 }
 
 //#define MAKE_HIDDEN(typ) struct  HIDDEN_ ## typ { GUEST_STRUCT; using HiddenType = typ; typ p; }
