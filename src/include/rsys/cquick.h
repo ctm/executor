@@ -324,12 +324,12 @@ enum pixpat_pattern_types
 #define PIXPAT_XVALID_X(pixpat)		(HxX (pixpat, patXValid))
 #define PIXPAT_XMAP_X(pixpat)		(HxX (pixpat, patXMap))
 #else
-#define PIXPAT_TYPE_X(pixpat)		(PPR ((pixpat)->p)->patType)
-#define PIXPAT_MAP_X(pixpat)		(PPR ((pixpat)->p)->patMap)
-#define PIXPAT_DATA_X(pixpat)		(PPR ((pixpat)->p)->patData)
-#define PIXPAT_XDATA_X(pixpat)		(PPR ((pixpat)->p)->patXData)
-#define PIXPAT_XVALID_X(pixpat)		(PPR ((pixpat)->p)->patXValid)
-#define PIXPAT_XMAP_X(pixpat)		(PPR ((pixpat)->p)->patXMap)
+#define PIXPAT_TYPE_X(pixpat)		(PPR(*pixpat)->patType)
+#define PIXPAT_MAP_X(pixpat)		(PPR(*pixpat)->patMap)
+#define PIXPAT_DATA_X(pixpat)		(PPR(*pixpat)->patData)
+#define PIXPAT_XDATA_X(pixpat)		(PPR(*pixpat)->patXData)
+#define PIXPAT_XVALID_X(pixpat)		(PPR(*pixpat)->patXValid)
+#define PIXPAT_XMAP_X(pixpat)		(PPR(*pixpat)->patXMap)
 #endif
 /* native byte order */
 #define PIXPAT_TYPE(pixpat)		(CW (PIXPAT_TYPE_X (pixpat)))
