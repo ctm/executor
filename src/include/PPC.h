@@ -34,6 +34,7 @@ struct LocationNameRec
 
 typedef struct PPCPortRec
 {
+  GUEST_STRUCT;
   GUEST<ScriptCode> nameScript;
   GUEST<Str32> name;
   
