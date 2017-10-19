@@ -1183,7 +1183,7 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
 	    else if (pixmap->packType == CWC (2))
 	      memcpy (STARH (h), nextbytep, pic_data_size);
 	    
-	    pixmap->baseAddr = h->p;
+	    pixmap->baseAddr = *h;
 	    *freep = TRUE;
 	  }
 	else
@@ -1209,7 +1209,7 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
 	       });
 	  }
 	HLock(h);
-	pixmap->baseAddr = (*h).p;	/* can't use STARH 'cause we don't */
+	pixmap->baseAddr = *h;	/* can't use STARH 'cause we don't */
 					/* want to byte swap the result */
 	temp_scanline = (uint8*)alloca (rowb);
 	for (scanline = (uint8 *) BITMAP_BASEADDR (pixmap),
@@ -1232,8 +1232,8 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
 		inp = nextbytep;
 		temph = NULL;
 	      }
-	    dp.p = (Ptr) RM (temp_scanline);
-	    temp_pp.p = (Ptr) RM (inp);
+	    dp = (Ptr) RM (temp_scanline);
+	    temp_pp = (Ptr) RM (inp);
 
 	    if (pixmap->pixelSize == CWC (16)
 		&& pixmap->packType == CWC (3))
@@ -1241,7 +1241,7 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
 	    else
 	      UnpackBits (&temp_pp, &dp,
 			  insert_pad_byte_p ? comp_bytes * 3 : rowb);
-	    inp = MR ((unsigned char *) temp_pp.p);
+	    inp = (unsigned char *) MR ( temp_pp);
 	    
 	    if (pixmap->pixelSize == CWC (32))
 	      {
@@ -1324,7 +1324,7 @@ A2(PRIVATE, void, eatbitdata, BitMap *, bp, BOOLEAN, packed)
 	      }
 	    HLock(h);
 	    CToPascalCall((void*)procp, CTOP_StdGetPic, STARH(h), datasize);
-	    bp->baseAddr = (*h).p;
+	    bp->baseAddr = *h;
 	} else
 	    bp->baseAddr = RM((Ptr) nextbytep);
 	nextbytep += datasize;
@@ -1340,7 +1340,7 @@ A2(PRIVATE, void, eatbitdata, BitMap *, bp, BOOLEAN, packed)
 	    TheZone = savezone;
 	  }
 	HLock(h);
-	bp->baseAddr = (*h).p;	/* can't use STARH */
+	bp->baseAddr = *h;	/* can't use STARH */
 	for (dp = MR(bp->baseAddr), ep = dp + datasize; dp < ep; ) {
 	    length = rowb > 250 ? eatINTEGER() : eatByte();
 	    if (procp) {
@@ -1561,7 +1561,7 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
 		 && CW (destrp->left) == CW (destrp->right)))
       return;
 #else
-    if (!pic || !pic->p || EmptyRect(destrp) || EmptyRect(&HxX(pic, picFrame)))
+    if (!pic || !*pic || EmptyRect(destrp) || EmptyRect(&HxX(pic, picFrame)))
       return;
 #endif
 

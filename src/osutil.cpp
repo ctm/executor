@@ -794,10 +794,10 @@ A2(PUBLIC trap, void, Enqueue, QElemPtr, e, QHdrPtr, h)
     virtual_int_state_t block;
 
     block = block_virtual_ints ();
-    for (qpp = (HIDDEN_QElemPtr *) &h->qHead; (*qpp).p && MR((*qpp).p) != e;
-					qpp = (HIDDEN_QElemPtr *) MR((*qpp).p))
+    for (qpp = (HIDDEN_QElemPtr *) &h->qHead; *qpp && MR(*qpp) != e;
+					qpp = (HIDDEN_QElemPtr *) MR(*qpp))
 	;
-    if (!(*qpp).p) {
+    if (!*qpp) {
 	e->evQElem.qLink = 0;
 	if (h->qTail)
 	    MR(h->qTail)->evQElem.qLink = RM(e);
@@ -816,11 +816,11 @@ A2(PUBLIC trap, OSErrRET, Dequeue, QElemPtr, e, QHdrPtr, h)
 	
     retval = qErr;
     block = block_virtual_ints ();
-    for (qpp = (HIDDEN_QElemPtr *) &h->qHead; (*qpp).p && MR((*qpp).p) != e;
-					qpp = (HIDDEN_QElemPtr *) MR((*qpp).p))
+    for (qpp = (HIDDEN_QElemPtr *) &h->qHead; *qpp && MR(*qpp) != e;
+					qpp = (HIDDEN_QElemPtr *) MR(*qpp))
 	;
-    if ((*qpp).p) {
-	(*qpp).p = e->evQElem.qLink;
+    if (*qpp) {
+	*qpp = e->evQElem.qLink;
 	if (MR(h->qTail) == e)
 	    h->qTail = qpp == (HIDDEN_QElemPtr *) &h->qHead ? (QElemPtr) 0 : RM((QElemPtr) qpp);
 	retval = noErr;

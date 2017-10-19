@@ -342,7 +342,7 @@ Executor::ROMlib_mgetres2 (resmaphand map, resref *rr)
   Handle retval;
 
   retval = MR (rr->rhand);
-  if (retval && retval->p)
+  if (retval && *retval)
     ROMlib_setreserr (noErr);
   else
     {
@@ -384,7 +384,7 @@ Executor::ROMlib_mgetres2 (resmaphand map, resref *rr)
 	      /* we can only set the state bits if the block pointer
 		 is non-nil */
 
-	      if (retval && retval->p)
+	      if (retval && *retval)
 		HSetState (retval,
 			   (RSRCBIT
 			    | ((rr->ratr & resLocked)    ? LOCKBIT  : 0)
@@ -490,7 +490,7 @@ P1(PUBLIC pascal trap, void, CloseResFile, INTEGER, rn)
             if (h)
 	      {
 		h = MR (h);
-		if ((*h).p)
+		if (*h)
 		  HClrRBit (h);
                 DisposHandle (h);
 	      }

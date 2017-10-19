@@ -1935,8 +1935,8 @@ int main(int argc, char** argv)
 
   TheZone = SysZone;
   UTableBase =
-  (DCtlHandlePtr) (long) RM (NewPtr (sizeof (UTableBase[0].p) * NDEVICES));
-  memset (MR (UTableBase), 0, sizeof (UTableBase[0].p) * NDEVICES);
+  (DCtlHandlePtr) (long) RM (NewPtr (sizeof (UTableBase[0]) * NDEVICES));
+  memset (MR (UTableBase), 0, sizeof (UTableBase[0]) * NDEVICES);
   UnitNtryCnt = CW (NDEVICES);
   TheZone = ApplZone;
 

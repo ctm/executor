@@ -121,7 +121,7 @@ P5(PUBLIC pascal trap, void, GetDItem, DialogPtr, dp,	/* IMI-421 */
 	   *(INTEGER *) (US_TO_SYN68K(itype)) = CW((INTEGER) ip->itmtype);
 	  }
 	if (item) /* We didn't test what happens when item is 0 on Mac */
-	  (*item).p = ip->itmhand;
+	  *item = ip->itmhand;
 	if (r) /* test on Mac shows r will not be written if 0 */
 	  *r = ip->itmr;
       }

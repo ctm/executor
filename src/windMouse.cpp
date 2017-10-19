@@ -37,14 +37,14 @@ P2(PUBLIC pascal trap, INTEGER, FindWindow, Point, p, HIDDEN_WindowPtr *, wpp)
 
     pointaslong = ((LONGINT)p.v << 16)|(unsigned short)p.h;
 
-    (*wpp).p = 0;
+    *wpp = 0;
     if (MBDFCALL(mbHit, 0, pointaslong) != -1)
       return inMenuBar;
     for (wp = MR (WindowList); wp ; wp = WINDOW_NEXT_WINDOW (wp))
       {
 	if (WINDOW_VISIBLE_X (wp) && PtInRgn (p, WINDOW_STRUCT_REGION (wp)))
 	  {
-	    wpp->p = RM ((WindowPtr) wp);
+	    *wpp = RM ((WindowPtr) wp);
 	    if (WINDOW_KIND (wp) < 0)
 	      {
 		retval = inSysWindow;

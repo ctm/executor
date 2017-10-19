@@ -143,7 +143,7 @@ raw_bits_for_color_pattern (PixPatPtr pixpat, PixMap *target,
        LOCK_HANDLE_EXCURSION_1
 	 (data,
 	  {
-	    src->baseAddr = data->p;
+	    src->baseAddr = *data;
 	    convert_pixmap (src, &dst, bounds, NULL);
 	  });
      });

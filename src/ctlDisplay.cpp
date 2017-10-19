@@ -126,7 +126,7 @@ P1(PUBLIC pascal trap, void, ShowControl, ControlHandle, c)	/* IMI-322 */
 P2 (PUBLIC pascal trap, void, HiliteControl, ControlHandle, c, 	/* IMI-322 */
     INTEGER, state)
 {
-  if (c && c->p)
+  if (c && *c)
     {
       if (CTL_VIS (c))
 	{

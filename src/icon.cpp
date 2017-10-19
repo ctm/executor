@@ -79,7 +79,7 @@ P2 (PUBLIC pascal trap, void, PlotIcon,
   if (icon == NULL)
     return;
   
-  if (!(*icon).p)
+  if (!*icon)
     LoadResource (icon);
   
   LOCK_HANDLE_EXCURSION_1
@@ -87,7 +87,7 @@ P2 (PUBLIC pascal trap, void, PlotIcon,
      {
        BitMap bm;
        
-       bm.baseAddr = (Ptr) icon->p;
+       bm.baseAddr = (Ptr) *icon;
        bm.rowBytes = CWC(4);
        bm.bounds.left = bm.bounds.top = 0;
        if (GetHandleSize (icon) == 2 * 16)
@@ -177,7 +177,7 @@ P2 (PUBLIC pascal trap, void, PlotCIcon,
 		PixMap *icon_pm;
 		
 		icon_pm = &CICON_PMAP (icon);
-		BITMAP_BASEADDR_X (icon_pm) = (Ptr) icon_data->p;
+		BITMAP_BASEADDR_X (icon_pm) = (Ptr) *icon_data;
 		
 		CopyMask ((BitMap *) icon_pm,
 			  mask_bm,
@@ -566,7 +566,7 @@ P4 (PUBLIC pascal trap, OSErr, PlotIconSuite,
        icon_size = (little_icon_p ? 16 : 32);
        icon_rect.bottom = icon_rect.right = CW (icon_size);
        
-       icon_pm.baseAddr = icon_data->p;
+       icon_pm.baseAddr = *icon_data;
        icon_pm.rowBytes = CW (  (icon_size * icon_bpp / 8)
 			      | PIXMAP_DEFAULT_ROW_BYTES);
        icon_pm.bounds = icon_rect;

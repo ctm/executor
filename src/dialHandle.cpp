@@ -131,7 +131,7 @@ ROMlib_CALLUSERITEM (DialogPtr dp,
     int retval;					\
     						\
     retval = FindWindow (pt, &__wp);		\
-    *(wp) = MR (__wp.p);			\
+    *(wp) = MR (__wp);			\
 						\
     retval;					\
   })
@@ -317,7 +317,7 @@ P1(PUBLIC pascal trap, BOOLEAN, IsDialogEvent,		/* IMI-416 */
 	p.h = CW(evt->where.h);
 	p.v = CW(evt->where.v);
 /*-->*/ return evt->what != CWC(mouseDown) || (FindWindow(p,
-				&wp) == inContent && MR(wp.p) == (WindowPtr) dp);
+				&wp) == inContent && MR(wp) == (WindowPtr) dp);
     }
     return FALSE;
 }
@@ -671,7 +671,7 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
 	}
       break;
     }
-  dpp->p = (DialogPtr) RM (dp);
+  *dpp = (DialogPtr) RM (dp);
   return retval;
 }
 

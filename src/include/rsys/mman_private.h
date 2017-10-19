@@ -83,7 +83,7 @@ extern unsigned long ROMlib_memtop;
 
 /* handle to block pointer */
 #define HANDLE_TO_BLOCK(handle)					\
-  (VALID_ADDRESS(handle) && VALID_ADDRESS(MR((handle)->p))	\
+  (VALID_ADDRESS(handle) && VALID_ADDRESS(MR(*handle))	\
    ? (block_header_t *) ((char *) STARH (handle)		\
 		         - HDRSIZE)				\
    : NULL)
@@ -116,7 +116,7 @@ extern unsigned long ROMlib_memtop;
   ((block)->master_ptr_flags = (state))
 
 /* set the master pointer of a handle to a given value */
-#define SETMASTER(handle, ptr)	((handle)->p = (Ptr)RM (ptr))
+#define SETMASTER(handle, ptr)	(*handle = (Ptr)RM (ptr))
 
 #define BLOCK_NEXT(block)			\
   ((block_header_t *) ((char *) (block) + PSIZE (block)))

@@ -113,7 +113,7 @@ A2(PUBLIC, LONGINT, ROMlib_SizeResource, Handle, res, BOOLEAN, usehandle)
     if (ResErr != noErr)
 /*-->*/ return -1;
 
-    if (usehandle && (*res).p)	/* STARH is overkill */
+    if (usehandle && *res)	/* STARH is overkill */
 	retval = GetHandleSize(res);
     else {
 	loc = Hx(map, rh.rdatoff) + B3TOLONG(rr->doff);

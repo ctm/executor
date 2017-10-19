@@ -394,7 +394,7 @@ typedef Byte *BytePtr;
 MAKE_HIDDEN(BytePtr);
 
 #define thePort		(STARH(STARH((HIDDEN_HIDDEN_GrafPtr_Ptr *) (long) SYN68K_TO_US(a5))))
-#define thePortX	((*STARH((HIDDEN_HIDDEN_GrafPtr_Ptr *) (long) SYN68K_TO_US(a5))).p)
+#define thePortX	((*STARH((HIDDEN_HIDDEN_GrafPtr_Ptr *) (long) SYN68K_TO_US(a5))))
 #define white		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -8)
 #define black		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -16)
 #define gray		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -24)

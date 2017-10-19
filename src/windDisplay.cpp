@@ -280,12 +280,12 @@ P2(PUBLIC pascal trap, void, SendBehind, WindowPtr, w, WindowPtr, behind)
       || WINDOW_NEXT_WINDOW (w) == (WindowPeek) w)
 /*-->*/ return;
   for (wpp = (HIDDEN_WindowPeek *) &WindowList;
-       (*wpp).p && STARH(wpp) != (WindowPeek) w;
+       *wpp && STARH(wpp) != (WindowPeek) w;
        wpp = (HIDDEN_WindowPeek *) &WINDOW_NEXT_WINDOW_X (STARH (wpp)))
     ;
-  if (! (*wpp).p)
+  if (! *wpp)
 /*-->*/	return;
-  (*wpp).p = WINDOW_NEXT_WINDOW_X (w);
+  *wpp = WINDOW_NEXT_WINDOW_X (w);
   oldbehind = STARH (wpp);
   if (behind)
     {
@@ -296,7 +296,7 @@ P2(PUBLIC pascal trap, void, SendBehind, WindowPtr, w, WindowPtr, behind)
     {
 #define SEND_BEHIND
 #if defined (SEND_BEHIND)
-	if (!(*wpp).p) /* what if 'w' is the only window? */
+	if (!*wpp) /* what if 'w' is the only window? */
 	  wpp = (HIDDEN_WindowPeek *) &WindowList;
     	for (; WINDOW_NEXT_WINDOW_X (STARH (wpp));
 	     wpp = (HIDDEN_WindowPeek *) &WINDOW_NEXT_WINDOW_X (STARH (wpp)))

@@ -354,7 +354,7 @@ Executor::OSErr MacBridge::UseDictionary (Executor::SpeechChannel chan, Executor
 #if 0
   @autoreleasepool {
     ::Size ExecSize = BigEndianValue(Executor::GetHandleSize(dictionary));
-    NSData *aData = [NSData dataWithBytes:dictionary->p length:ExecSize];
+    NSData *aData = [NSData dataWithBytes:*dictionary length:ExecSize];
     NSSpeechSynthesizer *aSynth = synthesizerMap[chan];
   }
 #endif
@@ -581,7 +581,7 @@ Executor::OSErr MacBridge::TextToPhonemes (Executor::SpeechChannel chan, const v
     if (lengthInMacRoman > ExecSize) {
       Executor::SetHandleSize(phonemeBuf, BigEndianValue(lengthInMacRoman));
     }
-    strcpy((char*)phonemeBuf->p, [phonemes cStringUsingEncoding:NSMacOSRomanStringEncoding]);
+    strcpy((char*)*phonemeBuf, [phonemes cStringUsingEncoding:NSMacOSRomanStringEncoding]);
     *phonemeBytes = BigEndianValue(lengthInMacRoman);
   }
   

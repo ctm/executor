@@ -328,7 +328,7 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
     ROMlib_initport(&alertport);
     SetPort(&alertport);
     InitCursor();
-    rp.p = RM(&viscliprgn);
+    rp = RM(&viscliprgn);
     alertport.visRgn = alertport.clipRgn = RM(&rp);
     viscliprgn.rgnSize = CWC(10);
 #if 0 && !defined(MSDOS)

@@ -1524,7 +1524,7 @@ void Executor::NeXTPrBits(comBitMap *srcbmp, comRect *srcrp, comRect *dstrp,
 	  HIDDEN_PixMapPtr pxp;
 	  boolean_t has_warned_p;
 
-	  pxp.p = (Executor::PixMapPtr) RM (srcpmp);
+	  pxp = (Executor::PixMapPtr) RM (srcpmp);
 	  DPSPrintf (DPSGetCurrentContext (),
 		     "[/Indexed /DeviceRGB %d <\n", (1 << pixelsize) - 1);
 

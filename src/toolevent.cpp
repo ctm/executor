@@ -142,7 +142,7 @@ A0(PRIVATE, void, ROMlib_togglealarm)
 	    /* save the bits underneath */
 	    /* draw sicon -16385 up there */
 	    if ((alarmh = ROMlib_getrestid (TICK ("SICN"), ALARMSICN)))
-	      src_alarm_bitmap.baseAddr = (*alarmh).p;
+	      src_alarm_bitmap.baseAddr = *alarmh;
 	    else
 	      /* once again, we need to move the (Ptr) cast
 		 inside the CL () because it confuses gcc */
@@ -272,7 +272,7 @@ void modstate(DialogPtr dp, INTEGER tomod, modstate_t mod)
     Rect r;
 
     GetDItem(dp, tomod, &type, (HIDDEN_Handle *) &ch, &r);
-    ch.p = MR(ch.p);
+    ch = MR(ch);
     if (type & CWC(ctrlItem)) {
 	switch (mod) {
 	case SETSTATE:
@@ -282,7 +282,7 @@ void modstate(DialogPtr dp, INTEGER tomod, modstate_t mod)
 	    newvalue = 0;
 	    break;
 	case FLIPSTATE:
-	    newvalue = GetCtlValue(ch.p) ? 0 : 1;
+	    newvalue = GetCtlValue(ch) ? 0 : 1;
 	    break;
 #if !defined(LETGCCWAIL)
 	default:
@@ -291,10 +291,10 @@ void modstate(DialogPtr dp, INTEGER tomod, modstate_t mod)
 #endif /* !defined(LETGCCWAIL) */
 	}
 	if (type & CWC(itemDisable)) {
-	    SetCtlValue(ch.p, 0);
-	    HiliteControl(ch.p, 255);
+	    SetCtlValue(ch, 0);
+	    HiliteControl(ch, 255);
 	} else
-	    SetCtlValue(ch.p, newvalue);
+	    SetCtlValue(ch, newvalue);
     }
 }
 
@@ -305,8 +305,8 @@ INTEGER getvalue(DialogPtr dp, INTEGER toget)
     Rect r;
 
     GetDItem(dp, toget, &type, (HIDDEN_Handle *) &ch, &r);
-    ch.p = MR(ch.p);
-    return type & CWC(ctrlItem) ? GetCtlValue(ch.p) : 0;
+    ch = MR(ch);
+    return type & CWC(ctrlItem) ? GetCtlValue(ch) : 0;
 }
 
 typedef struct depth
@@ -371,8 +371,8 @@ setedittext (DialogPtr dp, INTEGER itemno, StringPtr str)
   HIDDEN_Handle h;
 
   GetDItem (dp, itemno, &type, &h, &r);
-  h.p = MR (h.p);
-  SetIText(h.p, str);
+  h = MR (h);
+  SetIText(h, str);
 }
 
 void setedittextnum(DialogPtr dp, INTEGER itemno, INTEGER value)
@@ -409,8 +409,8 @@ INTEGER getedittext(DialogPtr dp, INTEGER itemno)
     LONGINT l;
 
     GetDItem(dp, itemno, &type, &h, &r);
-    h.p = MR(h.p);
-    GetIText(h.p, str);
+    h = MR(h);
+    GetIText(h, str);
     StringToNum(str, &l);
     return (INTEGER) l;
 }
@@ -520,8 +520,8 @@ update_string_from_edit_text (char **strp, DialogPtr dp, INTEGER itemno)
   Rect r;
   
   GetDItem(dp, itemno, &type, &h, &r);
-  h.p = MR(h.p);
-  GetIText(h.p, str);
+  h = MR(h);
+  GetIText(h, str);
   if (*strp)
     free (*strp);
   *strp = (char*)malloc (str[0] + 1);
@@ -714,20 +714,21 @@ PRIVATE void mod_item_enableness( DialogPtr dp, INTEGER item,
 				 enableness_t enableness_wanted )
 {
   INTEGER type;
-  HIDDEN_Handle h;
+  Handle h;
+  GUEST<Handle> tmpH;
   ControlHandle ch;
   Rect r;
 
-  GetDItem(dp, item, &type, &h, &r);
+  GetDItem(dp, item, &type, &tmpH, &r);
   type = CW(type);
-  h.p = MR(h.p);
+  h = MR(tmpH);
   if (((type & itemDisable) && enableness_wanted == enable)
       || (!(type & itemDisable) && enableness_wanted == disable))
     {
       type ^= itemDisable;
-      SetDItem(dp, item, type, h.p, &r);
+      SetDItem(dp, item, type, h, &r);
     }
-  ch = (ControlHandle) h.p;
+  ch = (ControlHandle) h;
   if (Hx(ch, contrlHilite) == 255 && enableness_wanted == enable)
     HiliteControl(ch, 0);
   else if (Hx(ch, contrlHilite) != 255 && enableness_wanted == disable)
@@ -748,7 +749,7 @@ set_sound_on_string (DialogPtr dp)
 			 ? "On (silent)"
 			 : "On"));
   GetDItem (dp, PREFSOUNDONITEM, &junk1, &h, &junk2);
-  SetCTitle ((ControlHandle) MR (h.p), sound_string);
+  SetCTitle ((ControlHandle) MR (h), sound_string);
 }
 
 /*

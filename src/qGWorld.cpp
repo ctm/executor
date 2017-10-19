@@ -325,7 +325,7 @@ P1 (PUBLIC pascal trap, Boolean, LockPixels,
       pixels_baseaddr_h = (Handle) PIXMAP_BASEADDR (pixels);
       /* lock the baseaddr handle memory */
       HSetState (pixels_baseaddr_h, HGetState (pixels_baseaddr_h) | LOCKBIT);
-      PIXMAP_BASEADDR_X (pixels) = pixels_baseaddr_h->p;
+      PIXMAP_BASEADDR_X (pixels) = *pixels_baseaddr_h;
       
       HSetState ((Handle) pixels, HGetState ((Handle) pixels) | LOCKBIT);
     }

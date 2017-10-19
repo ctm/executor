@@ -28,7 +28,7 @@ P1(PUBLIC pascal trap, void, InitGraf, Ptr, gp)
   PixMapHandle main_gd_pixmap;
 
 #if defined (BINCOMPAT)
-  (*(HIDDEN_Ptr *) (long) SYN68K_TO_US(a5)).p = RM (gp);
+  (*(HIDDEN_Ptr *) (long) SYN68K_TO_US(a5)) = RM (gp);
 #endif /* BINCOMPAT */
 
   main_gd_pixmap = GD_PMAP (MR (MainDevice));
@@ -170,7 +170,7 @@ P1(PUBLIC pascal trap, void, ClosePort, GrafPtr, p)
 
 P1(PUBLIC pascal trap, void, GetPort, HIDDEN_GrafPtr *, pp)
 {
-  (*pp).p = thePortX;
+  *pp = thePortX;
 }
 
 P1(PUBLIC pascal trap, void, GrafDevice, INTEGER, d)

@@ -121,7 +121,7 @@ P2(PUBLIC pascal trap, ControlHandle, GetNewControl,		/* IMI-321 */
     wh = (HIDDEN_wp *) GetResource(TICK("CNTL"), cid);
     if (!wh)
         return 0;
-    if (!(*wh).p)
+    if (!(*wh))
 	LoadResource((Handle) wh);
     ctab_res_h = ROMlib_getrestid (TICK ("cctb"), cid);
     retval = NewControl(wst, &(HxX(wh, _crect)),
@@ -186,16 +186,16 @@ P1(PUBLIC pascal trap, void, DisposeControl, ControlHandle, c)	/* IMI-321 */
        });
     
     for (t = (HIDDEN_ControlHandle *) &(((WindowPeek)(HxP(c, contrlOwner)))->controlList);
-	      (*t).p && STARH(t) != c; t = (HIDDEN_ControlHandle *) &((STARH(STARH(t)))->nextControl))
+	      (*t) && STARH(t) != c; t = (HIDDEN_ControlHandle *) &((STARH(STARH(t)))->nextControl))
         ;
-    if ((*t).p)
-        (*t).p = HxX(c, nextControl);
-    for (auxhp = (HIDDEN_AuxCtlHandle *) &AuxCtlHead; (*auxhp).p && (STARH(STARH(auxhp)))->acOwner != c;
+    if ((*t))
+        (*t) = HxX(c, nextControl);
+    for (auxhp = (HIDDEN_AuxCtlHandle *) &AuxCtlHead; (*auxhp) && (STARH(STARH(auxhp)))->acOwner != c;
 					auxhp = (HIDDEN_AuxCtlHandle *) &(STARH(STARH(auxhp)))->acNext)
 	;
-    if ((*auxhp).p) {
+    if ((*auxhp)) {
 	saveauxh = STARH(auxhp);
-	(*auxhp).p = STARH(STARH(auxhp))->acNext;
+	(*auxhp) = STARH(STARH(auxhp))->acNext;
 	DisposHandle((Handle) saveauxh);
     }
 

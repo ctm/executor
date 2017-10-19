@@ -646,13 +646,10 @@ CopyMacHandle (Handle h)
 {
   Handle retval;
   Size s;
-
-  h = MR (h);
   s = GetHandleSize (h);
   retval = NewHandle (s);
   if (retval)
     memcpy (STARH (retval), STARH (h), s);
-  retval = RM (retval);
   return retval;
 }
 

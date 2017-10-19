@@ -64,7 +64,7 @@ P2(PUBLIC pascal trap, void, StdPoly, GrafVerb, verb, PolyHandle, ph)
     INTEGER state;
     PAUSEDECL;
     
-    if (!ph || !(*ph).p || HxX(ph, polySize) == CWC(10) ||EmptyRect(&HxX(ph, polyBBox)))
+    if (!ph || !*ph || HxX(ph, polySize) == CWC(10) ||EmptyRect(&HxX(ph, polyBBox)))
 /*-->*/	return;
 
     state = HGetState((Handle) ph);

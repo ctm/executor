@@ -721,8 +721,8 @@ _NewEmptyHandle_flags (boolean_t sys_p)
       h = (Handle) ZONE_HFST_FREE (current_zone);
       if (h)
 	{
-	  ZONE_HFST_FREE_X (current_zone) = h->p;
-	  h->p = NULL;
+	  ZONE_HFST_FREE_X (current_zone) = *h;
+	  *h = NULL;
 	  SET_MEM_ERR (noErr);
 	  break;
 	}
@@ -775,7 +775,7 @@ _NewHandle_flags (Size size, boolean_t sys_p, boolean_t clear_p)
   gui_assert (block < ZONE_BK_LIM (current_zone));
   
   ROMlib_setupblock (block, size, REL, newh, 0);
-  newh->p = BLOCK_DATA_X (block);
+  *newh = BLOCK_DATA_X (block);
   
   if (clear_p)
     memset (BLOCK_DATA (block), 0, size - HDRSIZE);
@@ -818,7 +818,7 @@ DisposHandle (Handle h)
       
       block = HANDLE_TO_BLOCK (h);
 
-      if (h->p && BLOCK_TO_HANDLE (MR (TheZone), block) != h)
+      if (*h && BLOCK_TO_HANDLE (MR (TheZone), block) != h)
 	{
 	  TheZone = save_zone;
 	  SET_MEM_ERR (memAZErr);
@@ -847,7 +847,7 @@ DisposHandle (Handle h)
 	  ROMlib_freeblock (block);
 	}
       
-      h->p = ZONE_HFST_FREE_X (current_zone);
+      *h = ZONE_HFST_FREE_X (current_zone);
       ZONE_HFST_FREE_X (current_zone) = RM ((Ptr) h);
       
       TheZone = save_zone;
@@ -2082,7 +2082,7 @@ ROMlib_installhandle (Handle sh, Handle dh)
       ROMlib_freeblock (db);
       SETMASTER (dh, STARH (sh));
       BLOCK_LOCATION_OFFSET_X (sb) = CL ((uint32) dh - (uint32) MR (TheZone));
-      sh->p = (Ptr) ZONE_HFST_FREE_X (MR (TheZone));
+      *sh = (Ptr) ZONE_HFST_FREE_X (MR (TheZone));
       ZONE_HFST_FREE_X (MR (TheZone)) = RM ((Ptr) sh);
     }
   TheZone = save_zone;

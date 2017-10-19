@@ -131,7 +131,7 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
         //   memcpy (STARH (icon_item_h), &icon_item_template,
            icon_item_h = NewHandle (18);
        
-           Ptr ptr = MR(icon_item_h->p);
+           Ptr ptr = MR(*icon_item_h);
            *(short*)(ptr + 0) = CWC(0);    // count: item count - 1
            *(long*)(ptr + 2) = 0;          // h = NULL
            *(short*)(ptr + 6) = CWC(10);   // r.top

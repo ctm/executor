@@ -434,7 +434,7 @@ P1 (PUBLIC pascal trap, PixPatHandle, GetPixPat, INTEGER, pixpat_id)
   pixpat_res = (pixpat_res_handle) GetResource (TICK ("ppat"), pixpat_id);
   if (pixpat_res == NULL)
     return (PixPatHandle) NULL;
-  if (pixpat_res->p == NULL)
+  if (*pixpat_res == NULL)
     LoadResource ((Handle) pixpat_res);
   
   pixpat = (PixPatHandle) NewHandle (sizeof (PixPat));

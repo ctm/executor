@@ -133,7 +133,7 @@ P6 (PUBLIC pascal trap, void, CopyBits,
 	  HIDDEN_Handle t;
 
 	  PtrToHand ((Ptr) dst_bitmap, &t, sizeof (PixMap));
-	  bogo_port_pixmap = (PixMapHandle) t.p;
+	  bogo_port_pixmap = (PixMapHandle) t;
 	  CPORT_PIXMAP_X_NO_ASSERT (theCPort) = CL (bogo_port_pixmap);
 	  CPORT_VERSION_X_NO_ASSERT (theCPort) = CPORT_FLAG_BITS_X;
 	}

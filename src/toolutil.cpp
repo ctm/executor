@@ -243,8 +243,8 @@ P3(PUBLIC pascal trap, void, PackBits, HIDDEN_Ptr *, sp, HIDDEN_Ptr *, dp, INTEG
 {
   char *ip, *op, *ep, *erp, *markp, c;
   
-  ip = (char *) MR((*sp).p);
-  op = (char *) MR((*dp).p);
+  ip = (char *) MR(*sp);
+  op = (char *) MR(*dp);
   ep = ip + len;
   erp = ip + len - 2;
   markp = op++;
@@ -271,8 +271,8 @@ P3(PUBLIC pascal trap, void, PackBits, HIDDEN_Ptr *, sp, HIDDEN_Ptr *, dp, INTEG
         }
       markp = op++;
     }
-  (*sp).p = (Ptr) RM (ip);
-  (*dp).p = (Ptr) RM (op-1);
+  *sp = (Ptr) RM (ip);
+  *dp = (Ptr) RM (op-1);
 }
 
 
@@ -281,8 +281,8 @@ do {									 \
   const int8 *ip;							 \
   out_type *op, *ep;							 \
 									 \
-  ip = (const int8 *) MR (sp->p);					 \
-  op = (out_type *) MR (dp->p);						 \
+  ip = (const int8 *) MR (*sp);					 \
+  op = (out_type *) MR (*dp);						 \
   ep = (out_type *) ((int8 *) op + len);				 \
 									 \
   while (op < ep)							 \
@@ -304,8 +304,8 @@ do {									 \
 	}								 \
     }									 \
 									 \
-  sp->p = (Ptr) RM (ip);						 \
-  dp->p = (Ptr) RM (op);						 \
+  *sp = (Ptr) RM (ip);						 \
+  *dp = (Ptr) RM (op);						 \
 } while (FALSE)
 
 

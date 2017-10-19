@@ -614,7 +614,7 @@ P4 (PUBLIC, pascal int32, mbdf0, int16, sel, int16, mess,
 	if (mess != mbInit) /* fun w/ Word 6 */
 	{
 		GetPort(&saveport);
-		saveport.p = MR(saveport.p);
+		saveport = MR(saveport);
 		SetPort(MR(wmgr_port));
 	}
 	
@@ -665,6 +665,6 @@ P4 (PUBLIC, pascal int32, mbdf0, int16, sel, int16, mess,
 			break;
 	}
 	if (mess != mbInit)
-		SetPort(saveport.p);
+		SetPort(saveport);
 	return retval;
 }

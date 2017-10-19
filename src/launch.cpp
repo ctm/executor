@@ -1157,7 +1157,7 @@ PRIVATE void reset_low_globals(void)
       int i;
       
       for (i = 0; i < (int) NELEM (AppPacks); ++i)
-	AppPacks[i].p = 0;
+	AppPacks[i] = 0;
     }
     SysEvtMask = CWC(~(1L<< keyUp)); /* EVERYTHING except keyUp */
     SdVolume = 7; /* for Beebop 2 */

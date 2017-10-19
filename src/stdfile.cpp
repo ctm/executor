@@ -197,7 +197,7 @@ A1(PRIVATE, INTEGER, movealert, INTEGER, id)
     Rect *rp;
     
     h = GetResource(TICK("ALRT"), id);
-    if (!(*h).p)
+    if (!*h)
 	LoadResource(h);
     rp = (Rect *) STARH(h);
     dh = CW(rp->right)  - CW(rp->left);
@@ -883,20 +883,21 @@ P2(PUBLIC, pascal void,  ROMlib_filebox, DialogPeek, dp, INTEGER, which)
     INTEGER i;
     int width, strwidth, offset;
     StringPtr diskname;
-    HIDDEN_Handle ejhand;
+    GUEST<Handle> tmpH;
+    Handle ejhand;
     BOOLEAN ejectable;
     PenState ps;
 
     GetPenState(&ps);
     PenNormal();
     
-    h.p = NULL;
+    h = NULL;
     GetDItem((DialogPtr) dp, which, &i, &h, &r);
-/*    h.p = CL(h.p); we don't really use h */
+/*    h = CL(h); we don't really use h */
     switch (which) {
     case getNmList:
     case putNmList:
-        if (h.p)
+        if (h)
 	    FrameRect(&r);
 	flupdate(WINDFL(dp), GetCtlValue(WINDFL(dp)->flsh),
 							WINDFL(dp)->flnmlin);
@@ -909,12 +910,12 @@ P2(PUBLIC, pascal void,  ROMlib_filebox, DialogPeek, dp, INTEGER, which)
 	EraseRect(&r);
 	width = CW(r.right) - CW(r.left);
 	diskname = getdiskname( &ejectable, NULL );
-	GetDItem((DialogPtr) dp, putEject, &i, &ejhand, &r2);
-	ejhand.p = MR(ejhand.p);
+	GetDItem((DialogPtr) dp, putEject, &i, &tmpH, &r2);
+	ejhand = MR(tmpH);
 	if (ejectable)
-	    HiliteControl((ControlHandle) ejhand.p, 0);
+	    HiliteControl((ControlHandle) ejhand, 0);
 	else
-	    HiliteControl((ControlHandle) ejhand.p, 255);
+	    HiliteControl((ControlHandle) ejhand, 255);
 	strwidth = StringWidth(diskname) + 2 + 16 + 3;
 	offset = (width - strwidth) / 2;
 	if (offset < 3)
@@ -1163,17 +1164,17 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 	case NUMPAD_ENTER:
 	case '\r' :
 	    GetDItem((DialogPtr) dp, CW(dp->aDefItem), &i, (HIDDEN_Handle *) &h, &r);
-	    h.p = MR(h.p);
-	    if (Hx(h.p, contrlVis) && U(Hx(h.p, contrlHilite)) != 255)
+	    h = MR(h);
+	    if (Hx(h, contrlVis) && U(Hx(h, contrlHilite)) != 255)
 	      {
 		prefix[0] = 0;
 		oldticks = -1000;
 		*ith = CW(opentoken);
 		retval = -1;
 //#if !defined(MACOSX_)
-		HiliteControl(h.p, inButton);
+		HiliteControl(h, inButton);
 		Delay((LONGINT)5, (LONGINT *) 0);
-		HiliteControl(h.p, 0);
+		HiliteControl(h, 0);
 //#endif
 	      }
 	    break;
@@ -1247,8 +1248,8 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 	p = gp.get();
 	if (PtInRect(p, &fl->flrect)) {
 	    GetDItem((DialogPtr) dp, getOpen, &i, (HIDDEN_Handle *) &h, &r);
-	    h.p = MR(h.p);
-	    flmouse(fl, evt->where.get(), h.p);
+	    h = MR(h);
+	    flmouse(fl, evt->where.get(), h);
 	    ticks = TickCount();
 	    if (fl->flsel != -1 && savesel == fl->flsel &&
 					 (ticks < oldticks + CL(DoubleTime))) {
@@ -1271,9 +1272,9 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 	    retval = -1;
 	} else {
 	    GetDItem((DialogPtr) dp, getOpen, &i, (HIDDEN_Handle *) &h, &r);
-	    h.p = MR(h.p);
-	    if ((part = TestControl(h.p, p)) &&
-			     TrackControl(h.p, p, (ProcPtr) 0)) {
+	    h = MR(h);
+	    if ((part = TestControl(h, p)) &&
+			     TrackControl(h, p, (ProcPtr) 0)) {
 		prefix[0] = 0;
 		oldticks = -1000;
 		*ith = CWC(opentoken);
@@ -1913,7 +1914,8 @@ A4(PRIVATE, void, transformsfpdialog, DialogPtr, dp, Point *, offset,
 					  Rect *, scrollrect, BOOLEAN, getting)
 {
     INTEGER numitems, windheight, i, j, extrasizeneeded;
-    HIDDEN_Handle h;
+    Handle h;
+    GUEST<Handle> tmpH;
     Rect r;
     TEPtr tep;
 
@@ -1930,15 +1932,15 @@ A4(PRIVATE, void, transformsfpdialog, DialogPtr, dp, Point *, offset,
     }
     numitems = CW(*(INTEGER *)STARH((MR(((DialogPeek)dp)->items)))) + 1;
     for (j = 1 ; j <= numitems ; j++) {
-	GetDItem(dp, j, &i, &h, &r);
+	GetDItem(dp, j, &i, &tmpH, &r);
 	i = CW(i);
-	h.p = MR(h.p);
+	h = MR(tmpH);
 	if (!getting || CW(r.bottom) > CW(scrollrect->top)) {
 	    r.top = CW(CW(r.top) + (extrasizeneeded));
 	    r.bottom = CW(CW(r.bottom) + (extrasizeneeded));
 	    if (i <= 7 && i >= 4)	/* It's a control */
-		MoveControl((ControlHandle) h.p, CW(r.left), CW(r.top));
-	    SetDItem(dp, j, i, h.p, &r);
+		MoveControl((ControlHandle) h, CW(r.left), CW(r.top));
+	    SetDItem(dp, j, i, h, &r);
 	}
     }
     windheight = CW(dp->portRect.bottom) - CW(dp->portRect.top) + extrasizeneeded;
@@ -1955,7 +1957,8 @@ A4(PRIVATE, void, transformsfpdialog, DialogPtr, dp, Point *, offset,
 void adjustdrivebutton(DialogPtr dp)
 {
     INTEGER count;
-    HIDDEN_Handle drhand;
+    Handle drhand;
+    GUEST<Handle>tmpH;
     INTEGER i;
     Rect r;
 #if !defined(MSDOS) && !defined(CYGWIN32)
@@ -1975,9 +1978,9 @@ void adjustdrivebutton(DialogPtr dp)
 #else /* defined(MSDOS) */
     count = 2;	/* always allow the user to hit the drive button */
 #endif /* defined(MSDOS) */
-    GetDItem(dp, putDrive, &i, &drhand, &r);	/* putDrive == getDrive */
-    drhand.p = MR(drhand.p);
-    HiliteControl((ControlHandle) drhand.p, count > 1 ? 0 : 255);
+    GetDItem(dp, putDrive, &i, &tmpH, &r);	/* putDrive == getDrive */
+    drhand = MR(tmpH);
+    HiliteControl((ControlHandle) drhand, count > 1 ? 0 : 255);
 }
 
 A1(PRIVATE, void, doeject, DialogPtr, dp)
@@ -2187,14 +2190,14 @@ getditext (DialogPtr dp, INTEGER item, StringPtr text)
   HIDDEN_Handle h;
   Rect r;
 
-  h.p = 0;
+  h = 0;
   GetDItem (dp, item, &i, &h, &r);
-  if (!h.p)
+  if (!h)
     text[0] = 0;
   else
     {
-      h.p = MR (h.p);
-      GetIText (h.p, text);
+      h = MR (h);
+      GetIText (h, text);
     }
 }
 
@@ -2344,12 +2347,13 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
       rep_from_host_reply_block (&rep, &reply);
   }
   if (!reply_valid) {
-    HIDDEN_Handle h;
+    Handle h;
     DialogPtr dp;
     INTEGER ihit, i;
     int done, sav;
     Rect r, scrollrect;
-    HIDDEN_Handle pnhand, ejhand, drhand, sahand;
+    GUEST<Handle> tmpH;
+    Handle pnhand, ejhand, drhand, sahand;
     OSErr err;
     ControlHandle scrollh;
     fltype f;
@@ -2430,8 +2434,8 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
     dp = GetNewDialog(dig, (Ptr)0, (WindowPtr)-1);
     bumpsavedisk(dp, FALSE);
     SetPort(dp);
-    GetDItem(dp, openorsave, &i, &sahand, &r);
-    sahand.p = MR(sahand.p);
+    GetDItem(dp, openorsave, &i, &tmpH, &r);
+    sahand = MR(tmpH);
     if (getorput == put && SF_NAME (&f)[0])
       {
 	boolean_t writable;
@@ -2442,24 +2446,24 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
     else
       {
 	sav = FALSE;
-	HiliteControl((ControlHandle) sahand.p, 255);
+	HiliteControl((ControlHandle) sahand, 255);
       }
-    GetDItem(dp, ejectitem, &i, &ejhand, &r);
-    ejhand.p = MR(ejhand.p);
-    HiliteControl((ControlHandle) ejhand.p, 255);
-    GetDItem(dp, driveitem, &i, &drhand, &r);
-    drhand.p = MR(drhand.p);
+    GetDItem(dp, ejectitem, &i, &tmpH, &r);
+    ejhand = MR(tmpH);
+    HiliteControl((ControlHandle) ejhand, 255);
+    GetDItem(dp, driveitem, &i, &tmpH, &r);
+    drhand = MR(tmpH);
     adjustdrivebutton(dp);
 
     if (getorput == put)
       {
-	GetDItem(dp, promptitem, &i, &h, &r);
-	h.p = MR(h.p);
-	SetIText(h.p, prompt ? prompt : (StringPtr) "");
+	GetDItem(dp, promptitem, &i, &tmpH, &r);
+	h = MR(tmpH);
+	SetIText(h, prompt ? prompt : (StringPtr) "");
       }
 
-    GetDItem(dp, nmlistitem, &i, &h, &scrollrect);
-    h.p = MR(h.p);
+    GetDItem(dp, nmlistitem, &i, &tmpH, &scrollrect);
+    h = MR(tmpH);
 
     if (getorput == put) {
         INTEGER putname;
@@ -2476,18 +2480,18 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	    new_folder_button = create_new_folder_button (dp);
 	  }
 
-	GetDItem(dp, putname, &i, &pnhand, &r);
-	pnhand.p = MR(pnhand.p);
-	SetIText(pnhand.p, SF_NAME (&f));
+	GetDItem(dp, putname, &i, &tmpH, &r);
+	pnhand = MR(tmpH);
+	SetIText(pnhand, SF_NAME (&f));
 	SelIText((DialogPtr) dp, putname, 0, 32767);
     } else {
       if (f.flavor == original_sf)
 	{
-	  GetDItem(dp, getScroll, &i, &h, &r);
-	  h.p = MR(h.p);
+	  GetDItem(dp, getScroll, &i, &tmpH, &r);
+	  h = MR(tmpH);
 	  transform = CW(r.right) - CW(r.left) == 16;
-	  GetDItem(dp, getDotted, &i, &h, &r);
-	  h.p = MR(h.p);
+	  GetDItem(dp, getDotted, &i, &tmpH, &r);
+	  h = MR(tmpH);
 	  SetDItem(dp, getDotted, userItem, (Handle) P_ROMlib_filebox, &r);
 	}
       else
@@ -2499,8 +2503,8 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 
     SetDItem(dp, nmlistitem, userItem, (Handle) P_ROMlib_filebox, &scrollrect);
 
-    GetDItem(dp, diskname, &i, &h, &r);
-    h.p = MR(h.p);
+    GetDItem(dp, diskname, &i, &tmpH, &r);
+    h = MR(tmpH);
     SetDItem(dp, diskname, userItem, (Handle) P_ROMlib_filebox, &r);
 
     r.left   = CW(CW(scrollrect.left) + 1);
@@ -2514,7 +2518,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
     f.flfilef = filef;
     f.flnumt = numt;
     f.fltl = tl;
-    f.flch = (ControlHandle) sahand.p;
+    f.flch = (ControlHandle) sahand;
     f.flgraynondirs = getorput == get ? 0 : GRAYBIT;
 
     if (getorput == get) {
@@ -2546,7 +2550,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	ModalDialog((ProcPtr) P_ROMlib_stdffilt, &ihit);
 	ihit = CW(ihit);
 	if (getorput == put)
-	    GetIText(pnhand.p, SF_NAME (&f));
+	    GetIText(pnhand, SF_NAME (&f));
 	if (dh.odh)
 	  ihit = ROMlib_CALLDHOOK(&f, ihit, dp, dh);
 	if (ihit == openorsave) {
@@ -2560,7 +2564,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 		done = TRUE;
 		*SF_GOOD_XP(&f) = CBC (TRUE);
 	    } else {
-		GetIText(pnhand.p, SF_NAME (&f));
+		GetIText(pnhand, SF_NAME (&f));
 		hpb.dirInfo.ioCompletion = 0;
 		hpb.dirInfo.ioNamePtr    = ((StringPtr)
 					    RM((char *) SF_NAME (&f)));
@@ -2624,14 +2628,14 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	    Str255 file_name;
 	    boolean_t writable;
 
-	    GetIText(pnhand.p, file_name);
+	    GetIText(pnhand, file_name);
 	    str31assign (SF_NAME (&f), file_name);
 	    getdiskname (NULL, &writable);
 	    if ((SF_NAME (&f))[0] && writable && !sav) {
-		HiliteControl((ControlHandle) sahand.p, 0);
+		HiliteControl((ControlHandle) sahand, 0);
 		sav = TRUE;
 	    } else if ((!(SF_NAME (&f)[0]) || !writable) && sav) {
-		HiliteControl((ControlHandle) sahand.p, 255);
+		HiliteControl((ControlHandle) sahand, 255);
 		sav = FALSE;
 	    }
 	}

@@ -127,8 +127,8 @@ MAKE_HIDDEN(tehiddenh);
 #define TEAUTOVIEWBIT	1	/* found by dumping the handle
 				   before and after calling TEAutoView */
 
-#define TEHIDDENH(teh)	(STARH((HIDDEN_tehiddenh *)&(MR((*teh).p))->recalBack))
-#define TEHIDDENHX(teh)	((*(HIDDEN_tehiddenh *)&(MR((*teh).p))->recalBack).p)
+#define TEHIDDENH(teh)	(STARH((HIDDEN_tehiddenh *)&(MR(*teh))->recalBack))
+#define TEHIDDENHX(teh)	((*(HIDDEN_tehiddenh *)&(MR(*teh))->recalBack))
 
 extern void ROMlib_recompute_caret (TEHandle te);
 }

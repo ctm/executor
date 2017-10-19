@@ -79,8 +79,8 @@ invalidate_all_widths (void)
   hp = (HIDDEN_Handle *) STARH (wlh);
   for (i = 0; i < n_entries; ++i)
     {
-      DisposHandle (MR (hp[i].p));
-      hp[i].p = (Handle)CLC (0);
+      DisposHandle (MR (hp[i]));
+      hp[i] = nullptr;
     }
   HUnlock (wlh);
 }
@@ -220,8 +220,8 @@ A1(PRIVATE, BOOLEAN, widthlistmatch, FMInput *, fmip)
     HIDDEN_WHandle *whp, *ewhp;
 
     for (whp = (HIDDEN_WHandle *) STARH(WIDTHLISTHAND), ewhp = whp + MAXTABLES; whp != ewhp; whp++) {
-	if ((*whp).p && (LONGINT) (long) (*whp).p != (LONGINT) -1) {
-	    WidthPtr = (*(MR((*whp).p))).p;
+	if (*whp && (LONGINT) (*whp).raw() != (LONGINT) -1) {
+	    WidthPtr = *(MR(*whp));
 	    if (WIDTHPTR->aFID  == fmip->family &&
 				  WIDTHPTR->aSize     == fmip->size       &&
 			   (char) WIDTHPTR->aFace     == (char) fmip->face &&
@@ -233,7 +233,7 @@ A1(PRIVATE, BOOLEAN, widthlistmatch, FMInput *, fmip)
 				  WIDTHPTR->fSize     != -1 &&
 				  WIDTHPTR->fSize     !=  0 &&
 				 !WIDTHPTR->usedFam   == !FractEnable) {
-		WidthTabHandle = (WidthTableHandle) (*whp).p;
+		WidthTabHandle = (WidthTableHandle) *whp;
 		HLock((Handle) MR(WidthTabHandle));
 		return TRUE;
 	    }
@@ -650,7 +650,7 @@ A1(PRIVATE, void, newwidthtable, FMInput *, fmip)
 	}
     }
     HLock((Handle) MR(WidthTabHandle));
-    WidthPtr = (*MR(WidthTabHandle)).p;
+    WidthPtr = *MR(WidthTabHandle);
 
     WIDTHPTR->sExtra  = PORT_SP_EXTRA_X (thePort);
     WIDTHPTR->inNumer = fmip->numer;
@@ -868,7 +868,7 @@ P1(PUBLIC pascal trap, FMOutPtr, FMSwapFont, FMInput *, fmip)	/* IMI-223 */
 	ROMlib_fmo.leading = CW(fp->leading);
     } else {
 	LoadResource(MR(ROMlib_fmo.fontHandle));
-	WidthPtr = (*MR(WidthTabHandle)).p;
+	WidthPtr = *MR(WidthTabHandle);
     }
     fmip->size   = savesize;
     fmip->family = savefamily;

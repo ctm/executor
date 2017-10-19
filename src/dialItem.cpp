@@ -24,7 +24,7 @@ using namespace Executor;
     HIDDEN_Handle __item_handle;					\
 									\
     GetDItem (dp, item_no, item_type, &__item_handle, item_rect);	\
-    *(item_h) = MR (__item_handle.p);					\
+    *(item_h) = MR (__item_handle);					\
   })
   
 

@@ -615,7 +615,7 @@ P3(PUBLIC pascal trap, void, GetAppParms, StringPtr, namep,	/* IMII-58 */
 {
     str255assign(namep, CurApName);
     *rnp = CurApRefNum;
-    (*aphandp).p = AppParmHandle;
+    *aphandp = AppParmHandle;
 }
 
 PUBLIC char *ROMlib_errorstring;
@@ -912,7 +912,7 @@ P1(PUBLIC pascal trap, void, UnloadSeg, Ptr, addr)
     if (* (INTEGER *) addr == CWC(JMPLINSTR)) {
 	segno = SEGNOOFP(addr);
 	h = GetResource(TICK("CODE"), segno);
-	if (!(*h).p)
+	if (!*h)
 	    LoadResource(h);
 	segstart = STARH(h);
 	for (p = addr;   SEGNOOFP(p) == segno; p += 8)

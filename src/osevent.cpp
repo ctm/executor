@@ -333,7 +333,7 @@ A3(PUBLIC trap, OSErrRET, PPostEvent, INTEGER, evcode,		/* IMIV-85 */
 	if (!(evmsg & 0xff))
 	  {
 	    if (qelp)
-	      qelp->p = 0;
+	      *qelp = 0;
 	    return noErr;
 	  }
 	lastdown = -1;
@@ -342,7 +342,7 @@ A3(PUBLIC trap, OSErrRET, PPostEvent, INTEGER, evcode,		/* IMIV-85 */
 	if (!(evmsg & 0xff))
 	  {
 	    if (qelp)
-	      qelp->p = 0;
+	      *qelp = 0;
 	    return noErr;
 	  }
 	lastdown = evmsg;
@@ -365,7 +365,7 @@ A3(PUBLIC trap, OSErrRET, PPostEvent, INTEGER, evcode,		/* IMIV-85 */
     qp->evtQModifiers = CW(ROMlib_mods);
     Enqueue((QElemPtr) qp, &EventQueue);
     if (qelp)
-	(*qelp).p = qp;
+	*qelp = qp;
     return noErr;
 }
 

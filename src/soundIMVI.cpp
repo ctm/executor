@@ -131,7 +131,7 @@ Executor::clear_pending_sounds (void)
   call_back_info.busy = FALSE;
   if (sound_driver->HasSoundClearPending())
     SOUND_CLEAR_PENDING ();
-  allchans.p = (SndChannelPtr)CLC (0);
+  allchans = (SndChannelPtr)CLC (0);
 }
 
 

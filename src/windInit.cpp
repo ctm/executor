@@ -304,12 +304,12 @@ Executor may die without warning because of this mismatch", 0,
 
 P1 (PUBLIC pascal trap, void, GetWMgrPort, HIDDEN_GrafPtr *, wp)
 {
-  wp->p = WMgrPort;
+  *wp = WMgrPort;
 }
 
 P1 (PUBLIC pascal trap, void, GetCWMgrPort, HIDDEN_CGrafPtr *, wp)
 {
-  wp->p = WMgrCPort;
+  *wp = WMgrCPort;
 }
 
 P1(PUBLIC pascal trap, void, SetDeskCPat, PixPatHandle, ph)
@@ -604,7 +604,7 @@ P3(PUBLIC pascal trap, WindowPtr, GetNewWindow, INTEGER, wid, Ptr, wst,
     wh = (windrestypehand) GetResource(TICK("WIND"), wid);
     if (!wh)
         return(0);
-    if (!(*wh).p)
+    if (!*wh)
 	LoadResource((Handle) wh);
     tp = NewWindow(wst, &(HxX(wh, _wrect)),
 	    (StringPtr) ((char *) &HxX(wh, _wrect) + 18),
@@ -674,13 +674,13 @@ P1(PUBLIC pascal trap, void, CloseWindow, WindowPtr, w)
     DisposeRgn (WINDOW_UPDATE_REGION (w));
     DisposHandle ((Handle) WINDOW_TITLE (w));
     for (auxhp = (HIDDEN_AuxWinHandle *) &AuxWinHead;
-	 (*auxhp).p && STARH(STARH(auxhp))->awOwner != RM(w);
+	 *auxhp && STARH(STARH(auxhp))->awOwner != RM(w);
 	 auxhp = (HIDDEN_AuxWinHandle *) &STARH(STARH(auxhp))->awNext)
 	;
-    if ((*auxhp).p)
+    if (*auxhp)
       {
 	saveauxh = STARH(auxhp);
-	(*auxhp).p = STARH(STARH(auxhp))->awNext;
+	*auxhp = STARH(STARH(auxhp))->awNext;
 	DisposHandle((Handle) saveauxh);
       }
 

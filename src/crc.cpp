@@ -82,7 +82,7 @@ short Executor::getthecrc(ResType typ, long id)
     Handle h;
 
     h = GetResource(typ, id);
-    if (h && (*h).p)
+    if (h && *h)
 	return ROMlib_crcccitt((unsigned char *) STARH(h), GetHandleSize(h));
     else
 	return 0;

@@ -82,7 +82,7 @@ GetDControl (DialogPtr dp, INTEGER itemno)
   INTEGER unused;
 
   GetDItem (dp, itemno, &unused, &h, NULL);
-  retval = (ControlHandle) MR (h.p);
+  retval = (ControlHandle) MR (h);
   return retval;
 }
 
@@ -94,7 +94,7 @@ GetDIText (DialogPtr dp, INTEGER itemno)
   INTEGER unused;
 
   GetDItem(dp, itemno, &unused, &h, NULL);
-  retval = MR (h.p);
+  retval = MR (h);
 
   return retval;
 }
@@ -609,7 +609,7 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_stlfilterproc, DialogPeek, dp,
 	  {
 	    ControlHandle ch;
 
-	    ch = (ControlHandle) MR (h.p);
+	    ch = (ControlHandle) MR (h);
 	    if (TrackControl (ch, localp, NULL))
 	      {
 		*ith = CWC (OK);
@@ -948,7 +948,7 @@ adjust_menu_common (TPPrDlg dlg, INTEGER item, heading_t heading, ini_key_t defk
 
 		GetDItem ((DialogPtr) dlg, item, &unused, &h, &r);
 		r.right = CW (CW (r.left) + max_wid + 38);
-		SetDItem ((DialogPtr) dlg, item, ctrlItem, MR (h.p), &r);
+		SetDItem ((DialogPtr) dlg, item, ctrlItem, MR (h), &r);
 		SizeControl (ch, CW (r.right) - CW (r.left), 
 			         CW (r.bottom) - CW (r.top));
 	      }
@@ -1096,7 +1096,7 @@ P1(PUBLIC pascal trap, TPPrDlg, PrStlInit, THPrint, hPrint)
 	    GetDItem ((DialogPtr) retval, LAYOUT_PRINTER_TYPE_LABEL_NO,
 		      &item_type, &hh, &r);
 
-	    h = MR (hh.p);
+	    h = MR (hh);
 	    GetIText (h, str);
 	    orig = StringWidth (str);
 	    new1 = StringWidth (new_type_label);

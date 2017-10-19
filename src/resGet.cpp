@@ -247,7 +247,7 @@ PRIVATE void ROMlib_init_xdefs( void )
       newhandle = NewHandle(NUM_ROMLIB_DEFS * sizeof(ROMlib_defs[0]));
       if (oldhandle)
 	DisposHandle(oldhandle);
-    } while (!acceptable((unsigned long) newhandle->p) && --timeout);
+    } while (!acceptable((*newhandle).raw()) && --timeout);
 #if !defined(NDEBUG)
     if (!timeout)
       warning_unexpected("Maelstrom hack didn't work");
@@ -264,7 +264,7 @@ PRIVATE void ROMlib_init_xdefs( void )
     ROMlib_defs[7]  = (LONGINT) RM(P_snth5);
     ROMlib_defs[8]  = (LONGINT) RM(P_unixmount);
     ROMlib_defs[9]  = (LONGINT) RM(P_cdef1008);
-    *(LONGINT *)SYN68K_TO_US(0x58) = (LONGINT) newhandle->p;
+    *(LONGINT *)SYN68K_TO_US(0x58) = (LONGINT) (*newhandle).raw();
     TheZone = save_zone;
 #endif
 }
@@ -472,7 +472,7 @@ P1 (PUBLIC pascal trap, void, LoadResource, Handle volatile, res)
       return;
     }
 
-  if (res->p)
+  if (*res)
     {
       ROMlib_setreserr (noErr);
     }
@@ -512,7 +512,7 @@ P1(PUBLIC pascal trap, void, ReleaseResource, Handle, res)
     if (ResErr != CWC (noErr) || !rr->rhand)
         return;
     h = MR (rr->rhand);
-    if ((*h).p)
+    if (*h)
       HClrRBit(h);
     DisposHandle(h);
     rr->rhand = 0;
@@ -534,6 +534,6 @@ P1(PUBLIC pascal trap, void, DetachResource, Handle, res)
         return;
     }
     rr->rhand = 0;
-    if ((*h).p)
+    if (*h)
       HClrRBit(h);
 }

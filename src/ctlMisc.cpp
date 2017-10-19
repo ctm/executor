@@ -150,7 +150,7 @@ P2 (PUBLIC pascal trap, BOOLEAN, GetAuxCtl, ControlHandle, ctl,	/* IMV-222 */
 
   if (! ctl)
     {
-      aux_ctl->p = RM (default_aux_ctl);
+      *aux_ctl = RM (default_aux_ctl);
       return TRUE;
     }
   else
@@ -160,12 +160,12 @@ P2 (PUBLIC pascal trap, BOOLEAN, GetAuxCtl, ControlHandle, ctl,	/* IMV-222 */
       t = *lookup_aux_ctl (ctl);
       if (t)
 	{
-	  aux_ctl->p = t;
+	  *aux_ctl = t;
 	  return FALSE;
 	}
       else
 	{
-	  aux_ctl->p = RM (default_aux_ctl);
+	  *aux_ctl = RM (default_aux_ctl);
 	  return TRUE;
 	}
     }
@@ -192,7 +192,7 @@ Executor::ROMlib_ctlcall (ControlHandle c, int16 i, int32 l)
   
   defproc = CTL_DEFPROC (c);
   
-  if (defproc->p == NULL)
+  if (*defproc == NULL)
     LoadResource (defproc);
   
   cp = (ctlfuncp) STARH (defproc);

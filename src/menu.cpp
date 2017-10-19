@@ -118,7 +118,7 @@ P0(PUBLIC pascal trap, void, ClearMenuBar)
     HxX(MENULIST, muright) = CWC(MENULEFT);			/* int 2 */
 
     (&STARH(MENULIST)->mufu)[3] = CWC(sizeof(muelem)); /* lastHMenu: int 6 */
-    (*(HIDDEN_Handle *)&(&STARH(MENULIST)->mufu)[1]).p = (Handle)CLC(0);/* menuTitleSave: int 4,5 */
+    (*(HIDDEN_Handle *)&(&STARH(MENULIST)->mufu)[1]) = (Handle)CLC(0);/* menuTitleSave: int 4,5 */
 }
 
 #define BLACK_RGB { CWC (0), CWC (0), CWC (0) }
@@ -780,7 +780,7 @@ P1(PUBLIC pascal trap, Handle, GetNewMBar, INTEGER, mbarid)
       retval = 0;
     else
       {
-	if (!(*mb).p)
+	if (!*mb)
 	  LoadResource((Handle) mb);
 
 	LOCK_HANDLE_EXCURSION_1
@@ -1023,7 +1023,7 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
   boolean_t seen_up_already, done;
   
   GetPort (&saveport);
-  saveport.p = MR(saveport.p);
+  saveport = MR(saveport);
   SetPort (MR (wmgr_port));
   
   olditem = -1;
@@ -1281,7 +1281,7 @@ enter:
    }
  if (!mid)
    HiliteMenu(0);
- SetPort (saveport.p); /* Does SystemMenu() expect the WMgrPort also? */
+ SetPort (saveport); /* Does SystemMenu() expect the WMgrPort also? */
 
   /* Illustrator 5.5 behavior suggests that hits on hierarchical menus
    * for non leaf-node menus are handled differently.  [PR #1683].
@@ -1629,7 +1629,7 @@ Executor::ROMlib_menucall (INTEGER mess, MenuHandle themenu, Rect * menrect, Poi
 
   if (defproc)
     {
-      if (defproc->p == NULL)
+      if (*defproc == NULL)
 	LoadResource (defproc);
   
       mp = (menuprocp) STARH (defproc);
@@ -1671,7 +1671,7 @@ Executor::ROMlib_mbdfcall (INTEGER msg, INTEGER param1, LONGINT param2)
       break;
     }
   
-  if (defproc->p == NULL)
+  if (*defproc == NULL)
     LoadResource (defproc);
 
   mp = (mbdfprocp) STARH (defproc);

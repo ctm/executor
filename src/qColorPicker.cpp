@@ -44,7 +44,7 @@ using namespace Executor;
     HIDDEN_ControlHandle bogo_c;		\
 						\
     retval = FindControl (arg0, arg1, &bogo_c);	\
-    *(arg2) = MR (bogo_c.p);			\
+    *(arg2) = MR (bogo_c);			\
 						\
     retval;					\
   })

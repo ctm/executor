@@ -212,7 +212,7 @@ P2 (PUBLIC pascal trap, BOOLEAN, GetAuxWin,
   if (! w)
     {
       /* return default window color table */
-      aux_win_out->p = RM (default_aux_win);
+      *aux_win_out = RM (default_aux_win);
       return TRUE;
     }
   else
@@ -223,13 +223,13 @@ P2 (PUBLIC pascal trap, BOOLEAN, GetAuxWin,
       if (t)
 	{
 	  /* return this window's color table */
-	  aux_win_out->p = t;
+	  *aux_win_out = t;
 	  return TRUE;
 	}
       else
 	{
 	  /* return default window color table */
-	  aux_win_out->p = RM (default_aux_win);
+	  *aux_win_out = RM (default_aux_win);
 	  return FALSE;
 	}
     }

@@ -510,7 +510,7 @@ Executor::ROMlib_windcall (WindowPtr wind, int16 mess, int32 param)
   Rect saverect;
   
   defproc = WINDOW_DEF_PROC (wind);
-  if (defproc->p == NULL)
+  if (*defproc == NULL)
     LoadResource (defproc);
   
   switch (mess)

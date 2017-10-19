@@ -536,7 +536,7 @@ A5(PRIVATE, INTEGER, iuhelper, Ptr, ptr1, Ptr, ptr2, INTEGER, len1,
     locp = 0;
 #endif /* LETGCCWAIL */
 
-    if ((h = (Intl0Hndl) IUGetIntl(0)) && (*h).p) {
+    if ((h = (Intl0Hndl) IUGetIntl(0)) && *h) {
 	switch ((Hx(h, intl0Vers) >> 8) & 0xFF) {
 	case verBritain:
 	    locp = (locptype) britainlocalization;

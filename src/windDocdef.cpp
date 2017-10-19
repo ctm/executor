@@ -426,7 +426,7 @@ void
 draw_title (GrafPtr w,
 	    int go_away_drawn, int zoom_drawn)
 {
-  HIDDEN_GrafPtr tp;
+  GrafPtr tp;
   int left, top, right, bottom;
   StringHandle th;
   RgnHandle saveclip = NULL;
@@ -440,8 +440,9 @@ draw_title (GrafPtr w,
   bottom = CW (PORT_RECT (w).bottom) - CW (PORT_BOUNDS (w).top);
 
 /* #warning "clean up this port mess in draw_title ()" */
-  GetPort(&tp);
-  tp.p = MR(tp.p);
+  GUEST<GrafPtr> tmpPort;  
+  GetPort(&tmpPort);
+  tp = tmpPort.get();
   
   if (go_away_drawn)
     left_bound = left + 28;
@@ -452,17 +453,17 @@ draw_title (GrafPtr w,
   if (title_width)
     {
       title_start = left + (right - left - title_width) / 2 - 6;
-      saveclip = PORT_CLIP_REGION (tp.p);
-      PORT_CLIP_REGION_X (tp.p) = RM (NewRgn ());
+      saveclip = PORT_CLIP_REGION (tp);
+      PORT_CLIP_REGION_X (tp) = RM (NewRgn ());
       if (title_start >= left_bound)
-	CopyRgn (saveclip, PORT_CLIP_REGION (tp.p));
+	CopyRgn (saveclip, PORT_CLIP_REGION (tp));
       else
 	{
 	  title_start = left_bound;
-	  SetRectRgn (PORT_CLIP_REGION (tp.p),
+	  SetRectRgn (PORT_CLIP_REGION (tp),
 		      title_start, top - 16,
 		      right - (zoom_drawn ? 28 : 0), top-3);
-	  SectRgn (PORT_CLIP_REGION (tp.p), saveclip, PORT_CLIP_REGION (tp.p));
+	  SectRgn (PORT_CLIP_REGION (tp), saveclip, PORT_CLIP_REGION (tp));
 	}
       
       {
@@ -471,8 +472,8 @@ draw_title (GrafPtr w,
 	additional_clip_rgn = NewRgn ();
 	SetRectRgn (additional_clip_rgn, title_start, top - 16,
 		    title_start + title_width + 12, top - 2);
-	SectRgn (PORT_CLIP_REGION (tp.p), additional_clip_rgn,
-		 PORT_CLIP_REGION (tp.p));
+	SectRgn (PORT_CLIP_REGION (tp), additional_clip_rgn,
+		 PORT_CLIP_REGION (tp));
       
 	/* erase the text to be drawn with the title bar background
 	   color */
@@ -495,8 +496,8 @@ draw_title (GrafPtr w,
       
       if (saveclip)
 	{
-	  DisposeRgn (PORT_CLIP_REGION (tp.p));
-	  PORT_CLIP_REGION_X (tp.p) = RM (saveclip);
+	  DisposeRgn (PORT_CLIP_REGION (tp));
+	  PORT_CLIP_REGION_X (tp) = RM (saveclip);
 	}
     }
 }

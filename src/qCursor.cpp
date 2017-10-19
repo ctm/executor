@@ -395,11 +395,11 @@ P1 (PUBLIC pascal trap, void, SetCCursor,
 		    ccrsr_xmap.pixelSize = CW (host_cursor_depth);
 		    
 		    src = *STARH (CCRSR_MAP (ccrsr));
-		    src.baseAddr = CCRSR_DATA (ccrsr)->p;
+		    src.baseAddr = *CCRSR_DATA (ccrsr);
 		    LOCK_HANDLE_EXCURSION_1
 		      (ccrsr_xdata,
 		       {
-			 ccrsr_xmap.baseAddr = ccrsr_xdata->p;
+			 ccrsr_xmap.baseAddr = *ccrsr_xdata;
 			 convert_pixmap (&src, &ccrsr_xmap,
 					 &ROMlib_cursor_rect, NULL);
 		       });

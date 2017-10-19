@@ -10,7 +10,7 @@ MAKE_HIDDEN(HIDDEN_CGrafPtr_Ptr);
 
 
 #define theCPort	(STARH (STARH ((HIDDEN_HIDDEN_CGrafPtr_Ptr *) SYN68K_TO_US(a5))))
-#define theCPortX	((*STARH ((HIDDEN_HIDDEN_CGrafPtr_Ptr *) SYN68K_TO_US(a5))).p)
+#define theCPortX	((*STARH ((HIDDEN_HIDDEN_CGrafPtr_Ptr *) SYN68K_TO_US(a5))))
 
 #define minSeed 1024
 

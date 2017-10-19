@@ -128,7 +128,7 @@ Executor::get_icon_info (mextp item_info, icon_info_t *info, int need_icon_p)
 	  else
 	    {
 	      info->icon = h;
-	      if (!h->p)
+	      if (!*h)
 		LoadResource (h);
 	    }
 	}
@@ -739,7 +739,7 @@ P5(PUBLIC, pascal void, mdef0, INTEGER, mess, MenuHandle, mh, Rect *, rp,
   HIDDEN_GrafPtr saveport;
 
   GetPort(&saveport);
-  saveport.p = MR(saveport.p);
+  saveport = MR(saveport);
   SetPort (MR (wmgr_port));
   
   current_menu_rect = rp;
@@ -810,5 +810,5 @@ P5(PUBLIC, pascal void, mdef0, INTEGER, mess, MenuHandle, mh, Rect *, rp,
     }
   HUnlock((Handle) th);
   DisposHandle((Handle) th);
-  SetPort(saveport.p);
+  SetPort(saveport);
 }
