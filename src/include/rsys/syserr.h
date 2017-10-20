@@ -97,7 +97,7 @@ struct bdef {
   GUEST<INTEGER> id;
   GUEST<INTEGER>  alen;
   GUEST<INTEGER>  nbut;
-  struct PACKED but {
+  struct but {
     GUEST<INTEGER> butstrid;
     GUEST<Rect> butloc;
     GUEST<INTEGER> butprocid;

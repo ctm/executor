@@ -26,9 +26,8 @@ enum
   extSH = 0xFF,		/* extended sound header */
 };
 
-typedef struct PACKED _SndChannel *SndChannelPtr;
-typedef struct _SndChannel { GUEST_STRUCT;
-    GUEST< SndChannelPtr> nextChan;
+typedef struct SndChannel { GUEST_STRUCT;
+    GUEST< SndChannel* > nextChan;
     GUEST< Ptr> firstMod;
     GUEST< ProcPtr> callBack;
     GUEST< LONGINT> userInfo;
@@ -39,7 +38,7 @@ typedef struct _SndChannel { GUEST_STRUCT;
     GUEST< INTEGER> qHead;
     GUEST< INTEGER> qTail;
     GUEST< SndCommand[stdQLength]> queue;
-} SndChannel;
+} *SndChannelPtr;
 
 #define SND_CHAN_FLAGS_X(c) (c->flags)
 #define SND_CHAN_FLAGS(c) (CW (SND_CHAN_FLAGS_X (c)))

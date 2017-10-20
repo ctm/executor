@@ -33,14 +33,12 @@ namespace Executor {
 
 struct DialogRecord {
    GUEST_STRUCT;
-   WindowRecord window;
-   //PACKED_MEMBER(Handle, items);
-   //PACKED_MEMBER(TEHandle, textH);
+   GUEST<WindowRecord> window;
    GUEST<Handle> items;
    GUEST<TEHandle> textH;
    GUEST<INTEGER> editField;
-   INTEGER editOpen;
-   INTEGER aDefItem;
+   GUEST<INTEGER> editOpen;
+   GUEST<INTEGER> aDefItem;
 };
 typedef DialogRecord *DialogPeek;
 
@@ -63,7 +61,7 @@ typedef WindowPtr DialogPtr;
 #define DIALOG_ADEF_ITEM(dialog)	(CW (DIALOG_ADEF_ITEM_X (dialog)))
 
 struct DialogTemplate { GUEST_STRUCT;
-  Rect boundsRect;
+  GUEST<Rect> boundsRect;
   GUEST<INTEGER> procID;
   GUEST<BOOLEAN> visible;
   GUEST<BOOLEAN> filler1;

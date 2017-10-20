@@ -28,7 +28,7 @@ typedef GDPtr GDevicePtr;
 typedef GUEST<GDevicePtr> *GDHandle;
 
 
-typedef struct PACKED SProcRec *SProcPtr;
+typedef struct SProcRec *SProcPtr;
 
 typedef GUEST<SProcPtr> *SProcHndl;
 struct SProcRec { GUEST_STRUCT;
@@ -36,7 +36,7 @@ struct SProcRec { GUEST_STRUCT;
     GUEST< ProcPtr> srchProc;
 };
 
-typedef struct PACKED CProcRec *CProcPtr;
+typedef struct CProcRec *CProcPtr;
 
 
 typedef GUEST<CProcPtr> *CProcHndl;
