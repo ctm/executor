@@ -117,10 +117,10 @@ P1(PUBLIC pascal trap, LONGINT, GetCRefCon, ControlHandle, c)	/* IMI-327 */
 P2(PUBLIC pascal trap, void, SetCtlAction, ControlHandle, c,	/* IMI-328 */
 								  ProcPtr, a)
 {
-  if ((LONGINT) a != CLC (-1))
+  if (a != (ProcPtr) -1)
     HxX(c, contrlAction) = RM(a);
   else
-    HxX(c, contrlAction) = (ProcPtr) CLC (-1);
+    HxX(c, contrlAction) = guest_cast<ProcPtr> (CLC (-1));
 }
 
 P1(PUBLIC pascal trap, ProcPtr, GetCtlAction, ControlHandle, c)	/* IMI-328 */
@@ -155,7 +155,7 @@ P2 (PUBLIC pascal trap, BOOLEAN, GetAuxCtl, ControlHandle, ctl,	/* IMV-222 */
     }
   else
     {
-      AuxCtlHandle t;
+      GUEST<AuxCtlHandle> t;
 
       t = *lookup_aux_ctl (ctl);
       if (t)

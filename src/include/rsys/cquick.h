@@ -345,19 +345,19 @@ enum pixpat_pattern_types
 #define BITMAP_BOUNDS(bitmap)		((bitmap)->bounds)
 
 #define BITMAP_FLAGS_X(bitmap) \
-  ((bitmap)->rowBytes & ROWBYTES_FLAG_BITS_X)
-#define BITMAP_FLAGS(pixmap)		(CW (PIXMAP_FLAGS_X (pixmap)))
+  GUEST<uint16_t>::fromRaw((bitmap)->rowBytes.raw() & ROWBYTES_FLAG_BITS_X.raw())
+#define BITMAP_FLAGS(bitmap)		((bitmap)->rowBytes).get() & ROWBYTES_FLAG_BITS)
 
 #define BITMAP_DEFAULT_ROWBYTES_X	(CWC (0))
 
 #define BITMAP_ROWBYTES_X(bitmap) \
-  ((unsigned short) (bitmap)->rowBytes & ~ROWBYTES_FLAG_BITS_X)
-#define BITMAP_ROWBYTES(bitmap)		(CW (BITMAP_ROWBYTES_X (bitmap)))
+GUEST<uint16_t>::fromRaw((bitmap)->rowBytes.raw() & ~ROWBYTES_FLAG_BITS_X.raw())
+#define BITMAP_ROWBYTES(bitmap)		((bitmap)->rowBytes.get() & ~ROWBYTES_FLAG_BITS)
 
 #define BITMAP_SET_ROWBYTES_X(bitmap, value) \
-  ((bitmap)->rowBytes = (((value) & ~ROWBYTES_FLAG_BITS_X) \
-			 | BITMAP_FLAGS_X (bitmap)))
-
+((bitmap)->rowBytes.raw((((value).raw() & ~ROWBYTES_FLAG_BITS_X.raw()) \
+                       | BITMAP_FLAGS_X (bitmap).raw()))
+                     
 #define BITMAP_BASEADDR_X(bitmap)	((bitmap)->baseAddr)
 #define BITMAP_BASEADDR(bitmap)		(PPR (BITMAP_BASEADDR_X (bitmap)))
 
@@ -739,7 +739,7 @@ extern Handle ROMlib_copy_handle (Handle);
 
 /* this probably belongs elsewhere as well */
 #define THEPORT_SAVE_EXCURSION(thePort_new, body)	\
-  do { GrafPtr thePort_saveX = thePortX;		\
+  do { GUEST<GrafPtr> thePort_saveX = thePortX;		\
        SetPort (thePort_new);				\
        body						\
        thePortX = thePort_saveX; } while (0)

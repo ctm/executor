@@ -158,7 +158,7 @@ typedef struct { GUEST_STRUCT;
   GUEST<OSType> fdType;
   GUEST<OSType> fdCreator;
   GUEST<uint16_t> fdFlags;
-  Point fdLocation;
+  GUEST<Point> fdLocation;
   GUEST<uint16_t> fdFldr;
 } FInfo;
 
@@ -170,14 +170,14 @@ typedef struct { GUEST_STRUCT;
 } FXInfo;
 
 typedef struct { GUEST_STRUCT;
-  Rect frRect;
+  GUEST<Rect> frRect;
   GUEST<uint16_t> frFlags;
-  Point frLocation;
+  GUEST<Point> frLocation;
   GUEST<uint16_t> frView;
 } DInfo;
 
 typedef struct { GUEST_STRUCT;
-  Point frScroll;
+  GUEST<Point> frScroll;
   GUEST<LONGINT> frOpenChain;
   GUEST<uint16_t> frUnused;
   GUEST<uint16_t> frComment;

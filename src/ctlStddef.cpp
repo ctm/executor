@@ -167,12 +167,13 @@ drawlabel (StringPtr str, Rect *rp, justenum just)
     } *infop, *temp;
   register int i, ei, nlines;
   FontInfo fi;
-  INTEGER mid, top, incr, text_mode_save;
+  INTEGER mid, top, incr;
+  INTEGER text_mode_save;
   ALLOCABEGIN
     
   RGBForeColor (&current_control_colors[text_color]);
   
-  text_mode_save = PORT_TX_MODE_X (thePort);
+  text_mode_save = PORT_TX_MODE (thePort);
   TextMode (text_mode);
   
   GetFontInfo(&fi);
@@ -241,7 +242,7 @@ mapvar (int v)
 static void
 draw_push (ControlHandle c, int16 part)
 {
-  RgnHandle save;
+  GUEST<RgnHandle> save;
   int16 h, v;
   Rect r;
   
@@ -282,7 +283,7 @@ static void
 add_title (ControlHandle c)
 {
   WindowPtr control_owner;
-  RgnHandle save;
+  GUEST<RgnHandle> save;
   Rect r;
   
   control_owner = CTL_OWNER (c);

@@ -40,7 +40,7 @@ char ROMlib_rcsid_dialHandle[] =
 using namespace Executor;
 
 P3(PUBLIC pascal, BOOLEAN, ROMlib_myfilt, DialogPeek, dp, EventRecord *, evt,
-					    INTEGER *, ith)	/* IMI-415 */
+					    GUEST<INTEGER> *, ith)	/* IMI-415 */
 {
     itmp ip;
     ControlHandle c;
@@ -73,14 +73,14 @@ P3(PUBLIC pascal, BOOLEAN, ROMlib_myfilt, DialogPeek, dp, EventRecord *, evt,
 	       (mDownMask|mUpMask|keyDownMask|autoKeyMask|updateMask|activMask)
 
 typedef pascal BOOLEAN (*modalprocp) (DialogPtr dial, EventRecord *evtp,
-				      INTEGER *iht);
+				      GUEST<INTEGER> *iht);
 
 #define CALLMODALPROC(dp, evtp, ip, fp2)	\
   ROMlib_CALLMODALPROC((dp), (evtp), (ip), (modalprocp)(fp2))
 
 static inline BOOLEAN
 ROMlib_CALLMODALPROC (DialogPtr dp,
-		      EventRecord *evtp, INTEGER *ip, modalprocp fp)
+		      EventRecord *evtp, GUEST<INTEGER> *ip, modalprocp fp)
 {
   BOOLEAN retval;
 
@@ -146,7 +146,7 @@ ROMlib_CALLUSERITEM (DialogPtr dp,
    we have a lot of replicated code.  This is scary and should be fixed. */
 
 P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
-    INTEGER *, item)
+    GUEST<INTEGER> *, item)
 {
   /*
    * The code used to save thePort and restore it at the end of the
@@ -224,7 +224,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
 #else /* defined (ALLOW_MOVABLE_MODAL) */
 
 P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
-    INTEGER *, item)
+    GUEST<INTEGER> *, item)
 {
   /*
    * The code used to save thePort and restore it at the end of the
@@ -309,10 +309,10 @@ P1(PUBLIC pascal trap, BOOLEAN, IsDialogEvent,		/* IMI-416 */
     Point p;
     
     if (evt->what == CWC(activateEvt) || evt->what == CWC(updateEvt))
-/*-->*/ return ((WindowPeek)(long)(MR(evt->message)))->windowKind == CWC(dialogKind);
+/*-->*/ return MR(guest_cast<WindowPeek>(evt->message))->windowKind == CWC(dialogKind);
     dp = (DialogPeek) FrontWindow();
     if (dp && dp->window.windowKind == CWC(dialogKind)) {
-        if (dp->editField != -1)
+        if (dp->editField != CWC(-1))
             TEIdle(MR(dp->textH));
 	p.h = CW(evt->where.h);
 	p.v = CW(evt->where.v);
@@ -567,7 +567,7 @@ P2(PUBLIC pascal trap, void, UpdtDialog, DialogPtr, dp,		/* IMIV-60 */
 }
 
 P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
-    EventRecord *, evt, GUEST<DialogPtr> *, dpp, INTEGER *, itemp)
+    EventRecord *, evt, GUEST<DialogPtr> *, dpp, GUEST<INTEGER> *, itemp)
 {
   DialogPeek dp;
   Byte c;
@@ -653,16 +653,16 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
       HSetState(MR(((DialogPeek) dp)->items), flags);
       break;
     case updateEvt:
-      dp = (DialogPeek) (long) MR(evt->message);
+      dp = MR(guest_cast<DialogPeek>(evt->message));
       BeginUpdate((WindowPtr) dp);
       DrawDialog((DialogPtr) dp);
-      if (dp->editField != -1)
+      if (dp->editField != CWC(-1))
 	TEUpdate(&dp->window.port.portRect, MR(dp->textH));
       EndUpdate((WindowPtr) dp);
       break;
     case activateEvt:
-      dp = (DialogPeek) (long) MR(evt->message);
-      if (dp->editField != -1)
+      dp = MR(guest_cast<DialogPeek>(evt->message));
+      if (dp->editField != CWC(-1))
 	{
 	  if (Cx(evt->modifiers) & activeFlag)
 	    TEActivate(MR(dp->textH));
@@ -677,25 +677,25 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
 
 A1(PUBLIC, void, DlgCut, DialogPtr, dp)	/* IMI-418 */
 {
-    if ((((DialogPeek) dp)->editField) != -1)
+    if ((((DialogPeek) dp)->editField) != CWC(-1))
         TECut(MR(((DialogPeek)dp)->textH));
 }
 
 A1(PUBLIC, void, DlgCopy, DialogPtr, dp)	/* IMI-418 */
 {
-    if ((((DialogPeek) dp)->editField) != -1)
+    if ((((DialogPeek) dp)->editField) != CWC(-1))
         TECopy(MR(((DialogPeek)dp)->textH));
 }
 
 A1(PUBLIC, void, DlgPaste, DialogPtr, dp)	/* IMI-418 */
 {
-    if ((((DialogPeek) dp)->editField) != -1)
+    if ((((DialogPeek) dp)->editField) != CWC(-1))
         TEPaste(MR(((DialogPeek)dp)->textH));
 }
 
 A1(PUBLIC, void, DlgDelete, DialogPtr, dp)	/* IMI-418 */
 {
-    if ((((DialogPeek) dp)->editField) != -1)
+    if ((((DialogPeek) dp)->editField) != CWC(-1))
         TEDelete(MR(((DialogPeek)dp)->textH));
 }
 

@@ -509,7 +509,7 @@ P4 (PUBLIC pascal, void, new_draw_scroll, INTEGER, depth, INTEGER, flags,
   ctl = dlp->ctl;
   part = dlp->param;
 
-  if (CTL_VIS_X (ctl) == CWC (0))
+  if (CTL_VIS_X (ctl) == 0)
     return;
   switch (part)
     {

@@ -199,10 +199,10 @@ extern void C_ROMlib_myjobproc( DialogPtr dp, INTEGER itemno );
 extern void C_ROMlib_mystlproc( DialogPtr dp, INTEGER itemno );
 
 extern BOOLEAN C_ROMlib_numsonlyfilterproc( DialogPeek dp,
-					      EventRecord *evt, INTEGER *ith );
+					      EventRecord *evt, GUEST<INTEGER> *ith );
 
 extern BOOLEAN C_ROMlib_stlfilterproc( DialogPeek dp,
-					      EventRecord *evt, INTEGER *ith );
+					      EventRecord *evt, GUEST<INTEGER> *ith );
 
 extern void ROMlib_set_default_resolution (THPrint hPrint,
 					   INTEGER vres, INTEGER hres);

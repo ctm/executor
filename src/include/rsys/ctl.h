@@ -96,8 +96,8 @@ extern LONGINT ROMlib_ctlcall (ControlHandle c, INTEGER i, LONGINT l);
 struct popup_data { GUEST_STRUCT;
     GUEST< MenuHandle> menu;
     GUEST< int16> menu_id;
-    GUEST< int16> title_width;
-    GUEST< int> flags;
+    int16 title_width;
+    int flags;
 };
 
 typedef struct popup_data popup_data_t;

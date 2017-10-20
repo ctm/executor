@@ -198,15 +198,40 @@ struct GuestWrapper : GuestWrapperBase<TT>
 {
     GuestWrapper() = default;
     GuestWrapper(const GuestWrapper<TT>& y) = default;
-
     GuestWrapper<TT>& operator=(const GuestWrapper<TT>& y) = default;
+
+    template<typename T2, typename = typename std::enable_if<std::is_convertible<T2,TT>::value && sizeof(TT) == sizeof(T2)>::type>
+    GuestWrapper(const GuestWrapper<T2>& y)
+    {
+        this->raw(y.raw());
+    }
+
+    template<typename T2, typename = typename std::enable_if<std::is_convertible<T2,TT>::value && sizeof(TT) == sizeof(T2)>::type>
+    GuestWrapper<TT>& operator=(const GuestWrapper<T2>& y)
+    {
+        this->raw(y.raw());
+        return *this;
+    }
+
+    GuestWrapper(std::nullptr_t)
+    {
+        this->raw(0);
+    }
+
+    static GuestWrapper<TT> fromRaw(typename GuestWrapper<TT>::RawGuestType r)
+    {
+        GuestWrapper<TT> w;
+        w.raw(r);
+        return w;
+    }
+
 
     // Map implicit operations to *raw* access.
     // This should go away, and once we're sure it's gone,
     // we can wrap it to proper converted access.
     GuestWrapper(TT x) { this->raw((typename GuestWrapper<TT>::RawGuestType)x); }
     GuestWrapper<TT>& operator=(TT y) { this->raw((typename GuestWrapper<TT>::RawGuestType)y); return *this; }
-    operator TT() const { return (TT)this->raw(); }
+    //operator TT() const { return (TT)this->raw(); }
 
     explicit operator bool()
     {
@@ -225,6 +250,18 @@ bool operator!=(GuestWrapper<TT> a, GuestWrapper<TT> b)
 {
         return a.raw() != b.raw();
 }
+
+template<typename TT>
+bool operator==(GuestWrapper<TT*> a, std::nullptr_t)
+{
+        return !a;
+}
+template<typename TT>
+bool operator!=(GuestWrapper<TT*> a, std::nullptr_t)
+{
+        return a;
+}
+
 
 #define GUEST_STRUCT struct is_guest_struct {}
 

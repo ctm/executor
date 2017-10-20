@@ -154,10 +154,10 @@ extern pascal trap DialogPtr C_GetNewDialog( INTEGER id,
 extern pascal trap void C_CloseDialog( DialogPtr dp );
 extern pascal trap void C_DisposDialog( DialogPtr dp );
 extern pascal BOOLEAN C_ROMlib_myfilt( DialogPeek dp, EventRecord *evt, 
- INTEGER *ith );
+ GUEST<INTEGER> *ith );
 
 extern pascal trap void C_ModalDialog( ProcPtr fp, 
- INTEGER *item );
+ GUEST<INTEGER> *item );
 extern pascal trap BOOLEAN C_IsDialogEvent( 
  EventRecord *evt );
 extern pascal trap void C_DrawDialog( DialogPtr dp );
@@ -166,7 +166,7 @@ extern pascal trap INTEGER C_FindDItem( DialogPtr dp,
 extern pascal trap void C_UpdtDialog( DialogPtr dp, 
  RgnHandle rgn );
 extern pascal trap BOOLEAN C_DialogSelect( 
- EventRecord *evt, GUEST<DialogPtr> *dpp, INTEGER *item );
+ EventRecord *evt, GUEST<DialogPtr> *dpp, GUEST<INTEGER> *item );
 extern void DlgCut( DialogPtr dp );
 extern void DlgCopy( DialogPtr dp );
 extern void DlgPaste( DialogPtr dp );
@@ -178,7 +178,7 @@ extern void SetDAFont( INTEGER i );
 extern pascal trap void C_ParamText( StringPtr p0, 
  StringPtr p1, StringPtr p2, StringPtr p3 );
 extern pascal trap void C_GetDItem( DialogPtr dp, 
- INTEGER itemno, INTEGER *itype, GUEST<Handle> *item, Rect *r );
+ INTEGER itemno, GUEST<INTEGER> *itype, GUEST<Handle> *item, Rect *r );
 extern pascal trap void C_SetDItem( DialogPtr dp, 
  INTEGER itemno, INTEGER itype, Handle item, Rect *r );
 extern pascal trap void C_GetIText( Handle item, 

@@ -567,7 +567,7 @@ A3(static inline, void, ROMlib_CALLPRITEMPROC, TPPrDlg, prrecptr,
 #endif /* BINCOMPAT */
 
 P3(PUBLIC, pascal BOOLEAN,  ROMlib_stlfilterproc, DialogPeek, dp,
-					    EventRecord *, evt, INTEGER *, ith)
+					    EventRecord *, evt, GUEST<INTEGER> *, ith)
 {
   BOOLEAN retval;
   char *keyp;
@@ -661,7 +661,7 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_stlfilterproc, DialogPeek, dp,
 }
 
 P3(PUBLIC, pascal BOOLEAN,  ROMlib_numsonlyfilterproc, DialogPeek, dp,
-					    EventRecord *, evt, INTEGER *, ith)
+					    EventRecord *, evt, GUEST<INTEGER> *, ith)
 {
     char c;
 

@@ -211,8 +211,8 @@ A5(PRIVATE, BOOLEAN, getsetentry, GetOrSetType, gors, LONGINT, fd,
     if (nread >= (int) sizeof(struct defaulthead)
 	&& (dfp->head.magic == CLC(SINGLEMAGIC)
 	    || dfp->head.magic == CLC(DOUBLEMAGIC)
-	    || dfp->head.magic == SINGLEMAGIC
-	    || dfp->head.magic == DOUBLEMAGIC)) {
+	    || dfp->head.magic.raw() == SINGLEMAGIC
+	    || dfp->head.magic.raw() == DOUBLEMAGIC)) {
 	n = MIN(Cx(dfp->head.nentries),
 		((nread - (int) sizeof(Single_header)) /
 		 (int) sizeof(Single_descriptor)));
@@ -371,8 +371,11 @@ A1(PUBLIC, OSErr, ROMlib_geteofostype, fcbrec *, fp)	/* INTERNAL */
 	err = noErr;
 	if (fd == fp->fcfd) {	/* mixed file */
 	    idwanted = IDWANTED(fp);
-	    if (!getsetentry(Get, fd, idwanted, &d, NULL))
-		err = fp->fcPLen = 0;
+            if (!getsetentry(Get, fd, idwanted, &d, NULL))
+            {
+                err = 0;
+                fp->fcPLen = 0;
+            }
 	    else
 		fp->fcPLen = fp->fcleof = d.length;
 	} else

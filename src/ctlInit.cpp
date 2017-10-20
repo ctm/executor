@@ -190,7 +190,7 @@ P1(PUBLIC pascal trap, void, DisposeControl, ControlHandle, c)	/* IMI-321 */
         ;
     if ((*t))
         (*t) = HxX(c, nextControl);
-    for (auxhp = (GUEST<AuxCtlHandle> *) &AuxCtlHead; (*auxhp) && (STARH(STARH(auxhp)))->acOwner != c;
+    for (auxhp = (GUEST<AuxCtlHandle> *) &AuxCtlHead; (*auxhp) && MR((STARH(STARH(auxhp)))->acOwner) != c;
 					auxhp = (GUEST<AuxCtlHandle> *) &(STARH(STARH(auxhp)))->acNext)
 	;
     if ((*auxhp)) {

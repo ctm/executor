@@ -103,7 +103,7 @@ A4 (PRIVATE, itmp, htoip, Handle, h,
 }
 
 P5(PUBLIC pascal trap, void, GetDItem, DialogPtr, dp,	/* IMI-421 */
-	   INTEGER, itemno, INTEGER *, itype, GUEST<Handle> *, item, Rect *, r)
+	   INTEGER, itemno, GUEST<INTEGER> *, itype, GUEST<Handle> *, item, Rect *, r)
 {
     SignedByte flags;
     itmp ip = ROMlib_dpnotoip((DialogPeek) dp, itemno, &flags);
@@ -112,6 +112,7 @@ P5(PUBLIC pascal trap, void, GetDItem, DialogPtr, dp,	/* IMI-421 */
       {
 	if (itype)
 	  *itype = CW((INTEGER) ip->itmtype);
+#if 0
 	else
 	  {
 	    /* test on Mac shows unconditional write of *itype */
@@ -119,8 +120,10 @@ P5(PUBLIC pascal trap, void, GetDItem, DialogPtr, dp,	/* IMI-421 */
 	       when we tested it.  Perhaps they've fixed that now and we
 	       too should fix it.  ARGH! */
 	   *(INTEGER *) (US_TO_SYN68K(itype)) = CW((INTEGER) ip->itmtype);
-	  }
-	if (item) /* We didn't test what happens when item is 0 on Mac */
+          }
+          // but why should we duplicate this kind of bug?
+#endif
+        if (item) /* We didn't test what happens when item is 0 on Mac */
 	  *item = ip->itmhand;
 	if (r) /* test on Mac shows r will not be written if 0 */
 	  *r = ip->itmr;
@@ -196,8 +199,8 @@ settexth (DialogPeek dp, itmp ip, int item_no)
 	TEStyleHandle te_style;
 	STHandle style_table;
 	FontInfo finfo;
-	int16 tx_font_save_x, tx_size_save_x;
-	Style tx_face_save;
+	GUEST<int16> tx_font_save_x, tx_size_save_x;
+	GUEST<Style> tx_face_save;
 	
 	te_style = TE_GET_STYLE (te);
 	HASSIGN_2

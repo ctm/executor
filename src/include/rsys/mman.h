@@ -93,7 +93,7 @@ enum { TRAP_MASK = 0xF9FF };
 
 #define ZONE_SAVE_EXCURSION(zone, body)		\
   do {						\
-      THz save_zone;				\
+      GUEST<THz> save_zone;			\
 						\
       save_zone = TheZone;			\
       TheZone = zone;				\

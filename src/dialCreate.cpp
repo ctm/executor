@@ -77,7 +77,7 @@ Executor::dialog_create_item (DialogPeek dp, itmp dst, itmp src,
       if ((CB (dst->itmtype) & resCtrl) == resCtrl)
 	{
 	  Rect *ctl_rect;
-	  int top, left;
+	  GUEST<INTEGER> top, left;
 	  
 	  /* ### is visibility correct here? */
 	  ctl = GetNewControl (res_id, (WindowPtr) dp);
@@ -97,7 +97,7 @@ Executor::dialog_create_item (DialogPeek dp, itmp dst, itmp src,
 			    visible_p, 0, 0, 1,
 			    CB (dst->itmtype) & resCtrl, 0L);
 	}
-      dst->itmhand = (Handle) RM (ctl);
+      dst->itmhand = RM ((Handle) ctl);
       
       ValidRect (&dst->itmr);
       
@@ -172,7 +172,7 @@ Executor::dialog_create_item (DialogPeek dp, itmp dst, itmp src,
     }
   else if (CB (dst->itmtype) & picItem)
     {
-      dst->itmhand = (Handle) RM (GetPicture (res_id));
+      dst->itmhand = RM ((Handle) GetPicture (res_id));
     }
   else
     {
@@ -193,7 +193,8 @@ ROMlib_new_dialog_common (DialogPtr dp,
 			  int32 ref_con,
 			  Handle items)
 {
-  INTEGER *ip, i;
+  GUEST<INTEGER> *ip;
+  INTEGER i;
   itmp itp;
   
   if (!dp)
@@ -277,7 +278,7 @@ ROMlib_new_dialog_common (DialogPtr dp,
 	      {
 		int item_no;
 		
-		ip = (INTEGER *) STARH (items);
+		ip = (GUEST<INTEGER> *) STARH (items);
 		itp = (itmp) (ip + 1);
 		i = CW (*ip);
 		item_no = 1;

@@ -78,23 +78,23 @@ extern boolean_t cd_mounted_by_trickery_p;
 #define fcwriteperm	(1 << 0)
 
 typedef struct {
-  LONGINT fdfnum;	/* LONGINT fcbFlNum */
-  Byte fcflags;	/* Byte fcbMdRByt */
-  Byte fcbTypByt;
-  INTEGER fcbSBlk;
-  LONGINT fcleof;	/* LONGINT fcbEOF */
-  LONGINT fcPLen;
-  LONGINT fcbCrPs;
-  PACKED_MEMBER(VCB, *fcvptr);	/* VCB *fcbVPtr */
-  PACKED_MEMBER(Ptr, fcbBfAdr);
-  INTEGER fcbFlPos;
-  LONGINT fcbClmpSize;
+  GUEST<LONGINT> fdfnum;	/* LONGINT fcbFlNum */
+  GUEST<Byte> fcflags;	/* Byte fcbMdRByt */
+  GUEST<Byte> fcbTypByt;
+  GUEST<INTEGER> fcbSBlk;
+  GUEST<LONGINT> fcleof;	/* LONGINT fcbEOF */
+  GUEST<LONGINT> fcPLen;
+  GUEST<LONGINT> fcbCrPs;
+  GUEST<VCB *> fcvptr;	/* VCB *fcbVPtr */
+  GUEST<Ptr> fcbBfAdr;
+  GUEST<INTEGER> fcbFlPos;
+  GUEST<LONGINT> fcbClmpSize;
   LONGINT fcfd;		/* instead of: LONGINT fcbBTCBPtr	PACKED; */
-  LONGINT zero[3];	/* these three fields are fcbExtRec */
-  LONGINT fcbFType;
+  GUEST<LONGINT> zero[3];	/* these three fields are fcbExtRec */
+  GUEST<LONGINT> fcbFType;
   LONGINT hiddenfd;	/* instead of LONGINT fcbCatPos */
-  LONGINT fcparid;	/* LONGINT fcbDirID */
-  Byte fcname[32];	/* Str31 fcbCName */
+  GUEST<LONGINT> fcparid;	/* LONGINT fcbDirID */
+  GUEST<Byte[32]> fcname;	/* Str31 fcbCName */
 } fcbrec;
 
 #define NFCB 348		/* should be related to NOFILE */

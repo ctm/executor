@@ -19,15 +19,6 @@ char ROMlib_rcsid_dialItem[] =
 
 using namespace Executor;
 
-#define _GetDItem(dp, item_no, item_type, item_h, item_rect)		\
-  ({									\
-    GUEST<Handle> __item_handle;					\
-									\
-    GetDItem (dp, item_no, item_type, &__item_handle, item_rect);	\
-    *(item_h) = MR (__item_handle);					\
-  })
-  
-
 void
 Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
 {
@@ -44,13 +35,13 @@ Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
   
   if (method < 0)
     {
-      int16 item_type;
-      Handle item_h;
+      GUEST<int16> item_type;
+      GUEST<Handle> item_h;
       Rect item_rect;
       
       method = -method;
       
-      _GetDItem (dp, method, &item_type, &item_h, &item_rect);
+      GetDItem (dp, method, &item_type, &item_h, &item_rect);
 
       resize_p = FALSE;
       base_pt.v = CW (item_rect.top);
@@ -236,7 +227,7 @@ Executor::ShortenDITL (DialogPtr dp, int16 n_items)
 		 {
 		   Handle icon;
 		   
-		   icon = itemp->itmhand;
+		   icon = MR(itemp->itmhand);
 		   if (CICON_P (icon))
 		     DisposeCIcon ((CIconHandle) icon);
 		   erase_p = TRUE;

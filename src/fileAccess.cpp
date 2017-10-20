@@ -388,7 +388,7 @@ PUBLIC BOOLEAN Executor::ROMlib_isresourcefork(const char *fullname)
 	  fd = -1;
 	  retval = (fd = Uopen(fullname, O_BINARY|O_RDONLY, 0)) >= 0 &&
 	    read(fd, (void *) &magic, sizeof(magic)) == sizeof(magic) &&
-	      (magic == CLC(DOUBLEMAGIC)
+	      (magic == CLC(DOUBLEMAGIC).raw()
 	       || magic == DOUBLEMAGIC);
 	  if (fd >= 0)
 	    Uclose(fd);
@@ -427,7 +427,7 @@ dislike_name (char *namep)
 A4(PRIVATE, char *, dirindex, char *, dir, LONGINT, index, BOOLEAN, nodirectories,
 							  struct stat *, sbufp)
 {
-    THz saveZone;
+    GUEST<THz> saveZone;
     static char *cachedir = 0, *cachedirend;
     static DIR *dirp = 0;
 #if defined (USE_STRUCT_DIRECT)
@@ -1095,7 +1095,7 @@ A4(PRIVATE, OSErr, PBOpenForkD, ParmBlkPtr, pb, BOOLEAN, a,
     VCBExtra *vcbp;
     int namelen;
     fcbrec *fp;
-    THz savezone;
+    GUEST<THz> savezone;
     int save_index;
     char save_char;
     char *need_to_free;
@@ -1386,14 +1386,14 @@ A3(PRIVATE, OSErr, PBLockUnlockRange, ParmBlkPtr, pb, BOOLEAN, a,
 		cleanup = ROMlib_fd_remove_range;
 	      }
 
-	    err = verify (fd, toseek, BigEndianValue (pb->ioParam.ioReqCount));
+	    err = verify (fd, toseek, CL (pb->ioParam.ioReqCount));
 	    if (err == noErr && lseek(fd, toseek, SEEK_SET) == -1)
 		err = ROMlib_maperrno();
 	    if (err == noErr)
 	      err = ROMlib_lockunlockrange (fd, toseek,
 					    CL (pb->ioParam.ioReqCount), op);
 	    if (err == noErr)
-	      err = cleanup (fd, toseek, BigEndianValue (pb->ioParam.ioReqCount));
+	      err = cleanup (fd, toseek, CL (pb->ioParam.ioReqCount));
 	    lseek(fd, curseek, SEEK_SET);
 	}
     }
@@ -1609,8 +1609,8 @@ A2(PUBLIC, OSErr, ufsPBGetFPos, ParmBlkPtr, pb,		/* INTERNAL */
 	forkoffset = FORKOFFSET(fp);
 	pb->ioParam.ioPosOffset = BigEndianValue((int)(lseek(fp->fcfd, 0L, L_INCR) -
 								   forkoffset));
-	pb->ioParam.ioReqCount = pb->ioParam.ioActCount =
-						     pb->ioParam.ioPosMode = 0;
+	pb->ioParam.ioReqCount = pb->ioParam.ioActCount = 0;
+        pb->ioParam.ioPosMode = 0;
     }
     fs_err_hook (err);
     return err;

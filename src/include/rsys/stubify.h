@@ -510,7 +510,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
  ({ \
    void *new_addr;\
    ProcPtr __stub_arg_1 = (A1);\
-   INTEGER * __stub_arg_2 = (A2);\
+   GUEST<INTEGER> * __stub_arg_2 = (A2);\
  \
    new_addr = tooltraptable[0x0191];\
    ((new_addr == toolstuff[0x0191].orig)\
@@ -564,7 +564,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    void *new_addr;\
    EventRecord * __stub_arg_1 = (A1);\
    GUEST<DialogPtr> * __stub_arg_2 = (A2);\
-   INTEGER * __stub_arg_3 = (A3);\
+   GUEST<INTEGER> * __stub_arg_3 = (A3);\
  \
    new_addr = tooltraptable[0x0180];\
    ((new_addr == toolstuff[0x0180].orig)\
@@ -609,7 +609,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    void *new_addr;\
    DialogPtr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
-   INTEGER * __stub_arg_3 = (A3);\
+   GUEST<INTEGER> * __stub_arg_3 = (A3);\
    GUEST<Handle> * __stub_arg_4 = (A4);\
    Rect * __stub_arg_5 = (A5);\
  \

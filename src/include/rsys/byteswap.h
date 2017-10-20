@@ -168,13 +168,22 @@ inline void* MR(int32_t p) { return MR((void*)p); }
 
 #endif
 
-#define CWC(n) ((typeof (n)) (signed short) (((((unsigned short)n) << 8) & 0xFF00) \
-					     | ((((unsigned short)n) >> 8) & 0x00FF)))
-#define CLC(n) ((typeof (n)) (int) (  (((unsigned int) ((n)|0) & 0x000000FF) << 24)   \
+template<typename TT, typename T2 = std::conditional_t<std::is_signed<TT>::value,int16_t,uint16_t>>
+inline Executor::GUEST<T2>
+wordFromRaw(TT x) { return Executor::GUEST<T2>::fromRaw(x); }
+template<typename TT, typename T2 = std::conditional_t<std::is_signed<TT>::value,int32_t,uint32_t>>
+inline Executor::GUEST<T2>
+longwordFromRaw(TT x) { return Executor::GUEST<T2>::fromRaw(x); }
+
+#define CWC(n) (wordFromRaw( \
+                                                (signed short) (((((unsigned short)n) << 8) & 0xFF00) \
+					     | ((((unsigned short)n) >> 8) & 0x00FF))))
+#define CLC(n) (longwordFromRaw( \
+                                         (int) (  (((unsigned int) ((n)|0) & 0x000000FF) << 24)   \
 				     | (((unsigned int) (n) & 0x0000FF00) <<  8)   \
 				     | (((unsigned int) (n) & 0x00FF0000) >>  8)   \
 				     | (((unsigned int) (n) & 0xFF000000) \
-					>> 24)))
+					>> 24))))
 
 #define CLC_NULL nullptr
 

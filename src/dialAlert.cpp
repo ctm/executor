@@ -35,7 +35,8 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
   alth ah;
   Handle h;
   Handle ih;
-  INTEGER n, hit, defbut;
+  INTEGER n, defbut;
+  GUEST<INTEGER> hit;
   Handle alert_ctab_res_h;
   Handle item_ctab_res_h;
   
@@ -132,15 +133,15 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
            icon_item_h = NewHandle (18);
        
            Ptr ptr = MR(*icon_item_h);
-           *(short*)(ptr + 0) = CWC(0);    // count: item count - 1
+           *(GUEST<short>*)(ptr + 0) = CWC(0);    // count: item count - 1
            *(long*)(ptr + 2) = 0;          // h = NULL
-           *(short*)(ptr + 6) = CWC(10);   // r.top
-           *(short*)(ptr + 8) = CWC(20);   // r.left
-           *(short*)(ptr + 10) = CWC(42);   // r.bottom
-           *(short*)(ptr + 12) = CWC(52);   // r.right
+           *(GUEST<short>*)(ptr + 6) = CWC(10);   // r.top
+           *(GUEST<short>*)(ptr + 8) = CWC(20);   // r.left
+           *(GUEST<short>*)(ptr + 10) = CWC(42);   // r.bottom
+           *(GUEST<short>*)(ptr + 12) = CWC(52);   // r.right
            *(ptr + 14) = CBC ((1 << 7) | (iconItem));   // type
            *(ptr + 15) = CBC (2);       // len
-           *(short*)(ptr + 16) = CW (alert_extra_icon_id);      // res_id
+           *(GUEST<short>*)(ptr + 16) = CW (alert_extra_icon_id);      // res_id
 	   
 	   AppendDITL ((DialogPtr) dp, icon_item_h, overlayDITL);
 	   
