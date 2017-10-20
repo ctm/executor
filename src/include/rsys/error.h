@@ -91,7 +91,7 @@ extern _NORET_1_ void _gui_fatal (const char *file, int line, const char *fn,
 
 #define warning_helper(error, type, fmt, args...)	\
   _warning (error, type, __FILE__, __LINE__,		\
-	    __PRETTY_FUNCTION__, fmt , ## args)
+	    __PRETTY_FUNCTION__, " " fmt , ## args)
 
 extern void _warning (int error, const char *type, const char *file, int line,
 		      const char *fn, const char *fmt, ...)
