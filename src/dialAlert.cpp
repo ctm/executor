@@ -229,18 +229,18 @@ A2(PRIVATE, void, lockditl, INTEGER, id, BOOLEAN, flag)
     itmp ip;
     
     if((ih = lockres(TICK("DITL"), id, flag))) {
-	nitem = CW(*MR(*(INTEGER **)ih));
+	nitem = CW(*MR(*(GUEST<GUEST<INTEGER> *>*)ih));
 	ip = (itmp)((INTEGER *) STARH(ih) + 1);
 	while (nitem-- >= 0) {
 	    if ((CB(ip->itmtype) & RESCTL) == RESCTL) {
-		h = lockres(TICK("CNTL"), CW(*(INTEGER *)(&(ip->itmlen)+1)),
+		h = lockres(TICK("CNTL"), CW(*(GUEST<INTEGER> *)(&(ip->itmlen)+1)),
 									 flag);
-		procid = CW(*MR(*(INTEGER **)h)) + 8;
+		procid = CW(*MR(*(GUEST<GUEST<INTEGER> *>*)h)) + 8;
 		lockres(TICK("CDEF"), procid >> 4, flag);
 	    } else if (CB(ip->itmtype) & iconItem)
-		lockres(TICK("ICON"), CW(*(INTEGER *)(&(ip->itmlen)+1)), flag);
+		lockres(TICK("ICON"), CW(*(GUEST<INTEGER> *)(&(ip->itmlen)+1)), flag);
 	    else if (CB(ip->itmtype) & picItem)
-		lockres(TICK("PICT"), CW(*(INTEGER *)(&(ip->itmlen)+1)), flag);
+		lockres(TICK("PICT"), CW(*(GUEST<INTEGER> *)(&(ip->itmlen)+1)), flag);
 	    BUMPIP(ip);
 	}
     }

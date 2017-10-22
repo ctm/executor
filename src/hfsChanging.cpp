@@ -34,7 +34,7 @@ PRIVATE OSErr PBFInfoHelper(changeop op, FileParam *pb, LONGINT dirid,
     filekind kind;
     
     vcbp = 0;
-    if (op == GetOp && (BigEndianValue(pb->ioFDirIndex) > 0))
+    if (op == GetOp && (CW(pb->ioFDirIndex) > 0))
 	err = ROMlib_btpbindex((IOParam *) pb, dirid, &vcbp, &frp, &catkeyp,
 									 TRUE);
     else {
@@ -104,7 +104,7 @@ PUBLIC OSErr Executor::hfsPBGetFInfo(ParmBlkPtr pb, BOOLEAN async)
 
 PUBLIC OSErr Executor::hfsPBHGetFInfo(HParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(GetOp, (FileParam *) pb, BigEndianValue(pb->fileParam.ioDirID), async);
+    return PBFInfoHelper(GetOp, (FileParam *) pb, CL(pb->fileParam.ioDirID), async);
 }
 
 PUBLIC OSErr Executor::hfsPBSetFInfo(ParmBlkPtr pb, BOOLEAN async)
@@ -114,7 +114,7 @@ PUBLIC OSErr Executor::hfsPBSetFInfo(ParmBlkPtr pb, BOOLEAN async)
 
 PUBLIC OSErr Executor::hfsPBHSetFInfo(HParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(SetOp, (FileParam *) pb, BigEndianValue(pb->fileParam.ioDirID), async);
+    return PBFInfoHelper(SetOp, (FileParam *) pb, CL(pb->fileParam.ioDirID), async);
 }
 
 PUBLIC OSErr Executor::hfsPBSetFLock(ParmBlkPtr pb, BOOLEAN async)
@@ -124,7 +124,7 @@ PUBLIC OSErr Executor::hfsPBSetFLock(ParmBlkPtr pb, BOOLEAN async)
 
 PUBLIC OSErr Executor::hfsPBHSetFLock(HParmBlkPtr pb, BOOLEAN async)
 {
-    return PBFInfoHelper(LockOp, (FileParam *) pb, BigEndianValue(pb->fileParam.ioDirID), async);
+    return PBFInfoHelper(LockOp, (FileParam *) pb, CL(pb->fileParam.ioDirID), async);
 }
 
 PUBLIC OSErr Executor::hfsPBRstFLock(ParmBlkPtr pb, BOOLEAN async)
@@ -135,7 +135,7 @@ PUBLIC OSErr Executor::hfsPBRstFLock(ParmBlkPtr pb, BOOLEAN async)
 PUBLIC OSErr Executor::hfsPBHRstFLock(HParmBlkPtr pb, BOOLEAN async)
 {
     return PBFInfoHelper(UnlockOp, (FileParam *) pb,
-			 BigEndianValue (pb->fileParam.ioDirID), async);
+			 CL (pb->fileParam.ioDirID), async);
 }
 
 PUBLIC OSErr Executor::hfsPBSetFVers(ParmBlkPtr pb, BOOLEAN async)
@@ -144,16 +144,16 @@ PUBLIC OSErr Executor::hfsPBSetFVers(ParmBlkPtr pb, BOOLEAN async)
 }
 
 PUBLIC void
-ROMlib_fcbrename (HVCB *vcbp, LONGINT swapped_parid, StringPtr oldnamep,
+ROMlib_fcbrename (HVCB *vcbp, GUEST<LONGINT> swapped_parid, StringPtr oldnamep,
 		  StringPtr newnamep)
 {
   short length;
   filecontrolblock *fcbp, *efcbp;
-  HVCB *swapped_vcbp;
+  GUEST<HVCB *> swapped_vcbp;
 
   swapped_vcbp = RM (vcbp);
-  length = CW(*(short *)MR(FCBSPtr));
-  fcbp = (filecontrolblock *) ((short *)MR(FCBSPtr)+1);
+  length = CW(*(GUEST<INTEGER> *)MR(FCBSPtr));
+  fcbp = (filecontrolblock *) ((GUEST<INTEGER> *)MR(FCBSPtr)+1);
   efcbp = (filecontrolblock *) ((char *)MR(FCBSPtr) + length);
   for (;fcbp < efcbp;
        fcbp = (filecontrolblock *) ((char *)fcbp + CW(FSFCBLen)))
@@ -176,7 +176,7 @@ renamehelper(IOParam *pb, BOOLEAN async, LONGINT dirid, filekind kind)
   if (err == noErr)
     {
       npb = *pb;
-      npb.ioNamePtr = (StringPtr) (long) pb->ioMisc;
+      npb.ioNamePtr = guest_cast<StringPtr> (pb->ioMisc);
       err = ROMlib_findvcbandfile(&npb, dirid, &btparamrec2, &kind, FALSE);
       if (err != fnfErr)
 	{
@@ -189,13 +189,13 @@ renamehelper(IOParam *pb, BOOLEAN async, LONGINT dirid, filekind kind)
 	  if (err == noErr)
 	    {
 	      err = ROMlib_btrename(&btparamrec,
-				    (StringPtr) (long) MR(pb->ioMisc));
+				     MR(guest_cast<StringPtr>(pb->ioMisc)));
 	      if (err == noErr)
 		ROMlib_fcbrename (btparamrec.vcbp,
 				  btparamrec.tofind.catk.ckrParID,
 				  (StringPtr)
 				  &btparamrec.tofind.catk.ckrCName[0],
-				  (StringPtr) CL (pb->ioMisc));
+				  MR (guest_cast<StringPtr>(pb->ioMisc)));
 	    }
 	  err1 = ROMlib_cleancache(btparamrec.vcbp);
 	  if (err1 == noErr)
@@ -219,7 +219,7 @@ renamehelper(IOParam *pb, BOOLEAN async, LONGINT dirid, filekind kind)
 	  || (ROMlib_indexn((char *)nameptr+1, ':', nameptr[0])
 	      == (char *) nameptr + nameptr[0]))
 	{
-	  err = ROMlib_pbvolrename(pb, (StringPtr) (long) MR(pb->ioMisc));
+	  err = ROMlib_pbvolrename(pb, MR(guest_cast<StringPtr>(pb->ioMisc)));
 	  dirid = 1;
 	}
     }
@@ -233,6 +233,6 @@ PUBLIC OSErr Executor::hfsPBRename(ParmBlkPtr pb, BOOLEAN async)
 
 PUBLIC OSErr Executor::hfsPBHRename(HParmBlkPtr pb, BOOLEAN async)
 {
-    return renamehelper((IOParam *) pb, async, BigEndianValue(pb->fileParam.ioDirID),
+    return renamehelper((IOParam *) pb, async, CL(pb->fileParam.ioDirID),
 							    (filekind)(regular|directory));
 }

@@ -25,7 +25,7 @@ P3(PUBLIC pascal trap, void, StdComment, INTEGER, kind, INTEGER, size,
 								  Handle, hand)
 {
     SignedByte state;
-    INTEGER swappedsize;
+    GUEST<INTEGER> swappedsize;
 
     switch (kind)
       {
@@ -37,10 +37,10 @@ P3(PUBLIC pascal trap, void, StdComment, INTEGER, kind, INTEGER, size,
 	break;
       }
 
-    kind = CW(kind);
+    GUEST<INTEGER> kind_s = CW(kind);
     if (size) {
 	PICSAVEBEGIN(OP_LongComment);
-	PICWRITE(&kind, sizeof(kind));
+	PICWRITE(&kind_s, sizeof(kind_s));
 	swappedsize = CW(size);
 	PICWRITE(&swappedsize, sizeof(swappedsize));
 	state = HGetState(hand);
@@ -52,7 +52,7 @@ P3(PUBLIC pascal trap, void, StdComment, INTEGER, kind, INTEGER, size,
 	PICSAVEEND;
     } else {
 	PICSAVEBEGIN(OP_ShortComment);
-	PICWRITE(&kind, sizeof(kind));
+	PICWRITE(&kind_s, sizeof(kind_s));
 	PICSAVEEND;
     }
 }

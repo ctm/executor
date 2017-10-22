@@ -498,7 +498,8 @@ Executor::dialog_draw_item (DialogPtr dp, itmp itemp, int itemno)
 
 P1 (PUBLIC pascal trap, void, DrawDialog, DialogPtr, dp)	/* IMI-418 */
 {
-    INTEGER *intp, i, inum;
+    GUEST<INTEGER> *intp;
+    INTEGER i, inum;
     itmp ip;
     GrafPtr gp;
     SignedByte state;
@@ -512,7 +513,7 @@ P1 (PUBLIC pascal trap, void, DrawDialog, DialogPtr, dp)	/* IMI-418 */
 	DrawControls((WindowPtr) dp);
 	state = HGetState(MR(((DialogPeek)dp)->items));
 	HSetState(MR(((DialogPeek)dp)->items), state | LOCKBIT);
-	intp = (INTEGER *) STARH(MR(((DialogPeek)dp)->items));
+	intp = (GUEST<INTEGER> *) STARH(MR(((DialogPeek)dp)->items));
 	ip = (itmp)(intp + 1);
 	for (i = Cx (*intp), inum = 1; i-- >= 0; inum++, BUMPIP(ip))
 	  {
@@ -528,10 +529,11 @@ P1 (PUBLIC pascal trap, void, DrawDialog, DialogPtr, dp)	/* IMI-418 */
 P2(PUBLIC pascal trap, INTEGER, FindDItem, DialogPtr, dp,	/* IMIV-60 */
 								   Point, pt)
 {
-    INTEGER *intp, i, inum;
+    GUEST<INTEGER> *intp;
+    INTEGER i, inum;
     itmp ip;
     
-    intp = (INTEGER *)STARH(MR(((DialogPeek)dp)->items));
+    intp = (GUEST<INTEGER> *)STARH(MR(((DialogPeek)dp)->items));
     ip = (itmp)(intp + 1);
     for (i =Cx( *intp), inum = 0; i-- >= 0; inum++, BUMPIP(ip))
 	if (PtInRect(pt, &ip->itmr))
@@ -542,7 +544,8 @@ P2(PUBLIC pascal trap, INTEGER, FindDItem, DialogPtr, dp,	/* IMIV-60 */
 P2(PUBLIC pascal trap, void, UpdtDialog, DialogPtr, dp,		/* IMIV-60 */
 							      RgnHandle, rgn)
 {
-    INTEGER *intp, i, inum;
+        GUEST<INTEGER> *intp;
+    INTEGER i, inum;
     itmp ip;
     GrafPtr gp;
     SignedByte state;
@@ -553,7 +556,7 @@ P2(PUBLIC pascal trap, void, UpdtDialog, DialogPtr, dp,		/* IMIV-60 */
     DrawControls((WindowPtr) dp);
     state = HGetState(MR(((DialogPeek)dp)->items));
     HSetState(MR(((DialogPeek)dp)->items), state | LOCKBIT);
-    intp = (INTEGER *) STARH(MR(((DialogPeek)dp)->items));
+    intp = (GUEST<INTEGER> *) STARH(MR(((DialogPeek)dp)->items));
     ip = (itmp)(intp + 1);
     for (i = Cx (*intp), inum = 1; i-- >= 0; inum++, BUMPIP(ip))
       {
@@ -572,7 +575,8 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
   DialogPeek dp;
   Byte c;
   itmp ip;
-  INTEGER *intp, i, iend;
+  GUEST<INTEGER> *intp;
+  INTEGER i, iend;
   Point localp;
   GUEST<Point> glocalp;
   GrafPtr gp;
@@ -591,7 +595,7 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
       GlobalToLocal(&glocalp); 
       localp = glocalp.get();
       SetPort(gp);
-      intp = (INTEGER *) STARH(MR(dp->items));
+      intp = (GUEST<INTEGER> *) STARH(MR(dp->items));
       iend = Cx(*intp) + 2;
       ip = (itmp)(intp + 1);
       for (i = 0;
@@ -671,7 +675,7 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
 	}
       break;
     }
-  *dpp = (DialogPtr) RM (dp);
+  *dpp = RM ((DialogPtr)dp);
   return retval;
 }
 

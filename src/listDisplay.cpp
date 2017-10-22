@@ -22,7 +22,7 @@ P2(PUBLIC pascal trap, void, LDraw, Cell, cell,			/* IMIV-275 */
 					        ListHandle, list)
 {
     GrafPtr saveport;
-    RgnHandle saveclip;
+    GUEST<RgnHandle> saveclip;
     Rect r;
     GUEST<INTEGER> *ip;
     INTEGER off0, off1;
@@ -196,7 +196,7 @@ P2(PUBLIC pascal trap, void, LActivate, BOOLEAN, act,		/* IMIV-276 */
     BOOLEAN sel;
     GUEST<INTEGER> *ip;
     INTEGER off0, off1;
-    RgnHandle saveclip;
+    GUEST<RgnHandle> saveclip;
     LISTDECL();
 
     if (!act ^ !Hx(list, lActive)) {

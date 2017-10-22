@@ -19,9 +19,9 @@ P2 (PUBLIC pascal trap, void, CMY2RGB,
     CMYColor *, cmy_color,
     RGBColor *, rgb_color)
 {
-  rgb_color->red   = ~cmy_color->cyan;
-  rgb_color->green = ~cmy_color->magenta;
-  rgb_color->blue  = ~cmy_color->yellow;
+  rgb_color->red.raw(~cmy_color->cyan.raw());
+  rgb_color->green.raw(~cmy_color->magenta.raw());
+  rgb_color->blue.raw(~cmy_color->yellow.raw());
 }
    
 P2 (PUBLIC pascal trap, void, RGB2CMY,
@@ -31,9 +31,9 @@ P2 (PUBLIC pascal trap, void, RGB2CMY,
   /* use `bar = ~foo' instead of `bar = CW (MaxSmallFract - CW (foo))'
      to compute the complement value */
   
-  cmy_color->cyan    = ~rgb_color->red;
-  cmy_color->magenta = ~rgb_color->green;
-  cmy_color->yellow  = ~rgb_color->blue;
+  cmy_color->cyan.raw(~rgb_color->red.raw());
+  cmy_color->magenta.raw(~rgb_color->green.raw());
+  cmy_color->yellow.raw(~rgb_color->blue.raw());
 }
 
 #define SF_MULT(x,y) (((x) * (y)) / 65535)
@@ -45,7 +45,7 @@ P2 (PUBLIC pascal trap, void, RGB2CMY,
 #define ANGLE_TO_SF(angle) (C_TO_SF (angle) / 360)
 
 
-static inline unsigned short
+static inline GUEST<uint16_t>
 value (unsigned long n1, unsigned long n2, unsigned long hue)
 {
   if (hue < ANGLE_TO_SF (60))

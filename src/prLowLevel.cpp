@@ -79,7 +79,7 @@ GetDControl (DialogPtr dp, INTEGER itemno)
 {
   GUEST<Handle> h;
   ControlHandle retval;
-  INTEGER unused;
+  GUEST<INTEGER> unused;
 
   GetDItem (dp, itemno, &unused, &h, NULL);
   retval = (ControlHandle) MR (h);
@@ -91,7 +91,7 @@ GetDIText (DialogPtr dp, INTEGER itemno)
 {
   GUEST<Handle> h;
   Handle retval;
-  INTEGER unused;
+  GUEST<INTEGER> unused;
 
   GetDItem(dp, itemno, &unused, &h, NULL);
   retval = MR (h);
@@ -197,7 +197,7 @@ add_orientation_icons_to_update_region (DialogPtr dp)
 {
   GrafPtr gp;
   Rect r;
-  INTEGER unused;
+  GUEST<INTEGER> unused;
 
   gp = thePort;
   SetPort (dp);
@@ -574,9 +574,9 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_stlfilterproc, DialogPeek, dp,
 
   retval = FALSE;
   /* Check for user hitting <Enter> or clicking on "OK" button */
-  switch (evt->what)
+  switch (CW(evt->what))
     {
-    case CWC (keyDown):
+    case keyDown:
       {
 	char c;
 
@@ -589,14 +589,14 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_stlfilterproc, DialogPeek, dp,
 	  }
       }
       break;
-    case CWC (mouseDown):
+    case mouseDown:
       {
 	GUEST<Point> glocalp;
 	Point localp;
 	GrafPtr gp;
 	Rect r;
 	GUEST<Handle> h;
-	INTEGER unused;
+	GUEST<INTEGER> unused;
 
 	glocalp = evt->where;
 	gp = thePort;
@@ -686,7 +686,7 @@ PRIVATE void
 set_userItem (DialogPtr dp, INTEGER itemno, void *funcp)
 {
   Rect r;
-  INTEGER unused;
+  GUEST<INTEGER> unused;
 
   GetDItem(dp, itemno, &unused, NULL, &r);
   SetDItem(dp, itemno, userItem, (Handle)funcp, &r);
@@ -837,7 +837,7 @@ P1(PUBLIC pascal trap, TPPrDlg, PrJobInit, THPrint, hPrint)
 P2(PUBLIC, pascal void,  ROMlib_circle_ok, DialogPeek, dp, INTEGER, which)
 {
   Rect r;
-  INTEGER unused;
+  GUEST<INTEGER> unused;
 
   GetDItem ((DialogPtr) dp, which, &unused, NULL, &r);
   PenNormal ();
@@ -852,7 +852,7 @@ P2(PUBLIC, pascal void,  ROMlib_circle_ok, DialogPeek, dp, INTEGER, which)
 P2(PUBLIC, pascal void,  ROMlib_orientation, DialogPeek, dp, INTEGER, which)
 {
   Rect r;
-  INTEGER unused;
+  GUEST<INTEGER> unused;
 
   GetDItem ((DialogPtr) dp, which, &unused, NULL, &r);
   PenNormal ();
@@ -944,7 +944,7 @@ adjust_menu_common (TPPrDlg dlg, INTEGER item, heading_t heading, ini_key_t defk
 	      {
 		GUEST<Handle> h;
 		Rect r;
-		INTEGER unused;
+		GUEST<INTEGER> unused;
 
 		GetDItem ((DialogPtr) dlg, item, &unused, &h, &r);
 		r.right = CW (CW (r.left) + max_wid + 38);
@@ -1076,7 +1076,7 @@ P1(PUBLIC pascal trap, TPPrDlg, PrStlInit, THPrint, hPrint)
 	  }
 	  if (ROMlib_new_printer_name || ROMlib_new_label) {
 	    Rect r;
-	    INTEGER item_type;
+	    GUEST<INTEGER> item_type;
 	    GUEST<Handle> hh;
 	    Handle h;
 	    Str255 str;
@@ -1134,6 +1134,7 @@ P1(PUBLIC pascal trap, TPPrDlg, PrStlInit, THPrint, hPrint)
 
 P2(PUBLIC pascal trap, BOOLEAN, PrDlgMain, THPrint, hPrint, ProcPtr, initfptr)
 {
+    GUEST<INTEGER> item_swapped;
     INTEGER item;
     TPPrDlg prrecptr;
     BOOLEAN retval;
@@ -1162,8 +1163,8 @@ P2(PUBLIC pascal trap, BOOLEAN, PrDlgMain, THPrint, hPrint, ProcPtr, initfptr)
 	      item = 1;
 	    else
 	      {
-		ModalDialog((ProcPtr) MR(prrecptr->pFltrProc), &item);
-		item = CW(item);
+		ModalDialog((ProcPtr) MR(prrecptr->pFltrProc), &item_swapped);
+		item = CW(item_swapped);
 	      }
 	    CALLPRITEMPROC(prrecptr, item, MR(prrecptr->pItemProc));
 

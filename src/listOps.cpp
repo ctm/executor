@@ -127,7 +127,7 @@ P2(PUBLIC pascal trap, void, LClrCell, Cell, cell,		/* IMIV-272 */
     cellhelper(Rep, (Ptr) 0, 0, cell, list);
 }
 
-P4(PUBLIC pascal trap, void, LGetCell, Ptr, dp, INTEGER *, dlp,	/* IMIV-272 */
+P4(PUBLIC pascal trap, void, LGetCell, Ptr, dp, GUEST<INTEGER> *, dlp,	/* IMIV-272 */
 						 Cell, cell, ListHandle, list)
 {
     GUEST<INTEGER> *ip;

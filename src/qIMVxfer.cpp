@@ -198,10 +198,10 @@ Executor::convert_transparent (const PixMap *src1, const PixMap *src2,
      switch (bpp)					\
        {						\
        case 16:						\
-	 (pixel) = CW (swapped_pixel);			\
+	 (pixel) = CW_RAW (swapped_pixel);			\
 	 break;						\
        case 32:						\
-	 (pixel) = CL (swapped_pixel);			\
+	 (pixel) = CL_RAW (swapped_pixel);			\
 	 break;						\
        default:						\
 	 gui_fatal ("unknown bpp");			\

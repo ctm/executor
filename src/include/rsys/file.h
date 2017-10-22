@@ -41,14 +41,21 @@ typedef struct {
   LONGINT maxbytes;
 } hfs_access_t;
 
+/*
+ * Evil guest/host mixed structure.
+ * The devicename is a host memory pointer.
+ * partition is in big-endian guest byte order.
+ * #ifdef alpha seems to mean that alpha is the only 64 bit platform in the world,
+ * and that this structure should have a fixed size? Why?
+ */
 typedef struct {
-    LONGINT flags;
+    GUEST<LONGINT> flags;
     DrvQEl  dq;
     Ptr devicename; /* "/usr"	"/dev/rfd0"	whatever */
 #if !defined(__alpha)
     char *filler;
 #endif
-    INTEGER partition;	/* for multiply partitioned drives */
+    GUEST<INTEGER> partition;	/* for multiply partitioned drives */
     hfs_access_t hfs; /* currently only for floppies -- ick */
 } DrvQExtra; 
 
@@ -56,12 +63,14 @@ typedef struct {
 
 extern int ROMlib_nosync;
 
+#if 0
 #if !defined (VCBQHdr)
 extern QHdr VCBQHdr, DrvQHdr;
 extern GUEST<VCBPtr> DefVCBPtr_H;
 #endif
+#endif
 
-extern LONGINT DefDirID;
+extern GUEST<LONGINT> DefDirID;
 
 #if defined (MSDOS)
 extern boolean_t cd_mounted_by_trickery_p;
@@ -77,7 +86,14 @@ extern boolean_t cd_mounted_by_trickery_p;
 #define fcfisres	(1 << 1)
 #define fcwriteperm	(1 << 0)
 
+/*
+ * This struct is confusing.
+ * Some of it is big-endian guest data,
+ * some of it is native host data.
+ * Not entirely sure yet which is which.
+ */ 
 typedef struct {
+  GUEST_STRUCT;
   GUEST<LONGINT> fdfnum;	/* LONGINT fcbFlNum */
   GUEST<Byte> fcflags;	/* Byte fcbMdRByt */
   GUEST<Byte> fcbTypByt;
@@ -100,29 +116,33 @@ typedef struct {
 #define NFCB 348		/* should be related to NOFILE */
 
 typedef struct {
-  INTEGER nbytes;
-  fcbrec fc[NFCB];
+  GUEST_STRUCT;
+  GUEST<INTEGER> nbytes;
+  GUEST<fcbrec[NFCB]> fc;
 } fcbhidden;
 
 #define ROMlib_fcblocks	(((fcbhidden *)MR(FCBSPtr))->fc)
 
 typedef struct {	/* add new elements to the beginning of this struct */
-  LONGINT magicword;
-  FInfo FndrInfo;
-  LONGINT LgLen;
-  LONGINT RLgLen;
-  LONGINT CrDat;
+  GUEST_STRUCT;
+  GUEST<LONGINT> magicword;
+  GUEST<FInfo> FndrInfo;
+  GUEST<LONGINT> LgLen;
+  GUEST<LONGINT> RLgLen;
+  GUEST<LONGINT> CrDat;
 } hiddeninfo;
 
 typedef struct {
-    LONGINT dirid;
-    INTEGER filesystemlen;
+  GUEST_STRUCT;
+    GUEST<LONGINT> dirid;
+    GUEST<INTEGER> filesystemlen;
     unsigned char hostnamelen;
     char hostnameandroot[1];	/* potentially many more */
 } rkey_t;
 
 typedef struct {
-    LONGINT parid;
+    GUEST_STRUCT;
+    GUEST<LONGINT> parid;
     char path[1];	/* potentially many more */
 } rcontent_t;
 
@@ -264,12 +284,13 @@ enum
 };
 
 typedef struct {
-  INTEGER vMVersion;
-  ULONGINT vMAttrib;
-  LONGINT vMLocalHand;
-  LONGINT vMServerAdr;
-  LONGINT vMVolumeGrade;
-  INTEGER vMForeignPrivID;
+  GUEST_STRUCT;
+  GUEST<INTEGER> vMVersion;
+  GUEST<ULONGINT> vMAttrib;
+  GUEST<LONGINT> vMLocalHand;
+  GUEST<LONGINT> vMServerAdr;
+  GUEST<LONGINT> vMVolumeGrade;
+  GUEST<INTEGER> vMForeignPrivID;
 } getvolparams_info_t;
 
 #define HARDLOCKED (1 << 7)
@@ -318,7 +339,7 @@ typedef struct {
  */
 
 #define UPDATE_IONAMEPTR_P(pb) \
-	((pb).ioNamePtr && ((pb).ioFDirIndex != 0 || !MR((pb).ioNamePtr)[0]))
+	((pb).ioNamePtr && ((pb).ioFDirIndex != CWC(0) || !MR((pb).ioNamePtr)[0]))
 
 /* After a pathname has been normalized, the offset of the first
    slash.  It's 2 under DOS because a normalized path is, e.g., C:/etc */

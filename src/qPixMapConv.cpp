@@ -30,7 +30,7 @@ static uint32 depth_table_space[DEPTHCONV_MAX_UINT32_TABLE_SIZE];
 static depthconv_func_t conversion_func = NULL;
 
 static int32 cached_src_bpp = -1, cached_dst_bpp = -1;
-static int32 cached_src_seed_x = CLC (-1), cached_dst_seed_x = CLC (-1);
+static GUEST<int32> cached_src_seed_x = CLC (-1), cached_dst_seed_x = CLC (-1);
 
 static ITabHandle target_itab;
 
@@ -173,7 +173,7 @@ Executor::canonical_from_bogo_color (uint32 index,
 	  if (rgb_spec == mac_rgb_spec)
 	    {
 	      if (pixel_out)
-		*pixel_out = CW (index);
+		*pixel_out = CW_RAW (index);
 	      if (rgb_out)
 		(rgb_spec->pixel_to_rgbcolor) (rgb_spec, index, rgb_out);
 	      return;
@@ -185,7 +185,7 @@ Executor::canonical_from_bogo_color (uint32 index,
 	  if (rgb_spec == mac_rgb_spec)
 	    {
 	      if (pixel_out)
-		*pixel_out = CL (index);
+		*pixel_out = CL_RAW (index);
 	      if (rgb_out)
 		(rgb_spec->pixel_to_rgbcolor) (rgb_spec, index, rgb_out);
 	      return;
@@ -319,7 +319,8 @@ Executor::pixmap_rgb_spec (const PixMap *pixmap)
 void
 Executor::pixmap_set_pixel_fields (PixMap *pixmap, int bpp)
 {
-  pixmap->packType = pixmap->packSize = CWC (0);
+  pixmap->packType = CWC (0);
+  pixmap->packSize = CLC (0);
   
   if (bpp <= 8)
     {
@@ -388,7 +389,7 @@ Executor::convert_pixmap (const PixMap *src, PixMap *dst,
   GDHandle the_gd;
   int src_bpp, dst_bpp;
   int width, height;
-  int32 dst_seed_x, src_seed_x;
+  GUEST<int32> dst_seed_x, src_seed_x;
   const rgb_spec_t *src_rgb_spec, *dst_rgb_spec;
   
   uint8 *src_base, *dst_base;

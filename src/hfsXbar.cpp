@@ -194,7 +194,7 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 	break;
 
     default:
-	if (pb->ioParam.ioPosMode & CWC (NEWLINEMODE))
+	if (CW(pb->ioParam.ioPosMode) & NEWLINEMODE)
 	  {
 	    char *buf, *p_to_find, *p_alternate, *p;
 	    unsigned char to_find;
@@ -207,7 +207,7 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 
 	    buf = (char*)alloca (CL (pb->ioParam.ioReqCount));
 
-	    pbr.ioParam.ioBuffer = (Ptr) RM (buf);
+	    pbr.ioParam.ioBuffer = RM ((Ptr) buf);
 	    retval = PBRead (&pbr, FALSE);
 	    pb->ioParam.ioActCount  = pbr.ioParam.ioActCount;
 	    pb->ioParam.ioPosOffset = pbr.ioParam.ioPosOffset;
@@ -302,7 +302,7 @@ A2(PUBLIC trap, OSErrRET, PBWrite, ParmBlkPtr, pb, BOOLEAN, async)
 						  &pb->ioParam.ioActCount));
 
 	}
-	if (pb->ioParam.ioResult != noErr)
+	if (pb->ioParam.ioResult != CWC(noErr))
 	    pb->ioParam.ioActCount = 0;
 	retval = Cx(pb->ioParam.ioResult);
 	break;
@@ -411,7 +411,7 @@ A2(PUBLIC trap, OSErrRET, PBGetCatInfo, CInfoPBPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
     BOOLEAN ishfs;
-    StringPtr savep;
+    GUEST<StringPtr> savep;
 
     if (CW(pb->dirInfo.ioFDirIndex) < 0 && pb->hFileInfo.ioDirID == CLC (1))
 	retval = -43; /* perhaps we should check for a valid volume
@@ -513,7 +513,7 @@ A2(PUBLIC trap, OSErrRET, PBHGetFInfo, HParmBlkPtr, pb, BOOLEAN, async)
 {
     OSErr retval;
     BOOLEAN ishfs;
-    StringPtr savep;
+    GUEST<StringPtr> savep;
 
     savep = pb->ioParam.ioNamePtr;
     if (CW(pb->fileParam.ioFDirIndex) > 0)	/* IMIV-155, 156 */
@@ -701,7 +701,7 @@ A2(PUBLIC trap, OSErrRET, PBGetWDInfo, WDPBPtr, pb, BOOLEAN, async)
 A2(PUBLIC trap, OSErrRET, PBGetFInfo, ParmBlkPtr, pb, BOOLEAN, async)
 {
     BOOLEAN ishfs;
-    StringPtr savep;
+    GUEST<StringPtr> savep;
     OSErr retval;
 
     savep = pb->ioParam.ioNamePtr;

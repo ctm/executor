@@ -39,7 +39,7 @@ P1(PUBLIC pascal trap, void, InitGraf, Ptr, gp)
 			     PIXMAP_PIXEL_SIZE (main_gd_pixmap));
   screenBitsX.bounds = PIXMAP_BOUNDS (main_gd_pixmap);
   
-#define patinit(d, s)	(*(LONGINT *)d = CLC(s), *((LONGINT *)d+1) = CLC(s))
+#define patinit(d, s)	(*(GUEST<LONGINT> *)d = CLC(s), *((GUEST<LONGINT> *)d+1) = CLC(s))
   ZONE_SAVE_EXCURSION
     (SysZone,
      {
@@ -52,7 +52,7 @@ P1(PUBLIC pascal trap, void, InitGraf, Ptr, gp)
        WMgrPort = RM ((WindowPtr) NewPtr (sizeof (GrafPort)));
        OpenPort (MR (WMgrPort));
     
-       WMgrCPort = (CWindowPtr) RM (NewPtr (sizeof (CGrafPort)));
+       WMgrCPort = RM ((CWindowPtr) NewPtr (sizeof (CGrafPort)));
        OpenCPort (MR (WMgrCPort));
     
        thePortX = guest_cast<GrafPtr>(WMgrCPort);
@@ -104,15 +104,15 @@ A1(PUBLIC, void, ROMlib_initport, GrafPtr, p)			/* INTERNAL */
   *((char *)&p->txFace + 1) = 0; /* Excel & tests show we need to do this. */
   PORT_TX_MODE_X (p)     = CWC (srcOr);
   PORT_TX_SIZE_X (p)     = CWC (0);
-  PORT_SP_EXTRA_X (p)    = CWC (0);
+  PORT_SP_EXTRA_X (p)    = CLC (0);
   PORT_FG_COLOR_X (p)    = CLC (blackColor);
   PORT_BK_COLOR_X (p)    = CLC (whiteColor);
   PORT_COLR_BIT_X (p)    = CWC (0);
   PORT_PAT_STRETCH_X (p) = CWC (0);
-  PORT_PIC_SAVE_X (p)    = (Handle)CLC(0);
-  PORT_REGION_SAVE_X (p) = (Handle)CLC(0);
-  PORT_POLY_SAVE_X (p)   = (Handle)CLC(0);
-  PORT_GRAF_PROCS_X (p)  = (QDProcsPtr)CLC(0);
+  PORT_PIC_SAVE_X (p)    = nullptr;
+  PORT_REGION_SAVE_X (p) = nullptr;
+  PORT_POLY_SAVE_X (p)   = nullptr;
+  PORT_GRAF_PROCS_X (p)  = nullptr;
 }
 
 P1(PUBLIC pascal trap, void, SetPort, GrafPtr, p)
@@ -214,8 +214,8 @@ P2 (PUBLIC pascal trap, void, SetOrigin, INTEGER, h, INTEGER, v)
   dv = v - Cx (PORT_RECT (thePort).top);
   PIC_SAVE_EXCURSION
     ({
-      int16 swappeddh;
-      int16 swappeddv;
+      GUEST<int16> swappeddh;
+      GUEST<int16> swappeddv;
       
       PICOP (OP_Origin);
       
@@ -259,7 +259,7 @@ P1(PUBLIC pascal trap, void, BackPat, Pattern, pp)
       PixPatHandle old_bk;
 
       old_bk = CPORT_BK_PIXPAT (theCPort);
-      if (old_bk && PIXPAT_TYPE_X (old_bk) == pixpat_type_orig)
+      if (old_bk && PIXPAT_TYPE_X (old_bk) == CWC(pixpat_type_orig))
 	PATASSIGN (PIXPAT_1DATA (old_bk), pp);
       else
 	{

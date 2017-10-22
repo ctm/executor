@@ -210,8 +210,8 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
   ((BitMap *) ((char *) (port) + offsetof (GrafPort, portBits)))
 
 #define IS_PIXMAP_PTR_P(ptr)				\
-  ((((BitMap *) ptr) -> rowBytes & CWC (1 << 15))	\
-   && !(((BitMap *) ptr) -> rowBytes & CWC (1 << 14)))
+  ((CW(((BitMap *) ptr) -> rowBytes) & (1 << 15))	\
+   && !(CW(((BitMap *) ptr) -> rowBytes) & (1 << 14)))
 
 /* PixMap accessors */
 #define PIXMAP_BOUNDS(pixmap) (HxX (pixmap, bounds))
@@ -225,7 +225,7 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
 #define ROWBYTES_FLAG_BITS		(3 << 14)
 #define ROWBYTES_FLAG_BITS_X		(CWC (ROWBYTES_FLAG_BITS))
 #define PIXMAP_FLAGS_X(pixmap) \
-  (HxX (pixmap, rowBytes) & ROWBYTES_FLAG_BITS_X)
+  (GUEST<uint16_t>::fromRaw(HxX (pixmap, rowBytes).raw() & ROWBYTES_FLAG_BITS_X.raw()))
 #define PIXMAP_FLAGS(pixmap)		(CW (PIXMAP_FLAGS_X (pixmap)))
 
 /* ### phase out; eventually i'd like to see consistent use of
@@ -254,9 +254,9 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
 #define PIXMAP_ROWBYTES(pixmap)		(CW (PIXMAP_ROWBYTES_X (pixmap)))
 
 #define PIXMAP_SET_ROWBYTES_X(pixmap, value) \
-  (HxX (pixmap, rowBytes) \
-   = (((value) & ROWBYTES_VALUE_BITS_X) | PIXMAP_FLAGS_X (pixmap)))
-
+  (HxX (pixmap, rowBytes).raw( \
+   (((value).raw() & ROWBYTES_VALUE_BITS_X.raw()) | PIXMAP_FLAGS_X (pixmap).raw())))
+   
 #define PIXMAP_VERSION_X(pixmap)	(HxX (pixmap, pmVersion))
 #define PIXMAP_PACK_TYPE_X(pixmap)	(HxX (pixmap, packType))
 #define PIXMAP_PACK_SIZE_X(pixmap)	(HxX (pixmap, packSize))
@@ -289,7 +289,7 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
 #define PIXMAP_CMP_SIZE(pixmap)		(Cx (PIXMAP_CMP_SIZE_X (pixmap)))
 #define PIXMAP_PLANE_BYTES(pixmap)	(Cx (PIXMAP_PLANE_BYTES_X (pixmap)))
 #define PIXMAP_TABLE(pixmap)		(PPR (PIXMAP_TABLE_X (pixmap)))
-#define PIXMAP_TABLE_AS_OFFSET(pixmap)	(CL ((int32) PIXMAP_TABLE_X (pixmap).raw()))
+#define PIXMAP_TABLE_AS_OFFSET(pixmap)	(CL (guest_cast<int32>(PIXMAP_TABLE_X (pixmap))))
 
 #define WRAPPER_PIXMAP_FOR_COPY(wrapper_decl_name) \
   BitMap *wrapper_decl_name = (BitMap *) alloca (sizeof (BitMap))
@@ -335,7 +335,7 @@ enum pixpat_pattern_types
 #define PIXPAT_TYPE(pixpat)		(CW (PIXPAT_TYPE_X (pixpat)))
 #define PIXPAT_MAP(pixpat)		(PPR (PIXPAT_MAP_X (pixpat)))
 #define PIXPAT_DATA(pixpat)		(PPR (PIXPAT_DATA_X (pixpat)))
-#define PIXPAT_DATA_AS_OFFSET(pixpat)	(CL ((int32) PIXPAT_DATA_X (pixpat).raw()))
+#define PIXPAT_DATA_AS_OFFSET(pixpat)	(CL (guest_cast<int32>( PIXPAT_DATA_X (pixpat))))
 #define PIXPAT_XDATA(pixpat)		(PPR (PIXPAT_XDATA_X (pixpat)))
 #define PIXPAT_XVALID(pixpat)		(CW (PIXPAT_XVALID_X (pixpat)))
 #define PIXPAT_XMAP(pixpat)		((PixMapHandle) PPR (PIXPAT_XMAP_X (pixpat)))
@@ -356,7 +356,7 @@ GUEST<uint16_t>::fromRaw((bitmap)->rowBytes.raw() & ~ROWBYTES_FLAG_BITS_X.raw())
 
 #define BITMAP_SET_ROWBYTES_X(bitmap, value) \
 ((bitmap)->rowBytes.raw((((value).raw() & ~ROWBYTES_FLAG_BITS_X.raw()) \
-                       | BITMAP_FLAGS_X (bitmap).raw()))
+                       | BITMAP_FLAGS_X (bitmap).raw())))
                      
 #define BITMAP_BASEADDR_X(bitmap)	((bitmap)->baseAddr)
 #define BITMAP_BASEADDR(bitmap)		(PPR (BITMAP_BASEADDR_X (bitmap)))
@@ -563,20 +563,20 @@ extern void cursor_reset_current_cursor (void);
    pen state, color, and text state */
 typedef struct draw_state
 {
-  PenState pen_state;
+  GUEST<PenState> pen_state;
 
   /* used only when the control owner is a cgrafport */
-  RGBColor fg_color;
-  RGBColor bk_color;
+  GUEST<RGBColor> fg_color;
+  GUEST<RGBColor> bk_color;
   
-  int32 fg;
-  int32 bk;
+  GUEST<int32> fg;
+  GUEST<int32> bk;
 
   /* text draw state */
-  Style tx_face;
-  int16 tx_font;
-  int16 tx_mode;
-  int16 tx_size;
+  GUEST<Style> tx_face;
+  GUEST<int16> tx_font;
+  GUEST<int16> tx_mode;
+  GUEST<int16> tx_size;
 } draw_state_t;
 
 extern void draw_state_save (draw_state_t *draw_state);

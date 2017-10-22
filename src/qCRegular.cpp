@@ -23,7 +23,7 @@ using namespace Executor;
     {									\
       if (CGrafPort_p (thePort))					\
 	{								\
-	  PixPatHandle orig_fill_pixpat_x;				\
+	  GUEST<PixPatHandle> orig_fill_pixpat_x;			\
 	  								\
 	  PenMode (patCopy);						\
 	  orig_fill_pixpat_x = CPORT_FILL_PIXPAT_X (thePort);		\

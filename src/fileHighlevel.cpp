@@ -83,12 +83,12 @@ P4 (PUBLIC pascal trap, OSErr, FSMakeFSSpec,
     warning_unexpected ("colon found");
 
   str255assign (local_file_name, file_name);
-  hpb.volumeParam.ioNamePtr = (StringPtr) RM ((Ptr) local_file_name);
+  hpb.volumeParam.ioNamePtr =  RM ((StringPtr) local_file_name);
   hpb.volumeParam.ioVRefNum = CW (vRefNum);
   if (file_name[0])
-    hpb.volumeParam.ioVolIndex = CLC (-1);
+    hpb.volumeParam.ioVolIndex = CWC(-1);
   else
-    hpb.volumeParam.ioVolIndex = CLC (0);
+    hpb.volumeParam.ioVolIndex = CWC(0);
 
   retval = PBHGetVInfo (&hpb, FALSE);
 
@@ -97,7 +97,7 @@ P4 (PUBLIC pascal trap, OSErr, FSMakeFSSpec,
       CInfoPBRec cpb;
       
       str255assign (local_file_name, file_name);
-      cpb.hFileInfo.ioNamePtr = (StringPtr) RM ((Ptr) local_file_name);
+      cpb.hFileInfo.ioNamePtr = RM ((StringPtr) local_file_name);
       cpb.hFileInfo.ioVRefNum = CW (vRefNum);
       if (file_name[0])
 	cpb.hFileInfo.ioFDirIndex = CWC (0);
@@ -115,7 +115,7 @@ P4 (PUBLIC pascal trap, OSErr, FSMakeFSSpec,
 	{
 	  OSErr err;
 	  
-	  cpb.hFileInfo.ioNamePtr = (StringPtr)CLC (0);
+	  cpb.hFileInfo.ioNamePtr = nullptr;
 	  cpb.hFileInfo.ioVRefNum = CW (vRefNum);
 	  cpb.hFileInfo.ioFDirIndex = CWC (-1);
 	  cpb.hFileInfo.ioDirID = CL (dir_id);
@@ -128,7 +128,7 @@ P4 (PUBLIC pascal trap, OSErr, FSMakeFSSpec,
 		  spec->parID = CL (dir_id);
 		  extract_name ((StringPtr) spec->name, file_name);
 		}
-	      else
+	      else 
 		retval = dupFNErr;
 	    }
 	}
@@ -388,7 +388,7 @@ open_helper (FSSpecPtr spec, SignedByte perms, GUEST<int16> *refoutp,
 
   hpb.ioParam.ioVRefNum = spec->vRefNum;
   hpb.fileParam.ioDirID = spec->parID;
-  hpb.ioParam.ioNamePtr = (StringPtr) RM ((Ptr) spec->name);
+  hpb.ioParam.ioNamePtr = RM ((StringPtr) spec->name);
   if (perms == fsWrPerm)
     {
       warning_unexpected (NULL_STRING);
@@ -434,7 +434,7 @@ P3 (PUBLIC pascal trap, OSErr, FSpDirCreate,
 
   hpb.ioParam.ioVRefNum = spec->vRefNum;
   hpb.fileParam.ioDirID = spec->parID;
-  hpb.ioParam.ioNamePtr = (StringPtr) RM ((Ptr) spec->name);
+  hpb.ioParam.ioNamePtr = RM ((StringPtr) spec->name);
   retval = PBDirCreate (&hpb, FALSE);
   if (retval == noErr)
     *created_dir_id = hpb.fileParam.ioDirID;
@@ -449,7 +449,7 @@ P1 (PUBLIC pascal trap, OSErr, FSpDelete,
 
   hpb.ioParam.ioVRefNum = spec->vRefNum;
   hpb.fileParam.ioDirID = spec->parID;
-  hpb.ioParam.ioNamePtr = (StringPtr) RM ((Ptr) spec->name);
+  hpb.ioParam.ioNamePtr = RM ((StringPtr) spec->name);
   retval = PBHDelete (&hpb, FALSE);
   return retval;
 }
@@ -462,7 +462,7 @@ P2 (PUBLIC pascal trap, OSErr, FSpGetFInfo,
 
   hpb.fileParam.ioVRefNum = spec->vRefNum;
   hpb.fileParam.ioDirID = spec->parID;
-  hpb.fileParam.ioNamePtr = (StringPtr) RM ((Ptr) spec->name);
+  hpb.fileParam.ioNamePtr = RM ((StringPtr) spec->name);
   hpb.fileParam.ioFDirIndex = CWC (0);
   retval = PBHGetFInfo (&hpb, FALSE);
   if (retval == noErr)
@@ -479,7 +479,7 @@ P2 (PUBLIC pascal trap, OSErr, FSpSetFInfo,
   warning_unimplemented ("poorly implemented: call of PBHGetFInfo wasteful");
   hpb.fileParam.ioVRefNum = spec->vRefNum;
   hpb.fileParam.ioDirID = spec->parID;
-  hpb.fileParam.ioNamePtr = (StringPtr) RM ((Ptr) spec->name);
+  hpb.fileParam.ioNamePtr = RM ((StringPtr) spec->name);
   hpb.fileParam.ioFDirIndex = CWC (0);
   retval = PBHGetFInfo (&hpb, FALSE);
   if (retval == noErr)
@@ -501,7 +501,7 @@ lock_helper (FSSpecPtr spec, lock_procp procp)
 
   hpb.fileParam.ioVRefNum = spec->vRefNum;
   hpb.fileParam.ioDirID = spec->parID;
-  hpb.fileParam.ioNamePtr = (StringPtr) RM ((Ptr) spec->name);
+  hpb.fileParam.ioNamePtr = RM ((StringPtr) spec->name);
   retval = procp (&hpb, FALSE);
   return retval;
 }
@@ -526,8 +526,8 @@ P2 (PUBLIC pascal trap, OSErr, FSpRename,
 
   hpb.fileParam.ioVRefNum = spec->vRefNum;
   hpb.fileParam.ioDirID = spec->parID;
-  hpb.fileParam.ioNamePtr = (StringPtr) RM ((Ptr) spec->name);
-  hpb.ioParam.ioMisc = (LONGINT) RM ( new_name);
+  hpb.fileParam.ioNamePtr = RM ((StringPtr) spec->name);
+  hpb.ioParam.ioMisc = guest_cast<LONGINT> (RM ( new_name));
   retval = PBHRename (&hpb, FALSE);
   return retval;
 }
@@ -544,8 +544,8 @@ P2 (PUBLIC pascal trap, OSErr, FSpCatMove,
     {
       cbr.ioVRefNum = src->vRefNum;
       cbr.ioDirID = src->parID;
-      cbr.ioNamePtr = (StringPtr) RM ((Ptr) src->name);
-      cbr.ioNewName = (StringPtr) RM ((Ptr) dst->name);
+      cbr.ioNamePtr = RM ((StringPtr) src->name);
+      cbr.ioNewName = RM ((StringPtr) dst->name);
       cbr.ioNewDirID = dst->parID;
       retval = PBCatMove (&cbr, FALSE);
     }

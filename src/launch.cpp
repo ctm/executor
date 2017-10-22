@@ -1311,7 +1311,7 @@ ROMlib_filename_from_fsspec (char **strp, FSSpec *fsp)
 
   memset (&pbr, 0, sizeof pbr);
   pbr.ioParam.ioVRefNum = fsp->vRefNum;
-  pbr.ioParam.ioNamePtr = (StringPtr) RM ((Ptr) fsp->name);
+  pbr.ioParam.ioNamePtr = RM ((StringPtr) fsp->name);
   retval = ROMlib_nami (&pbr, CL (fsp->parID), NoIndex, strp, &filename,
 			&endname, FALSE, &vcbp, &sbuf);
   return retval;

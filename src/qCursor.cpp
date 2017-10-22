@@ -112,7 +112,7 @@ A0 (PUBLIC, void, ROMlib_restorecursor)
 
 A0(PUBLIC, void, ROMlib_showhidecursor)				/* INTERNAL */
 {
-    if (CrsrState == 0)
+    if (CrsrState == CWC(0))
 	ROMlib_showcursor();
     else
 	ROMlib_restorecursor();
@@ -148,7 +148,7 @@ P1(PUBLIC pascal trap, void, SetCursor, Cursor *, cp)
       rowbytes = (16 * host_cursor_depth) / 8;
       data_baseaddr = (char*)alloca (16 * rowbytes);
       
-      target_pixmap.baseAddr = (Ptr) RM (data_baseaddr);
+      target_pixmap.baseAddr = RM ((Ptr) data_baseaddr);
       target_pixmap.rowBytes = CWC (rowbytes);
       target_pixmap.bounds = ROMlib_cursor_rect;
       target_pixmap.cmpCount = CWC (1);
@@ -169,7 +169,7 @@ P1(PUBLIC pascal trap, void, SetCursor, Cursor *, cp)
   current_cursor_color_p = FALSE;
   current_cursor_valid_p = TRUE;
   
-  if (CrsrState == 0)
+  if (CrsrState == CWC(0))
     {
       CrsrVis = FALSE;
       ROMlib_showcursor();
@@ -192,7 +192,7 @@ P0(PUBLIC pascal trap, void, HideCursor)	/* IMI-168 */
 
 P0(PUBLIC pascal trap, void, ShowCursor)	/* IMI-168 */
 {
-    if ( (CrsrState = CW(CW(CrsrState) + 1)) == 0 )
+    if ( (CrsrState = CW(CW(CrsrState) + 1)) == CWC(0) )
 	ROMlib_showcursor();
     if (CW(CrsrState) > 0)
 	CrsrState = 0;
@@ -257,7 +257,7 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
        PixMapPtr cursor_pixel_map_resource;
        PixMapHandle cursor_pixel_map;
        
-       Handle h;
+       GUEST<Handle> h;
        
        resource = STARH (res_handle);
        ccrsr = STARH (ccrsr_handle);
@@ -268,7 +268,7 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
        /* NOTE: use CL below instead of MR because they're overloading
 	  crsrMap to have an offset rather than a handle */
 
-       cursor_pixel_map_offset = CL ((uint32) ccrsr->crsrMap.raw());
+       cursor_pixel_map_offset = CL (guest_cast<int32_t> (ccrsr->crsrMap));
        cursor_pixel_map_resource
 	 = (PixMapPtr) ((char *) resource + cursor_pixel_map_offset);
        
@@ -278,7 +278,7 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
 		  (Ptr) STARH (cursor_pixel_map),
 		  sizeof *cursor_pixel_map_resource);
        
-       ccrsr_data_offset = CL ((long) ccrsr->crsrData.raw());
+       ccrsr_data_offset = CL (guest_cast<int32_t>(ccrsr->crsrData));
        
        ccrsr_ctab_offset = (int) PIXMAP_TABLE_AS_OFFSET (MR (ccrsr->crsrMap));
        ccrsr_data_size = ccrsr_ctab_offset - ccrsr_data_offset;
@@ -291,7 +291,7 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
        tmp_ctab = (CTabPtr) ((char *) resource + ccrsr_ctab_offset);
        ccrsr_ctab_size = CTAB_STORAGE_FOR_SIZE (CW (tmp_ctab->ctSize));
        h = RM (NewHandle (ccrsr_ctab_size));
-       PIXMAP_TABLE_X (MR (ccrsr->crsrMap)) = (CTabHandle) h;
+       PIXMAP_TABLE_X (MR (ccrsr->crsrMap)) = guest_cast<CTabHandle> (h);
        BlockMove ((Ptr) tmp_ctab,
 		  (Ptr) STARH (PIXMAP_TABLE (MR (ccrsr->crsrMap))),
 		  ccrsr_ctab_size);

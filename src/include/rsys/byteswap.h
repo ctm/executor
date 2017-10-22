@@ -11,6 +11,10 @@
 #include "rsys/mactype.h"
 #include <syn68k_public.h> /* for ROMlib_offset */
 
+
+namespace Executor
+{
+
 #if defined (BIGENDIAN)
 
 #define CW(rhs)		(rhs)
@@ -37,40 +41,40 @@
 
 #else /* !defined (BIGENDIAN) */
 
-// #define CW_MACRO(n)  ((typeof (n)) swap16 ((unsigned short)(n)))
-// #define CL_MACRO(n)  ((typeof (n)) swap32 ((unsigned int) ((n)|0)))
+#define CW_RAW(n)  ((typeof (n)) swap16 ((unsigned short)(n)))
+#define CL_RAW(n)  ((typeof (n)) swap32 ((unsigned int) ((n)|0)))
 
 
-template<class TT> inline int16_t CW(TT x) { return swap16((uint16_t)x); }
-inline uint16_t CW(uint16_t x) { return swap16(x); }
-inline int16_t CW(int16_t x) { return swap16((uint16_t)x); }
+template<class TT> inline GUEST<int16_t> CW(TT x) { return GUEST<int16_t>::fromRaw(swap16((uint16_t)x)); }
+inline GUEST<uint16_t> CW(uint16_t x) { return GUEST<uint16_t>::fromRaw(swap16(x)); }
+inline GUEST<int16_t> CW(int16_t x) { return GUEST<int16_t>::fromRaw(swap16((uint16_t)x)); }
 
-inline uint16_t CW(unsigned int x) { return swap16((uint16_t)x); }
+inline GUEST<uint16_t> CW(unsigned int x) { return GUEST<uint16_t>::fromRaw(swap16((uint16_t)x)); }
 
 template<class TT, typename = typename std::enable_if<sizeof(TT) == 2,void>::type>
-TT CW(Executor::GuestWrapper<TT> x) { return x.get(); }
+TT CW(GuestWrapper<TT> x) { return x.get(); }
 
 
-template<class TT> inline int32_t CL(TT x) { return swap32((uint32_t)x); }
-inline uint32_t CL(uint32_t x) { return swap32(x); }
-inline int32_t CL(int32_t x) { return swap32((uint32_t)x); }
+template<class TT> inline GUEST<int32_t> CL(TT x) { return GUEST<int32_t>::fromRaw(swap32((uint32_t)x)); }
+inline GUEST<uint32_t> CL(uint32_t x) { return GUEST<uint32_t>::fromRaw(swap32(x)); }
+inline GUEST<int32_t> CL(int32_t x) { return GUEST<int32_t>::fromRaw(swap32((uint32_t)x)); }
 
 template<class TT, typename = typename std::enable_if<sizeof(TT) == 4,void>::type>
-TT CL(Executor::GuestWrapper<TT> x) { return x.get(); }
+TT CL(GuestWrapper<TT> x) { return x.get(); }
 
 
 inline unsigned char Cx(unsigned char x) { return x; }
 inline signed char Cx(signed char x) { return x; }
 inline char Cx(char x) { return x; }
 
-inline uint16_t Cx(uint16_t x) { return swap16(x); }
-inline int16_t Cx(int16_t x) { return swap16((uint16_t)x); }
+inline GUEST<uint16_t> Cx(uint16_t x) { return CW(x); }
+inline GUEST<int16_t> Cx(int16_t x) { return CW(x); }
 
-inline uint32_t Cx(uint32_t x) { return swap32(x); }
-inline int32_t Cx(int32_t x) { return swap32((uint32_t)x); }
+inline GUEST<uint32_t> Cx(uint32_t x) { return CL(x); }
+inline GUEST<int32_t> Cx(int32_t x) { return CL(x); }
 
 template<class TT>
-TT Cx(Executor::GuestWrapper<TT> x) { return x.get(); }
+TT Cx(GuestWrapper<TT> x) { return x.get(); }
 
 
 template<class TT>
@@ -91,13 +95,7 @@ TT* MR(TT* p)
         return nullptr;
 }
 
-template <class P, class TT = typename P::HiddenType>
-TT MR(const P& p)
-{
-    return MR(p.p);
-}
-
-
+/*
 template<typename TT>
 TT* RM(TT* p)
 {
@@ -105,28 +103,29 @@ TT* RM(TT* p)
         return (TT*) swap32( (uint32_t) ((uintptr_t)p - ROMlib_offset)) ;
     else
         return nullptr;
-}
+}*/
+#define RM2(x) RM(x)
 
 // in the future, we will make RM look like RM2
 // and when no old-fashioned RM is left, we can switch to automatic conversion
 template<typename TT>
-Executor::GUEST<TT*> RM2(TT* p)
+GUEST<TT*> RM(TT* p)
 {
     if(p)
-        return (TT*) swap32( (uint32_t) ((uintptr_t)p - ROMlib_offset)) ;
+        return GUEST<TT*>::fromRaw(swap32( (uint32_t) ((uintptr_t)p - ROMlib_offset))) ;
     else
         return nullptr;
 }
 
 
 template<typename TT>
-TT* MR(Executor::GuestWrapper<TT*> p)
+TT* MR(GuestWrapper<TT*> p)
 {
     return p.get();
 }
 
 template<typename TT>
-TT* MR(Executor::HiddenValue<uint32_t, TT*> p)
+TT* MR(HiddenValue<uint32_t, TT*> p)
 {
     return MR((TT*) p);
 }
@@ -168,17 +167,31 @@ inline void* MR(int32_t p) { return MR((void*)p); }
 
 #endif
 
-template<typename TT, typename T2 = std::conditional_t<std::is_signed<TT>::value,int16_t,uint16_t>>
-inline Executor::GUEST<T2>
-wordFromRaw(TT x) { return Executor::GUEST<T2>::fromRaw(x); }
-template<typename TT, typename T2 = std::conditional_t<std::is_signed<TT>::value,int32_t,uint32_t>>
-inline Executor::GUEST<T2>
-longwordFromRaw(TT x) { return Executor::GUEST<T2>::fromRaw(x); }
+namespace internal
+{
+        template<typename T0, typename TT, typename T2 = std::conditional_t<std::is_signed<T0>::value,int16_t,uint16_t>>
+        inline GUEST<T2>
+        wordFromRaw(TT x) { return GUEST<T2>::fromRaw(x); }
+        template<typename T0, typename TT, typename T2 = std::conditional_t<std::is_signed<T0>::value,int32_t,uint32_t>>
+        inline GUEST<T2>
+        longwordFromRaw(TT x) { return GUEST<T2>::fromRaw(x); }
+}
 
-#define CWC(n) (wordFromRaw( \
+#define CWC(n) (internal::wordFromRaw<decltype(n)>( \
                                                 (signed short) (((((unsigned short)n) << 8) & 0xFF00) \
 					     | ((((unsigned short)n) >> 8) & 0x00FF))))
-#define CLC(n) (longwordFromRaw( \
+#define CLC(n) (internal::longwordFromRaw<decltype(n)>( \
+                                         (int) (  (((unsigned int) ((n)|0) & 0x000000FF) << 24)   \
+				     | (((unsigned int) (n) & 0x0000FF00) <<  8)   \
+				     | (((unsigned int) (n) & 0x00FF0000) >>  8)   \
+				     | (((unsigned int) (n) & 0xFF000000) \
+					>> 24))))
+
+
+#define CWC_RAW(n) ((decltype(n))( \
+                                                (signed short) (((((unsigned short)n) << 8) & 0xFF00) \
+					     | ((((unsigned short)n) >> 8) & 0x00FF))))
+#define CLC_RAW(n) ((decltype(n))( \
                                          (int) (  (((unsigned int) ((n)|0) & 0x000000FF) << 24)   \
 				     | (((unsigned int) (n) & 0x0000FF00) <<  8)   \
 				     | (((unsigned int) (n) & 0x00FF0000) >>  8)   \
@@ -191,9 +204,9 @@ longwordFromRaw(TT x) { return Executor::GUEST<T2>::fromRaw(x); }
  * because of exponential growth in the preprocessed code size.
  */
 #define CWV(n) \
-((typeof (n)) (__builtin_constant_p ((long) (n)) ? CWC (n) : CW (n)))
+((__builtin_constant_p ((n)) ? (typeof (CW(n)))  CWC (n) : CW (n)))
 #define CLV(n) \
-((typeof (n)) (__builtin_constant_p ((long) (n)) ? CLC (n) : CL (n)))
+((__builtin_constant_p ((n)) ? (typeof (CL(n))) CLC (n) : CL (n)))
 
 #if 0
 /* This will cause a link error for an invalid Cx. */
@@ -316,5 +329,7 @@ extern int bad_cx_splosion;
     : CLV (big_endian_v) op (native_endian_v)))
 
 #endif /* !BIGENDIAN */
+
+}
 
 #endif /* !_BYTESWAP_H_ */

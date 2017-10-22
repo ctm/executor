@@ -50,7 +50,7 @@ A5(PRIVATE, void, charblit, BitMap *, fbmp, BitMap *, tbmp,	/* INTERNAL */
     INTEGER firstmaskend, lastmaskend, wordstodo, wordsfromdo, shiftsize;
     INTEGER numfromwords, numtowords;
     INTEGER i, j, numrows;
-    unsigned short *firstfromword, *firsttoword, *nextfromword, *nexttoword;
+    GUEST<unsigned short> *firstfromword, *firsttoword, *nextfromword, *nexttoword;
     ULONGINT nextlong, firstmask, lastmask;
     INTEGER firsttomod16;
 
@@ -88,11 +88,11 @@ A5(PRIVATE, void, charblit, BitMap *, fbmp, BitMap *, tbmp,	/* INTERNAL */
  * because the BLITROW macro increments the row number at the beginning.
  * I had a reason for this, but I don't currently remember it.
  */
-    firstfromword = (unsigned short *)
+    firstfromword = (GUEST<uint16_t> *)
 		    (MR(fbmp->baseAddr) + BITMAP_ROWBYTES (fbmp) *
 		(CW(srect->top) - CW(fbmp->bounds.top) - 1)) + firstfrom / 16;
 
-    firsttoword = (unsigned short *) (MR(tbmp->baseAddr) + BITMAP_ROWBYTES (tbmp) *
+    firsttoword = (GUEST<uint16_t> *) (MR(tbmp->baseAddr) + BITMAP_ROWBYTES (tbmp) *
 		   (CW(drect->top) - CW(tbmp->bounds.top) - 1)) + firstto / 16;
 /*
  * Calculate the number of words to be taken from one bitmap and the
@@ -243,15 +243,16 @@ A5(PRIVATE, void, charblit, BitMap *, fbmp, BitMap *, tbmp,	/* INTERNAL */
  */
 
 PUBLIC LONGINT
-Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
-	     FontInfo *finfop, INTEGER *charlocp, text_helper_action_t action)
+Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point> *denp,
+	     FontInfo *finfop, GUEST<INTEGER> *charlocp, text_helper_action_t action)
 {
   Point num, den;
   unsigned char *p;
   FMInput fmi;
   FMOutput *fmop;
   unsigned char *ep;
-  INTEGER wid, offset, missing, *widp, *locp;
+  INTEGER wid, offset, missing;
+  GUEST<INTEGER> *widp, *locp;
   unsigned out;
   register INTEGER c;
   FontRec *fp;
@@ -604,7 +605,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, Point *nump, Point *denp,
 	  stylemap2 = stylemap;
 	  stylemap3 = stylemap;
 	  stylemap2.baseAddr = stylemap.baseAddr;
-	  stylemap3.baseAddr = (Ptr)RM( ALLOCA(nbytes));
+	  stylemap3.baseAddr = RM((Ptr) ALLOCA(nbytes));
 #if 0
 	  BlockMove(MR(stylemap2.baseAddr), MR(stylemap3.baseAddr),	(Size) nbytes);
 #else
@@ -718,8 +719,8 @@ P4(PUBLIC pascal trap, void, StdText, INTEGER, n, Ptr, textbufp,
 {
   /*  if (!ROMlib_text_output_disabled_p) */
     {
-      Point swapped_num;
-      Point swapped_den;
+      GUEST<Point> swapped_num;
+      GUEST<Point> swapped_den;
   
       swapped_num.h = CW (num.h);
       swapped_num.v = CW (num.v);

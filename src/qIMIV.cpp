@@ -426,7 +426,7 @@ P6 (PUBLIC pascal trap, void, CopyMask,		/* IMIV-24 */
   row_bytes = (RECT_WIDTH (mask_rect) + 31) / 32 * 4;
   TEMP_ALLOC_ALLOCATE (mask_bits, temp_mask_bits,
 		       row_bytes * RECT_HEIGHT (mask_rect));
-  mask_bm.baseAddr = (Ptr)RM (mask_bits);
+  mask_bm.baseAddr = RM ((Ptr)mask_bits);
   mask_bm.rowBytes = CW (row_bytes);
   mask_bm.bounds   = *mask_rect;
   

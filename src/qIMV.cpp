@@ -111,7 +111,7 @@ P3 (PUBLIC pascal trap, void, GetCPixel, INTEGER, h, INTEGER, v,
 	*pixelp = cspec[pixval].rgb;
       else
 	{
-	  int16 swapped_pixval;
+	  GUEST<int16> swapped_pixval;
 	  int i;
       
 	  /* non-device color tables aren't guaranteed to be sorted, so we
@@ -140,7 +140,7 @@ P3 (PUBLIC pascal trap, void, SetCPixel, INTEGER, h, INTEGER, v,
   boolean_t cgrafport_p;
   
   RGBColor save_fg_rgb;
-  int32 save_fg;
+  GUEST<int32> save_fg;
   
   temp_rect.top    = CW (v);
   temp_rect.bottom = CW (v + 1);
@@ -165,7 +165,7 @@ P3 (PUBLIC pascal trap, void, SetCPixel, INTEGER, h, INTEGER, v,
 }
 
 static int8
-default_search_proc (RGBColor *rgb, int32 *pixel)
+default_search_proc (RGBColor *rgb, GUEST<int32> *pixel)
 {
   MatchRec *mr;
 
@@ -174,9 +174,9 @@ default_search_proc (RGBColor *rgb, int32 *pixel)
   if (mr->red == rgb->red
       && mr->green == rgb->green
       && mr->blue == rgb->blue)
-    *pixel = CL (mr->matchData);
+    *pixel = mr->matchData;
   else
-    *pixel = CL (!mr->matchData);
+    *pixel = CL (!CL(mr->matchData));
   return TRUE;
 }
 
@@ -188,10 +188,11 @@ default_search_proc_stub (syn68k_addr_t dummy_addr, void *dummy)
   int8 result;
 
   retval = POPADDR ();
-  arg2 = (void *) POPADDR ();
-  arg1 = (void *) POPADDR ();
+  #warning autc04: SYN68K_TO_US was missing
+  arg2 = (void *) SYN68K_TO_US( POPADDR () );
+  arg1 = (void *) SYN68K_TO_US( POPADDR () );
   
-  result = default_search_proc ((RGBColor*)arg1, (int32*)arg2);
+  result = default_search_proc ((RGBColor*)arg1, (GUEST<int32>*)arg2);
   WRITEUB (EM_A7, result);
   
   return retval;
@@ -202,9 +203,9 @@ P8 (PUBLIC pascal trap, void, SeedCFill, BitMap *, srcbp, BitMap *, dstbp,
     ProcPtr, matchprocp, int32, matchdata)
 {
   MatchRec mr;
-  LONGINT save_ref_con;
-  Handle save_pic_handle;
-  QDProcsPtr save_graf_procs;
+  GUEST<LONGINT> save_ref_con;
+  GUEST<Handle> save_pic_handle;
+  GUEST<QDProcsPtr> save_graf_procs;
   GDHandle gdev;
   RGBColor pixel;
   BitMap temp_bitmap1, temp_bitmap2;
@@ -234,14 +235,14 @@ P8 (PUBLIC pascal trap, void, SeedCFill, BitMap *, srcbp, BitMap *, dstbp,
   mr.green     = pixel.green;
   mr.blue      = pixel.blue;
   save_ref_con   = GD_REF_CON_X (gdev);
-  GD_REF_CON_X (gdev) = (int32) RM (&mr);
+  GD_REF_CON_X (gdev) = guest_cast<int32> (RM (&mr));
   
   save_pic_handle = PORT_PIC_SAVE_X (thePort);
   save_graf_procs = PORT_GRAF_PROCS_X (thePort);
   
-  PORT_PIC_SAVE_X (thePort)   = (Handle)CLC (0);
-  PORT_GRAF_PROCS_X (thePort) = (QDProcsPtr)CLC (0);
-  GD_SEARCH_PROC_X (gdev)     = (SProcHndl)CLC (0);
+  PORT_PIC_SAVE_X (thePort)   = nullptr;
+  PORT_GRAF_PROCS_X (thePort) = nullptr;
+  GD_SEARCH_PROC_X (gdev)     = nullptr;
   AddSearch (matchprocp);
   
   width  = RECT_WIDTH (srcrp);
@@ -254,7 +255,7 @@ P8 (PUBLIC pascal trap, void, SeedCFill, BitMap *, srcbp, BitMap *, dstbp,
   row_words = (width + 15) / 16;
   temp_bitmap1.rowBytes = CW (row_words * 2);
   TEMP_ALLOC_ALLOCATE (t, temp_bitmap1_bits, row_words * 2 * height);
-  temp_bitmap1.baseAddr = (Ptr)RM (t);
+  temp_bitmap1.baseAddr = RM ((Ptr)t);
   memset (MR (temp_bitmap1.baseAddr), '\377', row_words * 2 * height);
   temp_bitmap1.bounds = temp_rect;
   
@@ -265,7 +266,7 @@ P8 (PUBLIC pascal trap, void, SeedCFill, BitMap *, srcbp, BitMap *, dstbp,
 
   temp_bitmap2 = temp_bitmap1;
   TEMP_ALLOC_ALLOCATE (t, temp_bitmap2_bits, row_words * 2 * height);
-  temp_bitmap2.baseAddr = (Ptr)RM (t);
+  temp_bitmap2.baseAddr = RM ((Ptr)t);
   
   SeedFill (MR (temp_bitmap1.baseAddr),
 	    MR (temp_bitmap2.baseAddr),
@@ -286,9 +287,9 @@ P7 (PUBLIC pascal trap, void, CalcCMask, BitMap *, srcbp, BitMap *, dstbp,
     int32, matchdata)
 {
   MatchRec mr;
-  LONGINT save_ref_con;
-  Handle save_pic_handle;
-  QDProcsPtr save_graf_procs;
+  GUEST<LONGINT> save_ref_con;
+  GUEST<Handle> save_pic_handle;
+  GUEST<QDProcsPtr> save_graf_procs;
   GDHandle gdev;
   BitMap temp_bitmap1, temp_bitmap2;
   Rect temp_rect;
@@ -304,7 +305,7 @@ P7 (PUBLIC pascal trap, void, CalcCMask, BitMap *, srcbp, BitMap *, dstbp,
   if (!matchprocp)
     {
       matchprocp = (ProcPtr) SYN68K_TO_US(callback_install (default_search_proc_stub, NULL));
-      mr.matchData = 1;
+      mr.matchData = CL(1);
     }
   else
     {
@@ -315,14 +316,14 @@ P7 (PUBLIC pascal trap, void, CalcCMask, BitMap *, srcbp, BitMap *, dstbp,
   mr.green     = seedrgbp->green;
   mr.blue      = seedrgbp->blue;
   save_ref_con   = GD_REF_CON_X (gdev);
-  GD_REF_CON_X (gdev) = (int32) RM (&mr);
+  GD_REF_CON_X (gdev) = guest_cast<int32>( RM (&mr) );
   
   save_pic_handle = PORT_PIC_SAVE_X (thePort);
   save_graf_procs = PORT_GRAF_PROCS_X (thePort);
   
-  PORT_PIC_SAVE_X (thePort)   = (Handle)CLC (0);
-  PORT_GRAF_PROCS_X (thePort) = (QDProcsPtr)CLC (0);
-  GD_SEARCH_PROC_X (gdev)     = (SProcHndl)CLC (0);
+  PORT_PIC_SAVE_X (thePort)   = nullptr;
+  PORT_GRAF_PROCS_X (thePort) = nullptr;
+  GD_SEARCH_PROC_X (gdev)     = nullptr;
   AddSearch (matchprocp);
   
   width  = RECT_WIDTH (srcrp);
@@ -335,7 +336,7 @@ P7 (PUBLIC pascal trap, void, CalcCMask, BitMap *, srcbp, BitMap *, dstbp,
   row_words = (width + 15) / 16;
   temp_bitmap1.rowBytes = CW (row_words * 2);
   TEMP_ALLOC_ALLOCATE (t, temp_bitmap1_bits, row_words * 2 * height);
-  temp_bitmap1.baseAddr = (Ptr)RM (t);
+  temp_bitmap1.baseAddr = RM ((Ptr)t);
   memset (MR (temp_bitmap1.baseAddr), '\377', row_words * 2 * height);
   temp_bitmap1.bounds = temp_rect;
   
@@ -346,7 +347,7 @@ P7 (PUBLIC pascal trap, void, CalcCMask, BitMap *, srcbp, BitMap *, dstbp,
 
   temp_bitmap2 = temp_bitmap1;
   TEMP_ALLOC_ALLOCATE (t, temp_bitmap2_bits, row_words * 2 * height);
-  temp_bitmap2.baseAddr = (Ptr)RM (t);
+  temp_bitmap2.baseAddr = RM ((Ptr)t);
   
   CalcMask (MR (temp_bitmap1.baseAddr),
 	    MR (temp_bitmap2.baseAddr),

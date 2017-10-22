@@ -487,7 +487,7 @@ A2(PUBLIC, void, ROMlib_seginit, LONGINT, argc, char **, argv)	/* INTERNAL */
     finderinfohand fh;
     AppFile app;
     INTEGER newcount;
-    THz saveZone;
+    GUEST<THz> saveZone;
 
     fullpathname = 0;
     if (Uaccess(argv[0], X_OK) == 0)

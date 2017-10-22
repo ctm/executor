@@ -1078,7 +1078,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    void *new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
-   INTEGER * __stub_arg_3 = (A3);\
+   GUEST<INTEGER> * __stub_arg_3 = (A3);\
  \
    new_addr = tooltraptable[0x0143];\
    ((new_addr == toolstuff[0x0143].orig)\
@@ -1102,7 +1102,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    void *new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
-   INTEGER * __stub_arg_3 = (A3);\
+   GUEST<INTEGER> * __stub_arg_3 = (A3);\
  \
    new_addr = tooltraptable[0x013f];\
    ((new_addr == toolstuff[0x013f].orig)\
@@ -1126,7 +1126,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    void *new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
-   INTEGER * __stub_arg_3 = (A3);\
+   GUEST<INTEGER> * __stub_arg_3 = (A3);\
  \
    new_addr = tooltraptable[0x0141];\
    ((new_addr == toolstuff[0x0141].orig)\
@@ -1249,7 +1249,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    void *new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
-   CHAR * __stub_arg_3 = (A3);\
+   GUEST<CHAR> * __stub_arg_3 = (A3);\
  \
    new_addr = tooltraptable[0x004e];\
    ((new_addr == toolstuff[0x004e].orig)\
@@ -2533,8 +2533,8 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    void *new_addr;\
    PaletteHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
-   INTEGER * __stub_arg_3 = (A3);\
-   INTEGER * __stub_arg_4 = (A4);\
+   GUEST<INTEGER> * __stub_arg_3 = (A3);\
+   GUEST<INTEGER> * __stub_arg_4 = (A4);\
  \
    new_addr = tooltraptable[0x029d];\
    ((new_addr == toolstuff[0x029d].orig)\

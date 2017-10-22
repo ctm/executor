@@ -84,7 +84,7 @@ Executor::ctl_color_init (void)
   
   HxX (default_aux_ctl, acNext)     = CLC_NULL;
   HxX (default_aux_ctl, acOwner)    = CLC_NULL;
-  HxX (default_aux_ctl, acCTable)   = (CCTabHandle) RM (GetResource (TICK("cctb"), 0));
+  HxX (default_aux_ctl, acCTable)   = RM ((CCTabHandle) GetResource (TICK("cctb"), 0));
   HxX (default_aux_ctl, acFlags)    = CWC (0);
   HxX (default_aux_ctl, acReserved) = CLC (0);
   HxX (default_aux_ctl, acRefCon)   = CLC (0);

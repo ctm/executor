@@ -45,7 +45,7 @@ void
 Executor::dialog_create_item (DialogPeek dp, itmp dst, itmp src,
 		    int item_no, Point base_pt)
 {
-  int16 *data;
+  GUEST<INTEGER> *data;
   int16 res_id;
   int gd_bpp;
   
@@ -441,14 +441,15 @@ P3 (PUBLIC pascal trap, DialogPtr, GetNewDialog, INTEGER, id,	/* IMI-413 */
 P1(PUBLIC pascal trap, void, CloseDialog, DialogPtr, dp)	/* IMI-413 */
 {
   Handle items;
-  INTEGER *ip, i;
+  GUEST<INTEGER> *ip;
+  INTEGER i;
   itmp itp;
   
   items = DIALOG_ITEMS (dp);
   if (items)
     {
       /* #### should `items' be locked? */
-      ip = (INTEGER *) STARH (items);
+      ip = (GUEST<INTEGER> *) STARH (items);
       i = CW(*ip);
       itp = (itmp)(ip + 1);
       while (i-- >= 0)

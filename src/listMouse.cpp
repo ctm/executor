@@ -58,7 +58,7 @@ A4(PRIVATE, void, setselectnilflag, BOOLEAN, setit, Cell, cell,
 					ListHandle, list, BOOLEAN, hiliteempty)
 {
     GrafPtr saveport;
-    RgnHandle saveclip;
+    GUEST<RgnHandle> saveclip;
     Rect r;
     GUEST<INTEGER> *ip;
     INTEGER off0wbit, off0, off1;
@@ -156,7 +156,7 @@ P2(PUBLIC, pascal void,  ROMlib_mytrack, ControlHandle, ch, INTEGER, part)
     INTEGER quant, page;
     ListPtr lp;
 
-    lp = (ListPtr) (long) STARH((Handle) (long) MR(HxX(ch, contrlRfCon)));
+    lp = STARH(MR(guest_cast<ListHandle>(HxX(ch, contrlRfCon))));
 
     page = ch == MR(lp->hScroll) ?
 		     CW(lp->visible.right)  - CW(lp->visible.left) - 1
@@ -182,7 +182,7 @@ P2(PUBLIC, pascal void,  ROMlib_mytrack, ControlHandle, ch, INTEGER, part)
 	break;
     }
     SetCtlValue(ch, GetCtlValue(ch) + quant);
-    scrollbyvalues((ListHandle) (long) MR(HxX(ch, contrlRfCon)));
+    scrollbyvalues(MR(guest_cast<ListHandle>(HxX(ch, contrlRfCon))));
 }
 
 #if !defined (BINCOMPAT)
@@ -207,7 +207,8 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
 					      INTEGER, mods, ListHandle, list)
 {
     ControlHandle ch, scrollh, scrollv;
-    Rect r, rswapped;
+    struct { short top,left,bottom,right; } r;
+    GUEST<Rect> rswapped;
     BOOLEAN doubleclick, ctlchanged;
     BOOLEAN hiliteempty, onlyone, userects, disjoint, extend;
     BOOLEAN initial;
@@ -401,7 +402,7 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
 	    } else {
 		if (newcell.h != oldcell.h ||
 		    newcell.v != oldcell.v) {
-		    if (onlyone && oldcell.h != 32767) {
+		    if (onlyone && oldcell.h != CWC(32767)) {
 			oldcellunswapped.h = CW(oldcell.h);
 			oldcellunswapped.v = CW(oldcell.v);
 			setselectnilflag(FALSE, oldcellunswapped, list,

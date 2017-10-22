@@ -661,7 +661,7 @@ A1(PUBLIC, OSErr, ufsPBMountVol, ParmBlkPtr, pb)	/* INTERNAL */
     int macvolumenamelen, namelen;
     struct stat sbuf;
     OSErr err;
-    THz savezone;
+    GUEST<THz> savezone;
     ALLOCABEGIN
 
     err = noErr;
@@ -813,12 +813,12 @@ A2(PUBLIC, OSErr, Eject, StringPtr, voln, INTEGER, vrn)	/* IMIV-108 */
 }
 
 namespace Executor {
-  static VCB *findvcb(StringPtr, INTEGER, BOOLEAN*, INTEGER*);
+  static VCB *findvcb(StringPtr, INTEGER, BOOLEAN*, GUEST<INTEGER>*);
   static VCB *grabvcb(ParmBlkPtr, GUEST<INTEGER> *);
 }
 
 A4(PRIVATE, VCB *, findvcb, StringPtr, sp, INTEGER, vrn, BOOLEAN *, iswd,
-							       INTEGER *, vrnp)
+							       GUEST<INTEGER> *, vrnp)
 {
     VCB *vcbptr;
 
@@ -896,7 +896,7 @@ A2(PRIVATE, VCB *, grabvcb, ParmBlkPtr, pb, GUEST<INTEGER> *, vrefnump)
 	if (dir <= 2)
 	    *vrefnump = vcbp->vcbVRefNum;
 	else {	/* working dir id */
-	    if (pb->volumeParam.ioVRefNum != 0)
+	    if (pb->volumeParam.ioVRefNum != CWC(0))
 		*vrefnump = pb->volumeParam.ioVRefNum;
 	    else
 		*vrefnump = DefVRefNum;
@@ -1040,7 +1040,7 @@ A2(PUBLIC, OSErr, ufsPBSetVInfo, HParmBlkPtr, pb,	/* INTERNAL */
     int ntocopy;
     OSErr err;
     BOOLEAN iswd;
-    INTEGER temp;
+    GUEST<INTEGER> temp;
 
     err = noErr;
 

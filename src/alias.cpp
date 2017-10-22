@@ -261,7 +261,7 @@ test_directory (INTEGER vref, LONGINT dirid, const char *sub_dirp,
   Str255 file_name;
 
   str255_from_c_string (file_name, sub_dirp);
-  cpb.hFileInfo.ioNamePtr = (StringPtr) RM ((Ptr) file_name);
+  cpb.hFileInfo.ioNamePtr = RM ((StringPtr) file_name);
   cpb.hFileInfo.ioVRefNum = CW (vref);
   cpb.hFileInfo.ioFDirIndex = CWC (0);
   cpb.hFileInfo.ioDirID = CL (dirid);
@@ -406,7 +406,7 @@ P4 (PUBLIC pascal trap, OSErr, ResolveAlias,
   fs.parID = headp->ioDirID; /* NOT VALID IF THIS IS A FULL PATH SPEC */
   str255assign (fs.name, headp->fileName); 
 
-  pb.volumeParam.ioNamePtr = (StringPtr) RM ((Ptr) volname);
+  pb.volumeParam.ioNamePtr = RM ((StringPtr) volname);
   pb.volumeParam.ioVolIndex = CLC (-1);
   pb.volumeParam.ioVRefNum = 0;
   retval = PBHGetVInfo (&pb, FALSE);
@@ -429,7 +429,7 @@ P4 (PUBLIC pascal trap, OSErr, ResolveAliasFile,
 
 
   memset (&hpb, 0, sizeof hpb);
-  hpb.fileParam.ioNamePtr = (StringPtr) RM ((Ptr) theSpec->name);
+  hpb.fileParam.ioNamePtr = RM ((StringPtr) theSpec->name);
   hpb.fileParam.ioDirID = theSpec->parID;
   hpb.fileParam.ioVRefNum = theSpec->vRefNum;
   retval = PBHGetFInfo (&hpb, FALSE);

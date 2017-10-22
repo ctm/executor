@@ -91,7 +91,7 @@ draw_menu_title (muelem *elt,
 	else
 #endif /* COLOR_APPLE_MENU_ICON */
 	{
-		gray_title_p = ! (MI_ENABLE_FLAGS_X (muhandle) & CLC (1));
+		gray_title_p = ! (MI_ENABLE_FLAGS (muhandle) & 1);
 		if (gray_title_p)
 		{
 	  dither_title_p = !AVERAGE_COLOR (&bar_color, &title_color, 0x8000,
@@ -314,9 +314,9 @@ init ()
 	if (!MBSaveLoc)
 	{
 		MBSaveLoc = RM(NewHandle((Size) MBDFSTRUCTBYTES));
-		HxX(MBSAVELOC, mbCustomStorage) = (Handle) CLC (0);
+		HxX(MBSAVELOC, mbCustomStorage) = nullptr;
 	}
-	HxX (MBSAVELOC, lastMBSave) = CLC (0);
+	HxX (MBSAVELOC, lastMBSave) = CWC(0);
 	
 	
 }
@@ -448,7 +448,7 @@ done:;						\
 					 &save_rect, &save_rect, srcCopy, NULL);
 	   }
 	   
-	   mep->mbBitsSave = (Handle) RM (save_pmh);
+	   mep->mbBitsSave =  RM ((Handle)save_pmh);
 		 },
 		  {
 			  mep->mbBitsSave = NULL;
@@ -614,7 +614,6 @@ P4 (PUBLIC, pascal int32, mbdf0, int16, sel, int16, mess,
 	if (mess != mbInit) /* fun w/ Word 6 */
 	{
 		GetPort(&saveport);
-		saveport = MR(saveport);
 		SetPort(MR(wmgr_port));
 	}
 	
@@ -665,6 +664,6 @@ P4 (PUBLIC, pascal int32, mbdf0, int16, sel, int16, mess,
 			break;
 	}
 	if (mess != mbInit)
-		SetPort(saveport);
+		SetPort(MR(saveport));
 	return retval;
 }

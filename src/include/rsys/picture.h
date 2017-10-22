@@ -14,7 +14,7 @@ namespace Executor {
 #define PIC_SHORT_COMMENT	0xA0
 #define PIC_LONG_COMMENT	0xA1
 
-#define PICOP(x)	{ INTEGER op = CW(x); PICWRITE(&op, sizeof(op));  }
+#define PICOP(x)	{ GUEST<INTEGER> op = CW(x); PICWRITE(&op, sizeof(op));  }
 
 #define PIC_SAVE_EXCURSION(body) { if (PORT_PIC_SAVE_X (thePort)) { body } }
 
@@ -25,7 +25,7 @@ namespace Executor {
 
 #define PICSAVEEND	}
 
-#define PAUSEDECL	Handle savepichand
+#define PAUSEDECL	GUEST<Handle> savepichand
 #define PAUSERECORDING	savepichand = thePort->picSave, thePort->picSave = 0
 #define RESUMERECORDING	thePort->picSave = savepichand
 

@@ -10,7 +10,7 @@
 #define RGN_SMALL_SIZE_X	(CWC (sizeof (Region)))
 #define RGN_SMALL_SIZE		(sizeof (Region))
 
-#define RGN_STOP_X		(CWC (32767))
+#define RGN_STOP_X		(CWC_RAW (32767))
 #define RGN_STOP		(32767)
 
 #define RGNP_SIZE_X(rgnp)	((rgnp)->rgnSize & RGN_SIZE_MASK_X)
@@ -25,7 +25,7 @@
    ((rgnp)->rgnSize = ((CWV (size) & RGN_SIZE_MASK_X)		\
 		       | ((special_p)				\
 			  ? RGN_SPECIAL_FLAG_X			\
-			  : 0))))
+			  : CWC(0)))))
 
 #define RGNP_SET_SMALL(rgnp) \
   RGNP_SET_SIZE_AND_SPECIAL (rgnp, RGN_SMALL_SIZE, FALSE)

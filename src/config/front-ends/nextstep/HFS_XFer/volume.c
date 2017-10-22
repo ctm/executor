@@ -33,7 +33,7 @@ PRIVATE OSErr readvolumebitmap(HVCB *vcbp, volumeinfoPtr vp)
 
 PRIVATE OSErr initcache(HVCB *vcbp)
 {
-    THz savezone;
+    GUEST<THz> savezone;
     cachehead *headp;
     cacheentry *cachep;
     

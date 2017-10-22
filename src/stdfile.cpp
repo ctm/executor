@@ -1303,7 +1303,7 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 A3(PRIVATE, void, flinit, fltype *, f, Rect *, r, ControlHandle, sh)
 {
     FontInfo fi;
-    THz savezone;
+    GUEST<THz> savezone;
 
     GetFontInfo(&fi);
     

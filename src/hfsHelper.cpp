@@ -287,7 +287,7 @@ read_driver_block_size (LONGINT fd, LONGINT bsize, LONGINT maxbytes,
     {
       if (aligned_buf[0] == 0x45 && aligned_buf[1] == 0x52)
 	{
-	  retval = (unsigned short) CW (*(unsigned short *) &aligned_buf[2]);
+	  retval = (unsigned short) CW (*(GUEST<uint16_t> *) &aligned_buf[2]);
 	  warning_fs_log ("fd = 0x%x, block size = %d", fd, retval);
 	}
     }

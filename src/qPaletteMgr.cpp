@@ -57,7 +57,7 @@ using namespace Executor;
   (HxX (palette, pmPrivate).raw_and(~PALETTE_MODIFIED_BIT_X))
 
 #define PALETTE_SEED_X(palette)			\
-  (*(int *) STARH (HxP (palette, pmSeeds)))
+  (*(GUEST<LONGINT> *) STARH (HxP (palette, pmSeeds)))
 #define PALETTE_SEED(palette) (MR (PALETTE_SEED_X (palette)))
 
 #define ELT_FREE_P(elt)				\
@@ -71,8 +71,8 @@ typedef struct pm_resource_holder
   PaletteHandle palette;
   int entry;
 
-  int default_value;
-  RGBColor default_rgb;
+  GUEST<INTEGER> default_value;
+  GUEST<RGBColor> default_rgb;
 } pm_resource_holder_t;
 
 /* device at position `n' corresponds to the resource holder list at
@@ -299,16 +299,16 @@ int
 higher_priority_p (ColorInfo *entry0, int entry0_index,
 		   ColorInfo *entry1, int entry1_index)
 {
-  int entry0_explicit, entry0_animated, entry0_tolerant;
-  int entry1_explicit, entry1_animated, entry1_tolerant;
+  bool entry0_explicit, entry0_animated, entry0_tolerant;
+  bool entry1_explicit, entry1_animated, entry1_tolerant;
 
-  entry0_explicit = CI_USAGE_X (entry0) & CWC (pmExplicit);
-  entry0_animated = CI_USAGE_X (entry0) & CWC (pmAnimated);
-  entry0_tolerant = CI_USAGE_X (entry0) & CWC (pmTolerant);
+  entry0_explicit = (CI_USAGE_X (entry0) & CWC (pmExplicit)) != CWC(0);
+  entry0_animated = (CI_USAGE_X (entry0) & CWC (pmAnimated)) != CWC(0);
+  entry0_tolerant = (CI_USAGE_X (entry0) & CWC (pmTolerant)) != CWC(0);
 
-  entry1_explicit = CI_USAGE_X (entry1) & CWC (pmExplicit);
-  entry1_animated = CI_USAGE_X (entry1) & CWC (pmAnimated);
-  entry1_tolerant = CI_USAGE_X (entry1) & CWC (pmTolerant);
+  entry1_explicit = (CI_USAGE_X (entry1) & CWC (pmExplicit)) != CWC(0);
+  entry1_animated = (CI_USAGE_X (entry1) & CWC (pmAnimated)) != CWC(0);
+  entry1_tolerant = (CI_USAGE_X (entry1) & CWC (pmTolerant)) != CWC(0);
   
   /* explicit takes precidence over non-explicit */
   if (entry0_explicit && !entry1_explicit)
@@ -654,7 +654,7 @@ P1 (PUBLIC pascal trap, void, ActivatePalette, WindowPtr, src_window)
      have nothing to do */
   if (!PALETTE_MODIFIED_P (palette)
       /* PM5.0a sets the seeds to `-1', as far as i can tell */
-      && PALETTE_SEEDS_X (palette) != (Handle) CLC (-1)
+      && PALETTE_SEEDS_X (palette) != guest_cast<Handle> CLC (-1)
       /* we only have a single display currently */
       && PALETTE_SEED_X (palette) == CTAB_SEED_X (gd_ctab))
     return;
@@ -713,7 +713,7 @@ P1 (PUBLIC pascal trap, void, ActivatePalette, WindowPtr, src_window)
     pm_do_updates_gd_changed ();
   
   PALETTE_CLEAR_MODIFIED (palette);
-  if (PALETTE_SEEDS_X (palette) != (Handle) CLC (-1))
+  if (PALETTE_SEEDS_X (palette) != guest_cast<Handle>(CLC (-1)))
     PALETTE_SEED_X (palette) = CTAB_SEED_X (gd_ctab);
 }
 
@@ -818,7 +818,7 @@ P0 (PUBLIC pascal trap, void, InitPalettes)
       
       /* ### don't know what these fields fields are for, unitialized
  	 them to some random value */
-      PALETTE_WINDOW_X (default_palette) = (GrafPtr) CLC (0);
+      PALETTE_WINDOW_X (default_palette) =  nullptr;
       PALETTE_DEVICES_X (default_palette) = CLC (-1);
       
       default_palette_info = PALETTE_INFO (default_palette);
@@ -827,13 +827,13 @@ P0 (PUBLIC pascal trap, void, InitPalettes)
       entry->ciRGB = ROMlib_white_rgb_color;
       entry->ciUsage = CWC (pmCourteous);
       entry->ciTolerance = CWC (0);
-      entry->ciPrivate = CWC (0);
+      entry->ciPrivate = CLC (0);
       
       entry = &default_palette_info[1];
       entry->ciRGB = ROMlib_black_rgb_color;
       entry->ciUsage = CWC (pmCourteous);
       entry->ciTolerance = CWC (0);
-      entry->ciPrivate = CWC (0);
+      entry->ciPrivate = CLC (0);
       
       /* initial contents don't matter */
       PALETTE_SEEDS_X (default_palette) = RM (NewHandle (sizeof (int)));
@@ -1065,7 +1065,8 @@ P2 (PUBLIC pascal trap, void, ResizePalette,
 	  entry = &entries[i];
 	  entry->ciRGB = ROMlib_white_rgb_color;
 	  entry->ciUsage = CWC (pmCourteous);
-	  entry->ciFlags = entry->ciPrivate = entries->ciTolerance = 0;
+          entry->ciFlags = entries->ciTolerance = CWC(0);
+          entry->ciPrivate = CLC(0);
 	}
     }
 }
@@ -1259,16 +1260,16 @@ P1 (PUBLIC pascal trap, void, SaveFore, ColorSpec *, cp)
 
 P1 (PUBLIC pascal trap, void, RestoreFore, ColorSpec *, cp)
 {
-  switch (cp->value)
+  switch (CW(cp->value))
     {
-    case CWC (usePM):
+    case usePM:
       warning_unimplemented ("using rgb, even though pm was requested");
       goto USE_RGB_ANYWAY;
       break;
     default:
       warning_unexpected ("value = 0x%x (using rgb)", CW (cp->value));
       /* FALL THROUGH */
-    case CWC (useRGB):
+    case useRGB:
 USE_RGB_ANYWAY:
       RGBForeColor (&cp->rgb);
       break;
@@ -1285,16 +1286,16 @@ P1 (PUBLIC pascal trap, void, SaveBack, ColorSpec *, cp)
 
 P1 (PUBLIC pascal trap, void, RestoreBack, ColorSpec *, cp)
 {
-  switch (cp->value)
+  switch (CW(cp->value))
     {
-    case CWC (usePM):
+    case usePM:
       warning_unimplemented ("using rgb, even though pm was requested");
       goto USE_RGB_ANYWAY;
       break;
     default:
       warning_unexpected ("value = 0x%x (using rgb)", CW (cp->value));
       /* FALL THROUGH */
-    case CWC (useRGB):
+    case useRGB:
 USE_RGB_ANYWAY:
       RGBBackColor (&cp->rgb);
       break;
@@ -1429,7 +1430,7 @@ P3 (PUBLIC pascal trap, void, SetEntryColor,
 
 P4 (PUBLIC pascal trap, void, GetEntryUsage,
     PaletteHandle, src_palette, INTEGER, entry_index,
-    INTEGER *, dst_usage, INTEGER *, dst_tolerance)
+    GUEST<INTEGER> *, dst_usage, GUEST<INTEGER> *, dst_tolerance)
 {
   ColorInfo *entry;
   
@@ -1595,5 +1596,8 @@ P5 (PUBLIC pascal trap, void, CopyPalette,
 	  n_entries * sizeof *dst_entry);
   
   for (i = 0; i < n_entries; i ++, dst_entry ++)
-    dst_entry->ciFlags = dst_entry->ciPrivate = CWC (0);
+  {
+    dst_entry->ciFlags = CWC(0);
+    dst_entry->ciPrivate = CLC (0);
+  }
 }

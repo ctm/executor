@@ -41,11 +41,11 @@ PUBLIC OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid, LONGIN
     OSErr retval;
     INTEGER n_wd_bytes, new_n_wd_bytes;
     Ptr newptr;
-    THz saveZone;
+    GUEST<THz> saveZone;
 
     firstfreep = 0;
     for (wdp = (wdentry *) (MR(WDCBsPtr) + sizeof(INTEGER)),
-	       ewdp = (wdentry *) (MR(WDCBsPtr) +CW(*(INTEGER *)MR(WDCBsPtr)));
+	       ewdp = (wdentry *) (MR(WDCBsPtr) +CW(*(GUEST<INTEGER> *)MR(WDCBsPtr)));
 							  wdp != ewdp; wdp++) {
 	if (!firstfreep && !wdp->vcbp)
 	    firstfreep = wdp;
@@ -56,7 +56,7 @@ PUBLIC OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid, LONGIN
 	}
     }
     if (!firstfreep) {
-	n_wd_bytes = CW(*(INTEGER *) MR(WDCBsPtr));
+	n_wd_bytes = CW(*(GUEST<INTEGER> *) MR(WDCBsPtr));
 	new_n_wd_bytes = (n_wd_bytes - sizeof(INTEGER)) * 2 + sizeof(INTEGER);
 	saveZone = TheZone;
 	TheZone = SysZone;
@@ -68,14 +68,16 @@ PUBLIC OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid, LONGIN
 	    BlockMove( MR(WDCBsPtr), newptr, n_wd_bytes);
 	    DisposPtr( MR(WDCBsPtr) );
 	    WDCBsPtr = RM(newptr);
-	    *(INTEGER *) newptr = CW(new_n_wd_bytes);
+	    *(GUEST<INTEGER> *) newptr = CW(new_n_wd_bytes);
 	    firstfreep = (wdentry *) (newptr + n_wd_bytes);
 	    retval = noErr;
 	}
     } else
 	retval = noErr;
     if (retval == noErr) {
-	firstfreep->vcbp = RM(vcbp);
+            #warning vcbp is not used consistently:
+        //firstfreep->vcbp = RM(vcbp);
+        firstfreep->vcbp = vcbp;
 	firstfreep->dirid = CL(dirid);
 	firstfreep->procid = CL(procid);
 	pb->ioVRefNum = CW(WDPTOWDNUM(firstfreep));
@@ -143,12 +145,12 @@ PUBLIC OSErr Executor::hfsPBGetWDInfo(WDPBPtr pb, BOOLEAN async)
     if (Cx(pb->ioWDIndex) > 0) {
 	i = Cx(pb->ioWDIndex);
 	wdp = (wdentry *) (MR(WDCBsPtr) + sizeof(INTEGER));
-	ewdp = (wdentry *) (MR(WDCBsPtr) + CW(*(INTEGER *)MR(WDCBsPtr)));
+	ewdp = (wdentry *) (MR(WDCBsPtr) + CW(*(GUEST<INTEGER> *)MR(WDCBsPtr)));
 	if (Cx(pb->ioVRefNum) < 0) {
 	    for (;wdp != ewdp; wdp++)
 		if (wdp->vcbp && MR(wdp->vcbp)->vcbVRefNum == pb->ioVRefNum && --i <= 0)
 		    break;
-	} else if (pb->ioVRefNum == 0) {
+	} else if (pb->ioVRefNum == CWC(0)) {
 	    for (;wdp != ewdp && i > 1; ++wdp)
 	      if (wdp->vcbp)
 		--i;

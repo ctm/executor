@@ -22,11 +22,11 @@ using namespace Executor;
 #define TERM (*ip++ = RGNSTOPX)
 
 #define ADD4(y, x1, x2)						\
-    (*ip++ = CW((y)), *ip++ = CW((x1)), *ip++ = CW((x2)), TERM)
+    (*ip++ = CW_RAW((y)), *ip++ = CW_RAW((x1)), *ip++ = CW_RAW((x2)), TERM)
 
 #define ADD6(y, x1, x2, x3, x4)					\
-    (*ip++ = CW((y)), *ip++ = CW((x1)), *ip++ = CW((x2)),	\
-                  *ip++ = CW((x3)), *ip++ = CW((x4)), TERM)
+    (*ip++ = CW_RAW((y)), *ip++ = CW_RAW((x1)), *ip++ = CW_RAW((x2)),	\
+                  *ip++ = CW_RAW((x3)), *ip++ = CW_RAW((x4)), TERM)
 
 A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r)		/* INTERNAL */
 {
@@ -132,19 +132,19 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r)		/* INTERNAL */
                 else
                     nx = savex / 2;
                 if (first) {
-                    *op++ = CW(top);
-                    *op++ = CW(centl - nx);
-                    *op++ = CW(centr + nx);
+                    *op++ = CW_RAW(top);
+                    *op++ = CW_RAW(centl - nx);
+                    *op++ = CW_RAW(centr + nx);
                     *op++ = RGNSTOPX;
                     ox = nx;
                     first = FALSE;
                 } else {
                     if (nx != ox) {
-                        *op++ = CW(centt - oy);
-                        *op++ = CW(centl - nx);
-                        *op++ = CW(centl - ox);
-                        *op++ = CW(centr + ox);
-                        *op++ = CW(centr + nx);
+                        *op++ = CW_RAW(centt - oy);
+                        *op++ = CW_RAW(centl - nx);
+                        *op++ = CW_RAW(centl - ox);
+                        *op++ = CW_RAW(centr + ox);
+                        *op++ = CW_RAW(centr + nx);
                         *op++ = RGNSTOPX;
                         ox = nx;
                     }
@@ -160,7 +160,7 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r)		/* INTERNAL */
         while (ip != ep && *ip != RGNSTOPX)
             ip -= 2;
         ip2 = ip + 1;
-        *op++ = CW(bottom - (CW(*ip2++) - top));
+        *op++ = CW_RAW(bottom - (CW_RAW(*ip2++) - top));
         while ((*op++ = *ip2++) != RGNSTOPX)
             ;
     }

@@ -109,7 +109,7 @@ A0(PUBLIC, LONGINT, ROMlib_ZeroScrap)
 {
     OSErr retval;
     INTEGER f;
-    THz saveZone;
+    GUEST<THz> saveZone;
     
     if (Cx(ScrapState) < 0) {
         ScrapCount = 0;

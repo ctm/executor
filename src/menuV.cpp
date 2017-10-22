@@ -53,7 +53,7 @@ P0(PUBLIC pascal trap, LONGINT, MenuChoice)
 }
 
 P3(PUBLIC pascal trap, void, GetItemCmd, MenuHandle, mh, INTEGER, item,
-								  CHAR *, cmdp)
+								  GUEST<CHAR> *, cmdp)
 {
     mextp mep;
     
@@ -77,9 +77,8 @@ P4(PUBLIC pascal trap, LONGINT, PopUpMenuSelect, MenuHandle, mh, INTEGER, top,
 {
     Point p;
     Rect saver;
-    INTEGER tempi;
+    GUEST<INTEGER> tempi;
     LONGINT where;
-    RgnHandle saveclip;
     int count;
     
 /*
@@ -114,21 +113,20 @@ P4(PUBLIC pascal trap, LONGINT, PopUpMenuSelect, MenuHandle, mh, INTEGER, top,
 	item = count;
       }
     
-    tempi = item;
     THEPORT_SAVE_EXCURSION
       (MR (wmgr_port),
        {
-	 tempi = CW (tempi);
+	 tempi = CW (item);
 	 MENUCALL (mPopUpRect, mh, &saver, p, &tempi);
 	 TopMenuItem = tempi;
 	 where = ROMlib_mentosix (Hx (mh, menuID));
 	 
 	 MBDFCALL (mbSave, where, (LONGINT) (long) &saver);
 	 
-	 saveclip = PORT_CLIP_REGION_X (thePort); /* ick */
+	 auto saveclip = PORT_CLIP_REGION_X (thePort); /* ick */
 	 PORT_CLIP_REGION_X (thePort) = RM (NewRgn ());
 	 RectRgn (PORT_CLIP_REGION (thePort), &saver);
-	 MENUCALL (mDrawMsg, mh, &saver, p, (INTEGER *) 0);
+	 MENUCALL (mDrawMsg, mh, &saver, p, nullptr);
 	 DisposeRgn (PORT_CLIP_REGION (thePort));
 	 PORT_CLIP_REGION_X (thePort) = saveclip;
 	 MBDFCALL (mbSaveAlt, 0, where);

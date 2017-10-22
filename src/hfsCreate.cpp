@@ -71,7 +71,7 @@ PRIVATE OSErr createhelper(IOParam *pb, BOOLEAN async, createop op,
 		err = ROMlib_dirbusy(CL(drp->dirDirID), vcbp);
 		if (err == noErr)
 		  {
-		    if (drp->dirVal != 0)
+		    if (drp->dirVal != CWC(0))
 			err = fBsyErr;
 		    else
 			err = ROMlib_writevcbp(vcbp);
@@ -130,13 +130,13 @@ PUBLIC OSErr Executor::hfsPBCreate(ParmBlkPtr pb, BOOLEAN async)
 
 PUBLIC OSErr Executor::hfsPBHCreate(HParmBlkPtr pb, BOOLEAN async)
 {
-    return createhelper((IOParam *)pb, async, create, BigEndianValue(pb->fileParam.ioDirID),
+    return createhelper((IOParam *)pb, async, create, CL(pb->fileParam.ioDirID),
 								      regular);
 }
 
 PUBLIC OSErr Executor::hfsPBDirCreate(HParmBlkPtr pb, BOOLEAN async)
 {
-    return createhelper((IOParam *)pb, async, create, BigEndianValue(pb->fileParam.ioDirID),
+    return createhelper((IOParam *)pb, async, create, CL(pb->fileParam.ioDirID),
 								    directory);
 }
 
@@ -148,6 +148,6 @@ PUBLIC OSErr Executor::hfsPBDelete(ParmBlkPtr pb, BOOLEAN async)
 
 PUBLIC OSErr Executor::hfsPBHDelete(HParmBlkPtr pb, BOOLEAN async)
 {
-    return createhelper((IOParam *)pb, async, delete1, BigEndianValue(pb->fileParam.ioDirID),
+    return createhelper((IOParam *)pb, async, delete1, CL(pb->fileParam.ioDirID),
 							    (filekind)(regular | directory));
 }

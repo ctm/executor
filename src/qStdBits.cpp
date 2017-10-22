@@ -107,9 +107,9 @@ Executor::canonicalize_bogo_map (BitMap *bogo_map, PixMap **canonical_addr,
 	
 	/* no packing currently supported */
 	canonical->packType = CWC (0);
-	canonical->packSize = CWC (0);
+	canonical->packSize = CLC (0);
 	
-	canonical->vRes = canonical->hRes = CWC (72);
+	canonical->vRes = canonical->hRes = CLC (72<<16);
 	
 	gd_pmap = GD_PMAP (MR (TheGDevice));
 	if (canonical->baseAddr == PIXMAP_BASEADDR_X (gd_pmap))
@@ -130,9 +130,9 @@ Executor::canonicalize_bogo_map (BitMap *bogo_map, PixMap **canonical_addr,
 	    info->cleanup_type = Executor::cleanup_info::cleanup_none;
 	    canonical->pmTable = RM (validate_relative_bw_ctab ());
 	  }
-	canonical->planeBytes = CWC (0);
+	canonical->planeBytes = CLC (0);
 
-	canonical->pmReserved = CWC (0);
+	canonical->pmReserved = CLC (0);
 	break;
       }
 
@@ -212,10 +212,10 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
 {
   int32 zero = 0;
   int16 opcode;
-  int16 swapped_mode;
+  GUEST<int16> swapped_mode;
   int16 row_bytes;
-  int16 temp_pixmap_row_bytes;
-  int16 pack_type;
+  GUEST<int16> temp_pixmap_row_bytes;
+  GUEST<int16> pack_type;
   int16 pixel_size;
   int height;
   int i;
@@ -268,7 +268,7 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
   
   if (direct_bits_p)
     {
-      int32 swapped_bogo_baseaddr = CLC (0xFF);
+      GUEST<int32> swapped_bogo_baseaddr = CLC (0xFF);
       
       PICWRITE (&swapped_bogo_baseaddr, sizeof swapped_bogo_baseaddr);
     }
@@ -358,7 +358,8 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
       int parity;
       uint8 *packed_line;
       int8 *countloc;
-      int16 count, swappedcount, countsize;
+      int16 count, countsize;
+      GUEST<int16> swappedcount;
       uint8 *baseaddr;
 
       /* i copied the code below from the executor 1.2 implementation
@@ -635,7 +636,7 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
 			    * (CW (src_rect->bottom) - CW (src_rect->top)));
 
       TEMP_ALLOC_ALLOCATE (new_src_bits, temp_depth_bits, n_bytes_needed);
-      new_src->baseAddr = (Ptr)RM (new_src_bits);
+      new_src->baseAddr = RM ((Ptr)new_src_bits);
       
       pixmap_set_pixel_fields (new_src, dst_depth);
       new_src->pmTable = PIXMAP_TABLE_X (the_gd_pmap);
@@ -674,7 +675,7 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
       
       TEMP_ALLOC_ALLOCATE (scale_base, temp_scale_bits,
 			   new_src_row_bytes * RECT_HEIGHT (dst_rect));
-      new_src->baseAddr = (Ptr) RM (scale_base);
+      new_src->baseAddr = RM ((Ptr) scale_base);
       
       pixmap_set_pixel_fields (new_src, dst_depth);
       
@@ -741,7 +742,7 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
       new_src->rowBytes      = src->rowBytes;
       TEMP_ALLOC_ALLOCATE (overlap_bits, temp_overlap_bits,
 			   height * BITMAP_ROWBYTES (src));
-      new_src->baseAddr      = (Ptr) RM (overlap_bits);
+      new_src->baseAddr      = RM ((Ptr) overlap_bits);
       new_src->bounds        = copy_rect;
       
       pixmap_set_pixel_fields (new_src, dst_depth);
@@ -850,7 +851,7 @@ ROMlib_real_copy_bits (PixMap *src, PixMap *dst,
       TEMP_ALLOC_ALLOCATE (temp_bits, temp_alloc_bits, temp_bytes_needed);
 
       *new_src = *src;
-      new_src->baseAddr = (Ptr)RM (temp_bits);
+      new_src->baseAddr = RM ((Ptr)temp_bits);
       new_src->rowBytes = CW (temp_row_bytes | PIXMAP_DEFAULT_ROWBYTES);
       new_src->bounds = *dst_rect;
 

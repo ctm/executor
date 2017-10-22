@@ -116,9 +116,9 @@ rgb_diff (RGBColor *rgb1p, RGBColor *rgb2p)
    */
 
 
-  retval = (ABS (CW (rgb1p->red   & 0xff) - CW (rgb2p->red   & 0xff)) +
-	    ABS (CW (rgb1p->green & 0xff) - CW (rgb2p->green & 0xff)) +
-	    ABS (CW (rgb1p->blue  & 0xff) - CW (rgb2p->blue  & 0xff)));
+  retval = (ABS ((CW (rgb1p->red   ) & 0xff00) - (CW (rgb2p->red  ) & 0xff00)) +
+	    ABS ((CW (rgb1p->green ) & 0xff00) - (CW (rgb2p->green) & 0xff00)) +
+	    ABS ((CW (rgb1p->blue  ) & 0xff00) - (CW (rgb2p->blue ) & 0xff00)));
 
   return retval;
 }
@@ -147,9 +147,9 @@ ROMlib_search_proc (RGBColor *rgb)
 	                          : &mac_32bpp_rgb_spec;
       retval = (*rgb_spec->rgbcolor_to_pixel) (rgb_spec, rgb, TRUE);
       if (pixel_size == 16)
-	retval = CW (retval);
+	retval = CW (GUEST<uint16_t>::fromRaw(retval));
       else if (pixel_size == 32)
-	retval = CL (retval);
+	retval = CL (GUEST<uint32_t>::fromRaw(retval));
       else
 	gui_fatal ("unknown pixel size `%d'", pixel_size);
     }
@@ -213,7 +213,7 @@ P1 (PUBLIC pascal trap, LONGINT, Color2Index,
   SProcHndl t;
   LONGINT success_p;
   /* default */
-  LONGINT position = 0;
+  GUEST<LONGINT> position = {};
   GDHandle gdev;
   ITabHandle gd_itab;
   CTabHandle gd_ctab;
@@ -255,10 +255,9 @@ P1 (PUBLIC pascal trap, LONGINT, Color2Index,
     }
   
   if (! success_p)
-    position = ROMlib_search_proc (rgb);
+    return ROMlib_search_proc (rgb);
   else
-    position = CL (position);  /* They filled this in in big endian order. */
-  return position;
+    return CL (position);  /* They filled this in in big endian order. */
 }
 
 P2 (PUBLIC pascal trap, void, Index2Color,
@@ -275,9 +274,9 @@ P1 (PUBLIC pascal trap, void, InvertColor,
 /* #warning "only use default InvertColor complement procedure" */
 
   /* one's complement */
-  rgb->red = ~rgb->red;
-  rgb->green = ~rgb->green;
-  rgb->blue = ~rgb->blue;
+  rgb->red.raw( ~rgb->red.raw());
+  rgb->green.raw( ~rgb->green.raw());
+  rgb->blue.raw( ~rgb->blue.raw());
 }
 
 P1 (PUBLIC pascal trap, BOOLEAN, RealColor,
@@ -306,11 +305,11 @@ P1 (PUBLIC pascal trap, BOOLEAN, RealColor,
   closest = &(CTAB_TABLE (table)[index].rgb);
 
   /* high `resolution' bits */
-  mask = CW (((1 << resolution) - 1) << (16 - resolution));
+  mask = CW (((1 << resolution) - 1) << (16 - resolution)).raw();
   
-  return !(((rgb->red ^ closest->red) & mask)
-	   || ((rgb->green ^ closest->green) & mask)
-	   || ((rgb->blue ^ closest->blue) & mask));
+  return !(((rgb->red.raw() ^ closest->red.raw()) & mask)
+	   || ((rgb->green.raw() ^ closest->green.raw()) & mask)
+	   || ((rgb->blue.raw() ^ closest->blue.raw()) & mask));
 }
 
 P3 (PUBLIC pascal trap, void, GetSubTable,
@@ -371,8 +370,8 @@ P3 (PUBLIC pascal trap, void, GetSubTable,
   LOCK_HANDLE_EXCURSION_2
     (in_ctab, target_ctab,
      {
-       CTabHandle gdev_ctab_save = PIXMAP_TABLE_X (gd_pmap);
-       ITabHandle gdev_itab_save = GD_ITABLE_X (gdev);
+       GUEST<CTabHandle> gdev_ctab_save = PIXMAP_TABLE_X (gd_pmap);
+       GUEST<ITabHandle> gdev_itab_save = GD_ITABLE_X (gdev);
        
        /* pull tables into locals for easy access */
        ColorSpec *in_ctab_table = CTAB_TABLE (in_ctab);
@@ -638,7 +637,7 @@ P3 (PUBLIC pascal trap, void, MakeITable,
   ULONGINT (*rgb_error_func) (unsigned);
   unsigned char *itab_table;
   const int *offset;
-  ColorSpec color_for_index[256];
+  NativeColorSpec color_for_index[256];
   
   {
     static boolean_t been_here_p = FALSE;
@@ -780,7 +779,7 @@ P3 (PUBLIC pascal trap, void, MakeITable,
 	{
 	  int inverse_table_index;
 	  unsigned char ctab_index;
-	  const RGBColor *current_color;
+	  const NativeRGBColor *current_color;
 	  int off;
 
 	  inverse_table_index = DEQUEUE ();
@@ -867,7 +866,7 @@ P2 (PUBLIC pascal trap, void, ProtectEntry,
       
       /* mark this entry as protected; and set the
 	 low byte of the value field with the current
-	 device id */
+         device id */
       entry->value = CTAB_PROTECTED_BIT_X | (GD_ID_X (gdev) & CWC (0xFF));
     }
   else
@@ -885,7 +884,7 @@ P2 (PUBLIC pascal trap, void, ReserveEntry,
   GDHandle gdev;
   CTabHandle ctab;
   ColorSpec *entry;
-  INTEGER old_value;
+  GUEST<INTEGER> old_value;
   
   gdev = MR (TheGDevice);
   ctab = PIXMAP_TABLE (GD_PMAP (gdev));
@@ -908,7 +907,7 @@ P2 (PUBLIC pascal trap, void, ReserveEntry,
   else
     {
       /* clear the entry */
-      entry->value.raw( entry->value.raw() & ~CTAB_RESERVED_BIT_X );
+      entry->value = entry->value & ~CTAB_RESERVED_BIT_X;
     }
 
   /* success */

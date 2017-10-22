@@ -22,7 +22,7 @@ PUBLIC filecontrolblock *Executor::ROMlib_getfreefcbp( void )
     short length;
     filecontrolblock *fcbp, *efcbp;
     
-    length = CW(*(short *)MR(FCBSPtr));
+    length = CW(*(GUEST<INTEGER> *)MR(FCBSPtr));
     fcbp = (filecontrolblock *) ((short *)MR(FCBSPtr)+1);
     efcbp = (filecontrolblock *) ((char *)MR(FCBSPtr) + length);
     for (;fcbp < efcbp && Cx(fcbp->fcbFlNum);
@@ -38,11 +38,11 @@ PUBLIC filecontrolblock *Executor::ROMlib_refnumtofcbp(uint16 refnum)
     
     if (refnum < sizeof(short) || refnum % CW(FSFCBLen) != sizeof(short))
 	return 0;
-    len = CW(*(uint16 *)MR(FCBSPtr));
+    len = CW(*(GUEST<uint16> *)MR(FCBSPtr));
     if (refnum >= len)
 	return 0;
     retval = (filecontrolblock *)((char *)MR(FCBSPtr) + refnum);
-    if (retval->fcbFlNum == 0)
+    if (retval->fcbFlNum == CLC(0))
 	retval = 0;
     return retval;
 }
@@ -388,7 +388,7 @@ PRIVATE BOOLEAN fillextent(xtntdesc *xp, ULONGINT *nallocneededp, HVCB *vcbp,
 		    tmpxtnt[1].blockcount = CW(nfree);
 		    tmpxtnt[1].blockstart = CW(search);
 		}
-	    } else if (nfree > tmpxtnt[2].blockcount) {
+	    } else if (nfree > CW(tmpxtnt[2].blockcount)) {
 		tmpxtnt[2].blockcount = CW(nfree);
 		tmpxtnt[2].blockstart = CW(search);
 	    }
@@ -400,7 +400,7 @@ PRIVATE BOOLEAN fillextent(xtntdesc *xp, ULONGINT *nallocneededp, HVCB *vcbp,
 	    xp->blockstart = tmpxp->blockstart;
 	    xp->blockcount = CW(MIN(CW(tmpxp->blockcount), needed));
 #if 1
-	    if (xp->blockcount == 0)
+	    if (xp->blockcount == CWC(0))
 	        warning_unexpected ("blockcount = 0");
 #endif
 	    needed -= CW(xp->blockcount);
@@ -635,7 +635,7 @@ done:
     switch (alloc) {
     case seteof:
 	if (err == noErr)
-	    fcbp->fcbEOF = (ULONGINT) pb->ioMisc;
+	    fcbp->fcbEOF = guest_cast<int32_t>(pb->ioMisc);
 	break;
     case allocany:
     case alloccontig:
@@ -922,7 +922,7 @@ DONE:
 	newerr = ROMlib_cleancache(vcbp);
     else
 	newerr = noErr;
-    if (pb->ioResult == noErr)
+    if (pb->ioResult == CWC(noErr))
         pb->ioResult = CW(newerr);
     fs_err_hook (CW (pb->ioResult));
     return CW(pb->ioResult);
@@ -1280,7 +1280,7 @@ PUBLIC OSErr Executor::ROMlib_findvcbandfile(IOParam *pb, LONGINT dirid, btparam
   OSErr err;
   int badness;
   LONGINT dir;
-  StringPtr savep;
+  GUEST<StringPtr> savep;
     
   badness = 0;
   dir = 0;
@@ -1375,8 +1375,8 @@ PUBLIC OSErr Executor::ROMlib_alreadyopen(HVCB *vcbp, LONGINT flnum, SignedByte 
     if (*permp == fsRdPerm)
 	return noErr;
     busybit = busy == resourcebusy ? RESOURCEBIT : 0;
-    length = CW(*(short *)MR(FCBSPtr));
-    fcbp = (filecontrolblock *) ((short *)MR(FCBSPtr)+1);
+    length = CW(*(GUEST<INTEGER> *)MR(FCBSPtr));
+    fcbp = (filecontrolblock *) ((GUEST<INTEGER> *)MR(FCBSPtr)+1);
     efcbp = (filecontrolblock *) ((char *)MR(FCBSPtr) + length);
     for (;fcbp < efcbp; fcbp = (filecontrolblock *) ((char *)fcbp + CW(FSFCBLen)))
 	if (MR(fcbp->fcbVPtr) == vcbp && CL(fcbp->fcbFlNum) == flnum &&
@@ -1514,11 +1514,11 @@ PRIVATE OSErr PBOpenHelper(IOParam *pb, Forktype ft, LONGINT dirid, BOOLEAN asyn
 #if defined(MAC)
     fcbp->fcbBfAdr = pb->ioMisc;
 #else /* !defined(MAC) */
-    fcbp->fcbBfAdr = (Ptr) (long) pb->ioMisc;
+    fcbp->fcbBfAdr = guest_cast<Ptr> (pb->ioMisc);
 #endif /* !defined(MAC) */
     fcbp->fcbFlPos = 0;
     
-    fcbp->fcbClmpSize = frp->filClpSize;
+    fcbp->fcbClmpSize.set(frp->filClpSize.get());
     if (!fcbp->fcbClmpSize)
 	fcbp->fcbClmpSize = btparamrec.vcbp->vcbClpSiz;
 	
@@ -1555,7 +1555,7 @@ PUBLIC OSErr Executor::hfsPBHOpen(HParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
 
-  err = PBOpenHelper((IOParam *) pb, datafork, BigEndianValue(pb->fileParam.ioDirID),
+  err = PBOpenHelper((IOParam *) pb, datafork, CL(pb->fileParam.ioDirID),
 									async);
   fs_err_hook (err);
   return err;
@@ -1565,7 +1565,7 @@ PUBLIC OSErr Executor::hfsPBHOpenRF(HParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
 
-  err = PBOpenHelper((IOParam *) pb, resourcefork, BigEndianValue(pb->fileParam.ioDirID),
+  err = PBOpenHelper((IOParam *) pb, resourcefork, CL(pb->fileParam.ioDirID),
 								        async);
   fs_err_hook (err);
   return err;

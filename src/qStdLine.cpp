@@ -84,9 +84,9 @@ A8(PRIVATE, void, scodydxx1x2, register LONGINT, y1, register INTEGER, x1,
     *opp2 = op2;
 }
 
-#define OUT2(y, x1, x2)	(*op++ = CW(y),		\
-			 *op++ = CW(x1),	\
-			 *op++ = CW(x2),	\
+#define OUT2(y, x1, x2)	(*op++ = CW_RAW(y),		\
+			 *op++ = CW_RAW(x1),	\
+			 *op++ = CW_RAW(x2),	\
 			 *op++ = RGNSTOPX)
 
 A5(PRIVATE, INTEGER *, scrdydxx1x2, register LONGINT, y1, register INTEGER, x1,
@@ -205,7 +205,7 @@ A5(PRIVATE, INTEGER *, scrdxdyx1x2, register INTEGER, y1, register LONGINT, x1,
 	OUT2(y1++, x1 >> 16, ox);
 	ox = x1 >> 16;
     }
-    op[-3] = CW(x2-1);
+    op[-3] = CW_RAW(x2-1);
     return op;
 }
 
@@ -275,7 +275,7 @@ A3(PRIVATE, void, regionify1, register INTEGER *, ip1,
 	if (y1 < y2) {
 	    x1 = *ip1++;
 	    gui_assert(x1 < x2 || (x1 == 32767 && x2 == 32767));
-	    *op++ = CW(y1);
+	    *op++ = CW_RAW(y1);
 	    *op++ = x1;
 	    if (x1 == 32767)
 /*-->*/		break;
@@ -285,7 +285,7 @@ A3(PRIVATE, void, regionify1, register INTEGER *, ip1,
 	} else if (y1 > y2) {
 	    x2 = *ip2++;
 	    gui_assert(x1 < x2 || (x1 == 32767 && x2 == 32767));
-	    *op++ = CW(y2);
+	    *op++ = CW_RAW(y2);
 	    *op++ = x1;
 	    if (x1 == 32767)
 /*-->*/		break;
@@ -298,7 +298,7 @@ A3(PRIVATE, void, regionify1, register INTEGER *, ip1,
 	    x1 = *ip1++;
 	    x2 = *ip2++;
 	    gui_assert(x1 < x2 || (x1 == 32767 && x2 == 32767));
-	    *op++ = CW(y1);
+	    *op++ = CW_RAW(y1);
 	    *op++ = x1;
 	    if (x1 == 32767)
 /*-->*/		break;
@@ -308,7 +308,7 @@ A3(PRIVATE, void, regionify1, register INTEGER *, ip1,
 	    y2 = *ip2++;
 	}
     }
-    *op++ = CWC(32767);
+    *op++ = CWC_RAW(32767);
     rp->rgnSize = CW(-32768 + (op - (INTEGER *) rp) * sizeof(INTEGER));
 }
 
@@ -326,7 +326,7 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
   register INTEGER r32767;
   RgnHandle rh;
   PolyHandle ph;
-  Point swappedp;
+  GUEST<Point> swappedp;
   ALLOCABEGIN
   PAUSEDECL;
   
@@ -345,16 +345,16 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
 	if (psize == SMALLPOLY) {
 	  SetHandleSize((Handle) ph, psize + 2 * sizeof(Point));
 	  oip = (INTEGER *)((char *) STARH(ph) + psize);
-	  *oip++ = CW(y1);
-	  *oip++ = CW(x1);
+	  *oip++ = CW_RAW(y1);
+	  *oip++ = CW_RAW(x1);
 	  HxX(ph, polySize) = CW(Hx(ph, polySize) + 2 * sizeof(Point));
 	} else {
 	  SetHandleSize((Handle) ph, psize + sizeof(Point));
 	  oip = (INTEGER *)((char *) STARH(ph) + psize);
 	  HxX(ph, polySize) = CW(Hx(ph, polySize) + sizeof(Point));
 	}
-	*oip++ = CW(y2);
-	*oip++ = CW(x2);
+	*oip++ = CW_RAW(y2);
+	*oip++ = CW_RAW(x2);
   }
   
   PIC_SAVE_EXCURSION
@@ -396,9 +396,9 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
 	  tmpRP->rgnBBox.right  = CW(x1);
 	  tmpRP->rgnSize = CWC(SMALLRGN + 5 * sizeof(INTEGER));
 	  oip = (INTEGER *) ((char *)tmpRP + SMALLRGN);
-	  *oip++ = CW(y1);
-	  *oip++ = CW(x1);
-	  *oip++ = CW(x2);
+	  *oip++ = CW_RAW(y1);
+	  *oip++ = CW_RAW(x1);
+	  *oip++ = CW_RAW(x2);
 	  *oip++ = RGNSTOPX;
 	  *oip++ = RGNSTOPX;
 	  rp = RM(tmpRP);

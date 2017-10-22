@@ -17,9 +17,9 @@ using namespace Executor;
 
 /* traps from the DialogDispatch trap */
 
-P1 (PUBLIC pascal trap, OSErr, GetStdFilterProc, ProcPtr *, proc)
+P1 (PUBLIC pascal trap, OSErr, GetStdFilterProc, GUEST<ProcPtr> *, proc)
 {
-  *proc = (ProcPtr) RM (P_ROMlib_myfilt);
+  *proc = RM ( (ProcPtr)P_ROMlib_myfilt);
   warning_unimplemented ("no specs"); /* i.e. no documentation on how this
 					 routine is *supposed* to work, so
 					 we may be blowing off something

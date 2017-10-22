@@ -29,7 +29,8 @@ A2(PRIVATE, void, polyrgn, PolyHandle, ph, RgnHandle, rh)
 {
     GUEST<Point> *pp, *ep;
     Point firstp;
-    INTEGER tmpvis, state;
+    GUEST<INTEGER> tmpvis;
+    INTEGER state;
 
     state = HGetState((Handle) ph);
     HLock((Handle) ph);  

@@ -1069,8 +1069,8 @@ static int n = 0;
 *pprn = 2 + 94 * n++;
 return noErr;
 #endif
-    length =CW( *(short *)MR(FCBSPtr));
-    fcbp = (fcbrec *) ((short *)MR(FCBSPtr)+1);
+    length =CW( *(GUEST<int16_t> *)MR(FCBSPtr));
+    fcbp = (fcbrec *) ((GUEST<int16_t> *)MR(FCBSPtr)+1);
     efcbp = (fcbrec *) ((char *)MR(FCBSPtr) + length);
     for (;fcbp < efcbp && fcbp->fdfnum;
 			      fcbp = (fcbrec *) ((char *)fcbp + Cx(FSFCBLen)))

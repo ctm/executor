@@ -346,7 +346,7 @@ Executor::ROMlib_mgetres2 (resmaphand map, resref *rr)
     ROMlib_setreserr (noErr);
   else
     {
-      THz savezone;
+      GUEST<THz> savezone;
       SignedByte state;
       int32 loc;
 
@@ -550,7 +550,7 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
       Str255 local_name;
 
       str255assign (local_name, fn);
-      pbr.volumeParam.ioNamePtr = (StringPtr) RM ((Ptr) local_name);
+      pbr.volumeParam.ioNamePtr = RM ((StringPtr) local_name);
       pbr.volumeParam.ioVRefNum = CW (vref);
       pbr.volumeParam.ioVolIndex = CLC (-1);
       err = PBHGetVInfo (&pbr, FALSE);

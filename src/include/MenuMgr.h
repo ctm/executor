@@ -94,51 +94,6 @@ extern INTEGER 	MBarHeight;
 #define MenuCInfo	(MenuCInfo_H.p)
 #endif
 
-#if !defined (__STDC__)
-extern void DrawMenuBar(); 
-extern void ClearMenuBar(); 
-extern void InitMenus(); 
-extern MenuHandle NewMenu(); 
-extern void CalcMenuSize(); 
-extern MenuHandle GetMenu(); 
-extern void DisposeMenu(); 
-extern void AppendMenu(); 
-extern void AddResMenu(); 
-extern void DelMenuItem(); 
-extern void InsertResMenu(); 
-extern void InsMenuItem(); 
-extern void InsertMenu(); 
-extern void DeleteMenu(); 
-extern Handle GetNewMBar(); 
-extern Handle GetMenuBar(); 
-extern void SetMenuBar(); 
-extern INTEGER ROMlib_mentosix(); 
-extern void HiliteMenu(); 
-extern LONGINT ROMlib_menuhelper(); 
-extern LONGINT MenuSelect(); 
-extern void FlashMenuBar(); 
-extern LONGINT MenuKey(); 
-extern void SetItem(); 
-extern void GetItem(); 
-extern void DisableItem(); 
-extern void EnableItem(); 
-extern void CheckItem(); 
-extern void SetItemMark(); 
-extern void GetItemMark(); 
-extern void SetItemIcon(); 
-extern void GetItemIcon(); 
-extern void SetItemStyle(); 
-extern void GetItemStyle(); 
-extern INTEGER CountMItems(); 
-extern MenuHandle GetMHandle(); 
-extern void SetMenuFlash(); 
-extern BOOLEAN ROMlib_shouldalarm(); 
-extern void InitProcMenu(); 
-extern LONGINT MenuChoice(); 
-extern void GetItemCmd(); 
-extern void SetItemCmd(); 
-extern LONGINT PopUpMenuSelect(); 
-#else /* __STDC__ */
 extern pascal trap void C_DrawMenuBar( void  ); extern pascal trap void P_DrawMenuBar( void ); 
 extern pascal trap void C_ClearMenuBar( void  ); extern pascal trap void P_ClearMenuBar( void ); 
 extern pascal trap void C_InitMenus( void  ); extern pascal trap void P_InitMenus( void ); 
@@ -184,20 +139,17 @@ extern pascal trap void C_SetItemMark( MenuHandle mh, INTEGER item,
  CHAR mark ); extern pascal trap void P_SetItemMark( MenuHandle mh, INTEGER item, 
  CHAR mark ); 
 extern pascal trap void C_GetItemMark( MenuHandle mh, INTEGER item, 
- INTEGER *markp ); extern pascal trap void P_GetItemMark( MenuHandle mh, INTEGER item, 
- INTEGER *markp ); 
+ GUEST<INTEGER> *markp );
 extern pascal trap void C_SetItemIcon( MenuHandle mh, INTEGER item, 
  Byte icon ); extern pascal trap void P_SetItemIcon( MenuHandle mh, INTEGER item, 
  Byte icon ); 
 extern pascal trap void C_GetItemIcon( MenuHandle mh, INTEGER item, 
- INTEGER *iconp ); extern pascal trap void P_GetItemIcon( MenuHandle mh, INTEGER item, 
- INTEGER *iconp ); 
+        GUEST<INTEGER> *iconp );
 extern pascal trap void C_SetItemStyle( MenuHandle mh, INTEGER item, 
  INTEGER style ); extern pascal trap void P_SetItemStyle( MenuHandle mh, INTEGER item, 
  INTEGER style ); 
 extern pascal trap void C_GetItemStyle( MenuHandle mh, INTEGER item, 
- INTEGER *stylep ); extern pascal trap void P_GetItemStyle( MenuHandle mh, INTEGER item, 
- INTEGER *stylep ); 
+        GUEST<INTEGER> *stylep );
 extern pascal trap INTEGER C_CountMItems( MenuHandle mh ); extern pascal trap INTEGER P_CountMItems( MenuHandle mh); 
 extern pascal trap MenuHandle C_GetMHandle( INTEGER mid ); extern pascal trap MenuHandle P_GetMHandle( INTEGER mid); 
 extern pascal trap void C_SetMenuFlash( INTEGER i ); extern pascal trap void P_SetMenuFlash( INTEGER i); 
@@ -205,8 +157,7 @@ extern BOOLEAN ROMlib_shouldalarm( void  );
 extern pascal trap void C_InitProcMenu( INTEGER mbid ); extern pascal trap void P_InitProcMenu( INTEGER mbid); 
 extern pascal trap LONGINT C_MenuChoice( void  ); extern pascal trap LONGINT P_MenuChoice( void ); 
 extern pascal trap void C_GetItemCmd( MenuHandle mh, INTEGER item, 
- CHAR *cmdp ); extern pascal trap void P_GetItemCmd( MenuHandle mh, INTEGER item, 
- CHAR *cmdp ); 
+ GUEST<CHAR> *cmdp );
 extern pascal trap void C_SetItemCmd( MenuHandle mh, INTEGER item, 
  CHAR cmd ); extern pascal trap void P_SetItemCmd( MenuHandle mh, INTEGER item, 
  CHAR cmd ); 
@@ -223,5 +174,4 @@ extern pascal trap void C_SetMCEntries (INTEGER, MCTablePtr);
 extern pascal trap void C_InvalMenuBar (void);
 }
 
-#endif /* __STDC__ */
 #endif /* __MENU__ */

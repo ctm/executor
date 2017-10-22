@@ -189,12 +189,12 @@ Executor::ROMlib_color_init (void)
        ROMlib_dont_depthconv_ctab
 	 = (CTabHandle) NewHandle (CTAB_STORAGE_FOR_SIZE (0));
        CTAB_SIZE_X (ROMlib_dont_depthconv_ctab) = CWC (0);
-       CTAB_SEED_X (ROMlib_dont_depthconv_ctab) = CWC (0);
+       CTAB_SEED_X (ROMlib_dont_depthconv_ctab) = CLC (0);
        CTAB_FLAGS_X (ROMlib_dont_depthconv_ctab) = CWC (0);
 
        no_stdbits_color_conversion_color_table
 	 = (CTabHandle) NewHandle (sizeof (ColorTable));
-       CTAB_SEED_X (no_stdbits_color_conversion_color_table) = CWC (0);
+       CTAB_SEED_X (no_stdbits_color_conversion_color_table) = CLC (0);
     
 
      });

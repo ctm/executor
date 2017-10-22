@@ -87,10 +87,11 @@ P4 (PUBLIC pascal trap, void, StdArc, GrafVerb, verb, Rect *, r,
   register INTEGER h, v;
   INTEGER enda;
   INTEGER done;
-  RgnHandle saveclip, rh;
+  GUEST<RgnHandle> saveclip;
+  RgnHandle rh;
   GUEST<Point> saveloc;
-  INTEGER tmpvis;
-  INTEGER swappedarca, swappedstarta;
+  GUEST<INTEGER> tmpvis;
+  GUEST<INTEGER> swappedarca, swappedstarta;
   PAUSEDECL;
   
   if (EmptyRect(r))

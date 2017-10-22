@@ -100,7 +100,7 @@ P0(PUBLIC pascal trap, void, DrawMenuBar)
 }
 
 #define HIEROFFX	\
-       (*(INTEGER *) ((char *) STARH(MENULIST) + \
+       (*(GUEST<INTEGER> *) ((char *) STARH(MENULIST) + \
 				     Hx(MENULIST, muoff) + sizeof(muelem) + 4))
 
 #define HIEROFF	\
@@ -118,7 +118,7 @@ P0(PUBLIC pascal trap, void, ClearMenuBar)
     HxX(MENULIST, muright) = CWC(MENULEFT);			/* int 2 */
 
     (&STARH(MENULIST)->mufu)[3] = CWC(sizeof(muelem)); /* lastHMenu: int 6 */
-    (*(GUEST<Handle> *)&(&STARH(MENULIST)->mufu)[1]) = (Handle)CLC(0);/* menuTitleSave: int 4,5 */
+    (*(GUEST<Handle> *)&(&STARH(MENULIST)->mufu)[1]) = nullptr;/* menuTitleSave: int 4,5 */
 }
 
 #define BLACK_RGB { CWC (0), CWC (0), CWC (0) }
@@ -174,7 +174,7 @@ P0(PUBLIC pascal trap, void, InitMenus)
       /* try to load 'mctb' resource 0; otherwise use default
 	 built into `ROM' */
 
-	MenuCInfo = (MCTableHandle) RM (NewHandle (sizeof default_menu_ctab));
+	MenuCInfo = RM ((MCTableHandle) NewHandle (sizeof default_menu_ctab));
 	BlockMove ((Ptr) default_menu_ctab, (Ptr) STARH (MR (MenuCInfo)),
 		   sizeof default_menu_ctab);
     }
@@ -182,8 +182,8 @@ P0(PUBLIC pascal trap, void, InitMenus)
     {
       int n_entries;
 
-      n_entries = CW (*(uint16 *) STARH (default_mcinfo));
-      MenuCInfo = (MCTableHandle) RM (NewHandle (n_entries
+      n_entries = CW (*(GUEST<uint16> *) STARH (default_mcinfo));
+      MenuCInfo = RM ((MCTableHandle) NewHandle (n_entries
 						 * sizeof (MCEntry)));
       BlockMove ((Ptr) (&((uint16 *) STARH (default_mcinfo))[1]),
 		 (Ptr) STARH (MR (MenuCInfo)),
@@ -201,7 +201,7 @@ P0(PUBLIC pascal trap, void, InitMenus)
 P2(PUBLIC pascal trap, MenuHandle, NewMenu, INTEGER, mid, StringPtr, str)
 {
     MenuHandle retval;
-    Handle temph;
+    GUEST<Handle> temph;
     
     if (!str)
 	str = (StringPtr) "";
@@ -222,11 +222,11 @@ P1(PUBLIC pascal trap, void, CalcMenuSize, MenuHandle, mh)
 {
   Point dummy_pt;
   Rect rect;
-  int16 i;
+  GUEST<int16> i;
 
   if (mh)
     {
-      i = -1;
+      i = CWC(-1);
       THEPORT_SAVE_EXCURSION
 	(MR (wmgr_port),
 	 {
@@ -291,7 +291,7 @@ P1 (PUBLIC pascal trap, MenuHandle, GetMenu, int16, rid)
 	  
 	  MemErr = CWC (noErr);
 	  temph = GetResource (TICK("MDEF"),
-			       CW (*(int16 *)&HxX(retval, menuProc)));
+			       CW (*(GUEST<int16> *)&HxX(retval, menuProc)));
 	  if (SIZEOFMINFO != 15)
 	    Munger ((Handle) retval, (int32) 6, (Ptr) 0, (int32) 0,
 		    (Ptr) "x", (int32) 2);
@@ -349,9 +349,9 @@ A7(PRIVATE, void, app, StringPtr, str, char, icon, char, marker,
 
     eip->menitem++;
     if (disflag)
-        STARH(eip->menh)->enableFlags.raw( STARH(eip->menh)->enableFlags.raw() & CL(~((LONGINT)1 << eip->menitem)) );
+        STARH(eip->menh)->enableFlags = CL( CL(STARH(eip->menh)->enableFlags) & (~((LONGINT)1 << eip->menitem)) );
     else
-        STARH(eip->menh)->enableFlags.raw( STARH(eip->menh)->enableFlags.raw() | CL((LONGINT)1 << eip->menitem) );
+        STARH(eip->menh)->enableFlags = CL( CL(STARH(eip->menh)->enableFlags) | ((LONGINT)1 << eip->menitem) );
     newsize = eip->menoff + SIZEOFMEXT + 1 + U(str[0]);
     SetHandleSize((Handle) eip->menh, newsize);
 /*
@@ -1007,23 +1007,26 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
   Rect r, r2;
   Point dummy_pt;
   Point tempp;
-  INTEGER mid, item, olditem, tempi, oldtopmenuitem;
+  INTEGER mid, item, olditem, tempi;
+  GUEST<INTEGER> item_swapped;
   INTEGER firstitem;
   MenuHandle newmh;
   int i;
   LONGINT pointaslong;
   LONGINT where, templ;
-  RgnHandle saveclip, restoredrgn;
+  GUEST<RgnHandle> saveclip;
+  RgnHandle restoredrgn;
   BOOLEAN changedmenus;
   INTEGER oldwhichmenuhit, whichmenuhit;
-  GUEST<GrafPtr> saveport;
+  GrafPtr saveport;
   EventRecord ev;
   Point pt;
   LONGINT myd0;
   boolean_t seen_up_already, done;
   
-  GetPort (&saveport);
-  saveport = MR(saveport);
+  GUEST<GrafPtr> saveport_swapped;
+  GetPort (&saveport_swapped);
+  saveport = MR(saveport_swapped);
   SetPort (MR (wmgr_port));
   
   olditem = -1;
@@ -1056,9 +1059,9 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 	    {
 	      PORT_TX_FACE_X (MR (wmgr_port)) = (Style) CB (0);
 	      PORT_TX_FONT_X (MR (wmgr_port)) = CWC (0);
-	      item = CW(item);
-	      MENUCALL (mChooseMsg, mh, &r, pt, &item);
-	      item = CW(item);
+	      item_swapped = CW(item);
+	      MENUCALL (mChooseMsg, mh, &r, pt, &item_swapped);
+	      item = CW(item_swapped);
 	      if (item != olditem || changedmenus)
 		{
 		  if (firstitem == -1)
@@ -1082,15 +1085,14 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 		      item = olditem;
 		      PORT_TX_FACE_X (MR (wmgr_port)) = (Style) CB (0);
 		      PORT_TX_FONT_X (MR (wmgr_port)) = CWC (0);
-		      item = CW(item);
-		      MENUCALL (mChooseMsg, mh, &r, pt, &item);
-		      item = CW(item);
+		      item_swapped = CW(item);
+		      MENUCALL (mChooseMsg, mh, &r, pt, &item_swapped);
+		      item = CW(item_swapped);
 		      DisposeRgn (PORT_CLIP_REGION (MR (wmgr_port)));
 		      PORT_CLIP_REGION_X (MR (wmgr_port)) = saveclip;
 		    }
 		  if ((newmh = itemishierarchical(mh, item, &tempi)))
 		    {
-		      int16 saveatmenubottom;
 		      
 		      r2 = * (Rect *) (long) MBDFCALL (mbRect, 0,
 						       tempi | HIERRECTBIT);
@@ -1103,15 +1105,15 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 			}
 		      ((mbdfentry *)STARH(MR(MBSaveLoc)))
 			[wheretowhich(tempi)].mbReserved = CLC(0);
-		      oldtopmenuitem = TopMenuItem;
-		      saveatmenubottom = AtMenuBottom;
+		      auto oldtopmenuitem = TopMenuItem;
+		      auto saveatmenubottom = AtMenuBottom;
 		      TopMenuItem = r2.top;
 		      PORT_TX_FACE_X (MR (wmgr_port)) = (Style) CB (0);
 		      PORT_TX_FONT_X (MR (wmgr_port)) = CWC (0);
 		      saveclip = PORT_CLIP_REGION_X (thePort);
 		      PORT_CLIP_REGION_X (thePort) = RM (NewRgn ());
 		      RectRgn(PORT_CLIP_REGION (thePort), &r2);
-		      MENUCALL(mDrawMsg, newmh, &r2, dummy_pt, (INTEGER *) 0);
+		      MENUCALL(mDrawMsg, newmh, &r2, dummy_pt, nullptr);
 		      DisposeRgn (PORT_CLIP_REGION (thePort));
 		      PORT_CLIP_REGION_X (thePort) = saveclip;
 		      nmenusdisplayed++;
@@ -1158,7 +1160,7 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 		  saveclip = PORT_CLIP_REGION_X (thePort);	/* ick */
 		  PORT_CLIP_REGION_X (thePort) = RM (NewRgn ());
 		  RectRgn(PORT_CLIP_REGION (thePort), &r);
-		  MENUCALL(mDrawMsg, mh, &r, dummy_pt, (INTEGER *) 0);
+		  MENUCALL(mDrawMsg, mh, &r, dummy_pt, nullptr);
 		  DisposeRgn (PORT_CLIP_REGION (thePort));
 		  PORT_CLIP_REGION_X (thePort) = saveclip;
 		  nmenusdisplayed++;
@@ -1175,10 +1177,10 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 	      if (mh)
 		{
 		  MR (wmgr_port)->txFace = (Style) 0;
-		  MR (wmgr_port)->txFont = 0;
-		  item = CW(item);
-		  MENUCALL(mChooseMsg, mh, &r, pt, &item);
-		  item = CW(item);
+		  MR (wmgr_port)->txFont = CWC(0);
+		  item_swapped = CW(item);
+		  MENUCALL(mChooseMsg, mh, &r, pt, &item_swapped);
+		  item = CW(item_swapped);
 		}
 	      else
 		item = 0;
@@ -1244,9 +1246,9 @@ enter:
 	 tempp.h = 0;
 	 PORT_TX_FACE_X (MR (wmgr_port)) = (Style) CB (0);
 	 PORT_TX_FONT_X (MR (wmgr_port)) = CWC (0);
-	 tempi = CW(tempi);
-	 MENUCALL(mChooseMsg, mh, &r, tempp, &tempi);
-	 tempi = CW(tempi);
+	 item_swapped = CW(tempi);
+	 MENUCALL(mChooseMsg, mh, &r, tempp, &item_swapped);
+	 tempi = CW(item_swapped);
 #if !defined(MACOSX_)
 	 if (MenuFlash)
 	   {
@@ -1255,15 +1257,15 @@ enter:
 		 Delay(3L, (LONGINT *) 0);
 		 PORT_TX_FACE_X (MR (wmgr_port)) = (Style) CB (0);
 		 PORT_TX_FONT_X (MR (wmgr_port)) = CWC (0);
-		 tempi = CW(tempi);
-		 MENUCALL(mChooseMsg, mh, &r, pt, &tempi);
-		 tempi = CW(tempi);
+		 item_swapped = CW(tempi);
+		 MENUCALL(mChooseMsg, mh, &r, pt, &item_swapped);
+		 tempi = CW(item_swapped);
 		 Delay(3L, (LONGINT *) 0);
 		 PORT_TX_FACE_X (MR (wmgr_port)) = (Style) CB (0);
 		 PORT_TX_FONT_X (MR (wmgr_port)) = CWC (0);
-		 tempi = CW(tempi);
-		 MENUCALL(mChooseMsg, mh, &r, tempp, &tempi);
-		 tempi = CW(tempi);
+		 item_swapped = CW(tempi);
+		 MENUCALL(mChooseMsg, mh, &r, tempp, &item_swapped);
+		 tempi = CW(item_swapped);
 	       }
 	     Delay(3L, (LONGINT *) 0);
 	   }
@@ -1516,7 +1518,7 @@ P3(PUBLIC pascal trap, void, SetItemMark, MenuHandle, mh, INTEGER, item,
 }
 
 P3(PUBLIC pascal trap, void, GetItemMark, MenuHandle, mh, INTEGER, item,
-							      INTEGER *, markp)
+							      GUEST<INTEGER> *, markp)
 {
     mextp mep;
     
@@ -1536,7 +1538,7 @@ P3(PUBLIC pascal trap, void, SetItemIcon, MenuHandle, mh, INTEGER, item,
 }
 
 P3(PUBLIC pascal trap, void, GetItemIcon, MenuHandle, mh, INTEGER, item,
-							      INTEGER *, iconp)
+        GUEST<INTEGER> *, iconp)
 {
     mextp mep;
     
@@ -1556,7 +1558,7 @@ P3(PUBLIC pascal trap, void, SetItemStyle, MenuHandle, mh, INTEGER, item,
 }
 
 P3(PUBLIC pascal trap, void, GetItemStyle, MenuHandle, mh, INTEGER, item,
-							     INTEGER *, stylep)
+        GUEST<INTEGER> *, stylep)
 {
     mextp mep;
     
@@ -1620,7 +1622,7 @@ A0(PUBLIC, BOOLEAN, ROMlib_shouldalarm)
 
 void
 Executor::ROMlib_menucall (INTEGER mess, MenuHandle themenu, Rect * menrect, Point hit,
-		 INTEGER * which)
+		 GUEST<INTEGER> * which)
 {
   Handle defproc;
   menuprocp mp;

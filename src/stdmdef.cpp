@@ -298,7 +298,7 @@ draw_arrow (Rect *menu_rect, MenuHandle mh, arrowtype arrdir)
 namespace Executor {
   PRIVATE void erasearrow(Rect*, tablePtr, BOOLEAN);
   PRIVATE void popuprect(MenuHandle, Rect *, Point,
-						 INTEGER *, tablePtr);
+						 GUEST<INTEGER> *, tablePtr);
 }
 
 A3(PRIVATE, void, erasearrow, Rect *, rp, tablePtr, tablep, BOOLEAN, upordown)
@@ -540,7 +540,7 @@ fliprect (Rect *rp, int16 i, tablePtr tablep, Rect *flipr)
 
 static void
 doupdown (MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
-	  int16 *itemp)
+	  GUEST<int16> *itemp)
 {
   INTEGER offset;
   Rect scrollr, updater, rtmp;
@@ -628,7 +628,7 @@ doupdown (MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
 }
 
 void
-choose_menu (MenuHandle mh, Rect *rp, Point p, int16 *itemp, tablePtr tablep)
+choose_menu (MenuHandle mh, Rect *rp, Point p, GUEST<int16> *itemp, tablePtr tablep)
 {
   int32 nitem;
   struct table::tableentry *tp, *ep;
@@ -701,7 +701,7 @@ choose_menu (MenuHandle mh, Rect *rp, Point p, int16 *itemp, tablePtr tablep)
 }
 
 A5 (PRIVATE, void, popuprect, MenuHandle, mh, Rect *, rp, Point, p,
-    INTEGER *, itemp, tablePtr, tablep)
+    GUEST<INTEGER> *, itemp, tablePtr, tablep)
 {
   struct table::tableentry *tp;
   INTEGER vmax;
@@ -728,7 +728,7 @@ A5 (PRIVATE, void, popuprect, MenuHandle, mh, Rect *, rp, Point, p,
 
 
 P5(PUBLIC, pascal void, mdef0, INTEGER, mess, MenuHandle, mh, Rect *, rp,
-						    Point, p, INTEGER *, item)
+						    Point, p, GUEST<INTEGER> *, item)
 {
   FontInfo fi;
   char *sp;
@@ -736,9 +736,10 @@ P5(PUBLIC, pascal void, mdef0, INTEGER, mess, MenuHandle, mh, Rect *, rp,
   tableHandle th;
   tablePtr tp;
   struct table::tableentry *tabp;
-  GUEST<GrafPtr> saveport;
+  GUEST<GrafPtr> saveport_swapped;
+  GrafPtr saveport;
 
-  GetPort(&saveport);
+  GetPort(&saveport_swapped);
   saveport = MR(saveport);
   SetPort (MR (wmgr_port));
   
@@ -747,7 +748,7 @@ P5(PUBLIC, pascal void, mdef0, INTEGER, mess, MenuHandle, mh, Rect *, rp,
 #define MSWTEST
 #if defined (MSWTEST)
   PORT_TX_FONT_X (thePort) = SysFontFam;
-  PORT_TX_FACE_X (thePort) = CWC (0);
+  PORT_TX_FACE_X (thePort) = 0;
   PORT_TX_MODE_X (thePort) = CWC (srcOr);
 #endif /* MSWTEST */
 

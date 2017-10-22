@@ -118,7 +118,7 @@ extern pascal trap void C_LAddToCell( Ptr dp, INTEGER dl,
  Cell cell, ListHandle list );
 extern pascal trap void C_LClrCell( Cell cell, 
  ListHandle list );
-extern pascal trap void C_LGetCell( Ptr dp, INTEGER *dlp, 
+extern pascal trap void C_LGetCell( Ptr dp, GUEST<INTEGER> *dlp, 
  Cell cell, ListHandle list );
 extern pascal trap void C_LSetCell( Ptr dp, INTEGER dl, 
  Cell cell, ListHandle list );

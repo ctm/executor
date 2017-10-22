@@ -169,10 +169,10 @@ emit_rest (char *map_name)
 	    {
 	      struct rgb_color *color = &colors[color_i];
 	      
-	      fprintf (o_fp, "        { %d, %d, %d },\n",
-		       CW (color->red),
-		       CW (color->green),
-		       CW (color->blue));
+	      fprintf (o_fp, "        { CWC(%d), CWC(%d), CWC(%d) },\n",
+		        (color->red),
+		        (color->green),
+		        (color->blue));
 	    }
 	  fprintf (o_fp, "      };\n");
 	  fprintf (o_fp, "    image_update_ctab (%s, colors, %d);\n",

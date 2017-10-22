@@ -62,8 +62,8 @@ P6 (PUBLIC pascal trap, void, CopyBits,
 	 }
        else
 	 {
-	   RgnHandle savevisr;
-	   RgnHandle saveclipr;
+	   GUEST<RgnHandle> savevisr;
+	   GUEST<RgnHandle> saveclipr;
 	   RgnHandle big_region;
 	   QDProcsPtr gp;
 	   
@@ -169,7 +169,7 @@ P4 (PUBLIC pascal trap, void, ScrollRect, Rect *, rp, INTEGER, dh, INTEGER, dv,
   Rect srcr, dstr;
   RgnHandle temp, temp2, updatergn2, srcregion;
   RGBColor bk_rgb, fg_rgb;
-  int32 bk_color, fg_color;
+  GUEST<int32> bk_color, fg_color;
   int cgrafport_p;
   PAUSEDECL;
   

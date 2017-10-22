@@ -74,14 +74,14 @@ A2(PUBLIC trap, OSErrRET, PBGetFCBInfo, FCBPBPtr, pb, BOOLEAN, async)
     
     if ((i = CW(pb->ioFCBIndx)) > 0) {
 	fcbp  = (filecontrolblock *) (MR(FCBSPtr) + sizeof(INTEGER));
-	efcbp = (filecontrolblock *) (MR(FCBSPtr) + CW(*(INTEGER *)MR(FCBSPtr)));
+	efcbp = (filecontrolblock *) (MR(FCBSPtr) + CW(*(GUEST<INTEGER> *)MR(FCBSPtr)));
 	if (CW(pb->ioVRefNum) < 0) {
 	    for (;fcbp != efcbp; fcbp++)
 		if (fcbp->fcbFlNum &&
 		        MR(fcbp->fcbVPtr)->vcbVRefNum == pb->ioVRefNum && --i <= 0)
 		    break;
-	} else if (pb->ioVRefNum == 0) {
-	    for (;fcbp != efcbp && (fcbp->fcbFlNum == 0 || --i > 0); fcbp++)
+	} else if (pb->ioVRefNum == CWC(0)) {
+	    for (;fcbp != efcbp && (fcbp->fcbFlNum == CLC(0) || --i > 0); fcbp++)
 		;
 	} else /* if (CW(pb->ioVRefNum) > 0 */ {
 	    for (;fcbp != efcbp; fcbp++)
@@ -112,7 +112,7 @@ A2(PUBLIC trap, OSErrRET, PBGetFCBInfo, FCBPBPtr, pb, BOOLEAN, async)
 	pb->ioFCBPLen = fcbp->fcbEOF;
     }
     pb->ioFCBVRefNum = MR(fcbp->fcbVPtr)->vcbVRefNum;
-    if (CW(pb->ioFCBIndx) <= 0 || pb->ioVRefNum == 0)
+    if (CW(pb->ioFCBIndx) <= 0 || pb->ioVRefNum == CWC(0))
 	pb->ioVRefNum = pb->ioFCBVRefNum;
     pb->ioFCBClpSiz = fcbp->fcbClmpSize;
     pb->ioFCBParID = fcbp->fcbDirID;

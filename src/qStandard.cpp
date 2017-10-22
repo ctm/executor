@@ -15,25 +15,19 @@ char ROMlib_rcsid_qStandard[] =
 
 using namespace Executor;
 
-#if !defined (BINCOMPAT)
-#define PTRCAST (Ptr)
-#else /* BINCOMPAT */
-#define PTRCAST
-#endif /* BINCOMPAT */
-
 P1(PUBLIC pascal trap, void, SetStdProcs, QDProcs *, procs)
 {
-    procs->textProc = (textProc_t)RM(PTRCAST P_StdText);
-    procs->lineProc = (lineProc_t)RM(PTRCAST P_StdLine);
-    procs->rectProc = (rectProc_t)RM(PTRCAST P_StdRect);
-    procs->rRectProc = (rRectProc_t)RM(PTRCAST P_StdRRect);
-    procs->ovalProc = (ovalProc_t)RM(PTRCAST P_StdOval);
-    procs->arcProc = (arcProc_t)RM(PTRCAST P_StdArc);
-    procs->polyProc = (polyProc_t)RM(PTRCAST P_StdPoly);
-    procs->rgnProc = (rgnProc_t)RM(PTRCAST P_StdRgn);
-    procs->bitsProc = (bitsProc_t)RM(PTRCAST P_StdBits);
-    procs->commentProc = (commentProc_t)RM(PTRCAST P_StdComment);
-    procs->txMeasProc = (txMeasProc_t)RM(PTRCAST P_StdTxMeas);
-    procs->getPicProc = (getPicProc_t)RM(PTRCAST P_StdGetPic);
-    procs->putPicProc = (putPicProc_t)RM(PTRCAST P_StdPutPic);
+    procs->textProc = RM((textProc_t)P_StdText);
+    procs->lineProc = RM((lineProc_t)P_StdLine);
+    procs->rectProc = RM((rectProc_t)P_StdRect);
+    procs->rRectProc = RM((rRectProc_t)P_StdRRect);
+    procs->ovalProc = RM((ovalProc_t)P_StdOval);
+    procs->arcProc = RM((arcProc_t)P_StdArc);
+    procs->polyProc = RM((polyProc_t)P_StdPoly);
+    procs->rgnProc = RM((rgnProc_t)P_StdRgn);
+    procs->bitsProc = RM((bitsProc_t)P_StdBits);
+    procs->commentProc = RM((commentProc_t)P_StdComment);
+    procs->txMeasProc = RM((txMeasProc_t)P_StdTxMeas);
+    procs->getPicProc = RM((getPicProc_t)P_StdGetPic);
+    procs->putPicProc = RM((putPicProc_t)P_StdPutPic);
 }

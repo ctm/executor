@@ -701,7 +701,7 @@ P4 (PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */
   Rect r, *rp, tempr;
   struct lsastr *pl;
   int height, width;
-  Handle temph;
+  GUEST<Handle> temph;
   draw_state_t draw_state;
   int draw_p;
   Rect thumbr;

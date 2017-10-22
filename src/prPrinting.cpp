@@ -239,18 +239,14 @@ PRIVATE QDProcs prprocs;
 PRIVATE QDProcs sendpsprocs;
 PRIVATE boolean_t need_restore;
 
-#if defined(BINCOMPAT)
-#define GOOFYCAST
-#else
-#define GOOFYCAST	(Ptr)
-#endif
-
 P3(PUBLIC pascal trap, void, PrComment, INTEGER, kind, INTEGER, size,
 								  Handle, hand)
 {
     SignedByte state;
-    INTEGER *ip, flippage, angle;
-    Fixed *fp, yoffset, xoffset;
+    GUEST<INTEGER> *ip;
+    INTEGER flippage, angle;
+    GUEST<Fixed> *fp;
+    Fixed yoffset, xoffset;
 
     if (pageno >= pagewanted && pageno <= lastpagewanted)
 	{
@@ -265,13 +261,13 @@ P3(PUBLIC pascal trap, void, PrComment, INTEGER, kind, INTEGER, size,
 		    do_textcenter ((TCenterRecHdl) hand);
 	            break;
 		case rotatebegin:
-		    ip = (INTEGER *) STARH(hand);
+		    ip = (GUEST<INTEGER> *) STARH(hand);
 		    flippage = CW(ip[0]);
 		    angle = CW(ip[1]);
 		    ROMlib_rotatebegin(flippage, angle);
 		    break;
 		case rotatecenter:
-		    fp = (Fixed *) STARH(hand);
+		    fp = (GUEST<Fixed> *) STARH(hand);
 		    yoffset = CL(fp[0]);
 		    xoffset = CL(fp[1]);
 		    ROMlib_rotatecenter( Cx(thePort->pnLoc.v) +
@@ -310,7 +306,7 @@ P3(PUBLIC pascal trap, void, PrComment, INTEGER, kind, INTEGER, size,
 		case postscripttextis:
 		    if (ROMlib_passpostscript)
 			(PORT_GRAF_PROCS (thePort))->textProc
-			  = (textProc_t)RM(GOOFYCAST P_textasPS);
+			  = RM((textProc_t) P_textasPS);
 		    break;
 		case postscripthandle:
 		    if (pageno >= pagewanted && pageno <= lastpagewanted && ROMlib_passpostscript) {
@@ -333,7 +329,7 @@ PRIVATE boolean_t printport_open_p = FALSE;
 PRIVATE void
 ourinit (TPPrPort port, BOOLEAN preserve_font)
 {
-  INTEGER saved_font = port->gPort.txFont;
+  GUEST<INTEGER> saved_font = port->gPort.txFont;
 
   printer_init ();
   update_printing_globals ();
@@ -347,41 +343,41 @@ ourinit (TPPrPort port, BOOLEAN preserve_font)
   printport.pnLoc.h = CWC (-32768);
   printport.pnLoc.v = CWC (-32768);
   OpenPort(&port->gPort);
-  sendpsprocs.textProc = (textProc_t)RM(P_donotPrText);
-  sendpsprocs.lineProc = (lineProc_t)RM(P_donotPrLine);
-  sendpsprocs.rectProc = (rectProc_t)RM(P_donotPrRect);
-  sendpsprocs.rRectProc = (rRectProc_t)RM(P_donotPrRRect);
-  sendpsprocs.ovalProc = (ovalProc_t)RM(P_donotPrOval);
-  sendpsprocs.arcProc = (arcProc_t)RM(P_donotPrArc);
-  sendpsprocs.polyProc = (polyProc_t)RM(P_donotPrPoly);
-  sendpsprocs.rgnProc = (rgnProc_t)RM(P_donotPrRgn);
-  sendpsprocs.bitsProc = (bitsProc_t)RM(P_donotPrBits);
-  sendpsprocs.commentProc = (commentProc_t)RM(P_PrComment);
-  sendpsprocs.txMeasProc = (txMeasProc_t)RM(P_PrTxMeas);
+  sendpsprocs.textProc = RM((textProc_t)P_donotPrText);
+  sendpsprocs.lineProc = RM((lineProc_t)P_donotPrLine);
+  sendpsprocs.rectProc = RM((rectProc_t)P_donotPrRect);
+  sendpsprocs.rRectProc = RM((rRectProc_t)P_donotPrRRect);
+  sendpsprocs.ovalProc = RM((ovalProc_t)P_donotPrOval);
+  sendpsprocs.arcProc = RM((arcProc_t)P_donotPrArc);
+  sendpsprocs.polyProc = RM((polyProc_t)P_donotPrPoly);
+  sendpsprocs.rgnProc = RM((rgnProc_t)P_donotPrRgn);
+  sendpsprocs.bitsProc = RM((bitsProc_t)P_donotPrBits);
+  sendpsprocs.commentProc = RM((commentProc_t)P_PrComment);
+  sendpsprocs.txMeasProc = RM((txMeasProc_t)P_PrTxMeas);
 #if 0
-  sendpsprocs.getPicProc = (getPicProc_t)RM(P_donotPrGetPic);
-  sendpsprocs.putPicProc = (putPicProc_t)RM(P_donotPrPutPic);
+  sendpsprocs.getPicProc = RM((getPicProc_t)P_donotPrGetPic);
+  sendpsprocs.putPicProc = RM((putPicProc_t)P_donotPrPutPic);
 #else
-  sendpsprocs.getPicProc = (getPicProc_t)RM(P_StdGetPic);
-  sendpsprocs.putPicProc = (putPicProc_t)RM(P_StdPutPic);
+  sendpsprocs.getPicProc = RM((getPicProc_t)P_StdGetPic);
+  sendpsprocs.putPicProc = RM((putPicProc_t)P_StdPutPic);
 #endif
-  prprocs.textProc = (textProc_t)RM(P_PrText);
-  prprocs.lineProc = (lineProc_t)RM(P_PrLine);
-  prprocs.rectProc = (rectProc_t)RM(P_PrRect);
-  prprocs.rRectProc = (rRectProc_t)RM(P_PrRRect);
-  prprocs.ovalProc = (ovalProc_t)RM(P_PrOval);
-  prprocs.arcProc = (arcProc_t)RM(P_PrArc);
-  prprocs.polyProc = (polyProc_t)RM(P_PrPoly);
-  prprocs.rgnProc = (rgnProc_t)RM(P_PrRgn);
-  prprocs.bitsProc = (bitsProc_t)RM(P_PrBits);
-  prprocs.commentProc = (commentProc_t)RM(P_PrComment);
-  prprocs.txMeasProc = (txMeasProc_t)RM(P_PrTxMeas);
+  prprocs.textProc = RM((textProc_t)P_PrText);
+  prprocs.lineProc = RM((lineProc_t)P_PrLine);
+  prprocs.rectProc = RM((rectProc_t)P_PrRect);
+  prprocs.rRectProc = RM((rRectProc_t)P_PrRRect);
+  prprocs.ovalProc = RM((ovalProc_t)P_PrOval);
+  prprocs.arcProc = RM((arcProc_t)P_PrArc);
+  prprocs.polyProc = RM((polyProc_t)P_PrPoly);
+  prprocs.rgnProc = RM((rgnProc_t)P_PrRgn);
+  prprocs.bitsProc = RM((bitsProc_t)P_PrBits);
+  prprocs.commentProc = RM((commentProc_t)P_PrComment);
+  prprocs.txMeasProc = RM((txMeasProc_t)P_PrTxMeas);
 #if 0
-  prprocs.getPicProc = (getPicProc_t)RM(P_PrGetPic);
-  prprocs.putPicProc = (putPicProc_t)RM(P_PrPutPic);
+  prprocs.getPicProc = RM((getPicProc_t)P_PrGetPic);
+  prprocs.putPicProc = RM((putPicProc_t)P_PrPutPic);
 #else
-  prprocs.getPicProc = (getPicProc_t)RM(P_StdGetPic);
-  prprocs.putPicProc = (putPicProc_t)RM(P_StdPutPic);
+  prprocs.getPicProc = RM((getPicProc_t)P_StdGetPic);
+  prprocs.putPicProc = RM((putPicProc_t)P_StdPutPic);
 #endif
   port->saveprocs = prprocs;
 #if 1

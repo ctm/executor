@@ -186,7 +186,7 @@ P1 (PUBLIC pascal trap, void, SetMCInfo,
        size = GetHandleSize ((Handle) menu_ctab);
        t = NewHandle (size);
        BlockMove ((Ptr) STARH (menu_ctab), (Ptr) STARH (t), size);
-       MenuCInfo = (MCTableHandle) RM (t);
+       MenuCInfo = RM ((MCTableHandle) t);
      });
 }
 

@@ -162,7 +162,7 @@ PRIVATE LONGINT txnumh, txnumv, txdenh, txdenv;
 PRIVATE Rect srcpicframe, dstpicframe;
 PRIVATE LONGINT picnumh, picnumv, picdenh, picdenv;
 
-PRIVATE Point txtpoint;
+PRIVATE GUEST<Point> txtpoint;
 
 /*
  * TODO: reduce is exceedingly inefficient.  Reconsider its use here.
@@ -781,7 +781,7 @@ fontname (INTEGER hsize, Handle hand)
   StringPtr sp;
 
   p = (char *) STARH (hand);
-  i = CW (*(INTEGER *)p);
+  i = CW (*(GUEST<INTEGER> *)p);
   sp = (StringPtr) p + 2;
   add_assoc (i, sp);
 }
@@ -1006,41 +1006,41 @@ PRIVATE Byte eatByte()
     return retval;
 }
 
-PRIVATE INTEGER eatINTEGERX()
+PRIVATE GUEST<INTEGER> eatINTEGERX()
 {
-    INTEGER retval;
+    GUEST<INTEGER> retval;
 
     if (procp)
-	CToPascalCall((void*)procp, CTOP_StdGetPic, &retval, sizeof(INTEGER));
+	CToPascalCall((void*)procp, CTOP_StdGetPic, &retval, sizeof(GUEST<INTEGER>));
     else
-	retval = *(INTEGER *)nextbytep;
-    nextbytep += sizeof(INTEGER);
+	retval = *(GUEST<INTEGER> *)nextbytep;
+    nextbytep += sizeof(GUEST<INTEGER>);
     return retval;
 }
 
 PRIVATE INTEGER eatINTEGER()
 {
-    INTEGER retval;
+    GUEST<INTEGER> retval;
 
     retval = eatINTEGERX();
     return CW(retval);
 }
 
-PRIVATE LONGINT eatLONGINTX()
+PRIVATE GUEST<LONGINT> eatLONGINTX()
 {
-    LONGINT retval;
+    GUEST<LONGINT> retval;
 
     if (procp)
-	CToPascalCall((void*)procp, CTOP_StdGetPic, &retval, sizeof(LONGINT));
+	CToPascalCall((void*)procp, CTOP_StdGetPic, &retval, sizeof(GUEST<LONGINT>));
     else
-	retval = *(LONGINT *)nextbytep;
-    nextbytep += sizeof(LONGINT);
+	retval = *(GUEST<LONGINT> *)nextbytep;
+    nextbytep += sizeof(GUEST<LONGINT>);
     return retval;
 }
 
 PRIVATE LONGINT eatLONGINT()
 {
-    LONGINT retval;
+    GUEST<LONGINT> retval;
 
     retval = eatLONGINTX();
     return CL(retval);
@@ -1232,8 +1232,8 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
 		inp = nextbytep;
 		temph = NULL;
 	      }
-	    dp = (Ptr) RM (temp_scanline);
-	    temp_pp = (Ptr) RM (inp);
+	    dp = RM ((Ptr) temp_scanline);
+	    temp_pp = RM ((Ptr) inp);
 
 	    if (pixmap->pixelSize == CWC (16)
 		&& pixmap->packType == CWC (3))
@@ -1315,7 +1315,7 @@ A2(PRIVATE, void, eatbitdata, BitMap *, bp, BOOLEAN, packed)
 	    h = NewHandle(datasize);
 	    if (!h)
 	      {
-		THz savezone;
+		GUEST<THz> savezone;
 
 		savezone = TheZone;
 		TheZone = SysZone;
@@ -1332,7 +1332,7 @@ A2(PRIVATE, void, eatbitdata, BitMap *, bp, BOOLEAN, packed)
 	h = NewHandle(datasize);
 	if (!h)
 	  {
-	    THz savezone;
+	    GUEST<THz> savezone;
 	    
 	    savezone = TheZone;
 	    TheZone = SysZone;
@@ -1427,7 +1427,7 @@ A1 (PRIVATE, void, eatPixPat, PixPatHandle, pixpat)
 	     PixMapHandle patmap;
 
 	     patmap = (PixMapHandle) NewHandleClear (sizeof (PixMap));
-	     PIXMAP_TABLE_X (patmap) = (CTabHandle) RM (NewHandle (0));
+	     PIXMAP_TABLE_X (patmap) = RM ((CTabHandle) NewHandle (0));
 	     PIXPAT_MAP_X (pixpat) = RM (patmap);
 	   }
 	   MakeRGBPat (pixpat, &rgb);
@@ -1624,7 +1624,7 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
     PORT_TX_FONT_X (the_port) = CWC (0);
     PORT_TX_FACE_X (the_port) = 0;
     PORT_TX_SIZE_X (the_port) = CWC (0);
-    PORT_SP_EXTRA_X (the_port) = CWC (0);
+    PORT_SP_EXTRA_X (the_port) = CLC (0);
 
 #if 0
     /* this will fail if we are actually drawing to a
@@ -1935,170 +1935,86 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
 	    f = wparray[opcode].func;
 	    switch (wparray[opcode].argcode & ARGMASK) {
 	    case xxx0():
-#if !defined (__STDC__)
-		(*f)();
-#else /* __STDC__ */
 		(* (void (*)(void)) f)();
-#endif /* __STDC__ */
 		break;
 	    case xxx1(BYT):
-#if !defined (__STDC__)
-		(*f)(SE(bytes[0]));
-#else /* __STDC__ */
 		(* (void (*)(Byte)) f)(SE(bytes[0]));
-#endif /* __STDC__ */
 		break;
 	    case xxx1(LNG):
-#if !defined (__STDC__)
-		(*f)(lng);
-#else /* __STDC__ */
 		(* (void (*)(LONGINT)) f)(lng);
-#endif /* __STDC__ */
 		break;
 	    case xxx1(PAT):
-#if !defined (__STDC__)
-		(*f)(ourpattern);
-#else /* __STDC__ */
 		(* (void (*)(Pattern)) f)(ourpattern);
-#endif /* __STDC__ */
 		break;
 	    case xxx1(PNT):
-#if !defined (__STDC__)
-		(*f)(points[0]);
-#else /* __STDC__ */
 		(* (void (*)(Point)) f)(points[0]);
-#endif /* __STDC__ */
 		break;
 	    case xxx1(RCT):
 	    case xxx2(SAM, RCT):
-#if !defined (__STDC__)
-		(*f)(&rects[0]);
-#else /* __STDC__ */
 		(* (void (*)(Rect *)) f)(&rects[0]);
-#endif /* __STDC__ */
 		break;
 	    case xxx1(RGB):
-#if !defined (__STDC__)
-		(*f)(&rgb);
-#else /* __STDC__ */
 		(* (void (*)(RGBColor *)) f)(&rgb);
-#endif /* __STDC__ */
 		break;
 	    case xxx1(DAT):
-#if !defined (__STDC__)
-		(*f)(hsize, hand);
-#else /* __STDC__ */
 		(* (void (*)(INTEGER, Handle)) f)(hsize, hand);
-#endif /* __STDC__ */
 		break;
 	    case xxx1(PXP):
-#if !defined (__STDC__)
-		(*f)(hand);
-#else /* __STDC__ */
 		(* (void (*)(Handle)) f)(hand);
-#endif /* __STDC__ */
 		hand = NULL;
 		break;
 	    case xxx1(RGN):
 	    case xxx1(PLY):
 	    case xxx2(SAM, RGN):
 	    case xxx2(SAM, PLY):
-#if !defined (__STDC__)
-		(*f)(hand);
-#else /* __STDC__ */
 		(* (void (*)(Handle)) f)(hand);
-#endif /* __STDC__ */
 		break;
 	    case xxx1(WRD):
-#if !defined (__STDC__)
-		(*f)(words[0]);
-#else /* __STDC__ */
 		(* (void (*)(INTEGER)) f)(words[0]);
-#endif /* __STDC__ */
 		break;
 	    case xxx1(SPL):
 		/* was done when the args were picked up */
 		break;
 	    case xxx2(BYT, BYT):
-#if !defined (__STDC__)
-		(*f)(SE(bytes[0]), SE(bytes[1]));
-#else /* __STDC__ */
 		(* (void (*)(Byte, Byte)) f)
 						  (SE(bytes[0]), SE(bytes[1]));
-#endif /* __STDC__ */
 		break;
 	    case xxx2(BYT, TXT):
-#if !defined (__STDC__)
-		(*f)(SE(bytes[0]), ourstring, &txtpoint);
-#else /* __STDC__ */
-		(* (void (*)(Byte, StringPtr, Point *)) f)
+		(* (void (*)(Byte, StringPtr, GUEST<Point> *)) f)
 					       (SE(bytes[0]), ourstring, &txtpoint);
-#endif /* __STDC__ */
 		break;
 	    case xxx2(PNT, PNT):
-#if !defined (__STDC__)
-		(*f)(points[0], points[1]);
-#else /* __STDC__ */
 		(* (void (*)(Point, Point)) f)(points[0], points[1]);
-#endif /* __STDC__ */
 		break;
 	    case xxx2(PNT, TXT):
-#if !defined (__STDC__)
-		(*f)(points[0], ourstring, &txtpoint);
-#else /* __STDC__ */
-		(* (void (*)(Point, StringPtr, Point *)) f)
+		(* (void (*)(Point, StringPtr, GUEST<Point> *)) f)
 						  (points[0], ourstring, &txtpoint);
-#endif /* __STDC__ */
 		break;
 	    case xxx2(RCT, OVP):
 	    case xxx3(SAM, RCT, OVP):
-#if !defined (__STDC__)
-		(*f)(&rects[0], ovw, ovh);
-#else /* __STDC__ */
 		(* (void (*)(Rect *, INTEGER, INTEGER)) f)
 							 (&rects[0], ovw, ovh);
-#endif /* __STDC__ */
 		break;
 	    case xxx2(WRD, WRD):
-#if !defined (__STDC__)
-		(*f)(words[0], words[1]);
-#else /* __STDC__ */
 		(* (void (*)(INTEGER, INTEGER)) f)(words[0], words[1]);
-#endif /* __STDC__ */
 		break;
 	    case xxx3(BYT, BYT, TXT):
-#if !defined (__STDC__)
-		(*f)(SE(bytes[0]), SE(bytes[1]), ourstring, &txtpoint);
-#else /* __STDC__ */
-		(* (void (*)(Byte, Byte, StringPtr, Point *)) f)
+		(* (void (*)(Byte, Byte, StringPtr, GUEST<Point> *)) f)
 				 (SE(bytes[0]), SE(bytes[1]), ourstring, &txtpoint);
-#endif /* __STDC__ */
 		break;
 	    case xxx3(PNT, BYT, BYT):
-#if !defined (__STDC__)
-		(*f)(points[0], SE(bytes[0]), SE(bytes[1]));
-#else /* __STDC__ */
 		(* (void (*)(Point, Byte, Byte)) f)
 				       (points[0], SE(bytes[0]), SE(bytes[1]));
-#endif /* __STDC__ */
 		break;
 	    case xxx3(RCT, WRD, WRD):
 	    case xxx4(SAM, RCT, WRD, WRD):
 	    case xxx6(WRD, WRD, SAM, RCT, WRD, WRD):
-#if !defined (__STDC__)
-		(*f)(&rects[0], words[0], words[1]);
-#else /* __STDC__ */
 		(* (void (*)(Rect *, INTEGER, INTEGER)) f)
 					       (&rects[0], words[0], words[1]);
-#endif /* __STDC__ */
 		break;
 	    case xxx2(WRD, DAT):
-#if !defined (__STDC__)
-		(*f)(words[0], hsize, hand);
-#else /* __STDC__ */
 		(* (void (*)(INTEGER, INTEGER, Handle)) f)
 						       (words[0], hsize, hand);
-#endif /* __STDC__ */
 		break;
 	    default:
 		gui_assert(0);

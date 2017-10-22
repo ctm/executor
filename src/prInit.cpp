@@ -41,7 +41,7 @@ P0(PUBLIC pascal trap, void, PrOpen)
 #endif
 	HUnlock((Handle)h);
     }
-    PrintErr = ROMlib_printresfile == -1 ? CWC(fnfErr) : CWC(noErr);
+    PrintErr = ROMlib_printresfile == -1 ? CWC((OSErr)fnfErr) : CWC((OSErr)noErr);
 }
 
 P0(PUBLIC pascal trap, void, PrClose)

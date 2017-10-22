@@ -81,8 +81,8 @@ P1 (PUBLIC pascal trap, void, InitCPort,
      that operate on thePort */
   SetPort ((GrafPtr) p);
   
-  CPORT_VERSION_X (p) = (CPORT_FLAG_BITS_X
-			 | CWC (/* color quickdraw version */ 0));
+  CPORT_VERSION_X (p) = CPORT_FLAG_BITS_X;
+			// | CWC (/* color quickdraw version */ 0));
   
   gd = MR (TheGDevice);
   *STARH (CPORT_PIXMAP (p)) = *STARH (GD_PMAP (gd));
@@ -98,7 +98,7 @@ P1 (PUBLIC pascal trap, void, InitCPort,
   *((char *)&p->txFace + 1) = 0; /* Excel & tests show we need to do this. */
   PORT_TX_MODE_X (p)     = CWC (srcOr);
   PORT_TX_SIZE_X (p)     = CWC (0);
-  PORT_SP_EXTRA_X (p)    = CWC (0);
+  PORT_SP_EXTRA_X (p)    = CLC (0);
   RGBForeColor (&ROMlib_black_rgb_color);
   RGBBackColor (&ROMlib_white_rgb_color);
   PORT_COLR_BIT_X (p)    = CWC (0);
@@ -355,14 +355,14 @@ P0 (PUBLIC pascal trap, PixMapHandle, NewPixMap)
        */
       memset (STARH (pixmap), 0, sizeof (PixMap));
       HxX (pixmap, rowBytes)       = PIXMAP_DEFAULT_ROWBYTES_X;
-      PIXMAP_HRES_X (pixmap)       = PIXMAP_VRES_X (pixmap) = CWC (72);
+      PIXMAP_HRES_X (pixmap)       = PIXMAP_VRES_X (pixmap) = CLC (72 << 16);
       PIXMAP_PIXEL_TYPE_X (pixmap) = CWC (chunky_pixel_type);
       PIXMAP_CMP_COUNT_X (pixmap)  = CWC (1);
     }
 
   /* The ColorTable is set to an empty ColorTable (IMV-70). */
   PIXMAP_TABLE_X (pixmap)
-    = (CTabHandle) RM (NewHandleClear (sizeof (ColorTable)));
+    = RM ((CTabHandle) NewHandleClear (sizeof (ColorTable)));
   
   HUnlock ((Handle) pixmap);
   return pixmap;
@@ -459,7 +459,7 @@ P1 (PUBLIC pascal trap, PixPatHandle, GetPixPat, INTEGER, pixpat_id)
       }
   }
   
-  gui_assert ((int) (PIXPAT_MAP_X (pixpat).raw()) == CLC (sizeof (PixPat)));
+  gui_assert ((int) (PIXPAT_MAP_X (pixpat).raw()) == CLC (sizeof (PixPat)).raw());
   
   PIXPAT_MAP_X (pixpat) = RM (patmap);
   
@@ -495,7 +495,7 @@ P1 (PUBLIC pascal trap, PixPatHandle, GetPixPat, INTEGER, pixpat_id)
        /* SetHandleSize ((Handle) PIXMAP_TABLE (patmap), ctab_size); */
        
        HLock ((Handle) patmap);
-       PIXMAP_TABLE_X (patmap) = (CTabHandle) RM (NewHandle (ctab_size));
+       PIXMAP_TABLE_X (patmap) = RM ((CTabHandle) NewHandle (ctab_size));
        HUnlock ((Handle) patmap);
        
        BlockMove ((Ptr) ctab_ptr, 

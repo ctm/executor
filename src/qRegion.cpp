@@ -56,7 +56,7 @@ ROMlib_sledgehammer_rgn (RgnHandle rgn)
   start_ip = ip = RGN_DATA (rgn);
   
   /* #### verify that `y's are increasing also */
-  for (y = CW (*ip++); y != RGN_STOP; y = CW (*ip++))
+  for (y = CW_RAW (*ip++); y != RGN_STOP; y = CW_RAW (*ip++))
     {
       /* #### verify that there are an even numbers of `x's */
       if (special_rgn_p)
@@ -70,7 +70,7 @@ ROMlib_sledgehammer_rgn (RgnHandle rgn)
 	{
 	  int32 prev_x = INT32_MIN;
 	  
-	  for (x = CW (*ip++); x != RGN_STOP; x = CW (*ip++))
+	  for (x = CW_RAW (*ip++); x != RGN_STOP; x = CW_RAW (*ip++))
 	    gui_assert (x > prev_x);
 	}
     }
@@ -102,7 +102,7 @@ P0(PUBLIC pascal trap, void, OpenRgn)
   /* sentinel */
   (RGN_DATA (rh))[0] = RGN_STOP_X;
   
-  PORT_REGION_SAVE_X (thePort) = (Handle) RM (rh);
+  PORT_REGION_SAVE_X (thePort) = RM ((Handle) rh);
   HidePen();
 }
 
@@ -134,7 +134,7 @@ Executor::ROMlib_sizergn (RgnHandle rh, boolean_t special_p) /* INTERNAL */
     {
       while (*ip != RGN_STOP_X)
 	{
-	  y = CW (*ip++);
+	  y = CW_RAW (*ip++);
 	  while ((i = *ip++) != RGN_STOP)
 	    {
 	      if (i < left)	/* testing every element is a waste here */
@@ -148,8 +148,8 @@ Executor::ROMlib_sizergn (RgnHandle rh, boolean_t special_p) /* INTERNAL */
     {
       while (*ip != RGN_STOP_X)
 	{
-	  y = CW (*ip++);
-	  while ((i = CW (*ip++)) != RGN_STOP)
+	  y = CW_RAW (*ip++);
+	  while ((i = CW_RAW (*ip++)) != RGN_STOP)
 	    {
 	      if (i < left)	/* testing every element is a waste here */
 		left = i;
@@ -266,13 +266,13 @@ P3 (PUBLIC pascal trap, void, OffsetRgn, RgnHandle, rh,
 	     ep = (INTEGER *) ((char *) ip + RGNP_SIZE (rp)) - 6;
 	   ip < ep; ip++)
 	{
-	  *ip = CW (CW (*ip) + (dv));
+	  *ip = CW_RAW (CW_RAW (*ip) + (dv));
 	  ++ip;
 	  do
 	    {
-	      *ip = CW (CW (*ip) + (dh));
+	      *ip = CW_RAW (CW_RAW (*ip) + (dh));
 	      ++ip;
-	      *ip = CW (CW (*ip) + (dh));
+	      *ip = CW_RAW (CW_RAW (*ip) + (dh));
 	      ++ip;
 	    }
 	  while (*ip != RGN_STOP_X);
@@ -300,7 +300,7 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
       *endpoints = RGN_STOP;
       ipe = endpoints;
       op = endpoints + NHPAIR;
-      while ((v = CW (*ipr++)) != RGN_STOP)
+      while ((v = CW_RAW (*ipr++)) != RGN_STOP)
 	{
 	  if (v > p.v)
 	    {
@@ -311,9 +311,9 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
 	    }
 	  while (*ipr != RGN_STOP_X || *ipe != RGN_STOP)
 	    {
-	      if (CW (*ipr) < *ipe)
-		*op++ = CW (*ipr++);
-	      else if (*ipe < CW (*ipr))
+	      if (CW_RAW (*ipr) < *ipe)
+		*op++ = CW_RAW (*ipr++);
+	      else if (*ipe < CW_RAW (*ipr))
 		*op++ = *ipe++;
 	      else
 		{
@@ -352,9 +352,9 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
   op = freebuf;								\
   while (*ipr != RGN_STOP_X || *ipe != RGN_STOP)			\
     {									\
-      if (CW (*ipr) < *ipe)						\
-	*op++ = CW (*ipr++);						\
-      else if (*ipe < CW (*ipr))					\
+      if (CW_RAW (*ipr) < *ipe)						\
+	*op++ = CW_RAW (*ipr++);						\
+      else if (*ipe < CW_RAW (*ipr))					\
 	*op++ = *ipe++;							\
       else								\
 	{								\
@@ -394,14 +394,14 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
 						\
   ipe = cur;					\
   ipr = new;					\
-  *out++ = CW (vx);				\
+  *out++ = CW_RAW (vx);				\
   hold = (LONGINT) (long) out;			\
   while (*ipr != RGN_STOP || *ipe != RGN_STOP)	\
     {						\
       if (*ipr < *ipe)				\
-	*out++ = CW (*ipr++);			\
+	*out++ = CW_RAW (*ipr++);			\
       else if (*ipe < *ipr)			\
-	*out++ = CW (*ipe++);			\
+	*out++ = CW_RAW (*ipe++);			\
       else					\
 	{					\
 	  ipr++;				\
@@ -412,7 +412,7 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
     --out;					\
   else						\
     {						\
-      *out++ = CW (RGN_STOP);			\
+      *out++ = CW_RAW (RGN_STOP);			\
     }						\
   ipe = cur;					\
   cur = new;					\
@@ -476,7 +476,7 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
     sp2 = src2;						\
     newsource						\
     newdest						\
-    *outp++ = CW(y);					\
+    *outp++ = CW_RAW(y);					\
     outptr = outp;					\
     while (sstart != RGN_STOP && dstart != RGN_STOP) {	\
         if (sstop <= dstart)				\
@@ -629,7 +629,7 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
     INTEGER *ipr1, *ipr2;
     INTEGER *temppoints, *tptr;
     register INTEGER v1, v2, vx;
-    INTEGER r1[9], r2[9];
+    GUEST<INTEGER> r1[9], r2[9];
     Rect *rp;
     INTEGER nspecial;
     RgnHandle exchrgn;
@@ -663,35 +663,35 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
         rp = &RGN_BBOX (srcrgn1);
         r1[0] = rp->top;
         r1[1] = rp->left;
-        r1[2] = rp->right  != RGN_STOP_X ? rp->right  : GUEST<INTEGER>(CWC(RGN_STOP - 1));
-        r1[3] = RGN_STOP_X;
-        r1[4] = rp->bottom != RGN_STOP_X ? rp->bottom : GUEST<INTEGER>(CWC(RGN_STOP - 1));
+        r1[2] = rp->right  != CWC(RGN_STOP) ? rp->right  : GUEST<INTEGER>(CWC(RGN_STOP - 1));
+        r1[3] = CWC(RGN_STOP);
+        r1[4] = rp->bottom != CWC(RGN_STOP) ? rp->bottom : GUEST<INTEGER>(CWC(RGN_STOP - 1));
         r1[5] = rp->left;
-        r1[6] = rp->right  != RGN_STOP_X ? rp->right  : GUEST<INTEGER>(CWC(RGN_STOP - 1));
-        r1[7] = RGN_STOP_X;
-        r1[8] = RGN_STOP_X;
-        ipr1 = r1;
+        r1[6] = rp->right  != CWC(RGN_STOP) ? rp->right  : GUEST<INTEGER>(CWC(RGN_STOP - 1));
+        r1[7] = CWC(RGN_STOP);
+        r1[8] = CWC(RGN_STOP);
+        ipr1 = (INTEGER*)r1;
     } else
         ipr1 = RGN_DATA (srcrgn1);
     if (RGN_SMALL_P (srcrgn2)) {
         rp = &RGN_BBOX (srcrgn2);
         r2[0] = rp->top;
         r2[1] = rp->left;
-        r2[2] = rp->right  != RGN_STOP_X ? rp->right  : GUEST<INTEGER>(CWC(RGN_STOP - 1));
-        r2[3] = RGN_STOP_X;
-        r2[4] = rp->bottom != RGN_STOP_X ? rp->bottom : GUEST<INTEGER>(CWC(RGN_STOP - 1));
+        r2[2] = rp->right  != CWC(RGN_STOP) ? rp->right  : GUEST<INTEGER>(CWC(RGN_STOP - 1));
+        r2[3] = CWC(RGN_STOP);
+        r2[4] = rp->bottom != CWC(RGN_STOP) ? rp->bottom : GUEST<INTEGER>(CWC(RGN_STOP - 1));
         r2[5] = rp->left;
-        r2[6] = rp->right  != RGN_STOP_X ? rp->right  : GUEST<INTEGER>(CWC(RGN_STOP - 1));
-        r2[7] = RGN_STOP_X;
-        r2[8] = RGN_STOP_X;
-        ipr2 = r2;
+        r2[6] = rp->right  != CWC(RGN_STOP) ? rp->right  : GUEST<INTEGER>(CWC(RGN_STOP - 1));
+        r2[7] = CWC(RGN_STOP);
+        r2[8] = CWC(RGN_STOP);
+        ipr2 = (INTEGER*)r2;
     } else
         ipr2 = RGN_DATA (srcrgn2);
     *src1ep = *src2ep = *sectsegep = *sectcurep = *freeep = 
       *(src1ep+1) = *(src2ep+1) = RGN_STOP;
 
-    v1 = CW(*ipr1++);
-    v2 = CW(*ipr2++);
+    v1 = CW_RAW(*ipr1++);
+    v2 = CW_RAW(*ipr2++);
     wehavepairs = FALSE;	/* whether or not scan lines have stuff */
     switch (nspecial) {
     case 0:
@@ -699,17 +699,17 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
 	    if (v1 < v2) {
 		merge(ipr1, src1ep, freeep) /* no semi ... macro */
 		vx = v1;
-		v1 = CW(*ipr1++);
+		v1 = CW_RAW(*ipr1++);
 	    } else if (v2 < v1) {
 		merge(ipr2, src2ep, freeep)
 		vx = v2;
-		v2 = CW(*ipr2++);
+		v2 = CW_RAW(*ipr2++);
 	    } else {    /* equal */
 		merge(ipr1, src1ep, freeep)
 		merge(ipr2, src2ep, freeep)
 		vx = v1;
-		v1 = CW(*ipr1++);
-		v2 = CW(*ipr2++);
+		v1 = CW_RAW(*ipr1++);
+		v2 = CW_RAW(*ipr2++);
 	    }
 	    sect(src1ep, src2ep, sectsegep)
 	    outputrgn(vx, sectcurep, sectsegep, tptr);
@@ -721,17 +721,17 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
 	    if (v1 < v2) {
 		nextline(ipr1, src1ep) /* no semi ... macro */
 		vx = v1;
-		v1 = CW(*ipr1++);
+		v1 = CW_RAW(*ipr1++);
 	    } else if (v2 < v1) {
 		merge(ipr2, src2ep, freeep)
 		vx = v2;
-		v2 = CW(*ipr2++);
+		v2 = CW_RAW(*ipr2++);
 	    } else {    /* equal */
 		nextline(ipr1, src1ep)
 		merge(ipr2, src2ep, freeep)
 		vx = v1;
-		v1 = CW(*ipr1++);
-		v2 = CW(*ipr2++);
+		v1 = CW_RAW(*ipr1++);
+		v2 = CW_RAW(*ipr2++);
 	    }
 #if !defined (NDEBUG)
 	    assertincreasing(src1ep);
@@ -746,17 +746,17 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
 	    if (v1 < v2) {
 		nextline(ipr1, src1ep) /* no semi ... macro */
 		vx = v1;
-		v1 = CW(*ipr1++);
+		v1 = CW_RAW(*ipr1++);
 	    } else if (v2 < v1) {
 		nextline(ipr2, src2ep)
 		vx = v2;
-		v2 = CW(*ipr2++);
+		v2 = CW_RAW(*ipr2++);
 	    } else {    /* equal */
 		nextline(ipr1, src1ep)
 		nextline(ipr2, src2ep)
 		vx = v1;
-		v1 = CW(*ipr1++);
-		v2 = CW(*ipr2++);
+		v1 = CW_RAW(*ipr1++);
+		v2 = CW_RAW(*ipr2++);
 	    }
 	    sectline(src1ep, src2ep, tptr, vx)
 	}
@@ -801,7 +801,7 @@ A4(PRIVATE, void, binop, optype, op, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
     INTEGER *ipr1, *ipr2;
     INTEGER *temppoints, *tptr;
     register INTEGER v1, v2, vx;
-    INTEGER r1[9], r2[9];
+    GUEST<INTEGER> r1[9], r2[9];
     Rect *rp;
     ALLOCABEGIN
 
@@ -816,50 +816,50 @@ A4(PRIVATE, void, binop, optype, op, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
         rp = &(RGN_BBOX (srcrgn1));
         r1[0] = rp->top;
         r1[1] = rp->left;
-        r1[2] = rp->right  != RGN_STOP_X ? rp->right  : GUEST<INTEGER>(CW(RGN_STOP - 1));
-        r1[3] = RGN_STOP_X;
-        r1[4] = rp->bottom != RGN_STOP_X ? rp->bottom : GUEST<INTEGER>(CW(RGN_STOP - 1));
+        r1[2] = rp->right  != CWC(RGN_STOP) ? rp->right  : GUEST<INTEGER>(CW(RGN_STOP - 1));
+        r1[3] = CWC(RGN_STOP);
+        r1[4] = rp->bottom != CWC(RGN_STOP) ? rp->bottom : GUEST<INTEGER>(CW(RGN_STOP - 1));
         r1[5] = rp->left;
-        r1[6] = rp->right  != RGN_STOP_X ? rp->right  : GUEST<INTEGER>(CW(RGN_STOP - 1));
-        r1[7] = RGN_STOP_X;
-        r1[8] = RGN_STOP_X;
-        ipr1 = r1;
+        r1[6] = rp->right  != CWC(RGN_STOP) ? rp->right  : GUEST<INTEGER>(CW(RGN_STOP - 1));
+        r1[7] = CWC(RGN_STOP);
+        r1[8] = CWC(RGN_STOP);
+        ipr1 = (INTEGER*)r1;
     } else
         ipr1 = RGN_DATA (srcrgn1);
     if (RGN_SMALL_P (srcrgn2)) {
         rp = &(RGN_BBOX (srcrgn2));
         r2[0] = rp->top;
         r2[1] = rp->left;
-        r2[2] = rp->right  != RGN_STOP ? rp->right  : GUEST<INTEGER>(CW(RGN_STOP - 1));
-        r2[3] = RGN_STOP_X;
-        r2[4] = rp->bottom != RGN_STOP ? rp->bottom : GUEST<INTEGER>(CW(RGN_STOP - 1));
+        r2[2] = rp->right  != CWC(RGN_STOP) ? rp->right  : GUEST<INTEGER>(CW(RGN_STOP - 1));
+        r2[3] = CWC(RGN_STOP);
+        r2[4] = rp->bottom != CWC(RGN_STOP) ? rp->bottom : GUEST<INTEGER>(CW(RGN_STOP - 1));
         r2[5] = rp->left;
-        r2[6] = rp->right  != RGN_STOP ? rp->right  : GUEST<INTEGER>(CW(RGN_STOP - 1));
-        r2[7] = RGN_STOP_X;
-        r2[8] = RGN_STOP_X;
-        ipr2 = r2;
+        r2[6] = rp->right  != CWC(RGN_STOP) ? rp->right  : GUEST<INTEGER>(CW(RGN_STOP - 1));
+        r2[7] = CWC(RGN_STOP);
+        r2[8] = CWC(RGN_STOP);
+        ipr2 = (INTEGER*)r2;
     } else
         ipr2 = RGN_DATA (srcrgn2);
     *src1ep = *src2ep = *sectsegep = *sectcurep = *freeep = 
     *(src1ep+1) = *(src2ep+1) =  RGN_STOP;
 
-    v1 = CW(*ipr1++);
-    v2 = CW(*ipr2++);
+    v1 = CW_RAW(*ipr1++);
+    v2 = CW_RAW(*ipr2++);
     while (v1 != RGN_STOP || v2 != RGN_STOP) {
         if (v1 < v2) {
             merge(ipr1, src1ep, freeep) /* no semi ... macro */
             vx = v1;
-            v1 = CW(*ipr1++);
+            v1 = CW_RAW(*ipr1++);
         } else if (v2 < v1) {
             merge(ipr2, src2ep, freeep)
             vx = v2;
-            v2 = CW(*ipr2++);
+            v2 = CW_RAW(*ipr2++);
         } else {    /* equal */
             merge(ipr1, src1ep, freeep)
             merge(ipr2, src2ep, freeep)
             vx = v1;
-            v1 = CW(*ipr1++);
-            v2 = CW(*ipr2++);
+            v1 = CW_RAW(*ipr1++);
+            v2 = CW_RAW(*ipr2++);
         }
         switch (op) {
         case sectop:
@@ -908,7 +908,7 @@ Executor::nonspecial_rgn_to_special_rgn (const INTEGER *src, INTEGER *dst)
       INTEGER *next_prev;
       
       /* Fetch the first X on this new scanline. */
-      srcx = CW (src[1]);
+      srcx = CW_RAW (src[1]);
       if (srcx == RGN_STOP)
 	{
 	  /* The row with which to XOR is empty, so just extend the
@@ -927,8 +927,8 @@ Executor::nonspecial_rgn_to_special_rgn (const INTEGER *src, INTEGER *dst)
       prevx = prev[1];
       if (prevx == RGN_STOP)
 	{
-	  for (; (dst[1] = CW (src[1])) != RGN_STOP; src += 2, dst += 2)
-	    dst[2] = CW (src[2]);
+	  for (; (dst[1] = CW_RAW (src[1])) != RGN_STOP; src += 2, dst += 2)
+	    dst[2] = CW_RAW (src[2]);
 	  src += 2;
 	  dst += 2;
 	  prev = next_prev;
@@ -953,7 +953,7 @@ Executor::nonspecial_rgn_to_special_rgn (const INTEGER *src, INTEGER *dst)
 	  if (srcx < prevx)
 	    {
 	      *dst++ = srcx;
-	      srcx = CW (*src++);
+	      srcx = CW_RAW (*src++);
 	      if (srcx == RGN_STOP)
 		goto read_prev_only;
 	    }
@@ -966,7 +966,7 @@ Executor::nonspecial_rgn_to_special_rgn (const INTEGER *src, INTEGER *dst)
 	    }
 	  else /* srcx == prevx */
 	    {
-	      srcx = CW (*src++);
+	      srcx = CW_RAW (*src++);
 	      prevx = *prev++;
 	      if (srcx == RGN_STOP)
 		goto read_prev_only;
@@ -993,7 +993,7 @@ Executor::nonspecial_rgn_to_special_rgn (const INTEGER *src, INTEGER *dst)
       while (srcx != RGN_STOP)
 	{
 	  *dst++ = srcx;
-	  srcx = CW (*src++);
+	  srcx = CW_RAW (*src++);
 	}
       
     do_next:
@@ -1016,11 +1016,11 @@ static INTEGER npairs;
 #define DECL void rhtopandinseth(RgnHandle rh, INTEGER *p, register INTEGER dh)
 
 #define STATEDECL SignedByte state;
-#define ITYPE GUEST<INTEGER>
-#define SETIO ip = &HxX(rh, rgnSize) + 5; op = p; y = CW(*ip++); npairs = 0; \
+#define ITYPE INTEGER
+#define SETIO ip = RGN_DATA(rh); op = p; y = CW_RAW(*ip++); npairs = 0; \
 					      state = HGetState((Handle) rh); \
 							     HLock((Handle) rh)
-#define NEXTPAIR (x = CW(*ip++)) == RGN_STOP ? (y = CW(*ip++), 0) : 1
+#define NEXTPAIR (x = CW_RAW(*ip++)) == RGN_STOP ? (y = CW_RAW(*ip++), 0) : 1
 #define INCLXY(x, y) *op++ = y, *op++ = x, npairs++
 #define UNSETIO HSetState((Handle) rh, state); INCLXY(RGN_STOP, RGN_STOP)
 
@@ -1105,16 +1105,16 @@ A2(PRIVATE, void, ptorh, INTEGER *, p, RgnHandle, rh)
     
     op = RGN_DATA (rh);
     if (npairs) {	/* decrement one 'cause of the 32767 sentinel */
-	*op++ = CW(oy = *p);
+	*op++ = CW_RAW(oy = *p);
 	for (;npairs; npairs -= 2) {
 	    if ((y = *p++) != oy) {
 		*op++ = RGN_STOP_X;
-		*op++ = CW(y);
+		*op++ = CW_RAW(y);
 		oy = y;
 	    }
-	    *op++ = CW(*p++);
+	    *op++ = CW_RAW(*p++);
 	    ++p;			/* if Cx((*ip)++ != oy) error! */
-	    *op++ = CW(*p++);
+	    *op++ = CW_RAW(*p++);
 	}
     }
     *op++ = RGN_STOP_X;	/* need one or two? */
@@ -1259,13 +1259,13 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
 	memcpy((Ptr) temp, MR(*(Ptr *) s1), RGN_SMALL_SIZE);
 #endif
 	op = (INTEGER *) ((char *)temp + RGN_SMALL_SIZE);
-	*op++ = HxX(s1, rgnBBox.top);
-	*op++ = HxX(s1, rgnBBox.left);
-	*op++ = HxX(s1, rgnBBox.right);
+	*op++ = HxX(s1, rgnBBox.top).raw();
+	*op++ = HxX(s1, rgnBBox.left).raw();
+	*op++ = HxX(s1, rgnBBox.right).raw();
 	*op++ = RGN_STOP_X;
-	*op++ = HxX(s1, rgnBBox.bottom);
-	*op++ = HxX(s1, rgnBBox.left);
-	*op++ = HxX(s1, rgnBBox.right);
+	*op++ = HxX(s1, rgnBBox.bottom).raw();
+	*op++ = HxX(s1, rgnBBox.left).raw();
+	*op++ = HxX(s1, rgnBBox.right).raw();
 	*op++ = RGN_STOP_X;
 	*op++ = RGN_STOP_X;
 	ASSERT_SAFE (temp);
@@ -1281,13 +1281,13 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
 	memcpy((Ptr) temp, STARH (s2), RGN_SMALL_SIZE);
 #endif
 	op = (INTEGER *) ((char *)temp + RGN_SMALL_SIZE);
-	*op++ = HxX(s2, rgnBBox.top);
-	*op++ = HxX(s2, rgnBBox.left);
-	*op++ = HxX(s2, rgnBBox.right);
+	*op++ = HxX(s2, rgnBBox.top).raw();
+	*op++ = HxX(s2, rgnBBox.left).raw();
+	*op++ = HxX(s2, rgnBBox.right).raw();
 	*op++ = RGN_STOP_X;
-	*op++ = HxX(s2, rgnBBox.bottom);
-	*op++ = HxX(s2, rgnBBox.left);
-	*op++ = HxX(s2, rgnBBox.right);
+	*op++ = HxX(s2, rgnBBox.bottom).raw();
+	*op++ = HxX(s2, rgnBBox.left).raw();
+	*op++ = HxX(s2, rgnBBox.right).raw();
 	*op++ = RGN_STOP_X;
 	*op++ = RGN_STOP_X;
 	ASSERT_SAFE (temp);	
@@ -1300,64 +1300,64 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
     op  = RGN_DATA (dest);
     left = RGN_STOP; right = -32768;
     bottom = -32768;
-    for (y1 = CW(*ip1++), y2 = CW(*ip2++); y1 != RGN_STOP || y2 != RGN_STOP;) {
+    for (y1 = CW_RAW(*ip1++), y2 = CW_RAW(*ip2++); y1 != RGN_STOP || y2 != RGN_STOP;) {
 	if (y1 < y2) {
 	    bottom = y1;
-	    *op++ = CW(y1);
+	    *op++ = CW_RAW(y1);
 	    while ((*op++ = *ip1++) != RGN_STOP_X) {
-		x1 = CW(op[-1]);
+		x1 = CW_RAW(op[-1]);
 		if (x1 < left)
 		    left = x1;
 		if (x1 > right)
 		    right = x1;
 	    }
-	    y1 = CW(*ip1++);
+	    y1 = CW_RAW(*ip1++);
 	} else if (y2 < y1) {
 	    bottom = y2;
-	    *op++ = CW(y2);
+	    *op++ = CW_RAW(y2);
 	    while ((*op++ = *ip2++) != RGN_STOP_X) {
-		x2 = CW(op[-1]);
+		x2 = CW_RAW(op[-1]);
 		if (x2 < left)
 		    left = x2;
 		if (x2 > right)
 		    right = x2;
 	    }
-	    y2 = CW(*ip2++);
+	    y2 = CW_RAW(*ip2++);
 	} else {
 	    cnt = 0;
-	    for (x1 = CW(*ip1++), x2 = CW(*ip2++);
+	    for (x1 = CW_RAW(*ip1++), x2 = CW_RAW(*ip2++);
 		 x1 != RGN_STOP || x2 != RGN_STOP;) {
 		if (x1 < x2) {
 		    if (!cnt) {
 			bottom = y1;
-			*op++ = CW(y1);
+			*op++ = CW_RAW(y1);
 			if (x1 < left)
 			    left = x1;
 		    } else if (x1 > right)
 			right = x1;
-		    *op++ = CW(x1);
+		    *op++ = CW_RAW(x1);
 		    cnt++;
-		    x1 = CW(*ip1++);
+		    x1 = CW_RAW(*ip1++);
 		} else if (x2 < x1) {
 		    if (!cnt) {
 			bottom = y1;
-			*op++ = CW(y1);
+			*op++ = CW_RAW(y1);
 			if (x2 < left)
 			    left = x2;
 		    } else if (x2 > right)
 			right = x2;
-		    *op++ = CW(x2);
+		    *op++ = CW_RAW(x2);
 		    cnt++;
-		    x2 = CW(*ip2++);
+		    x2 = CW_RAW(*ip2++);
 		} else {
-		    x1 = CW(*ip1++);
-		    x2 = CW(*ip2++);
+		    x1 = CW_RAW(*ip1++);
+		    x2 = CW_RAW(*ip2++);
 		}
 	    }
 	    if (cnt)
 		*op++ = RGN_STOP_X;
-	    y1 = CW(*ip1++);
-	    y2 = CW(*ip2++);
+	    y1 = CW_RAW(*ip1++);
+	    y2 = CW_RAW(*ip2++);
 	}
     }
     *op++ = RGN_STOP_X;
@@ -1431,7 +1431,7 @@ A1(PUBLIC, void, ROMlib_printrgn, RgnHandle, h)
        if (!RGN_SMALL_P (h))
 	 {
 	   ip = RGN_DATA (h);
-	   while ((y = CW (*ip++)) != RGN_STOP)
+	   while ((y = CW_RAW (*ip++)) != RGN_STOP)
 	     {
 	       printf ("%ld:", (long) y);
 	       if (special)
@@ -1441,7 +1441,7 @@ A1(PUBLIC, void, ROMlib_printrgn, RgnHandle, h)
 		 }
 	       else
 		 {
-		   while ((x = CW (*ip++)) != RGN_STOP)
+		   while ((x = CW_RAW (*ip++)) != RGN_STOP)
 		     printf (" %ld", (long) x);
 		 }
 	       printf (" 32767\n");

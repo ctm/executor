@@ -150,7 +150,7 @@ A3(PUBLIC, OSErr, Rename, StringPtr, filen, INTEGER, vrn,	/* IMIV-114 */
     pbr.ioParam.ioNamePtr = RM(filen);
     pbr.ioParam.ioVRefNum = CW(vrn);
     pbr.ioParam.ioVersNum = 0;
-    pbr.ioParam.ioMisc = (LONGINT) RM( newf);
+    pbr.ioParam.ioMisc = guest_cast<LONGINT> (RM( newf));
     return(PBRename(&pbr, 0));
 }
 
@@ -305,7 +305,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
     struct stat datasbuf, resourcesbuf, parentsbuf;
     GUEST<LONGINT> longzero = 0;
     VCBExtra *vcbp;
-    THz savezone;
+    GUEST<THz> savezone;
     struct timeval accessupdatetimes[2];
     IndexType indext;
     FInfo finfo;
@@ -560,14 +560,13 @@ A2(PUBLIC, OSErr, ufsPBHGetFInfo, HParmBlkPtr, pb,	/* INTERNAL */
 {
     GUEST<LONGINT> d;
     OSErr err;
-    ProcPtr compsave;
-
+    
     d = pb->fileParam.ioDirID;
-    TRANSFER_ASSIGN (compsave, pb->ioParam.ioCompletion);
+    auto compsave = pb->ioParam.ioCompletion;
     pb->ioParam.ioCompletion = 0;
     err = ROMlib_PBGetSetFInfoD((ParmBlkPtr) pb, a, Get, &d, FALSE);
     pb->fileParam.ioDirID = d;
-    TRANSFER_ASSIGN (pb->ioParam.ioCompletion, compsave);
+    pb->ioParam.ioCompletion = compsave;
     return err;
 }
 
@@ -739,13 +738,13 @@ A2(PUBLIC, OSErr, ufsPBRename, ParmBlkPtr, pb,		/* INTERNAL */
 						    BOOLEAN, a)
 {
     return ROMlib_PBMoveOrRename(pb, a, (LONGINT) 0, (LONGINT) 0,
-			     (char *) (long) MR(pb->ioParam.ioMisc), FRename);
+	MR(guest_cast<char*>(pb->ioParam.ioMisc)), FRename);
 }
 
 A2(PUBLIC, OSErr, ufsPBHRename, HParmBlkPtr, pb,	/* INTERNAL */
 						      BOOLEAN, a)
 {
     return ROMlib_PBMoveOrRename((ParmBlkPtr) pb, a, CL(pb->fileParam.ioDirID),
-	     CL(pb->fileParam.ioDirID), (char *) (long) MR(pb->ioParam.ioMisc),
+	     CL(pb->fileParam.ioDirID), MR(guest_cast<char*>(pb->ioParam.ioMisc)),
 								      HRename);
 }

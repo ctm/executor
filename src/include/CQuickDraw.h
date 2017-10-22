@@ -362,7 +362,7 @@ extern pascal trap void C_AnimateEntry (WindowPtr, INTEGER, RGBColor *);
 extern pascal trap void C_AnimatePalette (WindowPtr, CTabHandle, INTEGER, INTEGER, INTEGER);
 extern pascal trap void C_GetEntryColor (PaletteHandle, INTEGER,  RGBColor *);
 extern pascal trap void C_SetEntryColor (PaletteHandle, INTEGER, RGBColor *);
-extern pascal trap void C_GetEntryUsage (PaletteHandle, INTEGER, INTEGER *, INTEGER *);
+extern pascal trap void C_GetEntryUsage (PaletteHandle, INTEGER, GUEST<INTEGER> *, GUEST<INTEGER> *);
 extern pascal trap void C_SetEntryUsage (PaletteHandle, INTEGER, INTEGER, INTEGER);
 extern pascal trap void C_CTab2Palette (CTabHandle, PaletteHandle, INTEGER, INTEGER);
 extern pascal trap void C_Palette2CTab (PaletteHandle, CTabHandle);

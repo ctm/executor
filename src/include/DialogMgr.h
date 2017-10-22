@@ -196,7 +196,7 @@ extern pascal trap void C_ShowDItem( DialogPtr dp,
 
 extern pascal trap CDialogPtr C_NewCDialog (Ptr, Rect *, StringPtr, BOOLEAN, INTEGER, WindowPtr, BOOLEAN, LONGINT, Handle);
 
-extern pascal trap OSErr C_GetStdFilterProc (ProcPtr *proc);
+extern pascal trap OSErr C_GetStdFilterProc (GUEST<ProcPtr> *proc);
 extern pascal trap OSErr C_SetDialogDefaultItem (DialogPtr dialog,
 						 int16 new_item);
 extern pascal trap OSErr C_SetDialogCancelItem (DialogPtr dialog, 

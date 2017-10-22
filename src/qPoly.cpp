@@ -34,12 +34,13 @@ P0(PUBLIC pascal trap, PolyHandle, OpenPoly)
 P0(PUBLIC pascal trap, void, ClosePoly)
 {
     INTEGER top = 32767, left = 32767, bottom = -32767, right = -32767;
-    INTEGER *ip, *ep, i;
+    GUEST<INTEGER> *ip, *ep;
+    INTEGER i;
     PolyHandle ph;
     
     ph = (PolyHandle) PORT_POLY_SAVE (thePort);
-    for (ip = (INTEGER *)((char *)STARH(ph) + SMALLPOLY),
-         ep = (INTEGER *)((char *)STARH(ph) + Hx(ph, polySize));
+    for (ip = (GUEST<INTEGER> *)((char *)STARH(ph) + SMALLPOLY),
+         ep = (GUEST<INTEGER> *)((char *)STARH(ph) + Hx(ph, polySize));
          ip != ep;) {
         if ((i = CW(*ip)) <= top)
             top = i;
@@ -56,7 +57,7 @@ P0(PUBLIC pascal trap, void, ClosePoly)
     HxX(ph, polyBBox.left)   = CW(left);
     HxX(ph, polyBBox.bottom) = CW(bottom);
     HxX(ph, polyBBox.right)  = CW(right);
-    PORT_POLY_SAVE_X (thePort) = (Handle)CWC (0);
+    PORT_POLY_SAVE_X (thePort) = nullptr;
     ShowPen();
 }
 

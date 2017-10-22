@@ -25,11 +25,11 @@ PUBLIC PicHandle Executor::ROMlib_OpenPicture_helper (const Rect *pf,
     piccachehand pch;
     PicHandle ph;
     GUEST<INTEGER> *ip;
-    RgnHandle temprh;
+    GUEST<RgnHandle> temprh;
     
     HidePen();
     pch = (piccachehand) NewHandle(sizeof(piccache));
-    PORT_PIC_SAVE_X (thePort) = (Handle) RM (pch);
+    PORT_PIC_SAVE_X (thePort) = RM ((Handle) pch);
     ph = (PicHandle) NewHandle((Size) INITIALPICSIZE);
     HxX(pch, pichandle) = RM(ph);
 
@@ -44,10 +44,10 @@ PUBLIC PicHandle Executor::ROMlib_OpenPicture_helper (const Rect *pf,
       {
 	ip[ 3] = params->version;
 	ip[ 4] = params->reserved1;
-	* (uint32 *) &ip[ 5] = (uint32) params->hRes;
-	* (uint32 *) &ip[ 7] = (uint32) params->vRes;
+	* (GUEST<uint32> *) &ip[ 5] = params->hRes;
+	* (GUEST<uint32> *) &ip[ 7] = params->vRes;
 	memcpy (&ip[ 9], &params->srcRect, sizeof params->srcRect);
-	* (uint32 *) &ip[13] = (uint32) params->reserved2;
+	* (GUEST<uint32> *) &ip[13] = params->reserved2;
       }
     else
       {
@@ -100,8 +100,8 @@ PUBLIC PicHandle Executor::ROMlib_OpenPicture_helper (const Rect *pf,
     HxX(pch, picov.v)		= 0;
     HxX(pch, picov.h)		= 0;
     HxX(pch, picidunno)		= 0;
-    HxX(pch, picforeColor)	= CWC(blackColor);
-    HxX(pch, picbackColor)	= CWC(whiteColor);
+    HxX(pch, picforeColor)	= CLC(blackColor);
+    HxX(pch, picbackColor)	= CLC(whiteColor);
     return(ph);
 }
 
@@ -299,13 +299,12 @@ PRIVATE void updatetxnumtxden( Point num, Point den )
 	HxX(pch, pictxnum.v) = CW(num.v);
 	HxX(pch, pictxden.h) = CW(den.h);
 	HxX(pch, pictxden.v) = CW(den.v);
-	PICOP(OP_TxRatio);
-	num.h = CW(num.h);
-	num.v = CW(num.v);
-        PICWRITE(&num, sizeof(num));
-	den.h = CW(den.h);
-	den.v = CW(den.v);
-        PICWRITE(&den, sizeof(den));
+        PICOP(OP_TxRatio);
+        GUEST<Point> tmpP;
+        tmpP.set(num);
+        PICWRITE(&tmpP, sizeof(tmpP));
+	tmpP.set(den);
+        PICWRITE(&tmpP, sizeof(tmpP));
     }
 }
 

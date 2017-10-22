@@ -47,12 +47,12 @@ A3 (PUBLIC, itmp, ROMlib_dpnotoip, DialogPeek, dp,		/* INTERNAL */
     INTEGER, itemno, SignedByte *, flags)
 {
   Handle items;
-  INTEGER *intp;
+  GUEST<INTEGER> *intp;
   itmp retval;
   
   items = DIALOG_ITEMS (dp);
   *flags = hlock_return_orig_state (items);
-  intp = (INTEGER *) STARH (items);
+  intp = (GUEST<INTEGER> *) STARH (items);
   if (itemno <= 0 || itemno > CW (*intp) + 1)
     retval = 0;
   else
@@ -69,7 +69,8 @@ A4 (PRIVATE, itmp, htoip, Handle, h,
     SignedByte *, flags_return)
 {
   WindowPeek wp;
-  int16 *ip, i, nop;
+  GUEST<INTEGER> *ip;
+  INTEGER i, nop;
   itmp retval;
   
   for (wp = MR (WindowList); wp; wp = WINDOW_NEXT_WINDOW (wp))
@@ -83,7 +84,7 @@ A4 (PRIVATE, itmp, htoip, Handle, h,
 	  items = DIALOG_ITEMS (wp);
 	  flags = hlock_return_orig_state (items);
 	  
-	  ip = (int16 *) STARH (items);
+	  ip = (GUEST<INTEGER> *) STARH (items);
 	  retval = (itmp) (ip + 1);
 	  for (i = CW (*ip) + 1, nop = 1; i --; BUMPIP (retval))
 	    {
@@ -361,12 +362,13 @@ A2(PUBLIC, void, ROMlib_dpntoteh, DialogPeek, dp, INTEGER, no)	/* INTERNAL */
 {
     SignedByte flags;
     itmp ip;
-    INTEGER *intp, num;
+    GUEST<INTEGER> *intp;
+    INTEGER num;
     
     if (no == 0)
       {
 	/* special case ... find next */
-        intp = (INTEGER *) STARH (MR(dp->items));
+        intp = (GUEST<INTEGER> *) STARH (MR(dp->items));
         num =Cx (*intp) + 1;
         ip = ROMlib_dpnotoip (dp, no = Cx (dp->editField) + 1, &flags);
         do

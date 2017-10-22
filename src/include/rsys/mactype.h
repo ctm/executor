@@ -113,6 +113,8 @@ public:
     explicit operator T2() const { return (T2) (FakeType) raw(); }
 };
 
+template<typename TT>
+struct GuestWrapper;
 
 template<typename TT>
 struct GuestWrapperBase
@@ -151,6 +153,18 @@ struct GuestWrapperBase
     {
         hidden.raw(hidden.raw() | x);
     }
+
+    void raw_and(GuestWrapper<TT> x)
+    {
+        hidden.raw(hidden.raw() & x.raw());
+    }
+
+    void raw_or(GuestWrapper<TT> x)
+    {
+        hidden.raw(hidden.raw() | x.raw());
+    }
+
+    GuestWrapper<TT> operator~() const;
 };
 
 template<typename TT>
@@ -240,16 +254,42 @@ struct GuestWrapper : GuestWrapperBase<TT>
 };
 
 template<typename TT>
-bool operator==(GuestWrapper<TT> a, GuestWrapper<TT> b)
+inline GuestWrapper<TT> GuestWrapperBase<TT>::operator~() const
+{
+        return GuestWrapper<TT>::fromRaw( ~this->raw() );
+}
+
+template<typename T1, typename T2,
+        typename result = decltype( T1() == T2() ),
+        typename enable = typename std::enable_if<sizeof(T1) == sizeof(T2)>::type>
+bool operator==(GuestWrapper<T1> a, GuestWrapper<T2> b)
 {
         return a.raw() == b.raw();
 }
 
-template<typename TT>
-bool operator!=(GuestWrapper<TT> a, GuestWrapper<TT> b)
+template<typename T1, typename T2,
+        typename result = decltype( T1() == T2() ),
+        typename enable = typename std::enable_if<sizeof(T1) == sizeof(T2)>::type>
+bool operator!=(GuestWrapper<T1> a, GuestWrapper<T2> b)
 {
         return a.raw() != b.raw();
 }
+
+template<typename T1, typename T2,
+        typename result = decltype( T1() & T2() ),
+        typename enable = typename std::enable_if<sizeof(T1) == sizeof(T2)>::type>
+GuestWrapper<T1> operator&(GuestWrapper<T1> a, GuestWrapper<T2> b)
+{
+        return GuestWrapper<T1>::fromRaw(a.raw() & b.raw());
+}
+template<typename T1, typename T2,
+        typename result = decltype( T1() | T2() ),
+        typename enable = typename std::enable_if<sizeof(T1) == sizeof(T2)>::type>
+GuestWrapper<T1> operator|(GuestWrapper<T1> a, GuestWrapper<T2> b)
+{
+        return GuestWrapper<T1>::fromRaw(a.raw() | b.raw());
+}
+
 
 template<typename TT>
 bool operator==(GuestWrapper<TT*> a, std::nullptr_t)
@@ -261,7 +301,6 @@ bool operator!=(GuestWrapper<TT*> a, std::nullptr_t)
 {
         return a;
 }
-
 
 #define GUEST_STRUCT struct is_guest_struct {}
 

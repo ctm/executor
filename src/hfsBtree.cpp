@@ -133,10 +133,10 @@ PUBLIC cacheentry *Executor::ROMlib_addrtocachep(Ptr addr, HVCB *vcbp)
 
 #define BTENTRY(btp, n) \
       ((anykey *)((char *) (btp) + \
-      CW(((short *)((char *)(btp) + PHYSBSIZE - sizeof(short)))[-(n)])))
+      CW(((GUEST<int16_t> *)((char *)(btp) + PHYSBSIZE - sizeof(short)))[-(n)])))
       
 #define BTOFFSET(btp, n)    \
-		      ((short *)((char *)(btp) + PHYSBSIZE - sizeof(short))-(n))
+		      ((GUEST<int16_t> *)((char *)(btp) + PHYSBSIZE - sizeof(short))-(n))
 
 #define EVENUP(x)   (((x)+1)/2 *2)
 
@@ -573,7 +573,7 @@ PUBLIC OSErr Executor::ROMlib_keyfind(btparam *btpb)
 	fs_err_hook (err);
 	return err;
       }
-    if (((btblock0 *)cachep->buf)->numentries == 0) {
+    if (((btblock0 *)cachep->buf)->numentries == CLC(0)) {
         btpb->foundp = 0;
         btpb->success = FALSE;
         btpb->leafindex = 0;
@@ -604,7 +604,7 @@ PUBLIC OSErr Executor::ROMlib_keyfind(btparam *btpb)
 	found = ROMlib_searchnode((btnode *)cachep->buf, &btpb->tofind,
 			 btpb->fp, &btpb->foundp, (INTEGER *) &tep->after);
 	if (type == indexnode)
-	    node = CL(*(LONGINT *) DATAPFROMKEY(btpb->foundp));
+	    node = CL(*(GUEST<LONGINT> *) DATAPFROMKEY(btpb->foundp));
 	else {
 	    btpb->leafindex = tep - btpb->trail;
 	    btpb->success = found;
@@ -766,8 +766,8 @@ PRIVATE OSErr add_free_nodes(cacheentry *block0cachep, ULONGINT n_new_nodes)
 		newbtp->ndType = CB(mapnode);	/* 2 */
 		newbtp->ndNRecs = CWC(1);
 
-		*((short *) newbtp + 255) = CWC((short)MAP_PAGE_MAP_BEGIN);
-		*((short *) newbtp + 254) = CWC((short)MAP_PAGE_MAP_END);
+		*((GUEST<INTEGER> *) newbtp + 255) = CWC((short)MAP_PAGE_MAP_BEGIN);
+		*((GUEST<INTEGER> *) newbtp + 254) = CWC((short)MAP_PAGE_MAP_END);
 		--n_new_nodes;
 		oldcachep->flags |= CACHEDIRTY;
 		newcachep->flags |= CACHEDIRTY;
@@ -933,7 +933,7 @@ PRIVATE OSErr merge(cacheentry *leftp, cacheentry *rightp)
     INTEGER n, nrecs, datasize, i;
     btnode *leftbtp, *rightbtp;
     char *datastart, *datastop;
-    INTEGER *offsetp;
+    GUEST<INTEGER> *offsetp;
     OSErr retval;
     
     leftbtp  = (btnode *) leftp ->buf;
@@ -976,7 +976,7 @@ PRIVATE OSErr shuffle(cacheentry *leftp, cacheentry *rightp)
     INTEGER leftfreesize, rightfreesize, numtocopy, n, recsize,
 	    rightdatasize, bytestoshift, i;
     char *rightbtentry0, *recstart, *recend;
-    INTEGER *offsetp;
+    GUEST<INTEGER> *offsetp;
     
     leftbtp  = (btnode *)  leftp->buf;
     rightbtp = (btnode *) rightp->buf;
@@ -1107,7 +1107,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 {
     cacheentry *leftcachep = NULL, *rightcachep = NULL;
     btnode *btp, *parentbtp, *leftbtp, *rightbtp;
-    short *offsetp;
+    GUEST<INTEGER> *offsetp;
     INTEGER adjust;
     char *startp, *stopp, *freep;
     INTEGER freesize, ntoadjust;
@@ -1164,11 +1164,11 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 	    checkbtp(parentbtp);
 #endif /* CATFILEDEBUG */
 	    if (parentindex > 0)
-		left = CL(*(LONGINT *)DATAPFROMKEY(BTENTRY(parentbtp, parentindex-1)));
+		left = CL(*(GUEST<LONGINT> *)DATAPFROMKEY(BTENTRY(parentbtp, parentindex-1)));
 	    else
 		left = -1;
 	    if (parentindex < CW(parentbtp->ndNRecs) - 1)
-		right = CL(*(LONGINT *)DATAPFROMKEY(BTENTRY(parentbtp, parentindex+1)));
+		right = CL(*(GUEST<LONGINT> *)DATAPFROMKEY(BTENTRY(parentbtp, parentindex+1)));
 	    else
 		right = -1;
 	} else {
@@ -1289,7 +1289,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 PRIVATE OSErr maketrailentrybusy(trailentry *tep, uint16 refnum)
 {
     OSErr err;
-    HVCB *SWvcbp;
+    GUEST<HVCB *> SWvcbp;
     
     SWvcbp = ((filecontrolblock *)((char *)MR(FCBSPtr) + refnum))->fcbVPtr;
     if (CW(tep->cachep->refnum) != refnum ||
@@ -1856,7 +1856,7 @@ PRIVATE OSErr slipin(cacheentry *cachep, INTEGER after, anykey *keyp,
     INTEGER sizeneeded, nrecs, keysize, freesize, offsetsize, noffsets, i;
     INTEGER newfirst, sizeused, shim;
     char *keylocp, *firstlocp;
-    short *firstoffset, *offsetp;
+    GUEST<INTEGER> *firstoffset, *offsetp;
     uint16 newnode;
     cacheentry *newcachep;
     btnode *btp, *newbtp;
@@ -1869,7 +1869,7 @@ PRIVATE OSErr slipin(cacheentry *cachep, INTEGER after, anykey *keyp,
     checkbtp(btp);
 #endif /* CATFILEDEBUG */
     vcbp = MR(cachep->vptr);
-    firstoffset = (short *)((char *)btp + PHYSBSIZE) - 1;
+    firstoffset = (GUEST<INTEGER> *)((char *)btp + PHYSBSIZE) - 1;
     nrecs = CW(btp->ndNRecs);
     keysize = EVENUP(((catkey *)keyp)->ckrKeyLen + 1);
     datasize = EVENUP(datasize);
@@ -1931,7 +1931,7 @@ PRIVATE OSErr slipin(cacheentry *cachep, INTEGER after, anykey *keyp,
 	memmove((char *)newbtp+PHYSBSIZE-offsetsize,
 		&firstoffset[-nrecs], offsetsize);
 	shim = (char *) BTENTRY(btp, newfirst) - (char *)btp - sizeof(btnode);
-	offsetp = (INTEGER *) ((char *)newbtp + PHYSBSIZE); 
+	offsetp = (GUEST<INTEGER> *) ((char *)newbtp + PHYSBSIZE); 
 	for (i = noffsets; --i >= 0;) {
 	    --offsetp;
 	    *offsetp = CW(CW(*offsetp) - shim);
@@ -1973,7 +1973,7 @@ PRIVATE OSErr makenewroot(cacheentry *leftp, cacheentry *rightp,
     btblock0 *block0p;
     cacheentry *newcachep;
     btnode *newbtp, *leftbtp, *rightbtp;
-    short *offsetp;
+    GUEST<INTEGER> *offsetp;
     INTEGER keylen;
     char *keydst;
     
@@ -2013,14 +2013,14 @@ PRIVATE OSErr makenewroot(cacheentry *leftp, cacheentry *rightp,
     keydst = (char *) BTENTRY(newbtp, 0);
     memmove(keydst, BTENTRY(leftbtp, 0), keylen);
     *keydst = keylen - 1;
-    *(ULONGINT *)(keydst + keylen) = leftp->logblk;
+    *(GUEST<ULONGINT> *)(keydst + keylen) = leftp->logblk;
     if (rightp) {
 	--offsetp;
 	offsetp[0] = CW(CW(offsetp[1]) + keylen + sizeof(ULONGINT));
 	keydst = (char *) BTENTRY(newbtp, 1);
 	memmove(keydst, BTENTRY(rightbtp, 0), keylen);
 	*keydst = keylen-1;
-	*(ULONGINT *)(keydst + keylen) = rightp->logblk;
+	*(GUEST<ULONGINT> *)(keydst + keylen) = rightp->logblk;
     }
     --offsetp;
     offsetp[0] = CW(CW(offsetp[1]) + keylen + sizeof(ULONGINT));
@@ -2040,7 +2040,7 @@ PRIVATE OSErr makefirstentry(btparam *btpb, char *datap, INTEGER datasize)
     OSErr err;
     cacheentry *block0cachep, *leafp;
     btnode *leafbtp;
-    short *offsetp;
+    GUEST<INTEGER> *offsetp;
     btblock0 *block0p;
     ULONGINT newnode;
     INTEGER keylen;
@@ -2128,7 +2128,7 @@ PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
 /*-->*/	return err;
       }
     btpb->trail[0].cachep = block0cachep;
-    if (block0p->numentries == 0)
+    if (block0p->numentries == CLC(0))
       {
         err = ::makefirstentry(btpb, (char*)datap, datasize);
 	fs_err_hook (err);
@@ -2220,7 +2220,7 @@ PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
     return err;
 }
 
-PRIVATE void makethreadrec(threadrec *recp, LONGINT SWparid, StringPtr namep)
+PRIVATE void makethreadrec(threadrec *recp, GUEST<LONGINT> SWparid, StringPtr namep)
 {
     memset(recp, 0, sizeof(*recp));
     recp->cdrType = THREADTYPE;
@@ -2433,7 +2433,7 @@ PUBLIC OSErr Executor::ROMlib_btpbindex (IOParam *pb, LONGINT dirid, HVCB **vcbp
     static filerec *save_frp;
     static anykey *save_entryp;
     static LONGINT save_count;
-    static INTEGER save_vRefNum;
+    static GUEST<INTEGER> save_vRefNum;
     
     if (dirid != save_dirid || pb->ioVRefNum != save_vRefNum) {
 	ROMlib_index_cached = FALSE;

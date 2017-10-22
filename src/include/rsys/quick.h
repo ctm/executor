@@ -26,8 +26,9 @@ extern boolean_t ROMlib_text_output_disabled_p;
 #define SMALLRGN	sizeof(Region)	/* 0x000A */
 #define SMALLRGNX	CWC(SMALLRGN)
 
+#warning RGNSTOP == RGN_STOP (region.h)
 #define RGNSTOP		32767	/* 0x7FFF */
-#define RGNSTOPX	CWC(RGNSTOP)
+#define RGNSTOPX	CWC_RAW(RGNSTOP)
 
 #define SMALLPOLY	(sizeof(Rect) + sizeof(INTEGER))
 

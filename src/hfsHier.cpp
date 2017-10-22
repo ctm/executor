@@ -34,8 +34,8 @@ PRIVATE OSErr cathelper(CInfoPBPtr pb, BOOLEAN async, catop op)
     BOOLEAN ignorename;
     
     vcbp = 0;
-    if (BigEndianValue(pb->hFileInfo.ioFDirIndex) > 0 && op == catGet) {
-	err = ROMlib_btpbindex((IOParam *) pb, BigEndianValue(pb->hFileInfo.ioDirID), &vcbp, &frp,
+    if (CW(pb->hFileInfo.ioFDirIndex) > 0 && op == catGet) {
+	err = ROMlib_btpbindex((IOParam *) pb, CL(pb->hFileInfo.ioDirID), &vcbp, &frp,
 								      &catkeyp, FALSE);
 	if (err != noErr)
 	    goto done;
@@ -61,7 +61,7 @@ PRIVATE OSErr cathelper(CInfoPBPtr pb, BOOLEAN async, catop op)
 	    kind = filekind(regular | directory);
 	    ignorename = FALSE;
 	}
-	err = ROMlib_findvcbandfile((IOParam *) pb, BigEndianValue(pb->hFileInfo.ioDirID),
+	err = ROMlib_findvcbandfile((IOParam *) pb, CL(pb->hFileInfo.ioDirID),
 						&btparamrec, &kind, ignorename);
 	if (err != noErr)
 	    goto done;
@@ -102,7 +102,7 @@ PRIVATE OSErr cathelper(CInfoPBPtr pb, BOOLEAN async, catop op)
 	    memmove(&pbf->ioFlXFndrInfo, frp->filFndrInfo,
 		    (LONGINT) sizeof(pbf->ioFlXFndrInfo));
 	    pbf->ioFlParID = catkeyp->ckrParID;
-	    pbf->ioFlClpSiz = frp->filClpSize;
+	    pbf->ioFlClpSiz.set(frp->filClpSize.get());
 	} else {
 	    frp->filFlags &= ~FILEFLAGSUSERSETTABLEMASK;
 	    frp->filFlags |=  FILEFLAGSUSERSETTABLEMASK &pbf->ioFlAttrib;
@@ -113,7 +113,7 @@ PRIVATE OSErr cathelper(CInfoPBPtr pb, BOOLEAN async, catop op)
 	    frp->filBkDat = pbf->ioFlBkDat;
 	    memmove(&frp->filFndrInfo, &pbf->ioFlXFndrInfo,
 		    (LONGINT) sizeof(frp->filFndrInfo));
-	    frp->filClpSize = pbf->ioFlClpSiz;
+	    frp->filClpSize.set(pbf->ioFlClpSiz.get());
 	    ROMlib_dirtyleaf(frp, vcbp);
 	    err = ROMlib_flushvcbp (vcbp);
 	}
@@ -129,8 +129,15 @@ PRIVATE OSErr cathelper(CInfoPBPtr pb, BOOLEAN async, catop op)
 		
     /* NOTE: IMIV-155 claims that pbd->ioFRefNum is updated, but the Mac+
 	 doesn't do the updating */
-	 
-	    pbd->ioFlAttrib = drp->dirFlags >> 8;
+         
+         #warning autc04: something is wrong here - right-shifting a 16-bit field into an 8 bit field is either wrong for big endian or wrong for little endian.
+            // pbd->ioFlAttrib = drp->dirFlags >> 8;
+            pbd->ioFlAttrib = 0;        // but no one will notice if we just return 0
+                                        // bit 0: directory locked?
+                                        // bit 2, 3, 5 related to file sharing
+                                        // bit 4 set below
+                                        // bit 1, 6, 7 reserved
+
 	    pbd->ioFlAttrib |= ATTRIB_ISADIR;
 	    memmove(&pbd->ioDrUsrWds, drp->dirUsrInfo,
 		    (LONGINT) sizeof(pbd->ioDrUsrWds));
@@ -201,7 +208,7 @@ PRIVATE OSErr parentchild(HVCB *vcbp, catkey *parentcatp,
     parid = CL(parentdirp->dirDirID);
     if (parid == CL(childdirp->dirDirID))
 	err = badMovErr;    /* can't move into oneself */
-    else if (parentdirp->dirVal != 0) { /* no need to check if no children */
+    else if (parentdirp->dirVal != CWC(0)) { /* no need to check if no children */
 	if (parid <= 2)     /* automatic disqualification; can't move */
 	    err = badMovErr;            /* root directory */
 	else {
@@ -238,7 +245,7 @@ PUBLIC OSErr Executor::hfsPBCatMove(CMovePBPtr pb, BOOLEAN async)
     BOOLEAN ignorename;
     
     srccurkind = (filekind)(regular | directory);
-    err = ROMlib_findvcbandfile((IOParam *) pb, BigEndianValue(pb->ioDirID), &srcbtparam,
+    err = ROMlib_findvcbandfile((IOParam *) pb, CL(pb->ioDirID), &srcbtparam,
 							    &srccurkind, FALSE);
     if (err == noErr) {
 	err = ROMlib_writevcbp(srcbtparam.vcbp);

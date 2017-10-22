@@ -38,7 +38,7 @@ typedef struct mext { GUEST_STRUCT;
     GUEST< Byte> mnextlen;
 } *mextp;
 
-extern void C_mdef0(INTEGER, MenuHandle, Rect *, Point, INTEGER *);
+extern void C_mdef0(INTEGER, MenuHandle, Rect *, Point, GUEST<INTEGER> *);
 extern int32 C_mbdf0(int16, int16, int16, int32);
 
 #define SIZEOFMEXT 5
@@ -204,7 +204,7 @@ typedef pascal LONGINT (*mbdfprocp)(INTEGER variant, INTEGER msg,
 				    INTEGER param1, LONGINT param2);
 
 extern void ROMlib_menucall (INTEGER mess, MenuHandle themenu, Rect *menrect,
-			     Point hit, INTEGER *which);
+			     Point hit, GUEST<INTEGER> *which);
 extern LONGINT ROMlib_mbdfcall (INTEGER msg, INTEGER param1, LONGINT param2);
 
 #define MENUCALL ROMlib_menucall
@@ -258,9 +258,9 @@ struct mbartype { GUEST_STRUCT;
     GUEST< INTEGER[1]> mrid;
 };
 
-typedef struct  { GUEST_STRUCT;
-    GUEST< muelem*> startp;
-    GUEST< muelem*> endp;
+typedef struct  {
+    muelem* startp;
+    muelem* endp;
 } startendpairs[2];
 
 typedef struct table {

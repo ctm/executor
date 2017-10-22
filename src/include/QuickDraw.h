@@ -215,10 +215,6 @@ struct RGBColor { GUEST_STRUCT;
     GUEST< unsigned short> red;
     GUEST< unsigned short> green;
     GUEST< unsigned short> blue;
-
-    RGBColor() = default;
-    RGBColor(GUEST<unsigned short> r, GUEST<unsigned short> g, GUEST<unsigned short> b)
-        : red(r), green(g), blue(b) {}
 };
 
 struct HSVColor { GUEST_STRUCT;
@@ -242,11 +238,17 @@ struct CMYColor { GUEST_STRUCT;
 struct ColorSpec { GUEST_STRUCT;
     GUEST< INTEGER> value;
     GUEST< RGBColor> rgb;
-
-    ColorSpec() = default;
-    ColorSpec(GUEST<INTEGER> v, const RGBColor& c)
-        : value(v), rgb(c) {}
 };
+
+struct NativeRGBColor { 
+        unsigned short red;
+        unsigned short green;
+        unsigned short blue;
+};
+struct NativeColorSpec {
+        INTEGER value;
+        NativeRGBColor rgb;
+};    
 
 typedef ColorSpec cSpecArray[1];	/* can't use 0 */
 
@@ -399,8 +401,8 @@ typedef Byte *BytePtr;
 #define dkGray		(STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5)) -40)
 #define arrowX		(* (Cursor  *) (STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5))-108))
 #define screenBitsX	(* (BitMap  *) (STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5))-122))
-#define randSeed	CL(* (LONGINT *) (STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5))-126))
-#define randSeedX	((* (LONGINT *) (STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5))-126)))
+#define randSeed	CL(* (GUEST<LONGINT> *) (STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5))-126))
+#define randSeedX	((* (GUEST<LONGINT> *) (STARH((GUEST<BytePtr> *)(long) SYN68K_TO_US(a5))-126)))
 
 #if 0
 extern GUEST<LONGINT> RndSeed_L;

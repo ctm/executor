@@ -115,8 +115,8 @@ P9(PUBLIC pascal trap, ListHandle,  LNew, Rect *, rview,	/* IMIV-270 */
     INTEGER *ip;
     Rect r;
     int i;
-    DataHandle tempdatah;
-    Handle temph;
+    GUEST<DataHandle> tempdatah;
+    GUEST<Handle> temph;
     LISTDECL();
 
     noffs = (CW(bounds->right) - CW(bounds->left)) *
@@ -181,7 +181,7 @@ P9(PUBLIC pascal trap, ListHandle,  LNew, Rect *, rview,	/* IMIV-270 */
 	ROMlib_vminmax(&min, &max, lp);
 	lp->vScroll = RM(NewControl((WindowPtr) wind, &r, (StringPtr) "",
 	       draw && lp->lActive, min, min, max, scrollBarProc, (LONGINT) 0));
-	STARH(MR(lp->vScroll))->contrlRfCon = (LONGINT) RM(retval);
+	STARH(MR(lp->vScroll))->contrlRfCon = guest_cast<LONGINT>(RM(retval));
 	lp->listFlags |= lDoVAutoscroll;
     }
 
@@ -194,7 +194,7 @@ P9(PUBLIC pascal trap, ListHandle,  LNew, Rect *, rview,	/* IMIV-270 */
 	ROMlib_hminmax(&min, &max, lp);
 	lp->hScroll = RM(NewControl((WindowPtr) wind, &r, (StringPtr) "",
 	       draw && lp->lActive, min, min, max, scrollBarProc, (LONGINT) 0));
-	STARH(MR(lp->hScroll))->contrlRfCon = (LONGINT) RM(retval);
+	STARH(MR(lp->hScroll))->contrlRfCon = guest_cast<LONGINT>(RM(retval));
 	lp->listFlags |= lDoHAutoscroll;
     }
 

@@ -65,7 +65,7 @@ init (ControlHandle ctl)
   POPUP_TITLE_WIDTH (data)   = CTL_MAX (ctl);
   POPUP_FLAGS (data)	     = flags;
   
-  CTL_DATA_X (ctl) = (Handle) RM (data);
+  CTL_DATA_X (ctl) = RM ((Handle) data);
   
   CTL_ACTION_X (ctl) = guest_cast<ProcPtr>( CLC (-1) );
   CTL_VALUE_X (ctl) = CWC (1);

@@ -118,7 +118,7 @@ PRIVATE OSErr readvolumebitmap(HVCB *vcbp, volumeinfoPtr vp)
 
 PRIVATE OSErr initcache(HVCB *vcbp)
 {
-    THz savezone;
+    GUEST<THz> savezone;
     cachehead *headp;
     cacheentry *cachep;
     INTEGER align;
@@ -355,7 +355,7 @@ Executor::ROMlib_dqbydrive (short vrefnum)
 {
   DrvQEl *dp;
   DrvQExtra *retval;
-  short swapped_vrefnum;
+  GUEST<INTEGER> swapped_vrefnum;
 
   swapped_vrefnum = CW (vrefnum);
   retval = 0;
@@ -479,7 +479,7 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
     volumeinfoPtr vip;
     BOOLEAN alreadythere;
     ULONGINT nblocks;
-    THz saveZone;
+    GUEST<THz> saveZone;
     
     warning_fs_log ("floppyfd = 0x%x, offset = %d, bsize = %d, maxbytes = %d "
 		    "flags = 0x%x", floppyfd, offset, bsize, maxbytes, flags);
@@ -504,7 +504,7 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
 		for (vcbp2 = (HVCB *) MR(VCBQHdr.qHead); vcbp2;
 					     vcbp2 = (HVCB *) MR(vcbp2->qLink))
 		    if (EqualString(vcbp2->vcbVN, vip->drVN, TRUE, TRUE)
-						    && vcbp2->vcbDrvNum == 0) {
+						    && vcbp2->vcbDrvNum == CWC(0)) {
 #if 1
 			vcbp2->vcbBufAdr = vcbp->vcbBufAdr;
 			vcbp2->vcbMAdr   = vcbp->vcbMAdr;
@@ -600,7 +600,7 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
     PBRETURN((VolumeParam *) pb, err);
 }
 
-PRIVATE void goofyclip(unsigned short *up)
+PRIVATE void goofyclip(GUEST<uint16_t> *up)
 {
     if (CW(*up) > 0x7C00)   /* IMIV-130 */
 	*up = CWC (0x7C00);
@@ -645,9 +645,10 @@ PRIVATE unsigned short getnmfls(HVCB *vcbp, INTEGER workingdirnum)
 	key.ckrParID = Cx(thp->thdParID);
 	str255assign(key.ckrCName, thp->thdCName);
 	key.ckrKeyLen = sizeof(LONGINT) + 2 + key.ckrCName[0];
-	err = ROMlib_keyfind(&btparamrec);
+        err = ROMlib_keyfind(&btparamrec);
+        #warning autc04: This does not seem right. Added .raw() here to preserve original executor behavior.
 	if (err == noErr && btparamrec.success)
-	    retval = ((directoryrec *)DATAPFROMKEY(btparamrec.foundp))->dirVal;
+	    retval = ((directoryrec *)DATAPFROMKEY(btparamrec.foundp))->dirVal.raw();
 	else
 	    retval = 0;
     } else
@@ -665,7 +666,7 @@ PRIVATE OSErr commonGetVInfo(HVolumeParam *pb, BOOLEAN async, fstype fs)
 	vcbp = (HVCB *) ROMlib_indexqueue(&VCBQHdr, Cx(pb->ioVolIndex));
 	workingdirnum = 0;
     } else {
-	if (pb->ioVolIndex == 0)
+	if (pb->ioVolIndex == CWC(0))
 	    vcbp = (HVCB *) ROMlib_findvcb(Cx(pb->ioVRefNum), (StringPtr) 0,
 							 (LONGINT *) 0, FALSE);
 	else /* if (Cx(pb->ioVolIndex) < 0) */
@@ -700,8 +701,8 @@ PRIVATE OSErr commonGetVInfo(HVolumeParam *pb, BOOLEAN async, fstype fs)
 	((VolumeParam *) pb)->ioVBlLn = 0;
 	if (!workingdirnum)
 	    pb->ioVRefNum = vcbp->vcbVRefNum;
-	goofyclip((unsigned short *) &pb->ioVNmAlBlks);
-	goofyclip((unsigned short *) &pb->ioVFrBlk);
+	goofyclip((GUEST<uint16_t> *) &pb->ioVNmAlBlks);
+	goofyclip((GUEST<uint16_t> *) &pb->ioVFrBlk);
 	break;
     case hfs:
 	pb->ioVLsMod = vcbp->vcbLsMod;
@@ -795,7 +796,7 @@ PUBLIC OSErr Executor::hfsPBGetVol(ParmBlkPtr pb, BOOLEAN async)
     PBRETURN((VolumeParam *) pb, err);
 }
 
-PUBLIC LONGINT Executor::DefDirID = CLC(2);
+PUBLIC GUEST<LONGINT> Executor::DefDirID = CLC(2);
 
 PUBLIC OSErr Executor::hfsPBHGetVol(WDPBPtr pb, BOOLEAN async)
 {
@@ -829,10 +830,12 @@ PUBLIC OSErr Executor::hfsPBHGetVol(WDPBPtr pb, BOOLEAN async)
 PRIVATE OSErr setvolhelper(VolumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
 							  BOOLEAN convertzeros)
 {
-    HVCB *vcbp, *newDefVCBPtr;
+    HVCB *vcbp;
+    GUEST<HVCB *> newDefVCBPtr;
     OSErr err, err1;
-    LONGINT newdir, newDefDirID;
-    INTEGER newDefVRefNum;
+    LONGINT newdir;
+    GUEST<LONGINT> newDefDirID;
+    GUEST<INTEGER> newDefVRefNum;
     CInfoPBRec cpb;
 
 /*
@@ -887,7 +890,7 @@ PRIVATE OSErr setvolhelper(VolumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
 		    else
 			newDefDirID = cpb.hFileInfo.ioFlParID;
 		  }
-	    } while (err1 && cpb.hFileInfo.ioDirID == 0 &&
+	    } while (err1 && cpb.hFileInfo.ioDirID == CLC(0) &&
 					     (cpb.hFileInfo.ioDirID = CLC(2)));
 	}
 	if (newDefDirID)
@@ -930,7 +933,7 @@ PRIVATE void closeallvcbfiles(HVCB *vcbp)
     IOParam iopb;
     short length;
     
-    length = CW(*(short *)MR(FCBSPtr));
+    length = CW(*(GUEST<INTEGER> *)MR(FCBSPtr));
     fcbp = (filecontrolblock *) ((short *)MR(FCBSPtr)+1);
     efcbp = (filecontrolblock *) ((char *)MR(FCBSPtr) + length);
     for (;fcbp < efcbp; fcbp = (filecontrolblock *) ((char *)fcbp + Cx(FSFCBLen)))
@@ -1057,7 +1060,7 @@ PUBLIC OSErr Executor::ROMlib_pbvolrename(IOParam *pb, StringPtr newnamep)
     Str255 name_copy;
     
     str255assign (name_copy, MR (pb->ioNamePtr));
-    hpb.volumeParam.ioNamePtr = (StringPtr) CL ((long) name_copy);
+    hpb.volumeParam.ioNamePtr = RM(name_copy);
     hpb.volumeParam.ioVRefNum = pb->ioVRefNum;
     hpb.volumeParam.ioVolIndex = CWC(-1);
     err = /* my */PBHGetVInfo((HParmBlkPtr) &hpb, FALSE);

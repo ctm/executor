@@ -54,11 +54,11 @@ P3(PUBLIC pascal trap, INTEGER, LAddColumn, INTEGER, count,	/* IMIV-271 */
 	    ip -= nafter;
 	    op -= nafter;
 	    BlockMove(ip, op, nafter);
-	    offset = CW(*(INTEGER *)op) & 0x7FFF;
+	    offset = CW(*(GUEST<INTEGER> *)op) & 0x7FFF;
 	    for (i = 0; ++i <= count; )
 	      {
 		op -= sizeof(INTEGER);
-		*(INTEGER *)op = CW(offset);
+		*(GUEST<INTEGER> *)op = CW(offset);
 	      }
 	    ip -= nbefore;
 	    op -= nbefore;
@@ -167,7 +167,7 @@ P3(PUBLIC pascal trap, void, LDelColumn, INTEGER, count,	/* IMIV-271 */
     Cell c;
     INTEGER ncols, nrows, noffsets, delta;
     Size nbefore, nafter, ntomove;
-    unsigned short int *ip, *op;	/* unsigned INTEGER */
+    GUEST<uint16_t> *ip, *op;	/* unsigned INTEGER */
     Ptr dataip, dataop;
     INTEGER off1, off2, off3, off4, off5;
     int i;
@@ -211,7 +211,7 @@ P3(PUBLIC pascal trap, void, LDelColumn, INTEGER, count,	/* IMIV-271 */
 	ncols = Hx(list, dataBounds.right) - Hx(list, dataBounds.left);
 	nbefore = (coln - Hx(list, dataBounds.left));
 	nafter  = ncols - nbefore;
-	ip = op = (unsigned short int *) HxX(list, cellArray);
+	ip = op = (GUEST<uint16_t> *) HxX(list, cellArray);
 	dataip = dataop = (Ptr) STARH(HxP(list, cells));
 	delta = 0;
 	/* SPEEDUP:  partial loop unrolling ... combine things and don't
@@ -304,7 +304,7 @@ P3(PUBLIC pascal trap, void, LDelRow, INTEGER, count,		/* IMIV-272 */
     Cell c;
     INTEGER ncols, nrows, noffsets;
     Size nbefore, nafter;
-    unsigned short int *ip, *op;
+    GUEST<uint16_t> *ip, *op;
     ControlHandle control;
     INTEGER off1, off2, off3;
     Size delta, ntomove;
@@ -345,7 +345,7 @@ P3(PUBLIC pascal trap, void, LDelRow, INTEGER, count,		/* IMIV-272 */
 	nrows = Hx(list, dataBounds.bottom) - Hx(list, dataBounds.top);
 	nbefore = (rown - Hx(list, dataBounds.top)) * ncols;
 	nafter  = nrows * ncols  - nbefore;
-	ip = op = (unsigned short int *) HxX(list, cellArray) + nbefore;
+	ip = op = (GUEST<uint16_t> *) HxX(list, cellArray) + nbefore;
 	ip += noffsets;
 	off1 = CW(*op) & 0x7FFF;
 	off2 = CW(*ip) & 0x7FFF;

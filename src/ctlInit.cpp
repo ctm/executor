@@ -34,7 +34,7 @@ P9(PUBLIC pascal trap, ControlHandle, NewControl, WindowPtr, wst, Rect *, r,
     ControlHandle retval;
     GrafPtr gp;
     AuxCtlHandle tmp, auxctlhead;
-    Handle temph;
+    GUEST<Handle> temph;
     
     retval = (ControlHandle) NewHandle((Size) sizeof(ControlRecord));
     temph = RM(GetResource(TICK("CDEF"), procid>>4));
@@ -68,7 +68,7 @@ P9(PUBLIC pascal trap, ControlHandle, NewControl, WindowPtr, wst, Rect *, r,
       (auxctlhead,
        acNext, RM (tmp),
        acOwner, RM (retval),
-       acCTable, (CCTabHandle) RM (GetResource (TICK("cctb"), 0)),
+       acCTable, RM ((CCTabHandle) GetResource (TICK("cctb"), 0)),
        acFlags, CW (procid & 0x0F),
        acReserved, CLC (0),
        acRefCon, CLC (0));
@@ -77,7 +77,7 @@ P9(PUBLIC pascal trap, ControlHandle, NewControl, WindowPtr, wst, Rect *, r,
     if (!HxX(auxctlhead, acCTable))
       {
 	warning_unexpected ("no 'cctb', 0, probably old system file ");
-	HxX(auxctlhead, acCTable) = (CCTabHandle) RM (default_ctl_ctab);
+	HxX(auxctlhead, acCTable) = RM ((CCTabHandle)default_ctl_ctab);
       }
 
     HASSIGN_11
@@ -128,7 +128,7 @@ P2(PUBLIC pascal trap, ControlHandle, GetNewControl,		/* IMI-321 */
 	    (StringPtr) ((char *) &HxX(wh, _crect) + 22),	/* _ctitle */
             Hx(wh, _cvisible) ? 255 : 0, Hx(wh, _cvalue), Hx(wh, _cmin),
 	    Hx(wh, _cmax), Hx(wh, _cprocid),
-	    CL(*(LONGINT *)((char *)&HxX(wh, _crect) + 18)));	/* _crefcon */
+	    CL(*(GUEST<LONGINT> *)((char *)&HxX(wh, _crect) + 18)));	/* _crefcon */
     if (ctab_res_h)
       SetCtlColor (retval, (CCTabHandle) ctab_res_h);
     return retval;

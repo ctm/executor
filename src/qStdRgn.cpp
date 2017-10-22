@@ -75,7 +75,7 @@ Executor::ROMlib_blt_rgn_update_dirty_rect
 	  row_bytes = BITMAP_ROWBYTES (new_src_pm);
 	  baseaddr_size = row_bytes * height;
 	  TEMP_ALLOC_ALLOCATE (new_bits, temp_alloc_space, baseaddr_size);
-	  new_src_pm->baseAddr = (Ptr) RM (new_bits);
+	  new_src_pm->baseAddr = RM ((Ptr) new_bits);
 
 	  s = (uint8 *) MR (src_pm->baseAddr);
 	  d = new_bits;
@@ -133,7 +133,7 @@ Executor::ROMlib_blt_rgn_update_dirty_rect
       new_src_pm->rowBytes = CW (row_bytes);
       TEMP_ALLOC_ALLOCATE (new_bits, temp_alloc_space,
 			   row_bytes * bbox_height);
-      new_src_pm->baseAddr = (Ptr) RM (new_bits);
+      new_src_pm->baseAddr = RM ((Ptr) new_bits);
       
       pixmap_set_pixel_fields (new_src_pm, bpp);
 
@@ -421,7 +421,7 @@ blt_pixpat_to_pixmap_simple_mode (RgnHandle rh, INTEGER mode,
 	       warning_unexpected ("xdata handle NULL_STRING");
 	       xh = (xdata_handle_t) NewHandle (sizeof (xdata_t));
 	       HxX (xh, raw_pat_bits_mem) = (Ptr)RM (NULL);
-	       src->patXData = (Handle) RM (xh);
+	       src->patXData = RM ((Handle) xh);
 	       xdata_valid_p = FALSE;
 	       handle_size_wrong_p = FALSE;
 	     }
@@ -546,9 +546,9 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
   pattern_pm.bounds.right  = CW ((x->row_bytes << (5 - x->log2_bpp)) >> 2);
   pattern_pm.rowBytes = CW (x->row_bytes);
   if (x->pat_bits)
-    pattern_pm.baseAddr = (Ptr) RM (x->pat_bits);
+    pattern_pm.baseAddr = RM ((Ptr) x->pat_bits);
   else
-    pattern_pm.baseAddr = (Ptr) RM (&x->pat_value);
+    pattern_pm.baseAddr = RM ((Ptr) &x->pat_value);
   
   pixmap_set_pixel_fields (&pattern_pm, 1 << x->log2_bpp);
   pattern_pm.pmTable = RM (ROMlib_dont_depthconv_ctab);
@@ -586,7 +586,7 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
   converted_pm.rowBytes = CW (row_bytes);
   TEMP_ALLOC_ALLOCATE (new_bits, temp_alloc_space,
 		       row_bytes * RECT_HEIGHT (&bbox));
-  converted_pm.baseAddr = (Ptr) RM (new_bits);
+  converted_pm.baseAddr = RM ((Ptr) new_bits);
 
   pixmap_set_pixel_fields (&converted_pm, 1 << log2_bpp);
   converted_pm.pmTable = RM (ROMlib_dont_depthconv_ctab);

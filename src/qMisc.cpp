@@ -160,8 +160,9 @@ P3(PUBLIC pascal trap, void, MapRect, Rect *, r, Rect *, srcr, Rect *, dstr)
 
 P3(PUBLIC pascal trap, void, MapRgn, RgnHandle, rh, Rect *, srcr, Rect *, dstr)
 {
-    INTEGER *ip, *op, oldv, newv, *tempp, srcdh, dstdh, srcdv, dstdv;
-    INTEGER xoff1, xoff2, yoff1, yoff2, *saveop, x1, x2;
+    GUEST<INTEGER> *ip, *op, *saveop;
+    INTEGER oldv, newv, *tempp, srcdh, dstdh, srcdv, dstdv;
+    INTEGER xoff1, xoff2, yoff1, yoff2, x1, x2;
     Fixed xcoff, ycoff;
     INTEGER buf1[1000], buf2[1000], *mergebuf, *freebuf, *ipe;
     LONGINT hold;
@@ -180,7 +181,7 @@ P3(PUBLIC pascal trap, void, MapRgn, RgnHandle, rh, Rect *, srcr, Rect *, dstr)
 	    dstdv = CW(dstr->bottom) - (yoff2 = CW(dstr->top) );
 	    xcoff = FixRatio(dstdh, srcdh);
 	    ycoff = FixRatio(dstdv, srcdv);
-	    ip = op = (INTEGER *) STARH(rh) + 5;
+	    ip = op = (GUEST<INTEGER> *) STARH(rh) + 5;
 	    oldv = -32768;
 	    buf1[0] = 32767;
 	    mergebuf = buf1;

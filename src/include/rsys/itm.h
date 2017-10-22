@@ -26,7 +26,7 @@ typedef GUEST<itmp> *itmh;
     + ((HxX (dlogh, dlglen) + 2) & ~1)		\
     + 2) == GetHandleSize ((Handle) (dlogh)))
 #define DIALOG_RES_POSITION_X(dlogh)			\
-  (*(int16 *) ((char *) &HxX (dlogh, dlglen)		\
+  (*(GUEST<int16> *) ((char *) &HxX (dlogh, dlglen)		\
 	       + ((HxX (dlogh, dlglen) + 2) & ~1)))
 
 #define DIALOG_RES_POSITION(dlog)			\
@@ -37,7 +37,7 @@ typedef GUEST<itmp> *itmh;
   ((sizeof (altstr) + 2) == GetHandleSize ((Handle) (alerth)))
 
 #define ALERT_RES_POSITION_X(alerth)		\
-  (*(int16 *) ((char *) &HxX (alerth, altstag) + 2))
+  (*(GUEST<int16> *) ((char *) &HxX (alerth, altstag) + 2))
 #define ALERT_RES_POSITION(alerth)		\
   CW (ALERT_RES_POSITION_X (alerth))
 
@@ -118,7 +118,7 @@ extern void dialog_draw_item (DialogPtr dp, itmp itemp, int itemno);
 #define ITEM_LEN(itemp)		\
   ((sizeof *(itemp) + (itemp)->itmlen + 1) & ~1)
 #define ITEM_DATA(itemp)	\
-  ((int16 *) ((itemp) + 1))
+  ((GUEST<INTEGER> *) ((itemp) + 1))
 
 #define BUMPIP(ip)					\
   ((void)						\

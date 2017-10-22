@@ -1434,7 +1434,7 @@ void Executor::NeXTPrBits(comBitMap *srcbmp, comRect *srcrp, comRect *dstrp,
       scalex = dstwidth / srcwidth;
       scaley = dstheight / srcheight;
       
-      if (srcbmp->rowBytes & CWC(0x8000))
+      if (CW(srcbmp->rowBytes) & 0x8000)
 	{
 	  srcpmp = (comPixMap *) srcbmp;
 	  pixelsize = CW(srcpmp->pixelSize);
@@ -1524,7 +1524,7 @@ void Executor::NeXTPrBits(comBitMap *srcbmp, comRect *srcrp, comRect *dstrp,
 	  GUEST<PixMapPtr> pxp;
 	  boolean_t has_warned_p;
 
-	  pxp = (Executor::PixMapPtr) RM (srcpmp);
+	  pxp =  RM ((Executor::PixMapPtr)srcpmp);
 	  DPSPrintf (DPSGetCurrentContext (),
 		     "[/Indexed /DeviceRGB %d <\n", (1 << pixelsize) - 1);
 

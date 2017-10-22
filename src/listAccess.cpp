@@ -24,7 +24,7 @@ P4(PUBLIC pascal trap, void, LFind, GUEST<INTEGER> *, offsetp,		/* IMIV-274 */
     GUEST<INTEGER> *ip;
 
     if ((ip = ROMlib_getoffp(cell, list))) {
-	*offsetp =  *ip++ & CWC(0x7FFF);
+	*offsetp =  CW(*ip++) & 0x7FFF;
 	*lenp    = CW((CW(*ip)   & 0x7FFF) - CW(*offsetp));
     } else
 	*offsetp = *lenp = CWC(-1);

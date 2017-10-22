@@ -85,13 +85,13 @@ A2(PUBLIC, OSErr, ufsPBGetFCBInfo, FCBPBPtr, pb,	/* INTERNAL */
 #endif /* LETGCCWAIL */
 
     err = noErr;
-    if (pb->ioFCBIndx == 0) {
+    if (pb->ioFCBIndx == CWC(0)) {
 	rn = Cx(pb->ioRefNum);
 	fp = PRNTOFPERR(rn, &err);
     } else if (Cx(pb->ioFCBIndx) > 0) {
 	for (count = 0, i = 0; i < NFCB && count < Cx(pb->ioFCBIndx); i++)
 	    if (ROMlib_fcblocks[i].fdfnum && (!pb->ioVRefNum ||
-		       ROMlib_fcblocks[i].fcvptr->vcbVRefNum == pb->ioVRefNum))
+		       MR(ROMlib_fcblocks[i].fcvptr)->vcbVRefNum == pb->ioVRefNum))
 		count++;
 	if (count == Cx(pb->ioFCBIndx)) {
 	    fp = ROMlib_fcblocks+i-1;
@@ -180,7 +180,7 @@ Executor::ROMlib_addtodq (ULONGINT drvsize, const char *devicename, INTEGER part
     DrvQExtra *dqp;
     DrvQEl *dp;
     int strl;
-    THz saveZone;
+    GUEST<THz> saveZone;
     static boolean_t seen_floppy = FALSE;
 
     saveZone = TheZone;
@@ -718,7 +718,7 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
     INTEGER wdlen;
     HVCB *vcbp;
     GUEST<LONGINT> m;
-    THz savezone;
+    GUEST<THz> savezone;
     struct stat sbuf;
     char *sysname;
     int sysnamelen;
@@ -850,7 +850,7 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
     WDCBsPtr = RM(NewPtr((Size) wdlen));
     TheZone = savezone;
     memset (MR(WDCBsPtr), 0, wdlen);
-    *(INTEGER *)MR(WDCBsPtr) = CW(wdlen);
+    *(GUEST<INTEGER> *)MR(WDCBsPtr) = CW(wdlen);
 
     ROMlib_ConfigurationFolder = copystr(getenv(CONFIGURATIONFOLDER));
     ROMlib_SystemFolder        = copystr(getenv(SYSTEMFOLDER));
@@ -1002,7 +1002,7 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
 	sysname = (char*)alloca(sysnamelen);
 	*sysname = sysnamelen - 2;	/* don't count first byte or nul */
 	sprintf(sysname+1, "%s:%s", ROMlib_SystemFolder, SYSMACNAME+1);
-	cpb.hFileInfo.ioNamePtr   = (StringPtr) RM(sysname);
+	cpb.hFileInfo.ioNamePtr   = RM((StringPtr)sysname);
 	cpb.hFileInfo.ioVRefNum   = 0;
 	cpb.hFileInfo.ioDirID     = 0;
     }
@@ -1166,7 +1166,7 @@ Executor::PRNTOFPERR (INTEGER prn, OSErr *errp)
   fcbrec *retval;
   OSErr err;
 
-  if (prn < 0 || prn >= CW(*(short *)MR(FCBSPtr)) || (prn % 94) != 2) {
+  if (prn < 0 || prn >= CW(*(GUEST<INTEGER> *)MR(FCBSPtr)) || (prn % 94) != 2) {
     retval = 0;
     err = rfNumErr;
   } else {
