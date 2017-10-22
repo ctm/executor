@@ -71,7 +71,8 @@ list_sources = listAccess.cpp listAddDel.cpp listCreate.cpp listDisplay.cpp \
 
 menu_sources = menu.cpp menuColor.cpp menuV.cpp stdmdef.cpp stdmbdf.cpp
 
-print_sources = PSprint.cpp PSstrings.cpp prError.cpp prInit.cpp prLowLevel.cpp \
+# PSprint.cpp 
+print_sources = PSstrings.cpp prError.cpp prInit.cpp prLowLevel.cpp \
                 prPrinting.cpp prRecords.cpp
 
 qd_sources = qBit.cpp qCConv.cpp qCGrafPort.cpp qCRegular.cpp qColor.cpp qColorMgr.cpp    \
