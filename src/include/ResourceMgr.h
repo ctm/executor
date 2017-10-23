@@ -89,9 +89,9 @@ extern LONGINT ROMlib_SizeResource( Handle res, BOOLEAN usehandle );
 extern pascal trap LONGINT C_SizeResource( Handle res ); extern pascal trap LONGINT P_SizeResource( Handle res); 
 extern pascal trap INTEGER C_CountTypes( void  ); extern pascal trap INTEGER P_CountTypes( void ); 
 extern pascal trap INTEGER C_Count1Types( void  ); extern pascal trap INTEGER P_Count1Types( void ); 
-extern pascal trap void C_GetIndType( ResType *typ, INTEGER indx ); extern pascal trap void P_GetIndType( ResType *typ, INTEGER indx); 
-extern pascal trap void C_Get1IndType( ResType *typ, 
- INTEGER indx ); extern pascal trap void P_Get1IndType( ResType *typ, 
+extern pascal trap void C_GetIndType( GUEST<ResType> *typ, INTEGER indx ); extern pascal trap void P_GetIndType( GUEST<ResType> *typ, INTEGER indx); 
+extern pascal trap void C_Get1IndType( GUEST<ResType> *typ, 
+ INTEGER indx ); extern pascal trap void P_Get1IndType( GUEST<ResType> *typ, 
  INTEGER indx ); 
 extern pascal trap LONGINT C_MaxSizeRsrc( Handle h ); extern pascal trap LONGINT P_MaxSizeRsrc( Handle h); 
 extern pascal trap LONGINT C_RsrcMapEntry( Handle h ); extern pascal trap LONGINT P_RsrcMapEntry( Handle h); 

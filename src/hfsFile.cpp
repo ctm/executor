@@ -389,6 +389,7 @@ PRIVATE BOOLEAN fillextent(xtntdesc *xp, ULONGINT *nallocneededp, HVCB *vcbp,
 		    tmpxtnt[1].blockstart = CW(search);
 		}
 	    } else if (nfree > CW(tmpxtnt[2].blockcount)) {
+                    #warning autc04: ^CW added above
 		tmpxtnt[2].blockcount = CW(nfree);
 		tmpxtnt[2].blockstart = CW(search);
 	    }

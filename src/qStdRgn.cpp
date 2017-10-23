@@ -209,7 +209,7 @@ Executor::ROMlib_blt_rgn_update_dirty_rect
   update_dirty_p = srcblt_rgn (rh, mode, ROMlib_log2[bpp],
 			       (blt_bitmap_t *) src_pm,
 			       (blt_bitmap_t *) dst_pm,
-			       (Point *) src_rect, (Point *) dst_rect,
+			       (GUEST<Point> *) src_rect, (GUEST<Point> *) dst_rect,
 			       fg_color, bk_color);
   
   /* if drawing to the screen, update the dirty rect (or copy the
@@ -628,7 +628,7 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
     pixmap_black_white (pixmap, &fg, &bk);
     srcblt_rgn (rh, srcCopy, log2_bpp,
 		(blt_bitmap_t *) &converted_pm, (blt_bitmap_t *) pixmap,
-		(Point *) &bbox, (Point *) &bbox,
+		(GUEST<Point> *) &bbox, (GUEST<Point> *) &bbox,
 		fg, bk);
   }
 

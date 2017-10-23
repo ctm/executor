@@ -128,7 +128,7 @@ delete_gw_info (gw_info_t *gw_info)
 }
 
 P6 (PUBLIC pascal trap, QDErr, NewGWorld,
-    GWorldPtr *, graphics_world_out,
+    GUEST<GWorldPtr> *, graphics_world_out,
     INTEGER, depth,
     Rect *, bounds,
     CTabHandle, ctab,
@@ -137,7 +137,7 @@ P6 (PUBLIC pascal trap, QDErr, NewGWorld,
 {
   PixMapHandle gw_pixmap, gd_pixmap;
   GWorldPtr graphics_world;
-  GrafPtr save_portX;
+  GUEST<GrafPtr> save_portX;
   int gd_allocated_p = FALSE;
 
   save_portX = thePortX;
@@ -196,7 +196,7 @@ P6 (PUBLIC pascal trap, QDErr, NewGWorld,
       if (MemError () != noErr)
 	return MemError ();
       
-      PIXMAP_BASEADDR_X (gd_pixmap) = (Ptr) RM (gd_pixmap_baseaddr);
+      PIXMAP_BASEADDR_X (gd_pixmap) = RM ((Ptr) gd_pixmap_baseaddr);
       
       PIXMAP_BOUNDS (gd_pixmap) = *bounds;
       if (depth > 8)
@@ -283,7 +283,7 @@ P6 (PUBLIC pascal trap, QDErr, NewGWorld,
 		allocation fails */
 	     gw_pixmap_baseaddr = NewHandle (0);
 	   PIXMAP_BASEADDR_X (gw_pixmap)
-	     = (Ptr) RM (gw_pixmap_baseaddr);
+	     = RM ((Ptr) gw_pixmap_baseaddr);
 	   
 	   PORT_RECT (graphics_world) = PIXMAP_BOUNDS (gw_pixmap) = *bounds;
 	 }
@@ -359,7 +359,7 @@ P1 (PUBLIC pascal trap, void, UnlockPixels,
 	  pixels_baseaddr_h = RecoverHandle (pixels_baseaddr);
 	  HSetState (pixels_baseaddr_h,
 		     HGetState (pixels_baseaddr_h) & ~LOCKBIT);
-	  PIXMAP_BASEADDR_X (pixels) = (Ptr) RM (pixels_baseaddr_h);
+	  PIXMAP_BASEADDR_X (pixels) = RM ((Ptr)pixels_baseaddr_h);
 
 	  HSetState ((Handle) pixels, HGetState ((Handle) pixels) & ~LOCKBIT);
 	}
@@ -368,7 +368,7 @@ P1 (PUBLIC pascal trap, void, UnlockPixels,
 
 
 P6 (PUBLIC pascal trap, GWorldFlags, UpdateGWorld,
-    GWorldPtr *, graphics_world,
+    GUEST<GWorldPtr> *, graphics_world,
     INTEGER, depth,
     Rect *, bounds,
     CTabHandle, ctab,
@@ -437,7 +437,8 @@ P6 (PUBLIC pascal trap, GWorldFlags, UpdateGWorld,
     }
   if (retval & (mapPix | newDepth | clipPix | stretchPix | reallocPix))
     {
-      GWorldPtr gw_ret, gw_ret_x;
+      GWorldPtr gw_ret;
+      GUEST<GWorldPtr> gw_ret_x;
       PixMapHandle gw_pmap_ret;
       gw_info_t *gw_info_ret;
       Rect src_rect, dst_rect;
@@ -550,8 +551,8 @@ P1 (PUBLIC pascal trap, void, DisposeGWorld,
 
 
 P2 (PUBLIC pascal trap, void, GetGWorld,
-    CGrafPtr *, port,
-    GDHandle *, graphics_device)
+    GUEST<CGrafPtr> *, port,
+    GUEST<GDHandle> *, graphics_device)
 {
   *port = theCPortX;
   *graphics_device = TheGDevice;
@@ -692,15 +693,15 @@ P1 (PUBLIC pascal trap, Ptr, GetPixBaseAddr,
 P4 (PUBLIC pascal trap, QDErr, NewScreenBuffer,
     Rect *, global_rect,
     Boolean, purgeable_p,
-    GDHandle *, graphics_device,
-    PixMapHandle *, offscreen_pixmap)
+    GUEST<GDHandle> *, graphics_device,
+    GUEST<PixMapHandle> *, offscreen_pixmap)
 {
   GDHandle max_graphics_device;
   PixMapHandle pixels, gd_pixmap;
   int width, height;
   short rowbytes;
   int bpp;
-  Ptr p;
+  GUEST<Ptr> p;
   
   max_graphics_device = GetMaxDevice (global_rect);
   gd_pixmap = GD_PMAP (max_graphics_device);
@@ -730,7 +731,7 @@ P4 (PUBLIC pascal trap, QDErr, NewScreenBuffer,
   
   /* an unlocked pixel map for a graphics world contains a handle to
      the pixel data; not a pointer */
-  p = (Ptr) RM (NewPtr (rowbytes * height));
+  p = RM ((Ptr)NewPtr (rowbytes * height));
   
   if (p == NULL)
     {
@@ -811,8 +812,8 @@ P1 (PUBLIC pascal trap, PixMapHandle, GetGWorldPixMap,
 P4 (PUBLIC pascal trap, QDErr, NewTempScreenBuffer,
     Rect *, global_rect,
     Boolean, purgeable_p,
-    GDHandle *, graphics_device,
-    PixMapHandle *, offscreen_pixmap)
+    GUEST<GDHandle> *, graphics_device,
+    GUEST<PixMapHandle> *, offscreen_pixmap)
 {
   gui_fatal ("unimplemented");
 #if !defined (LETGCCWAIL)

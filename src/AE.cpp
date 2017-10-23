@@ -54,27 +54,29 @@ P3 (PUBLIC pascal, OSErr, EventHandlerTemplate,
 P1 (PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
     EventRecord *, evtrec)
 {
-  AEEventID event_id;
-  AEEventClass event_class;
-  DescType dummy_type;
-  Size dummy_size;
-  TargetID dummy_target_id;
+  GUEST<AEEventID> event_id_s;
+  GUEST<AEEventClass> event_class_s;
+  GUEST<DescType> dummy_type;
+  GUEST<Size> dummy_size;
+  GUEST<TargetID> dummy_target_id;
   
   AppleEvent *evt = (AppleEvent*)alloca (sizeof *evt);
   
+  GUEST<EventHandlerProcPtr> hdlr_s;
   EventHandlerProcPtr hdlr;
   Handle evt_data;
-  Size evt_data_size;
-  int32 refcon, dummy_refcon;
+  GUEST<Size> evt_data_size;
+  GUEST<int32> refcon_s;
+  GUEST<int32> dummy_refcon;
   
   OSErr err;
   OSErr retval;
 
   /* our current buffer is empty */
-  evt_data_size = 0;
+  evt_data_size = CLC(0);
   err = AcceptHighLevelEvent (&dummy_target_id,
 			      &dummy_refcon,
-			      NULL, &evt_data_size);
+			      nullptr, &evt_data_size);
   if (err != bufferIsSmall)
     AE_RETURN_ERROR (errAEEventNotHandled);
   
@@ -101,37 +103,37 @@ P1 (PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
   
   err = AEGetAttributePtr (evt, keyEventClassAttr,
 			   typeType, &dummy_type,
-			   (Ptr) &event_class, sizeof event_class,
+			   (Ptr) &event_class_s, sizeof event_class_s,
 			   &dummy_size);
   if (err != noErr)
     {
       AEDisposeDesc (evt);
       AE_RETURN_ERROR (err);
     }
-  event_class = CL (event_class);
+  AEEventClass event_class = CL (event_class_s);
   
   err = AEGetAttributePtr (evt, keyEventIDAttr,
 			   typeType, &dummy_type,
-			   (Ptr) &event_id, sizeof event_id, &dummy_size);
+			   (Ptr) &event_id_s, sizeof event_id_s, &dummy_size);
   if (err != noErr)
     {
       AEDisposeDesc (evt);
       AE_RETURN_ERROR (err);
     }
-  event_id = CL (event_id);
+  AEEventID event_id = CL (event_id_s);
   
-  err = AEGetEventHandler (event_class, event_id, &hdlr, &refcon, FALSE);
+  err = AEGetEventHandler (event_class, event_id, &hdlr_s, &refcon_s, FALSE);
   if (err != noErr)
     {
-      err = AEGetEventHandler (event_class, event_id, &hdlr, &refcon, TRUE);
+      err = AEGetEventHandler (event_class, event_id, &hdlr_s, &refcon_s, TRUE);
       if (err != noErr)
 	{
 	  AEDisposeDesc (evt);
 	  AE_RETURN_ERROR (err);
 	}
     }
-  hdlr = MR (hdlr);
-  refcon = CL (refcon);
+  hdlr = MR (hdlr_s);
+  int32 refcon = CL (refcon_s);
   
   {
     AppleEvent *reply = (AppleEvent*)alloca (sizeof *reply);
@@ -166,8 +168,8 @@ P7 (PUBLIC pascal trap, OSErr, AESend,
     int32, timeout, IdleProcPtr, idle_proc, EventFilterProcPtr, filter_proc)
 {
   AEDesc *target = (AEDesc*)alloca (sizeof *target);
-  DescType target_type, dummy_type;
-  Size target_size, dummy_size;
+  GUEST<DescType> target_type_s, dummy_type;
+  GUEST<Size> target_size_s, dummy_size;
   
   ProcessSerialNumber *target_psn  = (ProcessSerialNumber *)alloca (sizeof *target_psn);
   ProcessSerialNumber *current_psn = (ProcessSerialNumber *)alloca (sizeof *current_psn);
@@ -179,14 +181,14 @@ P7 (PUBLIC pascal trap, OSErr, AESend,
   
   GetCurrentProcess (current_psn);
   err = AEGetAttributePtr (evt, keyAddressAttr,
-			   typeWildCard, &target_type,
-			   (Ptr) target_psn, sizeof *target_psn, &target_size);
+			   typeWildCard, &target_type_s,
+			   (Ptr) target_psn, sizeof *target_psn, &target_size_s);
   if (err != noErr)
     /* ### not sure what error we should return here */
     AE_RETURN_ERROR (errAEEventNotHandled);
   
-  target_type = CL (target_type);
-  target_size = CL (target_size);
+  DescType target_type = CL (target_type_s);
+  Size target_size = CL (target_size_s);
   
   if (err != noErr)
     AE_RETURN_ERROR (err);
@@ -319,8 +321,8 @@ P7 (PUBLIC pascal trap, OSErr, AEGetArray,
     AEDescList *, list,
     AEArrayType, array_type,
     AEArrayDataPointer, array_ptr, Size, max_size,
-    DescType *, return_item_type,
-    Size *, return_item_size, int32 *, return_item_count)
+    GUEST<DescType> *, return_item_type,
+    GUEST<Size> *, return_item_size, GUEST<int32> *, return_item_count)
 {
   warning_unimplemented (NULL_STRING);
   AE_RETURN_ERROR (noErr);
@@ -404,8 +406,8 @@ P5 (PUBLIC pascal trap, OSErr, AECoercePtr,
     Ptr, data, Size, data_size,
     DescType, result_type, AEDesc *, desc_out)
 {
-  ProcPtr coercion_hdlr;
-  int32 refcon;
+  GUEST<ProcPtr> coercion_hdlr_s;
+  GUEST<int32> refcon_s;
   Boolean is_desc_hdlr_p;
   OSErr err;
   
@@ -417,13 +419,13 @@ P5 (PUBLIC pascal trap, OSErr, AECoercePtr,
     }
   
   err = AEGetCoercionHandler (data_type, result_type,
-			      &coercion_hdlr, &refcon,
+			      &coercion_hdlr_s, &refcon_s,
 			      &is_desc_hdlr_p,
 			      FALSE);
   if (err != noErr)
     {
       err = AEGetCoercionHandler (data_type, result_type,
-				  &coercion_hdlr, &refcon,
+				  &coercion_hdlr_s, &refcon_s,
 				  &is_desc_hdlr_p,
 				  TRUE);
       if (err != noErr)
@@ -431,8 +433,8 @@ P5 (PUBLIC pascal trap, OSErr, AECoercePtr,
     }
   
   /* swap things to a normal state */
-  coercion_hdlr = MR (coercion_hdlr);
-  refcon = CL (refcon);
+  ProcPtr coercion_hdlr = MR (coercion_hdlr_s);
+  int32 refcon = CL (refcon_s);
   
   if (is_desc_hdlr_p)
     {
@@ -480,9 +482,10 @@ parse_evt (const AppleEvent *evtp, AEDesc *desc_out)
   if (retval == noErr)
     {
       LONGINT n;
+      GUEST<LONGINT> n_s;
 
-      retval = AECountItems (&d, &n);
-      n = CL (n);
+      retval = AECountItems (&d, &n_s);
+      n = CL (n_s);
       if (retval == noErr)
 	{
 	  Handle h;
@@ -500,7 +503,7 @@ parse_evt (const AppleEvent *evtp, AEDesc *desc_out)
 	      for (l = 1; retval == noErr && l <= n; ++l)
 		{
 		  AEDesc d2;
-		  AEKeyword keyword;
+		  GUEST<AEKeyword> keyword;
 
 		  retval = AEGetNthDesc (&d, 1L, typeAlias, &keyword, &d2);
 		  if (retval == noErr)
@@ -529,9 +532,11 @@ parse_evt (const AppleEvent *evtp, AEDesc *desc_out)
 P3 (PUBLIC pascal trap, OSErr, AECoerceDesc,
     AEDesc *, desc, DescType, result_type, AEDesc *, desc_out)
 {
+  GUEST<ProcPtr> coercion_hdlr_s;
+  GUEST<int32> refcon_s;
   ProcPtr coercion_hdlr;
   int32 refcon;
-  Boolean is_desc_hdlr_p;
+  GUEST<Boolean> is_desc_hdlr_p;
   DescType desc_type;
   OSErr err;
   
@@ -551,13 +556,13 @@ P3 (PUBLIC pascal trap, OSErr, AECoerceDesc,
     }
   
   err = AEGetCoercionHandler (desc_type, result_type,
-			      &coercion_hdlr, &refcon,
+			      &coercion_hdlr_s, &refcon_s,
 			      &is_desc_hdlr_p,
 			      FALSE);
   if (err != noErr)
     {
       err = AEGetCoercionHandler (desc_type, result_type,
-				  &coercion_hdlr, &refcon,
+				  &coercion_hdlr_s, &refcon_s,
 				  &is_desc_hdlr_p,
 				  TRUE);
       if (err != noErr)
@@ -565,8 +570,8 @@ P3 (PUBLIC pascal trap, OSErr, AECoerceDesc,
     }
   
   /* swap things to a normal state */
-  coercion_hdlr = MR (coercion_hdlr);
-  refcon = CL (refcon);
+  coercion_hdlr = MR (coercion_hdlr_s);
+  refcon = CL (refcon_s);
 
   if (is_desc_hdlr_p)
     {
@@ -596,15 +601,15 @@ P3 (PUBLIC pascal trap, OSErr, AECoerceDesc,
 
  fail:
   desc_out->descriptorType = CLC (typeNull);
-  desc_out->dataHandle = (Handle)CLC (0);
+  desc_out->dataHandle = nullptr;
   AE_RETURN_ERROR (errAECoercionFail);
 }
 
-P1 (PUBLIC pascal trap, OSErr, AEManagerInfo, LONGINT *, resultp)
+P1 (PUBLIC pascal trap, OSErr, AEManagerInfo, GUEST<LONGINT> *, resultp)
 {
   OSErr retval;
 
-  *resultp = 0;
+  *resultp = CL(0);
   retval = noErr;
 
   return retval;

@@ -47,8 +47,8 @@ typedef GUEST<resmapptr> *resmaphand;
 #define TYPEOFF(map)	Hx(map, typoff)
 #define TYPEOFFX(map)	((STARH(map))->typoff)
 
-#define NUMTMINUS1(map) CW(*(INTEGER *)((char *)STARH(map) + Hx(map, typoff)))
-#define NUMTMINUS1X(map) (*(INTEGER *)((char *)STARH(map) + Hx(map, typoff)))
+#define NUMTMINUS1(map) CW(*(GUEST<INTEGER> *)((char *)STARH(map) + Hx(map, typoff)))
+#define NUMTMINUS1X(map) (*(GUEST<INTEGER> *)((char *)STARH(map) + Hx(map, typoff)))
 
 #define MAPLEN(map)	Hx(map, rh.maplen)
 #define MAPLENX(map)	((STARH(map))->rh.maplen)

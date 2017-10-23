@@ -35,13 +35,13 @@ Executor::HCreateResFile_helper (INTEGER vrefnum, LONGINT parid, Str255 name,
     ROMlib_setreserr(HCreate(vrefnum, parid, name, creator, type)); /* ????
 								       might
 								    be wrong */
-    if (ResErr != noErr && Cx(ResErr) != dupFNErr)
+    if (ResErr != CWC(noErr) && Cx(ResErr) != dupFNErr)
         return;
     ROMlib_setreserr(HOpenRF(vrefnum, parid, name, fsRdWrPerm, &f));
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
         return;
     ROMlib_setreserr(GetEOF(f, &leof));
-    if (ResErr != noErr) {
+    if (ResErr != CWC(noErr)) {
         FSClose(f);
         return;
     }
@@ -60,7 +60,7 @@ Executor::HCreateResFile_helper (INTEGER vrefnum, LONGINT parid, Str255 name,
     buf.negone = -1;        /* zero types (0 - 1) */
     lc = sizeof(buf);
     ROMlib_setreserr(FSWriteAll(f, &lc, (Ptr)&buf));
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
         return;
     ROMlib_setreserr(FSClose(f));
 }
@@ -258,7 +258,7 @@ PRIVATE Handle mgetres_helper (resmaphand map, resref *rr, int32 dlen,
       if (!decompress_setup (Hx (map, resfn), &dlen, &uncompressed_size,
 			     &dcmp_offset, &dcmp_handle, &dcmp_workspace))
 	{
-	  if (ResErr == noErr)
+	  if (ResErr == CWC(noErr))
 	    compressed_p = FALSE;
 	  else
 	    {
@@ -354,22 +354,22 @@ Executor::ROMlib_mgetres2 (resmaphand map, resref *rr)
       state = hlock_return_orig_state ((Handle) map);
       loc = Hx (map, rh.rdatoff) + B3TOLONG (rr->doff);
       ROMlib_setreserr (SetFPos (Hx (map, resfn), fsFromStart, loc));
-      if (ResErr != noErr)
+      if (ResErr != CWC(noErr))
 	retval = NULL;
       else
 	{
 	  int32 lc;
 	  OSErr err;
-	  int32 dlen; /* length on disk (remaining) */
-
+	  GUEST<int32> dlen_s; /* length on disk (remaining) */
+          
 	  lc = sizeof (Size);
-	  err = FSReadAll (Hx (map, resfn), &lc, (Ptr) &dlen);
+	  err = FSReadAll (Hx (map, resfn), &lc, (Ptr) &dlen_s);
 	  ROMlib_setreserr (err);
-	  if (ResErr != noErr)
+	  if (ResErr != CWC(noErr))
 	    retval = NULL;
 	  else
 	    {
-	      dlen = CL (dlen);
+              int32 dlen = CL (dlen_s);
 	      if (ResLoad)
 		retval = mgetres_helper (map, rr, dlen, retval);
 	      else if (!rr->rhand)
@@ -462,7 +462,7 @@ P1(PUBLIC pascal trap, void, CloseResFile, INTEGER, rn)
         OSErr save_ResErr;
 
         UpdateResFile(rn);
-	save_ResErr = ResErr;
+	save_ResErr = CW(ResErr);
         
         /* update linked list */
         
@@ -484,10 +484,7 @@ P1(PUBLIC pascal trap, void, CloseResFile, INTEGER, rn)
 
         WALKTANDR(map, i, tr, j, rr)
 	  {
-	    Handle h;
-
-	    h = rr->rhand;
-            if (h)
+            if (Handle h = MR(rr->rhand))
 	      {
 		h = MR (h);
 		if (*h)
@@ -505,7 +502,7 @@ P1(PUBLIC pascal trap, void, CloseResFile, INTEGER, rn)
 }
 
 PRIVATE INTEGER
-already_open_res_file (INTEGER swapped_vref, LONGINT swapped_file_num)
+already_open_res_file (GUEST<INTEGER> swapped_vref, GUEST<LONGINT> swapped_file_num)
 {
   resmaphand map;
   fcbrec *fcbp;
@@ -552,7 +549,7 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
       str255assign (local_name, fn);
       pbr.volumeParam.ioNamePtr = RM ((StringPtr) local_name);
       pbr.volumeParam.ioVRefNum = CW (vref);
-      pbr.volumeParam.ioVolIndex = CLC (-1);
+      pbr.volumeParam.ioVolIndex = CWC (-1);
       err = PBHGetVInfo (&pbr, FALSE);
       if (err)
 	{
@@ -579,7 +576,7 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
 	}
     }
 
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
 /*-->*/	return -1;
 
     ROMlib_invalar();
@@ -590,12 +587,12 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
     pbr.ioParam.ioMisc = CLC (0);
     pbr.fileParam.ioDirID = CL (dirid);
     ROMlib_setreserr(PBHOpenRF(&pbr, FALSE));
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
         return(-1);
     f = CW(pbr.ioParam.ioRefNum);
     lc = sizeof(hd);
     ROMlib_setreserr(FSReadAll(f, &lc, (Ptr)&hd));
-    if (ResErr != noErr) {
+    if (ResErr != CWC(noErr)) {
         FSClose(f);
         return(-1);
     }
@@ -607,14 +604,14 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
     }
 
     ROMlib_setreserr(SetFPos(f, fsFromStart, Cx(hd.rmapoff)));
-    if (ResErr != noErr) {
+    if (ResErr != CWC(noErr)) {
         DisposHandle((Handle) map);
         FSClose(f);
         return(-1);
     }
     lc = CL(hd.maplen);
     ROMlib_setreserr(FSReadAll(f, &lc, (Ptr) STARH(map)));
-    if (ResErr != noErr) {
+    if (ResErr != CWC(noErr)) {
         DisposHandle((Handle) map);
         FSClose(f);
         return(-1);

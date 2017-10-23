@@ -52,20 +52,20 @@ P0 (PUBLIC pascal trap, OSErr, HMRemoveBalloon)
   return hmHelpManagerNotInited;
 }
 
-P1 (PUBLIC pascal trap, OSErr, HMGetHelpMenuHandle, MenuHandle *, mhp)
+P1 (PUBLIC pascal trap, OSErr, HMGetHelpMenuHandle, GUEST<MenuHandle> *, mhp)
 {
   warning_unimplemented (NULL_STRING);
-  *mhp = (MenuHandle)CLC (0);
+  *mhp = nullptr;
   return noErr;
 }
 
-P1 (PUBLIC pascal trap, OSErr, HMGetFont, INTEGER *, fontp)
+P1 (PUBLIC pascal trap, OSErr, HMGetFont, GUEST<INTEGER> *, fontp)
 {
   warning_unimplemented (NULL_STRING);
   return hmHelpManagerNotInited;
 }
 
-P1 (PUBLIC pascal trap, OSErr, HMGetFontSize, INTEGER *, sizep)
+P1 (PUBLIC pascal trap, OSErr, HMGetFontSize, GUEST<INTEGER> *, sizep)
 {
   warning_unimplemented (NULL_STRING);
   return hmHelpManagerNotInited;
@@ -89,7 +89,7 @@ P1 (PUBLIC pascal trap, OSErr, HMSetDialogResID, INTEGER, resid)
   return hmHelpManagerNotInited;
 }
 
-P1 (PUBLIC pascal trap, OSErr, HMGetDialogResID, INTEGER *, residp)
+P1 (PUBLIC pascal trap, OSErr, HMGetDialogResID, GUEST<INTEGER> *, residp)
 {
   warning_unimplemented (NULL_STRING);
   return hmHelpManagerNotInited;
@@ -101,8 +101,8 @@ P2 (PUBLIC pascal trap, OSErr, HMSetMenuResID, INTEGER, menuid, INTEGER, resid)
   return hmHelpManagerNotInited;
 }
 
-P2 (PUBLIC pascal trap, OSErr, HMGetMenuResID, INTEGER *, menuidp,
-    INTEGER *, residp)
+P2 (PUBLIC pascal trap, OSErr, HMGetMenuResID, GUEST<INTEGER> *, menuidp,
+    GUEST<INTEGER> *, residp)
 {
   warning_unimplemented (NULL_STRING);
   return hmHelpManagerNotInited;
@@ -123,13 +123,13 @@ P2 (PUBLIC pascal trap, OSErr, HMBalloonRect, HMMessageRecord *,
 }
 
 P2 (PUBLIC pascal trap, OSErr, HMBalloonPict, HMMessageRecord *, messp,
-    PicHandle *, pictp)
+    GUEST<PicHandle> *, pictp)
 {
   warning_unimplemented (NULL_STRING);
   return hmHelpManagerNotInited;
 }
 
-P1 (PUBLIC pascal trap, OSErr, HMGetBalloonWindow, WindowPtr *, windowpp)
+P1 (PUBLIC pascal trap, OSErr, HMGetBalloonWindow, GUEST<WindowPtr> *, windowpp)
 {
   warning_unimplemented (NULL_STRING);
   return hmHelpManagerNotInited;
@@ -156,9 +156,9 @@ P 9 (PUBLIC pascal trap, OSErr, HMGetIndHelpMsg, ResType, type, INTEGER, resid,
 #else
 PUBLIC OSErr
 HMGetIndHelpMsg (ResType type, INTEGER resid,
-		 INTEGER msg, INTEGER state, LONGINT * options, Point tip,
-		 Rect *altrectp, INTEGER *theprocp, INTEGER *variantp,
-		 HMMessageRecord *helpmsgp, INTEGER * count)
+		 INTEGER msg, INTEGER state, GUEST<LONGINT> * options, Point tip,
+		 Rect *altrectp, GUEST<INTEGER> *theprocp, GUEST<INTEGER> *variantp,
+		 HMMessageRecord *helpmsgp, GUEST<INTEGER> * count)
 {
   warning_unimplemented (NULL_STRING);
   return hmHelpManagerNotInited;

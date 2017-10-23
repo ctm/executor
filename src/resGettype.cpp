@@ -16,7 +16,7 @@ char ROMlib_rcsid_resGettype[] =
 #include "rsys/mman.h"
 
 namespace Executor {
-  typedef ResType *restypeptr;
+  typedef GUEST<ResType> *restypeptr;
   
   
   PRIVATE GUEST<restypeptr> *ar = 0;
@@ -42,8 +42,8 @@ A3(PRIVATE, INTEGER, inserttypes, resmaphand, map, INTEGER, ninserted,
 {
     typref *tr;
     INTEGER i, j;
-    ResType *next, *check;
-    ResType candidate;
+    GUEST<ResType> *next, *check;
+    GUEST<ResType> candidate;
 
     next = STARH(ar) + ninserted;
     if (first) {
@@ -120,7 +120,7 @@ P0(PUBLIC pascal trap, INTEGER, Count1Types)   /* IMIV-15 */
     return initar(Cx(CurMap));
 }
 
-P2(PUBLIC pascal trap, void, GetIndType, ResType *, typ, INTEGER, indx)
+P2(PUBLIC pascal trap, void, GetIndType, GUEST<ResType> *, typ, INTEGER, indx)
 {
     if (indx <= 0 || indx > initar(ARRN_ALL))
         *typ = 0;
@@ -128,7 +128,7 @@ P2(PUBLIC pascal trap, void, GetIndType, ResType *, typ, INTEGER, indx)
 	*typ = STARH(ar)[indx-1];
 }
 
-P2(PUBLIC pascal trap, void, Get1IndType, ResType *, typ,	/* IMIV-15 */
+P2(PUBLIC pascal trap, void, Get1IndType, GUEST<ResType> *, typ,	/* IMIV-15 */
 						          INTEGER, indx)
 {
     if (indx <= 0 || indx > initar(Cx(CurMap)))

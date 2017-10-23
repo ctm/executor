@@ -68,11 +68,11 @@ extern trap OSErr C_HMShowMenuBalloon (INTEGER item, INTEGER menuid,
 
 extern trap OSErr C_HMRemoveBalloon (void);
 
-extern trap OSErr C_HMGetHelpMenuHandle (MenuHandle *mhp);
+extern trap OSErr C_HMGetHelpMenuHandle (GUEST<MenuHandle> *mhp);
 
-extern trap OSErr C_HMGetFont (INTEGER *fontp);
+extern trap OSErr C_HMGetFont (GUEST<INTEGER> *fontp);
 
-extern trap OSErr C_HMGetFontSize (INTEGER *sizep);
+extern trap OSErr C_HMGetFontSize (GUEST<INTEGER> *sizep);
 
 extern trap OSErr C_HMSetFont (INTEGER font);
 
@@ -80,11 +80,11 @@ extern trap OSErr C_HMSetFontSize (INTEGER size);
 
 extern trap OSErr C_HMSetDialogResID (INTEGER resid);
 
-extern trap OSErr C_HMGetDialogResID (INTEGER *residp);
+extern trap OSErr C_HMGetDialogResID (GUEST<INTEGER> *residp);
 
 extern trap OSErr C_HMSetMenuResID (INTEGER menuid, INTEGER resid);
 
-extern trap OSErr C_HMGetMenuResID (INTEGER *menuidp, INTEGER *residp);
+extern trap OSErr C_HMGetMenuResID (GUEST<INTEGER> *menuidp, GUEST<INTEGER> *residp);
 
 extern trap OSErr C_HMScanTemplateItems (INTEGER whichid,
 					      INTEGER whicresfile,
@@ -93,9 +93,9 @@ extern trap OSErr C_HMScanTemplateItems (INTEGER whichid,
 extern trap OSErr C_HMBalloonRect (HMMessageRecord *messp, Rect *rectp);
 
 extern trap OSErr C_HMBalloonPict (HMMessageRecord *messp,
-					PicHandle *pictp);
+					GUEST<PicHandle> *pictp);
 
-extern trap OSErr C_HMGetBalloonWindow (WindowPtr *windowpp);
+extern trap OSErr C_HMGetBalloonWindow (GUEST<WindowPtr> *windowpp);
 
 extern trap OSErr C_HMExtractHelpMsg (ResType type, INTEGER resid,
 					   INTEGER msg, INTEGER state,
@@ -103,11 +103,11 @@ extern trap OSErr C_HMExtractHelpMsg (ResType type, INTEGER resid,
 
 extern OSErr HMGetIndHelpMsg (ResType type, INTEGER resid,
 			      INTEGER msg, INTEGER state,
-			      LONGINT *options, Point tip,
-			      Rect *altrectp, INTEGER *theprocp,
+			      GUEST<LONGINT> *options, Point tip,
+			      Rect *altrectp, GUEST<INTEGER> *theprocp,
 			      INTEGER *variantp,
 			      HMMessageRecord *helpmsgp,
-			      INTEGER *count);
+			      GUEST<INTEGER> *count);
 }
 
 #endif /* !_HELPMGR_H_ */

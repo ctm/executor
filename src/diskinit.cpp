@@ -78,7 +78,7 @@ raw_read_write (func_t func, our_file_info_t *op, LONGINT *lengthp,
   check_virtual_interrupt ();
   pbr.ioParam.ioVRefNum = CW (op->vref);
   pbr.ioParam.ioRefNum = CW (op->dref);
-  pbr.ioParam.ioBuffer = (Ptr) RM (buf);
+  pbr.ioParam.ioBuffer = RM ((Ptr)buf);
   pbr.ioParam.ioReqCount = CL (*lengthp);
   pbr.ioParam.ioPosMode = CWC (fsFromStart);
   pbr.ioParam.ioPosOffset = CL (op->pos);
@@ -153,7 +153,7 @@ begin_track_buffering_for_write (void)
       length = 0;
     }
   else
-    retval = MemErr;
+    retval = CW(MemErr);
   return retval;
 }
 
@@ -226,7 +226,7 @@ end_track_buffering_for_write (our_file_info_t *ofitp)
 P2(PUBLIC pascal trap, OSErr, DIZero, INTEGER, dn, StringPtr, vname)
 {
   OSErr err;
-  LONGINT time;
+  GUEST<ULONGINT> time;
   int name_len;
   char *name;
   our_file_info_t oi;
@@ -246,8 +246,9 @@ P2(PUBLIC pascal trap, OSErr, DIZero, INTEGER, dn, StringPtr, vname)
 	{
 	  OSErr err2;
 
-	  err = format_disk(time, name, FLOPPY_SECTORS_PER_DISK, writefunc,
-			    (int) &oi);
+          #warning disk init unsupported
+	  //err = format_disk(time, name, FLOPPY_SECTORS_PER_DISK, writefunc,
+	//		    (int) &oi);
 	  err2 = end_track_buffering_for_write (&oi);
 	  if (err == noErr)
 	    err = err2;

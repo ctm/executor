@@ -66,7 +66,7 @@ Executor::CountADBs (void)
 
 enum { SPOOFED_MOUSE_ADDR = 3 };
 
-PRIVATE Ptr adb_service_procp = 0; /* stored as though in lowglobal */
+PRIVATE GUEST<Ptr> adb_service_procp = nullptr; /* stored as though in lowglobal */
 PRIVATE Ptr adb_data_ptr = (Ptr) 0x90ABCDEF;
 
 PUBLIC void
@@ -77,7 +77,7 @@ Executor::C_adb_service_stub (void)
 PUBLIC void
 Executor::reset_adb_vector (void)
 {
-  adb_service_procp = 0;
+  adb_service_procp = nullptr;
 }
 
 PUBLIC OSErr
@@ -93,7 +93,7 @@ Executor::GetIndADB (ADBDataBlock *adbp, INTEGER index)
       adbp->devType = CB (0); /* should check on Mac to see what mouse is */
       adbp->origADBAddr = CB (SPOOFED_MOUSE_ADDR);
       if (!adb_service_procp)
-	adb_service_procp = (Ptr) RM (P_adb_service_stub);
+	adb_service_procp = RM ((Ptr)P_adb_service_stub);
       adbp->dbServiceRtPtr = adb_service_procp;
       adbp->dbDataAreaAddr = RM (adb_data_ptr);
       retval = SPOOFED_MOUSE_ADDR;
@@ -134,11 +134,8 @@ Executor::SetADBInfo (ADBSetInfoBlock *adbp, INTEGER address)
 PRIVATE boolean_t
 adb_vector_is_not_our_own (void)
 {
-  boolean_t retval;
-
-  retval = adb_service_procp != 0 &&
-    adb_service_procp != (Ptr) RM (P_adb_service_stub);
-  return retval;
+  return adb_service_procp &&
+    adb_service_procp != RM ((Ptr)P_adb_service_stub);
 }
 
 PRIVATE void
@@ -150,7 +147,7 @@ call_patched_adb_vector (char *message)
   save_a0 = EM_A0;
   EM_D0 = SPOOFED_MOUSE_ADDR << 4; /* based on Apeiron's code */
   EM_A0 = (unsigned long) US_TO_SYN68K(message);
-  CALL_EMULATOR ((syn68k_addr_t) CL ((long) adb_service_procp));
+  CALL_EMULATOR ((syn68k_addr_t) CL (guest_cast<uint32_t>( adb_service_procp)));
   EM_D0 = save_d0;
   EM_A0 = save_a0;
 }

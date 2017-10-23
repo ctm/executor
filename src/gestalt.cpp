@@ -357,7 +357,7 @@ gestalt_set_cpu_type (uint32 type)
 #endif
 
 PRIVATE OSErrRET
-gestalt_helper(OSType selector, LONGINT *responsep, BOOLEAN searchlist,
+gestalt_helper(OSType selector, GUEST<LONGINT> *responsep, BOOLEAN searchlist,
 	       gestaltentry_t table[], int length)
 {
   OSErr retval;
@@ -433,7 +433,7 @@ typedef struct
 {
   OSType selector;
   OSErr retval;
-  uint32 value;
+  GUEST<uint32> value;
 }
 gestalt_list_entry_t;
 
@@ -469,7 +469,7 @@ Executor::ROMlib_add_to_gestalt_list (OSType selector, OSErr retval, uint32 new_
     }
 }
 
-A2(PUBLIC trap, OSErrRET, Gestalt, OSType, selector, LONGINT *, responsep)
+A2(PUBLIC trap, OSErrRET, Gestalt, OSType, selector, GUEST<LONGINT> *, responsep)
 {
   static boolean_t been_here = FALSE;
 
@@ -515,7 +515,7 @@ A2(PUBLIC trap, OSErrRET, Gestalt, OSType, selector, LONGINT *, responsep)
 }
 
 P2(PUBLIC pascal trap, OSErrRET, PhysicalGestalt, OSType, selector,
-   LONGINT *, responsep)
+   GUEST<LONGINT> *, responsep)
 {
   OSErrRET retval;
 
@@ -544,7 +544,7 @@ P2(PUBLIC pascal trap, OSErrRET, PhysicalGestalt, OSType, selector,
 
 
 P2(PUBLIC pascal trap, OSErrRET, GestaltTablesOnly, OSType, selector,
-   LONGINT *, responsep)
+   GUEST<LONGINT> *, responsep)
 {
   return gestalt_helper(selector, responsep, FALSE, gtable, NELEM (gtable));
 }

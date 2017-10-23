@@ -84,13 +84,12 @@ A3(PRIVATE, BOOLEAN, xTrackBox, WindowPtr, wp, Point, pt,
        WINDCALL(wp, wDraw, part);
        while (!GetOSEvent(mUpMask, &ev))
 	 {
-	   ev.where.h = CW(ev.where.h);
-	   ev.where.v = CW(ev.where.v);
+           Point evwhere = ev.where.get();
 	   CALLDRAGHOOK();
-	   if (pt.h != ev.where.h || pt.v != ev.where.v)
+	   if (pt.h != evwhere.h || pt.v != evwhere.v)
 	     {
-	       pt.h = ev.where.h;
-	       pt.v = ev.where.v;
+	       pt.h = evwhere.h;
+	       pt.v = evwhere.v;
 	       inp =
 		 (WINDCALL
 		  (wp, wHit, ((LONGINT)pt.v << 16)|(unsigned short) pt.h) == part);

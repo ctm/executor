@@ -167,7 +167,7 @@ P3 (PUBLIC pascal trap, void, DragWindow, WindowPtr, wp, Point, p, Rect *, rp)
   RgnHandle rh;
   LONGINT l;
   EventRecord ev;
-  int cmddown;
+  bool cmddown;
   Rect r;
     
   THEPORT_SAVE_EXCURSION
@@ -175,7 +175,7 @@ P3 (PUBLIC pascal trap, void, DragWindow, WindowPtr, wp, Point, p, Rect *, rp)
      {
        GetOSEvent (0, &ev);
        SetClip (MR (GrayRgn));
-       cmddown = ev.modifiers & CWC (cmdKey);
+       cmddown = (bool)(ev.modifiers & CWC (cmdKey));
        if (cmddown)
 	 ClipAbove ((WindowPeek) wp);
        rh = NewRgn ();
@@ -255,7 +255,7 @@ P3(PUBLIC pascal trap, LONGINT, GrowWindow, WindowPtr, w, Point, startp,
       pinr.bottom = CWC(32767);
 
     gp = thePort;
-    SETUP_PORT (MR ((GrafPtr) WMgrPort));
+    SETUP_PORT ((GrafPtr) MR (WMgrPort));
     SETUP_PORT (MR (wmgr_port));
     ClipRect (&GD_BOUNDS (MR (TheGDevice)));
     ClipAbove((WindowPeek) w);
@@ -278,7 +278,7 @@ P3(PUBLIC pascal trap, LONGINT, GrowWindow, WindowPtr, w, Point, startp,
 	CALLDRAGHOOK();
       }
     WINDCALL ((WindowPtr) w, wGrow, (LONGINT) (long) &r);
-    RESTORE_PORT (MR ((GrafPtr) WMgrPort));
+    RESTORE_PORT ((GrafPtr) MR (WMgrPort));
     RESTORE_PORT (gp);
     if (p.h != startp.h || p.v != startp.v)
 /*-->*/ return(((LONGINT)(CW(r.bottom) - CW(r.top)) << 16)|

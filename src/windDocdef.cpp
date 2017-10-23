@@ -70,7 +70,6 @@ static RGBColor *window_colors;
 #undef hilite
 #define hilite (&window_colors[wHiliteColor])
 #define title_bar (&window_colors[wTitleBarColor])
-#define title_bar (&window_colors[wTitleBarColor])
 #define hilite_light (&window_colors[wHiliteColorLight])
 #define hilite_dark (&window_colors[wHiliteColorDark])
 #define title_bar_light (&window_colors[wTitleBarLight])
@@ -341,9 +340,9 @@ toggle_box_active (enum box_flag which_box, Point origin)
 	 that one out.  it works for the common case (white on block
 	 rounded window).  the mac function takes into account both
 	 `title' and `title_bar' in some unknown fasion */
-      if (((  title_bar->red
-	    + title_bar->green
-	    + title_bar->blue) / 3) > 0x8000)
+      if (((  (int)CW(title_bar->red)
+	    + (int)CW(title_bar->green)
+	    + (int)CW(title_bar->blue)) / 3) > 0x8000)
 	target_color = &ROMlib_black_rgb_color;
       else
 	target_color = &ROMlib_white_rgb_color;
@@ -888,7 +887,6 @@ void
 calc_doc (GrafPtr w)
 {
   RgnHandle rh;
-  INTEGER *ip;
   int left, top, right, bottom;
   
   left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
@@ -905,7 +903,7 @@ calc_doc (GrafPtr w)
   HxX (rh, rgnBBox.right)  = CW (right  +  2);   
   HxX (rh, rgnBBox.bottom) = CW (bottom +  2);
   HxX (rh, rgnSize) = CWC (44);
-  ip = (INTEGER *) STARH (rh) + 5;
+  auto ip = (GUEST<INTEGER> *) STARH (rh) + 5;
 
   *ip++ = CW(top   - 19); 
   *ip++ = CW(left  - 1);
@@ -934,7 +932,7 @@ void
 calc_alt_dialog_box (GrafPtr w)
 {
   RgnHandle rh;
-  INTEGER *ip;
+  
   int left, top, right, bottom;
   
   left   = CW (PORT_RECT (w).left)   - CW (PORT_BOUNDS (w).left);
@@ -952,7 +950,7 @@ calc_alt_dialog_box (GrafPtr w)
   HxX (rh, rgnBBox.right)  = CW (right  + 3);   
   HxX (rh, rgnBBox.bottom) = CW (bottom + 3);
   HxX (rh, rgnSize) = CWC (44);
-  ip = (INTEGER *) STARH (rh) + 5;
+  auto ip = (GUEST<INTEGER> *) STARH (rh) + 5;
   
   *ip++ = CW(top   - 1);
   *ip++ = CW(left  - 1);

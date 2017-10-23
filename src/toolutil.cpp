@@ -271,8 +271,8 @@ P3(PUBLIC pascal trap, void, PackBits, GUEST<Ptr> *, sp, GUEST<Ptr> *, dp, INTEG
         }
       markp = op++;
     }
-  *sp = (Ptr) RM (ip);
-  *dp = (Ptr) RM (op-1);
+  *sp = RM ((Ptr)ip);
+  *dp = RM ((Ptr)op-1);
 }
 
 
@@ -304,8 +304,8 @@ do {									 \
 	}								 \
     }									 \
 									 \
-  *sp = (Ptr) RM (ip);						 \
-  *dp = (Ptr) RM (op);						 \
+  *sp = RM ((Ptr)ip);						 \
+  *dp = RM ((Ptr)op);						 \
 } while (FALSE)
 
 
@@ -418,7 +418,8 @@ P3(PUBLIC pascal trap, void, LongMul, LONGINT, a, LONGINT, b, Int64Bit *, c)
     }
 }
 
-A2(PUBLIC, void, ScreenRes, INTEGER *, hp, INTEGER *, vp)
+#warning ScreenRes is duplicate with qGDevice.cpp
+A2(PUBLIC, void, ScreenRes, GUEST<INTEGER> *, hp, GUEST<INTEGER> *, vp)
 {
     *hp = ScrHRes;
     *vp = ScrVRes;

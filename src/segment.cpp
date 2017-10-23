@@ -538,7 +538,7 @@ A2(PUBLIC, void, ROMlib_seginit, LONGINT, argc, char **, argv)	/* INTERNAL */
 		        NewHandle((Size) sizeof(finderinfo) - sizeof(AppFile));
     TheZone = saveZone;
 
-    AppParmHandle = (Handle) RM(fh);
+    AppParmHandle = RM ((Handle)fh);
     HxX(fh, count)   = 0;
     HxX(fh, message) = ROMlib_print ? CWC(appPrint) : CWC(appOpen) ;
     if (fullpathname && fullpathname != argv[0])
@@ -582,8 +582,8 @@ A2(PUBLIC, void, ROMlib_seginit, LONGINT, argc, char **, argv)	/* INTERNAL */
     }
 }
 
-A2(PUBLIC, void, CountAppFiles, INTEGER *, messagep,
-					INTEGER *, countp)	/* IMII-57 */
+A2(PUBLIC, void, CountAppFiles, GUEST<INTEGER> *, messagep,
+        GUEST<INTEGER> *, countp)	/* IMII-57 */
 {
     if (AppParmHandle)
       {
@@ -611,7 +611,7 @@ A1(PUBLIC, void, ClrAppFiles, INTEGER, index)	/* IMII-58 */
 }
 
 P3(PUBLIC pascal trap, void, GetAppParms, StringPtr, namep,	/* IMII-58 */
-				      INTEGER *, rnp, GUEST<Handle> *, aphandp)
+        GUEST<INTEGER> *, rnp, GUEST<Handle> *, aphandp)
 {
     str255assign(namep, CurApName);
     *rnp = CurApRefNum;
@@ -683,7 +683,7 @@ P0(PUBLIC pascal trap, void, ExitToShell)
 #if 1
 
     Point pt;
-    static SFTypeList applonly = { CLC(T('A','P','P','L')) };
+    static GUEST<SFTypeList> applonly = { CLC(T('A','P','P','L')) };
     SFReply reply;
     char quickbytes[grafSize];
     LONGINT tmpA5;
@@ -726,14 +726,14 @@ P0(PUBLIC pascal trap, void, ExitToShell)
 	
 	if (QDExist == EXIST_NO) {
 	    a5 = (LONGINT) US_TO_SYN68K(&tmpA5);
-	    CurrentA5 = (Ptr) CL(a5);
+	    CurrentA5 = guest_cast<Ptr>( CL(a5) );
 	    InitGraf((Ptr) quickbytes + sizeof(quickbytes) - 4);
 	}
 	InitFonts();
 	FlushEvents( everyEvent, 0 );
 	if (WWExist == EXIST_NO)
 	    InitWindows();
-        if (TEScrpHandle == (Handle)CLC(-1) || TEScrpHandle == (Handle)CLC(0))
+        if (TEScrpHandle == guest_cast<Handle>(CLC(-1)) || TEScrpHandle == nullptr)
 	    TEInit();
 	if (DlgFont == CWC(0) || DlgFont == CWC(-1))
 	    InitDialogs((ProcPtr)0);
@@ -841,7 +841,7 @@ P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
     Handle newcode;
     unsigned short offbytes;
     INTEGER taboff, nentries, savenentries;
-    short *ptr, *saveptr;
+    GUEST<int16_t> *ptr, *saveptr;
 #if defined(MACOSX_)
     if (ROMlib_appbit && !(ROMlib_appbit & ROMlib_whichapps))
 	ExitToShell();
@@ -850,7 +850,7 @@ P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
     ResLoad = -1;	/* CricketDraw III's behaviour suggested this */
     newcode = GetResource(TICK("CODE"), segno);
     HLock(newcode);
-    taboff   = CW(((INTEGER *) STARH(newcode))[0]);
+    taboff   = CW(((GUEST<INTEGER> *) STARH(newcode))[0]);
     if ((uint16) taboff == 0xA89F)  /* magic compressed resource signature */
       {
 	/* We are totally dead here.  We almost certainly can't use
@@ -863,15 +863,15 @@ P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
 				 launch_compressed_lt7); 
 	C_ExitToShell ();
       }
-    savenentries = nentries = CW(((INTEGER *) STARH(newcode))[1]);
+    savenentries = nentries = CW(((GUEST<INTEGER> *) STARH(newcode))[1]);
 
-    saveptr = ptr = (short *) ((char *) (long) SYN68K_TO_US(a5) + taboff + Cx(CurJTOffset));
+    saveptr = ptr = (GUEST<int16_t> *) ((char *) (long) SYN68K_TO_US(a5) + taboff + Cx(CurJTOffset));
     while (--nentries >= 0) {
 	if (ptr[1] != CWC(JMPLINSTR)) {
 	    offbytes = CW(*ptr);
 	    *ptr++ = CW(segno);
 	    *ptr++ = CWC(JMPLINSTR);
-	    *(LONGINT *) ptr =
+	    *(GUEST<LONGINT> *) ptr =
 		 CL((LONGINT) (long) ((char *) US_TO_SYN68K(STARH(newcode)) + offbytes + 4));
 	    ptr += 2;
 	} else
@@ -881,7 +881,7 @@ P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
 			  TRUE);
 }
 
-#define SEGNOOFP(p) (CW(((INTEGER *)p)[-1]))
+#define SEGNOOFP(p) (CW(((GUEST<INTEGER> *)p)[-1]))
 
 namespace Executor {
   PRIVATE void unpatch(Ptr, Ptr);
@@ -889,10 +889,10 @@ namespace Executor {
 
 A2(PRIVATE, void, unpatch, Ptr, segstart, Ptr, p)
 {
-    INTEGER *ip;
+    GUEST<INTEGER> *ip;
     Ptr firstpc;
 
-    ip = (INTEGER *) p;
+    ip = (GUEST<INTEGER> *) p;
 
     firstpc = MR(*(Ptr *)(p + 2));
     ip[1]  = ip[-1];	/* the segment number */
@@ -909,7 +909,7 @@ P1(PUBLIC pascal trap, void, UnloadSeg, Ptr, addr)
     Handle h;
     INTEGER segno;
 
-    if (* (INTEGER *) addr == CWC(JMPLINSTR)) {
+    if (* (GUEST<INTEGER> *) addr == CWC(JMPLINSTR)) {
 	segno = SEGNOOFP(addr);
 	h = GetResource(TICK("CODE"), segno);
 	if (!*h)

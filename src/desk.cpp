@@ -32,6 +32,7 @@ using namespace Executor;
 P1(PUBLIC pascal trap, INTEGER, OpenDeskAcc, Str255, acc)	/* IMI-440 */
 {
     INTEGER retval;
+    GUEST<INTEGER> retval_s;
     DCtlHandle dctlh;
     WindowPtr wp;
 
@@ -42,8 +43,8 @@ P1(PUBLIC pascal trap, INTEGER, OpenDeskAcc, Str255, acc)	/* IMI-440 */
 	goto done;
       }
 
-    if (OpenDriver(acc, &retval) == noErr) {
-	retval = CW(retval);
+    if (OpenDriver(acc, &retval_s) == noErr) {
+	retval = CW(retval_s);
 	dctlh = GetDCtlEntry(retval);
 	if (dctlh)
 	  {
@@ -72,7 +73,7 @@ P2(PUBLIC pascal trap, void, SystemClick, EventRecord *, evp, WindowPtr, wp)
     Point p;
     LONGINT pointaslong, val;
     Rect bounds;
-    LONGINT templ;
+    GUEST<LONGINT> templ;
 
     if (wp) {
 	p.h = CW(evp->where.h);
@@ -85,7 +86,7 @@ P2(PUBLIC pascal trap, void, SystemClick, EventRecord *, evp, WindowPtr, wp)
 	    case wInContent:
 		if (WINDOW_HILITED_X (wp))
 		  {
-		    templ = (LONGINT) (long) RM(evp);
+		    templ = guest_cast<LONGINT>( RM(evp) );
 		    Control (WINDOW_KIND (wp), accEvent, (Ptr) &templ);
 		} else
 		    SelectWindow(wp);
@@ -107,7 +108,7 @@ P2(PUBLIC pascal trap, void, SystemClick, EventRecord *, evp, WindowPtr, wp)
 		ROMlib_hook(desk_deskhooknumber);
 		EM_D0 = -1;
 		EM_A0 = (LONGINT) (long) US_TO_SYN68K(evp);
-		CALL_EMULATOR((syn68k_addr_t) (long) CL((long) DeskHook.raw()));
+		CALL_EMULATOR((syn68k_addr_t) CL(guest_cast<LONGINT> (DeskHook)));
 	    }
 	}
     }
@@ -152,32 +153,32 @@ P1(PUBLIC pascal trap, BOOLEAN, SystemEvent, EventRecord *, evp)
     WindowPeek wp;
     INTEGER rn;
     DCtlHandle dctlh;
-    LONGINT templ;
+    GUEST<LONGINT> templ;
 
     if (SEvtEnb) {
 	wp = 0;
-	switch (evp->what) {
+	switch (CW(evp->what)) {
 	default:
-	case CWC(nullEvent):
-	case CWC(mouseDown):
-	case CWC(networkEvt):
-	case CWC(driverEvt):
-	case CWC(app1Evt):
-	case CWC(app2Evt):
-	case CWC(app3Evt):
-	case CWC(app4Evt):
+	case nullEvent:
+	case mouseDown:
+	case networkEvt:
+	case driverEvt:
+	case app1Evt:
+	case app2Evt:
+	case app3Evt:
+	case app4Evt:
 	    break;
-	case CWC(mouseUp):
-	case CWC(keyDown):
-	case CWC(keyUp):
-	case CWC(autoKey):
+	case mouseUp:
+	case keyDown:
+	case keyUp:
+	case autoKey:
 	    wp = (WindowPeek) FrontWindow();
 	    break;
-	case CWC(updateEvt):
-	case CWC(activateEvt):
-	    wp = (WindowPeek) MR(evp->message);
+	case updateEvt:
+	case activateEvt:
+	    wp = MR(guest_cast<WindowPeek>( evp->message ));
 	    break;
-	case CWC(diskEvt):
+	case diskEvt:
 	    /* NOTE:  I think the code around toolevent.c:277 should
 		      really be here.  I'm not going to get all excited
 		      about it right now though. */
@@ -188,7 +189,7 @@ P1(PUBLIC pascal trap, BOOLEAN, SystemEvent, EventRecord *, evp)
 	    if ((retval = rn < 0)) {
 		dctlh = rntodctlh(rn);
 		if (Hx(dctlh, dCtlEMask) & (1 << CW(evp->what))) {
-		    templ = (LONGINT) (long) RM(evp);
+		    templ = guest_cast<LONGINT> (RM(evp));
 		    Control(rn, accEvent, (Ptr) &templ);
 		}
 	    }
@@ -204,12 +205,13 @@ P1(PUBLIC pascal trap, void, SystemMenu, LONGINT, menu)
 {
     INTEGER i;
     DCtlHandle dctlh;
+    GUEST<LONGINT> menu_s;
 
     for (i = 0; i < CW(UnitNtryCnt); ++i) {
 	dctlh = MR(MR(UTableBase)[i]);
 	if (HxX(dctlh, dCtlMenu) == MBarEnable) {
-	    menu = CL(menu);
-	    Control(itorn(i), accMenu, (Ptr) &menu);
+	    menu_s = CL(menu);
+	    Control(itorn(i), accMenu, (Ptr) &menu_s);
 /*-->*/	    break;
 	}
     }

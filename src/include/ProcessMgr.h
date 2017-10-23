@@ -32,8 +32,9 @@ struct ProcessSerialNumber {
 
 typedef struct
 {
-  uint32 magic;
-  INTEGER n_fsspec;
+  GUEST_STRUCT;
+  GUEST<uint32> magic;
+  GUEST<INTEGER> n_fsspec;
   FSSpec fsspec[0];
 }
 ROMlib_AppParameters_t;
@@ -133,7 +134,7 @@ typedef ProcessInfoRec *ProcessInfoPtr;
 #define procNotFound	(-600)
 
 extern void process_create (boolean_t desk_accessory_p,
-			    uint32 type, uint32 signature);
+			    GUEST<uint32> type, GUEST<uint32> signature);
 
 extern pascal trap OSErr C_GetCurrentProcess
   (ProcessSerialNumber *serial_number);

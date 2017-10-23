@@ -63,7 +63,7 @@ extern pascal trap LONGINT C_BitShift( LONGINT a, INTEGER n ); extern pascal tra
 extern pascal trap INTEGER C_HiWord( LONGINT a ); extern pascal trap INTEGER P_HiWord( LONGINT a); 
 extern pascal trap INTEGER C_LoWord( LONGINT a ); extern pascal trap INTEGER P_LoWord( LONGINT a); 
 extern pascal trap void C_LongMul( LONGINT a, LONGINT b, Int64Bit *c ); extern pascal trap void P_LongMul( LONGINT a, LONGINT b, Int64Bit *c); 
-extern void ScreenRes( INTEGER *hp, INTEGER *vp ); 
+extern void ScreenRes( GUEST<INTEGER> *hp, GUEST<INTEGER> *vp ); 
 extern pascal trap PatHandle C_GetPattern( INTEGER id ); extern pascal trap PatHandle P_GetPattern( INTEGER id); 
 extern void GetIndPattern( Byte *op, INTEGER plistid, INTEGER index ); 
 extern pascal trap CursHandle C_GetCursor( INTEGER id ); extern pascal trap CursHandle P_GetCursor( INTEGER id); 

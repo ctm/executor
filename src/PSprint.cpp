@@ -70,7 +70,7 @@ PRIVATE void DPSPrintf(DPSContext unused, const char *format, ...)
     va_end(ap);
 }
 
-PRIVATE void DPSWritePostScript(DPSContext unused, const char *bufp, int n)
+PRIVATE void DPSWritePostScript(DPSContext unused, Ptr bufp, int n)
 {
   if (ROMlib_printfile)
     fwrite(bufp, n, 1, ROMlib_printfile);
@@ -467,7 +467,7 @@ static fontentry_t fonttable[] = {
       { "",		"",		"",		"" } },
 };
 
-comGrafPort Executor::printport;
+GrafPort Executor::printport;
 
 #define patCopy	8
 
@@ -578,7 +578,7 @@ mac_old_color_to_ps_gray (long color)
 
 PRIVATE boolean_t
 graymatch(unsigned char patp[8], INTEGER pnMode,
-	  comGrafPtr thePortp, float *grayp)
+	  GrafPtr thePortp, float *grayp)
 {
   uint32 *pl;
   boolean_t pat_is_black;
@@ -680,7 +680,7 @@ CONT:;
   return retval;
 }
 
-static void doimage(LONGINT verb, comRect *rp, comGrafPtr thePortp)
+static void doimage(LONGINT verb, Rect *rp, GrafPtr thePortp)
 {
     unsigned char *patp, pat[8], c, *bytes, *p;
     int rowbytes, i, j, toshift, numbytesneeded;
@@ -847,7 +847,7 @@ void Executor::ROMlib_rotateend( void )
   restore_virtual_ints (block);
 }
 
-static void NeXTClip(comRect *rp)
+static void NeXTClip(Rect *rp)
 {
   virtual_int_state_t block;
   
@@ -871,7 +871,7 @@ static void NeXTClip(comRect *rp)
   restore_virtual_ints (block);
 }
 
-static int myEqualRect(comRect *r1, comRect *r2)
+static int myEqualRect(Rect *r1, Rect *r2)
 {
     return r1->top    == r2->top    &&
            r1->bottom == r2->bottom &&
@@ -883,7 +883,7 @@ static int myEqualRect(comRect *r1, comRect *r2)
  * updates the fields that *all* drawing routines care about
  */
 
-static void commonupdate(comGrafPtr thePortp)
+static void commonupdate(GrafPtr thePortp)
 {
     int dx, dy;
 
@@ -1268,7 +1268,7 @@ void NeXTSetText(StringPtr fname, LONGINT txFace, LONGINT txSize,
 }
 
 PRIVATE void
-SmartGetFontName (comGrafPtr thePortp, StringPtr fname)
+SmartGetFontName (GrafPtr thePortp, StringPtr fname)
 {
   C_GetFontName (CW (thePortp->txFont), fname);
   if (!fname[0])
@@ -1281,7 +1281,7 @@ SmartGetFontName (comGrafPtr thePortp, StringPtr fname)
  * updates the fields that text routines care about
  */
 
-static void txupdate(comGrafPtr thePortp)
+static void txupdate(GrafPtr thePortp)
 {
     unsigned char fname[256];
 
@@ -1303,7 +1303,7 @@ static void txupdate(comGrafPtr thePortp)
     RESTOREA5;
 }
 
-void pnupdate(comGrafPtr thePortp)
+void pnupdate(GrafPtr thePortp)
 {
     commonupdate(thePortp);
 #if 0
@@ -1317,8 +1317,8 @@ void pnupdate(comGrafPtr thePortp)
 }
 
 
-void Executor::NeXTPrArc(LONGINT verb, comRect *rp, LONGINT starta, LONGINT arca,
-							    comGrafPtr thePortp)
+void Executor::NeXTPrArc(LONGINT verb, Rect *rp, LONGINT starta, LONGINT arca,
+							    GrafPtr thePortp)
 {
   if (rp->left != rp->right &&
       rp->top != rp->bottom) /* ignore empty rectangles */
@@ -1403,15 +1403,15 @@ num_image_bytes (int numbytes, int pixelsize, int direct_color_p)
 #define ROWMASK	0x1FFF
 #endif
 
-void Executor::NeXTPrBits(comBitMap *srcbmp, comRect *srcrp, comRect *dstrp,
-		LONGINT mode, comRgnHandle mask, comGrafPtr thePortp)
+void Executor::NeXTPrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp,
+		LONGINT mode, RgnHandle mask, GrafPtr thePortp)
 {
   float scalex, scaley;
   float srcwidth, srcheight, dstwidth, dstheight;
   float matrix[6];
   unsigned char *p1, *p2, *ep, *bytes, *baseaddr;
   int numbytesneeded;
-  comPixMap *srcpmp;
+  PixMap *srcpmp;
   short rowbytes, numbytes, pixelsize;
   virtual_int_state_t block;
   boolean_t direct_color_p;
@@ -1436,7 +1436,7 @@ void Executor::NeXTPrBits(comBitMap *srcbmp, comRect *srcrp, comRect *dstrp,
       
       if (CW(srcbmp->rowBytes) & 0x8000)
 	{
-	  srcpmp = (comPixMap *) srcbmp;
+	  srcpmp = (PixMap *) srcbmp;
 	  pixelsize = CW(srcpmp->pixelSize);
 	  if (pixelsize != 1 && mode != srcCopy)
 /*-->*/	    goto DONE;
@@ -1591,11 +1591,11 @@ DONE:
   TEMP_ALLOC_FREE (temp_alloc_space);
 }
 
-void Executor::NeXTPrLine(comPoint to, comGrafPtr thePortp)
+void Executor::NeXTPrLine(Point to, GrafPtr thePortp)
 {
     float temp, fromh, fromv, toh, tov;
     short psh, psv;
-    comRect r;
+    Rect r;
     virtual_int_state_t block;
 
     block = block_virtual_ints ();
@@ -1647,32 +1647,33 @@ void Executor::NeXTPrLine(comPoint to, comGrafPtr thePortp)
     restore_virtual_ints (block);
 }
 
-void Executor::NeXTPrOval(LONGINT verb, comRect *rp, comGrafPtr thePortp)
+void Executor::NeXTPrOval(LONGINT verb, Rect *rp, GrafPtr thePortp)
 {
     NeXTPrArc(verb, rp, 0, 360, thePortp);
 }
 
 #if 1
-void Executor::NeXTPrGetPic(comPtr dp, LONGINT bc, comGrafPtr thePortp)
+void Executor::NeXTPrGetPic(Ptr dp, LONGINT bc, GrafPtr thePortp)
 {
     gui_abort();
 }
 #endif
 
-void Executor::NeXTPrPutPic(comPtr sp, LONGINT bc, comGrafPtr thePortp)
+void Executor::NeXTPrPutPic(Ptr sp, LONGINT bc, GrafPtr thePortp)
 {
 }
 
-void Executor::NeXTPrPoly(LONGINT verb, comPolyHandle ph, comGrafPtr thePortp)
+void Executor::NeXTPrPoly(LONGINT verb, PolyHandle ph, GrafPtr thePortp)
 {
-    comPoint *pp, *ep, firstp;
+    GUEST<Point> *pp, *ep;
+    Point firstp;
     virtual_int_state_t block;
-    comPoint pt;
+    Point pt;
 
     block = block_virtual_ints ();
     pnupdate(thePortp);
     pp = MR(*ph)->polyPoints;
-    ep = (comPoint *) ((char *)MR(*ph) + CW((MR(*ph))->polySize));
+    ep = (GUEST<Point> *) ((char *)MR(*ph) + CW((MR(*ph))->polySize));
     firstp.h = CW(pp[0].h);
     firstp.v = CW(pp[0].v);
     thePortp->pnLoc = pp[0];
@@ -1707,8 +1708,8 @@ void Executor::NeXTPrPoly(LONGINT verb, comPolyHandle ph, comGrafPtr thePortp)
     restore_virtual_ints (block);
 }
 
-void Executor::NeXTPrRRect(LONGINT verb, comRect *rp, LONGINT width, LONGINT height,
-							    comGrafPtr thePortp)
+void Executor::NeXTPrRRect(LONGINT verb, Rect *rp, LONGINT width, LONGINT height,
+							    GrafPtr thePortp)
 {
     float sfactor, midy, rt, rb, rl, rr, sfactor2;
     short psh, psv;
@@ -1764,7 +1765,7 @@ void Executor::NeXTPrRRect(LONGINT verb, comRect *rp, LONGINT width, LONGINT hei
 }
 
 
-void Executor::NeXTPrRect(LONGINT verb, comRect *rp, comGrafPtr thePortp)
+void Executor::NeXTPrRect(LONGINT verb, Rect *rp, GrafPtr thePortp)
 {
     short psh, psv;
     virtual_int_state_t block;
@@ -1795,15 +1796,15 @@ void Executor::NeXTPrRect(LONGINT verb, comRect *rp, comGrafPtr thePortp)
     restore_virtual_ints (block);
 }
 
-void Executor::NeXTPrRgn(LONGINT verb, comRgnHandle rgn, comGrafPtr thePortp)
+void Executor::NeXTPrRgn(LONGINT verb, RgnHandle rgn, GrafPtr thePortp)
 {
     /* NOP */
 }
 
-short Executor::NeXTPrTxMeas(LONGINT n, comPtr p, comPoint *nump, comPoint *denp,
-				       comFontInfo *finfop, comGrafPtr thePortp)
+short Executor::NeXTPrTxMeas(LONGINT n, Ptr p, GUEST<Point> *nump, GUEST<Point> *denp,
+				       FontInfo *finfop, GrafPtr thePortp)
 {
-    Executor::Point num, den;
+    GUEST<Point> num, den;
     virtual_int_state_t block;
     short retval;
 
@@ -1829,7 +1830,7 @@ static int numspacesin(const char *str)
     return retval;
 }
 
-static void dopsunderline(comGrafPtr thePortp, short total,
+static void dopsunderline(GrafPtr thePortp, short total,
 			  boolean_t substitute_p, char *translated, LONGINT n)
 {
     unsigned char fname[256];
@@ -1940,7 +1941,7 @@ static void doashow(char *translated, LONGINT n, int i, short total)
     DPSPrintf(DPSGetCurrentContext(), "ashow\n");
 }
 
-void Executor::NeXTsendps (LONGINT n, comPtr textbufp)
+void Executor::NeXTsendps (LONGINT n, Ptr textbufp)
 {
     virtual_int_state_t block;
 
@@ -2060,7 +2061,7 @@ is_symbol (unsigned char c)
 }
 
 PRIVATE void
-find_run_of_symbol_chars (LONGINT n, comPtr textbufp, int *run_startp,
+find_run_of_symbol_chars (LONGINT n, Ptr textbufp, int *run_startp,
 			  int *run_stopp)
 {
   int start, stop;
@@ -2083,8 +2084,8 @@ find_run_of_symbol_chars (LONGINT n, comPtr textbufp, int *run_startp,
   *run_stopp = stop;
 }
 
-void Executor::NeXTPrText(LONGINT n, comPtr textbufp, comPoint num, comPoint den,
-		comGrafPtr thePortp)
+void Executor::NeXTPrText(LONGINT n, Ptr textbufp, Point num, Point den,
+		GrafPtr thePortp)
 {
     virtual_int_state_t block;
     /* right now blow off num and den */
@@ -2143,7 +2144,9 @@ void Executor::NeXTPrText(LONGINT n, comPtr textbufp, comPoint num, comPoint den
 		PSrotate (rotation.angle);
 		PSmoveto (-rotation.center_x, -rotation.center_y);
 	      }
-	    total = NeXTPrTxMeas(n, textbufp, &num, &den, (comFontInfo *) 0,
+            GUEST<Point> num_s, den_s;
+            num_s.set(num); den_s.set(den);
+	    total = NeXTPrTxMeas(n, textbufp, &num_s, &den_s, nullptr,
 				 thePortp);
 	    translated = (char*)alloca(n + 1);
 	    memcpy(translated, textbufp, n);

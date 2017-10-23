@@ -54,7 +54,7 @@ PUBLIC int Executor::ROMlib_clock = CLOCKOFF;
  *       a m68k RTS instruction, just to be safe.
  */
 
-VBLTask vblshim = { 0, CWC (vType), (ProcPtr) CLC (0xAEDCBA98), 0, 0 };
+VBLTask vblshim = { nullptr, CWC (vType), guest_cast<ProcPtr>(CLC ( 0xAEDCBA98)), CWC(0), CWC(0) };
 
 PRIVATE TMTask vbltm;
 
@@ -123,7 +123,7 @@ A0 (PUBLIC, void, C_ROMlib_vcatch)
 	   */
 
 	  EM_A0 = (LONGINT) (long) US_TO_SYN68K_CHECK0(vp);
-	  EM_A1 = (LONGINT) CL ((long) vp->vblAddr.raw());
+	  EM_A1 = CL (guest_cast<LONGINT> (vp->vblAddr));
 	  
 	  CALL_EMULATOR ((syn68k_addr_t) EM_A1);
 
@@ -183,14 +183,14 @@ A2 (PUBLIC trap, OSErrRET, SlotVInstall,
 
 A1 (PUBLIC trap, OSErrRET, VInstall, VBLTaskPtr, vtaskp)
 {
-  static unsigned short m68k_rts = CWC (0x4E75);	/* RTS */
+  static GUEST<uint16_t> m68k_rts = CWC (0x4E75);	/* RTS */
 
   vtaskp->vblCount = CW (CW (vtaskp->vblCount) + CW (vtaskp->vblPhase));
   if (vtaskp->qType == CWC ((INTEGER) vType))
     {
       if (!VBLQueue.qHead)
 	{
-	  vblshim.vblAddr = (ProcPtr) RM (&m68k_rts);	/* legal 68k code. */
+	  vblshim.vblAddr = RM ((ProcPtr) &m68k_rts);	/* legal 68k code. */
 	  Enqueue ((QElemPtr) &vblshim, &VBLQueue);
 	}
       Enqueue ((QElemPtr) vtaskp, &VBLQueue);

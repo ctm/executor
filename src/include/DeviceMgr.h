@@ -20,11 +20,11 @@
 
 namespace Executor {
 typedef struct {
-    ProcPtr udrvrOpen;
-    ProcPtr udrvrPrime;	/* read and write */
-    ProcPtr udrvrCtl;	/* control and killio */
-    ProcPtr udrvrStatus;
-    ProcPtr udrvrClose;
+    GUEST<ProcPtr> udrvrOpen;
+    GUEST<ProcPtr> udrvrPrime;	/* read and write */
+    GUEST<ProcPtr> udrvrCtl;	/* control and killio */
+    GUEST<ProcPtr> udrvrStatus;
+    GUEST<ProcPtr> udrvrClose;
     Str255  udrvrName;
 } umacdriver, *umacdriverptr;
 
@@ -136,7 +136,7 @@ extern DCtlHandle GetDCtlEntry();
 extern OSErr PBControl( ParmBlkPtr pbp, BOOLEAN a ); 
 extern OSErr PBStatus( ParmBlkPtr pbp, BOOLEAN a ); 
 extern OSErr PBKillIO( ParmBlkPtr pbp, BOOLEAN a ); 
-extern OSErr OpenDriver( StringPtr name, INTEGER *rnp ); 
+extern OSErr OpenDriver( StringPtr name, GUEST<INTEGER> *rnp ); 
 extern OSErr CloseDriver( INTEGER rn ); 
 extern OSErr Control( INTEGER rn, INTEGER code, 
  Ptr param ); 

@@ -95,7 +95,7 @@ Executor::wind_color_init (void)
        HxX (default_aux_win, awNext) = 0;
        HxX (default_aux_win, awOwner) = 0;
        HxX (default_aux_win, awCTable)
-	 = (CTabHandle) RM (GetResource (TICK("wctb"), 0));
+	 = RM ((CTabHandle) GetResource (TICK("wctb"), 0));
        HxX (default_aux_win, dialogCItem) = 0;
        HxX (default_aux_win, awFlags) = 0;
        HxX (default_aux_win, awReserved) = 0;
@@ -127,13 +127,13 @@ P2 (PUBLIC pascal trap, void, SetWinColor,
 
       if (!aux_w)
 	{
-	  AuxWinHandle t_aux_w;
+	  GUEST<AuxWinHandle> t_aux_w;
 	  
 	  t_aux_w = AuxWinHead;
 	  aux_w = (AuxWinHandle) NewHandle (sizeof (AuxWinRec));
 	  AuxWinHead = RM (aux_w);
 	  HxX (aux_w, awNext)      = t_aux_w;
-	  HxX (aux_w, awOwner)     = (WindowPtr) RM (w);
+	  HxX (aux_w, awOwner)     = RM ((WindowPtr)w);
 	  /* FIXME: copy? */
 	  HxX (aux_w, awCTable)    = RM (new_w_ctab);
 	  HxX (aux_w, dialogCItem) = 0;
@@ -217,7 +217,7 @@ P2 (PUBLIC pascal trap, BOOLEAN, GetAuxWin,
     }
   else
     {
-      AuxWinHandle t;
+      GUEST<AuxWinHandle> t;
 
       t = *lookup_aux_win (w);
       if (t)

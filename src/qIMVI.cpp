@@ -74,7 +74,7 @@ P2 (PUBLIC pascal trap, OSErr, BitMapToRegion, RgnHandle, rh,
 	  return rgnTooBigErr;						\
 	}								\
       else								\
-	*outp++ = CW(v);						\
+	*outp++ = CW_RAW(v);						\
     } while (0)
 
   top      = CW(bmp->bounds.top);
@@ -140,10 +140,10 @@ P2 (PUBLIC pascal trap, OSErr, BitMapToRegion, RgnHandle, rh,
 	break;
       case SMALLRGN + 9 * sizeof(INTEGER):
 	outp = RGN_DATA (rh);
-	HxX(rh, rgnBBox.top)    = outp[0];
-	HxX(rh, rgnBBox.left)   = outp[1];
-	HxX(rh, rgnBBox.bottom) = outp[4];
-	HxX(rh, rgnBBox.right)  = outp[2];
+	HxX(rh, rgnBBox.top)    = GUEST<int16_t>::fromRaw(outp[0]);
+	HxX(rh, rgnBBox.left)   = GUEST<int16_t>::fromRaw(outp[1]);
+	HxX(rh, rgnBBox.bottom) = GUEST<int16_t>::fromRaw(outp[4]);
+	HxX(rh, rgnBBox.right)  = GUEST<int16_t>::fromRaw(outp[2]);
 	RGN_SET_SMALL (rh);
 	break;
       default:

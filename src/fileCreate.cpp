@@ -28,7 +28,7 @@ A4(PUBLIC, OSErr, Create, StringPtr, filen, INTEGER, vrn,	/* IMIV-112 */
 {
     ParamBlockRec pbr;
     OSErr temp;
-    LONGINT t;
+    GUEST<ULONGINT> t;
 
     pbr.fileParam.ioNamePtr = RM(filen);
     pbr.fileParam.ioVRefNum = CW(vrn);

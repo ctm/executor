@@ -67,7 +67,7 @@ typedef GUEST<kchr_ptr_t> *kchr_hand;
 #define	KCHR_N_TABLES_X(p)		((p)->n_tables)
 #define KCHR_TABLE_X(p)			((p)->table)
 
-#define KCHR_N_DEAD_KEY_RECS_X(p)	(* (INTEGER *) (KCHR_TABLE_X (p) \
+#define KCHR_N_DEAD_KEY_RECS_X(p)	(* (GUEST<INTEGER> *) (KCHR_TABLE_X (p) \
 							+ KCHR_N_TABLES (p)))
 
 #define KCHR_DEAD_KEY_RECS_X(p)		((dead_key_rec_t *) \

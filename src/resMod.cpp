@@ -50,7 +50,7 @@ P3(PUBLIC pascal trap, void, SetResInfo, Handle, res, INTEGER, id,
     OSErr err;
 
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
         return;
     if (rr->ratr & resProtected) {
         ROMlib_setreserr(resAttrErr);    /* IV-18 */
@@ -60,7 +60,7 @@ P3(PUBLIC pascal trap, void, SetResInfo, Handle, res, INTEGER, id,
     if (name) {
 	sl = U(name[0]);
         if (U(*(sp = (char *)STARH(map) + Hx(map, namoff) + Cx(rr->noff))) < sl ||
-							  rr->noff == -1) {
+							  rr->noff == CWC(-1)) {
             SetHandleSize((Handle) map, Hx(map, rh.maplen) + sl + 1);
 	    err = MemError();
             if (ROMlib_setreserr(err))
@@ -81,7 +81,7 @@ P2(PUBLIC pascal trap, void, SetResAttrs, Handle, res, INTEGER, attrs)
     resref *rr;
 
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
         return;
     rr->ratr = attrs;
 }
@@ -94,7 +94,7 @@ P1(PUBLIC pascal trap, void, ChangedResource, Handle, res)
     Size oldsize, newsize;
 
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
         return;
     if (rr->ratr & resProtected) {
         ROMlib_setreserr(resAttrErr);    /* IV-18 */
@@ -238,7 +238,7 @@ P1(PUBLIC pascal trap, void, RmveResource, Handle, res)
 /*-->*/ return;
     }
     ROMlib_setreserr(ROMlib_findmapres(map, res, &tr, &rr));
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
 /*-->*/ return;
     if (rr->ratr & resProtected) {
 	ROMlib_setreserr(rmvResFailed);
@@ -247,7 +247,7 @@ P1(PUBLIC pascal trap, void, RmveResource, Handle, res)
     HSetState(res, HGetState(res) & ~RSRCBIT);
     troff = (char *)tr - (char *) STARH(map);
     rroff = (char *)rr - (char *) STARH(map);
-    if (rr->noff != -1) {
+    if (rr->noff != CWC(-1)) {
         nmoff = Cx(rr->noff) + NAMEOFF(map);
         nlen = U(*((char *)STARH(map) + nmoff)) + 1;
         Munger((Handle) map, nmoff, (Ptr)0, nlen, (Ptr) "", (LONGINT) 0);
@@ -263,7 +263,7 @@ P1(PUBLIC pascal trap, void, RmveResource, Handle, res)
     NAMEOFFX(map) = CW(NAMEOFF(map) - sizeof(resref));
     tr = (typref *)((char *) STARH(map) + troff);
     tr->nres = CW(CW(tr->nres) - 1);
-    if (tr->nres == -1) {
+    if (tr->nres == CWC(-1)) {
         ROMlib_invalar();
         NUMTMINUS1X(map) = CW(NUMTMINUS1(map) - 1);
         Munger((Handle) map, troff, (Ptr)0, (LONGINT)sizeof(typref), (Ptr) "",
@@ -314,7 +314,8 @@ A1(PRIVATE, OSErr, writemap, resmaphand, map)
 
 A2(PUBLIC, void, ROMlib_wr, resmaphand, map, resref *, rr)	/* INTERNAL */
 {
-    LONGINT rsize, newloc, lc, swappedrsize;
+    LONGINT rsize, newloc, lc;
+    GUEST<LONGINT> swappedrsize;
     Handle res;
 
     res = (Handle) MR(rr->rhand);
@@ -332,16 +333,16 @@ A2(PUBLIC, void, ROMlib_wr, resmaphand, map, resref *, rr)	/* INTERNAL */
             newloc = B3TOLONG(rr->doff);
         ROMlib_setreserr(SetFPos(Hx(map, resfn), fsFromStart, Hx(map, rh.rdatoff)
                                                                 + newloc));
-        if (ResErr != noErr)
+        if (ResErr != CWC(noErr))
             return;
         lc = sizeof(LONGINT);
 	swappedrsize = CL(rsize);
         ROMlib_setreserr(FSWriteAll(Hx(map, resfn), &lc, (Ptr) &swappedrsize));
-        if (ResErr != noErr)
+        if (ResErr != CWC(noErr))
             return;
         lc = rsize;
         ROMlib_setreserr(FSWriteAll(Hx(map, resfn), &lc, STARH(res)));
-        if (ResErr != noErr)
+        if (ResErr != CWC(noErr))
             return;
         rr->ratr &= ~resChanged;
     } else
@@ -374,13 +375,14 @@ A4(PRIVATE, void, getdat, INTEGER, fn, LONGINT, datoff, LONGINT, doff,
 								Handle *, h)
 {
     LONGINT size, lc;
-    
+    GUEST<LONGINT> size_s;
+
     gui_assert(datoff >= 0);
     gui_assert(doff >= 0);
     SetFPos(fn, fsFromStart, datoff + doff);
     lc = sizeof(LONGINT);
-    FSReadAll(fn, &lc, (Ptr) &size);
-    size = CL(size);
+    FSReadAll(fn, &lc, (Ptr) &size_s);
+    size = CL(size_s);
     gui_assert(size >= 0);
     *h = NewHandle(size);
     gui_assert(*h);
@@ -395,7 +397,8 @@ A4(PRIVATE, void, getdat, INTEGER, fn, LONGINT, datoff, LONGINT, doff,
 A4(PRIVATE, void, putdat, INTEGER, fn, LONGINT, datoff, LONGINT *, doffp,
 								    Handle, h)
 {
-    LONGINT size = GetHandleSize(h), lc, swappedsize;
+    LONGINT size = GetHandleSize(h), lc;
+    GUEST<LONGINT> swappedsize;
     
     gui_assert(size >= 0);
     gui_assert(datoff >= 0);
@@ -443,10 +446,11 @@ A4(PRIVATE, LONGINT, walkst, res_sorttype_t *, sp, res_sorttype_t *, sep, INTEGE
         else if (doff == sp->diskoff) {
 	    /* read and advance */
 	    SetFPos(fn, fsFromStart, datoff + doff);
-	    lc = sizeof(LONGINT);
-	    FSReadAll(fn, &lc, (Ptr) &size);
+            lc = sizeof(LONGINT);
+            GUEST<LONGINT> size_s;
+	    FSReadAll(fn, &lc, (Ptr) &size_s);
 	    gui_assert(lc == sizeof(LONGINT));
-	    size = CL(size);
+	    size = CL(size_s);
 	    gui_assert(size >= 0);
 	    doff += size + sizeof(LONGINT);
 	} else {
@@ -522,12 +526,12 @@ P1(PUBLIC pascal trap, void, UpdateResFile, INTEGER, rn)
 	    if (needtowalk) {
 		WALKTANDR(map, i, tr, j, rr)
 		    ROMlib_wr(map, rr);
-		    if (ResErr != noErr)
+		    if (ResErr != CWC(noErr))
 			return;
 		EWALKTANDR(tr, rr)
 	    }
 	    ROMlib_setreserr(writemap(map));
-	    if (ResErr != noErr)
+	    if (ResErr != CWC(noErr))
 		return;
 	}
 	iopb.ioRefNum = HxX(map, resfn);
@@ -542,7 +546,7 @@ P1(PUBLIC pascal trap, void, WriteResource, Handle, res)
     resref *rr;
 
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
         return;
     ROMlib_wr(map, rr);
 }

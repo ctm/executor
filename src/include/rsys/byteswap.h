@@ -81,6 +81,20 @@ template<class TT>
 TT Cx(TT x);    // no definition. Make sure we get a linker error if an unexpected version of Cx is used.
 
 
+inline unsigned char Cx_RAW(unsigned char x) { return x; }
+inline signed char Cx_RAW(signed char x) { return x; }
+inline char Cx_RAW(char x) { return x; }
+
+inline uint16_t Cx_RAW(uint16_t x) { return CW_RAW(x); }
+inline int16_t Cx_RAW(int16_t x) { return CW_RAW(x); }
+
+inline uint32_t Cx_RAW(uint32_t x) { return CL_RAW(x); }
+inline int32_t Cx_RAW(int32_t x) { return CL_RAW(x); }
+
+template<class TT>
+TT Cx_RAW(TT x);    // no definition. Make sure we get a linker error if an unexpected version of Cx is used.
+
+
 #if 0
 #define MR(n)  ((typeof (n))(n ? ((swap32 ((unsigned long) (n))) + ROMlib_offset) : 0))
 #define RM(n)  ((typeof (n))(n ? ((swap32 ((unsigned long) (n)- ROMlib_offset)) ) : 0))
@@ -130,11 +144,13 @@ TT* MR(HiddenValue<uint32_t, TT*> p)
     return MR((TT*) p);
 }
 
+//template<typename TT>
+//TT* MR(TT* p); // unavailable
 
 inline std::nullptr_t RM(std::nullptr_t p) { return nullptr; }
 
-inline void* MR(uint32_t p) { return MR((void*)p); }
-inline void* MR(int32_t p) { return MR((void*)p); }
+//inline void* MR(uint32_t p) { return MR((void*)p); }
+//inline void* MR(int32_t p) { return MR((void*)p); }
 
 
 #  define PPR(n) MR(n)

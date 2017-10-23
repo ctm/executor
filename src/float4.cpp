@@ -195,7 +195,7 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_Fsetenv, INTEGER *,
    * handling.
    */
 
-  env = CW (*dp);
+  env = CW_RAW (*dp);
   halts_enabled = env & 0x1F;
   env &= ~0x1F;
 
@@ -309,7 +309,7 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_Fsetenv, INTEGER *,
   gui_abort ();
 #endif
 
-  warning_floating_point ("setenv(0x%04X)", (unsigned) (uint16) CW (*dp));
+  warning_floating_point ("setenv(0x%04X)", (unsigned) (uint16) CW_RAW (*dp));
 }
 
 
@@ -395,7 +395,7 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_Fgetenv, INTEGER *,
   env = (env & ~0x1F) | halts_enabled;
 
   /* Return the computed environment word. */
-  *(unsigned short *) dp = CW(env);
+  *(unsigned short *) dp = CW_RAW(env);
   warning_floating_point ("Returning 0x%04X", (unsigned) env);
 }
 
@@ -431,8 +431,8 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_Fprocexit, INTEGER *, dp,
   C_ROMlib_Fgetenv (&swapped_old_env, 0);
 
   /* Compute the new environment (which is swapped). */
-  swapped_new_env = ((*dp & ~CWC (EXCEPTION_BITS_MASK))
-		     | (swapped_old_env & CWC (EXCEPTION_BITS_MASK)));
+  swapped_new_env = ((*dp & ~CWC_RAW (EXCEPTION_BITS_MASK))
+		     | (swapped_old_env & CWC_RAW (EXCEPTION_BITS_MASK)));
 
   /* Set up the new environment. */
   C_ROMlib_Fsetenv (&swapped_new_env, 0);
@@ -447,14 +447,14 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_Ftestxcp, INTEGER *,
   warning_floating_point (NULL_STRING);
   /* Fetch the current environment. */
   C_ROMlib_Fgetenv (&env, 0);
-  env = CW (env);
+  env = CW_RAW (env);
 
   /* Clear dp's high byte. */
-  *dp &= CWC (0x00FF);
+  *dp &= CWC_RAW (0x00FF);
 
   /* See if any of the specified exception bits are set. */
   if ((env >> 8) & ((unsigned char *)dp)[1])
-    *dp |= CWC (0x100);  /* Return 1 in the high byte. */
+    *dp |= CWC_RAW (0x100);  /* Return 1 in the high byte. */
 }
 
 
@@ -477,7 +477,7 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_FscalbX, INTEGER *,
   DECLAREINOUT();
 
   /* FIXME - may lose precision! */
-  scale = CW(*(short *)sp);
+  scale = CW_RAW(*(short *)sp);
   ieee_to_x80 (out = scalb (in = x80_to_ieee (dp), scale), dp);
 
   warning_floating_point ("scalb(" IEEE_T_FORMAT ", %d) == " IEEE_T_FORMAT "",
@@ -580,10 +580,10 @@ do {									\
     dest op ( in1 = f32_to_ieee ((const f32_t *) sp));			\
     break;								\
   case FI_OPERAND:							\
-    dest op (in1 = CW (*(short *) sp));					\
+    dest op (in1 = CW_RAW (*(short *) sp));					\
     break;								\
   case FL_OPERAND:							\
-    dest op (in1 = CL (*(long *)(sp)));					\
+    dest op (in1 = CL_RAW (*(long *)(sp)));					\
     break;								\
   case FC_OPERAND:							\
     dest op (in1 = comp_to_ieee ((const comp_t *) sp));			\
@@ -684,10 +684,10 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_FX2x, x80_t *,
     ieee_to_f32 (val, (f32_t *) dp);
     break;
   case FI_OPERAND:
-    *(short *)dp = CW( (signed short) rint (val));
+    *(short *)dp = CW_RAW( (signed short) rint (val));
     break;
   case FL_OPERAND:
-    *(long *)dp = CL( (LONGINT) rint (val));
+    *(long *)dp = CL_RAW( (LONGINT) rint (val));
     break;
   case FC_OPERAND:
     ieee_to_comp (val, (comp_t *) dp);
@@ -721,10 +721,10 @@ P_SAVED1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fremx, void *, sp,
     n2 = f32_to_ieee ((const f32_t *) sp);
     break;
   case FI_OPERAND:
-    n2 = CW(*(short *)sp);
+    n2 = CW_RAW(*(short *)sp);
     break;
   case FL_OPERAND:
-    n2 = CL(*(long *)sp);
+    n2 = CL_RAW(*(long *)sp);
     break;
   case FC_OPERAND:
     n2 = comp_to_ieee ((const comp_t *) sp);
@@ -787,10 +787,10 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, FCMP_RETURN_TYPE, ROMlib_Fcmpx,
     n2 = f32_to_ieee ((const f32_t *) sp);
     break;
   case FI_OPERAND:
-    n2 = CW(*(short *)sp);
+    n2 = CW_RAW(*(short *)sp);
     break;
   case FL_OPERAND:
-    n2 = CL (* (long *)sp);
+    n2 = CL_RAW (* (long *)sp);
     break;
   case FC_OPERAND:
     n2 = comp_to_ieee ((const comp_t *) sp);
@@ -911,10 +911,10 @@ P_SAVED0D1A0A1_4 (PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
     n = f32_to_ieee ((const f32_t *) sp);
     break;
   case FI_OPERAND:
-    n = CW (*(short *)sp);
+    n = CW_RAW (*(short *)sp);
     break;
   case FL_OPERAND:
-    n = CL (*(long *)sp);
+    n = CL_RAW (*(long *)sp);
     break;
   case FC_OPERAND:
     n = comp_to_ieee ((const comp_t *) sp);
@@ -926,7 +926,7 @@ P_SAVED0D1A0A1_4 (PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
   in = n;
 
   /* Fetch the number of digits they are interested in. */
-  digits = CW (*(short *) (&sp2->digits));
+  digits = CW_RAW (*(short *) (&sp2->digits));
   
   /* Compute sign. */
   if (n < 0)
@@ -938,7 +938,7 @@ P_SAVED0D1A0A1_4 (PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
     dp->sgn = CB (0);
 
   /* Default to 0 exp, in case of infinity, etc, just to be consistent. */
-  dp->exp = CWC (0);
+  dp->exp = CWC_RAW (0);
   
   if (n == 0)
     strcpy (c_string, "0");
@@ -1001,7 +1001,7 @@ P_SAVED0D1A0A1_4 (PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
       if (c_string[0] == '\0')
 	strcpy (c_string, "0");
 
-      dp->exp = CW (exponent);
+      dp->exp = CW_RAW (exponent);
     }
   
   /* See if the generated string is too LONGINT. */
@@ -1082,7 +1082,7 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fdec2x, Decimal *,
     for (p = (char *) sp->sig + 1, n = 0; p <= last_char; p++)
       n = (n * 10) + (*p - '0');
 
-    exp = SWAPSW_IFLE (sp->exp);
+    exp = CW (sp->exp);
 
     if (exp > 0)
       n *= pow (10.0, exp);
@@ -1108,10 +1108,10 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fdec2x, Decimal *,
     ieee_to_f32 (n, (f32_t *) dp);
     break;
   case FI_OPERAND:
-    *(short *) dp = CW( (signed short) rint (n));
+    *(short *) dp = CW_RAW( (signed short) rint (n));
     break;
   case FL_OPERAND:
-    *(long *) dp = CL( (LONGINT) rint (n));
+    *(long *) dp = CL_RAW( (LONGINT) rint (n));
     break;
   case FC_OPERAND:
     ieee_to_comp (n, (comp_t *) dp);
@@ -1131,12 +1131,12 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fclassx, void *,
 		  sp, INTEGER *, dp, unsigned short, sel)
 {
   static const unsigned char eight_zeros[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-  unsigned short first_word = CW (*(unsigned short *)sp);
+  unsigned short first_word = CW_RAW (*(unsigned short *)sp);
 
   warning_floating_point (NULL_STRING);
 
   /* Default to normal number. */
-  *dp = CWC (NormalNum);
+  *dp = CWC_RAW (NormalNum);
 
   warning_floating_point (NULL_STRING);
 
@@ -1151,18 +1151,18 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fclassx, void *,
       {
 	if ((((unsigned char *)sp)[2] & 0x7F) == 0
 	    && !memcmp (((unsigned char *)sp) + 3, eight_zeros, 7))
-	  *dp = CWC (Infinite);
-	else if (((unsigned short *)sp)[1] & CWC (X_QNAN_MASK))
-	  *dp = CWC (QNaN);
+	  *dp = CWC_RAW (Infinite);
+	else if (((unsigned short *)sp)[1] & CWC_RAW (X_QNAN_MASK))
+	  *dp = CWC_RAW (QNaN);
 	else
-	  *dp = CWC (SNaN);
+	  *dp = CWC_RAW (SNaN);
       }
-    else if ((((unsigned short *)sp)[1] & CWC (X_NORMNUM_MASK)) == 0)
+    else if ((((unsigned short *)sp)[1] & CWC_RAW (X_NORMNUM_MASK)) == 0)
       {
 	if (!memcmp (((char *)sp) + 2, eight_zeros, 8))
-	  *dp = CWC (ZeroNum);
+	  *dp = CWC_RAW (ZeroNum);
 	else
-	  *dp = CWC (DenormalNum);
+	  *dp = CWC_RAW (DenormalNum);
       }
     break;
   case FD_OPERAND:
@@ -1176,19 +1176,19 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fclassx, void *,
       {
 	if ((first_word & 0xF) == 0
 	    && !memcmp (((char *)sp) + 2, eight_zeros, 6))
-	  *dp = CWC (Infinite);
+	  *dp = CWC_RAW (Infinite);
 	else if (first_word & D_QNAN_MASK)
-	  *dp = CWC (QNaN);
+	  *dp = CWC_RAW (QNaN);
 	else
-	  *dp = CWC (SNaN);
+	  *dp = CWC_RAW (SNaN);
       }
     else if ((first_word & D_NORMNUM_MASK) == 0)
       {
 	if ((first_word & 0xF) == 0
 	    && !memcmp (((char *)sp) + 2, eight_zeros, 6))
-	  *dp = CWC (ZeroNum);
+	  *dp = CWC_RAW (ZeroNum);
 	else
-	  *dp = CWC (DenormalNum);
+	  *dp = CWC_RAW (DenormalNum);
       }
     break;
   case FS_OPERAND:
@@ -1197,22 +1197,22 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fclassx, void *,
 #define S_NORMNUM_MASK 0x78000000
 #define S_FRAC_MASK    0x07FFFFFF
 #define S_QNAN_MASK    0x04000000
-      ULONGINT v = CL (*(uint32 *)sp);
+      ULONGINT v = CL_RAW (*(uint32 *)sp);
       if ((v & S_INF_OR_NAN) == S_INF_OR_NAN)
 	{
 	  if ((v & S_FRAC_MASK) == 0)
-	    *dp = CWC (Infinite);
+	    *dp = CWC_RAW (Infinite);
 	  else if (v & S_QNAN_MASK)
-	    *dp = CWC (QNaN);
+	    *dp = CWC_RAW (QNaN);
 	  else
-	    *dp = CWC (SNaN);
+	    *dp = CWC_RAW (SNaN);
 	}
       else if ((v & S_NORMNUM_MASK) == 0)
 	{
 	  if ((v & S_FRAC_MASK) == 0)
-	    *dp = CWC (ZeroNum);
+	    *dp = CWC_RAW (ZeroNum);
 	  else
-	    *dp = CWC (DenormalNum);
+	    *dp = CWC_RAW (DenormalNum);
 	}
     }
     break;
@@ -1221,9 +1221,9 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fclassx, void *,
       static const unsigned char comp_nan[]  = { 0x80, 0, 0, 0, 0, 0, 0, 0 };
 
       if (!memcmp (sp, eight_zeros, sizeof (comp_t)))
-	*dp = CWC (ZeroNum);
+	*dp = CWC_RAW (ZeroNum);
       else if (!memcmp (sp, comp_nan, sizeof comp_nan))
-	*dp = CWC (SNaN);  /* FIXME - should this be signaling?  Bill sez so */
+	*dp = CWC_RAW (SNaN);  /* FIXME - should this be signaling?  Bill sez so */
 
       /* FIXME - should we let the SNaN get negated, below? */
     }
@@ -1237,6 +1237,6 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fclassx, void *,
    * sign bit, we only need to check the first byte of the type.
    */
   if (*(signed char *)sp < 0)
-    *dp = CW (0 - CW (*dp));
+    *dp = CW_RAW (0 - CW_RAW (*dp));
 
 }

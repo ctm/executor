@@ -63,13 +63,19 @@ typedef enum
  */
 
 
-    /* extra */
-typedef struct size_info { GUEST_STRUCT;
+struct SIZEResource { 
+    GUEST_STRUCT;
     GUEST< int16> size_flags;
     GUEST< int32> preferred_size;
     GUEST< int32> minimum_size;
-    GUEST< boolean_t> size_resource_present_p;
-    GUEST< boolean_t> application_p;
+};
+    
+typedef struct size_info { GUEST_STRUCT;
+    int16 size_flags;
+    int32 preferred_size;
+    int32 minimum_size;
+    boolean_t size_resource_present_p;
+    boolean_t application_p;
 } size_info_t;
 
 extern size_info_t size_info;
@@ -125,7 +131,7 @@ typedef ProcPtr GetSpecificFilterProcPtr;
 #define noOutstandingHLE	(-607)
 #define bufferIsSmall		(-608)
 
-extern pascal trap OSErr C_AcceptHighLevelEvent (TargetID *sender_id_return, int32 *refcon_return, Ptr msg_buf, int32 *msg_length_return);
+extern pascal trap OSErr C_AcceptHighLevelEvent (TargetID *sender_id_return, GUEST<int32> *refcon_return, Ptr msg_buf, GUEST<int32> *msg_length_return);
 extern pascal trap Boolean C_GetSpecificHighLevelEvent (GetSpecificFilterProcPtr fn, Ptr data, OSErr * err_return);
 extern pascal trap OSErr C_PostHighLevelEvent (EventRecord *evt, Ptr receiver_id, int32 refcon, Ptr msg_buf, int32 msg_length, int32 post_options);
 

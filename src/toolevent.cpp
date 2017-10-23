@@ -110,7 +110,7 @@ A0(PRIVATE, void, ROMlib_togglealarm)
       {
 	/* the baseAddr field of the src_alarm bitmap will either be
 	   the hard coded alarm, or the resource 'sicn' */
-	NULL,
+	nullptr,
 	CWC (2),
 	{ CWC (0), CWC (0), CWC (16), CWC (16) }
       };
@@ -118,7 +118,7 @@ A0(PRIVATE, void, ROMlib_togglealarm)
     static INTEGER alarm_bits[16];
     BitMap save_alarm_bitmap =
       {
-	(Ptr) RM (&alarm_bits[0]),
+	RM ((Ptr)&alarm_bits[0]),
 	CWC (2),
 	{ CWC (0), CWC (0), CWC (16), CWC (16) }
       };
@@ -231,7 +231,7 @@ P3(PUBLIC pascal trap, LONGINT, KeyTrans, Ptr, mapp, unsigned short, code,
 
 PUBLIC void Executor::ROMlib_circledefault(DialogPtr dp)
 {
-    INTEGER type;
+    GUEST<INTEGER> type;
     GUEST<Handle> h;
     Rect r;
     GrafPtr saveport;
@@ -267,12 +267,14 @@ typedef enum { SETSTATE, CLEARSTATE, FLIPSTATE } modstate_t;
 
 void modstate(DialogPtr dp, INTEGER tomod, modstate_t mod)
 {
-    INTEGER type, newvalue;
-    GUEST<ControlHandle> ch;
+    GUEST<INTEGER> type;
+    INTEGER newvalue;
+    GUEST<Handle> ch_s;
+    ControlHandle ch;
     Rect r;
 
-    GetDItem(dp, tomod, &type, (GUEST<Handle> *) &ch, &r);
-    ch = MR(ch);
+    GetDItem(dp, tomod, &type, &ch_s, &r);
+    ch = (ControlHandle) MR(ch_s);
     if (type & CWC(ctrlItem)) {
 	switch (mod) {
 	case SETSTATE:
@@ -300,13 +302,12 @@ void modstate(DialogPtr dp, INTEGER tomod, modstate_t mod)
 
 INTEGER getvalue(DialogPtr dp, INTEGER toget)
 {
-    INTEGER type;
+    GUEST<INTEGER> type;
     GUEST<ControlHandle> ch;
     Rect r;
 
     GetDItem(dp, toget, &type, (GUEST<Handle> *) &ch, &r);
-    ch = MR(ch);
-    return type & CWC(ctrlItem) ? GetCtlValue(ch) : 0;
+    return (type & CWC(ctrlItem)) ? GetCtlValue(MR(ch)) : 0;
 }
 
 typedef struct depth
@@ -366,13 +367,12 @@ void setoneofthree(DialogPtr dp, INTEGER toset, INTEGER item1, INTEGER item2,
 void
 setedittext (DialogPtr dp, INTEGER itemno, StringPtr str)
 {
-  INTEGER type;
+  GUEST<INTEGER> type;
   Rect r;
   GUEST<Handle> h;
 
   GetDItem (dp, itemno, &type, &h, &r);
-  h = MR (h);
-  SetIText(h, str);
+  SetIText(MR(h), str);
 }
 
 void setedittextnum(DialogPtr dp, INTEGER itemno, INTEGER value)
@@ -403,13 +403,14 @@ setedittextcstr (DialogPtr dp, INTEGER itemno, char *strp)
 INTEGER getedittext(DialogPtr dp, INTEGER itemno)
 {
     Str255 str;
-    GUEST<Handle> h;
-    INTEGER type;
+    GUEST<Handle> h_s;
+    Handle h;
+    GUEST<INTEGER> type;
     Rect r;
     LONGINT l;
 
-    GetDItem(dp, itemno, &type, &h, &r);
-    h = MR(h);
+    GetDItem(dp, itemno, &type, &h_s, &r);
+    h = MR(h_s);
     GetIText(h, str);
     StringToNum(str, &l);
     return (INTEGER) l;
@@ -515,12 +516,13 @@ void
 update_string_from_edit_text (char **strp, DialogPtr dp, INTEGER itemno)
 {
   Str255 str;
-  GUEST<Handle> h;
-  INTEGER type;
+  GUEST<Handle> h_s;
+  Handle h;
+  GUEST<INTEGER> type;
   Rect r;
   
-  GetDItem(dp, itemno, &type, &h, &r);
-  h = MR(h);
+  GetDItem(dp, itemno, &type, &h_s, &r);
+  h = MR(h_s);
   GetIText(h, str);
   if (*strp)
     free (*strp);
@@ -714,13 +716,14 @@ PRIVATE void mod_item_enableness( DialogPtr dp, INTEGER item,
 				 enableness_t enableness_wanted )
 {
   INTEGER type;
+  GUEST<INTEGER> type_s;
   Handle h;
   GUEST<Handle> tmpH;
   ControlHandle ch;
   Rect r;
 
-  GetDItem(dp, item, &type, &tmpH, &r);
-  type = CW(type);
+  GetDItem(dp, item, &type_s, &tmpH, &r);
+  type = CW(type_s);
   h = MR(tmpH);
   if (((type & itemDisable) && enableness_wanted == enable)
       || (!(type & itemDisable) && enableness_wanted == disable))
@@ -740,7 +743,7 @@ static void
 set_sound_on_string (DialogPtr dp)
 {
   Str255 sound_string;
-  INTEGER junk1;
+  GUEST<INTEGER> junk1;
   GUEST<Handle> h;
   Rect junk2;
     
@@ -816,7 +819,8 @@ PRIVATE void dopreferences( void )
 {
   DialogPtr dp;
   INTEGER ihit;
-
+  GUEST<INTEGER> ihit_s;
+  
   if (!(ROMlib_options & ROMLIB_NOPREFS_BIT))
     {
       if (WWExist != EXIST_YES)
@@ -837,8 +841,8 @@ PRIVATE void dopreferences( void )
 	      ROMlib_circledefault(dp);
 	      do
 		{
-		  ModalDialog((ProcPtr) 0, &ihit);
-		  ihit = CW(ihit);
+		  ModalDialog((ProcPtr) 0, &ihit_s);
+		  ihit = CW(ihit_s);
 		  switch (ihit)
 		    {
 		    case PREFNORMALITEM:
@@ -907,7 +911,8 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
 				    BOOLEAN, remflag)    /* no DA support */
 {
     BOOLEAN retval;
-    LONGINT now;
+    GUEST<ULONGINT> now_s;
+    ULONGINT now;
 #if defined(MACOSX_)
     struct sockaddr sockname;
     socklen_t addrlen;
@@ -927,10 +932,10 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
     TRACE(2);
     if (SPVolCtl & 0x80) {
 	TRACE(3);
-	GetDateTime(&now);
-	now = CL(now);
+	GetDateTime(&now_s);
+	now = CL(now_s);
 	TRACE(4);
-	if ((ULONGINT) now >= (ULONGINT) Cx(SPAlarm)) {
+	if (now >= (ULONGINT) Cx(SPAlarm)) {
 	    TRACE(5);
 	    if (now & 1) {
 		TRACE(6);

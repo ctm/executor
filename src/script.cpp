@@ -212,7 +212,7 @@ P7 (PUBLIC pascal trap, void, NMeasureJust, Ptr, text, int32, length,
     Fixed, slop, Ptr, charLocs, JustStyleCode, run_pos,
     Point, numer, Point, denom)
 {
-  Point numerx, denomx;
+  GUEST<Point> numerx, denomx;
   
   warning_unimplemented ("slop = %d, run_pos = %d", slop, run_pos);
   
@@ -222,7 +222,7 @@ P7 (PUBLIC pascal trap, void, NMeasureJust, Ptr, text, int32, length,
   denomx.h = CW (denomx.h);
   
   xStdTxMeas (length, (uint8 *) text, &numerx, &denomx,
-	      NULL, (int16 *) charLocs);
+	      NULL, (GUEST<int16> *) charLocs);
 }
 
 P1 (PUBLIC pascal trap, Boolean, ParseTable,
@@ -299,7 +299,7 @@ P5(PUBLIC pascal trap, INTEGER, Char2Pixel, Ptr, textbufp, INTEGER, len,
 }
 
 P6(PUBLIC pascal trap, void, FindWord, Ptr, textbufp, INTEGER, length,
-	   INTEGER, offset, BOOLEAN, leftside, Ptr, breaks, INTEGER *, offsets)
+	   INTEGER, offset, BOOLEAN, leftside, Ptr, breaks, GUEST<INTEGER> *, offsets)
 {
   INTEGER start, stop;
   boolean_t chasing_spaces_p;
@@ -325,25 +325,25 @@ P6(PUBLIC pascal trap, void, FindWord, Ptr, textbufp, INTEGER, length,
 
     offsets[0] = CW(start);
     offsets[1] = CW(stop);
-    offsets[2] = 0; /* Testing on Brute shows we should zero this memory */
-    offsets[3] = 0;
-    offsets[4] = 0;
-    offsets[5] = 0;
+    offsets[2] = CWC(0); /* Testing on Brute shows we should zero this memory */
+    offsets[3] = CWC(0);
+    offsets[4] = CWC(0);
+    offsets[5] = CWC(0);
     warning_unimplemented ("poorly implemented");
 }
 
 P4(PUBLIC pascal trap, void, HiliteText, Ptr, textbufp, INTEGER, firstoffset,
-				     INTEGER, secondoffset, INTEGER *, offsets)
+				     INTEGER, secondoffset, GUEST<INTEGER> *, offsets)
 {
 #if defined (BINCOMPAT)
     ROMlib_hook(script_notsupported);
 #endif /* BINCOMPAT */
     offsets[0] = CW(firstoffset);
     offsets[1] = CW(secondoffset);
-    offsets[2] = 0;
-    offsets[3] = 0;
-    offsets[4] = 0;
-    offsets[5] = 0;
+    offsets[2] = CWC(0);
+    offsets[3] = CWC(0);
+    offsets[4] = CWC(0);
+    offsets[5] = CWC(0);
 }
 
 PRIVATE int16
@@ -362,7 +362,7 @@ count_spaces (Ptr textbufp, int16 length)
 P3 (PUBLIC pascal trap, void, DrawJust, Ptr, textbufp,
     int16, length, int16, slop)
 {
-  Fixed save_sp_extra_x;
+  GUEST<Fixed> save_sp_extra_x;
   int n_spaces;
 
   save_sp_extra_x = PORT_SP_EXTRA_X (thePort);
@@ -400,7 +400,7 @@ snag_date_part (Ptr text, int *offsetp, LONGINT len)
 enum { longDateFound = 1, dateTimeNotFound = 0x8400 };
 
 P5(PUBLIC pascal trap, String2DateStatus, String2Time, Ptr, textp,
-       LONGINT, len, Ptr, cachep, LONGINT *, lenusedp, GUEST<Ptr> *, datetimep)
+       LONGINT, len, Ptr, cachep, GUEST<LONGINT> *, lenusedp, GUEST<Ptr> *, datetimep)
 {
   warning_unimplemented (NULL_STRING);
   *lenusedp = CLC (0);
@@ -410,11 +410,10 @@ P5(PUBLIC pascal trap, String2DateStatus, String2Time, Ptr, textp,
 PRIVATE void
 this_date_rec(DateTimeRec *p)
 {
-  LONGINT now;
+  GUEST<ULONGINT> now;
 
   GetDateTime (&now);
-  now = CL (now);
-  Secs2Date (now, p);
+  Secs2Date (CL (now), p);
 }
 
 PRIVATE int
@@ -439,7 +438,7 @@ this_millennium (void)
 
 P5 (PUBLIC pascal trap, String2DateStatus, String2Date,
     Ptr, text, int32, length, DateCachePtr, cache,
-    int32 *, length_used_ret, LongDatePtr, date_time)
+    GUEST<int32> *, length_used_ret, LongDatePtr, date_time)
 {
   String2DateStatus retval;
 
@@ -484,7 +483,7 @@ P5 (PUBLIC pascal trap, String2DateStatus, String2Date,
 P7 (PUBLIC pascal trap, StyledLineBreakCode, StyledLineBreak,
     Ptr, textp, int32, length,
     int32, text_start, int32, text_end, int32, flags,
-    Fixed *, text_width_fp, int32 *, text_offset)
+    GUEST<Fixed> *, text_width_fp, GUEST<int32> *, text_offset)
 {
   char *text = (char *) textp;
   /* the index into `text' that began the last word, which is where we
@@ -674,7 +673,7 @@ P2 (PUBLIC pascal trap, LONGINT, VisibleLength, Ptr, textp, LONGINT, len)
 }
 
 P2 (PUBLIC pascal trap, void, LongDate2Secs, LongDateRec *, ldatep,
-    ULONGINT *, secs_outp)
+    GUEST<ULONGINT> *, secs_outp)
 {
   long long secs;
   LONGINT high, low;
@@ -693,7 +692,7 @@ P2 (PUBLIC pascal trap, void, LongDate2Secs, LongDateRec *, ldatep,
   secs_outp[1] = CL (low);
 }
 
-P2 (PUBLIC pascal trap, void, LongSecs2Date, ULONGINT *, secs_inp,
+P2 (PUBLIC pascal trap, void, LongSecs2Date, GUEST<ULONGINT> *, secs_inp,
     LongDateRec *, ldatep)
 
 {
@@ -836,8 +835,8 @@ P6(PUBLIC pascal trap, void, DrawJustified,
    Point, numer,
    Point, denom)
 {
-  Point swapped_numer;
-  Point swapped_denom;
+  GUEST<Point> swapped_numer;
+  GUEST<Point> swapped_denom;
   
   warning_unimplemented ("poorly implemented");
   swapped_numer.h = CW (numer.h);
@@ -851,7 +850,7 @@ P6(PUBLIC pascal trap, void, DrawJustified,
 P3(PUBLIC pascal trap, ScriptRunStatus, FindScriptRun,
    Ptr, textPtr,
    LONGINT, textLen,
-   LONGINT *, lenUsedp)
+   GUEST<LONGINT> *, lenUsedp)
 {
   warning_unimplemented (NULL_STRING);
   *lenUsedp = CLC (1);
@@ -864,20 +863,20 @@ P9(PUBLIC pascal trap, INTEGER, PixelToChar,
    Fixed, slop,
    Fixed, pixelWidth,
    BOOLEAN *, leadingEdgep,
-   Fixed *, widthRemainingp,
+   GUEST<Fixed> *, widthRemainingp,
    JustStyleCode, styleRunPosition,
    Point, numer,
    Point, denom)
 {
-  INTEGER *locs;
+  GUEST<INTEGER> *locs;
   INTEGER retval, i;
-  Point swapped_numer;
-  Point swapped_denom;
+  GUEST<Point> swapped_numer;
+  GUEST<Point> swapped_denom;
   INTEGER int_pix_width;
 
   warning_unimplemented ("poorly implemented");
 
-  locs = (INTEGER*)alloca( sizeof(INTEGER) * (textLen + 1));
+  locs = (GUEST<INTEGER>*)alloca( sizeof(INTEGER) * (textLen + 1));
 
   swapped_numer.h = CW (numer.h);
   swapped_numer.v = CW (numer.v);
@@ -930,7 +929,7 @@ P8(PUBLIC pascal trap, INTEGER, CharToPixel,
    Point, denom)
 {
   INTEGER retval;
-  Point swapped_numer, swapped_denom;
+  GUEST<Point> swapped_numer, swapped_denom;
 
   warning_unimplemented ("poorly implemented");
 

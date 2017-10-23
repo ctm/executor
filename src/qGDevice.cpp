@@ -95,7 +95,7 @@ Executor::gd_allocate_main_device (void)
        
        gd_pixmap = GD_PMAP (graphics_device);
        PIXMAP_SET_ROWBYTES_X (gd_pixmap, CW (vdriver_row_bytes));
-       PIXMAP_BASEADDR_X (gd_pixmap) = (Ptr) RM (vdriver_fbuf);
+       PIXMAP_BASEADDR_X (gd_pixmap) = RM ((Ptr) vdriver_fbuf);
 
        gd_rect = &GD_RECT (graphics_device);
        gd_rect->top = gd_rect->left = CWC (0);
@@ -119,8 +119,8 @@ P2 (PUBLIC pascal trap, GDHandle, NewGDevice,
     LONGINT, mode)
 {
   GDHandle this2;
-  Handle h;
-  PixMapHandle pmh;
+  GUEST<Handle> h;
+  GUEST<PixMapHandle> pmh;
   
   ZONE_SAVE_EXCURSION
     (SysZone,
@@ -139,7 +139,7 @@ P2 (PUBLIC pascal trap, GDHandle, NewGDevice,
 
        /* how do i allocate a new inverse color table? */
        h = RM (NewHandle (0));
-       GD_ITABLE_X (this2) = (ITabHandle) h;
+       GD_ITABLE_X (this2) = guest_cast<ITabHandle>(h);
        GD_RES_PREF_X (this2) = CWC (DEFAULT_ITABLE_RESOLUTION);
   
        GD_SEARCH_PROC_X (this2) = (SProcHndl)RM (NULL);
@@ -154,7 +154,7 @@ P2 (PUBLIC pascal trap, GDHandle, NewGDevice,
        GD_PMAP_X (this2) = pmh;
        CTAB_FLAGS_X (PIXMAP_TABLE (GD_PMAP (this2))).raw_or(CTAB_GDEVICE_BIT_X);
   
-       GD_REF_CON_X (this2) = CWC (0);  /* ??? */
+       GD_REF_CON_X (this2) = CLC (0);  /* ??? */
        GD_REF_NUM_X (this2) = CW (ref_num);  /* ??? */
        GD_MODE_X (this2) = CL (mode);  /* ??? */
 
@@ -171,7 +171,7 @@ P2 (PUBLIC pascal trap, GDHandle, NewGDevice,
        GD_CCXDATA_X (this2) = (Handle)RM (NULL);
        GD_CCXMASK_X (this2) = (Handle)RM (NULL);
 
-       GD_RESERVED_X (this2) = CWC (0);
+       GD_RESERVED_X (this2) = CLC (0);
   
        /* if mode is -1, this2 is a user created gdevice,
 	  and InitGDevice () should not be called (IMV-122) */
@@ -343,7 +343,7 @@ P4 (PUBLIC pascal trap, void, DeviceLoop,
     DeviceLoopFlags, flags)
 {
   GDHandle gd;
-  RgnHandle save_vis_rgn_x;
+  GUEST<RgnHandle> save_vis_rgn_x;
   RgnHandle sect_rgn, gd_rect_rgn;
 
   save_vis_rgn_x = PORT_VIS_REGION_X (thePort);
@@ -420,12 +420,13 @@ P2 (PUBLIC pascal trap, BOOLEAN, TestDeviceAttribute,
   return retval;
 }
 
+#warning ScreenRes is duplicate with toolutil.cpp
 P2 (PUBLIC pascal trap, void, ScreenRes,
-    INTEGER *, h_res,
-    INTEGER *, v_res)
+    GUEST<INTEGER> *, h_res,
+    GUEST<INTEGER> *, v_res)
 {
-  *h_res = PIXMAP_HRES_X (GD_PMAP (MR (MainDevice)));
-  *v_res = PIXMAP_VRES_X (GD_PMAP (MR (MainDevice)));
+  *h_res = CW( PIXMAP_HRES (GD_PMAP (MR (MainDevice))) >> 16 );
+  *v_res = CW( PIXMAP_VRES (GD_PMAP (MR (MainDevice))) >> 16 );
 }
 
 P4 (PUBLIC pascal trap, INTEGER, HasDepth,

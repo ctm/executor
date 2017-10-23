@@ -25,7 +25,7 @@ typedef struct _xdata_t
   int row_bits_minus_1;		/* row_bytes * 8 - 1.			     */
   int height_minus_1;		/* Number of rows in this pattern, minus 1.  */
   int byte_size;		/* Total bytes taken by pattern.	     */
-  LONGINT ctab_seed_x;		/* Big endian color table seed.		     */
+  GUEST<LONGINT> ctab_seed_x;		/* Big endian color table seed.		     */
   const rgb_spec_t *rgb_spec;	/* Only non-NULL for log2_bpp >= 4.	     */
   
   uint32 magic_cookie;

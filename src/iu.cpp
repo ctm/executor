@@ -311,7 +311,7 @@ P3(PUBLIC pascal trap, void, IUSetIntl, INTEGER, rn,		/* IMI-506 */
 
     oldcurmap = Cx(CurMap);
     UseResFile(rn);
-    if (ResErr == noErr) {
+    if (ResErr == CWC(noErr)) {
 	h = IUGetIntl(id);
 	if (h && HomeResFile(h) == rn) {
 	    if (id == 0)

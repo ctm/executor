@@ -24,7 +24,7 @@ char ROMlib_rcsid_soundIMVI[] =
 
 using namespace Executor;
 
-P1(PUBLIC, pascal trap void, SndGetSysBeepState, INTEGER *, statep)
+P1(PUBLIC, pascal trap void, SndGetSysBeepState, GUEST<INTEGER> *, statep)
 {
   /* #warning SndGetSysBeepState not implemented */
   warning_sound_log (NULL_STRING);
@@ -59,7 +59,7 @@ P0(PUBLIC, pascal trap NumVersion, SndSoundManagerVersion)
       break;
     case soundpretend:
     case soundon:
-      ret = CLC(0x03030303);  /* FIXME; need to get this right */
+      ret = 0x03030303;  /* FIXME; need to get this right */
       break;
     default:
       gui_abort ();
@@ -73,14 +73,14 @@ P0(PUBLIC, pascal trap NumVersion, MACEVersion)
 {
   /* #warning MACEVersion not implemented */
   warning_sound_log (NULL_STRING);
-  return ROMlib_PretendSound == soundpretend ? CLC(0x2000000) : 0;
+  return ROMlib_PretendSound == soundpretend ? 0x2000000 : 0;
 }
 
 P0(PUBLIC, pascal trap NumVersion, SPBVersion)
 {
   /* #warning SPBVersion not implemented */
   warning_sound_log (NULL_STRING);
-  return ROMlib_PretendSound == soundpretend ? CLC(0x1000000) : 0;
+  return ROMlib_PretendSound == soundpretend ? 0x1000000 : 0;
 }
 
 P8(PUBLIC, pascal trap OSErr, SndStartFilePlay, SndChannelPtr, chanp,
@@ -131,7 +131,7 @@ Executor::clear_pending_sounds (void)
   call_back_info.busy = FALSE;
   if (sound_driver->HasSoundClearPending())
     SOUND_CLEAR_PENDING ();
-  allchans = (SndChannelPtr)CLC (0);
+  allchans = nullptr;
 }
 
 
@@ -280,7 +280,7 @@ P7(PUBLIC, pascal trap void, Exp1to6, Ptr, inp, Ptr, outp, LONGINT, cnt,
 
 
 P4(PUBLIC, pascal trap OSErr, SndRecord, ProcPtr, filterp, Point, corner,
-					 OSType, quality, Handle *, sndhandlep)
+					 OSType, quality, GUEST<Handle> *, sndhandlep)
 {
 /* #warning SPBRecord not implemented */
   warning_sound_log (NULL_STRING);
@@ -297,7 +297,7 @@ P4(PUBLIC, pascal trap OSErr, SndRecordToFile, ProcPtr, filterp,
 
 
 P3(PUBLIC, pascal trap OSErr, SPBOpenDevice, Str255, name, INTEGER, permission,
-							  LONGINT *, inrefnump)
+							  GUEST<LONGINT> *, inrefnump)
 {
 /* #warning SPBOpenDevice not implemented */
   warning_sound_log (NULL_STRING);
@@ -349,9 +349,9 @@ P1(PUBLIC, pascal trap OSErr, SPBStopRecording, LONGINT, refnum)
 }
 
 P7(PUBLIC, pascal trap OSErr, SPBGetRecordingStatus, LONGINT, refnum,
-	    INTEGER *, recordingstatus, INTEGER *, meterlevel, LONGINT *,
-	    totalsampstorecord, LONGINT *, numsampsrecorded, LONGINT *,
-			    totalmsecstorecord, LONGINT *, numbermsecsrecorded)
+        GUEST<INTEGER> *, recordingstatus, GUEST<INTEGER> *, meterlevel, GUEST<LONGINT> *,
+	    totalsampstorecord, GUEST<LONGINT> *, numsampsrecorded, GUEST<LONGINT> *,
+			    totalmsecstorecord, GUEST<LONGINT> *, numbermsecsrecorded)
 {
 /* #warning SPBGetRecordingStatus not implemented */
   warning_sound_log (NULL_STRING);
@@ -378,7 +378,7 @@ P3(PUBLIC, pascal trap OSErr, SPBSetDeviceInfo, LONGINT, refnum, OSType,
 
 P8(PUBLIC, pascal trap OSErr, SetupSndHeader, Handle, sndhandle, INTEGER,
     numchannels, Fixed, rate, INTEGER, size, OSType, compresion, INTEGER,
-			    basefreq, LONGINT, numbytes, INTEGER *, headerlenp)
+			    basefreq, LONGINT, numbytes, GUEST<INTEGER> *, headerlenp)
 {
 /* #warning SetupSndHeader not implemented */
   warning_sound_log (NULL_STRING);
@@ -410,7 +410,7 @@ P1(PUBLIC, pascal trap OSErr, SPBSignOutDevice, INTEGER, refnum)
 }
 
 P3(PUBLIC, pascal trap OSErr, SPBGetIndexedDevice, INTEGER, count,
-				     Str255, name, Handle *, deviceiconhandlep)
+				     Str255, name, GUEST<Handle> *, deviceiconhandlep)
 {
 /* #warning SPBGetIndexedDevice not implemented */
   warning_sound_log (NULL_STRING);
@@ -419,7 +419,7 @@ P3(PUBLIC, pascal trap OSErr, SPBGetIndexedDevice, INTEGER, count,
 
 
 P2(PUBLIC, pascal trap OSErr, SPBMillisecondsToBytes, LONGINT, refnum,
-							     LONGINT *, millip)
+        GUEST<LONGINT> *, millip)
 {
 /* #warning SPBMillisecondsToBytes not implemented */
   warning_sound_log (NULL_STRING);
@@ -427,7 +427,7 @@ P2(PUBLIC, pascal trap OSErr, SPBMillisecondsToBytes, LONGINT, refnum,
 }
 
 P2(PUBLIC, pascal trap OSErr, SPBBytesToMilliseconds, LONGINT, refnum,
-							 LONGINT *, bytecountp)
+        GUEST<LONGINT> *, bytecountp)
 {
 /* #warning SPBBytesToMilliseconds not implemented */
   warning_sound_log (NULL_STRING);
@@ -471,7 +471,7 @@ P4(PUBLIC, pascal trap INTEGER, DirectorUnknown4, ResType, arg1, INTEGER, arg2,
 
 enum { half_volume = 0x50 };
 
-P1(PUBLIC, pascal trap OSErr, GetSysBeepVolume, LONGINT *, levelp)
+P1(PUBLIC, pascal trap OSErr, GetSysBeepVolume, GUEST<LONGINT> *, levelp)
 {
   OSErr retval;
 
@@ -490,7 +490,7 @@ P1(PUBLIC, pascal trap OSErr, SetSysBeepVolume, LONGINT, level)
   return retval;
 }
 
-P1(PUBLIC, pascal trap OSErr, GetDefaultOutputVolume, LONGINT *,levelp)
+P1(PUBLIC, pascal trap OSErr, GetDefaultOutputVolume, GUEST<LONGINT> *,levelp)
 {
   OSErr retval;
 
@@ -510,7 +510,7 @@ P1(PUBLIC, pascal trap OSErr, SetDefaultOutputVolume, LONGINT, level)
 }
 
 P2(PUBLIC, pascal trap OSErr, GetSoundHeaderOffset, Handle, sndHandle,
-   LONGINT *,offset)
+   GUEST<LONGINT> *,offset)
 {
   OSErr retval;
   int num_commands;
@@ -524,8 +524,8 @@ P2(PUBLIC, pascal trap OSErr, GetSoundHeaderOffset, Handle, sndHandle,
   retval = badFormat;
   for (i = 0; i < num_commands; ++i)
     {
-      if (cmds[i].cmd == (INTEGER) CWC(bufferCmd | 0x8000) ||
-	  cmds[i].cmd == (INTEGER) CWC(soundCmd | 0x8000))
+      if (cmds[i].cmd == CWC(bufferCmd | 0x8000) ||
+	  cmds[i].cmd == CWC(soundCmd | 0x8000))
 	{
 	  *offset = cmds[i].param2;
 	  retval = noErr;

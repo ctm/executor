@@ -461,13 +461,14 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 	  AEAddressDesc *target = (AEAddressDesc *)alloca (sizeof *target);
 	  
 	  AEDescList *list = (AEDescList *)alloca (sizeof *list);
-	  int16 count, dummy;
+          int16 count;
+          GUEST<int16> count_s, dummy;
 	  
 	  err = AECreateDesc (typeProcessSerialNumber,
 			      (Ptr) &psn, sizeof psn, target);
 	  
-	  CountAppFiles (&dummy, &count);
-	  count = CW (count);
+	  CountAppFiles (&dummy, &count_s);
+	  count = CW (count_s);
 	  
 	  if (count)
 	    {

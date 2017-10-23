@@ -46,16 +46,15 @@ extern void flushcache (void);
 
 extern trap void HWPriv( LONGINT d0, LONGINT a0 );
 extern char *ROMlib_undotdot( char *origp ); 
-extern void CountAppFiles( INTEGER *messagep, 
- INTEGER *countp ); 
+extern void CountAppFiles( GUEST<INTEGER> *messagep, 
+        GUEST<INTEGER> *countp ); 
 extern void GetAppFiles( INTEGER index, AppFile *filep ); 
 extern void ClrAppFiles( INTEGER index ); 
 extern pascal trap void Launch( StringPtr appl, INTEGER vrefnum );
 extern pascal trap void Chain( StringPtr appl, INTEGER vrefnum );
 
 extern pascal trap void C_GetAppParms( StringPtr namep,
- INTEGER *rnp, GUEST<Handle> *aphandp ); extern pascal trap void P_GetAppParms( StringPtr namep,
- INTEGER *rnp, GUEST<Handle> *aphandp ); 
+        GUEST<INTEGER> *rnp, GUEST<Handle> *aphandp );
 extern pascal trap void P_ExitToShell( void ); 
 extern pascal trap void C_UnloadSeg( Ptr addr ); extern pascal trap void P_UnloadSeg( Ptr addr); 
 extern pascal trap void C_LoadSeg( INTEGER volatile segno ); extern pascal trap void P_LoadSeg( INTEGER volatile segno); 

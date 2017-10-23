@@ -48,7 +48,7 @@ A4(PUBLIC, OSErr, ROMlib_dispatch, ParmBlkPtr, p,		/* INTERNAL */
 	devicen = -CW(p->cntrlParam.ioCRefNum) - 1;
 	if (devicen < 0 || devicen >= NDEVICES)
 		retval = badUnitErr;
-	else if (UTableBase == (DCtlHandlePtr) (long) CLC(0xFFFFFFFF) ||
+	else if (UTableBase == guest_cast<DCtlHandlePtr>(CLC(-1)) ||
 			 (h = MR(MR(UTableBase)[devicen])) == 0 || *h == 0)
 		retval =  unitEmptyErr;
 	else {
@@ -153,7 +153,7 @@ A4(PUBLIC, OSErr, ROMlib_dispatch, ParmBlkPtr, p,		/* INTERNAL */
 				/* NOTE: It's not clear whether we should zero out this
 		   field or just check for DRIVEROPEN bit up above and never
 		   send messages except open to non-open drivers.  */
-				MR(UTableBase)[devicen] = (DCtlHandle)CLC(0);
+				MR(UTableBase)[devicen] = nullptr;
 			}
 			
 			if (routine < Close)
@@ -310,7 +310,7 @@ A2(PUBLIC, OSErr, ROMlib_driveropen, ParmBlkPtr, pbp,		/* INTERNAL */
 	   err = MemError();
 	 else if (!alreadyopen) {
 	   memset((char *) STARH(h), 0, sizeof(DCtlEntry));
-	   HxX(h, dCtlDriver)   = (umacdriverptr) RM(ramdh);
+	   HxX(h, dCtlDriver)   = RM((umacdriverptr) ramdh);
 	   HxX(h, dCtlFlags)    = HxX(ramdh, drvrFlags) | CWC(RAMBASEDBIT);
 	   HxX(h, dCtlRefNum)   = CW(- (devicen + 1));
 	   HxX(h, dCtlDelay)    = HxX(ramdh, drvrDelay);
@@ -370,11 +370,11 @@ A2(PUBLIC, OSErr, ROMlib_driveropen, ParmBlkPtr, pbp,		/* INTERNAL */
 	       if (!(HxX(h, dCtlDriver) = RM(up)))
 		 err = MemError();
 	       else {
-		 up->udrvrOpen   = (ProcPtr) RM(dip->open);
-		 up->udrvrPrime  = (ProcPtr) RM(dip->prime);
-		 up->udrvrCtl    = (ProcPtr) RM(dip->ctl);
-		 up->udrvrStatus = (ProcPtr) RM(dip->status);
-		 up->udrvrClose  = (ProcPtr) RM(dip->close);
+		 up->udrvrOpen   = RM ((ProcPtr)dip->open);
+		 up->udrvrPrime  = RM ((ProcPtr)dip->prime);
+		 up->udrvrCtl    = RM ((ProcPtr)dip->ctl);
+		 up->udrvrStatus = RM ((ProcPtr)dip->status);
+		 up->udrvrClose  = RM ((ProcPtr)dip->close);
 		 str255assign(up->udrvrName, dip->name);
 		 err = noErr;
 	       }
@@ -392,7 +392,7 @@ A2(PUBLIC, OSErr, ROMlib_driveropen, ParmBlkPtr, pbp,		/* INTERNAL */
   return err;
 }
 
-A2(PUBLIC, OSErr, OpenDriver, StringPtr, name, INTEGER *, rnp)	/* IMII-178 */
+A2(PUBLIC, OSErr, OpenDriver, StringPtr, name, GUEST<INTEGER> *, rnp)	/* IMII-178 */
 {
     ParamBlockRec pb;
     OSErr retval;

@@ -360,7 +360,7 @@ InitApplZone (void)
 #define INIT_APPLZONE_SIZE \
   (ROMlib_applzone_size + APPLZONE_SLOP)
   
-  HeapEnd = (Ptr) RM ((char *) MR (ApplZone)
+  HeapEnd = RM ((Ptr)(char *) MR (ApplZone)
 		      + INIT_APPLZONE_SIZE
 		      - (MIN_BLOCK_SIZE + APPLZONE_SLOP));
   
@@ -406,7 +406,7 @@ ROMlib_InitZones (offset_enum which)
     {
       char *memory;
       unsigned long total_allocated_memory, total_mac_visible_memory;
-      Ptr mem_top;
+      GUEST<Ptr> mem_top;
       
       canonicalize_memory_sizes ();
       
@@ -466,7 +466,7 @@ ROMlib_InitZones (offset_enum which)
 
       /* can't assign to low-memory globals yet */
 
-      mem_top = (Ptr) RM (memory + total_allocated_memory);
+      mem_top = RM ((Ptr)memory + total_allocated_memory);
       
       stack_begin = ((Ptr) memory
 		     + INIT_SYSZONE_SIZE
@@ -502,7 +502,7 @@ ROMlib_InitZones (offset_enum which)
 
       MemTop = mem_top;
 
-      SysZone = (THz) RM (memory);
+      SysZone = RM ((THz) memory);
       ROMlib_syszone = (unsigned long) memory;
       ROMlib_memtop = (unsigned long) (memory + total_allocated_memory);
       InitZone (0, 32, (Ptr) ((long) MR (SysZone) + init_syszone_size),
@@ -518,9 +518,9 @@ ROMlib_InitZones (offset_enum which)
 		  applzone_memory_segment_size) == -1)
 	warning_errno ("unable to `munmap ()' previous applzone");
   
-      ApplZone = (THz) RM ((char*) MR (SysZone)
+      ApplZone = RM ((THz)( (char*) MR (SysZone)
 			   + INIT_SYSZONE_SIZE
-			   + (mm_current_applzone * INIT_APPLZONE_SIZE));
+			   + (mm_current_applzone * INIT_APPLZONE_SIZE)));
       mm_current_applzone = (mm_current_applzone + 1) % mm_n_applzones;
   
       if (mmap ((char *) MR (ApplZone), INIT_APPLZONE_SIZE,
@@ -529,9 +529,9 @@ ROMlib_InitZones (offset_enum which)
 	errno_fatal ("unable to `mmap ()' new applzone");
     }
   else
-    ApplZone = (THz) RM ((Ptr) MR (SysZone) + INIT_SYSZONE_SIZE);
+    ApplZone = RM ((THz)  ((Ptr) MR (SysZone) + INIT_SYSZONE_SIZE));
 #else /* !MM_MANY_APPLZONES */
-  ApplZone = (THz) RM ((Ptr) MR (SysZone) + INIT_SYSZONE_SIZE);
+  ApplZone = RM ((THz)  ((Ptr) MR (SysZone) + INIT_SYSZONE_SIZE));
 #endif
   
   Executor::InitApplZone ();
@@ -646,7 +646,7 @@ InitZone (ProcPtr pGrowZone, int16 cMoreMasters,
   zone->gzProc    = RM (pGrowZone);
   zone->moreMast  = CW (cMoreMasters);
   zone->flags     = CWC (0);
-  zone->minCBFree = CWC (0);
+  zone->minCBFree = CLC (0);
   zone->purgeProc = CLC_NULL;
   zone->cntRel = zone->cntNRel = zone->cntEmpty = zone->cntHandles
     = CWC (0);
@@ -664,7 +664,7 @@ InitZone (ProcPtr pGrowZone, int16 cMoreMasters,
 #if 0
   zone->sparePtr = CLC ((Ptr) 0x83d2);	/* From experimentation */
 #else
-  zone->sparePtr = (Ptr)CLC (0);	/* Better safe than sorry */
+  zone->sparePtr = nullptr;	/* Better safe than sorry */
 #endif
 
   zone->allocPtr = RM ((Ptr) first_block);
@@ -705,7 +705,8 @@ SetZone (THz hz)
 Handle
 _NewEmptyHandle_flags (boolean_t sys_p)
 {
-  THz save_zone, current_zone;
+  GUEST<THz> save_zone;
+  THz current_zone;
   Handle h;
 
   MM_SLAM ("entry");
@@ -747,7 +748,8 @@ _NewHandle_flags (Size size, boolean_t sys_p, boolean_t clear_p)
 {
   Handle newh;
   block_header_t *block;
-  THz save_zone, current_zone;
+  GUEST<THz> save_zone;
+  THz current_zone;
   
   MM_SLAM ("entry");
   
@@ -798,14 +800,14 @@ DisposHandle (Handle h)
   MM_SLAM ("entry");
 
   if (TTS_HACK && 
-      h == (Handle) (CL (*(long *)SYN68K_TO_US (256)) + ROMlib_offset))
+      h == (MR (*(GUEST<Handle> *)SYN68K_TO_US (256))))
     h = 0;
   
   if (h)
     {
       block_header_t *block;
       THz current_zone;
-      THz save_zone;
+      GUEST<THz> save_zone;
       
       save_zone = TheZone;
       current_zone = HandleZone (h);
@@ -890,7 +892,8 @@ SetHandleSize (Handle h, Size newsize)
 {
   block_header_t *block;
   int32 oldpsize;
-  THz save_zone, current_zone;
+  GUEST<THz> save_zone;
+  THz current_zone;
   boolean_t save_memnomove_p;
   unsigned int state;
   
@@ -1111,7 +1114,7 @@ ReallocHandle (Handle h, Size size)
 {
   block_header_t *oldb, *newb;
   int32 newsize;
-  THz save_zone;
+  GUEST<THz> save_zone;
   THz current_zone;
   unsigned int state;
 
@@ -1198,7 +1201,8 @@ _NewPtr_flags (Size size, boolean_t sys_p, boolean_t clear_p)
 {
   Ptr p;
   block_header_t *b;
-  THz save_zone, current_zone;
+  GUEST<THz> save_zone;
+  THz current_zone;
   
   MM_SLAM ("entry");
   
@@ -1310,7 +1314,8 @@ SetPtrSize (Ptr p, Size newsize)
 {
   block_header_t *block;
   LONGINT oldpsize;
-  THz save_zone, current_zone;
+  GUEST<THz> save_zone;
+  THz current_zone;
   
   MM_SLAM ("entry");
   
@@ -1352,8 +1357,9 @@ SetPtrSize (Ptr p, Size newsize)
 	  /* First try and grow it forward */
 	  if (ROMlib_makespace (&nextblock, newsize - oldpsize))
 	    {
+                    #warning original code was endian-inconsistent
 	      ZONE_ZCB_FREE_X (current_zone)
-		= CL (ZONE_ZCB_FREE_X (current_zone) - PSIZE (nextblock));
+		= CL (ZONE_ZCB_FREE (current_zone) - PSIZE (nextblock));
 
 	      SETPSIZE (block, oldpsize + PSIZE (nextblock));
 	      SETSIZEC (block, 0);
@@ -1422,7 +1428,7 @@ PtrZone (Ptr p)
       return NULL;
     }
   
-  zone = (THz) BLOCK_LOCATION_ZONE (block);
+  zone = BLOCK_LOCATION_ZONE (block);
 
   if (!legit_zone_p (zone))
     {
@@ -1454,7 +1460,7 @@ Size
 _MaxMem_flags (Size *growp, boolean_t sys_p)
 {
   block_header_t *b;
-  THz save_zone;
+  GUEST<THz> save_zone;
   THz current_zone;
   uint32 biggestfree;
   uint32 sizesofar;
@@ -1560,7 +1566,7 @@ _CompactMem_flags (Size sizeneeded, boolean_t sys_p)
 {
   int32 amtfree;
   block_header_t *src, *target, *ap;
-  THz save_zone;
+  GUEST<THz> save_zone;
   THz current_zone;
   boolean_t startfront_p;
   
@@ -1626,7 +1632,7 @@ _CompactMem_flags (Size sizeneeded, boolean_t sys_p)
 		{
 		  amtfree = src_target_diff;
 		  if (!ZONE_ALLOC_PTR_X (current_zone))
-		    ZONE_ALLOC_PTR_X (current_zone) = (Ptr) RM (target);
+		    ZONE_ALLOC_PTR_X (current_zone) = RM ((Ptr)target);
 		}
 	    }
 	  src = target = BLOCK_NEXT (src);
@@ -1667,7 +1673,7 @@ _CompactMem_flags (Size sizeneeded, boolean_t sys_p)
 void
 _ResrvMem_flags (Size needed, boolean_t sys_p)
 {
-  THz save_zone;
+  GUEST<THz> save_zone;
   THz current_zone;
   block_header_t *b;
   Size free;
@@ -1730,7 +1736,7 @@ _PurgeMem_flags (Size sizeneeded, boolean_t sys_p)
 {
   long amount_free, max_free;
   block_header_t *b;
-  THz save_zone;
+  GUEST<THz> save_zone;
   THz current_zone;
   
   MM_SLAM ("entry");
@@ -1861,7 +1867,7 @@ MoveHHi (Handle h)
 int32
 _MaxBlock_flags (boolean_t sys_p)
 {
-  THz save_zone;
+  GUEST<THz> save_zone;
   THz current_zone;
   int32 max_free;
   int32 total_free;
@@ -1902,7 +1908,8 @@ _MaxBlock_flags (boolean_t sys_p)
 void
 _PurgeSpace_flags (Size *total_out, Size *contig_out, boolean_t sys_p)
 {
-  THz save_zone, current_zone;
+  GUEST<THz> save_zone;
+  THz current_zone;
   int32 total_free;
   int32 this_contig;
   int32 max_contig;
@@ -1996,7 +2003,8 @@ SetGrowZone (ProcPtr newgz)
 void
 EmptyHandle (Handle h)
 {
-  THz save_zone, current_zone;
+  GUEST<THz> save_zone;
+  THz current_zone;
   block_header_t *b;
   
   MM_SLAM ("entry");
@@ -2057,7 +2065,7 @@ EmptyHandle (Handle h)
 void
 ROMlib_installhandle (Handle sh, Handle dh)
 {
-  THz save_zone;
+  GUEST<THz> save_zone;
   
   MM_SLAM ("entry");
   save_zone = TheZone;
@@ -2082,7 +2090,7 @@ ROMlib_installhandle (Handle sh, Handle dh)
       ROMlib_freeblock (db);
       SETMASTER (dh, STARH (sh));
       BLOCK_LOCATION_OFFSET_X (sb) = CL ((uint32) dh - (uint32) MR (TheZone));
-      *sh = (Ptr) ZONE_HFST_FREE_X (MR (TheZone));
+      *sh = guest_cast<Ptr>( ZONE_HFST_FREE_X (MR (TheZone)) );
       ZONE_HFST_FREE_X (MR (TheZone)) = RM ((Ptr) sh);
     }
   TheZone = save_zone;

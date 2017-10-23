@@ -3682,8 +3682,8 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    void *new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    Ptr __stub_arg_2 = (A2);\
-   Point * __stub_arg_3 = (A3);\
-   Point * __stub_arg_4 = (A4);\
+   GUEST<Point> * __stub_arg_3 = (A3);\
+   GUEST<Point> * __stub_arg_4 = (A4);\
    FontInfo * __stub_arg_5 = (A5);\
  \
    new_addr = tooltraptable[0x00ed];\
@@ -4242,7 +4242,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define GetIndType(A1, A2) \
  ({ \
    void *new_addr;\
-   ResType * __stub_arg_1 = (A1);\
+   GUEST<ResType> * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
    new_addr = tooltraptable[0x019f];\
@@ -4253,7 +4253,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define Get1IndType(A1, A2) \
  ({ \
    void *new_addr;\
-   ResType * __stub_arg_1 = (A1);\
+   GUEST<ResType> * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
    new_addr = tooltraptable[0x000f];\
@@ -5941,7 +5941,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    void *new_addr;\
    Handle __stub_arg_1 = (A1);\
    ResType __stub_arg_2 = (A2);\
-   LONGINT * __stub_arg_3 = (A3);\
+   GUEST<LONGINT> * __stub_arg_3 = (A3);\
  \
    new_addr = tooltraptable[0x01fd];\
    ((new_addr == toolstuff[0x01fd].orig)\

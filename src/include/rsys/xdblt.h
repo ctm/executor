@@ -83,10 +83,10 @@ do {								\
   RgnPtr r = STARH (rh);					\
   if (RGNP_SMALL_P (r))						\
     {								\
-      phony_special_region[0] = r->rgnBBox.top;			\
+      phony_special_region[0] = r->rgnBBox.top.raw();		\
       phony_special_region[1] = CW (r->rgnBBox.left);		\
       phony_special_region[2] = CW (r->rgnBBox.right);		\
-      phony_special_region[4] = r->rgnBBox.bottom;		\
+      phony_special_region[4] = r->rgnBBox.bottom.raw();	\
       ptr_name = phony_special_region;				\
     }								\
   else if (RGNP_SPECIAL_P (r))					\

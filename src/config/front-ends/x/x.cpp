@@ -1383,7 +1383,7 @@ Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
 			     num_red_bits, low_red_bit,
 			     num_green_bits, low_green_bit,
 			     num_blue_bits, low_blue_bit,
-			     CL (GetCTSeed ()));
+			     CL_RAW (GetCTSeed ()));
 	    }
 	}
     }
@@ -1417,7 +1417,7 @@ Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
     syn68k_addr_t event_callback;
     
     event_callback = callback_install (post_pending_x_events, NULL);
-    *(syn68k_addr_t *) SYN68K_TO_US(M68K_EVENT_VECTOR * 4) = CL (event_callback);
+    *(GUEST<ULONGINT> *) SYN68K_TO_US(M68K_EVENT_VECTOR * 4) = CL ((ULONGINT)event_callback);
   }
 
   /* set up the async x even handler */
@@ -2468,7 +2468,7 @@ Executor::GetScrapX (OSType type, char **h)
 	      if (rettype == XA_STRING && actfmt == 8)
 		{
 		  SetHandleSize ((Handle) h, nitems);
-		  if (MemErr == noErr)
+		  if (MemErr == CWC(noErr))
 		    {
 		      memcpy (MR (*h), propreturn, nitems);
 		      for (ul = nitems, p = MR (*h); ul > 0; ul--)

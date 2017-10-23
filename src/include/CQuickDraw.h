@@ -296,7 +296,7 @@ extern pascal trap GDHandle C_GetMaxDevice (Rect *);
 extern pascal trap GDHandle C_GetNextDevice (GDHandle);
 extern pascal trap void C_DeviceLoop (RgnHandle, DeviceLoopDrawingProcPtr, LONGINT, DeviceLoopFlags);
 extern pascal trap BOOLEAN C_TestDeviceAttribute (GDHandle, INTEGER);
-extern pascal trap void C_ScreenRes (INTEGER *, INTEGER *);
+extern pascal trap void C_ScreenRes (GUEST<INTEGER> *, GUEST<INTEGER> *);
 extern pascal trap INTEGER C_HasDepth (GDHandle, INTEGER, INTEGER, INTEGER);
 extern pascal trap OSErr C_SetDepth (GDHandle, INTEGER, INTEGER, INTEGER);
 
@@ -392,24 +392,24 @@ extern pascal trap BOOLEAN C_GetAuxWin (WindowPtr, GUEST<AuxWinHandle> *);
 extern pascal trap void C_GetCWMgrPort (GUEST<CGrafPtr> *);
 
 /* QDExtensions trap */
-extern pascal trap QDErr C_NewGWorld (GWorldPtr *, INTEGER, Rect *, CTabHandle, GDHandle, GWorldFlags);
+extern pascal trap QDErr C_NewGWorld (GUEST<GWorldPtr> *, INTEGER, Rect *, CTabHandle, GDHandle, GWorldFlags);
 extern pascal trap Boolean C_LockPixels (PixMapHandle);
 extern pascal trap void C_UnlockPixels (PixMapHandle);
-extern pascal trap GWorldFlags C_UpdateGWorld (GWorldPtr *, INTEGER, Rect *, CTabHandle, GDHandle, GWorldFlags);
+extern pascal trap GWorldFlags C_UpdateGWorld (GUEST<GWorldPtr> *, INTEGER, Rect *, CTabHandle, GDHandle, GWorldFlags);
 extern pascal trap void C_DisposeGWorld (GWorldPtr);
-extern pascal trap void C_GetGWorld (CGrafPtr *, GDHandle *);
+extern pascal trap void C_GetGWorld (GUEST<CGrafPtr> *, GUEST<GDHandle> *);
 extern pascal trap void C_SetGWorld (CGrafPtr, GDHandle);
 extern pascal trap void C_AllowPurgePixels (PixMapHandle);
 extern pascal trap void C_NoPurgePixels (PixMapHandle);
 extern pascal trap GWorldFlags C_GetPixelsState (PixMapHandle);
 extern pascal trap void C_SetPixelsState (PixMapHandle, GWorldFlags);
 extern pascal trap Ptr C_GetPixBaseAddr (PixMapHandle);
-extern pascal trap QDErr C_NewScreenBuffer (Rect *, Boolean, GDHandle *, PixMapHandle *);
+extern pascal trap QDErr C_NewScreenBuffer (Rect *, Boolean, GUEST<GDHandle> *, GUEST<PixMapHandle> *);
 extern pascal trap void C_DisposeScreenBuffer (PixMapHandle);
 extern pascal trap GDHandle C_GetGWorldDevice (GWorldPtr);
 extern pascal trap Boolean C_PixMap32Bit (PixMapHandle);
 extern pascal trap PixMapHandle C_GetGWorldPixMap (GWorldPtr);
-extern pascal trap QDErr C_NewTempScreenBuffer (Rect *, Boolean, GDHandle *, PixMapHandle *);
+extern pascal trap QDErr C_NewTempScreenBuffer (Rect *, Boolean, GUEST<GDHandle> *, GUEST<PixMapHandle> *);
 extern pascal trap void C_GDeviceChanged (GDHandle);
 extern pascal trap void C_PortChanged (GrafPtr);
 extern pascal trap void C_PixPatChanged (PixPatHandle);
@@ -430,7 +430,7 @@ extern pascal trap OSErr C_DisposePictInfo (PictInfoID);
 extern pascal trap OSErr C_RecordPictInfo (PictInfoID, PicHandle);
 extern pascal trap OSErr C_RecordPixMapInfo (PictInfoID, PixMapHandle);
 extern pascal trap OSErr C_RetrievePictInfo (PictInfoID, PictInfo *, int16);
-extern pascal trap OSErr C_NewPictInfo (PictInfoID *, int16, int16, int16, int16);
+extern pascal trap OSErr C_NewPictInfo (GUEST<PictInfoID> *, int16, int16, int16, int16);
 extern pascal trap OSErr C_GetPictInfo (PicHandle, PictInfo *, int16, int16, int16, int16);
 extern pascal trap OSErr C_GetPixMapInfo (PixMapHandle, PictInfo *, int16, int16, int16, int16);
 

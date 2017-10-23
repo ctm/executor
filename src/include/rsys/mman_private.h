@@ -54,7 +54,7 @@ typedef struct block_header { GUEST_STRUCT;
 #define BLOCK_DATA_X(block)	(RM ((Ptr) (block)->data))
 
 #define BLOCK_LOCATION_OFFSET(block)	(CL (BLOCK_LOCATION_OFFSET_X (block)))
-#define BLOCK_LOCATION_ZONE(block)	(MR (BLOCK_LOCATION_ZONE_X (block)))
+#define BLOCK_LOCATION_ZONE(block)	(MR (guest_cast<THz>(BLOCK_LOCATION_ZONE_X (block))))
 #define BLOCK_DATA(block)	((Ptr) (block)->data)
 
 #define USE(block)		(((block)->flags >> 6) & 0x3)
@@ -116,7 +116,7 @@ extern unsigned long ROMlib_memtop;
   ((block)->master_ptr_flags = (state))
 
 /* set the master pointer of a handle to a given value */
-#define SETMASTER(handle, ptr)	(*handle = (Ptr)RM (ptr))
+#define SETMASTER(handle, ptr)	(*handle = RM ((Ptr)ptr))
 
 #define BLOCK_NEXT(block)			\
   ((block_header_t *) ((char *) (block) + PSIZE (block)))
@@ -132,7 +132,7 @@ extern unsigned long ROMlib_memtop;
 #define BLOCK_SET_LOCATION_OFFSET(block, loc)	\
   ((block)->location_u = CL (loc))
 #define BLOCK_SET_LOCATION_ZONE(block, loc)	\
-  ((block)->location_u = (uint32_t) RM (loc))
+  ((block)->location_u = guest_cast<uint32_t>(RM (loc)))
 #define BLOCK_SET_RESERVED(block)
 
 /* Zone record accessor macros */

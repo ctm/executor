@@ -138,11 +138,11 @@ extern trap BOOLEANRET EqualString( StringPtr s1, StringPtr s2,
  BOOLEAN casesig, BOOLEAN diacsig ); 
 extern void ROMlib_UprString( StringPtr s, BOOLEAN diac, INTEGER len ); 
 extern trap void UprString( StringPtr s, BOOLEAN diac ); 
-extern void GetDateTime( LONGINT *mactimepointer ); 
-extern trap OSErrRET ReadDateTime( LONGINT *secs ); 
-extern trap OSErrRET SetDateTime( LONGINT mactime ); 
-extern trap void Date2Secs( DateTimeRec *d, LONGINT *s ); 
-extern trap void Secs2Date( LONGINT mactime, DateTimeRec *d ); 
+extern void GetDateTime( GUEST<ULONGINT> *mactimepointer ); 
+extern trap OSErrRET ReadDateTime( GUEST<ULONGINT> *secs ); 
+extern trap OSErrRET SetDateTime( ULONGINT mactime ); 
+extern trap void Date2Secs( DateTimeRec *d, ULONGINT *s ); 
+extern trap void Secs2Date( ULONGINT mactime, DateTimeRec *d ); 
 extern void GetTime( DateTimeRec *d ); 
 extern void SetTime( DateTimeRec *d ); 
 extern trap OSErrRET InitUtil( void  ); 
@@ -156,14 +156,14 @@ extern void SetTrapAddress( LONGINT addr,
  INTEGER n ); 
 extern trap void Delay( LONGINT n, LONGINT *ftp ); 
 extern pascal trap void C_SysBeep( INTEGER i ); extern pascal trap void P_SysBeep( INTEGER i); 
-extern trap void Environs( INTEGER *rom, INTEGER *machine ); 
+extern trap void Environs( GUEST<INTEGER> *rom, GUEST<INTEGER> *machine ); 
 extern trap OSErrRET SysEnvirons( INTEGER vers, SysEnvRecPtr p ); 
 extern void Restart( void  ); 
 extern void SetUpA5( void  ); 
 extern void RestoreA5( void  );
 #undef GetMMUMode
 #undef SwapMMUMode
-extern void GetMMUMode( INTEGER *ip );
+extern void GetMMUMode( GUEST<INTEGER> *ip );
 extern void SwapMMUMode( Byte *bp ); 
 extern LONGINT StripAddress( LONGINT l ); 
 }

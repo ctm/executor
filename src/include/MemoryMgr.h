@@ -191,11 +191,11 @@ extern Size StackSpace (void);
 
 /* temporary memory functions; see tempmem.c */
 extern pascal trap int32 C_TempFreeMem (void);
-extern pascal trap Size C_TempMaxMem (Size *grow);
+extern pascal trap Size C_TempMaxMem (GUEST<Size> *grow);
 extern pascal trap Ptr C_TempTopMem (void);
-extern pascal trap Handle C_TempNewHandle (Size logical_size, OSErr *result_code);
-extern pascal trap void C_TempHLock (Handle h, OSErr *result_code);
-extern pascal trap void C_TempHUnlock (Handle h, OSErr *result_code);
-extern pascal trap void C_TempDisposeHandle (Handle h, OSErr *result_code);
+extern pascal trap Handle C_TempNewHandle (Size logical_size, GUEST<OSErr> *result_code);
+extern pascal trap void C_TempHLock (Handle h, GUEST<OSErr> *result_code);
+extern pascal trap void C_TempHUnlock (Handle h, GUEST<OSErr> *result_code);
+extern pascal trap void C_TempDisposeHandle (Handle h, GUEST<OSErr> *result_code);
 }
 #endif /* _MEMORY_MGR_H_ */

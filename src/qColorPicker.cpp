@@ -1129,11 +1129,11 @@ color_wheel_init (void)
   InsetRect (color_wheel_bounds, -8, -8);
   
   bpp = PIXMAP_PIXEL_SIZE (GD_PMAP (MR (MainDevice)));
-  color_wheel_pixmap.baseAddr = (Ptr)RM ((bpp == 8)
+  color_wheel_pixmap.baseAddr = RM ((Ptr)( (bpp == 8)
 				    ? color_wheel_bits_8
 				    : (bpp == 4
 				       ? color_wheel_bits_4
-				       : (gui_abort (), nullptr)));
+				       : (gui_abort (), nullptr))));
   color_wheel_pixmap.rowBytes = CW ((bpp == 8)
 				    ? 0x80D0
 				    : (bpp == 4

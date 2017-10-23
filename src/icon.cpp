@@ -34,7 +34,7 @@ using namespace Executor;
 
 #define _GetIconSuite(icon_suite, res_id, selector)			      \
   ({									      \
-    Handle _icon_suite_;						      \
+    GUEST<Handle> _icon_suite_;						      \
     OSErr _err_;							      \
 									      \
     _err_ = GetIconSuite (&_icon_suite_, (res_id), (selector));		      \
@@ -87,9 +87,9 @@ P2 (PUBLIC pascal trap, void, PlotIcon,
      {
        BitMap bm;
        
-       bm.baseAddr = (Ptr) *icon;
+       bm.baseAddr = *icon;
        bm.rowBytes = CWC(4);
-       bm.bounds.left = bm.bounds.top = 0;
+       bm.bounds.left = bm.bounds.top = CWC(0);
        if (GetHandleSize (icon) == 2 * 16)
 	 {
 	   bm.rowBytes = CWC(2);
@@ -127,7 +127,7 @@ P2 (PUBLIC pascal trap, void, PlotCIcon,
   /* when plotting, `ignore' the current fg/bk colors */
   GrafPtr current_port;
   RGBColor bk_rgb, fg_rgb;
-  int32 bk_color, fg_color;
+  GUEST<int32> bk_color, fg_color;
   int cgrafport_p;
   
   if (! icon)
@@ -177,7 +177,7 @@ P2 (PUBLIC pascal trap, void, PlotCIcon,
 		PixMap *icon_pm;
 		
 		icon_pm = &CICON_PMAP (icon);
-		BITMAP_BASEADDR_X (icon_pm) = (Ptr) *icon_data;
+		BITMAP_BASEADDR_X (icon_pm) = *icon_data;
 		
 		CopyMask ((BitMap *) icon_pm,
 			  mask_bm,
@@ -393,7 +393,7 @@ restype_to_index (ResType type)
 }
 
 P3 (PUBLIC pascal trap, OSErr, GetIconSuite, 
-    Handle *, icon_suite_return, short, res_id, IconSelectorValue, selector)
+    GUEST<Handle> *, icon_suite_return, short, res_id, IconSelectorValue, selector)
 {
   Handle icon_suite, *icons;
   int i;
@@ -426,7 +426,7 @@ P3 (PUBLIC pascal trap, OSErr, GetIconSuite,
 }
 
 P1 (PUBLIC pascal trap, OSErr, NewIconSuite,
-    Handle *, icon_suite_return)
+    GUEST<Handle> *, icon_suite_return)
 {
   Handle icon_suite;
   
@@ -452,7 +452,7 @@ P3 (PUBLIC pascal trap, OSErr, AddIconToSuite,
 }
 
 P3 (PUBLIC pascal trap, OSErr, GetIconFromSuite,
-    Handle *, icon_data_return, Handle, icon_suite, ResType, type)
+    GUEST<Handle> *, icon_data_return, Handle, icon_suite, ResType, type)
 {
   Handle *icons, icon_data;
   
@@ -574,7 +574,7 @@ P4 (PUBLIC pascal trap, OSErr, PlotIconSuite,
        icon_pm.cmpCount = CWC (1);
        icon_pm.pmTable = RM (color_table);
        
-       mask_bm.baseAddr = (Ptr) RM ((char *) STARH (icon_mask)
+       mask_bm.baseAddr = RM ((Ptr)(char *) STARH (icon_mask)
 			      + icon_size * icon_size / 8);
        mask_bm.rowBytes = CW (icon_size / 8);
        mask_bm.bounds = icon_rect;
@@ -632,13 +632,13 @@ label_info_t;
 
 PRIVATE label_info_t labels[7] =
 {
-  { { 0, 0, 0,}, "\011Essential", },
-  { { 0, 0, 0,}, "\03Hot", },
-  { { 0, 0, 0,}, "\013In Progress", },
-  { { 0, 0, 0,}, "\04Cool", },
-  { { 0, 0, 0,}, "\010Personal", },
-  { { 0, 0, 0,}, "\011Project 1", },
-  { { 0, 0, 0,}, "\011Project 2", },
+  { { CWC(0), CWC(0), CWC(0),}, "\011Essential", },
+  { { CWC(0), CWC(0), CWC(0),}, "\03Hot", },
+  { { CWC(0), CWC(0), CWC(0),}, "\013In Progress", },
+  { { CWC(0), CWC(0), CWC(0),}, "\04Cool", },
+  { { CWC(0), CWC(0), CWC(0),}, "\010Personal", },
+  { { CWC(0), CWC(0), CWC(0),}, "\011Project 1", },
+  { { CWC(0), CWC(0), CWC(0),}, "\011Project 2", },
 };
 
 P3 (PUBLIC pascal trap, OSErr, GetLabel,

@@ -44,7 +44,7 @@ Executor::image_init (pixel_image_desc_t *image_desc)
 	   IMAGE_X_BITS (retval, i) = x_bits = NewPixMap ();
 	   IMAGE_X_BITS_VALID (retval, i) = -1;
 	   
-	   PIXMAP_BASEADDR_X (bits) = (Ptr) RM (image_desc->bits[i].raw_bits);
+	   PIXMAP_BASEADDR_X (bits) = RM ((Ptr)image_desc->bits[i].raw_bits);
 	   PIXMAP_SET_ROWBYTES_X (bits, CW (image_desc->bits[i].row_bytes));
 	   bounds.top    = CW (image_desc->bounds.top);
 	   bounds.left   = CW (image_desc->bounds.left);
@@ -128,7 +128,7 @@ Executor::image_validate_x_bits (pixel_image_t *image, int color_p /* visual */)
   PixMapHandle bits, x_bits;
   PixMapHandle gd_pixmap;
   CTabHandle gd_pixmap_ctab;
-  int gd_bpp_x;
+  GUEST<INTEGER> gd_bpp_x;
   int bits_ctab_seed_x;
 
   gdev = MR (TheGDevice);
@@ -137,7 +137,7 @@ Executor::image_validate_x_bits (pixel_image_t *image, int color_p /* visual */)
   gd_bpp_x = PIXMAP_PIXEL_SIZE_X (gd_pixmap);
   
   bits = IMAGE_BITS (image, color_p);
-  bits_ctab_seed_x = CTAB_SEED_X (PIXMAP_TABLE (bits));
+  bits_ctab_seed_x = CTAB_SEED_X (PIXMAP_TABLE (bits)).raw();
   x_bits = IMAGE_X_BITS (image, color_p);
   
   if (IMAGE_X_BITS_VALID (image, color_p) == -1

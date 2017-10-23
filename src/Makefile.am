@@ -71,9 +71,8 @@ list_sources = listAccess.cpp listAddDel.cpp listCreate.cpp listDisplay.cpp \
 
 menu_sources = menu.cpp menuColor.cpp menuV.cpp stdmdef.cpp stdmbdf.cpp
 
-# PSprint.cpp 
 print_sources = PSstrings.cpp prError.cpp prInit.cpp prLowLevel.cpp \
-                prPrinting.cpp prRecords.cpp
+                prPrinting.cpp prRecords.cpp PSprint.cpp 
 
 qd_sources = qBit.cpp qCConv.cpp qCGrafPort.cpp qCRegular.cpp qColor.cpp qColorMgr.cpp    \
              qColorutil.cpp qCursor.cpp qGrafport.cpp qIMIV.cpp qIMV.cpp qIMVxfer.cpp     \
@@ -116,7 +115,8 @@ misc_sources = desk.cpp device.cpp disk.cpp diskinit.cpp dump.cpp trapname.cpp f
   paramline.c fauxdbm.cpp custom.cpp commtool.cpp cfm.cpp local_charset.cpp pef_hash.cpp \
   interfacelib.cpp mixed_mode.cpp suffix_maps.cpp appearance.cpp lockrange.cpp         \
   emutrap.cpp emutraptables.cpp emustubs.cpp unix_like.cpp parse.ypp check_structs.cpp   \
-  executor.cpp mkvol/mkvol.cpp crc.cpp
+  executor.cpp  crc.cpp
+#mkvol/mkvol.cpp
 
 include_sources = hintemplate.h \
                   include/ADB.h \

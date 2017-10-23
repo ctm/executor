@@ -530,7 +530,9 @@ PUBLIC void Executor::executor_main( void )
 {
     char quickbytes[grafSize];
     LONGINT tmpA5;
-    INTEGER mess, count, exevrefnum, toskip; AppFile thefile;
+    GUEST<INTEGER> mess, count_s;
+    INTEGER count;
+    INTEGER exevrefnum, toskip; AppFile thefile;
     Byte *p;
     int i;
     WDPBRec wdpb;
@@ -559,12 +561,12 @@ PUBLIC void Executor::executor_main( void )
     MinStack = CLC(0x400);		/* values ... */
     IAZNotify = 0;
     CurPitch = 0;
-    JSwapFont = (ProcPtr) RM(P_FMSwapFont);
-    JInitCrsr = (ProcPtr) RM(P_InitCursor);
+    JSwapFont = RM ((ProcPtr)P_FMSwapFont);
+    JInitCrsr = RM ((ProcPtr)P_InitCursor);
 
-    Key1Trans = (Ptr) RM(P_Key1Trans);
-    Key2Trans = (Ptr) RM(P_Key2Trans);
-    JFLUSH = (ProcPtr) RM(P_flushcache);
+    Key1Trans = RM ((Ptr)P_Key1Trans);
+    Key2Trans = RM ((Ptr)P_Key2Trans);
+    JFLUSH = RM ((ProcPtr)P_flushcache);
     JResUnknown1 = JFLUSH;	/* I don't know what these are supposed to */
     JResUnknown2 = JFLUSH;	/* do, but they're not called enough for
 				   us to worry about the cache flushing
@@ -594,7 +596,7 @@ PUBLIC void Executor::executor_main( void )
     memset(CL(SoundBase), 0, (LONGINT) 370 * sizeof(INTEGER));
 #else /* !0 */
     for (i = 0; i < 370; ++i)
-	((INTEGER *) MR(SoundBase))[i] = CWC (0x8000);	/* reference 0 sound */
+	((GUEST<INTEGER> *) MR(SoundBase))[i] = CWC (0x8000);	/* reference 0 sound */
 #endif /* !0 */
     TheZone = ApplZone;
     HiliteMode = CB(0xFF);
@@ -602,7 +604,7 @@ PUBLIC void Executor::executor_main( void )
     ROM85 = CWC(0x3FFF);
 
     a5 = US_TO_SYN68K((LONGINT) &tmpA5);
-    CurrentA5 = (Ptr) CL(a5);
+    CurrentA5 = guest_cast<Ptr> (CL(a5));
     InitGraf((Ptr) quickbytes + sizeof(quickbytes) - 4);
     InitFonts();
     InitCRM ();
@@ -623,8 +625,8 @@ PUBLIC void Executor::executor_main( void )
     FinderName[0] = MIN(strlen(BROWSER_NAME), sizeof(FinderName)-1);
     memcpy(FinderName+1, BROWSER_NAME, FinderName[0]);
     
-    CountAppFiles(&mess, &count);
-    count = CW (count);
+    CountAppFiles(&mess, &count_s);
+    count = CW (count_s);
     if (count > 0)
 	GetAppFiles(1, &thefile);
     else

@@ -194,7 +194,7 @@ A4(PUBLIC, OSErr, ROMlib_typidtop, ResType, typ, INTEGER, id,	/* INTERNAL */
 #define NUM_ROMLIB_DEFS 10
 
 #if !defined(MAELSTROM_HACK)
-PRIVATE LONGINT ROMlib_defs[NUM_ROMLIB_DEFS];
+PRIVATE GUEST<LONGINT> ROMlib_defs[NUM_ROMLIB_DEFS];
 #endif
 
 /*
@@ -219,23 +219,23 @@ PRIVATE BOOLEAN acceptable( unsigned long addr )
 PRIVATE void ROMlib_init_xdefs( void )
 {
 #if !defined(MAELSTROM_HACK)
-    ROMlib_defs[0]  = (LONGINT) RM(P_cdef0);
-    ROMlib_defs[1]  = (LONGINT) RM(P_cdef16);
-    ROMlib_defs[2]  = (LONGINT) RM(P_wdef0);
-    ROMlib_defs[3]  = (LONGINT) RM(P_wdef16);
-    ROMlib_defs[4]  = (LONGINT) RM(P_mdef0);
-    ROMlib_defs[5]  = (LONGINT) RM(P_ldef0);
-    ROMlib_defs[6]  = (LONGINT) RM(P_mbdf0);
-    ROMlib_defs[7]  = (LONGINT) RM(P_snth5);
-    ROMlib_defs[8]  = (LONGINT) RM(P_unixmount);
-    ROMlib_defs[9]  = (LONGINT) RM(P_cdef1008);
+    ROMlib_defs[0]  = guest_cast<LONGINT>( RM(P_cdef0) );
+    ROMlib_defs[1]  = guest_cast<LONGINT>( RM(P_cdef16) );
+    ROMlib_defs[2]  = guest_cast<LONGINT>( RM(P_wdef0) );
+    ROMlib_defs[3]  = guest_cast<LONGINT>( RM(P_wdef16) );
+    ROMlib_defs[4]  = guest_cast<LONGINT>( RM(P_mdef0) );
+    ROMlib_defs[5]  = guest_cast<LONGINT>( RM(P_ldef0) );
+    ROMlib_defs[6]  = guest_cast<LONGINT>( RM(P_mbdf0) );
+    ROMlib_defs[7]  = guest_cast<LONGINT>( RM(P_snth5) );
+    ROMlib_defs[8]  = guest_cast<LONGINT>( RM(P_unixmount) );
+    ROMlib_defs[9]  = guest_cast<LONGINT>( RM(P_cdef1008) );
 
     *(LONGINT *)SYN68K_TO_US(0x58) = RM((LONGINT) ROMlib_defs);
 #else
-    THz save_zone;
+    GUEST<THz> save_zone;
     Handle oldhandle, newhandle;
     long timeout;
-    LONGINT *ROMlib_defs;
+    GUEST<LONGINT> *ROMlib_defs;
 
     save_zone = TheZone;
 
@@ -253,18 +253,18 @@ PRIVATE void ROMlib_init_xdefs( void )
       warning_unexpected("Maelstrom hack didn't work");
 #endif
     HLock(newhandle);
-    ROMlib_defs = (LONGINT *) STARH(newhandle);
-    ROMlib_defs[0]  = (LONGINT) RM(P_cdef0);
-    ROMlib_defs[1]  = (LONGINT) RM(P_cdef16);
-    ROMlib_defs[2]  = (LONGINT) RM(P_wdef0);
-    ROMlib_defs[3]  = (LONGINT) RM(P_wdef16);
-    ROMlib_defs[4]  = (LONGINT) RM(P_mdef0);
-    ROMlib_defs[5]  = (LONGINT) RM(P_ldef0);
-    ROMlib_defs[6]  = (LONGINT) RM(P_mbdf0);
-    ROMlib_defs[7]  = (LONGINT) RM(P_snth5);
-    ROMlib_defs[8]  = (LONGINT) RM(P_unixmount);
-    ROMlib_defs[9]  = (LONGINT) RM(P_cdef1008);
-    *(LONGINT *)SYN68K_TO_US(0x58) = (LONGINT) (*newhandle).raw();
+    ROMlib_defs = (GUEST<LONGINT> *) STARH(newhandle);
+    ROMlib_defs[0]  = guest_cast<LONGINT>( RM(P_cdef0) );
+    ROMlib_defs[1]  = guest_cast<LONGINT>( RM(P_cdef16) );
+    ROMlib_defs[2]  = guest_cast<LONGINT>( RM(P_wdef0) );
+    ROMlib_defs[3]  = guest_cast<LONGINT>( RM(P_wdef16) );
+    ROMlib_defs[4]  = guest_cast<LONGINT>( RM(P_mdef0) );
+    ROMlib_defs[5]  = guest_cast<LONGINT>( RM(P_ldef0) );
+    ROMlib_defs[6]  = guest_cast<LONGINT>( RM(P_mbdf0) );
+    ROMlib_defs[7]  = guest_cast<LONGINT>( RM(P_snth5) );
+    ROMlib_defs[8]  = guest_cast<LONGINT>( RM(P_unixmount) );
+    ROMlib_defs[9]  = guest_cast<LONGINT>( RM(P_cdef1008) );
+    *(LONGINT *)SYN68K_TO_US(0x58) = (LONGINT) (*newhandle).raw();      // ### use standard low mem access method
     TheZone = save_zone;
 #endif
 }
@@ -292,7 +292,7 @@ pseudo_get_rom_resource (ResType typ, INTEGER id)
     ;
   if (i < (int) NELEM (pseudo_rom_table))
     {
-      INTEGER save_map;
+      GUEST<INTEGER> save_map;
 
       save_map = CurMap;
       CurMap = SysMap;
@@ -350,7 +350,7 @@ P2(PUBLIC pascal trap, Handle, GetResource, ResType, typ, INTEGER, id)
 	ROMlib_setreserr(noErr);
 	retval = 0;	/* IMIV */
     } else {
-	if (ResErr == noErr)
+	if (ResErr == CWC(noErr))
 	    retval = ROMlib_mgetres(map, rr);
 	else
 	    retval = 0;
@@ -378,7 +378,7 @@ P2(PUBLIC pascal trap, Handle, Get1Resource, ResType, typ,    /* IMIV-16 */
       return NULL;
     }
   ROMlib_setreserr (ROMlib_maptypidtop (map, typ, id, &rr));
-  if (ResErr == noErr)
+  if (ResErr == CWC(noErr))
     retval = ROMlib_mgetres (map, rr);
   else
     {
@@ -460,7 +460,7 @@ P1 (PUBLIC pascal trap, void, LoadResource, Handle volatile, res)
   resmaphand map;
   typref *tr;
   resref *rr;
-  int16 savemap;
+  GUEST<int16> savemap;
     
   volatile LONGINT savea0d0[2];
   savea0d0[0] = EM_D0;
@@ -527,7 +527,7 @@ P1(PUBLIC pascal trap, void, DetachResource, Handle, res)
 
     if (ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr)))
 /*-->*/ return;
-    if (ResErr != noErr || !(h = (Handle) MR(rr->rhand)))
+    if (ResErr != CWC(noErr) || !(h = (Handle) MR(rr->rhand)))
         return;
     if (Cx(rr->ratr) & resChanged) {
         ROMlib_setreserr(resAttrErr);    /* IV-18 */

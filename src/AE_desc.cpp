@@ -160,10 +160,10 @@ aggr_desc_get_addr (Handle aggr_desc_h,
       SetHandleSize (aggr_desc_h, aggr_desc_size + 2);
 
       {
-	int16 *t;
+	GUEST<int16> *t;
 	
 	aggr_desc_p = (char *) STARH (aggr_desc_h);
-	t = (int16 *) (aggr_desc_p + aggr_desc_size);
+	t = (GUEST<int16> *) (aggr_desc_p + aggr_desc_size);
 	/* ';;' */
 	t[0] = CWC (0x3b3b);
       }
@@ -354,7 +354,7 @@ aggr_put_nth_desc (Handle aggr_handle,
 static boolean_t
 aggr_get_nth_desc (Handle aggr_handle,
 		   int index,
-		   int32 *out_keyword,
+		   GUEST<int32> *out_keyword,
 		   descriptor_t *out_desc)
 {
   char *addr;
@@ -569,7 +569,7 @@ aggr_delete_key_desc (Handle aggr_handle,
 
 static void
 ae_desc_to_ptr (descriptor_t *desc,
-		Ptr data, uint32 max_size, int32 *size_out)
+		Ptr data, uint32 max_size, GUEST<int32> *size_out)
 {
   uint32 copy_size, desc_size;
   Handle desc_data;
@@ -713,18 +713,18 @@ P6 (PUBLIC pascal trap, OSErr, AECreateAppleEvent,
   memcpy (&event_data->target.data[0], STARH (target_data), target_size);
   
   {
-    int32 *t;
+    GUEST<int32> *t;
     
-    t = (int32 *) ((char *) event_data + sizeof *event_data + target_size);
+    t = (GUEST<int32> *) ((char *) event_data + sizeof *event_data + target_size);
     
     t[0] = TICKX ("aevt");
     t[1] = CLC (0x00010001);
   }
   
   {
-    int16 *t;
+    GUEST<int16> *t;
     
-    t = (int16 *) ((char *) event_data + sizeof *event_data + target_size + 8);
+    t = (GUEST<int16> *) ((char *) event_data + sizeof *event_data + target_size + 8);
     
     /* ';;' */
     t[0] = CWC (0x3b3b);
@@ -814,7 +814,7 @@ P4 (PUBLIC pascal trap, OSErr, AECreateList,
 }
 
 P2 (PUBLIC pascal trap, OSErr, AECountItems,
-    AEDescList *, list, int32 *, count_out)
+    AEDescList *, list, GUEST<int32> *, count_out)
 {
   subdesc_info_t info;
   Handle aggr_desc_h;
@@ -832,7 +832,7 @@ P2 (PUBLIC pascal trap, OSErr, AECountItems,
 
 P5 (PUBLIC pascal trap, OSErr, AEGetNthDesc,
     AEDescList *, list, int32, index,
-    DescType, desired_type, AEKeyword *, keyword_out,
+    DescType, desired_type, GUEST<AEKeyword> *, keyword_out,
     AEDesc *, desc_out)
 {
   descriptor_t *desc = (descriptor_t *)alloca (sizeof *desc);
@@ -848,9 +848,9 @@ P5 (PUBLIC pascal trap, OSErr, AEGetNthDesc,
 
 P8 (PUBLIC pascal trap, OSErr, AEGetNthPtr,
     AEDescList *, list, int32, index,
-    DescType, desired_type, AEKeyword *, keyword_out,
-    DescType *, type_out,
-    Ptr, data, int32, max_size, Size *, size_out)
+    DescType, desired_type, GUEST<AEKeyword> *, keyword_out,
+    GUEST<DescType> *, type_out,
+    Ptr, data, int32, max_size, GUEST<Size> *, size_out)
 {
   descriptor_t *desc = (descriptor_t *)alloca (sizeof *desc);
   descriptor_t *coerced_desc = (descriptor_t *)alloca (sizeof *coerced_desc);
@@ -919,7 +919,7 @@ P2 (PUBLIC pascal trap, OSErr, AEDeleteItem,
 
 P4 (PUBLIC pascal trap, OSErr, AESizeOfNthItem,
     AEDescList *, list, int32, index,
-    DescType *, type_out, Size *, size_out)
+    GUEST<DescType> *, type_out, GUEST<Size> *, size_out)
 {
   descriptor_t *desc = (descriptor_t *)alloca (sizeof *desc);
   
@@ -969,8 +969,8 @@ P3 (PUBLIC pascal trap, OSErr, AEPutKeyDesc,
 
 P7 (PUBLIC pascal trap, OSErr, AEGetKeyPtr,
     AERecord *, record, AEKeyword, keyword,
-    DescType, desired_type, DescType *, type_out,
-    Ptr, data, Size, max_size, Size *, size_out)
+    DescType, desired_type, GUEST<DescType> *, type_out,
+    Ptr, data, Size, max_size, GUEST<Size> *, size_out)
 {
   descriptor_t *desc = (descriptor_t *)alloca (sizeof *desc);
   descriptor_t *coerced_desc = (descriptor_t *)alloca (sizeof *coerced_desc);
@@ -1029,7 +1029,7 @@ P2 (PUBLIC pascal trap, OSErr, AEDeleteKeyDesc,
 
 P4 (PUBLIC pascal trap, OSErr, AESizeOfKeyDesc,
     AERecord *, record, AEKeyword, keyword,
-    DescType *, type_out, Size *, size_out)
+    GUEST<DescType> *, type_out, GUEST<Size> *, size_out)
 {
   descriptor_t *desc = (descriptor_t *)alloca (sizeof *desc);
   
@@ -1102,8 +1102,8 @@ P4 (PUBLIC pascal trap, OSErr, AEGetAttributeDesc,
 
 P7 (PUBLIC pascal trap, OSErr, AEGetAttributePtr,
     AppleEvent *, evt, AEKeyword, keyword,
-    DescType, desired_type, DescType *, type_out,
-    Ptr, data, Size, max_size, Size *, size_out)
+    DescType, desired_type, GUEST<DescType> *, type_out,
+    Ptr, data, Size, max_size, GUEST<Size> *, size_out)
 {
   descriptor_t *desc;
   descriptor_t *coerced_desc = (descriptor_t *)alloca (sizeof *coerced_desc);
@@ -1141,7 +1141,7 @@ P2 (PUBLIC pascal trap, OSErr, AEDeleteAttribute,
 
 P4 (PUBLIC pascal trap, OSErr, AESizeOfAttribute,
     AppleEvent *, evt, AEKeyword, keyword,
-    DescType *, type_out, Size *, size_out)
+    GUEST<DescType> *, type_out, GUEST<Size> *, size_out)
 {
   descriptor_t *desc;
   

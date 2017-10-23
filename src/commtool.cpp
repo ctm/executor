@@ -114,14 +114,14 @@ serial_insert (const char *input, const char *output, const char *name)
 	  p->ratedSpeed = CLC (19200);
 	  p->maxSpeed = CLC (57600);
 	  p->reserved = CLC (0);
-	  qp->qLink = (QElemPtr)CLC (0);
+	  qp->qLink = nullptr;
 	  qp->qType = CWC (crmType);
 	  qp->crmVersion = CWC (crmRecVersion);
 	  qp->crmPrivate = CLC (0);
 	  qp->crmReserved = CWC (0);
 	  qp->crmDeviceType = CLC (crmSerialDevice);
 	  qp->crmDeviceID = CLC (0);
-	  qp->crmAttributes = (LONGINT) RM (p);
+	  qp->crmAttributes = guest_cast<LONGINT>( RM (p) );
 	  qp->crmStatus = CLC (0);
 	  qp->crmRefCon = CLC (0);
 	  CRMInstall ((QElemPtr) qp);

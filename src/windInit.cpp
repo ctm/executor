@@ -346,7 +346,7 @@ ROMlib_new_window_common (WindowPeek w,
     title = (StringPtr) "";	/* thank MS Word for pointing this out */
   if (!behind)
     {
-      WINDOW_NEXT_WINDOW_X (w) = (WindowPeek)CLC (0);
+      WINDOW_NEXT_WINDOW_X (w) = nullptr;
       if (WindowList)
 	{
 	  for (t_w = MR (WindowList);
@@ -369,7 +369,7 @@ ROMlib_new_window_common (WindowPeek w,
   else if (behind == (WindowPtr) -1L)
     {
       WINDOW_NEXT_WINDOW_X (w) = WindowList;
-      WindowList = (WindowPeek) RM (w);
+      WindowList = RM ((WindowPeek) w);
       if (visible_p)
 	{
 	  /* notify the palette manager that the `FrontWindow ()' may have
@@ -380,7 +380,7 @@ ROMlib_new_window_common (WindowPeek w,
   else
     {
       WINDOW_NEXT_WINDOW_X (w) = WINDOW_NEXT_WINDOW_X (behind);
-      WINDOW_NEXT_WINDOW_X (behind) = (WindowPeek) RM (w);
+      WINDOW_NEXT_WINDOW_X (behind) = RM ((WindowPeek) w);
     }
   WINDOW_KIND_X (w) = CWC (userKind);
   WINDOW_VISIBLE_X (w) = visible_p;
@@ -391,7 +391,7 @@ ROMlib_new_window_common (WindowPeek w,
   WINDOW_HILITED_X (w) = visible_p && (t_w == w);
   if (WINDOW_HILITED_X (w))
     {
-      CurActivate = (WindowPtr) RM (w);
+      CurActivate = RM ((WindowPtr)w);
       for (t_w = WINDOW_NEXT_WINDOW (t_w);
 	   t_w && !WINDOW_HILITED_X (t_w);
 	   t_w = WINDOW_NEXT_WINDOW (t_w))
@@ -420,8 +420,8 @@ ROMlib_new_window_common (WindowPeek w,
   
   t_aux_w = (AuxWinHandle) NewHandle (sizeof (AuxWinRec));
   HxX (t_aux_w, awNext)      = AuxWinHead;
-  HxX (t_aux_w, awOwner)     = (WindowPtr) RM (w);
-  HxX (t_aux_w, awCTable) = (CTabHandle) RM (GetResource (TICK("wctb"), 0));
+  HxX (t_aux_w, awOwner)     = RM ((WindowPtr)w);
+  HxX (t_aux_w, awCTable) = RM ((CTabHandle) GetResource (TICK("wctb"), 0));
   HxX (t_aux_w, dialogCItem) = 0;
   HxX (t_aux_w, awFlags)     = CL ((proc_id & 0xF) << 24);
   HxX (t_aux_w, awReserved)  = 0;
@@ -449,8 +449,8 @@ ROMlib_new_window_common (WindowPeek w,
      });
 
   TextFont (applFont);
-  WINDOW_CONTROL_LIST_X (w) = (ControlHandle)CWC (0);
-  WINDOW_PIC_X (w) = (PicHandle)CWC (0);
+  WINDOW_CONTROL_LIST_X (w) = nullptr;
+  WINDOW_PIC_X (w) = nullptr;
   WINDOW_REF_CON_X (w) = CL (ref_con);
   WINDCALL ((WindowPtr) w, wNew, 0);
   if (WINDOW_VISIBLE_X (w))
@@ -475,7 +475,7 @@ ROMlib_new_window_common (WindowPeek w,
   if (t_w)
     {
       HiliteWindow ((WindowPtr) t_w, FALSE);
-      CurDeactive = (WindowPtr) RM (t_w);
+      CurDeactive = RM ((WindowPtr)t_w);
     }
 
   SetPort (save_port);
@@ -572,7 +572,7 @@ P3 (PUBLIC pascal trap, CWindowPtr, GetNewCWindow,
 			 Hx (win_res, _wvisible) != 0,
 			 Hx (win_res, _wprocid),
 			 behind, Hx (win_res, _wgoaway) != 0,
-			 CL (*(LONGINT *) ((char *) &HxX (win_res, _wrect) + 14)));
+			 CL (*(GUEST<LONGINT> *) ((char *) &HxX (win_res, _wrect) + 14)));
 
 
   win_ctab_res = ROMlib_getrestid (TICK ("wctb"), window_id);
@@ -610,7 +610,7 @@ P3(PUBLIC pascal trap, WindowPtr, GetNewWindow, INTEGER, wid, Ptr, wst,
 	    (StringPtr) ((char *) &HxX(wh, _wrect) + 18),
             Hx(wh, _wvisible) != 0, Hx(wh, _wprocid), (WindowPtr) behind,
             Hx(wh, _wgoaway) != 0,
-	    CL(*(LONGINT *)( (char *) &HxX(wh, _wrect) + 14)));
+	    CL(*(GUEST<LONGINT> *)( (char *) &HxX(wh, _wrect) + 14)));
     return(tp);
 }
  
@@ -634,7 +634,7 @@ P1(PUBLIC pascal trap, void, CloseWindow, WindowPtr, w)
 	if (wptmp)
 	  {
 	    HiliteWindow ((WindowPtr) wptmp, TRUE);
-	    CurActivate = (WindowPtr) RM (wptmp);
+	    CurActivate = RM ((WindowPtr)wptmp);
 	  }
       }
     if (MR (WindowList) == (WindowPeek) w)

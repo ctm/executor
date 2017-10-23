@@ -551,9 +551,9 @@ dump_pixmap_ptr (PixMapPtr x, Rect *rect)
   dump_field (dump_rect, &x->bounds, "bounds");
   iprintf ((o_fp, "pmVersion 0x%x;\n", CW (x->pmVersion)));
   iprintf ((o_fp, "packType 0x%x;\n", CW (x->packType)));
-  iprintf ((o_fp, "packSize 0x%x;\n", CW (x->packSize)));
+  iprintf ((o_fp, "packSize 0x%x;\n", CL (x->packSize)));
   iprintf ((o_fp, "hRes 0x%x, vRes 0x%x;\n", 
-	    CW (x->hRes), CW (x->vRes)));
+	    CL (x->hRes), CL (x->vRes)));
   iprintf ((o_fp, "pixelType 0x%x;\n", CW (x->pixelType)));
   iprintf ((o_fp, "pixelSize %d;\n", CW (x->pixelSize)));
   iprintf ((o_fp, "cmpCount %d;\n", CW (x->cmpCount)));
@@ -592,9 +592,9 @@ Executor::dump_pixmap (PixMapHandle pixmap, Rect *rect)
   dump_field (dump_rect, &x->bounds, "bounds");
   iprintf ((o_fp, "pmVersion 0x%x;\n", CW (x->pmVersion)));
   iprintf ((o_fp, "packType 0x%x;\n", CW (x->packType)));
-  iprintf ((o_fp, "packSize 0x%x;\n", CW (x->packSize)));
+  iprintf ((o_fp, "packSize 0x%x;\n", CL (x->packSize)));
   iprintf ((o_fp, "hRes 0x%x, vRes 0x%x;\n", 
-	    CW (x->hRes), CW (x->vRes)));
+	    CL (x->hRes), CL (x->vRes)));
   iprintf ((o_fp, "pixelType 0x%x;\n", CW (x->pixelType)));
   iprintf ((o_fp, "pixelSize %d;\n", CW (x->pixelSize)));
   iprintf ((o_fp, "cmpCount %d;\n", CW (x->cmpCount)));
@@ -733,7 +733,7 @@ Executor::dump_gdevice (GDHandle gdev)
   else
     dump_field (dump_handle, MR (x->gdNextGD), "gdNextGD");
   dump_field (dump_rect, &x->gdRect, "gdRect");
-  iprintf ((o_fp, "gdMode 0x%x;\n", CW (x->gdMode)));
+  iprintf ((o_fp, "gdMode 0x%x;\n", CL (x->gdMode)));
   iprintf ((o_fp, "[CC, Reserved fields omitted]; }\n")); indent -= 2;
   fflush (o_fp);
 }
@@ -825,7 +825,7 @@ Executor::dump_ccrsr (CCrsrHandle ccrsr)
   dump_field (dump_handle, MR (x->crsrData), "crsrData");
   if (dump_verbosity >= 3
       && x->crsrXData
-      && x->crsrXValid != 0)
+      && x->crsrXValid != CW(0))
     {
       BitMap bm;
       int depth;
@@ -850,8 +850,8 @@ Executor::dump_ccrsr (CCrsrHandle ccrsr)
   dump_field (dump_bits16, x->crsr1Data, "crsr1Data");
   dump_field (dump_bits16, x->crsrMask, "crsrMask");
   dump_field (dump_point, x->crsrHotSpot, "crsrHotSpot");
-  iprintf ((o_fp, "crsrXTable %x\n", CW (x->crsrXTable)));
-  iprintf ((o_fp, "crsrID 0x%x; }\n", CW (x->crsrID)));  indent -= 2;
+  iprintf ((o_fp, "crsrXTable %x\n", CL (x->crsrXTable)));
+  iprintf ((o_fp, "crsrID 0x%x; }\n", CL (x->crsrID)));  indent -= 2;
   fflush (o_fp);
 }
 
@@ -936,12 +936,12 @@ Executor::dump_dialog_peek (DialogPeek d)
 void
 dump_dialog_items (DialogPeek dp)
 {
-  int16 *item_data;
+  GUEST<int16> *item_data;
   int n_items;
   itmp items;
   int i;
  
-  item_data = (int16 *) STARH (DIALOG_ITEMS (dp));
+  item_data = (GUEST<int16> *) STARH (DIALOG_ITEMS (dp));
   n_items = CW (*item_data);
   items = (itmp) &item_data[1];
   fprintf (o_fp, "%d items:\n", n_items);
@@ -1244,7 +1244,7 @@ dump_scrap (StScrpHandle scrap)
 #define MAP_SAVE_EXCURSION(map, body)	\
   do					\
     {					\
-       INTEGER save_map;		\
+       GUEST<INTEGER> save_map;		\
 					\
        save_map = CurMap;		\
        CurMap = map;			\

@@ -562,7 +562,7 @@ Executor::ROMlib_setupblock (block_header_t *block,
     }
   
   if ((char *) ZONE_ALLOC_PTR (current_zone) < (char *) block + oldsize)
-    ZONE_ALLOC_PTR_X (current_zone) = (Ptr) RM (newfree);
+    ZONE_ALLOC_PTR_X (current_zone) = RM ((Ptr)newfree);
 
 
 #if 0
@@ -633,7 +633,7 @@ Executor::ROMlib_coalesce (block_header_t *block)
   
   if (ZONE_ALLOC_PTR (current_zone) >= block
       && (char *) ZONE_ALLOC_PTR (current_zone) <= (char *) block + total_free)
-    ZONE_ALLOC_PTR_X (current_zone) = (Ptr) RM (block);
+    ZONE_ALLOC_PTR_X (current_zone) = RM ((Ptr)block);
 }
 
 /* Mark a block free.  If relocatable, the master must have already
@@ -769,7 +769,7 @@ Executor::ROMlib_makespace (block_header_t **block_out, uint32 size)
 
   if (ZONE_ALLOC_PTR (current_zone) > block
       && ZONE_ALLOC_PTR (current_zone) <= b)
-    ZONE_ALLOC_PTR_X (current_zone) = (Ptr) RM (block);
+    ZONE_ALLOC_PTR_X (current_zone) = RM ((Ptr)block);
 
   /* Finally, coalesce the space into one big free block */
   gui_assert (USE (block) == FREE);
@@ -816,7 +816,7 @@ Executor::ROMlib_amtfree (block_header_t *block)
       SETPSIZE (block, total);
       if (ZONE_ALLOC_PTR (current_zone) > block
 	  && ZONE_ALLOC_PTR (current_zone) <= b)
-	ZONE_ALLOC_PTR_X (current_zone) = (Ptr) RM (block);
+	ZONE_ALLOC_PTR_X (current_zone) = RM ((Ptr)block);
     }
   return total;
 }
@@ -831,7 +831,7 @@ Executor::checkallocptr (void)
 
   current_zone = MR (TheZone);
 
-  if (ZONE_ALLOC_PTR_X (current_zone) == (Ptr)CLC (0))
+  if (ZONE_ALLOC_PTR_X (current_zone) == nullptr)
     return;
   for (b = ZONE_HEAP_DATA (current_zone);
        b != ZONE_BK_LIM (current_zone);

@@ -229,11 +229,11 @@ Executor::ROMlib_CALLCOMMENT (INTEGER kind, INTEGER size, Handle datah)
 
 
 INTEGER
-Executor::ROMlib_CALLTXMEAS (INTEGER bc, Ptr bufp, Point * nump, Point * denp,
+Executor::ROMlib_CALLTXMEAS (INTEGER bc, Ptr bufp, GUEST<Point> * nump, GUEST<Point> * denp,
 		   FontInfo * fip)
 {
   QDProcsPtr gp;
-  pascal trap INTEGER (*pp) (INTEGER, Ptr, Point *, Point *, FontInfo *);
+  txMeasProc_t pp;
   INTEGER retval;
 
   if ((gp = MR (thePort->grafProcs))

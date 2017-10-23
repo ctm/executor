@@ -9,7 +9,7 @@ namespace Executor {
    label in there. */
 
 struct cotton_suite_layout_t { GUEST_STRUCT;
-    GUEST< Handle[N_SUITE_ICONS]> icons;
+    Handle icons[N_SUITE_ICONS];        // icon.cpp stores native pointers here
     GUEST< INTEGER> label;
 };
 }

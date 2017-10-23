@@ -144,60 +144,7 @@ typedef struct TPrDlg { GUEST_STRUCT;
 extern INTEGER 	PrintErr;
 #endif
 
-#if !defined (__STDC__)
-extern INTEGER PrError(); 
-extern void PrSetError(); 
-extern void PrOpen(); 
-extern void PrClose(); 
-extern void PrDrvrOpen(); 
-extern void PrDrvrClose(); 
-extern void PrCtlCall(); 
-extern Handle PrDrvrDCE(); 
-extern INTEGER PrDrvrVers(); 
-extern void C_ROMlib_myjobproc(); 
-extern pascal BOOLEAN C_ROMlib_stlfilterproc(); 
-extern pascal BOOLEAN C_ROMlib_numsonlyfilterproc(); 
-extern void C_ROMlib_mystlproc(); 
-extern TPPrDlg PrJobInit(); 
-extern TPPrDlg PrStlInit(); 
-extern BOOLEAN PrDlgMain(); 
-extern void PrGeneral(); 
-extern void donotPrArc(); 
-extern void PrArc(); 
-extern void donotPrBits(); 
-extern void PrBits(); 
-extern void donotPrLine(); 
-extern void PrLine(); 
-extern void donotPrOval(); 
-extern void PrOval(); 
-extern void textasPS(); 
-extern void donotPrGetPic(); 
-extern void PrGetPic(); 
-extern void donotPrPutPic(); 
-extern void PrPutPic(); 
-extern void donotPrPoly(); 
-extern void PrPoly(); 
-extern void donotPrRRect(); 
-extern void PrRRect(); 
-extern void donotPrRect(); 
-extern void PrRect(); 
-extern void donotPrRgn(); 
-extern void PrRgn(); 
-extern INTEGER PrTxMeas(); 
-extern void donotPrText(); 
-extern void PrText(); 
-extern void PrComment(); 
-extern TPPrPort PrOpenDoc(); 
-extern void PrOpenPage(); 
-extern void PrClosePage(); 
-extern void PrCloseDoc(); 
-extern void PrPicFile(); 
-extern void PrintDefault(); 
-extern BOOLEAN PrValidate(); 
-extern BOOLEAN PrStlDialog(); 
-extern BOOLEAN PrJobDialog(); 
-extern void PrJobMerge(); 
-#else /* __STDC__ */
+
 extern pascal trap INTEGER C_PrError( void  );
 extern pascal trap void C_PrSetError( INTEGER iErr );
 extern pascal trap void C_PrOpen( void  );
@@ -210,11 +157,11 @@ extern pascal trap Handle C_PrDrvrDCE( void  );
 extern pascal trap INTEGER C_PrDrvrVers( void  );
 extern pascal void C_ROMlib_myjobproc( DialogPtr dp, INTEGER itemno );
 extern pascal BOOLEAN C_ROMlib_stlfilterproc( DialogPeek dp, 
-					     EventRecord *evt, INTEGER *ith );
+					     EventRecord *evt, GUEST<INTEGER> *ith );
 
 extern pascal BOOLEAN C_ROMlib_numsonlyfilterproc( DialogPeek dp,
 						  EventRecord *evt,
-						  INTEGER *ith );
+						  GUEST<INTEGER> *ith );
 
 extern pascal void C_ROMlib_mystlproc( DialogPtr dp, INTEGER itemno );
 extern pascal trap TPPrDlg C_PrJobInit( THPrint hPrint );
@@ -251,8 +198,8 @@ extern pascal trap void C_donotPrRect( GrafVerb v, Rect *rp );
 extern pascal trap void C_PrRect( GrafVerb v, Rect *rp );
 extern pascal trap void C_donotPrRgn( GrafVerb verb, RgnHandle rgn );
 extern pascal trap void C_PrRgn( GrafVerb verb, RgnHandle rgn );
-extern pascal trap INTEGER C_PrTxMeas( INTEGER n, Ptr p, Point *nump,
-				      Point *denp, FontInfo *finfop );
+extern pascal trap INTEGER C_PrTxMeas( INTEGER n, Ptr p, GUEST<Point> *nump,
+				      GUEST<Point> *denp, FontInfo *finfop );
 extern pascal trap void C_donotPrText( INTEGER n, Ptr textbufp, Point num,
 				      Point den );
 extern pascal trap void C_PrText( INTEGER n, Ptr textbufp, Point num,
@@ -271,6 +218,5 @@ extern pascal trap BOOLEAN C_PrValidate( THPrint hPrint );
 extern pascal trap BOOLEAN C_PrStlDialog( THPrint hPrint );
 extern pascal trap BOOLEAN C_PrJobDialog( THPrint hPrint );
 extern pascal trap void C_PrJobMerge( THPrint hPrintSrc, THPrint hPrintDst );
-#endif /* __STDC__ */
 }
 #endif /* __PRINTING__ */

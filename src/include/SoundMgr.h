@@ -187,7 +187,7 @@ typedef void *SPBPtr;
 typedef unsigned long UnsignedFixed;
 typedef Ptr CompressionInfoPtr;
 
-extern trap void C_SndGetSysBeepState(INTEGER *statep);
+extern trap void C_SndGetSysBeepState(GUEST<INTEGER> *statep);
 
 extern trap OSErr C_SndSetSysBeepState(INTEGER state);
 
@@ -230,14 +230,14 @@ extern trap void C_Exp1to6(Ptr inp, Ptr outp, LONGINT cnt, Ptr instatep,
 
 
 extern trap OSErr C_SndRecord(ProcPtr filterp, Point corner,
-					   OSType quality, Handle *sndhandlep);
+					   OSType quality, GUEST<Handle> *sndhandlep);
 
 extern trap OSErr C_SndRecordToFile(ProcPtr filterp, Point corner,
 					       OSType quality, INTEGER refnum);
 
 
 extern trap OSErr C_SPBOpenDevice(Str255 name, INTEGER permission,
-							   LONGINT *inrefnump);
+        GUEST<LONGINT> *inrefnump);
 
 extern trap OSErr C_SPBCloseDevice(LONGINT inrefnum);
 
@@ -253,9 +253,9 @@ extern trap OSErr C_SPBResumeRecording(LONGINT refnum);
 extern trap OSErr C_SPBStopRecording(LONGINT refnum);
 
 extern trap OSErr C_SPBGetRecordingStatus(LONGINT refnum,
-	INTEGER *recordingstatus, INTEGER *meterlevel,
-	LONGINT *totalsampstorecord, LONGINT *numsampsrecorded,
-		    LONGINT *totalmsecstorecord, LONGINT *numbermsecsrecorded);
+	GUEST<INTEGER> *recordingstatus, GUEST<INTEGER> *meterlevel,
+	GUEST<LONGINT> *totalsampstorecord, GUEST<LONGINT> *numsampsrecorded,
+        GUEST<LONGINT> *totalmsecstorecord, GUEST<LONGINT> *numbermsecsrecorded);
 
 
 extern trap OSErr C_SPBGetDeviceInfo(LONGINT refnum, OSType info,
@@ -267,7 +267,7 @@ extern trap OSErr C_SPBSetDeviceInfo(LONGINT refnum, OSType info,
 
 extern trap OSErr C_SetupSndHeader(Handle sndhandle, INTEGER numchannels,
 	Fixed rate, INTEGER size, OSType compresion, INTEGER basefreq,
-				        LONGINT numbytes, INTEGER *headerlenp);
+				        LONGINT numbytes, GUEST<INTEGER> *headerlenp);
 
 extern trap OSErr C_SetupAIFFHeader(INTEGER refnum, INTEGER numchannels,
 	Fixed samplerate, INTEGER samplesize, OSType compression,
@@ -278,23 +278,23 @@ extern trap OSErr C_SPBSignInDevice(INTEGER refnum, Str255 name);
 extern trap OSErr C_SPBSignOutDevice(INTEGER refnum);
 
 extern trap OSErr C_SPBGetIndexedDevice(INTEGER count, Str255 name,
-						    Handle *deviceiconhandlep);
+						    GUEST<Handle> *deviceiconhandlep);
 
 extern trap OSErr C_SPBMillisecondsToBytes(LONGINT refnum,
-							      LONGINT *millip);
+        GUEST<LONGINT> *millip);
 
 extern trap OSErr C_SPBBytesToMilliseconds(LONGINT refnum,
-							  LONGINT *bytecountp);
+        GUEST<LONGINT> *bytecountp);
 
-extern trap OSErr C_GetSysBeepVolume (LONGINT *levelp);
+extern trap OSErr C_GetSysBeepVolume (GUEST<LONGINT> *levelp);
 
 extern trap OSErr C_SetSysBeepVolume (LONGINT level);
 
-extern trap OSErr C_GetDefaultOutputVolume (LONGINT *levelp);
+extern trap OSErr C_GetDefaultOutputVolume (GUEST<LONGINT> *levelp);
 
 extern trap OSErr C_SetDefaultOutputVolume (LONGINT level);
 
-extern trap OSErr C_GetSoundHeaderOffset (Handle sndHandle, LONGINT *offset);
+extern trap OSErr C_GetSoundHeaderOffset (Handle sndHandle, GUEST<LONGINT> *offset);
 
 extern trap UnsignedFixed C_UnsignedFixedMulDiv (UnsignedFixed value,
 						 UnsignedFixed multiplier,

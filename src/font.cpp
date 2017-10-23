@@ -147,7 +147,7 @@ P2(PUBLIC pascal trap, void, GetFNum, StringPtr, fnam,		/* IMI-223 */
     if (ResError())
 	*fnum = 0;
     else if (shift)
-	*fnum =CW( CW(*(unsigned short *) fnum) >> 7);
+	*fnum =CW( CW(*(GUEST<uint16_t> *) fnum) >> 7);
     SetResLoad(TRUE);
 }
 
@@ -230,10 +230,10 @@ A1(PRIVATE, BOOLEAN, widthlistmatch, FMInput *, fmip)
 				  WIDTHPTR->inNumer.v == fmip->numer.v    &&
 				  WIDTHPTR->inDenom.h == fmip->denom.h    &&
 				  WIDTHPTR->inDenom.v == fmip->denom.v	  &&
-				  WIDTHPTR->fSize     != -1 &&
-				  WIDTHPTR->fSize     !=  0 &&
+				  WIDTHPTR->fSize     != CWC(-1) &&
+				  WIDTHPTR->fSize     !=  CWC(0) &&
 				 !WIDTHPTR->usedFam   == !FractEnable) {
-		WidthTabHandle = (WidthTableHandle) *whp;
+		WidthTabHandle = guest_cast<WidthTableHandle>(*whp);
 		HLock((Handle) MR(WidthTabHandle));
 		return TRUE;
 	    }
@@ -336,8 +336,8 @@ typedef enum { FontFract, FontInt, FondFract } howtobuild_t;
 PRIVATE void buildtabdata(howtobuild_t howtobuild, INTEGER extra,
 						       GUEST<INTEGER> *fondwidthtable)
 {
-    INTEGER c, firstchar, lastchar, width;
-    GUEST<INTEGER> *widp;
+    INTEGER c, firstchar, lastchar;
+    GUEST<INTEGER> *widp, width;
     GUEST<Fixed> *p, *ep;
     Fixed misswidth, hOutputInverse, fixed_extra;
     FontRec *fp;
@@ -372,7 +372,7 @@ PRIVATE void buildtabdata(howtobuild_t howtobuild, INTEGER extra,
 	    if (c < firstchar || c > lastchar)
 		*p++ = CL(misswidth);
 	    else {
-		*p++ = (width = *widp++) == -1 ?
+		*p++ = (width = *widp++) == CWC(-1) ?
 				     CL(misswidth)
 				 :
 				     CL(FIXED((CW(width) & 0xFF) + extra));
@@ -623,7 +623,7 @@ A1(PRIVATE, void, newwidthtable, FMInput *, fmip)
 
     savezone = TheZone;
     TheZone = SysZone;
-    WidthTabHandle = (WidthTableHandle) RM(NewHandle((Size) sizeof(WidthTable)));
+    WidthTabHandle =  RM((WidthTableHandle) NewHandle((Size) sizeof(WidthTable)));
     TheZone = savezone;
     Munger((Handle) MR(WidthListHand), (LONGINT) 0, (Ptr) 0, 0,
 				(Ptr) &WidthTabHandle, sizeof(WidthTabHandle));
@@ -770,7 +770,7 @@ P1(PUBLIC pascal trap, FMOutPtr, FMSwapFont, FMInput *, fmip)	/* IMI-223 */
 {
     Style style;
     FontRec *fp;
-    INTEGER savesize, savefamily;
+    GUEST<INTEGER> savesize, savefamily;
     BOOLEAN needtobuild;
     
     savesize = fmip->size;
@@ -795,7 +795,7 @@ P1(PUBLIC pascal trap, FMOutPtr, FMSwapFont, FMInput *, fmip)	/* IMI-223 */
     } else
 	savefamily = fmip->family;
     
-    if (fmip->family == 0)
+    if (fmip->family == CW(0))
       {
 	savefamily = 0;
 	fmip->family = SysFontFam;
@@ -809,8 +809,8 @@ P1(PUBLIC pascal trap, FMOutPtr, FMSwapFont, FMInput *, fmip)	/* IMI-223 */
 	fmip->numer.v !=   ROMlib_myfmi.numer.v ||
 	fmip->denom.h !=   ROMlib_myfmi.denom.h ||
 	fmip->denom.v !=   ROMlib_myfmi.denom.v ||
-	WIDTHPTR->fSize == -1		        ||
-	WIDTHPTR->fSize ==  0		        ||
+	WIDTHPTR->fSize == CW(-1)	        ||
+	WIDTHPTR->fSize ==  CW(0)	        ||
        (fmip->needBits && !ROMlib_myfmi.needBits)) {
 	if ((needtobuild = !widthlistmatch(fmip)))
 	    newwidthtable(fmip);

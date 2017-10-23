@@ -251,7 +251,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
   FMInput fmi;
   FMOutput *fmop;
   unsigned char *ep;
-  INTEGER wid, offset, missing;
+  INTEGER wid, offset;
   GUEST<INTEGER> *widp, *locp;
   unsigned out;
   register INTEGER c;
@@ -308,8 +308,8 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 	  
       if (PORT_PEN_VIS (thePort) < 0)
 	{
-	  Point swapped_num;
-	  Point swapped_den;
+	  GUEST<Point> swapped_num;
+	  GUEST<Point> swapped_den;
 
 	  swapped_num.h = CW (num.h);
 	  swapped_num.v = CW (num.v);
@@ -376,10 +376,13 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
   fmap.bounds.bottom = fp->fRectHeight;
   srect.top = misrect.top = 0;
   srect.bottom = misrect.bottom = fp->fRectHeight;
-  widp = (INTEGER *)&(fp->owTLoc) + Cx(fp->owTLoc);
-  locp = ((INTEGER *)&(fp->rowWords) + Cx(fp->rowWords) * Cx(fp->fRectHeight)
+  widp = (GUEST<INTEGER> *)&(fp->owTLoc) + Cx(fp->owTLoc);
+  locp = ((GUEST<INTEGER> *)&(fp->rowWords) + Cx(fp->rowWords) * Cx(fp->fRectHeight)
 	  + 1);
-  missing = *(widp + Cx(fp->lastChar) - Cx(fp->firstChar) + 1) & 0xff;
+
+  // makes no sense and is unused
+  // (widp points to big-endian, bitmask is native endian)
+  //        INTEGER missing = *(widp + Cx(fp->lastChar) - Cx(fp->firstChar) + 1) & 0xff;
   misrect.left = *(locp + Cx(fp->lastChar) - Cx(fp->firstChar) + 1);
   misrect.right = *(locp + Cx(fp->lastChar) - Cx(fp->firstChar) + 2);
   drect.left = PORT_PEN_LOC (thePort).h;
@@ -396,8 +399,8 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 
   if (action == text_helper_draw)
     {
-      Point swapped_num;
-      Point swapped_den;
+      GUEST<Point> swapped_num;
+      GUEST<Point> swapped_den;
     
       swapped_num.h = CW (num.h);
       swapped_num.v = CW (num.v);
@@ -734,8 +737,8 @@ P4(PUBLIC pascal trap, void, StdText, INTEGER, n, Ptr, textbufp,
 #define FIXEDONEHALF	(1L << 15)
 
 PUBLIC INTEGER
-Executor::xStdTxMeas (INTEGER n, Byte *p, Point *nump, Point *denp,
-	    FontInfo *finfop, INTEGER *charlocp)
+Executor::xStdTxMeas (INTEGER n, Byte *p, GUEST<Point> *nump, GUEST<Point> *denp,
+	    FontInfo *finfop, GUEST<INTEGER> *charlocp)
 {
   INTEGER retval;
 
@@ -745,25 +748,23 @@ Executor::xStdTxMeas (INTEGER n, Byte *p, Point *nump, Point *denp,
 }
 
 P5(PUBLIC pascal trap, INTEGER, StdTxMeas, INTEGER, n, Ptr, p,
-			      Point *, nump, Point *, denp, FontInfo *, finfop)
+        GUEST<Point> *, nump, GUEST<Point> *, denp, FontInfo *, finfop)
 {
-    return xStdTxMeas(n, (unsigned char *) p, nump, denp, finfop,
-							        (INTEGER *) 0);
+    return xStdTxMeas(n, (unsigned char *) p, nump, denp, finfop, nullptr);
 }
 
 A5(PUBLIC, INTEGER, ROMlib_StdTxMeas, LONGINT, n, Ptr, p,
-			      Point *, nump, Point *, denp, FontInfo *, finfop)
+        GUEST<Point> *, nump, GUEST<Point> *, denp, FontInfo *, finfop)
 {
-    return xStdTxMeas(n, (unsigned char *) p, nump, denp, finfop,
-							        (INTEGER *) 0);
+    return xStdTxMeas(n, (unsigned char *) p, nump, denp, finfop, nullptr);
 }
 
 P3(PUBLIC pascal trap, void, MeasureText, INTEGER, n, Ptr, text, /* IMIV-25 */
 								 Ptr, chars)
 {
-  Point num, den;
+  GUEST<Point> num, den;
   
   num.h = num.v = den.h = den.v = CWC (1);
   xStdTxMeas(n, (unsigned char *) text, &num, &den,
-	     (FontInfo *) 0, (INTEGER *) chars);
+	     (FontInfo *) 0, (GUEST<INTEGER> *) chars);
 }

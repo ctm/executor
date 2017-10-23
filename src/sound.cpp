@@ -275,12 +275,12 @@ PUBLIC int Executor::ROMlib_get_snd_cmds (Handle sndh, SndCommand **cmdsp)
   int retval;
 
   p = STARH (sndh);
-  format = CW (*(INTEGER *)p);
+  format = CW (*(GUEST<INTEGER> *)p);
   switch (format)
     {
     case 1:
       p += 2;
-      num_formats = CW (*(INTEGER *)p);
+      num_formats = CW (*(GUEST<INTEGER> *)p);
       switch (num_formats)
 	{
 	case 0:
@@ -308,7 +308,7 @@ PUBLIC int Executor::ROMlib_get_snd_cmds (Handle sndh, SndCommand **cmdsp)
   
   /* Now p points to "Number of sound commands" field of resource */
 
-  retval = CW (*(INTEGER *)p);
+  retval = CW (*(GUEST<INTEGER> *)p);
   *cmdsp = (SndCommand *)(p+2);
 
   return retval;
@@ -329,12 +329,12 @@ P3(PUBLIC, pascal trap OSErr, SndPlay, SndChannelPtr, chanp, Handle, sndh,
     resp = NULL;
 
   if (resp)
-    format = CW (*(INTEGER *)resp);
+    format = CW (*(GUEST<INTEGER> *)resp);
   else
     format = 0;
 
   warning_sound_log ("chanp %p fmt %d num_fmts %d async %d",
-		     chanp, format, resp ? CW (*((INTEGER *)(resp+2))) : 0,
+		     chanp, format, resp ? CW (*((GUEST<INTEGER> *)(resp+2))) : 0,
 		     async);
 
   warning_sound_log (" sndh %s", (HGetState(sndh) & LOCKBIT)
@@ -359,7 +359,7 @@ P3(PUBLIC, pascal trap OSErr, SndPlay, SndChannelPtr, chanp, Handle, sndh,
       {
 	GUEST<SndChannelPtr> foo;
 
-	foo = (SndChannelPtr)CLC (0);
+	foo = nullptr;
 	SndNewChannel (&foo, sampledSynth, 0, 0);
 	chanp = MR (foo);
       }
@@ -374,7 +374,7 @@ P3(PUBLIC, pascal trap OSErr, SndPlay, SndChannelPtr, chanp, Handle, sndh,
            offset */
 	if (cmd.cmd & CWC (0x8000))
 	  {
-	    cmd.param2 = (LONGINT) RM ((resp + CL (cmd.param2)));
+	    cmd.param2 = guest_cast<LONGINT> ( RM ((resp + CL (cmd.param2))) );
 	    cmd.cmd.raw_and( CWC (~0x8000) );
 	  }
 
@@ -582,7 +582,7 @@ do_current_command (SndChannelPtr chanp, struct hunger_info info)
   switch (CW (chanp->cmdInProg.cmd))
     {
     case bufferCmd:
-      hp = (SoundHeaderPtr) MR ( chanp->cmdInProg.param2);
+      hp = MR ( guest_cast<SoundHeaderPtr>(chanp->cmdInProg.param2) );
       
       if (hp->encode != stdSH)
 	{
@@ -649,7 +649,7 @@ do_current_db (SndChannelPtr chanp, struct hunger_info info)
   dbhp = SND_CHAN_DBHP (chanp);
   dbp = MR (dbhp->dbhBufferPtr[SND_CHAN_CURRENT_DB (chanp)]);
 
-  if ((dbp->dbFlags & CLC (dbBufferReady)) == 0)
+  if (!(dbp->dbFlags & CLC (dbBufferReady)))
     {
       /* This buffer isn't ready */
       warning_sound_log ("notready");
@@ -676,8 +676,8 @@ do_current_db (SndChannelPtr chanp, struct hunger_info info)
 		info.t3))
     {
       /* We are done with this buffer */
-      dbp->dbFlags.raw_and( CLC (~dbBufferReady) );
-      if (dbp->dbFlags.raw() & CLC (dbLastBuffer))
+      dbp->dbFlags &= CLC (~dbBufferReady);
+      if (dbp->dbFlags & CLC (dbLastBuffer))
 	/* We are completely done */
 	SND_DB_DONE (chanp);
       else
@@ -820,7 +820,7 @@ P3(PUBLIC, pascal trap OSErr, SndDoCommand, SndChannelPtr, chanp,
     {
       SoundHeaderPtr hp;
 
-      hp = (SoundHeaderPtr) MR (cmdp->param2);
+      hp = MR (guest_cast<SoundHeaderPtr>(cmdp->param2));
       if (!hp)
 	warning_sound_log ("hp = NULL");
       else
@@ -1073,7 +1073,7 @@ P2(PUBLIC, pascal trap OSErr, SndDisposeChannel, SndChannelPtr, chanp,
 	if (*pp)
 	  {
 	    *pp = chanp->nextChan;
-	    DisposPtr (MR ((Ptr) chanp->firstMod));
+	    DisposPtr ((Ptr) MR (chanp->firstMod));
 	    if (chanp->flags & CWC(CHAN_ALLOC_FLAG))
 	      DisposPtr((Ptr) chanp);
 	  }

@@ -716,8 +716,8 @@ extern int average_color (GDHandle gdev,
 			  RGBColor *c1, RGBColor *c2, int ratio,
 			  RGBColor *out);
 
-extern int16 xStdTxMeas (int16 n, uint8 *p, Point *nump, Point *denp,
-			 FontInfo *finfop, int16 *charlocp);
+extern int16 xStdTxMeas (int16 n, uint8 *p, GUEST<Point> *nump, GUEST<Point> *denp,
+			 FontInfo *finfop, GUEST<int16> *charlocp);
 
 extern void ROMlib_fg_bk (uint32 *fg_pixel_out, uint32 *bk_pixel_out,
 			  RGBColor *fg_rgb_out, RGBColor *bk_rgb_out,

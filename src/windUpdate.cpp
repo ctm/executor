@@ -82,7 +82,7 @@ P1(PUBLIC pascal trap, void, BeginUpdate, WindowPtr, w)
 {
 /* #warning Should SaveVisRgn ever become 0? */
   if (!SaveVisRgn)
-    SaveVisRgn = (RgnHandle) RM(NewHandle(0));
+    SaveVisRgn = RM((RgnHandle) NewHandle(0));
   
   CopyRgn(PORT_VIS_REGION (w), MR(SaveVisRgn));
   

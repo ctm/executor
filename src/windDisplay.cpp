@@ -182,7 +182,7 @@ P2(PUBLIC pascal trap, void, ShowHide, WindowPtr, w, BOOLEAN, flag)
 	       
 	       for (i = 0; i < CTAB_SIZE (w_ctab); i ++)
 		 {
-		   if (w_ctab_table[i].value == wContentColor)
+		   if (w_ctab_table[i].value == CWC(wContentColor))
 		     content_color = &w_ctab_table[i].rgb;
 		 }
 	     }
@@ -250,7 +250,7 @@ P1(PUBLIC pascal trap, void, ShowWindow, WindowPtr, w)
 	       t = WINDOW_NEXT_WINDOW (t))
 	    ;
 	  HiliteWindow ((WindowPtr) t, FALSE);
-	  CurDeactive = (WindowPtr) RM (t);
+	  CurDeactive = RM ((WindowPtr)t);
 	}
       TRAPEND();
     }
@@ -290,7 +290,7 @@ P2(PUBLIC pascal trap, void, SendBehind, WindowPtr, w, WindowPtr, behind)
   if (behind)
     {
 	WINDOW_NEXT_WINDOW_X (w) = WINDOW_NEXT_WINDOW_X (behind);
-	WINDOW_NEXT_WINDOW_X (behind) = (WindowPeek) RM (w);
+	WINDOW_NEXT_WINDOW_X (behind) = RM ((WindowPeek) w);
     }
   else
     {
@@ -302,7 +302,7 @@ P2(PUBLIC pascal trap, void, SendBehind, WindowPtr, w, WindowPtr, behind)
 	     wpp = (GUEST<WindowPeek> *) &WINDOW_NEXT_WINDOW_X (STARH (wpp)))
 	  ;
 	if (STARH (wpp) != (WindowPeek) w) 
-	  WINDOW_NEXT_WINDOW_X (STARH (wpp)) = (WindowPeek) RM (w);
+	  WINDOW_NEXT_WINDOW_X (STARH (wpp)) = RM ((WindowPeek) w);
 #endif /* SEND_BEHIND */
 	WINDOW_NEXT_WINDOW_X (w) = 0;
       }

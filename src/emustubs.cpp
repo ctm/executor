@@ -815,7 +815,7 @@ STUB(PtrAndHand)
 
 STUB(Date2Secs)
 {
-    LONGINT l;
+    ULONGINT l;
 
     SAVE_A1_D1_D2();
     Date2Secs((DateTimeRec *) SYN68K_TO_US_CHECK0(EM_A0), &l);
@@ -1920,7 +1920,7 @@ STUB(PrimeTime)
 
 STUB(ReadDateTime)
 {
-    EM_D0 = ReadDateTime((LONGINT *) SYN68K_TO_US_CHECK0(EM_A0));
+    EM_D0 = ReadDateTime((GUEST<ULONGINT> *) SYN68K_TO_US_CHECK0(EM_A0));
     RTS();
 }
 
@@ -2428,20 +2428,20 @@ STUB(SetTrapAddress)
 
 STUB(Gestalt)
 {
-  LONGINT l;
+  GUEST<LONGINT> l;
   ProcPtr oldp;
 
   switch (EM_D1 & 0xFFFF)
     {  
     case 0xA1AD:
     default:
-      l = 0;
+      l = CLC(0);
       EM_D0 = Gestalt(EM_D0, &l);
       EM_A0 = CL (l);
       break;
     case 0xA3AD:
       if (EM_D0 == DONGLE_GESTALT)
-	EM_D0 = Gestalt(EM_D0, (LONGINT *) SYN68K_TO_US_CHECK0 (EM_A0));
+	EM_D0 = Gestalt(EM_D0, (GUEST<LONGINT> *) SYN68K_TO_US_CHECK0 (EM_A0));
       else
 	EM_D0 = NewGestalt(EM_D0, (ProcPtr) SYN68K_TO_US_CHECK0(EM_A0));
       break;

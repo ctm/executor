@@ -36,7 +36,7 @@ enum { gestaltPHYSICAL                  = T ('M', 'U', 'L', '8') };
 
 enum { physicalUndefSelectorErr = -15551 };
 
-extern OSErrRET C_PhysicalGestalt (OSType selector, LONGINT *responsep);
+extern OSErrRET C_PhysicalGestalt (OSType selector, GUEST<LONGINT> *responsep);
 
 extern void gestalt_set_system_version (uint32 version);
 extern void gestalt_set_memory_size (uint32 size);

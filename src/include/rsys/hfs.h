@@ -309,7 +309,7 @@ typedef struct {
 
 struct wdentry { GUEST_STRUCT;
         #warning vcbp is stored as a native pointer. 
-    HVCBPtr vcbp;       // stored as native pointer!
+    GUEST<HVCBPtr> vcbp;       // stored as native pointer!
     GUEST< LONGINT> dirid;
     GUEST< LONGINT> cathint;    /* ??? */
     GUEST< LONGINT> procid;

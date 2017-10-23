@@ -2020,7 +2020,7 @@ host_set_cursor (char *cursor_data,
     {
       PixMap mask_pixmap, target_pixmap;
 
-      mask_pixmap.baseAddr  = (Ptr) RM (&cursor_mask[0]);
+      mask_pixmap.baseAddr  = RM ((Ptr)&cursor_mask[0]);
       mask_pixmap.rowBytes  = CWC (2);
       mask_pixmap.bounds    = ROMlib_cursor_rect;
       mask_pixmap.cmpCount  = CWC (1);

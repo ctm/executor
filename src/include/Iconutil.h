@@ -138,13 +138,13 @@ extern pascal trap CIconHandle C_GetCIcon (short icon_id);
 
 extern  pascal trap void C_DisposeCIcon (CIconHandle icon);
 
-extern pascal trap OSErr C_GetIconSuite (Handle *suite, short res_id,
+extern pascal trap OSErr C_GetIconSuite (GUEST<Handle> *suite, short res_id,
 					 IconSelectorValue selector);
-extern pascal trap OSErr C_NewIconSuite (Handle *suite);
+extern pascal trap OSErr C_NewIconSuite (GUEST<Handle> *suite);
 
 extern pascal trap OSErr C_AddIconToSuite (Handle icon_data, Handle suite,
 					   ResType type);
-extern pascal trap OSErr C_GetIconFromSuite (Handle *icon_data,
+extern pascal trap OSErr C_GetIconFromSuite (GUEST<Handle> *icon_data,
 					     Handle suite, ResType type);
 extern pascal trap OSErr C_PlotIconSuite (const Rect *rect,
 					  IconAlignmentType align,

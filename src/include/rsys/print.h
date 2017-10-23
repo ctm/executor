@@ -66,7 +66,7 @@ enum
   PRINT_CIRCLE_OK_NO = 14,
 };
 
-extern comGrafPort printport;
+extern GrafPort printport;
 extern INTEGER ROMlib_printresfile;
 extern LONGINT pagewanted;
 extern char ROMlib_needtorestore;

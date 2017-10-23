@@ -78,13 +78,13 @@ PUBLIC int Executor::nodrivesearch_p = FALSE;
 
 using namespace Executor;
 
-typedef	pascal BOOLEAN (*filtp)(DialogPtr dp, EventRecord *evp, INTEGER *ith);
+typedef	pascal BOOLEAN (*filtp)(DialogPtr dp, EventRecord *evp, GUEST<INTEGER> *ith);
 
 #define CALLFILTERPROC(dp, evt, ith, fp)	\
 ROMlib_CALLFILTERPROC((dp), (evt), (ith), (filtp) (fp))
 
 typedef	pascal BOOLEAN (*custom_filtp)(DialogPtr dp, EventRecord *evp,
-									   INTEGER *ith, UNIV Ptr data);
+									   GUEST<INTEGER> *ith, UNIV Ptr data);
 
 #define CALL_NEW_FILTER_PROC(dp, evt, ith, data, fp) \
 ROMlib_CALL_NEW_FILTER_PROC((dp), (evt), (ith), (data), \
@@ -147,7 +147,7 @@ typedef struct {
     char **flstrs;
     file_filter_u flfilef;
     INTEGER flnumt;
-    OSType * fltl;
+    GUEST<OSType> * fltl;
     ControlHandle flch;
     INTEGER flgraynondirs;
     Str255 flcurdirname;
@@ -170,10 +170,10 @@ namespace Executor {
 	PRIVATE INTEGER flwhich(fltype *, Point);
 	PRIVATE void flmouse(fltype *, Point, ControlHandle);
 	PRIVATE void getcurname(fltype *);
-	static inline BOOLEAN ROMlib_CALLFILTERPROC(DialogPtr, EventRecord *, INTEGER*, filtp);
+	static inline BOOLEAN ROMlib_CALLFILTERPROC(DialogPtr, EventRecord *, GUEST<INTEGER>*, filtp);
 	PRIVATE void flfinit(fltype *);
 	PRIVATE void flinsert(fltype *, StringPtr, INTEGER);
-	PRIVATE int typeinarray(OSType, INTEGER, SFTypeList);
+	PRIVATE int typeinarray(GUEST<OSType>, INTEGER, GUEST<SFTypeList>);
 	PRIVATE LONGINT stdfcmp(char *, char *);
 	static inline BOOLEAN ROMlib_CALLFILEFILT(ParmBlkPtr, filefiltp);
 	PRIVATE void flfill(fltype *);
@@ -187,7 +187,7 @@ namespace Executor {
 	PRIVATE void bumpsavedisk(DialogPtr, BOOLEAN);
 	PRIVATE void transformsfpdialog(DialogPtr, Point *, Rect *, BOOLEAN);
 	PRIVATE void doeject(DialogPtr);
-	PRIVATE OSType gettypeX(StringPtr, INTEGER, LONGINT);
+	PRIVATE GUEST<OSType> gettypeX(StringPtr, INTEGER, LONGINT);
 }
 
 A1(PRIVATE, INTEGER, movealert, INTEGER, id)
@@ -243,7 +243,8 @@ A1(PRIVATE, void, drawminiicon, INTEGER, icon)
 A3(PRIVATE, void, drawinboxwithicon, StringPtr, str, Rect *, rp, INTEGER, icon)
 {
     Rect r;
-    INTEGER width, strlen, strwidths[255], lengthavail, *widp;
+    INTEGER width, strlen, lengthavail;
+    GUEST<INTEGER> strwidths[255], *widp;
     static const char *ellipsis = "\003...";
 
     /*
@@ -361,7 +362,7 @@ A3(PRIVATE, void, flscroll, fltype *, f, INTEGER, from, INTEGER, to)
 }
 
 #define CTLFL(sh) \
-	((fltype *)(long) MR(((WindowPeek)MR(STARH((sh))->contrlOwner))->refCon))
+	(MR(guest_cast<fltype*>(((WindowPeek)MR(STARH((sh))->contrlOwner))->refCon)))
 
 /*
  * this hack is necessary because Excel 4 can bring up a dialog on top of
@@ -373,14 +374,13 @@ static LONGINT emergency_save_ref_con;
 PRIVATE fltype *
 WINDFL (void *dp)
 {
-  fltype *retval;
+  GUEST<LONGINT> retval;
 
-  retval = (fltype *) (long) ((WindowPeek)dp)->refCon;
-  if ((long) retval == CLC ((long) TICK("stdf")))
-    retval = (fltype *) SYN68K_TO_US (emergency_save_ref_con);
+  retval = ((WindowPeek)dp)->refCon;
+  if (retval == TICKX("stdf"))
+    return (fltype *) SYN68K_TO_US (emergency_save_ref_con);
   else
-    retval = MR (retval);
-  return retval;
+    return MR (guest_cast<fltype*>(retval));
 }
 
 #if 0
@@ -421,7 +421,7 @@ P2 (PUBLIC, pascal void, ROMlib_stdftrack, ControlHandle, sh, INTEGER, part)
   flscroll (CTLFL (sh), from, GetCtlValue (sh));
 }
 
-PRIVATE INTEGER cachedvrn = 32767;
+PRIVATE GUEST<INTEGER> cachedvrn = 32767;
 PRIVATE INTEGER savesel = -1;
 PRIVATE LONGINT oldticks = -1000;
 PRIVATE LONGINT lastkeydowntime = 0;
@@ -459,7 +459,7 @@ A2(PRIVATE, StringPtr, getdiskname, BOOLEAN *, ejectablep,
 	    ejectable = !(pbr.volumeParam.ioVAtrb & CWC(VNONEJECTABLEBIT));
 	    writable = !(pbr.volumeParam.ioVAtrb &
 			 CWC(VHARDLOCKBIT|VSOFTLOCKBIT));
-	    if (writable && pbr.volumeParam.ioVFrBlk == 0)
+	    if (writable && pbr.volumeParam.ioVFrBlk == CWC(0))
 	      writable = FALSE;
 	  }
 	else
@@ -481,7 +481,7 @@ A1(PRIVATE, void, drawjobberattop, DialogPeek, dp)
     INTEGER icon;
     Rect *rp;
     fltype *flp;
-    INTEGER savebottom;
+    GUEST<INTEGER> savebottom;
     BOOLEAN ejectable;
     PenState ps;
 
@@ -622,7 +622,7 @@ A3(PRIVATE, void, flmouse, fltype *, f, Point, p, ControlHandle, ch)
 }
 
 A4(static inline, BOOLEAN, ROMlib_CALLFILTERPROC, DialogPtr, dp,
-				 EventRecord *, evtp, INTEGER, *ith, filtp, fp)
+				 EventRecord *, evtp, GUEST<INTEGER>, *ith, filtp, fp)
 {
     BOOLEAN retval;
     LONGINT save_ref_con;
@@ -645,7 +645,7 @@ P4 (PUBLIC pascal trap, BOOLEAN, unused_stdfile, DialogPtr, dp, EventRecord *,
 #endif
 
 PRIVATE BOOLEAN
-ROMlib_CALL_NEW_FILTER_PROC (DialogPtr dp, EventRecord *evtp, INTEGER *ith,
+ROMlib_CALL_NEW_FILTER_PROC (DialogPtr dp, EventRecord *evtp, GUEST<INTEGER> *ith,
 			     UNIV Ptr data, custom_filtp fp)
 {
     BOOLEAN retval;
@@ -715,9 +715,9 @@ A3(PRIVATE, void, flinsert, fltype *, f, StringPtr, p, INTEGER, micon)
     ++f->flnmfil;
 }
 
-A3(PRIVATE, int, typeinarray, OSType, ft, INTEGER, numt, SFTypeList, tl)
+A3(PRIVATE, int, typeinarray, GUEST<OSType>, ft, INTEGER, numt, GUEST<SFTypeList>, tl)
 {
-    OSType *ostp = tl;
+    GUEST<OSType> *ostp = tl;
     
     while (numt--)
 	if (ft == *ostp++)
@@ -880,7 +880,7 @@ P2(PUBLIC, pascal void,  ROMlib_filebox, DialogPeek, dp, INTEGER, which)
 {
     GUEST<Handle> h;
     Rect r, r2;
-    INTEGER i;
+    GUEST<INTEGER> i;
     int width, strwidth, offset;
     StringPtr diskname;
     GUEST<Handle> tmpH;
@@ -1109,7 +1109,7 @@ folder_selected_p (fltype *fl)
 }
 
 PRIVATE INTEGER
-call_magicfp (fltype *fl, DialogPeek dp, EventRecord *evt, INTEGER *ith)
+call_magicfp (fltype *fl, DialogPeek dp, EventRecord *evt, GUEST<INTEGER> *ith)
 {
   INTEGER retval;
 
@@ -1138,11 +1138,12 @@ call_magicfp (fltype *fl, DialogPeek dp, EventRecord *evt, INTEGER *ith)
 #define keydownbit	0x1000
 
 P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
-		  EventRecord *, evt, INTEGER *, ith)  /* handle disk insert */
+		  EventRecord *, evt, GUEST<INTEGER> *, ith)  /* handle disk insert */
 {
     LONGINT ticks;
-    INTEGER i, from;
-    GUEST<ControlHandle> h;
+    GUEST<INTEGER> i;
+    INTEGER from;
+    ControlHandle h;
     Rect r;
     GUEST<Point> gp;
     Point p;
@@ -1153,6 +1154,7 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
     INTEGER nsel, fltop;
     INTEGER part;
     INTEGER retval, retval2;
+    GUEST<Handle> tmpH;
 
     fl = WINDFL(dp);
     opentoken = getOpen;	/* getOpen and putSave are both 1 */
@@ -1163,8 +1165,8 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 	switch (CL(evt->message) & 0xFF) {
 	case NUMPAD_ENTER:
 	case '\r' :
-	    GetDItem((DialogPtr) dp, CW(dp->aDefItem), &i, (GUEST<Handle> *) &h, &r);
-	    h = MR(h);
+	    GetDItem((DialogPtr) dp, CW(dp->aDefItem), &i, &tmpH, &r);
+	    h = (ControlHandle) MR(tmpH);
 	    if (Hx(h, contrlVis) && U(Hx(h, contrlHilite)) != 255)
 	      {
 		prefix[0] = 0;
@@ -1212,7 +1214,7 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
  * may be a better place to put it, but not enough tests have been done
  * to say where.
  */
-	    if (!fl->flgraynondirs && dp->editField == -1) {
+	    if (!fl->flgraynondirs && dp->editField == CWC(-1)) {
 		flep = MR(*fl->flinfo) + fl->flnmfil - 1;
 		if (CL(evt->when) > lastkeydowntime + CL(DoubleTime)) {
 		    flp = MR(*fl->flinfo);
@@ -1287,7 +1289,7 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 	retval = -1;
 	break;
     case updateEvt:
-	if ((DialogPeek) MR(evt->message) == dp)
+	if ( MR(guest_cast<DialogPeek> (evt->message)) == dp)
 	    drawjobberattop(dp);
 	*ith = CWC(100);
 	break;
@@ -1328,7 +1330,7 @@ A3(PRIVATE, void, flinit, fltype *, f, Rect *, r, ControlHandle, sh)
 
 A3(PRIVATE, void, stdfflip, Rect *, rp, INTEGER, n, INTEGER, height)
 {
-    INTEGER savetop = rp->top;
+    GUEST<INTEGER> savetop = rp->top;
 	
     rp->top = CW(CW(rp->top) + (n * height + 1));
     rp->bottom = CW(CW(rp->top) + height - 2);
@@ -1417,7 +1419,7 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
        {
 	 Rect *bounds;
 	 PixMapHandle port_pixmap;
-	 INTEGER save_bpp_x;
+	 GUEST<INTEGER> save_bpp_x;
 	 int row_bytes;
 	 void *save_bits_mem;
 	 
@@ -1439,7 +1441,7 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
 	 /* Allocate potentially large temporary pixmap space. */
 	 TEMP_ALLOC_ALLOCATE (save_bits_mem, temp_save_bits,
 			      CW (bounds->bottom) * row_bytes);
-	 PIXMAP_BASEADDR_X (save_bits) = (Ptr)RM (save_bits_mem);
+	 PIXMAP_BASEADDR_X (save_bits) = RM ((Ptr) save_bits_mem);
 	 WRAPPER_SET_PIXMAP_X (wrapper, RM2 (save_bits));
 	 
 	 CopyBits (PORT_BITS_FOR_COPY (thePort), wrapper,
@@ -1584,7 +1586,7 @@ makeworking (fltype *f)
 
 A1(PRIVATE, BOOLEAN, ejected, HParmBlkPtr, pb)
 {
-     return pb->volumeParam.ioVDrvInfo == 0;   
+     return pb->volumeParam.ioVDrvInfo == CWC(0);   
 }
 
 /*
@@ -1722,7 +1724,8 @@ PUBLIC void Executor::futzwithdosdisks( void )
 {
 #if defined (MSDOS) || defined (LINUX) || defined(CYGWIN32)
     int i, fd;
-    GUEST<LONGINT> mess;
+    GUEST<LONGINT> mess_s;
+    LONGINT mess;
     LONGINT blocksize;
     drive_flags_t flags;
 #if defined(MSDOS) || defined (CYGWIN32)
@@ -1769,10 +1772,10 @@ PUBLIC void Executor::futzwithdosdisks( void )
 	    if (((fd = OPEN_ROUTINE(FD_OF (i), &blocksize, &flags
 				    EXTRA_PARAM)) >= 0)
 		|| (flags & DRIVE_FLAGS_FLOPPY)) {
-	      try_to_mount_disk( DRIVE_NAME_OF (i), fd|MARKER, &mess,
+	      try_to_mount_disk( DRIVE_NAME_OF (i), fd|MARKER, &mess_s,
 				blocksize, 16 * PHYSBSIZE,
 				flags, 0);
-	      mess = CL(mess);
+	      mess = CL(mess_s);
 	      if (mess) {
 		if (mess >> 16 == 0) {
 		  DRIVE_LOADED(i) = TRUE;
@@ -1800,7 +1803,7 @@ PUBLIC void Executor::futzwithdosdisks( void )
 
 A2(PRIVATE, void, bumpsavedisk, DialogPtr, dp, BOOLEAN, always)
 {
-    INTEGER current;
+    GUEST<INTEGER> current;
     HParamBlockRec pb;
     INTEGER vref;
     OSErr err;
@@ -1822,7 +1825,7 @@ A2(PRIVATE, void, bumpsavedisk, DialogPtr, dp, BOOLEAN, always)
       warning_unexpected ("PBHGetVInfo returns %d", err);
     else if (!SFSaveDisk || ISWDNUM(-CW(SFSaveDisk)))
 	SFSaveDisk = CW(-CW(pb.volumeParam.ioVRefNum));
-    if (always || pb.ioParam.ioResult != noErr || ejected(&pb)) {
+    if (always || pb.ioParam.ioResult != CWC(noErr) || ejected(&pb)) {
 	current = pb.volumeParam.ioVRefNum;
 	is_single_tree_fs = single_tree_fs_p(&pb);
 	pb.volumeParam.ioVolIndex = 0;
@@ -1914,6 +1917,7 @@ A4(PRIVATE, void, transformsfpdialog, DialogPtr, dp, Point *, offset,
 					  Rect *, scrollrect, BOOLEAN, getting)
 {
     INTEGER numitems, windheight, i, j, extrasizeneeded;
+    GUEST<INTEGER> swapped_itype;
     Handle h;
     GUEST<Handle> tmpH;
     Rect r;
@@ -1930,10 +1934,10 @@ A4(PRIVATE, void, transformsfpdialog, DialogPtr, dp, Point *, offset,
 	tep->viewRect.top = CW(CW(tep->viewRect.top) + (extrasizeneeded));
 	tep->viewRect.bottom = CW(CW(tep->viewRect.bottom) + (extrasizeneeded));
     }
-    numitems = CW(*(INTEGER *)STARH((MR(((DialogPeek)dp)->items)))) + 1;
+    numitems = CW(*(GUEST<INTEGER> *)STARH((MR(((DialogPeek)dp)->items)))) + 1;
     for (j = 1 ; j <= numitems ; j++) {
-	GetDItem(dp, j, &i, &tmpH, &r);
-	i = CW(i);
+	GetDItem(dp, j, &swapped_itype, &tmpH, &r);
+	i = CW(swapped_itype);
 	h = MR(tmpH);
 	if (!getting || CW(r.bottom) > CW(scrollrect->top)) {
 	    r.top = CW(CW(r.top) + (extrasizeneeded));
@@ -1959,7 +1963,7 @@ void adjustdrivebutton(DialogPtr dp)
     INTEGER count;
     Handle drhand;
     GUEST<Handle>tmpH;
-    INTEGER i;
+    GUEST<INTEGER> i;
     Rect r;
 #if !defined(MSDOS) && !defined(CYGWIN32)
     HVCB *vcbp;
@@ -1990,9 +1994,8 @@ A1(PRIVATE, void, doeject, DialogPtr, dp)
     bumpsavedisk(dp, TRUE);
 }
 
-A3(PRIVATE, OSType, gettypeX, StringPtr, name, INTEGER, vref, LONGINT, dirid)
+A3(PRIVATE, GUEST<OSType>, gettypeX, StringPtr, name, INTEGER, vref, LONGINT, dirid)
 {
-  OSType retval;
   OSErr err;
   HParamBlockRec pbr;
 
@@ -2003,10 +2006,9 @@ A3(PRIVATE, OSType, gettypeX, StringPtr, name, INTEGER, vref, LONGINT, dirid)
   pbr.fileParam.ioDirID = CL (dirid);
   err = PBHGetFInfo (&pbr, FALSE);
   if (err == noErr)
-    retval = pbr.fileParam.ioFlFndrInfo.fdType;
+    return pbr.fileParam.ioFlFndrInfo.fdType;
   else
-    retval = 0;
-  return retval;
+    return CLC(0);
 }
 
 PRIVATE OSErr
@@ -2029,14 +2031,14 @@ unixcore (StringPtr namep, INTEGER *vrefnump, LONGINT *diridp)
 #if 0
   vcbp = ROMlib_vcbbyvrn(vrefnum);
 #else
-  pbr.ioParam.ioNamePtr = (StringPtr)CLC(0);
+  pbr.ioParam.ioNamePtr = nullptr;
   pbr.ioParam.ioVRefNum = CW(vrefnum);
   vcbp = ROMlib_breakoutioname(&pbr, &templ, &tempcp, (BOOLEAN *) 0, TRUE);
   free (tempcp);
 #endif
   if (vcbp && !vcbp->vcbCTRef)
     {
-      pb.ioParam.ioNamePtr = (StringPtr)CLC(0);
+      pb.ioParam.ioNamePtr = nullptr;
       pb.ioParam.ioVRefNum = pbr.ioParam.ioVRefNum;
       err = ROMlib_nami(&pb, *diridp, NoIndex, &pathname, &filename,
 			&endname, FALSE, &vcbp2, &sbuf);
@@ -2088,7 +2090,7 @@ P1(PUBLIC pascal trap, OSErr, unixmount, CInfoPBRec *, cbp)
       if (err == noErr)
 	{
 	  cbp->hFileInfo.ioVRefNum = CW (vrefnum);
-	  cbp->hFileInfo.ioDirID   = CW (dirid);
+	  cbp->hFileInfo.ioDirID   = CL (dirid);
 	}
     }
   return err;
@@ -2139,7 +2141,7 @@ create_new_folder_button (DialogPtr dp)
     retval = NULL;
   else
     {
-      INTEGER i;
+      GUEST<INTEGER> i;
       GUEST<Handle> h;
       Rect r;
 
@@ -2186,7 +2188,7 @@ destroy_new_folder_button (DialogPtr dp, ControlHandle ch)
 PRIVATE void
 getditext (DialogPtr dp, INTEGER item, StringPtr text)
 {
-  INTEGER i;
+  GUEST<INTEGER> i;
   GUEST<Handle> h;
   Rect r;
 
@@ -2196,8 +2198,7 @@ getditext (DialogPtr dp, INTEGER item, StringPtr text)
     text[0] = 0;
   else
     {
-      h = MR (h);
-      GetIText (h, text);
+      GetIText (MR(h), text);
     }
 }
 
@@ -2272,7 +2273,7 @@ do_new_folder (fltype *f)
   if (dp)
     {
       boolean_t done;
-      INTEGER ihit;
+      GUEST<INTEGER> ihit;
 
       SelIText (dp, 3, 0, 32767);
       ShowWindow (dp);
@@ -2283,16 +2284,16 @@ do_new_folder (fltype *f)
 	  /* TODO: consider a filter that limits the length
 	     of the string to 31 letters */
 	  ModalDialog (NULL, &ihit);
-	  switch (ihit)
+	  switch (CW(ihit))
 	    {
 	    default:
 	      break;
-	    case CWC (1):
+	    case 1:
 	      done = new_folder_from_dp (dp, f);
 	      if (done)
 		retval = TRUE;
 	      break;
-	    case CWC (2):
+	    case 2:
 	      done = TRUE;
 	      break;
 	    }
@@ -2319,7 +2320,7 @@ is_normal_dlgid (getorput_t getorput, INTEGER dig)
 
 PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 		      dialog_hook_u dh, reply_u rep, INTEGER dig, filter_u fp,
-		      file_filter_u filef, INTEGER numt, SFTypeList tl,
+		      file_filter_u filef, INTEGER numt, GUEST<SFTypeList> tl,
 		      getorput_t getorput, sf_flavor_t flavor,
 		      Ptr activeList, ActivateYDProcPtr activateproc,
 		      UNIV Ptr yourdatap)
@@ -2349,13 +2350,15 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
   if (!reply_valid) {
     Handle h;
     DialogPtr dp;
-    INTEGER ihit, i;
+    GUEST<INTEGER> ihit_s, i;
+    INTEGER ihit;
     int done, sav;
     Rect r, scrollrect;
     GUEST<Handle> tmpH;
     Handle pnhand, ejhand, drhand, sahand;
     OSErr err;
     ControlHandle scrollh;
+    #warning structure referenced using 32 bit pointer from refcon
     fltype f;
     GrafPtr gp;
     INTEGER openorsave, promptitem, nmlistitem, diskname, ejectitem, driveitem;
@@ -2530,6 +2533,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	} else
 	    (SF_NAME (&f))[0] = 0;
     }
+    #warning not 64-bit clean
     SetWRefCon((WindowPtr) dp, (LONGINT)(long)US_TO_SYN68K(&f));
     if (CW(dp->portRect.bottom) + p.v  + 7 > CW(screenBitsX.bounds.bottom))
 	p.v = CW(screenBitsX.bounds.bottom) - CW(dp->portRect.bottom) - 7;
@@ -2547,8 +2551,8 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
     ShowWindow((WindowPtr) dp);
     SelectWindow((WindowPtr) dp);
     while (!done) {
-	ModalDialog((ProcPtr) P_ROMlib_stdffilt, &ihit);
-	ihit = CW(ihit);
+	ModalDialog((ProcPtr) P_ROMlib_stdffilt, &ihit_s);
+	ihit = CW(ihit_s);
 	if (getorput == put)
 	    GetIText(pnhand, SF_NAME (&f));
 	if (dh.odh)
@@ -2566,8 +2570,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	    } else {
 		GetIText(pnhand, SF_NAME (&f));
 		hpb.dirInfo.ioCompletion = 0;
-		hpb.dirInfo.ioNamePtr    = ((StringPtr)
-					    RM((char *) SF_NAME (&f)));
+		hpb.dirInfo.ioNamePtr    = RM((StringPtr) SF_NAME (&f));
 		hpb.dirInfo.ioVRefNum    = SF_VREFNUM_X (&f);
 		hpb.dirInfo.ioFDirIndex  = CWC (0);
 		hpb.dirInfo.ioDrDirID    = 0;
@@ -2640,7 +2643,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	    }
 	}
 	if (WaitNextEvent(diskMask, &evt, 4, 0) &&
-					(evt.message & CLC(0xFFFF0000)) == 0) {
+					(evt.message & CLC(0xFFFF0000)) == CLC(0)) {
 	    pbr.volumeParam.ioNamePtr = 0;
 	    pbr.volumeParam.ioVolIndex = 0;
 	    pbr.volumeParam.ioVRefNum = CW(CL(evt.message) & 0xFFFF);
@@ -2680,7 +2683,7 @@ P7(PUBLIC pascal trap, void, SFPPutFile, Point, p, StringPtr, prompt,
   filteru.ofilterp = fp;
 
   spfcommon(p, prompt, name, dhu, repu, dig, filteru, zero_file_filter, -1,
-	    (OSType *) 0, put, original_sf, 0, 0, 0);
+	    nullptr, put, original_sf, 0, 0, 0);
 }
 
 P5(PUBLIC pascal trap, void, SFPutFile, Point, p, StringPtr, prompt,
@@ -2690,7 +2693,7 @@ P5(PUBLIC pascal trap, void, SFPutFile, Point, p, StringPtr, prompt,
 }
 
 P9(PUBLIC pascal trap, void, SFPGetFile, Point, p, StringPtr, prompt,
-		ProcPtr, filef, INTEGER, numt, SFTypeList, tl, ProcPtr, dh,
+		ProcPtr, filef, INTEGER, numt, GUEST<SFTypeList>, tl, ProcPtr, dh,
 				     SFReply *, rep, INTEGER, dig, ProcPtr, fp)
 {
   dialog_hook_u dhu;
@@ -2708,7 +2711,7 @@ P9(PUBLIC pascal trap, void, SFPGetFile, Point, p, StringPtr, prompt,
 }
 
 P7(PUBLIC pascal trap, void, SFGetFile, Point, p, StringPtr, prompt,
-    ProcPtr, filef, INTEGER, numt, SFTypeList, tl, ProcPtr, dh, SFReply *, rep)
+    ProcPtr, filef, INTEGER, numt, GUEST<SFTypeList>, tl, ProcPtr, dh, SFReply *, rep)
 {
     SFPGetFile(p, prompt, filef, numt, tl, dh, rep, getDlgID, (ProcPtr) 0);
 }
@@ -2738,7 +2741,7 @@ P10(PUBLIC pascal trap, void, CustomPutFile, Str255, prompt,
 }
 
 P11(PUBLIC pascal trap, void, CustomGetFile, FileFilterYDProcPtr, filefilter,
-    INTEGER, numtypes, SFTypeList, typelist, StandardFileReply *, replyp,
+    INTEGER, numtypes, GUEST<SFTypeList>, typelist, StandardFileReply *, replyp,
     INTEGER, dlgid, Point, where, DlgHookYDProcPtr, dlghook,
     ModalFilterYDProcPtr, filterproc, Ptr, activeList,
     ActivateYDProcPtr, activateproc, UNIV Ptr, yourdatap)
@@ -2763,7 +2766,7 @@ P11(PUBLIC pascal trap, void, CustomGetFile, FileFilterYDProcPtr, filefilter,
 }
 
 P4(PUBLIC pascal trap, void, StandardGetFile, ProcPtr, filef, INTEGER, numt,
-   SFTypeList, tl, StandardFileReply *, replyp)
+        GUEST<SFTypeList>, tl, StandardFileReply *, replyp)
 {
   Point p;
   reply_u repu;

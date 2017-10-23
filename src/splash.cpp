@@ -96,7 +96,7 @@ splash_screen_display (boolean_t button_p, char *basename)
     tmp_buf = alloca (vdriver_row_bytes * ROWS_PER_PASS);
 
     /* Set up phony bitmap for screen. */
-    screen_bitmap.baseAddr = (Ptr) RM (vdriver_fbuf);
+    screen_bitmap.baseAddr = RM ((Ptr)vdriver_fbuf);
     screen_bitmap.rowBytes = CW (vdriver_row_bytes);
     SetRect (&screen_bitmap.bounds, 0, 0, vdriver_width, ROWS_PER_PASS);
 
@@ -116,7 +116,7 @@ splash_screen_display (boolean_t button_p, char *basename)
 	|| SPLASH_SCREEN_WIDTH != vdriver_width)
       {
 	/* Set up phony bitmap to clear screen. */
-	blank_bitmap.baseAddr = (Ptr) RM (tmp_buf);
+	blank_bitmap.baseAddr = RM ((Ptr)tmp_buf);
 	blank_bitmap.rowBytes = CW (vdriver_row_bytes);
 	SetRect (&blank_bitmap.bounds, 0, 0, vdriver_width, ROWS_PER_PASS);
 	memset (tmp_buf, bg_pixel, vdriver_row_bytes * ROWS_PER_PASS);
@@ -143,7 +143,7 @@ splash_screen_display (boolean_t button_p, char *basename)
       }
 
     /* Set up phony bitmap for src row. */
-    src_row_bitmap.baseAddr = (Ptr) RM (tmp_buf);
+    src_row_bitmap.baseAddr = RM ((Ptr)tmp_buf);
     src_row_bitmap.rowBytes = CW (SPLASH_SCREEN_WIDTH
 				  >> (3 - vdriver_log2_bpp));
     SetRect (&src_row_bitmap.bounds, 0, 0, SPLASH_SCREEN_WIDTH, ROWS_PER_PASS);
@@ -151,7 +151,7 @@ splash_screen_display (boolean_t button_p, char *basename)
 
     SWAPPED_OPW (screen_bitmap.bounds.left, -, splash_left);
     screen_bitmap.bounds.top = CW (-splash_top);
-    screen_bitmap.baseAddr = (Ptr) RM (vdriver_fbuf);
+    screen_bitmap.baseAddr = RM ((Ptr)vdriver_fbuf);
 
     /* Actually read and display the splash screen bits. */
     for (i = 0; i < SPLASH_SCREEN_HEIGHT; i += ROWS_PER_PASS)

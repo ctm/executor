@@ -163,13 +163,13 @@ enum
   gestaltLocationErr = -5553,
 };
 
-extern trap OSErrRET Gestalt( OSType selector, LONGINT *responsep ); 
+extern trap OSErrRET Gestalt( OSType selector, GUEST<LONGINT> *responsep ); 
 extern trap OSErrRET NewGestalt( OSType selector, ProcPtr selFunc);
 extern trap OSErrRET ReplaceGestalt( OSType selector, ProcPtr selFunc,
 				    ProcPtr *oldSelFuncp);
 
 extern trap OSErrRET C_GestaltTablesOnly( OSType selector,
-					 LONGINT *responsep );
+        GUEST<LONGINT> *responsep );
 
 #endif
 }

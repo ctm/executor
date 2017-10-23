@@ -21,7 +21,8 @@ using namespace Executor;
 
 A0(PUBLIC, OSErr, TEFromScrap)
 {
-  int32 l, m;
+  GUEST<int32> l;
+  int32 m;
     
   m = GetScrap(MR (TEScrpHandle), TICK ("TEXT"), &l);
   if (m < 0)

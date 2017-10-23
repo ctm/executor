@@ -40,6 +40,7 @@ char ROMlib_rcsid_launch[] =
 #include "Gestalt.h"
 #include "Package.h"
 #include "AliasMgr.h"
+#include "OSEvent.h"
 
 #include "rsys/trapglue.h"
 #include "rsys/file.h"
@@ -361,7 +362,7 @@ PRIVATE void beginexecutingat( LONGINT startpc )
     EM_A2 = EM_D3;
     EM_A3 = 0;
     EM_A4 = 0;
-    EM_A5 = CL((LONGINT) CurrentA5.raw());	/* was smashed when we
+    EM_A5 = CL(guest_cast<LONGINT>(CurrentA5)); /* was smashed when we
 					   initialized above */
     EM_A6 = 0x1EF;
 
@@ -386,7 +387,7 @@ PUBLIC void Executor::SFSaveDisk_Update (INTEGER vrefnum, Str255 filename)
   Str255 save_name;
 
   str255assign (save_name, filename);
-  pbr.volumeParam.ioNamePtr = (StringPtr) RM (save_name);
+  pbr.volumeParam.ioNamePtr = RM ((StringPtr)save_name);
   pbr.volumeParam.ioVolIndex = CWC (-1);
   pbr.volumeParam.ioVRefNum = CW (vrefnum);
   PBGetVInfo (&pbr, FALSE);
@@ -396,7 +397,7 @@ PUBLIC void Executor::SFSaveDisk_Update (INTEGER vrefnum, Str255 filename)
 PUBLIC uint32 Executor::ROMlib_version_long;
 
 PRIVATE boolean_t
-cfrg_match (const cfir_t *cfirp, OSType arch_x, uint8 type_x, Str255 name)
+cfrg_match (const cfir_t *cfirp, GUEST<OSType> arch_x, uint8 type_x, Str255 name)
 {
   boolean_t retval;
 
@@ -413,7 +414,7 @@ Executor::ROMlib_find_cfrg (Handle cfrg, OSType arch, uint8 type, Str255 name)
   cfrg_resource_t *cfrgp;
   int n_descripts;
   cfir_t *cfirp;
-  OSType desired_arch_x;
+  GUEST<OSType> desired_arch_x;
   uint8 type_x;
   cfir_t *retval;
 
@@ -502,7 +503,8 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     vers_t *vp;
     char *versbuf, *namebuf;
     int namelen;
-    LONGINT abovea5, belowa5, jumplen, jumpoff, *lp;
+    LONGINT abovea5, belowa5, jumplen, jumpoff;
+    GUEST<LONGINT> *lp;
     INTEGER toskip;
     Byte *p;
     WDPBRec wdpb;
@@ -600,7 +602,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 					      (LONGINT) vp->c[1],
 					      (LONGINT) vp->c[2],
 					      (LONGINT) vp->c[3],
-					      (LONGINT) vp->loc);
+					      (LONGINT) CW(vp->loc));
 	ROMlib_version_long = ((vp->c[0] << 24)|
 			       (vp->c[1] << 16)|
 			       (vp->c[2] <<  8)|
@@ -654,9 +656,9 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	size_resource_h = Get1Resource (T ('S','I','Z','E'), -1);
       if (size_resource_h)
 	{
-	  size_info_t *size_resource;
+	  SIZEResource *size_resource;
 	  
-	  size_resource = (size_info_t *) STARH (size_resource_h);
+	  size_resource = (SIZEResource *) STARH (size_resource_h);
 	  size_info.size_flags = CW (size_resource->size_flags);
 	  size_info.preferred_size = CL (size_resource->preferred_size);
 	  size_info.minimum_size = CL (size_resource->minimum_size);
@@ -693,14 +695,14 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	lp = 0; /* just to shut GCC up */
 	jumplen = jumpoff = 0; /* just to shut GCC up */
 	a5 = (LONGINT) (long) US_TO_SYN68K (&tmpa5);
-	CurrentA5 = (Ptr) CL (a5);
+	CurrentA5 = guest_cast<Ptr> (CL (a5));
 	InitGraf ((Ptr) quickbytes + grafSize - 4);
       }
     else
       {
 	HLock(code0);
 
-	lp = (LONGINT *) STARH(code0);
+	lp = (GUEST<LONGINT> *) STARH(code0);
 	abovea5 = CL(*lp++);
 	belowa5 = CL(*lp++);
 	jumplen = CL(*lp++);
@@ -714,7 +716,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 
 #if defined(SYN68K)
 	EM_A7 -= abovea5 + belowa5;
-	CurStackBase = (Ptr) CL(EM_A7);
+	CurStackBase = guest_cast<Ptr> (CL(EM_A7));
 #else /* !defined(SYN68K) */
 	ROMlib_foolgcc = alloca(abovea5 + belowa5);
 	CurStackBase
@@ -724,10 +726,10 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	CurrentA5 = RM(MR(CurStackBase) + belowa5); /* set CurrentA5 */
 	BufPtr = RM(MR(CurrentA5) + abovea5);
 	CurJTOffset = CW(jumpoff);
-	a5 = CL((LONGINT) CurrentA5.raw());
+	a5 = CL(guest_cast<LONGINT>(CurrentA5));
       }
 
-    GetDateTime((LONGINT *) &Time);
+    GetDateTime(&Time);
     ROMBase = RM((Ptr) ROMlib_phoneyrom);
     dodusesit = ROMBase;
     QDExist = WWExist = EXIST_NO;
@@ -769,7 +771,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     ROMlib_uaf = 0;
 
     if (code0)
-      beginexecutingat(CL((LONGINT) CurrentA5.raw()) + CW(CurJTOffset) + 2);
+      beginexecutingat(CL(guest_cast<LONGINT>(CurrentA5)) + CW(CurJTOffset) + 2);
     else
       {
 	FSSpec fs;
@@ -791,75 +793,75 @@ PRIVATE void reset_low_globals(void)
  * globals beforehand
  */
 
-    ProcPtr saveDABeeper;
-    THz saveSysZone;
-    uint32 saveTicks;
-    INTEGER saveBootDrive;
-    LONGINT saveLo3Bytes;
-    LONGINT save20, save28, save58, save5C;
-    Ptr saveSoundBase;
-    Ptr saveVIA;
-    Ptr saveSCCRd;
-    Ptr saveSCCWr;
-    Handle saveAppParmHandle;
-    QHdr saveVCBQHdr;
-    QHdr saveFSQHdr;
-    QHdr saveDrvQHdr;
-    QHdr saveEventQueue;
-    QHdr saveVBLQueue;
-    Ptr saveFCBSPtr;
-    Ptr saveWDCBsPtr;
-    LONGINT saveCurDirStore;
-    INTEGER saveSFSaveDisk;
-    VCBPtr saveDefVCBPtr;
-    char saveCurApName[sizeof(CurApName)];
-    INTEGER saveCurApRefNum;
-    INTEGER saveCurMap;
-    Handle saveTopMapHndl;
-    Handle saveSysMapHndl;
-    INTEGER saveSysMap;
-    LONGINT saveScrapSize;
-    Handle saveScrapHandle;
-    INTEGER saveScrapCount;
-    INTEGER saveScrapState;
-    StringPtr saveScrapName;
-    Handle saveROMFont0;
-    Handle saveWidthListHand;
-    Byte saveSPValid;
-    Byte saveSPATalkA;
-    Byte saveSPATalkB;
-    Byte saveSPConfig;
-    INTEGER saveSPPortA;
-    INTEGER saveSPPortB;
-    LONGINT saveSPAlarm;
-    INTEGER saveSPFont;
-    Byte saveSPKbd;
-    Byte saveSPPrint;
-    Byte saveSPVolCtl;
-    Byte saveSPClikCaret;
-    Byte saveSPMisc2;
-    INTEGER saveKeyThresh;
-    INTEGER saveKeyRepThresh;
-    INTEGER saveMenuFlash;
-    LONGINT saveCaretTime;
-    LONGINT saveDoubleTime;
-    LONGINT saveDefDirID;
+    GUEST<ProcPtr> saveDABeeper;
+    GUEST<THz> saveSysZone;
+    GUEST<uint32> saveTicks;
+    GUEST<INTEGER> saveBootDrive;
+    GUEST<LONGINT> saveLo3Bytes;
+    GUEST<LONGINT> save20, save28, save58, save5C;
+    GUEST<Ptr> saveSoundBase;
+    GUEST<Ptr> saveVIA;
+    GUEST<Ptr> saveSCCRd;
+    GUEST<Ptr> saveSCCWr;
+    GUEST<Handle> saveAppParmHandle;
+    GUEST<QHdr> saveVCBQHdr;
+    GUEST<QHdr> saveFSQHdr;
+    GUEST<QHdr> saveDrvQHdr;
+    GUEST<QHdr> saveEventQueue;
+    GUEST<QHdr> saveVBLQueue;
+    GUEST<Ptr> saveFCBSPtr;
+    GUEST<Ptr> saveWDCBsPtr;
+    GUEST<LONGINT> saveCurDirStore;
+    GUEST<INTEGER> saveSFSaveDisk;
+    GUEST<VCBPtr> saveDefVCBPtr;
+    GUEST<char> saveCurApName[sizeof(CurApName)];
+    GUEST<INTEGER> saveCurApRefNum;
+    GUEST<INTEGER> saveCurMap;
+    GUEST<Handle> saveTopMapHndl;
+    GUEST<Handle> saveSysMapHndl;
+    GUEST<INTEGER> saveSysMap;
+    GUEST<LONGINT> saveScrapSize;
+    GUEST<Handle> saveScrapHandle;
+    GUEST<INTEGER> saveScrapCount;
+    GUEST<INTEGER> saveScrapState;
+    GUEST<StringPtr> saveScrapName;
+    GUEST<Handle> saveROMFont0;
+    GUEST<Handle> saveWidthListHand;
+    GUEST<Byte> saveSPValid;
+    GUEST<Byte> saveSPATalkA;
+    GUEST<Byte> saveSPATalkB;
+    GUEST<Byte> saveSPConfig;
+    GUEST<INTEGER> saveSPPortA;
+    GUEST<INTEGER> saveSPPortB;
+    GUEST<LONGINT> saveSPAlarm;
+    GUEST<INTEGER> saveSPFont;
+    GUEST<Byte> saveSPKbd;
+    GUEST<Byte> saveSPPrint;
+    GUEST<Byte> saveSPVolCtl;
+    GUEST<Byte> saveSPClikCaret;
+    GUEST<Byte> saveSPMisc2;
+    GUEST<INTEGER> saveKeyThresh;
+    GUEST<INTEGER> saveKeyRepThresh;
+    GUEST<INTEGER> saveMenuFlash;
+    GUEST<LONGINT> saveCaretTime;
+    GUEST<LONGINT> saveDoubleTime;
+    GUEST<LONGINT> saveDefDirID;
     GUEST<Handle> saveDAStrings[4];
-    Ptr saveMemTop;
-    DCtlHandlePtr saveUTableBase;
-    INTEGER saveUnitNtryCnt;
+    GUEST<Ptr> saveMemTop;
+    GUEST<DCtlHandlePtr> saveUTableBase;
+    GUEST<INTEGER> saveUnitNtryCnt;
     GUEST<Point> saveMouseLocation;
-    CGrafPtr saveWMgrCPort;
-    Handle saveMBDFHndl;
-    ProcPtr saveJCrsrTask;
+    GUEST<CGrafPtr> saveWMgrCPort;
+    GUEST<Handle> saveMBDFHndl;
+    GUEST<ProcPtr> saveJCrsrTask;
     
-    AE_info_t *saveAE_info;
+    GUEST<AE_info_t *>saveAE_info;
     
-    RGBColor saveHiliteRGB;
-    GDHandle saveTheGDevice, saveMainDevice, saveDeviceList;
-    char saveKeyMap[sizeof_KeyMap];
+    GUEST<RGBColor> saveHiliteRGB;
+    GUEST<GDHandle> saveTheGDevice, saveMainDevice, saveDeviceList;
+    GUEST<char> saveKeyMap[sizeof_KeyMap];
     
-    Byte saveFinderName[sizeof(FinderName)];
+    GUEST<Byte> saveFinderName[sizeof(FinderName)];
     virtual_int_state_t bt;
     
     bt = block_virtual_ints ();
@@ -867,10 +869,10 @@ PRIVATE void reset_low_globals(void)
 	saveTicks         = Ticks;
 	saveBootDrive     = BootDrive;
 	saveLo3Bytes      = Lo3Bytes;
-	save20            = *(LONGINT *) SYN68K_TO_US(0x20);
-	save28            = *(LONGINT *) SYN68K_TO_US(0x28);
-	save58            = *(LONGINT *) SYN68K_TO_US(0x58);
-	save5C            = *(LONGINT *) SYN68K_TO_US(0x5C);
+	save20            = *(GUEST<LONGINT> *) SYN68K_TO_US(0x20);
+	save28            = *(GUEST<LONGINT> *) SYN68K_TO_US(0x28);
+	save58            = *(GUEST<LONGINT> *) SYN68K_TO_US(0x58);
+	save5C            = *(GUEST<LONGINT> *) SYN68K_TO_US(0x5C);
 	saveVIA           = VIA;
 	saveSCCRd	  = SCCRd;
 	saveSCCWr	  = SCCWr;
@@ -1101,24 +1103,24 @@ PRIVATE void reset_low_globals(void)
     MinStack = CLC(0x400);		/* values ... */
     IAZNotify = 0;
     CurPitch = 0;
-    JSwapFont = (ProcPtr) RM(P_FMSwapFont);
-    JInitCrsr = (ProcPtr) RM(P_InitCursor);
+    JSwapFont = RM ((ProcPtr)P_FMSwapFont);
+    JInitCrsr = RM ((ProcPtr)P_InitCursor);
 
-    JHideCursor = (ProcPtr) RM(P_HideCursor);
-    JShowCursor = (ProcPtr) RM(P_ShowCursor);
-    JShieldCursor = (ProcPtr) RM(P_ShieldCursor);
-    JSetCrsr = (ProcPtr) RM(P_SetCursor);
-    JCrsrObscure = (ProcPtr) RM(P_ObscureCursor);
+    JHideCursor = RM ((ProcPtr)P_HideCursor);
+    JShowCursor = RM ((ProcPtr)P_ShowCursor);
+    JShieldCursor = RM ((ProcPtr)P_ShieldCursor);
+    JSetCrsr = RM ((ProcPtr)P_SetCursor);
+    JCrsrObscure = RM ((ProcPtr)P_ObscureCursor);
 
 #if 0
-    JUnknown574 = (ProcPtr) RM(P_Unknown574);
+    JUnknown574 = RM ((ProcPtr)P_Unknown574);
 #else
-    *(long *)(0x574 + ROMlib_offset) = (long) RM(P_Unknown574);
+    *(GUEST<void*> *)(0x574 + ROMlib_offset) = RM(P_Unknown574);
 #endif
 
-    Key1Trans = (Ptr) RM(P_Key1Trans);
-    Key2Trans = (Ptr) RM(P_Key2Trans);
-    JFLUSH = (ProcPtr) RM(P_flushcache);
+    Key1Trans = RM ((Ptr)P_Key1Trans);
+    Key2Trans = RM ((Ptr)P_Key2Trans);
+    JFLUSH = RM ((ProcPtr)P_flushcache);
     JResUnknown1 = JFLUSH;	/* I don't know what these are supposed to */
     JResUnknown2 = JFLUSH;	/* do, but they're not called enough for
 				   us to worry about the cache flushing
@@ -1134,21 +1136,21 @@ PRIVATE void reset_low_globals(void)
 					/* pagemaker 2.0 looks at 108
 					   and doesn't want to see -1 */
 #endif /* !defined(SYN68K) */
-    *(LONGINT *) SYN68K_TO_US(0x20) = save20;
-    *(LONGINT *) SYN68K_TO_US(0x28) = save28;
-    *(LONGINT *) SYN68K_TO_US(0x58) = save58;
-    *(LONGINT *) SYN68K_TO_US(0x5C) = save5C;
+    *(GUEST<LONGINT> *) SYN68K_TO_US(0x20) = save20;
+    *(GUEST<LONGINT> *) SYN68K_TO_US(0x28) = save28;
+    *(GUEST<LONGINT> *) SYN68K_TO_US(0x58) = save58;
+    *(GUEST<LONGINT> *) SYN68K_TO_US(0x5C) = save5C;
 
     HiliteMode = CB(0xFF);	/* I think this is correct */
     ROM85 = CWC(0x3FFF);	/* We be color now */
     MMU32Bit = 0x01;
     loadtrap = 0;
-    *(LONGINT *) SYN68K_TO_US(0x1008) = CLC (0x4); /* Quark XPress 3.0 references 0x1008
+    *(GUEST<LONGINT> *) SYN68K_TO_US(0x1008) = CLC (0x4); /* Quark XPress 3.0 references 0x1008
 					explicitly.  It takes the value
 					found there, subtracts four from
 					it and dereferences that value.
 					Yahoo */
-    *(short *) SYN68K_TO_US(4) = CWC (0x4e75); /* RTS, so when we dynamically recompile
+    *(GUEST<int16_t> *) SYN68K_TO_US(4) = CWC (0x4e75); /* RTS, so when we dynamically recompile
 				    code starting at 0 we won't get far */
 
     /* Micro-cap dereferences location one of the AppPacks locations */
@@ -1161,7 +1163,7 @@ PRIVATE void reset_low_globals(void)
     }
     SysEvtMask = CWC(~(1L<< keyUp)); /* EVERYTHING except keyUp */
     SdVolume = 7; /* for Beebop 2 */
-    CurrentA5 = (Ptr) CL (EM_A5);
+    CurrentA5 = guest_cast<Ptr> (CL (EM_A5));
 }
 
 PRIVATE void reset_traps(void)
@@ -1262,7 +1264,7 @@ PRIVATE void reinitialize_things(void)
 	  }
     }
 
-    length = CW(*(short *)MR(FCBSPtr));
+    length = CW(*(GUEST<int16_t> *)MR(FCBSPtr));
     fcbp = (filecontrolblock *) ((short *)MR(FCBSPtr)+1);
     efcbp = (filecontrolblock *) ((char *)MR(FCBSPtr) + length);
     for (;fcbp < efcbp;
@@ -1438,8 +1440,8 @@ Executor::NewLaunch (StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockR
 		     && lp != (long) SYN68K_TO_US(0x82a)
 		     && lp != (long) SYN68K_TO_US(0x16c)
 		     )
-		if (MR(*(int32 *)lp) >= MR(ApplZone)
-		    && MR(*(int32 *)lp) < MR(MR(ApplZone)->bkLim))
+		if (MR(*(GUEST<void*> *)lp) >= MR(ApplZone)
+		    && MR(*(GUEST<void*> *)lp) < MR(MR(ApplZone)->bkLim))
 		  warning_unexpected ("Low global at 0x%lx may point into "
 				      "ApplZone and probably shouldn't.",
 				      (unsigned long) US_TO_SYN68K (lp));

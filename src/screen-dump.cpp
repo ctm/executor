@@ -156,7 +156,7 @@ dump_indirect_pm (PixMap *pm)
       TEMP_ALLOC_ALLOCATE (fbuf, temp_fbuf_bits, fbuf_size);
       row_bytes = (width * bpp + 31) / 32 * 4;
       
-      tiff_pm->baseAddr = (Ptr)RM (fbuf);
+      tiff_pm->baseAddr = RM ((Ptr)fbuf);
       tiff_pm->rowBytes = CW (row_bytes | PIXMAP_DEFAULT_ROW_BYTES);
       tiff_pm->bounds   = pm->bounds;
       

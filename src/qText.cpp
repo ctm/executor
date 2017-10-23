@@ -90,7 +90,7 @@ Executor::DrawText_c_string (char *string)
 
 P1(PUBLIC pascal trap, INTEGER, CharWidth, CHAR, thec)
 {
-    Point np, dp;
+    GUEST<Point> np, dp;
     INTEGER retval;
     FontInfo fi;
     Byte c;
@@ -103,7 +103,7 @@ P1(PUBLIC pascal trap, INTEGER, CharWidth, CHAR, thec)
 
 P1(PUBLIC pascal trap, INTEGER, StringWidth, StringPtr, s)
 {
-  Point np, dp;
+  GUEST<Point> np, dp;
   INTEGER retval;
   FontInfo fi;
   
@@ -115,7 +115,7 @@ P1(PUBLIC pascal trap, INTEGER, StringWidth, StringPtr, s)
 
 P3(PUBLIC pascal trap, INTEGER, TextWidth, Ptr, tb, INTEGER, fb, INTEGER, bc)
 {
-  Point np, dp;
+  GUEST<Point> np, dp;
   INTEGER retval;
   FontInfo fi;
   
@@ -127,7 +127,7 @@ P3(PUBLIC pascal trap, INTEGER, TextWidth, Ptr, tb, INTEGER, fb, INTEGER, bc)
 
 P1(PUBLIC pascal trap, void, GetFontInfo, FontInfo *, ip)
 {
-    Point pn, pd;
+    GUEST<Point> pn, pd;
     
     pn.h = CWC(1);
     pn.v = CWC(1);

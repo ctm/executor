@@ -101,7 +101,7 @@ typedef struct
   {
     write_funcp_t writefuncp;
     int user_arg;
-    unsigned long time;
+    GUEST<uint32_t> time;
     const char *volume_name;
     int32 nsecs_left;
     int32 nsecs_in_map;
@@ -599,7 +599,7 @@ write_rest (info_t * infop)
 #define SECSINYEAR  (365L * SECSINDAY)
 
 int
-format_disk(unsigned long timevar, const char *volumename, int nsecs,
+format_disk(GUEST<uint32_t> timevar, const char *volumename, int nsecs,
 	    write_funcp_t writefuncp, int user_arg)
 {
   info_t info;

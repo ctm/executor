@@ -47,7 +47,7 @@ const char *ROMlib_executor_full_name = "Executor " EXECUTOR_VERSION
 ({							\
   int len;						\
   char str[1024];					\
-  INTEGER save_map;					\
+  GUEST<INTEGER> save_map;					\
   Handle h;						\
   OSType _typ;						\
 							\

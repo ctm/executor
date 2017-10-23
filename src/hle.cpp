@@ -45,7 +45,7 @@ Executor::hle_reset (void)
   if (current_hle_msg == NULL)
     return;
   
-  DisposPtr ((Ptr) MR (current_hle_msg->theMsgEvent.when));
+  DisposPtr (MR (guest_cast<Ptr>(current_hle_msg->theMsgEvent.when)));
   DisposPtr ((Ptr) current_hle_msg);
   
   current_hle_msg = NULL;
@@ -81,8 +81,8 @@ Executor::hle_get_event (EventRecord *evt, boolean_t remflag)
 }
 
 P4 (PUBLIC pascal trap, OSErr, AcceptHighLevelEvent,
-    TargetID *, sender_id_return, int32 *, refcon_return,
-    Ptr, msg_buf, int32 *, msg_buf_length_return)
+    TargetID *, sender_id_return, GUEST<int32> *, refcon_return,
+    Ptr, msg_buf, GUEST<int32> *, msg_buf_length_return)
 {
   OSErr retval = noErr;
   
@@ -96,7 +96,7 @@ P4 (PUBLIC pascal trap, OSErr, AcceptHighLevelEvent,
     retval = bufferIsSmall;
   
   if (retval == noErr)
-    memcpy (msg_buf, (Ptr) MR (current_hle_msg->theMsgEvent.when),
+    memcpy (msg_buf, MR (guest_cast<Ptr>(current_hle_msg->theMsgEvent.when)),
 	    CL (current_hle_msg->msgLength));
   
   *msg_buf_length_return = current_hle_msg->msgLength;
@@ -171,7 +171,7 @@ P6 (PUBLIC pascal trap, OSErr, PostHighLevelEvent,
       goto done;
     }
   memcpy (msg_buf_copy, msg_buf, msg_length);
-  hle_msg->theMsgEvent.when      = (int32) RM (msg_buf_copy);
+  hle_msg->theMsgEvent.when      = guest_cast<int32> (RM (msg_buf_copy));
   hle_msg->theMsgEvent.modifiers = CWC (-1);
   
   hle_msg->userRefCon     = CL (refcon);
@@ -183,7 +183,7 @@ P6 (PUBLIC pascal trap, OSErr, PostHighLevelEvent,
   if (MemError () != noErr)
     {
       retval = MemError ();
-      DisposPtr ((Ptr) MR(hle_msg->theMsgEvent.when));
+      DisposPtr (MR(guest_cast<Ptr>(hle_msg->theMsgEvent.when)));
       DisposPtr ((Ptr) hle_msg);
       goto done;
     }

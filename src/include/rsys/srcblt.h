@@ -13,7 +13,7 @@ extern "C" {
 
 extern boolean_t srcblt_rgn (Executor::RgnHandle rh, int mode, int log2_bpp,
 			     const Executor::blt_bitmap_t *src, const Executor::blt_bitmap_t *dst,
-			     Executor::Point *src_origin, Executor::Point *dst_origin,
+			     Executor::GUEST<Executor::Point> *src_origin, Executor::GUEST<Executor::Point> *dst_origin,
 			     uint32 fg_color, uint32 bk_color)
   asm ("_srcblt_rgn");
 

@@ -131,8 +131,8 @@ typedef struct
 {
   int hash_index;
   uint32 hash_word;
-  uint32 class_and_name_x;
-  syn68k_addr_t value;
+  GUEST<uint32> class_and_name_x;
+  GUEST<void*> value;
 }
 sort_entry_t;
 
@@ -155,7 +155,7 @@ update_export_hash_table (uint32 *hashp, int hash_index,  int first_index,
   
   new_value = ((run_count << CHAIN_COUNT_SHIFT) |
 	       (first_index & FIRST_INDEX_MASK));
-  hashp[hash_index] = CL (new_value);
+  hashp[hash_index] = CL_RAW (new_value);
 }
 
 
@@ -234,7 +234,7 @@ ROMlib_build_pef_hash (const map_entry_t table[], int count)
 						    hash_power);
 	  sorted[i].class_and_name_x = CL ((kPEFTVectSymbol << 24) |
 					   name_offset);
-	  sorted[i].value = (uint32) RM (&table[i].value);
+	  sorted[i].value = guest_cast<void*>( RM (&table[i].value) );       // ### ???
 	  length = strlen (table[i].symbol_name);
 	  memcpy (string_tablep + name_offset, table[i].symbol_name, length);
 	  name_offset += length;
@@ -262,7 +262,7 @@ ROMlib_build_pef_hash (const map_entry_t table[], int count)
 	  exportp[i] = sorted[i].hash_word;
 	  PEFEXS_CLASS_AND_NAME_X (&symbol_tablep[i]) =
 	    sorted[i].class_and_name_x;
-	  PEFEXS_SYMBOL_VALUE_X (&symbol_tablep[i]) = sorted[i].value;
+	  PEFEXS_SYMBOL_VALUE_X (&symbol_tablep[i]) = guest_cast<uint32_t>( sorted[i].value );
 	  PEFEXS_SECTION_INDEX_X (&symbol_tablep[i]) = CWC (-2);
 	}
       update_export_hash_table (hashp, previous_hash_index,
@@ -324,7 +324,7 @@ lookup_by_name (const ConnectionID connp,
 
 #endif
 
-  lihp = connp->lihp;
+  lihp = MR(connp->lihp);
 
   hash_word = PEFComputeHashWord ((unsigned char *) name, name_len);
   hash_index = PEFHashTableIndex (hash_word, PEFLIH_HASH_TABLE_POWER (lihp));
@@ -341,12 +341,12 @@ lookup_by_name (const ConnectionID connp,
   offset = PEFLIH_STRINGS_OFFSET (lihp);
   string_tablep = (typeof (string_tablep)) ((char *) lihp + offset);
 
-  chain_count_and_first_index = CL (hash_entries[hash_index]);
+  chain_count_and_first_index = CL_RAW (hash_entries[hash_index]);
   chain_count = ((chain_count_and_first_index >> CHAIN_COUNT_SHIFT)
 		 & CHAIN_COUNT_MASK);
   index = ((chain_count_and_first_index >> FIRST_INDEX_SHIFT)
 	   & FIRST_INDEX_MASK);
-  hash_word_swapped = CL (hash_word);
+  hash_word_swapped = CL_RAW (hash_word);
   for (past_index = index + chain_count;
        index < past_index &&
 	 (export_key_table[index] != hash_word_swapped ||
@@ -362,7 +362,7 @@ lookup_by_name (const ConnectionID connp,
 }
 
 P2 (PUBLIC pascal trap, OSErr, CountSymbols, ConnectionID, id,
-    LONGINT *, countp)
+    GUEST<LONGINT> *, countp)
 {
   OSErr retval;
 
@@ -373,7 +373,7 @@ P2 (PUBLIC pascal trap, OSErr, CountSymbols, ConnectionID, id,
 }
 
 P5 (PUBLIC pascal trap, OSErr, GetIndSymbol, ConnectionID, id,
-    LONGINT, index, Str255, name, Ptr *, addrp, SymClass *, classp)
+    LONGINT, index, Str255, name, GUEST<Ptr> *, addrp, SymClass *, classp)
 {
   OSErr retval;
 
@@ -384,7 +384,7 @@ P5 (PUBLIC pascal trap, OSErr, GetIndSymbol, ConnectionID, id,
 }
 
 P4 (PUBLIC pascal trap, OSErr, FindSymbol, ConnectionID, connID,
-    Str255, symName, Ptr *, symAddr, SymClass *, symClass)
+    Str255, symName, GUEST<Ptr> *, symAddr, SymClass *, symClass)
 {
   OSErr retval;
   PEFExportedSymbol *pefs;
@@ -395,7 +395,7 @@ P4 (PUBLIC pascal trap, OSErr, FindSymbol, ConnectionID, connID,
   else
     {
       int section_index;
-      uint32 val;
+      GUEST<uint32> val;
 
       if (symClass)
 	*symClass = *(SymClass *)&PEFEXS_CLASS_AND_NAME_X (pefs);
@@ -404,19 +404,17 @@ P4 (PUBLIC pascal trap, OSErr, FindSymbol, ConnectionID, connID,
       switch (section_index)
 	{
 	case -2: /* absolute address */
-	  *symAddr = (Ptr) CL (val);
+	  *symAddr = guest_cast<Ptr>(val);
 	  break;
 	case -3: /* re-exported */
 	  warning_unimplemented ("name = '%.*s', val = 0x%x", symName[0],
 				 symName+1, val);
-	  *symAddr = (Ptr) CL (val);
+	  *symAddr = guest_cast<Ptr>(val);
 	  break;
 	default:
 	  {
-	    uint32 sect_start;
-
-	    sect_start = connID->sects[section_index].start;
-	    *symAddr = (Ptr) CL (val + sect_start);
+	    GUEST<uint32> sect_start = connID->sects[section_index].start;
+	    *symAddr = RM( CL(val) +  MR(guest_cast<Ptr>(sect_start)));
 	  }
 	  break;
 	}

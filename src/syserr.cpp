@@ -108,13 +108,13 @@ PRIVATE myalerttab_t myalerttab = {
 
     CWC(156),	/* 8. Info "procedure" */
     CWC(4),
-    0,	/* was mydolicense, which we no longer use */
+    nullptr,	/* was mydolicense, which we no longer use */
 };
 
 char syserr_msg[256];
 
 namespace Executor {
-  PRIVATE INTEGER *findid(INTEGER);
+  PRIVATE GUEST<INTEGER> *findid(INTEGER);
 PRIVATE void drawtextstring(INTEGER id, INTEGER offsetx,
 							INTEGER offsety);
   PRIVATE void drawicon(INTEGER id,
@@ -123,17 +123,17 @@ PRIVATE void drawtextstring(INTEGER id, INTEGER offsetx,
 						 INTEGER offsety, BOOLEAN demo_button_p);
 }
 
-A1(PRIVATE, INTEGER *, findid, INTEGER, id)
+A1(PRIVATE, GUEST<INTEGER> *, findid, INTEGER, id)
 {
     int i;
-    INTEGER *ip;
+    GUEST<INTEGER> *ip;
 
-    for (i = CW(*(INTEGER *) MR(DSAlertTab)),
-					   ip = (INTEGER *) MR(DSAlertTab) + 1;
+    for (i = CW(*(GUEST<INTEGER> *) MR(DSAlertTab)),
+					   ip = (GUEST<INTEGER> *) MR(DSAlertTab) + 1;
 						        i > 0 && CW(*ip) != id;
-	 --i, ip = (INTEGER *) ((char *) ip + CW(ip[1]) + 2 * sizeof(INTEGER)))
+	 --i, ip = (GUEST<INTEGER> *) ((char *) ip + CW(ip[1]) + 2 * sizeof(INTEGER)))
     ;
-    return i > 0 ? ip : (INTEGER *) 0;
+    return i > 0 ? ip : nullptr;
 }
 
 A3(PRIVATE, void, drawtextstring, INTEGER, id, INTEGER, offsetx,
@@ -322,7 +322,7 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
     /* 4. Allocate and re-initialize QuickDraw */
 #if defined (BINCOMPAT)
     a5 = (LONGINT) (long) US_TO_SYN68K (&tmpa5);
-    CurrentA5 = (Ptr) (long) CL(a5);
+    CurrentA5 = guest_cast<Ptr> (CL(a5));
 #endif /* BINCOMPAT */
     InitGraf((Ptr) quickbytes + sizeof(quickbytes) - 4);
     ROMlib_initport(&alertport);

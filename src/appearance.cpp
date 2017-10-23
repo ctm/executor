@@ -123,7 +123,7 @@ AddResourceRN (INTEGER rn, Handle h, ResType type, INTEGER id, Str255 name)
       Handle hh;
 
       hh = h; 
-      if (HandleZone (h) != SysZone)
+      if (HandleZone (h) != MR(SysZone))
 	{
 	  Handle save_hand;
       
@@ -142,7 +142,7 @@ AddResourceRN (INTEGER rn, Handle h, ResType type, INTEGER id, Str255 name)
    with the refnum rn.  */
 
 PRIVATE void
-GetIndTypeRN (INTEGER rn, ResType *typep, INTEGER type_num)
+GetIndTypeRN (INTEGER rn, GUEST<ResType> *typep, INTEGER type_num)
 {
   INTEGER savern;
 
@@ -183,10 +183,11 @@ silently_replace_resources (INTEGER master_file_rn, INTEGER from_file_rn)
   for (type_num = 1; type_num <= type_num_max; ++type_num)
     {
       ResType type;
+      GUEST<ResType> type_s;
       INTEGER res_num, res_num_max;
 
-      GetIndTypeRN (from_file_rn, &type, type_num);
-      type = CL (type);
+      GetIndTypeRN (from_file_rn, &type_s, type_num);
+      type = CL (type_s);
       res_num_max = CountResourcesRN (from_file_rn, type);
       for (res_num = 1; res_num <= res_num_max; ++res_num)
 	{
@@ -218,7 +219,7 @@ Executor::ROMlib_set_appearance (void)
     appearance = (appearance_t)0;
   
   res_file = OpenRFPerm (res_filenames[appearance], CW (BootDrive), fsRdPerm);
-  if (res_file != CWC (-1))
+  if (res_file != -1)
     {
       silently_replace_resources (CW (SysMap), res_file);
       CloseResFile (res_file);

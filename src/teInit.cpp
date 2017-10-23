@@ -34,14 +34,14 @@ P0 (PUBLIC pascal trap, void, TEInit)
 /* This code just does "moveql #1,d0 ; rts".  We use it because
  * DNA strider chains to the old clikLoop handler.
  */
-static uint16 default_clik_loop[2] = { CWC (0x7001), CWC (0x4E75) };
+static GUEST<uint16> default_clik_loop[2] = { CWC (0x7001), CWC (0x4E75) };
 
 P2 (PUBLIC pascal trap, TEHandle, TENew, Rect *, dst, Rect *, view)
 {
   TEHandle teh;
   FontInfo finfo;
-  Handle hText;
-  tehiddenh temptehiddenh;
+  GUEST<Handle> hText;
+  GUEST<tehiddenh> temptehiddenh;
   GUEST<int16> *tehlinestarts;
   int te_size;
   
@@ -68,7 +68,7 @@ P2 (PUBLIC pascal trap, TEHandle, TENew, Rect *, dst, Rect *, view)
      caretState, CWC (caret_invis),
      just, CWC (teFlushDefault),
      crOnly, CWC (1),
-     clikLoop, (ProcPtr) RM (&default_clik_loop[0]),
+     clikLoop,  RM ((ProcPtr) &default_clik_loop[0]),
      inPort, thePortX,
      txFont, PORT_TX_FONT_X (thePort),
      txFace, PORT_TX_FACE (thePort),

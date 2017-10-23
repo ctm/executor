@@ -76,7 +76,7 @@ uint32 xdblt_insert_bits asm ("_xdblt_insert_bits");
 uint16 xdblt_dst_selector asm ("_xdblt_dst_selector");
 #endif
 
-#define M(n) CLC (0xFFFFFFFFU >> (n))
+#define M(n) CLC_RAW (0xFFFFFFFFU >> (n))
 const uint32 xdblt_mask_array[32] asm ("_xdblt_mask_array") =
 {
   M(0),   M(1),   M(2),   M(3),   M(4),   M(5),   M(6),   M(7),

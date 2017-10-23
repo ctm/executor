@@ -837,8 +837,8 @@ CONVERT_FUNC (depthconv_32_32,  CONVERT_32_32,  0, 0, COMPUTE_ADD_32_32,
 #define EXTRA_DECLS				\
   GDHandle gdev;				\
   PixMapHandle gd_pmap;				\
-  CTabHandle gdev_ctab_save;			\
-  ITabHandle gdev_itab_save;			\
+  GUEST<CTabHandle> gdev_ctab_save;			\
+  GUEST<ITabHandle> gdev_itab_save;			\
   const rgb_spec_t *src_rgb_spec
 
 #define EXTRA_SETUP()					\

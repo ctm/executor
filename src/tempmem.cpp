@@ -36,18 +36,21 @@ P0 (PUBLIC pascal trap, int32, TempFreeMem)
 }
 
 P1 (PUBLIC pascal trap, Size, TempMaxMem,
-    Size *, grow)
+    GUEST<Size> *, grow_s)
 {
 #if defined (TEMP_MEM_FAIL)
   return 0;
 #else
   int32 sysfree, applmax, retval;
+  Size grow;
 
   ZONE_SAVE_EXCURSION
     (ApplZone,
      {
-       applmax = MaxMem (grow);
+       applmax = MaxMem (&grow);
      });
+  if(grow_s)
+    *grow_s = grow;
   sysfree = FreeMemSys ();
   retval = MAX (applmax, sysfree);
   return retval;
@@ -61,7 +64,7 @@ P0 (PUBLIC pascal trap, Ptr, TempTopMem)
 }
 
 P2 (PUBLIC pascal trap, Handle, TempNewHandle,
-    Size, logical_size, OSErr *, result_code)
+    Size, logical_size, GUEST<OSErr> *, result_code)
 {
 #if defined (TEMP_MEM_FAIL)
   *result_code = CWC (memFullErr);
@@ -86,21 +89,21 @@ P2 (PUBLIC pascal trap, Handle, TempNewHandle,
 }
 
 P2 (PUBLIC pascal trap, void, TempHLock,
-    Handle, h, OSErr *, result_code)
+    Handle, h, GUEST<OSErr> *, result_code)
 {
   HLock (h);
   *result_code = MemErr;
 }
 
 P2 (PUBLIC pascal trap, void, TempHUnlock,
-    Handle, h, OSErr *, result_code)
+    Handle, h, GUEST<OSErr> *, result_code)
 {
   HUnlock (h);
   *result_code = MemErr;
 }
 
 P2 (PUBLIC pascal trap, void, TempDisposeHandle,
-    Handle, h, OSErr *, result_code)
+    Handle, h, GUEST<OSErr> *, result_code)
 {
   DisposHandle (h);
   *result_code = MemErr;

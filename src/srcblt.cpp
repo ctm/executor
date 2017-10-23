@@ -52,7 +52,7 @@ uint16 srcblt_dst_selector asm ("_srcblt_dst_selector");
 boolean_t
 srcblt_rgn (RgnHandle rh, int mode, int log2_bpp,
 	    const blt_bitmap_t *src, const blt_bitmap_t *dst,
-	    Point *src_origin, Point *dst_origin,
+	    GUEST<Point> *src_origin, GUEST<Point> *dst_origin,
 	    uint32 fg_color, uint32 bk_color)
 {
   uint32 mask, tile;

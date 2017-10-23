@@ -26,7 +26,7 @@ P1(PUBLIC pascal trap, LONGINT, MaxSizeRsrc, Handle, h)  /* IMIV-16 */
     INTEGER i, j;
     
     ROMlib_setreserr(ROMlib_findres(h, &map, &tr, &rr));
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
         return(-1);
     if (!rr->rhand || !(*(Handle) MR(rr->rhand))) {	/* STARH is overkill */
         dl = B3TOLONG(rr->doff);
@@ -47,7 +47,7 @@ P1(PUBLIC pascal trap, LONGINT, RsrcMapEntry, Handle, h) /* IMIV-16 */
     resref *rr;
     
     ROMlib_setreserr(ROMlib_findres(h, &map, &tr, &rr));
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
         return(0);
     return((char *)rr - (char *) STARH(map));
 }

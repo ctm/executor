@@ -24,7 +24,7 @@ using namespace Executor;
 P1(PUBLIC pascal trap, INTEGER, UniqueID, ResType, typ)
 {
     static INTEGER startid = 0;
-    INTEGER curmap;
+    GUEST<INTEGER> curmap;
     resmaphand map;
     resref *rr;
     
@@ -62,10 +62,10 @@ P4(PUBLIC pascal trap, void, GetResInfo, Handle, res, GUEST<INTEGER> *, id,
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
 
 #if !defined (STEF_GetResInfoFix)
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
         return;
 #else
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
       {
 	if (id)
 	  *id = CWC(-1);
@@ -81,7 +81,7 @@ P4(PUBLIC pascal trap, void, GetResInfo, Handle, res, GUEST<INTEGER> *, id,
     if (typ)
       *typ = tr->rtyp;
     if (name) {
-	if (rr->noff != -1)
+	if (rr->noff != CWC(-1))
 	    str255assign(name,
 			 (StringPtr)((char *)STARH(map) +Hx(map, namoff) + Cx(rr->noff)));
 	else
@@ -96,7 +96,7 @@ P1(PUBLIC pascal trap, INTEGER, GetResAttrs, Handle, res)
     resref *rr;
 
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
 /*-->*/ return 0;
     return(Cx(rr->ratr));
 }
@@ -110,7 +110,7 @@ A2(PUBLIC, LONGINT, ROMlib_SizeResource, Handle, res, BOOLEAN, usehandle)
     LONGINT loc, lc;
 
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
 /*-->*/ return -1;
 
     if (usehandle && *res)	/* STARH is overkill */
@@ -118,7 +118,7 @@ A2(PUBLIC, LONGINT, ROMlib_SizeResource, Handle, res, BOOLEAN, usehandle)
     else {
 	loc = Hx(map, rh.rdatoff) + B3TOLONG(rr->doff);
 	ROMlib_setreserr(SetFPos(Hx(map, resfn), fsFromStart, loc));
-	if (ResErr != noErr)
+	if (ResErr != CWC(noErr))
 /*-->*/	    return -1;
 
 	/* If the resource is compressed and we want the memory size, not
@@ -127,7 +127,7 @@ A2(PUBLIC, LONGINT, ROMlib_SizeResource, Handle, res, BOOLEAN, usehandle)
 
 	if (usehandle && (rr->ratr & resCompressed) && system_version >= 0x700)
 	  {
-	    LONGINT l[4]; /* [0] == diskSize,
+	    GUEST<LONGINT> l[4]; /* [0] == diskSize,
 			     [1] == compressedResourceTag, 
 			     [2] == typeFlags,
 			     [3] == uncompressedSize */
@@ -136,7 +136,7 @@ A2(PUBLIC, LONGINT, ROMlib_SizeResource, Handle, res, BOOLEAN, usehandle)
 	    lc = sizeof (l);
 	    GetFPos (Hx(map, resfn), &master_save_pos);
 	    ROMlib_setreserr(FSReadAll(Hx(map, resfn), &lc, (Ptr) l));
-	    if (ResErr != noErr || l[1] != CLC (COMPRESSED_TAG))
+	    if (ResErr != CWC(noErr) || l[1] != CLC (COMPRESSED_TAG))
 	      {
 		SetFPos (Hx(map, resfn), fsFromStart, master_save_pos);
 		goto not_compressed_after_all;
@@ -155,10 +155,11 @@ A2(PUBLIC, LONGINT, ROMlib_SizeResource, Handle, res, BOOLEAN, usehandle)
 	else
 	  {
 not_compressed_after_all:	    
-	    lc = sizeof(retval);
-	    ROMlib_setreserr(FSReadAll(Hx(map, resfn), &lc, (Ptr) &retval));
-	    retval = CL(retval);
-	    if (ResErr != noErr)
+            lc = sizeof(retval);
+            GUEST<Size> tmpRet;
+	    ROMlib_setreserr(FSReadAll(Hx(map, resfn), &lc, (Ptr) &tmpRet));
+	    retval = CL(tmpRet);
+	    if (ResErr != CWC(noErr))
 /*-->*/	      return -1;
 	  }
     }

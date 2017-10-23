@@ -75,10 +75,8 @@ PUBLIC OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid, LONGIN
     } else
 	retval = noErr;
     if (retval == noErr) {
-            #warning vcbp is not used consistently:
-        //firstfreep->vcbp = RM(vcbp);
-        firstfreep->vcbp = vcbp;
-	firstfreep->dirid = CL(dirid);
+        firstfreep->vcbp = RM(vcbp);
+        firstfreep->dirid = CL(dirid);
 	firstfreep->procid = CL(procid);
 	pb->ioVRefNum = CW(WDPTOWDNUM(firstfreep));
 	retval = noErr;

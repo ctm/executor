@@ -84,9 +84,9 @@ x80_to_ieee (const x80_t *x)
   volatile i386_x80_t temp80;
 
   /* Swap x's byte order. */
-  temp80.man_lo      = CL (x->man.hilo.man_lo);
-  temp80.man_hi      = CL (x->man.hilo.man_hi);
-  temp80.sgn_and_exp = CW (x->se.sgn_and_exp);
+  temp80.man_lo      = CL_RAW (x->man.hilo.man_lo);
+  temp80.man_hi      = CL_RAW (x->man.hilo.man_hi);
+  temp80.sgn_and_exp = CW_RAW (x->se.sgn_and_exp);
 
   /* If it's an Inf or NaN, be sure to set the "normalized" bit.
    * 80387 requires this bit to be set (else Inf's become NaN's)
@@ -216,8 +216,8 @@ f64_to_ieee (const f64_t *f)
 #else /* !QUADALIGN */
 # ifdef LITTLEENDIAN
   volatile native_f64_t temp;
-  temp.hilo.hi = CL (f->hilo.lo);
-  temp.hilo.lo = CL (f->hilo.hi);
+  temp.hilo.hi = CL_RAW (f->hilo.lo);
+  temp.hilo.lo = CL_RAW (f->hilo.hi);
   return temp.d;
 # else   /* !LITTLEENDIAN */
   return f->d;
@@ -236,7 +236,7 @@ f32_to_ieee (const f32_t *f)
   return *(float *)f;
 #else
   volatile native_f32_t temp;
-  temp.n = CL (*(uint32 *)f);  /* This byte swaps on LITTLEENDIAN machines. */
+  temp.n = CL_RAW (*(uint32 *)f);  /* This byte swaps on LITTLEENDIAN machines. */
   return temp.f;
 #endif /* !QUADALIGN */
 }
@@ -252,8 +252,8 @@ comp_to_ieee (const comp_t *cp)
   native_comp_t c;
 
 #if defined (LITTLEENDIAN)
-  c.hilo.hi = CL (*(uint32 *)(&cp->hilo.hi));
-  c.hilo.lo = CL (*(uint32 *)(&cp->hilo.lo));
+  c.hilo.hi = CL_RAW (*(uint32 *)(&cp->hilo.hi));
+  c.hilo.lo = CL_RAW (*(uint32 *)(&cp->hilo.lo));
 #else /* Not LITTLEENDIAN */
 # ifndef QUADALIGN
   c = *cp;
@@ -339,9 +339,9 @@ ieee_to_x80 (ieee_t n, x80_t *x)
        : "=m" (*&temp80) : "t" (n) : "st"); /* FIXME - st??? */
 
   /* Byte swap the memory representation and store it in x. */
-  x->se.sgn_and_exp  = CW (temp80.sgn_and_exp);
-  x->man.hilo.man_lo = CL (temp80.man_lo);
-  x->man.hilo.man_hi = CL (temp80.man_hi);
+  x->se.sgn_and_exp  = CW_RAW (temp80.sgn_and_exp);
+  x->man.hilo.man_lo = CL_RAW (temp80.man_lo);
+  x->man.hilo.man_hi = CL_RAW (temp80.man_hi);
 #elif defined (__alpha)
   volatile alpha_x64_t *temp64p;
   uint32 templ;
@@ -388,14 +388,14 @@ ieee_to_f64 (ieee_t val, f64_t *dest)
 # else  /* QUADALIGN */
   volatile f64_t temp;
   temp.d = (double) val;
-  *(uint32 *)&dest->hi = CL(temp.hilo.hi);
-  *(uint32 *)&dest->lo = CL(temp.hilo.lo);
+  *(uint32 *)&dest->hi = CL_RAW(temp.hilo.hi);
+  *(uint32 *)&dest->lo = CL_RAW(temp.hilo.lo);
 # endif  /* QUADALIGN */
 #else /* LITTLEENDIAN */
   volatile f64_t temp;
   temp.d = (double) val;
-  *(uint32 *)&dest->hilo.lo = CL(temp.hilo.hi);
-  *(uint32 *)&dest->hilo.hi = CL(temp.hilo.lo);
+  *(uint32 *)&dest->hilo.lo = CL_RAW(temp.hilo.hi);
+  *(uint32 *)&dest->hilo.hi = CL_RAW(temp.hilo.lo);
 #endif /* LITTLEENDIAN */
 }
 
@@ -409,7 +409,7 @@ ieee_to_f32 (ieee_t val, f32_t *dest)
 #if !defined (QUADALIGN)
   dest->f = (float) val;
 # ifdef LITTLEENDIAN
-  dest->n = CL (dest->n);
+  dest->n = CL_RAW (dest->n);
 # endif
 #else /* QUADALIGN */
   volatile f32_t temp;
@@ -429,8 +429,8 @@ ieee_to_comp (ieee_t val, comp_t *dest)
   /* Check to see if val is NaN. */
   if (val != val)
     {
-      *(uint32 *)&dest->hilo.hi = CL(0x80000000);   /* NaN high 32 bits. */
-      *(uint32 *)&dest->hilo.lo = CL(0x00000000);   /* NaN low 32 bits. */
+      *(uint32 *)&dest->hilo.hi = CL_RAW(0x80000000);   /* NaN high 32 bits. */
+      *(uint32 *)&dest->hilo.lo = CL_RAW(0x00000000);   /* NaN low 32 bits. */
     }
   else  /* Not NaN */
     {
@@ -442,8 +442,8 @@ ieee_to_comp (ieee_t val, comp_t *dest)
       temp.val = val;     /* Let C compiler cast the ieee_t to a LONGINT LONGINT. */
       
       /* Write the value out. */
-      *(uint32 *)&dest->hilo.hi = CL(temp.hilo.hi);
-      *(uint32 *)&dest->hilo.lo = CL(temp.hilo.lo);
+      *(uint32 *)&dest->hilo.hi = CL_RAW(temp.hilo.hi);
+      *(uint32 *)&dest->hilo.lo = CL_RAW(temp.hilo.lo);
 #endif
     }
 }

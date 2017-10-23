@@ -20,7 +20,7 @@ char ROMlib_rcsid_sdl_mem[] = "$Id: sdl_mem.c 88 2005-05-25 03:59:37Z ctm $";
 char *sdl_ReallocHandle(char **mem, int len)
 {
   ReallocHandle((Handle)mem, len);
-  if ( MemErr != noErr )
+  if ( MemErr != CWC(noErr) )
     return NULL;
   else
     return (char *) STARH((Handle)mem);

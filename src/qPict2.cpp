@@ -45,7 +45,7 @@ P3 (PUBLIC pascal trap, OSErr, RetrievePictInfo,
 }
 
 P5 (PUBLIC pascal trap, OSErr, NewPictInfo,
-    PictInfoID *, pict_info_id, int16, verb,
+    GUEST<PictInfoID> *, pict_info_id, int16, verb,
     int16, colors_requested, int16, color_pick_method,
     int16, version)
 {
@@ -193,10 +193,10 @@ P6 (PUBLIC pascal trap, OSErr, GetPixMapInfo,
     bank_index								      \
       = ((red & mask) >> 1) | ((green & mask) >> 6) | ((blue & mask) >> 11);  \
     									      \
-    count = CW (bank[bank_index]);					      \
+    count = /* ### CW*/ (bank[bank_index]);					      \
     if (! count)							      \
       unique_colors ++;							      \
-    bank[bank_index] = CW (count + 1);					      \
+    bank[bank_index] = /* ### CW*/ (count + 1);					      \
   })
   
   switch (bpp)

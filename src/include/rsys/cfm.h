@@ -60,7 +60,7 @@ struct cfir_t { GUEST_STRUCT;
 #define CFIR_LOCATION(cfir) (CL (CFIR_LOCATION_X(cfir)))
 
 #define CFIR_LENGTH_X(cfir) ((cfir)->cfir_length)
-#define CFIR_LENGTH(cfir) (CL (CFIR_LENGTH_X(cfir)))
+#define CFIR_LENGTH(cfir) (CW (CFIR_LENGTH_X(cfir)))
 
 #define CFIR_OFFSET_TO_FRAGMENT_X(cfir) ((cfir)->offset_to_fragment)
 #define CFIR_OFFSET_TO_FRAGMENT(cfir) (CL (CFIR_OFFSET_TO_FRAGMENT_X(cfir)))
@@ -155,12 +155,12 @@ typedef struct CFragConnection *ConnectionID;
 
 extern OSErr C_GetDiskFragment (FSSpecPtr fsp, LONGINT offset, LONGINT length,
 				Str63 fragname, LoadFlags flags,
-				ConnectionID *connp, Ptr *mainAddrp,
+				GUEST<ConnectionID> *connp, GUEST<Ptr> *mainAddrp,
 				Str255 errname);
 
 typedef uint8 SymClass;
 
-extern OSErr C_FindSymbol (ConnectionID connID, Str255 symName, Ptr *symAddr,
+extern OSErr C_FindSymbol (ConnectionID connID, Str255 symName, GUEST<Ptr> *symAddr,
 			   SymClass *symClass);
 
 
@@ -236,17 +236,17 @@ extern OSErr C_CloseConnection (ConnectionID *cidp);
 
 extern OSErr C_GetSharedLibrary (Str63 library, OSType arch,
 				 LoadFlags loadflags,
-				 ConnectionID *cidp, Ptr *mainaddrp,
+				 GUEST<ConnectionID> *cidp, GUEST<Ptr> *mainaddrp,
 				 Str255 errName);
 
 extern OSErr C_GetMemFragment (void * addr, uint32 length, Str63 fragname,
-			       LoadFlags flags, ConnectionID *connp,
-			       Ptr *mainAddrp, Str255 errname);
+			       LoadFlags flags, GUEST<ConnectionID> *connp,
+			       GUEST<Ptr> *mainAddrp, Str255 errname);
 
-extern OSErr C_CountSymbols (ConnectionID id, LONGINT *countp);
+extern OSErr C_CountSymbols (ConnectionID id, GUEST<LONGINT> *countp);
 
 extern OSErr C_GetIndSymbol (ConnectionID id, LONGINT index,
-			     Str255 name, Ptr *addrp,
+			     Str255 name, GUEST<Ptr> *addrp,
 			     SymClass *classp);
 
 extern ConnectionID ROMlib_new_connection (uint32 n_sects);

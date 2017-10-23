@@ -902,7 +902,7 @@ setup_trap_vectors (void)
 
   /* Set up the trap vector for the timer interrupt. */
   timer_callback = callback_install (catchalarm, NULL);
-  *(syn68k_addr_t *)SYN68K_TO_US(M68K_TIMER_VECTOR * 4) = CL (timer_callback);
+  *(GUEST<syn68k_addr_t> *)SYN68K_TO_US(M68K_TIMER_VECTOR * 4) = CL (timer_callback);
 
   /* Fill in unhandled trap vectors so they cause graceful deaths.
    * Skip over those trap vectors which are known to have legitimate
@@ -934,7 +934,7 @@ setup_trap_vectors (void)
       {
 	syn68k_addr_t c;
 	c = callback_install (unhandled_trap, (void *) i);
-	*(syn68k_addr_t *)SYN68K_TO_US(i * 4) = CL (c);
+	*(GUEST<syn68k_addr_t> *)SYN68K_TO_US(i * 4) = CL (c);
       }
 }
 #endif /* SYN68K */
@@ -1286,15 +1286,15 @@ int main(int argc, char** argv)
   check_structs ();
 
   INTEGER i;
-  static unsigned short jmpl_to_ResourceStub[3] =
+  static GUEST<uint16_t> jmpl_to_ResourceStub[3] =
   {
-    CWC ((unsigned short)0x4EF9), 0, 0		/* Filled in below. */
+    CWC ((unsigned short)0x4EF9), CWC(0), CWC(0)		/* Filled in below. */
   };
   long l;
   ULONGINT save_trap_vectors[64];
   virtual_int_state_t int_state;
-  THz saveSysZone, saveApplZone;
-  Ptr saveApplLimit;
+  GUEST<THz> saveSysZone, saveApplZone;
+  GUEST<Ptr> saveApplLimit;
 #if defined (MSDOS)
   boolean_t check_files_p;  /* See if FILES= is big enough? */
 #endif
@@ -1880,9 +1880,9 @@ int main(int argc, char** argv)
   }
   
   {
-    static uint16 ret = CWC ((unsigned short)0x4E75);
+    static GUEST<uint16> ret = CWC ((unsigned short)0x4E75);
 
-    JCrsrTask = (ProcPtr) RM (&ret);
+    JCrsrTask = RM ((ProcPtr) &ret);
   }
   
   SET_HILITE_BIT ();
@@ -1935,8 +1935,8 @@ int main(int argc, char** argv)
 
   TheZone = SysZone;
   UTableBase =
-  (DCtlHandlePtr) (long) RM (NewPtr (sizeof (UTableBase[0]) * NDEVICES));
-  memset (MR (UTableBase), 0, sizeof (UTableBase[0]) * NDEVICES);
+  RM ((DCtlHandlePtr) NewPtr (4 * NDEVICES));
+  memset (MR (UTableBase), 0, 4 * NDEVICES);
   UnitNtryCnt = CW (NDEVICES);
   TheZone = ApplZone;
 
@@ -1949,12 +1949,12 @@ int main(int argc, char** argv)
     make_rgb_spec (&mac_16bpp_rgb_spec,
 		     16, TRUE, 0,
 		     5, 10, 5, 5, 5, 0,
-		     CL (GetCTSeed ()));
+		     CL_RAW (GetCTSeed ()));
       
     make_rgb_spec (&mac_32bpp_rgb_spec,
         32, TRUE, 0,
         8, 16, 8, 8, 8, 0,
-        CL (GetCTSeed ()));
+        CL_RAW (GetCTSeed ()));
       
     gd_allocate_main_device ();
   }

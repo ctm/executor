@@ -69,7 +69,7 @@ P1(PUBLIC pascal trap, INTEGER, HomeResFile, Handle, res)
     resref *rr;
 
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
-    if (ResErr != noErr)
+    if (ResErr != CWC(noErr))
         return(-1);
     else
         return(Hx(map, resfn));

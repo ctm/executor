@@ -411,7 +411,7 @@ create_tips_text (void)
   b = find_button (TIPS_BUTTON_NAME);
   if (!orig_text)
     {
-      srand (Ticks); /* NOTE: we don't care that rand/srand is not a
+      srand (Ticks.get()); /* NOTE: we don't care that rand/srand is not a
 			   particular good way to generate random numbers */
       orig_text = (char*)about_box_buttons[b].text;
     }
@@ -582,6 +582,7 @@ draw_status_info (boolean_t executor_p)
   char syszone_ram_string[128];
   boolean_t gestalt_success_p;
   LONGINT total_ram;
+  GUEST<LONGINT> total_ram_x;
   const char *ram_tag, *system_ram_tag, *application_ram_tag;
 
   if (executor_p)
@@ -599,9 +600,9 @@ draw_status_info (boolean_t executor_p)
 
   /* Compute a string for total RAM. */
 #define MB (1024 * 1024U)
-  gestalt_success_p = (C_GestaltTablesOnly (gestaltLogicalRAMSize, &total_ram)
+  gestalt_success_p = (C_GestaltTablesOnly (gestaltLogicalRAMSize, &total_ram_x)
 		       == noErr);
-  total_ram = CL (total_ram);
+  total_ram = CL (total_ram_x);
   if (gestalt_success_p)
     sprintf (total_ram_string, "%s%u.%02u MB", ram_tag,
 	     total_ram / MB, (total_ram % MB) * 100 / MB);

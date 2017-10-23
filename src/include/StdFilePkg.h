@@ -110,19 +110,14 @@ extern pascal trap void P_SFPutFile( Point p, StringPtr prompt, StringPtr name,
 						    ProcPtr dh, SFReply *rep );
 
 extern pascal trap void C_SFPGetFile( Point p, StringPtr prompt, ProcPtr filef,
-		         INTEGER numt, SFTypeList tl, ProcPtr dh, SFReply *rep,
-						     INTEGER dig, ProcPtr fp );
-extern pascal trap void P_SFPGetFile( Point p, StringPtr prompt, ProcPtr filef,
-		         INTEGER numt, SFTypeList tl, ProcPtr dh, SFReply *rep,
+		         INTEGER numt, GUEST<SFTypeList> tl, ProcPtr dh, SFReply *rep,
 						     INTEGER dig, ProcPtr fp );
 
 extern pascal trap void C_SFGetFile( Point p, StringPtr prompt, ProcPtr filef,
-		       INTEGER numt, SFTypeList tl, ProcPtr dh, SFReply *rep );
-extern pascal trap void P_SFGetFile( Point p, StringPtr prompt, ProcPtr filef,
-		       INTEGER numt, SFTypeList tl, ProcPtr dh, SFReply *rep );
+		       INTEGER numt, GUEST<SFTypeList> tl, ProcPtr dh, SFReply *rep );
 
 extern pascal trap void C_StandardGetFile (ProcPtr filef, INTEGER numt,
-					   SFTypeList tl,
+                                           GUEST<SFTypeList> tl,
 					   StandardFileReply *replyp);
 
 extern pascal trap void C_StandardPutFile (Str255 prompt, Str255 defaultname,
@@ -139,7 +134,7 @@ extern pascal trap void C_CustomPutFile (Str255 prompt, Str255 defaultName,
 
 extern pascal trap void C_CustomGetFile (FileFilterYDProcPtr filefilter,
 					 INTEGER numtypes,
-					 SFTypeList typelist,
+					 GUEST<SFTypeList> typelist,
 					 StandardFileReply *replyp,
 					 INTEGER dlgid, Point where,
 					 DlgHookYDProcPtr dlghook,

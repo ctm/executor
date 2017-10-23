@@ -36,14 +36,13 @@ extern INTEGER 	ScrapState;
 #define ScrapName	(ScrapName_H.p)
 #endif
 
-extern pascal trap PScrapStuff C_InfoScrap( void  ); extern pascal trap PScrapStuff P_InfoScrap( void );
-extern pascal trap LONGINT C_UnloadScrap( void  ); extern pascal trap LONGINT P_UnloadScrap( void ); 
-extern pascal trap LONGINT C_LoadScrap( void  ); extern pascal trap LONGINT P_LoadScrap( void ); 
+extern pascal trap PScrapStuff C_InfoScrap( void  );
+extern pascal trap LONGINT C_UnloadScrap( void  );
+extern pascal trap LONGINT C_LoadScrap( void  );
 extern LONGINT ROMlib_ZeroScrap( void  ); 
-extern pascal trap LONGINT C_ZeroScrap( void  ); extern pascal trap LONGINT P_ZeroScrap( void ); 
-extern pascal trap LONGINT C_PutScrap( LONGINT len, ResType rest, Ptr p ); extern pascal trap LONGINT P_PutScrap( LONGINT len, ResType rest, Ptr p); 
+extern pascal trap LONGINT C_ZeroScrap( void  );
+extern pascal trap LONGINT C_PutScrap( LONGINT len, ResType rest, Ptr p );
 extern pascal trap LONGINT C_GetScrap( Handle h, ResType rest, 
- LONGINT *off ); extern pascal trap LONGINT P_GetScrap( Handle h, ResType rest, 
- LONGINT *off );
+ GUEST<LONGINT> *off );
 }
 #endif /* __SCRAP__ */

@@ -149,7 +149,7 @@ P5(PUBLIC pascal trap, void, ROMlib_Fxstr2dec, Decstr volatile, sp2,
 {
     int index, expsgn, implicitexp;
     
-    index = CW (*sp);
+    index = CW_RAW (*sp);
     warning_floating_point ("xstr2dec(\"%.*s\")",
 			    lastchar - index + 1, (const char *) sp2 + index);
     while (((sp2[index] == ' ')||(sp2[index] == '\t')) && (index <= lastchar))
@@ -183,7 +183,7 @@ P5(PUBLIC pascal trap, void, ROMlib_Fxstr2dec, Decstr volatile, sp2,
 	dp2->sig[1] = 'N';
 /*-->*/ goto abortlookahead;  /* should I use a break or return instead? */
     }
-    *sp = CW (index);		/* The base is legit.  Check exponent. */
+    *sp = CW_RAW (index);		/* The base is legit.  Check exponent. */
     dp2->exp =  CWC (0);
     if (LOWER(sp2[index]) == 'e') {
 	index++;
@@ -208,7 +208,7 @@ P5(PUBLIC pascal trap, void, ROMlib_Fxstr2dec, Decstr volatile, sp2,
 	if (expsgn)
 	  dp2->exp = CW (-1 * CW (dp2->exp));
     }
-    *sp = CW (index);
+    *sp = CW_RAW (index);
 abortlookahead:
     dp2->exp = CW (CW (dp2->exp) + implicitexp - dp2->sig[0]);
     *dp = CB (!sp2[index] || (index > lastchar));

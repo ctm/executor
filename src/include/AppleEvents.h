@@ -19,8 +19,9 @@ typedef ResType DescType;
 
 typedef struct AEDesc
 {
-  DescType descriptorType;
-  Handle dataHandle;
+  GUEST_STRUCT;
+  GUEST<DescType> descriptorType;
+  GUEST<Handle> dataHandle;
 } AEDesc;
 
 /* ### hack, delete */
@@ -34,8 +35,8 @@ typedef AEDesc descriptor_t;
 
 typedef struct AEKeyDesc
 {
-  AEKeyword descKey;
-  AEDesc descContent;
+  GUEST<AEKeyword> descKey;
+  GUEST<AEDesc> descContent;
 } AEKeyDesc;
 
 typedef AEKeyDesc key_desc_t;
@@ -98,9 +99,9 @@ enum
 
 typedef union AEArrayData
 {
-  int16 AEDataArray[1];
+  GUEST<int16> AEDataArray[1];
   int8 AEPackedArray[1];
-  Handle AEHandleArray[1];
+  GUEST<Handle> AEHandleArray[1];
   AEDesc AEDescArray[1];
   AEKeyDesc AEKeyDescArray[1];
 } AEArrayData;
@@ -276,8 +277,8 @@ extern ProcPtr AE_OSL_select_fn;
 
 extern pascal trap OSErr C_AEGetCoercionHandler
   (DescType from_type, DescType to_type,
-   ProcPtr *hdlr_out, int32 *refcon_out,
-   Boolean *from_type_is_desc_p_out, Boolean system_handler_p);
+   GUEST<ProcPtr> *hdlr_out, GUEST<int32> *refcon_out,
+   GUEST<Boolean> *from_type_is_desc_p_out, Boolean system_handler_p);
 
 extern pascal trap OSErr C_AECreateDesc (DescType type,
 					 Ptr data, Size data_size,
@@ -292,8 +293,8 @@ extern pascal trap OSErr C_AECoerceDesc (AEDesc *desc, DescType result_type,
 					 AEDesc *desc_out);
 
 extern pascal trap OSErr C_AEGetKeyPtr (AERecord *record, AEKeyword keyword,
-					DescType desired_type, DescType *type_out,
-					Ptr data, Size max_size, Size *size_out);
+					DescType desired_type, GUEST<DescType> *type_out,
+					Ptr data, Size max_size, GUEST<Size> *size_out);
 
 extern pascal trap OSErr C_AEGetKeyDesc (AERecord *record, AEKeyword keyword,
 					 DescType desired_type, AEDesc *desc_out);
@@ -309,7 +310,7 @@ extern pascal trap OSErr C_AEDeleteAttribute (AppleEvent *evt,
 					      AEKeyword keyword);
 
 extern pascal trap OSErr C_AESizeOfKeyDesc (AERecord *record, AEKeyword keyword,
-					    DescType *type_out, Size *size_out);
+					    GUEST<DescType> *type_out, GUEST<Size> *size_out);
 
 extern pascal trap OSErr C_AESetInteractionAllowed (AEInteractionAllowed level);
 
@@ -328,7 +329,7 @@ extern pascal trap OSErr C_AEGetInteractionAllowed (AEInteractionAllowed *return
 
 extern pascal trap OSErr C_AEDuplicateDesc (AEDesc *src, AEDesc *dst);
 
-extern pascal trap OSErr C_AECountItems (AEDescList *list, int32 *count_out);
+extern pascal trap OSErr C_AECountItems (AEDescList *list, GUEST<int32> *count_out);
 
 extern pascal trap OSErr C_AEDeleteItem (AEDescList *list, int32 index);
 
@@ -342,7 +343,7 @@ extern pascal trap OSErr C_AERemoveSpecialHandler (AEKeyword function_class,
 						   ProcPtr hdlr,
 						   Boolean system_handler_p);
 extern pascal trap OSErr C_AEGetSpecialHandler (AEKeyword function_class,
-						ProcPtr *hdlr_out,
+						GUEST<ProcPtr> *hdlr_out,
 						Boolean system_handler_p);
 
 extern pascal trap OSErr C_AESend (AppleEvent *evt, AppleEvent *reply,
@@ -355,7 +356,7 @@ extern pascal trap OSErr C_AECoercePtr (DescType data_type, Ptr data, Size data_
 
 extern pascal trap OSErr C_AEGetEventHandler (AEEventClass event_class,
 					      AEEventID event_id,
-					      EventHandlerProcPtr *hdlr, int32 *refcon,
+					      GUEST<EventHandlerProcPtr> *hdlr, GUEST<int32> *refcon,
 					      Boolean system_handler_p);
 
 extern pascal trap OSErr C_AERemoveEventHandler (AEEventClass event_class,
@@ -378,20 +379,20 @@ extern pascal trap OSErr C_AEPutAttributeDesc (AppleEvent *evt, AEKeyword keywor
 					       AEDesc *desc);
 
 extern pascal trap OSErr C_AEGetNthPtr (AEDescList *list, int32 index,
-					DescType desired_type, AEKeyword *keyword_out,
-					DescType *type_out,
-					Ptr data, int32 max_size, int32 *size_out);
+					DescType desired_type, GUEST<AEKeyword> *keyword_out,
+					GUEST<DescType> *type_out,
+					Ptr data, int32 max_size, GUEST<int32> *size_out);
 
 extern pascal trap OSErr C_AEGetAttributePtr (AppleEvent *evt, AEKeyword keyword,
-					      DescType desired_type, DescType *type_out,
-					      Ptr data, Size max_size, Size *size_out);
+					      DescType desired_type, GUEST<DescType> *type_out,
+					      Ptr data, Size max_size, GUEST<Size> *size_out);
 
 extern pascal trap OSErr C_AEGetArray (AEDescList *list,
 				       AEArrayType array_type,
 				       AEArrayDataPointer array_ptr, Size max_size,
-				       DescType *return_item_type,
-				       Size *return_item_size,
-				       int32 *return_item_count);
+				       GUEST<DescType> *return_item_type,
+				       GUEST<Size> *return_item_size,
+				       GUEST<int32> *return_item_count);
 
 extern pascal trap OSErr C_AECreateAppleEvent
   (AEEventClass event_class, AEEventID event_id,
@@ -421,14 +422,14 @@ extern pascal trap OSErr C_AEGetAttributeDesc (AppleEvent *evt, AEKeyword keywor
 					       DescType desired_type, AEDesc *desc_out);
 
 extern pascal trap OSErr C_AESizeOfAttribute (AppleEvent *evt, AEKeyword keyword,
-					      DescType *type_out, Size *size_out);
+					      GUEST<DescType> *type_out, GUEST<Size> *size_out);
 
 extern pascal trap OSErr C_AEGetNthDesc (AEDescList *list, int32 index,
-					 DescType desired_type, AEKeyword *keyword_out,
+					 DescType desired_type, GUEST<AEKeyword> *keyword_out,
 					 AEDesc *desc_out);
 
 extern pascal trap OSErr C_AESizeOfNthItem (AEDescList *list, int32 index,
-					    DescType *type_out, Size *size_out);
+					    GUEST<DescType> *type_out, GUEST<Size> *size_out);
 
 extern pascal trap OSErr C_AEPutPtr (AEDescList *list, int32 index, DescType type,
 				     Ptr data, Size data_size);
@@ -439,7 +440,7 @@ extern pascal trap OSErr C_AEInteractWithUser (int32 timeout, NMRecPtr nm_req,
 extern void AE_init (void);
 extern void AE_reinit (void);
 
-extern pascal trap OSErr C_AEManagerInfo (LONGINT *resultp);
+extern pascal trap OSErr C_AEManagerInfo (GUEST<LONGINT> *resultp);
 
 #if 0
 #if !defined (AE_info_H)

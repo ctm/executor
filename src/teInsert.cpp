@@ -44,7 +44,7 @@ Executor::ROMlib_StyleTextWidth (TEPtr tep,
   STElement *styles;
   
   int16 current_run_index;
-  int16 save_size, save_font;
+  GUEST<int16> save_size, save_font;
   Style save_face;
   int16 length;
   int16 retval;

@@ -74,7 +74,7 @@ get_sys_vref_and_dirid (INTEGER *sys_vrefp, LONGINT *sys_diridp)
 
   wdp.ioVRefNum = BootDrive;
   wdp.ioWDIndex = CWC (0);
-  wdp.ioNamePtr = (StringPtr)CLC (0);
+  wdp.ioNamePtr = nullptr;
   err = PBGetWDInfo (&wdp, FALSE);
   if (err == noErr)
     {
@@ -137,7 +137,7 @@ look_for_volume (const char *vol_name, INTEGER *vrefp, LONGINT *diridp)
 
   str255_from_c_string (pvol_name, vol_name);
   pbr.volumeParam.ioNamePtr = RM (&pvol_name[0]);
-  pbr.volumeParam.ioVolIndex = CLC (-1);
+  pbr.volumeParam.ioVolIndex = CWC (-1);
   pbr.volumeParam.ioVRefNum = CWC (0);
   retval = PBGetVInfo (&pbr, FALSE);
   if (retval == noErr)
@@ -180,7 +180,7 @@ last_chance_tmp_vref_and_dirid (INTEGER vref, INTEGER *tmp_vrefp,
 	  CInfoPBRec hpb;
 	  
 	  memset (&hpb, 0, sizeof hpb);
-	  hpb.dirInfo.ioNamePtr = (StringPtr) RM (top_level_names[i]);
+	  hpb.dirInfo.ioNamePtr = RM ((StringPtr) top_level_names[i]);
 	  hpb.dirInfo.ioVRefNum = pb.volumeParam.ioVRefNum;
 	  hpb.dirInfo.ioDrDirID = CLC (2);
 	  err = PBGetCatInfo (&hpb, FALSE);
@@ -188,7 +188,7 @@ last_chance_tmp_vref_and_dirid (INTEGER vref, INTEGER *tmp_vrefp,
 		*tmp_diridp = CL (hpb.dirInfo.ioDrDirID);
 	}
 	if (err != noErr)
-	  *tmp_diridp = CLC (2);
+	  *tmp_diridp = 2;
   }
   
   return retval;
@@ -283,7 +283,7 @@ create_directory (INTEGER sys_vref, LONGINT sys_dirid, const char *sub_dirp,
 
 P5 (PUBLIC pascal trap, OSErr, FindFolder,
     int16, vRefNum, OSType, folderType,
-    Boolean, createFolder, int16 *, foundVRefNum, int32 *, foundDirID)
+    Boolean, createFolder, GUEST<int16> *, foundVRefNum, GUEST<int32> *, foundDirID)
 {
   OSErr retval;
   const char *sub_dir;
@@ -356,7 +356,7 @@ P5 (PUBLIC pascal trap, OSErr, FindFolder,
 
 P3 (PUBLIC pascal trap, OSErr, NewAlias,
     FSSpecPtr, fromFile, FSSpecPtr, target,
-    AliasHandle *, alias)
+    GUEST<AliasHandle> *, alias)
 {
   OSErr retval;
 
@@ -407,7 +407,7 @@ P4 (PUBLIC pascal trap, OSErr, ResolveAlias,
   str255assign (fs.name, headp->fileName); 
 
   pb.volumeParam.ioNamePtr = RM ((StringPtr) volname);
-  pb.volumeParam.ioVolIndex = CLC (-1);
+  pb.volumeParam.ioVolIndex = CWC (-1);
   pb.volumeParam.ioVRefNum = 0;
   retval = PBHGetVInfo (&pb, FALSE);
   if (retval == noErr)
@@ -600,7 +600,7 @@ init_tail (alias_tail_t *tailp, Str32 zoneName, Str31 serverName,
 }
 
 PRIVATE OSErr
-assemble_pieces (AliasHandle *ahp, alias_head_t *headp, INTEGER n_pieces, ...)
+assemble_pieces (GUEST<AliasHandle> *ahp, alias_head_t *headp, INTEGER n_pieces, ...)
 {
   Size n_bytes_needed;
   va_list va;
@@ -637,8 +637,10 @@ assemble_pieces (AliasHandle *ahp, alias_head_t *headp, INTEGER n_pieces, ...)
       va_start (va, n_pieces);
       for (i = 0; i < n_pieces; ++i)
 	{
-	  INTEGER tag, tag_x;
-	  INTEGER length, length_x;
+          INTEGER tag;
+          GUEST<INTEGER> tag_x;
+          INTEGER length;
+          GUEST<INTEGER> length_x;
 	  void *p;
 		
 	  tag = va_arg (va, int);
@@ -660,7 +662,7 @@ assemble_pieces (AliasHandle *ahp, alias_head_t *headp, INTEGER n_pieces, ...)
       op += sizeof (INTEGER);
       memset (op, 0, sizeof (INTEGER));
 		
-      *ahp = (AliasHandle) RM (h);
+      *ahp = RM ((AliasHandle) h);
       retval = noErr;
     }
   return retval;
@@ -673,7 +675,7 @@ TAIL_TAG     , sizeof (tail)-2, &tail.weird_info)
 
 P5 (PUBLIC pascal trap, OSErr, NewAliasMinimalFromFullPath,
     INTEGER, path_len, Ptr, fullPath, Str32, zoneName, Str31, serverName,
-    AliasHandle *, ahp)
+    GUEST<AliasHandle> *, ahp)
 {
   OSErr retval;
 
@@ -714,7 +716,7 @@ P5 (PUBLIC pascal trap, OSErr, NewAliasMinimalFromFullPath,
 }
 
 P2 (PUBLIC pascal trap, OSErr, NewAliasMinimal,
-FSSpecPtr, fsp, AliasHandle *, ahp)
+FSSpecPtr, fsp, GUEST<AliasHandle> *, ahp)
 {
   HParamBlockRec hpb;
   OSErr retval;

@@ -74,8 +74,8 @@ typedef struct
 {
   uint32 log2_in_bpp;
   const rgb_spec_t *src_rgb_spec;
-  CTabHandle swapped_ctab;
-  ITabHandle swapped_itab;
+  GUEST<CTabHandle> swapped_ctab;
+  GUEST<ITabHandle> swapped_itab;
 } depthconv_rgb_to_ind_data_t;
 
 typedef struct

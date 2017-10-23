@@ -286,7 +286,7 @@ dummy (void)
 
 P5 (PUBLIC pascal trap, OSErr, AEGetEventHandler,
     AEEventClass, event_class, AEEventID, event_id,
-    EventHandlerProcPtr *, hdlr, int32 *, refcon,
+    GUEST<EventHandlerProcPtr> *, hdlr, GUEST<int32> *, refcon,
     Boolean, system_handler_p)
 {
   AE_hdlr_table_h table;
@@ -380,8 +380,8 @@ P6 (PUBLIC pascal trap, OSErr, AEInstallCoercionHandler,
 
 P6 (PUBLIC pascal trap, OSErr, AEGetCoercionHandler,
     DescType, from_type, DescType, to_type,
-    ProcPtr *, hdlr_out, int32 *, refcon_out,
-    Boolean *, from_type_is_desc_p_out,
+    GUEST<ProcPtr> *, hdlr_out, GUEST<int32> *, refcon_out,
+    GUEST<Boolean> *, from_type_is_desc_p_out,
     Boolean, system_handler_p)
 {
   AE_hdlr_table_h table;
@@ -468,7 +468,7 @@ P3 (PUBLIC pascal trap, OSErr, AEInstallSpecialHandler,
 }
 
 P3 (PUBLIC pascal trap, OSErr, AEGetSpecialHandler,
-    AEKeyword, function_class, ProcPtr *, hdlr_out,
+    AEKeyword, function_class, GUEST<ProcPtr> *, hdlr_out,
     Boolean, system_handler_p)
 {
   AE_hdlr_table_h table;

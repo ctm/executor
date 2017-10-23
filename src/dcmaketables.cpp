@@ -153,8 +153,8 @@ maketable_ ## bpp1 ## _ ## bpp2 (void *d, const uint32 *map)		      \
           new1 |= (v & ((1UL << bpp2) - 1)) << l;			      \
 	  if (l == 0)							      \
 	    {								      \
-	      dst[0] = dst[3] = CW (new1);				      \
-	      dst[1] = dst[2] = CWC (0);				      \
+	      dst[0] = dst[3] = CW_RAW (new1);				      \
+	      dst[1] = dst[2] = CWC_RAW (0);				      \
 	      dst += 4;							      \
 	      l = 16 - bpp2;						      \
 	      new1 = 0;							      \
@@ -195,7 +195,7 @@ maketable_ ## bpp1 ## _ ## bpp2 (void *d, const uint32 *map)		      \
           new1 |= (v & (0xFFFFFFFFUL >> (32 - bpp2))) << l;		      \
 	  if (l == 0)							      \
 	    {								      \
-	      *dst++ = Cx (new1);					      \
+	      *dst++ = Cx_RAW (new1);					      \
 	      l = (8 * sizeof new1) - bpp2;				      \
 	      new1 = 0;							      \
 	    }								      \
@@ -449,7 +449,7 @@ depthconv_make_ind_to_rgb_table (void *table_space, unsigned in_bpp,
 	   * to counteract the byte swap that will happen later when
 	   * the raw table is built.
 	   */
-	  raw_map[i] = (out_bpp == 16) ? CW (v) : CL (v);
+	  raw_map[i] = (out_bpp == 16) ? CW_RAW (v) : CL_RAW (v);
 	}
     }
 

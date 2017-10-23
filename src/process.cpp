@@ -45,8 +45,8 @@ typedef struct process_info
   struct process_info *next;
   
   uint32 mode;
-  uint32 type;
-  uint32 signature;
+  GUEST<uint32> type;
+  GUEST<uint32> signature;
   uint32 size;
   uint32 launch_ticks;
 
@@ -60,13 +60,13 @@ static process_info_t *current_process_info;
 static const int default_process_mode_flags = 0;
 
 /* ### not currently used */
-static ProcessSerialNumber system_process = { 0, CLC (kSystemProcess) };
-static ProcessSerialNumber no_process = { 0, CLC (kNoProcess) };
-static ProcessSerialNumber current_process = { 0, CLC (kCurrentProcess) };
+static ProcessSerialNumber system_process = { CLC(0), CLC (kSystemProcess) };
+static ProcessSerialNumber no_process = { CLC(0), CLC (kNoProcess) };
+static ProcessSerialNumber current_process = { CLC(0), CLC (kCurrentProcess) };
 
 void
 Executor::process_create (boolean_t desk_accessory_p,
-		uint32 type, uint32 signature)
+		GUEST<uint32> type, GUEST<uint32> signature)
 {
   size_resource_handle size;
   process_info_t *info;

@@ -89,7 +89,7 @@ using namespace Executor;
 A1(PUBLIC, OSErr, RAMSDOpen, SPortSel, port)	/* IMII-249 */
 {
     OSErr err;
-    INTEGER rn;
+    GUEST<INTEGER> rn;
 
     switch (port) {
     case sPortA:
@@ -125,9 +125,9 @@ A1(PUBLIC, void, RAMSDClose, SPortSel, port)	/* IMII-250 */
 
 A2(PUBLIC, OSErr, SerReset, INTEGER, rn, INTEGER, config)	/* IMII-250 */
 {
-  config = CW (config);
+  GUEST<INTEGER> config_s = CW (config);
 
-  return Control(rn, SERSET, (Ptr) &config);
+  return Control(rn, SERSET, (Ptr) &config_s);
 }
 
 #define SERSETBUF	9	/* IMII-251 */
@@ -301,7 +301,7 @@ typedef void (*compfuncp)( void );
 
 #if defined(BINCOMPAT)
 
-void callcomp(ParmBlkPtr pbp, compfuncp comp, OSErr err)
+void callcomp(ParmBlkPtr pbp, ProcPtr comp, OSErr err)
 {
     EM_A0 = (LONGINT) (long) US_TO_SYN68K(pbp);
     EM_A1 = (LONGINT) (long) US_TO_SYN68K(comp);
@@ -309,10 +309,11 @@ void callcomp(ParmBlkPtr pbp, compfuncp comp, OSErr err)
     CALL_EMULATOR((syn68k_addr_t) (long) comp);
 }
 
+#warning autc04: used to be (CW((pbp)->ioParam.ioTrap) & asyncTrpBit
 #define DOCOMPLETION(pbp, err)						      \
     (pbp)->ioParam.ioResult = CW(err);					      \
-    if (((pbp)->ioParam.ioTrap & asyncTrpBit) && (pbp)->ioParam.ioCompletion) \
-	callcomp(pbp, (compfuncp) CL((long)(pbp)->ioParam.ioCompletion.raw()), err);	      \
+    if ((CW((pbp)->ioParam.ioTrap) & asyncTrpBit) && (pbp)->ioParam.ioCompletion) \
+	callcomp(pbp, MR((pbp)->ioParam.ioCompletion), err);	      \
     return err
 
 #else
@@ -321,7 +322,7 @@ void callcomp(ParmBlkPtr pbp, compfuncp comp, OSErr err)
 
 #define DOCOMPLETION(pbp, err)				\
     (pbp)->ioParam.ioResult = CW(err);			\
-    if ((pbp)->ioParam.ioTrap & asyncTrpBit)		\
+    if (CW((pbp)->ioParam.ioTrap) & asyncTrpBit)		\
 	(*(compfuncp) (pbp)->ioParam.ioCompletion)();	\
     return err
 
@@ -347,7 +348,7 @@ A2(PUBLIC, OSErr, ROMlib_serialopen, ParmBlkPtr, pbp,		/* INTERNAL */
     err = noErr;
     if (!(dcp->dCtlFlags & CWC(OPENBIT))) {
 	h = (hiddenh) NewHandle(sizeof(hidden));
-	dcp->dCtlStorage = (Handle) RM(h);
+	dcp->dCtlStorage = RM ((Handle)h);
 	otherp = otherdctl(pbp);
 	if (otherp && (otherp->dCtlFlags & CWC(OPENBIT))) {
 	    *STARH(h) = *STARH((hiddenh) (long) MR(otherp->dCtlStorage));
@@ -985,7 +986,7 @@ A2(PUBLIC, OSErr, ROMlib_serialstatus, ParmBlkPtr, pbp,		/* INTERNAL */
 #if defined(SERIALDEBUG)
     warning_trace_info ("serial status getbuf = %d", (LONGINT) n);
 #endif
-		*(LONGINT *) pbp->cntrlParam.csParam = CL(n);
+		*(GUEST<LONGINT> *) pbp->cntrlParam.csParam = CL(n);
 		err = noErr;
 	    }
 	    break;

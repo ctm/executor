@@ -247,7 +247,7 @@ P1(PUBLIC pascal trap, BOOLEAN, CheckUpdate, EventRecord *, ev)
 	  else
 	    {
 	      ev->what = CW(updateEvt);
-	      ev->message = (long) RM(wp);
+	      ev->message = guest_cast<LONGINT>( RM(wp) );
 	      return TRUE;
 	    }
 	}
@@ -459,7 +459,7 @@ Executor::CALLDRAGHOOK (void)
     savea2 = EM_A2;
     savea3 = EM_A3;
     EM_D0 = 0;
-    CALL_EMULATOR((syn68k_addr_t) CL((long)DragHook.raw()));
+    CALL_EMULATOR((syn68k_addr_t) CL_RAW(DragHook.raw()));
     EM_D0 = saved0;
     EM_D1 = saved1;
     EM_D2 = saved2;
@@ -486,7 +486,7 @@ Executor::WINDCALLDESKHOOK (void)
   savea2 = EM_A2;
   savea3 = EM_A3;
   EM_D0 = 0;
-  CALL_EMULATOR((syn68k_addr_t) CL((long) DeskHook.raw()));
+  CALL_EMULATOR((syn68k_addr_t) CL_RAW(DeskHook.raw()));
   EM_D0 = saved0;
   EM_D1 = saved1;
   EM_D2 = saved2;
@@ -520,6 +520,7 @@ Executor::ROMlib_windcall (WindowPtr wind, int16 mess, int32 param)
       wind->portBits.bounds = PORT_BOUNDS (wind);
       break;
     case wGrow:
+    #warning 64bit- must not do this
       param = US_TO_SYN68K (param);
       break;
     default:

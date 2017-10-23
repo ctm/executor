@@ -84,7 +84,7 @@ P4(PUBLIC pascal trap, void, PrArc, GrafVerb, verb, Rect *, r,
 						INTEGER, starta, INTEGER, arca)
 {
     if (pageno >= pagewanted && pageno <= lastpagewanted)
-	NeXTPrArc(verb, (comRect *) r, starta, arca, (comGrafPtr) thePort);
+	NeXTPrArc(verb, r, starta, arca,  thePort);
 }
 
 P5(PUBLIC pascal trap, void, donotPrBits, BitMap *, srcbmp, Rect *, srcrp,
@@ -96,8 +96,8 @@ P5(PUBLIC pascal trap, void, PrBits, BitMap *, srcbmp, Rect *, srcrp,
 				 Rect *, dstrp, INTEGER, mode, RgnHandle, mask)
 {
     if (pageno >= pagewanted && pageno <= lastpagewanted)
-	NeXTPrBits((comBitMap *) srcbmp, (comRect *) srcrp, (comRect *) dstrp,
-			      mode, (comRgnHandle) mask, (comGrafPtr) thePort);
+	NeXTPrBits( srcbmp, srcrp, dstrp,
+			      mode,  mask,  thePort);
 }
 
 P1(PUBLIC pascal trap, void, donotPrLine, Point, p)
@@ -108,11 +108,11 @@ P1(PUBLIC pascal trap, void, PrLine, Point, p)
 {
     if (pageno >= pagewanted && pageno <= lastpagewanted)
       {
-	comPoint cp;
+	Point cp;
 	
 	cp.h = p.h;
 	cp.v = p.v;
-	NeXTPrLine(cp, (comGrafPtr) thePort);
+	NeXTPrLine(cp, thePort);
       }
 }
 
@@ -123,7 +123,7 @@ P2(PUBLIC pascal trap, void, donotPrOval, GrafVerb, v, Rect *, rp)
 P2(PUBLIC pascal trap, void, PrOval, GrafVerb, v, Rect *, rp)
 {
     if (pageno >= pagewanted && pageno <= lastpagewanted)
-	NeXTPrOval(v, (comRect *) rp, (comGrafPtr) thePort);
+	NeXTPrOval(v, rp, thePort);
 }
 
 P4(PUBLIC pascal trap, void, textasPS, INTEGER, n, Ptr, textbufp,
@@ -132,11 +132,11 @@ P4(PUBLIC pascal trap, void, textasPS, INTEGER, n, Ptr, textbufp,
 #if 1
     if (pageno >= pagewanted && pageno <= lastpagewanted)
       {
-	NeXTsendps(n, (comPtr) textbufp);
+	NeXTsendps(n,  textbufp);
 #if !defined (CYGWIN32)
-	NeXTsendps(1, (comPtr) "\r");
+	NeXTsendps(1,  (Ptr) "\r");
 #else
-	NeXTsendps(2, (comPtr) "\r\n");
+	NeXTsendps(2,  (Ptr) "\r\n");
 #endif
       }
 #endif
@@ -152,7 +152,7 @@ P2(PUBLIC pascal trap, void, PrGetPic, Ptr, dp, INTEGER, bc)
 {
     gui_abort();
     if (pageno >= pagewanted && pageno <= lastpagewanted)
-	NeXTPrGetPic((comPtr) dp, bc, (comGrafPtr) thePort);
+	NeXTPrGetPic( dp, bc,  thePort);
 }
 
 P2(PUBLIC pascal trap, void, donotPrPutPic, Ptr, sp, INTEGER, bc)
@@ -162,7 +162,7 @@ P2(PUBLIC pascal trap, void, donotPrPutPic, Ptr, sp, INTEGER, bc)
 P2(PUBLIC pascal trap, void, PrPutPic, Ptr, sp, INTEGER, bc)
 {
     if (pageno >= pagewanted && pageno <= lastpagewanted)
-	NeXTPrPutPic((comPtr) sp, bc, (comGrafPtr) thePort);
+	NeXTPrPutPic( sp, bc,  thePort);
 }
 
 P2(PUBLIC pascal trap, void, donotPrPoly, GrafVerb, verb, PolyHandle, ph)
@@ -172,7 +172,7 @@ P2(PUBLIC pascal trap, void, donotPrPoly, GrafVerb, verb, PolyHandle, ph)
 P2(PUBLIC pascal trap, void, PrPoly, GrafVerb, verb, PolyHandle, ph)
 {
     if (pageno >= pagewanted && pageno <= lastpagewanted)
-	NeXTPrPoly(verb, (comPolyHandle) ph, (comGrafPtr) thePort);
+	NeXTPrPoly(verb,  ph,  thePort);
 }
 
 P4(PUBLIC pascal trap, void, donotPrRRect, GrafVerb, verb, Rect *, r,
@@ -184,7 +184,7 @@ P4(PUBLIC pascal trap, void, PrRRect, GrafVerb, verb, Rect *, r,
 					       INTEGER, width, INTEGER, height)
 {
     if (pageno >= pagewanted && pageno <= lastpagewanted)
-	NeXTPrRRect(verb, (comRect *) r, width, height, (comGrafPtr) thePort);
+	NeXTPrRRect(verb, r, width, height,  thePort);
 }
 
 P2(PUBLIC pascal trap, void, donotPrRect, GrafVerb, v, Rect *, rp)
@@ -194,7 +194,7 @@ P2(PUBLIC pascal trap, void, donotPrRect, GrafVerb, v, Rect *, rp)
 P2(PUBLIC pascal trap, void, PrRect, GrafVerb, v, Rect *, rp)
 {
     if (pageno >= pagewanted && pageno <= lastpagewanted)
-	NeXTPrRect(v, (comRect *) rp, (comGrafPtr) thePort);
+	NeXTPrRect(v, rp,  thePort);
 }
 
 P2(PUBLIC pascal trap, void, donotPrRgn, GrafVerb, verb, RgnHandle, rgn)
@@ -204,15 +204,15 @@ P2(PUBLIC pascal trap, void, donotPrRgn, GrafVerb, verb, RgnHandle, rgn)
 P2(PUBLIC pascal trap, void, PrRgn, GrafVerb, verb, RgnHandle, rgn)
 {
     if (pageno >= pagewanted && pageno <= lastpagewanted)
-	NeXTPrRgn(verb, (comRgnHandle) rgn, (comGrafPtr) thePort);
+	NeXTPrRgn(verb,  rgn,  thePort);
 }
 
 P5(PUBLIC pascal trap, INTEGER, PrTxMeas, INTEGER, n, Ptr, p,
-			      Point *, nump, Point *, denp, FontInfo *, finfop)
+			      GUEST<Point> *, nump, GUEST<Point> *, denp, FontInfo *, finfop)
 {
     StdTxMeas(n, p, nump, denp, finfop);
-    return NeXTPrTxMeas(n, (comPtr) p, (comPoint *)nump, (comPoint *)denp,
-				  (comFontInfo *)finfop, (comGrafPtr) thePort);
+    return NeXTPrTxMeas(n,  p, nump, denp,
+				  finfop,  thePort);
 }
 
 P4(PUBLIC pascal trap, void, donotPrText, INTEGER, n, Ptr, textbufp,
@@ -225,13 +225,7 @@ P4(PUBLIC pascal trap, void, PrText, INTEGER, n, Ptr, textbufp,
 {
     if (pageno >= pagewanted && pageno <= lastpagewanted)
       {
-	comPoint numc, denc;
-
-	numc.h = num.h;
-	numc.v = num.v;
-	denc.h = den.h;
-	denc.v = den.v;
-	NeXTPrText(n, (comPtr) textbufp, numc, denc, (comGrafPtr) thePort);
+	NeXTPrText(n,  textbufp, num, den,  thePort);
       }
 }
 
@@ -312,7 +306,7 @@ P3(PUBLIC pascal trap, void, PrComment, INTEGER, kind, INTEGER, size,
 		    if (pageno >= pagewanted && pageno <= lastpagewanted && ROMlib_passpostscript) {
 			state = HGetState(hand);
 			HLock(hand);
-			NeXTsendps(size, (comPtr) STARH(hand));
+			NeXTsendps(size,  STARH(hand));
 			HSetState(hand, state);
 		    }
 		    break;

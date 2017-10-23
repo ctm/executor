@@ -331,7 +331,7 @@ A2(PUBLIC trap, void, UprString, StringPtr, s, BOOLEAN, diac)
     ROMlib_UprString(s+1, diac, (INTEGER) (unsigned char) s[0]);
 }
 
-A1(PUBLIC, void, GetDateTime, LONGINT *, mactimepointer)
+A1(PUBLIC, void, GetDateTime, GUEST<ULONGINT> *, mactimepointer)
 {
 #undef Time  /* Why is this here? */
     if (mactimepointer) {
@@ -343,13 +343,13 @@ A1(PUBLIC, void, GetDateTime, LONGINT *, mactimepointer)
     }
 }
 
-A1(PUBLIC trap, OSErrRET, ReadDateTime, LONGINT *, secs)
+A1(PUBLIC trap, OSErrRET, ReadDateTime, GUEST<ULONGINT> *, secs)
 {
     GetDateTime(secs);
     return(noErr);
 }
 
-A1(PUBLIC trap, OSErrRET, SetDateTime, LONGINT, mactime)
+A1(PUBLIC trap, OSErrRET, SetDateTime, ULONGINT, mactime)
 {
 #if !defined(SYSV) && !defined (CYGWIN32)
     struct timeval thetime;
@@ -603,16 +603,16 @@ Executor::date_to_swapped_fields (long long mactime, GUEST<INTEGER> *yearp, GUES
  * NOTE: not callable from the outside world directly
  */
 
-A2(PUBLIC trap, void, Date2Secs, DateTimeRec *, d, LONGINT *, s)
+A2(PUBLIC trap, void, Date2Secs, DateTimeRec *, d, ULONGINT *, s)
 {
     long long l;
 
     l  = ROMlib_long_long_secs (CW (d->year), CW (d->month), CW (d->day),
 				CW (d->hour), CW (d->minute), CW (d->second));
-    *s = (LONGINT)l;
+    *s = (ULONGINT)l;
 }
 
-A2(PUBLIC trap, void, Secs2Date, LONGINT, mactime, DateTimeRec *, d)
+A2(PUBLIC trap, void, Secs2Date, ULONGINT, mactime, DateTimeRec *, d)
 {
   date_to_swapped_fields ((unsigned long) mactime, &d->year, &d->month,
 			  &d->day, &d->hour, &d->minute, &d->second,
@@ -621,7 +621,7 @@ A2(PUBLIC trap, void, Secs2Date, LONGINT, mactime, DateTimeRec *, d)
 
 A1(PUBLIC, void, GetTime, DateTimeRec *, d)
 {
-    LONGINT secs;
+    GUEST<ULONGINT> secs;
 	
     GetDateTime(&secs);
     Secs2Date(CL(secs), d);
@@ -629,7 +629,7 @@ A1(PUBLIC, void, GetTime, DateTimeRec *, d)
 
 A1(PUBLIC, void, SetTime, DateTimeRec *, d)
 {
-    LONGINT secs;
+    ULONGINT secs;
 	
     Date2Secs(d, &secs);
     SetDateTime(secs);
@@ -643,7 +643,8 @@ A0(PRIVATE, void, setdefaults)
 {
     SPValid     = VALID;
     SPAlarm     = SPATalkB = SPATalkA = SPConfig = 0;
-    SPPrint     = SPPortB = SPPortA = CW(baud9600 | stop10 | data8 | noParity);
+    SPPortB = SPPortA = CW(baud9600 | stop10 | data8 | noParity);
+    SPPrint     = 0;
     SPFont      = CW(geneva - 1);
     SPKbd       = 0x63;
     SPVolCtl    = 3;
@@ -727,12 +728,7 @@ A0(PUBLIC trap, OSErrRET, InitUtil)		/* IMII-380 */
 	    SPPrint	= CW(sp.kbdPrint);
 	    SPVolCtl    = CW(sp.volClik)  >> 8;
 	    SPClikCaret = CW(sp.volClik);
-#if !defined (BIGENDIAN)
-	    SPMisc2	= sp.misc;
-#else
-	    SPMisc2	= sp.misc >> 8;
-#warning this is broken
-#endif
+            SPMisc2	= CW(sp.misc);
 	    badread = FALSE;
 	} else
 	    badread = TRUE;
@@ -834,9 +830,9 @@ A2(PUBLIC, LONGINT, NGetTrapAddress, INTEGER, n, INTEGER, ttype) /* IMII-384 */
   LONGINT retval;
 
   retval = (LONGINT) ((ttype == OSTrap) ?
-		      (LONGINT) CL((long) ostraptable[n&(NOSENTRIES-1)])
+		      ostraptable[n&(NOSENTRIES-1)]
 		      :
-		      (LONGINT) CL((long) tooltraptable[n&(NTOOLENTRIES-1)]));
+		      tooltraptable[n&(NTOOLENTRIES-1)]);
   warning_trace_info ("n = 0x%x, ttype = %d, retval = %p", (uint16) n, ttype,
 		      (void *) retval);
   return retval;
@@ -971,7 +967,7 @@ PUBLIC char Executor::ROMlib_phoneyrom[10] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0x06, 0x7C,
 };
 
-A2(PUBLIC trap, void, Environs, INTEGER *, rom, INTEGER *, machine)
+A2(PUBLIC trap, void, Environs, GUEST<INTEGER> *, rom, GUEST<INTEGER> *, machine)
 {
     unsigned char rom8, rom9;
 
@@ -1029,7 +1025,7 @@ A0(PUBLIC, void, RestoreA5)
 
 #define TRUE32b	1
 
-A1(PUBLIC, void, GetMMUMode, INTEGER *, ip)	/* IMV-592 */
+A1(PUBLIC, void, GetMMUMode, GUEST<INTEGER> *, ip)	/* IMV-592 */
 {
     *ip = CWC(TRUE32b);
 }

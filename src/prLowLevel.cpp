@@ -1146,7 +1146,7 @@ P2(PUBLIC pascal trap, BOOLEAN, PrDlgMain, THPrint, hPrint, ProcPtr, initfptr)
  * NOTE: we don't actually call this because Excel sets up some goofy pages
  *	 and then we get way confused.
  */
-    ROMlib_updatenextpagerect((comRect *) &Hx(hPrint, rPaper));
+    ROMlib_updatenextpagerect(&Hx(hPrint, rPaper));
 #endif /* defined(MACOSX_) */
     if ((prrecptr = CALLPRINITPROC(hPrint, initfptr))) {
       if (!SUNPATH_HACK || (((pritemprocp) MR(prrecptr->pItemProc)
@@ -1197,9 +1197,9 @@ P2(PUBLIC pascal trap, BOOLEAN, PrDlgMain, THPrint, hPrint, ProcPtr, initfptr)
 	DisposPtr((Ptr) prrecptr);
     }
 #if defined(MACOSX_)
-    ROMlib_updatemacpagerect((comRect *) &HxX(hPrint, rPaper),
-				    (comRect *) &HxX(hPrint, prInfo.rPage),
-				    (comRect *) &HxX(hPrint, prInfoPT.rPage));
+    ROMlib_updatemacpagerect(&HxX(hPrint, rPaper),
+				    &HxX(hPrint, prInfo.rPage),
+				    &HxX(hPrint, prInfoPT.rPage));
 #endif /* defined(MACOSX_) */
     return retval;
 }

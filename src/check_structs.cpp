@@ -588,16 +588,6 @@ void Executor::check_structs(void)
   check (block_header_t, 12);
   check (pblock_t, 14);
 
-  /* rsys/nextprint.h */
-  check (comRect, 8);
-  check (comPoint, 4);
-  check (comBitMap, 14);
-  check (comPixMap, 50);
-  check (comFontInfo, 8);
-  check (struct comPoly, 14);
-  check (struct comRgn, 10);
-  check (comGrafPort, 108);
-
   /* rsys/partition.h */
   check (partmapentry_t, 256);
   check (oldmapentry_t, 12);

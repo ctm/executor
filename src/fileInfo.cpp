@@ -100,7 +100,7 @@ A3(PUBLIC, OSErr, SetFInfo, StringPtr, filen, INTEGER, vrn,	/* IMIV-114 */
 {
     ParamBlockRec pbr;
     OSErr temp;
-    LONGINT t;
+    GUEST<ULONGINT> t;
 
     pbr.fileParam.ioNamePtr = RM(filen);
     pbr.fileParam.ioVRefNum = CW(vrn);

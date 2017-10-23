@@ -77,9 +77,9 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_FnextX,
 
   /* Determine the classes of both X and Y. */
   ROMlib_Fclassx (x, &x_class_swapped, sel);
-  x_class = CW (x_class_swapped);
+  x_class = CW_RAW (x_class_swapped);
   ROMlib_Fclassx (y, &y_class_swapped, sel);
-  y_class = CW (y_class_swapped);
+  y_class = CW_RAW (y_class_swapped);
 
   normalize_x80_p = FALSE;  /* default, avoid gcc warnings. */
 
@@ -102,13 +102,13 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_FnextX,
       byte_size = 4;
       break;
     case FI_OPERAND:
-      xv = CW (*(short *)x);
-      yv = CW (*(short *)y);
+      xv = CW_RAW (*(short *)x);
+      yv = CW_RAW (*(short *)y);
       byte_size = 2;
       break;
     case FL_OPERAND:
-      xv = CL(*(long *)x);
-      yv = CL(*(long *)y);
+      xv = CL_RAW (*(long *)x);
+      yv = CL_RAW (*(long *)y);
       byte_size = 4;
       break;
     case FC_OPERAND:
@@ -191,10 +191,10 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_FnextX,
 	result = f32_to_ieee ((const f32_t *) x);
 	break;
       case FI_OPERAND:
-	result = CW (*(short *)x);
+	result = CW_RAW (*(short *)x);
 	break;
       case FL_OPERAND:
-	result = CL (*(long *)x);
+	result = CL_RAW (*(long *)x);
 	break;
       case FC_OPERAND:
 	result = comp_to_ieee ((const comp_t *) x);

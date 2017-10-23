@@ -202,8 +202,6 @@ public:
     {
         p.raw(x);
     }
-
-    
 };
 
 
@@ -239,6 +237,26 @@ struct GuestWrapper : GuestWrapperBase<TT>
         return w;
     }
 
+    explicit operator bool()
+    {
+        return this->raw() != 0;
+    }
+
+    template<typename T2,
+             typename compatible = decltype( TT() | T2() )>
+             //typename sizematch = typename std::enable_if<sizeof(TT) == sizeof(T2)>::type>
+    GuestWrapper<TT>& operator|=(GuestWrapper<T2> x) {
+        this->raw_or(x.raw());
+        return *this;
+    }    
+
+    template<typename T2,
+             typename compatible = decltype( TT() & T2() )>
+             //typename sizematch = typename std::enable_if<sizeof(TT) == sizeof(T2)>::type>
+    GuestWrapper<TT>& operator&=(GuestWrapper<T2> x) {
+        this->raw_and(x.raw());
+        return *this;
+    }
 
     // Map implicit operations to *raw* access.
     // This should go away, and once we're sure it's gone,
@@ -246,11 +264,6 @@ struct GuestWrapper : GuestWrapperBase<TT>
     GuestWrapper(TT x) { this->raw((typename GuestWrapper<TT>::RawGuestType)x); }
     GuestWrapper<TT>& operator=(TT y) { this->raw((typename GuestWrapper<TT>::RawGuestType)y); return *this; }
     //operator TT() const { return (TT)this->raw(); }
-
-    explicit operator bool()
-    {
-        return this->raw() != 0;
-    }
 };
 
 template<typename TT>

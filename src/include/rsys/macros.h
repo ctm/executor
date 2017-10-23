@@ -67,6 +67,7 @@
 			 ((LONGINT) (unsigned char) str[2] <<  8) | \
 			 ((LONGINT) (unsigned char) str[3] <<  0))
 
+#if 0
 #if !defined(LITTLEENDIAN)
 
 #define TICKX(str)	(TICK(str))
@@ -79,6 +80,9 @@
 			 ((LONGINT) (unsigned char) str[3] << 24))
 
 #endif /* defined(LITTLEENDIAN) */
+#else
+#define TICKX(str) CLC(TICK(str))
+#endif
 
 #if defined (__CHECKER__)
 #include <checker.h>

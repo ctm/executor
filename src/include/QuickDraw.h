@@ -129,8 +129,8 @@ typedef pascal trap void (*rgnProc_t)(GrafVerb verb, RgnHandle rgn);
 typedef pascal trap void (*bitsProc_t)(BitMap *srcb, Rect *srcr, Rect *dstr,
                                      INTEGER mod, RgnHandle mask);
 typedef pascal trap void (*commentProc_t)(INTEGER kind, INTEGER size, Handle data);
-typedef pascal trap INTEGER  (*txMeasProc_t)(INTEGER bc, Ptr texta, Point *numer,
-                                           Point *denom, FontInfo *info);
+typedef pascal trap INTEGER  (*txMeasProc_t)(INTEGER bc, Ptr texta, GUEST<Point> *numer,
+                                           GUEST<Point> *denom, FontInfo *info);
 typedef pascal trap void (*getPicProc_t)(Ptr data, INTEGER bc);
 typedef pascal trap void (*putPicProc_t)(Ptr data, INTEGER bc);
 
@@ -648,9 +648,9 @@ extern pascal trap void C_StdRgn( GrafVerb verb, RgnHandle rgn );
 extern pascal trap void C_StdText( INTEGER n, Ptr textbufp, 
  Point num, Point den ); 
 extern pascal trap INTEGER C_StdTxMeas( INTEGER n, Ptr p, 
- Point *nump, Point *denp, FontInfo *finfop ); 
+        GUEST<Point> *nump, GUEST<Point> *denp, FontInfo *finfop ); 
 extern INTEGER ROMlib_StdTxMeas( LONGINT n, Ptr p, 
- Point *nump, Point *denp, FontInfo *finfop ); 
+        GUEST<Point> *nump, GUEST<Point> *denp, FontInfo *finfop ); 
 extern pascal trap void C_MeasureText( INTEGER n, Ptr text, 
  Ptr chars ); 
 extern pascal trap void C_TextFont( INTEGER f ); 

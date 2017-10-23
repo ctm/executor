@@ -543,10 +543,8 @@ extern pascal trap int32 C_TEGetHeight (LONGINT endLine, LONGINT startLine, TEHa
 extern pascal trap LONGINT P_TEGetHeight( LONGINT endLine, 
  LONGINT startLine, TEHandle teh ); 
 extern pascal trap void C_TEGetStyle( INTEGER offset, 
- TextStyle *theStyle, INTEGER *lineHeight, INTEGER *fontAscent, 
- TEHandle teh ); extern pascal trap void P_TEGetStyle( INTEGER offset, 
- TextStyle *theStyle, INTEGER *lineHeight, INTEGER *fontAscent, 
- TEHandle teh ); 
+ TextStyle *theStyle, GUEST<INTEGER> *lineHeight, GUEST<INTEGER> *fontAscent, 
+ TEHandle teh );
 extern pascal trap void C_TEStylPaste( TEHandle teh ); extern pascal trap void P_TEStylPaste( TEHandle teh); 
 extern pascal trap void C_TESetStyle( INTEGER mode, TextStyle *newStyle, 
  BOOLEAN redraw, TEHandle teh ); extern pascal trap void P_TESetStyle( INTEGER mode, TextStyle *newStyle, 
@@ -554,8 +552,7 @@ extern pascal trap void C_TESetStyle( INTEGER mode, TextStyle *newStyle,
 extern pascal trap void C_TEReplaceStyle( INTEGER mode, 
 TextStyle *oldStyle, TextStyle *newStyle, BOOLEAN redraw, TEHandle teh ); extern pascal trap void P_TEReplaceStyle( INTEGER mode, 
 TextStyle *oldStyle, TextStyle *newStyle, BOOLEAN redraw, TEHandle teh ); 
-extern pascal trap BOOLEAN C_TEContinuousStyle( INTEGER *modep, 
- TextStyle *thestyle, TEHandle teh ); extern pascal trap BOOLEAN P_TEContinuousStyle( INTEGER *modep, 
+extern pascal trap BOOLEAN C_TEContinuousStyle( GUEST<INTEGER> *modep, 
  TextStyle *thestyle, TEHandle teh ); 
 extern pascal trap void C_SetStylScrap( LONGINT start, LONGINT stop, 
  StScrpHandle newstyles, BOOLEAN redraw, TEHandle teh ); extern pascal trap void P_SetStylScrap( LONGINT start, LONGINT stop, 

@@ -61,7 +61,7 @@ raw_bits_for_pattern (const Pattern pattern, PixMap *target,
     templatesInited = true;
     memset(&pattern_pixmap_tmpl, 0, sizeof(PixMap));
     memset(&dst_pixmap_tmpl, 0, sizeof(PixMap));
-    pattern_pixmap_tmpl.rowBytes.raw( PIXMAP_DEFAULT_ROWBYTES_X | CWC (1) );
+    pattern_pixmap_tmpl.rowBytes = PIXMAP_DEFAULT_ROWBYTES_X | CWC (1);
     pattern_pixmap_tmpl.bounds.bottom.set(8);   // ### TODO: in the future, this can be a simple assignment
     pattern_pixmap_tmpl.bounds.right.set(8);
     pattern_pixmap_tmpl.hRes.set(72 << 16);
@@ -101,7 +101,7 @@ raw_bits_for_pattern (const Pattern pattern, PixMap *target,
     dst_pixmap_tmpl.pixelType = CWC (vdriver_rgb_pixel_type);
   
   dst_pixmap_tmpl.pmTable = PIXMAP_TABLE_X (GD_PMAP (MR (TheGDevice)));
-  dst_pixmap_tmpl.baseAddr = (Ptr) RM (bits);
+  dst_pixmap_tmpl.baseAddr = RM ((Ptr)bits);
   
   convert_pixmap (&pattern_pixmap_tmpl, &dst_pixmap_tmpl,
 		  &ROMlib_pattern_bounds, conv_table);
@@ -136,7 +136,7 @@ raw_bits_for_color_pattern (PixPatPtr pixpat, PixMap *target,
        dst.rowBytes = (CW (row_bytes)
 		       | (target->rowBytes & ROWBYTES_FLAG_BITS_X)
 		       | PIXMAP_DEFAULT_ROWBYTES_X);
-       dst.baseAddr = (Ptr) RM (bits);
+       dst.baseAddr = RM ((Ptr)bits);
   
        data = MR (pixpat->patData);
 
@@ -210,15 +210,15 @@ static void
 raw_bits_for_pixpat (PixPat *pixpat, PixMap *target,
 		     uint32 *bits, int *row_bytes, int *height_override)
 {
-  switch (pixpat->patType)
+  switch (CW(pixpat->patType))
     {
-    case CWC (pixpat_old_style_pattern):
+    case pixpat_old_style_pattern:
       raw_bits_for_pattern (pixpat->pat1Data, target, bits, row_bytes);
       break;
-    case CWC (pixpat_color_pattern):
+    case pixpat_color_pattern:
       raw_bits_for_color_pattern (pixpat, target, bits, row_bytes);
       break;
-    case CWC (pixpat_rgb_pattern):
+    case pixpat_rgb_pattern:
       raw_bits_for_rgb_pattern (pixpat, target, bits, row_bytes);
       *height_override = 1;
       break;

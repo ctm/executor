@@ -613,7 +613,7 @@ Executor::ROMlib_call_TEDoText (TEPtr tp, int16 first, int16 last, int16 what)
 {
   register int16 myd0;
 
-  if ((a0trap INTEGERRET (*) (void)) MR (TEDoText) == (void *) P_ROMlib_dotext)
+  if (MR (TEDoText) == (ProcPtr) P_ROMlib_dotext)
     myd0 = C_ROMlib_dotext (tp, first, last, what);
   else
     {
@@ -631,7 +631,7 @@ Executor::ROMlib_call_TEDoText (TEPtr tp, int16 first, int16 last, int16 what)
 	EM_D3 = (LONGINT) first;
 	EM_D4 = (LONGINT) last;
 	EM_D7 = (LONGINT) what;
-	EM_A0 = (LONGINT) (long) CL ((long) TEDoText.raw());
+	EM_A0 = CL_RAW(TEDoText.raw());
 	CALL_EMULATOR (EM_A0);
 	myd0 = EM_D0;
 	EM_D2 = saved2;

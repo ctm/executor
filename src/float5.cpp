@@ -103,7 +103,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fxpwri, INTEGER *, sp,
   DECLAREIN2OUT();
 
   /* FIXME - may lose precision! */
-  ieee_to_x80 (out = pow (in1 = x80_to_ieee (dp), in2 = CW(*(short *)sp)), dp);
+  ieee_to_x80 (out = pow (in1 = x80_to_ieee (dp), in2 = CW_RAW(*(short *)sp)), dp);
   warning_floating_point ("xpwri(%f, %f) == %f",
 			  (double) in1, (double) in2, (double) out);
 }
