@@ -486,7 +486,6 @@ P1(PUBLIC pascal trap, void, CloseResFile, INTEGER, rn)
 	  {
             if (Handle h = MR(rr->rhand))
 	      {
-		h = MR (h);
 		if (*h)
 		  HClrRBit (h);
                 DisposHandle (h);
