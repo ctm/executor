@@ -841,8 +841,9 @@ A4(PRIVATE, VCB *, findvcb, StringPtr, sp, INTEGER, vrn, BOOLEAN *, iswd,
 	if (vrn < 0) {
 	    *vrnp = CW(vrn);
 	    if (ISWDNUM(vrn)) {
-		*iswd = TRUE;
-		vcbptr = WDNUMTOWDP(vrn)->vcbp;
+                *iswd = TRUE;
+#warning autc04 ### This is a guess. The original was missing the MR.
+		vcbptr = MR( WDNUMTOWDP(vrn)->vcbp );
 	    } else
 		vcbptr = ROMlib_vcbbyvrn(vrn);
 	} else {
