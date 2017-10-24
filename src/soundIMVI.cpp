@@ -476,7 +476,7 @@ P1(PUBLIC, pascal trap OSErr, GetSysBeepVolume, GUEST<LONGINT> *, levelp)
   OSErr retval;
 
   warning_sound_log (NULL_STRING);
-  *levelp = half_volume;
+  *levelp = CLC(half_volume);
   retval = noErr;
   return retval;
 }
@@ -495,7 +495,7 @@ P1(PUBLIC, pascal trap OSErr, GetDefaultOutputVolume, GUEST<LONGINT> *,levelp)
   OSErr retval;
 
   warning_sound_log (NULL_STRING);
-  *levelp = half_volume;
+  *levelp = CLC(half_volume);
   retval = noErr;
   return retval;
 }

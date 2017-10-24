@@ -334,8 +334,8 @@ P2(PUBLIC pascal trap, void, PaintBehind, WindowPeek, w, RgnHandle, clobbered)
     rh = NewRgn();
     testrgn = NewRgn();
     CopyRgn(clobbered, rh);
-    PaintWhite = -1;
-    SaveUpdate = -1;
+    PaintWhite = CWC(-1);
+    SaveUpdate = CWC(-1);
     for (wp = w; wp; wp = WINDOW_NEXT_WINDOW (wp))
       {
         if (WINDOW_VISIBLE_X (wp))

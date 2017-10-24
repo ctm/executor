@@ -630,7 +630,7 @@ assemble_pieces (GUEST<AliasHandle> *ahp, alias_head_t *headp, INTEGER n_pieces,
     {
       char *op;
 		
-      headp->length = n_bytes_needed;
+      headp->length = CW(n_bytes_needed);
       op = (char *) STARH (h);
       memcpy (op, headp, sizeof (*headp));
       op += sizeof (*headp);

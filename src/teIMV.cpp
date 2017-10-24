@@ -488,7 +488,7 @@ P2 (PUBLIC pascal trap, TEHandle, TEStylNew, Rect *, dst, Rect *, view)
   
   lh_table = (LHHandle) NewHandle (sizeof (LHElement));
   lh = STARH (lh_table);
-  LH_HEIGHT_X (lh) = font_height;
+  LH_HEIGHT_X (lh) = CW(font_height);
   LH_ASCENT_X (lh) = font_info.ascent;
   
   TE_STYLE_LH_TABLE_X (te_style) = RM (lh_table);

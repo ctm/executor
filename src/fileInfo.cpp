@@ -503,8 +503,8 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 	pb->fileParam.ioFlPyLen     = pb->fileParam.ioFlLgLen;
 	pb->fileParam.ioFlRPyLen    = pb->fileParam.ioFlRLgLen;
 	pb->fileParam.ioFlVersNum = 0;
-	pb->fileParam.ioFlStBlk = -1;	/* NOT SUPPORTED */
-	pb->fileParam.ioFlRStBlk = -1;	/* NOT SUPPORTED */
+	pb->fileParam.ioFlStBlk = CW(-1);	/* NOT SUPPORTED */
+	pb->fileParam.ioFlRStBlk = CW(-1);	/* NOT SUPPORTED */
 	pb->fileParam.ioFlMdDat = CL(UNIXTIMETOMACTIME(
 			       MAX(resourcesbuf.st_mtime, datasbuf.st_mtime)));
 	if (dodirs)

@@ -525,7 +525,7 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
 			       CW(vcbp->vcbNmAlBlks) + CW(vcbp->vcbAlBlSt) + 2;
 		dqp->dq.dQDrvSz  = CW(nblocks);
 		dqp->dq.dQDrvSz2 = CW(nblocks >> 16);
-		dqp->dq.qType = 1;
+		dqp->dq.qType = CWC(1);
 
 		vcbp->vcbDrvNum = pb->volumeParam.ioVRefNum;
 		vcbp->vcbDRefNum = CW(drvtodref(Cx(pb->volumeParam.ioVRefNum)));
@@ -642,12 +642,13 @@ PRIVATE unsigned short getnmfls(HVCB *vcbp, INTEGER workingdirnum)
       err = ROMlib_keyfind(&btparamrec);
     if (err == noErr && btparamrec.success) {
 	thp = (threadrec *) DATAPFROMKEY(btparamrec.foundp);
-	key.ckrParID = Cx(thp->thdParID);
+	key.ckrParID = /*Cx*/(thp->thdParID);
 	str255assign(key.ckrCName, thp->thdCName);
 	key.ckrKeyLen = sizeof(LONGINT) + 2 + key.ckrCName[0];
         err = ROMlib_keyfind(&btparamrec);
         #warning autc04: This does not seem right. Added .raw() here to preserve original executor behavior.
-	if (err == noErr && btparamrec.success)
+        #warning waitwat? "key" is never used again
+        if (err == noErr && btparamrec.success)
 	    retval = ((directoryrec *)DATAPFROMKEY(btparamrec.foundp))->dirVal.raw();
 	else
 	    retval = 0;

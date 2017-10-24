@@ -334,8 +334,8 @@ P4 (PUBLIC pascal trap, OSErr, AERemoveEventHandler,
   
   table = hdlr_table (system_handler_p, event);
   
-  selector.sel0 = event_class;
-  selector.sel1 = event_id;
+  selector.sel0 = CL(event_class);
+  selector.sel1 = CL(event_id);
 
   /* #### fail if `hdlr' is not the currently installed handler? */
   AE_RETURN_ERROR (_AE_hdlr_delete (table, 0, &selector));
@@ -416,8 +416,8 @@ P4 (PUBLIC pascal trap, OSErr, AERemoveCoercionHandler,
   
   table = hdlr_table (system_handler_p, coercion);
   
-  selector.sel0 = from_type;
-  selector.sel1 = to_type;
+  selector.sel0 = CL(from_type);
+  selector.sel1 = CL(to_type);
   
   /* #### fail if `hdlr' is not the currently installed handler? */
   AE_RETURN_ERROR (_AE_hdlr_delete (table, 0, &selector));

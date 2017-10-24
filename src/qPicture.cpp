@@ -422,7 +422,7 @@ P0(PUBLIC pascal trap, void, ClosePicture)
 	SetHandleSize ((Handle) ph, Hx (pch, pichowfar));
 	DisposeRgn(HxP(pch, picclip));
 	DisposHandle((Handle) pch);
-	PORT_PIC_SAVE_X (thePort) = (Handle)RM (NULL);
+	PORT_PIC_SAVE_X (thePort) = nullptr;
 	ShowPen();
     }
 }

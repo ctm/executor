@@ -545,7 +545,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	wdpb.ioWDDirID = fsp->parID;
       }
     /* Do not do this -- Loser does it SFSaveDisk_Update (vRefNum, fName); */
-    wdpb.ioWDProcID = T('X','c','t','r');
+    wdpb.ioWDProcID = TICKX("Xctr");
     wdpb.ioNamePtr = 0;
     PBOpenWD(&wdpb, FALSE);
     ROMlib_exevrefnum = CW(wdpb.ioVRefNum);
@@ -562,7 +562,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 
     err = GetFInfo(ROMlib_exefname, ROMlib_exevrefnum, &finfo);
     
-    process_create (FALSE, finfo.fdType, finfo.fdCreator);
+    process_create (FALSE, CL(finfo.fdType), CL(finfo.fdCreator));
     
     if (ROMlib_exeuname)
       free (ROMlib_exeuname);

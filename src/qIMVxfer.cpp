@@ -577,10 +577,14 @@ Executor::convert_pixmap_with_IMV_mode (const PixMap *src1, const PixMap *src2,
 
 #define RGB_TO_INDIRECT_PIXEL(red, green, blue, pixel)	\
   ((pixel) = ITAB_LOOKUP (red, green, blue))
-#define RGB_TO_DIRECT_PIXEL(bpp, red, green, blue, pixel)	\
+#define RGB_TO_DIRECT_PIXEL(bpp, _red, _green, _blue, pixel)	\
   ((void)							\
    ({								\
-     RGBColor color = { (unsigned short)red, (unsigned short)green, (unsigned short)blue };			\
+     RGBColor color; \
+     color.red.raw(_red); \
+     color.green.raw(_green); \
+     color.blue.raw(_blue); \
+      /* = { (unsigned short)red, (unsigned short)green, (unsigned short)blue };	*/		\
      								\
      (pixel) = ((*rgb_spec->rgbcolor_to_pixel)			\
 		(rgb_spec, &color, FALSE));			\

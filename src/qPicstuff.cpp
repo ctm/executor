@@ -1460,7 +1460,7 @@ A1 (PRIVATE, void, eatPixPat, PixPatHandle, pixpat)
 		
 		HASSIGN_3
 		  (pixpat,
-		   patXMap, (Handle)RM (NULL),
+		   patXMap, nullptr,
 		   patXData, RM (NewHandleClear (sizeof (xdata_t))),
 		   patXValid, CWC (-1));
 	      });

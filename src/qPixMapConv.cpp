@@ -495,7 +495,7 @@ Executor::convert_pixmap (const PixMap *src, PixMap *dst,
 	src_seed_x = CTAB_SEED_X (src_table);
 	
 	dst_rgb_spec = pixmap_rgb_spec (dst);
-	dst_seed_x = dst_rgb_spec->seed_x;
+	dst_seed_x.raw( dst_rgb_spec->seed_x );
 	
 	if (   src_bpp != cached_src_bpp       || dst_bpp != cached_dst_bpp
 	    || src_seed_x != cached_src_seed_x || dst_seed_x != cached_dst_seed_x)
@@ -513,7 +513,7 @@ Executor::convert_pixmap (const PixMap *src, PixMap *dst,
 	static CTabHandle cached_target_table;
 	
 	src_rgb_spec = pixmap_rgb_spec (src);
-	src_seed_x = src_rgb_spec->seed_x;
+	src_seed_x.raw( src_rgb_spec->seed_x );
 	
 	if (dst_bpp == 1 && BITMAP_P (dst))
 	  target_table = ROMlib_bw_ctab;
@@ -526,7 +526,7 @@ Executor::convert_pixmap (const PixMap *src, PixMap *dst,
 	      (SysZone,
 	       {
 		 target_itab = (ITabHandle) NewHandle (sizeof (ITab));
-		 ITAB_SEED_X (target_itab) = -1;
+		 ITAB_SEED_X (target_itab) = CLC(-1);
 	       });
 	  }
 #warning ctm added questionable caching here
@@ -554,8 +554,8 @@ Executor::convert_pixmap (const PixMap *src, PixMap *dst,
 	src_rgb_spec = pixmap_rgb_spec (src);
 	dst_rgb_spec = pixmap_rgb_spec (dst);
 	
-	src_seed_x = src_rgb_spec->seed_x;
-	dst_seed_x = dst_rgb_spec->seed_x;
+	src_seed_x.raw( src_rgb_spec->seed_x );
+	dst_seed_x.raw( dst_rgb_spec->seed_x );
 
 	if (   src_bpp != cached_src_bpp       || dst_bpp != cached_dst_bpp
 	    || src_seed_x != cached_src_seed_x || dst_seed_x != cached_dst_seed_x)

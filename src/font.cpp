@@ -28,8 +28,8 @@ using namespace Executor;
 PRIVATE void
 reset_myfmi (void)
 {
-  ROMlib_myfmi.family = -1;
-  ROMlib_myfmi.size = -1;
+  ROMlib_myfmi.family = CWC(-1);
+  ROMlib_myfmi.size = CWC(-1);
   ROMlib_myfmi.face = -1;
 }
 

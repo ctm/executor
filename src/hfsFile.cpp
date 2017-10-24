@@ -702,7 +702,7 @@ PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
     char save0, save1, save2;
     
     tempbuf = (char *) (((long)tbuf+3)/ 4 * 4);
-    pb->ioResult = noErr;
+    pb->ioResult = CWC(noErr);
     pb->ioActCount = 0;
     totransfer = Cx(pb->ioReqCount);
     

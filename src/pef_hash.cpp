@@ -395,7 +395,7 @@ P4 (PUBLIC pascal trap, OSErr, FindSymbol, ConnectionID, connID,
   else
     {
       int section_index;
-      GUEST<uint32> val;
+      uint32 val;
 
       if (symClass)
 	*symClass = *(SymClass *)&PEFEXS_CLASS_AND_NAME_X (pefs);
@@ -404,17 +404,17 @@ P4 (PUBLIC pascal trap, OSErr, FindSymbol, ConnectionID, connID,
       switch (section_index)
 	{
 	case -2: /* absolute address */
-	  *symAddr = guest_cast<Ptr>(val);
+	  *symAddr = guest_cast<Ptr>(CL(val));
 	  break;
 	case -3: /* re-exported */
 	  warning_unimplemented ("name = '%.*s', val = 0x%x", symName[0],
 				 symName+1, val);
-	  *symAddr = guest_cast<Ptr>(val);
+	  *symAddr = guest_cast<Ptr>(CL(val));
 	  break;
 	default:
 	  {
 	    GUEST<uint32> sect_start = connID->sects[section_index].start;
-	    *symAddr = RM( CL(val) +  MR(guest_cast<Ptr>(sect_start)));
+	    *symAddr = RM( val +  MR(guest_cast<Ptr>(sect_start)));
 	  }
 	  break;
 	}

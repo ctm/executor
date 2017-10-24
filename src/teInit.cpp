@@ -64,7 +64,7 @@ P2 (PUBLIC pascal trap, TEHandle, TENew, Rect *, dst, Rect *, view)
 		     + CW (finfo.descent)
 		     + CW (finfo.leading)),
      fontAscent, finfo.ascent,
-     active, FALSE,
+     active, CWC(false),
      caretState, CWC (caret_invis),
      just, CWC (teFlushDefault),
      crOnly, CWC (1),

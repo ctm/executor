@@ -45,8 +45,8 @@ typedef struct process_info
   struct process_info *next;
   
   uint32 mode;
-  GUEST<uint32> type;
-  GUEST<uint32> signature;
+  uint32 type;
+  uint32 signature;
   uint32 size;
   uint32 launch_ticks;
 
@@ -66,7 +66,7 @@ static ProcessSerialNumber current_process = { CLC(0), CLC (kCurrentProcess) };
 
 void
 Executor::process_create (boolean_t desk_accessory_p,
-		GUEST<uint32> type, GUEST<uint32> signature)
+		uint32 type, uint32 signature)
 {
   size_resource_handle size;
   process_info_t *info;
@@ -183,7 +183,7 @@ P2 (PUBLIC pascal trap, OSErr, GetProcessInformation,
   PROCESS_INFO_SIZE_X (process_info)        = CL (info->size);
 
   /* ### set current zone to applzone? */
-  PROCESS_INFO_FREE_MEM_X (process_info)    = FreeMem ();
+  PROCESS_INFO_FREE_MEM_X (process_info)    = CL( FreeMem () );
   
   PROCESS_INFO_LAUNCHER (process_info)      = no_process;
   

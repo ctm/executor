@@ -642,7 +642,8 @@ typedef enum {Read, Write} ReadWriteType;
 A0(PRIVATE, void, setdefaults)
 {
     SPValid     = VALID;
-    SPAlarm     = SPATalkB = SPATalkA = SPConfig = 0;
+    SPAlarm     = CLC(0);
+    SPATalkB = SPATalkA = SPConfig = 0;
     SPPortB = SPPortA = CW(baud9600 | stop10 | data8 | noParity);
     SPPrint     = 0;
     SPFont      = CW(geneva - 1);
@@ -767,11 +768,7 @@ A0(PUBLIC trap, OSErrRET, WriteParam)		/* IMII-382 */
 	sp.font     = SPFont;
 	sp.kbdPrint = CW((short) (SPKbd    << 8) | (SPPrint     & 0xff));
 	sp.volClik  = CW((short) (SPVolCtl << 8) | (SPClikCaret & 0xff));
-#if !defined (BIGENDIAN)
-	sp.misc     = SPMisc2;
-#else
-	sp.misc     = SPMisc2 << 8;
-#endif
+	sp.misc     = CW(SPMisc2);
 	count = sizeof(sp);
 	if (FSWrite(rn, &count, (Ptr) &sp) == noErr && count == sizeof(sp))
 	    err = noErr;
@@ -818,7 +815,7 @@ A2(PUBLIC trap, OSErrRET, Dequeue, QElemPtr, e, QHdrPtr, h)
     if (*qpp) {
 	*qpp = e->evQElem.qLink;
 	if (MR(h->qTail) == e)
-	    h->qTail = qpp == (GUEST<QElemPtr> *) &h->qHead ? (QElemPtr) 0 : RM((QElemPtr) qpp);
+	    h->qTail = qpp == (GUEST<QElemPtr> *) &h->qHead ? nullptr : RM((QElemPtr) qpp);
 	retval = noErr;
     }
     restore_virtual_ints (block);

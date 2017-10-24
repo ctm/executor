@@ -531,8 +531,8 @@ extern OSErr GetFPos( INTEGER rn, LONGINT *filep );
 extern OSErr SetFPos( INTEGER rn, INTEGER posmode, LONGINT possoff ); 
 extern OSErr GetEOF( INTEGER rn, LONGINT *eof ); 
 extern OSErr SetEOF( INTEGER rn, LONGINT eof ); 
-extern OSErr Allocate( INTEGER rn, LONGINT *count ); 
-extern OSErr AllocContig( INTEGER rn, LONGINT *count ); 
+extern OSErr Allocate( INTEGER rn, GUEST<LONGINT> *count ); 
+extern OSErr AllocContig( INTEGER rn, GUEST<LONGINT> *count ); 
 extern OSErr FSClose( INTEGER rn ); 
 
 

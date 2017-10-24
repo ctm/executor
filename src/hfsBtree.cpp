@@ -1324,7 +1324,7 @@ PRIVATE OSErr deleteroot(cacheentry *oldrootp, cacheentry *block0cachep)
     block0p = (btblock0 *) block0cachep->buf;
     block0p->height = CW(CW(block0p->height) - 1);
     block0p->root =
-		 *(ULONGINT *) DATAPFROMKEY(BTENTRY((btnode *) oldrootp->buf, 0));
+		 *(GUEST<ULONGINT> *) DATAPFROMKEY(BTENTRY((btnode *) oldrootp->buf, 0));
     if (!(block0cachep->flags & CACHEBUSY))
 	warning_unexpected ("not busy");
     block0cachep->flags |= CACHEDIRTY;
@@ -2400,7 +2400,7 @@ PUBLIC OSErr Executor::ROMlib_btcreateemptydir(btparam *btpb, GUEST<LONGINT> *ne
     vcbp = btpb->vcbp;
     memset(&rec, 0, sizeof(rec));
     rec.cdrType = DIRTYPE;
-    rec.dirFlags = STARTFLAGS;
+    rec.dirFlags = CWC(STARTFLAGS);
     *newidp = rec.dirDirID = vcbp->vcbNxtCNID;
     vcbp->vcbNxtCNID = CL(CL(vcbp->vcbNxtCNID) + 1);
     vcbp->vcbFlags.raw_or( CWC(VCBDIRTY) );

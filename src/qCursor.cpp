@@ -438,7 +438,7 @@ P1 (PUBLIC pascal trap, void, SetCCursor,
 	     {
 	       current_ccrsr = (CCrsrHandle) NewHandle (sizeof (CCrsr));
 	       CCRSR_DATA_X (current_ccrsr) = RM (NewHandle (0));
-	       CCRSR_XDATA_X (current_ccrsr) = (Handle)RM (NULL);
+	       CCRSR_XDATA_X (current_ccrsr) = nullptr;
 	       CCRSR_MAP_X (current_ccrsr) = RM (NewPixMap ());
 	     });
 	}

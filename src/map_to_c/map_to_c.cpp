@@ -92,7 +92,7 @@ emit_char (unsigned char x)
   fprintf (o_fp, "%u, ", (unsigned int) x);
 }
 
-static Rect bounds;
+static NativeRect bounds;
 
 /* max possible number of `bits' */
 static image_bits_desc_t bits[5];

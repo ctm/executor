@@ -278,7 +278,7 @@ A2(PUBLIC, OSErr, SetEOF, INTEGER, rn, LONGINT, eof)		/* IMIV-111 */
     return (err);
 }
 
-A2(PUBLIC, OSErr, Allocate, INTEGER, rn, LONGINT *, count)	/* IMIV-112 */
+A2(PUBLIC, OSErr, Allocate, INTEGER, rn, GUEST<LONGINT> *, count)	/* IMIV-112 */
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -286,12 +286,12 @@ A2(PUBLIC, OSErr, Allocate, INTEGER, rn, LONGINT *, count)	/* IMIV-112 */
     pbr.ioParam.ioRefNum = Cx(rn);
     pbr.ioParam.ioReqCount = *count;
     temp = PBAllocate(&pbr, 0);
-    *count = CL(pbr.ioParam.ioActCount);
+    *count = pbr.ioParam.ioActCount;
     fs_err_hook (temp);
     return(temp);
 }
 
-A2(PUBLIC, OSErr, AllocContig, INTEGER, rn, LONGINT *, count)
+A2(PUBLIC, OSErr, AllocContig, INTEGER, rn, GUEST<LONGINT> *, count)
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -299,7 +299,7 @@ A2(PUBLIC, OSErr, AllocContig, INTEGER, rn, LONGINT *, count)
     pbr.ioParam.ioRefNum = Cx(rn);
     pbr.ioParam.ioReqCount = *count;
     temp = PBAllocContig(&pbr, 0);
-    *count = CL(pbr.ioParam.ioActCount);
+    *count = pbr.ioParam.ioActCount;
     fs_err_hook (temp);
     return(temp);
 }
@@ -1435,7 +1435,7 @@ pbsetfpos (ParmBlkPtr pb, boolean_t can_go_past_eof)
 	forkoffset = FORKOFFSET(fp);
 	err = pbfpos(pb, &toseek, can_go_past_eof);
 	fd = fp->fcfd;
-	pb->ioParam.ioPosOffset = BigEndianValue((int)(lseek(fd, toseek, SEEK_SET) - forkoffset));
+	pb->ioParam.ioPosOffset = CL((int)(lseek(fd, toseek, SEEK_SET) - forkoffset));
   }
   fs_err_hook (err);
   return err;
@@ -1518,8 +1518,8 @@ A2(PUBLIC, OSErr, ufsPBRead, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
 		pb->ioParam.ioActCount = 0;
 		err = ioErr;
 	    } else {
-		pb->ioParam.ioActCount = BigEndianValue(nread);
-		pb->ioParam.ioPosOffset = BigEndianValue((int)(lseek(fd, 0L, L_INCR) -
+		pb->ioParam.ioActCount = CL(nread);
+		pb->ioParam.ioPosOffset = CL((int)(lseek(fd, 0L, L_INCR) -
 								   forkoffset));
 		if (rc != Cx(pb->ioParam.ioReqCount))
 		    err = eofErr;
@@ -1577,8 +1577,8 @@ A2(PUBLIC, OSErr, ufsPBWrite, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
 		    err = ioErr;
 		} else {
 		    err = noErr;
-		    pb->ioParam.ioActCount = BigEndianValue(nwrite);
-		    pb->ioParam.ioPosOffset = BigEndianValue((int)(lseek(fd, 0L, L_INCR) -
+		    pb->ioParam.ioActCount = CL(nwrite);
+		    pb->ioParam.ioPosOffset = CL((int)(lseek(fd, 0L, L_INCR) -
 								   forkoffset));
 		    if (Cx(pb->ioParam.ioPosOffset) > Cx(fp->fcleof)) {
 			fp->fcleof = pb->ioParam.ioPosOffset;
@@ -1607,10 +1607,10 @@ A2(PUBLIC, OSErr, ufsPBGetFPos, ParmBlkPtr, pb,		/* INTERNAL */
     fp = PRNTOFPERR(Cx(pb->ioParam.ioRefNum), &err);
     if (err == noErr) {
 	forkoffset = FORKOFFSET(fp);
-	pb->ioParam.ioPosOffset = BigEndianValue((int)(lseek(fp->fcfd, 0L, L_INCR) -
+	pb->ioParam.ioPosOffset = CL((int)(lseek(fp->fcfd, 0L, L_INCR) -
 								   forkoffset));
-	pb->ioParam.ioReqCount = pb->ioParam.ioActCount = 0;
-        pb->ioParam.ioPosMode = 0;
+	pb->ioParam.ioReqCount = pb->ioParam.ioActCount = CL(0);
+        pb->ioParam.ioPosMode = CW(0);
     }
     fs_err_hook (err);
     return err;

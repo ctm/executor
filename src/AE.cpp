@@ -175,7 +175,7 @@ P7 (PUBLIC pascal trap, OSErr, AESend,
   ProcessSerialNumber *current_psn = (ProcessSerialNumber *)alloca (sizeof *current_psn);
   
   AEEventID event_id;
-  AEEventClass event_class;
+  GUEST<AEEventClass> event_class;
   
   OSErr err;
   

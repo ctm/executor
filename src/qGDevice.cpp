@@ -142,8 +142,8 @@ P2 (PUBLIC pascal trap, GDHandle, NewGDevice,
        GD_ITABLE_X (this2) = guest_cast<ITabHandle>(h);
        GD_RES_PREF_X (this2) = CWC (DEFAULT_ITABLE_RESOLUTION);
   
-       GD_SEARCH_PROC_X (this2) = (SProcHndl)RM (NULL);
-       GD_COMP_PROC_X (this2) = (CProcHndl)RM (NULL);
+       GD_SEARCH_PROC_X (this2) = nullptr;
+       GD_COMP_PROC_X (this2) = nullptr;
 
        GD_FLAGS_X (this2) = CWC (0);
        /* mode_from_bpp (1)  indicates b/w hardware */
@@ -158,7 +158,7 @@ P2 (PUBLIC pascal trap, GDHandle, NewGDevice,
        GD_REF_NUM_X (this2) = CW (ref_num);  /* ??? */
        GD_MODE_X (this2) = CL (mode);  /* ??? */
 
-       GD_NEXT_GD_X (this2) = (GDHandle)RM (NULL);
+       GD_NEXT_GD_X (this2) = nullptr;
 
        GD_RECT (this2).top = CWC (0);
        GD_RECT (this2).left = CWC (0);
@@ -168,8 +168,8 @@ P2 (PUBLIC pascal trap, GDHandle, NewGDevice,
        /* handle to cursor's expanded data/mask? */
        GD_CCBYTES_X (this2) = CWC (0);
        GD_CCDEPTH_X (this2) = CWC (0);
-       GD_CCXDATA_X (this2) = (Handle)RM (NULL);
-       GD_CCXMASK_X (this2) = (Handle)RM (NULL);
+       GD_CCXDATA_X (this2) = nullptr;
+       GD_CCXMASK_X (this2) = nullptr;
 
        GD_RESERVED_X (this2) = CLC (0);
   
@@ -195,7 +195,7 @@ Executor::gd_set_bpp (GDHandle gd, boolean_t color_p, boolean_t fixed_p, int bpp
     GD_FLAGS_X (gd).raw_and(CWC (~(1 << gdDevType)));
   
   GD_TYPE_X (gd) = (bpp > 8
- 		    ? directType
+ 		    ? CWC(directType)
  		    : (fixed_p ? CWC (fixedType) : CWC (clutType)));
   
   gd_pixmap = GD_PMAP (gd);

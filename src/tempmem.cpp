@@ -50,7 +50,7 @@ P1 (PUBLIC pascal trap, Size, TempMaxMem,
        applmax = MaxMem (&grow);
      });
   if(grow_s)
-    *grow_s = grow;
+    *grow_s = CL(grow);
   sysfree = FreeMemSys ();
   retval = MAX (applmax, sysfree);
   return retval;

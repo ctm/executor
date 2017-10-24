@@ -218,8 +218,8 @@ P7 (PUBLIC pascal trap, void, NMeasureJust, Ptr, text, int32, length,
   
   numerx.v = CW (numer.v);
   numerx.h = CW (numer.h);
-  denomx.v = CW (denomx.v);
-  denomx.h = CW (denomx.h);
+  denomx.v = CW (denom.v);
+  denomx.h = CW (denom.h);
   
   xStdTxMeas (length, (uint8 *) text, &numerx, &denomx,
 	      NULL, (GUEST<int16> *) charLocs);
@@ -896,7 +896,7 @@ P9(PUBLIC pascal trap, INTEGER, PixelToChar,
     {
       retval = textLen;
       *leadingEdgep = FALSE;
-      *widthRemainingp = pixelWidth - (CW(locs[textLen]) << 16);
+      *widthRemainingp = CL( pixelWidth - (CW(locs[textLen]) << 16) );
     }
   else
     {

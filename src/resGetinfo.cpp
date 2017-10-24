@@ -70,7 +70,7 @@ P4(PUBLIC pascal trap, void, GetResInfo, Handle, res, GUEST<INTEGER> *, id,
 	if (id)
 	  *id = CWC(-1);
 	if (typ)
-	  *typ = (ResType) 0;
+	  *typ = CLC( (ResType) 0 );
 	if (name)
 	    name[0] = 0;
 /*-->*/ return;

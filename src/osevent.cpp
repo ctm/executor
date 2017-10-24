@@ -365,7 +365,7 @@ A3(PUBLIC trap, OSErrRET, PPostEvent, INTEGER, evcode,		/* IMIV-85 */
     qp->evtQModifiers = CW(ROMlib_mods);
     Enqueue((QElemPtr) qp, &EventQueue);
     if (qelp)
-	*qelp = qp;
+	*qelp = RM(qp);
     return noErr;
 }
 

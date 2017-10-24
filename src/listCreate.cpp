@@ -153,14 +153,14 @@ P9(PUBLIC pascal trap, ListHandle,  LNew, Rect *, rview,	/* IMIV-270 */
     lp->clikTime    = 0;
     lp->clikLoc.h   = CWC(-32768);
     lp->clikLoc.v   = CWC(-32768);
-    lp->mouseLoc.h  = -1;
-    lp->mouseLoc.v  = -1;
+    lp->mouseLoc.h  = CWC(-1);
+    lp->mouseLoc.v  = CWC(-1);
     lp->lClikLoop   = 0;
-    lp->lastClick.h = -1;
-    lp->lastClick.v = -1;
+    lp->lastClick.h = CWC(-1);
+    lp->lastClick.v = CWC(-1);
     lp->refCon      = 0;
-    lp->userHandle  = (Handle) 0;
-    lp->maxIndex    = -1;	/* What is this anyway? */
+    lp->userHandle  = nullptr;
+    lp->maxIndex    = CWC(-1);	/* What is this anyway? */
     ip = (INTEGER *) lp->cellArray;
     for (i = 0; i <= noffs; i++)
         *ip++ = 0;

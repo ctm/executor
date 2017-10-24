@@ -529,7 +529,7 @@ A2(PUBLIC, void, ROMlib_seginit, LONGINT, argc, char **, argv)	/* INTERNAL */
 	CurApName[0] = MIN(app.fName[0], sizeof(CurApName)-1);
 	BlockMove((Ptr) app.fName+1, (Ptr) CurApName+1, (Size) CurApName[0]);
     } else {
-	CurApRefNum = -1;
+	CurApRefNum = CWC(-1);
 	CurApName[0] = 0;
     }
     saveZone = TheZone;

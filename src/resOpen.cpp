@@ -57,7 +57,7 @@ Executor::HCreateResFile_helper (INTEGER vrefnum, LONGINT parid, Str255 name,
     buf.bmap.namoff  = CWC(sizeof(resmap) + sizeof(INTEGER));
     buf.bmap.resfatr = CWC(0);   /* No special attributes */
     buf.bmap.typoff  = CWC(sizeof(resmap));
-    buf.negone = -1;        /* zero types (0 - 1) */
+    buf.negone = CWC(-1);        /* zero types (0 - 1) */
     lc = sizeof(buf);
     ROMlib_setreserr(FSWriteAll(f, &lc, (Ptr)&buf));
     if (ResErr != CWC(noErr))

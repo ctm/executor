@@ -193,9 +193,9 @@ P1 (PUBLIC pascal trap, void, RGBBackColor,
   if (ROMlib_evil_illustrator_7_hack)
     {
       color = (RGBColor*)alloca (sizeof (RGBColor));
-      color->red = 65535;
-      color->green = 65535;
-      color->blue = 65535;
+      color->red = CWC(65535);
+      color->green = CWC(65535);
+      color->blue = CWC(65535);
     }
 #endif
 

@@ -127,8 +127,8 @@ P0 (PUBLIC pascal trap, void, InitWindows)
        DisposeRgn(corners);
        CopyRgn (MR (GrayRgn), PORT_CLIP_REGION (MR (wmgr_port)));
        WindowList = NULL;
-       SaveUpdate = -1;
-       PaintWhite = -1;
+       SaveUpdate = CWC(-1);
+       PaintWhite = CWC(-1);
        DeskHook = NULL;
        GhostWindow = NULL;
        PATASSIGN (DragPattern, gray);

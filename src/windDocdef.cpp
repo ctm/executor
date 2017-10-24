@@ -653,9 +653,9 @@ draw_dialog_box (GrafPtr w)
   /* draw the center rectangle */
   if (color_p)
     {
-      middle_color.red   = 0xBBBB;
-      middle_color.green = 0xBBBB;
-      middle_color.blue  = 0xBBBB;
+      middle_color.red   = CWC(0xBBBB);
+      middle_color.green = CWC(0xBBBB);
+      middle_color.blue  = CWC(0xBBBB);
     }
   else
     middle_color = ROMlib_white_rgb_color;

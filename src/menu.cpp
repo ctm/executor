@@ -79,8 +79,8 @@ A1(PRIVATE, void, dirtymenusize, MenuHandle, mh)
 {
   if (mh)
     {
-      HxX(mh, menuWidth) = -1;
-      HxX(mh, menuHeight) = -1;
+      HxX(mh, menuWidth) = CWC(-1);
+      HxX(mh, menuHeight) = CWC(-1);
     }
 }
 
@@ -212,7 +212,7 @@ P2(PUBLIC pascal trap, MenuHandle, NewMenu, INTEGER, mid, StringPtr, str)
     SetResLoad(TRUE);
     temph = RM(GetResource(TICK("MDEF"), textMenuProc));
     HxX(retval, menuProc) = temph;
-    HxX(retval, enableFlags) = -1;
+    HxX(retval, enableFlags) = CLC(-1);
     str255assign(HxX(retval, menuData), str);
     *((char *) STARH(retval) + SIZEOFMINFO + U(str[0])) = 0;
     return(retval);

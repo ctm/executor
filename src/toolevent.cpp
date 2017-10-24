@@ -965,7 +965,7 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
             evt->what = CW(activateEvt);
             evt->message = guest_cast<LONGINT>(CurDeactive);
             if (remflag)
-                CurDeactive = (WindowPtr) 0;
+                CurDeactive = nullptr;
 	    retval = TRUE;
 /*-->*/     goto done;
         }
@@ -977,7 +977,7 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
             evt->message = guest_cast<LONGINT>(CurActivate);
             evt->modifiers.raw_or( CW(activeFlag) );
             if (remflag)
-                CurActivate = (WindowPtr) 0;
+                CurActivate = nullptr;
 	    retval = TRUE;
 /*-->*/     goto done;
         }

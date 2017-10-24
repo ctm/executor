@@ -261,8 +261,8 @@ struct GuestWrapper : GuestWrapperBase<TT>
     // Map implicit operations to *raw* access.
     // This should go away, and once we're sure it's gone,
     // we can wrap it to proper converted access.
-    GuestWrapper(TT x) { this->raw((typename GuestWrapper<TT>::RawGuestType)x); }
-    GuestWrapper<TT>& operator=(TT y) { this->raw((typename GuestWrapper<TT>::RawGuestType)y); return *this; }
+    //GuestWrapper(TT x) { this->raw((typename GuestWrapper<TT>::RawGuestType)x); }
+    //GuestWrapper<TT>& operator=(TT y) { this->raw((typename GuestWrapper<TT>::RawGuestType)y); return *this; }
     //operator TT() const { return (TT)this->raw(); }
 };
 

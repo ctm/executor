@@ -128,7 +128,7 @@ Executor::ROMlib_sizergn (RgnHandle rh, boolean_t special_p) /* INTERNAL */
   Size rs;
 
   ip = RGN_DATA (rh);
-  RGN_BBOX (rh).top = *ip;
+  RGN_BBOX (rh).top.raw( *ip );
   y = INT16_MIN;
   if (special_p)
     {
@@ -214,7 +214,7 @@ P1(PUBLIC pascal trap, void, CloseRgn, RgnHandle, rh)
   
   ROMlib_installhandle (PORT_REGION_SAVE (thePort), (Handle) rh);
   SetHandleSize ((Handle) rh, RGN_SIZE (rh));
-  PORT_REGION_SAVE_X (thePort) = (Handle)RM (NULL);
+  PORT_REGION_SAVE_X (thePort) = nullptr;
   ShowPen ();
 }
 
@@ -1362,7 +1362,7 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
     }
     *op++ = RGN_STOP_X;
     HASSIGN_5 (dest,
-	       rgnBBox.top,    *RGN_DATA (dest),
+	       rgnBBox.top,    *(GUEST<INTEGER>*)RGN_DATA (dest),
 	       rgnBBox.left,   CW (left),
 	       rgnBBox.bottom, CW (bottom),
 	       rgnBBox.right,  CW (right),

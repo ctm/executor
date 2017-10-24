@@ -938,7 +938,7 @@ P_SAVED0D1A0A1_4 (PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
     dp->sgn = CB (0);
 
   /* Default to 0 exp, in case of infinity, etc, just to be consistent. */
-  dp->exp = CWC_RAW (0);
+  dp->exp = CWC (0);
   
   if (n == 0)
     strcpy (c_string, "0");
@@ -1001,7 +1001,7 @@ P_SAVED0D1A0A1_4 (PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
       if (c_string[0] == '\0')
 	strcpy (c_string, "0");
 
-      dp->exp = CW_RAW (exponent);
+      dp->exp = CW (exponent);
     }
   
   /* See if the generated string is too LONGINT. */

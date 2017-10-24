@@ -600,7 +600,7 @@ pm_do_updates_gd_changed (void)
 	  PaintOne ((WindowPeek) t->w, WINDOW_STRUCT_REGION (t->w));
 	}
     }
-  PaintWhite = -1;  
+  PaintWhite = CWC(-1);  
 
   dirty_rect_update_screen ();
   vdriver_set_colors (0, CTAB_SIZE (gd_ctab) + 1, CTAB_TABLE (gd_ctab));

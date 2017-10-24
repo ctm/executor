@@ -65,9 +65,9 @@ rgb_extract_from_unswapped_pixel (const rgb_spec_t *rgb_spec,
    * don't have to bother computing the exact mask to grab the right
    * number of RGB bits.
    */
-  out->red   = table->map[0][(in >> table->low_red_bit  ) & 0xFF];
-  out->green = table->map[1][(in >> table->low_green_bit) & 0xFF];
-  out->blue  = table->map[2][(in >> table->low_blue_bit ) & 0xFF];
+  out->red  .raw( table->map[0][(in >> table->low_red_bit  ) & 0xFF] );
+  out->green.raw( table->map[1][(in >> table->low_green_bit) & 0xFF] );
+  out->blue .raw( table->map[2][(in >> table->low_blue_bit ) & 0xFF] );
 }
 
 
@@ -87,9 +87,9 @@ rgb_extract_from_swapped_16bpp_pixel (const rgb_spec_t *rgb_spec,
    * don't have to bother computing the exact mask to grab the right
    * number of RGB bits.
    */
-  out->red   = table->map[0][(in >> table->low_red_bit  ) & 0xFF];
-  out->green = table->map[1][(in >> table->low_green_bit) & 0xFF];
-  out->blue  = table->map[2][(in >> table->low_blue_bit ) & 0xFF];
+  out->red  .raw( table->map[0][(in >> table->low_red_bit  ) & 0xFF] );
+  out->green.raw( table->map[1][(in >> table->low_green_bit) & 0xFF] );
+  out->blue .raw( table->map[2][(in >> table->low_blue_bit ) & 0xFF] );
 }
 
 
@@ -107,9 +107,9 @@ rgb_extract_from_swapped_32bpp_pixel (const rgb_spec_t *rgb_spec,
    * don't have to bother computing the exact mask to grab the right
    * number of RGB bits.
    */
-  out->red   = table->map[0][(in >> table->low_red_bit  ) & 0xFF];
-  out->green = table->map[1][(in >> table->low_green_bit) & 0xFF];
-  out->blue  = table->map[2][(in >> table->low_blue_bit ) & 0xFF];
+  out->red  .raw( table->map[0][(in >> table->low_red_bit  ) & 0xFF] );
+  out->green.raw( table->map[1][(in >> table->low_green_bit) & 0xFF] );
+  out->blue .raw( table->map[2][(in >> table->low_blue_bit ) & 0xFF] );
 }
 #endif /* defined (LITTLEENDIAN) */
 

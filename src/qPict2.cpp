@@ -320,7 +320,7 @@ P6 (PUBLIC pascal trap, OSErr, GetPixMapInfo,
 	  {
 	    table[i].value     = CW (i);
 	    
-#define TILE(x) (((uint32) (x) * 0x8421UL) >> 4)
+#define TILE(x) CW(((uint32) (x & 0x1F) * 0x8421UL) >> 4)
 	  
 	    table[i].rgb.red   = TILE (t->bank_index >> 10);
 	    table[i].rgb.green = TILE (t->bank_index >> 5);

@@ -106,11 +106,11 @@ A2(PUBLIC, OSErr, ufsPBGetFCBInfo, FCBPBPtr, pb,	/* INTERNAL */
 	pb->ioVRefNum    = MR(fp->fcvptr)->vcbVRefNum;
 	pb->ioRefNum     = CW(rn);
 	pb->ioFCBFlNm    = fp->fdfnum;
-	pb->ioFCBFlags   = (fp->fcflags << 8) | (unsigned char)fp->fcbTypByt;
-	pb->ioFCBStBlk   = 0;
+	pb->ioFCBFlags   = CW( (fp->fcflags << 8) | (unsigned char)fp->fcbTypByt );
+	pb->ioFCBStBlk   = CW(0);
 	pb->ioFCBEOF     = fp->fcleof;
 	pb->ioFCBPLen    = fp->fcleof;
-	pb->ioFCBCrPs    = lseek(fp->fcfd, 0, SEEK_CUR) - FORKOFFSET(fp);
+	pb->ioFCBCrPs    = CL( lseek(fp->fcfd, 0, SEEK_CUR) - FORKOFFSET(fp) );
 	pb->ioFCBVRefNum = MR(fp->fcvptr)->vcbVRefNum;	/* what's this? */
 	pb->ioFCBClpSiz  = MR(fp->fcvptr)->vcbClpSiz;
 	pb->ioFCBParID   = fp->fcparid;
@@ -829,7 +829,7 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
 
     for (i = 0 ; i < NFCB ; i++) {
 	ROMlib_fcblocks[i].fdfnum      = 0;
-	ROMlib_fcblocks[i].fcleof      = i + 1;
+	ROMlib_fcblocks[i].fcleof      = CL(i + 1);
 	ROMlib_fcblocks[i].fcbTypByt   = 0;
 	ROMlib_fcblocks[i].fcbSBlk     = 0;
 	ROMlib_fcblocks[i].fcPLen      = 0;
@@ -843,7 +843,7 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
 	ROMlib_fcblocks[i].zero[2]     = 0;
 	ROMlib_fcblocks[i].fcname[0]   = 0;
     }
-    ROMlib_fcblocks[NFCB-1].fcleof = -1;
+    ROMlib_fcblocks[NFCB-1].fcleof = CLC(-1);
 
 #define NWDENTRIES	40
     wdlen = NWDENTRIES * sizeof(wdentry) + sizeof(INTEGER);
@@ -995,7 +995,7 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
 	    exit(1);
 	}
 	cpb.hFileInfo.ioNamePtr   = RM((StringPtr) SYSMACNAME);
-	cpb.hFileInfo.ioVRefNum   = -1;
+	cpb.hFileInfo.ioVRefNum   = CWC(-1);
 	cpb.hFileInfo.ioDirID     = CL((LONGINT) ST_INO (sbuf));
     } else {
 	sysnamelen = 1+strlen(ROMlib_SystemFolder)+1+strlen(SYSMACNAME+1)+1;

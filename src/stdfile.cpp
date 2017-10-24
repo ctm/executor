@@ -421,7 +421,7 @@ P2 (PUBLIC, pascal void, ROMlib_stdftrack, ControlHandle, sh, INTEGER, part)
   flscroll (CTLFL (sh), from, GetCtlValue (sh));
 }
 
-PRIVATE GUEST<INTEGER> cachedvrn = 32767;
+PRIVATE GUEST<INTEGER> cachedvrn = CWC(32767);
 PRIVATE INTEGER savesel = -1;
 PRIVATE LONGINT oldticks = -1000;
 PRIVATE LONGINT lastkeydowntime = 0;
@@ -430,7 +430,7 @@ PRIVATE char **holdstr;
 
 PUBLIC void Executor::ROMlib_init_stdfile(void)
 {
-    cachedvrn = 32767;
+    cachedvrn = CWC(32767);
     savesel = -1;
     oldticks = -1000;
     lastkeydowntime = 0;
