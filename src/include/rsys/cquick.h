@@ -352,7 +352,7 @@ enum pixpat_pattern_types
 
 #define BITMAP_ROWBYTES_X(bitmap) \
 GUEST<uint16_t>::fromRaw((bitmap)->rowBytes.raw() & ~ROWBYTES_FLAG_BITS_X.raw())
-#define BITMAP_ROWBYTES(bitmap)		((bitmap)->rowBytes.get() & ~ROWBYTES_FLAG_BITS)
+#define BITMAP_ROWBYTES(bitmap)		((uint16_t)(bitmap)->rowBytes.get() & ~ROWBYTES_FLAG_BITS)
 
 #define BITMAP_SET_ROWBYTES_X(bitmap, value) \
 ((bitmap)->rowBytes.raw((((value).raw() & ~ROWBYTES_FLAG_BITS_X.raw()) \
