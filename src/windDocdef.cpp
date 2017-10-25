@@ -36,7 +36,7 @@ PUBLIC BOOLEAN ROMlib_window_zoomed(WindowPeek wp)
     const Rect *portrp, *staterp, *boundsrp;
 
     portrp   = &PORT_RECT (wp);
-    staterp  = &MR (*(WStateData **) WINDOW_DATA (wp))->stdState;
+    staterp  = &MR (*(GUEST<WStateData *>*) WINDOW_DATA (wp))->stdState;
     boundsrp = &PORT_BOUNDS (wp);
 
     retval = (WINDOW_SPARE_FLAG_X (wp)
@@ -1105,7 +1105,7 @@ P4 (PUBLIC pascal, LONGINT, wdef0,
 	  WStateData *wsp;
 	  
 	  WINDOW_DATA_X (w) = RM (NewHandle ((Size) sizeof (WStateData)));
-	  wsp = MR (* (WStateData **) WINDOW_DATA (w));
+	  wsp = MR (* (GUEST<WStateData *>*) WINDOW_DATA (w));
 	  
 	  wsp->stdState = GD_BOUNDS (MR (TheGDevice));
 	  InsetRect (&wsp->stdState, 3, 3);

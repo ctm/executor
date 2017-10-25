@@ -182,7 +182,7 @@ Executor::canonicalize_bogo_map (BitMap *bogo_map, PixMap **canonical_addr,
 	}
       else
 	{
-	  PixMapHandle pixmap_handle = MR (*(PixMapHandle *) bogo_map);
+	  PixMapHandle pixmap_handle = MR (*(GUEST<PixMapHandle> *) bogo_map);
 	  
 	  *canonical_addr = STARH (pixmap_handle);
 	  

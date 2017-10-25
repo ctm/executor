@@ -56,7 +56,7 @@ typedef LONGINT TimeL;
 //                 is this an internal executor-only struct?
 typedef struct _ModifierStub {
     GUEST<struct _ModifierStub*> nextStub;
-    ProcPtr code;
+    GUEST<ProcPtr> code;
     LONGINT userInfo;
     TimeL count;
     TimeL every;

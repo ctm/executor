@@ -2431,7 +2431,7 @@ WeOwnScrapX (void)
 }
 
 int
-Executor::GetScrapX (OSType type, char **h)
+Executor::GetScrapX (OSType type, Handle h)
 {
   int retval;
   
@@ -2450,7 +2450,7 @@ Executor::GetScrapX (OSType type, char **h)
 	  unsigned long nbytesafter;
 	  unsigned char *propreturn;
 	  int i;
-	  char *p;
+	  Ptr p;
 
 	  XConvertSelection (x_dpy, XA_PRIMARY, XA_STRING, None, x_window,
 			     CurrentTime);

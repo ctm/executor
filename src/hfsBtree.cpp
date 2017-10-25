@@ -1643,19 +1643,20 @@ typedef struct {
     ULONGINT logbno;
 } saverec_t;
 
-PRIVATE OSErr savebusybuffers(HVCB *vcbp, saverec_t ***savehandlep)
+PRIVATE OSErr savebusybuffers(HVCB *vcbp, GUEST<saverec_t *>**savehandlep)
 {
     INTEGER count;
     cacheentry *cachep;
     cachehead *headp;
-    saverec_t tempsaverec, **retval;
+    saverec_t tempsaverec;
+    GUEST<saverec_t*> *retval;
     Size cursize;
     OSErr err;
 
     headp = (cachehead *) MR(vcbp->vcbCtlBuf);
     count = CW(headp->nitems);
     
-    retval = (saverec_t **) NewHandle((Size) 0);
+    retval = (GUEST<saverec_t *>*) NewHandle((Size) 0);
     if (retval == 0)
       {
 	err = MemError ();
@@ -1677,7 +1678,7 @@ PRIVATE OSErr savebusybuffers(HVCB *vcbp, saverec_t ***savehandlep)
     return noErr;
 }
 
-PRIVATE OSErr restorebusybuffers(saverec_t **savehandle)
+PRIVATE OSErr restorebusybuffers(GUEST<saverec_t *>*savehandle)
 {
     INTEGER nentries;
     saverec_t *savep;
@@ -1685,7 +1686,7 @@ PRIVATE OSErr restorebusybuffers(saverec_t **savehandle)
     cacheentry *notused;
     
     retval = noErr;
-    nentries = GetHandleSize((Handle) savehandle) / sizeof(**savehandle);
+    nentries = GetHandleSize((Handle) savehandle) / sizeof(saverec_t);
     HLock((Handle) savehandle);
     for (savep = MR(*savehandle); --nentries >= 0; ++savep) {
 	err = ROMlib_getcache(&notused, savep->refnum, savep->logbno, GETCACHESAVE);
@@ -1707,7 +1708,7 @@ PRIVATE OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
     IOParam iop;
     INTEGER refnum, flags;
     filecontrolblock *fcbp;
-    saverec_t **busysave;
+    GUEST<saverec_t *>*busysave;
     
     refnum = CW(block0cachep->refnum);
     block0p = (btblock0 *) block0cachep->buf;

@@ -1256,7 +1256,7 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
 #if 0
 	BlockMove(CL(*(Ptr *) s1), (Ptr) temp, RGN_SMALL_SIZE);
 #else
-	memcpy((Ptr) temp, MR(*(Ptr *) s1), RGN_SMALL_SIZE);
+	memcpy((Ptr) temp, MR(*s1), RGN_SMALL_SIZE);
 #endif
 	op = (INTEGER *) ((char *)temp + RGN_SMALL_SIZE);
 	*op++ = HxX(s1, rgnBBox.top).raw();

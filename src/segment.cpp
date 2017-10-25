@@ -894,7 +894,7 @@ A2(PRIVATE, void, unpatch, Ptr, segstart, Ptr, p)
 
     ip = (GUEST<INTEGER> *) p;
 
-    firstpc = MR(*(Ptr *)(p + 2));
+    firstpc = MR(*(GUEST<Ptr> *)(p + 2));
     ip[1]  = ip[-1];	/* the segment number */
     ip[-1] = CW(firstpc - segstart - 4);
     ip[0]  = CWC(MOVESPINSTR);

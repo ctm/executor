@@ -157,10 +157,10 @@ P3(PUBLIC pascal trap, void, ZoomWindow, WindowPtr, wp,		/* IMIV-50 */
       CopyRgn (WINDOW_STRUCT_REGION (wp), behind);
       if (part == inZoomIn)
 	PORT_RECT (wp) =
-	  MR(*(WStateData **) WINDOW_DATA (wp))->userState;
+	  MR(*(GUEST<WStateData *>*) WINDOW_DATA (wp))->userState;
       else
 	PORT_RECT (wp) =
-	  MR (*(WStateData **) WINDOW_DATA (wp))->stdState;
+	  MR (*(GUEST<WStateData *>*) WINDOW_DATA (wp))->stdState;
       OffsetRect (&PORT_BOUNDS (wp),
 		  -CW(PORT_RECT (wp).left) - CW(PORT_BOUNDS (wp).left),
 		  -CW(PORT_RECT (wp).top)  - CW(PORT_BOUNDS (wp).top));

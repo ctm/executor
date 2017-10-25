@@ -148,14 +148,14 @@ STUB (Launch)
   if (lpbp->launchBlockID == CWC (extendedBlock))
     strp = 0;
   else
-    strp = MR (*(StringPtr *) lpbp);
+    strp = MR (*(GUEST<StringPtr> *) lpbp);
   EM_D0 = NewLaunch (strp, 0, lpbp);
   RTS ();
 }
 
 STUB (Chain)
 {
-  Chain (MR(*(StringPtr *) SYN68K_TO_US(EM_A0)), 0);
+  Chain (MR(*(GUEST<StringPtr> *) SYN68K_TO_US(EM_A0)), 0);
   RTS ();
 }
 

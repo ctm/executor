@@ -689,7 +689,7 @@ P1(PUBLIC pascal trap, void, TEPaste, TEHandle, teh)
 #if defined(X) || defined(MACOSX_) || defined(SDL)
   Size s;
   
-  s = GetScrapX (TICK("TEXT"), (char **) MR (TEScrpHandle));
+  s = GetScrapX (TICK("TEXT"), MR (TEScrpHandle));
   if (s >= 0)
     TEScrpLength = CW (s);
 #endif /* defined(X) */

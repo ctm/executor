@@ -271,7 +271,8 @@ typedef struct table {
         StringPtr name;
         mextp options;
     } entry[1];
-} *tablePtr, **tableHandle;
+} *tablePtr;
+typedef GUEST<tablePtr> *tableHandle;
 
 void cleanup_icon_info (icon_info_t *info);
 int get_icon_info (mextp item_info, icon_info_t *info, int need_icon_p);

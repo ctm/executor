@@ -100,6 +100,8 @@ TT Cx_RAW(TT x);    // no definition. Make sure we get a linker error if an unex
 #define RM(n)  ((typeof (n))(n ? ((swap32 ((unsigned long) (n)- ROMlib_offset)) ) : 0))
 #elif 1
 
+/*
+
 template<typename TT>
 TT* MR(TT* p)
 {
@@ -108,6 +110,7 @@ TT* MR(TT* p)
     else
         return nullptr;
 }
+*/
 
 /*
 template<typename TT>

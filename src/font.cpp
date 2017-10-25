@@ -219,7 +219,7 @@ A1(PRIVATE, BOOLEAN, widthlistmatch, FMInput *, fmip)
     
     GUEST<WHandle> *whp, *ewhp;
 
-    for (whp = (GUEST<WHandle> *) STARH(WIDTHLISTHAND), ewhp = whp + MAXTABLES; whp != ewhp; whp++) {
+    for (whp = STARH(WIDTHLISTHAND), ewhp = whp + MAXTABLES; whp != ewhp; whp++) {
 	if (*whp && (LONGINT) (*whp).raw() != (LONGINT) -1) {
 	    WidthPtr = *(MR(*whp));
 	    if (WIDTHPTR->aFID  == fmip->family &&
@@ -342,7 +342,7 @@ PRIVATE void buildtabdata(howtobuild_t howtobuild, INTEGER extra,
     Fixed misswidth, hOutputInverse, fixed_extra;
     FontRec *fp;
     
-    fp = MR( *(FontRec **)MR(WIDTHPTR->tabFont));
+    fp = MR( *(GUEST<FontRec *>*)MR(WIDTHPTR->tabFont));
     firstchar = Cx(fp->firstChar);
     lastchar  = Cx(fp->lastChar);
 
@@ -413,7 +413,7 @@ A1(PRIVATE, void, buildtable, INTEGER, extra)
 #endif
     if (!FractEnable)
 	howtobuild = FontInt;
-    else if (MR(*(FontRec **)MR(WIDTHPTR->tabFont))->fontType & CWC(WIDTHBIT))
+    else if (MR(*(GUEST<FontRec *>*)MR(WIDTHPTR->tabFont))->fontType & CWC(WIDTHBIT))
       {
 	howtobuild = FontFract;
 	extra = 0;

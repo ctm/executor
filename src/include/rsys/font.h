@@ -25,7 +25,7 @@ typedef FamRec *FPtr;
 
 typedef GUEST<FPtr> *FHandle;
 
-typedef WHandle *WHandlePtr;
+typedef GUEST<WHandle> *WHandlePtr;
 
 typedef GUEST<WHandlePtr> *WHandleHandle;
 

@@ -262,7 +262,7 @@ P3(PUBLIC pascal trap, LONGINT, GetScrap, Handle, h, ResType, rest,
     }
     
 #if defined(X) || defined(MACOSX_) || defined (SDL)
-    s = GetScrapX(rest, (char **) h);
+    s = GetScrapX(rest, h);
     if (s >= 0) {
         *off = 0;	/* ack... could mess people up */
 /*-->*/ RETURN(s);
@@ -304,7 +304,7 @@ P3(PUBLIC pascal trap, LONGINT, GetScrap, Handle, h, ResType, rest,
         FSClose(f);
     } else {
         HLock(MR(ScrapHandle));
-        p = MR(*(unsigned char **)MR(ScrapHandle));
+        p = (unsigned char*) MR(*MR(ScrapHandle));
 #if 1 || !defined(QUADALIGN)
         while (l < Cx(ScrapSize) && rest != CL(*(GUEST<LONGINT> *)p))
 	  {

@@ -130,6 +130,11 @@ typedef union
 dialog_hook_u;
 
 typedef struct {
+    struct flinfostr {
+        INTEGER floffs;
+        INTEGER flicns;
+    };
+            
     sf_flavor_t flavor;
     reply_u flreplyp;
     ControlHandle flsh;
@@ -140,11 +145,8 @@ typedef struct {
     INTEGER flsel;
     Rect flrect;
     Rect flcurdirrect;
-    struct flinfostr {
-	INTEGER floffs;
-	INTEGER flicns;
-    } **flinfo;
-    char **flstrs;
+    GUEST<flinfostr *>*flinfo;
+    GUEST<char *>*flstrs;
     file_filter_u flfilef;
     INTEGER flnumt;
     GUEST<OSType> * fltl;
@@ -426,7 +428,7 @@ PRIVATE INTEGER savesel = -1;
 PRIVATE LONGINT oldticks = -1000;
 PRIVATE LONGINT lastkeydowntime = 0;
 PRIVATE Str255 prefix = { 0 };
-PRIVATE char **holdstr;
+PRIVATE GUEST<char *>*holdstr;
 
 PUBLIC void Executor::ROMlib_init_stdfile(void)
 {
@@ -857,7 +859,7 @@ A1(PRIVATE, void, flfill, fltype *, f)
 
     if (f->flnmfil > 0) {
 	holdstr = f->flstrs;
-		::qsort(MR(*f->flinfo), f->flnmfil, sizeof(**f->flinfo), stdfcmpC);
+		::qsort(MR(*f->flinfo), f->flnmfil, sizeof(fltype::flinfostr), stdfcmpC);
 	if (!(MR(*f->flinfo)[0].flicns&GRAYBIT) && !f->flgraynondirs) {
 	    f->flsel = 0;
 	    settype(f, 0);
@@ -1249,8 +1251,9 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 	GlobalToLocal(&gp);
 	p = gp.get();
 	if (PtInRect(p, &fl->flrect)) {
-	    GetDItem((DialogPtr) dp, getOpen, &i, (GUEST<Handle> *) &h, &r);
-	    h = MR(h);
+            GUEST<Handle> h_s;
+	    GetDItem((DialogPtr) dp, getOpen, &i, &h_s, &r);
+	    h = (ControlHandle)MR(h_s);
 	    flmouse(fl, evt->where.get(), h);
 	    ticks = TickCount();
 	    if (fl->flsel != -1 && savesel == fl->flsel &&
@@ -1273,8 +1276,9 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 	    *ith = CWC(FAKECURDIR);
 	    retval = -1;
 	} else {
-	    GetDItem((DialogPtr) dp, getOpen, &i, (GUEST<Handle> *) &h, &r);
-	    h = MR(h);
+            GUEST<Handle> h_s;
+	    GetDItem((DialogPtr) dp, getOpen, &i, &h_s, &r);
+	    h = (ControlHandle)MR(h_s);
 	    if ((part = TestControl(h, p)) &&
 			     TrackControl(h, p, (ProcPtr) 0)) {
 		prefix[0] = 0;
@@ -1323,8 +1327,8 @@ A3(PRIVATE, void, flinit, fltype *, f, Rect *, r, ControlHandle, sh)
     f->flsel = -1;
     savezone = TheZone;
     TheZone = SysZone;
-    f->flinfo = (fltype::flinfostr **) NewHandle((Size)0);
-    f->flstrs = (char **) NewHandle((Size)0);
+    f->flinfo = (GUEST<fltype::flinfostr *>*) NewHandle((Size)0);
+    f->flstrs = (GUEST<char *>*) NewHandle((Size)0);
     TheZone = savezone;
 }
 

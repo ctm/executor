@@ -215,7 +215,7 @@ typedef Byte Chars[1], *CharsPtr, **CharsHandle;
     if (!TE_STYLIZED_P (te))					\
       retval = NULL;						\
     else							\
-      retval = MR (*(TEStyleHandle *) &TE_TX_FONT_X (te));	\
+      retval = MR (*(GUEST<TEStyleHandle> *) &TE_TX_FONT_X (te));	\
     retval;							\
   })
 
@@ -323,7 +323,7 @@ extern void ROMlib_sledgehammer_te (TEHandle te);
     if (!TEP_STYLIZED_P (tep))					\
       retval = NULL;						\
     else							\
-      retval = MR (*(TEStyleHandle *) &TEP_TX_FONT_X (tep));	\
+      retval = MR (*(GUEST<TEStyleHandle> *) &TEP_TX_FONT_X (tep));	\
     retval;							\
   })
 

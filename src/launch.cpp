@@ -683,7 +683,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     
     h = GetResource(CL(finfo.fdCreator), 0);
     if (h) {
-	namelen = *MR(*(unsigned char **)h);
+	namelen = *MR(*h);
 	namebuf = (char*)alloca(namelen+1);
 	memcpy(namebuf, (char *) STARH(h)+1, namelen);
 	namebuf[namelen] = 0;

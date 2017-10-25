@@ -740,7 +740,7 @@ P5(PUBLIC, pascal void, mdef0, INTEGER, mess, MenuHandle, mh, Rect *, rp,
   GrafPtr saveport;
 
   GetPort(&saveport_swapped);
-  saveport = MR(saveport);
+  saveport = MR(saveport_swapped);
   SetPort (MR (wmgr_port));
   
   current_menu_rect = rp;
