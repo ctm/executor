@@ -430,7 +430,7 @@ Executor::opt_put_int_val (opt_database_t &db, const string &opt, int valint,
   opt_put_val (db, opt, val, pri, temp_val_p);
 }
 
-#define option_value(opt_val) ((opt_val)->t_val == "" ? "" : (opt_val)->val)
+#define option_value(opt_val) ((opt_val)->t_val != "" ? (opt_val)->t_val : (opt_val)->val)
 
 int
 Executor::opt_val (opt_database_t &db, string opt, string *retval)
