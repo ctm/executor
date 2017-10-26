@@ -1290,7 +1290,7 @@ int main(int argc, char** argv)
   {
     CWC ((unsigned short)0x4EF9), CWC(0), CWC(0)		/* Filled in below. */
   };
-  long l;
+  uint32_t l;
   ULONGINT save_trap_vectors[64];
   virtual_int_state_t int_state;
   GUEST<THz> saveSysZone, saveApplZone;
@@ -1816,13 +1816,13 @@ int main(int argc, char** argv)
 
   filltables ();
 
-  l = (long) ostraptable[0x0FC];
+  l = ostraptable[0x0FC];
   ((unsigned char *) jmpl_to_ResourceStub)[2] = l >> 24;
   ((unsigned char *) jmpl_to_ResourceStub)[3] = l >> 16;
   ((unsigned char *) jmpl_to_ResourceStub)[4] = l >> 8;
   ((unsigned char *) jmpl_to_ResourceStub)[5] = l;
-  ostraptable[0xFC]  = (void *) US_TO_SYN68K(jmpl_to_ResourceStub);
-  osstuff[0xFC].orig = (void *) US_TO_SYN68K(jmpl_to_ResourceStub);
+  ostraptable[0xFC]  = US_TO_SYN68K(jmpl_to_ResourceStub);
+  osstuff[0xFC].orig = US_TO_SYN68K(jmpl_to_ResourceStub);
 
   saveSysZone = SysZone;
   saveApplZone = ApplZone;

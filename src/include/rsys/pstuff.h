@@ -2,7 +2,7 @@
 #define _PSTUFF_H_
 
 namespace Executor {
-extern toolstuff_t pstuff[];
+extern pstuff_t pstuff[];
 extern osstuff_t osstuff[];
 
 #define P_ROMlib_mytrack		(pstuff[ 0].orig)

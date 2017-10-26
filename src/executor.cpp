@@ -393,7 +393,7 @@ PUBLIC syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
     unsigned short trapno, status;
     uint32 savea0, savea1, savea2, saved1, saved2;
     unsigned short trapword;
-    void *togoto;	/* FIXME: really a syn68k_addr_t */
+    syn68k_addr_t togoto;
 #if defined (MEMORY_WATCH)
     zone_info_t current_zone_infos[3];
     zone_info_t new_zone_infos[3];

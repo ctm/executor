@@ -13,7 +13,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 
 #define SetCTitle(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
  \
@@ -24,7 +24,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCTitle(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
  \
@@ -35,7 +35,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define HideControl(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0158];\
@@ -45,7 +45,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ShowControl(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0157];\
@@ -55,7 +55,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define HiliteControl(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -66,7 +66,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DrawControls(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0169];\
@@ -76,7 +76,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Draw1Control(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x016d];\
@@ -86,7 +86,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define UpdtControl(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
  \
@@ -97,7 +97,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define NewControl(A1, A2, A3, A4, A5, A6, A7, A8, A9) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    StringPtr __stub_arg_3 = (A3);\
@@ -115,7 +115,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetNewControl(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    WindowPtr __stub_arg_2 = (A2);\
  \
@@ -126,7 +126,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetCtlColor(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    CCTabHandle __stub_arg_2 = (A2);\
  \
@@ -137,7 +137,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DisposeControl(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0155];\
@@ -147,7 +147,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define KillControls(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0156];\
@@ -157,7 +157,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetCRefCon(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
  \
@@ -168,7 +168,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCRefCon(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x015a];\
@@ -178,7 +178,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetCtlAction(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    ProcPtr __stub_arg_2 = (A2);\
  \
@@ -189,7 +189,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCtlAction(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x016a];\
@@ -199,7 +199,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCVariant(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0009];\
@@ -209,7 +209,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetAuxCtl(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    GUEST<AuxCtlHandle> * __stub_arg_2 = (A2);\
  \
@@ -220,7 +220,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FindControl(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point __stub_arg_1 = (A1);\
    WindowPtr __stub_arg_2 = (A2);\
    GUEST<ControlHandle> * __stub_arg_3 = (A3);\
@@ -232,7 +232,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TrackControl(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
    ProcPtr __stub_arg_3 = (A3);\
@@ -244,7 +244,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TestControl(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
  \
@@ -255,7 +255,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetCtlValue(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -266,7 +266,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCtlValue(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0160];\
@@ -276,7 +276,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetCtlMin(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -287,7 +287,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCtlMin(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0161];\
@@ -297,7 +297,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetCtlMax(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -308,7 +308,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCtlMax(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0162];\
@@ -318,7 +318,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MoveControl(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -330,7 +330,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DragControl(A1, A2, A3, A4, A5) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -344,7 +344,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SizeControl(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ControlHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -356,7 +356,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Alert(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    ProcPtr __stub_arg_2 = (A2);\
  \
@@ -367,7 +367,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StopAlert(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    ProcPtr __stub_arg_2 = (A2);\
  \
@@ -378,7 +378,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define NoteAlert(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    ProcPtr __stub_arg_2 = (A2);\
  \
@@ -389,7 +389,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CautionAlert(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    ProcPtr __stub_arg_2 = (A2);\
  \
@@ -400,7 +400,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CouldAlert(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0189];\
@@ -410,7 +410,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FreeAlert(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x018a];\
@@ -420,7 +420,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CouldDialog(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0179];\
@@ -430,7 +430,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FreeDialog(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x017a];\
@@ -440,7 +440,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define NewCDialog(A1, A2, A3, A4, A5, A6, A7, A8, A9) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    StringPtr __stub_arg_3 = (A3);\
@@ -458,7 +458,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define NewDialog(A1, A2, A3, A4, A5, A6, A7, A8, A9) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    StringPtr __stub_arg_3 = (A3);\
@@ -476,7 +476,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetNewDialog(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    Ptr __stub_arg_2 = (A2);\
    WindowPtr __stub_arg_3 = (A3);\
@@ -488,7 +488,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CloseDialog(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    DialogPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0182];\
@@ -498,7 +498,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DisposDialog(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    DialogPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0183];\
@@ -508,7 +508,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ModalDialog(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ProcPtr __stub_arg_1 = (A1);\
    GUEST<INTEGER> * __stub_arg_2 = (A2);\
  \
@@ -519,7 +519,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define IsDialogEvent(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    EventRecord * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x017f];\
@@ -529,7 +529,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DrawDialog(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    DialogPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0181];\
@@ -539,7 +539,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FindDItem(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    DialogPtr __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
  \
@@ -550,7 +550,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define UpdtDialog(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    DialogPtr __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
  \
@@ -561,7 +561,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DialogSelect(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    EventRecord * __stub_arg_1 = (A1);\
    GUEST<DialogPtr> * __stub_arg_2 = (A2);\
    GUEST<INTEGER> * __stub_arg_3 = (A3);\
@@ -573,7 +573,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ErrorSound(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ProcPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x018c];\
@@ -583,7 +583,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InitDialogs(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ProcPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x017b];\
@@ -593,7 +593,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ParamText(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    StringPtr __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
    StringPtr __stub_arg_3 = (A3);\
@@ -606,7 +606,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetDItem(A1, A2, A3, A4, A5) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    DialogPtr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    GUEST<INTEGER> * __stub_arg_3 = (A3);\
@@ -620,7 +620,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetDItem(A1, A2, A3, A4, A5) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    DialogPtr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -634,7 +634,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetIText(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
  \
@@ -645,7 +645,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetIText(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
  \
@@ -656,7 +656,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SelIText(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    DialogPtr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -669,7 +669,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define HideDItem(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    DialogPtr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -680,7 +680,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ShowDItem(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    DialogPtr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -781,7 +781,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_LGetSelect((A1), (A2), (A3))     )
 #define InvalMenuBar() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x001d];\
    ((new_addr == toolstuff[0x001d].orig)\
@@ -790,7 +790,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DrawMenuBar() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0137];\
    ((new_addr == toolstuff[0x0137].orig)\
@@ -799,7 +799,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ClearMenuBar() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0134];\
    ((new_addr == toolstuff[0x0134].orig)\
@@ -808,7 +808,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InitMenus() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0130];\
    ((new_addr == toolstuff[0x0130].orig)\
@@ -817,7 +817,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define NewMenu(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
  \
@@ -828,7 +828,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CalcMenuSize(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0148];\
@@ -838,7 +838,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetMenu(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    int16 __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01bf];\
@@ -848,7 +848,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DisposeMenu(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0132];\
@@ -858,7 +858,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define AppendMenu(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
  \
@@ -869,7 +869,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define AddResMenu(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    ResType __stub_arg_2 = (A2);\
  \
@@ -880,7 +880,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DelMenuItem(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -891,7 +891,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InsertResMenu(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    ResType __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -903,7 +903,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InsMenuItem(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -915,7 +915,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InsertMenu(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -926,7 +926,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DeleteMenu(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    int16 __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0136];\
@@ -936,7 +936,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetNewMBar(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01c0];\
@@ -946,7 +946,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetMenuBar() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x013b];\
    ((new_addr == toolstuff[0x013b].orig)\
@@ -955,7 +955,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetMenuBar(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x013c];\
@@ -965,7 +965,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define HiliteMenu(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0138];\
@@ -975,7 +975,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MenuSelect(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x013d];\
@@ -985,7 +985,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FlashMenuBar(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x014c];\
@@ -995,7 +995,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MenuKey(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CHAR __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x013e];\
@@ -1005,7 +1005,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetItem(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    StringPtr __stub_arg_3 = (A3);\
@@ -1017,7 +1017,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetItem(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    StringPtr __stub_arg_3 = (A3);\
@@ -1029,7 +1029,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DisableItem(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -1040,7 +1040,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define EnableItem(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -1051,7 +1051,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CheckItem(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    BOOLEAN __stub_arg_3 = (A3);\
@@ -1063,7 +1063,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetItemMark(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    CHAR __stub_arg_3 = (A3);\
@@ -1075,7 +1075,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetItemMark(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    GUEST<INTEGER> * __stub_arg_3 = (A3);\
@@ -1087,7 +1087,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetItemIcon(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    Byte __stub_arg_3 = (A3);\
@@ -1099,7 +1099,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetItemIcon(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    GUEST<INTEGER> * __stub_arg_3 = (A3);\
@@ -1111,7 +1111,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetItemStyle(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -1123,7 +1123,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetItemStyle(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    GUEST<INTEGER> * __stub_arg_3 = (A3);\
@@ -1135,7 +1135,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CountMItems(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0150];\
@@ -1145,7 +1145,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetMHandle(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0149];\
@@ -1155,7 +1155,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetMenuFlash(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x014a];\
@@ -1165,7 +1165,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DelMCEntries(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -1176,7 +1176,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetMCInfo() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0261];\
    ((new_addr == toolstuff[0x0261].orig)\
@@ -1185,7 +1185,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetMCInfo(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MCTableHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0262];\
@@ -1195,7 +1195,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DispMCInfo(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MCTableHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0263];\
@@ -1205,7 +1205,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetMCEntry(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -1216,7 +1216,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetMCEntries(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    MCTablePtr __stub_arg_2 = (A2);\
  \
@@ -1227,7 +1227,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InitProcMenu(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0008];\
@@ -1237,7 +1237,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MenuChoice() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0266];\
    ((new_addr == toolstuff[0x0266].orig)\
@@ -1246,7 +1246,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetItemCmd(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    GUEST<CHAR> * __stub_arg_3 = (A3);\
@@ -1258,7 +1258,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetItemCmd(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    CHAR __stub_arg_3 = (A3);\
@@ -1270,7 +1270,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PopUpMenuSelect(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    MenuHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -1329,7 +1329,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_PrJobMerge((A1), (A2))     )
 #define CopyBits(A1, A2, A3, A4, A5, A6) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    BitMap * __stub_arg_1 = (A1);\
    BitMap * __stub_arg_2 = (A2);\
    const Rect * __stub_arg_3 = (A3);\
@@ -1344,7 +1344,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ScrollRect(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -1373,7 +1373,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_SmallFract2Fix((A1))     )
 #define OpenCPort(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CGrafPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0200];\
@@ -1383,7 +1383,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CloseCPort(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CGrafPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0202];\
@@ -1393,7 +1393,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InitCPort(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CGrafPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0201];\
@@ -1403,7 +1403,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetPortPix(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PixMapHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0206];\
@@ -1413,7 +1413,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define RGBForeColor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RGBColor * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0214];\
@@ -1423,7 +1423,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define RGBBackColor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RGBColor * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0215];\
@@ -1433,7 +1433,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetForeColor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RGBColor * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0219];\
@@ -1443,7 +1443,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetBackColor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RGBColor * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x021a];\
@@ -1453,7 +1453,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PenPixPat(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PixPatHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x020a];\
@@ -1463,7 +1463,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define BackPixPat(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PixPatHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x020b];\
@@ -1473,7 +1473,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define OpColor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RGBColor * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0221];\
@@ -1483,7 +1483,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define HiliteColor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RGBColor * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0222];\
@@ -1493,7 +1493,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define NewPixMap() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0203];\
    ((new_addr == toolstuff[0x0203].orig)\
@@ -1502,7 +1502,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DisposPixMap(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PixMapHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0204];\
@@ -1512,7 +1512,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CopyPixMap(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PixMapHandle __stub_arg_1 = (A1);\
    PixMapHandle __stub_arg_2 = (A2);\
  \
@@ -1523,7 +1523,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define NewPixPat() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0207];\
    ((new_addr == toolstuff[0x0207].orig)\
@@ -1532,7 +1532,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetPixPat(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x020c];\
@@ -1542,7 +1542,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DisposPixPat(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PixPatHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0208];\
@@ -1552,7 +1552,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CopyPixPat(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PixPatHandle __stub_arg_1 = (A1);\
    PixPatHandle __stub_arg_2 = (A2);\
  \
@@ -1563,7 +1563,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MakeRGBPat(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PixPatHandle __stub_arg_1 = (A1);\
    RGBColor * __stub_arg_2 = (A2);\
  \
@@ -1574,7 +1574,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FillCRect(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    PixPatHandle __stub_arg_2 = (A2);\
  \
@@ -1585,7 +1585,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FillCRoundRect(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    const Rect * __stub_arg_1 = (A1);\
    short __stub_arg_2 = (A2);\
    short __stub_arg_3 = (A3);\
@@ -1598,7 +1598,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FillCOval(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    const Rect * __stub_arg_1 = (A1);\
    PixPatHandle __stub_arg_2 = (A2);\
  \
@@ -1609,7 +1609,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FillCArc(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    const Rect * __stub_arg_1 = (A1);\
    short __stub_arg_2 = (A2);\
    short __stub_arg_3 = (A3);\
@@ -1622,7 +1622,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FillCPoly(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PolyHandle __stub_arg_1 = (A1);\
    PixPatHandle __stub_arg_2 = (A2);\
  \
@@ -1633,7 +1633,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FillCRgn(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    PixPatHandle __stub_arg_2 = (A2);\
  \
@@ -1644,7 +1644,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ForeColor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0062];\
@@ -1654,7 +1654,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define BackColor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0063];\
@@ -1664,7 +1664,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ColorBit(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0064];\
@@ -1674,7 +1674,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCTable(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0218];\
@@ -1684,7 +1684,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DisposCTable(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CTabHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0224];\
@@ -1694,7 +1694,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define QDError() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0240];\
    ((new_addr == toolstuff[0x0240].orig)\
@@ -1703,7 +1703,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCTSeed() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0228];\
    ((new_addr == toolstuff[0x0228].orig)\
@@ -1712,7 +1712,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Color2Index(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RGBColor * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0233];\
@@ -1722,7 +1722,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Index2Color(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
    RGBColor * __stub_arg_2 = (A2);\
  \
@@ -1733,7 +1733,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InvertColor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RGBColor * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0235];\
@@ -1743,7 +1743,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define RealColor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RGBColor * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0236];\
@@ -1753,7 +1753,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetSubTable(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CTabHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    CTabHandle __stub_arg_3 = (A3);\
@@ -1767,7 +1767,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_GetGray((A1), (A2), (A3))     )
 #define MakeITable(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CTabHandle __stub_arg_1 = (A1);\
    ITabHandle __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -1779,7 +1779,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ProtectEntry(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    BOOLEAN __stub_arg_2 = (A2);\
  \
@@ -1790,7 +1790,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ReserveEntry(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    BOOLEAN __stub_arg_2 = (A2);\
  \
@@ -1801,7 +1801,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetEntries(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    ColorSpec * __stub_arg_3 = (A3);\
@@ -1813,7 +1813,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define AddSearch(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ProcPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x023a];\
@@ -1823,7 +1823,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define AddComp(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ProcPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x023b];\
@@ -1833,7 +1833,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DelSearch(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ProcPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x024c];\
@@ -1843,7 +1843,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DelComp(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ProcPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x024d];\
@@ -1853,7 +1853,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetClientID(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x023c];\
@@ -1863,7 +1863,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SaveEntries(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CTabHandle __stub_arg_1 = (A1);\
    CTabHandle __stub_arg_2 = (A2);\
    ReqListRec * __stub_arg_3 = (A3);\
@@ -1875,7 +1875,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define RestoreEntries(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CTabHandle __stub_arg_1 = (A1);\
    CTabHandle __stub_arg_2 = (A2);\
    ReqListRec * __stub_arg_3 = (A3);\
@@ -1887,7 +1887,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetCursor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Cursor * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0051];\
@@ -1897,7 +1897,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InitCursor() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0050];\
    ((new_addr == toolstuff[0x0050].orig)\
@@ -1906,7 +1906,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define HideCursor() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0052];\
    ((new_addr == toolstuff[0x0052].orig)\
@@ -1915,7 +1915,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ShowCursor() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0053];\
    ((new_addr == toolstuff[0x0053].orig)\
@@ -1924,7 +1924,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ObscureCursor() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0056];\
    ((new_addr == toolstuff[0x0056].orig)\
@@ -1933,7 +1933,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ShieldCursor(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
  \
@@ -1944,7 +1944,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCCursor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x021b];\
@@ -1954,7 +1954,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetCCursor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CCrsrHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x021c];\
@@ -1964,7 +1964,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DisposCCursor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CCrsrHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0226];\
@@ -1974,7 +1974,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define AllocCursor() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x021d];\
    ((new_addr == toolstuff[0x021d].orig)\
@@ -1983,7 +1983,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InitGraf(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x006e];\
@@ -1993,7 +1993,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetPort(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GrafPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0073];\
@@ -2003,7 +2003,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InitPort(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GrafPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x006d];\
@@ -2013,7 +2013,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define OpenPort(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GrafPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x006f];\
@@ -2023,7 +2023,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ClosePort(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GrafPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x007d];\
@@ -2033,7 +2033,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetPort(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<GrafPtr> * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0074];\
@@ -2043,7 +2043,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GrafDevice(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0072];\
@@ -2053,7 +2053,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetPortBits(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    BitMap * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0075];\
@@ -2063,7 +2063,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PortSize(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -2074,7 +2074,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MovePortTo(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -2085,7 +2085,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetOrigin(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -2096,7 +2096,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetClip(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0079];\
@@ -2106,7 +2106,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetClip(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x007a];\
@@ -2116,7 +2116,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ClipRect(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x007b];\
@@ -2126,7 +2126,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define BackPat(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Byte * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x007c];\
@@ -2136,7 +2136,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SeedFill(A1, A2, A3, A4, A5, A6, A7, A8) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    Ptr __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -2153,7 +2153,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CalcMask(A1, A2, A3, A4, A5, A6) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    Ptr __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -2168,7 +2168,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CopyMask(A1, A2, A3, A4, A5, A6) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    BitMap * __stub_arg_1 = (A1);\
    BitMap * __stub_arg_2 = (A2);\
    BitMap * __stub_arg_3 = (A3);\
@@ -2183,7 +2183,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define IMVI_CopyDeepMask(A1, A2, A3, A4, A5, A6, A7, A8) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    BitMap * __stub_arg_1 = (A1);\
    BitMap * __stub_arg_2 = (A2);\
    BitMap * __stub_arg_3 = (A3);\
@@ -2200,7 +2200,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CharExtra(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fixed __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0223];\
@@ -2210,7 +2210,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetStdCProcs(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CQDProcs * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x024e];\
@@ -2220,7 +2220,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCPixel(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    RGBColor * __stub_arg_3 = (A3);\
@@ -2232,7 +2232,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetCPixel(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    RGBColor * __stub_arg_3 = (A3);\
@@ -2244,7 +2244,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SeedCFill(A1, A2, A3, A4, A5, A6, A7, A8) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    BitMap * __stub_arg_1 = (A1);\
    BitMap * __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -2261,7 +2261,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CalcCMask(A1, A2, A3, A4, A5, A6, A7) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    BitMap * __stub_arg_1 = (A1);\
    BitMap * __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -2277,7 +2277,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Random() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0061];\
    ((new_addr == toolstuff[0x0061].orig)\
@@ -2286,7 +2286,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetPixel(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -2297,7 +2297,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StuffHex(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
  \
@@ -2308,7 +2308,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ScalePt(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<Point> * __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -2320,7 +2320,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MapPt(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<Point> * __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -2332,7 +2332,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MapRect(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -2344,7 +2344,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MapRgn(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -2356,7 +2356,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MapPoly(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PolyHandle __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -2370,7 +2370,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_PMgrVersion()     )
 #define ActivatePalette(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0294];\
@@ -2382,7 +2382,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_RestoreClutDevice((A1))     )
 #define InitPalettes() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0290];\
    ((new_addr == toolstuff[0x0290].orig)\
@@ -2391,7 +2391,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define NewPalette(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    CTabHandle __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -2404,7 +2404,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetNewPalette(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0292];\
@@ -2414,7 +2414,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DisposePalette(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PaletteHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0293];\
@@ -2426,7 +2426,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_ResizePalette((A1), (A2))     )
 #define NSetPalette(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    PaletteHandle __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -2442,7 +2442,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_GetPaletteUpdates((A1))     )
 #define GetPalette(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0296];\
@@ -2452,7 +2452,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PmForeColor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0297];\
@@ -2462,7 +2462,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PmBackColor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0298];\
@@ -2480,7 +2480,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_RestoreBack((A1))     )
 #define AnimateEntry(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    RGBColor * __stub_arg_3 = (A3);\
@@ -2492,7 +2492,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define AnimatePalette(A1, A2, A3, A4, A5) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    CTabHandle __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -2506,7 +2506,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetEntryColor(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PaletteHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    RGBColor * __stub_arg_3 = (A3);\
@@ -2518,7 +2518,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetEntryColor(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PaletteHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    RGBColor * __stub_arg_3 = (A3);\
@@ -2530,7 +2530,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetEntryUsage(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PaletteHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    GUEST<INTEGER> * __stub_arg_3 = (A3);\
@@ -2543,7 +2543,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetEntryUsage(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PaletteHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -2556,7 +2556,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CTab2Palette(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CTabHandle __stub_arg_1 = (A1);\
    PaletteHandle __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -2569,7 +2569,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Palette2CTab(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PaletteHandle __stub_arg_1 = (A1);\
    CTabHandle __stub_arg_2 = (A2);\
  \
@@ -2582,7 +2582,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_Entry2Index((A1))     )
 #define CopyPalette(A1, A2, A3, A4, A5) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PaletteHandle __stub_arg_1 = (A1);\
    PaletteHandle __stub_arg_2 = (A2);\
    int16 __stub_arg_3 = (A3);\
@@ -2596,7 +2596,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define HidePen() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0096];\
    ((new_addr == toolstuff[0x0096].orig)\
@@ -2605,7 +2605,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ShowPen() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0097];\
    ((new_addr == toolstuff[0x0097].orig)\
@@ -2614,7 +2614,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetPen(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x009a];\
@@ -2624,7 +2624,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetPenState(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PenState * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0098];\
@@ -2634,7 +2634,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetPenState(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PenState * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0099];\
@@ -2644,7 +2644,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PenSize(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -2655,7 +2655,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PenMode(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x009c];\
@@ -2665,7 +2665,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PenPat(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Byte * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x009d];\
@@ -2675,7 +2675,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PenNormal() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x009e];\
    ((new_addr == toolstuff[0x009e].orig)\
@@ -2684,7 +2684,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MoveTo(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -2695,7 +2695,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Move(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -2706,7 +2706,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define LineTo(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -2717,7 +2717,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Line(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -2728,7 +2728,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DrawPicture(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PicHandle __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
  \
@@ -2739,7 +2739,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define OpenPicture(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00f3];\
@@ -2749,7 +2749,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ClosePicture() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x00f4];\
    ((new_addr == toolstuff[0x00f4].orig)\
@@ -2758,7 +2758,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PicComment(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    Handle __stub_arg_3 = (A3);\
@@ -2770,7 +2770,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define KillPicture(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PicHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00f5];\
@@ -2780,7 +2780,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define AddPt(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point __stub_arg_1 = (A1);\
    GUEST<Point> * __stub_arg_2 = (A2);\
  \
@@ -2791,7 +2791,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SubPt(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point __stub_arg_1 = (A1);\
    GUEST<Point> * __stub_arg_2 = (A2);\
  \
@@ -2802,7 +2802,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetPt(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<Point> * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -2814,7 +2814,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define EqualPt(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
  \
@@ -2825,7 +2825,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define LocalToGlobal(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<Point> * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0070];\
@@ -2835,7 +2835,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GlobalToLocal(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<Point> * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0071];\
@@ -2845,7 +2845,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define OpenPoly() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x00cb];\
    ((new_addr == toolstuff[0x00cb].orig)\
@@ -2854,7 +2854,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ClosePoly() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x00cc];\
    ((new_addr == toolstuff[0x00cc].orig)\
@@ -2863,7 +2863,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define KillPoly(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PolyHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00cd];\
@@ -2873,7 +2873,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define OffsetPoly(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PolyHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -2885,7 +2885,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetRect(A1, A2, A3, A4, A5) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -2899,7 +2899,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define OffsetRect(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -2911,7 +2911,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InsetRect(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -2923,7 +2923,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SectRect(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    const Rect * __stub_arg_1 = (A1);\
    const Rect * __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -2935,7 +2935,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define EmptyRect(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00ae];\
@@ -2945,7 +2945,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define UnionRect(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -2957,7 +2957,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PtInRect(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
  \
@@ -2968,7 +2968,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Pt2Rect(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -2980,7 +2980,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PtToAngle(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
    GUEST<INTEGER> * __stub_arg_3 = (A3);\
@@ -2992,7 +2992,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define EqualRect(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    const Rect * __stub_arg_1 = (A1);\
    const Rect * __stub_arg_2 = (A2);\
  \
@@ -3003,7 +3003,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define NewRgn() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x00d8];\
    ((new_addr == toolstuff[0x00d8].orig)\
@@ -3012,7 +3012,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define OpenRgn() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x00da];\
    ((new_addr == toolstuff[0x00da].orig)\
@@ -3021,7 +3021,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CopyRgn(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
  \
@@ -3032,7 +3032,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CloseRgn(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00db];\
@@ -3042,7 +3042,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DisposeRgn(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00d9];\
@@ -3052,7 +3052,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetEmptyRgn(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00dd];\
@@ -3062,7 +3062,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetRectRgn(A1, A2, A3, A4, A5) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3076,7 +3076,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define RectRgn(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
  \
@@ -3087,7 +3087,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define OffsetRgn(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3099,7 +3099,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PtInRgn(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
  \
@@ -3110,7 +3110,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InsetRgn(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3122,7 +3122,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SectRgn(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
    RgnHandle __stub_arg_3 = (A3);\
@@ -3134,7 +3134,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define UnionRgn(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
    RgnHandle __stub_arg_3 = (A3);\
@@ -3146,7 +3146,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DiffRgn(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
    RgnHandle __stub_arg_3 = (A3);\
@@ -3158,7 +3158,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define XorRgn(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
    RgnHandle __stub_arg_3 = (A3);\
@@ -3170,7 +3170,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define RectInRgn(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
  \
@@ -3181,7 +3181,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define EqualRgn(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
  \
@@ -3192,7 +3192,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define EmptyRgn(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00e2];\
@@ -3202,7 +3202,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FrameRect(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00a1];\
@@ -3212,7 +3212,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PaintRect(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00a2];\
@@ -3222,7 +3222,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define EraseRect(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00a3];\
@@ -3232,7 +3232,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InvertRect(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00a4];\
@@ -3242,7 +3242,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FillRect(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    Byte * __stub_arg_2 = (A2);\
  \
@@ -3253,7 +3253,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FrameOval(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00b7];\
@@ -3263,7 +3263,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PaintOval(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00b8];\
@@ -3273,7 +3273,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define EraseOval(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00b9];\
@@ -3283,7 +3283,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InvertOval(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00ba];\
@@ -3293,7 +3293,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FillOval(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    Byte * __stub_arg_2 = (A2);\
  \
@@ -3304,7 +3304,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FrameRoundRect(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3316,7 +3316,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PaintRoundRect(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3328,7 +3328,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define EraseRoundRect(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3340,7 +3340,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InvertRoundRect(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3352,7 +3352,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FillRoundRect(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3365,7 +3365,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FrameArc(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3377,7 +3377,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PaintArc(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3389,7 +3389,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define EraseArc(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3401,7 +3401,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InvertArc(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3413,7 +3413,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FillArc(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3426,7 +3426,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FrameRgn(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00d2];\
@@ -3436,7 +3436,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PaintRgn(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00d3];\
@@ -3446,7 +3446,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define EraseRgn(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00d4];\
@@ -3456,7 +3456,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InvertRgn(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00d5];\
@@ -3466,7 +3466,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FillRgn(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    Byte * __stub_arg_2 = (A2);\
  \
@@ -3477,7 +3477,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FramePoly(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PolyHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00c6];\
@@ -3487,7 +3487,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PaintPoly(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PolyHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00c7];\
@@ -3497,7 +3497,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ErasePoly(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PolyHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00c8];\
@@ -3507,7 +3507,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InvertPoly(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PolyHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00c9];\
@@ -3517,7 +3517,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FillPoly(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PolyHandle __stub_arg_1 = (A1);\
    Byte * __stub_arg_2 = (A2);\
  \
@@ -3528,7 +3528,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetStdProcs(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    QDProcs * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00ea];\
@@ -3538,7 +3538,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StdArc(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GrafVerb __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3551,7 +3551,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StdBits(A1, A2, A3, A4, A5) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    BitMap * __stub_arg_1 = (A1);\
    const Rect * __stub_arg_2 = (A2);\
    const Rect * __stub_arg_3 = (A3);\
@@ -3565,7 +3565,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StdLine(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0090];\
@@ -3575,7 +3575,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StdOval(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GrafVerb __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
  \
@@ -3586,7 +3586,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StdComment(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    Handle __stub_arg_3 = (A3);\
@@ -3598,7 +3598,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StdGetPic(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -3609,7 +3609,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StdPutPic(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -3620,7 +3620,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StdPoly(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GrafVerb __stub_arg_1 = (A1);\
    PolyHandle __stub_arg_2 = (A2);\
  \
@@ -3631,7 +3631,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StdRRect(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GrafVerb __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3644,7 +3644,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StdRect(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GrafVerb __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
  \
@@ -3655,7 +3655,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StdRgn(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GrafVerb __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
  \
@@ -3666,7 +3666,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StdText(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    Ptr __stub_arg_2 = (A2);\
    Point __stub_arg_3 = (A3);\
@@ -3679,7 +3679,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StdTxMeas(A1, A2, A3, A4, A5) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    Ptr __stub_arg_2 = (A2);\
    GUEST<Point> * __stub_arg_3 = (A3);\
@@ -3693,7 +3693,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MeasureText(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    Ptr __stub_arg_2 = (A2);\
    Ptr __stub_arg_3 = (A3);\
@@ -3705,7 +3705,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TextFont(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0087];\
@@ -3715,7 +3715,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TextFace(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0088];\
@@ -3725,7 +3725,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TextMode(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0089];\
@@ -3735,7 +3735,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TextSize(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x008a];\
@@ -3745,7 +3745,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SpaceExtra(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fixed __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x008e];\
@@ -3755,7 +3755,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DrawChar(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CHAR __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0083];\
@@ -3765,7 +3765,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DrawString(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    StringPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0084];\
@@ -3775,7 +3775,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DrawText(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3787,7 +3787,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CharWidth(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CHAR __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x008d];\
@@ -3797,7 +3797,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StringWidth(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    StringPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x008c];\
@@ -3807,7 +3807,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TextWidth(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -3819,7 +3819,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetFontInfo(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    FontInfo * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x008b];\
@@ -3877,7 +3877,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_QDDone((A1))     )
 #define NewGDevice(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
  \
@@ -3888,7 +3888,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InitGDevice(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
    GDHandle __stub_arg_3 = (A3);\
@@ -3900,7 +3900,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetDeviceAttribute(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GDHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    BOOLEAN __stub_arg_3 = (A3);\
@@ -3912,7 +3912,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetGDevice(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GDHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0231];\
@@ -3922,7 +3922,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DisposGDevice(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GDHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0230];\
@@ -3932,7 +3932,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetGDevice() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0232];\
    ((new_addr == toolstuff[0x0232].orig)\
@@ -3941,7 +3941,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetDeviceList() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0229];\
    ((new_addr == toolstuff[0x0229].orig)\
@@ -3950,7 +3950,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetMainDevice() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x022a];\
    ((new_addr == toolstuff[0x022a].orig)\
@@ -3959,7 +3959,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetMaxDevice(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0227];\
@@ -3969,7 +3969,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetNextDevice(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GDHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x022b];\
@@ -3979,7 +3979,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DeviceLoop(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    DeviceLoopDrawingProcPtr __stub_arg_2 = (A2);\
    LONGINT __stub_arg_3 = (A3);\
@@ -3992,7 +3992,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TestDeviceAttribute(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GDHandle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -4007,7 +4007,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_SetDepth((A1), (A2), (A3), (A4))     )
 #define BitMapToRegion(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    const BitMap * __stub_arg_2 = (A2);\
  \
@@ -4018,7 +4018,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define OpenCPicture(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    OpenCPicParams * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0220];\
@@ -4044,7 +4044,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_GetPixMapInfo((A1), (A2), (A3), (A4), (A5), (A6))     )
 #define SetResLoad(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    BOOLEAN __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x019b];\
@@ -4054,7 +4054,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CountResources(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ResType __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x019c];\
@@ -4064,7 +4064,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Count1Resources(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ResType __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x000d];\
@@ -4074,7 +4074,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetIndResource(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ResType __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -4085,7 +4085,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Get1IndResource(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ResType __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -4096,7 +4096,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetResource(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ResType __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -4107,7 +4107,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Get1Resource(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ResType __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -4118,7 +4118,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetNamedResource(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ResType __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
  \
@@ -4129,7 +4129,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Get1NamedResource(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ResType __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
  \
@@ -4140,7 +4140,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define LoadResource(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle volatile __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01a2];\
@@ -4150,7 +4150,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ReleaseResource(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01a3];\
@@ -4160,7 +4160,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DetachResource(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0192];\
@@ -4170,7 +4170,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define UniqueID(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ResType __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01c1];\
@@ -4180,7 +4180,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Unique1ID(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ResType __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0010];\
@@ -4190,7 +4190,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetResInfo(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
    GUEST<INTEGER> * __stub_arg_2 = (A2);\
    GUEST<ResType> * __stub_arg_3 = (A3);\
@@ -4203,7 +4203,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetResAttrs(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01a6];\
@@ -4213,7 +4213,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SizeResource(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01a5];\
@@ -4223,7 +4223,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CountTypes() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x019e];\
    ((new_addr == toolstuff[0x019e].orig)\
@@ -4232,7 +4232,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Count1Types() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x001c];\
    ((new_addr == toolstuff[0x001c].orig)\
@@ -4241,7 +4241,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetIndType(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<ResType> * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -4252,7 +4252,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Get1IndType(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<ResType> * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -4263,7 +4263,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MaxSizeRsrc(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0021];\
@@ -4273,7 +4273,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define RsrcMapEntry(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01c5];\
@@ -4283,7 +4283,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define RGetResource(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    ResType __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -4294,7 +4294,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InitResources() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0195];\
    ((new_addr == toolstuff[0x0195].orig)\
@@ -4303,7 +4303,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define RsrcZoneInit() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0196];\
    ((new_addr == toolstuff[0x0196].orig)\
@@ -4312,7 +4312,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ResError() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x01af];\
    ((new_addr == toolstuff[0x01af].orig)\
@@ -4321,7 +4321,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetResFileAttrs(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01f6];\
@@ -4331,7 +4331,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetResFileAttrs(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -4342,7 +4342,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetResInfo(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    StringPtr __stub_arg_3 = (A3);\
@@ -4354,7 +4354,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetResAttrs(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -4365,7 +4365,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ChangedResource(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01aa];\
@@ -4375,7 +4375,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define AddResource(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
    ResType __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -4388,7 +4388,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define RmveResource(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01ad];\
@@ -4398,7 +4398,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define UpdateResFile(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0199];\
@@ -4408,7 +4408,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define WriteResource(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01b0];\
@@ -4418,7 +4418,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetResPurge(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    BOOLEAN __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0193];\
@@ -4428,7 +4428,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CreateResFile(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    StringPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01b1];\
@@ -4438,7 +4438,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define HCreateResFile(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
    StringPtr __stub_arg_3 = (A3);\
@@ -4450,7 +4450,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define OpenRFPerm(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    StringPtr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    Byte __stub_arg_3 = (A3);\
@@ -4462,7 +4462,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define OpenResFile(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    StringPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0197];\
@@ -4472,7 +4472,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CloseResFile(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x019a];\
@@ -4482,7 +4482,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define HOpenResFile(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
    StringPtr __stub_arg_3 = (A3);\
@@ -4495,7 +4495,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CurResFile() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0194];\
    ((new_addr == toolstuff[0x0194].orig)\
@@ -4504,7 +4504,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define HomeResFile(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01a4];\
@@ -4514,7 +4514,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define UseResFile(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0198];\
@@ -4532,7 +4532,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_GetNextFOND((A1))     )
 #define TESetText(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
    TEHandle __stub_arg_3 = (A3);\
@@ -4544,7 +4544,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEGetText(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    TEHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01cb];\
@@ -4554,7 +4554,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TESetJust(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    TEHandle __stub_arg_2 = (A2);\
  \
@@ -4565,7 +4565,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEUpdate(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    TEHandle __stub_arg_2 = (A2);\
  \
@@ -4576,7 +4576,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TextBox(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    int32 __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -4589,7 +4589,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEScroll(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    int16 __stub_arg_1 = (A1);\
    int16 __stub_arg_2 = (A2);\
    TEHandle __stub_arg_3 = (A3);\
@@ -4601,7 +4601,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEKey(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CHAR __stub_arg_1 = (A1);\
    TEHandle __stub_arg_2 = (A2);\
  \
@@ -4612,7 +4612,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TECopy(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    TEHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01d5];\
@@ -4622,7 +4622,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TECut(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    TEHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01d6];\
@@ -4632,7 +4632,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEPaste(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    TEHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01db];\
@@ -4642,7 +4642,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEDelete(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    TEHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01d7];\
@@ -4652,7 +4652,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEInsert(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
    TEHandle __stub_arg_3 = (A3);\
@@ -4664,7 +4664,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEPinScroll(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    int16 __stub_arg_1 = (A1);\
    int16 __stub_arg_2 = (A2);\
    TEHandle __stub_arg_3 = (A3);\
@@ -4676,7 +4676,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TESelView(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    TEHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0011];\
@@ -4686,7 +4686,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEAutoView(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    BOOLEAN __stub_arg_1 = (A1);\
    TEHandle __stub_arg_2 = (A2);\
  \
@@ -4697,7 +4697,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEStylNew(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
  \
@@ -4716,7 +4716,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_TEStylInsert((A1), (A2), (A3), (A4))     )
 #define TEGetOffset(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point __stub_arg_1 = (A1);\
    TEHandle __stub_arg_2 = (A2);\
  \
@@ -4747,7 +4747,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_TENumStyles((A1), (A2), (A3))     )
 #define TEInit() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x01cc];\
    ((new_addr == toolstuff[0x01cc].orig)\
@@ -4756,7 +4756,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TENew(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
  \
@@ -4767,7 +4767,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEDispose(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    TEHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01cd];\
@@ -4777,7 +4777,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEIdle(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    TEHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01da];\
@@ -4787,7 +4787,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEClick(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point __stub_arg_1 = (A1);\
    BOOLEAN __stub_arg_2 = (A2);\
    TEHandle __stub_arg_3 = (A3);\
@@ -4799,7 +4799,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TESetSelect(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    int32 __stub_arg_1 = (A1);\
    int32 __stub_arg_2 = (A2);\
    TEHandle __stub_arg_3 = (A3);\
@@ -4811,7 +4811,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEActivate(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    TEHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01d8];\
@@ -4821,7 +4821,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TEDeactivate(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    TEHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01d9];\
@@ -4831,7 +4831,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TECalText(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    TEHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01d0];\
@@ -4843,7 +4843,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_TEFeatureFlag((A1), (A2), (A3))     )
 #define SetWinColor(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    CTabHandle __stub_arg_2 = (A2);\
  \
@@ -4854,7 +4854,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetAuxWin(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    GUEST<AuxWinHandle> * __stub_arg_2 = (A2);\
  \
@@ -4865,7 +4865,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetWTitle(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
  \
@@ -4876,7 +4876,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetWTitle(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
  \
@@ -4887,7 +4887,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FrontWindow() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0124];\
    ((new_addr == toolstuff[0x0124].orig)\
@@ -4896,7 +4896,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define HiliteWindow(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    BOOLEAN __stub_arg_2 = (A2);\
  \
@@ -4907,7 +4907,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define BringToFront(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0120];\
@@ -4917,7 +4917,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SelectWindow(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x011f];\
@@ -4927,7 +4927,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ShowHide(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    BOOLEAN __stub_arg_2 = (A2);\
  \
@@ -4938,7 +4938,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define HideWindow(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0116];\
@@ -4948,7 +4948,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ShowWindow(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0115];\
@@ -4958,7 +4958,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SendBehind(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    WindowPtr __stub_arg_2 = (A2);\
  \
@@ -4969,7 +4969,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DrawGrowIcon(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0104];\
@@ -4979,7 +4979,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InitWindows() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0112];\
    ((new_addr == toolstuff[0x0112].orig)\
@@ -4988,7 +4988,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetWMgrPort(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<GrafPtr> * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0110];\
@@ -4998,7 +4998,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCWMgrPort(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<CGrafPtr> * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0248];\
@@ -5008,7 +5008,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetDeskCPat(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    PixPatHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0247];\
@@ -5018,7 +5018,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define NewWindow(A1, A2, A3, A4, A5, A6, A7, A8) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    StringPtr __stub_arg_3 = (A3);\
@@ -5035,7 +5035,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define NewCWindow(A1, A2, A3, A4, A5, A6, A7, A8) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    Rect * __stub_arg_2 = (A2);\
    StringPtr __stub_arg_3 = (A3);\
@@ -5052,7 +5052,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetNewCWindow(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    Ptr __stub_arg_2 = (A2);\
    CWindowPtr __stub_arg_3 = (A3);\
@@ -5064,7 +5064,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetNewWindow(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    Ptr __stub_arg_2 = (A2);\
    WindowPtr __stub_arg_3 = (A3);\
@@ -5076,7 +5076,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CloseWindow(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x012d];\
@@ -5086,7 +5086,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DisposeWindow(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0114];\
@@ -5096,7 +5096,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetWRefCon(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
  \
@@ -5107,7 +5107,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetWRefCon(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0117];\
@@ -5117,7 +5117,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetWindowPic(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    PicHandle __stub_arg_2 = (A2);\
  \
@@ -5128,7 +5128,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetWindowPic(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x012f];\
@@ -5138,7 +5138,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PinRect(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
  \
@@ -5149,7 +5149,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DragTheRgn(A1, A2, A3, A4, A5, A6) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -5164,7 +5164,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DragGrayRgn(A1, A2, A3, A4, A5, A6) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -5179,7 +5179,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ClipAbove(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPeek __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x010b];\
@@ -5189,7 +5189,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CheckUpdate(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    EventRecord * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0111];\
@@ -5199,7 +5199,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SaveOld(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPeek __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x010e];\
@@ -5209,7 +5209,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PaintOne(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPeek __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
  \
@@ -5220,7 +5220,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PaintBehind(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPeek __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
  \
@@ -5231,7 +5231,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CalcVis(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPeek __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0109];\
@@ -5241,7 +5241,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CalcVisBehind(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPeek __stub_arg_1 = (A1);\
    RgnHandle __stub_arg_2 = (A2);\
  \
@@ -5252,7 +5252,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DrawNew(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPeek __stub_arg_1 = (A1);\
    BOOLEAN __stub_arg_2 = (A2);\
  \
@@ -5263,7 +5263,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetWVariant(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x000a];\
@@ -5273,7 +5273,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FindWindow(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point __stub_arg_1 = (A1);\
    GUEST<WindowPtr> * __stub_arg_2 = (A2);\
  \
@@ -5284,7 +5284,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TrackBox(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -5296,7 +5296,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TrackGoAway(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
  \
@@ -5307,7 +5307,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ZoomWindow(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    BOOLEAN __stub_arg_3 = (A3);\
@@ -5319,7 +5319,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define MoveWindow(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -5332,7 +5332,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DragWindow(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -5344,7 +5344,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GrowWindow(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
    Rect * __stub_arg_3 = (A3);\
@@ -5356,7 +5356,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SizeWindow(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -5369,7 +5369,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InvalRect(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0128];\
@@ -5379,7 +5379,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InvalRgn(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0127];\
@@ -5389,7 +5389,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ValidRect(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Rect * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x012a];\
@@ -5399,7 +5399,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ValidRgn(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    RgnHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0129];\
@@ -5409,7 +5409,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define BeginUpdate(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0122];\
@@ -5419,7 +5419,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define EndUpdate(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    WindowPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0123];\
@@ -5553,7 +5553,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_AERemoveSpecialHandler((A1), (A2), (A3))     )
 #define OpenDeskAcc(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    StringPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01b6];\
@@ -5563,7 +5563,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define CloseDeskAcc(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01b7];\
@@ -5573,7 +5573,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SystemClick(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    EventRecord * __stub_arg_1 = (A1);\
    WindowPtr __stub_arg_2 = (A2);\
  \
@@ -5584,7 +5584,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SystemEdit(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01c2];\
@@ -5594,7 +5594,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SystemTask() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x01b4];\
    ((new_addr == toolstuff[0x01b4].orig)\
@@ -5603,7 +5603,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SystemEvent(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    EventRecord * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01b2];\
@@ -5613,7 +5613,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SystemMenu(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01b5];\
@@ -5725,7 +5725,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_ROMlib_Fpstr2dec((A1), (A2), (A3), (A4))     )
 #define InitFonts() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x00fe];\
    ((new_addr == toolstuff[0x00fe].orig)\
@@ -5734,7 +5734,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetFontName(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
  \
@@ -5745,7 +5745,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetFNum(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    StringPtr __stub_arg_1 = (A1);\
    GUEST<INTEGER> * __stub_arg_2 = (A2);\
  \
@@ -5756,7 +5756,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetFontLock(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    BOOLEAN __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0103];\
@@ -5766,7 +5766,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define RealFont(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -5777,7 +5777,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FMSwapFont(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    FMInput * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0101];\
@@ -5787,7 +5787,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FontMetrics(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    FMetricRec * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0035];\
@@ -5797,7 +5797,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetFScaleDisable(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    BOOLEAN __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0034];\
@@ -5807,7 +5807,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetFractEnable(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    BOOLEAN __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0014];\
@@ -5861,7 +5861,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_PostHighLevelEvent((A1), (A2), (A3), (A4), (A5), (A6))     )
 #define SysBeep(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01c8];\
@@ -5871,7 +5871,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InitPack(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01e5];\
@@ -5881,7 +5881,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InitAllPacks() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x01e6];\
    ((new_addr == toolstuff[0x01e6].orig)\
@@ -5890,7 +5890,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define InfoScrap() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x01f9];\
    ((new_addr == toolstuff[0x01f9].orig)\
@@ -5899,7 +5899,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define UnloadScrap() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x01fa];\
    ((new_addr == toolstuff[0x01fa].orig)\
@@ -5908,7 +5908,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define LoadScrap() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x01fb];\
    ((new_addr == toolstuff[0x01fb].orig)\
@@ -5917,7 +5917,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ZeroScrap() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x01fc];\
    ((new_addr == toolstuff[0x01fc].orig)\
@@ -5926,7 +5926,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PutScrap(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
    ResType __stub_arg_2 = (A2);\
    Ptr __stub_arg_3 = (A3);\
@@ -5938,7 +5938,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetScrap(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
    ResType __stub_arg_2 = (A2);\
    GUEST<LONGINT> * __stub_arg_3 = (A3);\
@@ -6040,7 +6040,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_UppercaseStripDiacritics((A1), (A2), (A3))     )
 #define GetAppParms(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    StringPtr __stub_arg_1 = (A1);\
    INTEGER * __stub_arg_2 = (A2);\
    GUEST<Handle> * __stub_arg_3 = (A3);\
@@ -6052,7 +6052,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define ExitToShell() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x01f4];\
    ((new_addr == toolstuff[0x01f4].orig)\
@@ -6061,7 +6061,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define UnloadSeg(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01f1];\
@@ -6071,7 +6071,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SndPlay(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    SndChannelPtr __stub_arg_1 = (A1);\
    Handle __stub_arg_2 = (A2);\
    BOOLEAN __stub_arg_3 = (A3);\
@@ -6083,7 +6083,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SndNewChannel(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<SndChannelPtr> * __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
    LONGINT __stub_arg_3 = (A3);\
@@ -6096,7 +6096,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SndAddModifier(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    SndChannelPtr __stub_arg_1 = (A1);\
    ProcPtr __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -6109,7 +6109,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SndDoCommand(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    SndChannelPtr __stub_arg_1 = (A1);\
    SndCommand * __stub_arg_2 = (A2);\
    BOOLEAN __stub_arg_3 = (A3);\
@@ -6121,7 +6121,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SndDoImmediate(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    SndChannelPtr __stub_arg_1 = (A1);\
    SndCommand * __stub_arg_2 = (A2);\
  \
@@ -6134,7 +6134,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_SndChannelStatus((A1), (A2), (A3))     )
 #define SndControl(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    SndCommand * __stub_arg_2 = (A2);\
  \
@@ -6145,7 +6145,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SndDisposeChannel(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    SndChannelPtr __stub_arg_1 = (A1);\
    BOOLEAN __stub_arg_2 = (A2);\
  \
@@ -6268,7 +6268,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_StandardPutFile((A1), (A2), (A3))     )
 #define SysError(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    short __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01c9];\
@@ -6278,7 +6278,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define KeyTrans(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    unsigned short __stub_arg_2 = (A2);\
    LONGINT * __stub_arg_3 = (A3);\
@@ -6290,7 +6290,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetNextEvent(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    EventRecord * __stub_arg_2 = (A2);\
  \
@@ -6301,7 +6301,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define WaitNextEvent(A1, A2, A3, A4) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    EventRecord * __stub_arg_2 = (A2);\
    LONGINT __stub_arg_3 = (A3);\
@@ -6314,7 +6314,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define EventAvail(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    EventRecord * __stub_arg_2 = (A2);\
  \
@@ -6325,7 +6325,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetMouse(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<Point> * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0172];\
@@ -6335,7 +6335,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Button() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0174];\
    ((new_addr == toolstuff[0x0174].orig)\
@@ -6344,7 +6344,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define StillDown() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0173];\
    ((new_addr == toolstuff[0x0173].orig)\
@@ -6353,7 +6353,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define WaitMouseUp() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0177];\
    ((new_addr == toolstuff[0x0177].orig)\
@@ -6362,7 +6362,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetKeys(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    unsigned char * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0176];\
@@ -6372,7 +6372,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define TickCount() \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
     \
    new_addr = tooltraptable[0x0175];\
    ((new_addr == toolstuff[0x0175].orig)\
@@ -6381,7 +6381,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FracSqrt(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fract __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0049];\
@@ -6391,7 +6391,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FracSin(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fixed __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0048];\
@@ -6401,7 +6401,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FixAtan2(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
  \
@@ -6412,7 +6412,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FracCos(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fixed __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0047];\
@@ -6422,7 +6422,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FixRatio(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -6433,7 +6433,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FixMul(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fixed __stub_arg_1 = (A1);\
    Fixed __stub_arg_2 = (A2);\
  \
@@ -6444,7 +6444,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FixRound(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fixed __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x006c];\
@@ -6454,7 +6454,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define NewString(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    StringPtr __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0106];\
@@ -6464,7 +6464,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SetString(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    StringHandle __stub_arg_1 = (A1);\
    StringPtr __stub_arg_2 = (A2);\
  \
@@ -6475,7 +6475,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetString(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01ba];\
@@ -6485,7 +6485,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Munger(A1, A2, A3, A4, A5, A6) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Handle __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
    Ptr __stub_arg_3 = (A3);\
@@ -6500,7 +6500,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define PackBits(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<Ptr> * __stub_arg_1 = (A1);\
    GUEST<Ptr> * __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -6512,7 +6512,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define UnpackBits(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    GUEST<Ptr> * __stub_arg_1 = (A1);\
    GUEST<Ptr> * __stub_arg_2 = (A2);\
    INTEGER __stub_arg_3 = (A3);\
@@ -6524,7 +6524,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define BitTst(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
  \
@@ -6535,7 +6535,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define BitSet(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
  \
@@ -6546,7 +6546,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define BitClr(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Ptr __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
  \
@@ -6557,7 +6557,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define BitAnd(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
  \
@@ -6568,7 +6568,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define BitOr(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
  \
@@ -6579,7 +6579,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define BitXor(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
  \
@@ -6590,7 +6590,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define BitNot(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x005a];\
@@ -6600,7 +6600,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define BitShift(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
    INTEGER __stub_arg_2 = (A2);\
  \
@@ -6613,7 +6613,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #undef LoWord
 #define HiWord(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x006a];\
@@ -6623,7 +6623,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define LoWord(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x006b];\
@@ -6633,7 +6633,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define LongMul(A1, A2, A3) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
    LONGINT __stub_arg_2 = (A2);\
    Int64Bit * __stub_arg_3 = (A3);\
@@ -6645,7 +6645,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetPattern(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01b8];\
@@ -6655,7 +6655,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCursor(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01b9];\
@@ -6665,7 +6665,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetPicture(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01bc];\
@@ -6675,7 +6675,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DeltaPoint(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Point __stub_arg_1 = (A1);\
    Point __stub_arg_2 = (A2);\
  \
@@ -6686,7 +6686,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define SlopeFromAngle(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    INTEGER __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00bc];\
@@ -6696,7 +6696,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define AngleFromSlope(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fixed __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x00c4];\
@@ -6706,7 +6706,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FracMul(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fract __stub_arg_1 = (A1);\
    Fract __stub_arg_2 = (A2);\
  \
@@ -6717,7 +6717,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FixDiv(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fixed __stub_arg_1 = (A1);\
    Fixed __stub_arg_2 = (A2);\
  \
@@ -6728,7 +6728,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define FracDiv(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fract __stub_arg_1 = (A1);\
    Fract __stub_arg_2 = (A2);\
  \
@@ -6739,7 +6739,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Long2Fix(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    LONGINT __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x003f];\
@@ -6749,7 +6749,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Fix2Long(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fixed __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0040];\
@@ -6759,7 +6759,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Fix2Frac(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fixed __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0041];\
@@ -6769,7 +6769,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define Frac2Fix(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    Fract __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0042];\
@@ -6779,7 +6779,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define R_X2Fix(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    extended80 * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0044];\
@@ -6789,7 +6789,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define R_X2Frac(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    extended80 * __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0046];\
@@ -6975,7 +6975,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_PlotIconMethod((A1), (A2), (A3), (A4), (A5))     )
 #define PlotIcon(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    const Rect * __stub_arg_1 = (A1);\
    Handle __stub_arg_2 = (A2);\
  \
@@ -6988,7 +6988,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_PlotIconHandle((A1), (A2), (A3), (A4))     )
 #define PlotCIcon(A1, A2) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    const Rect * __stub_arg_1 = (A1);\
    CIconHandle __stub_arg_2 = (A2);\
  \
@@ -7003,7 +7003,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
    (     C_PlotSICNHandle((A1), (A2), (A3), (A4))     )
 #define GetIcon(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    short __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x01bb];\
@@ -7013,7 +7013,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define GetCIcon(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    short __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x021e];\
@@ -7023,7 +7023,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
   })
 #define DisposeCIcon(A1) \
  ({ \
-   void *new_addr;\
+   syn68k_addr_t new_addr;\
    CIconHandle __stub_arg_1 = (A1);\
  \
    new_addr = tooltraptable[0x0225];\
