@@ -813,7 +813,7 @@ PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
 					      bufp, rw, &actl);
 		actl = CL(actl);
 		if (rw == reading)
-		    ROMlib_destroy_blocks((syn68k_addr_t) US_TO_SYN68K(bufp), actl, TRUE);
+		    ROMlib_destroy_blocks(US_TO_SYN68K(bufp), actl, TRUE);
 	    } else {
 /* TODO:  Hubris attenuation:  SPEED THIS UP FOR EXCEL 4.x INSTALLERS!!!! */
 		newerr = noErr;
@@ -864,8 +864,7 @@ PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
 	    }
 	    bufp += ntoslide;
 	    if (rw == reading)
-		ROMlib_destroy_blocks((syn68k_addr_t)
-				      (long) US_TO_SYN68K(bufp), actl, TRUE);
+		ROMlib_destroy_blocks(US_TO_SYN68K(bufp), actl, TRUE);
 #endif
 	    pb->ioPosOffset = CL(CL(pb->ioPosOffset) + (actl));
 	    pb->ioActCount = CL(CL(pb->ioActCount) + (actl));

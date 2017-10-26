@@ -2538,7 +2538,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	    (SF_NAME (&f))[0] = 0;
     }
     #warning not 64-bit clean
-    SetWRefCon((WindowPtr) dp, (LONGINT)(long)US_TO_SYN68K(&f));
+    SetWRefCon((WindowPtr) dp, US_TO_SYN68K(&f));
     if (CW(dp->portRect.bottom) + p.v  + 7 > CW(screenBitsX.bounds.bottom))
 	p.v = CW(screenBitsX.bounds.bottom) - CW(dp->portRect.bottom) - 7;
     if (p.v < CW(MBarHeight) + 7)

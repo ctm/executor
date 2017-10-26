@@ -650,7 +650,7 @@ P4 (PUBLIC, pascal int32, mbdf0, int16, sel, int16, mess,
 			restore();
 			break;
 		case mbRect:
-			retval = (LONGINT) US_TO_SYN68K(getrect(param2));
+			retval = US_TO_SYN68K(getrect(param2));
 			break;
 		case mbSaveAlt:
 			savealt(param2);

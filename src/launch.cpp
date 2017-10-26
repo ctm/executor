@@ -694,7 +694,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
       {
 	lp = 0; /* just to shut GCC up */
 	jumplen = jumpoff = 0; /* just to shut GCC up */
-	a5 = (LONGINT) (long) US_TO_SYN68K (&tmpa5);
+	a5 = US_TO_SYN68K (&tmpa5);
 	CurrentA5 = guest_cast<Ptr> (CL (a5));
 	InitGraf ((Ptr) quickbytes + grafSize - 4);
       }
@@ -1442,9 +1442,9 @@ Executor::NewLaunch (StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockR
 		     )
 		if (MR(*(GUEST<void*> *)lp) >= MR(ApplZone)
 		    && MR(*(GUEST<void*> *)lp) < MR(MR(ApplZone)->bkLim))
-		  warning_unexpected ("Low global at 0x%lx may point into "
+		  warning_unexpected ("Low global at 0x%x may point into "
 				      "ApplZone and probably shouldn't.",
-				      (unsigned long) US_TO_SYN68K (lp));
+				      (unsigned int) US_TO_SYN68K (lp));
 	  }
 #endif
 	launchchain(fName, vRefNum, TRUE, &lpb);

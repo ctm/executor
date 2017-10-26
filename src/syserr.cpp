@@ -321,7 +321,7 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
 
     /* 4. Allocate and re-initialize QuickDraw */
 #if defined (BINCOMPAT)
-    a5 = (LONGINT) (long) US_TO_SYN68K (&tmpa5);
+    a5 = US_TO_SYN68K (&tmpa5);
     CurrentA5 = guest_cast<Ptr> (CL(a5));
 #endif /* BINCOMPAT */
     InitGraf((Ptr) quickbytes + sizeof(quickbytes) - 4);

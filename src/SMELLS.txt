@@ -1,3 +1,23 @@
+ROMlib_mbdfcall         64-bit problem: expects a host native pointer hidden in a LONGINT
+ROMlib_ctlcall
+
+* hilite mode, icons, some other things in 16bpp and 32bpp
+
+=======================
+
+!redefinitions in mkvol_internal.h
+--> formatting disabled for now
+
+pointless declarations of non-existant P_blah functions
+ROMlib_destroyblocks (cache fluching) is in file.cpp?
+
+
+region: mixed endianness, CWC_RAW
+hfs: some CWC_RAW
+blitting, colors: some CWC_RAW
+
+=========
+suspicious things and fixes that are only guesses:
 
 
 hfsVolume.cpp:528
@@ -70,15 +90,3 @@ serial.c: setbaud
     INTEGER rates[] = { ... 38400 ... };
         // this can't work
 
-=======================
-
-!redefinitions in mkvol_internal.h
---> formatting disabled for now
-
-pointless declarations of non-existant P_blah functions
-ROMlib_destroyblocks (cache fluching) is in file.cpp?
-
-
-region: mixed endianness, CWC_RAW
-hfs: some CWC_RAW
-blitting, colors: some CWC_RAW

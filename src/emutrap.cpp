@@ -274,7 +274,7 @@ CToPascalCall_m68k(void *wheretogo, unsigned long long magic, va_list ap)
     }
     va_end(ap);
 
-    CALL_EMULATOR((syn68k_addr_t) US_TO_SYN68K(wheretogo));
+    CALL_EMULATOR(US_TO_SYN68K(wheretogo));
 
     switch (retvaltype) {
     case 0:

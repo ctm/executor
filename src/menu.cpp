@@ -904,7 +904,7 @@ P1 (PUBLIC pascal trap, void, HiliteMenu, INTEGER, mid)
 A1(static inline, void, ROMlib_CALLMENUHOOK, menuhookp, fp)
 {
     ROMlib_hook(menu_menuhooknumber);
-    CALL_EMULATOR((syn68k_addr_t) US_TO_SYN68K((long) fp));
+    CALL_EMULATOR(US_TO_SYN68K((long) fp));
 }
 
 #define CALLMBARHOOK(arg, fp)	ROMlib_CALLMBARHOOK(arg, (mbarhookp)(fp))
@@ -913,8 +913,8 @@ A2(static inline, LONGINT, ROMlib_CALLMBARHOOK, Rect *,rp, mbarhookp, fp)
 {
     ROMlib_hook(menu_mbarhooknumber);
 
-    PUSHADDR((LONGINT) US_TO_SYN68K((long) rp));
-    CALL_EMULATOR((syn68k_addr_t) US_TO_SYN68K((long) fp));
+    PUSHADDR(US_TO_SYN68K((long) rp));
+    CALL_EMULATOR(US_TO_SYN68K((long) fp));
     return EM_D0;
 }
 

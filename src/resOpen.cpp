@@ -95,9 +95,9 @@ Handle Executor::ROMlib_mgetres(resmaphand map, resref *rr)
 	savea2 = EM_A2;
 	savea3 = EM_A3;
 	savea4 = EM_A4;
-	EM_A4 = (LONGINT) (long) US_TO_SYN68K(map);
-	EM_A3 = (LONGINT) (long) US_TO_SYN68K(rr);
-	EM_A2 = (LONGINT) (long) US_TO_SYN68K(rr);
+	EM_A4 = US_TO_SYN68K(map);
+	EM_A3 = US_TO_SYN68K(rr);
+	EM_A2 = US_TO_SYN68K(rr);
 #define TEMPORARYHACKUNTILWESWAPTABLES
 #if !defined(TEMPORARYHACKUNTILWESWAPTABLES)	
 	EM_A0 = (LONGINT) CL(ostraptable[0xFC]);

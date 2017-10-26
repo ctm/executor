@@ -627,7 +627,7 @@ Executor::ROMlib_call_TEDoText (TEPtr tp, int16 first, int16 last, int16 what)
 	saved7 = EM_D7;
 	savea2 = EM_A2;
 	savea3 = EM_A3;
-	EM_A3 = (LONGINT) (long) US_TO_SYN68K(tp);
+	EM_A3 = US_TO_SYN68K(tp);
 	EM_D3 = (LONGINT) first;
 	EM_D4 = (LONGINT) last;
 	EM_D7 = (LONGINT) what;

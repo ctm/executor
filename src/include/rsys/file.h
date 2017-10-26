@@ -177,9 +177,9 @@ do {	LONGINT saved0, saved1, saved2, saved3,	\
 	savea1 = EM_A1;				\
 	savea2 = EM_A2;				\
 	savea3 = EM_A3;				\
-	EM_A0 = (LONGINT) (long) US_TO_SYN68K(pb);		\
+	EM_A0 = US_TO_SYN68K(pb);		\
 	EM_D0 = err;				\
-	CALL_EMULATOR((syn68k_addr_t) US_TO_SYN68K ((long) compp));	\
+	CALL_EMULATOR(US_TO_SYN68K ((long) compp));	\
 	EM_D0 = saved0;				\
 	EM_D1 = saved1;				\
 	EM_D2 = saved2;				\

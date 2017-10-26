@@ -240,9 +240,9 @@ P1 (PUBLIC pascal trap, LONGINT, Color2Index,
 	M68kReg save_regs[16];
 	memcpy (save_regs, cpu_state.regs, 16 * sizeof cpu_state.regs[0]);
 	EM_A7 -= 128;
-	PUSHADDR ((LONGINT) US_TO_SYN68K(rgb));
-	PUSHADDR ((LONGINT) US_TO_SYN68K(&position));
-	CALL_EMULATOR ((syn68k_addr_t) US_TO_SYN68K(search_fn));
+	PUSHADDR (US_TO_SYN68K(rgb));
+	PUSHADDR (US_TO_SYN68K(&position));
+	CALL_EMULATOR (US_TO_SYN68K(search_fn));
 	/* success_p = EM_D0; */
 	success_p = POPUB ();
 	memcpy (cpu_state.regs, save_regs, 16 * sizeof cpu_state.regs[0]);

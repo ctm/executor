@@ -838,7 +838,7 @@ PUBLIC INTEGERRET ROMlib_dotext (void)
 
     retval = C_ROMlib_dotext(tep, first, last, what);
 
-    EM_A0 = (LONGINT) (long) US_TO_SYN68K(thePort);
+    EM_A0 = US_TO_SYN68K(thePort);
     EM_D0 = retval;
     return retval;
 }
@@ -885,7 +885,7 @@ A1 (static inline, BOOLEAN, CALLCLIKOK, TEHandle, teh)
 	    savea1 = EM_A1;
 	    savea2 = EM_A2;
 	    savea3 = EM_A3;
-	    CALL_EMULATOR((syn68k_addr_t) US_TO_SYN68K ((long)cp));
+	    CALL_EMULATOR(US_TO_SYN68K ((long)cp));
 
 #define      USE_Z_BIT_NOT_D0_FOR_CLIK_DETERMINATION /* as per Tom Pittman */
 #if !defined(USE_Z_BIT_NOT_D0_FOR_CLIK_DETERMINATION)

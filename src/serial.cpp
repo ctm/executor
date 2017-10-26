@@ -303,8 +303,8 @@ typedef void (*compfuncp)( void );
 
 void callcomp(ParmBlkPtr pbp, ProcPtr comp, OSErr err)
 {
-    EM_A0 = (LONGINT) (long) US_TO_SYN68K(pbp);
-    EM_A1 = (LONGINT) (long) US_TO_SYN68K(comp);
+    EM_A0 = US_TO_SYN68K(pbp);
+    EM_A1 = US_TO_SYN68K(comp);
     EM_D0 = (unsigned short) err;	/* TODO: unsigned short ? */
     CALL_EMULATOR((syn68k_addr_t) (long) comp);
 }

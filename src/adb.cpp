@@ -141,12 +141,12 @@ adb_vector_is_not_our_own (void)
 PRIVATE void
 call_patched_adb_vector (char *message)
 {
-  unsigned long save_d0, save_a0;
+  uint32_t save_d0, save_a0;
 
   save_d0 = EM_D0;
   save_a0 = EM_A0;
   EM_D0 = SPOOFED_MOUSE_ADDR << 4; /* based on Apeiron's code */
-  EM_A0 = (unsigned long) US_TO_SYN68K(message);
+  EM_A0 = US_TO_SYN68K(message);
   CALL_EMULATOR ((syn68k_addr_t) CL (guest_cast<uint32_t>( adb_service_procp)));
   EM_D0 = save_d0;
   EM_A0 = save_a0;

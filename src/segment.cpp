@@ -725,7 +725,7 @@ P0(PUBLIC pascal trap, void, ExitToShell)
 	size_info.application_p = FALSE;
 	
 	if (QDExist == EXIST_NO) {
-	    a5 = (LONGINT) US_TO_SYN68K(&tmpA5);
+	    a5 = US_TO_SYN68K(&tmpA5);
 	    CurrentA5 = guest_cast<Ptr>( CL(a5) );
 	    InitGraf((Ptr) quickbytes + sizeof(quickbytes) - 4);
 	}
@@ -872,12 +872,12 @@ P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
 	    *ptr++ = CW(segno);
 	    *ptr++ = CWC(JMPLINSTR);
 	    *(GUEST<LONGINT> *) ptr =
-		 CL((LONGINT) (long) ((char *) US_TO_SYN68K(STARH(newcode)) + offbytes + 4));
+		 CL(US_TO_SYN68K(STARH(newcode)) + offbytes + 4);
 	    ptr += 2;
 	} else
 	    ptr += 4;
     }
-    ROMlib_destroy_blocks( (syn68k_addr_t) (long) US_TO_SYN68K(saveptr), 8L * savenentries,
+    ROMlib_destroy_blocks( US_TO_SYN68K(saveptr), 8L * savenentries,
 			  TRUE);
 }
 
@@ -925,7 +925,7 @@ P1(PUBLIC pascal trap, void, UnloadSeg, Ptr, addr)
 
 	top = (char *) p + 6;	/* +8 that we didn't zap, -2 that we went
 					overboard on unpatch (see above) */
-	ROMlib_destroy_blocks( (syn68k_addr_t) (long) US_TO_SYN68K(top),
+	ROMlib_destroy_blocks( US_TO_SYN68K(top),
 			       bottom - top, FALSE);
 
 	HUnlock(h);

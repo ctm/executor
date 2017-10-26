@@ -478,6 +478,6 @@ A0(PUBLIC a0trap, INTEGER *, GetMaskTable)	/* IMIV-25 */
 	0x00, 0x08, 0x00, 0x04, 0x00, 0x02, 0x00, 0x01,
     };
 
-    EM_A0 = (LONGINT) US_TO_SYN68K(table);
+    EM_A0 = US_TO_SYN68K(table);
     return (INTEGER *) table;
 }

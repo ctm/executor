@@ -113,9 +113,9 @@ A4(PUBLIC, OSErr, ROMlib_dispatch, ParmBlkPtr, p,		/* INTERNAL */
 				savea2, savea3, savea4, savea5, savea6;
 				
 				savea2 = EM_A2;
-				EM_A0 = (LONGINT) (long) US_TO_SYN68K(p);
-				EM_A1 = (LONGINT) (long) US_TO_SYN68K(STARH(h));
-				EM_A2 = (LONGINT) (long) US_TO_SYN68K(procp);	/* for compatibility with above */
+				EM_A0 = US_TO_SYN68K(p);
+				EM_A1 = US_TO_SYN68K(STARH(h));
+				EM_A2 = US_TO_SYN68K(procp);	/* for compatibility with above */
 				saved1 = EM_D1;
 				saved2 = EM_D2;
 				saved3 = EM_D3;
@@ -127,7 +127,7 @@ A4(PUBLIC, OSErr, ROMlib_dispatch, ParmBlkPtr, p,		/* INTERNAL */
 				savea4 = EM_A4;
 				savea5 = EM_A5;
 				savea6 = EM_A6;
-				CALL_EMULATOR((syn68k_addr_t) (long) US_TO_SYN68K (procp));
+				CALL_EMULATOR(US_TO_SYN68K (procp));
 				EM_D1 = saved1;
 				EM_D2 = saved2;
 				EM_D3 = saved3;

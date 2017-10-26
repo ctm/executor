@@ -210,8 +210,8 @@ A3 (PRIVATE, LONGINT, catchalarm, LONGINT, volatile signo,
 		      /* No need to save and restore regs here; we
 		       * save and restore all of them outside this
 		       * loop. */
-		      EM_A0 = (LONGINT) (long) US_TO_SYN68K(tm_addr);
-		      EM_A1 = (LONGINT) (long) US_TO_SYN68K(qp);
+		      EM_A0 = US_TO_SYN68K(tm_addr);
+		      EM_A1 = US_TO_SYN68K(qp);
 		  
 		      CALL_EMULATOR ((syn68k_addr_t) EM_A0);
 		    }

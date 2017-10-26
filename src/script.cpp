@@ -50,7 +50,7 @@ P1(PUBLIC pascal trap, LONGINT, GetEnvirons, INTEGER, verb)
       break;
 
     case smKCHRCache:
-      retval = (LONGINT) US_TO_SYN68K (ROMlib_kchr_ptr ());
+      retval = US_TO_SYN68K (ROMlib_kchr_ptr ());
       break;
 
     default:

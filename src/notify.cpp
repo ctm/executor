@@ -51,7 +51,7 @@ A1(PUBLIC trap, OSErrRET, NMInstall, NMRecPtr, nmptr)
 	  saved2 = EM_D2;
 	  savea0 = EM_A0;
 	  savea1 = EM_A1;
-          PUSHADDR((LONGINT) (long) US_TO_SYN68K(nmptr));
+          PUSHADDR(US_TO_SYN68K(nmptr));
           CALL_EMULATOR( CL( guest_cast<uint32_t> (nmptr->nmResp)));
 	  EM_D0 = saved0;
 	  EM_D1 = saved1;

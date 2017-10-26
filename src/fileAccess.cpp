@@ -1511,8 +1511,7 @@ A2(PUBLIC, OSErr, ufsPBRead, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
 	    if (Cx(pb->ioParam.ioPosOffset) + rc > Cx(fp->fcleof))
 		rc = Cx(fp->fcleof) - Cx(pb->ioParam.ioPosOffset);
 	    nread = read(fd, (char *)(MR(pb->ioParam.ioBuffer)), rc);
-	    ROMlib_destroy_blocks((syn68k_addr_t)
-			         (long) US_TO_SYN68K(MR(pb->ioParam.ioBuffer)),
+	    ROMlib_destroy_blocks(US_TO_SYN68K(MR(pb->ioParam.ioBuffer)),
 				  rc, TRUE);
 	    if (nread == -1) {
 		pb->ioParam.ioActCount = 0;
