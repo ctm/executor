@@ -46,37 +46,62 @@ static void
 raw_bits_for_pattern (const Pattern pattern, PixMap *target,
 		      uint32 *bits, int *row_bytes)
 {
-  /* pattern_pixmap_tmpl is a template pattern to be used as the source
+  /* this is a template pattern to be used as the source
      when performing the conversion from the old style
      pattern to the destination */
-/* dst_pixmap_tmpl is a template pattern to be used as the dest
+  static PixMap pattern_pixmap_tmpl =
+    {
+      /* baseAddr; to be filled in later */
+      NULL,
+      PIXMAP_DEFAULT_ROWBYTES_X | CWC (1),
+      { CWC (0), CWC (0), CWC (8), CWC (8) },
+      /* version */
+      CWC (0),
+      CWC (0),
+      CLC (0),
+		
+      CLC (72 << 16), CLC (72 << 16),
+      
+      CWC (0),
+      /* 1bpp */
+      CWC (1),
+      /* 1 component */
+      CWC (1), CWC (1),
+      CLC (0),
+      /* color table; to be filled in later */
+      NULL,
+		
+      CLC (0),
+    };
+  /* this is a template pattern to be used as the dest
      when performing the conversion from the old style
      pattern to the destination */
-
-  static bool templatesInited = false;
-  static PixMap pattern_pixmap_tmpl, dst_pixmap_tmpl;
-
-  if(!templatesInited)
-  {
-    templatesInited = true;
-    memset(&pattern_pixmap_tmpl, 0, sizeof(PixMap));
-    memset(&dst_pixmap_tmpl, 0, sizeof(PixMap));
-    pattern_pixmap_tmpl.rowBytes = PIXMAP_DEFAULT_ROWBYTES_X | CWC (1);
-    pattern_pixmap_tmpl.bounds.bottom.set(8);   // ### TODO: in the future, this can be a simple assignment
-    pattern_pixmap_tmpl.bounds.right.set(8);
-    pattern_pixmap_tmpl.hRes.set(72 << 16);
-    pattern_pixmap_tmpl.vRes.set(72 << 16);
-
-    dst_pixmap_tmpl = pattern_pixmap_tmpl;
-
-    pattern_pixmap_tmpl.pixelSize.set(1);
-    pattern_pixmap_tmpl.cmpCount.set(1);
-    pattern_pixmap_tmpl.cmpSize.set(1);
-  }
-
+  static PixMap dst_pixmap_tmpl =
+    {
+      /* baseAddr; to be filled in later */
+      NULL,
+      0,
+      { CWC (0), CWC (0), CWC (8), CWC (8) },
+      /* version */
+      CWC (0),
+      CWC (0),
+      CLC (0),
+		
+      CLC (72 << 16), CLC (72 << 16),
+		
+      CWC (0),
+      CWC (0),
+      CWC (0), CWC (0),
+      CLC (0),
+      /* color table; to be filled in later */
+      NULL,
+		
+      CLC (0),
+    };
   CTabPtr conv_table;
   CTabHandle fg_bk_ctab;
   int dst_row_bytes, target_depth;
+
   
   pattern_pixmap_tmpl.baseAddr = RM ((Ptr) &pattern[0]);
   fg_bk_ctab = validate_fg_bk_ctab ();
