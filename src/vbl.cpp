@@ -122,7 +122,7 @@ A0 (PUBLIC, void, C_ROMlib_vcatch)
 	   * outside the loop.
 	   */
 
-	  EM_A0 = (LONGINT) (long) US_TO_SYN68K_CHECK0(vp);
+	  EM_A0 = US_TO_SYN68K_CHECK0(vp);
 	  EM_A1 = CL (guest_cast<LONGINT> (vp->vblAddr));
 	  
 	  CALL_EMULATOR ((syn68k_addr_t) EM_A1);

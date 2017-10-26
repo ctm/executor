@@ -213,7 +213,7 @@ STUB(HWPriv)
 
 STUB(ResourceStub)
 {
-    EM_A0 = (long) US_TO_SYN68K_CHECK0(ROMlib_mgetres2(
+    EM_A0 = US_TO_SYN68K_CHECK0(ROMlib_mgetres2(
 				(resmaphand) SYN68K_TO_US_CHECK0(EM_A4),
 				(resref *) SYN68K_TO_US_CHECK0(EM_A2)));
     RTS();
@@ -276,7 +276,7 @@ STUB(_GetResource)
     retaddr = POPADDR();
     arg0 = POPUW();
     retval = C_GetResource(POPUL(), arg0);
-    WRITEUL(EM_A7, (uint32) US_TO_SYN68K_CHECK0(retval));
+    WRITEUL(EM_A7, US_TO_SYN68K_CHECK0(retval));
     PUSHADDR(retaddr);
     EM_D0 = 0;
     RTS();
@@ -752,7 +752,7 @@ STUB(HandToHand)
     SAVE_A1_D1_D2();
     vp = (Handle) SYN68K_TO_US_CHECK0(EM_A0);
     EM_D0 = HandToHand(&vp);
-    EM_A0 = (long) US_TO_SYN68K_CHECK0(vp);
+    EM_A0 = US_TO_SYN68K_CHECK0(vp);
     RESTORE_A1_D1_D2();
     ADJUST_CC_BASED_ON_D0();
     RTS();
@@ -765,7 +765,7 @@ STUB(PtrToHand)
     SAVE_A1_D1_D2();
     EM_D0 = PtrToHand((Ptr) SYN68K_TO_US_CHECK0(EM_A0),
 		      &dsthand, EM_D0);
-    EM_A0 = US_TO_SYN68K_CHECK0 ((long) dsthand);
+    EM_A0 = US_TO_SYN68K_CHECK0 (dsthand);
     RESTORE_A1_D1_D2();
     ADJUST_CC_BASED_ON_D0();
     RTS();
@@ -1213,7 +1213,7 @@ pack8_fail_fn ()
   retaddr = POPADDR ();
   
   /* #### just clobber a1? */
-  EM_A1 = (uint32) US_TO_SYN68K_CHECK0(P_pack8_unknown_selector);
+  EM_A1 = US_TO_SYN68K_CHECK0(P_pack8_unknown_selector);
   
   CALL_EMULATOR ((syn68k_addr_t) AE_OSL_select_fn);
   
@@ -1810,7 +1810,7 @@ STUB (CommToolboxDispatch)
       EM_D0 = CRMGetCRMVersion ();
       break;
     case 1282:
-      EM_D0 = (LONGINT) US_TO_SYN68K_CHECK0 (CRMGetHeader ());
+      EM_D0 = US_TO_SYN68K_CHECK0 (CRMGetHeader ());
       break;
     case 1283:
       CRMInstall (MR (arg_block->args.crm_args.qp));
@@ -1819,7 +1819,7 @@ STUB (CommToolboxDispatch)
       EM_D0 = CRMRemove (MR (arg_block->args.crm_args.qp));
       break;
     case 1285:
-      EM_D0 = (LONGINT) US_TO_SYN68K_CHECK0 (CRMSearch (MR (arg_block->args.crm_args.qp)));
+      EM_D0 = US_TO_SYN68K_CHECK0 (CRMSearch (MR (arg_block->args.crm_args.qp)));
       break;
     case 1281:
       EM_D0 = InitCRM ();
@@ -2399,7 +2399,7 @@ ROMlib_GetTrapAddress_helper (uint32 *d0p, uint32 d1, uint32 *a0p)
   if (*a0p == (uint32) tooltraptable[UNIMPLEMENTEDINDEX])
     {
       add_to_bad_trap_addresses (tool_p, *d0p);
-      *a0p = (long) US_TO_SYN68K_CHECK0(P_bad_trap_unimplemented);
+      *a0p = US_TO_SYN68K_CHECK0(P_bad_trap_unimplemented);
     }
   *d0p = 0;
 }
@@ -2448,7 +2448,7 @@ STUB(Gestalt)
     case 0xA5AD:
       EM_D0 = ReplaceGestalt(EM_D0, (ProcPtr) SYN68K_TO_US_CHECK0(EM_A0),
 			     &oldp);
-      EM_A0 = (LONGINT) US_TO_SYN68K_CHECK0 (oldp);
+      EM_A0 = US_TO_SYN68K_CHECK0 (oldp);
       break;
     case 0xA7AD:
       gui_abort ();
@@ -2722,15 +2722,14 @@ STUB (SetGrowZone)
 
 STUB (GetZone)
 {
-  EM_A0 = (uint32) US_TO_SYN68K_CHECK0(GetZone ());
+  EM_A0 = US_TO_SYN68K_CHECK0(GetZone ());
   EM_D0 = CW (MemErr);
   RTS ();
 }
 
 STUB (NewEmptyHandle)
 {
-  EM_A0 = (uint32)
-    US_TO_SYN68K_CHECK0(_NewEmptyHandle_flags (SYS_P (EM_D1, 0xA166)));
+  EM_A0 = US_TO_SYN68K_CHECK0(_NewEmptyHandle_flags (SYS_P (EM_D1, 0xA166)));
   EM_D0 = CW (MemErr);
   RTS ();
 }
@@ -2755,7 +2754,7 @@ STUB (HandleZone)
 
 STUB (RecoverHandle)
 {
-  EM_A0 = (uint32) US_TO_SYN68K_CHECK0(
+  EM_A0 = US_TO_SYN68K_CHECK0(
 			_RecoverHandle_flags ((Ptr) SYN68K_TO_US_CHECK0(EM_A0),
 					      SYS_P (EM_D1, 0xA128)));
   EM_D0 = CW (MemErr);
@@ -2764,7 +2763,7 @@ STUB (RecoverHandle)
 
 STUB (NewPtr)
 {
-  EM_A0 = (uint32) US_TO_SYN68K_CHECK0(_NewPtr_flags (EM_D0, SYS_P (EM_D1, 0xA11E),
+  EM_A0 = US_TO_SYN68K_CHECK0(_NewPtr_flags (EM_D0, SYS_P (EM_D1, 0xA11E),
 				  CLEAR_P (EM_D1, 0xA11E)));
   EM_D0 = CW (MemErr);
   RTS ();
@@ -2772,7 +2771,7 @@ STUB (NewPtr)
 
 STUB (PtrZone)
 {
-  EM_A0 = (uint32) US_TO_SYN68K_CHECK0(PtrZone ((Ptr) SYN68K_TO_US_CHECK0(EM_A0)));
+  EM_A0 = US_TO_SYN68K_CHECK0(PtrZone ((Ptr) SYN68K_TO_US_CHECK0(EM_A0)));
   EM_D0 = CW (MemErr);
   RTS ();
 }

@@ -1,3 +1,6 @@
+PascalToCCall           check for 64-bit
+CToPascalCall
+
 ROMlib_mbdfcall         64-bit problem: expects a host native pointer hidden in a LONGINT
 ROMlib_ctlcall
 

@@ -49,18 +49,18 @@ using namespace Executor;
 
 #define SYN68K_TO_US_CHECK0_CHECKNEG1(addr)			\
 ({								\
-  typeof(addr) __t;						\
+  syn68k_addr_t __t;						\
 								\
   __t = addr;							\
-  ((long) __t == -1L) ? (uint16 *) -1 : SYN68K_TO_US_CHECK0(__t);	\
+  (__t == (syn68k_addr_t)-1) ? (uint16 *) -1 : SYN68K_TO_US_CHECK0(__t);	\
 })
 
 #define US_TO_SYN68K_CHECK0_CHECKNEG1(addr)			\
 ({								\
-  typeof(addr) __t;						\
+  void* __t;						        \
 								\
   __t = addr;							\
-  ((long) __t == -1) ? (int32) -1 : US_TO_SYN68K_CHECK0(__t);	\
+  (__t == (void*)-1) ? (syn68k_addr_t) -1 : US_TO_SYN68K_CHECK0(__t);	\
 })
 
 PUBLIC syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop)
@@ -207,7 +207,7 @@ PUBLIC syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t
 	WRITEUL(EM_A7, retval);
 	break;
       case 5:
-	WRITEUL(EM_A7, US_TO_SYN68K_CHECK0_CHECKNEG1(retval));
+	WRITEUL(EM_A7, US_TO_SYN68K_CHECK0_CHECKNEG1((void*)retval));
 	break;
       }
     return retaddr;
@@ -267,7 +267,7 @@ CToPascalCall_m68k(void *wheretogo, unsigned long long magic, va_list ap)
 	    PUSHUL(va_arg(ap, ULONGINT));
 	    break;
 	case 5:
-	    PUSHUL(US_TO_SYN68K_CHECK0_CHECKNEG1(va_arg(ap, ULONGINT)));
+	    PUSHUL(US_TO_SYN68K_CHECK0_CHECKNEG1((void*) va_arg(ap, ULONGINT)));
 	    break;
 	}
 	magic >>= 3;
