@@ -96,7 +96,7 @@ xdblt_canon_pattern (void)
   log2_bpp = xdblt_log2_bpp;
 
   rgn = xdblt_rgn_start;
-  y = CW (*rgn++);
+  y = CW_RAW (*rgn++);
   if (y == RGNSTOP)
     goto done_with_scanlines;
 
@@ -186,7 +186,7 @@ xdblt_canon_pattern (void)
   * so we have to look two bytes farther to find the next y
   * value.  Special regions store y's as big endian.
   */
-  next_y = CW (rgn[1]);
+  next_y = CW_RAW (rgn[1]);
   rgn += 2;
   if (next_y == RGNSTOP)
     goto done_with_scanlines;

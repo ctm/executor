@@ -61,53 +61,53 @@ begin_src_func
 end_func
 
 begin_mode copy_shift max_unwrap
- repeat		@dst@ = CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift));
- mask		@dst@ = (@dst@ & ~arg) | (CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)) & arg);
+ repeat		@dst@ = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift));
+ mask		@dst@ = (@dst@ & ~arg) | (CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg);
 end_mode
 
 begin_mode or_shift max_unwrap
- repeat		@dst@ |= CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift));
- mask		@dst@ |= CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)) & arg;
+ repeat		@dst@ |= CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift));
+ mask		@dst@ |= CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg;
 end_mode
 
 begin_mode xor_shift max_unwrap
- repeat		@dst@ ^= CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift));
- mask		@dst@ ^= CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)) & arg;
+ repeat		@dst@ ^= CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift));
+ mask		@dst@ ^= CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg;
 end_mode
 
 begin_mode xor_shift_fgbk max_unwrap
- repeat		@dst@ ^= CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift));
- mask		@dst@ ^= CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)) & arg;
+ repeat		@dst@ ^= CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift));
+ mask		@dst@ ^= CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg;
 end_mode
 
 begin_mode and_shift max_unwrap
- repeat		@dst@ &= CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift));
- mask		@dst@ &= CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)) | ~arg;
+ repeat		@dst@ &= CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift));
+ mask		@dst@ &= CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) | ~arg;
 end_mode
 
 begin_mode notcopy_shift max_unwrap
- repeat		@dst@ = ~(CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)));
- mask		@dst@ = (@dst@ & ~arg) | (~(CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift))) & arg);
+ repeat		@dst@ = ~(CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)));
+ mask		@dst@ = (@dst@ & ~arg) | (~(CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift))) & arg);
 end_mode
 
 begin_mode notor_shift max_unwrap
- repeat		@dst@ |= ~(CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)));
- mask		@dst@ |= (~(CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)))) & arg;
+ repeat		@dst@ |= ~(CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)));
+ mask		@dst@ |= (~(CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)))) & arg;
 end_mode
 
 begin_mode notxor_shift max_unwrap
- repeat		@dst@ ^= ~(CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)));
- mask		@dst@ ^= (~(CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)))) & arg;
+ repeat		@dst@ ^= ~(CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)));
+ mask		@dst@ ^= (~(CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)))) & arg;
 end_mode
 
 begin_mode notxor_shift_fgbk max_unwrap
- repeat		@dst@ ^= ~(CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)));
- mask		@dst@ ^= (~(CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)))) & arg;
+ repeat		@dst@ ^= ~(CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)));
+ mask		@dst@ ^= (~(CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)))) & arg;
 end_mode
 
 begin_mode notand_shift max_unwrap
- repeat		@dst@ &= ~(CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)));
- mask		@dst@ &= ~((CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift))) & arg);
+ repeat		@dst@ &= ~(CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)));
+ mask		@dst@ &= ~((CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift))) & arg);
 end_mode
 
 
@@ -167,13 +167,13 @@ begin_src_func
 end_func
 
 begin_mode copy_shift_fgbk max_unwrap
- repeat	{ const uint32 s = CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)); @dst@ = (s & fg_bits) | (~s & bk_bits); }
- mask	{ const uint32 s = (CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)) & arg); uint32 d = @dst@ & ~arg; d |= ((s & fg_bits) | (~s & bk_bits)) & arg; @dst@ = d; }
+ repeat	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); @dst@ = (s & fg_bits) | (~s & bk_bits); }
+ mask	{ const uint32 s = (CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg); uint32 d = @dst@ & ~arg; d |= ((s & fg_bits) | (~s & bk_bits)) & arg; @dst@ = d; }
 end_mode
 
 begin_mode notcopy_shift_fgbk max_unwrap
- repeat	{ const uint32 s = (CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift))); @dst@ = (~s & fg_bits) | (s & bk_bits); }
- mask	{ const uint32 s = (CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)) & arg); uint32 d = @dst@ & ~arg; d |= ((~s & fg_bits) | (s & bk_bits)) & arg; @dst@ = d; }
+ repeat	{ const uint32 s = (CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift))); @dst@ = (~s & fg_bits) | (s & bk_bits); }
+ mask	{ const uint32 s = (CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg); uint32 d = @dst@ & ~arg; d |= ((~s & fg_bits) | (s & bk_bits)) & arg; @dst@ = d; }
 end_mode
 
 
@@ -184,13 +184,13 @@ begin_src_func
 end_func
 
 begin_mode or_shift_fgbk max_unwrap
- repeat	{ const uint32 s = CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)); uint32 d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
- mask	{ const uint32 s = CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)) & arg; uint32 d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
+ repeat	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); uint32 d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
+ mask	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg; uint32 d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
 end_mode
 
 begin_mode notor_shift_fgbk max_unwrap
- repeat	{ const uint32 s = CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)); uint32 d = @dst@ & s; d |= (~s & fg_bits); @dst@ = d; }
- mask	{ const uint32 s = ~(CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift))) & arg; uint32 d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
+ repeat	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); uint32 d = @dst@ & s; d |= (~s & fg_bits); @dst@ = d; }
+ mask	{ const uint32 s = ~(CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift))) & arg; uint32 d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
 end_mode
 
 
@@ -201,11 +201,11 @@ begin_src_func
 end_func
 
 begin_mode and_shift_fgbk max_unwrap
- repeat	{ const uint32 s = CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)); uint32 d = @dst@ & s; d |= (~s & bk_bits); @dst@ = d; }
- mask	{ const uint32 s = CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)) | ~arg; uint32 d = @dst@ & s; d |= (~s & bk_bits); @dst@ = d; }
+ repeat	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); uint32 d = @dst@ & s; d |= (~s & bk_bits); @dst@ = d; }
+ mask	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) | ~arg; uint32 d = @dst@ & s; d |= (~s & bk_bits); @dst@ = d; }
 end_mode
 
 begin_mode notand_shift_fgbk max_unwrap
- repeat	{ const uint32 s = CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)); uint32 d = @dst@ & ~s; d |= (s & bk_bits); @dst@ = d; }
- mask	{ const uint32 s = CL ((CL (@src@) << left_shift) | (CL (@src_plus_1@) >> right_shift)) & arg; uint32 d = @dst@ & ~s; d |= (s & bk_bits); @dst@ = d; }
+ repeat	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); uint32 d = @dst@ & ~s; d |= (s & bk_bits); @dst@ = d; }
+ mask	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg; uint32 d = @dst@ & ~s; d |= (s & bk_bits); @dst@ = d; }
 end_mode

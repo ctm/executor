@@ -34,11 +34,11 @@ ultable.ctable:	mkultable
 sspairtable.ctable:	mksspairtable
 	./mksspairtable > $@
 
-rawpatstubs.cpp:	$(srcdir)/makerawblt.pl $(srcdir)/pat-blitters.tmpl
-	$(PERL) $(srcdir)/makerawblt.pl < $(srcdir)/pat-blitters.tmpl > rawpatstubs.cpp
+rawpatstubs.ctable:	$(srcdir)/makerawblt.pl $(srcdir)/pat-blitters.tmpl
+	$(PERL) $(srcdir)/makerawblt.pl < $(srcdir)/pat-blitters.tmpl > rawpatstubs.ctable
 
-rawsrcstubs.cpp: $(srcdir)/makerawblt.pl $(srcdir)/src-blitters.tmpl
-	$(PERL) $(srcdir)/makerawblt.pl < $(srcdir)/src-blitters.tmpl > rawsrcstubs.cpp
+rawsrcstubs.ctable: $(srcdir)/makerawblt.pl $(srcdir)/src-blitters.tmpl
+	$(PERL) $(srcdir)/makerawblt.pl < $(srcdir)/src-blitters.tmpl > rawsrcstubs.ctable
 
 parse.o: parse.cpp
 
@@ -47,8 +47,8 @@ stdmbdf.$(OBJEXT):	apple.cmap
 qIMIV.$(OBJEXT):	seedtables.ctable
 qStdText.$(OBJEXT):	ultable.ctable
 qIMVI.$(OBJEXT):	sspairtable.ctable
-rawpatblt.$(OBJEXT):	rawpatstubs.cpp
-rawsrcblt.$(OBJEXT):	rawsrcstubs.cpp
+rawpatblt.$(OBJEXT):	rawpatstubs.ctable
+rawsrcblt.$(OBJEXT):	rawsrcstubs.ctable
 windDocdef.$(OBJEXT):	$(wind_bitmap_c_files)
 
 # These helper variables break the source into logical groups, but there's
