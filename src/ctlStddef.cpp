@@ -367,18 +367,6 @@ P4 (PUBLIC, pascal LONGINT, cdef0, INTEGER, var, ControlHandle, c,
   Rect r;
   draw_state_t draw_state;
   int draw_p;
-
-  switch (mess)
-    {
-    case calcCRgns:
-    case calcCntlRgn:
-    case calcThumbRgn:
-    case thumbCntl:
-      param = (LONGINT) SYN68K_TO_US (param);
-      break;
-    default:
-      break;
-    }
   
   /* if drawing can occur, validate the color state */
   draw_p = (mess == drawCntl);
@@ -428,7 +416,7 @@ P4 (PUBLIC, pascal LONGINT, cdef0, INTEGER, var, ControlHandle, c,
     case calcCRgns:
     case calcCntlRgn:
       {
-	RgnHandle rgn = (RgnHandle) param;
+	RgnHandle rgn = ptr_from_longint<RgnHandle>( param );
 	SignedByte state;
 	
 	state = HGetState ((Handle) rgn);

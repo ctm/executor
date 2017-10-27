@@ -100,38 +100,10 @@ TT Cx_RAW(TT x);    // no definition. Make sure we get a linker error if an unex
 #define RM(n)  ((typeof (n))(n ? ((swap32 ((unsigned long) (n)- ROMlib_offset)) ) : 0))
 #elif 1
 
-/*
-
-template<typename TT>
-TT* MR(TT* p)
-{
-    if(p)
-        return (TT*) (swap32((uint32_t)p) + ROMlib_offset);
-    else
-        return nullptr;
-}
-*/
-
-/*
-template<typename TT>
-TT* RM(TT* p)
-{
-    if(p)
-        return (TT*) swap32( (uint32_t) ((uintptr_t)p - ROMlib_offset)) ;
-    else
-        return nullptr;
-}*/
-#define RM2(x) RM(x)
-
-// in the future, we will make RM look like RM2
-// and when no old-fashioned RM is left, we can switch to automatic conversion
 template<typename TT>
 GUEST<TT*> RM(TT* p)
 {
-    if(p)
-        return GUEST<TT*>::fromRaw(swap32( (uint32_t) ((uintptr_t)p - ROMlib_offset))) ;
-    else
-        return nullptr;
+    return GUEST<TT*>::fromHost(p);
 }
 
 
@@ -349,6 +321,23 @@ extern int bad_cx_splosion;
 
 #endif /* !BIGENDIAN */
 
+
+
+template<typename TT>
+TT ptr_from_longint(int32_t l)
+{
+        // FIXME: needless back-and-forth endian conversion
+    return MR( guest_cast<TT>( CL(l) ) );
 }
+
+template<typename TT>
+int32_t ptr_to_longint(TT p)
+{
+        // FIXME: needless back-and-forth endian conversion
+    return CL( guest_cast<int32_t>( RM(p) ) );
+}
+
+}
+
 
 #endif /* !_BYTESWAP_H_ */

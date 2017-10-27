@@ -236,6 +236,12 @@ struct GuestWrapper : GuestWrapperBase<TT>
         w.raw(r);
         return w;
     }
+    static GuestWrapper<TT> fromHost(typename GuestWrapper<TT>::WrappedType x)
+    {
+        GuestWrapper<TT> w;
+        w.set(x);
+        return w;
+    }
 
     explicit operator bool()
     {

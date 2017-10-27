@@ -505,7 +505,7 @@ P4 (PUBLIC pascal, void, new_draw_scroll, INTEGER, depth, INTEGER, flags,
   INTEGER part;
   Rect r;
   
-  dlp = (device_loop_param *)l;
+  dlp = ptr_from_longint<device_loop_param *>(l);
   ctl = dlp->ctl;
   part = dlp->param;
 
@@ -591,7 +591,7 @@ P4 (PUBLIC pascal, void, new_pos_ctl, INTEGER, depth, INTEGER, flags,
   Rect thumbr;
   Rect r;
 
-  dlp = (device_loop_param *)l;
+  dlp = ptr_from_longint<device_loop_param *>(l);
   ctl = dlp->ctl;
   p = dlp->param;
 
@@ -707,18 +707,6 @@ P4 (PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */
   Rect thumbr;
   save_t save;
   boolean_t need_to_restore_p;
-
-  switch (mess)
-    {
-    case calcCRgns:
-    case calcCntlRgn:
-    case calcThumbRgn:
-    case thumbCntl:
-      param = (LONGINT) SYN68K_TO_US (param);
-      break;
-    default:
-      break;
-    }
   
   /* if drawing can occur, validate the color state */
   draw_p = (mess == drawCntl
@@ -754,7 +742,7 @@ P4 (PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */
 	    RectRgn (rh, &HxX (c, contrlRect));
 	    dlp.ctl = c;
 	    dlp.param = param;
-	    DeviceLoop (rh, P_new_draw_scroll, (LONGINT) &dlp, 0);
+	    DeviceLoop (rh, P_new_draw_scroll, ptr_to_longint(&dlp), 0);
 	    DisposeRgn (rh);
 	  }
 	  SetPenState (&ps);
@@ -775,16 +763,16 @@ P4 (PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */
 	  {	
 	    param &= 0x7FFFFFFF;	/* IMI-331 */
 	  case calcThumbRgn:
-	    CopyRgn((RgnHandle)(long)HxP(c, contrlData),
-		    (RgnHandle)(long)param);
-	    GlobalToLocalRgn ((RgnHandle)(long) param);
+	    CopyRgn((RgnHandle)HxP(c, contrlData),
+		    ptr_from_longint<RgnHandle>(param));
+	    GlobalToLocalRgn(ptr_from_longint<RgnHandle>(param));
 	    break;
 	  }
 	else
 	  {
 	  case calcCntlRgn:
 	    r = HxX(c, contrlRect);
-	    RectRgn((RgnHandle)(long)param, &r);
+	    RectRgn(ptr_from_longint<RgnHandle>(param), &r);
 	    break;
 	  }
       break;
@@ -812,12 +800,12 @@ P4 (PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */
 	RectRgn (rh, &HxX (c, contrlRect));
 	dlp.ctl = c;
 	dlp.param = param;
-	DeviceLoop (rh, P_new_pos_ctl, (LONGINT) &dlp, 0);
+	DeviceLoop (rh, P_new_pos_ctl, ptr_to_longint(&dlp), 0);
 	DisposeRgn (rh);
       }
       break;
     case thumbCntl:
-      pl = (struct lsastr *) param;
+      pl = ptr_from_longint<struct lsastr *>(param);
       p.v = CW (pl->limitRect.top);
       p.h = CW (pl->limitRect.left);
       pl->slopRect = pl->limitRect = CTL_RECT (c);
