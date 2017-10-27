@@ -252,8 +252,7 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 	      }
 	    memcpy (MR (pb->ioParam.ioBuffer), MR (pbr.ioParam.ioBuffer),
 		    CL (pb->ioParam.ioActCount));
-	    ROMlib_destroy_blocks ((syn68k_addr_t) (long)
-				   US_TO_SYN68K(MR (pb->ioParam.ioBuffer)),
+	    ROMlib_destroy_blocks (US_TO_SYN68K(MR (pb->ioParam.ioBuffer)),
 				   CL (pb->ioParam.ioActCount), TRUE);
 	  }
 	else

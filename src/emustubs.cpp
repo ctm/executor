@@ -95,10 +95,10 @@ namespace Executor {
 
 STUB(GetDefaultStartup)
 {
-    (SYN68K_TO_US((signed char *)EM_A0))[0] = -1;
-    (SYN68K_TO_US((signed char *)EM_A0))[1] = -1;
-    (SYN68K_TO_US((signed char *)EM_A0))[2] = -1;
-    (SYN68K_TO_US((signed char *)EM_A0))[3] = -33; /* That's what Q610 has */
+    (SYN68K_TO_US(EM_A0))[0] = -1;
+    (SYN68K_TO_US(EM_A0))[1] = -1;
+    (SYN68K_TO_US(EM_A0))[2] = -1;
+    (SYN68K_TO_US(EM_A0))[3] = -33; /* That's what Q610 has */
     RTS();
 }
 
@@ -109,8 +109,8 @@ STUB(SetDefaultStartup)
 
 STUB(GetVideoDefault)
 {
-    (SYN68K_TO_US((signed char *)EM_A0))[0] = 0;	/* Q610 values */
-    (SYN68K_TO_US((signed char *)EM_A0))[1] = -56;
+    (SYN68K_TO_US(EM_A0))[0] = 0;	/* Q610 values */
+    (SYN68K_TO_US(EM_A0))[1] = -56;
     RTS();
 }
 
@@ -121,8 +121,8 @@ STUB(SetVideoDefault)
 
 STUB(GetOSDefault)
 {
-    (SYN68K_TO_US((signed char *)EM_A0))[0] = 0;	/* Q610 values */
-    (SYN68K_TO_US((signed char *)EM_A0))[1] = 1;
+    (SYN68K_TO_US(EM_A0))[0] = 0;	/* Q610 values */
+    (SYN68K_TO_US(EM_A0))[1] = 1;
     RTS();
 }
 
@@ -195,7 +195,7 @@ STUB(zerod0SetCtlValue)
 
     retaddr = POPADDR();
     arg0 = POPUW();
-    C_SetCtlValue((ControlHandle) SYN68K_TO_US ((void *) POPUL()), arg0);
+    C_SetCtlValue((ControlHandle) SYN68K_TO_US (POPUL()), arg0);
     EM_D0 = 0;
     ADJUST_CC_BASED_ON_D0 ();
     PUSHADDR(retaddr);
@@ -703,34 +703,34 @@ STUB (ResourceDispatch)
 STUB(Fix2X)
 {
     syn68k_addr_t retaddr;
-    void *retp;
+    syn68k_addr_t retp;
     Fixed f;
 
     retaddr = POPADDR();
     f = (Fixed) POPUL();
-    retp = (void *) POPADDR();
+    retp = POPADDR();
 
     R_Fix2X((void *) SYN68K_TO_US (retaddr), f,
 	    (extended80 *) SYN68K_TO_US (retp));
 
-    PUSHADDR((syn68k_addr_t) retp);
+    PUSHADDR(retp);
     return retaddr;
 }
 
 STUB(Frac2X)
 {
     syn68k_addr_t retaddr;
-    void *retp;
+    syn68k_addr_t retp;
     Fract f;
 
     retaddr = POPADDR();
     f = (Fract) POPUL();
-    retp = (void *) POPADDR();
+    retp = POPADDR();
 
     R_Frac2X((void *) SYN68K_TO_US (retaddr), f,
 	     (extended80 *) SYN68K_TO_US (retp));
 
-    PUSHADDR((syn68k_addr_t) retp);
+    PUSHADDR(retp);
     return retaddr;
 }
 
@@ -2164,7 +2164,7 @@ STUB(HFSDispatch)
 	else
 	  vp = hfstab[(EM_D0 & 0xFFFF)];
 	if (vp)
-	  EM_D0 = (*vp)((long) SYN68K_TO_US_CHECK0(EM_A0),
+	  EM_D0 = (*vp)((intptr_t) SYN68K_TO_US_CHECK0(EM_A0),
 			!!(EM_D1 & ASYNCBIT));
 	else
 	  {
@@ -2384,14 +2384,14 @@ ROMlib_GetTrapAddress_helper (uint32 *d0p, uint32 d1, uint32 *a0p)
   tool_p = istool (d0p, d1);
   if (tool_p)
     {
-      *a0p = (long) (tooltraptable[unimplementedtool(*d0p) ?
+      *a0p = (tooltraptable[unimplementedtool(*d0p) ?
 				   UNIMPLEMENTEDINDEX
 				   :
 				   *d0p]);
     }
   else
     {
-      *a0p = (long) (unimplementedos(*d0p) ?
+      *a0p = (unimplementedos(*d0p) ?
 		      tooltraptable[UNIMPLEMENTEDINDEX]
 		      :
 		      ostraptable[*d0p]);

@@ -603,7 +603,7 @@ PUBLIC void Executor::executor_main( void )
     /* Mac II has 0x3FFF here */
     ROM85 = CWC(0x3FFF);
 
-    a5 = US_TO_SYN68K((LONGINT) &tmpA5);
+    a5 = US_TO_SYN68K(&tmpA5);
     CurrentA5 = guest_cast<Ptr> (CL(a5));
     InitGraf((Ptr) quickbytes + sizeof(quickbytes) - 4);
     InitFonts();

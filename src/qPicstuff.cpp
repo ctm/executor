@@ -1481,7 +1481,7 @@ A1 (PRIVATE, unsigned short, nextop, INTEGER, vers)
   else
     {
       /* require even alignment */
-      if ((int32) nextbytep & 1)
+      if ((intptr_t) nextbytep & 1)
 	eatByte();
       retval = eatINTEGER();
     }

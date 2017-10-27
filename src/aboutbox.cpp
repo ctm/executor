@@ -206,13 +206,13 @@ static syn68k_addr_t
 scroll_stub (syn68k_addr_t junk, void *junk2)
 {
   syn68k_addr_t retaddr;
-  uint32 ctl;
+  ControlHandle ctl;
   INTEGER part;
 
   retaddr = POPADDR ();
   part = POPUW ();
-  ctl = (uint32) SYN68K_TO_US (POPUL ());
-  help_scroll ((ControlHandle) ctl, part);
+  ctl = (ControlHandle) SYN68K_TO_US (POPUL ());
+  help_scroll (ctl, part);
   return retaddr;
 }
 

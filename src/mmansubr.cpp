@@ -401,7 +401,7 @@ Executor::ROMlib_sledgehammer_zone (THz zone, boolean_t print_p,
 	case NREL:
 	  if (infop)
 	    ++infop->n_nrel;
-	  if ((uint32) BLOCK_LOCATION_ZONE (block) != (uint32) zone)
+	  if (BLOCK_LOCATION_ZONE (block) != zone)
 	    mm_fatal ("NREL block `%p' bad location; %p not zone %p",
 		      block, (char *) BLOCK_LOCATION_ZONE (block), zone);
 

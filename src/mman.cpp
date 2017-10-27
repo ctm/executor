@@ -484,7 +484,7 @@ ROMlib_InitZones (offset_enum which)
 	  ROMlib_offset = 8192;
 	  break;
 	case offset_big:
-	  ROMlib_offset = (uint32) memory;
+	  ROMlib_offset = (uintptr_t) memory;
 	  {
 	    int low_global_room = (char *) &lastlowglobal -
 	                          (char *) &nilhandle;
@@ -642,7 +642,7 @@ InitZone (ProcPtr pGrowZone, int16 cMoreMasters,
   zone->bkLim     = RM ((Ptr) last_block);
   zone->purgePtr  = CLC_NULL;
   zone->hFstFree  = CLC_NULL;
-  zone->zcbFree   = CL ((uint32) limitPtr - (uint32) zone - 64);
+  zone->zcbFree   = CL (limitPtr - (Ptr) zone - 64);
   zone->gzProc    = RM (pGrowZone);
   zone->moreMast  = CW (cMoreMasters);
   zone->flags     = CWC (0);
@@ -1053,7 +1053,7 @@ HandleZone (Handle h)
     }
   
   if (block)
-    zone = (THz) ((int32) h - (int32) BLOCK_LOCATION_OFFSET (block));
+    zone = (THz) ((Ptr) h - (int32) BLOCK_LOCATION_OFFSET (block));
   else if (applzone_p)
     zone = MR (ApplZone);
   else if (syszone_p)
@@ -1093,8 +1093,8 @@ _RecoverHandle_flags (Ptr p, boolean_t sys_p)
     {
       h = BLOCK_TO_HANDLE (zones[i], block);
 
-      if ((uint32) h > (uint32) zones[i]
-	  && (uint32) h < (uint32) ZONE_BK_LIM (zones[i])
+      if ((Ptr) h > (Ptr) zones[i]
+	  && (Ptr) h < (Ptr) ZONE_BK_LIM (zones[i])
 	  && STARH (h) == p)
 	break;
     }
@@ -1548,7 +1548,7 @@ _MaxMem_flags (Size *growp, boolean_t sys_p)
     }
 
   if (TheZone == ApplZone)
-    grow = (uint32) MR (ApplLimit) - (uint32) HEAPEND;
+    grow = (Ptr) MR (ApplLimit) - (Ptr) HEAPEND;
   else
     grow = 0;
 
@@ -1791,10 +1791,10 @@ BlockMove_and_possibly_flush_cache (Ptr src, Ptr dst, Size cnt,
 	 dereference 0 */
 
       if (!dst)
-	dst = (Ptr) SYN68K_TO_US (dst);
+	dst = (Ptr) SYN68K_TO_US (0);
 
       if (!src)
-	src = (Ptr) SYN68K_TO_US (src);
+	src = (Ptr) SYN68K_TO_US (0);
 
       memmove_transfer (dst, src, cnt);
       if (flush_p)
@@ -1959,17 +1959,17 @@ _PurgeSpace_flags (Size *total_out, Size *contig_out, boolean_t sys_p)
 Size
 StackSpace (void)
 {
-  int32 fp;
+  intptr_t fp;
 
   MM_SLAM ("entry");
   
-  fp = (int32) SYN68K_TO_US (EM_A7);
+  fp = (intptr_t) SYN68K_TO_US (EM_A7);
 
   /* Stack pointer on return is fp + 8 (4 for old fp, 4 for return
      address) */
 
   SET_MEM_ERR (noErr);
-  return (fp + 8) - (int32) HEAPEND;
+  return (fp + 8) - (intptr_t) HEAPEND;
 }
 
 void
@@ -2088,7 +2088,7 @@ ROMlib_installhandle (Handle sh, Handle dh)
       block_header_t *sb = HANDLE_TO_BLOCK (sh);
       ROMlib_freeblock (db);
       SETMASTER (dh, STARH (sh));
-      BLOCK_LOCATION_OFFSET_X (sb) = CL ((uint32) dh - (uint32) MR (TheZone));
+      BLOCK_LOCATION_OFFSET_X (sb) = CL ((Ptr) dh - (Ptr) MR (TheZone));
       *sh = guest_cast<Ptr>( ZONE_HFST_FREE_X (MR (TheZone)) );
       ZONE_HFST_FREE_X (MR (TheZone)) = RM ((Ptr) sh);
     }
