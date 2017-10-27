@@ -448,7 +448,7 @@ ROMlib_InitZones (offset_enum which)
 #if defined (SBRK_PERMANENT_MEMORY)
       if (memory == NULL)
 	{
-	  memory = sbrk (total_allocated_memory);
+	  memory = (char*)sbrk (total_allocated_memory);
 	  if (memory == (char *) -1)
 	    memory = NULL;
 	}
