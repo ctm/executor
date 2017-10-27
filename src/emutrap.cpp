@@ -66,7 +66,7 @@ using namespace Executor;
 PUBLIC syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop)
 {
     unsigned short pth, ptv;
-    LONGINT args[11], retval;
+    long args[11], retval;
 #if defined (powerpc)
     Point points[11];
     int point_count = 0;
@@ -75,18 +75,18 @@ PUBLIC syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t
     int count, rettype;
     void *funcp;
     int sizeflag;
-    typedef LONGINT (*func0argsp_t)(void);
-    typedef LONGINT (*func1argsp_t)(LONGINT);
-    typedef LONGINT (*func2argsp_t)(LONGINT,LONGINT);
-    typedef LONGINT (*func3argsp_t)(LONGINT,LONGINT,LONGINT);
-    typedef LONGINT (*func4argsp_t)(LONGINT,LONGINT,LONGINT,LONGINT);
-    typedef LONGINT (*func5argsp_t)(LONGINT,LONGINT,LONGINT,LONGINT,LONGINT);
-    typedef LONGINT (*func6argsp_t)(LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT);
-    typedef LONGINT (*func7argsp_t)(LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT);
-    typedef LONGINT (*func8argsp_t)(LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT);
-    typedef LONGINT (*func9argsp_t)(LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT);
-    typedef LONGINT (*func10argsp_t)(LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT);
-    typedef LONGINT (*func11argsp_t)(LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT,LONGINT);
+    typedef long (*func0argsp_t)(void);
+    typedef long (*func1argsp_t)(long);
+    typedef long (*func2argsp_t)(long,long);
+    typedef long (*func3argsp_t)(long,long,long);
+    typedef long (*func4argsp_t)(long,long,long,long);
+    typedef long (*func5argsp_t)(long,long,long,long,long);
+    typedef long (*func6argsp_t)(long,long,long,long,long,long);
+    typedef long (*func7argsp_t)(long,long,long,long,long,long,long);
+    typedef long (*func8argsp_t)(long,long,long,long,long,long,long,long);
+    typedef long (*func9argsp_t)(long,long,long,long,long,long,long,long,long);
+    typedef long (*func10argsp_t)(long,long,long,long,long,long,long,long,long,long);
+    typedef long (*func11argsp_t)(long,long,long,long,long,long,long,long,long,long,long);
     syn68k_addr_t retaddr;
 
     count = 0;
@@ -135,7 +135,7 @@ PUBLIC syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t
 	    args[count++] = POPSL();
 	    break;
 	case 5:
-	    args[count++] = (LONGINT) SYN68K_TO_US_CHECK0_CHECKNEG1(POPSL());
+	    args[count++] = (long) SYN68K_TO_US_CHECK0_CHECKNEG1(POPSL());
 	  break;
 	}
 	magic >>= 3;
@@ -216,8 +216,8 @@ PUBLIC syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t
 PRIVATE long
 CToPascalCall_m68k(void *wheretogo, unsigned long long magic, va_list ap)
 {
-    LONGINT retval;
-    ULONGINT ul;
+    long retval;
+    unsigned long ul;
     int retvaltype;
     M68kReg saveregs[14];
   
@@ -244,7 +244,7 @@ CToPascalCall_m68k(void *wheretogo, unsigned long long magic, va_list ap)
  	    PUSHUW((unsigned short) va_arg(ap, unsigned long));
 	    break;
 	case 3:
-	    ul = va_arg(ap, ULONGINT);
+	    ul = va_arg(ap, unsigned long);
 #if !defined(LITTLEENDIAN)
 #if !defined (powerpc)
 	    PUSHUW(ul);
@@ -264,10 +264,10 @@ CToPascalCall_m68k(void *wheretogo, unsigned long long magic, va_list ap)
 #endif /* defined(LITTLEENDIAN) */
 	    break;
 	case 4:
-	    PUSHUL(va_arg(ap, ULONGINT));
+	    PUSHUL(va_arg(ap, unsigned long));
 	    break;
 	case 5:
-	    PUSHUL(US_TO_SYN68K_CHECK0_CHECKNEG1((void*) va_arg(ap, ULONGINT)));
+	    PUSHUL(US_TO_SYN68K_CHECK0_CHECKNEG1((void*) va_arg(ap, unsigned long)));
 	    break;
 	}
 	magic >>= 3;
@@ -290,7 +290,7 @@ CToPascalCall_m68k(void *wheretogo, unsigned long long magic, va_list ap)
 	retval = POPSL();
 	break;
     case 5:
-	retval = (LONGINT) SYN68K_TO_US_CHECK0_CHECKNEG1(POPSL());
+	retval = (unsigned long) SYN68K_TO_US_CHECK0_CHECKNEG1(POPSL());
 	break;
 #if !defined(LETGCCWAIL)
     default:
