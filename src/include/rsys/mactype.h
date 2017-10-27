@@ -47,6 +47,10 @@ template<> struct Aligner<signed char> { uint8_t align; };
 // However, Cx is used all over Executor, should learn to handle GUEST<> types,
 // and eventually go away. SwapTyped is used internally here, and nowhere else.
 
+#if defined (BIGENDIAN)
+#define SwapTyped(x) (x)
+#else
+
 inline unsigned char SwapTyped(unsigned char x) { return x; }
 inline signed char SwapTyped(signed char x) { return x; }
 inline char SwapTyped(char x) { return x; }
@@ -56,7 +60,7 @@ inline int16_t SwapTyped(int16_t x) { return swap16((uint16_t)x); }
 
 inline uint32_t SwapTyped(uint32_t x) { return swap32(x); }
 inline int32_t SwapTyped(int32_t x) { return swap32((uint32_t)x); }
-
+#endif
 
 // USE_PACKED_HIDDENVALUE - control which one of two versions
 // of template struct/union HiddenValue to use.
@@ -68,7 +72,7 @@ inline int32_t SwapTyped(int32_t x) { return swap32((uint32_t)x); }
 #define USE_PACKED_HIDDENVALUE
 
 
-template<typename ActualType, typename FakeType = ActualType>
+template<typename ActualType>
 #ifdef USE_PACKED_HIDDENVALUE
 struct  __attribute__((packed, align(2))) HiddenValue
 #else
@@ -83,8 +87,8 @@ union HiddenValue
 #endif
 public:
     HiddenValue() = default;
-    HiddenValue(const HiddenValue<ActualType,FakeType>& y) = default;
-    HiddenValue<ActualType,FakeType>& operator=(const HiddenValue<ActualType,FakeType>& y) = default;
+    HiddenValue(const HiddenValue<ActualType>& y) = default;
+    HiddenValue<ActualType>& operator=(const HiddenValue<ActualType>& y) = default;
     
     ActualType raw() const
     {
@@ -103,14 +107,6 @@ public:
         *(ActualType*)data = x;         
 #endif
     }
-
-
-    HiddenValue(FakeType x) { raw( (ActualType)x ); }
-    HiddenValue<ActualType,FakeType>& operator=(FakeType y) { raw( (ActualType)y ); return *this; }
-    operator FakeType() const { return (FakeType) raw(); }
-
-    template<class T2>
-    explicit operator T2() const { return (T2) (FakeType) raw(); }
 };
 
 template<typename TT>
@@ -171,7 +167,7 @@ template<typename TT>
 struct GuestWrapperBase<TT*>
 {
 private:
-    HiddenValue<uint32_t, TT*> p;
+    HiddenValue<uint32_t> p;
 public:
     using WrappedType = TT*;
     using RawGuestType = uint32_t;
@@ -452,6 +448,7 @@ GUEST<TO> guest_cast(GuestWrapper<FROM> p)
     result.raw( p.raw() );
     return result;
 }
+
 
 
 #  define PACKED_MEMBER(typ, name) typ name
