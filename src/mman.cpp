@@ -406,7 +406,7 @@ ROMlib_InitZones (offset_enum which)
     {
       char *memory;
       unsigned long total_allocated_memory, total_mac_visible_memory;
-      GUEST<Ptr> mem_top;
+      Ptr mem_top;
       
       canonicalize_memory_sizes ();
       
@@ -466,7 +466,7 @@ ROMlib_InitZones (offset_enum which)
 
       /* can't assign to low-memory globals yet */
 
-      mem_top = RM ((Ptr)memory + total_allocated_memory);
+      mem_top = (Ptr)memory + total_allocated_memory;
       
       stack_begin = ((Ptr) memory
 		     + INIT_SYSZONE_SIZE
@@ -500,7 +500,7 @@ ROMlib_InitZones (offset_enum which)
 	  break;
 	}
 
-      MemTop = mem_top;
+      MemTop = RM(mem_top);
 
       SysZone = RM ((THz) memory);
       ROMlib_syszone = (unsigned long) memory;
