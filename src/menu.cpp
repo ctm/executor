@@ -1654,8 +1654,8 @@ Executor::ROMlib_menucall (INTEGER mess, MenuHandle themenu, Rect * menrect, Poi
 }
 
 
-LONGINT
-Executor::ROMlib_mbdfcall (INTEGER msg, INTEGER param1, LONGINT param2)
+intptr_t
+Executor::ROMlib_mbdfcall (INTEGER msg, INTEGER param1, intptr_t param2)
 {
   Handle defproc;
   int32 retval;
@@ -1696,7 +1696,7 @@ Executor::ROMlib_mbdfcall (INTEGER msg, INTEGER param1, LONGINT param2)
     {
     case mbRect:
     case mbMenuRgn:
-      retval = (int32) SYN68K_TO_US (retval);
+      retval = (intptr_t) SYN68K_TO_US (retval);
       break;
     default:
       break;

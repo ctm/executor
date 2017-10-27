@@ -201,11 +201,11 @@ extern GUEST<Handle> MBDFHndl_H;
 typedef pascal void (*menuprocp)(INTEGER mess, MenuHandle themenu,
 				 Rect *menrect, Point hit, INTEGER *which);
 typedef pascal LONGINT (*mbdfprocp)(INTEGER variant, INTEGER msg,
-				    INTEGER param1, LONGINT param2);
+				    INTEGER param1, intptr_t param2);
 
 extern void ROMlib_menucall (INTEGER mess, MenuHandle themenu, Rect *menrect,
 			     Point hit, GUEST<INTEGER> *which);
-extern LONGINT ROMlib_mbdfcall (INTEGER msg, INTEGER param1, LONGINT param2);
+extern intptr_t ROMlib_mbdfcall (INTEGER msg, INTEGER param1, intptr_t param2);
 
 #define MENUCALL ROMlib_menucall
 #define MBDFCALL ROMlib_mbdfcall
