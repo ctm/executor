@@ -9,17 +9,17 @@
  */
 namespace Executor {
 #if 1
-typedef unsigned char UInt8;
-typedef unsigned short UInt16;
-typedef unsigned long UInt32;
-typedef unsigned long long UInt64;
+typedef uint8_t UInt8;
+typedef uint16_t UInt16;
+typedef uint32_t UInt32;
+typedef uint64_t UInt64;
 
-typedef signed char SInt8;
-typedef signed short SInt16;
-typedef signed long SInt32;
-typedef signed long long SInt64;
+typedef int8_t SInt8;
+typedef int16_t SInt16;
+typedef int32_t SInt32;
+typedef int64_t SInt64;
 
-typedef unsigned short UniChar;
+typedef uint16_t UniChar;
 
 typedef UInt32 HFSCatalogNodeID;
 #endif
