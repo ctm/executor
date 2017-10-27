@@ -2,7 +2,7 @@
 #include "rsys/arch.h"
 
 boolean_t
-arch_init (void)
+Executor::arch_init (void)
 {
   return TRUE;
 }
