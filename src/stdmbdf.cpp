@@ -442,7 +442,7 @@ done:;						\
 	   {
 		   WRAPPER_PIXMAP_FOR_COPY (wrapper);
 		   
-		   WRAPPER_SET_PIXMAP_X (wrapper, RM2 (save_pmh));
+		   WRAPPER_SET_PIXMAP_X (wrapper, RM (save_pmh));
 		   
 		   CopyBits (PORT_BITS_FOR_COPY (thePort), wrapper,
 					 &save_rect, &save_rect, srcCopy, NULL);
@@ -511,7 +511,7 @@ restore (void)
 	   {
 		   WRAPPER_PIXMAP_FOR_COPY (wrapper);
 		   
-		   WRAPPER_SET_PIXMAP_X (wrapper, RM2 (save_pmh));
+		   WRAPPER_SET_PIXMAP_X (wrapper, RM (save_pmh));
 		   CopyBits (wrapper, PORT_BITS_FOR_COPY (thePort),
 					 &save_rect, &save_rect, srcCopy, NULL);
 	   }

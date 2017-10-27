@@ -175,7 +175,7 @@ P5 (PUBLIC pascal trap, OSErr, _AE_hdlr_table_alloc,
   AE_TABLE_N_ALLOCATED_BYTES_X (table) = CLC (52);
   AE_TABLE_N_ELTS_X (table) = CLC (0);
   
-  *table_return = RM2 (table);
+  *table_return = RM (table);
   AE_RETURN_ERROR (noErr);
 }
 

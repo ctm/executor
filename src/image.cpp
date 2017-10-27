@@ -109,7 +109,7 @@ Executor::image_copy (pixel_image_t *image, int color_p /* visual */,
   image_validate_x_bits (image, color_p);
 
   x_bits = IMAGE_X_BITS (image, color_p);
-  WRAPPER_SET_PIXMAP_X (wrapper, RM2 (x_bits));
+  WRAPPER_SET_PIXMAP_X (wrapper, RM (x_bits));
   x_bits_bounds = PIXMAP_BOUNDS (x_bits);
 
 #if 0
