@@ -1205,7 +1205,7 @@ pack8_fail_fn ()
 {
   syn68k_addr_t retaddr;
   
-  if (AE_OSL_select_fn == NULL)
+  if (AE_OSL_select_fn == 0)
     C_pack8_unknown_selector ();
 
   warning_unexpected ("calling OSL 'selh' special handler");
@@ -1215,7 +1215,7 @@ pack8_fail_fn ()
   /* #### just clobber a1? */
   EM_A1 = US_TO_SYN68K_CHECK0(P_pack8_unknown_selector);
   
-  CALL_EMULATOR ((syn68k_addr_t) AE_OSL_select_fn);
+  CALL_EMULATOR (AE_OSL_select_fn);
   
   return retaddr;
 }

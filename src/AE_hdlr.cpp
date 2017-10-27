@@ -427,7 +427,7 @@ P4 (PUBLIC pascal trap, OSErr, AERemoveCoercionHandler,
 
 #define k_special_sel1		(T ('\000', '\000', '\000', '\000'))
 
-ProcPtr Executor::AE_OSL_select_fn;
+syn68k_addr_t Executor::AE_OSL_select_fn;
 
 P3 (PUBLIC pascal trap, OSErr, AEInstallSpecialHandler,
     AEKeyword, function_class, ProcPtr, hdlr_fn,
@@ -445,7 +445,7 @@ P3 (PUBLIC pascal trap, OSErr, AEInstallSpecialHandler,
   /* #### OSL internal */
   if (function_class == keySelectProc)
     {
-      AE_OSL_select_fn = (ProcPtr) US_TO_SYN68K ((long) hdlr_fn);
+      AE_OSL_select_fn = US_TO_SYN68K (hdlr_fn);
       AE_RETURN_ERROR (noErr);
     }
   

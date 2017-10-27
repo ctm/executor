@@ -271,7 +271,7 @@ extern boolean_t application_accepts_open_app_aevt_p;
 #define keySelectProc		(T ('s', 'e', 'l', 'h'))
 
 /* #### OSL internal */
-extern ProcPtr AE_OSL_select_fn;
+extern syn68k_addr_t/*ProcPtr*/ AE_OSL_select_fn;
 
 /* prototypes go here */
 
