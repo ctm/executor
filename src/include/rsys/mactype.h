@@ -176,15 +176,16 @@ public:
     {
         uint32 rawp = this->raw();
         if(rawp)
-            return (TT*) (swap32(rawp) + ROMlib_offset);
+            return (TT*) (SYN68K_TO_US((uint32_t)swap32(rawp)));
         else
             return nullptr;
     }
 
     void set(TT* ptr)
     {
+        veryfyExportHostPointer((void*)ptr);
         if(ptr)
-            this->raw( swap32( (uint32_t) ((uintptr_t)ptr - ROMlib_offset) ) );
+            this->raw( swap32( US_TO_SYN68K(ptr) ) );
         else
             this->raw( 0 );
     }
