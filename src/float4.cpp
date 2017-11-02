@@ -301,7 +301,7 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_Fsetenv, INTEGER *,
     asm ("fldenv %0" : : "m" (i387_env));
   }
 #endif
-#elif defined(__alpha) || defined (powerpc) || defined (__ppc__)
+#elif defined(__alpha) || defined (powerpc) || defined (__ppc__) || defined(__x86_64)
 #warning ROMlib_Fsetenv not implemented!
     signal(SIGFPE, SIG_IGN);
 #else
