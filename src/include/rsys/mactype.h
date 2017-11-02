@@ -64,12 +64,8 @@ inline int32_t SwapTyped(int32_t x) { return swap32((uint32_t)x); }
 
 // USE_PACKED_HIDDENVALUE - control which one of two versions
 // of template struct/union HiddenValue to use.
-// Only the PACKED version currently works reliably,
-// the union version requires -fno-strict-aliasing.
-// ... and I haven't quite figured out why.
-// Would have been nice to do this without any non-standard __attribute__s.
 
-#define USE_PACKED_HIDDENVALUE
+//#define USE_PACKED_HIDDENVALUE
 
 
 template<typename ActualType>
