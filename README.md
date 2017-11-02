@@ -21,6 +21,10 @@ Grab a matching version of syn68k and build it:
 Sound does not currently work.
 There are also known problems with 16 and 32 bpp mode.
 
+On startup, Executor prints several warnings about unexpected sizes of
+structures. I currently believe that these structures are not part of
+the ABI for Mac applications, and changes in these sizes is thus harmless.
+This needs double-checking, though.
 
 What's been done
 ================
