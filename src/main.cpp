@@ -1283,8 +1283,7 @@ win_drive_to_bit (const char *drive_namep)
 
 int main(int argc, char** argv)
 {
-  char thingOnStack;
-  stackBase = &thingOnStack;
+  char thingOnStack;    /* used to determine an approximation of the stack base address */
   check_structs ();
 
   INTEGER i;

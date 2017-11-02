@@ -183,7 +183,6 @@ public:
 
     void set(TT* ptr)
     {
-        veryfyExportHostPointer((void*)ptr);
         if(ptr)
             this->raw( swap32( US_TO_SYN68K(ptr) ) );
         else
