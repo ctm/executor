@@ -205,7 +205,7 @@ typedef pascal LONGINT (*mbdfprocp)(INTEGER variant, INTEGER msg,
 
 extern void ROMlib_menucall (INTEGER mess, MenuHandle themenu, Rect *menrect,
 			     Point hit, GUEST<INTEGER> *which);
-extern intptr_t ROMlib_mbdfcall (INTEGER msg, INTEGER param1, intptr_t param2);
+extern LONGINT ROMlib_mbdfcall (INTEGER msg, INTEGER param1, LONGINT param2);
 
 #define MENUCALL ROMlib_menucall
 #define MBDFCALL ROMlib_mbdfcall

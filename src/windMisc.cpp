@@ -519,10 +519,6 @@ Executor::ROMlib_windcall (WindowPtr wind, int16 mess, int32 param)
       saverect = wind->portBits.bounds;
       wind->portBits.bounds = PORT_BOUNDS (wind);
       break;
-    case wGrow:
-    #warning 64bit- must not do this
-      param = US_TO_SYN68K (param);
-      break;
     default:
       /* do nothing */
       break;

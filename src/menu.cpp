@@ -1094,9 +1094,9 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 		  if ((newmh = itemishierarchical(mh, item, &tempi)))
 		    {
 		      
-		      r2 = * (Rect *) (long) MBDFCALL (mbRect, 0,
-						       tempi | HIERRECTBIT);
-		      MBDFCALL(mbSave, tempi, (LONGINT) (long) &r2);
+		      r2 = * ptr_from_longint<Rect*>( MBDFCALL (mbRect, 0,
+						       tempi | HIERRECTBIT));
+		      MBDFCALL(mbSave, tempi, ptr_to_longint(&r2));
 		      if (MBarHook)
 			{
 			  myd0 = CALLMBARHOOK(&r2, MR(MBarHook));
@@ -1145,8 +1145,8 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 		  mh = MR(((muelem *)
 			   ((char *)STARH(MR(MenuList)) + where))->muhandle);
 		  HiliteMenu(Hx(mh, menuID));
-		  r = * (Rect *) (long) MBDFCALL(mbRect, 0, where);
-		  MBDFCALL(mbSave, where, (LONGINT) (long) &r);
+		  r = * ptr_from_longint<Rect *>( MBDFCALL(mbRect, 0, where) );
+		  MBDFCALL(mbSave, where, ptr_to_longint(&r));
 		  if (MBarHook)
 		    {
 		      myd0 = CALLMBARHOOK(&r, MR(MBarHook));
@@ -1199,7 +1199,7 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 	      templ = where;
 	      if (where > Hx(MENULIST, muoff))
 		templ |= HIERRECTBIT;
-	      r = * (Rect *) (long) MBDFCALL(mbRect, 0, templ);
+	      r = * ptr_from_longint<Rect *>( MBDFCALL(mbRect, 0, templ) );
 	      whichmenuhit = wheretowhich(where);
 	      MBDFCALL(mbSaveAlt, 0, oldwhere);
 	      MBDFCALL(mbResetAlt, 0, where);
@@ -1654,25 +1654,15 @@ Executor::ROMlib_menucall (INTEGER mess, MenuHandle themenu, Rect * menrect, Poi
 }
 
 
-intptr_t
-Executor::ROMlib_mbdfcall (INTEGER msg, INTEGER param1, intptr_t param2)
+LONGINT
+Executor::ROMlib_mbdfcall (INTEGER msg, INTEGER param1, LONGINT param2)
 {
   Handle defproc;
-  intptr_t retval;
+  LONGINT retval;
   mbdfprocp mp;
 
   defproc = MR (MBDFHndl);
 
-  switch (msg)
-    {
-    case mbSave:
-    case mbMenuRgn:
-      param2 = US_TO_SYN68K(param2);
-      break;
-    default:
-      break;
-    }
-  
   if (*defproc == NULL)
     LoadResource (defproc);
 
@@ -1690,16 +1680,6 @@ Executor::ROMlib_mbdfcall (INTEGER msg, INTEGER param1, intptr_t param2)
 				   CTOP_mbdf0, (Hx (MENULIST, mufu) & 7), msg,
 				   param1, param2);
 	 });
-    }
-
-  switch (msg)
-    {
-    case mbRect:
-    case mbMenuRgn:
-      retval = (intptr_t) SYN68K_TO_US (retval);
-      break;
-    default:
-      break;
     }
 
   return retval;

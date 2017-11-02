@@ -259,7 +259,7 @@ P3(PUBLIC pascal trap, LONGINT, GrowWindow, WindowPtr, w, Point, startp,
     SETUP_PORT (MR (wmgr_port));
     ClipRect (&GD_BOUNDS (MR (TheGDevice)));
     ClipAbove((WindowPeek) w);
-    WINDCALL((WindowPtr) w, wGrow, (LONGINT) (long) &r);
+    WINDCALL((WindowPtr) w, wGrow, ptr_to_longint(&r));
     while (!GetOSEvent(mUpMask, &ev))
       {
         Point ep = ev.where.get();
@@ -268,16 +268,16 @@ P3(PUBLIC pascal trap, LONGINT, GrowWindow, WindowPtr, w, Point, startp,
 	ep.h = LoWord(l);
         if (p.h != ep.h || p.v != ep.v)
 	  {
-            WINDCALL((WindowPtr) w, wGrow, (LONGINT) (long) &r);
+            WINDCALL((WindowPtr) w, wGrow, ptr_to_longint(&r));
             r.right = CW(CW(r.right) + (ep.h - p.h));
             r.bottom = CW(CW(r.bottom) + (ep.v - p.v));
-            WINDCALL((WindowPtr) w, wGrow, (LONGINT) (long) &r);
+            WINDCALL((WindowPtr) w, wGrow, ptr_to_longint(&r));
             p.h = ep.h;
             p.v = ep.v;
 	  }
 	CALLDRAGHOOK();
       }
-    WINDCALL ((WindowPtr) w, wGrow, (LONGINT) (long) &r);
+    WINDCALL ((WindowPtr) w, wGrow, ptr_to_longint(&r));
     RESTORE_PORT ((GrafPtr) MR (WMgrPort));
     RESTORE_PORT (gp);
     if (p.h != startp.h || p.v != startp.v)
