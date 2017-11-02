@@ -1735,11 +1735,11 @@ NSetTrapAddress_stub (UniversalProcPtr addr, uint16 trapnum, TrapType typ)
     {
     case kOSTrapType:
       trapnum &= 0xff;
-      ostraptable [trapnum] = RM (addr);
+      ostraptable [trapnum] = (addr);
       break;
     case kToolboxTrapType:
       trapnum &= 0x3ff;
-      tooltraptable [trapnum] = RM (addr); 
+      tooltraptable [trapnum] = (addr); 
       break;
     default:
       warning_unexpected ("%d", typ);

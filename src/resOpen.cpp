@@ -102,10 +102,10 @@ Handle Executor::ROMlib_mgetres(resmaphand map, resref *rr)
 #if !defined(TEMPORARYHACKUNTILWESWAPTABLES)	
 	EM_A0 = (LONGINT) CL(ostraptable[0xFC]);
 #else /* defined(TEMPORARYHACKUNTILWESWAPTABLES) */
-	EM_A0 = (LONGINT) (long) ostraptable[0xFC];
+	EM_A0 = (LONGINT) ostraptable[0xFC];
 #endif
 	CALL_EMULATOR(EM_A0);
-	retval = (Handle) (long) SYN68K_TO_US(EM_A0);
+	retval = (Handle) SYN68K_TO_US(EM_A0);
 	EM_D0 = saved0;
 	EM_D1 = saved1;
 	EM_D2 = saved2;

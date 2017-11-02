@@ -1168,8 +1168,8 @@ PRIVATE void reset_low_globals(void)
 
 PRIVATE void reset_traps(void)
 {
-    static void *savetooltraptable[0x400];
-    static void   *saveostraptable[0x100];
+    static syn68k_addr_t savetooltraptable[0x400];
+    static syn68k_addr_t saveostraptable[0x100];
     static BOOLEAN beenhere = FALSE;
 
     ROMlib_reset_bad_trap_addresses ();

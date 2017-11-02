@@ -2412,13 +2412,13 @@ STUB(GetTrapAddress)
 
 STUB(SetTrapAddress)
 {
-    void **tablep;
+    syn68k_addr_t *tablep;
 
     if (istool(&EM_D0, EM_D1))
-	tablep = (void **) tooltraptable;
+	tablep = tooltraptable;
     else
-	tablep = (void **) ostraptable;
-    tablep[EM_D0] = (void *) EM_A0;
+	tablep = ostraptable;
+    tablep[EM_D0] = EM_A0;
 
     if (EM_D0 != 0xED)	/* Temporary MacWrite hack */
 	ROMlib_destroy_blocks(0, ~0, TRUE);

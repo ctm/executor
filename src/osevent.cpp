@@ -373,10 +373,10 @@ A3(PRIVATE, OSErrRET, _PPostEvent, INTEGER, evcode,
 				      LONGINT, evmsg, GUEST<EvQElPtr> *, qelpp)
 {
     OSErrRET ret;
-    ProcPtr proc;
+    syn68k_addr_t proc;
     GUEST<EvQElPtr> retquelp;
 
-    proc = (ProcPtr) ostraptable[0x2F];
+    proc = ostraptable[0x2F];
 
 #if 0	/* FIXME */
     if (proc == osstuff[0x2F].orig)
