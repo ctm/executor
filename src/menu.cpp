@@ -1658,7 +1658,7 @@ intptr_t
 Executor::ROMlib_mbdfcall (INTEGER msg, INTEGER param1, intptr_t param2)
 {
   Handle defproc;
-  int32 retval;
+  intptr_t retval;
   mbdfprocp mp;
 
   defproc = MR (MBDFHndl);
