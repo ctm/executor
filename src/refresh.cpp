@@ -153,8 +153,8 @@ Executor::find_changed_rect_and_update_shadow (const uint32 *screen, uint32 *sha
 
 #if defined (i386)
   {
-    typeof (shadow) shadow_dregs_unused;
-    typeof (screen) screen_dregs_unused;
+    decltype (shadow) shadow_dregs_unused;
+    decltype (screen) screen_dregs_unused;
   asm ("cld\n\t"
        "repe\n\t"
        "cmpsl"
@@ -181,8 +181,8 @@ Executor::find_changed_rect_and_update_shadow (const uint32 *screen, uint32 *sha
   /* Find the last long that changed (if any). */
 #if defined (i386)
   {
-    typeof (shadow) shadow_dregs_unused;
-    typeof (screen) screen_dregs_unused;
+    decltype (shadow) shadow_dregs_unused;
+    decltype (screen) screen_dregs_unused;
 
     asm volatile ("std\n\t"
 		  "repe\n\t"
@@ -271,8 +271,8 @@ Executor::find_changed_rect_and_update_shadow (const uint32 *screen, uint32 *sha
     {
 #if defined (i386)
       {
-	typeof (s2) s2_dregs_unused;
-	typeof (s1) s1_dregs_unused;
+	decltype (s2) s2_dregs_unused;
+	decltype (s1) s1_dregs_unused;
 	int count_dregs_unused;
 	asm ("rep\n\t"
 	     "movsl"

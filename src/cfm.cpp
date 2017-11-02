@@ -60,8 +60,8 @@ enum
 #undef roundup
 #define roundup(n, m)				\
 ({						\
-  typeof (n) __n;				\
-  typeof (m) __m;				\
+  decltype (n) __n;				\
+  decltype (m) __m;				\
 						\
   __n = (n);					\
   __m = (m);					\
@@ -71,8 +71,8 @@ enum
 #undef rounddown
 #define rounddown(n, m)				\
 ({						\
-  typeof (n) __n;				\
-  typeof (m) __m;				\
+  decltype (n) __n;				\
+  decltype (m) __m;				\
 						\
   __n = (n);					\
   __m = (m);					\
@@ -357,7 +357,7 @@ load_pattern_section (const void *mmapped_addr,
       uint8 *patmem;
 
 
-      patmem = (typeof (patmem)) ((char *) mmapped_addr + section_offset);
+      patmem = (decltype (patmem)) ((char *) mmapped_addr + section_offset);
       retval = pattern_initialize (addr, patmem, packed_size, unpacked_size);
       if (retval == noErr)
 	{
@@ -939,7 +939,7 @@ begin_closure (uint32 n_libs, PEFImportedLibrary_t *libs,
   int i;
   OSErr err;
 
-  retval = (typeof (retval)) NewPtr (sizeof *retval + n_libs * sizeof (lib_t));
+  retval = (decltype (retval)) NewPtr (sizeof *retval + n_libs * sizeof (lib_t));
   N_LIBS_X (retval) = CL (n_libs);
 
 #warning eventually need to worry about errors  
@@ -1005,7 +1005,7 @@ load_loader_section (const void *addr,
   relocation_area = (char *)
     (loader_section_bytes + PEFLIH_RELOC_INSTR_OFFSET (lihp));
 
-  symbol_names = (typeof (symbol_names))
+  symbol_names = (decltype (symbol_names))
     (loader_section_bytes + PEFLIH_STRINGS_OFFSET (lihp));
 
   closure_id = begin_closure (n_libs, libs, symbol_names, arch);
@@ -1016,7 +1016,7 @@ load_loader_section (const void *addr,
       uint8 (*reloc_instrs)[2];
 
       reloc_count = PEFRLH_RELOC_COUNT (&reloc_headers[i]);
-      reloc_instrs = (typeof (reloc_instrs))
+      reloc_instrs = (decltype (reloc_instrs))
 	(relocation_area
 	 + PEFRLH_FIRST_RELOC_OFFSET (&reloc_headers[i]));
       retval = relocate (reloc_headers,
@@ -1193,7 +1193,7 @@ do_pef_sections (ConnectionID connp, const PEFContainerHeader_t *headp,
   int i;
 
   n_sects = connp->n_sects;
-  sections = (typeof (sections)) ((char *) headp + sizeof *headp);
+  sections = (decltype (sections)) ((char *) headp + sizeof *headp);
 
   memset (connp->sects, 0, sizeof connp->sects[0] * n_sects);
   for (i = 0, retval = noErr; retval == noErr && i < n_sects; ++i)

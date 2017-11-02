@@ -310,7 +310,7 @@ Executor::convert_transparent (const PixMap *src1, const PixMap *src2,
    (((uint32 *) (b))[(x)] = (v)))
 
 #define TRANSPARENT_TRANSFORM(src1_v, src2_v)	\
-  (((typeof (bk_color)) src1_v != bk_color) ? src1_v : src2_v)
+  (((decltype (bk_color)) src1_v != bk_color) ? src1_v : src2_v)
 
 #define HILITE_TRANSFORM(src1_v, src2_v)				\
 ({									\
@@ -318,13 +318,13 @@ Executor::convert_transparent (const PixMap *src1, const PixMap *src2,
 									\
   /* only invert the pixel if the src/pattern is `on', ie., not the	\
      background color */						\
-  if ((typeof (bk_color))src1_v == bk_color)				\
+  if ((decltype (bk_color))src1_v == bk_color)				\
     v = src2_v;								\
   else									\
     {									\
-      if ((typeof (bk_color)) src2_v == bk_color)			\
+      if ((decltype (bk_color)) src2_v == bk_color)			\
 	v = hilite_color;						\
-      else if ((typeof (hilite_color)) src2_v == hilite_color)		\
+      else if ((decltype (hilite_color)) src2_v == hilite_color)		\
 	v = bk_color;							\
       else								\
 	v = src2_v;							\

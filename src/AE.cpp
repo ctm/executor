@@ -492,7 +492,7 @@ parse_evt (const AppleEvent *evtp, AEDesc *desc_out)
 	  AppParametersPtr p;
 
 	  h = NewHandle (sizeof *p + n * sizeof (FSSpec));
-	  if (!h || !(p = (typeof (p)) STARH (h)))
+	  if (!h || !(p = (decltype (p)) STARH (h)))
 	    retval = MemError();
 	  else
 	    {

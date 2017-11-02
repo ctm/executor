@@ -878,7 +878,7 @@ A2(PUBLIC trap, OSErrRET, PBHGetVolParms, HParmBlkPtr, pb, BOOLEAN, async)
 
 #define roomfor(ptr, field, byte_count) \
   ((byte_count) \
-   >= (int) offsetof (typeof (*(ptr)), field) + (int) sizeof ((ptr)->field))
+   >= (int) offsetof (std::remove_reference<decltype (*(ptr))>::type, field) + (int) sizeof ((ptr)->field))
     
   vcbp = ROMlib_findvcb(Cx(pb->ioParam.ioVRefNum),
 			MR(pb->ioParam.ioNamePtr), &dir, false);

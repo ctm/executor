@@ -49,7 +49,7 @@ using namespace Executor;
     retval;					\
   })
 
-#define sqr(v)	({ typeof (v) _v = (v);  _v * _v; })
+#define sqr(v)	({ decltype (v) _v = (v);  _v * _v; })
 
 #define color_picker_window_bounds	(_bounds)
 #define ok_button_bounds		(&_bounds[1])

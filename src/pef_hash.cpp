@@ -116,8 +116,8 @@ PEFComputeHashWord (const unsigned char *orig_p, uint32 namemax)
 
 #define PEFHashTableIndex(fullHashWord,hashTablePower)		\
 ({								\
-  typeof (fullHashWord) _fullHashWord = (fullHashWord);		\
-  typeof (hashTablePower) _hashTablePower = (hashTablePower);	\
+  decltype (fullHashWord) _fullHashWord = (fullHashWord);		\
+  decltype (hashTablePower) _hashTablePower = (hashTablePower);	\
 								\
   (_fullHashWord^(_fullHashWord >> _hashTablePower)) &		\
     ((1 << _hashTablePower) - 1);				\
@@ -193,7 +193,7 @@ ROMlib_build_pef_hash (const map_entry_t table[], int count)
 
   n_bytes_needed = (string_table_offset + string_table_length);
  
-  retval = (typeof (retval)) NewPtrSysClear (n_bytes_needed);
+  retval = (decltype (retval)) NewPtrSysClear (n_bytes_needed);
   if (retval)
     {
       sort_entry_t *sorted;
@@ -215,11 +215,11 @@ ROMlib_build_pef_hash (const map_entry_t table[], int count)
       PEFLIH_HASH_TABLE_POWER_X (retval) = CL (hash_power);
       PEFLIH_SYMBOL_COUNT_X (retval) = CL (count);
 
-      hashp = (typeof (hashp)) ((char *) retval + hash_offset);
-      exportp = (typeof (exportp)) ((char *) retval + export_offset);
-      symbol_tablep = ((typeof (symbol_tablep))
+      hashp = (decltype (hashp)) ((char *) retval + hash_offset);
+      exportp = (decltype (exportp)) ((char *) retval + export_offset);
+      symbol_tablep = ((decltype (symbol_tablep))
 		       ((char *) retval + symbol_table_offset));
-      string_tablep = ((typeof (string_tablep))
+      string_tablep = ((decltype (string_tablep))
 		       ((char *) retval + string_table_offset));
       sorted = (sort_entry_t *)alloca (sizeof *sorted * count);
       name_offset = 0;
@@ -330,16 +330,16 @@ lookup_by_name (const ConnectionID connp,
   hash_index = PEFHashTableIndex (hash_word, PEFLIH_HASH_TABLE_POWER (lihp));
 
   offset = PEFLIH_HASH_OFFSET (lihp);
-  hash_entries = (typeof (hash_entries)) ((char *) lihp + offset);
+  hash_entries = (decltype (hash_entries)) ((char *) lihp + offset);
 
   offset += sizeof *hash_entries * (1 << PEFLIH_HASH_TABLE_POWER (lihp));
-  export_key_table = (typeof (export_key_table)) ((char *) lihp + offset);
+  export_key_table = (decltype (export_key_table)) ((char *) lihp + offset);
 
   offset += sizeof *export_key_table * PEFLIH_SYMBOL_COUNT (lihp);
-  symbol_table = (typeof (symbol_table)) ((char *) lihp + offset);
+  symbol_table = (decltype (symbol_table)) ((char *) lihp + offset);
 
   offset = PEFLIH_STRINGS_OFFSET (lihp);
-  string_tablep = (typeof (string_tablep)) ((char *) lihp + offset);
+  string_tablep = (decltype (string_tablep)) ((char *) lihp + offset);
 
   chain_count_and_first_index = CL_RAW (hash_entries[hash_index]);
   chain_count = ((chain_count_and_first_index >> CHAIN_COUNT_SHIFT)

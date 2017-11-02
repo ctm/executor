@@ -310,7 +310,7 @@ PRIVATE Handle mgetres_helper (resmaphand map, resref *rr, int32 dlen,
 	      SignedByte state;
 
 	      state = hlock_return_orig_state (dcmp_handle);
-	      dcmp = (typeof (dcmp)) STARH (dcmp_handle);
+	      dcmp = (decltype (dcmp)) STARH (dcmp_handle);
 	      HLock (retval);
 	      CToPascalCall((void*)dcmp, CTOP_dcmp_template,
 			     xxx,

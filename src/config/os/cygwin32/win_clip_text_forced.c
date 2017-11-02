@@ -72,7 +72,7 @@ GetScrapX (LONGINT type, char **h)
       format = ROMlib_executor_format (type);
       if (support_cf_dib_p && type == T('P','I','C','T'))
 	{
-	  typeof (format) newval;
+	  decltype (format) newval;
 	  UINT formats[2] = { format, CF_DIB };
 	  
 	  newval = GetPriorityClipboardFormat (formats, NELEM (formats));

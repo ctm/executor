@@ -54,8 +54,8 @@ win_print_t;
 #if !defined (MIN)
 #define MIN(x, y)				\
 ({						\
-  typeof (x) _x;				\
-  typeof (y) _y;				\
+  decltype (x) _x;				\
+  decltype (y) _y;				\
 						\
   _x = (x);					\
   _y = (y);					\
@@ -66,8 +66,8 @@ win_print_t;
 #if !defined (MAX)
 #define MAX(x, y)				\
 ({						\
-  typeof (x) _x;				\
-  typeof (y) _y;				\
+  decltype (x) _x;				\
+  decltype (y) _y;				\
 						\
   _x = (x);					\
   _y = (y);					\

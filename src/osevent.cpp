@@ -682,7 +682,7 @@ Executor::display_keyboard_choices (void)
   printf ("Available keyboard maps:\n");
   SetResLoad (false);
   nres = CountResources (TICK ("KCHR"));
-  names = (typeof names)alloca (nres * sizeof (*names));
+  names = (decltype(names))alloca (nres * sizeof (*names));
   nfound = 0;
   for (i = 1; i <= nres; ++i)
     {

@@ -11,10 +11,10 @@
 
 #define advance_n_bytes(ptrp, n_bytes)				\
 ({								\
-  typeof (ptrp) _ptrp;						\
+  decltype (ptrp) _ptrp;						\
 								\
   _ptrp = (ptrp);						\
-  *(_ptrp) = (typeof (*_ptrp))((char *)*(_ptrp) + n_bytes);	\
+  *(_ptrp) = (decltype (*_ptrp))((char *)*(_ptrp) + n_bytes);	\
 })
 
 #define advance_n_bytes_voidp(ptrp, n_bytes) advance_n_bytes (ptrp, n_bytes)
@@ -42,8 +42,8 @@ advance_n_bytes_voidp (void **ptrp, size_t n_bytes)
 
 #define MAX(a, b)		  \
 ({				  \
-  typeof (a) _a;		  \
-  typeof (b) _b;		  \
+  decltype (a) _a;		  \
+  decltype (b) _b;		  \
 				  \
   _a = (a);			  \
   _b = (b);			  \

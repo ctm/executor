@@ -453,17 +453,17 @@ Executor::ROMlib_clear_gestalt_list (void)
 PUBLIC void
 Executor::ROMlib_add_to_gestalt_list (OSType selector, OSErr retval, uint32 new_value)
 {
-  typeof (gestalt_listp) new_listp;
+  decltype (gestalt_listp) new_listp;
 
-  new_listp = (typeof(gestalt_listp))realloc (gestalt_listp, listp_size + sizeof *gestalt_listp);
+  new_listp = (decltype(gestalt_listp))realloc (gestalt_listp, listp_size + sizeof *gestalt_listp);
   if (!new_listp)
     warning_unexpected ("out of memory");
   else
     {
-      typeof (gestalt_listp) entryp;
+      decltype (gestalt_listp) entryp;
 
       gestalt_listp = new_listp;
-      entryp = (typeof (entryp)) ((char *) gestalt_listp + listp_size);
+      entryp = (decltype (entryp)) ((char *) gestalt_listp + listp_size);
       entryp->selector = selector;
       entryp->retval = retval;
       entryp->value = CL (new_value);
@@ -495,7 +495,7 @@ A2(PUBLIC trap, OSErrRET, Gestalt, OSType, selector, GUEST<LONGINT> *, responsep
   {
     gestalt_list_entry_t *p, *ep;
 
-    for (p = gestalt_listp, ep = (typeof (ep))((char *) p + listp_size);
+    for (p = gestalt_listp, ep = (decltype (ep))((char *) p + listp_size);
 	 p != ep && p->selector != selector;
 	 ++p)
       ;

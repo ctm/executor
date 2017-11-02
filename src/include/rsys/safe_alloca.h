@@ -20,7 +20,7 @@
 #define SAFE_alloca(size)				\
     (							\
  	___newsize  = (size) + 3 * sizeof(long),	\
-	___tempptr = (typeof(___tempptr))alloca(___newsize),		\
+	___tempptr = (decltype(___tempptr))alloca(___newsize),		\
 	((uint32 *)___tempptr)[0] = ___newsize,		\
 	((uint32 *)___tempptr)[1] = FIREWALL_START,	\
 	___tempptr[___newsize-4]   = FIREWALL_STOP_0,	\

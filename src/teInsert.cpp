@@ -1057,7 +1057,7 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
   
 #define te_sel_new_end(_new_end)			\
   ({							\
-    typeof (_new_end) new_end = (_new_end);		\
+    decltype (_new_end) new_end = (_new_end);		\
 							\
     if (end != new_end)					\
       {							\
@@ -1086,7 +1086,7 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
 
 #define te_sel_new_start(_new_start)			\
   ({							\
-    typeof (_new_start) new_start = (_new_start);	\
+    decltype (_new_start) new_start = (_new_start);	\
 							\
     if (start != new_start)				\
       {							\

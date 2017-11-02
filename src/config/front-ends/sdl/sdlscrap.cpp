@@ -41,15 +41,15 @@ using namespace Executor;
 
 #define advance_n_bytes(ptrp, n_bytes)				\
 ({								\
-  typeof (ptrp) _ptrp;						\
+  decltype (ptrp) _ptrp;						\
 								\
   _ptrp = (ptrp);						\
-  *(_ptrp) = (typeof (*_ptrp))((char *)*(_ptrp) + n_bytes);	\
+  *(_ptrp) = (decltype (*_ptrp))((char *)*(_ptrp) + n_bytes);	\
 })
 
 #define roundup(val, n)				\
 ({						\
-  typeof (n) _n;				\
+  decltype (n) _n;				\
   _n = (n);                   			\
   ((val) + (_n-1)) / _n * _n;			\
 })
@@ -192,7 +192,7 @@ surface_from_dib (void *lp)
 				   R, G, B, A);
 	SDL_LockSurface (retval);
 	op = SDL_Surface_pixels (retval);
-	ip = (typeof (ip)) (bp + 1);
+	ip = (decltype (ip)) (bp + 1);
 	out_pitch = SDL_Surface_pitch (retval);
 	in_pitch = roundup (pixels_per_line * sizeof *ip, 4);
 	ip_advance = in_pitch  - sizeof *ip * pixels_per_line;

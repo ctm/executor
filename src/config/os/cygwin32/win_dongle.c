@@ -23,7 +23,7 @@ char ROMlib_rcsid_win_dongle[] = "$Id: win_dongle.c 139 2006-07-11 23:35:04Z ctm
 PRIVATE HINSTANCE sentinel_lib;
 PRIVATE HINSTANCE hasp_lib;
 
-#define DLL_DECLARE(x) PRIVATE typeof (x) *D ## x
+#define DLL_DECLARE(x) PRIVATE decltype (x) *D ## x
 
 DLL_DECLARE (RNBOproQuery);
 DLL_DECLARE (RNBOproGetFullStatus);
@@ -295,7 +295,7 @@ dll_query (dll_param_block *dp)
 	retval = DLL_NO_LIBRARY_ERROR;
       else
 	{
-	  funcp = (typeof (funcp)) GetProcAddress (dll_lib, func_name);
+	  funcp = (decltype (funcp)) GetProcAddress (dll_lib, func_name);
 	  if (!funcp)
 	    retval = DLL_NO_FUNCTION_ERROR;
 	  else

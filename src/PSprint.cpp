@@ -2100,7 +2100,7 @@ void Executor::NeXTPrText(LONGINT n, Ptr textbufp, Point num, Point den,
 	find_run_of_symbol_chars (n, textbufp, &run_start, &run_stop);
 	if (run_start >= 0)
 	  {
-	    typeof (thePortp->txFont) save_font;
+	    decltype (thePortp->txFont) save_font;
 
 	    if (run_start > 0)
 	      NeXTPrText (run_start, textbufp, num, den, thePortp);

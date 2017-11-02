@@ -451,9 +451,9 @@ extern GUEST<GDHandle>	DeviceList_H;
 
 #else
 
-#  define TheGDevice	((typeof (TheGDevice_H.type[0]))(TheGDevice_H.pp))
-#  define MainDevice	((typeof MainDevice_H.type[0])(MainDevice_H.p))
-#  define DeviceList	((typeof DeviceList_H.type[0])(DeviceList_H.p))
+#  define TheGDevice	((decltype (TheGDevice_H.type[0]))(TheGDevice_H.pp))
+#  define MainDevice	((decltype MainDevice_H.type[0])(MainDevice_H.p))
+#  define DeviceList	((decltype DeviceList_H.type[0])(DeviceList_H.p))
 
 #endif
 #endif

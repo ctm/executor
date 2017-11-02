@@ -117,7 +117,7 @@ wait_on_channel (volatile SndChannelPtr vchanp)
 static snd_time
 snd_fixed_div (snd_time x, snd_time y)
 {
-  typeof(x) temp1, temp2;
+  decltype(x) temp1, temp2;
   int bits;
 
   bits = 4 * sizeof x;
@@ -133,7 +133,7 @@ snd_fixed_div (snd_time x, snd_time y)
 static snd_time
 snd_fixed_mul (snd_time x, snd_time y)
 {
-  typeof(x) x1, x0, y1, y0;
+  decltype(x) x1, x0, y1, y0;
   int bits;
 
   bits = 4 * sizeof x;

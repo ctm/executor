@@ -133,7 +133,7 @@ func_name (const void *raw_table,					    \
  */
 #define CONVERT_COPY()							  \
 ({									  \
-  typeof (byte_width) byte_width_dregs_unused;				  \
+  decltype (byte_width) byte_width_dregs_unused;				  \
 									  \
   asm volatile ("cld\n\t"						  \
 		"movl %%ecx,%%eax\n\t"					  \

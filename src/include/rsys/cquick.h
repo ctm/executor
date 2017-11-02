@@ -72,7 +72,7 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
 
 /* return the field of the port */
 #define PORT_FIELD(port, field)							\
-  (*(typeof (((GrafPtr) (port))->field) *) ((char *) (port)			\
+  (*(decltype (((GrafPtr) (port))->field) *) ((char *) (port)			\
 					    + PORT_FIELD_OFFSET (field, port)))
 
 /* aggregate type fields do not require byte swapping */

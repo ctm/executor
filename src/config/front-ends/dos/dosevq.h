@@ -55,7 +55,7 @@ extern uint16 _get_queue_mem16 (unsigned long offset);
 extern void _set_queue_mem16 (unsigned long offset, uint16 val);
 
 #define _DOSEVQ_GET_FIELD(field)				\
-  ((typeof (((dosevq_queue_t *)0)->field))			\
+  ((decltype (((dosevq_queue_t *)0)->field))			\
    _get_queue_mem16 (DOS_EVENT_QUEUE_OFFSET			\
 		     + offsetof (dosevq_queue_t, field)))
 #define _DOSEVQ_SET_FIELD(field, val)				\

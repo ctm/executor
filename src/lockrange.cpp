@@ -78,9 +78,9 @@ Executor::ROMlib_fd_clear_locks_after_open (int fd, bool be_surprised_p)
     }
   if (n_removed)
     {
-      typeof (entries) new_entries;
+      decltype (entries) new_entries;
 
-      new_entries = (typeof(new_entries))realloc (entries, n_entries * sizeof *entries);
+      new_entries = (decltype(new_entries))realloc (entries, n_entries * sizeof *entries);
       if (new_entries)
 	entries = new_entries;
       else
@@ -124,9 +124,9 @@ Executor::ROMlib_fd_add_range (int fd, uint32 start_byte, uint32 count)
     retval = noErr;
   else
     {
-      typeof (entries) new_entries;
+      decltype (entries) new_entries;
 
-      new_entries = (typeof(new_entries))realloc (entries, (n_entries + 1) * sizeof *entries);
+      new_entries = (decltype(new_entries))realloc (entries, (n_entries + 1) * sizeof *entries);
       if (!new_entries)
 	{
 	  retval = afpNoMoreLocks;

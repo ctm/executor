@@ -110,26 +110,26 @@ enum { TRAP_MASK = 0xF9FF };
  */
 #define HASSIGN_1(h, f1, v1)			\
 ({						\
-  typeof (v1) _v1 = (v1);			\
-  typeof (STARH (h)) _hp = STARH (h);		\
+  decltype (v1) _v1 = (v1);			\
+  decltype (STARH (h)) _hp = STARH (h);		\
   _hp->f1 = _v1;				\
 })
 
 #define HASSIGN_2(h, f1, v1, f2, v2)		\
 ({						\
-  typeof (v1) _v1 = (v1);			\
-  typeof (v2) _v2 = (v2);			\
-  typeof (STARH (h)) _hp = STARH (h);		\
+  decltype (v1) _v1 = (v1);			\
+  decltype (v2) _v2 = (v2);			\
+  decltype (STARH (h)) _hp = STARH (h);		\
   _hp->f1 = _v1;				\
   _hp->f2 = _v2;				\
 })
 
 #define HASSIGN_3(h, f1, v1, f2, v2, f3, v3)	\
 ({						\
-  typeof (v1) _v1 = (v1);			\
-  typeof (v2) _v2 = (v2);			\
-  typeof (v3) _v3 = (v3);			\
-  typeof (STARH (h)) _hp = STARH (h);		\
+  decltype (v1) _v1 = (v1);			\
+  decltype (v2) _v2 = (v2);			\
+  decltype (v3) _v3 = (v3);			\
+  decltype (STARH (h)) _hp = STARH (h);		\
   _hp->f1 = _v1;				\
   _hp->f2 = _v2;				\
   _hp->f3 = _v3;				\
@@ -137,11 +137,11 @@ enum { TRAP_MASK = 0xF9FF };
 
 #define HASSIGN_4(h, f1, v1, f2, v2, f3, v3, f4, v4)	\
 ({							\
-  typeof (v1) _v1 = (v1);				\
-  typeof (v2) _v2 = (v2);				\
-  typeof (v3) _v3 = (v3);				\
-  typeof (v4) _v4 = (v4);				\
-  typeof (STARH (h)) _hp = STARH (h);			\
+  decltype (v1) _v1 = (v1);				\
+  decltype (v2) _v2 = (v2);				\
+  decltype (v3) _v3 = (v3);				\
+  decltype (v4) _v4 = (v4);				\
+  decltype (STARH (h)) _hp = STARH (h);			\
   _hp->f1 = _v1;					\
   _hp->f2 = _v2;					\
   _hp->f3 = _v3;					\
@@ -150,12 +150,12 @@ enum { TRAP_MASK = 0xF9FF };
 
 #define HASSIGN_5(h, f1, v1, f2, v2, f3, v3, f4, v4, f5, v5)	\
 ({								\
-  typeof (v1) _v1 = (v1);					\
-  typeof (v2) _v2 = (v2);					\
-  typeof (v3) _v3 = (v3);					\
-  typeof (v4) _v4 = (v4);					\
-  typeof (v5) _v5 = (v5);					\
-  typeof (STARH (h)) _hp = STARH (h);				\
+  decltype (v1) _v1 = (v1);					\
+  decltype (v2) _v2 = (v2);					\
+  decltype (v3) _v3 = (v3);					\
+  decltype (v4) _v4 = (v4);					\
+  decltype (v5) _v5 = (v5);					\
+  decltype (STARH (h)) _hp = STARH (h);				\
   _hp->f1 = _v1;						\
   _hp->f2 = _v2;						\
   _hp->f3 = _v3;						\
@@ -165,17 +165,17 @@ enum { TRAP_MASK = 0xF9FF };
 
 #define HASSIGN_6(h, f1, v1, f2, v2, f3, v3, f4, v4, f5, v5, f6, v6)	\
 ({									\
-  typeof (v1) _v1 = (v1);						\
-  typeof (v2) _v2 = (v2);						\
-  typeof (v3) _v3 = (v3);						\
-  typeof (v4) _v4 = (v4);						\
-  typeof (v5) _v5 = (v5);						\
-  typeof (v6) _v6 = (v6);						\
-  typeof (STARH (h)) _hp = STARH (h);					\
+  decltype (v1) _v1 = (v1);						\
+  decltype (v2) _v2 = (v2);						\
+  decltype (v3) _v3 = (v3);						\
+  decltype (v4) _v4 = (v4);						\
+  decltype (v5) _v5 = (v5);						\
+  decltype (v6) _v6 = (v6);						\
+  decltype (STARH (h)) _hp = STARH (h);					\
   _hp->f1 = _v1;							\
   _hp->f2 = _v2;							\
   _hp->f3 = _v3;							\
-  _hp->f4 = (typeof(_hp->f4))_v4;							\
+  _hp->f4 = (decltype(_hp->f4))_v4;							\
   _hp->f5 = _v5;							\
   _hp->f6 = _v6;							\
 })
@@ -183,14 +183,14 @@ enum { TRAP_MASK = 0xF9FF };
 #define HASSIGN_7(h, f1, v1, f2, v2, f3, v3, f4, v4, f5, v5,	\
 		  f6, v6, f7, v7)				\
 ({								\
-  typeof (v1) _v1 = (v1);					\
-  typeof (v2) _v2 = (v2);					\
-  typeof (v3) _v3 = (v3);					\
-  typeof (v4) _v4 = (v4);					\
-  typeof (v5) _v5 = (v5);					\
-  typeof (v6) _v6 = (v6);					\
-  typeof (v7) _v7 = (v7);					\
-  typeof (STARH (h)) _hp = STARH (h);				\
+  decltype (v1) _v1 = (v1);					\
+  decltype (v2) _v2 = (v2);					\
+  decltype (v3) _v3 = (v3);					\
+  decltype (v4) _v4 = (v4);					\
+  decltype (v5) _v5 = (v5);					\
+  decltype (v6) _v6 = (v6);					\
+  decltype (v7) _v7 = (v7);					\
+  decltype (STARH (h)) _hp = STARH (h);				\
   _hp->f1 = _v1;						\
   _hp->f2 = _v2;						\
   _hp->f3 = _v3;						\
@@ -203,17 +203,17 @@ enum { TRAP_MASK = 0xF9FF };
 #define HASSIGN_10(h, f1, v1, f2, v2, f3, v3, f4, v4, f5, v5,	\
 		   f6, v6, f7, v7, f8, v8, f9, v9, f10, v10)	\
 ({								\
-  typeof (v1) _v1 = (v1);					\
-  typeof (v2) _v2 = (v2);					\
-  typeof (v3) _v3 = (v3);					\
-  typeof (v4) _v4 = (v4);					\
-  typeof (v5) _v5 = (v5);					\
-  typeof (v6) _v6 = (v6);					\
-  typeof (v7) _v7 = (v7);					\
-  typeof (v8) _v8 = (v8);					\
-  typeof (v9) _v9 = (v9);					\
-  typeof (v10) _v10 = (v10);					\
-  typeof (STARH (h)) _hp = STARH (h);				\
+  decltype (v1) _v1 = (v1);					\
+  decltype (v2) _v2 = (v2);					\
+  decltype (v3) _v3 = (v3);					\
+  decltype (v4) _v4 = (v4);					\
+  decltype (v5) _v5 = (v5);					\
+  decltype (v6) _v6 = (v6);					\
+  decltype (v7) _v7 = (v7);					\
+  decltype (v8) _v8 = (v8);					\
+  decltype (v9) _v9 = (v9);					\
+  decltype (v10) _v10 = (v10);					\
+  decltype (STARH (h)) _hp = STARH (h);				\
   _hp->f1 = _v1;						\
   _hp->f2 = _v2;						\
   _hp->f3 = _v3;						\
@@ -230,18 +230,18 @@ enum { TRAP_MASK = 0xF9FF };
 		   f6, v6, f7, v7, f8, v8, f9, v9, f10, v10,	\
 		   f11, v11)					\
 ({								\
-  typeof (v1) _v1 = (v1);					\
-  typeof (v2) _v2 = (v2);					\
-  typeof (v3) _v3 = (v3);					\
-  typeof (v4) _v4 = (v4);					\
-  typeof (v5) _v5 = (v5);					\
-  typeof (v6) _v6 = (v6);					\
-  typeof (v7) _v7 = (v7);					\
-  typeof (v8) _v8 = (v8);					\
-  typeof (v9) _v9 = (v9);					\
-  typeof (v10) _v10 = (v10);					\
-  typeof (v11) _v11 = (v11);					\
-  typeof (STARH (h)) _hp = STARH (h);				\
+  decltype (v1) _v1 = (v1);					\
+  decltype (v2) _v2 = (v2);					\
+  decltype (v3) _v3 = (v3);					\
+  decltype (v4) _v4 = (v4);					\
+  decltype (v5) _v5 = (v5);					\
+  decltype (v6) _v6 = (v6);					\
+  decltype (v7) _v7 = (v7);					\
+  decltype (v8) _v8 = (v8);					\
+  decltype (v9) _v9 = (v9);					\
+  decltype (v10) _v10 = (v10);					\
+  decltype (v11) _v11 = (v11);					\
+  decltype (STARH (h)) _hp = STARH (h);				\
   _hp->f1 = _v1;						\
   _hp->f2 = _v2;						\
   _hp->f3 = _v3;						\
@@ -250,8 +250,8 @@ enum { TRAP_MASK = 0xF9FF };
   _hp->f6 = _v6;						\
   _hp->f7 = _v7;						\
   _hp->f8 = _v8;						\
-  _hp->f9 = (typeof (_hp->f9))_v9;						\
-  _hp->f10 = (typeof (_hp->f10))_v10;						\
+  _hp->f9 = (decltype (_hp->f9))_v9;						\
+  _hp->f10 = (decltype (_hp->f10))_v10;						\
   _hp->f11 = _v11;						\
 })
 
@@ -259,19 +259,19 @@ enum { TRAP_MASK = 0xF9FF };
 		   f6, v6, f7, v7, f8, v8, f9, v9, f10, v10,	\
 		   f11, v11, f12, v12)				\
 ({								\
-  typeof (v1) _v1 = (v1);					\
-  typeof (v2) _v2 = (v2);					\
-  typeof (v3) _v3 = (v3);					\
-  typeof (v4) _v4 = (v4);					\
-  typeof (v5) _v5 = (v5);					\
-  typeof (v6) _v6 = (v6);					\
-  typeof (v7) _v7 = (v7);					\
-  typeof (v8) _v8 = (v8);					\
-  typeof (v9) _v9 = (v9);					\
-  typeof (v10) _v10 = (v10);					\
-  typeof (v11) _v11 = (v11);					\
-  typeof (v12) _v12 = (v12);					\
-  typeof (STARH (h)) _hp = STARH (h);				\
+  decltype (v1) _v1 = (v1);					\
+  decltype (v2) _v2 = (v2);					\
+  decltype (v3) _v3 = (v3);					\
+  decltype (v4) _v4 = (v4);					\
+  decltype (v5) _v5 = (v5);					\
+  decltype (v6) _v6 = (v6);					\
+  decltype (v7) _v7 = (v7);					\
+  decltype (v8) _v8 = (v8);					\
+  decltype (v9) _v9 = (v9);					\
+  decltype (v10) _v10 = (v10);					\
+  decltype (v11) _v11 = (v11);					\
+  decltype (v12) _v12 = (v12);					\
+  decltype (STARH (h)) _hp = STARH (h);				\
   _hp->f1 = _v1;						\
   _hp->f2 = _v2;						\
   _hp->f3 = _v3;						\
@@ -290,20 +290,20 @@ enum { TRAP_MASK = 0xF9FF };
 		   f6, v6, f7, v7, f8, v8, f9, v9, f10, v10,	\
 		   f11, v11, f12, v12, f13, v13)		\
 ({								\
-  typeof (v1) _v1 = (v1);					\
-  typeof (v2) _v2 = (v2);					\
-  typeof (v3) _v3 = (v3);					\
-  typeof (v4) _v4 = (v4);					\
-  typeof (v5) _v5 = (v5);					\
-  typeof (v6) _v6 = (v6);					\
-  typeof (v7) _v7 = (v7);					\
-  typeof (v8) _v8 = (v8);					\
-  typeof (v9) _v9 = (v9);					\
-  typeof (v10) _v10 = (v10);					\
-  typeof (v11) _v11 = (v11);					\
-  typeof (v12) _v12 = (v12);					\
-  typeof (v13) _v13 = (v13);					\
-  typeof (STARH (h)) _hp = STARH (h);				\
+  decltype (v1) _v1 = (v1);					\
+  decltype (v2) _v2 = (v2);					\
+  decltype (v3) _v3 = (v3);					\
+  decltype (v4) _v4 = (v4);					\
+  decltype (v5) _v5 = (v5);					\
+  decltype (v6) _v6 = (v6);					\
+  decltype (v7) _v7 = (v7);					\
+  decltype (v8) _v8 = (v8);					\
+  decltype (v9) _v9 = (v9);					\
+  decltype (v10) _v10 = (v10);					\
+  decltype (v11) _v11 = (v11);					\
+  decltype (v12) _v12 = (v12);					\
+  decltype (v13) _v13 = (v13);					\
+  decltype (STARH (h)) _hp = STARH (h);				\
   _hp->f1 = _v1;						\
   _hp->f2 = _v2;						\
   _hp->f3 = _v3;						\
@@ -323,21 +323,21 @@ enum { TRAP_MASK = 0xF9FF };
 		   f6, v6, f7, v7, f8, v8, f9, v9, f10, v10,	\
 		   f11, v11, f12, v12, f13, v13, f14, v14)	\
 ({								\
-  typeof (v1) _v1 = (v1);					\
-  typeof (v2) _v2 = (v2);					\
-  typeof (v3) _v3 = (v3);					\
-  typeof (v4) _v4 = (v4);					\
-  typeof (v5) _v5 = (v5);					\
-  typeof (v6) _v6 = (v6);					\
-  typeof (v7) _v7 = (v7);					\
-  typeof (v8) _v8 = (v8);					\
-  typeof (v9) _v9 = (v9);					\
-  typeof (v10) _v10 = (v10);					\
-  typeof (v11) _v11 = (v11);					\
-  typeof (v12) _v12 = (v12);					\
-  typeof (v13) _v13 = (v13);					\
-  typeof (v14) _v14 = (v14);					\
-  typeof (STARH (h)) _hp = STARH (h);				\
+  decltype (v1) _v1 = (v1);					\
+  decltype (v2) _v2 = (v2);					\
+  decltype (v3) _v3 = (v3);					\
+  decltype (v4) _v4 = (v4);					\
+  decltype (v5) _v5 = (v5);					\
+  decltype (v6) _v6 = (v6);					\
+  decltype (v7) _v7 = (v7);					\
+  decltype (v8) _v8 = (v8);					\
+  decltype (v9) _v9 = (v9);					\
+  decltype (v10) _v10 = (v10);					\
+  decltype (v11) _v11 = (v11);					\
+  decltype (v12) _v12 = (v12);					\
+  decltype (v13) _v13 = (v13);					\
+  decltype (v14) _v14 = (v14);					\
+  decltype (STARH (h)) _hp = STARH (h);				\
   _hp->f1 = _v1;						\
   _hp->f2 = _v2;						\
   _hp->f3 = _v3;						\
@@ -359,22 +359,22 @@ enum { TRAP_MASK = 0xF9FF };
 		   f11, v11, f12, v12, f13, v13, f14, v14,	\
 		   f15, v15)					\
 ({								\
-  typeof (v1) _v1 = (v1);					\
-  typeof (v2) _v2 = (v2);					\
-  typeof (v3) _v3 = (v3);					\
-  typeof (v4) _v4 = (v4);					\
-  typeof (v5) _v5 = (v5);					\
-  typeof (v6) _v6 = (v6);					\
-  typeof (v7) _v7 = (v7);					\
-  typeof (v8) _v8 = (v8);					\
-  typeof (v9) _v9 = (v9);					\
-  typeof (v10) _v10 = (v10);					\
-  typeof (v11) _v11 = (v11);					\
-  typeof (v12) _v12 = (v12);					\
-  typeof (v13) _v13 = (v13);					\
-  typeof (v14) _v14 = (v14);					\
-  typeof (v15) _v15 = (v15);					\
-  typeof (STARH (h)) _hp = STARH (h);				\
+  decltype (v1) _v1 = (v1);					\
+  decltype (v2) _v2 = (v2);					\
+  decltype (v3) _v3 = (v3);					\
+  decltype (v4) _v4 = (v4);					\
+  decltype (v5) _v5 = (v5);					\
+  decltype (v6) _v6 = (v6);					\
+  decltype (v7) _v7 = (v7);					\
+  decltype (v8) _v8 = (v8);					\
+  decltype (v9) _v9 = (v9);					\
+  decltype (v10) _v10 = (v10);					\
+  decltype (v11) _v11 = (v11);					\
+  decltype (v12) _v12 = (v12);					\
+  decltype (v13) _v13 = (v13);					\
+  decltype (v14) _v14 = (v14);					\
+  decltype (v15) _v15 = (v15);					\
+  decltype (STARH (h)) _hp = STARH (h);				\
   _hp->f1 = _v1;						\
   _hp->f2 = _v2;						\
   _hp->f3 = _v3;						\

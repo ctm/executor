@@ -22,8 +22,17 @@ namespace Executor
 
 #else /* !defined (BIGENDIAN) */
 
-#define CW_RAW(n)  ((typeof (n)) swap16 ((unsigned short)(n)))
-#define CL_RAW(n)  ((typeof (n)) swap32 ((unsigned int) ((n)|0)))
+template<class TT>
+inline TT CW_RAW(TT n)
+{
+    return swap16((uint16_t)n);
+}
+template<class TT>
+inline TT CL_RAW(TT n)
+{
+    return swap32((uint32_t)n);
+}
+
 
 #endif
 
@@ -147,9 +156,9 @@ namespace internal
  * because of exponential growth in the preprocessed code size.
  */
 #define CWV(n) \
-((__builtin_constant_p ((n)) ? (typeof (CW(n)))  CWC (n) : CW (n)))
+((__builtin_constant_p ((n)) ? (decltype (CW(n)))  CWC (n) : CW (n)))
 #define CLV(n) \
-((__builtin_constant_p ((n)) ? (typeof (CL(n))) CLC (n) : CL (n)))
+((__builtin_constant_p ((n)) ? (decltype (CL(n))) CLC (n) : CL (n)))
 
 
 #endif  /* !defined (BIGENDIAN) */

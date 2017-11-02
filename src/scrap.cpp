@@ -418,15 +418,15 @@ mac_pixel32;
 
 #define advance_n_bytes(ptrp, n_bytes)				\
 ({								\
-  typeof (ptrp) _ptrp;						\
+  decltype (ptrp) _ptrp;						\
 								\
   _ptrp = (ptrp);						\
-  *(_ptrp) = (typeof (*_ptrp))((char *)*(_ptrp) + n_bytes);	\
+  *(_ptrp) = (decltype (*_ptrp))((char *)*(_ptrp) + n_bytes);	\
 })
 
 #define MAC_COLOR_COMPONENT_FROM_SDL_CC(x)	\
 ({						\
-  typeof (x) _x;				\
+  decltype (x) _x;				\
 						\
   _x = (x);					\
   (_x << 8)|(uint8)_x;				\
@@ -536,7 +536,7 @@ gworld_from_surface (SDL_Surface *surfp)
 		    rowbytes = PIXMAP_ROWBYTES (pm);
 
 		    ip = SDL_Surface_pixels (surfp);
-		    op = (typeof (op)) GetPixBaseAddr (pm);
+		    op = (decltype (op)) GetPixBaseAddr (pm);
 		    eip = ip + n_lines * pitch;
 		    for (; ip != eip; ip += pitch, op += rowbytes)
 		      memcpy (op, ip, rowbytes);
@@ -548,7 +548,7 @@ gworld_from_surface (SDL_Surface *surfp)
 		    sdl_pixel24 *ip;
 		    mac_pixel32 *op;
 		  
-		    op = (typeof (op)) GetPixBaseAddr (pm);
+		    op = (decltype (op)) GetPixBaseAddr (pm);
 		    ip = SDL_Surface_pixels (surfp);
 
 		    memcpy (op, ip, n_lines * pixels_per_line * sizeof *op);
@@ -731,7 +731,7 @@ surface_from_gworld (GWorldPtr gp)
 				 R, G, B, A);
       SDL_LockSurface (retval);
       op = SDL_Surface_pixels (retval);
-      ip = (typeof (ip)) GetPixBaseAddr (pm);
+      ip = (decltype (ip)) GetPixBaseAddr (pm);
       memcpy (op, ip, n_lines * pixels_per_line * sizeof *ip);
 #if 0
 #warning THIS IS BROKEN

@@ -401,7 +401,7 @@ P4 (PUBLIC pascal trap, OSErr, ResolveAlias,
 
   warning_unimplemented ("stub for Launch WON'T WORK WITH FULL PATH SPEC");
   retval = noErr;
-  headp = (typeof (headp)) STARH (alias);
+  headp = (decltype (headp)) STARH (alias);
   str255assign (volname, headp->volumeName);
   fs.parID = headp->ioDirID; /* NOT VALID IF THIS IS A FULL PATH SPEC */
   str255assign (fs.name, headp->fileName); 

@@ -2128,7 +2128,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 	{
 	  long (*funcp)(void);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp ();
 	}
 	break;
@@ -2136,7 +2136,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 	{
 	  long (*funcp)(uint32);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp (params[0]);
 	}
 	break;
@@ -2144,7 +2144,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 	{
 	  long (*funcp)(uint32, uint32);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp (params[0], params[1]);
 	}
 	break;
@@ -2152,7 +2152,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 	{
 	  long (*funcp)(uint32, uint32, uint32);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp (params[0], params[1], params[2]);
 	}
 	break;
@@ -2160,7 +2160,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 	{
 	  long (*funcp)(uint32, uint32, uint32, uint32);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp (params[0], params[1], params[2], params[3]);
 	}
 	break;
@@ -2168,7 +2168,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 	{
 	  long (*funcp)(uint32, uint32, uint32, uint32, uint32);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp (params[0], params[1], params [2], params [3],
 			  params[4]);
 	}
@@ -2177,7 +2177,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 	{
 	  long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp (params[0], params[1], params [2], params [3],
 			  params[4], params[5]);
 	}
@@ -2187,7 +2187,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 	  long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32,
 			uint32);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp (params[0], params[1], params [2], params [3],
 			  params[4], params[5], params [6]);
 	}
@@ -2197,7 +2197,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 	  long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32,
 			uint32, uint32);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp (params[0], params[1], params [2], params [3],
 			  params[4], params[5], params [6], params [7]);
 	}
@@ -2207,7 +2207,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 	  long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32,
 			uint32, uint32, uint32);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp (params[0], params[1], params [2], params [3],
 			  params[4], params[5], params [6], params [7],
 			  params[8]);
@@ -2218,7 +2218,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 	  long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32,
 			uint32, uint32, uint32, uint32);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp (params[0], params[1], params [2], params [3],
 			  params[4], params[5], params [6], params [7],
 			  params[8], params[9]);
@@ -2229,7 +2229,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 	  long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32,
 			uint32, uint32, uint32, uint32, uint32);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp (params[0], params[1], params [2], params [3],
 			  params[4], params[5], params [6], params [7],
 			  params[8], params[9], params[10]);
@@ -2240,7 +2240,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 	  long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32,
 			uint32, uint32, uint32, uint32, uint32, uint32);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp (params[0], params[1], params [2], params [3],
 			  params[4], params[5], params [6], params [7],
 			  params[8], params[9], params[10], params[11]);
@@ -2252,7 +2252,7 @@ CallUniversalProc_from_native_common (va_list ap, where_args_t where,
 			uint32, uint32, uint32, uint32, uint32, uint32,
 			uint32);
 
-	  funcp = (typeof (funcp)) transition_vectorp[0];
+	  funcp = (decltype (funcp)) transition_vectorp[0];
 	  retval = funcp (params[0], params[1], params [2], params [3],
 			  params[4], params[5], params [6], params [7],
 			  params[8], params[9], params[10], params[11],
