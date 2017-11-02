@@ -1,27 +1,52 @@
 Current Status
 ==============
 
-Major hacking is happening here.
-If you want to *use* Executor, go to the "original" version at github.com/ctm/executor.
+This version of Executor now builds and runs on 64-bit Linux.
 
-I am trying here to modernize the code base (based on MaddTheSane's C++ port)
-by inserting type-safe templates for all Big-Endian values.
-
-This should have three benefits:
-
-1. More type safety, which means fewer bugs once the bugs I add have been fixed again
-2. 64 bit support
-3. Easier-to-read code, because we can hopyfully automate most byte swapping.
-
-
-Compilation Notes
-=================
-
-Current configure line:
+Grab a matching version of syn68k and build it:
 
 ```
-CXX='g++ -m32' CC='gcc -m32' ../src/configure --with-front-end=x --with-sound=dummy --host=i686-unknown-linux
+./configure && make && sudo make install
 ```
+
+... and then build executor. If you have SDL 1.2:
+````
+./configure --with-sound=dummy
+````
+... and for the X frontend:
+````
+./configure --with-front-end=x --with-sound=dummy
+````
+
+Sound does not currently work.
+There are also known problems with 16 and 32 bpp mode.
+
+
+What's been done
+================
+
+This is based on MaddTheSane's cpp port of executor.
+Most big-endian values are now no longer stored as plain values, but
+as `GUEST<T>` values.
+`GUEST<T>` is a template alias that maps to T for single-byte types
+and for struct types, and to `GuestWrapper<T>` for multi-byte integers and pointers.
+This class handles endian conversion and pointer conversion.
+The `CW`, `CL`, `MR`, `RM` macros and friends have been redefined as inline functions
+accordingly.
+This makes byte swapping reasonably type safe, and allows us to store
+pointers as 4 byte values without losing all type information on 64-bit systems.
+See `rsys/mactype.h` and `rsys/byteswap.h`.
+
+A possible future direction would be to replace the `CW`, `CL`, `MR`, `RM` macros
+by implicit conversion operators and hope that makes code simpler and more readable.
+
+The other part of 64-bit support was to make syn68k map different parts of the
+64-bit address space into the M68K's 32-bit address space. 68K code can
+access the emulated memory, the video surface, Executor's global variables
+and local variables in Executor functions. Each of these can be located more
+than 4GB away from the others in the 64-bit address space.
+Unfortunately, this means that the 64-bit version will always be slower
+than the 32-bit version.
 
 Original Readme
 ========================================================================
