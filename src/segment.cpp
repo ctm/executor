@@ -171,10 +171,10 @@ A1(PUBLIC, char *, ROMlib_undotdot, char *, origp)
 	case '/':
 	    switch (dotcount) {
 	    case 0:		/* slash slash */
-	        BlockMove((Ptr) p+1, (Ptr) p, (Size) nleft-1);
+	        BlockMoveData((Ptr) p+1, (Ptr) p, (Size) nleft-1);
 		break;
 	    case 1:		/* slash dot slash */
-		BlockMove((Ptr) p+1, (Ptr) p-1, (Size) nleft-1);
+		BlockMoveData((Ptr) p+1, (Ptr) p-1, (Size) nleft-1);
 		p -= 2;
 		dotcount = 0;
 		break;
@@ -185,7 +185,7 @@ A1(PUBLIC, char *, ROMlib_undotdot, char *, origp)
 		    oldloc = origp + 1;
 		else
 		    ++oldloc;
-		BlockMove((Ptr) p+1, (Ptr) oldloc, (Size) nleft-1);
+		BlockMoveData((Ptr) p+1, (Ptr) oldloc, (Size) nleft-1);
 		p = oldloc - 1;
 		dotcount = 0;
 		break;
@@ -376,10 +376,10 @@ A2(PRIVATE, BOOLEAN, argv_to_appfile, char *, uname, AppFile *, ap)
 	      pathlen = strlen ((char *) path);
 	      path[pathlen] = '/';
 	      if (uname[0] == '.' && uname[1] == '/')
-		BlockMove ((Ptr) uname+2, (Ptr) (path+pathlen+1),
+		BlockMoveData ((Ptr) uname+2, (Ptr) (path+pathlen+1),
 			   (Size) namelen+1-2);
 	      else
-		BlockMove ((Ptr) uname, (Ptr) (path+pathlen+1),
+		BlockMoveData ((Ptr) uname, (Ptr) (path+pathlen+1),
 			   (Size) namelen+1);
 	      uname = (char *) path;
 #if defined (MSDOS) || defined(CYGWIN32)
@@ -527,7 +527,7 @@ A2(PUBLIC, void, ROMlib_seginit, LONGINT, argc, char **, argv)	/* INTERNAL */
 	CurApRefNum = CW(OpenRFPerm(app.fName, CW(app.vRefNum), fsCurPerm));
 #endif
 	CurApName[0] = MIN(app.fName[0], sizeof(CurApName)-1);
-	BlockMove((Ptr) app.fName+1, (Ptr) CurApName+1, (Size) CurApName[0]);
+	BlockMoveData((Ptr) app.fName+1, (Ptr) CurApName+1, (Size) CurApName[0]);
     } else {
 	CurApRefNum = CWC(-1);
 	CurApName[0] = 0;
@@ -759,7 +759,7 @@ P0(PUBLIC pascal trap, void, ExitToShell)
 	    else
 	      {
 		CurApName[0] = MIN(reply.fName[0], 31);
-		BlockMove((Ptr) reply.fName+1, (Ptr) CurApName+1,
+		BlockMoveData((Ptr) reply.fName+1, (Ptr) CurApName+1,
 			  (Size) CurApName[0]);
 		Launch(CurApName, CW(reply.vRefNum));
 	      }
@@ -779,7 +779,7 @@ P0(PUBLIC pascal trap, void, ExitToShell)
 
 #if defined(SUN) && !defined(X) && !defined(MACOSX_)
     close(_windowfd);	/* may be bad choice */
-    BlockMove(_savebits, _addr, (Size) _nb);
+    BlockMoveData(_savebits, _addr, (Size) _nb);
 #endif /* SUN && !defined */
 
 #if defined (SCO)
@@ -797,7 +797,7 @@ P0(PUBLIC pascal trap, void, ExitToShell)
 #if 0
     if (FinderName[0]) {
 	toexec = ALLOCA(FinderName[0]+1);
-	BlockMove((Ptr) FinderName+1, (Ptr) toexec, (Size) FinderName[0]);
+	BlockMoveData((Ptr) FinderName+1, (Ptr) toexec, (Size) FinderName[0]);
 	toexec[FinderName[0]] = 0;
 	execlp(toexec, toexec, (char *) 0); 
 	/* if it fails we'll exit */

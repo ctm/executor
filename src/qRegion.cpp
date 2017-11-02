@@ -1254,7 +1254,7 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
     if (RGN_SMALL_P (s1)) {
 	temp = (RgnPtr) ALLOCA( RGN_SMALL_SIZE + 9 * sizeof(INTEGER) );
 #if 0
-	BlockMove(CL(*(Ptr *) s1), (Ptr) temp, RGN_SMALL_SIZE);
+	BlockMoveData(CL(*(Ptr *) s1), (Ptr) temp, RGN_SMALL_SIZE);
 #else
 	memcpy((Ptr) temp, MR(*s1), RGN_SMALL_SIZE);
 #endif
@@ -1276,7 +1276,7 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
     if (RGN_SMALL_P (s2)) {
 	temp = (RgnPtr) ALLOCA (RGN_SMALL_SIZE + 9 * sizeof (INTEGER));
 #if 0
-	BlockMove(CL(*(Ptr *) s2), (Ptr) temp, RGN_SMALL_SIZE);
+	BlockMoveData(CL(*(Ptr *) s2), (Ptr) temp, RGN_SMALL_SIZE);
 #else
 	memcpy((Ptr) temp, STARH (s2), RGN_SMALL_SIZE);
 #endif

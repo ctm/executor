@@ -65,7 +65,7 @@ PUBLIC OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid, LONGIN
 	if (!newptr)
 	    retval = tmwdoErr;
 	else {
-	    BlockMove( MR(WDCBsPtr), newptr, n_wd_bytes);
+	    BlockMoveData( MR(WDCBsPtr), newptr, n_wd_bytes);
 	    DisposPtr( MR(WDCBsPtr) );
 	    WDCBsPtr = RM(newptr);
 	    *(GUEST<INTEGER> *) newptr = CW(new_n_wd_bytes);

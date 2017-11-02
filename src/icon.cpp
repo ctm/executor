@@ -295,7 +295,7 @@ P1 (PUBLIC pascal trap, CIconHandle, GetCIcon,
        cicon     = STARH (cicon_handle);
        cicon_res = STARH (cicon_res_handle);
        
-       BlockMove ((Ptr) cicon_res, (Ptr) cicon, new_size);
+       BlockMoveData ((Ptr) cicon_res, (Ptr) cicon, new_size);
        
        mask_data_offset = 0;
        
@@ -320,7 +320,7 @@ P1 (PUBLIC pascal trap, CIconHandle, GetCIcon,
 	 
 	 color_table
 	   = (CTabHandle) NewHandle (pmap_ctab_size);
-	 BlockMove ((Ptr) &cicon_res->iconMaskData + pmap_ctab_offset,
+	 BlockMoveData ((Ptr) &cicon_res->iconMaskData + pmap_ctab_offset,
 		    (Ptr) STARH (color_table),
 		    pmap_ctab_size);
 	 CTAB_SEED_X (color_table) = CL (GetCTSeed ());
@@ -328,7 +328,7 @@ P1 (PUBLIC pascal trap, CIconHandle, GetCIcon,
 	 
 	 cicon->iconPMap.baseAddr = CLC_NULL;
 	 cicon->iconData = RM (NewHandle (pmap_data_size));
-	 BlockMove ((Ptr) &cicon_res->iconMaskData + pmap_data_offset,
+	 BlockMoveData ((Ptr) &cicon_res->iconMaskData + pmap_data_offset,
 		    (Ptr) STARH(MR(cicon->iconData)),
 		    pmap_data_size);
        }

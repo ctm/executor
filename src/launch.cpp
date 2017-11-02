@@ -187,23 +187,23 @@ PRIVATE void ParseConfigFile(StringPtr exefname, OSType type)
       (char*)realloc(ROMlib_configfilename,
 	      dirsize + 1 + allocsize + sizeof(OLD_CONFIG_EXTENSION));
     strdst = (Ptr) ROMlib_configfilename;
-    BlockMove((Ptr) ROMlib_ConfigurationFolder, strdst, dirsize);
+    BlockMoveData((Ptr) ROMlib_ConfigurationFolder, strdst, dirsize);
     strdst += dirsize;
     *strdst++ = '/';
-    BlockMove((Ptr) exefname+1, strdst, fname0);
+    BlockMoveData((Ptr) exefname+1, strdst, fname0);
     savestrdst = strdst;
     strdst += fname0;
-    BlockMove((Ptr) CONFIGEXTENSION, strdst, sizeof(CONFIGEXTENSION));
+    BlockMoveData((Ptr) CONFIGEXTENSION, strdst, sizeof(CONFIGEXTENSION));
     configfile = Ufopen(ROMlib_configfilename, "r");
     if (!configfile) {
-      BlockMove((Ptr) OLD_CONFIG_EXTENSION, strdst, sizeof(OLD_CONFIG_EXTENSION));
+      BlockMoveData((Ptr) OLD_CONFIG_EXTENSION, strdst, sizeof(OLD_CONFIG_EXTENSION));
       configfile = Ufopen(ROMlib_configfilename, "r");
     }
     if (!configfile && type != 0) {
 	strdst = savestrdst;
 	sprintf((char *) strdst, "%08x", type);
 	strdst += sizeof("1234ABCD")-1;
-	BlockMove((Ptr) CONFIGEXTENSION, strdst, sizeof(CONFIGEXTENSION));
+	BlockMoveData((Ptr) CONFIGEXTENSION, strdst, sizeof(CONFIGEXTENSION));
 	configfile = Ufopen(ROMlib_configfilename, "r");
     }
     if (configfile) {
@@ -518,7 +518,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	;
     toskip = p - fName;
     CurApName[0] = MIN(fName[0]-toskip, 31);
-    BlockMove((Ptr) fName+1+toskip, (Ptr) CurApName+1,
+    BlockMoveData((Ptr) fName+1+toskip, (Ptr) CurApName+1,
 						      (Size) CurApName[0]);
 #if 0
     Munger(MR(AppParmHandle), 2L*sizeof(INTEGER), (Ptr) 0,
@@ -570,7 +570,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 							   ROMlib_exefname[0]);
     elen = strlen(ROMlib_exeuname);
     ename = (StringPtr) alloca(elen+1);
-    BlockMove((Ptr) ROMlib_exeuname, (Ptr) ename+1, elen);
+    BlockMoveData((Ptr) ROMlib_exeuname, (Ptr) ename+1, elen);
     ename[0] = elen;
 
     ROMlib_creator = CL(finfo.fdCreator);

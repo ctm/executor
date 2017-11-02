@@ -406,7 +406,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 	    StringPtr name_ptr;
 
 	    temp_name[0] = MIN (255, endname - filename - 1);
-	    BlockMove((Ptr) filename, (Ptr) temp_name + 1,
+	    BlockMoveData((Ptr) filename, (Ptr) temp_name + 1,
 		      (Size) temp_name[0]);
 	    temp_name[0] -= ROMlib_UNIX7_to_Mac((char *) temp_name + 1,
 						temp_name[0]);
@@ -420,7 +420,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 #endif
 	    name_ptr = (StringPtr) MR (pb->fileParam.ioNamePtr);
 	    name_ptr[0] = MIN (31, temp_name[0]);
-	    BlockMove ((Ptr) temp_name + 1, (Ptr) name_ptr + 1, name_ptr [0]);
+	    BlockMoveData ((Ptr) temp_name + 1, (Ptr) name_ptr + 1, name_ptr [0]);
 	  }
 	pb->fileParam.ioFRefNum = 0;
 	pb->fileParam.ioFlAttrib

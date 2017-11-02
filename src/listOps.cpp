@@ -85,7 +85,7 @@ A5(PRIVATE, void, cellhelper, AddOrRep, addorrep, Ptr, dp, INTEGER, dl,
 	  }
 
 	sp = (Ptr) STARH(HxP(list, cells)) + off1;
-	BlockMove(sp, sp + delta, (Size) off2 - off1);
+	BlockMoveData(sp, sp + delta, (Size) off2 - off1);
 
 	if (delta < 0)
 	  {
@@ -100,7 +100,7 @@ A5(PRIVATE, void, cellhelper, AddOrRep, addorrep, Ptr, dp, INTEGER, dl,
 	      warning_unexpected ("err = %d, delta = %d", err, delta);
 	  }
 
-	BlockMove(dp, (Ptr) STARH(HxP(list, cells)) + off0 +
+	BlockMoveData(dp, (Ptr) STARH(HxP(list, cells)) + off0 +
 				      (addorrep == Add ? len : 0) , (Size)dl);
 
 	ip = (GUEST<INTEGER> *) ((char *) STARH (list) + ip_offset);
@@ -140,7 +140,7 @@ P4(PUBLIC pascal trap, void, LGetCell, Ptr, dp, GUEST<INTEGER> *, dlp,	/* IMIV-2
 	ntomove = off2 - off1;
 	if (ntomove > CW(*dlp))
 	    ntomove = CW(*dlp);
-	BlockMove((Ptr) STARH(HxP(list, cells)) + off1, dp, (Size) ntomove);
+	BlockMoveData((Ptr) STARH(HxP(list, cells)) + off1, dp, (Size) ntomove);
 	*dlp = CW(ntomove);
     }
 }

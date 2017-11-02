@@ -1052,7 +1052,7 @@ PRIVATE void eatString(Str255 str)
     if (procp)
 	CToPascalCall((void*)procp, CTOP_StdGetPic, str+1, str[0]);
     else
-        BlockMove((Ptr) nextbytep, (Ptr) str+1, str[0]);
+        BlockMoveData((Ptr) nextbytep, (Ptr) str+1, str[0]);
     nextbytep += str[0];
 }
 
@@ -1081,7 +1081,7 @@ A2(PRIVATE, void, eatRegion, RgnHandle, rh, Size, hs)
 							 hs - sizeof(INTEGER));
 	HSetState((Handle) rh, state);
     } else
-        BlockMove((Ptr) nextbytep, (Ptr) STARH(rh) + sizeof(INTEGER),
+        BlockMoveData((Ptr) nextbytep, (Ptr) STARH(rh) + sizeof(INTEGER),
 							 hs - sizeof(INTEGER));
     HxX(rh, rgnSize) = CW(hs);
     nextbytep += hs - sizeof(INTEGER);
@@ -1754,7 +1754,7 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
 									hsize);
 			    HSetState(hand, state2);
 			} else
-			    BlockMove((Ptr) nextbytep, STARH(hand), hsize);
+			    BlockMoveData((Ptr) nextbytep, STARH(hand), hsize);
 			nextbytep += hsize;
 		    } else
 			eatRegion((RgnHandle) hand, hsize);

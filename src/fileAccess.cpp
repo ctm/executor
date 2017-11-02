@@ -789,15 +789,14 @@ loop:
 	}
 	vcbstrlen = strlen(vcbp->unixname);
 	vcbanddir = (char*)ALLOCA(vcbstrlen + content.dsize + 2);
-	BlockMove((Ptr) vcbp->unixname, (Ptr) vcbanddir, (Size) vcbstrlen+1);
-	if (content.dsize) {
+        memcpy(vcbanddir, vcbp->unixname, vcbstrlen+1);
+        if (content.dsize) {
 	    if (vcbanddir[vcbstrlen-1] != '/')
 	      {
 		vcbanddir[vcbstrlen] = '/';
 		++vcbstrlen;
 	      }
-	    BlockMove((Ptr) content.dptr, (Ptr) vcbanddir+vcbstrlen,
-							 (Size) content.dsize);
+            memcpy(vcbanddir+vcbstrlen, content.dptr, content.dsize);
 	    vcbanddir[vcbstrlen+content.dsize] = 0;
 	    if (Ustat(vcbanddir, &sbuf) < 0)
 	      {
@@ -870,8 +869,8 @@ loop:
 #if 0
 	therest = ROMlib_newunixfrommac((char *) fnamep+1, fnamep[0]);
 #else
-	therest = (char*)malloc ((Size) fnamep[0] + 1);
-	BlockMove((Ptr) fnamep+1, (Ptr) therest, (Size) fnamep[0]);
+        therest = (char*)malloc ((Size) fnamep[0] + 1);
+        memcpy(therest, fnamep+1, fnamep[0]);
 	therest[fnamep[0]] = 0;
 #endif
     }
@@ -879,15 +878,15 @@ loop:
     *pathname = (char*)malloc (therestlen + strlen(vcbanddir)+2);
     *filename = *pathname + strlen(vcbanddir) +1;
     *endname = *filename + therestlen + 1;
-    BlockMove((Ptr) vcbanddir, (Ptr) *pathname, (Size) strlen(vcbanddir));
+    memcpy(*pathname, vcbanddir, strlen(vcbanddir));
     if (therest) {
 	if (vcbanddir[1 + SLASH_CHAR_OFFSET])		/* i.e. test for "/" */
 	    (*filename)[-1] = '/';
 	else {
 	    --*filename;
 	    --*endname;
-	}
-	BlockMove((Ptr) therest, (Ptr) *filename, (Size) therestlen);
+        }
+        memcpy(*filename, therest, therestlen);
 	(*endname)[-1] = 0;
     } else {
 	*endname = *filename;
@@ -1195,9 +1194,8 @@ A4(PRIVATE, OSErr, PBOpenForkD, ParmBlkPtr, pb, BOOLEAN, a,
 		    namelen = strlen (filename);
 		    namelen -= ROMlib_UNIX7_to_Mac (filename, namelen);
 		    namelen = MIN(namelen, 31);
-		    fp->fcname[0] = namelen;
-		    BlockMove((Ptr) filename,
-		      (Ptr) fp->fcname+1, (Size) namelen);
+                    fp->fcname[0] = namelen;
+                    memcpy(fp->fcname+1, filename, namelen);
 		}
 	    }
 	}

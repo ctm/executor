@@ -910,7 +910,7 @@ P1 (PUBLIC pascal trap, PaletteHandle, GetNewPalette, INTEGER, id)
   palette_size
     = PALETTE_STORAGE_FOR_ENTRIES (PALETTE_ENTRIES (palette_res_h));
   retval = (PaletteHandle) (NewHandle (palette_size));
-  BlockMove ((Ptr) STARH (palette_res_h), (Ptr) STARH (retval),
+  BlockMoveData ((Ptr) STARH (palette_res_h), (Ptr) STARH (retval),
 	     palette_size);
   
   /* initial contents don't matter */

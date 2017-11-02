@@ -183,7 +183,7 @@ A2(PUBLIC, OSErr, SerStatus, INTEGER, rn, SerStaRec *, serstap)	/* IMII-253 */
     OSErr err;
 
     if ((err = Status(rn, SERSTATUS, (Ptr) status)) == noErr)
-	BlockMove((Ptr) status, (Ptr) serstap, (Size) sizeof(*serstap));
+	BlockMoveData((Ptr) status, (Ptr) serstap, (Size) sizeof(*serstap));
     return err;
 }
 

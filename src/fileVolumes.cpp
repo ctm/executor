@@ -1023,7 +1023,7 @@ A2(PUBLIC, OSErr, ufsPBHGetVInfo, HParmBlkPtr, pb,	/* INTERNAL */
 	pb->volumeParam.ioVWrCnt    = vcbp->vcbWrCnt;
 	pb->volumeParam.ioVFilCnt   = vcbp->vcbFilCnt;
 	pb->volumeParam.ioVDirCnt   = vcbp->vcbDirCnt;
-	BlockMove((Ptr) vcbp->vcbFndrInfo, (Ptr) pb->volumeParam.ioVFndrInfo,
+	BlockMoveData((Ptr) vcbp->vcbFndrInfo, (Ptr) pb->volumeParam.ioVFndrInfo,
 					     (Size) sizeof(vcbp->vcbFndrInfo));
 	if (ISWDNUM(Cx(BootDrive))) {
 	    wdp = WDNUMTOWDP(Cx(BootDrive));
@@ -1051,7 +1051,7 @@ A2(PUBLIC, OSErr, ufsPBSetVInfo, HParmBlkPtr, pb,	/* INTERNAL */
 	  {
 	    ntocopy = MIN(MR(pb->volumeParam.ioNamePtr)[0],
 			  sizeof (vcbp->vcbVN)-1);
-	    BlockMove((Ptr) MR(pb->volumeParam.ioNamePtr)+1,
+	    BlockMoveData((Ptr) MR(pb->volumeParam.ioNamePtr)+1,
 		      (Ptr) vcbp->vcbVN+1,(Size) ntocopy);
 	    vcbp->vcbVN[0] = ntocopy;
 	  }
@@ -1061,7 +1061,7 @@ A2(PUBLIC, OSErr, ufsPBSetVInfo, HParmBlkPtr, pb,	/* INTERNAL */
 	vcbp->vcbClpSiz   = pb->volumeParam.ioVClpSiz;
 	vcbp->vcbVolBkUp  = pb->volumeParam.ioVBkUp;
 	vcbp->vcbVSeqNum  = pb->volumeParam.ioVSeqNum;
-	BlockMove((Ptr) pb->volumeParam.ioVFndrInfo, (Ptr) vcbp->vcbFndrInfo,
+	BlockMoveData((Ptr) pb->volumeParam.ioVFndrInfo, (Ptr) vcbp->vcbFndrInfo,
 					     (Size) sizeof(vcbp->vcbFndrInfo));
     } else
 	err = nsvErr;

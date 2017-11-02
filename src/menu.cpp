@@ -175,7 +175,7 @@ P0(PUBLIC pascal trap, void, InitMenus)
 	 built into `ROM' */
 
 	MenuCInfo = RM ((MCTableHandle) NewHandle (sizeof default_menu_ctab));
-	BlockMove ((Ptr) default_menu_ctab, (Ptr) STARH (MR (MenuCInfo)),
+	BlockMoveData ((Ptr) default_menu_ctab, (Ptr) STARH (MR (MenuCInfo)),
 		   sizeof default_menu_ctab);
     }
   else
@@ -185,7 +185,7 @@ P0(PUBLIC pascal trap, void, InitMenus)
       n_entries = CW (*(GUEST<uint16> *) STARH (default_mcinfo));
       MenuCInfo = RM ((MCTableHandle) NewHandle (n_entries
 						 * sizeof (MCEntry)));
-      BlockMove ((Ptr) (&((uint16 *) STARH (default_mcinfo))[1]),
+      BlockMoveData ((Ptr) (&((uint16 *) STARH (default_mcinfo))[1]),
 		 (Ptr) STARH (MR (MenuCInfo)),
 		 n_entries * sizeof (MCEntry));
       append_end_marker_if_necessary (MR (MenuCInfo));
@@ -1461,10 +1461,10 @@ P3(PUBLIC pascal trap, void, SetItem, MenuHandle, mh, INTEGER, item,
             if (growth > 0) {
                 SetHandleSize((Handle) mh, hsize);
                 sb = (char *) STARH(mh) + start;
-                BlockMove((Ptr) sb, (Ptr) sb + growth, (Size) nbyte);
+                BlockMoveData((Ptr) sb, (Ptr) sb + growth, (Size) nbyte);
             } else {
                 sb = (char *) STARH(mh) + start;
-                BlockMove((Ptr) sb, (Ptr) sb + growth, (Size) nbyte);
+                BlockMoveData((Ptr) sb, (Ptr) sb + growth, (Size) nbyte);
                 SetHandleSize((Handle) mh, hsize);
             }
         }

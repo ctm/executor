@@ -91,7 +91,7 @@ A3(PRIVATE, void, outs, StringPtr, p, INTEGER, n, char **, opp)
 
     ntocopy = n ? n : p[0];	/* This can lead to copying NUL characters */
 				/* which is prescribed in IMI-505 (ick) */
-    BlockMove((Ptr) (p+1), (Ptr) *opp, (Size) ntocopy);
+    BlockMoveData((Ptr) (p+1), (Ptr) *opp, (Size) ntocopy);
     *opp += ntocopy;
 }
 
@@ -108,7 +108,7 @@ A3(PRIVATE, void, outn, INTEGER, n, BOOLEAN, leading0, char **, opp)
     NumToString((LONGINT) n, s);
     if (leading0 && n < 10)
 	*(*opp)++ = '0';
-    BlockMove((Ptr) (s+1), (Ptr) *opp, (Size) s[0]);
+    BlockMoveData((Ptr) (s+1), (Ptr) *opp, (Size) s[0]);
     *opp += s[0];
 }
 

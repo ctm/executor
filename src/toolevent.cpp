@@ -1237,7 +1237,7 @@ P0(PUBLIC pascal trap, BOOLEAN, WaitMouseUp)
 
 P1(PUBLIC pascal trap, void, GetKeys, unsigned char *, keys)
 {
-    BlockMove((Ptr) KeyMap, (Ptr) keys, (Size) sizeof_KeyMap);
+    BlockMoveData((Ptr) KeyMap, (Ptr) keys, (Size) sizeof_KeyMap);
 }
 
 

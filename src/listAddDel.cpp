@@ -53,7 +53,7 @@ P3(PUBLIC pascal trap, INTEGER, LAddColumn, INTEGER, count,	/* IMIV-271 */
 	while (--nrows >= 0) {
 	    ip -= nafter;
 	    op -= nafter;
-	    BlockMove(ip, op, nafter);
+	    BlockMoveData(ip, op, nafter);
 	    offset = CW(*(GUEST<INTEGER> *)op) & 0x7FFF;
 	    for (i = 0; ++i <= count; )
 	      {
@@ -62,7 +62,7 @@ P3(PUBLIC pascal trap, INTEGER, LAddColumn, INTEGER, count,	/* IMIV-271 */
 	      }
 	    ip -= nbefore;
 	    op -= nbefore;
-	    BlockMove(ip, op, nbefore);
+	    BlockMoveData(ip, op, nbefore);
 	}
 
 	p.h = Hx(list, cellSize.h);
@@ -115,7 +115,7 @@ P3(PUBLIC pascal trap, INTEGER, LAddRow, INTEGER, count,	/* IMIV-271 */
 	ip -= nafter;
 	op -= nafter;
 	offset = CW(*ip) & 0x7FFF;
-	BlockMove((Ptr) ip, (Ptr) op, nafter * sizeof(INTEGER));
+	BlockMoveData((Ptr) ip, (Ptr) op, nafter * sizeof(INTEGER));
 						    /* move the after rows */
 	while (--noffsets >= 0)
 	    *--op = CW(offset);
@@ -223,7 +223,7 @@ P3(PUBLIC pascal trap, void, LDelColumn, INTEGER, count,	/* IMIV-271 */
 
 	    off2 = CW(*ip) & 0x7FFF;
 	    ntomove = off2 - off1;
-	    BlockMove(dataip, dataop, ntomove);	/* copy before-data */
+	    BlockMoveData(dataip, dataop, ntomove);	/* copy before-data */
 	    dataip += ntomove;
 	    dataop += ntomove;
 
@@ -240,7 +240,7 @@ P3(PUBLIC pascal trap, void, LDelColumn, INTEGER, count,	/* IMIV-271 */
 
 	    off5 = CW(*ip) & 0x7FFF;
 	    ntomove = off5 - off4;
-	    BlockMove(dataip, dataop, ntomove);	/* copy before-data */
+	    BlockMoveData(dataip, dataop, ntomove);	/* copy before-data */
 	    dataip += ntomove;
 	    dataop += ntomove;
 	}
@@ -357,7 +357,7 @@ P3(PUBLIC pascal trap, void, LDelRow, INTEGER, count,		/* IMIV-272 */
 	*op = CW(CW(*ip) - delta);	/* sentinel */
 
 	ntomove = off3 - off2;
-	BlockMove((Ptr) STARH(HxP(list, cells)) + off2,
+	BlockMoveData((Ptr) STARH(HxP(list, cells)) + off2,
 			       (Ptr) STARH(HxP(list, cells)) + off1, ntomove);
 
 	SetHandleSize((Handle) list,

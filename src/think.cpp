@@ -20,7 +20,7 @@ A1(PUBLIC, StringPtr, CtoPstr, char *, str)
     Size len;
 
     len = strlen((char *) str);
-    BlockMove((Ptr) str, (Ptr) (str+1), len);
+    BlockMoveData((Ptr) str, (Ptr) (str+1), len);
     str[0] = len;
     return (StringPtr) str;
 }
@@ -30,7 +30,7 @@ A1(PUBLIC, char *, PtoCstr, StringPtr, str)
     Size len;
 
     len = str[0];
-    BlockMove((Ptr) (str+1), (Ptr) str, len);
+    BlockMoveData((Ptr) (str+1), (Ptr) str, len);
     str[len] = 0;
     return (char *) str;
 }
@@ -53,5 +53,5 @@ PUBLIC void Executor::CDebugStr( StringPtr p )
     n = strlen((char *) p);
     pstr = (char*)alloca(n + 1);
     pstr[0] = n;
-    BlockMove((Ptr) p, (Ptr) pstr+1, n);
+    BlockMoveData((Ptr) p, (Ptr) pstr+1, n);
 }

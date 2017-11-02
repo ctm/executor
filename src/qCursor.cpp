@@ -262,7 +262,7 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
        resource = STARH (res_handle);
        ccrsr = STARH (ccrsr_handle);
        
-       BlockMove ((Ptr) &resource->crsr, (Ptr) ccrsr,
+       BlockMoveData ((Ptr) &resource->crsr, (Ptr) ccrsr,
 		  sizeof (CCrsr));
        
        /* NOTE: use CL below instead of MR because they're overloading
@@ -274,7 +274,7 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
        
        cursor_pixel_map = NewPixMap ();
        ccrsr->crsrMap = RM (cursor_pixel_map);
-       BlockMove ((Ptr) cursor_pixel_map_resource,
+       BlockMoveData ((Ptr) cursor_pixel_map_resource,
 		  (Ptr) STARH (cursor_pixel_map),
 		  sizeof *cursor_pixel_map_resource);
        
@@ -284,7 +284,7 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
        ccrsr_data_size = ccrsr_ctab_offset - ccrsr_data_offset;
        
        ccrsr->crsrData = RM (NewHandle (ccrsr_data_size));
-       BlockMove ((Ptr) resource + ccrsr_data_offset,
+       BlockMoveData ((Ptr) resource + ccrsr_data_offset,
 		  STARH (MR (ccrsr->crsrData)),
 		  ccrsr_data_size);
        
@@ -292,7 +292,7 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
        ccrsr_ctab_size = CTAB_STORAGE_FOR_SIZE (CW (tmp_ctab->ctSize));
        h = RM (NewHandle (ccrsr_ctab_size));
        PIXMAP_TABLE_X (MR (ccrsr->crsrMap)) = guest_cast<CTabHandle> (h);
-       BlockMove ((Ptr) tmp_ctab,
+       BlockMoveData ((Ptr) tmp_ctab,
 		  (Ptr) STARH (PIXMAP_TABLE (MR (ccrsr->crsrMap))),
 		  ccrsr_ctab_size);
      });

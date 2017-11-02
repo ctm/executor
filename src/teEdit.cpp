@@ -134,13 +134,13 @@ tereplaceselection (TEHandle teh, int16 start, int16 stop, int16 len,
     SetHandleSize (TE_HTEXT (teh), hlen + nchar);
   if (nchar != 0)
     {
-      BlockMove (STARH (hText) + stop,
+      BlockMoveData (STARH (hText) + stop,
 		 STARH (hText) + start + len,
 		 n_to_move);
     }
   if (nchar < 0)
     SetHandleSize (hText, hlen + nchar);
-  BlockMove (ptr, STARH (hText) + start, len);
+  BlockMoveData (ptr, STARH (hText) + start, len);
   
   TE_SEL_END_X (teh) = TE_SEL_START_X (teh)
     = CW (TE_SEL_START (teh) + len);

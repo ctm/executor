@@ -552,7 +552,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 	  stylemap2.baseAddr = RM((Ptr) ALLOCA(nbytes));
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
 #if 0
-	  BlockMove(MR(stylemap.baseAddr), MR(stylemap2.baseAddr), (Size) nbytes);
+	  BlockMoveData(MR(stylemap.baseAddr), MR(stylemap2.baseAddr), (Size) nbytes);
 #else
 	  memcpy(MR(stylemap2.baseAddr), MR(stylemap.baseAddr), (Size) nbytes);
 #endif
@@ -610,7 +610,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 	  stylemap2.baseAddr = stylemap.baseAddr;
 	  stylemap3.baseAddr = RM((Ptr) ALLOCA(nbytes));
 #if 0
-	  BlockMove(MR(stylemap2.baseAddr), MR(stylemap3.baseAddr),	(Size) nbytes);
+	  BlockMoveData(MR(stylemap2.baseAddr), MR(stylemap3.baseAddr),	(Size) nbytes);
 #else
 	  memcpy(MR(stylemap3.baseAddr), MR(stylemap2.baseAddr), (Size) nbytes);
 #endif
@@ -637,7 +637,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 	  srect.right = CW(CW(srect.right) + Cx(fmop->shadow));
 
 #if 0
-	  BlockMove(MR(stylemap3.baseAddr), MR(bmp->baseAddr), (Size) nbytes);
+	  BlockMoveData(MR(stylemap3.baseAddr), MR(bmp->baseAddr), (Size) nbytes);
 #else
 	  memcpy(MR(bmp->baseAddr), MR(stylemap3.baseAddr), (Size) nbytes);
 #endif

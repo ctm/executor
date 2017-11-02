@@ -705,7 +705,7 @@ PUBLIC void Executor::executor_main( void )
       ;
     toskip = p - fName;
     CurApName[0] = MIN(fName[0]-toskip, 31);
-    BlockMove((Ptr) fName+1+toskip, (Ptr) CurApName+1,
+    BlockMoveData((Ptr) fName+1+toskip, (Ptr) CurApName+1,
 	      (Size) CurApName[0]);
 
     wdpb.ioVRefNum = hpb.hFileInfo.ioVRefNum;

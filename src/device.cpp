@@ -211,7 +211,7 @@ A3(PUBLIC, OSErr, Control, INTEGER, rn, INTEGER, code,
     pb.cntrlParam.ioCRefNum = CW(rn);
     pb.cntrlParam.csCode = CW(code);
     if (param)
-	BlockMove(param, (Ptr) pb.cntrlParam.csParam,
+	BlockMoveData(param, (Ptr) pb.cntrlParam.csParam,
 					 (Size) sizeof(pb.cntrlParam.csParam));
     err = PBControl(&pb, FALSE);
     fs_err_hook (err);
@@ -228,7 +228,7 @@ A3(PUBLIC, OSErr, Status, INTEGER, rn, INTEGER, code, Ptr, param) /* IMII-179 */
     pb.cntrlParam.csCode = CW(code);
     retval = PBStatus(&pb, FALSE);
     if (param)
-	BlockMove((Ptr) pb.cntrlParam.csParam, param,
+	BlockMoveData((Ptr) pb.cntrlParam.csParam, param,
 					 (Size) sizeof(pb.cntrlParam.csParam));
     fs_err_hook (retval);
     return retval;

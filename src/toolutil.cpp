@@ -221,13 +221,13 @@ P6(PUBLIC pascal trap, LONGINT, Munger, Handle, h, LONGINT, off, Ptr, p1,
         RETURN (off);
     tomove = ep - p - len1;
     if (len1 > len2) {
-        BlockMove((Ptr) p+len1, (Ptr) p+len2, tomove);
+        BlockMoveData((Ptr) p+len1, (Ptr) p+len2, tomove);
         SetHandleSize(h, hs + len2 - len1);
         p = (char *) STARH(h) + off;
     } else if (len1 < len2) {
         SetHandleSize(h, hs + len2 - len1);
         p = (char *) STARH(h) + off;
-        BlockMove((Ptr) p+len1, (Ptr) p+len2, tomove);
+        BlockMoveData((Ptr) p+len1, (Ptr) p+len2, tomove);
     }
     while (len2--)
         *p++ = *p2++;

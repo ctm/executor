@@ -199,7 +199,7 @@ P1 (PUBLIC pascal trap, CTabHandle, GetCTable,
 	      = sizeof (ColorTable) + (sizeof (ColorSpec) * CTAB_SIZE (clut));
 	    ctab = (CTabHandle) NewHandle (ctab_handle_size);
 	    
-	    BlockMove ((Ptr) STARH (clut), (Ptr) STARH (ctab),
+	    BlockMoveData ((Ptr) STARH (clut), (Ptr) STARH (ctab),
 		       ctab_handle_size);
 	    
 	    /* #### ctab_id or a new seed? */

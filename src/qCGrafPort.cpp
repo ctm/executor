@@ -478,7 +478,7 @@ P1 (PUBLIC pascal trap, PixPatHandle, GetPixPat, INTEGER, pixpat_id)
   PIXPAT_DATA_X (pixpat) = RM (NewHandle (pixpat_data_size));
   HUnlock((Handle) pixpat);
   
-  BlockMove ((Ptr) ((char *) STARH (pixpat_res) + pixpat_data_offset),
+  BlockMoveData ((Ptr) ((char *) STARH (pixpat_res) + pixpat_data_offset),
 	     STARH (PIXPAT_DATA (pixpat)),
 	     pixpat_data_size);
   
@@ -498,7 +498,7 @@ P1 (PUBLIC pascal trap, PixPatHandle, GetPixPat, INTEGER, pixpat_id)
        PIXMAP_TABLE_X (patmap) = RM ((CTabHandle) NewHandle (ctab_size));
        HUnlock ((Handle) patmap);
        
-       BlockMove ((Ptr) ctab_ptr, 
+       BlockMoveData ((Ptr) ctab_ptr, 
 		  (Ptr) STARH (PIXMAP_TABLE (patmap)),
 		  ctab_size);
 

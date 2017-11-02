@@ -304,7 +304,7 @@ P2(PUBLIC pascal trap, void, GetIText, Handle, item,		/* IMI-422 */
 	  if (hs > 255)	/* can't strassign with no leading count */
 	    hs = 255;
 	  text[0] = hs;
-	  BlockMove(STARH(item), (Ptr) text+1, hs);
+	  BlockMoveData(STARH(item), (Ptr) text+1, hs);
 	}
     }
 }
@@ -327,7 +327,7 @@ P2(PUBLIC pascal trap, void, SetIText, Handle, item,		/* IMI-422 */
       /* test on Mac shows that if the size can't be set, the copy
 	 isn't done, but the rest is */
       if (MemErr == CWC (noErr))
-	BlockMove((Ptr) &text[1], STARH (item), hs);
+	BlockMoveData((Ptr) &text[1], STARH (item), hs);
       ip = htoip (item, &wp, &no, &flags);
       if (ip)
 	{

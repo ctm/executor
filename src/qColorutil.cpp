@@ -153,7 +153,7 @@ Executor::ROMlib_copy_ctab (CTabHandle src, CTabHandle dst)
   ctab_size /* = CTAB_STORAGE_FOR_SIZE (CTAB_SIZE (src)); */
     = GetHandleSize ((Handle) src);
   SetHandleSize ((Handle) dst, ctab_size);
-  BlockMove ((Ptr) STARH (src), (Ptr) STARH (dst), ctab_size);
+  BlockMoveData ((Ptr) STARH (src), (Ptr) STARH (dst), ctab_size);
 }
 
 void
@@ -208,7 +208,7 @@ Executor::ROMlib_copy_handle (Handle src)
 
   handle_size = GetHandleSize (src);
   retval = NewHandle (handle_size);
-  BlockMove (STARH (src), STARH (retval),
+  BlockMoveData (STARH (src), STARH (retval),
 	     handle_size);
   return retval;
 }

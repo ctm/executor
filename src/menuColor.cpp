@@ -118,7 +118,7 @@ Executor::menu_delete_entries (int16 menu_id)
       if (MCENTRY_ID (&entries[i]) == menu_id)
 	{
 	  /* delete this element and shrink the handle size */
-	  BlockMove ((Ptr) &entries[i + 1], (Ptr) &entries[i],
+	  BlockMoveData ((Ptr) &entries[i + 1], (Ptr) &entries[i],
 		     menu_c_info_size - ((i + 1) * sizeof *entries));
 	  SetHandleSize ((Handle) menu_c_info,
 			 (menu_c_info_size -= sizeof *entries));
@@ -147,7 +147,7 @@ P2 (PUBLIC pascal trap, void, DelMCEntries,
 	  && MCENTRY_ITEM (&entries[i]) == menu_item)
 	{
 	  /* delete this element and shrink the handle size */
-	  BlockMove ((Ptr) &entries[i + 1], (Ptr) &entries[i],
+	  BlockMoveData ((Ptr) &entries[i + 1], (Ptr) &entries[i],
 		     menu_c_info_size - ((i + 1) * sizeof *entries));
 	  SetHandleSize ((Handle) menu_c_info,
 			 (menu_c_info_size -= sizeof *entries));
@@ -166,7 +166,7 @@ P0 (PUBLIC pascal trap, MCTableHandle, GetMCInfo)
   menu_c_info_size = GetHandleSize ((Handle) menu_c_info);
   retval = (MCTableHandle) NewHandle (menu_c_info_size);
   if (retval)
-    BlockMove ((Ptr) STARH (menu_c_info), (Ptr) STARH (retval),
+    BlockMoveData ((Ptr) STARH (menu_c_info), (Ptr) STARH (retval),
 	       menu_c_info_size);
 
   return retval;
@@ -185,7 +185,7 @@ P1 (PUBLIC pascal trap, void, SetMCInfo,
 
        size = GetHandleSize ((Handle) menu_ctab);
        t = NewHandle (size);
-       BlockMove ((Ptr) STARH (menu_ctab), (Ptr) STARH (t), size);
+       BlockMoveData ((Ptr) STARH (menu_ctab), (Ptr) STARH (t), size);
        MenuCInfo = RM ((MCTableHandle) t);
      });
 }

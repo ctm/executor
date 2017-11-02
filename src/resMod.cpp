@@ -363,7 +363,7 @@ A3(PRIVATE, void, fillst, sorttypehand, st, resref *, rp, resref *, rep)
         for (sp = end-1; newoff < sp->diskoff; sp--)
             ;
         sp++;
-        BlockMove((Ptr) sp, (Ptr) (sp+1), (Size)(end - sp) * sizeof(res_sorttype_t));
+        BlockMoveData((Ptr) sp, (Ptr) (sp+1), (Size)(end - sp) * sizeof(res_sorttype_t));
         sp->diskoff = newoff;
         sp->rrptr = rp;
         end++;
