@@ -25,7 +25,8 @@ using namespace Executor;
 typedef struct
 {
   OSType selector;
-  LONGINT value;
+  /*LONGINT*/
+  intptr_t value;
 } gestaltentry_t;
 
 #define UNKNOWN	0xFFFF
@@ -91,12 +92,13 @@ PRIVATE gestaltentry_t gtable[] = {
  * TODO: instead of casting these to LONGINT, shouldn't we be using something
  *       like US_TO_SYN68K here, or if not, soemthing that takes ROMlib_offset
  *       into account?
+ * HALF-DONE: we're using intptr_t now, so it works on 64bit as well.
  */
 
-#if defined(BINCOMPAT) && SIZEOF_CHAR_P == 4
-  { gestaltExtToolboxTable,	(LONGINT) (tooltraptable + 0x200), },
-  { gestaltToolboxTable,	(LONGINT) tooltraptable, },
-  { gestaltOSTable,		(LONGINT) ostraptable, },
+#if defined(BINCOMPAT)
+  { gestaltExtToolboxTable,	(intptr_t) (tooltraptable + 0x200), },
+  { gestaltToolboxTable,	(intptr_t) tooltraptable, },
+  { gestaltOSTable,		(intptr_t) ostraptable, },
 #else
   { gestaltExtToolboxTable,	UNKNOWN, },
   { gestaltOSTable,		UNKNOWN, },
