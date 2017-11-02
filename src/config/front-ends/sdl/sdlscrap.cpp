@@ -23,9 +23,19 @@ char ROMlib_rcsid_sdlscrap[] = "$Id: sdlscrap.c 88 2005-05-25 03:59:37Z ctm $";
 
 #include "rsys/error.h"
 
+namespace Executor{
+        // ### FIXME: clean up headers.
+extern void PutScrapX( OSType type, LONGINT length, char *p, int scrap_cnt );
+extern LONGINT GetScrapX( OSType type, Handle h );
+}
+
+using namespace Executor;
+
+
 #if defined (CYGWIN32)
 
 #include "SDL_bmp.h"
+
 
 #warning TODO: copy pixels properly and handle various bit depths
 
@@ -482,7 +492,7 @@ put_scrap(int type, int srclen, char *src)
 }
 
 PUBLIC void
-get_scrap(int type, int *dstlen, char **dst)
+get_scrap(int type, int *dstlen, Handle dst)
 {
   scrap_type format;
 
@@ -628,14 +638,14 @@ PUBLIC void export_scrap(const SDL_Event *event)
 }
 
 /* For Executor compatibility */
-LONGINT GetScrapX(LONGINT type, char **h)
+LONGINT Executor::GetScrapX(LONGINT type, Executor::Handle h)
 {
   int scraplen;
 
   get_scrap(type, &scraplen, h);
   return(scraplen);
 }
-void PutScrapX(LONGINT type, LONGINT length, char *p, int scrap_count)
+void Executor::PutScrapX(LONGINT type, LONGINT length, char *p, int scrap_count)
 {
   put_scrap(type, length, p);
 }
@@ -651,11 +661,11 @@ we_lost_clipboard(void)
   return false; /* TODO */
 }
 
-LONGINT GetScrapX(LONGINT type, char **h)
+LONGINT Executor::GetScrapX(LONGINT type, char **h)
 {
   return -1;  /* TODO */
 }
-void PutScrapX(LONGINT type, LONGINT length, char *p, int scrap_count)
+void Executor::PutScrapX(LONGINT type, LONGINT length, char *p, int scrap_count)
 {
   /* TODO */
 }

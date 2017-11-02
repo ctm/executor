@@ -25,6 +25,8 @@ char ROMlib_rcsid_sdlevents[] = "$Id: sdlevents.c 88 2005-05-25 03:59:37Z ctm $"
 
 #include "SDL/SDL.h"
 
+using namespace Executor;
+
 PRIVATE boolean_t use_scan_codes = FALSE;
 
 PUBLIC void
@@ -204,7 +206,7 @@ init_sdlk_to_mkv (void)
 /* The current state of the keyboard modifiers */
 static uint16 keymod = 0;
 static uint16 right_button_keymod = 0;
-static Point  mouseloc;		/* To save mouse location at interrupt */
+static GUEST<Point>  mouseloc;		/* To save mouse location at interrupt */
 
 static int modifier_p(unsigned char virt, uint16 *modstore)
 {
@@ -239,7 +241,7 @@ static int modifier_p(unsigned char virt, uint16 *modstore)
 syn68k_addr_t
 handle_sdl_mouse(syn68k_addr_t interrupt_addr, void *unused)
 {
-  MouseLocation = mouseloc;
+        MouseLocation = mouseloc;
   adb_apeiron_hack(FALSE);
   return(MAGIC_RTE_ADDRESS);
 }
@@ -247,7 +249,7 @@ handle_sdl_mouse(syn68k_addr_t interrupt_addr, void *unused)
 syn68k_addr_t
 handle_sdl_events(syn68k_addr_t interrupt_addr, void *unused)
 {
-  SDL_Event event;
+        SDL_Event event;
 
   while ( SDL_PollEvent(&event) )
     {
@@ -417,9 +419,9 @@ void sdl_events_init(void)
 
   /* hook into syn68k synchronous interrupts */
   mouse_callback = callback_install (handle_sdl_mouse, NULL);
-  *(syn68k_addr_t *) SYN68K_TO_US(M68K_MOUSE_MOVED_VECTOR * 4) = CL (mouse_callback);
+  *(GUEST<syn68k_addr_t> *) SYN68K_TO_US(M68K_MOUSE_MOVED_VECTOR * 4) = CL (mouse_callback);
   event_callback = callback_install (handle_sdl_events, NULL);
-  *(syn68k_addr_t *) SYN68K_TO_US(M68K_EVENT_VECTOR * 4) = CL (event_callback);
+  *(GUEST<syn68k_addr_t> *) SYN68K_TO_US(M68K_EVENT_VECTOR * 4) = CL (event_callback);
 
   /* then set up a filter that triggers the event interrupt */
   SDL_SetEventFilter(sdl_event_interrupt);

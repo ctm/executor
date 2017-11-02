@@ -9,6 +9,7 @@ char ROMlib_rcsid_sdlwin[] = "$Id: sdlwin.c 63 2004-12-24 18:19:43Z ctm $";
 #include "rsys/common.h"
 #include "rsys/srcblt.h"
 #include "rsys/refresh.h"
+#include "rsys/host.h"
 
 #if defined (CYGWIN32)
 #include "win_screen.h"
@@ -24,9 +25,12 @@ char ROMlib_rcsid_sdlwin[] = "$Id: sdlwin.c 63 2004-12-24 18:19:43Z ctm $";
 #include "sdlX.h"
 #endif
 
+using namespace Executor;
+
 /* This is our video display */
 static SDL_Surface *screen;
 
+namespace Executor {
 /* These variables are required by the vdriver interface. */
 uint8 *vdriver_fbuf;
 int vdriver_row_bytes;
@@ -35,6 +39,7 @@ int vdriver_height = 0;
 int vdriver_bpp = 8, vdriver_log2_bpp;
 int vdriver_max_bpp, vdriver_log2_max_bpp;
 vdriver_modes_t *vdriver_mode_list;
+}
 
 /* Currently a private colormap is the default */
 static int video_flags = (SDL_SWSURFACE|SDL_HWPALETTE);
@@ -46,7 +51,7 @@ static vdriver_modes_t sdl_impotent_modes = { 0, 0 };
 /* SDL vdriver implementation */
 
 void
-vdriver_opt_register (void)
+Executor::vdriver_opt_register (void)
 {
 }
 
@@ -54,7 +59,7 @@ PUBLIC boolean_t ROMlib_fullscreen_p = FALSE;
 PUBLIC boolean_t ROMlib_hwsurface_p = FALSE;
 
 boolean_t
-vdriver_init (int _max_width, int _max_height, int _max_bpp,
+Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
 	      boolean_t fixed_p, int *argc, char *argv[])
 {
   int flags;
@@ -97,7 +102,7 @@ vdriver_init (int _max_width, int _max_height, int _max_bpp,
 }
 
 boolean_t
-vdriver_acceptable_mode_p (int width, int height, int bpp,
+Executor::vdriver_acceptable_mode_p (int width, int height, int bpp,
 			   boolean_t grayscale_p, boolean_t exact_match_p)
 {
   boolean_t retval;
@@ -122,7 +127,7 @@ vdriver_acceptable_mode_p (int width, int height, int bpp,
 }
 
 boolean_t
-vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
+Executor::vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
 {
   /* Massage the width and height parameters */
   if ( width == 0 )
@@ -194,7 +199,7 @@ vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
 }
 
 void
-vdriver_set_colors (int first_color, int num_colors, const ColorSpec *colors)
+Executor::vdriver_set_colors (int first_color, int num_colors, const ColorSpec *colors)
 {
   int i;
   SDL_Color *sdl_cmap;
@@ -210,13 +215,13 @@ vdriver_set_colors (int first_color, int num_colors, const ColorSpec *colors)
 }
 
 void
-vdriver_get_colors (int first_color, int num_colors, ColorSpec *colors)
+Executor::vdriver_get_colors (int first_color, int num_colors, ColorSpec *colors)
 {
   gui_fatal ("`!vdriver_fixed_clut_p' and `vdriver_get_colors ()' called");
 }
 
 int
-vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
+Executor::vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
                                                       boolean_t cursor_p)
 {
   SDL_Rect *rects;
@@ -235,7 +240,7 @@ vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
 }
 
 int
-vdriver_update_screen (int top, int left, int bottom, int right,
+Executor::vdriver_update_screen (int top, int left, int bottom, int right,
 		       boolean_t cursor_p)
 {
   SDL_Rect rect;
@@ -260,12 +265,12 @@ vdriver_update_screen (int top, int left, int bottom, int right,
 }
 
 void
-vdriver_flush_display (void)
+Executor::vdriver_flush_display (void)
 {
 }
 
 void
-vdriver_shutdown (void)
+Executor::vdriver_shutdown (void)
 {
   SDL_Quit();
 }
@@ -276,7 +281,7 @@ vdriver_shutdown (void)
 unsigned char *vdriver_shadow_fbuf = NULL;
 
 void
-host_flush_shadow_screen (void)
+Executor::host_flush_shadow_screen (void)
 {
   int top_long, left_long, bottom_long, right_long;
 
@@ -285,7 +290,7 @@ host_flush_shadow_screen (void)
    */
   if (vdriver_shadow_fbuf == NULL)
     {
-      vdriver_shadow_fbuf = malloc(vdriver_row_bytes * vdriver_height);
+      vdriver_shadow_fbuf = (uint8_t*) malloc(vdriver_row_bytes * vdriver_height);
       memcpy (vdriver_shadow_fbuf, vdriver_fbuf, 
                                  vdriver_row_bytes * vdriver_height);
       vdriver_update_screen (0, 0, vdriver_height, vdriver_width, FALSE);

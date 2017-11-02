@@ -9,18 +9,22 @@ char ROMlib_rcsid_sdlwm[] = "$Id: sdlwm.c 88 2005-05-25 03:59:37Z ctm $";
 #include <stdio.h>
 #include "SDL/SDL.h"
 
+#include "rsys/common.h"
+#include "rsys/host.h"
+#include "rsys/parse.h" /* FIXME: name one good reason why SetTitle should be declared in a file named parse.h */
+
 /* Globals */
-int host_cursor_depth = 1;
+int Executor::host_cursor_depth = 1;
 
 /* Window manager interface functions */
 
-void
+extern "C" void
 ROMlib_SetTitle (char *title)
 {
   SDL_WM_SetCaption(title, "executor");
 }
 
-char *
+extern "C" char *
 ROMlib_GetTitle (void)
 {
   char *retval;
@@ -29,14 +33,14 @@ ROMlib_GetTitle (void)
   return retval;
 }
 
-void
+extern "C" void
 ROMlib_FreeTitle (char *title)
 {
 }
 
 /* This is really inefficient.  We should hash the cursors */
 void
-host_set_cursor (char *cursor_data,
+Executor::host_set_cursor (char *cursor_data,
                  unsigned short cursor_mask[16],
                  int hotspot_x, int hotspot_y)
 {
@@ -54,7 +58,7 @@ host_set_cursor (char *cursor_data,
 }
 
 int
-host_set_cursor_visible (int show_p)
+Executor::host_set_cursor_visible (int show_p)
 {
   return(SDL_ShowCursor(show_p));
 }

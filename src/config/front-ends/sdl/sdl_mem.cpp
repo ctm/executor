@@ -16,12 +16,13 @@ char ROMlib_rcsid_sdl_mem[] = "$Id: sdl_mem.c 88 2005-05-25 03:59:37Z ctm $";
 #include "rsys/common.h"
 #include "MemoryMgr.h"
 
+using namespace Executor;
 
-char *sdl_ReallocHandle(char **mem, int len)
+char *sdl_ReallocHandle(Executor::Handle mem, int len)
 {
-  ReallocHandle((Handle)mem, len);
+  ReallocHandle(mem, len);
   if ( MemErr != CWC(noErr) )
     return NULL;
   else
-    return (char *) STARH((Handle)mem);
+    return (char*) STARH(mem);
 }
