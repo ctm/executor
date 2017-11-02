@@ -25,7 +25,7 @@ namespace Executor {
     snd_time t1;
     /* # of fake buffers currently enqueued. */
     int num_fake_buffers_enqueued;
-    /* Set to TRUE when we're shutting down, and don't want any new sound
+    /* Set to true when we're shutting down, and don't want any new sound
      * to creep in.
      */
     syn68k_addr_t fake_sound_callback;

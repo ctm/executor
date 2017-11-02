@@ -81,7 +81,7 @@ rect_matches_control_item (WindowPtr w, Rect *rp)
   bool retval;
   ControlHandle c;
 
-  retval = FALSE;
+  retval = false;
   for (c = WINDOW_CONTROL_LIST (w); !retval && c ; c = CTL_NEXT_CONTROL (c))
     {
       Rect r;
@@ -99,7 +99,7 @@ P3(PUBLIC pascal trap, void, FrameRoundRect, Rect *, r, INTEGER, ow,
 {
   bool do_rect;
 
-  do_rect = FALSE;
+  do_rect = false;
 
   if (ROMlib_cdef0_is_rectangular)
     {
@@ -107,7 +107,7 @@ P3(PUBLIC pascal trap, void, FrameRoundRect, Rect *, r, INTEGER, ow,
 
       aux = MR (*lookup_aux_win (thePort));
       if (aux && rect_matches_control_item (HxP(aux, awOwner), r))
-	do_rect = TRUE;
+	do_rect = true;
     }
 
   if (do_rect)

@@ -216,7 +216,7 @@ Executor::ROMlib_teinsertstyleinfo (TEHandle te,
   StScrpHandle null_scrap;
   TEStyleHandle te_style;
   int16 scrap_n_styles;
-  int cleanup_scrap_p = FALSE;
+  int cleanup_scrap_p = false;
   StyleRun *new_runs;
   int i;
   
@@ -239,7 +239,7 @@ Executor::ROMlib_teinsertstyleinfo (TEHandle te,
 	  /* allocate a temp scrap */
 	  /* enough for a single scrap style element */
 	  scrap = (StScrpHandle) NewHandle (sizeof (StScrpRec));
-	  cleanup_scrap_p = TRUE;
+	  cleanup_scrap_p = true;
 	  
 	  SCRAP_N_STYLES_X (scrap) = CWC (1);
 	  scrap_elt = SCRAP_ST_ELT (scrap, 0);
@@ -269,7 +269,7 @@ Executor::ROMlib_teinsertstyleinfo (TEHandle te,
       scrap_elt = SCRAP_ST_ELT (scrap, i);
       
       style_index = get_style_index (te_style, SCRAP_ELT_TO_ATTR (scrap_elt),
-				     FALSE);
+				     false);
       
       /* must swap here, the elt start char is a `int32' */
       STYLE_RUN_START_CHAR_X (new_run) = CW (SCRAP_ELT_START_CHAR (scrap_elt));
@@ -289,7 +289,7 @@ Executor::ROMlib_teinsertstyleinfo (TEHandle te,
     DisposHandle ((Handle) scrap);
 }
 
-PUBLIC int Executor::ROMlib_forward_del_p = FALSE;
+PUBLIC int Executor::ROMlib_forward_del_p = false;
 
 void
 Executor::ROMlib_tedoitall (TEHandle teh, Ptr ptr,      /* INTERNAL */
@@ -578,7 +578,7 @@ P2(PUBLIC pascal trap, void, TEKey, CHAR, thec, TEHandle, te)
       c = '\r';
       /* FALL THROUGH */
     default:
-      ROMlib_tedoitall (te, (Ptr) &c, 1, FALSE, NULL);
+      ROMlib_tedoitall (te, (Ptr) &c, 1, false, NULL);
       break;
     }
   ROMlib_recompute_caret (te);
@@ -681,7 +681,7 @@ P1 (PUBLIC pascal trap, void, TECopy, TEHandle, te)
 P1(PUBLIC pascal trap, void, TECut, TEHandle, teh)
 {
   TECopy (teh);
-  ROMlib_tedoitall (teh, NULL, 0, FALSE, NULL);
+  ROMlib_tedoitall (teh, NULL, 0, false, NULL);
 }
 
 P1(PUBLIC pascal trap, void, TEPaste, TEHandle, teh)
@@ -697,16 +697,16 @@ P1(PUBLIC pascal trap, void, TEPaste, TEHandle, teh)
     (MR (TEScrpHandle),
      {
        ROMlib_tedoitall (teh, STARH (MR (TEScrpHandle)), CW (TEScrpLength),
-			 FALSE, NULL);
+			 false, NULL);
      });
 }
 
 P1 (PUBLIC pascal trap, void, TEDelete, TEHandle, teh)
 {
-  ROMlib_tedoitall (teh, NULL, 0, FALSE, NULL);
+  ROMlib_tedoitall (teh, NULL, 0, false, NULL);
 }
 
 P3 (PUBLIC pascal trap, void, TEInsert, Ptr, p, LONGINT, ln, TEHandle, teh)
 {
-  ROMlib_tedoitall(teh, p, ln, TRUE, NULL);
+  ROMlib_tedoitall(teh, p, ln, true, NULL);
 }

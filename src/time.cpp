@@ -48,7 +48,7 @@ PUBLIC struct timeval ROMlib_start_time;
 
 #if defined (SYN68K)
 /* Current state of virtual interrupt enabling. */
-PUBLIC virtual_int_state_t Executor::_virtual_interrupts_blocked = FALSE;
+PUBLIC virtual_int_state_t Executor::_virtual_interrupts_blocked = false;
 #endif
 
 /* Msecs during last interrupt. */
@@ -63,7 +63,7 @@ PRIVATE unsigned long next_interrupt_msecs;
 unsigned long
 msecs_elapsed (void)
 {
-  static char beenhere = FALSE;
+  static char beenhere = false;
   unsigned long e;
 
   if (!beenhere)
@@ -75,7 +75,7 @@ msecs_elapsed (void)
       gettimeofday (&ROMlib_start_time, &tz);  /* GMT */
       set_elapsed_1024 (0);
 
-      beenhere = TRUE;
+      beenhere = true;
     }
 
   /* Convert elapsed 1024ths of a second to elapsed milliseconds,
@@ -289,7 +289,7 @@ namespace Executor {
 
 A2 (PRIVATE, void, ROMlib_PrimeTime, QElemPtr, taskp, LONGINT, count)
 {
-  static char beenhere = FALSE;
+  static char beenhere = false;
   LONGINT msecs_until_next;
   virtual_int_state_t block;
   unsigned long now_msecs;
@@ -318,7 +318,7 @@ A2 (PRIVATE, void, ROMlib_PrimeTime, QElemPtr, taskp, LONGINT, count)
       last_interrupt_msecs = now_msecs; /* actually there haven't been any */
       msecs_until_next = 0x7FFF0000;  /* Arbitrary large value. */
       next_interrupt_msecs = now_msecs + msecs_until_next;
-      beenhere = TRUE;
+      beenhere = true;
 
 #if !defined (SYN68K)
       signal (SIGALRM, (void *) catchalarm);

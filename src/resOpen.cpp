@@ -171,11 +171,11 @@ decompress_setup (INTEGER rn, int32 *dlenp, int32 *final_sizep, int32 *offsetp,
     {
       SetFPos (rn, fsFromStart, master_save_pos);
       ROMlib_setreserr (noErr);
-/*->*/return FALSE;
+/*->*/return false;
     }
 
   if (info.typeFlags != CLC (COMPRESSED_FLAGS))
-    retval = FALSE;
+    retval = false;
   else
     {
       LONGINT save_pos;
@@ -185,7 +185,7 @@ decompress_setup (INTEGER rn, int32 *dlenp, int32 *final_sizep, int32 *offsetp,
       SetFPos (rn, fsFromStart, save_pos);
 
       if (!*dcmp_handlep)
-	retval = FALSE;
+	retval = false;
       else
 	{
 	  int32 final_size;
@@ -213,13 +213,13 @@ decompress_setup (INTEGER rn, int32 *dlenp, int32 *final_sizep, int32 *offsetp,
 
 	  *workspacep = NewPtr (working_size);
 	  if (!*workspacep)
-	    retval = FALSE;
+	    retval = false;
 	  else
 	    {
 	      *dlenp -= sizeof info;
 	      *final_sizep = final_size;
 	      *offsetp = CB (info.expansionBufferSize);
-	      retval = TRUE;
+	      retval = true;
 	    }
 	}
     }
@@ -259,11 +259,11 @@ PRIVATE Handle mgetres_helper (resmaphand map, resref *rr, int32 dlen,
 			     &dcmp_offset, &dcmp_handle, &dcmp_workspace))
 	{
 	  if (ResErr == CWC(noErr))
-	    compressed_p = FALSE;
+	    compressed_p = false;
 	  else
 	    {
 	      retval = NULL;
-	      done_p = TRUE;
+	      done_p = true;
 	    }
 	}
     }
@@ -549,7 +549,7 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
       pbr.volumeParam.ioNamePtr = RM ((StringPtr) local_name);
       pbr.volumeParam.ioVRefNum = CW (vref);
       pbr.volumeParam.ioVolIndex = CWC (-1);
-      err = PBHGetVInfo (&pbr, FALSE);
+      err = PBHGetVInfo (&pbr, false);
       if (err)
 	{
 	  ROMlib_setreserr (err);
@@ -585,7 +585,7 @@ P4 (PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
     pbr.ioParam.ioPermssn = CB (perm);
     pbr.ioParam.ioMisc = CLC (0);
     pbr.fileParam.ioDirID = CL (dirid);
-    ROMlib_setreserr(PBHOpenRF(&pbr, FALSE));
+    ROMlib_setreserr(PBHOpenRF(&pbr, false));
     if (ResErr != CWC(noErr))
         return(-1);
     f = CW(pbr.ioParam.ioRefNum);

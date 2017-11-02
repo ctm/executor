@@ -403,7 +403,7 @@ typedef enum
 
 PRIVATE print_where_t print_where;
 
-PRIVATE bool filename_chosen_p = FALSE;
+PRIVATE bool filename_chosen_p = false;
 
 PRIVATE void
 update_port (DialogPtr dp)
@@ -435,7 +435,7 @@ update_port (DialogPtr dp)
 
 	      unique_file_name (ROMlib_spool_template.c_str(), "execout*.ps", str);
 	      SetIText (GetDIText (dp, LAYOUT_FILENAME_NO), str);
-	      filename_chosen_p = TRUE;
+	      filename_chosen_p = true;
 	    }
 	  ShowDItem (dp, LAYOUT_FILENAME_NO);
 	  SelIText (dp, LAYOUT_FILENAME_NO, 0, 32767);
@@ -572,7 +572,7 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_stlfilterproc, DialogPeek, dp,
   BOOLEAN retval;
   char *keyp;
 
-  retval = FALSE;
+  retval = false;
   /* Check for user hitting <Enter> or clicking on "OK" button */
   switch (CW(evt->what))
     {
@@ -585,7 +585,7 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_stlfilterproc, DialogPeek, dp,
 	  {
 	    maybe_wait_for_keyup ();
 	    *ith = CWC (OK);
-	    retval = TRUE;
+	    retval = true;
 	  }
       }
       break;
@@ -613,7 +613,7 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_stlfilterproc, DialogPeek, dp,
 	    if (TrackControl (ch, localp, NULL))
 	      {
 		*ith = CWC (OK);
-		retval = TRUE;
+		retval = true;
 	      }
 	  }
 	break;
@@ -672,14 +672,14 @@ P3(PUBLIC, pascal BOOLEAN,  ROMlib_numsonlyfilterproc, DialogPeek, dp,
 	    case NUMPAD_ENTER:
 	        maybe_wait_for_keyup ();
 		*ith = CW(OK);
-		return TRUE;
+		return true;
 		break;
 	    default:
-		return FALSE;
+		return false;
 		break;
 	}
     }
-    return FALSE;
+    return false;
 }
 
 PRIVATE void
@@ -877,7 +877,7 @@ adjust_menu_common (TPPrDlg dlg, INTEGER item, heading_t heading, ini_key_t defk
   bool skip_all_but_a_few;
 
   if (strcmp (heading, "Printer") != 0)
-    skip_all_but_a_few = FALSE;
+    skip_all_but_a_few = false;
   else
     {
 #if defined (MSDOS)
@@ -885,7 +885,7 @@ adjust_menu_common (TPPrDlg dlg, INTEGER item, heading_t heading, ini_key_t defk
 
       filter = find_key ("Filter", ROMlib_print_filter);
       if (!filter)
-	skip_all_but_a_few = TRUE;
+	skip_all_but_a_few = true;
       else
 	{
 	  struct stat sbuf;
@@ -1003,14 +1003,14 @@ set_default_orientation (TPPrDlg dlg)
 PUBLIC void
 Executor::printer_init (void)
 {
-  static bool ini_read_p = FALSE;
+  static bool ini_read_p = false;
   
   if (!ini_read_p)
     {
       read_ini_file (ROMlib_PrintersIni);
       read_ini_file (ROMlib_PrintDef);
       get_all_defaults ();
-      ini_read_p = TRUE;
+      ini_read_p = true;
     }
 }
 
@@ -1023,7 +1023,7 @@ P1(PUBLIC pascal trap, TPPrDlg, PrStlInit, THPrint, hPrint)
 	retval = (TPPrDlg) NewPtr(sizeof(TPrDlg));
 	if (GetNewDialog(-8192, (Ptr) retval, (WindowPtr) -1)) {
 
-	  filename_chosen_p = FALSE;
+	  filename_chosen_p = false;
 	  print_where = PRINT_TO_PORT;
 
 	  HideDItem ((DialogPtr) retval, LAYOUT_FILENAME_LABEL_NO);
@@ -1051,11 +1051,11 @@ P1(PUBLIC pascal trap, TPPrDlg, PrStlInit, THPrint, hPrint)
 	      /* convert all upper (e.g. EXECUTOR.EXE) to 
 		 all lower (e.g. executor.exe) */
 
-	      all_upper = TRUE;
+	      all_upper = true;
 	      for (p = (char *) appname+1, n = appname[0];
 		   n > 0 && all_upper; ++p, --n)
 		if (islower (*p))
-		  all_upper = FALSE;
+		  all_upper = false;
 	      if (all_upper)
 		for (p = (char *) appname+1, n = appname[0];
 		     n > 0 ; ++p, --n)
@@ -1140,7 +1140,7 @@ P2(PUBLIC pascal trap, BOOLEAN, PrDlgMain, THPrint, hPrint, ProcPtr, initfptr)
     BOOLEAN retval;
 
     printer_init ();
-    retval = FALSE;
+    retval = false;
 #if 0 && defined(MACOSX_)
 /*
  * NOTE: we don't actually call this because Excel sets up some goofy pages
@@ -1188,11 +1188,11 @@ P2(PUBLIC pascal trap, BOOLEAN, PrDlgMain, THPrint, hPrint, ProcPtr, initfptr)
 	  {
 	    /* TODO: transfer data from prrecptr into hPrint */
 	    C_PrValidate(hPrint);
-/* TODO: if PrValidate returns TRUE maybe ModalDialog should be called again.*/
-	    retval = TRUE;
+/* TODO: if PrValidate returns true maybe ModalDialog should be called again.*/
+	    retval = true;
 	  }
 	else
-	  retval = FALSE;
+	  retval = false;
         CloseDialog((DialogPtr) prrecptr);
 	DisposPtr((Ptr) prrecptr);
     }

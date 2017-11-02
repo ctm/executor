@@ -30,9 +30,9 @@ char ROMlib_rcsid_dosevents[] = "$Id: dosevents.c 63 2004-12-24 18:19:43Z ctm $"
 
 static int pinned_mouse_x, pinned_mouse_y;
 
-PRIVATE bool caps_currently_locked = FALSE;
+PRIVATE bool caps_currently_locked = false;
 
-PUBLIC bool need_hacky_screen_update = FALSE;
+PUBLIC bool need_hacky_screen_update = false;
 
 /* Extract the charcode from keywhat. */
 #define CHARCODE_MASK 0xFF
@@ -81,7 +81,7 @@ mouse_moved (syn68k_addr_t interrupt_addr, void *unused)
     {
       vdriver_set_mode (0, 0, 0, vdriver_grayscale_p);
       redraw_screen ();
-      need_hacky_screen_update = FALSE;
+      need_hacky_screen_update = false;
     }
   vga_update_cursor (x, y);
   restore_virtual_ints (old_virt);
@@ -90,7 +90,7 @@ mouse_moved (syn68k_addr_t interrupt_addr, void *unused)
   MouseLocation.h = CW (x);
   MouseLocation.v = CW (y);
 
-  adb_apeiron_hack (TRUE, dx1, dy2);
+  adb_apeiron_hack (true, dx1, dy2);
 
   return MAGIC_RTE_ADDRESS;
 }
@@ -344,13 +344,13 @@ post_dos_event (dosevq_record_t *event)
       button_mods &= ~btnState;
       ROMlib_PPostEvent (mouseDown, 0, (GUEST<EvQElPtr> *) 0, when, where,
 			 button_mods);
-      adb_apeiron_hack (TRUE, 0, 0);
+      adb_apeiron_hack (true, 0, 0);
       break;
     case EVTYPE_MOUSE_UP:
       button_mods |= btnState;
       ROMlib_PPostEvent (mouseUp, 0, (GUEST<EvQElPtr> *) 0, when, where,
 			 button_mods);
-      adb_apeiron_hack (TRUE, 0, 0);
+      adb_apeiron_hack (true, 0, 0);
       break;
     default:
       gui_abort ();
@@ -363,11 +363,11 @@ post_all_pending_dos_events (syn68k_addr_t interrupt_addr, void *unused)
   dosevq_record_t e;
   int have_rawkey;
 
-  have_rawkey = FALSE;
+  have_rawkey = false;
   while (dosevq_dequeue (&e) != EVTYPE_NONE)
     {
       if (e.type == EVTYPE_RAWKEY)
-	have_rawkey = TRUE;
+	have_rawkey = true;
       post_dos_event (&e);
     }
 
@@ -401,7 +401,7 @@ init_dos_events (int max_mouse_x, int max_mouse_y)
   syn68k_addr_t mouse_moved_callback, event_callback;
 
   /* Turn off ctrl-c, make ctrl-break fatal. */
-  __djgpp_set_ctrl_c (FALSE);
+  __djgpp_set_ctrl_c (false);
 
   pinned_mouse_x = max_mouse_x - 1;
   pinned_mouse_y = max_mouse_y - 1;

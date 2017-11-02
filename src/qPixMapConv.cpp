@@ -116,7 +116,7 @@ Executor::pixmap_copy (const PixMap *src_pm, const Rect *src_rect,
     pixmap_black_white (src_pm, &black_pixel, &white_pixel);
     
     ROMlib_blt_rgn_update_dirty_rect (rgn, srcCopy,
-				      FALSE, CW (src_pm->pixelSize),
+				      false, CW (src_pm->pixelSize),
 				      src_pm, return_pm,
 				      src_rect, return_rect,
 				      black_pixel, white_pixel);
@@ -138,11 +138,11 @@ Executor::pixmap_copy_if_screen (const PixMap *src_pm, const Rect *src_rect,
       pixmap_copy (src_pm, src_rect,
  		   &write_back_data->src_pm, &write_back_data->src_rect);
 
-      return TRUE;
+      return true;
     }
 #endif
 
-  return FALSE;
+  return false;
 }
 
 uint32
@@ -151,7 +151,7 @@ pixel_from_rgb (RGBColor *color,
 {
   if (rgb_spec)
     return ((rgb_spec->rgbcolor_to_pixel)
-	    (rgb_spec, color, TRUE));
+	    (rgb_spec, color, true));
   else
     return Color2Index (color);
 }
@@ -196,7 +196,7 @@ Executor::canonical_from_bogo_color (uint32 index,
 
       (mac_rgb_spec->pixel_to_rgbcolor) (mac_rgb_spec, index, &t_color);
       if (pixel_out)
-	*pixel_out = (rgb_spec->rgbcolor_to_pixel) (rgb_spec, &t_color, TRUE);
+	*pixel_out = (rgb_spec->rgbcolor_to_pixel) (rgb_spec, &t_color, true);
       if (rgb_out)
 	*rgb_out = t_color;
     }

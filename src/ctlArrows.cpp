@@ -281,7 +281,7 @@ validate_colors_for_control (ControlHandle ctl)
 	}
     },
     {
-      current_ctl_color_p = FALSE;
+      current_ctl_color_p = false;
       
       /* only the ones that matter */
       current_ctl_colors[page_fg] = ROMlib_white_rgb_color;
@@ -659,7 +659,7 @@ save_and_switch_to_color_port_if_needed (save_t *sp)
   bool retval;
 
   if (CGrafPort_p (thePort))
-    retval = FALSE;
+    retval = false;
   else
     {
       CGrafPtr wp;
@@ -680,7 +680,7 @@ save_and_switch_to_color_port_if_needed (save_t *sp)
       sp->cp.fillPixPat = wp->fillPixPat;
       sp->cp.grafProcs = wp->grafProcs;
       SetPort ((GrafPtr) &sp->cp);
-      retval = TRUE;
+      retval = true;
     }
 
   return retval;
@@ -720,7 +720,7 @@ P4 (PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */
     }
 #if !defined (LETGCCWAIL)
   else
-    need_to_restore_p = FALSE;
+    need_to_restore_p = false;
 #endif
   
   switch (mess)

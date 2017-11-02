@@ -27,7 +27,7 @@ char ROMlib_rcsid_sdlevents[] = "$Id: sdlevents.c 88 2005-05-25 03:59:37Z ctm $"
 
 using namespace Executor;
 
-PRIVATE bool use_scan_codes = FALSE;
+PRIVATE bool use_scan_codes = false;
 
 PUBLIC void
 ROMlib_set_use_scancodes (bool val)
@@ -174,7 +174,7 @@ PRIVATE sdl_to_mkv_map_t map[] =
 PRIVATE void
 init_sdlk_to_mkv (void)
 {
-  static bool been_here = FALSE;
+  static bool been_here = false;
 
   if (!been_here)
     {
@@ -192,7 +192,7 @@ init_sdlk_to_mkv (void)
 	  mkv  = map[i].mkv;
 	  sdlk_to_mkv[sdlk] = mkv;
 	}
-      been_here = TRUE;
+      been_here = true;
     }
 }
 
@@ -242,7 +242,7 @@ syn68k_addr_t
 handle_sdl_mouse(syn68k_addr_t interrupt_addr, void *unused)
 {
         MouseLocation = mouseloc;
-  adb_apeiron_hack(FALSE);
+  adb_apeiron_hack(false);
   return(MAGIC_RTE_ADDRESS);
 }
 
@@ -264,11 +264,11 @@ handle_sdl_events(syn68k_addr_t interrupt_addr, void *unused)
 		else
                   {
                     if ( !we_lost_clipboard () )
-		      sendresumeevent (FALSE);
+		      sendresumeevent (false);
 		    else
                       {
                         ZeroScrap ();
-			sendresumeevent (TRUE);
+			sendresumeevent (true);
                       }
                   }
               }
@@ -323,7 +323,7 @@ handle_sdl_events(syn68k_addr_t interrupt_addr, void *unused)
 	    ROMlib_PPostEvent(down_p ? mouseDown : mouseUp,
 			      0, (GUEST<EvQElPtr> *) 0, when, where,
 			      keymod | right_button_keymod);
-	    adb_apeiron_hack (FALSE);
+	    adb_apeiron_hack (false);
 	  }
         break;
 

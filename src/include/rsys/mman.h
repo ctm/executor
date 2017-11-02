@@ -49,14 +49,14 @@ extern Ptr _NewPtr_copy_ptr_flags (Size size, const void *data_to_copy,
 extern Ptr _NewPtr_copy_handle_flags (Size size, Handle data_to_copy,
 				      bool sys_p);
 
-#define NewHandle_copy_ptr(s, p)      _NewHandle_copy_ptr_flags(s, p, FALSE)
-#define NewHandleSys_copy_ptr(s, p)   _NewHandle_copy_ptr_flags(s, p, TRUE)
-#define NewHandle_copy_handle(s, h)   _NewHandle_copy_handle_flags(s, h, FALSE)
-#define NewHandleSys_copy_handle(s, h) _NewHandle_copy_handle_flags(s, h, TRUE)
-#define NewPtr_copy_ptr(s, p)	    _NewPtr_copy_ptr_flags (s, p, FALSE)
-#define NewPtrSys_copy_ptr(s, p)    _NewPtr_copy_ptr_flags (s, p, TRUE)
-#define NewPtr_copy_handle(s, h)    _NewPtr_copy_handle_flags (s, h, FALSE)
-#define NewPtrSys_copy_handle(s, h) _NewPtr_copy_handle_flags (s, h, TRUE)
+#define NewHandle_copy_ptr(s, p)      _NewHandle_copy_ptr_flags(s, p, false)
+#define NewHandleSys_copy_ptr(s, p)   _NewHandle_copy_ptr_flags(s, p, true)
+#define NewHandle_copy_handle(s, h)   _NewHandle_copy_handle_flags(s, h, false)
+#define NewHandleSys_copy_handle(s, h) _NewHandle_copy_handle_flags(s, h, true)
+#define NewPtr_copy_ptr(s, p)	    _NewPtr_copy_ptr_flags (s, p, false)
+#define NewPtrSys_copy_ptr(s, p)    _NewPtr_copy_ptr_flags (s, p, true)
+#define NewPtr_copy_handle(s, h)    _NewPtr_copy_handle_flags (s, h, false)
+#define NewPtrSys_copy_handle(s, h) _NewPtr_copy_handle_flags (s, h, true)
 
 /* spewy flags */
 extern bool ROMlib_memnomove_p;
@@ -99,7 +99,7 @@ enum { TRAP_MASK = 0xF9FF };
       TheZone = zone;				\
       { body }					\
       TheZone = save_zone;			\
-  } while (FALSE)
+  } while (false)
 
 /* These macros assign values to fields of a structure referred to
  * by a handle.  They perform no byte swapping.  There is no need to
@@ -403,7 +403,7 @@ enum { TRAP_MASK = 0xF9FF };
     { body }						\
     							\
     HSetState (handle1, handle1_state);			\
-  } while (FALSE)
+  } while (false)
 
 #define LOCK_HANDLE_EXCURSION_2(handle1_expr,		\
 				handle2_expr, body)	\
@@ -422,7 +422,7 @@ enum { TRAP_MASK = 0xF9FF };
     							\
     HSetState (handle2, handle2_state);			\
     HSetState (handle1, handle1_state);			\
-  } while (FALSE)
+  } while (false)
 
 #define LOCK_HANDLE_EXCURSION_3(handle1_expr,		\
 				handle2_expr,		\
@@ -448,7 +448,7 @@ enum { TRAP_MASK = 0xF9FF };
     HSetState (handle3, handle3_state);			\
     HSetState (handle2, handle2_state);			\
     HSetState (handle1, handle1_state);			\
-  } while (FALSE)
+  } while (false)
 
 #define LOCK_HANDLE_EXCURSION_4(handle1_expr,		\
 				handle2_expr,		\
@@ -479,6 +479,6 @@ enum { TRAP_MASK = 0xF9FF };
     HSetState (handle3, handle3_state);			\
     HSetState (handle2, handle2_state);			\
     HSetState (handle1, handle1_state);			\
-  } while (FALSE)
+  } while (false)
 }
 #endif /* !_MMAN_PUBLIC_H_ */

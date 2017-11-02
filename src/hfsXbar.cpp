@@ -44,20 +44,20 @@ PRIVATE BOOLEAN hfsvol(IOParam *pb)
     HVCB *vcbp;
     LONGINT dir;
     
-    vcbp = ROMlib_findvcb(Cx(pb->ioVRefNum), MR(pb->ioNamePtr), &dir, TRUE);
+    vcbp = ROMlib_findvcb(Cx(pb->ioVRefNum), MR(pb->ioNamePtr), &dir, true);
     if (!vcbp) {
-	vcbp = ROMlib_findvcb(Cx(pb->ioVRefNum), (StringPtr) 0, &dir, TRUE);
+	vcbp = ROMlib_findvcb(Cx(pb->ioVRefNum), (StringPtr) 0, &dir, true);
 	if (!vcbp)
-	    return TRUE;	/* hopefully is a messed up working dir
+	    return true;	/* hopefully is a messed up working dir
 				    reference */
     }
     if (vcbp->vcbCTRef) {
 #if defined(CACHECHECK)
 	cachecheck(vcbp);
 #endif /* defined(CACHECHECK) */
-	return TRUE;
+	return true;
     } else
-	return FALSE;
+	return false;
 }
 
 PRIVATE BOOLEAN hfsIvol(VolumeParam *pb)	/* potentially Indexed vol */
@@ -65,11 +65,11 @@ PRIVATE BOOLEAN hfsIvol(VolumeParam *pb)	/* potentially Indexed vol */
     BOOLEAN retval;
     HVCB *vcbp;
 
-    retval = FALSE;
+    retval = false;
     if (Cx(pb->ioVolIndex) > 0) {
 	vcbp = (HVCB *) ROMlib_indexqueue(&VCBQHdr, Cx(pb->ioVolIndex));
 	if (vcbp && vcbp->vcbCTRef)
-	    retval = TRUE;
+	    retval = true;
     } else
 	retval = hfsvol((IOParam *) pb);
     return retval;
@@ -87,11 +87,11 @@ PRIVATE BOOLEAN hfsfil(IOParam *pb)
 #if defined(CACHECHECK)
 	    cachecheck(vcbp);
 #endif /* defined(CACHECHECK) */
-	    return TRUE;
+	    return true;
 	} else
-	    return FALSE;
+	    return false;
     } else
-	return FALSE;
+	return false;
 }
 
 A2(PUBLIC trap, OSErrRET, PBHRename, HParmBlkPtr, pb, BOOLEAN, async)
@@ -153,7 +153,7 @@ try_to_reopen (DrvQExtra *dqp)
 #endif
 }
 
-PUBLIC int Executor::ROMlib_directdiskaccess = FALSE;
+PUBLIC int Executor::ROMlib_directdiskaccess = false;
 
 A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 {
@@ -208,7 +208,7 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 	    buf = (char*)alloca (CL (pb->ioParam.ioReqCount));
 
 	    pbr.ioParam.ioBuffer = RM ((Ptr) buf);
-	    retval = PBRead (&pbr, FALSE);
+	    retval = PBRead (&pbr, false);
 	    pb->ioParam.ioActCount  = pbr.ioParam.ioActCount;
 	    pb->ioParam.ioPosOffset = pbr.ioParam.ioPosOffset;
 
@@ -242,7 +242,7 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 		  newpb.ioParam.ioRefNum = pb->ioParam.ioRefNum;
 		  newpb.ioParam.ioPosMode = CWC (fsFromMark);
 		  newpb.ioParam.ioPosOffset = CL (- to_backup);
-		  newerr = PBSetFPos (&newpb, FALSE);
+		  newerr = PBSetFPos (&newpb, false);
 		  if (newerr != noErr)
 		    warning_unexpected ("err = %d", newerr);
 		}
@@ -253,7 +253,7 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 	    memcpy (MR (pb->ioParam.ioBuffer), MR (pbr.ioParam.ioBuffer),
 		    CL (pb->ioParam.ioActCount));
 	    ROMlib_destroy_blocks (US_TO_SYN68K(MR (pb->ioParam.ioBuffer)),
-				   CL (pb->ioParam.ioActCount), TRUE);
+				   CL (pb->ioParam.ioActCount), true);
 	  }
 	else
 	  {
@@ -563,10 +563,10 @@ PUBLIC void test_serial(void)
   memset (&pb_out, 0, sizeof pb_out);
   pb_in.ioParam.ioNamePtr = RM ((StringPtr) "\004.AIn");
   pb_out.ioParam.ioNamePtr = RM ((StringPtr) "\005.AOut");
-  open_in_val = PBOpen (&pb_in, FALSE);
-  open_out_val = PBOpen (&pb_out, FALSE);
-  close_in_val = PBClose (&pb_in, FALSE);
-  close_out_val  = PBClose (&pb_out, FALSE);
+  open_in_val = PBOpen (&pb_in, false);
+  open_out_val = PBOpen (&pb_out, false);
+  close_in_val = PBClose (&pb_in, false);
+  close_out_val  = PBClose (&pb_out, false);
   ++count;
 }
 #endif
@@ -881,7 +881,7 @@ A2(PUBLIC trap, OSErrRET, PBHGetVolParms, HParmBlkPtr, pb, BOOLEAN, async)
    >= (int) offsetof (typeof (*(ptr)), field) + (int) sizeof ((ptr)->field))
     
   vcbp = ROMlib_findvcb(Cx(pb->ioParam.ioVRefNum),
-			MR(pb->ioParam.ioNamePtr), &dir, FALSE);
+			MR(pb->ioParam.ioNamePtr), &dir, false);
   if (vcbp)
     {
       infop = (getvolparams_info_t *) MR (pb->ioParam.ioBuffer);

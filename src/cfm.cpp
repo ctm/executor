@@ -483,7 +483,7 @@ check_vanddir (INTEGER vref, LONGINT dirid, int descend_count, Str63 library,
     {
       pb.hFileInfo.ioFDirIndex = CW (dirindex);
       pb.hFileInfo.ioDirID   = CL (dirid);
-      err = PBGetCatInfo(&pb, FALSE);
+      err = PBGetCatInfo(&pb, false);
       if (err)
 	{
 	  if (err != fnfErr)
@@ -506,7 +506,7 @@ check_vanddir (INTEGER vref, LONGINT dirid, int descend_count, Str63 library,
 		}
 	    }
 	  else if (pb.hFileInfo.ioFlFndrInfo.fdType == TICKX ("shlb"))
-	    retval = check_file (vref, dirid, s, FALSE, library, arch,
+	    retval = check_file (vref, dirid, s, false, library, arch,
 				 loadflags, cidp, mainaddrp, errName);
 	}
     }
@@ -547,7 +547,7 @@ P6 (PUBLIC pascal trap, OSErr, GetSharedLibrary, Str63, library, OSType, arch,
 	retval = check_vanddir (root_vref, root_dirid, 0, library, arch,
 				loadflags, cidp, mainaddrp, errName);
       if (retval != noErr)
-	retval = check_file (ROMlib_exevrefnum, 0, ROMlib_exefname, FALSE,
+	retval = check_file (ROMlib_exevrefnum, 0, ROMlib_exefname, false,
 			     library, arch, loadflags, cidp, mainaddrp,
 			     errName);
       if (retval != noErr)
@@ -561,7 +561,7 @@ P6 (PUBLIC pascal trap, OSErr, GetSharedLibrary, Str63, library, OSType, arch,
 	  INTEGER extensions_vref;
 	  LONGINT extensions_dirid;
 
-	  if (FindFolder (0, kExtensionFolderType, FALSE, &extensions_vref,
+	  if (FindFolder (0, kExtensionFolderType, false, &extensions_vref,
 	                  &extensions_dirid) == noErr)
 	    retval = check_vanddir (extensions_vref, extensions_dirid, 1,
 				    library, arch, loadflags, cidp,
@@ -570,10 +570,10 @@ P6 (PUBLIC pascal trap, OSErr, GetSharedLibrary, Str63, library, OSType, arch,
 
       if (retval != noErr)
 	{
-	  if (EqualString (library, "\7MathLib", FALSE, TRUE))
+	  if (EqualString (library, "\7MathLib", false, true))
 	    retval = ROMlib_GetMathLib (library, arch, loadflags, cidp,
 				mainaddrp, errName);
-	  else if (EqualString (library, "\14InterfaceLib", FALSE, TRUE))
+	  else if (EqualString (library, "\14InterfaceLib", false, true))
 	    retval = ROMlib_GetInterfaceLib (library, arch, loadflags, cidp,
 				     mainaddrp, errName);
 	}
@@ -1321,7 +1321,7 @@ fsmatch (FSSpecPtr fsp1, FSSpecPtr fsp2)
 
   retval = (fsp1->vRefNum == fsp2->vRefNum &&
 	    fsp1->parID == fsp2->parID &&
-	    EqualString (fsp1->name, fsp2->name, FALSE, TRUE));
+	    EqualString (fsp1->name, fsp2->name, false, true));
   return retval;
 }
 
@@ -1358,7 +1358,7 @@ get_context (int *contextidp, bool *exists_pp, FSSpecPtr fsp,
     {
       ++contexts[i].refcount;
       *contextidp = i;
-      *exists_pp = TRUE;
+      *exists_pp = true;
     }
   else
     {
@@ -1391,7 +1391,7 @@ get_context (int *contextidp, bool *exists_pp, FSSpecPtr fsp,
 	  cp->length_req = length;
 	  cp->refcount = 1;
 	  *contextidp = free_slot;
-	  *exists_pp = FALSE;
+	  *exists_pp = false;
 	}
     }
 

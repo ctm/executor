@@ -23,7 +23,7 @@ PRIVATE OSErr cathelper(CInfoPBPtr pb, BOOLEAN async, catop op)
     
     if (pb->hFileInfo.ioFDirIndex > 0 && op == Get) {
 	err = btpbindex((ioParam *) pb, pb->hFileInfo.ioDirID, &vcbp, &frp,
-								      &catkeyp, FALSE);
+								      &catkeyp, false);
 	if (err != noErr)
 	    goto done;
 	voidp = DATAPFROMKEY(catkeyp);
@@ -43,10 +43,10 @@ PRIVATE OSErr cathelper(CInfoPBPtr pb, BOOLEAN async, catop op)
     } else {
     	if (pb->hFileInfo.ioFDirIndex < 0) {
     	    kind = directory;
-    	    ignorename = TRUE;
+    	    ignorename = true;
     	} else {
 	    kind = regular | directory;
-	    ignorename = FALSE;
+	    ignorename = false;
 	}
 	err = findvcbandfile((ioParam *) pb, pb->hFileInfo.ioDirID,
 						&btparamrec, &kind, ignorename);
@@ -208,7 +208,7 @@ PUBLIC OSErr myPBCatMove(CMovePBPtr pb, BOOLEAN async)
     
     srccurkind = regular | directory;
     err = findvcbandfile((ioParam *) pb, pb->ioDirID, &srcbtparam,
-							    &srccurkind, FALSE);
+							    &srccurkind, false);
     if (err == noErr) {
 	err = writevcbp(srcbtparam.vcbp);
 	iop = *(ioParam *)pb;

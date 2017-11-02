@@ -26,13 +26,13 @@ PRIVATE OSErr freeallblocks(HVCB *vcbp, filerec *frp)
 	fcbp->fcbMdRByt = WRITEBIT;
 	pbr.ioParam.ioMisc = 0;
 	pbr.ioParam.ioRefNum = (char *) fcbp - (char *) FCBSPtr;
-	retval = AllocHelper((ioParam *) &pbr, FALSE, seteof, FALSE);
+	retval = AllocHelper((ioParam *) &pbr, false, seteof, false);
 	if (retval == noErr) {
 	    fcbp->fcbPLen = frp->filRPyLen;
 	    memcpy((char *) fcbp->fcbExtRec, (char *) frp->filRExtRec,
 					      (size_t) sizeof(frp->filRExtRec));
 	    fcbp->fcbMdRByt = WRITEBIT|RESOURCEBIT;
-	    retval = AllocHelper((ioParam *) &pbr, FALSE, seteof, FALSE);
+	    retval = AllocHelper((ioParam *) &pbr, false, seteof, false);
 	}
     }
     fcbp->fcbFlNum = 0;
@@ -51,7 +51,7 @@ PRIVATE OSErr createhelper(ioParam *pb, BOOLEAN async, createop op,
     extern ulong blockchecksum();
     
     curkind = regular | directory;
-    err = findvcbandfile(pb, dirid, &btparamrec, &curkind, FALSE);
+    err = findvcbandfile(pb, dirid, &btparamrec, &curkind, false);
     vcbp = btparamrec.vcbp;
     switch (err) {
     case noErr:

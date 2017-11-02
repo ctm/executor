@@ -133,7 +133,7 @@ P1(PUBLIC pascal trap, void, LAutoScroll, ListHandle, list)	/* IMIV-275 */
 
     gcell.h = HxX(list, dataBounds.left);
     gcell.v = HxX(list, dataBounds.top);
-    if (C_LGetSelect(TRUE, &gcell, list)) {
+    if (C_LGetSelect(true, &gcell, list)) {
         cell = gcell.get();
 	if (!PtInRect(cell, &HxX(list, visible))) {
 	    C_LScroll(cell.h - Hx(list, visible.left),
@@ -202,13 +202,13 @@ P2(PUBLIC pascal trap, void, LActivate, BOOLEAN, act,		/* IMIV-276 */
     if (!act ^ !Hx(list, lActive)) {
 	TRAPBEGIN();
 	if (act) {
-	    sel = TRUE;
+	    sel = true;
 	    if ((ch = HxP(list, hScroll)))
 		ShowControl(ch);
 	    if ((ch = HxP(list, vScroll)))
 		ShowControl(ch);
 	} else {
-	    sel = FALSE;
+	    sel = false;
 	    if ((ch = HxP(list, hScroll)))
 		HideControl(ch);
 	    if ((ch = HxP(list, vScroll)))

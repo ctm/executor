@@ -87,7 +87,7 @@
 #if defined (__CHECKER__)
 #include <checker.h>
 
-#define BLOCK(body) do { body } while (FALSE)
+#define BLOCK(body) do { body } while (false)
 
 #define TRANSFER_ASSIGN(dst, src)				\
   BLOCK								\

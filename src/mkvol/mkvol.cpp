@@ -51,8 +51,8 @@ typedef short int INTEGER;
 typedef int LONGINT;
 typedef int int32;
 
-#ifndef TRUE
-typedef enum { FALSE, TRUE } bool;
+#ifndef true
+typedef enum { false, true } bool;
 #endif
 
 #include "rsys/parsenum.h"
@@ -726,14 +726,14 @@ find_and_remove_switch_p (const char *switch_name, int *argcp, char *argv[])
   int start_argc;
   bool present_p;
 
-  present_p = FALSE;
+  present_p = false;
   start_argc = *argcp;
   for (out = in = 1; in < start_argc; in++)
     {
       argv[out] = argv[in];
       if (strcmp (argv[in], switch_name) == 0)
 	{
-	  present_p = TRUE;
+	  present_p = true;
 	  --*argcp;
 	}
       else
@@ -750,11 +750,11 @@ check_hfv_name (const char *hfv_name)
   if (strlen (hfv_name) == 0)
     {
       fprintf (stderr, "You can't have an empty file name!\n");
-      success_p = FALSE;
+      success_p = false;
     }
   else
     {
-      success_p = TRUE;
+      success_p = true;
     }
   return success_p;
 }
@@ -768,21 +768,21 @@ check_volume_name (const char *volume_name)
   if (len == 0)
     {
       fprintf (stderr, "You can't have an empty volume name!\n");
-      success_p = FALSE;
+      success_p = false;
     }
   else if (len > 27)
     {
       fprintf (stderr, "Volume names can be no longer than 27 characters.\n");
-      success_p = FALSE;
+      success_p = false;
     }
   else if (strchr (volume_name, ':'))
     {
       fprintf (stderr, "Volume names may not contain colons.\n");
-      success_p = FALSE;
+      success_p = false;
     }
   else
     {
-      success_p = TRUE;
+      success_p = true;
     }
 
   return success_p;
@@ -797,7 +797,7 @@ check_volume_size (const char *volume_size_string)
   if (!parse_number (volume_size_string, &nbytes, SECSIZE))
     {
       fprintf (stderr, "Malformed volume size.\n");
-      success_p = FALSE;
+      success_p = false;
     }
   else if (nbytes / SECSIZE < 100)	/* need at least 100 sectors */
     {
@@ -814,11 +814,11 @@ check_volume_size (const char *volume_size_string)
 	}
       putc ('\n', stderr);
 
-      success_p = FALSE;
+      success_p = false;
     }
   else
     {
-      success_p = TRUE;
+      success_p = true;
     }
 
   return success_p;
@@ -850,7 +850,7 @@ read_parameter (const char *prompt, char **s,
   char buf[2048];
   bool success_p;
 
-  success_p = FALSE;
+  success_p = false;
   do
     {
       fputs (prompt, stdout);
@@ -861,7 +861,7 @@ read_parameter (const char *prompt, char **s,
     }
   while (!verify_func (buf));
   *s = strcpy ((char*)malloc (strlen (buf) + 1), buf);
-  success_p = TRUE;
+  success_p = true;
 
  done:
   return success_p;
@@ -884,7 +884,7 @@ prompt_for_parameters (char **hfv_name, char **volume_name, char **volume_size)
 
   /* Default to an error string to avoid uninitialized memory bugs. */
   *hfv_name = *volume_name = *volume_size = "???error???";
-  success_p = FALSE;
+  success_p = false;
 
 printf (
 "Makehfv creates \"HFV\" files for use with Executor, the Macintosh emulator.\n"
@@ -919,7 +919,7 @@ OS_NAME, OS_NAME, OS_NAME);
 		       volume_size, check_volume_size))
     goto done;
 
-  success_p = TRUE;
+  success_p = true;
   
  done:
   return success_p;

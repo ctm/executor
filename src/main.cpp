@@ -169,13 +169,13 @@ PUBLIC INTEGER Executor::ROMlib_optional_res_x, Executor::ROMlib_optional_res_y;
 /* A string approximating the original command line. */
 PUBLIC const char *Executor::ROMlib_command_line;
 
-/* Set to TRUE if there was any error parsing arguments. */
-PRIVATE bool bad_arg_p = FALSE;
+/* Set to true if there was any error parsing arguments. */
+PRIVATE bool bad_arg_p = false;
 
-/* Set to FALSE when we know that the command line switches will result
+/* Set to false when we know that the command line switches will result
    in no graphics. */
 
-PRIVATE bool graphics_p = TRUE;
+PRIVATE bool graphics_p = true;
 
 /* for a description of flags declared here, see <rsys/flags.h> */
 
@@ -185,7 +185,7 @@ INTEGER Executor::flag_width = 0, Executor::flag_height = 0;  /* 0 means "use de
 /* Initial bits per pixel.  The screen depth can be changed dynamically. */
 int Executor::flag_bpp = 0;  /* 0 means "use default". */
 
-INTEGER Executor::ROMlib_shadow_screen_p = TRUE;
+INTEGER Executor::ROMlib_shadow_screen_p = true;
 
 INTEGER Executor::ROMlib_no_windows;
 
@@ -194,7 +194,7 @@ int ROMlib_drive_check = 0;
 #endif
 
 #if defined(SYN68K)
-static bool use_native_code_p = TRUE;
+static bool use_native_code_p = true;
 #endif
 
 /* the system version that executor is currently reporting to
@@ -493,7 +493,7 @@ check_arg (string argname, int *arg, int min, int max)
       fputs (" and ", stderr);
       print_command_line_value (stderr, max);
       fputs (" inclusive.\n", stderr);
-      bad_arg_p = TRUE;
+      bad_arg_p = true;
     }
 }
 
@@ -810,7 +810,7 @@ A1(PRIVATE, void, setstartdir, char *, argv0)
 #endif /* defined(MSDOS) */
 }
 
-PUBLIC BOOLEAN Executor::ROMlib_startupscreen = TRUE;
+PUBLIC BOOLEAN Executor::ROMlib_startupscreen = true;
 
 char *Executor::program_name;
 
@@ -995,15 +995,15 @@ drive_number_from_letter (char c, int *nump)
   if (isupper (c) || ((c >= '[' && c <= '`')))
     {
       *nump = c - 'A';
-      retval = TRUE;
+      retval = true;
     }
   else if (islower (c))
     {
       *nump = c - 'a';
-      retval = TRUE;
+      retval = true;
     }
   else
-    retval = FALSE;
+    retval = false;
   return retval;
 }
 
@@ -1012,7 +1012,7 @@ drive_error (const char *opt)
 {
   fprintf (stderr, "Invalid drive specification.\nUse something like "
 	   "\"-%s A-EJ\" (for drives A, B, C, D, E and J).\n", opt);
-  bad_arg_p = TRUE;
+  bad_arg_p = true;
 }
 
 PRIVATE const char *
@@ -1127,7 +1127,7 @@ note_memory_syntax_change (const char *arg, unsigned val)
 
   fputs ("\"\n", stderr);
 
-  bad_arg_p = TRUE;
+  bad_arg_p = true;
 }
 
 
@@ -1158,7 +1158,7 @@ zap_comments (char *buf, int n_left)
   ip = buf;
   op = buf;
   retval = 0;
-  last_was_cr = TRUE;
+  last_was_cr = true;
   while (n_left > 0)
     {
       while (n_left > 0 && (*ip != '#' || !last_was_cr))
@@ -1319,7 +1319,7 @@ int main(int argc, char** argv)
   }
 #endif
   
-  int grayscale_p = FALSE;
+  int grayscale_p = false;
 
 #if defined (DISPLAY_SPLASH_SCREEN)
   bool splash_screen_displayed_p;
@@ -1438,20 +1438,20 @@ int main(int argc, char** argv)
       && flag_bpp != 16 && flag_bpp != 32)
   {
     fprintf (stderr, "Bits per pixel must be 1, 2, 4, 8, 16 or 32.\n");
-    bad_arg_p = TRUE;
+    bad_arg_p = true;
   }
 
 #if defined (SDL)
   if (opt_val (common_db, "fullscreen", NULL))
-    ROMlib_fullscreen_p = TRUE;
+    ROMlib_fullscreen_p = true;
 
   if (opt_val (common_db, "hwsurface", NULL))
-    ROMlib_hwsurface_p = TRUE;
+    ROMlib_hwsurface_p = true;
 #endif
 
 #if defined(X) || (defined (CYGWIN32) && defined (SDL))
   if (opt_val (common_db, "scancodes", NULL))
-    ROMlib_set_use_scancodes (TRUE);
+    ROMlib_set_use_scancodes (true);
 #endif
 
 #if defined (Sound_SDL_Sound)
@@ -1462,14 +1462,14 @@ int main(int argc, char** argv)
 #endif
 
   if (opt_val (common_db, "ppc", NULL))
-    ROMlib_set_ppc (TRUE);
+    ROMlib_set_ppc (true);
 
   if (opt_val (common_db, "hfsplusro", NULL))
-    ROMlib_hfs_plus_support = TRUE;
+    ROMlib_hfs_plus_support = true;
 
 #if defined (CYGWIN32)
   if (opt_val (common_db, "realmodecd", NULL))
-    ROMlib_set_realmodecd (TRUE);
+    ROMlib_set_realmodecd (true);
 #endif
 
   if (opt_val (common_db, "size", &arg))
@@ -1521,7 +1521,7 @@ int main(int argc, char** argv)
 
 #if defined (MSDOS)
   {
-    int dangerous_video_p = FALSE;
+    int dangerous_video_p = false;
     opt_int_val (common_db, "dangerousvideospeedup",
                  &dangerous_video_p, &bad_arg_p);
     if (!dangerous_video_p)
@@ -1535,7 +1535,7 @@ int main(int argc, char** argv)
   opt_int_val (common_db, "skipaspi", &ROMlib_skipaspi, &bad_arg_p);
 
   {
-    int only_vga_p = FALSE;
+    int only_vga_p = false;
     opt_int_val (common_db, "vga", &only_vga_p, &bad_arg_p);
     only_use_vga_p = only_vga_p;
   }
@@ -1574,13 +1574,13 @@ int main(int argc, char** argv)
   substitute_fonts_p = !opt_val (common_db, "cities", NULL);
 
   if (opt_val (common_db, "offset", NULL))
-    force_big_offset = TRUE;
+    force_big_offset = true;
 
 #if defined (CYGWIN32)
   if (opt_val (common_db, "die", NULL))
     uninstall_exception_handler ();
   if (opt_val (common_db, "noautoevents", NULL))
-    set_timer_driven_events (FALSE);
+    set_timer_driven_events (false);
 #endif
 
 #if defined (MSDOS) || defined (CYGWIN32)
@@ -1673,7 +1673,7 @@ int main(int argc, char** argv)
     /* Set up syn68k. */
     initialize_68k_emulator (vdriver_system_busy,
 #if defined (__CHECKER__)
-			     FALSE,
+			     false,
 #else
 			     use_native_code_p,
 #endif
@@ -1690,7 +1690,7 @@ int main(int argc, char** argv)
   }
 
   if (opt_val (common_db, "keyboards", NULL))
-    graphics_p = FALSE;
+    graphics_p = false;
 
   /* Block virtual interrupts, until the system is fully set up. */
   int_state = block_virtual_ints ();
@@ -1705,7 +1705,7 @@ int main(int argc, char** argv)
     switch_to_non_moving_sbrk ();
 #endif
 
-  if (graphics_p && !vdriver_init (0, 0, 0, FALSE, &argc, argv))
+  if (graphics_p && !vdriver_init (0, 0, 0, false, &argc, argv))
   {
     fprintf (stderr, "Unable to initialize video driver.\n");
     exit (-12);
@@ -1718,12 +1718,12 @@ int main(int argc, char** argv)
 
 #if defined (MSDOS)
   {
-    int use_old_timer_p = FALSE;
+    int use_old_timer_p = false;
     opt_int_val (common_db, "oldtimer", &use_old_timer_p, &bad_arg_p);
     use_bios_timer_p = !use_old_timer_p;
   }
   {
-    int no_files_check_p = FALSE;
+    int no_files_check_p = false;
     opt_int_val (common_db, "nofilescheck", &no_files_check_p, &bad_arg_p);
     check_files_p = !no_files_check_p;
   }
@@ -1750,7 +1750,7 @@ int main(int argc, char** argv)
 #endif
 
   {
-    int no_auto = FALSE;
+    int no_auto = false;
     opt_int_val (common_db, "noautorefresh",  &no_auto, &bad_arg_p);
     do_autorefresh_p = !no_auto;
   }
@@ -1771,7 +1771,7 @@ int main(int argc, char** argv)
       uint32 vers;
 
       if (!ROMlib_parse_version (str, &vers))
-        bad_arg_p = TRUE;
+        bad_arg_p = true;
       else
         ROMlib_PrDrvrVers = (vers >> 8) * 10 + ((vers >> 4) & 0xF);
     }
@@ -1805,7 +1805,7 @@ int main(int argc, char** argv)
       if (port < 1 || port > 4)
       {
         fprintf (stderr, "modemport must be 1, 2, 3 or 4.\n");
-        bad_arg_p = TRUE;
+        bad_arg_p = true;
       }
       else
         set_modem_port_mapping_to_pc_port (port);
@@ -1816,7 +1816,7 @@ int main(int argc, char** argv)
       if (port < 1 || port > 4)
       {
         fprintf (stderr, "printerport must be 1, 2, 3 or 4.\n");
-        bad_arg_p = TRUE;
+        bad_arg_p = true;
       }
       else
         set_printer_port_mapping_to_pc_port (port);
@@ -1838,7 +1838,7 @@ int main(int argc, char** argv)
 	  if (argv[a][0] == '-') {
 		fprintf (stderr, "%s: unknown option `%s'\n",
 				 program_name, argv[a]);
-		bad_arg_p = TRUE;
+		bad_arg_p = true;
 	  }
     }
   }
@@ -1982,12 +1982,12 @@ int main(int argc, char** argv)
     
     /* initialize the mac rgb_spec's */
     make_rgb_spec (&mac_16bpp_rgb_spec,
-		     16, TRUE, 0,
+		     16, true, 0,
 		     5, 10, 5, 5, 5, 0,
 		     CL_RAW (GetCTSeed ()));
       
     make_rgb_spec (&mac_32bpp_rgb_spec,
-        32, TRUE, 0,
+        32, true, 0,
         8, 16, 8, 8, 8, 0,
         CL_RAW (GetCTSeed ()));
       
@@ -1996,7 +1996,7 @@ int main(int argc, char** argv)
 
 #if defined (DISPLAY_SPLASH_SCREEN)
   if (graphics_p)
-    splash_screen_displayed_p = splash_screen_display (FALSE, "splash");
+    splash_screen_displayed_p = splash_screen_display (false, "splash");
 #endif
 
   ROMlib_eventinit (graphics_p);
@@ -2052,7 +2052,7 @@ int main(int argc, char** argv)
       if (keyboard_set_failed)
         printf ("``%s'' is not an available keyboard\n", arg.c_str());
     } else
-      keyboard_set_failed = FALSE;
+      keyboard_set_failed = false;
 
     if (keyboard_set_failed || opt_val (common_db, "keyboards", NULL))
       display_keyboard_choices ();

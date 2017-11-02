@@ -243,7 +243,7 @@ Executor::ROMlib_recompute_caret (TEHandle te)
 
   state = TE_CARET_STATE (te);
   if (state == caret_vis || state == caret_invis)
-    togglecaret (te, TE_SEL_START (te), FALSE);
+    togglecaret (te, TE_SEL_START (te), false);
 }
 
 void
@@ -253,7 +253,7 @@ Executor::ROMlib_togglelite (TEHandle te)
 
   state = TE_CARET_STATE (te);
   if (state == caret_vis || state == caret_invis)
-    togglecaret (te, TE_SEL_START (te), TRUE);
+    togglecaret (te, TE_SEL_START (te), true);
   else
     togglehilite (te);
 }
@@ -338,7 +338,7 @@ P1 (PUBLIC pascal trap, void, TEIdle, TEHandle, teh)
       && (sel = Hx(teh, selStart)) == Hx(teh, selEnd)
       && (state = Hx(teh, caretState)))
     {
-      togglecaret(teh, sel, TRUE);
+      togglecaret(teh, sel, true);
       HxX(teh, caretState) = CW (state ^ 0xFF00);
       HxX(teh, caretTime)  = CL (ticks);
     }
@@ -843,7 +843,7 @@ PUBLIC INTEGERRET ROMlib_dotext (void)
     return retval;
 }
 
-/* return TRUE if click at location `cl' was a double click; otherwise
+/* return true if click at location `cl' was a double click; otherwise
    save away this click information (location, time) */
 static bool
 double_click_p (TEHandle te, int16 cl)
@@ -853,11 +853,11 @@ double_click_p (TEHandle te, int16 cl)
   ticks = TickCount ();
   if (cl == TE_CLICK_LOC (te)
       && ticks <= TE_CLICK_TIME (te) + CL (DoubleTime))
-    return TRUE;
+    return true;
   
   TE_CLICK_LOC_X (te)   = CW (cl);
   TE_CLICK_TIME_X (te)  = CL (ticks);
-  return FALSE;
+  return false;
 }
 
 typedef	BOOLEAN (*cliklooptype) (void);
@@ -904,7 +904,7 @@ A1 (static inline, BOOLEAN, CALLCLIKOK, TEHandle, teh)
 	    EM_A3 = savea3;
 	}
     } else
-	retval = TRUE;
+	retval = true;
     return retval;
 }
 
@@ -960,7 +960,7 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
   int16 left_origin = -1, right_origin = -1;
   int16 length;
   int16 state;
-  bool word_hilite_p = FALSE;
+  bool word_hilite_p = false;
   
   TESAVE (te);
   te_flags = HGetState ((Handle) te);
@@ -998,7 +998,7 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
 	  || start != click_posn))
     {
       if (state == caret_vis)
-	togglecaret (te, start, TRUE);
+	togglecaret (te, start, true);
       state = hilite_vis;
       
       if (click_posn < start)
@@ -1010,7 +1010,7 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
       else if (click_posn > end)
 	{
 	  if (state == caret_vis)
-	    togglecaret (te, start, TRUE);
+	    togglecaret (te, start, true);
 	  
 	  te_toggle_hilite_range (end, click_posn);
 	  end = click_posn;
@@ -1026,7 +1026,7 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
       
       if (double_click_p (te, click_posn))
 	{
-	  word_hilite_p = TRUE;
+	  word_hilite_p = true;
 	  
 	  true_origin = click_posn;
 	  left_origin = start
@@ -1041,7 +1041,7 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
 	  else
 	    {
 	      /* draw the caret */
-	      togglecaret (te, start, TRUE);
+	      togglecaret (te, start, true);
 	      state = caret_vis;
 	    }
 	}
@@ -1050,7 +1050,7 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
 	  origin = start = end = click_posn;
 	  
 	  /* draw the caret */
-	  togglecaret (te, start, TRUE);
+	  togglecaret (te, start, true);
 	  state = caret_vis;
 	}
     }
@@ -1064,7 +1064,7 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
 	if (start == end)				\
 	  {						\
 	    gui_assert (state == caret_vis);		\
-	    togglecaret (te, start, TRUE);		\
+	    togglecaret (te, start, true);		\
 	    state = caret_invis;			\
 	  }						\
 							\
@@ -1076,7 +1076,7 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
 							\
 	if (start == end)				\
 	  {						\
-	    togglecaret (te, start, TRUE);		\
+	    togglecaret (te, start, true);		\
 	    state = caret_vis;				\
 	  }						\
 	else						\
@@ -1093,7 +1093,7 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
 	if (start == end)				\
 	  {						\
 	    gui_assert (state == caret_vis);		\
-	    togglecaret (te, start, TRUE);		\
+	    togglecaret (te, start, true);		\
 	    state = caret_invis;			\
 	  }						\
 							\
@@ -1105,7 +1105,7 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
 							\
 	if (start == end)				\
 	  {						\
-	    togglecaret (te, start, TRUE);		\
+	    togglecaret (te, start, true);		\
 	    state = caret_vis;				\
 	  }						\
 	else						\
@@ -1273,5 +1273,5 @@ P1 (PUBLIC pascal trap, void, TEDeactivate, TEHandle, teh)
     TERESTORE ();
   }
   
-  TE_ACTIVE_X (teh) = CWC (FALSE);
+  TE_ACTIVE_X (teh) = CWC (false);
 }

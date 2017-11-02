@@ -276,25 +276,25 @@ PUBLIC BOOLEAN Executor::ROMlib_searchnode(btnode *btp, void *key, compfp fp,
 		if (mid == 0) {
 		    *keypp = totest;
 		    *afterp = -1;
-		    return FALSE;
+		    return false;
 		}
 		high = mid;
 		break;
 	    case same:
 		*keypp = totest;
 		*afterp = mid;
-		return TRUE;
+		return true;
 	    case firstisgreater:
 		totest2 = BTENTRY(btp, mid+1);
 		switch ((*fp)(key, totest2)) {
 		case firstisless:
 		    *keypp = totest;
 		    *afterp = mid;
-		    return FALSE;
+		    return false;
 		case same:
 		    *keypp = totest2;
 		    *afterp = mid+1;
-		    return TRUE;
+		    return true;
 		case firstisgreater:
 		    low = mid+1;
 		    break;
@@ -304,14 +304,14 @@ PUBLIC BOOLEAN Executor::ROMlib_searchnode(btnode *btp, void *key, compfp fp,
     case same:
 	*keypp = totest;
 	*afterp = high;
-	return TRUE;
+	return true;
     case firstisgreater:
 	*keypp = totest;
 	*afterp = high;
-	return FALSE;
+	return false;
     }
 #if !defined (LETGCCWAIL)
-    return FALSE;
+    return false;
 #endif
 }
 
@@ -366,7 +366,7 @@ PUBLIC LONGINT tagdate;
 PUBLIC LONGINT tagtfs0;
 PUBLIC LONGINT tagtfs1;
 
-PRIVATE BOOLEAN ROMlib_index_cached = FALSE;
+PRIVATE BOOLEAN ROMlib_index_cached = false;
 
 PUBLIC OSErr Executor::ROMlib_getcache(cacheentry **retpp, uint16 refnum, ULONGINT logbno,
 							    cacheflagtype flags)
@@ -385,7 +385,7 @@ PUBLIC OSErr Executor::ROMlib_getcache(cacheentry **retpp, uint16 refnum, ULONGI
     INTEGER badnesscount;
 #endif
     
-    ROMlib_index_cached = FALSE;
+    ROMlib_index_cached = false;
     fcbp = (filecontrolblock *)((char *)MR(FCBSPtr) + refnum);
     vcbp = MR(fcbp->fcbVPtr);
     filenum = CL(fcbp->fcbFlNum);
@@ -575,7 +575,7 @@ PUBLIC OSErr Executor::ROMlib_keyfind(btparam *btpb)
       }
     if (((btblock0 *)cachep->buf)->numentries == CLC(0)) {
         btpb->foundp = 0;
-        btpb->success = FALSE;
+        btpb->success = false;
         btpb->leafindex = 0;
         return noErr;
     }
@@ -593,7 +593,7 @@ PUBLIC OSErr Executor::ROMlib_keyfind(btparam *btpb)
 	    type = ((btnode *)cachep->buf)->ndType;
 	}
 	if (err != noErr || (type != indexnode && type != leafnode)) {
-	    btpb->success = FALSE;
+	    btpb->success = false;
 	    if (err == noErr) {
 	        warning_unexpected ("unknown node");
 	        err = fsDSIntErr;
@@ -679,7 +679,7 @@ PRIVATE OSErr MapBitSetOrClr(cacheentry *block0cachep, LONGINT bit,
     nnodes = CL(block0p->nnodes);
     gui_assert(bit < nnodes);
     btp = (btnode *) block0p;
-    done = FALSE;
+    done = false;
     do {
 	nrecs = CW(btp->ndNRecs);
 	mapstart = (unsigned char *) BTENTRY(btp, nrecs-1);
@@ -691,7 +691,7 @@ PRIVATE OSErr MapBitSetOrClr(cacheentry *block0cachep, LONGINT bit,
 	    else
 		BitClr((Ptr) mapstart, bit);
 	    cachep->flags |= CACHEDIRTY;
-	    done = TRUE;
+	    done = true;
 	} else {
 	    if (btp->ndFLink) {
 		bit -=  nmapnodes;
@@ -734,7 +734,7 @@ PRIVATE OSErr add_free_nodes(cacheentry *block0cachep, ULONGINT n_new_nodes)
     first_free_node = nnodes;
     btp = (btnode *) block0p;
     oldcachep = block0cachep;
-    done = FALSE;
+    done = false;
     block0p->nnodes = CL(nnodes + n_new_nodes);
     do {
 	nrecs = CW(btp->ndNRecs);
@@ -771,11 +771,11 @@ PRIVATE OSErr add_free_nodes(cacheentry *block0cachep, ULONGINT n_new_nodes)
 		--n_new_nodes;
 		oldcachep->flags |= CACHEDIRTY;
 		newcachep->flags |= CACHEDIRTY;
-		MapBitSetOrClr(block0cachep, first_free_node, TRUE);
-		done = TRUE;
+		MapBitSetOrClr(block0cachep, first_free_node, true);
+		done = true;
 	    }
 	} else
-	    done = TRUE;
+	    done = true;
     } while (!done);
     block0p->nfreenodes = CL(CL(block0p->nfreenodes) + n_new_nodes);
     return noErr;
@@ -817,7 +817,7 @@ PRIVATE OSErr MapFindFirstBitAndSet(cacheentry *block0cachep,
     block0p = (btblock0 *) block0cachep->buf;
     nnodes = CL(block0p->nnodes);
     btp = (btnode *) block0p;
-    done = FALSE;
+    done = false;
     retval = 0;
     do {
 	nrecs = CW(btp->ndNRecs);
@@ -829,7 +829,7 @@ PRIVATE OSErr MapFindFirstBitAndSet(cacheentry *block0cachep,
 	    BitSet((Ptr) mapstart, n);
 	    cachep->flags |= CACHEDIRTY;
 	    retval += n;
-	    done = TRUE;
+	    done = true;
 	} else {
 	    if (btp->ndFLink) {
 		retval +=  nmapnodes;
@@ -908,7 +908,7 @@ PRIVATE OSErr deletenode(cacheentry *todeletep)
     }
 #endif
     block0p->nfreenodes = CL(CL(block0p->nfreenodes) + 1);
-    MapBitSetOrClr(block0cachep, node, FALSE);
+    MapBitSetOrClr(block0cachep, node, false);
     block0cachep->flags |= CACHEDIRTY;
     memset(todeletep->buf, 0, PHYSBSIZE);
     todeletep->flags |= CACHEDIRTY;
@@ -1116,8 +1116,8 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
     BOOLEAN done, modselfkey, modrightkey;
     LONGINT left, right;
     
-    modselfkey = FALSE;
-    modrightkey = FALSE;
+    modselfkey = false;
+    modrightkey = false;
     *todeletep = -1;
     btp = (btnode *) selfcachep->buf;
     if (selfindex < 0 || selfindex >= CW(btp->ndNRecs)) {
@@ -1146,7 +1146,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
     }
     btp->ndNRecs = CW(CW(btp->ndNRecs) - 1);
     if (selfindex == 0)
-	modselfkey = TRUE;
+	modselfkey = true;
     
 #if defined (CATFILEDEBUG)
     checkbtp(btp);
@@ -1157,7 +1157,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
     /* check to see if freespace is too big */
     freesize = FREESIZE(btp);
     if (freesize > SIZECUTOFF) {
-	done = FALSE;
+	done = false;
 	if (parentcachep) {
 	    parentbtp = (btnode *) parentcachep->buf;
 #if defined (CATFILEDEBUG)
@@ -1196,8 +1196,8 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 		    fs_err_hook (err);
 		    return err;
 		  }
-		modselfkey = TRUE;
-		done = TRUE;
+		modselfkey = true;
+		done = true;
 	    }
 	}
 	if (!done && right >= 0) {
@@ -1222,8 +1222,8 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 		    fs_err_hook (err);
 		    return err;
 		  }
-		modrightkey = TRUE;
-		done = TRUE;
+		modrightkey = true;
+		done = true;
 	    }
 	}
 	if (!done) {
@@ -1248,7 +1248,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 		printf("merged left, self\n");
 #endif
 		*todeletep = parentindex;
-		modselfkey = FALSE;
+		modselfkey = false;
 		break;
 	    case doright:
 		err = merge(selfcachep, rightcachep);
@@ -1256,7 +1256,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 		printf("merged self, right\n");
 #endif
 		*todeletep = parentindex+1;
-		modrightkey = FALSE;
+		modrightkey = false;
 		break;
 	    case leavealone:    /* do nothing */
 		break;
@@ -1394,7 +1394,7 @@ PUBLIC OSErr Executor::ROMlib_btdelete(btparam *btpb)
     }
     tep = btpb->trail + btpb->leafindex;
     selfindex  = tep->after;
-    done = FALSE;
+    done = false;
     refnum = CW(btpb->trail[0].cachep->refnum);
     if (((btblock0 *)btpb->trail[0].cachep->buf)->numentries == CLC(1)) {
 	err = maketrailentrybusy(&btpb->trail[1], refnum);
@@ -1405,7 +1405,7 @@ PUBLIC OSErr Executor::ROMlib_btdelete(btparam *btpb)
 	  }
 	err = btdeletetree(btpb->trail[0].cachep, btpb->trail[1].cachep);
     } else {
-	done = FALSE;
+	done = false;
 	while (!done) {
 	    err = maketrailentrybusy(tep-1, refnum);
 	    if (err != noErr)
@@ -1446,7 +1446,7 @@ PUBLIC OSErr Executor::ROMlib_btdelete(btparam *btpb)
 		  }
 	    }
 	    if (todelete == -1)
-		done = TRUE;
+		done = true;
 	    else {
 		selfindex = todelete;
 		tep--;
@@ -1740,7 +1740,7 @@ PRIVATE OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
 	    return err;
 	  }
 	ROMlib_cleancache(MR(fcbp->fcbVPtr));
-	err = PBAllocate((ParmBlkPtr) &iop, FALSE);    /* yahoo */
+	err = PBAllocate((ParmBlkPtr) &iop, false);    /* yahoo */
 	MR(fcbp->fcbVPtr)->vcbFlags.raw_or( CWC(VCBDIRTY) );
 	ROMlib_flushvcbp(MR(fcbp->fcbVPtr));  /* just setting DIRTY isn't safe */
 	err1 = restorebusybuffers(busysave);
@@ -1912,10 +1912,10 @@ PRIVATE OSErr slipin(cacheentry *cachep, INTEGER after, anykey *keyp,
 	    *cachepp = newcachep;
 	
 	/* find split */
-	inbtp = FALSE;
+	inbtp = false;
 	for (newfirst = 0, sizeused = 0; sizeused < SIZECUTOFF; newfirst++) {
 	    if (after + 1 == newfirst && !inbtp) {
-		inbtp = TRUE;
+		inbtp = true;
 		sizeused += sizeneeded;
 /* --> */       --newfirst; /* didn't add in newfirst on this go around */
 	    } else
@@ -2152,7 +2152,7 @@ PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
     keytoinsertp = &btpb->tofind;
     datatoinsertp = (char*)datap;
     sizetoinsert = datasize;
-    done = FALSE;
+    done = false;
     refnum = CW(block0cachep->refnum);
     while (!done) {
 	err = maketrailentrybusy(tep, refnum);
@@ -2172,7 +2172,7 @@ PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
 		    fs_err_hook (err);
 		    return err;
 		  }
-		done = TRUE;
+		done = true;
 	    } else {
 		if (block0p->lastleaf == tep->cachep->logblk) {
 		    block0p->lastleaf = newcachep->logblk;
@@ -2199,7 +2199,7 @@ PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
 		sizetoinsert = sizeof(newcachep->logblk);
 	    }
 	} else
-	    done = TRUE;
+	    done = true;
     }
     for (tep = btpb->trail + btpb->leafindex;
 			       tep > btpb->trail+1 &&
@@ -2437,7 +2437,7 @@ PUBLIC OSErr Executor::ROMlib_btpbindex (IOParam *pb, LONGINT dirid, HVCB **vcbp
     static GUEST<INTEGER> save_vRefNum;
     
     if (dirid != save_dirid || pb->ioVRefNum != save_vRefNum) {
-	ROMlib_index_cached = FALSE;
+	ROMlib_index_cached = false;
 	save_dirid = dirid;
 	save_vRefNum = pb->ioVRefNum;
     }
@@ -2455,7 +2455,7 @@ PUBLIC OSErr Executor::ROMlib_btpbindex (IOParam *pb, LONGINT dirid, HVCB **vcbp
     if (ROMlib_index_cached)
 	err = noErr;
     else
-	err = ROMlib_findvcbandfile(&newpb, dirid, &btparamrec, &kind, FALSE);
+	err = ROMlib_findvcbandfile(&newpb, dirid, &btparamrec, &kind, false);
     if (err == noErr) {
 	if (!ROMlib_index_cached) {
 	    save_vcbp = btparamrec.vcbp;
@@ -2483,21 +2483,21 @@ PUBLIC OSErr Executor::ROMlib_btpbindex (IOParam *pb, LONGINT dirid, HVCB **vcbp
 		    err = ROMlib_getcache(&save_cachep, refnum, flink,
 								 GETCACHESAVE);
 		    if (err != noErr)
-			done = TRUE;
+			done = true;
 		    btp = (btnode *) save_cachep->buf;
 		    save_index = 0;
 		} else
-		    done = TRUE;
+		    done = true;
 		save_entryp = BTENTRY(btp, save_index);
 		if (save_dirid != 1 &&
 				  CL(save_entryp->catk.ckrParID) != save_dirid)
-		    done = TRUE;
+		    done = true;
 		else if (!done) {
 		    save_frp = (filerec *) DATAPFROMKEY(save_entryp);
 		    if (save_frp->cdrType == FILETYPE ||
 			        (!filesonly && save_frp->cdrType == DIRTYPE)) {
 			if (--count == 0)
-			    done = TRUE;
+			    done = true;
 		    }
 		}
 	    }

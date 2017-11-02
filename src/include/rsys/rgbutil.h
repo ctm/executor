@@ -27,7 +27,7 @@ typedef void (*rgb_extract_func_t) (const struct rgb_spec *rgb_spec,
 typedef struct rgb_spec
 {
   int bpp;				/* Bits per pixel, either 16 or 32. */
-  bool big_endian_p;		/* TRUE iff a Mac-format pixel.     */
+  bool big_endian_p;		/* true iff a Mac-format pixel.     */
   uint32 xor_mask;			/* Bits XOR'd after RGB assembled.  */
   int num_red_bits,   low_red_bit;	/* Size and position of red bits.   */
   int num_green_bits, low_green_bit;	/* Size and position of green bits. */

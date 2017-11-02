@@ -150,7 +150,7 @@ PRIVATE OSErr initcache(HVCB *vcbp)
     return noErr;
 }
 
-PUBLIC bool Executor::ROMlib_hfs_plus_support = FALSE;
+PUBLIC bool Executor::ROMlib_hfs_plus_support = false;
 
 PRIVATE bool
 is_hfs_plus_wrapper (volumeinfoPtr vp)
@@ -275,7 +275,7 @@ PRIVATE HVCB *vcbbyname(StringPtr name)
     HVCB *vcbp;
     
     for (vcbp = (HVCB *) MR(VCBQHdr.qHead); vcbp &&
-	      !EqualString(vcbp->vcbVN, name, FALSE, TRUE) ;
+	      !EqualString(vcbp->vcbVN, name, false, true) ;
 					       vcbp = (HVCB *) MR(vcbp->qLink))
 	;
     return vcbp;
@@ -500,10 +500,10 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
 	    err = readvolumeinfo(vcbp);
 	    if (err == noErr) {
 		vip = (volumeinfoPtr) MR(vcbp->vcbBufAdr);
-		alreadythere = FALSE;
+		alreadythere = false;
 		for (vcbp2 = (HVCB *) MR(VCBQHdr.qHead); vcbp2;
 					     vcbp2 = (HVCB *) MR(vcbp2->qLink))
-		    if (EqualString(vcbp2->vcbVN, vip->drVN, TRUE, TRUE)
+		    if (EqualString(vcbp2->vcbVN, vip->drVN, true, true)
 						    && vcbp2->vcbDrvNum == CWC(0)) {
 #if 1
 			vcbp2->vcbBufAdr = vcbp->vcbBufAdr;
@@ -515,7 +515,7 @@ Executor::hfsPBMountVol (ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGIN
 			((VCBExtra *) vcbp2)->u.hfs.fd =
 						 ((VCBExtra *) vcbp)->u.hfs.fd;
 			DisposPtr((Ptr) vcbp);
-			alreadythere = TRUE;
+			alreadythere = true;
 			vcbp = vcbp2;
 			break;
 		    }
@@ -669,10 +669,10 @@ PRIVATE OSErr commonGetVInfo(HVolumeParam *pb, BOOLEAN async, fstype fs)
     } else {
 	if (pb->ioVolIndex == CWC(0))
 	    vcbp = (HVCB *) ROMlib_findvcb(Cx(pb->ioVRefNum), (StringPtr) 0,
-							 (LONGINT *) 0, FALSE);
+							 (LONGINT *) 0, false);
 	else /* if (Cx(pb->ioVolIndex) < 0) */
 	    vcbp = (HVCB *) ROMlib_findvcb(Cx(pb->ioVRefNum), MR(pb->ioNamePtr),
-							 (LONGINT *) 0, TRUE);
+							 (LONGINT *) 0, true);
 	workingdirnum = getworkingdir(Cx(pb->ioVRefNum));
     }
 	
@@ -749,7 +749,7 @@ PUBLIC OSErr Executor::hfsPBSetVInfo(HParmBlkPtr pb, BOOLEAN async)
     HVCB *vcbp;
     
     vcbp = ROMlib_findvcb(Cx(pb->volumeParam.ioVRefNum),
-			  MR(pb->volumeParam.ioNamePtr), (LONGINT *) 0, FALSE);
+			  MR(pb->volumeParam.ioNamePtr), (LONGINT *) 0, false);
     if (vcbp) {
 	if (Cx(vcbp->vcbAtrb) & VHARDLOCKBIT)
 	    err = wPrErr;
@@ -848,7 +848,7 @@ PRIVATE OSErr setvolhelper(VolumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
 
     newdir = 0;
     vcbp = ROMlib_findvcb(Cx(pb->ioVRefNum), MR(pb->ioNamePtr),
-			  &newdir, FALSE);
+			  &newdir, false);
     if (!vcbp)
 	err = nsvErr;
     else {
@@ -884,7 +884,7 @@ PRIVATE OSErr setvolhelper(VolumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
  *	 Also we make this try twice as a PM PMSP
  */
 	    do {
-		if ((err1 = PBGetCatInfo(&cpb, FALSE)) == noErr)
+		if ((err1 = PBGetCatInfo(&cpb, false)) == noErr)
 		  {
 		    if (cpb.hFileInfo.ioFlAttrib & ATTRIB_ISADIR)
 			newDefDirID = cpb.dirInfo.ioDrDirID;
@@ -906,12 +906,12 @@ PRIVATE OSErr setvolhelper(VolumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
 
 PUBLIC OSErr Executor::hfsPBSetVol(ParmBlkPtr pb, BOOLEAN async)
 {
-    return setvolhelper((VolumeParam *) pb, async, 0, TRUE);
+    return setvolhelper((VolumeParam *) pb, async, 0, true);
 }
 
 PUBLIC OSErr Executor::hfsPBHSetVol(WDPBPtr pb, BOOLEAN async)
 {
-    return setvolhelper((VolumeParam *) pb, async, Cx(pb->ioWDDirID), FALSE);
+    return setvolhelper((VolumeParam *) pb, async, Cx(pb->ioWDDirID), false);
 }
 
 PUBLIC OSErr Executor::hfsPBFlushVol(ParmBlkPtr pb, BOOLEAN async)
@@ -920,7 +920,7 @@ PUBLIC OSErr Executor::hfsPBFlushVol(ParmBlkPtr pb, BOOLEAN async)
     OSErr err;
 
     vcbp = ROMlib_findvcb(Cx(pb->volumeParam.ioVRefNum),
-			   MR(pb->volumeParam.ioNamePtr), (LONGINT *) 0, TRUE);
+			   MR(pb->volumeParam.ioNamePtr), (LONGINT *) 0, true);
     if (vcbp)
 	err = ROMlib_flushvcbp(vcbp);
     else
@@ -940,7 +940,7 @@ PRIVATE void closeallvcbfiles(HVCB *vcbp)
     for (;fcbp < efcbp; fcbp = (filecontrolblock *) ((char *)fcbp + Cx(FSFCBLen)))
 	if (fcbp->fcbFlNum && MR(fcbp->fcbVPtr) == vcbp) {
 	    iopb.ioRefNum = CW((char *) fcbp - (char *) MR(FCBSPtr));
-	    /* my */PBFlushFile((ParmBlkPtr) &iopb, FALSE);
+	    /* my */PBFlushFile((ParmBlkPtr) &iopb, false);
 	}
 }
 
@@ -950,7 +950,7 @@ PUBLIC OSErr Executor::hfsPBUnmountVol(ParmBlkPtr pb)
     HVCB *vcbp;
     
     vcbp = ROMlib_findvcb(Cx(pb->volumeParam.ioVRefNum),
-			  MR(pb->volumeParam.ioNamePtr), (LONGINT *) 0, FALSE);
+			  MR(pb->volumeParam.ioNamePtr), (LONGINT *) 0, false);
     if (vcbp) {
 	closeallvcbfiles(vcbp);
 	err = ROMlib_flushvcbp(vcbp);
@@ -969,15 +969,15 @@ PRIVATE OSErr offlinehelper(VolumeParam *pb, HVCB *vcbp)
     OSErr err, err1, err2;
     IOParam iop;
     
-    err = /* my */PBFlushVol((ParmBlkPtr) pb, FALSE);
+    err = /* my */PBFlushVol((ParmBlkPtr) pb, false);
     err1 = 0;
     err2 = 0;
     if (err == noErr) {
 	if (vcbp) {
 	    iop.ioRefNum = vcbp->vcbXTRef;
-	    err1 = PBClose((ParmBlkPtr) &iop, FALSE);
+	    err1 = PBClose((ParmBlkPtr) &iop, false);
 	    iop.ioRefNum = vcbp->vcbCTRef;
-	    err2 = PBClose((ParmBlkPtr) &iop, FALSE);
+	    err2 = PBClose((ParmBlkPtr) &iop, false);
 #if 1
 	    DisposPtr(MR(vcbp->vcbMAdr));
 	    vcbp->vcbMAdr   = 0;
@@ -1010,7 +1010,7 @@ PUBLIC OSErr Executor::hfsPBOffLine(ParmBlkPtr pb)
     HVCB *vcbp;
     
     vcbp = ROMlib_findvcb(Cx(pb->volumeParam.ioVRefNum),
-			  MR(pb->volumeParam.ioNamePtr), (LONGINT *) 0, FALSE);
+			  MR(pb->volumeParam.ioNamePtr), (LONGINT *) 0, false);
     if (vcbp) {
 	if (vcbp->vcbDrvNum) {
 	    vcbp->vcbDRefNum = CW(-Cx(vcbp->vcbDrvNum));
@@ -1030,7 +1030,7 @@ PUBLIC OSErr Executor::hfsPBEject(ParmBlkPtr pb)
 
     vref = Cx(pb->volumeParam.ioVRefNum);
     vcbp = ROMlib_findvcb(vref,
-			  MR(pb->volumeParam.ioNamePtr), (LONGINT *) 0, FALSE);
+			  MR(pb->volumeParam.ioNamePtr), (LONGINT *) 0, false);
     if (vcbp) {
 	if (Cx(vcbp->vcbDrvNum)) {
 	    vcbp->vcbDRefNum = vcbp->vcbDrvNum;
@@ -1064,10 +1064,10 @@ PUBLIC OSErr Executor::ROMlib_pbvolrename(IOParam *pb, StringPtr newnamep)
     hpb.volumeParam.ioNamePtr = RM(name_copy);
     hpb.volumeParam.ioVRefNum = pb->ioVRefNum;
     hpb.volumeParam.ioVolIndex = CWC(-1);
-    err = /* my */PBHGetVInfo((HParmBlkPtr) &hpb, FALSE);
+    err = /* my */PBHGetVInfo((HParmBlkPtr) &hpb, false);
     if (err == noErr) {
 	hpb.volumeParam.ioNamePtr = RM(newnamep);
-	err = /* my */PBSetVInfo((HParmBlkPtr) &hpb, FALSE);
+	err = /* my */PBSetVInfo((HParmBlkPtr) &hpb, false);
     }
     return err;
 }

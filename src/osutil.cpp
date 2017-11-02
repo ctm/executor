@@ -285,7 +285,7 @@ A4(PUBLIC trap, INTEGERRET, RelString, StringPtr, s1, StringPtr, s2,
 A4(PUBLIC trap, BOOLEANRET, EqualString, StringPtr, s1, StringPtr, s2,
 					    BOOLEAN, casesig, BOOLEAN, diacsig)
 {
-    return RelString(s1, s2, casesig, diacsig) ? FALSE : TRUE;
+    return RelString(s1, s2, casesig, diacsig) ? false : true;
 }
 
 A2(PUBLIC, int, ROMlib_strcmp, const Byte *, s1, const Byte *, s2)	/* INTERNAL */
@@ -517,12 +517,12 @@ Executor::date_to_swapped_fields (long long mactime, GUEST<INTEGER> *yearp, GUES
     long long secs_left;
     ULONGINT approx_year, days, secs_approx_year;
     INTEGER month, day, hour, minute;
-    static BOOLEAN cutoffs_inited_p = FALSE;
+    static BOOLEAN cutoffs_inited_p = false;
 
     if (!cutoffs_inited_p)
       {
 	init_cutoffs ();
-	cutoffs_inited_p = TRUE;
+	cutoffs_inited_p = true;
       }
 
     if (mactime < 0)
@@ -711,7 +711,7 @@ A0(PUBLIC trap, OSErrRET, InitUtil)		/* IMII-380 */
     BOOLEAN badread;
 
 #if !defined(LETGCCWAIL)
-    badread = FALSE;
+    badread = false;
 #endif
     if ((err = openparam(&rn)) == noErr) {
 	count = sizeof(sp);
@@ -730,9 +730,9 @@ A0(PUBLIC trap, OSErrRET, InitUtil)		/* IMII-380 */
 	    SPVolCtl    = CW(sp.volClik)  >> 8;
 	    SPClikCaret = CW(sp.volClik);
             SPMisc2	= CW(sp.misc);
-	    badread = FALSE;
+	    badread = false;
 	} else
-	    badread = TRUE;
+	    badread = true;
     }
     if (err != noErr || badread)
 	setdefaults();
@@ -773,7 +773,7 @@ A0(PUBLIC trap, OSErrRET, WriteParam)		/* IMII-382 */
 	if (FSWrite(rn, &count, (Ptr) &sp) == noErr && count == sizeof(sp))
 	    err = noErr;
 	deriveglobals();
-	ROMlib_beepedonce = FALSE;
+	ROMlib_beepedonce = false;
 	err2 = FSClose(rn);
 	if (err == noErr)
 	  err = err2;
@@ -853,7 +853,7 @@ A0(PUBLIC, void, C_ROMlib_wakeup)
 #if defined (SDL)
   SDL_mutexP (ROMlib_shouldbeawake_mutex);
 #endif
-    shouldbeawake = TRUE;
+    shouldbeawake = true;
 #if defined (SDL)
   SDL_mutexV (ROMlib_shouldbeawake_mutex);
 #endif
@@ -900,7 +900,7 @@ A2 (PUBLIC trap, void, Delay, LONGINT, n, LONGINT *, ftp)	/* IMII-384 */
 #if defined (SDL)
       SDL_mutexP (ROMlib_shouldbeawake_mutex);
 #endif
-      shouldbeawake = FALSE;
+      shouldbeawake = false;
 
       tm.tmAddr = RM ((ProcPtr) P_ROMlib_wakeup);
       InsTime ((QElemPtr) &tm);
@@ -982,7 +982,7 @@ INTEGER ROMlib_processor     = env68040;
 #endif
 
 #if !defined(SYN68K)
-INTEGER ROMlib_hasFPU        = TRUE;
+INTEGER ROMlib_hasFPU        = true;
 #endif
 
 A2(PUBLIC trap, OSErrRET, SysEnvirons, INTEGER, vers, SysEnvRecPtr, p)
@@ -1002,9 +1002,9 @@ A2(PUBLIC trap, OSErrRET, SysEnvirons, INTEGER, vers, SysEnvRecPtr, p)
     p->hasFPU          = ROMlib_hasFPU;
 #else /* SYN68K */
     p->processor       = CWC(env68040);
-    p->hasFPU          = FALSE;
+    p->hasFPU          = false;
 #endif /* SYN68K */
-    p->hasColorQD      = TRUE;
+    p->hasColorQD      = true;
     p->keyBoardType    = CWC(envAExtendKbd);
     p->atDrvrVersNum   = 0;
     p->sysVRefNum      = BootDrive;

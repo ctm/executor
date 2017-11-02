@@ -72,7 +72,7 @@ PUBLIC void Executor::ROMlib_hfsinit( void )
  */
 
 #if !defined(LINUX) && !defined (MACOSX)
-#define EJECTABLE(buf) FALSE
+#define EJECTABLE(buf) false
 #else
 /* #warning this is not the proper way to tell if something is ejectable */
 #define EJECTABLE(buf) (buf[strlen(buf)-3] == 'f' && buf[strlen(buf)-2] == 'd')
@@ -130,13 +130,13 @@ PUBLIC OSErr Executor::ROMlib_ejectfloppy( LONGINT floppyfd )
 	  if (floppyfd & DOSFDBIT)
 	    {
 	      floppyfd &= ~DOSFDBIT;
-	      dosdisk_close(floppyfd, TRUE);
+	      dosdisk_close(floppyfd, true);
 	    }
 #if defined (MSDOS)
 	  else
 	    {
 	      floppyfd &= ~ASPIFDBIT;
-	      aspi_disk_close(floppyfd, TRUE);
+	      aspi_disk_close(floppyfd, true);
 	    }
 #endif
 	}
@@ -192,11 +192,11 @@ PRIVATE BOOLEAN isejectable( const charCx( *dname), LONGINT fd )
 #endif
 
     /* look for rfd[0-9] */
-    retval = FALSE;
+    retval = false;
 #if defined(MACOSX_) || defined (MACOSX)
     for (p = dname; p = index(p, 'r'); ++p) {
 	if (p[1] == 'f' && p[2] == 'd' && isdigit(p[3])) {
-	    retval = TRUE;
+	    retval = true;
 /*-->*/	    break;
 	}
     }
@@ -211,7 +211,7 @@ PRIVATE BOOLEAN isejectable( const charCx( *dname), LONGINT fd )
 	sr.sr_ioto	           = 1;
 	if (ioctl(fd, SGIOCREQ, &sr) == 0 && sr.sr_io_status == 0 &&
 							    Cx(inqp->ir_removable))
-	    retval = TRUE;
+	    retval = true;
     }
 #endif
     return retval;
@@ -340,8 +340,8 @@ Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, GUEST<LONGINT>
 
     pb.ioParam.ioVRefNum = CW(drivenum);
 
-    foundmap = FALSE;
-    first    = TRUE;
+    foundmap = false;
+    first    = true;
     offset = hfs.offset + PARTOFFSET * driver_block_size;
     if (ROMlib_readwrite(floppyfd, buf, PHYSBSIZE, offset, reading,
 					       bsize, maxbytes) == noErr) {
@@ -352,7 +352,7 @@ Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, GUEST<LONGINT>
 	    do {
 		if (strncmp((char *) partp->pmPartType, HFSPARTTYPE, 32)
 								    == 0) {
-		    foundmap = TRUE;
+		    foundmap = true;
 		    if (!first) {
 			++partition;
 			dqp = ROMlib_addtodq (2048L * 2, dname,
@@ -368,7 +368,7 @@ Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, GUEST<LONGINT>
 		    mess = ((LONGINT) err << 16) | drivenum;
 		    if (first) {
 			*messp = CL(mess);
-			first = FALSE;
+			first = false;
 		    } else
 			PPostEvent(diskEvt, mess, (GUEST<EvQElPtr> *) 0);
 		}
@@ -401,11 +401,11 @@ Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, GUEST<LONGINT>
 		mess = ((LONGINT) err << 16) | drivenum;
 		if (first) {
 		    *messp = CL(mess);
-		    first = FALSE;
+		    first = false;
 		} else 
 		    PPostEvent(diskEvt, mess, (GUEST<EvQElPtr> *) 0);
 	    }
-	    foundmap = TRUE;
+	    foundmap = true;
 	}
     }
 
@@ -432,7 +432,7 @@ Executor::try_to_mount_disk (const char *dname, LONGINT floppyfd, GUEST<LONGINT>
 	      warning_fs_log ("Found HFS volume on 0x%x %d", floppyfd,
 			      offset);
 	      offset -= VOLUMEINFOBLOCKNO * PHYSBSIZE;
-	      foundmap = TRUE;
+	      foundmap = true;
 /*-->*/	      break;
 	    } else if (buf[0] == 'H' && buf[1] == '+') {
 	      warning_fs_log ("Found HFS+ volume on 0x%x %d", floppyfd,
@@ -533,14 +533,14 @@ PUBLIC OSErr Executor::ROMlib_readwrite(LONGINT fd, char *buffer, LONGINT count,
 #endif
     err = noErr;
     newbuffer = 0;
-    needlseek = TRUE;
+    needlseek = true;
     if ((remainder = offset % blocksize)) {	/* |xxxDATA| */
 	remainder = blocksize - remainder;
 	totransfer = MIN(count, remainder);
 	newbuffer = (char *) (((long) alloca(blocksize + 3)+3) & ~3);
 	offset = offset / blocksize * blocksize;
 	JUMPTODONEIF(seekfp(fd, offset, SEEK_SET) < 0)
-	needlseek = FALSE;
+	needlseek = false;
 	JUMPTODONEIF(readfp(fd, newbuffer, blocksize) != blocksize)
 	if (rw == reading) {
 	    memmove(buffer, newbuffer+blocksize-remainder, totransfer);
@@ -558,7 +558,7 @@ PUBLIC OSErr Executor::ROMlib_readwrite(LONGINT fd, char *buffer, LONGINT count,
 	count -= remainder;
 	if (needlseek) {
 	    JUMPTODONEIF(seekfp(fd, offset, SEEK_SET) < 0)
-	    needlseek = FALSE;
+	    needlseek = false;
 	}
 	while (count) {
 	    totransfer = MIN(maxtransfer, count);
@@ -608,8 +608,8 @@ Executor::ROMlib_transphysblk (hfs_access_t *hfsp, LONGINT physblock, short nphy
     pb.ioReqCount = CL(PHYSBSIZE * (LONGINT nphysblocks));
     pb.ioPosMode  = CW(fsFromStart);
     pb.ioPosOffset = CL(physblock);
-    err = rw == reading ? PBRead ((ParmBlkPtr) &pb, FALSE) :
-    PBWrite((ParmBlkPtr) &pb, FALSE);
+    err = rw == reading ? PBRead ((ParmBlkPtr) &pb, false) :
+    PBWrite((ParmBlkPtr) &pb, false);
     if (actp)
         *actp = pb.ioActCount;
 #else

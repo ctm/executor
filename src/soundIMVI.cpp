@@ -128,7 +128,7 @@ void
 Executor::clear_pending_sounds (void)
 {
   call_back_info.headp = NULL;
-  call_back_info.busy = FALSE;
+  call_back_info.busy = false;
   if (sound_driver->HasSoundClearPending())
     SOUND_CLEAR_PENDING ();
   allchans = nullptr;
@@ -144,7 +144,7 @@ start_playing (SndChannelPtr chanp, SndDoubleBufferHeaderPtr paramp,
 	       int which_buf)
 {
   ProcPtr pp;
-  static bool task_inserted = FALSE;
+  static bool task_inserted = false;
 
   pp = MR (paramp->dbhDoubleBack);
   if (pp)
@@ -161,13 +161,13 @@ start_playing (SndChannelPtr chanp, SndDoubleBufferHeaderPtr paramp,
 	  call_back_info.headp = paramp;
 	  call_back_info.chanp = chanp;
 	  call_back_info.current_buffer = which_buf;
-	  call_back_info.busy = TRUE;
+	  call_back_info.busy = true;
 	  if (!task_inserted)
 	    {
 	      call_back_info.task.tmAddr
 		= RM ((ProcPtr) P_sound_timer_handler);
 	      InsTime ((QElemPtr) &call_back_info.task);
-	      task_inserted = TRUE;
+	      task_inserted = true;
 	    }
 	  duration_in_mills = (((long long) 1000 * (1 << 16)
 				* CL (dbp->dbNumFrames))
@@ -177,7 +177,7 @@ start_playing (SndChannelPtr chanp, SndDoubleBufferHeaderPtr paramp,
       else
 	{
 	  RmvTime ((QElemPtr) &call_back_info.task);
-	  task_inserted = FALSE;
+	  task_inserted = false;
 	}
     }
   return noErr;
@@ -194,7 +194,7 @@ A0 (PUBLIC, void, C_sound_timer_handler)
       current_buffer = call_back_info.current_buffer;
       pp = MR (call_back_info.headp->dbhDoubleBack);
       dbp = MR (call_back_info.headp->dbhBufferPtr[current_buffer]);
-      call_back_info.busy = FALSE;
+      call_back_info.busy = false;
       start_playing (call_back_info.chanp, call_back_info.headp,
 		     current_buffer ^ 1);
       dbp->dbFlags.raw_and( CLC (~dbBufferReady) );

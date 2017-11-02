@@ -53,7 +53,7 @@ static CALLBACK LONG my_fault_proc (LPEXCEPTION_POINTERS unused)
   if (ROMlib_fullscreen_p)
     {
       SDL_Quit ();
-      ROMlib_exit = TRUE;
+      ROMlib_exit = true;
     }
 #endif
   MessageBox (NULL, "Unexpected Application Failure",

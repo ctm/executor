@@ -63,13 +63,13 @@ Executor::dialog_create_item (DialogPeek dp, itmp dst, itmp src,
   if (CB (dst->itmtype) & ctrlItem)
     {
       Rect r;
-      bool visible_p = TRUE;
+      bool visible_p = true;
       ControlHandle ctl;
       
       r = dst->itmr;
       if (CW (r.left) > 8192)
 	{
-	  visible_p = FALSE;
+	  visible_p = false;
 	  r.left = CW (CW (r.left) - 16384);
 	  r.right = CW (CW (r.right) - 16384);
 	}
@@ -255,7 +255,7 @@ ROMlib_new_dialog_common (DialogPtr dp,
 	   te = TENew (&emptyrect, &emptyrect);
 	 
 	 DIALOG_TEXTH_X (dp) = RM (te);
-	 TEAutoView (TRUE, te);
+	 TEAutoView (true, te);
 	 DisposHandle (TE_HTEXT (te));
 	 TE_HTEXT_X (te) = CLC_NULL;
        }
@@ -303,7 +303,7 @@ P9 (PUBLIC pascal trap, CDialogPtr, NewCDialog, Ptr, storage, 	/* IMI-412 */
     WindowPtr, behind, BOOLEAN, go_away_flag, LONGINT, ref_con, Handle, items)
 {
   return (CDialogPtr) ROMlib_new_dialog_common ((DialogPtr) storage,
-						/* color */ TRUE, NULL, NULL,
+						/* color */ true, NULL, NULL,
 						bounds, title, visible_p, proc_id,
 						behind, go_away_flag, ref_con,
 						items);
@@ -314,7 +314,7 @@ P9 (PUBLIC pascal trap, DialogPtr, NewDialog, Ptr, storage, 	/* IMI-412 */
     WindowPtr, behind, BOOLEAN, go_away_flag, LONGINT, ref_con, Handle, items)
 {
   return ROMlib_new_dialog_common ((DialogPtr) storage,
-				   /* not color */ FALSE, NULL, NULL,
+				   /* not color */ false, NULL, NULL,
 				   bounds, title, visible_p, proc_id,
 				   behind, go_away_flag, ref_con, items);
 }

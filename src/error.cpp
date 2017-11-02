@@ -65,7 +65,7 @@ error_options[] =
  * "-".  For example, the string "all,-mem" will turn on all debugging,
  * and then turn off memory checking.
  *
- * Returns TRUE iff successful, FALSE if there was an error.
+ * Returns true iff successful, false if there was an error.
  */
 bool
 error_parse_option_string (const char *options)
@@ -75,7 +75,7 @@ error_parse_option_string (const char *options)
   int opt_len;
   bool success_p;
 
-  success_p = TRUE;
+  success_p = true;
   option_name = (char*)alloca (strlen (options) + 1);  /* big enough for any option.*/
   options_end = options + strlen (options);
 
@@ -95,7 +95,7 @@ error_parse_option_string (const char *options)
       if (opt_len == 0)
 	{
 	  fprintf (stderr, "Empty debug option specified.\n");
-	  success_p = FALSE;
+	  success_p = false;
 	}
       else
 	{
@@ -108,11 +108,11 @@ error_parse_option_string (const char *options)
 	      ++p;
 	      --opt_len;
 	      option_name[opt_len - 1] = '\0';
-	      on_p = FALSE;
+	      on_p = false;
 	    }
 	  else
 	    {
-	      on_p = TRUE;
+	      on_p = true;
 	    }
 
 	  strncpy (option_name, p, opt_len);
@@ -143,7 +143,7 @@ error_parse_option_string (const char *options)
 	    {
 	      fprintf (stderr, "Unknown debugging option `%s'.\n",
 		       option_name);
-	      success_p = FALSE;
+	      success_p = false;
 	    }
 	}
     }
@@ -230,7 +230,7 @@ static void err_printf (const char *fmt, ...);
 
 #if defined (SUPPORT_LOG_ERR_TO_RAM)
 
-/* TRUE iff we should try to log errors to RAM when possible. */
+/* true iff we should try to log errors to RAM when possible. */
 bool log_err_to_ram_p;
 
 /* Current number of characters in the err buf, not counting the "\0". */
@@ -251,7 +251,7 @@ error_dump_ram_err_buf (const char *separator_message)
       bool old_log_p;
       
       old_log_p = log_err_to_ram_p;
-      log_err_to_ram_p = FALSE;	/* print it, don't log it! */
+      log_err_to_ram_p = false;	/* print it, don't log it! */
       err_printf ("%s%s", ram_err_buf, separator_message);
       log_err_to_ram_p = old_log_p;
 
@@ -274,7 +274,7 @@ error_dump_at_exit (void)
 static void
 err_vprintf (const char *fmt, va_list ap)
 {
-  static bool beenhere_p = FALSE;
+  static bool beenhere_p = false;
   FILE *fp;
 
   fp = get_stream ();
@@ -297,7 +297,7 @@ err_vprintf (const char *fmt, va_list ap)
 	       ROMlib_stack_size / MB,
 	       (ROMlib_stack_size % MB) * 100 / MB,
 	       ROMlib_command_line);
-      beenhere_p = TRUE;
+      beenhere_p = true;
     }
 
   if (fmt == NULL)
@@ -314,13 +314,13 @@ err_vprintf (const char *fmt, va_list ap)
     }
   else
     {
-      static bool atexit_set_up = FALSE;
+      static bool atexit_set_up = false;
 
       /* Set ourselves up to dump everything on exit. */
       if (!atexit_set_up)
 	{
 	  atexit (error_dump_at_exit);
-	  atexit_set_up = TRUE;
+	  atexit_set_up = true;
 	}
 
       /* Make sure we've got at least 64K free for the upcoming sprintf.

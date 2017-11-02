@@ -38,7 +38,7 @@ using namespace Executor;
 	  CALLxxx;							\
 	}								\
     }									\
-  while (FALSE)
+  while (false)
 
 P2 (PUBLIC pascal trap, void, FillCRect,
     Rect *, r, PixPatHandle, pixpat)

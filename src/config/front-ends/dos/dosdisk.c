@@ -185,7 +185,7 @@ dosdisk_close (int disk, bool eject_p)
     retval = -1;
   else
     {
-      dcache_invalidate (disk | DOSFDBIT, TRUE);
+      dcache_invalidate (disk | DOSFDBIT, true);
       d->is_open = 0;
       retval = 0;
     }
@@ -386,7 +386,7 @@ dosdisk_open (int disk, LONGINT *bsizep, drive_flags_t *flagsp)
   d->disk_number       = disk;
   d->is_open           = 1;
 
-  dcache_invalidate (disk | DOSFDBIT, FALSE);
+  dcache_invalidate (disk | DOSFDBIT, false);
 
   lock_media (disk);
   check_and_clear_media_change (disk);
@@ -427,13 +427,13 @@ dosdisk_seek (int disk, off_t pos, int unused)
 		   * d->sectors_per_track * BYTES_PER_BLOCK);
   if (pos > bytes_on_disk)
     {
-      static char been_here = FALSE;
+      static char been_here = false;
 
       if (!been_here)
 	{
 	  warning_fs_log ("pos = %ld, bytes_on_disk = %lu",
 			  (long) pos, bytes_on_disk);
-	  been_here = TRUE;
+	  been_here = true;
 	}
       /* pos = bytes_on_disk; NO! */
     }
@@ -610,7 +610,7 @@ dosdisk_read (int disk, void *buf, int num_bytes)
   bool old_slow_clock_p;
   bool changed;
 
-  changed = FALSE;
+  changed = false;
   orig_buf = buf;
   orig_num_bytes = num_bytes;
   /* Make sure they've opened this disk. */
@@ -621,7 +621,7 @@ dosdisk_read (int disk, void *buf, int num_bytes)
     }
 
   /* Note that it's OK for the 1024 Hz clock to perform badly here. */
-  old_slow_clock_p = set_expect_slow_clock (TRUE);
+  old_slow_clock_p = set_expect_slow_clock (true);
 
   start_pos = d->fpos;
 
@@ -653,17 +653,17 @@ dosdisk_read (int disk, void *buf, int num_bytes)
       if (dcache_read (disk | DOSFDBIT, buf, d->fpos, block_size, NULL))
 	{
 	  bytes_read = block_size;
-	  cache_hit_p = TRUE;
+	  cache_hit_p = true;
 	}
       else if (d->is_cd_rom) {
 	  int error_count;
 	  uint32 bad_data_magic_cookie;
 	  bool cookie_failed_p;
 
-	  cache_hit_p = FALSE;
+	  cache_hit_p = false;
 
 	  bad_data_magic_cookie = 0xDE52AA03;  /* Unlikely bytes */
-	  cookie_failed_p = FALSE;
+	  cookie_failed_p = false;
 	  error_count = 0;
 
 	  do
@@ -714,7 +714,7 @@ dosdisk_read (int disk, void *buf, int num_bytes)
 		  else
 		    {
 		      bad_data_magic_cookie ^= 0xF723567F;  /* arbitrary */
-		      cookie_failed_p = TRUE;
+		      cookie_failed_p = true;
 		    }
 		}
 	    }
@@ -728,7 +728,7 @@ dosdisk_read (int disk, void *buf, int num_bytes)
 	  }
 	  bytes_read = sectors_to_read * CD_BLOCK_SIZE;
       } else {
-	  cache_hit_p = FALSE;
+	  cache_hit_p = false;
 
 	  compute_sector_info (d, d->fpos / BYTES_PER_BLOCK, &head, &track,
 			       &sector, &blocks_left_on_track);
@@ -877,7 +877,7 @@ dosdisk_write (int disk, const void *buf, int num_bytes)
   bool old_slow_clock_p;
   bool changed;
 
-  changed = FALSE;
+  changed = false;
   orig_num_bytes = num_bytes;
   /* Make sure they've opened this disk. */
   if (d == NULL)
@@ -893,10 +893,10 @@ dosdisk_write (int disk, const void *buf, int num_bytes)
   gui_assert ((num_bytes % BYTES_PER_BLOCK) == 0);
 
   /* Note that it's OK for the 1024 Hz clock to perform badly here. */
-  old_slow_clock_p = set_expect_slow_clock (TRUE);
+  old_slow_clock_p = set_expect_slow_clock (true);
 
   /* Invalidate the cache on any write. */
-  dcache_invalidate (disk | DOSFDBIT, TRUE);
+  dcache_invalidate (disk | DOSFDBIT, true);
 
   /* Loop until all bytes are written. */
   while (num_bytes != 0)

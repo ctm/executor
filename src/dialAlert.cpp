@@ -95,13 +95,13 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
        if (color_p)
 	 dp = ((DialogPeek)
 	       NewCDialog  (NULL, &adjusted_rect,
-			    (StringPtr) "", FALSE, dBoxProc,
-			    (WindowPtr) -1, FALSE, 0L, h));
+			    (StringPtr) "", false, dBoxProc,
+			    (WindowPtr) -1, false, 0L, h));
        else
 	 dp = ((DialogPeek)
 	       NewDialog  (NULL, &adjusted_rect,
-			   (StringPtr) "", FALSE, dBoxProc,
-			   (WindowPtr) -1, FALSE, 0L, h));
+			   (StringPtr) "", false, dBoxProc,
+			   (WindowPtr) -1, false, 0L, h));
        
        if (color_p)
 	 {
@@ -210,7 +210,7 @@ A3(PRIVATE, Handle, lockres, ResType, rt, INTEGER, id, BOOLEAN, flag)
 {
     Handle retval;
 
-    SetResLoad(TRUE);  
+    SetResLoad(true);  
     if ((retval = GetResource(rt, id))) {
 	if (flag)
 	    HNoPurge(retval);
@@ -261,12 +261,12 @@ A2(PRIVATE, void, lockalert, INTEGER, id, BOOLEAN, flag)
 
 P1(PUBLIC pascal trap, void, CouldAlert, INTEGER, id)	/* IMI-420 */
 {
-    lockalert(id, TRUE);
+    lockalert(id, true);
 }
 
 P1(PUBLIC pascal trap, void, FreeAlert, INTEGER, id)	/* IMI-420 */
 {
-    lockalert(id, FALSE);
+    lockalert(id, false);
 }
 
 A2(PRIVATE, void, lockdialog, INTEGER, id, BOOLEAN, flag)
@@ -281,10 +281,10 @@ A2(PRIVATE, void, lockdialog, INTEGER, id, BOOLEAN, flag)
 
 P1(PUBLIC pascal trap, void, CouldDialog, INTEGER, id)	/* IMI-415 */
 {
-    lockdialog(id, TRUE);
+    lockdialog(id, true);
 }
 
 P1(PUBLIC pascal trap, void, FreeDialog, INTEGER, id)	/* IMI-415 */
 {
-    lockdialog(id, FALSE);
+    lockdialog(id, false);
 }

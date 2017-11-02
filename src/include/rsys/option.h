@@ -85,7 +85,7 @@ opt_database_t opt_alloc_db (void);
 int opt_parse (opt_database_t &db, option_vec opts,
 	       int *argc, char *argv[]);
 
-/* returns TRUE if options was specified */
+/* returns true if options was specified */
 int opt_int_val (opt_database_t &db, std::string opt, int *retval,
 		 bool *parse_error_p);
 

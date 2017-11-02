@@ -26,7 +26,7 @@ static void __attribute__ ((stdcall))
   /* Virtual interrupt */
   if ( ! _virtual_interrupts_blocked )
     {
-      cpu_state.interrupt_pending[M68K_TIMER_PRIORITY] = TRUE;
+      cpu_state.interrupt_pending[M68K_TIMER_PRIORITY] = true;
       SET_INTERRUPT_STATUS (INTERRUPT_STATUS_CHANGED);
     }
 }
@@ -38,7 +38,7 @@ int Timer32_Init(void)
 {
   /* Allow 1 ms of drift so we don't chew the CPU with the timer */
   Timer32 = timeSetEvent(1000/60, 1, MTimer_Intr, 0, TIME_PERIODIC);
-  return (Timer32 ? TRUE : FALSE);
+  return (Timer32 ? true : false);
 }
 
 /* Finish -- this needs to be called for cleanup */

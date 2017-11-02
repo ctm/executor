@@ -241,7 +241,7 @@ P3(PUBLIC pascal trap, void, MapRgn, RgnHandle, rh, Rect *, srcr, Rect *, dstr)
 		}
 	    } while (!done);
 	    *op++ = CWC(32767);
-	    ROMlib_sizergn(rh, FALSE);
+	    ROMlib_sizergn(rh, false);
 	}
     }
 }

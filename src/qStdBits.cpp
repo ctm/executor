@@ -41,9 +41,9 @@ src_dst_overlap_and_dst_below_src_p (const Rect *srcr, const Rect *dstr,
       && (CW (srcr->top) + dv)  <= (CW (dstr->top))
       && (CW (srcr->left) + dh) <  (CW (dstr->right))
       && (CW (dstr->left))      <  (CW (srcr->right) + dh))
-    return TRUE;
+    return true;
   else
-    return FALSE;
+    return false;
 }
 
 static inline bool
@@ -511,7 +511,7 @@ P5 (PUBLIC pascal trap, void, StdBits,
     const Rect *, src_rect, const Rect *, dst_rect,
     INTEGER, mode, RgnHandle, mask)
 {
-  StdBitsPicSaveFlag (src_bogo_map, src_rect, dst_rect, mode, mask, TRUE);
+  StdBitsPicSaveFlag (src_bogo_map, src_rect, dst_rect, mode, mask, true);
 }
   
 static void
@@ -539,7 +539,7 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
   const rgb_spec_t *dst_rgb_spec;
   
 #if defined (SAVE_CURSOR)
-  int save_cursor_visible_p = FALSE;
+  int save_cursor_visible_p = false;
   int screen_src_p;
 #endif /* SAVE_CURSOR */
   
@@ -592,8 +592,8 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
 #if defined (SAVE_CURSOR)
       if (screen_src_p)
 	{
-	  save_cursor_visible_p = host_set_cursor_visible (FALSE);
-	  screen_src_p = FALSE;
+	  save_cursor_visible_p = host_set_cursor_visible (false);
+	  screen_src_p = false;
 	}
 #endif /* SAVE_CURSOR */
       
@@ -663,8 +663,8 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
 #if defined (SAVE_CURSOR)
       if (screen_src_p)
 	{
-	  save_cursor_visible_p = host_set_cursor_visible (FALSE);
-	  screen_src_p = FALSE;
+	  save_cursor_visible_p = host_set_cursor_visible (false);
+	  screen_src_p = false;
 	}
 #endif /* SAVE_CURSOR */
       
@@ -724,8 +724,8 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
 #if defined (SAVE_CURSOR)
       if (screen_src_p)
 	{
-	  save_cursor_visible_p = host_set_cursor_visible (FALSE);
-	  screen_src_p = FALSE;
+	  save_cursor_visible_p = host_set_cursor_visible (false);
+	  screen_src_p = false;
 	}
 #endif /* SAVE_CURSOR */
       
@@ -761,7 +761,7 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
 	pixmap_black_white (new_src, &black_pixel, &white_pixel);
 	
 	ROMlib_blt_rgn_update_dirty_rect (rgn, srcCopy,
-					  FALSE, dst_depth,
+					  false, dst_depth,
 					  src, new_src,
 					  &copy_rect, &copy_rect,
 					  black_pixel, white_pixel);
@@ -772,13 +772,13 @@ ROMlib_real_copy_bits_helper (PixMap *src, PixMap *dst,
     }
   
   ROMlib_blt_rgn_update_dirty_rect
-    (mask_region, mode, FALSE, dst_depth,
+    (mask_region, mode, false, dst_depth,
      src, dst, src_rect, dst_rect,
      fg_color, bk_color);
 
 #if defined (SAVE_CURSOR)
   if (save_cursor_visible_p)
-    host_set_cursor_visible (TRUE);
+    host_set_cursor_visible (true);
 #endif
   
   DisposeRgn (mask_region);
@@ -805,7 +805,7 @@ ROMlib_real_copy_bits (PixMap *src, PixMap *dst,
   bool shrink_first_p;
 
   if (src->pixelSize == dst->pixelSize)
-    shrink_first_p = FALSE;
+    shrink_first_p = false;
   else
     {
       int default_nbits, new_nbits;
@@ -830,7 +830,7 @@ ROMlib_real_copy_bits (PixMap *src, PixMap *dst,
       INTEGER temp_row_bytes;
       int src_depth;
 #if defined (SAVE_CURSOR)
-      int save_cursor_visible_p = FALSE;
+      int save_cursor_visible_p = false;
       int screen_src_p;
 #endif /* SAVE_CURSOR */
       TEMP_ALLOC_DECL (temp_alloc_bits);
@@ -839,8 +839,8 @@ ROMlib_real_copy_bits (PixMap *src, PixMap *dst,
       screen_src_p = active_screen_addr_p (src);
       if (screen_src_p)
 	{
-	  save_cursor_visible_p = host_set_cursor_visible (FALSE);
-	  screen_src_p = FALSE;
+	  save_cursor_visible_p = host_set_cursor_visible (false);
+	  screen_src_p = false;
 	}
 #endif /* SAVE_CURSOR */
 

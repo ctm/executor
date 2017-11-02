@@ -52,5 +52,5 @@ Executor::arch_init (void)
   arch_type = (i486_p ? ARCH_TYPE_I486 : ARCH_TYPE_I386);
 #endif /* !ALWAYS_ON_I486 */
 
-  return TRUE;
+  return true;
 }

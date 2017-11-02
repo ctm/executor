@@ -35,7 +35,7 @@ callback_init (void)
     callback_data[i].func = EMPTY_SLOT;
 
   /* Flush the caches. */
-  ROMlib_destroy_blocks (0, ~0, FALSE);
+  ROMlib_destroy_blocks (0, ~0, false);
 }
 
 

@@ -49,17 +49,17 @@ uint16 vga_window_selector;
  */
 uint16 vga_screen_selector;
 
-/* TRUE iff we should pretend there's no VBE video driver. */
+/* true iff we should pretend there's no VBE video driver. */
 bool only_use_vga_p;
 
-/* TRUE iff we should try to make %ds enclose the real linear frame
+/* true iff we should try to make %ds enclose the real linear frame
  * buffer and thereby give programs direct access to the frame buffer.
  * Having such a "fat %ds" is dangerous, but can make graphics much
  * faster, esp. for programs that require "refresh" mode.
  */
 bool try_to_use_fat_ds_vga_hack_p;
 
-/* TRUE iff we're actually using the fat %ds vga hack. */
+/* true iff we're actually using the fat %ds vga hack. */
 static bool actually_using_fat_ds_vga_hack_p;
 
 /* Saved vga state and its size, so we can clean up when we exit. */
@@ -79,17 +79,17 @@ static uint8 set_palette_during_vbl_mask;
 /* Bits per DAC element; usually 6, never more than 8. */
 static int bits_per_dac_element = 6;
 
-/* TRUE iff the DAC can be switched to 8bpp. */
+/* true iff the DAC can be switched to 8bpp. */
 static bool switchable_dac_p;
 
-/* Makes a call to the VESA driver, and returns TRUE iff successful. */
+/* Makes a call to the VESA driver, and returns true iff successful. */
 static bool
 vesa_call (int eax, __dpmi_regs *r)
 {
   bool success_p;
 
   if (only_use_vga_p)  /* only old-style VGA allowed? */
-    success_p = FALSE;
+    success_p = false;
   else
     {
       r->d.eax = eax;
@@ -122,9 +122,9 @@ getmode (void)
 	}
       else
 	{
-	  only_use_vga_p = TRUE;
+	  only_use_vga_p = true;
 	  retval = getmode ();
-	  only_use_vga_p = FALSE;
+	  only_use_vga_p = false;
 	}
     }
   else
@@ -196,7 +196,7 @@ static bool (*state_glue_funcp) (state_func_t, unsigned *);
  * the OPERATION.  If non-NULL, and the operation is
  * COMPUTE_BUFFER_SIZE, *buffer_size_ret is filled in with the
  * buffer size.  This routine assumes the state buffer is at
- * `dos_buf_segment:0'.  Returns TRUE on success, FALSE on failure.
+ * `dos_buf_segment:0'.  Returns true on success, false on failure.
  */
 static bool
 vesa_state_glue (state_func_t operation, unsigned *buffer_size_ret)
@@ -214,12 +214,12 @@ vesa_state_glue (state_func_t operation, unsigned *buffer_size_ret)
   if (vesa_call (VESA_STATE_CONTROL, &regs))
     {
       buf_size = regs.x.bx * 64;  /* only valid for COMPUTE_BUFFER_SIZE */
-      success_p = TRUE;
+      success_p = true;
     }
   else
     {
       buf_size = 0;
-      success_p = FALSE;
+      success_p = false;
     }
 
   if (buffer_size_ret != NULL)
@@ -251,12 +251,12 @@ vga_state_glue (state_func_t operation, unsigned *buffer_size_ret)
   if (__dpmi_int (0x10, &regs) == 0 && regs.h.al == 0x1C)
     {
       buf_size = regs.x.bx * 64;  /* only valid for COMPUTE_BUFFER_SIZE */
-      success_p = TRUE;
+      success_p = true;
     }
   else
     {
       buf_size = 0;
-      success_p = FALSE;
+      success_p = false;
     }
 
   if (buffer_size_ret != NULL)
@@ -345,8 +345,8 @@ save_vga_state (void)
 }
 
 
-/* Attempts to fetch the VESA information block.  Returns TRUE
- * iff successful, else FALSE (in which case it should be assumed
+/* Attempts to fetch the VESA information block.  Returns true
+ * iff successful, else false (in which case it should be assumed
  * that no VESA driver is present).
  */
 static bool
@@ -364,7 +364,7 @@ get_vesa_info_block (vesa_info_t *vesa_info)
   regs.x.di = 0;
 
   if (!vesa_call (VESA_GET_VGA_INFO, &regs))
-    success_p = FALSE;
+    success_p = false;
   else
     {
       movedata (dos_buf_selector, 0, dos_pm_ds, (unsigned) vesa_info,
@@ -391,14 +391,14 @@ call_vbe2_pmi (int ax, int bx, int cx, int dx)
 
 
 /* Sets up the VBE protected mode interface pointers.  See VBE function
- * 0x0A for more information.  Returns TRUE iff successful.
+ * 0x0A for more information.  Returns true iff successful.
  */
 static bool
 set_up_vbe2_protected_mode_interface (void)
 {
   bool success_p;
 
-  success_p = FALSE;  /* default */
+  success_p = false;  /* default */
   set_window_call_codep = NULL;
   set_display_start_codep = NULL;
   set_palette_data_code_p = NULL;
@@ -427,7 +427,7 @@ set_up_vbe2_protected_mode_interface (void)
 					 + vesa_pmi->set_display_start_offset);
 	      set_palette_data_code_p = ((char *) vesa_pmi
 					 + vesa_pmi->set_palette_data_offset);
-	      success_p = TRUE;
+	      success_p = true;
 
 	      if (vesa_pmi->io_priv_offset && mmap_io_sel == 0)
 		{
@@ -451,7 +451,7 @@ set_up_vbe2_protected_mode_interface (void)
 			{
 			  mmap_io_sel = 0;
 			  set_window_codep = NULL;
-			  success_p = FALSE;
+			  success_p = false;
 			}
 		      else
 			{
@@ -477,7 +477,7 @@ vgahost_init (int max_width, int max_height, int max_bpp, bool fixed_p,
   /* Grab a 64K selector for 0xA000:0000, for the frame buffer. */
   sel = __dpmi_segment_to_descriptor (0xA000);
   if (sel == -1)
-    return FALSE;
+    return false;
   vga_window_selector = sel;
   vga_screen_selector = -1;  /* no value yet. */
 
@@ -510,7 +510,7 @@ vgahost_init (int max_width, int max_height, int max_bpp, bool fixed_p,
 	}
     }
 
-  return TRUE;
+  return true;
 }
 
 
@@ -605,19 +605,19 @@ vgahost_compute_vga_mode_list (void)
   vesa_info_t vesa_info;
   static const vga_mode_t standard_vga_modes[NUM_STANDARD_VGA_MODES] =
     {
-      { 640, 480, 80, 0x12, 2, TRUE, FALSE, FALSE, 0, 0, 65536, 65536, -1 }
+      { 640, 480, 80, 0x12, 2, true, false, false, 0, 0, 65536, 65536, -1 }
     };
   static const vga_mode_t standard_vesa_modes[NUM_VESA_MODES] =
     {
       /* Many of these fields are intentionally left blank or have defaults. */
-      { 640,  400,  0, 0x100, 3, FALSE, FALSE, TRUE, 0, 0, 65536, 65536, -1 },
-      { 640,  480,  0, 0x101, 3, FALSE, FALSE, TRUE, 0, 0, 65536, 65536, -1 },
-      { 800,  600,  0, 0x102, 2, TRUE, FALSE, FALSE, 0, 0, 65536, 65536, -1 },
-      { 800,  600,  0, 0x103, 3, FALSE, FALSE, TRUE, 0, 0, 65536, 65536, -1 },
-      { 1024, 768,  0, 0x104, 2, TRUE,  FALSE, TRUE, 0, 0, 65536, 65536, -1 },
-      { 1024, 768,  0, 0x105, 3, FALSE, FALSE, TRUE, 0, 0, 65536, 65536, -1 },
-      { 1280, 1024, 0, 0x106, 2, TRUE,  FALSE, TRUE, 0, 0, 65536, 65536, -1 },
-      { 1280, 1024, 0, 0x107, 3, FALSE, FALSE, TRUE, 0, 0, 65536, 65536, -1 },
+      { 640,  400,  0, 0x100, 3, false, false, true, 0, 0, 65536, 65536, -1 },
+      { 640,  480,  0, 0x101, 3, false, false, true, 0, 0, 65536, 65536, -1 },
+      { 800,  600,  0, 0x102, 2, true, false, false, 0, 0, 65536, 65536, -1 },
+      { 800,  600,  0, 0x103, 3, false, false, true, 0, 0, 65536, 65536, -1 },
+      { 1024, 768,  0, 0x104, 2, true,  false, true, 0, 0, 65536, 65536, -1 },
+      { 1024, 768,  0, 0x105, 3, false, false, true, 0, 0, 65536, 65536, -1 },
+      { 1280, 1024, 0, 0x106, 2, true,  false, true, 0, 0, 65536, 65536, -1 },
+      { 1280, 1024, 0, 0x107, 3, false, false, true, 0, 0, 65536, 65536, -1 },
     };
   int num_modes, i;
   __dpmi_regs regs;
@@ -731,7 +731,7 @@ vgahost_compute_vga_mode_list (void)
 
 	  m->row_bytes       = mode_info.row_bytes;
 	  m->win_granularity = mode_info.win_granularity * 1024;
-	  m->interlaced_p    = FALSE;
+	  m->interlaced_p    = false;
 	  if ((mode_info.win_a_attributes & 0x3) == 0x3)
 	    m->win_read = 0;
 	  else if ((mode_info.win_b_attributes & 0x3) == 0x3)
@@ -761,7 +761,7 @@ vgahost_compute_vga_mode_list (void)
 	      if (sel != -1)
 		{
 		  mode_num |= USE_LINEAR_FBUF;
-		  m->multi_window_p = FALSE;
+		  m->multi_window_p = false;
 		  m->screen_selector = sel;
 		  m->win_size = m->row_bytes * m->height;
 		}
@@ -972,7 +972,7 @@ vgahost_illegal_mode_p (int width, int height, int bpp,
 			bool exact_match_p)
 {
   if (!actually_using_fat_ds_vga_hack_p || vga_current_mode == NULL)
-    return FALSE;
+    return false;
   return (vdriver_fbuf == vdriver_real_screen_baseaddr
 	  && bpp != (1 << vga_current_mode->log2_bpp));
 }
@@ -980,14 +980,14 @@ vgahost_illegal_mode_p (int width, int height, int bpp,
 
 /* Attempts to mmap sufficient memory for the specified video mode
  * over the memory pointed to by vdriver_fbuf, which must be
- * page-aligned.  Returns TRUE if successful, else FALSE.
+ * page-aligned.  Returns true if successful, else false.
  */
 bool
 vgahost_mmap_linear_fbuf (const vga_mode_t *mode)
 {
   bool success_p;
 
-  success_p = FALSE; /* Default */
+  success_p = false; /* Default */
   if (mode->phys_base_addr != 0)	/* do we have a linear frame buffer? */
     {
       if (!__djgpp_map_physical_memory (vdriver_fbuf,
@@ -996,7 +996,7 @@ vgahost_mmap_linear_fbuf (const vga_mode_t *mode)
 					 & ~(DPMI_PAGE_SIZE - 1)),
 					mode->phys_base_addr))
 	{
-	  success_p = TRUE;
+	  success_p = true;
 	}
       else if (mode->screen_selector != 0 && try_to_use_fat_ds_vga_hack_p)
 	{
@@ -1011,8 +1011,8 @@ vgahost_mmap_linear_fbuf (const vga_mode_t *mode)
 						       &fbuf_base))
 		{
 		  vdriver_fbuf = (uint8 *) (fbuf_base - executor_base);
-		  actually_using_fat_ds_vga_hack_p = TRUE;
-		  success_p = TRUE;
+		  actually_using_fat_ds_vga_hack_p = true;
+		  success_p = true;
 		}
 	    }
 	}
@@ -1029,8 +1029,8 @@ vgahost_mmap_linear_fbuf (const vga_mode_t *mode)
 
 
 /* Replaces the frame buffer space with RAM, instead of memory
- * mapped on to the video card.  Returns TRUE If successful,
- * else FALSE.
+ * mapped on to the video card.  Returns true If successful,
+ * else false.
  */
 bool
 vgahost_unmap_linear_fbuf (unsigned long num_bytes)
@@ -1040,7 +1040,7 @@ vgahost_unmap_linear_fbuf (unsigned long num_bytes)
   if (actually_using_fat_ds_vga_hack_p)
     {
       /* Can't unmap a fat %ds frame buffer! */
-      success_p = FALSE;
+      success_p = false;
     }
   else
     {
@@ -1066,7 +1066,7 @@ vgahost_set_mode (vga_mode_t *mode)
   ColorSpec clut[256];
   int i;
 
-  success_p = TRUE;
+  success_p = true;
 
   /* Actually set up the current mode.   Always do this, even if the
    * mode isn't changing, because sometimes the video mode gets
@@ -1078,7 +1078,7 @@ vgahost_set_mode (vga_mode_t *mode)
       if (!setmode (mode->mode_number ^ VBE_MODE_BIT))
 
 	{
-	  success_p = FALSE;
+	  success_p = false;
 	  goto done;
 	}
 	  
@@ -1090,7 +1090,7 @@ vgahost_set_mode (vga_mode_t *mode)
     {
       if (!setmode (mode->mode_number))
 	{
-	  success_p = FALSE;
+	  success_p = false;
 	  goto done;
 	}
     }

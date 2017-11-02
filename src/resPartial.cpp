@@ -34,7 +34,7 @@ P4 (PUBLIC pascal trap, void, ReadPartialResource,
 	  LONGINT cur_size;
 	  LONGINT loc;
 	  
-	  cur_size = ROMlib_SizeResource (res, FALSE);
+	  cur_size = ROMlib_SizeResource (res, false);
 	  err = CW (ResErr);
 	  if (err == noErr && (uint32) offset + count > (uint32) cur_size)
 	    err = inputOutOfBounds;

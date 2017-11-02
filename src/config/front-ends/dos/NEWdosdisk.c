@@ -324,13 +324,13 @@ dosdisk_seek (int disk, off_t pos, int unused)
 		   * d->sectors_per_track * BYTES_PER_BLOCK);
   if (pos > bytes_on_disk)
     {
-      static char been_here = FALSE;
+      static char been_here = false;
 
       if (!been_here)
 	{
 	  warning_fs_log ("pos = %ld, bytes_on_disk = %lu",
 			  (long) pos, bytes_on_disk);
-	  been_here = TRUE;
+	  been_here = true;
 	}
       /* pos = bytes_on_disk; NO! */
     }
@@ -581,7 +581,7 @@ dosdisk_read (int disk, void *buf, int num_bytes)
     }
 
   /* Note that it's OK for the 1024 Hz clock to perform badly here. */
-  old_slow_clock_p = set_expect_slow_clock (TRUE);
+  old_slow_clock_p = set_expect_slow_clock (true);
 
   start_pos = d->fpos;
 
@@ -613,10 +613,10 @@ dosdisk_read (int disk, void *buf, int num_bytes)
       if (dcache_read (disk | DOSFDBIT, buf, d->fpos, block_size))
 	{
 	  bytes_read = block_size;
-	  cache_hit_p = TRUE;
+	  cache_hit_p = true;
 	}
       else if (d->is_cd_rom) {
-	  cache_hit_p = FALSE;
+	  cache_hit_p = false;
 	  sectors_to_read = num_bytes / CD_BLOCK_SIZE;
 #if 0
 	  if (sectors_to_read > LOWMEM_CD_BUFFER_BLOCKS)
@@ -640,7 +640,7 @@ dosdisk_read (int disk, void *buf, int num_bytes)
 	    bool cookie_failed_p;
 
 	    bad_data_magic_cookie = 0xDE52AA03;  /* Unlikely bytes */
-	    cookie_failed_p = FALSE;
+	    cookie_failed_p = false;
 	    error_count = 0;
 
 	    do
@@ -686,7 +686,7 @@ dosdisk_read (int disk, void *buf, int num_bytes)
 		    else
 		      {
 			bad_data_magic_cookie ^= 0xF723567F;  /* arbitrary */
-			cookie_failed_p = TRUE;
+			cookie_failed_p = true;
 		      }
 		  }
 	      }
@@ -702,7 +702,7 @@ dosdisk_read (int disk, void *buf, int num_bytes)
 	  }
 #endif
       } else {
-	  cache_hit_p = FALSE;
+	  cache_hit_p = false;
 
 	  compute_sector_info (d, d->fpos / BYTES_PER_BLOCK, &head, &track,
 			       &sector, &blocks_left_on_track);
@@ -848,7 +848,7 @@ dosdisk_write (int disk, const void *buf, int num_bytes)
   gui_assert ((num_bytes % BYTES_PER_BLOCK) == 0);
 
   /* Note that it's OK for the 1024 Hz clock to perform badly here. */
-  old_slow_clock_p = set_expect_slow_clock (TRUE);
+  old_slow_clock_p = set_expect_slow_clock (true);
 
   /* Invalidate the cache on any write. */
   dcache_invalidate (disk | DOSFDBIT);

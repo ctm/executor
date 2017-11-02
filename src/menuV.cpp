@@ -89,7 +89,7 @@ P4(PUBLIC pascal trap, LONGINT, PopUpMenuSelect, MenuHandle, mh, INTEGER, top,
  * present (they call Gestalt for "qd  " before doing this goofy stuff).
  */
     if (ROMlib_flushoften)
-	ROMlib_destroy_blocks(0, ~0, TRUE);	/* For CIM 2.1.4 */
+	ROMlib_destroy_blocks(0, ~0, true);	/* For CIM 2.1.4 */
     p.h = top; /* MacWriteII seems to use these in this fashion */
     p.v = left;
 
@@ -131,5 +131,5 @@ P4(PUBLIC pascal trap, LONGINT, PopUpMenuSelect, MenuHandle, mh, INTEGER, top,
 	 PORT_CLIP_REGION_X (thePort) = saveclip;
 	 MBDFCALL (mbSaveAlt, 0, where);
        });
-    return ROMlib_menuhelper (mh, &saver, where, TRUE, 1);
+    return ROMlib_menuhelper (mh, &saver, where, true, 1);
 }

@@ -128,7 +128,7 @@ charcmp (char c1, char c2)
   bool retval;
 
   if (c1 == c2)
-    retval = TRUE;
+    retval = true;
   else if (c1 == '/')
     retval = c2 == '\\';
   else if (c1 == '\\')
@@ -181,7 +181,7 @@ Executor::ROMlib_addtodq (ULONGINT drvsize, const char *devicename, INTEGER part
     DrvQEl *dp;
     int strl;
     GUEST<THz> saveZone;
-    static bool seen_floppy = FALSE;
+    static bool seen_floppy = false;
 
     saveZone = TheZone;
     TheZone = SysZone;
@@ -201,7 +201,7 @@ Executor::ROMlib_addtodq (ULONGINT drvsize, const char *devicename, INTEGER part
         if ((flags & DRIVE_FLAGS_FLOPPY) && !seen_floppy)
 	  {
 	    dno = 1;
-	    seen_floppy = TRUE;
+	    seen_floppy = true;
 	  }
 	else
 	  {
@@ -260,7 +260,7 @@ root_directory_p(char *path, dev_t our_dev)
 
   slash = strrchr(path, '/');
   if (!slash || ((slash == path + SLASH_CHAR_OFFSET) && !slash[1]))
-    retval = TRUE;
+    retval = true;
   else
     {
       struct stat sbuf;
@@ -271,7 +271,7 @@ root_directory_p(char *path, dev_t our_dev)
       save_char = *slash;
       *slash = 0;
       if (Ustat(path, &sbuf) != 0)
-	retval = TRUE;
+	retval = true;
       else
 	retval = sbuf.st_dev != our_dev;
       *slash = save_char;
@@ -356,7 +356,7 @@ PRIVATE void ROMlib_automount_helper(char *path, char *aliasp)
 	    sret = Ustat(path, &sbuf);
 	    savep = 0;
 	    oldsavep = 0;
-	    done = FALSE;
+	    done = false;
 	    do {
 		if (sret == 0 && S_ISDIR (sbuf.st_mode)) {
 		    if (root_directory_p (path, sbuf.st_dev) || aliasp) {
@@ -385,12 +385,12 @@ PRIVATE void ROMlib_automount_helper(char *path, char *aliasp)
 			    gui_assert(vcbp);
 			    dirid = ST_INO (sbuf);
 			    ROMlib_dbm_store((VCBExtra *) vcbp, path, &dirid,
-					     FALSE);
+					     false);
 			}
 		    }
 		}
 		if (savep == path + SLASH_CHAR_OFFSET + 1)
-		  done = TRUE;
+		  done = true;
 		else
 		  {
 		    savep = strrchr(path, '/');
@@ -586,7 +586,7 @@ copystr (const char *name)
 }
 
 #if defined (MSDOS) || defined (CYGWIN32)
-PUBLIC bool cd_mounted_by_trickery_p = FALSE;
+PUBLIC bool cd_mounted_by_trickery_p = false;
 
 #define MACCDROM \
   (ROMlib_mac_cdromp ? (char *) ROMlib_mac_cdromp->chars : \
@@ -1007,12 +1007,12 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
 	cpb.hFileInfo.ioDirID     = 0;
     }
     cpb.hFileInfo.ioFDirIndex = CWC (0);
-    if (PBGetCatInfo(&cpb, FALSE) == noErr) {
+    if (PBGetCatInfo(&cpb, false) == noErr) {
 	wpb.ioNamePtr  = 0;
 	wpb.ioVRefNum  = cpb.hFileInfo.ioVRefNum;
 	wpb.ioWDProcID = TICKX("unix");
 	wpb.ioWDDirID  = cpb.hFileInfo.ioFlParID;
-	if (PBOpenWD(&wpb, FALSE) == noErr)
+	if (PBOpenWD(&wpb, false) == noErr)
 	    BootDrive = wpb.ioVRefNum;
     } else {
 	fprintf(stderr, "Couldn't open System: '%s'\n", ROMlib_SystemFolder);
@@ -1104,7 +1104,7 @@ A0(PUBLIC, void, ROMlib_fileinit)				/* INTERNAL */
 
       ROMlib_openharddisk (cd_big_hfv, &m);
       if (m)
-	cd_mounted_by_trickery_p = TRUE;
+	cd_mounted_by_trickery_p = true;
     }
 #endif
   if (ROMlib_magic_volumesp)

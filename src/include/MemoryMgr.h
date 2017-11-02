@@ -90,54 +90,54 @@ extern Byte 	ApplScratch[12];
 #endif
 /* traps which can have a `sys' or `clear' bit set */
 
-#define NewEmptyHandle()	(_NewEmptyHandle_flags (FALSE))
-#define NewEmptyHandleSys()	(_NewEmptyHandle_flags (TRUE))
+#define NewEmptyHandle()	(_NewEmptyHandle_flags (false))
+#define NewEmptyHandleSys()	(_NewEmptyHandle_flags (true))
 extern Handle _NewEmptyHandle_flags (bool sys_p);
 
-#define NewHandle(size)		(_NewHandle_flags (size, FALSE, FALSE))
-#define NewHandleSys(size)	(_NewHandle_flags (size, TRUE, FALSE))
-#define NewHandleClear(size)	(_NewHandle_flags (size, FALSE, TRUE))
-#define NewHandleSysClear(size)	(_NewHandle_flags (size, TRUE, TRUE))
+#define NewHandle(size)		(_NewHandle_flags (size, false, false))
+#define NewHandleSys(size)	(_NewHandle_flags (size, true, false))
+#define NewHandleClear(size)	(_NewHandle_flags (size, false, true))
+#define NewHandleSysClear(size)	(_NewHandle_flags (size, true, true))
 extern Handle _NewHandle_flags (Size size, bool sys_p, bool clear_p);
 
-#define RecoverHandle(ptr)	(_RecoverHandle_flags (ptr, FALSE))
-#define RecoverHandleSys(ptr)	(_RecoverHandle_flags (ptr, TRUE))
+#define RecoverHandle(ptr)	(_RecoverHandle_flags (ptr, false))
+#define RecoverHandleSys(ptr)	(_RecoverHandle_flags (ptr, true))
 extern Handle _RecoverHandle_flags (Ptr p, bool sys_p);
 
-#define NewPtr(size)		(_NewPtr_flags (size, FALSE, FALSE))
-#define NewPtrSys(size)		(_NewPtr_flags (size, TRUE, FALSE))
-#define NewPtrClear(size)	(_NewPtr_flags (size, FALSE, TRUE))
-#define NewPtrSysClear(size)	(_NewPtr_flags (size, TRUE, TRUE))
+#define NewPtr(size)		(_NewPtr_flags (size, false, false))
+#define NewPtrSys(size)		(_NewPtr_flags (size, true, false))
+#define NewPtrClear(size)	(_NewPtr_flags (size, false, true))
+#define NewPtrSysClear(size)	(_NewPtr_flags (size, true, true))
 extern Ptr _NewPtr_flags (Size size, bool sys_p, bool clear_p);
 
-#define FreeMem()		(_FreeMem_flags (FALSE))
-#define FreeMemSys()		(_FreeMem_flags (TRUE))
+#define FreeMem()		(_FreeMem_flags (false))
+#define FreeMemSys()		(_FreeMem_flags (true))
 extern int32 _FreeMem_flags (bool sys_p);
 
-#define MaxMem(growp)		(_MaxMem_flags (growp, FALSE))
-#define MaxMemSys(growp)	(_MaxMem_flags (growp, TRUE))
+#define MaxMem(growp)		(_MaxMem_flags (growp, false))
+#define MaxMemSys(growp)	(_MaxMem_flags (growp, true))
 extern Size _MaxMem_flags (Size *growp, bool sys_p);
 
-#define CompactMem(needed)	(_CompactMem_flags (needed, FALSE))
-#define CompactMemSys(needed)	(_CompactMem_flags (needed, TRUE))
+#define CompactMem(needed)	(_CompactMem_flags (needed, false))
+#define CompactMemSys(needed)	(_CompactMem_flags (needed, true))
 extern Size _CompactMem_flags (Size sizeneeded, bool sys_p);
 
-#define ResrvMem(needed)	(_ResrvMem_flags (needed, FALSE))
-#define ResrvMemSys(needed)	(_ResrvMem_flags (needed, TRUE))
+#define ResrvMem(needed)	(_ResrvMem_flags (needed, false))
+#define ResrvMemSys(needed)	(_ResrvMem_flags (needed, true))
 extern void _ResrvMem_flags (Size needed, bool sys_p);
 
-#define PurgeMem(needed)	(_PurgeMem_flags (needed, FALSE))
-#define PurgeMemSys(needed)	(_PurgeMem_flags (needed, TRUE))
+#define PurgeMem(needed)	(_PurgeMem_flags (needed, false))
+#define PurgeMemSys(needed)	(_PurgeMem_flags (needed, true))
 extern void _PurgeMem_flags (Size needed, bool sys_p);
 
-#define MaxBlock()		(_MaxBlock_flags (FALSE))
-#define MaxBlockSys()		(_MaxBlock_flags (TRUE))
+#define MaxBlock()		(_MaxBlock_flags (false))
+#define MaxBlockSys()		(_MaxBlock_flags (true))
 extern Size _MaxBlock_flags (bool sys_p);
 
 #define PurgeSpace(totalp, congtigp)		\
-  (_PurgeSpace_flags (totalp, contigp, FALSE))
+  (_PurgeSpace_flags (totalp, contigp, false))
 #define PurgeSpaceSys(totalp, congtigp)		\
-  (_PurgeSpace_flags (totalp, contigp, TRUE))
+  (_PurgeSpace_flags (totalp, contigp, true))
 extern void _PurgeSpace_flags (Size *totalp, Size *contigp, bool sys_p); 
 
 /* ### cliff bogofunc; should go away */

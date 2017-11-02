@@ -71,7 +71,7 @@ do						\
   cursor_debug (d, m, x, y);			\
   host_set_cursor (d, m, x, y);			\
 }						\
-while (FALSE)
+while (false)
 
 #endif
 
@@ -79,13 +79,13 @@ while (FALSE)
 static CCrsrHandle current_ccrsr;
 static Cursor current_crsr;
 
-static bool current_cursor_valid_p = FALSE;
+static bool current_cursor_valid_p = false;
 static int current_cursor_color_p;
 
 void
 Executor::cursor_reset_current_cursor (void)
 {
-  current_cursor_valid_p = FALSE;
+  current_cursor_valid_p = false;
   if (current_cursor_color_p)
     SetCCursor (current_ccrsr);
   else
@@ -96,8 +96,8 @@ A0 (PUBLIC, void, ROMlib_showcursor)
 {
   if (!CrsrVis)
     {
-      host_set_cursor_visible (TRUE);
-      CrsrVis = TRUE;
+      host_set_cursor_visible (true);
+      CrsrVis = true;
     }
 }
 
@@ -105,8 +105,8 @@ A0 (PUBLIC, void, ROMlib_restorecursor)
 {
   if (CrsrVis)
     {
-      host_set_cursor_visible (FALSE);
-      CrsrVis = FALSE;
+      host_set_cursor_visible (false);
+      CrsrVis = false;
     }
 }
 
@@ -166,12 +166,12 @@ P1(PUBLIC pascal trap, void, SetCursor, Cursor *, cp)
     }
   
   current_crsr = *cp;
-  current_cursor_color_p = FALSE;
-  current_cursor_valid_p = TRUE;
+  current_cursor_color_p = false;
+  current_cursor_valid_p = true;
   
   if (CrsrState == CWC(0))
     {
-      CrsrVis = FALSE;
+      CrsrVis = false;
       ROMlib_showcursor();
     }
 }
@@ -180,7 +180,7 @@ P0(PUBLIC pascal trap, void, InitCursor)
 {
     CrsrState = 0;
     SetCursor(&arrowX);
-    CrsrVis = FALSE;
+    CrsrVis = false;
     ROMlib_showcursor();
 }
 
@@ -205,7 +205,7 @@ namespace Executor {
 A1(PRIVATE, void, wewantpointermovements, INTEGER, x)
 {
     CrsrState = CW(CW(CrsrState) + x);
-    ROMlib_bewaremovement = TRUE;
+    ROMlib_bewaremovement = true;
 }
 
 P0(PUBLIC pascal trap, void, ObscureCursor)	/* IMI-168 */
@@ -464,8 +464,8 @@ P1 (PUBLIC pascal trap, void, SetCCursor,
       CCRSR_XVALID_X (current_ccrsr) = CWC (0);
       CCRSR_ID_X (current_ccrsr) = CLC (-1);
       
-      current_cursor_valid_p = TRUE;
-      current_cursor_color_p = TRUE;
+      current_cursor_valid_p = true;
+      current_cursor_color_p = true;
     }
 }
 

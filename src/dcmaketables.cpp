@@ -293,7 +293,7 @@ ind_src_table_builders[4][6] =
 };
 
 
-/* Returns TRUE iff the specified mapping has no effect (i.e. maps 0 to 0,
+/* Returns true iff the specified mapping has no effect (i.e. maps 0 to 0,
  * 1 to 1, 2 to 2, etc.
  */
 static inline bool
@@ -303,9 +303,9 @@ nop_map_p (const uint32 *map, int bpp)
 
   for (i = (1 << bpp) - 1; i >= 0; i--)
     if (map[i] != (uint32) i)
-      return FALSE;
+      return false;
   
-  return TRUE;
+  return true;
 }
 
 
@@ -443,7 +443,7 @@ depthconv_make_ind_to_rgb_table (void *table_space, unsigned in_bpp,
 
 	  /* Assemble the new RGB value. */
 	  v = (*dst_rgb_spec->rgbcolor_to_pixel)(dst_rgb_spec, &mapping[i].rgb,
-						 TRUE);
+						 true);
 
 	  /* Write out the value to the raw array.  We byte swap here
 	   * to counteract the byte swap that will happen later when

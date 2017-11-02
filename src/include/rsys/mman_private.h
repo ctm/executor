@@ -217,16 +217,16 @@ extern void ROMlib_sledgehammer_zones (const char *fn,
       ROMlib_sledgehammer_zones (__PRETTY_FUNCTION__,		\
 				 __FILE__, __LINE__,		\
 				 where, NULL);			\
-  } while (FALSE)
+  } while (false)
 
 #define MM_SLAM_ZONE(zone, where)				\
   do {								\
     if (ERROR_ENABLED_P (ERROR_MEMORY_MANAGER_SLAM))		\
-      ROMlib_sledgehammer_zone (zone, FALSE,			\
+      ROMlib_sledgehammer_zone (zone, false,			\
                                 __PRETTY_FUNCTION__,		\
                                 __FILE__, __LINE__,		\
                                 where, NULL);				\
-  } while (FALSE)
+  } while (false)
 
 #else /* No ERROR_MEMORY_MANAGER_SLAM */
 
@@ -240,7 +240,7 @@ extern void ROMlib_sledgehammer_zones (const char *fn,
   do {								\
     if ((err) != noErr)						\
       warning_trap_failure ("returning err %ld", (long) (err));	\
-  } while (FALSE)
+  } while (false)
 #else
 #define GEN_MEM_ERR(err)
 #endif

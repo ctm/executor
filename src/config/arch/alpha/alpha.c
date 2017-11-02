@@ -15,7 +15,7 @@ char ROMlib_rcsid_alpha[] =
 bool
 arch_init (void)
 {
-  return TRUE;
+  return true;
 }
 
 SWAP16_FUNC_DEFN

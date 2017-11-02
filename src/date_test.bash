@@ -110,8 +110,8 @@ typedef int BOOLEAN;\
 \
 enum\
   {\
-    FALSE,\
-    TRUE\
+    false,\
+    true\
   };\
 \
 #define A1(visibility, type, name, type0, arg0) \\\

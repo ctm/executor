@@ -185,7 +185,7 @@ P1(PUBLIC pascal trap, BOOLEAN, IsMovieDone, Movie, movie)
 
 #if !defined(CYGWIN32)
   warning_unimplemented (NULL_STRING);
-  retval = TRUE;
+  retval = true;
 #else
   retval = 0;
 #endif

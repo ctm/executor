@@ -128,7 +128,7 @@ PUBLIC compretval Executor::ROMlib_catcompare(void *firstp, void *secondp)
 	return firstisgreater;
     else
 		return (compretval)Executor::RelString((StringPtr) ckp1->ckrCName, (StringPtr) ckp2->ckrCName,
-								   FALSE, TRUE);
+								   false, true);
 }
 
 PUBLIC void Executor::ROMlib_makextntkey(xtntkey *keyp, Forktype forkwanted, LONGINT flnum,
@@ -510,10 +510,10 @@ PUBLIC OSErr Executor::ROMlib_allochelper(IOParam *pb, BOOLEAN async, alloctype 
 	neweof = ((unsigned long) (long) -1) / clumpsize * clumpsize;
     
     if (neweof < Cx(fcbp->fcbPLen)) {
-	needtoshrink = TRUE;
+	needtoshrink = true;
 	nallocneeded = (Cx(fcbp->fcbPLen) - neweof) / Cx(vcbp->vcbAlBlkSiz);
     } else {
-	needtoshrink = FALSE;
+	needtoshrink = false;
 	nallocneeded = (neweof - Cx(fcbp->fcbPLen)) / Cx(vcbp->vcbAlBlkSiz);
     }
 
@@ -558,10 +558,10 @@ PUBLIC OSErr Executor::ROMlib_allochelper(IOParam *pb, BOOLEAN async, alloctype 
 	        ROMlib_makextntparam(&btparamrec, vcbp, 0, 0, 0);
 	        btparamrec.tofind =  *(anykey *) xtkeyp;
 	        btparamrec.leafindex = -1;
-	        btparamrec.success = TRUE;
+	        btparamrec.success = true;
 	        btparamrec.foundp = (anykey *) xtkeyp;
 	    } else
-	        btparamrec.success = FALSE;
+	        btparamrec.success = false;
 	    while (btparamrec.success) {
 		xtkeyp = (xtntkey *) btparamrec.foundp;
 		gui_assert(xtkeyp && Cx(xtkeyp->xkrFNum) == Cx(fcbp->fcbFlNum) &&
@@ -660,7 +660,7 @@ done:
 PUBLIC OSErr Executor::hfsPBSetEOF(ParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
-  err = ROMlib_allochelper((IOParam *) pb, async, seteof, TRUE);
+  err = ROMlib_allochelper((IOParam *) pb, async, seteof, true);
   fs_err_hook (err);
   return err;
 }
@@ -668,7 +668,7 @@ PUBLIC OSErr Executor::hfsPBSetEOF(ParmBlkPtr pb, BOOLEAN async)
 PUBLIC OSErr Executor::hfsPBAllocate(ParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
-  err = ROMlib_allochelper((IOParam *) pb, async, allocany, TRUE);
+  err = ROMlib_allochelper((IOParam *) pb, async, allocany, true);
   fs_err_hook (err);
   return err;
 }
@@ -677,7 +677,7 @@ PUBLIC OSErr Executor::hfsPBAllocContig(ParmBlkPtr pb, BOOLEAN async)
 {
   OSErr err;
 
-  err = ROMlib_allochelper((IOParam *) pb, async, alloccontig, TRUE);
+  err = ROMlib_allochelper((IOParam *) pb, async, alloccontig, true);
   fs_err_hook (err);
   return err;
 }
@@ -741,7 +741,7 @@ PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
 #else /* !defined(MAC) */
 	    pb->ioMisc = CL((LONGINT) neweot);
 #endif /* !defined(MAC) */
-	    PBSetEOF((ParmBlkPtr) pb, FALSE);
+	    PBSetEOF((ParmBlkPtr) pb, false);
 	    if (pb->ioResult != CWC(noErr))
 		totransfer = Cx(fcbp->fcbPLen) - absoffset;
 	}
@@ -813,7 +813,7 @@ PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
 					      bufp, rw, &actl);
 		actl = CL(actl);
 		if (rw == reading)
-		    ROMlib_destroy_blocks(US_TO_SYN68K(bufp), actl, TRUE);
+		    ROMlib_destroy_blocks(US_TO_SYN68K(bufp), actl, true);
 	    } else {
 /* TODO:  Hubris attenuation:  SPEED THIS UP FOR EXCEL 4.x INSTALLERS!!!! */
 		newerr = noErr;
@@ -864,7 +864,7 @@ PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
 	    }
 	    bufp += ntoslide;
 	    if (rw == reading)
-		ROMlib_destroy_blocks(US_TO_SYN68K(bufp), actl, TRUE);
+		ROMlib_destroy_blocks(US_TO_SYN68K(bufp), actl, true);
 #endif
 	    pb->ioPosOffset = CL(CL(pb->ioPosOffset) + (actl));
 	    pb->ioActCount = CL(CL(pb->ioActCount) + (actl));
@@ -1117,7 +1117,7 @@ PRIVATE OSErr findentry(LONGINT dirid, StringPtr name, btparam *btpb,
     
     retval = 0;
     if (name == 0)
-	ignorename = TRUE;
+	ignorename = true;
     if (ignorename) {
         namelen = 0;
         namep = (StringPtr) "";
@@ -1266,11 +1266,11 @@ PRIVATE OSErr findentry(LONGINT dirid, StringPtr name, btparam *btpb,
 PRIVATE BOOLEAN dir_prefixes_volume(StringPtr dirnamep, StringPtr volnamep)
 {
   if (!dirnamep) /* don't dereference 0 if it's passed in */
-    return FALSE;
+    return false;
   if (dirnamep[0] <= volnamep[0]) /* must be larger, for ":" if nothing else */
-/*-->*/return FALSE;
+/*-->*/return false;
   if (memcmp(dirnamep+1, volnamep+1, volnamep[0]) != 0)
-/*-->*/return FALSE;
+/*-->*/return false;
   return dirnamep[volnamep[0]+1] == ':';
 }
 
@@ -1290,7 +1290,7 @@ PUBLIC OSErr Executor::ROMlib_findvcbandfile(IOParam *pb, LONGINT dirid, btparam
 
       namep = MR (pb->ioNamePtr);
       if (namep[0] == 1 && namep[1] == ':')
-	ignorename = TRUE;
+	ignorename = true;
     }
   do
     {
@@ -1299,7 +1299,7 @@ PUBLIC OSErr Executor::ROMlib_findvcbandfile(IOParam *pb, LONGINT dirid, btparam
       if (ignorename)
 	pb->ioNamePtr = 0;
       btpb->vcbp = ROMlib_findvcb(CW(pb->ioVRefNum), MR(pb->ioNamePtr), &dir,
-				  TRUE);
+				  true);
       pb->ioNamePtr = savep;
       if (dir == 0)
 	{
@@ -1423,7 +1423,7 @@ PRIVATE OSErr PBOpenHelper(IOParam *pb, Forktype ft, LONGINT dirid, BOOLEAN asyn
     
     pb->ioRefNum = CWC(0);	/* in case some program ignores a failure */
     kind = regular;
-    err = ROMlib_findvcbandfile(pb, dirid, &btparamrec, &kind, FALSE);
+    err = ROMlib_findvcbandfile(pb, dirid, &btparamrec, &kind, false);
     if (err != noErr)
       {
 	fs_err_hook (err);

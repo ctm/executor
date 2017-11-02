@@ -95,7 +95,7 @@ PUBLIC OSErr Executor::hfsPBOpenWD(WDPBPtr pb, BOOLEAN async)
     
     kind = (filekind)(regular|directory);
     retval = ROMlib_findvcbandfile((IOParam *)pb, Cx(pb->ioWDDirID),
-						    &btparamrec, &kind, FALSE);
+						    &btparamrec, &kind, false);
     if (retval != noErr)
 	PBRETURN(pb, retval);
     vcbp = btparamrec.vcbp;
@@ -137,7 +137,7 @@ PUBLIC OSErr Executor::hfsPBGetWDInfo(WDPBPtr pb, BOOLEAN async)
     BOOLEAN foundelsewhere;
     HVCB *vcbp;
     
-    foundelsewhere = FALSE;
+    foundelsewhere = false;
     retval = noErr;
     wdp = 0;
     if (Cx(pb->ioWDIndex) > 0) {
@@ -163,14 +163,14 @@ PUBLIC OSErr Executor::hfsPBGetWDInfo(WDPBPtr pb, BOOLEAN async)
 	wdp = WDNUMTOWDP(Cx(pb->ioVRefNum));
     else {
 	vcbp = ROMlib_findvcb(Cx(pb->ioVRefNum), (StringPtr) 0, (LONGINT *) 0,
-									 TRUE);
+									 true);
 	if (vcbp) {
 	    if (pb->ioNamePtr)
 		str255assign(MR(pb->ioNamePtr), (StringPtr) vcbp->vcbVN);
 	    pb->ioWDProcID  = 0;
 	    pb->ioVRefNum   = pb->ioWDVRefNum = vcbp->vcbVRefNum;
 	    pb->ioWDDirID   = (vcbp == MR(DefVCBPtr)) ? DefDirID : CLC(2);
-	    foundelsewhere = TRUE;
+	    foundelsewhere = true;
 	}
     }
 	
@@ -199,7 +199,7 @@ Executor::GetWDInfo (INTEGER wd, GUEST<INTEGER> *vrefp, GUEST<LONGINT> *dirp, GU
   WDPBRec wdp;
   memset (&wdp, 0, sizeof wdp);
   wdp.ioVRefNum = CW (wd);
-  retval = PBGetWDInfo (&wdp, FALSE);
+  retval = PBGetWDInfo (&wdp, false);
   if (retval == noErr)
     {
       *vrefp = wdp.ioVRefNum;

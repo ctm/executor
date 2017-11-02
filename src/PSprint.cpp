@@ -635,25 +635,25 @@ graymatch(unsigned char patp[8], INTEGER pnMode,
   }
 #endif
 
-  retval = FALSE;
+  retval = false;
 
   if (((pnMode == patOr    || pnMode == patCopy   ) && pat_is_black) ||
       ((pnMode == notPatOr || pnMode == notPatCopy) && pat_is_white))
     {
-      retval = TRUE;
+      retval = true;
       *grayp = gray_fore;
     }
   else if (((pnMode == patBic    || pnMode == notPatCopy) && pat_is_black) ||
 	   ((pnMode == notPatBic || pnMode == patCopy   ) && pat_is_white))
     {
-      retval = TRUE;
+      retval = true;
       *grayp = gray_back;
     }
   else if (pnMode == patCopy || pnMode == notPatCopy)
     {
       if (gray_fore == gray_back)
 	{
-	  retval = TRUE;
+	  retval = true;
 	  *grayp = gray_fore;
 	}
       else
@@ -672,7 +672,7 @@ graymatch(unsigned char patp[8], INTEGER pnMode,
 		darkness = 1.0 - darkness;
 
 	      *grayp = (darkness * gray_fore) + ((1 - darkness) * gray_back);
-	      retval = TRUE;
+	      retval = true;
 CONT:;
 	    }
 	}
@@ -1187,7 +1187,7 @@ typedef struct
 }
 substitute_t;
 
-PUBLIC bool Executor::substitute_fonts_p = FALSE;
+PUBLIC bool Executor::substitute_fonts_p = false;
 
 PRIVATE float
 substitute_font_if_needed (char **fontp, LONGINT orig_size,
@@ -1202,7 +1202,7 @@ substitute_font_if_needed (char **fontp, LONGINT orig_size,
   };
 
   retval = orig_size;
-  *need_to_freep = FALSE;
+  *need_to_freep = false;
   if (substitute_fonts_p)
     {
       int i;
@@ -1222,7 +1222,7 @@ substitute_font_if_needed (char **fontp, LONGINT orig_size,
 				strlen (substitutions[i].new1) + 1);
 	      sprintf (newname, "%s%s", substitutions[i].new1, font + len);
 	      *fontp = newname;
-	      *need_to_freep = TRUE;
+	      *need_to_freep = true;
 	      retval = orig_size * substitutions[i].multiplier;
 /*-->*/	      break;
 	    }
@@ -1418,8 +1418,8 @@ void Executor::NeXTPrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp,
   bool indexed_color_p;
   TEMP_ALLOC_DECL (temp_alloc_space);
 
-  direct_color_p = FALSE;
-  indexed_color_p = FALSE;
+  direct_color_p = false;
+  indexed_color_p = false;
   block = block_virtual_ints ();
   commonupdate(thePortp);
   srcwidth  = CW(srcrp->right)  - CW(srcrp->left);
@@ -1442,7 +1442,7 @@ void Executor::NeXTPrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp,
 /*-->*/	    goto DONE;
 	  direct_color_p = pixelsize > 8;
 	  if (!direct_color_p)
-	    indexed_color_p = TRUE;
+	    indexed_color_p = true;
 	}
       else
 	{
@@ -1511,7 +1511,7 @@ void Executor::NeXTPrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp,
 		PSimage();
 	      else
 		{
-		  PSsendboolean (FALSE);
+		  PSsendboolean (false);
 		  PSsendint (3);
 		  PScolorimage();
 		}
@@ -1536,7 +1536,7 @@ void Executor::NeXTPrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp,
 	     the result.  It's not clear when that's necessary.  TODO
 	     look into this further. */ 
 
-	  has_warned_p = FALSE;
+	  has_warned_p = false;
 	  for (i = 0; i < (1 << pixelsize); ++i)
 	    {
 	      unsigned char r;
@@ -1547,7 +1547,7 @@ void Executor::NeXTPrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp,
 		{
 		  warning_unexpected ("value = %d, i = %d",
 				      CW (ctab[i].value), i);
-		  has_warned_p = TRUE;
+		  has_warned_p = true;
 		}
 	      r = CW (ctab[i].rgb.red  ) >> 8;
 	      g = CW (ctab[i].rgb.green) >> 8;
@@ -2007,7 +2007,7 @@ enum symbol_char
 #define CHAR_REPLACE(s)				\
 case mac_char_ ## s:				\
   retval = symbol_char_ ##s;		\
-  is_symbol = TRUE;					\
+  is_symbol = true;					\
   break
 
 PRIVATE unsigned char
@@ -2017,7 +2017,7 @@ symbol_translate_char (unsigned char c, bool *is_symbolp)
   bool is_symbol;
 
   retval = c;
-  is_symbol = FALSE;
+  is_symbol = false;
   switch ((enum mac_char) c)
     {
       CHAR_REPLACE (notequal);
@@ -2221,7 +2221,7 @@ Executor::do_textbegin (TTxtPicHdl h)
   disable_copybits ();
   rotation.angle = Executor::GetHandleSize ((Handle) h) >= 10
       ? FIX_TO_FLOAT (TEXTPIC_ANGLE_FIXED (h)) : TEXTPIC_ANGLE (h);
-  rotation.rotated_p = TRUE;
+  rotation.rotated_p = true;
 }
 
 PUBLIC void
@@ -2236,7 +2236,7 @@ Executor::do_textend (void)
 {
   if (rotation.rotated_p)
     {
-      rotation.rotated_p = FALSE;
+      rotation.rotated_p = false;
       enable_copybits ();
     }
 }

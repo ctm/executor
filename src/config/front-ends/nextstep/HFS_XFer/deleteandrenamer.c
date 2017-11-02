@@ -14,7 +14,7 @@ void delete1file(INTEGER vrn, LONGINT dirid, Str255 s)
     pb.volumeParam.ioVolIndex = 0;
     pb.volumeParam.ioVRefNum = vrn;
     pb.volumeParam.ioNamePtr = 0;
-    err = xPBGetVInfo((volumeParam *) &pb, FALSE);
+    err = xPBGetVInfo((volumeParam *) &pb, false);
     if (err != noErr) {
         doerror(err, "\pPBGetVInfo");
 /*-->*/ return;
@@ -28,7 +28,7 @@ void delete1file(INTEGER vrn, LONGINT dirid, Str255 s)
     hpb.fileParam.ioFDirIndex = 0;
     hpb.fileParam.ioCompletion = 0;
     hpb.fileParam.ioNamePtr = s;
-    err = xPBGetCatInfo((CInfoPBPtr)&hpb, FALSE);
+    err = xPBGetCatInfo((CInfoPBPtr)&hpb, false);
     if (err != noErr) {
         doerror(err, "\pPBGetCatInfo");
 /*-->*/ return;
@@ -46,7 +46,7 @@ void delete1file(INTEGER vrn, LONGINT dirid, Str255 s)
         hpb.fileParam.ioNamePtr = s2;
         for (hpb.fileParam.ioFDirIndex = 1; err != fnfErr; ) {
  	    hpb.fileParam.ioDirID = subdirid;
-	    err = xPBGetCatInfo((CInfoPBPtr)&hpb, FALSE);
+	    err = xPBGetCatInfo((CInfoPBPtr)&hpb, false);
 	    if (err)
 		hpb.fileParam.ioFDirIndex++;
 	    else
@@ -56,14 +56,14 @@ void delete1file(INTEGER vrn, LONGINT dirid, Str255 s)
 	verifydirdelete = savevdd;
 	hpb.fileParam.ioNamePtr = s;
 	hpb.fileParam.ioDirID = dirid;
-	err = xPBHDelete((HFileParam *)&hpb, FALSE);
+	err = xPBHDelete((HFileParam *)&hpb, false);
 	if (err != noErr)
             doerror(err, "\pPBHDelete");
     } else {
 	if (verifyfiledelete && (ask("\pdelete file", s) == Cancel))
 	    return;
 	hpb.fileParam.ioDirID = dirid;
-	err = xPBHDelete((HFileParam *)&hpb, FALSE);
+	err = xPBHDelete((HFileParam *)&hpb, false);
 	if (err != noErr)
             doerror(err, "\pPBHDelete");
     }
@@ -89,14 +89,14 @@ void renamefile(DialogPtr dp)
     GetDItem(dp, TEXTITEM, &type, &h, &r);
     GetIText(h, s2);
     hpb.ioParam.ioMisc = (LONGORPTR) s2;
-    err = xPBHRename((HFileParam *)&hpb, FALSE);
+    err = xPBHRename((HFileParam *)&hpb, false);
     if (err == dupFNErr) {
 	cpb.hFileInfo.ioFDirIndex = 0;
 	cpb.hFileInfo.ioNamePtr = s2;
 	cpb.hFileInfo.ioVRefNum = -SFSaveDisk;
 	cpb.hFileInfo.ioDirID = fromdirid;
 	    
-	xPBGetCatInfo(&cpb, FALSE);
+	xPBGetCatInfo(&cpb, false);
         if (cpb.hFileInfo.ioFlAttrib & ISDIRMASK) {
 	    if (!verifydiroverwrite ||
 				 ask("\poverwrite directory", s2) == OK) {
@@ -107,7 +107,7 @@ void renamefile(DialogPtr dp)
 	        delete1file(-SFSaveDisk, fromdirid, s2);
 		verifyfiledelete = savevfd;
 		verifydirdelete = savevdd;
-	        err = xPBHRename((HFileParam *)&hpb, FALSE);
+	        err = xPBHRename((HFileParam *)&hpb, false);
 	    }
 	} else {
 	    if (!verifyfileoverwrite || ask("\poverwrite file", s2) == OK) {
@@ -118,7 +118,7 @@ void renamefile(DialogPtr dp)
 	        delete1file(-SFSaveDisk, fromdirid, s2);
 		verifyfiledelete = savevfd;
 		verifydirdelete = savevdd;
-	        err = xPBHRename((HFileParam *)&hpb, FALSE);
+	        err = xPBHRename((HFileParam *)&hpb, false);
 	    }
 	}
     } else if (err != noErr)
@@ -140,7 +140,7 @@ INTEGER donewdir(DialogPtr dp)
     GetDItem(dp, TEXTITEM, &type, &h, &r);
     GetIText(h, s);
     hpb.ioParam.ioNamePtr = (StringPtr) s;
-    err = xPBDirCreate((HFileParam *)&hpb, FALSE);
+    err = xPBDirCreate((HFileParam *)&hpb, false);
     if (err == dupFNErr) {
 	ParamText((StringPtr) "\pThat name is already in use.", 0, 0, 0);
 	StopAlert(ONEPARAMALERT, (ProcPtr) 0);

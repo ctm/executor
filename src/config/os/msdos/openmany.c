@@ -113,8 +113,8 @@ msdos_open_many_files (const char *directory, const char *suffix,
 }
 
 
-/* Returns FALSE if we know we don't have enough available file
- * descriptors, else TRUE.
+/* Returns false if we know we don't have enough available file
+ * descriptors, else true.
  */
 bool
 msdos_test_max_files (void)

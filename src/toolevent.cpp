@@ -67,14 +67,14 @@ LONGINT Executor::eventstate = 0;
 #define TRACE(n)
 #endif /* !defined(EVENTTRACE) */
 
-PRIVATE BOOLEAN ROMlib_alarmonmbar = FALSE;
+PRIVATE BOOLEAN ROMlib_alarmonmbar = false;
 
 PUBLIC int Executor::ROMlib_delay = 0;	/* number of ticks to wait when we
 										 * haven't gotten anything interesting */
 
 #define ALARMSICN	-16385
 
-PUBLIC BOOLEAN Executor::ROMlib_beepedonce = FALSE;
+PUBLIC BOOLEAN Executor::ROMlib_beepedonce = false;
 
 namespace Executor {
   PRIVATE void ROMlib_togglealarm();
@@ -128,7 +128,7 @@ A0(PRIVATE, void, ROMlib_togglealarm)
 	CopyBits (&save_alarm_bitmap, (BitMap *) STARH (GD_PMAP (MR (TheGDevice))),
 		  &save_alarm_bitmap.bounds, &screen_alarm_rect,
 		  srcCopy, NULL);
-	ROMlib_alarmonmbar = FALSE;
+	ROMlib_alarmonmbar = false;
       }
     else
       {
@@ -137,7 +137,7 @@ A0(PRIVATE, void, ROMlib_togglealarm)
 	    if (!ROMlib_beepedonce)
 	      {
 		SysBeep(5);
-		ROMlib_beepedonce = TRUE;
+		ROMlib_beepedonce = true;
 	      }
 	    /* save the bits underneath */
 	    /* draw sicon -16385 up there */
@@ -156,7 +156,7 @@ A0(PRIVATE, void, ROMlib_togglealarm)
 	    CopyBits (&src_alarm_bitmap, (BitMap *) STARH (GD_PMAP (MR (TheGDevice))),
 		      &src_alarm_bitmap.bounds, &screen_alarm_rect,
 		      srcCopy, NULL);
-	    ROMlib_alarmonmbar = TRUE;
+	    ROMlib_alarmonmbar = true;
 	}
     }
 }
@@ -559,7 +559,7 @@ void readprefvalues(DialogPtr dp)
 
     ROMlib_passpostscript   = getvalue(dp, PREFPASSPOSTSCRIPTITEM);
 #if 1
-    ROMlib_passpostscript = TRUE; /* wired down for now */
+    ROMlib_passpostscript = true; /* wired down for now */
 #endif
     ROMlib_newlinetocr      = getvalue(dp, PREFNEWLINEMAPPINGITEM);
     ROMlib_directdiskaccess = getvalue(dp, PREFDIRECTDISKITEM);
@@ -704,9 +704,9 @@ saveprefvalues (char *savefilename, LONGINT locationx, LONGINT locationy)
 
 	fprintf(fp, "};\n");
 	fclose(fp);
-	retval = TRUE;
+	retval = true;
     } else
-	retval = FALSE;
+	retval = false;
     return retval;
 }
 
@@ -827,11 +827,11 @@ PRIVATE void dopreferences( void )
 	SysBeep(5);
       else
 	{
-	  static BOOLEAN am_already_here = FALSE;
+	  static BOOLEAN am_already_here = false;
       
 	  if (!am_already_here)
 	    {
-	      am_already_here = TRUE;
+	      am_already_here = true;
 
 	      ParamText(CurApName, 0, 0, 0);
 
@@ -890,7 +890,7 @@ PRIVATE void dopreferences( void )
 		    saveprefvalues(ROMlib_configfilename, 0, 0);
 		}
 	      DisposDialog(dp);
-	      am_already_here = FALSE;
+	      am_already_here = false;
 	    }
 	}
     }
@@ -966,7 +966,7 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
             evt->message = guest_cast<LONGINT>(CurDeactive);
             if (remflag)
                 CurDeactive = nullptr;
-	    retval = TRUE;
+	    retval = true;
 /*-->*/     goto done;
         }
         if (CurActivate) {
@@ -978,7 +978,7 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
             evt->modifiers.raw_or( CW(activeFlag) );
             if (remflag)
                 CurActivate = nullptr;
-	    retval = TRUE;
+	    retval = true;
 /*-->*/     goto done;
         }
     }
@@ -1001,37 +1001,37 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
 	    switch ((Cx(evt->message) & charCodeMask)) {
 	    case '1':
 	    case '!':	/* command shift 1: About Box / Help */
-		retval = FALSE;
+		retval = false;
 		do_about_box();
 		break;
 	    case '2':
 	    case '@':	/* command shift 2: Floppy Stuff */
-		retval = FALSE;
+		retval = false;
 		/* dofloppymount(); already done at a lower level */
 		break;
 	    case '3':
 	    case '#':	/* command shift 3: Screen Dump to File */
-		retval = FALSE;
+		retval = false;
 		do_dump_screen ();
 		break;
 	    case '4':
 	    case '$':	/* command shift 4: Screen Dump to Printer */
-		retval = FALSE;
+		retval = false;
 		doscreendumptoprinter();
 		break;
 	    case '5':
 	    case '%':	/* command shift 5: Preferences */
-		retval = FALSE;
+		retval = false;
 		dopreferences();
 		break;
 	    case '6':
 	    case '^':	/* command shift 6: Don't restart Executor */
-		retval = FALSE;
+		retval = false;
 		doquitreallyquits();
 		break;
 	    case '7':
 	    case '&':
-	        retval = FALSE;
+	        retval = false;
 		/* Reset the video mode.  Seems to be needed under DOS
 		 * sometimes when hotkeying around.
 		 */
@@ -1042,7 +1042,7 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
 #if defined (SUPPORT_LOG_ERR_TO_RAM)
 	    case '9':
 	    case '(':	/* command shift 9: Dump RAM error log */
-		retval = FALSE;
+		retval = false;
 		error_dump_ram_err_buf ("\n *** cmd-shift-9 pressed ***\n");
 		break;
 #endif
@@ -1073,7 +1073,7 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
 	    ROMlib_updateworkspace();
             ROMlib_openfloppy(device, &evt->message);
             evt->what = CW(diskEvt);
-            retval = TRUE;
+            retval = true;
         } else {
             gui_assert(errno == EWOULDBLOCK);
 #endif /* defined(MACOSX_) */
@@ -1084,7 +1084,7 @@ A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
 		if (evt->message) {
 		    TRACE(27);
 		    evt->what = CW(diskEvt);
-		    retval = TRUE;
+		    retval = true;
 		}
 	    }
 #if defined(MACOSX_)
@@ -1114,7 +1114,7 @@ done:
     if (SystemEvent(evt)) {
 	TRACE(32);
 	evt->what = CWC(nullEvent);
-	retval = FALSE;
+	retval = false;
     }
     TRACE(33);
 
@@ -1126,7 +1126,7 @@ P2(PUBLIC pascal trap, BOOLEAN, GetNextEvent, INTEGER, em, EventRecord *, evt)
     BOOLEAN retval;
 
     TRACE(1);
-    retval = doevent(em, evt, TRUE);
+    retval = doevent(em, evt, true);
     TRACE(0);
     return retval;
 }
@@ -1160,7 +1160,7 @@ P4(PUBLIC pascal trap, BOOLEAN, WaitNextEvent, INTEGER, mask,
 		&& (p.h != saved_h || p.v != saved_v)) {
 		evp->what = CWC(osEvt);
 		evp->message = CLC(mouseMovedMessage<<24);
-		retval = TRUE;
+		retval = true;
 	    } else if (sleep > 0) {
 	      if (ROMlib_about_boxp && ROMlib_about_boxp->val)
 		{
@@ -1169,7 +1169,7 @@ P4(PUBLIC pascal trap, BOOLEAN, WaitNextEvent, INTEGER, mask,
 		      static bool displayed_initial_demo_about_box_p;
 		      if (!displayed_initial_demo_about_box_p)
 			{
-			  displayed_initial_demo_about_box_p = TRUE;
+			  displayed_initial_demo_about_box_p = true;
 			  do_about_box ();
 			}
 		    }
@@ -1186,7 +1186,7 @@ P4(PUBLIC pascal trap, BOOLEAN, WaitNextEvent, INTEGER, mask,
 
 P2(PUBLIC pascal trap, BOOLEAN, EventAvail, INTEGER, em, EventRecord *, evt)
 {
-    return(doevent(em, evt, FALSE));
+    return(doevent(em, evt, false));
 }
 
 P1(PUBLIC pascal trap, void, GetMouse, GUEST<Point> *, p)
@@ -1205,7 +1205,7 @@ P0(PUBLIC pascal trap, BOOLEAN, Button)
     BOOLEAN retval;
     
     GetOSEvent(0, &evt);
-    retval = (evt.modifiers & CWC(btnState)) ? FALSE : TRUE;
+    retval = (evt.modifiers & CWC(btnState)) ? false : true;
     return retval;
 }
 
@@ -1214,7 +1214,7 @@ P0(PUBLIC pascal trap, BOOLEAN, StillDown)	/* IMI-259 */
 {
     EventRecord evt;
 
-    return Button() ? !OSEventAvail((mDownMask|mUpMask), &evt) : FALSE;
+    return Button() ? !OSEventAvail((mDownMask|mUpMask), &evt) : false;
 }
 
 /*

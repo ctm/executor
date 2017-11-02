@@ -127,7 +127,7 @@ typedef enum
 
 typedef GUEST<PalettePtr> *PaletteHandle;
 
-/* return TRUE if `maybe_graphics_world' points to a graphics world,
+/* return true if `maybe_graphics_world' points to a graphics world,
    and not a graf port or cgraf port */
 #define GRAPHICS_WORLD_P(maybe_graphics_world)			\
   (CGrafPort_p(maybe_graphics_world)				\

@@ -23,7 +23,7 @@ char ROMlib_rcsid_windMouse[] =
 using namespace Executor;
 
 #if !defined (No_STEF_zoommods)
-/* WINDOW_ZOOMED returns TRUE if w is currently in stdState (big) */
+/* WINDOW_ZOOMED returns true if w is currently in stdState (big) */
 
 #define WINDOW_ZOOMED(w) (ROMlib_window_zoomed(w))
 
@@ -73,7 +73,7 @@ namespace Executor {
 A3(PRIVATE, BOOLEAN, xTrackBox, WindowPtr, wp, Point, pt,
 						INTEGER, part)	/* IMIV-50 */
 {
-  BOOLEAN inpart = TRUE, inp;
+  BOOLEAN inpart = true, inp;
   EventRecord ev;
 
   THEPORT_SAVE_EXCURSION

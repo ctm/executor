@@ -119,7 +119,7 @@ PRIVATE void createnfiles(INTEGER level, StringPtr prefixp, INTEGER n)
 	    name[0] += namelen;
 	    *munglocp = ':';
 	    printf("cf %d\n", fileindex);
-	    err = myPBCreate(&pb, FALSE);
+	    err = myPBCreate(&pb, false);
 	    if (err != noErr)
 		DebugStr((StringPtr) "\ppbcreate failed");
 	    name[0] -= namelen;
@@ -134,7 +134,7 @@ PRIVATE void createnfiles(INTEGER level, StringPtr prefixp, INTEGER n)
 	    name[0] += namelen-1;
 	    *munglocp = ':';
 	    printf("cd %d\n", dirindex);
-	    err = myPBDirCreate(&hp, FALSE);
+	    err = myPBDirCreate(&hp, false);
 	    if (err != noErr)
 		DebugStr((StringPtr) "\ppbdirCreate failed");
 	    name[0] += 1;
@@ -168,7 +168,7 @@ PRIVATE void deletenfiles(INTEGER level, StringPtr prefixp, INTEGER n)
 	    if (fileindex == 109)
 	        DebugStr("\pabout to do 109");
 #endif
-	    err = myPBDelete(&pb, FALSE);
+	    err = myPBDelete(&pb, false);
 	    if (err != noErr)
 		DebugStr((StringPtr) "\pmyPBDelete failed");
 	    name[0] -= namelen;
@@ -185,7 +185,7 @@ PRIVATE void deletenfiles(INTEGER level, StringPtr prefixp, INTEGER n)
 	    deletenfiles(level, name, n);
 	    name[0] -= 1;
 	    printf("dd %d\n", dirindex);
-	    err = myPBHDelete(&hp, FALSE);
+	    err = myPBHDelete(&hp, false);
 	    if (err != noErr)
 		DebugStr((StringPtr) "\pmyPBHDelete failed");
 	    name[0] -= namelen-1;
@@ -222,68 +222,68 @@ PUBLIC void main( void )
     pb.ioNamePtr = (StringPtr) "\pmyvol:mail:jody";
     pb.ioPermssn = fsRdPerm;
     pb.ioMisc = 0;
-    myPBOpen(&pb, FALSE);
+    myPBOpen(&pb, false);
     
     pb.ioPosMode = fsFromStart;
     pb.ioPosOffset = 0;
     pb.ioReqCount = TESTSIZE;
     pb.ioBuffer = testbuffer;
-    myPBRead(&pb, FALSE);
-    myPBClose(&pb, FALSE);
+    myPBRead(&pb, false);
+    myPBClose(&pb, false);
 #endif
 
 #if 0
     pb.ioNamePtr = (StringPtr) "\pMyVol:Cliff's file";
-    err = PBCreate(&pb, FALSE);
+    err = PBCreate(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:Cliff's second file";
-    err = PBCreate(&pb, FALSE);
+    err = PBCreate(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:Cliff's third file";
-    err = PBCreate(&pb, FALSE);
+    err = PBCreate(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:Cliff's fourth file";
-    err = PBCreate(&pb, FALSE);
+    err = PBCreate(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:Cliff's fifth file";
-    err = PBCreate(&pb, FALSE);
+    err = PBCreate(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:";
-    err = PBFlushVol(&pb, FALSE);
+    err = PBFlushVol(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:Cliff's file";
-    err = myPBDelete(&pb, FALSE);
+    err = myPBDelete(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:Cliff's second file";
-    err = myPBDelete(&pb, FALSE);
+    err = myPBDelete(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:Cliff's third file";
-    err = myPBDelete(&pb, FALSE);
+    err = myPBDelete(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:Cliff's fourth file";
-    err = myPBDelete(&pb, FALSE);
+    err = myPBDelete(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:Cliff's fifth file";
-    err = myPBDelete(&pb, FALSE);
+    err = myPBDelete(&pb, false);
 #endif
     
 #if 0
     hp.ioNamePtr = (StringPtr) "\pMyVol:testdir1";
     hp.ioDirID = 600;
     hp.ioVRefNum = 0;
-    err = PBDirCreate(&hp, FALSE);
+    err = PBDirCreate(&hp, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:";
-    err = PBFlushVol(&pb, FALSE);
-    err = myPBHDelete(&hp, FALSE);
+    err = PBFlushVol(&pb, false);
+    err = myPBHDelete(&hp, false);
 #endif
     
 #if 0
     pb.ioNamePtr = (StringPtr) "\pMyVol:testdir1:testdir1's file";
     pb.ioRefNum = 0;
-    err = myPBCreate(&pb, FALSE);
+    err = myPBCreate(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:testdir1:testdir1's second file";
-    err = myPBCreate(&pb, FALSE);
+    err = myPBCreate(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:testdir1:testdir1's third file";
-    err = myPBCreate(&pb, FALSE);
+    err = myPBCreate(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:testdir1:testdir1's fourth file";
-    err = myPBCreate(&pb, FALSE);
+    err = myPBCreate(&pb, false);
     pb.ioNamePtr = (StringPtr) "\pMyVol:testdir1:testdir1's fifth file";
-    err = myPBCreate(&pb, FALSE);
+    err = myPBCreate(&pb, false);
 #endif
 
 #if 1
     pb.ioNamePtr = (StringPtr) "\pMyVol:";
-    err = PBFlushVol((ParmBlkPtr) &pb, FALSE);
+    err = PBFlushVol((ParmBlkPtr) &pb, false);
     if (err != noErr)
 	DebugStr((StringPtr) "\pPBFlushVol fails");
 #endif
@@ -293,7 +293,7 @@ PUBLIC void main( void )
 #endif
 #if 0
     pb.ioNamePtr = (StringPtr) "\pMyVol:";
-    err = PBFlushVol((ParmBlkPtr) &pb, FALSE);
+    err = PBFlushVol((ParmBlkPtr) &pb, false);
     if (err != noErr)
 	DebugStr((StringPtr) "\pPBFlushVol fails");
 #endif
@@ -304,7 +304,7 @@ PUBLIC void main( void )
 #endif
 #if 0
     pb.ioNamePtr = (StringPtr) "\pMyVol:";
-    err = PBFlushVol((ParmBlkPtr) &pb, FALSE);
+    err = PBFlushVol((ParmBlkPtr) &pb, false);
     if (err != noErr)
 	DebugStr((StringPtr) "\pPBFlushVol fails");
 #endif

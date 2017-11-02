@@ -78,7 +78,7 @@ static int mm_current_applzone;
   do {						\
     GEN_MEM_ERR (err);				\
     MemErr = CWV (err);				\
-  } while (FALSE)
+  } while (false)
 
 SignedByte
 hlock_return_orig_state (Handle h)
@@ -390,7 +390,7 @@ unsigned long ROMlib_total_allocated_memory;
 void
 ROMlib_InitZones (offset_enum which)
 {
-  static bool beenhere = FALSE;
+  static bool beenhere = false;
   static Ptr stack_begin, stack_end;
   static unsigned long applzone_memory_segment_size;
   int init_syszone_size;
@@ -398,7 +398,7 @@ ROMlib_InitZones (offset_enum which)
 #if ERROR_SUPPORTED_P (ERROR_MEMORY_MANAGER_SLAM)
   /* Temporarily turn off heap slamming while the heap is being set up. */
   bool old_debug_enabled_p;
-  old_debug_enabled_p = error_set_enabled (ERROR_MEMORY_MANAGER_SLAM, FALSE);
+  old_debug_enabled_p = error_set_enabled (ERROR_MEMORY_MANAGER_SLAM, false);
 #endif
   
 #define INIT_SYSZONE_SIZE \
@@ -512,7 +512,7 @@ ROMlib_InitZones (offset_enum which)
       ROMlib_memtop = (unsigned long) (memory + total_allocated_memory);
       InitZone (0, 32, (Ptr) ((long) MR (SysZone) + init_syszone_size),
 		(Zone *) MR (SysZone));
-      beenhere = TRUE;
+      beenhere = true;
     }
   
 #if defined (MM_MANY_APPLZONES)
@@ -942,7 +942,7 @@ SetHandleSize (Handle h, Size newsize)
       /* First try and grow it forward */
       save_memnomove_p = ROMlib_memnomove_p;
       if (USE (nextblock) == REL && ROMlib_locked (block))
-	ROMlib_memnomove_p = FALSE;
+	ROMlib_memnomove_p = false;
       if (ROMlib_makespace (&nextblock, newsize - oldpsize))
 	{
 	  ROMlib_memnomove_p = save_memnomove_p;
@@ -1009,8 +1009,8 @@ HandleZone (Handle h)
       return NULL;
     }
   
-  applzone_p = FALSE;
-  syszone_p = FALSE;
+  applzone_p = false;
+  syszone_p = false;
   if (HANDLE_IN_ZONE_P (h, ApplZone))
     {
       Ptr p;
@@ -1021,7 +1021,7 @@ HandleZone (Handle h)
 	  SET_MEM_ERR (memAZErr);
 	  return NULL;
 	}
-      applzone_p = TRUE;
+      applzone_p = true;
     }
   else if (HANDLE_IN_ZONE_P (h, SysZone))
     {
@@ -1033,7 +1033,7 @@ HandleZone (Handle h)
 	  SET_MEM_ERR (memAZErr);
 	  return NULL;
 	}
-      syszone_p = TRUE;
+      syszone_p = true;
     }
   /*
    * Prevent us from returning a zone when a dereference of the handle would
@@ -1390,7 +1390,7 @@ legit_addr_p (void *addr)
 {
   bool retval;
 
-  retval = TRUE; /* all addresses are valid for now */
+  retval = true; /* all addresses are valid for now */
   return retval;
 }
 
@@ -1401,7 +1401,7 @@ legit_zone_p (THz zone)
   bool retval;
 
   if (!legit_addr_p (zone))
-    retval = FALSE;
+    retval = false;
   else
     {
       block_header_t *blockp;
@@ -1664,7 +1664,7 @@ _CompactMem_flags (Size sizeneeded, bool sys_p)
   
   if (amtfree < sizeneeded && !startfront_p)
     {
-      startfront_p = TRUE;
+      startfront_p = true;
       src = target = ZONE_HEAP_DATA (current_zone);
       goto repeat;
     }
@@ -1697,7 +1697,7 @@ _ResrvMem_flags (Size needed, bool sys_p)
   if (sys_p)
     TheZone = SysZone;
   current_zone = MR (TheZone);
-  already_maxed_p = FALSE;
+  already_maxed_p = false;
 
  again:
   for (b = ZONE_HEAP_DATA (current_zone);
@@ -1719,7 +1719,7 @@ _ResrvMem_flags (Size needed, bool sys_p)
   avail = MaxMem (&free);
   if (avail >= needed && !already_maxed_p)
     {
-      already_maxed_p = TRUE;
+      already_maxed_p = true;
       goto again;
     }
   if (free >= needed)
@@ -1803,7 +1803,7 @@ BlockMove_and_possibly_flush_cache (Ptr src, Ptr dst, Size cnt,
 
       memmove_transfer (dst, src, cnt);
       if (flush_p)
-	ROMlib_destroy_blocks (US_TO_SYN68K(dst), cnt, TRUE);
+	ROMlib_destroy_blocks (US_TO_SYN68K(dst), cnt, true);
     }
 
   /* don't use `SET_MEM_ERR' since that will do a heap slam and we
@@ -1814,13 +1814,13 @@ BlockMove_and_possibly_flush_cache (Ptr src, Ptr dst, Size cnt,
 void
 BlockMove (Ptr src, Ptr dst, Size cnt)
 {
-  BlockMove_and_possibly_flush_cache (src, dst, cnt, TRUE);
+  BlockMove_and_possibly_flush_cache (src, dst, cnt, true);
 }
 
 void
 BlockMoveData (Ptr src, Ptr dst, Size cnt)
 {
-  BlockMove_and_possibly_flush_cache (src, dst, cnt, FALSE);
+  BlockMove_and_possibly_flush_cache (src, dst, cnt, false);
 }
 
 void
@@ -1859,7 +1859,7 @@ MoveHHi (Handle h)
    */
 
   if (ROMlib_creator != TICK ("MSWD") && ROMlib_creator != TICK ("ddOr"))
-    ROMlib_destroy_blocks (0, ~0, TRUE);
+    ROMlib_destroy_blocks (0, ~0, true);
   
   /* #### there used to be a lot of code here; but it was unused and
      returned noErr #if !MOVEHIWORKS -- see the rcsfile for details */
@@ -2075,7 +2075,7 @@ ROMlib_installhandle (Handle sh, Handle dh)
   save_zone = TheZone;
   TheZone = RM (HandleZone (dh));
 
-  if (TRUE
+  if (true
       || ROMlib_locked (HANDLE_TO_BLOCK (dh))
       || HandleZone (sh) != MR (TheZone))
     {
@@ -2135,7 +2135,7 @@ _NewHandle_copy_ptr_flags (Size size, const void *data_to_copy,
 {
   Handle h;
 
-  h = _NewHandle_flags (size, sys_p, FALSE);
+  h = _NewHandle_flags (size, sys_p, false);
   if (MemErr == CWC (noErr))
     memcpy (STARH (h), data_to_copy, size);
   return h;
@@ -2152,7 +2152,7 @@ _NewHandle_copy_handle_flags (Size size, Handle data_to_copy, bool sys_p)
 
   if (GetHandleSize (data_to_copy) < size)
     warning_unexpected ("Not enough bytes to copy!");
-  h = _NewHandle_flags (size, sys_p, FALSE);
+  h = _NewHandle_flags (size, sys_p, false);
   if (MemErr == CWC (noErr))
     memcpy (STARH (h), STARH (data_to_copy), size);
   return h;
@@ -2168,7 +2168,7 @@ _NewPtr_copy_ptr_flags (Size size, const void *data_to_copy,
 {
   Ptr p;
 
-  p = _NewPtr_flags (size, sys_p, FALSE);
+  p = _NewPtr_flags (size, sys_p, false);
   if (MemErr == CWC (noErr))
     memcpy (p, data_to_copy, size);
   return p;
@@ -2185,7 +2185,7 @@ _NewPtr_copy_handle_flags (Size size, Handle data_to_copy, bool sys_p)
 
   if (GetHandleSize (data_to_copy) < size)
     warning_unexpected ("Not enough bytes to copy!");
-  p = _NewPtr_flags (size, sys_p, FALSE);
+  p = _NewPtr_flags (size, sys_p, false);
   if (MemErr == CWC (noErr))
     memcpy (p, STARH (data_to_copy), size);
   return p;

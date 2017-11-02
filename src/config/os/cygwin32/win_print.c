@@ -436,7 +436,7 @@ complain_if_no_ghostscript (void)
 	      reply = MessageBox (NULL, buf, "Printing Disabled", MB_OKCANCEL);
 	      if (reply != IDOK)
 		{
-		  ROMlib_exit = TRUE;
+		  ROMlib_exit = true;
 		  C_ExitToShell ();
 		}
 	    }
@@ -498,7 +498,7 @@ release_info (win_printp_t wp, uint32 *last_errorp)
 
   free (wp);
 
-  retval = TRUE;
+  retval = true;
   return retval;
 }
 
@@ -589,7 +589,7 @@ get_info (win_printp_t *wpp, int physx, int physy,
     loadgs ();
   if (!gsdll_revision)
     {
-      retval = FALSE;
+      retval = false;
       if (last_errorp)
 	*last_errorp = GetLastError ();
     }
@@ -598,7 +598,7 @@ get_info (win_printp_t *wpp, int physx, int physy,
       wp = malloc (sizeof *wp);
       if (!wp)
 	{
-	  retval = FALSE;
+	  retval = false;
 	  if (last_errorp)
 	    *last_errorp = MALLOC_FAILED;
 	}
@@ -638,7 +638,7 @@ get_info (win_printp_t *wpp, int physx, int physy,
 	      if (!(raster_caps & RC_DIBTODEV))
 		{
 		  DeleteDC (infop->hDC);
-		  retval = FALSE;
+		  retval = false;
 		  if (last_errorp)
 		    *last_errorp = NO_DIBTODEV;
 		}
@@ -709,7 +709,7 @@ get_info (win_printp_t *wpp, int physx, int physy,
 		    global_right  = wp->info.printx;
 		    global_bottom = wp->info.printy;
 		  }
-		  retval = TRUE;
+		  retval = true;
 		}
 	    }
 	}
@@ -734,7 +734,7 @@ print_file (win_printp_t wp, const char *spool_namep, uint32 *last_errorp)
   SAVE_FP_ENVIRONMENT ();
   if (!wp)
     {
-      retval = FALSE;
+      retval = false;
       *last_errorp = NIL_HANDLE;
     }
   else
@@ -748,7 +748,7 @@ print_file (win_printp_t wp, const char *spool_namep, uint32 *last_errorp)
       job_identifier = StartDoc (wp->info.hDC, &di);
       if (job_identifier <= 0)
 	{
-	  retval = FALSE;
+	  retval = false;
 	  if (last_errorp)
 	    *last_errorp = GetLastError ();
 	}
@@ -812,7 +812,7 @@ print_file (win_printp_t wp, const char *spool_namep, uint32 *last_errorp)
 
 	  if (gsdll_init (gsdll_callback, NULL, NELEM (argv)-1, argv) != 0)
 	    {
-	      retval = FALSE;
+	      retval = false;
 	      if (last_errorp)
 		*last_errorp = GSDLL_INIT_FAILED;
 	    }
@@ -853,7 +853,7 @@ print_file (win_printp_t wp, const char *spool_namep, uint32 *last_errorp)
 	      if (code > -100)
 		gsdll_execute_end ();
 	      gsdll_exit ();
-	      retval = TRUE;
+	      retval = true;
 	    }
 	}
     }
@@ -895,9 +895,9 @@ xxx (int size, face_t face, family_t family)
   lf.lfEscapement = 0;
   lf.lfOrientation = 0;
   lf.lfWeight = face & bold ? 700 : 400;
-  lf.lfItalic = face & italic ? TRUE : FALSE;
-  lf.lfUnderline = FALSE;
-  lf.lfStrikeOut = FALSE;
+  lf.lfItalic = face & italic ? true : false;
+  lf.lfUnderline = false;
+  lf.lfStrikeOut = false;
   lf.lfCharSet = ANSI_CHARSET;
   lf.lfOutPrecision = OUT_DEFAULT_PRECIS; /* ? */
   lf.lfClipPrecision = CLIP_DEFAULT_PRECIS; /* ? */

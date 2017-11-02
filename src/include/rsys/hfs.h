@@ -353,7 +353,7 @@ extern INTEGER SCSIFlags;
   (_v & WDMASK) == WDMAGIC ?					\
     (_v ^ WDMAGIC) % sizeof (wdentry) == sizeof (INTEGER)	\
   :								\
-    FALSE;							\
+    false;							\
 })
 
 #define WDNUMTOWDP(v) ((wdentry *)(MR(WDCBsPtr) + (INTEGER) ((v) ^ WDMAGIC)))

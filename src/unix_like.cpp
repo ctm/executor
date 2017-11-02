@@ -133,7 +133,7 @@ Executor::os_init (void)
 #if defined (SDL)
   install_exception_handler ();
 #endif
-  return TRUE;
+  return true;
 }
 
 PUBLIC int

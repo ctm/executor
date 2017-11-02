@@ -37,7 +37,7 @@ static volatile int itimer_chained = 0;
 
 static _go32_dpmi_seginfo old_handler;
 static _go32_dpmi_seginfo new_handler;
-BOOLEAN iret_wrapper_allocated = FALSE;
+BOOLEAN iret_wrapper_allocated = false;
 
 #if 1
 #define REPROGRAM_TIMER_0(ticks_per_sec)				  \
@@ -89,7 +89,7 @@ static void unchain()
 	if (iret_wrapper_allocated)
 	  {
 	    _go32_dpmi_free_iret_wrapper (&new_handler);
-	    iret_wrapper_allocated = FALSE;
+	    iret_wrapper_allocated = false;
 	  }
 
 	restore_real_ints (bi);
@@ -118,7 +118,7 @@ void protected_gettimeofday(struct timeval *tvp, struct timezone *tzp)
     static struct timeval last_known_time;
     static long last_known_clock;
     static unsigned long last_known_ticks;
-    static char beenhere = FALSE;
+    static char beenhere = false;
     long temp_clock;
 
     if (!beenhere)
@@ -128,7 +128,7 @@ void protected_gettimeofday(struct timeval *tvp, struct timezone *tzp)
 	  last_known_ticks = CL (Ticks);
 	else
 	  last_known_clock = clock ();
-	beenhere = TRUE;
+	beenhere = true;
       }
 
     if (ROMlib_ticks60 && ROMlib_clock)
@@ -265,7 +265,7 @@ itimer_set (unsigned long usecs, void (*func) (void))
 			gui_fatal ("Unable to allocate iret wrapper "
 				   "for the clock.");
 		      }
-		    iret_wrapper_allocated = TRUE;
+		    iret_wrapper_allocated = true;
 		    _go32_dpmi_set_protected_mode_interrupt_vector(8,
 								   &new_handler);
 		  }

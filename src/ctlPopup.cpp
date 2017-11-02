@@ -71,7 +71,7 @@ init (ControlHandle ctl)
   CTL_VALUE_X (ctl) = CWC (1);
   CTL_MIN_X (ctl) = CWC (1);
   CTL_MAX_X (ctl) = CW (CountMItems (mh));
-  CheckItem (mh,  1, TRUE);
+  CheckItem (mh,  1, true);
 }
 
 static void
@@ -153,7 +153,7 @@ draw (ControlHandle ctl, draw_state_t draw_state,
 
   /* true if we should draw the pulldown arrow; pulldown arrow is not
      drawn if there are no menu items */
-  bool draw_pulldown_arrow_p = TRUE;
+  bool draw_pulldown_arrow_p = true;
   
   data = (popup_data_handle) CTL_DATA (ctl);
   flags = POPUP_FLAGS (data);
@@ -167,7 +167,7 @@ draw (ControlHandle ctl, draw_state_t draw_state,
       item_info = (mextp)alloca (sizeof *item_info);
       memset (item_info, '\000', sizeof *item_info);
 
-      draw_pulldown_arrow_p = FALSE;
+      draw_pulldown_arrow_p = false;
     }
   
   ctl_rect = &CTL_RECT (ctl);
@@ -196,7 +196,7 @@ draw (ControlHandle ctl, draw_state_t draw_state,
 	    + CW (font_info.leading));
   title_width = POPUP_TITLE_WIDTH (data);
   
-  icon_p = get_icon_info (item_info, &icon_info, TRUE);
+  icon_p = get_icon_info (item_info, &icon_info, true);
   
   item_total_height = ((icon_p ? MAX (icon_info.height, height)
 			       : height)
@@ -247,7 +247,7 @@ draw (ControlHandle ctl, draw_state_t draw_state,
   }
   
   /* draw the title */
-  set_text_face (FALSE, flags, item_info);
+  set_text_face (false, flags, item_info);
   
   RGBForeColor (invert_title_p ? &ROMlib_white_rgb_color
 		               : &ROMlib_black_rgb_color);
@@ -347,7 +347,7 @@ draw (ControlHandle ctl, draw_state_t draw_state,
     int title_left, title_right;
     uint8 title_length;
     
-    set_text_face (TRUE, flags, item_info);
+    set_text_face (true, flags, item_info);
     
     title_left = item_left + icon_info.width;
     /* arrow is padded by the arrow width `11' on either side */
@@ -442,7 +442,7 @@ P4 (PUBLIC pascal, int32, cdef1008,
     WindowPtr ctl_owner;
 
     ctl_owner = CTL_OWNER (ctl);
-    window_font_p = (var & popupUseWFont ? TRUE : FALSE);
+    window_font_p = (var & popupUseWFont ? true : false);
     window_font = PORT_TX_FONT (ctl_owner);
     window_size = PORT_TX_SIZE (ctl_owner);
   }
@@ -454,7 +454,7 @@ P4 (PUBLIC pascal, int32, cdef1008,
     {
     case drawCntl:
       draw (ctl, draw_state, window_font, window_size, window_font_p,
-	    FALSE, FALSE, NULL, NULL);
+	    false, false, NULL, NULL);
       break;
       
     case testCntl:
@@ -508,11 +508,11 @@ P4 (PUBLIC pascal, int32, cdef1008,
 	orig_value = CTL_VALUE (ctl);
 	
 	for (i = 0; i <= count; i ++)
-	  CheckItem (mh, i, FALSE);
-	CheckItem (mh, orig_value, TRUE);
+	  CheckItem (mh, i, false);
+	CheckItem (mh, orig_value, true);
 	
 	draw (ctl, draw_state, window_font, window_size, window_font_p,
-	      TRUE, TRUE, &top, &left);
+	      true, true, &top, &left);
 	
 	port_bounds = &PORT_BOUNDS (CTL_OWNER (ctl));
 	top  -= CW (port_bounds->top);
@@ -523,7 +523,7 @@ P4 (PUBLIC pascal, int32, cdef1008,
 	if (value)
 	  CTL_VALUE_X (ctl) = CW (value);
 	draw (ctl, draw_state, window_font, window_size, window_font_p,
-	      FALSE, FALSE, NULL, NULL);
+	      false, false, NULL, NULL);
 	
 	break;
       }

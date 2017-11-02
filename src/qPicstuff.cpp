@@ -465,7 +465,7 @@ assoc_find_str (StringPtr sp)
   assoc_link_t **retval;
 
   for (retval = &assoc_headp;
-       *retval && EqualString ((*retval)->str, sp, FALSE, TRUE) != 0;
+       *retval && EqualString ((*retval)->str, sp, false, true) != 0;
        retval = &(*retval)->nextp)
     ;
   return retval;
@@ -1184,12 +1184,12 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
 	      memcpy (STARH (h), nextbytep, pic_data_size);
 	    
 	    pixmap->baseAddr = *h;
-	    *freep = TRUE;
+	    *freep = true;
 	  }
 	else
 	  {
 	    pixmap->baseAddr = RM ((Ptr) nextbytep);
-	    *freep = FALSE;
+	    *freep = false;
 	  }
 	nextbytep += pic_data_size;
 	if (pic_data_size & 1)
@@ -1270,7 +1270,7 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
 		DisposHandle (temph);
 	      }
 	  }
-	*freep = TRUE;
+	*freep = true;
       }
     
     if (pixmap->packType == CWC (2))

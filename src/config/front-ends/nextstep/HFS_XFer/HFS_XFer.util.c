@@ -17,10 +17,10 @@
 
 unsigned char buf[8][512];	/* don't change this size */
 
-#if !defined(TRUE)
-#define TRUE	1
-#define FALSE	0
-#endif /* !defined(TRUE) */
+#if !defined(true)
+#define true	1
+#define false	0
+#endif /* !defined(true) */
 
 static char isejectable( const char *dname, long fd )
 {
@@ -33,11 +33,11 @@ static char isejectable( const char *dname, long fd )
 #endif
 
     /* look for rfd[0-9] */
-    retval = FALSE;
+    retval = false;
 #if defined(NEXTSTEP)
     for (p = dname; p = index(p, 'r'); ++p) {
 	if (p[1] == 'f' && p[2] == 'd' && isdigit(p[3])) {
-	    retval = TRUE;
+	    retval = true;
 /*-->*/	    break;
 	}
     }
@@ -52,7 +52,7 @@ static char isejectable( const char *dname, long fd )
 	sr.sr_ioto	           = 1;
 	if (ioctl(fd, SGIOCREQ, &sr) == 0 && sr.sr_io_status == 0 &&
 							    inqp->ir_removable)
-	    retval = TRUE;
+	    retval = true;
     }
 #endif
     return retval;
@@ -135,7 +135,7 @@ static void trywithmode(char *argv0, char *rawname, mode_t mode)
 	sprintf(name, "/dev/r%sb", rawname);
     else
 	sprintf(name, "/dev/r%sh", rawname);
-    openit = FALSE;
+    openit = false;
     if ((fd = open(name, O_RDONLY)) >= 0 &&
 	        moderead(mode, fd, (char *) buf, sizeof(buf)) == sizeof(buf)) {
 	p = argv0 + strlen(argv0) - 3 - 2;	/* ".fs" -3 " "RO" -2 */
@@ -144,7 +144,7 @@ static void trywithmode(char *argv0, char *rawname, mode_t mode)
 	else
 	    newmode = 0666;
 	if (buf[2][0] == 'B' && buf[2][1] == 'D') {
-	    openit = TRUE;
+	    openit = true;
 	    nmalblks = (buf[2][18] <<  8) |  buf[2][19];
 
 	    alblksiz = (buf[2][20] << 24) | (buf[2][21] << 16) |
@@ -154,7 +154,7 @@ static void trywithmode(char *argv0, char *rawname, mode_t mode)
 		newmode = 0666;
 	} else if ((buf[1][0] == PARMAPSIG0 && buf[1][1] == PARMAPSIG1) ||
 		   (buf[1][0] == OLDMAPSIG0 && buf[1][1] == OLDMAPSIG1))
-	    openit = TRUE;
+	    openit = true;
 
 	ejectable = isejectable(name, fd);
 	close(fd);

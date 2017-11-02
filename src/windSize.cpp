@@ -203,7 +203,7 @@ do						\
   PenPat(gray);					\
   PenMode(notPatXor);				\
 }						\
-while (FALSE)
+while (false)
 
 #define RESTORE_PORT(p)				\
 do						\
@@ -212,7 +212,7 @@ do						\
   PenMode(patCopy);				\
   SetPort (p);					\
 }						\
-while (FALSE)
+while (false)
 
 P3(PUBLIC pascal trap, LONGINT, GrowWindow, WindowPtr, w, Point, startp,
 								    Rect *, rp)

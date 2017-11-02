@@ -171,7 +171,7 @@ SDLSound::sound_shutdown ()
   if (have_sound_p)
     {
       /* possibly kill the thread here */
-      have_sound_p = FALSE;
+      have_sound_p = false;
     }
 
   sdl_stream = NULL;
@@ -185,7 +185,7 @@ SDLSound::sound_clear_pending ()
 bool
 SDLSound::sound_silent ()
 {
-  return FALSE;
+  return false;
 }
 
 void
@@ -209,7 +209,7 @@ SDLSound::sdl_wait_until_callback_has_been_called (void)
 void *
 SDLSound::loop (void *unused)
 {
-  while (TRUE) {
+  while (true) {
     SDLSound *ourSelf = (SDLSound *)unused;
     ourSelf->patl_wait ();
     //      fprintf (stderr, "waiting until callback has been called\n");
@@ -266,7 +266,7 @@ SDLSound::sound_init ()
                            try to initialize.  May as well set
                            it to the common Mac value. */
 
-  have_sound_p = FALSE;
+  have_sound_p = false;
 
   if (sound_disabled_p)
     goto fail;
@@ -277,13 +277,13 @@ SDLSound::sound_init ()
       err = SDL_GetError ();
       fprintf (stderr, "SDL_Init(SDL_INIT_AUDIO) failed: '%s'\n",
 	       err ? err : "(NULL)");
-      return FALSE;
+      return false;
     }
 
   if (sdl_audio_driver_name)
     {
       const char *sanity_check_name;
-      bool success = FALSE;
+      bool success = false;
 
       sanity_check_name = SDL_GetCurrentAudioDriver();
       if (sanity_check_name)
@@ -292,7 +292,7 @@ SDLSound::sound_init ()
         {
           fprintf (stderr, "Wanted '%s', got '%s'", sdl_audio_driver_name,
             sanity_check_name ? sanity_check_name : "NULL");
-          return FALSE;
+          return false;
         }
     }
 
@@ -362,13 +362,13 @@ SDLSound::sound_init ()
 
   /*patl_signal ();*/
 
-  have_sound_p = TRUE;
+  have_sound_p = true;
 
   /* Success! */
-  return TRUE;
+  return true;
 
  fail:
 #warning TODO some sort of sdl shutdown
   fprintf (stderr, "failure of some sort\n");
-  return FALSE;
+  return false;
 }

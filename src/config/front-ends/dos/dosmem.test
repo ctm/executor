@@ -31,8 +31,8 @@ uint16 dos_pm_cs;
 /* Attempts to allocate a block of DOS memory of size SIZE which does
  * not span a 64K bank.  We need to make this guarantee so that calls
  * to floppy disk BIOS routines will work (DMA hardware requires
- * things not to cross 64K boundaries).  Returns TRUE iff successful,
- * else FALSE.
+ * things not to cross 64K boundaries).  Returns true iff successful,
+ * else false.
  */
 static bool
 alloc_single_bank_dos_block (int size, uint16 *segp, uint16 *selp)
@@ -52,7 +52,7 @@ warning_trace_info (NULL);
 warning_trace_info (NULL);
   /* Default values. */
   seg = sel = -1;
-  success_p = FALSE;
+  success_p = false;
 
 warning_trace_info (NULL);
 
@@ -82,7 +82,7 @@ warning_trace_info (NULL);
        */
       if ((seg & 0xFFF) == ((seg + paragraphs - 1) & 0xFFF))
 	{
-	  success_p = TRUE;
+	  success_p = true;
 warning_trace_info (NULL);
 	  break;
 	}
@@ -134,7 +134,7 @@ warning_trace_info ("enter");
 				    &dos_buf_selector))
     {
       warning_unexpected ("Unable to allocate DOS memory.");
-      return FALSE;
+      return false;
     }
 
   warning_trace_info ("DOS scratch buffer at 0x%04X:0000",
@@ -156,5 +156,5 @@ warning_trace_info ("enter");
   __dpmi_int_ss = dos_buf_segment;
   __dpmi_int_sp = DOS_STACK_TOP;
 
-  return TRUE;
+  return true;
 }

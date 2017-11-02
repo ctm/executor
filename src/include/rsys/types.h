@@ -16,19 +16,6 @@ typedef uint64_t uint64;
 #define INT_TYPES_TYPEDEFED
 #endif /* !INT_TYPES_TYPEDEFED */
 
-#if !defined (BOOLEAN_T_TYPEDEFED)
-# undef FALSE
-# undef TRUE
-enum { FALSE, TRUE };
-#else /* BOOLEAN_T_TYPEDEFED */
-# if !defined (FALSE)
-#  define FALSE 0
-# endif
-# if !defined (TRUE)
-#  define TRUE 1
-# endif
-#endif /* BOOLEAN_T_TYPEDEFED */
-
 #if !defined (INT16_MAX)
 #define INT16_MAX	((int16) 0x7FFF)
 #endif

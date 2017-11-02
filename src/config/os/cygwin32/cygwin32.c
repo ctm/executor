@@ -33,7 +33,7 @@ os_init (void)
   ROMlib_set_caps_lock_off ();
   guess_good_memory_settings ();
   install_exception_handler ();
-  retval = TRUE;
+  retval = true;
   return retval;
 }
 

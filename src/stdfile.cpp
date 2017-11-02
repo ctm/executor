@@ -65,7 +65,7 @@ char ROMlib_rcsid_stdfile[] =
 
 #include "rsys/osevent.h"
 
-PUBLIC int Executor::nodrivesearch_p = FALSE;
+PUBLIC int Executor::nodrivesearch_p = false;
 
 #if defined (MSDOS) || defined (CYGWIN32)
 #include "dosdisk.h"
@@ -454,7 +454,7 @@ A2(PRIVATE, StringPtr, getdiskname, BOOLEAN *, ejectablep,
 	pbr.volumeParam.ioNamePtr = RM(&retval[0]);
 	pbr.volumeParam.ioVolIndex = 0;
 	pbr.volumeParam.ioVRefNum = CW(-CW(SFSaveDisk));
-	err = PBGetVInfo(&pbr, FALSE);
+	err = PBGetVInfo(&pbr, false);
 	cachedvrn = SFSaveDisk;
 	if (err == noErr)
 	  {
@@ -462,13 +462,13 @@ A2(PRIVATE, StringPtr, getdiskname, BOOLEAN *, ejectablep,
 	    writable = !(pbr.volumeParam.ioVAtrb &
 			 CWC(VHARDLOCKBIT|VSOFTLOCKBIT));
 	    if (writable && pbr.volumeParam.ioVFrBlk == CWC(0))
-	      writable = FALSE;
+	      writable = false;
 	  }
 	else
 	  {
 	    warning_unexpected ("surprising PBGetVInfo retval = %d\n", err);
-	    ejectable = FALSE;
-	    writable = TRUE;
+	    ejectable = false;
+	    writable = true;
 	  }
     }
     if (ejectablep)
@@ -525,7 +525,7 @@ A1(PRIVATE, LONGINT, getdirid, StringPtr, fname)
     hpb.dirInfo.ioVRefNum    = CW(-CW(SFSaveDisk));
     hpb.dirInfo.ioFDirIndex  = CWC (0);
     hpb.dirInfo.ioDrDirID    = CurDirStore;
-    err = PBGetCatInfo(&hpb, FALSE);
+    err = PBGetCatInfo(&hpb, false);
     if (err == noErr)
       retval = CL (hpb.dirInfo.ioDrDirID);
     else
@@ -676,7 +676,7 @@ A1(PRIVATE, void, getcurname, fltype *, f)
     hpb.dirInfo.ioVRefNum    = CW(-CW(SFSaveDisk));
     hpb.dirInfo.ioFDirIndex  = CWC(-1);
     hpb.dirInfo.ioDrDirID    = CurDirStore;
-    err = PBGetCatInfo(&hpb, FALSE);
+    err = PBGetCatInfo(&hpb, false);
     if (err != noErr)
       {
 	warning_unexpected ("PBGetCatInfo err = %d\n", err);
@@ -723,8 +723,8 @@ A3(PRIVATE, int, typeinarray, GUEST<OSType>, ft, INTEGER, numt, GUEST<SFTypeList
     
     while (numt--)
 	if (ft == *ostp++)
-/*-->*/     return(TRUE);
-    return(FALSE);
+/*-->*/     return(true);
+    return(false);
 }
 
 /*
@@ -801,7 +801,7 @@ passes_filter (fltype *f, CInfoPBRec *cinfop, INTEGER numt)
       break;
     default:
       warning_unexpected ("flavor = %d", f->flavor);
-      retval = TRUE;
+      retval = true;
       break;
     }
   return retval;
@@ -826,7 +826,7 @@ A1(PRIVATE, void, flfill, fltype *, f)
     for (dirindex = 1; err != fnfErr && errcount != 3; dirindex++) {
 	pb.hFileInfo.ioFDirIndex = CW(dirindex);
 	pb.hFileInfo.ioDirID    = CurDirStore;
-	err = PBGetCatInfo(&pb, FALSE);
+	err = PBGetCatInfo(&pb, false);
 	if (err) {
 	    if (err != fnfErr) {
 	        warning_unexpected ("PBGetCatInfo err = %d\n", err);
@@ -970,7 +970,7 @@ A1(PRIVATE, LONGINT, getparent, LONGINT, dirid)
     cb.dirInfo.ioVRefNum = CW(-CW(SFSaveDisk));
     cb.dirInfo.ioFDirIndex = CWC (-1);
     cb.dirInfo.ioDrDirID = CL(dirid);
-    err = PBGetCatInfo(&cb, FALSE);
+    err = PBGetCatInfo(&cb, false);
     if (err == noErr)
       retval = CL(cb.dirInfo.ioDrParID);
     else
@@ -990,7 +990,7 @@ PRIVATE BOOLEAN findparent(GUEST<INTEGER> *vrefp, GUEST<LONGINT> *diridp)
     INTEGER namelen;
 
     vcbp = ROMlib_vcbbyvrn(CW(*vrefp));
-    retval = FALSE;
+    retval = false;
     if (!vcbp->vcbCTRef) {
 	namelen = strlen(((VCBExtra *) vcbp)->unixname);
 	if (namelen != 1 + SLASH_CHAR_OFFSET) {	/* i.e. "/" */
@@ -1006,7 +1006,7 @@ PRIVATE BOOLEAN findparent(GUEST<INTEGER> *vrefp, GUEST<LONGINT> *diridp)
 			       (vcbp = ROMlib_vcbbybiggestunixname(namecpy))) {
 		*vrefp = vcbp->vcbVRefNum;
 		*diridp = CL((LONGINT) ST_INO (sbuf));
-		retval = TRUE;
+		retval = true;
 	    }
 	}
     }
@@ -1022,7 +1022,7 @@ A1(PRIVATE, BOOLEAN, moveuponedir, DialogPtr, dp)
     parent = getparent(CL(CurDirStore));
     if (parent != CL(CurDirStore) && parent != 1) {
 	CurDirStore = CL(parent);
-	retval = TRUE;
+	retval = true;
     } else {
 	vrn = CW(-CW(SFSaveDisk));
 	retval = findparent(&vrn, &CurDirStore);
@@ -1057,7 +1057,7 @@ BOOLEAN keyarrow(fltype *fl, INTEGER incr)	/* -1: up, 1: down */
  * If we don't find a non-grayed out entry, we leave
  */
     if (nsel < 0 || nsel >= fl->flnmfil)
-/*-->*/	return FALSE;
+/*-->*/	return false;
 
 /*
  * Figure out what should be visible and scroll there if necessary
@@ -1084,7 +1084,7 @@ BOOLEAN keyarrow(fltype *fl, INTEGER incr)	/* -1: up, 1: down */
     safeflflip(fl, nsel);
     settype(fl, nsel);
     fl->flsel = nsel;
-    return TRUE;
+    return true;
 }
 
 PRIVATE bool
@@ -1103,7 +1103,7 @@ folder_selected_p (fltype *fl)
       break;
     default:
       warning_unexpected ("flavor = %d", fl->flavor);
-      retval = FALSE;
+      retval = false;
       break;
     }
 
@@ -1121,17 +1121,17 @@ call_magicfp (fltype *fl, DialogPeek dp, EventRecord *evt, GUEST<INTEGER> *ith)
     case new_sf:
       retval = fl->magicfp.ofilterp
 	? CALLFILTERPROC ((DialogPtr) dp, evt, ith, fl->magicfp.ofilterp)
-	  : FALSE;
+	  : false;
       break;
     case new_custom_sf:
       retval = fl->magicfp.cfilterp
 	? CALL_NEW_FILTER_PROC ((DialogPtr) dp, evt, ith, fl->mydata,
 				fl->magicfp.cfilterp)
-	  : FALSE;
+	  : false;
       break;
     default:
       warning_unexpected ("flavor = %d", fl->flavor);
-      retval = FALSE;
+      retval = false;
     }
 
   return retval;
@@ -1160,7 +1160,7 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 
     fl = WINDFL(dp);
     opentoken = getOpen;	/* getOpen and putSave are both 1 */
-    retval = FALSE;
+    retval = false;
     switch (CW(evt->what)) {
     case keyDown:
 	*ith = CW((CL(evt->message) & 0xFF) + keydownbit);
@@ -1228,7 +1228,7 @@ P3(PUBLIC, pascal INTEGER,  ROMlib_stdffilt, DialogPeek, dp,
 		prefix[++prefix[0]] = CL(evt->message) & 0xff;
 		while (flp < flep &&
 			    RelString((StringPtr) (MR(*fl->flstrs) +
-					flp->floffs), prefix, FALSE, TRUE) < 0)
+					flp->floffs), prefix, false, true) < 0)
 		    ++flp;
 		nsel = flp - MR(*fl->flinfo);
 		if (nsel != fl->flsel) {
@@ -1381,17 +1381,17 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
        hpb.dirInfo.ioDrDirID    = CurDirStore;
        max_width = 0;
        count = 0;
-       done = FALSE;
+       done = false;
        
        do  
 	 {
 	   OSErr err;
 
-	   err = PBGetCatInfo (&hpb, FALSE);
+	   err = PBGetCatInfo (&hpb, false);
 	   if (err != noErr)
 	     {
 	       warning_unexpected ("PBGetCatInfo returns err = %d\n", err);
-	       done = TRUE;
+	       done = true;
 	     }
 	   id = next->dirid = CL (hpb.dirInfo.ioDrDirID);
 	   next->vrefnum = CW (hpb.dirInfo.ioVRefNum);
@@ -1408,7 +1408,7 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
 	   if (id == 2) 
 	     {
 	       if (!findparent (&hpb.dirInfo.ioVRefNum, &hpb.dirInfo.ioDrDirID))
-		 done = TRUE;
+		 done = true;
 	     }
 	 } while (!done);
        fl = WINDFL(dp);
@@ -1490,8 +1490,8 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
        fillinrect.left = CW (CW (fillinrect.left) - 1);
        fillinrect.right = CW (CW (fillinrect.right) - 2);
        stdfflip (&fillinrect, sel, fl->fllinht);
-       done = FALSE;
-       seen_up_already = FALSE;
+       done = false;
+       seen_up_already = false;
        firstsel = -1;
        while (!done)
 	 {
@@ -1518,11 +1518,11 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
 	       if (OSEventAvail (mUpMask, &evt))
 		 {
 		   if (seen_up_already || (sel != firstsel && firstsel != -1))
-		     done = TRUE;
+		     done = true;
 		   else
 		     {
 		       GetOSEvent (mUpMask, &evt);
-		       seen_up_already = TRUE;
+		       seen_up_already = true;
 		     }
 		 }
 	       if (!done && OSEventAvail (mDownMask, &evt))
@@ -1546,13 +1546,13 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
 	;
       CurDirStore = CL(next->dirid);
       SFSaveDisk  = CW(-next->vrefnum);
-      return TRUE;
+      return true;
     }
   ALLOCAEND
 
   TEMP_ALLOC_FREE (temp_save_bits);
 
-  return FALSE;
+  return false;
 }
 
 PRIVATE void
@@ -1570,7 +1570,7 @@ makeworking (fltype *f)
 	wdpb.ioWDDirID  = CurDirStore;
 	wdpb.ioWDProcID = TICKX("STDF");
 	wdpb.ioNamePtr  = 0;
-	err = PBOpenWD(&wdpb, FALSE);
+	err = PBOpenWD(&wdpb, false);
 	if (err != noErr)
 	  warning_unexpected ("PBOpenWD returns %d\n", err);
 	
@@ -1602,7 +1602,7 @@ A1(PRIVATE, BOOLEAN, ejected, HParmBlkPtr, pb)
 PRIVATE bool single_tree_fs_p(HParmBlkPtr pb)
 {
 #if defined(MSDOS) || defined (CYGWIN32)
-  return FALSE;
+  return false;
 #else
     HVCB *vcbp = ROMlib_vcbbyvrn(CW(pb->volumeParam.ioVRefNum));
 	
@@ -1618,7 +1618,7 @@ PUBLIC int Executor::linuxfloppy_open(int disk, LONGINT *bsizep,
   struct cdrom_subchnl sub_info;
   bool force_read_only;
 
-  force_read_only = FALSE;
+  force_read_only = false;
   *flagsp = 0;
 #define FLOPPY_PREFIX "/dev/fd"
   if (strncmp (dname, FLOPPY_PREFIX, sizeof(FLOPPY_PREFIX)-1) == 0)
@@ -1656,7 +1656,7 @@ PUBLIC int Executor::linuxfloppy_open(int disk, LONGINT *bsizep,
   *bsizep = 512;
   if (retval >= 0)
     {
-      /* *ejectablep = TRUE; DRIVE_FLAGS_FIXED not set */
+      /* *ejectablep = true; DRIVE_FLAGS_FIXED not set */
     }
 
   return retval;
@@ -1736,16 +1736,16 @@ PUBLIC void Executor::futzwithdosdisks( void )
 /* #warning "We're cheating on DOS drive specs: ejectable, bsize, maxsize, writable" */
 #define OPEN_ROUTINE dosdisk_open
 #define CLOSE_ROUTINE dosdisk_close
-#define EXTRA_CLOSE_PARAM , FALSE
+#define EXTRA_CLOSE_PARAM , false
 #define MARKER DOSFDBIT
 #define EXTRA_PARAM
 #define ROMLIB_MACDRIVES ROMlib_macdrives
 #elif defined(LINUX)
     static dosdriveinfo_t drives[] = {
-	{ "/dev/fd0", (DrvQExtra *) 0, FALSE, IGNORED },
-	{ "/dev/cdrom", (DrvQExtra *) 0, FALSE, IGNORED },
+	{ "/dev/fd0", (DrvQExtra *) 0, false, IGNORED },
+	{ "/dev/cdrom", (DrvQExtra *) 0, false, IGNORED },
 #if 0
-	{ "/dev/fd1", (DrvQExtra *) 0, FALSE, IGNORED },
+	{ "/dev/fd1", (DrvQExtra *) 0, false, IGNORED },
 #endif
     };
 #define N_DRIVES NELEM(drives)
@@ -1760,7 +1760,7 @@ PUBLIC void Executor::futzwithdosdisks( void )
     /* Since we're scanning for new disks, let's be paranoid and
      * flush all cached disk information.
      */
-    dcache_invalidate_all (TRUE);
+    dcache_invalidate_all (true);
 
 #if defined (MSDOS)
     aspi_rescan ();
@@ -1782,7 +1782,7 @@ PUBLIC void Executor::futzwithdosdisks( void )
 	      mess = CL(mess_s);
 	      if (mess) {
 		if (mess >> 16 == 0) {
-		  DRIVE_LOADED(i) = TRUE;
+		  DRIVE_LOADED(i) = true;
 		  PPostEvent(diskEvt, mess, (GUEST<EvQElPtr> *) 0);
 		  /* TODO: we probably should post if mess returns an
 		     error, but I think we get confused if we do */
@@ -1814,17 +1814,17 @@ A2(PRIVATE, void, bumpsavedisk, DialogPtr, dp, BOOLEAN, always)
     BOOLEAN is_single_tree_fs, seenus;
 
 #if defined (MSDOS) || defined (CYGWIN32)
-/*    static BOOLEAN beenhere = FALSE; */
+/*    static BOOLEAN beenhere = false; */
 
     if (ROMlib_drive_check /* || !beenhere */) {
       futzwithdosdisks();
-/*      beenhere = TRUE; */
+/*      beenhere = true; */
     }
 #endif
     pb.volumeParam.ioVRefNum = CW(-CW(SFSaveDisk));
     pb.volumeParam.ioNamePtr = 0;
     pb.volumeParam.ioVolIndex = 0;
-    err = PBHGetVInfo(&pb, FALSE);
+    err = PBHGetVInfo(&pb, false);
     if (err != noErr)
       warning_unexpected ("PBHGetVInfo returns %d", err);
     else if (!SFSaveDisk || ISWDNUM(-CW(SFSaveDisk)))
@@ -1833,16 +1833,16 @@ A2(PRIVATE, void, bumpsavedisk, DialogPtr, dp, BOOLEAN, always)
 	current = pb.volumeParam.ioVRefNum;
 	is_single_tree_fs = single_tree_fs_p(&pb);
 	pb.volumeParam.ioVolIndex = 0;
-	seenus = FALSE;
+	seenus = false;
 	vref = 0;
 	do {
 	    pb.volumeParam.ioVolIndex = CW(CW(pb.volumeParam.ioVolIndex) + 1);
-	    err = PBHGetVInfo(&pb, FALSE);
+	    err = PBHGetVInfo(&pb, false);
 	    if (err != noErr && !seenus)
 	      warning_unexpected ("PBHGetVInfo = %d\n", err);
 	    else {
 		if (pb.volumeParam.ioVRefNum == current)
-		    seenus = TRUE;
+		    seenus = true;
 		else if (!ejected(&pb) &&
 			 (!is_single_tree_fs || !single_tree_fs_p(&pb))) {
 		    if (!vref || seenus)
@@ -1953,7 +1953,7 @@ A4(PRIVATE, void, transformsfpdialog, DialogPtr, dp, Point *, offset,
     }
     windheight = CW(dp->portRect.bottom) - CW(dp->portRect.top) + extrasizeneeded;
     SizeWindow( (WindowPtr) dp, CW(dp->portRect.right) - CW(dp->portRect.left),
-						       windheight, FALSE);
+						       windheight, false);
     if (getting) {
 	scrollrect->top = CW(CW(scrollrect->top) + (extrasizeneeded));
 	scrollrect->bottom = CW(CW(scrollrect->bottom) + (extrasizeneeded));
@@ -1974,14 +1974,14 @@ void adjustdrivebutton(DialogPtr dp)
     BOOLEAN seenunix;
 
     count = 0;
-    seenunix = FALSE;
+    seenunix = false;
     for (vcbp = (HVCB *) MR(VCBQHdr.qHead); vcbp;
 					       vcbp = (HVCB *) MR(vcbp->qLink))
 	if (vcbp->vcbCTRef && vcbp->vcbDrvNum)
 	    ++count;
 	else if (!seenunix) {
 	    ++count;
-	    seenunix = TRUE;
+	    seenunix = true;
 	}
 #else /* defined(MSDOS) */
     count = 2;	/* always allow the user to hit the drive button */
@@ -1995,7 +1995,7 @@ A1(PRIVATE, void, doeject, DialogPtr, dp)
 {
     Eject((StringPtr) "", -CW(SFSaveDisk));
     adjustdrivebutton(dp);
-    bumpsavedisk(dp, TRUE);
+    bumpsavedisk(dp, true);
 }
 
 A3(PRIVATE, GUEST<OSType>, gettypeX, StringPtr, name, INTEGER, vref, LONGINT, dirid)
@@ -2008,7 +2008,7 @@ A3(PRIVATE, GUEST<OSType>, gettypeX, StringPtr, name, INTEGER, vref, LONGINT, di
   pbr.fileParam.ioFVersNum = 0;
   pbr.fileParam.ioFDirIndex = CWC (0);
   pbr.fileParam.ioDirID = CL (dirid);
-  err = PBHGetFInfo (&pbr, FALSE);
+  err = PBHGetFInfo (&pbr, false);
   if (err == noErr)
     return pbr.fileParam.ioFlFndrInfo.fdType;
   else
@@ -2037,7 +2037,7 @@ unixcore (StringPtr namep, INTEGER *vrefnump, LONGINT *diridp)
 #else
   pbr.ioParam.ioNamePtr = nullptr;
   pbr.ioParam.ioVRefNum = CW(vrefnum);
-  vcbp = ROMlib_breakoutioname(&pbr, &templ, &tempcp, (BOOLEAN *) 0, TRUE);
+  vcbp = ROMlib_breakoutioname(&pbr, &templ, &tempcp, (BOOLEAN *) 0, true);
   free (tempcp);
 #endif
   if (vcbp && !vcbp->vcbCTRef)
@@ -2045,7 +2045,7 @@ unixcore (StringPtr namep, INTEGER *vrefnump, LONGINT *diridp)
       pb.ioParam.ioNamePtr = nullptr;
       pb.ioParam.ioVRefNum = pbr.ioParam.ioVRefNum;
       err = ROMlib_nami(&pb, *diridp, NoIndex, &pathname, &filename,
-			&endname, FALSE, &vcbp2, &sbuf);
+			&endname, false, &vcbp2, &sbuf);
       if (err == noErr)
 	{
 	  VCBExtra *vcbextrap;
@@ -2151,7 +2151,7 @@ create_new_folder_button (DialogPtr dp)
 
       GetDItem (dp, sfItemNewFolderUser, &i, &h, &r);
       retval = NewControl ((WindowPtr) dp, &r, (StringPtr) "\012New Folder",
-			   TRUE, 0, 0, 0, 0, 0L);
+			   true, 0, 0, 0, 0, 0L);
       SetDItem (dp, sfItemNewFolderUser, ctrlItem|btnCtrl,
 		(Handle) retval, &r);
     }
@@ -2252,13 +2252,13 @@ new_folder_from_dp (DialogPtr dp, fltype *f)
   if (str[0] > 31)
     str[0] = 31;
   hpb.ioParam.ioNamePtr = RM (&str[0]);
-  err = PBDirCreate (&hpb, FALSE);
+  err = PBDirCreate (&hpb, false);
   if (err != noErr)
     report_new_folder_failure (err); 
   else
     {
       *SF_FTYPE_XP(f) = hpb.fileParam.ioDirID;
-      retval = TRUE;
+      retval = true;
     }
   retval = err == noErr;
   return retval;
@@ -2271,7 +2271,7 @@ do_new_folder (fltype *f)
   GrafPtr gp;
   DialogPtr dp;
 
-  retval = FALSE;
+  retval = false;
   gp = thePort;
   dp = GetNewDialog (-6044, (Ptr) 0, (WindowPtr)-1);
   if (dp)
@@ -2282,7 +2282,7 @@ do_new_folder (fltype *f)
       SelIText (dp, 3, 0, 32767);
       ShowWindow (dp);
       SelectWindow (dp);
-      done = FALSE;
+      done = false;
       while (!done)
 	{
 	  /* TODO: consider a filter that limits the length
@@ -2295,10 +2295,10 @@ do_new_folder (fltype *f)
 	    case 1:
 	      done = new_folder_from_dp (dp, f);
 	      if (done)
-		retval = TRUE;
+		retval = true;
 	      break;
 	    case 2:
-	      done = TRUE;
+	      done = true;
 	      break;
 	    }
 	}
@@ -2332,7 +2332,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
   bool reply_valid;
   TRAPBEGIN();
 
-  reply_valid = FALSE;
+  reply_valid = false;
   if (is_normal_dlgid (getorput, dig) && host_has_spfcommon ()) {
     host_spf_reply_block reply;
     char *c_prompt;
@@ -2372,7 +2372,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
     CInfoPBRec hpb;
     ControlHandle new_folder_button;
 
-    done = FALSE;
+    done = false;
     memset (&f, 0, sizeof f);
     f.magicfp = fp;
     f.mydata = yourdatap;
@@ -2382,7 +2382,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
     if (p.h < 2 || p.v < CW(MBarHeight) + 7)
       get_starting_point (&p);
 
-    *SF_GOOD_XP(&f) = CBC (FALSE);
+    *SF_GOOD_XP(&f) = CBC (false);
     if (f.flavor == original_sf)
       f.flreplyp.oreplyp->version = CBC (0);
     else
@@ -2439,7 +2439,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
     }
     gp = thePort;
     dp = GetNewDialog(dig, (Ptr)0, (WindowPtr)-1);
-    bumpsavedisk(dp, FALSE);
+    bumpsavedisk(dp, false);
     SetPort(dp);
     GetDItem(dp, openorsave, &i, &tmpH, &r);
     sahand = MR(tmpH);
@@ -2448,11 +2448,11 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	bool writable;
 	
 	getdiskname (NULL, &writable);
-	sav = TRUE;
+	sav = true;
       }
     else
       {
-	sav = FALSE;
+	sav = false;
 	HiliteControl((ControlHandle) sahand, 255);
       }
     GetDItem(dp, ejectitem, &i, &tmpH, &r);
@@ -2483,7 +2483,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	else
 	  {
 	    putname = sfItemFileNameTextEdit;
-	    transform = FALSE;
+	    transform = false;
 	    new_folder_button = create_new_folder_button (dp);
 	  }
 
@@ -2502,7 +2502,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	  SetDItem(dp, getDotted, userItem, (Handle) P_ROMlib_filebox, &r);
 	}
       else
-	transform = FALSE;
+	transform = false;
     }
 
     if ( transform )
@@ -2519,7 +2519,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
     r.top    = CW(CW(scrollrect.top) + 1);
     r.bottom = CW(CW(scrollrect.bottom) - 1);
     scrollrect.left = CW(CW(scrollrect.right) - 16);
-    scrollh = NewControl((WindowPtr) dp, &scrollrect, (StringPtr) "", TRUE,
+    scrollh = NewControl((WindowPtr) dp, &scrollrect, (StringPtr) "", true,
 						   0, 0, 0, scrollBarProc, 0L);
     flinit(&f, &r, scrollh);
     f.flfilef = filef;
@@ -2543,7 +2543,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	p.v = CW(screenBitsX.bounds.bottom) - CW(dp->portRect.bottom) - 7;
     if (p.v < CW(MBarHeight) + 7)
 	p.v = CW(MBarHeight) + 7;
-    MoveWindow((WindowPtr) dp, p.h, p.v, FALSE);
+    MoveWindow((WindowPtr) dp, p.h, p.v, false);
 
     ihit = -1;
     if (dh.odh)
@@ -2569,8 +2569,8 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 		else
 		    *SF_FTYPE_XP(&f) = gettypeX(SF_NAME (&f), SF_VREFNUM (&f),
 						SF_DIRID (&f));
-		done = TRUE;
-		*SF_GOOD_XP(&f) = CBC (TRUE);
+		done = true;
+		*SF_GOOD_XP(&f) = CBC (true);
 	    } else {
 		GetIText(pnhand, SF_NAME (&f));
 		hpb.dirInfo.ioCompletion = 0;
@@ -2578,7 +2578,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 		hpb.dirInfo.ioVRefNum    = SF_VREFNUM_X (&f);
 		hpb.dirInfo.ioFDirIndex  = CWC (0);
 		hpb.dirInfo.ioDrDirID    = 0;
-		err = PBGetCatInfo(&hpb, FALSE);
+		err = PBGetCatInfo(&hpb, false);
 		switch (err) {
 		case noErr:
 		    ParamText(SF_NAME (&f), (StringPtr)0, (StringPtr)0,
@@ -2592,8 +2592,8 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 		      warning_unexpected ("err = %d", err);
 		    /* FALL THROUGH */
 		case fnfErr:
-		    done = TRUE;
-		    *SF_GOOD_XP(&f) = CBC (TRUE); /* great.  That's a take */
+		    done = true;
+		    *SF_GOOD_XP(&f) = CBC (true); /* great.  That's a take */
 		    break;
 		case bdNamErr:
 		case nsvErr:
@@ -2605,12 +2605,12 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	} else if ((ihit == f.fl_cancel_item) ||
 		   (ihit == putCancel)) { /* MYM 6.0 suggests that putCancel
 					     cancels a get, too */
-	    done = TRUE;
+	    done = true;
 	} else if (ihit == ejectitem) {
 	    doeject(dp);
 	    ihit = FAKEREDRAW;
 	} else if (ihit == driveitem) {
-	    bumpsavedisk(dp, TRUE);
+	    bumpsavedisk(dp, true);
 	    ihit = FAKEREDRAW;
 	} else if (ihit == diskname) {
 	    if (moveuponedir(dp))
@@ -2640,10 +2640,10 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	    getdiskname (NULL, &writable);
 	    if ((SF_NAME (&f))[0] && writable && !sav) {
 		HiliteControl((ControlHandle) sahand, 0);
-		sav = TRUE;
+		sav = true;
 	    } else if ((!(SF_NAME (&f)[0]) || !writable) && sav) {
 		HiliteControl((ControlHandle) sahand, 255);
-		sav = FALSE;
+		sav = false;
 	    }
 	}
 	if (WaitNextEvent(diskMask, &evt, 4, 0) &&
@@ -2651,7 +2651,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	    pbr.volumeParam.ioNamePtr = 0;
 	    pbr.volumeParam.ioVolIndex = 0;
 	    pbr.volumeParam.ioVRefNum = CW(CL(evt.message) & 0xFFFF);
-	    err = PBGetVInfo(&pbr, FALSE);
+	    err = PBGetVInfo(&pbr, false);
 	    gui_assert(err == noErr);
 	    if (err == noErr) {
 		adjustdrivebutton(dp);

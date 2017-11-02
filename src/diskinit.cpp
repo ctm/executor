@@ -82,7 +82,7 @@ raw_read_write (func_t func, our_file_info_t *op, LONGINT *lengthp,
   pbr.ioParam.ioReqCount = CL (*lengthp);
   pbr.ioParam.ioPosMode = CWC (fsFromStart);
   pbr.ioParam.ioPosOffset = CL (op->pos);
-  retval = func (&pbr, FALSE);
+  retval = func (&pbr, false);
   if (retval == noErr)
     {
       *lengthp = CL (pbr.ioParam.ioActCount);

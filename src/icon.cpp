@@ -59,7 +59,7 @@ P4 (PUBLIC pascal trap, OSErr, PlotIconID,
   if (err != noErr)
     ICON_RETURN_ERROR (err);
   
-  DisposeIconSuite (icon_suite, FALSE);
+  DisposeIconSuite (icon_suite, false);
   
   ICON_RETURN_ERROR (noErr);
 }
@@ -646,7 +646,7 @@ P3 (PUBLIC pascal trap, OSErr, GetLabel,
 {
   unsigned int index;
   OSErr retval;
-  static bool been_here = FALSE;
+  static bool been_here = false;
 
   if (!been_here)
     {
@@ -658,7 +658,7 @@ P3 (PUBLIC pascal trap, OSErr, GetLabel,
       labels[4].rgb_color = ROMlib_QDColors[6].rgb; /* blue */
       labels[5].rgb_color = ROMlib_QDColors[5].rgb; /* green */
       labels[6].rgb_color = ROMlib_QDColors[0].rgb; /* brown->black */
-      been_here = TRUE;
+      been_here = true;
     }
 
   index = label - 1;
@@ -740,7 +740,7 @@ P4 (PUBLIC pascal trap, Boolean, PtInIconSuite,
     Handle, suite)
 {
   warning_unimplemented (NULL_STRING);
-  return FALSE;
+  return false;
 }
 
 P4 (PUBLIC pascal trap, Boolean, PtInIconID,
@@ -759,7 +759,7 @@ P5 (PUBLIC pascal trap, Boolean, PtInIconMethod,
     IconGetterProcPtr, method, void *, data)
 {
   warning_unimplemented (NULL_STRING);
-  return FALSE;
+  return false;
 }
 
 P4 (PUBLIC pascal trap, Boolean, RectInIconSuite,
@@ -767,7 +767,7 @@ P4 (PUBLIC pascal trap, Boolean, RectInIconSuite,
     Handle, suite)
 {
   warning_unimplemented (NULL_STRING);
-  return FALSE;
+  return false;
 }
 
 P4 (PUBLIC pascal trap, Boolean, RectInIconID,
@@ -775,7 +775,7 @@ P4 (PUBLIC pascal trap, Boolean, RectInIconID,
     short, icon_id)
 {
   warning_unimplemented (NULL_STRING);
-  return FALSE;
+  return false;
 }
 
 P5 (PUBLIC pascal trap, Boolean, RectInIconMethod,
@@ -783,7 +783,7 @@ P5 (PUBLIC pascal trap, Boolean, RectInIconMethod,
     IconGetterProcPtr, method, void *, data)
 {
   warning_unimplemented (NULL_STRING);
-  return FALSE;
+  return false;
 }
 
 P3 (PUBLIC pascal trap, OSErr, MakeIconCache,

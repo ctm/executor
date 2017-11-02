@@ -54,7 +54,7 @@ PRIVATE void foo(short drivenumber)
     pb.hFileInfo.ioFDirIndex = 0;
     for (strpp = table; *strpp; strpp++) {
 	pb.hFileInfo.ioNamePtr = *strpp;
-	err = xPBGetCatInfo(&pb, FALSE);
+	err = xPBGetCatInfo(&pb, false);
 	if (err) {
 	    printf("getcatinfo failed %d\n", err);
 	    exit(1);

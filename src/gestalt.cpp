@@ -473,7 +473,7 @@ Executor::ROMlib_add_to_gestalt_list (OSType selector, OSErr retval, uint32 new_
 
 A2(PUBLIC trap, OSErrRET, Gestalt, OSType, selector, GUEST<LONGINT> *, responsep)
 {
-  static bool been_here = FALSE;
+  static bool been_here = false;
 
   warning_trace_info ("IN: sel `%c%c%c%c'",
 		      (selector >> 24) & 0xFF,
@@ -511,9 +511,9 @@ A2(PUBLIC trap, OSErrRET, Gestalt, OSType, selector, GUEST<LONGINT> *, responsep
       gestalt_set_physical_gestalt_callback ();
       OFFSET_ADDRESSES (gtable);
       OFFSET_ADDRESSES (phystable);
-      been_here = TRUE;
+      been_here = true;
     }
-  return gestalt_helper(selector, responsep, TRUE, gtable, NELEM (gtable));
+  return gestalt_helper(selector, responsep, true, gtable, NELEM (gtable));
 }
 
 P2(PUBLIC pascal trap, OSErrRET, PhysicalGestalt, OSType, selector,
@@ -537,7 +537,7 @@ P2(PUBLIC pascal trap, OSErrRET, PhysicalGestalt, OSType, selector,
       break;
     }
 
-  retval = gestalt_helper(selector, responsep, FALSE, phystable,
+  retval = gestalt_helper(selector, responsep, false, phystable,
 			  NELEM (phystable));
   if (retval == gestaltUndefSelectorErr)
     retval = physicalUndefSelectorErr;
@@ -548,7 +548,7 @@ P2(PUBLIC pascal trap, OSErrRET, PhysicalGestalt, OSType, selector,
 P2(PUBLIC pascal trap, OSErrRET, GestaltTablesOnly, OSType, selector,
    GUEST<LONGINT> *, responsep)
 {
-  return gestalt_helper(selector, responsep, FALSE, gtable, NELEM (gtable));
+  return gestalt_helper(selector, responsep, false, gtable, NELEM (gtable));
 }
 
 PRIVATE BOOLEAN

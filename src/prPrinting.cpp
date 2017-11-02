@@ -34,7 +34,7 @@ char ROMlib_rcsid_prPrinting[] =
 #if defined (MSDOS) || defined (CYGWIN32)
 #include <stdarg.h>
 
-PUBLIC bool deferred_printing_p = FALSE /* TRUE */;
+PUBLIC bool deferred_printing_p = false /* true */;
 
 #endif
 
@@ -44,8 +44,8 @@ using namespace std;
 
 PUBLIC int pageno = 0;	/* This isn't really the way to do it */
 namespace Executor {
-PUBLIC int ROMlib_passpostscript = TRUE;
-PUBLIC int ROMlib_fontsubstitution = FALSE;
+PUBLIC int ROMlib_passpostscript = true;
+PUBLIC int ROMlib_fontsubstitution = false;
 
 PUBLIC string ROMlib_document_paper_sizes;
 PUBLIC string ROMlib_paper_size;
@@ -64,7 +64,7 @@ PUBLIC int ROMlib_paper_y = 0;
    ES calls PrPageClose twice at the end.  This fix is sub-optimal, but
    probably won't hurt anything. */
 
-PRIVATE bool page_is_open = FALSE;
+PRIVATE bool page_is_open = false;
 }
 #include "rsys/nextprint.h"
 
@@ -273,7 +273,7 @@ P3(PUBLIC pascal trap, void, PrComment, INTEGER, kind, INTEGER, size,
 		    ROMlib_rotateend();
 		    break;
 	        case psbeginnosave:
-		  need_restore = FALSE;
+		  need_restore = false;
 		  /* FALL THROUGH */
 		case postscriptbegin:
 		    if (ROMlib_passpostscript)
@@ -281,7 +281,7 @@ P3(PUBLIC pascal trap, void, PrComment, INTEGER, kind, INTEGER, size,
 			if (kind == postscriptbegin)
 			  {
 			    ROMlib_gsave();
-			    need_restore = TRUE;
+			    need_restore = true;
 			  }
 			thePort->grafProcs = RM(&sendpsprocs);
 		    }
@@ -292,7 +292,7 @@ P3(PUBLIC pascal trap, void, PrComment, INTEGER, kind, INTEGER, size,
 			if (need_restore)
 			  {
 			    ROMlib_grestore();
-			    need_restore = FALSE;
+			    need_restore = false;
 			  }
 			thePort->grafProcs = RM(&prprocs);
 		      }
@@ -318,7 +318,7 @@ P3(PUBLIC pascal trap, void, PrComment, INTEGER, kind, INTEGER, size,
 	}
 }
 
-PRIVATE bool printport_open_p = FALSE;
+PRIVATE bool printport_open_p = false;
 
 PRIVATE void
 ourinit (TPPrPort port, BOOLEAN preserve_font)
@@ -330,7 +330,7 @@ ourinit (TPPrPort port, BOOLEAN preserve_font)
 
   if (!printport_open_p) {
 	OpenPort((GrafPtr) &printport);
-	printport_open_p = TRUE;
+	printport_open_p = true;
   } else
 	InitPort((GrafPtr) &printport);
   printport.txFont = CWC (-32768);	/* force reload */
@@ -409,7 +409,7 @@ open_ps_file (bool *need_pclosep)
   FILE *retval;
 
   retval = NULL;
-  *need_pclosep = FALSE;
+  *need_pclosep = false;
 
 #if defined (LINUX)
   if (ROMlib_printer != "PostScript File")
@@ -422,7 +422,7 @@ open_ps_file (bool *need_pclosep)
       if (retval)
 	{
 	  old_pipe_signal = signal (SIGPIPE, SIG_IGN);
-	  *need_pclosep = TRUE;
+	  *need_pclosep = true;
 	}
     }
 #endif
@@ -468,7 +468,7 @@ open_ps_file (bool *need_pclosep)
 }
 #endif /* !MACOSX_ */
 
-PRIVATE bool already_open = FALSE;
+PRIVATE bool already_open = false;
 
 #if defined (QUESTIONABLE_FIX_FOR_LOGBOOK_THAT_BREAKS_PRINTING_UNDER_TESTGEN)
 PRIVATE Byte save_FractEnable;
@@ -508,12 +508,12 @@ P3(PUBLIC pascal trap, TPPrPort, PrOpenDoc, THPrint, hPrint, TPPrPort, port,
 {
     call_job_dialog_if_needed (hPrint);
     if (port) {
-	port->fOurPtr = CB(FALSE);
+	port->fOurPtr = CB(false);
     } else {
 	port = (TPPrPort) NewPtr((Size) sizeof(TPrPort));
-	port->fOurPtr = CB(TRUE);
+	port->fOurPtr = CB(true);
     }
-    ourinit(port, FALSE);
+    ourinit(port, false);
 
 #if !defined (MACOSX_)
     pagewanted = Hx(hPrint, prJob.iFstPage);
@@ -565,14 +565,14 @@ P3(PUBLIC pascal trap, TPPrPort, PrOpenDoc, THPrint, hPrint, TPPrPort, port,
 #else
     printstate = seenOpenDoc;
 #endif
-    already_open = TRUE;
+    already_open = true;
     return port;
 }
 
 P2(PUBLIC pascal trap, void, PrOpenPage, TPPrPort, port, TPRect, pPageFrame)
 {
   ++pageno;
-  ourinit(port, TRUE);
+  ourinit(port, true);
   if (pageno >= pagewanted && pageno <= lastpagewanted)
     {
 #if !defined(MACOSX_)
@@ -588,7 +588,7 @@ P2(PUBLIC pascal trap, void, PrOpenPage, TPPrPort, port, TPRect, pPageFrame)
       printstate = seenOpenPage;
 #endif
     }
-  page_is_open = TRUE;
+  page_is_open = true;
 }
 
 P1(PUBLIC pascal trap, void, PrClosePage, TPPrPort, pPrPort)
@@ -606,7 +606,7 @@ P1(PUBLIC pascal trap, void, PrClosePage, TPPrPort, pPrPort)
 #endif
 	}
     }
-  page_is_open = FALSE;
+  page_is_open = false;
 }
 
 #if defined (MSDOS) || defined (CYGWIN32)
@@ -672,7 +672,7 @@ invoke_print_batch_file (const char *filename, ini_key_t printer, ini_key_t port
 #if defined (MSDOS)
   if (!deferred_printing_p)
     {
-      need_hacky_screen_update = TRUE;
+      need_hacky_screen_update = true;
       dosevq_reinit_mouse ();
     }
 #endif
@@ -746,12 +746,12 @@ P1(PUBLIC pascal trap, void, PrCloseDoc, TPPrPort, port)
 #if defined (QUESTIONABLE_FIX_FOR_LOGBOOK_THAT_BREAKS_PRINTING_UNDER_TESTGEN)
   FractEnable = save_FractEnable;
 #endif
-  already_open = FALSE;
+  already_open = false;
   
   if (printport_open_p)
     {
       ClosePort ((GrafPtr) &printport);
-      printport_open_p = FALSE;
+      printport_open_p = false;
     }
 
 }
@@ -765,5 +765,5 @@ P5(PUBLIC pascal trap, void, PrPicFile, THPrint, hPrint, TPPrPort, pPrPort,
 PUBLIC void
 Executor::print_reinit (void)
 {
-  printport_open_p = FALSE;
+  printport_open_p = false;
 }

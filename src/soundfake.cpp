@@ -144,7 +144,7 @@ bool SoundFake::sound_silent()
 bool SoundFake::sound_init()
 {
 	fake_sound_callback = callback_install (handle_fake_sound_callback, this);
-	no_more_sound_p = FALSE;
+	no_more_sound_p = false;
 	num_fake_buffers_enqueued = 0;
 	ROMlib_SND_RATE = 22255;
    

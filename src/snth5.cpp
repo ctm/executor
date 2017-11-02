@@ -34,7 +34,7 @@ P3(PUBLIC pascal, BOOLEAN, snth5, SndChannelPtr, chanp, SndCommand *, cmdp,
 	/* ROMlib_soundreserve(); */
 	beenhere = 1;
     }
-    done = TRUE;
+    done = true;
     switch (Cx(cmdp->cmd)) {
     case initCmd:
 	SoundActive = soundactive5;
@@ -42,7 +42,7 @@ P3(PUBLIC pascal, BOOLEAN, snth5, SndChannelPtr, chanp, SndCommand *, cmdp,
 	break;
     case freeCmd:
 	SoundActive = 0;
-	done = FALSE;
+	done = false;
 	/* TODO */
 	break;
     case quietCmd:
@@ -70,7 +70,7 @@ P3(PUBLIC pascal, BOOLEAN, snth5, SndChannelPtr, chanp, SndCommand *, cmdp,
 	/* TODO */
 	break;
     case availableCmd:
-	done = FALSE;
+	done = false;
 	/* TODO */
 	break;
     case bufferCmd:
@@ -82,7 +82,7 @@ P3(PUBLIC pascal, BOOLEAN, snth5, SndChannelPtr, chanp, SndCommand *, cmdp,
 #endif
 	ROMlib_outbuffer((char *) bufp->buf, Cx(bufp->nsamples), Cx(bufp->rate),
 									chanp);
-	done = FALSE;
+	done = false;
 	break;
 
     case requestNextCmd:	/* not needed */
@@ -110,5 +110,5 @@ P3(PUBLIC pascal, BOOLEAN, snth5, SndChannelPtr, chanp, SndCommand *, cmdp,
     if (done)
 	ROMlib_callcompletion(chanp);
 #endif
-    return FALSE;
+    return false;
 }

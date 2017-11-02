@@ -1298,7 +1298,7 @@ copy_resources (INTEGER new_rn, INTEGER old_rn, LONGINT type)
   INTEGER i;
 	  
   save_res_load = ResLoad;
-  ResLoad = TRUE;
+  ResLoad = true;
   num_res = CountResourcesRN (type, old_rn);
   for (i = 1; i <= num_res; ++i)
     {

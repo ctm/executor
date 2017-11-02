@@ -86,7 +86,7 @@ A4(PRIVATE, OSErr, PBCreateForD, ParmBlkPtr, pb, BOOLEAN, a,
     pathname = 0;
     /* Find out where this new entity should reside */
     if ((err = ROMlib_nami(pb, dir, NoIndex, &pathname, (char **)0, (char **)0,
-				  TRUE, &vcbp, (struct stat *) 0)) == noErr &&
+				  true, &vcbp, (struct stat *) 0)) == noErr &&
 				      (err = volumenotlocked(vcbp)) == noErr) {
 	if (ford == File)
 	    fd = Uopen(pathname, O_BINARY|O_CREAT|O_EXCL, 0666L);
@@ -94,7 +94,7 @@ A4(PRIVATE, OSErr, PBCreateForD, ParmBlkPtr, pb, BOOLEAN, a,
 	    fd = Umkdir(pathname, 0777);
 	    if (fd >= 0) {
 		dirid = 0;
-                ROMlib_dbm_store(vcbp, pathname, &dirid, TRUE);
+                ROMlib_dbm_store(vcbp, pathname, &dirid, true);
 		((HParmBlkPtr) pb)->fileParam.ioDirID = CL(dirid);
 	    }
 	}
@@ -141,7 +141,7 @@ A4(PRIVATE, OSErr, PBCreateForD, ParmBlkPtr, pb, BOOLEAN, a,
 	swapped_dir = CL(dir);
 	if (!ROMlib_creator_and_type_from_filename (strlen (pathname), 
 						    pathname, NULL, NULL))
-	  ROMlib_PBGetSetFInfoD(&newparam, FALSE, Set, &swapped_dir, FALSE);
+	  ROMlib_PBGetSetFInfoD(&newparam, false, Set, &swapped_dir, false);
     }
     if (pathname)
 	free (pathname);
@@ -178,7 +178,7 @@ A4(PRIVATE, OSErr, PBDeleteForD, ParmBlkPtr, pb, BOOLEAN, a,
     rpathname = 0;
     /* Find out where this new entity should reside */
     if ((err = ROMlib_nami(pb, dir, NoIndex, &pathname, &filename, &endname,
-					       TRUE, &vcbp, &sbuf)) == noErr &&
+					       true, &vcbp, &sbuf)) == noErr &&
 				      (err = volumenotlocked(vcbp)) == noErr) {
 
 	rpathname = ROMlib_resname(pathname, filename, endname);
@@ -191,7 +191,7 @@ A4(PRIVATE, OSErr, PBDeleteForD, ParmBlkPtr, pb, BOOLEAN, a,
 	  struct stat sbuf;
 
 	  if (Ustat (pathname, &sbuf) != 0)
-	    deletefailed = TRUE;
+	    deletefailed = true;
 	  else
 	    {
 	      if ((deletefailed = Urmdir(pathname)) == 0)

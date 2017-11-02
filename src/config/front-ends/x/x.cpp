@@ -73,7 +73,7 @@ char ROMlib_rcsid_x[] = "$Id: x.c 89 2005-05-25 04:15:34Z ctm $";
 
 #include "x_keycodes.h"
 
-PRIVATE bool use_scan_codes = FALSE;
+PRIVATE bool use_scan_codes = false;
 
 PUBLIC void
 ROMlib_set_use_scancodes (bool val)
@@ -166,7 +166,7 @@ static Pixmap pixmap_cursor_data, pixmap_cursor_mask;
 
 static GC copy_gc, cursor_data_gc, cursor_mask_gc, accel_gc;
 
-static int cursor_visible_p = FALSE;
+static int cursor_visible_p = false;
 
 static Atom x_selection_atom;
 
@@ -177,11 +177,11 @@ static int selectionlength;
 
 /* true if `vdriver_set_colors ()' has been called, otherwise we can
    blow off expose events */
-static int colors_initialized_p = FALSE;
+static int colors_initialized_p = false;
 
-/* TRUE if we should turn of autorepeat when the pointer is the
+/* true if we should turn of autorepeat when the pointer is the
    executor window */
-static int frob_autorepeat_p = FALSE;
+static int frob_autorepeat_p = false;
 
 static XrmOptionDescRec opts[] =
 {
@@ -225,9 +225,9 @@ get_string_resource (char *resource, char **retval)
   sprintf (res_class, "Executor.%s", resource);
   
   if (! XrmGetResource (xdb, res_name, res_class, &res_type, &v))
-    return FALSE;
+    return false;
   *retval = v.addr;
-  return TRUE;
+  return true;
 }
 
 int
@@ -240,30 +240,30 @@ get_bool_resource (char *resource, int *retval)
   sprintf (res_class, "Executor.%s", resource);
   
   if (! XrmGetResource (xdb, res_name, res_class, &res_type, &v))
-    return FALSE;
+    return false;
   if (   !strcasecmp (v.addr, "on")
       || !strcasecmp (v.addr, "true")
       || !strcasecmp (v.addr, "yes")
       || !strcasecmp (v.addr, "1"))
     {
-      *retval = TRUE;
-      return TRUE;
+      *retval = true;
+      return true;
     }
   if (   !strcasecmp (v.addr, "off")
       || !strcasecmp (v.addr, "false")
       || !strcasecmp (v.addr, "no")
       || !strcasecmp (v.addr, "0"))
     {
-      *retval = FALSE;
-      return TRUE;
+      *retval = false;
+      return true;
     }
 
   /* FIXME: print warning */
-  *retval = FALSE;
-  return TRUE;
+  *retval = false;
+  return true;
 }
 
-static int have_shm, shm_err = FALSE;
+static int have_shm, shm_err = false;
 
 static int shm_major_opcode;
 static int shm_first_event;
@@ -273,7 +273,7 @@ int
 x_error_handler (Display *err_dpy, XErrorEvent *err_evt)
 {
   if (err_evt->request_code == shm_major_opcode)
-    shm_err = TRUE;
+    shm_err = true;
   else
     {
       char error_text[256];
@@ -386,7 +386,7 @@ alloc_x_image (int bpp, int width, int height,
 		      XDestroyImage (x_image);
 		      fbuf = NULL;
 		      /* reset the shm_err flag */
-		      shm_err = FALSE;
+		      shm_err = false;
 		    }
 		  else
 		    {
@@ -871,23 +871,23 @@ x_keysym_to_mac_keywhat (unsigned int keysym, int16 button_state,
 	    break;
 	}
       if (key_tables[i].data == NULL)
-	return FALSE;
+	return false;
   
       if (keysym_low_byte < table->min  
 	  || keysym_low_byte > (table->min + table->size))
-	return FALSE;
+	return false;
   
       keywhat = table->data[keysym_low_byte - table->min];
     }
   
   if (keywhat == NOTKEY)
-    return FALSE;
+    return false;
   
   keywhat = ROMlib_right_to_left_key_map (keywhat);
 
   *virt_out = keywhat;
   *retval_out = ROMlib_xlate (keywhat, button_state, down_p);
-  return TRUE;
+  return true;
 }
 
 PRIVATE bool
@@ -897,10 +897,10 @@ keydown (uint8 key)
   int i;
   uint8 bit;
 
-  retval = FALSE;
+  retval = false;
 
   if (ROMlib_get_index_and_bit (key, &i, &bit) && (KeyMap[i] & bit))
-    retval = TRUE;
+    retval = true;
     
   return retval;
 }
@@ -1011,11 +1011,11 @@ x_modifier_p (unsigned int keysym, uint16 *return_mac_modifier)
       modifier = optionKey;
       break;
     default:
-      return FALSE;
+      return false;
     }
 
   *return_mac_modifier = modifier;
-  return TRUE;
+  return true;
 }
 
 bool
@@ -1152,14 +1152,14 @@ post_pending_x_events (syn68k_addr_t interrupt_addr, void *unused)
 			       0, (GUEST<EvQElPtr> *) 0,
 			       when, where,
 			       button_state);
-	    adb_apeiron_hack (FALSE);
+	    adb_apeiron_hack (false);
 	    break;
 	  }
 	case Expose:
 	  if (colors_initialized_p)
 	    vdriver_update_screen (evt.xexpose.y, evt.xexpose.x,
 				   evt.xexpose.y + evt.xexpose.height,
-				   evt.xexpose.x + evt.xexpose.width, FALSE);
+				   evt.xexpose.x + evt.xexpose.width, false);
 	  break;
 	case EnterNotify:
 	  if (frob_autorepeat_p)
@@ -1183,7 +1183,7 @@ post_pending_x_events (syn68k_addr_t interrupt_addr, void *unused)
         case MotionNotify:
 	  MouseLocation.h = CW (evt.xmotion.x);
 	  MouseLocation.v = CW (evt.xmotion.y);
-	  adb_apeiron_hack (FALSE);
+	  adb_apeiron_hack (false);
 	  break;
 	}
     }
@@ -1220,7 +1220,7 @@ Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
   if (x_dpy != NULL)
     {
       gui_fatal ("Internal error: vdriver_init() called twice!\n");
-      return FALSE;
+      return false;
     }
 
   x_dpy = XOpenDisplay ("");
@@ -1251,10 +1251,10 @@ Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
   get_bool_resource ("trueColor", &truecolor_p);
   
   if (get_bool_resource ("noSplash", &t_int))
-    opt_put_int_val (common_db, "nosplash", t_int, pri_x_resource, FALSE);
+    opt_put_int_val (common_db, "nosplash", t_int, pri_x_resource, false);
   
   if (get_string_resource ("debug", &t_str))
-    opt_put_val (common_db, "debug", t_str, pri_x_resource, FALSE);
+    opt_put_val (common_db, "debug", t_str, pri_x_resource, false);
 
   if (!get_string_resource ("geometry", &geom))
     geom = 0;
@@ -1379,7 +1379,7 @@ Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
 	      num_blue_bits  = ffs ((visual->blue_mask
 				     >> low_blue_bit) + 1) - 1;
 	      make_rgb_spec (&x_rgb_spec,
-			     x_x_image->bits_per_pixel, FALSE, 0,
+			     x_x_image->bits_per_pixel, false, 0,
 			     num_red_bits, low_red_bit,
 			     num_green_bits, low_green_bit,
 			     num_blue_bits, low_blue_bit,
@@ -1439,7 +1439,7 @@ Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
   /* Force a cleanup on program exit. */
   atexit (vdriver_shutdown);
   
-  return TRUE;
+  return true;
 }
 
 
@@ -1683,7 +1683,7 @@ Executor::host_set_cursor_visible (int show_p)
     {
       if (!show_p)
 	{
-	  cursor_visible_p = FALSE;
+	  cursor_visible_p = false;
 	  XDefineCursor (x_dpy, x_window, x_hidden_cursor);
 	}
     }
@@ -1691,7 +1691,7 @@ Executor::host_set_cursor_visible (int show_p)
     {
       if (show_p)
 	{
-	  cursor_visible_p = TRUE;
+	  cursor_visible_p = true;
 	  XDefineCursor (x_dpy, x_window, x_cursor);
 	}
     }
@@ -2023,7 +2023,7 @@ init_x_cmap (void)
     }
 #endif
 
-  x_cmap_initialized_p = TRUE;
+  x_cmap_initialized_p = true;
 }
 
 static ColorSpec cmap[256];
@@ -2064,7 +2064,7 @@ Executor::vdriver_set_colors (int first_color, int num_colors,
 	  conversion_func
 	    = depthconv_make_ind_to_rgb_table (depth_table_space, vdriver_bpp,
 					       NULL, colors, &x_rgb_spec);
-	  vdriver_update_screen (0, 0, vdriver_height, vdriver_width, FALSE);
+	  vdriver_update_screen (0, 0, vdriver_height, vdriver_width, false);
 	}
     }
   else
@@ -2106,12 +2106,12 @@ Executor::vdriver_set_colors (int first_color, int num_colors,
 	  conversion_func
 	    = depthconv_make_raw_table (depth_table_space, vdriver_bpp,
 					x_fbuf_bpp, NULL, cmap_mapping);
-	  vdriver_update_screen (0, 0, vdriver_height, vdriver_width, FALSE);
+	  vdriver_update_screen (0, 0, vdriver_height, vdriver_width, false);
 	}
     }
   XSync (x_dpy, False);
   
-  colors_initialized_p = TRUE;
+  colors_initialized_p = true;
 }
 
 int
@@ -2215,7 +2215,7 @@ Executor::vdriver_shutdown (void)
 
 vdriver_x_mode_t vdriver_x_modes =
 {
-  /* contiguous_range_p */ TRUE,
+  /* contiguous_range_p */ true,
   /* num_sizes */ 2,
   {
     /* min */ { 512, 342 },
@@ -2246,8 +2246,8 @@ Executor::vdriver_acceptable_mode_p (int width, int height, int bpp,
 	  && bpp != 4
 	  && bpp != 2
 	  && bpp != 1))
-    return FALSE;
-  return TRUE;
+    return false;
+  return true;
 }
 
 bool
@@ -2256,7 +2256,7 @@ Executor::vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
   if (!x_window)
     {
       alloc_x_window (width, height, bpp, grayscale_p);
-      return TRUE;
+      return true;
     }
   
   if (width == 0)
@@ -2281,8 +2281,8 @@ Executor::vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
     }
 
   if (!vdriver_acceptable_mode_p (width, height, bpp, grayscale_p,
-				  /* ignored */ FALSE))
-    return FALSE;
+				  /* ignored */ false))
+    return false;
   
   if (width != vdriver_width
       || height != vdriver_height)
@@ -2336,7 +2336,7 @@ Executor::vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
 			    ? &mac_16bpp_rgb_spec
 			    : NULL)));
 
-  return TRUE;
+  return true;
 }
 
 vdriver_accel_result_t
@@ -2370,13 +2370,13 @@ Executor::vdriver_accel_rect_fill (int top, int left, int bottom,
 	  
 	  x_color = (*x_rgb_spec.rgbcolor_to_pixel) (&x_rgb_spec,
 						     &rgb_color,
-						     TRUE);
+						     true);
 	}
       else
 	{
 	  x_color = (*x_rgb_spec.rgbcolor_to_pixel) (&x_rgb_spec,
 						     &cmap[color].rgb,
-						     TRUE);
+						     true);
 	}
     }
   else
@@ -2551,7 +2551,7 @@ Executor::host_flush_shadow_screen (void)
     {
       shadow_fbuf = (unsigned char*) malloc (fbuf_size);
       memcpy (shadow_fbuf, vdriver_fbuf, vdriver_row_bytes * vdriver_height);
-      vdriver_update_screen (0, 0, vdriver_height, vdriver_width, FALSE);
+      vdriver_update_screen (0, 0, vdriver_height, vdriver_width, false);
     }
   else if (find_changed_rect_and_update_shadow ((uint32 *) vdriver_fbuf,
 						(uint32 *) shadow_fbuf,
@@ -2563,6 +2563,6 @@ Executor::host_flush_shadow_screen (void)
     {
       vdriver_update_screen (top_long, (left_long * 32) >> vdriver_log2_bpp,
 			     bottom_long,
-			     (right_long * 32) >> vdriver_log2_bpp, FALSE);
+			     (right_long * 32) >> vdriver_log2_bpp, false);
     }
 }

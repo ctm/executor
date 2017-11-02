@@ -4,5 +4,5 @@
 bool
 Executor::arch_init (void)
 {
-  return TRUE;
+  return true;
 }

@@ -705,7 +705,7 @@ do {									\
 									\
 	  /* Translate canonical form to dest pixel. */			\
 	  v = (*dst_rgb_spec->rgbcolor_to_pixel) (dst_rgb_spec, &r,	\
-						  TRUE);		\
+						  true);		\
 									\
 	  /* Record the last RGB translated, for speed. */		\
 	  cache_in = in;						\

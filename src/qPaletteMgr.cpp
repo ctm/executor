@@ -203,9 +203,9 @@ window_p (WindowPtr w)
        t_w = WINDOW_NEXT_WINDOW (t_w))
     {
       if ((WindowPtr) t_w == w)
-	return TRUE;
+	return true;
     }
-  return FALSE;
+  return false;
 }
 
 P0 (PUBLIC pascal trap, INTEGER, PMgrVersion)
@@ -234,7 +234,7 @@ pm_allocate_animated_elt (ColorSpec *elt, int elt_i, ColorInfo *entry,
   
   CI_SET_ALLOCATED_ENTRY (entry, elt_i);
   
-  return TRUE;
+  return true;
 }
 
 int
@@ -251,10 +251,10 @@ pm_allocate_tolerant_elt (ColorSpec *elt, int elt_i, ColorInfo *entry,
       elt->rgb = CI_RGB (entry);
       
       CI_SET_ALLOCATED_ENTRY (entry, elt_i);
-      return TRUE;
+      return true;
     }
   
-  return FALSE;
+  return false;
 }
 
 void
@@ -312,30 +312,30 @@ higher_priority_p (ColorInfo *entry0, int entry0_index,
   
   /* explicit takes precidence over non-explicit */
   if (entry0_explicit && !entry1_explicit)
-    return TRUE;
+    return true;
   else if (!entry0_explicit && entry1_explicit)
-    return FALSE;
+    return false;
   else if (entry0_explicit && entry1_explicit)
     {
       if (entry0_animated && entry1_tolerant)
-	return TRUE;
+	return true;
       else if (entry0_tolerant && entry1_animated)
-	return FALSE;
+	return false;
       else
 	return entry0_index < entry1_index;
     }
   /* both non-explicit */
   else if (entry0_animated && entry1_tolerant)
-    return TRUE;
+    return true;
   else if (entry0_tolerant && entry1_animated)
-    return FALSE;
+    return false;
   else
     return entry0_index < entry1_index;
 }
 
 #define allocator(bits, elt, elt_i, entry, entry_i, force_p)		 \
 ({									 \
-  int allocated_p = FALSE;						 \
+  int allocated_p = false;						 \
 									 \
   if ((bits) & pmAnimated)						 \
     allocated_p = pm_allocate_animated_elt (elt, elt_i, entry, force_p); \
@@ -350,7 +350,7 @@ higher_priority_p (ColorInfo *entry0, int entry0_index,
       holder->palette = palette;					 \
       holder->entry = entry_i;						 \
                               						 \
-      gd_ctab_changed_p = TRUE;						 \
+      gd_ctab_changed_p = true;						 \
     }									 \
 })
 
@@ -449,7 +449,7 @@ higher_priority_p (ColorInfo *entry0, int entry0_index,
 	  free_elt = &gd_ctab_table[free_elt_i];			 \
 	  if (ELT_FREE_P (free_elt))					 \
 	    {								 \
-	      allocator (bits, free_elt, free_elt_i, entry, i, FALSE);	 \
+	      allocator (bits, free_elt, free_elt_i, entry, i, false);	 \
 	      free_elt_i ++;						 \
 	      goto next_entry;						 \
 	    }								 \
@@ -488,7 +488,7 @@ higher_priority_p (ColorInfo *entry0, int entry0_index,
 	  else								 \
 	    CI_DEALLOCATE_ENTRY (prev_entry);				 \
 									 \
-	  allocator (bits, elt, steal_elt_i, entry, i, TRUE);		 \
+	  allocator (bits, elt, steal_elt_i, entry, i, true);		 \
 	  steal_elt_i ++;						 \
 	  break;							 \
 	}								 \
@@ -553,7 +553,7 @@ higher_priority_p (ColorInfo *entry0, int entry0_index,
 	      if (ELT_FREE_P (elt))					\
 		{							\
 		  /* take the first free elt */				\
-		  allocator (bits, elt, elt_i, entry, i, FALSE);	\
+		  allocator (bits, elt, elt_i, entry, i, false);	\
 		  break;						\
 		}							\
 	    }								\
@@ -616,7 +616,7 @@ P1 (PUBLIC pascal trap, void, ActivatePalette, WindowPtr, src_window)
   PaletteHandle palette;
   GDHandle gd;
   PixMapHandle gd_pixmap;
-  int gd_ctab_changed_p = FALSE;
+  int gd_ctab_changed_p = false;
   CTabHandle gd_ctab;
   ColorSpec *gd_ctab_table;
   int gd_ctab_size;
@@ -698,7 +698,7 @@ P1 (PUBLIC pascal trap, void, ActivatePalette, WindowPtr, src_window)
 	      elt->value = holder->default_value;
 	      elt->rgb = holder->default_rgb;
 	      
-	      gd_ctab_changed_p = TRUE;
+	      gd_ctab_changed_p = true;
 	    }
 	}
     }
@@ -720,7 +720,7 @@ P1 (PUBLIC pascal trap, void, ActivatePalette, WindowPtr, src_window)
 P1 (PUBLIC pascal trap, void, RestoreClutDevice,
     GDHandle, gd)
 {
-  bool gd_ctab_changed_p = FALSE;
+  bool gd_ctab_changed_p = false;
   pm_resource_holder_t *holders;
   PixMapHandle gd_pixmap;
   CTabHandle gd_ctab;
@@ -760,9 +760,9 @@ P1 (PUBLIC pascal trap, void, RestoreClutDevice,
   	       ColorInfo *entry;
  	       
   	       entry = &PALETTE_INFO (holder->palette)[holder->entry];
-  	       pm_deallocate_entry (entry, TRUE);
+  	       pm_deallocate_entry (entry, true);
  	       
-  	       gd_ctab_changed_p = TRUE;
+  	       gd_ctab_changed_p = true;
   	     }
  
  	   gd_rgb = &gd_ctab_table[i].rgb;
@@ -775,7 +775,7 @@ P1 (PUBLIC pascal trap, void, RestoreClutDevice,
  	     {
   	       gd_ctab_table[i].value = holder->default_value;
   	       gd_ctab_table[i].rgb = holder->default_rgb;
-  	       gd_ctab_changed_p = TRUE;
+  	       gd_ctab_changed_p = true;
  	     }
   	 }
      });
@@ -939,7 +939,7 @@ Executor::pm_window_closed (WindowPtr w)
 {
   PaletteHandle palette;
   window_palette_alist_t t, prev;
-  int deallocate_entries_p = TRUE;
+  int deallocate_entries_p = true;
   int i;
   
   palette = GetPalette (w);
@@ -959,7 +959,7 @@ Executor::pm_window_closed (WindowPtr w)
 	  t = prev ? prev : window_palette_alist;
 	}
       else if (t->palette == palette)
-	deallocate_entries_p = FALSE;
+	deallocate_entries_p = false;
       prev = t;
     }
   if (deallocate_entries_p)
@@ -969,7 +969,7 @@ Executor::pm_window_closed (WindowPtr w)
 	  ColorInfo *entry;
 	  
 	  entry = &PALETTE_INFO (palette)[i];
-	  pm_deallocate_entry (entry, TRUE);
+	  pm_deallocate_entry (entry, true);
 	}
       
       /* #### force the gd to be updated */
@@ -1024,7 +1024,7 @@ P1 (PUBLIC pascal trap, void, DisposePalette, PaletteHandle, palette)
       ColorInfo *entry;
       
       entry = &PALETTE_INFO (palette)[i];
-      pm_deallocate_entry (entry, FALSE);
+      pm_deallocate_entry (entry, false);
     }
 
   DisposHandle ((Handle) palette);
@@ -1047,7 +1047,7 @@ P2 (PUBLIC pascal trap, void, ResizePalette,
 	  ColorInfo *entry;
 	  
 	  entry = &PALETTE_INFO (palette)[i];
-	  pm_deallocate_entry (entry, FALSE);
+	  pm_deallocate_entry (entry, false);
 	}
     }
   SetHandleSize ((Handle) palette,
@@ -1120,7 +1120,7 @@ set_palette_common (WindowPtr dst_window, PaletteHandle src_palette,
 	  ColorInfo *entry;
 	  
 	  entry = &PALETTE_INFO (palette)[i];
-	  pm_deallocate_entry (entry, TRUE);
+	  pm_deallocate_entry (entry, true);
 	}
       
       /* ##### force the gd to be updated */
@@ -1302,7 +1302,7 @@ USE_RGB_ANYWAY:
     }
 }
 
-static int update_host_colors_p = TRUE;
+static int update_host_colors_p = true;
 
 
 P3 (PUBLIC pascal trap, void, AnimateEntry,
@@ -1385,7 +1385,7 @@ P5 (PUBLIC pascal trap, void, AnimatePalette,
   
   /* Animate all of the entries. */
   save_update = update_host_colors_p;
-  update_host_colors_p = FALSE;  /* Avoid updating host for each entry. */
+  update_host_colors_p = false;  /* Avoid updating host for each entry. */
   for (i = 0; i < dst_length; i ++)
     AnimateEntry (dst_window, dst_entry + i, &src_cspec[i].rgb);
   update_host_colors_p = save_update;
@@ -1423,7 +1423,7 @@ P3 (PUBLIC pascal trap, void, SetEntryColor,
   entry = &PALETTE_INFO (dst_palette)[entry_index];
   CI_RGB (entry) = *src_rgb_color;
   
-  pm_deallocate_entry (entry, FALSE);
+  pm_deallocate_entry (entry, false);
   
   PALETTE_SET_MODIFIED (dst_palette);
 }
@@ -1455,7 +1455,7 @@ P4 (PUBLIC pascal trap, void, SetEntryUsage,
   CI_USAGE_X (entry) = CW (src_usage);
   CI_TOLERANCE_X (entry) = CW (src_tolerance);
   
-  pm_deallocate_entry (entry, FALSE);
+  pm_deallocate_entry (entry, false);
   
   PALETTE_SET_MODIFIED (dst_palette);
 }
@@ -1489,7 +1489,7 @@ P4 (PUBLIC pascal trap, void, CTab2Palette,
       ColorInfo *entry;
 
       entry = &palette_info[i];
-      pm_deallocate_entry (entry, FALSE);
+      pm_deallocate_entry (entry, false);
       
       entry->ciRGB = ctab_table[i].rgb;
       entry->ciUsage = CW (src_usage);

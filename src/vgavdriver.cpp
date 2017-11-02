@@ -110,10 +110,10 @@ uint8 *vga_portal_baseaddr;
  */
 uint8 *vdriver_real_screen_baseaddr;
 
-/* TRUE iff the blitter is allowed to go straight to the real screen. */
+/* true iff the blitter is allowed to go straight to the real screen. */
 bool vdriver_real_screen_blit_possible_p;
 
-/* TRUE iff the blitter should assume real screen bits are flipped. */
+/* true iff the blitter should assume real screen bits are flipped. */
 bool vdriver_flip_real_screen_pixels_p;
 
 /* Bytes per row for the "real" screen. */
@@ -174,12 +174,12 @@ vdriver_init (int max_width, int max_height, int max_bpp, bool fixed_p,
 
   /* Perform any host-specific initialization. */
   if (!vgahost_init (max_width, max_height, max_bpp, fixed_p, argc, argv))
-    return FALSE;
+    return false;
 
   /* Grab the "raw" list of modes we have available to us. */
   vga_mode_list = vgahost_compute_vga_mode_list ();
   if (vga_mode_list == NULL)
-    return FALSE;
+    return false;
   canonicalize_vga_mode_list ();
 
   /* Compute the maximum bpp allowed. */
@@ -213,7 +213,7 @@ vdriver_init (int max_width, int max_height, int max_bpp, bool fixed_p,
    */
   default_mode = compute_default_mode ();
   if (default_mode == NULL)
-    return FALSE;
+    return false;
   if (max_width == 0)
     max_width = default_mode->width;
   if (max_height == 0)
@@ -443,7 +443,7 @@ compute_default_mode (void)
 void
 vdriver_shutdown (void)
 {
-  static char beenhere = FALSE;
+  static char beenhere = false;
 
   if (!beenhere)
     {
@@ -456,7 +456,7 @@ vdriver_shutdown (void)
       vdriver_fbuf = NULL;
       fbuf_size = 0;
 
-      beenhere= TRUE;
+      beenhere= true;
     }
 }
 
@@ -647,7 +647,7 @@ do							\
 		: "0" (i), "1" (o), "2" (c)		\
 		);					\
 }							\
-while (FALSE)
+while (false)
 
 #define TRANSFER_1_1(a, inp, outp, c)					\
 do									\
@@ -698,7 +698,7 @@ do									\
 		: "g" (VGA_SELECTOR), "0" (inp), "1" (outp), "2" (c)	\
 		: "ax", "cx", "cc");					\
 }									\
-while (FALSE)
+while (false)
 
 #define TRANSFER_1_2(a, i, o, c)					  \
 do									  \
@@ -727,7 +727,7 @@ do									  \
 		: "m" (*(volatile char *)&(a)), "0" (i), "1" (o), "2" (c) \
 		: "ax", "bx", "dx", "cc");				  \
 }									  \
-while (FALSE)
+while (false)
 
 #define TRANSFER_1_4(a, i, o, c)					  \
 do									  \
@@ -758,7 +758,7 @@ do									  \
 		: "m" (*(volatile char *)&(a)), "0" (i), "1" (o), "2" (c) \
 		: "ax", "bx", "cc");					  \
 }									  \
-while (FALSE)
+while (false)
 
 #define TRANSFER_1_8(a, i, o, c)					  \
 do									  \
@@ -798,7 +798,7 @@ do									  \
 		: "m" (*(volatile char *)&(a)), "0" (i), "1" (o), "c" (2) \
 		: "ax", "bx", "dx", "cc");				  \
 }									  \
-while (FALSE)
+while (false)
 
 
 #define UPDATE_FUNC(name, transfer, out_size)				  \
@@ -1021,7 +1021,7 @@ fill_hardware_fbuf (unsigned long fill_long)
 
 
 /* Updates the hardware screen from the internal frame buffer with
- * the specified rectangle.  Returns TRUE if it succeeded, or FALSE
+ * the specified rectangle.  Returns true if it succeeded, or false
  * if the update is busy (which can only happen for the cursor).
  * If you're not drawing the cursor, you should ignore this
  * return value.
@@ -1030,14 +1030,14 @@ int
 vdriver_update_screen (int top, int left, int bottom, int right,
 		       bool cursor_p)
 {
-  static uint8 busy_p = FALSE;
-  static uint8 redraw_cursor_p = FALSE;
+  static uint8 busy_p = false;
+  static uint8 redraw_cursor_p = false;
   uint8 old_busy_p;
   int log2_bpp;
 
   if (vdriver_fbuf == NULL || vga_current_mode == NULL
       || VDRIVER_BYPASS_INTERNAL_FBUF_P ())
-    return FALSE;
+    return false;
   log2_bpp = vdriver_log2_bpp;
 
   /* Pin the rectangle inside the frame buffer and line left and right
@@ -1056,7 +1056,7 @@ vdriver_update_screen (int top, int left, int bottom, int right,
   if (bottom > vdriver_height)
     bottom = vdriver_height;
 
-  asm volatile ("movb $1,%0\n\t"  /* Atomically set busy_p to TRUE  */
+  asm volatile ("movb $1,%0\n\t"  /* Atomically set busy_p to true  */
 		"xchgb %b0,%1"    /*  and fetch busy_p's old value. */
 		: "=abcd" (old_busy_p), "=m" (busy_p));
 
@@ -1096,7 +1096,7 @@ vdriver_update_screen (int top, int left, int bottom, int right,
 	      && (left < cursor_right && right > cursor_left
 		  && top < cursor_bottom && bottom > cursor_top)))
 	{
-	  redraw_cursor_p = FALSE;
+	  redraw_cursor_p = false;
 	  draw_cursor (cursor_x, cursor_y);
 	}
     }
@@ -1115,7 +1115,7 @@ vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
 {
   int i, p;
 
-  for (i = 0, p = FALSE; i < num_rects; i++)
+  for (i = 0, p = false; i < num_rects; i++)
     {
       p = vdriver_update_screen (r[i].top, r[i].left, r[i].bottom, r[i].right,
 				 cursor_p);
@@ -1137,7 +1137,7 @@ vdriver_acceptable_mode_p (int width, int height, int bpp,
   /* Get the currently legal modes. */
   vm = vdriver_mode_list;
   if (vm->num_sizes == 0)
-    return FALSE;
+    return false;
 
   if (width == 0)
     {
@@ -1169,23 +1169,23 @@ vdriver_acceptable_mode_p (int width, int height, int bpp,
   /* First, check the bpp. */
   if ((bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8)
       || bpp > vdriver_max_bpp)
-    return FALSE;
+    return false;
 
   /* If their requested width isn't an even multiple of 32 bits wide,
    * bump it up a bit so it is.
    */
   new_width = (((width << log2_bpp) + 31) & ~31) >> log2_bpp;
   if (exact_match_p && new_width != width)
-    return FALSE;
+    return false;
   width = new_width;
 
   /* If they want more memory than we've allocated, they fail! */
   if (FBUF_SIZE (width, height, log2_bpp) > fbuf_size)
-    return FALSE;
+    return false;
 
   /* If their size is too small, fail! */
   if (width < VDRIVER_MIN_SCREEN_WIDTH || height < VDRIVER_MIN_SCREEN_HEIGHT)
-    return FALSE;
+    return false;
 
   /* Make sure the mode isn't too large for our hardware. */
   for (i = vm->num_sizes - 1; i >= 0; i--)
@@ -1200,12 +1200,12 @@ vdriver_acceptable_mode_p (int width, int height, int bpp,
     }
   
   if (i < 0)
-    return FALSE;
+    return false;
 
   if (vgahost_illegal_mode_p (width, height, bpp, exact_match_p))
-    return FALSE;
+    return false;
 
-  return TRUE;
+  return true;
 }
 
 
@@ -1270,8 +1270,8 @@ vdriver_set_colors (int first_color, int num_colors,
  * appear to.  If width or height is zero, the current width and
  * height will be retained; if there is not yet a current width and
  * height, it will choose sensible defaults.  Clears the display to
- * color 0.  Returns TRUE if it successfully changed the mode, else
- * FALSE.
+ * color 0.  Returns true if it successfully changed the mode, else
+ * false.
  */
 bool
 vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
@@ -1279,11 +1279,11 @@ vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
   vga_mode_t *v, *best;
   int log2_bpp, best_bpp_diff, bpp_diff;
   unsigned long best_area_diff;
-  int success_p = TRUE;
+  int success_p = true;
   bool old_shadow_p;
 
-  if (!vdriver_acceptable_mode_p (width, height, bpp, grayscale_p, FALSE))
-    return FALSE;
+  if (!vdriver_acceptable_mode_p (width, height, bpp, grayscale_p, false))
+    return false;
 
   /* Note whether we used to have a shadow screen. */
   old_shadow_p = ROMlib_shadow_screen_p;
@@ -1360,7 +1360,7 @@ vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
 
   if (best == NULL)
     {
-      success_p = FALSE;
+      success_p = false;
       goto done;
     }
 
@@ -1378,7 +1378,7 @@ vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
 
   /* Switch to this hardware mode. */
   if (!vgahost_set_mode (best))
-    return FALSE;
+    return false;
 
   /* Note some information about doing direct-to-screen blits. */
 
@@ -1393,13 +1393,13 @@ vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
   vdriver_flip_real_screen_pixels_p = (!vdriver_real_screen_blit_possible_p
 				       && (!best->planar_p || log2_bpp != 0));
 
-  ROMlib_shadow_screen_p = TRUE;
+  ROMlib_shadow_screen_p = true;
   if (vdriver_real_screen_blit_possible_p
       && vgahost_mmap_linear_fbuf (best))
     {
       vga_portal_baseaddr = vdriver_fbuf;
       vdriver_real_screen_baseaddr = vdriver_fbuf;
-      ROMlib_shadow_screen_p = FALSE;
+      ROMlib_shadow_screen_p = false;
     }
 
 #if defined (MSDOS)
@@ -1407,7 +1407,7 @@ vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
    * using it by now, we'll never turn it on.  This is to avoid
    * the frame buffer moving around and other strangeness.
    */
-  try_to_use_fat_ds_vga_hack_p = FALSE;
+  try_to_use_fat_ds_vga_hack_p = false;
 #endif
 
   /* Make sure refresh is doing the right thing (its behavior
@@ -1587,7 +1587,7 @@ vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
     fill_hardware_fbuf (vdriver_flip_real_screen_pixels_p ? 0 : ~0);
 
   /* Note that the cursor is invisible right now. */
-  cursor_visible_p = FALSE;
+  cursor_visible_p = false;
 
 /*#warning "Old interface cruft" */
   host_cursor_depth = 1 << vdriver_log2_bpp;
@@ -1719,7 +1719,7 @@ erase_cursor (void)
 
   cursor_restore_height = cursor_restore_width = 0;
 
-  cursor_visible_p = FALSE;
+  cursor_visible_p = false;
 }
 
 
@@ -1749,7 +1749,7 @@ draw_cursor (int x, int y)
     {
       dirty_rect_update_screen ();
       erase_cursor ();
-      cursor_visible_p = FALSE;
+      cursor_visible_p = false;
     }
 
   /* Compute the bounding rectangle for the cursor. */
@@ -1909,7 +1909,7 @@ draw_cursor (int x, int y)
     {
       dirty_rect_update_screen ();
 
-      if (!vdriver_update_screen (top, left, bottom, right, TRUE))
+      if (!vdriver_update_screen (top, left, bottom, right, true))
 	{
 	  /* If the update machinery is already busy, restore the old
 	   * information about the cursor's current location.
@@ -1946,7 +1946,7 @@ host_set_cursor_visible (int show_p)
 	{
 	  if (!draw_cursor_p)
 	    {
-	      draw_cursor_p = TRUE;
+	      draw_cursor_p = true;
 	      if (!cursor_visible_p)
 		draw_cursor (cursor_x, cursor_y);
 	    }
@@ -1955,7 +1955,7 @@ host_set_cursor_visible (int show_p)
 	{
 	  if (draw_cursor_p)
 	    {
-	      draw_cursor_p = FALSE;
+	      draw_cursor_p = false;
 	      if (cursor_visible_p)
 		{
 		  vdriver_accel_wait ();
@@ -1964,16 +1964,16 @@ host_set_cursor_visible (int show_p)
 		    {
 		      if (vdriver_update_screen (cursor_top, cursor_left,
 						 cursor_bottom, cursor_right,
-						 TRUE))
+						 true))
 			{
-			  cursor_visible_p = FALSE;
+			  cursor_visible_p = false;
 			  cursor_top = cursor_bottom = 0;
 			}
 		    }
 		  else
 		    {
 		      erase_cursor ();
-		      cursor_visible_p = FALSE;
+		      cursor_visible_p = false;
 		      cursor_top = cursor_bottom = 0;
 		    }
 		}
@@ -1990,7 +1990,7 @@ host_hide_cursor_if_intersects (int top, int left, int bottom, int right)
 {
   if (top < cursor_bottom && bottom > cursor_top
       && left < cursor_right && right > cursor_left)
-    return host_set_cursor_visible (FALSE);
+    return host_set_cursor_visible (false);
   else
     return draw_cursor_p;
 }
@@ -2166,10 +2166,10 @@ host_set_cursor (char *cursor_data,
   /* Hide and redraw the new cursor if it used to be visible. */
   if (draw_cursor_p)
     {
-      host_set_cursor_visible (FALSE);
+      host_set_cursor_visible (false);
       cursor_x = current_hot_x - cursor_hotspot_x;
       cursor_y = current_hot_y - cursor_hotspot_y;
-      host_set_cursor_visible (TRUE);
+      host_set_cursor_visible (true);
     }
 }
 
@@ -2206,7 +2206,7 @@ host_flush_shadow_screen (void)
        * it's faster just to copy from one to the other than it is
        * to check to see what's changed and then copy.
        */
-      vdriver_update_screen (0, 0, vdriver_height, vdriver_width, FALSE);
+      vdriver_update_screen (0, 0, vdriver_height, vdriver_width, false);
     }
   else
     {
@@ -2229,7 +2229,7 @@ host_flush_shadow_screen (void)
 #else
 	  last_refreshed_screen = (uint32 *) malloc (fbuf_size);
 #endif
-	  vdriver_update_screen (0, 0, vdriver_height, vdriver_width, FALSE);
+	  vdriver_update_screen (0, 0, vdriver_height, vdriver_width, false);
 	  if (last_refreshed_screen != NULL)
 	    memcpy (last_refreshed_screen, vdriver_fbuf,
 		    vdriver_row_bytes * vdriver_height);
@@ -2241,7 +2241,7 @@ host_flush_shadow_screen (void)
 	{
 	  vdriver_update_screen (top, left_long << (5 - vdriver_log2_bpp),
 				 bottom, right_long << (5 - vdriver_log2_bpp),
-				 FALSE);
+				 false);
 	}
     }
 }

@@ -46,7 +46,7 @@ ROMlib_executor_format (LONGINT type)
       retval = RegisterClipboardFormat (str);
       cache.type = type;
       cache.value = retval;
-      cache.valid = TRUE;
+      cache.valid = true;
     }
   return retval;
 }
@@ -108,7 +108,7 @@ GetScrapX (LONGINT type, char **h)
 		int len;
 
 		len = strlen (lp);
-		retval = get_scrap_helper (h, lp, len, TRUE);
+		retval = get_scrap_helper (h, lp, len, true);
 	      }
 	    break;
 	    default:
@@ -123,7 +123,7 @@ GetScrapX (LONGINT type, char **h)
 		    len = *(int32 *)lp;
 
 		    retval = get_scrap_helper (h, lp+sizeof(int32),
-					       len, FALSE);
+					       len, false);
 		  }
 	      }
 	      break;

@@ -13,7 +13,7 @@ char ROMlib_rcsid_next[] = "$Id: next.c 119 2005-07-11 21:36:20Z ctm $";
 bool
 os_init (void)
 {
-  return TRUE;
+  return true;
 }
 
 PUBLIC bool host_has_spfcommon (void)

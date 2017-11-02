@@ -34,7 +34,7 @@ vdriver_opt_register (void)
 /* The DIB driver can create windows of virtually any size */
 vdriver_dib_mode_t vdriver_dib_modes =
 {
-  /* contiguous_range_p */ TRUE,
+  /* contiguous_range_p */ true,
   /* num_sizes */ 2,
   {
     /* min */    { 512, 342 },  /* Where do these numbers come from? */
@@ -61,7 +61,7 @@ vdriver_init (int _max_width, int _max_height, int _max_bpp,
 		      MAX(VDRIVER_DEFAULT_SCREEN_HEIGHT, flag_height));
     }
   if ( _max_bpp && (_max_bpp != 8) )
-    return(FALSE);
+    return(false);
   vdriver_max_bpp = 8;
   vdriver_log2_max_bpp = ROMlib_log2[vdriver_max_bpp];
   vdriver_dib_modes.size[1].width = _max_width;
@@ -73,13 +73,13 @@ vdriver_init (int _max_width, int _max_height, int _max_bpp,
 				  NULL);
   if ( private_mem == NULL )
     {
-      return(FALSE);
+      return(false);
     }
   vdriver_fbuf = MapViewOfFile(private_mem, FILE_MAP_ALL_ACCESS, 0, 0, 0);
   if ( vdriver_fbuf == NULL )
     {
       /* Fatal error -- couldn't create the memory chunk */
-      return(FALSE);
+      return(false);
     }
 
   /* Create a main window */
@@ -99,7 +99,7 @@ vdriver_init (int _max_width, int _max_height, int _max_bpp,
     bounds.left = 0;
     bounds.right = _max_width;
     bounds.bottom = _max_height;
-    AdjustWindowRect(&bounds, style, FALSE);
+    AdjustWindowRect(&bounds, style, false);
     Win_Window = CreateWindow(Win_AppName, Win_AppName, style, 
 			      CW_USEDEFAULT, CW_USEDEFAULT,
 			      bounds.right-bounds.left,
@@ -134,7 +134,7 @@ vdriver_init (int _max_width, int _max_height, int _max_bpp,
       Win_Focus(1);
     }
   ReleaseDC(hdc, Win_Window);
-  return(TRUE);
+  return(true);
 }
 
 bool
@@ -144,15 +144,15 @@ vdriver_acceptable_mode_p (int width, int height, int bpp,
   /* Verify the video mode parameters */
   if ( width && ((width < vdriver_dib_modes.size[0].width) ||
 		 (width > vdriver_dib_modes.size[1].width)) )
-    return(FALSE);
+    return(false);
   if ( height && ((height < vdriver_dib_modes.size[0].height) ||
 		  (height > vdriver_dib_modes.size[1].height)) )
-    return(FALSE);
+    return(false);
   if ( bpp && (bpp != 8) )
-    return(FALSE);
+    return(false);
   if ( grayscale_p != vdriver_grayscale_p )
-    return(FALSE);
-  return(TRUE);
+    return(false);
+  return(true);
 }
 
 bool
@@ -161,8 +161,8 @@ vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
   HDC hdc;
   uint8 *dummy_fbuf;
 
-  if ( ! vdriver_acceptable_mode_p(width, height, bpp, grayscale_p, FALSE) )
-    return(FALSE);
+  if ( ! vdriver_acceptable_mode_p(width, height, bpp, grayscale_p, false) )
+    return(false);
 
   /* Set up the bitmap info header with our parameters */
   if ( screen_bmp )
@@ -171,7 +171,7 @@ vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
     free(binfo);
   binfo = (BITMAPINFO *)malloc(sizeof(*binfo)+PAL_SIZE);
   if ( binfo == NULL )
-    return(FALSE);
+    return(false);
   binfo->bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
   if ( ! width )
     width = vdriver_dib_modes.size[1].width;
@@ -195,7 +195,7 @@ vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
     if ( saved_pal == NULL ) {
       free(binfo);
       binfo = NULL;
-      return(FALSE);
+      return(false);
     }
     memset(saved_pal, 0, PAL_SIZE);
   }
@@ -218,7 +218,7 @@ vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
   screen_bmp = CreateDIBSection(hdc, binfo, DIB_RGB_COLORS,
 				(void **)(&dummy_fbuf), private_mem, 0);
   ReleaseDC(Win_Window, hdc);
-  return(TRUE);
+  return(true);
 }
 
 
@@ -258,7 +258,7 @@ vdriver_set_colors (int first_color, int num_colors, const ColorSpec *colors)
   vdriver_set_mode(vdriver_width, vdriver_height, vdriver_bpp,
                                              vdriver_grayscale_p);
   /* Redraw the screen with the new colors */
-  vdriver_update_screen(0, 0, vdriver_height, vdriver_width, FALSE);
+  vdriver_update_screen(0, 0, vdriver_height, vdriver_width, false);
 }
 
 void
@@ -278,7 +278,7 @@ vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
   hdc = GetDC(Win_Window);
   if ( sys_palette_p )
     {
-      SelectPalette(hdc, our_palette, FALSE);
+      SelectPalette(hdc, our_palette, false);
       RealizePalette(hdc);
     }
   mdc = CreateCompatibleDC(hdc);
@@ -392,14 +392,14 @@ Win_Focus(int on)
       /* This is more trouble than it's worth.  It fries system colors */
       SetSystemPaletteUse(hdc, SYSPAL_NOSTATIC);
 #endif
-      SelectPalette(hdc, our_palette, FALSE);
+      SelectPalette(hdc, our_palette, false);
       RealizePalette(hdc);
       InvalidateRect(Win_Window, NULL, 0);
     }
   else
     {
       /* Set the system palette and reset colors */
-      SelectPalette(hdc, sys_palette, FALSE);
+      SelectPalette(hdc, sys_palette, false);
       RealizePalette(hdc);
 #ifdef PRIVATE_CMAP
       SetSystemPaletteUse(hdc, SYSPAL_STATIC);
@@ -419,7 +419,7 @@ void Win_PAINT(void)
   hdc = BeginPaint(Win_Window, &ps);
   if ( sys_palette_p )
     {
-      SelectPalette(hdc, our_palette, FALSE);
+      SelectPalette(hdc, our_palette, false);
       RealizePalette(hdc);
     }
   mdc = CreateCompatibleDC(hdc);

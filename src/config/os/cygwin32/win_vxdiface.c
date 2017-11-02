@@ -92,13 +92,13 @@ BOOL VxdInit( void )
 				dwErrorCode);
     }
 		WarningAlert(msg);
-		return(FALSE);
+		return(false);
 	} else {
 #ifndef KEEP_OPEN
     CloseHandle(vhndl);
 		vhndl = INVALID_HANDLE_VALUE;
 #endif
-		return(TRUE);
+		return(true);
 	}
 }
 

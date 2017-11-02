@@ -75,21 +75,21 @@ void filllist(ListHandle list, LONGINT curdir, INTEGER savedisk)
     err = noErr;
     SetPt(&cell, 0, 0);
     LDelRow(0, 0, list);
-    LDoDraw(FALSE, list);
+    LDoDraw(false, list);
     numrows = 0;
     pb.hFileInfo.ioNamePtr  = s + 2;
     pb.hFileInfo.ioVRefNum  = savedisk;
     for (pb.hFileInfo.ioFDirIndex = 1; err != fnfErr;
  					     pb.hFileInfo.ioFDirIndex++) {
  	pb.hFileInfo.ioDirID = curdir;
- 	err = xPBGetCatInfo(&pb, FALSE);
+ 	err = xPBGetCatInfo(&pb, false);
  	if (err == noErr) {
-	    done = FALSE;
+	    done = false;
 	    for (cell.v = 0 ; !done & (cell.v < numrows) ; cell.v++) {
 	        len = 255;
 	        LGetCell(s2, &len, cell, list);
 	        s2[1] = len;
-	        done = RelString(s + 2, s2 + 1, FALSE, FALSE) < 1;
+	        done = RelString(s + 2, s2 + 1, false, false) < 1;
 	    }
 	    if (done)
 	        cell.v--;
@@ -107,7 +107,7 @@ void filllist(ListHandle list, LONGINT curdir, INTEGER savedisk)
  	    break;
  	}
     }
-    LDoDraw(TRUE, list);
+    LDoDraw(true, list);
     LUpdate(thePort->visRgn, list);
 }
    
@@ -125,7 +125,7 @@ void cd(ListHandle list, direction way, INTEGER vrn, LONGINT  * dirid)
     switch(way) {
         case up:
 	    hpb.hFileInfo.ioFDirIndex = -1;
-	    err = xPBGetCatInfo(&hpb, FALSE);
+	    err = xPBGetCatInfo(&hpb, false);
 	    if (err != noErr) {
  	        doerror(err, "\pPBGetCatInfo");
  	        return;
@@ -136,13 +136,13 @@ void cd(ListHandle list, direction way, INTEGER vrn, LONGINT  * dirid)
             break;
         case down:
             SetPt(&c, 0, 0);
-            if (!LGetSelect(TRUE, &c, list))
+            if (!LGetSelect(true, &c, list))
 /*-->*/		return;
             len = 255;
 	    LGetCell(s, &len, c, list);
 	    s[1] = (unsigned char) len - 2;
 	    hpb.hFileInfo.ioFDirIndex = 0;
-	    err = xPBGetCatInfo(&hpb, FALSE);
+	    err = xPBGetCatInfo(&hpb, false);
 	    if (err != noErr)
  	        doerror(err, "\pPBGetCatInfo");
     	    if (hpb.hFileInfo.ioFlAttrib & ISDIRMASK)
@@ -173,7 +173,7 @@ void unselect(ListHandle list)
     
     c.h = 0;
     for (c.v = 0 ; c.v < (*list)->dataBounds.bottom ; c.v++)
-        LSetSelect(FALSE, c, list);
+        LSetSelect(false, c, list);
 }
 
 void changedisk(ListHandle list, LONGINT *dirid, INTEGER  *disk,
@@ -191,25 +191,25 @@ void changedisk(ListHandle list, LONGINT *dirid, INTEGER  *disk,
     pb.volumeParam.ioVRefNum = *disk;
     pb.volumeParam.ioNamePtr = 0;
     pb.volumeParam.ioVolIndex = 0;
-    err = xPBGetVInfo(&pb, FALSE);
+    err = xPBGetVInfo(&pb, false);
     if (err != noErr)
         doerror(err, "\pPBGetVInfo");
     current = pb.volumeParam.ioVRefNum;
  
     pb.volumeParam.ioVolIndex = 1;
-    err = xPBGetVInfo(&pb, FALSE);
+    err = xPBGetVInfo(&pb, false);
     if (err != noErr)
         doerror(err, "\pPBGetVInfo");
     vref0 = pb.volumeParam.ioVRefNum;
     while (err == noErr && pb.volumeParam.ioVRefNum != current) {
  	++pb.volumeParam.ioVolIndex;
- 	err = xPBGetVInfo(&pb, FALSE);
+ 	err = xPBGetVInfo(&pb, false);
     }
     if (err != noErr) {
  	*disk = 0;
     } else {
  	++pb.volumeParam.ioVolIndex;
- 	err = xPBGetVInfo(&pb, FALSE);
+ 	err = xPBGetVInfo(&pb, false);
  	if (err == noErr)
  	    *disk = pb.volumeParam.ioVRefNum;
  	else
@@ -220,7 +220,7 @@ void changedisk(ListHandle list, LONGINT *dirid, INTEGER  *disk,
     pb.volumeParam.ioVolIndex = 0;
     pb.volumeParam.ioNamePtr = s;
     pb.volumeParam.ioVRefNum = *disk;
-    err = xPBGetVInfo(&pb, FALSE);
+    err = xPBGetVInfo(&pb, false);
     if (err != noErr) {
         doerror(err, "\pPBGetVInfo");
         return;
@@ -278,7 +278,7 @@ pascal INTEGER myfilterproc(DialogPtr unuseddp, EventRecord *event,
     Cell c;
     
     if (event->what != mouseDown)
-/*-->*/ return FALSE;
+/*-->*/ return false;
     GetNextEvent(diskMask, &evt);
     DialogSelect(event, &dp, item);
     SetPt(&c, 0, 0);
@@ -300,7 +300,7 @@ pascal INTEGER myfilterproc(DialogPtr unuseddp, EventRecord *event,
                 cd(firstlist, down, Firstsavedisk, &Firstcurdirstore);
             }
             event->what = nullEvent;
-            if (!LGetSelect(TRUE, &c, firstlist))
+            if (!LGetSelect(true, &c, firstlist))
                 hilite(dp, 255);
             else
                 hilite(dp, 0);
@@ -322,41 +322,41 @@ pascal INTEGER myfilterproc(DialogPtr unuseddp, EventRecord *event,
                 cd(secondlist, down, Secondsavedisk, &Secondcurdirstore);
             }
             event->what = nullEvent;
-            if (!LGetSelect(TRUE, &c, secondlist))
+            if (!LGetSelect(true, &c, secondlist))
                 hilite(dp, 255);
             else
                 hilite(dp, 0);
             break;
         case UPFIRSTDIR:
             cd(firstlist, up, Firstsavedisk, &Firstcurdirstore);
-            if (!LGetSelect(TRUE, &c, secondlist))
+            if (!LGetSelect(true, &c, secondlist))
                 hilite(dp, 255);
             break;
         case UPSECONDDIR:
             cd(secondlist, up, Secondsavedisk, &Secondcurdirstore);
-            if (!LGetSelect(TRUE, &c, firstlist))
+            if (!LGetSelect(true, &c, firstlist))
                 hilite(dp, 255);
             break;
         case FIRSTDRIVE:
             changedisk(firstlist, &Firstcurdirstore, &Firstsavedisk, dp,
             						    FIRSTVOLUME);
-            if (!LGetSelect(TRUE, &c, secondlist))
+            if (!LGetSelect(true, &c, secondlist))
                 hilite(dp, 255);
             break;
         case SECONDDRIVE:
             changedisk(secondlist, &Secondcurdirstore, &Secondsavedisk, dp,
             						      SECONDVOLUME);
-            if (!LGetSelect(TRUE, &c, firstlist))
+            if (!LGetSelect(true, &c, firstlist))
                 hilite(dp, 255);
             break;
         case DOWNFIRSTDIR:
             cd(firstlist, down, Firstsavedisk, &Firstcurdirstore);
-            if (!LGetSelect(TRUE, &c, secondlist))
+            if (!LGetSelect(true, &c, secondlist))
                 hilite(dp, 255);
             break;
         case DOWNSECONDDIR:
             cd(secondlist, down, Secondsavedisk, &Secondcurdirstore);
-            if (!LGetSelect(TRUE, &c, firstlist))
+            if (!LGetSelect(true, &c, firstlist))
                 hilite(dp, 255);
             break;
         case FIRSTEJECTBUTTON:
@@ -364,7 +364,7 @@ pascal INTEGER myfilterproc(DialogPtr unuseddp, EventRecord *event,
             changedisk(firstlist, &Firstcurdirstore, &Firstsavedisk, dp,
             						    FIRSTVOLUME);
             eject(toeject);
-            if (!LGetSelect(TRUE, &c, secondlist))
+            if (!LGetSelect(true, &c, secondlist))
                 hilite(dp, 255);
             break;
         case SECONDEJECTBUTTON:
@@ -372,14 +372,14 @@ pascal INTEGER myfilterproc(DialogPtr unuseddp, EventRecord *event,
             changedisk(secondlist, &Secondcurdirstore, &Secondsavedisk, dp,
             						      SECONDVOLUME);
             eject(toeject);
-            if (!LGetSelect(TRUE, &c, firstlist))
+            if (!LGetSelect(true, &c, firstlist))
                 hilite(dp, 255);
             break;
         default:
-	    return TRUE;
+	    return true;
             break;
     }
-    return FALSE;
+    return false;
 }
 
 void setuplists(DialogPtr dp)
@@ -396,21 +396,21 @@ void setuplists(DialogPtr dp)
     GetDItem(dp, FIRSTLIST, &type, &h, &r);
     SetRect(&dbounds, 0,0,1,0);
     SetPt(&csize, 0, 0);
-    firstlist = LNew(&r, &dbounds, csize, 0, dp, FALSE, FALSE, FALSE, TRUE);
+    firstlist = LNew(&r, &dbounds, csize, 0, dp, false, false, false, true);
     filllist(firstlist, Firstcurdirstore, Firstsavedisk);
     pb.volumeParam.ioNamePtr = s;
     pb.volumeParam.ioVolIndex = 0;
     pb.volumeParam.ioVRefNum = Firstsavedisk;
-    err = xPBGetVInfo(&pb, FALSE);
+    err = xPBGetVInfo(&pb, false);
     if (err != noErr)
         doerror(err, "\pPBGetVInfo");
     GetDItem(dp, FIRSTVOLUME, &type, &h, &r);
     SetIText(h, s);
     GetDItem(dp, SECONDLIST, &type, &h, &r);
-    secondlist = LNew(&r, &dbounds, csize, 0, dp, FALSE, FALSE, FALSE, TRUE);
+    secondlist = LNew(&r, &dbounds, csize, 0, dp, false, false, false, true);
     filllist(secondlist, Secondcurdirstore, Secondsavedisk);
     pb.volumeParam.ioVRefNum = Secondsavedisk;
-    err = xPBGetVInfo(&pb, FALSE);
+    err = xPBGetVInfo(&pb, false);
     if (err != noErr)
         doerror(err, "\pPBGetVInfo");
     GetDItem(dp, SECONDVOLUME, &type, &h, &r);
@@ -600,8 +600,8 @@ void init()
     optionmenu = NewMenu(4,"\pOptions");
     for (i=0;i<NELEM(optionvars) ; i++) {
 	AppendMenu(optionmenu,optionvars[i].name);
-	*optionvars[i].var = TRUE;
-	CheckItem(optionmenu, i + 1, TRUE);
+	*optionvars[i].var = true;
+	CheckItem(optionmenu, i + 1, true);
     }
     AppendMenu(optionmenu,"\p-;Verify None;Verify All");
     InsertMenu(optionmenu, 0);

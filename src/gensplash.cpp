@@ -274,9 +274,9 @@ output file `%s'\n",
   
   fscanf (splashfp, "%s", buf);
   if (! strcmp (buf, "P3"))
-    pixmap_p = TRUE;
+    pixmap_p = true;
   else if (! strcmp (buf, "P1"))
-    pixmap_p = FALSE;
+    pixmap_p = false;
   else
     {
       fprintf (stderr, "ppm type must be `P3' or `P1'\n");
@@ -308,9 +308,9 @@ output file `%s'\n",
   
   fscanf (buttonfp, "%s", buf);
   if (! strcmp (buf, "P3"))
-    pixmap_p = TRUE;
+    pixmap_p = true;
   else if (! strcmp (buf, "P1"))
-    pixmap_p = FALSE;
+    pixmap_p = false;
   else
     {
       fprintf (stderr, "ppm type must be `P3' or `P1'\n");

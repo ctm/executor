@@ -62,7 +62,7 @@ P3(PUBLIC pascal trap, BOOLEAN, SectRect, const Rect *, s1, const Rect *, s2,
   else
     {
       RECT_ZERO (dest);
-      return FALSE;
+      return false;
     }
 }
 

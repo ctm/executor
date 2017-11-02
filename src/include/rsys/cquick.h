@@ -194,7 +194,7 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
    : PORT_BITS ((GrafPtr) port).baseAddr)
 #define PORT_BASEADDR(port)		(PPR (PORT_BASEADDR_X (port)))
 
-/* return TRUE if the given bitmap has the same baseAddr, rowBytes and
+/* return true if the given bitmap has the same baseAddr, rowBytes and
    bounds as thePort's bits (portBits or portPixMap) */
 #define BITMAP_IS_THEPORT_P(bitmap)				\
   (! memcmp (bitmap,						\
@@ -476,7 +476,7 @@ typedef BitMap blt_bitmap_t;
     _cicon = (CIconHandle) _icon;					     \
 									     \
     ((icon_size < sizeof (CIcon))					     \
-     ? FALSE								     \
+     ? false								     \
      : (icon_size == (sizeof (CIcon)					     \
 		      - sizeof (int16)					     \
 		      + (RECT_HEIGHT (&BITMAP_BOUNDS (&CICON_PMAP (_cicon))) \

@@ -133,7 +133,7 @@ typedef Rect *RectPtr;
 #define RECT_ZERO(r)				\
 do						\
   memset (r, 0, sizeof (Rect));			\
-while (FALSE)
+while (false)
 
 #define RECT_EQUAL_P(r1, r2)			\
 ({						\

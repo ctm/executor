@@ -68,9 +68,9 @@ PRIVATE LONGINT autoticks;
 PRIVATE LONGINT lastdown = -1;
 
 #if !defined(MACOSX_)
-PUBLIC short ROMlib_pinned = FALSE;
+PUBLIC short ROMlib_pinned = false;
 #else
-PUBLIC short ROMlib_pinned = TRUE;
+PUBLIC short ROMlib_pinned = true;
 #endif
 
 PRIVATE Ptr kchr_ptr;
@@ -135,7 +135,7 @@ Executor::ROMlib_set_keyboard (const char *keyboardname)
   return !!new_h;
 }
 
-PRIVATE bool map_right_to_left = TRUE;
+PRIVATE bool map_right_to_left = true;
 
 PUBLIC uint16
 Executor::ROMlib_right_to_left_key_map (uint16 what)
@@ -203,7 +203,7 @@ A1(PUBLIC, void, ROMlib_eventinit, bool, graphics_valid_p)	/* INTERNAL */
 	MouseLocation.v = 0;
 	MouseLocation2.h = 0;
 	MouseLocation2.v = 0;
-	ScrDmpEnb = TRUE;
+	ScrDmpEnb = true;
 	evs[0].qLink = 0;	/* end of the line */
 	beenhere = 1;
 	for (p = evs+1, ep = evs+NEVENT; p != ep; p++)
@@ -270,10 +270,10 @@ Executor::ROMlib_get_index_and_bit (LONGINT loc, int *indexp, uint8 *bitp)
   bool retval;
 
   if (loc < 0 || loc / 8 >= sizeof_KeyMap)
-    retval = FALSE;
+    retval = false;
   else
     {
-      retval = TRUE;
+      retval = true;
       *indexp = loc / 8;
       *bitp = (1 << (loc % 8));
     }
@@ -302,7 +302,7 @@ key_down (uint8 loc)
   uint8 bit;
 
   if (!ROMlib_get_index_and_bit (loc, &i, &bit))
-    retval = FALSE;
+    retval = false;
   else
     retval = !!(KeyMap[i] & bit);
   return retval;
@@ -478,7 +478,7 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 					target,
 					/* dummy */ -1, /* dummy */ -1,
 					aevt);
-	      err = AECreateList (NULL, 0, FALSE, list);
+	      err = AECreateList (NULL, 0, false, list);
 	      
 	      for (i = 1; i <= count; i ++)
 		{
@@ -518,12 +518,12 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 		      /* dummy */ -1, NULL, NULL);
 	    }
 	  
-	  send_application_open_aevt_p = FALSE;
+	  send_application_open_aevt_p = false;
 	}
       }
     
     eventp->message = CLC(0);
-    ROMlib_memnomove_p = FALSE;	/* this is an icky hack needed for Excel */
+    ROMlib_memnomove_p = false;	/* this is an icky hack needed for Excel */
     ticks = TickCount();
 
 #if defined (X)
@@ -557,7 +557,7 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 	if (dropit) {
 	    dropevent(qp);
 	}
-	retval = TRUE;
+	retval = true;
     } else {
 	eventp->when      = CL(TickCount());
 
@@ -590,10 +590,10 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 	    autoticks = ticks + Cx(KeyRepThresh);
 	    eventp->what = CWC(autoKey);
 	    eventp->message = CL(lastdown);
-	    retval = TRUE;
+	    retval = true;
 	} else {
 	    eventp->what = CWC(nullEvent);
-	    retval = FALSE;
+	    retval = false;
 	}
     }
     restore_virtual_ints (block);
@@ -601,7 +601,7 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 	oldpoint = eventp->where.get();
 	if (ROMlib_bewaremovement) {
 	    ROMlib_showhidecursor();
-	    ROMlib_bewaremovement = FALSE;
+	    ROMlib_bewaremovement = false;
 	}
     }
 #if defined(MACOSX_)
@@ -622,13 +622,13 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 
 A2(PUBLIC trap, BOOLEANRET, GetOSEvent, INTEGER, evmask, EventRecord *, eventp)
 {
-    return OSEventCommon(evmask, eventp, TRUE);
+    return OSEventCommon(evmask, eventp, true);
 }
 
 A2(PUBLIC trap, BOOLEANRET, OSEventAvail, INTEGER, evmask,
 							 EventRecord *, eventp)
 {
-    return OSEventCommon(evmask, eventp, FALSE);
+    return OSEventCommon(evmask, eventp, false);
 }
 
 A1(PUBLIC trap, void, SetEventMask, INTEGER, evmask)
@@ -680,7 +680,7 @@ Executor::display_keyboard_choices (void)
 
   vdriver_shutdown ();
   printf ("Available keyboard maps:\n");
-  SetResLoad (FALSE);
+  SetResLoad (false);
   nres = CountResources (TICK ("KCHR"));
   names = (typeof names)alloca (nres * sizeof (*names));
   nfound = 0;

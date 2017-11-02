@@ -323,7 +323,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 	}
     }
 
-  fmi.needBits = CB(TRUE);
+  fmi.needBits = CB(true);
   fmi.family   = PORT_TX_FONT_X (thePort);
   fmi.size     = PORT_TX_SIZE_X (thePort);
   fmi.face     = PORT_TX_FACE_X (thePort);
@@ -503,7 +503,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 	  drect.right = CW(CW(drect.left) + misintwidth);
 	  if (action == text_helper_draw)
 	    {
-	      charblit(&fmap, bmp, &misrect, &drect, TRUE);
+	      charblit(&fmap, bmp, &misrect, &drect, true);
 	      ASSERT_SAFE(MR(stylemap.baseAddr));
 	    }
 	  if (FractEnable)
@@ -522,7 +522,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 	  drect.right = CW(CW(drect.left) + CW(srect.right) - CW(srect.left));
 	  if (action == text_helper_draw)
 	    {
-	      charblit(&fmap, bmp, &srect, &drect, TRUE);
+	      charblit(&fmap, bmp, &srect, &drect, true);
 	      ASSERT_SAFE(MR(stylemap.baseAddr));
 	    }
 	  if (FractEnable)
@@ -564,7 +564,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 	    {
 	      drect.left = CW(CW(drect.left) + 1);
 	      srect.right = CW(CW(srect.right) - 1);
-	      charblit(&stylemap2, bmp, &srect, &drect, FALSE);
+	      charblit(&stylemap2, bmp, &srect, &drect, false);
 	      ASSERT_SAFE(MR(stylemap.baseAddr));
 	    }
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
@@ -622,7 +622,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 	  srect.left = CW(CW(srect.left) + 1);
 	  drect.right = CW(CW(drect.right) - 1);
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
-	  charblit(&stylemap2, &stylemap3, &srect, &drect, FALSE);
+	  charblit(&stylemap2, &stylemap3, &srect, &drect, false);
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
 	  srect.left = CW(CW(srect.left) - 1); /* restore */
 	  drect.right = CW(CW(drect.right) + 1);
@@ -630,7 +630,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 	    {
 	      drect.left = CW(CW(drect.left) + 1);
 	      srect.right = CW(CW(srect.right) - 1);
-	      charblit(&stylemap2, &stylemap3, &srect, &drect, FALSE);
+	      charblit(&stylemap2, &stylemap3, &srect, &drect, false);
 	    }
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
 	  drect.left  = CW(CW(drect.left)  - Cx(fmop->shadow));	/* restore */
@@ -645,7 +645,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 	  srect.top = CW(CW(srect.top) + 1);
 	  drect.bottom = CW(CW(drect.bottom) - 1);
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
-	  charblit(&stylemap3, bmp, &srect, &drect, FALSE);
+	  charblit(&stylemap3, bmp, &srect, &drect, false);
 	  srect.top = CW(CW(srect.top) - 1); /* restore */
 	  drect.bottom = CW(CW(drect.bottom) + 1);
 	  ASSERT_SAFE(MR(stylemap.baseAddr));
@@ -653,7 +653,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 	    {
 	      drect.top = CW(CW(drect.top) + 1);
 	      srect.bottom = CW(CW(srect.bottom) - 1);
-	      charblit(&stylemap3, bmp, &srect, &drect, FALSE);
+	      charblit(&stylemap3, bmp, &srect, &drect, false);
 	    }
 	  drect.top  = CW(CW(drect.top) - Cx(fmop->shadow)); /* restore */
 	  srect.bottom = CW(CW(srect.bottom) + Cx(fmop->shadow));
@@ -707,7 +707,7 @@ Executor::disable_text_printing (void)
   bool retval;
 
   retval = ROMlib_text_output_disabled_p;
-  ROMlib_text_output_disabled_p = TRUE;
+  ROMlib_text_output_disabled_p = true;
   return retval;
 }
 

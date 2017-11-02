@@ -75,7 +75,7 @@ get_sys_vref_and_dirid (INTEGER *sys_vrefp, LONGINT *sys_diridp)
   wdp.ioVRefNum = BootDrive;
   wdp.ioWDIndex = CWC (0);
   wdp.ioNamePtr = nullptr;
-  err = PBGetWDInfo (&wdp, FALSE);
+  err = PBGetWDInfo (&wdp, false);
   if (err == noErr)
     {
       *sys_vrefp = CW (wdp.ioWDVRefNum);
@@ -139,7 +139,7 @@ look_for_volume (const char *vol_name, INTEGER *vrefp, LONGINT *diridp)
   pbr.volumeParam.ioNamePtr = RM (&pvol_name[0]);
   pbr.volumeParam.ioVolIndex = CWC (-1);
   pbr.volumeParam.ioVRefNum = CWC (0);
-  retval = PBGetVInfo (&pbr, FALSE);
+  retval = PBGetVInfo (&pbr, false);
   if (retval == noErr)
     {
       *vrefp = CW (pbr.volumeParam.ioVRefNum);
@@ -161,7 +161,7 @@ last_chance_tmp_vref_and_dirid (INTEGER vref, INTEGER *tmp_vrefp,
   HParamBlockRec pb = {};
   
   pb.volumeParam.ioVRefNum = CW (vref);
-  retval = PBHGetVInfo (&pb, FALSE);
+  retval = PBHGetVInfo (&pb, false);
   if (retval == noErr) {
 	static char *top_level_names[] =
 	{
@@ -183,7 +183,7 @@ last_chance_tmp_vref_and_dirid (INTEGER vref, INTEGER *tmp_vrefp,
 	  hpb.dirInfo.ioNamePtr = RM ((StringPtr) top_level_names[i]);
 	  hpb.dirInfo.ioVRefNum = pb.volumeParam.ioVRefNum;
 	  hpb.dirInfo.ioDrDirID = CLC (2);
-	  err = PBGetCatInfo (&hpb, FALSE);
+	  err = PBGetCatInfo (&hpb, false);
 	  if (err == noErr && (hpb.hFileInfo.ioFlAttrib & ATTRIB_ISADIR))
 		*tmp_diridp = CL (hpb.dirInfo.ioDrDirID);
 	}
@@ -216,7 +216,7 @@ get_tmp_vref_and_dirid (INTEGER vref, INTEGER *tmp_vrefp, LONGINT *tmp_diridp)
 
 
   {
-    static bool been_here_p = FALSE;
+    static bool been_here_p = false;
 
     if (!been_here_p)
       {
@@ -237,7 +237,7 @@ get_tmp_vref_and_dirid (INTEGER vref, INTEGER *tmp_vrefp, LONGINT *tmp_diridp)
 		ROMlib_automount (p);
 	      }
 	  }
-	been_here_p = TRUE;
+	been_here_p = true;
       }
   }
 
@@ -265,7 +265,7 @@ test_directory (INTEGER vref, LONGINT dirid, const char *sub_dirp,
   cpb.hFileInfo.ioVRefNum = CW (vref);
   cpb.hFileInfo.ioFDirIndex = CWC (0);
   cpb.hFileInfo.ioDirID = CL (dirid);
-  err = PBGetCatInfo (&cpb, FALSE);
+  err = PBGetCatInfo (&cpb, false);
   if (err == noErr && !(cpb.hFileInfo.ioFlAttrib & ATTRIB_ISADIR))
     err = dupFNErr;
   if (err == noErr)
@@ -409,11 +409,11 @@ P4 (PUBLIC pascal trap, OSErr, ResolveAlias,
   pb.volumeParam.ioNamePtr = RM ((StringPtr) volname);
   pb.volumeParam.ioVolIndex = CWC (-1);
   pb.volumeParam.ioVRefNum = 0;
-  retval = PBHGetVInfo (&pb, FALSE);
+  retval = PBHGetVInfo (&pb, false);
   if (retval == noErr)
     {
       fs.vRefNum = pb.volumeParam.ioVRefNum;
-      *wasAliased = FALSE;
+      *wasAliased = false;
       *target = fs;
     }
 
@@ -432,12 +432,12 @@ P4 (PUBLIC pascal trap, OSErr, ResolveAliasFile,
   hpb.fileParam.ioNamePtr = RM ((StringPtr) theSpec->name);
   hpb.fileParam.ioDirID = theSpec->parID;
   hpb.fileParam.ioVRefNum = theSpec->vRefNum;
-  retval = PBHGetFInfo (&hpb, FALSE);
+  retval = PBHGetFInfo (&hpb, false);
 
   if (retval == noErr)
     {
       *targetIsFolder = !!(hpb.fileParam.ioFlAttrib & ATTRIB_ISADIR);
-      *wasAliased = FALSE;
+      *wasAliased = false;
     }
 
   warning_unimplemented ("'%.*s' retval = %d, isFolder = %d", theSpec->name[0],
@@ -726,7 +726,7 @@ FSSpecPtr, fsp, GUEST<AliasHandle> *, ahp)
   memset (&hpb, 0, sizeof hpb);
   hpb.ioParam.ioNamePtr = RM (&volName[0]);
   hpb.ioParam.ioVRefNum = fsp->vRefNum;
-  retval = PBHGetVInfo (&hpb, FALSE);
+  retval = PBHGetVInfo (&hpb, false);
   if (retval == noErr)
     {
       alias_head_t head;
@@ -738,7 +738,7 @@ FSSpecPtr, fsp, GUEST<AliasHandle> *, ahp)
       hpb.ioParam.ioNamePtr = RM (&fsp->name[0]);
       hpb.ioParam.ioVRefNum = fsp->vRefNum;
       hpb.fileParam.ioDirID = fsp->parID;
-      retval = PBHGetFInfo (&hpb, FALSE);
+      retval = PBHGetFInfo (&hpb, false);
       if (retval == noErr)
 	{
 	  alias_tail_t tail;

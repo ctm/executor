@@ -94,13 +94,13 @@ static BOOL InstallDriver(
   if (schService == NULL) {
       err = GetLastError();
       if (err == ERROR_SERVICE_EXISTS) {
-				  return TRUE;
+				  return true;
       } else {
-		      return FALSE;
+		      return false;
       }
   }
   CloseServiceHandle (schService);
-  return TRUE;
+  return true;
 }
 
 static BOOL RemoveDriver(
@@ -115,7 +115,7 @@ static BOOL RemoveDriver(
                             DriverName,
                             SERVICE_ALL_ACCESS
                             );
-  if (schService == NULL) return FALSE;
+  if (schService == NULL) return false;
   ret = DeleteService (schService);
   CloseServiceHandle (schService);
   return ret;
@@ -133,7 +133,7 @@ static BOOL StartDriver(
                             DriverName,
                             SERVICE_ALL_ACCESS
                             );
-  if (schService == NULL) return FALSE;
+  if (schService == NULL) return false;
   ret = StartService (schService,    // service identifier
                       0,             // number of arguments
                       NULL           // pointer to arguments
@@ -141,9 +141,9 @@ static BOOL StartDriver(
   if(ret == 0) {
     err = GetLastError();
     if (err == ERROR_SERVICE_ALREADY_RUNNING) {
-			ret = TRUE;
+			ret = true;
     } else {
-			ret = FALSE;
+			ret = false;
 		}
   }
   CloseServiceHandle (schService);
@@ -163,7 +163,7 @@ static BOOL StopDriver(
                             DriverName,
                             SERVICE_ALL_ACCESS
                             );
-  if (schService == NULL) return FALSE;
+  if (schService == NULL) return false;
   ret = ControlService (schService,
                         SERVICE_CONTROL_STOP,
                         &serviceStatus
@@ -175,13 +175,13 @@ static BOOL StopDriver(
 static BOOL __cdecl start_driver( void )
 {
 	SC_HANDLE   schSCManager;
-	BOOL ret = FALSE;
+	BOOL ret = false;
 
 	schSCManager = OpenSCManager( NULL, NULL, SC_MANAGER_ALL_ACCESS );
-	if(!schSCManager) return(FALSE);
+	if(!schSCManager) return(false);
 	if(!InstallDriver( schSCManager, sDriverShort, sDriverLong )) {
 		CloseServiceHandle( schSCManager );
-		return(FALSE);
+		return(false);
 	}
 	ret = StartDriver( schSCManager, sDriverShort );
 	if(!ret) {
@@ -194,11 +194,11 @@ static BOOL __cdecl start_driver( void )
 static BOOL __cdecl stop_driver( void )
 {
 	SC_HANDLE   schSCManager;
-	BOOL ret = FALSE;
+	BOOL ret = false;
 
 	schSCManager = OpenSCManager( NULL, NULL, SC_MANAGER_ALL_ACCESS );
-	if(!schSCManager) return(FALSE);
-	if(StopDriver( schSCManager, sDriverShort )) ret = TRUE;
+	if(!schSCManager) return(false);
+	if(StopDriver( schSCManager, sDriverShort )) ret = true;
 	CloseServiceHandle( schSCManager );
 	return( ret );
 }
@@ -206,11 +206,11 @@ static BOOL __cdecl stop_driver( void )
 static BOOL __cdecl remove_driver( void )
 {
 	SC_HANDLE   schSCManager;
-	BOOL ret = FALSE;
+	BOOL ret = false;
 
 	schSCManager = OpenSCManager( NULL, NULL, SC_MANAGER_ALL_ACCESS );
-	if(!schSCManager) return(FALSE);
-	if(RemoveDriver( schSCManager, sDriverShort )) ret = TRUE;
+	if(!schSCManager) return(false);
+	if(RemoveDriver( schSCManager, sDriverShort )) ret = true;
 	CloseServiceHandle( schSCManager );
 	return( ret );
 }

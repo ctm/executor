@@ -36,7 +36,7 @@ PRIVATE OSErr cathelper(CInfoPBPtr pb, BOOLEAN async, catop op)
     vcbp = 0;
     if (CW(pb->hFileInfo.ioFDirIndex) > 0 && op == catGet) {
 	err = ROMlib_btpbindex((IOParam *) pb, CL(pb->hFileInfo.ioDirID), &vcbp, &frp,
-								      &catkeyp, FALSE);
+								      &catkeyp, false);
 	if (err != noErr)
 	    goto done;
 	voidp = DATAPFROMKEY(catkeyp);
@@ -56,10 +56,10 @@ PRIVATE OSErr cathelper(CInfoPBPtr pb, BOOLEAN async, catop op)
     } else {
     	if (CW(pb->hFileInfo.ioFDirIndex) < 0) {
     	    kind = directory;
-    	    ignorename = TRUE;
+    	    ignorename = true;
     	} else {
 	    kind = filekind(regular | directory);
-	    ignorename = FALSE;
+	    ignorename = false;
 	}
 	err = ROMlib_findvcbandfile((IOParam *) pb, CL(pb->hFileInfo.ioDirID),
 						&btparamrec, &kind, ignorename);
@@ -246,7 +246,7 @@ PUBLIC OSErr Executor::hfsPBCatMove(CMovePBPtr pb, BOOLEAN async)
     
     srccurkind = (filekind)(regular | directory);
     err = ROMlib_findvcbandfile((IOParam *) pb, CL(pb->ioDirID), &srcbtparam,
-							    &srccurkind, FALSE);
+							    &srccurkind, false);
     if (err == noErr) {
 	err = ROMlib_writevcbp(srcbtparam.vcbp);
 	iop = *(IOParam *)pb;

@@ -277,7 +277,7 @@ miniarrow_track (struct text_box *box, miniarrow_hilite_t _hilite)
       else if (fractional == 9)
 	{
 	  if (track_kount > 5)
-	    integer_increment_p = TRUE;
+	    integer_increment_p = true;
 	  
 	  integer ++;
 	  fractional = 0;
@@ -307,7 +307,7 @@ miniarrow_track (struct text_box *box, miniarrow_hilite_t _hilite)
 	  integer --;
 	  
 	  if (track_kount > 5)
-	    integer_increment_p = TRUE;
+	    integer_increment_p = true;
 	  else
 	    fractional = 9;
 	}
@@ -641,7 +641,7 @@ text_box_update_value_1 (struct text_box *box, int newval,
       /* redisplay even if the values are same, so the display always
 	 appears `cannonical' (even if, say, the user sets the text
 	 box to `' (whic defaults to zero), and `*value' is zero) */
-      text_box_update (box, TRUE);
+      text_box_update (box, true);
       return;
     }
   *value = newval;
@@ -668,13 +668,13 @@ text_box_update_value_1 (struct text_box *box, int newval,
     case hue_index:
     case saturation_index:
       if (update_color_wheel_target_p)
-	color_wheel_target_update (TRUE);
+	color_wheel_target_update (true);
     case lightness_index:
       color_wheel_notice_lightness_change ();
     }
   
   /* redraw the box with the `cannonicalized' value */
-  text_box_update (box, TRUE);
+  text_box_update (box, true);
 }
 
 static void
@@ -705,9 +705,9 @@ hue_saturation_update (int new_hue, int new_saturation,
     return;
   
   text_box_update_value_1 (&text_boxes[hue_index], new_hue,
-			   TRUE, FALSE);
+			   true, false);
   text_box_update_value_1 (&text_boxes[saturation_index], new_saturation,
-			   TRUE, FALSE);
+			   true, false);
   
   if (full_update_p)
     {
@@ -718,15 +718,15 @@ hue_saturation_update (int new_hue, int new_saturation,
       HSL2RGB (&hsl_color, &rgb_color);
       
       text_box_update_value_1 (&text_boxes[red_index],
-			       CW (rgb_color.red), TRUE, TRUE);
+			       CW (rgb_color.red), true, true);
       text_box_update_value_1 (&text_boxes[green_index],
-			       CW (rgb_color.green), TRUE, TRUE);
+			       CW (rgb_color.green), true, true);
       text_box_update_value_1 (&text_boxes[blue_index],
-			       CW (rgb_color.blue), TRUE, TRUE);
+			       CW (rgb_color.blue), true, true);
       
       compare_box_update ();
     }
-  color_wheel_target_update (TRUE);
+  color_wheel_target_update (true);
 }
 
 static void
@@ -736,7 +736,7 @@ text_box_update_if_value_1 (struct text_box *box,
   box->integer = new_integer;
   box->fractional = new_fractional;
   
-  text_box_update (box, TRUE);
+  text_box_update (box, true);
 }
 
 static void
@@ -747,13 +747,13 @@ text_box_update_if_value (struct text_box *box,
       && box->fractional == new_fractional)
     {
           /* to keep the box `cannonical' */
-      text_box_update (box, TRUE);
+      text_box_update (box, true);
       return;
     }
   
   text_box_update_if_value_1 (box, new_integer, new_fractional);
   text_box_update_value (box, if_val (box->max, new_integer, new_fractional),
-			 FALSE);
+			 false);
 }
 
 /* the value of `box' has changed, and we need to recompute the
@@ -772,7 +772,7 @@ text_box_update_value (struct text_box *box, int newval,
     case green_index:
     case blue_index:
       {
-	text_box_update_value_1 (box, newval, update_if_p, TRUE);
+	text_box_update_value_1 (box, newval, update_if_p, true);
 	
 	rgb_color.red   = CW (red);
 	rgb_color.green = CW (green);
@@ -781,10 +781,10 @@ text_box_update_value (struct text_box *box, int newval,
 	RGB2HSL (&rgb_color, &hsl_color);
 	
 	hue_saturation_update (CW (hsl_color.hue), CW (hsl_color.saturation),
-			       FALSE);
+			       false);
 	
 	text_box_update_value_1 (&text_boxes[lightness_index],
-				 CW (hsl_color.lightness), TRUE, TRUE);
+				 CW (hsl_color.lightness), true, true);
 	break;
       }
       
@@ -792,7 +792,7 @@ text_box_update_value (struct text_box *box, int newval,
     case saturation_index:
     case lightness_index:
       {
-	text_box_update_value_1 (box, newval, update_if_p, TRUE);
+	text_box_update_value_1 (box, newval, update_if_p, true);
 	
 	hsl_color.hue        = CW (hue);
 	hsl_color.saturation = CW (saturation);
@@ -801,11 +801,11 @@ text_box_update_value (struct text_box *box, int newval,
 	HSL2RGB (&hsl_color, &rgb_color);
 	
 	text_box_update_value_1 (&text_boxes[red_index],
-				 CW (rgb_color.red), TRUE, TRUE);
+				 CW (rgb_color.red), true, true);
 	text_box_update_value_1 (&text_boxes[green_index],
-				 CW (rgb_color.green), TRUE, TRUE);
+				 CW (rgb_color.green), true, true);
 	text_box_update_value_1 (&text_boxes[blue_index],
-				 CW (rgb_color.blue), TRUE, TRUE);
+				 CW (rgb_color.blue), true, true);
 	break;
       }
     }
@@ -894,9 +894,9 @@ event_loop (void)
 	      {
 		release_part = TrackControl (c, local_pt, (ProcPtr) -1);
 		if (release_part == inButton && c == ok_button)
-		  return TRUE;
+		  return true;
 		if (release_part == inButton && c == cancel_button)
-		  return FALSE;
+		  return false;
 		
 		break;
 	      }
@@ -910,8 +910,8 @@ event_loop (void)
 		  {
 		    text_box_set_te (box);
 		    TEClick (local_pt, ((evt.modifiers & CWC (shiftKey))
-					? TRUE
-					: FALSE),
+					? true
+					: false),
 			     te);
 		    break;
 		  }
@@ -922,7 +922,7 @@ event_loop (void)
 		    center_y = (  CW (box->miniarrow_rect.top)
 				+ CW (box->miniarrow_rect.bottom)) / 2;
 		    
-		    integer_increment_p = FALSE;
+		    integer_increment_p = false;
 		    track_kount = 0;
 		    
 		    goto handle_pt_1;
@@ -981,7 +981,7 @@ event_loop (void)
 			hue        = (atan2 (y, -x) + M_PI) / M_PI / 2 * 0xFFFF;
 			saturation = saturation_fp / (192 / 2) * 0xFFFF;
 			
-			hue_saturation_update (hue, saturation, TRUE);
+			hue_saturation_update (hue, saturation, true);
 		      }
 		  }
 	      }
@@ -1022,7 +1022,7 @@ event_loop (void)
 		  struct text_box *box;
 		  
 		  box = &text_boxes[i];
-		  text_box_update (box, FALSE);
+		  text_box_update (box, false);
 		  
 		  text_box_miniarrow_update (box, miniarrow_no_hilite);
 		}
@@ -1070,10 +1070,10 @@ event_loop (void)
 	      {
 	      case '\r':
 	      case NUMPAD_ENTER:
-		return TRUE;
+		return true;
 		/* ESC */
 	      case '\033':
-		return FALSE;
+		return false;
 	      default:
 		if (te_box)
 		  {
@@ -1224,7 +1224,7 @@ color_wheel_update (void)
 	  10 + font_height + 10 + 192 + 10 + font_ascent);
   DrawString (label_270_degs);
   
-  color_wheel_target_update (FALSE);
+  color_wheel_target_update (false);
 }
 
 static int color_wheel_noticed_lightness;
@@ -1331,10 +1331,10 @@ P4 (PUBLIC pascal trap, BOOLEAN, GetColor,
 				     /* no title */
 				     NULL,
 				     /* visible */
-				     TRUE,
+				     true,
 				     dBoxProc,
 				     (WindowPtr) -1,
-				     FALSE, /* dummy */ -1);
+				     false, /* dummy */ -1);
   
   /* #### the correct thing to do is have a 24bpp color wheel, and
      draw it to the screen dithered, with a reasonable colormap
@@ -1383,13 +1383,13 @@ P4 (PUBLIC pascal trap, BOOLEAN, GetColor,
 	    ok_button     = NewControl (color_picker_window,
 					ok_button_bounds, (StringPtr) "\002OK",
 					/* visible */
-					TRUE,
+					true,
 					0, 0, 1, pushButProc, -1);
 	    cancel_button = NewControl (color_picker_window,
 					cancel_button_bounds,
 					(StringPtr) "\006Cancel",
 					/* visible */
-					TRUE,
+					true,
 				   0, 0, 1, pushButProc, -1);
 	    
 	    te = TENew (dummy_rect, dummy_rect);

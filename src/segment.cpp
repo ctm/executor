@@ -70,7 +70,7 @@ typedef GUEST<finderinfoptr> *finderinfohand;
 
 using namespace Executor;
 
-PUBLIC int Executor::ROMlib_cacheheuristic = FALSE;
+PUBLIC int Executor::ROMlib_cacheheuristic = false;
 
 
 #if defined(ONLY_DESTROY_BETWEEN_CODE_SEGMENTS)
@@ -108,12 +108,12 @@ static int compar(const void *p1, const void *p2)
 
 A0(PUBLIC, void, flushcache)
 {
-    ROMlib_destroy_blocks( (syn68k_addr_t) 0, (uint32) ~0, TRUE );
+    ROMlib_destroy_blocks( (syn68k_addr_t) 0, (uint32) ~0, true );
 }
 
 A2(PUBLIC trap, void, HWPriv, LONGINT, d0, LONGINT, a0)
 {
-    static char d_cache_enabled = TRUE, i_cache_enabled = TRUE;
+    static char d_cache_enabled = true, i_cache_enabled = true;
     int new_state;
 
     switch (d0) {
@@ -147,7 +147,7 @@ A2(PUBLIC trap, void, HWPriv, LONGINT, d0, LONGINT, a0)
 	flushcache();
 	break;
     case 9:	/* Flush cache range */
-	ROMlib_destroy_blocks ((syn68k_addr_t) a0, EM_A1, TRUE);
+	ROMlib_destroy_blocks ((syn68k_addr_t) a0, EM_A1, true);
 	EM_D0 = noErr;	/* Maybe we should only touch d0.w? */
 	break;
     default:
@@ -164,7 +164,7 @@ A1(PUBLIC, char *, ROMlib_undotdot, char *, origp)
     bool slashseen_p;
 
     nleft = strlen(origp) + 1;
-    slashseen_p = FALSE;
+    slashseen_p = false;
     dotcount = -1;
     for (p = origp; *p; p++, nleft--) {
 	switch (*p) {
@@ -193,14 +193,14 @@ A1(PUBLIC, char *, ROMlib_undotdot, char *, origp)
 		dotcount = 0;
 		break;
 	    }
-	    slashseen_p = TRUE;
+	    slashseen_p = true;
 	    break;
 	case '.':
 	    if (slashseen_p)
 	      dotcount++;
 	    break;
 	default:
-	    slashseen_p = FALSE;
+	    slashseen_p = false;
 	    dotcount = -1;
 	    break;
 	}
@@ -248,7 +248,7 @@ full_pathname_p (char *uname)
   retval = uname[0] == '/';
 #if defined (MSDOS) || defined(CYGWIN32)
   if (!retval && uname[0] && uname[1] == ':' && uname[2] == '/')
-    retval = TRUE;
+    retval = true;
 #endif
   return retval;
 }
@@ -442,14 +442,14 @@ A2(PRIVATE, BOOLEAN, argv_to_appfile, char *, uname, AppFile *, ap)
   cinfo.hFileInfo.ioNamePtr = RM(path);
   cinfo.hFileInfo.ioFDirIndex = CWC (0);
   cinfo.hFileInfo.ioDirID = 0;
-  if ((retval = (PBGetCatInfo(&cinfo, FALSE) == noErr)))
+  if ((retval = (PBGetCatInfo(&cinfo, false) == noErr)))
     {
       ap->fType = cinfo.hFileInfo.ioFlFndrInfo.fdType;
       ap->versNum = 0;
       wpb.ioVRefNum  = cinfo.hFileInfo.ioVRefNum;
       wpb.ioWDProcID = TICKX("unix");
       wpb.ioWDDirID  = cinfo.hFileInfo.ioFlParID;
-      if (PBOpenWD(&wpb, FALSE) == noErr)
+      if (PBOpenWD(&wpb, false) == noErr)
 	{
 	  ap->vRefNum = wpb.ioVRefNum;
 	  lastcomponent(ap->fName, path);
@@ -469,7 +469,7 @@ A2(PRIVATE, BOOLEAN, argv_to_appfile, char *, uname, AppFile *, ap)
 }
 
 #if defined(MACOSX_) && defined(BINCOMPAT)
-PUBLIC INTEGER Executor::ROMlib_acceptsanotherfile = TRUE;
+PUBLIC INTEGER Executor::ROMlib_acceptsanotherfile = true;
 #endif
 
 PUBLIC int Executor::ROMlib_print;
@@ -544,13 +544,13 @@ A2(PUBLIC, void, ROMlib_seginit, LONGINT, argc, char **, argv)	/* INTERNAL */
     if (fullpathname && fullpathname != argv[0])
 	DisposPtr((Ptr) fullpathname);
 #if defined(NEXTSTEP) && defined(BINCOMPAT)
-    ROMlib_acceptsanotherfile = FALSE;
+    ROMlib_acceptsanotherfile = false;
     if (ROMlib_toexec) {
 	if (ROMlib_toopen)
 	    ROMlib_toexec = *(char **) ROMlib_toexec;	/* ick! */
 	if (argv_to_appfile(ROMlib_toexec, &app)) {
-	    ROMlib_startupscreen = FALSE;
-	    ROMlib_exit = TRUE;
+	    ROMlib_startupscreen = false;
+	    ROMlib_exit = true;
 	    newcount = Hx(fh, count) + 1;
 	    HxX(fh, count) = CW(newcount);
 	    SetHandleSize((Handle) fh,
@@ -571,8 +571,8 @@ A2(PUBLIC, void, ROMlib_seginit, LONGINT, argc, char **, argv)	/* INTERNAL */
     while (--argc > 0) {
 	++argv;
 	if (argv_to_appfile(argv[0], &app)) {
-	    ROMlib_startupscreen = FALSE;
-	    ROMlib_exit = TRUE;
+	    ROMlib_startupscreen = false;
+	    ROMlib_exit = true;
 	    newcount = Hx(fh, count) + 1;
 	    HxX(fh, count) = CW(newcount);
 	    SetHandleSize((Handle) fh,
@@ -673,7 +673,7 @@ PRIVATE void launch_browser( void )
 
 P0(PUBLIC pascal trap, void, ExitToShell)
 {
-  static char beenhere = FALSE;
+  static char beenhere = false;
 #if defined(MSDOS)
     char *toexec;
 #endif
@@ -691,7 +691,7 @@ P0(PUBLIC pascal trap, void, ExitToShell)
     int i;
 
     if (ROMlib_mods & optionKey)
-      ROMlib_exit = TRUE;
+      ROMlib_exit = true;
 
   /* NOTE: closing drivers is a bad thing in the long run, but for now
      we're doing it.  We actually do it here *and* in reinitialize_things().
@@ -718,11 +718,11 @@ P0(PUBLIC pascal trap, void, ExitToShell)
 	&& (!beenhere
 	    || strncmp((char *) CurApName+1,
 		       BROWSER_NAME, CurApName[0]) != 0)) {
-        beenhere = TRUE;
+        beenhere = true;
 
 	/* if we call `InitWindows ()', we don't want it shouting
 	   about 32bit uncleanliness, &c */
-	size_info.application_p = FALSE;
+	size_info.application_p = false;
 	
 	if (QDExist == EXIST_NO) {
 	    a5 = US_TO_SYN68K(&tmpA5);
@@ -771,7 +771,7 @@ P0(PUBLIC pascal trap, void, ExitToShell)
     CloseResFile(0);
     ROMlib_OurClose();
 
-    dcache_invalidate_all (TRUE);
+    dcache_invalidate_all (true);
 
 #if defined (X)
     autorepeatonX();
@@ -878,7 +878,7 @@ P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
 	    ptr += 4;
     }
     ROMlib_destroy_blocks( US_TO_SYN68K(saveptr), 8L * savenentries,
-			  TRUE);
+			  true);
 }
 
 #define SEGNOOFP(p) (CW(((GUEST<INTEGER> *)p)[-1]))
@@ -926,7 +926,7 @@ P1(PUBLIC pascal trap, void, UnloadSeg, Ptr, addr)
 	top = (char *) p + 6;	/* +8 that we didn't zap, -2 that we went
 					overboard on unpatch (see above) */
 	ROMlib_destroy_blocks( US_TO_SYN68K(top),
-			       bottom - top, FALSE);
+			       bottom - top, false);
 
 	HUnlock(h);
 	HPurge(h);

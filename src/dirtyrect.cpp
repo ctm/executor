@@ -115,7 +115,7 @@ Executor::dirty_rect_accrue (int top, int left, int bottom, int right)
     }
 
   /* Otherwise, glom away! */
-  for (done = FALSE; !done; )
+  for (done = false; !done; )
     {
       int new_area;
 
@@ -159,7 +159,7 @@ Executor::dirty_rect_accrue (int top, int left, int bottom, int right)
 	  if (ndr == 1)
 	    {
 	      union_rect (top, left, bottom, right, &dirty_rect[0]);
-	      done = TRUE;
+	      done = true;
 	    }
 	  else
 	    {
@@ -173,25 +173,25 @@ Executor::dirty_rect_accrue (int top, int left, int bottom, int right)
 	      if (d->top <= top)
 		{
 		  top = d->top;
-		  old_rect_grows_p = FALSE;
+		  old_rect_grows_p = false;
 		}
 	      else
-		old_rect_grows_p = TRUE;
+		old_rect_grows_p = true;
 
 	      if (d->left <= left)
 		left = d->left;
 	      else
-		old_rect_grows_p = TRUE;
+		old_rect_grows_p = true;
 
 	      if (d->bottom >= bottom)
 		bottom = d->bottom;
 	      else
-		old_rect_grows_p = TRUE;
+		old_rect_grows_p = true;
 
 	      if (d->right >= right)
 		right = d->right;
 	      else
-		old_rect_grows_p = TRUE;
+		old_rect_grows_p = true;
 
 	      /* If this new rect is not entirely subsumed by the rect
 	       * it interesects, then we delete the subsumed rect,
@@ -202,7 +202,7 @@ Executor::dirty_rect_accrue (int top, int left, int bottom, int right)
 	      if (old_rect_grows_p)
 		*d = dirty_rect[--ndr];
 	      else
-		done = TRUE;
+		done = true;
 	    }
 	}
       else  /* No glomming required. */
@@ -215,7 +215,7 @@ Executor::dirty_rect_accrue (int top, int left, int bottom, int right)
 	  n->bottom = bottom;
 	  n->right  = right;
 	  ++ndr;
-	  done = TRUE;
+	  done = true;
 	}
     }
   
@@ -223,7 +223,7 @@ Executor::dirty_rect_accrue (int top, int left, int bottom, int right)
 }
 
 
-/* Returns TRUE iff the specified rect is already encompassed by
+/* Returns true iff the specified rect is already encompassed by
  * the dirty rect list.
  */
 bool
@@ -236,10 +236,10 @@ Executor::dirty_rect_subsumed_p (int top, int left, int bottom, int right)
       const vdriver_rect_t *r = &dirty_rect[i];
       if (r->top <= top && r->left <= left
 	  && r->bottom >= bottom && r->right >= right)
-	return TRUE;
+	return true;
     }
 
-  return FALSE;
+  return false;
 }
 
 
@@ -338,6 +338,6 @@ Executor::dirty_rect_update_screen (void)
       /* Copy rects to a local copy so we are reentrant. */
       memcpy (&dirty_rect_copy[0], &dirty_rect[0], ndr * sizeof dirty_rect[0]);
 
-      vdriver_update_screen_rects (ndr, &dirty_rect_copy[0], FALSE);
+      vdriver_update_screen_rects (ndr, &dirty_rect_copy[0], false);
    }
 }

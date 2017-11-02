@@ -179,7 +179,7 @@ silently_replace_resources (INTEGER master_file_rn, INTEGER from_file_rn)
   SetZone (MR (SysZone));
   type_num_max = CountTypesRN (from_file_rn);
   save_resload = ResLoad;
-  SetResLoad (FALSE);
+  SetResLoad (false);
   for (type_num = 1; type_num <= type_num_max; ++type_num)
     {
       ResType type;
@@ -234,7 +234,7 @@ Executor::ROMlib_set_appearance (void)
 PUBLIC bool
 Executor::ROMlib_parse_appearance (const char *appearance_str)
 {
-  bool retval = TRUE;
+  bool retval = true;
   
   if (strcasecmp (appearance_str, "mac") == 0)
 	appearance = appearance_sys7;
@@ -242,7 +242,7 @@ Executor::ROMlib_parse_appearance (const char *appearance_str)
 	ROMlib_options |= ROMLIB_RECT_SCREEN_BIT;
 	appearance = appearance_win3;
   } else
-	retval = FALSE;
+	retval = false;
   
   return retval;
 }

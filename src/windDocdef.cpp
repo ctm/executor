@@ -51,11 +51,11 @@ PUBLIC BOOLEAN ROMlib_window_zoomed(WindowPeek wp)
 
 #endif
 }
-/* `color_p' is TRUE if the current call to the window definition
+/* `color_p' is true if the current call to the window definition
    function is for a while to be drawn in color */
 static int color_p;
 
-/* TRUE if the current window being serviced is a rounded window */
+/* true if the current window being serviced is a rounded window */
 static int rounded_window_p;
 
 /* colors to draw the current window with; has the appropriate
@@ -273,13 +273,13 @@ Executor::validate_colors_for_window (GrafPtr w)
       image_update_ctab (active, image_colors, 3);
       image_update_ctab (grow, image_colors, 4);
       
-      color_p = TRUE;
+      color_p = true;
      },
      {
        gui_assert (!rounded_window_p);
 
        window_colors = bw_window_colors;
-       color_p = FALSE;
+       color_p = false;
      });
 #undef DO_BLOCK_WITH_FAILURE
 #undef FAIL
@@ -306,7 +306,7 @@ toggle_box_active (enum box_flag which_box, Point origin)
 
   /* set box */
   if (rounded_window_p)
-    color_p = FALSE;
+    color_p = false;
   
   if (which_box == zoom_box_flag)
     box = zoom;
@@ -597,7 +597,7 @@ draw_frame (GrafPtr w, int draw_zoom_p, bool goaway_override)
       draw_title (w, draw_go_away_p, draw_zoom_p);
     }
   else
-    draw_title (w, FALSE, FALSE);
+    draw_title (w, false, false);
 
 /* #warning "delete these, they shouldn't be necessary" */
   /* be a sneaky bastard, and set the fg/bk color to b/w */
@@ -1008,7 +1008,7 @@ P4 (PUBLIC pascal, LONGINT, wdef0,
   int zoom_bit;
   bool draw_p;
   
-  rounded_window_p = FALSE;
+  rounded_window_p = false;
   
   /* extract and clean ZOOMBIT from varcode into zoom_bit */
   zoom_bit = varcode & ZOOMBIT;
@@ -1070,10 +1070,10 @@ P4 (PUBLIC pascal, LONGINT, wdef0,
       switch (varcode)
 	{
 	case documentProc:
-	  return hit_doc (w, parm, TRUE, FALSE);
+	  return hit_doc (w, parm, true, false);
 	case noGrowDocProc:
 	case movableDBoxProc:
-	  return hit_doc (w, parm, FALSE, varcode == movableDBoxProc);
+	  return hit_doc (w, parm, false, varcode == movableDBoxProc);
 	default:
 	  return hit_dialog_box (w, parm);
 	}
@@ -1116,10 +1116,10 @@ P4 (PUBLIC pascal, LONGINT, wdef0,
 	  OffsetRect (&wsp->userState, -CW (PORT_BOUNDS (w).left),
 		                       -CW (PORT_BOUNDS (w).top));
 	  
-	  WINDOW_SPARE_FLAG_X (w) = TRUE;
+	  WINDOW_SPARE_FLAG_X (w) = true;
 	}
       else
-	WINDOW_SPARE_FLAG_X (w) = FALSE;
+	WINDOW_SPARE_FLAG_X (w) = false;
       break;
     case wDispose:
       if (WINDOW_SPARE_FLAG_X (w))
@@ -1226,10 +1226,10 @@ draw_rounded_doc (GrafPtr w)
       draw_go_away_p = WINDOW_GO_AWAY_FLAG (w);
       if (draw_go_away_p)
 	draw_go_away (left, top);
-      draw_title (w, draw_go_away_p, FALSE);
+      draw_title (w, draw_go_away_p, false);
     }
   else
-    draw_title (w, FALSE, FALSE);
+    draw_title (w, false, false);
 }
 
 LONGINT
@@ -1321,7 +1321,7 @@ P4 (PUBLIC pascal, LONGINT, wdef16,
   draw_state_t draw_state;
   bool draw_p;
   
-  rounded_window_p = TRUE;
+  rounded_window_p = true;
 
   /* mask out zoom bit; it will be ignored */
   varcode &= ~ZOOMBIT;
@@ -1363,7 +1363,7 @@ P4 (PUBLIC pascal, LONGINT, wdef16,
       break;
       
     case wNew:
-      WINDOW_SPARE_FLAG_X (w) = FALSE;
+      WINDOW_SPARE_FLAG_X (w) = false;
       break;
       
     case wDispose:

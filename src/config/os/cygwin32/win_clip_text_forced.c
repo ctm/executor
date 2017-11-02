@@ -49,12 +49,12 @@ ROMlib_executor_format (LONGINT type)
       retval = RegisterClipboardFormat (str);
       cache.type = type;
       cache.value = retval;
-      cache.valid = TRUE;
+      cache.valid = true;
     }
   return retval;
 }
 
-PRIVATE bool support_cf_dib_p = TRUE;
+PRIVATE bool support_cf_dib_p = true;
 
 PUBLIC LONGINT
 GetScrapX (LONGINT type, char **h)
@@ -98,7 +98,7 @@ GetScrapX (LONGINT type, char **h)
 		int len;
 
 		len = strlen (lp);
-		retval = get_scrap_helper (h, lp, len, TRUE);
+		retval = get_scrap_helper (h, lp, len, true);
 	      }
 	    break;
 	    default:
@@ -113,7 +113,7 @@ GetScrapX (LONGINT type, char **h)
 		    len = *(int32 *)lp;
 
 		    retval = get_scrap_helper (h, lp+sizeof(int32),
-					       len, FALSE);
+					       len, false);
 		  }
 	      }
 	      break;
@@ -170,7 +170,7 @@ fill_in_data (char *destp, LONGINT type, LONGINT length, const char *p)
 }
 
 #warning DO NOT CHECK THIS IN
-PRIVATE bool old_paste_code_p = FALSE;
+PRIVATE bool old_paste_code_p = false;
 
 PRIVATE HANDLE clip_data = NULL;
 

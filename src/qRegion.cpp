@@ -98,7 +98,7 @@ P0(PUBLIC pascal trap, void, OpenRgn)
   
   rh = (RgnHandle) NewHandleClear (RGN_SMALL_SIZE + sizeof (INTEGER));
   
-  RGN_SET_SIZE_AND_SPECIAL (rh, RGN_SMALL_SIZE + sizeof (INTEGER), FALSE);
+  RGN_SET_SIZE_AND_SPECIAL (rh, RGN_SMALL_SIZE + sizeof (INTEGER), false);
   /* sentinel */
   (RGN_DATA (rh))[0] = RGN_STOP_X;
   
@@ -167,7 +167,7 @@ Executor::ROMlib_sizergn (RgnHandle rh, bool special_p) /* INTERNAL */
   else
     {
       rs = (char *) ++ip - (char *) STARH (rh);
-      RGN_SET_SIZE_AND_SPECIAL (rh, rs, FALSE);
+      RGN_SET_SIZE_AND_SPECIAL (rh, rs, false);
       if (rgn_is_rect_p (rh))
 	{
 	  SetHandleSize ((Handle) rh, RGN_SMALL_SIZE);
@@ -285,9 +285,9 @@ P3 (PUBLIC pascal trap, void, OffsetRgn, RgnHandle, rh,
 P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
 {
   if (!PtInRect (p, &RGN_BBOX (rh)))
-    return FALSE;
+    return false;
   if (RGN_SMALL_P (rh))
-    return TRUE;
+    return true;
   else
     {
       INTEGER *ipe, *op;
@@ -304,7 +304,7 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
 	{
 	  if (v > p.v)
 	    {
-	      in = FALSE;
+	      in = false;
 	      for (op = ipe; *op++ <= p.h; in = !in)
 		;
 	      return in;
@@ -336,7 +336,7 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
 	    }
 	}
     }
-  return FALSE;
+  return false;
 }
 
 /*
@@ -507,10 +507,10 @@ P2 (PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
     }							\
     if (wehavepairs || outp > outptr) {			\
 	*outp++ = RGN_STOP;				\
-	wehavepairs = TRUE;				\
+	wehavepairs = true;				\
     } else {						\
 	outp--;						\
-	wehavepairs = FALSE;				\
+	wehavepairs = false;				\
     }							\
 }
 
@@ -692,7 +692,7 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
 
     v1 = CW_RAW(*ipr1++);
     v2 = CW_RAW(*ipr2++);
-    wehavepairs = FALSE;	/* whether or not scan lines have stuff */
+    wehavepairs = false;	/* whether or not scan lines have stuff */
     switch (nspecial) {
     case 0:
 	while (v1 != RGN_STOP && v2 != RGN_STOP) {
@@ -772,7 +772,7 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
     {
       int dst_rgn_size = (RGN_SMALL_SIZE
 			  + sizeof(INTEGER) * (tptr - temppoints));
-      RGN_SET_SIZE_AND_SPECIAL (dstrgn, dst_rgn_size, FALSE);
+      RGN_SET_SIZE_AND_SPECIAL (dstrgn, dst_rgn_size, false);
       /* TODO fix rgnBBox here */
       ReallocHandle ((Handle) dstrgn, dst_rgn_size);
     }
@@ -781,7 +781,7 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
 	     (tptr - temppoints) * sizeof *temppoints);
     ROMlib_sizergn (dstrgn, nspecial > 0);	/* could do this while copying... */
     if (nspecial > 0)
-      RGN_SET_SPECIAL (dstrgn, TRUE);
+      RGN_SET_SPECIAL (dstrgn, true);
     ASSERT_SAFE (temppoints);
     ALLOCAEND
 }
@@ -886,7 +886,7 @@ A4(PRIVATE, void, binop, optype, op, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
 	op = (INTEGER *) STARH(dstrgn) + 5;
 	while (ip != tptr)
 	    *op++ = *ip++;
-	ROMlib_sizergn(dstrgn, FALSE);	/* could do this while copying... */
+	ROMlib_sizergn(dstrgn, false);	/* could do this while copying... */
     }
     ASSERT_SAFE (temppoints);
     ALLOCAEND
@@ -1148,7 +1148,7 @@ P3(PUBLIC pascal trap, void, InsetRgn, RgnHandle, rh, INTEGER, dh, INTEGER, dv)
 	qsort(p, npairs, sizeof(INTEGER) * 2, ::comparey);
 	ReallocHandle((Handle) rh, newsize);
 	ptorh(p, rh);
-	ROMlib_sizergn(rh, FALSE);
+	ROMlib_sizergn(rh, false);
 	gui_assert(Hx(rh, rgnSize) <= newsize);
 	HUnlock(h);
 	DisposHandle(h);
@@ -1166,10 +1166,10 @@ justone (const Rect *rp, RgnHandle rgn, RgnHandle dest)
       && CW (rp->bottom) >= CW (rp2->bottom))
     {
       CopyRgn (rgn, dest);
-      return TRUE;
+      return true;
     }
   else
-    return FALSE;
+    return false;
 }
 
 P3(PUBLIC pascal trap, void, SectRgn, RgnHandle, s1, RgnHandle, s2,
@@ -1395,7 +1395,7 @@ P2(PUBLIC pascal trap, BOOLEAN, RectInRgn, Rect *, rp,	/* IMIV-23 */
 P2(PUBLIC pascal trap, BOOLEAN, EqualRgn, RgnHandle, r1, RgnHandle, r2)
 {
   /* Since the first field of the region is the size, this
-   * will return FALSE if the sizes differ, too.
+   * will return false if the sizes differ, too.
    */
   return !memcmp (STARH (r1), STARH (r2), RGN_SIZE (r1));
 }
@@ -1405,7 +1405,7 @@ P1(PUBLIC pascal trap, BOOLEAN, EmptyRgn, RgnHandle, rh)
 #warning What does a mac do with a NULL HANDLE here?
   BOOLEAN retval;
 
-  retval = rh ? EmptyRect (&RGN_BBOX (rh)) : TRUE;
+  retval = rh ? EmptyRect (&RGN_BBOX (rh)) : true;
   return retval;
 }
 

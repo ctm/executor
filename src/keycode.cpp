@@ -68,14 +68,14 @@ PUBLIC int valid_key_format(const unsigned char *key)
   int retval;
 
   if (strlen((const char *) key) != 13)
-    retval = FALSE;
+    retval = false;
   else
     {
-      retval = TRUE;
+      retval = true;
       while (*key) {
 	if ((*key < '0' || *key > '9') && (*key < 'a' || *key > 'z'))
 	  {
-	    retval = FALSE;
+	    retval = false;
 /*-->*/	    break;
 	  }
 	++key;
@@ -427,9 +427,9 @@ PUBLIC int Executor::decode(const unsigned char *theirkey, decoded_info_t *infop
 	infop->expires_p = templong != 0;
 	infop->last_month = BASE_MONTH + (templong % MONTHS_IN_YEAR);
 	infop->last_year = BASE_YEAR + (templong / MONTHS_IN_YEAR);
-	retval = TRUE;
+	retval = true;
       }
     else
-      retval = FALSE;
+      retval = false;
     return retval;
 }

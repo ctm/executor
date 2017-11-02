@@ -106,7 +106,7 @@ P2 (PUBLIC pascal trap, OSErr, BitMapToRegion, RgnHandle, rh,
       scruffhold1 = line1p[linelen-1];
       line1p[linelen-1] &= scruffmask;
       tableindex = 0x0;
-      havewritteny = FALSE;
+      havewritteny = false;
       for (x = left - 1; x < left + linelen * 8 - 1; x += 8)
 	{
 	  c = *line0p++ ^ *line1p++;
@@ -114,7 +114,7 @@ P2 (PUBLIC pascal trap, OSErr, BitMapToRegion, RgnHandle, rh,
 	  if (*p && !havewritteny)
 	    {
 	      OUTPUT(y);
-	      havewritteny = TRUE;
+	      havewritteny = true;
 	    }
 	  while ((transition = *p++))
 	    OUTPUT(x + transition);

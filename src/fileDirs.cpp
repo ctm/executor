@@ -34,12 +34,12 @@ A2(PUBLIC, OSErr, ufsPBGetCatInfo, CInfoPBPtr, pb,	/* INTERNAL */
   OSErr retval;
 
   swapped_dir = pb->hFileInfo.ioDirID;
-  retval = ROMlib_PBGetSetFInfoD((ParmBlkPtr) pb, a, Get, &swapped_dir, TRUE);
+  retval = ROMlib_PBGetSetFInfoD((ParmBlkPtr) pb, a, Get, &swapped_dir, true);
 #if 0
 
   /* Although this looks right, it's wrong.  Swapped_dir gets filled with
      the parent directory id.  ROMlib_PBGetSetFInfoD fills in the correct
-     information based on dodirs being TRUE already, so nothing is needed
+     information based on dodirs being true already, so nothing is needed
      here.
 
   pb->hFileInfo.ioDirID = swapped_dir;
@@ -59,7 +59,7 @@ A2(PUBLIC, OSErr, ufsPBSetCatInfo, CInfoPBPtr, pb,	/* INTERNAL */
   OSErr retval;
 
   swapped_dir = pb->hFileInfo.ioDirID;
-  retval = ROMlib_PBGetSetFInfoD((ParmBlkPtr) pb, a, Set, &swapped_dir, TRUE);
+  retval = ROMlib_PBGetSetFInfoD((ParmBlkPtr) pb, a, Set, &swapped_dir, true);
   return retval;
 }
 
@@ -84,11 +84,11 @@ A6(PUBLIC, OSErr, ROMlib_PBMoveOrRename, ParmBlkPtr, pb,	/* INTERNAL */
     rnew  = 0;
 
     if ((err = ROMlib_nami(pb, dir, NoIndex, &oldpathname, &oldfilename,
-				 &oldendname, TRUE, &vcbp, &sbuf)) == noErr) {
+				 &oldendname, true, &vcbp, &sbuf)) == noErr) {
 	npb.ioParam.ioNamePtr = RM((StringPtr) newname);
 	npb.ioParam.ioVRefNum = pb->ioParam.ioVRefNum;
 	if ((err = ROMlib_nami(&npb, newdir, NoIndex, &newpathname,
-			       &newfilename, &newendname, TRUE, (VCBExtra **)0,
+			       &newfilename, &newendname, true, (VCBExtra **)0,
 					        (struct stat *) 0)) == noErr) {
 	    if (op == CatMove) {
 		fullnewname = (char*)ALLOCA(newendname - newpathname +
@@ -111,7 +111,7 @@ A6(PUBLIC, OSErr, ROMlib_PBMoveOrRename, ParmBlkPtr, pb,	/* INTERNAL */
 		if ((renamefailed = Urename(oldpathname, fullnewname)) == 0) {
 		    ROMlib_dbm_delete_inode (vcbp, ST_INO (sbuf));
 		    dirid = 0;
-		    ROMlib_dbm_store(vcbp, fullnewname, &dirid, TRUE);
+		    ROMlib_dbm_store(vcbp, fullnewname, &dirid, true);
 		    rname = ROMlib_resname(oldpathname, oldfilename,
 								   oldendname);
 		    if (Ustat(rname, &sbuf) != -1) {
@@ -165,7 +165,7 @@ A2(PUBLIC, OSErr, ufsPBOpenWD, WDPBPtr, pb, BOOLEAN, a)	/* INTERNAL */
     newpb.ioParam.ioVRefNum = pb->ioVRefNum;
 
     err = ROMlib_nami(&newpb, Cx(pb->ioWDDirID), NoIndex, &pathname, &filename,
-						 &endname, TRUE, &vcbp, &sbuf);
+						 &endname, true, &vcbp, &sbuf);
     if (err == noErr) {
         LONGINT l;
 
@@ -179,7 +179,7 @@ A2(PUBLIC, OSErr, ufsPBOpenWD, WDPBPtr, pb, BOOLEAN, a)	/* INTERNAL */
 	    dirid = 2;
 	l = dirid;
 	if (S_ISDIR (sbuf.st_mode))
-	  ROMlib_dbm_store (vcbp, pathname, &l, TRUE);
+	  ROMlib_dbm_store (vcbp, pathname, &l, true);
 	free (pathname);
 	err = ROMlib_mkwd(pb, (VCB *) vcbp, dirid, Cx(pb->ioWDProcID));
     }

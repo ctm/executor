@@ -169,5 +169,5 @@ not_compressed_after_all:
 
 P1(PUBLIC pascal trap, LONGINT, SizeResource, Handle, res)
 {
-    return ROMlib_SizeResource(res, TRUE);
+    return ROMlib_SizeResource(res, true);
 }

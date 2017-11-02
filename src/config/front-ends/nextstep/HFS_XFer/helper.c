@@ -95,7 +95,7 @@ PUBLIC void openfloppy( const char *dname )
 	    write(pipefd[1], dname, strlen(dname)+1);
 	pb.ioParam.ioVRefNum = 5;
 	myPBMountVol((volumeParam *) &pb);
-	writelocked = FALSE;
+	writelocked = false;
 	if (dname[6] == 'f') {	/* counting on /dev/rfd?b */
 	    bzero(&req, sizeof(req));
 	    req.command = FDCMD_GET_STATUS;
@@ -103,7 +103,7 @@ PUBLIC void openfloppy( const char *dname )
 	    if (ioctl(floppyfd, FDIOCREQ, &req) < 0)
 		printf("IOCREQ failed %d\n", errno);
 	    if (req.drive_stat.write_prot)
-		writelocked = TRUE;
+		writelocked = true;
 	} else {
 /*
  * NOTE: the bullshit below is because our DIT floppy pretends it can
@@ -118,19 +118,19 @@ PUBLIC void openfloppy( const char *dname )
 	    savec = buf[1023];
 	    buf[1023] ^= 0xFF;
 	    if (write(floppyfd, buf, 1024) != 1024)
-		writelocked = TRUE;
+		writelocked = true;
 	    if (lseek(floppyfd, 0, L_SET) < 0)
 		fprintf(stderr, "lseek errno %d\n", errno);
 	    if (read(floppyfd, buf, 1024) != 1024)
 		fprintf(stderr, "read errno %d\n", errno);
 	    if (buf[1023] == savec)
-		writelocked = TRUE;
+		writelocked = true;
 	    else {
 		if (lseek(floppyfd, 0, L_SET) < 0)
 		    fprintf(stderr, "lseek errno %d\n", errno);
 		buf[1023] = savec;
 		if (write(floppyfd, buf, 1024) != 1024)
-		    writelocked = TRUE;
+		    writelocked = true;
 	    }
 	}
 	if (writelocked) {
@@ -151,7 +151,7 @@ BOOLEAN xGetNextEvent( INTEGER em, EventRecord *evtp )
     long ns, nread;
     extern long sock;
 
-    retval = FALSE;
+    retval = false;
     if ((em & diskMask) && floppyfd == -1) {
 	addrlen = sizeof(sockname);
 	if ((ns = accept(sock, &sockname, (int *) &addrlen)) >= 0) {
@@ -159,11 +159,11 @@ BOOLEAN xGetNextEvent( INTEGER em, EventRecord *evtp )
 	    nread = read(ns, device, sizeof(device));
 	    openfloppy(device);
 	    evtp->what = diskEvt;
-	    retval = TRUE;
+	    retval = true;
 	} else
 	    assert(errno == EWOULDBLOCK);
     }
-    return retval ? TRUE : GetNextEvent(em, evtp);
+    return retval ? true : GetNextEvent(em, evtp);
 }
 
 BOOLEAN xWaitNextEvent( INTEGER em, EventRecord *evtp, LONGINT sleep,
@@ -176,7 +176,7 @@ BOOLEAN xWaitNextEvent( INTEGER em, EventRecord *evtp, LONGINT sleep,
     long ns, nread;
     extern long sock;
 
-    retval = FALSE;
+    retval = false;
     if ((em & diskMask) && floppyfd == -1) {
 	addrlen = sizeof(sockname);
 	if ((ns = accept(sock, &sockname, (int *) &addrlen)) >= 0) {
@@ -184,11 +184,11 @@ BOOLEAN xWaitNextEvent( INTEGER em, EventRecord *evtp, LONGINT sleep,
 	    nread = read(ns, device, sizeof(device));
 	    openfloppy(device);
 	    evtp->what = diskEvt;
-	    retval = TRUE;
+	    retval = true;
 	} else
 	    assert(errno == EWOULDBLOCK);
     }
-    return retval ? TRUE : WaitNextEvent(em, evtp, sleep, mousergn);
+    return retval ? true : WaitNextEvent(em, evtp, sleep, mousergn);
 }
 
 #endif
@@ -227,8 +227,8 @@ PUBLIC OSErr TransPhysBlk(HVCB *vcbp, long physblock, short nphysblocks,
     pb.ioReqCount = PHYSBSIZE * nphysblocks;
     pb.ioPosMode = fsFromStart;
     pb.ioPosOffset = physblock;
-    err = rw == reading ? PBRead ((ParmBlkPtr) &pb, FALSE) :
-			  PBWrite((ParmBlkPtr) &pb, FALSE);
+    err = rw == reading ? PBRead ((ParmBlkPtr) &pb, false) :
+			  PBWrite((ParmBlkPtr) &pb, false);
     if (actp)
 	*actp = pb.ioActCount;
 #else

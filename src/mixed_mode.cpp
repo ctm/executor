@@ -35,7 +35,7 @@ P3 (PUBLIC pascal trap, UniversalProcPtr, NewRoutineDescriptor, ProcPtr, proc,
       p = (RoutineDescriptor *) NewPtr (sizeof *p);
       p->goMixedModeTrap = CWC (MIXED_MODE_TRAP);
       ROMlib_destroy_blocks ((syn68k_addr_t)
-			     US_TO_SYN68K (&p->goMixedModeTrap), 2, TRUE);
+			     US_TO_SYN68K (&p->goMixedModeTrap), 2, true);
       p->version = CBC (kRoutineDescriptorVersion);
       p->routineDescriptorFlags = CBC (0);
       p->reserved1 = CLC (0);

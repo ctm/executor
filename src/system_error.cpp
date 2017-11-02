@@ -219,10 +219,10 @@ Executor::system_error (const char *_message, int _default_button,
 			    /* no title */
 			    NULL,
 			    /* invisible */
-			    FALSE,
+			    false,
 			    dBoxProc,
 			    (WindowPtr) -1,
-			    FALSE, /* dummy */ -1);
+			    false, /* dummy */ -1);
   
   THEPORT_SAVE_EXCURSION
     (msg_window,
@@ -275,7 +275,7 @@ Executor::system_error (const char *_message, int _default_button,
        width = message_width + 20;
        height = message_height + 20 + 20 + 13;
        
-       SizeWindow (msg_window, width, height, FALSE);
+       SizeWindow (msg_window, width, height, false);
        
        /* compute top/left based on screen dimensions */
        {
@@ -294,7 +294,7 @@ Executor::system_error (const char *_message, int _default_button,
 	 top  = CW (gd_rect->top)  + (gd_height - height) / 3;
 	 left = CW (gd_rect->left) + (gd_width - width) / 2;
 	 
-	 MoveWindow (msg_window, left, top, TRUE);
+	 MoveWindow (msg_window, left, top, true);
        }
        
        ShowWindow (msg_window);
@@ -325,7 +325,7 @@ Executor::system_error (const char *_message, int _default_button,
                                              should be const */
 					  buf,
 					  /* visible */
-					  TRUE,
+					  true,
 					  0, 0, 1, pushButProc,
 					  /* dummy */ -1);
 	     if (i == default_button)
@@ -334,10 +334,10 @@ Executor::system_error (const char *_message, int _default_button,
 		 InsetRect (&buttons[i].hilite_rect, -4, -4);
 		 buttons[i].oval
 		   = RECT_HEIGHT (&buttons[i].hilite_rect) / 2 - 4;
-		 buttons[i].hilite_p = TRUE;
+		 buttons[i].hilite_p = true;
 	       }
 	     else
-	       buttons[i].hilite_p = FALSE;
+	       buttons[i].hilite_p = false;
 	   }
        
        retval = event_loop ();

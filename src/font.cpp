@@ -35,18 +35,18 @@ reset_myfmi (void)
 
 P0(PUBLIC pascal trap, void, InitFonts)	/* IMI-222 */
 {
-    static BOOLEAN beenhere = FALSE;
+    static BOOLEAN beenhere = false;
     GUEST<THz> saveZone;
 
     if (!beenhere) {
 	saveZone = TheZone;
 	TheZone = SysZone;
-	SetResLoad(TRUE);
+	SetResLoad(true);
 	ROMFont0 = RM(GetResource(TICK("FONT"), FONTRESID(systemFont, 12)));
 	WidthListHand = RM(NewHandle(MAXTABLES * sizeof(GUEST<Handle>)));
 	memset(STARH(MR(WidthListHand)), 0, MAXTABLES * sizeof(GUEST<Handle>));
 	TheZone = saveZone;
-	beenhere = TRUE;
+	beenhere = true;
     }
     ApFontID = CW(Cx(SPFont) + 1);
     SysFontSiz = CWC(12);
@@ -102,7 +102,7 @@ P2(PUBLIC pascal trap, void, GetFontName, INTEGER, fnum,	/* IMI-223 */
 	fnum = CW(SysFontFam);
     else if (fnum == applFont)
 	fnum = CW(ApFontID);
-    SetResLoad(FALSE);
+    SetResLoad(false);
     h = GetResource(TICK("FONT"), FONTRESID(fnum, 0));
     if (!h)
 	h = GetResource(TICK("NFNT"), FONTRESID(fnum, 0));
@@ -111,7 +111,7 @@ P2(PUBLIC pascal trap, void, GetFontName, INTEGER, fnum,	/* IMI-223 */
     GetResInfo(h, &i, &rest, fnam);
     if (ResError())
 	*fnam = 0;
-    SetResLoad(TRUE);
+    SetResLoad(true);
 }
 
 /*
@@ -130,14 +130,14 @@ P2(PUBLIC pascal trap, void, GetFNum, StringPtr, fnam,		/* IMI-223 */
     GUEST<ResType> rest;
     BOOLEAN shift;
     
-    SetResLoad(FALSE);
+    SetResLoad(false);
 
     h = GetNamedResource(TICK("FOND"), fnam);
     if (h)
-      shift = FALSE;
+      shift = false;
     else
       {
-	shift = TRUE;
+	shift = true;
 	h = GetNamedResource(TICK("FONT"), fnam);
 	if (!h)
 	  h = GetNamedResource(TICK("NFNT"), fnam);
@@ -148,7 +148,7 @@ P2(PUBLIC pascal trap, void, GetFNum, StringPtr, fnam,		/* IMI-223 */
 	*fnum = 0;
     else if (shift)
 	*fnum =CW( CW(*(GUEST<uint16_t> *) fnum) >> 7);
-    SetResLoad(TRUE);
+    SetResLoad(true);
 }
 
 P1(PUBLIC pascal trap, void, SetFontLock, BOOLEAN, lflag)	/* IMI-223 */
@@ -235,11 +235,11 @@ A1(PRIVATE, BOOLEAN, widthlistmatch, FMInput *, fmip)
 				 !WIDTHPTR->usedFam   == !FractEnable) {
 		WidthTabHandle = guest_cast<WidthTableHandle>(*whp);
 		HLock((Handle) MR(WidthTabHandle));
-		return TRUE;
+		return true;
 	    }
 	}
     }
-    return FALSE;
+    return false;
 }
 
 A1(PRIVATE, int, countones, unsigned short, i)
@@ -474,7 +474,7 @@ A4(PRIVATE, void, findclosestfont, INTEGER, family, INTEGER, size,
 
     lesser = 0;
     greater = 32767;
-    SetResLoad(FALSE);
+    SetResLoad(false);
     nres = CountResources(TICK("FONT"));	/* how about NFNT? */
     for (i = 1; i <= nres; i++) {
 	h = GetIndResource(TICK("FONT"), i);
@@ -490,7 +490,7 @@ A4(PRIVATE, void, findclosestfont, INTEGER, family, INTEGER, size,
 	    }
 	}
     }
-    SetResLoad(TRUE);
+    SetResLoad(true);
     *lesserp = lesser;
     *greaterp = greater == 32767 ? 0 : greater;
 }
@@ -536,12 +536,12 @@ P2(PUBLIC pascal trap, BOOLEAN, RealFont, INTEGER, fnum,	/* IMI-223 */
     Handle h;
     int retval;
     
-    SetResLoad(FALSE);
+    SetResLoad(false);
     h = GetResource(TICK("FONT"), FONTRESID(fnum, sz));
     if (!h)
 	h = GetResource(TICK("NFNT"), FONTRESID(fnum, sz));
     retval = !!h;
-    SetResLoad(TRUE);
+    SetResLoad(true);
     if (!retval)
       {
 	FHandle fh;
@@ -552,7 +552,7 @@ P2(PUBLIC pascal trap, BOOLEAN, RealFont, INTEGER, fnum,	/* IMI-223 */
 	    INTEGER powerof2, lesser, greater;
 	    findclosestfond (fh, sz, &powerof2, &lesser, &greater);
 	    if (powerof2 == sz)
-	      retval = TRUE;
+	      retval = true;
 	  }
       }
     return retval;
@@ -662,10 +662,10 @@ A1(PRIVATE, void, newwidthtable, FMInput *, fmip)
     WIDTHPTR->tabSize = 0;	/* I don't know what this field is, but it */
 				/* appears to have flags in it */
 
-    SetResLoad(TRUE);
+    SetResLoad(true);
     fh = 0;
     wanted_family = Cx (fmip->family);
-    tried_app_font = FALSE;
+    tried_app_font = false;
     n_tried_sys_font = 0;
     if ((fh = at_least_one_fond_entry(wanted_family))
 	|| GetResource(TICK("FONT"), FONTRESID(wanted_family, Cx(fmip->size)))
@@ -675,13 +675,13 @@ A1(PRIVATE, void, newwidthtable, FMInput *, fmip)
 	     || GetResource(TICK("FONT"), FONTRESID(Cx(ApFontID), 0)))
       {
 	family = Cx(ApFontID);
-	tried_app_font = TRUE;
+	tried_app_font = true;
       }	
     else
       {
 	fh = at_least_one_fond_entry (Cx(SysFontFam));
 	family = Cx(SysFontFam);
-	tried_app_font = TRUE;
+	tried_app_font = true;
 	++n_tried_sys_font;
       }
     WIDTHPTR->tabFont = 0;
@@ -748,7 +748,7 @@ A1(PRIVATE, void, newwidthtable, FMInput *, fmip)
     if (!WIDTHPTR->tabFont) {
       if (!tried_app_font)
 	{
-	  tried_app_font = TRUE;
+	  tried_app_font = true;
 	  family = Cx(ApFontID);
 	  fh = at_least_one_fond_entry (family);
 	}
@@ -887,7 +887,7 @@ P1(PUBLIC pascal trap, void, FontMetrics, FMetricRec *, metrp)	/* IMIV-32 */
     fmi.family   = PORT_TX_FONT_X (thePort);
     fmi.size     = PORT_TX_SIZE_X (thePort);
     fmi.face     = PORT_TX_FACE_X (thePort);
-    fmi.needBits = CB(FALSE);
+    fmi.needBits = CB(false);
     fmi.device   = PORT_DEVICE_X (thePort);
     fmi.numer.v  = CWC(1);
     fmi.numer.h  = CWC(1);

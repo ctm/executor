@@ -25,7 +25,7 @@ char ROMlib_rcsid_ctlInit[] =
 
 using namespace Executor;
 
-PUBLIC BOOLEAN Executor::ROMlib_cdef0_is_rectangular = FALSE;
+PUBLIC BOOLEAN Executor::ROMlib_cdef0_is_rectangular = false;
 
 P9(PUBLIC pascal trap, ControlHandle, NewControl, WindowPtr, wst, Rect *, r,
 		  StringPtr, title, BOOLEAN, vis, INTEGER, value, INTEGER, min,
@@ -52,7 +52,7 @@ P9(PUBLIC pascal trap, ControlHandle, NewControl, WindowPtr, wst, Rect *, r,
 	GetResInfo (MR (temph), &id, &type, name);
 	ROMlib_cdef0_is_rectangular =
 	  (EqualString (name,
-			(StringPtr) "\023rectangular buttons", FALSE, FALSE));
+			(StringPtr) "\023rectangular buttons", false, false));
       }
 
     if (!title)

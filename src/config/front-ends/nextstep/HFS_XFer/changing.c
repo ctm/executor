@@ -32,10 +32,10 @@ PRIVATE OSErr PBFInfoHelper(changeop op, fileParam *pb, long dirid,
     filekind kind;
     
     if (op == Get && pb->ioFDirIndex > 0)
-	err = btpbindex((ioParam *) pb, dirid, &vcbp, &frp, &catkeyp, TRUE);
+	err = btpbindex((ioParam *) pb, dirid, &vcbp, &frp, &catkeyp, true);
     else {
 	kind = regular;
-	err = findvcbandfile((ioParam *) pb, dirid, &btparamrec, &kind, FALSE);
+	err = findvcbandfile((ioParam *) pb, dirid, &btparamrec, &kind, false);
 	if (err == noErr) {
 	    if (btparamrec.success) {
 		vcbp = btparamrec.vcbp;
@@ -143,11 +143,11 @@ PRIVATE OSErr renamehelper(ioParam *pb, BOOLEAN async, LONGINT dirid, filekind k
 				   == (char *) pb->ioNamePtr + pb->ioNamePtr[0])
 	err = pbvolrename(pb, (StringPtr) pb->ioMisc);
     else {
-	err = findvcbandfile(pb, dirid, &btparamrec, &kind, FALSE);
+	err = findvcbandfile(pb, dirid, &btparamrec, &kind, false);
 	if (err == noErr) {
 	    npb = *pb;
 	    npb.ioNamePtr = (StringPtr) pb->ioMisc;
-	    err = findvcbandfile(&npb, dirid, &btparamrec2, &kind, FALSE);
+	    err = findvcbandfile(&npb, dirid, &btparamrec2, &kind, false);
 	    if (err != fnfErr)
 		err = dupFNErr;
 	    else {

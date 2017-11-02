@@ -217,7 +217,7 @@ P3(PUBLIC pascal trap, BOOLEAN, LGetSelect, BOOLEAN, next,	/* IMIV-273 */
     Point p;
 
     if (!list || !cellp)
-        retval = FALSE;
+        retval = false;
     else if (next) {
 	c.h = CW(cellp->h);
 	c.v = CW(cellp->v);
@@ -227,7 +227,7 @@ P3(PUBLIC pascal trap, BOOLEAN, LGetSelect, BOOLEAN, next,	/* IMIV-273 */
 	    ip = ROMlib_getoffp(temp, list);
 	}
 	if (!ip)
-	    retval = FALSE;
+	    retval = false;
 	else {
 	    temp.h = Hx(list, dataBounds.right)  - 1;
 	    temp.v = Hx(list, dataBounds.bottom) - 1;
@@ -235,7 +235,7 @@ P3(PUBLIC pascal trap, BOOLEAN, LGetSelect, BOOLEAN, next,	/* IMIV-273 */
 	    while (ip != ep && !(CW(*ip) & 0x8000))
 		ip++;
 	    if (ip == ep)
-		retval = FALSE;
+		retval = false;
 	    else {
 		nint = ip - HxX(list, cellArray);
 		ncols = Hx(list, dataBounds.right) - Hx(list, dataBounds.left);
@@ -243,16 +243,16 @@ P3(PUBLIC pascal trap, BOOLEAN, LGetSelect, BOOLEAN, next,	/* IMIV-273 */
 		coln = nint % ncols;
 		cellp->v = CW(Hx(list, dataBounds.top)  + rown);
 		cellp->h = CW(Hx(list, dataBounds.left) + coln);
-		retval = TRUE;
+		retval = true;
 	    }
 	}
     } else {
 	p.h = CW(cellp->h);
 	p.v = CW(cellp->v);
 	if (!(ip = ROMlib_getoffp(p, list)))
-	    retval = FALSE;
+	    retval = false;
 	else
-	    retval = (CW(*ip) & 0x8000) ? TRUE : FALSE;
+	    retval = (CW(*ip) & 0x8000) ? true : false;
     }
     return retval;
 }

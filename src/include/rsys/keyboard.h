@@ -77,7 +77,7 @@ typedef GUEST<kchr_ptr_t> *kchr_hand;
 #define KCHR_N_TABLES(p)		(CW (KCHR_N_TABLES_X (p)))
 #define KCHR_N_DEAD_KEY_RECS(p)		(CW (KCHR_N_DEAD_KEY_RECS_X (p)))
 
-/* MKV prefix denotes a TRUE mac virtual key code (as opposed to the
+/* MKV prefix denotes a true mac virtual key code (as opposed to the
    ones I made up) */
 /* i pulled these defines from osevent.c; they should placed into a
    header file somewhere */

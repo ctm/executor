@@ -229,7 +229,7 @@ P1 (PUBLIC pascal trap, Boolean, ParseTable,
     CharByteTable, table)
 {
   memset (table, 0, sizeof (CharByteTable));
-  return TRUE;
+  return true;
 }
 
 P2 (PUBLIC pascal trap, Boolean, FillParseTable,
@@ -237,7 +237,7 @@ P2 (PUBLIC pascal trap, Boolean, FillParseTable,
 {
   /* ### should we even look at `script' */
   memset (table, 0, sizeof (CharByteTable));
-  return TRUE;
+  return true;
 }
 
 P3 (PUBLIC pascal trap, INTEGER, CharacterByteType, Ptr, textBuf,
@@ -895,7 +895,7 @@ P9(PUBLIC pascal trap, INTEGER, PixelToChar,
   if (int_pix_width >= CW(locs[textLen]))
     {
       retval = textLen;
-      *leadingEdgep = FALSE;
+      *leadingEdgep = false;
       *widthRemainingp = CL( pixelWidth - (CW(locs[textLen]) << 16) );
     }
   else
@@ -907,12 +907,12 @@ P9(PUBLIC pascal trap, INTEGER, PixelToChar,
 	  ((int_pix_width - CW(locs[i-1])) > (CW(locs[i]) - int_pix_width)))
 	{
 	  retval = i - 1;
-	  *leadingEdgep = FALSE;
+	  *leadingEdgep = false;
 	}
       else
 	{
 	  retval = i;
-	  *leadingEdgep = TRUE;
+	  *leadingEdgep = true;
 	}
     }
   return retval;
@@ -956,7 +956,7 @@ P3(PUBLIC pascal trap, void, UppercaseText,
    INTEGER, len,
    ScriptCode, script)
 {
-  ROMlib_UprString ((StringPtr) textp, FALSE, len);
+  ROMlib_UprString ((StringPtr) textp, false, len);
 }
 
 P3(PUBLIC pascal trap, void, StripDiacritics,
@@ -972,5 +972,5 @@ P3(PUBLIC pascal trap, void, UppercaseStripDiacritics,
    INTEGER, len,
    ScriptCode, script)
 {
-  ROMlib_UprString ((StringPtr) textp, TRUE, len);
+  ROMlib_UprString ((StringPtr) textp, true, len);
 }

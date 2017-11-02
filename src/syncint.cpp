@@ -27,7 +27,7 @@ handle_sdltimer_tick (Uint32 n)
 #if defined (CYGWIN32)
 	win_queue(&cpu_state.interrupt_pending[M68K_EVENT_PRIORITY]);
 #endif
-	cpu_state.interrupt_pending[M68K_TIMER_PRIORITY] = TRUE;
+	cpu_state.interrupt_pending[M68K_TIMER_PRIORITY] = true;
 	SET_INTERRUPT_STATUS (INTERRUPT_STATUS_CHANGED);
 	//  SDL_mutexP (ROMlib_shouldbeawake_mutex);
 	SDL_CondSignal (ROMlib_shouldbeawake_cond);
@@ -46,7 +46,7 @@ handle_sdltimer_tick (Uint32 n)
 static void
 handle_itimer_tick (int n)
 {
-  cpu_state.interrupt_pending[M68K_TIMER_PRIORITY] = TRUE;
+  cpu_state.interrupt_pending[M68K_TIMER_PRIORITY] = true;
   SET_INTERRUPT_STATUS (INTERRUPT_STATUS_CHANGED);
 }
 

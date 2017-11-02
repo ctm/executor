@@ -244,7 +244,7 @@ port_to_handle (uint8 port)
 
       for (i = 0; i < (int) NELEM (com_hands); ++i)
 	com_hands[i] = INVALID_HANDLE_VALUE;
-      been_here = TRUE;
+      been_here = true;
     }
 
   if (LOOKUP_KEY (&com_minus_1, port, serial_port_map) != 0)
@@ -311,8 +311,8 @@ dos_serial_bios_init_port (uint8 port,
 	  LENGTH_TO_WIN32_LENGTH (&win32_length, data_length);
 	  
 	  dcb.BaudRate = win32_baud;
-	  dcb.fBinary = TRUE;
-	  dcb.fParity = TRUE;
+	  dcb.fBinary = true;
+	  dcb.fParity = true;
 	  dcb.ByteSize = win32_length;
 	  dcb.Parity = win32_parity;
 	  dcb.StopBits = win32_stop;

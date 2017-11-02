@@ -382,14 +382,14 @@ parse_and_randomize_tips (char *buf)
   chars_needed += 2 * (n_tips - 1) + 1;
 
   retval = (char*)malloc (chars_needed);
-  seen_tip = FALSE;
+  seen_tip = false;
   p = retval;
   while (n_tips)
     {
       if (seen_tip)
 	add_to_str (&p, "\r\r", 2);
       else
-	seen_tip = TRUE;
+	seen_tip = true;
       i = rand () % n_tips;
       add_to_str (&p, buf+tips[i].tip_offset, tips[i].tip_length);
       tips[i] = tips[n_tips-1];
@@ -495,8 +495,8 @@ create_about_box ()
   /* Create the window. */
   about_box = (WindowPtr) NewCWindow (NULL, &about_box_bounds,
 				      (StringPtr) "\016About Executor",
-				      FALSE, dBoxProc, (CWindowPtr) -1,
-				      TRUE,	/* go away flag */
+				      false, dBoxProc, (CWindowPtr) -1,
+				      true,	/* go away flag */
 				      -5	/* unused */);
 
   THEPORT_SAVE_EXCURSION
@@ -517,11 +517,11 @@ create_about_box ()
 	   r.right  = CW (CW (r.left) + BUTTON_WIDTH);
 
 	   str255_from_c_string (str, about_box_buttons[b].name);
-	   about_box_buttons[b].ctl = NewControl (about_box, &r, str, TRUE, 0,
+	   about_box_buttons[b].ctl = NewControl (about_box, &r, str, true, 0,
 						  0, 1, pushButProc, b);
 	 }
        
-       about_scrollbar = NewControl (about_box, &scroll_bar_bounds, NULL, TRUE,
+       about_scrollbar = NewControl (about_box, &scroll_bar_bounds, NULL, true,
 				     0, 0, 100, scrollBarProc, -1);
        about_te = TENew (&te_bounds, &te_bounds);
        TESetJust (teFlushLeft, about_te);
@@ -655,7 +655,7 @@ event_loop (bool executor_p)
 
   old_scroll_bar_value = GetCtlValue (about_scrollbar);
 
-  for (done_p = FALSE; !done_p; ) {
+  for (done_p = false; !done_p; ) {
 	GetNextEvent ((  mDownMask | mUpMask
 				   | keyDownMask | keyUpMask | autoKeyMask
 				   | updateMask | activMask), &evt);
@@ -697,7 +697,7 @@ event_loop (bool executor_p)
 	    switch (ch) {
 	      case '\r':
 	      case NUMPAD_ENTER:
-			done_p = TRUE;
+			done_p = true;
 			break;
 	      default:
 			TEKey (ch, about_te);
@@ -763,7 +763,7 @@ retval;					\
 			{
 			  if (!strcmp (about_box_buttons[new_text].name,
 						   DONE_BUTTON_NAME))
-				done_p = TRUE;
+				done_p = true;
 			  else
 			  {
 			    set_current_button (new_text);
@@ -787,11 +787,11 @@ retval;					\
 void
 Executor::do_about_box (void)
 {
-  static bool busy_p = FALSE;
+  static bool busy_p = false;
 
   if (!busy_p)
     {
-      busy_p = TRUE;  /* Only allow one about box at a time. */
+      busy_p = true;  /* Only allow one about box at a time. */
 
       if (scroll_bar_callback == 0)
 	scroll_bar_callback = (ProcPtr) SYN68K_TO_US(callback_install (scroll_stub, NULL));
@@ -814,6 +814,6 @@ Executor::do_about_box (void)
 	   dispose_about_box ();
 	 });
 
-      busy_p = FALSE;
+      busy_p = false;
     }
 }

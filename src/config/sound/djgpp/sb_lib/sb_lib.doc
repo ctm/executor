@@ -92,7 +92,7 @@ logical ANDing the value returned by sb_get_capabilities() with the value of
 the capability desired. For example, to test for the capability of stereo:
 
 int caps=sb_get_capabilities();
-if(caps&SB_STEREO) {    /* If the stereo bit is set, this will be TRUE */
+if(caps&SB_STEREO) {    /* If the stereo bit is set, this will be true */
   /* Do something useful */
 }
 

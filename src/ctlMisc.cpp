@@ -144,14 +144,14 @@ P2 (PUBLIC pascal trap, BOOLEAN, GetAuxCtl, ControlHandle, ctl,	/* IMV-222 */
     GUEST<AuxCtlHandle> *, aux_ctl)
 {
   /* according to testing on the Mac+
-     `GetAuxCtl ()' returns FALSE (not TRUE) and leaves
+     `GetAuxCtl ()' returns false (not true) and leaves
      aux_ctl untouched; this is not the case of later
      mac version, such as the color classic v7.1 */
 
   if (! ctl)
     {
       *aux_ctl = RM (default_aux_ctl);
-      return TRUE;
+      return true;
     }
   else
     {
@@ -161,12 +161,12 @@ P2 (PUBLIC pascal trap, BOOLEAN, GetAuxCtl, ControlHandle, ctl,	/* IMV-222 */
       if (t)
 	{
 	  *aux_ctl = t;
-	  return FALSE;
+	  return false;
 	}
       else
 	{
 	  *aux_ctl = RM (default_aux_ctl);
-	  return TRUE;
+	  return true;
 	}
     }
 }

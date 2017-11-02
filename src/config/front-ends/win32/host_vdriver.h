@@ -15,8 +15,8 @@
 #if 0 /* FIXME: Remove this when we support title-bar changes */
 #define VDRIVER_DISPLAYED_IN_WINDOW
 #endif
-#define vdriver_fixed_clut_p FALSE
-#define vdriver_grayscale_p FALSE
+#define vdriver_fixed_clut_p false
+#define vdriver_grayscale_p false
 
 /* We don't have a function to notify the user that the system is busy */
 #define vdriver_system_busy 0
@@ -24,7 +24,7 @@
 
 #if WIN_SUBSYSTEM == WIN_DIB
 /* We don't provide any accelerated display functions under WIN_DIB */
-#define VDRIVER_BYPASS_INTERNAL_FBUF_P() FALSE
+#define VDRIVER_BYPASS_INTERNAL_FBUF_P() false
 #define vdriver_accel_rect_fill(t, l, b, r, c) VDRIVER_ACCEL_NO_UPDATE
 #define vdriver_accel_rect_scroll(t, l, b, r, dx, dy) VDRIVER_ACCEL_NO_UPDATE
 #define vdriver_accel_wait()

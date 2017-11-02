@@ -43,7 +43,7 @@ Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
       
       GetDItem (dp, method, &item_type, &item_h, &item_rect);
 
-      resize_p = FALSE;
+      resize_p = false;
       base_pt.v = CW (item_rect.top);
       base_pt.h = CW (item_rect.left);
     }
@@ -53,18 +53,18 @@ Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
 	{
 	default:
 	case overlayDITL:
-	  resize_p = FALSE;
+	  resize_p = false;
 	  base_pt.h = base_pt.v = 0;
 	  break;
       
 	case appendDITLRight:
-	  resize_p = TRUE;
+	  resize_p = true;
 	  base_pt.v = 0;
 	  base_pt.h = CW (dp_port_rect->right);
 	  break;
       
 	case appendDITLBottom:
-	  resize_p = TRUE;
+	  resize_p = true;
 	  base_pt.v = CW (dp_port_rect->bottom);
 	  base_pt.h = 0;
 	  break;
@@ -153,7 +153,7 @@ Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
   if (resize_p)
     SizeWindow ((WindowPtr) dp, width, height,
 		/* cause the window to be redraw */
-		TRUE);
+		true);
 }
 
 void
@@ -190,7 +190,7 @@ Executor::ShortenDITL (DialogPtr dp, int16 n_items)
 	   
 	   if (i >= first_item_to_dispose)
 	     {
-	       bool erase_p = FALSE;
+	       bool erase_p = false;
 	       Rect erase_rect;
 	       
 	       erase_rect = itemp->itmr;
@@ -217,7 +217,7 @@ Executor::ShortenDITL (DialogPtr dp, int16 n_items)
 		      them is inset `-3', so we also need to do that
 		      when erasing */
 		   InsetRect (&erase_rect, -3, -3);
-		   erase_p = TRUE;
+		   erase_p = true;
 		 }
 	       else if (itemp->itmtype & ctrlItem)
 		 {
@@ -230,16 +230,16 @@ Executor::ShortenDITL (DialogPtr dp, int16 n_items)
 		   icon = MR(itemp->itmhand);
 		   if (CICON_P (icon))
 		     DisposeCIcon ((CIconHandle) icon);
-		   erase_p = TRUE;
+		   erase_p = true;
 		 }
 	       else if (itemp->itmtype & picItem)
 		 {
-		   erase_p = TRUE;
+		   erase_p = true;
 		 }
 	       else
 		 {
 		   /* user item */
-		   erase_p = TRUE;
+		   erase_p = true;
 		 }
 	       
 	       if (erase_p)

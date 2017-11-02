@@ -15,7 +15,7 @@ using namespace Executor;
 P0 (PUBLIC pascal trap, BOOLEAN, HMGetBalloons)
 {
   warning_unimplemented (NULL_STRING);
-  return FALSE;
+  return false;
 }
 
 P1 (PUBLIC pascal trap, OSErr, HMSetBalloons, BOOLEAN, flag)
@@ -27,7 +27,7 @@ P1 (PUBLIC pascal trap, OSErr, HMSetBalloons, BOOLEAN, flag)
 P0 (PUBLIC pascal trap, BOOLEAN, HMIsBalloon)
 {
   warning_unimplemented (NULL_STRING);
-  return FALSE;
+  return false;
 }
 
 P7 (PUBLIC pascal trap, OSErr, HMShowBalloon, HMMessageRecord *, msgp,

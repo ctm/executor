@@ -136,9 +136,9 @@ on_chain_p (hashlink_t *hlp, chain_t *therest, bool dump_link)
     warning_trace_info ("dirid = %d, parid = %d, dirname = '%s'", hlp->dirid,
 			hlp->parid, hlp->dirname);
   if (!therest)
-    return FALSE;
+    return false;
   else if (therest->hashlinkp == hlp)
-    return TRUE;
+    return true;
   else
     return on_chain_p (hlp, therest->next, dump_link);
 }
@@ -166,13 +166,13 @@ recsetdp (VCBExtra * vcbp, datum *dp, hashlink_t *hlp, chain_t *therest)
       newhlp = *hashloc(vcbp, hlp->parid);
       if (newhlp)
 	{
-	  if (on_chain_p (newhlp, therest, FALSE))
+	  if (on_chain_p (newhlp, therest, false))
 	    {
 	      warning_unexpected ("recset loop unixname = '%s'"
 				  " dirid = %d, parid = %d, dirname = '%s'",
 				  vcbp->unixname, newhlp->dirid,
 				  newhlp->parid, newhlp->dirname);
-	      on_chain_p (newhlp, therest, TRUE);
+	      on_chain_p (newhlp, therest, true);
 	      dp->dsize = 0;
 	      dp->dptr = 0;
 	    }
@@ -259,14 +259,14 @@ filename_match (const char *prefix, const char *path1, const char *path2)
   bool retval;
   int prefix_length;
 
-  retval = TRUE;
+  retval = true;
   if (path2[0] == '/' && !path2[1]) /* top-level dir of this volume */
     prefix_length = 1;
   else
     {
       prefix_length = strlen (prefix);
       if (strncasecmp (prefix, path2, prefix_length) != 0)
-	retval = FALSE;
+	retval = false;
     }
 
   if (retval)
@@ -285,7 +285,7 @@ filename_match (const char *prefix, const char *path1, const char *path2)
 
 /*
  * hashinsert will do the stat for you if the dirid is 0
- * hashinsert returns TRUE if the entry is already there
+ * hashinsert returns true if the entry is already there
  */
 
 PRIVATE BOOLEAN hashinsert(VCBExtra *vcbp, char *pathname, LONGINT *diridp,
@@ -308,7 +308,7 @@ PRIVATE BOOLEAN hashinsert(VCBExtra *vcbp, char *pathname, LONGINT *diridp,
 	    *diridp = ST_INO (sbuf);
     }
     if (!diridp)
-	retval = FALSE;
+	retval = false;
     else {
 	hlpp = hashloc(vcbp, *diridp);
 	if (*hlpp && (*hlpp)->dirname[0] >= checked_val)
@@ -324,12 +324,12 @@ PRIVATE BOOLEAN hashinsert(VCBExtra *vcbp, char *pathname, LONGINT *diridp,
 				    (*hlpp)->parid);
 		goto use_new_value_to_be_safe;
 	      }
-	    retval = TRUE;
+	    retval = true;
 	  }
 	else {
 use_new_value_to_be_safe:
 	    savep = 0;
-	    retval = FALSE;
+	    retval = false;
 	    if (parid == 0) {
 		if (*diridp == 2)	/* root of a filesystem */
 		    parid = 1;	/* that's the way it is on the mac */
@@ -425,7 +425,7 @@ PRIVATE BOOLEAN filesystems_match(rkey_t *keyp, VCBExtra *vcbp)
 	retval = strncmp(vcbp->unixname,
 		       keyp->hostnameandroot + keyp->hostnamelen, namlen) == 0;
     else
-	retval = FALSE;
+	retval = false;
     return retval;
 }
 
@@ -466,7 +466,7 @@ PRIVATE BOOLEAN hostnames_match(rkey_t *keyp, VCBExtra *vcbp)
 	retval = strncmp(ROMlib_hostname, keyp->hostnameandroot,
 						      ROMlib_hostnamelen) == 0;
     } else
-	retval = FALSE;
+	retval = false;
     return retval;
 }
 
@@ -474,14 +474,14 @@ PRIVATE BOOLEAN isamatch(rkey_t *keyp, VCBExtra *vcbp, newness_t *newp)
 {
     BOOLEAN retval;
 
-    retval = FALSE;
+    retval = false;
     if (filesystems_match(keyp, vcbp)) {
 	if (no_hostname(keyp)) {
 	    *newp = old_generic_val;
-	    retval = TRUE;
+	    retval = true;
 	} else if (hostnames_match(keyp, vcbp)) {
 	    *newp = old_specific_val;
-	    retval = TRUE;
+	    retval = true;
 	}
     }
     return retval;
@@ -822,11 +822,11 @@ A4(PRIVATE, VCB *, findvcb, StringPtr, sp, INTEGER, vrn, BOOLEAN *, iswd,
 {
     VCB *vcbptr;
 
-    *iswd = FALSE;
+    *iswd = false;
     if (sp && sp[U(sp[0])] == VOLCHAR) {
 	for (vcbptr = (VCB *)MR(VCBQHdr.qHead);
 	     vcbptr && !EqualString(sp, (StringPtr) vcbptr->vcbVN,
-								  FALSE, TRUE);
+								  false, true);
 	     vcbptr = (VCB *)MR(vcbptr->qLink))
 	    ;
 	*vrnp = vcbptr->vcbVRefNum;
@@ -841,7 +841,7 @@ A4(PRIVATE, VCB *, findvcb, StringPtr, sp, INTEGER, vrn, BOOLEAN *, iswd,
 	if (vrn < 0) {
 	    *vrnp = CW(vrn);
 	    if (ISWDNUM(vrn)) {
-                *iswd = TRUE;
+                *iswd = true;
 #warning autc04 ### This is a guess. The original was missing the MR.
 		vcbptr = MR( WDNUMTOWDP(vrn)->vcbp );
 	    } else
@@ -877,7 +877,7 @@ A2(PRIVATE, VCB *, grabvcb, ParmBlkPtr, pb, GUEST<INTEGER> *, vrefnump)
     else if (Cx(pb->volumeParam.ioVolIndex) == 0) {
 	sp = MR(pb->volumeParam.ioNamePtr);
 	pb->volumeParam.ioNamePtr = 0;
-	vcbp = ROMlib_breakoutioname(pb, &dir, &therest, (BOOLEAN *) 0, FALSE);
+	vcbp = ROMlib_breakoutioname(pb, &dir, &therest, (BOOLEAN *) 0, false);
 	pb->volumeParam.ioNamePtr = RM(sp);
     } else
       {
@@ -886,7 +886,7 @@ A2(PRIVATE, VCB *, grabvcb, ParmBlkPtr, pb, GUEST<INTEGER> *, vrefnump)
 
 	p = (unsigned char *) MR (pb->volumeParam.ioNamePtr);
 	if (!p || p[0] == 0 || p[1] == ':')
-	  use_defaults = TRUE;
+	  use_defaults = true;
 	else
 	  use_defaults = !pstr_index_after (p, ':', 1);
 	vcbp = ROMlib_breakoutioname(pb, &dir, &therest, (BOOLEAN *) 0,
@@ -1089,7 +1089,7 @@ A1(PUBLIC, OSErr, ufsPBUnmountVol, ParmBlkPtr, pb)	/* INTERNAL */
     int i;
     VCBExtra *vcbp;
 
-    temp = PBFlushVol(pb, FALSE);
+    temp = PBFlushVol(pb, false);
     for (i = 0; i < NFCB; i++)
 	if (ROMlib_fcblocks[i].fdfnum &&
 		MR(ROMlib_fcblocks[i].fcvptr)->vcbVRefNum == pb->ioParam.ioVRefNum)
@@ -1106,7 +1106,7 @@ A1(PUBLIC, OSErr, ufsPBOffLine, ParmBlkPtr, pb)	/* INTERNAL */
 {
     OSErr temp;
 
-    temp = PBFlushVol(pb, FALSE);
+    temp = PBFlushVol(pb, false);
     if (temp != noErr)
 	return(temp);
     else
@@ -1117,7 +1117,7 @@ A1(PUBLIC, OSErr, ufsPBEject, ParmBlkPtr, pb)	/* INTERNAL */
 {
     OSErr temp;
 
-    temp = PBFlushFile(pb, FALSE);
+    temp = PBFlushFile(pb, false);
     if (temp != noErr)
 	return(temp);
     temp = PBOffLine(pb);

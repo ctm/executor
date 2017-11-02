@@ -106,11 +106,11 @@ note_executor_changed_screen (int top, int bottom)
     last = NUM_AUTOREFRESH_STRIPS - 1;
 
   for (i = first; i <= last; i++)
-    executor_changed_screen_p[i] = TRUE;
+    executor_changed_screen_p[i] = true;
 }
 
 
-/* Returns TRUE if refresh should be turned on. */
+/* Returns true if refresh should be turned on. */
 bool
 autodetect_refresh (void)
 {
@@ -125,27 +125,27 @@ autodetect_refresh (void)
   if (ROMlib_refresh != 0 || !ROMlib_shadow_screen_p)
     {
       memset (last_checksum_valid_p, 0, sizeof last_checksum_valid_p);
-      return FALSE;
+      return false;
     }
 
-  need_refresh_p = FALSE;  /* default value */
+  need_refresh_p = false;  /* default value */
 
   /* Compute checksums for the screen. */
   for (i = NUM_AUTOREFRESH_STRIPS - 1; i >= 0; i--)
     {
       if (executor_changed_screen_p[i])
 	{
-	  executor_changed_screen_p[i] = FALSE;  /* reset it */
-	  last_checksum_valid_p[i] = FALSE;
+	  executor_changed_screen_p[i] = false;  /* reset it */
+	  last_checksum_valid_p[i] = false;
 	}
       else
 	{
 	  uint32 c;
 	  c = checksum_strip (i);
 	  if (last_checksum_valid_p[i] && c != last_checksum[i])
-	    need_refresh_p = TRUE;
+	    need_refresh_p = true;
 	  last_checksum[i] = c;
-	  last_checksum_valid_p[i] = TRUE;
+	  last_checksum_valid_p[i] = true;
 	}
     }
 

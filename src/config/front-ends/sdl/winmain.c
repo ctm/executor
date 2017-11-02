@@ -92,14 +92,14 @@ int STDCALL WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
 	/* Load SDL dynamic link library */
 	if ( SDL_Init(0) < 0 ) {
 		fprintf(stderr, "WinMain() error: %s\n", SDL_GetError());
-		return(FALSE);
+		return(false);
 	}
 	atexit(SDL_Quit);
 
 	/* Create and register our class, then run main code */
 	if ( SDL_RegisterApp(appname, CS_BYTEALIGNCLIENT, hInst) < 0 ) {
 		fprintf(stderr, "WinMain() error: %s\n", SDL_GetError());
-		return(FALSE);
+		return(false);
 	}
 	SDL_main(argc, argv);
 

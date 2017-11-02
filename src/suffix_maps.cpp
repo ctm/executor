@@ -57,7 +57,7 @@ str_to_hex (const char *str, uint32 *valp)
 	if (isxdigit (*str))
 	  val = (val << 4) | ROMlib_fromhex (*str);
 	else
-	  retval = FALSE;
+	  retval = false;
       *valp = val;
     }
   return retval;
@@ -188,10 +188,10 @@ ROMlib_creator_and_type_from_suffix (const char *suffix, uint32 *creatorp,
 
   pp = find_suffixpp (suffix);
   if (!*pp)
-    retval = FALSE;
+    retval = false;
   else
     {
-      retval = TRUE;
+      retval = true;
       if (creatorp)
 	*creatorp = (*pp)->creator;
       if (typep)
@@ -209,10 +209,10 @@ ROMlib_creator_and_type_from_filename (int len, const char *filename,
 
   pp = find_filenamepp (len, filename);
   if (!*pp)
-    retval = FALSE;
+    retval = false;
   else
     {
-      retval = TRUE;
+      retval = true;
       if (creatorp)
 	*creatorp = (*pp)->creator;
       if (typep)
@@ -236,12 +236,12 @@ ROMlib_delete_suffix (const char *suffix)
 
   pp = find_suffixpp (suffix);
   if (!*pp)
-    retval = FALSE;
+    retval = false;
   else
     {
       suffix_entry_t *to_release;
 
-      retval = TRUE;
+      retval = true;
       to_release = *pp;
       *pp = (*pp)->next;
       release_entry (to_release);

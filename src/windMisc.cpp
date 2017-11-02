@@ -34,7 +34,7 @@ is_window_ptr (WindowPeek w)
   bool retval;
 
   if (!w)
-    retval = FALSE;
+    retval = false;
   else
     {
       for (wp = MR (WindowList);
@@ -159,7 +159,7 @@ P6 (PUBLIC pascal trap, LONGINT, DragTheRgn,
 	    {
 	      if (drawn)
 		PaintRgn(rgn);
-	      drawn = TRUE;
+	      drawn = true;
 	      OffsetRgn(rgn, ep.h - p.h, ep.v - p.v);
 	      PaintRgn(rgn);
 	      p.h = ep.h;
@@ -170,7 +170,7 @@ P6 (PUBLIC pascal trap, LONGINT, DragTheRgn,
 	{
 	  if (drawn)
 	    PaintRgn (rgn);
-	  drawn = FALSE;
+	  drawn = false;
         }
       if (proc)
 	{
@@ -248,10 +248,10 @@ P1(PUBLIC pascal trap, BOOLEAN, CheckUpdate, EventRecord *, ev)
 	    {
 	      ev->what = CW(updateEvt);
 	      ev->message = guest_cast<LONGINT>( RM(wp) );
-	      return TRUE;
+	      return true;
 	    }
 	}
-    return FALSE;
+    return false;
 }
 
 P1(PUBLIC pascal trap, void, SaveOld, WindowPeek, w)
@@ -498,7 +498,7 @@ Executor::WINDCALLDESKHOOK (void)
 }
 
 #if defined (EVIL_ILLUSTRATOR_7_HACK)
-PUBLIC BOOLEAN Executor::ROMlib_evil_illustrator_7_hack = FALSE;
+PUBLIC BOOLEAN Executor::ROMlib_evil_illustrator_7_hack = false;
 #endif
 
 int32

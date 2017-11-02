@@ -119,7 +119,7 @@ P1(PUBLIC pascal trap, BOOLEAN, PrValidate, THPrint, hPrint) /* IMII-158 */
   }
 
   HxX(hPrint, prJob.bJDocLoop) =  2;
-  return FALSE;
+  return false;
 }
 
 P1(PUBLIC pascal trap, BOOLEAN, PrStlDialog, THPrint, hPrint)

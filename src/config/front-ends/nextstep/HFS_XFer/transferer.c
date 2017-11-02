@@ -18,7 +18,7 @@ LONGINT ischild(LONGINT dir1, LONGINT dir2)
     pb.dirInfo.ioFDirIndex = -1;
     pb.dirInfo.ioDrDirID = dir1;
     while (pb.dirInfo.ioDrDirID > 1) {
-        err = xPBGetCatInfo(&pb, FALSE);
+        err = xPBGetCatInfo(&pb, false);
 	if (err != noErr)
 	    doerror(err, "\pPBGetCatInfo");
         if (pb.dirInfo.ioDrParID == dir2)
@@ -86,7 +86,7 @@ OSErr CopyFork(forktype fork, StringPtr name, LONGINT fromid,
     rdio.fileParam.ioDirID = fromid;
 #if defined(PREALLOCATE)
     rdio.fileParam.ioFDirIndex = 0;
-    err = xPBHGetFInfo((ParmBlkPtr) &rdio, FALSE);
+    err = xPBHGetFInfo((ParmBlkPtr) &rdio, false);
     if (err != noErr) {
 	doerror(err, "\pPBGetFInfo");
 /*-->*/ return err;
@@ -104,12 +104,12 @@ OSErr CopyFork(forktype fork, StringPtr name, LONGINT fromid,
     
     switch (fork) {
     case datafork:
-        err = xPBHOpen((HFileParam *)&rdio, FALSE);
+        err = xPBHOpen((HFileParam *)&rdio, false);
         if (err != noErr)
             return err;
-        err = xPBHOpen((HFileParam *)&wrio, FALSE);
+        err = xPBHOpen((HFileParam *)&wrio, false);
         if (err != noErr) {
-            xPBClose((ioParam *) &rdio, FALSE);
+            xPBClose((ioParam *) &rdio, false);
             return err;
         }
 #if defined(PREALLOCATE)
@@ -118,12 +118,12 @@ OSErr CopyFork(forktype fork, StringPtr name, LONGINT fromid,
 #endif /* PREALLOCATE */
         break;
     case resourcefork:
-        err = xPBHOpenRF((HFileParam *)&rdio, FALSE);
+        err = xPBHOpenRF((HFileParam *)&rdio, false);
         if (err != noErr)
             return err;
-        err = xPBHOpenRF((HFileParam *)&wrio, FALSE);
+        err = xPBHOpenRF((HFileParam *)&wrio, false);
         if (err != noErr) {
-            xPBClose((ioParam *) &rdio, FALSE);
+            xPBClose((ioParam *) &rdio, false);
             return err;
         }
 #if defined(PREALLOCATE)
@@ -136,10 +136,10 @@ OSErr CopyFork(forktype fork, StringPtr name, LONGINT fromid,
     }
     
 #if defined(PREALLOCATE)
-    err = xPBAllocContig((ParmBlkPtr) &wrio, FALSE);
+    err = xPBAllocContig((ParmBlkPtr) &wrio, false);
     if (err != noErr) {
 	if (err != dskFulErr) {
-	    err = xPBAllocate((ParmBlkPtr) &wrio, FALSE);
+	    err = xPBAllocate((ParmBlkPtr) &wrio, false);
 	    if (err != noErr) {
 		doerror(err, "\pPBAllocate");
 /*-->*/         goto DONE;
@@ -149,7 +149,7 @@ OSErr CopyFork(forktype fork, StringPtr name, LONGINT fromid,
 /*-->*/     goto DONE;
 	}
     }
-    err = xPBSetEOF((ParmBlkPtr) &wrio, FALSE);
+    err = xPBSetEOF((ParmBlkPtr) &wrio, false);
     if (err != noErr) {
 	doerror(err, "\pPBSetEOF");
 /*-->*/ goto DONE;
@@ -162,9 +162,9 @@ OSErr CopyFork(forktype fork, StringPtr name, LONGINT fromid,
         rdio.ioParam.ioPosMode = fsFromMark;
         rdio.ioParam.ioPosOffset = 0;
 #if 0
-        err = xPBRead((ParmBlkPtr) &rdio, FALSE);
+        err = xPBRead((ParmBlkPtr) &rdio, false);
 #else /* 0 */
-        err = xPBRead((ioParam *) &rdio, FALSE);
+        err = xPBRead((ioParam *) &rdio, false);
 #endif /* 0 */
         
         if (err == noErr || (err == eofErr && rdio.ioParam.ioActCount > 0)) {
@@ -172,29 +172,29 @@ OSErr CopyFork(forktype fork, StringPtr name, LONGINT fromid,
             wrio.ioParam.ioReqCount = rdio.ioParam.ioActCount;
             wrio.ioParam.ioPosMode = fsFromMark;
             wrio.ioParam.ioPosOffset = 0;
-            err = xPBWrite((ioParam *) &wrio, FALSE);
+            err = xPBWrite((ioParam *) &wrio, false);
         }
         sizecopied++;
 	updatepiechart();
         while (GetNextEvent(keyDownMask, &event))
             if ((event.modifiers & cmdKey) && 
 				((event.message & charCodeMask) == '.')) {
-		err = xPBClose((ioParam *) &wrio, FALSE);
+		err = xPBClose((ioParam *) &wrio, false);
 		if (err != noErr)
 		    doerror(err, "\pPBClose");
 		wrio.fileParam.ioDirID = toid;
-		err = xPBHDelete((HFileParam *) &wrio, FALSE);
+		err = xPBHDelete((HFileParam *) &wrio, false);
 		if (err != noErr)
 		    doerror(err, "\pPBHDelete");
-		BreakCopy = TRUE;
+		BreakCopy = true;
 		return eofErr;
 	    }
     } while (err == noErr);
     
     sizecopied--;
 DONE:
-    xPBClose((ioParam *) &rdio, FALSE);
-    xPBClose((ioParam *) &wrio, FALSE);
+    xPBClose((ioParam *) &rdio, false);
+    xPBClose((ioParam *) &wrio, false);
     return err;
 }
 
@@ -217,30 +217,30 @@ INTEGER copy1file(INTEGER srcvrn, INTEGER dstvrn, LONGINT srcdirid,
     Str255 s2;
     
     if (BreakCopy)
-        return FALSE;
-    retval = TRUE;
+        return false;
+    retval = true;
     hpb.fileParam.ioVRefNum = srcvrn;
     hpb.fileParam.ioDirID = srcdirid;
     hpb.fileParam.ioFDirIndex = 0;
     hpb.fileParam.ioNamePtr = s;
-    err = xPBGetCatInfo((CInfoPBPtr) &hpb, FALSE);
+    err = xPBGetCatInfo((CInfoPBPtr) &hpb, false);
     if (err != noErr) {
 	doerror(err, "\pPBGetCatInfo");
-/*-->*/ return FALSE;
+/*-->*/ return false;
     }
     if (hpb.fileParam.ioFlFndrInfo.fdFlags & fInvisible)
-/*-->*/ return FALSE;
+/*-->*/ return false;
     if (cantcopydir == hpb.fileParam.ioDirID) {
         if (!doit)
             warnaboutincest();
-/*-->*/ return FALSE;
+/*-->*/ return false;
     }
     if (hpb.fileParam.ioFlAttrib & ISDIRMASK) {
 	srcdirid = hpb.fileParam.ioDirID;
 	if (doit) {
 	    hpb.fileParam.ioVRefNum = dstvrn;
 	    hpb.fileParam.ioDirID = dstdirid;
-            err = xPBDirCreate((HFileParam *)&hpb, FALSE);
+            err = xPBDirCreate((HFileParam *)&hpb, false);
             if (err == dupFNErr) {
 	        if (!verifydiroverwrite ||
 	    			  ask("\poverwrite directory", s) == OK) {
@@ -251,16 +251,16 @@ INTEGER copy1file(INTEGER srcvrn, INTEGER dstvrn, LONGINT srcdirid,
 	            delete1file(dstvrn, dstdirid, s);
 		    verifyfiledelete = savevfd;
 		    verifydirdelete = savevdd;
-		    err = xPBDirCreate((HFileParam *)&hpb, FALSE);
+		    err = xPBDirCreate((HFileParam *)&hpb, false);
 		    if (err != noErr) {
 	                doerror(err, "\pPBDirCreate");
-/*-->*/                 return FALSE;
+/*-->*/                 return false;
 		    }
 	        } else
-/*-->*/             return FALSE;
+/*-->*/             return false;
             } else if (err != noErr) {
 	        doerror(err, "\pPBDirCreate");
-/*-->*/         return FALSE;
+/*-->*/         return false;
 	    }
 	    dstdirid = hpb.fileParam.ioDirID;
         }
@@ -269,7 +269,7 @@ INTEGER copy1file(INTEGER srcvrn, INTEGER dstvrn, LONGINT srcdirid,
         for (hpb.fileParam.ioFDirIndex = 1; err == noErr;
  					   hpb.fileParam.ioFDirIndex++) {
  	    hpb.fileParam.ioDirID = srcdirid;
-	    err = xPBGetCatInfo((CInfoPBPtr)&hpb, FALSE);
+	    err = xPBGetCatInfo((CInfoPBPtr)&hpb, false);
 	    if (err == noErr)
 		retval &= copy1file(srcvrn, dstvrn, srcdirid, dstdirid,
 								s2, doit);
@@ -283,27 +283,27 @@ INTEGER copy1file(INTEGER srcvrn, INTEGER dstvrn, LONGINT srcdirid,
         }
 	hpb.fileParam.ioVRefNum = dstvrn;
 	hpb.fileParam.ioDirID = dstdirid;
-	err = xPBHCreate((HFileParam *)&hpb, FALSE);
+	err = xPBHCreate((HFileParam *)&hpb, false);
 	if (err == dupFNErr) {
 	    if (!verifyfileoverwrite || ask("\poverwrite file", s) == OK) {
 		savevfd = verifyfiledelete;
 		verifyfiledelete = 0;
 	        delete1file(dstvrn, dstdirid, s);
 		verifyfiledelete = savevfd;
-		err = xPBHCreate((HFileParam *)&hpb, FALSE);
+		err = xPBHCreate((HFileParam *)&hpb, false);
 		if (err != noErr) {
 	            doerror(err, "\pPBHCreate");
-/*-->*/             return FALSE;
+/*-->*/             return false;
 		}
 	    } else {
 	        sizecopied += (hpb.fileParam.ioFlLgLen + BUFSIZE - 1) 
 	        / BUFSIZE + 
 	        (hpb.fileParam.ioFlRLgLen + BUFSIZE - 1) / BUFSIZE;
-/*-->*/         return FALSE;
+/*-->*/         return false;
 	    }
 	} else if (err != noErr) {
 	    doerror(err, "\pPBHCreate");
-/*-->*/     return FALSE;
+/*-->*/     return false;
 	}
 	if (piechartdp) {
 	    GetDItem(piechartdp, FILENAMEITEM, &type, &h, &r);
@@ -313,18 +313,18 @@ INTEGER copy1file(INTEGER srcvrn, INTEGER dstvrn, LONGINT srcdirid,
     						           srcvrn, dstvrn);
 	if (err != eofErr) {
 	    doerror(err, "\pCopyFork");
-	    return FALSE;
+	    return false;
 	}
 	err = CopyFork(resourcefork, s, srcdirid, hpb.fileParam.ioDirID,
     						           srcvrn, dstvrn);
 	if (err != eofErr) {
 	    doerror(err, "\pCopyFork");
-	    return FALSE;
+	    return false;
 	}
-	err = xPBSetCatInfo((CInfoPBPtr)&hpb, FALSE);
+	err = xPBSetCatInfo((CInfoPBPtr)&hpb, false);
 	if (err != noErr) {
 	    doerror(err, "\pPBSetCatInfo");
-/*-->*/     return FALSE;
+/*-->*/     return false;
 	}
     }
     return retval;
@@ -340,18 +340,18 @@ INTEGER move1file(INTEGER srcvrn, INTEGER dstvrn, LONGINT srcdirid,
     ParamBlockRec pb;
     
     if (BreakCopy)
-        return FALSE;
-    retval = TRUE;
+        return false;
+    retval = true;
     if (dstvrn == srcvrn) {
         if (!doit)
-/*-->*/     return FALSE;
+/*-->*/     return false;
         cpb.ioCompletion = 0;
         cpb.ioNamePtr = s;
         cpb.ioVRefNum = srcvrn;
         cpb.ioNewName = 0;
         cpb.ioNewDirID = dstdirid;
         cpb.ioDirID = srcdirid;
-        err = xPBCatMove(&cpb, FALSE);
+        err = xPBCatMove(&cpb, false);
         if (err == badMovErr)
             warnaboutincest();
         else if (err == dupFNErr) {
@@ -360,10 +360,10 @@ INTEGER move1file(INTEGER srcvrn, INTEGER dstvrn, LONGINT srcdirid,
 	    hpb.hFileInfo.ioVRefNum = srcvrn;
 	    hpb.hFileInfo.ioFDirIndex = 0;
 	    hpb.hFileInfo.ioDirID = srcdirid;
-	    err = xPBGetCatInfo(&hpb, FALSE);
+	    err = xPBGetCatInfo(&hpb, false);
 	    if (err != noErr) {
 	        doerror(err, "\pPBGetCatInfo");
-/*-->*/         return FALSE;
+/*-->*/         return false;
 	    }
 	    if (hpb.hFileInfo.ioFlAttrib & ISDIRMASK) {
 	        if (!verifydiroverwrite ||
@@ -375,7 +375,7 @@ INTEGER move1file(INTEGER srcvrn, INTEGER dstvrn, LONGINT srcdirid,
 	            delete1file(dstvrn, dstdirid, s);
 		    verifyfiledelete = savevfd;
 		    verifydirdelete = savevdd;
-                    err = xPBCatMove(&cpb, FALSE);
+                    err = xPBCatMove(&cpb, false);
 	            if (err != noErr)
 	                doerror(err, "\pPBCatMove");
 		}
@@ -386,7 +386,7 @@ INTEGER move1file(INTEGER srcvrn, INTEGER dstvrn, LONGINT srcdirid,
 		    verifyfiledelete = 0;
 	            delete1file(dstvrn, dstdirid, s);
 		    verifyfiledelete = savevfd;
-                    err = xPBCatMove(&cpb, FALSE);
+                    err = xPBCatMove(&cpb, false);
 	            if (err != noErr)
 	                doerror(err, "\pPBCatMove");
 		}
@@ -395,14 +395,14 @@ INTEGER move1file(INTEGER srcvrn, INTEGER dstvrn, LONGINT srcdirid,
 	    doerror(err, "\pPBCatMove");
     } else {
         if (hpb.hFileInfo.ioFlFndrInfo.fdFlags & fInvisible)
-/*-->*/     return FALSE;
+/*-->*/     return false;
 	pb.volumeParam.ioVolIndex = 0;
 	pb.volumeParam.ioVRefNum = vrn;
 	pb.volumeParam.ioNamePtr = 0;
-	err = xPBGetVInfo((volumeParam *) &pb, FALSE);
+	err = xPBGetVInfo((volumeParam *) &pb, false);
 	if (err != noErr) {
 	    doerror(err, "\pPBGetVInfo");
-/*-->*/     return FALSE;
+/*-->*/     return false;
 	}
 	if (pb.volumeParam.ioVAtrb & VOLLOCKEDMASK) {
 	    if (doit) {
@@ -410,7 +410,7 @@ INTEGER move1file(INTEGER srcvrn, INTEGER dstvrn, LONGINT srcdirid,
 		     "\pFiles can not be moved from a locked disk." , 0, 0, 0);
 		StopAlert(ONEPARAMALERT, (ProcPtr) 0);
 	    }
-/*-->*/     return FALSE;
+/*-->*/     return false;
 	}
 
         if ((retval = copy1file(srcvrn, dstvrn, srcdirid, dstdirid, s, doit))
@@ -453,7 +453,7 @@ void getnameandfromdirid(Str255 *sp, LONGINT *fromdirid)
         cpb.hFileInfo.ioDirID = globalreply.fType;
         cpb.hFileInfo.ioVRefNum = -SFSaveDisk;
         cpb.hFileInfo.ioNamePtr = *sp;
-        PBGetCatInfo(&cpb, FALSE);
+        PBGetCatInfo(&cpb, false);
 	if (sp[0] != 0)
 	    *fromdirid = cpb.hFileInfo.ioFlParID;
 	else
@@ -484,15 +484,15 @@ void dotransfer(INTEGER (*fp)(INTEGER, INTEGER, LONGINT,
     }
     sizetocopy = 0;
     sizecopied = 0;
-    BreakCopy = FALSE;    
-    (*fp)(-SFSaveDisk, -destdisk, fromdirid, destdir, sp, FALSE);
+    BreakCopy = false;    
+    (*fp)(-SFSaveDisk, -destdisk, fromdirid, destdir, sp, false);
     GetPort(&saveport);
     
     pb.volumeParam.ioCompletion = 0;
     pb.volumeParam.ioNamePtr = 0;
     pb.volumeParam.ioVRefNum = -destdisk;
     pb.volumeParam.ioVolIndex = 0;
-    err = xPBGetVInfo((volumeParam *)&pb, FALSE);
+    err = xPBGetVInfo((volumeParam *)&pb, false);
     if (err != noErr) {
 	doerror(err, "\pPBGetVInfo");
 	return;
@@ -506,7 +506,7 @@ void dotransfer(INTEGER (*fp)(INTEGER, INTEGER, LONGINT,
 
     makepiechart();
     updatepiechart();
-    (*fp)(-SFSaveDisk, -destdisk, fromdirid, destdir, sp, TRUE);
+    (*fp)(-SFSaveDisk, -destdisk, fromdirid, destdir, sp, true);
     updatepiechart();
     SetPort(saveport);
     if (piechartdp)
@@ -535,22 +535,22 @@ INTEGER docopydisk( DialogPtr dp )
     sizecopied = 0;
     piechartdp = (GrafPtr) 0;
     GetPort(&saveport);
-    BreakCopy = FALSE;
+    BreakCopy = false;
     pb.volumeParam.ioCompletion = 0;
     pb.volumeParam.ioNamePtr = s;
     pb.volumeParam.ioVRefNum = -SFSaveDisk;
     pb.volumeParam.ioVolIndex = 0;
-    err = xPBGetVInfo((volumeParam *)&pb, FALSE);
+    err = xPBGetVInfo((volumeParam *)&pb, false);
     if (err != noErr) {
 	doerror(err, "\pPBGetVInfo");
 	return 0;
     }
-    copy1file(-SFSaveDisk, -destdisk, 1, destdir, s, FALSE);
+    copy1file(-SFSaveDisk, -destdisk, 1, destdir, s, false);
     pb.volumeParam.ioCompletion = 0;
     pb.volumeParam.ioNamePtr = 0;
     pb.volumeParam.ioVRefNum = -destdisk;
     pb.volumeParam.ioVolIndex = 0;
-    err = xPBGetVInfo((volumeParam *)&pb, FALSE);
+    err = xPBGetVInfo((volumeParam *)&pb, false);
     if (err != noErr) {
 	doerror(err, "\pPBGetVInfo");
 	return 0;
@@ -564,7 +564,7 @@ INTEGER docopydisk( DialogPtr dp )
 
     makepiechart();
     updatepiechart();
-    copy1file(-SFSaveDisk, -destdisk, 1, destdir, s, TRUE);
+    copy1file(-SFSaveDisk, -destdisk, 1, destdir, s, true);
     updatepiechart();
     SetPort(saveport);
     if (piechartdp)

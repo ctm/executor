@@ -152,7 +152,7 @@ Executor::make_style_run_at (TEStyleHandle te_style, int16 sel)
 /* return the style index for the style that has the text attributes
    `attrs'.  if no such style exists, create it.
 
-   assign `count_changed_p' to TRUE if no such style existed, and it
+   assign `count_changed_p' to true if no such style existed, and it
    was necessary to allocate a new style
 
    if `incr_count_p' this function increases the style reference on
@@ -164,7 +164,7 @@ Executor::get_style_index (TEStyleHandle te_style, TextStyle *attrs, int incr_co
   /* these hold the swapped cached height, ascent for the style we are
      searching for */
   GUEST<int16> cached_height = CWC(-1), cached_ascent = CWC(-1);
-  int cache_filled_p = FALSE;
+  int cache_filled_p = false;
   STHandle style_table;
   STElement *st_elt;
   int st_i;
@@ -192,7 +192,7 @@ Executor::get_style_index (TEStyleHandle te_style, TextStyle *attrs, int incr_co
 	    {
 	      cached_height = ST_ELT_HEIGHT_X (st_elt);
 	      cached_ascent = ST_ELT_ASCENT_X (st_elt);
-	      cache_filled_p = TRUE;
+	      cache_filled_p = true;
 	    }
 	}
     }
@@ -426,7 +426,7 @@ te_add_attrs_to_range (TEHandle te,
 	   
 	   /* `current_run' valid over call to `get_style_index ()'
 	      since `te_style' is locked */
-	   new_style_index = get_style_index (te_style, &new_attrs, TRUE);
+	   new_style_index = get_style_index (te_style, &new_attrs, true);
 	   release_style_index (te_style, orig_style_index);
 	   
 	   STYLE_RUN_STYLE_INDEX_X (current_run) = CW (new_style_index);
@@ -600,7 +600,7 @@ P4 (PUBLIC pascal trap, void, TEStylInsert, Ptr, text, LONGINT, length,
     StScrpHandle, hST, TEHandle, te)
 {
   TE_SLAM (te);
-  ROMlib_tedoitall (te, text, length, TRUE, hST);
+  ROMlib_tedoitall (te, text, length, true, hST);
   TE_SLAM (te);
 }
 
@@ -738,7 +738,7 @@ P1 (PUBLIC pascal trap, void, TEStylPaste, TEHandle, te)
       DisposHandle (hText);
       
       /* remove the selected text */
-      ROMlib_tedoitall (te, NULL, 0, FALSE, NULL);
+      ROMlib_tedoitall (te, NULL, 0, false, NULL);
       return;
     }
   
@@ -753,7 +753,7 @@ P1 (PUBLIC pascal trap, void, TEStylPaste, TEHandle, te)
   LOCK_HANDLE_EXCURSION_1
     (hText,
      {
-       ROMlib_tedoitall (te, STARH (hText), length, FALSE, scrap);
+       ROMlib_tedoitall (te, STARH (hText), length, false, scrap);
      });
   if (scrap)
     DisposHandle ((Handle) scrap);
@@ -911,7 +911,7 @@ P5 (PUBLIC pascal trap, void, TEReplaceStyle, int16, mode,
 
 	  /* `get_style_index' may resize `style_table', so `style'
 	     is no longer valid */
-	  new_style_index = get_style_index (te_style, new_attrs, TRUE);
+	  new_style_index = get_style_index (te_style, new_attrs, true);
 	  release_style_index (te_style, orig_style_index);
 	  
 	  RUN_STYLE_INDEX_X (run) = CW (new_style_index);
@@ -950,7 +950,7 @@ P3 (PUBLIC pascal trap, BOOLEAN, TEContinuousStyle, GUEST<INTEGER> *, modep,
 	TS_SIZE_X (ts_out) = PORT_TX_SIZE_X (thePort);
       if (*modep & CWC (doColor))
 	TS_COLOR (ts_out) = ROMlib_black_rgb_color;
-      return TRUE;
+      return true;
     }
 
   /* just slam on entry, this function doesn't modify `teh' */
@@ -987,7 +987,7 @@ P3 (PUBLIC pascal trap, BOOLEAN, TEContinuousStyle, GUEST<INTEGER> *, modep,
       else
 	{
 	  /* get the style of the character preceeding the insertion
-	     point; in this case we always return `TRUE', since a single
+	     point; in this case we always return `true', since a single
 	     character is contiguous */
 	  insertion_point = sel_start;
 	  for (run_i = TE_STYLE_N_RUNS (te_style) - 1; run_i >= 0; run_i --)
@@ -1013,7 +1013,7 @@ P3 (PUBLIC pascal trap, BOOLEAN, TEContinuousStyle, GUEST<INTEGER> *, modep,
 	TS_SIZE_X (ts_out) = TS_SIZE_X (attr);
       if (*modep & CWC (doColor))
 	TS_COLOR (ts_out) = TS_COLOR (attr);
-      return TRUE;
+      return true;
     }
   else
     {

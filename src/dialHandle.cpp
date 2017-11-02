@@ -66,7 +66,7 @@ P3(PUBLIC pascal, BOOLEAN, ROMlib_myfilt, DialogPeek, dp, EventRecord *, evt,
 	}
 	HSetState(MR(((DialogPeek) dp)->items), flags);
     }
-    return FALSE;
+    return false;
 }
 
 #define DIALOGEVTS  \
@@ -177,7 +177,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
 	     fp2 = fp;
 	   else
 	     fp2 = (ProcPtr) P_ROMlib_myfilt;
-	   for (done = FALSE; !done;)
+	   for (done = false; !done;)
 	     {
 	       WindowPtr temp_wp;
 	       bool mousedown_p;
@@ -207,14 +207,14 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
 		 {
 		   /* #### not sure what this means */
 		   /* above callpascal might need to be `& 0xF0' */
-		   done = TRUE;
+		   done = true;
 		   break;
 		 }
 	       else
 		 {
 		   if (IsDialogEvent (&evt)
 		       && DialogSelect (&evt, &ndp, item))
-		     done = TRUE;
+		     done = true;
 		 }
 	     }
 	 }
@@ -255,7 +255,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
 	     fp2 = fp;
 	   else
 	     fp2 = (ProcPtr) P_ROMlib_myfilt;
-	   for (done = FALSE; !done; )
+	   for (done = false; !done; )
 	     {
 	       WindowPtr temp_wp;
 	       bool mousedown_p;
@@ -281,7 +281,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
 		   /* #### not sure what this means */
 		   /* above callpascal might need to be `& 0xF0' */
 		   
-		   done = TRUE;
+		   done = true;
 		   break;
 		 }
 	       else if (mousedown_p
@@ -293,7 +293,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
 		 {
 		   if (IsDialogEvent (&evt)
 		       && DialogSelect (&evt, &ndp, item))
-		     done = TRUE;
+		     done = true;
 		 }
 	     }
 	 }
@@ -319,7 +319,7 @@ P1(PUBLIC pascal trap, BOOLEAN, IsDialogEvent,		/* IMI-416 */
 /*-->*/ return evt->what != CWC(mouseDown) || (FindWindow(p,
 				&wp) == inContent && MR(wp) == (WindowPtr) dp);
     }
-    return FALSE;
+    return false;
 }
 
 bool
@@ -357,16 +357,16 @@ Executor::get_item_style_info (DialogPtr dp, int item_no,
 	    }
 	  
 	  *flags_return = flags;
-	  return TRUE;
+	  return true;
 	}
     }
-  return FALSE;
+  return false;
 }
 
 void
 Executor::ROMlib_drawiptext (DialogPtr dp, itmp ip, int item_no)
 {
-  bool restore_draw_state_p = FALSE;
+  bool restore_draw_state_p = false;
   draw_state_t draw_state;
   uint16 flags;
   item_style_info_t style_info;
@@ -375,7 +375,7 @@ Executor::ROMlib_drawiptext (DialogPtr dp, itmp ip, int item_no)
   if (get_item_style_info (dp, item_no, &flags, &style_info))
     {
       draw_state_save (&draw_state);
-      restore_draw_state_p = TRUE;
+      restore_draw_state_p = true;
       
       if (flags & TEdoFont)
 	TextFont (CW (style_info.font));
@@ -584,7 +584,7 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
   SignedByte flags;
   
   dp = (DialogPeek) FrontWindow();
-  retval = FALSE;
+  retval = false;
   *itemp = CWC (-1);
   switch (Cx(evt->what))
     {
@@ -609,7 +609,7 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
 	{
 	  if (Cx(dp->editField) != i-1)
 	    ROMlib_dpntoteh(dp, i);
-	  TEClick(localp, (Cx(evt->modifiers)&shiftKey) ? TRUE : FALSE,
+	  TEClick(localp, (Cx(evt->modifiers)&shiftKey) ? true : false,
 		  MR(dp->textH));
         }
       else if (CB(ip->itmtype) & ctrlItem)
@@ -625,7 +625,7 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
       if (itemenabled)
 	{
 	  *itemp = CW(i);
-	  retval = TRUE;
+	  retval = true;
 	  break;
         }
       break;
@@ -652,7 +652,7 @@ P3 (PUBLIC pascal trap, BOOLEAN, DialogSelect,		/* IMI-417 */
 	{
 	  warning_unexpected ("couldn't resolve editField -- dp = %p, "
 			      "CW (*itemp) = %d", dp, CW (*itemp));
-	  retval = FALSE;
+	  retval = false;
 	}
       HSetState(MR(((DialogPeek) dp)->items), flags);
       break;

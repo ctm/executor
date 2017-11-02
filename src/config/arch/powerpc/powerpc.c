@@ -119,5 +119,5 @@ arch_init (void)
   type = cpu_type ();
   if (type)
     gestalt_set_cpu_type (type);
-  return TRUE;
+  return true;
 }

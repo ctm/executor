@@ -39,8 +39,8 @@ uint16 dos_pm_cs;
 /* Attempts to allocate a block of DOS memory of size SIZE which does
  * not span two 64K banks.  We need to make this guarantee so that calls
  * to floppy disk BIOS routines will work (DMA hardware requires
- * things not to cross 64K boundaries).  Returns TRUE iff successful,
- * else FALSE.
+ * things not to cross 64K boundaries).  Returns true iff successful,
+ * else false.
  */
 static bool
 alloc_single_bank_dos_block (int size, uint16 *segp, uint16 *selp)
@@ -56,7 +56,7 @@ alloc_single_bank_dos_block (int size, uint16 *segp, uint16 *selp)
 
   /* Default values. */
   seg = sel = -1;
-  success_p = FALSE;
+  success_p = false;
 
   /* Allocate a bunch of selectors until we happen to get one that
    * doesn't cross a 64K mark.
@@ -78,7 +78,7 @@ alloc_single_bank_dos_block (int size, uint16 *segp, uint16 *selp)
        */
       if ((seg >> 12) == ((seg + paragraphs - 1) >> 12))
 	{
-	  success_p = TRUE;
+	  success_p = true;
 	  warning_trace_info (NULL_STRING);
 	  break;
 	}
@@ -121,7 +121,7 @@ init_dos_memory (void)
   /* Allocate a DOS buffer. */
   if (!alloc_single_bank_dos_block (DOS_BUF_SIZE, &dos_buf_segment,
 				    &dos_buf_selector))
-    return FALSE;
+    return false;
 
   /* Wire these down so we can use them at interrupt time. */
   dpmi_lock_memory (&dos_rm_selector, sizeof dos_rm_selector);
@@ -139,5 +139,5 @@ init_dos_memory (void)
   __dpmi_int_ss = dos_buf_segment;
   __dpmi_int_sp = DOS_STACK_TOP;
 
-  return TRUE;
+  return true;
 }

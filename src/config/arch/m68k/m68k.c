@@ -15,5 +15,5 @@ arch_init (void)
 {
   memset (&cpu_state, 0, sizeof cpu_state);
   callback_init ();
-  return TRUE;
+  return true;
 }

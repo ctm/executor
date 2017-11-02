@@ -173,7 +173,7 @@ extern Handle ROMlib_mgetres2(resmaphand map, resref *rr);
 			  ((type) >> 16) & 0xFF,		   \
 			  ((type) >>  8) & 0xFF,		   \
 			  (type) & 0xFF, c_string);		   \
-  } while (FALSE)
+  } while (false)
 
 #else
 #define warn_resource_not_found(type, id)

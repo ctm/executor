@@ -21,7 +21,7 @@ char ROMlib_rcsid_sound[] =
 
 using namespace Executor;
 
-/* TRUE when we want to pretend this host has no sound support. */
+/* true when we want to pretend this host has no sound support. */
 bool Executor::sound_disabled_p;
 
 /*
@@ -41,7 +41,7 @@ A0(PUBLIC, void, StopSound)
 
 A0(PUBLIC, BOOLEAN, SoundDone)
 {
-    return TRUE;
+    return true;
 }
 
 A1(PUBLIC, void, GetSoundVol, INTEGER *, volp)
@@ -200,7 +200,7 @@ static const uint8 mix8[] =
   0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
 };
 
-/* Return TRUE if the buffer was used up.  I hate value-result parms,
+/* Return true if the buffer was used up.  I hate value-result parms,
    but oh well.  A NULL orig_outbuf is OK; the resampled waveform
    will simply be lost. */
 
@@ -255,7 +255,7 @@ resample (uint8 *inbuf, uint8 *orig_outbuf, unsigned int insize,
 
   *chan_time = out_t;
   if (SND_DEMOTE (in_t) < insize - 1)
-    return FALSE;
+    return false;
   else
     {
       *current_start = (SND_PROMOTE (out_t)
@@ -263,7 +263,7 @@ resample (uint8 *inbuf, uint8 *orig_outbuf, unsigned int insize,
 			- snd_fixed_div (in_t, step));
       *prev_samp = inbuf[insize - 1];
 
-      return TRUE;
+      return true;
     }
 }
 

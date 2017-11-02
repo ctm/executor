@@ -142,33 +142,33 @@ P4 (PUBLIC pascal trap, void, StdArc, GrafVerb, verb, Rect *, r,
     ewall = findwall(r, ept.h, ept.v);
     LineTo(h = spt.h, v = spt.v);
 
-    for (done = FALSE; !done;)  
+    for (done = false; !done;)  
         switch (findwall(r, h, v)) {
         case RTop:
             if (ewall == RTop && h <= ept.h) {
                 LineTo(ept.h, top);
-                done = TRUE;
+                done = true;
                 break;
             }
             LineTo(h = right, v = top);
         case RRight:
             if (ewall == RRight && v <= ept.v) {
                 LineTo(right, ept.v);
-                done = TRUE;
+                done = true;
                 break;
             }
             LineTo(h = right, v = bottom);
         case RBottom:
             if (ewall == RBottom && h >= ept.h) {
                 LineTo(ept.h, bottom);
-                done = TRUE;
+                done = true;
                 break;
             }
             LineTo(h = left, v = bottom);
         case RLeft:
             if (ewall == RLeft && v >= ept.v) {
                 LineTo(left, ept.v);
-                done = TRUE;
+                done = true;
                 break;
             }
             LineTo(h = left, v = top);

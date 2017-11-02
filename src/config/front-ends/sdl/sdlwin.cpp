@@ -55,8 +55,8 @@ Executor::vdriver_opt_register (void)
 {
 }
 
-PUBLIC bool ROMlib_fullscreen_p = FALSE;
-PUBLIC bool ROMlib_hwsurface_p = FALSE;
+PUBLIC bool ROMlib_fullscreen_p = false;
+PUBLIC bool ROMlib_hwsurface_p = false;
 
 bool
 Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
@@ -71,7 +71,7 @@ Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
 #endif
 
   if ( SDL_Init(flags) < 0 )
-    return(FALSE);
+    return(false);
   sdl_events_init();
 
 #if 0
@@ -98,7 +98,7 @@ Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
 
   /* Clean up on exit */
   atexit(vdriver_shutdown);
-  return(TRUE);
+  return(true);
 }
 
 bool
@@ -117,9 +117,9 @@ Executor::vdriver_acceptable_mode_p (int width, int height, int bpp,
     bpp = vdriver_bpp;
 
   if ( ! SDL_VideoModeOK(width, height, bpp, video_flags) )
-    retval = FALSE;
+    retval = false;
   else if ( grayscale_p != vdriver_grayscale_p )
-    retval = FALSE;
+    retval = false;
   else
     retval = bpp <= 8;
 
@@ -163,13 +163,13 @@ Executor::vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
   if ( bpp == 0 )
     bpp = vdriver_bpp;
 
-  if ( ! vdriver_acceptable_mode_p(width, height, bpp, grayscale_p, FALSE) )
-    return(FALSE);
+  if ( ! vdriver_acceptable_mode_p(width, height, bpp, grayscale_p, false) )
+    return(false);
 
   /* Set the video mode */
   screen = SDL_SetVideoMode(width, height, bpp, video_flags);
   if ( screen == NULL )
-    return(FALSE);
+    return(false);
 
   /* Fill the vdriver globals */
   vdriver_width = screen->w;
@@ -181,7 +181,7 @@ Executor::vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
     {
       /* WARNING!  This results in surface memory that is unsafe to access! */
       if ( SDL_LockSurface(screen) < 0 )
-        return(FALSE);
+        return(false);
       vdriver_fbuf = (uint8 *)screen->pixels;
       SDL_UnlockSurface(screen);
       fprintf(stderr, "Warning: Executor performing unsafe video access\n");
@@ -195,7 +195,7 @@ Executor::vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
   ROMlib_recenter_window ();
 #endif
 
-  return(TRUE);
+  return(true);
 }
 
 void
@@ -293,7 +293,7 @@ Executor::host_flush_shadow_screen (void)
       vdriver_shadow_fbuf = (uint8_t*) malloc(vdriver_row_bytes * vdriver_height);
       memcpy (vdriver_shadow_fbuf, vdriver_fbuf, 
                                  vdriver_row_bytes * vdriver_height);
-      vdriver_update_screen (0, 0, vdriver_height, vdriver_width, FALSE);
+      vdriver_update_screen (0, 0, vdriver_height, vdriver_width, false);
     }
   else if (find_changed_rect_and_update_shadow ((uint32 *) vdriver_fbuf,
 						(uint32 *) vdriver_shadow_fbuf,
@@ -305,6 +305,6 @@ Executor::host_flush_shadow_screen (void)
     {
       vdriver_update_screen (top_long, (left_long * 32) >> vdriver_log2_bpp,
 			     bottom_long,
-			     (right_long * 32) >> vdriver_log2_bpp, FALSE);
+			     (right_long * 32) >> vdriver_log2_bpp, false);
     }
 }

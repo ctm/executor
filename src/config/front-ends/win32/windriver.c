@@ -80,7 +80,7 @@ host_flush_shadow_screen (void)
       vdriver_shadow_fbuf = malloc(vdriver_row_bytes * vdriver_height);
       memcpy (vdriver_shadow_fbuf, vdriver_fbuf, 
                                  vdriver_row_bytes * vdriver_height);
-      vdriver_update_screen (0, 0, vdriver_height, vdriver_width, FALSE);
+      vdriver_update_screen (0, 0, vdriver_height, vdriver_width, false);
     }
   else if (find_changed_rect_and_update_shadow ((uint32 *) vdriver_fbuf,
 						(uint32 *) vdriver_shadow_fbuf,
@@ -92,6 +92,6 @@ host_flush_shadow_screen (void)
     {
       vdriver_update_screen (top_long, (left_long * 32) >> vdriver_log2_bpp,
 			     bottom_long,
-			     (right_long * 32) >> vdriver_log2_bpp, FALSE);
+			     (right_long * 32) >> vdriver_log2_bpp, false);
     }
 }

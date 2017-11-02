@@ -59,11 +59,11 @@ parse_base_number (const char *s, const char *digits, long long *vp,
 
   /* Make sure there's at least one digit. */  
   if (s[0] == '\0')
-    return FALSE;
+    return false;
 
   radix = strlen (digits);
 
-  for (v = 0, divisor = 1, found_dot_p = FALSE; *s; s++)
+  for (v = 0, divisor = 1, found_dot_p = false; *s; s++)
     {
       const char *p;
       int n;
@@ -72,17 +72,17 @@ parse_base_number (const char *s, const char *digits, long long *vp,
       if (n == '.')
 	{
 	  if (found_dot_p)  /* Only one decimal point allowed. */
-	    return FALSE;
-	  found_dot_p = TRUE;
+	    return false;
+	  found_dot_p = true;
 	}
       else
 	{
 	  p = strchr (digits, n);
 	  if (p == NULL)
-	    return FALSE;
+	    return false;
 	  if (v > 0x7FFFFFFFFFFFFFFFLL / radix    /* Check overflow. */
 	      || divisor > 0x7FFFFFFFFFFFFFFFLL / radix)
-	    return FALSE;
+	    return false;
 	  v = (v * radix) + (p - digits);
 	  if (found_dot_p)
 	    divisor *= radix;
@@ -91,13 +91,13 @@ parse_base_number (const char *s, const char *digits, long long *vp,
 
   *vp = v;
   *divisorp = divisor;
-  return TRUE;
+  return true;
 }
 
 
-/* Parse a number specified in a flexible format.  Returns TRUE iff
+/* Parse a number specified in a flexible format.  Returns true iff
  * the parse was successful and the result didn't exceed 32 bits,
- * else FALSE.  Returns by reference the parsed value in *val.
+ * else false.  Returns by reference the parsed value in *val.
  *
  * Each number may have an optional preceding "+" or "-" sign, which
  * do the obvious thing.
@@ -143,7 +143,7 @@ Executor::parse_number (string orig_num, int32 *val,
 
   /* Empty string is an error.  We check this here to simplify checks later. */
   if (orig_num == "" || orig_num[0] == '\0')
-    return FALSE;
+    return false;
 
   num = (char *) alloca (orig_num.length() + 1);
   strcpy (num, orig_num.c_str());
@@ -165,19 +165,19 @@ Executor::parse_number (string orig_num, int32 *val,
 
   /* Make sure we parsed successfully. */
   if (!parsed_p)
-    return FALSE;
+    return false;
 
   /* Compute the resulting number by applying the scaling factors. */
   orig_raw_val = raw_val;
   raw_val <<= shift_factor;
   if (raw_val >> shift_factor != orig_raw_val)  /* exceeded precision? */
-    return FALSE;
+    return false;
   raw_val /= div;
 
   /* Make sure we didn't exceed the precision of the result. */
   v = (int32)raw_val;
   if (v != raw_val)
-    return FALSE;
+    return false;
 
   /* Round up if so specified. */
   if (round_up_to_multiple_of > 1)
@@ -188,5 +188,5 @@ Executor::parse_number (string orig_num, int32 *val,
 
   *val = negate_p ? -v : v;
 
-  return TRUE;
+  return true;
 }

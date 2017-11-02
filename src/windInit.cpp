@@ -43,14 +43,14 @@ char ROMlib_rcsid_windInit[] =
 
 using namespace Executor;
 
-PUBLIC BOOLEAN Executor::ROMlib_dirtyvariant = FALSE;
+PUBLIC BOOLEAN Executor::ROMlib_dirtyvariant = false;
 
 bool Executor::system_file_version_skew_p;
 
 static void
 exit_executor (void)
 {
-  ROMlib_exit = TRUE;
+  ROMlib_exit = true;
   ExitToShell ();
 }
 
@@ -83,7 +83,7 @@ P0 (PUBLIC pascal trap, void, InitWindows)
 		    "This is very bad.  You will have to reinstall %s"
 		    " before\n"
 		    "Executor will work again.\n", reinstall.c_str());
-	   ROMlib_exit = TRUE;
+	   ROMlib_exit = true;
 	   ExitToShell ();
 	 }
        new_ph = GetPixPat (deskPatID);
@@ -147,9 +147,9 @@ P0 (PUBLIC pascal trap, void, InitWindows)
       
       n_vals = (ROMlib_creatorsp->head.length /
 		sizeof ROMlib_creatorsp->vals[0]);
-      for (found_p = FALSE, i = 0; !found_p && i < n_vals; ++i)
+      for (found_p = false, i = 0; !found_p && i < n_vals; ++i)
 	if (ROMlib_creatorsp->vals[i] == (uint32) ROMlib_creator)
-	  found_p = TRUE;
+	  found_p = true;
 
       if (!found_p)
 	{
@@ -168,7 +168,7 @@ P0 (PUBLIC pascal trap, void, InitWindows)
     } 
 
   {
-    static bool issued_system_file_version_skew_warning_p = FALSE;
+    static bool issued_system_file_version_skew_warning_p = false;
     
     if (system_file_version_skew_p
 	&& ! issued_system_file_version_skew_warning_p)
@@ -179,12 +179,12 @@ Executor may die without warning because of this mismatch", 0,
 		      "Continue", "Exit", NULL,
 		      NULL, exit_executor, NULL);
       }
-    issued_system_file_version_skew_warning_p = TRUE;
+    issued_system_file_version_skew_warning_p = true;
   }
 
 #if defined (MSDOS)
   {
-    static bool issued_cd_warning_p = FALSE;
+    static bool issued_cd_warning_p = false;
 
     if (cd_mounted_by_trickery_p && !issued_cd_warning_p)
       {
@@ -215,7 +215,7 @@ Executor may die without warning because of this mismatch", 0,
 	      }
 	    free (warning_file);
 	  }
-        issued_cd_warning_p = TRUE;
+        issued_cd_warning_p = true;
       }
   }
 #endif  
@@ -268,7 +268,7 @@ Executor may die without warning because of this mismatch", 0,
     return;
 
   /* only issue warnings once */
-  size_info.application_p = FALSE;
+  size_info.application_p = false;
 
   if ((! size_info.size_resource_present_p
        || (size_info.size_flags & SZis32BitCompatible) != SZis32BitCompatible)
@@ -474,7 +474,7 @@ ROMlib_new_window_common (WindowPeek w,
     SetEmptyRgn (PORT_VIS_REGION (w));
   if (t_w)
     {
-      HiliteWindow ((WindowPtr) t_w, FALSE);
+      HiliteWindow ((WindowPtr) t_w, false);
       CurDeactive = RM ((WindowPtr)t_w);
     }
 
@@ -510,7 +510,7 @@ P8 (PUBLIC pascal trap, WindowPtr, NewWindow,
 	  size = sizeof (DialogRecord);
 	else
 	  size = sizeof *w;
-	w = (WindowPeek) _NewPtr_flags (size, FALSE, TRUE);
+	w = (WindowPeek) _NewPtr_flags (size, false, true);
 #else
 	w = (WindowPeek) NewPtr (sizeof *w);
 #endif
@@ -633,7 +633,7 @@ P1(PUBLIC pascal trap, void, CloseWindow, WindowPtr, w)
 	wptmp = ROMlib_firstvisible ((WindowPtr) WINDOW_NEXT_WINDOW (w));
 	if (wptmp)
 	  {
-	    HiliteWindow ((WindowPtr) wptmp, TRUE);
+	    HiliteWindow ((WindowPtr) wptmp, true);
 	    CurActivate = RM ((WindowPtr)wptmp);
 	  }
       }
@@ -695,7 +695,7 @@ P1(PUBLIC pascal trap, void, CloseWindow, WindowPtr, w)
  * but just replacing the for loop causes many apps to die.  It could
  * be because some window information that DisposeControl wants is
  * destroyed already, or it could be DisposeControl or KillControl
- * makes some FALSE assumptions.  More tests need to be written.
+ * makes some false assumptions.  More tests need to be written.
  */
 #if 1
     for (c = WINDOW_CONTROL_LIST (w); c;)

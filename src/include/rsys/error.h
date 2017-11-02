@@ -61,11 +61,11 @@ extern "C" {
 
 #define ERROR_BIT_MASK(err) (1 << (err))
 
-/* Returns TRUE iff that error is supported by this compile. */
+/* Returns true iff that error is supported by this compile. */
 #define ERROR_SUPPORTED_P(err) \
 ((ERROR_SUPPORTED_MASK & ERROR_BIT_MASK (err)) != 0)
 
-/* Returns TRUE iff that error is enabled at runtime. */
+/* Returns true iff that error is enabled at runtime. */
 #define ERROR_ENABLED_P(err) \
 ((ROMlib_debug_level & ERROR_SUPPORTED_MASK & ERROR_BIT_MASK (err)) != 0)
 

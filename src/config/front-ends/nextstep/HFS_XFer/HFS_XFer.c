@@ -109,7 +109,7 @@ void setcurdestname(INTEGER disk, LONGINT dir)
     hpb.dirInfo.ioDrDirID = dir;
     TESetText((Ptr) 0, 0, destdirname);
     do {
-        xPBGetCatInfo(&hpb, FALSE);
+        xPBGetCatInfo(&hpb, false);
         /* insert name : */
         TEInsert((Ptr) s+1, (LONGINT) s[0], destdirname);
         TEInsert((Ptr) ":", 1, destdirname);
@@ -177,11 +177,11 @@ pascal BOOLEAN myfilterproc(DialogPtr dp, EventRecord *event, INTEGER *item)
 		*item = getOpen;
 	    else
 		*item = ACTIONBUTTON;
-/*-->*/     return TRUE;
+/*-->*/     return true;
 	} else if ((event->message & 0xFF) == '.' &&
 						(event->modifiers & cmdKey)) {
 	    *item = Cancel;
-/*-->*/     return TRUE;
+/*-->*/     return true;
 	}
 	break;
     case updateEvt:
@@ -189,7 +189,7 @@ pascal BOOLEAN myfilterproc(DialogPtr dp, EventRecord *event, INTEGER *item)
 	    updatedestwin(-destdisk, destdir);
 	break;
     }
-    return FALSE;
+    return false;
 }
 
 INTEGER dodelete(DialogPtr dp)
@@ -242,12 +242,12 @@ pascal Boolean dirsfilter(DialogPtr dp, EventRecord *ep, INTEGER *itemhit)
     case keyDown:
 	if ((ep->message & 0xFF) == '\r') {
 	    *itemhit = getOpen;
-/*-->*/     return TRUE;
+/*-->*/     return true;
 	}
 	break;
     case nullEvent:
 	*itemhit = 100;
-/*-->*/ return TRUE;
+/*-->*/ return true;
     case updateEvt:
 	if ((WindowPtr)ep->message == destdirwin) {
 	    updatedestwin(-SFSaveDisk, CurDirStore);
@@ -255,19 +255,19 @@ pascal Boolean dirsfilter(DialogPtr dp, EventRecord *ep, INTEGER *itemhit)
 	}
 	break;
     }
-    return FALSE;
+    return false;
 }
 
 pascal INTEGER DirDlgHook(INTEGER itemhit, DialogPtr dp)
 {
-    static INTEGER needupdate = TRUE;
+    static INTEGER needupdate = true;
 
     if (needupdate) {
 	invaldestwin();
-	needupdate = FALSE;
+	needupdate = false;
     }
     if (itemhit != 100)
-	needupdate = TRUE;
+	needupdate = true;
     if (itemhit == SELECTBUTTON)
         return getOpen;
     else
@@ -304,7 +304,7 @@ void getnewdest()
 	pb.volumeParam.ioNamePtr = 0;
 	pb.volumeParam.ioCompletion = 0;
 	pb.volumeParam.ioVRefNum = -savedestdisk;
-	if (PBHGetVInfo(&pb, FALSE)==noErr && pb.volumeParam.ioVDrvInfo != 0) {
+	if (PBHGetVInfo(&pb, false)==noErr && pb.volumeParam.ioVDrvInfo != 0) {
 	    destdisk = savedestdisk;
 	    destdir = savedestdir;
 	    invaldestwin();
@@ -323,7 +323,7 @@ INTEGER hookcommon(INTEGER item, DialogPtr dp, INTEGER (*pp)(DialogPtr dp))
     static INTEGER needtoupdatedestdisk;
     
     if (needtoupdatedestdisk) {
-	needtoupdatedestdisk = FALSE;
+	needtoupdatedestdisk = false;
 	destdisk = SFSaveDisk;
 	destdir = CurDirStore;
 	invaldestwin();
@@ -344,7 +344,7 @@ INTEGER hookcommon(INTEGER item, DialogPtr dp, INTEGER (*pp)(DialogPtr dp))
 	break;
     case getEject:
 	if (destdisk == SFSaveDisk)
-	    needtoupdatedestdisk = TRUE;
+	    needtoupdatedestdisk = true;
 	break;
     default:
 	break;
@@ -365,7 +365,7 @@ void hideitem(DialogPtr dp, INTEGER item)
     }
     if (type == editText) {
         ((DialogPeek)dp)->editField = -1;
-        SizeWindow(dp, dp->portRect.right - dp->portRect.left, 220, TRUE);
+        SizeWindow(dp, dp->portRect.right - dp->portRect.left, 220, true);
     }
     OffsetRect(&r, 8000, 8000);
     type += itemDisable;
@@ -397,7 +397,7 @@ pascal INTEGER copydiskhook(INTEGER item, DialogPtr dp)
     if (item == -1) {
 	ShowWindow(destdirwin);
         SetOrigin(240, 0);
-        SizeWindow(dp, 250, dp->portRect.bottom - dp->portRect.top, TRUE);
+        SizeWindow(dp, 250, dp->portRect.bottom - dp->portRect.top, true);
         setactionbutton(dp, (StringPtr)"\pCopy");
         hideitem(dp, getOpen);
         hideitem(dp, TEXTITEM);
@@ -512,8 +512,8 @@ void init( void )
     optionmenu = NewMenu(4,(StringPtr) "\pOptions");
     for (i=0;i<NELEM(optionvars) ; i++) {
 	AppendMenu(optionmenu, (StringPtr) optionvars[i].name);
-	*optionvars[i].var = TRUE;
-	CheckItem(optionmenu, i + 1, TRUE);
+	*optionvars[i].var = true;
+	CheckItem(optionmenu, i + 1, true);
     }
     AppendMenu(optionmenu,(StringPtr) "\p-;Verify None;Verify All");
     InsertMenu(optionmenu, 0);
@@ -528,7 +528,7 @@ void init( void )
     InsetRect(&r, 4, 8);
     OffsetRect(&r, 0, 8);
     destdirname = TENew(&r, &r);
-    TEAutoView(TRUE, destdirname);
+    TEAutoView(true, destdirname);
     (*destdirname)->txSize = 12;
 }
 
@@ -588,7 +588,7 @@ void main( void )
     wd.ioWDDirID = CurDirStore;
     wd.ioVRefNum = -SFSaveDisk;
     wd.ioNamePtr = 0;
-    PBHSetVol(&wd, FALSE);
+    PBHSetVol(&wd, false);
     OpenResFile((StringPtr) "\pHFS_XFer");	/* DON'T TAKE THIS OUT!
 						   or put calls to init()
 						   before it! */

@@ -23,7 +23,7 @@ extern uint16 vga_screen_selector;
 extern uint16 vga_window_selector;
 #define VGA_SELECTOR vga_screen_selector
 
-#define vdriver_fixed_clut_p FALSE
+#define vdriver_fixed_clut_p false
 
 extern bool try_to_use_fat_ds_vga_hack_p;
 

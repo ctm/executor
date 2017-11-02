@@ -28,7 +28,7 @@
 			  : CWC(0)))))
 
 #define RGNP_SET_SMALL(rgnp) \
-  RGNP_SET_SIZE_AND_SPECIAL (rgnp, RGN_SMALL_SIZE, FALSE)
+  RGNP_SET_SIZE_AND_SPECIAL (rgnp, RGN_SMALL_SIZE, false)
 
 #define RGNP_SET_SIZE(rgnp, size)				\
   ((void)							\

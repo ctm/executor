@@ -60,7 +60,7 @@ win32_log_end (void)
 #endif
 
 PRIVATE HMODULE hB2Win32 = 0;
-PRIVATE bool cdrom_realmode_p = FALSE;
+PRIVATE bool cdrom_realmode_p = false;
 
 PUBLIC int
 ROMlib_set_realmodecd (int value)
@@ -139,7 +139,7 @@ init_vwin32 (void)
 	  if (!VxdInit ())
 	    {
 	      warning_unexpected ("VxdInit failed");
-	      cdrom_realmode_p = FALSE;
+	      cdrom_realmode_p = false;
 	    }
 	  else
 	    {
@@ -273,7 +273,7 @@ dosdisk_open (int disk, LONGINT *bsizep, drive_flags_t *flagsp)
   else
     {
       if (d)
-	dosdisk_close (disk, FALSE);
+	dosdisk_close (disk, false);
 
       d = &disks[disk];
       {
@@ -288,14 +288,14 @@ dosdisk_open (int disk, LONGINT *bsizep, drive_flags_t *flagsp)
       switch (which)
 	{
 	case WIN32_95:
-	  d->open_p = TRUE;
+	  d->open_p = true;
 	  break;
 	case WIN32_NT:
 	  d->open_p = win_nt_open (disk, &d->win_nt_handle, flagsp);
 	  break;
 	default:
 	  warning_unexpected (NULL_STRING);
-	  d->open_p = FALSE;
+	  d->open_p = false;
 	  break;
 	}
       {
@@ -311,7 +311,7 @@ dosdisk_open (int disk, LONGINT *bsizep, drive_flags_t *flagsp)
 	    if (disk < 2)
 	      {
 		*flagsp |= DRIVE_FLAGS_FLOPPY;
-		d->floppy_p = TRUE;
+		d->floppy_p = true;
 	      }
 	    break;
 	  case DRIVE_FIXED:
@@ -321,7 +321,7 @@ dosdisk_open (int disk, LONGINT *bsizep, drive_flags_t *flagsp)
 	  case DRIVE_CDROM:
 	    d->sector_size = *bsizep = CDROM_BYTES_PER_SECTOR;
 	    *flagsp |= DRIVE_FLAGS_LOCKED;
-	    d->cdrom_p = TRUE;
+	    d->cdrom_p = true;
 	    break;
 	  case DRIVE_REMOTE:
 	  case DRIVE_RAMDISK:
@@ -337,13 +337,13 @@ dosdisk_open (int disk, LONGINT *bsizep, drive_flags_t *flagsp)
 	  retval = disk;
 	else
 	  {
-	    dosdisk_close (disk, FALSE);
+	    dosdisk_close (disk, false);
 	    retval = -1;
 	  }
       }
     }
 
-  dcache_invalidate (disk | DOSFDBIT, FALSE);
+  dcache_invalidate (disk | DOSFDBIT, false);
 
   SetErrorMode (old_err_mode);
 
@@ -424,7 +424,7 @@ win_95_lock (int disk)
   
   volume = disk + 1; /* woo hoo */
 
-  retval = FALSE;
+  retval = false;
   for (i = 0; !retval && i < (int) NELEM (cat_list); ++i)
     {
       memset (&regs, 0, sizeof regs);
@@ -456,7 +456,7 @@ win_95_unlock (int disk)
   int i;
   
   volume = disk + 1;
-  retval = FALSE;
+  retval = false;
   for (i = 0; !retval && i < (int) NELEM (cat_list); ++i)
     {
       memset (&regs, 0, sizeof regs);
@@ -489,14 +489,14 @@ dosdisk_close (int disk, bool eject_p)
     retval = -1;
   else
     {
-      dcache_invalidate (disk | DOSFDBIT, TRUE);
+      dcache_invalidate (disk | DOSFDBIT, true);
 
       if (d->volume_locked_p)
 	{
 	  win_95_unlock (disk);
-	  d->volume_locked_p = FALSE;
+	  d->volume_locked_p = false;
 	}
-      d->open_p = FALSE;
+      d->open_p = false;
       if (d->win_nt_handle != INVALID_HANDLE_VALUE)
 	{
 	  CloseHandle (d->win_nt_handle);
@@ -618,7 +618,7 @@ win_95_dosdisk_cdrom_xfer (int disk, dosdisk_info_t *d, void *buf,
       if(hB2Win32)
 	GetSectors = (void *) GetProcAddress (hB2Win32, "GETCDSECTORS" );
       if (!GetSectors)
-	cdrom_realmode_p = FALSE;
+	cdrom_realmode_p = false;
     }
 
   if (!cdrom_realmode_p)
@@ -778,12 +778,12 @@ win_direct_accessible_disk (const char *p)
     case DRIVE_REMOVABLE:
     case DRIVE_FIXED:
     case DRIVE_CDROM:
-      retval = TRUE;
+      retval = true;
       break;
     case DRIVE_REMOTE:
     case DRIVE_RAMDISK:
     default:
-      retval = FALSE;
+      retval = false;
       break;
     }
 

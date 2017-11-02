@@ -103,7 +103,7 @@ P1(PUBLIC pascal trap, void, ChangedResource, Handle, res)
     rr->ratr |= resChanged;
     HxX(map, resfatr).raw_or(CWC(mapChanged));
     if (rr->doff[0] != 0xff || rr->doff[1] != 0xff || rr->doff[2] != 0xff) {
-	oldsize = ROMlib_SizeResource(res, FALSE);
+	oldsize = ROMlib_SizeResource(res, false);
 	newsize = GetHandleSize((Handle) MR(rr->rhand));
 	if (newsize > oldsize) {
 	    HxX(map, resfatr).raw_or(CWC(mapCompact));
@@ -512,15 +512,15 @@ P1(PUBLIC pascal trap, void, UpdateResFile, INTEGER, rn)
     }
     ROMlib_setreserr (noErr);
 /*
- * NOTE:  This implementation looks more TRUE to what IMI-125 implies than
+ * NOTE:  This implementation looks more true to what IMI-125 implies than
  *	  the one (above) it replaces.
  */
     fp = PRNTOFPERR(Hx(map, resfn), &err);
     if (err == noErr && (fp->fcflags & fcwriteperm)) {
-	needtowalk = TRUE;
+	needtowalk = true;
 	if (HxX(map, resfatr) & (CWC (mapCompact))) {
 	    compactdata(map);
-	    needtowalk = FALSE;
+	    needtowalk = false;
 	}
 	if (HxX(map, resfatr) & (CWC (mapChanged))) {
 	    if (needtowalk) {
@@ -535,7 +535,7 @@ P1(PUBLIC pascal trap, void, UpdateResFile, INTEGER, rn)
 		return;
 	}
 	iopb.ioRefNum = HxX(map, resfn);
-	PBFlushFile((ParmBlkPtr) &iopb, FALSE);
+	PBFlushFile((ParmBlkPtr) &iopb, false);
     }
 }
 

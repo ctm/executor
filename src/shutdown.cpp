@@ -19,7 +19,7 @@ using namespace Executor;
 
 P0 (PUBLIC pascal trap, void, ShutDwnPower)
 {
-  ROMlib_exit = TRUE;
+  ROMlib_exit = true;
   ExitToShell ();
 }
 

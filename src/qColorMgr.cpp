@@ -145,7 +145,7 @@ ROMlib_search_proc (RGBColor *rgb)
       
       rgb_spec = pixel_size == 16 ? &mac_16bpp_rgb_spec
 	                          : &mac_32bpp_rgb_spec;
-      retval = (*rgb_spec->rgbcolor_to_pixel) (rgb_spec, rgb, TRUE);
+      retval = (*rgb_spec->rgbcolor_to_pixel) (rgb_spec, rgb, true);
       if (pixel_size == 16)
 	retval = CW (GUEST<uint16_t>::fromRaw(retval));
       else if (pixel_size == 32)
@@ -183,14 +183,14 @@ ROMlib_search_proc (RGBColor *rgb)
 
 	    cur_diff = rgb_diff (rgb, &cspecp[retval].rgb);
 	    new_diff = 1;
-	    done_zero = FALSE;
+	    done_zero = false;
 	    while (new_diff && (candidate = hash_table[i]) != 0)
 	      {
 		if (candidate == 1 && !done_zero)
 		  {
 		    candidate = 0;
 		    --i;
-		    done_zero = TRUE;
+		    done_zero = true;
 		  }
 		new_diff = rgb_diff (rgb, &cspecp[candidate].rgb);
 		if (new_diff < cur_diff)
@@ -226,7 +226,7 @@ P1 (PUBLIC pascal trap, LONGINT, Color2Index,
   if (CTAB_SEED_X (gd_ctab) != ITAB_SEED_X (gd_itab))
     MakeITable (gd_ctab, gd_itab, GD_RES_PREF (gdev));
 
-  for (t = GD_SEARCH_PROC (MR (TheGDevice)), success_p = FALSE;
+  for (t = GD_SEARCH_PROC (MR (TheGDevice)), success_p = false;
        t && !success_p;)
     {
       BOOLEAN (*search_fn) ();
@@ -452,19 +452,19 @@ Executor::average_color (GDHandle gd,
       const rgb_spec_t *rgb_spec;
 
       rgb_spec = pixmap_rgb_spec (STARH (gd_pmap));
-      c1_index = (*rgb_spec->rgbcolor_to_pixel) (rgb_spec, c1, TRUE);
-      c2_index = (*rgb_spec->rgbcolor_to_pixel) (rgb_spec, c2, TRUE);
+      c1_index = (*rgb_spec->rgbcolor_to_pixel) (rgb_spec, c1, true);
+      c2_index = (*rgb_spec->rgbcolor_to_pixel) (rgb_spec, c2, true);
       in_between_index = (*rgb_spec->rgbcolor_to_pixel) (rgb_spec, &in_between,
-							 TRUE);
+							 true);
     }
   if (c1_index != c2_index
       && (in_between_index == c1_index
 	  || in_between_index == c2_index))
-    return FALSE;
+    return false;
   else
     {
       *out = in_between;
-      return TRUE;
+      return true;
     }
 }
 
@@ -479,14 +479,14 @@ P3 (PUBLIC pascal trap, BOOLEAN, GetGray,
                            if (! index_in_queue_p[_q_elt_])		      \
 			     {						      \
 			       queue[head] = _q_elt_;			      \
-			       index_in_queue_p[_q_elt_] = TRUE;	      \
+			       index_in_queue_p[_q_elt_] = true;	      \
 			       head = (head + 1) & (itab_elt_count - 1);      \
 			     }						      \
                         })
 
 #define DEQUEUE()	({ const unsigned _q_elt_ = queue[tail];	      \
 			   tail = (tail + 1) & (itab_elt_count - 1);	      \
-			   index_in_queue_p[_q_elt_] = FALSE;		      \
+			   index_in_queue_p[_q_elt_] = false;		      \
 			   _q_elt_;					      \
                         })
 
@@ -640,11 +640,11 @@ P3 (PUBLIC pascal trap, void, MakeITable,
   NativeColorSpec color_for_index[256];
   
   {
-    static bool been_here_p = FALSE;
+    static bool been_here_p = false;
     if (! been_here_p)
       {
  	init_offsets ();
- 	been_here_p = TRUE;
+ 	been_here_p = true;
       }
   }
   
@@ -713,7 +713,7 @@ P3 (PUBLIC pascal trap, void, MakeITable,
   /* Initialize to a non-0 and non-0xFF value. */
   memset (color_for_index, 0x80, sizeof color_for_index);
 
-  queue_starts_empty_p = TRUE;
+  queue_starts_empty_p = true;
   ctab_size = CTAB_SIZE (color_table);
   for (i = ctab_size; i >= 0; i --)
     {
@@ -732,7 +732,7 @@ P3 (PUBLIC pascal trap, void, MakeITable,
        */
       inverse_table_index = RGB_TO_ITAB_INDEX (&(color->rgb), resolution);
       ENQUEUE (inverse_table_index);
-      queue_starts_empty_p = FALSE;
+      queue_starts_empty_p = false;
 
       /* Figure out what the color index is. */
       if (CTAB_FLAGS_X (color_table) & CTAB_GDEVICE_BIT_X)
@@ -940,7 +940,7 @@ P3 (PUBLIC pascal trap, void, SetEntries,
   
   ctab = PIXMAP_TABLE (GD_PMAP (gd));
   ctab_table = CTAB_TABLE (ctab);
-  ctab_changed_p = FALSE;
+  ctab_changed_p = false;
 
   if (start >= 0)
     {
@@ -953,7 +953,7 @@ P3 (PUBLIC pascal trap, void, SetEntries,
 	      || r1->blue != r2->blue)
 	    {
 	      *r1 = *r2;
-	      ctab_changed_p = TRUE;
+	      ctab_changed_p = true;
 	    }
 	}
       first_color = start;
@@ -979,7 +979,7 @@ P3 (PUBLIC pascal trap, void, SetEntries,
 	      || r1->blue != r2->blue)
 	    {
 	      *r1 = *r2;
-	      ctab_changed_p = TRUE;
+	      ctab_changed_p = true;
 	    }
 	}
 
@@ -991,7 +991,7 @@ P3 (PUBLIC pascal trap, void, SetEntries,
    * If we don't always update the real color table, the colors
    * are simply wrong.
    */
-  ctab_changed_p = TRUE;
+  ctab_changed_p = true;
   
   if (ctab_changed_p)
     {
@@ -1078,7 +1078,7 @@ P3 (PUBLIC pascal trap, void, SaveEntries, CTabHandle, src, CTabHandle, result,
     ReqListRec *, selection)
 {
   int req_size, src_ctab_size;
-  int req_error_p = FALSE;
+  int req_error_p = false;
   int i;
   
   if (src == NULL)
@@ -1104,7 +1104,7 @@ P3 (PUBLIC pascal trap, void, SaveEntries, CTabHandle, src, CTabHandle, result,
       else
 	{
 	  selection->reqLData[i] = CWC (colReqErr);
-	  req_error_p = TRUE;
+	  req_error_p = true;
 	}
     }
   if (req_error_p)
@@ -1118,7 +1118,7 @@ P3 (PUBLIC pascal trap, void, RestoreEntries, CTabHandle, src, CTabHandle, dst,
     ReqListRec *, selection)
 {
   int req_size, dst_ctab_size;
-  int req_error_p = FALSE;
+  int req_error_p = false;
   int i;
   
   if (dst == NULL)
@@ -1137,7 +1137,7 @@ P3 (PUBLIC pascal trap, void, RestoreEntries, CTabHandle, src, CTabHandle, dst,
       else
 	{
 	  selection->reqLData[i] = CWC (colReqErr);
-	  req_error_p = TRUE;
+	  req_error_p = true;
 	}
     }
   if (req_error_p)

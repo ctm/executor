@@ -171,7 +171,7 @@ trap_watch (char *name, void *x, int size)
       return;
     }
   trap_watchpoints[trap_watchpoint_next].size = size;
-  trap_watchpoints[trap_watchpoint_next].handle_p = FALSE;
+  trap_watchpoints[trap_watchpoint_next].handle_p = false;
   trap_watchpoints[trap_watchpoint_next].x = (char*)x;
   trap_data
     = trap_watchpoints[trap_watchpoint_next].orig
@@ -193,7 +193,7 @@ trap_watch_handle (char *name, Handle x, int size)
       return;
     }
   trap_watchpoints[trap_watchpoint_next].size = size;
-  trap_watchpoints[trap_watchpoint_next].handle_p = TRUE;
+  trap_watchpoints[trap_watchpoint_next].handle_p = true;
   trap_watchpoints[trap_watchpoint_next].x = (char *) x;
   trap_data
     = trap_watchpoints[trap_watchpoint_next].orig
@@ -224,7 +224,7 @@ trap_dump_bits (const char *msg, char *data, int size)
 }
 
 
-int check_trap_watchpoints_p = FALSE;
+int check_trap_watchpoints_p = false;
 
 void
 check_trap_watchpoints (char *msg)
@@ -652,7 +652,7 @@ PUBLIC void Executor::executor_main( void )
     hpb.hFileInfo.ioVRefNum   = thefile.vRefNum;
     hpb.hFileInfo.ioFDirIndex = CWC (0);
     hpb.hFileInfo.ioDirID     = CLC (0);
-    PBGetCatInfo(&hpb, FALSE);
+    PBGetCatInfo(&hpb, false);
 
     if (thefile.fType == CLC(T('A','P','P','L')))
       fName = thefile.fName;
@@ -678,13 +678,13 @@ PUBLIC void Executor::executor_main( void )
 	  ExitToShell ();
 	else
 	  {
-	    ROMlib_exit = TRUE;
+	    ROMlib_exit = true;
 	    str255_from_c_string (fName, p);
 	    hpb.hFileInfo.ioNamePtr   = RM(fName);
 	    hpb.hFileInfo.ioVRefNum   = CWC (0);
 	    hpb.hFileInfo.ioFDirIndex = CWC (0);
 	    hpb.hFileInfo.ioDirID     = CLC (0);
-	    PBGetCatInfo(&hpb, FALSE);
+	    PBGetCatInfo(&hpb, false);
 
 	    {
 	      HParamBlockRec hp;
@@ -694,7 +694,7 @@ PUBLIC void Executor::executor_main( void )
 	      str255assign (fName2, fName);
 	      hp.ioParam.ioNamePtr = RM ((StringPtr) fName2);
 	      hp.volumeParam.ioVolIndex = CWC (-1);
-	      PBHGetVInfo (&hp, FALSE);
+	      PBHGetVInfo (&hp, false);
 	      hpb.hFileInfo.ioVRefNum   = hp.ioParam.ioVRefNum;
 	    }
 	  }
@@ -714,7 +714,7 @@ PUBLIC void Executor::executor_main( void )
     CurDirStore = hpb.hFileInfo.ioFlParID;
     wdpb.ioWDProcID = CLC (T('X','c','t','r'));
     wdpb.ioNamePtr = 0;
-    PBOpenWD(&wdpb, FALSE);
+    PBOpenWD(&wdpb, false);
     exevrefnum = CW(wdpb.ioVRefNum);
     Launch (CurApName, exevrefnum);  
 }

@@ -90,7 +90,7 @@ char ROMlib_rcsid_launch[] =
 
 using namespace Executor;
 
-PRIVATE bool ppc_launch_p = FALSE;
+PRIVATE bool ppc_launch_p = false;
 
 PUBLIC void Executor::ROMlib_set_ppc (bool val)
 {
@@ -135,10 +135,10 @@ PUBLIC int Executor::ROMlib_nowarn32;
 
 PUBLIC char *ROMlib_configfilename = NULL;
 
-PUBLIC int Executor::ROMlib_pretend_help = FALSE;
-PUBLIC int Executor::ROMlib_pretend_alias = FALSE;
-PUBLIC int Executor::ROMlib_pretend_edition = FALSE;
-PUBLIC int Executor::ROMlib_pretend_script = FALSE;
+PUBLIC int Executor::ROMlib_pretend_help = false;
+PUBLIC int Executor::ROMlib_pretend_alias = false;
+PUBLIC int Executor::ROMlib_pretend_edition = false;
+PUBLIC int Executor::ROMlib_pretend_script = false;
 
 void
 remalloc (char **strp)
@@ -224,16 +224,16 @@ PRIVATE void ParseConfigFile(StringPtr exefname, OSType type)
 	    ROMlib_WriteWhen(WriteInBltrgn);
 #if 0
 	if (ROMlib_options & ROMLIB_ACCELERATED_BIT)
-	    ROMlib_accelerated = TRUE;
+	    ROMlib_accelerated = true;
 	else
-	    ROMlib_accelerated = FALSE;
+	    ROMlib_accelerated = false;
 #endif
 	if (ROMlib_options & ROMLIB_REFRESH_BIT)
 	    ROMlib_refresh = 10;
 	if (ROMlib_options & ROMLIB_DIRTY_VARIANT_BIT)
-	    ROMlib_dirtyvariant = TRUE;
+	    ROMlib_dirtyvariant = true;
 	else
-	    ROMlib_dirtyvariant = FALSE;
+	    ROMlib_dirtyvariant = false;
 	if (ROMlib_options & ROMLIB_SOUNDOFF_BIT)
 	    ROMlib_PretendSound = soundoff;
 	if (ROMlib_options & ROMLIB_PRETENDSOUND_BIT)
@@ -242,49 +242,49 @@ PRIVATE void ParseConfigFile(StringPtr exefname, OSType type)
 	    ROMlib_PretendSound = SOUND_WORKS_P () ? soundon : soundpretend;
 #if 0
 	if (ROMlib_options & ROMLIB_PASSPOSTSCRIPT_BIT)
-	    ROMlib_passpostscript = TRUE;
+	    ROMlib_passpostscript = true;
 	else
-	    ROMlib_passpostscript = FALSE;
+	    ROMlib_passpostscript = false;
 #else
-/* #warning ROMlib_passpostscript wired to TRUE */
-	ROMlib_passpostscript = TRUE;
+/* #warning ROMlib_passpostscript wired to true */
+	ROMlib_passpostscript = true;
 #endif
 	if (ROMlib_options & ROMLIB_NEWLINETOCR_BIT)
-	    ROMlib_newlinetocr = TRUE;
+	    ROMlib_newlinetocr = true;
 	else
-	    ROMlib_newlinetocr = FALSE;
+	    ROMlib_newlinetocr = false;
 	if (ROMlib_options & ROMLIB_DIRECTDISKACCESS_BIT)
-	    ROMlib_directdiskaccess = TRUE;
+	    ROMlib_directdiskaccess = true;
 	else
-	    ROMlib_directdiskaccess = FALSE;
+	    ROMlib_directdiskaccess = false;
 	if (ROMlib_options & ROMLIB_NOWARN32_BIT)
-	    ROMlib_nowarn32 = TRUE;
+	    ROMlib_nowarn32 = true;
 	else
-	    ROMlib_nowarn32 = FALSE;
+	    ROMlib_nowarn32 = false;
 	if (ROMlib_options & ROMLIB_FLUSHOFTEN_BIT)
-	    ROMlib_flushoften = TRUE;
+	    ROMlib_flushoften = true;
 	else
-	    ROMlib_flushoften = FALSE;
+	    ROMlib_flushoften = false;
 
 	if (ROMlib_options & ROMLIB_PRETEND_HELP_BIT)
-	  ROMlib_pretend_help = TRUE;
+	  ROMlib_pretend_help = true;
 	else
-	  ROMlib_pretend_help = FALSE;
+	  ROMlib_pretend_help = false;
 
 	if (ROMlib_options & ROMLIB_PRETEND_ALIAS_BIT)
-	  ROMlib_pretend_alias = TRUE;
+	  ROMlib_pretend_alias = true;
 	else
-	  ROMlib_pretend_alias = FALSE;
+	  ROMlib_pretend_alias = false;
 
 	if (ROMlib_options & ROMLIB_PRETEND_EDITION_BIT)
-	  ROMlib_pretend_edition = TRUE;
+	  ROMlib_pretend_edition = true;
 	else
-	  ROMlib_pretend_edition = FALSE;
+	  ROMlib_pretend_edition = false;
 
 	if (ROMlib_options & ROMLIB_PRETEND_SCRIPT_BIT)
-	  ROMlib_pretend_script = TRUE;
+	  ROMlib_pretend_script = true;
 	else
-	  ROMlib_pretend_script = FALSE;
+	  ROMlib_pretend_script = false;
 
 	if (ROMlib_desired_bpp)
 	  SetDepth (MR (MainDevice), ROMlib_desired_bpp, 0, 0);
@@ -390,7 +390,7 @@ PUBLIC void Executor::SFSaveDisk_Update (INTEGER vrefnum, Str255 filename)
   pbr.volumeParam.ioNamePtr = RM ((StringPtr)save_name);
   pbr.volumeParam.ioVolIndex = CWC (-1);
   pbr.volumeParam.ioVRefNum = CW (vrefnum);
-  PBGetVInfo (&pbr, FALSE);
+  PBGetVInfo (&pbr, false);
   SFSaveDisk = CW (-CW (pbr.volumeParam.ioVRefNum));
 }
 
@@ -404,7 +404,7 @@ cfrg_match (const cfir_t *cfirp, GUEST<OSType> arch_x, uint8 type_x, Str255 name
   retval = (CFIR_ISA_X (cfirp) == arch_x &&
 	    CFIR_TYPE_X (cfirp) == type_x &&
 	    (!name[0] || EqualString (name, (StringPtr) CFIR_NAME (cfirp),
-				      FALSE, TRUE)));
+				      false, true)));
   return retval;
 }
 
@@ -532,7 +532,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	hpb.hFileInfo.ioVRefNum   = CW(vRefNum);
 	hpb.hFileInfo.ioFDirIndex = CWC (0);
 	hpb.hFileInfo.ioDirID     = 0;
-	PBGetCatInfo(&hpb, FALSE);
+	PBGetCatInfo(&hpb, false);
 	wdpb.ioVRefNum = CW(vRefNum);
 	wdpb.ioWDDirID = hpb.hFileInfo.ioFlParID;
       }
@@ -547,7 +547,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     /* Do not do this -- Loser does it SFSaveDisk_Update (vRefNum, fName); */
     wdpb.ioWDProcID = TICKX("Xctr");
     wdpb.ioNamePtr = 0;
-    PBOpenWD(&wdpb, FALSE);
+    PBOpenWD(&wdpb, false);
     ROMlib_exevrefnum = CW(wdpb.ioVRefNum);
     ROMlib_exefname = CurApName;
 #if 0
@@ -562,7 +562,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 
     err = GetFInfo(ROMlib_exefname, ROMlib_exevrefnum, &finfo);
     
-    process_create (FALSE, CL(finfo.fdType), CL(finfo.fdCreator));
+    process_create (false, CL(finfo.fdType), CL(finfo.fdCreator));
     
     if (ROMlib_exeuname)
       free (ROMlib_exeuname);
@@ -580,7 +580,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     {
       if (finfo.fdCreator == CL(TICK("Psyg"))
 	  || finfo.fdCreator == CL(TICK("Psod")))
-	ROMlib_flushoften = TRUE;
+	ROMlib_flushoften = true;
     }
 #endif /* defined(LEMMINGSHACK) */
 
@@ -612,7 +612,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 
     ROMlib_ScreenSize.first = INITIALPAIRVALUE;
     ROMlib_MacSize.first    = INITIALPAIRVALUE;
-    ROMlib_directdiskaccess = FALSE;
+    ROMlib_directdiskaccess = false;
     ROMlib_clear_gestalt_list ();
     ParseConfigFile ((StringPtr) "\017ExecutorDefault", 0);
     ParseConfigFile (ename, err == noErr ? CL(finfo.fdCreator) : 0);
@@ -662,19 +662,19 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	  size_info.size_flags = CW (size_resource->size_flags);
 	  size_info.preferred_size = CL (size_resource->preferred_size);
 	  size_info.minimum_size = CL (size_resource->minimum_size);
-	  size_info.size_resource_present_p = TRUE;
+	  size_info.size_resource_present_p = true;
 	}
       else
 	{
 	  memset (&size_info, '\000', sizeof size_info);
-	  size_info.size_resource_present_p = FALSE;
+	  size_info.size_resource_present_p = false;
 	}
-      size_info.application_p = TRUE;
+      size_info.application_p = true;
       
       size_flags = size_info.size_flags;
       
       /* we don't accept open app events until a handler is installed */
-      application_accepts_open_app_aevt_p = FALSE;
+      application_accepts_open_app_aevt_p = false;
       send_application_open_aevt_p
 	= system_version >= 0x700
 	  && ((size_flags & SZisHighLevelEventAware)
@@ -734,7 +734,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     dodusesit = ROMBase;
     QDExist = WWExist = EXIST_NO;
     TheZone = ApplZone;
-    ROMlib_memnomove_p = TRUE;
+    ROMlib_memnomove_p = true;
 
 #if  defined(NEXTSTEP)
     ROMlib_startapp();
@@ -750,7 +750,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
       {
 	memcpy(MR(CurrentA5) + jumpoff, lp, jumplen); /* copy in the
 							 jump table */
-	ROMlib_destroy_blocks (0, ~0, FALSE);
+	ROMlib_destroy_blocks (0, ~0, false);
 #if defined(ONLY_DESTROY_BETWEEN_CODE_SEGMENTS)
 	ROMlib_num_code_resources = 0;  /* Force a recompute. */
 #endif
@@ -783,7 +783,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 
 A2(PUBLIC trap, void, Chain, StringPtr, fName, INTEGER, vRefNum)
 {
-    launchchain(fName, vRefNum, FALSE, 0);
+    launchchain(fName, vRefNum, false, 0);
 }
 
 PRIVATE void reset_low_globals(void)
@@ -1170,13 +1170,13 @@ PRIVATE void reset_traps(void)
 {
     static syn68k_addr_t savetooltraptable[0x400];
     static syn68k_addr_t saveostraptable[0x100];
-    static BOOLEAN beenhere = FALSE;
+    static BOOLEAN beenhere = false;
 
     ROMlib_reset_bad_trap_addresses ();
     if (!beenhere) {
 	memcpy(  saveostraptable,   ostraptable, sizeof(  saveostraptable));
 	memcpy(savetooltraptable, tooltraptable, sizeof(savetooltraptable));
-	beenhere = TRUE;
+	beenhere = true;
     } else {
 /*
  * NOTE: I'm not preserving patches that go into the SystemZone.  Right now
@@ -1195,7 +1195,7 @@ our_special_map (resmaphand map)
 
   CurMap = STARH(map)->resfn;
   h = Get1Resource (TICK("nUSE"), 0);
-  retval = h ? TRUE : FALSE;
+  retval = h ? true : false;
 
   return retval;
 }
@@ -1296,7 +1296,7 @@ PRIVATE void reinitialize_things(void)
     }
 #endif
 
-    ROMlib_destroy_blocks (0, ~0, FALSE);
+    ROMlib_destroy_blocks (0, ~0, false);
 #if defined(ONLY_DESTROY_BETWEEN_CODE_SEGMENTS)
     ROMlib_num_code_resources = 0;  /* Force a recompute. */
 #endif
@@ -1315,7 +1315,7 @@ ROMlib_filename_from_fsspec (char **strp, FSSpec *fsp)
   pbr.ioParam.ioVRefNum = fsp->vRefNum;
   pbr.ioParam.ioNamePtr = RM ((StringPtr) fsp->name);
   retval = ROMlib_nami (&pbr, CL (fsp->parID), NoIndex, strp, &filename,
-			&endname, FALSE, &vcbp, &sbuf);
+			&endname, false, &vcbp, &sbuf);
   return retval;
 }
 
@@ -1323,7 +1323,7 @@ PUBLIC OSErr
 Executor::NewLaunch (StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockRec *lpbp)
 {
     OSErr retval;
-    static char beenhere = FALSE;
+    static char beenhere = false;
     static jmp_buf buf;
     static Str255 fName;
     static INTEGER vRefNum;
@@ -1335,14 +1335,14 @@ Executor::NewLaunch (StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockR
       {
 	lpb = *lpbp;
 	str255assign (fName, (MR (lpbp->launchAppSpec))->name);
-	extended_p = TRUE;
+	extended_p = true;
       }
     else
       {
 	lpb.launchBlockID = 0;
 	str255assign (fName, fName_arg);
 	vRefNum = vRefNum_arg;
-	extended_p = FALSE;
+	extended_p = false;
       }
 
     if (extended_p && (lpbp->launchControlFlags & CWC (launchContinue)))
@@ -1380,7 +1380,7 @@ Executor::NewLaunch (StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockR
 	/* This setjmp/longjmp code might be better put in launchchain */
 	if (!beenhere)
 	  {
-	    beenhere = TRUE;
+	    beenhere = true;
 	    setjmp(buf);
 	  }
 	else
@@ -1447,7 +1447,7 @@ Executor::NewLaunch (StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockR
 				      (unsigned int) US_TO_SYN68K (lp));
 	  }
 #endif
-	launchchain(fName, vRefNum, TRUE, &lpb);
+	launchchain(fName, vRefNum, true, &lpb);
       }
     return retval;
 }

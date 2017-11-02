@@ -136,13 +136,13 @@ ignore_func_p (const char *func_name)
     "_AE_hdlr_lookup",
     "_AE_hdlr_install",
   };
-  static bool been_here = FALSE;
+  static bool been_here = false;
   bool retval;
 
   if (!been_here)
     {
       qsort (exceptions, NELEM (exceptions), sizeof exceptions[0], compare);
-      been_here = TRUE;
+      been_here = true;
     }
 
   retval = !!bsearch (&func_name, exceptions, NELEM (exceptions),

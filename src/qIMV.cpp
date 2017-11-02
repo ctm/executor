@@ -177,7 +177,7 @@ default_search_proc (RGBColor *rgb, GUEST<int32> *pixel)
     *pixel = mr->matchData;
   else
     *pixel = CL (!CL(mr->matchData));
-  return TRUE;
+  return true;
 }
 
 syn68k_addr_t

@@ -299,7 +299,7 @@ WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
 	  if (code > -100)
 	    gsdll_execute_end ();
 	  gsdll_exit ();
-	  retval = TRUE;
+	  retval = true;
 	  EndDoc (global_hdc);
 	}
     }

@@ -51,7 +51,7 @@ static char keyboard_initialized = 0;
 static char mouse_initialized = 0;
 
 /* Global flag; use DPMI real mode callback for mouse driver? */
-bool use_mouse_rmcb_p = TRUE;
+bool use_mouse_rmcb_p = true;
 
 
 /* This dummy function is used to mark the beginning of memory to
@@ -345,7 +345,7 @@ dosevq_shutdown (void)
   if (keyboard_initialized)
     {
       __dpmi_set_protected_mode_interrupt_vector (KBD_VEC, &old_kbd_handler);
-      keyboard_initialized = FALSE;
+      keyboard_initialized = false;
     }
 
   if (mouse_initialized)
@@ -375,7 +375,7 @@ dosevq_shutdown (void)
       mouse_callback_addr.segment = 0;
       mouse_callback_addr.offset16 = 0;
 
-      mouse_initialized = FALSE;
+      mouse_initialized = false;
     }
 }
 

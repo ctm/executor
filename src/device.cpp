@@ -213,7 +213,7 @@ A3(PUBLIC, OSErr, Control, INTEGER, rn, INTEGER, code,
     if (param)
 	BlockMoveData(param, (Ptr) pb.cntrlParam.csParam,
 					 (Size) sizeof(pb.cntrlParam.csParam));
-    err = PBControl(&pb, FALSE);
+    err = PBControl(&pb, false);
     fs_err_hook (err);
     return err;
 }
@@ -226,7 +226,7 @@ A3(PUBLIC, OSErr, Status, INTEGER, rn, INTEGER, code, Ptr, param) /* IMII-179 */
     pb.cntrlParam.ioVRefNum = 0;
     pb.cntrlParam.ioCRefNum = CW(rn);
     pb.cntrlParam.csCode = CW(code);
-    retval = PBStatus(&pb, FALSE);
+    retval = PBStatus(&pb, false);
     if (param)
 	BlockMoveData((Ptr) pb.cntrlParam.csParam, param,
 					 (Size) sizeof(pb.cntrlParam.csParam));
@@ -240,7 +240,7 @@ A1(PUBLIC, OSErr, KillIO, INTEGER, rn)	/* IMII-179 */
     OSErr err;
 
     pb.cntrlParam.ioCRefNum = CW(rn);
-    err = PBKillIO(&pb, FALSE);
+    err = PBKillIO(&pb, false);
     fs_err_hook (err);
     return err;
 }
@@ -336,7 +336,7 @@ A2(PUBLIC, OSErr, ROMlib_driveropen, ParmBlkPtr, pbp,		/* INTERNAL */
 	 dip = 0;
 	 if (ROMlib_otherdrivers) {
 	   for (dip = ROMlib_otherdrivers; dip->open &&
-		!EqualString(dip->name, MR(pbp->ioParam.ioNamePtr), FALSE, TRUE);
+		!EqualString(dip->name, MR(pbp->ioParam.ioNamePtr), false, true);
 		dip++)
 	     ;
 	   if (!dip->open)
@@ -345,7 +345,7 @@ A2(PUBLIC, OSErr, ROMlib_driveropen, ParmBlkPtr, pbp,		/* INTERNAL */
 	 if (!dip) {
 	   for (dip = knowndrivers, edip = dip + NELEM(knowndrivers);
 		dip != edip &&
-		!EqualString(dip->name, MR(pbp->ioParam.ioNamePtr), FALSE, TRUE);
+		!EqualString(dip->name, MR(pbp->ioParam.ioNamePtr), false, true);
 		dip++)
 	     ;
 	   if (dip == edip)
@@ -400,7 +400,7 @@ A2(PUBLIC, OSErr, OpenDriver, StringPtr, name, GUEST<INTEGER> *, rnp)	/* IMII-17
     pb.ioParam.ioRefNum = CWC (0); /* so we can't get garbage for ioRefNum. */
     pb.ioParam.ioPermssn = fsCurPerm;
     pb.ioParam.ioNamePtr = RM(name);
-    retval = ROMlib_driveropen(&pb, FALSE);
+    retval = ROMlib_driveropen(&pb, false);
     *rnp = pb.ioParam.ioRefNum;
     fs_err_hook (retval);
     return retval;
@@ -412,7 +412,7 @@ A1(PUBLIC, OSErr, CloseDriver, INTEGER, rn)   /* IMII-178 */
     OSErr err;
 
     pb.cntrlParam.ioCRefNum = CW(rn);
-    err = PBClose(&pb, FALSE);
+    err = PBClose(&pb, false);
     fs_err_hook (err);
     return err;
 }

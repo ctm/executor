@@ -45,7 +45,7 @@ get_subdesc_info (Handle aggr_desc_h, subdesc_info_t *info,
     }
   else
     {
-      info->key_p = TRUE;
+      info->key_p = true;
       
       if (attribute_p)
 	{
@@ -289,7 +289,7 @@ find_key_index (Handle aggr_desc_h, int32 keyword, bool attribute_p,
       if (CL (inline_key_desc->key) == keyword)
 	{
 	  *index_return = count;
-	  return TRUE;
+	  return true;
 	}
       
       t += (CL (inline_key_desc->size)
@@ -298,7 +298,7 @@ find_key_index (Handle aggr_desc_h, int32 keyword, bool attribute_p,
     }
   
   *index_return = info.count + 1;
-  return FALSE;
+  return false;
 }
 
 
@@ -312,13 +312,13 @@ aggr_delete_index (Handle aggr_handle,
   int dummy_size;
   
   err = aggr_desc_get_addr (aggr_handle, index, attr_p,
-			    &dummy_addr, &dummy_size, FALSE,
-			    TRUE);
+			    &dummy_addr, &dummy_size, false,
+			    true);
   
   if (err != noErr)
-    return FALSE;
+    return false;
   else
-    return TRUE;
+    return true;
 }
 
 static bool
@@ -336,19 +336,19 @@ aggr_put_nth_desc (Handle aggr_handle,
   in_desc_type = DESC_TYPE (in_desc);
   size = GetHandleSize (in_desc_data);
   
-  err = aggr_desc_get_addr (aggr_handle, index, FALSE,
-			    (char **) &inline_desc, &size, TRUE, FALSE);
+  err = aggr_desc_get_addr (aggr_handle, index, false,
+			    (char **) &inline_desc, &size, true, false);
   if (err != noErr)
     {
       *out_failcode = err;
-      return FALSE;
+      return false;
     }
   
   inline_desc->type = CL (in_desc_type);
   memcpy (inline_desc->data, STARH (in_desc_data), size);
   
   *out_failcode = noErr;
-  return TRUE;
+  return true;
 }
 
 static bool
@@ -361,10 +361,10 @@ aggr_get_nth_desc (Handle aggr_handle,
   int size;
   OSErr err;
   
-  err = aggr_desc_get_addr (aggr_handle, index, FALSE,
-			    &addr, &size, FALSE, FALSE);
+  err = aggr_desc_get_addr (aggr_handle, index, false,
+			    &addr, &size, false, false);
   if (err != noErr)
-    return FALSE;
+    return false;
   
   if (ATTRIBUTE_COUNT (aggr_handle) == typeAEList)
     {
@@ -382,7 +382,7 @@ aggr_get_nth_desc (Handle aggr_handle,
 			       out_desc);
 	 });
       if (err != noErr)
-	return FALSE;
+	return false;
     }
   else
     {
@@ -400,10 +400,10 @@ aggr_get_nth_desc (Handle aggr_handle,
 				 out_desc);
 	   });
       if (err != noErr)
-	return FALSE;
+	return false;
     }
   
-  return TRUE;
+  return true;
 }
 
 static bool
@@ -434,15 +434,15 @@ aggr_put_key_desc (Handle aggr_handle,
   find_key_index (aggr_handle, keyword, attr_p, &index);
   
   err = aggr_desc_get_addr (aggr_handle, index, attr_p,
-			    (char **) &inline_key_desc, &size, TRUE, FALSE);
+			    (char **) &inline_key_desc, &size, true, false);
   if (err != noErr)
-    return FALSE;
+    return false;
   
   inline_key_desc->key = CL (keyword);
   inline_key_desc->type = CL (in_desc_type);
   memcpy (inline_key_desc->data, STARH (in_desc_data), size);
   
-  return TRUE;
+  return true;
 }
 
 static descriptor_t *
@@ -519,7 +519,7 @@ aggr_get_key_desc (Handle aggr_handle,
     return NULL;
   
   err = aggr_desc_get_addr (aggr_handle, index, attr_p,
-			    (char **) &inline_key_desc, &size, FALSE, FALSE);
+			    (char **) &inline_key_desc, &size, false, false);
   if (err != noErr)
     return NULL;
   
@@ -556,15 +556,15 @@ aggr_delete_key_desc (Handle aggr_handle,
     }
   
   if (! find_key_index (aggr_handle, keyword, attr_p, &index))
-    return FALSE;
+    return false;
   
   err = aggr_desc_get_addr (aggr_handle, index, attr_p,
-			    &dummy_addr, &dummy_size, FALSE,
-			    TRUE);
+			    &dummy_addr, &dummy_size, false,
+			    true);
   if (err != noErr)
-    return FALSE;
+    return false;
   else
-    return TRUE;
+    return true;
 }
 
 static void
@@ -821,7 +821,7 @@ P2 (PUBLIC pascal trap, OSErr, AECountItems,
   OSErr err;
   
   aggr_desc_h = DESC_DATA (list);
-  err = get_subdesc_info (aggr_desc_h, &info, FALSE);
+  err = get_subdesc_info (aggr_desc_h, &info, false);
   if (err != noErr)
     AE_RETURN_ERROR (err);
   
@@ -911,7 +911,7 @@ P2 (PUBLIC pascal trap, OSErr, AEDeleteItem,
   if (! LIST_CLASS_P (list))
     AE_RETURN_ERROR (errAEWrongDataType);
   
-  if (aggr_delete_index (DESC_DATA (list), FALSE, index))
+  if (aggr_delete_index (DESC_DATA (list), false, index))
     AE_RETURN_ERROR (errAEIllegalIndex);
   else
     AE_RETURN_ERROR (noErr);
@@ -946,7 +946,7 @@ P4 (PUBLIC pascal trap, OSErr, AEGetKeyDesc,
   if (! RECORD_CLASS_P (record))
     AE_RETURN_ERROR (errAEWrongDataType);
   
-  desc = aggr_get_key_desc (DESC_DATA (record), keyword, FALSE,
+  desc = aggr_get_key_desc (DESC_DATA (record), keyword, false,
 			    (descriptor_t *)alloca (sizeof *desc));
   if (desc == NULL)
     AE_RETURN_ERROR (errAEDescNotFound);
@@ -961,7 +961,7 @@ P3 (PUBLIC pascal trap, OSErr, AEPutKeyDesc,
   if (! RECORD_CLASS_P (record))
     AE_RETURN_ERROR (errAEWrongDataType);
   
-  if (aggr_put_key_desc (DESC_DATA (record), keyword, FALSE, desc))
+  if (aggr_put_key_desc (DESC_DATA (record), keyword, false, desc))
     AE_RETURN_ERROR (noErr);
   else
     AE_RETURN_ERROR (memFullErr);
@@ -979,7 +979,7 @@ P7 (PUBLIC pascal trap, OSErr, AEGetKeyPtr,
   if (! RECORD_CLASS_P (record))
     AE_RETURN_ERROR (errAEWrongDataType);
   
-  if (! aggr_get_key_desc (DESC_DATA (record), keyword, FALSE, desc))
+  if (! aggr_get_key_desc (DESC_DATA (record), keyword, false, desc))
     AE_RETURN_ERROR (errAEDescNotFound);
   
   err = AECoerceDesc (desc, desired_type, coerced_desc);
@@ -1007,7 +1007,7 @@ P5 (PUBLIC pascal trap, OSErr, AEPutKeyPtr,
   if (err != noErr)
     AE_RETURN_ERROR (err);
   
-  if (aggr_put_key_desc (DESC_DATA (record), keyword, FALSE, desc))
+  if (aggr_put_key_desc (DESC_DATA (record), keyword, false, desc))
     retval = noErr;
   else
     retval = memFullErr;
@@ -1021,7 +1021,7 @@ P2 (PUBLIC pascal trap, OSErr, AEDeleteKeyDesc,
   if (! RECORD_CLASS_P (record))
     AE_RETURN_ERROR (errAEWrongDataType);
   
-  if (! aggr_delete_key_desc (DESC_DATA (record), keyword, FALSE))
+  if (! aggr_delete_key_desc (DESC_DATA (record), keyword, false))
     AE_RETURN_ERROR (errAEDescNotFound);
   else
     AE_RETURN_ERROR (noErr);
@@ -1036,7 +1036,7 @@ P4 (PUBLIC pascal trap, OSErr, AESizeOfKeyDesc,
   if (! RECORD_CLASS_P (record))
     AE_RETURN_ERROR (errAEWrongDataType);
   
-  if (! aggr_get_key_desc (DESC_DATA (record), keyword, FALSE, desc))
+  if (! aggr_get_key_desc (DESC_DATA (record), keyword, false, desc))
     AE_RETURN_ERROR (errAEDescNotFound);
   
   *type_out = DESC_TYPE_X (desc);
@@ -1062,7 +1062,7 @@ P5 (PUBLIC pascal trap, OSErr, AEPutAttributePtr,
   if (err != noErr)
     AE_RETURN_ERROR (err);
   
-  if (aggr_put_key_desc (DESC_DATA (evt), keyword, TRUE, desc))
+  if (aggr_put_key_desc (DESC_DATA (evt), keyword, true, desc))
     retval = noErr;
   else
     retval = memFullErr;
@@ -1077,7 +1077,7 @@ P3 (PUBLIC pascal trap, OSErr, AEPutAttributeDesc,
   if (! APPLE_EVENT_CLASS_P (evt))
     AE_RETURN_ERROR (errAEWrongDataType);
   
-  if (aggr_put_key_desc (DESC_DATA (evt), keyword, TRUE, desc))
+  if (aggr_put_key_desc (DESC_DATA (evt), keyword, true, desc))
     AE_RETURN_ERROR (noErr);
   else
     AE_RETURN_ERROR (memFullErr);
@@ -1092,7 +1092,7 @@ P4 (PUBLIC pascal trap, OSErr, AEGetAttributeDesc,
   if (! APPLE_EVENT_CLASS_P (evt))
     AE_RETURN_ERROR (errAEWrongDataType);
   
-  desc = aggr_get_key_desc (DESC_DATA (evt), keyword, TRUE,
+  desc = aggr_get_key_desc (DESC_DATA (evt), keyword, true,
 			    (descriptor_t *)alloca (sizeof *desc));
   if (desc == NULL)
     AE_RETURN_ERROR (errAEDescNotFound);
@@ -1112,7 +1112,7 @@ P7 (PUBLIC pascal trap, OSErr, AEGetAttributePtr,
   if (! APPLE_EVENT_CLASS_P (evt))
     AE_RETURN_ERROR (errAEWrongDataType);
   
-  desc = aggr_get_key_desc (DESC_DATA (evt), keyword, TRUE,
+  desc = aggr_get_key_desc (DESC_DATA (evt), keyword, true,
 			    (descriptor_t *)alloca (sizeof *desc));
   if (desc == NULL)
     AE_RETURN_ERROR (errAEDescNotFound);
@@ -1133,7 +1133,7 @@ P2 (PUBLIC pascal trap, OSErr, AEDeleteAttribute,
   if (! APPLE_EVENT_CLASS_P (evt))
     AE_RETURN_ERROR (errAEWrongDataType);
   
-  if (! aggr_delete_key_desc (DESC_DATA (evt), keyword, TRUE))
+  if (! aggr_delete_key_desc (DESC_DATA (evt), keyword, true))
     AE_RETURN_ERROR (errAEDescNotFound);
   else
     AE_RETURN_ERROR (noErr);
@@ -1148,7 +1148,7 @@ P4 (PUBLIC pascal trap, OSErr, AESizeOfAttribute,
   if (! APPLE_EVENT_CLASS_P (evt))
     AE_RETURN_ERROR (errAEWrongDataType);
   
-  desc = aggr_get_key_desc (DESC_DATA (evt), keyword, TRUE,
+  desc = aggr_get_key_desc (DESC_DATA (evt), keyword, true,
 			    (descriptor_t *)alloca (sizeof *desc));
   if (desc == NULL)
     AE_RETURN_ERROR (errAEDescNotFound);

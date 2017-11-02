@@ -42,7 +42,7 @@ splash_screen_display (bool button_p, char *basename)
   if (!ROMlib_splashp)
     {
       warning_unexpected ("no splash");
-      return FALSE;
+      return false;
     }
   
   header = *(struct splash_screen_header *) ROMlib_splashp->chars;
@@ -78,7 +78,7 @@ splash_screen_display (bool button_p, char *basename)
 
   /* We can't handle a splash screen bigger than the real screen yet. */
   if (splash_top < 0 || splash_left < 0)
-    return FALSE;
+    return false;
   
   {
     int splash_row_bytes;
@@ -175,10 +175,10 @@ splash_screen_display (bool button_p, char *basename)
     DisposeRgn (row_rgn);
   }
   
-  vdriver_update_screen (0, 0, vdriver_height, vdriver_width, FALSE);
+  vdriver_update_screen (0, 0, vdriver_height, vdriver_width, false);
   vdriver_flush_display();
   
-  return TRUE;
+  return true;
 }
 
 #endif /* DISPLAY_SPLASH_SCREEN */

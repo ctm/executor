@@ -41,7 +41,7 @@ os_specific_really_quit (void)
 {
   int retval;
 
-  retval = TRUE;
+  retval = true;
   return retval;
 }
 
@@ -58,7 +58,7 @@ sdl_really_quit(void)
   else
     {
       ROMlib_send_quit ();
-      retval = FALSE;
+      retval = false;
     }
 
   return retval;

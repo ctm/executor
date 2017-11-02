@@ -72,7 +72,7 @@ Executor::dcache_set_enabled (bool enabled_p)
   bool old_enabled_p;
   old_enabled_p = dcache_enabled_p;
   if (old_enabled_p && !enabled_p)
-    dcache_invalidate_all (TRUE);
+    dcache_invalidate_all (true);
   dcache_enabled_p = enabled_p;
   return old_enabled_p;
 }
@@ -186,7 +186,7 @@ dcache_flush_entry (dcache_entry_t *dp)
   bool retval;
 
   if (!dp->dirty_callback)
-    retval = TRUE;
+    retval = true;
   else
     {
       uint8 *bufp;
@@ -219,7 +219,7 @@ dcache_invalidate_entry (dcache_entry_t *dp, bool flush_p)
   if (flush_p)
     retval = dcache_flush_entry (dp);
   else
-    retval = TRUE;
+    retval = true;
   DCACHE_ENTRY_INVALIDATE (dp);
   return retval;
 }
@@ -262,7 +262,7 @@ best_dcache_entry_to_replace (void)
 	}
     }
 
-  if (!dcache_invalidate_entry (best, TRUE))
+  if (!dcache_invalidate_entry (best, true))
     best = NULL;
 
   return best;
@@ -418,7 +418,7 @@ Executor::dcache_invalidate (uint32 fd, bool flush_p)
 {
   bool retval;
 
-  retval = TRUE;
+  retval = true;
   if (dcache_enabled_p)
     {
       dcache_entry_t *d;
@@ -426,7 +426,7 @@ Executor::dcache_invalidate (uint32 fd, bool flush_p)
       for (d = &dcache[0]; d < DCACHE_END; d++)
 	if (d->fd == fd)
 	  if (!dcache_invalidate_entry (d, flush_p))
-	    retval = FALSE;
+	    retval = false;
     }
   return retval;
 }
@@ -436,7 +436,7 @@ Executor::dcache_flush (uint32 fd)
 {
   bool retval;
 
-  retval = TRUE;
+  retval = true;
   if (dcache_enabled_p)
     {
       dcache_entry_t *d;
@@ -444,7 +444,7 @@ Executor::dcache_flush (uint32 fd)
       for (d = &dcache[0]; d < DCACHE_END; d++)
 	if (d->fd == fd)
 	  if (!dcache_flush_entry (d))
-	    retval = FALSE;
+	    retval = false;
     }
   return retval;
 }
@@ -456,14 +456,14 @@ Executor::dcache_invalidate_all (bool flush_p)
 {
   bool retval;
 
-  retval = TRUE;
+  retval = true;
   if (dcache_enabled_p)
     {
       dcache_entry_t *d;
 
       for (d = &dcache[0]; d < DCACHE_END; d++)
 	if (!dcache_invalidate_entry (d, flush_p))
-	  retval = FALSE;
+	  retval = false;
     }
   return retval;
 }

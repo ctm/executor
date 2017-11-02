@@ -168,7 +168,7 @@ mouse_handler (int button, int dx, int dy)
       old_button = button;
     }
 
-  adb_apeiron_hack (TRUE, dx, dy);
+  adb_apeiron_hack (true, dx, dy);
 }
 
 
@@ -291,7 +291,7 @@ event_init (int screen_width, int screen_height)
   /* Set up keyboard. */
   keyboard_fd = keyboard_init_return_fd ();
   if (keyboard_fd < 0)
-    return FALSE;
+    return false;
 
   /* Set up mouse. */
   mouse_fd = mouse_init_return_fd ("", vga_getmousetype (),
@@ -299,7 +299,7 @@ event_init (int screen_width, int screen_height)
   if (mouse_fd < 0)
     {
       event_shutdown ();  /* De-install keyboard handler. */
-      return FALSE;
+      return false;
     }
   
   /* Install default handlers. */
@@ -338,7 +338,7 @@ event_init (int screen_width, int screen_height)
   install_phoney_mouse_polling ();
 
   atexit (event_shutdown);
-  return TRUE;
+  return true;
 }
 
 

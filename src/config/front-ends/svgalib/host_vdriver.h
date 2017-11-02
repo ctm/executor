@@ -12,12 +12,12 @@ extern bool svgalib_have_blitwait_p;
 #define vdriver_accel_wait() \
 do { if (svgalib_have_blitwait_p) vga_blitwait (); } while (0)
 
-#define vdriver_fixed_clut_p FALSE
+#define vdriver_fixed_clut_p false
 
 /* We cannot yet unmap the screen (well, we can't remap it, and
  * we don't want to unmap it out from svgalib).
  */
-#define vgahost_unmap_linear_fbuf(num_bytes) FALSE
+#define vgahost_unmap_linear_fbuf(num_bytes) false
 
 #define VGA_WINDOW_GRANULARITY(mode)	65536U
 #define VGA_WINDOW_SIZE(mode)		65536U

@@ -231,13 +231,13 @@ Executor::make_rgb_spec (rgb_spec_t *rgb_spec,
   rgb_spec->rgbcolor_to_pixel = rgbcolor_to_pixel;
 
   rgb_spec->pixel_to_rgbcolor
-    = make_pixel_to_rgbcolor_table (rgb_spec, &rgb_spec->map, TRUE);
+    = make_pixel_to_rgbcolor_table (rgb_spec, &rgb_spec->map, true);
 
   /* Create black and white pixels tiled out to 32 bits. */
   b = (*rgb_spec->rgbcolor_to_pixel) (rgb_spec, &ROMlib_black_rgb_color,
-				      TRUE);
+				      true);
   w = (*rgb_spec->rgbcolor_to_pixel) (rgb_spec, &ROMlib_white_rgb_color,
-				      TRUE);
+				      true);
   if (bpp == 16)
     {
       /* Tile out to 32 bits. */

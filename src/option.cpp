@@ -191,20 +191,20 @@ _generate_help_message (void)
       for (buf = wrap_buf;; buf += next_len)
 	{	   
 	  wrap (buf, 75, &out_len, &next_len);
-	  send_to_help_buf (buf, out_len, TRUE);
+	  send_to_help_buf (buf, out_len, true);
 	  if (next_len == -1)
 	    break;
 	}
     }
   /* newline to separate pre-notes and options */
-  send_to_help_buf ("", 0, TRUE);
+  send_to_help_buf ("", 0, true);
   for (optBlocks::iterator block_i = opt_blocks.begin(); block_i != opt_blocks.end(); block_i ++)
     {
       string interface = block_i->interface;
       option_vec *opts = &block_i->opts;
 
-      send_to_help_buf (interface, FALSE);
-      send_to_help_buf (":", 1, TRUE);
+      send_to_help_buf (interface, false);
+      send_to_help_buf (":", 1, true);
       
       for (option_vec::iterator opt = opts->begin(); opt != opts->end(); opt ++)
 	{
@@ -220,22 +220,22 @@ _generate_help_message (void)
 	  opt_text_len = opt->text.length();
 	  same_line_p = opt_text_len < 14;
 	  
-	  send_to_help_buf ("  -", 3, FALSE);
+	  send_to_help_buf ("  -", 3, false);
 	  send_to_help_buf (opt->text,
 			    !same_line_p);
 	  if (same_line_p)
 	    send_to_help_buf (spaces,
-			      20 - (3 + opt_text_len), FALSE);
+			      20 - (3 + opt_text_len), false);
 	  else
-	    send_to_help_buf (spaces, 20, FALSE);
+	    send_to_help_buf (spaces, 20, false);
 
 	  strcpy_to_wrap_buf (opt->desc);
 	  for (buf = wrap_buf;; buf += next_len)
 	    {	   
 	      wrap (buf, 55, &out_len, &next_len);
-	      send_to_help_buf (buf, out_len, TRUE);
+	      send_to_help_buf (buf, out_len, true);
 	      if (next_len != -1)
-		send_to_help_buf (spaces, 20, FALSE);
+		send_to_help_buf (spaces, 20, false);
 	      else
 		break;
 	    }
@@ -379,7 +379,7 @@ opt_lookup (opt_database_t &db, const string &opt)
 	    }
 	  else
 	    {
-	      opt_put_val (db, opt, [try1 UTF8String], pri_dwrite, FALSE);
+	      opt_put_val (db, opt, [try1 UTF8String], pri_dwrite, false);
 	      retval = opt_lookup_helper (db, opt);
 	    }
 	}
@@ -437,7 +437,7 @@ Executor::opt_val (opt_database_t &db, string opt, string *retval)
 {
   opt_val_t *opt_val;
   string val = "";
-  bool found_p = FALSE;
+  bool found_p = false;
 
   opt_val = opt_lookup (db, opt);
   if (opt_val)
@@ -447,7 +447,7 @@ Executor::opt_val (opt_database_t &db, string opt, string *retval)
 	{
 	  if (retval)
 	    *retval = val;
-	  found_p = TRUE;
+	  found_p = true;
 	}
     }
   return found_p;
@@ -455,9 +455,9 @@ Executor::opt_val (opt_database_t &db, string opt, string *retval)
 
 
 /* Parses an integer value and returns it in *retval.  If
- * parse_error_p is non-NULL, sets parse_error_p to TRUE and prints an
+ * parse_error_p is non-NULL, sets parse_error_p to true and prints an
  * error message in case of a parse error, else leaves it untouched.
- * Returns TRUE if a value was found.
+ * Returns true if a value was found.
  */
 int
 Executor::opt_int_val (opt_database_t &db, string opt, int *retval,
@@ -475,9 +475,9 @@ Executor::opt_int_val (opt_database_t &db, string opt, int *retval,
 	  if (parse_error_p)
 	    {
 	      fprintf (stderr, "Malformed numeric argument to -%s.\n", opt.c_str());
-	      *parse_error_p = TRUE;
+	      *parse_error_p = true;
 	    }
-	  return FALSE;
+	  return false;
 	}
       *retval = v;
     }
@@ -491,7 +491,7 @@ int
 Executor::opt_parse (opt_database_t &db, option_vec opts,
 	   int *argc, char *argv[])
 {
-  int parse_error_p = FALSE;
+  int parse_error_p = false;
   int i;
   int argc_left;
 
@@ -549,7 +549,7 @@ Executor::opt_parse (opt_database_t &db, option_vec opts,
 			  fprintf (ERRMSG_STREAM, "\
 %s: option `-%s' requires argument\n",
 				   program_name, opt->text.c_str());
-			  parse_error_p = TRUE;
+			  parse_error_p = true;
 			}
 		      break;
 		    case opt_ignore:
@@ -565,7 +565,7 @@ Executor::opt_parse (opt_database_t &db, option_vec opts,
 			  fprintf (ERRMSG_STREAM, "\
 %s: option `-%s' requires argument\n",
 				   program_name, opt->text.c_str());
-			  parse_error_p = TRUE;
+			  parse_error_p = true;
 			}
 		      goto next_arg;
 		    }
@@ -574,7 +574,7 @@ Executor::opt_parse (opt_database_t &db, option_vec opts,
 			   (argc_left-1) * sizeof *argv);
 		  i = arg_i - 1;
 		  opt_put_val (db, opt->text, optval, pri_command_line,
-			       FALSE);
+			       false);
 		}
 	    }
 	}

@@ -81,18 +81,18 @@ vgahost_init (int max_width, int max_height, int max_bpp, bool fixed_p,
 	}
     }
 #endif
-  return TRUE;
+  return true;
 }
 
 
 void
 vgahost_shutdown (void)
 {
-  static char beenhere = FALSE;
+  static char beenhere = false;
   if (!beenhere)
     {
       vga_setmode (TEXT);
-      beenhere = TRUE;
+      beenhere = true;
     }
 }
 
@@ -122,7 +122,7 @@ vgahost_illegal_mode_p (int width, int height, int bpp,
 			bool exact_match_p)
 {
   if (vga_current_mode == NULL)
-    return FALSE;
+    return false;
   return (vdriver_fbuf == vdriver_real_screen_baseaddr
 	  && bpp != (1 << vga_current_mode->log2_bpp));
 }
@@ -169,7 +169,7 @@ vgahost_set_mode (vga_mode_t *mode)
   have_setrw_page_p = ((info->flags & HAVE_RWPAGE) != 0);
 #else
 /* #warning "separate r/w page support seems to be broken under Mach32 svgalib" */
-  have_setrw_page_p = FALSE;
+  have_setrw_page_p = false;
 #endif
 
   /* Record whether we have blitwait.  Don't bother claiming we do
@@ -188,7 +188,7 @@ vgahost_set_mode (vga_mode_t *mode)
   vga_portal_baseaddr = (uint8 *) vga_getgraphmem ();
   vdriver_real_screen_baseaddr = vga_portal_baseaddr;
 
-  return TRUE;
+  return true;
 }
 
 

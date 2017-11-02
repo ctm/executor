@@ -145,7 +145,7 @@ P9(PUBLIC pascal trap, ListHandle,  LNew, Rect *, rview,	/* IMIV-270 */
     lp->indent.v    = 0;
     lp->selFlags    = 0;
 #if defined (STEF_lActivefix)
-    lp->lActive     = TRUE;
+    lp->lActive     = true;
 #else
     lp->lActive     = FrontWindow() == wind;
 #endif
@@ -200,7 +200,7 @@ P9(PUBLIC pascal trap, ListHandle,  LNew, Rect *, rview,	/* IMIV-270 */
 
     HUnlock((Handle) retval);
     LISTBEGIN(retval);
-    LISTCALL(lInitMsg, FALSE, (Rect *)0, * (Cell *)&lp->clikLoc, 0, 0, retval);
+    LISTCALL(lInitMsg, false, (Rect *)0, * (Cell *)&lp->clikLoc, 0, 0, retval);
     LISTEND(retval);
     TRAPEND();
 #if defined (LIST_DEBUG)
@@ -215,7 +215,7 @@ P1(PUBLIC pascal trap, void, LDispose, ListHandle, list)	/* IMIV-271 */
     {
       LISTDECL();
       LISTBEGIN(list);
-      LISTCALL(lCloseMsg, FALSE, (Rect *)0, * (Cell *) &HxX(list, clikLoc), 0,
+      LISTCALL(lCloseMsg, false, (Rect *)0, * (Cell *) &HxX(list, clikLoc), 0,
 	       0, list);
       LISTEND(list);
 

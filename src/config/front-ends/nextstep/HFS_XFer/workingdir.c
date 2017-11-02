@@ -34,7 +34,7 @@ PUBLIC OSErr myPBOpenWD(WDPBPtr pb, BOOLEAN async)
     HVCB *vcbp;
     
     retval = findvcbandfile((ioParam *)pb, pb->ioWDDirID, &btparamrec, &kind,
-    																	 FALSE);
+    																	 false);
     if (retval != noErr)
 	PBRETURN(pb, retval);
     vcbp = btparamrec.vcbp;

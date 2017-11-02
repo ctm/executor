@@ -170,7 +170,7 @@ enum { LENGTH_OFFSET = 0, Y_OFFSET = 1, X_OFFSET = 2, MOUSE_OFFSET = 1 };
 enum { BUTTON_UP_BIT = 0x80 };
 
 /*
- * if deltas_p is TRUE, dx and dy are supplied as arguments, otherwise they
+ * if deltas_p is true, dx and dy are supplied as arguments, otherwise they
  * have to be computed as deltas off the last known MouseLocation.  Eventually
  * we should probably always have them be supplied as arguments since we
  * should probably make our mouse handling more true to real life.
@@ -179,7 +179,7 @@ enum { BUTTON_UP_BIT = 0x80 };
 PUBLIC void
 Executor::adb_apeiron_hack (bool deltas_p, ...)
 {
-  static bool been_here = FALSE;
+  static bool been_here = false;
   static long old_x;
   static long old_y;
   long x, y;
@@ -208,7 +208,7 @@ Executor::adb_apeiron_hack (bool deltas_p, ...)
     {
       old_x = x;
       old_y = y;
-      been_here = TRUE;
+      been_here = true;
     }
   if (adb_vector_is_not_our_own ())
     {

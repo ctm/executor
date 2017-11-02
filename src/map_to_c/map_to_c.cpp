@@ -407,7 +407,7 @@ read_and_process_block (char *map_name,
   int i;
 
   /* flag indicating if there are slop bits that need to be emitted
-     after looping through the pixels; TRUE if the width is not a
+     after looping through the pixels; true if the width is not a
      multiple of 8 */
   int bounds_slop_p;
   

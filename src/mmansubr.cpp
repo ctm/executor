@@ -29,7 +29,7 @@ using namespace Executor;
 void
 Executor::mman_heap_death (const char *func, const char *where)
 {
-  static bool already_dead_p = FALSE;
+  static bool already_dead_p = false;
   char err_msg[256];
 
   sprintf (err_msg,
@@ -39,7 +39,7 @@ Executor::mman_heap_death (const char *func, const char *where)
 
   if (!already_dead_p)  /* Avoid recursion. */
     {
-      already_dead_p = TRUE;
+      already_dead_p = true;
 
       warning_unexpected ("%s", err_msg);
 
@@ -86,7 +86,7 @@ mm_slam_hook (void)
     mm_slam_hook ();							\
     /* d'oh! */								\
     *(volatile uint32 *) -1;						\
-  } while (FALSE)
+  } while (false)
 #endif
 
 
@@ -95,7 +95,7 @@ mm_slam_hook (void)
 void
 dump_zone (THz zone)
 {
-  ROMlib_sledgehammer_zone (zone, TRUE, NULL, NULL, -1, NULL, NULL);
+  ROMlib_sledgehammer_zone (zone, true, NULL, NULL, -1, NULL, NULL);
 }
 
 #endif /* ERROR_SUPPORTED_P (ERROR_MEMORY_MANAGER_SLAM) */
@@ -188,7 +188,7 @@ addr_info (char *addr)
 	  && (char *) BLOCK_DATA (ptr_block) == ptr
 	  && BLOCK_TO_HANDLE (addr_zone, ptr_block) == handle)
 	{
-	  addr_is_handle_p = TRUE;
+	  addr_is_handle_p = true;
 	  
 	  goto handle_addr_info;
 	}
@@ -212,7 +212,7 @@ addr_info (char *addr)
     {
       /* relocatable block */
       handle = BLOCK_TO_HANDLE (addr_zone, block);
-      addr_is_handle_p = FALSE;
+      addr_is_handle_p = false;
       
       goto handle_addr_info;
     }
@@ -324,7 +324,7 @@ Executor::ROMlib_sledgehammer_zone (THz zone, bool print_p,
 			  const char *where, zone_info_t *infop)
 {
   block_header_t *block, *zone_start, *zone_end, *alloc_ptr;
-  bool found_alloc_ptr_p = FALSE;
+  bool found_alloc_ptr_p = false;
   int total_size;
   
   if (infop)
@@ -444,7 +444,7 @@ Executor::ROMlib_sledgehammer_zone (THz zone, bool print_p,
 	}
       
       if (block == alloc_ptr)
-	found_alloc_ptr_p = TRUE;
+	found_alloc_ptr_p = true;
     }
   if (alloc_ptr
       && ! found_alloc_ptr_p)
@@ -456,15 +456,15 @@ void
 Executor::ROMlib_sledgehammer_zones (const char *fn, const char *file, int lineno,
 			   const char *where, zone_info_t *info_array)
 {
-	ROMlib_sledgehammer_zone (MR (SysZone), FALSE,
+	ROMlib_sledgehammer_zone (MR (SysZone), false,
 							  fn, file, lineno, where,
 							  info_array ? &info_array[0] : NULL);
-	ROMlib_sledgehammer_zone (MR (ApplZone), FALSE,
+	ROMlib_sledgehammer_zone (MR (ApplZone), false,
 							  fn, file, lineno, where,
 							  info_array ? &info_array[1] : NULL);
 	if (TheZone != SysZone
 		&& TheZone != ApplZone)
-		ROMlib_sledgehammer_zone (MR (TheZone), FALSE,
+		ROMlib_sledgehammer_zone (MR (TheZone), false,
 								  fn, file, lineno, where,
 								  info_array ? &info_array[2] : NULL);
 }
@@ -697,11 +697,11 @@ Executor::ROMlib_pushblock (block_header_t *block, block_header_t *after)
 	  if (PSIZE (t_block) >= PSIZE (block))
 	    {
 	      ROMlib_moveblock (block, t_block, PSIZE (block) - SIZEC (block));
-	      return TRUE;
+	      return true;
 	    }
 	}
     }
-  return FALSE;
+  return false;
 }
 
 bool Executor::ROMlib_memnomove_p = 0;
@@ -739,7 +739,7 @@ Executor::ROMlib_makespace (block_header_t **block_out, uint32 size)
   if (total_size < size)
     {
       *block_out = old_block;
-      return FALSE;
+      return false;
     }
 
   /* Sum the size of the remaining free blocks. */
@@ -763,7 +763,7 @@ Executor::ROMlib_makespace (block_header_t **block_out, uint32 size)
 	{
 	  /* SetHandleSize will still recover through relalloc */
 	  *block_out = b;
-	  return FALSE;
+	  return false;
 	}
     }
 
@@ -776,7 +776,7 @@ Executor::ROMlib_makespace (block_header_t **block_out, uint32 size)
   gui_assert ((lastblock == (block_header_t *) ((char *) block + total_size)));
 
   SETPSIZE (block, total_size);
-  return TRUE;
+  return true;
 }
 
 /* Tell if BLOCK is locked or not */

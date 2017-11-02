@@ -287,7 +287,7 @@ enum { DEFAULT_HAND = DTR | RTS };
 PRIVATE void
 make_sure_sva_initted (void)
 {
-  static bool initted = FALSE;
+  static bool initted = false;
 
   if (!initted)
     {
@@ -297,7 +297,7 @@ make_sure_sva_initted (void)
       SVAsyncFifoInit ();
       SVAsyncSet (DEFAULT_BAUD, DEFAULT_COM);
       shadow_SVAsyncHand (DEFAULT_HAND);
-      initted = TRUE;
+      initted = true;
     }
 }
 

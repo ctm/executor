@@ -29,10 +29,10 @@ extern virtual_int_state_t _virtual_interrupts_blocked;
  */
 # define block_virtual_ints()				\
 ({ virtual_int_state_t _old_state;			\
-   _old_state = ((_virtual_interrupts_blocked & TRUE)	\
+   _old_state = ((_virtual_interrupts_blocked & true)	\
 		 | ((cpu_state.sr >> 7) & 0xE));	\
    cpu_state.sr |= (7 << 8);	/* int mask = 7 */	\
-   _virtual_interrupts_blocked = TRUE;			\
+   _virtual_interrupts_blocked = true;			\
    _old_state;						\
  })
 # define restore_virtual_ints(n)					     \

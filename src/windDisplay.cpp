@@ -79,12 +79,12 @@ P2(PUBLIC pascal trap, void, HiliteWindow, WindowPtr, w, BOOLEAN, flag)
 	 ClipAbove ((WindowPeek) w);
 	 if (flag && !WINDOW_HILITED_X (w))
 	   {
-	     WINDOW_HILITED_X (w) = TRUE;
+	     WINDOW_HILITED_X (w) = true;
 	     WINDCALL(w, wDraw, 0);
 	   }
 	 else if (!flag && WINDOW_HILITED_X (w))
 	   {
-	     WINDOW_HILITED_X (w) = FALSE;
+	     WINDOW_HILITED_X (w) = false;
 	     WINDCALL(w, wDraw, 0);
 	   }
        });
@@ -136,19 +136,19 @@ P1(PUBLIC pascal trap, void, SelectWindow, WindowPtr, w)
   cactive = FrontWindow ();
   if (cactive != w)
     {
-      HiliteWindow (cactive, FALSE);
+      HiliteWindow (cactive, false);
       CurDeactive = RM (cactive);
       CurActivate = RM (w);
     }
   BringToFront (w);
-  HiliteWindow (w, TRUE);
+  HiliteWindow (w, true);
 }
 
 P2(PUBLIC pascal trap, void, ShowHide, WindowPtr, w, BOOLEAN, flag)
 {
   if (flag && !WINDOW_VISIBLE_X (w))
     {
-      WINDOW_VISIBLE_X (w) = TRUE;
+      WINDOW_VISIBLE_X (w) = true;
       /* notify the palette manager that the `FrontWindow ()' may have
 	 changed */
       pm_front_window_maybe_changed_hook ();
@@ -195,7 +195,7 @@ P2(PUBLIC pascal trap, void, ShowHide, WindowPtr, w, BOOLEAN, flag)
     }
   else if (!flag && WINDOW_VISIBLE_X (w))
     {
-      WINDOW_VISIBLE_X (w) = FALSE;
+      WINDOW_VISIBLE_X (w) = false;
       /* notify the palette manager that the `FrontWindow ()' may have
 	 changed */
       pm_front_window_maybe_changed_hook ();
@@ -225,9 +225,9 @@ P1(PUBLIC pascal trap, void, HideWindow, WindowPtr, w)
 	    SelectWindow ((WindowPtr) nextvis);
 	  else
 	    CurDeactive = RM (w);
-	  WINDOW_HILITED_X (w) = FALSE;
+	  WINDOW_HILITED_X (w) = false;
 	}
-      ShowHide(w, FALSE);
+      ShowHide(w, false);
     }
 }
 
@@ -240,16 +240,16 @@ P1(PUBLIC pascal trap, void, ShowWindow, WindowPtr, w)
   if (!WINDOW_VISIBLE_X (w))
     {
       TRAPBEGIN ();
-      ShowHide (w, TRUE);
+      ShowHide (w, true);
       if (FrontWindow () == w && !WINDOW_HILITED_X (w))
 	{
-	  HiliteWindow (w, TRUE);
+	  HiliteWindow (w, true);
 	  CurActivate = RM (w);
 	  for (t = WINDOW_NEXT_WINDOW (w);
 	       t && !WINDOW_HILITED_X (t);
 	       t = WINDOW_NEXT_WINDOW (t))
 	    ;
-	  HiliteWindow ((WindowPtr) t, FALSE);
+	  HiliteWindow ((WindowPtr) t, false);
 	  CurDeactive = RM ((WindowPtr)t);
 	}
       TRAPEND();
@@ -320,9 +320,9 @@ P2(PUBLIC pascal trap, void, SendBehind, WindowPtr, w, WindowPtr, behind)
     newfront = (WindowPeek) FrontWindow ();
     if (oldfront != newfront) {
 	CurDeactive = CL((WindowPtr) oldfront);
-	HiliteWindow((WindowPtr) oldfront, FALSE);
+	HiliteWindow((WindowPtr) oldfront, false);
 	CurActivate = CL((WindowPtr) newfront);
-	HiliteWindow((WindowPtr) newfront, TRUE);
+	HiliteWindow((WindowPtr) newfront, true);
     }
 #else /* 0 */
     if (oldfront == (WindowPeek) w && MR (WindowList) != (WindowPeek) w)

@@ -277,13 +277,13 @@ P3(PUBLIC pascal trap, LONGINT, GetScrap, Handle, h, ResType, rest,
         retval = FSOpen(MR(ScrapName), CW (BootDrive), &f);
         if (retval != noErr)
 /*-->*/     RETURN(retval);
-        found = FALSE;
+        found = false;
         while (l < Cx(ScrapSize)  && !found) {
             ltoread = 8;
             FSReadAll(f, &ltoread, (Ptr) restlen);
 	    s = CL(restlen[1]);
             if (rest == CL(restlen[0]))
-                found = TRUE;
+                found = true;
             else {
                 incr = (8 + s + 1) & ~1L;
                 l += incr;

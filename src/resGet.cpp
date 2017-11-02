@@ -417,7 +417,7 @@ P2(PUBLIC pascal trap, Handle, GetNamedResource, ResType, typ, StringPtr, nam)
   Handle retval;
 
   retval = NULL;
-  if (EqualString (nam, about_box_menu_name_pstr, TRUE, TRUE))
+  if (EqualString (nam, about_box_menu_name_pstr, true, true))
     {
       static Handle phoney_hand;
 
@@ -487,7 +487,7 @@ P1 (PUBLIC pascal trap, void, LoadResource, Handle volatile, res)
 	  BOOLEAN save_resload;
 
 	  save_resload = ResLoad;
-	  SetResLoad (TRUE);
+	  SetResLoad (true);
 	  ROMlib_mgetres (map, rr);
 	  ResLoad = save_resload;
 	}

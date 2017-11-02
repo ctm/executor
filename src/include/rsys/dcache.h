@@ -15,8 +15,8 @@ extern uint32 dcache_read (uint32 fd, void *buf, uint32 offset, uint32 count,
 extern uint32 dcache_write (uint32 fd, const void *buf, uint32 offset,
 			  uint32 count, write_callback_funcp_t write_callback = NULL);
 
-extern bool dcache_invalidate (uint32 fd, bool flush_p = FALSE);
+extern bool dcache_invalidate (uint32 fd, bool flush_p = false);
 extern bool dcache_flush (uint32 fd);
-extern bool dcache_invalidate_all (bool flush_p = FALSE);
+extern bool dcache_invalidate_all (bool flush_p = false);
 }
 #endif  /* !_RSYS_DCACHE_H_ */

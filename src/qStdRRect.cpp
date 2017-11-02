@@ -80,23 +80,23 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r)		/* INTERNAL */
     }
     
     if (dh > dv) {
-        scalex = FALSE;
-        scaley = TRUE;
+        scalex = false;
+        scaley = true;
         rad = dh;
     } else if (dv > dh) {
-        scalex = TRUE;
-        scaley = FALSE;
+        scalex = true;
+        scaley = false;
         rad = dv;
     } else {
-        scalex = FALSE;
-        scaley = FALSE;
+        scalex = false;
+        scaley = false;
         rad = dv;
     }
     
     centl = CW(r->left) + dh / 2;
     centr = CW(r->left) + (dh + 1) / 2;
     centt = top + dv / 2;
-    first = TRUE;
+    first = true;
     
     op = (INTEGER *) STARH(rh) + 5;    
     x = 0;
@@ -137,7 +137,7 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r)		/* INTERNAL */
                     *op++ = CW_RAW(centr + nx);
                     *op++ = RGNSTOPX;
                     ox = nx;
-                    first = FALSE;
+                    first = false;
                 } else {
                     if (nx != ox) {
                         *op++ = CW_RAW(centt - oy);

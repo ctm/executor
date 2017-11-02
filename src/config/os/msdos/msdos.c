@@ -56,7 +56,7 @@ switch_to_non_moving_sbrk (void)
   _crt0_startup_flags |= _CRT0_FLAG_NONMOVE_SBRK;
 }
 
-/* Set to TRUE when we aren't able to get the real free memory info. */
+/* Set to true when we aren't able to get the real free memory info. */
 static bool dpmi_mem_is_rough_guess_p;
 
 static void
@@ -84,7 +84,7 @@ guess_good_memory_settings (void)
       if (mem_info.total_number_of_free_pages != -1)
 	{
 	  detected_dpmi_mem = mem_info.total_number_of_free_pages * page_size;
-	  dpmi_mem_is_rough_guess_p = FALSE;
+	  dpmi_mem_is_rough_guess_p = false;
 	}
       else
 	{
@@ -104,7 +104,7 @@ guess_good_memory_settings (void)
 	  else
 	    detected_dpmi_mem = 0;
 
-	  dpmi_mem_is_rough_guess_p = TRUE;
+	  dpmi_mem_is_rough_guess_p = true;
 	}
 
       if (detected_dpmi_mem > 512 * 1024 * 1024)
@@ -126,7 +126,7 @@ guess_good_memory_settings (void)
 }
 
 
-/* Initializes OS-specific features.  Returns TRUE if successful, FALSE
+/* Initializes OS-specific features.  Returns true if successful, false
  * on failure.
  */
 bool
@@ -145,7 +145,7 @@ os_init (void)
   if (!init_dos_memory ())
     {
       puts ("Unable to allocate conventional memory.");
-      return FALSE;
+      return false;
     }
 
   /* Lock down memory we might touch at interrupt time. */
@@ -155,7 +155,7 @@ os_init (void)
   /* Make an educated guess for what memory sizes the user might want. */
   guess_good_memory_settings ();
 
-  return TRUE;
+  return true;
 }
 
 

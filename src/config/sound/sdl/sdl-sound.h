@@ -39,7 +39,7 @@ namespace Executor {
     
     int semid;  /* Semaphore id */
     int sound_on; /* 1 if we are generating interrupts */
-    bool have_sound_p; /* TRUE if sound is supported */
+    bool have_sound_p; /* true if sound is supported */
     
     unsigned char buf[7*BUFSIZE];
     void patl_wait();

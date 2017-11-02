@@ -209,7 +209,7 @@ P2(PUBLIC pascal trap, MenuHandle, NewMenu, INTEGER, mid, StringPtr, str)
     HxX(retval, menuID) = CW(mid);
     HxX(retval, menuWidth) = HxX(retval, menuHeight) = 0;
     /* menuHeight calculated elsewhere */
-    SetResLoad(TRUE);
+    SetResLoad(true);
     temph = RM(GetResource(TICK("MDEF"), textMenuProc));
     HxX(retval, menuProc) = temph;
     HxX(retval, enableFlags) = CLC(-1);
@@ -253,7 +253,7 @@ P1 (PUBLIC pascal trap, MenuHandle, GetMenu, int16, rid)
   MenuHandle retval;
   Handle mct_res_h;
   
-  SetResLoad (TRUE);
+  SetResLoad (true);
   retval = (MenuHandle) GetResource (TICK ("MENU"), rid);
   
   mct_res_h = ROMlib_getrestid (TICK ("mctb"), rid);
@@ -433,7 +433,7 @@ P2(PUBLIC pascal trap, void, AppendMenu, MenuHandle, mh, StringPtr, str)
 	  i--;
 	  break;
 	case '(':
-	  disflag = TRUE;
+	  disflag = true;
 	  break;
 	case ';':
 	case '\n':
@@ -463,11 +463,11 @@ A2(PRIVATE, void, handleinsert, Handle, h, StringPtr, strp)
 
     n = GetHandleSize(h);
     sp = (StringPtr) STARH(h);
-    done = FALSE;
+    done = false;
     while (n > 0 && !done) {
-	switch (RelString(sp, strp, TRUE, TRUE)) {
+	switch (RelString(sp, strp, true, true)) {
 	case 1:
-	    done = TRUE;
+	    done = true;
 	    break;
 	case 0:
 	    return;
@@ -494,7 +494,7 @@ P2(PUBLIC pascal trap, void, AddResMenu, MenuHandle, mh, ResType, restype)
       Handle temph;
       StringPtr sp;
  
-      SetResLoad(FALSE);
+      SetResLoad(false);
       toend(mh, &endinf);
       temph = NewHandle((Size) 0);
       do
@@ -519,23 +519,23 @@ P2(PUBLIC pascal trap, void, AddResMenu, MenuHandle, mh, ResType, restype)
 			   sizeof EXECUTOR_NAME - 1) != 0))
 	about_box_menu_name_pstr = (StringPtr) "\016\000About CCRS...";
       if (restype == TICK ("DRVR") && about_box_menu_name_pstr[0])
-	app (about_box_menu_name_pstr, 0, 0, 0, 0, FALSE, &endinf);
+	app (about_box_menu_name_pstr, 0, 0, 0, 0, false, &endinf);
 
       n = GetHandleSize(temph);
       sp = (StringPtr) STARH(temph);
       HLock(temph);
       while (n > 0)
 	{
-	  app(sp, 0, 0, 0, 0, FALSE, &endinf);
+	  app(sp, 0, 0, 0, 0, false, &endinf);
 	  n  -= sp[0] + 1;
 	  sp += sp[0] + 1;
 	}
       HUnlock(temph);
       DisposHandle(temph);
-      SetResLoad(TRUE);	/* IMI-353 says to do this. */
+      SetResLoad(true);	/* IMI-353 says to do this. */
       dirtymenusize(mh);
     }
-  /* FIXME - IMI-353 says to call SetResLoad(TRUE), but we only do
+  /* FIXME - IMI-353 says to call SetResLoad(true), but we only do
    * this "if (mh)".
    */
 }
@@ -848,9 +848,9 @@ menu_id_exists_p (int id)
   for (mp = mps[nonhier].startp; mp != mps[nonhier].endp; mp ++)
     {
       if (CW (STARH (MR (mp->muhandle))->menuID) == id)
-	return TRUE;
+	return true;
     }
-  return FALSE;
+  return false;
 }
 
 A1(PUBLIC, INTEGER, ROMlib_mentosix, INTEGER, menuid)
@@ -878,9 +878,9 @@ A2(PRIVATE, BOOLEAN, mtoggle, INTEGER, mid, highstate, h)
     if (l != -1) {
 	l |= (LONGINT) h << 16;
 	MBDFCALL(mbHilite, 0, l);
-/*-->*/	return TRUE;
+/*-->*/	return true;
     }
-    return FALSE;
+    return false;
 }
 
 P1 (PUBLIC pascal trap, void, HiliteMenu, INTEGER, mid)
@@ -1035,14 +1035,14 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
     firstitem = 0;
   else
     firstitem = -1;
-  changedmenus = FALSE;
+  changedmenus = false;
   r = *saverp;
   memset (&dummy_pt, 0xFF, sizeof dummy_pt);
   oldwhichmenuhit = whichmenuhit = wheretowhich(oldwhere);
   restoredrgn = NewRgn();
 
-  seen_up_already = FALSE;
-  done = FALSE;
+  seen_up_already = false;
+  done = false;
   goto enter;
   while (!done)
     {
@@ -1066,7 +1066,7 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 		{
 		  if (firstitem == -1)
 		    firstitem = item;
-		  changedmenus = FALSE;
+		  changedmenus = false;
 		  if ((i = nmenusdisplayed - whichmenuhit))
 		    {
 		      restoren(i, restoredrgn, &r);
@@ -1194,7 +1194,7 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
 	      oldentry = (mbdfentry *)STARH(MR(MBSaveLoc)) + oldwhichmenuhit;
 	      oldentry->mbReserved = CL((ULONGINT)item);
 	      olditem = item = CL(newentry->mbReserved);
-	      changedmenus = TRUE;
+	      changedmenus = true;
 	      mh = MR(((muelem *) ((char *)STARH(MR(MenuList)) + where))->muhandle);
 	      templ = where;
 	      if (where > Hx(MENULIST, muoff))
@@ -1219,11 +1219,11 @@ enter:
 	  if (OSEventAvail (mUpMask, &ev))
 	    {
 	      if (seen_up_already || (item != firstitem && firstitem != -1))
-		done = TRUE;
+		done = true;
 	      else
 		{
 		  GetOSEvent (mUpMask, &ev);
-		  seen_up_already = TRUE;
+		  seen_up_already = true;
 		}
 	    }
 	  if (!done && OSEventAvail (mDownMask, &ev))
@@ -1318,7 +1318,7 @@ P1(PUBLIC pascal trap, LONGINT, MenuSelect, Point, p)
     LONGINT retval;
 
     TopMenuItem = MBarHeight;
-    retval = ROMlib_menuhelper((MenuHandle) 0, &spooeyr, 0, FALSE, 0);
+    retval = ROMlib_menuhelper((MenuHandle) 0, &spooeyr, 0, false, 0);
     return retval;
 }
 
@@ -1377,9 +1377,9 @@ A2(PRIVATE, BOOLEAN, findroot, INTEGER, menuid, INTEGER *, root_unswp)
 	gui_assert(0);	/* should be SysError */
     if (partype == nonhierparent) {
 	*root_unswp = menuid;
-/*-->*/	return TRUE;
+/*-->*/	return true;
     }
-    return FALSE;
+    return false;
 }
 
 P1(PUBLIC pascal trap, LONGINT, MenuKey, CHAR, thec)

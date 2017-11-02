@@ -181,7 +181,7 @@ LONG CALLBACK AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	size.bottom = vdriver_height;
 	size.left = 0;
 	size.right = vdriver_width;
-	AdjustWindowRect(&size, GetWindowLong(hwnd, GWL_STYLE), FALSE);
+	AdjustWindowRect(&size, GetWindowLong(hwnd, GWL_STYLE), false);
 	width = size.right - size.left;
 	height = size.bottom - size.top;
 
@@ -211,14 +211,14 @@ LONG CALLBACK AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	ROMlib_PPostEvent(w32_mousedown_p ? mouseDown : mouseUp,
 			  0, (GUEST<EvQElPtr> *) 0,
 			  when, where, button_state);
-	adb_apeiron_hack (FALSE);
+	adb_apeiron_hack (false);
 	break;
       }
 
     case WM_MOUSEMOVE:
       MouseLocation.h = CW (LOWORD (lParam));
       MouseLocation.v = CW (HIWORD (lParam));
-      adb_apeiron_hack (FALSE);
+      adb_apeiron_hack (false);
       break;
 
     case WM_SYSKEYDOWN:
@@ -324,7 +324,7 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
     cls.cbWndExtra     = 0;
     cls.cbClsExtra     = 0;
     if (!RegisterClass(&cls))
-      return FALSE;
+      return false;
   }
 
   /* Initialize the global windowing variables */

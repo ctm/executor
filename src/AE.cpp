@@ -122,10 +122,10 @@ P1 (PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
     }
   AEEventID event_id = CL (event_id_s);
   
-  err = AEGetEventHandler (event_class, event_id, &hdlr_s, &refcon_s, FALSE);
+  err = AEGetEventHandler (event_class, event_id, &hdlr_s, &refcon_s, false);
   if (err != noErr)
     {
-      err = AEGetEventHandler (event_class, event_id, &hdlr_s, &refcon_s, TRUE);
+      err = AEGetEventHandler (event_class, event_id, &hdlr_s, &refcon_s, true);
       if (err != noErr)
 	{
 	  AEDisposeDesc (evt);
@@ -421,13 +421,13 @@ P5 (PUBLIC pascal trap, OSErr, AECoercePtr,
   err = AEGetCoercionHandler (data_type, result_type,
 			      &coercion_hdlr_s, &refcon_s,
 			      &is_desc_hdlr_p,
-			      FALSE);
+			      false);
   if (err != noErr)
     {
       err = AEGetCoercionHandler (data_type, result_type,
 				  &coercion_hdlr_s, &refcon_s,
 				  &is_desc_hdlr_p,
-				  TRUE);
+				  true);
       if (err != noErr)
 	AE_RETURN_ERROR (errAECoercionFail);
     }
@@ -558,13 +558,13 @@ P3 (PUBLIC pascal trap, OSErr, AECoerceDesc,
   err = AEGetCoercionHandler (desc_type, result_type,
 			      &coercion_hdlr_s, &refcon_s,
 			      &is_desc_hdlr_p,
-			      FALSE);
+			      false);
   if (err != noErr)
     {
       err = AEGetCoercionHandler (desc_type, result_type,
 				  &coercion_hdlr_s, &refcon_s,
 				  &is_desc_hdlr_p,
-				  TRUE);
+				  true);
       if (err != noErr)
 	goto fail;
     }

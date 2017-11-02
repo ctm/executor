@@ -12,7 +12,7 @@
 #include <dev/scsireg.h>
 #include <sys/file.h>
 
-enum { FALSE, TRUE };
+enum { false, true };
 
 static capacity_reply_t cap;
 char buf[1024];
@@ -25,24 +25,24 @@ void main(int argc, const char *argv[])
     scsi_adr_t saddr;
     scsi_req_t cmd;
     
-    goodargs = TRUE;
-    tflag = FALSE;
+    goodargs = true;
+    tflag = false;
     if (argc == 3) {
 	unitstr = argv[1];
 	lunstr  = argv[2];
     } else if (argc == 4 && argv[1][0] == '-' &&
 			    argv[1][1] == 't' &&
 			    argv[1][2] == 0) {
-	tflag = TRUE;
+	tflag = true;
 	unitstr = argv[2];
 	lunstr  = argv[3];
     } else
-	goodargs = FALSE;
+	goodargs = false;
     if (goodargs) {
 	saddr.sa_target = atoi(unitstr);
 	saddr.sa_lun    = atoi(lunstr);
 	if (saddr.sa_target > 7 || saddr.sa_lun > 7)
-	    goodargs = FALSE;
+	    goodargs = false;
     }
     if (!goodargs)
 	exit(1);

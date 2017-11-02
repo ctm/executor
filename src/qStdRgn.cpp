@@ -104,7 +104,7 @@ Executor::ROMlib_blt_rgn_update_dirty_rect
 
 	  if (dst_rgb_spec)
 	    fg_color = ((*dst_rgb_spec->rgbcolor_to_pixel)
-			(dst_rgb_spec, &fg_rgb, TRUE));
+			(dst_rgb_spec, &fg_rgb, true));
 	  else
 	    fg_color = Color2Index (&fg_rgb);
 	}
@@ -181,7 +181,7 @@ Executor::ROMlib_blt_rgn_update_dirty_rect
       dst_rect = src_rect = &bbox;
       mode = srcCopy;
       pixmap_black_white (src_pm, &fg_color, &bk_color);
-      tile_src_p = FALSE;
+      tile_src_p = false;
     }
 
 /* #warning "don't ignore dither mode at some point in the future" */
@@ -338,7 +338,7 @@ blt_pattern_to_bitmap_simple_mode (RgnHandle rh, INTEGER mode,
       dst_pixmap = *STARH (main_gd_pmap);
       ROMlib_fg_bk (&fg_pixel, &bk_pixel, NULL, NULL,
 		    pixmap_rgb_spec (STARH (main_gd_pmap)),
-		    TRUE, FALSE);
+		    true, false);
     }
   else
     {
@@ -347,7 +347,7 @@ blt_pattern_to_bitmap_simple_mode (RgnHandle rh, INTEGER mode,
       dst_pixmap.rowBytes  = dst->rowBytes | PIXMAP_DEFAULT_ROWBYTES_X;
       dst_pixmap.pmTable   = RM (ROMlib_bw_ctab);
       
-      ROMlib_fg_bk (&fg_pixel, &bk_pixel, NULL, NULL, NULL, FALSE, FALSE);
+      ROMlib_fg_bk (&fg_pixel, &bk_pixel, NULL, NULL, NULL, false, false);
     }
   
   dst_pixmap.bounds = dst->bounds;
@@ -422,8 +422,8 @@ blt_pixpat_to_pixmap_simple_mode (RgnHandle rh, INTEGER mode,
 	       xh = (xdata_handle_t) NewHandle (sizeof (xdata_t));
 	       HxX (xh, raw_pat_bits_mem) = (Ptr)RM (NULL);
 	       src->patXData = RM ((Handle) xh);
-	       xdata_valid_p = FALSE;
-	       handle_size_wrong_p = FALSE;
+	       xdata_valid_p = false;
+	       handle_size_wrong_p = false;
 	     }
 	   else
 	     {
@@ -510,7 +510,7 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
   if (!pixpat_handle)
     {
       xh = xdata_for_pattern (pattern, pixmap);
-      apply_fg_bk_p = TRUE;
+      apply_fg_bk_p = true;
     }
   else
     {
@@ -523,12 +523,12 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
 	   if (pixpat->patType == CWC (pixpat_type_orig))
 	     {
 	       xh = xdata_for_pattern (pixpat->pat1Data, pixmap);
-	       apply_fg_bk_p = TRUE;
+	       apply_fg_bk_p = true;
 	     }
 	   else			/* newer-style pixpat */
 	     {
 	       xh = xdata_for_pixpat (pixpat, pixmap);
-	       apply_fg_bk_p = FALSE;
+	       apply_fg_bk_p = false;
 	     }
 #if 0
 	 });
@@ -560,7 +560,7 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
       
       ROMlib_fg_bk (&fg_pixel, &bk_pixel, NULL, NULL,
 		    pixmap_rgb_spec (pixmap),
-		    active_screen_addr_p (pixmap), FALSE);
+		    active_screen_addr_p (pixmap), false);
       
       /* Tile the pixel values out to 32 bpp. */
       tiled_fg_pixel = ((fg_pixel & ROMlib_pixel_size_mask[log2_bpp])
@@ -596,7 +596,7 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
       convert_transparent (&pattern_pm, pixmap, &converted_pm,
 			   &bbox, &bbox,
 			   mode,
-			   TRUE,
+			   true,
 /* #warning "have mat figure out what the tiling offsets should be" */
 			   0, 0);
     }
@@ -617,7 +617,7 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
       convert_pixmap_with_IMV_mode (&pattern_pm, pixmap, &converted_pm,
 				    ctab, ctab, itab,
 				    &bbox, &bbox,
-				    mode, &op_color, TRUE,
+				    mode, &op_color, true,
 /* #warning "have mat figure out what the tiling offsets should be" */
 				    0, 0);
     }

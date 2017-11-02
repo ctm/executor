@@ -25,7 +25,7 @@ BOOLEAN myvol(ioParam *pb)
     LONGINT dir;
     
 #if defined(ORIG)
-    return FALSE;
+    return false;
 #endif
     vcbp = findvcb(pb->ioVRefNum, pb->ioNamePtr, &dir);
 #if !defined(UNIX)
@@ -35,14 +35,14 @@ BOOLEAN myvol(ioParam *pb)
     return strncmp((char *) vcbp->vcbVN, "\pMyVol", vcbp->vcbVN[0]+1) == 0;
 #else
     if (!vcbp)
-	return FALSE;	/* hopefully is a messed up working dir reference */
+	return false;	/* hopefully is a messed up working dir reference */
     if (vcbp->vcbCTRef) {
 #if defined(CACHECHECK)
 	cachecheck(vcbp);
 #endif /* defined(CACHECHECK) */
-	return TRUE;
+	return true;
     } else
-	return FALSE;
+	return false;
 #endif
 }
 
@@ -52,7 +52,7 @@ BOOLEAN myfil(ioParam *pb)
     HVCB *vcbp;
 
 #if defined(ORIG)
-    return FALSE;
+    return false;
 #endif
     fcbp = refnumtofcbp(pb->ioRefNum);
     if (fcbp) {
@@ -67,12 +67,12 @@ BOOLEAN myfil(ioParam *pb)
 #if defined(CACHECHECK)
 	    cachecheck(vcbp);
 #endif /* defined(CACHECHECK) */
-	    return TRUE;
+	    return true;
 	} else
-	    return FALSE;
+	    return false;
 #endif
     } else
-	return FALSE;
+	return false;
 }
 #endif
 

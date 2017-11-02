@@ -48,7 +48,7 @@ char ROMlib_rcsid_aspi[] =
 
 PUBLIC int ROMlib_skipaspi = 0;
 
-/* TRUE iff we have a legitimate ASPI driver. */
+/* true iff we have a legitimate ASPI driver. */
 PRIVATE bool has_aspi_p;
 
 /* Number of host adaptors.*/
@@ -85,7 +85,7 @@ srb_status (void)
   return retval;
 }
 
-/* Waits for completion or until the timeout expires.  Returns TRUE
+/* Waits for completion or until the timeout expires.  Returns true
  * if success was achieved before timeout.
  */
 PRIVATE bool
@@ -134,7 +134,7 @@ aspi_call (aspi_command_t *cmd)
     {
       warning_unexpected ("segment = 0x%x, offset = 0x%x", aspi_entry_segment,
 			aspi_entry_offset);
-      return FALSE;
+      return false;
     }
 
   cmd->srb.status = BUSY;
@@ -184,7 +184,7 @@ aspi_call_wait (aspi_command_t *cmd, unsigned long msecs_timeout)
   do
     {
       if (!aspi_call (cmd))
-	return FALSE;
+	return false;
       retval = aspi_wait (msecs_timeout, &status);
       if (!retval && status == COMPLETED_WITH_ERROR && (count != max -1))
 	aspi_reset (cmd);
@@ -407,7 +407,7 @@ is_int13_accessible (const aspi_iterator_t *aip, uint8 *drivep)
 
 /* #define TEMPORARY_HACK */
 #if defined(TEMPORARY_HACK)
-  return FALSE;
+  return false;
 #endif
 
   memset (&cmd, 0, sizeof cmd);
@@ -416,7 +416,7 @@ is_int13_accessible (const aspi_iterator_t *aip, uint8 *drivep)
   cmd.u.gddi.lun = aip->last_lun;
 
   if (!aspi_call_wait (&cmd, ASPI_DEFAULT_TIMEOUT))
-    retval = FALSE; /* assume it's not accessible */
+    retval = false; /* assume it's not accessible */
   else
     {
       retval = !((cmd.u.gddi.drive_flags & INT13_MASK)
@@ -468,7 +468,7 @@ mode_sense (const aspi_iterator_t *aip, unsigned long *block_lengthp,
   
   if (!aspi_call_wait (&cmd, ASPI_DEFAULT_TIMEOUT))
     {
-      retval = FALSE;
+      retval = false;
       warning_fs_log ("(%d) mode_sense failed, host adapter status = %d, "
 		      "target status = %d", aip->last_target,
 		      cmd.u.ec.host_adaptor_status, cmd.u.ec.target_status);
@@ -491,7 +491,7 @@ mode_sense (const aspi_iterator_t *aip, unsigned long *block_lengthp,
       *write_protectp = mode_sense_data.wp_shifted_7 >> 7;
       warning_fs_log ("(%d) mode_sense succeeded, bs = %ld, num = %ld",
 		      aip->last_target, *block_lengthp, *num_blocksp);
-      retval = TRUE;
+      retval = true;
     }
   return retval;
 }
@@ -531,7 +531,7 @@ inquiry (const aspi_iterator_t *aip, bool *removablep)
   if (!aspi_call_wait (&cmd, ASPI_DEFAULT_TIMEOUT))
     {
       warning_fs_log ("inquiry failed");
-      *removablep = FALSE;
+      *removablep = false;
     }
   else
     {
@@ -551,11 +551,11 @@ get_aspi_info (aspi_iterator_t *aip, aspi_info_t *aspi_info_p)
   bool retval;
 
   if (!has_aspi_p)
-    return FALSE;
+    return false;
 
-  retval = FALSE;
-  last_success_p = TRUE;
-  done_p = FALSE;
+  retval = false;
+  last_success_p = true;
+  done_p = false;
   do
     {
       ++aip->last_lun;
@@ -568,23 +568,23 @@ get_aspi_info (aspi_iterator_t *aip, aspi_info_t *aspi_info_p)
 	      aip->last_target = 0;
 	      ++aip->last_adaptor;
 	      if (aip->last_adaptor >= num_host_adaptors)
-		done_p = TRUE;
+		done_p = true;
 	    }
 	}
-      last_success_p = FALSE;
+      last_success_p = false;
 
       if (!done_p)
 	{
 	  peripheral_type_t type;
 	  bool force_read_only;
 
-	  force_read_only = FALSE;
+	  force_read_only = false;
 	  type = get_device_type (aip);
 	  switch (type)
 	    {
 	    case WRITE_ONCE_READ_MULTIPLE_DEVICE:
 	    case READ_ONLY_DIRECT_ACCESS_DEVICE:
-	      force_read_only = TRUE;
+	      force_read_only = true;
 	      /* FALL THROUGH */
 	    case DIRECT_ACCESS_DEVICE:
 	      {
@@ -619,17 +619,17 @@ get_aspi_info (aspi_iterator_t *aip, aspi_info_t *aspi_info_p)
 
 			    aspi_info_p->num_blocks = num_blocks;
 			    aspi_info_p->write_protect = (force_read_only
-							  ? TRUE
+							  ? true
 							  : write_protect);
 			    if (!media_present (aip, block_length))
 			      {
 				warning_fs_log ("not ready");
-				media_loaded = FALSE;
+				media_loaded = false;
 			      }
 			  }
-			retval = TRUE;
-			done_p = TRUE;
-			last_success_p = TRUE;
+			retval = true;
+			done_p = true;
+			last_success_p = true;
 		      }
 		  }
 	      }
@@ -682,11 +682,11 @@ update_aitp (aspi_info_t *aitp)
     {
       aitp->block_length = block_length;
       aitp->num_blocks = num_blocks;
-      aitp->write_protect = aitp->force_write_protect ? TRUE : write_protect;
+      aitp->write_protect = aitp->force_write_protect ? true : write_protect;
       aitp->media_present = media_present (&aip, block_length);
     }
   else
-    aitp->media_present = FALSE;
+    aitp->media_present = false;
 }
 
 /*
@@ -704,14 +704,14 @@ aspi_disk_open (int disk, drive_flags_t *flagsp, LONGINT *bsizep)
   if (aitp)
     {
       if (aitp->is_open)
-	retval = FALSE;
+	retval = false;
       else
 	{
 	  if (aitp->removable)
 	    update_aitp (aitp);
 
 	  if (!aitp->media_present)
-	    retval = FALSE;
+	    retval = false;
 	  else
 	    {
 	      if (aitp->write_protect)
@@ -725,15 +725,15 @@ aspi_disk_open (int disk, drive_flags_t *flagsp, LONGINT *bsizep)
 		  warning_unexpected ("aitp->block_length == 0");
 		  *bsizep = 2048;
 		}
-	      aitp->is_open = TRUE;
-	      retval = TRUE;
+	      aitp->is_open = true;
+	      retval = true;
 	    }
 	}
     }
   else
-    retval = FALSE;
+    retval = false;
 
-  dcache_invalidate (disk | ASPIFDBIT, FALSE);	/* just being paranoid...can't hurt */
+  dcache_invalidate (disk | ASPIFDBIT, false);	/* just being paranoid...can't hurt */
 
   return retval;
 }
@@ -750,8 +750,8 @@ aspi_disk_close (int disk, bool eject)
     retval = -1;
   else
     {
-      dcache_invalidate (disk | ASPIFDBIT, TRUE);
-      aitp->is_open = FALSE;
+      dcache_invalidate (disk | ASPIFDBIT, true);
+      aitp->is_open = false;
       retval = 0;
     }
 
@@ -805,7 +805,7 @@ aspi_disk_seek (int fd, off_t pos, int unused)
 			      pos,
 			      aitp->block_length,
 			      aitp->num_blocks);
-	  been_here = TRUE;
+	  been_here = true;
 	}
       /* pos = bytes_on_disk; NO! */
     }
@@ -843,9 +843,9 @@ aspi_disk_xfer (operation_code_t op, int disk, void *buf, int num_bytes)
   gui_assert ((num_bytes % aspi_info_ptr->block_length) == 0);
 
   if (op == WRITE_10)
-    dcache_invalidate (disk | ASPIFDBIT, TRUE);
+    dcache_invalidate (disk | ASPIFDBIT, true);
 
-  old_slow_clock_p = set_expect_slow_clock (TRUE);
+  old_slow_clock_p = set_expect_slow_clock (true);
 
   warning_fs_log ("(%d,%d,%d) pos = %d", aspi_info_ptr->adaptor,
 		  aspi_info_ptr->target, aspi_info_ptr->lun,
@@ -938,8 +938,8 @@ aspi_disk_write (int disk, const void *buf, int num_bytes)
 
 
 /* Attempts to open up the ASPI driver, filling in *file_handle with
- * the file handle for the ASPI driver.  Returns TRUE if successful,
- * else FALSE.
+ * the file handle for the ASPI driver.  Returns true if successful,
+ * else false.
  */
 PRIVATE bool
 open_aspi_driver (int *file_handle)
@@ -960,17 +960,17 @@ open_aspi_driver (int *file_handle)
     {
       warning_unexpected ("Unable to open ASPI driver: %s" NL,
 			  strerror (__doserr_to_errno (regs.x.ax)));
-      return FALSE;
+      return false;
     }
 
   /* Note the DOS file handle for the SCSI driver. */
   *file_handle = regs.x.ax;
 
-  return TRUE;
+  return true;
 }
 
 
-/* Closes the ASPI driver.  Returns TRUE iff successful. */
+/* Closes the ASPI driver.  Returns true iff successful. */
 PRIVATE bool
 close_aspi_driver (int file_handle)
 {
@@ -987,8 +987,8 @@ close_aspi_driver (int file_handle)
 
 
 /* Computes the entry point for the ASPI driver, storing it
- * in aspi_entry_segment and aspi_entry_offset.  Returns TRUE
- * if successful, else FALSE.
+ * in aspi_entry_segment and aspi_entry_offset.  Returns true
+ * if successful, else false.
  */
 PRIVATE bool
 setup_aspi_entry_point (int file_handle)
@@ -1006,13 +1006,13 @@ setup_aspi_entry_point (int file_handle)
   regs.x.cx = 4;
   regs.x.bx = file_handle;
   if (logging_dpmi_int (0x21, &regs, "ASPI Entry") == -1)
-    return FALSE;
+    return false;
 
   /* Load the segment/offset returned by the ASPI driver. */
   aspi_entry_offset  = _farpeekw (dos_buf_selector, 0);
   aspi_entry_segment = _farpeekw (dos_buf_selector, 2);
 
-  /* Only return TRUE if either value was set to nonzero, to be safe. */
+  /* Only return true if either value was set to nonzero, to be safe. */
   return (aspi_entry_segment || aspi_entry_offset);
 }
 
@@ -1040,7 +1040,7 @@ aspi_try_to_open_and_mount_disk (int disk)
 	}
       else
 	{
-	  aspi_disk_close (disk, FALSE);
+	  aspi_disk_close (disk, false);
 	}
     }
 }
@@ -1066,12 +1066,12 @@ mount_all_aspi_devices (void)
       aspi_try_to_open_and_mount_disk (i);
     }
 
-  return TRUE;
+  return true;
 }
 #endif /* !ASPI_STANDALONE */
 
 
-/* Computes and fills in num_host_adaptors, and returns TRUE if successful. */
+/* Computes and fills in num_host_adaptors, and returns true if successful. */
 PRIVATE
 bool setup_num_host_adaptors (void)
 {
@@ -1084,17 +1084,17 @@ bool setup_num_host_adaptors (void)
   if (aspi_call_wait (&cmd, ASPI_DEFAULT_TIMEOUT))
     {
       num_host_adaptors = cmd.u.haq.number_host_adaptors;
-      success_p = TRUE;
+      success_p = true;
     }
   else
-    success_p = FALSE;
+    success_p = false;
 
   return success_p;
 }
 
 
 /* Initializes the ASPI driver and mounts all ASPI devices.  Returns
- * TRUE on success, else FALSE.
+ * true on success, else false.
  */  
 PUBLIC bool
 aspi_init (void)
@@ -1109,11 +1109,11 @@ aspi_init (void)
   gui_assert (ASPI_COMMAND_SPACE >= sizeof (aspi_command_t));
 
   /* Default to not having ASPI. */
-  has_aspi_p = FALSE;
+  has_aspi_p = false;
 
   if (ROMlib_skipaspi || !open_aspi_driver (&file_handle) ||
       !setup_aspi_entry_point (file_handle))
-    retval = FALSE;
+    retval = false;
   else
     {
       /* We close the driver once we have the entry point, because this
@@ -1126,15 +1126,15 @@ aspi_init (void)
 
       /* Compute the number of host adaptors. */
       if (!setup_num_host_adaptors ())
-	retval = FALSE;
+	retval = false;
       else
 	{
-	  has_aspi_p = TRUE;
+	  has_aspi_p = true;
 
 #if !defined (ASPI_STANDALONE)
 	  retval = mount_all_aspi_devices ();
 #else
-	  retval = TRUE;
+	  retval = true;
 #endif
 	}
     }

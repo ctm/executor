@@ -113,7 +113,7 @@ PUBLIC compretval catcompare(void *firstp, void *secondp)
 	return firstisgreater;
     else
 	return RelString((StringPtr) ckp1->ckrCName, (StringPtr) ckp2->ckrCName,
-								   FALSE, TRUE);
+								   false, true);
 }
 
 PUBLIC void makextntkey(xtntkey *keyp, forktype forkwanted, LONGINT flnum,
@@ -492,10 +492,10 @@ PUBLIC OSErr AllocHelper(ioParam *pb, BOOLEAN async, alloctype alloc,
 	        makextntparam(&btparamrec, vcbp, 0, 0, 0);
 	        btparamrec.tofind = *(anykey *) xtkeyp;
 	        btparamrec.leafindex = -1;
-	        btparamrec.success = TRUE;
+	        btparamrec.success = true;
 	        btparamrec.foundp = (anykey *) xtkeyp;
 	    } else
-	        btparamrec.success = FALSE;
+	        btparamrec.success = false;
 	    while (btparamrec.success) {
 	        xp = (xtntdesc *) DATAPFROMKEY(btparamrec.foundp);
 		setbits(vcbp, xp[0].blockstart, xp[0].blockcount, 0);
@@ -580,17 +580,17 @@ done:
 
 PUBLIC OSErr myPBSetEOF(ioParam *pb, BOOLEAN async)
 {
-    return AllocHelper(pb, async, seteof, TRUE);
+    return AllocHelper(pb, async, seteof, true);
 }
 
 PUBLIC OSErr myPBAllocate(ioParam *pb, BOOLEAN async)
 {
-    return AllocHelper(pb, async, allocany, TRUE);
+    return AllocHelper(pb, async, allocany, true);
 }
 
 PUBLIC OSErr myPBAllocContig(ioParam *pb, BOOLEAN async)
 {
-    return AllocHelper(pb, async, alloccontig, TRUE);
+    return AllocHelper(pb, async, alloccontig, true);
 }
 
 #if !defined (MIN)
@@ -635,7 +635,7 @@ PRIVATE OSErr PBReadWrite(ioParam *pb, BOOLEAN async, accesstype rw)
 #else /* UNIX */
 	    pb->ioMisc = (LONGINT) neweot;
 #endif /* UNIX */
-	    pb->ioResult = myPBSetEOF(pb, FALSE);
+	    pb->ioResult = myPBSetEOF(pb, false);
 	    if (newerr != noErr)
 		totransfer = fcbp->fcbPLen - absoffset;
 	}
@@ -938,7 +938,7 @@ PRIVATE OSErr PBOpenHelper(ioParam *pb, forktype ft, long dirid, BOOLEAN async)
     catkey *catkeyp;
     
     kind = regular;
-    err = findvcbandfile(pb, dirid, &btparamrec, &kind, FALSE);
+    err = findvcbandfile(pb, dirid, &btparamrec, &kind, false);
     if (err != noErr)
 	PBRETURN(pb, err);
 

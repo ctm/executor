@@ -22,7 +22,7 @@ char ROMlib_rcsid_djgpp_sound[] =
 
 #define TIME_TO_BUFFER(t) (((t) / BUFSIZE) % NUM_BUFS)
 
-/* TRUE iff we really support sound. */
+/* true iff we really support sound. */
 static bool have_sound_p;
 
 static unsigned char buf[NUM_BUFS][BUFSIZE] __attribute__ ((aligned (4)));
@@ -117,7 +117,7 @@ sound_djgpp_shutdown (sound_driver_t *s)
   if (have_sound_p)
     {
       sb_uninstall_driver ();
-      have_sound_p = FALSE;
+      have_sound_p = false;
     }
 }
 
@@ -136,7 +136,7 @@ sound_djgpp_clear_pending (sound_driver_t *s)
 static bool
 sound_djgpp_silent_p (sound_driver_t *s)
 {
-  return FALSE;
+  return false;
 }
 
 bool
@@ -145,7 +145,7 @@ sound_djgpp_init (sound_driver_t *s)
   warning_sound_log ("About to install sound driver...");
 
   if (sound_disabled_p)
-    have_sound_p = FALSE;
+    have_sound_p = false;
   else
     {
       sb_status success;

@@ -208,7 +208,7 @@ PRIVATE uint16 aspi_wrap_dos_mem_segment, aspi_wrap_dos_mem_selector;
 
 PUBLIC BOOLEAN get_aspi_info( aspi_iterator_t *aip, aspi_info_t *aspi_info_p )
 {
-  static BOOLEAN beenhere = FALSE, has_aspi = FALSE;
+  static BOOLEAN beenhere = false, has_aspi = false;
   __dpmi_regs regs;
   unsigned long timeout;
   static int number_host_adaptors;
@@ -222,9 +222,9 @@ PUBLIC BOOLEAN get_aspi_info( aspi_iterator_t *aip, aspi_info_t *aspi_info_p )
   BOOLEAN retval;
 
   if (!beenhere) {
-    beenhere = TRUE;
+    beenhere = true;
     if (ROMlib_skipaspi)
-      has_aspi = FALSE;
+      has_aspi = false;
     else
       {
 	warning_trace_info ("first time in aspi" NL);
@@ -234,7 +234,7 @@ PUBLIC BOOLEAN get_aspi_info( aspi_iterator_t *aip, aspi_info_t *aspi_info_p )
 	  fprintf(stderr, "Unable to allocate %ld bytes of conventional mem "
 		  "for aspi support\n",
 		  (long)sizeof(memory_template));
-	  has_aspi = FALSE;
+	  has_aspi = false;
 	} else {
 	  aspi_wrap_dos_mem_segment    = seg;
 	  aspi_wrap_dos_mem_selector   = sel;
@@ -252,20 +252,20 @@ PUBLIC BOOLEAN get_aspi_info( aspi_iterator_t *aip, aspi_info_t *aspi_info_p )
 	    WRAPPER_MEM_GET(memory_template.u.haq);
 	    number_host_adaptors =
 	      memory_template.u.haq.number_host_adaptors;
-	    has_aspi = TRUE;
+	    has_aspi = true;
 	  } else {
 	    __dpmi_free_dos_memory (aspi_wrap_dos_mem_selector);
 	    aspi_wrap_dos_mem_segment = 0;
 	    aspi_wrap_dos_mem_selector = 0;
-	    has_aspi = FALSE;
+	    has_aspi = false;
 	  }
 	}
       }
   }
-  retval = FALSE;
-  last_success = TRUE;
+  retval = false;
+  last_success = true;
   if (has_aspi) {
-    done = FALSE;
+    done = false;
     do {
       ++aip->last_lun;
       if (1 || aip->last_lun > 7 || !last_success) {
@@ -275,12 +275,12 @@ PUBLIC BOOLEAN get_aspi_info( aspi_iterator_t *aip, aspi_info_t *aspi_info_p )
 	  aip->last_target = 0;
 	  ++aip->last_adaptor;
 	  if (aip->last_adaptor >= number_host_adaptors)
-	    done = TRUE;
+	    done = true;
 	}
       }
       warning_trace_info ("adaptor = %d, target = %d, lun = %d" NL,
 			  aip->last_adaptor, aip->last_target, aip->last_lun);
-      last_success = FALSE;
+      last_success = false;
       if (!done) {
 	memory_template.srb.command = GET_DEVICE_TYPE;
 	memory_template.srb.adaptor = aip->last_adaptor;
@@ -360,9 +360,9 @@ PUBLIC BOOLEAN get_aspi_info( aspi_iterator_t *aip, aspi_info_t *aspi_info_p )
 	      aspi_info_p->block_length  = GET_MULTI_BYTE_VALUE(mode_sense_data.block_descriptors[0].block_length);
 	      aspi_info_p->num_blocks    = GET_MULTI_BYTE_VALUE(mode_sense_data.block_descriptors[0].number_of_blocks);
 	      aspi_info_p->write_protect = mode_sense_data.wp_shifted_7 >> 7;
-	      retval = TRUE;
-	      done = TRUE;
-	      last_success = TRUE;
+	      retval = true;
+	      done = true;
+	      last_success = true;
 	    }
 	  }
 	}
@@ -400,11 +400,11 @@ PRIVATE int aspi_disk_open(int disk, char *ejectablep, LONGINT *bsizep)
 
     aitp = disk_number_to_aspi_info(disk);
     if (aitp) {
-	*ejectablep = FALSE;
+	*ejectablep = false;
 	*bsizep = aitp->block_length;
-	retval = TRUE;
+	retval = true;
     } else
-        retval = FALSE;
+        retval = false;
     return retval;
 }
 

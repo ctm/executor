@@ -71,13 +71,13 @@ PUBLIC int ROMlib_lasterrnomapped;
     gui_assert(uerr < NELEM(xtable));	\
     xtable[uerr] = merr;		\
   }					\
-    while (FALSE);
+    while (false);
 
 A0(PUBLIC, OSErr, ROMlib_maperrno)				/* INTERNAL */
 {
   OSErr retval;
   static OSErr xtable[MAX_ERRNO + 1];
-  static char been_here = FALSE;
+  static char been_here = false;
   int errno_save;
 
   if (!been_here)
@@ -115,7 +115,7 @@ A0(PUBLIC, OSErr, ROMlib_maperrno)				/* INTERNAL */
       install_errno(EWOULDBLOCK,permErr);
 #endif
 
-      been_here = TRUE;
+      been_here = true;
     }
 
   errno_save = errno;
@@ -372,7 +372,7 @@ PUBLIC BOOLEAN Executor::ROMlib_isresourcefork(const char *fullname)
        they're stored in a subdirectory */
 
     if (netatalk_conventions_p)
-      retval = FALSE;
+      retval = false;
     else
       {
 	filename = strrchr(fullname, '/');
@@ -381,9 +381,9 @@ PUBLIC BOOLEAN Executor::ROMlib_isresourcefork(const char *fullname)
 	else
 	  ++filename;
 	if (filename[0] != '%')
-	  retval = FALSE;
+	  retval = false;
 	else if (!isxdigit(filename[1]) || !isxdigit(filename[2]))
-	  retval = TRUE;
+	  retval = true;
 	else {
 	  fd = -1;
 	  retval = (fd = Uopen(fullname, O_BINARY|O_RDONLY, 0)) >= 0 &&
@@ -397,7 +397,7 @@ PUBLIC BOOLEAN Executor::ROMlib_isresourcefork(const char *fullname)
     return retval;
 }
 
-int Executor::ROMlib_no_dot_files = FALSE;
+int Executor::ROMlib_no_dot_files = false;
 
 static bool
 dislike_name (char *namep)
@@ -511,7 +511,7 @@ A3(PRIVATE, INTEGER, Mac_to_UNIX7, unsigned char *, name, INTEGER, length,
     bool last_character_was_colon;
 
     retval = length;
-    last_character_was_colon = TRUE;
+    last_character_was_colon = true;
     while (--length >= 0) {
 	c = *name++;
 	if (NEEDTOMAP(c)) {
@@ -549,7 +549,7 @@ A2(PUBLIC, char *, ROMlib_newunixfrommac, char *, ip, INTEGER, n)
  * to determine the vcbp, but since it has to look at ioNamePtr
  * anyway it makes sense to make a unix partial pathname for the
  * rest.  While we're at it, if we get passed in a working-director
- * instead of a TRUE vrn we might as well note the directory id
+ * instead of a true vrn we might as well note the directory id
  * that is associated with it.
  */
 
@@ -573,7 +573,7 @@ A5(PUBLIC, VCB *, ROMlib_breakoutioname, ParmBlkPtr, pb,	/* INTERNAL */
     *diridp = 0;
     *therestp = 0;
     if (fullpathp)
-	*fullpathp = FALSE;
+	*fullpathp = false;
     if ((p = (unsigned char *) MR(pb->ioParam.ioNamePtr))) {
 	if (p[0] > 1 && p[1] != ':') {
 	    if ((colon = pstr_index_after(p, ':', SLASH_CHAR_OFFSET))) {
@@ -583,7 +583,7 @@ A5(PUBLIC, VCB *, ROMlib_breakoutioname, ParmBlkPtr, pb,	/* INTERNAL */
 			      ROMlib_newunixfrommac(colon+1,
 						    p[0] + (char *) p - colon);
 		if (fullpathp)
-		    *fullpathp = TRUE;
+		    *fullpathp = true;
 	    } else
 	        *therestp = ROMlib_newunixfrommac((char *) p+1, p[0]);
 	} else if (p[0] > 0) {
@@ -615,7 +615,7 @@ A5(PUBLIC, VCB *, ROMlib_breakoutioname, ParmBlkPtr, pb,	/* INTERNAL */
 
 /*
  * myscandir looks through a directory for a filename match with case not
- *	     significant.  It returns TRUE if a match was found; FALSE
+ *	     significant.  It returns true if a match was found; false
  *	     otherwise.  Note, the filename specified in "rest" starts
  *	     out smashed and needs the character stored in "save" to
  *	     be filled in before it can be used, but this has to be
@@ -639,15 +639,15 @@ A4(PRIVATE, BOOLEAN, myscandir, char *, dirname, char, save, char *, rest,
 	++dirname;
 #endif
 
-    retval = FALSE;
+    retval = false;
     if ((dirp = Uopendir(dirname))) {
 	*rest = save;
 	d0 = ((LONGINT) restlen << 16) | (unsigned short) restlen;
 	while ((directp = readdir(dirp)))
 	    if (restlen == (INTEGER) strlen (directp->d_name) &&
 	       ROMlib_RelString((unsigned char *) rest,
-		    (unsigned char *) directp->d_name, FALSE, TRUE, d0) == 0) {
-		retval = TRUE;
+		    (unsigned char *) directp->d_name, false, true, d0) == 0) {
+		retval = true;
 		memcpy(rest, directp->d_name, restlen);
 /*-->*/		break;
 	}
@@ -761,7 +761,7 @@ A9(PUBLIC, OSErr, ROMlib_nami, ParmBlkPtr, pb, LONGINT, dir,	/* INTERNAL */
 	savenamep = (StringPtr) -1;
 #endif /* LETGCCWAIL */
     vcbp = (VCBExtra *) ROMlib_breakoutioname(pb, &dirid, &therest, &fullp,
-									 TRUE);
+									 true);
     if (vcbpp)
 	*vcbpp = vcbp;
     if (fullp)
@@ -815,7 +815,7 @@ loop:
 		  LONGINT templong;
 
 		  templong = ST_INO(sbuf);
-		  ROMlib_dbm_store(vcbp, vcbanddir, &templong, TRUE);
+		  ROMlib_dbm_store(vcbp, vcbanddir, &templong, true);
 		}
 /*-->*/		goto loop;
 #else
@@ -1023,7 +1023,7 @@ A5(PRIVATE, OSErr, macopen, char *, file, short, perm, LONGINT *, fdp,
 			    && (!(sbuf.st_mode & S_IWUSR)));
     }
 #else
-    open_should_fail_p = FALSE;
+    open_should_fail_p = false;
 #endif
     if (open_should_fail_p)
       *fdp = -1;
@@ -1110,7 +1110,7 @@ A4(PRIVATE, OSErr, PBOpenForkD, ParmBlkPtr, pb, BOOLEAN, a,
  * We have to pass in sbuf below or we won't be weaseled like we should be.
  */
     if ((err = ROMlib_nami(pb, dir, NoIndex, &pathname, &filename, &endname,
-			       TRUE, &vcbp, (struct stat *) &sbuf)) == noErr) {
+			       true, &vcbp, (struct stat *) &sbuf)) == noErr) {
 	err = getprn(&prn);
 	if (err == noErr) {
 	    fp = (fcbrec *) (MR(FCBSPtr) + prn);
@@ -1150,7 +1150,7 @@ A4(PRIVATE, OSErr, PBOpenForkD, ParmBlkPtr, pb, BOOLEAN, a,
 		      &fp->fcfd, fork == ResourceFork, &fp->fcflags);
 		if (err != noErr
 		    && (fork != ResourceFork ||
-			(err = ROMlib_newresfork(pathname, &fp->fcfd, TRUE))))
+			(err = ROMlib_newresfork(pathname, &fp->fcfd, true))))
 		    freeprn(fp);
 		else {
 		    if (fork == ResourceFork)
@@ -1174,7 +1174,7 @@ A4(PRIVATE, OSErr, PBOpenForkD, ParmBlkPtr, pb, BOOLEAN, a,
 				    !ROMlib_creator_and_type_from_filename
 				    (strlen (filename), filename, NULL, NULL))
 				  err = ROMlib_newresfork(newname,
-							&fp->hiddenfd, TRUE);
+							&fp->hiddenfd, true);
 				else
 				  {
 				    err = noErr;
@@ -1183,7 +1183,7 @@ A4(PRIVATE, OSErr, PBOpenForkD, ParmBlkPtr, pb, BOOLEAN, a,
 			      }
 			    else
 			      macopen(newname, pb->ioParam.ioPermssn,
-				      &fp->hiddenfd, TRUE, &dummy_byte);
+				      &fp->hiddenfd, true, &dummy_byte);
 			  }
 			free (newname);
 		      }
@@ -1366,7 +1366,7 @@ A3(PRIVATE, OSErr, PBLockUnlockRange, ParmBlkPtr, pb, BOOLEAN, a,
     err = noErr;
     fp = PRNTOFPERR(Cx(pb->ioParam.ioRefNum), &err);
     if (err == noErr) {
-	if ((err = pbfpos(pb, &toseek, TRUE)) == noErr) {
+	if ((err = pbfpos(pb, &toseek, true)) == noErr) {
 	    OSErr (*verify ) (int fd, uint32 start, uint32 count);
 	    OSErr (*cleanup) (int fd, uint32 start, uint32 count);
 
@@ -1439,7 +1439,7 @@ pbsetfpos (ParmBlkPtr pb, bool can_go_past_eof)
   return err;
 }
 
-PUBLIC int Executor::ROMlib_newlinetocr = TRUE;
+PUBLIC int Executor::ROMlib_newlinetocr = true;
 
 /*
  * NOTE: ROMlib_destroy_blocks is a wrapper routine that either destroys
@@ -1498,7 +1498,7 @@ A2(PUBLIC, OSErr, ufsPBRead, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
 	return err;
       }
     fp = PRNTOFPERR(Cx(pb->ioParam.ioRefNum), &err);
-    if (err == noErr && ((err = pbsetfpos(pb, FALSE)) == noErr || err == eofErr)) {
+    if (err == noErr && ((err = pbsetfpos(pb, false)) == noErr || err == eofErr)) {
 	forkoffset = FORKOFFSET(fp);
 	if (Cx(pb->ioParam.ioReqCount) < 0)
 	    err = paramErr;
@@ -1510,7 +1510,7 @@ A2(PUBLIC, OSErr, ufsPBRead, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
 		rc = Cx(fp->fcleof) - Cx(pb->ioParam.ioPosOffset);
 	    nread = read(fd, (char *)(MR(pb->ioParam.ioBuffer)), rc);
 	    ROMlib_destroy_blocks(US_TO_SYN68K(MR(pb->ioParam.ioBuffer)),
-				  rc, TRUE);
+				  rc, true);
 	    if (nread == -1) {
 		pb->ioParam.ioActCount = 0;
 		err = ioErr;
@@ -1551,7 +1551,7 @@ A2(PUBLIC, OSErr, ufsPBWrite, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
 	return err;
       }
     fp = PRNTOFPERR(Cx(pb->ioParam.ioRefNum), &err);
-    if (err == noErr && ((err = pbsetfpos(pb, TRUE)) == noErr || err == eofErr)) {
+    if (err == noErr && ((err = pbsetfpos(pb, true)) == noErr || err == eofErr)) {
 	forkoffset = FORKOFFSET(fp);
 	if ((rc = Cx(pb->ioParam.ioReqCount)) < 0)
 	    err = paramErr;
@@ -1616,7 +1616,7 @@ A2(PUBLIC, OSErr, ufsPBGetFPos, ParmBlkPtr, pb,		/* INTERNAL */
 A2(PUBLIC, OSErr, ufsPBSetFPos, ParmBlkPtr, pb,		/* INTERNAL */
 								   BOOLEAN, a)
 {
-    OSErr err = pbsetfpos(pb, FALSE);
+    OSErr err = pbsetfpos(pb, false);
 
 #if 0
     if (pb->ioParam.ioRefNum == 0x5003)

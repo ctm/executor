@@ -50,7 +50,7 @@ construct_fixed_moves (const unsigned char *vary_mask, int code_size,
 
 	  m = &move[num_moves++];
 	  m->start = i;
-	  m->done = FALSE;
+	  m->done = false;
 
 	  /* Find the best size of move. */
 	  for (s = 3; s >= 0; s--)
@@ -188,7 +188,7 @@ popular_constant (const move_t *move, int num_moves,
 }
 
 
-/* Returns TRUE if a given register->memory move will be overwritten
+/* Returns true if a given register->memory move will be overwritten
  * by a constant move which has not yet been done.  This can happen in
  * this situation:
  *
@@ -213,9 +213,9 @@ operand_will_be_stomped (const move_t *op, const move_t *move_list,
       if (!m->done && m->src_reg == NULL
 	  && m->start < op->start + op->size
 	  && m->start + m->size > op->start)
-	return TRUE;
+	return true;
     }
-  return FALSE;
+  return false;
 }
 
 
@@ -270,7 +270,7 @@ schedule_move_list (move_t *move, int num_moves)
     }
 
   new_move[moves_done] = move[0];
-  move[0].done = TRUE;
+  move[0].done = true;
   moves_done++;
 
   while (1)
@@ -297,7 +297,7 @@ schedule_move_list (move_t *move, int num_moves)
 
       /* Make that move next. */
       new_move[moves_done] = move[best_index];
-      move[best_index].done = TRUE;
+      move[best_index].done = true;
       moves_done++;
     }
 
@@ -378,7 +378,7 @@ construct_operand_moves (const unsigned char *mask, int code_size,
 		move_t *m = &move[num_moves++];
 		m->start   = i;
 		m->size    = 4;
-		m->done    = FALSE;
+		m->done    = false;
 		m->src_reg = sig[s].reg_name;
 		m->value   = 0;
 		break;
@@ -554,9 +554,9 @@ main (int argc, char *argv[])
   compute_vary_mask (vary_mask, code_size);
 
   if (!strcmp (argv[2], "-genasm"))
-    generate_asm (vary_mask, code_size, sig, num_sigs, TRUE);
+    generate_asm (vary_mask, code_size, sig, num_sigs, true);
   else if (!strcmp (argv[2], "-genasm-skip-fixed"))
-    generate_asm (vary_mask, code_size, sig, num_sigs, FALSE);
+    generate_asm (vary_mask, code_size, sig, num_sigs, false);
   else if (!strcmp (argv[2], "-print-size"))
     printf ("%d\n", code_size);
 

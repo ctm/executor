@@ -15,8 +15,8 @@ using namespace Executor;
 
 /* This function fills in RESULT with the pathname for a unique file
  * of a specified form.  RESULT will be a 0-terminated Pascal string.
- * It returns TRUE iff successful, else FALSE.  If all names matching
- * the template are already taken by existing files, returns FALSE.
+ * It returns true iff successful, else false.  If all names matching
+ * the template are already taken by existing files, returns false.
  * TEMPLATE indicates the form of the filename: it should have exactly
  * one "*" character, which will be replaced with an alphanumeric
  * character to try to obtain a unique filename.
@@ -43,7 +43,7 @@ Executor::unique_file_name (const char *template1, const char *default_template,
 
   /* Make sure the resulting string won't be too long. */
   if (strlen (template1) + 1 >= 255)
-    return FALSE;
+    return false;
 
   try1 = copystr (template1);
   
@@ -61,10 +61,10 @@ Executor::unique_file_name (const char *template1, const char *default_template,
 	      strcpy ((char *) result + 1, try1);
 	      result[0] = strlen ((char *) result + 1);
 	      free (try1);
-	      return TRUE;
+	      return true;
 	    }
 	}
     }
   /* Failed! */
-  return FALSE;
+  return false;
 }

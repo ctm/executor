@@ -36,11 +36,11 @@ PRIVATE OSErr PBFInfoHelper(changeop op, FileParam *pb, LONGINT dirid,
     vcbp = 0;
     if (op == GetOp && (CW(pb->ioFDirIndex) > 0))
 	err = ROMlib_btpbindex((IOParam *) pb, dirid, &vcbp, &frp, &catkeyp,
-									 TRUE);
+									 true);
     else {
 	kind = regular;
 	err = ROMlib_findvcbandfile((IOParam *) pb, dirid, &btparamrec, &kind,
-									FALSE);
+									false);
 	if (err == noErr) {
 	    if (btparamrec.success) {
 		vcbp = btparamrec.vcbp;
@@ -160,7 +160,7 @@ ROMlib_fcbrename (HVCB *vcbp, GUEST<LONGINT> swapped_parid, StringPtr oldnamep,
     {
       if (fcbp->fcbDirID == swapped_parid
 	  && fcbp->fcbVPtr == swapped_vcbp
-	  && RelString (fcbp->fcbCName, oldnamep, FALSE, TRUE) == 0)
+	  && RelString (fcbp->fcbCName, oldnamep, false, true) == 0)
 	str255assign (fcbp->fcbCName, newnamep);
     }
 }
@@ -172,12 +172,12 @@ renamehelper(IOParam *pb, BOOLEAN async, LONGINT dirid, filekind kind)
   btparam btparamrec, btparamrec2;
   IOParam npb;
 
-  err = ROMlib_findvcbandfile(pb, dirid, &btparamrec, &kind, FALSE);
+  err = ROMlib_findvcbandfile(pb, dirid, &btparamrec, &kind, false);
   if (err == noErr)
     {
       npb = *pb;
       npb.ioNamePtr = guest_cast<StringPtr> (pb->ioMisc);
-      err = ROMlib_findvcbandfile(&npb, dirid, &btparamrec2, &kind, FALSE);
+      err = ROMlib_findvcbandfile(&npb, dirid, &btparamrec2, &kind, false);
       if (err != fnfErr)
 	{
 	  if (err != bdNamErr)

@@ -222,7 +222,7 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
     INTEGER dh, dv;
     Point p;
 
-    doubleclick = FALSE;
+    doubleclick = false;
     if (PtInRect(pt, &HxX(list, rView))) {
 	TRAPBEGIN();
 	flags = Hx(list, selFlags);
@@ -232,30 +232,30 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
 	if (newcell.h == HxX(list, lastClick.h) &&
 	    newcell.v == HxX(list, lastClick.v) &&
 			     TickCount() < Hx(list, clikTime) + CL(DoubleTime))
-	    doubleclick = TRUE;
+	    doubleclick = true;
 	HxX(list, lastClick) = newcell;
 	hiliteempty = !(flags & lNoNilHilite);
 	if (((mods & shiftKey) || (flags & lExtendDrag)) &&
 							 !(flags & lOnlyOne)) {
-	    onlyone   = FALSE;
+	    onlyone   = false;
 	    disjoint  = !(flags & lNoDisjoint);
 	    userects  = !(flags & lNoRect);
 	    cellvalue =  (flags & lUseSense) ? UseSense : On;
-	    extend    =  (flags & lUseSense) ? FALSE : !(flags & lNoExtend);
+	    extend    =  (flags & lUseSense) ? false : !(flags & lNoExtend);
 	} else if ((mods & cmdKey) && !(flags & lOnlyOne)) {
-	    onlyone   = FALSE;
+	    onlyone   = false;
 	    disjoint  = !(flags & lNoDisjoint);
-	    userects  = FALSE;
+	    userects  = false;
 	    cellvalue = UseSense;
-	    extend    = FALSE;
+	    extend    = false;
 	} else {
-	    onlyone   = TRUE;
-	    disjoint  = FALSE;
-	    userects  = FALSE;
+	    onlyone   = true;
+	    disjoint  = false;
+	    userects  = false;
 	    cellvalue = On;
-	    extend    = FALSE;
+	    extend    = false;
 	}
-	initial = C_LGetSelect(FALSE, &newcell, list);
+	initial = C_LGetSelect(false, &newcell, list);
 	if (cellvalue == UseSense)
 	    cellvalue = initial ? Off : On;
 	if (!disjoint && !initial)
@@ -273,7 +273,7 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
 		    for (c.v = r.top; c.v < r.bottom ; c.v++) {
 			cswapped.h = CW(c.h);
 			cswapped.v = CW(c.v);
-			if (C_LGetSelect(FALSE, &cswapped, list))
+			if (C_LGetSelect(false, &cswapped, list))
 			    goto out1;
 		    }
 		out1:
@@ -286,7 +286,7 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
 			for (c.v = r.top; c.v < r.bottom ; c.v++) {
 			    cswapped.h = CW(c.h);
 			    cswapped.v = CW(c.v);
-			    if (C_LGetSelect(FALSE, &cswapped, list))
+			    if (C_LGetSelect(false, &cswapped, list))
 				goto out2;
 		    }
 		    out2:
@@ -296,14 +296,14 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
 
 		    cswapped.h = CW(r.left);
 		    cswapped.v = CW(r.top);
-		    C_LGetSelect(TRUE, &cswapped, list);
+		    C_LGetSelect(true, &cswapped, list);
 		    anchor.top = cswapped.v;
 
 		    for (c.v = r.bottom - 1; c.v >= r.top ; c.v--)
 			for (c.h = r.left; c.h < r.right ; c.h++) {
 			    cswapped.h = CW(c.h);
 			    cswapped.v = CW(c.v);
-			    if (C_LGetSelect(FALSE, &cswapped, list))
+			    if (C_LGetSelect(false, &cswapped, list))
 				goto out3;
 		    }
 		    out3:
@@ -347,7 +347,7 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
 	    p.h = CW(evt.where.h);
 	    p.v = CW(evt.where.v);
 	    if (!PtInRect(p, &HxX(list, rView))) {
-		ctlchanged = FALSE;
+		ctlchanged = false;
 		scrollh = HxP(list, hScroll);
 		scrollv = HxP(list, vScroll);
 		dh = 0;
@@ -355,26 +355,26 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
 		if (CW(evt.where.h) < Hx(list, rView.left)) {
 		    if (scrollh) {
 			SetCtlValue(scrollh, GetCtlValue(scrollh)-1);
-			ctlchanged = TRUE;
+			ctlchanged = true;
 		    } else
 			dh = -1;
 		} else if (CW(evt.where.h) > Hx(list, rView.right)) {
 		    if (scrollh) {
 			SetCtlValue(scrollh, GetCtlValue(scrollh)+1);
-			ctlchanged = TRUE;
+			ctlchanged = true;
 		    } else
 			dh = 1;
 		}
 		if (CW(evt.where.v) < Hx(list, rView.top)) {
 		    if (scrollv) {
 			SetCtlValue(scrollv, GetCtlValue(scrollv)-1);
-			ctlchanged = TRUE;
+			ctlchanged = true;
 		    } else
 			dv = -1;
 		} else if (CW(evt.where.v) > Hx(list, rView.bottom)) {
 		    if (scrollv) {
 			SetCtlValue(scrollv, GetCtlValue(scrollv)+1);
-			ctlchanged = TRUE;
+			ctlchanged = true;
 		    } else
 			dv = 1;
 		}
@@ -405,7 +405,7 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
 		    if (onlyone && oldcell.h != CWC(32767)) {
 			oldcellunswapped.h = CW(oldcell.h);
 			oldcellunswapped.v = CW(oldcell.v);
-			setselectnilflag(FALSE, oldcellunswapped, list,
+			setselectnilflag(false, oldcellunswapped, list,
 								  hiliteempty);
 		    }
 		    newcellunswapped.h = CW(newcell.h);
@@ -416,7 +416,7 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt,		/* IMIV-273 */
 		}
 	    }
 	} while (!OSEventAvail(mUpMask, &evt) &&
-					    (GlobalToLocal(&evt.where), TRUE));
+					    (GlobalToLocal(&evt.where), true));
 	TRAPEND();
     } else if (((ch = HxP(list, hScroll)) && PtInRect(pt, &HxX(ch, contrlRect))) ||
                ((ch = HxP(list, vScroll)) && PtInRect(pt, &HxX(ch, contrlRect)))) {
@@ -439,5 +439,5 @@ P1(PUBLIC pascal trap, LONGINT, LLastClick, ListHandle, list)	/* IMIV-273 */
 P3(PUBLIC pascal trap, void, LSetSelect, BOOLEAN, setit,	/* IMIV-273 */
 						 Cell, cell, ListHandle, list)
 {
-    setselectnilflag(setit, cell, list, TRUE);
+    setselectnilflag(setit, cell, list, true);
 }

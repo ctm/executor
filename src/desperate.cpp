@@ -83,7 +83,7 @@ static const char *desperate_switches[] = {
  * a switch is found, *argcp and *argvp are modified to reflect
  * the new command line switches.
  *
- * Returns TRUE except in case of a parsing error (right now that
+ * Returns true except in case of a parsing error (right now that
  * can only happen with duplicate "-desperate" switches).
  */
 bool
@@ -100,7 +100,7 @@ Executor::handle_desperate_switch (int *argcp, char ***argvp)
   s = desperate_switch_index (argc, argv);
   if (s == -1)
     {
-      success_p = TRUE;
+      success_p = true;
       goto done;
     }
 
@@ -108,7 +108,7 @@ Executor::handle_desperate_switch (int *argcp, char ***argvp)
   if (desperate_switch_index (argc - s - 1, argv + s + 1) != -1)
     {
       fprintf (stderr, "Duplicate \"-desperate\" switch.\n");
-      success_p = FALSE;
+      success_p = false;
       goto done;
     }
 
@@ -147,7 +147,7 @@ Executor::handle_desperate_switch (int *argcp, char ***argvp)
 
   *argcp = new_argc;
   *argvp = new_argv;
-  success_p = TRUE;
+  success_p = true;
 
  done:
   return success_p;

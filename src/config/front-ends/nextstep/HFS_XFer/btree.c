@@ -179,25 +179,25 @@ PUBLIC BOOLEAN searchnode(btnode *btp, void *key, compfp fp, anykey **keypp,
 		if (mid == 0) {
 		    *keypp = totest;
 		    *afterp = -1;
-		    return FALSE;
+		    return false;
 		}
 		high = mid;
 		break;
 	    case same:
 		*keypp = totest;
 		*afterp = mid;
-		return TRUE;
+		return true;
 	    case firstisgreater:
 		totest2 = BTENTRY(btp, mid+1);
 		switch ((*fp)(key, totest2)) {
 		case firstisless:
 		    *keypp = totest;
 		    *afterp = mid;
-		    return FALSE;
+		    return false;
 		case same:
 		    *keypp = totest2;
 		    *afterp = mid+1;
-		    return TRUE;
+		    return true;
 		case firstisgreater:
 		    low = mid+1;
 		    break;
@@ -207,14 +207,14 @@ PUBLIC BOOLEAN searchnode(btnode *btp, void *key, compfp fp, anykey **keypp,
     case same:
 	*keypp = totest;
 	*afterp = high;
-	return TRUE;
+	return true;
     case firstisgreater:
 	*keypp = totest;
 	*afterp = high;
-	return FALSE;
+	return false;
     }
 #if !defined (LETGCCWAIL)
-    return FALSE;
+    return false;
 #endif
 }
 
@@ -472,7 +472,7 @@ PUBLIC OSErr keyfind(btparam *btpb)
 	return err;
     if (((btblock0 *)cachep->buf)->numentries == 0) {
         btpb->foundp = 0;
-        btpb->success = FALSE;
+        btpb->success = false;
         btpb->leafindex = 0;
         return noErr;
     }
@@ -490,7 +490,7 @@ PUBLIC OSErr keyfind(btparam *btpb)
 	    type = ((btnode *)cachep->buf)->ndType;
 	}
 	if (err != noErr || (type != indexnode && type != leafnode)) {
-	    btpb->success = FALSE;
+	    btpb->success = false;
 	    if (err == noErr) {
 	        DebugStr((StringPtr) "\punknown node");
 	        err = fsDSIntErr;
@@ -806,8 +806,8 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
     if (selfcachep->logblk == 15)
         DebugStr("\ppulling out of 15");
 #endif
-    modselfkey = FALSE;
-    modrightkey = FALSE;
+    modselfkey = false;
+    modrightkey = false;
     *todeletep = -1;
     btp = (btnode *) selfcachep->buf;
     if (selfindex < 0 || selfindex >= btp->ndNRecs) {
@@ -834,7 +834,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
     }
     --btp->ndNRecs;
     if (selfindex == 0)
-	modselfkey = TRUE;
+	modselfkey = true;
     
 #if defined (CATFILEDEBUG)
     checkbtp(btp);
@@ -845,7 +845,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
     /* check to see if freespace is too big */
     freesize = FREESIZE(btp);
     if (freesize > SIZECUTOFF) {
-	done = FALSE;
+	done = false;
 	if (parentcachep) {
 	    parentbtp = (btnode *) parentcachep->buf;
 #if defined (CATFILEDEBUG)
@@ -878,8 +878,8 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 #endif
 		if (err != noErr)
 		    return err;
-		modselfkey = TRUE;
-		done = TRUE;
+		modselfkey = true;
+		done = true;
 	    }
 	}
 	if (!done && right >= 0) {
@@ -898,8 +898,8 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 #endif
 		if (err != noErr)
 		    return err;
-		modrightkey = TRUE;
-		done = TRUE;
+		modrightkey = true;
+		done = true;
 	    }
 	}
 	if (!done) {
@@ -924,7 +924,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 		printf("merged left, self\n");
 #endif
 		*todeletep = parentindex;
-		modselfkey = FALSE;
+		modselfkey = false;
 		break;
 	    case doright:
 		err = merge(selfcachep, rightcachep);
@@ -932,7 +932,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
 		printf("merged self, right\n");
 #endif
 		*todeletep = parentindex+1;
-		modrightkey = FALSE;
+		modrightkey = false;
 		break;
 	    case leavealone:    /* do nothing */
 		break;
@@ -1054,7 +1054,7 @@ PUBLIC OSErr btdelete(btparam *btpb)
     }
     tep = btpb->trail + btpb->leafindex;
     selfindex  = tep->after;
-    done = FALSE;
+    done = false;
     refnum = btpb->trail[0].cachep->refnum;
     if (((btblock0 *)btpb->trail[0].cachep->buf)->numentries == 1) {
 	err = maketrailentrybusy(&btpb->trail[1], refnum);
@@ -1062,7 +1062,7 @@ PUBLIC OSErr btdelete(btparam *btpb)
 	    return err;
 	err = btdeletetree(btpb->trail[0].cachep, btpb->trail[1].cachep);
     } else {
-	done = FALSE;
+	done = false;
 	while (!done) {
 	    err = maketrailentrybusy(tep-1, refnum);
 	    if (err != noErr)
@@ -1088,7 +1088,7 @@ PUBLIC OSErr btdelete(btparam *btpb)
 		    return err;
 	    }
 	    if (todelete == -1)
-		done = TRUE;
+		done = true;
 	    else {
 		selfindex = todelete;
 		tep--;
@@ -1358,7 +1358,7 @@ PRIVATE OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
 	if (err != noErr)
 	    return err;
 	cleancache(fcbp->fcbVPtr);
-	err = myPBSetEOF((ioParam *) &iop, FALSE);    /* yahoo */
+	err = myPBSetEOF((ioParam *) &iop, false);    /* yahoo */
 	fcbp->fcbVPtr->vcbFlags |= VCBDIRTY;
 #if 0
 	assert(0);
@@ -1510,10 +1510,10 @@ PRIVATE OSErr slipin(cacheentry *cachep, INTEGER after, anykey *keyp,
 	    *cachepp = newcachep;
 	
 	/* find split */
-	inbtp = FALSE;
+	inbtp = false;
 	for (newfirst = 0, sizeused = 0; sizeused < SIZECUTOFF; newfirst++) {
 	    if (after + 1 == newfirst && !inbtp) {
-		inbtp = TRUE;
+		inbtp = true;
 		sizeused += sizeneeded;
 /* --> */       --newfirst; /* didn't add in newfirst on this go around */
 	    } else
@@ -1700,7 +1700,7 @@ PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
     keytoinsertp = &btpb->tofind;
     datatoinsertp = datap;
     sizetoinsert = datasize;
-    done = FALSE;
+    done = false;
     refnum = block0cachep->refnum;
     while (!done) {
 	err = maketrailentrybusy(tep, refnum);
@@ -1714,7 +1714,7 @@ PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
 		err = makenewroot(tep[1].cachep, newcachep, tep->cachep);
 		if (err != noErr)
 		    return err;
-		done = TRUE;
+		done = true;
 	    } else {
 		if (block0p->lastleaf == tep->cachep->logblk) {
 		    block0p->lastleaf = newcachep->logblk;
@@ -1739,7 +1739,7 @@ PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
 		sizetoinsert = sizeof(newcachep->logblk);
 	    }
 	} else
-	    done = TRUE;
+	    done = true;
     }
     for (tep = btpb->trail + btpb->leafindex;
 			       tep > btpb->trail+1 && tep->after == -1; --tep) {
@@ -1935,7 +1935,7 @@ PUBLIC OSErr btpbindex (ioParam *pb, LONGINT dirid, HVCB **vcbpp,
     *vcbpp = 0;
     
     kind = thread;
-    err = findvcbandfile(&newpb, dirid, &btparamrec, &kind, FALSE);
+    err = findvcbandfile(&newpb, dirid, &btparamrec, &kind, false);
     if (err == noErr) {
     	vcbp = btparamrec.vcbp;
 	*vcbpp = vcbp;
@@ -1948,27 +1948,27 @@ PUBLIC OSErr btpbindex (ioParam *pb, LONGINT dirid, HVCB **vcbpp,
 	    btp = (btnode *) cachep->buf;
 	    index = btparamrec.trail[btparamrec.leafindex].after;
 	    refnum = cachep->refnum;
-	    for (done = FALSE; !done;) {
+	    for (done = false; !done;) {
 	    	if (++index < btp->ndNRecs) {
 	    	    ;	/* nothing to do here; bumping index was sufficient */
 	    	} else if (flink = btp->ndFLink) {
 	    	    cachep->flags &= ~CACHEBUSY;
 	   	    err = getcache(&cachep, refnum, flink, GETCACHESAVE);
 	   	    if (err != noErr)
-	   	        done = TRUE;
+	   	        done = true;
 	    	    btp = (btnode *) cachep->buf;
 	    	    index = 0;
 	    	} else
-	    	    done = TRUE;
+	    	    done = true;
 	    	entryp = BTENTRY(btp, index);
 	    	if (dirid != 1 && entryp->catk.ckrParID != dirid)
-	    	    done = TRUE;
+	    	    done = true;
 	    	else if (!done) {
 	    	    frp = (filerec *) DATAPFROMKEY(entryp);
 	    	    if (frp->cdrType == FILETYPE ||
 	    	    		      (!filesonly && frp->cdrType == DIRTYPE)) {
 	    	        if (--count == 0)
-	    	            done = TRUE;
+	    	            done = true;
 	    	    }
 	    	}
 	    }

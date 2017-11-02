@@ -18,19 +18,19 @@ using namespace Executor;
 
 #if defined (BINCOMPAT)
 
-PRIVATE bool text_is_enabled_p = TRUE;
+PRIVATE bool text_is_enabled_p = true;
 
 PUBLIC void
 Executor::disable_stdtext (void)
 {
   if (ROMlib_options & ROMLIB_TEXT_DISABLE_BIT)
-    text_is_enabled_p = FALSE;
+    text_is_enabled_p = false;
 }
 
 PUBLIC void
 Executor::enable_stdtext (void)
 {
-  text_is_enabled_p = TRUE;
+  text_is_enabled_p = true;
 }
 
 void

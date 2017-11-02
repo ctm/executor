@@ -82,7 +82,7 @@ PUBLIC OSErr HGetFInfo (INTEGER vref, LONGINT dirid, Str255 name,
   pbr.fileParam.ioNamePtr = RM (name);
   pbr.fileParam.ioVRefNum = CW (vref);
   pbr.fileParam.ioDirID = CL (dirid);
-  retval = PBHGetFInfo (&pbr, FALSE);
+  retval = PBHGetFInfo (&pbr, false);
   if (retval == noErr)
     {
       OSASSIGN (fndrinfo->fdType, pbr.fileParam.ioFlFndrInfo.fdType);
@@ -207,7 +207,7 @@ iscandidate_for_quoting (unsigned char c1, unsigned char c2)
   bool retval;
 
   if (!islowerxdigit (c1) || !islowerxdigit (c2))
-    retval = FALSE;
+    retval = false;
   else
     {
       unsigned char c;
@@ -231,7 +231,7 @@ quoted_character (unsigned char *name, int length)
   else
     {
       if (name[0] != apple_double_quote_char)
-	retval = FALSE;
+	retval = false;
       else
 	{
 	  retval = (length > 2 &&
@@ -347,7 +347,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 	    LONGINT dirid;
 
 	    dirid = ST_INO(datasbuf);
-	    ROMlib_dbm_store(vcbp, pathname, &dirid, TRUE);
+	    ROMlib_dbm_store(vcbp, pathname, &dirid, true);
 	    if (!dodirs)
 	      {
 		err = fnfErr;
@@ -390,7 +390,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb,	/* INTERNAL */
 	    LONGINT dirid;
 
 	    dirid = ST_INO(parentsbuf);
-	    ROMlib_dbm_store(vcbp, pathname, &dirid, TRUE);
+	    ROMlib_dbm_store(vcbp, pathname, &dirid, true);
 	  }
 	if (filename+tozeroout >= pathname)
 	  filename[tozeroout] = savechar;
@@ -552,7 +552,7 @@ theend:
 A2(PUBLIC, OSErr, ufsPBGetFInfo, ParmBlkPtr, pb,	/* INTERNAL */
 						      BOOLEAN, a)
 {
-    return ROMlib_PBGetSetFInfoD(pb, a, Get, (GUEST<LONGINT> *)0, FALSE);
+    return ROMlib_PBGetSetFInfoD(pb, a, Get, (GUEST<LONGINT> *)0, false);
 }
 
 A2(PUBLIC, OSErr, ufsPBHGetFInfo, HParmBlkPtr, pb,	/* INTERNAL */
@@ -564,7 +564,7 @@ A2(PUBLIC, OSErr, ufsPBHGetFInfo, HParmBlkPtr, pb,	/* INTERNAL */
     d = pb->fileParam.ioDirID;
     auto compsave = pb->ioParam.ioCompletion;
     pb->ioParam.ioCompletion = 0;
-    err = ROMlib_PBGetSetFInfoD((ParmBlkPtr) pb, a, Get, &d, FALSE);
+    err = ROMlib_PBGetSetFInfoD((ParmBlkPtr) pb, a, Get, &d, false);
     pb->fileParam.ioDirID = d;
     pb->ioParam.ioCompletion = compsave;
     return err;
@@ -573,7 +573,7 @@ A2(PUBLIC, OSErr, ufsPBHGetFInfo, HParmBlkPtr, pb,	/* INTERNAL */
 A2(PUBLIC, OSErr, ufsPBSetFInfo, ParmBlkPtr, pb,	/* INTERNAL */
 						      BOOLEAN, a)
 {
-    return ROMlib_PBGetSetFInfoD(pb, a, Set, (GUEST<LONGINT> *)0, FALSE);
+    return ROMlib_PBGetSetFInfoD(pb, a, Set, (GUEST<LONGINT> *)0, false);
 }
 
 A2(PUBLIC, OSErr, ufsPBHSetFInfo, HParmBlkPtr, pb,	/* INTERNAL */
@@ -582,7 +582,7 @@ A2(PUBLIC, OSErr, ufsPBHSetFInfo, HParmBlkPtr, pb,	/* INTERNAL */
     GUEST<LONGINT> d;
 
     d = pb->fileParam.ioDirID;
-    return ROMlib_PBGetSetFInfoD((ParmBlkPtr) pb, a, Set, &d, FALSE);
+    return ROMlib_PBGetSetFInfoD((ParmBlkPtr) pb, a, Set, &d, false);
 }
 
 namespace Executor {
@@ -618,7 +618,7 @@ A4(PRIVATE, OSErr, PBLockUnlock, ParmBlkPtr, pb, BOOLEAN, a, LONGINT, dir,
     struct stat sbuf;
 
     if ((err = ROMlib_nami(pb, dir, NoIndex, &pathname, &filename, &endname,
-				     TRUE, (VCBExtra **) 0, &sbuf)) == noErr) {
+				     true, (VCBExtra **) 0, &sbuf)) == noErr) {
 	rpathname = ROMlib_resname(pathname, filename, endname);
 	if ((fliperr = flipwritebits(pathname, op))) {
 	    switch (fliperr) {

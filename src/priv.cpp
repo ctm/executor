@@ -93,10 +93,10 @@ void dopriv(long *regs)
 /*-->*/	return;
     }
     spp = (short **) &regs[(word & REGMASK) + ADDROFFSET];
-    srmodded = TRUE;	/* most of em do mod the sr */
+    srmodded = true;	/* most of em do mod the sr */
     switch (word & MOVESRMASK) {
     case MOVEFROMSR:
-	srmodded = FALSE;
+	srmodded = false;
 	switch (word & ADDRMODEMASK) {
 	case DREGDIRECT:
 	    *((short *) &regs[word & REGMASK] + 1) = regs[17] | ipl;

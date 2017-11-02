@@ -147,7 +147,7 @@ Executor::InitCRM (void)
 	   retval = serial_insert (".AIn", ".AOut", "COM1");
 	   if (retval == noErr)
 	     retval = serial_insert (".BIn", ".BOut", "COM2");
-	   beenhere = TRUE;
+	   beenhere = true;
 	 });
     }
   return retval;

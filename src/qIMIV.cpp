@@ -282,10 +282,10 @@ create_scratch_bitmap_if_necessary (uint8 **_fbuf,
       pixmap_copy (src_pm, src_rect, dst_pm, dst_rect);
       *_fbuf = BITMAP_BASEADDR (dst_pm);
       
-      return TRUE;
+      return true;
     }
   
-  return FALSE;
+  return false;
 }
 
 static void
@@ -296,7 +296,7 @@ SeedFill_handle_direct_screen_access (uint8 *srcp, uint8 *dstp,
 				      int seedh, int seedv)
 {
   write_back_data_t write_back_data;
-  bool write_back_p = FALSE;
+  bool write_back_p = false;
   
   create_scratch_bitmap_if_necessary (&srcp, src_row_words,
 				      height, word_width,
@@ -328,7 +328,7 @@ P8 (PUBLIC pascal trap, void, SeedFill, Ptr, srcp, Ptr, dstp, 	/* IMIV-24 */
 {
   SeedFill_handle_direct_screen_access ((uint8 *) srcp, (uint8 *) dstp,
 					srcr, dstr,
-					height, width, TRUE, seedh, seedv);
+					height, width, true, seedh, seedv);
 }
 
 P6 (PUBLIC pascal trap, void, CalcMask, Ptr, srcp, Ptr, dstp,	/* IMIV-24 */
@@ -336,7 +336,7 @@ P6 (PUBLIC pascal trap, void, CalcMask, Ptr, srcp, Ptr, dstp,	/* IMIV-24 */
 {
   SeedFill_handle_direct_screen_access ((uint8 *) srcp, (uint8 *) dstp,
 					srcr, dstr,
-					height, width, FALSE, 0, 0);
+					height, width, false, 0, 0);
 }
 
 static void

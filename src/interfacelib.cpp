@@ -880,77 +880,77 @@ PRIVATE OSErr
 PBFlushVolSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBFlushVol (pb, FALSE);
+  return PBFlushVol (pb, false);
 }
 
 PRIVATE OSErr
 PBHSetVolSync (WDPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHSetVol (pb, FALSE);
+  return PBHSetVol (pb, false);
 }
 
 PRIVATE OSErr
 PBFlushFileSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBFlushFile (pb, FALSE);
+  return PBFlushFile (pb, false);
 }
 
 PRIVATE OSErr
 PBCatSearchAsync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBCatSearch (pb, TRUE);
+  return PBCatSearch (pb, true);
 }
 
 PRIVATE OSErr
 PBLockRangeSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBLockRange (pb, FALSE);
+  return PBLockRange (pb, false);
 }
 
 PRIVATE OSErr
 PBUnlockRangeSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBUnlockRange (pb, FALSE);
+  return PBUnlockRange (pb, false);
 }
 
 PRIVATE OSErr
 PBDTGetIconSync (DTPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBDTGetIcon (pb, FALSE);
+  return PBDTGetIcon (pb, false);
 }
 
 PRIVATE OSErr
 PBDTGetIconInfoSync (DTPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBDTGetIconInfo (pb, FALSE);
+  return PBDTGetIconInfo (pb, false);
 }
 
 PRIVATE OSErr
 PBHRstFLockSync (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHRstFLock (pb, FALSE);
+  return PBHRstFLock (pb, false);
 }
 
 PRIVATE OSErr
 PBHSetFLockSync (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHSetFLock (pb, FALSE);
+  return PBHSetFLock (pb, false);
 }
 
 PRIVATE OSErr
 PBCloseWDSync (WDPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBCloseWD (pb, FALSE);
+  return PBCloseWD (pb, false);
 }
 
 PRIVATE OSErr
@@ -961,7 +961,7 @@ CloseWD (INTEGER wdref)
 
   memset (&pb, 0, sizeof pb);
   pb.ioVRefNum = CW (wdref);
-  retval = PBCloseWD (&pb, FALSE);
+  retval = PBCloseWD (&pb, false);
   warning_trace_info ("retval = %d", retval);
   return retval;
 }
@@ -970,35 +970,35 @@ PRIVATE OSErr
 PBHGetVInfoSync (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHGetVInfo (pb, FALSE);
+  return PBHGetVInfo (pb, false);
 }
 
 PRIVATE OSErr
 PBGetWDInfoSync (WDPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBGetWDInfo (pb, FALSE);
+  return PBGetWDInfo (pb, false);
 }
 
 PRIVATE OSErr
 PBAllocateSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBAllocate (pb, FALSE);
+  return PBAllocate (pb, false);
 }
 
 PRIVATE OSErr
 PBAllocContigSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBAllocContig (pb, FALSE);
+  return PBAllocContig (pb, false);
 }
 
 PRIVATE OSErr
 PBGetEOFSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBGetEOF (pb, FALSE);
+  return PBGetEOF (pb, false);
 }
 
 PRIVATE OSErr
@@ -1012,7 +1012,7 @@ HRstFLock (INTEGER vref, LONGINT dirid, Str255 file)
   pb.fileParam.ioDirID = CL (dirid);
   pb.ioParam.ioNamePtr = file;
   warning_trace_info (NULL_STRING);
-  retval = PBHRstFLock (&pb, FALSE);
+  retval = PBHRstFLock (&pb, false);
   return retval;
 }
 
@@ -1026,7 +1026,7 @@ HDelete (INTEGER vrefnum, LONGINT dirid, Str255 filename)
   pb.ioParam.ioVRefNum = CW (vrefnum);
   pb.fileParam.ioDirID = CL (dirid);
   pb.ioParam.ioNamePtr = filename;
-  retval = PBHDelete (&pb, FALSE);
+  retval = PBHDelete (&pb, false);
   warning_trace_info ("HDelete(%d, %d, %.*s) = %d", vrefnum, dirid,
 		      filename[0], filename+1, retval);
   return retval;
@@ -1044,7 +1044,7 @@ HOpenDF (INTEGER vref, LONGINT dirid, Str255 file, int8 perm, INTEGER *refp)
   pb.ioParam.ioNamePtr = file;
   pb.ioParam.ioPermssn = perm;
   warning_trace_info (NULL_STRING);
-  retval = PBOpenDF (&pb, FALSE);
+  retval = PBOpenDF (&pb, false);
   if (retval == noErr)
     *refp = pb.ioParam.ioRefNum;
   return retval;
@@ -1901,8 +1901,8 @@ extract_68k_reg_parameters (ProcInfoType orig_info,  uint32 params[13],
   bool suspicious_info_p;
 
   retval = 0;
-  seen_a_zero_p = FALSE;
-  suspicious_info_p = FALSE;
+  seen_a_zero_p = false;
+  suspicious_info_p = false;
   info = orig_info >> 11;
   for (i = 0; i < 4; ++i)
     {
@@ -1916,9 +1916,9 @@ extract_68k_reg_parameters (ProcInfoType orig_info,  uint32 params[13],
       widths[i] = width;
       if (width == 0)
 	{
-	  seen_a_zero_p = TRUE;
+	  seen_a_zero_p = true;
 	  if (reg)
-	    suspicious_info_p = TRUE;
+	    suspicious_info_p = true;
 	  params[i] = 0;
 	}
       else
@@ -1938,7 +1938,7 @@ extract_68k_reg_parameters (ProcInfoType orig_info,  uint32 params[13],
 	  reg_contents = cpu_state.regs[map[reg]].ul.n;
 	  retval = i + 1;
 	  if (seen_a_zero_p)
-	    suspicious_info_p = TRUE;
+	    suspicious_info_p = true;
 	  switch (width)
 	    {
 	    case 1:
@@ -2370,112 +2370,112 @@ PRIVATE OSErr
 PBCloseSync_wrapper (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBClose (pb, FALSE);
+  return PBClose (pb, false);
 }
 
 PRIVATE OSErr
 PBDeleteSync_wrapper (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBDelete (pb, FALSE);
+  return PBDelete (pb, false);
 }
 
 PRIVATE OSErr
 PBExchangeFilesSync_wrapper (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBExchangeFiles (pb, FALSE);
+  return PBExchangeFiles (pb, false);
 }
 
 PRIVATE OSErr
 PBGetCatInfoSync_wrapper (CInfoPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBGetCatInfo (pb, FALSE);
+  return PBGetCatInfo (pb, false);
 }
 
 PRIVATE OSErr
 PBGetFCBInfoSync_wrapper (FCBPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBGetFCBInfo (pb, FALSE);
+  return PBGetFCBInfo (pb, false);
 }
 
 PRIVATE OSErr
 PBGetFCBInfoAsync_wrapper (FCBPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBGetFCBInfo (pb, TRUE);
+  return PBGetFCBInfo (pb, true);
 }
 
 PRIVATE OSErr
 PBGetVInfoSync_wrapper (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBGetVInfo (pb, FALSE);
+  return PBGetVInfo (pb, false);
 }
 
 PRIVATE OSErr
 PBHCreateSync_wrapper (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHCreate (pb, FALSE);
+  return PBHCreate (pb, false);
 }
 
 PRIVATE OSErr
 PBGetFInfoSync_wrapper (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBGetFInfo (pb, FALSE);
+  return PBGetFInfo (pb, false);
 }
 
 PRIVATE OSErr
 PBHGetFInfoSync_wrapper (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHGetFInfo (pb, FALSE);
+  return PBHGetFInfo (pb, false);
 }
 
 PRIVATE OSErr
 PBHGetFInfoAsync_wrapper (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHGetFInfo (pb, TRUE);
+  return PBHGetFInfo (pb, true);
 }
 
 PRIVATE OSErr
 PBHGetVolParmsSync_wrapper (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHGetVolParms (pb, FALSE);
+  return PBHGetVolParms (pb, false);
 }
 
 PRIVATE OSErr
 PBHGetVolSync_wrapper (WDPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHGetVol (pb, FALSE);
+  return PBHGetVol (pb, false);
 }
 
 PRIVATE OSErr
 PBHOpenSync_wrapper (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHOpen (pb, FALSE);
+  return PBHOpen (pb, false);
 }
 
 PRIVATE OSErr
 PBHSetFInfoSync_wrapper (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHSetFInfo (pb, FALSE);
+  return PBHSetFInfo (pb, false);
 }
 
 PRIVATE OSErr
 PBSetFInfoSync_wrapper (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBSetFInfo (pb, FALSE);
+  return PBSetFInfo (pb, false);
 }
 
 PRIVATE OSErr
@@ -2488,7 +2488,7 @@ OpenWD (INTEGER vref, LONGINT dirid, LONGINT procid, INTEGER *wdrefp)
   wdpb.ioVRefNum = CW (vref);
   wdpb.ioWDDirID = CL (dirid);
   wdpb.ioWDProcID = CL (procid);
-  retval = PBOpenWD (&wdpb, FALSE);
+  retval = PBOpenWD (&wdpb, false);
   if (retval == noErr)
     *wdrefp = wdpb.ioVRefNum;
   warning_trace_info (NULL_STRING);
@@ -2505,7 +2505,7 @@ DirCreate (INTEGER vref, LONGINT parid, Str255 dirname, LONGINT *outdir)
   hpb.ioParam.ioVRefNum = CW (vref);
   hpb.fileParam.ioDirID = CL (parid);
   hpb.ioParam.ioNamePtr = RM ((Ptr) dirname);
-  retval = PBDirCreate (&hpb, FALSE);
+  retval = PBDirCreate (&hpb, false);
   if (retval == noErr)
     *outdir = hpb.fileParam.ioDirID;
   warning_trace_info (NULL_STRING);
@@ -2516,189 +2516,189 @@ PRIVATE OSErr
 PBOpenWDSync_wrapper (WDPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBOpenWD (pb, FALSE);
+  return PBOpenWD (pb, false);
 }
 
 PRIVATE OSErr
 PBReadSync_wrapper (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBRead (pb, FALSE);
+  return PBRead (pb, false);
 }
 
 PRIVATE OSErr
 PBReadAsync_wrapper (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBRead (pb, TRUE);
+  return PBRead (pb, true);
 }
 
 PRIVATE OSErr
 PBRenameSync_wrapper (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBRename (pb, FALSE);
+  return PBRename (pb, false);
 }
 
 PRIVATE OSErr
 PBSetCatInfoSync_wrapper (CInfoPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBSetCatInfo (pb, FALSE);
+  return PBSetCatInfo (pb, false);
 }
 
 PRIVATE OSErr
 PBSetEOFSync_wrapper (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBSetEOF (pb, FALSE);
+  return PBSetEOF (pb, false);
 }
 
 PRIVATE OSErr
 PBStatusSync_wrapper (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBStatus (pb, FALSE);
+  return PBStatus (pb, false);
 }
 
 PRIVATE OSErr
 PBWriteSync_wrapper (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBWrite (pb, FALSE);
+  return PBWrite (pb, false);
 }
 
 PRIVATE OSErr
 PBWriteAsync_wrapper (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBWrite (pb, TRUE);
+  return PBWrite (pb, true);
 }
 
 PRIVATE OSErr
 PBDTAddAPPLSync (DTPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBDTAddAPPL (pb, FALSE);
+  return PBDTAddAPPL (pb, false);
 }
 
 PRIVATE OSErr
 PBDTGetAPPLSync (DTPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBDTGetAPPL (pb, FALSE);
+  return PBDTGetAPPL (pb, false);
 }
 
 PRIVATE OSErr
 PBDirCreateSync (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBDirCreate (pb, FALSE);
+  return PBDirCreate (pb, false);
 }
 
 PRIVATE OSErr
 PBGetFPosSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBGetFPos (pb, FALSE);
+  return PBGetFPos (pb, false);
 }
 
 PRIVATE OSErr
 PBSetFPosSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBSetFPos (pb, FALSE);
+  return PBSetFPos (pb, false);
 }
 
 PRIVATE OSErr
 PBDTAddIconSync (DTPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBDTAddIcon (pb, FALSE);
+  return PBDTAddIcon (pb, false);
 }
 
 PRIVATE OSErr
 PBDTSetCommentSync (DTPBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBDTSetComment (pb, FALSE);
+  return PBDTSetComment (pb, false);
 }
 
 PRIVATE OSErr
 PBSetVolSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBSetVol (pb, FALSE);
+  return PBSetVol (pb, false);
 }
 
 PRIVATE OSErr
 PBSetVInfoSync (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBSetVInfo (pb, FALSE);
+  return PBSetVInfo (pb, false);
 }
 
 PRIVATE OSErr
 PBHDeleteSync (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHDelete (pb, FALSE);
+  return PBHDelete (pb, false);
 }
 
 PRIVATE OSErr
 PBCatSearchSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBCatSearch (pb, FALSE);
+  return PBCatSearch (pb, false);
 }
 
 PRIVATE OSErr
 PBCatMoveSync (CMovePBPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBCatMove (pb, FALSE);
+  return PBCatMove (pb, false);
 }
 
 PRIVATE OSErr
 PBHRenameSync (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHRename (pb, FALSE);
+  return PBHRename (pb, false);
 }
 
 PRIVATE OSErr
 PBOpenSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBOpen (pb, FALSE);
+  return PBOpen (pb, false);
 }
 
 PRIVATE OSErr
 PBHOpenDFSync (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBOpenDF (pb, FALSE);
+  return PBOpenDF (pb, false);
 }
 
 PRIVATE OSErr
 PBHOpenRFSync (HParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBHOpenRF (pb, FALSE);
+  return PBHOpenRF (pb, false);
 }
 
 PRIVATE OSErr
 PBOpenRFSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBOpenRF (pb, FALSE);
+  return PBOpenRF (pb, false);
 }
 
 PRIVATE OSErr
 PBControlSync (ParmBlkPtr pb)
 {
   warning_trace_info (NULL_STRING);
-  return PBControl (pb, FALSE);
+  return PBControl (pb, false);
 }
 
 PRIVATE OSErr
@@ -2706,7 +2706,7 @@ PBHOpenDenySync (HParmBlkPtr pb)
 {
   OSErr retval;
 
-  retval = OpenDeny (pb, FALSE);
+  retval = OpenDeny (pb, false);
   warning_trace_info ("%d", retval);
   return retval;
 }
@@ -2718,7 +2718,7 @@ HGetVol (StringPtr volName, INTEGER *vrefp, LONGINT *diridp)
   WDPBRec wdp;
 
   wdp.ioNamePtr = RM (volName);
-  retval = PBHGetVol (&wdp, FALSE);
+  retval = PBHGetVol (&wdp, false);
   if (retval == noErr)
     {
       *vrefp = wdp.ioVRefNum;
@@ -2737,7 +2737,7 @@ HSetVol (StringPtr volName, INTEGER vref, LONGINT dirid)
   wdp.ioNamePtr = RM (volName);
   wdp.ioVRefNum = CW (vref);
   wdp.ioWDDirID = CL (dirid);
-  retval = PBHSetVol (&wdp, FALSE);
+  retval = PBHSetVol (&wdp, false);
   warning_trace_info ("retval = %d", retval);
   return retval;
 }
@@ -2753,7 +2753,7 @@ HOpen (INTEGER vref, LONGINT dirid, Str255 filename, SignedByte perm,
   hpb.fileParam.ioDirID = CL (dirid);
   hpb.ioParam.ioNamePtr = RM (filename);
   hpb.ioParam.ioPermssn = CB (perm);
-  retval = PBHOpen (&hpb, FALSE);
+  retval = PBHOpen (&hpb, false);
   if (retval == noErr)
     *refp = hpb.ioParam.ioRefNum;
 
@@ -2772,7 +2772,7 @@ HSetFInfo (INTEGER vref, LONGINT dirid, Str255 filename, FInfo *finfop)
   hpb.fileParam.ioDirID = CL (dirid);
   hpb.ioParam.ioNamePtr = RM (filename);
   hpb.fileParam.ioFlFndrInfo = *finfop;
-  retval = PBHSetFInfo (&hpb, FALSE);
+  retval = PBHSetFInfo (&hpb, false);
   warning_trace_info ("retval = %d", retval);
   return retval;
 }
@@ -2790,14 +2790,14 @@ PRIVATE Boolean
 IsMPPOpen (void)
 {
   warning_trace_info (NULL_STRING);
-  return FALSE;
+  return false;
 }
 
 PRIVATE Boolean
 IsATPOpen (void)
 {
   warning_trace_info (NULL_STRING);
-  return FALSE;
+  return false;
 }
 
 PRIVATE OSErr

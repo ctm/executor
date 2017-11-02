@@ -36,9 +36,9 @@ extract_vers_num (Handle h)
   bool seen_left, seen_right, done;
 
   retval = old_retval = 0;
-  seen_left = FALSE;
-  seen_right = FALSE;
-  done = FALSE;
+  seen_left = false;
+  seen_right = false;
+  done = false;
   for (p = (char *) STARH (h), ep = p + GetHandleSize (h);
        !done && p < ep; ++p)
     {
@@ -46,13 +46,13 @@ extract_vers_num (Handle h)
 	{
 	case '(':
 	  if (seen_left)
-	    done = TRUE;
+	    done = true;
 	  else
-	    seen_left = TRUE;
+	    seen_left = true;
 	  break;
 	case ')':
-	  seen_right = TRUE;
-	  done = TRUE;
+	  seen_right = true;
+	  done = true;
 	  break;
 	case '0':
 	case '1':
@@ -67,13 +67,13 @@ extract_vers_num (Handle h)
 	  if (seen_left)
 	    retval = retval * 10 + *p - '0';
 	  if (retval < old_retval)
-	    done = TRUE;
+	    done = true;
 	  else
 	    old_retval = retval;
 	  break;
 	default:
 	  if (seen_left)
-	    done = TRUE;
+	    done = true;
 	  break;
 	}
     }
@@ -113,11 +113,11 @@ P0(PUBLIC pascal trap, INTEGER, InitResources)
 
        SysMapHndl = TopMapHndl;
        ROMlib_invalar ();
-       SetResLoad (TRUE);
+       SetResLoad (true);
        versh = GetResource (TICK ("vers"), 1);
        versnum = extract_vers_num (versh);
        if (versnum < MINIMUM_SYSTEM_FILE_NEEDED)
-	 system_file_version_skew_p = TRUE;
+	 system_file_version_skew_p = true;
 
        ROMlib_set_appearance ();
 

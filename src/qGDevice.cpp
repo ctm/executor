@@ -440,13 +440,13 @@ P4 (PUBLIC pascal trap, INTEGER, HasDepth,
   
   if (gdh != MR (MainDevice)
       || bpp == 0)
-    return FALSE;
+    return false;
   
   return (vdriver_acceptable_mode_p
 	  (0, 0, bpp, ((which_flags & (1 << gdDevType))
 		       ? (flags & (1 << gdDevType)) == (1 << gdDevType)
 		       : vdriver_grayscale_p),
-	   FALSE));
+	   false));
 }
 
 P4 (PUBLIC pascal trap, OSErr, SetDepth,

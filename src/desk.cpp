@@ -36,7 +36,7 @@ P1(PUBLIC pascal trap, INTEGER, OpenDeskAcc, Str255, acc)	/* IMI-440 */
     DCtlHandle dctlh;
     WindowPtr wp;
 
-    if (EqualString (acc, about_box_menu_name_pstr, TRUE, TRUE))
+    if (EqualString (acc, about_box_menu_name_pstr, true, true))
       {
 	do_about_box ();
 	retval = 0;
@@ -59,7 +59,7 @@ P1(PUBLIC pascal trap, INTEGER, OpenDeskAcc, Str255, acc)	/* IMI-440 */
 
   done:
 
-    SEvtEnb = TRUE;
+    SEvtEnb = true;
     return retval;
 }
 
@@ -121,7 +121,7 @@ P1(PUBLIC pascal trap, BOOLEAN, SystemEdit, INTEGER, editcmd)
 
     wp = (WindowPeek) FrontWindow();
     if (!wp)
-      retval = FALSE;
+      retval = false;
     else
       if ((retval = WINDOW_KIND (wp) < 0))
 	Control (WINDOW_KIND (wp), editcmd + accUndo, (Ptr) 0);
@@ -194,10 +194,10 @@ P1(PUBLIC pascal trap, BOOLEAN, SystemEvent, EventRecord *, evp)
 		}
 	    }
 	} else
-	    retval = FALSE;
+	    retval = false;
 
     } else
-	retval = FALSE;
+	retval = false;
     return retval;
 }
 

@@ -50,15 +50,15 @@ Executor::AE_init (void)
 
        err = _AE_hdlr_table_alloc (16, 0x80008, 0,
 				   /* #### */
-				   FALSE,
+				   false,
 				   &HxX (zone_tables, event_hdlr_table));
        err = _AE_hdlr_table_alloc (16, 0x80008, 0,
 				   /* #### */
-				   FALSE,
+				   false,
 				   &HxX (zone_tables, coercion_hdlr_table));
        err = _AE_hdlr_table_alloc (16, 0x80008, 0,
 				   /* #### */
-				   FALSE,
+				   false,
 				   &HxX (zone_tables, special_hdlr_table));
        info->system_zone_tables = RM (zone_tables);
      });
@@ -84,15 +84,15 @@ Executor::AE_reinit (void)
        
        err = _AE_hdlr_table_alloc (16, 0x80008, 0,
 				   /* #### */
-				   FALSE,
+				   false,
 				   &HxX (zone_tables, event_hdlr_table));
        err = _AE_hdlr_table_alloc (16, 0x80008, 0,
 				   /* #### */
-				   FALSE,
+				   false,
 				   &HxX (zone_tables, coercion_hdlr_table));
        err = _AE_hdlr_table_alloc (16, 0x80008, 0,
 				   /* #### */
-				   FALSE,
+				   false,
 				   &HxX (zone_tables, special_hdlr_table));
        info->appl_zone_tables = RM (zone_tables);
      });
@@ -189,7 +189,7 @@ P3 (PUBLIC pascal trap, OSErr, _AE_hdlr_delete,
   
   gui_assert (unknown_1 == 0);
   
-  err = hdlr_table_elt (table, selector, NULL, FALSE, &elt);
+  err = hdlr_table_elt (table, selector, NULL, false, &elt);
   if (err != noErr)
     AE_RETURN_ERROR (err);
   
@@ -214,7 +214,7 @@ P4 (PUBLIC pascal trap, OSErr, _AE_hdlr_lookup,
   
   gui_assert (unknown_1 == 0);
   
-  err = hdlr_table_elt (table, selector, NULL, FALSE, &elt);
+  err = hdlr_table_elt (table, selector, NULL, false, &elt);
   if (err != noErr)
     AE_RETURN_ERROR (err);
   
@@ -231,7 +231,7 @@ P4 (PUBLIC pascal trap, OSErr, _AE_hdlr_install,
   
   gui_assert (unknown_1 == 0);
   
-  err = hdlr_table_elt (table, selector, hdlr, TRUE, &elt);
+  err = hdlr_table_elt (table, selector, hdlr, true, &elt);
   if (err != noErr)
     AE_RETURN_ERROR (err);
   
@@ -263,7 +263,7 @@ P5 (PUBLIC pascal trap, OSErr, AEInstallEventHandler,
   hdlr.fn = RM (hdlr_fn);
   hdlr.refcon = CL (refcon);
   
-  err = hdlr_table_elt (table, &selector, &hdlr, TRUE, &elt);
+  err = hdlr_table_elt (table, &selector, &hdlr, true, &elt);
   if (err != noErr)
     AE_RETURN_ERROR (err);
   
@@ -272,7 +272,7 @@ P5 (PUBLIC pascal trap, OSErr, AEInstallEventHandler,
   
   /* hack because various applications complain if they get sent
      an open application event and don't have a handler for it */
-  application_accepts_open_app_aevt_p = TRUE;
+  application_accepts_open_app_aevt_p = true;
   
   AE_RETURN_ERROR (noErr);
 }
@@ -309,7 +309,7 @@ P5 (PUBLIC pascal trap, OSErr, AEGetEventHandler,
   selector.sel0 = CL (event_class);
   selector.sel1 = CL (event_id);
   
-  err = hdlr_table_elt (table, &selector, NULL, FALSE, &elt);
+  err = hdlr_table_elt (table, &selector, NULL, false, &elt);
   if (err != noErr)
     AE_RETURN_ERROR (err);
   
@@ -319,7 +319,7 @@ P5 (PUBLIC pascal trap, OSErr, AEGetEventHandler,
   
   /* hack because various applications complain if they get sent
      an open application event and don't have a handler for it */
-  application_accepts_open_app_aevt_p = TRUE;
+  application_accepts_open_app_aevt_p = true;
   
   AE_RETURN_ERROR (noErr);
 }
@@ -366,7 +366,7 @@ P6 (PUBLIC pascal trap, OSErr, AEInstallCoercionHandler,
   hdlr.fn = RM (hdlr_fn);
   hdlr.refcon = CL (refcon);
   
-  err = hdlr_table_elt (table, &selector, &hdlr, TRUE, &elt);
+  err = hdlr_table_elt (table, &selector, &hdlr, true, &elt);
   if (err != noErr)
     AE_RETURN_ERROR (err);
   
@@ -394,7 +394,7 @@ P6 (PUBLIC pascal trap, OSErr, AEGetCoercionHandler,
   selector.sel0 = CL (from_type);
   selector.sel1 = CL (to_type);
   
-  err = hdlr_table_elt (table, &selector, NULL, FALSE, &elt);
+  err = hdlr_table_elt (table, &selector, NULL, false, &elt);
   if (err != noErr)
     AE_RETURN_ERROR (err);
   
@@ -457,7 +457,7 @@ P3 (PUBLIC pascal trap, OSErr, AEInstallSpecialHandler,
   hdlr.fn = RM (hdlr_fn);
   hdlr.refcon = CL (-1);
   
-  err = hdlr_table_elt (table, &selector, &hdlr, TRUE, &elt);
+  err = hdlr_table_elt (table, &selector, &hdlr, true, &elt);
   if (err != noErr)
     AE_RETURN_ERROR (err);
   
@@ -481,7 +481,7 @@ P3 (PUBLIC pascal trap, OSErr, AEGetSpecialHandler,
   selector.sel0 = CL (function_class);
   selector.sel1 = CL (k_special_sel1);
   
-  err = hdlr_table_elt (table, &selector, NULL, FALSE, &elt);
+  err = hdlr_table_elt (table, &selector, NULL, false, &elt);
   if (err != noErr)
     AE_RETURN_ERROR (err);
   

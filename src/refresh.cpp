@@ -24,12 +24,12 @@ using namespace Executor;
 
 static TMTask refresh_tm_task;
 
-static bool refresh_tm_task_installed_p = FALSE;
+static bool refresh_tm_task_installed_p = false;
 
 
 A0 (PUBLIC, void, C_handle_refresh)
 {
-  static bool busy_p = FALSE;
+  static bool busy_p = false;
 
   /* If we're going directly to the screen, hang out and wait to see
    * if they stop writing directly to the screen later.
@@ -52,7 +52,7 @@ A0 (PUBLIC, void, C_handle_refresh)
 
       /* Make sure we aren't called recursively. */
       old_busy_p = busy_p;
-      busy_p = TRUE;
+      busy_p = true;
 
       PrimeTime ((QElemPtr) &refresh_tm_task, ROMlib_refresh * 1000 / 60);
 
@@ -71,7 +71,7 @@ Executor::dequeue_refresh_task (void)
    */
   set_refresh_rate (0);
   RmvTime ((QElemPtr) &refresh_tm_task);
-  refresh_tm_task_installed_p = FALSE;
+  refresh_tm_task_installed_p = false;
 }
 
 static bool shadow_screen_invalid_p;
@@ -80,7 +80,7 @@ void
 Executor::set_refresh_rate (int new1)
 {
 #if defined (VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
-  int old_vis = host_set_cursor_visible (FALSE);
+  int old_vis = host_set_cursor_visible (false);
 #endif /* VDRIVER_SUPPORTS_REAL_SCREEN_BLITS */
   static int last_refresh_set = 0;
 
@@ -95,7 +95,7 @@ Executor::set_refresh_rate (int new1)
 #endif /* VDRIVER_SUPPORTS_REAL_SCREEN_BLITS */
   
   if (!last_refresh_set && new1)
-    shadow_screen_invalid_p = TRUE;
+    shadow_screen_invalid_p = true;
   
   if (!refresh_tm_task_installed_p)
     {
@@ -121,9 +121,9 @@ Executor::set_refresh_rate (int new1)
 /* This code identifies a rectangle that encompasses any differences
  * between screen and shadow.  The rectangle is specified in terms of
  * 32 bit longs; the actual bits per pixel isn't important here.
- * If nothing has changed, this returns FALSE.  If something has changed,
+ * If nothing has changed, this returns false.  If something has changed,
  * this routine fills in the rectangle coordinates, copies the changed
- * data from screen to shadow, and returns TRUE.
+ * data from screen to shadow, and returns true.
  */
 BOOLEAN
 Executor::find_changed_rect_and_update_shadow (const uint32 *screen, uint32 *shadow,
@@ -171,7 +171,7 @@ Executor::find_changed_rect_and_update_shadow (const uint32 *screen, uint32 *sha
 
   /* If nothing has changed, return immediately. */
   if (longs_left == 0)
-    return FALSE;
+    return false;
 
   check_virtual_interrupt ();
 
@@ -206,14 +206,14 @@ Executor::find_changed_rect_and_update_shadow (const uint32 *screen, uint32 *sha
    * search (interrupt?)  But handle it gracefully anyway.
    */
   if (longs_left == 0)
-    return FALSE;
+    return false;
 
   check_virtual_interrupt ();
 
   /* Record one row past the last row that changed. */
   bottom = (longs_left + row_longs - 1) / row_longs;
   if (bottom <= top)
-    return FALSE;
+    return false;
 
   /* Now creep in from the left and find the leftmost changed long. */
   last_ix = (bottom - top - 1) * row_longs;
@@ -234,7 +234,7 @@ Executor::find_changed_rect_and_update_shadow (const uint32 *screen, uint32 *sha
 
  found_left:
   if (x >= row_longs)  /* Again, handle this gracefully. */
-    return FALSE;
+    return false;
   left = x;
 
   check_virtual_interrupt ();
@@ -257,7 +257,7 @@ Executor::find_changed_rect_and_update_shadow (const uint32 *screen, uint32 *sha
 
  found_right:
   if (x <= left)  /* Again, handle this gracefully. */
-    return FALSE;
+    return false;
   right = x;
 
  found_rect:
@@ -293,7 +293,7 @@ Executor::find_changed_rect_and_update_shadow (const uint32 *screen, uint32 *sha
   *bottom_long = bottom;
   *top_long    = top;
   
-  shadow_screen_invalid_p = FALSE;
+  shadow_screen_invalid_p = false;
   
-  return TRUE;
+  return true;
 }

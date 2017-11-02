@@ -137,7 +137,7 @@ hide_cursor_if_necessary (RgnHandle rh, const PixMap *dst, bool *old_vis)
 					     CW (rp->rgnBBox.bottom) - top,
 					     CW (rp->rgnBBox.right) - left);
 
-  return TRUE;
+  return true;
 }
 #endif /* VDRIVER_SUPPORTS_REAL_SCREEN_BLITS */
 
@@ -226,7 +226,7 @@ Executor::xdblt_xdata_norgb_norotate (RgnHandle rh, int mode,
 							 &cursor_vis_p);
     }
   else
-    cursor_maybe_changed_p = FALSE;
+    cursor_maybe_changed_p = false;
 #endif /* VDRIVER_SUPPORTS_REAL_SCREEN_BLITS */
 
   if (!mode_canon_p)
@@ -343,7 +343,7 @@ Executor::xdblt_xdata_short_narrow (RgnHandle rh, int mode,
 							 &cursor_vis_p);
     }
   else
-    cursor_maybe_changed_p = FALSE;
+    cursor_maybe_changed_p = false;
 #endif /* VDRIVER_SUPPORTS_REAL_SCREEN_BLITS */
 
 #if defined (RGB_NEEDS_MODE_MAPPING)
@@ -356,7 +356,7 @@ Executor::xdblt_xdata_short_narrow (RgnHandle rh, int mode,
   else
     xdblt_stub_table = x->stub_table_for_mode[mode];
   if (xdblt_stub_table == xdblt_nop_table)
-    return FALSE;
+    return false;
 
   xdblt_log2_bpp = log2_bpp = x->log2_bpp;
 
@@ -515,7 +515,7 @@ Executor::xdblt_xdata_complex (RgnHandle rh, int mode,
 							 &cursor_vis_p);
     }
   else
-    cursor_maybe_changed_p = FALSE;
+    cursor_maybe_changed_p = false;
 #endif /* VDRIVER_SUPPORTS_REAL_SCREEN_BLITS */
 
 #if defined (RGB_NEEDS_MODE_MAPPING)
@@ -602,7 +602,7 @@ do_short_narrow_pattern (RgnHandle rh, int mode, uint32 v, PixMap *dst,
     case (patOr & 3):
     case (patBic & 3):
       if (v == 0 || (rgb_spec && (v & rgb_spec->pixel_bits_mask) == 0))
-	return FALSE;
+	return false;
       op_color = ((mode & 3) == (patOr & 3)) ? fg_color : bk_color;
 
       if (v == (uint32) ~0 || (rgb_spec && v == rgb_spec->white_pixel))
@@ -796,7 +796,7 @@ Executor::xdblt_pattern (RgnHandle rh, int mode,
 							 &cursor_vis_p);
     }
   else
-    cursor_maybe_changed_p = FALSE;
+    cursor_maybe_changed_p = false;
 #endif /* VDRIVER_SUPPORTS_REAL_SCREEN_BLITS */
 
 #if defined (RGB_NEEDS_MODE_MAPPING)

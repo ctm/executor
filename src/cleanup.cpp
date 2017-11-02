@@ -78,7 +78,7 @@ call_cleanup_bat (void)
 	si.cb = sizeof si;
 	si.dwFlags = STARTF_USESHOWWINDOW;
 	si.wShowWindow = SW_HIDE;
-	CreateProcess (batch_file, NULL, NULL, NULL, FALSE, 0, NULL, NULL,
+	CreateProcess (batch_file, NULL, NULL, NULL, false, 0, NULL, NULL,
 		       &si, &pi);
       }
 #endif

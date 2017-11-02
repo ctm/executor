@@ -21,7 +21,7 @@ mp_decrement_big_endian (uint8 *bytes, int num_bytes)
   bool borrow_p;
   uint8 *b;
 
-  borrow_p = TRUE;
+  borrow_p = true;
   for (b = bytes + num_bytes; borrow_p && b > bytes; )
     {
       const uint8 v = *--b;
@@ -38,7 +38,7 @@ mp_increment_big_endian (uint8 *bytes, int num_bytes)
   bool carry_p;
   uint8 *b;
 
-  carry_p = TRUE;
+  carry_p = true;
   for (b = bytes + num_bytes; carry_p && b > bytes; )
     {
       /* Equivalent to "carry_p = !++*--b;"  Heh. */
@@ -81,7 +81,7 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_FnextX,
   ROMlib_Fclassx (y, &y_class_swapped, sel);
   y_class = CW_RAW (y_class_swapped);
 
-  normalize_x80_p = FALSE;  /* default, avoid gcc warnings. */
+  normalize_x80_p = false;  /* default, avoid gcc warnings. */
 
   switch (sel & OPCODE_MASK)
     {

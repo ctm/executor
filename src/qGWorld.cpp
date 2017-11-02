@@ -138,7 +138,7 @@ P6 (PUBLIC pascal trap, QDErr, NewGWorld,
   PixMapHandle gw_pixmap, gd_pixmap;
   GWorldPtr graphics_world;
   GUEST<GrafPtr> save_portX;
-  int gd_allocated_p = FALSE;
+  int gd_allocated_p = false;
 
   save_portX = thePortX;
   
@@ -182,7 +182,7 @@ P6 (PUBLIC pascal trap, QDErr, NewGWorld,
       
       gw_gd = NewGDevice (/* dummy */ 1,
 			  /* don't initialize */ -1);
-      gd_allocated_p = TRUE;
+      gd_allocated_p = true;
       /* set the various fields of the newly created graphics
 	 device */
       GD_RECT (gw_gd) = *bounds;
@@ -315,7 +315,7 @@ P1 (PUBLIC pascal trap, Boolean, LockPixels,
       if (gw_info->flags & pixelsLocked)
 	{
 	  gw_info->pixel_lock_count ++;
-	  return TRUE;
+	  return true;
 	}
 
       gw_info->flags |= pixelsLocked;
@@ -330,7 +330,7 @@ P1 (PUBLIC pascal trap, Boolean, LockPixels,
       HSetState ((Handle) pixels, HGetState ((Handle) pixels) | LOCKBIT);
     }
   
-  return TRUE;
+  return true;
 }
 
 
@@ -790,8 +790,8 @@ P1 (PUBLIC pascal trap, Boolean, PixMap32Bit,
     PixMapHandle, pixels)
 {
   warning_unimplemented ("poorly implemented");
-  return TRUE;
-/* #warning "Haven't verified that TRUE is better than 0xff or 0 in PixMap32Bit" */
+  return true;
+/* #warning "Haven't verified that true is better than 0xff or 0 in PixMap32Bit" */
 }
 
 
@@ -871,5 +871,5 @@ P1 (PUBLIC pascal trap, Boolean, QDDone,
 {
 /* #warning "QDDone not implemented" */
   warning_unimplemented (NULL_STRING);
-  return TRUE;
+  return true;
 }

@@ -24,7 +24,7 @@ using namespace std;
 
 /* Parse version e.g. "executor -system 7.0.2".  Omitted
  * digits will be zero, so "executor -system 7" is equivalent to
- * "executor -system 7.0.0".  Returns TRUE on success, else FALSE.
+ * "executor -system 7.0.0".  Returns true on success, else false.
  */
 
 bool
@@ -66,12 +66,12 @@ Executor::ROMlib_parse_version (string vers, uint32 *version_out)
   if (   major_version <= 0 || major_version > 0xF
       || minor_version < 0 || minor_version > 0xF
       || teeny_version < 0 || teeny_version > 0xF)
-    success_p = FALSE;
+    success_p = false;
   else
     {
       *version_out = CREATE_SYSTEM_VERSION (major_version, minor_version,
 					    teeny_version);
-      success_p = TRUE;
+      success_p = true;
     }
 
   return success_p;
@@ -79,7 +79,7 @@ Executor::ROMlib_parse_version (string vers, uint32 *version_out)
 
 /* Parse -system option, e.g. "executor -system 7.0.2".  Omitted
  * digits will be zero, so "executor -system 7" is equivalent to
- * "executor -system 7.0.0".  Returns TRUE on success, else FALSE.
+ * "executor -system 7.0.0".  Returns true on success, else false.
  */
 bool
 Executor::parse_system_version (string vers)
@@ -98,7 +98,7 @@ Executor::parse_system_version (string vers)
   return retval;
 }
 
-/* Parse -size option, e.g. "executor -size 640x480".  Returns FALSE
+/* Parse -size option, e.g. "executor -size 640x480".  Returns false
  * on parse error.
  */
 bool
@@ -139,19 +139,19 @@ Executor::parse_size_opt (string opt, string arg1)
     {
       fprintf (stderr, "Invalid screen size.  Use something like "
 	       "\"-%s 640x480\".\n", opt.c_str());
-      success_p = FALSE;
+      success_p = false;
     }
   else if (w < VDRIVER_MIN_SCREEN_WIDTH || h < VDRIVER_MIN_SCREEN_HEIGHT)
     {
       fprintf (stderr, "Screen size must be at least %dx%d.\n",
 	       VDRIVER_MIN_SCREEN_WIDTH, VDRIVER_MIN_SCREEN_HEIGHT);
-      success_p = FALSE;
+      success_p = false;
     }
   else
     {
       flag_width = w;
       flag_height = h;
-      success_p = TRUE;
+      success_p = true;
     }
 
   return success_p;
@@ -172,7 +172,7 @@ Executor::parse_prres_opt (INTEGER *outx, INTEGER *outy, string arg1)
   y = 0;
   p = &x;
 
-  for (retval = TRUE; *arg && retval; ++arg)
+  for (retval = true; *arg && retval; ++arg)
     {
       switch (*arg)
 	{
@@ -194,23 +194,23 @@ Executor::parse_prres_opt (INTEGER *outx, INTEGER *outy, string arg1)
 	    digit = *arg - '0';
 	    *p = 10 * *p + digit;
 	    if (*p <= old_val)
-	      retval = FALSE; /* overflow */
+	      retval = false; /* overflow */
 	  }
 	  break;
 	case 'x':
 	  if (p == &x)
 	    p = &y;
 	  else
-	    retval = FALSE; /* extra x */ 
+	    retval = false; /* extra x */ 
 	  break;
 	default:
-	  retval = FALSE; /* unknown character */
+	  retval = false; /* unknown character */
 	  break;
 	}
     }
 
   if (x <= 0 || y <= 0)
-    retval = FALSE;
+    retval = false;
  
   if (retval)
     {

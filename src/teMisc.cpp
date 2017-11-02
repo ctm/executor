@@ -359,7 +359,7 @@ calclhtab (TEHandle teh)
 		 sizeof (LHElement) * (n_lines + 1));
   lh = STARH (lh_table);
   first_changed = -1;
-  clear_lh_p = TRUE;
+  clear_lh_p = true;
   for (current_run = TE_STYLE_RUNS (sth), linestarts = TE_LINE_STARTS (teh);
        linestarts <= (TE_LINE_STARTS (teh) + n_lines);)
     {
@@ -369,7 +369,7 @@ calclhtab (TEHandle teh)
 			      STYLE_RUN_STYLE_INDEX (current_run));
       if (clear_lh_p)
 	{
-	  clear_lh_p = FALSE;
+	  clear_lh_p = false;
 	  if (first_changed == -1)
 	    {
 	      orig_height = LH_HEIGHT (lh);
@@ -395,7 +395,7 @@ calclhtab (TEHandle teh)
 	    first_changed = lh - STARH (lh_table);
 	  linestarts ++;
 	  lh ++;
-	  clear_lh_p = TRUE;
+	  clear_lh_p = true;
 	}
       else if (STYLE_RUN_START_CHAR (current_run + 1) < CW (linestarts[1]))
 	current_run ++;
@@ -407,7 +407,7 @@ calclhtab (TEHandle teh)
 	    first_changed = lh - STARH (lh_table);
 	  linestarts ++;
 	  lh ++;
-	  clear_lh_p = TRUE;
+	  clear_lh_p = true;
 	  current_run ++;
 	}
     }

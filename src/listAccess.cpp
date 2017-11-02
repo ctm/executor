@@ -45,16 +45,16 @@ P4(PUBLIC pascal trap, BOOLEAN, LNextCell, BOOLEAN, hnext,	/* IMIV-274 */
 	if (++scratch.h >= right)
 	    if (vnext && ++scratch.v < bottom) {
 		scratch.h = 0;
-		retval = TRUE;
+		retval = true;
 	    } else
-		retval = FALSE;
+		retval = false;
 	else
-	    retval = TRUE;
+	    retval = true;
     } else {
 	if (vnext && ++scratch.v < bottom)
-	    retval = TRUE;
+	    retval = true;
 	else
-	    retval = FALSE;
+	    retval = false;
     }
     if (retval) {
 	cellp->v = CW(scratch.v);
@@ -152,7 +152,7 @@ P5(PUBLIC pascal trap, BOOLEAN, LSearch, Ptr, dp,		/* IMIV-274 */
     while ((C_LFind(&offS, &lenS, cell, list), len = CW (lenS), off = CW (offS),
 	    len != -1) &&
 	       CALLCMP(dp, (Ptr) STARH(HxP(list, cells)) + off, dl, len, fp) != 0)
-	if (!C_LNextCell(TRUE, TRUE, &swappedcell, list)) {
+	if (!C_LNextCell(true, true, &swappedcell, list)) {
 	    cell.h = Hx(list, dataBounds.right);
 	    cell.v = Hx(list, dataBounds.bottom);
 	} else {
@@ -165,9 +165,9 @@ P5(PUBLIC pascal trap, BOOLEAN, LSearch, Ptr, dp,		/* IMIV-274 */
     if (len != -1) {
 	cellp->h = CW(cell.h);
 	cellp->v = CW(cell.v);
-/*-->*/	return TRUE;
+/*-->*/	return true;
     } else
-	return FALSE;
+	return false;
 }
 
 

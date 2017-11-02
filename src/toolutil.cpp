@@ -170,11 +170,11 @@ A3(PUBLIC, void, GetIndString, StringPtr, s, INTEGER, sid, INTEGER, index)
 
 A4(PRIVATE, int, cmpstrings, char *, p, char *, ep, char *, p1, LONGINT, len)
 {
-    int retval = TRUE;
+    int retval = true;
     
     while (retval && p != ep && len--)
         if (*p++ != *p1++)
-            retval = FALSE;
+            retval = false;
     return(retval);
 }
 
@@ -186,7 +186,7 @@ A4(PRIVATE, int, cmpstrings, char *, p, char *, ep, char *, p1, LONGINT, len)
 
 #warning Munger returns undocumented error return in D0 
 
-#define RETURN(x) do { retval = (x); goto DONE; } while (FALSE)
+#define RETURN(x) do { retval = (x); goto DONE; } while (false)
 
 #warning We never check for offset greater than HandleSize -- check and fix
 
@@ -306,7 +306,7 @@ do {									 \
 									 \
   *sp = RM ((Ptr)ip);						 \
   *dp = RM ((Ptr)op);						 \
-} while (FALSE)
+} while (false)
 
 
 void
@@ -502,10 +502,10 @@ P1(PUBLIC pascal trap, Fixed, SlopeFromAngle, INTEGER, a)
     } else
         sign = 1;
     if (a > 135) {
-        recip = TRUE;
+        recip = true;
         a = 270 - a;
     } else
-        recip = FALSE;
+        recip = false;
     retval = sloptab[a - 90];
     if (recip)
         retval = minvert(retval);
@@ -521,17 +521,17 @@ P1(PUBLIC pascal trap, INTEGER, AngleFromSlope, Fixed, s)
     
     if (s < 0) {
         s = -s;
-        neg = TRUE;
+        neg = true;
     } else
-        neg = FALSE;
+        neg = false;
     if (s < 0x10000) {
         if (s)
             s = minvert(s);
         else
             s = 0x7fffffff;
-        inv = TRUE;
+        inv = true;
     } else
-        inv = FALSE;
+        inv = false;
     for (ulp = (ULONGINT *)sloptab+1; *ulp > (ULONGINT) s ; ulp++)
         ;
     if (*(ulp-1) - s < s - *ulp)

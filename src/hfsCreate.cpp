@@ -35,13 +35,13 @@ PRIVATE OSErr freeallblocks(HVCB *vcbp, filerec *frp)
 	fcbp->fcbMdRByt = WRITEBIT;
 	pbr.ioParam.ioMisc = 0;
 	pbr.ioParam.ioRefNum = CW((char *) fcbp - (char *) MR(FCBSPtr));
-	retval = ROMlib_allochelper((IOParam *) &pbr, FALSE, seteof, FALSE);
+	retval = ROMlib_allochelper((IOParam *) &pbr, false, seteof, false);
 	if (retval == noErr) {
 	    fcbp->fcbPLen = frp->filRPyLen;
 	    memmove((char *) fcbp->fcbExtRec, (char *) frp->filRExtRec,
 		    (LONGINT) sizeof(frp->filRExtRec));
 	    fcbp->fcbMdRByt = WRITEBIT|RESOURCEBIT;
-	    retval = ROMlib_allochelper((IOParam *) &pbr, FALSE, seteof, FALSE);
+	    retval = ROMlib_allochelper((IOParam *) &pbr, false, seteof, false);
 	}
     }
     fcbp->fcbFlNum = 0;
@@ -59,7 +59,7 @@ PRIVATE OSErr createhelper(IOParam *pb, BOOLEAN async, createop op,
     HVCB *vcbp;
     
     curkind = (filekind)(regular | directory);
-    err = ROMlib_findvcbandfile(pb, dirid, &btparamrec, &curkind, FALSE);
+    err = ROMlib_findvcbandfile(pb, dirid, &btparamrec, &curkind, false);
     vcbp = btparamrec.vcbp;
     switch (err) {
     case noErr:

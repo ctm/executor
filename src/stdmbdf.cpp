@@ -44,7 +44,7 @@ draw_menu_title (muelem *elt,
 				 int hilite_p,
 				 int16 muright)
 {
-	int gray_title_p, dither_title_p = FALSE;
+	int gray_title_p, dither_title_p = false;
 	RGBColor title_color, bar_color;
 	MenuHandle muhandle;
 	char *title;
@@ -85,7 +85,7 @@ draw_menu_title (muelem *elt,
 		RGBBackColor (&ROMlib_white_rgb_color);
 		
 		image_update_ctab (apple, hilite_p ? &title_color : &bar_color, 0);
-		image_copy (apple, TRUE,
+		image_copy (apple, true,
 					&dstr, srcCopy);
 	}
 	else
@@ -211,7 +211,7 @@ mbdf_draw (int32 draw_p)
 		menulistp = STARH (MENULIST);
 		mpend = menulistp->mulist + CW (menulistp->muoff) / sizeof (muelem);
 		for (mp = menulistp->mulist; mp != mpend; mp++)
-			draw_menu_title (mp, mp == mpend - 1, FALSE, CW (menulistp->muright));
+			draw_menu_title (mp, mp == mpend - 1, false, CW (menulistp->muright));
 		HUnlock (MR (MenuList));
 		
 		/* highlite title if necessary */

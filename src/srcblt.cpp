@@ -85,7 +85,7 @@ srcblt_rgn (RgnHandle rh, int mode, int log2_bpp,
   mode &= 7;
 
 #if defined (VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
-  cursor_maybe_changed_p = old_vis_p = FALSE;
+  cursor_maybe_changed_p = old_vis_p = false;
   if (VDRIVER_BYPASS_INTERNAL_FBUF_P ())
     {
       int top, left;
@@ -105,8 +105,8 @@ srcblt_rgn (RgnHandle rh, int mode, int log2_bpp,
 	   * coordinate system sludge.  Copying from the screen is
 	   * uncommon anyway.
 	   */
-	  old_vis_p = host_set_cursor_visible (FALSE);
-	  cursor_maybe_changed_p = TRUE;
+	  old_vis_p = host_set_cursor_visible (false);
+	  cursor_maybe_changed_p = true;
 	}
       else
 	{
@@ -132,7 +132,7 @@ srcblt_rgn (RgnHandle rh, int mode, int log2_bpp,
 			 CW (rp->rgnBBox.left) - left,
 			 CW (rp->rgnBBox.bottom) - top,
 			 CW (rp->rgnBBox.right) - left));
-	  cursor_maybe_changed_p = TRUE;
+	  cursor_maybe_changed_p = true;
 	}
       else
 	{

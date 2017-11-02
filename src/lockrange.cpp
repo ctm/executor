@@ -108,7 +108,7 @@ Executor::ROMlib_fd_release_locks_for_close (int fd)
 	}
     }
 
-  err = ROMlib_fd_clear_locks_after_open (fd, FALSE);
+  err = ROMlib_fd_clear_locks_after_open (fd, false);
   if (err && retval == noErr)
     retval = err;
 

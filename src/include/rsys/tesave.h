@@ -16,7 +16,7 @@ typedef struct
 {
   GUEST_STRUCT;
 #if 0
-  /* TRUE if the save pattern is in _tpat, FALSE if it was placed in
+  /* true if the save pattern is in _tpat, false if it was placed in
      _tpixpat */
   INTEGER _tinpat;
   Pattern _tpat;

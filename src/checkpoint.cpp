@@ -20,7 +20,7 @@ typedef unsigned int uint32;
 #define PRIVATE static
 PRIVATE uint32 ROMlib_macdrives;
 PRIVATE uint32 ROMlib_dosdrives;
-enum { FALSE, TRUE };
+enum { false, true };
 
 #endif
 
@@ -35,7 +35,7 @@ enum { FALSE, TRUE };
 #include "winfs.h"
 #endif
 
-PRIVATE bool checkpointing_p = TRUE;
+PRIVATE bool checkpointing_p = true;
 
 PUBLIC checkpoint_t *checkpointp; /* globals are bad, but we use one in
 				     this case because checkpointing is
@@ -82,9 +82,9 @@ checkpoint_init (void)
       fclose (fp);
       buf[sizeof buf -1] = 0;
       if (strstr (buf, "-nosound"))
-	retval->sound_fails = TRUE;
+	retval->sound_fails = true;
       if (strstr (buf, "-skipaspi"))
-	retval->aspi_fails = TRUE;
+	retval->aspi_fails = true;
       p = strstr (buf, "-macdrives ");
       if (p)
 	retval->bad_macdrives
@@ -247,7 +247,7 @@ checkpoint_dosdrives (checkpoint_t *cp, checkpoint_option option, uint32 drive)
 PUBLIC void
 disable_checkpointing (void)
 {
-  checkpointing_p = FALSE;
+  checkpointing_p = false;
 }
 
 #if defined (STANDALONE_TEST)

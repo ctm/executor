@@ -203,7 +203,7 @@ A5(PRIVATE, BOOLEAN, getsetentry, GetOrSetType, gors, LONGINT, fd,
     BOOLEAN retval;
     INTEGER n;
 
-    retval = FALSE;
+    retval = false;
     saveloc = lseek(fd, 0L, SEEK_CUR);
     lseek(fd, 0L, L_SET);
     nread = read(fd, buf, sizeof(buf));
@@ -238,7 +238,7 @@ A5(PRIVATE, BOOLEAN, getsetentry, GetOrSetType, gors, LONGINT, fd,
 		gui_assert(0);
 		break;
 	    }
-	    retval = TRUE;
+	    retval = true;
 	}
     }
     lseek(fd, saveloc, L_SET);
@@ -347,7 +347,7 @@ A5(PRIVATE, BOOLEAN, getsetpiece, GetOrSetType, gors, LONGINT, fd,
 	retval = write(fd, bufp, length) == length;
 	break;
     default:
-	retval = FALSE;
+	retval = false;
 	gui_assert(0);
 	break;
     }
@@ -416,14 +416,14 @@ A8(PUBLIC, OSErr,  ROMlib_hiddenbyname, GetOrSetType, gors,	/* INTERNAL */
     if (Ustat(pathname, &sbuf) < 0)
 	retval = ROMlib_maperrno();
     else {
-	done = FALSE;
+	done = false;
 	rfd = Uopen(rpathname, O_BINARY|(gors == Set ? O_RDWR : O_RDONLY), 0);
 /*
 if (rfd == -1)
 fprintf(stderr, "%s(%d): open '%s' fails\n", __FILE__, __LINE__, rpathname);
 */
 	if (rfd < 0) {
-	    done = TRUE;
+	    done = true;
 	    if (errno == ENOENT) {
 		/* no resource fork (or AppleSingle) */
 		/* right now we ignore that it could be AppleSingle */
@@ -436,8 +436,8 @@ fprintf(stderr, "%s(%d): open '%s' fails\n", __FILE__, __LINE__, rpathname);
 		    *rlenp = 0;
 		    break;
 		case Set:
-		    retval = ROMlib_newresfork(rpathname, &rfd, FALSE);
-		    done = FALSE;
+		    retval = ROMlib_newresfork(rpathname, &rfd, false);
+		    done = false;
 		    break;
 		default:
 		    gui_assert(0);

@@ -83,7 +83,7 @@ P1(PUBLIC pascal trap, void, HideControl, ControlHandle, c)	/* IMI-322 */
 	       EraseRgn(rh);
 	       InvalRgn(rh);
 	       DisposeRgn(rh);
-	       CTL_VIS (c) = FALSE;
+	       CTL_VIS (c) = false;
 	     }
 	 });
     }

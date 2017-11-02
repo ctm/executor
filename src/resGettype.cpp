@@ -96,12 +96,12 @@ A1(PRIVATE, INTEGER, initar, INTEGER, rn)
 	ninserted = 0;
 	if (rn >= 0) {
 	    if ((map = ROMlib_rntohandl(rn, (Handle *) 0)))
-		ninserted = inserttypes(map, ninserted, TRUE);
+		ninserted = inserttypes(map, ninserted, true);
 	} else if (rn == ARRN_ALL) {
-	    first = TRUE;
+	    first = true;
 	    WALKMAPTOP(map)
 		ninserted = inserttypes(map, ninserted, first);
-		first = FALSE;
+		first = false;
 	    EWALKMAP()
 	}
 	SetHandleSize((Handle) ar, (Size) ninserted * sizeof(ResType));

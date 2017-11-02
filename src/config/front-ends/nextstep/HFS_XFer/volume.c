@@ -151,7 +151,7 @@ PRIVATE HVCB *vcbbyname(StringPtr name)
     HVCB *vcbp;
     
     for (vcbp = (HVCB *) VCBQHdr.qHead; vcbp &&
-	      !EqualString(vcbp->vcbVN, name, FALSE, TRUE) ;
+	      !EqualString(vcbp->vcbVN, name, false, true) ;
 						   vcbp = (HVCB *) vcbp->qLink)
 	;
     return vcbp;
@@ -535,7 +535,7 @@ PRIVATE OSErr setvolhelper(volumeParam *pb, BOOLEAN aysnc, LONGINT dirid)
 	    wdp = WDNUMTOWDP(defvrn);
 	    if (wdp->procid == 'STVL') {
 		wdpbrec.ioVRefNum = defvrn;
-		err = myPBCloseWD(&wdpbrec, FALSE);
+		err = myPBCloseWD(&wdpbrec, false);
 	    }
 	}
 	if (err == noErr) {
@@ -543,7 +543,7 @@ PRIVATE OSErr setvolhelper(volumeParam *pb, BOOLEAN aysnc, LONGINT dirid)
 	    wdpbrec.ioVRefNum = vcbp->vcbVRefNum;
 	    wdpbrec.ioWDProcID = 'STVL';
 	    wdpbrec.ioWDDirID = dirid;
-	    err = myPBOpenWD(&wdpbrec, FALSE);
+	    err = myPBOpenWD(&wdpbrec, false);
 	    if (err == noErr)
 		defvrn = wdpbrec.ioVRefNum;
 	}
@@ -589,7 +589,7 @@ PRIVATE void closeallvcbfiles(HVCB *vcbp)
     for (;fcbp < efcbp; fcbp = (filecontrolblock *) ((char *)fcbp + FSFCBLen))
 	if (fcbp->fcbFlNum && fcbp->fcbVPtr == vcbp) {
 	    iopb.ioRefNum = (char *) fcbp - (char *) FCBSPtr;
-	    myPBFlushFile((ioParam *) &iopb, FALSE);
+	    myPBFlushFile((ioParam *) &iopb, false);
 	}
 }
 
@@ -617,7 +617,7 @@ PRIVATE OSErr offlinehelper(volumeParam *pb, HVCB *vcbp)
     OSErr err;
     extern OSErr updatefloppy( void );
     
-    err = myPBFlushVol((volumeParam *) pb, FALSE);
+    err = myPBFlushVol((volumeParam *) pb, false);
     if (err == noErr) {
 	if (vcbp) {
 	    DisposPtr(vcbp->vcbMAdr);
@@ -675,10 +675,10 @@ PUBLIC OSErr pbvolrename(ioParam *pb, StringPtr newnamep)
     hpb.volumeParam.ioNamePtr = pb->ioNamePtr;
     hpb.volumeParam.ioVRefNum = pb->ioVRefNum;
     hpb.volumeParam.ioVolIndex = 0;
-    err = myPBHGetVInfo((HVolumeParam *) &hpb, FALSE);
+    err = myPBHGetVInfo((HVolumeParam *) &hpb, false);
     if (err == noErr) {
 	hpb.volumeParam.ioNamePtr = newnamep;
-	err = myPBSetVInfo((HVolumeParam *) &hpb, FALSE);
+	err = myPBSetVInfo((HVolumeParam *) &hpb, false);
     }
     return err;
 }

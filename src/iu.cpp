@@ -97,7 +97,7 @@ A3(PRIVATE, void, outs, StringPtr, p, INTEGER, n, char **, opp)
 
 /*
  * outn is similar to outl and outs but it converts a number to a set
- * of characters and adds them to *opp.  If leading0 is TRUE and the number
+ * of characters and adds them to *opp.  If leading0 is true and the number
  * is less than 10, a leading zero is output.
  */
 
@@ -141,7 +141,7 @@ A4(PRIVATE, void, day, INTEGER, n, Intl0Ptr, int0p, char, sep, char **, opp)
 
 A4(PRIVATE, void, year, INTEGER, n, Intl0Ptr, int0p, char, sep, char **, opp)
 {
-    outn(Cx(int0p->shrtDateFmt) & century ? n : n % 100, FALSE, opp);
+    outn(Cx(int0p->shrtDateFmt) & century ? n : n % 100, false, opp);
     if (sep)
 	*(*opp)++ = sep;
 }
@@ -198,7 +198,7 @@ P4(PUBLIC pascal trap, void, IUDatePString, LONGINT, date,	/* IMI-505 */
 		outs(int1p->months[CW(dtr.month)-1], abbrev, &op);
 	    }
 	    outl(Cx(int1p->st3), &op);
-	    outn(CW(dtr.year), FALSE, &op);
+	    outn(CW(dtr.year), false, &op);
 	    outl(Cx(int1p->st4), &op);
 	}
     }
@@ -300,7 +300,7 @@ P0(PUBLIC pascal trap, BOOLEAN, IUMetric)	/* IMI-505 */
     Handle h;
 
     h = IUGetIntl(0);
-    return h ? ((Intl0Ptr) STARH(h))->metricSys : FALSE;
+    return h ? ((Intl0Ptr) STARH(h))->metricSys : false;
 }
 
 P3(PUBLIC pascal trap, void, IUSetIntl, INTEGER, rn,		/* IMI-506 */
@@ -584,7 +584,7 @@ A5(PRIVATE, INTEGER, iuhelper, Ptr, ptr1, Ptr, ptr2, INTEGER, len1,
 P4(PUBLIC pascal trap, INTEGER, IUMagString, Ptr, ptr1,	/* IMI-506 */
 				     Ptr, ptr2, INTEGER, len1, INTEGER, len2)
 {
-    return iuhelper(ptr1, ptr2, len1, len2, FALSE);
+    return iuhelper(ptr1, ptr2, len1, len2, false);
 }
 
 A2(PUBLIC, INTEGER, IUCompString, StringPtr, str1,
@@ -596,7 +596,7 @@ A2(PUBLIC, INTEGER, IUCompString, StringPtr, str1,
 P4(PUBLIC pascal trap, INTEGER, IUMagIDString, Ptr, ptr1,	/* IMI-507 */
 				     Ptr, ptr2, INTEGER, len1, INTEGER, len2)
 {
-    return iuhelper(ptr1, ptr2, len1, len2, TRUE);
+    return iuhelper(ptr1, ptr2, len1, len2, true);
 }
 
 A2(PUBLIC, INTEGER, IUEqualString, StringPtr, str1,		/* IMI-506 */

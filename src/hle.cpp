@@ -74,10 +74,10 @@ Executor::hle_get_event (EventRecord *evt, bool remflag)
 	  DisposPtr ((Ptr) t);
 	}
       
-      return TRUE;
+      return true;
     }
   
-  return FALSE;
+  return false;
 }
 
 P4 (PUBLIC pascal trap, OSErr, AcceptHighLevelEvent,
@@ -121,11 +121,11 @@ P3 (PUBLIC pascal trap, Boolean, GetSpecificHighLevelEvent,
       if (evt_handled_p)
 	{
 	  *prev = t->next;
-	  return TRUE;
+	  return true;
 	}
     }
   
-  return FALSE;
+  return false;
 }
 
 namespace Executor {
@@ -137,7 +137,7 @@ P3 (PUBLIC pascal, Boolean, GetSpecificHighLevelEventProcTemplate, Ptr, data, Hi
   /* template for CTOP_... and PTOC_... flags generation */
   abort ();
 #if !defined (LETGCCWAIL)
-  return FALSE;
+  return false;
 #endif
 }
 

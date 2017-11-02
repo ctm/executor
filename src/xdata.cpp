@@ -35,10 +35,10 @@ Executor::update_xdata_if_needed (xdata_handle_t xh, PixPat *pixpat,
       if (x->raw_pat_bits_mem)
 	DisposPtr (x->raw_pat_bits_mem);
       xdata_for_pixpat_with_space (pixpat, dest, xh);
-      return TRUE;
+      return true;
     }
 
-  return FALSE;
+  return false;
 }
 
 
@@ -221,7 +221,7 @@ raw_bits_for_rgb_pattern (PixPatPtr pixpat, PixMap *target,
       gui_assert (rgb_spec != NULL);
 
       actual_value = (*rgb_spec->rgbcolor_to_pixel) (rgb_spec, &desired_color,
-						     TRUE);
+						     true);
       if (target_depth == 16)
 	actual_value |= (actual_value << 16);
     }
@@ -256,7 +256,7 @@ raw_bits_for_pixpat (PixPat *pixpat, PixMap *target,
 }
 
 
-/* Returns TRUE iff the specified pattern can be compressed to be only
+/* Returns true iff the specified pattern can be compressed to be only
  * four bytes wide with no loss of information.
  */
 static inline bool
@@ -273,14 +273,14 @@ narrow_p (const uint32 *bits, int row_longs, int height)
 
       for (i = row_longs - 1; i > 0; i--)
 	if (p[i] != v)
-	  return FALSE;
+	  return false;
     }
 
-  return TRUE;
+  return true;
 }
 
 
-/* Returns TRUE iff the specified pattern can be compressed to be only
+/* Returns true iff the specified pattern can be compressed to be only
  * one row tall with no loss of information.
  */
 static inline bool
@@ -294,10 +294,10 @@ short_p (const uint32 *bits, int row_longs, int height)
   for (p = ((const uint8 *) bits) + row_bytes; p != end; p += row_bytes)
     {
       if (memcmp (bits, p, row_bytes))
-	return FALSE;
+	return false;
     }
 
-  return TRUE;
+  return true;
 }
 
 

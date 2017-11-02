@@ -40,7 +40,7 @@ asm ("movl %%ebp, %0" : "=g" (from));		\
 from = *(char **)(from+4);  			\
 warning_unexpected ("name = \"%s\" from = %p", str, from); */	\
   retval = alloca (strlen (str) + 1);		\
-  last_was_slash_p = FALSE;			\
+  last_was_slash_p = false;			\
   for (ip = str, op = retval; *ip; ++ip)	\
     {						\
       if (*ip != '/' || !last_was_slash_p)	\
@@ -193,7 +193,7 @@ int Uopen(const char *path, int flags, int mode)
 
   path = DOUBLE_SLASH_REMOVE (path);
   retval = open(path, flags, mode);
-  ROMlib_fd_clear_locks_after_open (retval, TRUE);
+  ROMlib_fd_clear_locks_after_open (retval, true);
   return retval;
 }
 

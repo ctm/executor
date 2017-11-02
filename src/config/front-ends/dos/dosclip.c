@@ -23,7 +23,7 @@ PRIVATE void initclip(void)
 
     if (!been_here) {
 	
-	been_here = TRUE;
+	been_here = true;
     }
 }
 

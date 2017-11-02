@@ -287,7 +287,7 @@ do_selector_error (uint32 selector,
 		   char *trap_name,
 		   syn68k_addr_t (*trap_fp) (syn68k_addr_t, void **))
 {
-  bool found_trapno_p = FALSE;
+  bool found_trapno_p = false;
   int trapno = /* dummy */ -1, i;
   char buf[256];
   
@@ -297,7 +297,7 @@ do_selector_error (uint32 selector,
     if (toolstuff[i].ptoc.wheretogo == trap_fp)
       {
 	trapno = i + 0xA800;
-	found_trapno_p = TRUE;
+	found_trapno_p = true;
 	break;
       }
   if (! found_trapno_p)
@@ -305,7 +305,7 @@ do_selector_error (uint32 selector,
       if (osstuff[i].func == trap_fp)
 	{
 	  trapno = i + 0xA000;
-	  found_trapno_p = TRUE;
+	  found_trapno_p = true;
 	  break;
 	}
   
@@ -350,7 +350,7 @@ _do_selector_block (const selectorblock_t *sbp, unsigned long sel,
   const selectorblock_t *orig_sbp;
   
   orig_sbp = sbp;
-  for (done = FALSE;
+  for (done = false;
        (!(sbp->first == 0
 	  && sbp->last == 0)
 	&& !done);
@@ -361,7 +361,7 @@ _do_selector_block (const selectorblock_t *sbp, unsigned long sel,
 	  ptocp = &sbp->descriptorp[(sel - sbp->first) / sbp->divide];
 	  if (ptocp->wheretogo)
 	    return PascalToCCall (0, ptocp);
-	  done = TRUE;
+	  done = true;
 	}
     }
   
@@ -2347,7 +2347,7 @@ STUB (bad_trap_unimplemented)
 	int i;
 	bool need_comma_p;
 	
-	need_comma_p = FALSE;
+	need_comma_p = false;
 	for (i = 0; i < (int) NELEM (bad_traps) && i < n_bad_traps; ++i)
 	  {
 	    if (need_comma_p)
@@ -2358,7 +2358,7 @@ STUB (bad_trap_unimplemented)
 	      gui_assert (trap_buf[6] == 0);
 	      strcat (buf, trap_buf);
 	    }
-	    need_comma_p = TRUE;
+	    need_comma_p = true;
 	  }
       }
       strcat (buf, "].");
@@ -2421,7 +2421,7 @@ STUB(SetTrapAddress)
     tablep[EM_D0] = EM_A0;
 
     if (EM_D0 != 0xED)	/* Temporary MacWrite hack */
-	ROMlib_destroy_blocks(0, ~0, TRUE);
+	ROMlib_destroy_blocks(0, ~0, true);
     EM_D0 = 0;
     RTS();
 }

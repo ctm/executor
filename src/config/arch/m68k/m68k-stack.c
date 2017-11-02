@@ -37,7 +37,7 @@ m68k_use_interrupt_stacks (void)
 
   s = current_interrupt_stack;
   if (s + 2 > NUM_INTERRUPT_STACKS)
-    return FALSE;
+    return false;
   current_interrupt_stack = s + 2;
 
   m = &interrupt_stack[s];
@@ -53,7 +53,7 @@ m68k_use_interrupt_stacks (void)
   last_executor_stack_ptr
     = (uint32) &m[1].stack[INTERRUPT_STACK_SIZE - 16];
 
-  return TRUE;
+  return true;
 }
 
 

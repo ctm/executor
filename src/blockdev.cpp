@@ -48,7 +48,7 @@ blockdev_open (uint32 block_size,
       b->locked_p      = locked_p;
       b->removable_p   = removable_p;
       b->dcache_tag    = ++unique_dcache_tag;
-      b->valid_p       = TRUE;
+      b->valid_p       = true;
     }
 
   return b;
@@ -59,7 +59,7 @@ blockdev_open (uint32 block_size,
 #warning "I'm not sure if this function should be part of the API, since the read and write routines take offsets anyway.  It's only here because I'm not sure if you need to do a seek when switching from reads to writes and vice versa, like you do with fread/fwrite.  I don't think you do, but..."
 
 /* Reads the specified number of bytes from the given offset for
- * the given device.  Returns TRUE on success, else FALSE.
+ * the given device.  Returns true on success, else false.
  */
 bool
 Executor::blockdev_seek_set (blockdev_t *b, uint32 offset)
@@ -75,14 +75,14 @@ Executor::blockdev_seek_set (blockdev_t *b, uint32 offset)
 
 
 /* Reads the specified number of bytes from the given offset for
- * the given device.  Returns TRUE on success, else FALSE.
+ * the given device.  Returns true on success, else false.
  */
 bool
 Executor::blockdev_read (blockdev_t *b, uint32 offset, void *buf, uint32 num_bytes)
 {
   bool retval;
 
-  retval = FALSE;  /* default */
+  retval = false;  /* default */
   if (b && b->valid_p)
     {
       uint32 n;
@@ -122,7 +122,7 @@ Executor::blockdev_read (blockdev_t *b, uint32 offset, void *buf, uint32 num_byt
 	    }
 	}
 
-      retval = TRUE;
+      retval = true;
     }
 
  done:
@@ -133,7 +133,7 @@ Executor::blockdev_read (blockdev_t *b, uint32 offset, void *buf, uint32 num_byt
 
 
 /* Writes the specified number of bytes at the given offset for
- * the given device.  Returns TRUE on success, else FALSE.
+ * the given device.  Returns true on success, else false.
  */
 bool
 Executor::blockdev_write (blockdev_t *b, uint32 offset, const void *buf,
@@ -141,7 +141,7 @@ Executor::blockdev_write (blockdev_t *b, uint32 offset, const void *buf,
 {
   bool retval;
 
-  retval = FALSE;  /* default */
+  retval = false;  /* default */
   if (b && b->valid_p)
     {
       uint32 n;
@@ -182,7 +182,7 @@ Executor::blockdev_write (blockdev_t *b, uint32 offset, const void *buf,
 	  n += bytes_to_write;
 	}
 
-      retval = TRUE;
+      retval = true;
     }
 
  done:
@@ -200,7 +200,7 @@ Executor::blockdev_close (blockdev_t *b)
   else {
       dcache_invalidate (b->dcache_tag);
       b->close_func (b->fd);
-      b->valid_p = FALSE;
+      b->valid_p = false;
       free (b);
     }
 }

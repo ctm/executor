@@ -84,7 +84,7 @@ Executor::get_icon_info (mextp item_info, icon_info_t *info, int need_icon_p)
 	      CIconHandle icon;
 	      Rect *bounds;
 	      
-	      info->color_icon_p = TRUE;
+	      info->color_icon_p = true;
 	      
 	      icon = (CIconHandle) h;
 	      bounds = &(CICON_PMAP (icon).bounds);
@@ -96,7 +96,7 @@ Executor::get_icon_info (mextp item_info, icon_info_t *info, int need_icon_p)
 	      h = GetResource (TICK ("ICON"), 256 + item_info->micon);
 	      if (h)
 		{
-		  info->color_icon_p = FALSE;
+		  info->color_icon_p = false;
 		  info->width = 32 + ICON_PAD;
 		  info->height = 32 + ICON_PAD;
 		}
@@ -113,12 +113,12 @@ Executor::get_icon_info (mextp item_info, icon_info_t *info, int need_icon_p)
 	    h = GetResource (TICK ("SICN"), 256 + item_info->micon);
 	  if (h)
 	    {
-	      info->color_icon_p = FALSE;
+	      info->color_icon_p = false;
 	      info->width = 16 + ICON_PAD;
 	      info->height = 16 + ICON_PAD;
 	    }
 	  else
-	    return FALSE;
+	    return false;
 	}
       gui_assert (h);
       if (need_icon_p)
@@ -132,10 +132,10 @@ Executor::get_icon_info (mextp item_info, icon_info_t *info, int need_icon_p)
 		LoadResource (h);
 	    }
 	}
-      return TRUE;
+      return true;
     }
   else
-    return FALSE;
+    return false;
 }
 
 /* See IMV-236 */
@@ -147,7 +147,7 @@ PRIVATE BOOLEAN iskeyequiv(struct table::tableentry *tp)
     if (tp->options->mkeyeq)
 	retval = (tp->options->mkeyeq < 0x1b || tp->options->mkeyeq > 0x1f);
     else
-	retval = FALSE;
+	retval = false;
 
     return retval;
 }
@@ -168,7 +168,7 @@ size_menu (MenuHandle mh, tablePtr tablep)
       
       w = checksize + 2;
       
-      get_icon_info (tp->options, &icon_info, FALSE);
+      get_icon_info (tp->options, &icon_info, false);
       w += icon_info.width;
       
       height += tp[1].top - tp[0].top;
@@ -332,8 +332,8 @@ draw_item (Rect *rp, struct table::tableentry *tp, int32 bit, int item, MenuHand
   int active_p;
   bool dither_p, dither_cmd_p;
   
-  dither_p = FALSE;
-  dither_cmd_p = FALSE;
+  dither_p = false;
+  dither_cmd_p = false;
   draw_right_arrow_p = tp->options->mkeyeq == 0x1B;
   divider_p  = tp->name[0] && (tp->name[1] == '-');
   /* active vs grayed out */
@@ -346,7 +346,7 @@ draw_item (Rect *rp, struct table::tableentry *tp, int32 bit, int item, MenuHand
   
   v = top + ascent;
   
-  draw_icon_p = get_icon_info (tp->options, &icon_info, TRUE);
+  draw_icon_p = get_icon_info (tp->options, &icon_info, true);
   if (draw_icon_p)
     v += (icon_info.height - lineheight) / 2;
 
@@ -380,8 +380,8 @@ draw_item (Rect *rp, struct table::tableentry *tp, int32 bit, int item, MenuHand
 	    FAIL;
 	},
 	{
-	  dither_p = TRUE;
-	  dither_cmd_p = TRUE;
+	  dither_p = true;
+	  dither_cmd_p = true;
 
 	  if (memcmp (&bk_color, 
 		      &ROMlib_white_rgb_color, sizeof (RGBColor)))
@@ -517,7 +517,7 @@ draw_menu (MenuHandle mh, Rect *rp, tablePtr tablep)
 
 	nitem = (tp - tablep->entry) + 1;
 	bit = 1 << nitem;
-	draw_item (rp, tp, bit, nitem, mh, FALSE);
+	draw_item (rp, tp, bit, nitem, mh, false);
       }
   if (CW(rp->top) > CW (TopMenuItem))
     draw_arrow (rp, mh, uparrow);
@@ -552,7 +552,7 @@ doupdown (MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
     {
       /* flip (rp, CW (*itemp), tablep); */
       draw_item (rp, &tablep->entry[CW (*itemp) - 1], 1 << CW (*itemp),
-		 CW (*itemp), mh, FALSE);
+		 CW (*itemp), mh, false);
       *itemp = CWC (0);
     }
   if (HxX (MBSAVELOC, mbUglyScroll))
@@ -608,7 +608,7 @@ doupdown (MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
 	   tp[0].top < CW(updater.bottom) - CW(TopMenuItem) && tp != ep;
 	   tp++, bit <<= 1)
 	if (tp[1].top > CW (updater.top) - CW (TopMenuItem))
-	  draw_item (rp, tp, tp - tablep->entry + 1, bit, mh, FALSE);
+	  draw_item (rp, tp, tp - tablep->entry + 1, bit, mh, false);
       rtmp.top = rtmp.left = CWC(-32767);
       rtmp.bottom = rtmp.right = CWC(32767);
       ClipRect (&rtmp);
@@ -680,9 +680,9 @@ choose_menu (MenuHandle mh, Rect *rp, Point p, GUEST<int16> *itemp, tablePtr tab
 	      if (*itemp)
 		/* redraw this guy normally */
 		draw_item (rp, &tablep->entry[CW (*itemp) - 1], 1 << CW (*itemp),
-			   CW (*itemp), mh, FALSE);
+			   CW (*itemp), mh, false);
 	      if (nitem)
-		draw_item (rp, &tablep->entry[nitem - 1], 1 << nitem, nitem, mh, TRUE);
+		draw_item (rp, &tablep->entry[nitem - 1], 1 << nitem, nitem, mh, true);
 	      *itemp = CW (nitem);
 	    }
 	  if (nitem)
@@ -692,7 +692,7 @@ choose_menu (MenuHandle mh, Rect *rp, Point p, GUEST<int16> *itemp, tablePtr tab
   else if (*itemp)
     {
       nitem = CW (*itemp);
-      draw_item (rp, &tablep->entry[nitem - 1], 1 << nitem, nitem, mh, FALSE);
+      draw_item (rp, &tablep->entry[nitem - 1], 1 << nitem, nitem, mh, false);
       *itemp = CWC (0);
     }
   clip_rect.top    = clip_rect.left  = CWC (-32767);
@@ -778,7 +778,7 @@ P5(PUBLIC, pascal void, mdef0, INTEGER, mess, MenuHandle, mh, Rect *, rp,
       tabp->name    = (StringPtr) sp;
       tabp->options = (mextp) (sp + (unsigned char) *sp + 1);
       tabp->top     = v;
-      get_icon_info (tabp->options, &icon_info, FALSE);
+      get_icon_info (tabp->options, &icon_info, false);
       v += icon_info.height ? MAX (icon_info.height, lineheight) : lineheight;
     }
   tabp->top = v;

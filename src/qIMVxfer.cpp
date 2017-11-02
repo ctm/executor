@@ -34,61 +34,61 @@ sort_table (CTabPtr old, CTabPtr new1, unsigned max_color)
 
 /* declare a case in the transform switch */
 #define TRANSFORM_CASE(name, macro)				\
-  case MUNGE (name, 2, FALSE):					\
+  case MUNGE (name, 2, false):					\
     CONVERT_BITS (READ_INDIRECT_PIXEL, READ_INDIRECT_PIXEL,	\
 		  WRITE_INDIRECT_PIXEL,				\
 		  NONPAT_NEXT1,					\
 		  macro, 2);					\
     break;							\
-  case MUNGE (name, 4, FALSE):					\
+  case MUNGE (name, 4, false):					\
     CONVERT_BITS (READ_INDIRECT_PIXEL, READ_INDIRECT_PIXEL,	\
 		  WRITE_INDIRECT_PIXEL,				\
 		  NONPAT_NEXT1,					\
 		  macro, 4);					\
     break;							\
-  case MUNGE (name, 8, FALSE):					\
+  case MUNGE (name, 8, false):					\
     CONVERT_BITS (READ_INDIRECT_PIXEL, READ_INDIRECT_PIXEL,	\
 		  WRITE_INDIRECT_PIXEL,				\
 		  NONPAT_NEXT1,					\
 		  macro, 8);					\
     break;							\
-  case MUNGE (name, 16, FALSE):					\
+  case MUNGE (name, 16, false):					\
     CONVERT_BITS (READ_DIRECT16_PIXEL, READ_DIRECT16_PIXEL,	\
 		  WRITE_DIRECT16_PIXEL,				\
 		  NONPAT_NEXT1,					\
 		  macro, 8);					\
     break;							\
-  case MUNGE (name, 32, FALSE):					\
+  case MUNGE (name, 32, false):					\
     CONVERT_BITS (READ_DIRECT32_PIXEL, READ_DIRECT32_PIXEL,	\
 		  WRITE_DIRECT32_PIXEL,				\
 		  NONPAT_NEXT1,					\
 		  macro, 8);					\
     break;							\
-  case MUNGE (name, 2, TRUE):					\
+  case MUNGE (name, 2, true):					\
     CONVERT_BITS (READ_PAT_INDIRECT_PIXEL, READ_INDIRECT_PIXEL,	\
 		  WRITE_INDIRECT_PIXEL,				\
 		  PAT_NEXT1,					\
 		  macro, 2);					\
     break;							\
-  case MUNGE (name, 4, TRUE):					\
+  case MUNGE (name, 4, true):					\
     CONVERT_BITS (READ_PAT_INDIRECT_PIXEL, READ_INDIRECT_PIXEL,	\
 		  WRITE_INDIRECT_PIXEL,				\
 		  PAT_NEXT1,					\
 		  macro, 4);					\
     break;							\
-  case MUNGE (name, 8, TRUE):					\
+  case MUNGE (name, 8, true):					\
     CONVERT_BITS (READ_PAT_INDIRECT_PIXEL, READ_INDIRECT_PIXEL,	\
 		  WRITE_INDIRECT_PIXEL,				\
 		  PAT_NEXT1,					\
 		  macro, 8);					\
     break;							\
-  case MUNGE (name, 16, TRUE):					\
+  case MUNGE (name, 16, true):					\
     CONVERT_BITS (READ_PAT_DIRECT16_PIXEL, READ_DIRECT16_PIXEL,	\
 		  WRITE_DIRECT16_PIXEL,				\
 		  PAT_NEXT1,					\
 		  macro, 8);					\
     break;							\
-  case MUNGE (name, 32, TRUE):					\
+  case MUNGE (name, 32, true):					\
     CONVERT_BITS (READ_PAT_DIRECT32_PIXEL, READ_DIRECT32_PIXEL,	\
 		  WRITE_DIRECT32_PIXEL,				\
 		  PAT_NEXT1,					\
@@ -194,7 +194,7 @@ Executor::convert_transparent (const PixMap *src1, const PixMap *src2,
      uint32 swapped_pixel;				\
      							\
      swapped_pixel = ((*rgb_spec->rgbcolor_to_pixel)	\
-		      (rgb_spec, rgb, TRUE));		\
+		      (rgb_spec, rgb, true));		\
      switch (bpp)					\
        {						\
        case 16:						\
@@ -587,7 +587,7 @@ Executor::convert_pixmap_with_IMV_mode (const PixMap *src1, const PixMap *src2,
       /* = { (unsigned short)red, (unsigned short)green, (unsigned short)blue };	*/		\
      								\
      (pixel) = ((*rgb_spec->rgbcolor_to_pixel)			\
-		(rgb_spec, &color, FALSE));			\
+		(rgb_spec, &color, false));			\
    }))
 
 #define RGB_TO_PIXEL(bpp, red, green, blue, pixel)		\
