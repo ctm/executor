@@ -555,16 +555,14 @@ endif CONFIG_FRONT_END_NEXTSTEP
 
 if CONFIG_FRONT_END_SDL
 
-front_end_sources = config/front-ends/sdl/SDL_bmp.cpp        \
-                    config/front-ends/sdl/sdlevents.cpp      \
+front_end_sources = config/front-ends/sdl/sdlevents.cpp      \
                     config/front-ends/sdl/sdl_mem.cpp        \
                     config/front-ends/sdl/sdlquit.cpp        \
                     config/front-ends/sdl/sdlscrap.cpp       \
                     config/front-ends/sdl/sdlwin.cpp         \
                     config/front-ends/sdl/sdlwm.cpp          \
                     config/front-ends/sdl/syswm_map.cpp      \
-                    config/front-ends/sdl/winmain.cpp        \
-		    config/front-ends/sdl/for_sam.h        \
+                    config/front-ends/sdl/for_sam.h        \
 		    config/front-ends/sdl/host_bltmacros.h \
 		    config/front-ends/sdl/host_vdriver.h   \
 		    config/front-ends/sdl/map.h            \
