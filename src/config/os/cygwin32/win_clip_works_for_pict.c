@@ -32,7 +32,7 @@ ROMlib_executor_format (LONGINT type)
   {
     LONGINT type;
     UINT value;
-    boolean_t valid;
+    bool valid;
   } cache;
 
   if (cache.valid && type == cache.type)
@@ -64,7 +64,7 @@ sdlwindow (void)
   return retval;
 }
 
-PRIVATE boolean_t support_cf_dib_p = TRUE;
+PRIVATE bool support_cf_dib_p = TRUE;
 
 PUBLIC LONGINT
 GetScrapX (LONGINT type, char **h)
@@ -179,7 +179,7 @@ fill_in_data (char *destp, LONGINT type, LONGINT length, const char *p)
     }
 }
 
-PRIVATE boolean_t old_paste_code_p = FALSE;
+PRIVATE bool old_paste_code_p = FALSE;
 
 PRIVATE HANDLE clip_data = NULL;
 
@@ -246,10 +246,10 @@ PutScrapX (LONGINT type, LONGINT length, char *p, int scrap_count)
     }
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 we_lost_clipboard (void)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = GetClipboardOwner () != sdlwindow ();
   return retval;

@@ -73,7 +73,7 @@ compute_keyboard_mods (void)
 
 
 static LONGINT
-svgalib_keydata_to_mac_keydata (int scancode, INTEGER mods, boolean_t down_p,
+svgalib_keydata_to_mac_keydata (int scancode, INTEGER mods, bool down_p,
 				unsigned char *virtp)
 {
   unsigned char keycode;
@@ -211,7 +211,7 @@ mouse_moved (int x, int y)
 }
 
 
-boolean_t
+bool
 event_post_all_pending (void)
 {
   int evt, found_keyboard_event, found_mouse_event;
@@ -283,7 +283,7 @@ install_phoney_mouse_polling (void)
 #endif
 }
 
-boolean_t
+bool
 event_init (int screen_width, int screen_height)
 {
   syn68k_addr_t event_callback;

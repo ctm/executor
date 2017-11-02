@@ -49,12 +49,12 @@ fetch_and_remove_shift_suffix (char *num)
  * digits string must be uppercase.  All input characters are
  * converted to upper case.
  */
-static boolean_t
+static bool
 parse_base_number (const char *s, const char *digits, long long *vp,
 		   long long *divisorp)
 {
   long long v, divisor;
-  boolean_t found_dot_p;
+  bool found_dot_p;
   size_t radix;
 
   /* Make sure there's at least one digit. */  
@@ -128,13 +128,13 @@ parse_base_number (const char *s, const char *digits, long long *vp,
  * (farther from zero) multiple of a specified number.  If you don't
  * want rounding, just pass "1" for round_up_to_multiple_of.
  */
-boolean_t
+bool
 Executor::parse_number (string orig_num, int32 *val,
 	      unsigned round_up_to_multiple_of)
 {
   long long orig_raw_val, raw_val, div;
   int shift_factor;
-  boolean_t negate_p, parsed_p;
+  bool negate_p, parsed_p;
   int32 v;
   char *num;
 

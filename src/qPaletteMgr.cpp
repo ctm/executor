@@ -720,7 +720,7 @@ P1 (PUBLIC pascal trap, void, ActivatePalette, WindowPtr, src_window)
 P1 (PUBLIC pascal trap, void, RestoreClutDevice,
     GDHandle, gd)
 {
-  boolean_t gd_ctab_changed_p = FALSE;
+  bool gd_ctab_changed_p = FALSE;
   pm_resource_holder_t *holders;
   PixMapHandle gd_pixmap;
   CTabHandle gd_ctab;

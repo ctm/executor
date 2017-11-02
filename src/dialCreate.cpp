@@ -63,7 +63,7 @@ Executor::dialog_create_item (DialogPeek dp, itmp dst, itmp src,
   if (CB (dst->itmtype) & ctrlItem)
     {
       Rect r;
-      boolean_t visible_p = TRUE;
+      bool visible_p = TRUE;
       ControlHandle ctl;
       
       r = dst->itmr;
@@ -183,13 +183,13 @@ Executor::dialog_create_item (DialogPeek dp, itmp dst, itmp src,
 
 static DialogPtr
 ROMlib_new_dialog_common (DialogPtr dp,
-			  boolean_t color_p,
+			  bool color_p,
 			  CTabHandle w_ctab,
 			  Handle item_color_table_h,
 			  Rect *bounds, StringPtr title,
-			  boolean_t visible_p,
+			  bool visible_p,
 			  int16 proc_id, WindowPtr behind,
-			  boolean_t go_away_flag,
+			  bool go_away_flag,
 			  int32 ref_con,
 			  Handle items)
 {
@@ -392,7 +392,7 @@ P3 (PUBLIC pascal trap, DialogPtr, GetNewDialog, INTEGER, id,	/* IMI-413 */
   Handle item_ctab_res_h;
   DialogPtr retval;
   Handle dialog_ctab_res_h;
-  boolean_t color_p;
+  bool color_p;
   
   dialog_res_h = (dlogh) ROMlib_getrestid (TICK ("DLOG"), id);
   

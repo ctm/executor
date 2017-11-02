@@ -467,10 +467,10 @@ P3 (PUBLIC pascal trap, OSErr, GetIconFromSuite,
 }
 
 static OSErr
-find_best_icon (boolean_t small_p, int bpp,
+find_best_icon (bool small_p, int bpp,
 		Handle icon_suite_h,
 		Handle *icon_data_return, Handle *icon_mask_return,
-		boolean_t *small_return_p, int *icon_bpp_return)
+		bool *small_return_p, int *icon_bpp_return)
 {
   Handle *icons, *sized_icons;
   Handle icon_data, icon_mask;
@@ -524,7 +524,7 @@ P4 (PUBLIC pascal trap, OSErr, PlotIconSuite,
 {
   GrafPtr current_port;
   int port_bpp, icon_bpp;
-  boolean_t little_rect_p, little_icon_p;
+  bool little_rect_p, little_icon_p;
   Handle icon_data, icon_mask;
   OSErr err;
 
@@ -646,7 +646,7 @@ P3 (PUBLIC pascal trap, OSErr, GetLabel,
 {
   unsigned int index;
   OSErr retval;
-  static boolean_t been_here = FALSE;
+  static bool been_here = FALSE;
 
   if (!been_here)
     {

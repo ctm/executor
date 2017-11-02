@@ -10,18 +10,18 @@ char ROMlib_rcsid_next[] = "$Id: next.c 119 2005-07-11 21:36:20Z ctm $";
 #include "rsys/os.h"
 
 
-boolean_t
+bool
 os_init (void)
 {
   return TRUE;
 }
 
-PUBLIC boolean_t host_has_spfcommon (void)
+PUBLIC bool host_has_spfcommon (void)
 {
   return false;
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 host_spfcommon (host_spf_reply_block *replyp, const char *prompt,
 		const char *incoming_filename, void *fp, void *filef, int numt,
 		void *tl, getorput_t getorput, sf_flavor_t flavor,

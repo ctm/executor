@@ -231,10 +231,10 @@ Executor::ROMlib_set_appearance (void)
     }
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 Executor::ROMlib_parse_appearance (const char *appearance_str)
 {
-  boolean_t retval = TRUE;
+  bool retval = TRUE;
   
   if (strcasecmp (appearance_str, "mac") == 0)
 	appearance = appearance_sys7;

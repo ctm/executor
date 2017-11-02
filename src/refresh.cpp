@@ -24,12 +24,12 @@ using namespace Executor;
 
 static TMTask refresh_tm_task;
 
-static boolean_t refresh_tm_task_installed_p = FALSE;
+static bool refresh_tm_task_installed_p = FALSE;
 
 
 A0 (PUBLIC, void, C_handle_refresh)
 {
-  static boolean_t busy_p = FALSE;
+  static bool busy_p = FALSE;
 
   /* If we're going directly to the screen, hang out and wait to see
    * if they stop writing directly to the screen later.
@@ -48,7 +48,7 @@ A0 (PUBLIC, void, C_handle_refresh)
     }
   else
     {
-      boolean_t old_busy_p;
+      bool old_busy_p;
 
       /* Make sure we aren't called recursively. */
       old_busy_p = busy_p;
@@ -74,7 +74,7 @@ Executor::dequeue_refresh_task (void)
   refresh_tm_task_installed_p = FALSE;
 }
 
-static boolean_t shadow_screen_invalid_p;
+static bool shadow_screen_invalid_p;
 
 void
 Executor::set_refresh_rate (int new1)

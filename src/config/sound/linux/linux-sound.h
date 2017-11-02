@@ -5,6 +5,6 @@
 
 #include "rsys/sounddriver.h"
 
-extern boolean_t sound_linux_init (sound_driver_t *s);
+extern bool sound_linux_init (sound_driver_t *s);
 
 #endif /* !_LINUX_SOUND_H_ */

@@ -235,7 +235,7 @@ port_to_handle (uint8 port)
 {
   HANDLE retval;
   int com_minus_1;
-  static boolean_t been_here;
+  static bool been_here;
   static HANDLE com_hands[MAX_N_PORTS];
 
   if (!been_here)

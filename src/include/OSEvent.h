@@ -74,8 +74,8 @@ typedef struct size_info { GUEST_STRUCT;
     int16 size_flags;
     int32 preferred_size;
     int32 minimum_size;
-    boolean_t size_resource_present_p;
-    boolean_t application_p;
+    bool size_resource_present_p;
+    bool application_p;
 } size_info_t;
 
 extern size_info_t size_info;
@@ -136,7 +136,7 @@ extern pascal trap Boolean C_GetSpecificHighLevelEvent (GetSpecificFilterProcPtr
 extern pascal trap OSErr C_PostHighLevelEvent (EventRecord *evt, Ptr receiver_id, int32 refcon, Ptr msg_buf, int32 msg_length, int32 post_options);
 
 /* #### move to rsys/foo.h */
-extern boolean_t hle_get_event (EventRecord *evt, boolean_t remflag);
+extern bool hle_get_event (EventRecord *evt, bool remflag);
 extern void hle_init (void);
 extern void hle_reinit (void);
 extern void hle_reset (void);

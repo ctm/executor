@@ -14,7 +14,7 @@
 extern SDL_Surface *surface_from_dib (void *lp);
 #endif
 
-extern boolean_t we_lost_clipboard (void);
+extern bool we_lost_clipboard (void);
 extern void put_scrap (int type, int srclen, char *src);
 extern void get_scrap (int type, int *dstlen, char **dst);
 extern void export_scrap (const SDL_Event *event);

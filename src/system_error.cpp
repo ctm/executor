@@ -54,7 +54,7 @@ struct button
   const char *text;
   system_error_callback_t func;
 
-  boolean_t hilite_p;
+  bool hilite_p;
   Rect hilite_rect;
   int oval;
   
@@ -89,7 +89,7 @@ event_loop (void)
 	case mouseDown:
 	  {
 	    Point local_pt;
-	    boolean_t control_p;
+	    bool control_p;
 	    ControlHandle c;
             
             GUEST<Point> tmpPt = evt.where;

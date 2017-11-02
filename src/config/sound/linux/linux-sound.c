@@ -31,7 +31,7 @@ char ROMlib_rcsid_linux_sound[] =
 static int semid = -1;  /* Semaphore id */
 static int devfd;  /* Sound device file descriptor */
 static int sound_on = 0; /* 1 if we are generating interrupts */
-static boolean_t have_sound_p; /* TRUE if sound is supported */
+static bool have_sound_p; /* TRUE if sound is supported */
 
 /* Wait on the semaphore (atomic decrement) */
 
@@ -67,7 +67,7 @@ patl_signal (void)
 
 static snd_time t1 = 0;
 
-static boolean_t
+static bool
 sound_linux_works_p (sound_driver_t *s)
 {
   return have_sound_p;
@@ -165,7 +165,7 @@ sound_linux_clear_pending (sound_driver_t *s)
 {
 }
 
-static boolean_t
+static bool
 sound_linux_silent_p (sound_driver_t *s)
 {
   return FALSE;
@@ -213,10 +213,10 @@ loop (void *unused)
     }
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 valid_rate (int got, int wanted)
 {
-  boolean_t retval;
+  bool retval;
   int min, max;
 
   min = 0.95 * wanted; /* arbitrary fudge factors */
@@ -225,7 +225,7 @@ valid_rate (int got, int wanted)
   return retval;
 }
 
-boolean_t
+bool
 sound_linux_init (sound_driver_t *s)
 {
   int arg;

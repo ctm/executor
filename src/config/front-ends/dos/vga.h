@@ -107,7 +107,7 @@ typedef struct
 #define USE_LINEAR_FBUF (1 << 14)
 
 extern uint16 vesa_version;
-extern boolean_t only_use_vga_p;
+extern bool only_use_vga_p;
 
 enum { DONT_CLEAR_DISPLAY = (1 << 15) };
 

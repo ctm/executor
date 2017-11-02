@@ -9,6 +9,6 @@
  */
 
 namespace Executor {
-extern boolean_t arch_init (void);
+extern bool arch_init (void);
 }
 #endif /* !_RSYS_ARCH_H_ */

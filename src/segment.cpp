@@ -161,7 +161,7 @@ A1(PUBLIC, char *, ROMlib_undotdot, char *, origp)
 {
     int dotcount, nleft;
     char *p, *oldloc;
-    boolean_t slashseen_p;
+    bool slashseen_p;
 
     nleft = strlen(origp) + 1;
     slashseen_p = FALSE;
@@ -240,10 +240,10 @@ canonicalize_potential_windows_path (char *uname)
 }
 #endif
 
-PRIVATE boolean_t
+PRIVATE bool
 full_pathname_p (char *uname)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = uname[0] == '/';
 #if defined (MSDOS) || defined(CYGWIN32)

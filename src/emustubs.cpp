@@ -287,7 +287,7 @@ do_selector_error (uint32 selector,
 		   char *trap_name,
 		   syn68k_addr_t (*trap_fp) (syn68k_addr_t, void **))
 {
-  boolean_t found_trapno_p = FALSE;
+  bool found_trapno_p = FALSE;
   int trapno = /* dummy */ -1, i;
   char buf[256];
   
@@ -541,7 +541,7 @@ STUB (ScriptUtil)
   syn68k_addr_t retaddr;
   uint32 selector;
   uint8 low_selector_byte;
-  boolean_t use_high_table_p;
+  bool use_high_table_p;
   syn68k_addr_t retval;
 
   retaddr = POPADDR();
@@ -2313,7 +2313,7 @@ ROMlib_reset_bad_trap_addresses (void)
 }
 
 PRIVATE void
-add_to_bad_trap_addresses (boolean_t tool_p, unsigned short index)
+add_to_bad_trap_addresses (bool tool_p, unsigned short index)
 {
   int i;
   uint16 aline_trap;
@@ -2345,7 +2345,7 @@ STUB (bad_trap_unimplemented)
 	       "probably by getting the address of one of these traps: [");
       {
 	int i;
-	boolean_t need_comma_p;
+	bool need_comma_p;
 	
 	need_comma_p = FALSE;
 	for (i = 0; i < (int) NELEM (bad_traps) && i < n_bad_traps; ++i)
@@ -2375,7 +2375,7 @@ STUB (bad_trap_unimplemented)
 PUBLIC void
 ROMlib_GetTrapAddress_helper (uint32 *d0p, uint32 d1, uint32 *a0p)
 {
-  boolean_t tool_p;
+  bool tool_p;
 
   if (*d0p == READUL((syn68k_addr_t) 0xA198))
     *d0p = 0xA198;

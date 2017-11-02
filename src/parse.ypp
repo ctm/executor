@@ -537,7 +537,7 @@ static long yylex( void ) {
 	    else
 		*tempp++ = 0;
 	    {
-	      static boolean_t sorted = 0;
+	      static bool sorted = 0;
 
 	      if (!sorted)
 		{

@@ -14,10 +14,10 @@ char ROMlib_rcsid_svgalib[] = "$Id: svgalib.c 63 2004-12-24 18:19:43Z ctm $";
 
 
 /* Booleans for whether certain functionality is present. */
-boolean_t svgalib_have_blitwait_p;
-static boolean_t have_fillblit_p;
-static boolean_t have_bitblit_p;
-static boolean_t have_setrw_page_p;
+bool svgalib_have_blitwait_p;
+static bool have_fillblit_p;
+static bool have_bitblit_p;
+static bool have_setrw_page_p;
 
 /* Size of frame buffer to allocate. */
 static int num_mode_sets = 0;
@@ -41,8 +41,8 @@ vdriver_opt_register (void)
 }
 
 
-boolean_t
-vgahost_init (int max_width, int max_height, int max_bpp, boolean_t fixed_p,
+bool
+vgahost_init (int max_width, int max_height, int max_bpp, bool fixed_p,
 	      int *argc, char *argv[])
 {
   struct sigaction action;
@@ -104,7 +104,7 @@ vgahost_alloc_fbuf (unsigned long size)
 }
 
 
-boolean_t
+bool
 vgahost_mmap_linear_fbuf (const vga_mode_t *mode)
 {
   if (num_mode_sets == 1)
@@ -117,9 +117,9 @@ vgahost_mmap_linear_fbuf (const vga_mode_t *mode)
 }
 
 
-boolean_t
+bool
 vgahost_illegal_mode_p (int width, int height, int bpp,
-			boolean_t exact_match_p)
+			bool exact_match_p)
 {
   if (vga_current_mode == NULL)
     return FALSE;
@@ -128,7 +128,7 @@ vgahost_illegal_mode_p (int width, int height, int bpp,
 }
 			
 
-boolean_t
+bool
 vgahost_set_mode (vga_mode_t *mode)
 {
   vga_modeinfo *info;
@@ -340,7 +340,7 @@ vdriver_accel_rect_fill (int top, int left, int bottom, int right,
 			 uint32 color)
 {
   int width, height;
-  boolean_t bypass_p;
+  bool bypass_p;
 
   if (!have_fillblit_p || !vga_current_mode || vga_current_mode->log2_bpp != 3)
     return VDRIVER_ACCEL_NO_UPDATE;
@@ -374,7 +374,7 @@ vdriver_accel_rect_scroll (int top, int left, int bottom, int right,
 {
 #if 0
   int width, height;
-  boolean_t bypass_p;
+  bool bypass_p;
 
   if (!have_fillblit_p || !vga_current_mode || vga_current_mode->log2_bpp != 3)
     return VDRIVER_ACCEL_NO_UPDATE;

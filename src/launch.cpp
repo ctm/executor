@@ -90,9 +90,9 @@ char ROMlib_rcsid_launch[] =
 
 using namespace Executor;
 
-PRIVATE boolean_t ppc_launch_p = FALSE;
+PRIVATE bool ppc_launch_p = FALSE;
 
-PUBLIC void Executor::ROMlib_set_ppc (boolean_t val)
+PUBLIC void Executor::ROMlib_set_ppc (bool val)
 {
   ppc_launch_p = val;
 }
@@ -396,10 +396,10 @@ PUBLIC void Executor::SFSaveDisk_Update (INTEGER vrefnum, Str255 filename)
 
 PUBLIC uint32 Executor::ROMlib_version_long;
 
-PRIVATE boolean_t
+PRIVATE bool
 cfrg_match (const cfir_t *cfirp, GUEST<OSType> arch_x, uint8 type_x, Str255 name)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = (CFIR_ISA_X (cfirp) == arch_x &&
 	    CFIR_TYPE_X (cfirp) == type_x &&
@@ -1187,10 +1187,10 @@ PRIVATE void reset_traps(void)
     }
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 our_special_map (resmaphand map)
 {
-  boolean_t retval;
+  bool retval;
   Handle h;
 
   CurMap = STARH(map)->resfn;

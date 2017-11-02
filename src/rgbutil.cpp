@@ -29,7 +29,7 @@ rgbutil_init (void)
 
 
 static void
-make_component_map (uint16 *map, int num_bits, boolean_t swap_p)
+make_component_map (uint16 *map, int num_bits, bool swap_p)
 {
   unsigned mask;
   int i;
@@ -122,7 +122,7 @@ rgb_extract_from_swapped_32bpp_pixel (const rgb_spec_t *rgb_spec,
  */
 static rgb_extract_func_t
 make_pixel_to_rgbcolor_table (const rgb_spec_t *spec, rgb_map_t *d,
-			      boolean_t big_endian_rgbcolor_p)
+			      bool big_endian_rgbcolor_p)
 {
   d->low_red_bit   = spec->low_red_bit;
   d->low_green_bit = spec->low_green_bit;
@@ -166,7 +166,7 @@ make_pixel_to_rgbcolor_table (const rgb_spec_t *spec, rgb_map_t *d,
 static uint32
 rgbcolor_to_pixel (const rgb_spec_t *spec,
 		   const RGBColor *color,
-		   boolean_t big_endian_rgbcolor_p)
+		   bool big_endian_rgbcolor_p)
 {
   const uint8 *values;
   uint32 v;
@@ -205,7 +205,7 @@ rgbcolor_to_pixel (const rgb_spec_t *spec,
 
 void
 Executor::make_rgb_spec (rgb_spec_t *rgb_spec,
-	       int bpp, boolean_t big_endian_p,
+	       int bpp, bool big_endian_p,
 	       uint32 xor_mask,
 	       int num_red_bits, int low_red_bit,
 	       int num_green_bits, int low_green_bit,

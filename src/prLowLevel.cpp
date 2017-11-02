@@ -403,7 +403,7 @@ typedef enum
 
 PRIVATE print_where_t print_where;
 
-PRIVATE boolean_t filename_chosen_p = FALSE;
+PRIVATE bool filename_chosen_p = FALSE;
 
 PRIVATE void
 update_port (DialogPtr dp)
@@ -874,7 +874,7 @@ adjust_menu_common (TPPrDlg dlg, INTEGER item, heading_t heading, ini_key_t defk
   ControlHandle ch;
   MenuHandle mh;
 #if defined (MSDOS) || defined (CYGWIN32)
-  boolean_t skip_all_but_a_few;
+  bool skip_all_but_a_few;
 
   if (strcmp (heading, "Printer") != 0)
     skip_all_but_a_few = FALSE;
@@ -1003,7 +1003,7 @@ set_default_orientation (TPPrDlg dlg)
 PUBLIC void
 Executor::printer_init (void)
 {
-  static boolean_t ini_read_p = FALSE;
+  static bool ini_read_p = FALSE;
   
   if (!ini_read_p)
     {
@@ -1045,7 +1045,7 @@ P1(PUBLIC pascal trap, TPPrDlg, PrStlInit, THPrint, hPrint)
 
 	    if (!(ROMlib_options & ROMLIB_NOLOWER_BIT)) {
 	      char *p;
-	      boolean_t all_upper;
+	      bool all_upper;
 	      int n;
 
 	      /* convert all upper (e.g. EXECUTOR.EXE) to 

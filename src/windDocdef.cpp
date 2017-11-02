@@ -548,7 +548,7 @@ draw_zoom (int h, int v)
 }
 
 void
-draw_frame (GrafPtr w, int draw_zoom_p, boolean_t goaway_override)
+draw_frame (GrafPtr w, int draw_zoom_p, bool goaway_override)
 {
   int left, top, right, bottom;
   Rect r;
@@ -820,7 +820,7 @@ erase_grow_icon (GrafPtr w)
 
 LONGINT
 hit_doc (WindowPeek w, LONGINT parm, int growable_p,
-	 boolean_t goaway_override)
+	 bool goaway_override)
 {
   Point p;
   int left, top, right, bottom;
@@ -1006,7 +1006,7 @@ P4 (PUBLIC pascal, LONGINT, wdef0,
   WindowPeek w = (WindowPeek) window;
   draw_state_t draw_state;
   int zoom_bit;
-  boolean_t draw_p;
+  bool draw_p;
   
   rounded_window_p = FALSE;
   
@@ -1319,7 +1319,7 @@ P4 (PUBLIC pascal, LONGINT, wdef16,
 {
   WindowPeek w = (WindowPeek) wp;
   draw_state_t draw_state;
-  boolean_t draw_p;
+  bool draw_p;
   
   rounded_window_p = TRUE;
 

@@ -17,7 +17,7 @@ namespace Executor {
 extern SignedByte hlock_return_orig_state (Handle h);
 extern Size zone_size (THz zone);
 
-extern void BlockMove_the_trap (Ptr src, Ptr dst, Size cnt, boolean_t flush_p);
+extern void BlockMove_the_trap (Ptr src, Ptr dst, Size cnt, bool flush_p);
 
 /* Helper function that prints a useful error message when out of memory. */
 extern void print_mem_full_message (void);
@@ -41,13 +41,13 @@ extern int mm_n_applzones;
 #endif
 
 extern Handle _NewHandle_copy_ptr_flags (Size size, const void *data_to_copy,
-					 boolean_t sys_p);
+					 bool sys_p);
 extern Handle _NewHandle_copy_handle_flags (Size size, Handle data_to_copy,
-					    boolean_t sys_p);
+					    bool sys_p);
 extern Ptr _NewPtr_copy_ptr_flags (Size size, const void *data_to_copy,
-				   boolean_t sys_p);
+				   bool sys_p);
 extern Ptr _NewPtr_copy_handle_flags (Size size, Handle data_to_copy,
-				      boolean_t sys_p);
+				      bool sys_p);
 
 #define NewHandle_copy_ptr(s, p)      _NewHandle_copy_ptr_flags(s, p, FALSE)
 #define NewHandleSys_copy_ptr(s, p)   _NewHandle_copy_ptr_flags(s, p, TRUE)
@@ -59,7 +59,7 @@ extern Ptr _NewPtr_copy_handle_flags (Size size, Handle data_to_copy,
 #define NewPtrSys_copy_handle(s, h) _NewPtr_copy_handle_flags (s, h, TRUE)
 
 /* spewy flags */
-extern boolean_t ROMlib_memnomove_p;
+extern bool ROMlib_memnomove_p;
 
 #define LOCKBIT		(1 << 7)
 #define PURGEBIT	(1 << 6)

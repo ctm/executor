@@ -30,8 +30,8 @@ char ROMlib_rcsid_splash[] =
 static int bpp;
 static int log2_bpp;
 
-boolean_t
-splash_screen_display (boolean_t button_p, char *basename)
+bool
+splash_screen_display (bool button_p, char *basename)
 {
   struct splash_screen_header header;
   struct splash_screen_color color_buf[256];

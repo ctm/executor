@@ -26,11 +26,11 @@ char ROMlib_rcsid_autorefresh[] =
 
 namespace Executor {
 
-static boolean_t executor_changed_screen_p[NUM_AUTOREFRESH_STRIPS];
+static bool executor_changed_screen_p[NUM_AUTOREFRESH_STRIPS];
 
 
 /* Check auto refresh? */
-boolean_t do_autorefresh_p;
+bool do_autorefresh_p;
 
 
 /* Returns a value that will tend to change when the screen contents change
@@ -111,12 +111,12 @@ note_executor_changed_screen (int top, int bottom)
 
 
 /* Returns TRUE if refresh should be turned on. */
-boolean_t
+bool
 autodetect_refresh (void)
 {
   static uint32 last_checksum[NUM_AUTOREFRESH_STRIPS];
-  static boolean_t last_checksum_valid_p[NUM_AUTOREFRESH_STRIPS];
-  boolean_t need_refresh_p;
+  static bool last_checksum_valid_p[NUM_AUTOREFRESH_STRIPS];
+  bool need_refresh_p;
   int i;
 
   /* We don't need to autodetect refresh if we're already doing refresh

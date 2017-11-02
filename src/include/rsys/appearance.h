@@ -21,7 +21,7 @@ typedef enum
 } appearance_t;
 
 extern void ROMlib_set_appearance (void);
-extern boolean_t ROMlib_parse_appearance (const char *appearance_str);
+extern bool ROMlib_parse_appearance (const char *appearance_str);
 extern appearance_t ROMlib_get_appearance (void);
 }
 #endif

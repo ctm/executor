@@ -10,12 +10,12 @@
 
 namespace Executor {
 extern void sendsuspendevent (void);
-extern void sendresumeevent (boolean_t cvtclip);
+extern void sendresumeevent (bool cvtclip);
 
 #if defined (CYGWIN32)
-extern int get_scrap_helper (void *vh, void *lp, int len, boolean_t cvt_rets);
+extern int get_scrap_helper (void *vh, void *lp, int len, bool cvt_rets);
 extern int count_char (const char *p, int len, char c);
-extern boolean_t we_lost_clipboard (void);
+extern bool we_lost_clipboard (void);
 #if defined (SDL)
 extern int get_scrap_helper_dib (void *vh, void *lp);
 extern void put_scrap_helper_dib (void *lp);

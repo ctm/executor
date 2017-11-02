@@ -842,7 +842,7 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, FCMP_RETURN_TYPE, ROMlib_FcpXx,
  * this string and the original.
  */
 static int
-round_string (const char *in, char *out, boolean_t negative_p,
+round_string (const char *in, char *out, bool negative_p,
 	      int desired_digits)
 {
   int in_len, out_len, exponent_change, len_diff;

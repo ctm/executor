@@ -209,8 +209,8 @@ extern pascal trap OSErr C__AE_hdlr_install (AE_hdlr_table_h, int32,
 
 /* private */
 
-extern boolean_t send_application_open_aevt_p;
-extern boolean_t application_accepts_open_app_aevt_p;
+extern bool send_application_open_aevt_p;
+extern bool application_accepts_open_app_aevt_p;
 
 /*  error codes */
 

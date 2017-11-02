@@ -52,7 +52,7 @@ typedef int LONGINT;
 typedef int int32;
 
 #ifndef TRUE
-typedef enum { FALSE, TRUE } boolean_t;
+typedef enum { FALSE, TRUE } bool;
 #endif
 
 #include "rsys/parsenum.h"
@@ -719,12 +719,12 @@ cleanup (void)
  * the argument list.
  */
 
-PRIVATE boolean_t
+PRIVATE bool
 find_and_remove_switch_p (const char *switch_name, int *argcp, char *argv[])
 {
   int in, out;
   int start_argc;
-  boolean_t present_p;
+  bool present_p;
 
   present_p = FALSE;
   start_argc = *argcp;
@@ -743,10 +743,10 @@ find_and_remove_switch_p (const char *switch_name, int *argcp, char *argv[])
   return present_p;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 check_hfv_name (const char *hfv_name)
 {
-  boolean_t success_p;
+  bool success_p;
   if (strlen (hfv_name) == 0)
     {
       fprintf (stderr, "You can't have an empty file name!\n");
@@ -759,11 +759,11 @@ check_hfv_name (const char *hfv_name)
   return success_p;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 check_volume_name (const char *volume_name)
 {
   size_t len = strlen (volume_name);
-  boolean_t success_p;
+  bool success_p;
 
   if (len == 0)
     {
@@ -788,10 +788,10 @@ check_volume_name (const char *volume_name)
   return success_p;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 check_volume_size (const char *volume_size_string)
 {
-  boolean_t success_p;
+  bool success_p;
   int32 nbytes;
 
   if (!parse_number (volume_size_string, &nbytes, SECSIZE))
@@ -843,12 +843,12 @@ cleanup_string (char *s)
     s[--len] = '\0';
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 read_parameter (const char *prompt, char **s,
-		boolean_t (*verify_func) (const char *))
+		bool (*verify_func) (const char *))
 {
   char buf[2048];
-  boolean_t success_p;
+  bool success_p;
 
   success_p = FALSE;
   do
@@ -877,10 +877,10 @@ read_parameter (const char *prompt, char **s,
 #define OS_NAME "Mac OS X"
 #endif
 
-PRIVATE boolean_t
+PRIVATE bool
 prompt_for_parameters (char **hfv_name, char **volume_name, char **volume_size)
 {
-  boolean_t success_p;
+  bool success_p;
 
   /* Default to an error string to avoid uninitialized memory bugs. */
   *hfv_name = *volume_name = *volume_size = "???error???";
@@ -934,7 +934,7 @@ main (int argc, char *argv[])
   int32 years, leaps;
   int32 nsecs = 0, nbytes = 0;
   long timevar;
-  boolean_t force_p, help_p;
+  bool force_p, help_p;
   char *hfv_name, *volume_name, *volume_size;
 
   write_zeros = find_and_remove_switch_p ("-zeros", &argc, argv);

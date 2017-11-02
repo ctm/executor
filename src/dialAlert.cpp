@@ -74,7 +74,7 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
     (MR (MainDevice),
      {
        Rect adjusted_rect;
-       boolean_t color_p;
+       bool color_p;
        DialogPeek dp;
        SignedByte flags;
        itmp ip;

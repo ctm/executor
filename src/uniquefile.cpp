@@ -22,7 +22,7 @@ using namespace Executor;
  * character to try to obtain a unique filename.
  */
 
-boolean_t
+bool
 Executor::unique_file_name (const char *template1, const char *default_template,
 		  Str255 result)
 {

@@ -146,12 +146,12 @@ discard_all_inis (void)
 }
 #endif
 
-PUBLIC boolean_t
+PUBLIC bool
 Executor::read_ini_file (const char *filename)
 {
   using namespace std;
   FILE *fp;
-  boolean_t retval;
+  bool retval;
 
   fp = fopen (filename, "r");
   if (fp) {
@@ -236,28 +236,28 @@ Executor::open_ini_file_for_writing (const char *filename)
   return retval;
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 Executor::add_heading_to_file (FILE *fp, heading_t heading)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = fprintf (fp, "[%s]\n", heading.c_str()) > 0;
   return retval;
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 Executor::add_key_value_to_file (FILE *fp, ini_key_t key, value_t value)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = fprintf (fp, "%s=%s\n", key.c_str(), value.c_str()) > 0;
   return retval;
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 Executor::close_ini_file (FILE *fp)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = fclose (fp) == 0;
   return retval;

@@ -161,11 +161,11 @@ extern unsigned long ROMlib_memtop;
 extern OSErr ROMlib_relalloc (Size, block_header_t **);
 extern void ROMlib_setupblock (block_header_t *, uint32, short, Handle, ...);
 extern void ROMlib_freeblock (block_header_t *);
-extern boolean_t ROMlib_makespace (block_header_t **, uint32);
-extern boolean_t ROMlib_locked (block_header_t *);
+extern bool ROMlib_makespace (block_header_t **, uint32);
+extern bool ROMlib_locked (block_header_t *);
 extern void ROMlib_moveblock (block_header_t *, block_header_t *, uint32);
 extern int32 ROMlib_amtfree (block_header_t *);
-extern boolean_t ROMlib_pushblock (block_header_t *, block_header_t *);
+extern bool ROMlib_pushblock (block_header_t *, block_header_t *);
 extern void ROMlib_coalesce (block_header_t *blk);
 
 void mm_set_block_fields_offset (block_header_t *block,
@@ -202,7 +202,7 @@ struct pblock_t { GUEST_STRUCT;
     GUEST< ProcPtr> gz;
 };
 
-extern void ROMlib_sledgehammer_zone (THz zone, boolean_t print_p,
+extern void ROMlib_sledgehammer_zone (THz zone, bool print_p,
 				      const char *fn, const char *file,
 				      int lineno, const char *where,
 				      zone_info_t *infop);

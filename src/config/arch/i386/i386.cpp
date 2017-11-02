@@ -17,7 +17,7 @@ arch_type_t arch_type;
 #endif
 
 
-boolean_t
+bool
 Executor::arch_init (void)
 {
 #if !defined (ALWAYS_ON_I486)

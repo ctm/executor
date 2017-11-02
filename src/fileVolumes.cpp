@@ -129,8 +129,8 @@ chainfill (char *p, chain_t *therest)
     }
 }
 
-static boolean_t
-on_chain_p (hashlink_t *hlp, chain_t *therest, boolean_t dump_link)
+static bool
+on_chain_p (hashlink_t *hlp, chain_t *therest, bool dump_link)
 {
   if (dump_link)
     warning_trace_info ("dirid = %d, parid = %d, dirname = '%s'", hlp->dirid,
@@ -253,10 +253,10 @@ filename_from_pathname (const char *path)
   __retval;							\
 })
 
-PRIVATE boolean_t
+PRIVATE bool
 filename_match (const char *prefix, const char *path1, const char *path2)
 {
-  boolean_t retval;
+  bool retval;
   int prefix_length;
 
   retval = TRUE;

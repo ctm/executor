@@ -699,12 +699,12 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
   return retval;
 }
 
-PUBLIC boolean_t Executor::ROMlib_text_output_disabled_p;
+PUBLIC bool Executor::ROMlib_text_output_disabled_p;
 
-PUBLIC boolean_t
+PUBLIC bool
 Executor::disable_text_printing (void)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = ROMlib_text_output_disabled_p;
   ROMlib_text_output_disabled_p = TRUE;
@@ -712,7 +712,7 @@ Executor::disable_text_printing (void)
 }
 
 PUBLIC void
-Executor::set_text_printing (boolean_t state)
+Executor::set_text_printing (bool state)
 {
   ROMlib_text_output_disabled_p = state;
 }

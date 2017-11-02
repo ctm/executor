@@ -302,7 +302,7 @@ P6(PUBLIC pascal trap, void, FindWord, Ptr, textbufp, INTEGER, length,
 	   INTEGER, offset, BOOLEAN, leftside, Ptr, breaks, GUEST<INTEGER> *, offsets)
 {
   INTEGER start, stop;
-  boolean_t chasing_spaces_p;
+  bool chasing_spaces_p;
 #if defined (BINCOMPAT)
     ROMlib_hook(script_notsupported);
 #endif /* BINCOMPAT */

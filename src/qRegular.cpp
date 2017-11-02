@@ -75,10 +75,10 @@ P2(PUBLIC pascal trap, void, FillOval, Rect *, r, Pattern, pat)
   CALLOVAL(fill, r);
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 rect_matches_control_item (WindowPtr w, Rect *rp)
 {
-  boolean_t retval;
+  bool retval;
   ControlHandle c;
 
   retval = FALSE;
@@ -97,7 +97,7 @@ rect_matches_control_item (WindowPtr w, Rect *rp)
 P3(PUBLIC pascal trap, void, FrameRoundRect, Rect *, r, INTEGER, ow,
 								   INTEGER, oh)
 {
-  boolean_t do_rect;
+  bool do_rect;
 
   do_rect = FALSE;
 

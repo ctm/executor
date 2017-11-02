@@ -122,8 +122,8 @@ do {							\
 
 
 #if defined (VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
-static inline boolean_t
-hide_cursor_if_necessary (RgnHandle rh, const PixMap *dst, boolean_t *old_vis)
+static inline bool
+hide_cursor_if_necessary (RgnHandle rh, const PixMap *dst, bool *old_vis)
 {
   int top, left;
   RgnPtr rp;
@@ -194,18 +194,18 @@ INTEGER phony_special_region[7] =
  * pattern value by any multiple of the bits per pixel.  Some examples
  * are 0 or ~0 at any bpp, 0xA1A1A1A1 at 8bpp, 0x55555555 at 2bpp, etc.
  */
-boolean_t
+bool
 Executor::xdblt_xdata_norgb_norotate (RgnHandle rh, int mode,
 			    int pat_x_rotate_count, int pat_y_rotate_count,
 			    xdata_t *x, PixMap *dst)
 {
   RgnPtr r;
   int log2_bpp;
-  boolean_t active_screen_p;
+  bool active_screen_p;
   vdriver_accel_result_t accel_result;
-  boolean_t mode_canon_p;
+  bool mode_canon_p;
 #if defined (VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
-  boolean_t cursor_maybe_changed_p, cursor_vis_p;
+  bool cursor_maybe_changed_p, cursor_vis_p;
 #endif
   
   check_bitmap (dst, CHKR_WO);
@@ -315,16 +315,16 @@ ind_mode_to_rgb_mode[8] =
 #endif /* RGB_NEEDS_MODE_MAPPING */
 
 
-boolean_t
+bool
 Executor::xdblt_xdata_short_narrow (RgnHandle rh, int mode,
 			  int pat_x_rotate_count, int pat_y_rotate_count,
 			  xdata_t *x, PixMap *dst)
 {
   uint32 v, flip;
   int rcount, log2_bpp;
-  boolean_t mode_canon_p;
+  bool mode_canon_p;
 #if defined (VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
-  boolean_t cursor_maybe_changed_p, cursor_vis_p;
+  bool cursor_maybe_changed_p, cursor_vis_p;
 #endif
 
   check_bitmap (dst, CHKR_WO);
@@ -487,16 +487,16 @@ rotate_and_flip_xdata (xdata_t *x, int xrot, uint32 flip_mask)
 }
 
 
-boolean_t
+bool
 Executor::xdblt_xdata_complex (RgnHandle rh, int mode,
 		     int pat_x_rotate_count, int pat_y_rotate_count,
 		     xdata_t *x, PixMap *dst)
 {
   const char *base;
   uint32 flip_mask;
-  boolean_t mode_canon_p;
+  bool mode_canon_p;
 #if defined (VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
-  boolean_t cursor_maybe_changed_p, cursor_vis_p;
+  bool cursor_maybe_changed_p, cursor_vis_p;
 #endif
 
   check_bitmap (dst, CHKR_WO);
@@ -564,7 +564,7 @@ Executor::xdblt_xdata_complex (RgnHandle rh, int mode,
 }
 
 
-static boolean_t
+static bool
 do_short_narrow_pattern (RgnHandle rh, int mode, uint32 v, PixMap *dst,
 			 uint32 fg_color, uint32 bk_color, int log2_bpp,
 			 const rgb_spec_t *rgb_spec, int pat_x_rotate_count)
@@ -760,7 +760,7 @@ canonicalize_pat_value_for_mode (uint32 v, int mode, uint32 fg_color,
 }
 
 
-boolean_t
+bool
 Executor::xdblt_pattern (RgnHandle rh, int mode,
 	       int pat_x_rotate_count, int pat_y_rotate_count,
 	       const Pattern pattern, PixMap *dst,
@@ -769,9 +769,9 @@ Executor::xdblt_pattern (RgnHandle rh, int mode,
   uint32 v, mask, tile, *p, *end;
   const rgb_spec_t *rgb_spec = NULL;
   int log2_bpp;
-  boolean_t update_dirty_p;
+  bool update_dirty_p;
 #if defined (VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
-  boolean_t cursor_maybe_changed_p, cursor_vis_p;
+  bool cursor_maybe_changed_p, cursor_vis_p;
 #endif
 
   rgb_spec = pixmap_rgb_spec (dst);

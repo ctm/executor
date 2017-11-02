@@ -65,7 +65,7 @@ static ProcessSerialNumber no_process = { CLC(0), CLC (kNoProcess) };
 static ProcessSerialNumber current_process = { CLC(0), CLC (kCurrentProcess) };
 
 void
-Executor::process_create (boolean_t desk_accessory_p,
+Executor::process_create (bool desk_accessory_p,
 		uint32 type, uint32 signature)
 {
   size_resource_handle size;

@@ -43,9 +43,9 @@ vdriver_dib_mode_t vdriver_dib_modes =
 };
 
 
-boolean_t
+bool
 vdriver_init (int _max_width, int _max_height, int _max_bpp,
-	      boolean_t fixed_p, int *argc, char *argv[])
+	      bool fixed_p, int *argc, char *argv[])
 {
   HDC hdc;
 
@@ -137,9 +137,9 @@ vdriver_init (int _max_width, int _max_height, int _max_bpp,
   return(TRUE);
 }
 
-boolean_t
+bool
 vdriver_acceptable_mode_p (int width, int height, int bpp,
-			   boolean_t grayscale_p, boolean_t exact_match_p)
+			   bool grayscale_p, bool exact_match_p)
 {
   /* Verify the video mode parameters */
   if ( width && ((width < vdriver_dib_modes.size[0].width) ||
@@ -155,8 +155,8 @@ vdriver_acceptable_mode_p (int width, int height, int bpp,
   return(TRUE);
 }
 
-boolean_t
-vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
+bool
+vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
 {
   HDC hdc;
   uint8 *dummy_fbuf;
@@ -269,7 +269,7 @@ vdriver_get_colors (int first_color, int num_colors, ColorSpec *colors)
 
 int
 vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
-                                                      boolean_t cursor_p)
+                                                      bool cursor_p)
 {
   HDC hdc, mdc;
   int i;
@@ -297,7 +297,7 @@ vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
 
 int
 vdriver_update_screen (int top, int left, int bottom, int right,
-		       boolean_t cursor_p)
+		       bool cursor_p)
 {
   vdriver_rect_t r;
   

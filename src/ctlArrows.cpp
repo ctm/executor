@@ -653,10 +653,10 @@ CopyMacHandle (Handle h)
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 save_and_switch_to_color_port_if_needed (save_t *sp)
 {
-  boolean_t retval;
+  bool retval;
 
   if (CGrafPort_p (thePort))
     retval = FALSE;
@@ -706,7 +706,7 @@ P4 (PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */
   int draw_p;
   Rect thumbr;
   save_t save;
-  boolean_t need_to_restore_p;
+  bool need_to_restore_p;
   
   /* if drawing can occur, validate the color state */
   draw_p = (mess == drawCntl

@@ -33,7 +33,7 @@ using namespace Executor;
 ({						\
   char *retval, *op;				\
   const char *ip;				\
-  boolean_t last_was_slash_p;			\
+  bool last_was_slash_p;			\
 						\
 /* char *from;					\
 asm ("movl %%ebp, %0" : "=g" (from));		\

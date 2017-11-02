@@ -212,7 +212,7 @@ memcpy_but_delete_char (char *destp, const char *srcp, int len, char to_del)
 }
 
 PUBLIC int
-get_scrap_helper (void *vh, void *lp, int len, boolean_t convert_text)
+get_scrap_helper (void *vh, void *lp, int len, bool convert_text)
 {
   int retval;
   int new_len;

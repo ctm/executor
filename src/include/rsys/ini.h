@@ -35,12 +35,12 @@ extern void new_key_value_pair (heading_t heading,
 extern void discard_all_inis (void);
 #endif
 
-extern boolean_t read_ini_file (const char *filename);
+extern bool read_ini_file (const char *filename);
 extern pair_link_t *get_pair_link_n (heading_t heading, int n);
 extern FILE *open_ini_file_for_writing (const char *filename);
-extern boolean_t add_heading_to_file (FILE *fp, heading_t heading);
-extern boolean_t add_key_value_to_file (FILE *fp, ini_key_t key, value_t value);
-extern boolean_t close_ini_file (FILE *fp);
+extern bool add_heading_to_file (FILE *fp, heading_t heading);
+extern bool add_key_value_to_file (FILE *fp, ini_key_t key, value_t value);
+extern bool close_ini_file (FILE *fp);
 extern value_t find_key (heading_t heading, ini_key_t key);
 }
 #endif

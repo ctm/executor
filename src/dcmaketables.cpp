@@ -296,7 +296,7 @@ ind_src_table_builders[4][6] =
 /* Returns TRUE iff the specified mapping has no effect (i.e. maps 0 to 0,
  * 1 to 1, 2 to 2, etc.
  */
-static inline boolean_t
+static inline bool
 nop_map_p (const uint32 *map, int bpp)
 {
   int i;

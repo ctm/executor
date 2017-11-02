@@ -100,8 +100,8 @@ host_spf_reply_block;
 typedef enum { get, put } getorput_t;
 typedef enum { original_sf, new_sf, new_custom_sf } sf_flavor_t;
 
-extern boolean_t host_has_spfcommon (void);
-extern boolean_t host_spfcommon (host_spf_reply_block *replyp,
+extern bool host_has_spfcommon (void);
+extern bool host_spfcommon (host_spf_reply_block *replyp,
 				 const char *prompt, const char *filename,
 				 void *fp, void *filef, int numt,
 				 void *tl, getorput_t getorput,

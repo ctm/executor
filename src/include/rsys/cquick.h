@@ -603,7 +603,7 @@ struct pixpat_res
 void pixmap_free_copy (PixMap *pm);
 void pixmap_copy (const PixMap *src_pm, const Rect *src_rect,
 		  PixMap *return_pm, Rect *return_rect);
-boolean_t pixmap_copy_if_screen (const PixMap *src_pm, const Rect *src_rect,
+bool pixmap_copy_if_screen (const PixMap *src_pm, const Rect *src_rect,
  				 write_back_data_t *write_back_data);
 
 extern int ROMlib_Cursor_color_p;
@@ -643,7 +643,7 @@ extern void ROMlib_color_init ();
 extern Rect ROMlib_cursor_rect;
 
 extern void ROMlib_blt_rgn_update_dirty_rect
-  (RgnHandle, int16, boolean_t, int,
+  (RgnHandle, int16, bool, int,
    const PixMap *, PixMap *,
    const Rect *, const Rect *,
    uint32, uint32);
@@ -666,7 +666,7 @@ convert_pixmap_with_IMV_mode (const PixMap *src1, const PixMap *src2,
 			      ITabHandle itabh,
 			      const Rect *r1, const Rect *r2,
 			      int16 mode, const RGBColor *op_color,
-			      boolean_t tile_src1_p, 
+			      bool tile_src1_p, 
 			      int pat_x_offset, int pat_y_offset);
 
 void
@@ -674,7 +674,7 @@ convert_transparent (const PixMap *src1, const PixMap *src2,
 		     PixMap *dst,
 		     const Rect *r1, const Rect *r2,
 		     int16 mode,
-		     boolean_t tile_src1_p,
+		     bool tile_src1_p,
 		     int pat_x_offset, int pat_y_offset);
 
 extern void pm_front_window_maybe_changed_hook (void);
@@ -698,7 +698,7 @@ extern RGBColor *ROMlib_qd_color_to_rgb (LONGINT);
 
 extern void gd_allocate_main_device (void);
 extern void gd_set_main_device_bpp (void);
-extern void gd_set_bpp (GDHandle gd, boolean_t color_p, boolean_t fixed_p,
+extern void gd_set_bpp (GDHandle gd, bool color_p, bool fixed_p,
 			int bpp);
 extern void ROMlib_InitGWorlds (void);
 
@@ -722,8 +722,8 @@ extern int16 xStdTxMeas (int16 n, uint8 *p, GUEST<Point> *nump, GUEST<Point> *de
 extern void ROMlib_fg_bk (uint32 *fg_pixel_out, uint32 *bk_pixel_out,
 			  RGBColor *fg_rgb_out, RGBColor *bk_rgb_out,
 			  const rgb_spec_t *rgb_spec,
-			  boolean_t active_screen_addr_p,
-			  boolean_t src_blt_p);
+			  bool active_screen_addr_p,
+			  bool src_blt_p);
 
 extern void canonical_from_bogo_color (uint32 index,
 				       const rgb_spec_t *rgb_spec,

@@ -478,10 +478,10 @@ CToRoutineDescriptorCall (const RoutineDescriptor *p, unsigned long long magic,
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 is_routine_descriptor_ptr (uint16 *addr)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = (*addr == (uint16) CWC (MIXED_MODE_TRAP));
   return retval;

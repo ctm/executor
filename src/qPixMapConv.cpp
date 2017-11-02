@@ -124,7 +124,7 @@ Executor::pixmap_copy (const PixMap *src_pm, const Rect *src_rect,
   }
 }
  
-boolean_t
+bool
 Executor::pixmap_copy_if_screen (const PixMap *src_pm, const Rect *src_rect,
  		       write_back_data_t *write_back_data)
 {
@@ -213,8 +213,8 @@ void
 Executor::ROMlib_fg_bk (uint32 *fg_pixel_out, uint32 *bk_pixel_out,
 	      RGBColor *fg_rgb_out, RGBColor *bk_rgb_out,
 	      const rgb_spec_t *rgb_spec,
-	      boolean_t active_screen_addr_p,
-	      boolean_t indirect_p)
+	      bool active_screen_addr_p,
+	      bool indirect_p)
 {
   GrafPtr current_port;
   uint32 fg_pixel, bk_pixel;
@@ -396,7 +396,7 @@ Executor::convert_pixmap (const PixMap *src, PixMap *dst,
   int16 src_row_bytes, dst_row_bytes;
   
   write_back_data_t write_back;
-  boolean_t copy_p;
+  bool copy_p;
   
   TEMP_ALLOC_DECL (temp_scratch_pm_bits);
   

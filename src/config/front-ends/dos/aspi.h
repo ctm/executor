@@ -19,11 +19,11 @@ typedef struct {
     int lun;
     uint32 block_length;
     uint32 num_blocks;
-    boolean_t is_open;
-    boolean_t force_write_protect;
-    boolean_t write_protect;
-    boolean_t removable;
-    boolean_t media_present;
+    bool is_open;
+    bool force_write_protect;
+    bool write_protect;
+    bool removable;
+    bool media_present;
 } aspi_info_t;
 
 typedef struct {
@@ -270,11 +270,11 @@ typedef struct {
   } u;
 } aspi_command_t;
 
-extern int aspi_disk_close (int disk, boolean_t eject);
+extern int aspi_disk_close (int disk, bool eject);
 extern off_t aspi_disk_seek(int fd, off_t pos, int unused);
 extern int aspi_disk_read(int fd, void *bufp, int num_bytes);
 extern int aspi_disk_write(int fd, const void *bufp, int num_bytes);
-extern boolean_t aspi_init( void );
+extern bool aspi_init( void );
 extern void aspi_rescan (void);
 
 /* 

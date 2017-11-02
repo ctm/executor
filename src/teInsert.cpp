@@ -206,7 +206,7 @@ togglehilite (TEHandle te)
 }
 
 static void
-togglecaret (TEHandle teh, int16 sel, boolean_t paint_p)
+togglecaret (TEHandle teh, int16 sel, bool paint_p)
 {
   Point p;
   int16 pm;
@@ -845,7 +845,7 @@ PUBLIC INTEGERRET ROMlib_dotext (void)
 
 /* return TRUE if click at location `cl' was a double click; otherwise
    save away this click information (location, time) */
-static boolean_t
+static bool
 double_click_p (TEHandle te, int16 cl)
 {
   int32 ticks;
@@ -960,7 +960,7 @@ P3 (PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
   int16 left_origin = -1, right_origin = -1;
   int16 length;
   int16 state;
-  boolean_t word_hilite_p = FALSE;
+  bool word_hilite_p = FALSE;
   
   TESAVE (te);
   te_flags = HGetState ((Handle) te);

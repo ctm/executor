@@ -4,7 +4,7 @@
 #include "dosevq_defs.h"
 #include <sys/farptr.h>
 
-extern boolean_t need_hacky_screen_update;
+extern bool need_hacky_screen_update;
 
 /* This struct must be 32 bits, or else you'll have to change some
  * accessor macros and assembly code.

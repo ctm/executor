@@ -33,7 +33,7 @@ static ControlHandle ctl;
 static WindowPtr ctl_owner;
 static int16 window_font;
 static int16 window_size;
-static boolean_t window_font_p;
+static bool window_font_p;
 
 #endif
 
@@ -100,7 +100,7 @@ restore_bk_color (ControlHandle ctl, draw_state_t draw_state)
 }
 
 static void
-set_text_face (boolean_t item_p, int flags, mextp item_info)
+set_text_face (bool item_p, int flags, mextp item_info)
 {
   if (item_p)
     TextFace (item_info->mstyle);
@@ -122,8 +122,8 @@ set_text_face (boolean_t item_p, int flags, mextp item_info)
 
 static void
 draw (ControlHandle ctl, draw_state_t draw_state,
-      int16 window_font, int16 window_size, boolean_t window_font_p,
-      boolean_t invert_title_p, boolean_t title_only_p,
+      int16 window_font, int16 window_size, bool window_font_p,
+      bool invert_title_p, bool title_only_p,
       int *return_popup_top, int *return_popup_left)
 {
   FontInfo font_info;
@@ -136,7 +136,7 @@ draw (ControlHandle ctl, draw_state_t draw_state,
   int item_pad;
   
   icon_info_t icon_info;
-  boolean_t icon_p;
+  bool icon_p;
   
   mextp item_info;
   StringPtr item_title;
@@ -153,7 +153,7 @@ draw (ControlHandle ctl, draw_state_t draw_state,
 
   /* true if we should draw the pulldown arrow; pulldown arrow is not
      drawn if there are no menu items */
-  boolean_t draw_pulldown_arrow_p = TRUE;
+  bool draw_pulldown_arrow_p = TRUE;
   
   data = (popup_data_handle) CTL_DATA (ctl);
   flags = POPUP_FLAGS (data);
@@ -420,12 +420,12 @@ draw (ControlHandle ctl, draw_state_t draw_state,
 P4 (PUBLIC pascal, int32, cdef1008,
     int16, var, ControlHandle, ctl, int16, message, int32, param)
 {
-  boolean_t draw_p;
+  bool draw_p;
   int32 retval = /* dummy */ 0;
   draw_state_t draw_state;
   int16 window_font;
   int16 window_size;
-  boolean_t window_font_p;
+  bool window_font_p;
 
   
   if (message == initCntl)

@@ -9,7 +9,7 @@
  */
 namespace Executor {
 extern uint32 ROMlib_version_long;
-extern void ROMlib_set_ppc (boolean_t val);
+extern void ROMlib_set_ppc (bool val);
 extern int ROMlib_uaf;
 
 typedef enum

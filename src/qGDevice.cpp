@@ -183,10 +183,10 @@ P2 (PUBLIC pascal trap, GDHandle, NewGDevice,
 }
 
 void
-Executor::gd_set_bpp (GDHandle gd, boolean_t color_p, boolean_t fixed_p, int bpp)
+Executor::gd_set_bpp (GDHandle gd, bool color_p, bool fixed_p, int bpp)
 {
   PixMapHandle gd_pixmap;
-  boolean_t main_device_p = (gd == MR (MainDevice));
+  bool main_device_p = (gd == MR (MainDevice));
   
   /* set the color bit, all other flag bits should be the same */
   if (color_p)

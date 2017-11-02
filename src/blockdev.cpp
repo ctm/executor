@@ -26,8 +26,8 @@ blockdev_open (uint32 block_size,
 	       int (*write_func) (int fd, const void *buf, int nbytes),
 	       off_t (*seek_func) (int fd, off_t where),
 	       int (*close_func) (int fd),
-	       boolean_t locked_p,
-	       boolean_t removable_p)
+	       bool locked_p,
+	       bool removable_p)
 {
   blockdev_t *b;
 
@@ -61,10 +61,10 @@ blockdev_open (uint32 block_size,
 /* Reads the specified number of bytes from the given offset for
  * the given device.  Returns TRUE on success, else FALSE.
  */
-boolean_t
+bool
 Executor::blockdev_seek_set (blockdev_t *b, uint32 offset)
 {
-  boolean_t success_p;
+  bool success_p;
   success_p = (b->seek_func (offset, L_SET) == 0);
   if (success_p)
     b->fpos = offset;
@@ -77,10 +77,10 @@ Executor::blockdev_seek_set (blockdev_t *b, uint32 offset)
 /* Reads the specified number of bytes from the given offset for
  * the given device.  Returns TRUE on success, else FALSE.
  */
-boolean_t
+bool
 Executor::blockdev_read (blockdev_t *b, uint32 offset, void *buf, uint32 num_bytes)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = FALSE;  /* default */
   if (b && b->valid_p)
@@ -135,11 +135,11 @@ Executor::blockdev_read (blockdev_t *b, uint32 offset, void *buf, uint32 num_byt
 /* Writes the specified number of bytes at the given offset for
  * the given device.  Returns TRUE on success, else FALSE.
  */
-boolean_t
+bool
 Executor::blockdev_write (blockdev_t *b, uint32 offset, const void *buf,
 		uint32 num_bytes)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = FALSE;  /* default */
   if (b && b->valid_p)

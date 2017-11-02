@@ -485,7 +485,7 @@ extern void ROMlib_sledgehammer_te (TEHandle te);
 #define SCRAP_ELT_START_CHAR(scrap_elt)		\
   (CL (SCRAP_ELT_START_CHAR_X (scrap_elt)))
 
-extern boolean_t adjust_attrs (TextStyle *orig_attrs, TextStyle *new_attrs,
+extern bool adjust_attrs (TextStyle *orig_attrs, TextStyle *new_attrs,
 			       TextStyle *dst_attrs, TextStyle *continuous_attrs,
 			       int16 mode);
 extern int16 make_style_run_at (TEStyleHandle te_style, int16 sel);

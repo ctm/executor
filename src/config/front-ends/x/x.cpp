@@ -73,10 +73,10 @@ char ROMlib_rcsid_x[] = "$Id: x.c 89 2005-05-25 04:15:34Z ctm $";
 
 #include "x_keycodes.h"
 
-PRIVATE boolean_t use_scan_codes = FALSE;
+PRIVATE bool use_scan_codes = FALSE;
 
 PUBLIC void
-ROMlib_set_use_scancodes (boolean_t val)
+ROMlib_set_use_scancodes (bool val)
 {
   use_scan_codes = val; 
 }
@@ -842,7 +842,7 @@ key_table_t key_tables[] =
 
 static int
 x_keysym_to_mac_keywhat (unsigned int keysym, int16 button_state,
-			 LONGINT *retval_out, boolean_t down_p,
+			 LONGINT *retval_out, bool down_p,
 			 unsigned char *virt_out)
 {
   key_table_t *table;
@@ -890,10 +890,10 @@ x_keysym_to_mac_keywhat (unsigned int keysym, int16 button_state,
   return TRUE;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 keydown (uint8 key)
 {
-  boolean_t retval;
+  bool retval;
   int i;
   uint8 bit;
 
@@ -977,7 +977,7 @@ static uint16 which_modifier_virt (unsigned char virt)
   return retval;
 }
 
-static boolean_t
+static bool
 x_modifier_p (unsigned int keysym, uint16 *return_mac_modifier)
 {
   int16 modifier;
@@ -1018,12 +1018,12 @@ x_modifier_p (unsigned int keysym, uint16 *return_mac_modifier)
   return TRUE;
 }
 
-boolean_t
+bool
 x_event_pending_p (void)
 {
   fd_set fds;
   struct timeval no_wait;
-  boolean_t retval;
+  bool retval;
 
   FD_ZERO (&fds);
   FD_SET (x_fd, &fds);
@@ -1165,7 +1165,7 @@ post_pending_x_events (syn68k_addr_t interrupt_addr, void *unused)
 	  if (frob_autorepeat_p)
 	    XAutoRepeatOff (x_dpy);
 	  {
-	    boolean_t cvt;
+	    bool cvt;
 	    Window selection_owner;
 
 	    selection_owner = XGetSelectionOwner (x_dpy, XA_PRIMARY);
@@ -1198,9 +1198,9 @@ x_event_handler (int signo)
   cpu_state.interrupt_status_changed = INTERRUPT_STATUS_CHANGED; 
 }
 
-boolean_t
+bool
 Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
-	      boolean_t fixed_p, int *argc, char *argv[])
+	      bool fixed_p, int *argc, char *argv[])
 {
   int i;
       
@@ -1451,7 +1451,7 @@ Executor::vdriver_flush_display (void)
 
 
 void
-alloc_x_window (int width, int height, int bpp, boolean_t grayscale_p)
+alloc_x_window (int width, int height, int bpp, bool grayscale_p)
 {
   XSetWindowAttributes xswa;
   XSizeHints size_hints;
@@ -1763,7 +1763,7 @@ cs_cs_dist (const ColorSpec *c0, const ColorSpec *c1)
 					(b) - (x).blue)
 
 static char x_alloced[256];
-static boolean_t x_cmap_initialized_p;
+static bool x_cmap_initialized_p;
 static XColor x_cmap[256];
 static struct 
 {
@@ -2116,9 +2116,9 @@ Executor::vdriver_set_colors (int first_color, int num_colors,
 
 int
 Executor::vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
-			     boolean_t cursor_p)
+			     bool cursor_p)
 {
-  boolean_t convert_p;
+  bool convert_p;
   int i;
   
   convert_p = (x_fbuf_bpp == vdriver_bpp
@@ -2174,7 +2174,7 @@ Executor::vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
 
 int
 Executor::vdriver_update_screen (int top, int left, int bottom, int right,
-		       boolean_t cursor_p)
+		       bool cursor_p)
 {
   vdriver_rect_t r;
   
@@ -2225,10 +2225,10 @@ vdriver_x_mode_t vdriver_x_modes =
 };
 
 
-boolean_t
+bool
 Executor::vdriver_acceptable_mode_p (int width, int height, int bpp,
-			   boolean_t grayscale_p,
-			   boolean_t exact_match_p)
+			   bool grayscale_p,
+			   bool exact_match_p)
 {
   if (width == 0)
     width = vdriver_width;
@@ -2250,8 +2250,8 @@ Executor::vdriver_acceptable_mode_p (int width, int height, int bpp,
   return TRUE;
 }
 
-boolean_t
-Executor::vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
+bool
+Executor::vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
 {
   if (!x_window)
     {

@@ -111,7 +111,7 @@ cpu_type (void)
 
 /* unclear what we need to do here */
 
-boolean_t
+bool
 arch_init (void)
 {
   uint32 type;

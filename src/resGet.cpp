@@ -305,7 +305,7 @@ pseudo_get_rom_resource (ResType typ, INTEGER id)
 }
 
 #if defined (ULTIMA_III_HACK)
-PUBLIC boolean_t Executor::ROMlib_ultima_iii_hack;
+PUBLIC bool Executor::ROMlib_ultima_iii_hack;
 #endif
 
 P2(PUBLIC pascal trap, Handle, GetResource, ResType, typ, INTEGER, id)

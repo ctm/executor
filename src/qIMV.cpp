@@ -137,7 +137,7 @@ P3 (PUBLIC pascal trap, void, SetCPixel, INTEGER, h, INTEGER, v,
   Rect temp_rect;
 
   GrafPtr port;
-  boolean_t cgrafport_p;
+  bool cgrafport_p;
   
   RGBColor save_fg_rgb;
   GUEST<int32> save_fg;

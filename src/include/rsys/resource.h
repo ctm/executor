@@ -13,7 +13,7 @@
 namespace Executor {
 #define ULTIMA_III_HACK
 #if defined (ULTIMA_III_HACK)
-extern boolean_t ROMlib_ultima_iii_hack;
+extern bool ROMlib_ultima_iii_hack;
 #endif
 
 struct reshead { GUEST_STRUCT;

@@ -25,7 +25,7 @@ extern uint16 vga_window_selector;
 
 #define vdriver_fixed_clut_p FALSE
 
-extern boolean_t try_to_use_fat_ds_vga_hack_p;
+extern bool try_to_use_fat_ds_vga_hack_p;
 
 #define VDRIVER_SUPPORTS_REAL_SCREEN_BLITS
 

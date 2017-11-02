@@ -57,7 +57,7 @@ switch_to_non_moving_sbrk (void)
 }
 
 /* Set to TRUE when we aren't able to get the real free memory info. */
-static boolean_t dpmi_mem_is_rough_guess_p;
+static bool dpmi_mem_is_rough_guess_p;
 
 static void
 guess_good_memory_settings (void)
@@ -129,7 +129,7 @@ guess_good_memory_settings (void)
 /* Initializes OS-specific features.  Returns TRUE if successful, FALSE
  * on failure.
  */
-boolean_t
+bool
 os_init (void)
 {
   /* Turn off expensive stat computations we don't need (you turn them
@@ -239,11 +239,11 @@ msdos_print_info (void)
  * idea under djgpp because of how the malloc package works.  This
  * should hopefully work better.
  */
-boolean_t
+bool
 msdos_check_memory_remaining (unsigned long desired_bytes)
 {
   __dpmi_meminfo meminfo;
-  boolean_t success_p;
+  bool success_p;
 
   meminfo.handle  = 0;	/* unused */
   meminfo.size    = desired_bytes;
@@ -272,12 +272,12 @@ ROMlib_launch_native_app (int n_filenames, char **filenames)
   return paramErr;
 }
 
-PUBLIC boolean_t host_has_spfcommon (void)
+PUBLIC bool host_has_spfcommon (void)
 {
   return false;
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 host_spfcommon (host_spf_reply_block *replyp, const char *prompt,
 		const char *incoming_filename, void *fp, void *filef, int numt,
 		void *tl, getorput_t getorput, sf_flavor_t flavor,

@@ -14,16 +14,16 @@ extern void ROMlib_add_suffix_quad (const char *suffixp,
 				    const char *type_hexp,
 				    const char *applicationp);
 
-extern boolean_t ROMlib_creator_and_type_from_suffix (const char *suffix,
+extern bool ROMlib_creator_and_type_from_suffix (const char *suffix,
 						      uint32 *creatorp,
 						      uint32 *typep);
 
-extern boolean_t ROMlib_creator_and_type_from_filename (int len,
+extern bool ROMlib_creator_and_type_from_filename (int len,
 							const char *filename,
 							uint32 *creatorp,
 							uint32 *typep);
 
-extern boolean_t ROMlib_delete_suffix (const char *suffix);
+extern bool ROMlib_delete_suffix (const char *suffix);
 
 extern const char *ROMlib_find_best_creator_type_match (uint32 creator,
 							uint32 type);

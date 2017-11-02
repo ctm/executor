@@ -103,7 +103,7 @@ Executor::AE_reinit (void)
 static OSErr
 hdlr_table_elt (AE_hdlr_table_h table,
 		AE_hdlr_selector_t *selector, AE_hdlr_t *hdlr,
-		boolean_t create_p,
+		bool create_p,
 		AE_hdlr_table_elt_t **retval)
 {
   AE_hdlr_table_elt_t *elts, *elt;
@@ -239,7 +239,7 @@ P4 (PUBLIC pascal trap, OSErr, _AE_hdlr_install,
   AE_RETURN_ERROR (noErr);
 }
 
-boolean_t Executor::application_accepts_open_app_aevt_p;
+bool Executor::application_accepts_open_app_aevt_p;
 
 P5 (PUBLIC pascal trap, OSErr, AEInstallEventHandler,
     AEEventClass, event_class, AEEventID, event_id,

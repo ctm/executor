@@ -134,7 +134,7 @@ serial_insert (const char *input, const char *output, const char *name)
 PUBLIC CRMErr
 Executor::InitCRM (void)
 {
-  static boolean_t beenhere;
+  static bool beenhere;
   CRMErr retval;
 
   if (beenhere)

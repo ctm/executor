@@ -34,7 +34,7 @@ ROMlib_executor_format (LONGINT type)
   {
     LONGINT type;
     UINT value;
-    boolean_t valid;
+    bool valid;
   } cache;
 
   if (cache.valid && type == cache.type)
@@ -222,10 +222,10 @@ PutScrapX (LONGINT type, LONGINT length, char *p, int scrap_count)
     }
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 we_lost_clipboard (void)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = GetClipboardOwner () != cygwin_sdlwindow ();
   return retval;

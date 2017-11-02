@@ -10,7 +10,7 @@ char ROMlib_rcsid_m68k[] = "$Id: m68k.c 63 2004-12-24 18:19:43Z ctm $";
 
 CPUState cpu_state;
 
-boolean_t
+bool
 arch_init (void)
 {
   memset (&cpu_state, 0, sizeof cpu_state);

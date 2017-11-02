@@ -17,6 +17,6 @@ typedef enum
 
 extern msdos_open_many_result_t msdos_open_many_result;
 
-extern boolean_t msdos_test_max_files (void);
+extern bool msdos_test_max_files (void);
 
 #endif /* !_MSDOS_OPENMANY_H_ */

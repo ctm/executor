@@ -27,11 +27,11 @@ char ROMlib_rcsid_windMisc[] =
 
 using namespace Executor;
 
-PRIVATE boolean_t
+PRIVATE bool
 is_window_ptr (WindowPeek w)
 {
   WindowPeek wp;
-  boolean_t retval;
+  bool retval;
 
   if (!w)
     retval = FALSE;

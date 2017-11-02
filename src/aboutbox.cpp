@@ -147,12 +147,12 @@ static ProcPtr scroll_bar_callback;
 
 enum { THROTTLE_TICKS = 4 };
 
-PRIVATE boolean_t
+PRIVATE bool
 enough_time_has_passed (void)
 {
   static ULONGINT old_ticks;
   ULONGINT new_ticks;
-  boolean_t retval;
+  bool retval;
 
   new_ticks = TickCount ();
   retval = new_ticks - old_ticks >= THROTTLE_TICKS;
@@ -367,7 +367,7 @@ parse_and_randomize_tips (char *buf)
 {
   int n_tips, chars_needed;
   tip_t *tips;
-  boolean_t seen_tip;
+  bool seen_tip;
   char *retval;
   char *p;
   int i;
@@ -575,12 +575,12 @@ draw_mem_string (char *s, int y)
 
 
 static void
-draw_status_info (boolean_t executor_p)
+draw_status_info (bool executor_p)
 {
   char total_ram_string[128];
   char applzone_ram_string[128];
   char syszone_ram_string[128];
-  boolean_t gestalt_success_p;
+  bool gestalt_success_p;
   LONGINT total_ram;
   GUEST<LONGINT> total_ram_x;
   const char *ram_tag, *system_ram_tag, *application_ram_tag;
@@ -628,7 +628,7 @@ draw_status_info (boolean_t executor_p)
 
 
 static void
-event_loop (boolean_t executor_p)
+event_loop (bool executor_p)
 {
   static Rect frame_rect = {
     CWC (TE_TOP),
@@ -637,7 +637,7 @@ event_loop (boolean_t executor_p)
     CWC (TE_RIGHT - SCROLL_BAR_WIDTH + 1)
   };
   EventRecord evt;
-  boolean_t done_p;
+  bool done_p;
   int which_text;
   Rect te_dest_rect;
   int old_scroll_bar_value;
@@ -720,7 +720,7 @@ retval;					\
 	  case mouseDown:
 	  {
 	    Point local_pt;
-	    boolean_t control_p;
+	    bool control_p;
 	    ControlHandle c;
             
             GUEST<Point> tmpPt = evt.where;
@@ -787,7 +787,7 @@ retval;					\
 void
 Executor::do_about_box (void)
 {
-  static boolean_t busy_p = FALSE;
+  static bool busy_p = FALSE;
 
   if (!busy_p)
     {

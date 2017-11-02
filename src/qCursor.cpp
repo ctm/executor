@@ -79,7 +79,7 @@ while (FALSE)
 static CCrsrHandle current_ccrsr;
 static Cursor current_crsr;
 
-static boolean_t current_cursor_valid_p = FALSE;
+static bool current_cursor_valid_p = FALSE;
 static int current_cursor_color_p;
 
 void
@@ -309,7 +309,7 @@ Rect Executor::ROMlib_cursor_rect =
    elsewhere, but since it isn't clear exactly what to compare, we'll
    leave it here for now */
 
-static boolean_t
+static bool
 pixmap_eq_p (PixMapHandle pm0, PixMapHandle pm1)
 {
   return (PIXMAP_PIXEL_SIZE_X (pm0) == PIXMAP_PIXEL_SIZE_X (pm1)

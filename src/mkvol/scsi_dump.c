@@ -19,7 +19,7 @@ char buf[1024];
 
 void main(int argc, const char *argv[])
 {
-    boolean_t goodargs, tflag;
+    bool goodargs, tflag;
     const char *unitstr, *lunstr;
     int fd;
     scsi_adr_t saddr;

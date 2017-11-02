@@ -8,7 +8,7 @@
 
 #define VDRIVER_SVGALIB
 
-extern boolean_t svgalib_have_blitwait_p;
+extern bool svgalib_have_blitwait_p;
 #define vdriver_accel_wait() \
 do { if (svgalib_have_blitwait_p) vga_blitwait (); } while (0)
 

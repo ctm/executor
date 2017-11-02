@@ -25,7 +25,7 @@ char ROMlib_rcsid_AE[] =
 #include "rsys/flags.h"
 
 namespace Executor {
-boolean_t send_application_open_aevt_p;
+bool send_application_open_aevt_p;
   PUBLIC pascal OSErr C_EventHandlerTemplate(AppleEvent *evt, AppleEvent *reply,
 											 int32 refcon);
   PUBLIC pascal OSErr C_CoercePtrTemplate(DescType data_type, Ptr data, Size data_size,

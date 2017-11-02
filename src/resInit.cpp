@@ -33,7 +33,7 @@ extract_vers_num (Handle h)
 {
   uint32 retval, old_retval;
   const char *p, *ep;
-  boolean_t seen_left, seen_right, done;
+  bool seen_left, seen_right, done;
 
   retval = old_retval = 0;
   seen_left = FALSE;

@@ -11,7 +11,7 @@ typedef struct gw_info
   GWorldFlags flags;
   
   int pixel_lock_count;
-  boolean_t gd_allocated_p;
+  bool gd_allocated_p;
   
   struct gw_info *next;
 } gw_info_t;

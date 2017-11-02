@@ -13,8 +13,8 @@
 extern syn68k_addr_t
        handle_sdl_events(syn68k_addr_t interrupt_addr, void *unused);
 
-extern boolean_t ROMlib_fullscreen_p;
-extern boolean_t ROMlib_hwsurface_p;
+extern bool ROMlib_fullscreen_p;
+extern bool ROMlib_hwsurface_p;
 extern SDL_cond *ROMlib_shouldbeawake_cond;
 extern SDL_mutex *ROMlib_shouldbeawake_mutex;
 

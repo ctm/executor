@@ -283,7 +283,7 @@ SDLSound::sound_init ()
   if (sdl_audio_driver_name)
     {
       const char *sanity_check_name;
-      boolean_t success = FALSE;
+      bool success = FALSE;
 
       sanity_check_name = SDL_GetCurrentAudioDriver();
       if (sanity_check_name)

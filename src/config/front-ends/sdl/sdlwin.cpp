@@ -55,12 +55,12 @@ Executor::vdriver_opt_register (void)
 {
 }
 
-PUBLIC boolean_t ROMlib_fullscreen_p = FALSE;
-PUBLIC boolean_t ROMlib_hwsurface_p = FALSE;
+PUBLIC bool ROMlib_fullscreen_p = FALSE;
+PUBLIC bool ROMlib_hwsurface_p = FALSE;
 
-boolean_t
+bool
 Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
-	      boolean_t fixed_p, int *argc, char *argv[])
+	      bool fixed_p, int *argc, char *argv[])
 {
   int flags;
 
@@ -101,11 +101,11 @@ Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
   return(TRUE);
 }
 
-boolean_t
+bool
 Executor::vdriver_acceptable_mode_p (int width, int height, int bpp,
-			   boolean_t grayscale_p, boolean_t exact_match_p)
+			   bool grayscale_p, bool exact_match_p)
 {
-  boolean_t retval;
+  bool retval;
 
   if (!width)
     width = vdriver_width;
@@ -126,8 +126,8 @@ Executor::vdriver_acceptable_mode_p (int width, int height, int bpp,
   return retval;
 }
 
-boolean_t
-Executor::vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
+bool
+Executor::vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
 {
   /* Massage the width and height parameters */
   if ( width == 0 )
@@ -222,7 +222,7 @@ Executor::vdriver_get_colors (int first_color, int num_colors, ColorSpec *colors
 
 int
 Executor::vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
-                                                      boolean_t cursor_p)
+                                                      bool cursor_p)
 {
   SDL_Rect *rects;
   int       i;
@@ -241,7 +241,7 @@ Executor::vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
 
 int
 Executor::vdriver_update_screen (int top, int left, int bottom, int right,
-		       boolean_t cursor_p)
+		       bool cursor_p)
 {
   SDL_Rect rect;
   

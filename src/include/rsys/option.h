@@ -87,7 +87,7 @@ int opt_parse (opt_database_t &db, option_vec opts,
 
 /* returns TRUE if options was specified */
 int opt_int_val (opt_database_t &db, std::string opt, int *retval,
-		 boolean_t *parse_error_p);
+		 bool *parse_error_p);
 
 int opt_val (opt_database_t &db, std::string opt, std::string *retval);
 void opt_put_val (opt_database_t &db, const std::string &opt, std::string value,

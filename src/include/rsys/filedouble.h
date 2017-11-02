@@ -70,7 +70,7 @@ typedef struct defaultentries { GUEST_STRUCT;
 
 #define SINGLEVERSION	0x00020000
 
-extern OSErr ROMlib_newresfork (char *name, LONGINT *fdp, boolean_t unix_p);
+extern OSErr ROMlib_newresfork (char *name, LONGINT *fdp, bool unix_p);
 
 typedef enum { mkdir_op, rmdir_op } double_dir_op_t;
 

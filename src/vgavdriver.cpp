@@ -111,16 +111,16 @@ uint8 *vga_portal_baseaddr;
 uint8 *vdriver_real_screen_baseaddr;
 
 /* TRUE iff the blitter is allowed to go straight to the real screen. */
-boolean_t vdriver_real_screen_blit_possible_p;
+bool vdriver_real_screen_blit_possible_p;
 
 /* TRUE iff the blitter should assume real screen bits are flipped. */
-boolean_t vdriver_flip_real_screen_pixels_p;
+bool vdriver_flip_real_screen_pixels_p;
 
 /* Bytes per row for the "real" screen. */
 int vdriver_real_screen_row_bytes;
 
 /* Are we grayscale-only? */
-boolean_t vdriver_grayscale_p;
+bool vdriver_grayscale_p;
 
 
 typedef struct
@@ -165,8 +165,8 @@ static void canonicalize_vga_mode_list (void);
 static void draw_cursor (int x, int y);
 
 
-boolean_t
-vdriver_init (int max_width, int max_height, int max_bpp, boolean_t fixed_p,
+bool
+vdriver_init (int max_width, int max_height, int max_bpp, bool fixed_p,
 	      int *argc, char *argv[])
 {
   const vga_mode_t *v;
@@ -1028,7 +1028,7 @@ fill_hardware_fbuf (unsigned long fill_long)
  */
 int
 vdriver_update_screen (int top, int left, int bottom, int right,
-		       boolean_t cursor_p)
+		       bool cursor_p)
 {
   static uint8 busy_p = FALSE;
   static uint8 redraw_cursor_p = FALSE;
@@ -1111,7 +1111,7 @@ vdriver_update_screen (int top, int left, int bottom, int right,
 
 int
 vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
-			     boolean_t cursor_p)
+			     bool cursor_p)
 {
   int i, p;
 
@@ -1126,10 +1126,10 @@ vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
 }
 
 
-boolean_t
+bool
 vdriver_acceptable_mode_p (int width, int height, int bpp,
-			   boolean_t grayscale_p,
-			   boolean_t exact_match_p)
+			   bool grayscale_p,
+			   bool exact_match_p)
 {
   const vdriver_modes_t *vm;
   int i, log2_bpp, new_width;
@@ -1273,14 +1273,14 @@ vdriver_set_colors (int first_color, int num_colors,
  * color 0.  Returns TRUE if it successfully changed the mode, else
  * FALSE.
  */
-boolean_t
-vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
+bool
+vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
 {
   vga_mode_t *v, *best;
   int log2_bpp, best_bpp_diff, bpp_diff;
   unsigned long best_area_diff;
   int success_p = TRUE;
-  boolean_t old_shadow_p;
+  bool old_shadow_p;
 
   if (!vdriver_acceptable_mode_p (width, height, bpp, grayscale_p, FALSE))
     return FALSE;
@@ -1985,7 +1985,7 @@ host_set_cursor_visible (int show_p)
 }
 
 
-boolean_t
+bool
 host_hide_cursor_if_intersects (int top, int left, int bottom, int right)
 {
   if (top < cursor_bottom && bottom > cursor_top

@@ -1897,8 +1897,8 @@ extract_68k_reg_parameters (ProcInfoType orig_info,  uint32 params[13],
   int retval;
   uint32 info;
   int i;
-  boolean_t seen_a_zero_p;
-  boolean_t suspicious_info_p;
+  bool seen_a_zero_p;
+  bool suspicious_info_p;
 
   retval = 0;
   seen_a_zero_p = FALSE;

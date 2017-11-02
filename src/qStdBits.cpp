@@ -33,7 +33,7 @@ static void ROMlib_real_copy_bits (PixMap *src, PixMap *dst,
 				   const Rect *src_rect, const Rect *dst_rect,
 				   INTEGER mode, RgnHandle mask);
 
-static boolean_t
+static bool
 src_dst_overlap_and_dst_below_src_p (const Rect *srcr, const Rect *dstr,
 				     int dh, int dv)
 {
@@ -46,7 +46,7 @@ src_dst_overlap_and_dst_below_src_p (const Rect *srcr, const Rect *dstr,
     return FALSE;
 }
 
-static inline boolean_t
+static inline bool
 dy_zero_p (const Rect *srcr, const Rect *dstr,
 	   int dh, int dv)
 {
@@ -219,7 +219,7 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
   int16 pixel_size;
   int height;
   int i;
-  boolean_t direct_bits_p;
+  bool direct_bits_p;
   
   {
     /* always copy the src pixmap since the code below, as it is
@@ -802,7 +802,7 @@ ROMlib_real_copy_bits (PixMap *src, PixMap *dst,
 			      const Rect *src_rect, const Rect *dst_rect,
 			      INTEGER mode, RgnHandle mask)
 {
-  boolean_t shrink_first_p;
+  bool shrink_first_p;
 
   if (src->pixelSize == dst->pixelSize)
     shrink_first_p = FALSE;

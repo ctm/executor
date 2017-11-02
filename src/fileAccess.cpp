@@ -508,7 +508,7 @@ A3(PRIVATE, INTEGER, Mac_to_UNIX7, unsigned char *, name, INTEGER, length,
 {
     unsigned char c;
     INTEGER retval;
-    boolean_t last_character_was_colon;
+    bool last_character_was_colon;
 
     retval = length;
     last_character_was_colon = TRUE;
@@ -982,7 +982,7 @@ A5(PRIVATE, OSErr, macopen, char *, file, short, perm, LONGINT *, fdp,
 {
     int newperm;
     int flockret;
-    boolean_t open_should_fail_p;
+    bool open_should_fail_p;
     OSErr err;
 
     switch (perm) {
@@ -1288,7 +1288,7 @@ A2(PUBLIC, OSErr, ufsPBHOpenRF, HParmBlkPtr, pb,	/* INTERNAL */
 #define POSMASK	0x3	/* IMIV-121 */
 
 PRIVATE OSErr
-pbfpos (ParmBlkPtr pb, LONGINT *toseekp, boolean_t can_go_past_eof)
+pbfpos (ParmBlkPtr pb, LONGINT *toseekp, bool can_go_past_eof)
 {
     OSErr err;
     LONGINT leof;
@@ -1420,7 +1420,7 @@ A2(PUBLIC, OSErr, ufsPBUnlockRange, ParmBlkPtr, pb,	/* INTERNAL */
 }
 
 PRIVATE OSErr
-pbsetfpos (ParmBlkPtr pb, boolean_t can_go_past_eof)
+pbsetfpos (ParmBlkPtr pb, bool can_go_past_eof)
 {
   OSErr err;
   INTEGER forkoffset;

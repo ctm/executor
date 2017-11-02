@@ -19,7 +19,6 @@ typedef uint64_t uint64;
 #if !defined (BOOLEAN_T_TYPEDEFED)
 # undef FALSE
 # undef TRUE
-typedef int boolean_t;
 enum { FALSE, TRUE };
 #else /* BOOLEAN_T_TYPEDEFED */
 # if !defined (FALSE)

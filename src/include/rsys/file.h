@@ -73,7 +73,7 @@ extern GUEST<VCBPtr> DefVCBPtr_H;
 extern GUEST<LONGINT> DefDirID;
 
 #if defined (MSDOS)
-extern boolean_t cd_mounted_by_trickery_p;
+extern bool cd_mounted_by_trickery_p;
 #endif
 
 /* Internal structure of access path info */

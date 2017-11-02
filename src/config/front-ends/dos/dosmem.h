@@ -12,6 +12,6 @@ extern uint16 dos_pm_ds;
 extern uint16 dos_pm_interrupt_ds;
 extern uint16 dos_pm_cs;
 
-extern boolean_t init_dos_memory (void);
+extern bool init_dos_memory (void);
 
 #endif /* !_DOSMEM_H_ */

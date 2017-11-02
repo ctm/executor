@@ -50,10 +50,10 @@ do							\
 }							\
 while (0)
 
-PRIVATE boolean_t
+PRIVATE bool
 load_sent (const char *dll_name)
 {
-  boolean_t retval;
+  bool retval;
 
   sentinel_lib = LoadLibrary (dll_name);
   GETPROCADDRESS (sentinel_lib, RNBOproQuery);
@@ -64,10 +64,10 @@ load_sent (const char *dll_name)
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 load_hasp (const char *dll_name)
 {
-  boolean_t retval;
+  bool retval;
 
   hasp_lib = LoadLibrary (dll_name);
   GETPROCADDRESS (hasp_lib, hasp);

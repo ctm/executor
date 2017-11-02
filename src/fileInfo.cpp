@@ -191,20 +191,20 @@ A1(PUBLIC, unsigned char, ROMlib_fromhex, unsigned char, c)
  * error message.
  */
 
-PRIVATE boolean_t
+PRIVATE bool
 islowerxdigit (unsigned char c)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = ((c >= '0' && c <= '9') ||
 	    (c >= 'a' && c <= 'f'));
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 iscandidate_for_quoting (unsigned char c1, unsigned char c2)
 {
-  boolean_t retval;
+  bool retval;
 
   if (!islowerxdigit (c1) || !islowerxdigit (c2))
     retval = FALSE;
@@ -218,10 +218,10 @@ iscandidate_for_quoting (unsigned char c1, unsigned char c2)
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 quoted_character (unsigned char *name, int length)
 {
-  boolean_t retval;
+  bool retval;
 
   if (!netatalk_conventions_p)
     retval = (name[0] == apple_double_quote_char &&

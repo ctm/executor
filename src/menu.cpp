@@ -838,7 +838,7 @@ A1(PRIVATE, void, initpairs, startendpairs, pairs)
 
 }
 
-static boolean_t
+static bool
 menu_id_exists_p (int id)
 {
   muelem *mp;
@@ -1022,7 +1022,7 @@ int32 Executor::ROMlib_menuhelper (MenuHandle mh, Rect *saverp,
   EventRecord ev;
   Point pt;
   LONGINT myd0;
-  boolean_t seen_up_already, done;
+  bool seen_up_already, done;
   
   GUEST<GrafPtr> saveport_swapped;
   GetPort (&saveport_swapped);

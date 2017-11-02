@@ -18,7 +18,7 @@ using namespace Executor;
 static void
 mp_decrement_big_endian (uint8 *bytes, int num_bytes)
 {
-  boolean_t borrow_p;
+  bool borrow_p;
   uint8 *b;
 
   borrow_p = TRUE;
@@ -35,7 +35,7 @@ mp_decrement_big_endian (uint8 *bytes, int num_bytes)
 static void
 mp_increment_big_endian (uint8 *bytes, int num_bytes)
 {
-  boolean_t carry_p;
+  bool carry_p;
   uint8 *b;
 
   carry_p = TRUE;
@@ -66,7 +66,7 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_FnextX,
   x80_t x80_x;
   int byte_size;
   int x_sign, y_sign;
-  boolean_t normalize_x80_p;
+  bool normalize_x80_p;
   ieee_t xv, yv;
 
   saved_ccnz = cpu_state.ccnz;

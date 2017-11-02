@@ -21,7 +21,7 @@ typedef struct ccrsr_res { GUEST_STRUCT;
     GUEST< char> data;
 } *ccrsr_res_ptr;
 
-extern boolean_t ROMlib_text_output_disabled_p;
+extern bool ROMlib_text_output_disabled_p;
 
 #define SMALLRGN	sizeof(Region)	/* 0x000A */
 #define SMALLRGNX	CWC(SMALLRGN)
@@ -46,7 +46,7 @@ extern void DrawText_c_string (char *string);
 extern void nonspecial_rgn_to_special_rgn (const INTEGER *src, INTEGER *dst);
 extern void ROMlib_bltrgn( RgnHandle rh, unsigned char *patp,
 			  INTEGER mode, Rect *srcr, Rect *dstr);
-extern void ROMlib_sizergn (RgnHandle rh, boolean_t special_p);
+extern void ROMlib_sizergn (RgnHandle rh, bool special_p);
 extern void ROMlib_installhandle( Handle sh, Handle dh );
 extern void ROMlib_showcursor(void);
 extern void ROMlib_restorecursor(void);

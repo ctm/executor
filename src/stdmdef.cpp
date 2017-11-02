@@ -330,7 +330,7 @@ draw_item (Rect *rp, struct table::tableentry *tp, int32 bit, int item, MenuHand
   int draw_icon_p;
   int divider_p;
   int active_p;
-  boolean_t dither_p, dither_cmd_p;
+  bool dither_p, dither_cmd_p;
   
   dither_p = FALSE;
   dither_cmd_p = FALSE;

@@ -25,10 +25,10 @@ guess_good_memory_settings (void)
 				new_appl_size);
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 os_init (void)
 {
-  boolean_t retval;
+  bool retval;
 
   ROMlib_set_caps_lock_off ();
   guess_good_memory_settings ();

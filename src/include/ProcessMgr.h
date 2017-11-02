@@ -133,7 +133,7 @@ typedef ProcessInfoRec *ProcessInfoPtr;
 #define paramErr	(-50)
 #define procNotFound	(-600)
 
-extern void process_create (boolean_t desk_accessory_p,
+extern void process_create (bool desk_accessory_p,
 			    uint32 type, uint32 signature);
 
 extern pascal trap OSErr C_GetCurrentProcess

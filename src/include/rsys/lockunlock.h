@@ -21,7 +21,7 @@ extern int ROMlib_lockunlockrange (int fd, uint32 begin, uint32 count,
 
 
 PUBLIC OSErr ROMlib_fd_clear_locks_after_open (int fd,
-					       boolean_t be_surprised_p);
+					       bool be_surprised_p);
 PUBLIC OSErr ROMlib_fd_release_locks_for_close (int fd);
 PUBLIC OSErr ROMlib_fd_add_range (int fd, uint32 start_byte, uint32 count);
 PUBLIC OSErr ROMlib_fd_remove_range (int fd, uint32 start_byte, uint32 count);

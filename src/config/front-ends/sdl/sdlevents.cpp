@@ -27,10 +27,10 @@ char ROMlib_rcsid_sdlevents[] = "$Id: sdlevents.c 88 2005-05-25 03:59:37Z ctm $"
 
 using namespace Executor;
 
-PRIVATE boolean_t use_scan_codes = FALSE;
+PRIVATE bool use_scan_codes = FALSE;
 
 PUBLIC void
-ROMlib_set_use_scancodes (boolean_t val)
+ROMlib_set_use_scancodes (bool val)
 {
   use_scan_codes = val; 
 }
@@ -174,7 +174,7 @@ PRIVATE sdl_to_mkv_map_t map[] =
 PRIVATE void
 init_sdlk_to_mkv (void)
 {
-  static boolean_t been_here = FALSE;
+  static bool been_here = FALSE;
 
   if (!been_here)
     {
@@ -278,7 +278,7 @@ handle_sdl_events(syn68k_addr_t interrupt_addr, void *unused)
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
 	  {
-	    boolean_t down_p;
+	    bool down_p;
 	    int32     when;
 	    Point     where;
 
@@ -331,7 +331,7 @@ handle_sdl_events(syn68k_addr_t interrupt_addr, void *unused)
         case SDL_KEYUP:
 key_down_or_key_up:
 	  {
-	    boolean_t down_p;
+	    bool down_p;
 	    unsigned char mkvkey;
 	    uint16 mod;
 	    LONGINT keywhat;

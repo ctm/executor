@@ -53,8 +53,8 @@ typedef enum
 
 namespace Executor {
 #if !defined (vdriver_init)
-extern boolean_t vdriver_init (int max_width, int max_height, int max_bpp,
-			       boolean_t fixed_p, int *argc, char *argv[]);
+extern bool vdriver_init (int max_width, int max_height, int max_bpp,
+			       bool fixed_p, int *argc, char *argv[]);
 #endif
 
 #if !defined (vdriver_shutdown)
@@ -63,18 +63,18 @@ extern void vdriver_shutdown (void);
 
 #if !defined (vdriver_update_screen)
 extern int vdriver_update_screen (int top, int left, int bottom, int right,
-				  boolean_t cursor_p);
+				  bool cursor_p);
 #endif
 
 #if !defined (vdriver_update_screen_rects)
 extern int vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
-					boolean_t cursor_p);
+					bool cursor_p);
 #endif
 
 #if !defined (vdriver_acceptable_mode_p)
-extern boolean_t vdriver_acceptable_mode_p (int width, int height, int bpp,
-					    boolean_t grayscale_p,
-					    boolean_t exact_match_p);
+extern bool vdriver_acceptable_mode_p (int width, int height, int bpp,
+					    bool grayscale_p,
+					    bool exact_match_p);
 #endif
 
 #if !defined (vdriver_set_colors)
@@ -88,8 +88,8 @@ extern void vdriver_get_colors (int first_color, int num_colors,
 #endif
 
 #if !defined (vdriver_set_mode)
-extern boolean_t vdriver_set_mode (int width, int height, int bpp,
-				   boolean_t grayscale_p);
+extern bool vdriver_set_mode (int width, int height, int bpp,
+				   bool grayscale_p);
 #endif
 
 #if !defined (vdriver_flush_display)
@@ -97,7 +97,7 @@ extern void vdriver_flush_display (void);
 #endif
 
 #if !defined (vdriver_system_busy)
-extern void vdriver_system_busy (boolean_t busy_p);
+extern void vdriver_system_busy (bool busy_p);
 #endif
 
 #if !defined (vdriver_opt_register)
@@ -164,11 +164,11 @@ extern rgb_spec_t *vdriver_rgb_spec;
 #if defined (VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
 
 #if !defined (vdriver_real_screen_blit_possible_p)
-extern boolean_t vdriver_real_screen_blit_possible_p;
+extern bool vdriver_real_screen_blit_possible_p;
 #endif
 
 #if !defined (vdriver_flip_real_screen_pixels_p)
-extern boolean_t vdriver_flip_real_screen_pixels_p;
+extern bool vdriver_flip_real_screen_pixels_p;
 #endif
 
 #if !defined (vdriver_real_screen_row_bytes)

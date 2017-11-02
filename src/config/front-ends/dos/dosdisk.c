@@ -145,12 +145,12 @@ detect_media_extensions (void)
 }
 #endif
 
-PRIVATE boolean_t
+PRIVATE bool
 check_and_clear_media_change (int disk)
 {
   __dpmi_regs regs;
-  boolean_t error;
-  boolean_t retval;
+  bool error;
+  bool retval;
 
   dpmi_zero_regs (&regs);
   regs.h.ah = 0x49; /* Extended media change */
@@ -175,7 +175,7 @@ complain_about_changed_media (void)
 
 /* Closes a particular disk.  Returns -1 on failure, 0 on success. */
 int
-dosdisk_close (int disk, boolean_t eject_p)
+dosdisk_close (int disk, bool eject_p)
 {
   dosdisk_info_t *d;
   int retval;
@@ -607,8 +607,8 @@ dosdisk_read (int disk, void *buf, int num_bytes)
   dosdisk_info_t *d = disk_number_to_disk_info (disk);
   void *orig_buf;
   unsigned long start_pos;
-  boolean_t old_slow_clock_p;
-  boolean_t changed;
+  bool old_slow_clock_p;
+  bool changed;
 
   changed = FALSE;
   orig_buf = buf;
@@ -647,7 +647,7 @@ dosdisk_read (int disk, void *buf, int num_bytes)
       int error_tries_left;
       int block_size;
       __dpmi_regs regs;
-      boolean_t cache_hit_p;
+      bool cache_hit_p;
       
       block_size = d->is_cd_rom ? CD_BLOCK_SIZE : BYTES_PER_BLOCK;
       if (dcache_read (disk | DOSFDBIT, buf, d->fpos, block_size, NULL))
@@ -658,7 +658,7 @@ dosdisk_read (int disk, void *buf, int num_bytes)
       else if (d->is_cd_rom) {
 	  int error_count;
 	  uint32 bad_data_magic_cookie;
-	  boolean_t cookie_failed_p;
+	  bool cookie_failed_p;
 
 	  cache_hit_p = FALSE;
 
@@ -874,8 +874,8 @@ dosdisk_write (int disk, const void *buf, int num_bytes)
 {
   dosdisk_info_t *d = disk_number_to_disk_info (disk);
   int orig_num_bytes;
-  boolean_t old_slow_clock_p;
-  boolean_t changed;
+  bool old_slow_clock_p;
+  bool changed;
 
   changed = FALSE;
   orig_num_bytes = num_bytes;

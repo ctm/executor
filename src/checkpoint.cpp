@@ -14,7 +14,7 @@ char ROMlib_rcsid_checkpoint[] =
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-typedef unsigned char boolean_t;
+typedef unsigned char bool;
 typedef unsigned int uint32;
 #define PUBLIC
 #define PRIVATE static
@@ -35,7 +35,7 @@ enum { FALSE, TRUE };
 #include "winfs.h"
 #endif
 
-PRIVATE boolean_t checkpointing_p = TRUE;
+PRIVATE bool checkpointing_p = TRUE;
 
 PUBLIC checkpoint_t *checkpointp; /* globals are bad, but we use one in
 				     this case because checkpointing is

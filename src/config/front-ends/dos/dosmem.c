@@ -42,12 +42,12 @@ uint16 dos_pm_cs;
  * things not to cross 64K boundaries).  Returns TRUE iff successful,
  * else FALSE.
  */
-static boolean_t
+static bool
 alloc_single_bank_dos_block (int size, uint16 *segp, uint16 *selp)
 {
   int selectors_to_free[16], i, j, sel, seg;
   int paragraphs;
-  boolean_t success_p;
+  bool success_p;
 
   if (size > 64 * 1024)
     abort ();
@@ -110,7 +110,7 @@ alloc_single_bank_dos_block (int size, uint16 *segp, uint16 *selp)
 }
 
 
-boolean_t
+bool
 init_dos_memory (void)
 {
   asm ("movw %%cs,%0" : "=g" (dos_pm_cs));

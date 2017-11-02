@@ -131,7 +131,7 @@ Executor::SetADBInfo (ADBSetInfoBlock *adbp, INTEGER address)
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 adb_vector_is_not_our_own (void)
 {
   return adb_service_procp &&
@@ -177,13 +177,13 @@ enum { BUTTON_UP_BIT = 0x80 };
  */
 
 PUBLIC void
-Executor::adb_apeiron_hack (boolean_t deltas_p, ...)
+Executor::adb_apeiron_hack (bool deltas_p, ...)
 {
-  static boolean_t been_here = FALSE;
+  static bool been_here = FALSE;
   static long old_x;
   static long old_y;
   long x, y;
-  boolean_t button_is_down;
+  bool button_is_down;
   char message[3];
 
   x = CW (MouseLocation.h);

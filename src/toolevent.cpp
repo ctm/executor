@@ -1166,7 +1166,7 @@ P4(PUBLIC pascal trap, BOOLEAN, WaitNextEvent, INTEGER, mask,
 		{
 		  if (!retval)
 		    {
-		      static boolean_t displayed_initial_demo_about_box_p;
+		      static bool displayed_initial_demo_about_box_p;
 		      if (!displayed_initial_demo_about_box_p)
 			{
 			  displayed_initial_demo_about_box_p = TRUE;
@@ -1318,7 +1318,7 @@ Executor::sendsuspendevent (void)
 }
 
 PUBLIC void
-Executor::sendresumeevent (boolean_t cvtclip)
+Executor::sendresumeevent (bool cvtclip)
 {
   LONGINT what;
   Point p;

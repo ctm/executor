@@ -164,7 +164,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
        TEHandle idle;
        ProcPtr fp2;
        Point whereunswapped;
-       boolean_t done;
+       bool done;
        
        dp = (DialogPeek) FrontWindow ();
        if (dp->window.windowKind != CWC (dialogKind) &&
@@ -180,7 +180,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
 	   for (done = FALSE; !done;)
 	     {
 	       WindowPtr temp_wp;
-	       boolean_t mousedown_p;
+	       bool mousedown_p;
 	       int mousedown_where;
 	       
 	       if (idle)
@@ -242,7 +242,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
        TEHandle idle;
        ProcPtr fp2;
        Point whereunswapped;
-       boolean_t done;
+       bool done;
        
        dp = (DialogPeek) FrontWindow ();
        if (dp->window.windowKind != CWC (dialogKind) &&
@@ -258,7 +258,7 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
 	   for (done = FALSE; !done; )
 	     {
 	       WindowPtr temp_wp;
-	       boolean_t mousedown_p;
+	       bool mousedown_p;
 	       int mousedown_where;
 	       
 	       if (idle)
@@ -322,7 +322,7 @@ P1(PUBLIC pascal trap, BOOLEAN, IsDialogEvent,		/* IMI-416 */
     return FALSE;
 }
 
-boolean_t
+bool
 Executor::get_item_style_info (DialogPtr dp, int item_no,
 		     uint16 *flags_return, item_style_info_t *style_info)
 {
@@ -366,7 +366,7 @@ Executor::get_item_style_info (DialogPtr dp, int item_no,
 void
 Executor::ROMlib_drawiptext (DialogPtr dp, itmp ip, int item_no)
 {
-  boolean_t restore_draw_state_p = FALSE;
+  bool restore_draw_state_p = FALSE;
   draw_state_t draw_state;
   uint16 flags;
   item_style_info_t style_info;

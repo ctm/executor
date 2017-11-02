@@ -58,7 +58,7 @@ compare (const void *a, const void *b)
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 ignore_func_p (const char *func_name)
 {
   static const char *exceptions[] =
@@ -136,8 +136,8 @@ ignore_func_p (const char *func_name)
     "_AE_hdlr_lookup",
     "_AE_hdlr_install",
   };
-  static boolean_t been_here = FALSE;
-  boolean_t retval;
+  static bool been_here = FALSE;
+  bool retval;
 
   if (!been_here)
     {

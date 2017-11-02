@@ -43,12 +43,12 @@ Executor::ROMlib_WriteWhen (WriteWhenType when)
 void
 Executor::ROMlib_blt_rgn_update_dirty_rect
   (RgnHandle rh, 
-   int16 mode, boolean_t tile_src_p, int bpp, 
+   int16 mode, bool tile_src_p, int bpp, 
    const PixMap *src_pm, PixMap *dst_pm,
    const Rect *src_rect, const Rect *dst_rect,
    uint32 fg_color, uint32 bk_color)
 {
-  boolean_t screen_dst_p, update_dirty_p;
+  bool screen_dst_p, update_dirty_p;
   Rect bbox;
   TEMP_ALLOC_DECL (temp_alloc_space);
   
@@ -320,10 +320,10 @@ blt_pattern_to_bitmap_simple_mode (RgnHandle rh, INTEGER mode,
   GDHandle main_gd;
   uint32 bk_pixel, fg_pixel;
   int bpp, dst_top, dst_left;
-  boolean_t screen_dst_p;
+  bool screen_dst_p;
   PixMap dst_pixmap;
   GrafPtr the_port;
-  boolean_t update_dirty_p;
+  bool update_dirty_p;
   
   main_gd = MR (MainDevice);
   main_gd_pmap = GD_PMAP (main_gd);
@@ -377,9 +377,9 @@ static void
 blt_pixpat_to_pixmap_simple_mode (RgnHandle rh, INTEGER mode,
 				  PixPatHandle srch, PixMapHandle dsth)
 {
-  boolean_t screen_dst_p;
+  bool screen_dst_p;
   int dst_top, dst_left;
-  boolean_t update_dirty_p;
+  bool update_dirty_p;
 
   LOCK_HANDLE_EXCURSION_2
     (srch, dsth,
@@ -411,8 +411,8 @@ blt_pixpat_to_pixmap_simple_mode (RgnHandle rh, INTEGER mode,
 	 }
        else
 	 {
-	   boolean_t xdata_valid_p;
-	   boolean_t handle_size_wrong_p;
+	   bool xdata_valid_p;
+	   bool handle_size_wrong_p;
 	   xdata_handle_t xh;
 
 	   xh = (xdata_handle_t) MR (src->patXData);
@@ -499,7 +499,7 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
   void *new_bits;
   xdata_handle_t xh;
   xdata_t *x;
-  boolean_t apply_fg_bk_p;
+  bool apply_fg_bk_p;
   int bpp, log2_bpp;
   TEMP_ALLOC_DECL (temp_alloc_space);
 

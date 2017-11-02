@@ -34,7 +34,7 @@ using namespace Executor;
 static void
 ROMlib_sledgehammer_rgn (RgnHandle rgn)
 {
-  boolean_t special_rgn_p;
+  bool special_rgn_p;
   int16 size;
   int x, y;
   int16 *ip, *start_ip;
@@ -106,7 +106,7 @@ P0(PUBLIC pascal trap, void, OpenRgn)
   HidePen();
 }
 
-static boolean_t
+static bool
 rgn_is_rect_p (const RgnHandle rgnh)
 {
   const RgnPtr rgnp = STARH (rgnh);
@@ -122,7 +122,7 @@ rgn_is_rect_p (const RgnHandle rgnh)
 /* ROMlib_sizergn: crawl through a region and set bbox and size fields */
 
 void
-Executor::ROMlib_sizergn (RgnHandle rh, boolean_t special_p) /* INTERNAL */
+Executor::ROMlib_sizergn (RgnHandle rh, bool special_p) /* INTERNAL */
 {
   register INTEGER *ip, i, left = RGN_STOP, right = -RGN_STOP, y;
   Size rs;
@@ -1155,7 +1155,7 @@ P3(PUBLIC pascal trap, void, InsetRgn, RgnHandle, rh, INTEGER, dh, INTEGER, dv)
     }
 }
 
-static boolean_t
+static bool
 justone (const Rect *rp, RgnHandle rgn, RgnHandle dest)
 {
   const Rect *rp2 = &RGN_BBOX (rgn);

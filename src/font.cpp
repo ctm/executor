@@ -618,7 +618,7 @@ A1(PRIVATE, void, newwidthtable, FMInput *, fmip)
     INTEGER lesser, greater, wanted_family, family, fontresid, powerof2;
     LONGINT todelete;
     GUEST<THz> savezone;
-    boolean_t tried_app_font;
+    bool tried_app_font;
     int n_tried_sys_font;
 
     savezone = TheZone;

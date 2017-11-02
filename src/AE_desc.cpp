@@ -29,7 +29,7 @@ using namespace Executor;
 
 static OSErr
 get_subdesc_info (Handle aggr_desc_h, subdesc_info_t *info,
-		  boolean_t attribute_p)
+		  bool attribute_p)
 {
   if (ATTRIBUTE_COUNT (aggr_desc_h) == typeAEList
       || ATTRIBUTE_COUNT (aggr_desc_h) == typeAERecord) {
@@ -119,9 +119,9 @@ desc_offset (Handle aggr_desc_h, int index, subdesc_info_t *info,
 
 OSErr
 aggr_desc_get_addr (Handle aggr_desc_h,
-		    int index, boolean_t attribute_p,
+		    int index, bool attribute_p,
 		    char **addr_return,  int *size_return,
-		    boolean_t create_p, boolean_t delete_p)
+		    bool create_p, bool delete_p)
 {
   subdesc_info_t info;
   int offset;
@@ -269,8 +269,8 @@ aggr_desc_get_addr (Handle aggr_desc_h,
   AE_RETURN_ERROR (noErr);
 }
 
-static boolean_t
-find_key_index (Handle aggr_desc_h, int32 keyword, boolean_t attribute_p,
+static bool
+find_key_index (Handle aggr_desc_h, int32 keyword, bool attribute_p,
 		int *index_return)
 {
   subdesc_info_t info;
@@ -302,9 +302,9 @@ find_key_index (Handle aggr_desc_h, int32 keyword, boolean_t attribute_p,
 }
 
 
-static boolean_t
+static bool
 aggr_delete_index (Handle aggr_handle,
-		   boolean_t attr_p,
+		   bool attr_p,
 		   int index)
 {
   OSErr err;
@@ -321,7 +321,7 @@ aggr_delete_index (Handle aggr_handle,
     return TRUE;
 }
 
-static boolean_t
+static bool
 aggr_put_nth_desc (Handle aggr_handle,
 		   int index, OSErr *out_failcode,
 		   descriptor_t *in_desc)
@@ -351,7 +351,7 @@ aggr_put_nth_desc (Handle aggr_handle,
   return TRUE;
 }
 
-static boolean_t
+static bool
 aggr_get_nth_desc (Handle aggr_handle,
 		   int index,
 		   GUEST<int32> *out_keyword,
@@ -406,10 +406,10 @@ aggr_get_nth_desc (Handle aggr_handle,
   return TRUE;
 }
 
-static boolean_t
+static bool
 aggr_put_key_desc (Handle aggr_handle,
 		   int32 keyword,
-		   boolean_t attr_p,
+		   bool attr_p,
 		   descriptor_t *in_desc)
 {
   Handle in_desc_data;
@@ -448,7 +448,7 @@ aggr_put_key_desc (Handle aggr_handle,
 static descriptor_t *
 aggr_get_key_desc (Handle aggr_handle,
 		   int32 keyword,
-		   boolean_t attr_p,
+		   bool attr_p,
 		   descriptor_t *out_desc)
 {
   ae_header_t *event_data;
@@ -536,10 +536,10 @@ aggr_get_key_desc (Handle aggr_handle,
   return out_desc;
 }
 
-static boolean_t
+static bool
 aggr_delete_key_desc (Handle aggr_handle,
 		      int32 keyword,
-		      boolean_t attr_p)
+		      bool attr_p)
 {
   char *dummy_addr;
   int dummy_size;
@@ -587,7 +587,7 @@ ae_desc_to_ptr (descriptor_t *desc,
 #if 0
 
 void
-dump_union_desc (union desc *foo, boolean_t key_pair_p)
+dump_union_desc (union desc *foo, bool key_pair_p)
 {
   AEDesc *desc;
   uint32 type;

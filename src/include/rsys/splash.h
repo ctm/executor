@@ -55,7 +55,7 @@ struct splash_screen_color
 
 #if defined (DISPLAY_SPLASH_SCREEN)
 
-extern boolean_t splash_screen_display (boolean_t button_p, char *basename);
+extern bool splash_screen_display (bool button_p, char *basename);
 extern void splash_screen_event_loop (void);
 
 #endif /* DISPLAY_SPLASH_SCREEN */

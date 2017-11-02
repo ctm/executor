@@ -1134,7 +1134,7 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
     Byte *inp;
     Handle temph;
     INTEGER length;
-    boolean_t insert_pad_byte_p;
+    bool insert_pad_byte_p;
     int comp_bytes;
     int height;
     

@@ -35,21 +35,21 @@ extern const void **xdblt_short_wide_stubs[5];
 extern const void **xdblt_tall_wide_stubs[5];
 
 namespace Executor {
-extern boolean_t xdblt_xdata_norgb_norotate (RgnHandle rh, int mode,
+extern bool xdblt_xdata_norgb_norotate (RgnHandle rh, int mode,
 					     int pat_x_rotate_count,
 					     int pat_y_rotate_count,
 					     xdata_t *x,
 					     PixMap *dst_bitmap);
-extern boolean_t xdblt_xdata_short_narrow (RgnHandle rh, int mode,
+extern bool xdblt_xdata_short_narrow (RgnHandle rh, int mode,
 					   int pat_x_rotate_count,
 					   int pat_y_rotate_count,
 					   xdata_t *x,
 					   PixMap *dst_bitmap);
-extern boolean_t xdblt_xdata_complex (RgnHandle rh, int mode,
+extern bool xdblt_xdata_complex (RgnHandle rh, int mode,
 				      int pat_x_rotate_count,
 				      int pat_y_rotate_count,
 				      xdata_t *x, PixMap *dst_bitmap);
-extern boolean_t xdblt_pattern (RgnHandle rh, int mode,
+extern bool xdblt_pattern (RgnHandle rh, int mode,
 				int pat_x_rotate_count, int pat_y_rotate_count,
 				const Pattern pattern, PixMap *dst,
 				uint32 fg_color, uint32 bk_color);

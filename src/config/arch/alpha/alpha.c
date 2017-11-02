@@ -12,7 +12,7 @@ char ROMlib_rcsid_alpha[] =
 
 /* unclear what we need to do here */
 
-boolean_t
+bool
 arch_init (void)
 {
   return TRUE;

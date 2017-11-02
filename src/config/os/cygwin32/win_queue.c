@@ -12,7 +12,7 @@ char ROMlib_rcsid_win_queue[] = "$Id: win_queue.c 63 2004-12-24 18:19:43Z ctm $"
 
 #include <windows.h>
 
-PRIVATE boolean_t timer_driven_events_p = TRUE;
+PRIVATE bool timer_driven_events_p = TRUE;
 
 PUBLIC void
 win_queue (volatile uint8 *pendingp)
@@ -22,7 +22,7 @@ win_queue (volatile uint8 *pendingp)
 }
 
 PUBLIC void
-set_timer_driven_events (boolean_t value)
+set_timer_driven_events (bool value)
 {
   timer_driven_events_p = value;
 }

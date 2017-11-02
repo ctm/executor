@@ -40,7 +40,7 @@ using namespace Executor;
 
 typedef struct
 {
-  boolean_t rotated_p;
+  bool rotated_p;
   float center_x;
   float center_y;
   float angle;
@@ -576,14 +576,14 @@ mac_old_color_to_ps_gray (long color)
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 graymatch(unsigned char patp[8], INTEGER pnMode,
 	  GrafPtr thePortp, float *grayp)
 {
   uint32 *pl;
-  boolean_t pat_is_black;
-  boolean_t pat_is_white;
-  boolean_t retval;
+  bool pat_is_black;
+  bool pat_is_white;
+  bool retval;
   float gray_fore, gray_back;
 
   int i, j;
@@ -1187,11 +1187,11 @@ typedef struct
 }
 substitute_t;
 
-PUBLIC boolean_t Executor::substitute_fonts_p = FALSE;
+PUBLIC bool Executor::substitute_fonts_p = FALSE;
 
 PRIVATE float
 substitute_font_if_needed (char **fontp, LONGINT orig_size,
-			   boolean_t *need_to_freep)
+			   bool *need_to_freep)
 {
   float retval;
   static substitute_t substitutions[] =
@@ -1239,7 +1239,7 @@ void NeXTSetText(StringPtr fname, LONGINT txFace, LONGINT txSize,
     float matrix[6];
     virtual_int_state_t block;
     float font_size;
-    boolean_t need_to_free;
+    bool need_to_free;
 
     block = block_virtual_ints ();
     font = fnametofont(fname, txFace);
@@ -1414,8 +1414,8 @@ void Executor::NeXTPrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp,
   PixMap *srcpmp;
   short rowbytes, numbytes, pixelsize;
   virtual_int_state_t block;
-  boolean_t direct_color_p;
-  boolean_t indexed_color_p;
+  bool direct_color_p;
+  bool indexed_color_p;
   TEMP_ALLOC_DECL (temp_alloc_space);
 
   direct_color_p = FALSE;
@@ -1522,7 +1522,7 @@ void Executor::NeXTPrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp,
 	  Executor::ColorSpec *ctab;
 	  int i;
 	  GUEST<PixMapPtr> pxp;
-	  boolean_t has_warned_p;
+	  bool has_warned_p;
 
 	  pxp =  RM ((Executor::PixMapPtr)srcpmp);
 	  DPSPrintf (DPSGetCurrentContext (),
@@ -1831,7 +1831,7 @@ static int numspacesin(const char *str)
 }
 
 static void dopsunderline(GrafPtr thePortp, short total,
-			  boolean_t substitute_p, char *translated, LONGINT n)
+			  bool substitute_p, char *translated, LONGINT n)
 {
     unsigned char fname[256];
     char *font;
@@ -1852,7 +1852,7 @@ static void dopsunderline(GrafPtr thePortp, short total,
     SmartGetFontName(thePortp, fname);
     font = fnametofont(fname, thePortp->txFace);
     {
-      boolean_t need_to_free;
+      bool need_to_free;
 
       substitute_font_if_needed (&font, 0, &need_to_free);
       PSgsave();
@@ -2011,10 +2011,10 @@ case mac_char_ ## s:				\
   break
 
 PRIVATE unsigned char
-symbol_translate_char (unsigned char c, boolean_t *is_symbolp)
+symbol_translate_char (unsigned char c, bool *is_symbolp)
 {
   unsigned char retval;
-  boolean_t is_symbol;
+  bool is_symbol;
 
   retval = c;
   is_symbol = FALSE;
@@ -2051,10 +2051,10 @@ symbol_translate_char (unsigned char c, boolean_t *is_symbolp)
 
 /* end of ugly parallel enums and parallel switches */
 
-PRIVATE boolean_t
+PRIVATE bool
 is_symbol (unsigned char c)
 {
-  boolean_t retval;
+  bool retval;
 
   symbol_translate_char (c, &retval);
   return retval;
@@ -2198,7 +2198,7 @@ void Executor::NeXTOpenPage( void )
  */
 }
 
-PRIVATE boolean_t text_state;
+PRIVATE bool text_state;
 
 PRIVATE void
 disable_copybits (void)

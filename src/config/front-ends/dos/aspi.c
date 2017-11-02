@@ -49,7 +49,7 @@ char ROMlib_rcsid_aspi[] =
 PUBLIC int ROMlib_skipaspi = 0;
 
 /* TRUE iff we have a legitimate ASPI driver. */
-PRIVATE boolean_t has_aspi_p;
+PRIVATE bool has_aspi_p;
 
 /* Number of host adaptors.*/
 PRIVATE int num_host_adaptors;
@@ -88,11 +88,11 @@ srb_status (void)
 /* Waits for completion or until the timeout expires.  Returns TRUE
  * if success was achieved before timeout.
  */
-PRIVATE boolean_t
+PRIVATE bool
 aspi_wait (unsigned long msecs_timeout, unsigned char *statusp)
 {
   unsigned char status;
-  boolean_t retval;
+  bool retval;
   unsigned long start_ticks, new_ticks;
   unsigned long ticks_timeout;
 
@@ -123,12 +123,12 @@ aspi_wait (unsigned long msecs_timeout, unsigned char *statusp)
 }
 
 /* Calls the ASPI driver. */
-PRIVATE boolean_t
+PRIVATE bool
 aspi_call (aspi_command_t *cmd)
 {
   __dpmi_regs regs;
   __dpmi_raddr cmd_addr;
-  boolean_t success_p;
+  bool success_p;
   
   if (!aspi_entry_segment && !aspi_entry_offset)
     {
@@ -167,10 +167,10 @@ PRIVATE void aspi_reset (aspi_command_t *cmd);
 /* Makes an ASPI call and waits a set amount of time for a 
  * returned success value.
  */
-PRIVATE boolean_t
+PRIVATE bool
 aspi_call_wait (aspi_command_t *cmd, unsigned long msecs_timeout)
 {
-  boolean_t retval;
+  bool retval;
   unsigned char status;
   int count, max;
 
@@ -399,10 +399,10 @@ get_device_type (const aspi_iterator_t *aip)
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 is_int13_accessible (const aspi_iterator_t *aip, uint8 *drivep)
 {
-  boolean_t retval;
+  bool retval;
   aspi_command_t cmd;
 
 /* #define TEMPORARY_HACK */
@@ -447,11 +447,11 @@ dump_sense (unsigned char *sensep)
     }
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 mode_sense (const aspi_iterator_t *aip, unsigned long *block_lengthp,
-	    unsigned long *num_blocksp, boolean_t *write_protectp)
+	    unsigned long *num_blocksp, bool *write_protectp)
 {
-  boolean_t retval;
+  bool retval;
   aspi_command_t cmd;
 
   memset (&cmd, 0, sizeof cmd);
@@ -500,10 +500,10 @@ mode_sense (const aspi_iterator_t *aip, unsigned long *block_lengthp,
  * Try to read block 0 to determine if media is present
  */
 
-PRIVATE boolean_t
+PRIVATE bool
 media_present (const aspi_iterator_t *aip, int block_length)
 {
-  boolean_t retval;
+  bool retval;
   aspi_command_t cmd;
 
   memset (&cmd, 0, sizeof cmd);
@@ -518,7 +518,7 @@ media_present (const aspi_iterator_t *aip, int block_length)
 }
 
 PRIVATE void
-inquiry (const aspi_iterator_t *aip, boolean_t *removablep)
+inquiry (const aspi_iterator_t *aip, bool *removablep)
 {
   aspi_command_t cmd;
 
@@ -543,12 +543,12 @@ inquiry (const aspi_iterator_t *aip, boolean_t *removablep)
     }
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 get_aspi_info (aspi_iterator_t *aip, aspi_info_t *aspi_info_p)
 {
-  boolean_t done_p;
-  boolean_t last_success_p;
-  boolean_t retval;
+  bool done_p;
+  bool last_success_p;
+  bool retval;
 
   if (!has_aspi_p)
     return FALSE;
@@ -576,7 +576,7 @@ get_aspi_info (aspi_iterator_t *aip, aspi_info_t *aspi_info_p)
       if (!done_p)
 	{
 	  peripheral_type_t type;
-	  boolean_t force_read_only;
+	  bool force_read_only;
 
 	  force_read_only = FALSE;
 	  type = get_device_type (aip);
@@ -588,7 +588,7 @@ get_aspi_info (aspi_iterator_t *aip, aspi_info_t *aspi_info_p)
 	      /* FALL THROUGH */
 	    case DIRECT_ACCESS_DEVICE:
 	      {
-		boolean_t int13_accessible;
+		bool int13_accessible;
 		uint8 drive;
 
 		int13_accessible = is_int13_accessible (aip, &drive);
@@ -597,7 +597,7 @@ get_aspi_info (aspi_iterator_t *aip, aspi_info_t *aspi_info_p)
 		else
 		  {
 		    unsigned long block_length, num_blocks;
-		    boolean_t write_protect, removable, media_loaded;
+		    bool write_protect, removable, media_loaded;
 		    
 		    inquiry (aip, &removable);
 
@@ -675,7 +675,7 @@ update_aitp (aspi_info_t *aitp)
   aspi_iterator_t aip;
   unsigned long block_length;
   unsigned long num_blocks;
-  boolean_t write_protect;
+  bool write_protect;
 
   info_to_iterator (aitp, &aip);
   if (mode_sense (&aip, &block_length, &num_blocks, &write_protect))
@@ -693,10 +693,10 @@ update_aitp (aspi_info_t *aitp)
  * aspi_disk_open is private because it does no checking to see whether
  * or not the drive is already open.
  */
-PRIVATE boolean_t
+PRIVATE bool
 aspi_disk_open (int disk, drive_flags_t *flagsp, LONGINT *bsizep)
 {
-  boolean_t retval;
+  bool retval;
   aspi_info_t *aitp;
 
   *flagsp = 0;
@@ -740,7 +740,7 @@ aspi_disk_open (int disk, drive_flags_t *flagsp, LONGINT *bsizep)
 
 
 PUBLIC int 
-aspi_disk_close (int disk, boolean_t eject)
+aspi_disk_close (int disk, bool eject)
 {
   int retval;
   aspi_info_t *aitp;
@@ -825,7 +825,7 @@ aspi_disk_xfer (operation_code_t op, int disk, void *buf, int num_bytes)
   int orig_num_bytes;
   aspi_info_t *aspi_info_ptr;
   unsigned long blocks_to_xfer, bytes_to_xfer, bytes_xfered;
-  boolean_t old_slow_clock_p;
+  bool old_slow_clock_p;
 
   /* Sanity check our arguments and grab info about this device. */
   gui_assert (op == READ_10 || op == WRITE_10);
@@ -941,7 +941,7 @@ aspi_disk_write (int disk, const void *buf, int num_bytes)
  * the file handle for the ASPI driver.  Returns TRUE if successful,
  * else FALSE.
  */
-PRIVATE boolean_t
+PRIVATE bool
 open_aspi_driver (int *file_handle)
 {
   __dpmi_regs regs;
@@ -971,11 +971,11 @@ open_aspi_driver (int *file_handle)
 
 
 /* Closes the ASPI driver.  Returns TRUE iff successful. */
-PRIVATE boolean_t
+PRIVATE bool
 close_aspi_driver (int file_handle)
 {
   __dpmi_regs regs;
-  boolean_t retval;
+  bool retval;
 
   /* Make the DOS call to close the ASPI driver. */
   dpmi_zero_regs (&regs);
@@ -990,7 +990,7 @@ close_aspi_driver (int file_handle)
  * in aspi_entry_segment and aspi_entry_offset.  Returns TRUE
  * if successful, else FALSE.
  */
-PRIVATE boolean_t
+PRIVATE bool
 setup_aspi_entry_point (int file_handle)
 {
   __dpmi_regs regs;
@@ -1050,7 +1050,7 @@ aspi_try_to_open_and_mount_disk (int disk)
  * bugs here, you should check there for the same bugs.  These should be
  * merged sometime.
  */
-PRIVATE boolean_t
+PRIVATE bool
 mount_all_aspi_devices (void)
 {
   int i;
@@ -1073,9 +1073,9 @@ mount_all_aspi_devices (void)
 
 /* Computes and fills in num_host_adaptors, and returns TRUE if successful. */
 PRIVATE
-boolean_t setup_num_host_adaptors (void)
+bool setup_num_host_adaptors (void)
 {
-  boolean_t success_p;
+  bool success_p;
   aspi_command_t cmd;
 
   memset (&cmd, 0, sizeof cmd);
@@ -1096,11 +1096,11 @@ boolean_t setup_num_host_adaptors (void)
 /* Initializes the ASPI driver and mounts all ASPI devices.  Returns
  * TRUE on success, else FALSE.
  */  
-PUBLIC boolean_t
+PUBLIC bool
 aspi_init (void)
 {
   int file_handle;
-  boolean_t retval;
+  bool retval;
 
   if (!ROMlib_skipaspi)
     checkpoint_aspi (checkpointp, begin);

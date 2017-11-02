@@ -139,7 +139,7 @@ Executor::double_dir_op (char *name, double_dir_op_t op)
 }
 
 A3(PUBLIC, OSErr, ROMlib_newresfork, char *, name, LONGINT *, fdp,
-   boolean_t, unix_p)
+   bool, unix_p)
 {
     LONGINT fd;
     OSErr retval;

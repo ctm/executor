@@ -216,7 +216,7 @@ get_tmp_vref_and_dirid (INTEGER vref, INTEGER *tmp_vrefp, LONGINT *tmp_diridp)
 
 
   {
-    static boolean_t been_here_p = FALSE;
+    static bool been_here_p = FALSE;
 
     if (!been_here_p)
       {

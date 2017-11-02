@@ -12,8 +12,8 @@
 namespace Executor {
 typedef struct
 {
-  boolean_t sound_fails;
-  boolean_t aspi_fails;
+  bool sound_fails;
+  bool aspi_fails;
   uint32 bad_macdrives;
   uint32 bad_dosdrives;
 }

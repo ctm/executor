@@ -287,7 +287,7 @@ enum { DEFAULT_HAND = DTR | RTS };
 PRIVATE void
 make_sure_sva_initted (void)
 {
-  static boolean_t initted = FALSE;
+  static bool initted = FALSE;
 
   if (!initted)
     {

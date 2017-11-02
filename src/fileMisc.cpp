@@ -122,10 +122,10 @@ A2(PUBLIC, OSErr, ufsPBGetFCBInfo, FCBPBPtr, pb,	/* INTERNAL */
 #define slashstrcmp strcmp
 #else
 
-PRIVATE boolean_t
+PRIVATE bool
 charcmp (char c1, char c2)
 {
-  boolean_t retval;
+  bool retval;
 
   if (c1 == c2)
     retval = TRUE;
@@ -181,7 +181,7 @@ Executor::ROMlib_addtodq (ULONGINT drvsize, const char *devicename, INTEGER part
     DrvQEl *dp;
     int strl;
     GUEST<THz> saveZone;
-    static boolean_t seen_floppy = FALSE;
+    static bool seen_floppy = FALSE;
 
     saveZone = TheZone;
     TheZone = SysZone;
@@ -248,11 +248,11 @@ Executor::ROMlib_addtodq (ULONGINT drvsize, const char *devicename, INTEGER part
     return dqp;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 root_directory_p(char *path, dev_t our_dev)
 {
   char *slash;
-  boolean_t retval;
+  bool retval;
 
   /* we used to just compare our_inode to 2, but that doesn't work with
      NFS mounted filesystems that aren't mounted at the root directory or
@@ -352,7 +352,7 @@ PRIVATE void ROMlib_automount_helper(char *path, char *aliasp)
 	   store away intermediate directory numbers */
 
 	for (i = 0; i < 2; ++i) {
-	    boolean_t done;
+	    bool done;
 	    sret = Ustat(path, &sbuf);
 	    savep = 0;
 	    oldsavep = 0;
@@ -586,7 +586,7 @@ copystr (const char *name)
 }
 
 #if defined (MSDOS) || defined (CYGWIN32)
-PUBLIC boolean_t cd_mounted_by_trickery_p = FALSE;
+PUBLIC bool cd_mounted_by_trickery_p = FALSE;
 
 #define MACCDROM \
   (ROMlib_mac_cdromp ? (char *) ROMlib_mac_cdromp->chars : \
@@ -612,10 +612,10 @@ check_for_executor_cd (const char *drive)
     }
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 e2_is_mounted (void)
 {
-  boolean_t retval;
+  bool retval;
   const char e2_name[] = "Executor2";
 
   retval = !!vlookupbyname (e2_name, e2_name + strlen (e2_name));
@@ -696,10 +696,10 @@ drive_char_to_bit (char c)
 }
 #endif
 
-PRIVATE boolean_t
+PRIVATE bool
 is_unix_path (const char *pathname)
 {
-  boolean_t retval;
+  bool retval;
 
 #if defined(MSDOS) || defined (CYGWIN32)
   if (pathname[0] && pathname[1] == ':' && (pathname[2] == '/' ||

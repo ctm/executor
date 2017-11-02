@@ -86,10 +86,10 @@ static const char *desperate_switches[] = {
  * Returns TRUE except in case of a parsing error (right now that
  * can only happen with duplicate "-desperate" switches).
  */
-boolean_t
+bool
 Executor::handle_desperate_switch (int *argcp, char ***argvp)
 {
-  boolean_t success_p;
+  bool success_p;
   char **argv, **new_argv;
   int i, s, argc, new_argc;
 

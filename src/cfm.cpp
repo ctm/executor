@@ -402,7 +402,7 @@ get_root_and_app (INTEGER *root_vrefp, LONGINT *root_diridp,
 }
 
 PRIVATE OSErr
-check_file (INTEGER vref, LONGINT dirid, Str255 file, boolean_t shlb_test_p,
+check_file (INTEGER vref, LONGINT dirid, Str255 file, bool shlb_test_p,
 	    Str63 library, OSType arch, LoadFlags loadflags,
 	    ConnectionID *cidp, Ptr *mainaddrp, Str255 errName)
 {
@@ -1063,7 +1063,7 @@ load_loader_section (const void *addr,
 PRIVATE OSErr
 do_pef_section (ConnectionID connp, const void *addr,
 		const PEFSectionHeader_t *sections, int i,
-		boolean_t instantiate_p,
+		bool instantiate_p,
 		syn68k_addr_t *mainAddrp, OSType arch)
 {
   OSErr retval;
@@ -1305,7 +1305,7 @@ typedef struct
   LONGINT length_req;
   off_t offset_act;
   size_t length_act;
-  boolean_t mapped_to_eof_p;
+  bool mapped_to_eof_p;
   int refcount;
 }
 context_t;
@@ -1314,10 +1314,10 @@ PRIVATE int n_context_slots = 0;
 PRIVATE int n_active_contexts = 0;
 PRIVATE context_t *contexts = 0;
 
-PRIVATE boolean_t
+PRIVATE bool
 fsmatch (FSSpecPtr fsp1, FSSpecPtr fsp2)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = (fsp1->vRefNum == fsp2->vRefNum &&
 	    fsp1->parID == fsp2->parID &&
@@ -1325,10 +1325,10 @@ fsmatch (FSSpecPtr fsp1, FSSpecPtr fsp2)
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 match (FSSpecPtr fsp, LONGINT offset, LONGINT length, const context_t *cp)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = (cp->refcount > 0 &&
 	    fsmatch (fsp, (FSSpecPtr) &cp->fs) &&
@@ -1340,7 +1340,7 @@ match (FSSpecPtr fsp, LONGINT offset, LONGINT length, const context_t *cp)
 }
 
 PRIVATE OSErr
-get_context (int *contextidp, boolean_t *exists_pp, FSSpecPtr fsp,
+get_context (int *contextidp, bool *exists_pp, FSSpecPtr fsp,
 	     LONGINT offset, LONGINT length)
 {
   PRIVATE OSErr retval;
@@ -1451,7 +1451,7 @@ try_to_mmap_file (FSSpecPtr fsp, LONGINT offset, LONGINT length,
 
   if (retval == noErr)
     {
-      boolean_t exists_p;
+      bool exists_p;
       int context;
 
       retval = get_context (&context, &exists_p, fsp, offset, length);

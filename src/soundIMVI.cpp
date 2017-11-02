@@ -144,7 +144,7 @@ start_playing (SndChannelPtr chanp, SndDoubleBufferHeaderPtr paramp,
 	       int which_buf)
 {
   ProcPtr pp;
-  static boolean_t task_inserted = FALSE;
+  static bool task_inserted = FALSE;
 
   pp = MR (paramp->dbhDoubleBack);
   if (pp)

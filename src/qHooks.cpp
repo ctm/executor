@@ -18,7 +18,7 @@ using namespace Executor;
 
 #if defined (BINCOMPAT)
 
-PRIVATE boolean_t text_is_enabled_p = TRUE;
+PRIVATE bool text_is_enabled_p = TRUE;
 
 PUBLIC void
 Executor::disable_stdtext (void)

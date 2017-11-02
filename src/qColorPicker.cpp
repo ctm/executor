@@ -152,11 +152,11 @@ static int space_width;
 
 static void
 text_box_update_value (struct text_box *box, int newval,
-		       boolean_t update_if_p);
+		       bool update_if_p);
 static void
 text_box_update_value_1 (struct text_box *box, int newval,
-			 boolean_t update_if_p,
-			 boolean_t update_color_wheel_target_p);
+			 bool update_if_p,
+			 bool update_color_wheel_target_p);
 
 static void
 text_box_update_if_value (struct text_box *box,
@@ -171,7 +171,7 @@ static int if_val (int max, int integer, int fractional);
 
 static void color_wheel_update (void);
 static void color_wheel_notice_lightness_change (void);
-static void color_wheel_target_update (boolean_t short_cut_p);
+static void color_wheel_target_update (bool short_cut_p);
 
 #define red_index		(0)
 #define green_index		(1)
@@ -241,14 +241,14 @@ typedef enum miniarrow_hilite
   miniarrow_down_hilite,
 } miniarrow_hilite_t;
 
-static boolean_t integer_increment_p;
+static bool integer_increment_p;
 static int track_kount;
 
 static void
 miniarrow_track (struct text_box *box, miniarrow_hilite_t _hilite)
 {
   int integer, fractional, max;
-  boolean_t continuous_p;
+  bool continuous_p;
   
   integer = box->integer;
   fractional = box->fractional;
@@ -577,7 +577,7 @@ text_box_miniarrow_update (struct text_box *box,
 }
 
 static void
-text_box_update (struct text_box *box, boolean_t update_text_p)
+text_box_update (struct text_box *box, bool update_text_p)
 {
   char buf[16];
   
@@ -630,8 +630,8 @@ val_if (int val, int max,
 
 static void
 text_box_update_value_1 (struct text_box *box, int newval,
-			 boolean_t update_if_p,
-			 boolean_t update_color_wheel_target_p)
+			 bool update_if_p,
+			 bool update_color_wheel_target_p)
 {
   int *value;
   
@@ -696,7 +696,7 @@ compare_box_update (void)
 
 static void
 hue_saturation_update (int new_hue, int new_saturation,
-		       boolean_t full_update_p)
+		       bool full_update_p)
 {
   RGBColor rgb_color;
   HSLColor hsl_color;
@@ -761,7 +761,7 @@ text_box_update_if_value (struct text_box *box,
 
 static void
 text_box_update_value (struct text_box *box, int newval,
-		       boolean_t update_if_p)
+		       bool update_if_p)
 {
   RGBColor rgb_color;
   HSLColor hsl_color;
@@ -858,7 +858,7 @@ text_box_set_te (struct text_box *box)
   TEActivate (te);
 }
 
-static boolean_t
+static bool
 event_loop (void)
 {
   EventRecord evt;
@@ -876,7 +876,7 @@ event_loop (void)
 	case mouseDown:
 	  {
 	    Point local_pt;
-	    boolean_t control_p;
+	    bool control_p;
 	    ControlHandle c;
 	    int16 release_part;
 	    int i;
@@ -1148,7 +1148,7 @@ color_wheel_init (void)
 }
 
 static void
-color_wheel_target_update (boolean_t short_cut_p)
+color_wheel_target_update (bool short_cut_p)
 {
   double dist, angle;
   Rect src_rect, dst_rect;
@@ -1286,7 +1286,7 @@ P4 (PUBLIC pascal trap, BOOLEAN, GetColor,
     RGBColor *, out_color)
 {
   PaletteHandle palette;
-  boolean_t retval;
+  bool retval;
   
   /* compute relevent font information */
 

@@ -20,7 +20,7 @@ char ROMlib_rcsid_xdata[] =
 
 using namespace Executor;
 
-boolean_t
+bool
 Executor::update_xdata_if_needed (xdata_handle_t xh, PixPat *pixpat,
 			PixMap *dest)
 {
@@ -259,7 +259,7 @@ raw_bits_for_pixpat (PixPat *pixpat, PixMap *target,
 /* Returns TRUE iff the specified pattern can be compressed to be only
  * four bytes wide with no loss of information.
  */
-static inline boolean_t
+static inline bool
 narrow_p (const uint32 *bits, int row_longs, int height)
 {
   const uint32 *p, *end;
@@ -283,7 +283,7 @@ narrow_p (const uint32 *bits, int row_longs, int height)
 /* Returns TRUE iff the specified pattern can be compressed to be only
  * one row tall with no loss of information.
  */
-static inline boolean_t
+static inline bool
 short_p (const uint32 *bits, int row_longs, int height)
 {
   const uint8 *p, *end;
@@ -507,7 +507,7 @@ Executor::xdata_for_pattern (const Pattern pattern, PixMap *target)
 void
 Executor::xdata_free (xdata_handle_t xh)
 {
-  boolean_t xdata_valid_p;
+  bool xdata_valid_p;
   
   xdata_valid_p = xh && (GetHandleSize ((Handle) xh) == sizeof (xdata_t));
   

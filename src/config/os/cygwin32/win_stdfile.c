@@ -15,12 +15,12 @@ char ROMlib_rcsid_win_stdfile[] = "$Id: win_stdfile.c 119 2005-07-11 21:36:20Z c
 
 #include "win_win.h"
 
-PUBLIC boolean_t host_has_spfcommon (void)
+PUBLIC bool host_has_spfcommon (void)
 {
   return true;
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 host_spfcommon (host_spf_reply_block *replyp, const char *prompt,
 		const char *incoming_filename, void *fp, void *filef, int numt,
 		void *tl, getorput_t getorput, sf_flavor_t flavor,

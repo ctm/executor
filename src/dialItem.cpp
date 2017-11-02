@@ -26,7 +26,7 @@ Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
   int items_h_size, new_items_h_size;
   Rect *dp_port_rect;
   int width, height;
-  boolean_t resize_p;
+  bool resize_p;
   Point base_pt;
   
   dp_port_rect = &PORT_RECT (dp);
@@ -190,7 +190,7 @@ Executor::ShortenDITL (DialogPtr dp, int16 n_items)
 	   
 	   if (i >= first_item_to_dispose)
 	     {
-	       boolean_t erase_p = FALSE;
+	       bool erase_p = FALSE;
 	       Rect erase_rect;
 	       
 	       erase_rect = itemp->itmr;

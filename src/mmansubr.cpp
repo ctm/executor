@@ -29,7 +29,7 @@ using namespace Executor;
 void
 Executor::mman_heap_death (const char *func, const char *where)
 {
-  static boolean_t already_dead_p = FALSE;
+  static bool already_dead_p = FALSE;
   char err_msg[256];
 
   sprintf (err_msg,
@@ -121,7 +121,7 @@ addr_block (THz zone, char *addr)
   return NULL;
 }
 
-static boolean_t
+static bool
 addr_in_zone_p (THz zone, char *addr)
 {
   return ((char *) ZONE_HEAP_DATA (zone) <= addr
@@ -134,7 +134,7 @@ addr_info (char *addr)
   THz zones[3], addr_zone;
   Handle handle;
   block_header_t *block, *ptr_block;
-  boolean_t addr_is_handle_p;
+  bool addr_is_handle_p;
   char *ptr, *ptr_data_start;
   int ptr_data_size;
   int i;
@@ -319,12 +319,12 @@ addr_info (char *addr)
 }
 
 void
-Executor::ROMlib_sledgehammer_zone (THz zone, boolean_t print_p,
+Executor::ROMlib_sledgehammer_zone (THz zone, bool print_p,
 			  const char *fn, const char *file, int lineno,
 			  const char *where, zone_info_t *infop)
 {
   block_header_t *block, *zone_start, *zone_end, *alloc_ptr;
-  boolean_t found_alloc_ptr_p = FALSE;
+  bool found_alloc_ptr_p = FALSE;
   int total_size;
   
   if (infop)
@@ -677,7 +677,7 @@ Executor::ROMlib_moveblock (block_header_t *oldl, block_header_t *newl,
 
 /* Move the relocatable block at BLOCK to some point after the block
    AFTER if at all possible.  Return 1 if successful. */
-boolean_t
+bool
 Executor::ROMlib_pushblock (block_header_t *block, block_header_t *after)
 {
   block_header_t *t_block;
@@ -704,11 +704,11 @@ Executor::ROMlib_pushblock (block_header_t *block, block_header_t *after)
   return FALSE;
 }
 
-boolean_t Executor::ROMlib_memnomove_p = 0;
+bool Executor::ROMlib_memnomove_p = 0;
 
 /* Make space for a block of size SIZE starting at BLOCK.  If space
    exists return 1, else return 0.  */
-boolean_t
+bool
 Executor::ROMlib_makespace (block_header_t **block_out, uint32 size)
 {
   block_header_t *b;
@@ -780,7 +780,7 @@ Executor::ROMlib_makespace (block_header_t **block_out, uint32 size)
 }
 
 /* Tell if BLOCK is locked or not */
-boolean_t
+bool
 Executor::ROMlib_locked (block_header_t *block)
 {
   Handle h;

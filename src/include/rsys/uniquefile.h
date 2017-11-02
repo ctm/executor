@@ -9,7 +9,7 @@
  */
 
 namespace Executor {
-extern boolean_t unique_file_name (const char *template1,
+extern bool unique_file_name (const char *template1,
 				   const char *default_template,
 				   Str255 result);
 }

@@ -473,7 +473,7 @@ Executor::ROMlib_add_to_gestalt_list (OSType selector, OSErr retval, uint32 new_
 
 A2(PUBLIC trap, OSErrRET, Gestalt, OSType, selector, GUEST<LONGINT> *, responsep)
 {
-  static boolean_t been_here = FALSE;
+  static bool been_here = FALSE;
 
   warning_trace_info ("IN: sel `%c%c%c%c'",
 		      (selector >> 24) & 0xFF,

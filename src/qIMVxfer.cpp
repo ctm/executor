@@ -100,7 +100,7 @@ Executor::convert_transparent (const PixMap *src1, const PixMap *src2,
 		     PixMap *dst,
 		     const Rect *r1, const Rect *r2,
 		     int16 mode,
-		     boolean_t tile_src1_p,
+		     bool tile_src1_p,
 		     int pat_x_offset, int pat_y_offset)
 {
   unsigned char *src1_row_base, *src2_row_base, *dst_row_base;
@@ -112,7 +112,7 @@ Executor::convert_transparent (const PixMap *src1, const PixMap *src2,
   int bits_per_pixel;
   const rgb_spec_t *rgb_spec;
   
-  boolean_t copy1_p, copy2_p;
+  bool copy1_p, copy2_p;
   write_back_data_t write_back1, write_back2;
   
   bits_per_pixel = CW (src1->pixelSize);
@@ -371,7 +371,7 @@ Executor::convert_pixmap_with_IMV_mode (const PixMap *src1, const PixMap *src2,
 			      ITabHandle itabh,
 			      const Rect *r1, const Rect *r2,
 			      int16 mode, const RGBColor *op_color,
-			      boolean_t tile_src1_p,
+			      bool tile_src1_p,
 			      int pat_x_offset, int pat_y_offset)
 {
   CTabPtr src1_ctab, src2_ctab;
@@ -386,7 +386,7 @@ Executor::convert_pixmap_with_IMV_mode (const PixMap *src1, const PixMap *src2,
   const rgb_spec_t *rgb_spec;
   int bits_per_pixel;
   
-  boolean_t copy1_p, copy2_p;
+  bool copy1_p, copy2_p;
   write_back_data_t write_back1, write_back2;
   
   bits_per_pixel = CW (src1->pixelSize);

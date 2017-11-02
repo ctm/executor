@@ -567,7 +567,7 @@ dosdisk_read (int disk, void *buf, int num_bytes)
   dosdisk_info_t *d = disk_number_to_disk_info (disk);
   void *orig_buf;
   unsigned long start_pos;
-  boolean_t old_slow_clock_p;
+  bool old_slow_clock_p;
   uint16 buf_offset;
 
   buf_offset = 0;
@@ -607,7 +607,7 @@ dosdisk_read (int disk, void *buf, int num_bytes)
       int error_tries_left;
       int block_size;
       __dpmi_regs regs;
-      boolean_t cache_hit_p;
+      bool cache_hit_p;
 
       block_size = d->is_cd_rom ? CD_BLOCK_SIZE : BYTES_PER_BLOCK;
       if (dcache_read (disk | DOSFDBIT, buf, d->fpos, block_size))
@@ -637,7 +637,7 @@ dosdisk_read (int disk, void *buf, int num_bytes)
 	  {
 	    int error_count;
 	    uint32 bad_data_magic_cookie;
-	    boolean_t cookie_failed_p;
+	    bool cookie_failed_p;
 
 	    bad_data_magic_cookie = 0xDE52AA03;  /* Unlikely bytes */
 	    cookie_failed_p = FALSE;
@@ -831,7 +831,7 @@ dosdisk_write (int disk, const void *buf, int num_bytes)
 {
   dosdisk_info_t *d = disk_number_to_disk_info (disk);
   int orig_num_bytes;
-  boolean_t old_slow_clock_p;
+  bool old_slow_clock_p;
 
   orig_num_bytes = num_bytes;
   /* Make sure they've opened this disk. */

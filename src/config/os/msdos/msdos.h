@@ -44,7 +44,7 @@ typedef struct {
 #define NEED_LOG1P
 
 extern void msdos_print_info (void);
-extern boolean_t msdos_check_memory_remaining (unsigned long desired_bytes);
+extern bool msdos_check_memory_remaining (unsigned long desired_bytes);
 
 /* Indicate that we should sbrk memory that will never be freed, rather
  * than mallocing it.  This is solely an efficiency issue.  This is a

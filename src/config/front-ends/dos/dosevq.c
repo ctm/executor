@@ -51,7 +51,7 @@ static char keyboard_initialized = 0;
 static char mouse_initialized = 0;
 
 /* Global flag; use DPMI real mode callback for mouse driver? */
-boolean_t use_mouse_rmcb_p = TRUE;
+bool use_mouse_rmcb_p = TRUE;
 
 
 /* This dummy function is used to mark the beginning of memory to
@@ -179,7 +179,7 @@ void dosevq_lock_functions_end (void) { }
 /* Sets up a real mode mouse stub, to use in place of a real-mode callback.
  * We seem to need this for WinNT 3.51.
  */
-static boolean_t
+static bool
 setup_mouse_stub (void)
 {
   int seg, sel;

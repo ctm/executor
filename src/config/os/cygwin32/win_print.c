@@ -491,10 +491,10 @@ unloadgs (void)
   gsdll_get_bitmap_row = NULL;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 release_info (win_printp_t wp, uint32 *last_errorp)
 {
-  boolean_t retval;
+  bool retval;
 
   free (wp);
 
@@ -576,11 +576,11 @@ set_gs_gestalt_info (void)
   RESTORE_FP_ENVIRONMENT ();
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 get_info (win_printp_t *wpp, int physx, int physy,
 	  orientation_t orientation, int copies, uint32 *last_errorp)
 {
-  boolean_t retval;
+  bool retval;
   win_printp_t wp;
 
   SAVE_FP_ENVIRONMENT ();
@@ -726,10 +726,10 @@ get_info (win_printp_t *wpp, int physx, int physy,
   return retval;
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 print_file (win_printp_t wp, const char *spool_namep, uint32 *last_errorp)
 {
-  boolean_t retval;
+  bool retval;
 
   SAVE_FP_ENVIRONMENT ();
   if (!wp)

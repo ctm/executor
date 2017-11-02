@@ -181,6 +181,6 @@ struct HFSPlusAttrExtents { GUEST_STRUCT;
     GUEST< HFSPlusExtentRecord> extents;
 };
 
-extern boolean_t ROMlib_hfs_plus_support;
+extern bool ROMlib_hfs_plus_support;
 }
 #endif

@@ -165,7 +165,7 @@ namespace Executor {
 	PRIVATE void safeflflip(fltype *, INTEGER);
 	PRIVATE void flupdate(fltype *, INTEGER, INTEGER);
 	PRIVATE void flscroll(fltype *, INTEGER, INTEGER);
-	PRIVATE StringPtr getdiskname(BOOLEAN *, boolean_t *);
+	PRIVATE StringPtr getdiskname(BOOLEAN *, bool *);
 	PRIVATE void drawjobberattop(DialogPeek);
 	PRIVATE LONGINT getdirid(StringPtr);
 	PRIVATE void settype(fltype *, INTEGER);
@@ -441,10 +441,10 @@ PUBLIC void Executor::ROMlib_init_stdfile(void)
 }
 
 A2(PRIVATE, StringPtr, getdiskname, BOOLEAN *, ejectablep,
-   boolean_t *, writablep)
+   bool *, writablep)
 {
     static BOOLEAN ejectable;
-    static boolean_t writable;
+    static bool writable;
     static Str255 retval;
     ParamBlockRec pbr;
 
@@ -774,10 +774,10 @@ ROMlib_CALL_CUSTOM_FILE_FILT (ParmBlkPtr pbp, UNIV Ptr data,
     return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 passes_filter (fltype *f, CInfoPBRec *cinfop, INTEGER numt)
 {
-  boolean_t retval;
+  bool retval;
 
   switch (f->flavor)
     {
@@ -1087,10 +1087,10 @@ BOOLEAN keyarrow(fltype *fl, INTEGER incr)	/* -1: up, 1: down */
     return TRUE;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 folder_selected_p (fltype *fl)
 {
-  boolean_t retval;
+  bool retval;
 
   switch (fl->flavor)
     {
@@ -1364,7 +1364,7 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
   BOOLEAN done;
   ALLOCABEGIN
   BOOLEAN ejectable;
-  boolean_t seen_up_already;
+  bool seen_up_already;
   TEMP_ALLOC_DECL (temp_save_bits);
   
   THEPORT_SAVE_EXCURSION
@@ -1599,7 +1599,7 @@ A1(PRIVATE, BOOLEAN, ejected, HParmBlkPtr, pb)
  * etc.)
  */
 
-PRIVATE boolean_t single_tree_fs_p(HParmBlkPtr pb)
+PRIVATE bool single_tree_fs_p(HParmBlkPtr pb)
 {
 #if defined(MSDOS) || defined (CYGWIN32)
   return FALSE;
@@ -1616,7 +1616,7 @@ PUBLIC int Executor::linuxfloppy_open(int disk, LONGINT *bsizep,
 {
   int retval;
   struct cdrom_subchnl sub_info;
-  boolean_t force_read_only;
+  bool force_read_only;
 
   force_read_only = FALSE;
   *flagsp = 0;
@@ -1681,7 +1681,7 @@ typedef struct {
 
 #define N_DRIVES (32)
 
-PRIVATE boolean_t drive_loaded [N_DRIVES] = { 0 };
+PRIVATE bool drive_loaded [N_DRIVES] = { 0 };
 
 PRIVATE char *
 drive_name_of (int i)
@@ -2238,13 +2238,13 @@ report_new_folder_failure (OSErr err)
   NoteAlert (GENERIC_COMPLAINT_ID, (ProcPtr) 0);
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 new_folder_from_dp (DialogPtr dp, fltype *f)
 {
   Str255 str;
   HParamBlockRec hpb;
   OSErr err;
-  boolean_t retval;
+  bool retval;
 	  
   getditext (dp, 3, str);
   hpb.ioParam.ioVRefNum = CW (-CW (SFSaveDisk));
@@ -2264,10 +2264,10 @@ new_folder_from_dp (DialogPtr dp, fltype *f)
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 do_new_folder (fltype *f)
 {
-  boolean_t retval;
+  bool retval;
   GrafPtr gp;
   DialogPtr dp;
 
@@ -2276,7 +2276,7 @@ do_new_folder (fltype *f)
   dp = GetNewDialog (-6044, (Ptr) 0, (WindowPtr)-1);
   if (dp)
     {
-      boolean_t done;
+      bool done;
       GUEST<INTEGER> ihit;
 
       SelIText (dp, 3, 0, 32767);
@@ -2314,7 +2314,7 @@ rep_from_host_reply_block (reply_u *repp,
 {
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 is_normal_dlgid (getorput_t getorput, INTEGER dig)
 {
   return getorput == get
@@ -2329,7 +2329,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 		      Ptr activeList, ActivateYDProcPtr activateproc,
 		      UNIV Ptr yourdatap)
 {
-  boolean_t reply_valid;
+  bool reply_valid;
   TRAPBEGIN();
 
   reply_valid = FALSE;
@@ -2445,7 +2445,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
     sahand = MR(tmpH);
     if (getorput == put && SF_NAME (&f)[0])
       {
-	boolean_t writable;
+	bool writable;
 	
 	getdiskname (NULL, &writable);
 	sav = TRUE;
@@ -2633,7 +2633,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 	  }
 	if (getorput == put) {
 	    Str255 file_name;
-	    boolean_t writable;
+	    bool writable;
 
 	    GetIText(pnhand, file_name);
 	    str31assign (SF_NAME (&f), file_name);

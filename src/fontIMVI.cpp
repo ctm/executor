@@ -13,7 +13,7 @@ char ROMlib_rcsid_fontIMVI[] =
 
 using namespace Executor;
 
-static boolean_t outline_preferred_p = FALSE;
+static bool outline_preferred_p = FALSE;
 
 P1 (PUBLIC pascal trap, void, SetOutlinePreferred,
     Boolean, _outline_preferred_p)
@@ -44,7 +44,7 @@ P9 (PUBLIC pascal trap, OSErr, OutlineMetrics,
   return -50;
 }
 
-static boolean_t preserve_glyph_p = FALSE;
+static bool preserve_glyph_p = FALSE;
 
 P1 (PUBLIC pascal trap, void, SetPreserveGlyph,
     Boolean, _preserve_glyph_p)

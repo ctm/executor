@@ -437,7 +437,7 @@ Executor::opt_val (opt_database_t &db, string opt, string *retval)
 {
   opt_val_t *opt_val;
   string val = "";
-  boolean_t found_p = FALSE;
+  bool found_p = FALSE;
 
   opt_val = opt_lookup (db, opt);
   if (opt_val)
@@ -461,7 +461,7 @@ Executor::opt_val (opt_database_t &db, string opt, string *retval)
  */
 int
 Executor::opt_int_val (opt_database_t &db, string opt, int *retval,
-	     boolean_t *parse_error_p)
+	     bool *parse_error_p)
 {
   opt_val_t *opt_val;
   string val = "";

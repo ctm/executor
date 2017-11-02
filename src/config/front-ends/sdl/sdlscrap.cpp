@@ -175,7 +175,7 @@ surface_from_dib (void *lp)
 	}
 	dib_pixel;
 	int pixels_per_line;
-	boolean_t inverted_p;
+	bool inverted_p;
 	int n_lines;
 	sdl_pixel *op, *eop;
 	dib_pixel *ip, *eip;
@@ -433,7 +433,7 @@ convert_scrap(int type, char *dst, char *src, int srclen)
   return dstlen;
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 we_lost_clipboard(void)
 {
 #if defined(X11_SCRAP)
@@ -655,7 +655,7 @@ void Executor::PutScrapX(LONGINT type, LONGINT length, char *p, int scrap_count)
 #if defined (MACOSX)
 #warning "Need to support clipboard"
 
-PUBLIC boolean_t
+PUBLIC bool
 we_lost_clipboard(void)
 {
   return false; /* TODO */

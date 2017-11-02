@@ -34,7 +34,7 @@ char ROMlib_rcsid_prPrinting[] =
 #if defined (MSDOS) || defined (CYGWIN32)
 #include <stdarg.h>
 
-PUBLIC boolean_t deferred_printing_p = FALSE /* TRUE */;
+PUBLIC bool deferred_printing_p = FALSE /* TRUE */;
 
 #endif
 
@@ -64,7 +64,7 @@ PUBLIC int ROMlib_paper_y = 0;
    ES calls PrPageClose twice at the end.  This fix is sub-optimal, but
    probably won't hurt anything. */
 
-PRIVATE boolean_t page_is_open = FALSE;
+PRIVATE bool page_is_open = FALSE;
 }
 #include "rsys/nextprint.h"
 
@@ -231,7 +231,7 @@ P4(PUBLIC pascal trap, void, PrText, INTEGER, n, Ptr, textbufp,
 
 PRIVATE QDProcs prprocs;
 PRIVATE QDProcs sendpsprocs;
-PRIVATE boolean_t need_restore;
+PRIVATE bool need_restore;
 
 P3(PUBLIC pascal trap, void, PrComment, INTEGER, kind, INTEGER, size,
 								  Handle, hand)
@@ -318,7 +318,7 @@ P3(PUBLIC pascal trap, void, PrComment, INTEGER, kind, INTEGER, size,
 	}
 }
 
-PRIVATE boolean_t printport_open_p = FALSE;
+PRIVATE bool printport_open_p = FALSE;
 
 PRIVATE void
 ourinit (TPPrPort port, BOOLEAN preserve_font)
@@ -396,7 +396,7 @@ ourinit (TPPrPort port, BOOLEAN preserve_font)
 
 #include <stdio.h>
 
-PRIVATE boolean_t need_pclose;
+PRIVATE bool need_pclose;
 
 #if defined (LINUX)
 PRIVATE void (*old_pipe_signal)(int);
@@ -404,7 +404,7 @@ PRIVATE void (*old_pipe_signal)(int);
 
 #if !defined (MACOSX_)
 PRIVATE FILE *
-open_ps_file (boolean_t *need_pclosep)
+open_ps_file (bool *need_pclosep)
 {
   FILE *retval;
 
@@ -468,7 +468,7 @@ open_ps_file (boolean_t *need_pclosep)
 }
 #endif /* !MACOSX_ */
 
-PRIVATE boolean_t already_open = FALSE;
+PRIVATE bool already_open = FALSE;
 
 #if defined (QUESTIONABLE_FIX_FOR_LOGBOOK_THAT_BREAKS_PRINTING_UNDER_TESTGEN)
 PRIVATE Byte save_FractEnable;

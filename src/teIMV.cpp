@@ -55,7 +55,7 @@ Executor::generic_elt_calc_height_ascent (generic_elt_t *elt)
   TextFont (savefont);
 }
 
-boolean_t
+bool
 Executor::adjust_attrs (TextStyle *orig_attrs, TextStyle *new_attrs,
 	      TextStyle *dst_attrs, TextStyle *continuous_attrs,
 	      int16 mode)

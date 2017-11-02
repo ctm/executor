@@ -293,7 +293,7 @@ PUBLIC int Executor::ROMlib_forward_del_p = FALSE;
 
 void
 Executor::ROMlib_tedoitall (TEHandle teh, Ptr ptr,      /* INTERNAL */
-		  int16 len, boolean_t insert, StScrpHandle styleh)
+		  int16 len, bool insert, StScrpHandle styleh)
 {
   INTEGER start, stop, sellen, hlen, nchar;
   int16 calstart, calend;

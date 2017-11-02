@@ -170,12 +170,12 @@ PUBLIC INTEGER Executor::ROMlib_optional_res_x, Executor::ROMlib_optional_res_y;
 PUBLIC const char *Executor::ROMlib_command_line;
 
 /* Set to TRUE if there was any error parsing arguments. */
-PRIVATE boolean_t bad_arg_p = FALSE;
+PRIVATE bool bad_arg_p = FALSE;
 
 /* Set to FALSE when we know that the command line switches will result
    in no graphics. */
 
-PRIVATE boolean_t graphics_p = TRUE;
+PRIVATE bool graphics_p = TRUE;
 
 /* for a description of flags declared here, see <rsys/flags.h> */
 
@@ -194,7 +194,7 @@ int ROMlib_drive_check = 0;
 #endif
 
 #if defined(SYN68K)
-static boolean_t use_native_code_p = TRUE;
+static bool use_native_code_p = TRUE;
 #endif
 
 /* the system version that executor is currently reporting to
@@ -987,10 +987,10 @@ PUBLIC uint32 ROMlib_macdrives;  /* default computed at runtime */
 PUBLIC uint32 ROMlib_dosdrives = ~0;
 PRIVATE uint32 skipdrives = 0;
 
-PRIVATE boolean_t
+PRIVATE bool
 drive_number_from_letter (char c, int *nump)
 {
-  boolean_t retval;
+  bool retval;
 
   if (isupper (c) || ((c >= '[' && c <= '`')))
     {
@@ -1152,7 +1152,7 @@ PRIVATE int
 zap_comments (char *buf, int n_left)
 {
   char *ip, *op;
-  boolean_t last_was_cr;
+  bool last_was_cr;
   int retval;
 
   ip = buf;
@@ -1299,7 +1299,7 @@ int main(int argc, char** argv)
   GUEST<THz> saveSysZone, saveApplZone;
   GUEST<Ptr> saveApplLimit;
 #if defined (MSDOS)
-  boolean_t check_files_p;  /* See if FILES= is big enough? */
+  bool check_files_p;  /* See if FILES= is big enough? */
 #endif
   static void (*reg_funcs[]) (void) =
   {
@@ -1322,7 +1322,7 @@ int main(int argc, char** argv)
   int grayscale_p = FALSE;
 
 #if defined (DISPLAY_SPLASH_SCREEN)
-  boolean_t splash_screen_displayed_p;
+  bool splash_screen_displayed_p;
 #endif
 
 #if defined (VDRIVER_SVGALIB)
@@ -2045,7 +2045,7 @@ int main(int argc, char** argv)
   }
 
   {
-    boolean_t keyboard_set_failed;
+    bool keyboard_set_failed;
 
     if (opt_val (common_db, "keyboard", &arg)) {
       keyboard_set_failed = !ROMlib_set_keyboard (arg.c_str());

@@ -390,14 +390,14 @@ unsigned long ROMlib_total_allocated_memory;
 void
 ROMlib_InitZones (offset_enum which)
 {
-  static boolean_t beenhere = FALSE;
+  static bool beenhere = FALSE;
   static Ptr stack_begin, stack_end;
   static unsigned long applzone_memory_segment_size;
   int init_syszone_size;
   
 #if ERROR_SUPPORTED_P (ERROR_MEMORY_MANAGER_SLAM)
   /* Temporarily turn off heap slamming while the heap is being set up. */
-  boolean_t old_debug_enabled_p;
+  bool old_debug_enabled_p;
   old_debug_enabled_p = error_set_enabled (ERROR_MEMORY_MANAGER_SLAM, FALSE);
 #endif
   
@@ -708,7 +708,7 @@ SetZone (THz hz)
 
 
 Handle
-_NewEmptyHandle_flags (boolean_t sys_p)
+_NewEmptyHandle_flags (bool sys_p)
 {
   GUEST<THz> save_zone;
   THz current_zone;
@@ -749,7 +749,7 @@ _NewEmptyHandle_flags (boolean_t sys_p)
 }
 
 Handle
-_NewHandle_flags (Size size, boolean_t sys_p, boolean_t clear_p)
+_NewHandle_flags (Size size, bool sys_p, bool clear_p)
 {
   Handle newh;
   block_header_t *block;
@@ -899,7 +899,7 @@ SetHandleSize (Handle h, Size newsize)
   int32 oldpsize;
   GUEST<THz> save_zone;
   THz current_zone;
-  boolean_t save_memnomove_p;
+  bool save_memnomove_p;
   unsigned int state;
   
 #if defined (X) /* what about MACOSX_? */
@@ -998,8 +998,8 @@ HandleZone (Handle h)
 {
   THz zone;
   block_header_t *block;
-  boolean_t applzone_p;
-  boolean_t syszone_p;
+  bool applzone_p;
+  bool syszone_p;
   
   MM_SLAM ("entry");
   
@@ -1071,7 +1071,7 @@ HandleZone (Handle h)
 }
 
 Handle
-_RecoverHandle_flags (Ptr p, boolean_t sys_p)
+_RecoverHandle_flags (Ptr p, bool sys_p)
 {
   block_header_t *block;
   THz zones[3];
@@ -1202,7 +1202,7 @@ int do_save_alloc = 0;
 #endif
 
 Ptr
-_NewPtr_flags (Size size, boolean_t sys_p, boolean_t clear_p)
+_NewPtr_flags (Size size, bool sys_p, bool clear_p)
 {
   Ptr p;
   block_header_t *b;
@@ -1385,20 +1385,20 @@ SetPtrSize (Ptr p, Size newsize)
   MM_SLAM ("exit");
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 legit_addr_p (void *addr)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = TRUE; /* all addresses are valid for now */
   return retval;
 }
 
 
-PRIVATE boolean_t
+PRIVATE bool
 legit_zone_p (THz zone)
 {
-  boolean_t retval;
+  bool retval;
 
   if (!legit_addr_p (zone))
     retval = FALSE;
@@ -1446,7 +1446,7 @@ PtrZone (Ptr p)
 }
 
 int32
-_FreeMem_flags (boolean_t sys_p)
+_FreeMem_flags (bool sys_p)
 {
   uint32 freespace;
   
@@ -1462,7 +1462,7 @@ _FreeMem_flags (boolean_t sys_p)
 }
 
 Size
-_MaxMem_flags (Size *growp, boolean_t sys_p)
+_MaxMem_flags (Size *growp, bool sys_p)
 {
   block_header_t *b;
   GUEST<THz> save_zone;
@@ -1567,13 +1567,13 @@ _MaxMem_flags (Size *growp, boolean_t sys_p)
 
 
 Size
-_CompactMem_flags (Size sizeneeded, boolean_t sys_p)
+_CompactMem_flags (Size sizeneeded, bool sys_p)
 {
   int32 amtfree;
   block_header_t *src, *target, *ap;
   GUEST<THz> save_zone;
   THz current_zone;
-  boolean_t startfront_p;
+  bool startfront_p;
   
   MM_SLAM ("entry");
   
@@ -1676,14 +1676,14 @@ _CompactMem_flags (Size sizeneeded, boolean_t sys_p)
 }
 
 void
-_ResrvMem_flags (Size needed, boolean_t sys_p)
+_ResrvMem_flags (Size needed, bool sys_p)
 {
   GUEST<THz> save_zone;
   THz current_zone;
   block_header_t *b;
   Size free;
   long avail;
-  boolean_t already_maxed_p;
+  bool already_maxed_p;
   
   MM_SLAM ("entry");
   
@@ -1737,7 +1737,7 @@ _ResrvMem_flags (Size needed, boolean_t sys_p)
 }
 
 void
-_PurgeMem_flags (Size sizeneeded, boolean_t sys_p)
+_PurgeMem_flags (Size sizeneeded, bool sys_p)
 {
   long amount_free, max_free;
   block_header_t *b;
@@ -1788,7 +1788,7 @@ _PurgeMem_flags (Size sizeneeded, boolean_t sys_p)
 
 PRIVATE void
 BlockMove_and_possibly_flush_cache (Ptr src, Ptr dst, Size cnt,
-				    boolean_t flush_p)
+				    bool flush_p)
 {
   if (cnt > 0)
     {
@@ -1824,7 +1824,7 @@ BlockMoveData (Ptr src, Ptr dst, Size cnt)
 }
 
 void
-BlockMove_the_trap (Ptr src, Ptr dst, Size cnt, boolean_t flush_p)
+BlockMove_the_trap (Ptr src, Ptr dst, Size cnt, bool flush_p)
 {
   MM_SLAM ("entry");
   BlockMove_and_possibly_flush_cache (src, dst, cnt, flush_p);
@@ -1870,7 +1870,7 @@ MoveHHi (Handle h)
 }
 
 int32
-_MaxBlock_flags (boolean_t sys_p)
+_MaxBlock_flags (bool sys_p)
 {
   GUEST<THz> save_zone;
   THz current_zone;
@@ -1911,7 +1911,7 @@ _MaxBlock_flags (boolean_t sys_p)
 }
 
 void
-_PurgeSpace_flags (Size *total_out, Size *contig_out, boolean_t sys_p)
+_PurgeSpace_flags (Size *total_out, Size *contig_out, bool sys_p)
 {
   GUEST<THz> save_zone;
   THz current_zone;
@@ -2131,7 +2131,7 @@ ApplicZone (void)
  */
 Handle
 _NewHandle_copy_ptr_flags (Size size, const void *data_to_copy,
-			   boolean_t sys_p)
+			   bool sys_p)
 {
   Handle h;
 
@@ -2146,7 +2146,7 @@ _NewHandle_copy_ptr_flags (Size size, const void *data_to_copy,
  * NewHandleSys_copy_handle macros to access this function.
  */
 Handle
-_NewHandle_copy_handle_flags (Size size, Handle data_to_copy, boolean_t sys_p)
+_NewHandle_copy_handle_flags (Size size, Handle data_to_copy, bool sys_p)
 {
   Handle h;
 
@@ -2164,7 +2164,7 @@ _NewHandle_copy_handle_flags (Size size, Handle data_to_copy, boolean_t sys_p)
  */
 Ptr
 _NewPtr_copy_ptr_flags (Size size, const void *data_to_copy,
-			boolean_t sys_p)
+			bool sys_p)
 {
   Ptr p;
 
@@ -2179,7 +2179,7 @@ _NewPtr_copy_ptr_flags (Size size, const void *data_to_copy,
  * NewPtrSys_copy_handle macros to access this function.
  */
 Ptr
-_NewPtr_copy_handle_flags (Size size, Handle data_to_copy, boolean_t sys_p)
+_NewPtr_copy_handle_flags (Size size, Handle data_to_copy, bool sys_p)
 {
   Ptr p;
 

@@ -99,7 +99,7 @@ extern void C_ROMlib_mysound (INTEGER n);
 extern void ROMlib_drawiptext (DialogPtr dp, itmp ip, int item_no);
 extern void dialog_create_item (DialogPeek dp, itmp dst, itmp src,
 				int item_no, Point base_pt);
-extern boolean_t get_item_style_info (DialogPtr dp, int item_no,
+extern bool get_item_style_info (DialogPtr dp, int item_no,
 				      uint16 *flags_return,
 				      item_style_info_t *style_info);
 

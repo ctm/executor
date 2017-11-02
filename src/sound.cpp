@@ -204,7 +204,7 @@ static const uint8 mix8[] =
    but oh well.  A NULL orig_outbuf is OK; the resampled waveform
    will simply be lost. */
 
-static boolean_t
+static bool
 resample (uint8 *inbuf, uint8 *orig_outbuf, unsigned int insize,
 	  unsigned int outsize, uint32 infreq, uint32 outfreq,
 	  snd_time *current_start, uint8 *prev_samp,
@@ -321,7 +321,7 @@ P3(PUBLIC, pascal trap OSErr, SndPlay, SndChannelPtr, chanp, Handle, sndh,
   Ptr resp;
   SndCommand *cmds;
   int num_commands, i, format;
-  boolean_t need_allocate;
+  bool need_allocate;
 
   if (sndh)
     resp = STARH (sndh);
@@ -549,7 +549,7 @@ PRIVATE void recsndcmd(SndChannelPtr chanp, SndCommand *cmdp,
 #endif /* defined(OLD_BROKEN_NEXTSTEP_SOUND) */
 
 
-static inline boolean_t
+static inline bool
 earlier_p (snd_time t1, snd_time t2)
 {
   return ((t1 - t2) >> ((8 * sizeof t1) - 1)) != 0;

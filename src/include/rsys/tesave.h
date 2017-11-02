@@ -96,7 +96,7 @@ extern void	ROMlib_tesave( tesave *t, TEHandle teh );
 extern void	ROMlib_terestore( tesave *t );
 
 extern void ROMlib_tedoitall (TEHandle teh, Ptr ptr,
-			      int16 len, boolean_t insert, StScrpHandle styleh);
+			      int16 len, bool insert, StScrpHandle styleh);
 
 extern void	ROMlib_teinsertstyleinfo( TEHandle teh, INTEGER start,
 					     INTEGER len, StScrpHandle styleh);

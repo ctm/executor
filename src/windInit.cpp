@@ -45,7 +45,7 @@ using namespace Executor;
 
 PUBLIC BOOLEAN Executor::ROMlib_dirtyvariant = FALSE;
 
-boolean_t Executor::system_file_version_skew_p;
+bool Executor::system_file_version_skew_p;
 
 static void
 exit_executor (void)
@@ -142,7 +142,7 @@ P0 (PUBLIC pascal trap, void, InitWindows)
   if (ROMlib_creator && ROMlib_creatorsp)
     {  
       int i;
-      boolean_t found_p;
+      bool found_p;
       int n_vals;
       
       n_vals = (ROMlib_creatorsp->head.length /
@@ -168,7 +168,7 @@ P0 (PUBLIC pascal trap, void, InitWindows)
     } 
 
   {
-    static boolean_t issued_system_file_version_skew_warning_p = FALSE;
+    static bool issued_system_file_version_skew_warning_p = FALSE;
     
     if (system_file_version_skew_p
 	&& ! issued_system_file_version_skew_warning_p)
@@ -184,7 +184,7 @@ Executor may die without warning because of this mismatch", 0,
 
 #if defined (MSDOS)
   {
-    static boolean_t issued_cd_warning_p = FALSE;
+    static bool issued_cd_warning_p = FALSE;
 
     if (cd_mounted_by_trickery_p && !issued_cd_warning_p)
       {

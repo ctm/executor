@@ -9,13 +9,13 @@ typedef enum
 
 typedef struct win_print_str *win_printp_t;
 
-extern boolean_t get_info (win_printp_t *wpp,
+extern bool get_info (win_printp_t *wpp,
 		      int physx, int physy,
 		      orientation_t orientation,
 		      int copies,
 		      uint32 *last_errorp);
 
-extern boolean_t print_file (win_printp_t wp, const char *spool_namep,
+extern bool print_file (win_printp_t wp, const char *spool_namep,
 			     uint32 *last_errorp);
 
 #define INCHES(x) ((x) * 72)

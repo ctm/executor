@@ -84,10 +84,10 @@ extern void vga_update_cursor (int hot_x, int hot_y);
 
 
 /* Functions which must be provided by the host using this code. */
-extern boolean_t vgahost_init (int max_width, int max_height, int max_bpp,
-			       boolean_t fixed_p, int *argc, char *argv[]);
+extern bool vgahost_init (int max_width, int max_height, int max_bpp,
+			       bool fixed_p, int *argc, char *argv[]);
 extern void vgahost_shutdown (void);
-extern boolean_t vgahost_set_mode (vga_mode_t *mode);
+extern bool vgahost_set_mode (vga_mode_t *mode);
 extern void vgahost_set_colors (int first_color, int num_colors,
 				const ColorSpec *color_array);
 extern vga_mode_t *vgahost_compute_vga_mode_list (void);
@@ -97,16 +97,16 @@ extern void vgahost_alloc_fbuf (unsigned long size);
 #endif
 
 #if !defined (vgahost_mmap_linear_fbuf)
-extern boolean_t vgahost_mmap_linear_fbuf (const vga_mode_t *mode);
+extern bool vgahost_mmap_linear_fbuf (const vga_mode_t *mode);
 #endif
 
 #if !defined (vgahost_illegal_mode_p)
-extern boolean_t vgahost_illegal_mode_p (int width, int height, int bpp,
-					 boolean_t exact_match_p);
+extern bool vgahost_illegal_mode_p (int width, int height, int bpp,
+					 bool exact_match_p);
 #endif
 
 #if !defined (vgahost_unmap_linear_fbuf)
-extern boolean_t vgahost_unmap_linear_fbuf (unsigned long num_bytes);
+extern bool vgahost_unmap_linear_fbuf (unsigned long num_bytes);
 #endif
 
 extern void vgahost_set_rw_windows (int win);

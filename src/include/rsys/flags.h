@@ -49,5 +49,5 @@ extern int ROMlib_newlinetocr;
 /* TRUE if there is a version skew between the system file version and
    the required system version.  set by `InitResources ()', and used
    by `InitWindows ()' */
-extern boolean_t system_file_version_skew_p;
+extern bool system_file_version_skew_p;
 }

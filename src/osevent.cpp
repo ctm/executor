@@ -103,7 +103,7 @@ Executor::ROMlib_kchr_ptr (void)
   return kchr_ptr;
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 Executor::ROMlib_set_keyboard (const char *keyboardname)
 {
   Handle new_h;
@@ -135,7 +135,7 @@ Executor::ROMlib_set_keyboard (const char *keyboardname)
   return !!new_h;
 }
 
-PRIVATE boolean_t map_right_to_left = TRUE;
+PRIVATE bool map_right_to_left = TRUE;
 
 PUBLIC uint16
 Executor::ROMlib_right_to_left_key_map (uint16 what)
@@ -170,7 +170,7 @@ Executor::ROMlib_right_to_left_key_map (uint16 what)
  */
 
 PUBLIC LONGINT
-Executor::ROMlib_xlate (INTEGER virt, INTEGER modifiers, boolean_t down_p)
+Executor::ROMlib_xlate (INTEGER virt, INTEGER modifiers, bool down_p)
 {
   static uint16 down_value[VIRT_MASK + 1];
   LONGINT retval;
@@ -192,7 +192,7 @@ Executor::ROMlib_xlate (INTEGER virt, INTEGER modifiers, boolean_t down_p)
 
 char ROMlib_started;	/* flag used by Mac frontend */
 
-A1(PUBLIC, void, ROMlib_eventinit, boolean_t, graphics_valid_p)	/* INTERNAL */
+A1(PUBLIC, void, ROMlib_eventinit, bool, graphics_valid_p)	/* INTERNAL */
 {
     static int beenhere = 0;
     EvQEl *p, *ep;
@@ -264,10 +264,10 @@ Executor::geteventelem (void)
     return retval;
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 Executor::ROMlib_get_index_and_bit (LONGINT loc, int *indexp, uint8 *bitp)
 {
-  boolean_t retval;
+  bool retval;
 
   if (loc < 0 || loc / 8 >= sizeof_KeyMap)
     retval = FALSE;
@@ -294,10 +294,10 @@ A2(PUBLIC, void, ROMlib_zapmap, LONGINT, loc, LONGINT, val)
     }
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 key_down (uint8 loc)
 {
-  boolean_t retval;
+  bool retval;
   int i;
   uint8 bit;
 

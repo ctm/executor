@@ -38,7 +38,7 @@ char *srcblt_dst_baseaddr asm ("_srcblt_dst_baseaddr");
 
 int srcblt_shift_offset asm ("_srcblt_shift_offset");
 
-boolean_t srcblt_reverse_scanlines_p asm ("_srcblt_reverse_scanlines_p");
+bool srcblt_reverse_scanlines_p asm ("_srcblt_reverse_scanlines_p");
 
 #if defined (VGA_SCREEN_NEEDS_FAR_PTR)
 uint16 srcblt_src_selector asm ("_srcblt_src_selector");
@@ -49,7 +49,7 @@ uint16 srcblt_dst_selector asm ("_srcblt_dst_selector");
 #define MIN_PAGE_SIZE 512
 
 
-boolean_t
+bool
 srcblt_rgn (RgnHandle rh, int mode, int log2_bpp,
 	    const blt_bitmap_t *src, const blt_bitmap_t *dst,
 	    GUEST<Point> *src_origin, GUEST<Point> *dst_origin,
@@ -60,10 +60,10 @@ srcblt_rgn (RgnHandle rh, int mode, int log2_bpp,
   long src_x_offset, src_y_offset, left_shift;
   char *dst_baseaddr, *src_baseaddr;
 #if defined (VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
-  boolean_t cursor_maybe_changed_p, old_vis_p;
+  bool cursor_maybe_changed_p, old_vis_p;
 #endif
 #if defined (VGA_SCREEN_NEEDS_FAR_PTR)
-  boolean_t needs_seg_override_p;
+  bool needs_seg_override_p;
 #endif
 
   /* check_bitmap (src, CHKR_RO); */

@@ -14,14 +14,14 @@ char ROMlib_rcsid_paramline[] =
 
 #include "paramline.h"
 
-typedef enum { FALSE, TRUE } boolean_t;
+typedef enum { FALSE, TRUE } bool;
 
 int
 count_params (const char *p, int n)
 {
   int retval;
   char literal;
-  boolean_t reading_whitespace_p;
+  bool reading_whitespace_p;
 
   retval = 0;
   reading_whitespace_p = TRUE;
@@ -78,7 +78,7 @@ get_param (const char **bufpp, int *nleftp)
     {
       char literal;
       char *string;
-      boolean_t done;
+      bool done;
 
       string = "";
       literal = 0;

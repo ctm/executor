@@ -142,11 +142,11 @@ P4 (PUBLIC pascal trap, void, dcmp_template, Ptr, source, Ptr, dest,
    we need to adjust down the size of "dlen" down below where we read
    the compressed info. */
 
-PRIVATE boolean_t
+PRIVATE bool
 decompress_setup (INTEGER rn, int32 *dlenp, int32 *final_sizep, int32 *offsetp,
 		  Handle *dcmp_handlep, Ptr *workspacep)
 {
-  boolean_t retval;
+  bool retval;
   OSErr err;
   LONGINT len;
   dcomp_info_t info;

@@ -37,7 +37,7 @@ typedef struct _dcache_entry_t
 #endif
 
 /* True iff the cache is enabled. */
-static boolean_t dcache_enabled_p;
+static bool dcache_enabled_p;
 
 /* This is the actual cache. */
 static dcache_entry_t dcache[DCACHE_NUM_ENTRIES];
@@ -66,10 +66,10 @@ dcache_entry_lookup (uint32 fd, uint32 offset)
 
 
 /* Sets whether or not the dcache is enabled and returns the old state. */
-boolean_t
-Executor::dcache_set_enabled (boolean_t enabled_p)
+bool
+Executor::dcache_set_enabled (bool enabled_p)
 {
-  boolean_t old_enabled_p;
+  bool old_enabled_p;
   old_enabled_p = dcache_enabled_p;
   if (old_enabled_p && !enabled_p)
     dcache_invalidate_all (TRUE);
@@ -180,10 +180,10 @@ coalesce_writes (uint32 fd, uint8 **bufpp, uint32 *lengthp, uint32 *offsetp)
 }
 #endif
 
-static boolean_t
+static bool
 dcache_flush_entry (dcache_entry_t *dp)
 {
-  boolean_t retval;
+  bool retval;
 
   if (!dp->dirty_callback)
     retval = TRUE;
@@ -211,10 +211,10 @@ dcache_flush_entry (dcache_entry_t *dp)
   return retval;
 }
 
-static boolean_t
-dcache_invalidate_entry (dcache_entry_t *dp, boolean_t flush_p)
+static bool
+dcache_invalidate_entry (dcache_entry_t *dp, bool flush_p)
 {
-  boolean_t retval;
+  bool retval;
 
   if (flush_p)
     retval = dcache_flush_entry (dp);
@@ -413,10 +413,10 @@ Executor::dcache_write (uint32 fd, const void *buf, uint32 offset, uint32 count,
 }
 
 /* Throws away all cached information associated with FD. */
-boolean_t
-Executor::dcache_invalidate (uint32 fd, boolean_t flush_p)
+bool
+Executor::dcache_invalidate (uint32 fd, bool flush_p)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = TRUE;
   if (dcache_enabled_p)
@@ -431,10 +431,10 @@ Executor::dcache_invalidate (uint32 fd, boolean_t flush_p)
   return retval;
 }
 
-boolean_t
+bool
 Executor::dcache_flush (uint32 fd)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = TRUE;
   if (dcache_enabled_p)
@@ -451,10 +451,10 @@ Executor::dcache_flush (uint32 fd)
 
 
 /* Throws away all cached information. */
-boolean_t
-Executor::dcache_invalidate_all (boolean_t flush_p)
+bool
+Executor::dcache_invalidate_all (bool flush_p)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = TRUE;
   if (dcache_enabled_p)

@@ -51,8 +51,8 @@ Executor::hle_reset (void)
   current_hle_msg = NULL;
 }
 
-boolean_t
-Executor::hle_get_event (EventRecord *evt, boolean_t remflag)
+bool
+Executor::hle_get_event (EventRecord *evt, bool remflag)
 {
   if (hle_q)
     {

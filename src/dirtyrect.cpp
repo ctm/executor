@@ -32,7 +32,7 @@ static vdriver_rect_t dirty_rect[MAX_DIRTY_RECTS];
 #define ACCEPTABLE_PIXELS_ADDED 8000
 
 
-static inline boolean_t
+static inline bool
 rects_overlap_p (int top, int left, int bottom, int right,
 		 const vdriver_rect_t *r)
 {
@@ -91,7 +91,7 @@ Executor::dirty_rect_accrue (int top, int left, int bottom, int right)
 {
   unsigned long best_area_added;
   int ndr, i, best;
-  boolean_t done;
+  bool done;
 
   if (bottom <= top || right <= left
       || ROMlib_refresh
@@ -163,7 +163,7 @@ Executor::dirty_rect_accrue (int top, int left, int bottom, int right)
 	    }
 	  else
 	    {
-	      boolean_t old_rect_grows_p;
+	      bool old_rect_grows_p;
 	      vdriver_rect_t *d = &dirty_rect[best];
 
 	      /* We now re-insert the glommed rectangle into the list, to
@@ -226,7 +226,7 @@ Executor::dirty_rect_accrue (int top, int left, int bottom, int right)
 /* Returns TRUE iff the specified rect is already encompassed by
  * the dirty rect list.
  */
-boolean_t
+bool
 Executor::dirty_rect_subsumed_p (int top, int left, int bottom, int right)
 {
   int i;

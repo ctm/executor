@@ -48,17 +48,17 @@ uint16 vga_window_selector;
 uint16 vga_screen_selector;
 
 /* TRUE iff we should pretend there's no VBE video driver. */
-boolean_t only_use_vga_p;
+bool only_use_vga_p;
 
 /* TRUE iff we should try to make %ds enclose the real linear frame
  * buffer and thereby give programs direct access to the frame buffer.
  * Having such a "fat %ds" is dangerous, but can make graphics much
  * faster, esp. for programs that require "refresh" mode.
  */
-boolean_t try_to_use_fat_ds_vga_hack_p;
+bool try_to_use_fat_ds_vga_hack_p;
 
 /* TRUE iff we're actually using the fat %ds vga hack. */
-static boolean_t actually_using_fat_ds_vga_hack_p;
+static bool actually_using_fat_ds_vga_hack_p;
 
 /*
  * NOTE: it's not clear why we were saving VGA state before, but
@@ -88,7 +88,7 @@ static uint8 set_palette_during_vbl_mask;
 static int bits_per_dac_element = 6;
 
 /* TRUE iff the DAC can be switched to 8bpp. */
-static boolean_t switchable_dac_p;
+static bool switchable_dac_p;
 
 #if defined (SAVE_VGA_STATE)
 
@@ -97,15 +97,15 @@ typedef enum
   COMPUTE_BUFFER_SIZE, SAVE_STATE, RESTORE_STATE
 } state_func_t;
 
-static boolean_t (*state_glue_funcp) (state_func_t, unsigned *);
+static bool (*state_glue_funcp) (state_func_t, unsigned *);
 
 #endif
 
 /* Makes a call to the VESA driver, and returns TRUE iff successful. */
-static boolean_t
+static bool
 vesa_call (int eax, __dpmi_regs *r)
 {
-  boolean_t success_p;
+  bool success_p;
 
   if (only_use_vga_p)  /* only old-style VGA allowed? */
     success_p = FALSE;
@@ -133,11 +133,11 @@ vesa_call (int eax, __dpmi_regs *r)
  * buffer size.  This routine assumes the state buffer is at
  * `dos_buf_segment:0'.  Returns TRUE on success, FALSE on failure.
  */
-static boolean_t
+static bool
 vesa_state_glue (state_func_t operation, unsigned *buffer_size_ret)
 {
   __dpmi_regs regs;
-  boolean_t success_p;
+  bool success_p;
   unsigned buf_size;
 
   /* Call the video driver. */
@@ -169,11 +169,11 @@ vesa_state_glue (state_func_t operation, unsigned *buffer_size_ret)
 
 
 /* Same as vesa_state_glue, but only uses standard BIOS calls. */
-static boolean_t
+static bool
 vga_state_glue (state_func_t operation, unsigned *buffer_size_ret)
 {
   __dpmi_regs regs;
-  boolean_t success_p;
+  bool success_p;
   unsigned buf_size;
 
   /* Call the video driver. */
@@ -296,11 +296,11 @@ save_vga_state (void)
  * iff successful, else FALSE (in which case it should be assumed
  * that no VESA driver is present).
  */
-static boolean_t
+static bool
 get_vesa_info_block (vesa_info_t *vesa_info)
 {
   __dpmi_regs regs;
-  boolean_t success_p;
+  bool success_p;
 
   /* Move "VBE2" into the "VESA" signature field, to request 2.0 driver. */
   movedata (dos_pm_ds, (unsigned) "VBE2", dos_buf_selector, 0, 4);
@@ -340,10 +340,10 @@ call_vbe2_pmi (int ax, int bx, int cx, int dx)
 /* Sets up the VBE protected mode interface pointers.  See VBE function
  * 0x0A for more information.  Returns TRUE iff successful.
  */
-static boolean_t
+static bool
 set_up_vbe2_protected_mode_interface (void)
 {
-  boolean_t success_p;
+  bool success_p;
 
   success_p = FALSE;  /* default */
   set_window_call_codep = NULL;
@@ -415,8 +415,8 @@ set_up_vbe2_protected_mode_interface (void)
 #endif
 
 
-boolean_t
-vgahost_init (int max_width, int max_height, int max_bpp, boolean_t fixed_p,
+bool
+vgahost_init (int max_width, int max_height, int max_bpp, bool fixed_p,
 	      int *argc, char *argv[])
 {
   int sel;
@@ -928,9 +928,9 @@ vgahost_set_read_window (int window_num)
 }
 
 
-boolean_t
+bool
 vgahost_illegal_mode_p (int width, int height, int bpp,
-			boolean_t exact_match_p)
+			bool exact_match_p)
 {
   if (!actually_using_fat_ds_vga_hack_p || vga_current_mode == NULL)
     return FALSE;
@@ -943,10 +943,10 @@ vgahost_illegal_mode_p (int width, int height, int bpp,
  * over the memory pointed to by vdriver_fbuf, which must be
  * page-aligned.  Returns TRUE if successful, else FALSE.
  */
-boolean_t
+bool
 vgahost_mmap_linear_fbuf (const vga_mode_t *mode)
 {
-  boolean_t success_p;
+  bool success_p;
 
   success_p = FALSE; /* Default */
   if (mode->phys_base_addr != 0)	/* do we have a linear frame buffer? */
@@ -993,10 +993,10 @@ vgahost_mmap_linear_fbuf (const vga_mode_t *mode)
  * mapped on to the video card.  Returns TRUE If successful,
  * else FALSE.
  */
-boolean_t
+bool
 vgahost_unmap_linear_fbuf (unsigned long num_bytes)
 {
-  boolean_t success_p;
+  bool success_p;
 
   if (actually_using_fat_ds_vga_hack_p)
     {
@@ -1019,11 +1019,11 @@ vgahost_unmap_linear_fbuf (unsigned long num_bytes)
 }
 
 
-boolean_t
+bool
 vgahost_set_mode (vga_mode_t *mode)
 {
   __dpmi_regs regs;
-  boolean_t success_p;
+  bool success_p;
   ColorSpec clut[256];
   int i;
 

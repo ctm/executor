@@ -27,10 +27,10 @@ using namespace std;
  * "executor -system 7.0.0".  Returns TRUE on success, else FALSE.
  */
 
-boolean_t
+bool
 Executor::ROMlib_parse_version (string vers, uint32 *version_out)
 {
-  boolean_t success_p;
+  bool success_p;
   int major_version, minor_version, teeny_version;
   char *major_str, *minor_str, *teeny_str;
   char *temp_str, *system_str;
@@ -81,10 +81,10 @@ Executor::ROMlib_parse_version (string vers, uint32 *version_out)
  * digits will be zero, so "executor -system 7" is equivalent to
  * "executor -system 7.0.0".  Returns TRUE on success, else FALSE.
  */
-boolean_t
+bool
 Executor::parse_system_version (string vers)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = ROMlib_parse_version (vers, &system_version);
   if (retval)
@@ -101,10 +101,10 @@ Executor::parse_system_version (string vers)
 /* Parse -size option, e.g. "executor -size 640x480".  Returns FALSE
  * on parse error.
  */
-boolean_t
+bool
 Executor::parse_size_opt (string opt, string arg1)
 {
-  boolean_t success_p;
+  bool success_p;
   int w, h;
   const char *arg = arg1.c_str();
   
@@ -161,10 +161,10 @@ Executor::parse_size_opt (string opt, string arg1)
  * It's silly for us to do this by hand, but it was real quick to write.
  */
 
-PUBLIC boolean_t
+PUBLIC bool
 Executor::parse_prres_opt (INTEGER *outx, INTEGER *outy, string arg1)
 {
-  boolean_t retval;
+  bool retval;
   INTEGER x, y, *p;
   const char *arg = arg1.c_str();
 

@@ -21,7 +21,7 @@ struct splash_screen_color color_buf[256];
 
 int alloc_pixel;
 
-boolean_t pixmap_p;
+bool pixmap_p;
 
 void
 _errno_fatal (const char *file, int line, const char *fn,

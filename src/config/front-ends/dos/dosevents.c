@@ -30,9 +30,9 @@ char ROMlib_rcsid_dosevents[] = "$Id: dosevents.c 63 2004-12-24 18:19:43Z ctm $"
 
 static int pinned_mouse_x, pinned_mouse_y;
 
-PRIVATE boolean_t caps_currently_locked = FALSE;
+PRIVATE bool caps_currently_locked = FALSE;
 
-PUBLIC boolean_t need_hacky_screen_update = FALSE;
+PUBLIC bool need_hacky_screen_update = FALSE;
 
 /* Extract the charcode from keywhat. */
 #define CHARCODE_MASK 0xFF
@@ -185,7 +185,7 @@ compute_button_mods_from_dos_event (dosevq_record_t *event)
 
 static LONGINT
 dos_keydata_to_mac_keydata (dosevq_record_t *event, INTEGER mods,
-			    int map_arrow, boolean_t down_p,
+			    int map_arrow, bool down_p,
 			    unsigned char *virtp)
 {
   unsigned char keycode;
@@ -271,7 +271,7 @@ post_dos_event (dosevq_record_t *event)
   int scancode;
   static char last_rawkey_was_0xe0 = 0;
   static char last_rawkey_was_arrow = 0;
-  boolean_t is_caps_lock;
+  bool is_caps_lock;
 
   when = TickCount ();
   button_mods = ROMlib_mods = compute_button_mods_from_dos_event (event);

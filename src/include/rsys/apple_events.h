@@ -101,7 +101,7 @@ typedef struct subdesc_info
   int count;
   int base_offset;
   GUEST<uint32> *count_p;
-  boolean_t key_p;
+  bool key_p;
   int inline_desc_header_size;
 } subdesc_info_t;
 }

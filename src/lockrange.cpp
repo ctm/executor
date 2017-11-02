@@ -56,7 +56,7 @@ delete_entry (lock_entry_t *entry)
 
 
 PUBLIC OSErr
-Executor::ROMlib_fd_clear_locks_after_open (int fd, boolean_t be_surprised_p)
+Executor::ROMlib_fd_clear_locks_after_open (int fd, bool be_surprised_p)
 {
   int i;
   int n_removed;

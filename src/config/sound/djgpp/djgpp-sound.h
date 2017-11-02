@@ -5,6 +5,6 @@
 
 #include "rsys/sounddriver.h"
 
-extern boolean_t sound_djgpp_init (sound_driver_t *s);
+extern bool sound_djgpp_init (sound_driver_t *s);
 
 #endif /* !_DJGPP_SOUND_H_ */

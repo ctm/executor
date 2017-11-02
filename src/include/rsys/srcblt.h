@@ -11,7 +11,7 @@ extern "C" {
 #define USE_PORTABLE_SRCBLT
 #endif
 
-extern boolean_t srcblt_rgn (Executor::RgnHandle rh, int mode, int log2_bpp,
+extern bool srcblt_rgn (Executor::RgnHandle rh, int mode, int log2_bpp,
 			     const Executor::blt_bitmap_t *src, const Executor::blt_bitmap_t *dst,
 			     Executor::GUEST<Executor::Point> *src_origin, Executor::GUEST<Executor::Point> *dst_origin,
 			     uint32 fg_color, uint32 bk_color)
@@ -66,6 +66,6 @@ extern char *srcblt_dst_baseaddr asm ("_srcblt_dst_baseaddr");
 
 extern int srcblt_shift_offset asm ("_srcblt_shift_offset");
 
-extern boolean_t srcblt_reverse_scanlines_p asm ("_srcblt_reverse_scanlines_p");
+extern bool srcblt_reverse_scanlines_p asm ("_srcblt_reverse_scanlines_p");
 }
 #endif /* !_SRCBLT_H_ */

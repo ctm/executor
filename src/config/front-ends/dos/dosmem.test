@@ -34,12 +34,12 @@ uint16 dos_pm_cs;
  * things not to cross 64K boundaries).  Returns TRUE iff successful,
  * else FALSE.
  */
-static boolean_t
+static bool
 alloc_single_bank_dos_block (int size, uint16 *segp, uint16 *selp)
 {
   int dos_sel[16], i, j, sel, seg;
   int paragraphs;
-  boolean_t success_p;
+  bool success_p;
 
 warning_trace_info (NULL);
 
@@ -119,7 +119,7 @@ warning_trace_info (NULL);
 }
 
 
-boolean_t
+bool
 init_dos_memory (void)
 {
   asm ("movw %%cs,%0" : "=g" (dos_pm_cs));

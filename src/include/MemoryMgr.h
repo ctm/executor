@@ -92,53 +92,53 @@ extern Byte 	ApplScratch[12];
 
 #define NewEmptyHandle()	(_NewEmptyHandle_flags (FALSE))
 #define NewEmptyHandleSys()	(_NewEmptyHandle_flags (TRUE))
-extern Handle _NewEmptyHandle_flags (boolean_t sys_p);
+extern Handle _NewEmptyHandle_flags (bool sys_p);
 
 #define NewHandle(size)		(_NewHandle_flags (size, FALSE, FALSE))
 #define NewHandleSys(size)	(_NewHandle_flags (size, TRUE, FALSE))
 #define NewHandleClear(size)	(_NewHandle_flags (size, FALSE, TRUE))
 #define NewHandleSysClear(size)	(_NewHandle_flags (size, TRUE, TRUE))
-extern Handle _NewHandle_flags (Size size, boolean_t sys_p, boolean_t clear_p);
+extern Handle _NewHandle_flags (Size size, bool sys_p, bool clear_p);
 
 #define RecoverHandle(ptr)	(_RecoverHandle_flags (ptr, FALSE))
 #define RecoverHandleSys(ptr)	(_RecoverHandle_flags (ptr, TRUE))
-extern Handle _RecoverHandle_flags (Ptr p, boolean_t sys_p);
+extern Handle _RecoverHandle_flags (Ptr p, bool sys_p);
 
 #define NewPtr(size)		(_NewPtr_flags (size, FALSE, FALSE))
 #define NewPtrSys(size)		(_NewPtr_flags (size, TRUE, FALSE))
 #define NewPtrClear(size)	(_NewPtr_flags (size, FALSE, TRUE))
 #define NewPtrSysClear(size)	(_NewPtr_flags (size, TRUE, TRUE))
-extern Ptr _NewPtr_flags (Size size, boolean_t sys_p, boolean_t clear_p);
+extern Ptr _NewPtr_flags (Size size, bool sys_p, bool clear_p);
 
 #define FreeMem()		(_FreeMem_flags (FALSE))
 #define FreeMemSys()		(_FreeMem_flags (TRUE))
-extern int32 _FreeMem_flags (boolean_t sys_p);
+extern int32 _FreeMem_flags (bool sys_p);
 
 #define MaxMem(growp)		(_MaxMem_flags (growp, FALSE))
 #define MaxMemSys(growp)	(_MaxMem_flags (growp, TRUE))
-extern Size _MaxMem_flags (Size *growp, boolean_t sys_p);
+extern Size _MaxMem_flags (Size *growp, bool sys_p);
 
 #define CompactMem(needed)	(_CompactMem_flags (needed, FALSE))
 #define CompactMemSys(needed)	(_CompactMem_flags (needed, TRUE))
-extern Size _CompactMem_flags (Size sizeneeded, boolean_t sys_p);
+extern Size _CompactMem_flags (Size sizeneeded, bool sys_p);
 
 #define ResrvMem(needed)	(_ResrvMem_flags (needed, FALSE))
 #define ResrvMemSys(needed)	(_ResrvMem_flags (needed, TRUE))
-extern void _ResrvMem_flags (Size needed, boolean_t sys_p);
+extern void _ResrvMem_flags (Size needed, bool sys_p);
 
 #define PurgeMem(needed)	(_PurgeMem_flags (needed, FALSE))
 #define PurgeMemSys(needed)	(_PurgeMem_flags (needed, TRUE))
-extern void _PurgeMem_flags (Size needed, boolean_t sys_p);
+extern void _PurgeMem_flags (Size needed, bool sys_p);
 
 #define MaxBlock()		(_MaxBlock_flags (FALSE))
 #define MaxBlockSys()		(_MaxBlock_flags (TRUE))
-extern Size _MaxBlock_flags (boolean_t sys_p);
+extern Size _MaxBlock_flags (bool sys_p);
 
 #define PurgeSpace(totalp, congtigp)		\
   (_PurgeSpace_flags (totalp, contigp, FALSE))
 #define PurgeSpaceSys(totalp, congtigp)		\
   (_PurgeSpace_flags (totalp, contigp, TRUE))
-extern void _PurgeSpace_flags (Size *totalp, Size *contigp, boolean_t sys_p); 
+extern void _PurgeSpace_flags (Size *totalp, Size *contigp, bool sys_p); 
 
 /* ### cliff bogofunc; should go away */
 extern void ROMlib_installhandle (Handle sh, Handle dh);

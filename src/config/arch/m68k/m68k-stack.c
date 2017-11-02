@@ -29,7 +29,7 @@ static m68k_interrupt_stack_t interrupt_stack[NUM_INTERRUPT_STACKS];
 static volatile int current_interrupt_stack = 0;
 
 
-boolean_t
+bool
 m68k_use_interrupt_stacks (void)
 {
   m68k_interrupt_stack_t *m;

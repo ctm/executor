@@ -23,9 +23,9 @@ enum { MODIFIER_MASK = (ControlKey << 1) - 1 };
 enum { sizeof_KeyMap = 16 }; /* can't use sizeof(KeyMap) */
 
 extern LONGINT ROMlib_xlate (INTEGER virt, INTEGER modifiers,
-			     boolean_t down_p);
+			     bool down_p);
 
-extern void ROMlib_eventinit (boolean_t graphics_valid_p);
+extern void ROMlib_eventinit (bool graphics_valid_p);
 
 extern void post_keytrans_key_events (INTEGER evcode, LONGINT keywhat,
 				      int32 when, Point where,
@@ -33,14 +33,14 @@ extern void post_keytrans_key_events (INTEGER evcode, LONGINT keywhat,
 
 extern void display_keyboard_choices (void);
 
-extern boolean_t ROMlib_set_keyboard (const char *keyboardname);
+extern bool ROMlib_set_keyboard (const char *keyboardname);
 extern BOOLEAN ROMlib_bewaremovement;
 extern void ROMlib_showhidecursor (void);
 extern void maybe_wait_for_keyup (void);
 
 extern uint16 ROMlib_right_to_left_key_map (uint16 what);
 
-extern boolean_t ROMlib_get_index_and_bit (LONGINT loc, int *indexp,
+extern bool ROMlib_get_index_and_bit (LONGINT loc, int *indexp,
 					   uint8 *bitp);
 }
 #endif

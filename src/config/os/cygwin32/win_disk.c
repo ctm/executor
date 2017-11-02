@@ -60,7 +60,7 @@ win32_log_end (void)
 #endif
 
 PRIVATE HMODULE hB2Win32 = 0;
-PRIVATE boolean_t cdrom_realmode_p = FALSE;
+PRIVATE bool cdrom_realmode_p = FALSE;
 
 PUBLIC int
 ROMlib_set_realmodecd (int value)
@@ -79,10 +79,10 @@ typedef struct
   uint32 fpos;
   uint32 sector_size;
   uint32 num_sectors;
-  boolean_t open_p;
-  boolean_t floppy_p;
-  boolean_t cdrom_p;
-  boolean_t volume_locked_p;
+  bool open_p;
+  bool floppy_p;
+  bool cdrom_p;
+  bool volume_locked_p;
   HANDLE win_nt_handle;
 }
 dosdisk_info_t;
@@ -199,12 +199,12 @@ drive_type (int disk)
 							 non-NUL character.
 							 See Below. */
 
-PRIVATE boolean_t
+PRIVATE bool
 win_nt_open_common (int disk, HANDLE *handlep, const char *str,
 		    int str_len, int offset, char expect_char,
 		    drive_flags_t *flagsp)
 {
-  boolean_t retval;
+  bool retval;
   char *file_name;
 
   file_name = alloca (str_len);
@@ -231,10 +231,10 @@ win_nt_open_common (int disk, HANDLE *handlep, const char *str,
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 win_nt_open (int disk, HANDLE *handlep, drive_flags_t *flagsp)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = win_nt_open_common (disk, handlep, WIN_NT_PARTITION_TEMPLATE,
 			       sizeof WIN_NT_PARTITION_TEMPLATE, 3, 'A',
@@ -277,7 +277,7 @@ dosdisk_open (int disk, LONGINT *bsizep, drive_flags_t *flagsp)
 
       d = &disks[disk];
       {
-	boolean_t saved_lock;
+	bool saved_lock;
 
 	saved_lock = d->volume_locked_p;
 	memset (d, 0, sizeof *d);
@@ -363,10 +363,10 @@ disk_to_volume (int disk)
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 win_95_lock (int disk)
 {
-  boolean_t retval;
+  bool retval;
   vwin32_regs regs;
   int volume;
   DWORD byte_count;
@@ -387,10 +387,10 @@ win_95_lock (int disk)
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 win_95_unlock (int disk)
 {
-  boolean_t retval;
+  bool retval;
   vwin32_regs regs;
   int volume;
   DWORD byte_count;
@@ -412,10 +412,10 @@ win_95_unlock (int disk)
 #else
 PRIVATE  int cat_list[] = { 0x48, 0x08 };
 
-PRIVATE boolean_t
+PRIVATE bool
 win_95_lock (int disk)
 {
-  boolean_t retval;
+  bool retval;
   vwin32_regs regs;
   int volume;
   DWORD byte_count;
@@ -445,10 +445,10 @@ win_95_lock (int disk)
   return retval;
 }
 
-PRIVATE boolean_t
+PRIVATE bool
 win_95_unlock (int disk)
 {
-  boolean_t retval;
+  bool retval;
   vwin32_regs regs;
   int volume;
   DWORD byte_count;
@@ -479,7 +479,7 @@ win_95_unlock (int disk)
 #endif
 
 int
-dosdisk_close (int disk, boolean_t eject_p)
+dosdisk_close (int disk, bool eject_p)
 {
   int retval;
   dosdisk_info_t *d;
@@ -742,10 +742,10 @@ dosdisk_write (int disk, const void *buf, int num_bytes)
   return retval;
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 is_win_nt (void)
 {
-  boolean_t retval;
+  bool retval;
 
   init_vwin32 ();
   retval = which == WIN32_NT;
@@ -761,10 +761,10 @@ win_GetLogicalDriveStrings (size_t size, char *buf)
   return retval;
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 win_direct_accessible_disk (const char *p)
 {
-  boolean_t retval;
+  bool retval;
   UINT dt;
   UINT old_err_mode;
 
@@ -791,10 +791,10 @@ win_direct_accessible_disk (const char *p)
   return retval;
 }
 
-PUBLIC boolean_t
+PUBLIC bool
 win_access (const char *drive_to_mount)
 {
-  boolean_t retval;
+  bool retval;
 
   UINT old_err_mode;
 

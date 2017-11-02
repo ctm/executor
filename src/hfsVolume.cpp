@@ -150,12 +150,12 @@ PRIVATE OSErr initcache(HVCB *vcbp)
     return noErr;
 }
 
-PUBLIC boolean_t Executor::ROMlib_hfs_plus_support = FALSE;
+PUBLIC bool Executor::ROMlib_hfs_plus_support = FALSE;
 
-PRIVATE boolean_t
+PRIVATE bool
 is_hfs_plus_wrapper (volumeinfoPtr vp)
 {
-  boolean_t retval;
+  bool retval;
 
   retval = vp->drVCSize == CWC (0x482b);
   return retval;

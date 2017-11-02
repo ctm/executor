@@ -175,7 +175,7 @@ ROMlib_search_proc (RGBColor *rgb)
 	    uint8 *hash_table;
 	    uint32 candidate;
 	    uint32 cur_diff, new_diff;
-	    boolean_t done_zero;
+	    bool done_zero;
 
 	    hash_table = ((uint8 *) STARH (inverse_table)
 			  + itab_base_size (resolution));
@@ -630,7 +630,7 @@ P3 (PUBLIC pascal trap, void, MakeITable,
   unsigned short *queue;
   char *index_in_queue_p;
   ULONGINT *rgb_error;
-  boolean_t queue_starts_empty_p;
+  bool queue_starts_empty_p;
   int head, tail;
   int i;
   int ctab_size;
@@ -640,7 +640,7 @@ P3 (PUBLIC pascal trap, void, MakeITable,
   NativeColorSpec color_for_index[256];
   
   {
-    static boolean_t been_here_p = FALSE;
+    static bool been_here_p = FALSE;
     if (! been_here_p)
       {
  	init_offsets ();

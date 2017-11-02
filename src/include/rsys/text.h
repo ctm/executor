@@ -9,8 +9,8 @@
  */
 
 namespace Executor {
-extern boolean_t disable_text_printing (void);
-extern void set_text_printing (boolean_t state);
+extern bool disable_text_printing (void);
+extern void set_text_printing (bool state);
 extern INTEGER ROMlib_wordb (char * p);
 extern int ROMlib_forward_del_p;
 }

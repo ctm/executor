@@ -237,7 +237,7 @@ A9 (PRIVATE, void, xSeedFill, unsigned char *, srcp, unsigned char *, dstp,
 }
 
 #if defined (VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
-static boolean_t
+static bool
 create_scratch_bitmap_if_necessary (uint8 **_fbuf,
 				    /* dummy */ int row_words,
 				    int height, int word_width,
@@ -292,11 +292,11 @@ static void
 SeedFill_handle_direct_screen_access (uint8 *srcp, uint8 *dstp,
 				      int src_row_words, int dst_row_words,
 				      int height, int word_width,
-				      boolean_t use_seed_pt_p,
+				      bool use_seed_pt_p,
 				      int seedh, int seedv)
 {
   write_back_data_t write_back_data;
-  boolean_t write_back_p = FALSE;
+  bool write_back_p = FALSE;
   
   create_scratch_bitmap_if_necessary (&srcp, src_row_words,
 				      height, word_width,
