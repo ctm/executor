@@ -50,6 +50,8 @@ handle_itimer_tick (int n)
   SET_INTERRUPT_STATUS (INTERRUPT_STATUS_CHANGED);
 }
 
+#endif
+
 int
 Executor::syncint_init (void)
 {
@@ -100,7 +102,5 @@ Executor::syncint_post (unsigned long usecs)
   setitimer (ITIMER_REAL, &t, NULL);
 #endif
 }
-
-#endif /* !MSDOS */
 
 #endif /* SYN68K */
