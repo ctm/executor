@@ -168,10 +168,10 @@ P3 (PUBLIC pascal trap, INTEGER, TrackControl,	/* IMI-323 */
 	     {
 	       thumb._tlimit.left = CW(p.h);
 	       thumb._tlimit.top  = CW(p.v);
-	       CTLCALL(c, thumbCntl, (LONGINT) (long) &thumb);
+	       CTLCALL(c, thumbCntl, ptr_to_longint(&thumb));
 	       rh = NewRgn();
 		 
-	       CTLCALL(c, calcThumbRgn, (LONGINT) (long) rh);
+	       CTLCALL(c, calcThumbRgn, ptr_to_longint(rh));
 		 
 	       PATASSIGN(DragPattern, ltGray);
 	       l = DragTheRgn(rh, p, &thumb._tlimit, &thumb._tslop,

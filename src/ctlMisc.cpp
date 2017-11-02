@@ -177,18 +177,6 @@ Executor::ROMlib_ctlcall (ControlHandle c, int16 i, int32 l)
   Handle defproc;
   int32 retval;
   ctlfuncp cp;
-
-  switch (i)
-    {
-    case calcCRgns:
-    case calcCntlRgn:
-    case calcThumbRgn:
-    case thumbCntl:
-      l = US_TO_SYN68K_CHECK0(l);
-      break;
-    default:
-      break;
-    }
   
   defproc = CTL_DEFPROC (c);
   

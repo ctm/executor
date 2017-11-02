@@ -29,7 +29,7 @@ P2(PUBLIC pascal trap, void, SetCTitle, ControlHandle, c,	/* IMI-321 */
 	   RgnHandle rh;
        
 	   rh = NewRgn();
-	   CTLCALL(c, calcCntlRgn, (LONGINT) (long) rh);
+	   CTLCALL(c, calcCntlRgn, ptr_to_longint(rh));
 	   EraseRgn(rh);
 	   str255assign(HxX(c, contrlTitle), t);
 	   CTLCALL(c, drawCntl, ENTIRECONTROL);
@@ -59,7 +59,7 @@ P1(PUBLIC pascal trap, void, HideControl, ControlHandle, c)	/* IMI-322 */
 	       rh = NewRgn();
 	       /* #### warning; should this be called with the control
 		  owner as the current port, or no? */
-	       CTLCALL(c, calcCntlRgn, (LONGINT) (long) rh);
+	       CTLCALL(c, calcCntlRgn, ptr_to_longint(rh));
 
 
 	       /* The following code is a hack that works around a problem
@@ -113,7 +113,7 @@ P1(PUBLIC pascal trap, void, ShowControl, ControlHandle, c)	/* IMI-322 */
 	       HxX(c, contrlVis) = 255;
 	       
 	       /* #if SHOWCONTROL_ERASES
-		  CTLCALL(c, calcCntlRgn, (LONGINT) (long) rh);
+		  CTLCALL(c, calcCntlRgn, ptr_to_longint(rh));
 		  EraseRgn(rh);
 		  DisposeRgn(rh); */
 	   
