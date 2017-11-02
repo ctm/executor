@@ -1283,6 +1283,8 @@ win_drive_to_bit (const char *drive_namep)
 
 int main(int argc, char** argv)
 {
+  char thingOnStack;
+  stackBase = &thingOnStack;
   check_structs ();
 
   INTEGER i;
@@ -1636,6 +1638,32 @@ int main(int argc, char** argv)
 
   ROMlib_InitZones (force_big_offset ? offset_big : offset_none);
 
+#if SIZEOF_CHAR_P > 4
+  /*
+    On 64-bit platforms, there is no single ROMlib_offset, but rather
+    a four-element array. The high two bits of the 69K address are mapped
+    to an index in this array.
+    This way, we can access:
+        0 - the regular emulated memory
+        1 - executor's global variables (which includes syn68K callback addresses)
+        2 - local variables of executor's main thread
+        3 - video memory.
+
+    Block 0 is set up in ROMlib_InitZones.
+    1 and 2 are set up here to keep things predictable for debugging, although 
+    US_TO_SYN68K() will do so automatically on first use.
+   */
+  ROMlib_offsets[1] = (uintptr_t) &_etext;
+  ROMlib_offsets[1] -= ROMlib_offsets[1] & 3;
+  ROMlib_offsets[1] -= (1UL << 30);
+  ROMlib_sizes[1] = &_end - &_etext;
+  ROMlib_offsets[2] = (uintptr_t) &thingOnStack - 16*1024*1024;
+  ROMlib_offsets[2] -= ROMlib_offsets[2] & 3;
+  ROMlib_offsets[2] -= (2UL << 30);
+  ROMlib_sizes[2] = 16*1024*1024;
+  
+#endif    
+
   {
     uint32 save_a7;
 
@@ -1945,6 +1973,12 @@ int main(int argc, char** argv)
     if (!vdriver_set_mode (flag_width, flag_height, flag_bpp, grayscale_p))
       illegal_mode ();
 
+#if SIZEOF_CHAR_P > 4
+    if(vdriver_fbuf == 0) abort();
+    ROMlib_offsets[3] = (uintptr_t) vdriver_fbuf;
+    ROMlib_offsets[3] -= (3UL << 30);    
+#endif
+    
     /* initialize the mac rgb_spec's */
     make_rgb_spec (&mac_16bpp_rgb_spec,
 		     16, TRUE, 0,

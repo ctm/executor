@@ -385,6 +385,8 @@ print_mem_full_message (void)
 #endif
 }
 
+unsigned long ROMlib_total_allocated_memory;
+
 void
 ROMlib_InitZones (offset_enum which)
 {
@@ -430,7 +432,7 @@ ROMlib_InitZones (offset_enum which)
 				+ applzone_memory_segment_size
 				+ STACK_SIZE);
       total_allocated_memory = (total_allocated_memory + 8191) & ~8191;
-      
+      ROMlib_total_allocated_memory = total_allocated_memory;
       /* Note the memory in gestalt, rounded down the next 8K page multiple. */
       gestalt_set_memory_size (total_mac_visible_memory);
       
@@ -484,7 +486,10 @@ ROMlib_InitZones (offset_enum which)
 	  ROMlib_offset = 8192;
 	  break;
 	case offset_big:
-	  ROMlib_offset = (uintptr_t) memory;
+          ROMlib_offset = (uintptr_t) memory;
+#if SIZEOF_CHAR_P > 4
+          ROMlib_sizes[0] = total_allocated_memory;
+#endif
 	  {
 	    int low_global_room = (char *) &lastlowglobal -
 	                          (char *) &nilhandle;
