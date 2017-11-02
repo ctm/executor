@@ -1281,6 +1281,8 @@ win_drive_to_bit (const char *drive_namep)
 #define READ_IMPLIES_EXEC 0x0400000
 #endif
 
+extern char _etext, _end; /* boundaries of data+bss sections, supplied by the linker */
+
 int main(int argc, char** argv)
 {
   char thingOnStack;    /* used to determine an approximation of the stack base address */
