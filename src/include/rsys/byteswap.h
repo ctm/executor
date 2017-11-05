@@ -33,7 +33,6 @@ inline TT CL_RAW(TT n)
     return swap32((uint32_t)n);
 }
 
-
 #endif
 
 template<class TT> inline GUEST<int16_t> CW(TT x) { return GUEST<int16_t>::fromHost(x); }
@@ -122,10 +121,10 @@ inline std::nullptr_t RM(std::nullptr_t p) { return nullptr; }
 
 namespace internal
 {
-        template<typename T0, typename TT, typename T2 = std::conditional_t<std::is_signed<T0>::value,int16_t,uint16_t>>
+  template<typename T0, typename TT, typename T2 = typename std::conditional<std::is_signed<T0>::value,int16_t,uint16_t>::type>
         inline GUEST<T2>
         wordFromRaw(TT x) { return GUEST<T2>::fromRaw(x); }
-        template<typename T0, typename TT, typename T2 = std::conditional_t<std::is_signed<T0>::value,int32_t,uint32_t>>
+  template<typename T0, typename TT, typename T2 = typename std::conditional<std::is_signed<T0>::value,int32_t,uint32_t>::type>
         inline GUEST<T2>
         longwordFromRaw(TT x) { return GUEST<T2>::fromRaw(x); }
 }

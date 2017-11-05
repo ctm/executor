@@ -363,9 +363,15 @@ struct GuestType
         >::type;*/
 };
 
+namespace internal
+{
+    // equivalent to C++17 void_t
+    template<typename... Ts> struct make_void { typedef void type;};
+    template<typename... Ts> using void_t = typename make_void<Ts...>::type;
+}
 
 template <typename TT>
-struct GuestType<TT, std::void_t<typename TT::is_guest_struct> >
+struct GuestType<TT, internal::void_t<typename TT::is_guest_struct> >
 {
     using type = TT;
 };
