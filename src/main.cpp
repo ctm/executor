@@ -1521,6 +1521,11 @@ int main(int argc, char** argv)
 
 #endif
 
+#if defined (MACOSX)
+    // sync() really takes a long time on Mac OS X.
+    ROMlib_nosync = true;
+#endif
+    
 #if defined (MSDOS)
   {
     int dangerous_video_p = false;
