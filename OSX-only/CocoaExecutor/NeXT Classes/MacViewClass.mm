@@ -35,6 +35,7 @@ char ROMlib_rcsid_MacViewClass[] =
 #include <assert.h>
 
 using namespace Executor;
+
 /* NOTE: This isn't a very good MACOSX_ object, because much of its
  * data is stored in static variables, instead of in instance
  * variables.  That means we can only have one instantiation.  We do
@@ -225,7 +226,7 @@ d = (uint32 *) ((uint8 *) d + dst_add);			\
 
 int
 Executor::vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
-                                       boolean_t cursor_p)
+                                       bool cursor_p)
 {
    NSRect *nxr;
    int i;
@@ -309,7 +310,7 @@ Executor::vdriver_update_screen_rects (int num_rects, const vdriver_rect_t *r,
 
 int
 Executor::vdriver_update_screen (int top, int left, int bottom, int right,
-                                 boolean_t cursor_p)
+                                 bool cursor_p)
 {
    vdriver_rect_t r;
 
@@ -354,10 +355,10 @@ Executor::vdriver_set_colors (int first_color, int num_colors, const Executor::C
 }
 
 
-boolean_t
+bool
 Executor::vdriver_acceptable_mode_p (int width, int height, int bpp,
-                                     boolean_t grayscale_p,
-                                     boolean_t exact_match_p)
+                                     bool grayscale_p,
+                                     bool exact_match_p)
 {
    if (exact_match_p && two_bit_grayscale_display_p && !grayscale_p)
       return FALSE;
@@ -383,8 +384,8 @@ Executor::vdriver_acceptable_mode_p (int width, int height, int bpp,
 }
 
 
-boolean_t
-Executor::vdriver_set_mode (int width, int height, int bpp, boolean_t grayscale_p)
+bool
+Executor::vdriver_set_mode (int width, int height, int bpp, bool grayscale_p)
 {
    if (!vdriver_acceptable_mode_p (width, height, bpp, grayscale_p, FALSE))
       return FALSE;
@@ -611,20 +612,20 @@ extern void Executor::setcursorX(INTEGER *data, INTEGER *mask, LONGINT hotx, LON
 
 long Executor::ROMlib_printtimeout = 10000;	/* any positive number will do */
 
-boolean_t
+bool
 Executor::vdriver_init (int _max_width, int _max_height, int _max_bpp,
-                        boolean_t fixed_p, int *argc, char *argv[])
+                        bool fixed_p, int *argc, char *argv[])
 {
    int width, height, i;
    NSWindow *view_window;
 
-   make_rgb_spec (&ns_rgb_spec, 16, FALSE, CLC (0x000F000F),
+   make_rgb_spec (&ns_rgb_spec, 16, FALSE, CLC_RAW (0x000F000F),
 #if defined (LITTLEENDIAN)
                   4, 4, 4, 0, 4, 12,
 #else
                   4, 12, 4, 8, 4, 4,
 #endif
-                  CL (GetCTSeed ()));
+				  GetCTSeed ());
 
    /* Allocate the NeXT bitmap. */
    width = flag_width ? flag_width : MAX (_max_width, vdriver_width);
@@ -1536,7 +1537,7 @@ void Executor::PutScrapX (Executor::OSType type, LONGINT length, char *p, int sc
    RESTOREA5;
 }
 
-LONGINT Executor::GetScrapX (OSType type, char **h)
+LONGINT Executor::GetScrapX (OSType type, Executor::Handle h)
 {
    @autoreleasepool {
       NSArray *types;
@@ -1582,29 +1583,29 @@ LONGINT Executor::GetScrapX (OSType type, char **h)
             if (tofind == NSRTFPboardType)
             {
                ReallocHandle ((Handle) h, [data length] * 2);
-               if (MemErr != noErr)
+               if (MemErr != CWC(noErr))
                {
                   retval = -1;
                   /*-->*/ goto DONE;
                }
-               retval = convertreturns ((const char*)[data bytes], MR (*h), [data length], UNIXRTFToMac);
-               convertchars (MR (*h), retval, nexttomac);
+               retval = convertreturns ((const char*)[data bytes], (char*)MR (*h), [data length], UNIXRTFToMac);
+               convertchars ((char*)MR (*h), retval, nexttomac);
                ReallocHandle ((Handle) h, retval);
-               if (MemErr != noErr)
+               if (MemErr != CWC(noErr))
                   retval = -1;
                /*-->*/ goto DONE;
             } else {
                ReallocHandle ((Handle) h, [data length]);
-               if (MemErr != noErr) {
+               if (MemErr != CWC(noErr)) {
                   retval = -1;
                   /*-->*/ goto DONE;
                }
                if (![tofind isEqualToString: NSTIFFPboardType] && ![tofind isEqualToString:NSPICTPboardType])
-                  convertreturns ((const char*)[data bytes], MR (*h), [data length], UNIXToMac);
+                  convertreturns ((const char*)[data bytes],  (char*)MR (*h), [data length], UNIXToMac);
                else
                   memcpy (MR (*h), [data bytes], [data length]);
                if ([tofind isEqualToString:NSStringPboardType])
-                  convertchars (MR (*h), [data length], nexttomac);
+                  convertchars ((char*)MR (*h), [data length], nexttomac);
             }
             retval = [data length];
          }

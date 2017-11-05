@@ -27,7 +27,7 @@ char ROMlib_rcsid_prPrinting[] =
 #include "rsys/file.h"
 #include "rsys/cleanup.h"
 #ifdef MACOSX_
-#include "contextswitch.h"
+//#include "contextswitch.h"
 #endif
 #include "rsys/prefs.h"
 
@@ -551,13 +551,13 @@ P3(PUBLIC pascal trap, TPPrPort, PrOpenDoc, THPrint, hPrint, TPPrPort, port,
 		len = 0;
 	      }
 	    fprintf (ROMlib_printfile, ROMlib_doc_begin,
-		     ROMlib_document_paper_sizes, ROMlib_paper_size_name,
-		     ROMlib_paper_size_name_terminator,
-		     ROMlib_paper_orientation);
+		     ROMlib_document_paper_sizes.c_str(), ROMlib_paper_size_name.c_str(),
+		     ROMlib_paper_size_name_terminator.c_str(),
+		     ROMlib_paper_orientation.c_str());
 	    fprintf (ROMlib_printfile, ROMlib_doc_prolog);
 	    fprintf (ROMlib_printfile, ROMlib_doc_end_prolog,
-		     ROMlib_paper_size, ROMlib_paper_size_name,
-		     ROMlib_paper_size_name_terminator,
+		     ROMlib_paper_size.c_str(), ROMlib_paper_size_name.c_str(),
+		     ROMlib_paper_size_name_terminator.c_str(),
 		     Hx(hPrint, prJob.iCopies), len, p);
 	  }
 	pageno = 0;
@@ -579,8 +579,8 @@ P2(PUBLIC pascal trap, void, PrOpenPage, TPPrPort, port, TPRect, pPageFrame)
       if (ROMlib_printfile)
 	fprintf(ROMlib_printfile, ROMlib_page_begin, pageno - pagewanted + 1,
 		pageno - pagewanted + 1,
-		ROMlib_paper_x, ROMlib_paper_y, ROMlib_paper_size,
-		ROMlib_paper_size_name, ROMlib_paper_size_name_terminator,
+		ROMlib_paper_x, ROMlib_paper_y, ROMlib_paper_size.c_str(),
+		ROMlib_paper_size_name.c_str(), ROMlib_paper_size_name_terminator.c_str(),
 		ROMlib_rotation, ROMlib_translate_x, ROMlib_translate_y,
 		72.0 / ROMlib_resolution_x, -1 * 72.0 / ROMlib_resolution_y);
       ROMlib_suppressclip = 0;

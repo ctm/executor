@@ -182,9 +182,9 @@ dump_image (BitMap *bogo_bitmap, Rect *rect)
     }
   else
     {
-      map_row_bytes = CW ((unsigned short) pixmap->rowBytes
+      map_row_bytes = CW (pixmap->rowBytes
 			  & ~ROWBYTES_FLAG_BITS_X);
-      base_addr = MR ((char *) pixmap->baseAddr);
+      base_addr = (char*)MR (pixmap->baseAddr);
     }
   
   row_bytes = width;
