@@ -109,6 +109,7 @@ char ROMlib_rcsid_main[] =
 #include <process.h>
 #endif /* MSDOS */
 
+#undef MACOSX_
 #if defined(MACOSX_)
 namespace Executor {
   void NeXTMain();
@@ -739,7 +740,7 @@ A1(PRIVATE, void, setstartdir, char *, argv0)
 	    lookhere = buf;
 	}
       }
-#if defined(MACOSX_)
+#if defined(MACOSX_) && 0
   misc_self_examination (lookhere);
   std::string filePath = SystemDiskLocation();
   if (filePath != "") {

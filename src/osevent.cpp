@@ -47,6 +47,7 @@ char ROMlib_rcsid_osevent[] =
 #include "rsys/string.h"
 #include "rsys/keyboard.h"
 
+#undef MACOSX_
 #if defined(MACOSX_)
 #include "contextswitch.h"
 #endif

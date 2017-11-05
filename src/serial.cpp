@@ -16,7 +16,7 @@ char ROMlib_rcsid_serial[] =
 
 #include "rsys/common.h"
 
-#if defined (MACOSX_)
+#if defined (MACOSX)
 #warning bad serial support right now
 //TODO: this seems to use sgtty functions instead of termios.
 #include <sgtty.h>
@@ -48,7 +48,7 @@ char ROMlib_rcsid_serial[] =
 #include <termios.h>
 #endif
 
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
 #include <sys/ioctl.h>
 #endif
 
@@ -252,7 +252,7 @@ A1(PRIVATE, DCtlPtr, otherdctl, ParmBlkPtr, pbp)
     return h ? STARH(h) : 0;
 }
 
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
 
 /*
  * NOTE:  Currently we're using cufa and cufb; we really should
@@ -295,7 +295,7 @@ PRIVATE char *specialname(ParmBlkPtr pbp, const char **lockfilep,
     }
     return retval;
 }
-#endif /* defined (LINUX) || defined (MACOSX_) */
+#endif /* defined (LINUX) || defined (MACOSX) */
 
 typedef void (*compfuncp)( void );
 
@@ -330,7 +330,7 @@ void callcomp(ParmBlkPtr pbp, ProcPtr comp, OSErr err)
 
 #define SERIALDEBUG
 
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
 PRIVATE const char *lockname;
 #endif
 
@@ -340,7 +340,7 @@ A2(PUBLIC, OSErr, ROMlib_serialopen, ParmBlkPtr, pbp,		/* INTERNAL */
     OSErr err;
     DCtlPtr otherp;	/* auto due to old compiler bug */
     hiddenh h;
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
     const char *devname, *tempname;
     LONGINT fd, ourpid, theirpid, newfd, oumask;
 #endif
@@ -354,7 +354,7 @@ A2(PUBLIC, OSErr, ROMlib_serialopen, ParmBlkPtr, pbp,		/* INTERNAL */
 	    *STARH(h) = *STARH((hiddenh) (long) MR(otherp->dCtlStorage));
 	    dcp->dCtlFlags.raw_or( CWC(OPENBIT) );
 	} else {
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
 	    err = permErr;
 	    if ((devname = specialname(pbp, &lockname, &tempname))) {
 		oumask = umask(0);
@@ -388,7 +388,7 @@ A2(PUBLIC, OSErr, ROMlib_serialopen, ParmBlkPtr, pbp,		/* INTERNAL */
 	    }
 #endif
 	    if (err == noErr) {
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
 		HxX(h, fd) = ROMlib_priv_open(devname, O_BINARY|O_RDWR);
 		if (HxX(h, fd) < 0) 
 		    err = HxX(h, fd);	/* error return piggybacked */
@@ -411,7 +411,7 @@ A2(PUBLIC, OSErr, ROMlib_serialopen, ParmBlkPtr, pbp,		/* INTERNAL */
 			    (CW(pbp->cntrlParam.ioCRefNum) == AINREFNUM ||
 			     CW(pbp->cntrlParam.ioCRefNum) == AOUTREFNUM) ?
 						    CW(SPPortA) : CW(SPPortB));
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
 		}
 #endif
 	    }
@@ -450,7 +450,7 @@ A2(PUBLIC, OSErr, ROMlib_serialprime, ParmBlkPtr, pbp,		/* INTERNAL */
 	    else {
 		/* this may have to be changed since we aren't looking for
 		   parity and framing errors */
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
 		pbp->ioParam.ioActCount = CL(read(HxX(h, fd), buf, req_count));
 #elif defined (MSDOS) || defined (CYGWIN32)
 		pbp->ioParam.ioActCount = CL(serial_bios_read(HxX(h, fd), buf,
@@ -475,7 +475,7 @@ A2(PUBLIC, OSErr, ROMlib_serialprime, ParmBlkPtr, pbp,		/* INTERNAL */
 					        (LONGINT) req_count,
 			      (LONGINT) (unsigned char) buf[0]);
 #endif
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
 		pbp->ioParam.ioActCount = CL(write(HxX(h, fd),
 			       buf, req_count));
 #elif defined (MSDOS) || defined (CYGWIN32)
@@ -976,7 +976,7 @@ A2(PUBLIC, OSErr, ROMlib_serialstatus, ParmBlkPtr, pbp,		/* INTERNAL */
 	h = (hiddenh) MR(dcp->dCtlStorage);
 	switch (CW(pbp->cntrlParam.csCode)) {
 	case SERGETBUF:
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
 	    if (ioctl(HxX(h, fd), FIONREAD, &n) < 0)
 #else
 	    if (serial_bios_fionread(HxX(h, fd), &n) < 0)
@@ -991,7 +991,7 @@ A2(PUBLIC, OSErr, ROMlib_serialstatus, ParmBlkPtr, pbp,		/* INTERNAL */
 	    }
 	    break;
 	case SERSTATUS:
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
 	    if (ioctl(HxX(h, fd), FIONREAD, &n) < 0)
 #else
 	    if (serial_bios_fionread (HxX(h, fd), &n) < 0)
@@ -1020,7 +1020,7 @@ A2(PUBLIC, OSErr, ROMlib_serialstatus, ParmBlkPtr, pbp,		/* INTERNAL */
 
 PRIVATE void restorecloseanddispose(hiddenh h)
 {
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
 #if defined(TERMIO)
     ioctl(HxX(h, fd), TCSETAW, &HxX(h, state));
 #else

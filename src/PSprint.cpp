@@ -14,6 +14,8 @@ char ROMlib_rcsid_PSprint[] =
 	    "$Id: PSprint.c 87 2005-05-25 01:57:33Z ctm $";
 #endif
 
+#undef MACOSX_ /* no idea what's going on here... */
+
 #ifdef MACOSX_
 #import <Foundation/NSString.h>
 #import <AppKit/NSFontManager.h>

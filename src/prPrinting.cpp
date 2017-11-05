@@ -27,7 +27,7 @@ char ROMlib_rcsid_prPrinting[] =
 #include "rsys/file.h"
 #include "rsys/cleanup.h"
 #ifdef MACOSX_
-#include "contextswitch.h"
+//#include "contextswitch.h"
 #endif
 #include "rsys/prefs.h"
 

@@ -12,7 +12,7 @@ char ROMlib_rcsid_ibm_keycodes[] =
 
 using namespace Executor;
 
-#if defined (MSDOS) || defined (EVENT_SVGALIB) || defined (CYGWIN32) || (defined (SDL) && (defined (LINUX) || defined (MACOSX_)))
+#if defined (MSDOS) || defined (EVENT_SVGALIB) || defined (CYGWIN32) || (defined (SDL) && (defined (LINUX) || defined (MACOSX)))
 
 unsigned char Executor::ibm_virt_to_mac_virt[] =
 {

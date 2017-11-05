@@ -33,7 +33,7 @@ char ROMlib_rcsid_mman[] =
 #include "dpmilock.h"
 #endif
 
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
 #include <sys/mman.h>
 
 #if !defined (MAP_ANONYMOUS)

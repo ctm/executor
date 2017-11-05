@@ -34,7 +34,7 @@ char ROMlib_rcsid_prLowLevel[] =
 #include "rsys/string.h"
 #include "rsys/osevent.h"
 #ifdef MACOSX_
-#include "contextswitch.h"
+//#include "contextswitch.h"
 #endif
 
 #if defined (CYGWIN32)
@@ -383,7 +383,7 @@ update_ROMlib_printer_vars (TPPrDlg dp)
 PRIVATE void
 get_popup_bounding_box (Rect *rp, DialogPtr dp, INTEGER itemno)
 {
-  INTEGER unused;
+  GUEST<INTEGER> unused;
 
   GetDItem (dp, itemno, &unused, NULL, rp);
   rp->left = CW (CW (rp->left) - 1);
@@ -491,7 +491,7 @@ P2(PUBLIC pascal, void,  ROMlib_mystlproc, DialogPtr, dp, INTEGER, itemno)
       {
       case LAYOUT_OK_NO:
 #if defined(MACOSX_)
-	printstate = seenPageSetUp;
+//	printstate = seenPageSetUp;
 #endif
 	update_ROMlib_printer_vars ((TPPrDlg) dp);
 	break;

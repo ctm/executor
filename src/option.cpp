@@ -18,6 +18,7 @@ char ROMlib_rcsid_option[] =
 #include "rsys/parsenum.h"
 #include "rsys/notmac.h"
 
+#undef MACOSX_
 #ifdef MACOSX_
 #import <Foundation/NSUserDefaults.h>
 #import <Foundation/NSString.h>

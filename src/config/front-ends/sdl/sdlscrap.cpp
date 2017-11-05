@@ -661,7 +661,7 @@ we_lost_clipboard(void)
   return false; /* TODO */
 }
 
-LONGINT Executor::GetScrapX(LONGINT type, char **h)
+LONGINT Executor::GetScrapX(LONGINT type, Handle h)
 {
   return -1;  /* TODO */
 }

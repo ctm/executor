@@ -7,7 +7,7 @@
  * Eventually everything should be rejiggered to use the GNU build system.
  */
 
-#if defined (LINUX) || defined (MACOSX_)
+#if defined (LINUX) || defined (MACOSX)
 
 #include <sys/types.h>
 #include <sys/mman.h>

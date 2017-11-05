@@ -39,7 +39,7 @@ extern const char *ROMlib_executor_full_name;
 #define VERSION_SIG PLATFORM_CYGWIN32
 #elif defined(LINUX)
 #define VERSION_SIG PLATFORM_LINUX
-#elif defined(MACOSX_)
+#elif defined(MACOSX_) || defined(MACOSX)
 #define VERSION_SIG PLATFORM_MACOSX
 #else
 #error "Need VERSION_SIG #define"

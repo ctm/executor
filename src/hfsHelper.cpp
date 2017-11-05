@@ -613,7 +613,7 @@ Executor::ROMlib_transphysblk (hfs_access_t *hfsp, LONGINT physblock, short nphy
     if (actp)
         *actp = pb.ioActCount;
 #else
-#if defined(NEXTSTEP) || defined (MACOSX)
+#if 0 && (defined(NEXTSTEP) || defined (MACOSX))
     if ((LONGINT) bufp & 3) {
         newbufp = alloca( (LONGINT) nphysblocks * PHYSBSIZE + 4);
         newbufp = (Ptr) (((LONGINT) newbufp + 3) & ~3);
@@ -628,7 +628,7 @@ Executor::ROMlib_transphysblk (hfs_access_t *hfsp, LONGINT physblock, short nphy
                            (LONGINT) nphysblocks * PHYSBSIZE,
                            physblock + hfsp->offset, rw, hfsp->bsize,
                            hfsp->maxbytes);
-#if defined(NEXTSTEP) || defined (MACOSX)
+#if 0 && (defined(NEXTSTEP) || defined (MACOSX))
     if (rw == reading && bufp != newbufp && err == noErr)
         memmove(bufp, newbufp, (LONGINT) nphysblocks * PHYSBSIZE);
 #endif
