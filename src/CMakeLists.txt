@@ -3,21 +3,29 @@ cmake_minimum_required(VERSION 3.9)
 set(CMAKE_CXX_STANDARD 14)
 
 find_program(PERL_COMMAND perl)
-find_library(SYN68K_LIBRARY syn68k)
 find_library(DB_LIBRARY db)
 find_program(BISON_COMMAND bison)
 
+find_library(SYN68K_LIBRARY syn68k)
+find_path(SYN68K_INCLUDE_PATH syn68k_public.h)
+
 include_directories(include/)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${SYN68K_INCLUDE_PATH})
 
 set(FRONT_END sdl)
 set(HOST_ARCH x86_64)
+
+if(APPLE AND UNIX)
+set(HOST_OS "macosx")
+elseif(UNIX AND NOT APPLE)
+set(HOST_OS "linux")
+endif()
 
 add_subdirectory(config/front-ends/x)
 add_subdirectory(config/front-ends/sdl)
 add_subdirectory(config/arch/x86_64)
 
-set(host_os "linux")
 
 function(linkheader from to variant)
     if(DEFINED ARGV3)
@@ -29,10 +37,10 @@ function(linkheader from to variant)
     configure_file(${from}/${variant}/${input} ${to} COPYONLY)
 endfunction()
 
-linkheader("config/os" "host-os-config.h" "linux")
-linkheader("config/os" "build-os-config.h" "linux")
-linkheader("config/arch" "host-arch-config.h" "x86_64")
-linkheader("config/arch" "build-arch-config.h" "x86_64")
+linkheader("config/os" "host-os-config.h" ${HOST_OS})
+linkheader("config/os" "build-os-config.h" ${HOST_OS}) # not true, but this should go away
+linkheader("config/arch" "host-arch-config.h" ${HOST_ARCH})
+linkheader("config/arch" "build-arch-config.h" ${HOST_ARCH}) # not true, but this should go away
 linkheader("config/front-ends" "front-end-config.h" ${FRONT_END})
 linkheader("config/sound" "sound-config.h" "dummy" "dummy-sound.h")
 
@@ -43,7 +51,7 @@ add_executable(mkseedtables mkseedtables/mkseedtables.c)
 add_executable(mkultable mkultable/mkultable.c)
 add_executable(mksspairtable mksspairtable/mksspairtable.c)
 
-include_directories(config/os/linux)
+include_directories(config/os/${HOST_OS})
 
 set(MAP_FILES
         active             arrow_down_inactive  arrow_right_active    arrow_up_inactive  ractive      zoom
