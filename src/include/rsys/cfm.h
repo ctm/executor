@@ -187,7 +187,7 @@ typedef struct CFragConnection { GUEST_STRUCT;
     GUEST< struct PEFLoaderInfoHeader*> lihp;
     GUEST< uint32> ref_count;
     GUEST< uint32> n_sects;
-    GUEST< section_info_t[0]> sects;
+    GUEST< section_info_t> sects[0];
 } CFragConnection_t;
 
 enum
@@ -215,7 +215,7 @@ struct lib_t { GUEST_STRUCT;
 
 struct CFragClosure_t { GUEST_STRUCT;
     GUEST< uint32> n_libs;
-    GUEST< lib_t[0]> libs;
+    GUEST< lib_t> libs[0];
 };
 
 #define N_LIBS_X(c)  ((c)->n_libs)

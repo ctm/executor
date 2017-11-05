@@ -93,7 +93,7 @@ typedef struct _SoundHeader { GUEST_STRUCT;
     GUEST< LONGINT> loopEnd;
     GUEST< Byte> encode;
     GUEST< Byte> baseFrequency;
-    GUEST< Byte[0]> sampleArea;
+    GUEST< Byte> sampleArea[0];
 } SoundHeader, *SoundHeaderPtr;
 
 typedef struct _ExtSoundHeader { GUEST_STRUCT;
@@ -114,7 +114,7 @@ typedef struct _ExtSoundHeader { GUEST_STRUCT;
     GUEST< LONGINT> futureUse2;
     GUEST< LONGINT> futureUse3;
     GUEST< LONGINT> futureUse4;
-    GUEST< Byte[0]> sampleArea;
+    GUEST< Byte> sampleArea[0];
 } ExtSoundHeader, *ExtSoundHeaderPtr;
 
 enum {
@@ -147,7 +147,7 @@ typedef struct SndDoubleBuffer { GUEST_STRUCT;
     GUEST< LONGINT> dbNumFrames;
     GUEST< LONGINT> dbFlags;
     GUEST< LONGINT[2]> dbUserInfo;
-    GUEST< Byte[0]> dbSoundData;
+    GUEST< Byte> dbSoundData[0];
 } *SndDoubleBufferPtr;
 
 enum {

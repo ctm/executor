@@ -6,14 +6,14 @@ namespace Executor {
 struct inline_desc_t { GUEST_STRUCT;
     GUEST< DescType> type;
     GUEST< uint32> size;
-    GUEST< char[0]> data;
+    GUEST< char> data[0];
 };
 
 struct inline_key_desc_t { GUEST_STRUCT;
     GUEST< int32> key;
     GUEST< DescType> type;
     GUEST< uint32> size;
-    GUEST< char[0]> data;
+    GUEST< char> data[0];
 };
 
     /* #### always zero (?) */
@@ -36,7 +36,7 @@ typedef struct list_header { GUEST_STRUCT;
     GUEST< uint32> attribute_count;
     GUEST< uint32> param_count;
     GUEST< int32> unknown_3;
-    GUEST< char[0]> data;
+    GUEST< char> data[0];
 } list_header_t;
 
 typedef list_header_t *list_header_ptr;

@@ -46,7 +46,7 @@ typedef struct block_header { GUEST_STRUCT;
 #if defined (MM_BLOCK_HEADER_SENTINEL)
     GUEST< uint8[SENTINEL_SIZE]> post_sentinel;
 #endif
-    GUEST< uint32[0]> data;
+    GUEST< uint32> data[0];
 } block_header_t;
 
 #define BLOCK_LOCATION_OFFSET_X(block)	((block)->location_u)

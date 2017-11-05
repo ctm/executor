@@ -19,7 +19,7 @@ struct completer_pair_t { GUEST_STRUCT;
 
 struct completer_t { GUEST_STRUCT;
     GUEST< INTEGER> n_recs;
-    GUEST< completer_pair_t[0]> completer_recs;    /* VARIABLE LENGTH */
+    GUEST< completer_pair_t> completer_recs[0];    /* VARIABLE LENGTH */
 };
 
 #define COMPLETER_N_RECS_X(p)		((p)->n_recs)
@@ -54,9 +54,9 @@ typedef struct kchr_str { GUEST_STRUCT;
     GUEST< INTEGER> version;
     GUEST< modifier_table_number_t[256]> modifier_table;
     GUEST< INTEGER> n_tables;
-    GUEST< unsigned char[0][128]> table;    /* VARIABLE LENGTH */
+    GUEST< unsigned char> table[0][128];    /* VARIABLE LENGTH */
     GUEST< INTEGER> n_dead_key_recs;
-    GUEST< dead_key_rec_t[0]> dead_key_recs;    /* VARIABLE LENGTH */
+    GUEST< dead_key_rec_t> dead_key_recs[0];    /* VARIABLE LENGTH */
 } *kchr_ptr_t;
 
 

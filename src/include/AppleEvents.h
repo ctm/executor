@@ -152,7 +152,7 @@ typedef struct AE_hdlr_table { GUEST_STRUCT;
     GUEST< int32> n_allocated_bytes;
     GUEST< int32> n_elts;
     GUEST< int32[10]> pad_2;
-    GUEST< AE_hdlr_table_elt_t[0]> elts;
+    GUEST< AE_hdlr_table_elt_t> elts[0];
 } AE_hdlr_table_t;
 
 typedef AE_hdlr_table_t *AE_hdlr_table_ptr;
