@@ -375,7 +375,7 @@ A0 (PUBLIC, void, sendsuspendevent)
 	p.h = CW(MouseLocation.h);
 	p.v = CW(MouseLocation.v);
 	ROMlib_PPostEvent(osEvt, SUSPENDRESUMEBITS|SUSPEND|CONVERTCLIPBOARD,
-			  (HIDDEN_EvQElPtr *) 0, TickCount(), p, ROMlib_mods);
+			  nullptr, TickCount(), p, ROMlib_mods);
       }
 }
 
@@ -398,7 +398,7 @@ A1 (PUBLIC, void, sendresumeevent, LONGINT, cvtclip)
 	what |= CONVERTCLIPBOARD;
       p.h = CW(MouseLocation.h);
       p.v = CW(MouseLocation.v);
-      ROMlib_PPostEvent(osEvt, what, (HIDDEN_EvQElPtr *) 0, TickCount(),
+      ROMlib_PPostEvent(osEvt, what, nullptr, TickCount(),
 			p, ROMlib_mods);
     }
 }
@@ -410,9 +410,9 @@ A0(PUBLIC, void, sendcopy)
     p.h = CW(MouseLocation.h);
     p.v = CW(MouseLocation.v);
     ROMlib_PPostEvent(keyDown, 0x0863,	/* 0x63 == 'c' */
-			        (HIDDEN_EvQElPtr *) 0, TickCount(), p, cmdKey|btnState);
+			        nullptr, TickCount(), p, cmdKey|btnState);
     ROMlib_PPostEvent(keyUp, 0x0863,
-			        (HIDDEN_EvQElPtr *) 0, TickCount(), p, cmdKey|btnState);
+			        nullptr, TickCount(), p, cmdKey|btnState);
 }
 
 A0(PUBLIC, void, sendpaste)
@@ -422,18 +422,13 @@ A0(PUBLIC, void, sendpaste)
     p.h = CW(MouseLocation.h);
     p.v = CW(MouseLocation.v);
     ROMlib_PPostEvent(keyDown, 0x0976,	/* 0x76 == 'v' */
-				(HIDDEN_EvQElPtr *) 0, TickCount(), p, cmdKey|btnState);
+				nullptr, TickCount(), p, cmdKey|btnState);
     ROMlib_PPostEvent(keyUp, 0x0976,
-				(HIDDEN_EvQElPtr *) 0, TickCount(), p, cmdKey|btnState);
+				nullptr, TickCount(), p, cmdKey|btnState);
 }
 
-PRIVATE void pinmouse(INTEGER *hp, INTEGER *vp, BOOLEAN swap)
+PRIVATE void pinmouse(INTEGER *hp, INTEGER *vp)
 {
-    if (swap) {
-	*hp = CW(*hp);
-	*vp = CW(*vp);
-    }
-
     if (*hp < 0)
 	*hp = 0;
     else if (*hp > vdriver_width - 1)
@@ -443,18 +438,32 @@ PRIVATE void pinmouse(INTEGER *hp, INTEGER *vp, BOOLEAN swap)
 	*vp = 0;
     else if (*vp > vdriver_height - 1)
 	*vp = vdriver_height - 1;
-
-    if (swap) {
-	*hp = CW(*hp);
-	*vp = CW(*vp);
-    }
 }
+PRIVATE void pinmouse(GUEST<INTEGER> *hp, GUEST<INTEGER> *vp)
+{
+	INTEGER h = CW(*hp);
+	INTEGER v = CW(*vp);
+	
+	if (h < 0)
+		h = 0;
+	else if (h > vdriver_width - 1)
+		h = vdriver_width - 1;
+	
+	if (v < 0)
+		v = 0;
+	else if (v > vdriver_height - 1)
+		v = vdriver_height - 1;
+	
+	*hp = CW(h);
+	*vp = CW(v);
+}
+
 
 A1(PUBLIC, void, ROMlib_updatemouselocation, NSEvent *, neventp) /* INTERNAL */
 {
     MouseLocation.h = CW ([neventp locationInWindow].x);
     MouseLocation.v = CW (vdriver_height - [neventp locationInWindow].y);
-    pinmouse(&MouseLocation.h, &MouseLocation.v, TRUE);
+    pinmouse(&MouseLocation.h, &MouseLocation.v);
 }
 
 PRIVATE void
@@ -477,7 +486,7 @@ getwhere (Executor::Point *wherep, NSEvent *event)
 	wherep->v = y;
       }
     }
-    pinmouse(&wherep->h, &wherep->v, FALSE);
+    pinmouse(&wherep->h, &wherep->v);
 }
 
 A1(PUBLIC, void, postnextevent, NSEvent *, neventp)	/* INTERNAL */
@@ -496,12 +505,12 @@ A1(PUBLIC, void, postnextevent, NSEvent *, neventp)	/* INTERNAL */
     case NSLeftMouseDown:
     case NSRightMouseDown:
 	butmods &= ~btnState;
-	ROMlib_PPostEvent(mouseDown, 0, (HIDDEN_EvQElPtr *) 0, when, where, butmods);
+	ROMlib_PPostEvent(mouseDown, 0, nullptr, when, where, butmods);
 	break;
     case NSLeftMouseUp:
     case NSRightMouseUp:
 	butmods |= btnState;
-	ROMlib_PPostEvent(mouseUp, 0, (HIDDEN_EvQElPtr *) 0, when, where, butmods);
+	ROMlib_PPostEvent(mouseUp, 0, nullptr, when, where, butmods);
 	break;
     case NSKeyDown:
 #warning some sort of special translation needs to be done here
@@ -561,8 +570,10 @@ A2(PUBLIC, LONGINT, insertfonttbl, char **, op, char, doit)
 {
     char numstr[12];
     Str255 str;
-    INTEGER i, n, nres, shift;
-    ResType t, restype;
+    INTEGER i,n, nres, shift;
+	GUEST<INTEGER> i_raw;
+	GUEST<ResType> t;
+	ResType restype;
     Handle h;
     LONGINT retval;
 
@@ -576,7 +587,8 @@ A2(PUBLIC, LONGINT, insertfonttbl, char **, op, char, doit)
 	nres = CountResources(restype);
 	for (n = 1; n <= nres; n++) {
 	    h = GetIndResource(restype, n);
-	    GetResInfo(h, &i, &t, str);
+	    GetResInfo(h, &i_raw, &t, str);
+		i = CW(i_raw);
 	    if (shift)
 		i >>= 7;
 	    if (str[0] && str[1] != '.' && str[1] != '%') {

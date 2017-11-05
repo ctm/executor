@@ -1,7 +1,7 @@
 #include "rsys/common.h"
 #include "rsys/arch.h"
 
-boolean_t
+bool
 Executor::arch_init (void)
 {
   return TRUE;

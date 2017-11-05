@@ -26,7 +26,7 @@ void ROMlib_newFont(char *font, float txSize)
     [[NSFont fontWithName:[NSString stringWithCString:font encoding:NSMacOSRomanStringEncoding] size:txSize] set];
 }
 
-void ROMlib_updatenextpagerect(comRect *rp)
+void ROMlib_updatenextpagerect(Rect *rp)
 {
     NSSize new_paper_size;
     virtual_int_state_t block = block_virtual_ints();
@@ -46,8 +46,8 @@ static CGFloat printer_scaling_factor (void)
   return retval;
 }
 
-void ROMlib_updatemacpagerect(comRect *paperp, comRect *page1p,
-                                        comRect *page2p)
+void ROMlib_updatemacpagerect(Rect *paperp, Rect *page1p,
+                                        Rect *page2p)
 {
     NSSize new_size;
     virtual_int_state_t block = block_virtual_ints();
