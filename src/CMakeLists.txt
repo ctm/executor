@@ -11,6 +11,7 @@ include_directories(include/)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set(FRONT_END sdl)
+set(HOST_ARCH x86_64)
 
 add_subdirectory(config/front-ends/x)
 add_subdirectory(config/front-ends/sdl)
@@ -388,13 +389,14 @@ set(include_sources hintemplate.h
                   mkvol/mkvol_internal.h)
 
 add_executable(executor ${ctl_sources} ${dial_sources} ${file_sources}
-                 ${hfs_sources} ${list_sources} ${menu_sources}
-                 ${print_sources} ${qd_sources} ${res_sources}
-                 ${te_sources} ${wind_sources} ${ae_sources}
-                 ${sound_sources} ${num_sources} ${misc_sources}
-                 ${arch_sources} ${front_end_sources} ${host_sources}
-                 ${os_sources}  ${include_sources} ${other_sources}
-                ${GENERATED_FILES}
-                 )
-target_link_libraries(executor front-end-${FRONT_END} arch-x86_64)
+        ${hfs_sources} ${list_sources} ${menu_sources}
+        ${print_sources} ${qd_sources} ${res_sources}
+        ${te_sources} ${wind_sources} ${ae_sources}
+        ${sound_sources} ${num_sources} ${misc_sources}
+        ${arch_sources} ${front_end_sources} ${host_sources}
+        ${os_sources}  ${include_sources} ${other_sources}
+        ${GENERATED_FILES}
+    )
+
+target_link_libraries(executor front-end-${FRONT_END} arch-${HOST_ARCH})
 target_link_libraries(executor ${SYN68K_LIBRARY} ${DB_LIBRARY})

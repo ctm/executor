@@ -2,6 +2,20 @@ find_package(SDL)
 
 find_library(X11_LIBRARY X11)
 
+set(OS_SPECIFIC)
+
+if(UNIX AND NOT APPLE)
+    set(OS_SPECIFIC sdlX.cpp)
+endif()
+
+if(UNIX AND APPLE)
+    set(OS_SPECIFIC macosx_main.m)
+endif()
+
+if(WIN32)
+    set(OS_SPECIFIC winmain.c)
+endif()
+
 add_library(front-end-sdl
     sdlevents.cpp
     sdl_mem.cpp
@@ -24,9 +38,14 @@ add_library(front-end-sdl
     sdlX.h
     syswm_map.h
     syswm_vars.h
+    ${OS_SPECIFIC}
+    )
 
-    sdlX.cpp
-        )
-target_link_libraries(front-end-sdl ${SDL_LIBRARY} ${X11_LIBRARY})
+target_link_libraries(front-end-sdl ${SDL_LIBRARY})
+
+if(UNIX AND NOT APPLE)
+    target_link_libraries(front-end-sdl ${X11_LIBRARY})
+endif()
+
 
 target_include_directories(front-end-sdl PUBLIC . ${SDL_INCLUDE_DIR})
