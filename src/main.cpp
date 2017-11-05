@@ -109,7 +109,6 @@ char ROMlib_rcsid_main[] =
 #include <process.h>
 #endif /* MSDOS */
 
-#undef MACOSX_
 #if defined(MACOSX_)
 namespace Executor {
   void NeXTMain();
@@ -740,7 +739,7 @@ A1(PRIVATE, void, setstartdir, char *, argv0)
 	    lookhere = buf;
 	}
       }
-#if defined(MACOSX_) && 0
+#if defined(MACOSX_)
   misc_self_examination (lookhere);
   std::string filePath = SystemDiskLocation();
   if (filePath != "") {
@@ -1282,7 +1281,9 @@ win_drive_to_bit (const char *drive_namep)
 #define READ_IMPLIES_EXEC 0x0400000
 #endif
 
+#if defined(LINUX)
 extern char _etext, _end; /* boundaries of data+bss sections, supplied by the linker */
+#endif
 
 int main(int argc, char** argv)
 {
@@ -1647,24 +1648,44 @@ int main(int argc, char** argv)
     to an index in this array.
     This way, we can access:
         0 - the regular emulated memory
-        1 - executor's global variables (which includes syn68K callback addresses)
+        1 - video memory.
         2 - local variables of executor's main thread
-        3 - video memory.
+        3 - executor's global variables (which includes syn68K callback addresses)
 
     Block 0 is set up in ROMlib_InitZones.
-    1 and 2 are set up here to keep things predictable for debugging, although 
-    US_TO_SYN68K() will do so automatically on first use.
+    Block 1 is set up later, when video memory is allocated.
+    Global variables are in block 3 so that we don't need to figure out
+    the exact boundaries for that address range.
    */
-  ROMlib_offsets[1] = (uintptr_t) &_etext;
-  ROMlib_offsets[1] -= ROMlib_offsets[1] & 3;
-  ROMlib_offsets[1] -= (1UL << 30);
-  ROMlib_sizes[1] = &_end - &_etext;
+
+    // mark the slot as occupied until we explicitly set it later
+  ROMlib_offsets[1] = 0xFFFFFFFFFFFFFFFF - (1UL << 30);
+  ROMlib_sizes[1] = 0;
+    
+    // assume an arbitrary maximum stack size of 16MB.
   ROMlib_offsets[2] = (uintptr_t) &thingOnStack - 16*1024*1024;
   ROMlib_offsets[2] -= ROMlib_offsets[2] & 3;
   ROMlib_offsets[2] -= (2UL << 30);
   ROMlib_sizes[2] = 16*1024*1024;
-  
-#endif    
+
+    
+#if defined(LINUX)
+  ROMlib_offsets[3] = (uintptr_t) &_etext;
+  ROMlib_offsets[3] -= ROMlib_offsets[1] & 3;
+  ROMlib_offsets[3] -= (3UL << 30);
+  ROMlib_sizes[3] = &_end - &_etext;
+#elif defined(MACOSX)
+    /* Mac OS X doesn't have _etext and _end, and the functions in
+       mach/getsect.h don't give the correct results when ASLR is active.
+       So we just use the address of a static variable and 512MB in each direction.
+     */
+  static char staticThing[32];
+  ROMlib_offsets[3] = (uintptr_t) &staticThing - 0x20000000;
+  ROMlib_offsets[3] -= ROMlib_offsets[2] & 3;
+  ROMlib_offsets[3] -= (3UL << 30);
+  ROMlib_sizes[3] = 0x3FFFFFFF;
+#endif
+#endif
 
   {
     uint32 save_a7;
@@ -1977,8 +1998,9 @@ int main(int argc, char** argv)
 
 #if SIZEOF_CHAR_P > 4
     if(vdriver_fbuf == 0) abort();
-    ROMlib_offsets[3] = (uintptr_t) vdriver_fbuf;
-    ROMlib_offsets[3] -= (3UL << 30);    
+    ROMlib_offsets[1] = (uintptr_t) vdriver_fbuf;
+    ROMlib_offsets[1] -= (1UL << 30);
+    ROMlib_sizes[1] = vdriver_row_bytes * vdriver_height;
 #endif
     
     /* initialize the mac rgb_spec's */
