@@ -5,7 +5,7 @@
  * Copyright 1986, 1989, 1990, 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: MacTypes.h 86 2005-05-25 00:47:12Z ctm $
+ * $Id: ExMacTypes.h 86 2005-05-25 00:47:12Z ctm $
  */
 
 #include "rsys/mactype.h"

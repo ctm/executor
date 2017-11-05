@@ -39,7 +39,7 @@
 
 #if !defined USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 #include <syn68k_public.h>
-#include "MacTypes.h"
+#include "ExMacTypes.h"
 #include "rsys/trapdecl.h"
 #include "rsys/stubify.h"
 #include "rsys/slash.h"

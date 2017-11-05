@@ -1,7 +1,7 @@
 #if !defined (_FILEMGR_H_)
 #define _FILEMGR_H_
 
-#include "MacTypes.h"
+#include "ExMacTypes.h"
 
 /*
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.

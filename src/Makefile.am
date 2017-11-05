@@ -143,7 +143,7 @@ include_sources = hintemplate.h \
                   include/Iconutil.h \
                   include/IntlUtil.h \
                   include/ListMgr.h \
-                  include/MacTypes.h \
+                  include/ExMacTypes.h \
                   include/MemoryMgr.h \
                   include/MenuMgr.h \
                   include/NotifyMgr.h \
@@ -704,7 +704,7 @@ endif CONFIG_OS_LINUX
 
 if CONFIG_OS_MACOSX
 os_sources = config/os/macosx/macosx.h
-executor_LDFLAGS = -framework SDL -framework Cocoa
+executor_LDFLAGS = -framework Cocoa
 endif  CONFIG_OS_MACOSX
 
 if CONFIG_OS_MSDOS

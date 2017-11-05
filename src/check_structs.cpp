@@ -42,7 +42,7 @@
 #include "Iconutil.h"
 #include "IntlUtil.h"
 #include "ListMgr.h"
-#include "MacTypes.h"
+#include "ExMacTypes.h"
 #include "MemoryMgr.h"
 #include "MenuMgr.h"
 #include "NotifyMgr.h"
@@ -252,7 +252,7 @@ void Executor::check_structs(void)
   /* ListMgr.h */
   check (ListRec, 88);
 
-  /* MacTypes.h */
+  /* ExMacTypes.h */
   check (QHdr, 10);
   check (Point, 4);
   check (Rect, 8);

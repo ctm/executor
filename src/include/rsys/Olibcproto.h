@@ -8,7 +8,7 @@
  * $Id: Olibcproto.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-#include <MacTypes.h>
+#include <ExMacTypes.h>
 
 #if	defined(BINCOMPAT)	&& 0
 #include	<rsys/pragmal.h>

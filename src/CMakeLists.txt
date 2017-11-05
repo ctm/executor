@@ -186,7 +186,7 @@ set(include_sources hintemplate.h
                   include/Iconutil.h
                   include/IntlUtil.h
                   include/ListMgr.h
-                  include/MacTypes.h
+                  include/ExMacTypes.h
                   include/MemoryMgr.h
                   include/MenuMgr.h
                   include/NotifyMgr.h
