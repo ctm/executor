@@ -685,8 +685,11 @@ P0(PUBLIC pascal trap, void, ExitToShell)
     Point pt;
     static GUEST<SFTypeList> applonly = { CLC(T('A','P','P','L')) };
     SFReply reply;
-    char quickbytes[grafSize];
-    LONGINT tmpA5;
+    struct {
+        char quickbytes[grafSize];
+        GUEST<GrafPtr> qdthePort;
+        GUEST<LONGINT> tmpA5;
+    } a5space;
     WindowPeek t_w;
     int i;
 
@@ -725,9 +728,9 @@ P0(PUBLIC pascal trap, void, ExitToShell)
 	size_info.application_p = false;
 	
 	if (QDExist == EXIST_NO) {
-	    a5 = US_TO_SYN68K(&tmpA5);
+	    a5 = US_TO_SYN68K(&a5space.tmpA5);
 	    CurrentA5 = guest_cast<Ptr>( CL(a5) );
-	    InitGraf((Ptr) quickbytes + sizeof(quickbytes) - 4);
+	    InitGraf((Ptr) &a5space.qdthePort);
 	}
 	InitFonts();
 	FlushEvents( everyEvent, 0 );
