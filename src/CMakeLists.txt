@@ -1,6 +1,6 @@
 project(Executor)
 cmake_minimum_required(VERSION 3.9)
-
+set(CMAKE_CXX_STANDARD 14)
 
 find_program(PERL_COMMAND perl)
 find_library(SYN68K_LIBRARY syn68k)
