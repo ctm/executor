@@ -7,15 +7,14 @@ char ROMlib_rcsid_map_to_c[] =
 		"$Id: map_to_c.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
-#define COMPILE_FOR_BUILD
-
-#include "rsys/common.h"
 #include <ctype.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
+#define STANDALONE_IMAGE_H
 #include "rsys/image.h"
-#include "rsys/byteswap.h"
-
-using namespace Executor;
 
 /* consume input from o_fp, produce output to o_fp */
 static FILE *i_fp, *o_fp;

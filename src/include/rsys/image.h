@@ -1,4 +1,7 @@
+#ifndef IMAGE_H_
+#define IMAGE_H_
 
+#ifndef STANDALONE_IMAGE_H
 #include "QuickDraw.h"
 
 namespace Executor {
@@ -19,6 +22,7 @@ typedef struct pixel_image
 #define IMAGE_X_BITS(image, color_p)		((image)->x_bits[(color_p)])
 #define IMAGE_X_BITS_VALID(image, color_p) \
   ((image)->x_bits_valid[(color_p)])
+#endif
 
 typedef struct image_bits_desc
 {
@@ -38,6 +42,8 @@ typedef struct pixel_image_desc
   image_bits_desc_t bits[5];
 } pixel_image_desc_t;
 
+#ifndef STANDALONE_IMAGE_H
+
 extern pixel_image_t *image_init (pixel_image_desc_t *image_desc);
 extern void image_copy (pixel_image_t *image, int color_p /* visual */,
 			Rect *dst_rect, int mode);
@@ -47,3 +53,6 @@ extern void image_update_ctab (pixel_image_t *image,
 			       const RGBColor *new_colors, int max_color);
 extern void image_inits (void);
 }
+#endif
+
+#endif /* IMAGE_H_ */
