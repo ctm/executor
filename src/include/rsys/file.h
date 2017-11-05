@@ -486,7 +486,7 @@ extern unsigned char ROMlib_fromhex (unsigned char c);
 #endif
 
 #if !defined (ST_INO)
-#define ST_INO(buf) ((buf).st_ino)
+#define ST_INO(buf) ((uint32_t)((buf).st_ino))
 #endif
 
 extern char *ROMlib_volumename;
