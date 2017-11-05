@@ -15,62 +15,71 @@
 namespace Executor {
 #pragma pack(push, 2)
   typedef struct VoiceSpec {
-	OSType              creator;
-	OSType              id;
+    GUEST_STRUCT;
+	GUEST<OSType>              creator;
+	GUEST<OSType>              id;
   } VoiceSpec, *VoiceSpecPtr;
 
   
   typedef struct VoiceFileInfo {
+    GUEST_STRUCT;
 	FSSpec	fileSpec;
-	short	resID;
+	GUEST<uint16_t>	resID;
   } VoiceFileInfo;
   
   typedef struct SpeechStatusInfo {
-	Boolean             outputBusy;
-	Boolean             outputPaused;
-	long                inputBytesLeft;
-	short               phonemeCode;
+    GUEST_STRUCT;
+	GUEST<Boolean>             outputBusy;
+	GUEST<Boolean>             outputPaused;
+	GUEST<int32_t>                inputBytesLeft;
+	GUEST<int16_t>               phonemeCode;
   } SpeechStatusInfo;
   
   typedef struct VoiceDescription {
-	int32              length;
-	VoiceSpec           voice;
-	int32              version;
-	Str63               name;
-	Str255              comment;
-	int16              gender;
-	int16              age;
-	int16              script;
-	int16              language;
-	int16              region;
-	int32              reserved[4];
+    GUEST_STRUCT;
+	GUEST<int32>              length;
+	GUEST<VoiceSpec>           voice;
+	GUEST<int32>              version;
+	GUEST<Str63>               name;
+	GUEST<Str255>              comment;
+	GUEST<int16>              gender;
+	GUEST<int16>              age;
+	GUEST<int16>              script;
+	GUEST<int16>              language;
+	GUEST<int16>              region;
+	GUEST<int32>              reserved[4];
   } VoiceDescription;
 
   typedef struct SpeechChannelRecord {
+    GUEST_STRUCT;
 	LONGINT                data[1];
   } SpeechChannelRecord, *SpeechChannel;
   
   typedef struct PhonemeInfo {
-	short               opcode;
-	Str15               phStr;
-	Str31               exampleStr;
-	short               hiliteStart;
-	short               hiliteEnd;
+    GUEST_STRUCT;
+	GUEST<int16_t>               opcode;
+	GUEST<Str15>               phStr;
+	GUEST<Str31>               exampleStr;
+	GUEST<int16_t>               hiliteStart;
+	GUEST<int16_t>               hiliteEnd;
   } PhonemeInfo;
   
   typedef struct PhonemeDescriptor {
-	short               phonemeCount;
-	PhonemeInfo         thePhonemes[1];
+    GUEST_STRUCT;
+	GUEST<int16_t>               phonemeCount;
+	GUEST<PhonemeInfo>         thePhonemes[1];
   } PhonemeDescriptor;
   
   typedef struct SpeechXtndData {
-	OSType              synthCreator;
-	Byte                synthData[2];
+    GUEST_STRUCT;
+	GUEST<OSType>              synthCreator;
+	GUEST<Byte>                synthData[2];
   } SpeechXtndData;
   
   typedef struct DelimiterInfo {
-	Byte                startDelimiter[2];
-	Byte                endDelimiter[2];
+    GUEST_STRUCT;
+	GUEST<Byte>                startDelimiter[2];
+	GUEST<Byte>                endDelimiter[2];
   } DelimiterInfo;
   
   
@@ -102,7 +111,7 @@ namespace Executor {
   PUBLIC pascal OSErr C_SetSpeechInfo (SpeechChannel chan, OSType selector, const void *speechInfo);
   PUBLIC pascal OSErr C_GetSpeechInfo (SpeechChannel chan, OSType selector, void *speechInfo);
   PUBLIC pascal OSErr C_SpeakBuffer (SpeechChannel chan, const void *textBuf, ULONGINT textBytes, int32 controlFlags);
-  PUBLIC pascal OSErr C_TextToPhonemes (SpeechChannel chan, const void *textBuf, ULONGINT textBytes, Handle phonemeBuf, LONGINT *phonemeBytes);
+  PUBLIC pascal OSErr C_TextToPhonemes (SpeechChannel chan, const void *textBuf, ULONGINT textBytes, Handle phonemeBuf, GUEST<LONGINT> *phonemeBytes);
 }
 
 #endif /* defined(__CocoaExecutor__SpeechManager__) */

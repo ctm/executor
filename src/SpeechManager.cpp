@@ -232,7 +232,7 @@ P4(PUBLIC pascal, OSErr, SpeakBuffer, SpeechChannel, chan, const void *, textBuf
 #endif
 }
 
-P5(PUBLIC pascal, OSErr, TextToPhonemes, SpeechChannel, chan, const void *,textBuf, ULONGINT, textBytes, Handle, phonemeBuf, LONGINT *,phonemeBytes)
+P5(PUBLIC pascal, OSErr, TextToPhonemes, SpeechChannel, chan, const void *,textBuf, ULONGINT, textBytes, Handle, phonemeBuf, GUEST<LONGINT> *,phonemeBytes)
 {
 #ifdef MACOSX_
   return MacBridge::TextToPhonemes(chan, textBuf, textBytes, phonemeBuf, phonemeBytes);

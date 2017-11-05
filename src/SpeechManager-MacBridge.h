@@ -59,7 +59,7 @@ namespace MacBridge {
 							  Executor::ULONGINT textBytes,
 							  int32 controlFlags
 							  );
-  PUBLIC Executor::OSErr TextToPhonemes (Executor::SpeechChannel chan, const void *textBuf, Executor::ULONGINT textBytes, Executor::Handle phonemeBuf, Executor::LONGINT *phonemeBytes);
+  PUBLIC Executor::OSErr TextToPhonemes (Executor::SpeechChannel chan, const void *textBuf, Executor::ULONGINT textBytes, Executor::Handle phonemeBuf, Executor::GUEST<Executor::LONGINT> *phonemeBytes);
 
 }
 

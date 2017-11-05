@@ -16,23 +16,24 @@
 using namespace MacBridge;
 using namespace ByteSwap;
 
+using namespace Executor;
 
 OSStatus MacBridge::MacCFURLToExecutorFSSpec(CFURLRef inMac, Executor::FSSpec *outExec)
 {
-  OSStatus theErr = CLC((OSStatus)noErr);
+  OSStatus theErr = Executor::noErr;
   char aPath[PATH_MAX] = {0};
   if (!CFURLGetFileSystemRepresentation(inMac, false, (UInt8*)aPath, PATH_MAX)) {
-	return CLC((OSStatus)fnfErr);
+	return fnfErr;
   }
   CFStringRef aStr = CFURLCopyLastPathComponent(inMac);
   Executor::Str255 strName = {0};
   if (!CFStringGetPascalString(aStr, strName, 256, kCFStringEncodingMacRoman)) {
-	theErr = CLC((OSStatus)fnfErr);
+	theErr = fnfErr;
   }
   CFRelease(aStr);
   
   Executor::HVCB *customPart = Executor::ROMlib_vcbbybiggestunixname(aPath);
-  Executor::C_FSMakeFSSpec(customPart->vcbDrvNum, customPart->vcbDirIDM, strName, outExec);
+  Executor::C_FSMakeFSSpec(CW(customPart->vcbDrvNum), CL(customPart->vcbDirIDM), strName, outExec);
   
   return theErr;
 }
