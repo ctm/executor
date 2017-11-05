@@ -1676,7 +1676,7 @@ int main(int argc, char** argv)
     
 #if defined(LINUX)
   ROMlib_offsets[3] = (uintptr_t) &_etext;
-  ROMlib_offsets[3] -= ROMlib_offsets[1] & 3;
+  ROMlib_offsets[3] -= ROMlib_offsets[3] & 3;
   ROMlib_offsets[3] -= (3UL << 30);
   ROMlib_sizes[3] = &_end - &_etext;
 #elif defined(MACOSX)
