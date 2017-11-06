@@ -31,7 +31,7 @@ using namespace Executor;
 A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r)		/* INTERNAL */
 {
     RgnHandle rh;
-    register INTEGER x, y, temp;    /* some variables need to be longs */
+    INTEGER x, y, temp;    /* some variables need to be longs */
     INTEGER d, e, ny, oy, nx, ox, savex, rad;
     INTEGER scalex, scaley;
 

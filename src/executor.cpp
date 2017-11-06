@@ -227,7 +227,7 @@ trap_dump_bits (const char *msg, char *data, int size)
 int check_trap_watchpoints_p = false;
 
 void
-check_trap_watchpoints (char *msg)
+check_trap_watchpoints (const char *msg)
 {
   int size, i;
   

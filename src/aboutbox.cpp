@@ -57,7 +57,7 @@ char ROMlib_rcsid_aboutbox[] =
 
 using namespace Executor;
 
-static struct { const char *name;char *text; ControlHandle ctl; } about_box_buttons[] = {
+static struct { const char *name; const char *text; ControlHandle ctl; } about_box_buttons[] = {
   { LICENSE_BUTTON_NAME, NULL /* generated on the fly from licensetext.c */,
     NULL
   },
@@ -459,7 +459,7 @@ dispose_tips_text (void)
   b = find_button (TIPS_BUTTON_NAME);
   if (about_box_buttons[b].text != orig_text)
     {
-      free (about_box_buttons[b].text);
+      free ((void*)about_box_buttons[b].text);
       about_box_buttons[b].text = orig_text;
     }
 }
@@ -543,7 +543,7 @@ dispose_about_box (void)
 
 /* Sets the text currently being displayed. */
 static void
-set_text (char *text)
+set_text (const char *text)
 {
   TESetText ((Ptr) text, strlen (text), about_te);
   SetCtlMax (about_scrollbar,
@@ -673,9 +673,9 @@ event_loop (bool executor_p)
 		TextSize (24);
 		MoveTo (TE_LEFT, 30);
 		if (executor_p)
-		  DrawText_c_string ((char *) ROMlib_executor_full_name);
+		  DrawText_c_string (ROMlib_executor_full_name);
 		else
-		  DrawText_c_string ((char *) "Carbonless Copies Runtime System");
+		  DrawText_c_string ("Carbonless Copies Runtime System");
 		TextSize (12);
 		MoveTo (TE_LEFT, 49);
 		DrawText_c_string (COPYRIGHT_STRING_1);

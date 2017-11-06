@@ -143,7 +143,7 @@ validate_colors_for_control (ControlHandle ctl)
 
 static int countchar (StringPtr str, char c)
 {
-  register int retval;
+  int retval;
   char *p, *ep;
 
   for (retval = 0, p = (char *) str+1, ep = p + str[0]; p != ep; )
@@ -165,7 +165,7 @@ drawlabel (StringPtr str, Rect *rp, justenum just)
       INTEGER bytec;
       INTEGER left;
     } *infop, *temp;
-  register int i, ei, nlines;
+  int i, ei, nlines;
   FontInfo fi;
   INTEGER mid, top, incr;
   INTEGER text_mode_save;

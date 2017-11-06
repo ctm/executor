@@ -831,7 +831,7 @@ A1(PRIVATE, void, flfill, fltype *, f)
 	    if (err != fnfErr) {
 	        warning_unexpected ("PBGetCatInfo err = %d\n", err);
 		++errcount;
-		/* register int d7 = err; */
+		/* int d7 = err; */
 		
 	    }
 	} else {

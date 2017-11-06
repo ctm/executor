@@ -112,7 +112,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fxpwri, INTEGER *, sp,
 P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fxpwry, x80_t *, sp, 
 		 x80_t *, dp)
 {
-  register ieee_t r, n;
+  ieee_t r, n;
   DECLAREIN2OUT();
 
   /* FIXME - may lose precision! */
@@ -132,7 +132,7 @@ P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fcompound,  x80_t *, sp2,
   DECLAREIN2OUT();
 
   /* FIXME - may lose precision! */
-  register ieee_t r = x80_to_ieee (sp2), n = x80_to_ieee (sp);
+  ieee_t r = x80_to_ieee (sp2), n = x80_to_ieee (sp);
   in1 = r;
   in2 = n;
   ieee_to_x80 (out = pow (1 + r, n), dp);
@@ -146,7 +146,7 @@ P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fannuity,  x80_t *, sp2,
 {
   DECLAREIN2OUT();
 
-  register ieee_t r = x80_to_ieee (sp2), n = x80_to_ieee (sp);
+  ieee_t r = x80_to_ieee (sp2), n = x80_to_ieee (sp);
   in1 = r;
   in2 = n;
   ieee_to_x80 (out = (1 - (pow (1 + r, -n))) / r, dp);

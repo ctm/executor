@@ -611,7 +611,7 @@ P3 (PUBLIC pascal trap, int16, TEFeatureFlag,
 int16
 Executor::ROMlib_call_TEDoText (TEPtr tp, int16 first, int16 last, int16 what)
 {
-  register int16 myd0;
+  int16 myd0;
 
   if (MR (TEDoText) == (ProcPtr) P_ROMlib_dotext)
     myd0 = C_ROMlib_dotext (tp, first, last, what);

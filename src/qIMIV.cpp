@@ -52,8 +52,8 @@ namespace Executor {
 A7(PRIVATE, void, transfer, INTEGER *, srcp, INTEGER *, dstp, INTEGER, srcr,
 	       INTEGER, dstr, INTEGER, height, INTEGER, widthw, transferop, op)
 {
-    register INTEGER sbump, dbump;
-    register INTEGER *ep0, *ep1;
+    INTEGER sbump, dbump;
+    INTEGER *ep0, *ep1;
     
     sbump = srcr/2 - widthw;
     dbump = dstr/2 - widthw;

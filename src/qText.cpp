@@ -83,7 +83,7 @@ P3(PUBLIC pascal trap, void, DrawText, Ptr, tb, INTEGER, fb, INTEGER, bc)
  * with C strings.
  */
 void
-Executor::DrawText_c_string (char *string)
+Executor::DrawText_c_string (const char *string)
 {
   DrawText ((Ptr) string, 0, strlen (string));
 }

@@ -217,7 +217,7 @@ P6(PUBLIC pascal trap, LONGINT, DragGrayRgn, RgnHandle, rgn, Point, startp,
 
 P1(PUBLIC pascal trap, void, ClipAbove, WindowPeek, w)
 {
-    register WindowPeek wp;
+    WindowPeek wp;
 
     SectRgn (PORT_CLIP_REGION (MR (wmgr_port)), MR (GrayRgn),
 	     PORT_CLIP_REGION (MR (wmgr_port)));

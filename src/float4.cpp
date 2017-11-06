@@ -542,7 +542,7 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_FtintX, x80_t *,
 		  dp, unsigned short, sel)
 {
   DECLAREINOUT();
-  register ieee_t n = x80_to_ieee (dp);
+  ieee_t n = x80_to_ieee (dp);
 
   in = n;
   /* FIXME - may lose precision! */
@@ -561,7 +561,7 @@ P_SAVED0D1A0A1_2 (PUBLIC pascal trap, void, ROMlib_FtintX, x80_t *,
 #define SIMPLE_OP(name, op, is_binary_op)				\
 do {									\
   DECLAREIN2OUT();							\
-  register ieee_t dest;							\
+  ieee_t dest;							\
 									\
   if (is_binary_op) {							\
     dest = x80_to_ieee (dp);						\
@@ -660,7 +660,7 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, void, ROMlib_FX2x, x80_t *,
 		  sp, void *, dp, unsigned short, sel)
 {
   DECLAREIN();
-  register ieee_t val = x80_to_ieee (sp);
+  ieee_t val = x80_to_ieee (sp);
 
   /* FIXME - should trigger exceptions if val cannot be accurately
    * represented in the new type.
@@ -702,7 +702,7 @@ P_SAVED1A0A1_3 (PUBLIC pascal trap, void, ROMlib_Fremx, void *, sp,
 		x80_t *, dp, unsigned short, sel)
 {
   DECLAREIN2OUT();
-  register ieee_t n1, n2, ratio;
+  ieee_t n1, n2, ratio;
   int n;
 
   /* Fetch first argument. */
@@ -770,7 +770,7 @@ P_SAVED0D1A0A1_3 (PUBLIC pascal trap, FCMP_RETURN_TYPE, ROMlib_Fcmpx,
 		  void *, sp, x80_t *, dp, unsigned short, sel)
 {
   DECLAREIN2();
-  register ieee_t n1, n2;
+  ieee_t n1, n2;
 
   /* Fetch first value to compare. */
   n1 = x80_to_ieee (dp);
@@ -896,7 +896,7 @@ P_SAVED0D1A0A1_4 (PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
 		  sp2, void *, sp, Decimal *, dp, unsigned short, sel)
 {
   DECLAREIN();
-  register ieee_t n;
+  ieee_t n;
   int digits;
   char c_string[256] = "?";   /* Big enough to be safe. */
 

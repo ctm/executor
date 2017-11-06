@@ -687,7 +687,7 @@ A3(PUBLIC trap, void, R_Fix2X, void *, dummyretpc, Fixed, x,	/* INTERNAL */
 	"fmovex fp0, %0" : "=m" (temp) : "m" (x) : "fp0");
     X96TO80(temp, *ret);
 #else
-    register ieee_t n = x;
+    ieee_t n = x;
     n /= 0x10000;
     ieee_to_x80 (n, ret);
 #endif
@@ -704,7 +704,7 @@ A3(PUBLIC trap, void, R_Frac2X, void *, dummyretpc, Fract, x,	/* INTERNAL */
 	"fmovex fp0, %0" : "=m" (temp) : "m" (x) : "fp0");
     X96TO80(temp, *ret);
 #else
-    register ieee_t n = x;
+    ieee_t n = x;
     n /= 0x40000000;
     ieee_to_x80 (n, ret);
 #endif
@@ -722,7 +722,7 @@ P1(PUBLIC pascal trap, Fixed, R_X2Fix, extended80 *, x)
 	"fmovel fp0, %0" : "=g" (retval) : "m" (temp) : "fp0");
     return retval;
 #else
-    register ieee_t n = x80_to_ieee (x);
+    ieee_t n = x80_to_ieee (x);
     n *= 0x10000;
     return (Fixed) n;
 #endif
@@ -740,7 +740,7 @@ P1(PUBLIC pascal trap, Fract, R_X2Frac, extended80 *, x)
 	"fmovel fp0, %0" : "=g" (retval) : "m" (temp) : "fp0");
     return retval;
 #else
-    register ieee_t n = x80_to_ieee (x);
+    ieee_t n = x80_to_ieee (x);
     n *= 0x40000000;
     return (Fract) n;
 #endif

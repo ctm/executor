@@ -84,7 +84,7 @@ P4 (PUBLIC pascal trap, void, StdArc, GrafVerb, verb, Rect *, r,
           right = CW(r->right), bottom = CW(r->bottom);
   INTEGER ewall;
   Point spt, ept;
-  register INTEGER h, v;
+  INTEGER h, v;
   INTEGER enda;
   INTEGER done;
   GUEST<RgnHandle> saveclip;

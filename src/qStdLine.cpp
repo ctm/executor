@@ -32,37 +32,37 @@ using namespace Executor;
 		   *op2++ = (*op++ = (x)) + offx)
 
 namespace Executor {
-  PRIVATE void scodydxx1x2(register LONGINT y1, register INTEGER x1,
+  PRIVATE void scodydxx1x2(LONGINT y1, INTEGER x1,
 						   INTEGER dy, INTEGER dx, INTEGER ** opp, INTEGER ** opp2,
-						   register INTEGER offy, register INTEGER offx);
-  PRIVATE INTEGER *scrdydxx1x2(register LONGINT y1, register INTEGER x1,
-							   INTEGER dy, INTEGER dx, register INTEGER * op);
-  PRIVATE void scodydxx2x1(register LONGINT y1, register INTEGER x1,
+						   INTEGER offy, INTEGER offx);
+  PRIVATE INTEGER *scrdydxx1x2(LONGINT y1, INTEGER x1,
+							   INTEGER dy, INTEGER dx, INTEGER * op);
+  PRIVATE void scodydxx2x1(LONGINT y1, INTEGER x1,
 						   INTEGER dy, INTEGER dx, INTEGER ** opp, INTEGER ** opp2,
-						   register INTEGER offy, register INTEGER offx);
-  PRIVATE INTEGER *scrdydxx2x1(register LONGINT y1, register INTEGER x1,
-							   INTEGER dy, INTEGER dx, register INTEGER * op);
-  PRIVATE void scodxdyx1x2(register INTEGER y1, register LONGINT x1,
-						   register INTEGER dy, register INTEGER dx, INTEGER ** opp,
-						   INTEGER ** opp2, register INTEGER offy, register INTEGER offx);
-  PRIVATE INTEGER *scrdxdyx1x2(register INTEGER y1, register LONGINT x1,
-							   register INTEGER dy, register INTEGER dx, register INTEGER * op);
-  PRIVATE void scodxdyx2x1(register INTEGER y1, register LONGINT x1,
-						   register INTEGER dy, register INTEGER dx, INTEGER ** opp,
-						   INTEGER ** opp2, register INTEGER offy, register INTEGER offx);
-  PRIVATE INTEGER *scrdxdyx2x1(register INTEGER y1, register LONGINT x1,
-							   register INTEGER dy, register INTEGER dx, register INTEGER *op);
-  PRIVATE void regionify1(register INTEGER * ip1,
-						  register INTEGER * ip2, RgnPtr rp);
+						   INTEGER offy, INTEGER offx);
+  PRIVATE INTEGER *scrdydxx2x1(LONGINT y1, INTEGER x1,
+							   INTEGER dy, INTEGER dx, INTEGER * op);
+  PRIVATE void scodxdyx1x2(INTEGER y1, LONGINT x1,
+						   INTEGER dy, INTEGER dx, INTEGER ** opp,
+						   INTEGER ** opp2, INTEGER offy, INTEGER offx);
+  PRIVATE INTEGER *scrdxdyx1x2(INTEGER y1, LONGINT x1,
+							   INTEGER dy, INTEGER dx, INTEGER * op);
+  PRIVATE void scodxdyx2x1(INTEGER y1, LONGINT x1,
+						   INTEGER dy, INTEGER dx, INTEGER ** opp,
+						   INTEGER ** opp2, INTEGER offy, INTEGER offx);
+  PRIVATE INTEGER *scrdxdyx2x1(INTEGER y1, LONGINT x1,
+							   INTEGER dy, INTEGER dx, INTEGER *op);
+  PRIVATE void regionify1(INTEGER * ip1,
+						  INTEGER * ip2, RgnPtr rp);
 }
 
-A8(PRIVATE, void, scodydxx1x2, register LONGINT, y1, register INTEGER, x1,
+A8(PRIVATE, void, scodydxx1x2, LONGINT, y1, INTEGER, x1,
 	    INTEGER, dy, INTEGER, dx, INTEGER **, opp, INTEGER **, opp2,
-				register INTEGER, offy, register INTEGER, offx)
+				INTEGER, offy, INTEGER, offx)
 {
-    register INTEGER *op, *op2;
-    register INTEGER x2;
-    register LONGINT incr;
+    INTEGER *op, *op2;
+    INTEGER x2;
+    LONGINT incr;
 
     op  = *opp;
     op2 = *opp2;
@@ -89,11 +89,11 @@ A8(PRIVATE, void, scodydxx1x2, register LONGINT, y1, register INTEGER, x1,
 			 *op++ = CW_RAW(x2),	\
 			 *op++ = RGNSTOPX)
 
-A5(PRIVATE, INTEGER *, scrdydxx1x2, register LONGINT, y1, register INTEGER, x1,
-			    INTEGER, dy, INTEGER, dx, register INTEGER *, op)
+A5(PRIVATE, INTEGER *, scrdydxx1x2, LONGINT, y1, INTEGER, x1,
+			    INTEGER, dy, INTEGER, dx, INTEGER *, op)
 {
-    register INTEGER x2;
-    register LONGINT incr;
+    INTEGER x2;
+    LONGINT incr;
 
     x2 = x1 - dx;
     if (dy > dx) {
@@ -113,13 +113,13 @@ A5(PRIVATE, INTEGER *, scrdydxx1x2, register LONGINT, y1, register INTEGER, x1,
     return op;
 }
 
-A8(PRIVATE, void, scodydxx2x1, register LONGINT, y1, register INTEGER, x1,
+A8(PRIVATE, void, scodydxx2x1, LONGINT, y1, INTEGER, x1,
 	    INTEGER, dy, INTEGER, dx, INTEGER **, opp, INTEGER **, opp2,
-				register INTEGER, offy, register INTEGER, offx)
+				INTEGER, offy, INTEGER, offx)
 {
-    register INTEGER x2;
-    register LONGINT incr;
-    register INTEGER *op, *op2;
+    INTEGER x2;
+    LONGINT incr;
+    INTEGER *op, *op2;
 
     op  = *opp;
     op2 = *opp2;
@@ -141,11 +141,11 @@ A8(PRIVATE, void, scodydxx2x1, register LONGINT, y1, register INTEGER, x1,
     *opp2 = op2;
 }
 
-A5(PRIVATE, INTEGER *, scrdydxx2x1, register LONGINT, y1, register INTEGER, x1,
-			    INTEGER, dy, INTEGER, dx, register INTEGER *, op)
+A5(PRIVATE, INTEGER *, scrdydxx2x1, LONGINT, y1, INTEGER, x1,
+			    INTEGER, dy, INTEGER, dx, INTEGER *, op)
 {
-    register INTEGER x2;
-    register LONGINT incr;
+    INTEGER x2;
+    LONGINT incr;
 
     x2 = x1 + dx;
     if (dy > dx) {
@@ -162,13 +162,13 @@ A5(PRIVATE, INTEGER *, scrdydxx2x1, register LONGINT, y1, register INTEGER, x1,
     return op;
 }
 
-A8(PRIVATE, void, scodxdyx1x2, register INTEGER, y1, register LONGINT, x1,
-	    register INTEGER, dy, register INTEGER, dx, INTEGER **, opp,
-	    INTEGER **, opp2, register INTEGER, offy, register INTEGER, offx)
+A8(PRIVATE, void, scodxdyx1x2, INTEGER, y1, LONGINT, x1,
+	    INTEGER, dy, INTEGER, dx, INTEGER **, opp,
+	    INTEGER **, opp2, INTEGER, offy, INTEGER, offx)
 {
-    register INTEGER y2;
-    register LONGINT incr;
-    register INTEGER *op, *op2;
+    INTEGER y2;
+    LONGINT incr;
+    INTEGER *op, *op2;
 
     op  = *opp;
     op2 = *opp2;
@@ -183,11 +183,11 @@ A8(PRIVATE, void, scodxdyx1x2, register INTEGER, y1, register LONGINT, x1,
     *opp2 = op2;
 }
 
-A5(PRIVATE, INTEGER *, scrdxdyx1x2, register INTEGER, y1, register LONGINT, x1,
-	    register INTEGER, dy, register INTEGER, dx, register INTEGER *, op)
+A5(PRIVATE, INTEGER *, scrdxdyx1x2, INTEGER, y1, LONGINT, x1,
+	    INTEGER, dy, INTEGER, dx, INTEGER *, op)
 {
-    register INTEGER y2, ox, x2;
-    register LONGINT incr;
+    INTEGER y2, ox, x2;
+    LONGINT incr;
 
     x2 = x1 - dx;
     y2 = y1 + dy;
@@ -209,13 +209,13 @@ A5(PRIVATE, INTEGER *, scrdxdyx1x2, register INTEGER, y1, register LONGINT, x1,
     return op;
 }
 
-A8(PRIVATE, void, scodxdyx2x1, register INTEGER, y1, register LONGINT, x1,
-	    register INTEGER, dy, register INTEGER, dx, INTEGER **, opp,
-	    INTEGER **, opp2, register INTEGER, offy, register INTEGER, offx)
+A8(PRIVATE, void, scodxdyx2x1, INTEGER, y1, LONGINT, x1,
+	    INTEGER, dy, INTEGER, dx, INTEGER **, opp,
+	    INTEGER **, opp2, INTEGER, offy, INTEGER, offx)
 {
-    register INTEGER y2;
-    register LONGINT incr;
-    register INTEGER *op, *op2;
+    INTEGER y2;
+    LONGINT incr;
+    INTEGER *op, *op2;
 
     op  = *opp;
     op2 = *opp2;
@@ -230,11 +230,11 @@ A8(PRIVATE, void, scodxdyx2x1, register INTEGER, y1, register LONGINT, x1,
     *opp2 = op2;
 }
 
-A5(PRIVATE, INTEGER *, scrdxdyx2x1, register INTEGER, y1, register LONGINT, x1,
-	    register INTEGER, dy, register INTEGER, dx, register INTEGER *, op)
+A5(PRIVATE, INTEGER *, scrdxdyx2x1, INTEGER, y1, LONGINT, x1,
+	    INTEGER, dy, INTEGER, dx, INTEGER *, op)
 {
-    register INTEGER y2, ox;
-    register LONGINT incr;
+    INTEGER y2, ox;
+    LONGINT incr;
 
     y2 = y1 + dy;
     incr = ((LONGINT) dx << 16) / (dy+1) + 1;
@@ -253,8 +253,8 @@ A5(PRIVATE, INTEGER *, scrdxdyx2x1, register INTEGER, y1, register LONGINT, x1,
  *	 pairs.  2)  the start stop pairs are kept in native endianness.
  */
 
-A3(PRIVATE, void, regionify1, register INTEGER *, ip1,
-					   register INTEGER *, ip2, RgnPtr, rp)
+A3(PRIVATE, void, regionify1, INTEGER *, ip1,
+					   INTEGER *, ip2, RgnPtr, rp)
 {
     INTEGER *tempp;
     INTEGER *op;
@@ -323,7 +323,7 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
   Size psize;
   GUEST<RgnPtr> rp;
   Rect r;
-  register INTEGER r32767;
+  INTEGER r32767;
   RgnHandle rh;
   PolyHandle ph;
   GUEST<Point> swappedp;

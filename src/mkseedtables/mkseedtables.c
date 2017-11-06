@@ -55,8 +55,8 @@ static void buildbinarytotrinary()
 
 static void buildexpandtable()
 {
-    register LONGINT i, n, bit;
-    register LONGINT x, y;
+    LONGINT i, n, bit;
+    LONGINT x, y;
     unsigned char toexpand, seed, retval;
     
     printf("PRIVATE unsigned char expandtable[] = {\n");

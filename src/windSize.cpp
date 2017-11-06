@@ -34,7 +34,7 @@ P4(PUBLIC pascal trap, void, MoveWindow, WindowPtr, wp, INTEGER, h, INTEGER, v,
     GrafPtr gp;
     RgnHandle movepart, updatepart, behindpart;
     Rect r;
-    register WindowPeek w;
+    WindowPeek w;
 
     TRAPBEGIN();
     w = (WindowPeek) wp;

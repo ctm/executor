@@ -163,7 +163,7 @@ last_chance_tmp_vref_and_dirid (INTEGER vref, INTEGER *tmp_vrefp,
   pb.volumeParam.ioVRefNum = CW (vref);
   retval = PBHGetVInfo (&pb, false);
   if (retval == noErr) {
-	static char *top_level_names[] =
+	static const char *top_level_names[] =
 	{
 	    "\3tmp",
 	    "\4temp",

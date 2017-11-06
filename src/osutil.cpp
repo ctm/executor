@@ -217,8 +217,8 @@ PRIVATE unsigned char order[256] = {
 A5(PUBLIC, LONGINT, ROMlib_RelString, unsigned char *, s1, unsigned char *, s2,
 			       BOOLEAN, casesig, BOOLEAN, diacsig, LONGINT, d0)
 {
-    register INTEGER n1, n2;
-    register unsigned char *s, *t;
+    INTEGER n1, n2;
+    unsigned char *s, *t;
     unsigned char c1, c2;
 
     s = s1;
@@ -290,8 +290,8 @@ A4(PUBLIC trap, BOOLEANRET, EqualString, StringPtr, s1, StringPtr, s2,
 
 A2(PUBLIC, int, ROMlib_strcmp, const Byte *, s1, const Byte *, s2)	/* INTERNAL */
 {
-    register int n1 = U(s1[0]), n2 = U(s2[0]);
-    register unsigned char *p1 = (unsigned char *) s1+1,
+    int n1 = U(s1[0]), n2 = U(s2[0]);
+    unsigned char *p1 = (unsigned char *) s1+1,
       *p2 = (unsigned char *) s2+1, c1, c2;
 
 #if !defined (LETGCCWAIL)

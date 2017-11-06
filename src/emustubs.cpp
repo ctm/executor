@@ -284,7 +284,7 @@ STUB(_GetResource)
 
 static void
 do_selector_error (uint32 selector,
-		   char *trap_name,
+		   const char *trap_name,
 		   syn68k_addr_t (*trap_fp) (syn68k_addr_t, void **))
 {
   bool found_trapno_p = false;
@@ -336,13 +336,13 @@ typedef struct
 } selectorblock_t;
 
 #define do_selector_block(sbp, sel, trap)			\
-  ({ _do_selector_block (sbp, sel, (char*) # trap, _ ## trap); })
+  ({ _do_selector_block (sbp, sel, # trap, _ ## trap); })
 
 typedef syn68k_addr_t (*trap_stuff) (syn68k_addr_t, void **);
 
 PRIVATE syn68k_addr_t
 _do_selector_block (const selectorblock_t *sbp, unsigned long sel,
-		    char *trap_name,
+		    const char *trap_name,
 		    trap_stuff trap_fp)
 {
   char done;
@@ -385,7 +385,7 @@ static syn68k_addr_t
 _do_selector_table (uint32 selector,
 		    selector_table_entry_t *table, int table_size,
 		    syn68k_addr_t (*fail_fn) (void),
-		    char *trap_name,
+		    const char *trap_name,
 		    syn68k_addr_t (*trap_fp) (syn68k_addr_t, void **))
 {
   int i;

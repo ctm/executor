@@ -500,7 +500,7 @@ extern pascal trap void C_MakeRGBPat( PixPatHandle ph,
 extern pascal trap void C_DisposPixPat( PixPatHandle pph ); 
 extern pascal trap INTEGER C_Random( void  ); 
 extern pascal trap BOOLEAN C_GetPixel( INTEGER h, INTEGER v ); 
-extern pascal trap void C_StuffHex( register Ptr p, StringPtr s ); 
+extern pascal trap void C_StuffHex( Ptr p, StringPtr s ); 
 extern pascal trap void C_ScalePt( GUEST<Point> *pt, Rect *srcr, Rect *dstr ); 
 extern pascal trap void C_MapPt( GUEST<Point> *pt, Rect *srcr, Rect *dstr ); 
 extern pascal trap void C_MapRect( Rect *r, Rect *srcr, Rect *dstr ); 

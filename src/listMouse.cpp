@@ -34,11 +34,11 @@ namespace Executor {
 	 ListHandle list, BOOLEAN hiliteempty);
   static inline BOOLEAN ROMlib_CALLCLICK(clickproc);
   PRIVATE void scrollbyvalues(ListHandle);
-  PRIVATE void rect2value(register Rect * in, register Rect * butnotin,
-						  register INTEGER value, register ListHandle list,
+  PRIVATE void rect2value(Rect * in, Rect * butnotin,
+						  INTEGER value, ListHandle list,
 						  BOOLEAN hiliteempty);
-  PRIVATE void rectvalue(register Rect * rp, register INTEGER value,
-						 register ListHandle list, BOOLEAN hiliteempty);
+  PRIVATE void rectvalue(Rect * rp, INTEGER value,
+						 ListHandle list, BOOLEAN hiliteempty);
 }
 
 A2(PRIVATE, void, findcell, GUEST<Cell> *, cp, ListHandle, list)
@@ -99,8 +99,8 @@ A4(PRIVATE, void, setselectnilflag, BOOLEAN, setit, Cell, cell,
     }
 }
 
-A4(PRIVATE, void, rectvalue, register Rect *, rp, register INTEGER, value,
-			       register ListHandle, list, BOOLEAN, hiliteempty)
+A4(PRIVATE, void, rectvalue, Rect *, rp, INTEGER, value,
+			       ListHandle, list, BOOLEAN, hiliteempty)
 {
     GUEST<INTEGER> *ip, *ep;
     GUEST<INTEGER> *sp;

@@ -124,7 +124,7 @@ rgn_is_rect_p (const RgnHandle rgnh)
 void
 Executor::ROMlib_sizergn (RgnHandle rh, bool special_p) /* INTERNAL */
 {
-  register INTEGER *ip, i, left = RGN_STOP, right = -RGN_STOP, y;
+  INTEGER *ip, i, left = RGN_STOP, right = -RGN_STOP, y;
   Size rs;
 
   ip = RGN_DATA (rh);
@@ -628,7 +628,7 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
     INTEGER freeendpoints[NHPAIR], *freeep = freeendpoints;
     INTEGER *ipr1, *ipr2;
     INTEGER *temppoints, *tptr;
-    register INTEGER v1, v2, vx;
+    INTEGER v1, v2, vx;
     GUEST<INTEGER> r1[9], r2[9];
     Rect *rp;
     INTEGER nspecial;
@@ -800,7 +800,7 @@ A4(PRIVATE, void, binop, optype, op, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
     INTEGER freeendpoints[NHPAIR], *freeep = freeendpoints;
     INTEGER *ipr1, *ipr2;
     INTEGER *temppoints, *tptr;
-    register INTEGER v1, v2, vx;
+    INTEGER v1, v2, vx;
     GUEST<INTEGER> r1[9], r2[9];
     Rect *rp;
     ALLOCABEGIN
@@ -881,7 +881,7 @@ A4(PRIVATE, void, binop, optype, op, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
     /* TODO fix rgnBBox here */
     ReallocHandle((Handle) dstrgn,
 		  RGN_SMALL_SIZE + sizeof(INTEGER) * (tptr - temppoints));
-    { register INTEGER *ip, *op;
+    { INTEGER *ip, *op;
 	ip = temppoints;
 	op = (INTEGER *) STARH(dstrgn) + 5;
 	while (ip != tptr)
@@ -1013,7 +1013,7 @@ Executor::nonspecial_rgn_to_special_rgn (const INTEGER *src, INTEGER *dst)
 
 static INTEGER npairs;
 
-#define DECL void rhtopandinseth(RgnHandle rh, INTEGER *p, register INTEGER dh)
+#define DECL void rhtopandinseth(RgnHandle rh, INTEGER *p, INTEGER dh)
 
 #define STATEDECL SignedByte state;
 #define ITYPE INTEGER
@@ -1049,7 +1049,7 @@ static int comparey(const void* cp1, const void* cp2)
 
 A2(PRIVATE, LONGINT, comparex, char *, cp1, char *, cp2)
 {
-    register INTEGER *p1, *p2;
+    INTEGER *p1, *p2;
     LONGINT retval;
     
     p1 = (INTEGER *) cp1 + 1;
@@ -1073,7 +1073,7 @@ A2(PRIVATE, LONGINT, comparex, char *, cp1, char *, cp2)
 
 A2(PRIVATE, LONGINT, comparey, char *, cp1, char *, cp2)
 {
-    register INTEGER *p1, *p2;
+    INTEGER *p1, *p2;
     LONGINT retval;
     
     p1 = (INTEGER *) cp1;
@@ -1126,7 +1126,7 @@ P3(PUBLIC pascal trap, void, InsetRgn, RgnHandle, rh, INTEGER, dh, INTEGER, dv)
     Handle h;
     INTEGER *p;
     Rect *rp;
-    register Size newsize;;
+    Size newsize;;
     
     if (RGN_SMALL_P (rh)) {
 	InsetRect(&RGN_BBOX (rh), dh, dv);

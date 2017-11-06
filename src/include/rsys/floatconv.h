@@ -64,7 +64,7 @@ x80_to_ieee (const x80_t *x) ALWAYS_INLINE;
 EXTERN_INLINE ieee_t
 x80_to_ieee (const x80_t *x)
 {
-  register ieee_t retval;
+  ieee_t retval;
 
 #if defined (mc68000)
   volatile m68k_x96_t temp96;
@@ -248,7 +248,7 @@ comp_to_ieee (const comp_t *cp) ALWAYS_INLINE;
 EXTERN_INLINE ieee_t
 comp_to_ieee (const comp_t *cp)
 {
-  register ieee_t retval;
+  ieee_t retval;
   native_comp_t c;
 
 #if defined (LITTLEENDIAN)

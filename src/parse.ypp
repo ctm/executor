@@ -317,7 +317,7 @@ numberlist: numberlist ',' number
 #include	<ctype.h>
 
 struct namevaluestr {
-    char *name;
+    const char *name;
     long value;
     long lval;
 } reserved[] = 

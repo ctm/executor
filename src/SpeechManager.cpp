@@ -22,6 +22,7 @@ P0(PUBLIC pascal, NumVersion, SpeechManagerVersion)
   return MacBridge::SpeechManagerVersion();
 #else
   warning_unimplemented (NULL_STRING);
+  return 0;
 #endif
 }
 
@@ -31,6 +32,7 @@ P0(PUBLIC pascal, int16, SpeechBusy)
   return MacBridge::SpeechBusy();
 #else
   warning_unimplemented (NULL_STRING);
+  return 0;
 #endif
 }
 
@@ -40,6 +42,7 @@ P0(PUBLIC pascal, int16, SpeechBusySystemWide)
   return MacBridge::SpeechBusySystemWide();
 #else
   warning_unimplemented (NULL_STRING);
+  return 0;
 #endif
 }
 
@@ -49,6 +52,7 @@ P1(PUBLIC pascal, OSErr, CountVoices, int16 *, numVoices)
   return MacBridge::CountVoices(numVoices);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -58,6 +62,7 @@ P1(PUBLIC pascal, OSErr, DisposeSpeechChannel, SpeechChannel, chan)
   return MacBridge::DisposeSpeechChannel(chan);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -67,6 +72,7 @@ P1(PUBLIC pascal, OSErr, SpeakString, Str255, textToBeSpoken)
   return MacBridge::SpeakString(textToBeSpoken);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -76,6 +82,7 @@ P1(PUBLIC pascal, OSErr, StopSpeech, SpeechChannel, chan)
   return MacBridge::StopSpeech(chan);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -85,6 +92,7 @@ P1(PUBLIC pascal, OSErr, ContinueSpeech, SpeechChannel, chan)
   return MacBridge::ContinueSpeech(chan);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -94,6 +102,7 @@ P2(PUBLIC pascal, OSErr, GetIndVoice, int16, index, VoiceSpec *, voice)
   return MacBridge::GetIndVoice(index, voice);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -103,6 +112,7 @@ P2(PUBLIC pascal, OSErr, NewSpeechChannel, VoiceSpec *, voice, SpeechChannel *,c
   return MacBridge::NewSpeechChannel(voice, chan);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -112,6 +122,7 @@ P2(PUBLIC pascal, OSErr, StopSpeechAt, SpeechChannel, chan, int32, whereToStop)
   return MacBridge::StopSpeechAt(chan, whereToStop);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -121,6 +132,7 @@ P2(PUBLIC pascal, OSErr, PauseSpeechAt, SpeechChannel, chan, int32, whereToPause
   return MacBridge::PauseSpeechAt(chan, whereToPause);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -130,6 +142,7 @@ P2(PUBLIC pascal, OSErr, SetSpeechRate, SpeechChannel, chan, Fixed, rate)
   return MacBridge::SetSpeechRate(chan, rate);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -139,6 +152,7 @@ P2(PUBLIC pascal, OSErr, GetSpeechRate, SpeechChannel, chan, Fixed *,rate)
   return MacBridge::GetSpeechRate(chan, rate);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -148,6 +162,7 @@ P2(PUBLIC pascal, OSErr, SetSpeechPitch, SpeechChannel, chan, Fixed, pitch)
   return MacBridge::SetSpeechPitch(chan, pitch);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -157,6 +172,7 @@ P2(PUBLIC pascal, OSErr, GetSpeechPitch, SpeechChannel, chan, Fixed *,pitch)
   return MacBridge::GetSpeechPitch(chan, pitch);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -166,6 +182,7 @@ P2(PUBLIC pascal, OSErr, UseDictionary, SpeechChannel, chan, Handle, dictionary)
   return MacBridge::UseDictionary(chan, dictionary);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -175,6 +192,7 @@ P3(PUBLIC pascal, OSErr, MakeVoiceSpec, OSType, creator, OSType, id, VoiceSpec *
   return MacBridge::MakeVoiceSpec(creator, id, voice);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -184,6 +202,7 @@ P3(PUBLIC pascal, OSErr, GetVoiceDescription, const VoiceSpec *,voice, VoiceDesc
   return MacBridge::GetVoiceDescription(voice, info, infoLength);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -193,6 +212,7 @@ P3(PUBLIC pascal, OSErr, GetVoiceInfo, const VoiceSpec *,voice, OSType, selector
   return MacBridge::GetVoiceInfo(voice, selector, voiceInfo);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -202,6 +222,7 @@ P3(PUBLIC pascal, OSErr, SpeakText, SpeechChannel, chan, const void *,textBuf, U
   return MacBridge::SpeakText(chan, textBuf, textBytes);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -211,6 +232,7 @@ P3(PUBLIC pascal, OSErr, SetSpeechInfo, SpeechChannel, chan, OSType, selector, c
   return MacBridge::SetSpeechInfo(chan, selector, speechInfo);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -220,6 +242,7 @@ P3(PUBLIC pascal, OSErr, GetSpeechInfo, SpeechChannel, chan, OSType, selector, v
   return MacBridge::GetSpeechInfo(chan, selector, speechInfo);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -229,6 +252,7 @@ P4(PUBLIC pascal, OSErr, SpeakBuffer, SpeechChannel, chan, const void *, textBuf
   return MacBridge::SpeakBuffer(chan, textBuf, textBytes, controlFlags);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 
@@ -238,6 +262,7 @@ P5(PUBLIC pascal, OSErr, TextToPhonemes, SpeechChannel, chan, const void *,textB
   return MacBridge::TextToPhonemes(chan, textBuf, textBytes, phonemeBuf, phonemeBytes);
 #else
   warning_unimplemented (NULL_STRING);
+  return paramErr;
 #endif
 }
 

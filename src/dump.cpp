@@ -951,7 +951,7 @@ dump_dialog_items (DialogPeek dp)
        
       item = items;
       fprintf (o_fp, "item %d; type %d, hand %p, (%d, %d, %d, %d)\n",
- 	       i, CW ((int16) item->itmtype),
+ 	       i, (int) (item->itmtype),
  	       MR (item->itmhand),
  	       CW (item->itmr.top), CW (item->itmr.left), 
  	       CW (item->itmr.bottom), CW (item->itmr.right));
@@ -1051,7 +1051,7 @@ dump_menu_info (MenuHandle x)
 	p += 4;
       }
     indent -= 2;
-    iprintf ((o_fp, "total chars = %d\n", p - (unsigned char *) STARH(x)));
+    iprintf ((o_fp, "total chars = %ld\n", p - (unsigned char *) STARH(x)));
   }
   indent -= 2;
 }

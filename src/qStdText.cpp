@@ -254,7 +254,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
   INTEGER wid, offset;
   GUEST<INTEGER> *widp, *locp;
   unsigned out;
-  register INTEGER c;
+  INTEGER c;
   FontRec *fp;
   BitMap fmap;
   Rect srect, drect, misrect;
