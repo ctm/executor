@@ -89,14 +89,14 @@ PRIVATE OSErr readvolumebitmap(HVCB *vcbp, volumeinfoPtr vp)
     
     if (Cx(vp->drSigWord) != 0x4244)
       {
-	long *words;
+	GUEST<uint32_t> *words;
 
 	err = noMacDskErr;
 
-	words = (long *) vp;
-	warning_fs_log ("sigword = 0x%02x (%08lx %08lx %08lx %08lx)",
-			CW (vp->drSigWord), CL (words[0]), CL (words[1]),
-			CL (words[2]), CL (words[3]));
+	words = (GUEST<uint32_t> *) vp;
+	warning_fs_log ("sigword = 0x%02x (%08x %08x %08x %08x)",
+			CW (vp->drSigWord), (unsigned)CL (words[0]), (unsigned)CL (words[1]),
+			(unsigned)CL (words[2]), (unsigned)CL (words[3]));
       }
     else {
 	nphysrequired = NPHYSREQ(ROUNDUP8(Cx(vp->drNmAlBlks)) / 8);

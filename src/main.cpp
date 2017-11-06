@@ -898,7 +898,6 @@ static void
 setup_trap_vectors (void)
 {
   syn68k_addr_t timer_callback;
-  int i;
 
   /* Set up the trap vector for the timer interrupt. */
   timer_callback = callback_install (catchalarm, NULL);
@@ -908,7 +907,7 @@ setup_trap_vectors (void)
    * Skip over those trap vectors which are known to have legitimate
    * values.
    */
-  for (i = 1; i < 64; i++)
+  for (intptr_t i = 1; i < 64; i++)
     if (i != 10                            /* A line trap.       */
 #if defined (M68K_TIMER_VECTOR)
 	&& i != M68K_TIMER_VECTOR          /* timer interrupt.   */

@@ -715,7 +715,7 @@ P2 (PUBLIC pascal trap, void, StdRgn,
   
   if (HxX (rgn, rgnSize) & CWC (0x8000))
     {
-      warning_unexpected ("negative rgnSize = 0x%x\n", HxX (rgn, rgnSize));
+      warning_unexpected ("negative rgnSize = 0x%x\n", Hx (rgn, rgnSize));
       return;
     }
 

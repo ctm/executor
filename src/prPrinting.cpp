@@ -554,7 +554,7 @@ P3(PUBLIC pascal trap, TPPrPort, PrOpenDoc, THPrint, hPrint, TPPrPort, port,
 		     ROMlib_document_paper_sizes.c_str(), ROMlib_paper_size_name.c_str(),
 		     ROMlib_paper_size_name_terminator.c_str(),
 		     ROMlib_paper_orientation.c_str());
-	    fprintf (ROMlib_printfile, ROMlib_doc_prolog);
+	    fprintf (ROMlib_printfile, "%s", ROMlib_doc_prolog);
 	    fprintf (ROMlib_printfile, ROMlib_doc_end_prolog,
 		     ROMlib_paper_size.c_str(), ROMlib_paper_size_name.c_str(),
 		     ROMlib_paper_size_name_terminator.c_str(),
