@@ -163,7 +163,7 @@ P3(PUBLIC pascal trap, LONGINT, PutScrap, LONGINT, len, ResType, rest, Ptr, p)
         SetFPos(f, fsFromStart, (LONGINT)Cx(ScrapSize));
         l = 4;
         GUEST<ResType> rest_s = CL(rest);
-	FSWriteAll(f, &l, (Ptr) &rest);
+	FSWriteAll(f, &l, (Ptr) &rest_s);
         l = 4;
 	swappedlen = CL(len);
         FSWriteAll(f, &l, (Ptr) &swappedlen);
