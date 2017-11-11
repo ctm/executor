@@ -760,7 +760,7 @@ get_all_defaults (void)
   }
   default_table[] =
   {
-    { &ROMlib_printer, "Printer", NULL, },
+    { &ROMlib_printer, "Printer", "", },
     { &ROMlib_paper, "Paper Size", "Letter", },
     { &ROMlib_port, "Port", "LPT1", },
     { &ROMlib_paper_orientation, "Orientation", "Portrait", },
