@@ -11,7 +11,7 @@
 #import <sys/param.h> /* for MAXPATHLEN */
 #import <unistd.h>
 
-@interface SDLMain : NSObject
+@interface SDLMain : NSObject <NSApplicationDelegate>
 @end
 
 /* For some reaon, Apple removed setAppleMenu from the headers in 10.4,

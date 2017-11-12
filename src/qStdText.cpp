@@ -394,7 +394,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
   hOutputInverse = FixRatio (1 << 8, hOutput);
 
   space_extra = PORT_SP_EXTRA (thePort);
-  spacewidth = (CL (WIDTHPTR->tabData[' ']) + space_extra
+  spacewidth = (CL (WIDTHPTR->tabData[(unsigned)' ']) + space_extra
 		- CL (WIDTHPTR->sExtra));
 
   if (action == text_helper_draw)
@@ -484,7 +484,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
   widths  = WIDTHPTR->tabData;
   kernmax = Cx(fp->kernMax);
   leftmost = left >> 16;
-  WIDTHPTR->tabData[' '] = CL (spacewidth);
+  WIDTHPTR->tabData[(unsigned)' '] = CL (spacewidth);
   WIDTHPTR->sExtra = CL (space_extra);
   if (action == text_helper_draw)
     ASSERT_SAFE(MR(stylemap.baseAddr));

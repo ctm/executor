@@ -397,7 +397,7 @@ PRIVATE void buildtabdata(howtobuild_t howtobuild, INTEGER extra,
 	}
 	break;
     }
-    WIDTHPTR->tabData[' '] = CL(Cx(WIDTHPTR->tabData[' ']) +
+    WIDTHPTR->tabData[(unsigned)' '] = CL(Cx(WIDTHPTR->tabData[' ']) +
 				Cx(WIDTHPTR->sExtra));
 }
 

@@ -176,8 +176,11 @@ enum { BUTTON_UP_BIT = 0x80 };
  * should probably make our mouse handling more true to real life.
  */
 
+// NOTE: deltas_p should be a bool, but is passed as int,
+//       because va_start requires it.
+
 PUBLIC void
-Executor::adb_apeiron_hack (bool deltas_p, ...)
+Executor::adb_apeiron_hack (int/*bool*/ deltas_p, ...)
 {
   static bool been_here = false;
   static long old_x;

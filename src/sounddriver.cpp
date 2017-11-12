@@ -26,6 +26,10 @@ class SoundDriver *sound_driver;
 
 int ROMlib_SND_RATE = 22255;
 
+SoundDriver::~SoundDriver()
+{
+}
+    
 void
 sound_init (void)
 {

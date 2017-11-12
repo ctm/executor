@@ -1407,7 +1407,7 @@ legit_zone_p (THz zone)
       block_header_t *blockp;
 
       blockp = ZONE_HEAP_DATA (zone);
-      retval = (THz) blockp->location_u.get() == zone;
+      retval = BLOCK_LOCATION_ZONE(blockp) == zone;
     }
 
   return retval;

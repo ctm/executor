@@ -61,7 +61,7 @@ struct button
   int index;
 };
 
-static struct button buttons[3] = {0};
+static struct button buttons[3] = {};
 
 static WindowPtr msg_window = nullptr;
 

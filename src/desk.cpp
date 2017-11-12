@@ -31,7 +31,10 @@ using namespace Executor;
 
 P1(PUBLIC pascal trap, INTEGER, OpenDeskAcc, Str255, acc)	/* IMI-440 */
 {
-    INTEGER retval;
+    	// THINK Reference says that OpenDeskAcc's return value
+    	// is undefined on error. This returns zero - otherwise
+    	// we get a compiler warning taht might hide real bugs.
+    INTEGER retval = 0;
     GUEST<INTEGER> retval_s;
     DCtlHandle dctlh;
     WindowPtr wp;

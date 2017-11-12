@@ -10,7 +10,7 @@
 
 namespace Executor {
 extern void C_adb_service_stub (void);
-extern void adb_apeiron_hack (bool deltas_p, ...);
+extern void adb_apeiron_hack (int/*bool*/ deltas_p, ...);
 extern void reset_adb_vector (void);
 }
 #endif

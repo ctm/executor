@@ -169,7 +169,7 @@ default_search_proc (RGBColor *rgb, GUEST<int32> *pixel)
 {
   MatchRec *mr;
 
-  mr = (MatchRec *) GD_REF_CON (MR (TheGDevice));
+  mr = ptr_from_longint<MatchRec*>( GD_REF_CON (MR (TheGDevice)) );
 
   if (mr->red == rgb->red
       && mr->green == rgb->green
@@ -188,7 +188,7 @@ default_search_proc_stub (syn68k_addr_t dummy_addr, void *dummy)
   int8 result;
 
   retval = POPADDR ();
-  #warning autc04: SYN68K_TO_US was missing
+
   arg2 = (void *) SYN68K_TO_US( POPADDR () );
   arg1 = (void *) SYN68K_TO_US( POPADDR () );
   

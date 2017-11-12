@@ -830,8 +830,8 @@ A2(PUBLIC, LONGINT, NGetTrapAddress, INTEGER, n, INTEGER, ttype) /* IMII-384 */
 		      ostraptable[n&(NOSENTRIES-1)]
 		      :
 		      tooltraptable[n&(NTOOLENTRIES-1)]);
-  warning_trace_info ("n = 0x%x, ttype = %d, retval = %p", (uint16) n, ttype,
-		      (void *) retval);
+  warning_trace_info ("n = 0x%x, ttype = %d, retval = %8x", (uint16) n, ttype,
+		      (unsigned) retval);
   return retval;
 }
 

@@ -263,6 +263,9 @@ PRIVATE char *specialname(ParmBlkPtr pbp, const char **lockfilep,
 						        const char **tempfilep)
 {
     char *retval;
+    *lockfilep = 0;
+    *tempfilep = 0;
+    retval = 0;
 
     switch (CW(pbp->cntrlParam.ioCRefNum)) {
         case AINREFNUM:
@@ -289,9 +292,6 @@ PRIVATE char *specialname(ParmBlkPtr pbp, const char **lockfilep,
             *tempfilep = 0;
 #endif
             break;
-        default:
-            *lockfilep = 0;
-            retval = 0;
     }
     return retval;
 }

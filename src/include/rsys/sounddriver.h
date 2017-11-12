@@ -17,6 +17,8 @@ public:
   virtual void HungerFinish() = 0;
   virtual void sound_clear_pending() = 0;
   virtual bool HasSoundClearPending() = 0;
+    
+  virtual ~SoundDriver();
 };
 
 /* Current sound driver in use. */

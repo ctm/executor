@@ -660,7 +660,7 @@ P4 (PUBLIC, pascal int32, mbdf0, int16, sel, int16, mess,
 			break;
 		case mbMenuRgn:
 			retval = (LONGINT)
-			US_TO_SYN68K(menurgn((RgnHandle) US_TO_SYN68K(param2)));
+			US_TO_SYN68K(menurgn((RgnHandle) SYN68K_TO_US(param2)));
 			break;
 	}
 	if (mess != mbInit)

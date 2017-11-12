@@ -418,8 +418,8 @@ Executor::ROMlib_sledgehammer_zone (THz zone, bool print_p,
 	  if (infop)
 	    ++infop->n_free;
 	  if (BLOCK_LOCATION_OFFSET (block))
-	    mm_fatal ("free block `%p' has non-zero location `%p'",
-		       block, (char *) BLOCK_LOCATION_OFFSET (block));
+	    mm_fatal ("free block `%p' has non-zero location `%08x'",
+		       block, BLOCK_LOCATION_OFFSET (block));
 	  total_size += PSIZE (block);
 	  if (infop)
 	    {

@@ -600,7 +600,7 @@ init_tail (alias_tail_t *tailp, Str32 zoneName, Str31 serverName,
 }
 
 PRIVATE OSErr
-assemble_pieces (GUEST<AliasHandle> *ahp, alias_head_t *headp, INTEGER n_pieces, ...)
+assemble_pieces (GUEST<AliasHandle> *ahp, alias_head_t *headp, int n_pieces, ...)
 {
   Size n_bytes_needed;
   va_list va;
