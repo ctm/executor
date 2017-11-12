@@ -3,10 +3,6 @@
 
    shutdown.c; ShutDown Manager routines */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_shutdown[] = "$Id: shutdown.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #include "rsys/common.h"
 
 #include "ShutDown.h"

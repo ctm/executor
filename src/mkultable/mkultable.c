@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_mkultable[] = "$Id: mkultable.c 86 2005-05-25 00:47:12Z ctm $";
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 

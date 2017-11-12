@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_win_dongle[] = "$Id: win_dongle.c 139 2006-07-11 23:35:04Z ctm $";
-#endif
-
 #define USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 
 #include "rsys/common.h"

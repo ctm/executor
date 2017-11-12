@@ -8,10 +8,6 @@
  * TODO: use update regions if we don't have room to save and restore bitmaps
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_menu[] = "$Id: menu.c 87 2005-05-25 01:57:33Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "QuickDraw.h"
 #include "MenuMgr.h"

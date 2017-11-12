@@ -3,10 +3,6 @@
  * All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_winfs[] = "$Id: winfs.c 139 2006-07-11 23:35:04Z ctm $";
-#endif
-
 /* NOTE: we have to include common.h since it sets up some macros that
    we need, including PUBLIC and PRIVATE.  However, since this is file's
    purpose is to export routines that are definitely not Mac-routines, we

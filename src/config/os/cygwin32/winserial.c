@@ -8,10 +8,6 @@
  *       just a bunch of stubs to make serial.c compile
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_winserial[] = "$Id: winserial.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "winserial.h"
 #include "FileMgr.h"

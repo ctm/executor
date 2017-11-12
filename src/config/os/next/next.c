@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_next[] = "$Id: next.c 119 2005-07-11 21:36:20Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "rsys/os.h"
 

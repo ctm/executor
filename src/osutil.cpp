@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_osutil[] = "$Id: osutil.c 97 2005-06-22 20:08:38Z ctm $";
-#endif
-
 /* Forward declarations in OSUtil.h (DO NOT DELETE THIS LINE) */
 
 #include "rsys/common.h"

@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_default_ctab_values[] = "$Id: default_ctab_values.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "rsys/cquick.h"
 #include "QuickDraw.h"

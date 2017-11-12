@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_fileDouble[] = "$Id: fileDouble.c 86 2005-05-25 00:47:12Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "FileMgr.h"
 #include "rsys/file.h"

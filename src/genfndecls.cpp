@@ -2,9 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_genfndecls[] = "$Id: genfndecls.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
 /* fndecls.c
    processes C files and extract public function declarations */
 

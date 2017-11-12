@@ -8,10 +8,6 @@
 
 #if !defined(USE_PORTABLE_PATBLT)
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_xdstubtables[] = "$Id: xdstubtables.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /* For completely useless transfer modes (e.g. ORing with zero). */
 const void *xdblt_nop_table[12] = {
     &xdblt_nop,

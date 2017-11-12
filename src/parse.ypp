@@ -14,11 +14,6 @@
  * All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_parse[] =
-	    "$Id: parse.y,v 2.26 2000/02/12 05:31:08 ctm Exp $";
-#endif
-
 static long yylex( void );
 static void freestring( char *string );
 static char validblock = 1;

@@ -4,10 +4,6 @@
 
 #warning Has some hard-coded Executors in it
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_x[] = "$Id: x.c 89 2005-05-25 04:15:34Z ctm $";
-#endif
-
 #define Region Mac_Region
 #define Cursor Mac_Cursor
 

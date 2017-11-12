@@ -4,10 +4,6 @@
 
 /* Forward declarations in ScriptMgr.h (DO NOT DELETE THIS LINE) */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_script[] = "$Id: script.c 88 2005-05-25 03:59:37Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "QuickDraw.h"
 #include "IntlUtil.h"

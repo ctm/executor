@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_splash[] = "$Id: splash.c 88 2005-05-25 03:59:37Z ctm $";
-#endif
-
 #include "rsys/common.h"
 
 #if defined(DISPLAY_SPLASH_SCREEN)

@@ -4,10 +4,6 @@
 
 #warning Insert is not giving us a 0x72
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_x_keycodes[] = "$Id: x_keycodes.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "rsys/keyboard.h"
 

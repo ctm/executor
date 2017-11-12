@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_dosmem[] = "$Id: dosmem.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "dosmem.h"
 #include "dpmilock.h"

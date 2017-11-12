@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_xdata[] = "$Id: xdata.c 87 2005-05-25 01:57:33Z ctm $";
-#endif
-
 #include "rsys/common.h"
 
 #include "MemoryMgr.h"

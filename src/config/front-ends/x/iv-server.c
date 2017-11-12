@@ -2,11 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_iv_server[]
-    = "$Id: iv-server.c 89 2005-05-25 04:15:34Z ctm $";
-#endif
-
 #define Region Mac_Region
 #define Cursor Mac_Cursor
 

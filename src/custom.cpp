@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_custom[] = "$Id: custom.c 131 2006-05-10 19:23:20Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "rsys/custom.h"
 #include "rsys/version.h"

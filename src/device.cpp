@@ -4,10 +4,6 @@
 
 /* Forward declarations in DeviceMgr.h (DO NOT DELETE THIS LINE) */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_device[] = "$Id: device.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "DeviceMgr.h"
 #include "FileMgr.h"

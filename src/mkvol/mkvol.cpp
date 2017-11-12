@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_mkvol[] = "$Id: mkvol.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #undef _DARWIN_NO_64_BIT_INODE
 
 /* #include "rsys/common.h" */

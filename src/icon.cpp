@@ -5,10 +5,6 @@
 #warning the icon suite representation is our own brew -- tests should
 #warning be written and we should do what the Mac does
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_icon[] = "$Id: icon.c 88 2005-05-25 03:59:37Z ctm $";
-#endif
-
 #include "rsys/common.h"
 
 #include "QuickDraw.h"

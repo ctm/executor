@@ -2,9 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_m68k[] = "$Id: m68k.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
 #include "rsys/common.h"
 
 CPUState cpu_state;

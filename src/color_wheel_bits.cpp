@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_color_wheel_bits[] = "$Id: color_wheel_bits.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #include "rsys/color_wheel_bits.h"
 
 using namespace Executor;

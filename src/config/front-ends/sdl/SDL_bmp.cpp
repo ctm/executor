@@ -71,9 +71,6 @@ Author of Simple DirectMedia Layer -
     slouken@devolution.com
 */
 
-#ifdef SAVE_RCSID
-static char rcsid = "@(#) $Id: SDL_bmp.c 74 2004-12-30 03:38:55Z ctm $";
-#endif
 /* 
    Code to load and save surfaces in Windows BMP format.
 

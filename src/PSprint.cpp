@@ -8,10 +8,6 @@
 #include "rsys/common.h"
 #include <stdarg.h>
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_PSprint[] = "$Id: PSprint.c 87 2005-05-25 01:57:33Z ctm $";
-#endif
-
 #undef MACOSX_ /* no idea what's going on here... */
 
 #ifdef MACOSX_

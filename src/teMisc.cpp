@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_teMisc[] = "$Id: teMisc.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /* Forward declarations in TextEdit.h (DO NOT DELETE THIS LINE) */
 
 /*

@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_lockrange[] = "$Id: lockrange.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /*
  * The semantics of MacOS's LockRange routine requires that we make a
  * distinction between lock attempts that fail due to ourselves having

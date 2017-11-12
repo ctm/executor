@@ -9,10 +9,6 @@
 
 #if !defined(USE_PORTABLE_SRCBLT)
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_sbstubtables[] = "$Id: sbstubtables.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /* NOTE:  xor is the only mode that cares about neither fg nor
  * bk colors, so there is no special fgbk version for it.
  */

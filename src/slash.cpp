@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_slash[] = "$Id: slash.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /*
  * The DOS file manipulation routines don't like to see "//", which is
  * a pain for us because we like the format of a file to be the filesystem

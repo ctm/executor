@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_menuColor[] = "$Id: menuColor.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /* color menu routines added in IMV and beyond */
 
 #include "rsys/common.h"

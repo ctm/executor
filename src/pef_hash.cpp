@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_pef_hash[] = "$Id: pef_hash.c 88 2005-05-25 03:59:37Z ctm $";
-#endif
-
 #include "rsys/common.h"
 
 #include "MemoryMgr.h"

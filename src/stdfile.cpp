@@ -10,10 +10,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_stdfile[] = "$Id: stdfile.c 120 2005-07-14 21:20:19Z ctm $";
-#endif
-
 /* Forward declarations in StdFilePkg.h (DO NOT DELETE THIS LINE) */
 
 #include "rsys/common.h"

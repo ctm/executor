@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_hfsCreate[] = "$Id: hfsCreate.c 86 2005-05-25 00:47:12Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "OSUtil.h"
 #include "FileMgr.h"

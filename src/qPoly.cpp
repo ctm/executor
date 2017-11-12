@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_qPoly[] = "$Id: qPoly.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /* Forward declarations in QuickDraw.h (DO NOT DELETE THIS LINE) */
 
 /* HLock checked by ctm on Mon May 13 17:55:01 MDT 1991 */

@@ -4,10 +4,6 @@
 
 #if defined(powerpc) || defined(__ppc__)
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_interfacelib[] = "$Id: interfacelib.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #include <ctype.h>
 #include <unistd.h>
 #include <sys/mman.h>

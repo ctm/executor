@@ -4,10 +4,6 @@
 
 #if defined(powerpc) || defined(__ppc__)
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_mixed_mode[] = "$Id: mixed_mode.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #include "rsys/common.h"
 
 #include "FileMgr.h"

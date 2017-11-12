@@ -8,10 +8,6 @@
  * The UNIX specific stuff should be put in its appropriate place sometime.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_serial[] = "$Id: serial.c 88 2005-05-25 03:59:37Z ctm $";
-#endif
-
 #include "rsys/common.h"
 
 #if defined(MACOSX)

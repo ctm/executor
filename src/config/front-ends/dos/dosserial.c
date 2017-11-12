@@ -3,10 +3,6 @@
  * All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_dosserial[] = "$Id: dosserial.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "dosserial.h"
 #include <dpmi.h>

@@ -8,10 +8,6 @@
 	  faster and a little easier to debug, but not enough of any to
 	  make it sensible to do that initially.  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_fileHighlevel[] = "$Id: fileHighlevel.c 86 2005-05-25 00:47:12Z ctm $";
-#endif
-
 #include "rsys/common.h"
 
 #include "MemoryMgr.h"

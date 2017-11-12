@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_linux_sound[] = "$Id: linux-sound.c 114 2005-07-05 22:27:34Z ctm $";
-#endif
-
 #include "rsys/common.h"
 
 #include <sys/soundcard.h>

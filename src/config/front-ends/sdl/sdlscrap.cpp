@@ -5,10 +5,6 @@
  * Derived from public domain source code written by Sam Lantinga
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_sdlscrap[] = "$Id: sdlscrap.c 88 2005-05-25 03:59:37Z ctm $";
-#endif
-
 /* Handle clipboard text and data in arbitrary formats */
 
 #include <stdio.h>

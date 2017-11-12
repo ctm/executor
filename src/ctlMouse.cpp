@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_ctlMouse[] = "$Id: ctlMouse.c 74 2004-12-30 03:38:55Z ctm $";
-#endif
-
 /* Forward declarations in ControlMgr.h (DO NOT DELETE THIS LINE) */
 
 #include "rsys/common.h"

@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_syncint[] = "$Id: syncint.c 97 2005-06-22 20:08:38Z ctm $";
-#endif
-
 #include "rsys/common.h"
 
 /* We only have synchronous interrupts under syn68k. */

@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_faux_dbm[] = "$Id: fauxdbm.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /* 
  * The original plan was to use the Registry to simulate dbm, but
  * upon sober reflection, that was decided against, since a fried

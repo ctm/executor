@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_ctlInit[] = "$Id: ctlInit.c 86 2005-05-25 00:47:12Z ctm $";
-#endif
-
 /* Forward declarations in ControlMgr.h (DO NOT DELETE THIS LINE) */
 
 #include "rsys/common.h"

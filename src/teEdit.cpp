@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_teEdit[] = "$Id: teEdit.c 88 2005-05-25 03:59:37Z ctm $";
-#endif
-
 /* Forward declarations in TextEdit.h (DO NOT DELETE THIS LINE) */
 
 #include "rsys/common.h"

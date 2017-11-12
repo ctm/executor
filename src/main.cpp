@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_main[] = "$Id: main.c 127 2006-04-04 00:18:10Z ctm $";
-#endif
-
 /*
  * Errors should be handled more cleanly.
  */

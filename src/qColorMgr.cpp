@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_qColorMgr[] = "$Id: qColorMgr.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /* color manager */
 
 #include "rsys/common.h"

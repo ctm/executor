@@ -6,10 +6,6 @@
    avoid collisions.  Unfortunately, it didn't have the property that
    the same directory would have the same name between runs of Executor */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_win_stat[] = "$Id: win_stat.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #define USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 
 #include "rsys/common.h"

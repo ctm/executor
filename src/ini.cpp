@@ -3,10 +3,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_ini[] = "$Id: ini.c 88 2005-05-25 03:59:37Z ctm $";
-#endif
-
 /*
  * Yahoo -- yet another configuration file thingy.  Who needs YACC when
  * you expect your end user to be familiar with DOS .ini files?

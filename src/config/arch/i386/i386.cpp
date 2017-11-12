@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_i386[] = "$Id: i386.c 90 2005-05-25 05:06:01Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "rsys/arch.h"
 

@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_checkpoint[] = "$Id: checkpoint.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #if defined(STANDALONE_TEST)
 
 #warning do not check this in

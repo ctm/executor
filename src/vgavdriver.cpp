@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_vgavdriver[] = "$Id: vgavdriver.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /* This file is not a standalone vdriver; it merely captures the
  * commonality between various interfaces to vga hardware.  It relies
  * on set of host-specific functions to perform tasks whose implementations

@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_win_stdfile[] = "$Id: win_stdfile.c 119 2005-07-11 21:36:20Z ctm $";
-#endif
-
 #define USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 
 #include "rsys/common.h"

@@ -2,9 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_mman[] = "$Id: mman.c 88 2005-05-25 03:59:37Z ctm $";
-#endif
 /* Implementation of MAC memory manager routines */
 
 /* Forward declarations in MemoryMgr.h (DO NOT DELETE THIS LINE) */

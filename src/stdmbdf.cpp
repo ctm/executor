@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_stdmbdf[] = "$Id: stdmbdf.c 87 2005-05-25 01:57:33Z ctm $";
-#endif
-
 /*
  * Checked for HLock and HUnlock by ctm on Fri May 10 18:31:31 MDT 1991
  */

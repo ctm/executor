@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_map_to_c[] = "$Id: map_to_c.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #include <ctype.h>
 #include <stdio.h>
 #include <stdint.h>

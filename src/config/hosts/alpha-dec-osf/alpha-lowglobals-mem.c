@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_lowglobals_mem[] = "$Id: lowglobals-mem.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /* defined in conjunction with `MMAP_LOW_GLOBALS' */
 
 #include "rsys/common.h"

@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_keycode[] = "$Id: keycode.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /*
  * This file handles the mechanics of verifying serial number, authorization
  * key pairs and also extracting out the expiration date and numbe of CPUS

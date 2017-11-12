@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_screendump[] = "$Id: screen-dump.c 88 2005-05-25 03:59:37Z ctm $";
-#endif
-
 /* screen-dump.c; dump the mac screen to a tiff file */
 
 #include "rsys/common.h"

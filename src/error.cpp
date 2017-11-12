@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_error[] = "$Id: error.c 76 2005-01-04 23:45:03Z ctm $";
-#endif
-
 #include "rsys/common.h"
 
 #include <stdarg.h>

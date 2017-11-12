@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_aboutbox[] = "$Id: aboutbox.c 130 2006-05-10 17:21:35Z ctm $";
-#endif
-
 #include "rsys/common.h"
 
 #include "rsys/aboutbox.h"

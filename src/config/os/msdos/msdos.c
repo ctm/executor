@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_msdos[] = "$Id: msdos.c 119 2005-07-11 21:36:20Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "vga.h"
 #include "rsys/os.h"

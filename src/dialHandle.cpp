@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_dialHandle[] = "$Id: dialHandle.c 86 2005-05-25 00:47:12Z ctm $";
-#endif
-
 /* Forward declarations in DialogMgr.h (DO NOT DELETE THIS LINE) */
 
 /* HLock checked by ctm on Mon May 13 17:54:22 MDT 1991 */

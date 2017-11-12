@@ -4,10 +4,6 @@
 
 /* Forward declarations in QuickDraw.h (DO NOT DELETE THIS LINE) */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_qBit[] = "$Id: qBit.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #include "rsys/common.h"
 #include "QuickDraw.h"
 #include "CQuickDraw.h"

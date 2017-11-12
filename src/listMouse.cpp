@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined(OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_listMouse[] = "$Id: listMouse.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /* Forward declarations in ListMgr.h (DO NOT DELETE THIS LINE) */
 
 #include "rsys/common.h"
