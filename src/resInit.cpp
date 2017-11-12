@@ -85,9 +85,8 @@ extract_vers_num (Handle h)
 P0(PUBLIC pascal trap, INTEGER, InitResources)
 {
   /* Initialize globals */
-  ZONE_SAVE_EXCURSION
-    (SysZone,
-     {
+  TheZoneGuard guard(SysZone);
+  
        Handle versh;
        int32 versnum;
        
@@ -120,8 +119,6 @@ P0(PUBLIC pascal trap, INTEGER, InitResources)
 	 system_file_version_skew_p = true;
 
        ROMlib_set_appearance ();
-
-     });
   
   return CW(SysMap);
 }

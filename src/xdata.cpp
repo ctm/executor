@@ -140,9 +140,7 @@ raw_bits_for_color_pattern (PixPatPtr pixpat, PixMap *target,
   PixMapHandle patmap;
 
   patmap = MR (pixpat->patMap);
-  LOCK_HANDLE_EXCURSION_1
-    (patmap,
-     {
+  HLockGuard guard(patmap);
        int row_bytes;
        int target_depth;
        PixMap *src;
@@ -165,13 +163,9 @@ raw_bits_for_color_pattern (PixPatPtr pixpat, PixMap *target,
   
        data = MR (pixpat->patData);
 
-       LOCK_HANDLE_EXCURSION_1
-	 (data,
-	  {
-	    src->baseAddr = *data;
-	    convert_pixmap (src, &dst, bounds, NULL);
-	  });
-     });
+       HLockGuard guard2(data);
+       src->baseAddr = *data;
+       convert_pixmap (src, &dst, bounds, NULL);
 }
 
 
@@ -452,9 +446,8 @@ Executor::xdata_for_pixpat_with_space (PixPat *pixpat, PixMap *target,
   int max_byte_size, row_bytes;
   TEMP_ALLOC_DECL (raw_bits_temp_storage);
 
-  LOCK_HANDLE_EXCURSION_1
-    (xh,
-     {
+  HLockGuard guard(xh);
+  
        xdata_t *x = STARH (xh);
   
        /* Compute the dimensions of the PixPat, and allocate scratch
@@ -475,8 +468,7 @@ Executor::xdata_for_pixpat_with_space (PixPat *pixpat, PixMap *target,
        xdata_for_raw_data (target, x, raw_bits, row_bytes, height);
        
        TEMP_ALLOC_FREE (raw_bits_temp_storage);
-     });
-
+  
   return xh;
 }
 
@@ -488,9 +480,7 @@ Executor::xdata_for_pattern (const Pattern pattern, PixMap *target)
 
   xh = (xdata_handle_t) NewHandle (sizeof (xdata_t));
 
-  LOCK_HANDLE_EXCURSION_1
-    (xh,
-     {
+  HLockGuard guard(xh);
        uint32 raw_bits[8 * 8];  /* Maximum possible resultant pattern size. */
        int row_bytes;
        xdata_t *x = STARH (xh);
@@ -498,7 +488,6 @@ Executor::xdata_for_pattern (const Pattern pattern, PixMap *target)
        /* Compute the raw bits for this pixpat and crank out the xdata. */
        raw_bits_for_pattern (pattern, target, raw_bits, &row_bytes);
        xdata_for_raw_data (target, x, raw_bits, row_bytes, 8);
-     });
 
   return xh;
 }

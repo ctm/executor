@@ -16,8 +16,6 @@ namespace Executor {
 
 #define PICOP(x)	{ GUEST<INTEGER> op = CW(x); PICWRITE(&op, sizeof(op));  }
 
-#define PIC_SAVE_EXCURSION(body) { if (PORT_PIC_SAVE_X (thePort)) { body } }
-
 #define PICSAVEBEGIN(x)	if (thePort->picSave) {				\
 			    PICOP((x))
 
@@ -29,15 +27,20 @@ namespace Executor {
 #define PAUSERECORDING	savepichand = thePort->picSave, thePort->picSave = 0
 #define RESUMERECORDING	thePort->picSave = savepichand
 
-#define PAUSE_PIC_EXCURSION(body)		\
-  {						\
-    PAUSEDECL;					\
-						\
-    PAUSERECORDING;				\
-    { body }					\
-    RESUMERECORDING;				\
-  }
-  
+class PausePicGuard
+{
+    PAUSEDECL;
+public:
+    PausePicGuard()
+    {
+        PAUSERECORDING;
+    }
+    ~PausePicGuard()
+    {
+        RESUMERECORDING;
+    }
+};
+
 /*
  * Since this data structure doesn't appear to be documented anywhere, I
  * figured it out by opening pictures, doing operations and closing them on

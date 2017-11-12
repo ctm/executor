@@ -39,12 +39,10 @@ A0 (PUBLIC, OSErr, TEToScrap)
 {
   int32 m;
 
-  LOCK_HANDLE_EXCURSION_1
-    (MR (TEScrpHandle),
-     {
+    HLockGuard guard(MR (TEScrpHandle));
+
        m = PutScrap (CW (TEScrpLength), TICK ("TEXT"),
 		     STARH (MR (TEScrpHandle)));
-     });
   return m < 0 ? m : 0;
 }
 

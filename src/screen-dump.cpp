@@ -314,9 +314,7 @@ Executor::do_dump_screen (void)
   gd = MR (MainDevice);
   gd_pmh = GD_PMAP (gd);
   
-  LOCK_HANDLE_EXCURSION_1
-    (gd_pmh,
-     {
+  HLockGuard guard(gd_pmh);
        PixMap *gd_pm;
        int log2_bpp;
        
@@ -324,5 +322,4 @@ Executor::do_dump_screen (void)
        log2_bpp = ROMlib_log2[CW (gd_pm->pixelSize)];
        
        (*dump_fns[log2_bpp]) (gd_pm);
-     });
 }

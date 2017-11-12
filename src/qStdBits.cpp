@@ -233,15 +233,13 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
     _src = (PixMap*)alloca (sizeof *_src);
     _src_rect = (Rect*)alloca (sizeof *_src_rect);
     
-    ZONE_SAVE_EXCURSION
-      (ApplZone,
-       {
-	 if (FreeMemSys () >= FreeMem ())
+    TheZoneGuard guard(ApplZone);
+  
+    	 if (FreeMemSys () >= FreeMem ())
 	   TheZone = SysZone;
 	 
 	 pixmap_copy (src, src_rect,
 		      _src, _src_rect);
-       });
     
     src      = _src;
     src_rect = _src_rect;
@@ -296,9 +294,7 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
   
   if (! direct_bits_p)
     {
-      LOCK_HANDLE_EXCURSION_1
-	(MR (src->pmTable),
-	 {
+        HLockGuard guard(MR (src->pmTable));
 	   CTabPtr ctab;
 	   
 	   ctab = STARH (MR (src->pmTable));
@@ -315,7 +311,6 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
 	       PICWRITE (&elt->value, sizeof elt->value);
 	       PICWRITE (&elt->rgb, sizeof elt->rgb);
 	     }
-	 });
     }
   
   PICWRITE (src_rect, sizeof *src_rect);
@@ -324,11 +319,8 @@ write_copybits_picdata (PixMap *src, PixMap *dst,
   PICWRITE (&swapped_mode, sizeof swapped_mode);
   if (mask)
     {
-      LOCK_HANDLE_EXCURSION_1
-	(mask,
-	 {
+      HLockGuard guard(mask);
 	   PICWRITE (STARH (mask), Hx (mask, rgnSize));
-	 });
     }
   height = RECT_HEIGHT (&src->bounds);
   if (row_bytes < 8 || pack_type == CWC (2))
@@ -436,10 +428,10 @@ Executor::ROMlib_bogo_stdbits (BitMap *src_bogo_map, BitMap *dst_bogo_map,
   canonicalize_bogo_map (src_bogo_map, &src, &cleanup_info[0]);
   canonicalize_bogo_map (dst_bogo_map, &dst, &cleanup_info[1]);
   
-  PIC_SAVE_EXCURSION
-    ({
+  if (thePort->picSave)
+  {
       write_copybits_picdata (src, dst, src_rect, dst_rect, mode, mask);
-    });
+  }
   
   if (PORT_PEN_VIS (thePort) < 0)
     return;
@@ -490,10 +482,10 @@ Executor::StdBitsPicSaveFlag (BitMap *src_bogo_map,
   
   if (savepic)
     {
-      PIC_SAVE_EXCURSION
-	({
+      if (thePort->picSave)
+      {
 	  write_copybits_picdata (src, dst, src_rect, dst_rect, mode, mask);
-	});
+      }
     }
   
   if (PORT_PEN_VIS (thePort) < 0)

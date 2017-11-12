@@ -84,13 +84,12 @@ P1 (PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
   if (MemError () != noErr)
     AE_RETURN_ERROR (MemError ());
   
-  LOCK_HANDLE_EXCURSION_1
-    (evt_data,
      {
+        HLockGuard guard(evt_data);
        err = AcceptHighLevelEvent (&dummy_target_id,
 				   &dummy_refcon,
 				   STARH (evt_data), &evt_data_size);
-     });
+     }
   
   if (err != noErr)
     {
@@ -247,15 +246,14 @@ P7 (PUBLIC pascal trap, OSErr, AESend,
 	    *(uint32 *) &bogo_event_id = event_id;
 	    evt_rec.where     = bogo_event_id;
 	    
-	    LOCK_HANDLE_EXCURSION_1
-	      (desc_data,
 	       {
+                 HLockGuard guard(desc_data);
 		 err = PostHighLevelEvent (&evt_rec,
 					   /* #### i dunno */
 					   NULL, -1,
 					   STARH (desc_data), desc_data_size,
 					   -1);
-	       });
+	       }
 	    
 	    AE_RETURN_ERROR (err);
 	  }
@@ -584,14 +582,13 @@ P3 (PUBLIC pascal trap, OSErr, AECoerceDesc,
       
       desc_data = DESC_DATA (desc);
       
-      LOCK_HANDLE_EXCURSION_1
-	(desc_data,
-	 {
+       {
+           HLockGuard guard(desc_data);
 	   err = CToPascalCall((void*)coercion_hdlr, PTOC_CoercePtrTemplate,
 				desc_type, STARH (desc_data),
 				GetHandleSize (desc_data),
 				result_type, refcon, desc_out);
-	 });
+	}
     }
   
   if (err != noErr)

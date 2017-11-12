@@ -375,9 +375,9 @@ failure:						\
 done:;						\
 }
 	
-	LOCK_HANDLE_EXCURSION_1
-	(MR (MBSaveLoc),
 	 {
+                   HLockGuard guard(MR (MBSaveLoc));
+
 		 int current_mb_save;
 		 
 		 current_mb_save = Hx (MBSAVELOC, lastMBSave) + sizeof (mbdfentry);
@@ -453,7 +453,7 @@ done:;						\
 		  {
 			  mep->mbBitsSave = NULL;
 		  });
-	 });
+	 }
 	
 	/* Erase to white -- colored backgrounds can be drawn by individual
 	 mdefs.  If we erase this to the ostensible background color, MacClade
@@ -480,9 +480,7 @@ done:;						\
 static void
 restore (void)
 {
-	LOCK_HANDLE_EXCURSION_1
-	(MR (MBSaveLoc),
-	 {
+	  HLockGuard guard(MR (MBSaveLoc));
 		 mbdfentry *mep;
 		 PixMapHandle save_pmh;
 		 Rect save_rect;
@@ -523,7 +521,6 @@ restore (void)
 		 mep->mbBitsSave = NULL;
 		 HxX (MBSAVELOC, lastMBSave)
 		 = CW (Hx (MBSAVELOC, lastMBSave) - sizeof (mbdfentry));
-	 });
 }
 
 A1(PRIVATE, Rect *, getrect, LONGINT, offset)

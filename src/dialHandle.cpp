@@ -154,11 +154,9 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
    * caused a bug in Macwrite II when size/fontsize... and clicking on
    * a size on the left.
    */
-  
-  THEGDEVICE_SAVE_EXCURSION
-    (MR (MainDevice),
-     {
-       EventRecord evt;
+  TheGDeviceGuard guard(MR(MainDevice));
+
+  EventRecord evt;
        DialogPeek dp;
        GUEST<DialogPtr> ndp;
        TEHandle idle;
@@ -218,7 +216,6 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
 		 }
 	     }
 	 }
-     });
 }
 
 #else /* defined (ALLOW_MOVABLE_MODAL) */
@@ -233,10 +230,9 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
    * a size on the left.
    */
   
-  THEGDEVICE_SAVE_EXCURSION
-    (MR (MainDevice),
-     {
-       EventRecord evt;
+  TheGDeviceGuard guard(MR(MainDevice));
+
+  EventRecord evt;
        DialogPeek dp;
        GUEST<DialogPtr> ndp;
        TEHandle idle;
@@ -297,7 +293,6 @@ P2 (PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp,		/* IMI-415 */
 		 }
 	     }
 	 }
-     });
 }
 #endif
 
@@ -433,12 +428,11 @@ Executor::ROMlib_drawiptext (DialogPtr dp, itmp ip, int item_no)
       Handle text_h;
       
       text_h = MR (ip->itmhand);
-      LOCK_HANDLE_EXCURSION_1
-	(text_h, 
-	 {
+       {
+           HLockGuard guard(text_h);
 	   TextBox (STARH (text_h), GetHandleSize (text_h),
 		    &r, teFlushDefault);
-	 });
+	 }
       
       PORT_PEN_SIZE (thePort).h = PORT_PEN_SIZE (thePort).v = CWC (1);
       InsetRect (&r, -3, -3);

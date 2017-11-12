@@ -401,9 +401,9 @@ te_add_attrs_to_range (TEHandle te,
   start_run_index = make_style_run_at (te_style, start);
   end_run_index = make_style_run_at (te_style, end);
   
-  LOCK_HANDLE_EXCURSION_1
-    (te_style,
      {
+       HLockGuard guard(te_style);
+
        StyleRun *runs = TE_STYLE_RUNS (te_style);
        
        /* now go through each style and make the appropriate change */
@@ -431,7 +431,7 @@ te_add_attrs_to_range (TEHandle te,
 	   
 	   STYLE_RUN_STYLE_INDEX_X (current_run) = CW (new_style_index);
 	 }
-     });
+     }
   
   stabilize_style_info (te_style);
   te_style_combine_runs (te_style);
@@ -624,15 +624,12 @@ P2 (PUBLIC pascal trap, LONGINT, TEGetPoint, INTEGER, offset, TEHandle, teh)
   int ascent;
   
   TE_CHAR_TO_POINT (teh, offset, &p);
-  LOCK_HANDLE_EXCURSION_1
-    (teh,
-     {
+  HLockGuard guard(teh);
        TEPtr tep = STARH (teh);
        int lineno;
        
        lineno = TEP_CHAR_TO_LINENO (tep, offset);
        ascent = TEP_ASCENT_FOR_LINE (tep, lineno);
-     });
 
   return ((int32) (p.v + ascent) << 16) + (int32) p.h;
 }
@@ -750,11 +747,11 @@ P1 (PUBLIC pascal trap, void, TEStylPaste, TEHandle, te)
       scrap = NULL;
     }
   
-  LOCK_HANDLE_EXCURSION_1
-    (hText,
      {
+          HLockGuard guard(hText);
+
        ROMlib_tedoitall (te, STARH (hText), length, false, scrap);
-     });
+     }
   if (scrap)
     DisposHandle ((Handle) scrap);
   DisposHandle (hText);

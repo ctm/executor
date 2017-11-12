@@ -498,10 +498,7 @@ create_about_box ()
 				      false, dBoxProc, (CWindowPtr) -1,
 				      true,	/* go away flag */
 				      -5	/* unused */);
-
-  THEPORT_SAVE_EXCURSION
-    (about_box,
-     {
+  ThePortGuard guard(about_box);
        /* Create the push buttons. */
        for (b = 0; b < (int) NELEM (about_box_buttons); b++)
 	 {
@@ -525,7 +522,6 @@ create_about_box ()
 				     0, 0, 100, scrollBarProc, -1);
        about_te = TENew (&te_bounds, &te_bounds);
        TESetJust (teFlushLeft, about_te);
-     });
 }
 
 
@@ -610,12 +606,11 @@ draw_status_info (bool executor_p)
     sprintf (total_ram_string, "%s??? MB", ram_tag);
 
   /* Compute a string for ApplZone RAM. */
-  ZONE_SAVE_EXCURSION
-    (ApplZone,
      {
+        TheZoneGuard guard(ApplZone);
        sprintf (applzone_ram_string, "%s%lu KB / %u KB", application_ram_tag,
 		FreeMem () / 1024UL, ROMlib_applzone_size / 1024U);
-     });
+     }
 
   /* Compute a string for SysZone RAM. */
   sprintf (syszone_ram_string, "%s%lu KB / %u KB", system_ram_tag,
@@ -796,23 +791,22 @@ Executor::do_about_box (void)
       if (scroll_bar_callback == 0)
 	scroll_bar_callback = (ProcPtr) SYN68K_TO_US(callback_install (scroll_stub, NULL));
       
-      ZONE_SAVE_EXCURSION
-	(SysZone,
-	 {
+       {
+           TheZoneGuard guard(SysZone);
 	   create_about_box ();
        
-	   THEPORT_SAVE_EXCURSION
-	     (about_box,
-	      {
+	   
+	   {
+                ThePortGuard portGuard(about_box);
 		C_ShowWindow (about_box);
 		event_loop (strncasecmp (ROMlib_appname, EXECUTOR_NAME,
 					 sizeof EXECUTOR_NAME - 1) == 0);
-	      });
+	   }
 
 	   TEDispose (about_te);
 	   about_te = NULL;
 	   dispose_about_box ();
-	 });
+	 }
 
       busy_p = false;
     }

@@ -556,9 +556,7 @@ P3 (PUBLIC pascal trap, INTEGER, ReplaceText,
   warning_unimplemented ("not tested much");
 
   retval = 0;
-  LOCK_HANDLE_EXCURSION_1
-    (subst_text, 
-     {
+  HLockGuard guard(subst_text);
        Ptr p;
        INTEGER len;
        LONGINT offset;
@@ -578,7 +576,6 @@ P3 (PUBLIC pascal trap, INTEGER, ReplaceText,
 	   else
 	     ++retval;
 	 }
-     });
 
   return retval;
 }

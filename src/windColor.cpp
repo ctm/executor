@@ -88,9 +88,8 @@ void
 Executor::wind_color_init (void)
 {
   /* initalize the default window colortable */
-  ZONE_SAVE_EXCURSION
-    (SysZone,
-     {
+  TheZoneGuard guard(SysZone);
+  
        default_aux_win = (AuxWinHandle) NewHandle (sizeof (AuxWinRec));
        HxX (default_aux_win, awNext) = 0;
        HxX (default_aux_win, awOwner) = 0;
@@ -100,7 +99,6 @@ Executor::wind_color_init (void)
        HxX (default_aux_win, awFlags) = 0;
        HxX (default_aux_win, awReserved) = 0;
        HxX (default_aux_win, awRefCon) = 0;
-     });
 }
 
 GUEST<AuxWinHandle> *
@@ -159,9 +157,8 @@ P2 (PUBLIC pascal trap, void, SetWinColor,
 	  PORT_BK_COLOR_X (w) = CL (Color2Index (color));
 
 	  if (WINDOW_VISIBLE_X (w))
-	    THEPORT_SAVE_EXCURSION
-	      (w,
 	       {
+                ThePortGuard guard(w);
 		 RgnHandle t;
 		 t = NewRgn ();
 		 
@@ -171,7 +168,7 @@ P2 (PUBLIC pascal trap, void, SetWinColor,
 			    CW (PORT_BOUNDS (w).top));
 		 EraseRgn (t);
 		 DisposeRgn (t);
-	       });
+	       }
 	}
 	  
       if (WINDOW_VISIBLE_X (w))

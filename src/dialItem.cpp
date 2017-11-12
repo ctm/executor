@@ -105,9 +105,8 @@ Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
   
   SetHandleSize (items_h, items_h_size + new_items_h_size);
   
-  LOCK_HANDLE_EXCURSION_2
-    (items_h, new_items_h,
-     {
+  {
+       HLockGuard guard1(items_h), guard2(new_items_h);
        itmp new_itemp;
        char *base_itemp;
        char *base_new_itemp;
@@ -125,9 +124,7 @@ Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
        /* update the count for the new items */
        *(GUEST<int16> *) base_itemp = CW (item_count + new_item_count - 1);
        
-       THEPORT_SAVE_EXCURSION
-	 (dp,
-	  {
+       ThePortGuard portGuard(dp);
 	    
 	    for (i = 0; i < new_item_count; i ++)
 	      {
@@ -147,8 +144,7 @@ Executor::AppendDITL (DialogPtr dp, Handle new_items_h, DITLMethod method)
 		
 		BUMPIP (new_itemp);
 	      }
-	  });
-     });
+     }
   
   if (resize_p)
     SizeWindow ((WindowPtr) dp, width, height,
@@ -172,9 +168,8 @@ Executor::ShortenDITL (DialogPtr dp, int16 n_items)
   
   item_h_size = GetHandleSize (item_h);
   
-  LOCK_HANDLE_EXCURSION_1
-    (item_h,
      {  
+       HLockGuard guard(item_h);
        base_itemp = (char *) STARH (item_h);
        itemp = (itmp) ((GUEST<int16> *) STARH (item_h) + 1);
        count = CW (*(GUEST<int16> *) base_itemp) + 1;
@@ -247,13 +242,13 @@ Executor::ShortenDITL (DialogPtr dp, int16 n_items)
 		   /* #### do we erase with `EraseRect ()' or the
                       window background color defined by the window
                       color table? */
-		   THEPORT_SAVE_EXCURSION
-		     (dp, { EraseRect (&erase_rect); });
+                   ThePortGuard portGuard(dp);
+		   EraseRect (&erase_rect);
 		 }
 	     }
 	 }
        *(GUEST<int16> *) base_itemp = CW (first_item_to_dispose - 1);
-     });
+     }
   
   SetHandleSize ((Handle) item_h, item_h_size);
 }

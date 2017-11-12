@@ -482,9 +482,7 @@ P1 (PUBLIC pascal trap, PixPatHandle, GetPixPat, INTEGER, pixpat_id)
 	     STARH (PIXPAT_DATA (pixpat)),
 	     pixpat_data_size);
   
-  LOCK_HANDLE_EXCURSION_1
-    (pixpat_res,
-     {
+	HLockGuard guard(pixpat_res);
        /* ctab_ptr is a pointer into the pixpat_res_handle;
 	  make sure no allocations are done while it is in use */
        ctab_ptr = (CTabPtr) ((char *) STARH (pixpat_res)
@@ -504,7 +502,6 @@ P1 (PUBLIC pascal trap, PixPatHandle, GetPixPat, INTEGER, pixpat_id)
 
        /* ctab_ptr->ctSeed = CL (GetCTSeed ()); */
        CTAB_SEED_X (PIXMAP_TABLE (patmap)) = CL (GetCTSeed ());
-     });
   
 #if 0
   gui_assert (GetHandleSize (pixpat_res)

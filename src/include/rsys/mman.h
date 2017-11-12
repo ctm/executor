@@ -91,15 +91,20 @@ enum { TRAP_MASK = 0xF9FF };
 ((((trapno) & TRAP_MASK) == ((to_look_for) & TRAP_MASK)) \
  && (((trapno) & CLRBIT) != 0))
 
-#define ZONE_SAVE_EXCURSION(zone, body)		\
-  do {						\
-      GUEST<THz> save_zone;			\
-						\
-      save_zone = TheZone;			\
-      TheZone = zone;				\
-      { body }					\
-      TheZone = save_zone;			\
-  } while (false)
+class TheZoneGuard
+{
+    GUEST<THz> saveZone;
+public:
+    TheZoneGuard(GUEST<THz> zone)
+        : saveZone(TheZone)
+    {
+        TheZone = zone;
+    }
+    ~TheZoneGuard()
+    {
+        TheZone = saveZone;
+    }
+};
 
 /* These macros assign values to fields of a structure referred to
  * by a handle.  They perform no byte swapping.  There is no need to
@@ -392,93 +397,22 @@ enum { TRAP_MASK = 0xF9FF };
   _hp->f15 = _v15;						\
 })
 
-#define LOCK_HANDLE_EXCURSION_1(handle1_expr, body)	\
-  do {							\
-    Handle handle1;					\
-    SignedByte handle1_state;				\
-    							\
-    handle1 = (Handle) (handle1_expr);			\
-    handle1_state = hlock_return_orig_state (handle1);	\
-    							\
-    { body }						\
-    							\
-    HSetState (handle1, handle1_state);			\
-  } while (false)
+class HLockGuard
+{
+    Handle handle;
+    SignedByte state;
+public:
+    template<typename TT>
+    HLockGuard(GuestWrapper<TT*>* h)
+       : handle((Handle) h), state(hlock_return_orig_state((Handle) h))
+    {
+    }
+    ~HLockGuard()
+    {
+        HSetState(handle, state);
+    }
+};
 
-#define LOCK_HANDLE_EXCURSION_2(handle1_expr,		\
-				handle2_expr, body)	\
-  do {							\
-    Handle handle1;					\
-    Handle handle2;					\
-    SignedByte handle1_state;				\
-    SignedByte handle2_state;				\
-    							\
-    handle1 = (Handle) (handle1_expr);			\
-    handle2 = (Handle) (handle2_expr);			\
-    handle1_state = hlock_return_orig_state (handle1);	\
-    handle2_state = hlock_return_orig_state (handle2);	\
-    							\
-    { body }						\
-    							\
-    HSetState (handle2, handle2_state);			\
-    HSetState (handle1, handle1_state);			\
-  } while (false)
-
-#define LOCK_HANDLE_EXCURSION_3(handle1_expr,		\
-				handle2_expr,		\
-				handle3_expr, body)	\
-							\
-  do {							\
-    Handle handle1;					\
-    Handle handle2;					\
-    Handle handle3;					\
-    SignedByte handle1_state;				\
-    SignedByte handle2_state;				\
-    SignedByte handle3_state;				\
-    							\
-    handle1 = (Handle) (handle1_expr);			\
-    handle2 = (Handle) (handle2_expr);			\
-    handle3 = (Handle) (handle3_expr);			\
-    handle1_state = hlock_return_orig_state (handle1);	\
-    handle2_state = hlock_return_orig_state (handle2);	\
-    handle3_state = hlock_return_orig_state (handle3);	\
-    							\
-    { body }						\
-    							\
-    HSetState (handle3, handle3_state);			\
-    HSetState (handle2, handle2_state);			\
-    HSetState (handle1, handle1_state);			\
-  } while (false)
-
-#define LOCK_HANDLE_EXCURSION_4(handle1_expr,		\
-				handle2_expr,		\
-				handle3_expr,		\
-				handle4_expr, body)	\
-  do {							\
-    Handle handle1;					\
-    Handle handle2;					\
-    Handle handle3;					\
-    Handle handle4;					\
-    SignedByte handle1_state;				\
-    SignedByte handle2_state;				\
-    SignedByte handle3_state;				\
-    SignedByte handle4_state;				\
-    							\
-    handle1 = (Handle) (handle1_expr);			\
-    handle2 = (Handle) (handle2_expr);			\
-    handle3 = (Handle) (handle3_expr);			\
-    handle4 = (Handle) (handle4_expr);			\
-    handle1_state = hlock_return_orig_state (handle1);	\
-    handle2_state = hlock_return_orig_state (handle2);	\
-    handle3_state = hlock_return_orig_state (handle3);	\
-    handle4_state = hlock_return_orig_state (handle4);	\
-    							\
-    { body }						\
-    							\
-    HSetState (handle4, handle4_state);			\
-    HSetState (handle3, handle3_state);			\
-    HSetState (handle2, handle2_state);			\
-    HSetState (handle1, handle1_state);			\
-  } while (false)
 }
+
 #endif /* !_MMAN_PUBLIC_H_ */

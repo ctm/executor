@@ -177,9 +177,7 @@ P1 (PUBLIC pascal trap, void, SetMCInfo,
 {
   DispMCInfo (MR (MenuCInfo));
 
-  ZONE_SAVE_EXCURSION
-    (SysZone,
-     {
+TheZoneGuard guard(SysZone);
        Handle t;
        int size;
 
@@ -187,7 +185,6 @@ P1 (PUBLIC pascal trap, void, SetMCInfo,
        t = NewHandle (size);
        BlockMoveData ((Ptr) STARH (menu_ctab), (Ptr) STARH (t), size);
        MenuCInfo = RM ((MCTableHandle) t);
-     });
 }
 
 P1 (PUBLIC pascal trap, void, DispMCInfo,

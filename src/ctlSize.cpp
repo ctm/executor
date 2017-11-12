@@ -48,9 +48,7 @@ P5(PUBLIC pascal trap, void, DragControl, ControlHandle, c,	/* IMI-325 */
   RgnHandle rh;
   LONGINT l;
 
-  CTL_CALL_EXCURSION
-    (c,
-     {
+  CtlCallGuard guard(c);
     
        if (!(CTLCALL(c, dragCntl, 0) & 0xf000))
 	 {
@@ -63,7 +61,6 @@ P5(PUBLIC pascal trap, void, DragControl, ControlHandle, c,	/* IMI-325 */
         
 	   DisposeRgn(rh);
 	 }
-     });
 }
 
 P3(PUBLIC pascal trap, void, SizeControl, ControlHandle, c,	/* IMI-326 */

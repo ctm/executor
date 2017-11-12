@@ -79,20 +79,31 @@ do							\
 # define check_virtual_interrupt()
 #endif /* !SYN68K */
 
+class BlockVirtualInterruptsGuard
+{
+    virtual_int_state_t state;  
+public:
+    BlockVirtualInterruptsGuard()
+       : state(block_virtual_ints())
+    { }
+    ~BlockVirtualInterruptsGuard()
+    {
+        restore_virtual_ints(state);
+    }
+};
 
-#define BLOCK_VIRTUAL_INTERRUPTS_EXCURSION(body)	\
-do {							\
-  virtual_int_state_t __vstate = block_virtual_ints ();	\
-  { body }						\
-  restore_virtual_ints (__vstate);			\
-} while (0)
-
-#define BLOCK_REAL_INTERRUPTS_EXCURSION(body)		\
-do {							\
-  real_int_state_t __rstate = block_real_ints ();	\
-  { body }						\
-  restore_real_ints (__rstate);				\
-} while (0)
+class BlockRealInterruptsGuard
+{
+    virtual_int_state_t state;  
+public:
+    BlockRealInterruptsGuard()
+       : state(block_real_ints())
+    { }
+    ~BlockRealInterruptsGuard()
+    {
+        restore_real_ints(state);
+    }
+};
 }
 
 #endif /* !_BLOCKINTERRUPTS_H_ */

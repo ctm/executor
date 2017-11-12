@@ -69,9 +69,9 @@ P0 (PUBLIC pascal trap, void, InitWindows)
   AuxWinHead = RM (default_aux_win);
   SaveVisRgn = NULL;
   
-  THEPORT_SAVE_EXCURSION
-    (thePort,
      {
+       ThePortGuard guard(thePort);
+
        /* FIXME: is this a memory leak, to just call InitPort () again? */
        InitPort (MR (WMgrPort));
        InitCPort (MR (WMgrCPort));
@@ -132,7 +132,7 @@ P0 (PUBLIC pascal trap, void, InitWindows)
        DeskHook = NULL;
        GhostWindow = NULL;
        PATASSIGN (DragPattern, gray);
-     });
+     }
   
   /* since there is no `InitControls ()', we do this here */
   ctl_color_init ();
@@ -442,11 +442,10 @@ ROMlib_new_window_common (WindowPeek w,
   OffsetRect (&PORT_BOUNDS (w), -CW (bounds->left), -CW (bounds->top));
   PORT_RECT (w) = *bounds;
   OffsetRect (&PORT_RECT (w), -CW (bounds->left), -CW (bounds->top));
-  LOCK_HANDLE_EXCURSION_1
-    (WINDOW_TITLE (w),
      {
+        HLockGuard guard(WINDOW_TITLE(w));
        WINDOW_TITLE_WIDTH_X (w) = CW (StringWidth (STARH (WINDOW_TITLE (w))));
-     });
+     }
 
   TextFont (applFont);
   WINDOW_CONTROL_LIST_X (w) = nullptr;
@@ -455,9 +454,7 @@ ROMlib_new_window_common (WindowPeek w,
   WINDCALL ((WindowPtr) w, wNew, 0);
   if (WINDOW_VISIBLE_X (w))
     {
-      THEPORT_SAVE_EXCURSION
-	(MR (wmgr_port),
-	 {
+        ThePortGuard guard(MR (wmgr_port));
 	   WINDCALL ((WindowPtr) w, wCalcRgns, 0);
 	   SetClip (WINDOW_STRUCT_REGION (w));
 	   ClipAbove (w);
@@ -468,7 +465,6 @@ ROMlib_new_window_common (WindowPeek w,
 	   CopyRgn (WINDOW_CONT_REGION (w), WINDOW_UPDATE_REGION (w));
 	   if (WINDOW_NEXT_WINDOW_X (w))
 	     CalcVisBehind (WINDOW_NEXT_WINDOW (w), WINDOW_STRUCT_REGION (w));
-	 });
     }
   else
     SetEmptyRgn (PORT_VIS_REGION (w));
@@ -578,11 +574,8 @@ P3 (PUBLIC pascal trap, CWindowPtr, GetNewCWindow,
   win_ctab_res = ROMlib_getrestid (TICK ("wctb"), window_id);
   if (win_ctab_res != NULL)
     {
-      THEPORT_SAVE_EXCURSION
-	(thePort,
-	 {
-	   SetWinColor ((WindowPtr) new_cwin, (CTabHandle) win_ctab_res);
-	 });
+        ThePortGuard guard(thePort);
+        SetWinColor ((WindowPtr) new_cwin, (CTabHandle) win_ctab_res);
     }
   
   /* if this is a color window we must check if a palette

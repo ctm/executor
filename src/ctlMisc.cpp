@@ -194,12 +194,9 @@ Executor::ROMlib_ctlcall (ControlHandle c, int16 i, int32 l)
   else
     {
       ROMlib_hook (ctl_cdefnumber);
-      LOCK_HANDLE_EXCURSION_1
-	(defproc,
-	 {
+      HLockGuard guard(defproc);
 	   retval = CToPascalCall ((void*)(ctlfuncp) STARH (defproc),
 				   CTOP_cdef0, VAR (c), c, i, l);
-	 });
     }
 
   return retval;

@@ -1940,9 +1940,9 @@ host_set_cursor_visible (int show_p)
 
   old_draw_p = draw_cursor_p;
 
-  BLOCK_VIRTUAL_INTERRUPTS_EXCURSION
-    ({
-      if (show_p)
+  BlockVirtualInterruptsGuard guard;
+
+  if (show_p)
 	{
 	  if (!draw_cursor_p)
 	    {
@@ -1979,7 +1979,6 @@ host_set_cursor_visible (int show_p)
 		}
 	    }
 	}
-    });
 
   return old_draw_p;
 }

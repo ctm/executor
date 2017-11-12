@@ -570,9 +570,7 @@ new_link(OSType selector, ProcPtr selFunc)
     retval = gestaltLocationErr;
   else
     {
-      ZONE_SAVE_EXCURSION
-	(SysZone,
-	 {
+      TheZoneGuard guard(SysZone);
 	   gestalt_link_t *gp;
 
 	   gp = (gestalt_link_t *) NewPtr(sizeof(*gp));
@@ -586,7 +584,6 @@ new_link(OSType selector, ProcPtr selFunc)
 	       gp->next = gestalt_head;
 	       gestalt_head = gp;
 	     }
-	 });
     }
   return retval;
 }

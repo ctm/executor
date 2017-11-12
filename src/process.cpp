@@ -74,11 +74,11 @@ Executor::process_create (bool desk_accessory_p,
   
   size = get_size_resource ();
 
-  ZONE_SAVE_EXCURSION
-    (SysZone,
      {
+       TheZoneGuard guard(SysZone);
+  
        info = (process_info_t *) NewPtr (sizeof *info);
-     });
+     }
   
   /* ### we are seriously fucked */
   if (info == NULL)

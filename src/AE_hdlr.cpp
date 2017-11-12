@@ -40,10 +40,9 @@ Executor::AE_init (void)
   
   info = (AE_info_t *) NewPtrSysClear (sizeof *info);
   
-  ZONE_SAVE_EXCURSION
-    (SysZone,
-     {
-       AE_zone_tables_h zone_tables;
+  TheZoneGuard guard(SysZone);
+
+  AE_zone_tables_h zone_tables;
        
        zone_tables
 	 = (AE_zone_tables_h) NewHandleClear (sizeof (AE_zone_tables_t));
@@ -61,8 +60,7 @@ Executor::AE_init (void)
 				   false,
 				   &HxX (zone_tables, special_hdlr_table));
        info->system_zone_tables = RM (zone_tables);
-     });
-  
+
   AE_info = RM (info);
 }
 
@@ -74,9 +72,9 @@ Executor::AE_reinit (void)
   
   info = MR (AE_info);
   
-  ZONE_SAVE_EXCURSION
-    (ApplZone,
-     {
+
+        TheZoneGuard guard(ApplZone);
+ 
        AE_zone_tables_h zone_tables;
        
        zone_tables
@@ -95,9 +93,6 @@ Executor::AE_reinit (void)
 				   false,
 				   &HxX (zone_tables, special_hdlr_table));
        info->appl_zone_tables = RM (zone_tables);
-     });
-  
-
 }
 
 static OSErr

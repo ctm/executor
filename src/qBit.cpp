@@ -35,10 +35,8 @@ P6 (PUBLIC pascal trap, void, CopyBits,
   
 #warning ctm hack below (mode = srcCopy) -- might not be best solution
 
-  ZONE_SAVE_EXCURSION
-    (SysZone,
-     {
-       int dst_is_theport_p;
+TheZoneGuard guard(SysZone);
+         int dst_is_theport_p;
        
        /* use `->portBits' instead of `PORT_BITS ()', because here we want
 	  those actual bytes, not the logical structure that is the
@@ -98,8 +96,8 @@ P6 (PUBLIC pascal trap, void, CopyBits,
 	   PORT_CLIP_REGION_X (thePort) = saveclipr;
 	   DisposeRgn (big_region);
 	 }
-     });
-  /* cruft */
+
+         /* cruft */
 #if 0
   if (is_port_bits_p || is_cport_pixmap_ptr_p)
     {

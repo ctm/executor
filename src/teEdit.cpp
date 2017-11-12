@@ -658,12 +658,11 @@ P1 (PUBLIC pascal trap, void, TECopy, TEHandle, te)
 	}
       SCRAP_N_STYLES_X (scrap) = CW (n_scrap_styles);
       
-      LOCK_HANDLE_EXCURSION_1
-	(scrap,
-	 {
+       {
+           HLockGuard guard(scrap);
 	   PutScrap (SCRAP_SIZE_FOR_N_STYLES (n_scrap_styles),
 		     TICK ("styl"), (Ptr) STARH (scrap));
-	 });
+	 }
       DisposHandle ((Handle) scrap);
       
       HSetState ((Handle) te_style, te_style_flags);
@@ -693,12 +692,9 @@ P1(PUBLIC pascal trap, void, TEPaste, TEHandle, teh)
   if (s >= 0)
     TEScrpLength = CW (s);
 #endif /* defined(X) */
-  LOCK_HANDLE_EXCURSION_1
-    (MR (TEScrpHandle),
-     {
+  HLockGuard guard(MR (TEScrpHandle));
        ROMlib_tedoitall (teh, STARH (MR (TEScrpHandle)), CW (TEScrpLength),
 			 false, NULL);
-     });
 }
 
 P1 (PUBLIC pascal trap, void, TEDelete, TEHandle, teh)

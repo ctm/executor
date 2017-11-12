@@ -70,12 +70,12 @@ P2(PUBLIC pascal trap, void, StdPoly, GrafVerb, verb, PolyHandle, ph)
 
     state = HGetState((Handle) ph);
     HLock((Handle) ph);
-    PIC_SAVE_EXCURSION
-      ({
+    if (thePort->picSave)
+    {
 	ROMlib_drawingverbpicupdate (verb);
 	PICOP (OP_framePoly + (int) verb);
 	PICWRITE (STARH(ph), Hx (ph, polySize));
-      });
+    }
 
     if (PORT_PEN_VIS (thePort) < 0 && !PORT_REGION_SAVE_X (thePort)
 	&& verb != frame)

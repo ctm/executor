@@ -738,16 +738,36 @@ extern Handle ROMlib_copy_handle (Handle);
 #define DEFAULT_ITABLE_RESOLUTION 4
 
 /* this probably belongs elsewhere as well */
-#define THEPORT_SAVE_EXCURSION(thePort_new, body)	\
-  do { GUEST<GrafPtr> thePort_saveX = thePortX;		\
-       SetPort (thePort_new);				\
-       body						\
-       thePortX = thePort_saveX; } while (0)
+class ThePortGuard
+{
+    GUEST<GrafPtr> savePort;  
+public:
+    ThePortGuard(GrafPtr port)
+        : savePort(thePortX)
+    {
+        SetPort(port);
+    }
+    ~ThePortGuard()
+    {
+        thePortX = savePort;
+    }
+};
 
-#define THEGDEVICE_SAVE_EXCURSION(TheGDevice_new, body)	\
-  do { GDHandle TheGDevice_save = PPR (TheGDevice);	\
-       SetGDevice (TheGDevice_new);			\
-       body						\
-       SetGDevice (TheGDevice_save); } while (0)
+class TheGDeviceGuard
+{
+    GDHandle saveDevice;  
+public:
+    TheGDeviceGuard(GDHandle device)
+        : saveDevice(MR(TheGDevice))
+    {
+        SetGDevice(device);
+    }
+    ~TheGDeviceGuard()
+    {
+        SetGDevice(saveDevice);
+    }
+};
+
+
 }
 #endif /* _CQUICK_H_ */

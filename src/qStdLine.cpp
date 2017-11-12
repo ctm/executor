@@ -357,15 +357,15 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
 	*oip++ = CW_RAW(x2);
   }
   
-  PIC_SAVE_EXCURSION
-  ({
+  if (thePort->picSave)
+  {
 	ROMlib_drawingpicupdate();
 	PICOP(OP_Line);
 	PICWRITE(&PORT_PEN_LOC (thePort), sizeof (PORT_PEN_LOC (thePort)));
 	swappedp.h = CW(p.h);
 	swappedp.v = CW(p.v);
 	PICWRITE(&swappedp, sizeof(swappedp));
-  })
+  }
   
   /*
    * NOTE: this early return used to be before we wrote the picture, but

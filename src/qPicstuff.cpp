@@ -1170,11 +1170,9 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
 	    
 	    if (h == NULL)
 	      {
-		ZONE_SAVE_EXCURSION
-		  (SysZone,
-		   {
-		     h = NewHandle (final_data_size);
-		   });
+		TheZoneGuard guard(SysZone);
+  
+	        h = NewHandle (final_data_size);
 	      }
 	    HLock (h);
 	    
@@ -1202,11 +1200,9 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
 	h = NewHandle (final_data_size);
 	if (h == NULL)
 	  {
-	    ZONE_SAVE_EXCURSION
-	      (SysZone,
-	       {
-		 h = NewHandle (final_data_size);
-	       });
+	    TheZoneGuard guard(SysZone);
+  
+	    h = NewHandle (final_data_size);
 	  }
 	HLock(h);
 	pixmap->baseAddr = *h;	/* can't use STARH 'cause we don't */
@@ -1415,9 +1411,7 @@ A1 (PRIVATE, void, eatPixPat, PixPatHandle, pixpat)
   Size datasize;
   Handle temph;
 
-  LOCK_HANDLE_EXCURSION_1
-    (pixpat,
-     {
+  HLockGuard guard(pixpat);
        PIXPAT_TYPE_X (pixpat) = eatINTEGERX ();
        if (PIXPAT_TYPE_X (pixpat) == CWC (RGBPat))
 	 {
@@ -1440,9 +1434,7 @@ A1 (PRIVATE, void, eatPixPat, PixPatHandle, pixpat)
 	   eatPattern (PIXPAT_1DATA (pixpat));
 	   patmap = (PixMapHandle) NewHandle (sizeof (PixMap));
 	   PIXPAT_MAP_X (pixpat) = RM (patmap);
-	   LOCK_HANDLE_EXCURSION_1
-	     (patmap,
-	      {
+                HLockGuard guard(patmap);
 		PixMapPtr patmap_ptr = STARH (patmap);
 		
 		eatPixMap (patmap_ptr, 0);
@@ -1463,9 +1455,8 @@ A1 (PRIVATE, void, eatPixPat, PixPatHandle, pixpat)
 		   patXMap, nullptr,
 		   patXData, RM (NewHandleClear (sizeof (xdata_t))),
 		   patXValid, CWC (-1));
-	      });
+
 	 }
-   });
 }
 
 #define opEndPic	0xff

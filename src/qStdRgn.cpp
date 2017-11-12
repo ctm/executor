@@ -284,14 +284,11 @@ do {									\
   if (CGrafPort_p (the_port))						\
     {									\
       PixMapHandle cport_pmap = CPORT_PIXMAP ((CGrafPtr) the_port);	\
-      LOCK_HANDLE_EXCURSION_1						\
-	(cport_pmap,							\
-	 {								\
+      HLockGuard guard(cport_pmap);					\
 	   blt_fancy_pat_mode_to_pixmap (rh, mode,			\
 					 pixpat_accessor ((CGrafPtr)	\
 							  the_port),	\
 					 NULL, STARH (cport_pmap));	\
-	 });								\
     }									\
   else if (active_screen_addr_p (&the_port->portBits))			\
     {									\
@@ -381,9 +378,9 @@ blt_pixpat_to_pixmap_simple_mode (RgnHandle rh, INTEGER mode,
   int dst_top, dst_left;
   bool update_dirty_p;
 
-  LOCK_HANDLE_EXCURSION_2
-    (srch, dsth,
+  
      {
+        HLockGuard guard1(srch), guard2(dsth);
        PixPat *src = STARH (srch);
        PixMap *dst = STARH (dsth);
        GrafPtr the_port = thePort;
@@ -461,15 +458,12 @@ blt_pixpat_to_pixmap_simple_mode (RgnHandle rh, INTEGER mode,
 	       update_xdata_if_needed (xh, src, dst);
 	     }
 
-	   LOCK_HANDLE_EXCURSION_1
-	     (xh,
-	      {
+             HLockGuard guard(xh);
 		xdata_t *x = STARH (xh);
 		update_dirty_p = (*x->blt_func) (rh, mode, -dst_left,
 						 -dst_top, x, dst);
-	      });
 	 }
-     });
+     }
 
   /* Update the real screen as appropriate. */
   if (screen_dst_p && update_dirty_p)
@@ -514,11 +508,6 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
     }
   else
     {
-#if 0
-      LOCK_HANDLE_EXCURSION_1
-	(pixpat_handle,
-#endif
-	 {
 	   PixPat *pixpat = STARH (pixpat_handle);
 	   if (pixpat->patType == CWC (pixpat_type_orig))
 	     {
@@ -530,11 +519,6 @@ blt_fancy_pat_mode_to_pixmap (RgnHandle rh, int mode,
 	       xh = xdata_for_pixpat (pixpat, pixmap);
 	       apply_fg_bk_p = false;
 	     }
-#if 0
-	 });
-#else
-    }
-#endif
     }
 
   /* Set up the pattern bitmap. */
@@ -719,17 +703,14 @@ P2 (PUBLIC pascal trap, void, StdRgn,
       return;
     }
 
-  PIC_SAVE_EXCURSION
-    ({
+  if (thePort->picSave)
+  {
       ROMlib_drawingverbpicupdate (verb);
       PICOP (OP_frameRgn + (int) verb);
-      LOCK_HANDLE_EXCURSION_1
-	(rgn,
-	 {
+         HLockGuard guard(rgn);
 	   RgnPtr rp = STARH (rgn);
 	   PICWRITE (rp, CW (rp->rgnSize));
-	 });
-    });
+  }
   
   /* intersect the region to be drawn with the
      port bounds and port rect */

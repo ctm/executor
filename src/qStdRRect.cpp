@@ -191,14 +191,14 @@ P4(PUBLIC pascal trap, void, StdRRect, GrafVerb, verb, Rect *, r,
     GUEST<Point> p;
     PAUSEDECL;
 
-    PIC_SAVE_EXCURSION
-      ({
+    if (thePort->picSave)
+    {
 	p.h = CW (width);
 	p.v = CW (height);
 	ROMlib_drawingverbrectovalpicupdate (verb, r, &p);
 	PICOP (OP_frameRRect + (int) verb);
 	PICWRITE (r, sizeof(*r));
-      });
+    }
 
     if (PORT_PEN_VIS (thePort) < 0
 	&& (!PORT_REGION_SAVE (thePort) || verb != frame))

@@ -63,10 +63,9 @@ Executor::gd_allocate_main_device (void)
   if (vdriver_fbuf == NULL)
     gui_fatal ("vdriver not initialized, unable to allocate `MainDevice'");
   
-  ZONE_SAVE_EXCURSION
-    (SysZone,
-     {
-       PixMapHandle gd_pixmap;
+TheZoneGuard guard(SysZone);
+  
+PixMapHandle gd_pixmap;
        Rect *gd_rect;
        
        graphics_device = NewGDevice (/* no driver */ 0,
@@ -111,7 +110,6 @@ Executor::gd_allocate_main_device (void)
        vdriver_set_colors (0, 1 << vdriver_bpp,
 			   CTAB_TABLE (PIXMAP_TABLE
 				       (GD_PMAP (graphics_device))));
-     });
 }  
 
 P2 (PUBLIC pascal trap, GDHandle, NewGDevice,
@@ -122,10 +120,9 @@ P2 (PUBLIC pascal trap, GDHandle, NewGDevice,
   GUEST<Handle> h;
   GUEST<PixMapHandle> pmh;
   
-  ZONE_SAVE_EXCURSION
-    (SysZone,
-     {
-       this2 = (GDHandle) NewHandle ((Size) sizeof (GDevice));
+  TheZoneGuard guard(SysZone);
+
+         this2 = (GDHandle) NewHandle ((Size) sizeof (GDevice));
 
        if (this2 == NULL)
 	 return this2;
@@ -177,7 +174,6 @@ P2 (PUBLIC pascal trap, GDHandle, NewGDevice,
 	  and InitGDevice () should not be called (IMV-122) */
        if (mode != -1)
 	 InitGDevice (ref_num, mode, this2);
-     });
   
   return this2;
 }
@@ -527,12 +523,10 @@ P4 (PUBLIC pascal trap, OSErr, SetDepth,
 	  
 	      ROMlib_copy_ctab (PIXMAP_TABLE (gd_pixmap),
 				PIXMAP_TABLE (window_pixmap));
-	      THEPORT_SAVE_EXCURSION
-		(gp,
-		 {
+              
+               ThePortGuard guard(gp);
 		   RGBForeColor (&CPORT_RGB_FG_COLOR (gp));
 		   RGBBackColor (&CPORT_RGB_BK_COLOR (gp));
-		 });
 	    }
 	  else
 	    {
@@ -558,12 +552,9 @@ P4 (PUBLIC pascal trap, OSErr, SetDepth,
 			  PIXMAP_TABLE (wmgr_cport_pixmap));
       }
       
-      THEPORT_SAVE_EXCURSION
-	(MR (wmgr_port),
-	 {
+       ThePortGuard guard(MR (wmgr_port));
 	   RGBForeColor (&ROMlib_black_rgb_color);
 	   RGBBackColor (&ROMlib_white_rgb_color);
-	 });
     }
 
   /* Redraw the screen if that's what changed. */

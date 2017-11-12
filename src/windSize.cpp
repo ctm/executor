@@ -170,9 +170,7 @@ P3 (PUBLIC pascal trap, void, DragWindow, WindowPtr, wp, Point, p, Rect *, rp)
   bool cmddown;
   Rect r;
     
-  THEPORT_SAVE_EXCURSION
-    (MR (wmgr_port),
-     {
+    ThePortGuard guard(MR (wmgr_port));
        GetOSEvent (0, &ev);
        SetClip (MR (GrayRgn));
        cmddown = (bool)(ev.modifiers & CWC (cmdKey));
@@ -193,7 +191,6 @@ P3 (PUBLIC pascal trap, void, DragWindow, WindowPtr, wp, Point, p, Rect *, rp)
 		    !cmddown);
     
        DisposeRgn (rh);
-     });
 }
 
 #define SETUP_PORT(p)				\
@@ -300,12 +297,9 @@ P4 (PUBLIC pascal trap, void, SizeWindow, WindowPtr, w,
       PORT_RECT (w).right  = CW (CW (PORT_RECT (w).left) + width);
       PORT_RECT (w).bottom = CW (CW (PORT_RECT (w).top)  + height);
       
-      THEPORT_SAVE_EXCURSION
-	(MR (wmgr_port),
-	 {
+      ThePortGuard guard(MR (wmgr_port));
 	   WINDCALL (w, wCalcRgns, 0);
 	   if (WINDOW_VISIBLE_X (w))
 	     DrawNew ((WindowPeek) w, flag);
-	 });
     }
 }

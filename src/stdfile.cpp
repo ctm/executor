@@ -1367,9 +1367,8 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
   bool seen_up_already;
   TEMP_ALLOC_DECL (temp_save_bits);
   
-  THEPORT_SAVE_EXCURSION
-    (MR (wmgr_port),
      {
+       ThePortGuard guard(MR (wmgr_port));
        int str_width;
        
        next = &first;
@@ -1539,7 +1538,7 @@ A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
        CopyBits(wrapper, PORT_BITS_FOR_COPY (thePort),
 		&PIXMAP_BOUNDS (save_bits), &therect, srcCopy, NULL);
        DisposPixMap (save_bits);
-     });
+     }
   if (sel != -1)
     {
       for (i = 0, next = &first; i != sel; ++i, next = next->next)

@@ -736,9 +736,8 @@ P1 (PUBLIC pascal trap, void, RestoreClutDevice,
   
   gd_pixmap = GD_PMAP (gd);
   gd_ctab = PIXMAP_TABLE (gd_pixmap);
-  LOCK_HANDLE_EXCURSION_1
-    (gd_ctab,
      {
+        HLockGuard guard(gd_ctab);
        ColorSpec *gd_ctab_table;
        int gd_ctab_size;
         
@@ -778,7 +777,7 @@ P1 (PUBLIC pascal trap, void, RestoreClutDevice,
   	       gd_ctab_changed_p = true;
  	     }
   	 }
-     });
+     }
 
   if (gd_ctab_changed_p)
     pm_do_updates_gd_changed ();

@@ -1280,11 +1280,9 @@ DisposPtr (Ptr p)
       zone = PtrZone (p);
       if (zone)
 	{
-	  ZONE_SAVE_EXCURSION
-	    (RM (zone),
-	     {
-	       ROMlib_freeblock (block);
-	     });
+	  TheZoneGuard guard(RM(zone));
+
+          ROMlib_freeblock (block);
 	}
       else
 	warning_unexpected (NULL_STRING);

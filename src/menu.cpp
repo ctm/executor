@@ -227,10 +227,9 @@ P1(PUBLIC pascal trap, void, CalcMenuSize, MenuHandle, mh)
   if (mh)
     {
       i = CWC(-1);
-      THEPORT_SAVE_EXCURSION
-	(MR (wmgr_port),
-	 {
-	   PORT_TX_FACE_X (MR (wmgr_port)) = (Style) CB (0);
+      ThePortGuard guard(MR (wmgr_port));
+
+      PORT_TX_FACE_X (MR (wmgr_port)) = (Style) CB (0);
 	   PORT_TX_FONT_X (MR (wmgr_port)) = CWC (0);
        
 	   /* initialize the unused point to a known value */
@@ -238,7 +237,6 @@ P1(PUBLIC pascal trap, void, CalcMenuSize, MenuHandle, mh)
 	   memset (&rect, 0, sizeof rect);
        
 	   MENUCALL (mSizeMsg, mh, &rect, dummy_pt, &i);
-	 });
     }
 }
 
@@ -258,10 +256,10 @@ P1 (PUBLIC pascal trap, MenuHandle, GetMenu, int16, rid)
   
   mct_res_h = ROMlib_getrestid (TICK ("mctb"), rid);
   if (mct_res_h)
-    LOCK_HANDLE_EXCURSION_1
-      (mct_res_h,
-       {
-	 mct_res_t *mct_res;
+  {
+    HLockGuard guard(mct_res_h);
+
+    mct_res_t *mct_res;
 /*
 	 MCEntry entry;
 	 int i;
@@ -278,7 +276,7 @@ P1 (PUBLIC pascal trap, MenuHandle, GetMenu, int16, rid)
 	 SetMCEntries (CW (mct_res->n_entries),
 		       &mct_res->entries[0]);
 	 
-       });
+  }
 
   if (retval)
     {
@@ -783,10 +781,9 @@ P1(PUBLIC pascal trap, Handle, GetNewMBar, INTEGER, mbarid)
 	if (!*mb)
 	  LoadResource((Handle) mb);
 
-	LOCK_HANDLE_EXCURSION_1
-	  (mb,
-	   {
-	     ip = HxX(mb, mrid);
+	HLockGuard guard(mb);
+
+        ip = HxX(mb, mrid);
 	     ep = ip + Hx(mb, nmen);
 	     saveml = MENULIST;
 
@@ -801,8 +798,8 @@ P1(PUBLIC pascal trap, Handle, GetNewMBar, INTEGER, mbarid)
 	       InsertMenu(mh, 0);
 	       ip++;
 	     }
-	   });
-	MenuList = RM((Handle) saveml);
+
+             MenuList = RM((Handle) saveml);
       }
     return retval;
 }
@@ -1643,12 +1640,9 @@ Executor::ROMlib_menucall (INTEGER mess, MenuHandle themenu, Rect * menrect, Poi
       else
 	{
 	  ROMlib_hook (menu_mdefnumber);
-	  LOCK_HANDLE_EXCURSION_1
-	    (defproc,
-	     {
+	HLockGuard guard(defproc);
 		   CToPascalCall (STARH (defproc),
 			      CTOP_mdef0, mess, themenu, menrect, hit, which);
-	     });
 	}
     }
 }
@@ -1673,13 +1667,11 @@ Executor::ROMlib_mbdfcall (INTEGER msg, INTEGER param1, LONGINT param2)
   else
     {
       ROMlib_hook (menu_mbdfnumber);
-      LOCK_HANDLE_EXCURSION_1
-	(defproc,
-	 {
+      	HLockGuard guard(defproc);
+
 	   retval = CToPascalCall (STARH (defproc),
 				   CTOP_mbdf0, (Hx (MENULIST, mufu) & 7), msg,
 				   param1, param2);
-	 });
     }
 
   return retval;

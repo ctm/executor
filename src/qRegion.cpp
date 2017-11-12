@@ -1425,9 +1425,7 @@ A1(PUBLIC, void, ROMlib_printrgn, RgnHandle, h)
 	  (long) Hx (h, rgnBBox.top),
 	  (long) Hx (h, rgnBBox.right), (long) Hx (h, rgnBBox.bottom));
 
-  LOCK_HANDLE_EXCURSION_1
-    (h,
-     {
+  HLockGuard guard(h);
        if (!RGN_SMALL_P (h))
 	 {
 	   ip = RGN_DATA (h);
@@ -1451,7 +1449,6 @@ A1(PUBLIC, void, ROMlib_printrgn, RgnHandle, h)
 	   if (newsize != size)
 	     printf ("WARNING: computed size = %d\n", newsize);
 	 }
-     });
 }
 
 #endif /* NDEBUG */

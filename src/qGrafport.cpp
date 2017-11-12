@@ -40,9 +40,9 @@ P1(PUBLIC pascal trap, void, InitGraf, Ptr, gp)
   screenBitsX.bounds = PIXMAP_BOUNDS (main_gd_pixmap);
   
 #define patinit(d, s)	(*(GUEST<LONGINT> *)d = CLC(s), *((GUEST<LONGINT> *)d+1) = CLC(s))
-  ZONE_SAVE_EXCURSION
-    (SysZone,
-     {
+  
+  TheZoneGuard guard(SysZone);
+  
        patinit(white,  0x00000000);
        patinit(black,  0xffffffff);
        patinit(gray,   0xaa55aa55);
@@ -72,7 +72,6 @@ P1(PUBLIC pascal trap, void, InitGraf, Ptr, gp)
        ScreenRow = screenBitsX.rowBytes;
        randSeedX = CLC (1);
        QDExist = EXIST_YES;
-     });
 }
 
 /*
@@ -212,8 +211,8 @@ P2 (PUBLIC pascal trap, void, SetOrigin, INTEGER, h, INTEGER, v)
 
   dh = h - Cx (PORT_RECT (thePort).left);
   dv = v - Cx (PORT_RECT (thePort).top);
-  PIC_SAVE_EXCURSION
-    ({
+  if (thePort->picSave)
+    {
       GUEST<int16> swappeddh;
       GUEST<int16> swappeddv;
       
@@ -223,7 +222,7 @@ P2 (PUBLIC pascal trap, void, SetOrigin, INTEGER, h, INTEGER, v)
       PICWRITE (&swappeddh, sizeof swappeddh);
       swappeddv = CW(dv);
       PICWRITE (&swappeddv, sizeof swappeddv);
-    });
+    }
   OffsetRect (&PORT_BOUNDS (thePort),   dh, dv);
   OffsetRect (&PORT_RECT (thePort),     dh, dv);
   OffsetRgn (PORT_VIS_REGION (thePort), dh, dv);

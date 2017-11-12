@@ -1,6 +1,8 @@
 #if !defined (_MEMORY_MGR_H_)
 #define _MEMORY_MGR_H_
 
+#include "ExMacTypes.h"
+
 /*
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.

@@ -522,12 +522,10 @@ Executor::convert_pixmap (const PixMap *src, PixMap *dst,
 	
 	if (!target_itab)
 	  {
-	    ZONE_SAVE_EXCURSION
-	      (SysZone,
-	       {
+	    TheZoneGuard guard(SysZone);
+  
 		 target_itab = (ITabHandle) NewHandle (sizeof (ITab));
 		 ITAB_SEED_X (target_itab) = CLC(-1);
-	       });
 	  }
 #warning ctm added questionable caching here
 	if (target_table != cached_target_table ||

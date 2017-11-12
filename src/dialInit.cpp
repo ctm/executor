@@ -36,10 +36,9 @@ P1 (PUBLIC pascal trap, void, InitDialogs, ProcPtr, rp)	/* IMI-411 */
 {
   Ptr nothing = (Ptr) "";
   
-  ZONE_SAVE_EXCURSION
-    (SysZone,
-     {
-       DlgFont = CWC (systemFont);
+  TheZoneGuard guard(SysZone);
+  
+  DlgFont = CWC (systemFont);
        ResumeProc = RM (rp);
        ErrorSound ((ProcPtr) P_ROMlib_mysound);
        Handle tmp;
@@ -51,7 +50,6 @@ P1 (PUBLIC pascal trap, void, InitDialogs, ProcPtr, rp)	/* IMI-411 */
        DAStrings[2] = RM (tmp);
        PtrToHand (nothing, &tmp, (LONGINT) 1);
        DAStrings[3] = RM (tmp);
-    });
 }
 
 A1(PUBLIC, void, SetDAFont, INTEGER, i)	/* IMI-412 */

@@ -70,24 +70,22 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
   h = ih;
   HandToHand (&h);
   
-  THEGDEVICE_SAVE_EXCURSION
-    (MR (MainDevice),
-     {
-       Rect adjusted_rect;
+  TheGDeviceGuard guard(MR(MainDevice));
+
+  Rect adjusted_rect;
        bool color_p;
        DialogPeek dp;
        SignedByte flags;
        itmp ip;
        
-       LOCK_HANDLE_EXCURSION_1
-	 (ah,
 	  {
+            HLockGuard hGuard(ah);
 	    dialog_compute_rect (&HxX (ah, altr),
 				 &adjusted_rect,
 				 (ALERT_RES_HAS_POSITION_P (ah)
 				  ? ALERT_RES_POSITION (ah)
 				  : noAutoCenter));
-	  });
+	  }
        
        color_p = ((alert_ctab_res_h
 		   && CTAB_SIZE ((CTabHandle) alert_ctab_res_h) != -1)
@@ -105,12 +103,11 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
        
        if (color_p)
 	 {
-	   THEPORT_SAVE_EXCURSION
-	     (thePort,
 	      {
+                ThePortGuard portGuard(thePort);
 		SetWinColor (DIALOG_WINDOW (dp),
 			     (CTabHandle) alert_ctab_res_h);
-	      });
+	      }
 
 	   if (item_ctab_res_h)
 	     {
@@ -152,9 +149,8 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
 
        ShowWindow ((WindowPtr) dp);
        
-       THEPORT_SAVE_EXCURSION
-	 (FrontWindow (),
 	  {
+            ThePortGuard portGuard(FrontWindow());
 	    defbut = 1 + ((n & 8) >> 3);
 	    ip = ROMlib_dpnotoip(dp, defbut, &flags);
 	    if (ip)
@@ -171,11 +167,11 @@ P2 (PUBLIC pascal trap, INTEGER, Alert, INTEGER, id,		/* IMI-418 */
 	      }
 	    dp->aDefItem = CW(defbut);
 	    ModalDialog (fp, &hit);
-	  });
+	  }
        HSetState (DIALOG_ITEMS (dp), flags);
        DisposDialog ((DialogPtr) dp);
-     });
-  return CW (hit);
+
+       return CW (hit);
 }
 
 P2 (PUBLIC pascal trap, INTEGER, StopAlert, INTEGER, id,	/* IMI-419 */

@@ -1241,53 +1241,40 @@ dump_scrap (StScrpHandle scrap)
   
 }
 
-#define MAP_SAVE_EXCURSION(map, body)	\
-  do					\
-    {					\
-       GUEST<INTEGER> save_map;		\
-					\
-       save_map = CurMap;		\
-       CurMap = map;			\
-       { body }				\
-       CurMap = save_map;		\
-    } while (0)
+class MapSaveGuard
+{
+    GUEST<INTEGER> saveMap;
+public:
+    MapSaveGuard(GUEST<INTEGER> map)
+        : saveMap(CurMap)
+    {
+        CurMap = map;
+    }
+    ~MapSaveGuard()
+    {
+        CurMap = saveMap;
+    }
+};
 
 static INTEGER
 CountResourcesRN (LONGINT type, INTEGER rn)
 {
-  INTEGER retval;
-  
-  MAP_SAVE_EXCURSION
-    (CW (rn),
-     {
-       retval = Count1Resources (type);
-     });
-
-  return retval;
+  MapSaveGuard(CW (rn));
+  return Count1Resources (type);
 }
 
 static Handle
 GetIndResourceRN (LONGINT type, INTEGER i, INTEGER rn)
 {
-  Handle retval;
-
-  MAP_SAVE_EXCURSION
-    (CW (rn),
-     {
-       retval = Get1IndResource (type, i);
-     });
-
-  return retval;
+  MapSaveGuard(CW (rn));
+  return Get1IndResource (type, i);
 }
 
 static void
 AddResourceRN (Handle h, LONGINT type, INTEGER id, Str255 name, INTEGER rn)
 {
-  MAP_SAVE_EXCURSION
-    (CW (rn),
-     {
-       AddResource (h, type, id, name);
-     });
+  MapSaveGuard(CW (rn));
+  AddResource (h, type, id, name);
 }
 
 static OSErr

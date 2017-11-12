@@ -224,9 +224,8 @@ Executor::system_error (const char *_message, int _default_button,
 			    (WindowPtr) -1,
 			    false, /* dummy */ -1);
   
-  THEPORT_SAVE_EXCURSION
-    (msg_window,
      {
+       ThePortGuard guard(msg_window);
        FontInfo font_info;
        int total_message_width;
        int text_height;
@@ -341,7 +340,7 @@ Executor::system_error (const char *_message, int _default_button,
 	   }
        
        retval = event_loop ();
-     });
+     }
   
   DisposeWindow (msg_window);
   

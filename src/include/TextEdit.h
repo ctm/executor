@@ -182,20 +182,14 @@ typedef Byte Chars[1], *CharsPtr, **CharsHandle;
   ({									\
     int16 retval;							\
     									\
-    LOCK_HANDLE_EXCURSION_1						\
-      (te,								\
-       {								\
-	 retval = ROMlib_call_TEDoText (STARH (te), start, end, what);	\
-       });								\
+    HLockGuard guard(te);						\
+    retval = ROMlib_call_TEDoText (STARH (te), start, end, what);	\
     retval;								\
   })
 #define TE_CHAR_TO_POINT(te, sel, pt)			\
   ({							\
-    LOCK_HANDLE_EXCURSION_1				\
-      (te,						\
-       {						\
-	 te_char_to_point (STARH (te), sel, pt);	\
-       });						\
+    HLockGuard guard(te);				\
+    te_char_to_point (STARH (te), sel, pt);	        \
   })
 
 /* no need to lock te, since `te_char_to_lineno' cannot move memory

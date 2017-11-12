@@ -82,9 +82,7 @@ P2 (PUBLIC pascal trap, void, PlotIcon,
   if (!*icon)
     LoadResource (icon);
   
-  LOCK_HANDLE_EXCURSION_1
-    (icon,
-     {
+  HLockGuard guard(icon);
        BitMap bm;
        
        bm.baseAddr = *icon;
@@ -103,7 +101,6 @@ P2 (PUBLIC pascal trap, void, PlotIcon,
        bm.bounds.right = bm.bounds.bottom;
        CopyBits(&bm, PORT_BITS_FOR_COPY (thePort), &bm.bounds, rect,
 		srcCopy, NULL);
-     });
 }
 
 P4 (PUBLIC pascal trap, OSErr, PlotIconHandle,
@@ -147,9 +144,7 @@ P2 (PUBLIC pascal trap, void, PlotCIcon,
   RGBForeColor (&ROMlib_black_rgb_color);
   RGBBackColor (&ROMlib_white_rgb_color);
   
-  LOCK_HANDLE_EXCURSION_1
-    (icon,
-     {
+       HLockGuard guard(icon);
        PixMapHandle gd_pixmap;
        
        BitMap *mask_bm;
@@ -171,10 +166,9 @@ P2 (PUBLIC pascal trap, void, PlotCIcon,
 	   Handle icon_data;
 	   
 	   icon_data = CICON_DATA (icon);
-	   LOCK_HANDLE_EXCURSION_1
-	     (icon_data,
-	      {
-		PixMap *icon_pm;
+           HLockGuard guard(icon_data);
+  
+	   	PixMap *icon_pm;
 		
 		icon_pm = &CICON_PMAP (icon);
 		BITMAP_BASEADDR_X (icon_pm) = *icon_data;
@@ -186,7 +180,6 @@ P2 (PUBLIC pascal trap, void, PlotCIcon,
 			  &BITMAP_BOUNDS (mask_bm),
 			  /* #### fix up the need for this cast */
 			  (Rect *) rect);
-	      });
 	 }
        else
 	 {
@@ -211,7 +204,6 @@ P2 (PUBLIC pascal trap, void, PlotCIcon,
 		     /* #### fix up the need for this cast */
 		     (Rect *) rect);
 	 }
-     });
   
   if (cgrafport_p)
     {
@@ -280,10 +272,9 @@ P1 (PUBLIC pascal trap, CIconHandle, GetCIcon,
   new_size = sizeof(CIcon) - sizeof(INTEGER) + mask_data_size + bmap_data_size;
 
   cicon_handle = (CIconHandle) NewHandle (new_size);
-  LOCK_HANDLE_EXCURSION_2
-    (cicon_handle, cicon_res_handle,
-     {
-       CTabPtr tmp_ctab;
+  HLockGuard guard1(cicon_handle), guard2(cicon_res_handle);
+
+  CTabPtr tmp_ctab;
        int mask_data_offset;
        int bmap_data_offset;
        int pmap_ctab_offset;
@@ -332,7 +323,6 @@ P1 (PUBLIC pascal trap, CIconHandle, GetCIcon,
 		    (Ptr) STARH(MR(cicon->iconData)),
 		    pmap_data_size);
        }
-     });
 
   return cicon_handle;
 }
@@ -402,10 +392,9 @@ P3 (PUBLIC pascal trap, OSErr, GetIconSuite,
   if (MemErr != CWC (noErr))
     ICON_RETURN_ERROR (memFullErr);
 
-  LOCK_HANDLE_EXCURSION_1
-    (icon_suite,
-     {
-       icons = (Handle *) STARH (icon_suite);
+  HLockGuard guard(icon_suite);
+
+  icons = (Handle *) STARH (icon_suite);
   
        for (i = 0; i < N_SUITE_ICONS; i ++)
 	 {
@@ -418,7 +407,6 @@ P3 (PUBLIC pascal trap, OSErr, GetIconSuite,
 		 icons[i] = icon;
 	     }
 	 }
-     });
   
   *icon_suite_return = RM (icon_suite);
   
@@ -549,10 +537,9 @@ P4 (PUBLIC pascal trap, OSErr, PlotIconSuite,
   
   /* plot our icon */
   
-  LOCK_HANDLE_EXCURSION_2
-    (icon_data, icon_mask,
-     {
-       PixMap icon_pm;
+  HLockGuard guard1(icon_data), guard2(icon_mask);
+
+  PixMap icon_pm;
        BitMap mask_bm;
        CTabHandle color_table;
        Rect icon_rect;
@@ -586,7 +573,6 @@ P4 (PUBLIC pascal trap, OSErr, PlotIconSuite,
 		 (Rect *) rect);
        
        DisposCTable (color_table);
-     });
   
   ICON_RETURN_ERROR (noErr);
 }
@@ -680,10 +666,9 @@ P2 (PUBLIC pascal trap, OSErr, DisposeIconSuite,
 {
   if (dispose_data_p)
     {
-      LOCK_HANDLE_EXCURSION_1
-	(suite,
-	 {
-	   Handle *icons;
+      HLockGuard guard(suite);
+
+      Handle *icons;
 	   int i;
 
 	   icons = (Handle *) STARH (suite);
@@ -702,7 +687,6 @@ P2 (PUBLIC pascal trap, OSErr, DisposeIconSuite,
 		     DisposHandle (icons[i]);
 		 }
 	     }
-	 });
     }
   
   DisposHandle (suite);

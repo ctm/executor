@@ -89,17 +89,14 @@ Executor::ROMlib_kchr_ptr (void)
 {
   if (!kchr_ptr)
     {
-      ZONE_SAVE_EXCURSION
-	(SysZone,
-	 {
-	   Handle kchr_hand;
+        TheZoneGuard guard(SysZone);
+  	   Handle kchr_hand;
 
 	   kchr_hand = GetResource (TICK ("KCHR"), kchr_id);
 	   gui_assert (kchr_hand);
 	   LoadResource (kchr_hand);
 	   HLock (kchr_hand);
 	   kchr_ptr = STARH (kchr_hand);
-	 });
     }
   return kchr_ptr;
 }
@@ -109,10 +106,8 @@ Executor::ROMlib_set_keyboard (const char *keyboardname)
 {
   Handle new_h;
 
-  ZONE_SAVE_EXCURSION
-    (SysZone,
-     {
-       Str255 pkeyboardname;
+   TheZoneGuard guard(SysZone);
+         Str255 pkeyboardname;
 
        str255_from_c_string (pkeyboardname, keyboardname);
        new_h = GetNamedResource (TICK ("KCHR"), pkeyboardname);
@@ -132,7 +127,6 @@ Executor::ROMlib_set_keyboard (const char *keyboardname)
 	   HLock (new_h);
 	   kchr_ptr = STARH (new_h);
 	 }
-     });
   return !!new_h;
 }
 

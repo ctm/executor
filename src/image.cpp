@@ -26,10 +26,9 @@ Executor::image_init (pixel_image_desc_t *image_desc)
   pixel_image_t *retval;
   int i;
 
-  ZONE_SAVE_EXCURSION
-    (SysZone,
-     {
-       retval = (pixel_image_t *) NewPtr (sizeof *retval);
+  TheZoneGuard guard(SysZone);
+
+  retval = (pixel_image_t *) NewPtr (sizeof *retval);
        
        for (i = 0; i < 2; i ++)
 	 {
@@ -94,7 +93,6 @@ Executor::image_init (pixel_image_desc_t *image_desc)
 	 }
        
        return retval;
-     });
 }
 
 /* all image_... functions assume thePort as target */
@@ -149,12 +147,9 @@ Executor::image_validate_x_bits (pixel_image_t *image, int color_p /* visual */)
 	= gd_bpp_x;
       ROMlib_copy_ctab (gd_pixmap_ctab, PIXMAP_TABLE (x_bits));
 
-      LOCK_HANDLE_EXCURSION_2
-	(bits, x_bits,
-	 {
-	   convert_pixmap (STARH (bits), STARH (x_bits),
-			   &PIXMAP_BOUNDS (bits), NULL);
-	 });
+      HLockGuard guard1(bits), guard2(x_bits);
+        convert_pixmap (STARH (bits), STARH (x_bits),
+                        &PIXMAP_BOUNDS (bits), NULL);
       
       IMAGE_X_BITS_VALID (image, color_p) = bits_ctab_seed_x;
     }

@@ -242,9 +242,7 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
   if (res_handle == NULL)
     return NULL;
 
-  LOCK_HANDLE_EXCURSION_2
-    (ccrsr_handle, res_handle,
-     {
+  HLockGuard guard1(ccrsr_handle), guard2(res_handle);
        ccrsr_res_ptr resource;
        CCrsrPtr ccrsr;
        CTabPtr tmp_ctab;
@@ -295,7 +293,6 @@ P1 (PUBLIC pascal trap, CCrsrHandle, GetCCursor, INTEGER, crsr_id)
        BlockMoveData ((Ptr) tmp_ctab,
 		  (Ptr) STARH (PIXMAP_TABLE (MR (ccrsr->crsrMap))),
 		  ccrsr_ctab_size);
-     });
   
   return ccrsr_handle;
 }
@@ -353,9 +350,8 @@ P1 (PUBLIC pascal trap, void, SetCCursor,
 	return;
     }
   
-  LOCK_HANDLE_EXCURSION_1
-    ((Handle) ccrsr,
      {
+       HLockGuard guard(ccrsr);
        GDHandle gdev;
        PixMapHandle gd_pmap;
        GUEST<Point> *hot_spot;
@@ -382,10 +378,9 @@ P1 (PUBLIC pascal trap, void, SetCCursor,
 	     {
 	       SetHandleSize (ccrsr_xdata, 32 * host_cursor_depth);
 	       
-	       LOCK_HANDLE_EXCURSION_2
-		 (CCRSR_MAP (ccrsr), CCRSR_DATA (ccrsr),
-		  {
-		    PixMap src;
+	       HLockGuard guard1(CCRSR_MAP (ccrsr)), guard2( CCRSR_DATA (ccrsr) );
+
+               PixMap src;
 		    PixMap ccrsr_xmap;
 
 		    /* only fields used by `convert_pixmap ()',
@@ -396,26 +391,20 @@ P1 (PUBLIC pascal trap, void, SetCCursor,
 		    
 		    src = *STARH (CCRSR_MAP (ccrsr));
 		    src.baseAddr = *CCRSR_DATA (ccrsr);
-		    LOCK_HANDLE_EXCURSION_1
-		      (ccrsr_xdata,
-		       {
+		    HLockGuard guard3(ccrsr_xdata);
 			 ccrsr_xmap.baseAddr = *ccrsr_xdata;
 			 convert_pixmap (&src, &ccrsr_xmap,
 					 &ROMlib_cursor_rect, NULL);
-		       });
-		  });
-	       CCRSR_XVALID_X (ccrsr) = CW (host_cursor_depth);
+
+                CCRSR_XVALID_X (ccrsr) = CW (host_cursor_depth);
 	       CCRSR_ID_X (ccrsr) = CTAB_SEED_X (PIXMAP_TABLE (gd_pmap));
 	     }
       
 	   /* Actually set the current cursor. */
-	   LOCK_HANDLE_EXCURSION_1
-	     (ccrsr_xdata,
-	      {
+	   HLockGuard guard(ccrsr_xdata);
 		HOST_SET_CURSOR ((char *) STARH (ccrsr_xdata),
 				 (unsigned short *) CCRSR_MASK (ccrsr),
 				 CW (hot_spot->h), CW (hot_spot->v));
-	      });
 	 }
        else
 	 {
@@ -423,7 +412,7 @@ P1 (PUBLIC pascal trap, void, SetCCursor,
 			    (unsigned short *) CCRSR_MASK (ccrsr),
 			    CW (hot_spot->h), CW (hot_spot->v));
 	 }
-     });
+     }
 
   /* copy the cursor so if there is a depth change, we have the cursor
      data around to reset the cursor; a pain in the butt */
@@ -433,14 +422,11 @@ P1 (PUBLIC pascal trap, void, SetCCursor,
     
       if (!current_ccrsr)
 	{
-	  ZONE_SAVE_EXCURSION
-	    (SysZone,
-	     {
-	       current_ccrsr = (CCrsrHandle) NewHandle (sizeof (CCrsr));
+            TheZoneGuard guard(SysZone);
+  	       current_ccrsr = (CCrsrHandle) NewHandle (sizeof (CCrsr));
 	       CCRSR_DATA_X (current_ccrsr) = RM (NewHandle (0));
 	       CCRSR_XDATA_X (current_ccrsr) = nullptr;
 	       CCRSR_MAP_X (current_ccrsr) = RM (NewPixMap ());
-	     });
 	}
     
       /* copy the cursor structure */

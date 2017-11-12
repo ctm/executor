@@ -76,9 +76,8 @@ A3(PRIVATE, BOOLEAN, xTrackBox, WindowPtr, wp, Point, pt,
   BOOLEAN inpart = true, inp;
   EventRecord ev;
 
-  THEPORT_SAVE_EXCURSION
-    (MR (wmgr_port),
-     {
+      ThePortGuard guard(MR (wmgr_port));
+
        SetClip(MR(GrayRgn));
 
        WINDCALL(wp, wDraw, part);
@@ -100,7 +99,7 @@ A3(PRIVATE, BOOLEAN, xTrackBox, WindowPtr, wp, Point, pt,
 	      }
 	     }
 	 }
-     });
+
   return inpart;
 }
 

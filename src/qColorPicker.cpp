@@ -1364,9 +1364,9 @@ P4 (PUBLIC pascal trap, BOOLEAN, GetColor,
   /* #### add palette entries for the {current, orig}_colors? */
   
   color_wheel_color_table = (CTabHandle) NewHandle (CTAB_STORAGE_FOR_SIZE (23));
-  LOCK_HANDLE_EXCURSION_1
-    (color_wheel_color_table,
      {
+       	HLockGuard guard(color_wheel_color_table);
+
        CTAB_SIZE_X (color_wheel_color_table) = CW (23);
        color_wheel_colors = CTAB_TABLE (color_wheel_color_table);
        
@@ -1374,9 +1374,8 @@ P4 (PUBLIC pascal trap, BOOLEAN, GetColor,
        
        ActivatePalette (color_picker_window);
        
-       THEPORT_SAVE_EXCURSION
-	 (color_picker_window,
 	  {
+            ThePortGuard guard(color_picker_window);
 	    Rect *dummy_rect = (Rect*)alloca (sizeof *dummy_rect);
 	    memset (dummy_rect, '\000', sizeof *dummy_rect);
 	    
@@ -1402,8 +1401,8 @@ P4 (PUBLIC pascal trap, BOOLEAN, GetColor,
 	    
 	    TEDispose (te);
 	    te_box = NULL;
-	  });
-     });       
+	  }
+     } 
   
   DisposHandle ((Handle) color_wheel_color_table);
   

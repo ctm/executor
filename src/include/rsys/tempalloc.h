@@ -64,11 +64,11 @@ do {									\
     }									\
   else									\
     {									\
-      ZONE_SAVE_EXCURSION	/* Try SysZone first. */		\
-	(SysZone, { (name).u.handle = NewHandle (size); });		\
+      { TheZoneGuard guard(SysZone);	/* Try SysZone first. */	\
+	(name).u.handle = NewHandle (size); }           		\
       if (!(name).u.handle)						\
-        ZONE_SAVE_EXCURSION	/* Then ApplZone. */			\
-	  (ApplZone, { (name).u.handle = NewHandle (size); });		\
+        { TheZoneGuard guard(ApplZone);	/* Then ApplZone. */		\
+	  (name).u.handle = NewHandle (size); }	                	\
       if ((name).u.handle)						\
 	{								\
 	  (name).status = TEMP_ALLOC_DISPOSHANDLE;			\

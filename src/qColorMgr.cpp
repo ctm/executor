@@ -357,19 +357,18 @@ P3 (PUBLIC pascal trap, void, GetSubTable,
 	     sure to do it out of the system zone, since we will keep
 	     this itab around forever */
 	  if (cached_itab == NULL)
-	    ZONE_SAVE_EXCURSION
-	      (SysZone,
 	       {
+                 TheZoneGuard guard(SysZone);
+  
 		 cached_itab = (ITabHandle) NewHandle ((Size) sizeof (ITab));
-	       });
+	       }
 	  
 	  itab = cached_itab;
 	  MakeITable (target_ctab, itab, resolution);
 	}
-    }
-  LOCK_HANDLE_EXCURSION_2
-    (in_ctab, target_ctab,
-     {
+  }
+  HLockGuard guard1(in_ctab), guard2(target_ctab);
+
        GUEST<CTabHandle> gdev_ctab_save = PIXMAP_TABLE_X (gd_pmap);
        GUEST<ITabHandle> gdev_itab_save = GD_ITABLE_X (gdev);
        
@@ -404,7 +403,6 @@ P3 (PUBLIC pascal trap, void, GetSubTable,
        
        PIXMAP_TABLE_X (gd_pmap) = gdev_ctab_save;
        GD_ITABLE_X (gdev) = gdev_itab_save;
-     });
 }
 
 int

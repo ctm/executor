@@ -105,9 +105,7 @@ P3 (PUBLIC pascal trap, INTEGER, TrackControl,	/* IMI-323 */
   
   int retval;
   
-  CTL_CALL_EXCURSION
-    (c,
-     {
+       CtlCallGuard guard(c);
        partstart = inpart = TestControl(c, p);
        
        /* Super-Dice-It hack: It appears that Super Dice It 1.1
@@ -219,7 +217,6 @@ P3 (PUBLIC pascal trap, INTEGER, TrackControl,	/* IMI-323 */
 	   inpart = TestControl(c, whereunswapped);
 	 }
      done:;
-     });
     
   retval = (partstart == inpart ? inpart : 0); /* DON'T CHANGE THIS
 						  line w/o looking to Note 1
@@ -232,14 +229,11 @@ P2(PUBLIC pascal trap, INTEGER, TestControl,			/* IMI-325 */
 {
   int16 retval;
 
-  CTL_CALL_EXCURSION
-    (c,
-     {
+  CtlCallGuard guard(c);
        if (Hx(c, contrlVis) && U(Hx(c, contrlHilite)) != 255)
 	 retval = CTLCALL(c, testCntl, ((LONGINT) p.v << 16) |
 			  (unsigned short) p.h);
        else
 	 retval = 0;
-     });
   return retval;
 }

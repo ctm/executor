@@ -113,9 +113,7 @@ P4(PUBLIC pascal trap, LONGINT, PopUpMenuSelect, MenuHandle, mh, INTEGER, top,
 	item = count;
       }
     
-    THEPORT_SAVE_EXCURSION
-      (MR (wmgr_port),
-       {
+    ThePortGuard guard(MR(wmgr_port));
 	 tempi = CW (item);
 	 MENUCALL (mPopUpRect, mh, &saver, p, &tempi);
 	 TopMenuItem = tempi;
@@ -130,6 +128,6 @@ P4(PUBLIC pascal trap, LONGINT, PopUpMenuSelect, MenuHandle, mh, INTEGER, top,
 	 DisposeRgn (PORT_CLIP_REGION (thePort));
 	 PORT_CLIP_REGION_X (thePort) = saveclip;
 	 MBDFCALL (mbSaveAlt, 0, where);
-       });
-    return ROMlib_menuhelper (mh, &saver, where, true, 1);
+
+         return ROMlib_menuhelper (mh, &saver, where, true, 1);
 }

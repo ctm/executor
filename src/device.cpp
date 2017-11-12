@@ -291,10 +291,9 @@ A2(PUBLIC, OSErr, ROMlib_driveropen, ParmBlkPtr, pbp,		/* INTERNAL */
   GUEST<ResType> typ;
   BOOLEAN alreadyopen;
 
-  ZONE_SAVE_EXCURSION
-    (SysZone,
-     {
-       err = noErr;
+  TheZoneGuard guard(SysZone);
+
+  err = noErr;
 	 
        if ((ramdh =
 	    (ramdriverhand) GetNamedResource(TICK("DRVR"),
@@ -387,7 +386,7 @@ A2(PUBLIC, OSErr, ROMlib_driveropen, ParmBlkPtr, pbp,		/* INTERNAL */
 	 } else
 	   err = dInstErr;
        }
-     });
+
   fs_err_hook (err);
   return err;
 }

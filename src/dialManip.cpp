@@ -171,8 +171,7 @@ settexth (DialogPeek dp, itmp ip, int item_no)
     te_style_face = PORT_TX_FACE (dp);
     te_style_size = PORT_TX_SIZE (dp);
     
-    THEPORT_SAVE_EXCURSION
-      ((GrafPtr) dp, { GetForeColor (&te_style_color); });
+    { ThePortGuard guard((GrafPtr) dp); GetForeColor (&te_style_color); }
     
     if (get_item_style_info ((DialogPtr) dp, item_no, &flags, &style_info))
       {
@@ -331,9 +330,7 @@ P2(PUBLIC pascal trap, void, SetIText, Handle, item,		/* IMI-422 */
       ip = htoip (item, &wp, &no, &flags);
       if (ip)
 	{
-	  THEPORT_SAVE_EXCURSION
-	    ((WindowPtr) wp,
-	     {
+          ThePortGuard guard((WindowPtr) wp);
 	       ROMlib_drawiptext ((DialogPtr) wp, ip, no);
 	       if (no == DIALOG_EDIT_FIELD (wp) + 1)
 		 {
@@ -346,7 +343,6 @@ P2(PUBLIC pascal trap, void, SetIText, Handle, item,		/* IMI-422 */
 			      text_h);
 		 }
 	       ValidRect (&ip->itmr);
-	     });
 	  HSetState (DIALOG_ITEMS (wp), flags);
 	}
     }
@@ -444,12 +440,10 @@ P2 (PUBLIC pascal trap, void, HideDItem, DialogPtr, dp,		/* IMIV-59 */
 	  if (item == DIALOG_ADEF_ITEM (dp))
 	    InsetRect (&r, -4, -4);
 	}
-      THEPORT_SAVE_EXCURSION
-	(dp,
-	 {
+      
+      ThePortGuard guard(dp);
 	   EraseRect (&r);
 	   InvalRect (&r);
-	 });
     }
   HSetState (DIALOG_ITEMS (dp), flags);
 }
@@ -483,11 +477,9 @@ P2 (PUBLIC pascal trap, void, ShowDItem, DialogPtr, dp,		/* IMIV-59 */
 	  if (item == DIALOG_ADEF_ITEM (dp))
 	    InsetRect (&r, -4, -4);
 	}
-      THEPORT_SAVE_EXCURSION
-	(dp,
-	 {
-	   InvalRect(&r);
-	 });
+    
+      ThePortGuard guard(dp);
+      InvalRect(&r);
     }
   if (CB (ip->itmtype) & ctrlItem)
     {

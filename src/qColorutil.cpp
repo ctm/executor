@@ -161,10 +161,8 @@ Executor::ROMlib_color_init (void)
 {
   ColorSpec *bw_ctab_table;
 
-  ZONE_SAVE_EXCURSION
-    (SysZone,
-     {
-       /* allocate and initialize ROMlib_bw_ctab */
+TheZoneGuard guard(SysZone);
+         /* allocate and initialize ROMlib_bw_ctab */
        ROMlib_bw_ctab = (CTabHandle) NewHandle (CTAB_STORAGE_FOR_SIZE (1));
        CTAB_SIZE_X (ROMlib_bw_ctab) = CWC (1);
        CTAB_SEED_X (ROMlib_bw_ctab) = CL (GetCTSeed ());
@@ -195,9 +193,6 @@ Executor::ROMlib_color_init (void)
        no_stdbits_color_conversion_color_table
 	 = (CTabHandle) NewHandle (sizeof (ColorTable));
        CTAB_SEED_X (no_stdbits_color_conversion_color_table) = CLC (0);
-    
-
-     });
 }
 
 Handle

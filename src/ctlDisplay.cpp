@@ -23,9 +23,7 @@ P2(PUBLIC pascal trap, void, SetCTitle, ControlHandle, c,	/* IMI-321 */
 {
   if (c)
     {
-      CTL_CALL_EXCURSION
-	(c,
-	 {
+      CtlCallGuard guard(c);
 	   RgnHandle rh;
        
 	   rh = NewRgn();
@@ -34,7 +32,6 @@ P2(PUBLIC pascal trap, void, SetCTitle, ControlHandle, c,	/* IMI-321 */
 	   str255assign(HxX(c, contrlTitle), t);
 	   CTLCALL(c, drawCntl, ENTIRECONTROL);
 	   DisposeRgn(rh);
-	 });
     }
 }
 
@@ -49,9 +46,7 @@ P1(PUBLIC pascal trap, void, HideControl, ControlHandle, c)	/* IMI-322 */
 {
   if (c)
     {
-      CTL_CALL_EXCURSION
-	(c,
-	 {
+      CtlCallGuard guard(c);
 	   RgnHandle rh;
        
 	   if (c && CTL_VIS (c))
@@ -85,7 +80,6 @@ P1(PUBLIC pascal trap, void, HideControl, ControlHandle, c)	/* IMI-322 */
 	       DisposeRgn(rh);
 	       CTL_VIS (c) = false;
 	     }
-	 });
     }
 }
 
@@ -99,9 +93,7 @@ P1(PUBLIC pascal trap, void, ShowControl, ControlHandle, c)	/* IMI-322 */
 {
   if (c)
     {
-      CTL_CALL_EXCURSION
-	(c,
-	 {
+      CtlCallGuard guard(c);
 	   /* #if SHOWCONTROL_ERASES
 	      RgnHandle rh; */
 	   
@@ -119,7 +111,6 @@ P1(PUBLIC pascal trap, void, ShowControl, ControlHandle, c)	/* IMI-322 */
 	   
 	       CTLCALL(c, drawCntl, 0);
 	     }
-	 });
     }
 }
 
@@ -135,15 +126,12 @@ P2 (PUBLIC pascal trap, void, HiliteControl, ControlHandle, c, 	/* IMI-322 */
 	  oldh = CTL_HILITE (c);
 	  if (oldh != state)
 	    {
-	      CTL_CALL_EXCURSION
-		(c,
-		 {
+              CtlCallGuard guard(c);
 		   HxX (c, contrlHilite) = state;
 		   if (oldh == INACTIVE || state == INACTIVE)
 		     CTLCALL(c, drawCntl, 0);
 		   else
 		     CTLCALL(c, drawCntl, state);
-		 });
 	    }
 	}
       else

@@ -104,12 +104,12 @@ splash_screen_display (bool button_p, char *basename)
     dst_origin.h = dst_origin.v = CWC (0);
 
     /* Set up a region for the one row in question. */
-    ZONE_SAVE_EXCURSION
-      (SysZone,
        {
+         TheZoneGuard guard(SysZone);
+  
 	 row_rgn = NewRgn ();
 	 RGN_BBOX (row_rgn) = screen_bitmap.bounds;
-       });
+       }
 
     /* Clear the screen if there's a border. */
     if (SPLASH_SCREEN_HEIGHT != vdriver_height

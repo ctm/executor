@@ -818,9 +818,8 @@ Executor::xdblt_pattern (RgnHandle rh, int mode,
     {
       xdata_handle_t xh = xdata_for_pattern (pattern, dst);
 
-      LOCK_HANDLE_EXCURSION_1
-	(xh,
 	 {
+           HLockGuard guard(xh);
 	   xdata_t *x = STARH (xh);
 	   p = x->pat_bits;
 	   if (p)
@@ -870,7 +869,7 @@ Executor::xdblt_pattern (RgnHandle rh, int mode,
 							 rgb_spec,
 							 pat_x_rotate_count);
 	     }
-	 });
+	 }
 
       xdata_free (xh);
     }

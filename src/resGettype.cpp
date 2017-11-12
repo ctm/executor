@@ -87,11 +87,9 @@ A1(PRIVATE, INTEGER, initar, INTEGER, rn)
 	    ReallocHandle((Handle) ar, mostbytesneeded);
 	else
 	  {
-	    ZONE_SAVE_EXCURSION
-	      (SysZone,
-	       {
-		 ar = (GUEST<restypeptr> *) NewHandle(mostbytesneeded);
-	       });
+	    TheZoneGuard guard(SysZone);
+  
+	    ar = (GUEST<restypeptr> *) NewHandle(mostbytesneeded);
 	  }
 	ninserted = 0;
 	if (rn >= 0) {

@@ -58,12 +58,12 @@ P2(PUBLIC pascal trap, void, StdRect, GrafVerb, v, Rect *, rp)
     if (EmptyRect(rp))
 /*-->*/	return;
 
-    PIC_SAVE_EXCURSION
-      ({
+    if (thePort->picSave)
+    {
 	ROMlib_drawingverbrectpicupdate( v, rp );
 	PICOP(OP_frameRect + (int) v);
 	PICWRITE(rp, sizeof(*rp));
-      });
+    }
 
     PAUSERECORDING;
     rh = NewRgn();

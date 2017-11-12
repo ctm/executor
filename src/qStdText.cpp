@@ -294,8 +294,8 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
       if (n <= 0)
 /*-->*/	return retval;
       
-      PIC_SAVE_EXCURSION
-	({
+      if (thePort->picSave)
+      {
 	  ROMlib_textpicupdate (num, den);
 	  PICOP (OP_LongText);
 	  PICWRITE (&PORT_PEN_LOC (thePort), sizeof (PORT_PEN_LOC (thePort)));
@@ -304,7 +304,7 @@ Executor::text_helper (LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point>
 	  PICWRITE (p, count);
 	  if (!(count & 1))
 	    PICWRITE ("", 1);	/* even things out */
-	});
+      }
 	  
       if (PORT_PEN_VIS (thePort) < 0)
 	{

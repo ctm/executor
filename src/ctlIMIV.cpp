@@ -22,11 +22,9 @@ P1(PUBLIC pascal trap, void, Draw1Control, ControlHandle, c)	/* IMIV-53 */
 {
   if (CTL_VIS_X (c))
     {
-      CTL_CALL_EXCURSION
-	(c,
-	 {
-	   CTLCALL(c, drawCntl, 0);
-	 });
+      CtlCallGuard guard(c);
+      
+      CTLCALL(c, drawCntl, 0);
     }
 }
 

@@ -236,14 +236,14 @@ P1(PUBLIC pascal trap, BOOLEAN, CheckUpdate, EventRecord *, ev)
       if (WINDOW_VISIBLE_X (wp) && !EmptyRgn (WINDOW_UPDATE_REGION (wp)))
 	{
 	  if (WINDOW_PIC (wp))
-	    THEPORT_SAVE_EXCURSION
-	      ((GrafPtr) wp,
 	       {
+                 ThePortGuard guard((GrafPtr) wp);
+
 		 BeginUpdate ((WindowPtr) wp);
 		 picr = PORT_RECT (wp);
 		 DrawPicture (WINDOW_PIC (wp), &picr);
 		 EndUpdate ((WindowPtr) wp);
-	       });
+	       }
 	  else
 	    {
 	      ev->what = CW(updateEvt);
@@ -266,9 +266,7 @@ P2(PUBLIC pascal trap, void, PaintOne, WindowPeek, w, RgnHandle, clobbered)
 {
   RgnHandle rh;
   
-  THEPORT_SAVE_EXCURSION
-    (MR (wmgr_port),
-     {
+    ThePortGuard guard(MR (wmgr_port));
        if (w)
 	 SetClip(WINDOW_STRUCT_REGION (w));
        else
@@ -323,7 +321,6 @@ P2(PUBLIC pascal trap, void, PaintOne, WindowPeek, w, RgnHandle, clobbered)
 		 FillRgn (clobbered, DeskPattern);
 	     }
 	 }
-     });
 }
 
 P2(PUBLIC pascal trap, void, PaintBehind, WindowPeek, w, RgnHandle, clobbered)
@@ -414,17 +411,16 @@ P2(PUBLIC pascal trap, void, DrawNew, WindowPeek, w, BOOLEAN, flag)
   XorRgn (WINDOW_STRUCT_REGION (w), MR(OldStructure), r1);
   XorRgn(MR(OldContent), WINDOW_CONT_REGION (w), r2);
   UnionRgn(r1, r2, r2);
-  THEPORT_SAVE_EXCURSION
-    (MR (wmgr_port),
-     {
-       SetClip (WINDOW_STRUCT_REGION (w));
+
+  ThePortGuard guard(MR (wmgr_port));
+  SetClip (WINDOW_STRUCT_REGION (w));
        ClipAbove(w);
        WINDCALL((WindowPtr) w, wDraw, 0);
        PaintBehind(w, r2);
        CalcVisBehind(w, r2);
        if (flag)
 	 CopyRgn (WINDOW_CONT_REGION (w), WINDOW_UPDATE_REGION (w));
-     });
+
   DisposeRgn(r1);
   DisposeRgn(r2);
 }
@@ -539,12 +535,9 @@ Executor::ROMlib_windcall (WindowPtr wind, int16 mess, int32 param)
       ROMlib_evil_illustrator_7_hack = ROMlib_creator == TICK ("ART5");
 #endif
       ROMlib_hook(wind_wdefnumber);
-      LOCK_HANDLE_EXCURSION_1
-	(defproc,
-	 {
+      HLockGuard guard(defproc);
 	   retval = CToPascalCall (STARH (defproc),
 				   CTOP_wdef0, var(wind), wind, mess, param);
-	 });
 #if defined EVIL_ILLUSTRATOR_7_HACK
       ROMlib_evil_illustrator_7_hack = save_hack;
 #endif

@@ -374,13 +374,12 @@ aggr_get_nth_desc (Handle aggr_handle,
       
       if (out_keyword)
 	*out_keyword = CLC (typeWildCard);
-      LOCK_HANDLE_EXCURSION_1
-	(aggr_handle,
-	 {
+         {
+           HLockGuard guard(aggr_handle);
 	   err = AECreateDesc (CL (inline_out_desc->type),
 			       (Ptr) inline_out_desc->data, size,
 			       out_desc);
-	 });
+	 }
       if (err != noErr)
 	return false;
     }
@@ -392,13 +391,12 @@ aggr_get_nth_desc (Handle aggr_handle,
       
       if (out_keyword)
 	*out_keyword = inline_out_desc->key;
-	LOCK_HANDLE_EXCURSION_1
-	  (aggr_handle,
 	   {
+             HLockGuard guard(aggr_handle);
 	     err = AECreateDesc (CL (inline_out_desc->type),
 				 (Ptr) inline_out_desc->data, size,
 				 out_desc);
-	   });
+	   }
       if (err != noErr)
 	return false;
     }
@@ -471,13 +469,12 @@ aggr_get_key_desc (Handle aggr_handle,
 
 	    target = &event_data->target;
 	
-	    LOCK_HANDLE_EXCURSION_1
-	      (aggr_handle,
 	       {
+                 HLockGuard guard(aggr_handle);
 		 err = AECreateDesc (CL (target->type),
 				     (Ptr) target->data, CL (target->size),
 				     out_desc);
-	       });
+	       }
 	    if (err != noErr)
 	      return NULL;
 	    return out_desc;
@@ -485,14 +482,13 @@ aggr_get_key_desc (Handle aggr_handle,
 	  
 	case keyEventClassAttr:
 	  {
-	    LOCK_HANDLE_EXCURSION_1
-	      (aggr_handle,
 	       {
+                 HLockGuard guard(aggr_handle);
 		 err = AECreateDesc (typeType,
 				     (Ptr) &event_data->event_class,
 				     sizeof event_data->event_class,
 				     out_desc);
-	       });
+	       }
 	    if (err != noErr)
 	      return NULL;
 	    return out_desc;
@@ -500,14 +496,13 @@ aggr_get_key_desc (Handle aggr_handle,
 	  
 	case keyEventIDAttr:
 	  {
-	    LOCK_HANDLE_EXCURSION_1
-	      (aggr_handle,
 	       {
+                 HLockGuard guard(aggr_handle);
 		 err = AECreateDesc (typeType,
 				     (Ptr) &event_data->event_id,
 				     sizeof event_data->event_id,
 				     out_desc);
-	       });
+	       }
 	    if (err != noErr)
 	      return NULL;
 	    return out_desc;
@@ -523,13 +518,12 @@ aggr_get_key_desc (Handle aggr_handle,
   if (err != noErr)
     return NULL;
   
-  LOCK_HANDLE_EXCURSION_1
-    (aggr_handle,
-     {
+      {
+        HLockGuard guard(aggr_handle);
        err = AECreateDesc (CL (inline_key_desc->type),
 			   (Ptr) inline_key_desc->data, size,
 			   out_desc);
-     });
+     }
   if (err != noErr)
     return NULL;
   
@@ -779,13 +773,12 @@ P2 (PUBLIC pascal trap, OSErr, AEDuplicateDesc,
   
   src_data = DESC_DATA (src);
   
-  LOCK_HANDLE_EXCURSION_1
-    (src_data,
-     {
+  {
+    HLockGuard guard(src_data);
        err = AECreateDesc (DESC_TYPE (src),
 			   STARH (src_data), GetHandleSize (src_data),
 			   dst);
-     });
+   }
   AE_RETURN_ERROR (err);
 }
 

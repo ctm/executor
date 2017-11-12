@@ -74,8 +74,14 @@ typedef pascal LONGINT
 extern LONGINT ROMlib_ctlcall (ControlHandle c, INTEGER i, LONGINT l);
 #define CTLCALL(c, i, l)	ROMlib_ctlcall((c), (i), (l))
 
-#define CTL_CALL_EXCURSION(control, body)			\
-  THEPORT_SAVE_EXCURSION (CTL_OWNER (control), { body })
+class CtlCallGuard : private ThePortGuard
+{
+public:
+    CtlCallGuard(ControlHandle ctl)
+        : ThePortGuard(CTL_OWNER(ctl))
+    {
+    }
+};
 
 #define ENTIRECONTROL	0
 #define MAXPARTCODE	253

@@ -485,13 +485,12 @@ draw_title (GrafPtr w,
       RGBForeColor (title);
       
       th = WINDOW_TITLE (w);
-      LOCK_HANDLE_EXCURSION_1
-	(th,
 	 {
+           HLockGuard guard(th);
 	   PORT_TX_MODE_X (thePort) = CWC (srcCopy);
 	   MoveTo (title_start + 6, top - 5);
 	   DrawString (STARH (th));
-	 });
+	 }
       
       if (saveclip)
 	{

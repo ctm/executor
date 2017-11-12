@@ -97,13 +97,13 @@ P9(PUBLIC pascal trap, ControlHandle, NewControl, WindowPtr, wst, Rect *, r,
     WINDOW_CONTROL_LIST_X (wst) = RM (retval);
     
     
-    CTL_CALL_EXCURSION
-      (retval,
        {
+         CtlCallGuard guard(retval);
+
 	 CTLCALL (retval, initCntl, 0);
 	 if (WINDOW_VISIBLE_X (wst) && vis)
 	   CTLCALL (retval, drawCntl, 0);
-       });
+       }
     
     SetPort (gp);
     return retval;
@@ -179,11 +179,11 @@ P1(PUBLIC pascal trap, void, DisposeControl, ControlHandle, c)	/* IMI-321 */
     AuxCtlHandle saveauxh;
     
     HideControl(c);
-    CTL_CALL_EXCURSION
-      (c,
        {
+        CtlCallGuard guard(c);
+
 	 CTLCALL(c, dispCntl, 0);
-       });
+       }
     
     for (t = (GUEST<ControlHandle> *) &(((WindowPeek)(HxP(c, contrlOwner)))->controlList);
 	      (*t) && STARH(t) != c; t = (GUEST<ControlHandle> *) &((STARH(STARH(t)))->nextControl))

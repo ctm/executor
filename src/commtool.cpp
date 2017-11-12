@@ -141,14 +141,11 @@ Executor::InitCRM (void)
     retval = noErr;
   else
     {
-      ZONE_SAVE_EXCURSION
-	(SysZone,
-	 {
-	   retval = serial_insert (".AIn", ".AOut", "COM1");
-	   if (retval == noErr)
-	     retval = serial_insert (".BIn", ".BOut", "COM2");
-	   beenhere = true;
-	 });
+      TheZoneGuard guard(SysZone);
+        retval = serial_insert (".AIn", ".AOut", "COM1");
+        if (retval == noErr)
+        retval = serial_insert (".BIn", ".BOut", "COM2");
+        beenhere = true;
     }
   return retval;
 }

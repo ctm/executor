@@ -24,11 +24,11 @@ P0 (PUBLIC pascal trap, int32, TempFreeMem)
 #else
   int32 sysfree, applfree, retval;
 
-  ZONE_SAVE_EXCURSION
-    (ApplZone,
      {
+        TheZoneGuard guard(ApplZone);
+  
        applfree = FreeMem ();
-     });
+     }
   sysfree = FreeMemSys ();
   retval = MAX (applfree, sysfree);
   return retval;
@@ -44,11 +44,11 @@ P1 (PUBLIC pascal trap, Size, TempMaxMem,
   int32 sysfree, applmax, retval;
   Size grow;
 
-  ZONE_SAVE_EXCURSION
-    (ApplZone,
      {
+       TheZoneGuard guard(ApplZone);
+  
        applmax = MaxMem (&grow);
-     });
+     }
   if(grow_s)
     *grow_s = CL(grow);
   sysfree = FreeMemSys ();
@@ -73,16 +73,13 @@ P2 (PUBLIC pascal trap, Handle, TempNewHandle,
   {
     Handle retval;
 
-    ZONE_SAVE_EXCURSION
-      (ApplZone,
-       {
+    TheZoneGuard guard(ApplZone);
 	 if (FreeMemSys () >= FreeMem ())
 	   TheZone = SysZone;
 	 
 	 retval = NewHandle (logical_size);
 	 if (result_code)
 	   *result_code = MemErr;
-       });
     return retval;
   }
 #endif

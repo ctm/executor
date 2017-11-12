@@ -27,9 +27,7 @@ P2(PUBLIC pascal trap, void, SetWTitle, WindowPtr, w, StringPtr, t)
       return;
     PtrToXHand((Ptr) t, (Handle) WINDOW_TITLE (w), (LONGINT) t[0] + 1);
 
-    THEPORT_SAVE_EXCURSION
-      (MR (wmgr_port),
-       {
+    ThePortGuard guard(MR (wmgr_port));
 	 WINDOW_TITLE_WIDTH_X (w) = CW (StringWidth (t));
 	 
 	 if (WINDOW_VISIBLE_X (w))
@@ -38,7 +36,6 @@ P2(PUBLIC pascal trap, void, SetWTitle, WindowPtr, w, StringPtr, t)
 	     ClipAbove ((WindowPeek) w);
 	     WINDCALL (w, wDraw, 0);
 	   }
-       });
 }
 
 P2(PUBLIC pascal trap, void, GetWTitle, WindowPtr, w, StringPtr, t)
@@ -72,9 +69,7 @@ P2(PUBLIC pascal trap, void, HiliteWindow, WindowPtr, w, BOOLEAN, flag)
 {
     if (!w)
       return;
-    THEPORT_SAVE_EXCURSION
-      (MR (wmgr_port),
-       {
+    ThePortGuard guard(MR (wmgr_port));
 	 SetClip (WINDOW_STRUCT_REGION (w));
 	 ClipAbove ((WindowPeek) w);
 	 if (flag && !WINDOW_HILITED_X (w))
@@ -87,7 +82,6 @@ P2(PUBLIC pascal trap, void, HiliteWindow, WindowPtr, w, BOOLEAN, flag)
 	     WINDOW_HILITED_X (w) = false;
 	     WINDCALL(w, wDraw, 0);
 	   }
-       });
 }
 
 P1(PUBLIC pascal trap, void, BringToFront, WindowPtr, w)
@@ -96,9 +90,8 @@ P1(PUBLIC pascal trap, void, BringToFront, WindowPtr, w)
   RgnHandle hidden;
   
   if (MR (WindowList) != (WindowPeek) w)
-    THEPORT_SAVE_EXCURSION
-      (MR (wmgr_port),
        {
+        ThePortGuard guard(MR (wmgr_port));
 	 SetClip (MR (GrayRgn));
 	 for (wp = MR (WindowList);
 	      wp && WINDOW_NEXT_WINDOW (wp) != (WindowPeek) w;
@@ -126,7 +119,7 @@ P1(PUBLIC pascal trap, void, BringToFront, WindowPtr, w)
 		 DisposeRgn (hidden);
 	       }
 	   }
-       });
+       }
 }
 
 P1(PUBLIC pascal trap, void, SelectWindow, WindowPtr, w)
@@ -152,9 +145,7 @@ P2(PUBLIC pascal trap, void, ShowHide, WindowPtr, w, BOOLEAN, flag)
       /* notify the palette manager that the `FrontWindow ()' may have
 	 changed */
       pm_front_window_maybe_changed_hook ();
-      THEPORT_SAVE_EXCURSION
-	(MR (wmgr_port),
-	 {
+      ThePortGuard guard(MR (wmgr_port));
 	   AuxWinHandle aux_w;
 	   RGBColor *content_color = NULL;
 	   CTabHandle w_ctab;
@@ -191,7 +182,6 @@ P2(PUBLIC pascal trap, void, ShowHide, WindowPtr, w, BOOLEAN, flag)
 	   FillRgn (WINDOW_CONT_REGION (w), white);
 	   if (content_color)
 	     RGBBackColor (&ROMlib_white_rgb_color);
-	 });
     }
   else if (!flag && WINDOW_VISIBLE_X (w))
     {
@@ -199,14 +189,11 @@ P2(PUBLIC pascal trap, void, ShowHide, WindowPtr, w, BOOLEAN, flag)
       /* notify the palette manager that the `FrontWindow ()' may have
 	 changed */
       pm_front_window_maybe_changed_hook ();
-      THEPORT_SAVE_EXCURSION
-	(MR (wmgr_port),
-	 {
+      ThePortGuard guard(MR (wmgr_port));
 	   SetClip (MR (GrayRgn));
 	   SetEmptyRgn (PORT_VIS_REGION (w));
 	   PaintBehind (WINDOW_NEXT_WINDOW (w), WINDOW_STRUCT_REGION (w));
 	   CalcVisBehind (WINDOW_NEXT_WINDOW (w), WINDOW_STRUCT_REGION (w));
-	 });
     }
 }
 
@@ -327,13 +314,10 @@ P2(PUBLIC pascal trap, void, SendBehind, WindowPtr, w, WindowPtr, behind)
 #else /* 0 */
     if (oldfront == (WindowPeek) w && MR (WindowList) != (WindowPeek) w)
       {
-	THEPORT_SAVE_EXCURSION
-	  (w,
-	   {
+        ThePortGuard guard(w);
 	     r = HxX (PORT_VIS_REGION (w), rgnBBox);
 	     EraseRect(&r);			/* ick! The bad Mac made me do it */
 	     InvalRect(&r);
-	   });
       }
 #endif /* 0 */
 }
@@ -341,9 +325,8 @@ P2(PUBLIC pascal trap, void, SendBehind, WindowPtr, w, WindowPtr, behind)
 P1(PUBLIC pascal trap, void, DrawGrowIcon, WindowPtr, w)
 {
   if (!ROMlib_emptyvis && WINDOW_VISIBLE (w))
-    THEPORT_SAVE_EXCURSION
-      (MR (wmgr_port),
        {
+         ThePortGuard guard(MR (wmgr_port));
 	 SetClip (PORT_CLIP_REGION (w));
 	 OffsetRgn (WINDOW_STRUCT_REGION (w),
 		    CW (PORT_BOUNDS (w).left),
@@ -358,5 +341,5 @@ P1(PUBLIC pascal trap, void, DrawGrowIcon, WindowPtr, w)
 		    - CW (PORT_BOUNDS (w).top));
 	 ClipAbove ((WindowPeek) w);
 	 WINDCALL(w, wDrawGIcon, 0);
-       });
+       }
 }

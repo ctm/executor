@@ -25,12 +25,12 @@ P2(PUBLIC pascal trap, void, StdOval, GrafVerb, v, Rect *, rp)
     PAUSEDECL;
     
     if (!EmptyRect(rp)) {
-      PIC_SAVE_EXCURSION
-	({
+      if (thePort->picSave)
+      {
 	  ROMlib_drawingverbrectpicupdate (v, rp);
 	  PICOP (OP_frameOval + (int) v);
 	  PICWRITE (rp, sizeof (*rp));
-	});
+      };
 
 	PAUSERECORDING;
 	if (CW(rp->bottom) - CW(rp->top) < 4 &&

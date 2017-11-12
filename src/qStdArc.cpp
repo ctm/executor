@@ -103,8 +103,8 @@ P4 (PUBLIC pascal trap, void, StdArc, GrafVerb, verb, Rect *, r,
 /*-->*/ return;
     }
 
-  PIC_SAVE_EXCURSION
-    ({
+  if (thePort->picSave)
+  {
       ROMlib_drawingverbrectpicupdate( verb, r );
       PICOP(OP_frameArc + (int) verb);
       PICWRITE(r, sizeof(*r));
@@ -112,7 +112,7 @@ P4 (PUBLIC pascal trap, void, StdArc, GrafVerb, verb, Rect *, r,
       PICWRITE(&swappedstarta, sizeof(swappedstarta));
       swappedarca = CW(arca);
       PICWRITE(&swappedarca, sizeof(swappedarca));
-    });
+  }
   
   if (PORT_PEN_VIS (thePort) < 0)
 /*-->*/ return;

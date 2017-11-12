@@ -256,9 +256,7 @@ P6 (PUBLIC pascal trap, QDErr, NewGWorld,
       depth = PIXMAP_PIXEL_SIZE (gd_pixmap);
     }
   
-  THEGDEVICE_SAVE_EXCURSION
-    (gw_gd,
-     {
+  TheGDeviceGuard guard(gw_gd);
        /* allocate and initialize a new graphics world structure */
        graphics_world = (GWorldPtr) NewPtr (sizeof (GWorld));
        OpenCPort (GW_CPORT (graphics_world));
@@ -295,7 +293,6 @@ P6 (PUBLIC pascal trap, QDErr, NewGWorld,
        
        if (flags & pixelsLocked)
 	 LockPixels (gw_pixmap);
-     });
 
   *graphics_world_out = RM (graphics_world);
   

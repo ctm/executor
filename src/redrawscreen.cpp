@@ -20,9 +20,7 @@ using namespace Executor;
 void
 Executor::redraw_screen (void)
 {
-  THEGDEVICE_SAVE_EXCURSION
-    (MR (MainDevice),
-     {
+  TheGDeviceGuard guard(MR(MainDevice));
        vdriver_set_colors (0, 1 << vdriver_bpp,
 			   CTAB_TABLE (PIXMAP_TABLE
 				       (GD_PMAP (MR (MainDevice)))));
@@ -45,5 +43,4 @@ Executor::redraw_screen (void)
 	 }
        
        DrawMenuBar ();
-     });
 }

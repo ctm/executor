@@ -206,11 +206,8 @@ ROMlib_new_dialog_common (DialogPtr dp,
 		  proc_id, (CWindowPtr) behind, go_away_flag, ref_con);
       if (w_ctab && CTAB_SIZE (w_ctab) > -1)
 	{
-	  THEPORT_SAVE_EXCURSION
-	    (thePort,
-	     {
-	       SetWinColor (DIALOG_WINDOW (dp), w_ctab);
-	     });
+	  ThePortGuard guard(thePort);
+          SetWinColor (DIALOG_WINDOW (dp), w_ctab);
 	}
     }
   else
@@ -229,10 +226,9 @@ ROMlib_new_dialog_common (DialogPtr dp,
 
 #warning We no longer call TEStylNew, this helps LB password
   
-  THEPORT_SAVE_EXCURSION
-    ((GrafPtr) dp,
-     {
-       Rect newr;
+  ThePortGuard guard((GrafPtr) dp);
+
+  Rect newr;
        
        TextFont (CW (DlgFont));
        newr.top = newr.left = CWC (0);
@@ -272,10 +268,9 @@ ROMlib_new_dialog_common (DialogPtr dp,
 	   memset (&zero_pt, '\000', sizeof zero_pt);
 	   
 	   MoveHHi (items);
+           
+           HLockGuard guard(items);
 	   
-	   LOCK_HANDLE_EXCURSION_1
-	     (items,
-	      {
 		int item_no;
 		
 		ip = (GUEST<INTEGER> *) STARH (items);
@@ -290,9 +285,7 @@ ROMlib_new_dialog_common (DialogPtr dp,
 		    BUMPIP (itp);
 		    item_no ++;
 		  }
-	      });
 	 }
-     });
   
   return (DialogPtr) dp;
 }
@@ -408,9 +401,7 @@ P3 (PUBLIC pascal trap, DialogPtr, GetNewDialog, INTEGER, id,	/* IMI-413 */
   
   color_p = (dialog_ctab_res_h || item_ctab_res_h);
   
-  LOCK_HANDLE_EXCURSION_1
-    (dialog_res_h,
-     {
+  HLockGuard guard(dialog_res_h);
        Rect adjusted_rect;
        
        dialog_compute_rect (&HxX (dialog_res_h, dlgr),
@@ -433,7 +424,6 @@ P3 (PUBLIC pascal trap, DialogPtr, GetNewDialog, INTEGER, id,	/* IMI-413 */
 				     Hx (dialog_res_h, dlggaflag),
 				     Hx (dialog_res_h, dlgrc),
 				     dialog_item_list_res_h);
-     });
   
   return retval;
 }

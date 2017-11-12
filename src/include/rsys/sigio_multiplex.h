@@ -19,16 +19,19 @@
 #define BLOCK_SIGIO_END				\
   sigprocmask (SIG_SETMASK, &_orig_mask, NULL); \
 
-#define BLOCK_SIGIO_EXCURSION(body)		\
-({						\
-  BLOCK_SIGIO_DECL;				\
-						\
-  BLOCK_SIGIO_BEGIN;				\
-						\
-  { body }					\
-						\
-  BLOCK_SIGIO_END;				\
-})
+class BlockSigIOGuard
+{
+    BLOCK_SIGIO_DECL;
+public:
+    BlockSigIOGuard()
+    {
+        BLOCK_SIGIO_BEGIN;
+    }
+    ~BlockSigIOGuard()
+    {
+        BLOCK_SIGIO_END;
+    }
+};
 
 typedef void (*sigio_hdlr_t) (int signo);
 void sigio_multiplex_install_handler (int fd, sigio_hdlr_t hdlr);
