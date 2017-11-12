@@ -1,4 +1,5 @@
-namespace Executor {
+namespace Executor
+{
 /* false if we are blitting straight to screen memory, true if we are
    blitting to a shadow screen */
 extern INTEGER ROMlib_shadow_screen_p;
@@ -11,7 +12,7 @@ extern INTEGER ROMlib_bltrgn_save_cursor_p;
 /* do not check for diskette when under dos */
 extern int ROMlib_drive_check;
 
-#if defined (NOMOUSE_COMMAND_LINE_OPTION)
+#if defined(NOMOUSE_COMMAND_LINE_OPTION)
 /* no mouse is installed; keyboard only */
 extern int ROMlib_no_mouse;
 #endif
@@ -35,12 +36,12 @@ extern const char *ROMlib_command_line;
 /* 0 means try running browser, 1 means don't */
 extern int ROMlib_nobrowser;
 
-#if defined (MSDOS)
+#if defined(MSDOS)
 /* 0 means use ASPI, 1 means don't */
 extern int ROMlib_skipaspi;
 #endif
 
- /* 0 means normal, 1 means special gestalt values for photoshop */
+/* 0 means normal, 1 means special gestalt values for photoshop */
 extern int ROMlib_photoshop_hack;
 
 /* 1 means map '\n' to '\r' in newline mode */

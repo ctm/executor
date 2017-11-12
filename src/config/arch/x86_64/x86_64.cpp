@@ -1,8 +1,7 @@
 #include "rsys/common.h"
 #include "rsys/arch.h"
 
-bool
-Executor::arch_init (void)
+bool Executor::arch_init(void)
 {
-  return true;
+    return true;
 }

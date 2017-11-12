@@ -9,8 +9,9 @@
  */
 
 #define EVIL_ILLUSTRATOR_7_HACK
-namespace Executor {
-#if defined (EVIL_ILLUSTRATOR_7_HACK)
+namespace Executor
+{
+#if defined(EVIL_ILLUSTRATOR_7_HACK)
 extern BOOLEAN ROMlib_evil_illustrator_7_hack;
 #endif
 }

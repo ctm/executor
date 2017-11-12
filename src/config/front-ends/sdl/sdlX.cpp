@@ -1,4 +1,4 @@
-#if !defined (_WIN32)
+#if !defined(_WIN32)
 
 /*
  * Yuck -- even though we're SDL based, we need to know about X, since if we
@@ -9,10 +9,9 @@
 #include <X11/Xlib.h>
 #include "sdlX.h"
 
-void
-ROMlib_XInitThreads (void)
+void ROMlib_XInitThreads(void)
 {
-  XInitThreads ();
+    XInitThreads();
 }
 
 #endif

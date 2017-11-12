@@ -8,7 +8,8 @@
  * $Id: color_wheel_bits.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-namespace Executor {
+namespace Executor
+{
 const extern unsigned char color_wheel_bits_8[];
 const extern unsigned char color_wheel_bits_4[];
 }

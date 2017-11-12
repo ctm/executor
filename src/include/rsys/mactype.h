@@ -1,4 +1,4 @@
-#if !defined (_MACTYPE_H_)
+#if !defined(_MACTYPE_H_)
 #define _MACTYPE_H_
 
 /*
@@ -17,13 +17,14 @@
 #error C++ required
 #endif
 
-namespace Executor {
+namespace Executor
+{
 
 typedef int16 INTEGER;
 typedef int32 LONGINT;
 typedef uint32 ULONGINT;
 
-#if !defined (USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
+#if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 typedef int8 BOOLEAN;
 typedef int16 CHAR; /* very important not to use this as char */
 #endif
@@ -38,20 +39,34 @@ struct Aligner
 };
 
 // Except for chars
-template<> struct Aligner<char> { uint8_t align; };
-template<> struct Aligner<unsigned char> { uint8_t align; };
-template<> struct Aligner<signed char> { uint8_t align; };
-
+template<>
+struct Aligner<char>
+{
+    uint8_t align;
+};
+template<>
+struct Aligner<unsigned char>
+{
+    uint8_t align;
+};
+template<>
+struct Aligner<signed char>
+{
+    uint8_t align;
+};
 
 // For now, SwapTyped is exactly the same as Cx.
 // However, Cx is used all over Executor, should learn to handle GUEST<> types,
 // and eventually go away. SwapTyped is used internally here, and nowhere else.
 
-#if defined (BIGENDIAN)
+#if defined(BIGENDIAN)
 #define SwapTyped(x) (x)
 #else
 
-inline unsigned char SwapTyped(unsigned char x) { return x; }
+inline unsigned char SwapTyped(unsigned char x)
+{
+    return x;
+}
 inline signed char SwapTyped(signed char x) { return x; }
 inline char SwapTyped(char x) { return x; }
 
@@ -67,10 +82,9 @@ inline int32_t SwapTyped(int32_t x) { return swap32((uint32_t)x); }
 
 //#define USE_PACKED_HIDDENVALUE
 
-
 template<typename ActualType>
 #ifdef USE_PACKED_HIDDENVALUE
-struct  __attribute__((packed, align(2))) HiddenValue
+struct __attribute__((packed, align(2))) HiddenValue
 #else
 union HiddenValue
 #endif
@@ -83,15 +97,15 @@ union HiddenValue
 #endif
 public:
     HiddenValue() = default;
-    HiddenValue(const HiddenValue<ActualType>& y) = default;
-    HiddenValue<ActualType>& operator=(const HiddenValue<ActualType>& y) = default;
-    
+    HiddenValue(const HiddenValue<ActualType> &y) = default;
+    HiddenValue<ActualType> &operator=(const HiddenValue<ActualType> &y) = default;
+
     ActualType raw() const
     {
 #ifdef USE_PACKED_HIDDENVALUE
         return packed;
 #else
-        return *(const ActualType*)data;
+        return *(const ActualType *)data;
 #endif
     }
 
@@ -100,7 +114,7 @@ public:
 #ifdef USE_PACKED_HIDDENVALUE
         packed = x;
 #else
-        *(ActualType*)data = x;         
+        *(ActualType *)data = x;
 #endif
     }
 };
@@ -112,7 +126,7 @@ template<typename TT>
 struct GuestWrapperBase
 {
     HiddenValue<TT> hidden;
-    
+
     using WrappedType = TT;
     using RawGuestType = TT;
 
@@ -133,7 +147,7 @@ struct GuestWrapperBase
 
     void raw(RawGuestType x)
     {
-        hidden.raw(x); 
+        hidden.raw(x);
     }
 
     void raw_and(RawGuestType x)
@@ -160,29 +174,30 @@ struct GuestWrapperBase
 };
 
 template<typename TT>
-struct GuestWrapperBase<TT*>
+struct GuestWrapperBase<TT *>
 {
 private:
     HiddenValue<uint32_t> p;
+
 public:
-    using WrappedType = TT*;
+    using WrappedType = TT *;
     using RawGuestType = uint32_t;
-    
+
     WrappedType get() const
     {
         uint32 rawp = this->raw();
         if(rawp)
-            return (TT*) (SYN68K_TO_US((uint32_t)swap32(rawp)));
+            return (TT *)(SYN68K_TO_US((uint32_t)swap32(rawp)));
         else
             return nullptr;
     }
 
-    void set(TT* ptr)
+    void set(TT *ptr)
     {
         if(ptr)
-            this->raw( swap32( US_TO_SYN68K(ptr) ) );
+            this->raw(swap32(US_TO_SYN68K(ptr)));
         else
-            this->raw( 0 );
+            this->raw(0);
     }
 
     RawGuestType raw() const
@@ -196,22 +211,21 @@ public:
     }
 };
 
-
 template<typename TT>
 struct GuestWrapper : GuestWrapperBase<TT>
 {
     GuestWrapper() = default;
-    GuestWrapper(const GuestWrapper<TT>& y) = default;
-    GuestWrapper<TT>& operator=(const GuestWrapper<TT>& y) = default;
+    GuestWrapper(const GuestWrapper<TT> &y) = default;
+    GuestWrapper<TT> &operator=(const GuestWrapper<TT> &y) = default;
 
-    template<typename T2, typename = typename std::enable_if<std::is_convertible<T2,TT>::value && sizeof(TT) == sizeof(T2)>::type>
-    GuestWrapper(const GuestWrapper<T2>& y)
+    template<typename T2, typename = typename std::enable_if<std::is_convertible<T2, TT>::value && sizeof(TT) == sizeof(T2)>::type>
+    GuestWrapper(const GuestWrapper<T2> &y)
     {
         this->raw(y.raw());
     }
 
-    template<typename T2, typename = typename std::enable_if<std::is_convertible<T2,TT>::value && sizeof(TT) == sizeof(T2)>::type>
-    GuestWrapper<TT>& operator=(const GuestWrapper<T2>& y)
+    template<typename T2, typename = typename std::enable_if<std::is_convertible<T2, TT>::value && sizeof(TT) == sizeof(T2)>::type>
+    GuestWrapper<TT> &operator=(const GuestWrapper<T2> &y)
     {
         this->raw(y.raw());
         return *this;
@@ -241,17 +255,19 @@ struct GuestWrapper : GuestWrapperBase<TT>
     }
 
     template<typename T2,
-             typename compatible = decltype( TT() | T2() )>
-             //typename sizematch = typename std::enable_if<sizeof(TT) == sizeof(T2)>::type>
-    GuestWrapper<TT>& operator|=(GuestWrapper<T2> x) {
+             typename compatible = decltype(TT() | T2())>
+    //typename sizematch = typename std::enable_if<sizeof(TT) == sizeof(T2)>::type>
+    GuestWrapper<TT> &operator|=(GuestWrapper<T2> x)
+    {
         this->raw_or(x.raw());
         return *this;
-    }    
+    }
 
     template<typename T2,
-             typename compatible = decltype( TT() & T2() )>
-             //typename sizematch = typename std::enable_if<sizeof(TT) == sizeof(T2)>::type>
-    GuestWrapper<TT>& operator&=(GuestWrapper<T2> x) {
+             typename compatible = decltype(TT() & T2())>
+    //typename sizematch = typename std::enable_if<sizeof(TT) == sizeof(T2)>::type>
+    GuestWrapper<TT> &operator&=(GuestWrapper<T2> x)
+    {
         this->raw_and(x.raw());
         return *this;
     }
@@ -267,70 +283,75 @@ struct GuestWrapper : GuestWrapperBase<TT>
 template<typename TT>
 inline GuestWrapper<TT> GuestWrapperBase<TT>::operator~() const
 {
-        return GuestWrapper<TT>::fromRaw( ~this->raw() );
+    return GuestWrapper<TT>::fromRaw(~this->raw());
 }
 
 template<typename T1, typename T2,
-        typename result = decltype( T1() == T2() ),
-        typename enable = typename std::enable_if<sizeof(T1) == sizeof(T2)>::type>
+         typename result = decltype(T1() == T2()),
+         typename enable = typename std::enable_if<sizeof(T1) == sizeof(T2)>::type>
 bool operator==(GuestWrapper<T1> a, GuestWrapper<T2> b)
 {
-        return a.raw() == b.raw();
+    return a.raw() == b.raw();
 }
 
 template<typename T1, typename T2,
-        typename result = decltype( T1() == T2() ),
-        typename enable = typename std::enable_if<sizeof(T1) == sizeof(T2)>::type>
+         typename result = decltype(T1() == T2()),
+         typename enable = typename std::enable_if<sizeof(T1) == sizeof(T2)>::type>
 bool operator!=(GuestWrapper<T1> a, GuestWrapper<T2> b)
 {
-        return a.raw() != b.raw();
+    return a.raw() != b.raw();
 }
 
 template<typename T1, typename T2,
-        typename result = decltype( T1() & T2() ),
-        typename enable = typename std::enable_if<sizeof(T1) == sizeof(T2)>::type>
+         typename result = decltype(T1() & T2()),
+         typename enable = typename std::enable_if<sizeof(T1) == sizeof(T2)>::type>
 GuestWrapper<T1> operator&(GuestWrapper<T1> a, GuestWrapper<T2> b)
 {
-        return GuestWrapper<T1>::fromRaw(a.raw() & b.raw());
+    return GuestWrapper<T1>::fromRaw(a.raw() & b.raw());
 }
 template<typename T1, typename T2,
-        typename result = decltype( T1() | T2() ),
-        typename enable = typename std::enable_if<sizeof(T1) == sizeof(T2)>::type>
+         typename result = decltype(T1() | T2()),
+         typename enable = typename std::enable_if<sizeof(T1) == sizeof(T2)>::type>
 GuestWrapper<T1> operator|(GuestWrapper<T1> a, GuestWrapper<T2> b)
 {
-        return GuestWrapper<T1>::fromRaw(a.raw() | b.raw());
+    return GuestWrapper<T1>::fromRaw(a.raw() | b.raw());
 }
-
 
 template<typename TT>
-bool operator==(GuestWrapper<TT*> a, std::nullptr_t)
+bool operator==(GuestWrapper<TT *> a, std::nullptr_t)
 {
-        return !a;
+    return !a;
 }
 template<typename TT>
-bool operator!=(GuestWrapper<TT*> a, std::nullptr_t)
+bool operator!=(GuestWrapper<TT *> a, std::nullptr_t)
 {
-        return a;
+    return a;
 }
 
-#define GUEST_STRUCT struct is_guest_struct {}
+#define GUEST_STRUCT       \
+    struct is_guest_struct \
+    {                      \
+    }
 
-struct Point {
+struct Point
+{
     INTEGER v;
     INTEGER h;
 };
 
 template<>
-struct GuestWrapper<Point> { GUEST_STRUCT;
-    GuestWrapper< INTEGER> v;
-    GuestWrapper< INTEGER> h;
+struct GuestWrapper<Point>
+{
+    GUEST_STRUCT;
+    GuestWrapper<INTEGER> v;
+    GuestWrapper<INTEGER> h;
 
     using WrappedType = Point;
     using RawGuestType = Point;
 
     Point get() const
     {
-        return Point { v.get(), h.get() };
+        return Point{ v.get(), h.get() };
     }
 
     void set(Point x)
@@ -341,7 +362,7 @@ struct GuestWrapper<Point> { GUEST_STRUCT;
 
     Point raw() const
     {
-        return Point { v.raw(), h.raw() };
+        return Point{ v.raw(), h.raw() };
     }
 
     void raw(Point x)
@@ -349,10 +370,9 @@ struct GuestWrapper<Point> { GUEST_STRUCT;
         v.raw(x.v);
         h.raw(x.h);
     }
-
 };
 
-template <typename TT, typename SFINAE = void>
+template<typename TT, typename SFINAE = void>
 struct GuestType
 {
     using type = GuestWrapper<TT>;
@@ -366,12 +386,17 @@ struct GuestType
 namespace internal
 {
     // equivalent to C++17 void_t
-    template<typename... Ts> struct make_void { typedef void type;};
-    template<typename... Ts> using void_t = typename make_void<Ts...>::type;
+    template<typename... Ts>
+    struct make_void
+    {
+        typedef void type;
+    };
+    template<typename... Ts>
+    using void_t = typename make_void<Ts...>::type;
 }
 
-template <typename TT>
-struct GuestType<TT, internal::void_t<typename TT::is_guest_struct> >
+template<typename TT>
+struct GuestType<TT, internal::void_t<typename TT::is_guest_struct>>
 {
     using type = TT;
 };
@@ -379,14 +404,13 @@ struct GuestType<TT, internal::void_t<typename TT::is_guest_struct> >
 // forward declare.
 // uses template specialization to bypass the above,
 // so a GUEST_STRUCT on the actual declaration is redundant (but still fine)
-#define FORWARD_GUEST_STRUCT(CLS)   \
-    struct CLS;\
-    template<>  \
-    struct GuestType<CLS>    \
-    {   \
-        using type = CLS;    \
+#define FORWARD_GUEST_STRUCT(CLS) \
+    struct CLS;                   \
+    template<>                    \
+    struct GuestType<CLS>         \
+    {                             \
+        using type = CLS;         \
     }
-    
 
 template<typename TT>
 using GUEST = typename GuestType<TT>::type;
@@ -447,16 +471,13 @@ GUEST<TO> guest_cast(GuestWrapper<FROM> p)
 {
     //return GUEST<TO>((TO)(FROM)p);
     GUEST<TO> result;
-    result.raw( p.raw() );
+    result.raw(p.raw());
     return result;
 }
 
-
-
-#  define PACKED_MEMBER(typ, name) typ name
+#define PACKED_MEMBER(typ, name) typ name
 // Roadmap:
 // 1. remove
-
 }
 
 #endif /* _MACTYPE_H_ */

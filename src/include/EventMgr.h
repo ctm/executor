@@ -1,4 +1,4 @@
-#if !defined (__EVENT__)
+#if !defined(__EVENT__)
 #define __EVENT__
 
 /*
@@ -10,70 +10,73 @@
 
 #include "QuickDraw.h"
 
-namespace Executor {
-#define nullEvent	0
-#define mouseDown	1
-#define mouseUp		2
-#define keyDown		3
-#define keyUp		4
-#define autoKey		5
-#define updateEvt	6
-#define diskEvt		7
-#define activateEvt	8
-#define networkEvt	10
-#define driverEvt	11
-#define app1Evt		12
-#define app2Evt		13
-#define app3Evt		14
-#define app4Evt		15
-#define kHighLevelEvent	23
+namespace Executor
+{
+#define nullEvent 0
+#define mouseDown 1
+#define mouseUp 2
+#define keyDown 3
+#define keyUp 4
+#define autoKey 5
+#define updateEvt 6
+#define diskEvt 7
+#define activateEvt 8
+#define networkEvt 10
+#define driverEvt 11
+#define app1Evt 12
+#define app2Evt 13
+#define app3Evt 14
+#define app4Evt 15
+#define kHighLevelEvent 23
 
-#define charCodeMask	0xFFL
-#define keyCodeMask	0xFF00L
+#define charCodeMask 0xFFL
+#define keyCodeMask 0xFF00L
 
-#define mDownMask	2
-#define mUpMask		4
-#define keyDownMask	8
-#define keyUpMask	16
-#define autoKeyMask	32
-#define updateMask	64
-#define diskMask	128
-#define activMask	256
+#define mDownMask 2
+#define mUpMask 4
+#define keyDownMask 8
+#define keyUpMask 16
+#define autoKeyMask 32
+#define updateMask 64
+#define diskMask 128
+#define activMask 256
 /* #define networkMask	1024 */
-#define highLevelEventMask	1024
-#define driverMask	2048
-#define app1Mask	4096
-#define app2Mask	8192
-#define app3Mask	16384
-#define app4Mask	(-32768)
-#define everyEvent	(-1)
+#define highLevelEventMask 1024
+#define driverMask 2048
+#define app1Mask 4096
+#define app2Mask 8192
+#define app3Mask 16384
+#define app4Mask (-32768)
+#define everyEvent (-1)
 
-#define activeFlag	1
-#define changeFlag	2
-#define btnState	128
-#define cmdKey		256
-#define shiftKey	512
-#define alphaLock	1024
-#define optionKey	2048
-#define ControlKey	4096	/* IM V-196 */
+#define activeFlag 1
+#define changeFlag 2
+#define btnState 128
+#define cmdKey 256
+#define shiftKey 512
+#define alphaLock 1024
+#define optionKey 2048
+#define ControlKey 4096 /* IM V-196 */
 
 enum
 {
-  rightShiftKey   = 0x2000,
-  rightOptionKey  = 0x4000,
-  rightControlKey = 0x8000
+    rightShiftKey = 0x2000,
+    rightOptionKey = 0x4000,
+    rightControlKey = 0x8000
 };
 
-struct EventRecord { GUEST_STRUCT;
-    GUEST< INTEGER> what;
-    GUEST< LONGINT> message;
-    GUEST< LONGINT> when;
-    GUEST< Point> where;
-    GUEST< INTEGER> modifiers;
+struct EventRecord
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> what;
+    GUEST<LONGINT> message;
+    GUEST<LONGINT> when;
+    GUEST<Point> where;
+    GUEST<INTEGER> modifiers;
 };
 
-#if !defined (KeyMap)
-extern unsigned char 	KeyMap[16];
+#if !defined(KeyMap)
+extern unsigned char KeyMap[16];
 #endif
 }
 

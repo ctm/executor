@@ -1,4 +1,4 @@
-#if !defined (__OS_MACOSX_H_)
+#if !defined(__OS_MACOSX_H_)
 #define __OS_MACOSX_H_
 
 #include <stdio.h>
@@ -19,9 +19,9 @@
 #include <signal.h>
 #define trap
 
-#if !defined (__GLIBC__) || __GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 1)
+#if !defined(__GLIBC__) || __GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 1)
 
-#undef  GLIBC_DB1_INCLUDES_NDBM
+#undef GLIBC_DB1_INCLUDES_NDBM
 
 #else
 
@@ -30,30 +30,30 @@
 
 #endif
 
-#if !defined (MACOSX)
-# define MACOSX
+#if !defined(MACOSX)
+#define MACOSX
 #endif
 
-#if !defined (O_BINARY)
-# define O_BINARY 0
+#if !defined(O_BINARY)
+#define O_BINARY 0
 #endif
 
-#if !defined (PRIVATE)
-# define PRIVATE static
+#if !defined(PRIVATE)
+#define PRIVATE static
 #endif
 
-#if !defined (MMAP_LOW_GLOBALS)
+#if !defined(MMAP_LOW_GLOBALS)
 /* define `MMAP_LOW_GLOBALS' if the zero page needs to be
    `mmap ()'ed for the low globals (see main:main.c) */
 #define MMAP_LOW_GLOBALS
 #endif /* !MMAP_LOW_GLOBALS */
 
-extern void mmap_lowglobals (void);
+extern void mmap_lowglobals(void);
 
 #define TRY_TO_MMAP_ZONES
-extern void *mmap_permanent_memory (unsigned long amount_wanted);
+extern void *mmap_permanent_memory(unsigned long amount_wanted);
 
-#if !defined (REINSTALL_SIGNAL_HANDLER)
+#if !defined(REINSTALL_SIGNAL_HANDLER)
 /* define `REINSTALL_SIGNAL_HANDLER' if signal handlers are
    de-installed after the signals occur, and require reinstallation */
 #define REINSTALL_SIGNAL_HANDLER
@@ -69,8 +69,7 @@ extern void *mmap_permanent_memory (unsigned long amount_wanted);
 
 #define CONFIG_OFFSET_P 1 /* Use offset memory, at least for the first port */
 
-
-extern int ROMlib_launch_native_app (int n_filenames, char **filenames);
+extern int ROMlib_launch_native_app(int n_filenames, char **filenames);
 
 /* #if !defined (GLIBC_DB1_INCLUDES_NDBM) */
 /* #include <ndbm.h> */
@@ -85,15 +84,15 @@ extern int ROMlib_launch_native_app (int n_filenames, char **filenames);
 
 #include <ndbm.h>
 
-#if !defined (COMPILE_FOR_BUILD)
+#if !defined(COMPILE_FOR_BUILD)
 
-extern void _dbm_fetch (datum *datump, DBM *db, datum datum);
-extern void _dbm_firstkey (datum *datump, DBM *db);
-extern void _dbm_nextkey (datum *datump, DBM *db);
+extern void _dbm_fetch(datum *datump, DBM *db, datum datum);
+extern void _dbm_firstkey(datum *datump, DBM *db);
+extern void _dbm_nextkey(datum *datump, DBM *db);
 
-#define DBM_FETCH(datump, db, datum) _dbm_fetch ((datump), (db), (datum))
-#define DBM_FIRSTKEY(datump, db) _dbm_firstkey ((datump), (db))
-#define DBM_NEXTKEY(datump, db) _dbm_nextkey ((datump), (db))
+#define DBM_FETCH(datump, db, datum) _dbm_fetch((datump), (db), (datum))
+#define DBM_FIRSTKEY(datump, db) _dbm_firstkey((datump), (db))
+#define DBM_NEXTKEY(datump, db) _dbm_nextkey((datump), (db))
 
 #endif
 

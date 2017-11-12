@@ -7,7 +7,8 @@
  *
  * $Id: qcolor.h 63 2004-12-24 18:19:43Z ctm $
  */
-namespace Executor {
+namespace Executor
+{
 extern ColorSpec *default_ctab_colors[];
 }
 #endif

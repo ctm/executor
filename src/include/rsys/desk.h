@@ -7,7 +7,12 @@
  *
  * $Id: desk.h 63 2004-12-24 18:19:43Z ctm $
  */
-namespace Executor {
-enum { DESK_ACC_MIN = 12, DESK_ACC_MAX = 31 };
+namespace Executor
+{
+enum
+{
+    DESK_ACC_MIN = 12,
+    DESK_ACC_MAX = 31
+};
 }
 #endif

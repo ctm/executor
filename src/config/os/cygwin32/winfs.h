@@ -1,4 +1,4 @@
-#if !defined (_winfs_h_)
+#if !defined(_winfs_h_)
 #define _winfs_h_
 
 /*
@@ -27,11 +27,11 @@ enum { WINFS_SIG = 0x3301; }; /* arbitrary number */
 
 struct statfs
 {
-  uint32 f_blocks;
-  uint32 f_bsize;
-  uint32 f_bavail;
-  uint32 f_bfree;
-  uint32 f_files;
+    uint32 f_blocks;
+    uint32 f_bsize;
+    uint32 f_bavail;
+    uint32 f_bfree;
+    uint32 f_files;
 };
 
 #if !defined _DEV_T_
@@ -45,11 +45,11 @@ extern DIR *opendir (const char *path);
 extern struct dirent *readdir (DIR *dirp);
 #endif
 
-extern int Ustatfs (const char *name, struct statfs *fsp);
-extern int statfs (const char *name, struct statfs *fsp);
-extern int sync (void);
-extern int link (const char *oldpath, const char *newpath);
-extern char *getwd (char *buf);
-extern int fsync (int fd);
+extern int Ustatfs(const char *name, struct statfs *fsp);
+extern int statfs(const char *name, struct statfs *fsp);
+extern int sync(void);
+extern int link(const char *oldpath, const char *newpath);
+extern char *getwd(char *buf);
+extern int fsync(int fd);
 
 #endif /* !defined (_winfs_h_) */

@@ -1,4 +1,4 @@
-#if !defined (_RSYS_CRC_H_)
+#if !defined(_RSYS_CRC_H_)
 #define _RSYS_CRC_H_
 
 /*
@@ -8,7 +8,8 @@
  * $Id: crc.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-namespace Executor {
+namespace Executor
+{
 extern short getthecrc(ResType type, long id);
 extern unsigned short ROMlib_crcccitt(unsigned char *data, long length);
 }

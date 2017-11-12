@@ -2,7 +2,7 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
+#if !defined(OMIT_RCSID_STRINGS)
 char ROMlib_rcsid_win_screen[] = "$Id: win_screen.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
@@ -16,64 +16,64 @@ char ROMlib_rcsid_win_screen[] = "$Id: win_screen.c 63 2004-12-24 18:19:43Z ctm 
 #include <windows.h>
 
 PUBLIC int
-os_current_screen_width (void)
+os_current_screen_width(void)
 {
-  int retval;
+    int retval;
 
-  retval = GetSystemMetrics (SM_CXSCREEN);
-  return retval;
+    retval = GetSystemMetrics(SM_CXSCREEN);
+    return retval;
 }
 
 PUBLIC int
-os_current_screen_height (void)
+os_current_screen_height(void)
 {
-  int retval;
+    int retval;
 
-  retval = GetSystemMetrics (SM_CYSCREEN);
-  return retval;
+    retval = GetSystemMetrics(SM_CYSCREEN);
+    return retval;
 }
 
 PUBLIC int
-os_maximum_window_height (void)
+os_maximum_window_height(void)
 {
-  int retval;
+    int retval;
 
-  if (ROMlib_fullscreen_p)
-    retval = os_current_screen_height ();
-  else
-    retval = GetSystemMetrics (SM_CYFULLSCREEN);
-  return retval;
+    if(ROMlib_fullscreen_p)
+        retval = os_current_screen_height();
+    else
+        retval = GetSystemMetrics(SM_CYFULLSCREEN);
+    return retval;
 }
 
 PUBLIC int
-os_maximum_window_width (void)
+os_maximum_window_width(void)
 {
-  int retval;
+    int retval;
 
-  if (ROMlib_fullscreen_p)
-    retval = os_current_screen_width ();
-  else
-    retval = GetSystemMetrics (SM_CXFULLSCREEN);
-  return retval;
+    if(ROMlib_fullscreen_p)
+        retval = os_current_screen_width();
+    else
+        retval = GetSystemMetrics(SM_CXFULLSCREEN);
+    return retval;
 }
 
 PUBLIC void
-ROMlib_recenter_window (void)
+ROMlib_recenter_window(void)
 {
-  if (!ROMlib_fullscreen_p)
+    if(!ROMlib_fullscreen_p)
     {
-      RECT bounds;
+        RECT bounds;
 
-      if (GetWindowRect (SDL_Window, &bounds))
-	{
-	  int width, height, caption_height;
-	  int x, y;
+        if(GetWindowRect(SDL_Window, &bounds))
+        {
+            int width, height, caption_height;
+            int x, y;
 
-	  caption_height = GetSystemMetrics (SM_CYCAPTION);
-	  width = bounds.right-bounds.left;
-	  height = bounds.bottom-bounds.top + caption_height;
-	  x = (GetSystemMetrics(SM_CXFULLSCREEN)-width)/2;
-	  y = (GetSystemMetrics(SM_CYFULLSCREEN)-height)/2;
+            caption_height = GetSystemMetrics(SM_CYCAPTION);
+            width = bounds.right - bounds.left;
+            height = bounds.bottom - bounds.top + caption_height;
+            x = (GetSystemMetrics(SM_CXFULLSCREEN) - width) / 2;
+            y = (GetSystemMetrics(SM_CYFULLSCREEN) - height) / 2;
 #if 0
 	  {
 	    LONG l;
@@ -98,8 +98,8 @@ ROMlib_recenter_window (void)
 #endif
 	  }
 #endif
-	  SetWindowPos(SDL_Window, NULL, x, y + caption_height, width, height,
-		       (SWP_NOCOPYBITS | SWP_NOZORDER | SWP_SHOWWINDOW));
-	}
+            SetWindowPos(SDL_Window, NULL, x, y + caption_height, width, height,
+                         (SWP_NOCOPYBITS | SWP_NOZORDER | SWP_SHOWWINDOW));
+        }
     }
 }

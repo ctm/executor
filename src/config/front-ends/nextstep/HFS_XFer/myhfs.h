@@ -12,17 +12,19 @@
 #define HVCB VCB
 #endif
 
-#define FLOPPYREF   -5
-#define PHYSBSIZE   512
+#define FLOPPYREF -5
+#define PHYSBSIZE 512
 
-#define MADROFFSET	40
+#define MADROFFSET 40
 
-typedef struct {
+typedef struct
+{
     unsigned short blockstart;
     unsigned short blockcount;
 } xtntdesc, xtntrec[3];
 
-typedef struct {
+typedef struct
+{
     short drSigWord;
     long drCrDate;
     long drLsMod;
@@ -55,12 +57,13 @@ typedef struct {
     xtntrec drCTExtRec;
 } volumeinfo, *volumeinfoPtr, **volumeinfoHandle;
 
-#define VOLUMEINFOBLOCKNO   2
-#define InternalDrive   1
-#define ROUNDUP8(x) ((x+7)/8*8)
-#define NPHYSREQ(x) ((x+PHYSBSIZE-1)/PHYSBSIZE)
+#define VOLUMEINFOBLOCKNO 2
+#define InternalDrive 1
+#define ROUNDUP8(x) ((x + 7) / 8 * 8)
+#define NPHYSREQ(x) ((x + PHYSBSIZE - 1) / PHYSBSIZE)
 
-typedef struct {
+typedef struct
+{
     long ndFLink;
     long ndBLink;
     unsigned char ndType;
@@ -69,16 +72,19 @@ typedef struct {
     short idunno;
 } btnode;
 
-typedef enum { indexnode, leafnode = 0xFF } btnodetype;
+typedef enum { indexnode,
+               leafnode = 0xFF } btnodetype;
 
-typedef struct {
+typedef struct
+{
     unsigned char ckrKeyLen;
     char ckrResrv1;
     long ckrParID;
     unsigned char ckrCName[32];
 } catkey;
 
-typedef struct {
+typedef struct
+{
     unsigned char xkrKeyLen;
     unsigned char xkrFkType;
     long xkrFNum;
@@ -91,19 +97,20 @@ typedef union {
     xtntkey xtntk;
 } anykey;
 
-#define FILETYPE    2
+#define FILETYPE 2
 
-typedef struct {
+typedef struct
+{
     char cdrType;
     char cdrResrv2;
     char filFlags;
     char filTyp;
-    FInfo filUsrWds;    /* not sure what form */
+    FInfo filUsrWds; /* not sure what form */
     long filFlNum;
     short filStBlk; /* I don't think this is used */
     long filLgLen;
     long filPyLen;
-    short filRStBlk;    /* not used? */
+    short filRStBlk; /* not used? */
     long filRLgLen;
     long filRPyLen;
     long filCrDat;
@@ -118,7 +125,8 @@ typedef struct {
 
 #define DIRTYPE 1
 
-typedef struct {
+typedef struct
+{
     char cdrType;
     char cdrResrv2;
     short dirFlags;
@@ -132,9 +140,10 @@ typedef struct {
     long dirResrv[4];
 } directoryrec;
 
-#define THREADTYPE  3
+#define THREADTYPE 3
 
-typedef struct {
+typedef struct
+{
     char cdrType;
     char cdrResrv2;
     char thdResrv[8];
@@ -142,17 +151,20 @@ typedef struct {
     unsigned char thdCName[32];
 } threadrec;
 
-typedef enum { firstisless = -1, same, firstisgreater } compretval;
+typedef enum { firstisless = -1,
+               same,
+               firstisgreater } compretval;
 
 typedef compretval (*compfp)(void *first, void *second);
 
-#define WRITEBIT    (1<<0)
-#define RESOURCEBIT (1<<1)
-#define SHAREDBIT   (1<<4)
-#define FLOCKEDBIT  (1<<5)
-#define DIRTYBIT    (1<<7)
+#define WRITEBIT (1 << 0)
+#define RESOURCEBIT (1 << 1)
+#define SHAREDBIT (1 << 4)
+#define FLOCKEDBIT (1 << 5)
+#define DIRTYBIT (1 << 7)
 
-typedef struct {
+typedef struct
+{
     long fcbFlNum;
     Byte fcbMdRByt;
     Byte fcbTypByt;
@@ -172,56 +184,63 @@ typedef struct {
     unsigned char fcbCName[32];
 } filecontrolblock;
 
-typedef enum { datafork, resourcefork = 0xFF } forktype;
+typedef enum { datafork,
+               resourcefork = 0xFF } forktype;
 
-typedef enum { reading, writing } accesstype;
+typedef enum { reading,
+               writing } accesstype;
 
-#define VSOFTLOCKBIT    (1<<15)
-#define VHARDLOCKBIT    (1<<7)
-#define FSOFTLOCKBIT    (1<<0)
-#define FILEFLAGSUSERSETTABLEMASK   FSOFTLOCKBIT
+#define VSOFTLOCKBIT (1 << 15)
+#define VHARDLOCKBIT (1 << 7)
+#define FSOFTLOCKBIT (1 << 0)
+#define FILEFLAGSUSERSETTABLEMASK FSOFTLOCKBIT
 
-typedef struct {
-    long    flink;              /* 0 */
-    long    blink;              /* 4 */
-    unsigned char type;         /* 8 */
-    unsigned char dummy;        /* 9 */
-    short   hesthreejim;        /* 10 */
-    long    height;             /* 12 */
-    long    root;               /* 16 */
-    long    numentries;         /* 20 */
-    long    firstleaf;          /* 24 */
-    long    lastleaf;           /* 28 */
-    short   btnodesize;         /* 32 */
-    short   indexkeylen;        /* 34 */
-    long    nnodes;             /* 36 */
-    long    nfreenodes;         /* 40 */
+typedef struct
+{
+    long flink; /* 0 */
+    long blink; /* 4 */
+    unsigned char type; /* 8 */
+    unsigned char dummy; /* 9 */
+    short hesthreejim; /* 10 */
+    long height; /* 12 */
+    long root; /* 16 */
+    long numentries; /* 20 */
+    long firstleaf; /* 24 */
+    long lastleaf; /* 28 */
+    short btnodesize; /* 32 */
+    short indexkeylen; /* 34 */
+    long nnodes; /* 36 */
+    long nfreenodes; /* 40 */
     unsigned char reserved[72]; /* 44 */
-    unsigned char dummy2[132];  /* 116 */
-    unsigned char map[256];     /* 248 */
-    long unknown2[2];           /* 504 */
+    unsigned char dummy2[132]; /* 116 */
+    unsigned char map[256]; /* 248 */
+    long unknown2[2]; /* 504 */
 } btblock0;
 
 #define DATAPFROMKEY(p) ((char *)(p) + ((((catkey *)p)->ckrKeyLen + 2) & ~1))
 
-typedef enum { mfs, hfs } fstype;
-typedef enum { regular = 1, directory = 2, thread = 4 } filekind;
+typedef enum { mfs,
+               hfs } fstype;
+typedef enum { regular = 1,
+               directory = 2,
+               thread = 4 } filekind;
 
 #if !defined(UNIX)
 #define THINKCMESSED
 #endif /* !defined(UNIX) */
 
-#if defined (THINKCMESSED)
-#define vcbClpSiz   vcbClpSIz
+#if defined(THINKCMESSED)
+#define vcbClpSiz vcbClpSIz
 #endif /* THINKCMESSED */
 
 /*
  * TODO: do the ioCompletion routine when necessary
  */
- 
+
 #define PBRETURN(pb, x) return (pb)->ioResult = (x)
 
-typedef struct _cacheentry {
+typedef struct _cacheentry
+{
     struct _cacheentry *flink;
     struct _cacheentry *blink;
     HVCB *vptr;
@@ -234,22 +253,24 @@ typedef struct _cacheentry {
     char buf[PHYSBSIZE];
 } cacheentry;
 
-#define CACHEDIRTY  (1 << 7)
-#define CACHEBUSY   (1 << 6)
-#define CACHEFREE   (1 << 5)
+#define CACHEDIRTY (1 << 7)
+#define CACHEBUSY (1 << 6)
+#define CACHEFREE (1 << 5)
 
-typedef struct {
+typedef struct
+{
     cacheentry *flink;
     cacheentry *blink;
-    short   nitems;
-    ushort  flags;
+    short nitems;
+    ushort flags;
 } cachehead;
 
-#define NCACHEENTRIES   16
+#define NCACHEENTRIES 16
 
-#define MAXTRAILS   8
+#define MAXTRAILS 8
 
-typedef struct {
+typedef struct
+{
     cacheentry *cachep;
     short logbno;
     short after;
@@ -261,22 +282,24 @@ typedef struct {
  * The first cut of code had all these arguments being pushed and popped on
  * the stack as arguments.
  */
- 
-typedef struct {
-    HVCB *vcbp;                     /* in */
-    anykey tofind;                  /* in */
-    compfp fp;                      /* in */
-    short refnum;                   /* in */
-    BOOLEAN success;                /* out */
-    anykey *foundp;                 /* out */
-    short leafindex;                /* out */
-    trailentry trail[MAXTRAILS];    /* out */
+
+typedef struct
+{
+    HVCB *vcbp; /* in */
+    anykey tofind; /* in */
+    compfp fp; /* in */
+    short refnum; /* in */
+    BOOLEAN success; /* out */
+    anykey *foundp; /* out */
+    short leafindex; /* out */
+    trailentry trail[MAXTRAILS]; /* out */
 } btparam;
 
-typedef struct {    /* from MPW equates */
+typedef struct
+{ /* from MPW equates */
     HVCB *vcbp;
     LONGINT dirid;
-    LONGINT cathint;    /* ??? */
+    LONGINT cathint; /* ??? */
     LONGINT procid;
 } wdentry;
 
@@ -298,24 +321,29 @@ extern LONGINT TFSTagData0;
 extern LONGINT TFSTagData1;
 #endif
 
-#define WDMASK  0xC001
+#define WDMASK 0xC001
 #define WDMAGIC 0x8001
-#define ISWDNUM(v)  (((v) & WDMASK) == WDMAGIC)
+#define ISWDNUM(v) (((v)&WDMASK) == WDMAGIC)
 #define WDNUMTOWDP(v) ((wdentry *)(WDCBsPtr + ((v) ^ 0x8001)))
-#define WDPTOWDNUM(p)   (((char *) (p) - (char *)WDCBsPtr) ^ 0x8001)
+#define WDPTOWDNUM(p) (((char *)(p) - (char *)WDCBsPtr) ^ 0x8001)
 
-typedef enum { seteof, allocany, alloccontig } alloctype;
+typedef enum { seteof,
+               allocany,
+               alloccontig } alloctype;
 
 extern compretval catcompare(void *firstp, void *secondp);
 
-typedef enum { GETCACHESAVE = 1, GETCACHENOREAD = 2 } cacheflagtype;
+typedef enum { GETCACHESAVE = 1,
+               GETCACHENOREAD = 2 } cacheflagtype;
 
-#define VCBDIRTY    (1 << 15)
+#define VCBDIRTY (1 << 15)
 
-typedef enum {NOTE, CAUTION, STOP} alerttype;
+typedef enum { NOTE,
+               CAUTION,
+               STOP } alerttype;
 
 #if defined(UNIX)
-#define CurTime	(GetDateTime(&Time), Time)
+#define CurTime (GetDateTime(&Time), Time)
 #else
 #define CurTime Time
 #endif
@@ -324,15 +352,15 @@ typedef enum {NOTE, CAUTION, STOP} alerttype;
 
 extern cacheentry *addrtocachep(Ptr addr, HVCB *vcbp);
 extern BOOLEAN searchnode(btnode *btp, void *key, compfp fp, anykey **keypp,
-							       INTEGER *afterp);
+                          INTEGER *afterp);
 extern OSErr getcache(cacheentry **retpp, short refnum, ulong logbno,
-							   cacheflagtype flags);
+                      cacheflagtype flags);
 extern OSErr putcache(cacheentry *cachep);
 extern OSErr keyfind(btparam *btpb);
 extern OSErr btnext(anykey **nextpp, anykey *keyp, HVCB *vcbp);
 extern OSErr btdelete(btparam *btpb);
 extern void makecatparam(btparam *btpb, HVCB *vcbp, LONGINT dirid,
-						    INTEGER namelen, Ptr namep);
+                         INTEGER namelen, Ptr namep);
 extern OSErr filedelete(btparam *btpb, filekind kind);
 extern OSErr dirdelete(btparam *btpb);
 extern OSErr dirtyleaf(void *p, HVCB *vcbp);
@@ -343,8 +371,8 @@ extern xtntkey *newextentrecord(filecontrolblock *fcbp, ushort newabn);
 extern OSErr btrename(btparam *btpb, StringPtr newnamep);
 extern OSErr btcreateemptyfile(btparam *btpb);
 extern OSErr btcreateemptydir(btparam *btpb, LONGINT *newidp);
-extern OSErr btpbindex (ioParam *pb, LONGINT dirid, HVCB **vcbpp,
-			  filerec **frpp, catkey **catkeypp, BOOLEAN onlyfiles);
+extern OSErr btpbindex(ioParam *pb, LONGINT dirid, HVCB **vcbpp,
+                       filerec **frpp, catkey **catkeypp, BOOLEAN onlyfiles);
 extern OSErr cleancache(HVCB *vcbp);
 extern OSErr flushcachevcbp(HVCB *vcbp);
 
@@ -354,30 +382,30 @@ extern INTEGER flnumtorefnum(ulong flnum);
 
 /* public entries in file.c */
 
-extern filecontrolblock *getfreefcbp( void );
+extern filecontrolblock *getfreefcbp(void);
 extern filecontrolblock *refnumtofcbp(short refnum);
 extern compretval xtntcompare(void *firstp, void *secondp);
 extern compretval catcompare(void *firstp, void *secondp);
 extern void makextntkey(xtntkey *keyp, forktype forkwanted, LONGINT flnum,
-								    ushort bno);
+                        ushort bno);
 extern void makextntparam(btparam *btpb, HVCB *vcbp, forktype forkwanted,
-						     LONGINT flnum, ushort bno);
+                          LONGINT flnum, ushort bno);
 extern long logtophys(filecontrolblock *fcbp, long absoffset,
-							   short *nphyscontigp);
+                      short *nphyscontigp);
 extern void makecatkey(catkey *keyp, LONGINT dirid, INTEGER namelen, Ptr namep);
 extern OSErr findvcbandfile(ioParam *pb, LONGINT dirid, btparam *btpb,
-					   filekind *kindp, BOOLEAN ignorename);
+                            filekind *kindp, BOOLEAN ignorename);
 extern OSErr alreadyopen(HVCB *vcbp, ulong flnum, SignedByte *permp,
-								short *refnump);
+                         short *refnump);
 extern OSErr dirtyfcbp(filecontrolblock *fcbp);
 extern OSErr AllocHelper(ioParam *pb, BOOLEAN async, alloctype alloc,
-							     BOOLEAN writefcbp);
+                         BOOLEAN writefcbp);
 
 /* public entries in helper.c */
 
-extern void OurExit( void );
+extern void OurExit(void);
 extern OSErr TransPhysBlk(HVCB *vcbp, long physblock, short nphysblocks,
-					   Ptr bufp, accesstype rw, long *actp);
+                          Ptr bufp, accesstype rw, long *actp);
 extern char *indexn(char *str, char tofind, INTEGER length);
 #if !defined(UNIX)
 extern void str255assign(StringPtr dstp, StringPtr srcp);

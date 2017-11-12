@@ -1,4 +1,4 @@
-#if !defined (_RSYS_VERSION_H_)
+#if !defined(_RSYS_VERSION_H_)
 #define _RSYS_VERSION_H_
 
 /* $Id: version.h 94 2005-05-25 15:53:40Z ctm $ */
@@ -7,16 +7,16 @@
 extern "C" {
 #endif
 
-#if !defined (EXECUTOR_VERSION)
+#if !defined(EXECUTOR_VERSION)
 #define EXECUTOR_VERSION "2.1pr16" /* don't forget EXECUTOR_VERSION_NUMERIC */
 #endif
 
-#define SYSTEM_VERSION_ENCODING(m,n,x,b) ((m) * 1000000 \
-					  + (n) * 10000 \
-					  + ((x) ? ((x) - 'a' + 1) * 100 : 0) \
-					  + (b))
+#define SYSTEM_VERSION_ENCODING(m, n, x, b) ((m)*1000000                         \
+                                             + (n)*10000                         \
+                                             + ((x) ? ((x) - 'a' + 1) * 100 : 0) \
+                                             + (b))
 
-#if !defined (EXECUTOR_VERSION_NUMERIC)
+#if !defined(EXECUTOR_VERSION_NUMERIC)
 #define EXECUTOR_VERSION_NUMERIC SYSTEM_VERSION_ENCODING(2, 1, 0, 16)
 #endif
 
@@ -45,19 +45,31 @@ extern const char *ROMlib_executor_full_name;
 #error "Need VERSION_SIG #define"
 #endif
 
-enum { CLASS_COMMERCIAL = 0, CLASS_EDUCATIONAL = 10, CLASS_STUDENT = 20 };
-enum { PLATFORM_NEXTSTEP = 0, PLATFORM_CYGWIN32 = 1, PLATFORM_DOS = 2,
-       PLATFORM_LINUX = 3, PLATFORM_ANY = 4, PLATFORM_MACOSX = 5 };
+enum
+{
+    CLASS_COMMERCIAL = 0,
+    CLASS_EDUCATIONAL = 10,
+    CLASS_STUDENT = 20
+};
+enum
+{
+    PLATFORM_NEXTSTEP = 0,
+    PLATFORM_CYGWIN32 = 1,
+    PLATFORM_DOS = 2,
+    PLATFORM_LINUX = 3,
+    PLATFORM_ANY = 4,
+    PLATFORM_MACOSX = 5
+};
 
 enum
 {
-  STUDENT_DOS = CLASS_STUDENT + PLATFORM_DOS,
-  STUDENT_LINUX = CLASS_STUDENT + PLATFORM_LINUX,
+    STUDENT_DOS = CLASS_STUDENT + PLATFORM_DOS,
+    STUDENT_LINUX = CLASS_STUDENT + PLATFORM_LINUX,
 };
 
 #define EXECUTOR_NAME "executor"
 
-extern void ROMlib_set_system_version (uint32 version);
+extern void ROMlib_set_system_version(uint32 version);
 
 #ifdef __cplusplus
 }

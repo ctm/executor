@@ -1,4 +1,4 @@
-#if !defined (_NEXT_H_)
+#if !defined(_NEXT_H_)
 #define _NEXT_H_
 
 /* We need this hack to avoid appkit.h including db/db.h, which conflicts
@@ -20,11 +20,9 @@
 /* Use BSD signal calls, not newer POSIX stuff. */
 #define USE_BSD_SIGNALS
 
-
-#if !defined (S_ISDIR)
-# define S_ISDIR(mode)	(((mode) & (_S_IFMT)) == (_S_IFDIR))
+#if !defined(S_ISDIR)
+#define S_ISDIR(mode) (((mode) & (_S_IFMT)) == (_S_IFDIR))
 #endif
-
 
 #if 0
 #include <stdio.h>
@@ -43,35 +41,35 @@
 #include <dev/disk.h>
 #endif
 
-#if !defined (NEXT)
-# define NEXT
+#if !defined(NEXT)
+#define NEXT
 #endif
 
-#if !defined (O_BINARY)
-# define O_BINARY 0
+#if !defined(O_BINARY)
+#define O_BINARY 0
 #endif
 
-#if !defined (PRIVATE)
-# define PRIVATE static
+#if !defined(PRIVATE)
+#define PRIVATE static
 #endif
 
 /* NEXTSTEP only works on i486's and better. */
-#if defined (i386) && !defined (ALWAYS_ON_I486)
+#if defined(i386) && !defined(ALWAYS_ON_I486)
 #define ALWAYS_ON_I486
 #endif
 
 /* Don't ask.  This is historical brain-damage. */
-#if !defined (SUN)
-# define SUN
+#if !defined(SUN)
+#define SUN
 #endif
 
-#define BOOLEAN_T_TYPEDEFED  /* NeXT does this for us. */
+#define BOOLEAN_T_TYPEDEFED /* NeXT does this for us. */
 
 #define TRY_TO_MMAP_ZONES
-extern void *mmap_permanent_memory (unsigned long amount_wanted);
+extern void *mmap_permanent_memory(unsigned long amount_wanted);
 
-#if defined (OPENSTEP) && defined (STRICT_OPENSTEP)
-#if defined (m68k)
+#if defined(OPENSTEP) && defined(STRICT_OPENSTEP)
+#if defined(m68k)
 /* Currently on m68k systems we use the native CPU,
    so we can't offset memory.  I doubt this will ever change. */
 #error STRICT_OPENSTEP conflicts with m68k

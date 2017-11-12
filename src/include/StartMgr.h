@@ -1,4 +1,4 @@
-#if !defined (__STARTMGR__)
+#if !defined(__STARTMGR__)
 #define __STARTMGR__
 
 /*
@@ -8,35 +8,38 @@
  * $Id: StartMgr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-
-namespace Executor {
+namespace Executor
+{
 typedef union {
-    struct {
-	SignedByte sdExtDevID;
-	SignedByte sdPartition;
-	SignedByte sdSlotNum;
-	SignedByte sdSRsrcID;
+    struct
+    {
+        SignedByte sdExtDevID;
+        SignedByte sdPartition;
+        SignedByte sdSlotNum;
+        SignedByte sdSRsrcID;
     } slotDev;
-    struct {
-	SignedByte sdReserved1;
-	SignedByte sdReserved2;
-	INTEGER sdRefNum;
+    struct
+    {
+        SignedByte sdReserved1;
+        SignedByte sdReserved2;
+        INTEGER sdRefNum;
     } scsiDev;
 } DefStartRec, *DefStartPtr;
 
-typedef struct {
+typedef struct
+{
     SignedByte sdSlot;
     SignedByte sdSResource;
 } DefVideoRec, *DefVideoPtr;
 
-typedef struct {
+typedef struct
+{
     SignedByte sdReserved;
     SignedByte sdOSType;
 } DefOSRec, *DefOSPtr;
 
-
-#if !defined (CPUFlag)
-extern Byte 	CPUFlag;
+#if !defined(CPUFlag)
+extern Byte CPUFlag;
 #endif
 }
 

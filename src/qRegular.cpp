@@ -2,9 +2,8 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_qRegular[] =
-	    "$Id: qRegular.c 63 2004-12-24 18:19:43Z ctm $";
+#if !defined(OMIT_RCSID_STRINGS)
+char ROMlib_rcsid_qRegular[] = "$Id: qRegular.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
 /* Forward declarations in QuickDraw.h (DO NOT DELETE THIS LINE) */
@@ -42,10 +41,10 @@ P1(PUBLIC pascal trap, void, InvertRect, Rect *, r)
 
 P2(PUBLIC pascal trap, void, FillRect, Rect *, r, Pattern, pat)
 {
-  if (!EmptyRgn (PORT_VIS_REGION (thePort)))
+    if(!EmptyRgn(PORT_VIS_REGION(thePort)))
     {
-      ROMlib_fill_pat (pat);
-      CALLRECT(fill, r);
+        ROMlib_fill_pat(pat);
+        CALLRECT(fill, r);
     }
 }
 
@@ -71,105 +70,104 @@ P1(PUBLIC pascal trap, void, InvertOval, Rect *, r)
 
 P2(PUBLIC pascal trap, void, FillOval, Rect *, r, Pattern, pat)
 {
-  ROMlib_fill_pat (pat);
-  CALLOVAL(fill, r);
+    ROMlib_fill_pat(pat);
+    CALLOVAL(fill, r);
 }
 
 PRIVATE bool
-rect_matches_control_item (WindowPtr w, Rect *rp)
+rect_matches_control_item(WindowPtr w, Rect *rp)
 {
-  bool retval;
-  ControlHandle c;
+    bool retval;
+    ControlHandle c;
 
-  retval = false;
-  for (c = WINDOW_CONTROL_LIST (w); !retval && c ; c = CTL_NEXT_CONTROL (c))
+    retval = false;
+    for(c = WINDOW_CONTROL_LIST(w); !retval && c; c = CTL_NEXT_CONTROL(c))
     {
-      Rect r;
+        Rect r;
 
-      r = CTL_RECT (c);
-      retval = ((CW (r.top) - CW (rp->top) == CW (rp->bottom) - CW (r.bottom)) &&
-		(CW (r.left) - CW (rp->left) == CW (rp->right) - CW (r.right)));
+        r = CTL_RECT(c);
+        retval = ((CW(r.top) - CW(rp->top) == CW(rp->bottom) - CW(r.bottom)) && (CW(r.left) - CW(rp->left) == CW(rp->right) - CW(r.right)));
     }
 
-  return retval;
+    return retval;
 }
 
 P3(PUBLIC pascal trap, void, FrameRoundRect, Rect *, r, INTEGER, ow,
-								   INTEGER, oh)
+   INTEGER, oh)
 {
-  bool do_rect;
+    bool do_rect;
 
-  do_rect = false;
+    do_rect = false;
 
-  if (ROMlib_cdef0_is_rectangular)
+    if(ROMlib_cdef0_is_rectangular)
     {
-      AuxWinHandle aux;
+        AuxWinHandle aux;
 
-      aux = MR (*lookup_aux_win (thePort));
-      if (aux && rect_matches_control_item (HxP(aux, awOwner), r))
-	do_rect = true;
+        aux = MR(*lookup_aux_win(thePort));
+        if(aux && rect_matches_control_item(HxP(aux, awOwner), r))
+            do_rect = true;
     }
 
-  if (do_rect)
-    FrameRect (r);
-  else
-    CALLRRECT(frame, r, ow, oh);
+    if(do_rect)
+        FrameRect(r);
+    else
+        CALLRRECT(frame, r, ow, oh);
 }
 
 P3(PUBLIC pascal trap, void, PaintRoundRect, Rect *, r, INTEGER, ow,
-								   INTEGER, oh)
+   INTEGER, oh)
 {
     CALLRRECT(paint, r, ow, oh);
 }
 
 P3(PUBLIC pascal trap, void, EraseRoundRect, Rect *, r, INTEGER, ow,
-								   INTEGER, oh)
+   INTEGER, oh)
 {
     CALLRRECT(erase, r, ow, oh);
 }
 
 P3(PUBLIC pascal trap, void, InvertRoundRect, Rect *, r, INTEGER, ow,
-								   INTEGER, oh)
+   INTEGER, oh)
 {
     CALLRRECT(invert, r, ow, oh);
 }
 
 P4(PUBLIC pascal trap, void, FillRoundRect, Rect *, r, INTEGER, ow,
-						     INTEGER, oh, Pattern, pat)
+   INTEGER, oh, Pattern, pat)
 {
-  ROMlib_fill_pat (pat);
-  CALLRRECT(fill, r, ow, oh);
+    ROMlib_fill_pat(pat);
+    CALLRRECT(fill, r, ow, oh);
 }
 
 P3(PUBLIC pascal trap, void, FrameArc, Rect *, r, INTEGER, start,
-								INTEGER, angle)
+   INTEGER, angle)
 {
     CALLARC(frame, r, start, angle);
 }
 
-P3(PUBLIC pascal trap, void,  PaintArc, Rect *, r, INTEGER, start,
-								INTEGER, angle)
+P3(PUBLIC pascal trap, void, PaintArc, Rect *, r, INTEGER, start,
+   INTEGER, angle)
 {
     CALLARC(paint, r, start, angle);
 }
 
 P3(PUBLIC pascal trap, void, EraseArc, Rect *, r, INTEGER, start,
-								INTEGER, angle)
+   INTEGER, angle)
 {
     CALLARC(erase, r, start, angle);
 }
 
 P3(PUBLIC pascal trap, void, InvertArc, Rect *, r, INTEGER, start,
-								INTEGER, angle)
+   INTEGER, angle)
 {
     CALLARC(invert, r, start, angle);
 }
 
 P4(PUBLIC pascal trap, void, FillArc, Rect *, r, INTEGER, start,
-						  INTEGER, angle, Pattern, pat)
+   INTEGER, angle, Pattern, pat)
 {
-  ROMlib_fill_pat (pat);
-  CALLARC (fill, r, start, angle);
+    ROMlib_fill_pat(pat);
+    CALLARC(fill, r, start, angle);
 }
 
 P1(PUBLIC pascal trap, void, FrameRgn, RgnHandle, rh)
@@ -194,10 +192,9 @@ P1(PUBLIC pascal trap, void, InvertRgn, RgnHandle, rh)
 
 P2(PUBLIC pascal trap, void, FillRgn, RgnHandle, rh, Pattern, pat)
 {
-  ROMlib_fill_pat (pat);
-  CALLRGN(fill, rh);
+    ROMlib_fill_pat(pat);
+    CALLRGN(fill, rh);
 }
-
 
 P1(PUBLIC pascal trap, void, FramePoly, PolyHandle, poly)
 {
@@ -221,6 +218,6 @@ P1(PUBLIC pascal trap, void, InvertPoly, PolyHandle, poly)
 
 P2(PUBLIC pascal trap, void, FillPoly, PolyHandle, poly, Pattern, pat)
 {
-  ROMlib_fill_pat (pat);
-  CALLPOLY (fill, poly);
+    ROMlib_fill_pat(pat);
+    CALLPOLY(fill, poly);
 }

@@ -7,8 +7,8 @@
 #endif
 
 /* Choose our graphic subsystem */
-#define WIN_DIB 0    /* Use CreateDIBSection() -- compilable with mingwin32 */
-#define WIN_MGL 1    /* Use the SciTech MGL Library */
+#define WIN_DIB 0 /* Use CreateDIBSection() -- compilable with mingwin32 */
+#define WIN_MGL 1 /* Use the SciTech MGL Library */
 #define WIN_SUBSYSTEM WIN_DIB
 
 /* Win32 is after all, a windowing environment */
@@ -20,7 +20,6 @@
 
 /* We don't have a function to notify the user that the system is busy */
 #define vdriver_system_busy 0
-
 
 #if WIN_SUBSYSTEM == WIN_DIB
 /* We don't provide any accelerated display functions under WIN_DIB */
@@ -37,10 +36,3 @@ extern vdriver_dib_mode_t vdriver_dib_modes;
 #else
 #error No windows graphics subsystem defined!
 #endif /* WIN_DIB */
-
-
-
-
-
-
-

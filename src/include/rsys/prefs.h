@@ -2,16 +2,17 @@
 #define __RSYS_PREFS__
 
 #ifdef __cplusplus
-namespace Executor {
+namespace Executor
+{
 #endif
 
 typedef enum {
-  WriteAlways,
-  WriteInBltrgn,
-  WriteInOSEvent,
-  WriteAtEndOfTrap,
-  WriteNever
-} WriteWhenType;	/* This is an extension */
+    WriteAlways,
+    WriteInBltrgn,
+    WriteInOSEvent,
+    WriteAtEndOfTrap,
+    WriteNever
+} WriteWhenType; /* This is an extension */
 
 #ifdef __cplusplus
 extern WriteWhenType ROMlib_when;
@@ -33,16 +34,15 @@ extern int ROMlib_pretend_alias;
 extern int ROMlib_pretend_script;
 extern int ROMlib_pretend_edition;
 
-
 extern uint32 system_version;
 #endif
 
-#define ROMLIB_DEBUG_BIT                (1 <<  1)
+#define ROMLIB_DEBUG_BIT (1 << 1)
 
 #ifdef __cplusplus
-extern void ROMlib_WriteWhen (WriteWhenType when); 
+extern void ROMlib_WriteWhen(WriteWhenType when);
 
-extern void do_dump_screen (void);
+extern void do_dump_screen(void);
 }
 extern "C" {
 #endif

@@ -1,4 +1,4 @@
-#if !defined (_OS_CYGWIN32_H_)
+#if !defined(_OS_CYGWIN32_H_)
 #define _OS_CYGWIN32_H_
 
 #include <unistd.h>
@@ -24,17 +24,18 @@
 #undef NULL
 #define NULL ((void *)0)
 
-#if !defined (CYGWIN32)
+#if !defined(CYGWIN32)
 #define CYGWIN32
 #endif
 
-#if !defined (PRIVATE)
+#if !defined(PRIVATE)
 #define PRIVATE static
 #endif
 
-typedef struct {
-  char *dptr;
-  unsigned dsize;
+typedef struct
+{
+    char *dptr;
+    unsigned dsize;
 } datum;
 
 #ifndef M_PI
@@ -48,22 +49,24 @@ typedef struct {
 typedef unsigned short uid_t;
 typedef unsigned short gid_t;
 
-#if !defined (USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES) || !defined (_WINSOCK_H)
+#if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES) || !defined(_WINSOCK_H)
 /*
   time structures
   */
-struct timeval {
-  long tv_sec;     /* seconds */
-  long tv_usec;    /* microseconds */
+struct timeval
+{
+    long tv_sec; /* seconds */
+    long tv_usec; /* microseconds */
 };
 
 #define _WINSOCK_H /* so we don't get another timeval declaration */
 
 #endif
 
-struct timezone {
-  int tz_minuteswest; /* minutes west of Greenwich */
-  int tz_dsttime;     /* type of dst correction */
+struct timezone
+{
+    int tz_minuteswest; /* minutes west of Greenwich */
+    int tz_dsttime; /* type of dst correction */
 };
 
 #define pclose(p) (-1)
@@ -77,18 +80,18 @@ struct timezone {
 #define NEED_SCALB
 #define NEED_LOG1P
 
-extern int geteuid (void);
-extern int Timer32_Init (void);
+extern int geteuid(void);
+extern int Timer32_Init(void);
 
-#define ST_INO(buf)					\
-({							\
-  struct stat tmp;					\
-							\
-  tmp = buf;						\
-  ((uint16) tmp.st_ino << 16) | ((uint16) tmp.st_rdev);	\
-})
+#define ST_INO(buf)                                         \
+    ({                                                      \
+        struct stat tmp;                                    \
+                                                            \
+        tmp = buf;                                          \
+        ((uint16)tmp.st_ino << 16) | ((uint16)tmp.st_rdev); \
+    })
 
-extern int ROMlib_set_realmodecd (int value);
-extern int ROMlib_launch_native_app (int n_filenames, char **filenames);
+extern int ROMlib_set_realmodecd(int value);
+extern int ROMlib_launch_native_app(int n_filenames, char **filenames);
 
 #endif /* !_OS_CYGWIN32_H_ */

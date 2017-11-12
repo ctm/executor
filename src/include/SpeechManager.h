@@ -12,106 +12,114 @@
 #include "SoundMgr.h"
 #include "FileMgr.h"
 
-namespace Executor {
+namespace Executor
+{
 #pragma pack(push, 2)
-  typedef struct VoiceSpec {
+typedef struct VoiceSpec
+{
     GUEST_STRUCT;
-	GUEST<OSType>              creator;
-	GUEST<OSType>              id;
-  } VoiceSpec, *VoiceSpecPtr;
+    GUEST<OSType> creator;
+    GUEST<OSType> id;
+} VoiceSpec, *VoiceSpecPtr;
 
-  
-  typedef struct VoiceFileInfo {
+typedef struct VoiceFileInfo
+{
     GUEST_STRUCT;
-	FSSpec	fileSpec;
-	GUEST<uint16_t>	resID;
-  } VoiceFileInfo;
-  
-  typedef struct SpeechStatusInfo {
-    GUEST_STRUCT;
-	GUEST<Boolean>             outputBusy;
-	GUEST<Boolean>             outputPaused;
-	GUEST<int32_t>                inputBytesLeft;
-	GUEST<int16_t>               phonemeCode;
-  } SpeechStatusInfo;
-  
-  typedef struct VoiceDescription {
-    GUEST_STRUCT;
-	GUEST<int32>              length;
-	GUEST<VoiceSpec>           voice;
-	GUEST<int32>              version;
-	GUEST<Str63>               name;
-	GUEST<Str255>              comment;
-	GUEST<int16>              gender;
-	GUEST<int16>              age;
-	GUEST<int16>              script;
-	GUEST<int16>              language;
-	GUEST<int16>              region;
-	GUEST<int32>              reserved[4];
-  } VoiceDescription;
+    FSSpec fileSpec;
+    GUEST<uint16_t> resID;
+} VoiceFileInfo;
 
-  typedef struct SpeechChannelRecord {
+typedef struct SpeechStatusInfo
+{
     GUEST_STRUCT;
-	LONGINT                data[1];
-  } SpeechChannelRecord, *SpeechChannel;
-  
-  typedef struct PhonemeInfo {
+    GUEST<Boolean> outputBusy;
+    GUEST<Boolean> outputPaused;
+    GUEST<int32_t> inputBytesLeft;
+    GUEST<int16_t> phonemeCode;
+} SpeechStatusInfo;
+
+typedef struct VoiceDescription
+{
     GUEST_STRUCT;
-	GUEST<int16_t>               opcode;
-	GUEST<Str15>               phStr;
-	GUEST<Str31>               exampleStr;
-	GUEST<int16_t>               hiliteStart;
-	GUEST<int16_t>               hiliteEnd;
-  } PhonemeInfo;
-  
-  typedef struct PhonemeDescriptor {
+    GUEST<int32> length;
+    GUEST<VoiceSpec> voice;
+    GUEST<int32> version;
+    GUEST<Str63> name;
+    GUEST<Str255> comment;
+    GUEST<int16> gender;
+    GUEST<int16> age;
+    GUEST<int16> script;
+    GUEST<int16> language;
+    GUEST<int16> region;
+    GUEST<int32> reserved[4];
+} VoiceDescription;
+
+typedef struct SpeechChannelRecord
+{
     GUEST_STRUCT;
-	GUEST<int16_t>               phonemeCount;
-	GUEST<PhonemeInfo>         thePhonemes[1];
-  } PhonemeDescriptor;
-  
-  typedef struct SpeechXtndData {
+    LONGINT data[1];
+} SpeechChannelRecord, *SpeechChannel;
+
+typedef struct PhonemeInfo
+{
     GUEST_STRUCT;
-	GUEST<OSType>              synthCreator;
-	GUEST<Byte>                synthData[2];
-  } SpeechXtndData;
-  
-  typedef struct DelimiterInfo {
+    GUEST<int16_t> opcode;
+    GUEST<Str15> phStr;
+    GUEST<Str31> exampleStr;
+    GUEST<int16_t> hiliteStart;
+    GUEST<int16_t> hiliteEnd;
+} PhonemeInfo;
+
+typedef struct PhonemeDescriptor
+{
     GUEST_STRUCT;
-	GUEST<Byte>                startDelimiter[2];
-	GUEST<Byte>                endDelimiter[2];
-  } DelimiterInfo;
-  
-  
+    GUEST<int16_t> phonemeCount;
+    GUEST<PhonemeInfo> thePhonemes[1];
+} PhonemeDescriptor;
+
+typedef struct SpeechXtndData
+{
+    GUEST_STRUCT;
+    GUEST<OSType> synthCreator;
+    GUEST<Byte> synthData[2];
+} SpeechXtndData;
+
+typedef struct DelimiterInfo
+{
+    GUEST_STRUCT;
+    GUEST<Byte> startDelimiter[2];
+    GUEST<Byte> endDelimiter[2];
+} DelimiterInfo;
+
 #pragma pack(pop)
-  
-  PUBLIC pascal NumVersion C_SpeechManagerVersion (void);
-  PUBLIC pascal int16 C_SpeechBusy (void);
-  PUBLIC pascal int16 C_SpeechBusySystemWide(void);
-  PUBLIC pascal OSErr C_CountVoices (int16 *numVoices);
-  PUBLIC pascal OSErr C_DisposeSpeechChannel (SpeechChannel chan);
-  PUBLIC pascal OSErr C_SpeakString (Str255 textToBeSpoken);
-  
-  PUBLIC pascal OSErr C_StopSpeech (SpeechChannel chan);
-  PUBLIC pascal OSErr C_ContinueSpeech (SpeechChannel chan);
-  
-  PUBLIC pascal OSErr C_GetIndVoice (int16 index, VoiceSpec *voice);
-  PUBLIC pascal OSErr C_NewSpeechChannel (VoiceSpec *voice, SpeechChannel *chan);
-  PUBLIC pascal OSErr C_StopSpeechAt (SpeechChannel chan, int32 whereToStop);
-  PUBLIC pascal OSErr C_PauseSpeechAt (SpeechChannel chan, int32 whereToPause);
-  PUBLIC pascal OSErr C_SetSpeechRate(SpeechChannel chan, Fixed rate);
-  PUBLIC pascal OSErr C_GetSpeechRate (SpeechChannel chan, Fixed *rate);
-  PUBLIC pascal OSErr C_SetSpeechPitch (SpeechChannel chan, Fixed pitch);
-  PUBLIC pascal OSErr C_GetSpeechPitch (SpeechChannel chan, Fixed *pitch);
-  PUBLIC pascal OSErr C_UseDictionary (SpeechChannel chan, Handle dictionary);
-  PUBLIC pascal OSErr C_MakeVoiceSpec (OSType creator, OSType id, VoiceSpec *voice);
-  PUBLIC pascal OSErr C_GetVoiceDescription (const VoiceSpec *voice, VoiceDescription *info, LONGINT infoLength);
-  PUBLIC pascal OSErr C_GetVoiceInfo (const VoiceSpec *voice, OSType selector, void *voiceInfo);
-  PUBLIC pascal OSErr C_SpeakText (SpeechChannel chan, const void *textBuf, ULONGINT textBytes);
-  PUBLIC pascal OSErr C_SetSpeechInfo (SpeechChannel chan, OSType selector, const void *speechInfo);
-  PUBLIC pascal OSErr C_GetSpeechInfo (SpeechChannel chan, OSType selector, void *speechInfo);
-  PUBLIC pascal OSErr C_SpeakBuffer (SpeechChannel chan, const void *textBuf, ULONGINT textBytes, int32 controlFlags);
-  PUBLIC pascal OSErr C_TextToPhonemes (SpeechChannel chan, const void *textBuf, ULONGINT textBytes, Handle phonemeBuf, GUEST<LONGINT> *phonemeBytes);
+
+PUBLIC pascal NumVersion C_SpeechManagerVersion(void);
+PUBLIC pascal int16 C_SpeechBusy(void);
+PUBLIC pascal int16 C_SpeechBusySystemWide(void);
+PUBLIC pascal OSErr C_CountVoices(int16 *numVoices);
+PUBLIC pascal OSErr C_DisposeSpeechChannel(SpeechChannel chan);
+PUBLIC pascal OSErr C_SpeakString(Str255 textToBeSpoken);
+
+PUBLIC pascal OSErr C_StopSpeech(SpeechChannel chan);
+PUBLIC pascal OSErr C_ContinueSpeech(SpeechChannel chan);
+
+PUBLIC pascal OSErr C_GetIndVoice(int16 index, VoiceSpec *voice);
+PUBLIC pascal OSErr C_NewSpeechChannel(VoiceSpec *voice, SpeechChannel *chan);
+PUBLIC pascal OSErr C_StopSpeechAt(SpeechChannel chan, int32 whereToStop);
+PUBLIC pascal OSErr C_PauseSpeechAt(SpeechChannel chan, int32 whereToPause);
+PUBLIC pascal OSErr C_SetSpeechRate(SpeechChannel chan, Fixed rate);
+PUBLIC pascal OSErr C_GetSpeechRate(SpeechChannel chan, Fixed *rate);
+PUBLIC pascal OSErr C_SetSpeechPitch(SpeechChannel chan, Fixed pitch);
+PUBLIC pascal OSErr C_GetSpeechPitch(SpeechChannel chan, Fixed *pitch);
+PUBLIC pascal OSErr C_UseDictionary(SpeechChannel chan, Handle dictionary);
+PUBLIC pascal OSErr C_MakeVoiceSpec(OSType creator, OSType id, VoiceSpec *voice);
+PUBLIC pascal OSErr C_GetVoiceDescription(const VoiceSpec *voice, VoiceDescription *info, LONGINT infoLength);
+PUBLIC pascal OSErr C_GetVoiceInfo(const VoiceSpec *voice, OSType selector, void *voiceInfo);
+PUBLIC pascal OSErr C_SpeakText(SpeechChannel chan, const void *textBuf, ULONGINT textBytes);
+PUBLIC pascal OSErr C_SetSpeechInfo(SpeechChannel chan, OSType selector, const void *speechInfo);
+PUBLIC pascal OSErr C_GetSpeechInfo(SpeechChannel chan, OSType selector, void *speechInfo);
+PUBLIC pascal OSErr C_SpeakBuffer(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, int32 controlFlags);
+PUBLIC pascal OSErr C_TextToPhonemes(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, Handle phonemeBuf, GUEST<LONGINT> *phonemeBytes);
 }
 
 #endif /* defined(__CocoaExecutor__SpeechManager__) */

@@ -1,12 +1,14 @@
-#if !defined (_RSYS_SOUNDFAKE_H_)
+#if !defined(_RSYS_SOUNDFAKE_H_)
 #define _RSYS_SOUNDFAKE_H_
 
 #include "rsys/sounddriver.h"
 #include "TimeMgr.h"
 
-namespace Executor {
-  class SoundFake: public SoundDriver {
-  public:
+namespace Executor
+{
+class SoundFake : public SoundDriver
+{
+public:
     virtual bool sound_init();
     virtual void sound_shutdown();
     virtual bool sound_works();
@@ -17,11 +19,12 @@ namespace Executor {
     virtual void HungerStart();
     virtual struct hunger_info GetHungerInfo();
     virtual void sound_clear_pending();
-    virtual bool HasSoundClearPending() {
-      return true;
+    virtual bool HasSoundClearPending()
+    {
+        return true;
     }
 
-  private:
+private:
     snd_time t1;
     /* # of fake buffers currently enqueued. */
     int num_fake_buffers_enqueued;
@@ -31,10 +34,10 @@ namespace Executor {
     syn68k_addr_t fake_sound_callback;
     bool no_more_sound_p;
     TMTask fake_sound_tm_task;
-    static syn68k_addr_t handle_fake_sound_callback (syn68k_addr_t addr, void *junk);
+    static syn68k_addr_t handle_fake_sound_callback(syn68k_addr_t addr, void *junk);
     void NoteSoundInterrupt();
     void set_up_tm_task();
-  };
+};
 }
 
 #endif /* !_RSYS_SOUNDFAKE_H_ */

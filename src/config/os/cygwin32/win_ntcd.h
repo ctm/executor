@@ -3,7 +3,6 @@
 		11/15/1997 Lauri Pesonen
 */
 
-
 /*
 		Installs the driver, if not already installed.
 		Starts the driver, if not already running.
@@ -26,14 +25,12 @@
 */
 BOOL CdenableSysInstallStart(void);
 
-
 /*
 		Stops and removes the driver. See above.
 		This must be called when new version of the driver is updated.
 */
 void CdenableSysStopRemove(void);
 
-	
 /*
 		HANDLE h: returned from CreateFile ( "\\\\.\\X:", GENERIC_READ, ... );
 		Returns the bytes actually read (==count), 0 on failure.
@@ -43,17 +40,15 @@ void CdenableSysStopRemove(void);
 		Max read is 64 kb.
 		Synchronous read, but quite fast.
 */
-int CdenableSysReadCdBytes( HANDLE h, DWORD start, DWORD count, char *buf );
-
+int CdenableSysReadCdBytes(HANDLE h, DWORD start, DWORD count, char *buf);
 
 /*
 		Same as SysReadCdBytes, but "start" and "count" are in 2048 byte
 		sectors.
 */
-int CdenableSysReadCdSectors( HANDLE h, DWORD start, DWORD count, char *buf );
-
+int CdenableSysReadCdSectors(HANDLE h, DWORD start, DWORD count, char *buf);
 
 /*
 		Returns CDENABLE_CURRENT_VERSION (of the driver).
 */
-DWORD CdenableSysGetVersion( void );
+DWORD CdenableSysGetVersion(void);

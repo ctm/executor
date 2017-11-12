@@ -2,9 +2,8 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_lockrange[] =
-		"$Id: lockrange.c 63 2004-12-24 18:19:43Z ctm $";
+#if !defined(OMIT_RCSID_STRINGS)
+char ROMlib_rcsid_lockrange[] = "$Id: lockrange.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
 /*
@@ -34,207 +33,206 @@ using namespace Executor;
 
 typedef struct
 {
-  int fd;
-  uint32 start_byte;
-  uint32 count;
-}
-lock_entry_t;
+    int fd;
+    uint32 start_byte;
+    uint32 count;
+} lock_entry_t;
 
 PRIVATE lock_entry_t *entries;
 PRIVATE int n_entries;
 
 PRIVATE void
-delete_entry (lock_entry_t *entry)
+delete_entry(lock_entry_t *entry)
 {
-  size_t n_bytes;
+    size_t n_bytes;
 
-  --n_entries;
-  n_bytes = (entries + n_entries - entry) * sizeof *entries;
-  if (n_bytes)
-    memmove (entry, &entry[1], n_bytes);
-}
-
-
-PUBLIC OSErr
-Executor::ROMlib_fd_clear_locks_after_open (int fd, bool be_surprised_p)
-{
-  int i;
-  int n_removed;
-  OSErr retval;
-
-  retval = noErr;
-  n_removed = 0;
-  for (i = 0; i < n_entries; ++i)
-    {
-      if (entries[i].fd == fd)
-	{
-	  if (be_surprised_p)
-	    warning_unexpected ("fd = %d, start_byte = %d, count = %d",
-				fd, entries[i].start_byte, entries[i].count);
-	  delete_entry (&entries[i]);
-	  ++n_removed;
-	  --i;
-	}
-    }
-  if (n_removed)
-    {
-      decltype (entries) new_entries;
-
-      new_entries = (decltype(new_entries))realloc (entries, n_entries * sizeof *entries);
-      if (new_entries)
-	entries = new_entries;
-      else
-	retval = memFullErr;
-    }
-  return retval;
+    --n_entries;
+    n_bytes = (entries + n_entries - entry) * sizeof *entries;
+    if(n_bytes)
+        memmove(entry, &entry[1], n_bytes);
 }
 
 PUBLIC OSErr
-Executor::ROMlib_fd_release_locks_for_close (int fd)
+Executor::ROMlib_fd_clear_locks_after_open(int fd, bool be_surprised_p)
 {
-  OSErr err;
-  OSErr retval;
-  int i;
+    int i;
+    int n_removed;
+    OSErr retval;
 
-  retval = noErr;
-  for (i = 0; i < n_entries; ++i)
-    {
-      if (entries[i].fd == fd)
-	{
-	  err = ROMlib_lockunlockrange (fd, entries[i].start_byte,
-					entries[i].count, unlock);
-	  if (err && retval == noErr)
-	    retval = err;
-	}
-    }
-
-  err = ROMlib_fd_clear_locks_after_open (fd, false);
-  if (err && retval == noErr)
-    retval = err;
-
-  return retval;
-}
-
-PUBLIC OSErr
-Executor::ROMlib_fd_add_range (int fd, uint32 start_byte, uint32 count)
-{
-  OSErr retval;
-
-  if (!count)
     retval = noErr;
-  else
+    n_removed = 0;
+    for(i = 0; i < n_entries; ++i)
     {
-      decltype (entries) new_entries;
-
-      new_entries = (decltype(new_entries))realloc (entries, (n_entries + 1) * sizeof *entries);
-      if (!new_entries)
-	{
-	  retval = afpNoMoreLocks;
-	  warning_unexpected ("fd = %d, start_byte = %d, count = %d",
-			      fd, start_byte, count);
-	}
-      else
-	{
-	  entries = new_entries;
-	  entries[n_entries].fd = fd;
-	  entries[n_entries].start_byte = start_byte;
-	  entries[n_entries].count = count;
-	  ++n_entries;
-	  retval = noErr;
-	}
+        if(entries[i].fd == fd)
+        {
+            if(be_surprised_p)
+                warning_unexpected("fd = %d, start_byte = %d, count = %d",
+                                   fd, entries[i].start_byte, entries[i].count);
+            delete_entry(&entries[i]);
+            ++n_removed;
+            --i;
+        }
     }
-  
-  return retval;
+    if(n_removed)
+    {
+        decltype(entries) new_entries;
+
+        new_entries = (decltype(new_entries))realloc(entries, n_entries * sizeof *entries);
+        if(new_entries)
+            entries = new_entries;
+        else
+            retval = memFullErr;
+    }
+    return retval;
 }
 
 PUBLIC OSErr
-Executor::ROMlib_fd_range_overlap (int fd, uint32 start_byte, uint32 count)
+Executor::ROMlib_fd_release_locks_for_close(int fd)
 {
-  OSErr retval;
+    OSErr err;
+    OSErr retval;
+    int i;
 
-  retval = noErr;
-  if (count)
+    retval = noErr;
+    for(i = 0; i < n_entries; ++i)
     {
-      uint32 stop_byte;
-      int i;
-
-      stop_byte = start_byte + count;
-      if (stop_byte < start_byte)
-	stop_byte = ~0;
-      for (i = 0; i < n_entries; ++i)
-	{
-	  if (entries[i].fd == fd)
-	    {
-	      uint32 entries_stop_byte;
-
-	      entries_stop_byte = entries[i].start_byte + entries[i].count;
-	      if (entries_stop_byte < entries[i].start_byte)
-		entries_stop_byte = ~0;
-
-	      if (entries[i].start_byte < start_byte)
-		{
-		  if (entries_stop_byte > start_byte)
-		    retval = afpRangeOverlap;
-		}
-	      else if (entries[i].start_byte > start_byte)
-		{
-		  if (stop_byte > entries[i].start_byte)
-		    retval = afpRangeOverlap;
-		}
-	      else
-		retval = afpRangeOverlap;
-	    }
-	}
+        if(entries[i].fd == fd)
+        {
+            err = ROMlib_lockunlockrange(fd, entries[i].start_byte,
+                                         entries[i].count, unlock);
+            if(err && retval == noErr)
+                retval = err;
+        }
     }
 
-  return retval;
+    err = ROMlib_fd_clear_locks_after_open(fd, false);
+    if(err && retval == noErr)
+        retval = err;
+
+    return retval;
+}
+
+PUBLIC OSErr
+Executor::ROMlib_fd_add_range(int fd, uint32 start_byte, uint32 count)
+{
+    OSErr retval;
+
+    if(!count)
+        retval = noErr;
+    else
+    {
+        decltype(entries) new_entries;
+
+        new_entries = (decltype(new_entries))realloc(entries, (n_entries + 1) * sizeof *entries);
+        if(!new_entries)
+        {
+            retval = afpNoMoreLocks;
+            warning_unexpected("fd = %d, start_byte = %d, count = %d",
+                               fd, start_byte, count);
+        }
+        else
+        {
+            entries = new_entries;
+            entries[n_entries].fd = fd;
+            entries[n_entries].start_byte = start_byte;
+            entries[n_entries].count = count;
+            ++n_entries;
+            retval = noErr;
+        }
+    }
+
+    return retval;
+}
+
+PUBLIC OSErr
+Executor::ROMlib_fd_range_overlap(int fd, uint32 start_byte, uint32 count)
+{
+    OSErr retval;
+
+    retval = noErr;
+    if(count)
+    {
+        uint32 stop_byte;
+        int i;
+
+        stop_byte = start_byte + count;
+        if(stop_byte < start_byte)
+            stop_byte = ~0;
+        for(i = 0; i < n_entries; ++i)
+        {
+            if(entries[i].fd == fd)
+            {
+                uint32 entries_stop_byte;
+
+                entries_stop_byte = entries[i].start_byte + entries[i].count;
+                if(entries_stop_byte < entries[i].start_byte)
+                    entries_stop_byte = ~0;
+
+                if(entries[i].start_byte < start_byte)
+                {
+                    if(entries_stop_byte > start_byte)
+                        retval = afpRangeOverlap;
+                }
+                else if(entries[i].start_byte > start_byte)
+                {
+                    if(stop_byte > entries[i].start_byte)
+                        retval = afpRangeOverlap;
+                }
+                else
+                    retval = afpRangeOverlap;
+            }
+        }
+    }
+
+    return retval;
 }
 
 PRIVATE lock_entry_t *
-find_fd_start_count_helper (int fd, uint32 start_byte, uint32 count)
+find_fd_start_count_helper(int fd, uint32 start_byte, uint32 count)
 {
-  int i;
-  lock_entry_t *retval;
+    int i;
+    lock_entry_t *retval;
 
-  retval = NULL;
-  for (i = 0; !retval && i < n_entries; ++i)
+    retval = NULL;
+    for(i = 0; !retval && i < n_entries; ++i)
     {
-      if (entries[i].fd == fd && entries[i].start_byte == start_byte)
-	{
-	  if (entries[i].count == count) /* perhaps we should check to
+        if(entries[i].fd == fd && entries[i].start_byte == start_byte)
+        {
+            if(entries[i].count == count) /* perhaps we should check to
 					    see if both of them run past
 					    maxuint */
-	    retval = &entries[i];
-	}
+                retval = &entries[i];
+        }
     }
-  return retval;
+    return retval;
 }
 
 PUBLIC OSErr
-Executor::ROMlib_find_fd_start_count (int fd, uint32 start_byte, uint32 count)
+Executor::ROMlib_find_fd_start_count(int fd, uint32 start_byte, uint32 count)
 {
-  OSErr retval;
+    OSErr retval;
 
-  retval = find_fd_start_count_helper (fd, start_byte, count)
-    ? noErr : afpRangeNotLocked;
+    retval = find_fd_start_count_helper(fd, start_byte, count)
+        ? noErr
+        : afpRangeNotLocked;
 
-  return retval;
+    return retval;
 }
 
 PUBLIC OSErr
-Executor::ROMlib_fd_remove_range (int fd, uint32 start_byte, uint32 count)
+Executor::ROMlib_fd_remove_range(int fd, uint32 start_byte, uint32 count)
 {
-  OSErr retval;
-  lock_entry_t *entry;
+    OSErr retval;
+    lock_entry_t *entry;
 
-  entry = find_fd_start_count_helper (fd, start_byte, count);
-  if (!entry)
-    retval = afpRangeNotLocked;
-  else
+    entry = find_fd_start_count_helper(fd, start_byte, count);
+    if(!entry)
+        retval = afpRangeNotLocked;
+    else
     {
-      delete_entry (entry);
-      retval = noErr;
+        delete_entry(entry);
+        retval = noErr;
     }
-  
-  return retval;
+
+    return retval;
 }

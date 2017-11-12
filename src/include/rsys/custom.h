@@ -16,7 +16,10 @@
 extern "C" {
 #endif
 
-enum { CUSTOM_BLOCK_SIZE = 393216, }; /* enough room for splash screen
+enum
+{
+    CUSTOM_BLOCK_SIZE = 393216,
+}; /* enough room for splash screen
 					 and license */
 
 #define CUSTOM_MAGIC 0xf6e0c5c9cb52e1bfLL
@@ -47,39 +50,34 @@ enum { CUSTOM_BLOCK_SIZE = 393216, }; /* enough room for splash screen
 
 typedef struct
 {
-  uint32 magic;
-  uint32 length;
-}
-header_t;
+    uint32 magic;
+    uint32 length;
+} header_t;
 
 typedef struct
 {
-  uint64_t magic;
-  header_t headers[0];
-  uint8 filler[CUSTOM_BLOCK_SIZE - sizeof (uint64_t)];
-}
-custom_block_t;
+    uint64_t magic;
+    header_t headers[0];
+    uint8 filler[CUSTOM_BLOCK_SIZE - sizeof(uint64_t)];
+} custom_block_t;
 
 typedef struct
 {
-  header_t head;
-  uint32 val;
-}
-custom_val_t;
+    header_t head;
+    uint32 val;
+} custom_val_t;
 
 typedef struct
 {
-  header_t head;
-  uint32 vals[0];
-}
-custom_vals_t;
+    header_t head;
+    uint32 vals[0];
+} custom_vals_t;
 
 typedef struct
 {
-  header_t head;
-  uint8 chars[0];
-}
-custom_chars_t;
+    header_t head;
+    uint8 chars[0];
+} custom_chars_t;
 
 extern custom_val_t *ROMlib_checksump;
 extern custom_vals_t *ROMlib_creatorsp;
@@ -102,7 +100,7 @@ extern custom_chars_t *ROMlib_suffix_mapsp;
 extern custom_chars_t *ROMlib_default_appp;
 extern custom_val_t *ROMlib_days_of_demop;
 
-extern void ROMlib_do_custom (void);
+extern void ROMlib_do_custom(void);
 #ifdef __cplusplus
 }
 #endif

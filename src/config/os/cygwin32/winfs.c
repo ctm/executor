@@ -3,9 +3,8 @@
  * All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_winfs[] =
-	    "$Id: winfs.c 139 2006-07-11 23:35:04Z ctm $";
+#if !defined(OMIT_RCSID_STRINGS)
+char ROMlib_rcsid_winfs[] = "$Id: winfs.c 139 2006-07-11 23:35:04Z ctm $";
 #endif
 
 /* NOTE: we have to include common.h since it sets up some macros that
@@ -179,32 +178,32 @@ closedir (DIR *dirp)
 #warning impotent fsync
 
 PUBLIC int
-fsync (int fd)
+fsync(int fd)
 {
-  int retval;
+    int retval;
 
-  retval = 0;
-  return retval;
+    retval = 0;
+    return retval;
 }
 
 #warning impotent sync
 
 PUBLIC int
-sync (void)
+sync(void)
 {
-  int retval;
+    int retval;
 
-  retval = 0;
-  return retval;
+    retval = 0;
+    return retval;
 }
 
 PUBLIC char *
-getwd (char *buf)
+getwd(char *buf)
 {
-  char *retval;
+    char *retval;
 
-  retval = getcwd (buf, MAXPATHLEN);
-  return retval;
+    retval = getcwd(buf, MAXPATHLEN);
+    return retval;
 }
 
 #warning link is just a spoof -- I think it will work for our purposes though
@@ -212,115 +211,115 @@ getwd (char *buf)
 /* serial.c and main.c */
 
 PUBLIC int
-link (const char *oldpath, const char *newpath)
+link(const char *oldpath, const char *newpath)
 {
-  int retval;
-  int hand;
+    int retval;
+    int hand;
 
-  hand = creat (newpath, O_RDWR);
-  if (hand == -1)
-    retval = -1;
-  else
+    hand = creat(newpath, O_RDWR);
+    if(hand == -1)
+        retval = -1;
+    else
     {
-      close (hand);
-      retval = 0;
+        close(hand);
+        retval = 0;
     }
-  return retval;
+    return retval;
 }
 
 #warning statfs is spoofed
 
 PUBLIC int
-statfs (const char *path, struct statfs *bufp)
+statfs(const char *path, struct statfs *bufp)
 {
-  int retval;
-  DWORD sectors_per_cluster;
-  DWORD bytes_per_sector;
-  DWORD free_clusters;
-  DWORD clusters;
-  BOOL success;
-  
-  success = GetDiskFreeSpace (path, &sectors_per_cluster, &bytes_per_sector,
-			      &free_clusters, &clusters);
-  if (success)
+    int retval;
+    DWORD sectors_per_cluster;
+    DWORD bytes_per_sector;
+    DWORD free_clusters;
+    DWORD clusters;
+    BOOL success;
+
+    success = GetDiskFreeSpace(path, &sectors_per_cluster, &bytes_per_sector,
+                               &free_clusters, &clusters);
+    if(success)
     {
-      bufp->f_bsize = bytes_per_sector;
-      bufp->f_blocks = clusters * sectors_per_cluster;
-      bufp->f_bfree = free_clusters * sectors_per_cluster;
-      bufp->f_bavail = bufp->f_bfree;
-      bufp->f_files = 10;
+        bufp->f_bsize = bytes_per_sector;
+        bufp->f_blocks = clusters * sectors_per_cluster;
+        bufp->f_bfree = free_clusters * sectors_per_cluster;
+        bufp->f_bavail = bufp->f_bfree;
+        bufp->f_files = 10;
 #warning f_files made up
-      retval = 0;
+        retval = 0;
     }
-  else
+    else
     {
-      warning_trace_info ("path = '%s'", path);
-      bufp->f_bsize = 512;
-      bufp->f_blocks = 512 * 1024 * 1024 / bufp->f_bsize;
-      bufp->f_bavail = 256 * 1024 * 1024 / bufp->f_bsize;
-      bufp->f_bfree = 256 * 1024 * 1024 / bufp->f_bsize;
-      bufp->f_files = 10;
-      retval = -1;
+        warning_trace_info("path = '%s'", path);
+        bufp->f_bsize = 512;
+        bufp->f_blocks = 512 * 1024 * 1024 / bufp->f_bsize;
+        bufp->f_bavail = 256 * 1024 * 1024 / bufp->f_bsize;
+        bufp->f_bfree = 256 * 1024 * 1024 / bufp->f_bsize;
+        bufp->f_files = 10;
+        retval = -1;
     }
 
-  return retval;
+    return retval;
 }
 
 PUBLIC int
-ROMlib_lockunlockrange (int fd, uint32 begin, uint32 count, lockunlock_t op)
+ROMlib_lockunlockrange(int fd, uint32 begin, uint32 count, lockunlock_t op)
 {
-  int retval;
-  BOOL WINAPI (*routine) (HANDLE, DWORD, DWORD, DWORD, DWORD);
+    int retval;
+    BOOL WINAPI (*routine)(HANDLE, DWORD, DWORD, DWORD, DWORD);
 
-  warning_trace_info ("fd = %d, begin = %d, count = %d, op = %d",
-		      fd, begin, count, op);
-  switch (op)
+    warning_trace_info("fd = %d, begin = %d, count = %d, op = %d",
+                       fd, begin, count, op);
+    switch(op)
     {
-    case lock:
-      routine = LockFile;
-      break;
-    case unlock:
-      routine = UnlockFile;
-      break;
-    default:
-      warning_unexpected ("op = %d", op);
-      routine = 0;
-      break;
+        case lock:
+            routine = LockFile;
+            break;
+        case unlock:
+            routine = UnlockFile;
+            break;
+        default:
+            warning_unexpected("op = %d", op);
+            routine = 0;
+            break;
     }
-    
-  if (!routine)
-    retval = paramErr;
-  else
+
+    if(!routine)
+        retval = paramErr;
+    else
     {
-      BOOL success;
-      HANDLE h;
+        BOOL success;
+        HANDLE h;
 
-      h = (HANDLE) _get_osfhandle (fd);
-      success = routine (h, begin, 0, count, 0);
-      if (success)
-	retval = noErr;
-      else
-	{
-	  DWORD err;
+        h = (HANDLE)_get_osfhandle(fd);
+        success = routine(h, begin, 0, count, 0);
+        if(success)
+            retval = noErr;
+        else
+        {
+            DWORD err;
 
-	  err = GetLastError ();
-	  switch (err)
-	    {
-	    case ERROR_LOCK_VIOLATION:
-	      retval = fLckdErr;
-	      break;
-	    case ERROR_NOT_LOCKED:
-	      retval = afpRangeNotLocked;
-	      break;
-	    case ERROR_LOCK_FAILED:
-	      retval = afpRangeOverlap;
-	      break;
-	    default:
-	      warning_unexpected ("err = %ld, h = %p", err, h);
-	      retval = noErr;
-	      break;
-	    }
-	}
+            err = GetLastError();
+            switch(err)
+            {
+                case ERROR_LOCK_VIOLATION:
+                    retval = fLckdErr;
+                    break;
+                case ERROR_NOT_LOCKED:
+                    retval = afpRangeNotLocked;
+                    break;
+                case ERROR_LOCK_FAILED:
+                    retval = afpRangeOverlap;
+                    break;
+                default:
+                    warning_unexpected("err = %ld, h = %p", err, h);
+                    retval = noErr;
+                    break;
+            }
+        }
     }
-  return retval;
+    return retval;
 }

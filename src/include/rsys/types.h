@@ -1,7 +1,7 @@
-#if !defined (_RSYS_TYPES_H_)
+#if !defined(_RSYS_TYPES_H_)
 #define _RSYS_TYPES_H_
 
-#if !defined (INT_TYPES_TYPEDEFED)
+#if !defined(INT_TYPES_TYPEDEFED)
 #include <stdint.h>
 #include <sys/types.h>
 typedef int8_t int8;
@@ -16,28 +16,28 @@ typedef uint64_t uint64;
 #define INT_TYPES_TYPEDEFED
 #endif /* !INT_TYPES_TYPEDEFED */
 
-#if !defined (INT16_MAX)
-#define INT16_MAX	((int16) 0x7FFF)
+#if !defined(INT16_MAX)
+#define INT16_MAX ((int16)0x7FFF)
 #endif
 
-#if !defined (INT16_MIN)
-#define INT16_MIN	((int16) (-INT16_MAX - 1))
+#if !defined(INT16_MIN)
+#define INT16_MIN ((int16)(-INT16_MAX - 1))
 #endif
 
-#if !defined (UINT16_MAX)
-#define UINT16_MAX	((uint16) 0xFFFF)
+#if !defined(UINT16_MAX)
+#define UINT16_MAX ((uint16)0xFFFF)
 #endif
 
-#if !defined (INT32_MAX)
-#define INT32_MAX	((int32) 0x7FFFFFFF)
+#if !defined(INT32_MAX)
+#define INT32_MAX ((int32)0x7FFFFFFF)
 #endif
 
-#if !defined (INT32_MIN)
-#define INT32_MIN	((int32) (-INT32_MAX - 1))
+#if !defined(INT32_MIN)
+#define INT32_MIN ((int32)(-INT32_MAX - 1))
 #endif
 
-#if !defined (UINT32_MAX)
-#define UINT32_MAX	((uint32) 0xFFFFFFFF)
+#if !defined(UINT32_MAX)
+#define UINT32_MAX ((uint32)0xFFFFFFFF)
 #endif
 
 #endif /* !_RSYS_TYPES_H_ */

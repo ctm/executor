@@ -8,9 +8,9 @@
  * $Id: SDL_bmp.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-extern int SDL_SaveCF_DIB (SDL_Surface *surfp, char **dib_bytesp,
-			   size_t *dib_lenp);
+extern int SDL_SaveCF_DIB(SDL_Surface *surfp, char **dib_bytesp,
+                          size_t *dib_lenp);
 
-extern SDL_Surface * SDL_LoadCF_DIB (void *mem);
+extern SDL_Surface *SDL_LoadCF_DIB(void *mem);
 
 #endif

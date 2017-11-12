@@ -1,4 +1,4 @@
-#if !defined (__rsys_wrappers_h__)
+#if !defined(__rsys_wrappers_h__)
 #define __rsys_wrappers_h__
 
 #define JWM 1
@@ -11,7 +11,7 @@
 #define WEBWARS 8
 #define PAXIMPERIA 9
 #define TEMATH 10
-/* #define ABSOLUTE 11 interferes with cygwin build  */ 
+/* #define ABSOLUTE 11 interferes with cygwin build  */
 #define BASEVIEW 12
 
 #endif

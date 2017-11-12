@@ -2,7 +2,7 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
+#if !defined(OMIT_RCSID_STRINGS)
 char ROMlib_rcsid_faux_dbm[] = "$Id: fauxdbm.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
@@ -17,7 +17,7 @@ char ROMlib_rcsid_faux_dbm[] = "$Id: fauxdbm.c 63 2004-12-24 18:19:43Z ctm $";
 
 #include "rsys/common.h"
 
-#if defined(CYGWIN32) || defined (MSDOS)
+#if defined(CYGWIN32) || defined(MSDOS)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,211 +26,210 @@ char ROMlib_rcsid_faux_dbm[] = "$Id: fauxdbm.c 63 2004-12-24 18:19:43Z ctm $";
 #include "rsys/fauxdbm.h"
 
 PUBLIC DBM *
-dbm_open (const char *name, int flags, int mode)
+dbm_open(const char *name, int flags, int mode)
 {
-  DBM *retval;
-  char *open_mode;
-  FILE *fp;
-  
-  retval = NULL;
+    DBM *retval;
+    char *open_mode;
+    FILE *fp;
 
-  if (flags == O_RDONLY)
-    open_mode = "rb";
-  else
-    open_mode = "a+b";
+    retval = NULL;
 
-  fp = fopen (name, open_mode);
-  if (fp != NULL)
+    if(flags == O_RDONLY)
+        open_mode = "rb";
+    else
+        open_mode = "a+b";
+
+    fp = fopen(name, open_mode);
+    if(fp != NULL)
     {
-      retval = malloc (sizeof *retval);
-      retval->fp = fp;
+        retval = malloc(sizeof *retval);
+        retval->fp = fp;
     }
 
-  return retval;
+    return retval;
 }
 
 PUBLIC datum
-dbm_firstkey (DBM *file)
+dbm_firstkey(DBM *file)
 {
-  datum retval;
+    datum retval;
 
-  if (!file)
+    if(!file)
     {
-      retval.dptr = 0;
-      retval.dsize = 0;
+        retval.dptr = 0;
+        retval.dsize = 0;
     }
-  else
+    else
     {
-      rewind (file->fp);
-      retval = dbm_nextkey (file);
+        rewind(file->fp);
+        retval = dbm_nextkey(file);
     }
-  return retval;
+    return retval;
 }
 
 #define KEY_ID "key" /* 4 bytes long, counting NUL */
 #define CONTENT_ID "content" /* 8 bytes long, counting NUL */
 
 PRIVATE void
-read_datum (DBM *file)
+read_datum(DBM *file)
 {
-  if (file)
+    if(file)
     {
-      char *p;
+        char *p;
 
-      p = file->buf;
-      if (fread (p, 4, 1, file->fp) != 1)
-	*(uint32 *)p = 0;
-      else
-	{
-	  int to_read;
+        p = file->buf;
+        if(fread(p, 4, 1, file->fp) != 1)
+            *(uint32 *)p = 0;
+        else
+        {
+            int to_read;
 
-	  to_read = sizeof KEY_ID + *(uint32 *)p;
-	  p += 4;
-	  while (to_read % 4)
-	    ++to_read;
-	  if (p + to_read - file->buf <= (int) sizeof file->buf)
-	    {
-	      fread (p, to_read, 1, file->fp);
-	      p += to_read;
-	      if (fread (p, 4, 1, file->fp) != 1)
-		*(uint32 *)p = 0;
-	      else
-		{
-		  to_read = sizeof CONTENT_ID + *(uint32 *)p;
-		  p += 4;
-		  while (to_read % 4)
-		    ++to_read;
-		  if (p + to_read - file->buf <= (int) sizeof file->buf)
-		    fread (p, to_read, 1, file->fp);
-		}
-	    }
-	}
+            to_read = sizeof KEY_ID + *(uint32 *)p;
+            p += 4;
+            while(to_read % 4)
+                ++to_read;
+            if(p + to_read - file->buf <= (int)sizeof file->buf)
+            {
+                fread(p, to_read, 1, file->fp);
+                p += to_read;
+                if(fread(p, 4, 1, file->fp) != 1)
+                    *(uint32 *)p = 0;
+                else
+                {
+                    to_read = sizeof CONTENT_ID + *(uint32 *)p;
+                    p += 4;
+                    while(to_read % 4)
+                        ++to_read;
+                    if(p + to_read - file->buf <= (int)sizeof file->buf)
+                        fread(p, to_read, 1, file->fp);
+                }
+            }
+        }
     }
 }
 
 PUBLIC datum
-dbm_nextkey (DBM *file)
+dbm_nextkey(DBM *file)
 {
-  datum retval;
+    datum retval;
 
-  if (!file)
+    if(!file)
     {
-      retval.dptr = 0;
-      retval.dsize = 0;
+        retval.dptr = 0;
+        retval.dsize = 0;
     }
-  else
+    else
     {
-      read_datum (file);
-      retval.dsize = *(uint32 *) file->buf;
-      if (retval.dsize)
-	retval.dptr = file->buf + sizeof (uint32) + sizeof KEY_ID;
-      else
-	retval.dptr = 0;
+        read_datum(file);
+        retval.dsize = *(uint32 *)file->buf;
+        if(retval.dsize)
+            retval.dptr = file->buf + sizeof(uint32) + sizeof KEY_ID;
+        else
+            retval.dptr = 0;
     }
-  return retval;
+    return retval;
 }
 
 PUBLIC datum
-dbm_fetch (DBM *file, datum key)
+dbm_fetch(DBM *file, datum key)
 {
-  datum retval;
-  int keysize;
-  int offset;
+    datum retval;
+    int keysize;
+    int offset;
 
-  keysize = *(uint32 *)file->buf;
-  offset = sizeof (uint32) + sizeof (KEY_ID) + keysize;
-  while (offset % 4)
-    ++offset;
-  retval.dsize = *(uint32 *)(file->buf + offset);
-  if (retval.dsize)
-    retval.dptr = file->buf + offset + sizeof (uint32) + sizeof CONTENT_ID;
-  else
-    retval.dptr = 0;
-  return retval;
+    keysize = *(uint32 *)file->buf;
+    offset = sizeof(uint32) + sizeof(KEY_ID) + keysize;
+    while(offset % 4)
+        ++offset;
+    retval.dsize = *(uint32 *)(file->buf + offset);
+    if(retval.dsize)
+        retval.dptr = file->buf + offset + sizeof(uint32) + sizeof CONTENT_ID;
+    else
+        retval.dptr = 0;
+    return retval;
 }
 
-#define RAW_LENGTH(datum, id) (sizeof (uint32) + sizeof (id) + datum.dsize)
+#define RAW_LENGTH(datum, id) (sizeof(uint32) + sizeof(id) + datum.dsize)
 
-#define PADDING(n)				\
-({						\
-  int _n = n;					\
-  _n % 4 ? 4 - _n % 4 : 0;			\
-})
+#define PADDING(n)               \
+    ({                           \
+        int _n = n;              \
+        _n % 4 ? 4 - _n % 4 : 0; \
+    })
 
 PRIVATE void
-buf_from_datum (char **opp, datum d, const char *tag)
+buf_from_datum(char **opp, datum d, const char *tag)
 {
-  char *op;
+    char *op;
 
-  op = *opp;
-  *(uint32 *) op = (uint32) d.dsize;
-  op += sizeof (uint32);
-  memcpy (op, tag, strlen (tag) + 1);
-  op += strlen (tag) + 1;
-  memcpy (op, d.dptr, d.dsize);
-  op += d.dsize;
-  while ((op - *opp) % 4)
-    ++op;
-  *opp = op;
+    op = *opp;
+    *(uint32 *)op = (uint32)d.dsize;
+    op += sizeof(uint32);
+    memcpy(op, tag, strlen(tag) + 1);
+    op += strlen(tag) + 1;
+    memcpy(op, d.dptr, d.dsize);
+    op += d.dsize;
+    while((op - *opp) % 4)
+        ++op;
+    *opp = op;
 }
 
 PUBLIC int
-dbm_store (DBM *file, datum key, datum content, int flags)
+dbm_store(DBM *file, datum key, datum content, int flags)
 {
-  int retval;
+    int retval;
 
-  retval = -1;
-  if (file)
+    retval = -1;
+    if(file)
     {
-      int key_raw_length, content_raw_length;
-      int key_padding   , content_padding;
+        int key_raw_length, content_raw_length;
+        int key_padding, content_padding;
 
-      key_raw_length     = RAW_LENGTH (key    , KEY_ID);
-      content_raw_length = RAW_LENGTH (content, CONTENT_ID);
+        key_raw_length = RAW_LENGTH(key, KEY_ID);
+        content_raw_length = RAW_LENGTH(content, CONTENT_ID);
 
-      key_padding     = PADDING (key_raw_length);
-      content_padding = PADDING (content_raw_length);
+        key_padding = PADDING(key_raw_length);
+        content_padding = PADDING(content_raw_length);
 
-      if (key_raw_length + key_padding + content_raw_length + content_padding 
-	  <= (int) sizeof file->buf)
-	{
-	  char *op;
+        if(key_raw_length + key_padding + content_raw_length + content_padding
+           <= (int)sizeof file->buf)
+        {
+            char *op;
 
-	  op = file->buf;
-	  buf_from_datum (&op, key    , KEY_ID);
-	  buf_from_datum (&op, content, CONTENT_ID);
-	  if (fwrite (file->buf, op - file->buf, 1, file->fp) == 1)
-	    retval = 0;
-	}
+            op = file->buf;
+            buf_from_datum(&op, key, KEY_ID);
+            buf_from_datum(&op, content, CONTENT_ID);
+            if(fwrite(file->buf, op - file->buf, 1, file->fp) == 1)
+                retval = 0;
+        }
     }
-  return retval;
+    return retval;
 }
 
 PUBLIC void
-dbm_close (DBM *file)
+dbm_close(DBM *file)
 {
-  if (file)
+    if(file)
     {
-      fclose (file->fp);
-      free (file);
+        fclose(file->fp);
+        free(file);
     }
 }
 
 #if 0
 
-#define XXX(datum, size)			\
-do						\
-{						\
-  int i;					\
-  char *p;					\
-						\
-  datum.dsize = size;				\
-  datum.dptr = alloca (size);			\
-  p = datum.dptr;				\
-  for (i = 0; i < size; ++i)			\
-    *p++ = '0' + size;				\
-}						\
-while (0)
+#define XXX(datum, size)           \
+    do                             \
+    {                              \
+        int i;                     \
+        char *p;                   \
+                                   \
+        datum.dsize = size;        \
+        datum.dptr = alloca(size); \
+        p = datum.dptr;            \
+        for(i = 0; i < size; ++i)  \
+            *p++ = '0' + size;     \
+    } while(0)
 
 int
 main (void)

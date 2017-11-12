@@ -2,7 +2,7 @@
  * Although written by Abacus R&D, the source code in this file is not
  * copyrighted by Abacus R&D, but is in the public domain.
  */
- 
+
 /* ardimods_main.c:  major functions of ardimods */
 
 #import <syslog.h>

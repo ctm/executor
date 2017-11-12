@@ -11,8 +11,9 @@
 
 #include "FileMgr.h"
 
-namespace MacBridge {
-	void ResolveRF();
+namespace MacBridge
+{
+void ResolveRF();
 }
 
 #endif /* defined(__CocoaExecutor__stdfile_OSX__) */

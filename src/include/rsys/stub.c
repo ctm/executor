@@ -8,8 +8,6 @@
 
 #include <stdio.h>
 
-
 extern void rsys_stub_func_154485156()
 {
-	
 }

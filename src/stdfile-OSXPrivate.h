@@ -14,8 +14,9 @@
 
 #include "stdfile.h"
 
-namespace MacBridge {
-  PUBLIC OSStatus MacCFURLToExecutorFSSpec(CFURLRef inMac, Executor::FSSpec *outExec);
+namespace MacBridge
+{
+PUBLIC OSStatus MacCFURLToExecutorFSSpec(CFURLRef inMac, Executor::FSSpec *outExec);
 }
 
 #endif /* defined(__CocoaExecutor__stdfile_OSXPrivate__) */

@@ -2,9 +2,8 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_diskinit[] =
-		    "$Id: diskinit.c 87 2005-05-25 01:57:33Z ctm $";
+#if !defined(OMIT_RCSID_STRINGS)
+char ROMlib_rcsid_diskinit[] = "$Id: diskinit.c 87 2005-05-25 01:57:33Z ctm $";
 #endif
 
 /* Forward declarations in DiskInit.h (DO NOT DELETE THIS LINE) */
@@ -37,97 +36,101 @@ P2(PUBLIC pascal trap, INTEGER, DIBadMount, Point, pt, LONGINT, evtmess)
 
 P1(PUBLIC pascal trap, OSErr, DIFormat, INTEGER, dn)
 {
-  return noErr; /* We don't do low-level formats right now */
+    return noErr; /* We don't do low-level formats right now */
 }
 
 enum
 {
-  FLOPPY_SIDES_PER_DISK = 2,
-  FLOPPY_TRACKS_PER_SIDE = 80,
-  FLOPPY_SECTORS_PER_TRACK = 18,
-  FLOPPY_SECTORS_PER_DISK = FLOPPY_SIDES_PER_DISK * FLOPPY_TRACKS_PER_SIDE
-    * FLOPPY_SECTORS_PER_TRACK,
+    FLOPPY_SIDES_PER_DISK = 2,
+    FLOPPY_TRACKS_PER_SIDE = 80,
+    FLOPPY_SECTORS_PER_TRACK = 18,
+    FLOPPY_SECTORS_PER_DISK = FLOPPY_SIDES_PER_DISK * FLOPPY_TRACKS_PER_SIDE
+        * FLOPPY_SECTORS_PER_TRACK,
 };
 
 PRIVATE OSErr
-get_vref_dref (INTEGER rn, INTEGER *vrefp, INTEGER *drefp)
+get_vref_dref(INTEGER rn, INTEGER *vrefp, INTEGER *drefp)
 {
-  OSErr retval;
+    OSErr retval;
 
-  retval = noErr;
-  *vrefp = rn;
-  *drefp = OURHFSDREF;
-  return retval;
+    retval = noErr;
+    *vrefp = rn;
+    *drefp = OURHFSDREF;
+    return retval;
 }
 
-typedef struct {
-  INTEGER vref;
-  INTEGER dref;
-  LONGINT pos;
+typedef struct
+{
+    INTEGER vref;
+    INTEGER dref;
+    LONGINT pos;
 } our_file_info_t;
 
-typedef OSErrRET (*func_t) (ParmBlkPtr pb, BOOLEAN async);
+typedef OSErrRET (*func_t)(ParmBlkPtr pb, BOOLEAN async);
 
 PRIVATE OSErr
-raw_read_write (func_t func, our_file_info_t *op, LONGINT *lengthp,
-		char buf[])
+raw_read_write(func_t func, our_file_info_t *op, LONGINT *lengthp,
+               char buf[])
 {
-  OSErr retval;
-  ParamBlockRec pbr;
+    OSErr retval;
+    ParamBlockRec pbr;
 
-  check_virtual_interrupt ();
-  pbr.ioParam.ioVRefNum = CW (op->vref);
-  pbr.ioParam.ioRefNum = CW (op->dref);
-  pbr.ioParam.ioBuffer = RM ((Ptr)buf);
-  pbr.ioParam.ioReqCount = CL (*lengthp);
-  pbr.ioParam.ioPosMode = CWC (fsFromStart);
-  pbr.ioParam.ioPosOffset = CL (op->pos);
-  retval = func (&pbr, false);
-  if (retval == noErr)
+    check_virtual_interrupt();
+    pbr.ioParam.ioVRefNum = CW(op->vref);
+    pbr.ioParam.ioRefNum = CW(op->dref);
+    pbr.ioParam.ioBuffer = RM((Ptr)buf);
+    pbr.ioParam.ioReqCount = CL(*lengthp);
+    pbr.ioParam.ioPosMode = CWC(fsFromStart);
+    pbr.ioParam.ioPosOffset = CL(op->pos);
+    retval = func(&pbr, false);
+    if(retval == noErr)
     {
-      *lengthp = CL (pbr.ioParam.ioActCount);
-      op->pos += CL (pbr.ioParam.ioActCount);
+        *lengthp = CL(pbr.ioParam.ioActCount);
+        op->pos += CL(pbr.ioParam.ioActCount);
     }
-  return retval;
+    return retval;
 }
 
 PRIVATE OSErr
-raw_read (our_file_info_t *op, LONGINT *lengthp, char buf[])
+raw_read(our_file_info_t *op, LONGINT *lengthp, char buf[])
 {
-  return raw_read_write (PBRead, op, lengthp, buf);
+    return raw_read_write(PBRead, op, lengthp, buf);
 }
 
 PRIVATE OSErr
-raw_write (our_file_info_t *op, LONGINT *lengthp, char buf[])
+raw_write(our_file_info_t *op, LONGINT *lengthp, char buf[])
 {
-  return raw_read_write (PBWrite, op, lengthp, buf);
+    return raw_read_write(PBWrite, op, lengthp, buf);
 }
 
-enum { N_TRACK_BYTES = (PHYSBSIZE * FLOPPY_SIDES_PER_DISK
-			* FLOPPY_SECTORS_PER_TRACK) };
+enum
+{
+    N_TRACK_BYTES = (PHYSBSIZE * FLOPPY_SIDES_PER_DISK
+                     * FLOPPY_SECTORS_PER_TRACK)
+};
 
 P1(PUBLIC pascal trap, OSErr, DIVerify, INTEGER, dn)
 {
-  int i;
-  char buf[N_TRACK_BYTES];
-  LONGINT length;
-  OSErr err;
-  our_file_info_t oi;
+    int i;
+    char buf[N_TRACK_BYTES];
+    LONGINT length;
+    OSErr err;
+    our_file_info_t oi;
 
-  err = get_vref_dref (dn, &oi.vref, &oi.dref);
-  oi.pos = 0;
-  if (err == noErr)
+    err = get_vref_dref(dn, &oi.vref, &oi.dref);
+    oi.pos = 0;
+    if(err == noErr)
     {
-      for (i = 0, err = noErr; err == noErr && i < FLOPPY_TRACKS_PER_SIDE; ++i)
-	{
-	  length = sizeof(buf);
-	  err = raw_read (&oi, &length, buf);
-	  if (err == noErr && length != sizeof(buf))
-	    err = ioErr;
-	}
+        for(i = 0, err = noErr; err == noErr && i < FLOPPY_TRACKS_PER_SIDE; ++i)
+        {
+            length = sizeof(buf);
+            err = raw_read(&oi, &length, buf);
+            if(err == noErr && length != sizeof(buf))
+                err = ioErr;
+        }
     }
 
-  return err;
+    return err;
 }
 
 /*
@@ -141,82 +144,82 @@ PRIVATE long offset;
 PRIVATE long length;
 
 PRIVATE OSErr
-begin_track_buffering_for_write (void)
+begin_track_buffering_for_write(void)
 {
-  OSErr retval;
+    OSErr retval;
 
-  track_bufp = NewPtr (N_TRACK_BYTES);
-  if (track_bufp)
+    track_bufp = NewPtr(N_TRACK_BYTES);
+    if(track_bufp)
     {
-      retval = noErr;
-      offset = 0;
-      length = 0;
+        retval = noErr;
+        offset = 0;
+        length = 0;
     }
-  else
-    retval = CW(MemErr);
-  return retval;
+    else
+        retval = CW(MemErr);
+    return retval;
 }
 
 PRIVATE OSErr
-flush_buffer (our_file_info_t *ofitp)
+flush_buffer(our_file_info_t *ofitp)
 {
-  OSErr retval;
-  LONGINT n_to_write;
+    OSErr retval;
+    LONGINT n_to_write;
 
-  n_to_write = length;
+    n_to_write = length;
 
-  retval = raw_write (ofitp, &n_to_write, (char *) track_bufp);
-  if (retval == noErr && n_to_write != length)
-    retval = ioErr;
-  else
+    retval = raw_write(ofitp, &n_to_write, (char *)track_bufp);
+    if(retval == noErr && n_to_write != length)
+        retval = ioErr;
+    else
     {
-      length = 0;
-      offset += n_to_write;
+        length = 0;
+        offset += n_to_write;
     }
-  return retval;
+    return retval;
 }
 
 PRIVATE size_t
-writefunc (int magic, const void *buf, size_t buf_len)
+writefunc(int magic, const void *buf, size_t buf_len)
 {
-  OSErr err = noErr;
-  our_file_info_t *ofip;
-  char *bufp;
-  size_t buf_len_remaining;
+    OSErr err = noErr;
+    our_file_info_t *ofip;
+    char *bufp;
+    size_t buf_len_remaining;
 
-  buf_len_remaining = buf_len;
-  ofip = (our_file_info_t *) magic;
-  if (ofip->pos != offset)
-    warning_unexpected ("ofip->pos = %d, offset = %ld\n", ofip->pos, offset);
-  
-  bufp = (char*)buf;
-  while (err == noErr && buf_len_remaining > 0)
+    buf_len_remaining = buf_len;
+    ofip = (our_file_info_t *)magic;
+    if(ofip->pos != offset)
+        warning_unexpected("ofip->pos = %d, offset = %ld\n", ofip->pos, offset);
+
+    bufp = (char *)buf;
+    while(err == noErr && buf_len_remaining > 0)
     {
-      uint32 n_bytes_left, n_to_copy;
+        uint32 n_bytes_left, n_to_copy;
 
-      n_bytes_left = N_TRACK_BYTES - length;
-      n_to_copy = MIN (n_bytes_left, buf_len_remaining);
-      memcpy (track_bufp + length, bufp, n_to_copy);
-      length += n_to_copy;
-      if (length == N_TRACK_BYTES)
-	err = flush_buffer(ofip);
-      buf_len_remaining -= n_to_copy;
+        n_bytes_left = N_TRACK_BYTES - length;
+        n_to_copy = MIN(n_bytes_left, buf_len_remaining);
+        memcpy(track_bufp + length, bufp, n_to_copy);
+        length += n_to_copy;
+        if(length == N_TRACK_BYTES)
+            err = flush_buffer(ofip);
+        buf_len_remaining -= n_to_copy;
     }
-  return err ? 0 : buf_len;
+    return err ? 0 : buf_len;
 }
 
 PRIVATE OSErr
-end_track_buffering_for_write (our_file_info_t *ofitp)
+end_track_buffering_for_write(our_file_info_t *ofitp)
 {
-  OSErr retval;
+    OSErr retval;
 
-  if (length)
-    retval = flush_buffer (ofitp);
-  else
-    retval = noErr;
-  DisposPtr (track_bufp);
-  track_bufp = 0;
-  return retval;
+    if(length)
+        retval = flush_buffer(ofitp);
+    else
+        retval = noErr;
+    DisposPtr(track_bufp);
+    track_bufp = 0;
+    return retval;
 }
 
 /*
@@ -225,34 +228,34 @@ end_track_buffering_for_write (our_file_info_t *ofitp)
 
 P2(PUBLIC pascal trap, OSErr, DIZero, INTEGER, dn, StringPtr, vname)
 {
-  OSErr err;
-  GUEST<ULONGINT> time;
-  int name_len;
-  char *name;
-  our_file_info_t oi;
+    OSErr err;
+    GUEST<ULONGINT> time;
+    int name_len;
+    char *name;
+    our_file_info_t oi;
 
-  name_len = vname[0];
-  name = (char*)alloca(name_len + 1);
-  memcpy(name, vname+1, name_len);
-  name[name_len] = 0;
-  GetDateTime(&time);
-  
-  err = get_vref_dref (dn, &oi.vref, &oi.dref);
-  if (err == noErr)
+    name_len = vname[0];
+    name = (char *)alloca(name_len + 1);
+    memcpy(name, vname + 1, name_len);
+    name[name_len] = 0;
+    GetDateTime(&time);
+
+    err = get_vref_dref(dn, &oi.vref, &oi.dref);
+    if(err == noErr)
     {
-      oi.pos = 0;
-      err = begin_track_buffering_for_write ();
-      if (err == noErr)
-	{
-	  OSErr err2;
+        oi.pos = 0;
+        err = begin_track_buffering_for_write();
+        if(err == noErr)
+        {
+            OSErr err2;
 
-          #warning disk init unsupported
-	  //err = format_disk(time, name, FLOPPY_SECTORS_PER_DISK, writefunc,
-	//		    (int) &oi);
-	  err2 = end_track_buffering_for_write (&oi);
-	  if (err == noErr)
-	    err = err2;
-	}
+#warning disk init unsupported
+            //err = format_disk(time, name, FLOPPY_SECTORS_PER_DISK, writefunc,
+            //		    (int) &oi);
+            err2 = end_track_buffering_for_write(&oi);
+            if(err == noErr)
+                err = err2;
+        }
     }
-  return err;
+    return err;
 }

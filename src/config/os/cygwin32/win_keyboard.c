@@ -2,7 +2,7 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
+#if !defined(OMIT_RCSID_STRINGS)
 char ROMlib_rcsid_win_keyboard[] = "$Id: win_keyboard.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
@@ -18,14 +18,14 @@ char ROMlib_rcsid_win_keyboard[] = "$Id: win_keyboard.c 63 2004-12-24 18:19:43Z 
 #include "win_keyboard.h"
 
 PUBLIC void
-ROMlib_set_caps_lock_off (void)
+ROMlib_set_caps_lock_off(void)
 {
-  if (GetKeyState (VK_CAPITAL) & 1)
+    if(GetKeyState(VK_CAPITAL) & 1)
     {
-      char state[256];
+        char state[256];
 
-      GetKeyboardState (state);
-      state[VK_CAPITAL] = 0;
-      SetKeyboardState (state);
+        GetKeyboardState(state);
+        state[VK_CAPITAL] = 0;
+        SetKeyboardState(state);
     }
 }

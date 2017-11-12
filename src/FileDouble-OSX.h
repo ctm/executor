@@ -13,8 +13,8 @@
 #include "rsys/suffix_maps.h"
 #include "rsys/osutil.h"
 
-namespace MacBridge {
-  
+namespace MacBridge
+{
 }
 
 #endif /* defined(__CocoaExecutor__FileDouble_OSX__) */

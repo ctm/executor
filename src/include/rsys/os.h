@@ -1,4 +1,4 @@
-#if !defined (_RSYS_OS_H_)
+#if !defined(_RSYS_OS_H_)
 #define _RSYS_OS_H_
 
 /*
@@ -7,8 +7,9 @@
  *
  * $Id: os.h 63 2004-12-24 18:19:43Z ctm $
  */
-namespace Executor {
-extern bool os_init (void);
+namespace Executor
+{
+extern bool os_init(void);
 }
 
 #endif /* !_RSYS_OS_H_ */

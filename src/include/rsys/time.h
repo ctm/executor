@@ -1,4 +1,4 @@
-#if !defined (_RSYS_TIME_H_)
+#if !defined(_RSYS_TIME_H_)
 #define _RSYS_TIME_H_
 
 /*
@@ -10,14 +10,15 @@
 
 extern struct timeval ROMlib_start_time;
 
-extern unsigned long msecs_elapsed (void);
+extern unsigned long msecs_elapsed(void);
 
-namespace Executor {
-#if !defined (USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
+namespace Executor
+{
+#if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 extern QHdr ROMlib_timehead;
 
-#if defined (SYN68K)
-extern syn68k_addr_t catchalarm (syn68k_addr_t pc, void *unused);
+#if defined(SYN68K)
+extern syn68k_addr_t catchalarm(syn68k_addr_t pc, void *unused);
 #endif
 #endif
 }

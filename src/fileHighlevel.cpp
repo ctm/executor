@@ -8,10 +8,8 @@
 	  faster and a little easier to debug, but not enough of any to
 	  make it sensible to do that initially.  */
 
-
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_fileHighlevel[] =
-	"$Id: fileHighlevel.c 86 2005-05-25 00:47:12Z ctm $";
+#if !defined(OMIT_RCSID_STRINGS)
+char ROMlib_rcsid_fileHighlevel[] = "$Id: fileHighlevel.c 86 2005-05-25 00:47:12Z ctm $";
 #endif
 
 #include "rsys/common.h"
@@ -35,33 +33,33 @@ using namespace Executor;
  */
 
 PRIVATE void
-extract_name (Str255 dest, StringPtr source)
+extract_name(Str255 dest, StringPtr source)
 {
-  int len, new_len;
-  Byte *p;
-  
-  len = source[0];
-  if (source[len] == ':') /* ignore trailing ':' */
-    --len;
-  for (p = source + len; p >= source+1 && *p != ':'; --p)
-    ;
-  new_len = len - (p - source);
-  dest[0] = new_len;
-  memmove (dest+1, p+1, new_len);
+    int len, new_len;
+    Byte *p;
+
+    len = source[0];
+    if(source[len] == ':') /* ignore trailing ':' */
+        --len;
+    for(p = source + len; p >= source + 1 && *p != ':'; --p)
+        ;
+    new_len = len - (p - source);
+    dest[0] = new_len;
+    memmove(dest + 1, p + 1, new_len);
 }
 
-P4 (PUBLIC pascal trap, OSErr, FSMakeFSSpec,
-    int16, vRefNum, int32, dir_id,
-    Str255, file_name, FSSpecPtr, spec)
+P4(PUBLIC pascal trap, OSErr, FSMakeFSSpec,
+   int16, vRefNum, int32, dir_id,
+   Str255, file_name, FSSpecPtr, spec)
 {
-  Str255 local_file_name;
-  OSErr retval;
-  HParamBlockRec hpb;
+    Str255 local_file_name;
+    OSErr retval;
+    HParamBlockRec hpb;
 
-  if (!file_name)
-    warning_unexpected("!file_name");
+    if(!file_name)
+        warning_unexpected("!file_name");
 
-/*
+    /*
  * Colons make things tricky because they are used both to identify volumes
  * and to delimit directories and sometimes to identify partial paths.  Right
  * now, most of these uses of colon shouldn't cause problems, but there are
@@ -79,61 +77,61 @@ P4 (PUBLIC pascal trap, OSErr, FSMakeFSSpec,
  * and dir_id = a number that isn't a directory id?
  */
 
-  if (pstr_index_after (file_name, ':', 0))
-    warning_unexpected ("colon found");
+    if(pstr_index_after(file_name, ':', 0))
+        warning_unexpected("colon found");
 
-  str255assign (local_file_name, file_name);
-  hpb.volumeParam.ioNamePtr =  RM ((StringPtr) local_file_name);
-  hpb.volumeParam.ioVRefNum = CW (vRefNum);
-  if (file_name[0])
-    hpb.volumeParam.ioVolIndex = CWC(-1);
-  else
-    hpb.volumeParam.ioVolIndex = CWC(0);
+    str255assign(local_file_name, file_name);
+    hpb.volumeParam.ioNamePtr = RM((StringPtr)local_file_name);
+    hpb.volumeParam.ioVRefNum = CW(vRefNum);
+    if(file_name[0])
+        hpb.volumeParam.ioVolIndex = CWC(-1);
+    else
+        hpb.volumeParam.ioVolIndex = CWC(0);
 
-  retval = PBHGetVInfo (&hpb, false);
+    retval = PBHGetVInfo(&hpb, false);
 
-  if (retval == noErr)
+    if(retval == noErr)
     {
-      CInfoPBRec cpb;
-      
-      str255assign (local_file_name, file_name);
-      cpb.hFileInfo.ioNamePtr = RM ((StringPtr) local_file_name);
-      cpb.hFileInfo.ioVRefNum = CW (vRefNum);
-      if (file_name[0])
-	cpb.hFileInfo.ioFDirIndex = CWC (0);
-      else
-	cpb.hFileInfo.ioFDirIndex = CWC (-1);
-      cpb.hFileInfo.ioDirID = CL (dir_id);
-      retval = PBGetCatInfo (&cpb, false);
-      if (retval == noErr)
-	{
-	  spec->vRefNum = hpb.volumeParam.ioVRefNum;
-	  spec->parID = cpb.hFileInfo.ioFlParID;
-	  extract_name ((StringPtr) spec->name, MR (cpb.hFileInfo.ioNamePtr));
-	}
-      else if (retval == fnfErr)
-	{
-	  OSErr err;
-	  
-	  cpb.hFileInfo.ioNamePtr = nullptr;
-	  cpb.hFileInfo.ioVRefNum = CW (vRefNum);
-	  cpb.hFileInfo.ioFDirIndex = CWC (-1);
-	  cpb.hFileInfo.ioDirID = CL (dir_id);
-	  err = PBGetCatInfo (&cpb, false);
-	  if (err == noErr)
-	    {
-	      if (cpb.hFileInfo.ioFlAttrib & ATTRIB_ISADIR)
-		{
-		  spec->vRefNum = hpb.volumeParam.ioVRefNum;
-		  spec->parID = CL (dir_id);
-		  extract_name ((StringPtr) spec->name, file_name);
-		}
-	      else 
-		retval = dupFNErr;
-	    }
-	}
+        CInfoPBRec cpb;
+
+        str255assign(local_file_name, file_name);
+        cpb.hFileInfo.ioNamePtr = RM((StringPtr)local_file_name);
+        cpb.hFileInfo.ioVRefNum = CW(vRefNum);
+        if(file_name[0])
+            cpb.hFileInfo.ioFDirIndex = CWC(0);
+        else
+            cpb.hFileInfo.ioFDirIndex = CWC(-1);
+        cpb.hFileInfo.ioDirID = CL(dir_id);
+        retval = PBGetCatInfo(&cpb, false);
+        if(retval == noErr)
+        {
+            spec->vRefNum = hpb.volumeParam.ioVRefNum;
+            spec->parID = cpb.hFileInfo.ioFlParID;
+            extract_name((StringPtr)spec->name, MR(cpb.hFileInfo.ioNamePtr));
+        }
+        else if(retval == fnfErr)
+        {
+            OSErr err;
+
+            cpb.hFileInfo.ioNamePtr = nullptr;
+            cpb.hFileInfo.ioVRefNum = CW(vRefNum);
+            cpb.hFileInfo.ioFDirIndex = CWC(-1);
+            cpb.hFileInfo.ioDirID = CL(dir_id);
+            err = PBGetCatInfo(&cpb, false);
+            if(err == noErr)
+            {
+                if(cpb.hFileInfo.ioFlAttrib & ATTRIB_ISADIR)
+                {
+                    spec->vRefNum = hpb.volumeParam.ioVRefNum;
+                    spec->parID = CL(dir_id);
+                    extract_name((StringPtr)spec->name, file_name);
+                }
+                else
+                    retval = dupFNErr;
+            }
+        }
     }
-  return retval;
+    return retval;
 }
 
 #if 0
@@ -284,18 +282,18 @@ release_fcb_info (save_fcb_info_t *infop)
  */
 
 PRIVATE void
-create_temp_name (Str63 name, int i)
+create_temp_name(Str63 name, int i)
 {
-  OSErr err;
-  ProcessSerialNumber psn;
+    OSErr err;
+    ProcessSerialNumber psn;
 
-  err = GetCurrentProcess (&psn);
-  if (err == noErr)
-    sprintf ((char *) name+1,
-	     "%x%x.%x", CL (psn.highLongOfPSN), CL (psn.lowLongOfPSN), i);
-  else
-    sprintf ((char *) name+1, "%d.%x", err, i);
-  name[0] = strlen ((char *) name+1);
+    err = GetCurrentProcess(&psn);
+    if(err == noErr)
+        sprintf((char *)name + 1,
+                "%x%x.%x", CL(psn.highLongOfPSN), CL(psn.lowLongOfPSN), i);
+    else
+        sprintf((char *)name + 1, "%d.%x", err, i);
+    name[0] = strlen((char *)name + 1);
 }
 
 /*
@@ -304,8 +302,8 @@ create_temp_name (Str63 name, int i)
  * so for now we do the same thing on both.
  */
 
-P2 (PUBLIC pascal trap, OSErr, FSpExchangeFiles,
-    FSSpecPtr, src, FSSpecPtr, dst)
+P2(PUBLIC pascal trap, OSErr, FSpExchangeFiles,
+   FSSpecPtr, src, FSSpecPtr, dst)
 {
 #if 0
   save_fcb_info_t *src_fcb_info, *dst_fcb_info;
@@ -336,284 +334,281 @@ P2 (PUBLIC pascal trap, OSErr, FSpExchangeFiles,
 
   return retval;
 #else
-  OSErr retval;
+    OSErr retval;
 
-  warning_unimplemented ("poorly implemented");
-  if (src->vRefNum != dst->vRefNum)
-    retval = diffVolErr;
-  else if (ROMlib_creator != TICK("PAUP") || src->parID != dst->parID)
-    retval = wrgVolTypeErr;
-  else
+    warning_unimplemented("poorly implemented");
+    if(src->vRefNum != dst->vRefNum)
+        retval = diffVolErr;
+    else if(ROMlib_creator != TICK("PAUP") || src->parID != dst->parID)
+        retval = wrgVolTypeErr;
+    else
     {
-      /* Evil hack to get PAUP to work -- doesn't bother adjusting FCBs */
-      FSSpec tmp_spec;
-      int i;
-      
-      i = 0;
-      tmp_spec = *dst;
-      do
-	{
-	  create_temp_name (tmp_spec.name, i++);
-	  retval = FSpRename (dst, tmp_spec.name);
-	}
-      while (retval == dupFNErr);
-      if (retval == noErr)
-	{
-	  retval = FSpRename (src, dst->name);
-	  if (retval != noErr)
-	    FSpRename (&tmp_spec, dst->name);
-	  else
-	    {
-	      retval = FSpRename (&tmp_spec, src->name);
-	      if (retval != noErr)
-		{
-		  FSpRename (dst, src->name);
-		  FSpRename (&tmp_spec, dst->name);
-		}
-	    }
-	} 
+        /* Evil hack to get PAUP to work -- doesn't bother adjusting FCBs */
+        FSSpec tmp_spec;
+        int i;
+
+        i = 0;
+        tmp_spec = *dst;
+        do
+        {
+            create_temp_name(tmp_spec.name, i++);
+            retval = FSpRename(dst, tmp_spec.name);
+        } while(retval == dupFNErr);
+        if(retval == noErr)
+        {
+            retval = FSpRename(src, dst->name);
+            if(retval != noErr)
+                FSpRename(&tmp_spec, dst->name);
+            else
+            {
+                retval = FSpRename(&tmp_spec, src->name);
+                if(retval != noErr)
+                {
+                    FSpRename(dst, src->name);
+                    FSpRename(&tmp_spec, dst->name);
+                }
+            }
+        }
     }
-  return retval;
+    return retval;
 #endif
 }
 
-typedef OSErrRET (*open_procp) (HParmBlkPtr pb, BOOLEAN sync);
+typedef OSErrRET (*open_procp)(HParmBlkPtr pb, BOOLEAN sync);
 
 PRIVATE OSErr
-open_helper (FSSpecPtr spec, SignedByte perms, GUEST<int16> *refoutp,
-	     open_procp procp)
+open_helper(FSSpecPtr spec, SignedByte perms, GUEST<int16> *refoutp,
+            open_procp procp)
 {
-  OSErr retval;
-  HParamBlockRec hpb;
+    OSErr retval;
+    HParamBlockRec hpb;
 
-  hpb.ioParam.ioVRefNum = spec->vRefNum;
-  hpb.fileParam.ioDirID = spec->parID;
-  hpb.ioParam.ioNamePtr = RM ((StringPtr) spec->name);
-  if (perms == fsWrPerm)
+    hpb.ioParam.ioVRefNum = spec->vRefNum;
+    hpb.fileParam.ioDirID = spec->parID;
+    hpb.ioParam.ioNamePtr = RM((StringPtr)spec->name);
+    if(perms == fsWrPerm)
     {
-      warning_unexpected (NULL_STRING);
-      perms = fsRdWrPerm;
+        warning_unexpected(NULL_STRING);
+        perms = fsRdWrPerm;
     }
-  hpb.ioParam.ioPermssn = perms;
-  warning_unimplemented ("poorly implemented ... will try to open drivers");
-  retval = procp (&hpb, false);
-  if (retval == noErr)
-    *refoutp = hpb.ioParam.ioRefNum;
-  return retval;
+    hpb.ioParam.ioPermssn = perms;
+    warning_unimplemented("poorly implemented ... will try to open drivers");
+    retval = procp(&hpb, false);
+    if(retval == noErr)
+        *refoutp = hpb.ioParam.ioRefNum;
+    return retval;
 }
 
-P3 (PUBLIC pascal trap, OSErr, FSpOpenDF,
-    FSSpecPtr, spec, SignedByte, perms, GUEST<int16> *, refoutp)
+P3(PUBLIC pascal trap, OSErr, FSpOpenDF,
+   FSSpecPtr, spec, SignedByte, perms, GUEST<int16> *, refoutp)
 {
-  return open_helper (spec, perms, refoutp, PBHOpen);
+    return open_helper(spec, perms, refoutp, PBHOpen);
 }
 
-P3 (PUBLIC pascal trap, OSErr, FSpOpenRF,
-    FSSpecPtr, spec, SignedByte, perms, GUEST<int16> *, refoutp)
+P3(PUBLIC pascal trap, OSErr, FSpOpenRF,
+   FSSpecPtr, spec, SignedByte, perms, GUEST<int16> *, refoutp)
 {
-  return open_helper (spec, perms, refoutp, PBHOpenRF);
+    return open_helper(spec, perms, refoutp, PBHOpenRF);
 }
 
-P4 (PUBLIC pascal trap, OSErr, FSpCreate,
-    FSSpecPtr, spec, OSType, creator, OSType, file_type,
-    ScriptCode, script)
+P4(PUBLIC pascal trap, OSErr, FSpCreate,
+   FSSpecPtr, spec, OSType, creator, OSType, file_type,
+   ScriptCode, script)
 {
-  OSErr retval;
+    OSErr retval;
 
-  retval = HCreate (CW (spec->vRefNum), CL (spec->parID), spec->name,
-		    creator, file_type);
-  return retval;
+    retval = HCreate(CW(spec->vRefNum), CL(spec->parID), spec->name,
+                     creator, file_type);
+    return retval;
 }
 
-P3 (PUBLIC pascal trap, OSErr, FSpDirCreate,
-    FSSpecPtr, spec, ScriptCode, script,
-    GUEST<int32> *, created_dir_id)
+P3(PUBLIC pascal trap, OSErr, FSpDirCreate,
+   FSSpecPtr, spec, ScriptCode, script,
+   GUEST<int32> *, created_dir_id)
 {
-  OSErr retval;
-  HParamBlockRec hpb;
+    OSErr retval;
+    HParamBlockRec hpb;
 
-  hpb.ioParam.ioVRefNum = spec->vRefNum;
-  hpb.fileParam.ioDirID = spec->parID;
-  hpb.ioParam.ioNamePtr = RM ((StringPtr) spec->name);
-  retval = PBDirCreate (&hpb, false);
-  if (retval == noErr)
-    *created_dir_id = hpb.fileParam.ioDirID;
-  return retval;
+    hpb.ioParam.ioVRefNum = spec->vRefNum;
+    hpb.fileParam.ioDirID = spec->parID;
+    hpb.ioParam.ioNamePtr = RM((StringPtr)spec->name);
+    retval = PBDirCreate(&hpb, false);
+    if(retval == noErr)
+        *created_dir_id = hpb.fileParam.ioDirID;
+    return retval;
 }
 
-P1 (PUBLIC pascal trap, OSErr, FSpDelete,
-    FSSpecPtr, spec)
+P1(PUBLIC pascal trap, OSErr, FSpDelete,
+   FSSpecPtr, spec)
 {
-  OSErr retval;
-  HParamBlockRec hpb;
+    OSErr retval;
+    HParamBlockRec hpb;
 
-  hpb.ioParam.ioVRefNum = spec->vRefNum;
-  hpb.fileParam.ioDirID = spec->parID;
-  hpb.ioParam.ioNamePtr = RM ((StringPtr) spec->name);
-  retval = PBHDelete (&hpb, false);
-  return retval;
+    hpb.ioParam.ioVRefNum = spec->vRefNum;
+    hpb.fileParam.ioDirID = spec->parID;
+    hpb.ioParam.ioNamePtr = RM((StringPtr)spec->name);
+    retval = PBHDelete(&hpb, false);
+    return retval;
 }
 
-P2 (PUBLIC pascal trap, OSErr, FSpGetFInfo,
-    FSSpecPtr, spec, FInfo *, fndr_info)
+P2(PUBLIC pascal trap, OSErr, FSpGetFInfo,
+   FSSpecPtr, spec, FInfo *, fndr_info)
 {
-  OSErr retval;
-  HParamBlockRec hpb;
+    OSErr retval;
+    HParamBlockRec hpb;
 
-  hpb.fileParam.ioVRefNum = spec->vRefNum;
-  hpb.fileParam.ioDirID = spec->parID;
-  hpb.fileParam.ioNamePtr = RM ((StringPtr) spec->name);
-  hpb.fileParam.ioFDirIndex = CWC (0);
-  retval = PBHGetFInfo (&hpb, false);
-  if (retval == noErr)
-    *fndr_info = hpb.fileParam.ioFlFndrInfo;
-  return retval;
+    hpb.fileParam.ioVRefNum = spec->vRefNum;
+    hpb.fileParam.ioDirID = spec->parID;
+    hpb.fileParam.ioNamePtr = RM((StringPtr)spec->name);
+    hpb.fileParam.ioFDirIndex = CWC(0);
+    retval = PBHGetFInfo(&hpb, false);
+    if(retval == noErr)
+        *fndr_info = hpb.fileParam.ioFlFndrInfo;
+    return retval;
 }
 
-P2 (PUBLIC pascal trap, OSErr, FSpSetFInfo,
-    FSSpecPtr, spec, FInfo *, fndr_info)
+P2(PUBLIC pascal trap, OSErr, FSpSetFInfo,
+   FSSpecPtr, spec, FInfo *, fndr_info)
 {
-  OSErr retval;
-  HParamBlockRec hpb;
+    OSErr retval;
+    HParamBlockRec hpb;
 
-  warning_unimplemented ("poorly implemented: call of PBHGetFInfo wasteful");
-  hpb.fileParam.ioVRefNum = spec->vRefNum;
-  hpb.fileParam.ioDirID = spec->parID;
-  hpb.fileParam.ioNamePtr = RM ((StringPtr) spec->name);
-  hpb.fileParam.ioFDirIndex = CWC (0);
-  retval = PBHGetFInfo (&hpb, false);
-  if (retval == noErr)
+    warning_unimplemented("poorly implemented: call of PBHGetFInfo wasteful");
+    hpb.fileParam.ioVRefNum = spec->vRefNum;
+    hpb.fileParam.ioDirID = spec->parID;
+    hpb.fileParam.ioNamePtr = RM((StringPtr)spec->name);
+    hpb.fileParam.ioFDirIndex = CWC(0);
+    retval = PBHGetFInfo(&hpb, false);
+    if(retval == noErr)
     {
-      hpb.fileParam.ioDirID = spec->parID;
-      hpb.fileParam.ioFlFndrInfo = *fndr_info;
-      retval = PBHSetFInfo (&hpb, false);
+        hpb.fileParam.ioDirID = spec->parID;
+        hpb.fileParam.ioFlFndrInfo = *fndr_info;
+        retval = PBHSetFInfo(&hpb, false);
     }
-  return retval;
+    return retval;
 }
 
-typedef OSErrRET (*lock_procp) (HParmBlkPtr pb, BOOLEAN async);
+typedef OSErrRET (*lock_procp)(HParmBlkPtr pb, BOOLEAN async);
 
 PRIVATE OSErr
-lock_helper (FSSpecPtr spec, lock_procp procp)
+lock_helper(FSSpecPtr spec, lock_procp procp)
 {
-  OSErr retval;
-  HParamBlockRec hpb;
+    OSErr retval;
+    HParamBlockRec hpb;
 
-  hpb.fileParam.ioVRefNum = spec->vRefNum;
-  hpb.fileParam.ioDirID = spec->parID;
-  hpb.fileParam.ioNamePtr = RM ((StringPtr) spec->name);
-  retval = procp (&hpb, false);
-  return retval;
+    hpb.fileParam.ioVRefNum = spec->vRefNum;
+    hpb.fileParam.ioDirID = spec->parID;
+    hpb.fileParam.ioNamePtr = RM((StringPtr)spec->name);
+    retval = procp(&hpb, false);
+    return retval;
 }
 
-P1 (PUBLIC pascal trap, OSErr, FSpSetFLock,
-    FSSpecPtr, spec)
+P1(PUBLIC pascal trap, OSErr, FSpSetFLock,
+   FSSpecPtr, spec)
 {
-  return lock_helper (spec, PBHSetFLock);
+    return lock_helper(spec, PBHSetFLock);
 }
 
-P1 (PUBLIC pascal trap, OSErr, FSpRstFLock,
-    FSSpecPtr, spec)
+P1(PUBLIC pascal trap, OSErr, FSpRstFLock,
+   FSSpecPtr, spec)
 {
-  return lock_helper (spec, PBHRstFLock);
+    return lock_helper(spec, PBHRstFLock);
 }
 
-P2 (PUBLIC pascal trap, OSErr, FSpRename,
-    FSSpecPtr, spec, Str255, new_name)
+P2(PUBLIC pascal trap, OSErr, FSpRename,
+   FSSpecPtr, spec, Str255, new_name)
 {
-  OSErr retval;
-  HParamBlockRec hpb;
+    OSErr retval;
+    HParamBlockRec hpb;
 
-  hpb.fileParam.ioVRefNum = spec->vRefNum;
-  hpb.fileParam.ioDirID = spec->parID;
-  hpb.fileParam.ioNamePtr = RM ((StringPtr) spec->name);
-  hpb.ioParam.ioMisc = guest_cast<LONGINT> (RM ( new_name));
-  retval = PBHRename (&hpb, false);
-  return retval;
+    hpb.fileParam.ioVRefNum = spec->vRefNum;
+    hpb.fileParam.ioDirID = spec->parID;
+    hpb.fileParam.ioNamePtr = RM((StringPtr)spec->name);
+    hpb.ioParam.ioMisc = guest_cast<LONGINT>(RM(new_name));
+    retval = PBHRename(&hpb, false);
+    return retval;
 }
 
-P2 (PUBLIC pascal trap, OSErr, FSpCatMove,
-    FSSpecPtr, src, FSSpecPtr, dst)
+P2(PUBLIC pascal trap, OSErr, FSpCatMove,
+   FSSpecPtr, src, FSSpecPtr, dst)
 {
-  OSErr retval;
-  CMovePBRec cbr;
+    OSErr retval;
+    CMovePBRec cbr;
 
-  if (src->vRefNum != dst->vRefNum)
-    retval = paramErr;
-  else
+    if(src->vRefNum != dst->vRefNum)
+        retval = paramErr;
+    else
     {
-      cbr.ioVRefNum = src->vRefNum;
-      cbr.ioDirID = src->parID;
-      cbr.ioNamePtr = RM ((StringPtr) src->name);
-      cbr.ioNewName = RM ((StringPtr) dst->name);
-      cbr.ioNewDirID = dst->parID;
-      retval = PBCatMove (&cbr, false);
+        cbr.ioVRefNum = src->vRefNum;
+        cbr.ioDirID = src->parID;
+        cbr.ioNamePtr = RM((StringPtr)src->name);
+        cbr.ioNewName = RM((StringPtr)dst->name);
+        cbr.ioNewDirID = dst->parID;
+        retval = PBCatMove(&cbr, false);
     }
-  return retval;
+    return retval;
 }
 
-P4 (PUBLIC pascal trap, void, FSpCreateResFile,
-    FSSpecPtr, spec, OSType, creator, OSType, file_type,
-    ScriptCode, script)
+P4(PUBLIC pascal trap, void, FSpCreateResFile,
+   FSSpecPtr, spec, OSType, creator, OSType, file_type,
+   ScriptCode, script)
 {
-  HCreateResFile_helper (CW (spec->vRefNum), CL (spec->parID),
-			 spec->name, creator, file_type, script);
+    HCreateResFile_helper(CW(spec->vRefNum), CL(spec->parID),
+                          spec->name, creator, file_type, script);
 }
 
-
-P2 (PUBLIC pascal trap, INTEGER, FSpOpenResFile,
-    FSSpecPtr, spec, SignedByte, perms)
+P2(PUBLIC pascal trap, INTEGER, FSpOpenResFile,
+   FSSpecPtr, spec, SignedByte, perms)
 {
-  INTEGER retval;
+    INTEGER retval;
 
-  retval = HOpenResFile (CW (spec->vRefNum), CL (spec->parID), spec->name,
-			 perms);
-  return retval;
+    retval = HOpenResFile(CW(spec->vRefNum), CL(spec->parID), spec->name,
+                          perms);
+    return retval;
 }
-
 
 /* NOTE: the HCreate and HOpenRF are not traps, they're just high level
    calls that are handy to use elsewhere, so they're included here. */
 
 PUBLIC OSErr
-Executor::HCreate (INTEGER vref, LONGINT dirid, Str255 name, OSType creator, OSType type)
+Executor::HCreate(INTEGER vref, LONGINT dirid, Str255 name, OSType creator, OSType type)
 {
-  HParamBlockRec hpb;
-  OSErr retval;
+    HParamBlockRec hpb;
+    OSErr retval;
 
-  hpb.fileParam.ioNamePtr = RM (name);
-  hpb.fileParam.ioVRefNum = CW (vref);
-  hpb.fileParam.ioDirID = CL (dirid);
-  retval = PBHCreate (&hpb, false);
-  if (retval == noErr)
+    hpb.fileParam.ioNamePtr = RM(name);
+    hpb.fileParam.ioVRefNum = CW(vref);
+    hpb.fileParam.ioDirID = CL(dirid);
+    retval = PBHCreate(&hpb, false);
+    if(retval == noErr)
     {
-      hpb.fileParam.ioFDirIndex = CWC (0);
-      retval = PBHGetFInfo (&hpb, false);
-      if (retval == noErr)
-	{
-	  hpb.fileParam.ioFlFndrInfo.fdCreator = CL (creator);
-	  hpb.fileParam.ioFlFndrInfo.fdType = CL (type);
-	  hpb.fileParam.ioDirID = CL (dirid);
-	  retval = PBHSetFInfo (&hpb, false);
-	}
+        hpb.fileParam.ioFDirIndex = CWC(0);
+        retval = PBHGetFInfo(&hpb, false);
+        if(retval == noErr)
+        {
+            hpb.fileParam.ioFlFndrInfo.fdCreator = CL(creator);
+            hpb.fileParam.ioFlFndrInfo.fdType = CL(type);
+            hpb.fileParam.ioDirID = CL(dirid);
+            retval = PBHSetFInfo(&hpb, false);
+        }
     }
-  return retval;
+    return retval;
 }
 
 PUBLIC OSErr
-Executor::HOpenRF (INTEGER vref, LONGINT dirid, Str255 name, SignedByte perm,
-	 INTEGER *refp)
+Executor::HOpenRF(INTEGER vref, LONGINT dirid, Str255 name, SignedByte perm,
+                  INTEGER *refp)
 {
-  HParamBlockRec hpb;
-  OSErr retval;
+    HParamBlockRec hpb;
+    OSErr retval;
 
-  hpb.fileParam.ioNamePtr = RM (name);
-  hpb.fileParam.ioVRefNum = CW (vref);
-  hpb.ioParam.ioPermssn = CB (perm);
-  hpb.ioParam.ioMisc = CLC (0);
-  hpb.fileParam.ioDirID = CL (dirid);
-  retval = PBHOpenRF (&hpb, false);
-  if (retval == noErr)
-    *refp = CW (hpb.ioParam.ioRefNum);
-  return retval;
+    hpb.fileParam.ioNamePtr = RM(name);
+    hpb.fileParam.ioVRefNum = CW(vref);
+    hpb.ioParam.ioPermssn = CB(perm);
+    hpb.ioParam.ioMisc = CLC(0);
+    hpb.fileParam.ioDirID = CL(dirid);
+    retval = PBHOpenRF(&hpb, false);
+    if(retval == noErr)
+        *refp = CW(hpb.ioParam.ioRefNum);
+    return retval;
 }

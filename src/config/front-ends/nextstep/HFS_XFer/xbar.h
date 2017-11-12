@@ -1,5 +1,5 @@
 extern BOOLEAN xWaitNextEvent(INTEGER em, EventRecord *evt, LONGINT sleep,
-							  RgnHandle mousergn);
+                              RgnHandle mousergn);
 extern BOOLEAN xGetNextEvent(INTEGER em, EventRecord *evt);
 
 extern OSErr xPBHRename(HFileParam *pb, BOOLEAN async);

@@ -2,33 +2,36 @@
 #define __TRAPGLUE__
 
 #ifdef __cplusplus
-namespace Executor {
+namespace Executor
+{
 #endif
-typedef struct {
+typedef struct
+{
     void *wheretogo;
     ULONGINT magic;
 } ptocblock_t;
 
-
-typedef struct {
+typedef struct
+{
     ptocblock_t ptoc;
     syn68k_addr_t orig;
 } toolstuff_t;
 
-typedef struct {
+typedef struct
+{
     syn68k_addr_t orig;
     void *func;
 } osstuff_t;
 
-typedef struct {
+typedef struct
+{
     ptocblock_t ptoc;
     void *orig;
 } pstuff_t;
-    
 
-#define TOOLBIT		(0x0800)
-#define NTOOLENTRIES	(0x400)
-#define NOSENTRIES	(0x100)
+#define TOOLBIT (0x0800)
+#define NTOOLENTRIES (0x400)
+#define NOSENTRIES (0x100)
 
 extern syn68k_addr_t tooltraptable[NTOOLENTRIES];
 extern syn68k_addr_t ostraptable[NOSENTRIES];

@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-#if !defined (COMPILE_FOR_BUILD)
+#if !defined(COMPILE_FOR_BUILD)
 /* A replacement for stdio in a windowed environment */
 
 #if 0
@@ -21,6 +21,3 @@ extern void Win_Message(FILE *stream, const char *fmt, ...);
 extern void process_win32_events(void);
 
 #endif /* _win32_h */
-
-
-

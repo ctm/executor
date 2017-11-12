@@ -2,9 +2,8 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_resGet[] =
-	    "$Id: resGet.c 63 2004-12-24 18:19:43Z ctm $";
+#if !defined(OMIT_RCSID_STRINGS)
+char ROMlib_rcsid_resGet[] = "$Id: resGet.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
 /* Forward declarations in ResourceMgr.h (DO NOT DELETE THIS LINE) */
@@ -29,11 +28,12 @@ char ROMlib_rcsid_resGet[] =
 
 #include <ctype.h>
 
-namespace Executor {
-	PRIVATE INTEGER countmapresources(resmaphand, ResType);
-	PRIVATE Handle getindmapresource(resmaphand, ResType,
-									 INTEGER *);
-	PRIVATE Handle getnamedmapresource(resmaphand, ResType, StringPtr);
+namespace Executor
+{
+PRIVATE INTEGER countmapresources(resmaphand, ResType);
+PRIVATE Handle getindmapresource(resmaphand, ResType,
+                                 INTEGER *);
+PRIVATE Handle getnamedmapresource(resmaphand, ResType, StringPtr);
 }
 
 using namespace Executor;
@@ -48,14 +48,15 @@ A2(PRIVATE, INTEGER, countmapresources, resmaphand, map, ResType, typ)
     INTEGER i, retval;
     typref *tr;
 
-    retval = 0; 
+    retval = 0;
     WALKTR(map, i, tr)
-        if (CL(tr->rtyp) == typ) {
-            retval += 1 + Cx(tr->nres);
-            break;
-        }
+    if(CL(tr->rtyp) == typ)
+    {
+        retval += 1 + Cx(tr->nres);
+        break;
+    }
     EWALKTR(tr)
-    return(retval);
+    return (retval);
 }
 
 P1(PUBLIC pascal trap, INTEGER, CountResources, ResType, typ)
@@ -66,80 +67,88 @@ P1(PUBLIC pascal trap, INTEGER, CountResources, ResType, typ)
     ROMlib_setreserr(noErr);
     n = 0;
     WALKMAPTOP(map)
-        n += countmapresources(map, typ);
+    n += countmapresources(map, typ);
     EWALKMAP()
-    return(n);
+    return (n);
 }
 
-P1(PUBLIC pascal trap, INTEGER, Count1Resources,		/* IMIV-15 */
-						    ResType, typ)
+P1(PUBLIC pascal trap, INTEGER, Count1Resources, /* IMIV-15 */
+   ResType, typ)
 {
     resmaphand map;
-    
+
     map = ROMlib_rntohandl(Cx(CurMap), (Handle *)0);
-    if (!map) {
+    if(!map)
+    {
         ROMlib_setreserr(resFNotFound);
-/*-->*/ return 0;
+        /*-->*/ return 0;
     }
-    return(countmapresources(map, typ));
+    return (countmapresources(map, typ));
 }
 
 A3(PRIVATE, Handle, getindmapresource, resmaphand, map, ResType, typ,
-							       INTEGER *, indx)
+   INTEGER *, indx)
 {
     INTEGER i, j, nr;
     typref *tr;
     resref *rr;
-    
+
     WALKTR(map, i, tr)
-        if (CL(tr->rtyp) == typ) {
-            nr = Cx(tr->nres) + 1;
-            WALKRR(map, tr, j, rr)
-                if (--*indx == 0)
-/*-->*/             return ROMlib_mgetres(map, rr);
-            EWALKRR(rr)
-        }
+    if(CL(tr->rtyp) == typ)
+    {
+        nr = Cx(tr->nres) + 1;
+        WALKRR(map, tr, j, rr)
+        if(--*indx == 0)
+            /*-->*/ return ROMlib_mgetres(map, rr);
+        EWALKRR(rr)
+    }
     EWALKTR(tr)
-    return((Handle)0);
+    return ((Handle)0);
 }
 
 P2(PUBLIC pascal trap, Handle, GetIndResource, ResType, typ, INTEGER, indx)
 {
     resmaphand map;
     Handle retval;
-    
-    if (indx <= 0) {
+
+    if(indx <= 0)
+    {
         ROMlib_setreserr(resNotFound);
-/*-->*/ return 0;
+        /*-->*/ return 0;
     }
     WALKMAPTOP(map)
-        retval = getindmapresource(map, typ, &indx);
-        if (retval) {
-            ROMlib_setreserr(noErr);
-/*-->*/     return retval;
-        }
+    retval = getindmapresource(map, typ, &indx);
+    if(retval)
+    {
+        ROMlib_setreserr(noErr);
+        /*-->*/ return retval;
+    }
     EWALKMAP()
     ROMlib_setreserr(resNotFound);
     return 0;
 }
 
-P2(PUBLIC pascal trap, Handle, Get1IndResource, ResType, typ,  /* IMIV-15 */
-							      INTEGER, i)
+P2(PUBLIC pascal trap, Handle, Get1IndResource, ResType, typ, /* IMIV-15 */
+   INTEGER, i)
 {
     resmaphand map;
     Handle retval;
     INTEGER tempi;
-    
+
     map = ROMlib_rntohandl(Cx(CurMap), (Handle *)0);
-    if (!map) {
+    if(!map)
+    {
         ROMlib_setreserr(resFNotFound);
-/*-->*/ return 0;
+        /*-->*/ return 0;
     }
     tempi = i;
-    if (i <= 0 || !(retval = getindmapresource(map, typ, &tempi))) {
+    if(i <= 0 || !(retval = getindmapresource(map, typ, &tempi)))
+    {
         ROMlib_setreserr(resNotFound);
-/*-->*/ return 0;
-    } else {
+        /*-->*/ return 0;
+    }
+    else
+    {
         ROMlib_setreserr(noErr);
         return retval;
     }
@@ -147,23 +156,25 @@ P2(PUBLIC pascal trap, Handle, Get1IndResource, ResType, typ,  /* IMIV-15 */
 
 /* ROMlib_maptypidtop: given a map, typ and an id,
 				    *ptr is filled in appropriately */
-                
-A4(PUBLIC, OSErr, ROMlib_maptypidtop, resmaphand, map,		/* INTERNAL */
-				    ResType, typ, INTEGER, id, resref **, ptr)
+
+A4(PUBLIC, OSErr, ROMlib_maptypidtop, resmaphand, map, /* INTERNAL */
+   ResType, typ, INTEGER, id, resref **, ptr)
 {
     INTEGER i, j;
     typref *tr;
     resref *rr;
-    
+
     WALKTR(map, i, tr)
-        if (CL(tr->rtyp) == typ) {
-            WALKRR(map, tr, j, rr)
-                if (Cx(rr->rid) == id) {
-                    *ptr = rr;
-                    return(noErr);
-                }
-            EWALKRR(rr)
+    if(CL(tr->rtyp) == typ)
+    {
+        WALKRR(map, tr, j, rr)
+        if(Cx(rr->rid) == id)
+        {
+            *ptr = rr;
+            return (noErr);
         }
+        EWALKRR(rr)
+    }
     EWALKTR(tr)
     return resNotFound;
 }
@@ -172,21 +183,21 @@ A4(PUBLIC, OSErr, ROMlib_maptypidtop, resmaphand, map,		/* INTERNAL */
 		ROMlib_typidtop fills in *pth and *ptr
                 with a resmap handle and a resref pointer */
 
-A4(PUBLIC, OSErr, ROMlib_typidtop, ResType, typ, INTEGER, id,	/* INTERNAL */
-					      resmaphand *, pth, resref **, ptr)
+A4(PUBLIC, OSErr, ROMlib_typidtop, ResType, typ, INTEGER, id, /* INTERNAL */
+   resmaphand *, pth, resref **, ptr)
 {
-  resmaphand map;
-  
-  WALKMAPCUR (map)
-    if (ROMlib_maptypidtop(map, typ, id, ptr) == noErr)
-      {
-	*pth = map;
-	return noErr;
-      }
-  EWALKMAP ()
-  
-  warn_resource_not_found (typ, id);
-  return resNotFound;
+    resmaphand map;
+
+    WALKMAPCUR(map)
+    if(ROMlib_maptypidtop(map, typ, id, ptr) == noErr)
+    {
+        *pth = map;
+        return noErr;
+    }
+    EWALKMAP()
+
+    warn_resource_not_found(typ, id);
+    return resNotFound;
 }
 
 #define MAELSTROM_HACK
@@ -208,29 +219,26 @@ PRIVATE GUEST<LONGINT> ROMlib_defs[NUM_ROMLIB_DEFS];
  * nn is the offset into ROMlib_defs (0, 4, 8, ...)
  */
 
-PRIVATE BOOLEAN acceptable( unsigned long addr )
+PRIVATE BOOLEAN acceptable(unsigned long addr)
 {
-  return ! (islower(   addr        & 0xFF ) ||
-            islower ( (addr >>  8) & 0xFF ) ||
-            islower ( (addr >> 16) & 0xFF ) ||
-	    islower ( (addr >> 24) & 0xFF ));
+    return !(islower(addr & 0xFF) || islower((addr >> 8) & 0xFF) || islower((addr >> 16) & 0xFF) || islower((addr >> 24) & 0xFF));
 }
 
-PRIVATE void ROMlib_init_xdefs( void )
+PRIVATE void ROMlib_init_xdefs(void)
 {
 #if !defined(MAELSTROM_HACK)
-    ROMlib_defs[0]  = guest_cast<LONGINT>( RM(P_cdef0) );
-    ROMlib_defs[1]  = guest_cast<LONGINT>( RM(P_cdef16) );
-    ROMlib_defs[2]  = guest_cast<LONGINT>( RM(P_wdef0) );
-    ROMlib_defs[3]  = guest_cast<LONGINT>( RM(P_wdef16) );
-    ROMlib_defs[4]  = guest_cast<LONGINT>( RM(P_mdef0) );
-    ROMlib_defs[5]  = guest_cast<LONGINT>( RM(P_ldef0) );
-    ROMlib_defs[6]  = guest_cast<LONGINT>( RM(P_mbdf0) );
-    ROMlib_defs[7]  = guest_cast<LONGINT>( RM(P_snth5) );
-    ROMlib_defs[8]  = guest_cast<LONGINT>( RM(P_unixmount) );
-    ROMlib_defs[9]  = guest_cast<LONGINT>( RM(P_cdef1008) );
+    ROMlib_defs[0] = guest_cast<LONGINT>(RM(P_cdef0));
+    ROMlib_defs[1] = guest_cast<LONGINT>(RM(P_cdef16));
+    ROMlib_defs[2] = guest_cast<LONGINT>(RM(P_wdef0));
+    ROMlib_defs[3] = guest_cast<LONGINT>(RM(P_wdef16));
+    ROMlib_defs[4] = guest_cast<LONGINT>(RM(P_mdef0));
+    ROMlib_defs[5] = guest_cast<LONGINT>(RM(P_ldef0));
+    ROMlib_defs[6] = guest_cast<LONGINT>(RM(P_mbdf0));
+    ROMlib_defs[7] = guest_cast<LONGINT>(RM(P_snth5));
+    ROMlib_defs[8] = guest_cast<LONGINT>(RM(P_unixmount));
+    ROMlib_defs[9] = guest_cast<LONGINT>(RM(P_cdef1008));
 
-    *(LONGINT *)SYN68K_TO_US(0x58) = RM((LONGINT) ROMlib_defs);
+    *(LONGINT *)SYN68K_TO_US(0x58) = RM((LONGINT)ROMlib_defs);
 #else
     GUEST<THz> save_zone;
     Handle oldhandle, newhandle;
@@ -242,69 +250,68 @@ PRIVATE void ROMlib_init_xdefs( void )
     TheZone = SysZone;
     newhandle = 0;
     timeout = 64000;
-    do {
-      oldhandle = newhandle;
-      newhandle = NewHandle(NUM_ROMLIB_DEFS * sizeof(ROMlib_defs[0]));
-      if (oldhandle)
-	DisposHandle(oldhandle);
-    } while (!acceptable((*newhandle).raw()) && --timeout);
+    do
+    {
+        oldhandle = newhandle;
+        newhandle = NewHandle(NUM_ROMLIB_DEFS * sizeof(ROMlib_defs[0]));
+        if(oldhandle)
+            DisposHandle(oldhandle);
+    } while(!acceptable((*newhandle).raw()) && --timeout);
 #if !defined(NDEBUG)
-    if (!timeout)
-      warning_unexpected("Maelstrom hack didn't work");
+    if(!timeout)
+        warning_unexpected("Maelstrom hack didn't work");
 #endif
     HLock(newhandle);
-    ROMlib_defs = (GUEST<LONGINT> *) STARH(newhandle);
-    ROMlib_defs[0]  = guest_cast<LONGINT>( RM(P_cdef0) );
-    ROMlib_defs[1]  = guest_cast<LONGINT>( RM(P_cdef16) );
-    ROMlib_defs[2]  = guest_cast<LONGINT>( RM(P_wdef0) );
-    ROMlib_defs[3]  = guest_cast<LONGINT>( RM(P_wdef16) );
-    ROMlib_defs[4]  = guest_cast<LONGINT>( RM(P_mdef0) );
-    ROMlib_defs[5]  = guest_cast<LONGINT>( RM(P_ldef0) );
-    ROMlib_defs[6]  = guest_cast<LONGINT>( RM(P_mbdf0) );
-    ROMlib_defs[7]  = guest_cast<LONGINT>( RM(P_snth5) );
-    ROMlib_defs[8]  = guest_cast<LONGINT>( RM(P_unixmount) );
-    ROMlib_defs[9]  = guest_cast<LONGINT>( RM(P_cdef1008) );
-    *(LONGINT *)SYN68K_TO_US(0x58) = (LONGINT) (*newhandle).raw();      // ### use standard low mem access method
+    ROMlib_defs = (GUEST<LONGINT> *)STARH(newhandle);
+    ROMlib_defs[0] = guest_cast<LONGINT>(RM(P_cdef0));
+    ROMlib_defs[1] = guest_cast<LONGINT>(RM(P_cdef16));
+    ROMlib_defs[2] = guest_cast<LONGINT>(RM(P_wdef0));
+    ROMlib_defs[3] = guest_cast<LONGINT>(RM(P_wdef16));
+    ROMlib_defs[4] = guest_cast<LONGINT>(RM(P_mdef0));
+    ROMlib_defs[5] = guest_cast<LONGINT>(RM(P_ldef0));
+    ROMlib_defs[6] = guest_cast<LONGINT>(RM(P_mbdf0));
+    ROMlib_defs[7] = guest_cast<LONGINT>(RM(P_snth5));
+    ROMlib_defs[8] = guest_cast<LONGINT>(RM(P_unixmount));
+    ROMlib_defs[9] = guest_cast<LONGINT>(RM(P_cdef1008));
+    *(LONGINT *)SYN68K_TO_US(0x58) = (LONGINT)(*newhandle).raw(); // ### use standard low mem access method
     TheZone = save_zone;
 #endif
 }
 
 typedef struct
 {
-  ResType type;
-  INTEGER id;
-}
-pseudo_rom_entry_t;
+    ResType type;
+    INTEGER id;
+} pseudo_rom_entry_t;
 
 PRIVATE Handle
-pseudo_get_rom_resource (ResType typ, INTEGER id)
+pseudo_get_rom_resource(ResType typ, INTEGER id)
 {
-  Handle retval;
-  int i;
-  static pseudo_rom_entry_t pseudo_rom_table[] =
-    {
-      { T ('F', 'O', 'N', 'D'), 3 }
+    Handle retval;
+    int i;
+    static pseudo_rom_entry_t pseudo_rom_table[] = {
+        { T('F', 'O', 'N', 'D'), 3 }
     };
 
-  for (i = 0; (i < (int) NELEM (pseudo_rom_table) &&
-	       (pseudo_rom_table[i].type != typ
-		|| pseudo_rom_table[i].id != id)); ++i)
-    ;
-  if (i < (int) NELEM (pseudo_rom_table))
+    for(i = 0; (i < (int)NELEM(pseudo_rom_table) && (pseudo_rom_table[i].type != typ
+                                                     || pseudo_rom_table[i].id != id));
+        ++i)
+        ;
+    if(i < (int)NELEM(pseudo_rom_table))
     {
-      GUEST<INTEGER> save_map;
+        GUEST<INTEGER> save_map;
 
-      save_map = CurMap;
-      CurMap = SysMap;
-      retval = C_Get1Resource (typ, id);
-      CurMap = save_map;
+        save_map = CurMap;
+        CurMap = SysMap;
+        retval = C_Get1Resource(typ, id);
+        CurMap = save_map;
     }
-  else
-    retval = 0;
-  return retval;
+    else
+        retval = 0;
+    return retval;
 }
 
-#if defined (ULTIMA_III_HACK)
+#if defined(ULTIMA_III_HACK)
 PUBLIC bool Executor::ROMlib_ultima_iii_hack;
 #endif
 
@@ -315,187 +322,194 @@ P2(PUBLIC pascal trap, Handle, GetResource, ResType, typ, INTEGER, id)
     static int beenhere = 0;
     Handle retval;
 
-    if (!beenhere) {
-	beenhere = 1;
-	ROMlib_init_xdefs();
+    if(!beenhere)
+    {
+        beenhere = 1;
+        ROMlib_init_xdefs();
     }
 
-    retval = pseudo_get_rom_resource (typ, id);
-    if (retval)
-/*-->*/return retval;
+    retval = pseudo_get_rom_resource(typ, id);
+    if(retval)
+        /*-->*/ return retval;
 
 #define BOBSEYESHACK
 #if defined(BOBSEYESHACK)
-/*
+    /*
  * This gets around a bug in Bob's Eyes that references stray memory.
  * I'm trying to find the author of the program and get him to fix it.
  *  	--Cliff Sat Sep  3 08:02:51 MDT 1994
  */
-    if (typ == TICK("rAnd") && id == 128)
-	return 0;
+    if(typ == TICK("rAnd") && id == 128)
+        return 0;
 #endif
 
 #if !defined(MAC)
-    switch (typ) {			/* fake out code resources */
+    switch(typ)
+    { /* fake out code resources */
 #define ICKYHACK
-#if defined (ICKYHACK)
-    case T('P','A','C','K'):
-	return GetResource(TICK("ALRT"), -3995);
+#if defined(ICKYHACK)
+        case T('P', 'A', 'C', 'K'):
+            return GetResource(TICK("ALRT"), -3995);
 #endif /* ICKYHACK */
     }
 #endif /* !defined(MAC) */
 
     ROMlib_setreserr(ROMlib_typidtop(typ, id, &map, &rr));
-    if (Cx(ResErr) == resNotFound) {
-	ROMlib_setreserr(noErr);
-	retval = 0;	/* IMIV */
-    } else {
-	if (ResErr == CWC(noErr))
-	    retval = ROMlib_mgetres(map, rr);
-	else
-	    retval = 0;
+    if(Cx(ResErr) == resNotFound)
+    {
+        ROMlib_setreserr(noErr);
+        retval = 0; /* IMIV */
     }
-#if defined (ULTIMA_III_HACK)
-    if (ROMlib_ultima_iii_hack && typ == TICK("PREF") && retval)
-      {
-	*((char *) STARH (retval) + 1) = 0; /* turn off Music prefs */
-      }
+    else
+    {
+        if(ResErr == CWC(noErr))
+            retval = ROMlib_mgetres(map, rr);
+        else
+            retval = 0;
+    }
+#if defined(ULTIMA_III_HACK)
+    if(ROMlib_ultima_iii_hack && typ == TICK("PREF") && retval)
+    {
+        *((char *)STARH(retval) + 1) = 0; /* turn off Music prefs */
+    }
 #endif
     return retval;
 }
 
-P2(PUBLIC pascal trap, Handle, Get1Resource, ResType, typ,    /* IMIV-16 */
-							   INTEGER, id)
+P2(PUBLIC pascal trap, Handle, Get1Resource, ResType, typ, /* IMIV-16 */
+   INTEGER, id)
 {
-  Handle retval;
-  resmaphand map;
-  resref *rr;
-    
-  map = ROMlib_rntohandl (Cx (CurMap), NULL);
-  if (!map)
+    Handle retval;
+    resmaphand map;
+    resref *rr;
+
+    map = ROMlib_rntohandl(Cx(CurMap), NULL);
+    if(!map)
     {
-      ROMlib_setreserr (resFNotFound);
-      return NULL;
+        ROMlib_setreserr(resFNotFound);
+        return NULL;
     }
-  ROMlib_setreserr (ROMlib_maptypidtop (map, typ, id, &rr));
-  if (ResErr == CWC(noErr))
-    retval = ROMlib_mgetres (map, rr);
-  else
+    ROMlib_setreserr(ROMlib_maptypidtop(map, typ, id, &rr));
+    if(ResErr == CWC(noErr))
+        retval = ROMlib_mgetres(map, rr);
+    else
     {
-      warn_resource_not_found (typ, id);
-      retval = NULL;
+        warn_resource_not_found(typ, id);
+        retval = NULL;
     }
-  if (ResErr == CWC (resNotFound))
-    /* IMIV */
-    ResErr = CWC (noErr);
-  return retval;
+    if(ResErr == CWC(resNotFound))
+        /* IMIV */
+        ResErr = CWC(noErr);
+    return retval;
 }
 
 A3(PRIVATE, Handle, getnamedmapresource, resmaphand, map, ResType, typ,
-								StringPtr, nam)
+   StringPtr, nam)
 {
     INTEGER i, j;
     typref *tr;
     resref *rr;
-    
+
     WALKTR(map, i, tr)
-        if (CL(tr->rtyp) == typ) {
-            WALKRR(map, tr, j, rr)
-                if (Cx(rr->noff) != -1 && EqualString((StringPtr) (
-                            (char *)STARH(map) + Hx(map, namoff) + Cx(rr->noff)),
-						        (StringPtr) nam, 0, 1))
-/*-->*/             return ROMlib_mgetres(map, rr);
-            EWALKRR(rr)
-        }
+    if(CL(tr->rtyp) == typ)
+    {
+        WALKRR(map, tr, j, rr)
+        if(Cx(rr->noff) != -1 && EqualString((StringPtr)(
+                                                 (char *)STARH(map) + Hx(map, namoff) + Cx(rr->noff)),
+                                             (StringPtr)nam, 0, 1))
+            /*-->*/ return ROMlib_mgetres(map, rr);
+        EWALKRR(rr)
+    }
     EWALKTR(tr)
     ROMlib_setreserr(resNotFound);
-    return(0);
+    return (0);
 }
 
 P2(PUBLIC pascal trap, Handle, GetNamedResource, ResType, typ, StringPtr, nam)
 {
-  Handle retval;
+    Handle retval;
 
-  retval = NULL;
-  if (EqualString (nam, about_box_menu_name_pstr, true, true))
+    retval = NULL;
+    if(EqualString(nam, about_box_menu_name_pstr, true, true))
     {
-      static Handle phoney_hand;
+        static Handle phoney_hand;
 
-      if (!phoney_hand)
-	phoney_hand = NewHandleSys (0);
-      retval = phoney_hand;
+        if(!phoney_hand)
+            phoney_hand = NewHandleSys(0);
+        retval = phoney_hand;
     }
-  else
+    else
     {
-      resmaphand map;
+        resmaphand map;
 
-      WALKMAPCUR(map)
-	if ((retval = getnamedmapresource(map, typ, nam))) {
-	  ROMlib_setreserr(noErr);
-	  goto DONE;
-	}
-      EWALKMAP()
-	warn_resource_not_found_name (typ, nam);
-      ROMlib_setreserr(resNotFound);
+        WALKMAPCUR(map)
+        if((retval = getnamedmapresource(map, typ, nam)))
+        {
+            ROMlib_setreserr(noErr);
+            goto DONE;
+        }
+        EWALKMAP()
+        warn_resource_not_found_name(typ, nam);
+        ROMlib_setreserr(resNotFound);
     }
 DONE:
-  return retval;
+    return retval;
 }
 
 P2(PUBLIC pascal trap, Handle, Get1NamedResource, ResType, typ, /* IMIV-16 */
-								StringPtr, s)
+   StringPtr, s)
 {
     resmaphand map;
-    
+
     map = ROMlib_rntohandl(Cx(CurMap), (Handle *)0);
-    if (!map) {
+    if(!map)
+    {
         ROMlib_setreserr(resFNotFound);
-/*-->*/ return 0;
+        /*-->*/ return 0;
     }
-    return(getnamedmapresource(map, typ, s));
+    return (getnamedmapresource(map, typ, s));
 }
 
-P1 (PUBLIC pascal trap, void, LoadResource, Handle volatile, res)
+P1(PUBLIC pascal trap, void, LoadResource, Handle volatile, res)
 {
-  resmaphand map;
-  typref *tr;
-  resref *rr;
-  GUEST<int16> savemap;
-    
-  volatile LONGINT savea0d0[2];
-  savea0d0[0] = EM_D0;
-  savea0d0[1] = EM_A0;
+    resmaphand map;
+    typref *tr;
+    resref *rr;
+    GUEST<int16> savemap;
 
-  if (!res)
+    volatile LONGINT savea0d0[2];
+    savea0d0[0] = EM_D0;
+    savea0d0[1] = EM_A0;
+
+    if(!res)
     {
-      ROMlib_setreserr (nilHandleErr);
-      return;
+        ROMlib_setreserr(nilHandleErr);
+        return;
     }
 
-  if (*res)
+    if(*res)
     {
-      ROMlib_setreserr (noErr);
+        ROMlib_setreserr(noErr);
     }
-  else
+    else
     {
-      savemap = CurMap;
-      CurMap = ((resmap *) STARH (MR (TopMapHndl)))->resfn;
-      ROMlib_setreserr (ROMlib_findres (res, &map, &tr, &rr));
-      CurMap = savemap;
-      if (ResErr == CWC (noErr))
-	{
-	  BOOLEAN save_resload;
+        savemap = CurMap;
+        CurMap = ((resmap *)STARH(MR(TopMapHndl)))->resfn;
+        ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
+        CurMap = savemap;
+        if(ResErr == CWC(noErr))
+        {
+            BOOLEAN save_resload;
 
-	  save_resload = ResLoad;
-	  SetResLoad (true);
-	  ROMlib_mgetres (map, rr);
-	  ResLoad = save_resload;
-	}
+            save_resload = ResLoad;
+            SetResLoad(true);
+            ROMlib_mgetres(map, rr);
+            ResLoad = save_resload;
+        }
     }
-      
-    
-  EM_D0 = savea0d0[0];
-  EM_A0 = savea0d0[1];
+
+    EM_D0 = savea0d0[0];
+    EM_A0 = savea0d0[1];
 }
 
 P1(PUBLIC pascal trap, void, ReleaseResource, Handle, res)
@@ -505,15 +519,15 @@ P1(PUBLIC pascal trap, void, ReleaseResource, Handle, res)
     resref *rr;
     Handle h;
 
-    if (ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr)))
-/*-->*/ return;
-    if (Cx(rr->ratr) & resChanged)
-	ROMlib_wr(map, rr);
-    if (ResErr != CWC (noErr) || !rr->rhand)
+    if(ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr)))
+        /*-->*/ return;
+    if(Cx(rr->ratr) & resChanged)
+        ROMlib_wr(map, rr);
+    if(ResErr != CWC(noErr) || !rr->rhand)
         return;
-    h = MR (rr->rhand);
-    if (*h)
-      HClrRBit(h);
+    h = MR(rr->rhand);
+    if(*h)
+        HClrRBit(h);
     DisposHandle(h);
     rr->rhand = 0;
 }
@@ -525,15 +539,16 @@ P1(PUBLIC pascal trap, void, DetachResource, Handle, res)
     resref *rr;
     Handle h;
 
-    if (ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr)))
-/*-->*/ return;
-    if (ResErr != CWC(noErr) || !(h = (Handle) MR(rr->rhand)))
+    if(ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr)))
+        /*-->*/ return;
+    if(ResErr != CWC(noErr) || !(h = (Handle)MR(rr->rhand)))
         return;
-    if (Cx(rr->ratr) & resChanged) {
-        ROMlib_setreserr(resAttrErr);    /* IV-18 */
+    if(Cx(rr->ratr) & resChanged)
+    {
+        ROMlib_setreserr(resAttrErr); /* IV-18 */
         return;
     }
     rr->rhand = 0;
-    if (*h)
-      HClrRBit(h);
+    if(*h)
+        HClrRBit(h);
 }

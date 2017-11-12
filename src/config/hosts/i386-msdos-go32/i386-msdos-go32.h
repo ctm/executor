@@ -1,7 +1,7 @@
-#if !defined (_I386_MSDOS_GO32_H_)
+#if !defined(_I386_MSDOS_GO32_H_)
 #define _I386_MSDOS_GO32_H_
 
-#if !defined (SYN68K)
+#if !defined(SYN68K)
 #define SYN68K
 #endif
 

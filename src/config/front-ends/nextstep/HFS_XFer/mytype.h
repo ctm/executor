@@ -15,7 +15,7 @@ typedef unsigned short ushort;
 
 #endif
 
-typedef unsigned long  ulong;
+typedef unsigned long ulong;
 
 #if !defined(UNIX)
 #define PRIVATE static

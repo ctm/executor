@@ -1,4 +1,4 @@
-#if !defined (_RMINT70_H_)
+#if !defined(_RMINT70_H_)
 #define _RMINT70_H_
 
 extern uint8 rm_int_70_handler_start;

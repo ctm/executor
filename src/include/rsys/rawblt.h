@@ -1,11 +1,11 @@
-#if !defined (_RSYS_RAWBLT_H_)
+#if !defined(_RSYS_RAWBLT_H_)
 #define _RSYS_RAWBLT_H_
 
 typedef struct
 {
-  const void *label;
-  int32 offset;
-  int32 arg;
+    const void *label;
+    int32 offset;
+    int32 arg;
 } blt_section_t;
 
 #define MAX_BLT_SECTIONS 1024

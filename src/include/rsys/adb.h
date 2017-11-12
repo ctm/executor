@@ -8,9 +8,10 @@
  * $Id: adb.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-namespace Executor {
-extern void C_adb_service_stub (void);
-extern void adb_apeiron_hack (int/*bool*/ deltas_p, ...);
-extern void reset_adb_vector (void);
+namespace Executor
+{
+extern void C_adb_service_stub(void);
+extern void adb_apeiron_hack(int /*bool*/ deltas_p, ...);
+extern void reset_adb_vector(void);
 }
 #endif

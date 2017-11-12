@@ -2,9 +2,8 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_adb[] =
-		"$Id: adb.c 63 2004-12-24 18:19:43Z ctm $";
+#if !defined(OMIT_RCSID_STRINGS)
+char ROMlib_rcsid_adb[] = "$Id: adb.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
 #include "rsys/common.h"
@@ -45,129 +44,140 @@ char ROMlib_rcsid_adb[] =
 using namespace Executor;
 
 PUBLIC void
-Executor::ADBReInit (void)
+Executor::ADBReInit(void)
 {
-  warning_unimplemented (NULL_STRING);
+    warning_unimplemented(NULL_STRING);
 }
 
 PUBLIC OSErr
-Executor::ADBOp (Ptr data, ProcPtr procp, Ptr buffer, INTEGER command)
+Executor::ADBOp(Ptr data, ProcPtr procp, Ptr buffer, INTEGER command)
 {
-  warning_unimplemented (NULL_STRING);
-  return noErr;
+    warning_unimplemented(NULL_STRING);
+    return noErr;
 }
 
 PUBLIC INTEGER
-Executor::CountADBs (void)
+Executor::CountADBs(void)
 {
-  warning_unimplemented (NULL_STRING);
-  return 1;
+    warning_unimplemented(NULL_STRING);
+    return 1;
 }
 
-enum { SPOOFED_MOUSE_ADDR = 3 };
+enum
+{
+    SPOOFED_MOUSE_ADDR = 3
+};
 
 PRIVATE GUEST<Ptr> adb_service_procp = nullptr; /* stored as though in lowglobal */
-PRIVATE Ptr adb_data_ptr = (Ptr) 0x90ABCDEF;
+PRIVATE Ptr adb_data_ptr = (Ptr)0x90ABCDEF;
 
 PUBLIC void
-Executor::C_adb_service_stub (void)
+Executor::C_adb_service_stub(void)
 {
 }
 
 PUBLIC void
-Executor::reset_adb_vector (void)
+Executor::reset_adb_vector(void)
 {
-  adb_service_procp = nullptr;
+    adb_service_procp = nullptr;
 }
 
 PUBLIC OSErr
-Executor::GetIndADB (ADBDataBlock *adbp, INTEGER index)
+Executor::GetIndADB(ADBDataBlock *adbp, INTEGER index)
 {
-  OSErr retval;
+    OSErr retval;
 
-  warning_unimplemented (NULL_STRING);
-  if (index != 1)
-    retval = -1;
-  else
+    warning_unimplemented(NULL_STRING);
+    if(index != 1)
+        retval = -1;
+    else
     {
-      adbp->devType = CB (0); /* should check on Mac to see what mouse is */
-      adbp->origADBAddr = CB (SPOOFED_MOUSE_ADDR);
-      if (!adb_service_procp)
-	adb_service_procp = RM ((Ptr)P_adb_service_stub);
-      adbp->dbServiceRtPtr = adb_service_procp;
-      adbp->dbDataAreaAddr = RM (adb_data_ptr);
-      retval = SPOOFED_MOUSE_ADDR;
+        adbp->devType = CB(0); /* should check on Mac to see what mouse is */
+        adbp->origADBAddr = CB(SPOOFED_MOUSE_ADDR);
+        if(!adb_service_procp)
+            adb_service_procp = RM((Ptr)P_adb_service_stub);
+        adbp->dbServiceRtPtr = adb_service_procp;
+        adbp->dbDataAreaAddr = RM(adb_data_ptr);
+        retval = SPOOFED_MOUSE_ADDR;
     }
-  return retval;
+    return retval;
 }
 
 PUBLIC OSErr
-Executor::GetADBInfo (ADBDataBlock *adbp, INTEGER address)
+Executor::GetADBInfo(ADBDataBlock *adbp, INTEGER address)
 {
-  OSErr retval;
+    OSErr retval;
 
-  warning_unimplemented (NULL_STRING);
-  if (address != SPOOFED_MOUSE_ADDR)
-    retval = -1;
-  else
-    retval = GetIndADB (adbp, 1);
-  return retval;
+    warning_unimplemented(NULL_STRING);
+    if(address != SPOOFED_MOUSE_ADDR)
+        retval = -1;
+    else
+        retval = GetIndADB(adbp, 1);
+    return retval;
 }
 
 PUBLIC OSErr
-Executor::SetADBInfo (ADBSetInfoBlock *adbp, INTEGER address)
+Executor::SetADBInfo(ADBSetInfoBlock *adbp, INTEGER address)
 {
-  OSErr retval;
+    OSErr retval;
 
-  warning_unimplemented (NULL_STRING);
-  if (address != SPOOFED_MOUSE_ADDR)
-    retval = -1;
-  else
+    warning_unimplemented(NULL_STRING);
+    if(address != SPOOFED_MOUSE_ADDR)
+        retval = -1;
+    else
     {
-      adb_service_procp = adbp->siServiceRtPtr;
-      adb_data_ptr = MR (adbp->siDataAreaAddr);
-      retval = noErr;
+        adb_service_procp = adbp->siServiceRtPtr;
+        adb_data_ptr = MR(adbp->siDataAreaAddr);
+        retval = noErr;
     }
-  return retval;
+    return retval;
 }
 
 PRIVATE bool
-adb_vector_is_not_our_own (void)
+adb_vector_is_not_our_own(void)
 {
-  return adb_service_procp &&
-    adb_service_procp != RM ((Ptr)P_adb_service_stub);
+    return adb_service_procp && adb_service_procp != RM((Ptr)P_adb_service_stub);
 }
 
 PRIVATE void
-call_patched_adb_vector (char *message)
+call_patched_adb_vector(char *message)
 {
-  uint32_t save_d0, save_a0;
+    uint32_t save_d0, save_a0;
 
-  save_d0 = EM_D0;
-  save_a0 = EM_A0;
-  EM_D0 = SPOOFED_MOUSE_ADDR << 4; /* based on Apeiron's code */
-  EM_A0 = US_TO_SYN68K(message);
-  CALL_EMULATOR ((syn68k_addr_t) CL (guest_cast<uint32_t>( adb_service_procp)));
-  EM_D0 = save_d0;
-  EM_A0 = save_a0;
+    save_d0 = EM_D0;
+    save_a0 = EM_A0;
+    EM_D0 = SPOOFED_MOUSE_ADDR << 4; /* based on Apeiron's code */
+    EM_A0 = US_TO_SYN68K(message);
+    CALL_EMULATOR((syn68k_addr_t)CL(guest_cast<uint32_t>(adb_service_procp)));
+    EM_D0 = save_d0;
+    EM_A0 = save_a0;
 }
 
 static inline int
-pin (int val, int min, int max)
+pin(int val, int min, int max)
 {
-  int retval;
+    int retval;
 
-  if (val < min)
-    retval = min;
-  else if (val > max)
-    retval = max;
-  else
-    retval = val;
-  return retval;
+    if(val < min)
+        retval = min;
+    else if(val > max)
+        retval = max;
+    else
+        retval = val;
+    return retval;
 }
 
-enum { LENGTH_OFFSET = 0, Y_OFFSET = 1, X_OFFSET = 2, MOUSE_OFFSET = 1 };
-enum { BUTTON_UP_BIT = 0x80 };
+enum
+{
+    LENGTH_OFFSET = 0,
+    Y_OFFSET = 1,
+    X_OFFSET = 2,
+    MOUSE_OFFSET = 1
+};
+enum
+{
+    BUTTON_UP_BIT = 0x80
+};
 
 /*
  * if deltas_p is true, dx and dy are supplied as arguments, otherwise they
@@ -180,77 +190,76 @@ enum { BUTTON_UP_BIT = 0x80 };
 //       because va_start requires it.
 
 PUBLIC void
-Executor::adb_apeiron_hack (int/*bool*/ deltas_p, ...)
+Executor::adb_apeiron_hack(int /*bool*/ deltas_p, ...)
 {
-  static bool been_here = false;
-  static long old_x;
-  static long old_y;
-  long x, y;
-  bool button_is_down;
-  char message[3];
+    static bool been_here = false;
+    static long old_x;
+    static long old_y;
+    long x, y;
+    bool button_is_down;
+    char message[3];
 
-  x = CW (MouseLocation.h);
-  y = CW (MouseLocation.v);
-  button_is_down = !(ROMlib_mods & btnState);
+    x = CW(MouseLocation.h);
+    y = CW(MouseLocation.v);
+    button_is_down = !(ROMlib_mods & btnState);
 
-/* begin code for PegLeg */
+    /* begin code for PegLeg */
 
-  if (button_is_down)
-    MBState = 0;
-  else
-    MBState = 0xFF;
+    if(button_is_down)
+        MBState = 0;
+    else
+        MBState = 0xFF;
 
-  MTemp.h = MouseLocation.h;
-  MTemp.v = MouseLocation.v;
+    MTemp.h = MouseLocation.h;
+    MTemp.v = MouseLocation.v;
 
-/* end code for PegLeg */
+    /* end code for PegLeg */
 
-  MouseLocation2 = MouseLocation;
+    MouseLocation2 = MouseLocation;
 
-  if (!been_here)
+    if(!been_here)
     {
-      old_x = x;
-      old_y = y;
-      been_here = true;
+        old_x = x;
+        old_y = y;
+        been_here = true;
     }
-  if (adb_vector_is_not_our_own ())
+    if(adb_vector_is_not_our_own())
     {
-      int dx, dy;
+        int dx, dy;
 
-      if (deltas_p)
-	{
-	  va_list ap;
+        if(deltas_p)
+        {
+            va_list ap;
 
-	  va_start (ap, deltas_p);
-	  dx = va_arg (ap, int);
-	  dy = va_arg (ap, int);
-	  va_end (ap);
-	}
-      else
-	{
-	  dx = x - old_x;
-	  dy = y - old_y;
-	}
+            va_start(ap, deltas_p);
+            dx = va_arg(ap, int);
+            dy = va_arg(ap, int);
+            va_end(ap);
+        }
+        else
+        {
+            dx = x - old_x;
+            dy = y - old_y;
+        }
 
-      do
-	{
-	  int this_dx, this_dy;
+        do
+        {
+            int this_dx, this_dy;
 
-	  this_dx = pin (dx, -64, 63);
-	  this_dy = pin (dy, -64, 63);
-	  message[LENGTH_OFFSET] = sizeof (message) - 1;
-	  message[X_OFFSET] = (this_dx) | 0x80;  /* Apeiron expects the high */
-	  message[Y_OFFSET] = (this_dy) | 0x80;  /*   bit to be set.         */
-	  if (button_is_down)
-	    message[MOUSE_OFFSET] &= ~BUTTON_UP_BIT;
-	  else
-	    message[MOUSE_OFFSET] |= BUTTON_UP_BIT;
-	  call_patched_adb_vector (message);
-	  dx -= this_dx;
-	  dy -= this_dy;
-	}
-      while (dx || dy);
+            this_dx = pin(dx, -64, 63);
+            this_dy = pin(dy, -64, 63);
+            message[LENGTH_OFFSET] = sizeof(message) - 1;
+            message[X_OFFSET] = (this_dx) | 0x80; /* Apeiron expects the high */
+            message[Y_OFFSET] = (this_dy) | 0x80; /*   bit to be set.         */
+            if(button_is_down)
+                message[MOUSE_OFFSET] &= ~BUTTON_UP_BIT;
+            else
+                message[MOUSE_OFFSET] |= BUTTON_UP_BIT;
+            call_patched_adb_vector(message);
+            dx -= this_dx;
+            dy -= this_dy;
+        } while(dx || dy);
     }
-  old_x = x;
-  old_y = y;
+    old_x = x;
+    old_y = y;
 }

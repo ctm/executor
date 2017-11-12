@@ -2,9 +2,8 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_qt[] =
-		"$Id: qt.c 63 2004-12-24 18:19:43Z ctm $";
+#if !defined(OMIT_RCSID_STRINGS)
+char ROMlib_rcsid_qt[] = "$Id: qt.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
 #include "rsys/common.h"
@@ -12,19 +11,18 @@ char ROMlib_rcsid_qt[] =
 
 using namespace Executor;
 
-#if defined (CYGWIN32)
+#if defined(CYGWIN32)
 
-#define LIB_LOOKUP(lib, proc)				\
-do							\
-{							\
-  proc = (void *) GetProcAddress ((lib), #proc);	\
-  if (!x)						\
-    {							\
-      warning_unexpected ("Couldn't find " #proc);	\
-      goto error;					\
-    }							\
-}							\
-while (0)
+#define LIB_LOOKUP(lib, proc)                           \
+    do                                                  \
+    {                                                   \
+        proc = (void *)GetProcAddress((lib), #proc);    \
+        if(!x)                                          \
+        {                                               \
+            warning_unexpected("Couldn't find " #proc); \
+            goto error;                                 \
+        }                                               \
+    } while(0)
 
 #if 0
 PRIVATE void
@@ -61,25 +59,25 @@ qt_init (void)
 
 P0(PUBLIC pascal trap, OSErr, EnterMovies)
 {
-  OSErr retval;
+    OSErr retval;
 
 #if !defined(CYGWIN32)
-  warning_unimplemented (NULL_STRING);
-  retval = noErr;
+    warning_unimplemented(NULL_STRING);
+    retval = noErr;
 #else
 #if 0
   retval = EnterMovies ();
 #else
-  retval = 0;
+    retval = 0;
 #endif
 #endif
-  return retval;
+    return retval;
 }
 
 P0(PUBLIC pascal trap, void, ExitMovies)
 {
-#if !defined (CYGWIN32)
-  warning_unimplemented (NULL_STRING);
+#if !defined(CYGWIN32)
+    warning_unimplemented(NULL_STRING);
 #else
 #if 0
   ExitMovies ();
@@ -90,7 +88,7 @@ P0(PUBLIC pascal trap, void, ExitMovies)
 
 P2(PUBLIC pascal trap, void, MoviesTask, Movie, movie, LONGINT, maxmillisecs)
 {
-  warning_unimplemented (NULL_STRING);
+    warning_unimplemented(NULL_STRING);
 }
 
 P3(PUBLIC pascal trap, OSErr, PrerollMovie,
@@ -98,168 +96,168 @@ P3(PUBLIC pascal trap, OSErr, PrerollMovie,
    TimeValue, time,
    Fixed, rate)
 {
-  OSErr retval;
+    OSErr retval;
 
 #if !defined(CYGWIN32)
-  warning_unimplemented (NULL_STRING);
-  retval = noErr;
+    warning_unimplemented(NULL_STRING);
+    retval = noErr;
 #else
-  retval = 0;
+    retval = 0;
 #endif
-  return retval;
+    return retval;
 }
 
 P2(PUBLIC pascal trap, void, SetMovieActive, Movie, movie, BOOLEAN, active)
 {
-  warning_unimplemented (NULL_STRING);
+    warning_unimplemented(NULL_STRING);
 }
 
 P1(PUBLIC pascal trap, void, StartMovie, Movie, movie)
 {
-  warning_unimplemented (NULL_STRING);
+    warning_unimplemented(NULL_STRING);
 }
 
 P1(PUBLIC pascal trap, void, StopMovie, Movie, movie)
 {
-  warning_unimplemented (NULL_STRING);
+    warning_unimplemented(NULL_STRING);
 }
 
 P1(PUBLIC pascal trap, void, GoToBeginningOfMovie, Movie, movie)
 {
-  warning_unimplemented (NULL_STRING);
+    warning_unimplemented(NULL_STRING);
 }
 
 P3(PUBLIC pascal trap, void, SetMovieGWorld, Movie, movie, CGrafPtr, cgrafp,
    GDHandle, gdh)
 {
-  warning_unimplemented (NULL_STRING);
+    warning_unimplemented(NULL_STRING);
 }
 
 P1(PUBLIC pascal trap, OSErr, UpdateMovie, Movie, movie)
 {
-  OSErr retval;
+    OSErr retval;
 
 #if !defined(CYGWIN32)
-  warning_unimplemented (NULL_STRING);
-  retval = noErr;
+    warning_unimplemented(NULL_STRING);
+    retval = noErr;
 #else
-  retval = 0;
+    retval = 0;
 #endif
-  return retval;
+    return retval;
 }
 
 P1(PUBLIC pascal trap, void, DisposeMovie, Movie, movie)
 {
-  warning_unimplemented (NULL_STRING);
+    warning_unimplemented(NULL_STRING);
 }
 
 P1(PUBLIC pascal trap, INTEGER, GetMovieVolume, Movie, movie)
 {
-  INTEGER retval;
+    INTEGER retval;
 
 #if !defined(CYGWIN32)
-  warning_unimplemented (NULL_STRING);
-  retval = 1;
+    warning_unimplemented(NULL_STRING);
+    retval = 1;
 #else
-  retval = 0;
+    retval = 0;
 #endif
-  return retval;
+    return retval;
 }
 
 P1(PUBLIC pascal trap, OSErr, CloseMovieFile, INTEGER, refnum)
 {
-  OSErr retval;
+    OSErr retval;
 
 #if !defined(CYGWIN32)
-  warning_unimplemented (NULL_STRING);
-  retval = noErr;
+    warning_unimplemented(NULL_STRING);
+    retval = noErr;
 #else
-  retval = 0;
+    retval = 0;
 #endif
-  return retval;
+    return retval;
 }
 
 P1(PUBLIC pascal trap, BOOLEAN, IsMovieDone, Movie, movie)
 {
-  BOOLEAN retval;
+    BOOLEAN retval;
 
 #if !defined(CYGWIN32)
-  warning_unimplemented (NULL_STRING);
-  retval = true;
+    warning_unimplemented(NULL_STRING);
+    retval = true;
 #else
-  retval = 0;
+    retval = 0;
 #endif
-  return retval;
+    return retval;
 }
 
 P6(PUBLIC pascal trap, OSErr, NewMovieFromFile, Movie *, moviep,
    INTEGER, refnum, INTEGER *, residp, StringPtr, resnamep, INTEGER, flags,
    BOOLEAN *, datarefwaschangedp)
 {
-  OSErr retval;
+    OSErr retval;
 
 #if !defined(CYGWIN32)
-  warning_unimplemented (NULL_STRING);
-  retval = noErr;
+    warning_unimplemented(NULL_STRING);
+    retval = noErr;
 #else
-  retval = 0;
+    retval = 0;
 #endif
-  return retval;
+    return retval;
 }
 
 P1(PUBLIC pascal trap, Fixed, GetMoviePreferredRate, Movie, movie)
 {
-  Fixed retval;
+    Fixed retval;
 
 #if !defined(CYGWIN32)
-  warning_unimplemented (NULL_STRING);
-  retval = 0;
+    warning_unimplemented(NULL_STRING);
+    retval = 0;
 #else
-  retval = 0;
+    retval = 0;
 #endif
-  return retval;
+    return retval;
 }
 
 P2(PUBLIC pascal trap, void, GetMovieBox, Movie, movie, Rect *, boxp)
 {
-  warning_unimplemented (NULL_STRING);
+    warning_unimplemented(NULL_STRING);
 }
 
 P2(PUBLIC pascal trap, void, SetMovieBox, Movie, movie, const Rect *, boxp)
 {
-  warning_unimplemented (NULL_STRING);
+    warning_unimplemented(NULL_STRING);
 }
 
 P3(PUBLIC pascal trap, ComponentInstance, NewMovieController, Movie, movie,
    const Rect *, movierectp, LONGINT, flags)
 {
-  ComponentInstance retval;
+    ComponentInstance retval;
 
 #if !defined(CYGWIN32)
-  warning_unimplemented (NULL_STRING);
-  retval = 0;
+    warning_unimplemented(NULL_STRING);
+    retval = 0;
 #else
-  retval = 0;
+    retval = 0;
 #endif
-  return retval;
+    return retval;
 }
 
 P1(PUBLIC pascal trap, void, DisposeMovieController,
    ComponentInstance, controller)
 {
-  warning_unimplemented (NULL_STRING);
+    warning_unimplemented(NULL_STRING);
 }
 
 P3(PUBLIC pascal trap, OSErr, OpenMovieFile, const FSSpec *, filespecp,
    INTEGER *, refnump, uint8, perm)
 {
-  OSErr retval;
+    OSErr retval;
 
 #if !defined(CYGWIN32)
-  warning_unimplemented (NULL_STRING);
-  retval = fnfErr;
+    warning_unimplemented(NULL_STRING);
+    retval = fnfErr;
 #else
-  retval = 0;
+    retval = 0;
 #endif
-  return retval;
+    return retval;
 }

@@ -3,10 +3,10 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (__syswm_vars_h__)
+#if !defined(__syswm_vars_h__)
 #define __syswm_vars_h__
 
-#if defined (_WIN32) && !defined (WIN32)
+#if defined(_WIN32) && !defined(WIN32)
 #define WIN32
 #endif
 
@@ -14,7 +14,7 @@
 #include "SDL/SDL_syswm.h"
 
 /* System dependent variables */
-#if defined(__unix__) || defined (MACOSX)
+#if defined(__unix__) || defined(MACOSX)
 /* * */
 extern Display *SDL_Display;
 extern Window SDL_Window;

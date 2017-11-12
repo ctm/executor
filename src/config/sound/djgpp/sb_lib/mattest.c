@@ -4,10 +4,8 @@
 #include <unistd.h>
 #include "sb_lib.h"
 
-
-static unsigned char wave[] __attribute__ ((aligned (4))) =
-{
-  0x7A, 0x7A, 0x7B, 0x79, 0x78, 0x7A, 0x7B, 0x7B, 0x7B, 0x7B, 0x79,
+static unsigned char wave[] __attribute__((aligned(4))) = {
+    0x7A, 0x7A, 0x7B, 0x79, 0x78, 0x7A, 0x7B, 0x7B, 0x7B, 0x7B, 0x79,
     0x7B, 0x7B, 0x7C, 0x7B, 0x7D, 0x7C, 0x7C, 0x7C, 0x7D, 0x7C, 0x7B,
     0x7E, 0x7C, 0x7C, 0x7B, 0x7B, 0x80, 0x7F, 0x7B, 0x7C, 0x7F, 0x7F,
     0x80, 0x81, 0x7B, 0x7A, 0x7C, 0x7D, 0x7D, 0x7C, 0x7C, 0x7E, 0x7F,
@@ -2083,42 +2081,41 @@ static unsigned char wave[] __attribute__ ((aligned (4))) =
 
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 
-int
-main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-  extern volatile int sb_numInQueue;
-  int i;
+    extern volatile int sb_numInQueue;
+    int i;
 
-  /* Juke stderr to go to stdout, so traceback can get captured to a file. */
-  close (2);
-  dup2 (1, 2);
+    /* Juke stderr to go to stdout, so traceback can get captured to a file. */
+    close(2);
+    dup2(1, 2);
 
-  if (argc != 1)
+    if(argc != 1)
     {
-      printf ("Usage: %s\n", argv[0]);
-      exit (-1);
+        printf("Usage: %s\n", argv[0]);
+        exit(-1);
     }
 
-  if (sb_install_driver (NULL) != SB_SUCCESS)
+    if(sb_install_driver(NULL) != SB_SUCCESS)
     {
-      printf ("Unable to install driver.\n");
-      printf ("error string: \"%s\"\n", sb_driver_error);
-      exit (-1);
+        printf("Unable to install driver.\n");
+        printf("error string: \"%s\"\n", sb_driver_error);
+        exit(-1);
     }
 
-  atexit (sb_uninstall_driver);
+    atexit(sb_uninstall_driver);
 
-  for (i = 0; i < sizeof wave; i += 2048)
+    for(i = 0; i < sizeof wave; i += 2048)
     {
-      while (sb_numInQueue > 2)
-	;
-      sb_enqueue_sample (wave + i, MIN (2048, sizeof wave - i));
+        while(sb_numInQueue > 2)
+            ;
+        sb_enqueue_sample(wave + i, MIN(2048, sizeof wave - i));
     }
 
-  while (sb_numInQueue > 0)
-    ;
+    while(sb_numInQueue > 0)
+        ;
 
-  puts ("Successfully played sound.");
+    puts("Successfully played sound.");
 
-  return 0;
+    return 0;
 }

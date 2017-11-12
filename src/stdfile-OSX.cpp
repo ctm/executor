@@ -10,8 +10,6 @@
 #include "rsys/common.h"
 #include "stdfile-OSX.h"
 
-
 void MacBridge::ResolveRF()
 {
-	
 }

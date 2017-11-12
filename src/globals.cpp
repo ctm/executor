@@ -2,9 +2,8 @@
  * Development, Inc. All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_globals[] =
- "$Id: globals.c 63 2004-12-24 18:19:43Z ctm $";
+#if !defined(OMIT_RCSID_STRINGS)
+char ROMlib_rcsid_globals[] = "$Id: globals.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
 #include "rsys/common.h"
@@ -25,7 +24,7 @@ char ROMlib_rcsid_globals[] =
 using namespace Executor;
 
 #define DATA(type, name, suffix, address, supported, manager, citation) \
-GUEST<type> name suffix
+    GUEST<type> name suffix
 
 DATA(Ptr,     nilhandle,,	 0x00, true-b, rsys/misc,      MADEUP);
 /*

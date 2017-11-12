@@ -2,9 +2,8 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_menuV[] =
-		"$Id: menuV.c 63 2004-12-24 18:19:43Z ctm $";
+#if !defined(OMIT_RCSID_STRINGS)
+char ROMlib_rcsid_menuV[] = "$Id: menuV.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
 /* Forward declarations in MenuMgr.h (DO NOT DELETE THIS LINE) */
@@ -26,9 +25,9 @@ using namespace Executor;
 
 P1(PUBLIC pascal trap, void, InitProcMenu, INTEGER, mbid)
 {
-  if (!MenuList)
-    InitMenus();
-  
+    if(!MenuList)
+        InitMenus();
+
 #if 0
     /* NOTE:  We don't dispose this guy because it is a phoney resource */
     if (MBDFHndl)
@@ -53,81 +52,82 @@ P0(PUBLIC pascal trap, LONGINT, MenuChoice)
 }
 
 P3(PUBLIC pascal trap, void, GetItemCmd, MenuHandle, mh, INTEGER, item,
-								  GUEST<CHAR> *, cmdp)
+   GUEST<CHAR> *, cmdp)
 {
     mextp mep;
-    
-    if ((mep = ROMlib_mitemtop(mh, item, (StringPtr *) 0)))
-        *cmdp = CW((unsigned short) (unsigned char) mep->mkeyeq);
+
+    if((mep = ROMlib_mitemtop(mh, item, (StringPtr *)0)))
+        *cmdp = CW((unsigned short)(unsigned char)mep->mkeyeq);
 }
 
 P3(PUBLIC pascal trap, void, SetItemCmd, MenuHandle, mh, INTEGER, item,
-								     CHAR, cmd)
+   CHAR, cmd)
 {
     mextp mep;
-    
-    if ((mep = ROMlib_mitemtop(mh, item, (StringPtr *) 0))) {
+
+    if((mep = ROMlib_mitemtop(mh, item, (StringPtr *)0)))
+    {
         mep->mkeyeq = cmd;
         CalcMenuSize(mh);
     }
 }
 
 P4(PUBLIC pascal trap, LONGINT, PopUpMenuSelect, MenuHandle, mh, INTEGER, top,
-						  INTEGER, left, INTEGER, item)
+   INTEGER, left, INTEGER, item)
 {
     Point p;
     Rect saver;
     GUEST<INTEGER> tempi;
     LONGINT where;
     int count;
-    
-/*
+
+    /*
  * The following call to ROMlib_destroy_blocks is only here because
  * CompuServe Information Manager creates code on the fly right before
  * calling PopUpMenuSelect.  How does this work on a Quadra?  I suspect
  * that the particular code in question isn't hit if color QuickDraw is
  * present (they call Gestalt for "qd  " before doing this goofy stuff).
  */
-    if (ROMlib_flushoften)
-	ROMlib_destroy_blocks(0, ~0, true);	/* For CIM 2.1.4 */
+    if(ROMlib_flushoften)
+        ROMlib_destroy_blocks(0, ~0, true); /* For CIM 2.1.4 */
     p.h = top; /* MacWriteII seems to use these in this fashion */
     p.v = left;
 
     /* ### what to do if `mh' is empty -- is this correct? */
-    count = CountMItems (mh);
-    
+    count = CountMItems(mh);
+
 #if 0
     /* if we blow off empty menus, then ClarisImpact custom
        pulldown/popup menus don't come up */
     if (! count)
       return (int32) Hx (mh, menuID) << 16;
 #endif
-    
+
     /* if item is zero, it means no menu item was previously selected,
        and a `default' should be chosen */
-    if (! item)
-      item = 1;
-    else if (item > count)
-      {
-	warning_unexpected ("menu item exceeds number of items in menu");
-	item = count;
-      }
-    
-    ThePortGuard guard(MR(wmgr_port));
-	 tempi = CW (item);
-	 MENUCALL (mPopUpRect, mh, &saver, p, &tempi);
-	 TopMenuItem = tempi;
-	 where = ROMlib_mentosix (Hx (mh, menuID));
-	 
-	 MBDFCALL (mbSave, where, (intptr_t) &saver);
-	 
-	 auto saveclip = PORT_CLIP_REGION_X (thePort); /* ick */
-	 PORT_CLIP_REGION_X (thePort) = RM (NewRgn ());
-	 RectRgn (PORT_CLIP_REGION (thePort), &saver);
-	 MENUCALL (mDrawMsg, mh, &saver, p, nullptr);
-	 DisposeRgn (PORT_CLIP_REGION (thePort));
-	 PORT_CLIP_REGION_X (thePort) = saveclip;
-	 MBDFCALL (mbSaveAlt, 0, where);
+    if(!item)
+        item = 1;
+    else if(item > count)
+    {
+        warning_unexpected("menu item exceeds number of items in menu");
+        item = count;
+    }
 
-         return ROMlib_menuhelper (mh, &saver, where, true, 1);
+    ThePortGuard guard(MR(wmgr_port));
+    tempi = CW(item);
+    MENUCALL(mPopUpRect, mh, &saver, p, &tempi);
+    TopMenuItem = tempi;
+    where = ROMlib_mentosix(Hx(mh, menuID));
+
+    MBDFCALL(mbSave, where, (intptr_t)&saver);
+
+    auto saveclip = PORT_CLIP_REGION_X(thePort); /* ick */
+    PORT_CLIP_REGION_X(thePort) = RM(NewRgn());
+    RectRgn(PORT_CLIP_REGION(thePort), &saver);
+    MENUCALL(mDrawMsg, mh, &saver, p, nullptr);
+    DisposeRgn(PORT_CLIP_REGION(thePort));
+    PORT_CLIP_REGION_X(thePort) = saveclip;
+    MBDFCALL(mbSaveAlt, 0, where);
+
+    return ROMlib_menuhelper(mh, &saver, where, true, 1);
 }

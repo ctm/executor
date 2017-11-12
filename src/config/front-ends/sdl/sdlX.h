@@ -1,1 +1,1 @@
-extern void ROMlib_XInitThreads (void);
+extern void ROMlib_XInitThreads(void);

@@ -1,4 +1,4 @@
-#if !defined (_RSYS_RELEASE_H_)
+#if !defined(_RSYS_RELEASE_H_)
 #define _RSYS_RELEASE_H_
 
 /*
@@ -20,13 +20,13 @@
  * by defining ERROR_SUPPORTED_MASK there.
  */
 
-#if !defined (ERROR_SUPPORTED_MASK)
-#  define ERROR_SUPPORTED_MASK (~0)  /* all errors */
+#if !defined(ERROR_SUPPORTED_MASK)
+#define ERROR_SUPPORTED_MASK (~0) /* all errors */
 #endif /* !ERROR_SUPPORTED_MASK */
 
 #define SUPPORT_LOG_ERR_TO_RAM
 
-#if defined (EXPERIMENTAL)
+#if defined(EXPERIMENTAL)
 #define ALLOW_MOVABLE_MODAL
 #endif
 

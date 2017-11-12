@@ -2,7 +2,7 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
+#if !defined(OMIT_RCSID_STRINGS)
 char ROMlib_rcsid_win_temp[] = "$Id: win_temp.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
@@ -16,42 +16,41 @@ char ROMlib_rcsid_win_temp[] = "$Id: win_temp.c 63 2004-12-24 18:19:43Z ctm $";
 #include "win_temp.h"
 
 PRIVATE void
-normalize_directory_name (char *str)
+normalize_directory_name(char *str)
 {
-  for (; *str; ++str)
-    if (*str == '\\')
-      {
-	if (!str[1])
-	  *str = 0;
-	else
-	  *str = '/';
-      }
+    for(; *str; ++str)
+        if(*str == '\\')
+        {
+            if(!str[1])
+                *str = 0;
+            else
+                *str = '/';
+        }
 }
 
-
 PUBLIC char *
-win_temp (void)
+win_temp(void)
 {
-  char buf[2048];
-  DWORD len1;
-  char *retval;
+    char buf[2048];
+    DWORD len1;
+    char *retval;
 
-  len1 = GetTempPath (sizeof buf, buf);
-  if (len1 < sizeof buf)
-    retval = strdup (buf);
-  else
+    len1 = GetTempPath(sizeof buf, buf);
+    if(len1 < sizeof buf)
+        retval = strdup(buf);
+    else
     {
-      DWORD len2;
-      char *bufp;
+        DWORD len2;
+        char *bufp;
 
-      ++len1;
-      bufp = alloca (len1);
-      len2 = GetTempPath (len1, bufp);
-      if (len2 < len1)
-	retval = strdup (bufp);
-      else
-	retval = NULL;
+        ++len1;
+        bufp = alloca(len1);
+        len2 = GetTempPath(len1, bufp);
+        if(len2 < len1)
+            retval = strdup(bufp);
+        else
+            retval = NULL;
     }
-  normalize_directory_name (retval);
-  return retval;
+    normalize_directory_name(retval);
+    return retval;
 }

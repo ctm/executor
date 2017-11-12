@@ -68,46 +68,48 @@ typedef unsigned char uint8;
 typedef unsigned short uint16;
 typedef unsigned long uint32;
 
-#define PACKED __attribute__ ((packed))
+#define PACKED __attribute__((packed))
 
 typedef struct
 {
-  uint8 len                   PACKED; /* 0x00 */
-  uint8 unit                  PACKED; /* 0x01 */
-  uint8 command               PACKED; /* 0x02 */
-  uint16 status               PACKED; /* 0x03 */
-  uint8 reserved[8]           PACKED; /* 0x05 */
-  uint8 media_descriptor      PACKED; /* 0x0d */
-  uint32 transfer_address     PACKED; /* 0x0e */
-  uint16 sector_count         PACKED; /* 0x12 */
-  uint16 starting_sector      PACKED; /* 0x14 should be 0xffff */
-  uint32 volid_pointer        PACKED; /* 0x16 */
-  uint32 long_starting_sector PACKED; /* 0x1A */
-}
-ioctl_read_t;
+    uint8 len PACKED; /* 0x00 */
+    uint8 unit PACKED; /* 0x01 */
+    uint8 command PACKED; /* 0x02 */
+    uint16 status PACKED; /* 0x03 */
+    uint8 reserved[8] PACKED; /* 0x05 */
+    uint8 media_descriptor PACKED; /* 0x0d */
+    uint32 transfer_address PACKED; /* 0x0e */
+    uint16 sector_count PACKED; /* 0x12 */
+    uint16 starting_sector PACKED; /* 0x14 should be 0xffff */
+    uint32 volid_pointer PACKED; /* 0x16 */
+    uint32 long_starting_sector PACKED; /* 0x1A */
+} ioctl_read_t;
 
-enum { IOCTL_INPUT = 4 };
-
-#define xxx(yyy, zzz) ((yyy) * 16 + (zzz))
-
-void fill_read_t (ioctl_read_t *readp, uint8 unit, uint16 sector_count,
-	   uint32 starting_sector)
+enum
 {
-  memset (readp, 0, sizeof *readp);
-  readp->len = sizeof *readp;
-  readp->unit = unit;
-  readp->command = IOCTL_INPUT;
-  readp->transfer_address = xxx (dos_buf_selector, dos_buf_segment);
-  readp->sector_count = sector_count;
-  readp->starting_sector = 0xFFFF;
-  readp->long_starting_sector = starting_sector;
+    IOCTL_INPUT = 4
+};
+
+#define xxx(yyy, zzz) ((yyy)*16 + (zzz))
+
+void fill_read_t(ioctl_read_t *readp, uint8 unit, uint16 sector_count,
+                 uint32 starting_sector)
+{
+    memset(readp, 0, sizeof *readp);
+    readp->len = sizeof *readp;
+    readp->unit = unit;
+    readp->command = IOCTL_INPUT;
+    readp->transfer_address = xxx(dos_buf_selector, dos_buf_segment);
+    readp->sector_count = sector_count;
+    readp->starting_sector = 0xFFFF;
+    readp->long_starting_sector = starting_sector;
 }
 
-int main (void)
+int main(void)
 {
-  int retval;
+    int retval;
 
-  printf ("%d\n", sizeof (ioctl_read_t));
-  retval = 0;
-  return retval;
+    printf("%d\n", sizeof(ioctl_read_t));
+    retval = 0;
+    return retval;
 }

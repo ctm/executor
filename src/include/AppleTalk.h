@@ -1,3 +1,3 @@
-#if !defined (PortBUse)
-extern Executor::Byte 	PortBUse;
+#if !defined(PortBUse)
+extern Executor::Byte PortBUse;
 #endif

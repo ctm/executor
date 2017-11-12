@@ -1,4 +1,4 @@
-#if !defined (__COMMTOOL__)
+#if !defined(__COMMTOOL__)
 #define __COMMTOOL__
 
 /*
@@ -8,50 +8,74 @@
  * $Id: CommTool.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-namespace Executor {
-typedef struct CRMRec { GUEST_STRUCT;
-    GUEST< QElemPtr> qLink;
-    GUEST< INTEGER> qType;
-    GUEST< INTEGER> crmVersion;
-    GUEST< LONGINT> crmPrivate;
-    GUEST< INTEGER> crmReserved;
-    GUEST< LONGINT> crmDeviceType;
-    GUEST< LONGINT> crmDeviceID;
-    GUEST< LONGINT> crmAttributes;
-    GUEST< LONGINT> crmStatus;
-    GUEST< LONGINT> crmRefCon;
-} *CRMRecPtr;
+namespace Executor
+{
+typedef struct CRMRec
+{
+    GUEST_STRUCT;
+    GUEST<QElemPtr> qLink;
+    GUEST<INTEGER> qType;
+    GUEST<INTEGER> crmVersion;
+    GUEST<LONGINT> crmPrivate;
+    GUEST<INTEGER> crmReserved;
+    GUEST<LONGINT> crmDeviceType;
+    GUEST<LONGINT> crmDeviceID;
+    GUEST<LONGINT> crmAttributes;
+    GUEST<LONGINT> crmStatus;
+    GUEST<LONGINT> crmRefCon;
+} * CRMRecPtr;
 
 typedef OSErr CRMErr;
 
-enum { crmGenericError = -1, crmNoErr = 0 };
-enum { curCRMVersion = 1 };
-enum { crmType = 9 };
-enum { crmRecVersion = 1 };
-enum { curCRMSerRecVer = 0 };
-enum { crmSerialDevice = 1 };
+enum
+{
+    crmGenericError = -1,
+    crmNoErr = 0
+};
+enum
+{
+    curCRMVersion = 1
+};
+enum
+{
+    crmType = 9
+};
+enum
+{
+    crmRecVersion = 1
+};
+enum
+{
+    curCRMSerRecVer = 0
+};
+enum
+{
+    crmSerialDevice = 1
+};
 
-typedef struct CRMSerialRecord { GUEST_STRUCT;
-    GUEST< INTEGER> version;
-    GUEST< StringHandle> inputDriverName;
-    GUEST< StringHandle> outputDriverName;
-    GUEST< StringHandle> name;
-    GUEST< Handle> deviceIcon;
-    GUEST< LONGINT> ratedSpeed;
-    GUEST< LONGINT> maxSpeed;
-    GUEST< LONGINT> reserved;
-} *CRMSerialPtr;
+typedef struct CRMSerialRecord
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> version;
+    GUEST<StringHandle> inputDriverName;
+    GUEST<StringHandle> outputDriverName;
+    GUEST<StringHandle> name;
+    GUEST<Handle> deviceIcon;
+    GUEST<LONGINT> ratedSpeed;
+    GUEST<LONGINT> maxSpeed;
+    GUEST<LONGINT> reserved;
+} * CRMSerialPtr;
 
-extern INTEGER CRMGetCRMVersion (void);
+extern INTEGER CRMGetCRMVersion(void);
 
-extern QHdrPtr CRMGetHeader (void);
+extern QHdrPtr CRMGetHeader(void);
 
-extern void CRMInstall (QElemPtr);
+extern void CRMInstall(QElemPtr);
 
-extern OSErr CRMRemove (QElemPtr);
+extern OSErr CRMRemove(QElemPtr);
 
-extern QElemPtr CRMSearch (QElemPtr);
+extern QElemPtr CRMSearch(QElemPtr);
 
-extern CRMErr InitCRM (void);
+extern CRMErr InitCRM(void);
 }
 #endif

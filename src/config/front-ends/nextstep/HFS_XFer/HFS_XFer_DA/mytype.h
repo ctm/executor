@@ -10,13 +10,13 @@ typedef unsigned short ushort;
 #else
 
 #define LONGORPTR LONGINT
-#include		<rsys/libcproto.h>
+#include <rsys/libcproto.h>
 
 #endif
 
-typedef unsigned long  ulong;
+typedef unsigned long ulong;
 
-#if		!defined(UNIX)
+#if !defined(UNIX)
 #define PRIVATE static
 #define PUBLIC
-#endif	/* UNIX */
+#endif /* UNIX */

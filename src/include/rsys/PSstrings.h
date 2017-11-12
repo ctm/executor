@@ -1,6 +1,7 @@
 #if !defined(__rsys_PSstrings__)
 #define __rsys_PSstrings__
-namespace Executor {
+namespace Executor
+{
 extern const char ROMlib_doc_begin[];
 extern const char ROMlib_doc_prolog[];
 extern const char ROMlib_doc_end_prolog[];

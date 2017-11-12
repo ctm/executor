@@ -1,4 +1,4 @@
-#if !defined (__STAT_FUN_PRIVATE_H__)
+#if !defined(__STAT_FUN_PRIVATE_H__)
 #define __STAT_FUN_PRIVATE_H__
 
 #if 0 /* this stuff is no longer used */

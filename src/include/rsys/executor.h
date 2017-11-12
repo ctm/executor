@@ -9,12 +9,13 @@
  */
 
 #define BROWSER_NAME "Browser"
-namespace Executor {
+namespace Executor
+{
 extern LONGINT debugnumber;
 extern LONGINT ROMlib_creator;
 extern syn68k_addr_t alinehandler(syn68k_addr_t pc, void *ignored);
 extern void setupsignals(void);
-extern void filltables (void);
-extern void executor_main (void);
+extern void filltables(void);
+extern void executor_main(void);
 }
 #endif

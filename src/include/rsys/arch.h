@@ -1,4 +1,4 @@
-#if !defined (_RSYS_ARCH_H_)
+#if !defined(_RSYS_ARCH_H_)
 #define _RSYS_ARCH_H_
 
 /*
@@ -8,7 +8,8 @@
  * $Id: arch.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-namespace Executor {
-extern bool arch_init (void);
+namespace Executor
+{
+extern bool arch_init(void);
 }
 #endif /* !_RSYS_ARCH_H_ */

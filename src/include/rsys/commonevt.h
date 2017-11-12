@@ -1,4 +1,4 @@
-#if !defined (_COMMONEVT_H_)
+#if !defined(_COMMONEVT_H_)
 #define _COMMONEVT_H_
 
 /*
@@ -8,26 +8,36 @@
  * X have their own idea of what the type "Cursor" should be.
  */
 
-namespace Executor {
-typedef struct {
-    enum { commonkeypress,      commonkeyrelease, commonbuttonpress,
-	   commonbuttonrelease, commonexpose,     commonenternotify,
-	   commonleavenotify,   commonmotionnotify  } type;
-  INTEGER button;
-  INTEGER x;
-  INTEGER y;
-  LONGINT state;
+namespace Executor
+{
+typedef struct
+{
+    enum
+    {
+        commonkeypress,
+        commonkeyrelease,
+        commonbuttonpress,
+        commonbuttonrelease,
+        commonexpose,
+        commonenternotify,
+        commonleavenotify,
+        commonmotionnotify
+    } type;
+    INTEGER button;
+    INTEGER x;
+    INTEGER y;
+    LONGINT state;
 } commonevent;
 
-#define commonshiftmask		(1 << 0)
-#define commonlockmask		(1 << 1)
-#define commoncontrolmask	(1 << 2)
-#define commonmod1mask		(1 << 3)
-#define commonbutton2mask	(1 << 4)
-#define commonbutton1mask	(1 << 5)
+#define commonshiftmask (1 << 0)
+#define commonlockmask (1 << 1)
+#define commoncontrolmask (1 << 2)
+#define commonmod1mask (1 << 3)
+#define commonbutton2mask (1 << 4)
+#define commonbutton1mask (1 << 5)
 
-#define commonbutton1	1
-#define commonbutton2	2
-#define commonbutton3	3
+#define commonbutton1 1
+#define commonbutton2 2
+#define commonbutton3 3
 }
 #endif /* !_COMMONEVT_H_ */

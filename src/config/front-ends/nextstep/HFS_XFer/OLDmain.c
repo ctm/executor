@@ -8,9 +8,9 @@
 #include "FileMgr.h"
 #include "myhfs.h"
 
-#define TESTSIZE    100
+#define TESTSIZE 100
 
-#define NELEM(x)    (sizeof(x) / sizeof(x[0]))
+#define NELEM(x) (sizeof(x) / sizeof(x[0]))
 
 PRIVATE INTEGER dirindex = 0, fileindex = 0;
 
@@ -95,10 +95,10 @@ PRIVATE char *filenames[] = {
     "\ptwelve",
 };
 
-extern OSErr myPBCreate   (ioParam    *pb, BOOLEAN async);
-extern OSErr myPBDelete   (ioParam    *pb, BOOLEAN async);
+extern OSErr myPBCreate(ioParam *pb, BOOLEAN async);
+extern OSErr myPBDelete(ioParam *pb, BOOLEAN async);
 extern OSErr myPBDirCreate(HFileParam *pb, BOOLEAN async);
-extern OSErr myPBHDelete  (HFileParam *pb, BOOLEAN async);
+extern OSErr myPBHDelete(HFileParam *pb, BOOLEAN async);
 
 PRIVATE void createnfiles(INTEGER level, StringPtr prefixp, INTEGER n)
 {
@@ -108,40 +108,45 @@ PRIVATE void createnfiles(INTEGER level, StringPtr prefixp, INTEGER n)
     unsigned char *munglocp;
     int namelen, i;
     OSErr err;
-    
+
     str255assign(name, prefixp);
     munglocp = name + name[0];
-    if (level == 0) {
-	pb.ioNamePtr = name;
-	pb.ioVRefNum = 0;
-	for (i = n; --i >= 0;) {
-	    str255assign(munglocp, (StringPtr) filenames[fileindex++ % NELEM(filenames)]);
-	    namelen = *munglocp;
-	    name[0] += namelen;
-	    *munglocp = ':';
-	    printf("cf %d\n", fileindex);
-	    err = myPBCreate(&pb, false);
-	    if (err != noErr)
-		DebugStr((StringPtr) "\ppbcreate failed");
-	    name[0] -= namelen;
-	}
-    } else {
-	--level;
-	hp.ioNamePtr = name;
-	hp.ioVRefNum = 0;
-	for (i = n; --i >= 0;) {
-	    str255assign(munglocp, (StringPtr) dirnames[dirindex++ % NELEM(dirnames)]);
-	    namelen = *munglocp;
-	    name[0] += namelen-1;
-	    *munglocp = ':';
-	    printf("cd %d\n", dirindex);
-	    err = myPBDirCreate(&hp, false);
-	    if (err != noErr)
-		DebugStr((StringPtr) "\ppbdirCreate failed");
-	    name[0] += 1;
-	    createnfiles(level, name, n);
-	    name[0] -= namelen;
-	}
+    if(level == 0)
+    {
+        pb.ioNamePtr = name;
+        pb.ioVRefNum = 0;
+        for(i = n; --i >= 0;)
+        {
+            str255assign(munglocp, (StringPtr)filenames[fileindex++ % NELEM(filenames)]);
+            namelen = *munglocp;
+            name[0] += namelen;
+            *munglocp = ':';
+            printf("cf %d\n", fileindex);
+            err = myPBCreate(&pb, false);
+            if(err != noErr)
+                DebugStr((StringPtr) "\ppbcreate failed");
+            name[0] -= namelen;
+        }
+    }
+    else
+    {
+        --level;
+        hp.ioNamePtr = name;
+        hp.ioVRefNum = 0;
+        for(i = n; --i >= 0;)
+        {
+            str255assign(munglocp, (StringPtr)dirnames[dirindex++ % NELEM(dirnames)]);
+            namelen = *munglocp;
+            name[0] += namelen - 1;
+            *munglocp = ':';
+            printf("cd %d\n", dirindex);
+            err = myPBDirCreate(&hp, false);
+            if(err != noErr)
+                DebugStr((StringPtr) "\ppbdirCreate failed");
+            name[0] += 1;
+            createnfiles(level, name, n);
+            name[0] -= namelen;
+        }
     }
 }
 
@@ -153,48 +158,53 @@ PRIVATE void deletenfiles(INTEGER level, StringPtr prefixp, INTEGER n)
     unsigned char *munglocp;
     int namelen, i;
     OSErr err;
-    
+
     str255assign(name, prefixp);
     munglocp = name + name[0];
-    if (level == 0) {
-	pb.ioNamePtr = name;
-	pb.ioVRefNum = 0;
-	for (i = n; --i >= 0;) {
-	    str255assign(munglocp, (StringPtr) filenames[fileindex++ % NELEM(filenames)]);
-	    namelen = *munglocp;
-	    name[0] += namelen;
-	    *munglocp = ':';
-	    printf("df %d\n", fileindex);
+    if(level == 0)
+    {
+        pb.ioNamePtr = name;
+        pb.ioVRefNum = 0;
+        for(i = n; --i >= 0;)
+        {
+            str255assign(munglocp, (StringPtr)filenames[fileindex++ % NELEM(filenames)]);
+            namelen = *munglocp;
+            name[0] += namelen;
+            *munglocp = ':';
+            printf("df %d\n", fileindex);
 #if 0
 	    if (fileindex == 109)
 	        DebugStr("\pabout to do 109");
 #endif
-	    err = myPBDelete(&pb, false);
-	    if (err != noErr)
-		DebugStr((StringPtr) "\pmyPBDelete failed");
-	    name[0] -= namelen;
-	}
-    } else {
-	--level;
-	hp.ioNamePtr = name;
-	hp.ioVRefNum = 0;
-	for (i = n; --i >= 0;) {
-	    str255assign(munglocp, (StringPtr) dirnames[dirindex++ % NELEM(dirnames)]);
-	    namelen = *munglocp;
-	    *munglocp = ':';
-	    name[0] += namelen;
-	    deletenfiles(level, name, n);
-	    name[0] -= 1;
-	    printf("dd %d\n", dirindex);
-	    err = myPBHDelete(&hp, false);
-	    if (err != noErr)
-		DebugStr((StringPtr) "\pmyPBHDelete failed");
-	    name[0] -= namelen-1;
-	}
+            err = myPBDelete(&pb, false);
+            if(err != noErr)
+                DebugStr((StringPtr) "\pmyPBDelete failed");
+            name[0] -= namelen;
+        }
+    }
+    else
+    {
+        --level;
+        hp.ioNamePtr = name;
+        hp.ioVRefNum = 0;
+        for(i = n; --i >= 0;)
+        {
+            str255assign(munglocp, (StringPtr)dirnames[dirindex++ % NELEM(dirnames)]);
+            namelen = *munglocp;
+            *munglocp = ':';
+            name[0] += namelen;
+            deletenfiles(level, name, n);
+            name[0] -= 1;
+            printf("dd %d\n", dirindex);
+            err = myPBHDelete(&hp, false);
+            if(err != noErr)
+                DebugStr((StringPtr) "\pmyPBHDelete failed");
+            name[0] -= namelen - 1;
+        }
     }
 }
 
-PUBLIC void main( void )
+PUBLIC void main(void)
 {
     ioParam pb;
 #if 0
@@ -257,7 +267,7 @@ PUBLIC void main( void )
     pb.ioNamePtr = (StringPtr) "\pMyVol:Cliff's fifth file";
     err = myPBDelete(&pb, false);
 #endif
-    
+
 #if 0
     hp.ioNamePtr = (StringPtr) "\pMyVol:testdir1";
     hp.ioDirID = 600;
@@ -267,7 +277,7 @@ PUBLIC void main( void )
     err = PBFlushVol(&pb, false);
     err = myPBHDelete(&hp, false);
 #endif
-    
+
 #if 0
     pb.ioNamePtr = (StringPtr) "\pMyVol:testdir1:testdir1's file";
     pb.ioRefNum = 0;
@@ -284,9 +294,9 @@ PUBLIC void main( void )
 
 #if 1
     pb.ioNamePtr = (StringPtr) "\pMyVol:";
-    err = PBFlushVol((ParmBlkPtr) &pb, false);
-    if (err != noErr)
-	DebugStr((StringPtr) "\pPBFlushVol fails");
+    err = PBFlushVol((ParmBlkPtr)&pb, false);
+    if(err != noErr)
+        DebugStr((StringPtr) "\pPBFlushVol fails");
 #endif
 #if 1
 #if 1

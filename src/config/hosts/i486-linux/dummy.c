@@ -2,7 +2,7 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
+#if !defined(OMIT_RCSID_STRINGS)
 char ROMlib_rcsid_dummy[] = "$Id: dummy.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
@@ -12,13 +12,13 @@ char ROMlib_rcsid_dummy[] = "$Id: dummy.c 63 2004-12-24 18:19:43Z ctm $";
 #include "rsys/fatal.h"
 
 double
-logb (double x)
+logb(double x)
 {
-  gui_fatal ("unimplemented");
+    gui_fatal("unimplemented");
 }
 
 double
-scalb (double x, int n)
+scalb(double x, int n)
 {
-  gui_fatal ("unimplemented");
+    gui_fatal("unimplemented");
 }

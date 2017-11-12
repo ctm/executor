@@ -2,9 +2,8 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_uniquefile[] =
-	    "$Id: uniquefile.c 88 2005-05-25 03:59:37Z ctm $";
+#if !defined(OMIT_RCSID_STRINGS)
+char ROMlib_rcsid_uniquefile[] = "$Id: uniquefile.c 88 2005-05-25 03:59:37Z ctm $";
 #endif
 
 #include "rsys/common.h"
@@ -22,49 +21,48 @@ using namespace Executor;
  * character to try to obtain a unique filename.
  */
 
-bool
-Executor::unique_file_name (const char *template1, const char *default_template,
-		  Str255 result)
+bool Executor::unique_file_name(const char *template1, const char *default_template,
+                                Str255 result)
 {
-  static const char suff[] = "0123456789abcdefghijklmnopqrstuvwxyz";
-  const char *try_suff;
-  char *try1;
-  char *replace;
-  struct stat sbuf;
-  time_t oldest_time;
+    static const char suff[] = "0123456789abcdefghijklmnopqrstuvwxyz";
+    const char *try_suff;
+    char *try1;
+    char *replace;
+    struct stat sbuf;
+    time_t oldest_time;
 
-  /* The template1 string must have a '*'. */
-  if (!template1 || !strchr (template1, '*'))
-    template1 = default_template;
+    /* The template1 string must have a '*'. */
+    if(!template1 || !strchr(template1, '*'))
+        template1 = default_template;
 
-  /* Default to an empty string. */
-  result[0] = 0;
-  result[1] = '\0';
+    /* Default to an empty string. */
+    result[0] = 0;
+    result[1] = '\0';
 
-  /* Make sure the resulting string won't be too long. */
-  if (strlen (template1) + 1 >= 255)
-    return false;
+    /* Make sure the resulting string won't be too long. */
+    if(strlen(template1) + 1 >= 255)
+        return false;
 
-  try1 = copystr (template1);
-  
-  if (try1)
+    try1 = copystr(template1);
+
+    if(try1)
     {
-      /* Try to find a unique file name.  If we fail, choose the oldest. */
-      oldest_time = 0;
-      replace = strrchr (try1, '*');
-      for (try_suff = suff; *try_suff; try_suff++)
-	{
-	  *replace = *try_suff;
-	  if (Ustat (try1, &sbuf) != 0 && errno == ENOENT)
-	    {
-	      /* If this file name isn't taken, grab it !*/
-	      strcpy ((char *) result + 1, try1);
-	      result[0] = strlen ((char *) result + 1);
-	      free (try1);
-	      return true;
-	    }
-	}
+        /* Try to find a unique file name.  If we fail, choose the oldest. */
+        oldest_time = 0;
+        replace = strrchr(try1, '*');
+        for(try_suff = suff; *try_suff; try_suff++)
+        {
+            *replace = *try_suff;
+            if(Ustat(try1, &sbuf) != 0 && errno == ENOENT)
+            {
+                /* If this file name isn't taken, grab it !*/
+                strcpy((char *)result + 1, try1);
+                result[0] = strlen((char *)result + 1);
+                free(try1);
+                return true;
+            }
+        }
     }
-  /* Failed! */
-  return false;
+    /* Failed! */
+    return false;
 }

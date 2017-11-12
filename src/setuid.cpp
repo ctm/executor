@@ -2,9 +2,8 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_setuid[] =
-		"$Id: setuid.c 63 2004-12-24 18:19:43Z ctm $";
+#if !defined(OMIT_RCSID_STRINGS)
+char ROMlib_rcsid_setuid[] = "$Id: setuid.c 63 2004-12-24 18:19:43Z ctm $";
 #endif
 
 /*
@@ -20,16 +19,16 @@ char ROMlib_rcsid_setuid[] =
 
 using namespace Executor;
 
-void ROMlib_setuid( int uid )
+void ROMlib_setuid(int uid)
 {
-#if !defined(MSDOS) && !defined (CYGWIN32)
+#if !defined(MSDOS) && !defined(CYGWIN32)
     setuid(uid);
 #endif
 }
 
-void ROMlib_seteuid( int uid )
+void ROMlib_seteuid(int uid)
 {
-#if !defined(MSDOS) && !defined (CYGWIN32)
+#if !defined(MSDOS) && !defined(CYGWIN32)
     seteuid(uid);
 #endif
 }

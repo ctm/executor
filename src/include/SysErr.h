@@ -1,4 +1,4 @@
-#if !defined (_SYSERR_H_)
+#if !defined(_SYSERR_H_)
 #define _SYSERR_H_
 
 /*
@@ -8,11 +8,13 @@
  * $Id: SysErr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-namespace Executor {
-typedef enum { EXIST_YES = 0, EXIST_NO = 0xFF } exist_enum_t;
+namespace Executor
+{
+typedef enum { EXIST_YES = 0,
+               EXIST_NO = 0xFF } exist_enum_t;
 
 #if 0
-#if !defined (DSAlertTab_H)
+#if !defined(DSAlertTab_H)
 extern GUEST<Ptr> DSAlertTab_H;
 extern Rect DSAlertRect;
 extern Byte 	WWExist;
@@ -24,7 +26,7 @@ extern Byte 	QDExist;
 
 extern char syserr_msg[];
 
-extern pascal void C_SysError (short errorcode);
+extern pascal void C_SysError(short errorcode);
 }
 
 #endif /* !_SYSERR_H_ */
