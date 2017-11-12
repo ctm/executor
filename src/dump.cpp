@@ -1338,7 +1338,7 @@ just_name(unsigned char just)
     };
     const char *retval;
 
-    retval = just < NELEM(names) ? names[just] : names[NELEM(names - 1)];
+    retval = just < NELEM(names) ? names[just] : names[NELEM(names) - 1];
     return retval;
 }
 
@@ -1350,7 +1350,7 @@ flop_name(unsigned char flop)
     };
     const char *retval;
 
-    retval = flop < NELEM(names) ? names[flop] : names[NELEM(names - 1)];
+    retval = flop < NELEM(names) ? names[flop] : names[NELEM(names) - 1];
     return retval;
 }
 

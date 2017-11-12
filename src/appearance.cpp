@@ -209,9 +209,6 @@ Executor::ROMlib_set_appearance(void)
 {
     INTEGER res_file;
 
-    if(appearance < 0 || appearance >= NELEM(res_filenames))
-        appearance = (appearance_t)0;
-
     res_file = OpenRFPerm(res_filenames[appearance], CW(BootDrive), fsRdPerm);
     if(res_file != -1)
     {
