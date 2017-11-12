@@ -1,5 +1,6 @@
 build*
 **.o
+*~
 src/apple.c
 src/active.c
 src/arrow_down_active.c
