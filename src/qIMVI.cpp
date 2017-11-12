@@ -55,7 +55,7 @@ P2(PUBLIC pascal trap, OSErr, BitMapToRegion, RgnHandle, rh,
         /*-->*/ return pixmapTooDeepErr;
 
     SetHandleSize((Handle)rh, MAXRGNSIZE);
-    outp = (INTEGER *)((char *)STARH(rh) + SMALLRGN);
+    outp = (INTEGER *)((char *)STARH(rh) + RGN_SMALL_SIZE);
     endoutp = (INTEGER *)((char *)STARH(rh) + MAXRGNSIZE);
 
 #define OUTPUT(v)                                                    \
@@ -65,7 +65,7 @@ P2(PUBLIC pascal trap, OSErr, BitMapToRegion, RgnHandle, rh,
         {                                                            \
             /* ### set the size to something reasonable, although we \
                should see what the mac does */                       \
-            SetHandleSize((Handle)rh, SMALLRGN);                     \
+            SetHandleSize((Handle)rh, RGN_SMALL_SIZE);                     \
             return rgnTooBigErr;                                     \
         }                                                            \
         else                                                         \
@@ -118,22 +118,22 @@ P2(PUBLIC pascal trap, OSErr, BitMapToRegion, RgnHandle, rh,
         if(tableindex)
             OUTPUT(x + 1);
         if(havewritteny)
-            OUTPUT(RGNSTOP);
+            OUTPUT(RGN_STOP);
         saveline0p[linelen - 1] = scruffhold0;
         saveline1p[linelen - 1] = scruffhold1;
         line0p = saveline1p;
         line1p = saveline1p + rowbytes;
     }
-    OUTPUT(RGNSTOP);
+    OUTPUT(RGN_STOP);
     rgnsize = (char *)outp - (char *)STARH(rh);
     switch(rgnsize)
     {
-        case SMALLRGN + sizeof(INTEGER):
+        case RGN_SMALL_SIZE + sizeof(INTEGER):
         it_is_empty:
             RECT_ZERO(&RGN_BBOX(rh));
             RGN_SET_SMALL(rh);
             break;
-        case SMALLRGN + 9 * sizeof(INTEGER):
+        case RGN_SMALL_SIZE + 9 * sizeof(INTEGER):
             outp = RGN_DATA(rh);
             HxX(rh, rgnBBox.top) = GUEST<int16_t>::fromRaw(outp[0]);
             HxX(rh, rgnBBox.left) = GUEST<int16_t>::fromRaw(outp[1]);

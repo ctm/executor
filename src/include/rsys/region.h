@@ -7,12 +7,6 @@
 #define RGN_SIZE_MASK_X (CWC(0x7FFF))
 #define RGN_SPECIAL_FLAG_X (CWC(0x8000))
 
-#define RGN_SMALL_SIZE_X (CWC(sizeof(Region)))
-#define RGN_SMALL_SIZE (sizeof(Region))
-
-#define RGN_STOP_X (CWC_RAW(32767))
-#define RGN_STOP (32767)
-
 #define RGNP_SIZE_X(rgnp) ((rgnp)->rgnSize & RGN_SIZE_MASK_X)
 #define RGNP_SPECIAL_P(rgnp) \
     (!!((rgnp)->rgnSize & RGN_SPECIAL_FLAG_X))

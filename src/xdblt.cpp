@@ -180,7 +180,7 @@ setup_dst_bitmap(int log2_bpp, PixMap *dst_pixmap)
     return xdblt_x_offset << 3;
 }
 
-INTEGER phony_special_region[7] = { 0, 0, 0, RGNSTOP, 0, RGNSTOP, RGNSTOPX };
+INTEGER phony_special_region[7] = { 0, 0, 0, RGN_STOP, 0, RGN_STOP, RGN_STOP_X };
 
 /* This is the fastest blitter function.  It can be called when the
  * xdata is one row tall and 4 bytes wide, the xdata pixels are not
@@ -230,7 +230,7 @@ bool Executor::xdblt_xdata_norgb_norotate(RgnHandle rh, int mode,
 
     if(active_screen_p
        && mode == (patCopy & 3) /* patCopy or notPatCopy */
-       && (r = STARH(rh), r->rgnSize == SMALLRGNX))
+       && (r = STARH(rh), r->rgnSize == RGN_SMALL_SIZE_X))
     {
         int top, left;
 
@@ -658,7 +658,7 @@ do_short_narrow_pattern(RgnHandle rh, int mode, uint32 v, PixMap *dst,
 
     if(v == tv
        && raw_mode == XDBLT_COPY
-       && (r = STARH(rh), r->rgnSize == SMALLRGNX)
+       && (r = STARH(rh), r->rgnSize == RGN_SMALL_SIZE_X)
        && active_screen_addr_p(dst))
     {
         int top, left;

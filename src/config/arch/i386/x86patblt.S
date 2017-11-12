@@ -12,7 +12,7 @@
 #define CODE_BUFFER_SIZE 16384 /* if you change this, be sure to change
 				  the TOUCH_PAGES code below */
 
-#define RGNSTOP 32767
+#define RGN_STOP 32767
 
 /* Offsets into our function pointer table for this transfer mode. */
 #define REPEAT_0_FUNC		0	/* Just a "ret" */
@@ -90,7 +90,7 @@ _xdblt_canon_pattern:
 	lodsw
 	rorw	$8,%ax
 	cwtl
-	cmpl	$RGNSTOP,%eax
+	cmpl	$RGN_STOP,%eax
 	je	Ldone_with_scanlines
 	movl	%eax,y	
 
@@ -108,7 +108,7 @@ Lstart_scanline:
 	movl	code_start,%edi
 
 	/* Have we hit the end of this scanline? */
-	cmpl	$RGNSTOP,%eax
+	cmpl	$RGN_STOP,%eax
 	je	Lfetch_next_y
 
 	/* No, so scale by bpp and apply horizontal offset. */
@@ -226,7 +226,7 @@ Lsame_long:
 
 Lno_boundary_cruft:
 	/* See if we've hit the end of the scanline. */
-	cmpw	$RGNSTOP,(%esi)
+	cmpw	$RGN_STOP,(%esi)
 	je	Lfetch_next_y
 	movl	%eax,%ebx
 	andl	$31,%ebx
@@ -237,7 +237,7 @@ Lno_boundary_cruft:
 	.align	4,0x90
 Lfetch_next_y:
 	/* Fetch the starting y value for the next scanline.  When we
-	 * get here, %esi points to the RGNSTOP for the last scanline,
+	 * get here, %esi points to the RGN_STOP for the last scanline,
 	 * so we have to look two bytes farther to find the next y
 	 * value.  Special regions store y's as big endian.
 	 */
@@ -245,7 +245,7 @@ Lfetch_next_y:
 	addl	$4,%esi
 	rorw	$8,%dx
 	movswl	%dx,%edx
-	cmpl	$RGNSTOP,%edx
+	cmpl	$RGN_STOP,%edx
 	je	Ldone_with_scanlines
 
 	/* Save away the next y value. */

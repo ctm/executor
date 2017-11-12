@@ -26,12 +26,11 @@ typedef struct ccrsr_res
 
 extern bool ROMlib_text_output_disabled_p;
 
-#define SMALLRGN sizeof(Region) /* 0x000A */
-#define SMALLRGNX CWC(SMALLRGN)
+#define RGN_SMALL_SIZE_X (CWC(sizeof(Region)))
+#define RGN_SMALL_SIZE (sizeof(Region))
 
-#warning RGNSTOP == RGN_STOP (region.h)
-#define RGNSTOP 32767 /* 0x7FFF */
-#define RGNSTOPX CWC_RAW(RGNSTOP)
+#define RGN_STOP_X (CWC_RAW(32767))
+#define RGN_STOP (32767)
 
 #define SMALLPOLY (sizeof(Rect) + sizeof(INTEGER))
 

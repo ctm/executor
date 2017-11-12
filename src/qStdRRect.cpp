@@ -14,7 +14,7 @@
 
 using namespace Executor;
 
-#define TERM (*ip++ = RGNSTOPX)
+#define TERM (*ip++ = RGN_STOP_X)
 
 #define ADD4(y, x1, x2) \
     (*ip++ = CW_RAW((y)), *ip++ = CW_RAW((x1)), *ip++ = CW_RAW((x2)), TERM)
@@ -149,7 +149,7 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r) /* INTERNAL */
                     *op++ = CW_RAW(top);
                     *op++ = CW_RAW(centl - nx);
                     *op++ = CW_RAW(centr + nx);
-                    *op++ = RGNSTOPX;
+                    *op++ = RGN_STOP_X;
                     ox = nx;
                     first = false;
                 }
@@ -162,7 +162,7 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r) /* INTERNAL */
                         *op++ = CW_RAW(centl - ox);
                         *op++ = CW_RAW(centr + ox);
                         *op++ = CW_RAW(centr + nx);
-                        *op++ = RGNSTOPX;
+                        *op++ = RGN_STOP_X;
                         ox = nx;
                     }
                 }
@@ -175,14 +175,14 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r) /* INTERNAL */
     while(ip != ep)
     {
         ip -= 4;
-        while(ip != ep && *ip != RGNSTOPX)
+        while(ip != ep && *ip != RGN_STOP_X)
             ip -= 2;
         ip2 = ip + 1;
         *op++ = CW_RAW(bottom - (CW_RAW(*ip2++) - top));
-        while((*op++ = *ip2++) != RGNSTOPX)
+        while((*op++ = *ip2++) != RGN_STOP_X)
             ;
     }
-    *op++ = RGNSTOPX;
+    *op++ = RGN_STOP_X;
 
     long_region_size = sizeof(INTEGER) * (op - (INTEGER *)STARH(rh));
     if(long_region_size >= 32768) /* test for overflow */

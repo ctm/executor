@@ -100,14 +100,14 @@ void srcblt_bitmap(void)
 
     rgn = srcblt_rgn_start;
     y = CW_RAW(*rgn++);
-    if(y == RGNSTOP)
+    if(y == RGN_STOP)
         goto done_with_scanlines;
 
 start_scanline:
     x = rgn[0];
     mask = 0;
     sec = section;
-    if(x == RGNSTOP)
+    if(x == RGN_STOP)
         goto fetch_next_y;
 
     start_x_bit = (x << log2_bpp) + srcblt_x_offset;
@@ -155,8 +155,8 @@ xfer_done:
     mask = ~0;
 
 same_long:
-    /* NOTE:  the start x bit fetched here may be RGNSTOP.  That case
-   * will be detected later; RGNSTOP will cause the boundary cruft
+    /* NOTE:  the start x bit fetched here may be RGN_STOP.  That case
+   * will be detected later; RGN_STOP will cause the boundary cruft
    * to get blitted just like an X not in the same long, so this
    * hack works.
    */
@@ -178,20 +178,20 @@ same_long:
         abort();
 
 no_boundary_cruft:
-    if(rgn[0] == RGNSTOP)
+    if(rgn[0] == RGN_STOP)
         goto fetch_next_y;
     mask = xdblt_mask_array[start_x_bit & 31];
     goto next_stop;
 
 fetch_next_y:
     /* Fetch the starting y value for the next scanline.  When we
-  * get here, rgn points to the RGNSTOP for the last scanline,
+  * get here, rgn points to the RGN_STOP for the last scanline,
   * so we have to look two bytes farther to find the next y
   * value.  Special regions store y's as big endian.
   */
     next_y = CW_RAW(rgn[1]);
     rgn += 2;
-    if(next_y == RGNSTOP)
+    if(next_y == RGN_STOP)
         goto done_with_scanlines;
 
     /* If this is an empty scanline, don't loop, just move on. */

@@ -87,7 +87,7 @@ A8(PRIVATE, void, scodydxx1x2, LONGINT, y1, INTEGER, x1,
 #define OUT2(y, x1, x2) (*op++ = CW_RAW(y),  \
                          *op++ = CW_RAW(x1), \
                          *op++ = CW_RAW(x2), \
-                         *op++ = RGNSTOPX)
+                         *op++ = RGN_STOP_X)
 
 A5(PRIVATE, INTEGER *, scrdydxx1x2, LONGINT, y1, INTEGER, x1,
    INTEGER, dy, INTEGER, dx, INTEGER *, op)
@@ -422,18 +422,18 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
         if(PORT_REGION_SAVE_X(thePort) && y1 == y2 && x1 != x2)
         {
             RgnPtr tmpRP;
-            tmpRP = (RgnPtr)ALLOCA(SMALLRGN + 5 * sizeof(INTEGER));
+            tmpRP = (RgnPtr)ALLOCA(RGN_SMALL_SIZE + 5 * sizeof(INTEGER));
             tmpRP->rgnBBox.top = CW(y1);
             tmpRP->rgnBBox.left = CW(x1);
             tmpRP->rgnBBox.bottom = CW(y2);
             tmpRP->rgnBBox.right = CW(x1);
-            tmpRP->rgnSize = CWC(SMALLRGN + 5 * sizeof(INTEGER));
-            oip = (INTEGER *)((char *)tmpRP + SMALLRGN);
+            tmpRP->rgnSize = CWC(RGN_SMALL_SIZE + 5 * sizeof(INTEGER));
+            oip = (INTEGER *)((char *)tmpRP + RGN_SMALL_SIZE);
             *oip++ = CW_RAW(y1);
             *oip++ = CW_RAW(x1);
             *oip++ = CW_RAW(x2);
-            *oip++ = RGNSTOPX;
-            *oip++ = RGNSTOPX;
+            *oip++ = RGN_STOP_X;
+            *oip++ = RGN_STOP_X;
             rp = RM(tmpRP);
             XorRgn(&rp,
                    (RgnHandle)PORT_REGION_SAVE(thePort),
@@ -455,7 +455,7 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
     {
         /* size allocated below is overkill */
         RgnPtr tmpRP;
-        tmpRP = (RgnPtr)ALLOCA(SMALLRGN + (dy + 1) * sizeof(INTEGER) * 6 + sizeof(INTEGER));
+        tmpRP = (RgnPtr)ALLOCA(RGN_SMALL_SIZE + (dy + 1) * sizeof(INTEGER) * 6 + sizeof(INTEGER));
         tmpRP->rgnBBox.top = CW(y1);
         tmpRP->rgnBBox.left = CW(MIN(x1, x2));
         tmpRP->rgnBBox.bottom = CW(y2);
@@ -470,7 +470,7 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
             op = scrdxdyx2x1(y1, x1, dy, dx, (INTEGER *)tmpRP + 5);
         else
             op = scrdxdyx1x2(y1, x1 + 1, dy, dx, (INTEGER *)tmpRP + 5);
-        *op++ = RGNSTOPX;
+        *op++ = RGN_STOP_X;
         tmpRP->rgnSize = CW((char *)op - (char *)tmpRP);
         rp = RM(tmpRP);
         XorRgn(&rp,
@@ -485,7 +485,7 @@ P1(PUBLIC pascal trap, void, StdLine, Point, p)
     }
 
     RgnPtr tmpRP;
-    tmpRP = (RgnPtr)ALLOCA(SMALLRGN + (dy + py + 1) * sizeof(LONGINT) * 4 + 3 * 2 * sizeof(LONGINT));
+    tmpRP = (RgnPtr)ALLOCA(RGN_SMALL_SIZE + (dy + py + 1) * sizeof(LONGINT) * 4 + 3 * 2 * sizeof(LONGINT));
     /* Cx(rp->rgnSize) gets filled in later */
     tmpRP->rgnBBox.top = CW(y1);
     tmpRP->rgnBBox.left = CW(MIN(x1, x2));
