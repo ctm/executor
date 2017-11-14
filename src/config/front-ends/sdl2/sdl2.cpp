@@ -270,13 +270,25 @@ ROMlib_FreeTitle(char *title)
 {
 }
 
+/* This is really inefficient.  We should hash the cursors */
 void Executor::host_set_cursor(char *cursor_data,
                                unsigned short cursor_mask[16],
                                int hotspot_x, int hotspot_y)
 {
+    SDL_Cursor *old_cursor, *new_cursor;
+
+    old_cursor = SDL_GetCursor();
+    new_cursor = SDL_CreateCursor((unsigned char *)cursor_data,
+                                  (unsigned char *)cursor_mask,
+                                  16, 16, hotspot_x, hotspot_y);
+    if(new_cursor != NULL)
+    {
+        SDL_SetCursor(new_cursor);
+        SDL_FreeCursor(old_cursor);
+    }
 }
 
 int Executor::host_set_cursor_visible(int show_p)
 {
-    return 0;
+    return (SDL_ShowCursor(show_p));
 }
