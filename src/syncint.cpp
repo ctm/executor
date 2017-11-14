@@ -62,7 +62,6 @@ int Executor::syncint_init(void)
     s.sa_handler = handle_itimer_tick;
     sigemptyset(&s.sa_mask);
     s.sa_flags = 0;
-    s.sa_restorer = NULL;
     return (sigaction(SIGALRM, &s, NULL) == 0);
 
 #else
