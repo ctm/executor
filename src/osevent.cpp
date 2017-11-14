@@ -542,6 +542,13 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 
 #endif /* CYGWIN32 */
 
+#ifdef VDRIVER_PUMP_EVENTS
+    /* why oh why are there special cases for all those platforms above?
+       The following call was introduced for the SDL2 front-end,
+       which is newer than all of the above. */
+    vdriver_pump_events();
+#endif
+
     block = block_virtual_ints();
     for(qp = (EvQEl *)MR(EventQueue.qHead); qp && !((1 << Cx(qp->evtQWhat)) & evmask);
         qp = (EvQEl *)MR(qp->qLink))

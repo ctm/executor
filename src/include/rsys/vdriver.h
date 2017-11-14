@@ -196,5 +196,9 @@ extern bool vdriver_grayscale_p;
 #if !defined(vdriver_fixed_clut_p)
 extern bool vdriver_fixed_clut_p;
 #endif
+
+#ifdef VDRIVER_PUMP_EVENTS
+extern void vdriver_pump_events();
+#endif
 }
 #endif /* !_VDRIVER_H_ */
