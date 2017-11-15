@@ -4,9 +4,14 @@
 #include "rsys/cquick.h" /* for ROMlib_log2 */
 #include "rsys/adb.h"
 #include "rsys/osevent.h"
+#include "rsys/scrap.h"
+#include "rsys/keyboard.h"
 #include "OSEvent.h"
 #include "ToolboxEvent.h"
 #include "SegmentLdr.h"
+#include "ScrapMgr.h"
+
+#include "keycode_map.h"
 
 #include <SDL.h>
 
@@ -209,6 +214,38 @@ static bool ConfirmQuit()
     return buttonid == 1;
 }
 
+static bool isModifier(unsigned char virt, uint16 *modstore)
+{
+    /* Note: shift and control can be cleared if right* and left* are pressed */
+    switch(virt)
+    {
+        case MKV_LEFTSHIFT:
+        case MKV_RIGHTSHIFT:
+            *modstore = shiftKey;
+            break;
+        case MKV_CAPS:
+            *modstore = alphaLock;
+            break;
+        case MKV_LEFTCNTL:
+        case MKV_RIGHTCNTL:
+            *modstore = ControlKey;
+            break;
+        case MKV_CLOVER:
+            *modstore = cmdKey;
+            break;
+        case MKV_LEFTOPTION:
+        case MKV_RIGHTOPTION:
+            *modstore = optionKey;
+            break;
+        default:
+            *modstore = 0;
+            return false;
+    }
+    return true;
+}
+
+
+
 void Executor::vdriver_pump_events()
 {
     SDL_Event event;
@@ -245,6 +282,58 @@ void Executor::vdriver_pump_events()
                 adb_apeiron_hack(false);
             }
             break;
+            case SDL_KEYDOWN:
+            case SDL_KEYUP:
+            {
+                bool down_p;
+                unsigned char mkvkey;
+                uint16 mod;
+                LONGINT keywhat;
+                int32 when;
+                Point where;
+
+                init_sdlk_to_mkv();
+                down_p = (event.key.state == SDL_PRESSED);
+
+                /*if(use_scan_codes)
+                    mkvkey = ibm_virt_to_mac_virt[event.key.keysym.scancode];
+                else*/
+                {
+                    auto p = sdlk_to_mkv.find(event.key.keysym.sym);
+                    if(p == sdlk_to_mkv.end())
+                        mkvkey = NOTAKEY;
+                    else
+                        mkvkey = p->second;
+                }
+                mkvkey = ROMlib_right_to_left_key_map(mkvkey);
+                if(isModifier(mkvkey, &mod))
+                {
+                    if(down_p)
+                        keymod |= mod;
+                    else
+                        keymod &= ~mod;
+                }
+                when = TickCount();
+                where.h = CW(MouseLocation.h);
+                where.v = CW(MouseLocation.v);
+                keywhat = ROMlib_xlate(mkvkey, keymod, down_p);
+                post_keytrans_key_events(down_p ? keyDown : keyUp,
+                                         keywhat, when, where,
+                                         keymod, mkvkey);
+            }
+            break;
+            case SDL_WINDOWEVENT_FOCUS_GAINED:
+                //if(!we_lost_clipboard())
+                    sendresumeevent(false);
+                //else
+                //{
+                //    ZeroScrap();
+                //    sendresumeevent(true);
+                //}
+                break;
+            case SDL_WINDOWEVENT_FOCUS_LOST:
+                sendsuspendevent();
+                break;
             case SDL_QUIT:
                 if(ConfirmQuit())
                     ExitToShell();
