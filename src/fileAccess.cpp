@@ -1169,8 +1169,8 @@ A4(PRIVATE, OSErr, PBOpenForkD, ParmBlkPtr, pb, BOOLEAN, a,
             if(Ustat(pathname, &sbuf) < 0) /* NOTE: this is a stat of */
                 err = ROMlib_maperrno(); /* the parent's directory, */
             else
-            { /* so ROMlib_nami won't do */
-                if(ST_INO(sbuf) == vcbp->u.ufs.ino) /* the stat for us */
+            { /* so ROMlib_nami won't do the stat for us */
+                if(ST_INO(sbuf) == vcbp->u.ufs.ino)
                     fp->fcparid = CLC(2);
                 else
                     fp->fcparid = CL((LONGINT)ST_INO(sbuf));

@@ -362,6 +362,13 @@ A5(PRIVATE, BOOLEAN, getsetpiece, GetOrSetType, gors, LONGINT, fd,
     return retval;
 }
 
+/*
+ * ROMlib_geteofostype
+ *
+ * Fill fp->fcPLen (physical length?)
+ * 	    fp->fcleof (logical eof, same as above)
+ *		fp->fcbFType (file type)
+ */
 A1(PUBLIC, OSErr, ROMlib_geteofostype, fcbrec *, fp) /* INTERNAL */
 {
     LONGINT fd;
@@ -409,6 +416,19 @@ A1(PUBLIC, OSErr, ROMlib_geteofostype, fcbrec *, fp) /* INTERNAL */
     return err;
 }
 
+/*
+ * ROMlib_hiddenbyname
+ *
+ * Gets or sets file metadata.
+ * I (autc04) have no idea why the function is named as it is.
+ *
+ * 		datep	file dates
+ *		finfop
+ *		fxinfop
+ *		lenp	data fork length
+ *		rlenp	resource fork length
+ */
+ 
 A8(PUBLIC, OSErr, ROMlib_hiddenbyname, GetOrSetType, gors, /* INTERNAL */
    char *, pathname, char *, rpathname, Single_dates *, datep,
    FInfo *, finfop, FXInfo *, fxinfop, GUEST<LONGINT> *, lenp,
