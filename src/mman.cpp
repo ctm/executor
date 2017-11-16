@@ -16,7 +16,6 @@
 
 #include "rsys/mman_private.h"
 #include "rsys/file.h"
-#include "rsys/smash.h"
 #include "rsys/memory_layout.h"
 #include "rsys/hook.h"
 #include "rsys/memsize.h"

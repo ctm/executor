@@ -15,7 +15,6 @@
 #include "rsys/cquick.h"
 #include "rsys/mman.h"
 #include "rsys/tesave.h"
-#include "rsys/smash.h"
 #include "rsys/hook.h"
 #include "rsys/region.h"
 #include "rsys/text.h"

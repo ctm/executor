@@ -9,7 +9,6 @@
 #include "CQuickDraw.h"
 #include "MemoryMgr.h"
 
-#include "rsys/smash.h"
 #include "rsys/mman.h"
 #include "rsys/cquick.h"
 #include "rsys/rgbutil.h"

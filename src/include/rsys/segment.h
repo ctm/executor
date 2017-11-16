@@ -21,10 +21,6 @@ extern void SFSaveDisk_Update(INTEGER vrefnum, Str255 filename);
 
 extern char *ROMlib_undotdot(char *origp);
 
-#if defined(ONLY_DESTROY_BETWEEN_CODE_SEGMENTS)
-extern INTEGER ROMlib_num_code_resources;
-#endif /* ONLY_DESTROY_BETWEEN_CODE_SEGMENTS */
-
 extern LONGINT ROMlib_appbit, ROMlib_whichapps;
 extern INTEGER ROMlib_acceptsanotherfile;
 

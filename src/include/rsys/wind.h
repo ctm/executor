@@ -15,7 +15,6 @@
 #include "OSUtil.h"
 
 #include "rsys/mman.h"
-#include "rsys/smash.h"
 #include "rsys/pstuff.h"
 
 namespace Executor

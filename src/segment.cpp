@@ -68,40 +68,6 @@ using namespace Executor;
 
 PUBLIC int Executor::ROMlib_cacheheuristic = false;
 
-#if defined(ONLY_DESTROY_BETWEEN_CODE_SEGMENTS)
-static short flush_bypass = 0;
-
-/* This is the total number of code resources accessible to the program.
- * If it's zero, we recompute it.  Remember to set it to zero whenever
- * launching a new program!
- */
-
-typedef struct
-{
-    syn68k_addr_t start;
-    uint32 num_bytes;
-} destroy_pair_t;
-
-INTEGER ROMlib_num_code_resources = 0;
-
-static int compar(const void *p1, const void *p2)
-{
-    int retval;
-    uint32 s1, s2;
-
-    s1 = (uint32)((const destroy_pair_t *)p1)->start;
-    s2 = (uint32)((const destroy_pair_t *)p2)->start;
-
-    if(s1 < s2)
-        retval = -1;
-    else if(s2 < s1)
-        retval = 1;
-    else
-        retval = 0;
-    return retval;
-}
-#endif
-
 A0(PUBLIC, void, flushcache)
 {
     ROMlib_destroy_blocks((syn68k_addr_t)0, (uint32)~0, true);

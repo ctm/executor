@@ -5,7 +5,6 @@
 #include "rsys/common.h"
 #include "OSUtil.h"
 #include "NotifyMgr.h"
-#include "rsys/smash.h"
 #include "rsys/hook.h"
 
 using namespace Executor;

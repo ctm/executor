@@ -42,12 +42,10 @@
 #include "rsys/next.h"
 #include "rsys/sounddriver.h"
 #include "rsys/pstuff.h"
-#include "rsys/jumpvectors.h"
 #include "rsys/prefs.h"
 #include "rsys/flags.h"
 #include "rsys/aboutpanel.h"
 #include "rsys/segment.h"
-#include "rsys/misc.h"
 #include "rsys/pstuff.h"
 #include "rsys/tesave.h"
 #include "rsys/blockinterrupts.h"
@@ -743,9 +741,6 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
         memcpy(MR(CurrentA5) + jumpoff, lp, jumplen); /* copy in the
 							 jump table */
         ROMlib_destroy_blocks(0, ~0, false);
-#if defined(ONLY_DESTROY_BETWEEN_CODE_SEGMENTS)
-        ROMlib_num_code_resources = 0; /* Force a recompute. */
-#endif
     }
     SetCursor(STARH(GetCursor(watchCursor)));
 
@@ -1290,9 +1285,6 @@ PRIVATE void reinitialize_things(void)
 #endif
 
     ROMlib_destroy_blocks(0, ~0, false);
-#if defined(ONLY_DESTROY_BETWEEN_CODE_SEGMENTS)
-    ROMlib_num_code_resources = 0; /* Force a recompute. */
-#endif
 }
 
 PRIVATE OSErr

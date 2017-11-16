@@ -270,12 +270,10 @@ set(include_sources hintemplate.h
                   include/rsys/interfacelib.h
                   include/rsys/itm.h
                   include/rsys/iv.h
-                  include/rsys/jumpvectors.h
                   include/rsys/keyboard.h
                   include/rsys/keyboards.h
                   include/rsys/keycode.h
                   include/rsys/launch.h
-                  include/rsys/libcproto.h
                   include/rsys/licensetext.h
                   include/rsys/list.h
                   include/rsys/local_charset.h
@@ -288,7 +286,6 @@ set(include_sources hintemplate.h
                   include/rsys/memory_layout.h
                   include/rsys/memsize.h
                   include/rsys/menu.h
-                  include/rsys/misc.h
                   include/rsys/mixed_mode.h
                   include/rsys/mman.h
                   include/rsys/mman_private.h
@@ -299,7 +296,6 @@ set(include_sources hintemplate.h
                   include/rsys/nextprint.h
                   include/rsys/noreturn.h
                   include/rsys/notmac.h
-                  include/rsys/Olibcproto.h
                   include/rsys/option.h
                   include/rsys/options.h
                   include/rsys/os.h
@@ -338,7 +334,6 @@ set(include_sources hintemplate.h
                   include/rsys/setuid.h
                   include/rsys/sigio_multiplex.h
                   include/rsys/slash.h
-                  include/rsys/smash.h
                   include/rsys/sounddriver.h
                   include/rsys/soundfake.h
                   include/rsys/soundopts.h
@@ -374,7 +369,6 @@ set(include_sources hintemplate.h
                   include/rsys/x.h
                   include/rsys/xdata.h
                   include/rsys/xdblt.h
-                  include/rsys/Xdefs.h
                   include/SANE.h
                   include/ScrapMgr.h
                   include/ScriptMgr.h
