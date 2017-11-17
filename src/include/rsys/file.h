@@ -323,15 +323,6 @@ typedef struct
 #define L_XTND 2
 #endif /* L_XTND */
 
-#define NEEDTOMAP(c)                                                                                                                                                                                                           \
-    ({                                                                                                                                                                                                                         \
-        unsigned char _ch;                                                                                                                                                                                                     \
-                                                                                                                                                                                                                               \
-        _ch = c;                                                                                                                                                                                                               \
-                                                                                                                                                                                                                               \
-        ((_ch != '\r' && _ch != '?') || !netatalk_conventions_p) && (_ch == '\\' || _ch == '%' || _ch == '*' || _ch == '?' || _ch == '"' || _ch == '<' || _ch == '>' || _ch == '|' || _ch == '/' || _ch < ' ' || _ch >= 0x7f); \
-    })
-
 /*
  * TODO: Below we check for non-zero
  *	 ioFDirIndex.  It should probably be a check for positive.  We
@@ -367,8 +358,6 @@ extern OSErr ROMlib_geteofostype(fcbrec *fp);
 extern OSErr ROMlib_nami(ParmBlkPtr pb, LONGINT dir, IndexType indextype,
                          char **pathname, char **filename, char **endname,
                          BOOLEAN nodirs, VCBExtra **vcbpp, struct stat *sbufp);
-extern int ROMlib_mkresdir(char *resname, char *datapathname,
-                           char *datafilename);
 extern OSErr ROMlib_maperrno(void);
 extern VCB *ROMlib_breakoutioname(ParmBlkPtr pb, LONGINT *diridp,
                                   char **therestp, BOOLEAN *fullpathp, BOOLEAN usedefault);
@@ -389,7 +378,6 @@ extern OSErr ROMlib_PBGetSetFInfoD(ParmBlkPtr pb, BOOLEAN a,
 extern OSErr ROMlib_driveropen(ParmBlkPtr pbp, BOOLEAN a);
 extern OSErr ROMlib_dispatch(ParmBlkPtr p, BOOLEAN async,
                              DriverRoutineType routine, INTEGER trap);
-extern char *ROMlib_resname(char *pathname, char *filename, char *endname);
 
 extern DrvQExtra *ROMlib_addtodq(ULONGINT drvsize, const char *devicename,
                                  INTEGER partition, INTEGER drefnum,
@@ -456,7 +444,6 @@ extern OSErr ufsPBOffLine(ParmBlkPtr ufsPB);
 extern OSErr ufsPBEject(ParmBlkPtr ufsPB);
 
 extern void ROMlib_fileinit(void);
-extern BOOLEAN ROMlib_isresourcefork(const char *fullname);
 
 #if !defined(NDEBUG)
 

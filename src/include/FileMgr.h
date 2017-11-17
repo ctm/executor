@@ -572,7 +572,6 @@ extern OSErr AllocContig(INTEGER rn, GUEST<LONGINT> *count);
 extern OSErr FSClose(INTEGER rn);
 
 extern void ROMlib_rewinddir(void);
-extern char *ROMlib_newunixfrommac(char *ip, INTEGER n);
 extern trap OSErrRET OpenDeny(HParmBlkPtr pb, BOOLEAN a);
 extern trap OSErrRET PBHGetLogInInfo(HParmBlkPtr pb, BOOLEAN a);
 extern trap OSErrRET PBHGetDirAccess(HParmBlkPtr pb, BOOLEAN a);

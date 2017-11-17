@@ -190,8 +190,7 @@ A4(PRIVATE, OSErr, PBDeleteForD, ParmBlkPtr, pb, BOOLEAN, a,
 
         rpathname = ROMlib_resname(pathname, filename, endname);
         deletefailed = Uunlink(rpathname);
-        if(netatalk_conventions_p)
-            double_dir_op(pathname, rmdir_op);
+        double_dir_op(pathname, rmdir_op);
         if(!deletefailed || errno == ENOTDIR || errno == ENOENT)
             deletefailed = Uunlink(pathname);
         if(deletefailed && ford == Directory)

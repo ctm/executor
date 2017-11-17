@@ -12,6 +12,7 @@
 
 #include "rsys/resource.h"
 #include "rsys/file.h"
+#include "rsys/filedouble.h"
 #include "rsys/mman.h"
 #include "rsys/flags.h"
 #include "rsys/version.h"
@@ -95,12 +96,7 @@ P0(PUBLIC pascal trap, INTEGER, InitResources)
         fprintf(stderr, "OpenRFPerm (\"%.*s\", 0x%x, fsCurPerm) failed\n",
                 SYSMACNAME[0], SYSMACNAME + 1, (uint16)Cx(BootDrive));
 
-        if(afpd_conventions_p)
-            fprintf(stderr,
-                    "Try omitting \"-afpd\" from the command line\n");
-        else if(netatalk_conventions_p)
-            fprintf(stderr,
-                    "Try omitting \"-netatalk\" from the command line\n");
+        report_resfork_problem();
 
         exit(1);
     }

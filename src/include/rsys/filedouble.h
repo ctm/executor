@@ -84,16 +84,28 @@ typedef struct defaultentries
 #define SINGLEVERSION 0x00020000
 
 extern OSErr ROMlib_newresfork(char *name, LONGINT *fdp, bool unix_p);
-
-typedef enum { mkdir_op,
-               rmdir_op } double_dir_op_t;
+extern char *ROMlib_resname(char *pathname, char *filename, char *endname);
 
 extern int afpd_conventions_p;
 extern int netatalk_conventions_p;
 extern char apple_double_quote_char;
-extern const char *apple_double_fork_prefix;
-extern int apple_double_fork_prefix_length;
+
+typedef enum { mkdir_op,
+               rmdir_op } double_dir_op_t;
 
 extern void double_dir_op(char *name, double_dir_op_t op);
+extern char *ROMlib_newunixfrommac(char *ip, INTEGER n);
+extern BOOLEAN ROMlib_isresourcefork(const char *fullname);
+
+enum class ResForkFormat
+{
+	standard,
+	afpd,
+	netatalk,
+	native
+};
+
+extern void setup_resfork_format(ResForkFormat rf);
+extern void report_resfork_problem();
 }
 #endif

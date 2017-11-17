@@ -1608,19 +1608,12 @@ int main(int argc, char **argv)
     use_native_code_p = !opt_val(common_db, "notnative", NULL);
 #endif
 
-    afpd_conventions_p = opt_val(common_db, "afpd", NULL);
-    netatalk_conventions_p = (afpd_conventions_p || opt_val(common_db, "netatalk", NULL));
-    if(netatalk_conventions_p)
-    {
-        apple_double_quote_char = ':';
-        apple_double_fork_prefix = ".AppleDouble/";
-    }
+    if(opt_val(common_db, "netatalk", NULL))
+        setup_resfork_format(ResForkFormat::netatalk);
+    else if(opt_val(common_db, "afpd", NULL))
+        setup_resfork_format(ResForkFormat::afpd);
     else
-    {
-        apple_double_quote_char = '%';
-        apple_double_fork_prefix = "%";
-    }
-    apple_double_fork_prefix_length = strlen(apple_double_fork_prefix);
+        setup_resfork_format(ResForkFormat::standard);
 
     substitute_fonts_p = !opt_val(common_db, "cities", NULL);
 

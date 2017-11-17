@@ -12,17 +12,17 @@
 
 namespace Executor
 {
-enum rsrcForkConventions
-{
-    rsrcForkConventionsAFPd,
-    rsrcForkConventionsNetATalk,
-    rsrcForkConventionsMacRsrc
-};
 int afpd_conventions_p;
 int netatalk_conventions_p;
 char apple_double_quote_char;
 const char *apple_double_fork_prefix;
 int apple_double_fork_prefix_length;
+}
+
+namespace Executor
+{
+PRIVATE unsigned char tohex(unsigned char);
+PRIVATE INTEGER Mac_to_UNIX7(unsigned char *, INTEGER, unsigned char *);
 }
 
 using namespace Executor;
@@ -96,6 +96,8 @@ PRIVATE defaultentries_t ourentries;
 PUBLIC void
 Executor::double_dir_op(char *name, double_dir_op_t op)
 {
+    if(!netatalk_conventions_p)
+        return;
     char *last_slash;
 
     last_slash = strrchr(name, '/');
@@ -169,7 +171,7 @@ A3(PUBLIC, OSErr, ROMlib_newresfork, char *, name, LONGINT *, fdp,
     return retval;
 }
 
-/*
+    /*
  * Modifications to hiddenbyname:
  *
  * haven't thought it through yet.
@@ -428,7 +430,7 @@ A1(PUBLIC, OSErr, ROMlib_geteofostype, fcbrec *, fp) /* INTERNAL */
  *		lenp	data fork length
  *		rlenp	resource fork length
  */
- 
+
 A8(PUBLIC, OSErr, ROMlib_hiddenbyname, GetOrSetType, gors, /* INTERNAL */
    char *, pathname, char *, rpathname, Single_dates *, datep,
    FInfo *, finfop, FXInfo *, fxinfop, GUEST<LONGINT> *, lenp,
@@ -544,5 +546,195 @@ fprintf(stderr, "%s(%d): open '%s' fails\n", __FILE__, __LINE__, rpathname);
         Uclose(rfd);
     }
     fs_err_hook(retval);
+    return retval;
+}
+
+    /*
+ * Old algorithm:
+ *
+ * The new code is a little bit tricky; it would be just prepend a %, except
+ * if someone has a name that begins with two hex digits ("feed me") you would
+ * get something that could be a data fork, so we make sure that if the first
+ * char is a % and the next two are hex and the hex would make something that
+ * we would have wanted to map then we map the second character even though
+ * we normally wouldn't map it.
+ *
+ * New algorithm:
+ *
+ * We just prepend the bloody "%" -- We get into trouble with other providers
+ * of Apple Double if we do it differently.  What a crock.
+ */
+
+#define ROOTS_PERCENT_FILE "%%2F"
+
+A3(PUBLIC, char *, ROMlib_resname, char *, pathname, /* INTERNAL */
+   char *, filename, char *, endname)
+{
+    int pathnamesize, filenamesize, newsize;
+    char *newname;
+
+    pathnamesize = filename - pathname;
+    filenamesize = endname - filename;
+    if(pathnamesize)
+    {
+        newsize = pathnamesize + filenamesize
+            + apple_double_fork_prefix_length;
+        newname = (char *)malloc(newsize);
+        memcpy(newname, pathname, pathnamesize);
+        strcpy(&newname[pathnamesize], apple_double_fork_prefix);
+        memcpy(newname + pathnamesize + apple_double_fork_prefix_length,
+               filename, filenamesize);
+    }
+    else
+    {
+        /* "E:/" --> "E:/%%2F" */
+        newsize = filenamesize + sizeof(ROOTS_PERCENT_FILE);
+        newname = (char *)malloc(newsize);
+        sprintf(newname, "%s%s", filename, ROOTS_PERCENT_FILE);
+    }
+    return newname;
+}
+
+/*
+ * NOTE: we must use capital letters in tohex below.  Code depends on it.
+ */
+
+A1(PRIVATE, unsigned char, tohex, unsigned char, c)
+{
+    unsigned char retval;
+
+    retval = (unsigned char)(netatalk_conventions_p ? "0123456789abcdef"
+                                                    : "0123456789ABCDEF")[c & 0xF];
+    return retval;
+}
+
+A3(PRIVATE, INTEGER, Mac_to_UNIX7, unsigned char *, name, INTEGER, length,
+   unsigned char *, out)
+{
+    unsigned char c;
+    INTEGER retval;
+    bool last_character_was_colon;
+
+    retval = length;
+    last_character_was_colon = true;
+    while(--length >= 0)
+    {
+        c = *name++;
+        if(((c != '\r' && c != '?') || !netatalk_conventions_p)
+           && (c == '\\' || c == '%' || c == '*' || c == '?' || c == '"'
+               || c == '<' || c == '>' || c == '|' || c == '/'
+               || c < ' ' || c >= 0x7f))
+        {
+            *out++ = apple_double_quote_char;
+            *out++ = tohex(c >> 4);
+            *out++ = tohex(c);
+            retval += 2;
+        }
+        else if(c == ':')
+        {
+            if(last_character_was_colon)
+            {
+                *out++ = '.';
+                *out++ = '.';
+                retval += 2;
+            }
+            *out++ = '/';
+        }
+        else
+            *out++ = c;
+        last_character_was_colon = c == ':';
+    }
+    return retval;
+}
+
+A2(PUBLIC, char *, ROMlib_newunixfrommac, char *, ip, INTEGER, n)
+{
+    char *retval;
+
+    if((retval = (char *)malloc(3 * n + 1))) /* worst case numbers */
+        retval[Mac_to_UNIX7((unsigned char *)ip, n,
+                            (unsigned char *)retval)]
+            = 0;
+    return retval;
+}
+
+void Executor::setup_resfork_format(ResForkFormat rf)
+{
+    afpd_conventions_p = netatalk_conventions_p = false;
+    switch(rf)
+    {
+        case ResForkFormat::standard:
+            break;
+        case ResForkFormat::afpd:
+            afpd_conventions_p = true;
+            break;
+        case ResForkFormat::netatalk:
+            afpd_conventions_p = netatalk_conventions_p = true;
+            break;
+        case ResForkFormat::native:
+            break;
+    }
+    if(netatalk_conventions_p)
+    {
+        apple_double_quote_char = ':';
+        apple_double_fork_prefix = ".AppleDouble/";
+    }
+    else
+    {
+        apple_double_quote_char = '%';
+        apple_double_fork_prefix = "%";
+    }
+    apple_double_fork_prefix_length = strlen(apple_double_fork_prefix);
+}
+
+void Executor::report_resfork_problem()
+{
+    if(afpd_conventions_p)
+        fprintf(stderr,
+                "Try omitting \"-afpd\" from the command line\n");
+    else if(netatalk_conventions_p)
+        fprintf(stderr,
+                "Try omitting \"-netatalk\" from the command line\n");
+}
+
+/*
+ * Blech!  I've finally caved in and am going to look for the magic
+ * number in the obnoxious case of a file that starts with %XX where XX
+ * are two upper case hex digits.
+ */
+
+PUBLIC BOOLEAN Executor::ROMlib_isresourcefork(const char *fullname)
+{
+    LONGINT fd;
+    LONGINT magic;
+    BOOLEAN retval;
+    const char *filename;
+
+    /* netatalk_conventions_p means we never see resource forks, because
+	 they're stored in a subdirectory */
+
+    if(netatalk_conventions_p)
+        retval = false;
+    else
+    {
+        filename = strrchr(fullname, '/');
+        if(!filename)
+            filename = fullname;
+        else
+            ++filename;
+        if(filename[0] != '%')
+            retval = false;
+        else if(!isxdigit(filename[1]) || !isxdigit(filename[2]))
+            retval = true;
+        else
+        {
+            fd = -1;
+            retval = (fd = Uopen(fullname, O_BINARY | O_RDONLY, 0)) >= 0
+                && read(fd, (void *)&magic, sizeof(magic)) == sizeof(magic)
+                && (magic == CLC(DOUBLEMAGIC).raw() || magic == DOUBLEMAGIC);
+            if(fd >= 0)
+                Uclose(fd);
+        }
+    }
     return retval;
 }
