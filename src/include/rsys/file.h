@@ -130,16 +130,6 @@ typedef struct
 #define ROMlib_fcblocks (((fcbhidden *)MR(FCBSPtr))->fc)
 
 typedef struct
-{ /* add new elements to the beginning of this struct */
-    GUEST_STRUCT;
-    GUEST<LONGINT> magicword;
-    GUEST<FInfo> FndrInfo;
-    GUEST<LONGINT> LgLen;
-    GUEST<LONGINT> RLgLen;
-    GUEST<LONGINT> CrDat;
-} hiddeninfo;
-
-typedef struct
 {
     GUEST_STRUCT;
     GUEST<LONGINT> dirid;
@@ -248,10 +238,7 @@ extern fcbrec *PRNTOFPERR(INTEGER prn, OSErr *errp);
 #define ATTRIB_ISADIR (1 << 4)
 #define ATTRIB_ISOPEN (1 << 7)
 
-#define RESOURCEDIR ".Rsrc/"
-#define RESOURCEDIRNOSLASH ".Rsrc"
 #define RESOURCEPREAMBLE 512
-#define HIDDENOFFSET (RESOURCEPREAMBLE - sizeof(hiddeninfo))
 #define MAGICWORD 0x41524449
 
 #define CHEATDIR __cheatdir

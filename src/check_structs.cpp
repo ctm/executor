@@ -491,7 +491,6 @@ void Executor::check_structs(void)
     check(DrvQExtra, 46);
     check(fcbrec, 94);
     check(fcbhidden, 32714);
-    check(hiddeninfo, 32);
     check(VCBExtra, 202);
     check(getvolparams_info_t, 20);
 
