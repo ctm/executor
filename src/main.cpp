@@ -382,6 +382,8 @@ capable of color.",
       opt_no_arg, "" },
     { "afpd", "use afpd conventions for AppleDouble files (implies -netatalk)",
       opt_no_arg, "" },
+    { "rsrc", "use native resource forks on Mac OS X",
+      opt_no_arg, "" },
 
 #if defined(MSDOS)
     {
@@ -1612,9 +1614,11 @@ int main(int argc, char **argv)
         setup_resfork_format(ResForkFormat::netatalk);
     else if(opt_val(common_db, "afpd", NULL))
         setup_resfork_format(ResForkFormat::afpd);
+    else if(opt_val(common_db, "rsrc", NULL))
+        setup_resfork_format(ResForkFormat::native);
     else
         setup_resfork_format(ResForkFormat::standard);
-
+    
     substitute_fonts_p = !opt_val(common_db, "cities", NULL);
 
     if(opt_val(common_db, "offset", NULL))

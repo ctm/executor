@@ -487,6 +487,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb, /* INTERNAL */
                 ((CInfoPBPtr)pb)->hFileInfo.ioFlClpSiz = CLC(512);
             }
         }
+#if 0
         if(Ustat(rpathname, &resourcesbuf) < 0)
         {
             pb->fileParam.ioFlRPyLen = 0;
@@ -514,6 +515,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb, /* INTERNAL */
                        sizeof(((CInfoPBPtr)pb)->hFileInfo.ioFlXFndrInfo));
         }
         else
+#endif
         {
             if((err = ROMlib_hiddenbyname(Get, pathname, rpathname, &dateinfo,
                                           &finfo, &fxinfo, &pb->fileParam.ioFlLgLen,

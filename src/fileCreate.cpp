@@ -191,7 +191,8 @@ A4(PRIVATE, OSErr, PBDeleteForD, ParmBlkPtr, pb, BOOLEAN, a,
         rpathname = ROMlib_resname(pathname, filename, endname);
         deletefailed = Uunlink(rpathname);
         double_dir_op(pathname, rmdir_op);
-        if(!deletefailed || errno == ENOTDIR || errno == ENOENT)
+        if(!deletefailed || errno == ENOTDIR || errno == ENOENT || errno == ENOTSUP)
+                // ENOTSUP triggered by trying to delete ..namedfork/rsrc on Mac OS X
             deletefailed = Uunlink(pathname);
         if(deletefailed && ford == Directory)
         {

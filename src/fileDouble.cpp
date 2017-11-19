@@ -6,6 +6,10 @@
 #include "FileMgr.h"
 #include "rsys/file.h"
 
+#ifdef MACOSX
+#include <sys/xattr.h>
+#endif
+
 #if defined(CYGWIN32)
 #include "winfs.h"
 #endif
@@ -17,6 +21,10 @@ int netatalk_conventions_p;
 char apple_double_quote_char;
 const char *apple_double_fork_prefix;
 int apple_double_fork_prefix_length;
+const char *resfork_suffix = "";
+int resfork_suffix_length = 0;
+
+bool native_resfork_p = true;
 }
 
 namespace Executor
@@ -157,7 +165,12 @@ A3(PUBLIC, OSErr, ROMlib_newresfork, char *, name, LONGINT *, fdp,
         ourentries.finfo.finfo.fdCreator = 0;
     }
     initialize_ourdefault();
-    if((fd = Uopen(name, (O_BINARY | O_RDWR | O_CREAT), 0666L)) < 0 || write(fd, (char *)&ourdefault, sizeof(ourdefault)) != sizeof(ourdefault) || write(fd, (char *)&ourentries, sizeof(ourentries)) != sizeof(ourentries))
+    if((fd = Uopen(name, (O_BINARY | O_RDWR | O_CREAT), 0666L)) < 0
+        || (!native_resfork_p &&
+            (write(fd, (char *)&ourdefault, sizeof(ourdefault)) != sizeof(ourdefault)
+        || write(fd, (char *)&ourentries, sizeof(ourentries)) != sizeof(ourentries)))
+        )
+        
     {
         retval = ROMlib_maperrno();
         Uclose(fd);
@@ -253,6 +266,9 @@ A1(PUBLIC, LONGINT, ROMlib_FORKOFFSET, fcbrec *, fp) /* INTERNAL */
     Single_descriptor d;
     Single_ID idwanted;
 
+    if(native_resfork_p)
+        return 0;
+    
     if(fp->fcfd != fp->hiddenfd)
         /*-->*/ return 0L;
     idwanted = IDWANTED(fp);
@@ -287,7 +303,7 @@ A1(PUBLIC, OSErr, ROMlib_seteof, fcbrec *, fp) /* INTERNAL */
     fd = fp->fcfd;
     leof = Cx(fp->fcleof);
     err = noErr;
-    if(fd == fp->hiddenfd)
+    if(!native_resfork_p && fd == fp->hiddenfd)
     { /* mixed file */
         idwanted = IDWANTED(fp);
         if(getsetentry(Get, fd, idwanted, &d, &peof))
@@ -386,7 +402,7 @@ A1(PUBLIC, OSErr, ROMlib_geteofostype, fcbrec *, fp) /* INTERNAL */
     else
     {
         err = noErr;
-        if(fd == fp->fcfd)
+        if(!native_resfork_p && fd == fp->fcfd)
         { /* mixed file */
             idwanted = IDWANTED(fp);
             if(!getsetentry(Get, fd, idwanted, &d, NULL))
@@ -401,6 +417,28 @@ A1(PUBLIC, OSErr, ROMlib_geteofostype, fcbrec *, fp) /* INTERNAL */
             fp->fcleof = fp->fcPLen = CL((int)sbuf.st_size);
         if(err == noErr)
         {
+#ifdef MACOSX
+            if(native_resfork_p)
+            {
+               /* struct {
+                    FInfo finfo;
+                    FXInfo fxinfo;
+                } buffer;
+                if(getxattr(pathname, XATTR_FINDERINFO_NAME, &buffer, 32, 0, 0) < 0)
+                {
+                    uint32 type;
+
+                    if(ROMlib_creator_and_type_from_filename(fp->fcname[0], (char *)fp->fcname + 1, NULL, &type))
+                        fp->fcbFType = CL(type);
+                    else
+                        fp->fcbFType = TICKX("TEXT");
+                }
+                else
+                    fp->fcbFType = buffer.finfo.fdType;*/
+                fp->fcbFType = 0; /* who reads this, anyway? */
+            }
+            else
+#endif
             if(!getsetentry(Get, fd, Finder_Info_ID, &d, NULL) || (!getsetpiece(Get, fd, &d, (char *)&finfo, sizeof(finfo))))
             {
                 uint32 type;
@@ -448,6 +486,62 @@ A8(PUBLIC, OSErr, ROMlib_hiddenbyname, GetOrSetType, gors, /* INTERNAL */
         retval = ROMlib_maperrno();
     else
     {
+#ifdef MACOSX
+        if(native_resfork_p)
+        {
+            struct {
+                FInfo finfo;
+                FXInfo fxinfo;
+            } buffer;
+            if(gors == Get)
+            {
+                if(getxattr(pathname, XATTR_FINDERINFO_NAME, &buffer, 32, 0, 0) < 0)
+                {
+                    memset(&buffer, 0, sizeof(buffer));
+                }
+                if(finfop)
+                    *finfop = buffer.finfo;
+                if(fxinfop)
+                    *fxinfop = buffer.fxinfo;
+                
+                if(datep)
+                {
+                    datep->crdat = CL(UNIXTIMETOMACTIME(sbuf.st_birthtime));
+                    datep->moddat = CL(UNIXTIMETOMACTIME(sbuf.st_mtime));
+                    datep->accessdat = CL(UNIXTIMETOMACTIME(sbuf.st_atime));
+                    datep->backupdat = 0;
+                }
+                if(lenp)
+                    *lenp = CL((int)sbuf.st_size);
+                if(rlenp)
+                {
+                    if(Ustat(rpathname, &sbuf) < 0)
+                        *rlenp = 0;
+                    else
+                        *rlenp = CL((int)sbuf.st_size);
+                }
+                fs_err_hook(retval);
+                return retval;
+            }
+            else
+            {
+                if(getxattr(pathname, XATTR_FINDERINFO_NAME, &buffer, 32, 0, 0) < 0)
+                {
+                    memset(&buffer, 0, sizeof(buffer));
+                }
+
+                if(finfop)
+                    buffer.finfo = *finfop;
+                if(fxinfop)
+                    buffer.fxinfo = *fxinfop;
+                
+                if(setxattr(pathname, XATTR_FINDERINFO_NAME, &buffer, 32, 0, 0) < 0)
+                    retval = ROMlib_maperrno();
+                fs_err_hook(retval);
+                return retval;
+            }
+        }
+#endif
         done = false;
         rfd = Uopen(rpathname, O_BINARY | (gors == Set ? O_RDWR : O_RDONLY), 0);
         /*
@@ -578,12 +672,17 @@ A3(PUBLIC, char *, ROMlib_resname, char *, pathname, /* INTERNAL */
     if(pathnamesize)
     {
         newsize = pathnamesize + filenamesize
-            + apple_double_fork_prefix_length;
+            + apple_double_fork_prefix_length
+            + resfork_suffix_length;
         newname = (char *)malloc(newsize);
         memcpy(newname, pathname, pathnamesize);
         strcpy(&newname[pathnamesize], apple_double_fork_prefix);
         memcpy(newname + pathnamesize + apple_double_fork_prefix_length,
                filename, filenamesize);
+        memcpy(newname + pathnamesize + apple_double_fork_prefix_length + filenamesize - 1,
+               resfork_suffix, resfork_suffix_length);
+        newname[newsize-1] = 0;
+        
     }
     else
     {
@@ -660,31 +759,32 @@ A2(PUBLIC, char *, ROMlib_newunixfrommac, char *, ip, INTEGER, n)
 
 void Executor::setup_resfork_format(ResForkFormat rf)
 {
-    afpd_conventions_p = netatalk_conventions_p = false;
+    afpd_conventions_p = netatalk_conventions_p = native_resfork_p = false;
     switch(rf)
     {
         case ResForkFormat::standard:
+            apple_double_quote_char = '%';
+            apple_double_fork_prefix = "%";
             break;
         case ResForkFormat::afpd:
+            apple_double_quote_char = '%';
+            apple_double_fork_prefix = "%";
             afpd_conventions_p = true;
             break;
         case ResForkFormat::netatalk:
             afpd_conventions_p = netatalk_conventions_p = true;
+            apple_double_quote_char = ':';
+            apple_double_fork_prefix = ".AppleDouble/";
             break;
         case ResForkFormat::native:
+            apple_double_quote_char = '%';
+            apple_double_fork_prefix = "";
+            resfork_suffix = "/..namedfork/rsrc";
+            native_resfork_p = true;
             break;
     }
-    if(netatalk_conventions_p)
-    {
-        apple_double_quote_char = ':';
-        apple_double_fork_prefix = ".AppleDouble/";
-    }
-    else
-    {
-        apple_double_quote_char = '%';
-        apple_double_fork_prefix = "%";
-    }
     apple_double_fork_prefix_length = strlen(apple_double_fork_prefix);
+    resfork_suffix_length = strlen(resfork_suffix);
 }
 
 void Executor::report_resfork_problem()
