@@ -1757,7 +1757,7 @@ BlockMove_and_possibly_flush_cache(Ptr src, Ptr dst, Size cnt,
         if(!src)
             src = (Ptr)SYN68K_TO_US(0);
 
-        memmove_transfer(dst, src, cnt);
+        memmove(dst, src, cnt);
         if(flush_p)
             ROMlib_destroy_blocks(US_TO_SYN68K(dst), cnt, true);
     }

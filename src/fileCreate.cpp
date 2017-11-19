@@ -136,7 +136,7 @@ A4(PRIVATE, OSErr, PBCreateForD, ParmBlkPtr, pb, BOOLEAN, a,
     {
         GUEST<LONGINT> swapped_dir;
 
-        TRANSFER_ASSIGN(newparam.fileParam, pb->fileParam);
+        newparam.fileParam = pb->fileParam;
         memset(&newparam.fileParam.ioFlFndrInfo, 0,
                sizeof(newparam.fileParam.ioFlFndrInfo));
         memset(&newparam.fileParam.ioFlCrDat, 0,

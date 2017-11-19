@@ -228,7 +228,6 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fsetenv, INTEGER *,
             : "g"(fpcr), "g"(fpsr));
     }
 #elif defined(i386)
-#if !defined(__CHECKER__)
     {
         unsigned short fcw, fsw;
         i387_env_t i387_env;
@@ -303,7 +302,6 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fsetenv, INTEGER *,
             :
             : "m"(i387_env));
     }
-#endif
 #elif defined(__alpha) || defined(powerpc) || defined(__ppc__) || defined(__x86_64)
 #warning ROMlib_Fsetenv not implemented!
     signal(SIGFPE, SIG_IGN);

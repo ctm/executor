@@ -112,7 +112,7 @@ namespace Executor
         EXTRA_CLEANUP();                                                            \
     }
 
-#if defined(i386) && !defined(__CHECKER__)
+#if defined(i386)
 
 /* Override some of the common conversion cases with inline assembly
  * hand-scheduled for the Pentium.

@@ -1736,11 +1736,7 @@ int main(int argc, char **argv)
 #if defined(SYN68K)
         /* Set up syn68k. */
         initialize_68k_emulator(vdriver_system_busy,
-#if defined(__CHECKER__)
-                                false,
-#else
                                 use_native_code_p,
-#endif
                                 (uint32 *)SYN68K_TO_US(0),
 #if defined(USE_BIOS_TIMER)
                                 dos_int_flag.rm_segment * 16
