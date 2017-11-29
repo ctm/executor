@@ -115,15 +115,10 @@ bool Executor::vdriver_set_mode(int width, int height, int bpp, bool grayscale_p
         case 32:
             pixelFormat = SDL_PIXELFORMAT_BGRX8888;
             break;
+        default:
+            std::abort();
     }
-    /*
-    sdlTexture = SDL_CreateTexture(sdlRenderer,
-                                   //SDL_PIXELTYPE_INDEX8,
-                                   //SDL_PIXELFORMAT_ARGB8888,
-                                   SDL_PIXELFORMAT_BGRA8888,
-                                   SDL_TEXTUREACCESS_STREAMING,
-                                   vdriver_width, vdriver_height);
-*/
+    
     vdriver_fbuf = new uint8_t[vdriver_width * vdriver_height * 4];
 
     sdlSurface = SDL_CreateRGBSurfaceWithFormatFrom(
