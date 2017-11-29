@@ -231,7 +231,7 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt, /* IMIV-273 */
     doubleclick = false;
     if(PtInRect(pt, &HxX(list, rView)))
     {
-        TRAPBEGIN();
+        
         flags = Hx(list, selFlags);
         newcell.h = CW(pt.h);
         newcell.v = CW(pt.v);
@@ -455,7 +455,7 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt, /* IMIV-273 */
                 }
             }
         } while(!OSEventAvail(mUpMask, &evt) && (GlobalToLocal(&evt.where), true));
-        TRAPEND();
+        
     }
     else if(((ch = HxP(list, hScroll)) && PtInRect(pt, &HxX(ch, contrlRect))) || ((ch = HxP(list, vScroll)) && PtInRect(pt, &HxX(ch, contrlRect))))
     {

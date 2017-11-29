@@ -87,7 +87,7 @@ P2(PUBLIC pascal trap, void, StdPoly, GrafVerb, verb, PolyHandle, ph)
         case frame:
             /* we used to unconditionally close the polygon here, but
 	   testing on the mac shows that is incorrect */
-            TRAPBEGIN();
+            
             pp = HxX(ph, polyPoints);
             ep = (GUEST<Point> *)((char *)STARH(ph) + Hx(ph, polySize));
             firstp.h = CW(pp[0].h);
@@ -100,7 +100,7 @@ P2(PUBLIC pascal trap, void, StdPoly, GrafVerb, verb, PolyHandle, ph)
                 StdLine(p);
                 PORT_PEN_LOC(thePort) = pp[0];
             }
-            TRAPEND();
+            
             break;
         case paint:
         case erase:

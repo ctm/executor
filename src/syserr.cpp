@@ -337,7 +337,7 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
 #endif
 
     /* 5, 6. Draw alert box if the errorcode is >= 0 */
-    TRAPBEGIN();
+    
     if(errorcode < 0)
         errorcode = -errorcode;
     else
@@ -383,5 +383,5 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
         dobuttons(/* CL(ResumeProc) ? Cx(ap->buttonid) + 1 : */ Cx(ap->buttonid),
                   offsetx, offsety, false);
 
-    TRAPEND();
+    
 }

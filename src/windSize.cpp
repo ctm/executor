@@ -31,7 +31,7 @@ P4(PUBLIC pascal trap, void, MoveWindow, WindowPtr, wp, INTEGER, h, INTEGER, v,
     Rect r;
     WindowPeek w;
 
-    TRAPBEGIN();
+    
     w = (WindowPeek)wp;
     gp = thePort;
     if(WINDOW_VISIBLE_X(w))
@@ -154,7 +154,7 @@ P4(PUBLIC pascal trap, void, MoveWindow, WindowPtr, wp, INTEGER, h, INTEGER, v,
     if(front)
         SelectWindow((WindowPtr)w);
     SetPort(gp);
-    TRAPEND();
+    
 }
 
 P3(PUBLIC pascal trap, void, DragWindow, WindowPtr, wp, Point, p, Rect *, rp)

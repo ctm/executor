@@ -31,11 +31,11 @@ P2(PUBLIC pascal trap, void, TEUpdate, Rect *, r, TEHandle, te)
     if(!ROMlib_emptyvis)
     {
         TESAVE(te);
-        TRAPBEGIN();
+        
         TE_DO_TEXT(te, 0, TE_LENGTH(te), teDraw);
         if(TE_ACTIVE(te) && TE_CARET_STATE(te) != 255)
             ROMlib_togglelite(te);
-        TRAPEND();
+        
         TERESTORE();
     }
     TE_SLAM(te);
@@ -76,7 +76,7 @@ P3(PUBLIC pascal trap, void, TEScroll, int16, dh, int16, dv, TEHandle, te)
 
     TESAVE(te);
     TE_SLAM(te);
-    TRAPBEGIN();
+    
     rh = NewRgn();
 
     r = TE_VIEW_RECT(te);
@@ -94,7 +94,7 @@ P3(PUBLIC pascal trap, void, TEScroll, int16, dh, int16, dv, TEHandle, te)
     PORT_VIS_REGION_X(thePort) = RM(save_vis);
     DisposeRgn(rh);
 
-    TRAPEND();
+    
     TE_SLAM(te);
     TERESTORE();
 }

@@ -17,7 +17,7 @@ A5(PRIVATE, void, draw, BOOLEAN, sel, Rect *, rect, INTEGER, doff,
 {
     GrafPtr savePort;
 
-    TRAPBEGIN();
+    
     savePort = thePort;
     SetPort(HxP(list, port));
     EraseRect(rect);
@@ -28,7 +28,7 @@ A5(PRIVATE, void, draw, BOOLEAN, sel, Rect *, rect, INTEGER, doff,
     if(sel)
         InvertRect(rect);
     SetPort(savePort);
-    TRAPEND();
+    
 }
 
 P7(PUBLIC pascal, void, ldef0, INTEGER, msg, BOOLEAN, sel, Rect *, rect,

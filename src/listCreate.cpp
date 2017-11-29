@@ -121,7 +121,7 @@ P9(PUBLIC pascal trap, ListHandle, LNew, Rect *, rview, /* IMIV-270 */
         /*-->*/ return 0; /* spooey list definition proc */
     }
 
-    TRAPBEGIN();
+    
     tempdatah = RM((DataHandle)NewHandle(0));
     HxX(retval, cells) = tempdatah;
     HLock((Handle)retval);
@@ -193,7 +193,7 @@ P9(PUBLIC pascal trap, ListHandle, LNew, Rect *, rview, /* IMIV-270 */
     LISTBEGIN(retval);
     LISTCALL(lInitMsg, false, (Rect *)0, *(Cell *)&lp->clikLoc, 0, 0, retval);
     LISTEND(retval);
-    TRAPEND();
+    
 #if defined(LIST_DEBUG)
     add_list(retval);
 #endif

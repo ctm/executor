@@ -56,8 +56,8 @@ A3(PUBLIC, OSErr, GetFInfo, StringPtr, filen, INTEGER, vrn, /* IMIV-113 */
     temp = PBGetFInfo(&pbr, 0);
     if(temp == noErr)
     {
-        OSASSIGN(fndrinfo->fdType, pbr.fileParam.ioFlFndrInfo.fdType);
-        OSASSIGN(fndrinfo->fdCreator, pbr.fileParam.ioFlFndrInfo.fdCreator);
+        fndrinfo->fdType = pbr.fileParam.ioFlFndrInfo.fdType;
+        fndrinfo->fdCreator = pbr.fileParam.ioFlFndrInfo.fdCreator;
         fndrinfo->fdFlags = pbr.fileParam.ioFlFndrInfo.fdFlags;
         fndrinfo->fdLocation = pbr.fileParam.ioFlFndrInfo.fdLocation;
         fndrinfo->fdFldr = pbr.fileParam.ioFlFndrInfo.fdFldr;
@@ -78,8 +78,8 @@ PUBLIC OSErr HGetFInfo(INTEGER vref, LONGINT dirid, Str255 name,
     retval = PBHGetFInfo(&pbr, false);
     if(retval == noErr)
     {
-        OSASSIGN(fndrinfo->fdType, pbr.fileParam.ioFlFndrInfo.fdType);
-        OSASSIGN(fndrinfo->fdCreator, pbr.fileParam.ioFlFndrInfo.fdCreator);
+        fndrinfo->fdType = pbr.fileParam.ioFlFndrInfo.fdType;
+        fndrinfo->fdCreator = pbr.fileParam.ioFlFndrInfo.fdCreator;
         fndrinfo->fdFlags = pbr.fileParam.ioFlFndrInfo.fdFlags;
         fndrinfo->fdLocation = pbr.fileParam.ioFlFndrInfo.fdLocation;
         fndrinfo->fdFldr = pbr.fileParam.ioFlFndrInfo.fdFldr;
@@ -102,8 +102,8 @@ A3(PUBLIC, OSErr, SetFInfo, StringPtr, filen, INTEGER, vrn, /* IMIV-114 */
     temp = PBGetFInfo(&pbr, 0);
     if(temp != noErr)
         return (temp);
-    OSASSIGN(pbr.fileParam.ioFlFndrInfo.fdType, fndrinfo->fdType);
-    OSASSIGN(pbr.fileParam.ioFlFndrInfo.fdCreator, fndrinfo->fdCreator);
+    pbr.fileParam.ioFlFndrInfo.fdType = fndrinfo->fdType;
+    pbr.fileParam.ioFlFndrInfo.fdCreator = fndrinfo->fdCreator;
     pbr.fileParam.ioFlFndrInfo.fdFlags = fndrinfo->fdFlags;
     pbr.fileParam.ioFlFndrInfo.fdLocation = fndrinfo->fdLocation;
     pbr.fileParam.ioFlFndrInfo.fdFldr = fndrinfo->fdFldr = pbr.fileParam.ioFlFndrInfo.fdFldr;

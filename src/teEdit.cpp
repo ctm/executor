@@ -294,7 +294,7 @@ void Executor::ROMlib_tedoitall(TEHandle teh, Ptr ptr, /* INTERNAL */
     LHHandle lht;
 
     TESAVE(teh);
-    TRAPBEGIN();
+    
 
 #if !defined(LETGCCWAIL)
     te_style = NULL;
@@ -463,7 +463,7 @@ void Executor::ROMlib_tedoitall(TEHandle teh, Ptr ptr, /* INTERNAL */
     else
         TE_CARET_STATE_X(teh) = CWC(255);
 
-    TRAPEND();
+    
     TERESTORE();
 }
 
@@ -478,7 +478,7 @@ static void doarrow(TEHandle te, CHAR thec)
     Byte c;
 
     TESAVE(te);
-    TRAPBEGIN();
+    
     te_flags = HGetState((Handle)te);
     HLock((Handle)te);
     tep = STARH(te);
@@ -538,7 +538,7 @@ static void doarrow(TEHandle te, CHAR thec)
     ROMlib_togglelite(te);
     HSetState((Handle)te, te_flags);
 
-    TRAPEND();
+    
     TERESTORE();
 }
 

@@ -221,7 +221,7 @@ P1(PUBLIC pascal trap, void, ShowWindow, WindowPtr, w)
         /*-->*/ return;
     if(!WINDOW_VISIBLE_X(w))
     {
-        TRAPBEGIN();
+        
         ShowHide(w, true);
         if(FrontWindow() == w && !WINDOW_HILITED_X(w))
         {
@@ -234,7 +234,7 @@ P1(PUBLIC pascal trap, void, ShowWindow, WindowPtr, w)
             HiliteWindow((WindowPtr)t, false);
             CurDeactive = RM((WindowPtr)t);
         }
-        TRAPEND();
+        
     }
 }
 

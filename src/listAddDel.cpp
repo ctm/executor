@@ -34,7 +34,7 @@ P3(PUBLIC pascal trap, INTEGER, LAddColumn, INTEGER, count, /* IMIV-271 */
 
     if(noffsets)
     {
-        TRAPBEGIN();
+        
         SetHandleSize((Handle)list,
                       GetHandleSize((Handle)list) + noffsets * sizeof(INTEGER));
         ncols = Hx(list, dataBounds.right) - Hx(list, dataBounds.left);
@@ -75,7 +75,7 @@ P3(PUBLIC pascal trap, INTEGER, LAddColumn, INTEGER, count, /* IMIV-271 */
                 for(c.h = CW(todraw.left); c.h < CW(todraw.right); c.h++)
                     C_LDraw(c, list);
         }
-        TRAPEND();
+        
     }
     return coln;
 }
@@ -102,7 +102,7 @@ P3(PUBLIC pascal trap, INTEGER, LAddRow, INTEGER, count, /* IMIV-271 */
 
     if(noffsets)
     {
-        TRAPBEGIN();
+        
         SetHandleSize((Handle)list,
                       GetHandleSize((Handle)list) + noffsets * sizeof(INTEGER));
         nrows = Hx(list, dataBounds.bottom) - Hx(list, dataBounds.top);
@@ -132,7 +132,7 @@ P3(PUBLIC pascal trap, INTEGER, LAddRow, INTEGER, count, /* IMIV-271 */
                 for(c.h = CW(todraw.left); c.h < CW(todraw.right); c.h++)
                     C_LDraw(c, list);
         }
-        TRAPEND();
+        
     }
     return rown;
 }
@@ -208,7 +208,7 @@ P3(PUBLIC pascal trap, void, LDelColumn, INTEGER, count, /* IMIV-271 */
     {
         INTEGER visible_right, bounds_right;
 
-        TRAPBEGIN();
+        
         ncols = Hx(list, dataBounds.right) - Hx(list, dataBounds.left);
         nbefore = (coln - Hx(list, dataBounds.left));
         nafter = ncols - nbefore;
@@ -297,7 +297,7 @@ P3(PUBLIC pascal trap, void, LDelColumn, INTEGER, count, /* IMIV-271 */
                 for(c.h = CW(todraw.left); c.h < CW(todraw.right); c.h++)
                     C_LDraw(c, list);
         }
-        TRAPEND();
+        
     }
 }
 
@@ -346,7 +346,7 @@ P3(PUBLIC pascal trap, void, LDelRow, INTEGER, count, /* IMIV-272 */
     {
         INTEGER visible_bottom, bounds_bottom;
 
-        TRAPBEGIN();
+        
         nrows = Hx(list, dataBounds.bottom) - Hx(list, dataBounds.top);
         nbefore = (rown - Hx(list, dataBounds.top)) * ncols;
         nafter = nrows * ncols - nbefore;
@@ -415,6 +415,6 @@ P3(PUBLIC pascal trap, void, LDelRow, INTEGER, count, /* IMIV-272 */
                 for(c.h = CW(todraw.left); c.h < CW(todraw.right); c.h++)
                     C_LDraw(c, list);
         }
-        TRAPEND();
+        
     }
 }

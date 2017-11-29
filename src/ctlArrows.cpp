@@ -720,7 +720,7 @@ P4(PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */
                            &HxX(c, contrlRect), &r))
             {
                 validate_colors_for_control(c);
-                TRAPBEGIN();
+                
                 GetPenState(&ps);
                 PenNormal();
                 {
@@ -735,7 +735,7 @@ P4(PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */
                     DisposeRgn(rh);
                 }
                 SetPenState(&ps);
-                TRAPEND();
+                
                 break;
             }
         case testCntl:

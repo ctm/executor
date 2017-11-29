@@ -73,7 +73,7 @@ P3(PUBLIC pascal trap, void, LScroll, INTEGER, ncol, /* IMIV-275 */
     INTEGER tmpi;
     Point p;
 
-    TRAPBEGIN();
+    
     r = HxX(list, rView);
 
     /*
@@ -129,7 +129,7 @@ P3(PUBLIC pascal trap, void, LScroll, INTEGER, ncol, /* IMIV-275 */
         C_LUpdate(rh, list);
         DisposeRgn(rh);
     }
-    TRAPEND();
+    
 }
 
 P1(PUBLIC pascal trap, void, LAutoScroll, ListHandle, list) /* IMIV-275 */
@@ -159,7 +159,7 @@ P2(PUBLIC pascal trap, void, LUpdate, RgnHandle, rgn, /* IMIV-275 */
     INTEGER top, left, bottom, right;
     ControlHandle ch;
 
-    TRAPBEGIN();
+    
     cleft = c.h = Hx(list, visible.left);
     c.v = Hx(list, visible.top);
     csize.h = Hx(list, cellSize.h);
@@ -196,7 +196,7 @@ P2(PUBLIC pascal trap, void, LUpdate, RgnHandle, rgn, /* IMIV-275 */
         if(RectInRgn(&HxX(ch, contrlRect), rgn))
             Draw1Control(ch);
     }
-    TRAPEND();
+    
 }
 
 P2(PUBLIC pascal trap, void, LActivate, BOOLEAN, act, /* IMIV-276 */
@@ -213,7 +213,7 @@ P2(PUBLIC pascal trap, void, LActivate, BOOLEAN, act, /* IMIV-276 */
 
     if(!act ^ !Hx(list, lActive))
     {
-        TRAPBEGIN();
+        
         if(act)
         {
             sel = true;
@@ -253,7 +253,7 @@ P2(PUBLIC pascal trap, void, LActivate, BOOLEAN, act, /* IMIV-276 */
         }
         LISTEND(list);
         HxX(list, lActive) = !!act;
-        TRAPEND();
+        
     }
 }
 

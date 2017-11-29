@@ -1025,7 +1025,7 @@ P4(PUBLIC pascal, LONGINT, wdef0,
             if(!WINDOW_VISIBLE_X(w))
                 return 0;
             PenNormal();
-            TRAPBEGIN();
+            
             switch(varcode)
             {
                 case documentProc:
@@ -1055,7 +1055,7 @@ P4(PUBLIC pascal, LONGINT, wdef0,
                     draw_alt_dialog_box((GrafPtr)w);
                     break;
             }
-            TRAPEND();
+            
             break;
         case wHit:
             switch(varcode)
@@ -1117,9 +1117,9 @@ P4(PUBLIC pascal, LONGINT, wdef0,
                 DisposHandle(WINDOW_DATA(w));
             break;
         case wGrow:
-            TRAPBEGIN();
+            
             draw_grow_lines((Rect *)(long)SYN68K_TO_US(parm));
-            TRAPEND();
+            
             break;
         case wDrawGIcon:
         {
@@ -1141,7 +1141,7 @@ P4(PUBLIC pascal, LONGINT, wdef0,
             SectRgn(PORT_CLIP_REGION(thePort), temp_rgn,
                     PORT_CLIP_REGION(thePort));
 
-            TRAPBEGIN();
+            
             if(varcode == documentProc)
             {
                 if(WINDOW_HILITED_X(w))
@@ -1149,7 +1149,7 @@ P4(PUBLIC pascal, LONGINT, wdef0,
                 else
                     erase_grow_icon((GrafPtr)w);
             }
-            TRAPEND();
+            
 
             CopyRgn(save_clip, PORT_CLIP_REGION(thePort));
 
@@ -1326,7 +1326,7 @@ P4(PUBLIC pascal, LONGINT, wdef16,
         case wDraw:
             if(!WINDOW_VISIBLE_X(w))
                 break;
-            TRAPBEGIN();
+            
             switch(param)
             {
                 case 0:
@@ -1337,7 +1337,7 @@ P4(PUBLIC pascal, LONGINT, wdef16,
                     toggle_go_away_box((GrafPtr)w);
                     break;
             }
-            TRAPEND();
+            
             break;
 
         case wHit:

@@ -189,7 +189,7 @@ P3(PUBLIC pascal trap, void, LSize, INTEGER, width, /* IMIV-274 */
     Rect r;
     Point p;
 
-    TRAPBEGIN();
+    
     oldright = Hx(list, rView.right);
     oldbottom = Hx(list, rView.bottom);
     newright = Hx(list, rView.left) + width;
@@ -266,5 +266,5 @@ P3(PUBLIC pascal trap, void, LSize, INTEGER, width, /* IMIV-274 */
     C_LUpdate(updatergn, list);
     DisposeRgn(updatergn);
     DisposeRgn(rectrgn);
-    TRAPEND();
+    
 }

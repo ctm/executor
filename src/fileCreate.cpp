@@ -33,8 +33,8 @@ A4(PUBLIC, OSErr, Create, StringPtr, filen, INTEGER, vrn, /* IMIV-112 */
     if(temp != noErr)
         return (temp);
 
-    OSASSIGN(pbr.fileParam.ioFlFndrInfo.fdType, CL(filtyp));
-    OSASSIGN(pbr.fileParam.ioFlFndrInfo.fdCreator, CL(creator));
+    pbr.fileParam.ioFlFndrInfo.fdType = CL(filtyp);
+    pbr.fileParam.ioFlFndrInfo.fdCreator = CL(creator);
     pbr.fileParam.ioFlFndrInfo.fdFlags = 0;
     ZEROPOINT(pbr.fileParam.ioFlFndrInfo.fdLocation);
     pbr.fileParam.ioFlFndrInfo.fdFldr = 0;

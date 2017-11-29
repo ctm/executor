@@ -29,11 +29,4 @@
 #define a0trap
 #endif
 
-#if !defined(OSASSIGN)
-#define OSASSIGN(d, s) ((d) = (s))
-#endif
-
-#define TRAPBEGIN()
-#define TRAPEND()
-
 #endif /* !_CRUFT_H_ */

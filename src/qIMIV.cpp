@@ -139,7 +139,7 @@ A9(PRIVATE, void, xSeedFill, unsigned char *, srcp, unsigned char *, dstp,
     /* should be a sanity check of seedh and seedv here with just a zering
        of the destrect and early return if they are bad */
 
-    TRAPBEGIN();
+    
     transfer((INTEGER *)srcp, (INTEGER *)dstp, srcr, dstr, height, width,
              Copy);
     sp = stack;
@@ -243,7 +243,7 @@ A9(PRIVATE, void, xSeedFill, unsigned char *, srcp, unsigned char *, dstp,
                               CW(temprect.left) + (LONGINT)width * 16);
         }
     }
-    TRAPEND();
+    
 }
 
 #if defined(VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)

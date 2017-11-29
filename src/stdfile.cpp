@@ -2394,7 +2394,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
                       UNIV Ptr yourdatap)
 {
     bool reply_valid;
-    TRAPBEGIN();
+    
 
     reply_valid = false;
     if(is_normal_dlgid(getorput, dig) && host_has_spfcommon())
@@ -2769,7 +2769,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
         makeworking(&f);
         SetPort(gp);
     }
-    TRAPEND();
+    
 }
 
 P7(PUBLIC pascal trap, void, SFPPutFile, Point, p, StringPtr, prompt,

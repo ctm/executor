@@ -166,7 +166,7 @@ P4(PUBLIC pascal trap, void, ScrollRect, Rect *, rp, INTEGER, dh, INTEGER, dv,
     int cgrafport_p;
     PAUSEDECL;
 
-    TRAPBEGIN();
+    
     PAUSERECORDING;
 
     cgrafport_p = CGrafPort_p(thePort);
@@ -255,5 +255,5 @@ P4(PUBLIC pascal trap, void, ScrollRect, Rect *, rp, INTEGER, dh, INTEGER, dv,
     DisposeRgn(updatergn2);
 
     RESUMERECORDING;
-    TRAPEND();
+    
 }
