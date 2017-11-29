@@ -59,9 +59,6 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
     bool needs_seg_override_p;
 #endif
 
-    /* check_bitmap (src, CHKR_RO); */
-    check_bitmap(dst, CHKR_WO);
-
     /* Record log2 bpp. */
     srcblt_log2_bpp = log2_bpp;
 

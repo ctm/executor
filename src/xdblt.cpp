@@ -201,8 +201,6 @@ bool Executor::xdblt_xdata_norgb_norotate(RgnHandle rh, int mode,
     bool cursor_maybe_changed_p, cursor_vis_p;
 #endif
 
-    check_bitmap(dst, CHKR_WO);
-
     mode_canon_p = MODE_CANON_P(mode);
     mode &= 7;
 
@@ -314,8 +312,6 @@ bool Executor::xdblt_xdata_short_narrow(RgnHandle rh, int mode,
 #if defined(VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
     bool cursor_maybe_changed_p, cursor_vis_p;
 #endif
-
-    check_bitmap(dst, CHKR_WO);
 
     mode_canon_p = MODE_CANON_P(mode);
     mode &= 7;
@@ -484,8 +480,6 @@ bool Executor::xdblt_xdata_complex(RgnHandle rh, int mode,
     bool cursor_maybe_changed_p, cursor_vis_p;
 #endif
 
-    check_bitmap(dst, CHKR_WO);
-
     mode_canon_p = MODE_CANON_P(mode);
     mode &= 7;
 
@@ -557,8 +551,6 @@ do_short_narrow_pattern(RgnHandle rh, int mode, uint32 v, PixMap *dst,
     uint32 tv, op_color;
     RgnPtr r;
     vdriver_accel_result_t accel_result;
-
-    check_bitmap(dst, CHKR_WO);
 
     extra_rot = setup_dst_bitmap(log2_bpp, dst);
 
