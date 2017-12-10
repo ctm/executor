@@ -34,7 +34,7 @@
 #include "dosserial.h"
 #endif
 
-#if defined(CYGWIN32)
+#if defined(CYGWIN32) || defined(WIN32)
 #include "win_serial.h"
 #endif
 
@@ -185,7 +185,7 @@ A2(PUBLIC, OSErr, SerStatus, INTEGER, rn, SerStaRec *, serstap) /* IMII-253 */
 
 #define OPENBIT (1 << 0)
 
-#if !defined(MSDOS) && !defined(CYGWIN32)
+#if !defined(MSDOS) && !defined(CYGWIN32) && !defined(WIN32)
 #if defined(TERMIO)
 
 typedef struct
@@ -458,7 +458,7 @@ A2(PUBLIC, OSErr, ROMlib_serialprime, ParmBlkPtr, pbp, /* INTERNAL */
 		   parity and framing errors */
 #if defined(LINUX) || defined(MACOSX)
                     pbp->ioParam.ioActCount = CL(read(HxX(h, fd), buf, req_count));
-#elif defined(MSDOS) || defined(CYGWIN32)
+#elif defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
                     pbp->ioParam.ioActCount = CL(serial_bios_read(HxX(h, fd), buf,
                                                                   req_count));
 #else
@@ -484,7 +484,7 @@ A2(PUBLIC, OSErr, ROMlib_serialprime, ParmBlkPtr, pbp, /* INTERNAL */
 #if defined(LINUX) || defined(MACOSX)
                     pbp->ioParam.ioActCount = CL(write(HxX(h, fd),
                                                        buf, req_count));
-#elif defined(MSDOS) || defined(CYGWIN32)
+#elif defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
                     pbp->ioParam.ioActCount = CL(serial_bios_write(HxX(h, fd),
                                                                    buf, req_count));
 #else
@@ -527,7 +527,7 @@ A2(PUBLIC, OSErr, ROMlib_serialprime, ParmBlkPtr, pbp, /* INTERNAL */
 
 A2(PRIVATE, OSErr, serset, LONGINT, fd, INTEGER, param)
 {
-#if defined(MSDOS) || defined(CYGWIN32)
+#if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
 
     retval = serial_bios_serset(fd, param);
@@ -690,7 +690,7 @@ A2(PRIVATE, OSErr, serset, LONGINT, fd, INTEGER, param)
 
 A2(PRIVATE, OSErr, serxhshake, LONGINT, fd, SerShk *, sershkp)
 {
-#if defined(MSDOS) || defined(CYGWIN32)
+#if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
 
     retval = serial_bios_serxhshake(fd, sershkp);
@@ -763,7 +763,7 @@ A2(PRIVATE, OSErr, serxhshake, LONGINT, fd, SerShk *, sershkp)
 
 A2(PRIVATE, OSErr, setbaud, LONGINT, fd, INTEGER, baud)
 {
-#if defined(MSDOS) || defined(CYGWIN32)
+#if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
 
     retval = serial_bios_setbaud(fd, baud);
@@ -810,7 +810,7 @@ A2(PRIVATE, OSErr, setbaud, LONGINT, fd, INTEGER, baud)
 
 A2(PRIVATE, OSErr, ctlbrk, LONGINT, fd, INTEGER, flag)
 {
-#if defined(MSDOS) || defined(CYGWIN32)
+#if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
 
     retval = serial_bios_ctlbrk(fd, flag);
@@ -835,7 +835,7 @@ A2(PRIVATE, OSErr, ctlbrk, LONGINT, fd, INTEGER, flag)
 
 A2(PRIVATE, OSErr, flow, LONGINT, fd, LONGINT, flag)
 {
-#if defined(MSDOS) || defined(CYGWIN32)
+#if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
 
     retval = serial_bios_setflow(fd, flag);
@@ -919,14 +919,14 @@ A2(PUBLIC, OSErr, ROMlib_serialctl, ParmBlkPtr, pbp, /* INTERNAL */
                 err = setbaud(HxX(h, fd), CW(pbp->cntrlParam.csParam[0]));
                 break;
             case SERMISC:
-#if defined(MSDOS) || defined(CYGWIN32)
+#if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
                 err = serial_bios_setdtr(HxX(h, fd));
 #else
                 err = controlErr; /* not supported */
 #endif
                 break;
             case SERSETDTR:
-#if defined(MSDOS) || defined(CYGWIN32)
+#if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
                 err = serial_bios_clrdtr(HxX(h, fd));
 #else
                 err = controlErr; /* not supported */

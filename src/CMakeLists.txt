@@ -16,7 +16,9 @@ include_directories(${SYN68K_INCLUDE_PATH})
 set(FRONT_END sdl2)
 set(HOST_ARCH x86_64)
 
-if(APPLE AND UNIX)
+if(WIN32)
+set(HOST_OS "win32")
+elseif(APPLE AND UNIX)
 set(HOST_OS "macosx")
 elseif(UNIX AND NOT APPLE)
 set(HOST_OS "linux")
@@ -26,6 +28,7 @@ add_subdirectory(config/front-ends/x)
 add_subdirectory(config/front-ends/sdl)
 add_subdirectory(config/front-ends/sdl2)
 add_subdirectory(config/arch/x86_64)
+add_subdirectory(config/os/win32)
 
 
 function(linkheader from to variant)
@@ -402,4 +405,9 @@ add_executable(executor ${ctl_sources} ${dial_sources} ${file_sources}
     )
 
 target_link_libraries(executor front-end-${FRONT_END} arch-${HOST_ARCH})
+
+if(HOST_OS STREQUAL win32)
+    target_link_libraries(executor os-${HOST_OS})
+endif()
+
 target_link_libraries(executor ${SYN68K_LIBRARY} ${DB_LIBRARY})
