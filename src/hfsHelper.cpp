@@ -15,12 +15,14 @@
 
 #include "rsys/hfs.h"
 #include "rsys/file.h"
-#include "rsys/setuid.h"
 #include "rsys/partition.h"
 
 #if defined(MSDOS) || defined(CYGWIN32)
 #include "dosdisk.h"
 #include "aspi.h"
+#elif defined(WIN32)
+// ### TODO: new win32 OS code does not yet
+// include the direct disk access stuff
 #else
 #include <unistd.h>
 #include <sys/socket.h>
@@ -50,7 +52,6 @@ PRIVATE LONGINT pipefd[2];
 
 PUBLIC LONGINT Executor::ROMlib_sock;
 
-extern void mustbesetuid(void);
 extern ULONGINT ROMlib_ourmtime;
 extern LONGINT ROMlib_xfervmsize;
 extern char *ROMlib_xfervmaddr;
