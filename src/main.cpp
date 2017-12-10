@@ -38,7 +38,6 @@
 #include "rsys/mman.h"
 #include "rsys/menu.h"
 #include "rsys/next.h"
-#include "rsys/setuid.h"
 #include "rsys/pstuff.h"
 #include "rsys/prefs.h"
 #include "rsys/flags.h"
@@ -49,7 +48,6 @@
 #include "rsys/vbl.h"
 #include "rsys/time.h"
 #include "rsys/segment.h"
-#include "rsys/keycode.h"
 #include "rsys/version.h"
 #include "rsys/m68kint.h"
 #include "rsys/blockinterrupts.h"
@@ -754,7 +752,6 @@ A1(PRIVATE, void, setstartdir, char *, argv0)
         pipe(p);
         if((pid = fork()) == 0)
         {
-            ROMlib_setuid(getuid());
             close(1);
             dup(p[1]);
             arg0len = strlen(argv0);
@@ -1416,13 +1413,6 @@ int main(int argc, char **argv)
 #endif /* MMAP_LOW_GLOBALS */
 
     ROMlib_WriteWhen(WriteInOSEvent);
-
-#if defined(MACOSX_) && 0
-    ROMlib_seteuid(0); /* This is necessary because when people copy
-				   setuid-root files from floppies, the setuid
-				   bit stays, but the "root" part doesn't, so
-				   even if they run as root, they're messed */
-#endif
 
     setstartdir(argv[0]);
     set_appname(argv[0]);
