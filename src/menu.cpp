@@ -1036,6 +1036,7 @@ int32 Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
     EventRecord ev;
     Point pt;
     LONGINT myd0;
+    GUEST<Point> ptTmp;
     bool seen_up_already, done;
 
     GUEST<GrafPtr> saveport_swapped;
@@ -1057,10 +1058,10 @@ int32 Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
 
     seen_up_already = false;
     done = false;
-    goto enter;
+
+    goto enter; // The 90s were hard times...
     while(!done)
     {
-        GUEST<Point> ptTmp;
         GetMouse(&ptTmp);
         pt = ptTmp.get();
         pointaslong = ((int32)pt.v << 16) | (unsigned short)pt.h;
