@@ -14,7 +14,7 @@
  * this can be more intelligently adjusted.
  */
 
-#if defined(CYGWIN32) || defined(MSDOS) || defined(MACOSX_)
+#if defined(CYGWIN32) || defined(MSDOS) || defined(MACOSX_) || defined(WIN32)
 
 /* No representation for:
    138, S caron
