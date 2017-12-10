@@ -121,12 +121,25 @@ bool Executor::vdriver_set_mode(int width, int height, int bpp, bool grayscale_p
     
     vdriver_fbuf = new uint8_t[vdriver_width * vdriver_height * 4];
 
+#if 1
+    uint32_t rmask, gmask, bmask, amask;
+    int sdlBpp;
+    SDL_PixelFormatEnumToMasks(pixelFormat, &sdlBpp, &rmask, &gmask, &bmask, &amask);
+
+    sdlSurface = SDL_CreateRGBSurfaceFrom(
+        vdriver_fbuf,
+        vdriver_width, vdriver_height,
+        sdlBpp,
+        vdriver_row_bytes,
+        rmask, gmask, bmask, amask);
+#else
     sdlSurface = SDL_CreateRGBSurfaceWithFormatFrom(
         vdriver_fbuf,
         vdriver_width, vdriver_height,
         vdriver_bpp,
         vdriver_row_bytes,
         pixelFormat);
+#endif
 
     return true;
 }
