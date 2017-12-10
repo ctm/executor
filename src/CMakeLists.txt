@@ -13,7 +13,7 @@ include_directories(include/)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(${SYN68K_INCLUDE_PATH})
 
-set(FRONT_END sdl)
+set(FRONT_END sdl2)
 set(HOST_ARCH x86_64)
 
 if(APPLE AND UNIX)
