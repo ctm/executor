@@ -27,10 +27,6 @@
 #undef USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 #endif
 
-#if !defined(LINUX) && !defined(MSDOS) && !defined(NEXT) && !defined(CYGWIN32) && !defined(MACOSX_) && !defined(MACOSX)
-#error "Unsupported host"
-#endif
-
 #include "rsys/cruft.h"
 #include "rsys/macros.h"
 #include "rsys/types.h"
