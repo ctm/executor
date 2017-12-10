@@ -12,12 +12,14 @@
 
 namespace Executor
 {
-typedef uint32 real_int_state_t;
 
+#if !defined(SYN68K) || defined(MSDOS)
+typedef uint32 real_int_state_t;
 #define block_real_ints() \
     ((real_int_state_t)sigblock(sigmask(SIGALRM)))
 #define restore_real_ints(n) \
     ((void)sigsetmask(n))
+#endif
 
 #if defined(SYN68K)
 typedef uint8 virtual_int_state_t;
@@ -94,20 +96,6 @@ public:
     }
 };
 
-class BlockRealInterruptsGuard
-{
-    virtual_int_state_t state;
-
-public:
-    BlockRealInterruptsGuard()
-        : state(block_real_ints())
-    {
-    }
-    ~BlockRealInterruptsGuard()
-    {
-        restore_real_ints(state);
-    }
-};
 }
 
 #endif /* !_BLOCKINTERRUPTS_H_ */
