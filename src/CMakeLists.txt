@@ -3,7 +3,11 @@ cmake_minimum_required(VERSION 3.9)
 set(CMAKE_CXX_STANDARD 14)
 
 find_program(PERL_COMMAND perl)
-find_library(DB_LIBRARY db)
+
+find_library(DB_LIBRARY db libdb48.lib)
+find_path(DB_INCLUDE_PATH db.h ndbm.h)
+include_directories(${DB_INCLUDE_PATH})
+
 find_program(BISON_COMMAND bison)
 
 include_directories(include/)
