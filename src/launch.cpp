@@ -302,7 +302,6 @@ PRIVATE void ParseConfigFile(StringPtr exefname, OSType type)
         len = strlen(_x) + 1;           \
         _title = (char *)alloca(len);   \
         memcpy(_title, _x, len);        \
-        ROMlib_localize_string(_title); \
         ROMlib_SetTitle(_title);        \
     } while(0)
 
@@ -319,6 +318,7 @@ PRIVATE void ParseConfigFile(StringPtr exefname, OSType type)
         dot = strrchr(newtitle, '.');
         if(dot && (strcmp(dot, ".appl") == 0 || strcmp(dot, ".APPL") == 0))
             *dot = 0;
+        // TODO: convert from MacRoman to UTF-8 (at least for SDL2 frontend)
         SetTitle(newtitle);
     }
 #if 0
