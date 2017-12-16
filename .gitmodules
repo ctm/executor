@@ -1,0 +1,3 @@
+[submodule "syn68k"]
+	path = syn68k
+	url = https://github.com/autc04/syn68k

@@ -6,12 +6,8 @@ find_program(PERL_COMMAND perl)
 find_library(DB_LIBRARY db)
 find_program(BISON_COMMAND bison)
 
-find_library(SYN68K_LIBRARY syn68k)
-find_path(SYN68K_INCLUDE_PATH syn68k_public.h)
-
 include_directories(include/)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-include_directories(${SYN68K_INCLUDE_PATH})
 
 set(FRONT_END sdl2)
 set(HOST_ARCH x86_64)
@@ -408,4 +404,4 @@ if(HOST_OS STREQUAL win32)
     target_link_libraries(executor os-${HOST_OS})
 endif()
 
-target_link_libraries(executor ${SYN68K_LIBRARY} ${DB_LIBRARY})
+target_link_libraries(executor syn68k ${DB_LIBRARY})

@@ -6,7 +6,7 @@ if(SDL2_FOUND)
         # workaround for SDL2_LIBRARIES containing trailing whitespace that is illegal in CMake 3.10
     string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
 
-    target_link_libraries(front-end-sdl2 ${SDL2_LIBRARIES})
+    target_link_libraries(front-end-sdl2 syn68k ${SDL2_LIBRARIES})
     target_include_directories(front-end-sdl2
         PUBLIC .
         PRIVATE ${SDL2_INCLUDE_DIRS})
