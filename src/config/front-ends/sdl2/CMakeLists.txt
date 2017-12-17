@@ -4,7 +4,9 @@ if(SDL2_FOUND)
     add_library(front-end-sdl2 host_bltmacros.h sdl2.h sdl2.cpp keycode_map.cpp)
 
         # workaround for SDL2_LIBRARIES containing trailing whitespace that is illegal in CMake 3.10
-    string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
+    if(SDL2_LIBRARIES)
+        string(STRIP ${SDL2_LIBRARIES} SDL2_LIBRARIES)
+    endif()
 
     target_link_libraries(front-end-sdl2 syn68k ${SDL2_LIBRARIES})
     target_include_directories(front-end-sdl2
