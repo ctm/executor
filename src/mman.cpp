@@ -41,8 +41,6 @@
 #include <mach/mach_error.h>
 #endif
 
-using namespace ByteSwap;
-
 namespace Executor
 {
 

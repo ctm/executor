@@ -69,7 +69,6 @@
 #include "rsys/hfs_plus.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 #if 0
 PUBLIC ULONGINT blockchecksum(void *blockp)

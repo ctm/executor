@@ -29,7 +29,6 @@
  */
 
 using namespace Executor;
-using namespace ByteSwap;
 
 INTEGER
 find_control_helper(Point p, ControlHandle c,

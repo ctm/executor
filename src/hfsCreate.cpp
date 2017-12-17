@@ -8,7 +8,6 @@
 #include "rsys/hfs.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 typedef enum { create,
                delete1 } createop;

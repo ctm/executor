@@ -34,7 +34,6 @@ PUBLIC bool deferred_printing_p = false /* true */;
 #endif
 
 using namespace Executor;
-using namespace ByteSwap;
 using namespace std;
 
 PUBLIC int pageno = 0; /* This isn't really the way to do it */

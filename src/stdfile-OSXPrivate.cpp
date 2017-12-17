@@ -14,7 +14,6 @@
 
 #undef FSMakeFSSpec
 using namespace MacBridge;
-using namespace ByteSwap;
 
 using namespace Executor;
 

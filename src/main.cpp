@@ -138,7 +138,6 @@ PRIVATE void setstartdir(char *);
 #include <vector>
 
 using namespace Executor;
-using namespace ByteSwap;
 using namespace std;
 
 BOOLEAN Executor::force_big_offset = CONFIG_OFFSET_P;

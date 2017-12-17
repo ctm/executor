@@ -10,7 +10,6 @@
 #include "rsys/hfs.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 PUBLIC filecontrolblock *Executor::ROMlib_getfreefcbp(void)
 {

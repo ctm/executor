@@ -10,7 +10,6 @@
 #include "rsys/file.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 typedef enum { catGet,
                catSet } catop;

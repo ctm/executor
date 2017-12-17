@@ -49,8 +49,6 @@ static dispatch_block_t initSpeechBlock= ^{
 
 #define BeginSpeech() dispatch_once(&initSpeech, initSpeechBlock)
 
-using namespace ByteSwap;
-
 Executor::NumVersion MacBridge::SpeechManagerVersion (void)
 {
 #if 0

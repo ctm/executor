@@ -9,7 +9,6 @@
 #include "rsys/hfs.h"
 
 using namespace Executor;
-using namespace ByteSwap;
 
 typedef enum {
     GetOp,

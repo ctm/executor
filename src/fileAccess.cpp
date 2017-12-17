@@ -32,7 +32,6 @@
 #endif
 
 using namespace Executor;
-using namespace ByteSwap;
 
 namespace Executor
 {

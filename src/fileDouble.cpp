@@ -34,7 +34,6 @@ PRIVATE INTEGER Mac_to_UNIX7(unsigned char *, INTEGER, unsigned char *);
 }
 
 using namespace Executor;
-using namespace ByteSwap;
 
 /*
  * Coded more or less up to the spec:  APDA M0908LL/A

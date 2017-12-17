@@ -24,7 +24,6 @@
 #include <SDL_Audio.h>
 
 using namespace Executor;
-using namespace ByteSwap;
 
 enum
 {
