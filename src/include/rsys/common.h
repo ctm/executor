@@ -15,10 +15,7 @@
 /* #include this second, so we know what release type we are. */
 #include "rsys/release.h"
 
-#if defined(COMPILE_FOR_BUILD)
-#include "build-os-config.h"
-#include "build-arch-config.h"
-#else /* !COMPILE_FOR_BUILD */
+#if !defined(COMPILE_FOR_BUILD)
 #include "host-os-config.h"
 #include "host-arch-config.h"
 #endif /* !COMPILE_FOR_BUILD */
