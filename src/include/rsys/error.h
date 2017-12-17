@@ -68,6 +68,13 @@ extern "C" {
 #define ERROR_ENABLED_P(err) \
     ((ROMlib_debug_level & ERROR_SUPPORTED_MASK & ERROR_BIT_MASK(err)) != 0)
 
+#ifdef _MSC_VER
+#define ATTR_FORMAT(...)
+#define __PRETTY_FUNCTION__ __FUNCSIG__
+#else
+#define ATTR_FORMAT(...) __attribute((format(__VA_ARGS__)))
+#endif
+
 extern uint32_t ROMlib_debug_level;
 
 extern bool error_parse_option_string(const char *options);
@@ -81,61 +88,61 @@ extern bool error_set_enabled(int err, bool enabled_p);
 /* ### eventually this should be nuked */
 #define gui_abort() gui_fatal("abort")
 
-#define gui_fatal(fmt, args...) \
-    _gui_fatal(__FILE__, __LINE__, __PRETTY_FUNCTION__, fmt, ##args)
+#define gui_fatal(...) \
+    _gui_fatal(__FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
 
 extern _NORET_1_ void _gui_fatal(const char *file, int line, const char *fn,
                                  const char *fmt, ...) _NORET_2_;
 
-#define warning_helper(error, type, fmt, args...) \
+#define warning_helper(error, type, ...) \
     _warning(error, type, __FILE__, __LINE__,     \
-             __PRETTY_FUNCTION__, " " fmt, ##args)
+             __PRETTY_FUNCTION__, " " __VA_ARGS__)
 
 extern void _warning(int error, const char *type, const char *file, int line,
                      const char *fn, const char *fmt, ...)
-    __attribute__((format(printf, 6, 7)));
+    ATTR_FORMAT(printf, 6, 7);
 
 #if ERROR_SUPPORTED_P(ERROR_UNIMPLEMENTED)
-#define warning_unimplemented(fmt, args...) \
+#define warning_unimplemented(...) \
     warning_helper(ERROR_UNIMPLEMENTED,     \
                    "unimplemented feature", \
-                   fmt, ##args)
+                   __VA_ARGS__)
 #else
 #define warning_unimplemented(fmt, args...)
 #endif
 
 #if ERROR_SUPPORTED_P(ERROR_UNEXPECTED)
-#define warning_unexpected(fmt, args...) \
+#define warning_unexpected(...) \
     warning_helper(ERROR_UNEXPECTED,     \
                    "unexpected event",   \
-                   fmt, ##args)
+                   __VA_ARGS__)
 #else
 #define warning_unexpected(fmt, args...)
 #endif
 
 #if ERROR_SUPPORTED_P(ERROR_FILESYSTEM_LOG)
-#define warning_fs_log(fmt, args...)     \
+#define warning_fs_log(...)     \
     warning_helper(ERROR_FILESYSTEM_LOG, \
                    "filesystem",         \
-                   fmt, ##args)
+                   __VA_ARGS__)
 #else
 #define warning_fs_log(fmt, args...)
 #endif
 
 #if ERROR_SUPPORTED_P(ERROR_TRACE_INFO)
-#define warning_trace_info(fmt, args...) \
+#define warning_trace_info(...) \
     warning_helper(ERROR_TRACE_INFO,     \
                    "trace info",         \
-                   fmt, ##args)
+                   __VA_ARGS__)
 #else
 #define warning_trace_info(fmt, args...)
 #endif
 
 #if ERROR_SUPPORTED_P(ERROR_TRAP_FAILURE)
-#define warning_trap_failure(fmt, args...) \
+#define warning_trap_failure(...) \
     warning_helper(ERROR_TRAP_FAILURE,     \
                    "trap failure",         \
-                   fmt, ##args)
+                   __VA_ARGS__)
 #else
 #define warning_trap_failure(fmt, args...)
 #endif
@@ -143,23 +150,23 @@ extern void _warning(int error, const char *type, const char *file, int line,
 #if ERROR_SUPPORTED_P(ERROR_SOUND_LOG)
 extern void _sound_warning(const char *file, int line, const char *fn,
                            const char *fmt, ...);
-#define warning_sound_log(fmt, args...) \
-    _sound_warning(__FILE__, __LINE__, __PRETTY_FUNCTION__, fmt, ##args)
+#define warning_sound_log(...) \
+    _sound_warning(__FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
 #else
 #define warning_sound_log(fmt, args...)
 #endif
 
 #if ERROR_SUPPORTED_P(ERROR_FLOATING_POINT)
-#define warning_floating_point(fmt, args...) \
+#define warning_floating_point(...) \
     warning_helper(ERROR_FLOATING_POINT,     \
                    "FP",                     \
-                   fmt, ##args)
+                   __VA_ARGS__)
 #else
 #define warning_floating_point(fmt, args...)
 #endif
 
-#define errno_fatal(fmt, args...) \
-    _errno_fatal(__FILE__, __LINE__, __PRETTY_FUNCTION__, fmt, ##args)
+#define errno_fatal(...) \
+    _errno_fatal(__FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
 extern _NORET_1_ void _errno_fatal(const char *file, int line, const char *fn,
                                    const char *fmt, ...) _NORET_2_
 #if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 6)
@@ -169,11 +176,11 @@ extern _NORET_1_ void _errno_fatal(const char *file, int line, const char *fn,
     ;
 
 #if ERROR_SUPPORTED_P(ERROR_ERRNO)
-#define warning_errno(fmt, args...) \
-    _errno_warning(__FILE__, __LINE__, __PRETTY_FUNCTION__, fmt, ##args)
+#define warning_errno(...) \
+    _errno_warning(__FILE__, __LINE__, __PRETTY_FUNCTION__, __VA_ARGS__)
 extern void _errno_warning(const char *file, int line, const char *fn,
                            const char *fmt, ...)
-    __attribute__((format(printf, 4, 5)));
+    ATTR_FORMAT(printf, 4, 5);
 #else
 #define warning_errno(fmt, args...)
 #endif
