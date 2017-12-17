@@ -447,11 +447,11 @@ void Executor::dialog_draw_item(DialogPtr dp, itmp itemp, int itemno)
     {
         Rect r;
 
-#warning This fix helps Energy Scheming, but we really should find out the
-#warning exact semantics for when we should try to draw items, different
-#warning item types may have different behaviors, we also might want to
-#warning look at visRgn and clipRgn.  BTW, we should also test to see
-#warning whether SectRect will really write to location 0
+// FIXME: #warning This fix helps Energy Scheming, but we really should find out the
+// FIXME: #warning exact semantics for when we should try to draw items, different
+// FIXME: #warning item types may have different behaviors, we also might want to
+// FIXME: #warning look at visRgn and clipRgn.  BTW, we should also test to see
+// FIXME: #warning whether SectRect will really write to location 0
 
         if(SectRect(&itemp->itmr, &dp->portRect, &r))
             ROMlib_drawiptext(dp, itemp, itemno);

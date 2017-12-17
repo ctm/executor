@@ -217,7 +217,7 @@ ROMlib_new_dialog_common(DialogPtr dp,
         HxX(aux_win_h, dialogCItem) = RM(item_color_table_h);
     }
 
-#warning We no longer call TEStylNew, this helps LB password
+// FIXME: #warning We no longer call TEStylNew, this helps LB password
 
     ThePortGuard guard((GrafPtr)dp);
 

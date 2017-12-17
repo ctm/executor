@@ -3,7 +3,7 @@
  */
 #if defined(CFM_PROBLEMS)
 
-#warning "No CFM support for now, even though it limped previously."
+// FIXME: #warning "No CFM support for now, even though it limped previously."
 
 #elif defined(powerpc)
 
@@ -385,14 +385,14 @@ check_existing_connections(Str63 library, OSType arch, LoadFlags loadflags,
                            ConnectionID *cidp, Ptr *mainaddrp, Str255 errName)
 {
 /* TODO */
-#warning TODO
+// FIXME: #warning TODO
     return fragLibNotFound;
 }
 
 PRIVATE void
 get_root_and_app(INTEGER *root_vrefp, LONGINT *root_diridp,
                  INTEGER *app_vrefp, LONGINT *app_diridp){
-#warning TODO
+// FIXME: #warning TODO
     /* TODO */
 }
 
@@ -928,7 +928,7 @@ begin_closure(uint32 n_libs, PEFImportedLibrary_t *libs,
     retval = (decltype(retval))NewPtr(sizeof *retval + n_libs * sizeof(lib_t));
     N_LIBS_X(retval) = CL(n_libs);
 
-#warning eventually need to worry about errors
+// FIXME: #warning eventually need to worry about errors
 
     for(err = noErr, i = 0; /* err == noErr && */ i < n_libs; ++i)
     {

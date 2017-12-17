@@ -661,8 +661,8 @@ PRIVATE unsigned short getnmfls(HVCB *vcbp, INTEGER workingdirnum)
         str255assign(key.ckrCName, thp->thdCName);
         key.ckrKeyLen = sizeof(LONGINT) + 2 + key.ckrCName[0];
         err = ROMlib_keyfind(&btparamrec);
-#warning autc04: This does not seem right. Added .raw() here to preserve original executor behavior.
-#warning waitwat? "key" is never used again
+// FIXME: #warning autc04: This does not seem right. Added .raw() here to preserve original executor behavior.
+// FIXME: #warning waitwat? "key" is never used again
         if(err == noErr && btparamrec.success)
             retval = ((directoryrec *)DATAPFROMKEY(btparamrec.foundp))->dirVal.raw();
         else

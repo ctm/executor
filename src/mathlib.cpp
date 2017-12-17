@@ -451,7 +451,7 @@ ROMlib_GetMathLib(Str63 library, OSType arch, LoadFlags loadflags,
 #if !defined(CFM_PROBLEMS)
         cid = ROMlib_new_connection(1);
 #else
-#warning "Will not work until CFM is viable"
+// FIXME: #warning "Will not work until CFM is viable"
         cid = 0;
 #endif
         if(!cid)

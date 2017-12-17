@@ -499,7 +499,7 @@ P8(PUBLIC pascal trap, WindowPtr, NewWindow,
 
 #define DARK_CASTLE_HACK
 #if defined(DARK_CASTLE_HACK)
-#warning DARK_CASTLE_HACK
+// FIXME: #warning DARK_CASTLE_HACK
             if(strncmp((char *)title + 1, "Modal", 5) == 0)
                 size = sizeof(DialogRecord);
             else
@@ -677,7 +677,7 @@ P1(PUBLIC pascal trap, void, CloseWindow, WindowPtr, w)
     }
 
 #if defined(NOTAGOODIDEA)
-#warning "what the hell does this mean?! DANGER WILL ROBINSON!"
+// FIXME: #warning "what the hell does this mean?! DANGER WILL ROBINSON!"
     Cx (*(Ptr *)Cx)(((WindowPeek)w)->windowDefProc) = 0;
     DisposHandle(Cx(((WindowPeek)w)->windowDefProc));
 #endif /* NOTAGOODIDEA */

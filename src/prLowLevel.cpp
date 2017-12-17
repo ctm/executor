@@ -146,7 +146,7 @@ P2(PUBLIC pascal, void, ROMlib_myjobproc, DialogPtr, dp, INTEGER, itemno)
                 HxX(hPrint, prJob.iCopies) = CW(num_copies);
             }
 #if defined(CYGWIN32)
-#warning TODO use better x and y coords
+// FIXME: #warning TODO use better x and y coords
             warning_trace_info("ROMlib_printer = %s, WIN32_TOKEN = %s",
                                ROMlib_printer, WIN32_TOKEN);
             if(strcmp(ROMlib_printer, WIN32_TOKEN) == 0)

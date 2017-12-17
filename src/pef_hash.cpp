@@ -302,7 +302,7 @@ lookup_by_name(const ConnectionID connp,
     const char *string_tablep;
 
 #if 1
-#warning get rid of this eventually
+// FIXME: #warning get rid of this eventually
 
     if(connp == (ConnectionID)0x12348765)
         return NULL;

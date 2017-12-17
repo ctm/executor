@@ -11,7 +11,7 @@
 #include "rsys/common.h"
 
 #if defined(MACOSX)
-#warning bad serial support right now
+// FIXME: #warning bad serial support right now
 //TODO: this seems to use sgtty functions instead of termios.
 #include <sgtty.h>
 #include <sys/errno.h>
@@ -308,7 +308,7 @@ void callcomp(ParmBlkPtr pbp, ProcPtr comp, OSErr err)
     CALL_EMULATOR((syn68k_addr_t)(long)comp);
 }
 
-#warning autc04: used to be (CW((pbp)->ioParam.ioTrap) & asyncTrpBit
+// FIXME: #warning autc04: used to be (CW((pbp)->ioParam.ioTrap) & asyncTrpBit
 #define DOCOMPLETION(pbp, err)                                                   \
     (pbp)->ioParam.ioResult = CW(err);                                           \
     if((CW((pbp)->ioParam.ioTrap) & asyncTrpBit) && (pbp)->ioParam.ioCompletion) \
@@ -317,7 +317,7 @@ void callcomp(ParmBlkPtr pbp, ProcPtr comp, OSErr err)
 
 #else
 
-#warning BINCOMPAT not defined
+// FIXME: #warning BINCOMPAT not defined
 
 #define DOCOMPLETION(pbp, err)                       \
     (pbp)->ioParam.ioResult = CW(err);               \
@@ -462,7 +462,7 @@ A2(PUBLIC, OSErr, ROMlib_serialprime, ParmBlkPtr, pbp, /* INTERNAL */
                     pbp->ioParam.ioActCount = CL(serial_bios_read(HxX(h, fd), buf,
                                                                   req_count));
 #else
-#warning not sure what to do here
+// FIXME: #warning not sure what to do here
 #endif
 #if defined(SERIALDEBUG)
                     warning_trace_info("serial prime read %d bytes, first is 0x%0x",
@@ -488,7 +488,7 @@ A2(PUBLIC, OSErr, ROMlib_serialprime, ParmBlkPtr, pbp, /* INTERNAL */
                     pbp->ioParam.ioActCount = CL(serial_bios_write(HxX(h, fd),
                                                                    buf, req_count));
 #else
-#warning not sure what to do here
+// FIXME: #warning not sure what to do here
 #endif
                 }
                 break;

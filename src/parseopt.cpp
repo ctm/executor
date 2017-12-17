@@ -110,7 +110,7 @@ bool Executor::parse_size_opt(string opt, string arg1)
         }
         else
 #else
-#warning we should support "-size maximum"
+// FIXME: #warning we should support "-size maximum"
 #endif
         {
             const char *p;

@@ -556,7 +556,7 @@ graymatch(unsigned char patp[8], INTEGER pnMode,
     pat_is_white = ((gray_fore == 1 && gray_back == 1) || (gray_fore == 1 && pl[0] == -1 && pl[1] == -1) || (gray_back == 1 && pl[0] == 0 && pl[1] == 0));
 
 #if 0
-#warning DO NOT CHECK THIS IN
+// FIXME: #warning DO NOT CHECK THIS IN
   {
     long fg, bk;
     const char *fgs, *bks;

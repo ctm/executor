@@ -1079,7 +1079,7 @@ _RecoverHandle_flags(Ptr p, bool sys_p)
     else
     {
         h = 0;
-#warning FIND OUT WHAT A REAL MAC DOES HERE
+// FIXME: #warning FIND OUT WHAT A REAL MAC DOES HERE
     }
     return h;
 }
@@ -1324,7 +1324,7 @@ void SetPtrSize(Ptr p, Size newsize)
             /* First try and grow it forward */
             if(ROMlib_makespace(&nextblock, newsize - oldpsize))
             {
-#warning original code was endian-inconsistent
+// FIXME: #warning original code was endian-inconsistent
                 ZONE_ZCB_FREE_X(current_zone)
                     = CL(ZONE_ZCB_FREE(current_zone) - PSIZE(nextblock));
 

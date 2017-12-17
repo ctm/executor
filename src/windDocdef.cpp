@@ -1076,7 +1076,7 @@ P4(PUBLIC pascal, LONGINT, wdef0,
                 case documentProc:
                 case noGrowDocProc:
                 case movableDBoxProc:
-#warning TODO: correct frame for movableDBoxProc (toolbox essentials 4-10)
+// FIXME: #warning TODO: correct frame for movableDBoxProc (toolbox essentials 4-10)
                     calc_doc((GrafPtr)w);
                     break;
                 case dBoxProc:

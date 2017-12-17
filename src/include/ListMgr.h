@@ -18,7 +18,7 @@ typedef Point Cell;
 typedef Byte DataArray[32001];
 #else /* defined(__alpha) */
 typedef Byte DataArray;
-#warning incorrect typedef to make gcc happy
+// FIXME: #warning incorrect typedef to make gcc happy
 #endif /* defined(__alpha) */
 
 typedef DataArray *DataPtr;

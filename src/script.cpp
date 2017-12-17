@@ -619,7 +619,7 @@ P4(PUBLIC pascal trap, FormatStatus, ExtendedToString, /* TTS TODO */
 #if !defined(CYGWIN32)
     sprintf(buf, "%Lg", val);
 #else
-#warning may lose bits of precision here
+// FIXME: #warning may lose bits of precision here
     sprintf(buf, "%g", (double)val);
 #endif
     str255_from_c_string(string, buf);

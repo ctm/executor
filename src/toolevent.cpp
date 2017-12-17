@@ -1229,7 +1229,7 @@ P1(PUBLIC pascal trap, void, GetMouse, GUEST<Point> *, p)
     GlobalToLocal(p);
 }
 
-#warning Button not coded per IM Macintosh Toolbox Essentials 2-108
+// FIXME: #warning Button not coded per IM Macintosh Toolbox Essentials 2-108
 P0(PUBLIC pascal trap, BOOLEAN, Button)
 {
     EventRecord evt;
@@ -1240,7 +1240,7 @@ P0(PUBLIC pascal trap, BOOLEAN, Button)
     return retval;
 }
 
-#warning StillDown not coded per IM Macintosh Toolbox Essentials 2-109
+// FIXME: #warning StillDown not coded per IM Macintosh Toolbox Essentials 2-109
 P0(PUBLIC pascal trap, BOOLEAN, StillDown) /* IMI-259 */
 {
     EventRecord evt;

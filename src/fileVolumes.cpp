@@ -880,7 +880,7 @@ A4(PRIVATE, VCB *, findvcb, StringPtr, sp, INTEGER, vrn, BOOLEAN *, iswd,
             if(ISWDNUM(vrn))
             {
                 *iswd = true;
-#warning autc04 ### This is a guess. The original was missing the MR.
+// FIXME: #warning autc04 ### This is a guess. The original was missing the MR.
                 vcbptr = MR(WDNUMTOWDP(vrn)->vcbp);
             }
             else

@@ -245,7 +245,7 @@ P2(PUBLIC pascal trap, OSErr, DIZero, INTEGER, dn, StringPtr, vname)
         {
             OSErr err2;
 
-#warning disk init unsupported
+// FIXME: #warning disk init unsupported
             //err = format_disk(time, name, FLOPPY_SECTORS_PER_DISK, writefunc,
             //		    (int) &oi);
             err2 = end_track_buffering_for_write(&oi);

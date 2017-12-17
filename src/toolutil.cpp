@@ -182,7 +182,7 @@ A4(PRIVATE, int, cmpstrings, char *, p, char *, ep, char *, p1, LONGINT, len)
  * error location isn't changed?
  */
 
-#warning Munger returns undocumented error return in D0
+// FIXME: #warning Munger returns undocumented error return in D0
 
 #define RETURN(x)     \
     do                \
@@ -191,9 +191,9 @@ A4(PRIVATE, int, cmpstrings, char *, p, char *, ep, char *, p1, LONGINT, len)
         goto DONE;    \
     } while(false)
 
-#warning We never check for offset greater than HandleSize -- check and fix
+// FIXME: #warning We never check for offset greater than HandleSize -- check and fix
 
-#warning We also return -1 even though the Mac may return something different
+// FIXME: #warning We also return -1 even though the Mac may return something different
 
 P6(PUBLIC pascal trap, LONGINT, Munger, Handle, h, LONGINT, off, Ptr, p1,
    LONGINT, len1, Ptr, p2, LONGINT, len2)
@@ -427,7 +427,7 @@ P3(PUBLIC pascal trap, void, LongMul, LONGINT, a, LONGINT, b, Int64Bit *, c)
     }
 }
 
-#warning ScreenRes is duplicate with qGDevice.cpp
+// FIXME: #warning ScreenRes is duplicate with qGDevice.cpp
 A2(PUBLIC, void, ScreenRes, GUEST<INTEGER> *, hp, GUEST<INTEGER> *, vp)
 {
     *hp = ScrHRes;

@@ -10,7 +10,7 @@
 #include "rsys/prefs.h"
 #include "rsys/host.h"
 
-#warning This seems unsafe...
+// FIXME: #warning This seems unsafe...
 
 using namespace Executor;
 

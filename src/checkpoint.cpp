@@ -4,7 +4,7 @@
 
 #if defined(STANDALONE_TEST)
 
-#warning do not check this in
+// FIXME: #warning do not check this in
 
 #include <stdio.h>
 #include <stdlib.h>

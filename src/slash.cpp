@@ -171,7 +171,7 @@ int Uutimes(const char *path, struct timeval tvp[2])
   path = DOUBLE_SLASH_REMOVE (path);
   return utimes(path, tvp);
 #else
-#warning "Blowing off utimes"
+// FIXME: #warning "Blowing off utimes"
     return -1;
 #endif
 }

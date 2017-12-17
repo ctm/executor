@@ -115,7 +115,7 @@ PRIVATE gestaltentry_t gtable[] = {
     {
         gestaltToolboxTable, UNKNOWN,
     },
-#warning gestalt{ExtToolboxTable,ToolboxTable,OSTable} not initialized
+// FIXME: #warning gestalt{ExtToolboxTable,ToolboxTable,OSTable} not initialized
 #endif
 
 #if defined(SYN68K)
@@ -167,7 +167,7 @@ PRIVATE gestaltentry_t gtable[] = {
     {
         gestaltSysArchitecture, gestaltPowerPC,
     },
-#warning questionable gestalt values for StuffitExpander
+// FIXME: #warning questionable gestalt values for StuffitExpander
     { gestaltOSAttr, 0x3FF },
     { T('t', 'h', 'd', 's'), 0 },
 #else
@@ -236,7 +236,7 @@ PRIVATE gestaltentry_t gtable[] = {
     },
 
 #if 0
-#warning DO NOT CHECK THIS IN
+// FIXME: #warning DO NOT CHECK THIS IN
   { T ('d', 'r', 'a', 'g'),	0, },
 #endif
 
@@ -286,7 +286,7 @@ PRIVATE gestaltentry_t phystable[] = {
 #if SIZEOF_CHAR_P == 4
     { gestaltExecutorVersionString, (long)EXECUTOR_VERSION },
 #else
-#warning gestaltExecutorVersionString not currently available
+// FIXME: #warning gestaltExecutorVersionString not currently available
 #endif
 #if defined(LINUX) || defined(CYGWIN32)
     { gestaltPhysicalRAMSize, TO_BE_FILLED_IN },

@@ -406,7 +406,7 @@ P2(PUBLIC pascal trap, BOOLEAN, TestDeviceAttribute,
     return retval;
 }
 
-#warning ScreenRes is duplicate with toolutil.cpp
+// FIXME: #warning ScreenRes is duplicate with toolutil.cpp
 P2(PUBLIC pascal trap, void, ScreenRes,
    GUEST<INTEGER> *, h_res,
    GUEST<INTEGER> *, v_res)

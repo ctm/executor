@@ -28,7 +28,7 @@ P6(PUBLIC pascal trap, void, CopyBits,
 
 #define StdBits_TOOLTRAP_NUMBER (0xEB)
 
-#warning ctm hack below (mode = srcCopy) -- might not be best solution
+// FIXME: #warning ctm hack below (mode = srcCopy) -- might not be best solution
 
     TheZoneGuard guard(SysZone);
     int dst_is_theport_p;

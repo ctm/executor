@@ -365,7 +365,7 @@ A1(PUBLIC trap, OSErrRET, SetDateTime, ULONGINT, mactime)
     else
         return (noErr);
 #else /* defined(SYSV) */
-#warning "SetDateTime not implemented"
+// FIXME: #warning "SetDateTime not implemented"
     return clkWrErr;
 #endif /* defined(SYSV) */
 }

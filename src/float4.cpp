@@ -303,10 +303,10 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fsetenv, INTEGER *,
             : "m"(i387_env));
     }
 #elif defined(__alpha) || defined(powerpc) || defined(__ppc__) || defined(__x86_64)
-#warning ROMlib_Fsetenv not implemented!
+// FIXME: #warning ROMlib_Fsetenv not implemented!
     signal(SIGFPE, SIG_IGN);
 #else
-#warning ROMlib_Fsetenv not implemented!
+// FIXME: #warning ROMlib_Fsetenv not implemented!
     gui_abort();
 #endif
 
@@ -383,10 +383,10 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fgetenv, INTEGER *,
         env |= PRECISION_MODE_HIGH_BIT;
 
 #elif defined(__alpha) || defined(powerpc) || defined(__ppc__)
-#warning ROMlib_Fgetenv not properly implemented!
+// FIXME: #warning ROMlib_Fgetenv not properly implemented!
     env = 0;
 #else
-#warning ROMlib_Fgetenv not implemented!
+// FIXME: #warning ROMlib_Fgetenv not implemented!
     gui_abort();
 #endif
 
@@ -951,7 +951,7 @@ P_SAVED0D1A0A1_4(PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
 #if !defined(CYGWIN32)
         sprintf(digit_string, "%.80Lf", n);
 #else
-#warning MAY LOSE PRECISION HERE
+// FIXME: #warning MAY LOSE PRECISION HERE
         sprintf(digit_string, "%.80f", (double)n);
 #endif
 

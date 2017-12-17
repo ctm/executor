@@ -699,7 +699,7 @@ gworld_from_pict(PicHandle ph)
             LockPixels(pm);
             DrawPicture(ph, &r);
 #if 0
-#warning THIS INTERFERES WITH PICT PASTING
+// FIXME: #warning THIS INTERFERES WITH PICT PASTING
 	  {
 	    char *p;
 
@@ -752,7 +752,7 @@ surface_from_gworld(GWorldPtr gp)
         ip = (decltype(ip))GetPixBaseAddr(pm);
         memcpy(op, ip, n_lines * pixels_per_line * sizeof *ip);
 #if 0
-#warning THIS IS BROKEN
+// FIXME: #warning THIS IS BROKEN
       memset (op, 0x00, 4 * n_lines * pixels_per_line);
       memset (op, 0xFF, 4 * n_lines * pixels_per_line / 2);
 #endif

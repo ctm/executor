@@ -35,7 +35,7 @@ using namespace Executor;
 #if defined(MACOSX_)
 // The code in here should work for Mac OS X as well as Linux, although
 // in Mac OS X they use MAP_ANON instead of MAP_ANONYMOUS
-#warning "Fix this, the code isn't Linux specific"
+// FIXME: #warning "Fix this, the code isn't Linux specific"
 #define MAP_ANONYMOUS MAP_ANON
 #endif
 
@@ -431,7 +431,7 @@ mmap_permanent_memory(unsigned long amount_wanted)
     }
 #else
 
-#warning THIS CODE IS PROBABLY WRONG
+// FIXME: #warning THIS CODE IS PROBABLY WRONG
 
     /*
    * I haven't tested a powerpc build in a while, but I just noticed that

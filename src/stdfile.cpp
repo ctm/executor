@@ -2407,7 +2407,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 #if 0
     local_name = ...;
 #else
-#warning "TODO: support native file pickers"
+// FIXME: #warning "TODO: support native file pickers"
 #endif
         reply_valid = host_spfcommon(&reply, c_prompt, local_name, &fp, &filef,
                                      numt, tl, getorput, flavor, activeList,
@@ -2428,7 +2428,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
         Handle pnhand, ejhand, drhand, sahand;
         OSErr err;
         ControlHandle scrollh;
-#warning structure referenced using 32 bit pointer from refcon
+// FIXME: #warning structure referenced using 32 bit pointer from refcon
         fltype f;
         GrafPtr gp;
         INTEGER openorsave, promptitem, nmlistitem, diskname, ejectitem, driveitem;
@@ -2612,7 +2612,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
             else
                 (SF_NAME(&f))[0] = 0;
         }
-#warning not 64-bit clean
+// FIXME: #warning not 64-bit clean
         SetWRefCon((WindowPtr)dp, US_TO_SYN68K(&f));
         if(CW(dp->portRect.bottom) + p.v + 7 > CW(screenBitsX.bounds.bottom))
             p.v = CW(screenBitsX.bounds.bottom) - CW(dp->portRect.bottom) - 7;

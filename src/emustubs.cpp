@@ -1759,7 +1759,7 @@ STUB(PostEvent)
 {
     GUEST<EvQElPtr> qelemp;
 
-#warning the first argument to PPostEvent looks suspicious
+// FIXME: #warning the first argument to PPostEvent looks suspicious
     EM_D0 = PPostEvent(EM_A0, EM_D0,
                        (GUEST<EvQElPtr> *)&qelemp);
     EM_A0 = qelemp.raw();
@@ -1849,7 +1849,7 @@ STUB(Delay)
 {
     LONGINT tempp;
 
-#warning is a0 really the argument to delay?  That sounds weird
+// FIXME: #warning is a0 really the argument to delay?  That sounds weird
     Delay(EM_A0, &tempp);
     EM_D0 = tempp;
     RTS();
@@ -2780,7 +2780,7 @@ STUB(IconDispatch)
                              IconDispatch);
 }
 
-#warning should include speech manager selectors
+// FIXME: #warning should include speech manager selectors
 /*
  * NOTE: IM Sound p. 4-109 has a table of speech manager selectors:
  * 
@@ -2931,7 +2931,7 @@ STUB(QuickTime)
 
 #if defined(__ppc__)
 
-#warning "Need to get CFM going before we can enable this glue."
+// FIXME: #warning "Need to get CFM going before we can enable this glue."
 
 #elif defined(powerpc)
 

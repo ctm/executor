@@ -403,14 +403,14 @@ void te_draw(TEPtr tep,
         clip_rect = (Rect *)alloca(sizeof *clip_rect);
 
 #if 0
-#warning this code appears to cause trouble with TTSs logbook
+// FIXME: #warning this code appears to cause trouble with TTSs logbook
 
 /* the problem is that they have a picture open and expect the text
  calls to be logged into the picture even though they can't make it to the
 							    screen */
     SectRect (view_rect, vis_rect, clip_rect);
 #else
-#warning this section of code should be cleaned up
+// FIXME: #warning this section of code should be cleaned up
         SectRect(view_rect, view_rect, clip_rect);
 #endif
 

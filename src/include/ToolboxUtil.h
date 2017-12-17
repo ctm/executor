@@ -31,7 +31,7 @@ struct Int64Bit
 typedef Pattern *PatPtr;
 #else /* defined(__alpha) */
 typedef char *PatPtr;
-#warning "Bad PatPtr def ... 'cause of problems with my gcc mods -- ctm"
+// FIXME: #warning "Bad PatPtr def ... 'cause of problems with my gcc mods -- ctm"
 #endif /* defined(__alpha) */
 
 typedef GUEST<PatPtr> *PatHandle;

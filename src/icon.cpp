@@ -2,8 +2,8 @@
  * Development, Inc.  All rights reserved.
  */
 
-#warning the icon suite representation is our own brew -- tests should
-#warning be written and we should do what the Mac does
+// FIXME: #warning the icon suite representation is our own brew -- tests should
+// FIXME: #warning be written and we should do what the Mac does
 
 #include "rsys/common.h"
 

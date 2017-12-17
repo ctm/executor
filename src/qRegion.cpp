@@ -1526,7 +1526,7 @@ P2(PUBLIC pascal trap, BOOLEAN, EqualRgn, RgnHandle, r1, RgnHandle, r2)
 
 P1(PUBLIC pascal trap, BOOLEAN, EmptyRgn, RgnHandle, rh)
 {
-#warning What does a mac do with a NULL HANDLE here?
+// FIXME: #warning What does a mac do with a NULL HANDLE here?
     BOOLEAN retval;
 
     retval = rh ? EmptyRect(&RGN_BBOX(rh)) : true;
