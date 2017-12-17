@@ -77,7 +77,6 @@
 
 #include "rsys/cfm.h"
 #include "rsys/launch.h"
-#include "rsys/local_charset.h"
 #include "rsys/version.h"
 #include "rsys/appearance.h"
 
