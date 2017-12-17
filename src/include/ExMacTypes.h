@@ -118,16 +118,14 @@ struct Rect
 
 typedef Rect *RectPtr;
 
-#define RECT_WIDTH(r)                   \
-    ({                                  \
-        const Rect *__r = (r);          \
-        CW(__r->right) - CW(__r->left); \
-    })
-#define RECT_HEIGHT(r)                  \
-    ({                                  \
-        const Rect *__r = (r);          \
-        CW(__r->bottom) - CW(__r->top); \
-    })
+inline short RECT_WIDTH(const Rect *r)
+{
+    return CW(r->right) - CW(r->left);
+}
+inline short RECT_HEIGHT(const Rect *r)
+{
+    return CW(r->bottom) - CW(r->top);
+}
 
 #define NULL_RECTP ((Rect *)NULL)
 
@@ -136,12 +134,12 @@ typedef Rect *RectPtr;
         memset(r, 0, sizeof(Rect)); \
     while(false)
 
-#define RECT_EQUAL_P(r1, r2)                       \
-    ({                                             \
-        const uint32 *__p1 = (const uint32 *)(r1); \
-        const uint32 *__p2 = (const uint32 *)(r2); \
-        __p1[0] == __p2[0] && __p1[1] == __p2[1];  \
-    })
+inline bool RECT_EQUAL_P(const Rect *r1, const Rect *r2)
+{
+    const uint32 *__p1 = (const uint32 *)(r1);
+    const uint32 *__p2 = (const uint32 *)(r2);
+    return __p1[0] == __p2[0] && __p1[1] == __p2[1];
+}
 
 /* from IntlUtil.h */
 typedef INTEGER ScriptCode;
