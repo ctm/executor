@@ -103,18 +103,6 @@ struct SerStaRec
 #define PRNTRIRNUM (-8)
 #define PRNTRORNUM (-9)
 
-/* DO NOT DELETE THIS LINE */
-#if !defined(__STDC__)
-extern __OSErr RAMSDOpen();
-extern void RAMSDClose();
-extern __OSErr SerReset();
-extern __OSErr SerSetBuf();
-extern __OSErr SerHShake();
-extern __OSErr SerSetBrk();
-extern __OSErr SerClrBrk();
-extern __OSErr SerGetBuf();
-extern __OSErr SerStatus();
-#else /* __STDC__ */
 extern __OSErr RAMSDOpen(SPortSel port);
 extern void RAMSDClose(SPortSel port);
 extern __OSErr SerReset(INTEGER rn, INTEGER config);
@@ -124,7 +112,6 @@ extern __OSErr SerSetBrk(INTEGER rn);
 extern __OSErr SerClrBrk(INTEGER rn);
 extern __OSErr SerGetBuf(INTEGER rn, LONGINT *lp);
 extern __OSErr SerStatus(INTEGER rn, SerStaRec *serstap);
-#endif /* __STDC__ */
 
 #if defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 #undef __Byte

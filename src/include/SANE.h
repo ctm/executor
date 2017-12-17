@@ -127,56 +127,6 @@ struct DecForm
 
 #define FCMP_RETURN_TYPE void
 
-/* DO NOT DELETE THIS LINE */
-#if !defined(__STDC__)
-extern pascal void ROMlib_Fcomp2X();
-extern void ROMlib_Fsetenv();
-extern void ROMlib_Fgetenv();
-extern void ROMlib_Fprocentry();
-extern void ROMlib_Fprocexit();
-extern void ROMlib_Ftestxcp();
-extern void ROMlib_FsqrtX();
-extern void ROMlib_FscalbX();
-extern void ROMlib_FlogbX();
-extern void ROMlib_FabsX();
-extern void ROMlib_FnegX();
-extern void ROMlib_FrintX();
-extern void ROMlib_FtintX();
-extern void ROMlib_Fcpysgnx();
-extern void ROMlib_Faddx();
-extern void ROMlib_Fsubx();
-extern void ROMlib_Fmulx();
-extern void ROMlib_Fdivx();
-extern void ROMlib_Fremx();
-extern FCMP_RETURN_TYPE ROMlib_Fcmpx();
-extern FCMP_RETURN_TYPE ROMlib_FcpXx();
-extern void ROMlib_FX2x();
-extern void ROMlib_Fx2X();
-extern void ROMlib_Fx2dec();
-extern void ROMlib_Fdec2x();
-extern void ROMlib_Fclassx();
-extern void ROMlib_FlnX();
-extern void ROMlib_Flog2X();
-extern void ROMlib_Fln1X();
-extern void ROMlib_Flog21X();
-extern void ROMlib_FexpX();
-extern void ROMlib_Fexp2X();
-extern void ROMlib_Fexp1X();
-extern void ROMlib_Fexp21X();
-extern void ROMlib_Fxpwri();
-extern void ROMlib_Fxpwry();
-extern void ROMlib_Fcompound();
-extern void ROMlib_Fannuity();
-extern void ROMlib_FsinX();
-extern void ROMlib_FcosX();
-extern void ROMlib_FtanX();
-extern void ROMlib_FatanX();
-extern void ROMlib_FrandX();
-extern void ROMlib_Fdec2str();
-extern void ROMlib_Fxstr2dec();
-extern void ROMlib_Fcstr2dec();
-extern void ROMlib_Fpstr2dec();
-#else /* __STDC__ */
 extern pascal void C_ROMlib_Fcomp2X(comp sp, extended80 *
                                                  dp);
 extern pascal void P_ROMlib_Fcomp2X(comp sp, extended80 *
@@ -368,6 +318,5 @@ extern pascal trap void C_ROMlib_Fgethv(LONGINT *hvp, unsigned short sel);
 
 extern pascal trap void C_ROMlib_FnextX(uint8 *x, uint8 *y,
                                         unsigned short sel);
-#endif /* __STDC__ */
 }
 #endif

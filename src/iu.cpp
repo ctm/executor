@@ -31,11 +31,7 @@ typedef struct
     unsigned char secondary;
 } sorttype;
 
-#if !defined(__STDC__)
-typedef INTEGER (*locptype)();
-#else /* __STDC__ */
 typedef INTEGER (*locptype)(Ptr ptr, INTEGER len, sorttype *sp);
-#endif /* __STDC__ */
 
 PRIVATE void outl(LONGINT, char **);
 PRIVATE void outs(StringPtr, INTEGER, char **);

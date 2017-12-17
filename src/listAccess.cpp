@@ -90,14 +90,6 @@ P3(PUBLIC pascal trap, void, LRect, Rect *, cellrect, /* IMIV-274 */
     }
 }
 
-#if !defined(__STDC__)
-
-typedef INTEGER (*cmpf)();
-
-#define CALLCMP(a1, a2, a3, a4, fp) CallPascalW4(a1, a2, a3, a4, fp)
-
-#else /* __STDC__ */
-
 typedef pascal INTEGER (*cmpf)(Ptr p1, Ptr p2, INTEGER len1, INTEGER len2);
 
 #if !defined(BINCOMPAT)
@@ -132,8 +124,6 @@ A5(static inline, INTEGER, ROMlib_CALLCMP, Ptr, p1, Ptr, p2, INTEGER, l1,
 }
 
 #endif /* BINCOMPAT */
-
-#endif /* __STDC__ */
 
 P5(PUBLIC pascal trap, BOOLEAN, LSearch, Ptr, dp, /* IMIV-274 */
    INTEGER, dl, Ptr, proc, GUEST<Cell> *, cellp, ListHandle, list)

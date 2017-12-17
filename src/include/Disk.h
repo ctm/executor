@@ -52,15 +52,8 @@ struct DrvSts
     GUEST<INTEGER> diskErrs;
 };
 
-/* DO NOT DELETE THIS LINE */
-#if !defined(__STDC__)
-extern OSErr DiskEject();
-extern OSErr SetTagBuffer();
-extern OSErr DriveStatus();
-#else /* __STDC__ */
 extern OSErr DiskEject(INTEGER rn);
 extern OSErr SetTagBuffer(Ptr bp);
 extern OSErr DriveStatus(INTEGER dn, DrvSts *statp);
-#endif /* __STDC__ */
 }
 #endif /* __DISK__ */

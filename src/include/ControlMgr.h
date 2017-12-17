@@ -131,38 +131,6 @@ struct AuxCtlRec
     GUEST<LONGINT> acRefCon;
 };
 
-#if !defined(__STDC__)
-extern void SetCTitle();
-extern void GetCTitle();
-extern void HideControl();
-extern void ShowControl();
-extern void HiliteControl();
-extern void DrawControls();
-extern void Draw1Control();
-extern void UpdtControl();
-extern ControlHandle NewControl();
-extern ControlHandle GetNewControl();
-extern void DisposeControl();
-extern void KillControls();
-extern void SetCRefCon();
-extern LONGINT GetCRefCon();
-extern void SetCtlAction();
-extern ProcPtr GetCtlAction();
-extern INTEGER GetCVariant();
-extern BOOLEAN GetAuxCtl();
-extern INTEGER FindControl();
-extern INTEGER TrackControl();
-extern INTEGER TestControl();
-extern void SetCtlValue();
-extern INTEGER GetCtlValue();
-extern void SetCtlMin();
-extern INTEGER GetCtlMin();
-extern void SetCtlMax();
-extern INTEGER GetCtlMax();
-extern void MoveControl();
-extern void DragControl();
-extern void SizeControl();
-#else /* __STDC__ */
 extern pascal trap void C_SetCTitle(ControlHandle c,
                                     StringPtr t);
 extern pascal trap void P_SetCTitle(ControlHandle c,
@@ -265,5 +233,4 @@ extern pascal trap void P_SizeControl(ControlHandle c,
                                       INTEGER width, INTEGER height);
 extern pascal trap void C_SetCtlColor(ControlHandle ctl, CCTabHandle ctab);
 }
-#endif /* __STDC__ */
 #endif /* __CONTROL__ */

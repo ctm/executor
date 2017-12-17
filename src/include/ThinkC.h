@@ -9,22 +9,11 @@
 
 namespace Executor
 {
-#if !defined(__STDC__)
-extern void CDebugStr();
-#else /* __STDC__ */
 extern void CDebugStr(StringPtr p);
-#endif /* __STDC__ */
 
-/* DO NOT DELETE THIS LINE */
-#if !defined(__STDC__)
-extern StringPtr CtoPstr();
-extern char *PtoCstr();
-extern void DebugStr();
-#else /* __STDC__ */
 extern StringPtr CtoPstr(char *str);
 extern char *PtoCstr(StringPtr str);
 extern pascal trap void C_DebugStr(StringPtr p);
 extern pascal trap void P_DebugStr(StringPtr p);
-#endif /* __STDC__ */
 }
 #endif /* __THINKCDOTH__ */

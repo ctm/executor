@@ -95,16 +95,6 @@ enum
 #define UNIV
 #endif
 
-#if !defined(__STDC__)
-
-extern pascal void ROMlib_filebox();
-extern void SFPPutFile();
-extern void SFPutFile();
-extern void SFPGetFile();
-extern void SFGetFile();
-
-#else /* __STDC__ */
-
 extern pascal void C_ROMlib_filebox(DialogPeek dp, INTEGER which);
 extern pascal void P_ROMlib_filebox(DialogPeek dp, INTEGER which);
 
@@ -152,7 +142,6 @@ extern pascal trap void C_CustomGetFile(FileFilterYDProcPtr filefilter,
                                         ActivateYDProcPtr activateproc,
                                         UNIV Ptr yourdatap);
 
-#endif /* __STDC__ */
 }
 
 #endif /* __STDFILE__ */

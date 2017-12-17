@@ -19,15 +19,8 @@ struct TMTask
     GUEST<LONGINT> tmCount; /* I don't trust IMIV-301 */
 };
 
-/* DO NOT DELETE THIS LINE */
-#if !defined(__STDC__)
-extern void InsTime();
-extern void RmvTime();
-extern void PrimeTime();
-#else /* __STDC__ */
 extern void InsTime(QElemPtr taskp);
 extern void RmvTime(QElemPtr taskp);
 extern void PrimeTime(QElemPtr taskp, LONGINT count);
-#endif /* __STDC__ */
 }
 #endif /* __TIMEMGR__ */

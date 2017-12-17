@@ -329,21 +329,6 @@ extern trap OSErr C_SndGetInfo(SndChannelPtr chan, OSType selector,
 extern trap OSErr C_SndSetInfo(SndChannelPtr chan, OSType selector,
                                void *infoPtr);
 
-/* DO NOT DELETE THIS LINE */
-#if !defined(__STDC__)
-extern void StartSound();
-extern void StopSound();
-extern BOOLEAN SoundDone();
-extern void GetSoundVol();
-extern void SetSoundVol();
-extern pascal trap OSErr SndPlay();
-extern pascal trap OSErr SndNewChannel();
-extern pascal trap OSErr SndAddModifier();
-extern pascal trap OSErr SndDoCommand();
-extern pascal trap OSErr SndDoImmediate();
-extern pascal trap OSErr SndControl();
-extern pascal trap OSErr SndDisposeChannel();
-#else /* __STDC__ */
 extern void StartSound(Ptr srec, LONGINT nb, ProcPtr comp);
 extern void StopSound(void);
 extern BOOLEAN SoundDone(void);
@@ -379,7 +364,5 @@ extern void C_FinaleUnknown1(void);
 extern OSErr C_FinaleUnknown2(ResType, LONGINT, Ptr, Ptr);
 extern long C_DirectorUnknown3(void);
 extern INTEGER C_DirectorUnknown4(ResType, INTEGER, Ptr, Ptr);
-
-#endif /* __STDC__ */
 }
 #endif /* __SOUNDMGR__ */

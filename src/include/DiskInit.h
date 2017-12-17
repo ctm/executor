@@ -23,16 +23,6 @@
 
 namespace Executor
 {
-/* DO NOT DELETE THIS LINE */
-#if !defined(__STDC__)
-extern void DILoad();
-extern void DIUnload();
-extern INTEGER DIBadMount();
-extern INTEGER dibadmount();
-extern OSErr DIFormat();
-extern OSErr DIVerify();
-extern OSErr DIZero();
-#else /* __STDC__ */
 extern void C_DILoad(void);
 extern void C_DIUnload(void);
 extern INTEGER C_DIBadMount(Point pt, LONGINT evtmess);
@@ -40,6 +30,5 @@ extern INTEGER C_dibadmount(Point *ptp, LONGINT evtmess);
 extern OSErr C_DIFormat(INTEGER dn);
 extern OSErr C_DIVerify(INTEGER dn);
 extern OSErr C_DIZero(INTEGER dn, StringPtr vname);
-#endif /* __STDC__ */
 }
 #endif /* __DISKINIT__ */

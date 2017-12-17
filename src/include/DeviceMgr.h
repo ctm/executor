@@ -119,29 +119,7 @@ typedef struct
 
 extern driverinfo *__ROMlib_otherdrivers;
 
-#if 0
-#if !defined(UTableBase_H)
-extern GUEST<DCtlHandlePtr> UTableBase_H;
-extern GUEST<Ptr> 	VIA_H;
-extern INTEGER UnitNtryCnt;
-extern INTEGER 	UnitNtryCnt;
-#endif
 
-#define UTableBase (UTableBase_H.p)
-#define VIA (VIA_H.p)
-#endif
-
-#if !defined(__STDC__)
-extern OSErr PBControl();
-extern OSErr PBStatus();
-extern OSErr PBKillIO();
-extern OSErr OpenDriver();
-extern OSErr CloseDriver();
-extern OSErr Control();
-extern OSErr Status();
-extern OSErr KillIO();
-extern DCtlHandle GetDCtlEntry();
-#else /* __STDC__ */
 extern OSErr PBControl(ParmBlkPtr pbp, BOOLEAN a);
 extern OSErr PBStatus(ParmBlkPtr pbp, BOOLEAN a);
 extern OSErr PBKillIO(ParmBlkPtr pbp, BOOLEAN a);
@@ -152,6 +130,5 @@ extern OSErr Control(INTEGER rn, INTEGER code,
 extern OSErr Status(INTEGER rn, INTEGER code, Ptr param);
 extern OSErr KillIO(INTEGER rn);
 extern DCtlHandle GetDCtlEntry(INTEGER rn);
-#endif /* __STDC__ */
 }
 #endif /* __DEVICEMGR__ */

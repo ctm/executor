@@ -28,11 +28,7 @@ extern char *ROMlib_WordApp;
 extern char *ROMlib_appname;
 extern char *ROMlib_ScreenDumpFile;
 
-#if !defined(__STDC__)
-extern BOOLEAN ROMlib_shouldalarm();
-#else /* __STDC__ */
 extern BOOLEAN ROMlib_shouldalarm(void);
-#endif /* __STDC__ */
 
 extern void initX(LONGINT argc, char **argv, INTEGER *rowbytep, INTEGER *bottomp, INTEGER *rightp, char **addrp);
 extern void putimageX(LONGINT top, LONGINT left, LONGINT bottom, LONGINT right);

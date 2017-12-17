@@ -537,59 +537,6 @@ enum
     NEWLINEMODE = 1 << 7
 };
 
-#if !defined(__STDC__)
-extern OSErrRET hfsPBOpen();
-extern OSErrRET hfsPBHOpen();
-extern OSErrRET hfsPBOpenRF();
-extern OSErrRET hfsPBHOpenRF();
-extern OSErrRET hfsPBLockRange();
-extern OSErrRET hfsPBUnlockRange();
-extern OSErrRET hfsPBRead();
-extern OSErrRET hfsPBWrite();
-extern OSErrRET hfsPBGetFPos();
-extern OSErrRET hfsPBSetFPos();
-extern OSErrRET hfsPBGetEOF();
-extern OSErrRET hfsPBSetEOF();
-extern OSErrRET hfsPBAllocate();
-extern OSErrRET hfsPBAllocContig();
-extern OSErrRET hfsPBFlushFile();
-extern OSErrRET hfsPBClose();
-extern OSErrRET hfsPBCreate();
-extern OSErrRET hfsPBHCreate();
-extern OSErrRET hfsPBDirCreate();
-extern OSErrRET hfsPBDelete();
-extern OSErrRET hfsPBHDelete();
-extern OSErrRET hfsPBGetCatInfo();
-extern OSErrRET hfsPBSetCatInfo();
-extern OSErrRET hfsPBCatMove();
-extern OSErrRET hfsPBOpenWD();
-extern OSErrRET hfsPBCloseWD();
-extern OSErrRET hfsPBGetWDInfo();
-extern OSErrRET hfsPBGetFInfo();
-extern OSErrRET hfsPBHGetFInfo();
-extern OSErrRET hfsPBSetFInfo();
-extern OSErrRET hfsPBHSetFInfo();
-extern OSErrRET hfsPBSetFLock();
-extern OSErrRET hfsPBHSetFLock();
-extern OSErrRET hfsPBRstFLock();
-extern OSErrRET hfsPBHRstFLock();
-extern OSErrRET hfsPBSetFVers();
-extern OSErrRET hfsPBRename();
-extern OSErrRET hfsPBHRename();
-extern OSErrRET hfsPBGetFCBInfo();
-extern OSErr hfsPBMountVol();
-extern OSErrRET hfsPBGetVInfo();
-extern OSErrRET hfsPBHGetVInfo();
-extern OSErrRET hfsPBSetVInfo();
-extern OSErrRET hfsPBGetVol();
-extern OSErrRET hfsPBHGetVol();
-extern OSErrRET hfsPBSetVol();
-extern OSErrRET hfsPBHSetVol();
-extern OSErrRET hfsPBFlushVol();
-extern OSErrRET hfsPBUnmountVol();
-extern OSErrRET hfsPBOffLine();
-extern OSErrRET hfsPBEject();
-#else /* __STDC__ */
 extern OSErr hfsPBOpen(ParmBlkPtr ufsPB, BOOLEAN a);
 extern OSErr hfsPBHOpen(HParmBlkPtr ufsPB, BOOLEAN a);
 extern OSErr hfsPBOpenRF(ParmBlkPtr ufsPB, BOOLEAN a);
@@ -653,8 +600,6 @@ extern void ROMlib_OurClose(void);
 
 extern long ROMlib_priv_open(const char *filename, long mode);
 extern void vcbsync(HVCB *vcbp);
-
-#endif /* __STDC__ */
 
 #endif
 }
