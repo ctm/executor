@@ -394,8 +394,7 @@ add_executable(executor ${ctl_sources} ${dial_sources} ${file_sources}
         ${print_sources} ${qd_sources} ${res_sources}
         ${te_sources} ${wind_sources} ${ae_sources}
         ${sound_sources} ${num_sources} ${misc_sources}
-        ${arch_sources} ${front_end_sources} ${host_sources}
-        ${os_sources}  ${include_sources} ${other_sources}
+        ${include_sources}
         ${GENERATED_FILES}
     )
 
