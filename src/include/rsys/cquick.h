@@ -744,6 +744,11 @@ public:
     {
         SetPort(port);
     }
+    ThePortGuard()
+        : savePort(thePortX)
+    {
+    }
+    ThePortGuard(const ThePortGuard&) = delete;
     ~ThePortGuard()
     {
         thePortX = savePort;

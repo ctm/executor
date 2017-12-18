@@ -114,7 +114,7 @@ P2(PUBLIC pascal trap, INTEGER, Alert, INTEGER, id, /* IMI-418 */
     if(color_p)
     {
         {
-            ThePortGuard portGuard(thePort);
+            ThePortGuard portGuard;
             SetWinColor(DIALOG_WINDOW(dp),
                         (CTabHandle)alert_ctab_res_h);
         }
