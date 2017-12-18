@@ -52,7 +52,7 @@ typedef Zone *THz;
 
 #if 0
 #if !defined(MemErr)
-extern int16 MemErr;
+extern int16_t MemErr;
 extern GUEST<Ptr> 	MemTop_H;
 extern GUEST<Ptr> 	BufPtr_H;
 extern GUEST<Ptr> 	HeapEnd_H;
@@ -115,7 +115,7 @@ extern Ptr _NewPtr_flags(Size size, bool sys_p, bool clear_p);
 
 #define FreeMem() (_FreeMem_flags(false))
 #define FreeMemSys() (_FreeMem_flags(true))
-extern int32 _FreeMem_flags(bool sys_p);
+extern int32_t _FreeMem_flags(bool sys_p);
 
 #define MaxMem(growp) (_MaxMem_flags(growp, false))
 #define MaxMemSys(growp) (_MaxMem_flags(growp, true))
@@ -167,7 +167,7 @@ extern void HClrRBit(Handle h);
 extern void InitApplZone(void);
 extern void SetApplBase(Ptr newbase);
 extern void MoreMasters(void);
-extern void InitZone(ProcPtr pGrowZone, int16 cMoreMasters,
+extern void InitZone(ProcPtr pGrowZone, int16_t cMoreMasters,
                      Ptr limitPtr, THz startPtr);
 extern THz GetZone(void);
 extern void SetZone(THz hz);
@@ -192,7 +192,7 @@ extern THz ApplicZone(void);
 extern Size StackSpace(void);
 
 /* temporary memory functions; see tempmem.c */
-extern pascal trap int32 C_TempFreeMem(void);
+extern pascal trap int32_t C_TempFreeMem(void);
 extern pascal trap Size C_TempMaxMem(GUEST<Size> *grow);
 extern pascal trap Ptr C_TempTopMem(void);
 extern pascal trap Handle C_TempNewHandle(Size logical_size, GUEST<OSErr> *result_code);

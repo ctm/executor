@@ -113,7 +113,7 @@ static const int
     ind_src_conversion_funcs[(log2_in_bpp) - (log2_out_bpp) + 5]
 #define TABLE_SIZE(log2_in_bpp, log2_out_bpp)                          \
     ((ind_src_unaligned_table_size[(log2_in_bpp) - (log2_out_bpp) + 5] \
-      + sizeof(uint32) /* First long specifies log2_in_bpp. */         \
+      + sizeof(uint32_t) /* First long specifies log2_in_bpp. */         \
       + DEPTHCONV_TABLE_ALIGNMENT(log2_in_bpp, log2_out_bpp) - 1)      \
      & (DEPTHCONV_TABLE_ALIGNMENT(log2_in_bpp, log2_out_bpp) - 1))
 
@@ -124,14 +124,14 @@ static const int
  */
 #define DEPTH_INCREASING_BY_FACTOR_OF_2(bpp1, bpp2)                             \
     static void                                                                 \
-        maketable_##bpp1##_##bpp2(void *d, const uint32 *map)                   \
+        maketable_##bpp1##_##bpp2(void *d, const uint32_t *map)                   \
     {                                                                           \
         int c;                                                                  \
-        uint16 *dst;                                                            \
+        uint16_t *dst;                                                            \
                                                                                 \
-        for(c = 0, dst = (uint16 *)d; c < 256; c++)                             \
+        for(c = 0, dst = (uint16_t *)d; c < 256; c++)                             \
         {                                                                       \
-            uint16 new1;                                                        \
+            uint16_t new1;                                                        \
             int r, l;                                                           \
                                                                                 \
             /* Compute initial left shift count. */                             \
@@ -140,7 +140,7 @@ static const int
             /* Loop over all input pixels and create the lookup table entry. */ \
             for(new1 = 0, r = 8 - bpp1; r >= 0; r -= bpp1)                      \
             {                                                                   \
-                uint32 v = map[(c >> r) & ((1UL << bpp1) - 1)];                 \
+                uint32_t v = map[(c >> r) & ((1UL << bpp1) - 1)];                 \
                 new1 |= (v & ((1UL << bpp2) - 1)) << l;                         \
                 if(l == 0)                                                      \
                 {                                                               \
@@ -164,7 +164,7 @@ DEPTH_INCREASING_BY_FACTOR_OF_2(8, 16)
 /* This macro handles the cases where the pixel depth is not decreasing. */
 #define DEPTH_NONDECREASING(bpp1, bpp2, new_type)                               \
     static void                                                                 \
-        maketable_##bpp1##_##bpp2(void *d, const uint32 *map)                   \
+        maketable_##bpp1##_##bpp2(void *d, const uint32_t *map)                   \
     {                                                                           \
         int c;                                                                  \
         new_type *dst;                                                          \
@@ -180,7 +180,7 @@ DEPTH_INCREASING_BY_FACTOR_OF_2(8, 16)
             /* Loop over all input pixels and create the lookup table entry. */ \
             for(new1 = 0, r = 8 - bpp1; r >= 0; r -= bpp1)                      \
             {                                                                   \
-                uint32 v = map[(c >> r) & ((1UL << bpp1) - 1)];                 \
+                uint32_t v = map[(c >> r) & ((1UL << bpp1) - 1)];                 \
                 new1 |= (v & (0xFFFFFFFFUL >> (32 - bpp2))) << l;               \
                 if(l == 0)                                                      \
                 {                                                               \
@@ -196,29 +196,29 @@ DEPTH_INCREASING_BY_FACTOR_OF_2(8, 16)
 
 DEPTH_NONDECREASING(1, 1, uint8)
 /* 1 -> 2 handled above by `DEPTH_INCREASING_BY_FACTOR_OF_2'. */
-DEPTH_NONDECREASING(1, 4, uint32)
-DEPTH_NONDECREASING(1, 8, uint32)
-DEPTH_NONDECREASING(1, 16, uint32)
-DEPTH_NONDECREASING(1, 32, uint32)
+DEPTH_NONDECREASING(1, 4, uint32_t)
+DEPTH_NONDECREASING(1, 8, uint32_t)
+DEPTH_NONDECREASING(1, 16, uint32_t)
+DEPTH_NONDECREASING(1, 32, uint32_t)
 
 DEPTH_NONDECREASING(2, 2, uint8)
 /* 2 -> 4 handled above by `DEPTH_INCREASING_BY_FACTOR_OF_2'. */
-DEPTH_NONDECREASING(2, 8, uint32)
-DEPTH_NONDECREASING(2, 16, uint32)
-DEPTH_NONDECREASING(2, 32, uint32)
+DEPTH_NONDECREASING(2, 8, uint32_t)
+DEPTH_NONDECREASING(2, 16, uint32_t)
+DEPTH_NONDECREASING(2, 32, uint32_t)
 
 DEPTH_NONDECREASING(4, 4, uint8)
 /* 4 -> 8 handled above by `DEPTH_INCREASING_BY_FACTOR_OF_2'. */
-DEPTH_NONDECREASING(4, 16, uint32)
-DEPTH_NONDECREASING(4, 32, uint32)
+DEPTH_NONDECREASING(4, 16, uint32_t)
+DEPTH_NONDECREASING(4, 32, uint32_t)
 
 DEPTH_NONDECREASING(8, 8, uint8)
 /* 8 -> 16 handled above by `DEPTH_INCREASING_BY_FACTOR_OF_2'. */
-DEPTH_NONDECREASING(8, 32, uint32)
+DEPTH_NONDECREASING(8, 32, uint32_t)
 
 #define DEPTH_DECREASING(bpp1, bpp2)                                            \
     static void                                                                 \
-        maketable_##bpp1##_##bpp2(void *d, const uint32 *map)                   \
+        maketable_##bpp1##_##bpp2(void *d, const uint32_t *map)                   \
     {                                                                           \
         int c;                                                                  \
         uint8 *dst;                                                             \
@@ -257,7 +257,7 @@ DEPTH_DECREASING(8, 1)
 DEPTH_DECREASING(8, 2)
 DEPTH_DECREASING(8, 4)
 
-typedef void (*maketable_func_t)(void *, const uint32 *);
+typedef void (*maketable_func_t)(void *, const uint32_t *);
 
 /* This is a table of the functions to create mapping tables
  * for all combinations of in->out bpp's where in <= 8.
@@ -279,12 +279,12 @@ static const maketable_func_t
  * 1 to 1, 2 to 2, etc.
  */
 static inline bool
-nop_map_p(const uint32 *map, int bpp)
+nop_map_p(const uint32_t *map, int bpp)
 {
     int i;
 
     for(i = (1 << bpp) - 1; i >= 0; i--)
-        if(map[i] != (uint32)i)
+        if(map[i] != (uint32_t)i)
             return false;
 
     return true;
@@ -296,7 +296,7 @@ nop_map_p(const uint32 *map, int bpp)
  */
 depthconv_func_t
 depthconv_make_raw_table(void *table_space, unsigned in_bpp, unsigned out_bpp,
-                         uint32 *table_size, const uint32 *mapping)
+                         uint32_t *table_size, const uint32_t *mapping)
 {
     int log2_in_bpp, log2_out_bpp;
 
@@ -319,9 +319,9 @@ depthconv_make_raw_table(void *table_space, unsigned in_bpp, unsigned out_bpp,
     if(in_bpp == out_bpp && (mapping == NULL || nop_map_p(mapping, in_bpp)))
     {
         if(table_size)
-            *table_size = sizeof(uint32); /* To hold log2_in_bpp. */
+            *table_size = sizeof(uint32_t); /* To hold log2_in_bpp. */
         if(table_space)
-            *(uint32 *)table_space = log2_in_bpp;
+            *(uint32_t *)table_space = log2_in_bpp;
         return depthconv_copy;
     }
 
@@ -336,7 +336,7 @@ depthconv_make_raw_table(void *table_space, unsigned in_bpp, unsigned out_bpp,
     if(table_space)
     {
         void *dst;
-        uint32 map_space[256];
+        uint32_t map_space[256];
 
         /* Create a NOP mapping if they specify a NULL mapping. */
         if(mapping == NULL)
@@ -348,7 +348,7 @@ depthconv_make_raw_table(void *table_space, unsigned in_bpp, unsigned out_bpp,
         }
 
         /* Align the table and crank out the data. */
-        *(uint32 *)table_space = log2_in_bpp;
+        *(uint32_t *)table_space = log2_in_bpp;
         dst = DEPTHCONV_ALIGN_TABLE(table_space, log2_in_bpp, log2_out_bpp);
         (ind_src_table_builders[log2_in_bpp][log2_out_bpp])(dst, mapping);
     }
@@ -363,9 +363,9 @@ depthconv_make_raw_table(void *table_space, unsigned in_bpp, unsigned out_bpp,
 depthconv_func_t
 depthconv_make_ind_to_ind_table(void *table_space,
                                 unsigned in_bpp, unsigned out_bpp,
-                                uint32 *table_size, const ColorSpec *mapping)
+                                uint32_t *table_size, const ColorSpec *mapping)
 {
-    uint32 *raw_map;
+    uint32_t *raw_map;
 
     /* Verify bpp. */
     if(in_bpp > 8 || out_bpp > 8)
@@ -383,7 +383,7 @@ depthconv_make_ind_to_ind_table(void *table_space,
 
         if(mapping)
         {
-            raw_map = (uint32 *)alloca(256 * sizeof raw_map[0]);
+            raw_map = (uint32_t *)alloca(256 * sizeof raw_map[0]);
             for(i = (1 << in_bpp) - 1; i >= 0; i--)
                 raw_map[i] = COLORSPEC_VALUE_LOW_BYTE(&mapping[i]);
         }
@@ -396,10 +396,10 @@ depthconv_make_ind_to_ind_table(void *table_space,
 /* This creates a table to map indirect pixels to RGB pixels. */
 depthconv_func_t
 depthconv_make_ind_to_rgb_table(void *table_space, unsigned in_bpp,
-                                uint32 *table_size, const ColorSpec *mapping,
+                                uint32_t *table_size, const ColorSpec *mapping,
                                 const rgb_spec_t *dst_rgb_spec)
 {
-    uint32 raw_map[256];
+    uint32_t raw_map[256];
     unsigned out_bpp;
 
     /* Verify bpp. */
@@ -418,7 +418,7 @@ depthconv_make_ind_to_rgb_table(void *table_space, unsigned in_bpp,
 
         for(i = (1 << in_bpp) - 1; i >= 0; i--)
         {
-            uint32 v;
+            uint32_t v;
 
             /* Assemble the new RGB value. */
             v = (*dst_rgb_spec->rgbcolor_to_pixel)(dst_rgb_spec, &mapping[i].rgb,
@@ -439,7 +439,7 @@ depthconv_make_ind_to_rgb_table(void *table_space, unsigned in_bpp,
 /* This creates a table to map RGB pixels to indirect pixels. */
 depthconv_func_t
 depthconv_make_rgb_to_ind_table(void *table_space, unsigned out_bpp,
-                                uint32 *table_size, CTabHandle mapping,
+                                uint32_t *table_size, CTabHandle mapping,
                                 ITabHandle itab,
                                 const rgb_spec_t *src_rgb_spec)
 {
@@ -498,7 +498,7 @@ depthconv_make_rgb_to_ind_table(void *table_space, unsigned out_bpp,
 
 /* This creates a table to map RGB pixels to RGB pixels. */
 depthconv_func_t
-depthconv_make_rgb_to_rgb_table(void *table_space, uint32 *table_size,
+depthconv_make_rgb_to_rgb_table(void *table_space, uint32_t *table_size,
                                 const rgb_spec_t *src_rgb_spec,
                                 const rgb_spec_t *dst_rgb_spec)
 {

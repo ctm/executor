@@ -13,14 +13,14 @@
 #define USE_VGAVDRIVER
 #define VGAHOST_VGA_MODE_EXTENSIONS     \
     unsigned win_granularity, win_size; \
-    uint32 phys_base_addr;              \
-    uint16 screen_selector;
+    uint32_t phys_base_addr;              \
+    uint16_t screen_selector;
 
 #define VGA_WINDOW_GRANULARITY(mode) ((mode)->win_granularity)
 #define VGA_WINDOW_SIZE(mode) ((mode)->win_size)
 
-extern uint16 vga_screen_selector;
-extern uint16 vga_window_selector;
+extern uint16_t vga_screen_selector;
+extern uint16_t vga_window_selector;
 #define VGA_SELECTOR vga_screen_selector
 
 #define vdriver_fixed_clut_p false

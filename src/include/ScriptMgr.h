@@ -104,34 +104,34 @@ typedef uint8 StyledLineBreakCode;
 typedef struct DateCacheRec
 {
     GUEST_STRUCT;
-    GUEST<int16[256]> hidden;
+    GUEST<int16_t[256]> hidden;
 } * DateCachePtr;
 
 typedef struct LongDateRec
 {
     GUEST_STRUCT;
-    GUEST<int16> era;
-    GUEST<int16> year;
-    GUEST<int16> month;
-    GUEST<int16> day;
-    GUEST<int16> hour;
-    GUEST<int16> minute;
-    GUEST<int16> second;
-    GUEST<int16> dayOfWeek;
-    GUEST<int16> dayOfYear;
-    GUEST<int16> weekOfYear;
-    GUEST<int16> pm;
-    GUEST<int16> res1;
-    GUEST<int16> res2;
-    GUEST<int16> res3;
+    GUEST<int16_t> era;
+    GUEST<int16_t> year;
+    GUEST<int16_t> month;
+    GUEST<int16_t> day;
+    GUEST<int16_t> hour;
+    GUEST<int16_t> minute;
+    GUEST<int16_t> second;
+    GUEST<int16_t> dayOfWeek;
+    GUEST<int16_t> dayOfYear;
+    GUEST<int16_t> weekOfYear;
+    GUEST<int16_t> pm;
+    GUEST<int16_t> res1;
+    GUEST<int16_t> res2;
+    GUEST<int16_t> res3;
 } * LongDatePtr;
 
 typedef INTEGER TruncCode;
-typedef int16 JustStyleCode;
+typedef int16_t JustStyleCode;
 
 typedef int8 CharByteTable[256];
 
-typedef int16 ScriptRunStatus; /* Not sure this is correct, since in IM
+typedef int16_t ScriptRunStatus; /* Not sure this is correct, since in IM
 				  ScriptRunStatus is a record with two
 				  Signed Bytes */
 
@@ -179,10 +179,10 @@ typedef char DateDelta;
 struct TogglePB
 {
     GUEST_STRUCT;
-    GUEST<int32> togFlags;
+    GUEST<int32_t> togFlags;
     GUEST<ResType> amChars;
     GUEST<ResType> pmChars;
-    GUEST<int32[4]> reserved;
+    GUEST<int32_t[4]> reserved;
 };
 
 enum
@@ -256,17 +256,17 @@ extern pascal trap OSErr P_InitDateCache(DateCachePtr theCache);
 extern pascal trap INTEGER C_CharByte(Ptr textBuf, INTEGER textOffset);
 extern pascal trap INTEGER P_CharByte(Ptr textBuf, INTEGER textOffset);
 
-extern pascal trap String2DateStatus C_String2Date(Ptr text, int32 length,
+extern pascal trap String2DateStatus C_String2Date(Ptr text, int32_t length,
                                                    DateCachePtr cache,
-                                                   GUEST<int32> *length_used_ret,
+                                                   GUEST<int32_t> *length_used_ret,
                                                    LongDatePtr date_time);
-extern pascal trap StyledLineBreakCode C_StyledLineBreak(Ptr textp, int32 length,
-                                                         int32 text_start, int32 text_end,
-                                                         int32 flags,
+extern pascal trap StyledLineBreakCode C_StyledLineBreak(Ptr textp, int32_t length,
+                                                         int32_t text_start, int32_t text_end,
+                                                         int32_t flags,
                                                          GUEST<Fixed> *text_width_fp,
-                                                         GUEST<int32> *text_offset);
+                                                         GUEST<int32_t> *text_offset);
 
-extern pascal trap void C_NMeasureJust(Ptr text, int32 length,
+extern pascal trap void C_NMeasureJust(Ptr text, int32_t length,
                                        Fixed slop, Ptr charLocs,
                                        JustStyleCode run_pos,
                                        Point numer, Point denom);

@@ -35,10 +35,10 @@ P0(PUBLIC pascal trap, LONGINT, GetCTSeed)
     return seed++;
 }
 
-PRIVATE uint32
+PRIVATE uint32_t
 itab_base_size(int res)
 {
-    uint32 retval;
+    uint32_t retval;
 
     retval = offsetof(ITab, iTTable) + ((1 << (3 * res)) * sizeof((ITab *)0)->iTTable[0]);
     return retval;
@@ -53,9 +53,9 @@ itab_base_size(int res)
 PRIVATE int
 itable_hash(RGBColor *rgbp, int resolution)
 {
-    uint32 hash;
+    uint32_t hash;
     int retval;
-    uint16 red, green, blue;
+    uint16_t red, green, blue;
 
     red = CW(rgbp->red) >> (16 - resolution);
     green = CW(rgbp->green) >> (16 - resolution);
@@ -86,10 +86,10 @@ itable_hash(RGBColor *rgbp, int resolution)
 /*
  */
 
-PRIVATE uint32
+PRIVATE uint32_t
 rgb_diff(RGBColor *rgb1p, RGBColor *rgb2p)
 {
-    uint32 retval;
+    uint32_t retval;
 
     /*
    * NOTE: the surprising "& 0xff" below was determined empirically by
@@ -120,12 +120,12 @@ rgb_diff(RGBColor *rgb1p, RGBColor *rgb2p)
      | ((CW((rgb)->green) >> (16 - (resolution))) << (resolution))   \
      | ((CW((rgb)->blue) >> (16 - (resolution)))))
 
-static uint32
+static uint32_t
 ROMlib_search_proc(RGBColor *rgb)
 {
     GDHandle gd;
     int pixel_size;
-    uint32 retval;
+    uint32_t retval;
 
     gd = MR(TheGDevice);
     pixel_size = PIXMAP_PIXEL_SIZE(GD_PMAP(gd));
@@ -163,8 +163,8 @@ ROMlib_search_proc(RGBColor *rgb)
             {
                 int i;
                 uint8 *hash_table;
-                uint32 candidate;
-                uint32 cur_diff, new_diff;
+                uint32_t candidate;
+                uint32_t cur_diff, new_diff;
                 bool done_zero;
 
                 hash_table = ((uint8 *)STARH(inverse_table)

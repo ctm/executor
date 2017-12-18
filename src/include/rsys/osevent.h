@@ -42,8 +42,8 @@ extern LONGINT ROMlib_xlate(INTEGER virt, INTEGER modifiers,
 extern void ROMlib_eventinit(bool graphics_valid_p);
 
 extern void post_keytrans_key_events(INTEGER evcode, LONGINT keywhat,
-                                     int32 when, Point where,
-                                     uint16 button_state, unsigned char virt);
+                                     int32_t when, Point where,
+                                     uint16_t button_state, unsigned char virt);
 
 extern void display_keyboard_choices(void);
 
@@ -52,7 +52,7 @@ extern BOOLEAN ROMlib_bewaremovement;
 extern void ROMlib_showhidecursor(void);
 extern void maybe_wait_for_keyup(void);
 
-extern uint16 ROMlib_right_to_left_key_map(uint16 what);
+extern uint16_t ROMlib_right_to_left_key_map(uint16_t what);
 
 extern bool ROMlib_get_index_and_bit(LONGINT loc, int *indexp,
                                      uint8 *bitp);

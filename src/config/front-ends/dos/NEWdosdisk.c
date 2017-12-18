@@ -443,7 +443,7 @@ dump_buf(const void *buf, int size, int starting_address)
 	{
 	  if ((i % 16) == 0)
 	    e += sprintf (e, "\n%07o:", (unsigned) i+starting_address);
-	  e += sprintf (e, " %04x", *(const uint16 *) ((char *)buf+i));
+	  e += sprintf (e, " %04x", *(const uint16_t *) ((char *)buf+i));
 	}
       
       warning_fs_log ("%s", p);
@@ -464,14 +464,14 @@ typedef struct
     uint8 len PACKED; /* 0x00 */
     uint8 unit PACKED; /* 0x01 */
     uint8 command PACKED; /* 0x02 */
-    uint16 status PACKED; /* 0x03 */
+    uint16_t status PACKED; /* 0x03 */
     uint8 reserved[8] PACKED; /* 0x05 */
     uint8 media_descriptor PACKED; /* 0x0d */
-    uint32 transfer_address PACKED; /* 0x0e */
-    uint16 sector_count PACKED; /* 0x12 */
-    uint16 starting_sector PACKED; /* 0x14 should be 0xffff */
-    uint32 volid_pointer PACKED; /* 0x16 */
-    uint32 long_starting_sector PACKED; /* 0x1A */
+    uint32_t transfer_address PACKED; /* 0x0e */
+    uint16_t sector_count PACKED; /* 0x12 */
+    uint16_t starting_sector PACKED; /* 0x14 should be 0xffff */
+    uint32_t volid_pointer PACKED; /* 0x16 */
+    uint32_t long_starting_sector PACKED; /* 0x1A */
 } ioctl_read_t;
 
 enum
@@ -481,8 +481,8 @@ enum
 
 #define xxx(yyy, zzz) ((yyy)*16 + (zzz))
 
-void fill_read_t(ioctl_read_t *readp, uint32 starting_sector,
-                 uint16 sector_count)
+void fill_read_t(ioctl_read_t *readp, uint32_t starting_sector,
+                 uint16_t sector_count)
 {
     memset(readp, 0, sizeof *readp);
     readp->len = sizeof *readp;
@@ -494,12 +494,12 @@ void fill_read_t(ioctl_read_t *readp, uint32 starting_sector,
     readp->long_starting_sector = starting_sector;
 }
 
-uint32 new_cd_read(int cd, uint32 start_sector, uint32 sectors_to_read)
+uint32_t new_cd_read(int cd, uint32_t start_sector, uint32_t sectors_to_read)
 {
     __dpmi_regs regs;
     ioctl_read_t ioctl_read;
     uint8 error;
-    uint32 retval;
+    uint32_t retval;
 
     warning_fs_log("cd = %d, start_sector = %d, sectors_to_read = %d",
                    cd, start_sector, sectors_to_read);
@@ -518,7 +518,7 @@ uint32 new_cd_read(int cd, uint32 start_sector, uint32 sectors_to_read)
     retval = error ? 0 : sectors_to_read * CD_BLOCK_SIZE;
 
     {
-        uint16 status;
+        uint16_t status;
 
         status = _farpeekw(dos_buf_selector, 3);
         warning_fs_log("retval = %d, status = 0x%0x", retval, status);
@@ -549,7 +549,7 @@ int dosdisk_read(int disk, void *buf, int num_bytes)
     void *orig_buf;
     unsigned long start_pos;
     bool old_slow_clock_p;
-    uint16 buf_offset;
+    uint16_t buf_offset;
 
     buf_offset = 0;
     orig_buf = buf;
@@ -618,7 +618,7 @@ int dosdisk_read(int disk, void *buf, int num_bytes)
 #else
             {
                 int error_count;
-                uint32 bad_data_magic_cookie;
+                uint32_t bad_data_magic_cookie;
                 bool cookie_failed_p;
 
                 bad_data_magic_cookie = 0xDE52AA03; /* Unlikely bytes */

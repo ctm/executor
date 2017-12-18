@@ -455,7 +455,7 @@ int Executor::opt_int_val(opt_database_t &db, string opt, int *retval,
     opt_val = opt_lookup(db, opt);
     if(opt_val && (val = option_value(opt_val)) != "" && retval)
     {
-        int32 v;
+        int32_t v;
         if(!parse_number(val, &v, 1))
         {
             if(parse_error_p)

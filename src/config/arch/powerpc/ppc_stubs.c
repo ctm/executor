@@ -111,8 +111,8 @@ NewDialog_AIX(Ptr dst, Rect *r, StringPtr tit, BOOLEAN vis, INTEGER procid,
 }
 
 PUBLIC OSErr
-OutlineMetrics_AIX(int16 byte_count, Ptr text, PointAsLong numerAL,
-                   PointAsLong denomAL, int16 *y_max, int16 *y_min,
+OutlineMetrics_AIX(int16_t byte_count, Ptr text, PointAsLong numerAL,
+                   PointAsLong denomAL, int16_t *y_max, int16_t *y_min,
                    Fixed *aw_array, Fixed *lsb_array, Rect *bounds_array)
 {
     OSErr retval;

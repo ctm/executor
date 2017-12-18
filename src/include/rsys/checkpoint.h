@@ -15,8 +15,8 @@ typedef struct
 {
     bool sound_fails;
     bool aspi_fails;
-    uint32 bad_macdrives;
-    uint32 bad_dosdrives;
+    uint32_t bad_macdrives;
+    uint32_t bad_dosdrives;
 } checkpoint_t;
 
 typedef enum {
@@ -30,9 +30,9 @@ extern checkpoint_t *checkpoint_init(void);
 extern void checkpoint_sound(checkpoint_t *cp, checkpoint_option option);
 extern void checkpoint_aspi(checkpoint_t *cp, checkpoint_option option);
 extern void checkpoint_macdrive(checkpoint_t *cp, checkpoint_option option,
-                                uint32 drive);
+                                uint32_t drive);
 extern void checkpoint_dosdrives(checkpoint_t *cp, checkpoint_option option,
-                                 uint32 drive);
+                                 uint32_t drive);
 extern void disable_checkpointing(void);
 }
 #endif

@@ -29,18 +29,18 @@ bool do_autorefresh_p;
 /* Returns a value that will tend to change when the screen contents change
  * for the specified horizontal strip on the screen.
  */
-static uint32
+static uint32_t
 checksum_strip(int which_strip)
 {
     int n, row_size, strip_rows, next_row_delta;
-    const uint32 *base;
-    uint32 sum;
+    const uint32_t *base;
+    uint32_t sum;
 
     strip_rows = vdriver_height / NUM_AUTOREFRESH_STRIPS;
-    base = (const uint32 *)(vdriver_fbuf
+    base = (const uint32_t *)(vdriver_fbuf
                             + which_strip * strip_rows * vdriver_row_bytes);
-    row_size = vdriver_row_bytes / (4U * sizeof(uint32));
-    next_row_delta = (vdriver_row_bytes * 2 / sizeof(uint32)) - (row_size * 4U);
+    row_size = vdriver_row_bytes / (4U * sizeof(uint32_t));
+    next_row_delta = (vdriver_row_bytes * 2 / sizeof(uint32_t)) - (row_size * 4U);
 
     /* Sum (most of) the longs on every other row in this strip. */
     for(sum = 0, n = strip_rows; n > 0; n -= 2)
@@ -50,7 +50,7 @@ checksum_strip(int which_strip)
         for(r = row_size; r > 0; r--)
         {
 #if defined(i386)
-            uint32 t1, t2;
+            uint32_t t1, t2;
 
             /* Hand-scheduled for the Pentium.  gcc does a terrible job. */
             asm("movl (%3),%1\n\t"
@@ -103,7 +103,7 @@ void note_executor_changed_screen(int top, int bottom)
 /* Returns true if refresh should be turned on. */
 bool autodetect_refresh(void)
 {
-    static uint32 last_checksum[NUM_AUTOREFRESH_STRIPS];
+    static uint32_t last_checksum[NUM_AUTOREFRESH_STRIPS];
     static bool last_checksum_valid_p[NUM_AUTOREFRESH_STRIPS];
     bool need_refresh_p;
     int i;
@@ -129,7 +129,7 @@ bool autodetect_refresh(void)
         }
         else
         {
-            uint32 c;
+            uint32_t c;
             c = checksum_strip(i);
             if(last_checksum_valid_p[i] && c != last_checksum[i])
                 need_refresh_p = true;

@@ -199,7 +199,7 @@ typedef Byte Chars[1], *CharsPtr, **CharsHandle;
 
 #define TE_DO_TEXT(te, start, end, what)                            \
     ({                                                              \
-        int16 retval;                                               \
+        int16_t retval;                                               \
                                                                     \
         HLockGuard guard(te);                                       \
         retval = ROMlib_call_TEDoText(STARH(te), start, end, what); \
@@ -499,11 +499,11 @@ extern void ROMlib_sledgehammer_te(TEHandle te);
 
 extern bool adjust_attrs(TextStyle *orig_attrs, TextStyle *new_attrs,
                          TextStyle *dst_attrs, TextStyle *continuous_attrs,
-                         int16 mode);
-extern int16 make_style_run_at(TEStyleHandle te_style, int16 sel);
-extern int16 get_style_index(TEStyleHandle te_style, TextStyle *attrs,
+                         int16_t mode);
+extern int16_t make_style_run_at(TEStyleHandle te_style, int16_t sel);
+extern int16_t get_style_index(TEStyleHandle te_style, TextStyle *attrs,
                              int incr_count_p);
-extern void release_style_index(TEStyleHandle te_style, int16 style_index);
+extern void release_style_index(TEStyleHandle te_style, int16_t style_index);
 extern void stabilize_style_info(TEStyleHandle te_style);
 extern void te_style_combine_runs(TEStyleHandle te_style);
 
@@ -573,7 +573,7 @@ extern pascal trap INTEGER C_TEGetOffset(Point pt, TEHandle teh);
 extern pascal trap INTEGER P_TEGetOffset(Point pt, TEHandle teh);
 extern pascal trap LONGINT C_TEGetPoint(INTEGER offset, TEHandle teh);
 extern pascal trap LONGINT P_TEGetPoint(INTEGER offset, TEHandle teh);
-extern pascal trap int32 C_TEGetHeight(LONGINT endLine, LONGINT startLine, TEHandle teh);
+extern pascal trap int32_t C_TEGetHeight(LONGINT endLine, LONGINT startLine, TEHandle teh);
 extern pascal trap LONGINT P_TEGetHeight(LONGINT endLine,
                                          LONGINT startLine, TEHandle teh);
 extern pascal trap void C_TEGetStyle(INTEGER offset,
@@ -630,7 +630,7 @@ extern OSErr TEToScrap(void);
 extern Handle TEScrapHandle(void);
 extern LONGINT TEGetScrapLen(void);
 extern void TESetScrapLen(LONGINT ln);
-extern pascal trap int16 C_TEFeatureFlag(int16 feature, int16 action,
+extern pascal trap int16_t C_TEFeatureFlag(int16_t feature, int16_t action,
                                          TEHandle te);
 }
 #endif /* _TEXTEDIT_H_ */

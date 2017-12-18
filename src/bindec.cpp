@@ -21,7 +21,7 @@ A2(PUBLIC trap, void, NumToString, LONGINT, l, StringPtr, s)
         *p = '0';
         return;
     }
-    else if((uint32)l == 0x80000000L)
+    else if((uint32_t)l == 0x80000000L)
     {
         const char *q = "-2147483648";
         s[0] = 11;

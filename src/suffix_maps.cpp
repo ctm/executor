@@ -22,8 +22,8 @@ using namespace Executor;
 typedef struct suffix_entry
 {
     char *suffix;
-    uint32 creator;
-    uint32 type;
+    uint32_t creator;
+    uint32_t type;
     const char *application;
     struct suffix_entry *next;
 } suffix_entry_t;
@@ -31,7 +31,7 @@ typedef struct suffix_entry
 PRIVATE suffix_entry_t *suffix_head;
 
 PRIVATE bool
-str_to_hex(const char *str, uint32 *valp)
+str_to_hex(const char *str, uint32_t *valp)
 {
     bool retval;
     int len;
@@ -41,7 +41,7 @@ str_to_hex(const char *str, uint32 *valp)
 
     if(retval)
     {
-        uint32 val;
+        uint32_t val;
 
         val = 0;
         for(str += 2; retval && *str; ++str)
@@ -58,8 +58,8 @@ PUBLIC void
 ROMlib_add_suffix_quad(const char *suffixp, const char *creator_hexp,
                        const char *type_hexp, const char *applicationp)
 {
-    uint32 creator;
-    uint32 type;
+    uint32_t creator;
+    uint32_t type;
 
     if(str_to_hex(creator_hexp, &creator) && str_to_hex(type_hexp, &type))
     {
@@ -102,7 +102,7 @@ find_suffixpp(const char *suffix)
  */
 
 PUBLIC const char *
-ROMlib_find_best_creator_type_match(uint32 creator, uint32 type)
+ROMlib_find_best_creator_type_match(uint32_t creator, uint32_t type)
 {
     enum
     {
@@ -176,8 +176,8 @@ find_filenamepp(int len, const char *filename)
 }
 
 PUBLIC bool
-ROMlib_creator_and_type_from_suffix(const char *suffix, uint32 *creatorp,
-                                    uint32 *typep)
+ROMlib_creator_and_type_from_suffix(const char *suffix, uint32_t *creatorp,
+                                    uint32_t *typep)
 {
     bool retval;
     suffix_entry_t **pp;
@@ -198,7 +198,7 @@ ROMlib_creator_and_type_from_suffix(const char *suffix, uint32 *creatorp,
 
 PUBLIC bool
 ROMlib_creator_and_type_from_filename(int len, const char *filename,
-                                      uint32 *creatorp, uint32 *typep)
+                                      uint32_t *creatorp, uint32_t *typep)
 {
     bool retval;
     suffix_entry_t **pp;

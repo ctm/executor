@@ -375,20 +375,20 @@ replace_selector_in_table(OSType selector, LONGINT new_value,
     replace_selector_in_table(selector, new_value, table, NELEM(table))
 
 PUBLIC void
-Executor::replace_physgestalt_selector(OSType selector, uint32 new_value)
+Executor::replace_physgestalt_selector(OSType selector, uint32_t new_value)
 {
     REPLACE_SELECTOR_IN_TABLE(selector, new_value, phystable);
 }
 
 PUBLIC void
-Executor::gestalt_set_memory_size(uint32 size)
+Executor::gestalt_set_memory_size(uint32_t size)
 {
     REPLACE_SELECTOR_IN_TABLE(gestaltLogicalRAMSize, size, gtable);
     REPLACE_SELECTOR_IN_TABLE(gestaltPhysicalRAMSize, size, gtable);
 }
 
 PUBLIC void
-Executor::gestalt_set_system_version(uint32 version)
+Executor::gestalt_set_system_version(uint32_t version)
 {
     REPLACE_SELECTOR_IN_TABLE(gestaltSystemVersion, version, gtable);
 }
@@ -402,7 +402,7 @@ gestalt_set_physical_gestalt_callback(void)
 
 #if defined(powerpc) || defined(__ppc__)
 PUBLIC void
-gestalt_set_cpu_type(uint32 type)
+gestalt_set_cpu_type(uint32_t type)
 {
     REPLACE_SELECTOR_IN_TABLE(gestaltPHYSICAL, type, gtable);
 }
@@ -484,7 +484,7 @@ typedef struct
 {
     OSType selector;
     OSErr retval;
-    GUEST<uint32> value;
+    GUEST<uint32_t> value;
 } gestalt_list_entry_t;
 
 PRIVATE gestalt_list_entry_t *gestalt_listp = NULL;
@@ -499,7 +499,7 @@ Executor::ROMlib_clear_gestalt_list(void)
 }
 
 PUBLIC void
-Executor::ROMlib_add_to_gestalt_list(OSType selector, OSErr retval, uint32 new_value)
+Executor::ROMlib_add_to_gestalt_list(OSType selector, OSErr retval, uint32_t new_value)
 {
     decltype(gestalt_listp) new_listp;
 
@@ -529,7 +529,7 @@ A2(PUBLIC trap, OSErrRET, Gestalt, OSType, selector, GUEST<LONGINT> *, responsep
                        (selector >> 8) & 0xFF,
                        (selector)&0xFF);
 #if defined(CYGWIN32)
-    if((uint32)selector == 0xb7d20e84)
+    if((uint32_t)selector == 0xb7d20e84)
     {
         OSErrRET retval;
 
@@ -573,7 +573,7 @@ P2(PUBLIC pascal trap, OSErrRET, PhysicalGestalt, OSType, selector,
     {
         case gestaltScreenSize:
             replace_physgestalt_selector(gestaltScreenSize,
-                                         ((vdriver_height << 16) | (uint16)vdriver_width));
+                                         ((vdriver_height << 16) | (uint16_t)vdriver_width));
             break;
 #if defined(CYGWIN32)
         case gestaltGhostScriptVersion:

@@ -108,14 +108,14 @@ port_to_bios_port(bios_port_t *bios_portp, uint8 port)
 #if !defined(USE_SVA)
 
 PRIVATE int
-baud_to_bios_baud(bios_serial_baud_t *bios_baudp, uint32 baud)
+baud_to_bios_baud(bios_serial_baud_t *bios_baudp, uint32_t baud)
 {
     int retval;
 
     struct
     {
         bios_serial_baud_t val;
-        uint32 key;
+        uint32_t key;
     } map[] = {
         /* { bios_serial_baud_110, 110, }, */
         /* { bios_serial_baud_150, 150, }, */
@@ -145,14 +145,14 @@ baud_to_bios_baud(bios_serial_baud_t *bios_baudp, uint32 baud)
 #else
 
 PRIVATE int
-baud_to_sva_baud(unsigned int *sva_baudp, uint32 baud)
+baud_to_sva_baud(unsigned int *sva_baudp, uint32_t baud)
 {
     int retval;
 
     struct
     {
         unsigned int val;
-        uint32 key;
+        uint32_t key;
     } map[] = {
         {
             300, baud300,
@@ -204,14 +204,14 @@ parity_to_bios_parity(bios_serial_parity_t *bios_parityp, parity_t parity)
 }
 
 PRIVATE int
-stop_to_bios_stop(bios_serial_stop_bits_t *bios_stopp, uint32 stop_bits)
+stop_to_bios_stop(bios_serial_stop_bits_t *bios_stopp, uint32_t stop_bits)
 {
     int retval;
 
     struct
     {
         bios_serial_stop_bits_t val;
-        uint32 key;
+        uint32_t key;
     } map[] = {
         /* NOTE: 1 = 1, 2 = 1.5, 3 = 2 */
         {
@@ -232,14 +232,14 @@ stop_to_bios_stop(bios_serial_stop_bits_t *bios_stopp, uint32 stop_bits)
 }
 
 PRIVATE int
-length_to_bios_length(bios_serial_length_t *bios_lengthp, uint32 data_length)
+length_to_bios_length(bios_serial_length_t *bios_lengthp, uint32_t data_length)
 {
     int retval;
 
     struct
     {
         bios_serial_length_t val;
-        uint32 key;
+        uint32_t key;
     } map[] = {
         {
             bios_serial_length_5, data5,
@@ -354,10 +354,10 @@ make_sure_sva_initted(void)
 
 PRIVATE int
 dos_serial_bios_init_port(uint8 port,
-                          uint32 baud,
-                          uint32 parity,
-                          uint32 stop_bits,
-                          uint32 data_length,
+                          uint32_t baud,
+                          uint32_t parity,
+                          uint32_t stop_bits,
+                          uint32_t data_length,
                           line_status_t *line_statusp,
                           modem_status_t *modem_statusp)
 {
@@ -593,7 +593,7 @@ PUBLIC OSErr
 serial_bios_serset(LONGINT fd, INTEGER param)
 {
     OSErr retval;
-    uint32 mac_baud, mac_data_length, mac_parity, mac_stop_bits;
+    uint32_t mac_baud, mac_data_length, mac_parity, mac_stop_bits;
 
     mac_baud = param & 0x3FF;
     mac_data_length = param & 0xc00;

@@ -821,13 +821,13 @@ key_table_t key_tables[] = {
    conversion was successful */
 
 static int
-x_keysym_to_mac_keywhat(unsigned int keysym, int16 button_state,
+x_keysym_to_mac_keywhat(unsigned int keysym, int16_t button_state,
                         LONGINT *retval_out, bool down_p,
                         unsigned char *virt_out)
 {
     key_table_t *table;
     uint8 keysym_high_byte, keysym_low_byte;
-    int16 keywhat;
+    int16_t keywhat;
     int i;
 
     if(use_scan_codes)
@@ -885,10 +885,10 @@ keydown(uint8 key)
     return retval;
 }
 
-PRIVATE uint16
+PRIVATE uint16_t
 x_to_mac_state(unsigned int x_state)
 {
-    uint16 retval;
+    uint16_t retval;
 
     retval = ((x_state & ShiftMask ? shiftKey : 0)
               | (x_state & LockMask ? alphaLock : 0)
@@ -919,9 +919,9 @@ x_to_mac_state(unsigned int x_state)
 
 #define X_TO_MAC_STATE(x_state) x_to_mac_state(x_state)
 
-static uint16 which_modifier_virt(unsigned char virt)
+static uint16_t which_modifier_virt(unsigned char virt)
 {
-    uint16 retval;
+    uint16_t retval;
 
     retval = 0;
     switch(virt)
@@ -957,9 +957,9 @@ static uint16 which_modifier_virt(unsigned char virt)
 }
 
 static bool
-x_modifier_p(unsigned int keysym, uint16 *return_mac_modifier)
+x_modifier_p(unsigned int keysym, uint16_t *return_mac_modifier)
 {
-    int16 modifier;
+    int16_t modifier;
 
     *return_mac_modifier = 0;
     switch(keysym)
@@ -1015,7 +1015,7 @@ post_pending_x_events(syn68k_addr_t interrupt_addr, void *unused)
 {
     XEvent evt;
     Point where;
-    int32 when;
+    int32_t when;
 
     when = TickCount();
     while(XCheckTypedEvent(x_dpy, SelectionRequest, &evt)
@@ -1052,8 +1052,8 @@ post_pending_x_events(syn68k_addr_t interrupt_addr, void *unused)
             case KeyRelease:
             {
                 LONGINT keywhat;
-                uint16 button_state;
-                uint16 modifier;
+                uint16_t button_state;
+                uint16_t modifier;
                 unsigned keysym;
                 unsigned char virt;
 
@@ -1117,7 +1117,7 @@ post_pending_x_events(syn68k_addr_t interrupt_addr, void *unused)
             case ButtonPress:
             case ButtonRelease:
             {
-                int16 button_state;
+                int16_t button_state;
 
                 where.h = evt.xbutton.x;
                 where.v = evt.xbutton.y;
@@ -1750,15 +1750,15 @@ static bool x_cmap_initialized_p;
 static XColor x_cmap[256];
 static struct
 {
-    uint16 red, green, blue; /* Each is shifted right one bit. */
+    uint16_t red, green, blue; /* Each is shifted right one bit. */
 } shifted_x_cmap[256];
 
 /* maps mac colors to the x color table */
-static uint32 _cmap_mapping[256];
+static uint32_t _cmap_mapping[256];
 
 /* mapping from mac color table index values to x color map index
    values; or NULL if the mapping is the identity */
-static uint32 *cmap_mapping;
+static uint32_t *cmap_mapping;
 
 static void
 compute_new_mapping(int index, const ColorSpec *c)
@@ -2312,10 +2312,10 @@ bool Executor::vdriver_set_mode(int width, int height, int bpp, bool grayscale_p
 
 vdriver_accel_result_t
 Executor::vdriver_accel_rect_fill(int top, int left, int bottom,
-                                  int right, uint32 color)
+                                  int right, uint32_t color)
 {
     XGCValues gc_values;
-    uint32 x_color;
+    uint32_t x_color;
 
     /* Don't use accel fills in refresh mode, and don't bother if that
    * rect is going to be transferred to the screen anyway (this happens
@@ -2513,10 +2513,10 @@ void Executor::host_flush_shadow_screen(void)
         memcpy(shadow_fbuf, vdriver_fbuf, vdriver_row_bytes * vdriver_height);
         vdriver_update_screen(0, 0, vdriver_height, vdriver_width, false);
     }
-    else if(find_changed_rect_and_update_shadow((uint32 *)vdriver_fbuf,
-                                                (uint32 *)shadow_fbuf,
+    else if(find_changed_rect_and_update_shadow((uint32_t *)vdriver_fbuf,
+                                                (uint32_t *)shadow_fbuf,
                                                 (vdriver_row_bytes
-                                                 / sizeof(uint32)),
+                                                 / sizeof(uint32_t)),
                                                 vdriver_height,
                                                 &top_long, &left_long,
                                                 &bottom_long, &right_long))

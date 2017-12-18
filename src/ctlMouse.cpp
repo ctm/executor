@@ -145,8 +145,8 @@ P3(PUBLIC pascal trap, INTEGER, TrackControl, /* IMI-323 */
             inpart = TestControl(c, whereunswapped);
             CTLCALL(c, autoTrack, inpart);
         }
-        CTLCALL(c, posCntl, ((((int32)whereunswapped.v - p.v) << 16)
-                             | (uint16)(whereunswapped.h - p.h)));
+        CTLCALL(c, posCntl, ((((int32_t)whereunswapped.v - p.v) << 16)
+                             | (uint16_t)(whereunswapped.h - p.h)));
         inpart = TestControl(c, whereunswapped);
     }
     else
@@ -169,7 +169,7 @@ P3(PUBLIC pascal trap, INTEGER, TrackControl, /* IMI-323 */
             PATASSIGN(DragPattern, ltGray);
             l = DragTheRgn(rh, p, &thumb._tlimit, &thumb._tslop,
                            CW(thumb._taxis), a);
-            if((uint32)l != 0x80008000)
+            if((uint32_t)l != 0x80008000)
             {
                 CTLCALL(c, posCntl, l);
                 inpart = partstart;
@@ -222,7 +222,7 @@ done:;
 P2(PUBLIC pascal trap, INTEGER, TestControl, /* IMI-325 */
    ControlHandle, c, Point, p)
 {
-    int16 retval;
+    int16_t retval;
 
     CtlCallGuard guard(c);
     if(Hx(c, contrlVis) && U(Hx(c, contrlHilite)) != 255)

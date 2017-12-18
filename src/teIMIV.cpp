@@ -15,8 +15,8 @@
 
 using namespace Executor;
 
-P3(PUBLIC pascal trap, void, TEPinScroll, int16, dh, /* IMIV-57 */
-   int16, dv, TEHandle, te)
+P3(PUBLIC pascal trap, void, TEPinScroll, int16_t, dh, /* IMIV-57 */
+   int16_t, dv, TEHandle, te)
 {
     Rect *view_rect;
     Rect *dest_rect;
@@ -67,7 +67,7 @@ P3(PUBLIC pascal trap, void, TEPinScroll, int16, dh, /* IMIV-57 */
     {
         /* ### i fixed the above code, but didn't take a look at horiz
        scrolling yet */
-        int16 maxshift;
+        int16_t maxshift;
 
         if(dh > 0)
         {
@@ -109,9 +109,9 @@ A1(PUBLIC, void, ROMlib_teautoloop, TEHandle, teh)
         TEPinScroll(0, -Hx(teh, lineHeight), teh);
 }
 
-static int16
-getdelta(int16 selstart, int16 selstop,
-         int16 viewstart, int16 viewstop)
+static int16_t
+getdelta(int16_t selstart, int16_t selstop,
+         int16_t viewstart, int16_t viewstop)
 {
     if(selstart < viewstart)
         return viewstart - selstart;
@@ -132,7 +132,7 @@ getdelta(int16 selstart, int16 selstop,
 
 P1(PUBLIC pascal trap, void, TESelView, TEHandle, teh) /* IMIV-57 */
 {
-    int16 dh, dv;
+    int16_t dh, dv;
     Point start, stop;
 
     if(STARH(TEHIDDENH(teh))->flags & CLC(TEAUTOVIEWBIT))

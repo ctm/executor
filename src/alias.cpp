@@ -286,8 +286,8 @@ create_directory(INTEGER sys_vref, LONGINT sys_dirid, const char *sub_dirp,
 }
 
 P5(PUBLIC pascal trap, OSErr, FindFolder,
-   int16, vRefNum, OSType, folderType,
-   Boolean, createFolder, GUEST<int16> *, foundVRefNum, GUEST<int32> *, foundDirID)
+   int16_t, vRefNum, OSType, folderType,
+   Boolean, createFolder, GUEST<int16_t> *, foundVRefNum, GUEST<int32_t> *, foundDirID)
 {
     OSErr retval;
     const char *sub_dir;
@@ -450,8 +450,8 @@ P4(PUBLIC pascal trap, OSErr, ResolveAliasFile,
 }
 
 P8(PUBLIC pascal trap, OSErr, MatchAlias,
-   FSSpecPtr, fromFile, int32, rulesMask,
-   AliasHandle, alias, int16 *, aliasCount,
+   FSSpecPtr, fromFile, int32_t, rulesMask,
+   AliasHandle, alias, int16_t *, aliasCount,
    FSSpecArrayPtr, aliasList, Boolean *, needsUpdate,
    AliasFilterProcPtr, aliasFilter,
    Ptr, yourDataPtr)

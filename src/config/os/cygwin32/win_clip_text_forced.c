@@ -105,10 +105,10 @@ GetScrapX(LONGINT type, char **h)
                     else
 #endif
                     {
-                        int32 len;
-                        len = *(int32 *)lp;
+                        int32_t len;
+                        len = *(int32_t *)lp;
 
-                        retval = get_scrap_helper(h, lp + sizeof(int32),
+                        retval = get_scrap_helper(h, lp + sizeof(int32_t),
                                                   len, false);
                     }
                 }
@@ -159,8 +159,8 @@ fill_in_data(char *destp, LONGINT type, LONGINT length, const char *p)
             *destp++ = 0;
             break;
         default:
-            *(int32 *)destp = length;
-            memcpy(destp + sizeof(int32), p, length);
+            *(int32_t *)destp = length;
+            memcpy(destp + sizeof(int32_t), p, length);
             break;
     }
 }
@@ -202,7 +202,7 @@ PutScrapX(LONGINT type, LONGINT length, char *p, int scrap_count)
     }
 
     fprintf(stderr, "active = 0x%x, top = 0x%x, sdl = 0x%x\n",
-            (uint32)active_wnd, (uint32)top_wnd, (uint32)sdl_wnd);
+            (uint32_t)active_wnd, (uint32_t)top_wnd, (uint32_t)sdl_wnd);
 
     if(OpenClipboard(sdl_wnd) && (/* scrap_count == old_count || */ EmptyClipboard()))
     {

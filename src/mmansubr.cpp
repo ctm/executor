@@ -78,7 +78,7 @@ mm_slam_hook(void)
         }                                                             \
         mm_slam_hook();                                               \
         /* d'oh! */                                                   \
-        *(volatile uint32 *)-1;                                       \
+        *(volatile uint32_t *)-1;                                       \
     } while(false)
 #endif
 
@@ -351,7 +351,7 @@ void Executor::ROMlib_sledgehammer_zone(THz zone, bool print_p,
             mm_fatal("bad size correction `%d' in block `%p'",
                      (int)SIZEC(block), block);
 
-        if((int32)LSIZE(block) < 0)
+        if((int32_t)LSIZE(block) < 0)
             mm_fatal("bad logical block size `%d' in block `%p'",
                      (int)LSIZE(block), block);
 
@@ -463,7 +463,7 @@ PRIVATE void
 mm_set_block_fields_common(block_header_t *block,
                            unsigned state, unsigned use,
                            unsigned size_correction,
-                           uint32 physical_size)
+                           uint32_t physical_size)
 {
     BLOCK_SET_STATE(block, state);
     BLOCK_SET_USE(block, use);
@@ -476,7 +476,7 @@ mm_set_block_fields_common(block_header_t *block,
 void Executor::mm_set_block_fields_offset(block_header_t *block,
                                           unsigned state, unsigned use,
                                           unsigned size_correction,
-                                          uint32 physical_size, uint32 location)
+                                          uint32_t physical_size, uint32_t location)
 {
     mm_set_block_fields_common(block, state, use, size_correction,
                                physical_size);
@@ -486,7 +486,7 @@ void Executor::mm_set_block_fields_offset(block_header_t *block,
 void Executor::mm_set_block_fields_zone(block_header_t *block,
                                         unsigned state, unsigned use,
                                         unsigned size_correction,
-                                        uint32 physical_size, THz location)
+                                        uint32_t physical_size, THz location)
 {
     mm_set_block_fields_common(block, state, use, size_correction,
                                physical_size);
@@ -499,15 +499,15 @@ void Executor::mm_set_block_fields_zone(block_header_t *block,
    calculate the offset of the master pointer in the location
    field. */
 void Executor::ROMlib_setupblock(block_header_t *block,
-                                 uint32 size, int16 use, Handle master_ptr, ...)
+                                 uint32_t size, int16_t use, Handle master_ptr, ...)
 {
-    int32 oldsize;
+    int32_t oldsize;
     /* size actually allocated (inc align byte and header) */
-    int32 asize;
+    int32_t asize;
     block_header_t *newfree;
     int olduse;
     THz current_zone;
-    uint32 physical_size;
+    uint32_t physical_size;
     unsigned size_correction;
 
     current_zone = MR(TheZone);
@@ -554,7 +554,7 @@ void Executor::ROMlib_setupblock(block_header_t *block,
 		       EMPTY_STATE, use,
 		       size_correction, physical_size,
 		       ((use == NREL)
-			? (uint32) current_zone
+			? (uint32_t) current_zone
 			: ((use == REL)
 			   ? (char *) master_ptr - (char *) current_zone
 			   : (gui_fatal ("unknown use `%d'", use), -1))));
@@ -596,7 +596,7 @@ void Executor::ROMlib_setupblock(block_header_t *block,
 void Executor::ROMlib_coalesce(block_header_t *block)
 {
     block_header_t *t_block;
-    int32 total_free;
+    int32_t total_free;
     THz current_zone;
 
     current_zone = MR(TheZone);
@@ -637,7 +637,7 @@ void Executor::ROMlib_freeblock(block_header_t *block)
 /* Move the relocatable block at OLDL to the empty block NEWL, growing
    its size to NEWSIZE */
 void Executor::ROMlib_moveblock(block_header_t *oldl, block_header_t *newl,
-                                uint32 newsize)
+                                uint32_t newsize)
 {
     Handle master;
     THz current_zone;
@@ -687,10 +687,10 @@ bool Executor::ROMlib_memnomove_p = 0;
 
 /* Make space for a block of size SIZE starting at BLOCK.  If space
    exists return 1, else return 0.  */
-bool Executor::ROMlib_makespace(block_header_t **block_out, uint32 size)
+bool Executor::ROMlib_makespace(block_header_t **block_out, uint32_t size)
 {
     block_header_t *b;
-    uint32 total_size;
+    uint32_t total_size;
     block_header_t *lastblock, *old_block, *block, *bk_lim;
     THz current_zone;
 
@@ -770,9 +770,9 @@ bool Executor::ROMlib_locked(block_header_t *block)
 
 /* Find the total amount of free space starting at block.  Compress them
    all. */
-int32 Executor::ROMlib_amtfree(block_header_t *block)
+int32_t Executor::ROMlib_amtfree(block_header_t *block)
 {
-    int32 total;
+    int32_t total;
     block_header_t *b;
     THz current_zone;
 
@@ -828,7 +828,7 @@ OSErr Executor::ROMlib_relalloc(Size size, block_header_t **newblk)
 {
     block_header_t *b;
     block_header_t *start;
-    int32 biggest_block, old_biggest_block;
+    int32_t biggest_block, old_biggest_block;
     THz current_zone;
 
     current_zone = MR(TheZone);
@@ -864,7 +864,7 @@ retry:
         if(USE(b) == FREE)
         {
             ROMlib_coalesce(b);
-            if(PSIZE(b) >= (uint32)size)
+            if(PSIZE(b) >= (uint32_t)size)
             {
                 *newblk = b;
                 return noErr;
@@ -882,7 +882,7 @@ retry:
         if(USE(b) == FREE)
         {
             ROMlib_coalesce(b);
-            if(PSIZE(b) >= (uint32)size)
+            if(PSIZE(b) >= (uint32_t)size)
             {
                 *newblk = b;
                 return noErr;
@@ -908,7 +908,7 @@ retry:
     /* Finally, extend the heap if it's ApplZone */
     if(TheZone == ApplZone)
     {
-        int32 newsize;
+        int32_t newsize;
 
         newsize = size;
         /* Account for size restrictions */
@@ -937,7 +937,7 @@ retry:
  */
 
 #if defined(SCAREY_NEW_OLD_CODE)
-        if((uint32)MR(ApplLimit) - (uint32)HEAPEND >= newsize)
+        if((uint32_t)MR(ApplLimit) - (uint32_t)HEAPEND >= newsize)
         {
             /* Do the extension */
             /* The new block */
@@ -946,7 +946,7 @@ retry:
             *newblk = b;
 
             /* The new trailer */
-            ZONE_BK_LIM_X(current_zone) = RM((block_header_t *)((uint32)ZONE_BK_LIM(current_zone) + newsize));
+            ZONE_BK_LIM_X(current_zone) = RM((block_header_t *)((uint32_t)ZONE_BK_LIM(current_zone) + newsize));
             b = ZONE_BK_LIM(current_zone);
             SETZERO(b);
             SETUSE(b, FREE);

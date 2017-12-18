@@ -13,7 +13,7 @@ namespace Executor
 #if defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 #define __Byte uint8
 #define __SignedByte int8
-#define __OSErr int32
+#define __OSErr int32_t
 #define __Ptr void *
 #else
 #define __Byte Byte

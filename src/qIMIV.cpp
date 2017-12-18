@@ -385,7 +385,7 @@ copy_mask_1(BitMap *src_bm, BitMap *mask_bm, BitMap *dst_bm,
     else
     {
         Rect src_top, src_bottom, mask_top, mask_bottom, dst_top, dst_bottom;
-        int16 src_half, mask_half, dst_half;
+        int16_t src_half, mask_half, dst_half;
         BitMap mask_top_bm, mask_bottom_bm;
 
         DisposeRgn(mask_rgn);

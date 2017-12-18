@@ -41,8 +41,8 @@ P2(PUBLIC pascal trap, void, TEUpdate, Rect *, r, TEHandle, te)
     TE_SLAM(te);
 }
 
-P4(PUBLIC pascal trap, void, TextBox, Ptr, p, int32, ln,
-   Rect *, r, int16, j)
+P4(PUBLIC pascal trap, void, TextBox, Ptr, p, int32_t, ln,
+   Rect *, r, int16_t, j)
 {
     TEHandle teh;
     Rect viewrect;
@@ -69,7 +69,7 @@ P4(PUBLIC pascal trap, void, TextBox, Ptr, p, int32, ln,
     TEDispose(teh);
 }
 
-P3(PUBLIC pascal trap, void, TEScroll, int16, dh, int16, dv, TEHandle, te)
+P3(PUBLIC pascal trap, void, TEScroll, int16_t, dh, int16_t, dv, TEHandle, te)
 {
     RgnHandle rh, save_vis;
     Rect r, vis_rgn_bbox;

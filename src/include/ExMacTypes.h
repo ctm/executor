@@ -136,8 +136,8 @@ inline short RECT_HEIGHT(const Rect *r)
 
 inline bool RECT_EQUAL_P(const Rect *r1, const Rect *r2)
 {
-    const uint32 *__p1 = (const uint32 *)(r1);
-    const uint32 *__p2 = (const uint32 *)(r2);
+    const uint32_t *__p1 = (const uint32_t *)(r1);
+    const uint32_t *__p2 = (const uint32_t *)(r2);
     return __p1[0] == __p2[0] && __p1[1] == __p2[1];
 }
 

@@ -53,7 +53,7 @@ qPict2.cpp:316ff
 	  {
 	    table[i].value     = CW (i);
 	    
-#define TILE(x) (((uint32) (x) * 0x8421UL) >> 4)
+#define TILE(x) (((uint32_t) (x) * 0x8421UL) >> 4)
 	  
 	    table[i].rgb.red   = TILE (t->bank_index >> 10);
 	    table[i].rgb.green = TILE (t->bank_index >> 5);
@@ -63,7 +63,7 @@ qPict2.cpp:316ff
       }
 WTF?
 my version:
-#define TILE(x) CW(((uint32) (x & 0x1F) * 0x8421UL) >> 4)
+#define TILE(x) CW(((uint32_t) (x & 0x1F) * 0x8421UL) >> 4)
 
 teIMV.cpp:491:
   LH_HEIGHT_X (lh) = font_height;

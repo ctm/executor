@@ -208,7 +208,7 @@ PRIVATE unsigned long tick_timer(void)
 }
 #endif /* FUTILE_HACK */
 
-PRIVATE uint16 aspi_wrap_dos_mem_segment, aspi_wrap_dos_mem_selector;
+PRIVATE uint16_t aspi_wrap_dos_mem_segment, aspi_wrap_dos_mem_selector;
 
 PUBLIC BOOLEAN get_aspi_info(aspi_iterator_t *aip, aspi_info_t *aspi_info_p)
 {

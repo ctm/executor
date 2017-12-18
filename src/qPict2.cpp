@@ -34,15 +34,15 @@ P2(PUBLIC pascal trap, OSErr, RecordPixMapInfo,
 
 P3(PUBLIC pascal trap, OSErr, RetrievePictInfo,
    PictInfoID, pict_info_id, PictInfo *, pict_info,
-   int16, colors_requested)
+   int16_t, colors_requested)
 {
     gui_fatal("unimplemented");
 }
 
 P5(PUBLIC pascal trap, OSErr, NewPictInfo,
-   GUEST<PictInfoID> *, pict_info_id, int16, verb,
-   int16, colors_requested, int16, color_pick_method,
-   int16, version)
+   GUEST<PictInfoID> *, pict_info_id, int16_t, verb,
+   int16_t, colors_requested, int16_t, color_pick_method,
+   int16_t, version)
 {
     gui_fatal("unimplemented");
 #if !defined(LETGCCWAIL)
@@ -52,8 +52,8 @@ P5(PUBLIC pascal trap, OSErr, NewPictInfo,
 
 P6(PUBLIC pascal trap, OSErr, GetPictInfo,
    PicHandle, pic_h, PictInfo *, pict_info,
-   int16, verb, int16, color_version, int16, color_pick_method,
-   int16, version)
+   int16_t, verb, int16_t, color_version, int16_t, color_pick_method,
+   int16_t, version)
 {
     gui_fatal("unimplemented");
 #if !defined(LETGCCWAIL)
@@ -89,9 +89,9 @@ P6(PUBLIC pascal trap, OSErr, GetPictInfo,
          ? b[x]                        \
          : ((b[(x) * (bpp) / 8] >> SHIFT_COUNT((x), (bpp))) & ((1 << (bpp)) - 1)))
 #define READ_DIRECT16_PIXEL(b, x, bpp) \
-    ((uint16 *)b)[x]
+    ((uint16_t *)b)[x]
 #define READ_DIRECT32_PIXEL(b, x, bpp) \
-    ((uint32 *)b)[x]
+    ((uint32_t *)b)[x]
 #define RECORD_COLORS(read, record, bpp)                               \
     ({                                                                 \
         int x, y;                                                      \
@@ -100,8 +100,8 @@ P6(PUBLIC pascal trap, OSErr, GetPictInfo,
         {                                                              \
             for(x = 0; x < width; x++)                                 \
             {                                                          \
-                uint32 r, g, b;                                        \
-                uint32 pixel;                                          \
+                uint32_t r, g, b;                                        \
+                uint32_t pixel;                                          \
                                                                        \
                 pixel = read(row_base, x, bpp);                        \
                                                                        \
@@ -130,15 +130,15 @@ struct link
 
 P6(PUBLIC pascal trap, OSErr, GetPixMapInfo,
    PixMapHandle, pixmap, PictInfo *, pict_info,
-   int16, verb, int16, colors_requested, int16, color_pick_method,
-   int16, version)
+   int16_t, verb, int16_t, colors_requested, int16_t, color_pick_method,
+   int16_t, version)
 {
     CTabHandle pixmap_color_table;
     uint8 *row_base;
     int row_bytes, bpp;
     const rgb_spec_t *rgb_spec;
-    uint16 *bank;
-    int32 unique_colors;
+    uint16_t *bank;
+    int32_t unique_colors;
     int height, width;
     struct link *head, *tail;
     OSErr retval;
@@ -168,7 +168,7 @@ P6(PUBLIC pascal trap, OSErr, GetPixMapInfo,
     }
     color_pick_method = popularMethod;
 
-    bank = (uint16 *)NewPtr(32768 * sizeof *bank);
+    bank = (uint16_t *)NewPtr(32768 * sizeof *bank);
     if(MemError() != noErr)
         return MemError();
     memset(bank, '\000', 32768 * sizeof *bank);
@@ -178,8 +178,8 @@ P6(PUBLIC pascal trap, OSErr, GetPixMapInfo,
 #define RECORD_555(red, green, blue)                                               \
     ({                                                                             \
         int bank_index;                                                            \
-        const uint16 mask = 0xF100;                                                \
-        uint16 count;                                                              \
+        const uint16_t mask = 0xF100;                                                \
+        uint16_t count;                                                              \
                                                                                    \
         bank_index                                                                 \
             = ((red & mask) >> 1) | ((green & mask) >> 6) | ((blue & mask) >> 11); \
@@ -311,7 +311,7 @@ P6(PUBLIC pascal trap, OSErr, GetPixMapInfo,
                 {
                     table[i].value = CW(i);
 
-#define TILE(x) CW(((uint32)(x & 0x1F) * 0x8421UL) >> 4)
+#define TILE(x) CW(((uint32_t)(x & 0x1F) * 0x8421UL) >> 4)
 
                     table[i].rgb.red = TILE(t->bank_index >> 10);
                     table[i].rgb.green = TILE(t->bank_index >> 5);

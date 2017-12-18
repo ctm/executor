@@ -14,7 +14,7 @@ namespace Executor
 {
 
 #if !defined(SYN68K) || defined(MSDOS)
-typedef uint32 real_int_state_t;
+typedef uint32_t real_int_state_t;
 #define block_real_ints() \
     ((real_int_state_t)sigblock(sigmask(SIGALRM)))
 #define restore_real_ints(n) \

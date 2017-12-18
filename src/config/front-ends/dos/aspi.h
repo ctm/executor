@@ -14,12 +14,12 @@
 
 typedef struct
 {
-    uint32 fpos;
+    uint32_t fpos;
     int adaptor;
     int target;
     int lun;
-    uint32 block_length;
-    uint32 num_blocks;
+    uint32_t block_length;
+    uint32_t num_blocks;
     bool is_open;
     bool force_write_protect;
     bool write_protect;
@@ -65,7 +65,7 @@ typedef struct
     status_t status : 8 PACKED;
     uint8 adaptor PACKED;
     uint8 flags PACKED;
-    uint32 reserved PACKED;
+    uint32_t reserved PACKED;
 } srb_t;
 
 typedef struct
@@ -165,9 +165,9 @@ typedef struct
 {
     operation_code_t operation_code : 8 PACKED;
     uint8 lun_shifted_5 PACKED;
-    uint32 logical_block_address PACKED;
+    uint32_t logical_block_address PACKED;
     uint8 reserved PACKED;
-    uint16 transfer_length PACKED;
+    uint16_t transfer_length PACKED;
     uint8 must_be_zero PACKED;
 } read_write_10_t;
 
@@ -182,8 +182,8 @@ typedef struct
 
 typedef struct
 {
-    uint16 offset PACKED;
-    uint16 segment PACKED;
+    uint16_t offset PACKED;
+    uint16_t segment PACKED;
 } offset_segment_t;
 
 #define DATA_SENSE_LENGTH 32
@@ -213,7 +213,7 @@ typedef struct
 {
     uint8 target_id PACKED;
     uint8 lun PACKED;
-    uint32 data_allocation_length PACKED;
+    uint32_t data_allocation_length PACKED;
     uint8 sense_allocation_length PACKED;
     offset_segment_t data_buffer_pointer PACKED;
     offset_segment_t srb_link_pointer PACKED;

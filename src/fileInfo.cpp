@@ -497,7 +497,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb, /* INTERNAL */
             pb->fileParam.ioFlFndrInfo.fdCreator = TICKX("UNIX");
             pb->fileParam.ioFlFndrInfo.fdType = TICKX("TEXT");
             {
-                uint32 creator, type;
+                uint32_t creator, type;
 
                 if(ROMlib_creator_and_type_from_filename(strlen(pathname),
                                                          pathname, &creator,
@@ -544,7 +544,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb, /* INTERNAL */
         if(dodirs)
             fxinfo = ((CInfoPBPtr)pb)->hFileInfo.ioFlXFndrInfo;
         {
-            uint32 creator, type;
+            uint32_t creator, type;
 
             if(ROMlib_creator_and_type_from_filename(strlen(filename), filename, &creator, &type)
                && finfo.fdType == CL(type) && finfo.fdCreator == CL(creator))

@@ -23,11 +23,11 @@ namespace Executor
 {
 bool send_application_open_aevt_p;
 PUBLIC pascal OSErr C_EventHandlerTemplate(AppleEvent *evt, AppleEvent *reply,
-                                           int32 refcon);
+                                           int32_t refcon);
 PUBLIC pascal OSErr C_CoercePtrTemplate(DescType data_type, Ptr data, Size data_size,
-                                        DescType to_type, int32 refcon, AEDesc *desc_out);
+                                        DescType to_type, int32_t refcon, AEDesc *desc_out);
 
-PUBLIC pascal OSErr C_CoerceDescTemplate(AEDesc *desc, DescType to_type, int32 refcon,
+PUBLIC pascal OSErr C_CoerceDescTemplate(AEDesc *desc, DescType to_type, int32_t refcon,
                                          AEDesc *desc_out);
 }
 using namespace Executor;
@@ -36,7 +36,7 @@ using namespace Executor;
 
 P3(PUBLIC pascal, OSErr, EventHandlerTemplate,
    AppleEvent *, evt, AppleEvent *, reply,
-   int32, refcon)
+   int32_t, refcon)
 {
     /* template for CTOP_... and PTOC_... flags generation */
     abort();
@@ -60,8 +60,8 @@ P1(PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
     EventHandlerProcPtr hdlr;
     Handle evt_data;
     GUEST<Size> evt_data_size;
-    GUEST<int32> refcon_s;
-    GUEST<int32> dummy_refcon;
+    GUEST<int32_t> refcon_s;
+    GUEST<int32_t> dummy_refcon;
 
     OSErr err;
     OSErr retval;
@@ -126,7 +126,7 @@ P1(PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
         }
     }
     hdlr = MR(hdlr_s);
-    int32 refcon = CL(refcon_s);
+    int32_t refcon = CL(refcon_s);
 
     {
         AppleEvent *reply = (AppleEvent *)alloca(sizeof *reply);
@@ -158,7 +158,7 @@ P1(PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
 P7(PUBLIC pascal trap, OSErr, AESend,
    AppleEvent *, evt, AppleEvent *, reply,
    AESendMode, send_mode, AESendPriority, send_priority,
-   int32, timeout, IdleProcPtr, idle_proc, EventFilterProcPtr, filter_proc)
+   int32_t, timeout, IdleProcPtr, idle_proc, EventFilterProcPtr, filter_proc)
 {
     AEDesc *target = (AEDesc *)alloca(sizeof *target);
     GUEST<DescType> target_type_s, dummy_type;
@@ -237,7 +237,7 @@ P7(PUBLIC pascal trap, OSErr, AESend,
                 evt_rec.what = CWC(kHighLevelEvent);
                 evt_rec.message = event_class;
 
-                *(uint32 *)&bogo_event_id = event_id;
+                *(uint32_t *)&bogo_event_id = event_id;
                 evt_rec.where = bogo_event_id;
 
                 {
@@ -287,7 +287,7 @@ P1(PUBLIC pascal trap, OSErr, AESuspendTheCurrentEvent,
 P4(PUBLIC pascal trap, OSErr, AEResumeTheCurrentEvent,
    AppleEvent *, evt, AppleEvent *, reply,
    EventHandlerProcPtr, dispatcher,
-   int32, refcon)
+   int32_t, refcon)
 {
     warning_unimplemented(NULL_STRING);
     AE_RETURN_ERROR(noErr);
@@ -314,7 +314,7 @@ P7(PUBLIC pascal trap, OSErr, AEGetArray,
    AEArrayType, array_type,
    AEArrayDataPointer, array_ptr, Size, max_size,
    GUEST<DescType> *, return_item_type,
-   GUEST<Size> *, return_item_size, GUEST<int32> *, return_item_count)
+   GUEST<Size> *, return_item_size, GUEST<int32_t> *, return_item_count)
 {
     warning_unimplemented(NULL_STRING);
     AE_RETURN_ERROR(noErr);
@@ -323,7 +323,7 @@ P7(PUBLIC pascal trap, OSErr, AEGetArray,
 P6(PUBLIC pascal trap, OSErr, AEPutArray,
    AEDescList *, list, AEArrayType, type,
    AEArrayDataPointer, array_data, DescType, item_type,
-   Size, item_size, int32, item_count)
+   Size, item_size, int32_t, item_count)
 {
     warning_unimplemented(NULL_STRING);
     AE_RETURN_ERROR(noErr);
@@ -352,7 +352,7 @@ P1(PUBLIC pascal trap, OSErr, AEGetInteractionAllowed,
 }
 
 P3(PUBLIC pascal trap, OSErr, AEInteractWithUser,
-   int32, timeout, NMRecPtr, nm_req,
+   int32_t, timeout, NMRecPtr, nm_req,
    IdleProcPtr, idle_proc)
 {
     warning_unimplemented(NULL_STRING);
@@ -372,7 +372,7 @@ P1(PUBLIC pascal trap, OSErr, AEResetTimer,
 
 P6(PUBLIC pascal, OSErr, CoercePtrTemplate,
    DescType, data_type, Ptr, data, Size, data_size,
-   DescType, to_type, int32, refcon, AEDesc *, desc_out)
+   DescType, to_type, int32_t, refcon, AEDesc *, desc_out)
 {
     /* template for CTOP_... and PTOC_... flags generation */
     abort();
@@ -382,7 +382,7 @@ P6(PUBLIC pascal, OSErr, CoercePtrTemplate,
 }
 
 P4(PUBLIC pascal, OSErr, CoerceDescTemplate,
-   AEDesc *, desc, DescType, to_type, int32, refcon,
+   AEDesc *, desc, DescType, to_type, int32_t, refcon,
    AEDesc *, desc_out)
 {
     /* template for CTOP_... and PTOC_... flags generation */
@@ -398,7 +398,7 @@ P5(PUBLIC pascal trap, OSErr, AECoercePtr,
    DescType, result_type, AEDesc *, desc_out)
 {
     GUEST<ProcPtr> coercion_hdlr_s;
-    GUEST<int32> refcon_s;
+    GUEST<int32_t> refcon_s;
     Boolean is_desc_hdlr_p;
     OSErr err;
 
@@ -425,7 +425,7 @@ P5(PUBLIC pascal trap, OSErr, AECoercePtr,
 
     /* swap things to a normal state */
     ProcPtr coercion_hdlr = MR(coercion_hdlr_s);
-    int32 refcon = CL(refcon_s);
+    int32_t refcon = CL(refcon_s);
 
     if(is_desc_hdlr_p)
     {
@@ -524,9 +524,9 @@ P3(PUBLIC pascal trap, OSErr, AECoerceDesc,
    AEDesc *, desc, DescType, result_type, AEDesc *, desc_out)
 {
     GUEST<ProcPtr> coercion_hdlr_s;
-    GUEST<int32> refcon_s;
+    GUEST<int32_t> refcon_s;
     ProcPtr coercion_hdlr;
-    int32 refcon;
+    int32_t refcon;
     GUEST<Boolean> is_desc_hdlr_p;
     DescType desc_type;
     OSErr err;

@@ -332,7 +332,7 @@ static int current_depth_item;
    C_HasDepth below. */
 
 static void
-set_depth(DialogPtr dp, int16 item_to_set)
+set_depth(DialogPtr dp, int16_t item_to_set)
 {
     int i;
 

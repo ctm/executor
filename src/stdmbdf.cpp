@@ -42,7 +42,7 @@ static void
 draw_menu_title(muelem *elt,
                 int last_menu_p,
                 int hilite_p,
-                int16 muright)
+                int16_t muright)
 {
     int gray_title_p, dither_title_p = false;
     RGBColor title_color, bar_color;
@@ -123,7 +123,7 @@ draw_menu_title(muelem *elt,
 }
 
 static void
-realhilite(int16 offset, highstate h)
+realhilite(int16_t offset, highstate h)
 {
     muelem *mp;
 
@@ -181,7 +181,7 @@ realhilite(int16 offset, highstate h)
 }
 
 static void
-mbdf_draw(int32 draw_p)
+mbdf_draw(int32_t draw_p)
 {
     RGBColor bar_color;
     menulist *menulistp;
@@ -329,9 +329,9 @@ A0(PRIVATE, void, dispose)
 }
 
 static void
-mbdfhilite(int32 hilitestate)
+mbdfhilite(int32_t hilitestate)
 {
-    int16 loword;
+    int16_t loword;
 
     loword = LoWord(hilitestate);
     switch(HiWord(hilitestate))
@@ -354,7 +354,7 @@ A0(PRIVATE, void, height)
 }
 
 static void
-save(int16 offset, Rect *rect)
+save(int16_t offset, Rect *rect)
 {
     GDHandle gd;
     PixMapHandle gd_pixmap;
@@ -608,10 +608,10 @@ A1(PRIVATE, RgnHandle, menurgn, RgnHandle, rgn)
     return rgn;
 }
 
-P4(PUBLIC, pascal int32, mbdf0, int16, sel, int16, mess,
-   int16, param1, int32, param2)
+P4(PUBLIC, pascal int32_t, mbdf0, int16_t, sel, int16_t, mess,
+   int16_t, param1, int32_t, param2)
 {
-    int32 retval;
+    int32_t retval;
     GUEST<GrafPtr> saveport;
 
     retval = 0;

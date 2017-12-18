@@ -307,7 +307,7 @@ void vgahost_set_write_window(int win)
 
 vdriver_accel_result_t
 vdriver_accel_rect_fill(int top, int left, int bottom, int right,
-                        uint32 color)
+                        uint32_t color)
 {
     int width, height;
     bool bypass_p;

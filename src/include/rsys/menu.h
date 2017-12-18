@@ -42,7 +42,7 @@ typedef struct mext
 } * mextp;
 
 extern void C_mdef0(INTEGER, MenuHandle, Rect *, Point, GUEST<INTEGER> *);
-extern int32 C_mbdf0(int16, int16, int16, int32);
+extern int32_t C_mbdf0(int16_t, int16_t, int16_t, int32_t);
 
 #define SIZEOFMEXT 5
 #define SIZEOFMINFO (sizeof(MenuInfo) - sizeof(Str255) + 1)
@@ -261,7 +261,7 @@ typedef struct con_info
 typedef struct mct_res
 {
     GUEST_STRUCT;
-    GUEST<int16> n_entries;
+    GUEST<int16_t> n_entries;
     GUEST<MCEntry[1]> entries;
 } mct_res_t;
 
@@ -280,11 +280,11 @@ typedef struct
 
 typedef struct table
 {
-    int32 lasttick;
-    int16 count;
+    int32_t lasttick;
+    int16_t count;
     struct tableentry
     {
-        int16 top;
+        int16_t top;
         StringPtr name;
         mextp options;
     } entry[1];
@@ -297,13 +297,13 @@ int get_icon_info(mextp item_info, icon_info_t *info, int need_icon_p);
 extern int ROMlib_sticky_menus_p;
 
 void menu_bar_color(RGBColor *bar_color);
-void menu_title_color(int16 id, RGBColor *title_color);
-void menu_bk_color(int16 id, RGBColor *bk_color);
-void menu_item_colors(int16 id, int16 item,
+void menu_title_color(int16_t id, RGBColor *title_color);
+void menu_bk_color(int16_t id, RGBColor *bk_color);
+void menu_item_colors(int16_t id, int16_t item,
                       RGBColor *bk_color, RGBColor *name_color,
                       RGBColor *mark_color, RGBColor *command_color);
 
-void menu_delete_entries(int16 menu_id);
+void menu_delete_entries(int16_t menu_id);
 }
 
 extern "C" int ROMlib_AppleChar;

@@ -471,7 +471,7 @@ P1(PUBLIC pascal trap, void, LoadResource, Handle volatile, res)
     resmaphand map;
     typref *tr;
     resref *rr;
-    GUEST<int16> savemap;
+    GUEST<int16_t> savemap;
 
     volatile LONGINT savea0d0[2];
     savea0d0[0] = EM_D0;

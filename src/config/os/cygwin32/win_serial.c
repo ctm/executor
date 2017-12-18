@@ -98,14 +98,14 @@ set_printer_port_mapping_to_pc_port(int pc_port)
  */
 
 PRIVATE int
-baud_to_win32_baud(DWORD *win32_baudp, uint32 baud)
+baud_to_win32_baud(DWORD *win32_baudp, uint32_t baud)
 {
     int retval;
 
     struct
     {
         DWORD val;
-        uint32 key;
+        uint32_t key;
     } map[] = {
         {
             300, baud300,
@@ -166,14 +166,14 @@ parity_to_win32_parity(BYTE *win32_parityp, parity_t parity)
 }
 
 PRIVATE int
-stop_to_win32_stop(BYTE *win32_stopp, uint32 stop_bits)
+stop_to_win32_stop(BYTE *win32_stopp, uint32_t stop_bits)
 {
     int retval;
 
     struct
     {
         BYTE val;
-        uint32 key;
+        uint32_t key;
     } map[] = {
         {
             win32_serial_stop_bits_1, 1,
@@ -190,14 +190,14 @@ stop_to_win32_stop(BYTE *win32_stopp, uint32 stop_bits)
 }
 
 PRIVATE int
-length_to_win32_length(BYTE *win32_lengthp, uint32 data_length)
+length_to_win32_length(BYTE *win32_lengthp, uint32_t data_length)
 {
     int retval;
 
     struct
     {
         BYTE val;
-        uint32 key;
+        uint32_t key;
     } map[] = {
         {
             5, data5,
@@ -316,10 +316,10 @@ port_to_handle(uint8 port)
 
 PRIVATE int
 dos_serial_bios_init_port(uint8 port,
-                          uint32 baud,
-                          uint32 parity,
-                          uint32 stop_bits,
-                          uint32 data_length)
+                          uint32_t baud,
+                          uint32_t parity,
+                          uint32_t stop_bits,
+                          uint32_t data_length)
 {
     int retval;
     HANDLE h;
@@ -360,11 +360,11 @@ dos_serial_bios_init_port(uint8 port,
 
 typedef WINBOOL(WINAPI *xferfuncp_t)(HANDLE, PVOID, DWORD, PDWORD, LPOVERLAPPED);
 
-PUBLIC uint32
+PUBLIC uint32_t
 serial_bios_xfer(LONGINT fd, void *buf, size_t count, xferfuncp_t funcp)
 {
     HANDLE h;
-    uint32 retval;
+    uint32_t retval;
 
     h = port_to_handle(fd);
     if(h == INVALID_HANDLE_VALUE)
@@ -392,29 +392,29 @@ serial_bios_xfer(LONGINT fd, void *buf, size_t count, xferfuncp_t funcp)
  * these routines, even the write routine.
  */
 
-PUBLIC uint32
+PUBLIC uint32_t
 serial_bios_read(LONGINT fd, void *buf, size_t count)
 {
-    uint32 retval;
+    uint32_t retval;
 
     retval = serial_bios_xfer(fd, buf, count, ReadFile);
     return retval;
 }
 
-PUBLIC uint32
+PUBLIC uint32_t
 serial_bios_write(LONGINT fd, void *buf, size_t count)
 {
-    uint32 retval;
+    uint32_t retval;
 
     retval = serial_bios_xfer(fd, buf, count, (void *)WriteFile);
     return retval;
 }
 
-PUBLIC int32
+PUBLIC int32_t
 serial_bios_serset(LONGINT fd, INTEGER param)
 {
-    int32 retval;
-    uint32 mac_baud, mac_data_length, mac_parity, mac_stop_bits;
+    int32_t retval;
+    uint32_t mac_baud, mac_data_length, mac_parity, mac_stop_bits;
 
     /* TODO */
     mac_baud = param & 0x3FF;
@@ -429,10 +429,10 @@ serial_bios_serset(LONGINT fd, INTEGER param)
     return retval;
 }
 
-PUBLIC int32
+PUBLIC int32_t
 serial_bios_serxhshake(LONGINT fd, SerShk *sershkp)
 {
-    int32 retval;
+    int32_t retval;
 
     warning_unimplemented(NULL_STRING);
     retval = noErr;
@@ -445,50 +445,50 @@ serial_bios_serxhshake(LONGINT fd, SerShk *sershkp)
  * not hard to do, but we just don't do it yet.
  */
 
-PUBLIC int32
+PUBLIC int32_t
 serial_bios_setbaud(LONGINT fd, INTEGER baud)
 {
-    int32 retval;
+    int32_t retval;
 
     warning_unimplemented(NULL_STRING);
     retval = noErr;
     return retval;
 }
 
-PUBLIC int32
+PUBLIC int32_t
 serial_bios_ctlbrk(LONGINT fd, INTEGER flag)
 {
-    int32 retval;
+    int32_t retval;
 
     warning_unimplemented(NULL_STRING);
     retval = noErr;
     return retval;
 }
 
-PUBLIC int32
+PUBLIC int32_t
 serial_bios_setflow(LONGINT fd, LONGINT flag)
 {
-    int32 retval;
+    int32_t retval;
 
     warning_unimplemented(NULL_STRING);
     retval = noErr;
     return retval;
 }
 
-PUBLIC int32
+PUBLIC int32_t
 serial_bios_setdtr(LONGINT fd)
 {
-    int32 retval;
+    int32_t retval;
 
     warning_unimplemented(NULL_STRING);
     retval = noErr;
     return retval;
 }
 
-PUBLIC int32
+PUBLIC int32_t
 serial_bios_clrdtr(LONGINT fd)
 {
-    int32 retval;
+    int32_t retval;
 
     warning_unimplemented(NULL_STRING);
     retval = noErr;

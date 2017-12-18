@@ -127,10 +127,10 @@ Executor::ROMlib_set_keyboard(const char *keyboardname)
 
 PRIVATE bool map_right_to_left = true;
 
-PUBLIC uint16
-Executor::ROMlib_right_to_left_key_map(uint16 what)
+PUBLIC uint16_t
+Executor::ROMlib_right_to_left_key_map(uint16_t what)
 {
-    uint16 retval;
+    uint16_t retval;
 
     retval = what;
     if(map_right_to_left)
@@ -162,7 +162,7 @@ Executor::ROMlib_right_to_left_key_map(uint16 what)
 PUBLIC LONGINT
 Executor::ROMlib_xlate(INTEGER virt, INTEGER modifiers, bool down_p)
 {
-    static uint16 down_value[VIRT_MASK + 1];
+    static uint16_t down_value[VIRT_MASK + 1];
     LONGINT retval;
 
     if(!down_p)
@@ -455,8 +455,8 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
             AEAddressDesc *target = (AEAddressDesc *)alloca(sizeof *target);
 
             AEDescList *list = (AEDescList *)alloca(sizeof *list);
-            int16 count;
-            GUEST<int16> count_s, dummy;
+            int16_t count;
+            GUEST<int16_t> count_s, dummy;
 
             err = AECreateDesc(typeProcessSerialNumber,
                                (Ptr)&psn, sizeof psn, target);
@@ -658,8 +658,8 @@ A0(PUBLIC, QHdrPtr, GetEvQHdr)
 }
 
 PUBLIC void
-Executor::post_keytrans_key_events(INTEGER evcode, LONGINT keywhat, int32 when,
-                                   Point where, uint16 button_state, unsigned char virt)
+Executor::post_keytrans_key_events(INTEGER evcode, LONGINT keywhat, int32_t when,
+                                   Point where, uint16_t button_state, unsigned char virt)
 {
     INTEGER first_key, second_key;
 

@@ -74,15 +74,15 @@ ifd_add_entry(struct ifd *ifd, int tag, int type, ...)
     switch(type)
     {
         case SHORT:
-            *(int16 *)(&current_entry->value_offset) = (int16)va_arg(ap, int32);
+            *(int16_t *)(&current_entry->value_offset) = (int16_t)va_arg(ap, int32_t);
             break;
         case LONG:
-            current_entry->value_offset = va_arg(ap, int32);
+            current_entry->value_offset = va_arg(ap, int32_t);
             break;
         case -1:
-            current_entry->type = va_arg(ap, int32);
-            current_entry->count = va_arg(ap, int32);
-            current_entry->value_offset = va_arg(ap, int32);
+            current_entry->type = va_arg(ap, int32_t);
+            current_entry->count = va_arg(ap, int32_t);
+            current_entry->value_offset = va_arg(ap, int32_t);
             break;
         default:
             gui_fatal("unknown tag type");
@@ -112,15 +112,15 @@ dump_indirect_pm(PixMap *pm)
     int8 *tif;
     int tif_size;
 
-    int32 *strip_offsets;
+    int32_t *strip_offsets;
     int strip_offsets_size;
     int strip_offsets_offset;
 
-    int32 *strip_byte_counts;
+    int32_t *strip_byte_counts;
     int strip_byte_counts_size;
     int strip_byte_counts_offset;
 
-    int16 *color_map;
+    int16_t *color_map;
     int color_map_size;
     int color_map_offset;
 
@@ -188,9 +188,9 @@ dump_indirect_pm(PixMap *pm)
 
     header = (struct header *)&tif[0];
     ifd = (struct ifd *)&tif[header_size];
-    color_map = (int16 *)&tif[color_map_offset];
-    strip_offsets = (int32 *)&tif[strip_offsets_offset];
-    strip_byte_counts = (int32 *)&tif[strip_byte_counts_offset];
+    color_map = (int16_t *)&tif[color_map_offset];
+    strip_offsets = (int32_t *)&tif[strip_offsets_offset];
+    strip_byte_counts = (int32_t *)&tif[strip_byte_counts_offset];
 
 #if defined(LITTLEENDIAN)
     header->byte_order = II_little_endian;

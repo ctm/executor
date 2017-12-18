@@ -64,14 +64,14 @@ P3(PUBLIC pascal trap, UniversalProcPtr, NewFatRoutineDescriptor,
 }
 
 P2(PUBLIC pascal trap, OSErr, SaveMixedModeState, void *, statep,
-   uint32, vers)
+   uint32_t, vers)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
 P2(PUBLIC pascal trap, OSErr, RestoreMixedModeState, void *, statep,
-   uint32, vers)
+   uint32_t, vers)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;

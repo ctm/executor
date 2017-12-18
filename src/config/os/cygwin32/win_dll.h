@@ -12,9 +12,9 @@ enum
 
 typedef struct
 {
-    uint32 type; /* see above */
-    uint32 magic; /* see above */
-    uint32 size; /* total length of parameter block */
+    uint32_t type; /* see above */
+    uint32_t magic; /* see above */
+    uint32_t size; /* total length of parameter block */
     const char *dll_name;
     const char *function_name;
     void *arg_to_function;

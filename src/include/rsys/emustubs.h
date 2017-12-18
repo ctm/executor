@@ -20,12 +20,12 @@ struct adbop_t
 typedef struct comm_toolbox_dispatch_args
 {
     GUEST_STRUCT;
-    GUEST<int16> selector;
+    GUEST<int16_t> selector;
 
     union {
         struct
         {
-            GUEST<int16> n_items;
+            GUEST<int16_t> n_items;
             GUEST<DialogPtr> dp;
         } shorten_args;
         struct
@@ -56,7 +56,7 @@ struct initzonehiddenargs_t
     GUEST<voidptr> pGrowZone;
 };
 
-extern void ROMlib_GetTrapAddress_helper(uint32 *d0p, uint32 d1, uint32 *a0p);
+extern void ROMlib_GetTrapAddress_helper(uint32_t *d0p, uint32_t d1, uint32_t *a0p);
 extern void ROMlib_reset_bad_trap_addresses(void);
 extern void C_pack8_unknown_selector(void);
 

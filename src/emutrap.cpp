@@ -47,7 +47,7 @@ using namespace Executor;
         syn68k_addr_t __t;                                                    \
                                                                               \
         __t = addr;                                                           \
-        (__t == (syn68k_addr_t)-1) ? (uint16 *)-1 : SYN68K_TO_US_CHECK0(__t); \
+        (__t == (syn68k_addr_t)-1) ? (uint16_t *)-1 : SYN68K_TO_US_CHECK0(__t); \
     })
 
 #define US_TO_SYN68K_CHECK0_CHECKNEG1(addr)                                 \
@@ -310,11 +310,11 @@ PRIVATE long
 CToRoutineDescriptorCall(const RoutineDescriptor *p, unsigned long long magic,
                          va_list ap)
 {
-    uint32 args[11];
+    uint32_t args[11];
     int n_args;
     ProcInfoType procinfo;
     UniversalProcPtr up;
-    uint32 *argsp;
+    uint32_t *argsp;
     long retval;
     int retvaltype;
 
@@ -349,7 +349,7 @@ CToRoutineDescriptorCall(const RoutineDescriptor *p, unsigned long long magic,
 
     while(magic >>= 3)
     {
-        uint32 arg;
+        uint32_t arg;
 
         ++n_args;
         switch(magic & 7)
@@ -363,32 +363,32 @@ CToRoutineDescriptorCall(const RoutineDescriptor *p, unsigned long long magic,
             break;
             case 2:
             {
-                arg = (uint16)va_arg(ap, unsigned long);
+                arg = (uint16_t)va_arg(ap, unsigned long);
                 arg = CW(arg);
                 procinfo |= STACK_ROUTINE_PARAMETER(n_args, kTwoByteCode);
             }
             break;
             case 3: /* point */
             {
-                arg = (uint32)va_arg(ap, unsigned long);
+                arg = (uint32_t)va_arg(ap, unsigned long);
 #if defined(powerpc)
-                arg = *(uint32 *)arg;
+                arg = *(uint32_t *)arg;
 #endif
-                arg = (CW((uint16)arg) | (CW(arg >> 16) << 16));
+                arg = (CW((uint16_t)arg) | (CW(arg >> 16) << 16));
                 procinfo |= STACK_ROUTINE_PARAMETER(n_args, kFourByteCode);
             }
             break;
             case 4:
             {
-                arg = (uint32)va_arg(ap, unsigned long);
+                arg = (uint32_t)va_arg(ap, unsigned long);
                 arg = CL(arg);
                 procinfo |= STACK_ROUTINE_PARAMETER(n_args, kFourByteCode);
             }
             break;
             case 5:
             {
-                arg = (uint32)va_arg(ap, unsigned long);
-                arg = (uint32)SYN68K_TO_US_CHECK0_CHECKNEG1(arg);
+                arg = (uint32_t)va_arg(ap, unsigned long);
+                arg = (uint32_t)SYN68K_TO_US_CHECK0_CHECKNEG1(arg);
                 procinfo |= STACK_ROUTINE_PARAMETER(n_args, kFourByteCode);
             }
             break;
@@ -480,11 +480,11 @@ CToRoutineDescriptorCall(const RoutineDescriptor *p, unsigned long long magic,
 }
 
 PRIVATE bool
-is_routine_descriptor_ptr(uint16 *addr)
+is_routine_descriptor_ptr(uint16_t *addr)
 {
     bool retval;
 
-    retval = (*addr == (uint16)CWC(MIXED_MODE_TRAP));
+    retval = (*addr == (uint16_t)CWC(MIXED_MODE_TRAP));
     return retval;
 }
 #endif

@@ -34,7 +34,7 @@ extern int ROMlib_pretend_alias;
 extern int ROMlib_pretend_script;
 extern int ROMlib_pretend_edition;
 
-extern uint32 system_version;
+extern uint32_t system_version;
 #endif
 
 #define ROMLIB_DEBUG_BIT (1 << 1)

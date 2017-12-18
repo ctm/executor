@@ -10,11 +10,11 @@
 #include <stdlib.h>
 #include <string.h>
 typedef unsigned char bool;
-typedef unsigned int uint32;
+typedef unsigned int uint32_t;
 #define PUBLIC
 #define PRIVATE static
-PRIVATE uint32 ROMlib_macdrives;
-PRIVATE uint32 ROMlib_dosdrives;
+PRIVATE uint32_t ROMlib_macdrives;
+PRIVATE uint32_t ROMlib_dosdrives;
 enum
 {
     false,
@@ -43,13 +43,13 @@ PUBLIC checkpoint_t *checkpointp; /* globals are bad, but we use one in
 				     routines that we checkpoint to take
 				     an additional argument */
 
-PRIVATE uint32
+PRIVATE uint32_t
 extract_bad_drives_from_string(const char *opt, const char *str)
 {
     int len;
     char *p;
-    uint32 good_drives;
-    uint32 retval;
+    uint32_t good_drives;
+    uint32_t retval;
 
     while(*str != ' ')
         ++str;
@@ -97,7 +97,7 @@ checkpoint_init(void)
 }
 
 PRIVATE void
-write_drive_string(FILE *fp, uint32 drive)
+write_drive_string(FILE *fp, uint32_t drive)
 {
     drive &= (1 << 26) - 1; /* only represent A-Z */
     if(!drive)
@@ -126,7 +126,7 @@ write_drive_string(FILE *fp, uint32 drive)
                 else
                 {
                     int last_good_bit;
-                    uint32 mask;
+                    uint32_t mask;
 
                     last_good_bit = drive_bit + 2;
                     mask = (1 << drive_bit) | (1 << (drive_bit + 1))
@@ -175,7 +175,7 @@ write_checkpoint_file(checkpoint_t *cp)
                 fprintf(fp, "-skipaspi\n");
             if(cp->bad_macdrives)
             {
-                uint32 macdrives;
+                uint32_t macdrives;
 
                 macdrives = ROMlib_macdrives ? ROMlib_macdrives : ~0;
                 macdrives &= ~cp->bad_macdrives;
@@ -184,7 +184,7 @@ write_checkpoint_file(checkpoint_t *cp)
             }
             if(cp->bad_dosdrives)
             {
-                uint32 dosdrives;
+                uint32_t dosdrives;
 
                 dosdrives = ROMlib_dosdrives ? ROMlib_dosdrives : ~0;
                 dosdrives &= ~cp->bad_dosdrives;
@@ -218,7 +218,7 @@ checkpoint_aspi(checkpoint_t *cp, checkpoint_option option)
 }
 
 PUBLIC void
-checkpoint_macdrive(checkpoint_t *cp, checkpoint_option option, uint32 drive)
+checkpoint_macdrive(checkpoint_t *cp, checkpoint_option option, uint32_t drive)
 {
     if(checkpointing_p && cp)
     {
@@ -231,7 +231,7 @@ checkpoint_macdrive(checkpoint_t *cp, checkpoint_option option, uint32 drive)
 }
 
 PUBLIC void
-checkpoint_dosdrives(checkpoint_t *cp, checkpoint_option option, uint32 drive)
+checkpoint_dosdrives(checkpoint_t *cp, checkpoint_option option, uint32_t drive)
 {
     if(checkpointing_p && cp)
     {

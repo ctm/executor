@@ -11,7 +11,7 @@
 
 #include "rsys/types.h"
 
-extern uint32 ppc_call(uint32 toc, uint32 (*func)(uint32), uint32 arg);
+extern uint32_t ppc_call(uint32_t toc, uint32_t (*func)(uint32_t), uint32_t arg);
 
 /*
  * Using __ppc__ to detect that we're going to have problems with the

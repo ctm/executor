@@ -689,10 +689,10 @@ parse_offset_file(void)
 
 #if defined(MSDOS)
 
-PRIVATE uint32
+PRIVATE uint32_t
 drive_char_to_bit(char c)
 {
-    uint32 retval;
+    uint32_t retval;
 
     if(c >= 'a' && c <= 'z')
         retval = 1 << (c - 'a');
@@ -1058,7 +1058,7 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
                         stat_test[0] = mp->mnt_dir[0];
                         if(statfs(stat_test, &sbuf) == 0)
                         {
-                            uint32 bit;
+                            uint32_t bit;
 
                             bit = drive_char_to_bit(stat_test[0]);
                             checkpoint_dosdrives(checkpointp, begin, bit);
@@ -1079,7 +1079,7 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
 
             for(i = 0; i <= 31; ++i)
             {
-                uint32 bit;
+                uint32_t bit;
 
                 bit = 1 << i;
                 if(ROMlib_dosdrives & bit)

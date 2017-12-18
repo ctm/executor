@@ -201,15 +201,15 @@ void Executor::canonicalize_bogo_map(BitMap *bogo_map, PixMap **canonical_addr,
 static void
 write_copybits_picdata(PixMap *src, PixMap *dst,
                        const Rect *src_rect, const Rect *dst_rect,
-                       int16 mode, RgnHandle mask)
+                       int16_t mode, RgnHandle mask)
 {
-    int32 zero = 0;
-    int16 opcode;
-    GUEST<int16> swapped_mode;
-    int16 row_bytes;
-    GUEST<int16> temp_pixmap_row_bytes;
-    GUEST<int16> pack_type;
-    int16 pixel_size;
+    int32_t zero = 0;
+    int16_t opcode;
+    GUEST<int16_t> swapped_mode;
+    int16_t row_bytes;
+    GUEST<int16_t> temp_pixmap_row_bytes;
+    GUEST<int16_t> pack_type;
+    int16_t pixel_size;
     int height;
     int i;
     bool direct_bits_p;
@@ -259,7 +259,7 @@ write_copybits_picdata(PixMap *src, PixMap *dst,
 
     if(direct_bits_p)
     {
-        GUEST<int32> swapped_bogo_baseaddr = CLC(0xFF);
+        GUEST<int32_t> swapped_bogo_baseaddr = CLC(0xFF);
 
         PICWRITE(&swapped_bogo_baseaddr, sizeof swapped_bogo_baseaddr);
     }
@@ -343,8 +343,8 @@ write_copybits_picdata(PixMap *src, PixMap *dst,
         int parity;
         uint8 *packed_line;
         int8 *countloc;
-        int16 count, countsize;
-        GUEST<int16> swappedcount;
+        int16_t count, countsize;
+        GUEST<int16_t> swappedcount;
         uint8 *baseaddr;
 
         /* i copied the code below from the executor 1.2 implementation
@@ -507,7 +507,7 @@ ROMlib_real_copy_bits_helper(PixMap *src, PixMap *dst,
     GrafPtr current_port;
 
     Rect tmp_mask_rect;
-    uint32 bk_color, fg_color;
+    uint32_t bk_color, fg_color;
 
     /* region used to compute the complete mask region */
     RgnHandle mask_region;
@@ -754,7 +754,7 @@ ROMlib_real_copy_bits_helper(PixMap *src, PixMap *dst,
 	 call to copy the overlapping image to be recorded */
 
         {
-            uint32 black_pixel, white_pixel;
+            uint32_t black_pixel, white_pixel;
             RgnHandle rgn;
 
             rgn = NewRgn();

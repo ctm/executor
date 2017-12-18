@@ -14,7 +14,7 @@ typedef struct
 
 /* These are actually asm symbols, so we need the extern here. */
 extern callback_data_t callback_data[NUM_CALLBACK_SLOTS];
-extern uint32 callback_stubs[NUM_CALLBACK_SLOTS];
+extern uint32_t callback_stubs[NUM_CALLBACK_SLOTS];
 
 /* Last slot checked, for simple round-robin allocation algorithm
  * (which is fine since we almost never free anything).
@@ -57,16 +57,16 @@ callback_install(callback_handler_t func, void *arbitrary_argument)
 void *
 callback_argument(syn68k_addr_t callback_address)
 {
-    return callback_data[(uint32 *)callback_address - callback_stubs].arg;
+    return callback_data[(uint32_t *)callback_address - callback_stubs].arg;
 }
 
 callback_handler_t
 callback_function(syn68k_addr_t callback_address)
 {
-    return callback_data[(uint32 *)callback_address - callback_stubs].func;
+    return callback_data[(uint32_t *)callback_address - callback_stubs].func;
 }
 
 void callback_remove(syn68k_addr_t m68k_address)
 {
-    callback_data[(uint32 *)m68k_address - callback_stubs].func = EMPTY_SLOT;
+    callback_data[(uint32_t *)m68k_address - callback_stubs].func = EMPTY_SLOT;
 }

@@ -143,7 +143,7 @@ P0(PUBLIC pascal trap, void, InitWindows)
 
         n_vals = (ROMlib_creatorsp->head.length / sizeof ROMlib_creatorsp->vals[0]);
         for(found_p = false, i = 0; !found_p && i < n_vals; ++i)
-            if(ROMlib_creatorsp->vals[i] == (uint32)ROMlib_creator)
+            if(ROMlib_creatorsp->vals[i] == (uint32_t)ROMlib_creator)
                 found_p = true;
 
         if(!found_p)

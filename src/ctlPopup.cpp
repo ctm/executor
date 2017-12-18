@@ -25,8 +25,8 @@ using namespace Executor;
 static draw_state_t draw_state;
 static ControlHandle ctl;
 static WindowPtr ctl_owner;
-static int16 window_font;
-static int16 window_size;
+static int16_t window_font;
+static int16_t window_size;
 static bool window_font_p;
 
 #endif
@@ -36,7 +36,7 @@ init(ControlHandle ctl)
 {
     popup_data_handle data;
     MenuHandle mh;
-    int16 mid;
+    int16_t mid;
     int flags;
 
     data = (popup_data_handle)NewHandle(sizeof(popup_data_t));
@@ -116,7 +116,7 @@ set_text_face(bool item_p, int flags, mextp item_info)
 
 static void
 draw(ControlHandle ctl, draw_state_t draw_state,
-     int16 window_font, int16 window_size, bool window_font_p,
+     int16_t window_font, int16_t window_size, bool window_font_p,
      bool invert_title_p, bool title_only_p,
      int *return_popup_top, int *return_popup_left)
 {
@@ -410,14 +410,14 @@ draw(ControlHandle ctl, draw_state_t draw_state,
     }
 }
 
-P4(PUBLIC pascal, int32, cdef1008,
-   int16, var, ControlHandle, ctl, int16, message, int32, param)
+P4(PUBLIC pascal, int32_t, cdef1008,
+   int16_t, var, ControlHandle, ctl, int16_t, message, int32_t, param)
 {
     bool draw_p;
-    int32 retval = /* dummy */ 0;
+    int32_t retval = /* dummy */ 0;
     draw_state_t draw_state;
-    int16 window_font;
-    int16 window_size;
+    int16_t window_font;
+    int16_t window_size;
     bool window_font_p;
 
     if(message == initCntl)
@@ -484,7 +484,7 @@ P4(PUBLIC pascal, int32, cdef1008,
         {
             MenuHandle mh;
             int top, left;
-            int16 orig_value, value;
+            int16_t orig_value, value;
             Rect *port_bounds;
             popup_data_handle data;
             int i, count;

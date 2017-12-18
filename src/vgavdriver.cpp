@@ -59,7 +59,7 @@ static const vga_mode_t *default_mode;
 static vga_mode_t *vga_mode_list;
 
 /* Space for lookup tables used during depth conversion. */
-static uint32 depth_conversion_table[256][2];
+static uint32_t depth_conversion_table[256][2];
 
 /* Function to update the screen in the current mode. */
 static void (*screen_update_func)(unsigned, unsigned, unsigned, unsigned);
@@ -1016,7 +1016,7 @@ int vdriver_update_screen(int top, int left, int bottom, int right,
 
     if(!old_busy_p && right > left && bottom > top)
     {
-        VGA_IF_SEL(volatile uint16 saved_es);
+        VGA_IF_SEL(volatile uint16_t saved_es);
 
         /* Set up %es to access the raw frame buffer window. */
         VGA_IF_SEL(asm volatile("movw %%es,%0\n\t"
@@ -1619,10 +1619,10 @@ make_depth_tables(int in_bpp, int out_bpp)
 }
 
 /* Saved data used to erase the old cursor. */
-static uint8 cursor_restore_data[16 * sizeof(uint32) * 16];
+static uint8 cursor_restore_data[16 * sizeof(uint32_t) * 16];
 static uint8 *cursor_restore_first_byte;
 static int cursor_restore_height, cursor_restore_width;
-VGA_IF_SEL(static uint16 cursor_restore_selector;)
+VGA_IF_SEL(static uint16_t cursor_restore_selector;)
 static int cursor_restore_row_bytes;
 
 static void
@@ -1630,7 +1630,7 @@ erase_cursor(void)
 {
     unsigned char *in, *out;
     int rows_left, out_add;
-    VGA_IF_SEL(volatile uint16 saved_es);
+    VGA_IF_SEL(volatile uint16_t saved_es);
 
     /* Set stuff up for movsb. */
     VGA_IF_SEL(asm volatile("movw %%es,%0\n\t"
@@ -1711,7 +1711,7 @@ draw_cursor(int x, int y)
         unsigned char *p, *save;
         int w, h, x_byte;
         int target_row_bytes;
-        VGA_IF_SEL(volatile uint16 saved_fs);
+        VGA_IF_SEL(volatile uint16_t saved_fs);
 
         dirty_rect_update_screen();
 
@@ -1994,11 +1994,11 @@ void host_set_cursor(char *cursor_data,
     {
         case 0:
         {
-            const uint16 *d, *m;
+            const uint16_t *d, *m;
             int xmod;
 
-            d = (const uint16 *)data_baseaddr;
-            m = (const uint16 *)mask_baseaddr;
+            d = (const uint16_t *)data_baseaddr;
+            m = (const uint16_t *)mask_baseaddr;
 
             for(xmod = 0; xmod < 8; xmod++)
                 for(y = 0; y < 16; y++)
@@ -2150,7 +2150,7 @@ void host_flush_shadow_screen(void)
        * have changed (if any).
        */
         int top, left_long, bottom, right_long;
-        static uint32 *last_refreshed_screen = NULL;
+        static uint32_t *last_refreshed_screen = NULL;
 
         /* Lazily allocate the screen that keeps track of the last image
        * we refreshed.
@@ -2158,19 +2158,19 @@ void host_flush_shadow_screen(void)
         if(last_refreshed_screen == NULL)
         {
 #if defined(SBRK_PERMANENT_MEMORY)
-            last_refreshed_screen = (uint32 *)sbrk((fbuf_size + 31) & ~31);
-            if(last_refreshed_screen == (uint32 *)-1)
+            last_refreshed_screen = (uint32_t *)sbrk((fbuf_size + 31) & ~31);
+            if(last_refreshed_screen == (uint32_t *)-1)
                 last_refreshed_screen = NULL;
 #else
-            last_refreshed_screen = (uint32 *)malloc(fbuf_size);
+            last_refreshed_screen = (uint32_t *)malloc(fbuf_size);
 #endif
             vdriver_update_screen(0, 0, vdriver_height, vdriver_width, false);
             if(last_refreshed_screen != NULL)
                 memcpy(last_refreshed_screen, vdriver_fbuf,
                        vdriver_row_bytes * vdriver_height);
         }
-        else if(find_changed_rect_and_update_shadow((const uint32 *)vdriver_fbuf, last_refreshed_screen,
-                                                    vdriver_row_bytes / sizeof(uint32), vdriver_height,
+        else if(find_changed_rect_and_update_shadow((const uint32_t *)vdriver_fbuf, last_refreshed_screen,
+                                                    vdriver_row_bytes / sizeof(uint32_t), vdriver_height,
                                                     &top, &left_long, &bottom, &right_long))
         {
             vdriver_update_screen(top, left_long << (5 - vdriver_log2_bpp),
@@ -2185,10 +2185,10 @@ void vdriver_set_up_internal_screen(void)
 {
     if(vdriver_real_screen_blit_possible_p && ROMlib_shadow_screen_p)
     {
-        uint32 len;
+        uint32_t len;
         int unused;
 
-        len = vdriver_row_bytes * vdriver_height / sizeof(uint32);
+        len = vdriver_row_bytes * vdriver_height / sizeof(uint32_t);
         asm volatile(VGA_IF_SEL("pushl %%ds ; movw %3,%%ds\n\t") "cld\n\t"
                                                                  "rep\n\t"
                                                                  "movsl" VGA_IF_SEL("\n\tpopl %%ds")

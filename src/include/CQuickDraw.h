@@ -74,7 +74,7 @@ struct GDevice
     GUEST<LONGINT> gdReserved;
 };
 
-typedef uint32 DeviceLoopFlags;
+typedef uint32_t DeviceLoopFlags;
 
 /* DeviceLoop flags. */
 #define singleDevices (1 << 0)
@@ -160,16 +160,16 @@ struct OpenCPicParams
     GUEST<Rect> srcRect;
     GUEST<Fixed> hRes;
     GUEST<Fixed> vRes;
-    GUEST<int16> version;
-    GUEST<int16> reserved1;
-    GUEST<int32> reserved2;
+    GUEST<int16_t> version;
+    GUEST<int16_t> reserved1;
+    GUEST<int32_t> reserved2;
 };
 
 typedef struct CommonSpec
 {
     GUEST_STRUCT;
-    GUEST<int16> count;
-    GUEST<int16> ID;
+    GUEST<int16_t> count;
+    GUEST<int16_t> ID;
 } CommentSpec;
 
 typedef CommentSpec *CommentSpecPtr;
@@ -179,11 +179,11 @@ typedef GUEST<CommentSpecPtr> *CommentSpecHandle;
 struct FontSpec
 {
     GUEST_STRUCT;
-    GUEST<int16> pictFontID;
-    GUEST<int16> sysFontID;
-    GUEST<int32[4]> size;
-    GUEST<int16> style;
-    GUEST<int32> nameOffset;
+    GUEST<int16_t> pictFontID;
+    GUEST<int16_t> sysFontID;
+    GUEST<int32_t[4]> size;
+    GUEST<int16_t> style;
+    GUEST<int32_t> nameOffset;
 };
 
 typedef FontSpec *FontSpecPtr;
@@ -193,39 +193,39 @@ typedef GUEST<FontSpecPtr> *FontSpecHandle;
 struct PictInfo
 {
     GUEST_STRUCT;
-    GUEST<int16> version; /* 0 */
-    GUEST<int32> uniqueColors; /* 2 */
+    GUEST<int16_t> version; /* 0 */
+    GUEST<int32_t> uniqueColors; /* 2 */
     GUEST<PaletteHandle> thePalette; /* 6 */
     GUEST<CTabHandle> theColorTable; /* 10 */
     GUEST<Fixed> hRes; /* 14 */
     GUEST<Fixed> vRes; /* 18 */
     GUEST<INTEGER> depth; /* 22 */
     GUEST<Rect> sourceRect; /* top24, left26, bottom28, right30 */
-    GUEST<int32> textCount; /* 32 */
-    GUEST<int32> lineCount;
-    GUEST<int32> rectCount;
-    GUEST<int32> rRectCount;
-    GUEST<int32> ovalCount;
-    GUEST<int32> arcCount;
-    GUEST<int32> polyCount;
-    GUEST<int32> regionCount;
-    GUEST<int32> bitMapCount;
-    GUEST<int32> pixMapCount;
-    GUEST<int32> commentCount;
-    GUEST<int32> uniqueComments;
+    GUEST<int32_t> textCount; /* 32 */
+    GUEST<int32_t> lineCount;
+    GUEST<int32_t> rectCount;
+    GUEST<int32_t> rRectCount;
+    GUEST<int32_t> ovalCount;
+    GUEST<int32_t> arcCount;
+    GUEST<int32_t> polyCount;
+    GUEST<int32_t> regionCount;
+    GUEST<int32_t> bitMapCount;
+    GUEST<int32_t> pixMapCount;
+    GUEST<int32_t> commentCount;
+    GUEST<int32_t> uniqueComments;
     GUEST<CommentSpecHandle> commentHandle;
-    GUEST<int32> uniqueFonts;
+    GUEST<int32_t> uniqueFonts;
     GUEST<FontSpecHandle> fontHandle;
     GUEST<Handle> fontNamesHandle;
-    GUEST<int32> reserved1;
-    GUEST<int32> reserved2;
+    GUEST<int32_t> reserved1;
+    GUEST<int32_t> reserved2;
 };
 
 typedef PictInfo *PictInfoPtr;
 
 typedef GUEST<PictInfoPtr> *PictInfoHandle;
 
-typedef int32 PictInfoID;
+typedef int32_t PictInfoID;
 
 #define RGBDirect (0x10)
 #define Indirect (0)
@@ -249,7 +249,7 @@ typedef int32 PictInfoID;
 #define ditherPix (1 << 30)
 #define gwFlagErr (1 << 31)
 
-typedef int16 QDErr;
+typedef int16_t QDErr;
 
 /* error codes returned by QDError */
 #define noErr 0
@@ -395,8 +395,8 @@ extern pascal trap void C_SetPaletteUpdates(PaletteHandle, INTEGER);
 extern pascal trap INTEGER C_GetPaletteUpdates(PaletteHandle);
 extern pascal trap void C_CopyPalette(PaletteHandle src_palette,
                                       PaletteHandle dst_palette,
-                                      int16 src_start, int16 dst_start,
-                                      int16 n_entries);
+                                      int16_t src_start, int16_t dst_start,
+                                      int16_t n_entries);
 
 extern pascal trap void C_SetWinColor(WindowPtr, CTabHandle);
 extern pascal trap BOOLEAN C_GetAuxWin(WindowPtr, GUEST<AuxWinHandle> *);
@@ -441,10 +441,10 @@ extern pascal trap void C_DisposGDevice(GDHandle gdh);
 extern pascal trap OSErr C_DisposePictInfo(PictInfoID);
 extern pascal trap OSErr C_RecordPictInfo(PictInfoID, PicHandle);
 extern pascal trap OSErr C_RecordPixMapInfo(PictInfoID, PixMapHandle);
-extern pascal trap OSErr C_RetrievePictInfo(PictInfoID, PictInfo *, int16);
-extern pascal trap OSErr C_NewPictInfo(GUEST<PictInfoID> *, int16, int16, int16, int16);
-extern pascal trap OSErr C_GetPictInfo(PicHandle, PictInfo *, int16, int16, int16, int16);
-extern pascal trap OSErr C_GetPixMapInfo(PixMapHandle, PictInfo *, int16, int16, int16, int16);
+extern pascal trap OSErr C_RetrievePictInfo(PictInfoID, PictInfo *, int16_t);
+extern pascal trap OSErr C_NewPictInfo(GUEST<PictInfoID> *, int16_t, int16_t, int16_t, int16_t);
+extern pascal trap OSErr C_GetPictInfo(PicHandle, PictInfo *, int16_t, int16_t, int16_t, int16_t);
+extern pascal trap OSErr C_GetPixMapInfo(PixMapHandle, PictInfo *, int16_t, int16_t, int16_t, int16_t);
 
 extern pascal trap PicHandle C_OpenCPicture(OpenCPicParams *newheaderp);
 

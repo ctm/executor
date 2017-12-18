@@ -280,10 +280,10 @@ void Executor::host_flush_shadow_screen(void)
                vdriver_row_bytes * vdriver_height);
         vdriver_update_screen(0, 0, vdriver_height, vdriver_width, false);
     }
-    else if(find_changed_rect_and_update_shadow((uint32 *)vdriver_fbuf,
-                                                (uint32 *)vdriver_shadow_fbuf,
+    else if(find_changed_rect_and_update_shadow((uint32_t *)vdriver_fbuf,
+                                                (uint32_t *)vdriver_shadow_fbuf,
                                                 (vdriver_row_bytes
-                                                 / sizeof(uint32)),
+                                                 / sizeof(uint32_t)),
                                                 vdriver_height,
                                                 &top_long, &left_long,
                                                 &bottom_long, &right_long))

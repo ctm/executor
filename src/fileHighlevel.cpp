@@ -45,7 +45,7 @@ extract_name(Str255 dest, StringPtr source)
 }
 
 P4(PUBLIC pascal trap, OSErr, FSMakeFSSpec,
-   int16, vRefNum, int32, dir_id,
+   int16_t, vRefNum, int32_t, dir_id,
    Str255, file_name, FSSpecPtr, spec)
 {
     Str255 local_file_name;
@@ -373,7 +373,7 @@ P2(PUBLIC pascal trap, OSErr, FSpExchangeFiles,
 typedef OSErrRET (*open_procp)(HParmBlkPtr pb, BOOLEAN sync);
 
 PRIVATE OSErr
-open_helper(FSSpecPtr spec, SignedByte perms, GUEST<int16> *refoutp,
+open_helper(FSSpecPtr spec, SignedByte perms, GUEST<int16_t> *refoutp,
             open_procp procp)
 {
     OSErr retval;
@@ -396,13 +396,13 @@ open_helper(FSSpecPtr spec, SignedByte perms, GUEST<int16> *refoutp,
 }
 
 P3(PUBLIC pascal trap, OSErr, FSpOpenDF,
-   FSSpecPtr, spec, SignedByte, perms, GUEST<int16> *, refoutp)
+   FSSpecPtr, spec, SignedByte, perms, GUEST<int16_t> *, refoutp)
 {
     return open_helper(spec, perms, refoutp, PBHOpen);
 }
 
 P3(PUBLIC pascal trap, OSErr, FSpOpenRF,
-   FSSpecPtr, spec, SignedByte, perms, GUEST<int16> *, refoutp)
+   FSSpecPtr, spec, SignedByte, perms, GUEST<int16_t> *, refoutp)
 {
     return open_helper(spec, perms, refoutp, PBHOpenRF);
 }
@@ -420,7 +420,7 @@ P4(PUBLIC pascal trap, OSErr, FSpCreate,
 
 P3(PUBLIC pascal trap, OSErr, FSpDirCreate,
    FSSpecPtr, spec, ScriptCode, script,
-   GUEST<int32> *, created_dir_id)
+   GUEST<int32_t> *, created_dir_id)
 {
     OSErr retval;
     HParamBlockRec hpb;

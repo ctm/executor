@@ -191,7 +191,7 @@ writefunc(int magic, const void *buf, size_t buf_len)
     bufp = (char *)buf;
     while(err == noErr && buf_len_remaining > 0)
     {
-        uint32 n_bytes_left, n_to_copy;
+        uint32_t n_bytes_left, n_to_copy;
 
         n_bytes_left = N_TRACK_BYTES - length;
         n_to_copy = MIN(n_bytes_left, buf_len_remaining);

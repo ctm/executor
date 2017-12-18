@@ -11,9 +11,9 @@ using namespace Executor;
 
 typedef struct _dcache_entry_t
 {
-    uint32 fd; /* tag */
-    uint32 offset; /* block's offset */
-    uint32 when_last_accessed; /* the smaller the older; 0 means invalid */
+    uint32_t fd; /* tag */
+    uint32_t offset; /* block's offset */
+    uint32_t when_last_accessed; /* the smaller the older; 0 means invalid */
     uint8 data[DCACHE_BLOCK_SIZE]; /* actual cached data */
     write_callback_funcp_t dirty_callback; /* callback to write dirty data
 					   (only set if the data is indeed
@@ -38,13 +38,13 @@ static dcache_entry_t dcache[DCACHE_NUM_ENTRIES];
 #define DCACHE_END (&dcache[DCACHE_NUM_ENTRIES])
 
 /* Incremented counter, so we can do LRU */
-static uint32 now = 1;
+static uint32_t now = 1;
 
 /* Finds the valid dcache entry corresponding to the given fd and
  * offset, or NULL if none is found.
  */
 static dcache_entry_t *
-dcache_entry_lookup(uint32 fd, uint32 offset)
+dcache_entry_lookup(uint32_t fd, uint32_t offset)
 {
     dcache_entry_t *d;
 
@@ -84,9 +84,9 @@ enum
 
 static void
 fill_run(dcache_entry_t *dps[], int nelems, int *indexp, int offset_increment,
-         uint32 offset, uint32 fd)
+         uint32_t offset, uint32_t fd)
 {
-    uint32 candidate_offset;
+    uint32_t candidate_offset;
     int nclean;
     int index;
 
@@ -129,7 +129,7 @@ copy_buffer(uint8 **bufpp, dcache_entry_t *d)
 }
 
 static void
-coalesce_writes(uint32 fd, uint8 **bufpp, uint32 *lengthp, uint32 *offsetp)
+coalesce_writes(uint32_t fd, uint8 **bufpp, uint32_t *lengthp, uint32_t *offsetp)
 {
     dcache_entry_t *backwards_dps[MAX_BACKWARDS];
     int backwards_index;
@@ -150,7 +150,7 @@ coalesce_writes(uint32 fd, uint8 **bufpp, uint32 *lengthp, uint32 *offsetp)
         int n_bufs;
         uint8 *bufp;
         uint8 *outbufp;
-        uint32 length;
+        uint32_t length;
         dcache_entry_t *d;
         int i;
 
@@ -187,8 +187,8 @@ dcache_flush_entry(dcache_entry_t *dp)
     else
     {
         uint8 *bufp;
-        uint32 length;
-        uint32 offset;
+        uint32_t length;
+        uint32_t offset;
         write_callback_funcp_t dirty_callback;
 
         dirty_callback = dp->dirty_callback;
@@ -235,7 +235,7 @@ dcache_invalidate_entry(dcache_entry_t *dp, bool flush_p)
 static dcache_entry_t *
 best_dcache_entry_to_replace(void)
 {
-    uint32 best_time;
+    uint32_t best_time;
     dcache_entry_t *d, *best;
 
     best_time = UINT32_MAX;
@@ -269,12 +269,12 @@ best_dcache_entry_to_replace(void)
 
 #if defined(READ_CYLINDER_AT_A_TIME)
 static dcache_entry_t *
-read_cylinder(uint32 fd, uint32 offset, read_callback_funcp_t read_callback)
+read_cylinder(uint32_t fd, uint32_t offset, read_callback_funcp_t read_callback)
 {
-    uint32 nread;
+    uint32_t nread;
     uint8 buf[SECTORS_PER_FLOPPY_CYLINDER * 512], *bufp;
     dcache_entry_t *retval;
-    uint32 new_offset;
+    uint32_t new_offset;
 
     new_offset = offset / sizeof buf * sizeof buf;
     nread = read_callback(fd, buf, new_offset, sizeof buf);
@@ -288,7 +288,7 @@ read_cylinder(uint32 fd, uint32 offset, read_callback_funcp_t read_callback)
         {
             if(!dcache_entry_lookup(fd, new_offset))
             {
-                uint32 n_written;
+                uint32_t n_written;
 
                 n_written = dcache_write(fd, bufp, new_offset,
                                          DCACHE_BLOCK_SIZE, NULL);
@@ -306,12 +306,12 @@ read_cylinder(uint32 fd, uint32 offset, read_callback_funcp_t read_callback)
  * using the callback function if necessary.  Returns how many bytes
  * were read.
  */
-uint32
-Executor::dcache_read(uint32 fd, void *buf, uint32 offset, uint32 count,
+uint32_t
+Executor::dcache_read(uint32_t fd, void *buf, uint32_t offset, uint32_t count,
                       read_callback_funcp_t read_callback)
 {
-    uint32 n;
-    uint32 retval;
+    uint32_t n;
+    uint32_t retval;
 
     retval = 0;
     if(dcache_enabled_p)
@@ -335,7 +335,7 @@ Executor::dcache_read(uint32 fd, void *buf, uint32 offset, uint32 count,
                         /*-->*/ break;
                     else
                     {
-                        uint32 nread;
+                        uint32_t nread;
 
                         nread = read_callback(fd, d->data, offset,
                                               DCACHE_BLOCK_SIZE);
@@ -357,9 +357,9 @@ Executor::dcache_read(uint32 fd, void *buf, uint32 offset, uint32 count,
             }
             d->when_last_accessed = now;
             {
-                uint32 n_to_copy;
+                uint32_t n_to_copy;
 
-                n_to_copy = MIN((uint32)DCACHE_BLOCK_SIZE, count - n);
+                n_to_copy = MIN((uint32_t)DCACHE_BLOCK_SIZE, count - n);
                 memcpy((uint8 *)buf + n, d->data, n_to_copy);
                 retval += n_to_copy;
             }
@@ -370,16 +370,16 @@ Executor::dcache_read(uint32 fd, void *buf, uint32 offset, uint32 count,
 }
 
 /* Caches the specified bytes for possible later use. */
-uint32
-Executor::dcache_write(uint32 fd, const void *buf, uint32 offset, uint32 count,
+uint32_t
+Executor::dcache_write(uint32_t fd, const void *buf, uint32_t offset, uint32_t count,
                        write_callback_funcp_t dirty_callback)
 {
-    uint32 retval;
+    uint32_t retval;
 
     retval = 0;
     if(dcache_enabled_p)
     {
-        uint32 n;
+        uint32_t n;
 
         ++now;
 
@@ -410,7 +410,7 @@ Executor::dcache_write(uint32 fd, const void *buf, uint32 offset, uint32 count,
 }
 
 /* Throws away all cached information associated with FD. */
-bool Executor::dcache_invalidate(uint32 fd, bool flush_p)
+bool Executor::dcache_invalidate(uint32_t fd, bool flush_p)
 {
     bool retval;
 
@@ -427,7 +427,7 @@ bool Executor::dcache_invalidate(uint32 fd, bool flush_p)
     return retval;
 }
 
-bool Executor::dcache_flush(uint32 fd)
+bool Executor::dcache_flush(uint32_t fd)
 {
     bool retval;
 

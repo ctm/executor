@@ -233,7 +233,7 @@ PRIVATE BOOLEAN isejectable( const charCx( *dname), LONGINT fd )
 
 PRIVATE LONGINT try_to_open_disk(const char *dname,
                                  LONGINT *bsizep, LONGINT *maxbytesp, drive_flags_t *flagsp,
-                                 uint32 *offsetp)
+                                 uint32_t *offsetp)
 {
     LONGINT floppyfd;
     int len;
@@ -301,7 +301,7 @@ read_driver_block_size(LONGINT fd, LONGINT bsize, LONGINT maxbytes,
 PUBLIC void
 Executor::try_to_mount_disk(const char *dname, LONGINT floppyfd, GUEST<LONGINT> *messp,
                             LONGINT bsize, LONGINT maxbytes, drive_flags_t flags,
-                            uint32 offset_in)
+                            uint32_t offset_in)
 {
     INTEGER partition;
     ParamBlockRec pb;
@@ -480,7 +480,7 @@ PUBLIC void Executor::ROMlib_openfloppy(const char *dname, GUEST<LONGINT> *messp
     LONGINT floppyfd;
     LONGINT bsize, maxbytes;
     drive_flags_t flags;
-    uint32 offset;
+    uint32_t offset;
 
     *messp = 0;
     floppyfd = try_to_open_disk(dname, &bsize, &maxbytes, &flags, &offset);
@@ -708,13 +708,8 @@ PUBLIC void *Executor::ROMlib_indexqueue(QHdr *qp, short index)
 {
     QElemPtr p;
 
-#if 0
-    for (p = CL(qp->qHead); (--index > 0) && p; p = CL(p->qLink))
-	;
-#else
     for(p = MR(qp->qHead); (--index > 0) && p; p = MR(p->vcbQElem.qLink))
         ;
-#endif
     return p;
 }
 

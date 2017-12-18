@@ -12,7 +12,7 @@
 using namespace Executor;
 
 P4(PUBLIC pascal trap, void, ReadPartialResource,
-   Handle, res, int32, offset, Ptr, buffer, int32, count)
+   Handle, res, int32_t, offset, Ptr, buffer, int32_t, count)
 {
     resmaphand map;
     typref *tr;
@@ -31,7 +31,7 @@ P4(PUBLIC pascal trap, void, ReadPartialResource,
 
             cur_size = ROMlib_SizeResource(res, false);
             err = CW(ResErr);
-            if(err == noErr && (uint32)offset + count > (uint32)cur_size)
+            if(err == noErr && (uint32_t)offset + count > (uint32_t)cur_size)
                 err = inputOutOfBounds;
             else
             {
@@ -39,7 +39,7 @@ P4(PUBLIC pascal trap, void, ReadPartialResource,
 
                 rn = Hx(map, resfn);
                 loc = (Hx(map, rh.rdatoff) + B3TOLONG(rr->doff)
-                       + sizeof(Size) + (uint32)offset);
+                       + sizeof(Size) + (uint32_t)offset);
                 err = SetFPos(rn, fsFromStart, loc);
                 if(err == noErr)
                 {
@@ -58,13 +58,13 @@ P4(PUBLIC pascal trap, void, ReadPartialResource,
 }
 
 P4(PUBLIC pascal trap, void, WritePartialResource,
-   Handle, resource, int32, offset, Ptr, buffer, int32, count)
+   Handle, resource, int32_t, offset, Ptr, buffer, int32_t, count)
 {
     warning_unimplemented(NULL_STRING);
 }
 
 P2(PUBLIC pascal trap, void, SetResourceSize,
-   Handle, resource, int32, size)
+   Handle, resource, int32_t, size)
 {
     warning_unimplemented(NULL_STRING);
 }

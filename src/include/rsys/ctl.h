@@ -56,12 +56,12 @@ extern AuxCtlHandle default_aux_ctl;
 extern CTabHandle default_ctl_ctab;
 extern GUEST<AuxCtlHandle> *lookup_aux_ctl(ControlHandle ctl);
 
-extern int32 C_cdef0(int16 var, ControlHandle ctl, int16 mess,
-                     int32 param);
-extern int32 C_cdef16(int16 var, ControlHandle ctl, int16 mess,
-                      int32 param);
-extern int32 C_cdef1008(int16 var, ControlHandle ctl, int16 mess,
-                        int32 param);
+extern int32_t C_cdef0(int16_t var, ControlHandle ctl, int16_t mess,
+                     int32_t param);
+extern int32_t C_cdef16(int16_t var, ControlHandle ctl, int16_t mess,
+                      int32_t param);
+extern int32_t C_cdef1008(int16_t var, ControlHandle ctl, int16_t mess,
+                        int32_t param);
 
 #define VAR(w) (GetCVariant((w)))
 
@@ -102,8 +102,8 @@ struct popup_data
 {
     GUEST_STRUCT;
     GUEST<MenuHandle> menu;
-    GUEST<int16> menu_id;
-    int16 title_width;
+    GUEST<int16_t> menu_id;
+    int16_t title_width;
     int flags;
 };
 

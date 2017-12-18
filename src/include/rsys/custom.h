@@ -50,8 +50,8 @@ enum
 
 typedef struct
 {
-    uint32 magic;
-    uint32 length;
+    uint32_t magic;
+    uint32_t length;
 } header_t;
 
 typedef struct
@@ -64,13 +64,13 @@ typedef struct
 typedef struct
 {
     header_t head;
-    uint32 val;
+    uint32_t val;
 } custom_val_t;
 
 typedef struct
 {
     header_t head;
-    uint32 vals[0];
+    uint32_t vals[0];
 } custom_vals_t;
 
 typedef struct

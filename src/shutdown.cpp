@@ -25,7 +25,7 @@ P0(PUBLIC pascal trap, void, ShutDwnStart)
 
 P2(PUBLIC pascal trap, void, ShutDwnInstall,
    ProcPtr, shutdown_proc,
-   int16, flags)
+   int16_t, flags)
 {
     /* #warning "ShutDwnInstall unimplemented" */
     warning_unimplemented(NULL_STRING);

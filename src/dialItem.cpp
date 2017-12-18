@@ -29,7 +29,7 @@ void Executor::AppendDITL(DialogPtr dp, Handle new_items_h, DITLMethod method)
 
     if(method < 0)
     {
-        GUEST<int16> item_type;
+        GUEST<int16_t> item_type;
         GUEST<Handle> item_h;
         Rect item_rect;
 
@@ -77,8 +77,8 @@ void Executor::AppendDITL(DialogPtr dp, Handle new_items_h, DITLMethod method)
         int i;
 
         base_itemp = (char *)STARH(items_h);
-        item_count = CW(*(GUEST<int16> *)base_itemp) + 1;
-        itemp = (itmp)((GUEST<int16> *)STARH(items_h) + 1);
+        item_count = CW(*(GUEST<int16_t> *)base_itemp) + 1;
+        itemp = (itmp)((GUEST<int16_t> *)STARH(items_h) + 1);
 
         for(i = 0; i < item_count; i++)
             itemp = (itmp)((char *)itemp + ITEM_LEN(itemp));
@@ -109,14 +109,14 @@ void Executor::AppendDITL(DialogPtr dp, Handle new_items_h, DITLMethod method)
         int i;
 
         base_itemp = (char *)STARH(items_h);
-        item_count = CW(*(GUEST<int16> *)base_itemp) + 1;
+        item_count = CW(*(GUEST<int16_t> *)base_itemp) + 1;
 
         base_new_itemp = (char *)STARH(new_items_h);
-        new_itemp = (itmp)((GUEST<int16> *)STARH(new_items_h) + 1);
-        new_item_count = CW(*(GUEST<int16> *)base_new_itemp) + 1;
+        new_itemp = (itmp)((GUEST<int16_t> *)STARH(new_items_h) + 1);
+        new_item_count = CW(*(GUEST<int16_t> *)base_new_itemp) + 1;
 
         /* update the count for the new items */
-        *(GUEST<int16> *)base_itemp = CW(item_count + new_item_count - 1);
+        *(GUEST<int16_t> *)base_itemp = CW(item_count + new_item_count - 1);
 
         ThePortGuard portGuard(dp);
 
@@ -126,7 +126,7 @@ void Executor::AppendDITL(DialogPtr dp, Handle new_items_h, DITLMethod method)
 
             itemp = (itmp)(base_itemp + items_h_size
                            + ((char *)new_itemp
-                              - (base_new_itemp + sizeof(int16))));
+                              - (base_new_itemp + sizeof(int16_t))));
 
             dialog_create_item((DialogPeek)dp, itemp, new_itemp,
                                (i + 1) + item_count, base_pt);
@@ -146,7 +146,7 @@ void Executor::AppendDITL(DialogPtr dp, Handle new_items_h, DITLMethod method)
                    true);
 }
 
-void Executor::ShortenDITL(DialogPtr dp, int16 n_items)
+void Executor::ShortenDITL(DialogPtr dp, int16_t n_items)
 {
     Handle item_h;
     char *base_itemp;
@@ -164,8 +164,8 @@ void Executor::ShortenDITL(DialogPtr dp, int16 n_items)
     {
         HLockGuard guard(item_h);
         base_itemp = (char *)STARH(item_h);
-        itemp = (itmp)((GUEST<int16> *)STARH(item_h) + 1);
-        count = CW(*(GUEST<int16> *)base_itemp) + 1;
+        itemp = (itmp)((GUEST<int16_t> *)STARH(item_h) + 1);
+        count = CW(*(GUEST<int16_t> *)base_itemp) + 1;
 
         if(count < n_items)
             n_items = count;
@@ -240,19 +240,19 @@ void Executor::ShortenDITL(DialogPtr dp, int16 n_items)
                 }
             }
         }
-        *(GUEST<int16> *)base_itemp = CW(first_item_to_dispose - 1);
+        *(GUEST<int16_t> *)base_itemp = CW(first_item_to_dispose - 1);
     }
 
     SetHandleSize((Handle)item_h, item_h_size);
 }
 
-int16 Executor::CountDITL(DialogPtr dp)
+int16_t Executor::CountDITL(DialogPtr dp)
 {
     Handle items;
-    int16 count;
+    int16_t count;
 
     items = DIALOG_ITEMS(dp);
-    count = CW(*(GUEST<int16> *)STARH(items)) + 1;
+    count = CW(*(GUEST<int16_t> *)STARH(items)) + 1;
 
     return count;
 }

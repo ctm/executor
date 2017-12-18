@@ -389,10 +389,10 @@ WINDFL(void *dp)
 
 P2(PUBLIC, pascal void, ROMlib_stdftrack, ControlHandle, sh, INTEGER, part)
 {
-    const uint32 min_between_scroll_msecs = 100;
-    static uint32 last_scroll_msecs;
-    uint32 current_msecs;
-    int16 from, pg;
+    const uint32_t min_between_scroll_msecs = 100;
+    static uint32_t last_scroll_msecs;
+    uint32_t current_msecs;
+    int16_t from, pg;
 
     current_msecs = msecs_elapsed();
 

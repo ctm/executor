@@ -92,7 +92,7 @@ void ppm_read_write_bits(int height, int width, int row_bytes,
                 {
                     if(pixmap_p)
                     {
-                        uint32 red, green, blue;
+                        uint32_t red, green, blue;
                         struct splash_screen_color color;
 
                         fscanf(fp, "%d %d %d", &red, &green, &blue);
@@ -235,13 +235,13 @@ output file `%s'\n",
     }
 
     {
-        int16 n_buttons;
+        int16_t n_buttons;
 
         fscanf(paramfp, "n_buttons %hd\n", &n_buttons);
 
         for(i = 0; i < n_buttons; i++)
         {
-            int16 top, left, bottom, right;
+            int16_t top, left, bottom, right;
             struct splash_screen_rect *rect;
 
             fscanf(paramfp, "rect %hd %hd %hd %hd\n",
@@ -260,7 +260,7 @@ output file `%s'\n",
     init_color_buf();
 
     {
-        uint32 red, green, blue;
+        uint32_t red, green, blue;
         struct splash_screen_color color;
 
         fscanf(paramfp, "bk_color %d %d %d", &red, &green, &blue);

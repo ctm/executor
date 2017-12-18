@@ -16,7 +16,7 @@ P1(PUBLIC pascal trap, OSErr, InitEditionPack, INTEGER, unused)
 
 P6(PUBLIC pascal trap, OSErr, NewSection,
    EditionContainerSpecPtr, container,
-   FSSpecPtr, section_doc, SectionType, kind, int32, section_id,
+   FSSpecPtr, section_doc, SectionType, kind, int32_t, section_id,
    UpdateMode, initial_mode, SectionHandle *, section_out)
 {
     warning_unimplemented(NULL_STRING);
@@ -69,7 +69,7 @@ P1(PUBLIC pascal trap, OSErr, DeleteEditionContainerFile,
 
 P3(PUBLIC pascal trap, OSErr, SetEditionFormatMark,
    EditionRefNum, edition, FormatType, format,
-   int32, mark)
+   int32_t, mark)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
@@ -77,7 +77,7 @@ P3(PUBLIC pascal trap, OSErr, SetEditionFormatMark,
 
 P3(PUBLIC pascal trap, OSErr, GetEditionFormatMark,
    EditionRefNum, edition, FormatType, format,
-   int32 *, currentMark)
+   int32_t *, currentMark)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
@@ -160,7 +160,7 @@ P1(PUBLIC pascal trap, OSErr, SectionOptionsDialog,
 
 P6(PUBLIC pascal trap, OSErr, NewSubscriberExpDialog,
    NewSubscriberReplyPtr, reply,
-   Point, where, int16, expnasion_ditl_res_id,
+   Point, where, int16_t, expnasion_ditl_res_id,
    ExpDialogHookProcPtr, dialog_hook,
    ExpModalFilterProcPtr, filter_hook,
    Ptr, data)
@@ -171,7 +171,7 @@ P6(PUBLIC pascal trap, OSErr, NewSubscriberExpDialog,
 
 P6(PUBLIC pascal trap, OSErr, NewPublisherExpDialog,
    NewPublisherReplyPtr, reply,
-   Point, where, int16, expnasion_ditl_res_id,
+   Point, where, int16_t, expnasion_ditl_res_id,
    ExpDialogHookProcPtr, dialog_hook,
    ExpModalFilterProcPtr, filter_hook,
    Ptr, data)
@@ -182,7 +182,7 @@ P6(PUBLIC pascal trap, OSErr, NewPublisherExpDialog,
 
 P6(PUBLIC pascal trap, OSErr, SectionOptionsExpDialog,
    SectionOptionsReply *, reply,
-   Point, where, int16, expnasion_ditl_res_id,
+   Point, where, int16_t, expnasion_ditl_res_id,
    ExpDialogHookProcPtr, dialog_hook,
    ExpModalFilterProcPtr, filter_hook,
    Ptr, data)

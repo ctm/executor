@@ -96,7 +96,7 @@ P4(PUBLIC pascal trap, LONGINT, PopUpMenuSelect, MenuHandle, mh, INTEGER, top,
     /* if we blow off empty menus, then ClarisImpact custom
        pulldown/popup menus don't come up */
     if (! count)
-      return (int32) Hx (mh, menuID) << 16;
+      return (int32_t) Hx (mh, menuID) << 16;
 #endif
 
     /* if item is zero, it means no menu item was previously selected,

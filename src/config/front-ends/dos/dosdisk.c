@@ -545,7 +545,7 @@ dump_buf(const void *buf, int size, int starting_address)
 	{
 	  if ((i % 16) == 0)
 	    e += sprintf (e, "\n%07o:", (unsigned) i+starting_address);
-	  e += sprintf (e, " %04x", *(const uint16 *) ((char *)buf+i));
+	  e += sprintf (e, " %04x", *(const uint16_t *) ((char *)buf+i));
 	}
       
       warning_fs_log ("%s", p);
@@ -639,7 +639,7 @@ int dosdisk_read(int disk, void *buf, int num_bytes)
         else if(d->is_cd_rom)
         {
             int error_count;
-            uint32 bad_data_magic_cookie;
+            uint32_t bad_data_magic_cookie;
             bool cookie_failed_p;
 
             cache_hit_p = false;

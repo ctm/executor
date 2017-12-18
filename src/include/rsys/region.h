@@ -25,7 +25,7 @@
 #define RGNP_SET_SIZE(rgnp, size)                               \
     ((void)({                                                   \
         RgnPtr __rgnp = (rgnp);                                 \
-        int16 __orig_size_x;                                    \
+        int16_t __orig_size_x;                                    \
                                                                 \
         __orig_size_x = __rgnp->rgnSize;                        \
         __rngp->rgnSize = ((__orig_size_x & RGN_SPECIAL_FLAG_X) \

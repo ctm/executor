@@ -21,8 +21,8 @@
     (                                                          \
         ___newsize = (size) + 3 * sizeof(long),                \
         ___tempptr = (decltype(___tempptr))alloca(___newsize), \
-        ((uint32 *)___tempptr)[0] = ___newsize,                \
-        ((uint32 *)___tempptr)[1] = FIREWALL_START,            \
+        ((uint32_t *)___tempptr)[0] = ___newsize,                \
+        ((uint32_t *)___tempptr)[1] = FIREWALL_START,            \
         ___tempptr[___newsize - 4] = FIREWALL_STOP_0,          \
         ___tempptr[___newsize - 3] = FIREWALL_STOP_1,          \
         ___tempptr[___newsize - 2] = FIREWALL_STOP_2,          \
@@ -34,8 +34,8 @@
     {                                                              \
         ___tempptr = (unsigned char *)(var);                       \
         ___tempptr -= 2 * sizeof(long);                            \
-        gui_assert(((uint32 *)___tempptr)[1] == FIREWALL_START);   \
-        ___newsize = ((uint32 *)___tempptr)[0];                    \
+        gui_assert(((uint32_t *)___tempptr)[1] == FIREWALL_START);   \
+        ___newsize = ((uint32_t *)___tempptr)[0];                    \
         gui_assert(___tempptr[___newsize - 4] == FIREWALL_STOP_0); \
         gui_assert(___tempptr[___newsize - 3] == FIREWALL_STOP_1); \
         gui_assert(___tempptr[___newsize - 2] == FIREWALL_STOP_2); \

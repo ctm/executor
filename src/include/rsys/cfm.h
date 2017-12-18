@@ -20,14 +20,14 @@ enum
 struct cfrg_resource_t
 {
     GUEST_STRUCT;
-    GUEST<uint32> reserved0;
-    GUEST<uint32> reserved1;
-    GUEST<uint32> version;
-    GUEST<uint32> reserved2;
-    GUEST<uint32> reserved3;
-    GUEST<uint32> reserved4;
-    GUEST<uint32> reserved5;
-    GUEST<int32> n_descripts;
+    GUEST<uint32_t> reserved0;
+    GUEST<uint32_t> reserved1;
+    GUEST<uint32_t> version;
+    GUEST<uint32_t> reserved2;
+    GUEST<uint32_t> reserved3;
+    GUEST<uint32_t> reserved4;
+    GUEST<uint32_t> reserved5;
+    GUEST<int32_t> n_descripts;
 };
 
 #define CFRG_VERSION_X(cfrg) ((cfgr)->version)
@@ -40,18 +40,18 @@ struct cfir_t
 {
     GUEST_STRUCT;
     GUEST<OSType> isa;
-    GUEST<uint32> update_level;
-    GUEST<uint32> current_version;
-    GUEST<uint32> oldest_definition_version;
-    GUEST<uint32> stack_size;
-    GUEST<int16> appl_library_dir;
+    GUEST<uint32_t> update_level;
+    GUEST<uint32_t> current_version;
+    GUEST<uint32_t> oldest_definition_version;
+    GUEST<uint32_t> stack_size;
+    GUEST<int16_t> appl_library_dir;
     GUEST<uint8> fragment_type;
     GUEST<uint8> fragment_location;
-    GUEST<int32> offset_to_fragment;
-    GUEST<int32> fragment_length;
-    GUEST<uint32> reserved0;
-    GUEST<uint32> reserved1;
-    GUEST<uint16> cfir_length;
+    GUEST<int32_t> offset_to_fragment;
+    GUEST<int32_t> fragment_length;
+    GUEST<uint32_t> reserved0;
+    GUEST<uint32_t> reserved1;
+    GUEST<uint16_t> cfir_length;
     GUEST<unsigned char[1]> name;
 };
 
@@ -113,7 +113,7 @@ struct MemFragment
 {
     GUEST_STRUCT;
     GUEST<Ptr> address;
-    GUEST<uint32> length;
+    GUEST<uint32_t> length;
     GUEST<BOOLEAN> inPlace;
 };
 
@@ -121,8 +121,8 @@ struct DiskFragment
 {
     GUEST_STRUCT;
     GUEST<FSSpecPtr> fileSpec;
-    GUEST<uint32> offset;
-    GUEST<uint32> length;
+    GUEST<uint32_t> offset;
+    GUEST<uint32_t> length;
 };
 
 struct SegmentedFragment
@@ -136,7 +136,7 @@ struct SegmentedFragment
 typedef struct FragmentLocator
 {
     GUEST_STRUCT;
-    GUEST<uint32> where;
+    GUEST<uint32_t> where;
     union {
         MemFragment inMem;
         DiskFragment onDisk;
@@ -147,14 +147,14 @@ typedef struct FragmentLocator
 struct InitBlock
 {
     GUEST_STRUCT;
-    GUEST<uint32> contextID;
-    GUEST<uint32> closureID;
+    GUEST<uint32_t> contextID;
+    GUEST<uint32_t> closureID;
     GUEST<FragmentLocator> fragLocator;
     GUEST<Ptr> libName;
-    GUEST<uint32> reserved4a;
-    GUEST<uint32> reserved4b;
-    GUEST<uint32> reserved4c;
-    GUEST<uint32> reserved4d;
+    GUEST<uint32_t> reserved4a;
+    GUEST<uint32_t> reserved4b;
+    GUEST<uint32_t> reserved4c;
+    GUEST<uint32_t> reserved4d;
 };
 
 typedef struct CFragConnection *ConnectionID;
@@ -179,8 +179,8 @@ struct section_info_t
 {
     GUEST_STRUCT;
     GUEST<syn68k_addr_t> start;
-    GUEST<uint32> length;
-    GUEST<uint32> ref_count;
+    GUEST<uint32_t> length;
+    GUEST<uint32_t> ref_count;
     GUEST<uint8> perms;
     /* TODO: should probably pad this with three bytes and then PACK the entire
      structure, but only after verifying that it works that way on a Mac. */
@@ -191,8 +191,8 @@ typedef struct CFragConnection
     GUEST_STRUCT;
     GUEST<FragmentLocator> frag;
     GUEST<struct PEFLoaderInfoHeader *> lihp;
-    GUEST<uint32> ref_count;
-    GUEST<uint32> n_sects;
+    GUEST<uint32_t> ref_count;
+    GUEST<uint32_t> n_sects;
     GUEST<section_info_t> sects[0];
 } CFragConnection_t;
 
@@ -208,8 +208,8 @@ struct lib_t
 {
     GUEST_STRUCT;
     GUEST<ConnectionID> cid;
-    GUEST<int32> n_symbols;
-    GUEST<int32> first_symbol;
+    GUEST<int32_t> n_symbols;
+    GUEST<int32_t> first_symbol;
 };
 
 #define LIB_CID_X(l) ((l)->cid)
@@ -224,7 +224,7 @@ struct lib_t
 struct CFragClosure_t
 {
     GUEST_STRUCT;
-    GUEST<uint32> n_libs;
+    GUEST<uint32_t> n_libs;
     GUEST<lib_t> libs[0];
 };
 
@@ -250,7 +250,7 @@ extern OSErr C_GetSharedLibrary(Str63 library, OSType arch,
                                 GUEST<ConnectionID> *cidp, GUEST<Ptr> *mainaddrp,
                                 Str255 errName);
 
-extern OSErr C_GetMemFragment(void *addr, uint32 length, Str63 fragname,
+extern OSErr C_GetMemFragment(void *addr, uint32_t length, Str63 fragname,
                               LoadFlags flags, GUEST<ConnectionID> *connp,
                               GUEST<Ptr> *mainAddrp, Str255 errname);
 
@@ -260,7 +260,7 @@ extern OSErr C_GetIndSymbol(ConnectionID id, LONGINT index,
                             Str255 name, GUEST<Ptr> *addrp,
                             SymClass *classp);
 
-extern ConnectionID ROMlib_new_connection(uint32 n_sects);
+extern ConnectionID ROMlib_new_connection(uint32_t n_sects);
 extern void ROMlib_release_tracking_values(void);
 }
 

@@ -198,7 +198,7 @@ static const uint8 mix8[] = {
 
 static bool
 resample(uint8 *inbuf, uint8 *orig_outbuf, unsigned int insize,
-         unsigned int outsize, uint32 infreq, uint32 outfreq,
+         unsigned int outsize, uint32_t infreq, uint32_t outfreq,
          snd_time *current_start, uint8 *prev_samp,
          snd_time *chan_time, snd_time until)
 

@@ -536,7 +536,7 @@ void ROMlib_InitZones(offset_enum which)
 
 void SetApplBase(Ptr newbase)
 {
-    int32 totend;
+    int32_t totend;
 
     if((char *)newbase < (char *)ZONE_BK_LIM(MR(SysZone)) + MIN_BLOCK_SIZE)
     {
@@ -579,7 +579,7 @@ void MoreMasters(void)
     current_zone = MR(TheZone);
 
     handles = (GUEST<Ptr> *)NewPtr(ZONE_MORE_MAST(current_zone)
-                                   * sizeof(uint32));
+                                   * sizeof(uint32_t));
 
     if(handles == NULL)
     {
@@ -606,7 +606,7 @@ void print_free(void)
 }
 #endif
 
-void InitZone(ProcPtr pGrowZone, int16 cMoreMasters,
+void InitZone(ProcPtr pGrowZone, int16_t cMoreMasters,
               Ptr limitPtr, THz zone)
 {
     block_header_t *last_block;
@@ -865,7 +865,7 @@ Size GetHandleSize(Handle h)
 void SetHandleSize(Handle h, Size newsize)
 {
     block_header_t *block;
-    int32 oldpsize;
+    int32_t oldpsize;
     GUEST<THz> save_zone;
     THz current_zone;
     bool save_memnomove_p;
@@ -1026,7 +1026,7 @@ THz HandleZone(Handle h)
     }
 
     if(block)
-        zone = (THz)((Ptr)h - (int32)BLOCK_LOCATION_OFFSET(block));
+        zone = (THz)((Ptr)h - (int32_t)BLOCK_LOCATION_OFFSET(block));
     else if(applzone_p)
         zone = MR(ApplZone);
     else if(syszone_p)
@@ -1085,7 +1085,7 @@ _RecoverHandle_flags(Ptr p, bool sys_p)
 void ReallocHandle(Handle h, Size size)
 {
     block_header_t *oldb, *newb;
-    int32 newsize;
+    int32_t newsize;
     GUEST<THz> save_zone;
     THz current_zone;
     unsigned int state;
@@ -1122,7 +1122,7 @@ void ReallocHandle(Handle h, Size size)
         }
 
         state = BLOCK_STATE(oldb);
-        if(PSIZE(oldb) >= (uint32)size)
+        if(PSIZE(oldb) >= (uint32_t)size)
         {
             ROMlib_setupblock(oldb, size, REL, h, state);
             goto done;
@@ -1403,9 +1403,9 @@ THz PtrZone(Ptr p)
     return zone;
 }
 
-int32 _FreeMem_flags(bool sys_p)
+int32_t _FreeMem_flags(bool sys_p)
 {
-    uint32 freespace;
+    uint32_t freespace;
 
     MM_SLAM("entry");
 
@@ -1423,8 +1423,8 @@ Size _MaxMem_flags(Size *growp, bool sys_p)
     block_header_t *b;
     GUEST<THz> save_zone;
     THz current_zone;
-    uint32 biggestfree;
-    uint32 sizesofar;
+    uint32_t biggestfree;
+    uint32_t sizesofar;
     block_header_t *startb;
     Size grow;
     enum
@@ -1527,7 +1527,7 @@ Size _MaxMem_flags(Size *growp, bool sys_p)
 
 Size _CompactMem_flags(Size sizeneeded, bool sys_p)
 {
-    int32 amtfree;
+    int32_t amtfree;
     block_header_t *src, *target, *ap;
     GUEST<THz> save_zone;
     THz current_zone;
@@ -1584,7 +1584,7 @@ repeat:
         {
             if(src > target)
             {
-                int32 src_target_diff = (char *)src - (char *)target;
+                int32_t src_target_diff = (char *)src - (char *)target;
 
                 mm_set_block_fields_offset(target,
                                            FREE_BLOCK_STATE, FREE, 0,
@@ -1605,7 +1605,7 @@ repeat:
      the final free block. */
     if(src == ZONE_BK_LIM(current_zone) && src > target)
     {
-        int32 src_target_diff = (char *)src - (char *)target;
+        int32_t src_target_diff = (char *)src - (char *)target;
 
         mm_set_block_fields_offset(target,
                                    FREE_BLOCK_STATE, FREE, 0,
@@ -1818,12 +1818,12 @@ void MoveHHi(Handle h)
     SET_MEM_ERR(noErr);
 }
 
-int32 _MaxBlock_flags(bool sys_p)
+int32_t _MaxBlock_flags(bool sys_p)
 {
     GUEST<THz> save_zone;
     THz current_zone;
-    int32 max_free;
-    int32 total_free;
+    int32_t max_free;
+    int32_t total_free;
     block_header_t *b;
 
     MM_SLAM("entry");
@@ -1862,9 +1862,9 @@ void _PurgeSpace_flags(Size *total_out, Size *contig_out, bool sys_p)
 {
     GUEST<THz> save_zone;
     THz current_zone;
-    int32 total_free;
-    int32 this_contig;
-    int32 max_contig;
+    int32_t total_free;
+    int32_t this_contig;
+    int32_t max_contig;
     block_header_t *b;
 
     MM_SLAM("entry");
@@ -1983,7 +1983,7 @@ void EmptyHandle(Handle h)
 
     if(ZONE_PURGE_PROC_X(current_zone))
     {
-        uint32 saved0, saved1, saved2, savea0, savea1;
+        uint32_t saved0, saved1, saved2, savea0, savea1;
         ROMlib_hook(memory_purgeprocnumber);
 
         saved0 = EM_D0;

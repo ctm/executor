@@ -666,18 +666,18 @@ extern trap OSErrRET PBDeleteFileIDRef(ParmBlkPtr pb, BOOLEAN async);
 extern trap OSErrRET PBResolveFileIDRef(ParmBlkPtr pb, BOOLEAN async);
 
 /* prototypes for the high level filesystem dispatch traps */
-extern pascal trap OSErr C_FSMakeFSSpec(int16 vRefNum, int32 dir_id,
+extern pascal trap OSErr C_FSMakeFSSpec(int16_t vRefNum, int32_t dir_id,
                                         Str255 file_name, FSSpecPtr spec);
 extern pascal trap OSErr C_FSpExchangeFiles(FSSpecPtr src, FSSpecPtr dst);
 extern pascal trap OSErr C_FSpOpenDF(FSSpecPtr spec, SignedByte perms,
-                                     GUEST<int16> *refNum_out);
+                                     GUEST<int16_t> *refNum_out);
 extern pascal trap OSErr C_FSpOpenRF(FSSpecPtr spec, SignedByte perms,
-                                     GUEST<int16> *refNum_out);
+                                     GUEST<int16_t> *refNum_out);
 extern pascal trap OSErr C_FSpCreate(FSSpecPtr spec,
                                      OSType creator, OSType file_type,
                                      ScriptCode script);
 extern pascal trap OSErr C_FSpDirCreate(FSSpecPtr spec, ScriptCode script,
-                                        GUEST<int32> *created_dir_id);
+                                        GUEST<int32_t> *created_dir_id);
 extern pascal trap OSErr C_FSpDelete(FSSpecPtr spec);
 
 extern pascal trap OSErr C_FSpGetFInfo(FSSpecPtr spec, FInfo *fndr_info);

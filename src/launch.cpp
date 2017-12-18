@@ -96,12 +96,12 @@ PUBLIC void Executor::ROMlib_set_ppc(bool val)
 FILE *configfile;
 
 //Exported as a C value
-int32 ROMlib_options;
+int32_t ROMlib_options;
 
-static int16 name0stripappl(StringPtr name)
+static int16_t name0stripappl(StringPtr name)
 {
     char *p;
-    int16 retval;
+    int16_t retval;
 
     retval = name[0];
     if(name[0] >= 5)
@@ -386,7 +386,7 @@ PUBLIC void Executor::SFSaveDisk_Update(INTEGER vrefnum, Str255 filename)
     SFSaveDisk = CW(-CW(pbr.volumeParam.ioVRefNum));
 }
 
-PUBLIC uint32 Executor::ROMlib_version_long;
+PUBLIC uint32_t Executor::ROMlib_version_long;
 
 PRIVATE bool
 cfrg_match(const cfir_t *cfirp, GUEST<OSType> arch_x, uint8 type_x, Str255 name)
@@ -464,10 +464,10 @@ cfm_launch(Handle cfrg0, OSType desired_arch, FSSpecPtr fsp)
             fprintf(stderr, "Memory leak from segmented fragment\n");
         }
         {
-            uint32 new_toc;
+            uint32_t new_toc;
             void *new_pc;
 
-            new_toc = ((uint32 *)mainAddr)[1];
+            new_toc = ((uint32_t *)mainAddr)[1];
             new_pc = ((void **)mainAddr)[0];
             ppc_call(new_toc, new_pc, 0);
         }
@@ -636,7 +636,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 
     {
         Handle size_resource_h;
-        int16 size_flags;
+        int16_t size_flags;
 
         size_resource_h = Get1Resource(T('S', 'I', 'Z', 'E'), 0);
         if(size_resource_h == NULL)
@@ -781,7 +781,7 @@ PRIVATE void reset_low_globals(void)
 
     GUEST<ProcPtr> saveDABeeper;
     GUEST<THz> saveSysZone;
-    GUEST<uint32> saveTicks;
+    GUEST<uint32_t> saveTicks;
     GUEST<INTEGER> saveBootDrive;
     GUEST<LONGINT> saveLo3Bytes;
     GUEST<LONGINT> save20, save28, save58, save5C;

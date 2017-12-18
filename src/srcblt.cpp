@@ -20,13 +20,13 @@ const INTEGER *srcblt_rgn_start asm("_srcblt_rgn_start");
 
 const void **srcblt_stub_table asm("_srcblt_stub_table");
 
-int32 srcblt_x_offset asm("_srcblt_x_offset");
+int32_t srcblt_x_offset asm("_srcblt_x_offset");
 
-int32 srcblt_src_row_bytes asm("_srcblt_src_row_bytes");
-int32 srcblt_dst_row_bytes asm("_srcblt_dst_row_bytes");
+int32_t srcblt_src_row_bytes asm("_srcblt_src_row_bytes");
+int32_t srcblt_dst_row_bytes asm("_srcblt_dst_row_bytes");
 
-uint32 srcblt_fg_color asm("_srcblt_fg_color");
-uint32 srcblt_bk_color asm("_srcblt_bk_color");
+uint32_t srcblt_fg_color asm("_srcblt_fg_color");
+uint32_t srcblt_bk_color asm("_srcblt_bk_color");
 
 char *srcblt_src_baseaddr asm("_srcblt_src_baseaddr");
 char *srcblt_dst_baseaddr asm("_srcblt_dst_baseaddr");
@@ -36,8 +36,8 @@ int srcblt_shift_offset asm("_srcblt_shift_offset");
 bool srcblt_reverse_scanlines_p asm("_srcblt_reverse_scanlines_p");
 
 #if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-uint16 srcblt_src_selector asm("_srcblt_src_selector");
-uint16 srcblt_dst_selector asm("_srcblt_dst_selector");
+uint16_t srcblt_src_selector asm("_srcblt_src_selector");
+uint16_t srcblt_dst_selector asm("_srcblt_dst_selector");
 #endif
 
 /* We use this macro to avoid page faults when aligning pointers. */
@@ -46,9 +46,9 @@ uint16 srcblt_dst_selector asm("_srcblt_dst_selector");
 bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
                 const blt_bitmap_t *src, const blt_bitmap_t *dst,
                 GUEST<Point> *src_origin, GUEST<Point> *dst_origin,
-                uint32 fg_color, uint32 bk_color)
+                uint32_t fg_color, uint32_t bk_color)
 {
-    uint32 mask, tile;
+    uint32_t mask, tile;
     unsigned long dst_align32_offset, src_align32_offset;
     long src_x_offset, src_y_offset, left_shift;
     char *dst_baseaddr, *src_baseaddr;
@@ -157,7 +157,7 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
 
     /* Handle the common case of flipped fg/bk colors and a copy xfer mode. */
     if((mode & 3) == (srcCopy & 3) /* either srcCopy or notSrcCopy */
-       && srcblt_fg_color == 0 && srcblt_bk_color == (uint32)~0)
+       && srcblt_fg_color == 0 && srcblt_bk_color == (uint32_t)~0)
     {
         mode ^= (srcCopy ^ notSrcCopy);
         srcblt_bk_color = 0;
@@ -242,7 +242,7 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
 
     if(left_shift == 0)
     {
-        if(srcblt_fg_color == (uint32)~0 && srcblt_bk_color == 0)
+        if(srcblt_fg_color == (uint32_t)~0 && srcblt_bk_color == 0)
             srcblt_stub_table = srcblt_noshift_stubs FIRST_DIM[mode];
         else
             srcblt_stub_table = srcblt_noshift_fgbk_stubs FIRST_DIM[mode];
@@ -250,7 +250,7 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
     else
     {
 #if defined(USE_PORTABLE_SRCBLT) || !defined(i386)
-        if(srcblt_fg_color == (uint32)~0 && srcblt_bk_color == 0)
+        if(srcblt_fg_color == (uint32_t)~0 && srcblt_bk_color == 0)
             srcblt_stub_table = srcblt_shift_stubs[mode];
         else
             srcblt_stub_table = srcblt_shift_fgbk_stubs[mode];
@@ -258,7 +258,7 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
         if(arch_type == ARCH_TYPE_I386)
         {
             /* i386 */
-            if(srcblt_fg_color == (uint32)~0 && srcblt_bk_color == 0)
+            if(srcblt_fg_color == (uint32_t)~0 && srcblt_bk_color == 0)
                 srcblt_stub_table = srcblt_shift_i386_stubs FIRST_DIM[mode];
             else
                 srcblt_stub_table = srcblt_shift_fgbk_i386_stubs FIRST_DIM[mode];
@@ -266,7 +266,7 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
         else
         {
             /* i486 or better */
-            if(srcblt_fg_color == (uint32)~0 && srcblt_bk_color == 0)
+            if(srcblt_fg_color == (uint32_t)~0 && srcblt_bk_color == 0)
                 srcblt_stub_table = srcblt_shift_i486_stubs FIRST_DIM[mode];
             else
                 srcblt_stub_table = srcblt_shift_fgbk_i486_stubs FIRST_DIM[mode];

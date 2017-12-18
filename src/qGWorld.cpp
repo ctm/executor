@@ -223,7 +223,7 @@ P6(PUBLIC pascal trap, QDErr, NewGWorld,
             SetHandleSize((Handle)ctab,
                           CTAB_STORAGE_FOR_SIZE(ctab_max_elt));
             CTAB_SIZE_X(ctab) = CW(ctab_max_elt);
-            CTAB_SEED_X(ctab) = CL((int32)depth);
+            CTAB_SEED_X(ctab) = CL((int32_t)depth);
             CTAB_FLAGS_X(ctab) = CTAB_GDEVICE_BIT_X;
             memcpy(CTAB_TABLE(ctab),
                    default_ctab_colors[ROMlib_log2[depth]],

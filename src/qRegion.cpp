@@ -30,9 +30,9 @@ static void
 ROMlib_sledgehammer_rgn(RgnHandle rgn)
 {
     bool special_rgn_p;
-    int16 size;
+    int16_t size;
     int x, y;
-    int16 *ip, *start_ip;
+    int16_t *ip, *start_ip;
 
     gui_assert(rgn);
 
@@ -56,14 +56,14 @@ ROMlib_sledgehammer_rgn(RgnHandle rgn)
         /* #### verify that there are an even numbers of `x's */
         if(special_rgn_p)
         {
-            int32 prev_x = INT32_MIN;
+            int32_t prev_x = INT32_MIN;
 
             for(x = *ip++; x != RGN_STOP; x = *ip++)
                 gui_assert(x > prev_x);
         }
         else
         {
-            int32 prev_x = INT32_MIN;
+            int32_t prev_x = INT32_MIN;
 
             for(x = CW_RAW(*ip++); x != RGN_STOP; x = CW_RAW(*ip++))
                 gui_assert(x > prev_x);

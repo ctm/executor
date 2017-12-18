@@ -68,7 +68,7 @@ Executor::NumVersion MacBridge::SpeechManagerVersion (void)
 #endif
 }
 
-int16 MacBridge::SpeechBusy (void)
+int16_t MacBridge::SpeechBusy (void)
 {
   BeginSpeech();
   @autoreleasepool {
@@ -78,7 +78,7 @@ int16 MacBridge::SpeechBusy (void)
   }
 }
 
-int16 MacBridge::SpeechBusySystemWide(void)
+int16_t MacBridge::SpeechBusySystemWide(void)
 {
   @autoreleasepool {
     SInt16 toRet = [NSSpeechSynthesizer isAnyApplicationSpeaking];
@@ -87,7 +87,7 @@ int16 MacBridge::SpeechBusySystemWide(void)
   }
 }
 
-Executor::OSErr MacBridge::CountVoices (int16 *numVoices)
+Executor::OSErr MacBridge::CountVoices (int16_t *numVoices)
 {
   @autoreleasepool {
     if (!numVoices) {
@@ -157,7 +157,7 @@ static inline void MacVoiceSpecToExecutorVoiceSpec(Executor::VoiceSpec &Executor
   ExecutorVoice.id = CL(MacVoice.id);
 }
 
-Executor::OSErr MacBridge::GetIndVoice (int16 index, Executor::VoiceSpec *voice)
+Executor::OSErr MacBridge::GetIndVoice (int16_t index, Executor::VoiceSpec *voice)
 {
   @autoreleasepool {
     BeginSpeech();
@@ -221,7 +221,7 @@ Executor::OSErr MacBridge::NewSpeechChannel (Executor::VoiceSpec *voice, Executo
   }
 }
 
-Executor::OSErr MacBridge::StopSpeechAt (Executor::SpeechChannel chan, int32 whereToStop)
+Executor::OSErr MacBridge::StopSpeechAt (Executor::SpeechChannel chan, int32_t whereToStop)
 {
   NSSpeechBoundary boundary;
   NSSpeechSynthesizer *synth = synthesizerMap[chan->data[0]];
@@ -251,7 +251,7 @@ Executor::OSErr MacBridge::StopSpeechAt (Executor::SpeechChannel chan, int32 whe
   return Executor::noErr;
 }
 
-Executor::OSErr MacBridge::PauseSpeechAt (Executor::SpeechChannel chan, int32 whereToPause)
+Executor::OSErr MacBridge::PauseSpeechAt (Executor::SpeechChannel chan, int32_t whereToPause)
 {
   NSSpeechBoundary boundary;
   NSSpeechSynthesizer *synth = synthesizerMap[chan->data[0]];
@@ -414,11 +414,11 @@ Executor::OSErr MacBridge::GetVoiceDescription (
     {
       NSString *gender = aVoiceInfo[NSVoiceGender];
       if ([gender isEqualToString:NSVoiceGenderMale]) {
-        info->gender = CWC((int16)1); //kMale
+        info->gender = CWC((int16_t)1); //kMale
       } else if ([gender isEqualToString:NSVoiceGenderFemale]) {
-        info->gender = CWC((int16)2); //kFemale
+        info->gender = CWC((int16_t)2); //kFemale
       } else {
-        info->gender = CWC((int16)0);
+        info->gender = CWC((int16_t)0);
       }
     }
     
@@ -436,7 +436,7 @@ Executor::OSErr MacBridge::GetVoiceDescription (
     }
     info->language = CW(aLang);
     info->region = CW(aRegion);
-    info->script = CWC((int16)NSMacOSRomanStringEncoding);
+    info->script = CWC((int16_t)NSMacOSRomanStringEncoding);
     memset(info->reserved, 0, sizeof(info->reserved));
   }
   
@@ -544,7 +544,7 @@ Executor::OSErr MacBridge::SpeakBuffer (
 									Executor::SpeechChannel chan,
 									const void *textBuf,
 									Executor::ULONGINT textBytes,
-									int32 controlFlags
+									int32_t controlFlags
 									)
 {
   ::OSErr toRet = ::noErr;

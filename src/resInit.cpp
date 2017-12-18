@@ -20,14 +20,14 @@
 
 using namespace Executor;
 
-/* extracts an int32 from a string of the form [^(]*([0-9]*).*
+/* extracts an int32_t from a string of the form [^(]*([0-9]*).*
  * () == 0, any invalid string == -1
  */
 
-PRIVATE int32
+PRIVATE int32_t
 extract_vers_num(Handle h)
 {
-    uint32 retval, old_retval;
+    uint32_t retval, old_retval;
     const char *p, *ep;
     bool seen_left, seen_right, done;
 
@@ -84,7 +84,7 @@ P0(PUBLIC pascal trap, INTEGER, InitResources)
     TheZoneGuard guard(SysZone);
 
     Handle versh;
-    int32 versnum;
+    int32_t versnum;
 
     ROMlib_setreserr(noErr);
     str255assign(SysResName, SYSMACNAME);
@@ -94,7 +94,7 @@ P0(PUBLIC pascal trap, INTEGER, InitResources)
     if(SysMap == CWC(-1))
     {
         fprintf(stderr, "OpenRFPerm (\"%.*s\", 0x%x, fsCurPerm) failed\n",
-                SYSMACNAME[0], SYSMACNAME + 1, (uint16)Cx(BootDrive));
+                SYSMACNAME[0], SYSMACNAME + 1, (uint16_t)Cx(BootDrive));
 
         report_resfork_problem();
 

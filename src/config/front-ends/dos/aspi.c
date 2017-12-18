@@ -49,8 +49,8 @@ PRIVATE bool has_aspi_p;
 PRIVATE int num_host_adaptors;
 
 /* The entry point for the ASPI driver. */
-PRIVATE uint16 aspi_entry_segment;
-PRIVATE uint16 aspi_entry_offset;
+PRIVATE uint16_t aspi_entry_segment;
+PRIVATE uint16_t aspi_entry_offset;
 
 PUBLIC void
 aspi_iterator_init(aspi_iterator_t *aip)
@@ -234,7 +234,7 @@ set_srb(srb_t *srb, command_t command, uint8 adaptor, uint8 flags)
 /* Helper function:  fills in the fields of a given execute_command_t. */
 PRIVATE void
 set_ec_common(execute_command_t *ecb, uint8 target_id, uint8 lun,
-              uint32 data_allocation_length, int cdb_length)
+              uint32_t data_allocation_length, int cdb_length)
 {
     memset(ecb, 0, sizeof *ecb);
     ecb->target_id = target_id;
@@ -249,7 +249,7 @@ set_ec_common(execute_command_t *ecb, uint8 target_id, uint8 lun,
 /* Helper function:  fills in the fields of a given read_write_10_t. */
 PRIVATE void
 set_rw_10(read_write_10_t *rw, operation_code_t op, uint8 lun,
-          uint16 blocks_to_xfer, uint32 logical_block_address)
+          uint16_t blocks_to_xfer, uint32_t logical_block_address)
 {
     memset(rw, 0, sizeof *rw);
     rw->operation_code = op;
@@ -268,7 +268,7 @@ set_rw_10(read_write_10_t *rw, operation_code_t op, uint8 lun,
 
 PRIVATE void
 set_rw_6 (read_write_6_t *rw, operation_code_t op, uint8 lun,
-	      uint16 blocks_to_xfer, uint32 logical_block_address)
+	      uint16_t blocks_to_xfer, uint32_t logical_block_address)
 {
   memset (rw, 0, sizeof *rw);
   rw->operation_code                = op;
@@ -317,10 +317,10 @@ set_start_stop(start_stop_t *m, operation_code_t op, uint8 lun, uint8 immed,
 }
 
 /* Reads a three byte array as a big endian value. */
-PRIVATE uint32
+PRIVATE uint32_t
 read3(const uint8 np[3])
 {
-    return ((uint32)np[0] << 16) | (np[1] << 8) | np[2];
+    return ((uint32_t)np[0] << 16) | (np[1] << 8) | np[2];
 }
 
 char *type_name(unsigned char type)

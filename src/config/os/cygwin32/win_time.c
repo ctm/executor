@@ -11,14 +11,14 @@
 #include <windows.h>
 #include "mmsystem.h"
 
-PRIVATE uint64
+PRIVATE uint64_t
 system_time_to_micro_time(const SYSTEMTIME *timep)
 {
     FILETIME file_time;
     uint64_t retval;
 
     SystemTimeToFileTime(timep, &file_time);
-    retval = ((((uint64_t)file_time.dwHighDateTime) << 32) | (uint32)file_time.dwLowDateTime) / 10;
+    retval = ((((uint64_t)file_time.dwHighDateTime) << 32) | (uint32_t)file_time.dwLowDateTime) / 10;
     return retval;
 }
 

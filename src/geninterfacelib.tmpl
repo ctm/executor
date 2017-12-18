@@ -217,7 +217,7 @@ dump_header (void)
 "#include \"rsys/emustubs.h\"\n"
 "#include \"rsys/mixed_mode.h\"\n\n"
 "#define SetPalette C_SetPalette\n\n"
-"typedef uint32 PointAsLong;\n"
+"typedef uint32_t PointAsLong;\n"
 );
 }
 
@@ -325,13 +325,13 @@ arg_type (arg_t t)
       retval = "uint8";
       break;
     case two_byte_arg:
-      retval = "uint16";
+      retval = "uint16_t";
       break;
     case point_arg:
       retval = "PointAsLong";
       break;
     case four_byte_arg:
-      retval = "uint32";
+      retval = "uint32_t";
       break;
     case pointer_arg:
       retval = "void *";

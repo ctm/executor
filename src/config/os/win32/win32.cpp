@@ -11,7 +11,7 @@ bool Executor::os_init()
 }
 
 PUBLIC int
-Executor::ROMlib_lockunlockrange(int fd, uint32 begin, uint32 count, lockunlock_t op)
+Executor::ROMlib_lockunlockrange(int fd, uint32_t begin, uint32_t count, lockunlock_t op)
 {
     return 0;
 #if 0

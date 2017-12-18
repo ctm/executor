@@ -227,9 +227,9 @@ extern pascal trap void P_SetFractEnable(BOOLEAN enable);
 extern pascal trap void C_SetOutlinePreferred(Boolean _outline_perferred_p);
 extern pascal trap Boolean C_GetOutlinePreferred(void);
 extern pascal trap Boolean C_IsOutline(Point numer, Point denom);
-extern pascal trap OSErr C_OutlineMetrics(int16 byte_count, Ptr text,
+extern pascal trap OSErr C_OutlineMetrics(int16_t byte_count, Ptr text,
                                           Point numer, Point denom,
-                                          int16 *y_max, int16 *y_min,
+                                          int16_t *y_max, int16_t *y_min,
                                           Fixed *aw_array, Fixed *lsb_array,
                                           Rect *bounds_array);
 

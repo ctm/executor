@@ -27,11 +27,11 @@ enum { WINFS_SIG = 0x3301; }; /* arbitrary number */
 
 struct statfs
 {
-    uint32 f_blocks;
-    uint32 f_bsize;
-    uint32 f_bavail;
-    uint32 f_bfree;
-    uint32 f_files;
+    uint32_t f_blocks;
+    uint32_t f_bsize;
+    uint32_t f_bavail;
+    uint32_t f_bfree;
+    uint32_t f_files;
 };
 
 #if !defined _DEV_T_

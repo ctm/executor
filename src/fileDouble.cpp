@@ -425,7 +425,7 @@ A1(PUBLIC, OSErr, ROMlib_geteofostype, fcbrec *, fp) /* INTERNAL */
                 } buffer;
                 if(getxattr(pathname, XATTR_FINDERINFO_NAME, &buffer, 32, 0, 0) < 0)
                 {
-                    uint32 type;
+                    uint32_t type;
 
                     if(ROMlib_creator_and_type_from_filename(fp->fcname[0], (char *)fp->fcname + 1, NULL, &type))
                         fp->fcbFType = CL(type);
@@ -440,7 +440,7 @@ A1(PUBLIC, OSErr, ROMlib_geteofostype, fcbrec *, fp) /* INTERNAL */
 #endif
             if(!getsetentry(Get, fd, Finder_Info_ID, &d, NULL) || (!getsetpiece(Get, fd, &d, (char *)&finfo, sizeof(finfo))))
             {
-                uint32 type;
+                uint32_t type;
 
                 if(ROMlib_creator_and_type_from_filename(fp->fcname[0], (char *)fp->fcname + 1, NULL, &type))
                     fp->fcbFType = CL(type);

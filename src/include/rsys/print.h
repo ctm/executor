@@ -260,7 +260,7 @@ extern void ROMlib_acknowledge_job_dialog(THPrint thprint);
 
 extern "C" {
 extern char *ROMlib_win32_token;
-extern uint32 ROMlib_PrDrvrVers;
+extern uint32_t ROMlib_PrDrvrVers;
 
 extern char *ROMlib_new_printer_name;
 extern char *ROMlib_new_label;

@@ -430,10 +430,10 @@ typedef GUEST<CCrsrPtr> *CCrsrHandle;
 struct MatchRec
 {
     GUEST_STRUCT;
-    GUEST<uint16> red;
-    GUEST<uint16> green;
-    GUEST<uint16> blue;
-    GUEST<int32> matchData;
+    GUEST<uint16_t> red;
+    GUEST<uint16_t> green;
+    GUEST<uint16_t> blue;
+    GUEST<int32_t> matchData;
 };
 
 typedef Byte *BytePtr;

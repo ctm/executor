@@ -8,8 +8,8 @@ namespace Executor
 {
 typedef struct
 {
-    uint16 x_rot_count; /* Number of pixels x-rotated.		     */
-    uint16 y_rot_count; /* Number of rows y-rotated.		     */
+    uint16_t x_rot_count; /* Number of pixels x-rotated.		     */
+    uint16_t y_rot_count; /* Number of rows y-rotated.		     */
     uint8 src_flipped_p; /* Are the mode_bits already flipped?	     */
 } xdata_xfer_spec_t;
 
@@ -28,7 +28,7 @@ typedef struct _xdata_t
     GUEST<LONGINT> ctab_seed_x; /* Big endian color table seed.		     */
     const rgb_spec_t *rgb_spec; /* Only non-NULL for log2_bpp >= 4.	     */
 
-    uint32 magic_cookie;
+    uint32_t magic_cookie;
 
     /* This function will do the actual blit. */
     bool (*blt_func)(RgnHandle rh, int mode,
@@ -40,11 +40,11 @@ typedef struct _xdata_t
    * used for tall or wide patterns.
    */
     int pat_x_rot; /* X rotation in bits (from canonical).      */
-    uint32 pat_flip_mask; /* XOR mask applied to bits, from canonical. */
+    uint32_t pat_flip_mask; /* XOR mask applied to bits, from canonical. */
 
     /* Exactly one of these two holds the actual bits for the pattern. */
-    uint32 pat_value; /* For short, narrow patterns.		     */
-    uint32 *pat_bits; /* For tall and/or wide patterns (else NULL).*/
+    uint32_t pat_value; /* For short, narrow patterns.		     */
+    uint32_t *pat_bits; /* For tall and/or wide patterns (else NULL).*/
 
     Ptr raw_pat_bits_mem; /* Might not == pat_bits; for DisposPtr.     */
 

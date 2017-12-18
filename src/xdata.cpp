@@ -37,7 +37,7 @@ bool Executor::update_xdata_if_needed(xdata_handle_t xh, PixPat *pixpat,
 
 static void
 raw_bits_for_pattern(const Pattern pattern, PixMap *target,
-                     uint32 *bits, int *row_bytes)
+                     uint32_t *bits, int *row_bytes)
 {
     /* this is a template pattern to be used as the source
      when performing the conversion from the old style
@@ -128,7 +128,7 @@ raw_bits_for_pattern(const Pattern pattern, PixMap *target,
 
 static void
 raw_bits_for_color_pattern(PixPatPtr pixpat, PixMap *target,
-                           uint32 *bits, int *row_bytesp)
+                           uint32_t *bits, int *row_bytesp)
 {
     PixMapHandle patmap;
 
@@ -163,9 +163,9 @@ raw_bits_for_color_pattern(PixPatPtr pixpat, PixMap *target,
 
 static void
 raw_bits_for_rgb_pattern(PixPatPtr pixpat, PixMap *target,
-                         uint32 *bits, int *row_bytes)
+                         uint32_t *bits, int *row_bytes)
 {
-    uint32 actual_value;
+    uint32_t actual_value;
     RGBColor desired_color;
     int target_depth;
 
@@ -184,7 +184,7 @@ raw_bits_for_rgb_pattern(PixPatPtr pixpat, PixMap *target,
         switch(target_depth)
         {
             case 1:
-                actual_value = ((int32)(actual_value << 31)) >> 31;
+                actual_value = ((int32_t)(actual_value << 31)) >> 31;
                 break;
             case 2:
                 actual_value = (actual_value & 3) * 0x55555555U;
@@ -218,7 +218,7 @@ raw_bits_for_rgb_pattern(PixPatPtr pixpat, PixMap *target,
 
 static void
 raw_bits_for_pixpat(PixPat *pixpat, PixMap *target,
-                    uint32 *bits, int *row_bytes, int *height_override)
+                    uint32_t *bits, int *row_bytes, int *height_override)
 {
     switch(CW(pixpat->patType))
     {
@@ -244,15 +244,15 @@ raw_bits_for_pixpat(PixPat *pixpat, PixMap *target,
  * four bytes wide with no loss of information.
  */
 static inline bool
-narrow_p(const uint32 *bits, int row_longs, int height)
+narrow_p(const uint32_t *bits, int row_longs, int height)
 {
-    const uint32 *p, *end;
+    const uint32_t *p, *end;
 
     end = &bits[row_longs * height];
 
     for(p = bits; p != end; p += row_longs)
     {
-        uint32 v = p[0];
+        uint32_t v = p[0];
         int i;
 
         for(i = row_longs - 1; i > 0; i--)
@@ -267,12 +267,12 @@ narrow_p(const uint32 *bits, int row_longs, int height)
  * one row tall with no loss of information.
  */
 static inline bool
-short_p(const uint32 *bits, int row_longs, int height)
+short_p(const uint32_t *bits, int row_longs, int height)
 {
     const uint8 *p, *end;
     int row_bytes;
 
-    row_bytes = row_longs * sizeof(uint32);
+    row_bytes = row_longs * sizeof(uint32_t);
     end = ((const uint8 *)bits) + row_bytes * height;
     for(p = ((const uint8 *)bits) + row_bytes; p != end; p += row_bytes)
     {
@@ -285,10 +285,10 @@ short_p(const uint32 *bits, int row_longs, int height)
 
 /* Don't call this directly, use the `xdata_for_pixpat' macro. */
 static void
-xdata_for_raw_data(PixMap *target, xdata_t *x, uint32 *raw_bits,
+xdata_for_raw_data(PixMap *target, xdata_t *x, uint32_t *raw_bits,
                    int row_bytes, int height)
 {
-    uint32 *p, v;
+    uint32_t *p, v;
     unsigned row_longs;
 
     memset(x, 0, sizeof *x);
@@ -315,7 +315,7 @@ xdata_for_raw_data(PixMap *target, xdata_t *x, uint32 *raw_bits,
         else if(row_bytes == 2)
         {
             for(y = height - 1; y >= 0; y--)
-                raw_bits[y] = (((const uint16 *)raw_bits)[y]) * 0x00010001U;
+                raw_bits[y] = (((const uint16_t *)raw_bits)[y]) * 0x00010001U;
         }
         else
             abort();
@@ -335,7 +335,7 @@ xdata_for_raw_data(PixMap *target, xdata_t *x, uint32 *raw_bits,
         if(*p != v)
             break;
 
-    if(p == raw_bits) /* is every uint32 in the pattern the same? */
+    if(p == raw_bits) /* is every uint32_t in the pattern the same? */
     {
         int shift;
 
@@ -360,7 +360,7 @@ xdata_for_raw_data(PixMap *target, xdata_t *x, uint32 *raw_bits,
             x->blt_func = xdblt_xdata_norgb_norotate;
             if(v == 0)
                 x->stub_table_for_mode = xdblt_zeros_stubs;
-            else if(v == (uint32)~0)
+            else if(v == (uint32_t)~0)
                 x->stub_table_for_mode = xdblt_ones_stubs;
             else
                 x->stub_table_for_mode = xdblt_short_narrow_stubs;
@@ -379,18 +379,18 @@ xdata_for_raw_data(PixMap *target, xdata_t *x, uint32 *raw_bits,
 	   * the Handle might move in such a way as to become no
 	   * longer long-aligned.
 	   */
-            x->raw_pat_bits_mem = NewPtr(height * sizeof(uint32) + 3);
-            x->pat_bits = (uint32 *)(((unsigned long)x->raw_pat_bits_mem
+            x->raw_pat_bits_mem = NewPtr(height * sizeof(uint32_t) + 3);
+            x->pat_bits = (uint32_t *)(((unsigned long)x->raw_pat_bits_mem
                                       + 3)
                                      & ~3);
             for(i = 0; i < height; i++)
                 x->pat_bits[i] = raw_bits[i * row_longs];
             x->stub_table_for_mode = xdblt_tall_narrow_stubs;
 
-            x->row_bytes = sizeof(uint32);
+            x->row_bytes = sizeof(uint32_t);
             x->log2_row_bytes = 2;
             x->row_bits_minus_1 = 31;
-            x->byte_size = height * sizeof(uint32);
+            x->byte_size = height * sizeof(uint32_t);
         }
         else /* wide */
         {
@@ -409,7 +409,7 @@ xdata_for_raw_data(PixMap *target, xdata_t *x, uint32 *raw_bits,
 
             /* Allocate long-aligned memory, as described above. */
             x->raw_pat_bits_mem = NewPtr(x->byte_size + 3);
-            x->pat_bits = (uint32 *)(((unsigned long)x->raw_pat_bits_mem
+            x->pat_bits = (uint32_t *)(((unsigned long)x->raw_pat_bits_mem
                                       + 3)
                                      & ~3);
             memcpy(x->pat_bits, raw_bits, x->byte_size);
@@ -429,7 +429,7 @@ xdata_handle_t
 Executor::xdata_for_pixpat_with_space(PixPat *pixpat, PixMap *target,
                                       xdata_handle_t xh)
 {
-    uint32 *raw_bits;
+    uint32_t *raw_bits;
     int height;
     unsigned width;
     int max_byte_size, row_bytes;
@@ -447,7 +447,7 @@ Executor::xdata_for_pixpat_with_space(PixPat *pixpat, PixMap *target,
         height = RECT_HEIGHT(bounds);
         width = RECT_WIDTH(bounds);
     }
-    max_byte_size = width * sizeof(uint32) * height;
+    max_byte_size = width * sizeof(uint32_t) * height;
     TEMP_ALLOC_ALLOCATE(raw_bits, raw_bits_temp_storage, max_byte_size);
 
     /* Compute the raw bits for this pixpat. */
@@ -469,7 +469,7 @@ Executor::xdata_for_pattern(const Pattern pattern, PixMap *target)
     xh = (xdata_handle_t)NewHandle(sizeof(xdata_t));
 
     HLockGuard guard(xh);
-    uint32 raw_bits[8 * 8]; /* Maximum possible resultant pattern size. */
+    uint32_t raw_bits[8 * 8]; /* Maximum possible resultant pattern size. */
     int row_bytes;
     xdata_t *x = STARH(xh);
 

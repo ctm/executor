@@ -20,13 +20,13 @@
 namespace Executor
 {
 
-typedef int16 INTEGER;
-typedef int32 LONGINT;
-typedef uint32 ULONGINT;
+typedef int16_t INTEGER;
+typedef int32_t LONGINT;
+typedef uint32_t ULONGINT;
 
 #if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 typedef int8 BOOLEAN;
-typedef int16 CHAR; /* very important not to use this as char */
+typedef int16_t CHAR; /* very important not to use this as char */
 #endif
 
 // Define alignment.
@@ -185,7 +185,7 @@ public:
 
     WrappedType get() const
     {
-        uint32 rawp = this->raw();
+        uint32_t rawp = this->raw();
         if(rawp)
             return (TT *)(SYN68K_TO_US((uint32_t)swap32(rawp)));
         else

@@ -18,8 +18,8 @@ static int srcblt_dst_row_stride;
 const void *srcblt_nop_table[1] = { NULL };
 
 /* This macro is used in `rawsrcstubs.c' */
-#define NEXT_ROW (src = (const uint32 *)&src_row_base[s[1].offset], \
-                  dst = (uint32 *)&dst_row_base[s[1].offset])
+#define NEXT_ROW (src = (const uint32_t *)&src_row_base[s[1].offset], \
+                  dst = (uint32_t *)&dst_row_base[s[1].offset])
 
 namespace Executor
 {
@@ -78,7 +78,7 @@ void srcblt_bitmap(void)
     const INTEGER *rgn;
     int x, y, next_y, start_x_bit, stop_x_bit, start_x_long, stop_x_long;
     int num_rows, num_longs;
-    uint32 mask;
+    uint32_t mask;
     int log2_bpp;
 
     if(srcblt_stub_table == srcblt_nop_table)
@@ -126,7 +126,7 @@ next_stop:
         goto same_long;
 
     /* Different longs. */
-    if(mask == (uint32)~0)
+    if(mask == (uint32_t)~0)
         goto blt_contig;
 
     /* Mask not solid. */

@@ -1272,8 +1272,8 @@ A3(PRIVATE, OSErr, PBLockUnlockRange, ParmBlkPtr, pb, BOOLEAN, a,
     {
         if((err = pbfpos(pb, &toseek, true)) == noErr)
         {
-            OSErr (*verify)(int fd, uint32 start, uint32 count);
-            OSErr (*cleanup)(int fd, uint32 start, uint32 count);
+            OSErr (*verify)(int fd, uint32_t start, uint32_t count);
+            OSErr (*cleanup)(int fd, uint32_t start, uint32_t count);
 
             fd = fp->fcfd;
             curseek = lseek(fd, 0, SEEK_SET);
@@ -1357,7 +1357,7 @@ PUBLIC int Executor::ROMlib_newlinetocr = true;
 
 PUBLIC int Executor::ROMlib_flushoften = 0;
 
-PUBLIC unsigned long Executor::ROMlib_destroy_blocks(syn68k_addr_t start, uint32 count,
+PUBLIC unsigned long Executor::ROMlib_destroy_blocks(syn68k_addr_t start, uint32_t count,
                                                      BOOLEAN flush_only_faulty_checksums)
 {
     unsigned long num_blocks_destroyed;

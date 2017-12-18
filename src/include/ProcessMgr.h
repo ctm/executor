@@ -18,8 +18,8 @@ typedef INTEGER LaunchFlags;
 struct ProcessSerialNumber
 {
     GUEST_STRUCT;
-    GUEST<uint32> highLongOfPSN;
-    GUEST<uint32> lowLongOfPSN;
+    GUEST<uint32_t> highLongOfPSN;
+    GUEST<uint32_t> lowLongOfPSN;
 };
 
 /* for now, anyway */
@@ -35,7 +35,7 @@ struct ProcessSerialNumber
 typedef struct
 {
     GUEST_STRUCT;
-    GUEST<uint32> magic;
+    GUEST<uint32_t> magic;
     GUEST<INTEGER> n_fsspec;
     FSSpec fsspec[0];
 } ROMlib_AppParameters_t;
@@ -84,18 +84,18 @@ enum
 struct ProcessInfoRec
 {
     GUEST_STRUCT;
-    GUEST<uint32> processInfoLength;
+    GUEST<uint32_t> processInfoLength;
     GUEST<StringPtr> processName;
     GUEST<ProcessSerialNumber> processNumber;
-    GUEST<uint32> processType;
+    GUEST<uint32_t> processType;
     GUEST<OSType> processSignature;
-    GUEST<uint32> processMode;
+    GUEST<uint32_t> processMode;
     GUEST<Ptr> processLocation;
-    GUEST<uint32> processSize;
-    GUEST<uint32> processFreeMem;
+    GUEST<uint32_t> processSize;
+    GUEST<uint32_t> processFreeMem;
     GUEST<ProcessSerialNumber> processLauncher;
-    GUEST<uint32> processLaunchDate;
-    GUEST<uint32> processActiveTime;
+    GUEST<uint32_t> processLaunchDate;
+    GUEST<uint32_t> processActiveTime;
     GUEST<FSSpecPtr> processAppSpec;
 };
 typedef ProcessInfoRec *ProcessInfoPtr;
@@ -150,7 +150,7 @@ typedef ProcessInfoRec *ProcessInfoPtr;
 #define procNotFound (-600)
 
 extern void process_create(bool desk_accessory_p,
-                           uint32 type, uint32 signature);
+                           uint32_t type, uint32_t signature);
 
 extern pascal trap OSErr C_GetCurrentProcess(ProcessSerialNumber *serial_number);
 

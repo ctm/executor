@@ -12,6 +12,6 @@ namespace Executor
 extern pascal trap void C_ShutDwnPower(void);
 extern pascal trap void C_ShutDwnStart(void);
 extern pascal trap void C_ShutDwnInstall(ProcPtr shutdown_proc,
-                                         int16 flags);
+                                         int16_t flags);
 extern pascal trap void C_ShutDwnRemove(ProcPtr shutdown_proc);
 }

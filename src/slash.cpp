@@ -143,7 +143,7 @@ int Ustat(const char *path, struct stat *buf)
 #if defined(CYGWIN32)
     else
     {
-        uint32 ino;
+        uint32_t ino;
 
         ino = ino_from_name(path);
         buf->st_ino = ino >> 16; /* See definition of ST_INO */

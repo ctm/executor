@@ -183,10 +183,10 @@ P2(PUBLIC pascal trap, BOOLEAN, GetAuxCtl, ControlHandle, ctl, /* IMV-222 */
     }
 }
 
-int32 Executor::ROMlib_ctlcall(ControlHandle c, int16 i, int32 l)
+int32_t Executor::ROMlib_ctlcall(ControlHandle c, int16_t i, int32_t l)
 {
     Handle defproc;
-    int32 retval;
+    int32_t retval;
     ctlfuncp cp;
 
     defproc = CTL_DEFPROC(c);

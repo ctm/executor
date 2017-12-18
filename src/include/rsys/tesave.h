@@ -42,7 +42,7 @@ typedef struct
 
     /* ### is tesave mac-visible state?  how is color and whatnot really
      stored? */
-    GUEST<int32> fg_color, bk_color;
+    GUEST<int32_t> fg_color, bk_color;
     /* only filled if `CGrafPort_p ()' */
     GUEST<RGBColor> rgb_fg_color, rgb_bk_color;
 } tesave;
@@ -68,12 +68,12 @@ typedef struct
 typedef struct generic_elt
 {
     GUEST_STRUCT;
-    GUEST<int16> Height;
-    GUEST<int16> Ascent;
-    GUEST<int16> Font;
+    GUEST<int16_t> Height;
+    GUEST<int16_t> Ascent;
+    GUEST<int16_t> Font;
     GUEST<Style> Face;
     GUEST<Byte> filler;
-    GUEST<int16> Size;
+    GUEST<int16_t> Size;
     GUEST<RGBColor> Color;
 } generic_elt_t;
 
@@ -92,16 +92,16 @@ extern INTEGER ROMlib_StyleTextWidth(TEPtr tep, INTEGER start,
 extern INTEGER ROMlib_word(char *p);
 
 extern void ROMlib_caltext(TEHandle te,
-                           int16 sel, int16 n_added,
-                           int16 *first_changed_out, int16 *last_changed_out);
+                           int16_t sel, int16_t n_added,
+                           int16_t *first_changed_out, int16_t *last_changed_out);
 
-extern void te_char_to_point(const TEPtr tep, int16 sel, Point *p);
+extern void te_char_to_point(const TEPtr tep, int16_t sel, Point *p);
 extern void ROMlib_togglelite(TEHandle teh);
 extern void ROMlib_tesave(tesave *t, TEHandle teh);
 extern void ROMlib_terestore(tesave *t);
 
 extern void ROMlib_tedoitall(TEHandle teh, Ptr ptr,
-                             int16 len, bool insert, StScrpHandle styleh);
+                             int16_t len, bool insert, StScrpHandle styleh);
 
 extern void ROMlib_teinsertstyleinfo(TEHandle teh, INTEGER start,
                                      INTEGER len, StScrpHandle styleh);
@@ -109,13 +109,13 @@ extern void ROMlib_teremovestyleinfo(TEStyleHandle sth, INTEGER start,
                                      INTEGER stop);
 extern INTEGER C_ROMlib_dotext(TEPtr tep, INTEGER first, INTEGER last,
                                INTEGER what);
-extern int16 te_char_to_run_index(TEStyleHandle te_style, int16 sel);
-extern int16 te_char_to_lineno(TEPtr te, int16 sel);
+extern int16_t te_char_to_run_index(TEStyleHandle te_style, int16_t sel);
+extern int16_t te_char_to_lineno(TEPtr te, int16_t sel);
 
 extern void ROMlib_teautoloop(TEHandle teh);
 
-extern int16 ROMlib_call_TEDoText(TEPtr tp, int16 first, int16 last,
-                                  int16 what);
+extern int16_t ROMlib_call_TEDoText(TEPtr tp, int16_t first, int16_t last,
+                                  int16_t what);
 
 struct tehidden
 {

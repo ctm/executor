@@ -79,7 +79,7 @@ enum
 
 PRIVATE OSErr
 try_to_get_memory(void **addrp, syn68k_addr_t default_syn_address,
-                  uint32 total_size, int alignment)
+                  uint32_t total_size, int alignment)
 {
     OSErr retval;
 #if !defined(linux)
@@ -113,9 +113,9 @@ enum
 
 PRIVATE OSErr
 load_unpacked_section(const void *mmapped_addr,
-                      syn68k_addr_t default_address, uint32 total_size,
-                      uint32 packed_size, uint32 unpacked_size,
-                      uint32 section_offset, share_kind_t share_kind,
+                      syn68k_addr_t default_address, uint32_t total_size,
+                      uint32_t packed_size, uint32_t unpacked_size,
+                      uint32_t section_offset, share_kind_t share_kind,
                       int alignment, section_info_t *infop)
 {
     OSErr retval;
@@ -148,11 +148,11 @@ load_unpacked_section(const void *mmapped_addr,
 }
 
 PRIVATE OSErr
-repeat_block(uint32 repeat_count, uint32 block_size, uint8 **destpp,
-             const uint8 **srcpp, uint32 *dest_lengthp, uint32 *src_lengthp)
+repeat_block(uint32_t repeat_count, uint32_t block_size, uint8 **destpp,
+             const uint8 **srcpp, uint32_t *dest_lengthp, uint32_t *src_lengthp)
 {
     OSErr retval;
-    uint32 total_bytes_to_write;
+    uint32_t total_bytes_to_write;
 
     total_bytes_to_write = repeat_count * block_size;
     if(total_bytes_to_write > *dest_lengthp || block_size > *src_lengthp)
@@ -173,10 +173,10 @@ repeat_block(uint32 repeat_count, uint32 block_size, uint8 **destpp,
 }
 
 PRIVATE OSErr
-extract_count(const uint8 **srcpp, uint32 *lengthp, uint32 *countp)
+extract_count(const uint8 **srcpp, uint32_t *lengthp, uint32_t *countp)
 {
     OSErr retval;
-    uint32 count;
+    uint32_t count;
     uint8 next_piece;
 
     count = *countp;
@@ -198,12 +198,12 @@ extract_count(const uint8 **srcpp, uint32 *lengthp, uint32 *countp)
 }
 
 PRIVATE OSErr
-interleave(uint32 repeat_count, uint32 custom_size, uint8 **destpp,
-           const uint8 **srcpp, uint32 *dest_lengthp, uint32 *src_lengthp,
-           uint32 common_size, const uint8 *common_mem)
+interleave(uint32_t repeat_count, uint32_t custom_size, uint8 **destpp,
+           const uint8 **srcpp, uint32_t *dest_lengthp, uint32_t *src_lengthp,
+           uint32_t common_size, const uint8 *common_mem)
 {
     OSErr retval;
-    uint32 total_size;
+    uint32_t total_size;
 
     total_size = repeat_count * (common_size + custom_size) + common_size;
     if(total_size > *dest_lengthp || custom_size * repeat_count > *src_lengthp)
@@ -234,8 +234,8 @@ interleave(uint32 repeat_count, uint32 custom_size, uint8 **destpp,
 }
 
 PRIVATE OSErr
-pattern_initialize(uint8 *addr, const uint8 *patmem, uint32 packed_size,
-                   uint32 unpacked_size)
+pattern_initialize(uint8 *addr, const uint8 *patmem, uint32_t packed_size,
+                   uint32_t unpacked_size)
 {
     OSErr retval;
 
@@ -243,7 +243,7 @@ pattern_initialize(uint8 *addr, const uint8 *patmem, uint32 packed_size,
     while(retval == noErr && packed_size > 0)
     {
         uint8 opcode;
-        uint32 count;
+        uint32_t count;
 
         opcode = *patmem >> 5;
         count = (*patmem & 0x1f);
@@ -271,7 +271,7 @@ pattern_initialize(uint8 *addr, const uint8 *patmem, uint32 packed_size,
                     break;
                 case 2:
                 {
-                    uint32 repeat_count;
+                    uint32_t repeat_count;
 
                     repeat_count = 0;
                     retval = extract_count(&patmem, &packed_size, &repeat_count);
@@ -284,15 +284,15 @@ pattern_initialize(uint8 *addr, const uint8 *patmem, uint32 packed_size,
                 case 3:
                 case 4:
                 {
-                    uint32 common_size;
-                    uint32 custom_size;
+                    uint32_t common_size;
+                    uint32_t custom_size;
 
                     common_size = count;
                     custom_size = 0;
                     retval = extract_count(&patmem, &packed_size, &custom_size);
                     if(retval == noErr)
                     {
-                        uint32 repeat_count;
+                        uint32_t repeat_count;
 
                         repeat_count = 0;
                         retval = extract_count(&patmem, &packed_size,
@@ -340,9 +340,9 @@ pattern_initialize(uint8 *addr, const uint8 *patmem, uint32 packed_size,
 
 PRIVATE OSErr
 load_pattern_section(const void *mmapped_addr,
-                     syn68k_addr_t default_address, uint32 total_size,
-                     uint32 packed_size, uint32 unpacked_size,
-                     uint32 section_offset, share_kind_t share_kind,
+                     syn68k_addr_t default_address, uint32_t total_size,
+                     uint32_t packed_size, uint32_t unpacked_size,
+                     uint32_t section_offset, share_kind_t share_kind,
                      int alignment, section_info_t *infop)
 {
     OSErr retval;
@@ -368,10 +368,10 @@ load_pattern_section(const void *mmapped_addr,
 }
 
 PRIVATE void
-repeatedly_relocate(uint32 count, uint8 **relocAddressp, uint32 val)
+repeatedly_relocate(uint32_t count, uint8 **relocAddressp, uint32_t val)
 {
-    uint32 *p;
-    p = (uint32 *)*relocAddressp;
+    uint32_t *p;
+    p = (uint32_t *)*relocAddressp;
     while(count-- > 0)
     {
         *p = CL(CL(*p) + val);
@@ -579,7 +579,7 @@ P6(PUBLIC pascal trap, OSErr, GetSharedLibrary, Str63, library, OSType, arch,
 
 P1(PUBLIC pascal trap, OSErr, CloseConnection, ConnectionID *, cidp)
 {
-    warning_trace_info("cidp = %p, cid = 0x%x", cidp, (uint32)*cidp);
+    warning_trace_info("cidp = %p, cid = 0x%x", cidp, (uint32_t)*cidp);
     return noErr;
 }
 
@@ -587,17 +587,17 @@ enum
 {
     tracking_val_start = 0x88123456
 };
-PRIVATE uint32 num_tracking_vals;
+PRIVATE uint32_t num_tracking_vals;
 PRIVATE char **tracking_symbols;
 
 PRIVATE void
 tracking_handler(int signum, struct sigcontext sc)
 {
-    uint32 r12;
-    uint32 val;
+    uint32_t r12;
+    uint32_t val;
 
     r12 = sc.regs->gpr[PT_R12];
-    val = r12 - (uint32)tracking_val_start;
+    val = r12 - (uint32_t)tracking_val_start;
     if(val < num_tracking_vals)
         fprintf(stderr, "Need glue for '%s'\n", tracking_symbols[val]);
     ExitToShell();
@@ -618,10 +618,10 @@ ROMlib_release_tracking_values(void)
     signal(SIGSEGV, (void *)tracking_handler);
 }
 
-PRIVATE uint32
+PRIVATE uint32_t
 tracking_value(const char *symbol_name)
 {
-    uint32 retval;
+    uint32_t retval;
 
     tracking_symbols = realloc(tracking_symbols,
                                (num_tracking_vals + 1) * sizeof *tracking_symbols);
@@ -632,7 +632,7 @@ tracking_value(const char *symbol_name)
 }
 
 PRIVATE OSErr
-symbol_lookup(uint32 *indexp, Ptr *valp, uint8 imports[][4],
+symbol_lookup(uint32_t *indexp, Ptr *valp, uint8 imports[][4],
               const char *symbol_names, CFragClosureID closure_id)
 {
     OSErr retval;
@@ -654,7 +654,7 @@ symbol_lookup(uint32 *indexp, Ptr *valp, uint8 imports[][4],
         for(i = 0; i < n_libs; ++i)
         {
             const lib_t *l;
-            uint32 first_symbol;
+            uint32_t first_symbol;
 
             l = &closure_id->libs[i];
             first_symbol = LIB_FIRST_SYMBOL(l);
@@ -684,16 +684,16 @@ symbol_lookup(uint32 *indexp, Ptr *valp, uint8 imports[][4],
 
 PRIVATE OSErr
 relocate(const PEFLoaderRelocationHeader_t reloc_headers[],
-         int section, uint32 reloc_count, uint8 reloc_instrs[][2],
+         int section, uint32_t reloc_count, uint8 reloc_instrs[][2],
          uint8 imports[][4], const char *symbol_names,
          CFragClosureID closure_id, ConnectionID connp)
 {
     OSErr retval;
     uint8 *relocAddress;
-    uint32 importIndex;
+    uint32_t importIndex;
     syn68k_addr_t sectionC;
     syn68k_addr_t sectionD;
-    int32 repeat_remaining;
+    int32_t repeat_remaining;
 
     repeat_remaining = -1; /* i.e. not currently processing RelocSmRepeat or
 			    RelocLgRepeat */
@@ -773,7 +773,7 @@ relocate(const PEFLoaderRelocationHeader_t reloc_headers[],
                                                        closure_id);
                                 if(retval == noErr)
                                     repeatedly_relocate(1, &relocAddress,
-                                                        (uint32)symbol_val);
+                                                        (uint32_t)symbol_val);
                             }
                             break;
                         default:
@@ -801,7 +801,7 @@ relocate(const PEFLoaderRelocationHeader_t reloc_headers[],
                                                    closure_id);
                             if(retval == noErr)
                                 repeatedly_relocate(1, &relocAddress,
-                                                    (uint32)symbol_val);
+                                                    (uint32_t)symbol_val);
                             break;
                         case 1:
                             sectionC = connp->sects[index].start;
@@ -829,7 +829,7 @@ relocate(const PEFLoaderRelocationHeader_t reloc_headers[],
                     {
                         case 8:
                         {
-                            uint32 offset;
+                            uint32_t offset;
 
                             offset = ((msb & 0xf) << 8) | (reloc_instrs[0][1]);
                             ++offset;
@@ -865,7 +865,7 @@ relocate(const PEFLoaderRelocationHeader_t reloc_headers[],
                             {
                                 case 0x28:
                                 {
-                                    uint32 offset;
+                                    uint32_t offset;
 
                                     offset = ((msb & 3) << 24 | (reloc_instrs[0][1]) << 16 | (reloc_instrs[0][2]) << 8 | (reloc_instrs[0][3]));
 
@@ -887,7 +887,7 @@ relocate(const PEFLoaderRelocationHeader_t reloc_headers[],
                                                            closure_id);
                                     if(retval == noErr)
                                         repeatedly_relocate(1, &relocAddress,
-                                                            (uint32)symbol_val);
+                                                            (uint32_t)symbol_val);
                                 }
                                     --reloc_count;
                                     ++reloc_instrs;
@@ -918,7 +918,7 @@ relocate(const PEFLoaderRelocationHeader_t reloc_headers[],
 }
 
 PRIVATE CFragClosureID
-begin_closure(uint32 n_libs, PEFImportedLibrary_t *libs,
+begin_closure(uint32_t n_libs, PEFImportedLibrary_t *libs,
               const char *symbol_names, OSType arch)
 {
     CFragClosureID retval;
@@ -958,18 +958,18 @@ begin_closure(uint32 n_libs, PEFImportedLibrary_t *libs,
 
 PRIVATE OSErr
 load_loader_section(const void *addr,
-                    syn68k_addr_t default_address, uint32 total_size,
-                    uint32 packed_size, uint32 unpacked_size,
-                    uint32 section_offset, share_kind_t share_kind,
+                    syn68k_addr_t default_address, uint32_t total_size,
+                    uint32_t packed_size, uint32_t unpacked_size,
+                    uint32_t section_offset, share_kind_t share_kind,
                     int alignment, syn68k_addr_t *mainAddrp, OSType arch,
                     ConnectionID connp)
 {
     OSErr retval;
     char *loader_section_bytes;
     PEFLoaderInfoHeader_t *lihp;
-    uint32 n_libs;
-    uint32 n_imports;
-    uint32 n_reloc_headers;
+    uint32_t n_libs;
+    uint32_t n_imports;
+    uint32_t n_reloc_headers;
     PEFImportedLibrary_t *libs;
     uint8(*imports)[4];
     PEFLoaderRelocationHeader_t *reloc_headers;
@@ -996,7 +996,7 @@ load_loader_section(const void *addr,
 
     for(i = 0, retval = noErr; retval == noErr && i < n_reloc_headers; ++i)
     {
-        uint32 reloc_count;
+        uint32_t reloc_count;
         uint8(*reloc_instrs)[2];
 
         reloc_count = PEFRLH_RELOC_COUNT(&reloc_headers[i]);
@@ -1010,21 +1010,21 @@ load_loader_section(const void *addr,
     }
     if(retval == noErr && lihp->initSection != 0xffffffff)
     {
-        uint32 *init_addr;
-        uint32 init_toc;
-        uint32 (*init_routine)(uint32);
+        uint32_t *init_addr;
+        uint32_t init_toc;
+        uint32_t (*init_routine)(uint32_t);
         InitBlock init_block;
 
         warning_unimplemented("register preservation, bad init_block");
         // #warning this code has a lot of problems (register preservation, bad init_block)
 
-        init_addr = (uint32 *)SYN68K_TO_US(connp->sects[PEFLIH_INIT_SECTION(lihp)].start + PEFLIH_INIT_OFFSET(lihp));
+        init_addr = (uint32_t *)SYN68K_TO_US(connp->sects[PEFLIH_INIT_SECTION(lihp)].start + PEFLIH_INIT_OFFSET(lihp));
 
         memset(&init_block, 0xFA, sizeof init_block);
-        init_routine = (uint32(*)(uint32))SYN68K_TO_US(init_addr[0]);
-        init_toc = (uint32)SYN68K_TO_US(init_addr[1]);
+        init_routine = (uint32_t(*)(uint32_t))SYN68K_TO_US(init_addr[0]);
+        init_toc = (uint32_t)SYN68K_TO_US(init_addr[1]);
 #if defined(powerpc) || defined(__ppc__)
-        retval = ppc_call(init_toc, init_routine, (uint32)&init_block);
+        retval = ppc_call(init_toc, init_routine, (uint32_t)&init_block);
 #else
         warning_unexpected(NULL_STRING);
         retval = paramErr;
@@ -1049,10 +1049,10 @@ do_pef_section(ConnectionID connp, const void *addr,
     OSErr retval;
     const PEFSectionHeader_t *shp;
     syn68k_addr_t default_address;
-    uint32 total_size;
-    uint32 packed_size;
-    uint32 unpacked_size;
-    uint32 section_offset;
+    uint32_t total_size;
+    uint32_t packed_size;
+    uint32_t unpacked_size;
+    uint32_t section_offset;
     int share_kind;
     int alignment;
 
@@ -1060,7 +1060,7 @@ do_pef_section(ConnectionID connp, const void *addr,
 
 #if 1
     {
-        uint32 def;
+        uint32_t def;
 
         def = PEFSH_DEFAULT_ADDRESS(shp);
         if(def)
@@ -1136,7 +1136,7 @@ do_pef_section(ConnectionID connp, const void *addr,
 typedef enum { ICACHE } flush_type_t;
 
 PRIVATE void
-cacheflush(void *start, uint32 length, flush_type_t flush)
+cacheflush(void *start, uint32_t length, flush_type_t flush)
 {
 #if defined(powerpc) || defined(__ppc__)
     enum
@@ -1234,7 +1234,7 @@ do_pef_sections(ConnectionID connp, const PEFContainerHeader_t *headp,
 }
 
 PUBLIC ConnectionID
-ROMlib_new_connection(uint32 n_sects)
+ROMlib_new_connection(uint32_t n_sects)
 {
     ConnectionID retval;
     Size n_bytes;
@@ -1247,7 +1247,7 @@ ROMlib_new_connection(uint32 n_sects)
 }
 
 P7(PUBLIC pascal trap, OSErr, GetMemFragment, void *, addr,
-   uint32, length, Str63, fragname, LoadFlags, flags,
+   uint32_t, length, Str63, fragname, LoadFlags, flags,
    ConnectionID *, connp, Ptr *, mainAddrp, Str255, errname)
 {
     OSErr retval;

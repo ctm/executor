@@ -96,7 +96,7 @@ C_DragTheRgn( RgnHandle rgn, Point startp,
 
 /* here are some low-memory global accessors */
 
-PRIVATE int32
+PRIVATE int32_t
 LMGetLastSPExtra(void)
 {
     warning_trace_info(NULL_STRING);
@@ -145,7 +145,7 @@ LMGetWidthPtr(void)
     return (Ptr)MR(WidthPtr);
 }
 
-PRIVATE uint32
+PRIVATE uint32_t
 LMGetCaretTime(void)
 {
     warning_trace_info(NULL_STRING);
@@ -207,7 +207,7 @@ LMGetTopMenuItem(void)
     return CW(TopMenuItem);
 }
 
-PRIVATE uint32
+PRIVATE uint32_t
 LMGetDoubleTime(void)
 {
     warning_trace_info(NULL_STRING);
@@ -235,7 +235,7 @@ LMGetWidthTabHandle(void)
     return (Handle)MR(WidthTabHandle);
 }
 
-PRIVATE int16
+PRIVATE int16_t
 LMGetROM85(void)
 {
     warning_trace_info(NULL_STRING);
@@ -298,7 +298,7 @@ LMGetApplZone(void)
     return MR(ApplZone);
 }
 
-PRIVATE uint32
+PRIVATE uint32_t
 LMGetTicks(void)
 {
     warning_trace_info(NULL_STRING);
@@ -355,7 +355,7 @@ LMGetScrVRes(void)
 }
 
 PRIVATE void
-LMSetMenuDisable(int32 val)
+LMSetMenuDisable(int32_t val)
 {
     warning_trace_info(NULL_STRING);
     MenuDisable = CL(val);
@@ -598,7 +598,7 @@ LMGetTEScrpLength(void)
     return CW(TEScrpLength);
 }
 
-PRIVATE uint32
+PRIVATE uint32_t
 LMGetTime(void)
 {
     warning_trace_info(NULL_STRING);
@@ -1293,8 +1293,8 @@ NewDialog_SYSV4(Ptr dst, Rect *r, StringPtr tit, BOOLEAN vis, INTEGER procid,
 }
 
 PUBLIC OSErr
-OutlineMetrics_SYSV4(int16 byte_count, Ptr text, PointAsLong numerAL,
-                     PointAsLong denomAL, int16 *y_max, int16 *y_min,
+OutlineMetrics_SYSV4(int16_t byte_count, Ptr text, PointAsLong numerAL,
+                     PointAsLong denomAL, int16_t *y_max, int16_t *y_min,
                      Fixed *aw_array, const outlinemetrics_aixtosysv4 *pbp)
 {
     Point numer;
@@ -1564,7 +1564,7 @@ StdText_PC(INTEGER n, Ptr textbufp, PointAsLong numAL, PointAsLong denAL)
     StdText(n, textbufp, num, den);
 }
 
-typedef uint32 CellAsLong;
+typedef uint32_t CellAsLong;
 
 PRIVATE void
 LFind_PC(INTEGER *offsetp, INTEGER *lenp, CellAsLong cellAL, ListHandle list)
@@ -1680,7 +1680,7 @@ TrackBox_PC(WindowPtr wp, PointAsLong ptAL, INTEGER part)
 
 /* Some stubs that are very likely to give us all sorts of trouble */
 
-typedef int32 OSStatus;
+typedef int32_t OSStatus;
 
 PRIVATE OSStatus
 RegisterAppearanceClient_stub(void)
@@ -1722,7 +1722,7 @@ enum
 // #warning we should really merge this with what is in emustubs.c
 
 PRIVATE void
-NSetTrapAddress_stub(UniversalProcPtr addr, uint16 trapnum, TrapType typ)
+NSetTrapAddress_stub(UniversalProcPtr addr, uint16_t trapnum, TrapType typ)
 {
     switch(typ)
     {
@@ -1742,17 +1742,17 @@ NSetTrapAddress_stub(UniversalProcPtr addr, uint16 trapnum, TrapType typ)
 }
 
 PRIVATE void
-SetOSTrapAddress(UniversalProcPtr addr, uint16 trapnum)
+SetOSTrapAddress(UniversalProcPtr addr, uint16_t trapnum)
 {
     warning_trace_info(NULL_STRING);
     NSetTrapAddress_stub(addr, trapnum, kOSTrapType);
 }
 
 PRIVATE UniversalProcPtr
-GetToolTrapAddress(uint16 trap_no)
+GetToolTrapAddress(uint16_t trap_no)
 {
     UniversalProcPtr retval;
-    uint32 d0, a0;
+    uint32_t d0, a0;
 
     d0 = trap_no;
     ROMlib_GetTrapAddress_helper(&d0, 0xA746, &a0);
@@ -1762,10 +1762,10 @@ GetToolTrapAddress(uint16 trap_no)
 }
 
 PRIVATE UniversalProcPtr
-GetOSTrapAddress(uint16 trap_no)
+GetOSTrapAddress(uint16_t trap_no)
 {
     UniversalProcPtr retval;
-    uint32 d0, a0;
+    uint32_t d0, a0;
 
     d0 = trap_no;
     ROMlib_GetTrapAddress_helper(&d0, 0xA346, &a0);
@@ -1786,10 +1786,10 @@ SetA5(long val)
 }
 
 PRIVATE int
-count_and_reverse_args(uint32 *infop)
+count_and_reverse_args(uint32_t *infop)
 {
-    uint32 info_in;
-    uint32 info_out;
+    uint32_t info_in;
+    uint32_t info_out;
     int retval;
 
     info_in = *infop;
@@ -1805,12 +1805,12 @@ count_and_reverse_args(uint32 *infop)
 
 PRIVATE int
 extract_stack_parameters(ProcInfoType info, va_list ap,
-                         uint32 params[13], int widths[13],
+                         uint32_t params[13], int widths[13],
                          where_args_t where)
 {
     int n_params;
     int convention;
-    uint32 *argp;
+    uint32_t *argp;
     int *widp;
 
     int incr;
@@ -1851,14 +1851,14 @@ extract_stack_parameters(ProcInfoType info, va_list ap,
         {
             case kOneByteCode:
                 if(where == args_via_stdarg)
-                    *argp = (uint8)va_arg(ap, uint32);
+                    *argp = (uint8)va_arg(ap, uint32_t);
                 else
                     *argp = POPUB();
                 *widp = 1;
                 break;
             case kTwoByteCode:
                 if(where == args_via_stdarg)
-                    *argp = (uint16)va_arg(ap, uint32);
+                    *argp = (uint16_t)va_arg(ap, uint32_t);
                 else
                     *argp = POPUW();
                 *widp = 2;
@@ -1868,7 +1868,7 @@ extract_stack_parameters(ProcInfoType info, va_list ap,
             /* FALL THROUGH */
             case kFourByteCode:
                 if(where == args_via_stdarg)
-                    *argp = (uint32)va_arg(ap, uint32);
+                    *argp = (uint32_t)va_arg(ap, uint32_t);
                 else
                     *argp = POPUL();
                 *widp = 4;
@@ -1884,11 +1884,11 @@ extract_stack_parameters(ProcInfoType info, va_list ap,
 }
 
 PRIVATE int
-extract_68k_reg_parameters(ProcInfoType orig_info, uint32 params[13],
+extract_68k_reg_parameters(ProcInfoType orig_info, uint32_t params[13],
                            int widths[13])
 {
     int retval;
-    uint32 info;
+    uint32_t info;
     int i;
     bool seen_a_zero_p;
     bool suspicious_info_p;
@@ -1916,7 +1916,7 @@ extract_68k_reg_parameters(ProcInfoType orig_info, uint32 params[13],
         }
         else
         {
-            uint32 reg_contents;
+            uint32_t reg_contents;
             static int map[] = {
                 0, /* kRegisterD0,  0 */
                 1, /* kRegisterD1,  1 */
@@ -1955,8 +1955,8 @@ PRIVATE long
 Call68KProc_from_native(void *addr, ProcInfoType info, va_list ap)
 {
     long retval;
-    uint32 params[13];
-    uint32 *argp;
+    uint32_t params[13];
+    uint32_t *argp;
     int incr;
     int widths[13];
     int n_params;
@@ -2015,7 +2015,7 @@ Call68KProc_from_native(void *addr, ProcInfoType info, va_list ap)
 
     while(info)
     {
-        uint32 param_width;
+        uint32_t param_width;
 
         param_width = (info & 0x3);
         switch(param_width)
@@ -2033,7 +2033,7 @@ Call68KProc_from_native(void *addr, ProcInfoType info, va_list ap)
             break;
             case kTwoByteCode:
             {
-                uint16 w;
+                uint16_t w;
 
                 w = *argp;
                 PUSHUW(w);
@@ -2041,7 +2041,7 @@ Call68KProc_from_native(void *addr, ProcInfoType info, va_list ap)
             break;
             case kFourByteCode:
             {
-                uint32 l;
+                uint32_t l;
 
                 l = *argp;
                 PUSHUL(l);
@@ -2063,7 +2063,7 @@ Call68KProc_from_native(void *addr, ProcInfoType info, va_list ap)
                 retval = (uint8)EM_D0;
                 break;
             case 2:
-                retval = (uint16)EM_D0;
+                retval = (uint16_t)EM_D0;
                 break;
             case 4:
                 retval = EM_D0;
@@ -2098,7 +2098,7 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
                                      ProcPtr proc, ProcInfoType info)
 {
     long retval;
-    uint32 params[13];
+    uint32_t params[13];
     int widths[13];
     int n_params;
 
@@ -2110,10 +2110,10 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
     else
         n_params = extract_stack_parameters(info, ap, params, widths, where);
     {
-        uint32 *transition_vectorp;
-        register uint32 toc asm("r2");
+        uint32_t *transition_vectorp;
+        register uint32_t toc asm("r2");
 
-        transition_vectorp = (uint32 *)proc;
+        transition_vectorp = (uint32_t *)proc;
         toc = transition_vectorp[1];
         asm volatile(""
                      :
@@ -2130,7 +2130,7 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
             break;
             case 1:
             {
-                long (*funcp)(uint32);
+                long (*funcp)(uint32_t);
 
                 funcp = (decltype(funcp))transition_vectorp[0];
                 retval = funcp(params[0]);
@@ -2138,7 +2138,7 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
             break;
             case 2:
             {
-                long (*funcp)(uint32, uint32);
+                long (*funcp)(uint32_t, uint32_t);
 
                 funcp = (decltype(funcp))transition_vectorp[0];
                 retval = funcp(params[0], params[1]);
@@ -2146,7 +2146,7 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
             break;
             case 3:
             {
-                long (*funcp)(uint32, uint32, uint32);
+                long (*funcp)(uint32_t, uint32_t, uint32_t);
 
                 funcp = (decltype(funcp))transition_vectorp[0];
                 retval = funcp(params[0], params[1], params[2]);
@@ -2154,7 +2154,7 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
             break;
             case 4:
             {
-                long (*funcp)(uint32, uint32, uint32, uint32);
+                long (*funcp)(uint32_t, uint32_t, uint32_t, uint32_t);
 
                 funcp = (decltype(funcp))transition_vectorp[0];
                 retval = funcp(params[0], params[1], params[2], params[3]);
@@ -2162,7 +2162,7 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
             break;
             case 5:
             {
-                long (*funcp)(uint32, uint32, uint32, uint32, uint32);
+                long (*funcp)(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
 
                 funcp = (decltype(funcp))transition_vectorp[0];
                 retval = funcp(params[0], params[1], params[2], params[3],
@@ -2171,7 +2171,7 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
             break;
             case 6:
             {
-                long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32);
+                long (*funcp)(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
 
                 funcp = (decltype(funcp))transition_vectorp[0];
                 retval = funcp(params[0], params[1], params[2], params[3],
@@ -2180,8 +2180,8 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
             break;
             case 7:
             {
-                long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32,
-                              uint32);
+                long (*funcp)(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t,
+                              uint32_t);
 
                 funcp = (decltype(funcp))transition_vectorp[0];
                 retval = funcp(params[0], params[1], params[2], params[3],
@@ -2190,8 +2190,8 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
             break;
             case 8:
             {
-                long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32,
-                              uint32, uint32);
+                long (*funcp)(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t,
+                              uint32_t, uint32_t);
 
                 funcp = (decltype(funcp))transition_vectorp[0];
                 retval = funcp(params[0], params[1], params[2], params[3],
@@ -2200,8 +2200,8 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
             break;
             case 9:
             {
-                long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32,
-                              uint32, uint32, uint32);
+                long (*funcp)(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t,
+                              uint32_t, uint32_t, uint32_t);
 
                 funcp = (decltype(funcp))transition_vectorp[0];
                 retval = funcp(params[0], params[1], params[2], params[3],
@@ -2211,8 +2211,8 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
             break;
             case 10:
             {
-                long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32,
-                              uint32, uint32, uint32, uint32);
+                long (*funcp)(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t,
+                              uint32_t, uint32_t, uint32_t, uint32_t);
 
                 funcp = (decltype(funcp))transition_vectorp[0];
                 retval = funcp(params[0], params[1], params[2], params[3],
@@ -2222,8 +2222,8 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
             break;
             case 11:
             {
-                long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32,
-                              uint32, uint32, uint32, uint32, uint32);
+                long (*funcp)(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t,
+                              uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
 
                 funcp = (decltype(funcp))transition_vectorp[0];
                 retval = funcp(params[0], params[1], params[2], params[3],
@@ -2233,8 +2233,8 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
             break;
             case 12:
             {
-                long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32,
-                              uint32, uint32, uint32, uint32, uint32, uint32);
+                long (*funcp)(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t,
+                              uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
 
                 funcp = (decltype(funcp))transition_vectorp[0];
                 retval = funcp(params[0], params[1], params[2], params[3],
@@ -2244,9 +2244,9 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
             break;
             case 13:
             {
-                long (*funcp)(uint32, uint32, uint32, uint32, uint32, uint32,
-                              uint32, uint32, uint32, uint32, uint32, uint32,
-                              uint32);
+                long (*funcp)(uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t,
+                              uint32_t, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t,
+                              uint32_t);
 
                 funcp = (decltype(funcp))transition_vectorp[0];
                 retval = funcp(params[0], params[1], params[2], params[3],
@@ -2272,8 +2272,8 @@ CallUniversalProc_from_native(UniversalProcPtr proc, ProcInfoType info, ...)
 
     va_start(ap, info);
 
-    warning_trace_info("proc = %p, *proc = 0x%04x", proc, *(uint16 *)proc);
-    if(proc->goMixedModeTrap != (uint16)CWC(MIXED_MODE_TRAP))
+    warning_trace_info("proc = %p, *proc = 0x%04x", proc, *(uint16_t *)proc);
+    if(proc->goMixedModeTrap != (uint16_t)CWC(MIXED_MODE_TRAP))
         retval = Call68KProc_from_native(proc, info, ap);
     else if(proc->routineRecords[0].ISA == CBC(kM68kISA))
         retval = Call68KProc_from_native(proc->routineRecords[0].procDescriptor,
@@ -2291,11 +2291,11 @@ PRIVATE void
 microseconds(uint64_t *retp)
 {
     warning_trace_info(NULL_STRING);
-    *retp = (uint64_t)(uint32)msecs_elapsed() * 1000;
+    *retp = (uint64_t)(uint32_t)msecs_elapsed() * 1000;
 }
 
 PRIVATE void
-PurgeSpace_wrapper(uint32 *totalp, uint32 *contigp)
+PurgeSpace_wrapper(uint32_t *totalp, uint32_t *contigp)
 {
     PurgeSpace(totalp, contigp);
     warning_trace_info("%d %d", *totalp, *contigp);
@@ -2323,23 +2323,23 @@ RecoverHandle_wrapper(Ptr p)
     return RecoverHandle(p);
 }
 
-PRIVATE uint32
+PRIVATE uint32_t
 FreeMem_wrapper(void)
 {
-    uint32 retval;
+    uint32_t retval;
 
     retval = FreeMem();
-    warning_trace_info("%d", (int32)retval);
+    warning_trace_info("%d", (int32_t)retval);
     return retval;
 }
 
-PRIVATE uint32
+PRIVATE uint32_t
 FreeMemSys_wrapper(void)
 {
-    uint32 retval;
+    uint32_t retval;
 
     retval = FreeMemSys();
-    warning_trace_info("%d", (int32)retval);
+    warning_trace_info("%d", (int32_t)retval);
     return retval;
 }
 
@@ -2350,13 +2350,13 @@ ReserveMem_wrapper(Size size)
     ResrvMem(size);
 }
 
-PRIVATE uint32
+PRIVATE uint32_t
 SetCurrentA5(void)
 {
-    uint32 retval;
+    uint32_t retval;
 
-    retval = (uint32)SYN68K_TO_US(EM_A5);
-    EM_A5 = (uint32)CL(CurrentA5);
+    retval = (uint32_t)SYN68K_TO_US(EM_A5);
+    EM_A5 = (uint32_t)CL(CurrentA5);
     warning_trace_info("old = 0x%x, new = 0x%x", retval, EM_A5);
     return retval;
 }
@@ -2824,7 +2824,7 @@ X2Fix_wrapper(double x)
 }
 
 PRIVATE void
-MakeDataExecutable(void *p, uint32 len)
+MakeDataExecutable(void *p, uint32_t len)
 {
     warning_trace_info("%p %d", p, len);
     warning_unimplemented("need to call mprotect here");

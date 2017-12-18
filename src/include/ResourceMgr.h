@@ -178,12 +178,12 @@ extern pascal trap void C_UseResFile(INTEGER rn);
 extern pascal trap void P_UseResFile(INTEGER rn);
 
 extern pascal trap void C_ReadPartialResource(Handle resource,
-                                              int32 offset,
-                                              Ptr buffer, int32 count);
+                                              int32_t offset,
+                                              Ptr buffer, int32_t count);
 extern pascal trap void C_WritePartialResource(Handle resource,
-                                               int32 offset,
-                                               Ptr buffer, int32 count);
-extern pascal trap void C_SetResourceSize(Handle resource, int32 size);
+                                               int32_t offset,
+                                               Ptr buffer, int32_t count);
+extern pascal trap void C_SetResourceSize(Handle resource, int32_t size);
 
 extern pascal Handle C_GetNextFOND(Handle fondHandle);
 }

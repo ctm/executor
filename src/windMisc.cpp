@@ -491,10 +491,10 @@ void Executor::WINDCALLDESKHOOK(void)
 PUBLIC BOOLEAN Executor::ROMlib_evil_illustrator_7_hack = false;
 #endif
 
-int32 Executor::ROMlib_windcall(WindowPtr wind, int16 mess, int32 param)
+int32_t Executor::ROMlib_windcall(WindowPtr wind, int16_t mess, int32_t param)
 {
     Handle defproc;
-    int32 retval;
+    int32_t retval;
     windprocp wp;
     Rect saverect;
 

@@ -33,8 +33,8 @@ typedef struct block_header
     GUEST<uint8> master_ptr_flags;
     GUEST<uint8> reserved;
     GUEST<uint8> size_correction;
-    GUEST<uint32> size;
-    GUEST<uint32> location_u; /* sometimes it's a pointer (the zone),
+    GUEST<uint32_t> size;
+    GUEST<uint32_t> location_u; /* sometimes it's a pointer (the zone),
 					   sometimes it's an offset */
 #if defined(MM_RECORD_ALLOCATION_STACK_TRACES)
     GUEST<int> alloc_debug_number;
@@ -43,7 +43,7 @@ typedef struct block_header
 #if defined(MM_BLOCK_HEADER_SENTINEL)
     GUEST<uint8[SENTINEL_SIZE]> post_sentinel;
 #endif
-    GUEST<uint32> data[0];
+    GUEST<uint32_t> data[0];
 } block_header_t;
 
 #define BLOCK_LOCATION_OFFSET_X(block) ((block)->location_u)
@@ -155,24 +155,24 @@ extern unsigned long ROMlib_memtop;
 #define MEM_DEBUG_P() ERROR_ENABLED_P(ERROR_TRAP_FAILURE)
 
 extern OSErr ROMlib_relalloc(Size, block_header_t **);
-extern void ROMlib_setupblock(block_header_t *, uint32, short, Handle, ...);
+extern void ROMlib_setupblock(block_header_t *, uint32_t, short, Handle, ...);
 extern void ROMlib_freeblock(block_header_t *);
-extern bool ROMlib_makespace(block_header_t **, uint32);
+extern bool ROMlib_makespace(block_header_t **, uint32_t);
 extern bool ROMlib_locked(block_header_t *);
-extern void ROMlib_moveblock(block_header_t *, block_header_t *, uint32);
-extern int32 ROMlib_amtfree(block_header_t *);
+extern void ROMlib_moveblock(block_header_t *, block_header_t *, uint32_t);
+extern int32_t ROMlib_amtfree(block_header_t *);
 extern bool ROMlib_pushblock(block_header_t *, block_header_t *);
 extern void ROMlib_coalesce(block_header_t *blk);
 
 void mm_set_block_fields_offset(block_header_t *block,
                                 unsigned state, unsigned use,
                                 unsigned size_correction,
-                                uint32 physical_size, uint32 location);
+                                uint32_t physical_size, uint32_t location);
 
 void mm_set_block_fields_zone(block_header_t *block,
                               unsigned state, unsigned use,
                               unsigned size_correction,
-                              uint32 physical_size, THz location);
+                              uint32_t physical_size, THz location);
 
 extern void checkallocptr(void);
 
@@ -180,11 +180,11 @@ extern void checkallocptr(void);
 
 typedef struct
 {
-    int32 n_rel;
-    int32 n_nrel;
-    int32 n_free;
-    int32 largest_free;
-    int32 total_free;
+    int32_t n_rel;
+    int32_t n_nrel;
+    int32_t n_free;
+    int32_t largest_free;
+    int32_t total_free;
 } zone_info_t;
 
 typedef Zone *ZonePtr;

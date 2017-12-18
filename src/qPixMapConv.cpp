@@ -19,19 +19,19 @@
 
 using namespace Executor;
 
-static uint32 depth_table_space[DEPTHCONV_MAX_UINT32_TABLE_SIZE];
+static uint32_t depth_table_space[DEPTHCONV_MAX_UINT32_TABLE_SIZE];
 
 static depthconv_func_t conversion_func = NULL;
 
-static int32 cached_src_bpp = -1, cached_dst_bpp = -1;
-static GUEST<int32> cached_src_seed_x = CLC(-1), cached_dst_seed_x = CLC(-1);
+static int32_t cached_src_bpp = -1, cached_dst_bpp = -1;
+static GUEST<int32_t> cached_src_seed_x = CLC(-1), cached_dst_seed_x = CLC(-1);
 
 static ITabHandle target_itab;
 
 rgb_spec_t Executor::mac_16bpp_rgb_spec, Executor::mac_32bpp_rgb_spec;
 
 void Executor::pixmap_black_white(const PixMap *pixmap,
-                                  uint32 *black_return, uint32 *white_return)
+                                  uint32_t *black_return, uint32_t *white_return)
 {
     if(pixmap->pixelType == CWC(RGBDirect))
     {
@@ -53,7 +53,7 @@ void Executor::pixmap_black_white(const PixMap *pixmap,
 }
 
 void Executor::gd_black_white(GDHandle gdh,
-                              uint32 *black_return, uint32 *white_return)
+                              uint32_t *black_return, uint32_t *white_return)
 {
     GDPtr gd;
     PixMapPtr gd_pmap;
@@ -95,7 +95,7 @@ void Executor::pixmap_copy(const PixMap *src_pm, const Rect *src_rect,
     return_pm->bounds = *return_rect;
 
     {
-        uint32 black_pixel, white_pixel;
+        uint32_t black_pixel, white_pixel;
         RgnHandle rgn;
         Rect tmp_rect;
 
@@ -134,7 +134,7 @@ bool Executor::pixmap_copy_if_screen(const PixMap *src_pm, const Rect *src_rect,
     return false;
 }
 
-uint32
+uint32_t
 pixel_from_rgb(RGBColor *color,
                const rgb_spec_t *rgb_spec)
 {
@@ -144,9 +144,9 @@ pixel_from_rgb(RGBColor *color,
         return Color2Index(color);
 }
 
-void Executor::canonical_from_bogo_color(uint32 index,
+void Executor::canonical_from_bogo_color(uint32_t index,
                                          const rgb_spec_t *rgb_spec,
-                                         uint32 *pixel_out,
+                                         uint32_t *pixel_out,
                                          RGBColor *rgb_out)
 {
     if(rgb_spec)
@@ -196,14 +196,14 @@ void Executor::canonical_from_bogo_color(uint32 index,
     }
 }
 
-void Executor::ROMlib_fg_bk(uint32 *fg_pixel_out, uint32 *bk_pixel_out,
+void Executor::ROMlib_fg_bk(uint32_t *fg_pixel_out, uint32_t *bk_pixel_out,
                             RGBColor *fg_rgb_out, RGBColor *bk_rgb_out,
                             const rgb_spec_t *rgb_spec,
                             bool active_screen_addr_p,
                             bool indirect_p)
 {
     GrafPtr current_port;
-    uint32 fg_pixel, bk_pixel;
+    uint32_t fg_pixel, bk_pixel;
     RGBColor fg_rgb, bk_rgb;
 
     current_port = thePort;
@@ -228,7 +228,7 @@ void Executor::ROMlib_fg_bk(uint32 *fg_pixel_out, uint32 *bk_pixel_out,
     {
         if(active_screen_addr_p)
         {
-            uint32 fg_color, bk_color;
+            uint32_t fg_color, bk_color;
 
             fg_color = PORT_FG_COLOR(current_port);
             fg_rgb = *ROMlib_qd_color_to_rgb(fg_color);
@@ -240,7 +240,7 @@ void Executor::ROMlib_fg_bk(uint32 *fg_pixel_out, uint32 *bk_pixel_out,
         }
         else
         {
-            uint32 black_pixel, white_pixel;
+            uint32_t black_pixel, white_pixel;
 
             black_pixel = pixel_from_rgb(&ROMlib_black_rgb_color,
                                          rgb_spec);
@@ -373,11 +373,11 @@ void Executor::convert_pixmap(const PixMap *src, PixMap *dst,
     GDHandle the_gd;
     int src_bpp, dst_bpp;
     int width, height;
-    GUEST<int32> dst_seed_x, src_seed_x;
+    GUEST<int32_t> dst_seed_x, src_seed_x;
     const rgb_spec_t *src_rgb_spec, *dst_rgb_spec;
 
     uint8 *src_base, *dst_base;
-    int16 src_row_bytes, dst_row_bytes;
+    int16_t src_row_bytes, dst_row_bytes;
 
     write_back_data_t write_back;
     bool copy_p;

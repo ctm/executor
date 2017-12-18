@@ -13,22 +13,22 @@
 /* Use this memory for temporary stack during calls to DOS memory.
  * DOS_STACK_TOP is the real mode offset you should use.
  */
-uint16 dos_buf_segment;
-uint16 dos_buf_selector;
+uint16_t dos_buf_segment;
+uint16_t dos_buf_selector;
 
 /* This selector refers to DOS conventional memory. */
-uint16 dos_rm_selector;
+uint16_t dos_rm_selector;
 
 /* This is our %ds selector.  We copy %ds to %ss right away in main. */
-uint16 dos_pm_ds;
+uint16_t dos_pm_ds;
 
 /* This is an alias for %ds that will always be valid, even when
  * ctrl-break is hit.  We use this at interrupt time.
  */
-uint16 dos_pm_interrupt_ds;
+uint16_t dos_pm_interrupt_ds;
 
 /* This is our %cs selector. */
-uint16 dos_pm_cs;
+uint16_t dos_pm_cs;
 
 /* Attempts to allocate a block of DOS memory of size SIZE which does
  * not span two 64K banks.  We need to make this guarantee so that calls
@@ -37,7 +37,7 @@ uint16 dos_pm_cs;
  * else false.
  */
 static bool
-alloc_single_bank_dos_block(int size, uint16 *segp, uint16 *selp)
+alloc_single_bank_dos_block(int size, uint16_t *segp, uint16_t *selp)
 {
     int selectors_to_free[16], i, j, sel, seg;
     int paragraphs;

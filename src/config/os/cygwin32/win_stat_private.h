@@ -6,7 +6,7 @@
 typedef struct stat_hash_str
 {
   char *stat_name;
-  uint32 stat_ino;
+  uint32_t stat_ino;
   struct stat_hash_str *stat_next;
 }
 stat_hash_t;

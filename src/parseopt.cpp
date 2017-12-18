@@ -21,7 +21,7 @@ using namespace std;
  * "executor -system 7.0.0".  Returns true on success, else false.
  */
 
-bool Executor::ROMlib_parse_version(string vers, uint32 *version_out)
+bool Executor::ROMlib_parse_version(string vers, uint32_t *version_out)
 {
     bool success_p;
     int major_version, minor_version, teeny_version;

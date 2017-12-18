@@ -162,7 +162,7 @@ P4(PUBLIC pascal trap, void, ScrollRect, Rect *, rp, INTEGER, dh, INTEGER, dv,
     Rect srcr, dstr;
     RgnHandle temp, temp2, updatergn2, srcregion;
     RGBColor bk_rgb, fg_rgb;
-    GUEST<int32> bk_color, fg_color;
+    GUEST<int32_t> bk_color, fg_color;
     int cgrafport_p;
     PAUSEDECL;
 

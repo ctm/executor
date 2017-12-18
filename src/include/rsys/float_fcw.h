@@ -9,8 +9,8 @@
  */
 namespace Executor
 {
-extern uint32 ROMlib_get_fcw_fsw(void);
-extern void ROMlib_set_fcw_fsw(uint32 fcwfsw);
-extern void ROMlib_compare_fcw_fsw(uint32 fcwfsw, const char *func, int line);
+extern uint32_t ROMlib_get_fcw_fsw(void);
+extern void ROMlib_set_fcw_fsw(uint32_t fcwfsw);
+extern void ROMlib_compare_fcw_fsw(uint32_t fcwfsw, const char *func, int line);
 }
 #endif

@@ -70,7 +70,7 @@ PUBLIC int Executor::ROMlib_cacheheuristic = false;
 
 A0(PUBLIC, void, flushcache)
 {
-    ROMlib_destroy_blocks((syn68k_addr_t)0, (uint32)~0, true);
+    ROMlib_destroy_blocks((syn68k_addr_t)0, (uint32_t)~0, true);
 }
 
 A2(PUBLIC trap, void, HWPriv, LONGINT, d0, LONGINT, a0)
@@ -841,7 +841,7 @@ P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
     newcode = GetResource(TICK("CODE"), segno);
     HLock(newcode);
     taboff = CW(((GUEST<INTEGER> *)STARH(newcode))[0]);
-    if((uint16)taboff == 0xA89F) /* magic compressed resource signature */
+    if((uint16_t)taboff == 0xA89F) /* magic compressed resource signature */
     {
         /* We are totally dead here.  We almost certainly can't use
 	 * `system_error' to inform the user because the window

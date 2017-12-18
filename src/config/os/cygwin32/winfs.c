@@ -262,7 +262,7 @@ statfs(const char *path, struct statfs *bufp)
 }
 
 PUBLIC int
-ROMlib_lockunlockrange(int fd, uint32 begin, uint32 count, lockunlock_t op)
+ROMlib_lockunlockrange(int fd, uint32_t begin, uint32_t count, lockunlock_t op)
 {
     int retval;
     BOOL WINAPI (*routine)(HANDLE, DWORD, DWORD, DWORD, DWORD);

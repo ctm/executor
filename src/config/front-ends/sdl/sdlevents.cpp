@@ -421,11 +421,11 @@ init_sdlk_to_mkv(void)
 #include "syswm_map.h"
 
 /* The current state of the keyboard modifiers */
-static uint16 keymod = 0;
-static uint16 right_button_keymod = 0;
+static uint16_t keymod = 0;
+static uint16_t right_button_keymod = 0;
 static GUEST<Point> mouseloc; /* To save mouse location at interrupt */
 
-static int modifier_p(unsigned char virt, uint16 *modstore)
+static int modifier_p(unsigned char virt, uint16_t *modstore)
 {
     /* Note: shift and control can be cleared if right* and left* are pressed */
     switch(virt)
@@ -496,7 +496,7 @@ handle_sdl_events(syn68k_addr_t interrupt_addr, void *unused)
             case SDL_MOUSEBUTTONUP:
             {
                 bool down_p;
-                int32 when;
+                int32_t when;
                 Point where;
 
                 if(event.button.button == 3)
@@ -549,9 +549,9 @@ handle_sdl_events(syn68k_addr_t interrupt_addr, void *unused)
             {
                 bool down_p;
                 unsigned char mkvkey;
-                uint16 mod;
+                uint16_t mod;
                 LONGINT keywhat;
-                int32 when;
+                int32_t when;
                 Point where;
 
                 init_sdlk_to_mkv();

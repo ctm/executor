@@ -30,7 +30,7 @@ extern const char *ROMlib_executor_full_name;
 
 #define EXECUTOR_NAME "executor"
 
-extern void ROMlib_set_system_version(uint32 version);
+extern void ROMlib_set_system_version(uint32_t version);
 
 #ifdef __cplusplus
 }

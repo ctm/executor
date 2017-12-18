@@ -141,7 +141,7 @@ P4(PUBLIC pascal trap, void, dcmp_template, Ptr, source, Ptr, dest,
    the compressed info. */
 
 PRIVATE bool
-decompress_setup(INTEGER rn, int32 *dlenp, int32 *final_sizep, int32 *offsetp,
+decompress_setup(INTEGER rn, int32_t *dlenp, int32_t *final_sizep, int32_t *offsetp,
                  Handle *dcmp_handlep, Ptr *workspacep)
 {
     bool retval;
@@ -186,8 +186,8 @@ decompress_setup(INTEGER rn, int32 *dlenp, int32 *final_sizep, int32 *offsetp,
             retval = false;
         else
         {
-            int32 final_size;
-            int32 working_size;
+            int32_t final_size;
+            int32_t working_size;
 
             LoadResource(*dcmp_handlep);
             final_size = CL(info.uncompressedSize);
@@ -235,13 +235,13 @@ decompress_setup(INTEGER rn, int32 *dlenp, int32 *final_sizep, int32 *offsetp,
  *       mgetres when the handle's already there.
  */
 
-PRIVATE Handle mgetres_helper(resmaphand map, resref *rr, int32 dlen,
+PRIVATE Handle mgetres_helper(resmaphand map, resref *rr, int32_t dlen,
                               Handle retval)
 {
-    int32 dcmp_offset = 0;
+    int32_t dcmp_offset = 0;
     Handle dcmp_handle = NULL;
     Ptr dcmp_workspace = NULL;
-    int32 uncompressed_size = 0;
+    int32_t uncompressed_size = 0;
     Ptr xxx;
     OSErr err;
     bool compressed_p;
@@ -343,7 +343,7 @@ Executor::ROMlib_mgetres2(resmaphand map, resref *rr)
     {
         GUEST<THz> savezone;
         SignedByte state;
-        int32 loc;
+        int32_t loc;
 
         savezone = TheZone;
         state = hlock_return_orig_state((Handle)map);
@@ -353,9 +353,9 @@ Executor::ROMlib_mgetres2(resmaphand map, resref *rr)
             retval = NULL;
         else
         {
-            int32 lc;
+            int32_t lc;
             OSErr err;
-            GUEST<int32> dlen_s; /* length on disk (remaining) */
+            GUEST<int32_t> dlen_s; /* length on disk (remaining) */
 
             lc = sizeof(Size);
             err = FSReadAll(Hx(map, resfn), &lc, (Ptr)&dlen_s);
@@ -364,7 +364,7 @@ Executor::ROMlib_mgetres2(resmaphand map, resref *rr)
                 retval = NULL;
             else
             {
-                int32 dlen = CL(dlen_s);
+                int32_t dlen = CL(dlen_s);
                 if(ResLoad)
                     retval = mgetres_helper(map, rr, dlen, retval);
                 else if(!rr->rhand)

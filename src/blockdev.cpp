@@ -13,8 +13,8 @@ using namespace Executor;
  * blockdev_close when you are done with it.
  */
 blockdev_t *
-blockdev_open(uint32 block_size,
-              uint32 max_xfer_size,
+blockdev_open(uint32_t block_size,
+              uint32_t max_xfer_size,
               int fd,
               int (*read_func)(int fd, void *buf, int nbytes),
               int (*write_func)(int fd, const void *buf, int nbytes),
@@ -28,7 +28,7 @@ blockdev_open(uint32 block_size,
     b = (blockdev_t *)malloc(sizeof *b);
     if(b)
     {
-        static uint32 unique_dcache_tag;
+        static uint32_t unique_dcache_tag;
 
         memset(b, 0, sizeof *b);
 
@@ -53,7 +53,7 @@ blockdev_open(uint32 block_size,
 /* Reads the specified number of bytes from the given offset for
  * the given device.  Returns true on success, else false.
  */
-bool Executor::blockdev_seek_set(blockdev_t *b, uint32 offset)
+bool Executor::blockdev_seek_set(blockdev_t *b, uint32_t offset)
 {
     bool success_p;
     success_p = (b->seek_func(offset, L_SET) == 0);
@@ -67,14 +67,14 @@ bool Executor::blockdev_seek_set(blockdev_t *b, uint32 offset)
 /* Reads the specified number of bytes from the given offset for
  * the given device.  Returns true on success, else false.
  */
-bool Executor::blockdev_read(blockdev_t *b, uint32 offset, void *buf, uint32 num_bytes)
+bool Executor::blockdev_read(blockdev_t *b, uint32_t offset, void *buf, uint32_t num_bytes)
 {
     bool retval;
 
     retval = false; /* default */
     if(b && b->valid_p)
     {
-        uint32 n;
+        uint32_t n;
 
         gui_assert((offset % b->block_size) == 0);
         gui_assert((num_bytes % b->block_size) == 0);
@@ -90,7 +90,7 @@ bool Executor::blockdev_read(blockdev_t *b, uint32 offset, void *buf, uint32 num
                 n += b->block_size;
             else
             {
-                uint32 bytes_to_read;
+                uint32_t bytes_to_read;
 
                 /* Cache miss.  Seek if necessary. */
                 if(offset + n != b->fpos)
@@ -123,15 +123,15 @@ done:
 /* Writes the specified number of bytes at the given offset for
  * the given device.  Returns true on success, else false.
  */
-bool Executor::blockdev_write(blockdev_t *b, uint32 offset, const void *buf,
-                              uint32 num_bytes)
+bool Executor::blockdev_write(blockdev_t *b, uint32_t offset, const void *buf,
+                              uint32_t num_bytes)
 {
     bool retval;
 
     retval = false; /* default */
     if(b && b->valid_p)
     {
-        uint32 n;
+        uint32_t n;
 
 #if !defined(BLOCKDEV_WRITE_THROUGH_CACHE)
         /* Be paranoid...nuke the cache for this device. */
@@ -143,7 +143,7 @@ bool Executor::blockdev_write(blockdev_t *b, uint32 offset, const void *buf,
 
         for(n = 0; n < num_bytes;)
         {
-            uint32 bytes_to_write;
+            uint32_t bytes_to_write;
             uint8 *p;
 
             p = (uint8 *)buf + n;

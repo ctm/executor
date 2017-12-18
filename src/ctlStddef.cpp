@@ -234,10 +234,10 @@ mapvar(int v)
 }
 
 static void
-draw_push(ControlHandle c, int16 part)
+draw_push(ControlHandle c, int16_t part)
 {
     GUEST<RgnHandle> save;
-    int16 h, v;
+    int16_t h, v;
     Rect r;
 
     r = CTL_RECT(c);
@@ -292,7 +292,7 @@ add_title(ControlHandle c)
 }
 
 static void
-draw_check(ControlHandle c, int16 part)
+draw_check(ControlHandle c, int16_t part)
 {
     Rect r;
 
@@ -325,7 +325,7 @@ draw_check(ControlHandle c, int16 part)
 }
 
 static void
-draw_radio(ControlHandle c, int16 part)
+draw_radio(ControlHandle c, int16_t part)
 {
     Rect r;
 
@@ -388,13 +388,13 @@ P4(PUBLIC, pascal LONGINT, cdef0, INTEGER, var, ControlHandle, c,
                 switch(var & ~useWFont)
                 {
                     case pushButProc & 0xF:
-                        draw_push(c, (int16)param);
+                        draw_push(c, (int16_t)param);
                         break;
                     case checkBoxProc & 0xF:
-                        draw_check(c, (int16)param);
+                        draw_check(c, (int16_t)param);
                         break;
                     case radioButProc & 0xF:
-                        draw_radio(c, (int16)param);
+                        draw_radio(c, (int16_t)param);
                         break;
                 }
             }

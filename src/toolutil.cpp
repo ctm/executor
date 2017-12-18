@@ -316,10 +316,10 @@ P3(PUBLIC pascal trap, void, PackBits, GUEST<Ptr> *, sp, GUEST<Ptr> *, dp, INTEG
         *dp = RM((Ptr)op);                                                   \
     } while(false)
 
-void Executor::unpack_int16_bits(GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
+void Executor::unpack_int16_t_bits(GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
 {
     /* This is used when unpacking 16 bpp PICT bitmaps. */
-    UNPACK_BITS_BODY(int16);
+    UNPACK_BITS_BODY(int16_t);
 }
 
 P3(PUBLIC pascal trap, void, UnpackBits, GUEST<Ptr> *, sp, GUEST<Ptr> *, dp, INTEGER, len)
@@ -575,7 +575,7 @@ P2(PUBLIC pascal trap, Fract, FracMul, Fract, x, Fract, y) /* IMIV-64 */
 {
     Extended z;
 
-    if((uint32)x == 0x80000000 && (uint32)y == 0x80000000)
+    if((uint32_t)x == 0x80000000 && (uint32_t)y == 0x80000000)
         /*-->*/ return 0; /* this is a deliberate "bug" according to IMIV-63
 				    but nevertheless the mac+ returns 0 here */
     z = Frac2X(x) * Frac2X(y);

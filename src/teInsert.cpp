@@ -21,8 +21,8 @@
 
 using namespace Executor;
 
-int16 Executor::ROMlib_StyleTextWidth(TEPtr tep,
-                                      int16 start, int16 count)
+int16_t Executor::ROMlib_StyleTextWidth(TEPtr tep,
+                                      int16_t start, int16_t count)
 {
     Handle hText;
     SignedByte hText_flags;
@@ -34,11 +34,11 @@ int16 Executor::ROMlib_StyleTextWidth(TEPtr tep,
     SignedByte style_table_flags;
     STElement *styles;
 
-    int16 current_run_index;
-    GUEST<int16> save_size, save_font;
+    int16_t current_run_index;
+    GUEST<int16_t> save_size, save_font;
     Style save_face;
-    int16 length;
-    int16 retval;
+    int16_t length;
+    int16_t retval;
 
     length = TEP_LENGTH(tep);
     if(start > length)
@@ -76,7 +76,7 @@ int16 Executor::ROMlib_StyleTextWidth(TEPtr tep,
     {
         StyleRun *current_run, *next_run;
         STElement *style;
-        int16 next_run_start, run_len;
+        int16_t next_run_start, run_len;
 
         current_run = &runs[current_run_index];
         next_run = &runs[current_run_index + 1];
@@ -108,19 +108,19 @@ cleanup:
     return retval;
 }
 
-void Executor::te_char_to_point(const TEPtr tep, int16 sel, Point *p)
+void Executor::te_char_to_point(const TEPtr tep, int16_t sel, Point *p)
 {
     SignedByte hText_flags;
     Handle hText;
     Ptr Text;
-    GUEST<int16> *line_starts;
-    int16 line_start, line_end;
-    int16 just;
+    GUEST<int16_t> *line_starts;
+    int16_t line_start, line_end;
+    int16_t just;
     /* offset from the left edge of the dest rect to the beginning of
      text for this line */
-    int16 left_offset;
-    int16 lineno, lineno_i;
-    int16 top, left;
+    int16_t left_offset;
+    int16_t lineno, lineno_i;
+    int16_t top, left;
     Rect *dest_rect;
     int on_break_p;
 
@@ -149,7 +149,7 @@ void Executor::te_char_to_point(const TEPtr tep, int16 sel, Point *p)
 
     if(just == teCenter || just == teFlushRight)
     {
-        int16 line_len;
+        int16_t line_len;
 
         line_len = line_end - line_start;
 
@@ -195,10 +195,10 @@ togglehilite(TEHandle te)
 }
 
 static void
-togglecaret(TEHandle teh, int16 sel, bool paint_p)
+togglecaret(TEHandle teh, int16_t sel, bool paint_p)
 {
     Point p;
-    int16 pm;
+    int16_t pm;
 
     pm = PORT_PEN_MODE(thePort);
     TE_CHAR_TO_POINT(teh, sel, &p);
@@ -227,7 +227,7 @@ togglecaret(TEHandle teh, int16 sel, bool paint_p)
 PUBLIC void
 Executor::ROMlib_recompute_caret(TEHandle te)
 {
-    int16 state;
+    int16_t state;
 
     state = TE_CARET_STATE(te);
     if(state == caret_vis || state == caret_invis)
@@ -236,7 +236,7 @@ Executor::ROMlib_recompute_caret(TEHandle te)
 
 void Executor::ROMlib_togglelite(TEHandle te)
 {
-    int16 state;
+    int16_t state;
 
     state = TE_CARET_STATE(te);
     if(state == caret_vis || state == caret_invis)
@@ -342,7 +342,7 @@ void style_update_port(STElement *style)
 /* ### the old code did something whacky related to italics */
 
 void te_draw(TEPtr tep,
-             int16 start, int16 end)
+             int16_t start, int16_t end)
 {
     Handle hText;
     Ptr Text;
@@ -352,32 +352,32 @@ void te_draw(TEPtr tep,
     TEStyleHandle te_style = NULL;
     SignedByte te_style_flags = -1;
     StyleRun *runs, *current_run;
-    int16 n_runs;
+    int16_t n_runs;
 
     STHandle style_table = NULL;
     SignedByte style_table_flags = -1;
     STElement *styles;
-    int16 n_styles;
+    int16_t n_styles;
 
     /* all drawing is done per-line; before any drawing we erase the
      entire target rectangle */
     Point start_pt, end_pt;
-    int16 start_lineno, end_lineno, current_lineno;
-    GUEST<int16> *line_starts;
-    int16 first_visible_lineno, last_visible_lineno;
-    int16 start_line_start;
+    int16_t start_lineno, end_lineno, current_lineno;
+    GUEST<int16_t> *line_starts;
+    int16_t first_visible_lineno, last_visible_lineno;
+    int16_t start_line_start;
     Rect *dest_rect, r;
-    int16 dest_rect_left, dest_rect_right, dest_rect_bottom, dest_rect_top;
-    int16 current_line_top, top, bottom;
+    int16_t dest_rect_left, dest_rect_right, dest_rect_bottom, dest_rect_top;
+    int16_t current_line_top, top, bottom;
 
     Rect *view_rect;
-    int16 view_rect_bottom;
+    int16_t view_rect_bottom;
 
-    int16 current_run_start, current_run_end;
-    int16 current_line_start, current_line_end;
-    int16 current_posn;
-    int16 start_run_index;
-    int16 n_lines;
+    int16_t current_run_start, current_run_end;
+    int16_t current_line_start, current_line_end;
+    int16_t current_posn;
+    int16_t start_run_index;
+    int16_t n_lines;
 
     start_lineno = TEP_CHAR_TO_LINENO(tep, start);
     end_lineno = TEP_CHAR_TO_LINENO(tep, end);
@@ -394,9 +394,9 @@ void te_draw(TEPtr tep,
     view_rect_bottom = CW(view_rect->bottom);
 
     {
-        int16 height;
+        int16_t height;
         Rect *view_rect, *clip_rect, *vis_rect;
-        int16 clip_rect_top, clip_rect_bottom;
+        int16_t clip_rect_top, clip_rect_bottom;
 
         view_rect = &TEP_VIEW_RECT(tep);
         vis_rect = &RGN_BBOX(PORT_VIS_REGION(thePort));
@@ -595,19 +595,19 @@ void te_draw(TEPtr tep,
 }
 
 void te_hilite(TEPtr tep,
-               int16 start, int16 end)
+               int16_t start, int16_t end)
 {
     Handle hText;
     SignedByte hText_flags;
     Ptr Text;
 
     Point start_pt, end_pt;
-    int16 start_lineno, end_lineno, lineno_i;
-    GUEST<int16> *line_starts;
-    int16 top, left, bottom, right;
+    int16_t start_lineno, end_lineno, lineno_i;
+    GUEST<int16_t> *line_starts;
+    int16_t top, left, bottom, right;
     Rect *dest_rect, r;
-    int16 dest_rect_left, dest_rect_right;
-    int16 length;
+    int16_t dest_rect_left, dest_rect_right;
+    int16_t length;
 
     hText = TEP_HTEXT(tep);
     hText_flags = HGetState(hText);
@@ -672,25 +672,25 @@ DONE:
     HSetState(hText, hText_flags);
 }
 
-int16 te_find(TEPtr tep, int16 start, int16 end)
+int16_t te_find(TEPtr tep, int16_t start, int16_t end)
 {
     Handle hText;
     SignedByte hText_flags;
     Ptr Text;
-    int16 length;
+    int16_t length;
 
-    int16 just;
-    int16 v, h;
-    int16 dest_rect_top, dest_rect_left;
+    int16_t just;
+    int16_t v, h;
+    int16_t dest_rect_top, dest_rect_left;
     Rect *dest_rect;
 
-    int16 line_start, line_end, end_limit, lineno;
-    GUEST<int16> *line_starts;
-    int16 current_posn;
+    int16_t line_start, line_end, end_limit, lineno;
+    GUEST<int16_t> *line_starts;
+    int16_t current_posn;
     int height, width, char_width = 0;
-    int16 n_lines;
-    int16 left_offset;
-    int16 retval;
+    int16_t n_lines;
+    int16_t left_offset;
+    int16_t retval;
 
     hText = TEP_HTEXT(tep);
     hText_flags = HGetState(hText);
@@ -743,7 +743,7 @@ int16 te_find(TEPtr tep, int16 start, int16 end)
     /* compute the left offset for this line */
     if(just == teCenter || just == teFlushRight)
     {
-        int16 line_len;
+        int16_t line_len;
 
         line_len = line_end - line_start;
 
@@ -793,8 +793,8 @@ DONE:
    
    for calling conventions, see IM Text, 2-63 */
 
-A4(PUBLIC, int16, C_ROMlib_dotext, TEPtr, tep, /* INTERNAL */
-   int16, start, int16, end, int16, what)
+A4(PUBLIC, int16_t, C_ROMlib_dotext, TEPtr, tep, /* INTERNAL */
+   int16_t, start, int16_t, end, int16_t, what)
 {
     if(what == teHilite)
         te_hilite(tep, start, end);
@@ -826,9 +826,9 @@ PUBLIC INTEGERRET ROMlib_dotext(void)
 /* return true if click at location `cl' was a double click; otherwise
    save away this click information (location, time) */
 static bool
-double_click_p(TEHandle te, int16 cl)
+double_click_p(TEHandle te, int16_t cl)
 {
-    int32 ticks;
+    int32_t ticks;
 
     ticks = TickCount();
     if(cl == TE_CLICK_LOC(te)
@@ -937,12 +937,12 @@ P3(PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
     EventRecord evt;
     SignedByte te_flags;
     TEPtr tep;
-    int16 start, end;
-    int16 click_posn;
-    int16 origin = -1, true_origin = -1;
-    int16 left_origin = -1, right_origin = -1;
-    int16 length;
-    int16 state;
+    int16_t start, end;
+    int16_t click_posn;
+    int16_t origin = -1, true_origin = -1;
+    int16_t left_origin = -1, right_origin = -1;
+    int16_t length;
+    int16_t state;
     bool word_hilite_p = false;
 
     TESAVE(te);
@@ -1184,10 +1184,10 @@ P3(PUBLIC pascal trap, void, TEClick, Point, pt, BOOLEAN, extend,
     TERESTORE();
 }
 
-P3(PUBLIC pascal trap, void, TESetSelect, int32, start, int32, stop,
+P3(PUBLIC pascal trap, void, TESetSelect, int32_t, start, int32_t, stop,
    TEHandle, teh)
 {
-    int16 length;
+    int16_t length;
 
     TE_SLAM(teh);
     length = TE_LENGTH(teh);
@@ -1220,7 +1220,7 @@ P3(PUBLIC pascal trap, void, TESetSelect, int32, start, int32, stop,
 
 P1(PUBLIC pascal trap, void, TEActivate, TEHandle, teh)
 {
-    int16 start, end;
+    int16_t start, end;
 
     TE_SLAM(teh);
 

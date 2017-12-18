@@ -19,7 +19,7 @@ using namespace Executor;
  * for a given number of symbols.  This loop is equivalent:
  *
  * static UInt8
- * PEFComputeHashTableExponent (int32 exportCount)
+ * PEFComputeHashTableExponent (int32_t exportCount)
  * {
  *   int exponent;
  * 
@@ -38,16 +38,16 @@ using namespace Executor;
 
 #if !defined(__USE_ISOC9X)
 
-PRIVATE uint32
+PRIVATE uint32_t
 floor_log2(double d)
 {
-    uint32 retval;
+    uint32_t retval;
 
     if(d <= 1)
         retval = 0;
     else
     {
-        uint32 u;
+        uint32_t u;
 
         u = d;
         retval = 31;
@@ -62,7 +62,7 @@ floor_log2(double d)
 #endif
 
 PRIVATE uint8
-PEFComputeHashTableExponent(int32 count)
+PEFComputeHashTableExponent(int32_t count)
 {
     int retval;
 
@@ -85,19 +85,19 @@ PEFComputeHashTableExponent(int32 count)
 
 #define PseudoRotate(x)         \
     ({                          \
-        int32 _x;               \
+        int32_t _x;               \
                                 \
         _x = (x);               \
         (_x << 1) - (_x >> 16); \
     })
 
-static uint32
-PEFComputeHashWord(const unsigned char *orig_p, uint32 namemax)
+static uint32_t
+PEFComputeHashWord(const unsigned char *orig_p, uint32_t namemax)
 {
-    uint32 retval;
+    uint32_t retval;
     const unsigned char *p;
     unsigned char c;
-    int32 val;
+    int32_t val;
 
     val = 0;
     for(p = orig_p; (c = *p++) && namemax-- > 0;)
@@ -123,8 +123,8 @@ PEFComputeHashWord(const unsigned char *orig_p, uint32 namemax)
 typedef struct
 {
     int hash_index;
-    uint32 hash_word;
-    GUEST<uint32> class_and_name_x;
+    uint32_t hash_word;
+    GUEST<uint32_t> class_and_name_x;
     GUEST<void *> value;
 } sort_entry_t;
 
@@ -140,10 +140,10 @@ hash_index_compare(const void *p1, const void *p2)
 }
 
 PRIVATE void
-update_export_hash_table(uint32 *hashp, int hash_index, int first_index,
+update_export_hash_table(uint32_t *hashp, int hash_index, int first_index,
                          int run_count)
 {
-    uint32 new_value;
+    uint32_t new_value;
 
     new_value = ((run_count << CHAIN_COUNT_SHIFT) | (first_index & FIRST_INDEX_MASK));
     hashp[hash_index] = CL_RAW(new_value);
@@ -153,13 +153,13 @@ PUBLIC PEFLoaderInfoHeader_t *
 ROMlib_build_pef_hash(const map_entry_t table[], int count)
 {
     PEFLoaderInfoHeader_t *retval;
-    uint32 hash_power;
+    uint32_t hash_power;
     int n_hash_entries;
-    uint32 hash_offset, export_offset, symbol_table_offset, string_table_offset;
+    uint32_t hash_offset, export_offset, symbol_table_offset, string_table_offset;
     int hash_length, export_length, symbol_table_length, string_table_length;
     Size n_bytes_needed;
-    uint32 *hashp;
-    uint32 *exportp;
+    uint32_t *hashp;
+    uint32_t *exportp;
     PEFExportedSymbol *symbol_tablep;
     char *string_tablep;
     int i;
@@ -190,7 +190,7 @@ ROMlib_build_pef_hash(const map_entry_t table[], int count)
         int previous_hash_index;
         int run_count;
         int previous_index_of_first_element;
-        uint32 name_offset;
+        uint32_t name_offset;
 
         PEFLIH_MAIN_SECTION_X(retval) = CLC(-1);
         PEFLIH_MAIN_OFFSET_X(retval) = CLC(-1);
@@ -286,19 +286,19 @@ PRIVATE PEFExportedSymbol *
 lookup_by_name(const ConnectionID connp,
                const char *name, int name_len)
 {
-    uint32 hash_word;
-    uint32 hash_index;
-    uint32 chain_count_and_first_index;
+    uint32_t hash_word;
+    uint32_t hash_index;
+    uint32_t chain_count_and_first_index;
     int chain_count;
     int index;
     int past_index;
-    uint32 hash_word_swapped;
+    uint32_t hash_word_swapped;
     PEFExportedSymbol *retval;
     PEFLoaderInfoHeader_t *lihp;
-    uint32 *hash_entries;
-    uint32 *export_key_table;
+    uint32_t *hash_entries;
+    uint32_t *export_key_table;
     PEFExportedSymbol *symbol_table;
-    uint32 offset;
+    uint32_t offset;
     const char *string_tablep;
 
 #if 1
@@ -377,7 +377,7 @@ P4(PUBLIC pascal trap, OSErr, FindSymbol, ConnectionID, connID,
     else
     {
         int section_index;
-        uint32 val;
+        uint32_t val;
 
         if(symClass)
             *symClass = *(SymClass *)&PEFEXS_CLASS_AND_NAME_X(pefs);
@@ -395,7 +395,7 @@ P4(PUBLIC pascal trap, OSErr, FindSymbol, ConnectionID, connID,
                 break;
             default:
             {
-                GUEST<uint32> sect_start = connID->sects[section_index].start;
+                GUEST<uint32_t> sect_start = connID->sects[section_index].start;
                 *symAddr = RM(val + MR(guest_cast<Ptr>(sect_start)));
             }
             break;

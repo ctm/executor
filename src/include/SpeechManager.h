@@ -41,17 +41,17 @@ typedef struct SpeechStatusInfo
 typedef struct VoiceDescription
 {
     GUEST_STRUCT;
-    GUEST<int32> length;
+    GUEST<int32_t> length;
     GUEST<VoiceSpec> voice;
-    GUEST<int32> version;
+    GUEST<int32_t> version;
     GUEST<Str63> name;
     GUEST<Str255> comment;
-    GUEST<int16> gender;
-    GUEST<int16> age;
-    GUEST<int16> script;
-    GUEST<int16> language;
-    GUEST<int16> region;
-    GUEST<int32> reserved[4];
+    GUEST<int16_t> gender;
+    GUEST<int16_t> age;
+    GUEST<int16_t> script;
+    GUEST<int16_t> language;
+    GUEST<int16_t> region;
+    GUEST<int32_t> reserved[4];
 } VoiceDescription;
 
 typedef struct SpeechChannelRecord
@@ -94,19 +94,19 @@ typedef struct DelimiterInfo
 #pragma pack(pop)
 
 PUBLIC pascal NumVersion C_SpeechManagerVersion(void);
-PUBLIC pascal int16 C_SpeechBusy(void);
-PUBLIC pascal int16 C_SpeechBusySystemWide(void);
-PUBLIC pascal OSErr C_CountVoices(int16 *numVoices);
+PUBLIC pascal int16_t C_SpeechBusy(void);
+PUBLIC pascal int16_t C_SpeechBusySystemWide(void);
+PUBLIC pascal OSErr C_CountVoices(int16_t *numVoices);
 PUBLIC pascal OSErr C_DisposeSpeechChannel(SpeechChannel chan);
 PUBLIC pascal OSErr C_SpeakString(Str255 textToBeSpoken);
 
 PUBLIC pascal OSErr C_StopSpeech(SpeechChannel chan);
 PUBLIC pascal OSErr C_ContinueSpeech(SpeechChannel chan);
 
-PUBLIC pascal OSErr C_GetIndVoice(int16 index, VoiceSpec *voice);
+PUBLIC pascal OSErr C_GetIndVoice(int16_t index, VoiceSpec *voice);
 PUBLIC pascal OSErr C_NewSpeechChannel(VoiceSpec *voice, SpeechChannel *chan);
-PUBLIC pascal OSErr C_StopSpeechAt(SpeechChannel chan, int32 whereToStop);
-PUBLIC pascal OSErr C_PauseSpeechAt(SpeechChannel chan, int32 whereToPause);
+PUBLIC pascal OSErr C_StopSpeechAt(SpeechChannel chan, int32_t whereToStop);
+PUBLIC pascal OSErr C_PauseSpeechAt(SpeechChannel chan, int32_t whereToPause);
 PUBLIC pascal OSErr C_SetSpeechRate(SpeechChannel chan, Fixed rate);
 PUBLIC pascal OSErr C_GetSpeechRate(SpeechChannel chan, Fixed *rate);
 PUBLIC pascal OSErr C_SetSpeechPitch(SpeechChannel chan, Fixed pitch);
@@ -118,7 +118,7 @@ PUBLIC pascal OSErr C_GetVoiceInfo(const VoiceSpec *voice, OSType selector, void
 PUBLIC pascal OSErr C_SpeakText(SpeechChannel chan, const void *textBuf, ULONGINT textBytes);
 PUBLIC pascal OSErr C_SetSpeechInfo(SpeechChannel chan, OSType selector, const void *speechInfo);
 PUBLIC pascal OSErr C_GetSpeechInfo(SpeechChannel chan, OSType selector, void *speechInfo);
-PUBLIC pascal OSErr C_SpeakBuffer(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, int32 controlFlags);
+PUBLIC pascal OSErr C_SpeakBuffer(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, int32_t controlFlags);
 PUBLIC pascal OSErr C_TextToPhonemes(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, Handle phonemeBuf, GUEST<LONGINT> *phonemeBytes);
 }
 

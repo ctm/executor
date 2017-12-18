@@ -30,23 +30,23 @@ typedef enum {
     win32_serial_stop_bits_2,
 } win32_serial_stop_bits_t;
 
-extern uint32 serial_bios_read(LONGINT fd, void *buf, size_t count);
+extern uint32_t serial_bios_read(LONGINT fd, void *buf, size_t count);
 
-extern uint32 serial_bios_write(LONGINT fd, void *buf, size_t count);
+extern uint32_t serial_bios_write(LONGINT fd, void *buf, size_t count);
 
-extern int32 serial_bios_serset(LONGINT fd, INTEGER param);
+extern int32_t serial_bios_serset(LONGINT fd, INTEGER param);
 
-extern int32 serial_bios_serxhshake(LONGINT fd, SerShk *sershkp);
+extern int32_t serial_bios_serxhshake(LONGINT fd, SerShk *sershkp);
 
-extern int32 serial_bios_setbaud(LONGINT fd, INTEGER baud);
+extern int32_t serial_bios_setbaud(LONGINT fd, INTEGER baud);
 
-extern int32 serial_bios_ctlbrk(LONGINT fd, INTEGER flag);
+extern int32_t serial_bios_ctlbrk(LONGINT fd, INTEGER flag);
 
-extern int32 serial_bios_setflow(LONGINT fd, LONGINT flag);
+extern int32_t serial_bios_setflow(LONGINT fd, LONGINT flag);
 
-extern int32 serial_bios_setdtr(LONGINT fd);
+extern int32_t serial_bios_setdtr(LONGINT fd);
 
-extern int32 serial_bios_clrdtr(LONGINT fd);
+extern int32_t serial_bios_clrdtr(LONGINT fd);
 
 extern int serial_bios_fionread(LONGINT fd, LONGINT *np);
 

@@ -119,7 +119,7 @@ P2(PUBLIC pascal trap, void, PlotCIcon,
     /* when plotting, `ignore' the current fg/bk colors */
     GrafPtr current_port;
     RGBColor bk_rgb, fg_rgb;
-    GUEST<int32> bk_color, fg_color;
+    GUEST<int32_t> bk_color, fg_color;
     int cgrafport_p;
 
     if(!icon)

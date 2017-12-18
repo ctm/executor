@@ -14,8 +14,8 @@ using namespace Executor;
 
 #if defined(SDL)
 
-static Uint32
-handle_sdltimer_tick(Uint32 n)
+static Uint32_t
+handle_sdltimer_tick(Uint32_t n)
 {
 //  fprintf (stderr, "T");
 //  fflush (stderr);

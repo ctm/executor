@@ -39,7 +39,7 @@ void Executor::dialog_create_item(DialogPeek dp, itmp dst, itmp src,
                                   int item_no, Point base_pt)
 {
     GUEST<INTEGER> *data;
-    int16 res_id;
+    int16_t res_id;
     int gd_bpp;
 
     if(dst != src)
@@ -181,9 +181,9 @@ ROMlib_new_dialog_common(DialogPtr dp,
                          Handle item_color_table_h,
                          Rect *bounds, StringPtr title,
                          bool visible_p,
-                         int16 proc_id, WindowPtr behind,
+                         int16_t proc_id, WindowPtr behind,
                          bool go_away_flag,
-                         int32 ref_con,
+                         int32_t ref_con,
                          Handle items)
 {
     GUEST<INTEGER> *ip;

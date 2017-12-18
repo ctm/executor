@@ -14,15 +14,15 @@
 #include "rsys/types.h"
 
 #define SWAP16_FUNC_DEFN            \
-    uint16 const                    \
-    swap16(uint16 n)                \
+    uint16_t const                    \
+    swap16(uint16_t n)                \
     {                               \
         return (n >> 8) | (n << 8); \
     }
 
 #define SWAP32_FUNC_DEFN \
-    uint32 const         \
-    swap32(uint32 n)     \
+    uint32_t const         \
+    swap32(uint32_t n)     \
     {                    \
         return htonl(n); \
     }

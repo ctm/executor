@@ -4,8 +4,8 @@
 typedef struct
 {
     const void *label;
-    int32 offset;
-    int32 arg;
+    int32_t offset;
+    int32_t arg;
 } blt_section_t;
 
 #define MAX_BLT_SECTIONS 1024

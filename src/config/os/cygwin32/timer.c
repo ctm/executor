@@ -12,7 +12,7 @@
 
 /* Timer handler */
 static void __attribute__((stdcall))
-MTimer_Intr(uint32 uID, uint32 uMsg, uint32 dwUser, uint32 dw1, uint32 dw2)
+MTimer_Intr(uint32_t uID, uint32_t uMsg, uint32_t dwUser, uint32_t dw1, uint32_t dw2)
 {
     /* Eventually we may want to add some intelligent projection here
    * and adjust the value of the timer to match the real-time circumstances.
@@ -27,7 +27,7 @@ MTimer_Intr(uint32 uID, uint32 uMsg, uint32 dwUser, uint32 dw1, uint32 dw2)
     }
 }
 
-static uint32 Timer32;
+static uint32_t Timer32;
 
 /* Init */
 int Timer32_Init(void)

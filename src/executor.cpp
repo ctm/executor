@@ -93,7 +93,7 @@ LONGINT Executor::debugnumber, debugtable[1 << 12], cutoff = 20;
 typedef struct
 {
     unsigned trapno;
-    int32 when;
+    int32_t when;
 } trap_when_t;
 
 static int
@@ -111,7 +111,7 @@ void dump_recent_traps(int num_traps_back)
     /* Record all the traps that are recent enough. */
     for(i = 0, num_interesting_traps = 0; i < (int)NELEM(traps); i++)
     {
-        int32 when;
+        int32_t when;
 
         when = debugtable[i];
         if(when != 0 && when >= debugnumber - num_traps_back)
@@ -352,7 +352,7 @@ unsigned short Executor::mostrecenttrap;
 int memory_watch = 0;
 
 PRIVATE void
-dump_difference(uint16 trapn, int i,
+dump_difference(uint16_t trapn, int i,
                 zone_info_t *currentp, const zone_info_t *newp)
 {
     fprintf(stderr, "%d %s(%d): D#rel = %d, D#nrel = %d, D#free = %d, Dtotal = %d\n",
@@ -363,7 +363,7 @@ dump_difference(uint16 trapn, int i,
 }
 
 PRIVATE void
-compare_zone_infos(uint16 trapn, zone_info_t current[3], zone_info_t new[3])
+compare_zone_infos(uint16_t trapn, zone_info_t current[3], zone_info_t new[3])
 {
     int i;
 
@@ -379,7 +379,7 @@ PUBLIC syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
 {
     syn68k_addr_t retval;
     unsigned short trapno, status;
-    uint32 savea0, savea1, savea2, saved1, saved2;
+    uint32_t savea0, savea1, savea2, saved1, saved2;
     unsigned short trapword;
     syn68k_addr_t togoto;
 #if defined(MEMORY_WATCH)

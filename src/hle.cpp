@@ -72,8 +72,8 @@ bool Executor::hle_get_event(EventRecord *evt, bool remflag)
 }
 
 P4(PUBLIC pascal trap, OSErr, AcceptHighLevelEvent,
-   TargetID *, sender_id_return, GUEST<int32> *, refcon_return,
-   Ptr, msg_buf, GUEST<int32> *, msg_buf_length_return)
+   TargetID *, sender_id_return, GUEST<int32_t> *, refcon_return,
+   Ptr, msg_buf, GUEST<int32_t> *, msg_buf_length_return)
 {
     OSErr retval = noErr;
 
@@ -134,8 +134,8 @@ P3(PUBLIC pascal, Boolean, GetSpecificHighLevelEventProcTemplate, Ptr, data, Hig
 }
 
 P6(PUBLIC pascal trap, OSErr, PostHighLevelEvent,
-   EventRecord *, evt, Ptr, receiver_id, int32, refcon,
-   Ptr, msg_buf, int32, msg_length, int32, post_options)
+   EventRecord *, evt, Ptr, receiver_id, int32_t, refcon,
+   Ptr, msg_buf, int32_t, msg_length, int32_t, post_options)
 {
     HighLevelEventMsgPtr hle_msg;
     Ptr msg_buf_copy;
@@ -163,7 +163,7 @@ P6(PUBLIC pascal trap, OSErr, PostHighLevelEvent,
         goto done;
     }
     memcpy(msg_buf_copy, msg_buf, msg_length);
-    hle_msg->theMsgEvent.when = guest_cast<int32>(RM(msg_buf_copy));
+    hle_msg->theMsgEvent.when = guest_cast<int32_t>(RM(msg_buf_copy));
     hle_msg->theMsgEvent.modifiers = CWC(-1);
 
     hle_msg->userRefCon = CL(refcon);

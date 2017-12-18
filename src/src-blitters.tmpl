@@ -113,48 +113,48 @@ end_mode
 
 
 begin_src_func
- init	const uint32 fg_bits = srcblt_fg_color;
- init	const uint32 bk_bits = srcblt_bk_color;
+ init	const uint32_t fg_bits = srcblt_fg_color;
+ init	const uint32_t bk_bits = srcblt_bk_color;
 end_func
 
 begin_mode copy_noshift_fgbk max_unwrap
- repeat	{ const uint32 s = @src@; @dst@ = (s & fg_bits) | (~s & bk_bits); }
- mask	{ const uint32 s = @src@; @dst@ = (@dst@ & ~arg) | (((s & fg_bits) | (~s & bk_bits)) & arg); }
+ repeat	{ const uint32_t s = @src@; @dst@ = (s & fg_bits) | (~s & bk_bits); }
+ mask	{ const uint32_t s = @src@; @dst@ = (@dst@ & ~arg) | (((s & fg_bits) | (~s & bk_bits)) & arg); }
 end_mode
 
 begin_mode notcopy_noshift_fgbk max_unwrap
- repeat	{ const uint32 s = @src@; @dst@ = (~s & fg_bits) | (s & bk_bits); }
- mask	{ const uint32 s = @src@; @dst@ = (@dst@ & ~arg) | (((~s & fg_bits) | (s & bk_bits)) & arg); }
+ repeat	{ const uint32_t s = @src@; @dst@ = (~s & fg_bits) | (s & bk_bits); }
+ mask	{ const uint32_t s = @src@; @dst@ = (@dst@ & ~arg) | (((~s & fg_bits) | (s & bk_bits)) & arg); }
 end_mode
 
 
 begin_src_func
- init	const uint32 fg_bits = srcblt_fg_color;
+ init	const uint32_t fg_bits = srcblt_fg_color;
 end_func
 
 begin_mode or_noshift_fgbk max_unwrap
- repeat	{ uint32 s = @src@, d; d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
- mask	{ uint32 s = @src@ & arg, d; d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
+ repeat	{ uint32_t s = @src@, d; d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
+ mask	{ uint32_t s = @src@ & arg, d; d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
 end_mode
 
 begin_mode notor_noshift_fgbk max_unwrap
- repeat	{ uint32 s = @src@, d; d = @dst@ & s; d |= (~s & fg_bits); @dst@ = d; }
- mask	{ uint32 s = ~@src@ & arg, d; d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
+ repeat	{ uint32_t s = @src@, d; d = @dst@ & s; d |= (~s & fg_bits); @dst@ = d; }
+ mask	{ uint32_t s = ~@src@ & arg, d; d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
 end_mode
 
 
 begin_src_func
- init	const uint32 bk_bits = srcblt_bk_color;
+ init	const uint32_t bk_bits = srcblt_bk_color;
 end_func
 
 begin_mode and_noshift_fgbk max_unwrap
- repeat	{ uint32 s = @src@, d; d = @dst@ & s; d |= (~s & bk_bits); @dst@ = d; }
- mask	{ uint32 s = @src@ | ~arg, d; d = @dst@ & s; d |= (~s & bk_bits); @dst@ = d; }
+ repeat	{ uint32_t s = @src@, d; d = @dst@ & s; d |= (~s & bk_bits); @dst@ = d; }
+ mask	{ uint32_t s = @src@ | ~arg, d; d = @dst@ & s; d |= (~s & bk_bits); @dst@ = d; }
 end_mode
 
 begin_mode notand_noshift_fgbk max_unwrap
- repeat	{ uint32 s = @src@, d; d = @dst@ & ~s; d |= (s & bk_bits); @dst@ = d; }
- mask	{ uint32 s = @src@ & arg, d; d = @dst@ & ~s; d |= (s & bk_bits); @dst@ = d; }
+ repeat	{ uint32_t s = @src@, d; d = @dst@ & ~s; d |= (s & bk_bits); @dst@ = d; }
+ mask	{ uint32_t s = @src@ & arg, d; d = @dst@ & ~s; d |= (s & bk_bits); @dst@ = d; }
 end_mode
 
 
@@ -162,50 +162,50 @@ end_mode
 begin_src_func
  init	const long left_shift = srcblt_shift_offset;
  init	const long right_shift = 32 - left_shift;
- init	const uint32 fg_bits = srcblt_fg_color;
- init	const uint32 bk_bits = srcblt_bk_color;
+ init	const uint32_t fg_bits = srcblt_fg_color;
+ init	const uint32_t bk_bits = srcblt_bk_color;
 end_func
 
 begin_mode copy_shift_fgbk max_unwrap
- repeat	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); @dst@ = (s & fg_bits) | (~s & bk_bits); }
- mask	{ const uint32 s = (CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg); uint32 d = @dst@ & ~arg; d |= ((s & fg_bits) | (~s & bk_bits)) & arg; @dst@ = d; }
+ repeat	{ const uint32_t s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); @dst@ = (s & fg_bits) | (~s & bk_bits); }
+ mask	{ const uint32_t s = (CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg); uint32_t d = @dst@ & ~arg; d |= ((s & fg_bits) | (~s & bk_bits)) & arg; @dst@ = d; }
 end_mode
 
 begin_mode notcopy_shift_fgbk max_unwrap
- repeat	{ const uint32 s = (CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift))); @dst@ = (~s & fg_bits) | (s & bk_bits); }
- mask	{ const uint32 s = (CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg); uint32 d = @dst@ & ~arg; d |= ((~s & fg_bits) | (s & bk_bits)) & arg; @dst@ = d; }
+ repeat	{ const uint32_t s = (CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift))); @dst@ = (~s & fg_bits) | (s & bk_bits); }
+ mask	{ const uint32_t s = (CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg); uint32_t d = @dst@ & ~arg; d |= ((~s & fg_bits) | (s & bk_bits)) & arg; @dst@ = d; }
 end_mode
 
 
 begin_src_func
  init	const long left_shift = srcblt_shift_offset;
  init	const long right_shift = 32 - left_shift;
- init	const uint32 fg_bits = srcblt_fg_color;
+ init	const uint32_t fg_bits = srcblt_fg_color;
 end_func
 
 begin_mode or_shift_fgbk max_unwrap
- repeat	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); uint32 d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
- mask	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg; uint32 d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
+ repeat	{ const uint32_t s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); uint32_t d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
+ mask	{ const uint32_t s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg; uint32_t d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
 end_mode
 
 begin_mode notor_shift_fgbk max_unwrap
- repeat	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); uint32 d = @dst@ & s; d |= (~s & fg_bits); @dst@ = d; }
- mask	{ const uint32 s = ~(CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift))) & arg; uint32 d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
+ repeat	{ const uint32_t s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); uint32_t d = @dst@ & s; d |= (~s & fg_bits); @dst@ = d; }
+ mask	{ const uint32_t s = ~(CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift))) & arg; uint32_t d = @dst@ & ~s; d |= (s & fg_bits); @dst@ = d; }
 end_mode
 
 
 begin_src_func
  init	const long left_shift = srcblt_shift_offset;
  init	const long right_shift = 32 - left_shift;
- init	const uint32 bk_bits = srcblt_bk_color;
+ init	const uint32_t bk_bits = srcblt_bk_color;
 end_func
 
 begin_mode and_shift_fgbk max_unwrap
- repeat	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); uint32 d = @dst@ & s; d |= (~s & bk_bits); @dst@ = d; }
- mask	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) | ~arg; uint32 d = @dst@ & s; d |= (~s & bk_bits); @dst@ = d; }
+ repeat	{ const uint32_t s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); uint32_t d = @dst@ & s; d |= (~s & bk_bits); @dst@ = d; }
+ mask	{ const uint32_t s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) | ~arg; uint32_t d = @dst@ & s; d |= (~s & bk_bits); @dst@ = d; }
 end_mode
 
 begin_mode notand_shift_fgbk max_unwrap
- repeat	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); uint32 d = @dst@ & ~s; d |= (s & bk_bits); @dst@ = d; }
- mask	{ const uint32 s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg; uint32 d = @dst@ & ~s; d |= (s & bk_bits); @dst@ = d; }
+ repeat	{ const uint32_t s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)); uint32_t d = @dst@ & ~s; d |= (s & bk_bits); @dst@ = d; }
+ mask	{ const uint32_t s = CL_RAW ((CL_RAW (@src@) << left_shift) | (CL_RAW (@src_plus_1@) >> right_shift)) & arg; uint32_t d = @dst@ & ~s; d |= (s & bk_bits); @dst@ = d; }
 end_mode

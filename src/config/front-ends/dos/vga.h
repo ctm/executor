@@ -33,36 +33,36 @@
 typedef struct
 {
     uint8 signature[4];
-    uint16 version;
-    uint16 oem_string_offset, oem_string_segment;
+    uint16_t version;
+    uint16_t oem_string_offset, oem_string_segment;
     uint8 capabilities[4];
-    uint16 mode_list_offset, mode_list_segment;
+    uint16_t mode_list_offset, mode_list_segment;
 
     /* VBE 2.0 fields. */
-    uint16 total_memory;
-    uint16 oem_software_rev;
-    uint16 oem_vendor_name_offset, oem_vendor_name_segment;
-    uint16 oem_product_name_offset, oem_product_name_segment;
-    uint16 oem_product_rev_offset, oem_product_rev_segment;
+    uint16_t total_memory;
+    uint16_t oem_software_rev;
+    uint16_t oem_vendor_name_offset, oem_vendor_name_segment;
+    uint16_t oem_product_name_offset, oem_product_name_segment;
+    uint16_t oem_product_rev_offset, oem_product_rev_segment;
     uint8 reserved[222];
     uint8 oemdata[256];
 } vesa_info_t;
 
 typedef struct
 {
-    uint16 mode_attributes;
+    uint16_t mode_attributes;
     uint8 win_a_attributes;
     uint8 win_b_attributes;
-    uint16 win_granularity;
-    uint16 win_size;
-    uint16 win_a_segment;
-    uint16 win_b_segment;
-    uint16 winfunc_offset, winfunc_segment;
-    uint16 row_bytes;
+    uint16_t win_granularity;
+    uint16_t win_size;
+    uint16_t win_a_segment;
+    uint16_t win_b_segment;
+    uint16_t winfunc_offset, winfunc_segment;
+    uint16_t row_bytes;
 
     /* Optional information, valid iff (mode_attributes & 0x2). */
-    uint16 width;
-    uint16 height;
+    uint16_t width;
+    uint16_t height;
     uint8 char_width;
     uint8 char_height;
     uint8 num_planes;
@@ -85,9 +85,9 @@ typedef struct
     uint8 direct_color_mode_info;
 
     /* VBE 2.0 info. */
-    uint32 phys_base_addr;
-    int32 off_screen_mem_offset;
-    uint16 off_screen_mem_size; /* in 1K units */
+    uint32_t phys_base_addr;
+    int32_t off_screen_mem_offset;
+    uint16_t off_screen_mem_size; /* in 1K units */
 
     uint8 reserved[206];
 } mode_info_t;
@@ -104,7 +104,7 @@ typedef struct
 
 #define USE_LINEAR_FBUF (1 << 14)
 
-extern uint16 vesa_version;
+extern uint16_t vesa_version;
 extern bool only_use_vga_p;
 
 enum

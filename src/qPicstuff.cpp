@@ -1238,7 +1238,7 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
 
             if(pixmap->pixelSize == CWC(16)
                && pixmap->packType == CWC(3))
-                unpack_int16_bits(&temp_pp, &dp, rowb);
+                unpack_int16_t_bits(&temp_pp, &dp, rowb);
             else
                 UnpackBits(&temp_pp, &dp,
                            insert_pad_byte_p ? comp_bytes * 3 : rowb);
@@ -1530,7 +1530,7 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
        grafport, hence we need to save and restore it */
     Rect saveportbounds;
 
-    int16 version_2, version_2ext;
+    int16_t version_2, version_2ext;
     Fixed hRes, vRes;
     PixPatHandle junk_pen_pixpat, junk_bk_pixpat, junk_fill_pixpat;
     BOOLEAN saveFractEnable, saveFScaleDisable;

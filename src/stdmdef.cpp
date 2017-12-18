@@ -28,7 +28,7 @@ static Rect *current_menu_rect;
 #define BOTTOM_ARROW_P() \
     (CW(AtMenuBottom) > CW(current_menu_rect->bottom))
 
-static int16 checksize, cloversize, lineheight, ascent;
+static int16_t checksize, cloversize, lineheight, ascent;
 
 #define UP (1 << 0)
 #define DOWN (1 << 1)
@@ -148,7 +148,7 @@ PRIVATE BOOLEAN iskeyequiv(struct table::tableentry *tp)
 void size_menu(MenuHandle mh, tablePtr tablep)
 {
     struct table::tableentry *tp, *ep;
-    int16 width, height, actual_height, max_height;
+    int16_t width, height, actual_height, max_height;
 
     width = height = actual_height = 0;
     /* the 32 is just a guess */
@@ -309,11 +309,11 @@ A3(PRIVATE, void, erasearrow, Rect *, rp, tablePtr, tablep, BOOLEAN, upordown)
 }
 
 static void
-draw_item(Rect *rp, struct table::tableentry *tp, int32 bit, int item, MenuHandle mh,
+draw_item(Rect *rp, struct table::tableentry *tp, int32_t bit, int item, MenuHandle mh,
           int invert_p)
 {
     RGBColor bk_color, mark_color, title_color, command_color;
-    int16 top, bottom, v;
+    int16_t top, bottom, v;
     Rect rtmp;
     int draw_right_arrow_p;
     icon_info_t icon_info;
@@ -487,7 +487,7 @@ static void
 draw_menu(MenuHandle mh, Rect *rp, tablePtr tablep)
 {
     struct table::tableentry *tp, *ep;
-    int16 topcutoff, bottomcutoff;
+    int16_t topcutoff, bottomcutoff;
 
     if(CW(TopMenuItem) < CW(rp->top))
         topcutoff = CW(rp->top) - CW(TopMenuItem) + lineheight;
@@ -504,7 +504,7 @@ draw_menu(MenuHandle mh, Rect *rp, tablePtr tablep)
         tp++)
         if(tp[1].top > topcutoff)
         {
-            int32 bit;
+            int32_t bit;
             int nitem;
 
             nitem = (tp - tablep->entry) + 1;
@@ -519,7 +519,7 @@ draw_menu(MenuHandle mh, Rect *rp, tablePtr tablep)
 }
 
 static void
-fliprect(Rect *rp, int16 i, tablePtr tablep, Rect *flipr)
+fliprect(Rect *rp, int16_t i, tablePtr tablep, Rect *flipr)
 {
     struct table::tableentry *tp;
 
@@ -532,7 +532,7 @@ fliprect(Rect *rp, int16 i, tablePtr tablep, Rect *flipr)
 
 static void
 doupdown(MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
-         GUEST<int16> *itemp)
+         GUEST<int16_t> *itemp)
 {
     INTEGER offset;
     Rect scrollr, updater, rtmp;
@@ -619,9 +619,9 @@ doupdown(MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
     }
 }
 
-void choose_menu(MenuHandle mh, Rect *rp, Point p, GUEST<int16> *itemp, tablePtr tablep)
+void choose_menu(MenuHandle mh, Rect *rp, Point p, GUEST<int16_t> *itemp, tablePtr tablep)
 {
-    int32 nitem;
+    int32_t nitem;
     struct table::tableentry *tp, *ep;
     Rect valid_rect, clip_rect;
     INTEGER menu_id;
@@ -653,14 +653,14 @@ void choose_menu(MenuHandle mh, Rect *rp, Point p, GUEST<int16> *itemp, tablePtr
             doupdown(mh, rp, tablep, UP, itemp);
         else
         {
-            int32 bit;
+            int32_t bit;
 
             for(tp = tablep->entry, ep = tp + tablep->count;
                 tp != ep && p.v >= tp->top + CW(TopMenuItem);
                 tp++)
                 ;
             nitem = tp - tablep->entry;
-            MenuDisable = CL((menu_id << 16) | (uint16)nitem);
+            MenuDisable = CL((menu_id << 16) | (uint16_t)nitem);
 
             bit = (1 << nitem) | 1;
             if((MI_ENABLE_FLAGS(mh) & bit) != bit

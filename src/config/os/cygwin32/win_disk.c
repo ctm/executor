@@ -75,9 +75,9 @@ enum
 
 typedef struct
 {
-    uint32 fpos;
-    uint32 sector_size;
-    uint32 num_sectors;
+    uint32_t fpos;
+    uint32_t sector_size;
+    uint32_t num_sectors;
     bool open_p;
     bool floppy_p;
     bool cdrom_p;
@@ -524,7 +524,7 @@ dosdisk_seek(int disk, off_t pos, int unused)
 }
 
 PRIVATE int
-win_nt_dosdisk_xfer(int disk, dosdisk_info_t *d, void *buf, uint32 offset,
+win_nt_dosdisk_xfer(int disk, dosdisk_info_t *d, void *buf, uint32_t offset,
                     int num_bytes, DeviceIoControl_function_t func)
 {
     int retval;
@@ -561,7 +561,7 @@ win_nt_dosdisk_xfer(int disk, dosdisk_info_t *d, void *buf, uint32 offset,
 
 PRIVATE int
 win_95_dosdisk_disk_xfer(int disk, dosdisk_info_t *d, void *buf,
-                         uint32 offset, int num_bytes,
+                         uint32_t offset, int num_bytes,
                          DeviceIoControl_function_t func)
 {
     int retval;
@@ -601,7 +601,7 @@ win_95_dosdisk_disk_xfer(int disk, dosdisk_info_t *d, void *buf,
 
 PRIVATE int
 win_95_dosdisk_cdrom_xfer(int disk, dosdisk_info_t *d, void *buf,
-                          uint32 offset, int num_bytes,
+                          uint32_t offset, int num_bytes,
                           DeviceIoControl_function_t func)
 {
     int retval;
@@ -635,7 +635,7 @@ win_95_dosdisk_cdrom_xfer(int disk, dosdisk_info_t *d, void *buf,
 }
 
 PRIVATE int
-win_95_dosdisk_xfer(int disk, dosdisk_info_t *d, void *buf, uint32 offset,
+win_95_dosdisk_xfer(int disk, dosdisk_info_t *d, void *buf, uint32_t offset,
                     int num_bytes, DeviceIoControl_function_t func)
 {
     int retval;
@@ -647,7 +647,7 @@ win_95_dosdisk_xfer(int disk, dosdisk_info_t *d, void *buf, uint32 offset,
 }
 
 PRIVATE int
-dosdisk_xfer(int disk, void *buf, uint32 offset, int num_bytes,
+dosdisk_xfer(int disk, void *buf, uint32_t offset, int num_bytes,
              DeviceIoControl_function_t func)
 {
     int retval;
@@ -679,10 +679,10 @@ dosdisk_xfer(int disk, void *buf, uint32 offset, int num_bytes,
     return retval;
 }
 
-PRIVATE uint32
-read_in(uint32 fd, void *buf, uint32 offset, uint32 count)
+PRIVATE uint32_t
+read_in(uint32_t fd, void *buf, uint32_t offset, uint32_t count)
 {
-    uint32 retval;
+    uint32_t retval;
 
     fd &= ~DOSFDBIT;
     retval = dosdisk_xfer(fd, buf, offset, count, VWIN32_SECTOR_READ);
@@ -707,10 +707,10 @@ dosdisk_read(int disk, void *buf, int num_bytes)
     return retval;
 }
 
-PRIVATE uint32
-write_back(uint32 fd, const void *buf, uint32 offset, uint32 count)
+PRIVATE uint32_t
+write_back(uint32_t fd, const void *buf, uint32_t offset, uint32_t count)
 {
-    uint32 retval;
+    uint32_t retval;
 
     fd &= ~DOSFDBIT;
     retval = dosdisk_xfer(fd, (void *)buf, offset, count, VWIN32_SECTOR_WRITE);
@@ -746,10 +746,10 @@ is_win_nt(void)
     return retval;
 }
 
-PUBLIC uint32
+PUBLIC uint32_t
 win_GetLogicalDriveStrings(size_t size, char *buf)
 {
-    uint32 retval;
+    uint32_t retval;
 
     retval = GetLogicalDriveStrings(size, buf);
     return retval;
@@ -821,7 +821,7 @@ WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
       read_sector_t read_sector;
       disk_io_t disk_io;
       char buf[2048]; /* how can we tell the sector size if there's no FAT? */
-      uint32 byte_count;
+      uint32_t byte_count;
       BOOL result;
 
       printf ("vxd success\n");

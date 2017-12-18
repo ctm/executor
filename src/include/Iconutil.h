@@ -93,9 +93,9 @@ enum
 typedef ProcPtr IconActionProcPtr;
 typedef ProcPtr IconGetterProcPtr;
 
-typedef uint32 IconSelectorValue;
-typedef int16 IconAlignmentType;
-typedef int16 IconTransformType;
+typedef uint32_t IconSelectorValue;
+typedef int16_t IconAlignmentType;
+typedef int16_t IconTransformType;
 
 typedef struct CIcon
 {
@@ -104,7 +104,7 @@ typedef struct CIcon
     GUEST<BitMap> iconMask;
     GUEST<BitMap> iconBMap;
     GUEST<Handle> iconData;
-    GUEST<int16[1]> iconMaskData;
+    GUEST<int16_t[1]> iconMaskData;
 } * CIconPtr;
 
 typedef GUEST<CIconPtr> *CIconHandle;

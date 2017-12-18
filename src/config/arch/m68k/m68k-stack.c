@@ -5,15 +5,15 @@
 #include "rsys/common.h"
 #include "m68k-stack.h"
 
-uint32 last_executor_stack_ptr;
+uint32_t last_executor_stack_ptr;
 
 #define INTERRUPT_STACK_SIZE (256 * 1024 - 16)
 #define NUM_INTERRUPT_STACKS 2
 
 typedef struct
 {
-    uint32 *old_stack_variable;
-    uint32 old_stack_value;
+    uint32_t *old_stack_variable;
+    uint32_t old_stack_value;
     uint8 stack[INTERRUPT_STACK_SIZE];
 } m68k_interrupt_stack_t;
 
@@ -36,13 +36,13 @@ bool m68k_use_interrupt_stacks(void)
     /* Switch Mac stack. */
     m[0].old_stack_variable = &EM_A7;
     m[0].old_stack_value = EM_A7;
-    EM_A7 = (uint32)&m[0].stack[INTERRUPT_STACK_SIZE - 16];
+    EM_A7 = (uint32_t)&m[0].stack[INTERRUPT_STACK_SIZE - 16];
 
     /* Switch Executor stack. */
     m[1].old_stack_variable = &last_executor_stack_ptr;
     m[1].old_stack_value = last_executor_stack_ptr;
     last_executor_stack_ptr
-        = (uint32)&m[1].stack[INTERRUPT_STACK_SIZE - 16];
+        = (uint32_t)&m[1].stack[INTERRUPT_STACK_SIZE - 16];
 
     return true;
 }

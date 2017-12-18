@@ -28,7 +28,7 @@ void Executor::generic_elt_copy(generic_elt_t *dst, generic_elt_t *src)
 
 void Executor::generic_elt_calc_height_ascent(generic_elt_t *elt)
 {
-    int16 savesize, savefont;
+    int16_t savesize, savefont;
     Style saveface;
     FontInfo font_info;
 
@@ -50,9 +50,9 @@ void Executor::generic_elt_calc_height_ascent(generic_elt_t *elt)
 
 bool Executor::adjust_attrs(TextStyle *orig_attrs, TextStyle *new_attrs,
                             TextStyle *dst_attrs, TextStyle *continuous_attrs,
-                            int16 mode)
+                            int16_t mode)
 {
-    GUEST<int16> orig_font, orig_size;
+    GUEST<int16_t> orig_font, orig_size;
 
     orig_font = TS_FONT_X(orig_attrs);
     orig_size = TS_SIZE_X(orig_attrs);
@@ -95,7 +95,7 @@ bool Executor::adjust_attrs(TextStyle *orig_attrs, TextStyle *new_attrs,
 /* return the index into `runs' that has a starting char `sel'.  if no
    such run exists, create it */
 
-int16 Executor::make_style_run_at(TEStyleHandle te_style, int16 sel)
+int16_t Executor::make_style_run_at(TEStyleHandle te_style, int16_t sel)
 {
     int run_index;
 
@@ -149,11 +149,11 @@ int16 Executor::make_style_run_at(TEStyleHandle te_style, int16 sel)
    if `incr_count_p' this function increases the style reference on
    the returned style by one */
 
-int16 Executor::get_style_index(TEStyleHandle te_style, TextStyle *attrs, int incr_count_p)
+int16_t Executor::get_style_index(TEStyleHandle te_style, TextStyle *attrs, int incr_count_p)
 {
     /* these hold the swapped cached height, ascent for the style we are
      searching for */
-    GUEST<int16> cached_height = CWC(-1), cached_ascent = CWC(-1);
+    GUEST<int16_t> cached_height = CWC(-1), cached_ascent = CWC(-1);
     int cache_filled_p = false;
     STHandle style_table;
     STElement *st_elt;
@@ -214,7 +214,7 @@ int16 Executor::get_style_index(TEStyleHandle te_style, TextStyle *attrs, int in
 
 /* decrease the reference count of style at `style_index' by one */
 
-void Executor::release_style_index(TEStyleHandle te_style, int16 style_index)
+void Executor::release_style_index(TEStyleHandle te_style, int16_t style_index)
 {
     STHandle style_table;
     STElement *st_elt;
@@ -235,13 +235,13 @@ void Executor::stabilize_style_info(TEStyleHandle te_style)
     STHandle style_table;
     STElement *st_elt;
     /* map from original style indexes to new style indexes */
-    GUEST<int16> *index_map;
-    int16 n_styles, n_runs;
+    GUEST<int16_t> *index_map;
+    int16_t n_styles, n_runs;
     int i;
 
     n_styles = TE_STYLE_N_STYLES(te_style);
     style_table = TE_STYLE_STYLE_TABLE(te_style);
-    index_map = (GUEST<int16> *)alloca(n_styles * sizeof *index_map);
+    index_map = (GUEST<int16_t> *)alloca(n_styles * sizeof *index_map);
 
     for(i = 0; i < n_styles; i++)
         index_map[i] = CW(i);
@@ -303,13 +303,13 @@ done:
 }
 
 static void
-combine_run_with_next(TEStyleHandle te_style, int16 run_index)
+combine_run_with_next(TEStyleHandle te_style, int16_t run_index)
 {
     StyleRun *runs;
-    int16 n_runs;
+    int16_t n_runs;
     STHandle style_table;
     STElement *style;
-    int16 style_index;
+    int16_t style_index;
 
     n_runs = TE_STYLE_N_RUNS(te_style);
     runs = TE_STYLE_RUNS(te_style);
@@ -330,7 +330,7 @@ combine_run_with_next(TEStyleHandle te_style, int16 run_index)
 
 void Executor::te_style_combine_runs(TEStyleHandle te_style)
 {
-    int16 current_run_index, n_runs;
+    int16_t current_run_index, n_runs;
 
     /* remove any extra run fragmentation; if two adjacent runs are the
      same style, combine them */
@@ -361,19 +361,19 @@ void Executor::te_style_combine_runs(TEStyleHandle te_style)
 
 static void
 te_add_attrs_to_range(TEHandle te,
-                      int16 start, int16 end,
-                      TextStyle *attrs, int16 mode)
+                      int16_t start, int16_t end,
+                      TextStyle *attrs, int16_t mode)
 {
     TEStyleHandle te_style;
     STHandle style_table;
-    int16 start_run_index, end_run_index;
-    int16 current_run_index;
+    int16_t start_run_index, end_run_index;
+    int16_t current_run_index;
 
     TextStyle continuous_attrs;
 
     if(mode & doToggle)
     {
-        GUEST<int16> continuous_mode = CWC(doFace);
+        GUEST<int16_t> continuous_mode = CWC(doFace);
 
         TS_FACE(&continuous_attrs) = TS_FACE(attrs);
         TEContinuousStyle(&continuous_mode, &continuous_attrs, te);
@@ -400,8 +400,8 @@ te_add_attrs_to_range(TEHandle te,
             StyleRun *current_run;
             TextStyle new_attrs;
             STElement *orig_style;
-            int16 orig_style_index;
-            int16 new_style_index;
+            int16_t orig_style_index;
+            int16_t new_style_index;
 
             current_run = &runs[current_run_index];
             orig_style_index = STYLE_RUN_STYLE_INDEX(current_run);
@@ -426,7 +426,7 @@ te_add_attrs_to_range(TEHandle te,
 P2(PUBLIC pascal trap, TEHandle, TEStylNew, Rect *, dst, Rect *, view)
 {
     FontInfo font_info;
-    int16 font_height;
+    int16_t font_height;
     TEHandle teh;
     TEStyleHandle te_style;
     StScrpHandle stsh;
@@ -524,9 +524,9 @@ P1(PUBLIC pascal trap, StScrpHandle, GetStylScrap, TEHandle, te)
     StyleRun *runs;
     TEStyleHandle te_style;
     STHandle style_table;
-    int16 start, end, length;
-    int16 start_run_index, end_run_index;
-    int16 scrap_n_styles;
+    int16_t start, end, length;
+    int16_t start_run_index, end_run_index;
+    int16_t scrap_n_styles;
     int i;
 
     TE_SLAM(te);
@@ -590,7 +590,7 @@ P4(PUBLIC pascal trap, void, TEStylInsert, Ptr, text, LONGINT, length,
 
 P2(PUBLIC pascal trap, INTEGER, TEGetOffset, Point, pt, TEHandle, te)
 {
-    int16 retval;
+    int16_t retval;
     GUEST<Point> sp;
 
     sp = TE_SEL_POINT(te);
@@ -615,13 +615,13 @@ P2(PUBLIC pascal trap, LONGINT, TEGetPoint, INTEGER, offset, TEHandle, teh)
     lineno = TEP_CHAR_TO_LINENO(tep, offset);
     ascent = TEP_ASCENT_FOR_LINE(tep, lineno);
 
-    return ((int32)(p.v + ascent) << 16) + (int32)p.h;
+    return ((int32_t)(p.v + ascent) << 16) + (int32_t)p.h;
 }
 
-P3(PUBLIC pascal trap, int32, TEGetHeight,
+P3(PUBLIC pascal trap, int32_t, TEGetHeight,
    LONGINT, endLine, LONGINT, startLine, TEHandle, teh)
 {
-    int32 retval;
+    int32_t retval;
 
     if(startLine > 0)
         startLine--;
@@ -638,7 +638,7 @@ P3(PUBLIC pascal trap, int32, TEGetHeight,
      and 2. pin start and end by `TE_N_LINES ()' */
     if(startLine > endLine)
     {
-        uint32 temp;
+        uint32_t temp;
 
         temp = startLine;
         startLine = endLine;
@@ -665,8 +665,8 @@ P3(PUBLIC pascal trap, int32, TEGetHeight,
     return retval;
 }
 
-P5(PUBLIC pascal trap, void, TEGetStyle, int16, sel,
-   TextStyle *, attrs, GUEST<int16> *, line_height, GUEST<int16> *, font_ascent,
+P5(PUBLIC pascal trap, void, TEGetStyle, int16_t, sel,
+   TextStyle *, attrs, GUEST<int16_t> *, line_height, GUEST<int16_t> *, font_ascent,
    TEHandle, te)
 {
     if(TE_STYLIZED_P(te))
@@ -704,9 +704,9 @@ P5(PUBLIC pascal trap, void, TEGetStyle, int16, sel,
 P1(PUBLIC pascal trap, void, TEStylPaste, TEHandle, te)
 {
     Handle hText;
-    GUEST<int32> dummy;
+    GUEST<int32_t> dummy;
     /* length of the scrap text */
-    int16 length, retval;
+    int16_t length, retval;
     StScrpHandle scrap;
 
     hText = NewHandle(1);
@@ -742,7 +742,7 @@ P1(PUBLIC pascal trap, void, TEStylPaste, TEHandle, te)
 static void
 te_do_redraw(TEHandle te)
 {
-    int16 cal_start, cal_end, sel_start, sel_end;
+    int16_t cal_start, cal_end, sel_start, sel_end;
 
     TESAVE(te);
 
@@ -761,10 +761,10 @@ te_do_redraw(TEHandle te)
     TERESTORE();
 }
 
-P4(PUBLIC pascal trap, void, TESetStyle, int16, mode, TextStyle *, new_attrs,
+P4(PUBLIC pascal trap, void, TESetStyle, int16_t, mode, TextStyle *, new_attrs,
    BOOLEAN, redraw, TEHandle, te)
 {
-    int16 start, end;
+    int16_t start, end;
 
     if(!TE_STYLIZED_P(te))
         return;
@@ -822,17 +822,17 @@ P4(PUBLIC pascal trap, void, TESetStyle, int16, mode, TextStyle *, new_attrs,
     TE_SLAM(te);
 }
 
-P5(PUBLIC pascal trap, void, TEReplaceStyle, int16, mode,
+P5(PUBLIC pascal trap, void, TEReplaceStyle, int16_t, mode,
    TextStyle *, attrs_to_replace, TextStyle *, replacement_attrs, BOOLEAN, redraw,
    TEHandle, te)
 {
     TEStyleHandle te_style;
     SignedByte te_style_flags;
-    int16 sel_start, sel_end;
-    int16 start_run_index, end_run_index;
+    int16_t sel_start, sel_end;
+    int16_t start_run_index, end_run_index;
     STHandle style_table;
     StyleRun *runs;
-    int16 run_i;
+    int16_t run_i;
 
     TE_SLAM(te);
 
@@ -858,7 +858,7 @@ P5(PUBLIC pascal trap, void, TEReplaceStyle, int16, mode,
     for(run_i = start_run_index; run_i < end_run_index; run_i++)
     {
         StyleRun *run;
-        int16 orig_style_index;
+        int16_t orig_style_index;
         STElement *style;
 
         run = &runs[run_i];
@@ -880,7 +880,7 @@ P5(PUBLIC pascal trap, void, TEReplaceStyle, int16, mode,
                           &TS_COLOR(attrs_to_replace),
                           sizeof(RGBColor))))
         {
-            int16 new_style_index;
+            int16_t new_style_index;
 
             TextStyle *new_attrs = (TextStyle *)alloca(sizeof *new_attrs);
 
@@ -909,13 +909,13 @@ P5(PUBLIC pascal trap, void, TEReplaceStyle, int16, mode,
 P3(PUBLIC pascal trap, BOOLEAN, TEContinuousStyle, GUEST<INTEGER> *, modep,
    TextStyle *, ts_out, TEHandle, teh)
 {
-    int16 sel_start, sel_end;
+    int16_t sel_start, sel_end;
     TEStyleHandle te_style;
     STHandle style_table;
     STElement *style;
     int style_index = -1;
     int run_i;
-    GUEST<int16> orig_mode;
+    GUEST<int16_t> orig_mode;
 
     if(!TE_STYLIZED_P(teh))
     {
@@ -996,9 +996,9 @@ P3(PUBLIC pascal trap, BOOLEAN, TEContinuousStyle, GUEST<INTEGER> *, modep,
     else
     {
         StyleRun *run = NULL;
-        GUEST<int16> font = CWC(0);
+        GUEST<int16_t> font = CWC(0);
         Style face = 0;
-        GUEST<int16> size = CWC(0);
+        GUEST<int16_t> size = CWC(0);
         RGBColor color;
 
         /* locate the starting run */
@@ -1066,21 +1066,21 @@ P3(PUBLIC pascal trap, BOOLEAN, TEContinuousStyle, GUEST<INTEGER> *, modep,
     }
 }
 
-P5(PUBLIC pascal trap, void, SetStylScrap, int32, start, int32, stop,
+P5(PUBLIC pascal trap, void, SetStylScrap, int32_t, start, int32_t, stop,
    StScrpHandle, newstyles, BOOLEAN, redraw, TEHandle, teh)
 {
     ROMlib_hook(te_notsupported);
     warning_unimplemented(NULL_STRING);
 }
 
-P3(PUBLIC pascal trap, void, TECustomHook, int16, sel, GUEST<ProcPtr> *,
+P3(PUBLIC pascal trap, void, TECustomHook, int16_t, sel, GUEST<ProcPtr> *,
    addr, TEHandle, te)
 {
     ROMlib_hook(te_notsupported);
     warning_unimplemented(NULL_STRING);
 }
 
-P3(PUBLIC pascal trap, LONGINT, TENumStyles, int32, start, int32, stop,
+P3(PUBLIC pascal trap, LONGINT, TENumStyles, int32_t, start, int32_t, stop,
    TEHandle, te)
 {
     ROMlib_hook(te_notsupported);

@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <stdint.h>
 
 #if defined(MACOSX_)
 #include <libc.h>
@@ -43,7 +44,6 @@
 typedef short int INTEGER;
 
 typedef int LONGINT;
-typedef int int32;
 
 #ifndef true
 typedef enum { false,
@@ -97,11 +97,11 @@ typedef struct
     int user_arg;
     GUEST<uint32_t> time;
     const char *volume_name;
-    int32 nsecs_left;
-    int32 nsecs_in_map;
-    int32 nsecs_in_alblock;
-    int32 nalblocks_in_tree;
-    int32 nalblocks_in_desktop;
+    int32_t nsecs_left;
+    int32_t nsecs_in_map;
+    int32_t nsecs_in_alblock;
+    int32_t nalblocks_in_tree;
+    int32_t nalblocks_in_desktop;
 } info_t;
 
 /*
@@ -148,7 +148,7 @@ write_volume_info(info_t *infop)
  */
     nalblks = ((infop->nsecs_left - 3 + infop->nsecs_in_alblock - 1)
                / infop->nsecs_in_alblock);
-    infop->nsecs_in_map = (int32)(((long)nalblks + NMAPBITS - 1) / NMAPBITS);
+    infop->nsecs_in_map = (int32_t)(((long)nalblks + NMAPBITS - 1) / NMAPBITS);
     nalblks = (infop->nsecs_left - infop->nsecs_in_map - 3
                + infop->nsecs_in_alblock - 1)
         / infop->nsecs_in_alblock;
@@ -210,9 +210,9 @@ write_volume_info(info_t *infop)
 PRIVATE int
 write_volume_bitmap(info_t *infop)
 {
-    int32 nalblocks_in_use;
+    int32_t nalblocks_in_use;
     unsigned char buf[SECSIZE], *p;
-    int32 i;
+    int32_t i;
 
     assert(infop->nsecs_left >= infop->nsecs_in_map);
     nalblocks_in_use = infop->nalblocks_in_tree * 2 + infop->nalblocks_in_desktop;
@@ -304,7 +304,7 @@ PRIVATE int
 write_extents(info_t *infop)
 {
     char buf[SECSIZE];
-    int32 i, j;
+    int32_t i, j;
 
     assert(infop->nsecs_left >= infop->nalblocks_in_tree * infop->nsecs_in_alblock);
     fill_btblock0(infop, extent);
@@ -340,7 +340,7 @@ write_catalog(info_t *infop)
     directoryrec *dirp;
     threadrec *threadp;
     filerec *filep;
-    int32 j, remaining_alblocks_in_tree;
+    int32_t j, remaining_alblocks_in_tree;
 
     assert(infop->nsecs_left >= infop->nalblocks_in_tree * infop->nsecs_in_alblock);
     fill_btblock0(infop, catalog);
@@ -552,7 +552,7 @@ write_rest(info_t *infop)
 
     if(!write_zeros && infop->writefuncp == (write_funcp_t)write)
     {
-        int32 blocks_to_skip;
+        int32_t blocks_to_skip;
 
         blocks_to_skip = infop->nsecs_left - 2;
         if(blocks_to_skip > 0)
@@ -774,7 +774,7 @@ PRIVATE bool
 check_volume_size(const char *volume_size_string)
 {
     bool success_p;
-    int32 nbytes;
+    int32_t nbytes;
 
     if(!parse_number(volume_size_string, &nbytes, SECSIZE))
     {
@@ -908,8 +908,8 @@ int main(int argc, char *argv[])
 {
     time_t now;
     struct tm *tmp;
-    int32 years, leaps;
-    int32 nsecs = 0, nbytes = 0;
+    int32_t years, leaps;
+    int32_t nsecs = 0, nbytes = 0;
     long timevar;
     bool force_p, help_p;
     char *hfv_name, *volume_name, *volume_size;

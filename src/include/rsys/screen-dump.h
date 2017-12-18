@@ -5,22 +5,22 @@ namespace Executor
 {
 struct header
 {
-    int16 byte_order;
-    int16 magic_number;
-    int32 ifd_offset;
+    int16_t byte_order;
+    int16_t magic_number;
+    int32_t ifd_offset;
 };
 
 struct directory_entry
 {
-    int16 tag;
-    int16 type;
-    int32 count;
-    int32 value_offset;
+    int16_t tag;
+    int16_t type;
+    int32_t count;
+    int32_t value_offset;
 };
 
 struct ifd
 {
-    int16 count;
+    int16_t count;
     struct directory_entry entries[1];
 };
 }

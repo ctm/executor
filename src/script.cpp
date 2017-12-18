@@ -204,15 +204,15 @@ P2(PUBLIC pascal trap, INTEGER, CharType, Ptr, textbufp, INTEGER, offset)
     return retval;
 }
 
-P4(PUBLIC pascal trap, void, MeasureJust, Ptr, textbufp, int16, length,
-   int16, slop, Ptr, charlocs)
+P4(PUBLIC pascal trap, void, MeasureJust, Ptr, textbufp, int16_t, length,
+   int16_t, slop, Ptr, charlocs)
 {
     if(slop)
         warning_unimplemented("slop = %d", slop);
     MeasureText(length, textbufp, charlocs);
 }
 
-P7(PUBLIC pascal trap, void, NMeasureJust, Ptr, text, int32, length,
+P7(PUBLIC pascal trap, void, NMeasureJust, Ptr, text, int32_t, length,
    Fixed, slop, Ptr, charLocs, JustStyleCode, run_pos,
    Point, numer, Point, denom)
 {
@@ -226,7 +226,7 @@ P7(PUBLIC pascal trap, void, NMeasureJust, Ptr, text, int32, length,
     denomx.h = CW(denom.h);
 
     xStdTxMeas(length, (uint8 *)text, &numerx, &denomx,
-               NULL, (GUEST<int16> *)charLocs);
+               NULL, (GUEST<int16_t> *)charLocs);
 }
 
 P1(PUBLIC pascal trap, Boolean, ParseTable,
@@ -349,10 +349,10 @@ P4(PUBLIC pascal trap, void, HiliteText, Ptr, textbufp, INTEGER, firstoffset,
     offsets[5] = CWC(0);
 }
 
-PRIVATE int16
-count_spaces(Ptr textbufp, int16 length)
+PRIVATE int16_t
+count_spaces(Ptr textbufp, int16_t length)
 {
-    int16 retval;
+    int16_t retval;
 
     retval = 0;
     while(length-- > 0)
@@ -363,7 +363,7 @@ count_spaces(Ptr textbufp, int16 length)
 }
 
 P3(PUBLIC pascal trap, void, DrawJust, Ptr, textbufp,
-   int16, length, int16, slop)
+   int16_t, length, int16_t, slop)
 {
     GUEST<Fixed> save_sp_extra_x;
     int n_spaces;
@@ -444,8 +444,8 @@ this_millennium(void)
 }
 
 P5(PUBLIC pascal trap, String2DateStatus, String2Date,
-   Ptr, text, int32, length, DateCachePtr, cache,
-   GUEST<int32> *, length_used_ret, LongDatePtr, date_time)
+   Ptr, text, int32_t, length, DateCachePtr, cache,
+   GUEST<int32_t> *, length_used_ret, LongDatePtr, date_time)
 {
     String2DateStatus retval;
 
@@ -488,9 +488,9 @@ P5(PUBLIC pascal trap, String2DateStatus, String2Date,
 }
 
 P7(PUBLIC pascal trap, StyledLineBreakCode, StyledLineBreak,
-   Ptr, textp, int32, length,
-   int32, text_start, int32, text_end, int32, flags,
-   GUEST<Fixed> *, text_width_fp, GUEST<int32> *, text_offset)
+   Ptr, textp, int32_t, length,
+   int32_t, text_start, int32_t, text_end, int32_t, flags,
+   GUEST<Fixed> *, text_width_fp, GUEST<int32_t> *, text_offset)
 {
     char *text = (char *)textp;
     /* the index into `text' that began the last word, which is where we

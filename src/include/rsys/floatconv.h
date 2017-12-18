@@ -106,7 +106,7 @@ x80_to_ieee(const x80_t *x)
 
 #elif defined(__alpha)
     volatile alpha_x64_t temp64;
-    uint32 templ;
+    uint32_t templ;
 
     temp64.sgn = GET_X80_SGN(x);
     if(GET_X80_EXP(x) == 0 && x->man.man == 0)
@@ -243,7 +243,7 @@ f32_to_ieee(const f32_t *f)
     return *(float *)f;
 #else
     volatile native_f32_t temp;
-    temp.n = CL_RAW(*(uint32 *)f); /* This byte swaps on LITTLEENDIAN machines. */
+    temp.n = CL_RAW(*(uint32_t *)f); /* This byte swaps on LITTLEENDIAN machines. */
     return temp.f;
 #endif /* !QUADALIGN */
 }
@@ -258,8 +258,8 @@ comp_to_ieee(const comp_t *cp)
     native_comp_t c;
 
 #if defined(LITTLEENDIAN)
-    c.hilo.hi = CL_RAW(*(uint32 *)(&cp->hilo.hi));
-    c.hilo.lo = CL_RAW(*(uint32 *)(&cp->hilo.lo));
+    c.hilo.hi = CL_RAW(*(uint32_t *)(&cp->hilo.hi));
+    c.hilo.lo = CL_RAW(*(uint32_t *)(&cp->hilo.lo));
 #else /* Not LITTLEENDIAN */
 #ifndef QUADALIGN
     c = *cp;
@@ -353,7 +353,7 @@ ieee_to_x80(ieee_t n, x80_t *x)
     x->man.hilo.man_hi = CL_RAW(temp80.man_hi);
 #elif defined(__alpha)
     volatile alpha_x64_t *temp64p;
-    uint32 templ;
+    uint32_t templ;
 
     temp64p = (alpha_x64_t *)&n;
 
@@ -395,14 +395,14 @@ ieee_to_f64(ieee_t val, f64_t *dest)
 #else /* QUADALIGN */
     volatile f64_t temp;
     temp.d = (double)val;
-    *(uint32 *)&dest->hi = CL_RAW(temp.hilo.hi);
-    *(uint32 *)&dest->lo = CL_RAW(temp.hilo.lo);
+    *(uint32_t *)&dest->hi = CL_RAW(temp.hilo.hi);
+    *(uint32_t *)&dest->lo = CL_RAW(temp.hilo.lo);
 #endif /* QUADALIGN */
 #else /* LITTLEENDIAN */
     volatile f64_t temp;
     temp.d = (double)val;
-    *(uint32 *)&dest->hilo.lo = CL_RAW(temp.hilo.hi);
-    *(uint32 *)&dest->hilo.hi = CL_RAW(temp.hilo.lo);
+    *(uint32_t *)&dest->hilo.lo = CL_RAW(temp.hilo.hi);
+    *(uint32_t *)&dest->hilo.hi = CL_RAW(temp.hilo.lo);
 #endif /* LITTLEENDIAN */
 }
 
@@ -420,7 +420,7 @@ ieee_to_f32(ieee_t val, f32_t *dest)
 #else /* QUADALIGN */
     volatile f32_t temp;
     temp.f = (float)val;
-    *(uint32 *)dest = CL(temp.n);
+    *(uint32_t *)dest = CL(temp.n);
 #endif
 }
 
@@ -435,8 +435,8 @@ ieee_to_comp(ieee_t val, comp_t *dest)
     /* Check to see if val is NaN. */
     if(val != val)
     {
-        *(uint32 *)&dest->hilo.hi = CL_RAW(0x80000000); /* NaN high 32 bits. */
-        *(uint32 *)&dest->hilo.lo = CL_RAW(0x00000000); /* NaN low 32 bits. */
+        *(uint32_t *)&dest->hilo.hi = CL_RAW(0x80000000); /* NaN high 32 bits. */
+        *(uint32_t *)&dest->hilo.lo = CL_RAW(0x00000000); /* NaN low 32 bits. */
     }
     else /* Not NaN */
     {
@@ -448,8 +448,8 @@ ieee_to_comp(ieee_t val, comp_t *dest)
         temp.val = val; /* Let C compiler cast the ieee_t to a LONGINT LONGINT. */
 
         /* Write the value out. */
-        *(uint32 *)&dest->hilo.hi = CL_RAW(temp.hilo.hi);
-        *(uint32 *)&dest->hilo.lo = CL_RAW(temp.hilo.lo);
+        *(uint32_t *)&dest->hilo.hi = CL_RAW(temp.hilo.hi);
+        *(uint32_t *)&dest->hilo.lo = CL_RAW(temp.hilo.lo);
 #endif
     }
 }

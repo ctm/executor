@@ -24,9 +24,9 @@ namespace Executor
     typedef type *type##Ptr;          \
     typedef GUEST<type##Ptr> *type##Handle
 
-typedef int32 TimeStamp;
+typedef int32_t TimeStamp;
 typedef Handle EditionRefNum;
-typedef int16 UpdateMode;
+typedef int16_t UpdateMode;
 typedef SignedByte SectionType;
 typedef char FormatType[4];
 
@@ -42,10 +42,10 @@ struct SectionRecord
     GUEST<SectionType> kind;
     GUEST<UpdateMode> mode;
     GUEST<TimeStamp> mdDate;
-    GUEST<int32> sectionID;
-    GUEST<int32> refCon;
+    GUEST<int32_t> sectionID;
+    GUEST<int32_t> refCon;
     GUEST<AliasHandle> alias;
-    GUEST<int32> subPart;
+    GUEST<int32_t> subPart;
     GUEST<Handle> nextSection; /* ### Section */
     GUEST<Handle> controlBlock;
     GUEST<EditionRefNum> refNum;
@@ -58,7 +58,7 @@ struct EditionContainerSpec
     GUEST_STRUCT;
     GUEST<FSSpec> theFile;
     GUEST<ScriptCode> theFileScript;
-    GUEST<int32> thePart;
+    GUEST<int32_t> thePart;
     GUEST<Str31> thePartName;
     GUEST<ScriptCode> thePartScript;
 };
@@ -132,7 +132,7 @@ struct EditionOpenerParamBlock
     GUEST<SectionHandle> sectionH;
     GUEST<FSSpecPtr> document;
     GUEST<OSType> fdCreator;
-    GUEST<int32> ioRefNum;
+    GUEST<int32_t> ioRefNum;
     GUEST<FormatIOProcPtr> ioProc;
     GUEST<Boolean> success;
     GUEST<SignedByte> formatsMask;
@@ -151,12 +151,12 @@ typedef uint8 FormatIOVerb;
 struct FormatIOParamBlock
 {
     GUEST_STRUCT;
-    GUEST<int32> ioRefNum;
+    GUEST<int32_t> ioRefNum;
     GUEST<FormatType> format;
-    GUEST<int32> formatIndex;
-    GUEST<int32> offset;
+    GUEST<int32_t> formatIndex;
+    GUEST<int32_t> offset;
     GUEST<Ptr> buffPtr;
-    GUEST<int32> buffLen;
+    GUEST<int32_t> buffLen;
 };
 
 typedef struct FormatIOParamBlock FormatIOParamBlock;
@@ -186,7 +186,7 @@ typedef FormatIOParamBlock *FormatIOParamBlockPtr;
 extern pascal trap OSErr C_InitEditionPack(INTEGER unused);
 extern pascal trap OSErr C_NewSection(EditionContainerSpecPtr container,
                                       FSSpecPtr section_doc,
-                                      SectionType kind, int32 section_id,
+                                      SectionType kind, int32_t section_id,
                                       UpdateMode initial_mode,
                                       SectionHandle *section_out);
 extern pascal trap OSErr C_RegisterSection(FSSpecPtr section_doc,
@@ -202,11 +202,11 @@ extern pascal trap OSErr C_DeleteEditionContainerFile(FSSpecPtr edition_file);
 
 extern pascal trap OSErr C_SetEditionFormatMark(EditionRefNum edition,
                                                 FormatType format,
-                                                int32 mark);
+                                                int32_t mark);
 
 extern pascal trap OSErr C_GetEditionFormatMark(EditionRefNum edition,
                                                 FormatType format,
-                                                int32 *currentMark);
+                                                int32_t *currentMark);
 
 extern pascal trap OSErr C_OpenEdition(SectionHandle subscriber_section,
                                        EditionRefNum *ref_num);
@@ -235,19 +235,19 @@ extern pascal trap OSErr C_NewPublisherDialog(NewSubscriberReplyPtr reply);
 extern pascal trap OSErr C_SectionOptionsDialog(SectionOptionsReply *reply);
 
 extern pascal trap OSErr C_NewSubscriberExpDialog(NewSubscriberReplyPtr reply, Point where,
-                                                  int16 expnasion_ditl_res_id,
+                                                  int16_t expnasion_ditl_res_id,
                                                   ExpDialogHookProcPtr dialog_hook,
                                                   ExpModalFilterProcPtr filter_hook,
                                                   Ptr data);
 
 extern pascal trap OSErr C_NewPublisherExpDialog(NewPublisherReplyPtr reply, Point where,
-                                                 int16 expnasion_ditl_res_id,
+                                                 int16_t expnasion_ditl_res_id,
                                                  ExpDialogHookProcPtr dialog_hook,
                                                  ExpModalFilterProcPtr filter_hook,
                                                  Ptr data);
 
 extern pascal trap OSErr C_SectionOptionsExpDialog(SectionOptionsReply *reply,
-                                                   Point where, int16 expnasion_ditl_res_id,
+                                                   Point where, int16_t expnasion_ditl_res_id,
                                                    ExpDialogHookProcPtr dialog_hook,
                                                    ExpModalFilterProcPtr filter_hook,
                                                    Ptr data);

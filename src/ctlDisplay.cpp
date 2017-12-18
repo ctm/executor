@@ -115,7 +115,7 @@ P2(PUBLIC pascal trap, void, HiliteControl, ControlHandle, c, /* IMI-322 */
     {
         if(CTL_VIS(c))
         {
-            int16 oldh;
+            int16_t oldh;
 
             oldh = CTL_HILITE(c);
             if(oldh != state)

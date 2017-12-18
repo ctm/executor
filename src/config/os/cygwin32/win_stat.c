@@ -24,10 +24,10 @@
  * fold lower to uppper and fold slash to back-slash
  */
 
-PRIVATE uint32
+PRIVATE uint32_t
 char_val(int c)
 {
-    uint32 retval;
+    uint32_t retval;
 
     retval = toupper(c);
     if(c == '/')
@@ -46,10 +46,10 @@ char_val(int c)
  * is what you see now, and it's been tested on 27,483 different files.
  */
 
-PRIVATE uint32
+PRIVATE uint32_t
 hash_func(const char *p)
 {
-    uint32 retval, u;
+    uint32_t retval, u;
     int c;
     const char *orig_p;
 
@@ -78,21 +78,21 @@ hash_func(const char *p)
     return retval;
 }
 
-PUBLIC uint32
+PUBLIC uint32_t
 ino_from_name(const char *name)
 {
     char fullname[2048];
     char *filenamep;
-    uint32 len;
+    uint32_t len;
     char *p;
-    uint32 retval;
+    uint32_t retval;
 
     len = GetFullPathName(name, sizeof fullname, fullname, &filenamep);
     if(len <= sizeof fullname - 1)
         p = fullname;
     else
     {
-        uint32 len2;
+        uint32_t len2;
 
         ++len;
         p = alloca(len);

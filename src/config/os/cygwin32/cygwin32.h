@@ -88,7 +88,7 @@ extern int Timer32_Init(void);
         struct stat tmp;                                    \
                                                             \
         tmp = buf;                                          \
-        ((uint16)tmp.st_ino << 16) | ((uint16)tmp.st_rdev); \
+        ((uint16_t)tmp.st_ino << 16) | ((uint16_t)tmp.st_rdev); \
     })
 
 extern int ROMlib_set_realmodecd(int value);

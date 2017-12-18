@@ -840,7 +840,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define GetMenu(A1)                                                                            \
     ({                                                                                         \
         syn68k_addr_t new_addr;                                                                \
-        int16 __stub_arg_1 = (A1);                                                             \
+        int16_t __stub_arg_1 = (A1);                                                             \
                                                                                                \
         new_addr = tooltraptable[0x01bf];                                                      \
         ((new_addr == toolstuff[0x01bf].orig)                                                  \
@@ -928,7 +928,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define DeleteMenu(A1)                                                                      \
     ({                                                                                      \
         syn68k_addr_t new_addr;                                                             \
-        int16 __stub_arg_1 = (A1);                                                          \
+        int16_t __stub_arg_1 = (A1);                                                          \
                                                                                             \
         new_addr = tooltraptable[0x0136];                                                   \
         ((new_addr == toolstuff[0x0136].orig)                                               \
@@ -2250,10 +2250,10 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
         BitMap *__stub_arg_2 = (A2);                                                                                                                                                         \
         Rect *__stub_arg_3 = (A3);                                                                                                                                                           \
         Rect *__stub_arg_4 = (A4);                                                                                                                                                           \
-        int16 __stub_arg_5 = (A5);                                                                                                                                                           \
-        int16 __stub_arg_6 = (A6);                                                                                                                                                           \
+        int16_t __stub_arg_5 = (A5);                                                                                                                                                           \
+        int16_t __stub_arg_6 = (A6);                                                                                                                                                           \
         ProcPtr __stub_arg_7 = (A7);                                                                                                                                                         \
-        int32 __stub_arg_8 = (A8);                                                                                                                                                           \
+        int32_t __stub_arg_8 = (A8);                                                                                                                                                           \
                                                                                                                                                                                              \
         new_addr = tooltraptable[0x0250];                                                                                                                                                    \
         ((new_addr == toolstuff[0x0250].orig)                                                                                                                                                \
@@ -2269,7 +2269,7 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
         Rect *__stub_arg_4 = (A4);                                                                                                                                             \
         RGBColor *__stub_arg_5 = (A5);                                                                                                                                         \
         ProcPtr __stub_arg_6 = (A6);                                                                                                                                           \
-        int32 __stub_arg_7 = (A7);                                                                                                                                             \
+        int32_t __stub_arg_7 = (A7);                                                                                                                                             \
                                                                                                                                                                                \
         new_addr = tooltraptable[0x024f];                                                                                                                                      \
         ((new_addr == toolstuff[0x024f].orig)                                                                                                                                  \
@@ -2586,9 +2586,9 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
         syn68k_addr_t new_addr;                                                                                                                      \
         PaletteHandle __stub_arg_1 = (A1);                                                                                                           \
         PaletteHandle __stub_arg_2 = (A2);                                                                                                           \
-        int16 __stub_arg_3 = (A3);                                                                                                                   \
-        int16 __stub_arg_4 = (A4);                                                                                                                   \
-        int16 __stub_arg_5 = (A5);                                                                                                                   \
+        int16_t __stub_arg_3 = (A3);                                                                                                                   \
+        int16_t __stub_arg_4 = (A4);                                                                                                                   \
+        int16_t __stub_arg_5 = (A5);                                                                                                                   \
                                                                                                                                                      \
         new_addr = tooltraptable[0x02a1];                                                                                                            \
         ((new_addr == toolstuff[0x02a1].orig)                                                                                                        \
@@ -4579,9 +4579,9 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
     ({                                                                                                                             \
         syn68k_addr_t new_addr;                                                                                                    \
         Ptr __stub_arg_1 = (A1);                                                                                                   \
-        int32 __stub_arg_2 = (A2);                                                                                                 \
+        int32_t __stub_arg_2 = (A2);                                                                                                 \
         Rect *__stub_arg_3 = (A3);                                                                                                 \
-        int16 __stub_arg_4 = (A4);                                                                                                 \
+        int16_t __stub_arg_4 = (A4);                                                                                                 \
                                                                                                                                    \
         new_addr = tooltraptable[0x01ce];                                                                                          \
         ((new_addr == toolstuff[0x01ce].orig)                                                                                      \
@@ -4591,8 +4591,8 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define TEScroll(A1, A2, A3)                                                                                          \
     ({                                                                                                                \
         syn68k_addr_t new_addr;                                                                                       \
-        int16 __stub_arg_1 = (A1);                                                                                    \
-        int16 __stub_arg_2 = (A2);                                                                                    \
+        int16_t __stub_arg_1 = (A1);                                                                                    \
+        int16_t __stub_arg_2 = (A2);                                                                                    \
         TEHandle __stub_arg_3 = (A3);                                                                                 \
                                                                                                                       \
         new_addr = tooltraptable[0x01dd];                                                                             \
@@ -4666,8 +4666,8 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define TEPinScroll(A1, A2, A3)                                                                                          \
     ({                                                                                                                   \
         syn68k_addr_t new_addr;                                                                                          \
-        int16 __stub_arg_1 = (A1);                                                                                       \
-        int16 __stub_arg_2 = (A2);                                                                                       \
+        int16_t __stub_arg_1 = (A1);                                                                                       \
+        int16_t __stub_arg_2 = (A2);                                                                                       \
         TEHandle __stub_arg_3 = (A3);                                                                                    \
                                                                                                                          \
         new_addr = tooltraptable[0x0012];                                                                                \
@@ -4801,8 +4801,8 @@ extern toolstuff_t toolstuff[NTOOLENTRIES];
 #define TESetSelect(A1, A2, A3)                                                                                          \
     ({                                                                                                                   \
         syn68k_addr_t new_addr;                                                                                          \
-        int32 __stub_arg_1 = (A1);                                                                                       \
-        int32 __stub_arg_2 = (A2);                                                                                       \
+        int32_t __stub_arg_1 = (A1);                                                                                       \
+        int32_t __stub_arg_2 = (A2);                                                                                       \
         TEHandle __stub_arg_3 = (A3);                                                                                    \
                                                                                                                          \
         new_addr = tooltraptable[0x01d1];                                                                                \

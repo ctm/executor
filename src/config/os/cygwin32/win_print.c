@@ -27,7 +27,7 @@
  * accesses NaNs.
  */
 
-#define SAVE_FP_ENVIRONMENT() uint32 __save_fpe = ROMlib_get_fcw_fsw()
+#define SAVE_FP_ENVIRONMENT() uint32_t __save_fpe = ROMlib_get_fcw_fsw()
 #define RESTORE_FP_ENVIRONMENT() ROMlib_set_fcw_fsw(__save_fpe)
 
 typedef struct
@@ -568,7 +568,7 @@ unloadgs(void)
 }
 
 PRIVATE bool
-release_info(win_printp_t wp, uint32 *last_errorp)
+release_info(win_printp_t wp, uint32_t *last_errorp)
 {
     bool retval;
 
@@ -653,7 +653,7 @@ set_gs_gestalt_info(void)
 
 PUBLIC bool
 get_info(win_printp_t *wpp, int physx, int physy,
-         orientation_t orientation, int copies, uint32 *last_errorp)
+         orientation_t orientation, int copies, uint32_t *last_errorp)
 {
     bool retval;
     win_printp_t wp;
@@ -797,7 +797,7 @@ get_info(win_printp_t *wpp, int physx, int physy,
 }
 
 PUBLIC bool
-print_file(win_printp_t wp, const char *spool_namep, uint32 *last_errorp)
+print_file(win_printp_t wp, const char *spool_namep, uint32_t *last_errorp)
 {
     bool retval;
 

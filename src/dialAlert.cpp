@@ -21,7 +21,7 @@
 
 using namespace Executor;
 
-int16 alert_extra_icon_id = -32768;
+int16_t alert_extra_icon_id = -32768;
 
 static icon_item_template_t icon_item_template = {
     /* item count - 1 */

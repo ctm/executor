@@ -19,13 +19,13 @@ typedef enum {
     VWIN32_EXTENDED_OP = 6,
 } DeviceIoControl_function_t;
 
-typedef uint32 drive_number_0t; /* zero based */
-typedef uint32 drive_number_1t; /* one based */
+typedef uint32_t drive_number_0t; /* zero based */
+typedef uint32_t drive_number_1t; /* one based */
 
 typedef struct
 {
-    uint32 diStartSector PACKED;
-    uint16 diSectors PACKED;
+    uint32_t diStartSector PACKED;
+    uint16_t diSectors PACKED;
     void *diBuffer PACKED;
 } disk_io_t;
 
@@ -37,24 +37,24 @@ typedef enum { READ_OP = 0,
 
 typedef struct
 {
-    uint32 ebx;
-    uint32 edx;
-    uint32 ecx;
-    uint32 eax;
-    uint32 edi;
-    uint32 esi;
-    uint32 flags;
+    uint32_t ebx;
+    uint32_t edx;
+    uint32_t ecx;
+    uint32_t eax;
+    uint32_t edi;
+    uint32_t esi;
+    uint32_t flags;
 } vwin32_regs;
 
 typedef struct
 {
     disk_io_t *disk_iop;
-    uint32 filler0;
+    uint32_t filler0;
     sector_xfer_magic0_t magic;
     drive_number_0t drive_number_0based;
-    uint32 filler1;
-    uint32 filler2;
-    uint32 success_flag;
+    uint32_t filler1;
+    uint32_t filler2;
+    uint32_t success_flag;
 } xfer_sector_t;
 
 typedef struct
@@ -63,9 +63,9 @@ typedef struct
     drive_number_1t drive_number_1based;
     sector_xfer_magic0_t magic0;
     sector_xfer_magic1_t magic1;
-    uint32 filler0;
+    uint32_t filler0;
     extended_op_t op;
-    uint32 success_flag;
+    uint32_t success_flag;
 } extended_sector_op_t;
 
 #define VWIN32_VXD_NAME "\\\\.\\vwin32"

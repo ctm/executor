@@ -121,13 +121,13 @@ parse_base_number(const char *s, const char *digits, long long *vp,
  * (farther from zero) multiple of a specified number.  If you don't
  * want rounding, just pass "1" for round_up_to_multiple_of.
  */
-bool Executor::parse_number(string orig_num, int32 *val,
+bool Executor::parse_number(string orig_num, int32_t *val,
                             unsigned round_up_to_multiple_of)
 {
     long long orig_raw_val, raw_val, div;
     int shift_factor;
     bool negate_p, parsed_p;
-    int32 v;
+    int32_t v;
     char *num;
 
     /* Default value to be safe. */
@@ -167,7 +167,7 @@ bool Executor::parse_number(string orig_num, int32 *val,
     raw_val /= div;
 
     /* Make sure we didn't exceed the precision of the result. */
-    v = (int32)raw_val;
+    v = (int32_t)raw_val;
     if(v != raw_val)
         return false;
 

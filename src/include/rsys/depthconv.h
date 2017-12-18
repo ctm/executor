@@ -22,25 +22,25 @@ typedef void (*depthconv_func_t)(const void *table,
  */
 extern depthconv_func_t
 depthconv_make_raw_table(void *table_space, unsigned in_bpp,
-                         unsigned out_bpp, uint32 *table_size,
-                         const uint32 *mapping);
+                         unsigned out_bpp, uint32_t *table_size,
+                         const uint32_t *mapping);
 extern depthconv_func_t
 depthconv_make_ind_to_ind_table(void *table_space, unsigned in_bpp,
-                                unsigned out_bpp, uint32 *table_size,
+                                unsigned out_bpp, uint32_t *table_size,
                                 const ColorSpec *mapping);
 extern depthconv_func_t
 depthconv_make_ind_to_rgb_table(void *table_space, unsigned in_bpp,
-                                uint32 *table_size, const ColorSpec *mapping,
+                                uint32_t *table_size, const ColorSpec *mapping,
                                 const rgb_spec_t *dst_rgb_spec);
 
 extern depthconv_func_t
 depthconv_make_rgb_to_ind_table(void *table_space, unsigned out_bpp,
-                                uint32 *table_size, CTabHandle mapping,
+                                uint32_t *table_size, CTabHandle mapping,
                                 ITabHandle itab,
                                 const rgb_spec_t *src_rgb_spec);
 
 extern depthconv_func_t
-depthconv_make_rgb_to_rgb_table(void *table_space, uint32 *table_size,
+depthconv_make_rgb_to_rgb_table(void *table_space, uint32_t *table_size,
                                 const rgb_spec_t *src_rgb_spec,
                                 const rgb_spec_t *dst_rgb_spec);
 
@@ -50,9 +50,9 @@ depthconv_make_rgb_to_rgb_table(void *table_space, uint32 *table_size,
  * well as excess to assure that we can align the array just the way
  * we want it.
  */
-#define DEPTHCONV_MAX_TABLE_SIZE (sizeof(uint32) + 32 * 256 + 31)
+#define DEPTHCONV_MAX_TABLE_SIZE (sizeof(uint32_t) + 32 * 256 + 31)
 #define DEPTHCONV_MAX_UINT32_TABLE_SIZE \
-    ((DEPTHCONV_MAX_TABLE_SIZE + sizeof(uint32) - 1) / sizeof(uint32))
+    ((DEPTHCONV_MAX_TABLE_SIZE + sizeof(uint32_t) - 1) / sizeof(uint32_t))
 
 /* ------- END public API ------- */
 
@@ -63,15 +63,15 @@ typedef uint8 depthconv_8_1_data_t[8][256];
 typedef uint8 depthconv_4_1_data_t[4][256];
 typedef uint8 depthconv_2_1_data_t[2][256];
 typedef uint8 depthconv_1_1_data_t[256];
-typedef uint16 depthconv_1_2_data_t[256][4];
-typedef uint32 depthconv_1_4_data_t[256];
-typedef uint32 depthconv_1_8_data_t[256][2];
-typedef uint32 depthconv_1_16_data_t[256][4];
-typedef uint32 depthconv_1_32_data_t[256][8];
+typedef uint16_t depthconv_1_2_data_t[256][4];
+typedef uint32_t depthconv_1_4_data_t[256];
+typedef uint32_t depthconv_1_8_data_t[256][2];
+typedef uint32_t depthconv_1_16_data_t[256][4];
+typedef uint32_t depthconv_1_32_data_t[256][8];
 
 typedef struct
 {
-    uint32 log2_in_bpp;
+    uint32_t log2_in_bpp;
     const rgb_spec_t *src_rgb_spec;
     GUEST<CTabHandle> swapped_ctab;
     GUEST<ITabHandle> swapped_itab;
@@ -79,7 +79,7 @@ typedef struct
 
 typedef struct
 {
-    uint32 log2_in_bpp;
+    uint32_t log2_in_bpp;
     const rgb_spec_t *src_rgb_spec;
     const rgb_spec_t *dst_rgb_spec;
 } depthconv_rgb_to_rgb_data_t;
@@ -89,7 +89,7 @@ extern const int depthconv_ind_src_table_alignment[];
     depthconv_ind_src_table_alignment[(log2_in_bpp) - (log2_out_bpp) + 5]
 #define DEPTHCONV_ALIGN_TABLE(t, log2_in_bpp, log2_out_bpp)                  \
     ((void *)((((unsigned long)(t))                                          \
-               + sizeof(uint32)                                              \
+               + sizeof(uint32_t)                                              \
                + (DEPTHCONV_TABLE_ALIGNMENT(log2_in_bpp, log2_out_bpp)) - 1) \
               & ~((DEPTHCONV_TABLE_ALIGNMENT(log2_in_bpp, log2_out_bpp)) - 1)))
 

@@ -12,10 +12,10 @@ extern bool get_info(win_printp_t *wpp,
                      int physx, int physy,
                      orientation_t orientation,
                      int copies,
-                     uint32 *last_errorp);
+                     uint32_t *last_errorp);
 
 extern bool print_file(win_printp_t wp, const char *spool_namep,
-                       uint32 *last_errorp);
+                       uint32_t *last_errorp);
 
 #define INCHES(x) ((x)*72)
 #define MMETERS(x) ((x)*2.835)

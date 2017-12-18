@@ -4,11 +4,11 @@
 
 #include "rsys/common.h"
 
-PUBLIC uint32
-ppc_call(uint32 toc, uint32 (*func)(uint32), uint32 arg)
+PUBLIC uint32_t
+ppc_call(uint32_t toc, uint32_t (*func)(uint32_t), uint32_t arg)
 {
-    uint32 retval;
-    register uint32 toc_r2 asm("r2");
+    uint32_t retval;
+    register uint32_t toc_r2 asm("r2");
 
     toc_r2 = toc;
     asm volatile(""

@@ -94,7 +94,7 @@ hdlr_table_elt(AE_hdlr_table_h table,
                AE_hdlr_table_elt_t **retval)
 {
     AE_hdlr_table_elt_t *elts, *elt;
-    int32 n_elts, elt_index;
+    int32_t n_elts, elt_index;
 
     elts = AE_TABLE_ELTS(table);
     n_elts = AE_TABLE_N_ELTS(table);
@@ -141,7 +141,7 @@ hdlr_table_elt(AE_hdlr_table_h table,
 }
 
 P5(PUBLIC pascal trap, OSErr, _AE_hdlr_table_alloc,
-   int32, unknown_1, int32, unknown_2, int32, unknown_3,
+   int32_t, unknown_1, int32_t, unknown_2, int32_t, unknown_3,
    int8, unknown_p,
    GUEST<AE_hdlr_table_h> *, table_return)
 {
@@ -167,7 +167,7 @@ P5(PUBLIC pascal trap, OSErr, _AE_hdlr_table_alloc,
 }
 
 P3(PUBLIC pascal trap, OSErr, _AE_hdlr_delete,
-   AE_hdlr_table_h, table, int32, unknown_1,
+   AE_hdlr_table_h, table, int32_t, unknown_1,
    AE_hdlr_selector_t *, selector)
 {
     AE_hdlr_table_elt_t *elt, *elts;
@@ -193,7 +193,7 @@ P3(PUBLIC pascal trap, OSErr, _AE_hdlr_delete,
 }
 
 P4(PUBLIC pascal trap, OSErr, _AE_hdlr_lookup,
-   AE_hdlr_table_h, table, int32, unknown_1,
+   AE_hdlr_table_h, table, int32_t, unknown_1,
    AE_hdlr_selector_t *, selector, AE_hdlr_t *, hdlr_return)
 {
     AE_hdlr_table_elt_t *elt;
@@ -210,7 +210,7 @@ P4(PUBLIC pascal trap, OSErr, _AE_hdlr_lookup,
 }
 
 P4(PUBLIC pascal trap, OSErr, _AE_hdlr_install,
-   AE_hdlr_table_h, table, int32, unknown_1,
+   AE_hdlr_table_h, table, int32_t, unknown_1,
    AE_hdlr_selector_t *, selector, AE_hdlr_t *, hdlr)
 {
     AE_hdlr_table_elt_t *elt;
@@ -230,7 +230,7 @@ bool Executor::application_accepts_open_app_aevt_p;
 
 P5(PUBLIC pascal trap, OSErr, AEInstallEventHandler,
    AEEventClass, event_class, AEEventID, event_id,
-   EventHandlerProcPtr, hdlr_fn, int32, refcon,
+   EventHandlerProcPtr, hdlr_fn, int32_t, refcon,
    Boolean, system_handler_p)
 {
     AE_hdlr_table_h table;
@@ -273,7 +273,7 @@ dummy(void)
 
 P5(PUBLIC pascal trap, OSErr, AEGetEventHandler,
    AEEventClass, event_class, AEEventID, event_id,
-   GUEST<EventHandlerProcPtr> *, hdlr, GUEST<int32> *, refcon,
+   GUEST<EventHandlerProcPtr> *, hdlr, GUEST<int32_t> *, refcon,
    Boolean, system_handler_p)
 {
     AE_hdlr_table_h table;
@@ -332,7 +332,7 @@ P4(PUBLIC pascal trap, OSErr, AERemoveEventHandler,
 
 P6(PUBLIC pascal trap, OSErr, AEInstallCoercionHandler,
    DescType, from_type, DescType, to_type,
-   ProcPtr, hdlr_fn, int32, refcon,
+   ProcPtr, hdlr_fn, int32_t, refcon,
    Boolean, from_type_is_desc_p,
    Boolean, system_handler_p)
 {
@@ -367,7 +367,7 @@ P6(PUBLIC pascal trap, OSErr, AEInstallCoercionHandler,
 
 P6(PUBLIC pascal trap, OSErr, AEGetCoercionHandler,
    DescType, from_type, DescType, to_type,
-   GUEST<ProcPtr> *, hdlr_out, GUEST<int32> *, refcon_out,
+   GUEST<ProcPtr> *, hdlr_out, GUEST<int32_t> *, refcon_out,
    GUEST<Boolean> *, from_type_is_desc_p_out,
    Boolean, system_handler_p)
 {

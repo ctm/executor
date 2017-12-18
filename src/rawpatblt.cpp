@@ -11,7 +11,7 @@
 #if defined(USE_PORTABLE_PATBLT)
 
 /* This macro is used in `rawpatstubs.c' */
-#define NEXT_ROW (dst = (uint32 *)&row_base[s[1].offset])
+#define NEXT_ROW (dst = (uint32_t *)&row_base[s[1].offset])
 
 namespace Executor
 {
@@ -80,7 +80,7 @@ void xdblt_canon_pattern(void)
     const INTEGER *rgn;
     int x, y, next_y, start_x_bit, stop_x_bit, start_x_long, stop_x_long;
     int num_rows, num_longs;
-    uint32 mask;
+    uint32_t mask;
     int log2_bpp;
 
     if(xdblt_stub_table == xdblt_nop_table)
@@ -117,7 +117,7 @@ next_stop:
         goto same_long;
 
     /* Different longs. */
-    if(mask == (uint32)~0)
+    if(mask == (uint32_t)~0)
         goto blt_contig;
 
     /* Mask not solid. */

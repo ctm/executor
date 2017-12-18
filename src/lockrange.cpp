@@ -30,8 +30,8 @@ using namespace Executor;
 typedef struct
 {
     int fd;
-    uint32 start_byte;
-    uint32 count;
+    uint32_t start_byte;
+    uint32_t count;
 } lock_entry_t;
 
 PRIVATE lock_entry_t *entries;
@@ -109,7 +109,7 @@ Executor::ROMlib_fd_release_locks_for_close(int fd)
 }
 
 PUBLIC OSErr
-Executor::ROMlib_fd_add_range(int fd, uint32 start_byte, uint32 count)
+Executor::ROMlib_fd_add_range(int fd, uint32_t start_byte, uint32_t count)
 {
     OSErr retval;
 
@@ -141,14 +141,14 @@ Executor::ROMlib_fd_add_range(int fd, uint32 start_byte, uint32 count)
 }
 
 PUBLIC OSErr
-Executor::ROMlib_fd_range_overlap(int fd, uint32 start_byte, uint32 count)
+Executor::ROMlib_fd_range_overlap(int fd, uint32_t start_byte, uint32_t count)
 {
     OSErr retval;
 
     retval = noErr;
     if(count)
     {
-        uint32 stop_byte;
+        uint32_t stop_byte;
         int i;
 
         stop_byte = start_byte + count;
@@ -158,7 +158,7 @@ Executor::ROMlib_fd_range_overlap(int fd, uint32 start_byte, uint32 count)
         {
             if(entries[i].fd == fd)
             {
-                uint32 entries_stop_byte;
+                uint32_t entries_stop_byte;
 
                 entries_stop_byte = entries[i].start_byte + entries[i].count;
                 if(entries_stop_byte < entries[i].start_byte)
@@ -184,7 +184,7 @@ Executor::ROMlib_fd_range_overlap(int fd, uint32 start_byte, uint32 count)
 }
 
 PRIVATE lock_entry_t *
-find_fd_start_count_helper(int fd, uint32 start_byte, uint32 count)
+find_fd_start_count_helper(int fd, uint32_t start_byte, uint32_t count)
 {
     int i;
     lock_entry_t *retval;
@@ -204,7 +204,7 @@ find_fd_start_count_helper(int fd, uint32 start_byte, uint32 count)
 }
 
 PUBLIC OSErr
-Executor::ROMlib_find_fd_start_count(int fd, uint32 start_byte, uint32 count)
+Executor::ROMlib_find_fd_start_count(int fd, uint32_t start_byte, uint32_t count)
 {
     OSErr retval;
 
@@ -216,7 +216,7 @@ Executor::ROMlib_find_fd_start_count(int fd, uint32 start_byte, uint32 count)
 }
 
 PUBLIC OSErr
-Executor::ROMlib_fd_remove_range(int fd, uint32 start_byte, uint32 count)
+Executor::ROMlib_fd_remove_range(int fd, uint32_t start_byte, uint32_t count)
 {
     OSErr retval;
     lock_entry_t *entry;

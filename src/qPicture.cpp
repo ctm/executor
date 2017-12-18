@@ -39,10 +39,10 @@ PUBLIC PicHandle Executor::ROMlib_OpenPicture_helper(const Rect *pf,
     {
         ip[3] = params->version;
         ip[4] = params->reserved1;
-        *(GUEST<uint32> *)&ip[5] = params->hRes;
-        *(GUEST<uint32> *)&ip[7] = params->vRes;
+        *(GUEST<uint32_t> *)&ip[5] = params->hRes;
+        *(GUEST<uint32_t> *)&ip[7] = params->vRes;
         memcpy(&ip[9], &params->srcRect, sizeof params->srcRect);
-        *(GUEST<uint32> *)&ip[13] = params->reserved2;
+        *(GUEST<uint32_t> *)&ip[13] = params->reserved2;
     }
     else
     {

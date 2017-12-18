@@ -28,9 +28,9 @@ P2(PUBLIC pascal trap, Boolean, IsOutline,
 }
 
 P9(PUBLIC pascal trap, OSErr, OutlineMetrics,
-   int16, byte_count, Ptr, text,
+   int16_t, byte_count, Ptr, text,
    Point, numer, Point, denom,
-   int16 *, y_max, int16 *, y_min,
+   int16_t *, y_max, int16_t *, y_min,
    Fixed *, aw_array, Fixed *, lsb_array,
    Rect *, bounds_array)
 {

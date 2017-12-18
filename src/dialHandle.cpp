@@ -314,7 +314,7 @@ P1(PUBLIC pascal trap, BOOLEAN, IsDialogEvent, /* IMI-416 */
 }
 
 bool Executor::get_item_style_info(DialogPtr dp, int item_no,
-                                   uint16 *flags_return, item_style_info_t *style_info)
+                                   uint16_t *flags_return, item_style_info_t *style_info)
 {
     AuxWinHandle aux_win_h;
 
@@ -330,7 +330,7 @@ bool Executor::get_item_style_info(DialogPtr dp, int item_no,
         item_color_info = &items_color_info[item_no - 1];
         if(item_color_info->data || item_color_info->offset)
         {
-            uint16 flags;
+            uint16_t flags;
             int style_info_offset;
 
             flags = CW(item_color_info->data);
@@ -357,7 +357,7 @@ void Executor::ROMlib_drawiptext(DialogPtr dp, itmp ip, int item_no)
 {
     bool restore_draw_state_p = false;
     draw_state_t draw_state;
-    uint16 flags;
+    uint16_t flags;
     item_style_info_t style_info;
     Rect r;
 

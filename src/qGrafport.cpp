@@ -201,14 +201,14 @@ P2(PUBLIC pascal trap, void, MovePortTo, INTEGER, lg, INTEGER, tg)
 
 P2(PUBLIC pascal trap, void, SetOrigin, INTEGER, h, INTEGER, v)
 {
-    int32 dh, dv;
+    int32_t dh, dv;
 
     dh = h - Cx(PORT_RECT(thePort).left);
     dv = v - Cx(PORT_RECT(thePort).top);
     if(thePort->picSave)
     {
-        GUEST<int16> swappeddh;
-        GUEST<int16> swappeddv;
+        GUEST<int16_t> swappeddh;
+        GUEST<int16_t> swappeddv;
 
         PICOP(OP_Origin);
 

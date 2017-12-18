@@ -25,14 +25,14 @@ PUBLIC filecontrolblock *Executor::ROMlib_getfreefcbp(void)
     return fcbp < efcbp ? fcbp : 0;
 }
 
-PUBLIC filecontrolblock *Executor::ROMlib_refnumtofcbp(uint16 refnum)
+PUBLIC filecontrolblock *Executor::ROMlib_refnumtofcbp(uint16_t refnum)
 {
-    uint16 len;
+    uint16_t len;
     filecontrolblock *retval;
 
     if(refnum < sizeof(short) || refnum % CW(FSFCBLen) != sizeof(short))
         return 0;
-    len = CW(*(GUEST<uint16> *)MR(FCBSPtr));
+    len = CW(*(GUEST<uint16_t> *)MR(FCBSPtr));
     if(refnum >= len)
         return 0;
     retval = (filecontrolblock *)((char *)MR(FCBSPtr) + refnum);
@@ -137,7 +137,7 @@ PUBLIC compretval Executor::ROMlib_catcompare(void *firstp, void *secondp)
 }
 
 PUBLIC void Executor::ROMlib_makextntkey(xtntkey *keyp, Forktype forkwanted, LONGINT flnum,
-                                         uint16 bno)
+                                         uint16_t bno)
 {
     keyp->xkrKeyLen = 7;
     keyp->xkrFkType = forkwanted;
@@ -146,7 +146,7 @@ PUBLIC void Executor::ROMlib_makextntkey(xtntkey *keyp, Forktype forkwanted, LON
 }
 
 PUBLIC void Executor::ROMlib_makextntparam(btparam *btpb, HVCB *vcbp, Forktype forkwanted,
-                                           LONGINT flnum, uint16 bno)
+                                           LONGINT flnum, uint16_t bno)
 {
     btpb->vcbp = vcbp;
     ROMlib_makextntkey((xtntkey *)&btpb->tofind, forkwanted, flnum, bno);
@@ -155,7 +155,7 @@ PUBLIC void Executor::ROMlib_makextntparam(btparam *btpb, HVCB *vcbp, Forktype f
     btpb->leafindex = -1;
 }
 
-PRIVATE xtntkey *fcbpbnotoxkeyp(filecontrolblock *fcbp, uint16 bno)
+PRIVATE xtntkey *fcbpbnotoxkeyp(filecontrolblock *fcbp, uint16_t bno)
 {
     Forktype forkwanted;
     xtntkey *xkeyp;
@@ -178,7 +178,7 @@ PRIVATE xtntkey *fcbpbnotoxkeyp(filecontrolblock *fcbp, uint16 bno)
 PUBLIC LONGINT Executor::ROMlib_logtophys(filecontrolblock *fcbp, LONGINT absoffset,
                                           LONGINT *nphyscontigp)
 {
-    uint16 bno;
+    uint16_t bno;
     HVCB *vcbp;
     LONGINT alblksiz, retblock;
     xtntkey *xkeyp;
@@ -347,7 +347,7 @@ PRIVATE ULONGINT countbits(HVCB *vcbp, ULONGINT bno, unsigned char lookfor)
 }
 
 PRIVATE BOOLEAN fillextent(xtntdesc *xp, ULONGINT *nallocneededp, HVCB *vcbp,
-                           uint16 *newabnp)
+                           uint16_t *newabnp)
 {
     INTEGER nempty;
     ULONGINT toextend;
@@ -482,7 +482,7 @@ PUBLIC OSErr Executor::ROMlib_allochelper(IOParam *pb, BOOLEAN async, alloctype 
     filecontrolblock *fcbp;
     OSErr err, err1;
     LONGINT neweof, totallength, newneweof;
-    uint16 clumpsize, newabn;
+    uint16_t clumpsize, newabn;
     HVCB *vcbp;
     LONGINT tosmoke;
     ULONGINT nallocneeded, oldnallocneeded;

@@ -12,7 +12,7 @@ arch_type_t arch_type;
 bool Executor::arch_init(void)
 {
 #if !defined(ALWAYS_ON_I486)
-    uint32 scratch1, scratch2;
+    uint32_t scratch1, scratch2;
     uint8 i486_p;
 
     /* Adapted from _Assembly Language: For Real Programmers Only_ p. 561.

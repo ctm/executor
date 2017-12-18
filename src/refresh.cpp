@@ -116,17 +116,17 @@ void Executor::set_refresh_rate(int new1)
  * data from screen to shadow, and returns true.
  */
 BOOLEAN
-Executor::find_changed_rect_and_update_shadow(const uint32 *screen, uint32 *shadow,
+Executor::find_changed_rect_and_update_shadow(const uint32_t *screen, uint32_t *shadow,
                                               long row_longs, long num_rows,
                                               int *top_long, int *left_long,
                                               int *bottom_long, int *right_long)
 {
     long longs_left, last_ix, x, y, screen_longs;
-    uint32 *s1;
-    const uint32 *s2;
+    uint32_t *s1;
+    const uint32_t *s2;
     int top, left, bottom, right;
 #if !defined(i386)
-    const uint32 *shadow_first_changed, *screen_first_changed;
+    const uint32_t *shadow_first_changed, *screen_first_changed;
 #endif
 
     if(shadow_screen_invalid_p)

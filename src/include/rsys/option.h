@@ -99,7 +99,7 @@ char *opt_help_message(void);
 void opt_register_pre_note(char *note);
 void opt_register_pre_note(std::string note);
 
-extern uint32 parse_drive_opt(const char *opt_name, const char *opt_value);
+extern uint32_t parse_drive_opt(const char *opt_name, const char *opt_value);
 extern FILE *executor_dir_fopen(const char *file, const char *perm);
 extern int executor_dir_remove(const char *file);
 }

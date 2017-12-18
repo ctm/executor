@@ -39,7 +39,7 @@ __dpmi_paddr new_kbd_handler;
 __dpmi_raddr mouse_callback_addr;
 
 /* Selector for DOS memory for mouse stub and event queue. */
-uint16 mouse_handler_and_queue_sel;
+uint16_t mouse_handler_and_queue_sel;
 
 /* These flags tell us whether we need to shut these down when we exit. */
 static char keyboard_initialized = 0;
@@ -57,10 +57,10 @@ void dosevq_lock_functions_begin(void) {}
 /* We use this instead of _farpeekw so we can guarantee that it
  * is in locked down memory even when we're not inlining.
  */
-inline uint16
+inline uint16_t
 _get_queue_mem16(unsigned long offset)
 {
-    uint16 result;
+    uint16_t result;
     asm volatile(QUOTED_DATA16 "movw _mouse_handler_and_queue_sel,%%fs\n\t"
                                ".byte 0x64\n\t"
                                "movw (%k1),%w0"
@@ -73,7 +73,7 @@ _get_queue_mem16(unsigned long offset)
  * is in locked down memory even when we're not inlining.
  */
 inline void
-_set_queue_mem16(unsigned long offset, uint16 val)
+_set_queue_mem16(unsigned long offset, uint16_t val)
 {
     asm volatile(QUOTED_DATA16 "movw _mouse_handler_and_queue_sel,%%fs\n\t"
                                ".byte 0x64\n\t"
@@ -105,7 +105,7 @@ void dosevq_enqueue(dosevq_type_t type, unsigned char which,
     e.type = type;
     e.which = which;
     e.keyflags = keyflags;
-    DOSEVQ_SET_QELT(qhead, *(uint32 *)&e);
+    DOSEVQ_SET_QELT(qhead, *(uint32_t *)&e);
 
     /* Notify Executor that an event has come in. */
     cpu_state.interrupt_pending[M68K_EVENT_PRIORITY] = 1;
@@ -381,7 +381,7 @@ dosevq_dequeue(dosevq_record_t *e)
         qtail = DOSEVQ_QTAIL();
         if(DOSEVQ_QHEAD() != qtail)
         {
-            *(uint32 *)e = DOSEVQ_QELT(qtail);
+            *(uint32_t *)e = DOSEVQ_QELT(qtail);
             DOSEVQ_SET_QTAIL((qtail + 1) % DOSEVQ_QUEUE_SIZE);
         }
 

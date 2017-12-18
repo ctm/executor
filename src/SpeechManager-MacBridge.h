@@ -14,19 +14,19 @@
 namespace MacBridge
 {
 PUBLIC Executor::NumVersion SpeechManagerVersion(void);
-PUBLIC int16 SpeechBusy(void);
-PUBLIC int16 SpeechBusySystemWide(void);
-PUBLIC Executor::OSErr CountVoices(int16 *numVoices);
+PUBLIC int16_t SpeechBusy(void);
+PUBLIC int16_t SpeechBusySystemWide(void);
+PUBLIC Executor::OSErr CountVoices(int16_t *numVoices);
 PUBLIC Executor::OSErr DisposeSpeechChannel(Executor::SpeechChannel chan);
 PUBLIC Executor::OSErr SpeakString(Executor::Str255 textToBeSpoken);
 
 PUBLIC Executor::OSErr StopSpeech(Executor::SpeechChannel chan);
 PUBLIC Executor::OSErr ContinueSpeech(Executor::SpeechChannel chan);
 
-PUBLIC Executor::OSErr GetIndVoice(int16 index, Executor::VoiceSpec *voice);
+PUBLIC Executor::OSErr GetIndVoice(int16_t index, Executor::VoiceSpec *voice);
 PUBLIC Executor::OSErr NewSpeechChannel(Executor::VoiceSpec *voice, Executor::SpeechChannel *chan);
-PUBLIC Executor::OSErr StopSpeechAt(Executor::SpeechChannel chan, int32 whereToStop);
-PUBLIC Executor::OSErr PauseSpeechAt(Executor::SpeechChannel chan, int32 whereToPause);
+PUBLIC Executor::OSErr StopSpeechAt(Executor::SpeechChannel chan, int32_t whereToStop);
+PUBLIC Executor::OSErr PauseSpeechAt(Executor::SpeechChannel chan, int32_t whereToPause);
 PUBLIC Executor::OSErr SetSpeechRate(Executor::SpeechChannel chan, Executor::Fixed rate);
 PUBLIC Executor::OSErr GetSpeechRate(Executor::SpeechChannel chan, Executor::Fixed *rate);
 PUBLIC Executor::OSErr SetSpeechPitch(Executor::SpeechChannel chan, Executor::Fixed pitch);
@@ -54,7 +54,7 @@ PUBLIC Executor::OSErr SpeakBuffer(
     Executor::SpeechChannel chan,
     const void *textBuf,
     Executor::ULONGINT textBytes,
-    int32 controlFlags);
+    int32_t controlFlags);
 PUBLIC Executor::OSErr TextToPhonemes(Executor::SpeechChannel chan, const void *textBuf, Executor::ULONGINT textBytes, Executor::Handle phonemeBuf, Executor::GUEST<Executor::LONGINT> *phonemeBytes);
 }
 

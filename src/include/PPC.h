@@ -10,8 +10,8 @@
 namespace Executor
 {
 
-typedef int16 PPCPortKinds;
-typedef int16 PPCLocationKind;
+typedef int16_t PPCPortKinds;
+typedef int16_t PPCLocationKind;
 
 typedef struct EntityName
 {

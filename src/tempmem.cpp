@@ -12,12 +12,12 @@ using namespace Executor;
 /* #define TEMP_MEM_FAIL */
 #define paramErr (-50)
 
-P0(PUBLIC pascal trap, int32, TempFreeMem)
+P0(PUBLIC pascal trap, int32_t, TempFreeMem)
 {
 #if defined(TEMP_MEM_FAIL)
     return 0;
 #else
-    int32 sysfree, applfree, retval;
+    int32_t sysfree, applfree, retval;
 
     {
         TheZoneGuard guard(ApplZone);
@@ -36,7 +36,7 @@ P1(PUBLIC pascal trap, Size, TempMaxMem,
 #if defined(TEMP_MEM_FAIL)
     return 0;
 #else
-    int32 sysfree, applmax, retval;
+    int32_t sysfree, applmax, retval;
     Size grow;
 
     {

@@ -162,16 +162,16 @@ void Executor::scale_blt_bitmap(const blt_bitmap_t *src_bitmap, blt_bitmap_t *ds
         case 4:
             SCALE_LOOP(new_width,
                        {
-                           ((uint16 *)dst_row_base)[h]
-                               = ((uint16 *)src_row_base)[x >> 16];
+                           ((uint16_t *)dst_row_base)[h]
+                               = ((uint16_t *)src_row_base)[x >> 16];
                            x += dx;
                        });
             break;
         case 5:
             SCALE_LOOP(new_width,
                        {
-                           ((uint32 *)dst_row_base)[h]
-                               = ((uint32 *)src_row_base)[x >> 16];
+                           ((uint32_t *)dst_row_base)[h]
+                               = ((uint32_t *)src_row_base)[x >> 16];
                            x += dx;
                        });
             break;

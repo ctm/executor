@@ -24,8 +24,8 @@
 using namespace Executor;
 
 static void
-tedoinserttext(TEHandle te, int16 hlen, int16 len,
-               int16 start, Ptr ptr)
+tedoinserttext(TEHandle te, int16_t hlen, int16_t len,
+               int16_t start, Ptr ptr)
 {
     Handle hText;
     char *Text;
@@ -45,13 +45,13 @@ tedoinserttext(TEHandle te, int16 hlen, int16 len,
 }
 
 void Executor::ROMlib_teremovestyleinfo(TEStyleHandle te_style,
-                                        int16 start, int16 end)
+                                        int16_t start, int16_t end)
 {
     StyleRun *runs, *start_run, *prev_run;
-    int16 start_run_index, end_run_index;
-    int16 current_run_index;
-    int16 shift;
-    int16 n_runs;
+    int16_t start_run_index, end_run_index;
+    int16_t current_run_index;
+    int16_t shift;
+    int16_t n_runs;
 
     if(start == end)
         return;
@@ -114,12 +114,12 @@ void Executor::ROMlib_teremovestyleinfo(TEStyleHandle te_style,
 }
 
 static void
-tereplaceselection(TEHandle teh, int16 start, int16 stop, int16 len,
-                   Ptr ptr, int16 nchar, int16 hlen)
+tereplaceselection(TEHandle teh, int16_t start, int16_t stop, int16_t len,
+                   Ptr ptr, int16_t nchar, int16_t hlen)
 {
     Handle hText;
     /* number of characters after teh selection to relocate */
-    int16 n_to_move;
+    int16_t n_to_move;
 
     hText = TE_HTEXT(teh);
     n_to_move = hlen - stop;
@@ -142,13 +142,13 @@ tereplaceselection(TEHandle teh, int16 start, int16 stop, int16 len,
 }
 
 void te_style_insert_runs(TEStyleHandle te_style,
-                          int16 start, int len,
-                          StyleRun *new_runs, int16 n_new_runs)
+                          int16_t start, int len,
+                          StyleRun *new_runs, int16_t n_new_runs)
 {
     STHandle style_table;
     StyleRun *runs;
-    int16 start_run_index;
-    int16 run_i, n_runs;
+    int16_t start_run_index;
+    int16_t run_i, n_runs;
 
     start_run_index = te_char_to_run_index(te_style, start);
     runs = TE_STYLE_RUNS(te_style);
@@ -164,9 +164,9 @@ void te_style_insert_runs(TEStyleHandle te_style,
 
     for(run_i = 0; run_i < n_new_runs; run_i++)
     {
-        int16 style_index, new_style_index;
+        int16_t style_index, new_style_index;
         StyleRun *new_run, *next_new_run, *run;
-        int16 run_start, run_end, run_index;
+        int16_t run_start, run_end, run_index;
 
         new_run = &new_runs[run_i];
         next_new_run = &new_runs[run_i + 1];
@@ -202,11 +202,11 @@ void te_style_insert_runs(TEStyleHandle te_style,
 }
 
 void Executor::ROMlib_teinsertstyleinfo(TEHandle te,
-                                        int16 start, int16 len, StScrpHandle scrap)
+                                        int16_t start, int16_t len, StScrpHandle scrap)
 {
     StScrpHandle null_scrap;
     TEStyleHandle te_style;
-    int16 scrap_n_styles;
+    int16_t scrap_n_styles;
     int cleanup_scrap_p = false;
     StyleRun *new_runs;
     int i;
@@ -221,7 +221,7 @@ void Executor::ROMlib_teinsertstyleinfo(TEHandle te,
             scrap = null_scrap;
         else
         {
-            int16 start_run_index;
+            int16_t start_run_index;
             StyleRun *start_run;
             STElement *start_st_elt;
             ScrpSTElement *scrap_elt;
@@ -254,7 +254,7 @@ void Executor::ROMlib_teinsertstyleinfo(TEHandle te,
     {
         ScrpSTElement *scrap_elt;
         StyleRun *new_run;
-        int16 style_index;
+        int16_t style_index;
 
         new_run = &new_runs[i];
         scrap_elt = SCRAP_ST_ELT(scrap, i);
@@ -262,7 +262,7 @@ void Executor::ROMlib_teinsertstyleinfo(TEHandle te,
         style_index = get_style_index(te_style, SCRAP_ELT_TO_ATTR(scrap_elt),
                                       false);
 
-        /* must swap here, the elt start char is a `int32' */
+        /* must swap here, the elt start char is a `int32_t' */
         STYLE_RUN_START_CHAR_X(new_run) = CW(SCRAP_ELT_START_CHAR(scrap_elt));
         STYLE_RUN_STYLE_INDEX_X(new_run) = CW(style_index);
     }
@@ -283,10 +283,10 @@ void Executor::ROMlib_teinsertstyleinfo(TEHandle te,
 PUBLIC int Executor::ROMlib_forward_del_p = false;
 
 void Executor::ROMlib_tedoitall(TEHandle teh, Ptr ptr, /* INTERNAL */
-                                int16 len, bool insert, StScrpHandle styleh)
+                                int16_t len, bool insert, StScrpHandle styleh)
 {
     INTEGER start, stop, sellen, hlen, nchar;
-    int16 calstart, calend;
+    int16_t calstart, calend;
     Point oldend, newend;
     Rect eraser;
     TEStyleHandle te_style;
@@ -469,9 +469,9 @@ void Executor::ROMlib_tedoitall(TEHandle teh, Ptr ptr, /* INTERNAL */
 
 static void doarrow(TEHandle te, CHAR thec)
 {
-    int16 sel_start, sel_end;
-    int16 length;
-    int16 lineno;
+    int16_t sel_start, sel_end;
+    int16_t length;
+    int16_t lineno;
     Point pt;
     TEPtr tep;
     SignedByte te_flags;
@@ -508,7 +508,7 @@ static void doarrow(TEHandle te, CHAR thec)
         case ASCIIUPARROW:
         case ASCIIDOWNARROW:
         {
-            int16 offset;
+            int16_t offset;
 
             TEP_CHAR_TO_POINT(tep, sel_start, &pt);
             if(TEP_LINE_HEIGHT(tep) != -1)
@@ -580,8 +580,8 @@ P1(PUBLIC pascal trap, void, TECopy, TEHandle, te)
     Handle hText;
     SignedByte hText_flags;
     char *Text;
-    int16 len;
-    int16 start, end;
+    int16_t len;
+    int16_t start, end;
 
     start = TE_SEL_START(te);
     end = TE_SEL_END(te);
@@ -600,8 +600,8 @@ P1(PUBLIC pascal trap, void, TECopy, TEHandle, te)
         SignedByte te_style_flags;
         STHandle style_table;
         StScrpHandle scrap;
-        int16 start_run_index, end_run_index, current_run_index;
-        int16 n_scrap_styles;
+        int16_t start_run_index, end_run_index, current_run_index;
+        int16_t n_scrap_styles;
         StyleRun *runs;
 
         ZeroScrap();
@@ -628,7 +628,7 @@ P1(PUBLIC pascal trap, void, TECopy, TEHandle, te)
             StyleRun *current_run;
             STElement *style;
             ScrpSTElement *scrap_elt;
-            int16 run_start;
+            int16_t run_start;
 
             n_scrap_styles++;
             SetHandleSize((Handle)scrap,

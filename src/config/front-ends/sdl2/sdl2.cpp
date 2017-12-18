@@ -222,7 +222,7 @@ static bool ConfirmQuit()
     return buttonid == 1;
 }
 
-static bool isModifier(unsigned char virt, uint16 *modstore)
+static bool isModifier(unsigned char virt, uint16_t *modstore)
 {
     /* Note: shift and control can be cleared if right* and left* are pressed */
     switch(virt)
@@ -273,7 +273,7 @@ void Executor::vdriver_pump_events()
             case SDL_MOUSEBUTTONUP:
             {
                 bool down_p;
-                int32 when;
+                int32_t when;
                 Point where;
 
                 down_p = (event.button.state == SDL_PRESSED);
@@ -295,9 +295,9 @@ void Executor::vdriver_pump_events()
             {
                 bool down_p;
                 unsigned char mkvkey;
-                uint16 mod;
+                uint16_t mod;
                 LONGINT keywhat;
-                int32 when;
+                int32_t when;
                 Point where;
 
                 init_sdlk_to_mkv();

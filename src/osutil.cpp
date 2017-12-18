@@ -840,7 +840,7 @@ A2(PUBLIC, LONGINT, NGetTrapAddress, INTEGER, n, INTEGER, ttype) /* IMII-384 */
 
     retval = (LONGINT)((ttype == OSTrap) ? ostraptable[n & (NOSENTRIES - 1)]
                                          : tooltraptable[n & (NTOOLENTRIES - 1)]);
-    warning_trace_info("n = 0x%x, ttype = %d, retval = %8x", (uint16)n, ttype,
+    warning_trace_info("n = 0x%x, ttype = %d, retval = %8x", (uint16_t)n, ttype,
                        (unsigned)retval);
     return retval;
 }
@@ -877,7 +877,7 @@ A2(PUBLIC trap, void, Delay, LONGINT, n, LONGINT *, ftp) /* IMII-384 */
     {
 #if defined(CYGWIN32)
         clock_t finish_clocks;
-        void __attribute__((stdcall)) Sleep(int32 dwMilliseconds);
+        void __attribute__((stdcall)) Sleep(int32_t dwMilliseconds);
 
         finish_clocks = clock() + n * CLOCKS_PER_SEC / 60;
         while(clock() < finish_clocks)

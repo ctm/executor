@@ -38,7 +38,7 @@
 
 using namespace Executor;
 
-PUBLIC uint32 ROMlib_PrDrvrVers = 70;
+PUBLIC uint32_t ROMlib_PrDrvrVers = 70;
 
 P0(PUBLIC pascal trap, void, PrDrvrOpen) /* TODO */
 {

@@ -919,12 +919,12 @@ void Executor::dump_dialog_peek(DialogPeek d)
 
 void dump_dialog_items(DialogPeek dp)
 {
-    GUEST<int16> *item_data;
+    GUEST<int16_t> *item_data;
     int n_items;
     itmp items;
     int i;
 
-    item_data = (GUEST<int16> *)STARH(DIALOG_ITEMS(dp));
+    item_data = (GUEST<int16_t> *)STARH(DIALOG_ITEMS(dp));
     n_items = CW(*item_data);
     items = (itmp)&item_data[1];
     fprintf(o_fp, "%d items:\n", n_items);
@@ -1079,12 +1079,12 @@ void dump_control(ControlHandle x)
     iprintf((o_fp, "}\n"));
 }
 
-void dump_memlocs(uint32 to_look_for, int size, const void *start_addr,
+void dump_memlocs(uint32_t to_look_for, int size, const void *start_addr,
                   const void *end_addr)
 {
     const uint8 *ucp;
-    const uint16 *usp;
-    const uint32 *ulp;
+    const uint16_t *usp;
+    const uint32_t *ulp;
 
     switch(size)
     {
@@ -1094,13 +1094,13 @@ void dump_memlocs(uint32 to_look_for, int size, const void *start_addr,
                     iprintf((o_fp, "%p\n", ucp));
             break;
         case 2:
-            for(usp = (const uint16 *)start_addr; usp < (uint16 *)end_addr; ++usp)
-                if(*usp == (uint16)to_look_for)
+            for(usp = (const uint16_t *)start_addr; usp < (uint16_t *)end_addr; ++usp)
+                if(*usp == (uint16_t)to_look_for)
                     iprintf((o_fp, "%p\n", usp));
             break;
         case 4:
-            for(ulp = (const uint32 *)start_addr; ulp < (uint32 *)end_addr;
-                ulp = (const uint32 *)((char *)ulp + 2))
+            for(ulp = (const uint32_t *)start_addr; ulp < (uint32_t *)end_addr;
+                ulp = (const uint32_t *)((char *)ulp + 2))
                 if(*ulp == to_look_for)
                     iprintf((o_fp, "%p\n", ulp));
             break;
@@ -1140,7 +1140,7 @@ void dump_te(TEHandle te)
 
     {
         char buf[40000];
-        int16 length;
+        int16_t length;
 
         length = TE_LENGTH(te);
         memcpy(buf, STARH(TE_HTEXT(te)), length);
@@ -1150,8 +1150,8 @@ void dump_te(TEHandle te)
     }
 
     {
-        int16 n_lines;
-        GUEST<int16> *line_starts;
+        int16_t n_lines;
+        GUEST<int16_t> *line_starts;
 
         n_lines = TE_N_LINES(te);
         line_starts = TE_LINE_STARTS(te);
@@ -1163,7 +1163,7 @@ void dump_te(TEHandle te)
     {
         STHandle style_table;
         StyleRun *runs;
-        int16 n_lines, n_runs, n_styles;
+        int16_t n_lines, n_runs, n_styles;
         TEStyleHandle te_style;
         LHHandle lh_table;
         LHElement *lh;
@@ -1327,7 +1327,7 @@ OSErr dump_code_resources(const char *filename)
 
 #include <syn68k_public.h>
 
-void (*m68kaddr_linker_hack)(const uint16 *) = m68kaddr;
+void (*m68kaddr_linker_hack)(const uint16_t *) = m68kaddr;
 #endif
 
 PRIVATE const char *

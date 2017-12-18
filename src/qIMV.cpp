@@ -106,7 +106,7 @@ P3(PUBLIC pascal trap, void, GetCPixel, INTEGER, h, INTEGER, v,
             *pixelp = cspec[pixval].rgb;
         else
         {
-            GUEST<int16> swapped_pixval;
+            GUEST<int16_t> swapped_pixval;
             int i;
 
             /* non-device color tables aren't guaranteed to be sorted, so we
@@ -135,7 +135,7 @@ P3(PUBLIC pascal trap, void, SetCPixel, INTEGER, h, INTEGER, v,
     bool cgrafport_p;
 
     RGBColor save_fg_rgb;
-    GUEST<int32> save_fg;
+    GUEST<int32_t> save_fg;
 
     temp_rect.top = CW(v);
     temp_rect.bottom = CW(v + 1);
@@ -160,7 +160,7 @@ P3(PUBLIC pascal trap, void, SetCPixel, INTEGER, h, INTEGER, v,
 }
 
 static int8
-default_search_proc(RGBColor *rgb, GUEST<int32> *pixel)
+default_search_proc(RGBColor *rgb, GUEST<int32_t> *pixel)
 {
     MatchRec *mr;
 
@@ -187,15 +187,15 @@ default_search_proc_stub(syn68k_addr_t dummy_addr, void *dummy)
     arg2 = (void *)SYN68K_TO_US(POPADDR());
     arg1 = (void *)SYN68K_TO_US(POPADDR());
 
-    result = default_search_proc((RGBColor *)arg1, (GUEST<int32> *)arg2);
+    result = default_search_proc((RGBColor *)arg1, (GUEST<int32_t> *)arg2);
     WRITEUB(EM_A7, result);
 
     return retval;
 }
 
 P8(PUBLIC pascal trap, void, SeedCFill, BitMap *, srcbp, BitMap *, dstbp,
-   Rect *, srcrp, Rect *, dstrp, int16, seedh, int16, seedv,
-   ProcPtr, matchprocp, int32, matchdata)
+   Rect *, srcrp, Rect *, dstrp, int16_t, seedh, int16_t, seedv,
+   ProcPtr, matchprocp, int32_t, matchdata)
 {
     MatchRec mr;
     GUEST<LONGINT> save_ref_con;
@@ -230,7 +230,7 @@ P8(PUBLIC pascal trap, void, SeedCFill, BitMap *, srcbp, BitMap *, dstbp,
     mr.green = pixel.green;
     mr.blue = pixel.blue;
     save_ref_con = GD_REF_CON_X(gdev);
-    GD_REF_CON_X(gdev) = guest_cast<int32>(RM(&mr));
+    GD_REF_CON_X(gdev) = guest_cast<int32_t>(RM(&mr));
 
     save_pic_handle = PORT_PIC_SAVE_X(thePort);
     save_graf_procs = PORT_GRAF_PROCS_X(thePort);
@@ -279,7 +279,7 @@ P8(PUBLIC pascal trap, void, SeedCFill, BitMap *, srcbp, BitMap *, dstbp,
 
 P7(PUBLIC pascal trap, void, CalcCMask, BitMap *, srcbp, BitMap *, dstbp,
    Rect *, srcrp, Rect *, dstrp, RGBColor *, seedrgbp, ProcPtr, matchprocp,
-   int32, matchdata)
+   int32_t, matchdata)
 {
     MatchRec mr;
     GUEST<LONGINT> save_ref_con;
@@ -311,7 +311,7 @@ P7(PUBLIC pascal trap, void, CalcCMask, BitMap *, srcbp, BitMap *, dstbp,
     mr.green = seedrgbp->green;
     mr.blue = seedrgbp->blue;
     save_ref_con = GD_REF_CON_X(gdev);
-    GD_REF_CON_X(gdev) = guest_cast<int32>(RM(&mr));
+    GD_REF_CON_X(gdev) = guest_cast<int32_t>(RM(&mr));
 
     save_pic_handle = PORT_PIC_SAVE_X(thePort);
     save_graf_procs = PORT_GRAF_PROCS_X(thePort);

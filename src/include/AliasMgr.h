@@ -8,7 +8,7 @@ namespace Executor
 {
 typedef ProcPtr AliasFilterProcPtr;
 typedef Handle AliasHandle;
-typedef int16 AliasTypeInfo;
+typedef int16_t AliasTypeInfo;
 
 enum
 {
@@ -26,10 +26,10 @@ enum
     kFontFolderType = T('f', 'o', 'n', 't'),
 };
 
-extern pascal trap OSErr C_FindFolder(int16 vRefNum, OSType folderType,
+extern pascal trap OSErr C_FindFolder(int16_t vRefNum, OSType folderType,
                                       Boolean createFolder,
-                                      GUEST<int16> *foundVRefNum,
-                                      GUEST<int32> *foundDirID);
+                                      GUEST<int16_t> *foundVRefNum,
+                                      GUEST<int32_t> *foundDirID);
 
 extern pascal trap OSErr C_NewAlias(FSSpecPtr fromFile, FSSpecPtr target,
                                     GUEST<AliasHandle> *alias);
@@ -37,7 +37,7 @@ extern pascal trap OSErr C_NewAlias(FSSpecPtr fromFile, FSSpecPtr target,
 extern pascal trap OSErr C_NewAliasMinimal(FSSpecPtr target,
                                            GUEST<AliasHandle> *alias);
 
-extern pascal trap OSErr C_NewAliasMinimalFromFullPath(int16 fullpathLength, Ptr fullpath,
+extern pascal trap OSErr C_NewAliasMinimalFromFullPath(int16_t fullpathLength, Ptr fullpath,
                                                        Str32 zoneName, Str31 serverName, GUEST<AliasHandle> *alias);
 
 extern pascal trap OSErr C_UpdateAlias(FSSpecPtr fromFile, FSSpecPtr target,
@@ -54,8 +54,8 @@ extern pascal trap OSErr C_ResolveAliasFile(FSSpecPtr theSpec,
                                             Boolean *targetIsFolder,
                                             Boolean *wasAliased);
 
-extern pascal trap OSErr C_MatchAlias(FSSpecPtr fromFile, int32 rulesMask,
-                                      AliasHandle alias, int16 *aliasCount,
+extern pascal trap OSErr C_MatchAlias(FSSpecPtr fromFile, int32_t rulesMask,
+                                      AliasHandle alias, int16_t *aliasCount,
                                       FSSpecArrayPtr aliasList,
                                       Boolean *needsUpdate,
                                       AliasFilterProcPtr aliasFilter,

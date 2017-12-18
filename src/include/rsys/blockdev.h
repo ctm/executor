@@ -4,10 +4,10 @@ namespace Executor
 {
 typedef struct _blockdev_t
 {
-    uint32 block_size;
-    uint32 max_xfer_size; /* Max number of bytes to transfer at once. */
+    uint32_t block_size;
+    uint32_t max_xfer_size; /* Max number of bytes to transfer at once. */
     int fd;
-    uint32 fpos; /* Current file position. */
+    uint32_t fpos; /* Current file position. */
     bool locked_p; /* read-only? */
     bool removable_p;
 
@@ -24,15 +24,15 @@ typedef struct _blockdev_t
  */
 
     /* Internal use only. */
-    uint32 dcache_tag; /* unique number for dcache lookups. */
+    uint32_t dcache_tag; /* unique number for dcache lookups. */
     bool valid_p; /* valid blockdev_t record? */
 } blockdev_t;
 
-extern bool blockdev_read(blockdev_t *b, uint32 offset, void *buf,
-                          uint32 num_bytes);
-extern bool blockdev_write(blockdev_t *b, uint32 offset, const void *buf,
-                           uint32 num_bytes);
-extern bool blockdev_seek_set(blockdev_t *b, uint32 offset);
+extern bool blockdev_read(blockdev_t *b, uint32_t offset, void *buf,
+                          uint32_t num_bytes);
+extern bool blockdev_write(blockdev_t *b, uint32_t offset, const void *buf,
+                           uint32_t num_bytes);
+extern bool blockdev_seek_set(blockdev_t *b, uint32_t offset);
 extern void blockdev_close(blockdev_t *b);
 }
 #endif /* !_RSYS_BLOCKDEV_H_ */

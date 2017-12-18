@@ -5,10 +5,10 @@
 namespace Executor
 {
 typedef uint8 ISAType;
-typedef uint16 CallingConventionType;
-typedef uint32 ProcInfoType;
-typedef uint16 RegisterSelectorType;
-typedef uint16 RoutineFlagsType;
+typedef uint16_t CallingConventionType;
+typedef uint32_t ProcInfoType;
+typedef uint16_t RegisterSelectorType;
+typedef uint16_t RoutineFlagsType;
 
 enum
 {
@@ -39,20 +39,20 @@ struct RoutineRecord
     GUEST<ISAType> ISA;
     GUEST<RoutineFlagsType> routineFlags;
     GUEST<ProcPtr> procDescriptor;
-    GUEST<uint32> reserved2;
-    GUEST<uint32> selector;
+    GUEST<uint32_t> reserved2;
+    GUEST<uint32_t> selector;
 };
 
 struct RoutineDescriptor
 {
     GUEST_STRUCT;
-    GUEST<uint16> goMixedModeTrap;
+    GUEST<uint16_t> goMixedModeTrap;
     GUEST<uint8> version;
     GUEST<RDFlagsType> routineDescriptorFlags;
-    GUEST<uint32> reserved1;
+    GUEST<uint32_t> reserved1;
     GUEST<uint8> reserved2;
     GUEST<uint8> selectorInfo;
-    GUEST<uint16> routineCount;
+    GUEST<uint16_t> routineCount;
     GUEST<RoutineRecord[1]> routineRecords;
 };
 
@@ -146,8 +146,8 @@ extern void C_DisposeRoutineDescriptor(UniversalProcPtr ptr);
 extern UniversalProcPtr C_NewFatRoutineDescriptor(ProcPtr m68k, ProcPtr ppc,
                                                   ProcInfoType info);
 
-extern OSErr C_SaveMixedModeState(void *statep, uint32 vers);
+extern OSErr C_SaveMixedModeState(void *statep, uint32_t vers);
 
-extern OSErr C_RestoreMixedModeState(void *statep, uint32 vers);
+extern OSErr C_RestoreMixedModeState(void *statep, uint32_t vers);
 }
 #endif

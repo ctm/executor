@@ -6,7 +6,7 @@
 #include "ListMgr.h"
 #include "ScriptMgr.h"
 
-typedef uint32 PointAsLong;
+typedef uint32_t PointAsLong;
 
 typedef struct
 {
@@ -136,14 +136,14 @@ extern DialogPtr NewDialog_SYSV4(Ptr dst, Rect *r, StringPtr tit,
                                  WindowPtr behind, BOOLEAN gaflag,
                                  const newdialog_aixtosysv4 *pbp);
 
-extern OSErr OutlineMetrics_AIX(int16 byte_count, Ptr text,
+extern OSErr OutlineMetrics_AIX(int16_t byte_count, Ptr text,
                                 PointAsLong numerAL, PointAsLong denomAL,
-                                int16 *y_max, int16 *y_min, Fixed *aw_array,
+                                int16_t *y_max, int16_t *y_min, Fixed *aw_array,
                                 Fixed *lsb_array, Rect *bounds_array);
 
-extern OSErr OutlineMetrics_SYSV4(int16 byte_count, Ptr text,
+extern OSErr OutlineMetrics_SYSV4(int16_t byte_count, Ptr text,
                                   PointAsLong numerAL, PointAsLong denomAL,
-                                  int16 *y_max, int16 *y_min, Fixed *aw_array,
+                                  int16_t *y_max, int16_t *y_min, Fixed *aw_array,
                                   const outlinemetrics_aixtosysv4 *pbp);
 
 extern ListHandle LNew_AIX(Rect *rview, Rect *bounds, PointAsLong pal,

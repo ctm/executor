@@ -20,7 +20,7 @@ find_custom_string(const char *str)
     void *retval;
 
     for(headerp = custom.headers;
-        headerp->length && headerp->magic != *(uint32 *)str;
+        headerp->length && headerp->magic != *(uint32_t *)str;
         headerp = (header_t *)((char *)headerp + headerp->length + sizeof *headerp))
         ;
     ;

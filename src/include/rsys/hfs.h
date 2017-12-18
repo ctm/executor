@@ -297,7 +297,7 @@ typedef struct _cacheentry
     GUEST<cacheentry_ptr> blink;
     GUEST<HVCBPtr> vptr;
     GUEST<LONGINT> fileno;
-    GUEST<uint16> refnum;
+    GUEST<uint16_t> refnum;
     GUEST<ULONGINT> physblock;
     GUEST<ULONGINT> logblk;
     GUEST<unsigned char> flags;
@@ -315,7 +315,7 @@ struct cachehead
     GUEST<cacheentry_ptr> flink;
     GUEST<cacheentry_ptr> blink;
     GUEST<unsigned short> nitems;
-    GUEST<uint16> flags;
+    GUEST<uint16_t> flags;
 };
 
 #define NCACHEENTRIES 16
@@ -390,7 +390,7 @@ extern INTEGER SCSIFlags;
 
 #define ISWDNUM(v)                                                                     \
     ({                                                                                 \
-        uint16 _v;                                                                     \
+        uint16_t _v;                                                                     \
                                                                                        \
         _v = (v);                                                                      \
         (_v & WDMASK) == WDMAGIC ? (_v ^ WDMAGIC) % sizeof(wdentry) == sizeof(INTEGER) \
@@ -433,7 +433,7 @@ enum
 extern cacheentry *ROMlib_addrtocachep(Ptr addr, HVCB *vcbp);
 extern BOOLEAN ROMlib_searchnode(btnode *btp, void *key, compfp fp, anykey **keypp,
                                  INTEGER *afterp);
-extern OSErr ROMlib_getcache(cacheentry **retpp, uint16 refnum, ULONGINT logbno,
+extern OSErr ROMlib_getcache(cacheentry **retpp, uint16_t refnum, ULONGINT logbno,
                              cacheflagtype flags);
 extern OSErr ROMlib_putcache(cacheentry *cachep);
 extern OSErr ROMlib_keyfind(btparam *btpb);
@@ -448,7 +448,7 @@ extern OSErr ROMlib_dirtyleaf(void *p, HVCB *vcbp);
 extern OSErr ROMlib_filecreate(btparam *btpb, void *data, filekind kind);
 extern OSErr ROMlib_dircreate(btparam *btpb, directoryrec *data);
 extern OSErr ROMlib_dircreate(btparam *btpb, directoryrec *data);
-extern xtntkey *ROMlib_newextentrecord(filecontrolblock *fcbp, uint16 newabn);
+extern xtntkey *ROMlib_newextentrecord(filecontrolblock *fcbp, uint16_t newabn);
 extern OSErr ROMlib_btrename(btparam *btpb, StringPtr newnamep);
 extern OSErr ROMlib_btcreateemptyfile(btparam *btpb);
 extern OSErr ROMlib_btcreateemptydir(btparam *btpb, GUEST<LONGINT> *newidp);
@@ -464,13 +464,13 @@ extern INTEGER ROMlib_flnumtorefnum(ULONGINT flnum, VCB *vcbp);
 /* public entries in file.c */
 
 extern filecontrolblock *ROMlib_getfreefcbp(void);
-extern filecontrolblock *ROMlib_refnumtofcbp(uint16 refnum);
+extern filecontrolblock *ROMlib_refnumtofcbp(uint16_t refnum);
 extern compretval ROMlib_xtntcompare(void *firstp, void *secondp);
 extern compretval ROMlib_catcompare(void *firstp, void *secondp);
 extern void ROMlib_makextntkey(xtntkey *keyp, Forktype forkwanted, LONGINT flnum,
-                               uint16 bno);
+                               uint16_t bno);
 extern void ROMlib_makextntparam(btparam *btpb, HVCB *vcbp, Forktype forkwanted,
-                                 LONGINT flnum, uint16 bno);
+                                 LONGINT flnum, uint16_t bno);
 extern LONGINT ROMlib_logtophys(filecontrolblock *fcbp, LONGINT absoffset,
                                 LONGINT *nphyscontigp);
 extern OSErr ROMlib_makecatkey(catkey *keyp, LONGINT dirid, INTEGER namelen, Ptr namep);
@@ -594,7 +594,7 @@ extern OSErr hfsPBEject(ParmBlkPtr ufsPB);
 extern void try_to_mount_disk(const char *dname, LONGINT floppyfd,
                               GUEST<LONGINT> *messp, LONGINT bsize,
                               LONGINT maxbytes, drive_flags_t flags,
-                              uint32 offset);
+                              uint32_t offset);
 
 extern void ROMlib_OurClose(void);
 

@@ -282,7 +282,7 @@ STUB(_GetResource)
 }
 
 static void
-do_selector_error(uint32 selector,
+do_selector_error(uint32_t selector,
                   const char *trap_name,
                   syn68k_addr_t (*trap_fp)(syn68k_addr_t, void **))
 {
@@ -372,7 +372,7 @@ _do_selector_block(const selectorblock_t *sbp, unsigned long sel,
 
 typedef struct selector_table_entry
 {
-    uint32 selector;
+    uint32_t selector;
     ptocblock_t ptoc;
 } selector_table_entry_t;
 
@@ -381,7 +381,7 @@ typedef struct selector_table_entry
                           #trap, _##trap); })
 
 static syn68k_addr_t
-_do_selector_table(uint32 selector,
+_do_selector_table(uint32_t selector,
                    selector_table_entry_t *table, int table_size,
                    syn68k_addr_t (*fail_fn)(void),
                    const char *trap_name,
@@ -534,7 +534,7 @@ PRIVATE selectorblock_t textutils_block[] = {
 STUB(ScriptUtil)
 {
     syn68k_addr_t retaddr;
-    uint32 selector;
+    uint32_t selector;
     uint8 low_selector_byte;
     bool use_high_table_p;
     syn68k_addr_t retval;
@@ -545,7 +545,7 @@ STUB(ScriptUtil)
 
     if(selector == 0x800affb6)
     {
-        uint16 sel2;
+        uint16_t sel2;
 
         sel2 = POPUW();
         PUSHADDR(retaddr);
@@ -702,7 +702,7 @@ STUB(Frac2X)
 }
 
 #define SAVE_A1_D1_D2()            \
-    uint32 savea1, saved1, saved2; \
+    uint32_t savea1, saved1, saved2; \
     savea1 = EM_A1;                \
     saved1 = EM_D1;                \
     saved2 = EM_D2
@@ -2143,7 +2143,7 @@ STUB(HFSRoutines)
 
 #define UNIMPLEMENTEDINDEX (0x9F)
 
-PRIVATE long istool(uint32 *d0p, uint32 d1)
+PRIVATE long istool(uint32_t *d0p, uint32_t d1)
 {
     long retval;
 
@@ -2221,7 +2221,7 @@ PRIVATE long unimplementedtool(long d0)
  * buy us much, anyway
  */
 
-PRIVATE uint16 bad_traps[10];
+PRIVATE uint16_t bad_traps[10];
 PRIVATE int n_bad_traps = 0;
 
 PUBLIC void
@@ -2234,7 +2234,7 @@ PRIVATE void
 add_to_bad_trap_addresses(bool tool_p, unsigned short index)
 {
     int i;
-    uint16 aline_trap;
+    uint16_t aline_trap;
 
     aline_trap = 0xA000 + index;
     if(tool_p)
@@ -2291,7 +2291,7 @@ STUB(bad_trap_unimplemented)
 }
 
 PUBLIC void
-ROMlib_GetTrapAddress_helper(uint32 *d0p, uint32 d1, uint32 *a0p)
+ROMlib_GetTrapAddress_helper(uint32_t *d0p, uint32_t d1, uint32_t *a0p)
 {
     bool tool_p;
 
@@ -2310,7 +2310,7 @@ ROMlib_GetTrapAddress_helper(uint32 *d0p, uint32 d1, uint32 *a0p)
         *a0p = (unimplementedos(*d0p) ? tooltraptable[UNIMPLEMENTEDINDEX]
                                       : ostraptable[*d0p]);
     }
-    if(*a0p == (uint32)tooltraptable[UNIMPLEMENTEDINDEX])
+    if(*a0p == (uint32_t)tooltraptable[UNIMPLEMENTEDINDEX])
     {
         add_to_bad_trap_addresses(tool_p, *d0p);
         *a0p = US_TO_SYN68K_CHECK0(P_bad_trap_unimplemented);
@@ -2652,7 +2652,7 @@ STUB(NewHandle)
 {
     /* #### d1 options */
 
-    EM_A0 = (uint32)US_TO_SYN68K_CHECK0(_NewHandle_flags(EM_D0, SYS_P(EM_D1, 0xA122),
+    EM_A0 = (uint32_t)US_TO_SYN68K_CHECK0(_NewHandle_flags(EM_D0, SYS_P(EM_D1, 0xA122),
                                                          CLEAR_P(EM_D1, 0xA122)));
     EM_D0 = CW(MemErr);
     RTS();
@@ -2660,7 +2660,7 @@ STUB(NewHandle)
 
 STUB(HandleZone)
 {
-    EM_A0 = (uint32)
+    EM_A0 = (uint32_t)
         US_TO_SYN68K_CHECK0(HandleZone((Handle)SYN68K_TO_US_CHECK0(EM_A0)));
     EM_D0 = CW(MemErr);
     RTS();
@@ -2698,7 +2698,7 @@ STUB(MaxMem)
 
 STUB(PurgeSpace)
 {
-    int32 total, contig;
+    int32_t total, contig;
 
     _PurgeSpace_flags(&total, &contig, SYS_P(EM_D1, 0xA062));
     EM_D0 = total;
@@ -2970,10 +2970,10 @@ STUB(modeswitch)
 
     if(convention == kRegisterBased)
     {
-        uint32 retval;
+        uint32_t retval;
         int retwidth;
         int ret_reg;
-        uint32 mask;
+        uint32_t mask;
 
         warning_trace_info("calling universal from mixed mode using "
                            "register conventions");
@@ -3002,7 +3002,7 @@ STUB(modeswitch)
         {
             if(mask)
             {
-                uint32 *regp;
+                uint32_t *regp;
                 static int map[] = {
                     0, /* kRegisterD0,  0 */
                     1, /* kRegisterD1,  1 */
@@ -3047,7 +3047,7 @@ STUB(modeswitch)
     else
     {
         int rettype;
-        uint32 retval;
+        uint32_t retval;
 
         warning_trace_info("calling universal from mixed mode");
         retval = CallUniversalProc_from_native_common(unused, args_via_68k_stack,

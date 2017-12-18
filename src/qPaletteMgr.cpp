@@ -1552,7 +1552,7 @@ P1(PUBLIC pascal trap, LONGINT, Entry2Index, INTEGER, entry_index)
 
 P5(PUBLIC pascal trap, void, CopyPalette,
    PaletteHandle, src_palette, PaletteHandle, dst_palette,
-   int16, src_start, int16, dst_start, int16, n_entries)
+   int16_t, src_start, int16_t, dst_start, int16_t, n_entries)
 {
     int src_n_entries, dst_n_entries;
     ColorInfo *src_info, *dst_info;

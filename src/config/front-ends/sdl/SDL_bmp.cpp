@@ -164,7 +164,7 @@ typedef struct
 {
     const char *filename;
     FILE *fp;
-    Sint32 bfOffBits;
+    Sint32_t bfOffBits;
 } private_bmp_read_t;
 
 /* CF_DIB-specific state information for reading */
@@ -186,8 +186,8 @@ struct dib_read_obj
 {
     void (*read_init)(dib_read_obj_t *);
     void (*read_seek)(dib_read_obj_t *);
-    Uint32 (*readle32)(dib_read_obj_t *);
-    Uint16 (*readle16)(dib_read_obj_t *);
+    Uint32_t (*readle32)(dib_read_obj_t *);
+    Uint16_t (*readle16)(dib_read_obj_t *);
     int (*readle8)(dib_read_obj_t *);
     int (*read)(dib_read_obj_t *, void *, int);
     void (*read_close)(dib_read_obj_t *);
@@ -264,10 +264,10 @@ SDL_ERROR(void)
     return retval;
 }
 
-static Uint32
+static Uint32_t
 bmp_readle32(dib_read_obj_t *obj)
 {
-    Uint32 retval;
+    Uint32_t retval;
 
     if(obj->error)
         retval = 0;
@@ -279,20 +279,20 @@ bmp_readle32(dib_read_obj_t *obj)
     return retval;
 }
 
-static Uint32
+static Uint32_t
 cfdib_readle32(dib_read_obj_t *obj)
 {
-    Uint32 retval;
+    Uint32_t retval;
 
-    retval = *(Uint32 *)obj->u.cfdib.p;
+    retval = *(Uint32_t *)obj->u.cfdib.p;
     advance_n_bytes_voidp(&obj->u.cfdib.p, sizeof retval);
     return retval;
 }
 
-static Uint16
+static Uint16_t
 bmp_readle16(dib_read_obj_t *obj)
 {
-    Uint16 retval;
+    Uint16_t retval;
 
     if(obj->error)
         retval = 0;
@@ -304,12 +304,12 @@ bmp_readle16(dib_read_obj_t *obj)
     return retval;
 }
 
-static Uint16
+static Uint16_t
 cfdib_readle16(dib_read_obj_t *obj)
 {
-    Uint16 retval;
+    Uint16_t retval;
 
-    retval = *(Uint16 *)obj->u.cfdib.p;
+    retval = *(Uint16_t *)obj->u.cfdib.p;
     advance_n_bytes_voidp(&obj->u.cfdib.p, sizeof retval);
     return retval;
 }
@@ -336,7 +336,7 @@ cfdib_readle8(dib_read_obj_t *obj)
 {
     Uint8 retval;
 
-    retval = *(Uint16 *)obj->u.cfdib.p;
+    retval = *(Uint16_t *)obj->u.cfdib.p;
     advance_n_bytes_voidp(&obj->u.cfdib.p, sizeof retval);
     return retval;
 }
@@ -407,32 +407,32 @@ cfdib_read_no_masks(dib_read_obj_t *obj, int biSize)
 SDL_Surface *
 SDL_BMP_read_helper(dib_read_obj_t *obj)
 {
-    Uint32 ui;
-    Sint32 i, pad;
+    Uint32_t ui;
+    Sint32_t i, pad;
     int c;
     SDL_Surface *surface;
-    Uint32 Rmask;
-    Uint32 Gmask;
-    Uint32 Bmask;
+    Uint32_t Rmask;
+    Uint32_t Gmask;
+    Uint32_t Bmask;
     SDL_Palette *palette;
     Uint8 *bits;
     int ExpandBMP;
 
     /* The Win32 BITMAPINFOHEADER struct (40 bytes) */
-    Uint32 biSize;
-    Sint32 biWidth;
-    Sint32 biHeight;
-    Uint16 biPlanes;
-    Uint16 biBitCount;
-    Uint32 biCompression;
-    Uint32 biSizeImage;
-    Sint32 biXPelsPerMeter;
-    Sint32 biYPelsPerMeter;
-    Uint32 biClrUsed;
-    Uint32 biClrImportant;
+    Uint32_t biSize;
+    Sint32_t biWidth;
+    Sint32_t biHeight;
+    Uint16_t biPlanes;
+    Uint16_t biBitCount;
+    Uint32_t biCompression;
+    Uint32_t biSizeImage;
+    Sint32_t biXPelsPerMeter;
+    Sint32_t biYPelsPerMeter;
+    Uint32_t biClrUsed;
+    Uint32_t biClrImportant;
 
-    Uint16 desired_bit_depth;
-    Uint16 pixels_per_bit;
+    Uint16_t desired_bit_depth;
+    Uint16_t pixels_per_bit;
 
     surface = NULL;
 
@@ -719,10 +719,10 @@ struct dib_write_obj
 {
     void (*write_init)(dib_write_obj_t *);
     int (*write)(dib_write_obj_t *, const void *, int);
-    void (*writele32)(dib_write_obj_t *, Uint32);
-    void (*writele16)(dib_write_obj_t *, Uint16);
+    void (*writele32)(dib_write_obj_t *, Uint32_t);
+    void (*writele16)(dib_write_obj_t *, Uint16_t);
     void (*writele8)(dib_write_obj_t *, Uint8);
-    void (*write_seek)(dib_write_obj_t *, Uint32);
+    void (*write_seek)(dib_write_obj_t *, Uint32_t);
     long (*write_ftell)(dib_write_obj_t *);
     int (*write_close)(dib_write_obj_t *);
     bool error;
@@ -755,10 +755,10 @@ bmp_write_init(dib_write_obj_t *obj)
         else
         {
             /* The Win32 BMP file header (14 bytes) */
-            Uint32 bfSize;
-            Uint16 bfReserved1;
-            Uint16 bfReserved2;
-            Sint32 bfOffBits;
+            Uint32_t bfSize;
+            Uint16_t bfReserved1;
+            Uint16_t bfReserved2;
+            Sint32_t bfOffBits;
 
             /* Set the BMP file header values */
             bfSize = 0; /* We'll write this when we're done */
@@ -852,7 +852,7 @@ cfdib_write(dib_write_obj_t *obj, const void *p, int n_bytes)
 }
 
 static void
-bmp_writele32(dib_write_obj_t *obj, Uint32 val)
+bmp_writele32(dib_write_obj_t *obj, Uint32_t val)
 {
     if(!obj->error)
     {
@@ -862,13 +862,13 @@ bmp_writele32(dib_write_obj_t *obj, Uint32 val)
 }
 
 static void
-cfdib_writele32(dib_write_obj_t *obj, Uint32 val)
+cfdib_writele32(dib_write_obj_t *obj, Uint32_t val)
 {
     cfdib_write(obj, &val, sizeof val);
 }
 
 static void
-bmp_writele16(dib_write_obj_t *obj, Uint16 val)
+bmp_writele16(dib_write_obj_t *obj, Uint16_t val)
 {
     if(!obj->error)
     {
@@ -878,7 +878,7 @@ bmp_writele16(dib_write_obj_t *obj, Uint16 val)
 }
 
 static void
-cfdib_writele16(dib_write_obj_t *obj, Uint16 val)
+cfdib_writele16(dib_write_obj_t *obj, Uint16_t val)
 {
     cfdib_write(obj, &val, sizeof val);
 }
@@ -901,13 +901,13 @@ cfdib_writele8(dib_write_obj_t *obj, Uint8 val)
 }
 
 static void
-bmp_write_seek(dib_write_obj_t *obj, Uint32 offset)
+bmp_write_seek(dib_write_obj_t *obj, Uint32_t offset)
 {
     obj->error = (obj->error || fseek(obj->u.bmp.fp, offset, SEEK_SET) != 0);
 }
 
 static void
-cfdib_write_seek(dib_write_obj_t *obj, Uint32 offset)
+cfdib_write_seek(dib_write_obj_t *obj, Uint32_t offset)
 {
     if(!obj->error)
     {
@@ -960,7 +960,7 @@ bmp_write_close(dib_write_obj_t *obj)
         retval = EOF;
     else
     {
-        Uint32 bfSize;
+        Uint32_t bfSize;
 
         /* Write the BMP file size */
         bfSize = obj->write_ftell(obj);
@@ -990,17 +990,17 @@ int SDL_BMP_write_helper(SDL_Surface *surfp, dib_write_obj_t *obj)
     int retval;
 
     /* The Win32 BITMAPINFOHEADER struct (40 bytes) */
-    Uint32 biSize;
-    Sint32 biWidth;
-    Sint32 biHeight;
-    Uint16 biPlanes;
-    Uint16 biBitCount;
-    Uint32 biCompression;
-    Uint32 biSizeImage;
-    Sint32 biXPelsPerMeter;
-    Sint32 biYPelsPerMeter;
-    Uint32 biClrUsed;
-    Uint32 biClrImportant;
+    Uint32_t biSize;
+    Sint32_t biWidth;
+    Sint32_t biHeight;
+    Uint16_t biPlanes;
+    Uint16_t biBitCount;
+    Uint32_t biCompression;
+    Uint32_t biSizeImage;
+    Sint32_t biXPelsPerMeter;
+    Sint32_t biYPelsPerMeter;
+    Uint32_t biClrUsed;
+    Uint32_t biClrImportant;
     bool need_to_free;
 
     need_to_free = false;
@@ -1113,7 +1113,7 @@ int SDL_BMP_write_helper(SDL_Surface *surfp, dib_write_obj_t *obj)
 
     if(obj->write_seek == bmp_write_seek)
     {
-        Sint32 bfOffBits;
+        Sint32_t bfOffBits;
 
         /* Write the bitmap offset */
         bfOffBits = obj->write_ftell(obj);

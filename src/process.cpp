@@ -39,11 +39,11 @@ typedef struct process_info
 {
     struct process_info *next;
 
-    uint32 mode;
-    uint32 type;
-    uint32 signature;
-    uint32 size;
-    uint32 launch_ticks;
+    uint32_t mode;
+    uint32_t type;
+    uint32_t signature;
+    uint32_t size;
+    uint32_t launch_ticks;
 
     ProcessSerialNumber serial_number;
 } process_info_t;
@@ -60,11 +60,11 @@ static ProcessSerialNumber no_process = { CLC(0), CLC(kNoProcess) };
 static ProcessSerialNumber current_process = { CLC(0), CLC(kCurrentProcess) };
 
 void Executor::process_create(bool desk_accessory_p,
-                              uint32 type, uint32 signature)
+                              uint32_t type, uint32_t signature)
 {
     size_resource_handle size;
     process_info_t *info;
-    static uint32 next_free_psn = 4;
+    static uint32_t next_free_psn = 4;
 
     size = get_size_resource();
 
@@ -162,7 +162,7 @@ P2(PUBLIC pascal trap, OSErr, GetProcessInformation,
    ProcessInfoPtr, process_info)
 {
     process_info_t *info;
-    int32 current_ticks;
+    int32_t current_ticks;
 
     info = get_process_info(serial_number);
     if(info == NULL

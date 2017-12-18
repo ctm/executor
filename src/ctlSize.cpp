@@ -51,7 +51,7 @@ P5(PUBLIC pascal trap, void, DragControl, ControlHandle, c, /* IMI-325 */
         rh = NewRgn();
         CTLCALL(c, calcCntlRgn, ptr_to_longint(rh));
         l = DragGrayRgn(rh, p, limit, slop, axis, (ProcPtr)0);
-        if((uint32)l != 0x80008000)
+        if((uint32_t)l != 0x80008000)
             MoveControl(c, Hx(c, contrlRect.left) + LoWord(l),
                         Hx(c, contrlRect.top) + HiWord(l));
 

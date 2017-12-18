@@ -23,7 +23,7 @@ P1(PUBLIC pascal trap, OSErr, GetStdFilterProc, GUEST<ProcPtr> *, proc)
 }
 
 P2(PUBLIC pascal trap, OSErr, SetDialogDefaultItem, DialogPtr, dialog,
-   int16, new_item)
+   int16_t, new_item)
 {
     DialogPeek dp;
 
@@ -37,7 +37,7 @@ P2(PUBLIC pascal trap, OSErr, SetDialogDefaultItem, DialogPtr, dialog,
 /* These two probably adjust stuff that doesn't appear in Stock System 7 */
 
 P2(PUBLIC pascal trap, OSErr, SetDialogCancelItem, DialogPtr, dialog,
-   int16, new_item)
+   int16_t, new_item)
 {
     warning_unimplemented(NULL_STRING);
     return noErr; /* noErr is likely to be less upsetting than paramErr -- ctm */

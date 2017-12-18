@@ -25,53 +25,53 @@
 using namespace Executor;
 
 /* Holds the four-byte pattern value, for "short & narrow" patterns. */
-uint32 xdblt_pattern_value asm("_xdblt_pattern_value");
+uint32_t xdblt_pattern_value asm("_xdblt_pattern_value");
 
 /* Holds the row bytes for the pattern.  Always evenly divisible by four. */
-uint32 xdblt_log2_pattern_row_bytes asm("_xdblt_log2_pattern_row_bytes");
+uint32_t xdblt_log2_pattern_row_bytes asm("_xdblt_log2_pattern_row_bytes");
 
 /* Holds the row bytes for the pattern.  Always evenly divisible by four. */
-uint32 xdblt_pattern_height_minus_1 asm("_xdblt_pattern_height_minus_1");
+uint32_t xdblt_pattern_height_minus_1 asm("_xdblt_pattern_height_minus_1");
 
 /* Start and end of the pattern. */
-uint32 *xdblt_pattern_baseaddr asm("_xdblt_pattern_baseaddr");
-uint32 *xdblt_pattern_end asm("_xdblt_pattern_end");
+uint32_t *xdblt_pattern_baseaddr asm("_xdblt_pattern_baseaddr");
+uint32_t *xdblt_pattern_end asm("_xdblt_pattern_end");
 
 /* Since the pattern may be rotated vertically, we add this to the
  * row we would otherwise compute to display on bitmap row #N.
  */
-uint32 xdblt_pattern_row_0 asm("_xdblt_pattern_row_0");
+uint32_t xdblt_pattern_row_0 asm("_xdblt_pattern_row_0");
 
 /* Table of functions that describe this transfer mode. */
 const void **xdblt_stub_table asm("_xdblt_stub_table");
 
 /* log base 2 of the bits per pixel of the destination bitmap [0, 5]. */
-uint32 xdblt_log2_bpp asm("_xdblt_log2_bpp");
+uint32_t xdblt_log2_bpp asm("_xdblt_log2_bpp");
 
 /* "Special region" data to be transferred. */
 const INTEGER *xdblt_rgn_start asm("_xdblt_rgn_start");
 
 /* Added to the X value grabbed from the region to get the "real" value. */
-uint32 xdblt_x_offset asm("_xdblt_x_offset");
+uint32_t xdblt_x_offset asm("_xdblt_x_offset");
 
 /* Canonicalized base address of the destination bitmap.  We offset
  * the bitmap's base so that (region_y_val * dst_rowbytes) is the
  * offset from the baseaddr to the proper row.
  */
-uint32 *xdblt_dst_baseaddr asm("_xdblt_dst_baseaddr");
+uint32_t *xdblt_dst_baseaddr asm("_xdblt_dst_baseaddr");
 
 /* Bytes per row of the destination bitmap. */
-uint32 xdblt_dst_row_bytes asm("_xdblt_dst_row_bytes");
+uint32_t xdblt_dst_row_bytes asm("_xdblt_dst_row_bytes");
 
 /* Bit pattern inserted for bit insertion modes. */
-uint32 xdblt_insert_bits asm("_xdblt_insert_bits");
+uint32_t xdblt_insert_bits asm("_xdblt_insert_bits");
 
 #if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-uint16 xdblt_dst_selector asm("_xdblt_dst_selector");
+uint16_t xdblt_dst_selector asm("_xdblt_dst_selector");
 #endif
 
 #define M(n) CLC_RAW(0xFFFFFFFFU >> (n))
-const uint32 xdblt_mask_array[32] asm("_xdblt_mask_array") = {
+const uint32_t xdblt_mask_array[32] asm("_xdblt_mask_array") = {
     M(0), M(1), M(2), M(3), M(4), M(5), M(6), M(7),
     M(8), M(9), M(10), M(11), M(12), M(13), M(14), M(15),
     M(16), M(17), M(18), M(19), M(20), M(21), M(22), M(23),
@@ -82,7 +82,7 @@ const uint32 xdblt_mask_array[32] asm("_xdblt_mask_array") = {
 /* Since we map all modes to one of { copy, or, xor, and }, sometimes we
  * need to flip the pattern bits.  This table tells us when to do that.
  */
-static const uint32 flip_mask_for_mode[8] = { 0, 0, 0, ~(uint32)0, ~(uint32)0, ~(uint32)0, ~(uint32)0, 0 };
+static const uint32_t flip_mask_for_mode[8] = { 0, 0, 0, ~(uint32_t)0, ~(uint32_t)0, ~(uint32_t)0, ~(uint32_t)0, 0 };
 
 /* This macro rotates the specified 32 bit value right by the given
  * number of bits and modifies the input value.  It can only be called
@@ -104,7 +104,7 @@ static const uint32 flip_mask_for_mode[8] = { 0, 0, 0, ~(uint32)0, ~(uint32)0, ~
 #define RORL(count, n)                                        \
     do                                                        \
     {                                                         \
-        uint32 _tmp_ = (n);                                   \
+        uint32_t _tmp_ = (n);                                   \
         int _count_ = (count);                                \
         (n) = (_tmp_ >> _count_) | (_tmp_ << (32 - _count_)); \
     } while(0)
@@ -172,7 +172,7 @@ setup_dst_bitmap(int log2_bpp, PixMap *dst_pixmap)
     dst -= row_bytes * CW(dst_pixmap->bounds.top);
     xdblt_dst_row_bytes = row_bytes;
     byte_slop = (unsigned long)dst & 3;
-    xdblt_dst_baseaddr = (uint32 *)(dst - byte_slop);
+    xdblt_dst_baseaddr = (uint32_t *)(dst - byte_slop);
 
     xdblt_x_offset = ((byte_slop << 3)
                       - (CW(dst_pixmap->bounds.left) << log2_bpp));
@@ -306,7 +306,7 @@ bool Executor::xdblt_xdata_short_narrow(RgnHandle rh, int mode,
                                         int pat_x_rotate_count, int pat_y_rotate_count,
                                         xdata_t *x, PixMap *dst)
 {
-    uint32 v, flip;
+    uint32_t v, flip;
     int rcount, log2_bpp;
     bool mode_canon_p;
 #if defined(VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
@@ -383,12 +383,12 @@ bool Executor::xdblt_xdata_short_narrow(RgnHandle rh, int mode,
  * and then rotates the given xdata by XROT bits.
  */
 static inline void
-rotate_and_flip_xdata(xdata_t *x, int xrot, uint32 flip_mask)
+rotate_and_flip_xdata(xdata_t *x, int xrot, uint32_t flip_mask)
 {
     /* First flip all bits appropriately. */
     if(flip_mask != 0)
     {
-        uint32 *p, *e;
+        uint32_t *p, *e;
         e = xdblt_pattern_end;
         for(p = xdblt_pattern_baseaddr; p != e; p++)
             *p ^= flip_mask;
@@ -401,7 +401,7 @@ rotate_and_flip_xdata(xdata_t *x, int xrot, uint32 flip_mask)
 
         if(row_bytes == 4)
         {
-            uint32 *p, *e;
+            uint32_t *p, *e;
             e = xdblt_pattern_end;
             for(p = xdblt_pattern_baseaddr; p != e; p++)
                 RORL(xrot, *p);
@@ -474,7 +474,7 @@ bool Executor::xdblt_xdata_complex(RgnHandle rh, int mode,
                                    xdata_t *x, PixMap *dst)
 {
     const char *base;
-    uint32 flip_mask;
+    uint32_t flip_mask;
     bool mode_canon_p;
 #if defined(VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
     bool cursor_maybe_changed_p, cursor_vis_p;
@@ -503,8 +503,8 @@ bool Executor::xdblt_xdata_complex(RgnHandle rh, int mode,
 #endif
 
     base = (const char *)x->pat_bits;
-    xdblt_pattern_baseaddr = (uint32 *)base;
-    xdblt_pattern_end = (uint32 *)(&base[x->byte_size]);
+    xdblt_pattern_baseaddr = (uint32_t *)base;
+    xdblt_pattern_end = (uint32_t *)(&base[x->byte_size]);
 
     pat_x_rotate_count <<= x->log2_bpp;
     pat_x_rotate_count += setup_dst_bitmap(x->log2_bpp, dst);
@@ -543,12 +543,12 @@ bool Executor::xdblt_xdata_complex(RgnHandle rh, int mode,
 }
 
 static bool
-do_short_narrow_pattern(RgnHandle rh, int mode, uint32 v, PixMap *dst,
-                        uint32 fg_color, uint32 bk_color, int log2_bpp,
+do_short_narrow_pattern(RgnHandle rh, int mode, uint32_t v, PixMap *dst,
+                        uint32_t fg_color, uint32_t bk_color, int log2_bpp,
                         const rgb_spec_t *rgb_spec, int pat_x_rotate_count)
 {
     int extra_rot, raw_mode;
-    uint32 tv, op_color;
+    uint32_t tv, op_color;
     RgnPtr r;
     vdriver_accel_result_t accel_result;
 
@@ -581,7 +581,7 @@ do_short_narrow_pattern(RgnHandle rh, int mode, uint32 v, PixMap *dst,
                 return false;
             op_color = ((mode & 3) == (patOr & 3)) ? fg_color : bk_color;
 
-            if(v == (uint32)~0 || (rgb_spec && v == rgb_spec->white_pixel))
+            if(v == (uint32_t)~0 || (rgb_spec && v == rgb_spec->white_pixel))
             {
                 /* Just a copy. */
                 v = op_color;
@@ -626,7 +626,7 @@ do_short_narrow_pattern(RgnHandle rh, int mode, uint32 v, PixMap *dst,
     {
         xdblt_stub_table = xdblt_zeros_stubs[raw_mode];
     }
-    else if(v == (uint32)~0)
+    else if(v == (uint32_t)~0)
     {
         xdblt_stub_table = xdblt_ones_stubs[raw_mode];
     }
@@ -692,9 +692,9 @@ do_short_narrow_pattern(RgnHandle rh, int mode, uint32 v, PixMap *dst,
             && accel_result == VDRIVER_ACCEL_NO_UPDATE);
 }
 
-static inline uint32
-canonicalize_pat_value_for_mode(uint32 v, int mode, uint32 fg_color,
-                                uint32 bk_color, const rgb_spec_t *rgb_spec)
+static inline uint32_t
+canonicalize_pat_value_for_mode(uint32_t v, int mode, uint32_t fg_color,
+                                uint32_t bk_color, const rgb_spec_t *rgb_spec)
 {
     if(mode & (patCopy ^ notPatCopy))
         v ^= ~0;
@@ -736,9 +736,9 @@ canonicalize_pat_value_for_mode(uint32 v, int mode, uint32 fg_color,
 bool Executor::xdblt_pattern(RgnHandle rh, int mode,
                              int pat_x_rotate_count, int pat_y_rotate_count,
                              const Pattern pattern, PixMap *dst,
-                             uint32 fg_color, uint32 bk_color)
+                             uint32_t fg_color, uint32_t bk_color)
 {
-    uint32 v, mask, tile, *p, *end;
+    uint32_t v, mask, tile, *p, *end;
     const rgb_spec_t *rgb_spec = NULL;
     int log2_bpp;
     bool update_dirty_p;
@@ -779,8 +779,8 @@ bool Executor::xdblt_pattern(RgnHandle rh, int mode,
     /* See if the pattern is 0x0000000000000000 or 0xFFFFFFFFFFFFFFFF.
    * These are _extremely_ common cases.
    */
-    v = *(const uint32 *)pattern;
-    if((v + 1U) <= 1U && v == ((const uint32 *)pattern)[1])
+    v = *(const uint32_t *)pattern;
+    if((v + 1U) <= 1U && v == ((const uint32_t *)pattern)[1])
     {
         update_dirty_p = do_short_narrow_pattern(rh, mode, v, dst, fg_color,
                                                  bk_color, log2_bpp,
@@ -798,7 +798,7 @@ bool Executor::xdblt_pattern(RgnHandle rh, int mode,
             {
                 int raw_mode;
 
-                end = (uint32 *)((char *)p + x->byte_size);
+                end = (uint32_t *)((char *)p + x->byte_size);
                 for(; p != end; p++)
                 {
                     /* This is a little slow, but who cares about this
@@ -816,7 +816,7 @@ bool Executor::xdblt_pattern(RgnHandle rh, int mode,
                     xdblt_insert_bits = bk_color;
                 }
                 else if((mode & 3) == (patOr & 3)
-                        && !(fg_color == (uint32)~0
+                        && !(fg_color == (uint32_t)~0
                              || (rgb_spec
                                  && fg_color == rgb_spec->white_pixel)))
                 {

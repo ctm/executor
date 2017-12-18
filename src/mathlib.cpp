@@ -17,7 +17,7 @@
 using namespace Executor;
 
 PRIVATE void
-num2dec(/* const */ DecForm *f, double d, uint32 unused1, uint32 unused2,
+num2dec(/* const */ DecForm *f, double d, uint32_t unused1, uint32_t unused2,
         Decimal *dp)
 {
     // #warning mystery args
@@ -252,13 +252,13 @@ nan_wrapper(void)
 }
 
 PRIVATE void
-feclearexcept_stub(uint32 bits)
+feclearexcept_stub(uint32_t bits)
 {
     warning_trace_info("bits = 0x%x", bits);
     warning_unimplemented("bits = 0x%x", bits);
 }
 
-typedef uint32 fexcept_t;
+typedef uint32_t fexcept_t;
 
 PRIVATE void
 fesetexcept_stub(const fexcept_t *flagp, int bits)
@@ -267,8 +267,8 @@ fesetexcept_stub(const fexcept_t *flagp, int bits)
     warning_unimplemented(NULL_STRING);
 }
 
-PRIVATE uint32
-fetestexcept_stub(uint32 bits)
+PRIVATE uint32_t
+fetestexcept_stub(uint32_t bits)
 {
     warning_trace_info(NULL_STRING);
     warning_unimplemented(NULL_STRING);

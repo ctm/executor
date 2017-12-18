@@ -47,7 +47,7 @@ cursor_debug(const uint8 *datap, const uint8 *maskp, int hot_x, int hot_y)
     offset = vdriver_row_bytes - 16;
     for(y = 0; y < 16; ++y)
     {
-        uint16 u, bit;
+        uint16_t u, bit;
 
         u = *datap++;
         u = (u << 8) | *datap++;

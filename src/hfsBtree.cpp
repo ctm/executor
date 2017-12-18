@@ -373,7 +373,7 @@ PUBLIC LONGINT tagtfs1;
 
 PRIVATE BOOLEAN ROMlib_index_cached = false;
 
-PUBLIC OSErr Executor::ROMlib_getcache(cacheentry **retpp, uint16 refnum, ULONGINT logbno,
+PUBLIC OSErr Executor::ROMlib_getcache(cacheentry **retpp, uint16_t refnum, ULONGINT logbno,
                                        cacheflagtype flags)
 {
     cacheentry *retval, *lastp, *lastdirtyp, *lastfreep;
@@ -1358,7 +1358,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
     return err;
 }
 
-PRIVATE OSErr maketrailentrybusy(trailentry *tep, uint16 refnum)
+PRIVATE OSErr maketrailentrybusy(trailentry *tep, uint16_t refnum)
 {
     OSErr err;
     GUEST<HVCB *> SWvcbp;
@@ -1963,7 +1963,7 @@ PRIVATE OSErr slipin(cacheentry *cachep, INTEGER after, anykey *keyp,
     INTEGER newfirst, sizeused, shim;
     char *keylocp, *firstlocp;
     GUEST<INTEGER> *firstoffset, *offsetp;
-    uint16 newnode;
+    uint16_t newnode;
     cacheentry *newcachep;
     btnode *btp, *newbtp;
     HVCB *vcbp;
@@ -2395,7 +2395,7 @@ PUBLIC OSErr Executor::ROMlib_dircreate(btparam *btpb, directoryrec *data)
     return err;
 }
 
-PUBLIC xtntkey *Executor::ROMlib_newextentrecord(filecontrolblock *fcbp, uint16 newabn)
+PUBLIC xtntkey *Executor::ROMlib_newextentrecord(filecontrolblock *fcbp, uint16_t newabn)
 {
     xtntrec rec;
     HVCB *vcbp;

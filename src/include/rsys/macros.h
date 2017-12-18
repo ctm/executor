@@ -50,17 +50,17 @@
     (BlockMove((Ptr)(s), (Ptr)(d), (Size)((unsigned char)(s)[0]) + 1))
 
 #define PATASSIGN(dest, src)                             \
-    (((uint32 *)(dest))[0] = ((const uint32 *)(src))[0], \
-     ((uint32 *)(dest))[1] = ((const uint32 *)(src))[1])
+    (((uint32_t *)(dest))[0] = ((const uint32_t *)(src))[0], \
+     ((uint32_t *)(dest))[1] = ((const uint32_t *)(src))[1])
 
 #define PATTERNS_EQUAL_P(p1, p2)                            \
-    (((const uint32 *)(p1))[0] == ((const uint32 *)(p2))[0] \
-     && ((const uint32 *)(p1))[1] == ((const uint32 *)(p2))[1])
+    (((const uint32_t *)(p1))[0] == ((const uint32_t *)(p2))[0] \
+     && ((const uint32_t *)(p1))[1] == ((const uint32_t *)(p2))[1])
 
-#define T(a, b, c, d) ((((uint32)(uint8)(a)) << 24)   \
-                       | (((uint32)(uint8)(b)) << 16) \
-                       | (((uint32)(uint8)(c)) << 8)  \
-                       | (((uint32)(uint8)(d)) << 0))
+#define T(a, b, c, d) ((((uint32_t)(uint8)(a)) << 24)   \
+                       | (((uint32_t)(uint8)(b)) << 16) \
+                       | (((uint32_t)(uint8)(c)) << 8)  \
+                       | (((uint32_t)(uint8)(d)) << 0))
 
 #define TICK(str) (((LONGINT)(unsigned char)str[0] << 24) | ((LONGINT)(unsigned char)str[1] << 16) | ((LONGINT)(unsigned char)str[2] << 8) | ((LONGINT)(unsigned char)str[3] << 0))
 

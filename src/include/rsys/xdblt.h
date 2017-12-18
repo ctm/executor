@@ -53,24 +53,24 @@ extern bool xdblt_xdata_complex(RgnHandle rh, int mode,
 extern bool xdblt_pattern(RgnHandle rh, int mode,
                           int pat_x_rotate_count, int pat_y_rotate_count,
                           const Pattern pattern, PixMap *dst,
-                          uint32 fg_color, uint32 bk_color);
+                          uint32_t fg_color, uint32_t bk_color);
 }
 
 extern "C" {
-extern uint32 xdblt_pattern_value asm("_xdblt_pattern_value");
-extern uint32 xdblt_log2_pattern_row_bytes asm("_xdblt_log2_pattern_row_bytes");
-extern uint32 xdblt_pattern_height_minus_1 asm("_xdblt_pattern_height_minus_1");
-extern uint32 *xdblt_pattern_baseaddr asm("_xdblt_pattern_baseaddr");
-extern uint32 *xdblt_pattern_end asm("_xdblt_pattern_end");
-extern uint32 xdblt_pattern_row_0 asm("_xdblt_pattern_row_0");
+extern uint32_t xdblt_pattern_value asm("_xdblt_pattern_value");
+extern uint32_t xdblt_log2_pattern_row_bytes asm("_xdblt_log2_pattern_row_bytes");
+extern uint32_t xdblt_pattern_height_minus_1 asm("_xdblt_pattern_height_minus_1");
+extern uint32_t *xdblt_pattern_baseaddr asm("_xdblt_pattern_baseaddr");
+extern uint32_t *xdblt_pattern_end asm("_xdblt_pattern_end");
+extern uint32_t xdblt_pattern_row_0 asm("_xdblt_pattern_row_0");
 extern const void **xdblt_stub_table asm("_xdblt_stub_table");
-extern uint32 xdblt_log2_bpp asm("_xdblt_log2_bpp");
+extern uint32_t xdblt_log2_bpp asm("_xdblt_log2_bpp");
 extern const Executor::INTEGER *xdblt_rgn_start asm("_xdblt_rgn_start");
-extern uint32 xdblt_x_offset asm("_xdblt_x_offset");
-extern uint32 *xdblt_dst_baseaddr asm("_xdblt_dst_baseaddr");
-extern uint32 xdblt_dst_row_bytes asm("_xdblt_dst_row_bytes");
-extern uint32 xdblt_insert_bits asm("_xdblt_insert_bits");
-extern const uint32 xdblt_mask_array[32] asm("_xdblt_mask_array");
+extern uint32_t xdblt_x_offset asm("_xdblt_x_offset");
+extern uint32_t *xdblt_dst_baseaddr asm("_xdblt_dst_baseaddr");
+extern uint32_t xdblt_dst_row_bytes asm("_xdblt_dst_row_bytes");
+extern uint32_t xdblt_insert_bits asm("_xdblt_insert_bits");
+extern const uint32_t xdblt_mask_array[32] asm("_xdblt_mask_array");
 }
 
 /* This must be a macro instead of a function because it sometimes

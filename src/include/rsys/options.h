@@ -21,7 +21,7 @@ typedef struct
 extern pair_t ROMlib_ScreenSize;
 extern pair_t ROMlib_MacSize;
 extern pair_t ROMlib_ScreenLocation;
-extern int32 ROMlib_options;
+extern int32_t ROMlib_options;
 extern char *ROMlib_WindowName;
 extern char *ROMlib_Comments;
 extern int ROMlib_desired_bpp;

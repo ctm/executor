@@ -185,10 +185,10 @@ P0(PUBLIC pascal trap, void, InitMenus)
     {
         int n_entries;
 
-        n_entries = CW(*(GUEST<uint16> *)STARH(default_mcinfo));
+        n_entries = CW(*(GUEST<uint16_t> *)STARH(default_mcinfo));
         MenuCInfo = RM((MCTableHandle)NewHandle(n_entries
                                                 * sizeof(MCEntry)));
-        BlockMoveData((Ptr)(&((uint16 *)STARH(default_mcinfo))[1]),
+        BlockMoveData((Ptr)(&((uint16_t *)STARH(default_mcinfo))[1]),
                       (Ptr)STARH(MR(MenuCInfo)),
                       n_entries * sizeof(MCEntry));
         append_end_marker_if_necessary(MR(MenuCInfo));
@@ -225,7 +225,7 @@ P1(PUBLIC pascal trap, void, CalcMenuSize, MenuHandle, mh)
 {
     Point dummy_pt;
     Rect rect;
-    GUEST<int16> i;
+    GUEST<int16_t> i;
 
     if(mh)
     {
@@ -249,7 +249,7 @@ P1(PUBLIC pascal trap, void, CalcMenuSize, MenuHandle, mh)
  *	 from a resource id to a handle.
  */
 
-P1(PUBLIC pascal trap, MenuHandle, GetMenu, int16, rid)
+P1(PUBLIC pascal trap, MenuHandle, GetMenu, int16_t, rid)
 {
     MenuHandle retval;
     Handle mct_res_h;
@@ -291,10 +291,10 @@ P1(PUBLIC pascal trap, MenuHandle, GetMenu, int16, rid)
 
             MemErr = CWC(noErr);
             temph = GetResource(TICK("MDEF"),
-                                CW(*(GUEST<int16> *)&HxX(retval, menuProc)));
+                                CW(*(GUEST<int16_t> *)&HxX(retval, menuProc)));
             if(SIZEOFMINFO != 15)
-                Munger((Handle)retval, (int32)6, (Ptr)0, (int32)0,
-                       (Ptr) "x", (int32)2);
+                Munger((Handle)retval, (int32_t)6, (Ptr)0, (int32_t)0,
+                       (Ptr) "x", (int32_t)2);
             MI_PROC_X(retval) = RM(temph);
             CalcMenuSize(retval);
         }
@@ -737,10 +737,10 @@ P2(PUBLIC pascal trap, void, InsertMenu, MenuHandle, mh, INTEGER, before)
     }
 }
 
-P1(PUBLIC pascal trap, void, DeleteMenu, int16, mid)
+P1(PUBLIC pascal trap, void, DeleteMenu, int16_t, mid)
 {
     muelem *mp, *mpend;
-    int32 deleteloc;
+    int32_t deleteloc;
 
     menu_delete_entries(mid);
 
@@ -752,8 +752,8 @@ P1(PUBLIC pascal trap, void, DeleteMenu, int16, mid)
     if(mp != mpend)
     {
         deleteloc = (LONGINT)((char *)mp - (char *)STARH(MR(MenuList)));
-        Munger(MR(MenuList), deleteloc, (Ptr)0, (int32)sizeof(muelem),
-               (Ptr) "", (int32)0);
+        Munger(MR(MenuList), deleteloc, (Ptr)0, (int32_t)sizeof(muelem),
+               (Ptr) "", (int32_t)0);
         HxX(MENULIST, muoff) = CW(Hx(MENULIST, muoff) - sizeof(muelem));
         MBDFCALL(mbCalc, 0, deleteloc);
     }
@@ -767,8 +767,8 @@ P1(PUBLIC pascal trap, void, DeleteMenu, int16, mid)
         if(mp == mpend)
             /*-->*/ return; /* not there */
         Munger(MR(MenuList),
-               (int32)((char *)mp - (char *)STARH(MR(MenuList))),
-               (Ptr)0, (int32)sizeof(muelem), (Ptr) "", (int32)0);
+               (int32_t)((char *)mp - (char *)STARH(MR(MenuList))),
+               (Ptr)0, (int32_t)sizeof(muelem), (Ptr) "", (int32_t)0);
     }
     HIEROFFX = CW(HIEROFF - sizeof(muelem));
 }
@@ -1013,9 +1013,9 @@ A3(PRIVATE, MenuHandle, itemishierarchical, MenuHandle, mh, INTEGER, item,
 
 #define HIERRECTBIT (1L << 16)
 
-int32 Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
-                                  int32 oldwhere, BOOLEAN ispopup,
-                                  int16 nmenusdisplayed)
+int32_t Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
+                                  int32_t oldwhere, BOOLEAN ispopup,
+                                  int16_t nmenusdisplayed)
 {
     mbdfentry *oldentry, *newentry;
     Rect r, r2;
@@ -1064,7 +1064,7 @@ int32 Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
     {
         GetMouse(&ptTmp);
         pt = ptTmp.get();
-        pointaslong = ((int32)pt.v << 16) | (unsigned short)pt.h;
+        pointaslong = ((int32_t)pt.v << 16) | (unsigned short)pt.h;
         where = MBDFCALL(mbHit, 0, pointaslong);
         if(MenuHook)
             CALLMENUHOOK(MR(MenuHook));

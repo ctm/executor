@@ -30,7 +30,7 @@ typedef GUEST<itmp> *itmh;
       + 2)                               \
      == GetHandleSize((Handle)(dlogh)))
 #define DIALOG_RES_POSITION_X(dlogh)               \
-    (*(GUEST<int16> *)((char *)&HxX(dlogh, dlglen) \
+    (*(GUEST<int16_t> *)((char *)&HxX(dlogh, dlglen) \
                        + ((HxX(dlogh, dlglen) + 2) & ~1)))
 
 #define DIALOG_RES_POSITION(dlog) \
@@ -40,7 +40,7 @@ typedef GUEST<itmp> *itmh;
     ((sizeof(altstr) + 2) == GetHandleSize((Handle)(alerth)))
 
 #define ALERT_RES_POSITION_X(alerth) \
-    (*(GUEST<int16> *)((char *)&HxX(alerth, altstag) + 2))
+    (*(GUEST<int16_t> *)((char *)&HxX(alerth, altstag) + 2))
 #define ALERT_RES_POSITION(alerth) \
     CW(ALERT_RES_POSITION_X(alerth))
 
@@ -87,20 +87,20 @@ typedef GUEST<dlogp> *dlogh;
 typedef struct item_style_info
 {
     GUEST_STRUCT;
-    GUEST<int16> font;
+    GUEST<int16_t> font;
     GUEST<Style> face;
     GUEST<unsigned char> filler;
-    GUEST<int16> size;
+    GUEST<int16_t> size;
     GUEST<RGBColor> foreground;
     GUEST<RGBColor> background;
-    GUEST<int16> mode;
+    GUEST<int16_t> mode;
 } item_style_info_t;
 
 typedef struct item_color_info
 {
     GUEST_STRUCT;
-    GUEST<int16> data;
-    GUEST<int16> offset;
+    GUEST<int16_t> data;
+    GUEST<int16_t> offset;
 } item_color_info_t;
 
 extern itmp ROMlib_dpnotoip(DialogPeek dp, INTEGER itemno, SignedByte *flags);
@@ -111,7 +111,7 @@ extern void ROMlib_drawiptext(DialogPtr dp, itmp ip, int item_no);
 extern void dialog_create_item(DialogPeek dp, itmp dst, itmp src,
                                int item_no, Point base_pt);
 extern bool get_item_style_info(DialogPtr dp, int item_no,
-                                uint16 *flags_return,
+                                uint16_t *flags_return,
                                 item_style_info_t *style_info);
 
 extern void dialog_draw_item(DialogPtr dp, itmp itemp, int itemno);

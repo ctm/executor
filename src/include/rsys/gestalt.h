@@ -4,8 +4,8 @@
 namespace Executor
 {
 #if defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
-typedef uint32 OSType;
-typedef uint32 OSErr;
+typedef uint32_t OSType;
+typedef uint32_t OSErr;
 #endif
 
 enum
@@ -13,10 +13,10 @@ enum
     DONGLE_GESTALT = 0xb7d20e84,
 };
 
-extern void replace_physgestalt_selector(OSType selector, uint32 new_value);
+extern void replace_physgestalt_selector(OSType selector, uint32_t new_value);
 extern void ROMlib_clear_gestalt_list(void);
 extern void ROMlib_add_to_gestalt_list(OSType selector, OSErr retval,
-                                       uint32 new_value);
+                                       uint32_t new_value);
 
 /* GhostScript DLL version number */
 enum
@@ -56,9 +56,9 @@ enum
 
 extern OSErrRET C_PhysicalGestalt(OSType selector, GUEST<LONGINT> *responsep);
 
-extern void gestalt_set_system_version(uint32 version);
-extern void gestalt_set_memory_size(uint32 size);
-extern void gestalt_set_cpu_type(uint32 type);
+extern void gestalt_set_system_version(uint32_t version);
+extern void gestalt_set_memory_size(uint32_t size);
+extern void gestalt_set_cpu_type(uint32_t type);
 
 #endif
 }

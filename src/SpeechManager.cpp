@@ -26,7 +26,7 @@ P0(PUBLIC pascal, NumVersion, SpeechManagerVersion)
 #endif
 }
 
-P0(PUBLIC pascal, int16, SpeechBusy)
+P0(PUBLIC pascal, int16_t, SpeechBusy)
 {
 #ifdef MACOSX_
     return MacBridge::SpeechBusy();
@@ -36,7 +36,7 @@ P0(PUBLIC pascal, int16, SpeechBusy)
 #endif
 }
 
-P0(PUBLIC pascal, int16, SpeechBusySystemWide)
+P0(PUBLIC pascal, int16_t, SpeechBusySystemWide)
 {
 #ifdef MACOSX_
     return MacBridge::SpeechBusySystemWide();
@@ -46,7 +46,7 @@ P0(PUBLIC pascal, int16, SpeechBusySystemWide)
 #endif
 }
 
-P1(PUBLIC pascal, OSErr, CountVoices, int16 *, numVoices)
+P1(PUBLIC pascal, OSErr, CountVoices, int16_t *, numVoices)
 {
 #ifdef MACOSX_
     return MacBridge::CountVoices(numVoices);
@@ -96,7 +96,7 @@ P1(PUBLIC pascal, OSErr, ContinueSpeech, SpeechChannel, chan)
 #endif
 }
 
-P2(PUBLIC pascal, OSErr, GetIndVoice, int16, index, VoiceSpec *, voice)
+P2(PUBLIC pascal, OSErr, GetIndVoice, int16_t, index, VoiceSpec *, voice)
 {
 #ifdef MACOSX_
     return MacBridge::GetIndVoice(index, voice);
@@ -116,7 +116,7 @@ P2(PUBLIC pascal, OSErr, NewSpeechChannel, VoiceSpec *, voice, SpeechChannel *, 
 #endif
 }
 
-P2(PUBLIC pascal, OSErr, StopSpeechAt, SpeechChannel, chan, int32, whereToStop)
+P2(PUBLIC pascal, OSErr, StopSpeechAt, SpeechChannel, chan, int32_t, whereToStop)
 {
 #ifdef MACOSX_
     return MacBridge::StopSpeechAt(chan, whereToStop);
@@ -126,7 +126,7 @@ P2(PUBLIC pascal, OSErr, StopSpeechAt, SpeechChannel, chan, int32, whereToStop)
 #endif
 }
 
-P2(PUBLIC pascal, OSErr, PauseSpeechAt, SpeechChannel, chan, int32, whereToPause)
+P2(PUBLIC pascal, OSErr, PauseSpeechAt, SpeechChannel, chan, int32_t, whereToPause)
 {
 #ifdef MACOSX_
     return MacBridge::PauseSpeechAt(chan, whereToPause);
@@ -246,7 +246,7 @@ P3(PUBLIC pascal, OSErr, GetSpeechInfo, SpeechChannel, chan, OSType, selector, v
 #endif
 }
 
-P4(PUBLIC pascal, OSErr, SpeakBuffer, SpeechChannel, chan, const void *, textBuf, ULONGINT, textBytes, int32, controlFlags)
+P4(PUBLIC pascal, OSErr, SpeakBuffer, SpeechChannel, chan, const void *, textBuf, ULONGINT, textBytes, int32_t, controlFlags)
 {
 #ifdef MACOSX_
     return MacBridge::SpeakBuffer(chan, textBuf, textBytes, controlFlags);

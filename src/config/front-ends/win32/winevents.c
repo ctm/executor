@@ -45,9 +45,9 @@ void process_win32_events(void)
 
 static unsigned char w32_clover_p = 0; /* Set by the WM_SYS* messages */
 static unsigned char w32_mousedown_p = 0; /* Set by WM_LBUTTON* messages */
-static int16 Keyboard_State(void)
+static int16_t Keyboard_State(void)
 {
-    int16 keystate;
+    int16_t keystate;
 
     keystate = 0;
 
@@ -69,7 +69,7 @@ static int16 Keyboard_State(void)
     return keystate;
 }
 
-static int w32_modifier_p(unsigned char virt, int16 *modstore)
+static int w32_modifier_p(unsigned char virt, int16_t *modstore)
 {
     *modstore = 0;
     switch(virt)
@@ -99,7 +99,7 @@ static int w32_modifier_p(unsigned char virt, int16 *modstore)
 LONG CALLBACK AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     Point where;
-    int32 when;
+    int32_t when;
 
     switch(msg)
     {
@@ -197,7 +197,7 @@ LONG CALLBACK AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         case WM_LBUTTONDOWN:
         case WM_LBUTTONUP:
         {
-            int16 button_state;
+            int16_t button_state;
             when = TickCount();
             where.h = LOWORD(lParam);
             where.v = HIWORD(lParam);
@@ -228,8 +228,8 @@ LONG CALLBACK AppWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             unsigned char down_p;
             LONGINT keywhat;
             unsigned char virt;
-            uint16 whichmod;
-            uint16 button_state;
+            uint16_t whichmod;
+            uint16_t button_state;
 
             /* Check for autorepeat (bit 30 specifies a repeated key) */
             down_p = ((msg == WM_KEYDOWN) || (msg == WM_SYSKEYDOWN));

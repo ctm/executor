@@ -34,7 +34,7 @@
 typedef struct
 {
     char *dptr;
-    uint32 dsize;
+    uint32_t dsize;
 } datum;
 
 /* Specify which extra functions we need in float.h. */

@@ -472,8 +472,8 @@ PRIVATE Byte save_FractEnable;
 
 #if defined(CYGWIN32)
 PRIVATE THPrint last_thprint;
-PRIVATE uint32 job_dialog_count;
-PRIVATE uint32 job_dialog_desired = 1;
+PRIVATE uint32_t job_dialog_count;
+PRIVATE uint32_t job_dialog_desired = 1;
 #endif
 
 PRIVATE void

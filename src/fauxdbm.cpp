@@ -75,12 +75,12 @@ read_datum(DBM *file)
 
         p = file->buf;
         if(fread(p, 4, 1, file->fp) != 1)
-            *(uint32 *)p = 0;
+            *(uint32_t *)p = 0;
         else
         {
             int to_read;
 
-            to_read = sizeof KEY_ID + *(uint32 *)p;
+            to_read = sizeof KEY_ID + *(uint32_t *)p;
             p += 4;
             while(to_read % 4)
                 ++to_read;
@@ -89,10 +89,10 @@ read_datum(DBM *file)
                 fread(p, to_read, 1, file->fp);
                 p += to_read;
                 if(fread(p, 4, 1, file->fp) != 1)
-                    *(uint32 *)p = 0;
+                    *(uint32_t *)p = 0;
                 else
                 {
-                    to_read = sizeof CONTENT_ID + *(uint32 *)p;
+                    to_read = sizeof CONTENT_ID + *(uint32_t *)p;
                     p += 4;
                     while(to_read % 4)
                         ++to_read;
@@ -117,9 +117,9 @@ dbm_nextkey(DBM *file)
     else
     {
         read_datum(file);
-        retval.dsize = *(uint32 *)file->buf;
+        retval.dsize = *(uint32_t *)file->buf;
         if(retval.dsize)
-            retval.dptr = file->buf + sizeof(uint32) + sizeof KEY_ID;
+            retval.dptr = file->buf + sizeof(uint32_t) + sizeof KEY_ID;
         else
             retval.dptr = 0;
     }
@@ -133,19 +133,19 @@ dbm_fetch(DBM *file, datum key)
     int keysize;
     int offset;
 
-    keysize = *(uint32 *)file->buf;
-    offset = sizeof(uint32) + sizeof(KEY_ID) + keysize;
+    keysize = *(uint32_t *)file->buf;
+    offset = sizeof(uint32_t) + sizeof(KEY_ID) + keysize;
     while(offset % 4)
         ++offset;
-    retval.dsize = *(uint32 *)(file->buf + offset);
+    retval.dsize = *(uint32_t *)(file->buf + offset);
     if(retval.dsize)
-        retval.dptr = file->buf + offset + sizeof(uint32) + sizeof CONTENT_ID;
+        retval.dptr = file->buf + offset + sizeof(uint32_t) + sizeof CONTENT_ID;
     else
         retval.dptr = 0;
     return retval;
 }
 
-#define RAW_LENGTH(datum, id) (sizeof(uint32) + sizeof(id) + datum.dsize)
+#define RAW_LENGTH(datum, id) (sizeof(uint32_t) + sizeof(id) + datum.dsize)
 
 #define PADDING(n)               \
     ({                           \
@@ -159,8 +159,8 @@ buf_from_datum(char **opp, datum d, const char *tag)
     char *op;
 
     op = *opp;
-    *(uint32 *)op = (uint32)d.dsize;
-    op += sizeof(uint32);
+    *(uint32_t *)op = (uint32_t)d.dsize;
+    op += sizeof(uint32_t);
     memcpy(op, tag, strlen(tag) + 1);
     op += strlen(tag) + 1;
     memcpy(op, d.dptr, d.dsize);

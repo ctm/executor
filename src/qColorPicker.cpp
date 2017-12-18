@@ -35,7 +35,7 @@ using namespace Executor;
 
 #define _FindControl(arg0, arg1, arg2)             \
     ({                                             \
-        int16 retval;                              \
+        int16_t retval;                              \
         GUEST<ControlHandle> bogo_c;               \
                                                    \
         retval = FindControl(arg0, arg1, &bogo_c); \
@@ -867,7 +867,7 @@ event_loop(void)
                 Point local_pt;
                 bool control_p;
                 ControlHandle c;
-                int16 release_part;
+                int16_t release_part;
                 int i;
 
                 /* ### beep if the mousedown is not in

@@ -8,16 +8,16 @@
 
 #include "Gestalt.h"
 
-PRIVATE uint32
+PRIVATE uint32_t
 cpu_type_from_string(const char *str)
 {
-    uint32 retval;
+    uint32_t retval;
     unsigned long u;
     static struct
     {
         unsigned long num;
         const char *name;
-        uint32 gestaltValue;
+        uint32_t gestaltValue;
     } entries[] = {
         {
             1, "601", gestaltCPU601,
@@ -96,11 +96,11 @@ cpu_type_from_string(const char *str)
 
 #define CPU_LINE "cpu"
 
-PRIVATE uint32
+PRIVATE uint32_t
 cpu_type(void)
 {
     FILE *fp;
-    uint32 retval;
+    uint32_t retval;
 
     retval = 0;
     fp = fopen("/proc/cpuinfo", "r");
@@ -128,7 +128,7 @@ cpu_type(void)
 
 bool arch_init(void)
 {
-    uint32 type;
+    uint32_t type;
 
     type = cpu_type();
     if(type)

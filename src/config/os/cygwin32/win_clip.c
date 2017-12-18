@@ -115,10 +115,10 @@ GetScrapX(LONGINT type, char **h)
                     else
 #endif
                     {
-                        int32 len;
-                        len = *(int32 *)lp;
+                        int32_t len;
+                        len = *(int32_t *)lp;
 
-                        retval = get_scrap_helper(h, lp + sizeof(int32),
+                        retval = get_scrap_helper(h, lp + sizeof(int32_t),
                                                   len, false);
                     }
                 }
@@ -169,8 +169,8 @@ fill_in_data(char *destp, LONGINT type, LONGINT length, const char *p)
             *destp++ = 0;
             break;
         default:
-            *(int32 *)destp = length;
-            memcpy(destp + sizeof(int32), p, length);
+            *(int32_t *)destp = length;
+            memcpy(destp + sizeof(int32_t), p, length);
             break;
     }
 }

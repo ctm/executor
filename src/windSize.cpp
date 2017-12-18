@@ -177,7 +177,7 @@ P3(PUBLIC pascal trap, void, DragWindow, WindowPtr, wp, Point, p, Rect *, rp)
     if(CW(r.top) < 24)
         r.top = CWC(24);
     l = DragGrayRgn(rh, p, &r, &r, noConstraint, (ProcPtr)0);
-    if((uint32)l != 0x80008000)
+    if((uint32_t)l != 0x80008000)
         MoveWindow(wp,
                    (-CW(PORT_BOUNDS(wp).left)
                     + LoWord(l) + CW(PORT_RECT(wp).left)),

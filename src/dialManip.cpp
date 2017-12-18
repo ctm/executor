@@ -22,7 +22,7 @@ using namespace Executor;
 namespace Executor
 {
 PRIVATE itmp htoip(Handle h,
-                   WindowPeek *wp_return, int16 *nop_return,
+                   WindowPeek *wp_return, int16_t *nop_return,
                    SignedByte *flags_return);
 }
 
@@ -61,7 +61,7 @@ A3(PUBLIC, itmp, ROMlib_dpnotoip, DialogPeek, dp, /* INTERNAL */
 }
 
 A4(PRIVATE, itmp, htoip, Handle, h,
-   WindowPeek *, wp_return, int16 *, nop_return,
+   WindowPeek *, wp_return, int16_t *, nop_return,
    SignedByte *, flags_return)
 {
     WindowPeek wp;
@@ -135,7 +135,7 @@ settexth(DialogPeek dp, itmp ip, int item_no)
     Handle item_text_h;
     TEHandle te;
     TEPtr tep;
-    int16 length;
+    int16_t length;
 
     current_port = thePort;
 
@@ -157,10 +157,10 @@ settexth(DialogPeek dp, itmp ip, int item_no)
 
     /* set up the text styles */
     {
-        int16 te_style_size, te_style_font;
+        int16_t te_style_size, te_style_font;
         Style te_style_face;
         RGBColor te_style_color;
-        uint16 flags;
+        uint16_t flags;
         item_style_info_t style_info;
 
         te_style_font = PORT_TX_FONT(dp);
@@ -198,7 +198,7 @@ settexth(DialogPeek dp, itmp ip, int item_no)
             TEStyleHandle te_style;
             STHandle style_table;
             FontInfo finfo;
-            GUEST<int16> tx_font_save_x, tx_size_save_x;
+            GUEST<int16_t> tx_font_save_x, tx_size_save_x;
             GUEST<Style> tx_face_save;
 
             te_style = TE_GET_STYLE(te);
@@ -312,7 +312,7 @@ P2(PUBLIC pascal trap, void, SetIText, Handle, item, /* IMI-422 */
     {
         WindowPeek wp;
         SignedByte flags;
-        int16 no;
+        int16_t no;
         itmp ip;
         Size hs;
 

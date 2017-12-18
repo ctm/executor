@@ -12,18 +12,18 @@ enum
 
 typedef struct
 {
-    uint32 type; /* see above */
-    uint32 magic; /* see above */
-    uint32 size; /* total length of parameter block */
-    uint32 Service; /* see HASP Programmer's Guide for these parameters */
-    uint32 SeedCode;
-    uint32 LptNum;
-    uint32 Password1;
-    uint32 Password2;
-    uint32 Par1;
-    uint32 Par2;
-    uint32 Par3;
-    uint32 Par4;
+    uint32_t type; /* see above */
+    uint32_t magic; /* see above */
+    uint32_t size; /* total length of parameter block */
+    uint32_t Service; /* see HASP Programmer's Guide for these parameters */
+    uint32_t SeedCode;
+    uint32_t LptNum;
+    uint32_t Password1;
+    uint32_t Password2;
+    uint32_t Par1;
+    uint32_t Par2;
+    uint32_t Par3;
+    uint32_t Par4;
 } hasp_param_block;
 
 enum

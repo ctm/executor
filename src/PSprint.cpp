@@ -527,7 +527,7 @@ PRIVATE bool
 graymatch(unsigned char patp[8], INTEGER pnMode,
           GrafPtr thePortp, float *grayp)
 {
-    uint32 *pl;
+    uint32_t *pl;
     bool pat_is_black;
     bool pat_is_white;
     bool retval;
@@ -550,7 +550,7 @@ graymatch(unsigned char patp[8], INTEGER pnMode,
     gray_fore = mac_old_color_to_ps_gray(CL(thePortp->fgColor));
     gray_back = mac_old_color_to_ps_gray(CL(thePortp->bkColor));
 
-    pl = (uint32 *)patp;
+    pl = (uint32_t *)patp;
     pat_is_black = ((gray_fore == 0 && gray_back == 0) || (gray_fore == 0 && pl[0] == -1 && pl[1] == -1) || (gray_back == 0 && pl[0] == 0 && pl[1] == 0));
 
     pat_is_white = ((gray_fore == 1 && gray_back == 1) || (gray_fore == 1 && pl[0] == -1 && pl[1] == -1) || (gray_back == 1 && pl[0] == 0 && pl[1] == 0));

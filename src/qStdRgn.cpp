@@ -35,10 +35,10 @@ void Executor::ROMlib_WriteWhen(WriteWhenType when)
 }
 
 void Executor::ROMlib_blt_rgn_update_dirty_rect(RgnHandle rh,
-                                                int16 mode, bool tile_src_p, int bpp,
+                                                int16_t mode, bool tile_src_p, int bpp,
                                                 const PixMap *src_pm, PixMap *dst_pm,
                                                 const Rect *src_rect, const Rect *dst_rect,
-                                                uint32 fg_color, uint32 bk_color)
+                                                uint32_t fg_color, uint32_t bk_color)
 {
     bool screen_dst_p, update_dirty_p;
     Rect bbox;
@@ -232,7 +232,7 @@ const int Executor::ROMlib_log2[] = {
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 5,
 };
 
-const uint32 Executor::ROMlib_pixel_tile_scale[6] = {
+const uint32_t Executor::ROMlib_pixel_tile_scale[6] = {
     0xFFFFFFFF,
     0x55555555,
     0x11111111,
@@ -241,7 +241,7 @@ const uint32 Executor::ROMlib_pixel_tile_scale[6] = {
     0x00000001,
 };
 
-const uint32 Executor::ROMlib_pixel_size_mask[6] = {
+const uint32_t Executor::ROMlib_pixel_size_mask[6] = {
     0x00000001,
     0x00000003,
     0x0000000F,
@@ -300,7 +300,7 @@ blt_pattern_to_bitmap_simple_mode(RgnHandle rh, INTEGER mode,
 {
     PixMapHandle main_gd_pmap;
     GDHandle main_gd;
-    uint32 bk_pixel, fg_pixel;
+    uint32_t bk_pixel, fg_pixel;
     int bpp, dst_top, dst_left;
     bool screen_dst_p;
     PixMap dst_pixmap;
@@ -376,8 +376,8 @@ blt_pixpat_to_pixmap_simple_mode(RgnHandle rh, INTEGER mode,
         if(src->patType == CWC(pixpat_old_style_pattern))
         {
             const rgb_spec_t *dst_rgb_spec;
-            uint32 fg_color;
-            uint32 bk_color;
+            uint32_t fg_color;
+            uint32_t bk_color;
 
             dst_rgb_spec = pixmap_rgb_spec(dst);
             canonical_from_bogo_color(PORT_FG_COLOR(the_port), dst_rgb_spec,
@@ -522,7 +522,7 @@ blt_fancy_pat_mode_to_pixmap(RgnHandle rh, int mode,
     /* When dealing with an old-style pattern, we need to apply fg/bk colors. */
     if(apply_fg_bk_p)
     {
-        uint32 *p, *end, fg_pixel, bk_pixel, tiled_fg_pixel, tiled_bk_pixel;
+        uint32_t *p, *end, fg_pixel, bk_pixel, tiled_fg_pixel, tiled_bk_pixel;
 
         ROMlib_fg_bk(&fg_pixel, &bk_pixel, NULL, NULL,
                      pixmap_rgb_spec(pixmap),
@@ -535,11 +535,11 @@ blt_fancy_pat_mode_to_pixmap(RgnHandle rh, int mode,
                           * ROMlib_pixel_tile_scale[log2_bpp]);
 
         /* Note that we don't care if we clobber the bits of this temp xdata. */
-        p = (uint32 *)MR(pattern_pm.baseAddr);
-        end = (uint32 *)((char *)p + x->byte_size);
+        p = (uint32_t *)MR(pattern_pm.baseAddr);
+        end = (uint32_t *)((char *)p + x->byte_size);
         for(; p != end; p++)
         {
-            uint32 v = *p;
+            uint32_t v = *p;
             /* #warning "not sure how this interacts w/RGB" */
             *p = (v & tiled_fg_pixel) | ((~v) & tiled_bk_pixel);
         }
@@ -589,7 +589,7 @@ blt_fancy_pat_mode_to_pixmap(RgnHandle rh, int mode,
     }
 
     {
-        uint32 fg, bk;
+        uint32_t fg, bk;
 
         pixmap_black_white(pixmap, &fg, &bk);
         srcblt_rgn(rh, srcCopy, log2_bpp,

@@ -26,8 +26,8 @@ DLL_DECLARE(RNBOproGetFullStatus);
 DLL_DECLARE(RNBOproFormatPacket);
 DLL_DECLARE(RNBOproInitialize);
 
-extern void PASCAL hasp(uint32 service, uint32 seed, uint32 lptnum, uint32 pass1,
-                        uint32 pass2, int32 *p1, int32 *p2, int32 *p3, int32 *p4);
+extern void PASCAL hasp(uint32_t service, uint32_t seed, uint32_t lptnum, uint32_t pass1,
+                        uint32_t pass2, int32_t *p1, int32_t *p2, int32_t *p3, int32_t *p4);
 
 DLL_DECLARE(hasp);
 
@@ -140,7 +140,7 @@ family_query(const char *family, RB_WORD *full_statusp, RB_WORD *resultp,
 }
 
 PRIVATE int
-sentinel_dongle_query(uint32 *valuep)
+sentinel_dongle_query(uint32_t *valuep)
 {
     int retval;
 
@@ -170,7 +170,7 @@ sentinel_dongle_query(uint32 *valuep)
                 if(status == SENTPRO_SUCCESS)
                 {
                     status = 0;
-                    *valuep = CL((uint32)word);
+                    *valuep = CL((uint32_t)word);
                 }
             }
         }
@@ -201,15 +201,15 @@ hasp_dongle_query(hasp_param_block *valuep)
             retval = HASP_NO_LIBRARY_ERROR;
         else
         {
-            int32 service;
-            int32 seed;
-            int32 lptnum;
-            int32 pass1;
-            int32 pass2;
-            int32 p1;
-            int32 p2;
-            int32 p3;
-            int32 p4;
+            int32_t service;
+            int32_t seed;
+            int32_t lptnum;
+            int32_t pass1;
+            int32_t pass2;
+            int32_t p1;
+            int32_t p2;
+            int32_t p3;
+            int32_t p4;
 
             service = CL(valuep->Service);
             seed = CL(valuep->SeedCode);
@@ -221,7 +221,7 @@ hasp_dongle_query(hasp_param_block *valuep)
             p3 = CL(valuep->Par3);
             p4 = CL(valuep->Par4);
             if(service == ReadBlock || service == WriteBlock)
-                p4 = (int32)SYN68K_TO_US(p4);
+                p4 = (int32_t)SYN68K_TO_US(p4);
 
             warning_trace_info("about to call Dhasp");
             Dhasp(service, seed, lptnum, pass1, pass2, &p1, &p2, &p3, &p4);
@@ -309,7 +309,7 @@ dll_query(dll_param_block *dp)
  */
 
 PUBLIC int
-dongle_query(uint32 *valuep)
+dongle_query(uint32_t *valuep)
 {
     int retval;
 

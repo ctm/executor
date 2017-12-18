@@ -23,20 +23,20 @@
 
 using namespace Executor;
 
-int16 nextbreak(TEHandle teh, int16 off, int16 len,
-                int16 max_width);
+int16_t nextbreak(TEHandle teh, int16_t off, int16_t len,
+                int16_t max_width);
 
 #if ERROR_SUPPORTED_P(ERROR_TEXT_EDIT_SLAM)
 void Executor::ROMlib_sledgehammer_te(TEHandle te)
 {
-    int16 n_lines;
-    int16 width;
-    int16 length;
+    int16_t n_lines;
+    int16_t width;
+    int16_t length;
     Rect *dest_rect;
     Handle hText;
     char *Text;
-    int16 current_lineno;
-    GUEST<int16> *line_starts;
+    int16_t current_lineno;
+    GUEST<int16_t> *line_starts;
     LHHandle lh_table;
     int te_size;
     int i;
@@ -53,8 +53,8 @@ void Executor::ROMlib_sledgehammer_te(TEHandle te)
     {
         TEStyleHandle te_style;
         int lh_table_size, te_style_size;
-        int16 n_runs, n_styles;
-        int16 *style_count_vec;
+        int16_t n_runs, n_styles;
+        int16_t *style_count_vec;
         STHandle style_table;
 
         te_style = TE_GET_STYLE(te);
@@ -72,11 +72,11 @@ void Executor::ROMlib_sledgehammer_te(TEHandle te)
                        + ((n_runs + 1)
                           * (int)sizeof *TE_STYLE_RUNS((TEStyleHandle)NULL))));
         n_styles = TE_STYLE_N_STYLES(te_style);
-        style_count_vec = (int16 *)alloca(n_styles * sizeof *style_count_vec);
+        style_count_vec = (int16_t *)alloca(n_styles * sizeof *style_count_vec);
         memset(style_count_vec, 0, n_styles * sizeof *style_count_vec);
         for(i = 0; i < n_runs; i++)
         {
-            int16 style_index;
+            int16_t style_index;
             StyleRun *run;
 
             run = TE_STYLE_RUN(te_style, i);
@@ -87,7 +87,7 @@ void Executor::ROMlib_sledgehammer_te(TEHandle te)
             else if(i > 0)
             {
                 StyleRun *prev_run;
-                int16 prev_style_index;
+                int16_t prev_style_index;
 
                 prev_run = TE_STYLE_RUN(te_style, i - 1);
                 prev_style_index = STYLE_RUN_STYLE_INDEX(prev_run);
@@ -131,7 +131,7 @@ void Executor::ROMlib_sledgehammer_te(TEHandle te)
         current_lineno < n_lines;
         current_lineno++)
     {
-        int16 current_line_start, next_break;
+        int16_t current_line_start, next_break;
 
         current_line_start = LINE_START(line_starts,
                                         current_lineno);
@@ -175,17 +175,17 @@ A1(PUBLIC, INTEGER, ROMlib_wordb, char *, p) /* INTERNAL */
 
 #define MYWORDB(p) (U(p) <= 0x20)
 
-int16 nextbreak(TEHandle teh, int16 off, int16 len,
-                int16 max_width)
+int16_t nextbreak(TEHandle teh, int16_t off, int16_t len,
+                int16_t max_width)
 {
     char *sp, *ep;
     char *minsp, *maxsp;
-    int16 width = 0;
+    int16_t width = 0;
     Handle hText;
     char *Text;
     INTEGER curpos;
     SignedByte hText_flags;
-    int16 retval;
+    int16_t retval;
 
     /* ### warn if the width is less than that of any char? */
     hText = TE_HTEXT(teh);
@@ -259,13 +259,13 @@ int16 nextbreak(TEHandle teh, int16 off, int16 len,
 }
 
 /* return the `run' index that contains the current character */
-int16 Executor::te_char_to_run_index(TEStyleHandle te_style, int16 sel)
+int16_t Executor::te_char_to_run_index(TEStyleHandle te_style, int16_t sel)
 {
     StyleRun *current_run;
-    int16 n_runs;
-    int16 high, low, current;
-    int16 retval;
-    int16 current_elt;
+    int16_t n_runs;
+    int16_t high, low, current;
+    int16_t retval;
+    int16_t current_elt;
 
     n_runs = TE_STYLE_N_RUNS(te_style);
     if(n_runs <= 1)
@@ -295,13 +295,13 @@ int16 Executor::te_char_to_run_index(TEStyleHandle te_style, int16 sel)
 }
 
 /* return the line number that contains character index `sel' */
-int16 Executor::te_char_to_lineno(TEPtr te, int16 sel)
+int16_t Executor::te_char_to_lineno(TEPtr te, int16_t sel)
 {
-    int16 n_lines;
-    GUEST<int16> *line_starts;
-    int16 high, low, current;
-    int16 retval;
-    int16 current_elt;
+    int16_t n_lines;
+    GUEST<int16_t> *line_starts;
+    int16_t high, low, current;
+    int16_t retval;
+    int16_t current_elt;
 
     n_lines = TEP_N_LINES(te);
     if(n_lines <= 1)
@@ -330,13 +330,13 @@ int16 Executor::te_char_to_lineno(TEPtr te, int16 sel)
     return retval;
 }
 
-int16 calclhtab(TEHandle teh)
+int16_t calclhtab(TEHandle teh)
 {
-    int16 n_lines;
+    int16_t n_lines;
     StyleRun *current_run;
-    GUEST<int16> *linestarts;
-    int16 first_changed;
-    int16 orig_height = -1, orig_ascent = -1;
+    GUEST<int16_t> *linestarts;
+    int16_t first_changed;
+    int16_t orig_height = -1, orig_ascent = -1;
     LHHandle lh_table;
     LHPtr lh;
     TEStyleHandle sth;
@@ -433,16 +433,16 @@ void te_set_line_starts_allocation(TEHandle te, int n_lines)
 /* recalculate the various text edit tables associated with `te' after
    `nadded' characters are to be added (or deleted) at `sel' */
 void Executor::ROMlib_caltext(TEHandle te,
-                              int16 sel, int16 n_added,
-                              int16 *first_changed_out, int16 *last_changed_out)
+                              int16_t sel, int16_t n_added,
+                              int16_t *first_changed_out, int16_t *last_changed_out)
 {
-    int16 n_lines;
-    GUEST<int16> *line_starts;
-    int16 first_lineno;
-    int16 t;
-    int16 width;
-    int16 length;
-    int16 first_changed = -1, last_changed = -1;
+    int16_t n_lines;
+    GUEST<int16_t> *line_starts;
+    int16_t first_lineno;
+    int16_t t;
+    int16_t width;
+    int16_t length;
+    int16_t first_changed = -1, last_changed = -1;
 
     width = RECT_WIDTH(&TE_DEST_RECT(te));
 
@@ -479,15 +479,15 @@ void Executor::ROMlib_caltext(TEHandle te,
     {
         /* break point for the current line, also the start point for
        the next line */
-        int16 current_line_break;
-        int16 current_lineno;
+        int16_t current_line_break;
+        int16_t current_lineno;
 
         /* start with the previous line, since deltion on the current line
        can cause the previous line's break to change */
         for(current_lineno = MAX(first_lineno - 1, 0);; current_lineno++)
         {
-            int16 current_line_start;
-            int16 orig_current_line_break;
+            int16_t current_line_start;
+            int16_t orig_current_line_break;
 
             /* compute the new break for the current line */
             current_line_start = LINE_START(line_starts, current_lineno);
@@ -569,8 +569,8 @@ P1(PUBLIC pascal trap, void, TECalText, TEHandle, te)
     TE_SLAM(te);
 }
 
-P3(PUBLIC pascal trap, int16, TEFeatureFlag,
-   int16, feature, int16, action, TEHandle, te)
+P3(PUBLIC pascal trap, int16_t, TEFeatureFlag,
+   int16_t, feature, int16_t, action, TEHandle, te)
 {
     switch(feature)
     {
@@ -596,9 +596,9 @@ P3(PUBLIC pascal trap, int16, TEFeatureFlag,
     return action;
 }
 
-int16 Executor::ROMlib_call_TEDoText(TEPtr tp, int16 first, int16 last, int16 what)
+int16_t Executor::ROMlib_call_TEDoText(TEPtr tp, int16_t first, int16_t last, int16_t what)
 {
-    int16 myd0;
+    int16_t myd0;
 
     if(MR(TEDoText) == (ProcPtr)P_ROMlib_dotext)
         myd0 = C_ROMlib_dotext(tp, first, last, what);
@@ -606,7 +606,7 @@ int16 Executor::ROMlib_call_TEDoText(TEPtr tp, int16 first, int16 last, int16 wh
     {
         ROMlib_hook(te_dotextnumber);
         {
-            int32 saved2, saved3, saved4, saved7, savea2, savea3;
+            int32_t saved2, saved3, saved4, saved7, savea2, savea3;
 
             saved2 = EM_D2;
             saved3 = EM_D3;

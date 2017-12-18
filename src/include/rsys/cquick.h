@@ -289,7 +289,7 @@ static inline GrafPtr ASSERT_NOT_CPORT(void *port)
 #define PIXMAP_CMP_SIZE(pixmap) (Cx(PIXMAP_CMP_SIZE_X(pixmap)))
 #define PIXMAP_PLANE_BYTES(pixmap) (Cx(PIXMAP_PLANE_BYTES_X(pixmap)))
 #define PIXMAP_TABLE(pixmap) (PPR(PIXMAP_TABLE_X(pixmap)))
-#define PIXMAP_TABLE_AS_OFFSET(pixmap) (CL(guest_cast<int32>(PIXMAP_TABLE_X(pixmap))))
+#define PIXMAP_TABLE_AS_OFFSET(pixmap) (CL(guest_cast<int32_t>(PIXMAP_TABLE_X(pixmap))))
 
 #define WRAPPER_PIXMAP_FOR_COPY(wrapper_decl_name) \
     BitMap *wrapper_decl_name = (BitMap *)alloca(sizeof(BitMap))
@@ -334,7 +334,7 @@ enum pixpat_pattern_types
 #define PIXPAT_TYPE(pixpat) (CW(PIXPAT_TYPE_X(pixpat)))
 #define PIXPAT_MAP(pixpat) (PPR(PIXPAT_MAP_X(pixpat)))
 #define PIXPAT_DATA(pixpat) (PPR(PIXPAT_DATA_X(pixpat)))
-#define PIXPAT_DATA_AS_OFFSET(pixpat) (CL(guest_cast<int32>(PIXPAT_DATA_X(pixpat))))
+#define PIXPAT_DATA_AS_OFFSET(pixpat) (CL(guest_cast<int32_t>(PIXPAT_DATA_X(pixpat))))
 #define PIXPAT_XDATA(pixpat) (PPR(PIXPAT_XDATA_X(pixpat)))
 #define PIXPAT_XVALID(pixpat) (CW(PIXPAT_XVALID_X(pixpat)))
 #define PIXPAT_XMAP(pixpat) ((PixMapHandle)PPR(PIXPAT_XMAP_X(pixpat)))
@@ -468,7 +468,7 @@ typedef BitMap blt_bitmap_t;
     ({                                                                            \
         Handle _icon;                                                             \
         CIconHandle _cicon;                                                       \
-        uint32 icon_size;                                                         \
+        uint32_t icon_size;                                                         \
                                                                                   \
         _icon = (Handle)(icon);                                                   \
         icon_size = GetHandleSize(_icon);                                         \
@@ -477,7 +477,7 @@ typedef BitMap blt_bitmap_t;
         ((icon_size < sizeof(CIcon))                                              \
              ? false                                                              \
              : (icon_size == (sizeof(CIcon)                                       \
-                              - sizeof(int16)                                     \
+                              - sizeof(int16_t)                                     \
                               + (RECT_HEIGHT(&BITMAP_BOUNDS(&CICON_PMAP(_cicon))) \
                                  * (BITMAP_ROWBYTES(&CICON_BMAP(_cicon))          \
                                     + BITMAP_ROWBYTES(&CICON_MASK(_cicon)))))));  \
@@ -568,14 +568,14 @@ typedef struct draw_state
     GUEST<RGBColor> fg_color;
     GUEST<RGBColor> bk_color;
 
-    GUEST<int32> fg;
-    GUEST<int32> bk;
+    GUEST<int32_t> fg;
+    GUEST<int32_t> bk;
 
     /* text draw state */
     GUEST<Style> tx_face;
-    GUEST<int16> tx_font;
-    GUEST<int16> tx_mode;
-    GUEST<int16> tx_size;
+    GUEST<int16_t> tx_font;
+    GUEST<int16_t> tx_mode;
+    GUEST<int16_t> tx_size;
 } draw_state_t;
 
 extern void draw_state_save(draw_state_t *draw_state);
@@ -630,8 +630,8 @@ extern CTabHandle validate_relative_bw_ctab();
 extern CTabHandle validate_fg_bk_ctab();
 
 extern const int ROMlib_log2[];
-extern const uint32 ROMlib_pixel_tile_scale[];
-extern const uint32 ROMlib_pixel_size_mask[];
+extern const uint32_t ROMlib_pixel_tile_scale[];
+extern const uint32_t ROMlib_pixel_size_mask[];
 
 extern CTabHandle default_w_ctab;
 extern AuxWinHandle default_aux_win;
@@ -641,10 +641,10 @@ extern void ROMlib_color_init();
 
 extern Rect ROMlib_cursor_rect;
 
-extern void ROMlib_blt_rgn_update_dirty_rect(RgnHandle, int16, bool, int,
+extern void ROMlib_blt_rgn_update_dirty_rect(RgnHandle, int16_t, bool, int,
                                              const PixMap *, PixMap *,
                                              const Rect *, const Rect *,
-                                             uint32, uint32);
+                                             uint32_t, uint32_t);
 
 extern void convert_pixmap(const PixMap *old_pixmap, PixMap *new_pixmap,
                            const Rect *rect, CTabPtr conv_table);
@@ -662,14 +662,14 @@ void convert_pixmap_with_IMV_mode(const PixMap *src1, const PixMap *src2,
                                   CTabHandle src1_ctabh, CTabHandle src2_ctabh,
                                   ITabHandle itabh,
                                   const Rect *r1, const Rect *r2,
-                                  int16 mode, const RGBColor *op_color,
+                                  int16_t mode, const RGBColor *op_color,
                                   bool tile_src1_p,
                                   int pat_x_offset, int pat_y_offset);
 
 void convert_transparent(const PixMap *src1, const PixMap *src2,
                          PixMap *dst,
                          const Rect *r1, const Rect *r2,
-                         int16 mode,
+                         int16_t mode,
                          bool tile_src1_p,
                          int pat_x_offset, int pat_y_offset);
 
@@ -702,9 +702,9 @@ extern void pixmap_set_pixel_fields(PixMap *pixmap, int bpp);
 extern const rgb_spec_t *pixmap_rgb_spec(const PixMap *pixmap);
 
 extern void pixmap_black_white(const PixMap *pixmap,
-                               uint32 *black_return, uint32 *white_return);
+                               uint32_t *black_return, uint32_t *white_return);
 extern void gd_black_white(GDHandle gdh,
-                           uint32 *black_return, uint32 *white_return);
+                           uint32_t *black_return, uint32_t *white_return);
 
 extern rgb_spec_t mac_16bpp_rgb_spec, mac_32bpp_rgb_spec;
 
@@ -712,18 +712,18 @@ extern int average_color(GDHandle gdev,
                          RGBColor *c1, RGBColor *c2, int ratio,
                          RGBColor *out);
 
-extern int16 xStdTxMeas(int16 n, uint8 *p, GUEST<Point> *nump, GUEST<Point> *denp,
-                        FontInfo *finfop, GUEST<int16> *charlocp);
+extern int16_t xStdTxMeas(int16_t n, uint8 *p, GUEST<Point> *nump, GUEST<Point> *denp,
+                        FontInfo *finfop, GUEST<int16_t> *charlocp);
 
-extern void ROMlib_fg_bk(uint32 *fg_pixel_out, uint32 *bk_pixel_out,
+extern void ROMlib_fg_bk(uint32_t *fg_pixel_out, uint32_t *bk_pixel_out,
                          RGBColor *fg_rgb_out, RGBColor *bk_rgb_out,
                          const rgb_spec_t *rgb_spec,
                          bool active_screen_addr_p,
                          bool src_blt_p);
 
-extern void canonical_from_bogo_color(uint32 index,
+extern void canonical_from_bogo_color(uint32_t index,
                                       const rgb_spec_t *rgb_spec,
-                                      uint32 *pixel_out,
+                                      uint32_t *pixel_out,
                                       RGBColor *rgb_out);
 
 #define AVERAGE_COLOR(c1, c2, ratio, out) \

@@ -77,9 +77,9 @@ const char *ROMlib_executor_full_name = "Executor " EXECUTOR_VERSION
     })
 
 PUBLIC void
-ROMlib_set_system_version(uint32 version)
+ROMlib_set_system_version(uint32_t version)
 {
-    static uint32 old_version = -1;
+    static uint32_t old_version = -1;
 
     if(version != old_version)
     {

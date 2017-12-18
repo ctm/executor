@@ -112,7 +112,7 @@ extern void vdriver_opt_register(void);
 #if !defined(vdriver_accel_rect_fill)
 extern vdriver_accel_result_t vdriver_accel_rect_fill(int top, int left,
                                                       int bottom, int right,
-                                                      uint32 color);
+                                                      uint32_t color);
 #endif
 
 #if !defined(vdriver_accel_rect_scroll)

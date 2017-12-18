@@ -126,7 +126,7 @@ typedef struct
     unsigned short unused4 PACKED;
 } i387_env_t;
 
-PUBLIC uint32
+PUBLIC uint32_t
 ROMlib_get_fcw_fsw(void)
 {
     i387_env_t i387_env;
@@ -137,7 +137,7 @@ ROMlib_get_fcw_fsw(void)
 }
 
 PUBLIC void
-ROMlib_set_fcw_fsw(uint32 fcwfsw)
+ROMlib_set_fcw_fsw(uint32_t fcwfsw)
 {
     i387_env_t i387_env;
 
@@ -151,10 +151,10 @@ ROMlib_set_fcw_fsw(uint32 fcwfsw)
 }
 
 PUBLIC void
-ROMlib_compare_fcw_fsw(uint32 fcwfsw, const char *func, int line)
+ROMlib_compare_fcw_fsw(uint32_t fcwfsw, const char *func, int line)
 {
-    uint16 old_fcw;
-    uint16 old_fsw;
+    uint16_t old_fcw;
+    uint16_t old_fsw;
     i387_env_t i387_env;
 
     old_fcw = fcwfsw >> 16;
@@ -310,7 +310,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fsetenv, INTEGER *,
     gui_abort();
 #endif
 
-    warning_floating_point("setenv(0x%04X)", (unsigned)(uint16)CW_RAW(*dp));
+    warning_floating_point("setenv(0x%04X)", (unsigned)(uint16_t)CW_RAW(*dp));
 }
 
 P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fgetenv, INTEGER *,
@@ -1193,7 +1193,7 @@ P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fclassx, void *,
 #define S_NORMNUM_MASK 0x78000000
 #define S_FRAC_MASK 0x07FFFFFF
 #define S_QNAN_MASK 0x04000000
-            ULONGINT v = CL_RAW(*(uint32 *)sp);
+            ULONGINT v = CL_RAW(*(uint32_t *)sp);
             if((v & S_INF_OR_NAN) == S_INF_OR_NAN)
             {
                 if((v & S_FRAC_MASK) == 0)

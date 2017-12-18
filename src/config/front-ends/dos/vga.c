@@ -31,15 +31,15 @@ static vga_mode_t mode_list[MAX_VGA_MODES + 1];
 static int orig_vga_mode = -1;
 
 /* Do we have a VESA driver? */
-uint16 vesa_version;
+uint16_t vesa_version;
 
 /* Selector for real mode 0xA0000 - 0xAFFFF */
-uint16 vga_window_selector;
+uint16_t vga_window_selector;
 
 /* Selector for the screen, wherever it is.  May be the same as
  * `vga_window_selector', or may be different for a linear frame buffer, etc.
  */
-uint16 vga_screen_selector;
+uint16_t vga_screen_selector;
 
 /* true iff we should pretend there's no VBE video driver. */
 bool only_use_vga_p;
@@ -369,17 +369,17 @@ set_up_vbe2_protected_mode_interface (void)
 
 	      if (vesa_pmi->io_priv_offset && mmap_io_sel == 0)
 		{
-		  const uint16 *p;
+		  const uint16_t *p;
 
-		  for (p = (const uint16 *) ((char *)vesa_pmi
+		  for (p = (const uint16_t *) ((char *)vesa_pmi
 					     + vesa_pmi->io_priv_offset);
 		       *p != 0xFFFF;
 		       p++)
 		    ;
 		  if (p[1] != 0xFFFF)
 		    {
-		      uint32 addr = *(const uint32 *)(p + 1);
-		      uint16 length = p[3];
+		      uint32_t addr = *(const uint32_t *)(p + 1);
+		      uint16_t length = p[3];
 		      int sel;
 
 		      if (addr < 1024 * 1024 && length <= 65536)
@@ -503,10 +503,10 @@ void vgahost_shutdown(void)
 }
 
 static int
-selector_for_phys_mem(uint32 base, uint32 num_bytes)
+selector_for_phys_mem(uint32_t base, uint32_t num_bytes)
 {
     int sel;
-    uint32 seg_lim;
+    uint32_t seg_lim;
     __dpmi_meminfo minfo;
 
     /* Allocate a descriptor. */

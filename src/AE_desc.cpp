@@ -154,10 +154,10 @@ OSErr aggr_desc_get_addr(Handle aggr_desc_h,
         SetHandleSize(aggr_desc_h, aggr_desc_size + 2);
 
         {
-            GUEST<int16> *t;
+            GUEST<int16_t> *t;
 
             aggr_desc_p = (char *)STARH(aggr_desc_h);
-            t = (GUEST<int16> *)(aggr_desc_p + aggr_desc_size);
+            t = (GUEST<int16_t> *)(aggr_desc_p + aggr_desc_size);
             /* ';;' */
             t[0] = CWC(0x3b3b);
         }
@@ -264,7 +264,7 @@ OSErr aggr_desc_get_addr(Handle aggr_desc_h,
 }
 
 static bool
-find_key_index(Handle aggr_desc_h, int32 keyword, bool attribute_p,
+find_key_index(Handle aggr_desc_h, int32_t keyword, bool attribute_p,
                int *index_return)
 {
     subdesc_info_t info;
@@ -347,7 +347,7 @@ aggr_put_nth_desc(Handle aggr_handle,
 static bool
 aggr_get_nth_desc(Handle aggr_handle,
                   int index,
-                  GUEST<int32> *out_keyword,
+                  GUEST<int32_t> *out_keyword,
                   descriptor_t *out_desc)
 {
     char *addr;
@@ -399,7 +399,7 @@ aggr_get_nth_desc(Handle aggr_handle,
 
 static bool
 aggr_put_key_desc(Handle aggr_handle,
-                  int32 keyword,
+                  int32_t keyword,
                   bool attr_p,
                   descriptor_t *in_desc)
 {
@@ -438,7 +438,7 @@ aggr_put_key_desc(Handle aggr_handle,
 
 static descriptor_t *
 aggr_get_key_desc(Handle aggr_handle,
-                  int32 keyword,
+                  int32_t keyword,
                   bool attr_p,
                   descriptor_t *out_desc)
 {
@@ -525,7 +525,7 @@ aggr_get_key_desc(Handle aggr_handle,
 
 static bool
 aggr_delete_key_desc(Handle aggr_handle,
-                     int32 keyword,
+                     int32_t keyword,
                      bool attr_p)
 {
     char *dummy_addr;
@@ -556,9 +556,9 @@ aggr_delete_key_desc(Handle aggr_handle,
 
 static void
 ae_desc_to_ptr(descriptor_t *desc,
-               Ptr data, uint32 max_size, GUEST<int32> *size_out)
+               Ptr data, uint32_t max_size, GUEST<int32_t> *size_out)
 {
-    uint32 copy_size, desc_size;
+    uint32_t copy_size, desc_size;
     Handle desc_data;
 
     desc_data = DESC_DATA(desc);
@@ -577,13 +577,13 @@ void
 dump_union_desc (union desc *foo, bool key_pair_p)
 {
   AEDesc *desc;
-  uint32 type;
+  uint32_t type;
   char data[1024];
-  uint32 size;
+  uint32_t size;
   
   if (key_pair_p)
     {
-      uint32 key;
+      uint32_t key;
 
       key = KEY_DESC_KEYWORD (&foo[0].key);
       fprintf (stderr, "key `%c%c%c%c', ",
@@ -641,7 +641,7 @@ dump_union_desc (union desc *foo, bool key_pair_p)
 void
 dump_desc (descriptor_t *desc)
 {
-  uint32 type;
+  uint32_t type;
   
   type = DESC_TYPE (desc);
   fprintf (stderr, "type `%c%c%c%c'\n",
@@ -674,7 +674,7 @@ dump_desc (descriptor_t *desc)
 P6(PUBLIC pascal trap, OSErr, AECreateAppleEvent,
    AEEventClass, event_class, AEEventID, event_id,
    AEAddressDesc *, target,
-   int16, return_id, int32, transaction_id,
+   int16_t, return_id, int32_t, transaction_id,
    AppleEvent *, evt_out)
 {
     Handle target_data;
@@ -700,18 +700,18 @@ P6(PUBLIC pascal trap, OSErr, AECreateAppleEvent,
     memcpy(&event_data->target.data[0], STARH(target_data), target_size);
 
     {
-        GUEST<int32> *t;
+        GUEST<int32_t> *t;
 
-        t = (GUEST<int32> *)((char *)event_data + sizeof *event_data + target_size);
+        t = (GUEST<int32_t> *)((char *)event_data + sizeof *event_data + target_size);
 
         t[0] = TICKX("aevt");
         t[1] = CLC(0x00010001);
     }
 
     {
-        GUEST<int16> *t;
+        GUEST<int16_t> *t;
 
-        t = (GUEST<int16> *)((char *)event_data + sizeof *event_data + target_size + 8);
+        t = (GUEST<int16_t> *)((char *)event_data + sizeof *event_data + target_size + 8);
 
         /* ';;' */
         t[0] = CWC(0x3b3b);
@@ -800,7 +800,7 @@ P4(PUBLIC pascal trap, OSErr, AECreateList,
 }
 
 P2(PUBLIC pascal trap, OSErr, AECountItems,
-   AEDescList *, list, GUEST<int32> *, count_out)
+   AEDescList *, list, GUEST<int32_t> *, count_out)
 {
     subdesc_info_t info;
     Handle aggr_desc_h;
@@ -817,7 +817,7 @@ P2(PUBLIC pascal trap, OSErr, AECountItems,
 }
 
 P5(PUBLIC pascal trap, OSErr, AEGetNthDesc,
-   AEDescList *, list, int32, index,
+   AEDescList *, list, int32_t, index,
    DescType, desired_type, GUEST<AEKeyword> *, keyword_out,
    AEDesc *, desc_out)
 {
@@ -833,10 +833,10 @@ P5(PUBLIC pascal trap, OSErr, AEGetNthDesc,
 }
 
 P8(PUBLIC pascal trap, OSErr, AEGetNthPtr,
-   AEDescList *, list, int32, index,
+   AEDescList *, list, int32_t, index,
    DescType, desired_type, GUEST<AEKeyword> *, keyword_out,
    GUEST<DescType> *, type_out,
-   Ptr, data, int32, max_size, GUEST<Size> *, size_out)
+   Ptr, data, int32_t, max_size, GUEST<Size> *, size_out)
 {
     descriptor_t *desc = (descriptor_t *)alloca(sizeof *desc);
     descriptor_t *coerced_desc = (descriptor_t *)alloca(sizeof *coerced_desc);
@@ -859,7 +859,7 @@ P8(PUBLIC pascal trap, OSErr, AEGetNthPtr,
 }
 
 P3(PUBLIC pascal trap, OSErr, AEPutDesc,
-   AEDescList *, list, int32, index,
+   AEDescList *, list, int32_t, index,
    AEDesc *, desc)
 {
     OSErr retval = noErr;
@@ -872,7 +872,7 @@ P3(PUBLIC pascal trap, OSErr, AEPutDesc,
 }
 
 P5(PUBLIC pascal trap, OSErr, AEPutPtr,
-   AEDescList *, list, int32, index, DescType, type,
+   AEDescList *, list, int32_t, index, DescType, type,
    Ptr, data, Size, data_size)
 {
     descriptor_t *desc;
@@ -892,7 +892,7 @@ P5(PUBLIC pascal trap, OSErr, AEPutPtr,
 }
 
 P2(PUBLIC pascal trap, OSErr, AEDeleteItem,
-   AEDescList *, list, int32, index)
+   AEDescList *, list, int32_t, index)
 {
     if(!LIST_CLASS_P(list))
         AE_RETURN_ERROR(errAEWrongDataType);
@@ -904,7 +904,7 @@ P2(PUBLIC pascal trap, OSErr, AEDeleteItem,
 }
 
 P4(PUBLIC pascal trap, OSErr, AESizeOfNthItem,
-   AEDescList *, list, int32, index,
+   AEDescList *, list, int32_t, index,
    GUEST<DescType> *, type_out, GUEST<Size> *, size_out)
 {
     descriptor_t *desc = (descriptor_t *)alloca(sizeof *desc);

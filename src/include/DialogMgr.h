@@ -113,7 +113,7 @@ typedef GUEST<AlertTPtr> *AlertTHndl;
 #define appendDITLRight 1
 #define appendDITLBottom 2
 
-typedef int16 DITLMethod;
+typedef int16_t DITLMethod;
 
 #define TEdoFont 1
 #define TEdoFace 2
@@ -205,15 +205,15 @@ extern pascal trap CDialogPtr C_NewCDialog(Ptr, Rect *, StringPtr, BOOLEAN, INTE
 
 extern pascal trap OSErr C_GetStdFilterProc(GUEST<ProcPtr> *proc);
 extern pascal trap OSErr C_SetDialogDefaultItem(DialogPtr dialog,
-                                                int16 new_item);
+                                                int16_t new_item);
 extern pascal trap OSErr C_SetDialogCancelItem(DialogPtr dialog,
-                                               int16 new_item);
+                                               int16_t new_item);
 extern pascal trap OSErr C_SetDialogTracksCursor(DialogPtr dialog,
                                                  Boolean tracks);
 
 extern void AppendDITL(DialogPtr, Handle, DITLMethod);
-extern void ShortenDITL(DialogPtr, int16);
-extern int16 CountDITL(DialogPtr);
+extern void ShortenDITL(DialogPtr, int16_t);
+extern int16_t CountDITL(DialogPtr);
 }
 
 #endif /* _DIALOG_H_ */

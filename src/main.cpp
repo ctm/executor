@@ -192,7 +192,7 @@ static bool use_native_code_p = true;
    applications, set through the `-system' options.  contains the
    version number in the form `0xABC' which corresponds to system
    version A.B.C */
-uint32 Executor::system_version = 0x700; /* keep this in sync with Browser's .ecf file */
+uint32_t Executor::system_version = 0x700; /* keep this in sync with Browser's .ecf file */
 
 const option_vec Executor::common_opts = {
     { "sticky", "sticky menus", opt_no_arg, "" },
@@ -1019,9 +1019,9 @@ illegal_mode(void)
 }
 
 #if defined(MSDOS) || defined(CYGWIN32)
-PUBLIC uint32 ROMlib_macdrives; /* default computed at runtime */
-PUBLIC uint32 ROMlib_dosdrives = ~0;
-PRIVATE uint32 skipdrives = 0;
+PUBLIC uint32_t ROMlib_macdrives; /* default computed at runtime */
+PUBLIC uint32_t ROMlib_dosdrives = ~0;
+PRIVATE uint32_t skipdrives = 0;
 
 PRIVATE bool
 drive_number_from_letter(char c, int *nump)
@@ -1053,7 +1053,7 @@ drive_error(const char *opt)
 }
 
 PRIVATE const char *
-munch_next_char(const char *p, uint32 *destp, const char *opt)
+munch_next_char(const char *p, uint32_t *destp, const char *opt)
 {
     const char *retval;
     int d;
@@ -1093,10 +1093,10 @@ munch_next_char(const char *p, uint32 *destp, const char *opt)
     return retval;
 }
 
-PUBLIC uint32
+PUBLIC uint32_t
 parse_drive_opt(const char *opt_name, const char *opt_value)
 {
-    uint32 retval;
+    uint32_t retval;
     const char *next_charp;
 
     retval = 0;
@@ -1296,10 +1296,10 @@ read_args_from_file(const char *filename, int *argcp, char ***argvpp)
 }
 
 #if defined(CYGWIN32)
-PRIVATE uint32
+PRIVATE uint32_t
 win_drive_to_bit(const char *drive_namep)
 {
-    uint32 retval;
+    uint32_t retval;
 
     if(drive_namep[1] == ':')
         retval = 1 << (tolower(drive_namep[0]) - 'a');
@@ -1723,14 +1723,14 @@ int main(int argc, char **argv)
 #endif
 
     {
-        uint32 save_a7;
+        uint32_t save_a7;
 
         save_a7 = EM_A7;
 #if defined(SYN68K)
         /* Set up syn68k. */
         initialize_68k_emulator(vdriver_system_busy,
                                 use_native_code_p,
-                                (uint32 *)SYN68K_TO_US(0),
+                                (uint32_t *)SYN68K_TO_US(0),
 #if defined(USE_BIOS_TIMER)
                                 dos_int_flag.rm_segment * 16
 #else /* !USE_BIOS_TIMER */
@@ -1822,7 +1822,7 @@ int main(int argc, char **argv)
 
         if(opt_val(common_db, "prvers", &str))
         {
-            uint32 vers;
+            uint32_t vers;
 
             if(!ROMlib_parse_version(str, &vers))
                 bad_arg_p = true;
@@ -1969,7 +1969,7 @@ int main(int argc, char **argv)
     }
 
     {
-        static GUEST<uint16> ret = CWC((unsigned short)0x4E75);
+        static GUEST<uint16_t> ret = CWC((unsigned short)0x4E75);
 
         JCrsrTask = RM((ProcPtr)&ret);
     }

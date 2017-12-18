@@ -24,7 +24,7 @@ void Executor::menu_bar_color(RGBColor *bar_color)
         *bar_color = ROMlib_white_rgb_color;
 }
 
-void Executor::menu_title_color(int16 id, RGBColor *title_color)
+void Executor::menu_title_color(int16_t id, RGBColor *title_color)
 {
     MCEntryPtr mc_entry;
 
@@ -37,7 +37,7 @@ void Executor::menu_title_color(int16 id, RGBColor *title_color)
         *title_color = ROMlib_black_rgb_color;
 }
 
-void Executor::menu_bk_color(int16 id, RGBColor *bk_color)
+void Executor::menu_bk_color(int16_t id, RGBColor *bk_color)
 {
     MCEntryPtr mc_entry;
 
@@ -54,7 +54,7 @@ void Executor::menu_bk_color(int16 id, RGBColor *bk_color)
     }
 }
 
-void Executor::menu_item_colors(int16 id, int16 item,
+void Executor::menu_item_colors(int16_t id, int16_t item,
                                 RGBColor *bk_color, RGBColor *name_color,
                                 RGBColor *mark_color, RGBColor *command_color)
 {
@@ -93,7 +93,7 @@ void Executor::menu_item_colors(int16 id, int16 item,
     }
 }
 
-void Executor::menu_delete_entries(int16 menu_id)
+void Executor::menu_delete_entries(int16_t menu_id)
 {
     MCTableHandle menu_c_info;
     MCEntryPtr entries;

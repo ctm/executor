@@ -91,7 +91,7 @@ sort_table(CTabPtr old, CTabPtr new1, unsigned max_color)
 void Executor::convert_transparent(const PixMap *src1, const PixMap *src2,
                                    PixMap *dst,
                                    const Rect *r1, const Rect *r2,
-                                   int16 mode,
+                                   int16_t mode,
                                    bool tile_src1_p,
                                    int pat_x_offset, int pat_y_offset)
 {
@@ -99,7 +99,7 @@ void Executor::convert_transparent(const PixMap *src1, const PixMap *src2,
     int src1_rowbytes, src2_rowbytes, dst_rowbytes, src1_deltax, src2_deltax;
     int width, height, s1_width, s1_height;
     RGBColor *hilite_rgb;
-    uint32 bk_color, hilite_color;
+    uint32_t bk_color, hilite_color;
 
     int bits_per_pixel;
     const rgb_spec_t *rgb_spec;
@@ -179,7 +179,7 @@ void Executor::convert_transparent(const PixMap *src1, const PixMap *src2,
 
 #define RGB_TO_DIRECT_PIXEL(bpp, rgb, pixel)                                   \
     ((void)({                                                                  \
-        uint32 swapped_pixel;                                                  \
+        uint32_t swapped_pixel;                                                  \
                                                                                \
         swapped_pixel = ((*rgb_spec->rgbcolor_to_pixel)(rgb_spec, rgb, true)); \
         switch(bpp)                                                            \
@@ -268,9 +268,9 @@ void Executor::convert_transparent(const PixMap *src1, const PixMap *src2,
          ? b[x]                        \
          : ((b[(x) * (bpp) / 8] >> SHIFT_COUNT((x), (bpp))) & ((1 << (bpp)) - 1)))
 #define READ_DIRECT16_PIXEL(b, x, bpp) \
-    ((uint16 *)b)[x]
+    ((uint16_t *)b)[x]
 #define READ_DIRECT32_PIXEL(b, x, bpp) \
-    ((uint32 *)b)[x]
+    ((uint32_t *)b)[x]
 
 #define READ_PAT_INDIRECT_PIXEL(b, x, bpp) \
     READ_INDIRECT_PIXEL(b, (x) & (s1_width - 1), bpp)
@@ -288,9 +288,9 @@ void Executor::convert_transparent(const PixMap *src1, const PixMap *src2,
                              *p |= (((v) & ((1 << (bpp)) - 1)) << SHIFT_COUNT(x, bpp)); \
                          })))
 #define WRITE_DIRECT16_PIXEL(v, b, x, bpp) \
-    ((void)(((uint16 *)(b))[(x)] = (v)))
+    ((void)(((uint16_t *)(b))[(x)] = (v)))
 #define WRITE_DIRECT32_PIXEL(v, b, x, bpp) \
-    ((void)(((uint32 *)(b))[(x)] = (v)))
+    ((void)(((uint32_t *)(b))[(x)] = (v)))
 
 #define TRANSPARENT_TRANSFORM(src1_v, src2_v) \
     (((decltype(bk_color))src1_v != bk_color) ? src1_v : src2_v)
@@ -352,7 +352,7 @@ void Executor::convert_pixmap_with_IMV_mode(const PixMap *src1, const PixMap *sr
                                             CTabHandle src1_ctabh, CTabHandle src2_ctabh,
                                             ITabHandle itabh,
                                             const Rect *r1, const Rect *r2,
-                                            int16 mode, const RGBColor *op_color,
+                                            int16_t mode, const RGBColor *op_color,
                                             bool tile_src1_p,
                                             int pat_x_offset, int pat_y_offset)
 {
@@ -363,7 +363,7 @@ void Executor::convert_pixmap_with_IMV_mode(const PixMap *src1, const PixMap *sr
     int width, height, s1_width, s1_height;
     int itab_res, itab_res_mask;
     const uint8 *itab_array;
-    uint32 op_red, op_green, op_blue;
+    uint32_t op_red, op_green, op_blue;
 
     const rgb_spec_t *rgb_spec;
     int bits_per_pixel;
@@ -503,12 +503,12 @@ void Executor::convert_pixmap_with_IMV_mode(const PixMap *src1, const PixMap *sr
             for(x = 0; x < width; x++)                           \
             {                                                    \
                 /* source 1, 2 rgb's */                          \
-                uint32 r1, g1, b1;                               \
-                uint32 r2, g2, b2;                               \
+                uint32_t r1, g1, b1;                               \
+                uint32_t r2, g2, b2;                               \
                 /* result rgb's */                               \
-                uint32 rr, gr, br;                               \
+                uint32_t rr, gr, br;                               \
                 /* final pixel value */                          \
-                uint32 p1, p2, pr;                               \
+                uint32_t p1, p2, pr;                               \
                                                                  \
                 p1 = read1(src1_row_base, x + src1_deltax, bpp); \
                 p2 = read2(src2_row_base, x + src2_deltax, bpp); \
@@ -584,9 +584,9 @@ void Executor::convert_pixmap_with_IMV_mode(const PixMap *src1, const PixMap *sr
          ? b[x]                        \
          : ((b[(x) * (bpp) / 8] >> SHIFT_COUNT((x), (bpp))) & ((1 << (bpp)) - 1)))
 #define READ_DIRECT16_PIXEL(b, x, bpp) \
-    ((uint16 *)b)[x]
+    ((uint16_t *)b)[x]
 #define READ_DIRECT32_PIXEL(b, x, bpp) \
-    ((uint32 *)b)[x]
+    ((uint32_t *)b)[x]
 
 #define READ_PAT_INDIRECT_PIXEL(b, x, bpp) \
     READ_INDIRECT_PIXEL(b, (x) & (s1_width - 1), bpp)
@@ -604,9 +604,9 @@ void Executor::convert_pixmap_with_IMV_mode(const PixMap *src1, const PixMap *sr
                              *p |= (((v) & ((1 << (bpp)) - 1)) << SHIFT_COUNT(x, bpp)); \
                          })))
 #define WRITE_DIRECT16_PIXEL(v, b, x, bpp) \
-    ((void)(((uint16 *)(b))[(x)] = (v)))
+    ((void)(((uint16_t *)(b))[(x)] = (v)))
 #define WRITE_DIRECT32_PIXEL(v, b, x, bpp) \
-    ((void)(((uint32 *)(b))[(x)] = (v)))
+    ((void)(((uint32_t *)(b))[(x)] = (v)))
 
 #define ITAB_LOOKUP(r, g, b)                                                    \
     itab_array[((((r) >> (16 - itab_res)) & itab_res_mask) << (2 * itab_res))   \

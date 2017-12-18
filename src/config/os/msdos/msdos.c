@@ -82,7 +82,7 @@ guess_good_memory_settings(void)
         }
         else
         {
-            uint32 phys_pages, linear_pages;
+            uint32_t phys_pages, linear_pages;
             long pages;
 
             /* Compute a decent guess for how much memory we should assume
@@ -247,7 +247,7 @@ bool msdos_check_memory_remaining(unsigned long desired_bytes)
 #define paramErr (-50)
 
 PUBLIC int
-ROMlib_lockunlockrange(int fd, uint32 begin, uint32 count, lockunlock_t op)
+ROMlib_lockunlockrange(int fd, uint32_t begin, uint32_t count, lockunlock_t op)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;

@@ -53,7 +53,7 @@ namespace Executor
         EXTRA_DECLS;                                                                \
                                                                                     \
         /* Grab log2_in_bpp from the supplied table. */                             \
-        log2_in_bpp = *(const uint32 *)raw_table;                                   \
+        log2_in_bpp = *(const uint32_t *)raw_table;                                   \
         log2_out_bpp = log2_in_bpp + log2_out_ratio;                                \
                                                                                     \
         /* Line up incoming data on byte boundaries. */                             \
@@ -478,7 +478,7 @@ namespace Executor
     {                                                  \
         int w;                                         \
         for(w = byte_width - 1; w >= 0; w--)           \
-            ((uint16 *)outp)[w] = (*table)[inp[w]][0]; \
+            ((uint16_t *)outp)[w] = (*table)[inp[w]][0]; \
     } while(0)
 #define COMPUTE_ADD_1_2(row_bytes, byte_width) (row_bytes)
 #endif /* !CONVERT_1_2 */
@@ -489,7 +489,7 @@ namespace Executor
     {                                               \
         int w;                                      \
         for(w = byte_width - 1; w >= 0; w--)        \
-            ((uint32 *)outp)[w] = (*table)[inp[w]]; \
+            ((uint32_t *)outp)[w] = (*table)[inp[w]]; \
     } while(0)
 #define COMPUTE_ADD_1_4(row_bytes, byte_width) (row_bytes)
 #endif /* !CONVERT_1_4 */
@@ -502,8 +502,8 @@ namespace Executor
         for(w = byte_width - 1; w >= 0; w--)               \
         {                                                  \
             unsigned in = inp[w];                          \
-            ((uint32 *)outp)[w * 2] = (*table)[in][0];     \
-            ((uint32 *)outp)[w * 2 + 1] = (*table)[in][1]; \
+            ((uint32_t *)outp)[w * 2] = (*table)[in][0];     \
+            ((uint32_t *)outp)[w * 2 + 1] = (*table)[in][1]; \
         }                                                  \
     } while(0)
 #define COMPUTE_ADD_1_8(row_bytes, byte_width) (row_bytes)
@@ -514,12 +514,12 @@ namespace Executor
     do                                                \
     {                                                 \
         int w;                                        \
-        uint32 *dp;                                   \
+        uint32_t *dp;                                   \
                                                       \
-        dp = (uint32 *)&outp[(byte_width - 1) * 16];  \
+        dp = (uint32_t *)&outp[(byte_width - 1) * 16];  \
         for(w = byte_width - 1; w >= 0; dp -= 4, w--) \
         {                                             \
-            const uint32 *sp;                         \
+            const uint32_t *sp;                         \
             sp = &(*table)[inp[w]][0];                \
             dp[0] = sp[0];                            \
             dp[1] = sp[1];                            \
@@ -535,12 +535,12 @@ namespace Executor
     do                                                \
     {                                                 \
         int w;                                        \
-        uint32 *dp;                                   \
+        uint32_t *dp;                                   \
                                                       \
-        dp = (uint32 *)&outp[(byte_width - 1) * 32];  \
+        dp = (uint32_t *)&outp[(byte_width - 1) * 32];  \
         for(w = byte_width - 1; w >= 0; dp -= 8, w--) \
         {                                             \
-            const uint32 *sp;                         \
+            const uint32_t *sp;                         \
             sp = &(*table)[inp[w]][0];                \
             dp[0] = sp[0];                            \
             dp[1] = sp[1];                            \
@@ -628,42 +628,42 @@ namespace Executor
     } while(0)
 
 #if !defined(CONVERT_16_1)
-#define CONVERT_16_1() CONVERT_RGB_IND(uint16, 1)
+#define CONVERT_16_1() CONVERT_RGB_IND(uint16_t, 1)
 #define COMPUTE_ADD_16_1(row_bytes, byte_width) ((row_bytes) - (byte_width))
 #endif /* !CONVERT_16_1 */
 
 #if !defined(CONVERT_16_2)
-#define CONVERT_16_2() CONVERT_RGB_IND(uint16, 2)
+#define CONVERT_16_2() CONVERT_RGB_IND(uint16_t, 2)
 #define COMPUTE_ADD_16_2(row_bytes, byte_width) ((row_bytes) - (byte_width))
 #endif /* !CONVERT_16_2 */
 
 #if !defined(CONVERT_16_4)
-#define CONVERT_16_4() CONVERT_RGB_IND(uint16, 4)
+#define CONVERT_16_4() CONVERT_RGB_IND(uint16_t, 4)
 #define COMPUTE_ADD_16_4(row_bytes, byte_width) ((row_bytes) - (byte_width))
 #endif /* !CONVERT_16_4 */
 
 #if !defined(CONVERT_16_8)
-#define CONVERT_16_8() CONVERT_RGB_IND(uint16, 8)
+#define CONVERT_16_8() CONVERT_RGB_IND(uint16_t, 8)
 #define COMPUTE_ADD_16_8(row_bytes, byte_width) ((row_bytes) - (byte_width))
 #endif /* !CONVERT_16_8 */
 
 #if !defined(CONVERT_32_1)
-#define CONVERT_32_1() CONVERT_RGB_IND(uint32, 1)
+#define CONVERT_32_1() CONVERT_RGB_IND(uint32_t, 1)
 #define COMPUTE_ADD_32_1(row_bytes, byte_width) ((row_bytes) - (byte_width))
 #endif /* !CONVERT_32_1 */
 
 #if !defined(CONVERT_32_2)
-#define CONVERT_32_2() CONVERT_RGB_IND(uint32, 2)
+#define CONVERT_32_2() CONVERT_RGB_IND(uint32_t, 2)
 #define COMPUTE_ADD_32_2(row_bytes, byte_width) ((row_bytes) - (byte_width))
 #endif /* !CONVERT_32_2 */
 
 #if !defined(CONVERT_32_4)
-#define CONVERT_32_4() CONVERT_RGB_IND(uint32, 4)
+#define CONVERT_32_4() CONVERT_RGB_IND(uint32_t, 4)
 #define COMPUTE_ADD_32_4(row_bytes, byte_width) ((row_bytes) - (byte_width))
 #endif /* !CONVERT_32_4 */
 
 #if !defined(CONVERT_32_8)
-#define CONVERT_32_8() CONVERT_RGB_IND(uint32, 8)
+#define CONVERT_32_8() CONVERT_RGB_IND(uint32_t, 8)
 #define COMPUTE_ADD_32_8(row_bytes, byte_width) ((row_bytes) - (byte_width))
 #endif /* !CONVERT_32_8 */
 
@@ -703,22 +703,22 @@ namespace Executor
     } while(0)
 
 #if !defined(CONVERT_16_16)
-#define CONVERT_16_16() CONVERT_RGB_RGB(uint16, uint16)
+#define CONVERT_16_16() CONVERT_RGB_RGB(uint16_t, uint16_t)
 #define COMPUTE_ADD_16_16(row_bytes, byte_width) ((row_bytes) - (byte_width))
 #endif /* !CONVERT_16_16 */
 
 #if !defined(CONVERT_16_32)
-#define CONVERT_16_32() CONVERT_RGB_RGB(uint16, uint32)
+#define CONVERT_16_32() CONVERT_RGB_RGB(uint16_t, uint32_t)
 #define COMPUTE_ADD_16_32(row_bytes, byte_width) ((row_bytes) - (byte_width))
 #endif /* !CONVERT_16_32 */
 
 #if !defined(CONVERT_32_16)
-#define CONVERT_32_16() CONVERT_RGB_RGB(uint32, uint16)
+#define CONVERT_32_16() CONVERT_RGB_RGB(uint32_t, uint16_t)
 #define COMPUTE_ADD_32_16(row_bytes, byte_width) ((row_bytes) - (byte_width))
 #endif /* !CONVERT_32_16 */
 
 #if !defined(CONVERT_32_32)
-#define CONVERT_32_32() CONVERT_RGB_RGB(uint32, uint32)
+#define CONVERT_32_32() CONVERT_RGB_RGB(uint32_t, uint32_t)
 #define COMPUTE_ADD_32_32(row_bytes, byte_width) ((row_bytes) - (byte_width))
 #endif /* !CONVERT_32_32 */
 
@@ -777,32 +777,32 @@ CONVERT_FUNC(depthconv_8_1, CONVERT_8_1, -3, 3, COMPUTE_ADD_8_1,
 
 #undef EXTRA_DECLS
 #define EXTRA_DECLS   \
-    uint16 cache_in;  \
-    uint16 cache_out; \
+    uint16_t cache_in;  \
+    uint16_t cache_out; \
     SRC_DST_RGB_SPEC_DECLS
 CONVERT_FUNC(depthconv_16_16, CONVERT_16_16, 0, 0, COMPUTE_ADD_16_16,
              depthconv_rgb_to_rgb_data_t)
 
 #undef EXTRA_DECLS
 #define EXTRA_DECLS   \
-    uint16 cache_in;  \
-    uint32 cache_out; \
+    uint16_t cache_in;  \
+    uint32_t cache_out; \
     SRC_DST_RGB_SPEC_DECLS
 CONVERT_FUNC(depthconv_16_32, CONVERT_16_32, 1, 1, COMPUTE_ADD_16_32,
              depthconv_rgb_to_rgb_data_t)
 
 #undef EXTRA_DECLS
 #define EXTRA_DECLS   \
-    uint32 cache_in;  \
-    uint16 cache_out; \
+    uint32_t cache_in;  \
+    uint16_t cache_out; \
     SRC_DST_RGB_SPEC_DECLS
 CONVERT_FUNC(depthconv_32_16, CONVERT_32_16, -1, 1, COMPUTE_ADD_32_16,
              depthconv_rgb_to_rgb_data_t)
 
 #undef EXTRA_DECLS
 #define EXTRA_DECLS   \
-    uint32 cache_in;  \
-    uint32 cache_out; \
+    uint32_t cache_in;  \
+    uint32_t cache_out; \
     SRC_DST_RGB_SPEC_DECLS
 CONVERT_FUNC(depthconv_32_32, CONVERT_32_32, 0, 0, COMPUTE_ADD_32_32,
              depthconv_rgb_to_rgb_data_t)

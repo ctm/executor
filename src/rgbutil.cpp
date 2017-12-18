@@ -22,7 +22,7 @@ void rgbutil_init(void)
 }
 
 static void
-make_component_map(uint16 *map, int num_bits, bool swap_p)
+make_component_map(uint16_t *map, int num_bits, bool swap_p)
 {
     unsigned mask;
     int i;
@@ -47,7 +47,7 @@ make_component_map(uint16 *map, int num_bits, bool swap_p)
 
 static void
 rgb_extract_from_unswapped_pixel(const rgb_spec_t *rgb_spec,
-                                 uint32 in, RGBColor *out)
+                                 uint32_t in, RGBColor *out)
 {
     const rgb_map_t *table;
 
@@ -65,7 +65,7 @@ rgb_extract_from_unswapped_pixel(const rgb_spec_t *rgb_spec,
 #if defined(LITTLEENDIAN)
 static void
 rgb_extract_from_swapped_16bpp_pixel(const rgb_spec_t *rgb_spec,
-                                     uint32 in, RGBColor *out)
+                                     uint32_t in, RGBColor *out)
 
 {
     const rgb_map_t *table;
@@ -85,7 +85,7 @@ rgb_extract_from_swapped_16bpp_pixel(const rgb_spec_t *rgb_spec,
 
 static void
 rgb_extract_from_swapped_32bpp_pixel(const rgb_spec_t *rgb_spec,
-                                     uint32 in, RGBColor *out)
+                                     uint32_t in, RGBColor *out)
 {
     const rgb_map_t *table;
 
@@ -151,13 +151,13 @@ make_pixel_to_rgbcolor_table(const rgb_spec_t *spec, rgb_map_t *d,
     }
 }
 
-static uint32
+static uint32_t
 rgbcolor_to_pixel(const rgb_spec_t *spec,
                   const RGBColor *color,
                   bool big_endian_rgbcolor_p)
 {
     const uint8 *values;
-    uint32 v;
+    uint32_t v;
 
     /* Treat RGBColor as an array of bytes, so we can easily grab MSB's. */
     values = (const uint8 *)color;
@@ -182,7 +182,7 @@ rgbcolor_to_pixel(const rgb_spec_t *spec,
     if(spec->big_endian_p)
     {
         if(spec->bpp == 16)
-            v = (uint16)CW_RAW(v); /* cast masks off extra cruft in high bits. */
+            v = (uint16_t)CW_RAW(v); /* cast masks off extra cruft in high bits. */
         else
             v = CL_RAW(v);
     }
@@ -192,13 +192,13 @@ rgbcolor_to_pixel(const rgb_spec_t *spec,
 
 void Executor::make_rgb_spec(rgb_spec_t *rgb_spec,
                              int bpp, bool big_endian_p,
-                             uint32 xor_mask,
+                             uint32_t xor_mask,
                              int num_red_bits, int low_red_bit,
                              int num_green_bits, int low_green_bit,
                              int num_blue_bits, int low_blue_bit,
-                             uint32 seed_x)
+                             uint32_t seed_x)
 {
-    uint32 w, b;
+    uint32_t w, b;
 
     /* fill in the ordinary fields */
     rgb_spec->bpp = bpp;

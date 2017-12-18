@@ -118,7 +118,7 @@ P1(PUBLIC pascal trap, CTabHandle, GetCTable,
 {
     CTabHandle ctab;
     clut_res_handle clut;
-    int32 ctab_id;
+    int32_t ctab_id;
 
     ctab_id = ctab_res_id;
     switch(ctab_id)
@@ -132,7 +132,7 @@ P1(PUBLIC pascal trap, CTabHandle, GetCTable,
             /* number of elements in the color table minus 1 */
             int ctab_size;
             int i;
-            uint32 stride, c;
+            uint32_t stride, c;
             ColorSpec *table;
 
             ctab_size = (1 << (ctab_id - 32)) - 1;

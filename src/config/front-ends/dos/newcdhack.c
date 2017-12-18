@@ -65,8 +65,8 @@ struct ReadL {
 #include <string.h>
 
 typedef unsigned char uint8;
-typedef unsigned short uint16;
-typedef unsigned long uint32;
+typedef unsigned short uint16_t;
+typedef unsigned long uint32_t;
 
 #define PACKED __attribute__((packed))
 
@@ -75,14 +75,14 @@ typedef struct
     uint8 len PACKED; /* 0x00 */
     uint8 unit PACKED; /* 0x01 */
     uint8 command PACKED; /* 0x02 */
-    uint16 status PACKED; /* 0x03 */
+    uint16_t status PACKED; /* 0x03 */
     uint8 reserved[8] PACKED; /* 0x05 */
     uint8 media_descriptor PACKED; /* 0x0d */
-    uint32 transfer_address PACKED; /* 0x0e */
-    uint16 sector_count PACKED; /* 0x12 */
-    uint16 starting_sector PACKED; /* 0x14 should be 0xffff */
-    uint32 volid_pointer PACKED; /* 0x16 */
-    uint32 long_starting_sector PACKED; /* 0x1A */
+    uint32_t transfer_address PACKED; /* 0x0e */
+    uint16_t sector_count PACKED; /* 0x12 */
+    uint16_t starting_sector PACKED; /* 0x14 should be 0xffff */
+    uint32_t volid_pointer PACKED; /* 0x16 */
+    uint32_t long_starting_sector PACKED; /* 0x1A */
 } ioctl_read_t;
 
 enum
@@ -92,8 +92,8 @@ enum
 
 #define xxx(yyy, zzz) ((yyy)*16 + (zzz))
 
-void fill_read_t(ioctl_read_t *readp, uint8 unit, uint16 sector_count,
-                 uint32 starting_sector)
+void fill_read_t(ioctl_read_t *readp, uint8 unit, uint16_t sector_count,
+                 uint32_t starting_sector)
 {
     memset(readp, 0, sizeof *readp);
     readp->len = sizeof *readp;
