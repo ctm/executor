@@ -675,7 +675,7 @@ Executor::ROMlib_transphysblk(hfs_access_t *hfsp, LONGINT physblock, short nphys
         memmove(bufp, newbufp, (LONGINT) nphysblocks * PHYSBSIZE);
 #endif
     if(actp)
-        *actp = err != noErr ? 0 : CL((LONGINT)nphysblocks * PHYSBSIZE);
+        *actp = err != noErr ? CLC(0) : CL((LONGINT)nphysblocks * PHYSBSIZE);
 
 #endif
     if(err != noErr)

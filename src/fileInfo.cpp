@@ -309,7 +309,7 @@ A5(PUBLIC, OSErr, ROMlib_PBGetSetFInfoD, ParmBlkPtr, pb, /* INTERNAL */
     char *pathname, *filename, *endname, *rpathname;
     char savechar;
     struct stat datasbuf, resourcesbuf, parentsbuf;
-    GUEST<LONGINT> longzero = 0;
+    GUEST<LONGINT> longzero(0);
     VCBExtra *vcbp;
     GUEST<THz> savezone;
     struct timeval accessupdatetimes[2];

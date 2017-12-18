@@ -146,7 +146,7 @@ P1(PUBLIC pascal trap, INTEGER, GetCVariant, ControlHandle, c) /* IMV-222 */
 
     for(h = MR(AuxCtlHead); h != 0 && HxP(h, acOwner) != c; h = HxP(h, acNext))
         ;
-    return h != 0 ? Hx(h, acFlags) : 0;
+    return h != 0 ? Hx(h, acFlags) : (INTEGER)0;
 }
 
 /* according to IM-MTE; this has been renamed

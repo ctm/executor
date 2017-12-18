@@ -239,7 +239,7 @@ P2(PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp, /* IMI-415 */
         *item = CWC(-1);
     else
     {
-        idle = (Cx(dp->editField) == -1) ? 0 : MR(dp->textH);
+        idle = (Cx(dp->editField) == -1) ? TEHandle(nullptr) : MR(dp->textH);
         if(fp)
             fp2 = fp;
         else
