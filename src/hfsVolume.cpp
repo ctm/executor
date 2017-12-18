@@ -268,7 +268,7 @@ OSErr Executor::ROMlib_flushvcbp(HVCB *vcbp)
             memmove(&vip->drCTExtRec, &fcbp->fcbExtRec,
                     (LONGINT)sizeof(fcbp->fcbExtRec));
             retval = writevolumeinfo(vcbp, p);
-            vcbp->vcbFlags.raw_and(CW(~VCBDIRTY));
+            vcbp->vcbFlags &= CW(~VCBDIRTY);
         }
     }
     return retval;
@@ -561,7 +561,7 @@ Executor::hfsPBMountVol(ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGINT
                 vcbp->vcbOffsM = 0;
                 vcbp->vcbAtrb = 0;
                 if(flags & DRIVE_FLAGS_FIXED)
-                    vcbp->vcbAtrb.raw_or(CW(VNONEJECTABLEBIT));
+                    vcbp->vcbAtrb |= CW(VNONEJECTABLEBIT);
 
                 if(!vcbp->vcbCTRef)
                     err = tmfoErr;
@@ -593,7 +593,7 @@ Executor::hfsPBMountVol(ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGINT
                             flags |= DRIVE_FLAGS_LOCKED;
                     }
                     if(flags & DRIVE_FLAGS_LOCKED)
-                        vcbp->vcbAtrb.raw_or(CW(VHARDLOCKBIT));
+                        vcbp->vcbAtrb |= CW(VHARDLOCKBIT);
                     if(!alreadythere)
                         Enqueue((QElemPtr)vcbp, &VCBQHdr);
                     pb->volumeParam.ioVRefNum = vcbp->vcbVRefNum;
@@ -787,7 +787,7 @@ PUBLIC OSErr Executor::hfsPBSetVInfo(HParmBlkPtr pb, BOOLEAN async)
             vcbp->vcbVSeqNum = pb->volumeParam.ioVSeqNum;
             memmove(vcbp->vcbFndrInfo, pb->volumeParam.ioVFndrInfo,
                     (LONGINT)32);
-            vcbp->vcbFlags.raw_or(CW(VCBDIRTY));
+            vcbp->vcbFlags |= CW(VCBDIRTY);
             err = noErr;
         }
     }

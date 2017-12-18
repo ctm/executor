@@ -1672,7 +1672,7 @@ PRIVATE OSErr valenceadjust(btparam *btpb, INTEGER toadjust, filekind kind)
                         else
                             btpb->vcbp->vcbNmFls = CW(CW(btpb->vcbp->vcbNmFls) + toadjust);
                     }
-                    btpb->vcbp->vcbFlags.raw_or(CW(VCBDIRTY));
+                    btpb->vcbp->vcbFlags |= CW(VCBDIRTY);
                 }
             }
             else
@@ -1844,7 +1844,7 @@ PRIVATE OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
         }
         ROMlib_cleancache(MR(fcbp->fcbVPtr));
         err = PBAllocate((ParmBlkPtr)&iop, false); /* yahoo */
-        MR(fcbp->fcbVPtr)->vcbFlags.raw_or(CWC(VCBDIRTY));
+        MR(fcbp->fcbVPtr)->vcbFlags |= CWC(VCBDIRTY);
         ROMlib_flushvcbp(MR(fcbp->fcbVPtr)); /* just setting DIRTY isn't safe */
         err1 = restorebusybuffers(busysave);
         if(err == noErr || (err == dskFulErr && CL(iop.ioActCount) > 0))
@@ -2516,7 +2516,7 @@ PUBLIC OSErr Executor::ROMlib_btcreateemptyfile(btparam *btpb)
     rec.filFlags = STARTFLAGS;
     rec.filFlNum = vcbp->vcbNxtCNID;
     vcbp->vcbNxtCNID = CL(CL(vcbp->vcbNxtCNID) + 1);
-    vcbp->vcbFlags.raw_or(CWC(VCBDIRTY));
+    vcbp->vcbFlags |= CWC(VCBDIRTY);
     rec.filMdDat = rec.filCrDat = Time;
     err = ROMlib_filecreate(btpb, &rec, regular);
 #if defined(CATFILEDEBUG)
@@ -2538,7 +2538,7 @@ PUBLIC OSErr Executor::ROMlib_btcreateemptydir(btparam *btpb, GUEST<LONGINT> *ne
     rec.dirFlags = CWC(STARTFLAGS);
     *newidp = rec.dirDirID = vcbp->vcbNxtCNID;
     vcbp->vcbNxtCNID = CL(CL(vcbp->vcbNxtCNID) + 1);
-    vcbp->vcbFlags.raw_or(CWC(VCBDIRTY));
+    vcbp->vcbFlags |= CWC(VCBDIRTY);
     rec.dirMdDat = rec.dirCrDat = Time;
     err = ROMlib_dircreate(btpb, &rec);
     fs_err_hook(err);

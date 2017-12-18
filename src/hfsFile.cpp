@@ -239,7 +239,7 @@ PRIVATE void setbits(HVCB *vcbp, ULONGINT bno, ULONGINT ntoset, unsigned char lo
         vcbp->vcbFreeBks = CW(CW(vcbp->vcbFreeBks) - (ntoset));
     else
         vcbp->vcbFreeBks = CW(CW(vcbp->vcbFreeBks) + (ntoset));
-    vcbp->vcbFlags.raw_or(CW(VCBDIRTY));
+    vcbp->vcbFlags |= CW(VCBDIRTY);
     /* bno -= Cx(vcbp->vcbAlBlSt); not sure about this */
     ebno = bno + ntoset;
     cp = (unsigned char *)MR(vcbp->vcbMAdr) + bno / 8 + MADROFFSET;
@@ -1112,7 +1112,7 @@ PRIVATE OSErr dirtyfcbp(filecontrolblock *fcbp)
         else if(refnum == Cx(vcbp->vcbXTRef) || refnum == Cx(vcbp->vcbCTRef))
         {
             err = noErr;
-            vcbp->vcbFlags.raw_or(CW(VCBDIRTY));
+            vcbp->vcbFlags |= CW(VCBDIRTY);
         }
         else
         {

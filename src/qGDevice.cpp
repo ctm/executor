@@ -140,7 +140,7 @@ P2(PUBLIC pascal trap, GDHandle, NewGDevice,
 
     pmh = RM(NewPixMap());
     GD_PMAP_X(this2) = pmh;
-    CTAB_FLAGS_X(PIXMAP_TABLE(GD_PMAP(this2))).raw_or(CTAB_GDEVICE_BIT_X);
+    CTAB_FLAGS_X(PIXMAP_TABLE(GD_PMAP(this2))) |= CTAB_GDEVICE_BIT_X;
 
     GD_REF_CON_X(this2) = CLC(0); /* ??? */
     GD_REF_NUM_X(this2) = CW(ref_num); /* ??? */
