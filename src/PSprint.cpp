@@ -2,7 +2,7 @@
  * Copyright 1992 - 2000 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: PSprint.c 87 2005-05-25 01:57:33Z ctm $
+
  */
 
 #include "rsys/common.h"

@@ -5,7 +5,7 @@
  * Copyright 1987 - 1993 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: quick.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 #include "rsys/pstuff.h"

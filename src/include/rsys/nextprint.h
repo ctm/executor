@@ -8,7 +8,7 @@
  * Copyright 1992 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: nextprint.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 /* cottons: added `__' to idle because it conflits with posix

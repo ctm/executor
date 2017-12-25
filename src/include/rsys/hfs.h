@@ -5,7 +5,7 @@
  * Copyright 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: hfs.h 87 2005-05-25 01:57:33Z ctm $
+
  */
 
 #define DOSFDBIT 0x40000000 /* or this into a fd to show that we \

@@ -1,4 +1,4 @@
-$Id: TODO.autoconf 63 2004-12-24 18:19:43Z ctm $
+
 
 Yipes, converting the build system to the latest GNU build system will
 take a little deciphering of what the current build system does.  If I

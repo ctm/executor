@@ -2,7 +2,7 @@
  * Copyright 1990, 1991 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: trapdefines.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 #define trap__PBOpen ".word 0xA000 /* _PBOpen */"

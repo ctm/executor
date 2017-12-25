@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# $Id: makerawblt.pl,v 1.4 1995/10/29 23:49:06 mat Exp $
+
 
 # This is how many times to unwrap the blitting loop
 $max_unwrap_factor = 8;

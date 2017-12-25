@@ -29,7 +29,7 @@ enum
  * Copyright 1996-1999 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: gestalt.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 /* Executor Version as string */

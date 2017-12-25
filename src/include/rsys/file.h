@@ -13,7 +13,7 @@ extern char *copystr(const char *name);
  * Copyright 1986 - 1998 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: file.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 #include "DeviceMgr.h"

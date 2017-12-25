@@ -9,11 +9,6 @@
 #include "rsys/next.h"
 #include <syn68k_public.h>
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_NEXTprint[] =
-	    "$Id: NEXTprint.m,v 2.5 1997/07/19 01:17:09 ctm Exp $";
-#endif
-
 /*
  * Copyright 1992 by Abacus Research and Development, Inc.
  * All rights reserved.

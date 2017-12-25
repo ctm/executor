@@ -5,7 +5,7 @@
  * Copyright 1998 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: custom.h 131 2006-05-10 19:23:20Z ctm $
+
  */
 
 /*

@@ -1,7 +1,7 @@
 #if !defined(_RSYS_VERSION_H_)
 #define _RSYS_VERSION_H_
 
-/* $Id: version.h 94 2005-05-25 15:53:40Z ctm $ */
+
 
 #ifdef __cplusplus
 extern "C" {

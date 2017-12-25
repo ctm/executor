@@ -1,4 +1,4 @@
-; $Id: executor.iss 111 2005-07-05 17:22:30Z ctm $
+
 
 [Setup]
 AppName=Executor

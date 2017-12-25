@@ -1,8 +1,3 @@
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_MacViewClass[] =
-    "$Id: MacViewClass.m,v 2.34 1997/05/09 09:51:14 ctm Exp $";
-#endif
-
 #import <Cocoa/Cocoa.h>
 #define Cursor NeXT_Cursor
 #include "rsys/common.h"

@@ -2,7 +2,7 @@
  * Copyright 1992, 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: blockinterrupts.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 #if !defined(_BLOCKINTERRUPTS_H_)

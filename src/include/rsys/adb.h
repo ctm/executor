@@ -5,7 +5,7 @@
  * Copyright 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: adb.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 namespace Executor

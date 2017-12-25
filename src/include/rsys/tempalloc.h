@@ -5,7 +5,7 @@
  * Copyright 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: tempalloc.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 /* This header contains macros which are useful if you want to allocate

@@ -5,7 +5,7 @@
  * Copyright 1998 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: SDL_bmp.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 extern int SDL_SaveCF_DIB(SDL_Surface *surfp, char **dib_bytesp,

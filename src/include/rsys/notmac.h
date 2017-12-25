@@ -4,7 +4,7 @@
  * Copyright 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: notmac.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 #if defined(MSDOS) || defined(CYGWIN32)

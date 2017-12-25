@@ -3,7 +3,7 @@
 .ascii "Copyright 1992, 1995 by Abacus Research and Development, Inc.\
   All rights reserved.\0"
 
-.ascii "$Id: trap.S,v 2.1 1995/10/09 10:50:22 mat Exp $\0"
+
 
 .text
 	.even

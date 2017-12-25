@@ -1,7 +1,6 @@
 /* Copyright 1995 by Abacus Research and Development, Inc.
    All rights reserved.
- 
-   $Id: sigio_multiplex.h 63 2004-12-24 18:19:43Z ctm $ */
+ */
 
 #if !defined(_SIGIO_MULTIPLEX_H_)
 #define _SIGIO_MULTIPLEX_H_

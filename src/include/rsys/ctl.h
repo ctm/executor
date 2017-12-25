@@ -5,7 +5,7 @@
  * Copyright 1986, 1989, 1990, 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: ctl.h 85 2005-05-24 22:06:13Z ctm $
+
  */
 
 #include "ControlMgr.h"

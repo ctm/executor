@@ -5,7 +5,7 @@
  * Copyright 1998 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: evil.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 #define EVIL_ILLUSTRATOR_7_HACK

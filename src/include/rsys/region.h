@@ -2,7 +2,7 @@
 #define _REGION_H_
 
 /* region.h
-   $Id: region.h 63 2004-12-24 18:19:43Z ctm $ */
+ */
 
 #define RGN_SIZE_MASK_X (CWC(0x7FFF))
 #define RGN_SPECIAL_FLAG_X (CWC(0x8000))

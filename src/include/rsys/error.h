@@ -5,7 +5,7 @@
  * Copyright 1986, 1989, 1990, 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: error.h 74 2004-12-30 03:38:55Z ctm $
+
  */
 
 #include <stdint.h>

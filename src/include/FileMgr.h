@@ -7,7 +7,7 @@
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: FileMgr.h 86 2005-05-25 00:47:12Z ctm $
+
  */
 
 //So as to not conflict with OS X defines

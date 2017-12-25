@@ -1,4 +1,4 @@
-$Id: readme.txt 104 2005-06-30 16:43:33Z ctm $
+
 
 UNSUPPORTED -- READ ARDI'S WEB SITE
 

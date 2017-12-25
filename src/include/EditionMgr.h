@@ -6,7 +6,7 @@
  * Copyright 1986, 1989, 1990, 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: EditionMgr.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 #include "IntlUtil.h"

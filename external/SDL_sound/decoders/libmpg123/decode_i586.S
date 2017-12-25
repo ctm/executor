@@ -27,7 +27,7 @@
 
  Stefan Bieschewski <stb@acm.org>
 
- $Id: decode_i586.s 1 2004-09-18 13:30:08Z thomas $
+
 */
 
 #include "mangle.h"

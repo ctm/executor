@@ -5,7 +5,7 @@
  * Copyright 1997 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: ini.h 87 2005-05-25 01:57:33Z ctm $
+
  */
 
 #include <string>

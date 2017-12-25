@@ -5,7 +5,7 @@
  * Copyright 2000 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: hfs_plus.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 namespace Executor
 {

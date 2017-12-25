@@ -13,7 +13,7 @@
 .ascii "Copyright 1992 by Abacus Research and Development, Inc.\
   All rights reserved."
 
-.ascii "$Id: stubs.s,v 2.5 1994/12/19 15:32:39 ctm Exp $\0"
+
 
 	.even
 

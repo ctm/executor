@@ -9,7 +9,7 @@
  * Copyright 1994-1996 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: aspi.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 typedef struct
