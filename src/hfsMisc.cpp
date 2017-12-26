@@ -131,23 +131,3 @@ PUBLIC QHdrPtr myGetDrvQHdr( void )
     return &DrvQHdr;
 }
 #endif
-
-#if defined(MAC)
-#define LINKHACK
-#endif
-
-#if defined(LINKHACK)
-PUBLIC void bcopy(void *srcp, void *dstp, LONGINT length)
-{
-    BlockMove(srcp, dstp, length);
-}
-
-PUBLIC void bzero(void *dstp, LONGINT ntozero)
-{
-    char *dstcp;
-
-    dstcp = dstp;
-    while(--ntozero >= 0)
-        *dstcp++ = 0;
-}
-#endif /* LINKHACK */

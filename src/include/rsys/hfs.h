@@ -523,12 +523,6 @@ extern DrvQExtra *ROMlib_dqbydrive(short vrefnum);
 extern OSErr ROMlib_dirbusy(LONGINT dirid, HVCB *vcbp);
 extern void ROMlib_adjustdirid(LONGINT *diridp, HVCB *vcbp, INTEGER vrefnum);
 
-#if defined(MAC)
-/* public entries in misc.c */
-extern void bcopy(void *srcp, void *dstp, LONGINT length);
-extern void bzero(void *dstp, LONGINT ntozero);
-#endif
-
 /* public entry in error.c */
 extern void errormessage(StringPtr msg, alerttype severity);
 
