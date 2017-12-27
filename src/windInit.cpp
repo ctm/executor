@@ -36,6 +36,8 @@
 #include "rsys/options.h"
 #include "rsys/launch.h"
 
+#include <algorithm>
+
 using namespace Executor;
 
 PUBLIC BOOLEAN Executor::ROMlib_dirtyvariant = false;
@@ -184,27 +186,25 @@ Executor may die without warning because of this mismatch",
 
         if(cd_mounted_by_trickery_p && !issued_cd_warning_p)
         {
-            char *warning_file;
+            std::string warning_file;
             struct stat sbuf;
 
-            warning_file = copystr("+/cdinfo.txt");
+            warning_file = expandPath("+/cdinfo.txt");
             if(warning_file)
             {
-                if(stat(warning_file, &sbuf) == 0)
+                if(stat(warning_file.c_str(), &sbuf) == 0)
                 {
                     char buf[1024];
                     int i;
 
-                    for(i = strlen(warning_file) - 1; i >= 0; --i)
-                        if(warning_file[i] == '/')
-                            warning_file[i] = '\\';
-
+                    std::replace(warning_file.begin(), warning_file.end(), '/', '\\');
+                    
                     sprintf(buf, "From DOS or Windows, please read the "
                                  "file \"%s\".  "
                                  "If you don't, Executor won't be "
                                  "able to read Mac CD-ROMS (except "
                                  "the Executor CD-ROM, which is special).",
-                            warning_file);
+                            warning_file.c_str());
                     system_error(buf, 0,
                                  "Exit", "Continue", NULL,
                                  exit_executor, NULL, NULL);

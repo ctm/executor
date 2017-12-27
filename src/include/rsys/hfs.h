@@ -512,7 +512,7 @@ extern OSErr ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid,
 extern OSErr ROMlib_pbvolrename(IOParam *pb, StringPtr newnamep);
 extern OSErr ROMlib_flushvcbp(HVCB *vcbp);
 extern HVCB *ROMlib_vcbbyvrn(short vrefnum);
-extern VCBExtra *ROMlib_vcbbyunixname(char *uname);
+extern VCBExtra *ROMlib_vcbbyunixname(const char *uname);
 extern HVCB *ROMlib_vcbbybiggestunixname(const char *uname);
 extern HVCB *ROMlib_vcbbydrive(short vrefnum);
 

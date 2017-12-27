@@ -330,7 +330,7 @@ PUBLIC HVCB *Executor::ROMlib_vcbbybiggestunixname(const char *name)
 }
 
 PUBLIC VCBExtra *
-Executor::ROMlib_vcbbyunixname(char *name)
+Executor::ROMlib_vcbbyunixname(const char *name)
 {
     HVCB *vcbp;
 

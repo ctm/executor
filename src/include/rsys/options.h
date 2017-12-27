@@ -8,10 +8,9 @@
 
  */
 
-#ifdef __cplusplus
-using namespace Executor;
-extern "C" {
-#endif
+namespace Executor
+{
+
 typedef struct
 {
     LONGINT first;
@@ -67,7 +66,5 @@ enum
 };
 
 #define INITIALPAIRVALUE (-1000)
-#ifdef __cplusplus
 }
-#endif
 #endif

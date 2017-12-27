@@ -52,10 +52,6 @@ PRIVATE LONGINT pipefd[2];
 
 PUBLIC LONGINT Executor::ROMlib_sock;
 
-extern ULONGINT ROMlib_ourmtime;
-extern LONGINT ROMlib_xfervmsize;
-extern char *ROMlib_xfervmaddr;
-
 PUBLIC void Executor::ROMlib_hfsinit(void)
 {
 }

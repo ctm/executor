@@ -1,10 +1,10 @@
 #if !defined(__RSYS_PREFS__)
 #define __RSYS_PREFS__
 
-#ifdef __cplusplus
+#include <string>
+
 namespace Executor
 {
-#endif
 
 typedef enum {
     WriteAlways,
@@ -14,7 +14,6 @@ typedef enum {
     WriteNever
 } WriteWhenType; /* This is an extension */
 
-#ifdef __cplusplus
 extern WriteWhenType ROMlib_when;
 extern int ROMlib_PretendSound;
 extern int ROMlib_cacheheuristic;
@@ -35,21 +34,15 @@ extern int ROMlib_pretend_script;
 extern int ROMlib_pretend_edition;
 
 extern uint32_t system_version;
-#endif
 
 #define ROMLIB_DEBUG_BIT (1 << 1)
 
-#ifdef __cplusplus
 extern void ROMlib_WriteWhen(WriteWhenType when);
 
 extern void do_dump_screen(void);
-}
-extern "C" {
-#endif
-extern char *ROMlib_configfilename;
+extern std::string ROMlib_configfilename;
 extern FILE *configfile;
-#ifdef __cplusplus
+
 }
-#endif
 
 #endif /* !defined(__RSYS_PREFS__) */

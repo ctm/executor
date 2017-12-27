@@ -142,12 +142,6 @@ using namespace std;
 
 BOOLEAN Executor::force_big_offset = CONFIG_OFFSET_P;
 
-#if defined(MACOSX_)
-//#define main oldmain
-char *ROMlib_xfervmaddr;
-LONGINT ROMlib_xfervmsize = 0;
-#endif /* MACOSX_ */
-
 PUBLIC int Executor::ROMlib_noclock = 0;
 
 #if defined(NOMOUSE_COMMAND_LINE_OPTION)
@@ -541,7 +535,7 @@ PUBLIC INTEGER ROMlib_startdirlen;
 #if defined(MSDOS) || defined(CYGWIN32)
 PUBLIC char ROMlib_start_drive;
 #endif
-PUBLIC char *Executor::ROMlib_appname;
+PUBLIC std::string Executor::ROMlib_appname;
 
 #if !defined(LINUX)
 #define SHELL "/bin/sh"
@@ -552,164 +546,6 @@ PUBLIC char *Executor::ROMlib_appname;
 #endif
 
 #define APPWRAP "/Executor.app"
-
-ULONGINT ROMlib_ourmtime;
-
-#if defined(MACOSX_)
-
-#include <mach-o/loader.h>
-#include <mach-o/swap.h>
-
-extern void willsetperms(void);
-extern void badfilesystem(void);
-namespace Executor
-{
-PRIVATE void misc_self_examination(char *);
-}
-
-A1(PRIVATE, void, misc_self_examination, char *, us)
-{
-    struct mach_header head;
-    struct load_command load;
-    struct segment_command seg;
-    struct fat_header fat_head;
-    struct fat_arch arch;
-    struct stat sbuf;
-    int i;
-    BOOLEAN need_to_swap;
-    enum NXByteOrder targetorder;
-    LONGINT err;
-    FILE *ROMlib_fp;
-
-    if(!(ROMlib_fp = Ufopen(us, "r+")))
-    {
-        if(!(ROMlib_fp = Ufopen(us, "r")))
-        {
-            fprintf(stderr, "couldn't open '%s'\n", us);
-            exit(3);
-        }
-    }
-    if(fread(&fat_head, sizeof(fat_head), 1, ROMlib_fp) != 1)
-    {
-        fprintf(stderr, "couldn't read fat_header\n");
-        exit(4);
-    }
-    if(fat_head.magic == CLC(FAT_MAGIC))
-    {
-        /*
- * NOTE: we assume that every architecture supported will have a "lowseg"
- *	 segment, hence we can just use the first one we find.  If the
- *	 binary is later thinned, the user will have to reregister anyway.
- */
-        if(fread(&arch, sizeof(arch), 1, ROMlib_fp) != 1)
-        {
-            fprintf(stderr, "couldn't read arch info\n");
-            exit(6);
-        }
-
-        if(fseek(ROMlib_fp, CL(arch.offset), SEEK_SET) == -1)
-        {
-            fprintf(stderr, "couldn't seek after load seg command\n");
-            exit(17);
-        }
-    }
-    else
-    {
-        rewind(ROMlib_fp);
-        arch.offset = 0;
-    }
-
-    if(fread(&head, sizeof(head), 1, ROMlib_fp) != 1)
-    {
-        fprintf(stderr, "couldn't read header\n");
-        exit(4);
-    }
-
-/*
- * NOTE: In the following few sections of code we have to accept the
- *	 possibility that the header information will be swapped relative
- *	 to us.  Normally we only care when things are swapped relative
- *	 to a big endian machine.  But if the first architecture we find
- *	 is a big endian one and we're little endian, then we still have
- *	 to do swappage.  The alternative would be to store the registration
- *	 information in the "lowseg" of the architecture that we're currently
- *	 running on, but that means that for N archtectures, Executor would
- *	 have to be registered N times.  Ick.
- */
-
-#if defined(LITTLEENDIAN)
-    targetorder = NX_LittleEndian;
-#else /* !defined(LITTLEENDIAN) */
-    targetorder = NX_BigEndian;
-#endif /* !defined(LITTLEENDIAN) */
-
-    if((need_to_swap = head.magic != MH_MAGIC))
-        swap_mach_header(&head, targetorder);
-
-    if(head.magic != MH_MAGIC)
-    {
-        fprintf(stderr, "bad magic number\n");
-        exit(5);
-    }
-
-    for(i = 0; i < head.ncmds; ++i)
-    {
-        if(fread(&load, sizeof(load), 1, ROMlib_fp) != 1)
-        {
-            fprintf(stderr, "couldn't read load command\n");
-            exit(6);
-        }
-        if(need_to_swap)
-            swap_load_command(&load, targetorder);
-        if(load.cmd == LC_SEGMENT)
-        {
-            if(fread(&seg.segname, sizeof(seg) - sizeof(load), 1,
-                     ROMlib_fp)
-               != 1)
-            {
-                fprintf(stderr, "couldn't read load segment command\n");
-                exit(7);
-            }
-            if(need_to_swap)
-                swap_segment_command(&seg, targetorder);
-            if(strcmp(seg.segname, "hfs_xfer") == 0)
-            {
-                ROMlib_xfervmaddr = (char *)seg.vmaddr;
-                ROMlib_xfervmsize = seg.vmsize;
-            }
-            if(fseek(ROMlib_fp, load.cmdsize - sizeof(seg), SEEK_CUR) == -1)
-            {
-                fprintf(stderr, "couldn't seek after load seg command\n");
-                exit(17);
-            }
-        }
-        else
-        {
-            if(fseek(ROMlib_fp, load.cmdsize - sizeof(load), SEEK_CUR) == -1)
-            {
-                fprintf(stderr, "couldn't seek after load command\n");
-                exit(8);
-            }
-        }
-    }
-    fclose(ROMlib_fp);
-
-#if !defined(LETGCCWAIL)
-    err = 0;
-#endif
-    if(Ustat(us, &sbuf) == 0)
-    {
-        if(!geteuid() && (sbuf.st_uid || (sbuf.st_mode & 07777) != 04755))
-            willsetperms();
-        if((geteuid() != 0) && (sbuf.st_uid == 0) && ((sbuf.st_mode & 04000) == 04000))
-            badfilesystem();
-        if(sbuf.st_uid)
-            err = Uchown(us, 0, -1);
-        if((!sbuf.st_uid || err == 0) && (sbuf.st_mode & 07777) != 04755)
-            Uchmod(us, 04755);
-    }
-}
-#endif /* defined (MACOSX_) */
 
 #if defined(MSDOS) || defined(CYGWIN32)
 PUBLIC char ROMlib_savecwd[MAXPATHLEN];
@@ -724,15 +560,16 @@ PRIVATE void cd_back(void)
 PRIVATE void
 set_appname(char *argv0)
 {
-    ROMlib_appname = strrchr(argv0, '/');
+    char *p = strrchr(argv0, '/');
 #if defined(MSDOS) || defined(CYGWIN32)
-    if(!ROMlib_appname)
-        ROMlib_appname = strrchr(argv0, '\\');
+    if(!p)
+        p = strrchr(argv0, '\\');
 #endif
-    if(ROMlib_appname)
-        ++ROMlib_appname;
+    if(p)
+        ++p;
     else
-        ROMlib_appname = argv0;
+        p = argv0;
+    ROMlib_appname = p;
 }
 
 A1(PRIVATE, void, setstartdir, char *, argv0)
@@ -1217,55 +1054,16 @@ zap_comments(char *buf, int n_left)
     return retval;
 }
 
-#if !defined(LINUX)
-
-#define EXECUTOR_DIR(filename)                                                       \
-    ({                                                                               \
-        char *retval;                                                                \
-                                                                                     \
-        retval = (char *)alloca(strlen(ROMlib_startdir) + 1 + strlen(filename) + 1); \
-        sprintf(retval, "%s/%s", ROMlib_startdir, (filename));                       \
-        retval;                                                                      \
-    })
-
-#else
-
-#define EXECUTOR_DIR(filename)                        \
-    ({                                                \
-        char *s;                                      \
-        char *retval;                                 \
-                                                      \
-        s = (char *)alloca(2 + strlen(filename) + 1); \
-        sprintf(s, "+/%s", filename);                 \
-        s = copystr(s);                               \
-        retval = (char *)alloca(strlen(s) + 1);       \
-        strcpy(retval, s);                            \
-        free(s);                                      \
-        retval;                                       \
-    })
-
-#endif
-
 PUBLIC FILE *
 Executor::executor_dir_fopen(const char *file, const char *perm)
 {
-    char *pathname;
-    FILE *retval;
-
-    pathname = EXECUTOR_DIR(file);
-    retval = fopen(pathname, perm);
-    return retval;
+    return fopen(expandPath(std::string("+/") + file).c_str(), perm);
 }
 
 PUBLIC int
 Executor::executor_dir_remove(const char *file)
 {
-    char *pathname;
-    int retval;
-
-    pathname = EXECUTOR_DIR(file);
-    retval = remove(pathname);
-    return retval;
+    return remove(expandPath(std::string("+/") + file).c_str());
 }
 
 PRIVATE void
@@ -1962,10 +1760,10 @@ int main(int argc, char **argv)
     }
     else
     {
-        /* how about a nice yellow hilite color? */
-        HiliteRGB.red = CWC((unsigned short)0xFFFF);
-        HiliteRGB.green = CWC((unsigned short)0xFFFF);
-        HiliteRGB.blue = CWC((unsigned short)0);
+        /* how about a nice yellow hilite color? no, it's ugly. */
+        HiliteRGB.red = CWC((unsigned short)0xAAAA);
+        HiliteRGB.green = CWC((unsigned short)0xAAAA);
+        HiliteRGB.blue = CWC((unsigned short)0xFFFF);
     }
 
     {

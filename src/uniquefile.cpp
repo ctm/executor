@@ -22,8 +22,6 @@ bool Executor::unique_file_name(const char *template1, const char *default_templ
 {
     static const char suff[] = "0123456789abcdefghijklmnopqrstuvwxyz";
     const char *try_suff;
-    char *try1;
-    char *replace;
     struct stat sbuf;
     time_t oldest_time;
 
@@ -39,24 +37,20 @@ bool Executor::unique_file_name(const char *template1, const char *default_templ
     if(strlen(template1) + 1 >= 255)
         return false;
 
-    try1 = copystr(template1);
+    std::string try1 = expandPath(template1);
 
-    if(try1)
+    /* Try to find a unique file name.  If we fail, choose the oldest. */
+    oldest_time = 0;
+    auto pos = try1.rfind('*');
+    for(try_suff = suff; *try_suff; try_suff++)
     {
-        /* Try to find a unique file name.  If we fail, choose the oldest. */
-        oldest_time = 0;
-        replace = strrchr(try1, '*');
-        for(try_suff = suff; *try_suff; try_suff++)
+        try1[pos] = *try_suff;
+        if(Ustat(try1.c_str(), &sbuf) != 0 && errno == ENOENT)
         {
-            *replace = *try_suff;
-            if(Ustat(try1, &sbuf) != 0 && errno == ENOENT)
-            {
-                /* If this file name isn't taken, grab it !*/
-                strcpy((char *)result + 1, try1);
-                result[0] = strlen((char *)result + 1);
-                free(try1);
-                return true;
-            }
+            /* If this file name isn't taken, grab it !*/
+            strcpy((char *)result + 1, try1.c_str());
+            result[0] = strlen((char *)result + 1);
+            return true;
         }
     }
     /* Failed! */

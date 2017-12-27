@@ -14,19 +14,21 @@
  * All rights reserved.
  */
 
+using namespace Executor;
+
 static long yylex( void );
 static void freestring( char *string );
 static char validblock = 1;
 char *ROMlib_win32_token = 0;
-char *ROMlib_WindowName = 0;
+char *Executor::ROMlib_WindowName = 0;
 char *ROMlib_DongleFamily = 0;
-char *ROMlib_Comments = 0;
+char *Executor::ROMlib_Comments = 0;
 char *ROMlib_new_printer_name = 0;
 char *ROMlib_new_label = 0;
 static char *ROMlib_mac_cdrom;
-pair_t ROMlib_ScreenSize = { INITIALPAIRVALUE, INITIALPAIRVALUE };
-pair_t ROMlib_MacSize = { INITIALPAIRVALUE, INITIALPAIRVALUE };
-pair_t ROMlib_ScreenLocation = { INITIALPAIRVALUE, INITIALPAIRVALUE };
+pair_t Executor::ROMlib_ScreenSize = { INITIALPAIRVALUE, INITIALPAIRVALUE };
+pair_t Executor::ROMlib_MacSize = { INITIALPAIRVALUE, INITIALPAIRVALUE };
+pair_t Executor::ROMlib_ScreenLocation = { INITIALPAIRVALUE, INITIALPAIRVALUE };
 static unsigned short crcval;
 int ROMlib_AppleChar = 0;
 int ROMlib_right_button_modifier = 0;

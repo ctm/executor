@@ -662,9 +662,9 @@ A1(PUBLIC, void, ROMlib_dbm_open, VCBExtra *, vcbp) /* INTERNAL */
     vcbp->u.ufs.hashtable = (hashlink_t **)malloc(size);
     vcbp->u.ufs.nhashentries = HASHSIZE;
     memset(vcbp->u.ufs.hashtable, 0, size);
-    readadbm(ROMlib_PublicDirectoryMap, vcbp);
+    readadbm(ROMlib_PublicDirectoryMap.c_str(), vcbp);
 #if !defined(CYGWIN32) && !defined(MSDOS)
-    readadbm(ROMlib_PrivateDirectoryMap, vcbp);
+    readadbm(ROMlib_PrivateDirectoryMap.c_str(), vcbp);
 #endif
     dirid = 2;
     hashinsert(vcbp, "", &dirid, 1, checked_val);
@@ -677,10 +677,10 @@ A1(PUBLIC, void, ROMlib_dbm_close, VCBExtra *, vcbp) /* INTERNAL */
 
     deletep = cleanvcbhash(vcbp);
 #if !defined(CYGWIN32) && !defined(MSDOS)
-    writeadbm(ROMlib_PrivateDirectoryMap, vcbp, deletep);
+    writeadbm(ROMlib_PrivateDirectoryMap.c_str(), vcbp, deletep);
 #endif
     oumask = umask(000);
-    writeadbm(ROMlib_PublicDirectoryMap, vcbp, deletep);
+    writeadbm(ROMlib_PublicDirectoryMap.c_str(), vcbp, deletep);
     umask(oumask);
     freedeletelist(deletep);
 }
@@ -688,7 +688,7 @@ A1(PUBLIC, void, ROMlib_dbm_close, VCBExtra *, vcbp) /* INTERNAL */
 A1(PUBLIC, OSErr, ufsPBMountVol, ParmBlkPtr, pb) /* INTERNAL */
 {
     VCBExtra *vp;
-    char *name;
+    const char *name;
     int macvolumenamelen, namelen;
     struct stat sbuf;
     OSErr err;
@@ -698,24 +698,24 @@ A1(PUBLIC, OSErr, ufsPBMountVol, ParmBlkPtr, pb) /* INTERNAL */
     err = noErr;
     savezone = TheZone;
     TheZone = SysZone;
-    if(Ustat(ROMlib_volumename, &sbuf) < 0)
-        /*-->*/ RETURN(badMDBErr) if(ROMlib_vcbbydrive(Cx(pb->volumeParam.ioVRefNum)) || ROMlib_vcbbyunixname(ROMlib_volumename))
+    if(Ustat(ROMlib_volumename.c_str(), &sbuf) < 0)
+        /*-->*/ RETURN(badMDBErr) if(ROMlib_vcbbydrive(Cx(pb->volumeParam.ioVRefNum)) || ROMlib_vcbbyunixname(ROMlib_volumename.c_str()))
             RETURN(volOnLinErr);
     vp = (VCBExtra *)NewPtr((Size)sizeof(VCBExtra));
 
-    macvolumenamelen = strlen(ROMlib_volumename);
+    macvolumenamelen = ROMlib_volumename.size();
     if(vp)
         memset(vp, 0, (LONGINT)sizeof(VCBExtra));
     if(!vp || !(vp->unixname = (char *)NewPtr(macvolumenamelen + 1)))
         /*-->*/ RETURN(memFullErr)
-            strcpy(vp->unixname, ROMlib_volumename);
+            strcpy(vp->unixname, ROMlib_volumename.c_str());
     vp->vcb.vcbDrvNum = pb->ioParam.ioVRefNum;
     --ROMlib_nextvrn;
     vp->vcb.vcbVRefNum = CW(ROMlib_nextvrn);
     vp->u.ufs.ino = ST_INO(sbuf);
-    if(strcmp("/", ROMlib_volumename + SLASH_CHAR_OFFSET) == 0)
+    if(strcmp("/", ROMlib_volumename.c_str() + SLASH_CHAR_OFFSET) == 0)
     {
-        name = ROMlib_volumename;
+        name = ROMlib_volumename.c_str();
         if(SLASH_CHAR_OFFSET == 2) /* C:/ --> C/ */
         {
             char *new_name;
@@ -729,8 +729,8 @@ A1(PUBLIC, OSErr, ufsPBMountVol, ParmBlkPtr, pb) /* INTERNAL */
     }
     else
     {
-        if(!(name = strrchr(ROMlib_volumename, '/')))
-            name = ROMlib_volumename;
+        if(!(name = strrchr(ROMlib_volumename.c_str(), '/')))
+            name = ROMlib_volumename.c_str();
         else
             ++name;
     }

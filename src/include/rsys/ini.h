@@ -23,8 +23,8 @@ typedef struct pair_link_str
     value_t value;
 } pair_link_t;
 
-extern char *ROMlib_PrintersIni;
-extern char *ROMlib_PrintDef;
+extern std::string ROMlib_PrintersIni;
+extern std::string ROMlib_PrintDef;
 
 extern heading_t new_heading(unsigned char *start, int len);
 extern void new_key_value_pair(heading_t heading,

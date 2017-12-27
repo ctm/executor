@@ -92,11 +92,8 @@ PUBLIC void Executor::ROMlib_set_ppc(bool val)
 #define CONFIGEXTENSION ".ecf"
 #define OLD_CONFIG_EXTENSION ".econf" /* must be longer than configextension */
 
-//Exported as a C value
-FILE *configfile;
-
-//Exported as a C value
-int32_t ROMlib_options;
+FILE *Executor::configfile;
+int32_t Executor::ROMlib_options;
 
 static int16_t name0stripappl(StringPtr name)
 {
@@ -122,7 +119,7 @@ static int16_t name0stripappl(StringPtr name)
 
 PUBLIC int Executor::ROMlib_nowarn32;
 
-PUBLIC char *ROMlib_configfilename = NULL;
+std::string Executor::ROMlib_configfilename;
 
 PUBLIC int Executor::ROMlib_pretend_help = false;
 PUBLIC int Executor::ROMlib_pretend_alias = false;
@@ -151,12 +148,10 @@ void reset_string(char **strp)
     *strp = 0;
 }
 
-int ROMlib_desired_bpp;
+int Executor::ROMlib_desired_bpp;
 
 PRIVATE void ParseConfigFile(StringPtr exefname, OSType type)
 {
-    Ptr strdst, savestrdst;
-    INTEGER allocsize, dirsize;
     int strwidth;
     char *newtitle;
     char *dot;
@@ -166,33 +161,21 @@ PRIVATE void ParseConfigFile(StringPtr exefname, OSType type)
     reset_string(&ROMlib_Comments);
     ROMlib_desired_bpp = 0;
     fname0 = name0stripappl(exefname);
-    allocsize = fname0;
-    if(allocsize < (int)sizeof("0x1234ABCD") - 1) /* IMPORTANT TO CODE */
-        allocsize = sizeof("0x1234ABCD") - 1; /* BELOW */
-    dirsize = strlen(ROMlib_ConfigurationFolder);
-    ROMlib_configfilename = (char *)realloc(ROMlib_configfilename,
-                                            dirsize + 1 + allocsize + sizeof(OLD_CONFIG_EXTENSION));
-    strdst = (Ptr)ROMlib_configfilename;
-    BlockMoveData((Ptr)ROMlib_ConfigurationFolder, strdst, dirsize);
-    strdst += dirsize;
-    *strdst++ = '/';
-    BlockMoveData((Ptr)exefname + 1, strdst, fname0);
-    savestrdst = strdst;
-    strdst += fname0;
-    BlockMoveData((Ptr)CONFIGEXTENSION, strdst, sizeof(CONFIGEXTENSION));
-    configfile = Ufopen(ROMlib_configfilename, "r");
+    std::string appname(exefname+1, exefname + 1 + fname0);
+
+    ROMlib_configfilename = ROMlib_ConfigurationFolder + "/" + appname + CONFIGEXTENSION;
+    configfile = Ufopen(ROMlib_configfilename.c_str(), "r");
     if(!configfile)
     {
-        BlockMoveData((Ptr)OLD_CONFIG_EXTENSION, strdst, sizeof(OLD_CONFIG_EXTENSION));
-        configfile = Ufopen(ROMlib_configfilename, "r");
+        ROMlib_configfilename = ROMlib_ConfigurationFolder + "/" + appname + OLD_CONFIG_EXTENSION;
+        configfile = Ufopen(ROMlib_configfilename.c_str(), "r");
     }
     if(!configfile && type != 0)
     {
-        strdst = savestrdst;
-        sprintf((char *)strdst, "%08x", type);
-        strdst += sizeof("1234ABCD") - 1;
-        BlockMoveData((Ptr)CONFIGEXTENSION, strdst, sizeof(CONFIGEXTENSION));
-        configfile = Ufopen(ROMlib_configfilename, "r");
+        char buf[16];
+        sprintf(buf, "%08x", type);
+        ROMlib_configfilename = ROMlib_ConfigurationFolder + "/" + buf + CONFIGEXTENSION;
+        configfile = Ufopen(ROMlib_configfilename.c_str(), "r");
     }
     if(configfile)
     {

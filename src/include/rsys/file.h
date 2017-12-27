@@ -1,7 +1,7 @@
 #if !defined(__rsys_file__)
 #define __rsys_file__
 
-extern char *copystr(const char *name);
+#include <string>
 
 #if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 
@@ -222,15 +222,7 @@ typedef enum { NoIndex,
         return err;                                                    \
     } while(0)
 
-#if 0
-#define PRNTOFPERR(prn, err)                                                                                \
-    (((prn) < 0 || (prn) >= CW(*(short *)MR(FCBSPtr)) || prn % 94 != 2) ? (((err) = rfNumErr), (fcbrec *)0) \
-                                                                        : (((err) = noErr), (fcbrec *)((char *)MR(FCBSPtr) + (prn))))
-#else
-#if !defined(NO_ROMLIB)
 extern fcbrec *PRNTOFPERR(INTEGER prn, OSErr *errp);
-#endif /* !NO_ROMLIB */
-#endif
 
 #define ATTRIB_ISLOCKED (1 << 0)
 #define ATTRIB_RESOPEN (1 << 2)
@@ -385,7 +377,7 @@ extern DrvQExtra *ROMlib_addtodq(ULONGINT drvsize, const char *devicename,
 
 extern unsigned long ROMlib_destroy_blocks(syn68k_addr_t start, uint32_t count,
                                            BOOLEAN flush_only_faulty_checksums);
-extern void ROMlib_automount(char *path);
+extern void ROMlib_automount(const char *path);
 
 extern Byte open_attrib_bits(LONGINT file_id, VCB *vcbp, GUEST<INTEGER> *refnump);
 
@@ -479,7 +471,9 @@ extern unsigned char ROMlib_fromhex(unsigned char c);
 #define ST_INO(buf) ((uint32_t)((buf).st_ino))
 #endif
 
-extern char *ROMlib_volumename;
+extern std::string ROMlib_volumename;
 extern INTEGER ROMlib_nextvrn;
+
+std::string expandPath(std::string);
 }
 #endif /* !defined(__rsys_file__) */

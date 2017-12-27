@@ -9,8 +9,10 @@
  */
 
 #include "rsys/options.h"
-extern "C" {
+
 extern int yyparse(void); /* ick -- that's what yacc produces */
+namespace Executor
+{
 extern void ROMlib_HideScreen(void);
 extern void ROMlib_SetTitle(char *name);
 extern void ROMlib_SetLocation(pair_t *pairsp);

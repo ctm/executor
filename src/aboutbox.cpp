@@ -398,7 +398,6 @@ static char *orig_text;
 static void
 create_tips_text(void)
 {
-    char *filename;
     FILE *fp;
     int b;
 
@@ -411,13 +410,8 @@ create_tips_text(void)
     }
     if(about_box_buttons[b].text == orig_text)
     {
-#if !defined(LINUX)
-        filename = copystr("+/tips.txt");
-#else
-        filename = copystr("/opt/executor/tips.txt");
-#endif
-        fp = fopen(filename, "r");
-        free(filename);
+        auto filename = expandPath("+/tips.txt");
+        fp = fopen(filename.c_str(), "r");
         if(fp)
         {
             char tempbuf[32768];
@@ -791,7 +785,7 @@ void Executor::do_about_box(void)
             {
                 ThePortGuard portGuard(about_box);
                 C_ShowWindow(about_box);
-                event_loop(strncasecmp(ROMlib_appname, EXECUTOR_NAME,
+                event_loop(strncasecmp(ROMlib_appname.c_str(), EXECUTOR_NAME,
                                        sizeof EXECUTOR_NAME - 1)
                            == 0);
             }

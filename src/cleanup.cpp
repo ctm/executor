@@ -10,6 +10,7 @@
 #include <rsys/notmac.h>
 
 #include <stdarg.h>
+#include <string>
 
 #if defined(MSDOS) || defined(CYGWIN32)
 
@@ -24,16 +25,16 @@
 PUBLIC void
 add_to_cleanup(const char *s, ...)
 {
-    char *batch_file;
+    std::string batch_file;
     FILE *fp;
     struct stat sbuf;
 
-    batch_file = copystr(CLEANUP_BATCH_FILE_NAME);
-    if(stat(batch_file, &sbuf) == 0)
-        fp = fopen(batch_file, "a");
+    batch_file = expandPath(CLEANUP_BATCH_FILE_NAME);
+    if(stat(batch_file.c_str(), &sbuf) == 0)
+        fp = fopen(batch_file.c_str(), "a");
     else
     {
-        fp = fopen(batch_file, "w");
+        fp = fopen(batch_file.c_str(), "w");
         if(fp)
         {
             fprintf(fp, "@echo off\n");
@@ -55,15 +56,15 @@ add_to_cleanup(const char *s, ...)
 PUBLIC void
 call_cleanup_bat(void)
 {
-    char *batch_file;
+    std::string batch_file;
     struct stat sbuf;
 
-    batch_file = copystr(CLEANUP_BATCH_FILE_NAME);
-    if(stat(batch_file, &sbuf) == 0)
+    batch_file = expandPath(CLEANUP_BATCH_FILE_NAME);
+    if(stat(batch_file.c_str(), &sbuf) == 0)
     {
-        add_to_cleanup("del \"%s\"\n", batch_file);
+        add_to_cleanup("del \"%s\"\n", batch_file.c_str());
 #if defined(MSDOS)
-        spawnl(P_OVERLAY, batch_file, batch_file, 0);
+        spawnl(P_OVERLAY, batch_file.c_str(), batch_file.c_str(), 0);
 #else
         {
             STARTUPINFO si;
@@ -73,7 +74,7 @@ call_cleanup_bat(void)
             si.cb = sizeof si;
             si.dwFlags = STARTF_USESHOWWINDOW;
             si.wShowWindow = SW_HIDE;
-            CreateProcess(batch_file, NULL, NULL, NULL, false, 0, NULL, NULL,
+            CreateProcess(batch_file.c_str(), NULL, NULL, NULL, false, 0, NULL, NULL,
                           &si, &pi);
         }
 #endif

@@ -6,6 +6,7 @@
 #include "rsys/osevent.h"
 #include "rsys/scrap.h"
 #include "rsys/keyboard.h"
+#include "rsys/parse.h"
 #include "OSEvent.h"
 #include "ToolboxEvent.h"
 #include "SegmentLdr.h"
@@ -350,20 +351,20 @@ void Executor::vdriver_pump_events()
     }
 }
 
-extern "C" void
-ROMlib_SetTitle(char *title)
+void
+Executor::ROMlib_SetTitle(char *title)
 {
 }
 
-extern "C" char *
-ROMlib_GetTitle(void)
+char *
+Executor::ROMlib_GetTitle(void)
 {
     static char str[] = "Foo";
     return str;
 }
 
-extern "C" void
-ROMlib_FreeTitle(char *title)
+void
+Executor::ROMlib_FreeTitle(char *title)
 {
 }
 

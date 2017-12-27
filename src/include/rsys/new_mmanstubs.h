@@ -55,7 +55,6 @@ extern Size GetHandleSizeError(Handle h);
                  : size;                  \
     })
 #else /* !defined(TRUSTNEXTGCC) */
-#if !defined(NO_ROMLIB)
 static inline LONGINT GetHandleSize(Handle h)
 {
     LONGINT size;
@@ -64,7 +63,6 @@ static inline LONGINT GetHandleSize(Handle h)
     return size < 0 ? (MemErr = CW(size), 0)
                     : size;
 }
-#endif /* !NO_ROMLIB */
 #endif /* !defined(TRUSTNEXTGCC) */
 
 extern OSErrRET SetHandleSizeError(Handle h, ULONGINT newsize);
@@ -88,7 +86,6 @@ extern Size GetPtrSizeError(Ptr p);
                  : size;                  \
     })
 #else /* !defined(TRUSTNEXTGCC) */
-#if !defined(NO_ROMLIB)
 static inline LONGINT GetPtrSize(Ptr p)
 {
     LONGINT size;
@@ -97,7 +94,6 @@ static inline LONGINT GetPtrSize(Ptr p)
     return size < 0 ? (MemErr = CW(size), 0)
                     : size;
 }
-#endif /* !NO_ROMLIB */
 #endif /* !defined(TRUSTNEXTGCC) */
 
 extern OSErrRET SetPtrSizeError(Ptr p, ULONGINT newsize);

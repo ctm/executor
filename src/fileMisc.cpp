@@ -41,6 +41,7 @@
 #endif
 
 #include <ctype.h>
+#include <algorithm>
 
 using namespace Executor;
 
@@ -253,9 +254,9 @@ Executor::ROMlib_addtodq(ULONGINT drvsize, const char *devicename, INTEGER parti
 }
 
 PRIVATE bool
-root_directory_p(char *path, dev_t our_dev)
+root_directory_p(const char *path, dev_t our_dev)
 {
-    char *slash;
+    const char *slash;
     bool retval;
 
     /* we used to just compare our_inode to 2, but that doesn't work with
@@ -268,17 +269,14 @@ root_directory_p(char *path, dev_t our_dev)
     else
     {
         struct stat sbuf;
-        char save_char;
 
         if(slash == path + SLASH_CHAR_OFFSET)
             ++slash;
-        save_char = *slash;
-        *slash = 0;
-        if(Ustat(path, &sbuf) != 0)
+        std::string tmp(path, slash);
+        if(Ustat(tmp.c_str(), &sbuf) != 0)
             retval = true;
         else
             retval = sbuf.st_dev != our_dev;
-        *slash = save_char;
     }
     return retval;
 }
@@ -289,12 +287,14 @@ root_directory_p(char *path, dev_t our_dev)
  * way to map the "drive number" into such a string)
  */
 
-PUBLIC char *Executor::ROMlib_volumename;
+PUBLIC std::string Executor::ROMlib_volumename;
 
-PRIVATE void ROMlib_automount_helper(char *path, char *aliasp)
+PRIVATE void ROMlib_automount_helper(const char *cpath, char *aliasp)
 {
+    char *path = (char*) alloca(strlen(cpath) + 1);
+    strcpy(path, cpath);
+
     struct stat sbuf;
-    char *oldsavep, *savep, save;
     ParamBlockRec pb;
     int sret;
     int i;
@@ -302,10 +302,9 @@ PRIVATE void ROMlib_automount_helper(char *path, char *aliasp)
     INTEGER retval;
     HVCB *vcbp;
     DrvQExtra *dqp;
-
-#if defined(MSDOS)
-    char *newpath;
-#endif
+    char *oldsavep;
+    char *savep;
+    char save;
 
 #if defined(MSDOS) || defined(CYGWIN32)
     {
@@ -347,7 +346,7 @@ PRIVATE void ROMlib_automount_helper(char *path, char *aliasp)
 #if !defined(MSDOS) || defined(CYGWIN32)
         ROMlib_undotdot(path);
 #else
-        newpath = alloca(strlen(path) + 3); /* one for null, two for drive */
+        char *newpath = alloca(strlen(path) + 3); /* one for null, two for drive */
         _fixpath(path, newpath);
         path = newpath;
 #endif
@@ -372,7 +371,7 @@ PRIVATE void ROMlib_automount_helper(char *path, char *aliasp)
                         {
                             ROMlib_volumename = path;
                             dqp = ROMlib_addtodq(2048L * 50,
-                                                 ROMlib_volumename, 0,
+                                                 ROMlib_volumename.c_str(), 0,
                                                  OURUFSDREF,
                                                  DRIVE_FLAGS_FIXED, 0);
                             pb.ioParam.ioVRefNum = dqp->dq.dQDrive;
@@ -421,7 +420,7 @@ PRIVATE void ROMlib_automount_helper(char *path, char *aliasp)
     }
 }
 
-PUBLIC void Executor::ROMlib_automount(char *path)
+PUBLIC void Executor::ROMlib_automount(const char *path)
 {
     ROMlib_automount_helper(path, NULL);
 }
@@ -431,168 +430,35 @@ PUBLIC void ROMlib_volume_alias(const char *path, const char *alias_name)
     ROMlib_automount_helper((char *)path, (char *)alias_name);
 }
 
-char *combine_str(const char *str1, const char *str2)
-{
-    int len1;
-    char *retval;
 
-    if(!str1 || !str2)
-        return 0;
-    len1 = strlen(str1);
-    retval = (char *)malloc(len1 + strlen(str2) + 1);
-    strcpy(retval, str1);
-    strcpy(retval + len1, str2);
-    return retval;
-}
-
-PUBLIC void
-Executor::convert_slashs_to_backslashs(char *p)
+PUBLIC std::string
+Executor::expandPath(std::string name)
 {
-    if(p)
+    if(name.empty())
+        return "";
+
+    switch(name[0])
     {
-        while(*p)
-        {
-            if(*p == '/')
-                *p = '\\';
-            ++p;
-        }
-    }
-}
-
-#if defined(LINUX)
-
-PRIVATE char *
-substr(const char *source_string,
-       const char *source_substring,
-       const char *dest_substring)
-{
-    int source_string_len;
-    int source_substring_len;
-    int dest_substring_len;
-    int max_len;
-    char *retval;
-
-    source_string_len = strlen(source_string);
-    source_substring_len = strlen(source_substring);
-    dest_substring_len = strlen(dest_substring);
-    if(dest_substring_len > source_substring_len)
-        max_len = ((source_string_len + source_substring_len - 1) / source_substring_len * dest_substring_len) + 1;
-    else
-        max_len = source_string_len + 1;
-    retval = (char *)malloc(max_len);
-    if(retval)
-    {
-        const char *ip;
-        char *op;
-
-        for(op = retval, ip = source_string; *ip;)
-        {
-            if(strncmp(ip, source_substring, source_substring_len) != 0)
-                *op++ = *ip++;
-            else
+        case '+':
+            name = ROMlib_startdir + name.substr(1);
+            break;
+        case '~':
             {
-                memcpy(op, dest_substring, dest_substring_len);
-                ip += source_substring_len;
-                op += dest_substring_len;
-            }
-        }
-        *op = 0;
-    }
-    return retval;
-}
-
-PRIVATE char *
-convert_executors_to_appnames(char *str)
-{
-    char *retval;
-    int appname_len;
-    char *appname;
-    char *dash;
-
-    if(!str)
-        retval = NULL;
-    else
-    {
-        appname_len = strlen(ROMlib_appname);
-        appname = (char *)alloca(appname_len + 1);
-        memcpy(appname, ROMlib_appname, appname_len + 1);
-        dash = strchr(appname, '-');
-        if(dash)
-            *dash = 0;
-        if(strcmp(appname, "executor") == 0)
-            retval = str;
-        else
-        {
-            retval = substr(str, "executor", appname);
-            if(retval)
-                free(str);
-            else
-                retval = str;
-        }
-    }
-    return retval;
-}
-#endif
-
-PUBLIC char *
-copystr(const char *name)
-{
-    char *retval;
-
-    if(!name)
-        retval = 0;
-    else
-    {
-        switch(name[0])
-        {
-            case '+':
-#if !defined(LINUX)
-                retval = combine_str(ROMlib_startdir, name + 1);
-#else
-                retval = combine_str("/home/executor", name + 1);
-#endif
-                break;
-#if !defined(CYGWIN32)
-            case '~':
-            {
-                struct passwd *pwp;
-
-#if defined(LINUX)
+                auto home = getenv("HOME");
+                if(home)
                 {
-                    char *home;
-
-                    home = getenv("HOME");
-                    if(home)
-                    {
-                        retval = combine_str(home, name + 1);
-                        break;
-                    }
-                }
-#endif
-                pwp = getpwuid(getuid());
-                if(pwp)
-                {
-                    retval = combine_str(pwp->pw_dir, name + 1);
+                    name = home + name.substr(1);
                     break;
                 }
             }
-/* FALL THROUGH */
-#endif
-            default:
-                retval = combine_str("", name);
-                break;
-        }
+            break;
     }
-
+    
 #if defined(MSDOS) || defined(CYGWIN32)
-    convert_slashs_to_backslashs(retval);
+    std::replace(name.begin(), name.end(), '/', '\\');
 #endif
 
-#if defined(LINUX)
-    retval = convert_executors_to_appnames(retval);
-#endif
-
-    return retval;
+    return name;
 }
 
 #if defined(MSDOS) || defined(CYGWIN32)
@@ -637,16 +503,14 @@ e2_is_mounted(void)
 PUBLIC StringPtr Executor::ROMlib_exefname;
 PUBLIC char *Executor::ROMlib_exeuname;
 
-PUBLIC char *Executor::ROMlib_ConfigurationFolder;
-PUBLIC char *Executor::ROMlib_SystemFolder;
-PUBLIC char *Executor::ROMlib_DefaultFolder;
-PUBLIC char *Executor::ROMlib_PublicDirectoryMap;
-PUBLIC char *Executor::ROMlib_PrivateDirectoryMap;
-PUBLIC char *Executor::ROMlib_ExcelApp;
-PUBLIC char *Executor::ROMlib_WordApp;
-PUBLIC char *ROMlib_MacVolumes;
-PUBLIC char *Executor::ROMlib_ScreenDumpFile;
-PRIVATE char *ROMlib_OffsetFile;
+std::string Executor::ROMlib_ConfigurationFolder;
+std::string Executor::ROMlib_SystemFolder;
+std::string Executor::ROMlib_DefaultFolder;
+std::string Executor::ROMlib_PublicDirectoryMap;
+std::string Executor::ROMlib_PrivateDirectoryMap;
+static std::string ROMlib_MacVolumes;
+std::string Executor::ROMlib_ScreenDumpFile;
+static std::string ROMlib_OffsetFile;
 
 PUBLIC LONGINT Executor::ROMlib_magic_offset = -1;
 
@@ -668,7 +532,7 @@ parse_offset_file(void)
 {
     FILE *fp;
 
-    fp = Ufopen(ROMlib_OffsetFile, "r");
+    fp = Ufopen(ROMlib_OffsetFile.c_str(), "r");
     if(!fp)
     {
 #if 0
@@ -729,104 +593,8 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
     struct stat sbuf;
     char *sysname;
     int sysnamelen;
-    char *p, *ep, *newp;
-    static struct dangerstr
-    { /* DANGER DANGER DANGER */
-        const char *name; /* this is taken from <defaults.h> */
-        std::string value; /* instead of us including it ... */
-    } defvec[] = { /* if <defaults.h> changes we're SOL */
-#if defined(LINUX)
-                   { "ConfigurationFolder", "/var/opt/executor/share/conf" },
-                   { "SystemFolder", "/home/executor/System Folder" },
-                   { "PublicDirectoryMap", "/var/opt/executor/directory_map" },
-                   { "PrivateDirectoryMap", "~/.executor/directory_map" },
-                   { "DefaultFolder", "/home/executor" },
-                   { "ExcelApp", "/home/executor/Excel/Microsoft Excel.appl" },
-                   { "WordApp", "/home/executor/Word/Microsoft Word.appl" },
-                   { "MacVolumes", "/var/opt/executor/exsystem.hfv;/var/opt/executor" },
-                   { "ScreenDumpFile", "/tmp/excscrn*.tiff" },
-                   { "OffsetFile", "/opt/executor/offset_file" },
-                   { "PrintersIni", "/opt/executor/printers.ini" },
-                   { "PrintDef", "/var/opt/executor/printdef.ini" },
-
-                   { NULL, "/home/executor.afpd/System Folder" },
-                   { NULL, "/home/executor.afpd" },
-                   { NULL, "/home/executor.afpd/Excel/Microsoft Excel.appl" },
-                   { NULL, "/home/executor.afpd/Word/Microsoft Word.appl" },
-
-#elif !defined(MSDOS) && !defined(CYGWIN32)
-                   { "ConfigurationFolder", "+/Configuration" },
-                   { "SystemFolder", "+/ExecutorVolume/System Folder" },
-                   { "PublicDirectoryMap", "+/DirectoryMap" },
-                   { "PrivateDirectoryMap", "~/.Executor/DirectoryMap" },
-                   { "DefaultFolder", "+/ExecutorVolume" },
-                   { "ExcelApp", "+/ExecutorVolume/Excel/Microsoft Excel.appl" },
-                   { "WordApp", "+/ExecutorVolume/Word/Microsoft Word.appl" },
-                   { "MacVolumes", "+/exsystem.hfv;+" },
-                   { "ScreenDumpFile", "/tmp/excscrn*.tif" },
-                   { "OffsetFile", "+/offset_file" },
-                   { "PrintersIni", "+/printers.ini" },
-                   { "PrintDef", "+/printdef.ini" },
-#else /* defined(MSDOS) || defined (CYGWIN32) */
-                   { "CONFIGURATIONFOLDER", "+/configur" },
-
-#if defined(MSDOS)
-                   { "SYSTEMFOLDER", "System:System Folder" },
-#else
-                   { "SYSTEMFOLDER", "+/Apps/System Folder" },
-#endif
-
-                   { "PUBLICDIRECTORYMAP", "+/dirMap" },
-                   { "PRIVATEDIRECTORYMAP", "~/.executor/directorymap" },
-
-#if defined(MSDOS)
-                   { "DEFAULTFOLDER", "System:" },
-#else
-                   { "DEFAULTFOLDER", "+/Apps" },
-#endif
-
-                   { "EXCELAPP", "User:Excel:Microsoft Excel" },
-                   { "WORDAPP", "User:Word:Microsoft Word" },
-                   { "MACVOLUMES", "+/exsystem.hfv;+" },
-                   { "SCREENDUMPFILE", "+" },
-                   { "OFFSETFILE", "+/offset.txt" },
-                   { "PRINTERSINI", "+/printers.ini" },
-                   { "PRINTDEF", "+/printdef.ini" },
-#endif /* defined(MSDOS) */
-    };
-
-#if !defined(LINUX)
-#define AFPD(m, n) (m)
-#else
-#define AFPD(m, n) (afpd_conventions_p ? (n) : (m))
-#endif
-
-#define CONFIGURATIONFOLDER defvec[0].name
-#define SYSTEMFOLDER defvec[1].name
-#define PUBLICDIRECTORYMAP defvec[2].name
-#define PRIVATEDIRECTORYMAP defvec[3].name
-#define DEFAULTFOLDER defvec[4].name
-#define EXCELAPP defvec[5].name
-#define WORDAPP defvec[6].name
-#define MACVOLUMES defvec[7].name
-#define SCREENDUMPFILE defvec[8].name
-#define OFFSETFILE defvec[9].name
-#define PRINTERSINI defvec[10].name
-#define PRINTDEF defvec[11].name
-
-#define CONFIGURATIONFOLDER_DEF defvec[0].value.c_str()
-#define SYSTEMFOLDER_DEF defvec[AFPD(1, 12)].value.c_str()
-#define PUBLICDIRECTORYMAP_DEF defvec[2].value.c_str()
-#define PRIVATEDIRECTORYMAP_DEF defvec[3].value.c_str()
-#define DEFAULTFOLDER_DEF defvec[AFPD(4, 13)].value.c_str()
-#define EXCELAPP_DEF defvec[AFPD(5, 14)].value.c_str()
-#define WORDAPP_DEF defvec[AFPD(6, 15)].value.c_str()
-#define MACVOLUMES_DEF defvec[7].value.c_str()
-#define SCREENDUMPFILE_DEF defvec[8].value.c_str()
-#define OFFSETFILE_DEF defvec[9].value.c_str()
-#define PRINTERSINI_DEF defvec[10].value.c_str()
-#define PRINTDEF_DEF defvec[11].value.c_str()
-
+    char *p, *ep;
+   
     CurDirStore = CLC(2);
 
     savezone = TheZone;
@@ -860,43 +628,23 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
     memset(MR(WDCBsPtr), 0, wdlen);
     *(GUEST<INTEGER> *)MR(WDCBsPtr) = CW(wdlen);
 
-    ROMlib_ConfigurationFolder = copystr(getenv(CONFIGURATIONFOLDER));
-    ROMlib_SystemFolder = copystr(getenv(SYSTEMFOLDER));
-    ROMlib_PublicDirectoryMap = copystr(getenv(PUBLICDIRECTORYMAP));
-    ROMlib_PrivateDirectoryMap = copystr(getenv(PRIVATEDIRECTORYMAP));
-    ROMlib_DefaultFolder = copystr(getenv(DEFAULTFOLDER));
-    ROMlib_ExcelApp = copystr(getenv(EXCELAPP));
-    ROMlib_WordApp = copystr(getenv(WORDAPP));
-    ROMlib_MacVolumes = copystr(getenv(MACVOLUMES));
-    ROMlib_ScreenDumpFile = copystr(getenv(SCREENDUMPFILE));
-    ROMlib_OffsetFile = copystr(getenv(OFFSETFILE));
-    ROMlib_PrintersIni = copystr(getenv(PRINTERSINI));
-    ROMlib_PrintDef = copystr(getenv(PRINTDEF));
+    auto initpath = [](const char *varname, const char *defval) {
+        if(auto v = getenv(varname))
+            return expandPath(v);
+        else
+            return expandPath(defval);
+    };
 
-    if(!ROMlib_ConfigurationFolder)
-        ROMlib_ConfigurationFolder = copystr(CONFIGURATIONFOLDER_DEF);
-    if(!ROMlib_SystemFolder)
-        ROMlib_SystemFolder = copystr(SYSTEMFOLDER_DEF);
-    if(!ROMlib_PublicDirectoryMap)
-        ROMlib_PublicDirectoryMap = copystr(PUBLICDIRECTORYMAP_DEF);
-    if(!ROMlib_PrivateDirectoryMap)
-        ROMlib_PrivateDirectoryMap = copystr(PRIVATEDIRECTORYMAP_DEF);
-    if(!ROMlib_DefaultFolder)
-        ROMlib_DefaultFolder = copystr(DEFAULTFOLDER_DEF);
-    if(!ROMlib_ExcelApp)
-        ROMlib_ExcelApp = copystr(EXCELAPP_DEF);
-    if(!ROMlib_WordApp)
-        ROMlib_WordApp = copystr(WORDAPP_DEF);
-    if(!ROMlib_MacVolumes)
-        ROMlib_MacVolumes = copystr(MACVOLUMES_DEF);
-    if(!ROMlib_ScreenDumpFile)
-        ROMlib_ScreenDumpFile = copystr(SCREENDUMPFILE_DEF);
-    if(!ROMlib_OffsetFile)
-        ROMlib_OffsetFile = copystr(OFFSETFILE_DEF);
-    if(!ROMlib_PrintersIni)
-        ROMlib_PrintersIni = copystr(PRINTERSINI_DEF);
-    if(!ROMlib_PrintDef)
-        ROMlib_PrintDef = copystr(PRINTDEF_DEF);
+    ROMlib_ConfigurationFolder = initpath("Configuration", "+/Configuration");
+    ROMlib_SystemFolder = initpath("SystemFolder", "+/ExecutorVolume/System Folder");
+    ROMlib_PublicDirectoryMap = initpath("PublicDirectoryMap", "+/DirectoryMap");
+    ROMlib_PrivateDirectoryMap = initpath("PrivateDirectoryMap", "~/.Executor/DirectoryMap");
+    ROMlib_DefaultFolder = initpath("DefaultFolder", "+/ExecutorVolume");
+    ROMlib_MacVolumes = initpath("MacVolumes", "+/exsystem.hfv;+"); // this is wrong: only first + is replaced
+    ROMlib_ScreenDumpFile = initpath("ScreenDumpFile", "/tmp/excscrn*.tif");
+    ROMlib_OffsetFile = initpath("OffsetFile", "+/offset_file");
+    ROMlib_PrintersIni = initpath("PrintersIni", "+/printers.ini");
+    ROMlib_PrintDef = initpath("PrintDef", "+/printdef.ini");
 
     parse_offset_file();
 
@@ -907,25 +655,12 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
  */
 
 #if defined(LITTLEENDIAN)
-
-#define STR_APPEND(str, suffix)                                  \
-    {                                                            \
-        char *str2;                                              \
-                                                                 \
-        str2 = (char *)malloc(strlen(str) + strlen(suffix) + 1); \
-        sprintf(str2, "%s%s", str, suffix);                      \
-        str = str2;                                              \
-    }
-
-#define LITTLE_ENDIAN_SUFFIX "-le"
-
-    STR_APPEND(ROMlib_PublicDirectoryMap, LITTLE_ENDIAN_SUFFIX);
-    STR_APPEND(ROMlib_PrivateDirectoryMap, LITTLE_ENDIAN_SUFFIX);
-
+    ROMlib_PublicDirectoryMap += "-le";
+    ROMlib_PrivateDirectoryMap += "-le";
 #endif /* defined(LITTLEENDIAN) */
 
     ROMlib_hfsinit();
-    ROMlib_automount(ROMlib_SystemFolder);
+    ROMlib_automount(ROMlib_SystemFolder.c_str());
 
 #if 0
     m = 0;
@@ -934,22 +669,23 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
 	    ROMlib_openharddisk(ROMlib_DefaultFolder, &m);
 #else
     m = 0;
-    p = ROMlib_MacVolumes;
+    p = (char*) alloca(ROMlib_MacVolumes.size() + 1);
+    strcpy(p, ROMlib_MacVolumes.c_str());
     while(p && *p)
     {
         ep = strchr(p, ';');
         if(ep)
             *ep = 0;
-        newp = copystr(p);
-        if(Ustat(newp, &sbuf) == 0)
+        std::string newp = expandPath(p);
+        if(Ustat(newp.c_str(), &sbuf) == 0)
         {
             if(!S_ISDIR(sbuf.st_mode))
-                ROMlib_openharddisk(newp, &m);
+                ROMlib_openharddisk(newp.c_str(), &m);
             else
             {
                 DIR *dirp;
 
-                dirp = Uopendir(newp);
+                dirp = Uopendir(newp.c_str());
                 if(dirp)
                 {
 #if defined(USE_STRUCT_DIRECT)
@@ -968,18 +704,13 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
                                             || strcasecmp(direntp->d_name + namelen - 4, ".ima")
                                                 == 0))
                         {
-                            char *tempname;
-
-                            tempname = (char *)alloca(strlen(newp) + 1 + namelen + 1);
-                            sprintf(tempname, "%s/%s", newp, direntp->d_name);
-                            ROMlib_openharddisk(tempname, &m);
+                            ROMlib_openharddisk((newp + "/" + direntp->d_name).c_str(), &m);
                         }
                     }
                     closedir(dirp);
                 }
             }
         }
-        free(newp);
         if(ep)
         {
             *ep = ';';
@@ -991,19 +722,19 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
 #endif
 
     ROMlib_automount(ROMlib_startdir);
-    ROMlib_automount(ROMlib_DefaultFolder);
-    if(is_unix_path(ROMlib_DefaultFolder)
-       && Ustat(ROMlib_DefaultFolder, &sbuf) == 0)
+    ROMlib_automount(ROMlib_DefaultFolder.c_str());
+    if(is_unix_path(ROMlib_DefaultFolder.c_str())
+       && Ustat(ROMlib_DefaultFolder.c_str(), &sbuf) == 0)
     {
         CurDirStore = CL((LONGINT)ST_INO(sbuf));
-        vcbp = ROMlib_vcbbybiggestunixname(ROMlib_DefaultFolder);
+        vcbp = ROMlib_vcbbybiggestunixname(ROMlib_DefaultFolder.c_str());
         SFSaveDisk = CW(-CW(vcbp->vcbVRefNum));
     }
-    if(is_unix_path(ROMlib_SystemFolder))
+    if(is_unix_path(ROMlib_SystemFolder.c_str()))
     {
-        if(Ustat(ROMlib_SystemFolder, &sbuf) < 0)
+        if(Ustat(ROMlib_SystemFolder.c_str(), &sbuf) < 0)
         {
-            fprintf(stderr, "Couldn't find '%s'\n", ROMlib_SystemFolder);
+            fprintf(stderr, "Couldn't find '%s'\n", ROMlib_SystemFolder.c_str());
             exit(1);
         }
         cpb.hFileInfo.ioNamePtr = RM((StringPtr)SYSMACNAME);
@@ -1012,10 +743,10 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
     }
     else
     {
-        sysnamelen = 1 + strlen(ROMlib_SystemFolder) + 1 + strlen(SYSMACNAME + 1) + 1;
+        sysnamelen = 1 + ROMlib_SystemFolder.size() + 1 + strlen(SYSMACNAME + 1) + 1;
         sysname = (char *)alloca(sysnamelen);
         *sysname = sysnamelen - 2; /* don't count first byte or nul */
-        sprintf(sysname + 1, "%s:%s", ROMlib_SystemFolder, SYSMACNAME + 1);
+        sprintf(sysname + 1, "%s:%s", ROMlib_SystemFolder.c_str(), SYSMACNAME + 1);
         cpb.hFileInfo.ioNamePtr = RM((StringPtr)sysname);
         cpb.hFileInfo.ioVRefNum = 0;
         cpb.hFileInfo.ioDirID = 0;
@@ -1032,7 +763,7 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
     }
     else
     {
-        fprintf(stderr, "Couldn't open System: '%s'\n", ROMlib_SystemFolder);
+        fprintf(stderr, "Couldn't open System: '%s'\n", ROMlib_SystemFolder.c_str());
         exit(1);
     }
 #if defined(MSDOS) || defined(CYGWIN32)
@@ -1139,11 +870,8 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
 
             if(*pathp && *aliasp)
             {
-                char *newpath;
-
-                newpath = copystr(pathp);
-                ROMlib_volume_alias(newpath, aliasp);
-                free(newpath);
+                auto newpath = expandPath(pathp);
+                ROMlib_volume_alias(newpath.c_str(), aliasp);
             }
         } while(*pathp && *aliasp);
     }

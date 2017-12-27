@@ -597,16 +597,15 @@ clean(char *strp)
         }
 }
 
-int saveprefvalues(char *savefilename, LONGINT locationx, LONGINT locationy)
+int saveprefvalues(const char *savefilename, LONGINT locationx, LONGINT locationy)
 {
     int retval;
     FILE *fp;
 
     if((fp = Ufopen(savefilename, "w")))
     {
-        clean(savefilename);
         {
-            char *lastslash;
+            const char *lastslash;
 
             lastslash = strrchr(savefilename, '/');
             lastslash = lastslash ? lastslash + 1 : savefilename;
@@ -887,7 +886,7 @@ PRIVATE void dopreferences(void)
                 {
                     readprefvalues(dp);
                     if(ihit == PREFSAVEITEM)
-                        saveprefvalues(ROMlib_configfilename, 0, 0);
+                        saveprefvalues(ROMlib_configfilename.c_str(), 0, 0);
                 }
                 DisposDialog(dp);
                 am_already_here = false;

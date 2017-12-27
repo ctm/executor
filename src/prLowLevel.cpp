@@ -349,11 +349,11 @@ update_ROMlib_printer_vars(TPPrDlg dp)
         }
     }
 
-    if(ROMlib_PrintDef)
+    if(!ROMlib_PrintDef.empty())
     {
         FILE *fp;
 
-        fp = open_ini_file_for_writing(ROMlib_PrintDef);
+        fp = open_ini_file_for_writing(ROMlib_PrintDef.c_str());
         if(fp)
         {
             add_heading_to_file(fp, "Defaults");
@@ -875,8 +875,8 @@ P2(PUBLIC, pascal void, ROMlib_orientation, DialogPeek, dp, INTEGER, which)
     PenPat(black);
 }
 
-PUBLIC char *Executor::ROMlib_PrintersIni;
-PUBLIC char *Executor::ROMlib_PrintDef;
+PUBLIC std::string Executor::ROMlib_PrintersIni;
+PUBLIC std::string Executor::ROMlib_PrintDef;
 
 PRIVATE void
 adjust_menu_common(TPPrDlg dlg, INTEGER item, heading_t heading, ini_key_t defkey)
@@ -1013,8 +1013,8 @@ Executor::printer_init(void)
 
     if(!ini_read_p)
     {
-        read_ini_file(ROMlib_PrintersIni);
-        read_ini_file(ROMlib_PrintDef);
+        read_ini_file(ROMlib_PrintersIni.c_str());
+        read_ini_file(ROMlib_PrintDef.c_str());
         get_all_defaults();
         ini_read_p = true;
     }
@@ -1049,7 +1049,7 @@ P1(PUBLIC pascal trap, TPPrDlg, PrStlInit, THPrint, hPrint)
             {
                 Str255 appname;
 
-                str255assignc(appname, ROMlib_appname);
+                str255assignc(appname, ROMlib_appname.c_str());
 
                 if(!(ROMlib_options & ROMLIB_NOLOWER_BIT))
                 {

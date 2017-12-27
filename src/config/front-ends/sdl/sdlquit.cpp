@@ -10,6 +10,8 @@
 #include "rsys/options.h"
 #include "rsys/toolevent.h"
 
+using namespace Executor;
+
 #if defined(_WIN32)
 
 PRIVATE int

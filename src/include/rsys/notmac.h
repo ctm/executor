@@ -4,7 +4,7 @@
  * Copyright 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
+ * Question. What do the things in this header file have in common???
  */
 
 #if defined(MSDOS) || defined(CYGWIN32)
@@ -18,15 +18,13 @@ namespace Executor
 {
 extern char ROMlib_startdir[];
 
-extern char *ROMlib_ConfigurationFolder;
-extern char *ROMlib_SystemFolder;
-extern char *ROMlib_PublicDirectoryMap;
-extern char *ROMlib_PrivateDirectoryMap;
-extern char *ROMlib_DefaultFolder;
-extern char *ROMlib_ExcelApp;
-extern char *ROMlib_WordApp;
-extern char *ROMlib_appname;
-extern char *ROMlib_ScreenDumpFile;
+extern std::string ROMlib_ConfigurationFolder;
+extern std::string ROMlib_SystemFolder;
+extern std::string ROMlib_PublicDirectoryMap;
+extern std::string ROMlib_PrivateDirectoryMap;
+extern std::string ROMlib_DefaultFolder;
+extern std::string ROMlib_ScreenDumpFile;
+extern std::string ROMlib_appname;
 
 extern BOOLEAN ROMlib_shouldalarm(void);
 

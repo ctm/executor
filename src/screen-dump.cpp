@@ -253,7 +253,7 @@ dump_indirect_pm(PixMap *pm)
         strip_byte_counts[i] = row_bytes;
 
     /* now open up a file and write this sucker out */
-    if(!unique_file_name(ROMlib_ScreenDumpFile, "excscrn*.tif",
+    if(!unique_file_name(ROMlib_ScreenDumpFile.c_str(), "excscrn*.tif",
                          temp_file_name))
         return;
 

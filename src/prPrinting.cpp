@@ -636,11 +636,11 @@ PRIVATE void
 invoke_print_batch_file(const char *filename, ini_key_t printer, ini_key_t port)
 {
     int spawn_result;
-    char *batch_file;
+    std::string batch_file;
     char *backslashed_filename;
     char *backslashed_start_dir;
 
-    batch_file = copystr(BATCH_FILE_NAME);
+    batch_file = expandPath(BATCH_FILE_NAME);
     backslashed_filename = alloca(strlen(filename) + 1);
     strcpy(backslashed_filename, filename);
     backslash_string(backslashed_filename);
@@ -652,21 +652,20 @@ invoke_print_batch_file(const char *filename, ini_key_t printer, ini_key_t port)
     if(deferred_printing_p)
     {
         add_to_cleanup("cd %s\n%s %s %s %s %s\n", backslashed_start_dir,
-                       batch_file, backslashed_start_dir, backslashed_filename,
+                       batch_file.c_str(), backslashed_start_dir, backslashed_filename,
                        printer, port);
     }
     else
     {
-        spawn_result = spawnl(P_WAIT, batch_file, BATCH_FILE_NAME,
+        spawn_result = spawnl(P_WAIT, batch_file.c_str(), BATCH_FILE_NAME,
                               backslashed_start_dir, backslashed_filename,
                               printer, port, 0);
 
         warning_trace_info("spawn(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\") = %d",
-                           batch_file, backslashed_start_dir,
+                           batch_file.c_str(), backslashed_start_dir,
                            backslashed_filename,
                            printer, port, spawn_result);
     }
-    free(batch_file);
 
 #if defined(MSDOS)
     if(!deferred_printing_p)

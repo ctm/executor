@@ -2451,7 +2451,7 @@ int Executor::GetScrapX(OSType type, Handle h)
     return retval;
 }
 
-void ROMlib_SetTitle(char *newtitle)
+void Executor::ROMlib_SetTitle(char *newtitle)
 {
     XSizeHints xsh;
 
@@ -2461,7 +2461,7 @@ void ROMlib_SetTitle(char *newtitle)
 }
 
 char *
-ROMlib_GetTitle(void)
+Executor::ROMlib_GetTitle(void)
 {
     char *retval;
 
@@ -2469,7 +2469,7 @@ ROMlib_GetTitle(void)
     return retval;
 }
 
-void ROMlib_FreeTitle(char *title)
+void Executor::ROMlib_FreeTitle(char *title)
 {
     XFree(title);
 }

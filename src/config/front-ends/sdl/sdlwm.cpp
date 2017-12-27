@@ -14,14 +14,14 @@ int Executor::host_cursor_depth = 1;
 
 /* Window manager interface functions */
 
-extern "C" void
-ROMlib_SetTitle(char *title)
+void
+Executor::ROMlib_SetTitle(char *title)
 {
     SDL_WM_SetCaption(title, "executor");
 }
 
-extern "C" char *
-ROMlib_GetTitle(void)
+char *
+Executor::ROMlib_GetTitle(void)
 {
     char *retval;
 
@@ -29,8 +29,8 @@ ROMlib_GetTitle(void)
     return retval;
 }
 
-extern "C" void
-ROMlib_FreeTitle(char *title)
+void
+Executor::ROMlib_FreeTitle(char *title)
 {
 }
 

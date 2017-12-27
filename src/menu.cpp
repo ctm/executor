@@ -523,7 +523,7 @@ P2(PUBLIC pascal trap, void, AddResMenu, MenuHandle, mh, ResType, restype)
        */
 
         if(!ROMlib_menu_about_stringp
-           && (strncasecmp(ROMlib_appname, EXECUTOR_NAME,
+           && (strncasecmp(ROMlib_appname.c_str(), EXECUTOR_NAME,
                            sizeof EXECUTOR_NAME - 1)
                != 0))
             about_box_menu_name_pstr = (StringPtr) "\016\000About CCRS...";
