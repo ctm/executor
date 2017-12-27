@@ -62,7 +62,6 @@
 #include "rsys/option.h"
 #include "rsys/flags.h"
 #include "rsys/host.h"
-#include "rsys/x.h"
 #include "rsys/parse.h"
 #include "rsys/osevent.h"
 #include "rsys/notmac.h"

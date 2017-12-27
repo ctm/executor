@@ -25,7 +25,6 @@
 #include "SegmentLdr.h"
 #include "rsys/segment.h"
 #include "rsys/notmac.h"
-#include "rsys/custom.h"
 #include "rsys/gestalt.h"
 #include "rsys/osevent.h"
 
@@ -241,52 +240,7 @@ create_license_text(void)
     b = find_license_button();
     if(about_box_buttons[b].text == NULL)
     {
-        long new_size;
-        char *license_text, *p, *q;
-        const char *licensep;
-
-        new_size = 0;
-
-        /* Compute the length of the license string. */
-        for(licensep = ROMlib_licensep ? (const char *)ROMlib_licensep->chars : "";
-            *licensep;)
-        {
-            int title_len;
-            int body_len;
-
-            title_len = strlen(licensep);
-            licensep += title_len + 1;
-            body_len = strlen(licensep);
-            licensep += body_len + 1;
-            new_size += title_len + body_len + 5;
-        }
-
-        /* Allocate and construct the license string. */
-        license_text = (char *)NewPtrSys(new_size + 1);
-        license_text[0] = '\0';
-
-        p = license_text;
-
-        for(licensep = ROMlib_licensep ? (char *)ROMlib_licensep->chars : "";
-            *licensep;)
-        {
-            const char *titlep;
-            const char *bodyp;
-
-            titlep = licensep;
-            licensep += strlen(licensep) + 1;
-            bodyp = licensep;
-            licensep += strlen(licensep) + 1;
-            p += sprintf(p, "%s\r\r%s\r\r\r", titlep, bodyp);
-        }
-
-        /* Nuke any trailing whitespace, and end with exactly one linefeed */
-        for(q = p - 1; q >= license_text && isspace(*q); q--)
-            *q = '\0';
-        if(q >= license_text)
-            strcpy(q + 1, "\r");
-
-        about_box_buttons[b].text = license_text;
+        //about_box_buttons[b].text = license_text;
     }
 }
 

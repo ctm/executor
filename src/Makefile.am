@@ -235,8 +235,6 @@ include_sources = hintemplate.h \
                   include/rsys/mixed_mode.h \
                   include/rsys/mman.h \
                   include/rsys/mman_private.h \
-                  include/rsys/mmanstubs.h \
-                  include/rsys/new_mmanstubs.h \
                   include/rsys/newvga.h \
                   include/rsys/next.h \
                   include/rsys/nextprint.h \
@@ -300,7 +298,6 @@ include_sources = hintemplate.h \
                   include/rsys/toolevent.h \
                   include/rsys/toolutil.h \
                   include/rsys/trapdecl.h \
-                  include/rsys/trapdefines.h \
                   include/rsys/trapglue.h \
                   include/rsys/trapname.h \
                   include/rsys/types.h \
@@ -311,7 +308,6 @@ include_sources = hintemplate.h \
                   include/rsys/vgavdriver.h \
                   include/rsys/wind.h \
                   include/rsys/wrappers.h \
-                  include/rsys/x.h \
                   include/rsys/xdata.h \
                   include/rsys/xdblt.h \
                   include/SANE.h \

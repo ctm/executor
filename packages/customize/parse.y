@@ -8,8 +8,6 @@ typedef unsigned long long uint64;
 typedef unsigned int uint32;
 typedef unsigned char uint8;
 
-#include "rsys/custom.h"
-
 typedef struct
 {
   uint32 length;
