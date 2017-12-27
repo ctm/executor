@@ -68,27 +68,13 @@ static struct
     { "Credits",
       "Bill Goldman \321 Browser, Testing\r"
       "Mat Hostetter \321 Syn68k, Low Level Graphics, DOS port, more...\r"
-
-#if defined(MSDOS)
       "Joel Hunter \321 Low Level DOS Sound\r"
-#endif
-
-#if defined(CYGWIN32)
       "Sam Lantinga \321 Win32 port\r"
-#endif
-
       "Patrick LoPresti \321 High Level Sound, Low Level Linux Sound\r"
       "Cliff Matthews \321 this credit list (and most things not listed)\r"
       "Cotton Seed \321 High Level Graphics, Apple Events, more...\r"
-
-#if defined(MSDOS) || defined(CYGWIN32)
       "Lauri Pesonen \321 Low Level Win32 CD-ROM access (Executor 2.1)\r"
-#endif
-
-#if defined(MSDOS)
       "Samuel Vincent \321 Low Level DOS Serial Port Support\r"
-#endif
-
       "and all the engineers and testers who helped us build version 1.x\r"
       "\r"
       "Windows Appearance:\r"
@@ -113,7 +99,6 @@ static struct
       "Cygnus Support \321 the gdb debugger, the gnats bug tracking software\r"
       "Linus Torvalds et al. \321 Linux, our favorite OS"
       "\r"
-#if defined(MSDOS)
       "Executor/DOS was ported via DJGPP, DJ Delorie's port of gcc.\r"
       "DJGPP's primary authors are:\r"
       "\r"
@@ -124,7 +109,6 @@ static struct
       "Eli Zaretskii \321 Some DOS-related library functions\r"
       "\rThis product includes software developed by "
       "the University of California, Berkeley and its contributors\r"
-#endif
       ,
       NULL },
     { TIPS_BUTTON_NAME,

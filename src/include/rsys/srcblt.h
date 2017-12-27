@@ -24,11 +24,7 @@ extern void srcblt_bitmap(void)
 
 extern char srcblt_nop asm("_srcblt_nop");
 
-#if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-#define SRCBLT_ARRAY [2]
-#else
 #define SRCBLT_ARRAY
-#endif
 
 extern const void **srcblt_noshift_stubs SRCBLT_ARRAY[8];
 extern const void **srcblt_noshift_fgbk_stubs SRCBLT_ARRAY[8];

@@ -124,13 +124,6 @@ PUBLIC OSErr Executor::ROMlib_ejectfloppy(LONGINT floppyfd)
                 floppyfd &= ~DOSFDBIT;
                 dosdisk_close(floppyfd, true);
             }
-#if defined(MSDOS)
-            else
-            {
-                floppyfd &= ~ASPIFDBIT;
-                aspi_disk_close(floppyfd, true);
-            }
-#endif
         }
         eject_floppy_notify();
     }
@@ -538,15 +531,6 @@ PUBLIC OSErr Executor::ROMlib_readwrite(LONGINT fd, char *buffer, LONGINT count,
         readfp = dosdisk_read;
         writefp = dosdisk_write;
     }
-#if defined(MSDOS)
-    else if(fd & ASPIFDBIT)
-    {
-        fd &= ~ASPIFDBIT;
-        seekfp = aspi_disk_seek;
-        readfp = aspi_disk_read;
-        writefp = aspi_disk_write;
-    }
-#endif
     else
     {
 #endif

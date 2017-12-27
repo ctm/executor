@@ -188,7 +188,6 @@ static XrmOptionDescRec opts[] = {
 /* options that are transfered from the x resource database to the
      `common' executor options database */
 #define FIRST_COMMON_OPT 4
-    { "-nosplash", ".noSplash", XrmoptionNoArg, "off" },
     { "-debug", ".debug", XrmoptionSepArg, 0 },
 };
 
@@ -1224,9 +1223,6 @@ bool Executor::vdriver_init(int _max_width, int _max_height, int _max_bpp,
     get_bool_resource("privateColormap", &private_cmap_p);
 
     get_bool_resource("trueColor", &truecolor_p);
-
-    if(get_bool_resource("noSplash", &t_int))
-        opt_put_int_val(common_db, "nosplash", t_int, pri_x_resource, false);
 
     if(get_string_resource("debug", &t_str))
         opt_put_val(common_db, "debug", t_str, pri_x_resource, false);

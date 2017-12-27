@@ -138,12 +138,6 @@ using namespace Executor;
 
 FILE *Executor::o_fp = NULL;
 
-#ifdef MSDOS
-/* useful for overriding when under dos */
-FILE *stderr_fp = stderr;
-FILE *stdout_fp = stdout;
-#endif /* MSDOS */
-
 static int indent = 0;
 
 std::string field_name = "";

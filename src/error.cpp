@@ -169,49 +169,15 @@ notdir(const char *file)
     return retval ? &retval[1] : file;
 }
 
-#define ERR_LOG_FILE "/tmp/err.txt"
-
-#if defined(MSDOS) || defined(VDRIVER_SVGALIB)
-static FILE *err_log_fp;
-#endif
-
 static FILE *
 get_stream(void)
 {
-#if defined(MSDOS) || defined(VDRIVER_SVGALIB)
-    if(opt_val(common_db, "logerr", NULL))
-    {
-        if(err_log_fp == NULL)
-        {
-            /* if err_log_fp is NULL, then we have called get_stream for
-	     the first time, so we want to open the log file truncated */
-            err_log_fp = fopen(ERR_LOG_FILE, "w"); /* NOT Ufopen */
-            if(err_log_fp)
-                return err_log_fp;
-        }
-        else
-            return err_log_fp;
-    }
-    return stdout;
-#else
     return stderr;
-#endif
 }
 
 static void
 flush_stream(void)
 {
-#if defined(MSDOS) || defined(VDRIVER_SVGALIB)
-    FILE *fp = get_stream();
-    if(fp == err_log_fp)
-    {
-        /* this effectively does an `fflush ()', but mat says that
-         closing and reopening the file under dos maybe be more robust
-         in the case of a catostrophic dos crash */
-        fclose(err_log_fp);
-        err_log_fp = fopen(ERR_LOG_FILE, "a"); /* NOT Ufopen */
-    }
-#endif
 }
 
 static void err_printf(const char *fmt, ...);

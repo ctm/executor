@@ -37,22 +37,7 @@ print_cmd_line_arg(const char *str)
 }
 
 /* FIXME - these should be moved to configuration files somehow. */
-#if defined(MSDOS)
-static const char *desperate_switches[] = {
-    "-vga",
-    "-oldtimer",
-    "-nosound",
-    "-skipaspi",
-    "-nofilescheck",
-    "-noautorefresh",
-    "-memory",
-    "2M",
-    "-macdrives",
-    "",
-    "-dosdrives",
-    ""
-};
-#elif defined(LINUX)
+#if defined(LINUX)
 static const char *desperate_switches[] = {
     "-nosound",
     "-nodrivesearch",

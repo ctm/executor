@@ -88,7 +88,7 @@ PRIVATE void emthandler(LONGINT wsignal, LONGINT code, struct sigcontext *scp)
 
 LONGINT Executor::debugnumber, debugtable[1 << 12], cutoff = 20;
 
-#if !defined(MSDOS) && !defined(NDEBUG)
+#if !defined(NDEBUG)
 typedef struct
 {
     unsigned trapno;
@@ -129,7 +129,7 @@ void dump_recent_traps(int num_traps_back)
         printf("0x%04X\t%ld\t%s\n", traps[i].trapno, (long)traps[i].when,
                trap_name(traps[i].trapno));
 }
-#endif /* !MSDOS && !NDEBUG */
+#endif /* !NDEBUG */
 
 #if !defined(NDEBUG)
 
@@ -612,10 +612,6 @@ PUBLIC void Executor::executor_main(void)
 
     loadtrap = 0;
 
-#if defined(MSDOS)
-    ROMlib_WriteWhen(WriteInBltrgn);
-#endif /* MSDOS */
-
     /* ROMlib_WriteWhen(WriteInOSEvent); */
 
     FinderName[0] = MIN(strlen(BROWSER_NAME), sizeof(FinderName) - 1);
@@ -627,12 +623,6 @@ PUBLIC void Executor::executor_main(void)
         GetAppFiles(1, &thefile);
     else
         thefile.fType = 0;
-
-#if defined(DISPLAY_SPLASH_SCREEN)
-    /* Reset the CLUT since it may have gotten changed by the splash screen. */
-    gd_set_bpp(MR(MainDevice), !vdriver_grayscale_p, vdriver_fixed_clut_p,
-               vdriver_bpp);
-#endif /* DISPLAY_SPLASH_SCREEN */
 
 #if defined(SYN68K)
 #define ALINETRAPNUMBER 0xA

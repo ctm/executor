@@ -149,7 +149,6 @@ try_to_reopen(DrvQExtra *dqp)
     drive_flags_t flags;
     dqp->hfs.fd = linuxfloppy_open(0, &dqp->hfs.bsize, &flags,
                                    (char *)dqp->devicename);
-#elif defined(MSDOS)
 #else
     /* #warning need to be able to reopen a drive */
     warning_unimplemented("Unable to reopen a drive because the code has not "

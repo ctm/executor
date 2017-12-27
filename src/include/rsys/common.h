@@ -5,12 +5,6 @@
 #define WIN32 /* evil hackage needed to make SDL happy */
 #endif
 
-/* #include this first, so we know what wrapper we are. */
-#include "rsys/wrappers.h"
-
-/* #include this second, so we know what release type we are. */
-#include "rsys/release.h"
-
 #if !defined(COMPILE_FOR_BUILD)
 #include "host-os-config.h"
 #include "host-arch-config.h"

@@ -205,21 +205,6 @@ A1(PUBLIC, void, ROMlib_eventinit, bool, graphics_valid_p) /* INTERNAL */
             Rect *main_gd_bounds;
 
             main_gd_bounds = &GD_BOUNDS(MR(MainDevice));
-#if defined(MSDOS)
-            init_dos_events(CW(main_gd_bounds->right),
-                            CW(main_gd_bounds->bottom));
-#elif defined(EVENT_SVGALIB)
-            if(!event_init(CW(main_gd_bounds->right),
-                           CW(main_gd_bounds->bottom)))
-            {
-                fprintf(stderr,
-                        "Unable to initialize svgalib events.\n"
-                        "Make sure that executor-svga is installed setuid root,\n"
-                        "that libvga.config has your mouse properly identified\n"
-                        "and that /dev/mouse is a symlink to the right place\n");
-                exit(-1);
-            }
-#endif
         }
     }
 }
@@ -581,16 +566,6 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
 #endif
                 MouseLocation2 = eventp->where = ROMlib_curs;
         }
-
-#if defined(MSDOS) || defined(EVENT_SVGALIB)
-        {
-            LONGINT x, y;
-
-            querypointerX(&x, &y, NULL);
-            eventp->where.h = MouseLocation2.h = ROMlib_curs.h = CW(x);
-            eventp->where.v = MouseLocation2.v = ROMlib_curs.v = CW(y);
-        }
-#endif
 
         eventp->modifiers = CW(ROMlib_mods);
         if((evmask & autoKeyMask) && lastdown != -1 && ticks > autoticks)

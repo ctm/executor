@@ -43,7 +43,6 @@
 #include "rsys/vdriver.h"
 #include "rsys/aboutbox.h"
 #include "rsys/redrawscreen.h"
-#include "rsys/release.h"
 #include "rsys/toolevent.h"
 #include "rsys/nextprint.h"
 #include "rsys/scrap.h"

@@ -864,7 +864,6 @@ A5(PRIVATE, OSErr, macopen, char *, file, short, perm, LONGINT *, fdp,
 {
     int newperm;
     int flockret;
-    bool open_should_fail_p;
     OSErr err;
 
     switch(perm)
@@ -893,25 +892,7 @@ A5(PRIVATE, OSErr, macopen, char *, file, short, perm, LONGINT *, fdp,
             break;
     }
 
-#if defined(MSDOS)
-#define BROKEN_OPEN
-#endif
-
-#if defined(BROKEN_OPEN)
-    {
-        struct stat sbuf;
-
-        open_should_fail_p = ((newperm == O_WRONLY || newperm == O_RDWR)
-                              && Ustat(file, &sbuf) == 0
-                              && (!(sbuf.st_mode & S_IWUSR)));
-    }
-#else
-    open_should_fail_p = false;
-#endif
-    if(open_should_fail_p)
-        *fdp = -1;
-    else
-        *fdp = Uopen(file, O_BINARY | newperm, 0);
+    *fdp = Uopen(file, O_BINARY | newperm, 0);
     if(*fdp == -1 && perm == fsCurPerm)
     {
         *fdp = Uopen(file, O_BINARY | O_RDONLY, 0);

@@ -58,6 +58,8 @@ extern "C" {
 #define ERROR_SUPPORTED_MASK (~0) /* Compile in support for all errors. */
 #endif
 
+#define SUPPORT_LOG_ERR_TO_RAM /* simplification opportunity: is this feature useful? */
+
 #define ERROR_BIT_MASK(err) (1 << (err))
 
 /* Returns true iff that error is supported by this compile. */

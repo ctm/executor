@@ -33,12 +33,6 @@
 #include "dosdisk.h"
 #endif
 
-#if defined(MSDOS)
-#include <mntent.h>
-#include <sys/vfs.h>
-#include "aspi.h"
-#endif
-
 #include <ctype.h>
 #include <algorithm>
 
@@ -119,10 +113,6 @@ A2(PUBLIC, OSErr, ufsPBGetFCBInfo, FCBPBPtr, pb, /* INTERNAL */
     return err;
 }
 
-#if 0 && defined(MSDOS)
-#define slashstrcmp strcmp
-#else
-
 PRIVATE bool
 charcmp(char c1, char c2)
 {
@@ -158,7 +148,6 @@ slashstrcmp(const char *p1, const char *p2)
     }
     return retval;
 }
-#endif
 
 PRIVATE INTEGER ROMlib_driveno = 3;
 PRIVATE INTEGER ROMlib_ejdriveno = 2;
@@ -804,7 +793,6 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
         else
 #endif
         {
-#if WRAPPER_NAME != SUNPATH && WRAPPER_NAME != BLOODBATH
             int i;
 
             for(i = 0; i <= 31; ++i)
@@ -831,13 +819,8 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
                     checkpoint_dosdrives(checkpointp, end, bit);
                 }
             }
-#endif
         }
     }
-#endif
-
-#if defined(MSDOS)
-    aspi_init();
 #endif
 
 #if defined(MSDOS) || defined(CYGWIN32)

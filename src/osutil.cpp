@@ -28,10 +28,6 @@
 #include "rsys/toolevent.h"
 #include "rsys/stdfile.h"
 
-#if defined(MSDOS)
-#include <pc.h>
-#endif
-
 using namespace Executor;
 
 /*
@@ -885,14 +881,6 @@ A2(PUBLIC trap, void, Delay, LONGINT, n, LONGINT *, ftp) /* IMII-384 */
             Sleep(0); /* Give up current CPU timeslice */
             check_virtual_interrupt();
         }
-#elif defined(MSDOS)
-        unsigned long finish_msecs;
-        /* Busy looping is fine here. */
-        finish_msecs = msecs_elapsed() + n * 1000 / 60;
-        while(msecs_elapsed() < finish_msecs)
-        {
-            check_virtual_interrupt();
-        }
 #else /* !MSDOS */
         TMTask tm;
 #if defined(USE_BSD_SIGNALS)
@@ -961,10 +949,6 @@ P1(PUBLIC pascal trap, void, SysBeep, INTEGER, i) /* SYSTEM DEPENDENT */
     DebugStr("\004Beep");
 #elif defined(X) || defined(MACOSX_) || defined(CYGWIN32)
     host_beep_at_user();
-#elif defined(MSDOS)
-    sound(440);
-    Delay(i, (LONGINT *)0);
-    sound(0);
 #else
     write(1, "\7", 1);
 #endif

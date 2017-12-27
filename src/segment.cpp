@@ -53,10 +53,6 @@
 
 #endif
 
-#if defined(MSDOS)
-#include "dosevents.h"
-#include "vga.h"
-#endif /* defined(MSDOS) */
 namespace Executor
 {
 typedef finderinfo *finderinfoptr;
@@ -605,31 +601,6 @@ P3(PUBLIC pascal trap, void, GetAppParms, StringPtr, namep, /* IMII-58 */
 PUBLIC char *ROMlib_errorstring;
 PUBLIC char ROMlib_exit = 0;
 
-#if defined(MSDOS)
-#include <limits.h>
-#endif /* defined(MSDOS) */
-
-#if defined(MSDOS)
-PRIVATE void execme(const char *toexec)
-{
-#if !defined(MSDOS)
-    execl(toexec, toexec, "-nosplash", (char *)0);
-#else
-#if defined(notdef) /* we don't do this, now that we run under Windows */
-    int i;
-    i386_registers_t regs;
-
-    for(i = 3; i < OPEN_MAX; ++i) /* leave 0, 1, 2 open */
-        close(i);
-    regs.l.ebx = (ULONGINT)toexec;
-    regs.l.ecx = (ULONGINT) "-nosplash";
-    regs.w.ax = 0xFF10; /* Turbo assist case 16. */
-    int21(&regs);
-#endif
-#endif
-}
-#endif /* defined(MSDOS) */
-
 PUBLIC int Executor::ROMlib_nobrowser = 0;
 
 PRIVATE BOOLEAN valid_browser(void)
@@ -658,9 +629,6 @@ PRIVATE void launch_browser(void)
 P0(PUBLIC pascal trap, void, ExitToShell)
 {
     static char beenhere = false;
-#if defined(MSDOS)
-    char *toexec;
-#endif
     ALLOCABEGIN
 
 #if 1
@@ -795,20 +763,6 @@ P0(PUBLIC pascal trap, void, ExitToShell)
     }
 #endif
 
-#if defined(MSDOS)
-#define EXECUTORSUFFIX ".exe" /* This is necessary because of the way go32 */
-#else /* works with Executor */
-#define EXECUTORSUFFIX ""
-#endif
-#if defined(MSDOS)
-    if(!ROMlib_exit)
-    {
-        toexec = ALLOCA(strlen(ROMlib_startdir) + 1 + strlen(ROMlib_appname) + strlen(EXECUTORSUFFIX) + 1);
-        sprintf(toexec, "%s/%s%s", ROMlib_startdir, ROMlib_appname,
-                EXECUTORSUFFIX);
-        execme(toexec);
-    }
-#endif
     exit(ROMlib_exit == 1 ? 0 : ROMlib_exit); /* 1 is historically good */
     ALLOCAEND /* yeah, right, if exit fails... */
 }

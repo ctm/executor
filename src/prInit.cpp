@@ -30,10 +30,6 @@ P0(PUBLIC pascal trap, void, PrOpen)
         if(ROMlib_printresfile == -1)
             ROMlib_printresfile
                 = OpenRFPerm("\020NeXTLaserPrinter", Cx(BootDrive), fsCurPerm);
-#elif defined(MSDOS)
-        if(ROMlib_printresfile == -1)
-            ROMlib_printresfile
-                = OpenRFPerm("\017\\TMP\\EXECOUT.PS", Cx(BootDrive), fsCurPerm);
 #endif
         HUnlock((Handle)h);
     }

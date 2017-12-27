@@ -610,16 +610,10 @@ P1(PUBLIC pascal trap, void, PrClosePage, TPPrPort, pPrPort)
 
 #if defined(MSDOS) || defined(CYGWIN32)
 
-#if defined(MSDOS)
-#include <process.h>
-#include "dosevq.h"
-#else
 #include <process.h>
 
 #if !defined P_WAIT
 #define P_WAIT 1
-#endif
-
 #endif
 
 #define BATCH_FILE_NAME "+\\print.bat"
@@ -666,14 +660,6 @@ invoke_print_batch_file(const char *filename, ini_key_t printer, ini_key_t port)
                            backslashed_filename,
                            printer, port, spawn_result);
     }
-
-#if defined(MSDOS)
-    if(!deferred_printing_p)
-    {
-        need_hacky_screen_update = true;
-        dosevq_reinit_mouse();
-    }
-#endif
 }
 #endif
 

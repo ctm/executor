@@ -52,35 +52,6 @@ PRIVATE unsigned long last_interrupt_msecs;
 /* Msecs during next anticipated interrupt. */
 PRIVATE unsigned long next_interrupt_msecs;
 
-#if defined(MSDOS) && !defined(USE_BIOS_TIMER)
-
-unsigned long
-msecs_elapsed(void)
-{
-    static char beenhere = false;
-    unsigned long e;
-
-    if(!beenhere)
-    {
-        struct timezone tz;
-
-        tz.tz_minuteswest = 0;
-        tz.tz_dsttime = 0;
-        gettimeofday(&ROMlib_start_time, &tz); /* GMT */
-        set_elapsed_1024(0);
-
-        beenhere = true;
-    }
-
-    /* Convert elapsed 1024ths of a second to elapsed milliseconds,
-   * and try to avoid overflow.
-   */
-    e = fetch_elapsed_1024();
-    return ((e >> 10) * 1000) + (((e & 1023) * 1000) >> 10);
-}
-
-#else /* !defined (MSDOS) || defined (USE_BIOS_TIMER) */
-
 #if !defined(CYGWIN32)
 unsigned long
 msecs_elapsed()
@@ -102,8 +73,6 @@ msecs_elapsed()
     return m - start_msecs;
 }
 #endif
-
-#endif /* !defined (MSDOS) || defined (USE_BIOS_TIMER) */
 
 /*
  * catchalarm has been written with an eye toward not having errors accumulate.

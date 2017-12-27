@@ -63,7 +63,6 @@
 #include "rsys/parseopt.h"
 #include "rsys/print.h"
 #include "rsys/memsize.h"
-#include "rsys/splash.h"
 #include "rsys/stdfile.h"
 #include "rsys/autorefresh.h"
 #include "rsys/sounddriver.h"
@@ -87,17 +86,6 @@
 #include "rsys/check_structs.h"
 
 #include "paramline.h"
-
-#if defined(MSDOS)
-#include "aspi.h"
-#include "dosdisk.h"
-#include "dosmem.h"
-#include "dpmilock.h"
-#include "vga.h"
-#include "openmany.h"
-#include "dosserial.h"
-#include <process.h>
-#endif /* MSDOS */
 
 #if defined(MACOSX_)
 namespace Executor
@@ -228,44 +216,6 @@ const option_vec Executor::common_opts = {
       opt_no_arg, "" },
 #endif
 
-#if defined(MSDOS)
-    { "oldtimer",
-      "use old-style 18.2 Hz timer, instead of the newer 1024 Hz "
-      "timer.  This will result in less accurate timer emulation, "
-      "but may work around problems with certain BIOSes.",
-      opt_no_arg, "" },
-    { "vga",
-      "use old-style VGA graphics modes only, and don't use SuperVGA.  "
-      "This will limit you to a slow 640x480 with 16 colors, but may let "
-      "you run Executor even when Executor has problems with your "
-      "video driver.",
-      opt_no_arg, "" },
-    { "nofilescheck",
-      "bypass a startup check that attempts to determine if your FILES= "
-      "parameter is large enough.",
-      opt_no_arg, "" },
-    { "videospeedup",
-      "if you have a linear frame buffer (which requires a VBE 2.0 video "
-      "driver like SciTech Display Doctor) this can make graphics much faster "
-      "for games that bypass QuickDraw and therefore require \"refresh\" mode."
-      "  This isn't needed under plain DOS if you are using cwsdpmi.exe.  "
-      "The drawback is that enabling this feature removes some memory "
-      "protection from your system and makes it possible for Executor "
-      "to crash your computer or destroy data.  On some systems this "
-      "switch will cause Executor to crash right away; you can't use it "
-      "on such systems, and there's nothing that can be done about it.  "
-      "Use at your own risk!",
-      opt_no_arg, "" },
-    { "nosync",
-      "Allow disk data structures to stay in memory until Executor quits.  "
-      "This will dramatically speed up Executor's creation and deletion of "
-      "many small files, but if Executor crashes the data in memory won't "
-      "be written to disk and HFV corruption could result.  "
-      "Use at your own risk!",
-      opt_no_arg, "" },
-    { "skipaspi", "totally bypass ASPI drivers",
-      opt_no_arg, "" },
-#endif /* MSDOS */
 #if defined(MSDOS) || defined(CYGWIN32)
     { "macdrives", "drive letters that represent Mac formatted media",
       opt_sep, "" },
@@ -359,11 +309,6 @@ const option_vec Executor::common_opts = {
       opt_no_arg, "" },
 #endif
 
-#if defined(MSDOS) || defined(VDRIVER_SVGALIB) || defined(CYGWIN32)
-    { "logerr", "log diagnostic output to error log file", opt_no_arg,
-      "" },
-#endif
-
     { "grayscale", "\
 specify that executor should run in grayscale mode even if it is \
 capable of color.",
@@ -374,21 +319,6 @@ capable of color.",
       opt_no_arg, "" },
     { "rsrc", "use native resource forks on Mac OS X",
       opt_no_arg, "" },
-
-#if defined(MSDOS)
-    {
-        "modemport", "which PC serial port (1, 2, 3 or 4) should be used when"
-                     " a Macintosh application access the modem port",
-        opt_sep, "",
-    },
-    {
-        "printerport", "which PC serial port (1, 2, 3 or 4) should be used when"
-                       " a Macintosh application *directly* accesses the printer port.  This"
-                       " option does not affect printing.  It only affects communications type "
-                       " programs that do their own serial port management.",
-        opt_sep, "",
-    },
-#endif
 
 #if CONFIG_OFFSET_P == 0
     { "offset", "offset Mac memory (i.e. simulate Win32)", opt_no_arg, "" },
@@ -839,15 +769,6 @@ illegal_mode(void)
         fprintf(stderr, "Invalid graphics mode.  Largest allowable "
                         "screen %dx%d, %d bits per pixel.\n",
                 max_width, max_height, max_bpp);
-#if defined(MSDOS)
-        if(!vesa_version)
-        {
-            fputs("No VESA driver detected.  To get more video modes, "
-                  "make sure you have a\n"
-                  "VESA-compatible video driver and a SuperVGA board.\n",
-                  stderr);
-        }
-#endif
     }
 
     /* Don't call ExitToShell here; ROMlib isn't set up enough yet to do that. */
@@ -942,20 +863,11 @@ parse_drive_opt(const char *opt_name, const char *opt_value)
 }
 #endif
 
-#if !defined(MSDOS)
 static void
 print_info(void)
 {
     printf("This is %s, compiled.\n",
            ROMlib_executor_full_name);
-
-#if defined(i386)
-    /* Print out CPU type. */
-    if(arch_type == ARCH_TYPE_I386)
-        printf("CPU type is 80386.\n");
-    else
-        printf("CPU type is 80486 or better.\n");
-#endif /* i386 */
 
 #define MB (1024 * 1024U)
 
@@ -971,7 +883,6 @@ print_info(void)
 
 #undef MB
 }
-#endif /* !MSDOS */
 
 /* This is to tell people about the switch from "-applzone 4096" to
  * "-applzone 4M".
@@ -1133,9 +1044,6 @@ int main(int argc, char **argv)
     virtual_int_state_t int_state;
     GUEST<THz> saveSysZone, saveApplZone;
     GUEST<Ptr> saveApplLimit;
-#if defined(MSDOS)
-    bool check_files_p; /* See if FILES= is big enough? */
-#endif
     static void (*reg_funcs[])(void) = {
         vdriver_opt_register,
         NULL,
@@ -1154,24 +1062,6 @@ int main(int argc, char **argv)
 #endif
 
     int grayscale_p = false;
-
-#if defined(DISPLAY_SPLASH_SCREEN)
-    bool splash_screen_displayed_p;
-#endif
-
-#if defined(VDRIVER_SVGALIB)
-    /* We need to do this right away, to give up suid root privileges. */
-    vga_init();
-#endif
-
-#if defined(MSDOS)
-    /* Guarantee that ds and ss are the same, so we can use
-   * -fomit-frame-pointer and other fun hacks.  We need to do this
-   * *right away*, before we might use %ebp as a general register.
-   */
-    asm("pushl %ds\n\t"
-        "popl %ss");
-#endif /* MSDOS */
 
     ROMlib_command_line = construct_command_line_string(argc, argv);
 
@@ -1355,28 +1245,6 @@ int main(int argc, char **argv)
     ROMlib_nosync = true;
 #endif
 
-#if defined(MSDOS)
-    {
-        int dangerous_video_p = false;
-        opt_int_val(common_db, "dangerousvideospeedup",
-                    &dangerous_video_p, &bad_arg_p);
-        if(!dangerous_video_p)
-            opt_int_val(common_db, "videospeedup",
-                        &dangerous_video_p, &bad_arg_p);
-        try_to_use_fat_ds_vga_hack_p = dangerous_video_p;
-    }
-
-    opt_int_val(common_db, "nosync", &ROMlib_nosync, &bad_arg_p);
-
-    opt_int_val(common_db, "skipaspi", &ROMlib_skipaspi, &bad_arg_p);
-
-    {
-        int only_vga_p = false;
-        opt_int_val(common_db, "vga", &only_vga_p, &bad_arg_p);
-        only_use_vga_p = only_vga_p;
-    }
-#endif
-
     {
         int skip;
         skip = 0;
@@ -1544,16 +1412,6 @@ int main(int argc, char **argv)
     /* Block virtual interrupts, until the system is fully set up. */
     int_state = block_virtual_ints();
 
-#if defined(MSDOS)
-    /* We must switch to a non-moving sbrk before calling vdriver_init,
-   * if the user wants to try the fat %ds vga hack.  Otherwise,
-   * the address of the frame buffer relative to the base of %ds
-   * could change after we've already determined its value.
-   */
-    if(try_to_use_fat_ds_vga_hack_p)
-        switch_to_non_moving_sbrk();
-#endif
-
     if(graphics_p && !vdriver_init(0, 0, 0, false, &argc, argv))
     {
         fprintf(stderr, "Unable to initialize video driver.\n");
@@ -1563,19 +1421,6 @@ int main(int argc, char **argv)
 #if defined(SYN68K)
     /* Save the trap vectors away. */
     memcpy(save_trap_vectors, SYN68K_TO_US(0), sizeof save_trap_vectors);
-#endif
-
-#if defined(MSDOS)
-    {
-        int use_old_timer_p = false;
-        opt_int_val(common_db, "oldtimer", &use_old_timer_p, &bad_arg_p);
-        use_bios_timer_p = !use_old_timer_p;
-    }
-    {
-        int no_files_check_p = false;
-        opt_int_val(common_db, "nofilescheck", &no_files_check_p, &bad_arg_p);
-        check_files_p = !no_files_check_p;
-    }
 #endif
 
     opt_int_val(common_db, "sticky", &ROMlib_sticky_menus_p, &bad_arg_p);
@@ -1638,41 +1483,9 @@ int main(int argc, char **argv)
 
     if(opt_val(common_db, "info", NULL))
     {
-#if defined(MSDOS)
-        msdos_print_info();
-#else
         print_info();
-#endif /* MSDOS */
         exit(0);
     }
-
-#if defined(MSDOS)
-    {
-        int port;
-
-        if(opt_int_val(common_db, "modemport", &port, &bad_arg_p))
-        {
-            if(port < 1 || port > 4)
-            {
-                fprintf(stderr, "modemport must be 1, 2, 3 or 4.\n");
-                bad_arg_p = true;
-            }
-            else
-                set_modem_port_mapping_to_pc_port(port);
-        }
-
-        if(opt_int_val(common_db, "printerport", &port, &bad_arg_p))
-        {
-            if(port < 1 || port > 4)
-            {
-                fprintf(stderr, "printerport must be 1, 2, 3 or 4.\n");
-                bad_arg_p = true;
-            }
-            else
-                set_printer_port_mapping_to_pc_port(port);
-        }
-    }
-#endif
 
     /* If we failed to parse our arguments properly, exit now.
    * I don't think we should call ExitToShell yet because the
@@ -1786,30 +1599,6 @@ int main(int argc, char **argv)
     FSFCBLen = CWC(94);
     ScrapState = CWC(-1);
 
-#if defined(MSDOS)
-    switch_to_non_moving_sbrk();
-#endif
-
-#if defined(MSDOS)
-    /* Make sure FILES= is big enough. */
-    if(check_files_p && !msdos_test_max_files())
-        exit(-39);
-
-    /* Make sure we have at least 0.75 megabytes of memory remaining, so
-   * that syn68k will have a big enough working area.  This figure is
-   * somewhat arbitrary, but we really don't want the user cutting it
-   * particularly close and then complain about lousy performance and
-   * flaky behavior.
-   */
-    if(!msdos_check_memory_remaining(768 * 1024))
-    {
-        vdriver_shutdown();
-        print_mem_full_message();
-        exit(-50);
-    }
-
-#endif
-
 #if defined(NEXT) && !defined(SYN68K)
     ROMlib_install_ardi_mods();
 #endif /* NEXT && !SYN68K */
@@ -1852,11 +1641,6 @@ int main(int argc, char **argv)
 
         gd_allocate_main_device();
     }
-
-#if defined(DISPLAY_SPLASH_SCREEN)
-    if(graphics_p)
-        splash_screen_displayed_p = splash_screen_display(false, "splash");
-#endif
 
     ROMlib_eventinit(graphics_p);
     hle_init();

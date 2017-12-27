@@ -1252,20 +1252,6 @@ PRIVATE void reinitialize_things(void)
 
     CurMap = STARH((resmaphand)MR(TopMapHndl))->resfn;
 
-/* TODO replace the code in main.c with this stuff */
-#if !defined(MSDOS)
-    /*
- * In the GO32 environment we're not guaranteed to have a floating point
- * coprocessor, so we delay floating point environment initialization until
- * we actually use it.
- */
-    /* Set up default floating point environment. */
-    {
-        INTEGER env = 0;
-        ROMlib_Fsetenv(&env, 0);
-    }
-#endif
-
     ROMlib_destroy_blocks(0, ~0, false);
 }
 

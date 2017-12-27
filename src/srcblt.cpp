@@ -35,11 +35,6 @@ int srcblt_shift_offset asm("_srcblt_shift_offset");
 
 bool srcblt_reverse_scanlines_p asm("_srcblt_reverse_scanlines_p");
 
-#if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-uint16_t srcblt_src_selector asm("_srcblt_src_selector");
-uint16_t srcblt_dst_selector asm("_srcblt_dst_selector");
-#endif
-
 /* We use this macro to avoid page faults when aligning pointers. */
 #define MIN_PAGE_SIZE 512
 
@@ -54,9 +49,6 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
     char *dst_baseaddr, *src_baseaddr;
 #if defined(VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
     bool cursor_maybe_changed_p, old_vis_p;
-#endif
-#if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-    bool needs_seg_override_p;
 #endif
 
     /* Record log2 bpp. */
@@ -87,9 +79,6 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
             src_baseaddr = (char *)vdriver_real_screen_baseaddr;
             if(vdriver_flip_real_screen_pixels_p)
                 mode ^= (srcCopy ^ notSrcCopy);
-#if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-            srcblt_src_selector = vga_screen_selector;
-#endif
 
             /* I'm a lazy bastard and don't want to figure out the
 	   * coordinate system sludge.  Copying from the screen is
@@ -102,18 +91,11 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
         {
             srcblt_src_row_bytes = CW(src->rowBytes) & ROWBYTES_VALUE_BITS;
             src_baseaddr = (char *)MR(src->baseAddr);
-#if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-            asm("movw %%ds,%0"
-                : "=m"(srcblt_src_selector));
-#endif
         }
         if(active_screen_addr_p(dst))
         {
             srcblt_dst_row_bytes = vdriver_real_screen_row_bytes;
             dst_baseaddr = (char *)vdriver_real_screen_baseaddr;
-#if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-            srcblt_dst_selector = vga_screen_selector;
-#endif
             top = CW(dst->bounds.top);
             left = CW(dst->bounds.left);
 
@@ -128,10 +110,6 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
         {
             srcblt_dst_row_bytes = CW(dst->rowBytes) & ROWBYTES_VALUE_BITS;
             dst_baseaddr = (char *)MR(dst->baseAddr);
-#if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-            asm("movw %%ds,%0"
-                : "=m"(srcblt_dst_selector));
-#endif
         }
     }
     else
@@ -142,11 +120,6 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
         srcblt_dst_row_bytes = CW(dst->rowBytes) & ROWBYTES_VALUE_BITS;
         src_baseaddr = (char *)MR(src->baseAddr);
         dst_baseaddr = (char *)MR(dst->baseAddr);
-#if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-        asm("movw %%ds,%0\n\t"
-            "movw %%ds,%1"
-            : "=m"(srcblt_src_selector), "=m"(srcblt_dst_selector));
-#endif
     }
 
     /* Compute the offset to map dst y coords to src bitmap coords.*/
@@ -233,12 +206,7 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
    */
     srcblt_reverse_scanlines_p = (src_baseaddr < dst_baseaddr);
 
-#if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-    needs_seg_override_p = (srcblt_src_selector != srcblt_dst_selector);
-#define FIRST_DIM [needs_seg_override_p]
-#else
 #define FIRST_DIM
-#endif
 
     if(left_shift == 0)
     {

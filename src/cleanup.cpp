@@ -18,10 +18,6 @@
 #include <windows.h>
 #endif
 
-#if defined(MSDOS)
-#include <process.h>
-#endif
-
 PUBLIC void
 add_to_cleanup(const char *s, ...)
 {
@@ -63,9 +59,6 @@ call_cleanup_bat(void)
     if(stat(batch_file.c_str(), &sbuf) == 0)
     {
         add_to_cleanup("del \"%s\"\n", batch_file.c_str());
-#if defined(MSDOS)
-        spawnl(P_OVERLAY, batch_file.c_str(), batch_file.c_str(), 0);
-#else
         {
             STARTUPINFO si;
             PROCESS_INFORMATION pi;
@@ -77,7 +70,6 @@ call_cleanup_bat(void)
             CreateProcess(batch_file.c_str(), NULL, NULL, NULL, false, 0, NULL, NULL,
                           &si, &pi);
         }
-#endif
     }
 }
 

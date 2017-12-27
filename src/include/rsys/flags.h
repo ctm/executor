@@ -19,8 +19,6 @@ extern int ROMlib_no_mouse;
 
 extern INTEGER ROMlib_no_windows;
 
-extern int ROMlib_nosplash;
-
 /* 0 means "use default". */
 extern INTEGER flag_width, flag_height;
 
@@ -35,11 +33,6 @@ extern const char *ROMlib_command_line;
 
 /* 0 means try running browser, 1 means don't */
 extern int ROMlib_nobrowser;
-
-#if defined(MSDOS)
-/* 0 means use ASPI, 1 means don't */
-extern int ROMlib_skipaspi;
-#endif
 
 /* 0 means normal, 1 means special gestalt values for photoshop */
 extern int ROMlib_photoshop_hack;

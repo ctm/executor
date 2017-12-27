@@ -165,7 +165,7 @@ set(misc_sources desk.cpp device.cpp disk.cpp diskinit.cpp dump.cpp trapname.cpp
   version.cpp shutdown.cpp uniquefile.cpp sigio_multiplex.cpp screen-dump.cpp
   process.cpp alias.cpp string.cpp tempmem.cpp edition.cpp fontIMVI.cpp balloon.cpp
   error.cpp adb.cpp color_wheel_bits.cpp finder.cpp system_error.cpp ibm_keycodes.cpp
-  splash.cpp icon.cpp redrawscreen.cpp ini.cpp checkpoint.cpp qt.cpp cleanup.cpp
+  icon.cpp redrawscreen.cpp ini.cpp checkpoint.cpp qt.cpp cleanup.cpp
   paramline.c fauxdbm.cpp commtool.cpp cfm.cpp pef_hash.cpp
   interfacelib.cpp mixed_mode.cpp suffix_maps.cpp appearance.cpp lockrange.cpp
   emutrap.cpp emutraptables.cpp emustubs.cpp unix_like.cpp parse.ypp check_structs.cpp
@@ -266,7 +266,6 @@ set(include_sources hintemplate.h
                   include/rsys/icon.h
                   include/rsys/image.h
                   include/rsys/ini.h
-                  include/rsys/int386.h
                   include/rsys/interfacelib.h
                   include/rsys/itm.h
                   include/rsys/iv.h
@@ -287,7 +286,6 @@ set(include_sources hintemplate.h
                   include/rsys/mixed_mode.h
                   include/rsys/mman.h
                   include/rsys/mman_private.h
-                  include/rsys/newvga.h
                   include/rsys/next.h
                   include/rsys/nextprint.h
                   include/rsys/noreturn.h
@@ -319,7 +317,6 @@ set(include_sources hintemplate.h
                   include/rsys/redrawscreen.h
                   include/rsys/refresh.h
                   include/rsys/region.h
-                  include/rsys/release.h
                   include/rsys/resource.h
                   include/rsys/rgbutil.h
                   include/rsys/safe_alloca.h
@@ -332,7 +329,6 @@ set(include_sources hintemplate.h
                   include/rsys/sounddriver.h
                   include/rsys/soundfake.h
                   include/rsys/soundopts.h
-                  include/rsys/splash.h
                   include/rsys/srcblt.h
                   include/rsys/stdbits.h
                   include/rsys/stdfile.h
@@ -357,9 +353,7 @@ set(include_sources hintemplate.h
                   include/rsys/vbl.h
                   include/rsys/vdriver.h
                   include/rsys/version.h
-                  include/rsys/vgavdriver.h
                   include/rsys/wind.h
-                  include/rsys/wrappers.h
                   include/rsys/xdata.h
                   include/rsys/xdblt.h
                   include/SANE.h

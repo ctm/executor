@@ -30,10 +30,6 @@
 #include "rsys/hfs.h"
 #include "rsys/serial.h"
 
-#if defined(MSDOS)
-#include "dosserial.h"
-#endif
-
 #if defined(CYGWIN32) || defined(WIN32)
 #include "win_serial.h"
 #endif

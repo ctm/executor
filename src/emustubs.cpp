@@ -858,22 +858,6 @@ STUB(NMRemove)
     RTS();
 }
 
-#if defined(MSDOS)
-PRIVATE int float_environment_initted = 0;
-
-PRIVATE void init_float_environment(void)
-{
-    INTEGER env;
-
-    if(!float_environment_initted)
-    {
-        env = 0;
-        ROMlib_Fsetenv(&env, 0);
-        float_environment_initted = 1;
-    }
-}
-#endif /* defined(MSDOS) */
-
 PRIVATE ptocblock_t alias_dispatch_ptoc[] = {
     PTOCBLOCK(FindFolder), /* 00 */
     PTOCBLOCK(ZERO),
@@ -942,9 +926,6 @@ STUB(Pack4)
 {
     unsigned short us;
 
-#if defined(MSDOS)
-    init_float_environment();
-#endif
     us = READUW(EM_A7 + 4);
     return do_selector_block(pack4block, us & 0xFF, Pack4);
 }
@@ -979,9 +960,6 @@ STUB(Pack5)
     syn68k_addr_t retaddr;
     unsigned short uw;
 
-#if defined(MSDOS)
-    init_float_environment();
-#endif
     retaddr = POPADDR();
     uw = POPUW();
     PUSHADDR(retaddr);

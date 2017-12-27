@@ -7,8 +7,6 @@
 
 using namespace Executor;
 
-#if defined(MSDOS) || defined(EVENT_SVGALIB) || defined(CYGWIN32) || (defined(SDL) && (defined(LINUX) || defined(MACOSX)))
-
 unsigned char Executor::ibm_virt_to_mac_virt[] = {
     0xFF, /* unused 0x00 */
     0x35, /* ESC 0x01 */
@@ -131,4 +129,3 @@ unsigned char Executor::ibm_virt_to_mac_virt[] = {
     MKV_PAGEDOWN, /* 0x76 (remapped in dosevents.c) */
     MKV_PAUSE, /* 0x77 */
 };
-#endif

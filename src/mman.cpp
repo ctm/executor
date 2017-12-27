@@ -24,10 +24,6 @@
 #include "rsys/toolutil.h"
 #include "rsys/gestalt.h"
 
-#if defined(MSDOS)
-#include "dpmilock.h"
-#endif
-
 #if defined(LINUX) || defined(MACOSX)
 #include <sys/mman.h>
 
@@ -359,11 +355,6 @@ void print_mem_full_message(void)
     fprintf(stderr,
             "Executor has run out of memory.  Try specifying "
             "a smaller -memory size.\n");
-#if defined(MSDOS)
-    fprintf(stderr,
-            "Under Windows and Warp, try increasing the DPMI memory "
-            "available to Executor.\n");
-#endif
 }
 
 unsigned long ROMlib_total_allocated_memory;
@@ -472,9 +463,6 @@ void ROMlib_InitZones(offset_enum which)
 #endif
                 {
                     int low_global_room = (char *)&lastlowglobal - (char *)&nilhandle;
-#if defined(MSDOS)
-                    dpmi_lock_memory(&nilhandle_H, low_global_room);
-#endif
                     memory += low_global_room;
                     init_syszone_size -= low_global_room;
                 }

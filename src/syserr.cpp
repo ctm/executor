@@ -330,11 +330,7 @@ P1(PUBLIC pascal, void, SysError, short, errorcode)
     rp = RM(&viscliprgn);
     alertport.visRgn = alertport.clipRgn = RM(&rp);
     viscliprgn.rgnSize = CWC(10);
-#if 0 && !defined(MSDOS)
-    viscliprgn.rgnBBox = DSAlertRect;
-#else
     viscliprgn.rgnBBox = main_gd_rect;
-#endif
 
     /* 5, 6. Draw alert box if the errorcode is >= 0 */
     

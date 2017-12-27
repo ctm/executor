@@ -10,9 +10,6 @@
 #include "rsys/xdata.h"
 #include "rsys/xdblt.h"
 #include "rsys/vdriver.h"
-#if defined(USE_VGAVDRIVER)
-#include "rsys/vgavdriver.h"
-#endif
 
 #include "rsys/quick.h"
 #include "rsys/cquick.h"
@@ -65,10 +62,6 @@ uint32_t xdblt_dst_row_bytes asm("_xdblt_dst_row_bytes");
 
 /* Bit pattern inserted for bit insertion modes. */
 uint32_t xdblt_insert_bits asm("_xdblt_insert_bits");
-
-#if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-uint16_t xdblt_dst_selector asm("_xdblt_dst_selector");
-#endif
 
 #define M(n) CLC_RAW(0xFFFFFFFFU >> (n))
 const uint32_t xdblt_mask_array[32] asm("_xdblt_mask_array") = {
@@ -154,19 +147,12 @@ setup_dst_bitmap(int log2_bpp, PixMap *dst_pixmap)
     {
         row_bytes = vdriver_real_screen_row_bytes;
         dst = (char *)vdriver_real_screen_baseaddr;
-#if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-        xdblt_dst_selector = vga_screen_selector;
-#endif
     }
     else
 #endif /* VDRIVER_SUPPORTS_REAL_SCREEN_BLITS */
     {
         row_bytes = BITMAP_ROWBYTES(dst_pixmap);
         dst = (char *)MR(dst_pixmap->baseAddr);
-#if defined(VGA_SCREEN_NEEDS_FAR_PTR)
-        asm("movw %%ds,%0"
-            : "=m"(xdblt_dst_selector));
-#endif
     }
 
     dst -= row_bytes * CW(dst_pixmap->bounds.top);

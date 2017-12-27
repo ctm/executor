@@ -269,11 +269,7 @@ void Executor::opt_register_pre_note(char *note)
     pre_notes[n_pre_notes++] = note;
 }
 
-#if !defined(MSDOS)
 #define ERRMSG_STREAM stderr
-#else
-#define ERRMSG_STREAM stdout /* stderr is annoying to DOS users. */
-#endif
 
 void Executor::opt_register(string new_interface,
                             option_vec new_opts)

@@ -1806,10 +1806,6 @@ PUBLIC void Executor::futzwithdosdisks(void)
      */
     dcache_invalidate_all(true);
 
-#if defined(MSDOS)
-    aspi_rescan();
-#endif
-
     if(!nodrivesearch_p)
     {
         for(i = 0; i < N_DRIVES; ++i)

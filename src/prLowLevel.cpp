@@ -890,26 +890,12 @@ adjust_menu_common(TPPrDlg dlg, INTEGER item, heading_t heading, ini_key_t defke
         skip_all_but_a_few = false;
     else
     {
-#if defined(MSDOS)
-        ini_key_t filter;
-
-        filter = find_key("Filter", ROMlib_print_filter);
-        if(!filter)
-            skip_all_but_a_few = true;
-        else
-        {
-            struct stat sbuf;
-
-            skip_all_but_a_few = stat(filter, &sbuf) != 0;
-        }
-#else
         char *gs_dll;
         struct stat sbuf;
 
         gs_dll = get_gs_dll(NULL);
         skip_all_but_a_few = stat(gs_dll, &sbuf) != 0;
         free(gs_dll);
-#endif
     }
 #endif
 
