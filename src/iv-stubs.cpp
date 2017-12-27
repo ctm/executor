@@ -29,12 +29,12 @@
 using namespace Executor;
 
 #define print_errno_error_message(call, msg)   \
-    ({                                         \
+    do {                                       \
         fprintf(stderr, "%s:%d; %s: %s; %s\n", \
                 __FILE__, __LINE__,            \
                 call, strerror(errno),         \
                 msg);                          \
-    })
+    } while(0)
 
 void send_image(int width, int height,
                 int row_bytes, int send_row_bytes,
