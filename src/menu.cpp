@@ -34,10 +34,8 @@
 #include "rsys/aboutbox.h"
 #include "rsys/system_error.h"
 #include "rsys/vdriver.h"
-#include "rsys/custom.h"
 #include "rsys/notmac.h"
 #include "rsys/version.h"
-#include "rsys/custom.h"
 #include "rsys/stubify.h"
 
 using namespace Executor;
@@ -522,11 +520,6 @@ P2(PUBLIC pascal trap, void, AddResMenu, MenuHandle, mh, ResType, restype)
        * ask for desk accessories.
        */
 
-        if(!ROMlib_menu_about_stringp
-           && (strncasecmp(ROMlib_appname.c_str(), EXECUTOR_NAME,
-                           sizeof EXECUTOR_NAME - 1)
-               != 0))
-            about_box_menu_name_pstr = (StringPtr) "\016\000About CCRS...";
         if(restype == TICK("DRVR") && about_box_menu_name_pstr[0])
             app(about_box_menu_name_pstr, 0, 0, 0, 0, false, &endinf);
 

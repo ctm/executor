@@ -17,8 +17,6 @@
 #include "rsys/wind.h"
 #include "rsys/host.h"
 
-#include "rsys/custom.h"
-
 using namespace Executor;
 
 static Rect *current_menu_rect;

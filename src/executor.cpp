@@ -45,7 +45,6 @@
 #include "rsys/options.h"
 #include "rsys/suffix_maps.h"
 #include "rsys/string.h"
-#include "rsys/custom.h"
 
 #undef PRIVATE
 #define PRIVATE
@@ -655,19 +654,12 @@ PUBLIC void Executor::executor_main(void)
         fName = thefile.fName;
     else
     {
-        const char *p;
+        const char *p = NULL;
 
         if(count > 0)
         {
             p = ROMlib_find_best_creator_type_match(CL(hpb.hFileInfo.ioFlFndrInfo.fdCreator),
                                                     CL(hpb.hFileInfo.ioFlFndrInfo.fdType));
-        }
-        else
-        {
-            if(!ROMlib_default_appp)
-                p = NULL;
-            else
-                p = (char *)ROMlib_default_appp->chars;
         }
         fName = name;
         if(!p)

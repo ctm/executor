@@ -20,7 +20,6 @@
 #include "rsys/mman.h"
 #include "rsys/region.h"
 #include "rsys/srcblt.h"
-#include "rsys/custom.h"
 
 static int bpp;
 static int log2_bpp;

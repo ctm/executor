@@ -19,7 +19,6 @@
 #include "rsys/stdfile.h"
 #include "rsys/ini.h"
 #include "rsys/string.h"
-#include "rsys/custom.h"
 #include "rsys/segment.h"
 #include "rsys/suffix_maps.h"
 
@@ -856,50 +855,6 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
             cd_mounted_by_trickery_p = true;
     }
 #endif
-    if(ROMlib_magic_volumesp)
-    {
-        char *p, *pathp, *aliasp;
-
-        p = (char *)ROMlib_magic_volumesp->chars;
-        do
-        {
-            pathp = p;
-            p += strlen(p) + 1;
-            aliasp = p;
-            p += strlen(p) + 1;
-
-            if(*pathp && *aliasp)
-            {
-                auto newpath = expandPath(pathp);
-                ROMlib_volume_alias(newpath.c_str(), aliasp);
-            }
-        } while(*pathp && *aliasp);
-    }
-    if(ROMlib_suffix_mapsp)
-    {
-        char *p, *suffixp;
-
-        p = (char *)ROMlib_suffix_mapsp->chars;
-        do
-        {
-            suffixp = p;
-            if(*suffixp)
-            {
-                char *creator_hexp, *type_hexp, *applicationp;
-
-                p += strlen(p) + 1;
-                creator_hexp = p;
-                p += strlen(p) + 1;
-                type_hexp = p;
-                p += strlen(p) + 1;
-                applicationp = p;
-                p += strlen(p) + 1;
-
-                ROMlib_add_suffix_quad(suffixp, creator_hexp, type_hexp,
-                                       applicationp);
-            }
-        } while(*suffixp);
-    }
 }
 
 #if defined(BINCOMPAT)

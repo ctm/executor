@@ -77,7 +77,6 @@
 #include "rsys/arch.h"
 #include "rsys/checkpoint.h"
 #include "rsys/cleanup.h"
-#include "rsys/custom.h"
 #include "rsys/gestalt.h"
 #include "rsys/keyboards.h"
 #include "rsys/launch.h"
@@ -1174,7 +1173,6 @@ int main(int argc, char **argv)
         "popl %ss");
 #endif /* MSDOS */
 
-    ROMlib_do_custom();
     ROMlib_command_line = construct_command_line_string(argc, argv);
 
     if(!arch_init())

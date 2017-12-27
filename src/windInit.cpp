@@ -32,7 +32,6 @@
 #include "rsys/segment.h"
 #include "rsys/file.h"
 #include "rsys/executor.h"
-#include "rsys/custom.h"
 #include "rsys/options.h"
 #include "rsys/launch.h"
 
@@ -136,33 +135,6 @@ P0(PUBLIC pascal trap, void, InitWindows)
     ctl_color_init();
 
     WWExist = EXIST_YES;
-
-    if(ROMlib_creator && ROMlib_creatorsp)
-    {
-        int i;
-        bool found_p;
-        int n_vals;
-
-        n_vals = (ROMlib_creatorsp->head.length / sizeof ROMlib_creatorsp->vals[0]);
-        for(found_p = false, i = 0; !found_p && i < n_vals; ++i)
-            if(ROMlib_creatorsp->vals[i] == (uint32_t)ROMlib_creator)
-                found_p = true;
-
-        if(!found_p)
-        {
-            char msg_buf[1024];
-            sprintf(msg_buf, "You are trying to run a Macintosh Application "
-                             "for which this copy of Executor isn't licensed.  This "
-                             "copy of Executor is licensed only to run specific "
-                             "applications.  "
-                             "Please choose the \"About Executor...\" menu item and "
-                             "click on the \"License\" button for more information.");
-
-            system_error(msg_buf, 0,
-                         "Exit", NULL, NULL,
-                         C_ExitToShell, NULL, NULL);
-        }
-    }
 
     {
         static bool issued_system_file_version_skew_warning_p = false;

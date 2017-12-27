@@ -112,7 +112,7 @@ misc_sources = desk.cpp device.cpp disk.cpp diskinit.cpp dump.cpp trapname.cpp f
   process.cpp alias.cpp string.cpp tempmem.cpp edition.cpp fontIMVI.cpp balloon.cpp        \
   error.cpp adb.cpp color_wheel_bits.cpp finder.cpp system_error.cpp ibm_keycodes.cpp    \
   splash.cpp icon.cpp redrawscreen.cpp ini.cpp checkpoint.cpp qt.cpp cleanup.cpp           \
-  paramline.c fauxdbm.cpp custom.cpp commtool.cpp cfm.cpp local_charset.cpp pef_hash.cpp \
+  paramline.c fauxdbm.cpp commtool.cpp cfm.cpp local_charset.cpp pef_hash.cpp \
   interfacelib.cpp mixed_mode.cpp suffix_maps.cpp appearance.cpp lockrange.cpp         \
   emutrap.cpp emutraptables.cpp emustubs.cpp unix_like.cpp parse.ypp check_structs.cpp   \
   executor.cpp  crc.cpp
@@ -181,7 +181,6 @@ include_sources = hintemplate.h \
                   include/rsys/cruft.h \
                   include/rsys/ctl.h \
                   include/rsys/ctopflags.h \
-                  include/rsys/custom.h \
                   include/rsys/dcache.h \
                   include/rsys/depthconv.h \
                   include/rsys/desk.h \

@@ -44,7 +44,6 @@
 #include "rsys/aboutbox.h"
 #include "rsys/redrawscreen.h"
 #include "rsys/release.h"
-#include "rsys/custom.h"
 #include "rsys/toolevent.h"
 #include "rsys/nextprint.h"
 #include "rsys/scrap.h"
@@ -1192,18 +1191,6 @@ P4(PUBLIC pascal trap, BOOLEAN, WaitNextEvent, INTEGER, mask,
             }
             else if(sleep > 0)
             {
-                if(ROMlib_about_boxp && ROMlib_about_boxp->val)
-                {
-                    if(!retval)
-                    {
-                        static bool displayed_initial_demo_about_box_p;
-                        if(!displayed_initial_demo_about_box_p)
-                        {
-                            displayed_initial_demo_about_box_p = true;
-                            do_about_box();
-                        }
-                    }
-                }
                 Delay(MIN(sleep, 4), (LONGINT *)0);
                 sleep -= 4;
             }
