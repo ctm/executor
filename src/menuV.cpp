@@ -115,7 +115,7 @@ P4(PUBLIC pascal trap, LONGINT, PopUpMenuSelect, MenuHandle, mh, INTEGER, top,
     TopMenuItem = tempi;
     where = ROMlib_mentosix(Hx(mh, menuID));
 
-    MBDFCALL(mbSave, where, (intptr_t)&saver);
+    MBDFCALL(mbSave, where, ptr_to_longint(&saver));
 
     auto saveclip = PORT_CLIP_REGION_X(thePort); /* ick */
     PORT_CLIP_REGION_X(thePort) = RM(NewRgn());
