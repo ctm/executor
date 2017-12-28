@@ -31,7 +31,7 @@ Executor::new_heading(unsigned char *start, int len)
     heading_t retval;
     heading_link_t *linkp;
 
-    linkp = (heading_link_t *)malloc(sizeof *linkp);
+    linkp = new heading_link_t;
     if(!linkp)
         retval = "";
     else
@@ -40,7 +40,7 @@ Executor::new_heading(unsigned char *start, int len)
         if(!p)
         {
             retval = "";
-            free(linkp);
+            delete linkp;
         }
         else
         {
@@ -81,49 +81,26 @@ PUBLIC void
 Executor::new_key_value_pair(heading_t heading, unsigned char *keystart, int keylen,
                              unsigned char *valuestart, int valuelen)
 {
-    pair_link_t *pairp = (pair_link_t *)malloc(sizeof *pairp);
-    if(pairp)
+    pair_link_t *pairp = new pair_link_t;
+    pairp->key = std::string(keystart, keystart+keylen);
+    pairp->value = std::string(valuestart, valuestart+valuelen);
+
+    heading_link_t *headingp = find_heading(heading);
+    pairp->next = 0;
+    if(!headingp)
     {
-        char *keyp;
-        keyp = (char *)alloca(keylen + 1);
-        if(!keyp)
-            free(pairp);
-        else
-        {
-            char *valueP = (char *)alloca(valuelen + 1);
-            if(!valueP)
-            {
-                free(pairp);
-            }
-            else
-            {
-                heading_link_t *headingp;
+        warning_unexpected("couldn't find %s", heading.c_str());
+        delete pairp;
+    }
+    else
+    {
+        pair_link_t **pairpp;
 
-                strncpy(keyp, (char *)keystart, keylen);
-                keyp[keylen] = 0;
-                pairp->value = keyp;
-                strncpy(valueP, (char *)valuestart, valuelen);
-                valueP[valuelen] = 0;
-                pairp->value = valueP;
-                headingp = find_heading(heading);
-                pairp->next = 0;
-                if(!headingp)
-                {
-                    warning_unexpected("couldn't find %s", heading.c_str());
-                    free(pairp);
-                }
-                else
-                {
-                    pair_link_t **pairpp;
-
-                    for(pairpp = &headingp->pairs;
-                        *pairpp;
-                        pairpp = &(*pairpp)->next)
-                        ;
-                    *pairpp = pairp;
-                }
-            }
-        }
+        for(pairpp = &headingp->pairs;
+            *pairpp;
+            pairpp = &(*pairpp)->next)
+            ;
+        *pairpp = pairp;
     }
 }
 
@@ -209,7 +186,7 @@ Executor::read_ini_file(const char *filename)
                         ep = p + strlen((char *)p);
                         while(isspace(*(ep - 1)))
                             --ep;
-                        new_key_value_pair((heading_t)heading.c_str(), p, eq - p, eq + 1, ep - eq - 1);
+                        new_key_value_pair(heading, p, eq - p, eq + 1, ep - eq - 1);
                     }
                 }
                 break;
