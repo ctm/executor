@@ -27,7 +27,7 @@ endif()
 add_subdirectory(config/front-ends/x)
 add_subdirectory(config/front-ends/sdl)
 add_subdirectory(config/front-ends/sdl2)
-add_subdirectory(config/arch/x86_64)
+add_subdirectory(config/arch/generic_le)
 add_subdirectory(config/os/win32)
 
 
