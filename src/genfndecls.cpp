@@ -5,13 +5,10 @@
 /* fndecls.c
    processes C files and extract public function declarations */
 
-#include "rsys/common.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-
-using namespace Executor;
 
 void *
 xmalloc(unsigned size)

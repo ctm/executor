@@ -19,10 +19,6 @@
 #include "rsys/refresh.h"
 #include "rsys/soundopts.h"
 
-#if !defined(SYN68K)
-#include "m68k-stack.h"
-#endif
-
 using namespace Executor;
 
 #if defined(SYSV)
