@@ -1373,9 +1373,11 @@ int main(int argc, char **argv)
     ROMlib_offsets[3] -= ROMlib_offsets[3] & 3;
     ROMlib_offsets[3] -= (3UL << 30);
     ROMlib_sizes[3] = &_end - &_etext;
-#elif defined(MACOSX)
+#else
     /* Mac OS X doesn't have _etext and _end, and the functions in
        mach/getsect.h don't give the correct results when ASLR is active.
+       Win32 might also have a way to get the addresses, or it might not.
+
        So we just use the address of a static variable and 512MB in each direction.
      */
     static char staticThing[32];
