@@ -24,6 +24,8 @@ using namespace Executor;
 
 #define MSECS_FOR_BUFFER_TO_PLAY ((FAKE_BUF_SIZE * 1000L) / SND_RATE)
 
+static TMTask fake_sound_tm_task;
+
 bool SoundFake::sound_works()
 {
     return !no_more_sound_p;

@@ -2,7 +2,6 @@
 #define _RSYS_SOUNDFAKE_H_
 
 #include "rsys/sounddriver.h"
-#include "TimeMgr.h"
 
 namespace Executor
 {
@@ -28,12 +27,13 @@ private:
     snd_time t1;
     /* # of fake buffers currently enqueued. */
     int num_fake_buffers_enqueued;
+    syn68k_addr_t fake_sound_callback;
+
     /* Set to true when we're shutting down, and don't want any new sound
      * to creep in.
      */
-    syn68k_addr_t fake_sound_callback;
     bool no_more_sound_p;
-    TMTask fake_sound_tm_task;
+
     static syn68k_addr_t handle_fake_sound_callback(syn68k_addr_t addr, void *junk);
     void NoteSoundInterrupt();
     void set_up_tm_task();
