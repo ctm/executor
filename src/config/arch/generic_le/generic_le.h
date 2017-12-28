@@ -13,8 +13,7 @@
 #define swap16(v) _byteswap_ushort(v)
 #define swap32(v) _byteswap_ulong(v)
 #else
-#define swap16(v) ((uint16_t)(__builtin_bswap32((int32_t)(v)) >> 16))
-
+#define swap16(v) ((uint16_t)__builtin_bswap16((uint32_t)(v)))
 #define swap32(v) ((uint32_t)__builtin_bswap32((int32_t)(v)))
 #endif
 

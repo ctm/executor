@@ -14,7 +14,7 @@ include_directories(include/)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set(FRONT_END sdl2)
-set(HOST_ARCH x86_64)
+set(HOST_ARCH generic_le)
 
 if(WIN32)
 set(HOST_OS "win32")
