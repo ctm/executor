@@ -27,7 +27,7 @@
 #include <signal.h>
 #include <fcntl.h>
 
-#include "rsys/sigio_multiplex.h"
+#include "sigio_multiplex.h"
 
 #undef Time
 

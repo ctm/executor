@@ -10,7 +10,7 @@
 #include <sys/types.h>
 #include <sys/time.h>
 
-#include "rsys/sigio_multiplex.h"
+#include "sigio_multiplex.h"
 using namespace Executor;
 
 /* a simple sigio multiplexor */

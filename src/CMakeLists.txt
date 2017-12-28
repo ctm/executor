@@ -162,7 +162,7 @@ set(misc_sources desk.cpp device.cpp disk.cpp diskinit.cpp dump.cpp trapname.cpp
   slash.cpp stdfile.cpp romlib_stubs.cpp syserr.cpp toolevent.cpp toolutil.cpp time.cpp
   vbl.cpp syncint.cpp virtualint.cpp refresh.cpp autorefresh.cpp aboutbox.cpp
   option.cpp parseopt.cpp parsenum.cpp desperate.cpp
-  version.cpp shutdown.cpp uniquefile.cpp sigio_multiplex.cpp screen-dump.cpp
+  version.cpp shutdown.cpp uniquefile.cpp screen-dump.cpp
   process.cpp alias.cpp string.cpp tempmem.cpp edition.cpp fontIMVI.cpp balloon.cpp
   error.cpp adb.cpp color_wheel_bits.cpp finder.cpp system_error.cpp ibm_keycodes.cpp
   icon.cpp redrawscreen.cpp ini.cpp checkpoint.cpp qt.cpp cleanup.cpp
@@ -324,7 +324,6 @@ set(include_sources hintemplate.h
                   include/rsys/screen-dump.h
                   include/rsys/segment.h
                   include/rsys/serial.h
-                  include/rsys/sigio_multiplex.h
                   include/rsys/slash.h
                   include/rsys/sounddriver.h
                   include/rsys/soundfake.h

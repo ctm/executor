@@ -9,7 +9,9 @@ if(X11_LIBRARY AND Xext_LIBRARY)
 			host_bltmacros.h
 			host_vdriver.h
 			x.h
-			x_keycodes.h
+            x_keycodes.h
+            sigio_multiplex.h
+            sigio_multiplex.cpp
 		)
 	target_link_libraries(front-end-x syn68k ${X11_LIBRARY} ${Xext_LIBRARY})
 	target_include_directories(front-end-x PUBLIC .)
