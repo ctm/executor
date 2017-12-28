@@ -1,18 +1,14 @@
-PascalToCCall           check for 64-bit
-CToPascalCall
-
-ROMlib_mbdfcall         64-bit problem: expects a host native pointer hidden in a LONGINT
-ROMlib_ctlcall
-
-* hilite mode, icons, some other things in 16bpp and 32bpp
-
-=======================
-
-!redefinitions in mkvol_internal.h
---> formatting disabled for now
-
 pointless declarations of non-existant P_blah functions
 ROMlib_destroyblocks (cache fluching) is in file.cpp?
+
+there is a function called futzwithdosdisks, which seems to check for mountable hfs volumes and is in stdfile.cpp
+
+serial.c: setbaud
+    INTEGER rates[] = { ... 38400 ... };
+        // this can't work
+
+=====
+rename "futzwithdosdisks" to something sensible and move it out of stdfile.cpp
 
 
 region: mixed endianness, CWC_RAW
@@ -88,8 +84,3 @@ missing CL:
 alias.cpp:633
       headp->length = CW(n_bytes_needed);
 (CW was missing)
-
-serial.c: setbaud
-    INTEGER rates[] = { ... 38400 ... };
-        // this can't work
-
