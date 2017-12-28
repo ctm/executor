@@ -11,7 +11,7 @@ if(X11_LIBRARY AND Xext_LIBRARY)
 			x.h
 			x_keycodes.h
 		)
-	target_link_libraries(front-end-x ${X11_LIBRARY} ${Xext_LIBRARY})
+	target_link_libraries(front-end-x syn68k ${X11_LIBRARY} ${Xext_LIBRARY})
 	target_include_directories(front-end-x PUBLIC .)
 
 endif()

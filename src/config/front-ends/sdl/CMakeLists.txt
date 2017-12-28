@@ -41,7 +41,7 @@ if(SDL_LIBRARY AND SDL_INCLUDE_DIR AND X11_LIBRARY AND Xext_LIBRARY)
         ${OS_SPECIFIC}
         )
 
-    target_link_libraries(front-end-sdl ${SDL_LIBRARY})
+    target_link_libraries(front-end-sdl syn68k ${SDL_LIBRARY})
 
     if(UNIX AND NOT APPLE)
         target_link_libraries(front-end-sdl ${X11_LIBRARY})
