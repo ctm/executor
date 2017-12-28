@@ -1,9 +1,0 @@
-// This Configuration file (/executor/configur/5843454c.ecf) was built by Executor
-Comments = "Excel will die if System is set  >= 7";
-WindowName = "Microsoft Excel";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitOften, SoundOff, PassPostscript};

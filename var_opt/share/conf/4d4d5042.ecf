@@ -1,9 +1,0 @@
-// This Configuration file (/executor/configur/4d4d5042.ecf) was built by Executor
-Comments = "Introduction to Claris Works can not play sound.";
-WindowName = "Introduction to ClarisWorks";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR};

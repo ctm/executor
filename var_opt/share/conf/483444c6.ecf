@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/483444c6.ecf) was built by Executor
-Comments = "Spaceward Ho 4.x requires System 7.  Sound On is good, too.";
-// WindowName = "DemoHo68K";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 7.0.0;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

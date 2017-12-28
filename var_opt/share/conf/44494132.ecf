@@ -1,5 +1,0 @@
-// This Configuration file (/executor/configur/44494132.ecf) was built by Executor
-Comments = "Diamonds 1.6 seems to run OK.";
-RefreshNumber = 6;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

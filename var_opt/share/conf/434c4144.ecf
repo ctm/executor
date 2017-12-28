@@ -1,9 +1,0 @@
-// This Configuration file (434c4144.ecf) was built by Executor
-Comments = "";
-// WindowName = "MacClade 3.07";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 7.0.0;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitOften, PretendSound, PassPostscript, NewLineToCR};

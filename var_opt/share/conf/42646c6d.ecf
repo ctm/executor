@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/42646c6d.ecf) was built by Executor
-Comments = "Bedlam needs System 7, writes directly to the screen and wants Sound On.";
-// WindowName = "Bedlam";
-BitsPerPixel = 1;
-ScreenLocation = { 0, 0 };
-SystemVersion = 7.0.0;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

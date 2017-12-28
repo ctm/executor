@@ -1,9 +1,0 @@
-// This Configuration file (/executor/configur/43475246.ecf) was built by Executor
-Comments = "Cricket Graph really is 32-bit clean.";
-WindowName = "Cricket Graph";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR, NoWarn32};

@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/f5536b69.ecf) was built by Executor
-Comments = "Ingemar's Skiing Game";
-// WindowName = "Ingemar's skiing game 1.0.1.u";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitOften, SoundOn, PassPostscript, NewLineToCR, NoWarn32};

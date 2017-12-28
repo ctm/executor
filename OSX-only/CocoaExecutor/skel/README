@@ -1,6 +1,0 @@
-The skel directory contains a single directory "volume", which is the
-read-only template used to create an initial ExecutorVolume when one
-can't be found at Executor's startup.  ExecutorVolume at minimum needs
-a "System Folder" directory that contains an Executor compatible "System"
-file (traditionally represented as a pair of files "System" and "%System").
-

@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/48525630.ecf) was built by Executor
-Comments = "Cyclone wants Sound On.  It will write directly to the screen, too.";
-// WindowName = "Cyclone 1.2.1";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

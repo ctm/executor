@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/4d687a75.ecf) was built by Executor
-Comments = "5 of a Kind wants Sound On and Animation";
-// WindowName = "5 of a Kind";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitOften, SoundOn, PassPostscript, NewLineToCR, NoWarn32};

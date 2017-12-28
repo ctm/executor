@@ -1,9 +1,0 @@
-// This Configuration file (/executor/configur/4c505243.ecf) was built by Executor
-Comments = "Leprechaun wants sound on.";
-WindowName = "Leprechaun%AA V3.0";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitOften, SoundOn, PassPostscript, NoWarn32};

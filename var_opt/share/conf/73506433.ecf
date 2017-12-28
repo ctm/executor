@@ -1,9 +1,0 @@
-// This Configuration file (73506433.ecf) was built by Executor
-Comments = "Speedometer";
-// WindowName = "Speedometer 3.23";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, PretendSound, PassPostscript, NewLineToCR};

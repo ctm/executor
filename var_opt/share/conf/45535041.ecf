@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/45535041.ecf) was built by Executor
-Comments = "Beebop 2 wants sound on";
-// WindowName = "BeeBop II";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 7.0.0;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitOften, SoundOn, PassPostscript, NewLineToCR, NoWarn32};

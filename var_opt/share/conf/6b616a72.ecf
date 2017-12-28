@@ -1,9 +1,0 @@
-// This Configuration file (6b616a72.ecf) was built by Executor
-Comments = "";
-// WindowName = "Installer";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 7.0.0;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, PretendSound, PassPostscript, NewLineToCR, FlushOften, PretendScript};

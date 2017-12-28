@@ -1,9 +1,0 @@
-// This Configuration file (/executor/configur/4154726e.ecf) was built by Executor
-Comments = "A-train works, but sound will not play";
-WindowName = "A-Train";
-BitsPerPixel = 4;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR, NoWarn32};
