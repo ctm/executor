@@ -209,7 +209,7 @@ typedef void *AudioSelectionPtr;
 typedef void *SPBPtr;
 #endif
 
-typedef unsigned long UnsignedFixed;
+typedef uint32_t UnsignedFixed;
 typedef Ptr CompressionInfoPtr;
 
 extern trap void C_SndGetSysBeepState(GUEST<INTEGER> *statep);

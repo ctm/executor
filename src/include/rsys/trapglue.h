@@ -7,7 +7,7 @@ namespace Executor
 typedef struct
 {
     void *wheretogo;
-    ULONGINT magic;
+    uint64_t magic;
 } ptocblock_t;
 
 typedef struct
@@ -39,7 +39,7 @@ extern syn68k_addr_t PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop);
 
 extern unsigned short mostrecenttrap;
 
-extern long CToPascalCall(void *, unsigned long, ...);
+extern uintptr_t CToPascalCall(void *, unsigned long, ...);
 extern toolstuff_t toolstuff[NTOOLENTRIES];
 }
 

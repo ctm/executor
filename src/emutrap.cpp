@@ -61,27 +61,27 @@ using namespace Executor;
 PUBLIC syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop)
 {
     unsigned short pth, ptv;
-    long args[11], retval;
+    uintptr_t args[11], retval;
 #if defined(powerpc)
     Point points[11];
     int point_count = 0;
 #endif
-    unsigned long long magic;
+    uint64_t magic;
     int count, rettype;
     void *funcp;
     int sizeflag;
-    typedef long (*func0argsp_t)(void);
-    typedef long (*func1argsp_t)(long);
-    typedef long (*func2argsp_t)(long, long);
-    typedef long (*func3argsp_t)(long, long, long);
-    typedef long (*func4argsp_t)(long, long, long, long);
-    typedef long (*func5argsp_t)(long, long, long, long, long);
-    typedef long (*func6argsp_t)(long, long, long, long, long, long);
-    typedef long (*func7argsp_t)(long, long, long, long, long, long, long);
-    typedef long (*func8argsp_t)(long, long, long, long, long, long, long, long);
-    typedef long (*func9argsp_t)(long, long, long, long, long, long, long, long, long);
-    typedef long (*func10argsp_t)(long, long, long, long, long, long, long, long, long, long);
-    typedef long (*func11argsp_t)(long, long, long, long, long, long, long, long, long, long, long);
+    typedef uintptr_t (*func0argsp_t)(void);
+    typedef uintptr_t (*func1argsp_t)(uintptr_t);
+    typedef uintptr_t (*func2argsp_t)(uintptr_t, uintptr_t);
+    typedef uintptr_t (*func3argsp_t)(uintptr_t, uintptr_t, uintptr_t);
+    typedef uintptr_t (*func4argsp_t)(uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+    typedef uintptr_t (*func5argsp_t)(uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+    typedef uintptr_t (*func6argsp_t)(uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+    typedef uintptr_t (*func7argsp_t)(uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+    typedef uintptr_t (*func8argsp_t)(uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+    typedef uintptr_t (*func9argsp_t)(uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+    typedef uintptr_t (*func10argsp_t)(uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t);
+    typedef uintptr_t (*func11argsp_t)(uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t, uintptr_t);
     syn68k_addr_t retaddr;
 
     count = 0;
@@ -116,14 +116,7 @@ PUBLIC syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t
                 ptv = POPSW();
                 pth = POPSW();
 #if !defined(LITTLEENDIAN)
-#if !defined(powerpc)
                 args[count++] = (ptv << 16) | pth;
-#else
-                points[point_count].h = pth;
-                points[point_count].v = ptv;
-                args[count++] = (long)&points[point_count];
-                ++point_count;
-#endif
 #else /* defined(LITTLEENDIAN) */
                 args[count++] = (pth << 16) | ptv;
 #endif /* defined(LITTLEENDIAN) */
@@ -132,7 +125,7 @@ PUBLIC syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t
                 args[count++] = POPSL();
                 break;
             case 5:
-                args[count++] = (long)SYN68K_TO_US_CHECK0_CHECKNEG1(POPSL());
+                args[count++] = (uintptr_t)SYN68K_TO_US_CHECK0_CHECKNEG1(POPSL());
                 break;
         }
         magic >>= 3;
@@ -211,11 +204,11 @@ PUBLIC syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t
     return retaddr;
 }
 
-PRIVATE long
-CToPascalCall_m68k(void *wheretogo, unsigned long long magic, va_list ap)
+PRIVATE uintptr_t
+CToPascalCall_m68k(void *wheretogo, uint64_t magic, va_list ap)
 {
-    long retval;
-    unsigned long ul;
+    uintptr_t retval;
+    uintptr_t ul;
     int retvaltype;
     M68kReg saveregs[14];
 
@@ -239,36 +232,26 @@ CToPascalCall_m68k(void *wheretogo, unsigned long long magic, va_list ap)
         switch(magic & 7)
         {
             case 1:
-                PUSHUB((unsigned char)va_arg(ap, unsigned long));
+                PUSHUB((unsigned char)va_arg(ap, uintptr_t));
                 break;
             case 2:
-                PUSHUW((unsigned short)va_arg(ap, unsigned long));
+                PUSHUW((unsigned short)va_arg(ap, uintptr_t));
                 break;
             case 3:
-                ul = va_arg(ap, unsigned long);
+                ul = va_arg(ap, uintptr_t);
 #if !defined(LITTLEENDIAN)
-#if !defined(powerpc)
                 PUSHUW(ul);
                 PUSHUW(ul >> 16);
-#else
-                {
-                    unsigned long new_ul;
-
-                    new_ul = *(unsigned long *)ul;
-                    PUSHUW(new_ul);
-                    PUSHUW(new_ul >> 16);
-                }
-#endif
 #else /* defined(LITTLEENDIAN) */
                 PUSHUW(ul >> 16);
                 PUSHUW(ul);
 #endif /* defined(LITTLEENDIAN) */
                 break;
             case 4:
-                PUSHUL(va_arg(ap, unsigned long));
+                PUSHUL(va_arg(ap, uintptr_t));
                 break;
             case 5:
-                PUSHUL(US_TO_SYN68K_CHECK0_CHECKNEG1((void *)va_arg(ap, unsigned long)));
+                PUSHUL(US_TO_SYN68K_CHECK0_CHECKNEG1((void *)va_arg(ap, uintptr_t)));
                 break;
         }
         magic >>= 3;
@@ -292,7 +275,7 @@ CToPascalCall_m68k(void *wheretogo, unsigned long long magic, va_list ap)
             retval = POPSL();
             break;
         case 5:
-            retval = (unsigned long)SYN68K_TO_US_CHECK0_CHECKNEG1(POPSL());
+            retval = (uintptr_t)SYN68K_TO_US_CHECK0_CHECKNEG1(POPSL());
             break;
 #if !defined(LETGCCWAIL)
         default:
@@ -489,11 +472,11 @@ is_routine_descriptor_ptr(uint16_t *addr)
 }
 #endif
 
-PUBLIC long Executor::CToPascalCall(void *wheretogo, unsigned long magic_in, ...)
+PUBLIC uintptr_t Executor::CToPascalCall(void *wheretogo, uint64_t magic_in, ...)
 {
     va_list ap;
-    LONGINT retval;
-    unsigned long long magic;
+    uintptr_t retval;
+    uint64_t magic;
 
     switch(magic_in)
     {
