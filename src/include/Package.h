@@ -10,12 +10,15 @@
 
 namespace Executor
 {
-#define dskInit 2
-#define stdFile 3
-#define flPoint 4
-#define trFunc 5
-#define intUtil 6
-#define bdConv 7
+enum
+{
+    dskInit = 2,
+    stdFile = 3,
+    flPoint = 4,
+    trFunc = 5,
+    intUtil = 6,
+    bdConv = 7,
+};
 
 #if 0
 #if !defined(AppPacks_H)
@@ -24,8 +27,10 @@ extern GUEST<Handle> AppPacks_H[8];
 #endif
 
 extern pascal trap void C_InitPack(INTEGER packid);
+PASCAL_TRAP(InitPack, 0xA9E5);
 
 extern pascal trap void C_InitAllPacks(void);
+PASCAL_TRAP(InitAllPacks, 0xA9E6);
 
 }
 #endif /* __PACKAGE__ */

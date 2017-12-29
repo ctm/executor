@@ -30,29 +30,36 @@ extern pascal trap OSErr C_FindFolder(int16_t vRefNum, OSType folderType,
                                       Boolean createFolder,
                                       GUEST<int16_t> *foundVRefNum,
                                       GUEST<int32_t> *foundDirID);
+PASCAL_FUNCTION(FindFolder);
 
 extern pascal trap OSErr C_NewAlias(FSSpecPtr fromFile, FSSpecPtr target,
                                     GUEST<AliasHandle> *alias);
+PASCAL_FUNCTION(NewAlias);
 
 extern pascal trap OSErr C_NewAliasMinimal(FSSpecPtr target,
                                            GUEST<AliasHandle> *alias);
+PASCAL_FUNCTION(NewAliasMinimal);
 
 extern pascal trap OSErr C_NewAliasMinimalFromFullPath(int16_t fullpathLength, Ptr fullpath,
                                                        Str32 zoneName, Str31 serverName, GUEST<AliasHandle> *alias);
+PASCAL_FUNCTION(NewAliasMinimalFromFullPath);
 
 extern pascal trap OSErr C_UpdateAlias(FSSpecPtr fromFile, FSSpecPtr target,
                                        AliasHandle alias,
                                        Boolean *wasChanged);
+PASCAL_FUNCTION(UpdateAlias);
 
 extern pascal trap OSErr C_ResolveAlias(FSSpecPtr fromFile,
                                         AliasHandle alias,
                                         FSSpecPtr target,
                                         Boolean *wasAliased);
+PASCAL_FUNCTION(ResolveAlias);
 
 extern pascal trap OSErr C_ResolveAliasFile(FSSpecPtr theSpec,
                                             Boolean resolveAliasChains,
                                             Boolean *targetIsFolder,
                                             Boolean *wasAliased);
+PASCAL_FUNCTION(ResolveAliasFile);
 
 extern pascal trap OSErr C_MatchAlias(FSSpecPtr fromFile, int32_t rulesMask,
                                       AliasHandle alias, int16_t *aliasCount,
@@ -60,9 +67,11 @@ extern pascal trap OSErr C_MatchAlias(FSSpecPtr fromFile, int32_t rulesMask,
                                       Boolean *needsUpdate,
                                       AliasFilterProcPtr aliasFilter,
                                       Ptr yourDataPtr);
+PASCAL_FUNCTION(MatchAlias);
 extern pascal trap OSErr C_GetAliasInfo(AliasHandle alias,
                                         AliasTypeInfo index,
                                         Str63 theString);
+PASCAL_FUNCTION(GetAliasInfo);
 }
 
 #endif

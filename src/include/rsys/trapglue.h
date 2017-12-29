@@ -1,10 +1,9 @@
 #if !defined(__TRAPGLUE__)
 #define __TRAPGLUE__
 
-#ifdef __cplusplus
 namespace Executor
 {
-#endif
+
 typedef struct
 {
     void *wheretogo;
@@ -39,8 +38,9 @@ extern syn68k_addr_t ostraptable[NOSENTRIES];
 extern syn68k_addr_t PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop);
 
 extern unsigned short mostrecenttrap;
-#ifdef __cplusplus
+
+extern long CToPascalCall(void *, unsigned long, ...);
+extern toolstuff_t toolstuff[NTOOLENTRIES];
 }
-#endif
 
 #endif

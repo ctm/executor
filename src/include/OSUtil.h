@@ -14,17 +14,20 @@
 
 namespace Executor
 {
-#define macXLMachine 0
-#define macMachine 1
-#define UNIXMachine 1127
+enum
+{
+    macXLMachine = 0,
+    macMachine = 1,
+    UNIXMachine = 1127,
+};
 
-#define clkRdErr (-85)
-#define clkWrErr (-86)
-#define memFullErr (-108)
-#define memWZErr (-111)
-#define nilHandleErr (-109)
-#define prInitErr (-88)
-#define prWrErr (-87)
+enum
+{
+    clkRdErr = (-85),
+    clkWrErr = (-86),
+    prInitErr = (-88),
+    prWrErr = (-87),
+};
 
 struct SysParmType
 {
@@ -85,35 +88,53 @@ typedef struct SysEnvRec
     GUEST<INTEGER> sysVRefNum;
 } * SysEnvRecPtr;
 
-#define SYSRECVNUM 2
+enum
+{
+    SYSRECVNUM = 2,
+};
 
 /* sysEnv machine types */
-#define envMachUnknown 0
-#define env512KE 1
-#define envMacPlus 2
-#define envSE 3
-#define envMacII 4
-#define envMac -1
-#define envXL -2
+enum
+{
+    envMachUnknown = 0,
+    env512KE = 1,
+    envMacPlus = 2,
+    envSE = 3,
+    envMacII = 4,
+    envMac = -1,
+    envXL = -2,
+};
 
-#define envCPUUnknown 0
-#define env68000 1
-#define env68020 3
-#define env68030 4
-#define env68040 5
+enum
+{
+    envCPUUnknown = 0,
+    env68000 = 1,
+    env68020 = 3,
+    env68030 = 4,
+    env68040 = 5,
+};
 
-#define envUnknownKbd 0
-#define envMacKbd 1
-#define envMacAndPad 2
-#define envMacPlusKbd 3
-#define envAExtendKbd 4
-#define envStandADBKbd 5
+enum
+{
+    envUnknownKbd = 0,
+    envMacKbd = 1,
+    envMacAndPad = 2,
+    envMacPlusKbd = 3,
+    envAExtendKbd = 4,
+    envStandADBKbd = 5,
+};
 
-#define envBadVers (-5501)
-#define envVersTooBig (-5502)
+enum
+{
+    envBadVers = (-5501),
+    envVersTooBig = (-5502),
+};
 
-#define OSTrap 0
-#define ToolTrap 1
+enum
+{
+    OSTrap = 0,
+    ToolTrap = 1,
+};
 
 #if !defined(SysVersion)
 extern INTEGER SysVersion;
@@ -167,6 +188,7 @@ extern void SetTrapAddress(LONGINT addr,
                            INTEGER n);
 extern trap void Delay(LONGINT n, LONGINT *ftp);
 extern pascal trap void C_SysBeep(INTEGER i);
+PASCAL_TRAP(SysBeep, 0xA9C8);
 
 extern trap void Environs(GUEST<INTEGER> *rom, GUEST<INTEGER> *machine);
 extern trap OSErrRET SysEnvirons(INTEGER vers, SysEnvRecPtr p);

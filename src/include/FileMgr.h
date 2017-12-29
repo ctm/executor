@@ -93,59 +93,69 @@
 
 namespace Executor
 {
-#define fOnDesk 1
-#define fHasBundle 8192
-#define fInvisible 16384
-#define fTrash (-3)
-#define fDesktop (-2)
-#define fDisk 0
+enum
+{
+    fOnDesk = 1,
+    fHasBundle = 8192,
+    fInvisible = 16384,
+    fTrash = (-3),
+    fDesktop = (-2),
+    fDisk = 0,
+};
 
-#define fsCurPerm 0
-#define fsRdPerm 1
-#define fsWrPerm 2
-#define fsRdWrPerm 3
-#define fsRdWrShPerm 4
+enum
+{
+    fsCurPerm = 0,
+    fsRdPerm = 1,
+    fsWrPerm = 2,
+    fsRdWrPerm = 3,
+    fsRdWrShPerm = 4,
+};
 
-#define fsAtMark 0
-#define fsFromStart 1
-#define fsFromLEOF 2
-#define fsFromMark 3
-#define rdVerify 64
+enum
+{
+    fsAtMark = 0,
+    fsFromStart = 1,
+    fsFromLEOF = 2,
+    fsFromMark = 3,
+    rdVerify = 64,
+};
 
-#define badMDBErr (-60)
-#define badMovErr (-122)
-#define bdNamErr (-37)
-#define dirFulErr (-33)
-#define dskFulErr (-34)
-#define dupFNErr (-48)
-#define eofErr (-39)
-#define extFSErr (-58)
-#define fBsyErr (-47)
-#define fLckdErr (-45)
-#define fnfErr (-43)
-#define fnOpnErr (-38)
-#define fsRnErr (-59)
-#define gfpErr (-52)
-#define ioErr (-36)
-#define memFullErr (-108)
-#define noMacDskErr (-57)
-#define nsDrvErr (-56)
-#define nsvErr (-35)
-#define opWrErr (-49)
-#define paramErr (-50)
-#define permErr (-54)
-#define posErr (-40)
-#define rfNumErr (-51)
-#define tmfoErr (-42)
-#define volOffLinErr (-53)
-#define volOnLinErr (-55)
-#define vLckdErr (-46)
-#define wrgVolTypErr (-123)
-#define wrPermErr (-61)
-#define wPrErr (-44)
-#define tmwdoErr (-121)
-#define dirNFErr (-120)
-#define fsDSIntErr (-127)
+enum
+{
+    badMDBErr = (-60),
+    badMovErr = (-122),
+    bdNamErr = (-37),
+    dirFulErr = (-33),
+    dskFulErr = (-34),
+    dupFNErr = (-48),
+    eofErr = (-39),
+    extFSErr = (-58),
+    fBsyErr = (-47),
+    fLckdErr = (-45),
+    fnfErr = (-43),
+    fnOpnErr = (-38),
+    fsRnErr = (-59),
+    gfpErr = (-52),
+    ioErr = (-36),
+    noMacDskErr = (-57),
+    nsDrvErr = (-56),
+    nsvErr = (-35),
+    opWrErr = (-49),
+    permErr = (-54),
+    posErr = (-40),
+    rfNumErr = (-51),
+    tmfoErr = (-42),
+    volOffLinErr = (-53),
+    volOnLinErr = (-55),
+    vLckdErr = (-46),
+    wrgVolTypErr = (-123),
+    wrPermErr = (-61),
+    wPrErr = (-44),
+    tmwdoErr = (-121),
+    dirNFErr = (-120),
+    fsDSIntErr = (-127),
+};
 
 enum
 {
@@ -549,9 +559,12 @@ extern INTEGER 	DefVRefNum;
 extern INTEGER 	FSFCBLen;
 #endif
 
-#define FCBSPtr (FCBSPtr_H.p)
-#define DefVCBPtr (DefVCBPtr_H.p)
-#define WDCBsPtr (WDCBsPtr_H.p)
+enum
+{
+    FCBSPtr = (FCBSPtr_H.p),
+    DefVCBPtr = (DefVCBPtr_H.p),
+    WDCBsPtr = (WDCBsPtr_H.p),
+};
 #endif
 
 #pragma pack(pop)
@@ -668,32 +681,49 @@ extern trap OSErrRET PBResolveFileIDRef(ParmBlkPtr pb, BOOLEAN async);
 /* prototypes for the high level filesystem dispatch traps */
 extern pascal trap OSErr C_FSMakeFSSpec(int16_t vRefNum, int32_t dir_id,
                                         Str255 file_name, FSSpecPtr spec);
+PASCAL_FUNCTION(FSMakeFSSpec);
 extern pascal trap OSErr C_FSpExchangeFiles(FSSpecPtr src, FSSpecPtr dst);
+PASCAL_FUNCTION(FSpExchangeFiles);
 extern pascal trap OSErr C_FSpOpenDF(FSSpecPtr spec, SignedByte perms,
                                      GUEST<int16_t> *refNum_out);
+PASCAL_FUNCTION(FSpOpenDF);
 extern pascal trap OSErr C_FSpOpenRF(FSSpecPtr spec, SignedByte perms,
                                      GUEST<int16_t> *refNum_out);
+PASCAL_FUNCTION(FSpOpenRF);
 extern pascal trap OSErr C_FSpCreate(FSSpecPtr spec,
                                      OSType creator, OSType file_type,
                                      ScriptCode script);
+PASCAL_FUNCTION(FSpCreate);
 extern pascal trap OSErr C_FSpDirCreate(FSSpecPtr spec, ScriptCode script,
                                         GUEST<int32_t> *created_dir_id);
+PASCAL_FUNCTION(FSpDirCreate);
 extern pascal trap OSErr C_FSpDelete(FSSpecPtr spec);
+PASCAL_FUNCTION(FSpDelete);
 
 extern pascal trap OSErr C_FSpGetFInfo(FSSpecPtr spec, FInfo *fndr_info);
+PASCAL_FUNCTION(FSpGetFInfo);
 extern pascal trap OSErr C_FSpSetFInfo(FSSpecPtr spec, FInfo *fndr_info);
+PASCAL_FUNCTION(FSpSetFInfo);
 extern pascal trap OSErr C_FSpSetFLock(FSSpecPtr spec);
+PASCAL_FUNCTION(FSpSetFLock);
 extern pascal trap OSErr C_FSpRstFLock(FSSpecPtr spec);
+PASCAL_FUNCTION(FSpRstFLock);
 extern pascal trap OSErr C_FSpRename(FSSpecPtr spec, Str255 new_name);
+PASCAL_FUNCTION(FSpRename);
 extern pascal trap OSErr C_FSpCatMove(FSSpecPtr src, FSSpecPtr dst);
+PASCAL_FUNCTION(FSpCatMove);
 extern pascal trap void C_FSpCreateResFile(FSSpecPtr spec,
                                            OSType creator, OSType file_type,
                                            ScriptCode script);
+PASCAL_FUNCTION(FSpCreateResFile);
 extern pascal trap INTEGER C_FSpOpenResFile(FSSpecPtr spec, SignedByte perms);
+PASCAL_FUNCTION(FSpOpenResFile);
 extern pascal trap INTEGER C_HOpenResFile(INTEGER vref, LONGINT dirid,
                                           Str255 file_name, SignedByte perm);
+PASCAL_TRAP(HOpenResFile, 0xA81A);
 extern pascal trap void C_HCreateResFile(INTEGER vrefnum, LONGINT parid,
                                          Str255 name);
+PASCAL_TRAP(HCreateResFile, 0xA81B);
 
 extern OSErr HCreate(INTEGER vref, LONGINT dirid, Str255 name, OSType creator,
                      OSType type);

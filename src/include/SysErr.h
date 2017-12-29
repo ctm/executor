@@ -21,7 +21,10 @@ extern Byte 	WWExist;
 extern Byte 	QDExist;
 #endif
 
-#define DSAlertTab (DSAlertTab_H.p)
+enum
+{
+    DSAlertTab = (DSAlertTab_H.p),
+};
 #endif
 
 extern char syserr_msg[];

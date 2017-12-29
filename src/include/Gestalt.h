@@ -96,62 +96,89 @@ enum
     gestaltPowerPC = 2,
 };
 
-#define gestalt32BitAddressing 0
-#define gestalt32BitSysZone 1
-#define gestalt32BitCapable 2
+enum
+{
+    gestalt32BitAddressing = 0,
+    gestalt32BitSysZone = 1,
+    gestalt32BitCapable = 2,
+};
 
 /* gestaltHardwareAttr return values */
-#define gestaltHasVIA1 0
-#define gestaltHasVIA2 1
-#define gestaltHasASC 3
-#define gestaltHasSSC 4
-#define gestaltHasSCI 7
+enum
+{
+    gestaltHasVIA1 = 0,
+    gestaltHasVIA2 = 1,
+    gestaltHasASC = 3,
+    gestaltHasSSC = 4,
+    gestaltHasSCI = 7,
+};
 
-#define gestaltEasyAccessOff (1 << 0)
-#define gestalt68881 1
-#define gestaltMacKbd 1
-#define gestalt68040MMu 4
-#define gestalt68000 1
-#define gestalt68040 5
+enum
+{
+    gestaltEasyAccessOff = (1 << 0),
+    gestalt68881 = 1,
+    gestaltMacKbd = 1,
+    gestalt68040MMu = 4,
+    gestalt68000 = 1,
+    gestalt68040 = 5,
+};
 
-#define gestaltOriginalQD 0
-#define gestalt8BitQD 0x0100
-#define gestalt32BitQD 0x0200
-#define gestalt32BitQD11 0x0210
-#define gestalt32BitQD12 0x0220
-#define gestalt32BitQD13 0x0230
+enum
+{
+    gestaltOriginalQD = 0,
+    gestalt8BitQD = 0x0100,
+    gestalt32BitQD = 0x0200,
+    gestalt32BitQD11 = 0x0210,
+    gestalt32BitQD12 = 0x0220,
+    gestalt32BitQD13 = 0x0230,
+};
 
-#define gestaltHasColor 0
-#define gestaltHasDeepGWorlds 1
-#define gestaltHasDirectPixMaps 2
-#define gestaltHasGrayishTextOr 3
+enum
+{
+    gestaltHasColor = 0,
+    gestaltHasDeepGWorlds = 1,
+    gestaltHasDirectPixMaps = 2,
+    gestaltHasGrayishTextOr = 3,
+};
 
-#define gestaltTE1 1
-#define gestaltTE2 2
-#define gestaltTE3 3
-#define gestaltTE4 4
-#define gestaltTE5 5
+enum
+{
+    gestaltTE1 = 1,
+    gestaltTE2 = 2,
+    gestaltTE3 = 3,
+    gestaltTE4 = 4,
+    gestaltTE5 = 5,
+};
 
-#define gestaltDITLExtPresent 0
+enum
+{
+    gestaltDITLExtPresent = 0,
+};
 
-#define gestaltStandardTimeMgr 1
-#define gestaltVMPresent (1 << 0)
+enum
+{
+    gestaltStandardTimeMgr = 1,
+    gestaltVMPresent = (1 << 0),
+};
 
-#define gestaltClassic 1
-#define gestaltMacXL 2
-#define gestaltMac512KE 3
-#define gestaltMacPlus 4
-#define gestaltMacSE 5
-#define gestaltMacII 6
-#define gestaltMacIIx 7
-#define gestaltMacIIcx 8
-#define gestaltMacSE30 9
-#define gestaltPortable 10
-#define gestaltMacIIci 11
-#define gestaltMacIIfx 13
-#define gestaltMacClassic 17
-#define gestaltMacIIsi 18
-#define gestaltMacLC 19
+enum
+{
+    gestaltClassic = 1,
+    gestaltMacXL = 2,
+    gestaltMac512KE = 3,
+    gestaltMacPlus = 4,
+    gestaltMacSE = 5,
+    gestaltMacII = 6,
+    gestaltMacIIx = 7,
+    gestaltMacIIcx = 8,
+    gestaltMacSE30 = 9,
+    gestaltPortable = 10,
+    gestaltMacIIci = 11,
+    gestaltMacIIfx = 13,
+    gestaltMacClassic = 17,
+    gestaltMacIIsi = 18,
+    gestaltMacLC = 19,
+};
 
 enum
 {

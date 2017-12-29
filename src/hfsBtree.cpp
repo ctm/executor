@@ -359,7 +359,7 @@ PUBLIC OSErr Executor::ROMlib_putcache(cacheentry *cachep)
     cachep->flags &= ~CACHEDIRTY;
 
     if(err == noErr)
-        err = dcache_flush(((VCBExtra *)vcbp)->u.hfs.fd) ? noErr : ioErr;
+        err = dcache_flush(((VCBExtra *)vcbp)->u.hfs.fd) ? (OSErr)noErr : (OSErr)ioErr;
     fs_err_hook(err);
     return err;
 }

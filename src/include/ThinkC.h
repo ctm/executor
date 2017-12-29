@@ -14,6 +14,7 @@ extern void CDebugStr(StringPtr p);
 extern StringPtr CtoPstr(char *str);
 extern char *PtoCstr(StringPtr str);
 extern pascal trap void C_DebugStr(StringPtr p);
+PASCAL_TRAP(DebugStr, 0xABFF);
 
 }
 #endif /* __THINKCDOTH__ */

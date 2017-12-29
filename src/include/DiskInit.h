@@ -9,18 +9,6 @@
  *
 
  */
-
-#define badMDBErr (-60)
-#define extFSErr (-58)
-#define firstDskErr (-84)
-#define ioErr (-36)
-#define lastDskErr (-64)
-#define memFullErr (-108)
-#define noMacDskErr (-57)
-#define nsDrvErr (-56)
-#define paramErr (-50)
-#define volOnLinErr (-55)
-
 namespace Executor
 {
 extern void C_DILoad(void);

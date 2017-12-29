@@ -11,8 +11,11 @@
 namespace Executor
 {
 
-#define qErr (-1)
-#define vTypErr (-2)
+enum
+{
+    qErr = (-1),
+    vTypErr = (-2),
+};
 
 struct VBLTask
 {

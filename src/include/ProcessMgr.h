@@ -128,51 +128,68 @@ typedef ProcessInfoRec *ProcessInfoPtr;
 /* flags for the `processMode' field of the `ProcessInformationRec'
    record */
 
-#define modeDeskAccessory 0x00020000
-#define modeMultiLaunch 0x00010000
-#define modeNeedSuspendResume 0x00004000
-#define modeCanBackground 0x00001000
-#define modeDoesActivateOnFGSwitch 0x00000800
-#define modeOnlyBackground 0x00000400
-#define modeGetFrontClicks 0x00000200
-#define modeGetAppDiedMsg 0x00000100
-#define mode32BitCompatible 0x00000080
-#define modeHighLevelEventAware 0x00000040
-#define modeLocalAndRemoteHLEvents 0x00000020
-#define modeStationeryAware 0x00000010
-#define modeUseTextEditServices 0x00000008
+enum
+{
+    modeDeskAccessory = 0x00020000,
+    modeMultiLaunch = 0x00010000,
+    modeNeedSuspendResume = 0x00004000,
+    modeCanBackground = 0x00001000,
+    modeDoesActivateOnFGSwitch = 0x00000800,
+    modeOnlyBackground = 0x00000400,
+    modeGetFrontClicks = 0x00000200,
+    modeGetAppDiedMsg = 0x00000100,
+    mode32BitCompatible = 0x00000080,
+    modeHighLevelEventAware = 0x00000040,
+    modeLocalAndRemoteHLEvents = 0x00000020,
+    modeStationeryAware = 0x00000010,
+    modeUseTextEditServices = 0x00000008,
+};
 
-#define kNoProcess (0)
-#define kSystemProcess (1)
-#define kCurrentProcess (2)
+enum
+{
+    kNoProcess = (0),
+    kSystemProcess = (1),
+    kCurrentProcess = (2),
+};
 
-#define paramErr (-50)
-#define procNotFound (-600)
+enum
+{
+    procNotFound = (-600),
+};
 
 extern void process_create(bool desk_accessory_p,
                            uint32_t type, uint32_t signature);
 
 extern pascal trap OSErr C_GetCurrentProcess(ProcessSerialNumber *serial_number);
+PASCAL_FUNCTION(GetCurrentProcess);
 
 extern pascal trap OSErr C_GetNextProcess(ProcessSerialNumber *serial_number);
+PASCAL_FUNCTION(GetNextProcess);
 
 extern pascal trap OSErr C_GetProcessInformation(ProcessSerialNumber *serial_number,
                                                  ProcessInfoPtr info);
+PASCAL_FUNCTION(GetProcessInformation);
 
 extern pascal trap OSErr C_SameProcess(ProcessSerialNumber *serial_number0,
                                        ProcessSerialNumber *serial_number1,
                                        Boolean *same_out);
+PASCAL_FUNCTION(SameProcess);
 extern pascal trap OSErr C_GetFrontProcess(ProcessSerialNumber *serial_number, void *dummy);
+PASCAL_FUNCTION(GetFrontProcess);
 
 extern pascal trap OSErr C_SetFrontProcess(ProcessSerialNumber *serial_number);
+PASCAL_FUNCTION(SetFrontProcess);
 
 extern pascal trap OSErr C_WakeUpProcess(ProcessSerialNumber *serial_number);
+PASCAL_FUNCTION(WakeUpProcess);
 
 extern pascal trap OSErr C_GetProcessSerialNumberFromPortName(PPCPortPtr port_name,
                                                               ProcessSerialNumber *serial_number);
+PASCAL_FUNCTION(GetProcessSerialNumberFromPortName);
 
 extern pascal trap OSErr C_GetPortNameFromProcessSerialNumber(PPCPortPtr port_name,
                                                               ProcessSerialNumber *serial_number);
+PASCAL_FUNCTION(GetPortNameFromProcessSerialNumber);
 
 extern OSErr NewLaunch(StringPtr appl, INTEGER vrefnum,
                        LaunchParamBlockRec *lpbp);

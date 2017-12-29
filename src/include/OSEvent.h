@@ -15,7 +15,10 @@
 
 namespace Executor
 {
-#define evtNotEnb 1
+enum
+{
+    evtNotEnb = 1,
+};
 
 struct EvQEl
 {
@@ -31,12 +34,15 @@ struct EvQEl
 
 typedef EvQEl *EvQElPtr;
 
-#define osEvt 15
-#define SUSPENDRESUMEBITS 0x01000000
-#define SUSPEND (0 << 0)
-#define RESUME (1 << 0)
-#define CONVERTCLIPBOARD (1 << 1)
-#define mouseMovedMessage 0xFA
+enum
+{
+    osEvt = 15,
+    SUSPENDRESUMEBITS = 0x01000000,
+    SUSPEND = (0 << 0),
+    RESUME = (1 << 0),
+    CONVERTCLIPBOARD = (1 << 1),
+    mouseMovedMessage = 0xFA,
+};
 
 typedef enum {
     SZreserved0 = (1 << 15),
@@ -90,7 +96,10 @@ extern INTEGER 	SysEvtMask;
 extern QHdr 	EventQueue;
 #endif
 
-#define Ticks (Ticks_UL.u)
+enum
+{
+    Ticks = (Ticks_UL.u),
+};
 #endif
 
 extern void ROMlib_eventdep(void);
@@ -134,12 +143,18 @@ typedef struct HighLevelEventMsg
 
 typedef ProcPtr GetSpecificFilterProcPtr;
 
-#define noOutstandingHLE (-607)
-#define bufferIsSmall (-608)
+enum
+{
+    noOutstandingHLE = (-607),
+    bufferIsSmall = (-608),
+};
 
 extern pascal trap OSErr C_AcceptHighLevelEvent(TargetID *sender_id_return, GUEST<int32_t> *refcon_return, Ptr msg_buf, GUEST<int32_t> *msg_length_return);
+PASCAL_FUNCTION(AcceptHighLevelEvent);
 extern pascal trap Boolean C_GetSpecificHighLevelEvent(GetSpecificFilterProcPtr fn, Ptr data, OSErr *err_return);
+PASCAL_FUNCTION(GetSpecificHighLevelEvent);
 extern pascal trap OSErr C_PostHighLevelEvent(EventRecord *evt, Ptr receiver_id, int32_t refcon, Ptr msg_buf, int32_t msg_length, int32_t post_options);
+PASCAL_FUNCTION(PostHighLevelEvent);
 
 /* #### move to rsys/foo.h */
 extern bool hle_get_event(EventRecord *evt, bool remflag);

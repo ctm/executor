@@ -1,4 +1,4 @@
-#if !defined(_STUBIFY_H_)
+#if 0 && !defined(_STUBIFY_H_)
 #define _STUBIFY_H_
 
 #include "rsys/ctopflags.h"
@@ -9,8 +9,6 @@
 namespace Executor
 {
 #endif
-extern long CToPascalCall(void *, unsigned long, ...);
-extern toolstuff_t toolstuff[NTOOLENTRIES];
 
 #define SetCTitle(A1, A2)                                                                                \
     ({                                                                                                   \

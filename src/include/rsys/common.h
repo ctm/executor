@@ -10,7 +10,7 @@
 #include "host-arch-config.h"
 #endif /* !COMPILE_FOR_BUILD */
 
-#if !defined(CYGWIN32) && defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
+#if !defined(CYGWIN32) && !defined(WIN32) && defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 #undef USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 #endif
 
@@ -20,24 +20,28 @@
 #include "rsys/mactype.h"
 #include "rsys/byteswap.h"
 
-#if !defined USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 #include <syn68k_public.h>
+
+#include "rsys/pascal.h"
 #include "ExMacTypes.h"
 #include "rsys/trapdecl.h"
-#include "rsys/stubify.h"
 #include "rsys/slash.h"
 #include "rsys/error.h"
+#if !defined USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 #include "rsys/lowglobals.h"
 #endif
+
+#include "rsys/ctopflags.h"
+#include "rsys/ptocflags.h"
+#include "rsys/trapglue.h"
 
 #if !defined(COMPILE_FOR_BUILD)
 #include "front-end-config.h"
 #endif
 
-#ifdef __cplusplus
 namespace Executor
 {
-#endif
+
 typedef struct
 {
 } host_spf_reply_block;
@@ -56,7 +60,6 @@ extern bool host_spfcommon(host_spf_reply_block *replyp,
                            sf_flavor_t flavor,
                            void *activeList, void *activateproc,
                            void *yourdatap);
-#ifdef __cplusplus
 }
-#endif
+
 #endif /* !_COMMON_H_ */

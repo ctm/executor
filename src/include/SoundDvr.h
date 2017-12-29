@@ -10,9 +10,12 @@
 
 namespace Executor
 {
-#define swMode (-1)
-#define ftMode 1
-#define ffMode 0
+enum
+{
+    swMode = (-1),
+    ftMode = 1,
+    ffMode = 0,
+};
 
 typedef Byte FreeWave[30001];
 struct FFSynthRec
@@ -85,7 +88,10 @@ extern Byte 	SoundActive;
 extern INTEGER 	CurPitch;
 #endif
 
-#define SoundBase (SoundBase_H.p)
+enum
+{
+    SoundBase = (SoundBase_H.p),
+};
 #endif
 }
 

@@ -12,19 +12,28 @@
 
 namespace Executor
 {
-#define memFullErr (-108)
-#define memLockedErr (-117)
-#define memPurErr (-112)
-#define memWZErr (-111)
+enum
+{
+    memFullErr = (-108),
+    memLockedErr = (-117),
+    memPurErr = (-112),
+    memWZErr = (-111),
+};
 //enum { memAZErr	 = -113 };
-#define nilHandleErr (-109)
+enum
+{
+    nilHandleErr = (-109),
+};
 
-#define memROZErr (-99)
-#define memAdrErr (-110)
-#define memAZErr (-113)
-#define memPCErr (-114)
-#define memBCErr (-115)
-#define memSCErr (-116)
+enum
+{
+    memROZErr = (-99),
+    memAdrErr = (-110),
+    memAZErr = (-113),
+    memPCErr = (-114),
+    memBCErr = (-115),
+    memSCErr = (-116),
+};
 
 struct Zone
 {
@@ -77,19 +86,22 @@ extern LONGINT 	MinusOne;
 extern Byte 	ApplScratch[12];
 #endif
 
-#define MemTop (MemTop_H.p)
-#define BufPtr (BufPtr_H.p)
-#define HeapEnd (HeapEnd_H.p)
-#define TheZone (TheZone_H.p)
-#define ApplLimit (ApplLimit_H.p)
-#define SysZone (SysZone_H.p)
-#define ApplZone (ApplZone_H.p)
-#define ROMBase (ROMBase_H.p)
-#define heapcheck (heapcheck_H.p)
-#define GZRootHnd (GZRootHnd_H.p)
-#define IAZNotify (IAZNotify_H.p)
-#define CurrentA5 (CurrentA5_H.p)
-#define CurStackBase (CurStackBase_H.p)
+enum
+{
+    MemTop = (MemTop_H.p),
+    BufPtr = (BufPtr_H.p),
+    HeapEnd = (HeapEnd_H.p),
+    TheZone = (TheZone_H.p),
+    ApplLimit = (ApplLimit_H.p),
+    SysZone = (SysZone_H.p),
+    ApplZone = (ApplZone_H.p),
+    ROMBase = (ROMBase_H.p),
+    heapcheck = (heapcheck_H.p),
+    GZRootHnd = (GZRootHnd_H.p),
+    IAZNotify = (IAZNotify_H.p),
+    CurrentA5 = (CurrentA5_H.p),
+    CurStackBase = (CurStackBase_H.p),
+};
 #endif
 /* traps which can have a `sys' or `clear' bit set */
 
@@ -193,11 +205,18 @@ extern Size StackSpace(void);
 
 /* temporary memory functions; see tempmem.c */
 extern pascal trap int32_t C_TempFreeMem(void);
+PASCAL_FUNCTION(TempFreeMem);
 extern pascal trap Size C_TempMaxMem(GUEST<Size> *grow);
+PASCAL_FUNCTION(TempMaxMem);
 extern pascal trap Ptr C_TempTopMem(void);
+PASCAL_FUNCTION(TempTopMem);
 extern pascal trap Handle C_TempNewHandle(Size logical_size, GUEST<OSErr> *result_code);
+PASCAL_FUNCTION(TempNewHandle);
 extern pascal trap void C_TempHLock(Handle h, GUEST<OSErr> *result_code);
+PASCAL_FUNCTION(TempHLock);
 extern pascal trap void C_TempHUnlock(Handle h, GUEST<OSErr> *result_code);
+PASCAL_FUNCTION(TempHUnlock);
 extern pascal trap void C_TempDisposeHandle(Handle h, GUEST<OSErr> *result_code);
+PASCAL_FUNCTION(TempDisposeHandle);
 }
 #endif /* _MEMORY_MGR_H_ */

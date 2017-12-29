@@ -11,46 +11,70 @@
 #include "QuickDraw.h"
 namespace Executor
 {
-#define systemFont 0
-#define applFont 1
-#define newYork 2
-#define geneva 3
-#define monaco 4
-#define venice 5
-#define london 6
-#define athens 7
-#define sanFran 8
-#define toronto 9
-#define cairo 11
-#define losAngeles 12
+enum
+{
+    systemFont = 0,
+    applFont = 1,
+    newYork = 2,
+    geneva = 3,
+    monaco = 4,
+    venice = 5,
+    london = 6,
+    athens = 7,
+    sanFran = 8,
+    toronto = 9,
+    cairo = 11,
+    losAngeles = 12,
+};
 
 #if !defined(NEXT)
-#define times 20
+enum
+{
+    times = 20,
+};
 #else /* NEXT */
-#define timesFont 20
+enum
+{
+    timesFont = 20,
+};
 #endif /* NEXT */
 
-#define helvetica 21
-#define courier 22
-#define symbol 23
-#define taliesin 24
+enum
+{
+    helvetica = 21,
+    courier = 22,
+    symbol = 23,
+    taliesin = 24,
+};
 
-#define commandMark 0x11
-#define checkMark 0x12
-#define diamondMark 0x13
-#define appleMark 0x14
+enum
+{
+    commandMark = 0x11,
+    checkMark = 0x12,
+    diamondMark = 0x13,
+    appleMark = 0x14,
+};
 
-#define propFont ((INTEGER)0x9000)
-#define prpFntH ((INTEGER)0x9001)
-#define prpFntW ((INTEGER)0x9002)
-#define prpFntHW ((INTEGER)0x9003)
+enum
+{
+    propFont = ((INTEGER)0x9000),
+    prpFntH = ((INTEGER)0x9001),
+    prpFntW = ((INTEGER)0x9002),
+    prpFntHW = ((INTEGER)0x9003),
+};
 
-#define fixedFont ((INTEGER)0xB000)
-#define fxdFntH ((INTEGER)0xB001)
-#define fxdFntW ((INTEGER)0xB002)
-#define fxdFntHW ((INTEGER)0xB003)
+enum
+{
+    fixedFont = ((INTEGER)0xB000),
+    fxdFntH = ((INTEGER)0xB001),
+    fxdFntW = ((INTEGER)0xB002),
+    fxdFntHW = ((INTEGER)0xB003),
+};
 
-#define fontWid ((INTEGER)0xACB0)
+enum
+{
+    fontWid = ((INTEGER)0xACB0),
+};
 
 struct FMetricRec
 {
@@ -191,44 +215,63 @@ extern INTEGER 	fondid;
 extern Byte 	FractEnable;
 #endif
 
-#define JSwapFont (JSwapFont_H.p)
-#define WidthListHand (WidthListHand_H.p)
-#define ROMFont0 (ROMFont0_H.p)
-#define WidthPtr (WidthPtr_H.p)
-#define WidthTabHandle (WidthTabHandle_H.p)
-#define LastFOND (LastFOND_H.p)
+enum
+{
+    JSwapFont = (JSwapFont_H.p),
+    WidthListHand = (WidthListHand_H.p),
+    ROMFont0 = (ROMFont0_H.p),
+    WidthPtr = (WidthPtr_H.p),
+    WidthTabHandle = (WidthTabHandle_H.p),
+    LastFOND = (LastFOND_H.p),
+};
 #endif
 
 extern pascal trap void C_InitFonts(void);
+PASCAL_TRAP(InitFonts, 0xA8FE);
 
 extern pascal trap void C_GetFontName(INTEGER fnum,
                                       StringPtr fnam);
+PASCAL_TRAP(GetFontName, 0xA8FF);
 extern void ROMlib_GetFontName(LONGINT fnum, char *fnam);
 extern pascal trap void C_GetFNum(StringPtr fnam,
                                   GUEST<INTEGER> *fnum);
+PASCAL_TRAP(GetFNum, 0xA900);
 extern pascal trap BOOLEAN C_RealFont(INTEGER fnum,
                                       INTEGER sz);
+PASCAL_TRAP(RealFont, 0xA902);
 extern pascal trap void C_SetFontLock(BOOLEAN lflag);
+PASCAL_TRAP(SetFontLock, 0xA903);
 
 extern pascal trap FMOutPtr C_FMSwapFont(FMInput *fmip);
+PASCAL_TRAP(FMSwapFont, 0xA901);
 extern pascal trap void C_FontMetrics(FMetricRec *metrp);
+PASCAL_TRAP(FontMetrics, 0xA835);
 
 extern pascal trap void C_SetFScaleDisable(
     BOOLEAN disable);
+PASCAL_TRAP(SetFScaleDisable, 0xA834);
 extern pascal trap void C_SetFractEnable(BOOLEAN enable);
+PASCAL_TRAP(SetFractEnable, 0xA814);
 
 
 extern pascal trap void C_SetOutlinePreferred(Boolean _outline_perferred_p);
+PASCAL_FUNCTION(SetOutlinePreferred);
 extern pascal trap Boolean C_GetOutlinePreferred(void);
+PASCAL_FUNCTION(GetOutlinePreferred);
 extern pascal trap Boolean C_IsOutline(Point numer, Point denom);
+PASCAL_FUNCTION(IsOutline);
 extern pascal trap OSErr C_OutlineMetrics(int16_t byte_count, Ptr text,
                                           Point numer, Point denom,
                                           int16_t *y_max, int16_t *y_min,
                                           Fixed *aw_array, Fixed *lsb_array,
                                           Rect *bounds_array);
+PASCAL_FUNCTION(OutlineMetrics);
 
 extern pascal trap void C_SetPreserveGlyph(Boolean preserve_glyph);
+PASCAL_FUNCTION(SetPreserveGlyph);
 extern pascal trap Boolean C_GetPreserveGlyph(void);
+PASCAL_FUNCTION(GetPreserveGlyph);
 extern pascal trap OSErr C_FlushFonts(void);
+PASCAL_FUNCTION(FlushFonts);
 }
 #endif /* _FONTMGR_H_ */

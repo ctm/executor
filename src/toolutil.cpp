@@ -427,13 +427,6 @@ P3(PUBLIC pascal trap, void, LongMul, LONGINT, a, LONGINT, b, Int64Bit *, c)
     }
 }
 
-// FIXME: #warning ScreenRes is duplicate with qGDevice.cpp
-A2(PUBLIC, void, ScreenRes, GUEST<INTEGER> *, hp, GUEST<INTEGER> *, vp)
-{
-    *hp = ScrHRes;
-    *vp = ScrVRes;
-}
-
 P1(PUBLIC pascal trap, PatHandle, GetPattern, INTEGER, id)
 {
     return ((PatHandle)ROMlib_getrestid(TICK("PAT "), id));

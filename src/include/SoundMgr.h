@@ -20,7 +20,10 @@ struct SndCommand
     GUEST<LONGINT> param2;
 };
 
-#define stdQLength 128
+enum
+{
+    stdQLength = 128,
+};
 
 enum
 {
@@ -136,12 +139,15 @@ enum
     MIDISynthOut = 9,
 };
 
-#define badChannel (-205)
-#define badFormat (-206)
-#define noHardware (-200)
-#define notEnoughHardware (-201)
-#define queueFull (-203)
-#define resProblem (-204)
+enum
+{
+    badChannel = (-205),
+    badFormat = (-206),
+    noHardware = (-200),
+    notEnoughHardware = (-201),
+    queueFull = (-203),
+    resProblem = (-204),
+};
 
 #if !defined(SoundActive)
 extern Byte SoundActive;

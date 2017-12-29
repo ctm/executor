@@ -75,29 +75,47 @@ typedef GUEST<DCtlPtr> *DCtlHandle;
 
 typedef GUEST<DCtlHandle> *DCtlHandlePtr;
 
-#define asyncTrpBit (1 << 10)
-#define noQueueBit (1 << 9)
+enum
+{
+    asyncTrpBit = (1 << 10),
+    noQueueBit = (1 << 9),
+};
 
-#define NEEDTIMEBIT (1 << 13)
+enum
+{
+    NEEDTIMEBIT = (1 << 13),
+};
 
-#define aRdCmd 2
-#define aWrCmd 3
+enum
+{
+    aRdCmd = 2,
+    aWrCmd = 3,
+};
 
-#define killCode 1
+enum
+{
+    killCode = 1,
+};
 
-#define NDEVICES 48
+enum
+{
+    NDEVICES = 48,
+};
 
-#define abortErr (-27)
-#define badUnitErr (-21)
-#define controlErr (-17)
-#define dInstErr (-26)
-#define dRemovErr (-25)
-#define notOpenErr (-28)
-#define openErr (-23)
-#define readErr (-19)
-#define statusErr (-18)
-#define unitEmptyErr (-22)
-#define writErr (-20)
+enum
+{
+    abortErr = (-27),
+    badUnitErr = (-21),
+    controlErr = (-17),
+    dInstErr = (-26),
+    dRemovErr = (-25),
+    notOpenErr = (-28),
+    openErr = (-23),
+    readErr = (-19),
+    statusErr = (-18),
+    unitEmptyErr = (-22),
+    writErr = (-20),
+};
 
 typedef struct
 {

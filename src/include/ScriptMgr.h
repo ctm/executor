@@ -15,89 +15,125 @@ namespace Executor
 {
 typedef INTEGER String2DateStatus;
 
-#define smRoman 0
+enum
+{
+    smRoman = 0,
+};
 
-#define smCharPunct 0
-#define smCharAscii 1
-#define smCharEuro 7
+enum
+{
+    smCharPunct = 0,
+    smCharAscii = 1,
+    smCharEuro = 7,
+};
 
-#define smPunctNormal 0x0000
-#define smPunctNumber 0x0100
-#define smPunctSymbol 0x0200
-#define smPunctBlank 0x0300
+enum
+{
+    smPunctNormal = 0x0000,
+    smPunctNumber = 0x0100,
+    smPunctSymbol = 0x0200,
+    smPunctBlank = 0x0300,
+};
 
-#define smCharLeft 0x0000
-#define smCharRight 0x2000
+enum
+{
+    smCharLeft = 0x0000,
+    smCharRight = 0x2000,
+};
 
-#define smCharLower 0x0000
-#define smCharUpper 0x4000
+enum
+{
+    smCharLower = 0x0000,
+    smCharUpper = 0x4000,
+};
 
-#define smChar1byte 0x0000
-#define smChar2byte 0x8000
+enum
+{
+    smChar1byte = 0x0000,
+    smChar2byte = 0x8000,
+};
 
-#define smTransAscii 0
-#define smTransNative 1
-#define smTransLower 16384
-#define smTransUpper 32768
-#define smMaskAscii 1
-#define smMaskNative 2
-#define smMaskAll -1
+enum
+{
+    smTransAscii = 0,
+    smTransNative = 1,
+    smTransLower = 16384,
+    smTransUpper = 32768,
+    smMaskAscii = 1,
+    smMaskNative = 2,
+    smMaskAll = -1,
+};
 
-#define smScriptVersion 0
-#define smScriptMunged 2
-#define smScriptEnabled 4
-#define smScriptRight 6
-#define smScriptJust 8
-#define smScriptRedraw 10
-#define smScriptSysFond 12
-#define smScriptAppFond 14
-#define smScriptNumber 16
-#define smScriptDate 18
-#define smScriptSort 20
-#define smScriptRsvd1 22
-#define smScriptRsvd2 24
-#define smScriptRsvd3 26
-#define smScriptRsvd4 28
-#define smScriptRsvd5 30
-#define smScriptKeys 32
-#define smScriptIcon 34
-#define smScriptPrint 36
-#define smScriptTrap 38
-#define smScriptCreator 40
-#define smScriptFile 42
-#define smScriptName 44
+enum
+{
+    smScriptVersion = 0,
+    smScriptMunged = 2,
+    smScriptEnabled = 4,
+    smScriptRight = 6,
+    smScriptJust = 8,
+    smScriptRedraw = 10,
+    smScriptSysFond = 12,
+    smScriptAppFond = 14,
+    smScriptNumber = 16,
+    smScriptDate = 18,
+    smScriptSort = 20,
+    smScriptRsvd1 = 22,
+    smScriptRsvd2 = 24,
+    smScriptRsvd3 = 26,
+    smScriptRsvd4 = 28,
+    smScriptRsvd5 = 30,
+    smScriptKeys = 32,
+    smScriptIcon = 34,
+    smScriptPrint = 36,
+    smScriptTrap = 38,
+    smScriptCreator = 40,
+    smScriptFile = 42,
+    smScriptName = 44,
+};
 
-#define smVersion 0
-#define smMunged 2
-#define smEnabled 4
-#define smBiDirect 6
-#define smFontForce 8
-#define smIntlForce 10
-#define smForced 12
-#define smDefault 14
-#define smPrint 16
-#define smSysScript 18
-#define smAppScript 20
-#define smKeyScript 22
-#define smSysRef 24
-#define smKeyCache 26
-#define smKeySwap 28
+enum
+{
+    smVersion = 0,
+    smMunged = 2,
+    smEnabled = 4,
+    smBiDirect = 6,
+    smFontForce = 8,
+    smIntlForce = 10,
+    smForced = 12,
+    smDefault = 14,
+    smPrint = 16,
+    smSysScript = 18,
+    smAppScript = 20,
+    smKeyScript = 22,
+    smSysRef = 24,
+    smKeyCache = 26,
+    smKeySwap = 28,
+};
 
 enum
 {
     smKCHRCache = 38
 };
 
-#define smVerbNotFound (-1)
+enum
+{
+    smVerbNotFound = (-1),
+};
 
-#define smBreakWord 0
-#define smBreakChar 1
-#define smBreakOverflow 2
+enum
+{
+    smBreakWord = 0,
+    smBreakChar = 1,
+    smBreakOverflow = 2,
+};
 
 /* TruncText return codes */
-#define NotTruncated 0
-#define Truncated 1
-#define TruncErr (-1)
+enum
+{
+    NotTruncated = 0,
+    Truncated = 1,
+    TruncErr = (-1),
+};
 
 typedef uint8 StyledLineBreakCode;
 
@@ -195,92 +231,125 @@ extern INTEGER TESysJust;
 #endif
 
 extern pascal trap LONGINT C_VisibleLength(Ptr textp, LONGINT len);
+PASCAL_FUNCTION(VisibleLength);
 
 extern pascal trap void C_LongDate2Secs(LongDateRec *ldatep,
                                         GUEST<ULONGINT> *secs_outp);
+PASCAL_FUNCTION(LongDate2Secs);
 
 extern pascal trap void C_LongSecs2Date(GUEST<ULONGINT> *secs_inp,
                                         LongDateRec *ldatep);
+PASCAL_FUNCTION(LongSecs2Date);
 
 extern pascal trap LONGINT C_GetEnvirons(INTEGER verb);
+PASCAL_FUNCTION(GetEnvirons);
 
 extern pascal trap OSErr C_SetEnvirons(INTEGER verb, LONGINT param);
+PASCAL_FUNCTION(SetEnvirons);
 
 extern pascal trap LONGINT C_GetScript(INTEGER script, INTEGER verb);
+PASCAL_FUNCTION(GetScript);
 
 extern pascal trap OSErr C_SetScript(INTEGER script, INTEGER verb,
                                      LONGINT param);
+PASCAL_FUNCTION(SetScript);
 extern pascal trap INTEGER C_Font2Script(INTEGER fontnum);
+PASCAL_FUNCTION(Font2Script);
 
 extern pascal trap INTEGER C_Transliterate(Handle srch, Handle dsth,
                                            INTEGER target, LONGINT srcmask);
+PASCAL_FUNCTION(Transliterate);
 extern pascal trap INTEGER C_FontScript(void);
+PASCAL_FUNCTION(FontScript);
 
 extern pascal trap INTEGER C_IntlScript(void);
+PASCAL_FUNCTION(IntlScript);
 
 extern pascal trap void C_KeyScript(INTEGER scriptcode);
+PASCAL_FUNCTION(KeyScript);
 
 extern pascal trap INTEGER C_CharType(Ptr textbufp, INTEGER offset);
+PASCAL_FUNCTION(CharType);
 
 extern pascal trap void C_MeasureJust(Ptr textbufp, INTEGER length,
                                       INTEGER slop, Ptr charlocs);
+PASCAL_FUNCTION(MeasureJust);
 extern pascal trap INTEGER C_Pixel2Char(Ptr textbufp, INTEGER len,
                                         INTEGER slop, INTEGER pixwidth, BOOLEAN *leftsidep);
+PASCAL_FUNCTION(Pixel2Char);
 extern pascal trap INTEGER C_Char2Pixel(Ptr textbufp, INTEGER len,
                                         INTEGER slop, INTEGER offset, SignedByte dir);
+PASCAL_FUNCTION(Char2Pixel);
 extern pascal trap void C_FindWord(Ptr textbufp, INTEGER length,
                                    INTEGER offset, BOOLEAN leftside, Ptr breaks, GUEST<INTEGER> *offsets);
+PASCAL_FUNCTION(FindWord);
 extern pascal trap void C_HiliteText(Ptr textbufp, INTEGER firstoffset,
                                      INTEGER secondoffset, GUEST<INTEGER> *offsets);
+PASCAL_FUNCTION(HiliteText);
 extern pascal trap void C_DrawJust(Ptr textbufp, INTEGER length,
                                    INTEGER slop);
+PASCAL_FUNCTION(DrawJust);
 extern pascal trap String2DateStatus C_String2Time(Ptr textp,
                                                    LONGINT len, Ptr cachep, GUEST<LONGINT> *lenusedp, GUEST<Ptr> *datetimep);
+PASCAL_FUNCTION(String2Time);
 extern INTEGER GetSysFont(void);
 extern INTEGER GetAppFont(void);
 extern INTEGER GetMBarHeight(void);
 extern INTEGER GetSysJust(void);
 extern void SetSysJust(INTEGER just);
 extern pascal trap OSErr C_InitDateCache(DateCachePtr theCache);
+PASCAL_FUNCTION(InitDateCache);
 
 extern pascal trap INTEGER C_CharByte(Ptr textBuf, INTEGER textOffset);
+PASCAL_FUNCTION(CharByte);
 
 
 extern pascal trap String2DateStatus C_String2Date(Ptr text, int32_t length,
                                                    DateCachePtr cache,
                                                    GUEST<int32_t> *length_used_ret,
                                                    LongDatePtr date_time);
+PASCAL_FUNCTION(String2Date);
 extern pascal trap StyledLineBreakCode C_StyledLineBreak(Ptr textp, int32_t length,
                                                          int32_t text_start, int32_t text_end,
                                                          int32_t flags,
                                                          GUEST<Fixed> *text_width_fp,
                                                          GUEST<int32_t> *text_offset);
+PASCAL_FUNCTION(StyledLineBreak);
 
 extern pascal trap void C_NMeasureJust(Ptr text, int32_t length,
                                        Fixed slop, Ptr charLocs,
                                        JustStyleCode run_pos,
                                        Point numer, Point denom);
+PASCAL_FUNCTION(NMeasureJust);
 
 extern pascal trap Boolean C_ParseTable(CharByteTable table);
+PASCAL_FUNCTION(ParseTable);
 extern pascal trap Boolean C_FillParseTable(CharByteTable table,
                                             ScriptCode script);
+PASCAL_FUNCTION(FillParseTable);
 
 extern pascal trap INTEGER C_ReplaceText(Handle base_text, Handle subst_text,
                                          Str15 key);
+PASCAL_FUNCTION(ReplaceText);
 extern pascal trap INTEGER C_TruncString(INTEGER width, Str255 string,
                                          TruncCode code);
+PASCAL_FUNCTION(TruncString);
 
 extern pascal trap FormatStatus C_StringToExtended(Str255 string, NumFormatStringRec *formatp,
                                                    NumberParts *partsp, Extended80 *xp);
+PASCAL_FUNCTION(StringToExtended);
 
 extern pascal trap FormatStatus C_ExtendedToString(Extended80 *xp,
                                                    NumFormatStringRec *formatp, NumberParts *partsp, Str255 string);
+PASCAL_FUNCTION(ExtendedToString);
 
 extern pascal trap FormatStatus C_StringToFormatRec(Str255 in_string,
                                                     NumberParts *partsp, NumFormatStringRec *out_string);
+PASCAL_FUNCTION(StringToFormatRec);
 
 extern pascal trap ToggleResults C_ToggleDate(LongDateTime *lsecsp,
                                               LongDateField field, DateDelta delta, INTEGER ch, TogglePB *paramsp);
+PASCAL_FUNCTION(ToggleDate);
 
 extern pascal trap Fixed C_PortionLine(
     Ptr textPtr,
@@ -288,6 +357,7 @@ extern pascal trap Fixed C_PortionLine(
     JustStyleCode styleRunPosition,
     Point numer,
     Point denom);
+PASCAL_FUNCTION(PortionLine);
 
 extern pascal trap void C_DrawJustified(
     Ptr textPtr,
@@ -296,11 +366,13 @@ extern pascal trap void C_DrawJustified(
     JustStyleCode styleRunPosition,
     Point numer,
     Point denom);
+PASCAL_FUNCTION(DrawJustified);
 
 extern pascal trap ScriptRunStatus C_FindScriptRun(
     Ptr textPtr,
     LONGINT textLen,
     GUEST<LONGINT> *lenUsedp);
+PASCAL_FUNCTION(FindScriptRun);
 
 extern pascal trap INTEGER C_PixelToChar(
     Ptr textBuf,
@@ -312,6 +384,7 @@ extern pascal trap INTEGER C_PixelToChar(
     JustStyleCode styleRunPosition,
     Point numer,
     Point denom);
+PASCAL_FUNCTION(PixelToChar);
 
 extern pascal trap INTEGER C_CharToPixel(
     Ptr textBuf,
@@ -322,26 +395,31 @@ extern pascal trap INTEGER C_CharToPixel(
     JustStyleCode styleRunPosition,
     Point numer,
     Point denom);
+PASCAL_FUNCTION(CharToPixel);
 
 extern pascal trap void C_LowercaseText(
     Ptr textp,
     INTEGER len,
     ScriptCode script);
+PASCAL_FUNCTION(LowercaseText);
 
 extern pascal trap void C_UppercaseText(
     Ptr textp,
     INTEGER len,
     ScriptCode script);
+PASCAL_FUNCTION(UppercaseText);
 
 extern pascal trap void C_StripDiacritics(
     Ptr textp,
     INTEGER len,
     ScriptCode script);
+PASCAL_FUNCTION(StripDiacritics);
 
 extern pascal trap void C_UppercaseStripDiacritics(
     Ptr textp,
     INTEGER len,
     ScriptCode script);
+PASCAL_FUNCTION(UppercaseStripDiacritics);
 
 extern INTEGER C_CharacterByteType(Ptr textBuf, INTEGER textOffset,
                                    ScriptCode script);

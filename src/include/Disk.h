@@ -10,29 +10,29 @@
 
 namespace Executor
 {
-#define nsDrvErr (-56)
-#define paramErr (-50)
-#define wPrErr (-44)
-#define firstDskErr (-84)
-#define sectNFErr (-81)
-#define seekErr (-80)
-#define spdAdjErr (-79)
-#define twoSideErr (-78)
-#define initIWMErr (-77)
-#define tk0BadErr (-76)
-#define cantStepErr (-75)
-#define wrUnderrun (-74)
-#define badDBtSlp (-73)
-#define badDCksum (-72)
-#define noDtaMkErr (-71)
-#define badBtSlpErr (-70)
-#define badCksmErr (-69)
-#define dataVerErr (-68)
-#define noAdrMkErr (-67)
-#define noNybErr (-66)
-#define offLinErr (-65)
-#define noDriveErr (-64)
-#define lastDskErr (-64)
+enum
+{
+    firstDskErr = (-84),
+    sectNFErr = (-81),
+    seekErr = (-80),
+    spdAdjErr = (-79),
+    twoSideErr = (-78),
+    initIWMErr = (-77),
+    tk0BadErr = (-76),
+    cantStepErr = (-75),
+    wrUnderrun = (-74),
+    badDBtSlp = (-73),
+    badDCksum = (-72),
+    noDtaMkErr = (-71),
+    badBtSlpErr = (-70),
+    badCksmErr = (-69),
+    dataVerErr = (-68),
+    noAdrMkErr = (-67),
+    noNybErr = (-66),
+    offLinErr = (-65),
+    noDriveErr = (-64),
+    lastDskErr = (-64),
+};
 
 struct DrvSts
 {

@@ -98,7 +98,7 @@ draw_menu_title(muelem *elt,
                                             &title_color);
             RGBForeColor(&title_color);
         }
-        PORT_TX_MODE_X(thePort) = srcCopy;
+        PORT_TX_MODE_X(thePort) = CWC(srcCopy);
         MoveTo(CW(elt->muleft) + MENULEFT - 3, 14);
         if(ROMlib_AppleChar && title[0] == 1 && title[1] == APPLE_CHAR)
         {

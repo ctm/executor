@@ -56,75 +56,112 @@ typedef ListRec *ListPtr;
 
 typedef GUEST<ListPtr> *ListHandle;
 
-#define lDoVAutoscroll 2
-#define lDoHAutoscroll 1
+enum
+{
+    lDoVAutoscroll = 2,
+    lDoHAutoscroll = 1,
+};
 
-#define lOnlyOne -128
-#define lExtendDrag 64
-#define lNoDisjoint 32
+enum
+{
+    lOnlyOne = -128,
+    lExtendDrag = 64,
+    lNoDisjoint = 32,
+};
 
-#define lNoExtend 16
-#define lNoRect 8
-#define lUseSense 4
-#define lNoNilHilite 2
+enum
+{
+    lNoExtend = 16,
+    lNoRect = 8,
+    lUseSense = 4,
+    lNoNilHilite = 2,
+};
 
-#define lInitMsg 0
-#define lDrawMsg 1
-#define lHiliteMsg 2
-#define lCloseMsg 3
+enum
+{
+    lInitMsg = 0,
+    lDrawMsg = 1,
+    lHiliteMsg = 2,
+    lCloseMsg = 3,
+};
 
 extern pascal trap void C_LFind(GUEST<INTEGER> *offsetp,
                                 GUEST<INTEGER> *lenp, Cell cell, ListHandle list);
+PASCAL_FUNCTION(LFind);
 extern pascal trap BOOLEAN C_LNextCell(BOOLEAN hnext,
                                        BOOLEAN vnext, GUEST<Cell> *cellp, ListHandle list);
+PASCAL_FUNCTION(LNextCell);
 extern pascal trap void C_LRect(Rect *cellrect,
                                 Cell cell, ListHandle list);
+PASCAL_FUNCTION(LRect);
 extern pascal trap BOOLEAN
 C_LSearch(Ptr dp,
           INTEGER dl, Ptr proc, GUEST<Cell> *cellp, ListHandle list);
 extern pascal trap void C_LSize(INTEGER width,
                                 INTEGER height, ListHandle list);
+PASCAL_FUNCTION(LSize);
 extern pascal trap INTEGER C_LAddColumn(INTEGER count,
                                         INTEGER coln, ListHandle list);
+PASCAL_FUNCTION(LAddColumn);
 extern pascal trap INTEGER C_LAddRow(INTEGER count,
                                      INTEGER rown, ListHandle list);
+PASCAL_FUNCTION(LAddRow);
 extern pascal trap void C_LDelColumn(INTEGER count,
                                      INTEGER coln, ListHandle list);
+PASCAL_FUNCTION(LDelColumn);
 extern pascal trap void C_LDelRow(INTEGER count,
                                   INTEGER rown, ListHandle list);
+PASCAL_FUNCTION(LDelRow);
 extern pascal trap ListHandle C_LNew(Rect *rview,
                                      Rect *bounds, Point csize, INTEGER proc, WindowPtr wind,
                                      BOOLEAN draw, BOOLEAN grow, BOOLEAN scrollh, BOOLEAN scrollv);
+PASCAL_FUNCTION(LNew);
 extern pascal trap void C_LDispose(ListHandle list);
+PASCAL_FUNCTION(LDispose);
 extern pascal trap void C_LDraw(Cell cell,
                                 ListHandle list);
+PASCAL_FUNCTION(LDraw);
 extern pascal trap void C_LDoDraw(BOOLEAN draw,
                                   ListHandle list);
+PASCAL_FUNCTION(LDoDraw);
 extern pascal trap void C_LScroll(INTEGER ncol,
                                   INTEGER nrow, ListHandle list);
+PASCAL_FUNCTION(LScroll);
 extern pascal trap void C_LAutoScroll(ListHandle list);
+PASCAL_FUNCTION(LAutoScroll);
 extern pascal trap void C_LUpdate(RgnHandle rgn,
                                   ListHandle list);
+PASCAL_FUNCTION(LUpdate);
 extern pascal trap void C_LActivate(BOOLEAN act,
                                     ListHandle list);
+PASCAL_FUNCTION(LActivate);
 extern pascal void C_ROMlib_mytrack(ControlHandle ch, INTEGER part);
 
 extern pascal trap BOOLEAN C_LClick(Point pt,
                                     INTEGER mods, ListHandle list);
+PASCAL_FUNCTION(LClick);
 extern pascal trap LONGINT C_LLastClick(ListHandle list);
+PASCAL_FUNCTION(LLastClick);
 extern pascal trap void C_LSetSelect(BOOLEAN setit,
                                      Cell cell, ListHandle list);
+PASCAL_FUNCTION(LSetSelect);
 extern pascal trap void C_LAddToCell(Ptr dp, INTEGER dl,
                                      Cell cell, ListHandle list);
+PASCAL_FUNCTION(LAddToCell);
 extern pascal trap void C_LClrCell(Cell cell,
                                    ListHandle list);
+PASCAL_FUNCTION(LClrCell);
 extern pascal trap void C_LGetCell(Ptr dp, GUEST<INTEGER> *dlp,
                                    Cell cell, ListHandle list);
+PASCAL_FUNCTION(LGetCell);
 extern pascal trap void C_LSetCell(Ptr dp, INTEGER dl,
                                    Cell cell, ListHandle list);
+PASCAL_FUNCTION(LSetCell);
 extern pascal trap void C_LCellSize(Point csize,
                                     ListHandle list);
+PASCAL_FUNCTION(LCellSize);
 extern pascal trap BOOLEAN C_LGetSelect(BOOLEAN next,
                                         GUEST<Cell> *cellp, ListHandle list);
+PASCAL_FUNCTION(LGetSelect);
 }
 #endif /* __LIST__ */

@@ -10,50 +10,64 @@
 
 namespace Executor
 {
-#define pushButProc 0
-#define checkBoxProc 1
-#define radioButProc 2
-#define useWFont 8
-#define scrollBarProc 16
+enum
+{
+    pushButProc = 0,
+    checkBoxProc = 1,
+    radioButProc = 2,
+    useWFont = 8,
+    scrollBarProc = 16,
+};
 
-#define inButton 10
-#define inCheckBox 11
-#define inUpButton 20
-#define inDownButton 21
-#define inPageUp 22
-#define inPageDown 23
-#define inThumb 129
+enum
+{
+    inButton = 10,
+    inCheckBox = 11,
+    inUpButton = 20,
+    inDownButton = 21,
+    inPageUp = 22,
+    inPageDown = 23,
+    inThumb = 129,
+};
 
-#define popupFixedWidth (1 << 0)
-#define popupUseAddResMenu (1 << 2)
-#define popupUseWFont (1 << 3)
+enum
+{
+    popupFixedWidth = (1 << 0),
+    popupUseAddResMenu = (1 << 2),
+    popupUseWFont = (1 << 3),
+};
 
-#define popupTitleBold (1 << 8)
-#define popupTitleItalic (1 << 9)
-#define popupTitleUnderline (1 << 10)
-#define popupTitleOutline (1 << 11)
-#define popupTitleShadow (1 << 12)
-#define popupTitleCondense (1 << 13)
-#define popupTitleExtend (1 << 14)
-#define popupTitleNoStyle (1 << 15)
+enum
+{
+    popupTitleBold = (1 << 8),
+    popupTitleItalic = (1 << 9),
+    popupTitleUnderline = (1 << 10),
+    popupTitleOutline = (1 << 11),
+    popupTitleShadow = (1 << 12),
+    popupTitleCondense = (1 << 13),
+    popupTitleExtend = (1 << 14),
+    popupTitleNoStyle = (1 << 15),
+};
 
-#define popupTitleLeftJust (0x00)
-#define popupTitleCenterJust (0x01)
-#define popupTitleRightJust (0xFF)
+enum
+{
+    popupTitleLeftJust = (0x00),
+    popupTitleCenterJust = (0x01),
+    popupTitleRightJust = (0xFF),
+};
 
-#define noConstraint 0
-#define hAxisOnly 1
-#define vAxisOnly 2
-
-#define drawCntl 0
-#define testCntl 1
-#define calcCRgns 2
-#define initCntl 3
-#define dispCntl 4
-#define posCntl 5
-#define thumbCntl 6
-#define dragCntl 7
-#define autoTrack 8
+enum
+{
+    drawCntl = 0,
+    testCntl = 1,
+    calcCRgns = 2,
+    initCntl = 3,
+    dispCntl = 4,
+    posCntl = 5,
+    thumbCntl = 6,
+    dragCntl = 7,
+    autoTrack = 8,
+};
 enum
 {
     calcCntlRgn = 10,
@@ -61,21 +75,27 @@ enum
 };
 
 /* control color table parts */
-#define cFrameColor 0
-#define cBodyColor 1
-#define cTextColor 2
-#define cThumbColor 3
+enum
+{
+    cFrameColor = 0,
+    cBodyColor = 1,
+    cTextColor = 2,
+    cThumbColor = 3,
+};
 /* #define ???		4 */
-#define cArrowsColorLight 5
-#define cArrowsColorDark 6
-#define cThumbLight 7
-#define cThumbDark 8
-#define cHiliteLight 9
-#define cHiliteDark 10
-#define cTitleBarLight 11
-#define cTitleBarDark 12
-#define cTingeLight 13
-#define cTingeDark 14
+enum
+{
+    cArrowsColorLight = 5,
+    cArrowsColorDark = 6,
+    cThumbLight = 7,
+    cThumbDark = 8,
+    cHiliteLight = 9,
+    cHiliteDark = 10,
+    cTitleBarLight = 11,
+    cTitleBarDark = 12,
+    cTingeLight = 13,
+    cTingeDark = 14,
+};
 
 typedef struct __cr ControlRecord;
 typedef ControlRecord *ControlPtr;
@@ -133,65 +153,96 @@ struct AuxCtlRec
 
 extern pascal trap void C_SetCTitle(ControlHandle c,
                                     StringPtr t);
+PASCAL_TRAP(SetCTitle, 0xA95F);
 extern pascal trap void C_GetCTitle(ControlHandle c,
                                     StringPtr t);
+PASCAL_TRAP(GetCTitle, 0xA95E);
 extern pascal trap void C_HideControl(ControlHandle c);
+PASCAL_TRAP(HideControl, 0xA958);
 
 extern pascal trap void C_ShowControl(ControlHandle c);
+PASCAL_TRAP(ShowControl, 0xA957);
 
 extern pascal trap void C_HiliteControl(ControlHandle c,
                                         INTEGER state);
+PASCAL_TRAP(HiliteControl, 0xA95D);
 extern pascal trap void C_DrawControls(WindowPtr w);
+PASCAL_TRAP(DrawControls, 0xA969);
 
 extern pascal trap void C_Draw1Control(ControlHandle c);
+PASCAL_TRAP(Draw1Control, 0xA96D);
 
 extern pascal trap void C_UpdtControl(WindowPtr wp,
                                       RgnHandle rh);
+PASCAL_TRAP(UpdtControl, 0xA953);
 extern pascal trap ControlHandle C_NewControl(WindowPtr wst, Rect *r,
                                               StringPtr title, BOOLEAN vis, INTEGER value, INTEGER min,
                                               INTEGER max, INTEGER procid, LONGINT rc);
+PASCAL_TRAP(NewControl, 0xA954);
 extern pascal trap ControlHandle C_GetNewControl(
     INTEGER cid, WindowPtr wst);
+PASCAL_TRAP(GetNewControl, 0xA9BE);
 extern pascal trap void C_DisposeControl(ControlHandle c);
+PASCAL_TRAP(DisposeControl, 0xA955);
 
 extern pascal trap void C_KillControls(WindowPtr w);
+PASCAL_TRAP(KillControls, 0xA956);
 
 extern pascal trap void C_SetCRefCon(ControlHandle c,
                                      LONGINT data);
+PASCAL_TRAP(SetCRefCon, 0xA95B);
 extern pascal trap LONGINT C_GetCRefCon(ControlHandle c);
+PASCAL_TRAP(GetCRefCon, 0xA95A);
 
 extern pascal trap void C_SetCtlAction(ControlHandle c,
                                        ProcPtr a);
+PASCAL_TRAP(SetCtlAction, 0xA96B);
 extern pascal trap ProcPtr C_GetCtlAction(ControlHandle c);
+PASCAL_TRAP(GetCtlAction, 0xA96A);
 
 extern pascal trap INTEGER C_GetCVariant(ControlHandle c);
+PASCAL_TRAP(GetCVariant, 0xA809);
 
 extern pascal trap BOOLEAN C_GetAuxCtl(ControlHandle c,
                                        GUEST<AuxCtlHandle> *acHndl);
+PASCAL_TRAP(GetAuxCtl, 0xAA44);
 extern pascal trap INTEGER C_FindControl(Point p,
                                          WindowPtr w, GUEST<ControlHandle> *cp);
+PASCAL_TRAP(FindControl, 0xA96C);
 extern pascal trap INTEGER C_TrackControl(
     ControlHandle c, Point p, ProcPtr a);
+PASCAL_TRAP(TrackControl, 0xA968);
 extern pascal trap INTEGER C_TestControl(
     ControlHandle c, Point p);
+PASCAL_TRAP(TestControl, 0xA966);
 extern pascal trap void C_SetCtlValue(ControlHandle c,
                                       INTEGER v);
+PASCAL_TRAP(SetCtlValue, 0xA963);
 extern pascal trap INTEGER C_GetCtlValue(
     ControlHandle c);
+PASCAL_TRAP(GetCtlValue, 0xA960);
 extern pascal trap void C_SetCtlMin(ControlHandle c,
                                     INTEGER v);
+PASCAL_TRAP(SetCtlMin, 0xA964);
 extern pascal trap INTEGER C_GetCtlMin(ControlHandle c);
+PASCAL_TRAP(GetCtlMin, 0xA961);
 
 extern pascal trap void C_SetCtlMax(ControlHandle c,
                                     INTEGER v);
+PASCAL_TRAP(SetCtlMax, 0xA965);
 extern pascal trap INTEGER C_GetCtlMax(ControlHandle c);
+PASCAL_TRAP(GetCtlMax, 0xA962);
 
 extern pascal trap void C_MoveControl(ControlHandle c,
                                       INTEGER h, INTEGER v);
+PASCAL_TRAP(MoveControl, 0xA959);
 extern pascal trap void C_DragControl(ControlHandle c,
                                       Point p, Rect *limit, Rect *slop, INTEGER axis);
+PASCAL_TRAP(DragControl, 0xA967);
 extern pascal trap void C_SizeControl(ControlHandle c,
                                       INTEGER width, INTEGER height);
+PASCAL_TRAP(SizeControl, 0xA95C);
 extern pascal trap void C_SetCtlColor(ControlHandle ctl, CCTabHandle ctab);
+PASCAL_TRAP(SetCtlColor, 0xAA43);
 }
 #endif /* __CONTROL__ */

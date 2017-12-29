@@ -13,11 +13,15 @@
 namespace Executor
 {
 extern _NORET_1_ pascal trap void C_ExitToShell(void) _NORET_2_;
+PASCAL_TRAP(ExitToShell, 0xA9F4);
 
 #if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 
-#define appOpen 0
-#define appPrint 1
+enum
+{
+    appOpen = 0,
+    appPrint = 1,
+};
 
 struct AppFile
 {
@@ -28,7 +32,10 @@ struct AppFile
     GUEST<Str255> fName;
 };
 
-#define hwParamErr (-502)
+enum
+{
+    hwParamErr = (-502),
+};
 
 #if 0
 #if !defined(AppParmHandle_H)
@@ -41,7 +48,10 @@ extern INTEGER 	CurJTOffset;
 extern INTEGER 	CurPageOption;
 #endif
 
-#define AppParmHandle (AppParmHandle_H.p)
+enum
+{
+    AppParmHandle = (AppParmHandle_H.p),
+};
 #endif
 
 extern void flushcache(void);
@@ -57,13 +67,13 @@ extern pascal trap void Chain(StringPtr appl, INTEGER vrefnum);
 
 extern pascal trap void C_GetAppParms(StringPtr namep,
                                       GUEST<INTEGER> *rnp, GUEST<Handle> *aphandp);
+PASCAL_TRAP(GetAppParms, 0xA9F5);
 
 extern pascal trap void C_UnloadSeg(Ptr addr);
+PASCAL_TRAP(UnloadSeg, 0xA9F1);
 
 extern pascal trap void C_LoadSeg(INTEGER volatile segno);
-
-extern pascal trap void C_UnloadSeg(Ptr addr);
-
+PASCAL_FUNCTION(LoadSeg);
 
 #endif
 }

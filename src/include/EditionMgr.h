@@ -119,11 +119,14 @@ typedef SectionOptionsReply *SectionOptionsReplyPtr;
 
 typedef uint8 EditionOpenerVerb;
 
-#define eoOpen (0)
-#define eoClose (1)
-#define eoOpenNew (2)
-#define eoCloseNew (3)
-#define eoCanSubscribe (4)
+enum
+{
+    eoOpen = (0),
+    eoClose = (1),
+    eoOpenNew = (2),
+    eoCloseNew = (3),
+    eoCanSubscribe = (4),
+};
 
 struct EditionOpenerParamBlock
 {
@@ -143,10 +146,13 @@ typedef EditionOpenerParamBlock *EditionOpenerParamBlockPtr;
 
 typedef uint8 FormatIOVerb;
 
-#define ioHasFormat (0)
-#define ioReadFormat (1)
-#define ioNewFormat (2)
-#define ioWtriteFormat (3)
+enum
+{
+    ioHasFormat = (0),
+    ioReadFormat = (1),
+    ioNewFormat = (2),
+    ioWtriteFormat = (3),
+};
 
 struct FormatIOParamBlock
 {
@@ -162,116 +168,140 @@ struct FormatIOParamBlock
 typedef struct FormatIOParamBlock FormatIOParamBlock;
 typedef FormatIOParamBlock *FormatIOParamBlockPtr;
 
-#define noErr 0
-#define abortErr (-27)
-#define eofErr (-39)
-#define fnfErr (-43)
-#define flLckedErr (-45)
-#define fBusyErr (-47)
-#define paramErr (-50)
-#define rfNumErr (-51)
-#define permErr (-54)
-#define wrPermErr (-61)
-#define noTypeErr (-102)
-#define memFullErr (-108)
-#define userCanceledErr (-128)
-#define editionMgrInitErr (-450)
-#define badSectionErr (-451)
-#define notRegisteredSectionErr (-452)
-#define badSubPartErr (-454)
-#define multiplePubliserWrn (-460)
-#define containerNotFoundWrn (-461)
-#define notThePublisherWrn (-463)
+enum
+{
+    flLckedErr = (-45),
+    fBusyErr = (-47),
+    noTypeErr = (-102),
+    userCanceledErr = (-128),
+    editionMgrInitErr = (-450),
+    badSectionErr = (-451),
+    notRegisteredSectionErr = (-452),
+    badSubPartErr = (-454),
+    multiplePubliserWrn = (-460),
+    containerNotFoundWrn = (-461),
+    notThePublisherWrn = (-463),
+};
 
 extern pascal trap OSErr C_InitEditionPack(INTEGER unused);
+PASCAL_FUNCTION(InitEditionPack);
 extern pascal trap OSErr C_NewSection(EditionContainerSpecPtr container,
                                       FSSpecPtr section_doc,
                                       SectionType kind, int32_t section_id,
                                       UpdateMode initial_mode,
                                       SectionHandle *section_out);
+PASCAL_FUNCTION(NewSection);
 extern pascal trap OSErr C_RegisterSection(FSSpecPtr section_doc,
                                            SectionHandle section,
                                            Boolean *alias_was_updated_p_out);
+PASCAL_FUNCTION(RegisterSection);
 extern pascal trap OSErr C_UnRegisterSection(SectionHandle section);
+PASCAL_FUNCTION(UnRegisterSection);
 extern pascal trap OSErr C_IsRegisteredSection(SectionHandle section);
+PASCAL_FUNCTION(IsRegisteredSection);
 extern pascal trap OSErr C_AssociateSection(SectionHandle section,
                                             FSSpecPtr new_section_doc);
+PASCAL_FUNCTION(AssociateSection);
 extern pascal trap OSErr C_CreateEditionContainerFile(FSSpecPtr edition_file, OSType creator,
                                                       ScriptCode edition_file_name_script);
+PASCAL_FUNCTION(CreateEditionContainerFile);
 extern pascal trap OSErr C_DeleteEditionContainerFile(FSSpecPtr edition_file);
+PASCAL_FUNCTION(DeleteEditionContainerFile);
 
 extern pascal trap OSErr C_SetEditionFormatMark(EditionRefNum edition,
                                                 FormatType format,
                                                 int32_t mark);
+PASCAL_FUNCTION(SetEditionFormatMark);
 
 extern pascal trap OSErr C_GetEditionFormatMark(EditionRefNum edition,
                                                 FormatType format,
                                                 int32_t *currentMark);
+PASCAL_FUNCTION(GetEditionFormatMark);
 
 extern pascal trap OSErr C_OpenEdition(SectionHandle subscriber_section,
                                        EditionRefNum *ref_num);
+PASCAL_FUNCTION(OpenEdition);
 
 extern pascal trap OSErr C_EditionHasFormat(EditionRefNum edition,
                                             FormatType format,
                                             Size *format_size);
+PASCAL_FUNCTION(EditionHasFormat);
 extern pascal trap OSErr C_ReadEdition(EditionRefNum edition,
                                        FormatType format,
                                        Ptr buffer, Size buffer_size);
+PASCAL_FUNCTION(ReadEdition);
 
 extern pascal trap OSErr C_OpenNewEdition(SectionHandle publisher_section,
                                           OSType creator,
                                           FSSpecPtr publisher_section_doc,
                                           EditionRefNum *ref_num);
+PASCAL_FUNCTION(OpenNewEdition);
 
 extern pascal trap OSErr C_WriteEdition(EditionRefNum edition, FormatType format,
                                         Ptr buffer, Size buffer_size);
+PASCAL_FUNCTION(WriteEdition);
 
 extern pascal trap OSErr C_CloseEdition(EditionRefNum edition, Boolean success_p);
+PASCAL_FUNCTION(CloseEdition);
 
 extern pascal trap OSErr C_GetLastEditionContainerUsed(EditionContainerSpecPtr container);
+PASCAL_FUNCTION(GetLastEditionContainerUsed);
 
 extern pascal trap OSErr C_NewSubscriberDialog(NewSubscriberReplyPtr reply);
+PASCAL_FUNCTION(NewSubscriberDialog);
 extern pascal trap OSErr C_NewPublisherDialog(NewSubscriberReplyPtr reply);
+PASCAL_FUNCTION(NewPublisherDialog);
 extern pascal trap OSErr C_SectionOptionsDialog(SectionOptionsReply *reply);
+PASCAL_FUNCTION(SectionOptionsDialog);
 
 extern pascal trap OSErr C_NewSubscriberExpDialog(NewSubscriberReplyPtr reply, Point where,
                                                   int16_t expnasion_ditl_res_id,
                                                   ExpDialogHookProcPtr dialog_hook,
                                                   ExpModalFilterProcPtr filter_hook,
                                                   Ptr data);
+PASCAL_FUNCTION(NewSubscriberExpDialog);
 
 extern pascal trap OSErr C_NewPublisherExpDialog(NewPublisherReplyPtr reply, Point where,
                                                  int16_t expnasion_ditl_res_id,
                                                  ExpDialogHookProcPtr dialog_hook,
                                                  ExpModalFilterProcPtr filter_hook,
                                                  Ptr data);
+PASCAL_FUNCTION(NewPublisherExpDialog);
 
 extern pascal trap OSErr C_SectionOptionsExpDialog(SectionOptionsReply *reply,
                                                    Point where, int16_t expnasion_ditl_res_id,
                                                    ExpDialogHookProcPtr dialog_hook,
                                                    ExpModalFilterProcPtr filter_hook,
                                                    Ptr data);
+PASCAL_FUNCTION(SectionOptionsExpDialog);
 
 extern pascal trap OSErr C_GetEditionInfo(SectionHandle section,
                                           EditionInfoPtr edition_info);
+PASCAL_FUNCTION(GetEditionInfo);
 
 extern pascal trap OSErr C_GoToPublisherSection(EditionContainerSpecPtr container);
+PASCAL_FUNCTION(GoToPublisherSection);
 
 extern pascal trap OSErr C_GetStandardFormats(EditionContainerSpecPtr container,
                                               FormatType *preview_format,
                                               Handle preview,
                                               Handle publisher_alias,
                                               Handle formats);
+PASCAL_FUNCTION(GetStandardFormats);
 extern pascal trap OSErr C_GetEditionOpenerProc(EditionOpenerProcPtr *opener);
+PASCAL_FUNCTION(GetEditionOpenerProc);
 extern pascal trap OSErr C_SetEditionOpenerProc(EditionOpenerProcPtr opener);
+PASCAL_FUNCTION(SetEditionOpenerProc);
 
 extern pascal trap OSErr C_CallEditionOpenerProc(EditionOpenerVerb selector,
                                                  EditionOpenerParamBlock *param_block,
                                                  EditionOpenerProcPtr opener);
+PASCAL_FUNCTION(CallEditionOpenerProc);
 
 extern pascal trap OSErr C_CallFormatIOProc(FormatIOVerb selector,
                                             FormatIOParamBlock *param_block,
                                             FormatIOProcPtr proc);
+PASCAL_FUNCTION(CallFormatIOProc);
 }
 
 #endif /* _EDITIONMGR_H_ */

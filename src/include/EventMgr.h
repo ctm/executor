@@ -12,50 +12,65 @@
 
 namespace Executor
 {
-#define nullEvent 0
-#define mouseDown 1
-#define mouseUp 2
-#define keyDown 3
-#define keyUp 4
-#define autoKey 5
-#define updateEvt 6
-#define diskEvt 7
-#define activateEvt 8
-#define networkEvt 10
-#define driverEvt 11
-#define app1Evt 12
-#define app2Evt 13
-#define app3Evt 14
-#define app4Evt 15
-#define kHighLevelEvent 23
+enum
+{
+    nullEvent = 0,
+    mouseDown = 1,
+    mouseUp = 2,
+    keyDown = 3,
+    keyUp = 4,
+    autoKey = 5,
+    updateEvt = 6,
+    diskEvt = 7,
+    activateEvt = 8,
+    networkEvt = 10,
+    driverEvt = 11,
+    app1Evt = 12,
+    app2Evt = 13,
+    app3Evt = 14,
+    app4Evt = 15,
+    kHighLevelEvent = 23,
+};
 
-#define charCodeMask 0xFFL
-#define keyCodeMask 0xFF00L
+enum
+{
+    charCodeMask = 0xFFL,
+    keyCodeMask = 0xFF00L,
+};
 
-#define mDownMask 2
-#define mUpMask 4
-#define keyDownMask 8
-#define keyUpMask 16
-#define autoKeyMask 32
-#define updateMask 64
-#define diskMask 128
-#define activMask 256
+enum
+{
+    mDownMask = 2,
+    mUpMask = 4,
+    keyDownMask = 8,
+    keyUpMask = 16,
+    autoKeyMask = 32,
+    updateMask = 64,
+    diskMask = 128,
+    activMask = 256,
+};
 /* #define networkMask	1024 */
-#define highLevelEventMask 1024
-#define driverMask 2048
-#define app1Mask 4096
-#define app2Mask 8192
-#define app3Mask 16384
-#define app4Mask (-32768)
-#define everyEvent (-1)
+enum
+{
+    highLevelEventMask = 1024,
+    driverMask = 2048,
+    app1Mask = 4096,
+    app2Mask = 8192,
+    app3Mask = 16384,
+    app4Mask = (-32768),
+    everyEvent = (-1),
+};
 
-#define activeFlag 1
-#define changeFlag 2
-#define btnState 128
-#define cmdKey 256
-#define shiftKey 512
-#define alphaLock 1024
-#define optionKey 2048
+enum
+{
+    activeFlag = 1,
+    changeFlag = 2,
+    btnState = 128,
+    cmdKey = 256,
+    shiftKey = 512,
+    alphaLock = 1024,
+    optionKey = 2048,
+};
 #define ControlKey 4096 /* IM V-196 */
 
 enum

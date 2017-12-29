@@ -13,22 +13,34 @@
 
 namespace Executor
 {
-#define putDlgID (-3999)
+enum
+{
+    putDlgID = (-3999),
+};
 
-#define putSave 1
-#define putCancel 2
-#define putEject 5
-#define putDrive 6
-#define putName 7
+enum
+{
+    putSave = 1,
+    putCancel = 2,
+    putEject = 5,
+    putDrive = 6,
+    putName = 7,
+};
 
-#define getDlgID (-4000)
+enum
+{
+    getDlgID = (-4000),
+};
 
-#define getOpen 1
-#define getCancel 3
-#define getEject 5
-#define getDrive 6
-#define getNmList 7
-#define getScroll 8
+enum
+{
+    getOpen = 1,
+    getCancel = 3,
+    getEject = 5,
+    getDrive = 6,
+    getNmList = 7,
+    getScroll = 8,
+};
 
 struct SFReply
 {
@@ -100,23 +112,29 @@ extern pascal void P_ROMlib_filebox(DialogPeek dp, INTEGER which);
 
 extern pascal trap void C_SFPPutFile(Point p, StringPtr prompt,
                                      StringPtr name, ProcPtr dh, SFReply *rep, INTEGER dig, ProcPtr fp);
+PASCAL_FUNCTION(SFPPutFile);
 
 extern pascal trap void C_SFPutFile(Point p, StringPtr prompt, StringPtr name,
                                     ProcPtr dh, SFReply *rep);
+PASCAL_FUNCTION(SFPutFile);
 
 extern pascal trap void C_SFPGetFile(Point p, StringPtr prompt, ProcPtr filef,
                                      INTEGER numt, GUEST<SFTypeList> tl, ProcPtr dh, SFReply *rep,
                                      INTEGER dig, ProcPtr fp);
+PASCAL_FUNCTION(SFPGetFile);
 
 extern pascal trap void C_SFGetFile(Point p, StringPtr prompt, ProcPtr filef,
                                     INTEGER numt, GUEST<SFTypeList> tl, ProcPtr dh, SFReply *rep);
+PASCAL_FUNCTION(SFGetFile);
 
 extern pascal trap void C_StandardGetFile(ProcPtr filef, INTEGER numt,
                                           GUEST<SFTypeList> tl,
                                           StandardFileReply *replyp);
+PASCAL_FUNCTION(StandardGetFile);
 
 extern pascal trap void C_StandardPutFile(Str255 prompt, Str255 defaultname,
                                           StandardFileReply *replyp);
+PASCAL_FUNCTION(StandardPutFile);
 
 extern pascal trap void C_CustomPutFile(Str255 prompt, Str255 defaultName,
                                         StandardFileReply *replyp,
@@ -126,6 +144,7 @@ extern pascal trap void C_CustomPutFile(Str255 prompt, Str255 defaultName,
                                         Ptr activeList,
                                         ActivateYDProcPtr activateproc,
                                         UNIV Ptr yourdatap);
+PASCAL_FUNCTION(CustomPutFile);
 
 extern pascal trap void C_CustomGetFile(FileFilterYDProcPtr filefilter,
                                         INTEGER numtypes,
@@ -137,6 +156,7 @@ extern pascal trap void C_CustomGetFile(FileFilterYDProcPtr filefilter,
                                         Ptr activeList,
                                         ActivateYDProcPtr activateproc,
                                         UNIV Ptr yourdatap);
+PASCAL_FUNCTION(CustomGetFile);
 
 }
 

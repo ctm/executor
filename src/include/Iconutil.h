@@ -86,9 +86,10 @@ enum
     svAllAvailableData = 0xFFFFFF,
 };
 
-#define noErr 0
-#define paramErr (-50)
-#define noMaskFoundErr (-1000)
+enum
+{
+    noMaskFoundErr = (-1000),
+};
 
 typedef ProcPtr IconActionProcPtr;
 typedef ProcPtr IconGetterProcPtr;
@@ -115,103 +116,138 @@ extern pascal trap OSErr C_PlotIconID(const Rect *rect,
                                       IconAlignmentType align,
                                       IconTransformType tranform,
                                       short res_id);
+PASCAL_FUNCTION(PlotIconID);
 
 extern pascal trap OSErr C_PlotIconMethod(const Rect *rect,
                                           IconAlignmentType align,
                                           IconTransformType transform,
                                           IconGetterProcPtr method,
                                           void *data);
+PASCAL_FUNCTION(PlotIconMethod);
 extern pascal trap void C_PlotCIcon(const Rect *rect, CIconHandle icon);
+PASCAL_TRAP(PlotCIcon, 0xAA1F);
 extern pascal trap void C_PlotIcon(const Rect *rect, Handle icon);
+PASCAL_TRAP(PlotIcon, 0xA94B);
 extern pascal trap OSErr C_PlotIconHandle(const Rect *rect,
                                           IconAlignmentType align,
                                           IconTransformType transform,
                                           Handle icon);
+PASCAL_FUNCTION(PlotIconHandle);
 extern pascal trap OSErr C_PlotCIconHandle(const Rect *rect,
                                            IconAlignmentType align,
                                            IconTransformType transform,
                                            CIconHandle icon);
+PASCAL_FUNCTION(PlotCIconHandle);
 extern pascal trap OSErr C_PlotSICNHandle(const Rect *rect,
                                           IconAlignmentType align,
                                           IconTransformType transform,
                                           Handle icon);
+PASCAL_FUNCTION(PlotSICNHandle);
 
 extern pascal trap Handle C_GetIcon(short icon_id);
+PASCAL_TRAP(GetIcon, 0xA9BB);
 extern pascal trap CIconHandle C_GetCIcon(short icon_id);
+PASCAL_TRAP(GetCIcon, 0xAA1E);
 
 extern pascal trap void C_DisposeCIcon(CIconHandle icon);
+PASCAL_TRAP(DisposeCIcon, 0xAA25);
 
 extern pascal trap OSErr C_GetIconSuite(GUEST<Handle> *suite, short res_id,
                                         IconSelectorValue selector);
+PASCAL_FUNCTION(GetIconSuite);
 extern pascal trap OSErr C_NewIconSuite(GUEST<Handle> *suite);
+PASCAL_FUNCTION(NewIconSuite);
 
 extern pascal trap OSErr C_AddIconToSuite(Handle icon_data, Handle suite,
                                           ResType type);
+PASCAL_FUNCTION(AddIconToSuite);
 extern pascal trap OSErr C_GetIconFromSuite(GUEST<Handle> *icon_data,
                                             Handle suite, ResType type);
+PASCAL_FUNCTION(GetIconFromSuite);
 extern pascal trap OSErr C_PlotIconSuite(const Rect *rect,
                                          IconAlignmentType align,
                                          IconTransformType transform,
                                          Handle suite);
+PASCAL_FUNCTION(PlotIconSuite);
 extern pascal trap OSErr C_ForEachIconDo(Handle suite,
                                          IconSelectorValue selector,
                                          IconActionProcPtr action,
                                          void *data);
+PASCAL_FUNCTION(ForEachIconDo);
 extern pascal trap short C_GetSuiteLabel(Handle suite);
+PASCAL_FUNCTION(GetSuiteLabel);
 extern pascal trap OSErr C_SetSuiteLabel(Handle suite, short label);
+PASCAL_FUNCTION(SetSuiteLabel);
 extern pascal trap OSErr C_GetLabel(short label, RGBColor *label_color,
                                     Str255 label_string);
+PASCAL_FUNCTION(GetLabel);
 extern pascal trap OSErr C_DisposeIconSuite(Handle suite,
                                             Boolean dispose_data_p);
+PASCAL_FUNCTION(DisposeIconSuite);
 
 extern pascal trap OSErr C_IconSuiteToRgn(RgnHandle rgn, const Rect *rect,
                                           IconAlignmentType align,
                                           Handle suite);
+PASCAL_FUNCTION(IconSuiteToRgn);
 extern pascal trap OSErr C_IconIDToRgn(RgnHandle rgn, const Rect *rect,
                                        IconAlignmentType align,
                                        short icon_id);
+PASCAL_FUNCTION(IconIDToRgn);
 extern pascal trap OSErr C_IconMethodToRgn(RgnHandle rgn, const Rect *rect,
                                            IconAlignmentType align,
                                            IconGetterProcPtr method,
                                            void *data);
+PASCAL_FUNCTION(IconMethodToRgn);
 
 extern pascal trap Boolean C_PtInIconSuite(Point test_pt,
                                            const Rect *rect,
                                            IconAlignmentType align,
                                            Handle suite);
+PASCAL_FUNCTION(PtInIconSuite);
 extern pascal trap Boolean C_PtInIconID(Point test_pt, const Rect *rect,
                                         IconAlignmentType align,
                                         short icon_id);
+PASCAL_FUNCTION(PtInIconID);
 extern pascal trap Boolean C_PtInIconMethod(Point test_pt, const Rect *rect,
                                             IconAlignmentType align,
                                             IconGetterProcPtr method,
                                             void *data);
+PASCAL_FUNCTION(PtInIconMethod);
 extern pascal trap Boolean C_RectInIconSuite(const Rect *test_rect,
                                              const Rect *rect,
                                              IconAlignmentType align,
                                              Handle suite);
+PASCAL_FUNCTION(RectInIconSuite);
 extern pascal trap Boolean C_RectInIconID(const Rect *test_rect,
                                           const Rect *rect,
                                           IconAlignmentType align,
                                           short icon_id);
+PASCAL_FUNCTION(RectInIconID);
 extern pascal trap Boolean C_RectInIconMethod(const Rect *test_rect,
                                               const Rect *rect,
                                               IconAlignmentType align,
                                               IconGetterProcPtr method,
                                               void *data);
+PASCAL_FUNCTION(RectInIconMethod);
 extern pascal trap OSErr C_MakeIconCache(Handle *cache,
                                          IconGetterProcPtr make_icon,
                                          void *data);
+PASCAL_FUNCTION(MakeIconCache);
 extern pascal trap OSErr C_LoadIconCache(const Rect *rect,
                                          IconAlignmentType align,
                                          IconTransformType transform,
                                          Handle cache);
+PASCAL_FUNCTION(LoadIconCache);
 extern pascal trap OSErr C_GetIconCacheData(Handle cache, void **data);
+PASCAL_FUNCTION(GetIconCacheData);
 extern pascal trap OSErr C_SetIconCacheData(Handle cache, void *data);
+PASCAL_FUNCTION(SetIconCacheData);
 extern pascal trap OSErr C_GetIconCacheProc(Handle cache,
                                             IconGetterProcPtr *proc);
+PASCAL_FUNCTION(GetIconCacheProc);
 extern pascal trap OSErr C_SetIconCacheProc(Handle cache,
                                             IconGetterProcPtr proc);
+PASCAL_FUNCTION(SetIconCacheProc);
 }
 
 #endif /* !_ICON_UTIL_H */

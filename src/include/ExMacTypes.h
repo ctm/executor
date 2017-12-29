@@ -48,7 +48,10 @@ typedef LONGINT Fixed, Fract;
 /* SmallFract represnts values between 0 and 65535 */
 typedef unsigned short SmallFract;
 
-#define MaxSmallFract 0xFFFF
+enum
+{
+    MaxSmallFract = 0xFFFF,
+};
 
 typedef double Extended;
 
@@ -75,7 +78,8 @@ typedef union __qe *QElemPtr;
 
 enum
 {
-    noErr = 0
+    noErr = 0,
+    paramErr = (-50),
 };
 
 #if 0
