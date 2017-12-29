@@ -10,12 +10,8 @@
 
 #include "rsys/mactype.h"
 
-#ifdef __cplusplus
 namespace Executor
 {
-#endif
-
-#define a5 (EM_A5)
 
 #if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef int8 SignedByte;
@@ -148,7 +144,5 @@ typedef INTEGER LangCode;
 /* DO NOT DELETE THIS LINE */
 extern INTEGER ROM85;
 extern INTEGER DSErrCode;
-#ifdef __cplusplus
 }
-#endif
 #endif /* _MACTYPES_H_ */

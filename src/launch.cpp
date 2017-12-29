@@ -666,8 +666,8 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     {
         lp = 0; /* just to shut GCC up */
         jumplen = jumpoff = 0; /* just to shut GCC up */
-        a5 = US_TO_SYN68K(&tmpa5);
-        CurrentA5 = guest_cast<Ptr>(CL(a5));
+        EM_A5 = US_TO_SYN68K(&tmpa5);
+        CurrentA5 = guest_cast<Ptr>(CL(EM_A5));
         InitGraf((Ptr)quickbytes + grafSize - 4);
     }
     else
@@ -698,7 +698,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
         CurrentA5 = RM(MR(CurStackBase) + belowa5); /* set CurrentA5 */
         BufPtr = RM(MR(CurrentA5) + abovea5);
         CurJTOffset = CW(jumpoff);
-        a5 = CL(guest_cast<LONGINT>(CurrentA5));
+        EM_A5 = CL(guest_cast<LONGINT>(CurrentA5));
     }
 
     GetDateTime(&Time);

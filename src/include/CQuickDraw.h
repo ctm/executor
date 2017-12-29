@@ -6,8 +6,8 @@
 
 namespace Executor
 {
-#define theCPort (STARH(STARH((GUEST<GUEST<CGrafPtr> *> *)SYN68K_TO_US(a5))))
-#define theCPortX ((*STARH((GUEST<GUEST<CGrafPtr> *> *)SYN68K_TO_US(a5))))
+#define theCPort (STARH(STARH((GUEST<GUEST<CGrafPtr> *> *)SYN68K_TO_US(EM_A5))))
+#define theCPortX ((*STARH((GUEST<GUEST<CGrafPtr> *> *)SYN68K_TO_US(EM_A5))))
 
 #define minSeed 1024
 

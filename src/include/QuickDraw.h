@@ -438,17 +438,17 @@ struct MatchRec
 
 typedef Byte *BytePtr;
 
-#define thePort (STARH(STARH((GUEST<GUEST<GrafPtr> *> *)SYN68K_TO_US(a5))))
-#define thePortX ((*STARH((GUEST<GUEST<GrafPtr> *> *)SYN68K_TO_US(a5))))
-#define white (STARH((GUEST<BytePtr> *)SYN68K_TO_US(a5)) - 8)
-#define black (STARH((GUEST<BytePtr> *)SYN68K_TO_US(a5)) - 16)
-#define gray (STARH((GUEST<BytePtr> *)SYN68K_TO_US(a5)) - 24)
-#define ltGray (STARH((GUEST<BytePtr> *)SYN68K_TO_US(a5)) - 32)
-#define dkGray (STARH((GUEST<BytePtr> *)SYN68K_TO_US(a5)) - 40)
-#define arrowX (*(Cursor *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(a5)) - 108))
-#define screenBitsX (*(BitMap *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(a5)) - 122))
-#define randSeed CL(*(GUEST<LONGINT> *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(a5)) - 126))
-#define randSeedX ((*(GUEST<LONGINT> *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(a5)) - 126)))
+#define thePort (STARH(STARH((GUEST<GUEST<GrafPtr> *> *)SYN68K_TO_US(EM_A5))))
+#define thePortX ((*STARH((GUEST<GUEST<GrafPtr> *> *)SYN68K_TO_US(EM_A5))))
+#define white (STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 8)
+#define black (STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 16)
+#define gray (STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 24)
+#define ltGray (STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 32)
+#define dkGray (STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 40)
+#define arrowX (*(Cursor *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 108))
+#define screenBitsX (*(BitMap *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 122))
+#define randSeed CL(*(GUEST<LONGINT> *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 126))
+#define randSeedX ((*(GUEST<LONGINT> *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 126)))
 
 #if 0
 extern GUEST<LONGINT> RndSeed_L;

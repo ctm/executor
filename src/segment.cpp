@@ -683,8 +683,8 @@ P0(PUBLIC pascal trap, void, ExitToShell)
 
         if(QDExist == EXIST_NO)
         {
-            a5 = US_TO_SYN68K(&a5space.tmpA5);
-            CurrentA5 = guest_cast<Ptr>(CL(a5));
+            EM_A5 = US_TO_SYN68K(&a5space.tmpA5);
+            CurrentA5 = guest_cast<Ptr>(CL(EM_A5));
             InitGraf((Ptr)&a5space.qdthePort);
         }
         InitFonts();
@@ -807,7 +807,7 @@ P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
     }
     savenentries = nentries = CW(((GUEST<INTEGER> *)STARH(newcode))[1]);
 
-    saveptr = ptr = (GUEST<int16_t> *)((char *)(long)SYN68K_TO_US(a5) + taboff + Cx(CurJTOffset));
+    saveptr = ptr = (GUEST<int16_t> *)((char *)(long)SYN68K_TO_US(EM_A5) + taboff + Cx(CurJTOffset));
     while(--nentries >= 0)
     {
         if(ptr[1] != CWC(JMPLINSTR))
