@@ -342,7 +342,7 @@ extern pascal trap void C_SetGDevice(GDHandle);
 PASCAL_TRAP(SetGDevice, 0xAA31);
 
 extern pascal trap void C_DisposeGDevice(GDHandle);
-PASCAL_FUNCTION(DisposeGDevice);
+PASCAL_TRAP(DisposeGDevice, 0xAA30);
 extern pascal trap GDHandle C_GetGDevice();
 PASCAL_TRAP(GetGDevice, 0xAA32);
 extern pascal trap GDHandle C_GetDeviceList();
@@ -582,9 +582,6 @@ extern pascal trap void C_SaveEntries(CTabHandle, CTabHandle, ReqListRec *);
 PASCAL_TRAP(SaveEntries, 0xAA49);
 extern pascal trap void C_RestoreEntries(CTabHandle, CTabHandle, ReqListRec *);
 PASCAL_TRAP(RestoreEntries, 0xAA4A);
-
-extern pascal trap void C_DisposGDevice(GDHandle gdh);
-PASCAL_TRAP(DisposGDevice, 0xAA30);
 
 extern pascal trap OSErr C_DisposePictInfo(PictInfoID);
 PASCAL_FUNCTION(DisposePictInfo);

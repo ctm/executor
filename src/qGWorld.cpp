@@ -524,7 +524,7 @@ P1(PUBLIC pascal trap, void, DisposeGWorld,
 
     if(gw_info->gd_allocated_p)
     {
-        DisposGDevice(gw_info->gw_gd);
+        DisposeGDevice(gw_info->gw_gd);
     }
 
     ClosePort((GrafPtr)graphics_world);

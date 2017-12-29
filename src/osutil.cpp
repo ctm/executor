@@ -1000,7 +1000,7 @@ A2(PUBLIC trap, OSErrRET, SysEnvirons, INTEGER, vers, SysEnvRecPtr, p)
 #endif /* SYN68K */
     p->hasColorQD = true;
     p->keyBoardType = CWC(envAExtendKbd);
-    p->atDrvrVersNum = 0;
+p->atDrvrVersNum = 0;
     p->sysVRefNum = BootDrive;
 
     return vers <= SYSRECVNUM ? noErr : envVersTooBig;
@@ -1029,4 +1029,14 @@ A1(PUBLIC, void, SwapMMUMode, Byte *, bp) /* IMV-593 */
 A1(PUBLIC, LONGINT, StripAddress, LONGINT, l) /* IMV-593 */
 {
     return l;
+}
+
+P1(PUBLIC pascal trap, void, DebugStr, StringPtr, p)
+{
+    int i;
+
+    fprintf(stderr, "debugstr: ");
+    for(i = *p++; i-- > 0; fprintf(stderr, "%c", (LONGINT)*p++))
+        ;
+    fprintf(stderr, "\n");
 }

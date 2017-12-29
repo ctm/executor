@@ -338,8 +338,10 @@ extern pascal trap OSErr C_AEPutKeyDesc(AERecord *record, AEKeyword keyword,
                                         AEDesc *desc);
 PASCAL_FUNCTION(AEPutKeyDesc);
 
+/*
 extern pascal trap OSErr C_AEDeleteParam(AppleEvent *evt, AEKeyword keyword);
 PASCAL_FUNCTION(AEDeleteParam);
+*/
 
 extern pascal trap OSErr C_AEDeleteAttribute(AppleEvent *evt,
                                              AEKeyword keyword);
@@ -366,8 +368,11 @@ extern pascal trap OSErr C_AEResumeTheCurrentEvent(AppleEvent *evt, AppleEvent *
                                                    EventHandlerProcPtr dispatcher,
                                                    int32_t refcon);
 PASCAL_FUNCTION(AEResumeTheCurrentEvent);
+
+/*
 extern pascal trap OSErr C_AEProcessEvent(EventRecord *evt);
 PASCAL_FUNCTION(AEProcessEvent);
+*/
 
 extern pascal trap OSErr C_AEGetInteractionAllowed(AEInteractionAllowed *return_level);
 PASCAL_FUNCTION(AEGetInteractionAllowed);

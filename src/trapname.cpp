@@ -2638,7 +2638,7 @@ const char *trap_name_array[0x1000] = {
     "SetDeviceAttribute", /* 0xAA2D */
     "InitGDevice", /* 0xAA2E */
     "NewGDevice", /* 0xAA2F */
-    "DisposGDevice", /* 0xAA30 */
+    "DisposeGDevice", /* 0xAA30 */
     "SetGDevice", /* 0xAA31 */
     "GetGDevice", /* 0xAA32 */
     "Color2Index", /* 0xAA33 */
@@ -3662,7 +3662,7 @@ const char *trap_name_array[0x1000] = {
     "SetDeviceAttribute", /* 0xAE2D */
     "InitGDevice", /* 0xAE2E */
     "NewGDevice", /* 0xAE2F */
-    "DisposGDevice", /* 0xAE30 */
+    "DisposeGDevice", /* 0xAE30 */
     "SetGDevice", /* 0xAE31 */
     "GetGDevice", /* 0xAE32 */
     "Color2Index", /* 0xAE33 */

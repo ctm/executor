@@ -26,7 +26,6 @@
 #include <string.h>
 #endif
 
-#include "ThinkC.h"
 #define HVCB VCB
 
 namespace Executor

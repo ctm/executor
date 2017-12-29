@@ -266,7 +266,7 @@ P1(PUBLIC pascal trap, void, SetGDevice,
     }
 }
 
-P1(PUBLIC pascal trap, void, DisposGDevice,
+P1(PUBLIC pascal trap, void, DisposeGDevice,
    GDHandle, gdh)
 {
     DisposHandle((Handle)GD_ITABLE(gdh));

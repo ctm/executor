@@ -54,7 +54,6 @@
 #include "Disk.h"
 #include "DiskInit.h"
 #include "Package.h"
-#include "ThinkC.h"
 #include "ShutDown.h"
 
 #include "rsys/time.h"
@@ -4059,7 +4058,7 @@ PRIVATE map_entry_t
             "TrackGoAway", TrackGoAway_PC,
         },
         {
-            "DisposeGDevice", C_DisposGDevice,
+            "DisposeGDevice", C_DisposeGDevice,
         },
         {
             "CopyBits", C_CopyBits,
@@ -6119,7 +6118,7 @@ PRIVATE map_entry_t
             "RestoreEntries", C_RestoreEntries,
         },
         {
-            "DisposGDevice", C_DisposGDevice,
+            "DisposeGDevice", C_DisposeGDevice,
         },
         {
             "DisposePictInfo", C_DisposePictInfo,

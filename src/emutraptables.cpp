@@ -635,7 +635,7 @@ toolstuff_t Executor::toolstuff[0x400] = {
     { { (void *)&C_SetDeviceAttribute, PTOC_SetDeviceAttribute }, 0 },
     { { (void *)&C_InitGDevice, PTOC_InitGDevice }, 0 },
     { { (void *)&C_NewGDevice, PTOC_NewGDevice }, 0 },
-    { { (void *)&C_DisposGDevice, PTOC_DisposGDevice }, 0 },
+    { { (void *)&C_DisposeGDevice, PTOC_DisposeGDevice }, 0 },
     { { (void *)&C_SetGDevice, PTOC_SetGDevice }, 0 },
     { { (void *)&C_GetGDevice, PTOC_GetGDevice }, 0 },
     { { (void *)&C_Color2Index, PTOC_Color2Index }, 0 },
@@ -1107,7 +1107,7 @@ toolstuff_t Executor::toolstuff[0x400] = {
     unimplemented_toolstuff,
     unimplemented_toolstuff,
     unimplemented_toolstuff,
-    { { (void *)&_DebugStr, static_cast<ULONGINT>(-1) }, 0 },
+    { { (void *)&C_DebugStr, ptoc(&C_DebugStr) }, 0 },
 };
 
 pstuff_t Executor::pstuff[] = {

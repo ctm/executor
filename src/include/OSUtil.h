@@ -200,5 +200,8 @@ extern void RestoreA5(void);
 extern void GetMMUMode(GUEST<INTEGER> *ip);
 extern void SwapMMUMode(Byte *bp);
 extern LONGINT StripAddress(LONGINT l);
+
+extern pascal trap void C_DebugStr(StringPtr p);
+PASCAL_TRAP(DebugStr, 0xABFF);
 }
 #endif /* __OSUTIL__ */

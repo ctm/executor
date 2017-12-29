@@ -67,7 +67,6 @@
 #include "StdFilePkg.h"
 #include "SysErr.h"
 #include "TextEdit.h"
-#include "ThinkC.h"
 #include "TimeMgr.h"
 #include "ToolboxEvent.h"
 #include "ToolboxUtil.h"
@@ -402,8 +401,6 @@ void Executor::check_structs(void)
     check(StScrpRec, 22);
     check(NullSTRec, 8);
     check(TEStyleRec, 24);
-
-    /* ThinkC.h has no structs or unions */
 
     /* TimeMgr.h */
     check(TMTask, 14);

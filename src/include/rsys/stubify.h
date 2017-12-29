@@ -3919,15 +3919,15 @@ namespace Executor
              ? C_SetGDevice(__stub_arg_1)                                                   \
              : (void)CToPascalCall(SYN68K_TO_US(new_addr), CTOP_SetGDevice, __stub_arg_1)); \
     })
-#define DisposGDevice(A1)                                                                      \
+#define DisposeGDevice(A1)                                                                      \
     ({                                                                                         \
         syn68k_addr_t new_addr;                                                                \
         GDHandle __stub_arg_1 = (A1);                                                          \
                                                                                                \
         new_addr = tooltraptable[0x0230];                                                      \
         ((new_addr == toolstuff[0x0230].orig)                                                  \
-             ? C_DisposGDevice(__stub_arg_1)                                                   \
-             : (void)CToPascalCall(SYN68K_TO_US(new_addr), CTOP_DisposGDevice, __stub_arg_1)); \
+             ? C_DisposeGDevice(__stub_arg_1)                                                   \
+             : (void)CToPascalCall(SYN68K_TO_US(new_addr), CTOP_DisposeGDevice, __stub_arg_1)); \
     })
 #define GetGDevice()                                                              \
     ({                                                                            \

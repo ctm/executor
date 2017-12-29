@@ -8,7 +8,6 @@
 #include "SegmentLdr.h"
 #include "ToolboxEvent.h"
 #include "MemoryMgr.h"
-#include "ThinkC.h"
 #include "SysErr.h"
 #include "DialogMgr.h"
 #include "ResourceMgr.h"

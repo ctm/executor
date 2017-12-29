@@ -51,15 +51,19 @@ enum
 };
 
 extern trap BOOLEAN C_HMGetBalloons(void);
+PASCAL_FUNCTION(HMGetBalloons);
 
 extern trap OSErr C_HMSetBalloons(BOOLEAN flag);
+PASCAL_FUNCTION(HMSetBalloons);
 
 extern trap BOOLEAN C_HMIsBalloon(void);
+PASCAL_FUNCTION(HMIsBalloon);
 
 extern trap OSErr C_HMShowBalloon(HMMessageRecord *msgp, Point tip,
                                   RectPtr alternaterectp, Ptr tipprocptr,
                                   INTEGER proc, INTEGER variant,
                                   INTEGER method);
+PASCAL_FUNCTION(HMShowBalloon);
 
 extern trap OSErr C_HMShowMenuBalloon(INTEGER item, INTEGER menuid,
                                       LONGINT flags,
@@ -67,41 +71,57 @@ extern trap OSErr C_HMShowMenuBalloon(INTEGER item, INTEGER menuid,
                                       RectPtr alternaterectp,
                                       Ptr tipproc, INTEGER proc,
                                       INTEGER variant);
+PASCAL_FUNCTION(HMShowMenuBalloon);
 
 extern trap OSErr C_HMRemoveBalloon(void);
+PASCAL_FUNCTION(HMRemoveBalloon);
 
 extern trap OSErr C_HMGetHelpMenuHandle(GUEST<MenuHandle> *mhp);
+PASCAL_FUNCTION(HMGetHelpMenuHandle);
 
 extern trap OSErr C_HMGetFont(GUEST<INTEGER> *fontp);
+PASCAL_FUNCTION(HMGetFont);
 
 extern trap OSErr C_HMGetFontSize(GUEST<INTEGER> *sizep);
+PASCAL_FUNCTION(HMGetFontSize);
 
 extern trap OSErr C_HMSetFont(INTEGER font);
+PASCAL_FUNCTION(HMSetFont);
 
 extern trap OSErr C_HMSetFontSize(INTEGER size);
+PASCAL_FUNCTION(HMSetFontSize);
 
 extern trap OSErr C_HMSetDialogResID(INTEGER resid);
+PASCAL_FUNCTION(HMSetDialogResID);
 
 extern trap OSErr C_HMGetDialogResID(GUEST<INTEGER> *residp);
+PASCAL_FUNCTION(HMGetDialogResID);
 
 extern trap OSErr C_HMSetMenuResID(INTEGER menuid, INTEGER resid);
+PASCAL_FUNCTION(HMSetMenuResID);
 
 extern trap OSErr C_HMGetMenuResID(GUEST<INTEGER> *menuidp, GUEST<INTEGER> *residp);
+PASCAL_FUNCTION(HMGetMenuResID);
 
 extern trap OSErr C_HMScanTemplateItems(INTEGER whichid,
                                         INTEGER whicresfile,
                                         ResType whictype);
+PASCAL_FUNCTION(HMScanTemplateItems);
 
 extern trap OSErr C_HMBalloonRect(HMMessageRecord *messp, Rect *rectp);
+PASCAL_FUNCTION(HMBalloonRect);
 
 extern trap OSErr C_HMBalloonPict(HMMessageRecord *messp,
                                   GUEST<PicHandle> *pictp);
+PASCAL_FUNCTION(HMBalloonPict);
 
 extern trap OSErr C_HMGetBalloonWindow(GUEST<WindowPtr> *windowpp);
+PASCAL_FUNCTION(HMGetBalloonWindow);
 
 extern trap OSErr C_HMExtractHelpMsg(ResType type, INTEGER resid,
                                      INTEGER msg, INTEGER state,
                                      HMMessageRecord *helpmsgp);
+PASCAL_FUNCTION(HMExtractHelpMsg);
 
 extern OSErr HMGetIndHelpMsg(ResType type, INTEGER resid,
                              INTEGER msg, INTEGER state,
