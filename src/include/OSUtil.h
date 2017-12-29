@@ -167,7 +167,7 @@ extern void SetTrapAddress(LONGINT addr,
                            INTEGER n);
 extern trap void Delay(LONGINT n, LONGINT *ftp);
 extern pascal trap void C_SysBeep(INTEGER i);
-extern pascal trap void P_SysBeep(INTEGER i);
+
 extern trap void Environs(GUEST<INTEGER> *rom, GUEST<INTEGER> *machine);
 extern trap OSErrRET SysEnvirons(INTEGER vers, SysEnvRecPtr p);
 extern void Restart(void);

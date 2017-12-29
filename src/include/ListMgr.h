@@ -95,9 +95,6 @@ extern pascal trap void C_LDelRow(INTEGER count,
 extern pascal trap ListHandle C_LNew(Rect *rview,
                                      Rect *bounds, Point csize, INTEGER proc, WindowPtr wind,
                                      BOOLEAN draw, BOOLEAN grow, BOOLEAN scrollh, BOOLEAN scrollv);
-extern pascal trap ListHandle P_LNew(Rect *rview,
-                                     Rect *bounds, Point csize, INTEGER proc, WindowPtr wind,
-                                     BOOLEAN draw, BOOLEAN grow, BOOLEAN scrollh, BOOLEAN scrollv);
 extern pascal trap void C_LDispose(ListHandle list);
 extern pascal trap void C_LDraw(Cell cell,
                                 ListHandle list);

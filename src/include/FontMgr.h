@@ -200,29 +200,23 @@ extern Byte 	FractEnable;
 #endif
 
 extern pascal trap void C_InitFonts(void);
-extern pascal trap void P_InitFonts(void);
+
 extern pascal trap void C_GetFontName(INTEGER fnum,
-                                      StringPtr fnam);
-extern pascal trap void P_GetFontName(INTEGER fnum,
                                       StringPtr fnam);
 extern void ROMlib_GetFontName(LONGINT fnum, char *fnam);
 extern pascal trap void C_GetFNum(StringPtr fnam,
                                   GUEST<INTEGER> *fnum);
 extern pascal trap BOOLEAN C_RealFont(INTEGER fnum,
                                       INTEGER sz);
-extern pascal trap BOOLEAN P_RealFont(INTEGER fnum,
-                                      INTEGER sz);
 extern pascal trap void C_SetFontLock(BOOLEAN lflag);
-extern pascal trap void P_SetFontLock(BOOLEAN lflag);
+
 extern pascal trap FMOutPtr C_FMSwapFont(FMInput *fmip);
 extern pascal trap void C_FontMetrics(FMetricRec *metrp);
-extern pascal trap void P_FontMetrics(FMetricRec *metrp);
+
 extern pascal trap void C_SetFScaleDisable(
     BOOLEAN disable);
-extern pascal trap void P_SetFScaleDisable(
-    BOOLEAN disable);
 extern pascal trap void C_SetFractEnable(BOOLEAN enable);
-extern pascal trap void P_SetFractEnable(BOOLEAN enable);
+
 
 extern pascal trap void C_SetOutlinePreferred(Boolean _outline_perferred_p);
 extern pascal trap Boolean C_GetOutlinePreferred(void);

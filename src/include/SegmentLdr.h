@@ -57,13 +57,13 @@ extern pascal trap void Chain(StringPtr appl, INTEGER vrefnum);
 
 extern pascal trap void C_GetAppParms(StringPtr namep,
                                       GUEST<INTEGER> *rnp, GUEST<Handle> *aphandp);
-extern pascal trap void P_ExitToShell(void);
+
 extern pascal trap void C_UnloadSeg(Ptr addr);
-extern pascal trap void P_UnloadSeg(Ptr addr);
+
 extern pascal trap void C_LoadSeg(INTEGER volatile segno);
-extern pascal trap void P_LoadSeg(INTEGER volatile segno);
+
 extern pascal trap void C_UnloadSeg(Ptr addr);
-extern pascal trap void P_UnloadSeg(Ptr addr);
+
 
 #endif
 }

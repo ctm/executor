@@ -100,12 +100,8 @@ extern pascal void P_ROMlib_filebox(DialogPeek dp, INTEGER which);
 
 extern pascal trap void C_SFPPutFile(Point p, StringPtr prompt,
                                      StringPtr name, ProcPtr dh, SFReply *rep, INTEGER dig, ProcPtr fp);
-extern pascal trap void P_SFPPutFile(Point p, StringPtr prompt,
-                                     StringPtr name, ProcPtr dh, SFReply *rep, INTEGER dig, ProcPtr fp);
 
 extern pascal trap void C_SFPutFile(Point p, StringPtr prompt, StringPtr name,
-                                    ProcPtr dh, SFReply *rep);
-extern pascal trap void P_SFPutFile(Point p, StringPtr prompt, StringPtr name,
                                     ProcPtr dh, SFReply *rep);
 
 extern pascal trap void C_SFPGetFile(Point p, StringPtr prompt, ProcPtr filef,

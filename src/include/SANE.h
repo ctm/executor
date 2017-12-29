@@ -133,185 +133,107 @@ extern pascal void P_ROMlib_Fcomp2X(comp sp, extended80 *
                                                  dp);
 extern pascal trap void C_ROMlib_Fsetenv(INTEGER *dp,
                                          INTEGER sel);
-extern pascal trap void P_ROMlib_Fsetenv(INTEGER *dp,
-                                         INTEGER sel);
 extern pascal trap void C_ROMlib_Fgetenv(INTEGER *dp,
-                                         INTEGER sel);
-extern pascal trap void P_ROMlib_Fgetenv(INTEGER *dp,
                                          INTEGER sel);
 extern pascal trap void C_ROMlib_Fprocentry(INTEGER *dp,
                                             INTEGER sel);
-extern pascal trap void P_ROMlib_Fprocentry(INTEGER *dp,
-                                            INTEGER sel);
 extern pascal trap void C_ROMlib_Fprocexit(INTEGER *dp,
-                                           INTEGER sel);
-extern pascal trap void P_ROMlib_Fprocexit(INTEGER *dp,
                                            INTEGER sel);
 extern pascal trap void C_ROMlib_Ftestxcp(INTEGER *dp,
                                           INTEGER sel);
-extern pascal trap void P_ROMlib_Ftestxcp(INTEGER *dp,
-                                          INTEGER sel);
 extern pascal trap void C_ROMlib_FsqrtX(extended80 *dp,
-                                        unsigned short sel);
-extern pascal trap void P_ROMlib_FsqrtX(extended80 *dp,
                                         unsigned short sel);
 extern pascal trap void C_ROMlib_FscalbX(INTEGER *sp,
                                          extended80 *dp, unsigned short sel);
-extern pascal trap void P_ROMlib_FscalbX(INTEGER *sp,
-                                         extended80 *dp, unsigned short sel);
 extern pascal trap void C_ROMlib_FlogbX(extended80 *dp,
-                                        unsigned short sel);
-extern pascal trap void P_ROMlib_FlogbX(extended80 *dp,
                                         unsigned short sel);
 extern pascal trap void C_ROMlib_FabsX(extended80 *dp,
                                        unsigned short sel);
-extern pascal trap void P_ROMlib_FabsX(extended80 *dp,
-                                       unsigned short sel);
 extern pascal trap void C_ROMlib_FnegX(extended80 *dp,
-                                       unsigned short sel);
-extern pascal trap void P_ROMlib_FnegX(extended80 *dp,
                                        unsigned short sel);
 extern pascal trap void C_ROMlib_FrintX(extended80 *dp,
                                         unsigned short sel);
-extern pascal trap void P_ROMlib_FrintX(extended80 *dp,
-                                        unsigned short sel);
 extern pascal trap void C_ROMlib_FtintX(extended80 *dp,
-                                        unsigned short sel);
-extern pascal trap void P_ROMlib_FtintX(extended80 *dp,
                                         unsigned short sel);
 extern pascal trap void C_ROMlib_Fcpysgnx(x80_t *sp,
                                           x80_t *dp, unsigned short sel);
-extern pascal trap void P_ROMlib_Fcpysgnx(x80_t *sp,
-                                          x80_t *dp, unsigned short sel);
 extern pascal trap void C_ROMlib_Faddx(void *sp, extended80 *
-                                                     dp,
-                                       unsigned short sel);
-extern pascal trap void P_ROMlib_Faddx(void *sp, extended80 *
                                                      dp,
                                        unsigned short sel);
 extern pascal trap void C_ROMlib_Fsubx(void *sp, extended80 *
                                                      dp,
                                        unsigned short sel);
-extern pascal trap void P_ROMlib_Fsubx(void *sp, extended80 *
-                                                     dp,
-                                       unsigned short sel);
 extern pascal trap void C_ROMlib_Fmulx(void *sp, extended80 *
-                                                     dp,
-                                       unsigned short sel);
-extern pascal trap void P_ROMlib_Fmulx(void *sp, extended80 *
                                                      dp,
                                        unsigned short sel);
 extern pascal trap void C_ROMlib_Fdivx(void *sp, extended80 *
                                                      dp,
                                        unsigned short sel);
-extern pascal trap void P_ROMlib_Fdivx(void *sp, extended80 *
-                                                     dp,
-                                       unsigned short sel);
 extern pascal trap void C_ROMlib_Fremx(void *sp,
-                                       extended80 *dp, unsigned short sel);
-extern pascal trap void P_ROMlib_Fremx(void *sp,
                                        extended80 *dp, unsigned short sel);
 extern pascal trap FCMP_RETURN_TYPE C_ROMlib_Fcmpx(void *sp, extended80 *
                                                                  dp,
                                                    unsigned short sel);
-extern pascal trap void P_ROMlib_Fcmpx(void *sp, extended80 *
-                                                     dp,
-                                       unsigned short sel);
 extern pascal trap FCMP_RETURN_TYPE C_ROMlib_FcpXx(void *sp, extended80 *
                                                                  dp,
                                                    unsigned short sel);
-extern pascal trap void P_ROMlib_FcpXx(void *sp, extended80 *
-                                                     dp,
-                                       unsigned short sel);
 extern pascal trap void C_ROMlib_FX2x(extended80 *sp, void *
-                                                          dp,
-                                      unsigned short sel);
-extern pascal trap void P_ROMlib_FX2x(extended80 *sp, void *
                                                           dp,
                                       unsigned short sel);
 extern pascal trap void C_ROMlib_Fx2X(void *sp, extended80 *
                                                     dp,
                                       unsigned short sel);
-extern pascal trap void P_ROMlib_Fx2X(void *sp, extended80 *
-                                                    dp,
-                                      unsigned short sel);
 extern pascal trap void C_ROMlib_Fx2dec(DecForm *sp2, void *
-                                                          sp,
-                                        Decimal *dp, unsigned short sel);
-extern pascal trap void P_ROMlib_Fx2dec(DecForm *sp2, void *
                                                           sp,
                                         Decimal *dp, unsigned short sel);
 extern pascal trap void C_ROMlib_Fdec2x(Decimal *sp, void *
                                                          dp,
                                         unsigned short sel);
-extern pascal trap void P_ROMlib_Fdec2x(Decimal *sp, void *
-                                                         dp,
-                                        unsigned short sel);
 extern pascal trap void C_ROMlib_Fclassx(void *sp, INTEGER *
                                                        dp,
                                          unsigned short sel);
-extern pascal trap void P_ROMlib_Fclassx(void *sp, INTEGER *
-                                                       dp,
-                                         unsigned short sel);
 extern pascal trap void C_ROMlib_FlnX(extended80 *dp);
-extern pascal trap void P_ROMlib_FlnX(extended80 *dp);
+
 extern pascal trap void C_ROMlib_Flog2X(extended80 *dp);
-extern pascal trap void P_ROMlib_Flog2X(extended80 *dp);
+
 extern pascal trap void C_ROMlib_Fln1X(extended80 *dp);
-extern pascal trap void P_ROMlib_Fln1X(extended80 *dp);
+
 extern pascal trap void C_ROMlib_Flog21X(extended80 *dp);
-extern pascal trap void P_ROMlib_Flog21X(extended80 *dp);
+
 extern pascal trap void C_ROMlib_FexpX(extended80 *dp);
-extern pascal trap void P_ROMlib_FexpX(extended80 *dp);
+
 extern pascal trap void C_ROMlib_Fexp2X(extended80 *dp);
-extern pascal trap void P_ROMlib_Fexp2X(extended80 *dp);
+
 extern pascal trap void C_ROMlib_Fexp1X(extended80 *dp);
-extern pascal trap void P_ROMlib_Fexp1X(extended80 *dp);
+
 extern pascal trap void C_ROMlib_Fexp21X(extended80 *dp);
-extern pascal trap void P_ROMlib_Fexp21X(extended80 *dp);
+
 extern pascal trap void C_ROMlib_Fxpwri(INTEGER *sp,
-                                        extended80 *dp);
-extern pascal trap void P_ROMlib_Fxpwri(INTEGER *sp,
                                         extended80 *dp);
 extern pascal trap void C_ROMlib_Fxpwry(extended80 *sp,
                                         extended80 *dp);
-extern pascal trap void P_ROMlib_Fxpwry(extended80 *sp,
-                                        extended80 *dp);
 extern pascal trap void C_ROMlib_Fcompound(extended80 *sp2,
-                                           extended80 *sp, extended80 *dp);
-extern pascal trap void P_ROMlib_Fcompound(extended80 *sp2,
                                            extended80 *sp, extended80 *dp);
 extern pascal trap void C_ROMlib_Fannuity(extended80 *sp2,
                                           extended80 *sp, extended80 *dp);
-extern pascal trap void P_ROMlib_Fannuity(extended80 *sp2,
-                                          extended80 *sp, extended80 *dp);
 extern pascal trap void C_ROMlib_FsinX(extended80 *dp);
-extern pascal trap void P_ROMlib_FsinX(extended80 *dp);
+
 extern pascal trap void C_ROMlib_FcosX(extended80 *dp);
-extern pascal trap void P_ROMlib_FcosX(extended80 *dp);
+
 extern pascal trap void C_ROMlib_FtanX(extended80 *dp);
-extern pascal trap void P_ROMlib_FtanX(extended80 *dp);
+
 extern pascal trap void C_ROMlib_FatanX(extended80 *dp);
-extern pascal trap void P_ROMlib_FatanX(extended80 *dp);
+
 extern pascal trap void C_ROMlib_FrandX(extended80 *dp);
-extern pascal trap void P_ROMlib_FrandX(extended80 *dp);
+
 extern pascal trap void C_ROMlib_Fdec2str(DecForm *sp2,
-                                          Decimal *sp, Decstr dp);
-extern pascal trap void P_ROMlib_Fdec2str(DecForm *sp2,
                                           Decimal *sp, Decstr dp);
 extern pascal trap void C_ROMlib_Fxstr2dec(Decstr sp2,
                                            INTEGER *sp, Decimal *dp2, Byte *dp,
                                            INTEGER lastchar);
-extern pascal trap void P_ROMlib_Fxstr2dec(Decstr sp2,
-                                           INTEGER *sp, Decimal *dp2, Byte *dp,
-                                           INTEGER lastchar);
 extern pascal trap void C_ROMlib_Fcstr2dec(Decstr sp2,
                                            INTEGER *sp, Decimal *dp2, Byte *dp);
-extern pascal trap void P_ROMlib_Fcstr2dec(Decstr sp2,
-                                           INTEGER *sp, Decimal *dp2, Byte *dp);
 extern pascal trap void C_ROMlib_Fpstr2dec(Decstr sp2,
-                                           INTEGER *sp, Decimal *dp2, Byte *dp);
-extern pascal trap void P_ROMlib_Fpstr2dec(Decstr sp2,
                                            INTEGER *sp, Decimal *dp2, Byte *dp);
 extern pascal trap void C_ROMlib_Fsethv(LONGINT *hvp, unsigned short sel);
 extern pascal trap void C_ROMlib_Fgethv(LONGINT *hvp, unsigned short sel);

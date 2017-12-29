@@ -24,29 +24,23 @@ extern Byte 	ScrDmpEnb;
 extern void ROMlib_alarmoffmbar(void);
 extern pascal trap LONGINT C_KeyTrans(Ptr mapp, unsigned short code,
                                       LONGINT *state);
-extern pascal trap LONGINT P_KeyTrans(Ptr mapp, unsigned short code,
-                                      LONGINT *state);
 extern pascal trap BOOLEAN C_GetNextEvent(INTEGER em,
-                                          EventRecord *evt);
-extern pascal trap BOOLEAN P_GetNextEvent(INTEGER em,
                                           EventRecord *evt);
 extern pascal trap BOOLEAN C_WaitNextEvent(INTEGER mask,
                                            EventRecord *evp, LONGINT sleep, RgnHandle mousergn);
-extern pascal trap BOOLEAN P_WaitNextEvent(INTEGER mask,
-                                           EventRecord *evp, LONGINT sleep, RgnHandle mousergn);
 extern pascal trap BOOLEAN C_EventAvail(INTEGER em, EventRecord *evt);
-extern pascal trap BOOLEAN P_EventAvail(INTEGER em, EventRecord *evt);
+
 extern pascal trap void C_GetMouse(GUEST<Point> *p);
 extern pascal trap BOOLEAN C_Button(void);
-extern pascal trap BOOLEAN P_Button(void);
+
 extern pascal trap BOOLEAN C_StillDown(void);
-extern pascal trap BOOLEAN P_StillDown(void);
+
 extern pascal trap BOOLEAN C_WaitMouseUp(void);
-extern pascal trap BOOLEAN P_WaitMouseUp(void);
+
 extern pascal trap void C_GetKeys(unsigned char *keys);
-extern pascal trap void P_GetKeys(unsigned char *keys);
+
 extern pascal trap LONGINT C_TickCount(void);
-extern pascal trap LONGINT P_TickCount(void);
+
 extern LONGINT GetDblTime(void);
 extern LONGINT GetCaretTime(void);
 }

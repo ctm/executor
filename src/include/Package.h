@@ -24,8 +24,8 @@ extern GUEST<Handle> AppPacks_H[8];
 #endif
 
 extern pascal trap void C_InitPack(INTEGER packid);
-extern pascal trap void P_InitPack(INTEGER packid);
+
 extern pascal trap void C_InitAllPacks(void);
-extern pascal trap void P_InitAllPacks(void);
+
 }
 #endif /* __PACKAGE__ */

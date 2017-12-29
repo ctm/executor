@@ -133,27 +133,17 @@ typedef SignedByte DateForm;
 
 extern pascal trap void C_IUDatePString(LONGINT date,
                                         DateForm form, StringPtr p, Handle h);
-extern pascal trap void P_IUDatePString(LONGINT date,
-                                        DateForm form, StringPtr p, Handle h);
 extern pascal trap Handle C_IUGetIntl(INTEGER id);
-extern pascal trap Handle P_IUGetIntl(INTEGER id);
+
 extern pascal trap void C_IUDateString(LONGINT date,
-                                       DateForm form, StringPtr p);
-extern pascal trap void P_IUDateString(LONGINT date,
                                        DateForm form, StringPtr p);
 extern pascal trap void C_IUTimePString(LONGINT date,
                                         BOOLEAN secs, StringPtr p, Handle h);
-extern pascal trap void P_IUTimePString(LONGINT date,
-                                        BOOLEAN secs, StringPtr p, Handle h);
 extern pascal trap void C_IUTimeString(LONGINT date,
                                        BOOLEAN secs, StringPtr p);
-extern pascal trap void P_IUTimeString(LONGINT date,
-                                       BOOLEAN secs, StringPtr p);
 extern pascal trap BOOLEAN C_IUMetric(void);
-extern pascal trap BOOLEAN P_IUMetric(void);
+
 extern pascal trap void C_IUSetIntl(INTEGER rn,
-                                    INTEGER id, Handle newh);
-extern pascal trap void P_IUSetIntl(INTEGER rn,
                                     INTEGER id, Handle newh);
 
 extern pascal trap INTEGER C_IUMagString(Ptr ptr1, Ptr ptr2, INTEGER len1, INTEGER len2);
@@ -162,13 +152,9 @@ extern INTEGER IUCompString(StringPtr str1,
                             StringPtr str2);
 extern pascal trap INTEGER C_IUMagIDString(Ptr ptr1,
                                            Ptr ptr2, INTEGER len1, INTEGER len2);
-extern pascal trap INTEGER P_IUMagIDString(Ptr ptr1,
-                                           Ptr ptr2, INTEGER len1, INTEGER len2);
 extern INTEGER IUEqualString(StringPtr str1,
                              StringPtr str2);
 extern pascal trap void C_IUMystery(Ptr arg1, Ptr arg2,
-                                    INTEGER arg3, INTEGER arg4);
-extern pascal trap void P_IUMystery(Ptr arg1, Ptr arg2,
                                     INTEGER arg3, INTEGER arg4);
 
 extern pascal trap void C_IULDateString(LongDateTime *datetimep,

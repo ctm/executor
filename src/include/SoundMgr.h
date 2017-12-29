@@ -336,30 +336,18 @@ extern void GetSoundVol(INTEGER *volp);
 extern void SetSoundVol(INTEGER vol);
 extern trap OSErr C_SndPlay(SndChannelPtr chanp, Handle sndh,
                             BOOLEAN async);
-extern pascal trap OSErr P_SndPlay(SndChannelPtr chanp, Handle sndh,
-                                   BOOLEAN async);
 extern trap OSErr C_SndNewChannel(GUEST<SndChannelPtr> *chanpp,
                                   INTEGER synth, LONGINT init, ProcPtr userroutinep);
-extern pascal trap OSErr P_SndNewChannel(GUEST<SndChannelPtr> *chanpp,
-                                         INTEGER synth, LONGINT init, ProcPtr userroutinep);
 extern trap OSErr C_SndAddModifier(SndChannelPtr chanp,
                                    ProcPtr mod, INTEGER id, LONGINT init);
-extern pascal trap OSErr P_SndAddModifier(SndChannelPtr chanp,
-                                          ProcPtr mod, INTEGER id, LONGINT init);
 extern trap OSErr C_SndDoCommand(SndChannelPtr chanp,
                                  SndCommand *cmdp, BOOLEAN nowait);
-extern pascal trap OSErr P_SndDoCommand(SndChannelPtr chanp,
-                                        SndCommand *cmdp, BOOLEAN nowait);
 extern trap OSErr C_SndDoImmediate(SndChannelPtr chanp,
                                    SndCommand *cmdp);
-extern pascal trap OSErr P_SndDoImmediate(SndChannelPtr chanp,
-                                          SndCommand *cmdp);
 extern trap OSErr C_SndControl(INTEGER id, SndCommand *cmdp);
-extern pascal trap OSErr P_SndControl(INTEGER id, SndCommand *cmdp);
+
 extern trap OSErr C_SndDisposeChannel(SndChannelPtr chanp,
                                       BOOLEAN quitnow);
-extern pascal trap OSErr P_SndDisposeChannel(SndChannelPtr chanp,
-                                             BOOLEAN quitnow);
 extern void C_FinaleUnknown1(void);
 extern OSErr C_FinaleUnknown2(ResType, LONGINT, Ptr, Ptr);
 extern long C_DirectorUnknown3(void);

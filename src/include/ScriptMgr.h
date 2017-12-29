@@ -203,40 +203,30 @@ extern pascal trap void C_LongSecs2Date(GUEST<ULONGINT> *secs_inp,
                                         LongDateRec *ldatep);
 
 extern pascal trap LONGINT C_GetEnvirons(INTEGER verb);
-extern pascal trap LONGINT P_GetEnvirons(INTEGER verb);
+
 extern pascal trap OSErr C_SetEnvirons(INTEGER verb, LONGINT param);
-extern pascal trap OSErr P_SetEnvirons(INTEGER verb, LONGINT param);
+
 extern pascal trap LONGINT C_GetScript(INTEGER script, INTEGER verb);
-extern pascal trap LONGINT P_GetScript(INTEGER script, INTEGER verb);
+
 extern pascal trap OSErr C_SetScript(INTEGER script, INTEGER verb,
                                      LONGINT param);
-extern pascal trap OSErr P_SetScript(INTEGER script, INTEGER verb,
-                                     LONGINT param);
 extern pascal trap INTEGER C_Font2Script(INTEGER fontnum);
-extern pascal trap INTEGER P_Font2Script(INTEGER fontnum);
+
 extern pascal trap INTEGER C_Transliterate(Handle srch, Handle dsth,
                                            INTEGER target, LONGINT srcmask);
-extern pascal trap INTEGER P_Transliterate(Handle srch, Handle dsth,
-                                           INTEGER target, LONGINT srcmask);
 extern pascal trap INTEGER C_FontScript(void);
-extern pascal trap INTEGER P_FontScript(void);
+
 extern pascal trap INTEGER C_IntlScript(void);
-extern pascal trap INTEGER P_IntlScript(void);
+
 extern pascal trap void C_KeyScript(INTEGER scriptcode);
-extern pascal trap void P_KeyScript(INTEGER scriptcode);
+
 extern pascal trap INTEGER C_CharType(Ptr textbufp, INTEGER offset);
-extern pascal trap INTEGER P_CharType(Ptr textbufp, INTEGER offset);
+
 extern pascal trap void C_MeasureJust(Ptr textbufp, INTEGER length,
-                                      INTEGER slop, Ptr charlocs);
-extern pascal trap void P_MeasureJust(Ptr textbufp, INTEGER length,
                                       INTEGER slop, Ptr charlocs);
 extern pascal trap INTEGER C_Pixel2Char(Ptr textbufp, INTEGER len,
                                         INTEGER slop, INTEGER pixwidth, BOOLEAN *leftsidep);
-extern pascal trap INTEGER P_Pixel2Char(Ptr textbufp, INTEGER len,
-                                        INTEGER slop, INTEGER pixwidth, BOOLEAN *leftsidep);
 extern pascal trap INTEGER C_Char2Pixel(Ptr textbufp, INTEGER len,
-                                        INTEGER slop, INTEGER offset, SignedByte dir);
-extern pascal trap INTEGER P_Char2Pixel(Ptr textbufp, INTEGER len,
                                         INTEGER slop, INTEGER offset, SignedByte dir);
 extern pascal trap void C_FindWord(Ptr textbufp, INTEGER length,
                                    INTEGER offset, BOOLEAN leftside, Ptr breaks, GUEST<INTEGER> *offsets);
@@ -252,9 +242,9 @@ extern INTEGER GetMBarHeight(void);
 extern INTEGER GetSysJust(void);
 extern void SetSysJust(INTEGER just);
 extern pascal trap OSErr C_InitDateCache(DateCachePtr theCache);
-extern pascal trap OSErr P_InitDateCache(DateCachePtr theCache);
+
 extern pascal trap INTEGER C_CharByte(Ptr textBuf, INTEGER textOffset);
-extern pascal trap INTEGER P_CharByte(Ptr textBuf, INTEGER textOffset);
+
 
 extern pascal trap String2DateStatus C_String2Date(Ptr text, int32_t length,
                                                    DateCachePtr cache,
