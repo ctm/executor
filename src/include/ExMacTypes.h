@@ -123,8 +123,6 @@ inline short RECT_HEIGHT(const Rect *r)
     return CW(r->bottom) - CW(r->top);
 }
 
-#define NULL_RECTP ((Rect *)NULL)
-
 #define RECT_ZERO(r)                \
     do                              \
         memset(r, 0, sizeof(Rect)); \
