@@ -19,7 +19,7 @@
 #include "rsys/segment.h"
 #include "rsys/string.h"
 
-#if defined(CYGWIN32) || defined(MSDOS)
+#if defined(CYGWIN32) || defined(MSDOS) || defined(WIN32)
 #include "rsys/fauxdbm.h"
 #endif
 
@@ -463,7 +463,7 @@ PRIVATE void ourgethostname(void)
 {
     if(ROMlib_hostnamelen == -1)
     {
-#if !defined(MSDOS) && !defined(CYGWIN32)
+#if !defined(MSDOS) && !defined(CYGWIN32) && !defined(WIN32)
         gethostname(ROMlib_hostname, OURMAXHOSTNAMELEN);
         ROMlib_hostnamelen = strlen(ROMlib_hostname);
 #else /* defined(MSDOS) */
@@ -1126,8 +1126,10 @@ A2(PUBLIC, OSErr, ufsPBFlushVol, ParmBlkPtr, pb, /* INTERNAL */
 {
     OSErr err = noErr;
 
+#ifndef WIN32
     if(!ROMlib_nosync)
         sync();
+#endif
     return err;
 }
 

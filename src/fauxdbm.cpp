@@ -13,7 +13,7 @@
 
 #include "rsys/common.h"
 
-#if defined(CYGWIN32) || defined(MSDOS)
+#if defined(CYGWIN32) || defined(MSDOS) || defined(WIN32)
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +25,7 @@ PUBLIC DBM *
 dbm_open(const char *name, int flags, int mode)
 {
     DBM *retval;
-    char *open_mode;
+    const char *open_mode;
     FILE *fp;
 
     retval = NULL;
@@ -38,7 +38,7 @@ dbm_open(const char *name, int flags, int mode)
     fp = fopen(name, open_mode);
     if(fp != NULL)
     {
-        retval = malloc(sizeof *retval);
+        retval = (DBM*) malloc(sizeof *retval);
         retval->fp = fp;
     }
 

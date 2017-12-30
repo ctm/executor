@@ -11,9 +11,9 @@
 #include <fcntl.h>
 
 #include <dirent.h>
-#include <sys/vfs.h>
+//#include <sys/vfs.h>
 #include <sys/param.h>
-#include <sys/errno.h>
+//#include <sys/errno.h>
 
 
 #if !defined(PRIVATE)
@@ -22,12 +22,15 @@
 
 #define CONFIG_OFFSET_P 1 /* Use offset memory, at least for the first port */
 
-#define DB_DBM_HSEARCH 1
-#include <db.h>
-
 #define NEED_SCALB
 #define NEED_LOGB
 
 extern int ROMlib_launch_native_app(int n_filenames, char **filenames);
 
-#define WIN32
+//#define WIN32
+
+typedef struct
+{
+    char *dptr;
+    unsigned dsize;
+} datum;

@@ -387,6 +387,8 @@ target_link_libraries(executor front-end-${FRONT_END} arch-${HOST_ARCH})
 
 if(HOST_OS STREQUAL win32)
     target_link_libraries(executor os-${HOST_OS})
+else()
+    target_link_libraries(executor ${DB_LIBRARY})
 endif()
 
-target_link_libraries(executor syn68k ${DB_LIBRARY})
+target_link_libraries(executor syn68k)
