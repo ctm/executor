@@ -39,7 +39,7 @@ extern syn68k_addr_t PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop);
 
 extern unsigned short mostrecenttrap;
 
-extern uintptr_t CToPascalCall(void *, unsigned long, ...);
+extern uintptr_t CToPascalCall(void *, uint64_t, ...);
 extern toolstuff_t toolstuff[NTOOLENTRIES];
 }
 

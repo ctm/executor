@@ -1927,7 +1927,7 @@ STUB(PrGlue)
     return do_selector_block(prglueblock, ul >> 27, PrGlue);
 }
 
-typedef long (*fsprocp_t)(long, long);
+typedef OSErrRET (*fsprocp_t)(void*, BOOLEAN);
 
 fsprocp_t hfstab[] = {
     (fsprocp_t)apparent_nop, /* 0 */
@@ -2055,7 +2055,7 @@ STUB(HFSDispatch)
         else
             vp = hfstab[(EM_D0 & 0xFFFF)];
         if(vp)
-            EM_D0 = (*vp)((intptr_t)SYN68K_TO_US_CHECK0(EM_A0),
+            EM_D0 = (*vp)(SYN68K_TO_US_CHECK0(EM_A0),
                           !!(EM_D1 & ASYNCBIT));
         else
         {
@@ -2108,11 +2108,10 @@ STUB(FInitQueue)
 
 STUB(HFSRoutines)
 {
-    typedef long (*fsprocp_t)(long, long);
     fsprocp_t vp;
 
     vp = (fsprocp_t)((EM_D1 & HFSBIT) ? ignoreme2[1] : ignoreme2[0]);
-    EM_D0 = (*vp)((long)SYN68K_TO_US_CHECK0(EM_A0), !!(EM_D1 & ASYNCBIT));
+    EM_D0 = (*vp)(SYN68K_TO_US_CHECK0(EM_A0), !!(EM_D1 & ASYNCBIT));
     RTS();
 }
 
@@ -2340,7 +2339,7 @@ STUB(Gestalt)
         case 0xA5AD:
             EM_D0 = ReplaceGestalt(EM_D0, (ProcPtr)SYN68K_TO_US_CHECK0(EM_A0),
                                    &oldp);
-            EM_A0 = US_TO_SYN68K_CHECK0(oldp);
+            EM_A0 = US_TO_SYN68K_CHECK0((void*)oldp);
             break;
         case 0xA7AD:
             gui_abort();

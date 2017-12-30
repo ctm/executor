@@ -23,7 +23,7 @@ P1(PUBLIC pascal trap, void, InitGraf, Ptr, gp)
     PixMapHandle main_gd_pixmap;
 
 #if defined(BINCOMPAT)
-    (*(GUEST<Ptr> *)(long)SYN68K_TO_US(EM_A5)) = RM(gp);
+    (*(GUEST<Ptr> *)SYN68K_TO_US(EM_A5)) = RM(gp);
 #endif /* BINCOMPAT */
 
     main_gd_pixmap = GD_PMAP(MR(MainDevice));

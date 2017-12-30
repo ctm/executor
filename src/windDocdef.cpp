@@ -1118,7 +1118,7 @@ P4(PUBLIC pascal, LONGINT, wdef0,
             break;
         case wGrow:
             
-            draw_grow_lines((Rect *)(long)SYN68K_TO_US(parm));
+            draw_grow_lines((Rect *)SYN68K_TO_US(parm));
             
             break;
         case wDrawGIcon:

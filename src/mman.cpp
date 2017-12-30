@@ -52,8 +52,8 @@ int ROMlib_stack_size = DEFAULT_STACK_SIZE;
    0xFFFF0048 both here and on a Mac.  On a Mac, this doesn't cause a crash.
    */
 
-PUBLIC unsigned long ROMlib_syszone;
-PUBLIC unsigned long ROMlib_memtop;
+PUBLIC uintptr_t ROMlib_syszone;
+PUBLIC uintptr_t ROMlib_memtop;
 
 #if defined(MM_MANY_APPLZONES)
 /* for debugging, we can have multiple applzones which are used
@@ -475,9 +475,9 @@ void ROMlib_InitZones(offset_enum which)
         MemTop = RM(mem_top);
 
         SysZone = RM((THz)memory);
-        ROMlib_syszone = (unsigned long)memory;
-        ROMlib_memtop = (unsigned long)(memory + total_allocated_memory);
-        InitZone(0, 32, (Ptr)((long)MR(SysZone) + init_syszone_size),
+        ROMlib_syszone = (uintptr_t)memory;
+        ROMlib_memtop = (uintptr_t)(memory + total_allocated_memory);
+        InitZone(0, 32, (Ptr)((uintptr_t)MR(SysZone) + init_syszone_size),
                  (Zone *)MR(SysZone));
         beenhere = true;
     }
@@ -943,12 +943,12 @@ bad:
 }
 
 #define HANDLE_IN_ZONE_P(handle, z)                  \
-    ((unsigned long)(handle) >= (unsigned long)MR(z) \
-     && (unsigned long)(handle) < (unsigned long)ZONE_BK_LIM(MR(z)))
+    ((uintptr_t)(handle) >= (uintptr_t)MR(z) \
+     && (uintptr_t)(handle) < (uintptr_t)ZONE_BK_LIM(MR(z)))
 
 #define PTR_IN_ZONE_P(ptr, z)                     \
-    ((unsigned long)(ptr) >= (unsigned long)MR(z) \
-     && (unsigned long)(ptr) <= (unsigned long)ZONE_BK_LIM(MR(z)))
+    ((uintptr_t)(ptr) >= (uintptr_t)MR(z) \
+     && (uintptr_t)(ptr) <= (uintptr_t)ZONE_BK_LIM(MR(z)))
 
 THz HandleZone(Handle h)
 {

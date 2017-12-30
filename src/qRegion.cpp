@@ -381,12 +381,11 @@ P2(PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
 #define outputrgn(vx, cur, new, out)                \
     {                                               \
         INTEGER *ipe, *ipr;                         \
-        LONGINT hold;                               \
                                                     \
         ipe = cur;                                  \
         ipr = new;                                  \
         *out++ = CW_RAW(vx);                        \
-        hold = (LONGINT)(long)out;                  \
+        auto hold = out;                            \
         while(*ipr != RGN_STOP || *ipe != RGN_STOP) \
         {                                           \
             if(*ipr < *ipe)                         \
@@ -399,7 +398,7 @@ P2(PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
                 ipe++;                              \
             }                                       \
         }                                           \
-        if(hold == (LONGINT)(long)out)              \
+        if(hold == out)                             \
             --out;                                  \
         else                                        \
         {                                           \

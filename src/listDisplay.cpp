@@ -269,7 +269,7 @@ void Executor::ROMlib_listcall(INTEGER mess, BOOLEAN sel, Rect *rp, Cell cell, I
         listprocp lp;
 
         lp = MR(*(GUEST<listprocp> *)listdefhand);
-        if(!(long)lp)
+        if(!lp)
         {
             LoadResource(HxP(lhand, listDefProc));
             lp = MR(*(GUEST<listprocp> *)HxP(lhand, listDefProc));

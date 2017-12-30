@@ -807,7 +807,7 @@ P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
     }
     savenentries = nentries = CW(((GUEST<INTEGER> *)STARH(newcode))[1]);
 
-    saveptr = ptr = (GUEST<int16_t> *)((char *)(long)SYN68K_TO_US(EM_A5) + taboff + Cx(CurJTOffset));
+    saveptr = ptr = (GUEST<int16_t> *)((char *)SYN68K_TO_US(EM_A5) + taboff + Cx(CurJTOffset));
     while(--nentries >= 0)
     {
         if(ptr[1] != CWC(JMPLINSTR))

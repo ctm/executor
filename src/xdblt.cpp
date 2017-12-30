@@ -157,7 +157,7 @@ setup_dst_bitmap(int log2_bpp, PixMap *dst_pixmap)
 
     dst -= row_bytes * CW(dst_pixmap->bounds.top);
     xdblt_dst_row_bytes = row_bytes;
-    byte_slop = (unsigned long)dst & 3;
+    byte_slop = (uintptr_t)dst & 3;
     xdblt_dst_baseaddr = (uint32_t *)(dst - byte_slop);
 
     xdblt_x_offset = ((byte_slop << 3)

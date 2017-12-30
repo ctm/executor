@@ -811,7 +811,7 @@ PUBLIC INTEGERRET ROMlib_dotext(void)
     TEPtr tep;
     INTEGER first, last, what;
 
-    tep = (TEPtr)(long)SYN68K_TO_US(EM_A3);
+    tep = (TEPtr)SYN68K_TO_US(EM_A3);
     first = EM_D3;
     last = EM_D4;
     what = EM_D7;
@@ -867,7 +867,7 @@ A1(static inline, BOOLEAN, CALLCLIKOK, TEHandle, teh)
             savea1 = EM_A1;
             savea2 = EM_A2;
             savea3 = EM_A3;
-            CALL_EMULATOR(US_TO_SYN68K((long)cp));
+            CALL_EMULATOR(US_TO_SYN68K(cp));
 
 #define USE_Z_BIT_NOT_D0_FOR_CLIK_DETERMINATION /* as per Tom Pittman */
 #if !defined(USE_Z_BIT_NOT_D0_FOR_CLIK_DETERMINATION)

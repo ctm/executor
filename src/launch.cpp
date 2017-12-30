@@ -1356,42 +1356,42 @@ Executor::NewLaunch(StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockRe
 #if ERROR_SUPPORTED_P(ERROR_UNEXPECTED)
         if(ERROR_ENABLED_P(ERROR_UNEXPECTED))
         {
-            long lp;
+            uintptr_t lp;
 
-            for(lp = (long)&nilhandle; lp <= (long)&lastlowglobal; lp += 2)
-                if(lp != (long)&TheZone
-                   && lp != (long)&ApplZone
-                   && lp != (long)&FSFCBLen
-                   && lp != (long)&SysMap
-                   && lp != (long)SYN68K_TO_US(0x2f6)
-                   && lp != (long)SYN68K_TO_US(0x8e6)
-                   && lp != (long)SYN68K_TO_US(0x900)
-                   && lp != (long)&CurMap
-                   && lp != (long)SYN68K_TO_US(0x8a6)
-                   && lp != (long)SYN68K_TO_US(0x8aa)
-                   && lp != (long)SYN68K_TO_US(0x268)
-                   && lp != (long)SYN68K_TO_US(0x982)
-                   && lp != (long)SYN68K_TO_US(0xaee)
-                   && lp != (long)SYN68K_TO_US(0xcca)
-                   && lp != (long)SYN68K_TO_US(0xd50)
-                   && lp != (long)SYN68K_TO_US(0x18e)
-                   && lp != (long)SYN68K_TO_US(0x190)
-                   && lp != (long)SYN68K_TO_US(0x2f2)
-                   && lp != (long)SYN68K_TO_US(0x11e)
-                   && lp != (long)SYN68K_TO_US(0x15c)
-                   && lp != (long)SYN68K_TO_US(0x27e)
-                   && lp != (long)SYN68K_TO_US(0x31a)
-                   && lp != (long)SYN68K_TO_US(0x82c)
-                   && lp != (long)SYN68K_TO_US(0x82e)
-                   && lp != (long)SYN68K_TO_US(0x830)
-                   && lp != (long)SYN68K_TO_US(0x832)
-                   && lp != (long)SYN68K_TO_US(0xa4a)
-                   && lp != (long)SYN68K_TO_US(0xa52)
-                   && lp != (long)SYN68K_TO_US(0xa56)
-                   && lp != (long)SYN68K_TO_US(0xbf4)
-                   && lp != (long)SYN68K_TO_US(0x828)
-                   && lp != (long)SYN68K_TO_US(0x82a)
-                   && lp != (long)SYN68K_TO_US(0x16c))
+            for(lp = (uintptr_t)&nilhandle; lp <= (uintptr_t)&lastlowglobal; lp += 2)
+                if(lp != (uintptr_t)&TheZone
+                   && lp != (uintptr_t)&ApplZone
+                   && lp != (uintptr_t)&FSFCBLen
+                   && lp != (uintptr_t)&SysMap
+                   && lp != (uintptr_t)SYN68K_TO_US(0x2f6)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x8e6)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x900)
+                   && lp != (uintptr_t)&CurMap
+                   && lp != (uintptr_t)SYN68K_TO_US(0x8a6)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x8aa)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x268)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x982)
+                   && lp != (uintptr_t)SYN68K_TO_US(0xaee)
+                   && lp != (uintptr_t)SYN68K_TO_US(0xcca)
+                   && lp != (uintptr_t)SYN68K_TO_US(0xd50)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x18e)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x190)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x2f2)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x11e)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x15c)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x27e)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x31a)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x82c)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x82e)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x830)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x832)
+                   && lp != (uintptr_t)SYN68K_TO_US(0xa4a)
+                   && lp != (uintptr_t)SYN68K_TO_US(0xa52)
+                   && lp != (uintptr_t)SYN68K_TO_US(0xa56)
+                   && lp != (uintptr_t)SYN68K_TO_US(0xbf4)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x828)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x82a)
+                   && lp != (uintptr_t)SYN68K_TO_US(0x16c))
                     if(MR(*(GUEST<void *> *)lp) >= MR(ApplZone)
                        && MR(*(GUEST<void *> *)lp) < MR(MR(ApplZone)->bkLim))
                         warning_unexpected("Low global at 0x%x may point into "

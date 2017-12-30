@@ -253,7 +253,7 @@ OSErr Executor::ROMlib_flushvcbp(HVCB *vcbp)
         {
             realp = (Ptr)alloca((Size)512 + 4); /* needs to be aligned on unix */
 
-            p = (Ptr)(((long)realp + 3) & ~3L);
+            p = (Ptr)(((uintptr_t)realp + 3) & ~3L);
             vip = (volumeinfoPtr)p;
             memmove(&vip->drSigWord, &vcbp->vcbSigWord, (LONGINT)64);
             memmove(&vip->drVolBkUp, &vcbp->vcbVolBkUp, (LONGINT)66);
@@ -573,7 +573,7 @@ Executor::hfsPBMountVol(ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGINT
                         signed char buffer[PHYSBSIZE + 3];
                         signed char *buf;
 
-                        buf = (signed char *)(((long)buffer + 3) & ~3L);
+                        buf = (signed char *)(((uintptr_t)buffer + 3) & ~3L);
                         err2 = ROMlib_transphysblk(&((VCBExtra *)vcbp)->u.hfs,
                                                    (ULONGINT)VOLUMEINFOBLOCKNO
                                                        * PHYSBSIZE,

@@ -761,7 +761,7 @@ PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
     INTEGER ntoslide;
     char save0, save1, save2;
 
-    tempbuf = (char *)(((long)tbuf + 3) / 4 * 4);
+    tempbuf = (char *)(((uintptr_t)tbuf + 3) / 4 * 4);
     pb->ioResult = CWC(noErr);
     pb->ioActCount = 0;
     totransfer = Cx(pb->ioReqCount);
@@ -906,7 +906,7 @@ PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
 		}
 	    }
 #else
-            ntoslide = (long)bufp & 3;
+            ntoslide = (uintptr_t)bufp & 3;
             bufp -= ntoslide;
             save0 = bufp[0];
             save1 = bufp[1];

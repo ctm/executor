@@ -72,10 +72,10 @@ typedef struct block_header
 /* ### bogo compat */
 #define HDRSIZE HEADER_SIZE
 
-extern unsigned long ROMlib_syszone;
-extern unsigned long ROMlib_memtop;
+extern uintptr_t ROMlib_syszone;
+extern uintptr_t ROMlib_memtop;
 
-#define VALID_ADDRESS(p) ((unsigned long)(p) >= ROMlib_syszone && (unsigned long)(p) < ROMlib_memtop)
+#define VALID_ADDRESS(p) ((uintptr_t)(p) >= ROMlib_syszone && (uintptr_t)(p) < ROMlib_memtop)
 
 /* handle to block pointer */
 #define HANDLE_TO_BLOCK(handle)                          \

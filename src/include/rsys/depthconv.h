@@ -88,7 +88,7 @@ extern const int depthconv_ind_src_table_alignment[];
 #define DEPTHCONV_TABLE_ALIGNMENT(log2_in_bpp, log2_out_bpp) \
     depthconv_ind_src_table_alignment[(log2_in_bpp) - (log2_out_bpp) + 5]
 #define DEPTHCONV_ALIGN_TABLE(t, log2_in_bpp, log2_out_bpp)                  \
-    ((void *)((((unsigned long)(t))                                          \
+    ((void *)((((uintptr_t)(t))                                          \
                + sizeof(uint32_t)                                              \
                + (DEPTHCONV_TABLE_ALIGNMENT(log2_in_bpp, log2_out_bpp)) - 1) \
               & ~((DEPTHCONV_TABLE_ALIGNMENT(log2_in_bpp, log2_out_bpp)) - 1)))

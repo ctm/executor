@@ -308,7 +308,7 @@ Executor::try_to_mount_disk(const char *dname, LONGINT floppyfd, GUEST<LONGINT> 
 
     *messp = 0;
     tbuf = (char *)alloca(bsize + 3);
-    buf = (char *)(((long)tbuf + 3) & ~3);
+    buf = (char *)(((uintptr_t)tbuf + 3) & ~3);
     partition = 0;
 
     if(floppyfd >= 0)
@@ -546,7 +546,7 @@ PUBLIC OSErr Executor::ROMlib_readwrite(LONGINT fd, char *buffer, LONGINT count,
     { /* |xxxDATA| */
         remainder = blocksize - remainder;
         totransfer = MIN(count, remainder);
-        newbuffer = (char *)(((long)alloca(blocksize + 3) + 3) & ~3);
+        newbuffer = (char *)(((uintptr_t)alloca(blocksize + 3) + 3) & ~3);
         offset = offset / blocksize * blocksize;
         JUMPTODONEIF(seekfp(fd, offset, SEEK_SET) < 0)
         needlseek = false;
@@ -594,7 +594,7 @@ PUBLIC OSErr Executor::ROMlib_readwrite(LONGINT fd, char *buffer, LONGINT count,
     if(count)
     { /* |DATAxxx| */
         if(!newbuffer)
-            newbuffer = (char *)(((long)alloca(blocksize + 3) + 3) & ~3);
+            newbuffer = (char *)(((uintptr_t)alloca(blocksize + 3) + 3) & ~3);
         if(needlseek)
             JUMPTODONEIF(seekfp(fd, offset, SEEK_SET) < 0)
         JUMPTODONEIF(readfp(fd, newbuffer, blocksize) != blocksize)

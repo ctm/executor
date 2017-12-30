@@ -761,8 +761,8 @@ void Executor::dump_palette(PaletteHandle palette)
     else
         dump_field(dump_handle, MR(pmWindow(x)), "pmWindow");
     iprintf((o_fp, "pmPrivate 0x%x\n", CW(pmPrivate(x))));
-    iprintf((o_fp, "pmDevices 0x%lx\n", (long)CL(pmDevices(x))));
-    iprintf((o_fp, "pmSeeds 0x%lx\n", (long)MR(pmSeeds(x))));
+    iprintf((o_fp, "pmDevices 0x%x\n", CL(pmDevices(x))));
+    iprintf((o_fp, "pmSeeds %#p\n", MR(pmSeeds(x))));
     if(dump_verbosity >= 2)
     {
         int i;
@@ -957,7 +957,7 @@ void Executor::dump_aux_win(AuxWinHandle awh)
     dump_field(dump_ctab, MR(aw->awCTable), "awCTable");
     dump_field(dump_handle, MR(aw->dialogCItem), "dialogCItem");
     iprintf((o_fp, "awFlags 0x%lx;\n", (long)CL(aw->awFlags)));
-    iprintf((o_fp, "awReserved 0x%lx;\n", (long)MR(aw->awReserved)));
+    iprintf((o_fp, "awReserved %#p;\n", MR(aw->awReserved)));
     iprintf((o_fp, "awRefCon 0x%lx; }\n", (long)CL(aw->awRefCon)));
     indent -= 2;
 

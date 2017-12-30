@@ -603,8 +603,8 @@ syszone_p(ProcPtr p)
     THz syszone;
 
     syszone = MR(SysZone);
-    return ((unsigned long)p >= (unsigned long)&syszone->heapData
-            && (unsigned long)p < (unsigned long)MR(syszone->bkLim));
+    return ((uintptr_t)p >= (uintptr_t)&syszone->heapData
+            && (uintptr_t)p < (uintptr_t)MR(syszone->bkLim));
 }
 
 PRIVATE OSErr

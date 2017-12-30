@@ -145,7 +145,7 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
     src_baseaddr += (src_x_offset >> 3);
     left_shift = src_x_offset & 7;
 
-    dst_align32_offset = (unsigned long)dst_baseaddr & 3;
+    dst_align32_offset = (uintptr_t)dst_baseaddr & 3;
 
     /* Only align dst % 4 bytes when that cannot cause src to get pushed
    * across a page boundary (which might cause a segfault).  If that
@@ -156,15 +156,15 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
         int offset;
 
         offset = -1; /* default value. */
-        if(((unsigned long)src_baseaddr & (MIN_PAGE_SIZE - 1))
+        if(((uintptr_t)src_baseaddr & (MIN_PAGE_SIZE - 1))
            >= dst_align32_offset)
             offset = dst_align32_offset;
         else if(!left_shift)
         {
             /* Might as well align src if we can't align dst. */
-            src_align32_offset = (unsigned long)src_baseaddr & 3;
+            src_align32_offset = (uintptr_t)src_baseaddr & 3;
 
-            if(((unsigned long)dst_baseaddr & (MIN_PAGE_SIZE - 1))
+            if(((uintptr_t)dst_baseaddr & (MIN_PAGE_SIZE - 1))
                >= src_align32_offset)
                 offset = src_align32_offset;
         }
@@ -189,7 +189,7 @@ bool srcblt_rgn(RgnHandle rh, int mode, int log2_bpp,
    */
     if(left_shift)
     {
-        src_align32_offset = (unsigned long)src_baseaddr & 3;
+        src_align32_offset = (uintptr_t)src_baseaddr & 3;
         src_baseaddr -= src_align32_offset;
         left_shift += src_align32_offset * 8;
     }
