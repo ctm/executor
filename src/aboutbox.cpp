@@ -41,7 +41,7 @@
 #define TE_TOP 66
 #define TE_BOTTOM (TE_TOP + TE_HEIGHT)
 
-#define DONE_BUTTON_NAME "Accept"
+#define DONE_BUTTON_NAME "OK"
 
 #define LICENSE_BUTTON_NAME "License"
 #define TIPS_BUTTON_NAME "Tips"
@@ -57,7 +57,7 @@ static struct
     const char *text;
     ControlHandle ctl;
 } about_box_buttons[] = {
-    { LICENSE_BUTTON_NAME, NULL /* generated on the fly from licensetext.c */,
+    { LICENSE_BUTTON_NAME, "License." /* generated on the fly from licensetext.c */,
       NULL },
     { "Maker",
       "ARDI\r"
