@@ -36,7 +36,6 @@
 #include "rsys/vdriver.h"
 #include "rsys/notmac.h"
 #include "rsys/version.h"
-#include "rsys/stubify.h"
 
 using namespace Executor;
 
@@ -911,7 +910,7 @@ P1(PUBLIC pascal trap, void, HiliteMenu, INTEGER, mid)
 A1(static inline, void, ROMlib_CALLMENUHOOK, menuhookp, fp)
 {
     ROMlib_hook(menu_menuhooknumber);
-    CALL_EMULATOR(US_TO_SYN68K((long)fp));
+    CALL_EMULATOR(US_TO_SYN68K(fp));
 }
 
 #define CALLMBARHOOK(arg, fp) ROMlib_CALLMBARHOOK(arg, (mbarhookp)(fp))
@@ -920,8 +919,8 @@ A2(static inline, LONGINT, ROMlib_CALLMBARHOOK, Rect *, rp, mbarhookp, fp)
 {
     ROMlib_hook(menu_mbarhooknumber);
 
-    PUSHADDR(US_TO_SYN68K((long)rp));
-    CALL_EMULATOR(US_TO_SYN68K((long)fp));
+    PUSHADDR(US_TO_SYN68K(rp));
+    CALL_EMULATOR(US_TO_SYN68K(fp));
     return EM_D0;
 }
 

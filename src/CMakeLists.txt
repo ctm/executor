@@ -333,7 +333,6 @@ set(include_sources hintemplate.h
                   include/rsys/stdfile.h
                   include/rsys/stdio_smashage.h
                   include/rsys/string.h
-                  include/rsys/stubify.h
                   include/rsys/suffix_maps.h
                   include/rsys/syncint.h
                   include/rsys/syserr.h
@@ -367,7 +366,6 @@ set(include_sources hintemplate.h
                   include/StdFilePkg.h
                   include/SysErr.h
                   include/TextEdit.h
-                  include/ThinkC.h
                   include/TimeMgr.h
                   include/ToolboxEvent.h
                   include/ToolboxUtil.h
