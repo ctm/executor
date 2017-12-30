@@ -467,7 +467,7 @@ void Executor::ROMlib_tedoitall(TEHandle teh, Ptr ptr, /* INTERNAL */
     TERESTORE();
 }
 
-static void doarrow(TEHandle te, CHAR thec)
+static void doarrow(TEHandle te, CharParameter thec)
 {
     int16_t sel_start, sel_end;
     int16_t length;
@@ -542,7 +542,7 @@ static void doarrow(TEHandle te, CHAR thec)
     TERESTORE();
 }
 
-P2(PUBLIC pascal trap, void, TEKey, CHAR, thec, TEHandle, te)
+P2(PUBLIC pascal trap, void, TEKey, CharParameter, thec, TEHandle, te)
 {
     Byte c;
 

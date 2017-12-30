@@ -45,7 +45,7 @@ P1(PUBLIC pascal trap, void, SpaceExtra, Fixed, e)
         PORT_SP_EXTRA_X(thePort) = CL(e);
 }
 
-P1(PUBLIC pascal trap, void, DrawChar, CHAR, thec)
+P1(PUBLIC pascal trap, void, DrawChar, CharParameter, thec)
 {
     Point p;
     Byte c;
@@ -82,7 +82,7 @@ void Executor::DrawText_c_string(const char *string)
     DrawText((Ptr)string, 0, strlen(string));
 }
 
-P1(PUBLIC pascal trap, INTEGER, CharWidth, CHAR, thec)
+P1(PUBLIC pascal trap, INTEGER, CharWidth, CharParameter, thec)
 {
     GUEST<Point> np, dp;
     INTEGER retval;

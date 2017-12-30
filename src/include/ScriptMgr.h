@@ -182,7 +182,7 @@ struct NumFormatStringRec
 };
 
 typedef union {
-    CHAR a[2];
+    char a[2];
     INTEGER b;
 } WideChar;
 
@@ -201,7 +201,7 @@ struct NumberParts
     GUEST<WideCharArr> peMinus;
     GUEST<WideCharArr> peMinusPlus;
     GUEST<WideCharArr> altNumTable;
-    GUEST<CHAR[20]> reserved;
+    GUEST<char[20]> reserved;
 };
 
 typedef extended80 Extended80;

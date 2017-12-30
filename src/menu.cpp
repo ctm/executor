@@ -1403,7 +1403,7 @@ A2(PRIVATE, BOOLEAN, findroot, INTEGER, menuid, INTEGER *, root_unswp)
     return false;
 }
 
-P1(PUBLIC pascal trap, LONGINT, MenuKey, CHAR, thec)
+P1(PUBLIC pascal trap, LONGINT, MenuKey, CharParameter, thec)
 {
     muelem *mp, *mpend;
     startendpairs mps;
@@ -1531,7 +1531,7 @@ P3(PUBLIC pascal trap, void, CheckItem, MenuHandle, mh, INTEGER, item,
 }
 
 P3(PUBLIC pascal trap, void, SetItemMark, MenuHandle, mh, INTEGER, item,
-   CHAR, mark)
+   CharParameter, mark)
 {
     mextp mep;
 

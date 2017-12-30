@@ -560,7 +560,7 @@ PASCAL_TRAP(TextBox, 0xA9CE);
 extern pascal trap void C_TEScroll(INTEGER dh, INTEGER dv, TEHandle teh);
 PASCAL_TRAP(TEScroll, 0xA9DD);
 
-extern pascal trap void C_TEKey(CHAR thec, TEHandle teh);
+extern pascal trap void C_TEKey(CharParameter thec, TEHandle teh);
 PASCAL_TRAP(TEKey, 0xA9DC);
 
 extern pascal trap void C_TECopy(TEHandle teh);

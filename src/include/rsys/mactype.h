@@ -24,10 +24,11 @@ typedef int16_t INTEGER;
 typedef int32_t LONGINT;
 typedef uint32_t ULONGINT;
 
-#if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
+#if !defined(WIN32) || !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 typedef int8 BOOLEAN;
-typedef int16_t CHAR; /* very important not to use this as char */
 #endif
+
+typedef int16_t CharParameter; /* very important not to use this as char */
 
 // Define alignment.
 

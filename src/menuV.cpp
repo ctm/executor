@@ -48,7 +48,7 @@ P0(PUBLIC pascal trap, LONGINT, MenuChoice)
 }
 
 P3(PUBLIC pascal trap, void, GetItemCmd, MenuHandle, mh, INTEGER, item,
-   GUEST<CHAR> *, cmdp)
+   GUEST<CharParameter> *, cmdp)
 {
     mextp mep;
 
@@ -57,7 +57,7 @@ P3(PUBLIC pascal trap, void, GetItemCmd, MenuHandle, mh, INTEGER, item,
 }
 
 P3(PUBLIC pascal trap, void, SetItemCmd, MenuHandle, mh, INTEGER, item,
-   CHAR, cmd)
+   CharParameter, cmd)
 {
     mextp mep;
 

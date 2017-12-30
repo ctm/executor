@@ -172,7 +172,7 @@ PASCAL_TRAP(MenuSelect, 0xA93D);
 extern pascal trap void C_FlashMenuBar(INTEGER mid);
 PASCAL_TRAP(FlashMenuBar, 0xA94C);
 
-extern pascal trap LONGINT C_MenuKey(CHAR thec);
+extern pascal trap LONGINT C_MenuKey(CharParameter thec);
 PASCAL_TRAP(MenuKey, 0xA93E);
 
 extern pascal trap void C_SetItem(MenuHandle mh, INTEGER item,
@@ -191,7 +191,7 @@ extern pascal trap void C_CheckItem(MenuHandle mh, INTEGER item,
                                     BOOLEAN cflag);
 PASCAL_TRAP(CheckItem, 0xA945);
 extern pascal trap void C_SetItemMark(MenuHandle mh, INTEGER item,
-                                      CHAR mark);
+                                      CharParameter mark);
 PASCAL_TRAP(SetItemMark, 0xA944);
 extern pascal trap void C_GetItemMark(MenuHandle mh, INTEGER item,
                                       GUEST<INTEGER> *markp);
@@ -225,10 +225,10 @@ extern pascal trap LONGINT C_MenuChoice(void);
 PASCAL_TRAP(MenuChoice, 0xAA66);
 
 extern pascal trap void C_GetItemCmd(MenuHandle mh, INTEGER item,
-                                     GUEST<CHAR> *cmdp);
+                                     GUEST<CharParameter> *cmdp);
 PASCAL_TRAP(GetItemCmd, 0xA84E);
 extern pascal trap void C_SetItemCmd(MenuHandle mh, INTEGER item,
-                                     CHAR cmd);
+                                     CharParameter cmd);
 PASCAL_TRAP(SetItemCmd, 0xA84F);
 extern pascal trap LONGINT C_PopUpMenuSelect(MenuHandle mh, INTEGER top,
                                              INTEGER left, INTEGER item);
