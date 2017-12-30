@@ -15,6 +15,10 @@
 #include "keycode_map.h"
 
 #include <SDL.h>
+#ifdef WIN32
+#include <SDL_syswm.h>
+#include "sdl2_hwnd.h"
+#endif
 
 namespace Executor
 {
@@ -63,6 +67,15 @@ bool Executor::vdriver_acceptable_mode_p(int width, int height, int bpp,
     else
         return false;
 }
+
+#ifdef WIN32
+HWND Executor::getMainSDLWindow()
+{
+    SDL_SysWMinfo info;
+    SDL_GetWindowWMInfo(sdlWindow, &info);
+    return info.info.win.window;
+}
+#endif
 
 bool Executor::vdriver_set_mode(int width, int height, int bpp, bool grayscale_p)
 {

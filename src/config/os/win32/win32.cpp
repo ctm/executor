@@ -1,3 +1,4 @@
+#define USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 #include <windows.h>
 #include <rsys/common.h>
 #include "rsys/lockunlock.h"
@@ -72,6 +73,7 @@ Executor::ROMlib_lockunlockrange(int fd, uint32_t begin, uint32_t count, lockunl
 #endif
 }
 
+#if 0
 PUBLIC int
 ROMlib_launch_native_app(int n_filenames, char **filenames)
 {
@@ -85,6 +87,7 @@ ROMlib_launch_native_app(int n_filenames, char **filenames)
 
     return 0;
 }
+#endif
 
 PUBLIC bool Executor::host_has_spfcommon(void)
 {
