@@ -102,7 +102,7 @@ A0(PUBLIC, OSErr, ROMlib_maperrno) /* INTERNAL */
         install_errno(ESPIPE, posErr);
         install_errno(EROFS, wPrErr);
         install_errno(EMLINK, dirFulErr);
-#if !defined(MSDOS) && !defined(CYGWIN32)
+#if !defined(WIN32)
         install_errno(ETXTBSY, fBsyErr);
         install_errno(EWOULDBLOCK, permErr);
 #endif
@@ -1600,8 +1600,10 @@ A2(PUBLIC, OSErr, ufsPBFlushFile, ParmBlkPtr, pb, /* INTERNAL */
     OSErr err;
 
     fp = PRNTOFPERR(Cx(pb->ioParam.ioRefNum), &err);
+#ifndef WIN32
     if(!ROMlib_nosync)
         sync();
+#endif
     fs_err_hook(err);
     return err;
 }

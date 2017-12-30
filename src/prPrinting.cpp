@@ -20,14 +20,12 @@
 #include "rsys/dirtyrect.h"
 #include "rsys/vdriver.h"
 #include "rsys/file.h"
-#include "rsys/cleanup.h"
-#ifdef MACOSX_
-//#include "contextswitch.h"
-#endif
+
 #include "rsys/prefs.h"
 
 #if defined(MSDOS) || defined(CYGWIN32)
 #include <stdarg.h>
+#include "rsys/cleanup.h"
 
 PUBLIC bool deferred_printing_p = false /* true */;
 

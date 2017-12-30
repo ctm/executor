@@ -1,22 +1,20 @@
 /* Copyright 1998 by Abacus Research and
  * Development, Inc.  All rights reserved.
  */
+#if defined(WIN32)
 
 #define USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
+#define CLEANUP_BATCH_FILE_NAME "+/cleanup.bat"
 
 #include <rsys/common.h>
-#include <rsys/cleanup.h>
 #include <rsys/file.h>
 #include <rsys/notmac.h>
 
 #include <stdarg.h>
 #include <string>
 
-#if defined(MSDOS) || defined(CYGWIN32)
-
-#if defined(CYGWIN32)
+#include "cleanup.h"
 #include <windows.h>
-#endif
 
 PUBLIC void
 add_to_cleanup(const char *s, ...)

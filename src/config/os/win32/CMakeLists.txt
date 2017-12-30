@@ -4,6 +4,8 @@ add_library(os-win32
             win32.cpp
             win_serial.cpp
             win_serial.h
-            win_launch.cpp)
+            win_launch.cpp
+            cleanup.h
+            cleanup.cpp)
 target_link_libraries(os-win32 syn68k front-end-sdl2)
 endif()
