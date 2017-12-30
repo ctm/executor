@@ -1,77 +1,74 @@
+/*
+ * Copyright 1992 by Abacus Research and Development, Inc.
+ * All rights reserved.
+ *
+ */
+
 #if !defined(__GESTALT__)
 #define __GESTALT__
 
 namespace Executor
 {
-#define gestaltPhysicalRAMSize T('r', 'a', 'm', ' ')
-
-#if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
-
-/*
- * Copyright 1992 by Abacus Research and Development, Inc.
- * All rights reserved.
- *
-
- */
-
-#define gestaltAddressingModeAttr T('a', 'd', 'd', 'r')
-#define gestaltAliasMgrAttr T('a', 'l', 'i', 's')
-#define gestaltApplEventsAttr T('e', 'v', 'n', 't')
-#define gestaltAppleTalkVersion T('a', 't', 'l', 'k')
-#define gestaltAUXVersion T('a', '/', 'u', 'x')
-#define gestaltConnMgrAttr T('c', 'o', 'n', 'n')
-#define gestaltCRMAttr T('c', 'r', 'm', ' ')
-#define gestaltCTBVersion T('c', 't', 'b', 'v')
-#define gestaltDBAccessMgrAttr T('d', 'b', 'a', 'c')
-#define gestaltDITLExtAttr T('d', 'i', 't', 'l')
-#define gestaltEasyAccessAttr T('e', 'a', 's', 'y')
-#define gestaltEditionMgrAttr T('e', 'd', 't', 'n')
-#define gestaltExtToolboxTable T('x', 't', 't', 't')
-#define gestaltFindFolderAttr T('f', 'o', 'l', 'd')
-#define gestaltFontMgrAttr T('f', 'o', 'n', 't')
-#define gestaltFPUType T('f', 'p', 'u', ' ')
-#define gestaltFSAttr T('f', 's', ' ', ' ')
-#define gestaltFXfrMgrAttr T('f', 'x', 'f', 'r')
-#define gestaltHardwareAttr T('h', 'd', 'w', 'r')
-#define gestaltHelpMgrAttr T('h', 'e', 'l', 'p')
-#define gestaltKeyboardType T('k', 'b', 'd', ' ')
-#define gestaltLogicalPageSize T('p', 'g', 's', 'z')
-#define gestaltLogicalRAMSize T('l', 'r', 'a', 'm')
-#define gestaltLowMemorySize T('l', 'm', 'e', 'm')
-#define gestaltMiscAttr T('m', 'i', 's', 'c')
-#define gestaltMMUType T('m', 'm', 'u', ' ')
-#define gestaltNotificatinMgrAttr T('n', 'm', 'g', 'r')
-#define gestaltNuBusConnectors T('s', 'l', 't', 'c')
-#define gestaltOSAttr T('o', 's', ' ', ' ')
-#define gestaltOSTable T('o', 's', 't', 't')
-#define gestaltParityAttr T('p', 'r', 't', 'y')
-#define gestaltPopupAttr T('p', 'o', 'p', '!')
-#define gestaltPowerMgrAttr T('p', 'o', 'w', 'r')
-#define gestaltPPCToolboxAttr T('p', 'p', 'c', ' ')
-#define gestaltProcessorType T('p', 'r', 'o', 'c')
-#define gestaltQuickdrawVersion T('q', 'd', ' ', ' ')
-#define gestaltQuickdrawFeatures T('q', 'd', 'r', 'w')
-#define gestaltResourceMgrAttr T('r', 's', 'r', 'c')
-#define gestaltScriptCount T('s', 'c', 'r', '#')
-#define gestaltScriptMgrVersion T('s', 'c', 'r', 'i')
-#define gestaltSerialAttr T('s', 'e', 'r', ' ')
-#define gestaltSoundAttr T('s', 'n', 'd', ' ')
-#define gestaltStandardFileAttr T('s', 't', 'd', 'f')
-#define gestaltStdNBPAttr T('n', 'l', 'u', 'p')
-#define gestaltTermMgrAttr T('t', 'e', 'r', 'm')
-#define gestaltTextEditVersion T('t', 'e', ' ', ' ')
-#define gestaltTimeMgrVersion T('t', 'm', 'g', 'r')
-#define gestaltToolboxTable T('t', 'b', 'b', 't')
-#define gestaltVersion T('v', 'e', 'r', 's')
-#define gestaltVMAttr T('v', 'm', ' ', ' ')
-#define gestaltMachineIcon T('m', 'i', 'c', 'n')
-#define gestaltMachineType T('m', 'a', 'c', 'h')
-#define gestaltROMSize T('r', 'o', 'm', ' ')
-#define gestaltROMVersion T('r', 'o', 'm', 'v')
-#define gestaltSystemVersion T('s', 'y', 's', 'v')
 
 enum
 {
+    gestaltPhysicalRAMSize = T('r', 'a', 'm', ' '),
+    gestaltAddressingModeAttr = T('a', 'd', 'd', 'r'),
+    gestaltAliasMgrAttr = T('a', 'l', 'i', 's'),
+    gestaltApplEventsAttr = T('e', 'v', 'n', 't'),
+    gestaltAppleTalkVersion = T('a', 't', 'l', 'k'),
+    gestaltAUXVersion = T('a', '/', 'u', 'x'),
+    gestaltConnMgrAttr = T('c', 'o', 'n', 'n'),
+    gestaltCRMAttr = T('c', 'r', 'm', ' '),
+    gestaltCTBVersion = T('c', 't', 'b', 'v'),
+    gestaltDBAccessMgrAttr = T('d', 'b', 'a', 'c'),
+    gestaltDITLExtAttr = T('d', 'i', 't', 'l'),
+    gestaltEasyAccessAttr = T('e', 'a', 's', 'y'),
+    gestaltEditionMgrAttr = T('e', 'd', 't', 'n'),
+    gestaltExtToolboxTable = T('x', 't', 't', 't'),
+    gestaltFindFolderAttr = T('f', 'o', 'l', 'd'),
+    gestaltFontMgrAttr = T('f', 'o', 'n', 't'),
+    gestaltFPUType = T('f', 'p', 'u', ' '),
+    gestaltFSAttr = T('f', 's', ' ', ' '),
+    gestaltFXfrMgrAttr = T('f', 'x', 'f', 'r'),
+    gestaltHardwareAttr = T('h', 'd', 'w', 'r'),
+    gestaltHelpMgrAttr = T('h', 'e', 'l', 'p'),
+    gestaltKeyboardType = T('k', 'b', 'd', ' '),
+    gestaltLogicalPageSize = T('p', 'g', 's', 'z'),
+    gestaltLogicalRAMSize = T('l', 'r', 'a', 'm'),
+    gestaltLowMemorySize = T('l', 'm', 'e', 'm'),
+    gestaltMiscAttr = T('m', 'i', 's', 'c'),
+    gestaltMMUType = T('m', 'm', 'u', ' '),
+    gestaltNotificatinMgrAttr = T('n', 'm', 'g', 'r'),
+    gestaltNuBusConnectors = T('s', 'l', 't', 'c'),
+    gestaltOSAttr = T('o', 's', ' ', ' '),
+    gestaltOSTable = T('o', 's', 't', 't'),
+    gestaltParityAttr = T('p', 'r', 't', 'y'),
+    gestaltPopupAttr = T('p', 'o', 'p', '!'),
+    gestaltPowerMgrAttr = T('p', 'o', 'w', 'r'),
+    gestaltPPCToolboxAttr = T('p', 'p', 'c', ' '),
+    gestaltProcessorType = T('p', 'r', 'o', 'c'),
+    gestaltQuickdrawVersion = T('q', 'd', ' ', ' '),
+    gestaltQuickdrawFeatures = T('q', 'd', 'r', 'w'),
+    gestaltResourceMgrAttr = T('r', 's', 'r', 'c'),
+    gestaltScriptCount = T('s', 'c', 'r', '#'),
+    gestaltScriptMgrVersion = T('s', 'c', 'r', 'i'),
+    gestaltSerialAttr = T('s', 'e', 'r', ' '),
+    gestaltSoundAttr = T('s', 'n', 'd', ' '),
+    gestaltStandardFileAttr = T('s', 't', 'd', 'f'),
+    gestaltStdNBPAttr = T('n', 'l', 'u', 'p'),
+    gestaltTermMgrAttr = T('t', 'e', 'r', 'm'),
+    gestaltTextEditVersion = T('t', 'e', ' ', ' '),
+    gestaltTimeMgrVersion = T('t', 'm', 'g', 'r'),
+    gestaltToolboxTable = T('t', 'b', 'b', 't'),
+    gestaltVersion = T('v', 'e', 'r', 's'),
+    gestaltVMAttr = T('v', 'm', ' ', ' '),
+    gestaltMachineIcon = T('m', 'i', 'c', 'n'),
+    gestaltMachineType = T('m', 'a', 'c', 'h'),
+    gestaltROMSize = T('r', 'o', 'm', ' '),
+    gestaltROMVersion = T('r', 'o', 'm', 'v'),
+    gestaltSystemVersion = T('s', 'y', 's', 'v'),
+
     gestaltNativeCPUtype = T('c', 'p', 'u', 't'),
     gestaltSysArchitecture = T('s', 'y', 's', 'a'),
 };
@@ -206,6 +203,5 @@ extern trap OSErrRET C_GestaltTablesOnly(OSType selector,
                                          GUEST<LONGINT> *responsep);
 PASCAL_FUNCTION(GestaltTablesOnly);
 
-#endif
 }
 #endif
