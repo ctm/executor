@@ -16,12 +16,9 @@
 
 using namespace Executor;
 
-#if defined(MSDOS) || defined(CYGWIN32)
-
-#if defined(CYGWIN32)
+#if defined(WIN32)
 #include "winfs.h"
 #include "win_stat.h"
-#endif
 
 #define DOUBLE_SLASH_REMOVE(str)                                      \
     ({                                                                \
@@ -33,7 +30,7 @@ using namespace Executor;
         asm ("movl %%ebp, %0" : "=g" (from));                         \
         from = *(char **)(from+4);                                    \
         warning_unexpected ("name = \"%s\" from = %p", str, from); */ \
-        retval = alloca(strlen(str) + 1);                             \
+        retval = (char*)alloca(strlen(str) + 1);                      \
         last_was_slash_p = false;                                     \
         for(ip = str, op = retval; *ip; ++ip)                         \
         {                                                             \
@@ -63,19 +60,6 @@ int Uchmod(const char *path, int mode)
     return chmod(path, mode);
 }
 
-int Uchown(const char *path, uid_t owner, gid_t group)
-{
-    int retval;
-
-    path = DOUBLE_SLASH_REMOVE(path);
-#if !defined(CYGWIN32)
-    retval = chown(path, owner, group);
-#else
-    retval = 0;
-#endif
-    return retval;
-}
-
 int Ucreat(const char *path, int mode)
 {
     path = DOUBLE_SLASH_REMOVE(path);
@@ -99,7 +83,7 @@ int Umkdir(const char *path, int mode)
 {
     path = DOUBLE_SLASH_REMOVE(path);
     return mkdir(path
-#if !defined(CYGWIN32)
+#if !defined(WIN32)
                  ,
                  mode
 #endif
@@ -112,11 +96,11 @@ DIR *Uopendir(const char *path)
     return opendir((char *)path);
 }
 
-int Urename(const char *path, const char *new)
+int Urename(const char *path, const char *newpath)
 {
     path = DOUBLE_SLASH_REMOVE(path);
-    new = DOUBLE_SLASH_REMOVE(new);
-    return rename(path, new);
+    newpath = DOUBLE_SLASH_REMOVE(newpath);
+    return rename(path, newpath);
 }
 
 int Urmdir(const char *path)
@@ -133,14 +117,14 @@ int Ustat(const char *path, struct stat *buf)
     retval = stat(path, buf);
     if(strlen(path) == 2 && path[1] == ':')
     {
-#if defined(CYGWIN32)
+#if defined(WIN32)
         buf->st_ino = 0;
         buf->st_rdev = 1;
 #else
         buf->st_ino = 1;
 #endif
     }
-#if defined(CYGWIN32)
+#if defined(WIN32)
     else
     {
         uint32_t ino;

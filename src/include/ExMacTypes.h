@@ -14,18 +14,18 @@ namespace Executor
 {
 
 #if !defined(__MACTYPES__) || defined(__cplusplus)
-typedef int8 SignedByte;
+typedef int8_t SignedByte;
 #endif
-typedef uint8 Byte;
+typedef uint8_t Byte;
 #if !defined(__MACTYPES__) || defined(__cplusplus)
-typedef int8 *Ptr;
+typedef int8_t *Ptr;
 #endif
 
 #if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef GUEST<Ptr> *Handle;
 #endif
 
-typedef BOOLEAN Boolean;
+typedef int8_t Boolean;
 
 typedef Byte Str15[16];
 typedef Byte Str31[32];

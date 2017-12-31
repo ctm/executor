@@ -8,11 +8,7 @@
 
  */
 
-#if defined(MSDOS) || defined(CYGWIN32)
-
 extern void add_to_cleanup(const char *s, ...);
 extern void call_cleanup_bat(void);
-
-#endif
 
 #endif /* !defined(__RSYS_CLEANUP__) */

@@ -34,7 +34,7 @@
 #include "win_serial.h"
 #endif
 
-#if !defined(CYGWIN32)
+#if !defined(WIN32)
 #include <termios.h>
 #endif
 
@@ -301,7 +301,7 @@ void callcomp(ParmBlkPtr pbp, ProcPtr comp, OSErr err)
     EM_A0 = US_TO_SYN68K(pbp);
     EM_A1 = US_TO_SYN68K(comp);
     EM_D0 = (unsigned short)err; /* TODO: unsigned short ? */
-    CALL_EMULATOR((syn68k_addr_t)(long)comp);
+    CALL_EMULATOR((syn68k_addr_t)(uintptr_t)comp);
 }
 
 // FIXME: #warning autc04: used to be (CW((pbp)->ioParam.ioTrap) & asyncTrpBit
@@ -348,7 +348,7 @@ A2(PUBLIC, OSErr, ROMlib_serialopen, ParmBlkPtr, pbp, /* INTERNAL */
         otherp = otherdctl(pbp);
         if(otherp && (otherp->dCtlFlags & CWC(OPENBIT)))
         {
-            *STARH(h) = *STARH((hiddenh)(long)MR(otherp->dCtlStorage));
+            *STARH(h) = *STARH((hiddenh)MR(otherp->dCtlStorage));
             dcp->dCtlFlags.raw_or(CWC(OPENBIT));
         }
         else

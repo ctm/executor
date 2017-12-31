@@ -350,7 +350,7 @@ A1(PUBLIC trap, OSErrRET, ReadDateTime, GUEST<ULONGINT> *, secs)
 
 A1(PUBLIC trap, OSErrRET, SetDateTime, ULONGINT, mactime)
 {
-#if !defined(SYSV) && !defined(CYGWIN32)
+#if !defined(SYSV) && !defined(WIN32)
     struct timeval thetime;
 
     thetime.tv_sec = MACTIMETOGUNIXTIME(mactime);
@@ -871,7 +871,7 @@ A2(PUBLIC trap, void, Delay, LONGINT, n, LONGINT *, ftp) /* IMII-384 */
 {
     if(n > 0)
     {
-#if defined(CYGWIN32)
+#if defined(WIN32)
         clock_t finish_clocks;
         void __attribute__((stdcall)) Sleep(int32_t dwMilliseconds);
 

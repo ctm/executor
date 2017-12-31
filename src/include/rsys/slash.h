@@ -5,12 +5,11 @@
 extern "C" {
 #endif
 
-#if defined(MSDOS) || defined(CYGWIN32)
+#if defined(WIN32)
 
 extern int Uaccess(const char *path, int mode);
 extern int Uchdir(const char *path);
 extern int Uchmod(const char *path, int mode);
-extern int Uchown(const char *path, uid_t owner, gid_t group);
 extern int Ucreat(const char *path, int mode);
 extern FILE *Ufopen(const char *path, const char *type);
 extern int Ulink(const char *path, const char *newpath);
@@ -23,7 +22,7 @@ extern DIR *Uopendir(const char *path);
 extern int Ustatfs(const char *path, struct statfs *buf);
 #endif
 
-extern int Urename(const char *path, const char *new);
+extern int Urename(const char *path, const char *newp);
 extern int Urmdir(const char *path);
 extern int Ustat(const char *path, struct stat *buf);
 extern int Uunlink(const char *path);
@@ -34,7 +33,6 @@ extern int Uutimes(const char *path, struct timeval tvp[2]);
 #define Uaccess access
 #define Uchdir chdir
 #define Uchmod chmod
-#define Uchown chown
 #define Ucreat creat
 #define Ufopen fopen
 #define Ulink link

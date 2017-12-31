@@ -7,9 +7,6 @@
  * Question. What do the things in this header file have in common???
  */
 
-#if defined(MSDOS) || defined(CYGWIN32)
-extern char ROMlib_start_drive;
-#endif
 
 #if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 
@@ -25,6 +22,9 @@ extern std::string ROMlib_PrivateDirectoryMap;
 extern std::string ROMlib_DefaultFolder;
 extern std::string ROMlib_ScreenDumpFile;
 extern std::string ROMlib_appname;
+#if defined(WIN32)
+extern char ROMlib_start_drive;
+#endif
 
 extern BOOLEAN ROMlib_shouldalarm(void);
 

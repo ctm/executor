@@ -34,3 +34,6 @@ typedef struct
     char *dptr;
     unsigned dsize;
 } datum;
+
+
+inline int geteuid() { return 1; }

@@ -26,11 +26,11 @@
 #include "rsys/checkpoint.h"
 #endif
 
-#if !defined(CYGWIN32)
+#if !defined(WIN32)
 #include <pwd.h>
 #else
 #include "winfs.h"
-#include "dosdisk.h"
+//#include "dosdisk.h"
 #endif
 
 #include <ctype.h>
@@ -626,7 +626,7 @@ A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
     ROMlib_ConfigurationFolder = initpath("Configuration", "+/Configuration");
     ROMlib_SystemFolder = initpath("SystemFolder", "+/ExecutorVolume/System Folder");
     ROMlib_PublicDirectoryMap = initpath("PublicDirectoryMap", "+/DirectoryMap");
-    ROMlib_PrivateDirectoryMap = initpath("PrivateDirectoryMap", "~/.Executor/DirectoryMap");
+    ROMlib_PrivateDirectoryMap = initpath("PrivateDirectoryMap", "~/.ExecutorDirectoryMap");
     ROMlib_DefaultFolder = initpath("DefaultFolder", "+/ExecutorVolume");
     ROMlib_MacVolumes = initpath("MacVolumes", "+/exsystem.hfv;+"); // this is wrong: only first + is replaced
     ROMlib_ScreenDumpFile = initpath("ScreenDumpFile", "/tmp/excscrn*.tif");

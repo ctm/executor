@@ -47,7 +47,9 @@
 #include "rsys/nextprint.h"
 #include "rsys/scrap.h"
 
+#if !defined(WIN32)
 #include <sys/socket.h>
+#endif
 
 using namespace Executor;
 

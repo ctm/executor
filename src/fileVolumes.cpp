@@ -23,9 +23,8 @@
 #include "rsys/fauxdbm.h"
 #endif
 
-#if defined(CYGWIN32)
+#if defined(WIN32)
 #include "winfs.h"
-#include "cygwin32.h"
 #endif
 
 #define MAKEVOLUME "/makevolume"

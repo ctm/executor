@@ -1,10 +1,8 @@
 /* Copyright 1998 by Abacus Research and
  * Development, Inc.  All rights reserved.
  */
-#if defined(WIN32)
-
-#define USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 #define CLEANUP_BATCH_FILE_NAME "+/cleanup.bat"
+#include <windows.h>
 
 #include <rsys/common.h>
 #include <rsys/file.h>
@@ -14,7 +12,8 @@
 #include <string>
 
 #include "cleanup.h"
-#include <windows.h>
+
+using namespace Executor;
 
 PUBLIC void
 add_to_cleanup(const char *s, ...)
@@ -36,7 +35,6 @@ add_to_cleanup(const char *s, ...)
                 fprintf(fp, "%c:\n", ROMlib_start_drive);
         }
     }
-    free(batch_file);
     if(fp)
     {
         va_list ap;
@@ -70,5 +68,3 @@ call_cleanup_bat(void)
         }
     }
 }
-
-#endif

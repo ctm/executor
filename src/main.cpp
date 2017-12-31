@@ -75,7 +75,6 @@
 #include "rsys/os.h"
 #include "rsys/arch.h"
 #include "rsys/checkpoint.h"
-#include "rsys/cleanup.h"
 #include "rsys/gestalt.h"
 #include "rsys/keyboards.h"
 #include "rsys/launch.h"
@@ -100,7 +99,7 @@ PRIVATE void setstartdir(char *);
 
 #include <ctype.h>
 
-#if !defined(MSDOS) && !defined(CYGWIN32)
+#if !defined(WIN32)
 #include <sys/wait.h>
 #endif
 
@@ -461,8 +460,8 @@ A4(PUBLIC, LONGINT, wait4, LONGINT, pid, union wait *, statusp, LONGINT,
 
 PUBLIC char Executor::ROMlib_startdir[MAXPATHLEN];
 PUBLIC INTEGER ROMlib_startdirlen;
-#if defined(MSDOS) || defined(CYGWIN32)
-PUBLIC char ROMlib_start_drive;
+#if defined(WIN32)
+PUBLIC char Executor::ROMlib_start_drive;
 #endif
 PUBLIC std::string Executor::ROMlib_appname;
 
@@ -475,16 +474,6 @@ PUBLIC std::string Executor::ROMlib_appname;
 #endif
 
 #define APPWRAP "/Executor.app"
-
-#if defined(MSDOS) || defined(CYGWIN32)
-PUBLIC char ROMlib_savecwd[MAXPATHLEN];
-
-PRIVATE void cd_back(void)
-{
-    if(ROMlib_savecwd[0])
-        Uchdir(ROMlib_savecwd);
-}
-#endif
 
 PRIVATE void
 set_appname(char *argv0)
@@ -503,7 +492,7 @@ set_appname(char *argv0)
 
 A1(PRIVATE, void, setstartdir, char *, argv0)
 {
-#if !defined(MSDOS) && !defined(CYGWIN32)
+#if !defined(WIN32)
     LONGINT p[2], pid;
     char buf[MAXPATHLEN];
     INTEGER nread, arg0len;
@@ -543,16 +532,6 @@ A1(PRIVATE, void, setstartdir, char *, argv0)
             lookhere = buf;
         }
     }
-#if defined(MACOSX_)
-    misc_self_examination(lookhere);
-    std::string filePath = SystemDiskLocation();
-    if(filePath != "")
-    {
-        strcpy(ROMlib_startdir, filePath.c_str());
-        ROMlib_startdirlen = filePath.length();
-        return;
-    }
-#endif
     suffix = rindex(lookhere, '/');
     if(suffix)
         *suffix = 0;
@@ -565,19 +544,6 @@ A1(PRIVATE, void, setstartdir, char *, argv0)
     ROMlib_startdirlen = strlen(ROMlib_startdir) + 1;
 #else /* defined(MSDOS) || defined(CYGWIN32) */
 
-#if defined(MSDOS) || defined(CYGWIN32)
-    atexit(call_cleanup_bat);
-#endif
-
-    /*
- * When run under DOS, argv[0] contains a full path name, including
- * a dos-drive and colon at the beginning (e.g. C:/fratzand/executor).
- * However, you get neither when running under DOS under gdb.  Yahoo.
- */
-    if(!getcwd(ROMlib_savecwd, sizeof(ROMlib_savecwd)))
-        ROMlib_savecwd[0] = 0;
-    else
-        atexit(cd_back);
     if(argv0[1] == ':')
     {
         char *lastslash;
@@ -641,7 +607,7 @@ unhandled_trap(syn68k_addr_t callback_address, void *arg)
     int trap_num;
     char pc_str[128];
 
-    trap_num = (long)arg;
+    trap_num = (intptr_t)arg;
 
     switch(trap_num)
     {
@@ -1397,11 +1363,7 @@ int main(int argc, char **argv)
         initialize_68k_emulator(vdriver_system_busy,
                                 use_native_code_p,
                                 (uint32_t *)SYN68K_TO_US(0),
-#if defined(USE_BIOS_TIMER)
-                                dos_int_flag.rm_segment * 16
-#else /* !USE_BIOS_TIMER */
                                 0
-#endif /* !USE_BIOS_TIMER */
                                 );
 #endif /* SYN68K */
 
