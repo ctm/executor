@@ -12,7 +12,6 @@
 #include "rsys/quick.h"
 #include "rsys/ctl.h"
 #include "rsys/version.h"
-#include "rsys/licensetext.h"
 #include "CQuickDraw.h"
 #include "Gestalt.h"
 #include "ToolboxEvent.h"

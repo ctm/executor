@@ -272,7 +272,6 @@ set(include_sources hintemplate.h
                   include/rsys/keyboard.h
                   include/rsys/keyboards.h
                   include/rsys/launch.h
-                  include/rsys/licensetext.h
                   include/rsys/list.h
                   include/rsys/lockunlock.h
                   include/rsys/lowglobals.h
