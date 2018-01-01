@@ -29,7 +29,6 @@
 #include "rsys/trapglue.h"
 #include "rsys/cquick.h"
 #include "rsys/file.h"
-#include "rsys/next.h"
 #include "rsys/soundopts.h"
 #include "rsys/pstuff.h"
 #include "rsys/prefs.h"

@@ -18,12 +18,10 @@
 
 #include "rsys/cquick.h"
 #include "rsys/quick.h"
-#include "rsys/next.h"
 #include "rsys/segment.h"
 #include "rsys/flags.h"
 #include "rsys/version.h"
 #include "rsys/vdriver.h"
-#include "rsys/next.h"
 #include "rsys/osevent.h"
 #include "rsys/options.h"
 #include "rsys/syserr.h"

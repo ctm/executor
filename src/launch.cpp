@@ -39,7 +39,6 @@
 
 #include "rsys/trapglue.h"
 #include "rsys/file.h"
-#include "rsys/next.h"
 #include "rsys/sounddriver.h"
 #include "rsys/pstuff.h"
 #include "rsys/prefs.h"

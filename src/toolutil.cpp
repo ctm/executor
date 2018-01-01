@@ -18,7 +18,6 @@
 #include "SANE.h"
 #include "rsys/float.h"
 #include "rsys/floatconv.h"
-#include "rsys/next.h" /* for ROMlib_info */
 #include "rsys/string.h"
 #include "rsys/mman_private.h"
 #include "rsys/resource.h"

@@ -31,7 +31,6 @@
 #include "rsys/prefs.h"
 #include "rsys/vdriver.h"
 #include "rsys/host.h"
-#include "rsys/next.h"
 #include "rsys/segment.h"
 #include "rsys/toolevent.h"
 #include "rsys/osevent.h"
