@@ -16,7 +16,6 @@
 #include "rsys/memsize.h"
 #include "rsys/mman.h"
 #include "rsys/system_error.h"
-#include "rsys/memory_layout.h"
 #include "rsys/lowglobals.h"
 
 #include "Gestalt.h"

@@ -287,7 +287,6 @@ set(include_sources hintemplate.h
                   include/rsys/macros.h
                   include/rsys/mactype.h
                   include/rsys/mathlib.h
-                  include/rsys/memory_layout.h
                   include/rsys/memsize.h
                   include/rsys/menu.h
                   include/rsys/mixed_mode.h

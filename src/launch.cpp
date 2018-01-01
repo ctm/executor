@@ -51,7 +51,6 @@
 #include "rsys/resource.h"
 #include "rsys/hfs.h"
 #include "rsys/osutil.h"
-#include "rsys/memory_layout.h"
 #include "rsys/stdfile.h"
 #include "rsys/notmac.h"
 #include "rsys/ctl.h"
