@@ -308,9 +308,6 @@ set(include_sources hintemplate.h
                   include/rsys/partition.h
                   include/rsys/pef.h
                   include/rsys/picture.h
-                  include/rsys/pragmal.h
-                  include/rsys/pragmar.h
-                  include/rsys/pragmas.h
                   include/rsys/prefpanel.h
                   include/rsys/prefs.h
                   include/rsys/print.h
