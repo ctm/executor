@@ -73,18 +73,6 @@ extern int ROMlib_launch_native_app(int n_filenames, char **filenames);
 
 #include <ndbm.h>
 
-#if !defined(COMPILE_FOR_BUILD)
-
-extern void _dbm_fetch(datum *datump, DBM *db, datum datum);
-extern void _dbm_firstkey(datum *datump, DBM *db);
-extern void _dbm_nextkey(datum *datump, DBM *db);
-
-#define DBM_FETCH(datump, db, datum) _dbm_fetch((datump), (db), (datum))
-#define DBM_FIRSTKEY(datump, db) _dbm_firstkey((datump), (db))
-#define DBM_NEXTKEY(datump, db) _dbm_nextkey((datump), (db))
-
-#endif
-
 #include <sys/param.h>
 #include <sys/mount.h>
 #include <sys/ioctl.h>

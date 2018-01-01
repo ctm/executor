@@ -555,17 +555,6 @@ PRIVATE void freedeletelist(hashlink_t *deletep)
     }
 }
 
-/*
- * See the extended comment in linux.c before adjusting any of this.
- * It's much more subtle than it looks.
- */
-
-#if !defined(DBM_FETCH)
-#define DBM_FETCH(datump, db, datum) (*(datump) = dbm_fetch((db), (datum)))
-#define DBM_FIRSTKEY(datump, db) (*(datump) = dbm_firstkey(db))
-#define DBM_NEXTKEY(datump, db) (*(datump) = dbm_nextkey(db))
-#endif
-
 PRIVATE void readadbm(const char *dbmname, VCBExtra *vcbp)
 {
     DBM *db;
@@ -583,12 +572,12 @@ PRIVATE void readadbm(const char *dbmname, VCBExtra *vcbp)
         ; /* fprintf(stderr, "Problems opening dbm \"%s\"\n", dbmname); */
     else
     {
-        for(DBM_FIRSTKEY(&key, db); key.dptr; DBM_NEXTKEY(&key, db))
+        for(key = dbm_firstkey(db); key.dptr; key = dbm_nextkey(db))
         {
             keyp = (rkey_t *)key.dptr;
             if(isamatch(keyp, vcbp, &new1))
             {
-                DBM_FETCH(&content, db, key);
+                content = dbm_fetch(db, key);
                 if(content.dsize)
                 {
                     contentp = (rcontent_t *)content.dptr;

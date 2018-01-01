@@ -182,64 +182,6 @@ ROMlib_launch_native_app(int n_filenames, char **filenames)
     return 0;
 }
 
-/*
- * There is a very bad problem associated with the use of the db
- * shared libraries under Linux.  Specifically, the calling convention
- * for functions which return structs that are larger than 32 bits
- * somehow got changed when some of the Linux distributions switched
- * from gcc to egcs.  Both compilers put an extra pointer on the stack
- * before calling the routine that returns the large struct, but gcc
- * expects the caller to pop that extra pointer, where egcs expects
- * the called to pop it.  This means that if you compile the caller
- * with gcc and call a shared library that was called with egcs, the
- * stack pointer will be off by 4 bytes after the function returns and
- * the stack is adjusted.  That can be a catastrophe if further code
- * expects the stack to be correct after adjustments.  On the other
- * hand, if we make the questionable call and then do nothing else,
- * the "leave" instruction will restore the stack pointer by using the
- * frame pointer and we'll never be bothered by the extra pop.
- *
- * So, as a workaround, we can wrap the routines, then check the
- * assembly code that the compiler produces to make sure that it's
- * tolerant of the error, then call the wrappers.  That makes the
- * wrapper routines look like voodoo code that was written by a
- * superstitious programmer, but the code (or some other workaround)
- * is absolutely necessary because we want to have one Executor
- * executable that can run with both the shared libraries from Red Hat
- * 5.2 as well as the new ones in SuSE 6.0 (and the new ones that will
- * probably be in Red Hat 6.0).
- *
- * These wrappers absolutely have to be compiled with enough
- * optimization so that the stack isn't adjusted before the leave
- * instruction.  If it is adjusted, then any interrupt that occurs
- * between the adjustment and the transfering of the data from the
- * temporary stack space to the address passed will cause corruption.
- *
- * If you do not understand the above, or if you disagree with it,
- * please contact Cliff before changing the following code.  Axing the
- * code alone and then testing the result is not sufficient, unless
- * you're sure that your test involves *both* db shared libaries.
- *
- */
-
-PUBLIC void
-_dbm_fetch(datum *datump, DBM *db, datum datum)
-{
-    *datump = dbm_fetch(db, datum);
-}
-
-PUBLIC void
-_dbm_firstkey(datum *datump, DBM *db)
-{
-    *datump = dbm_firstkey(db);
-}
-
-PUBLIC void
-_dbm_nextkey(datum *datump, DBM *db)
-{
-    *datump = dbm_nextkey(db);
-}
-
 PUBLIC bool Executor::host_has_spfcommon(void)
 {
     return false;
