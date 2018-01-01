@@ -24,6 +24,15 @@ elseif(UNIX AND NOT APPLE)
 set(HOST_OS "linux")
 endif()
 
+
+if(CMAKE_COMPILER_IS_GNUCXX)
+    # -Wno-enum-compare: Mac OSErr codes are currently spread between different
+    #                    anonymous enums in the headers.
+    #                    Code like (blah ? noErr : paramErr) triggers the enum-compare warning.
+
+	add_definitions(-Wno-enum-compare)
+endif()
+
 add_subdirectory(config/front-ends/x)
 add_subdirectory(config/front-ends/sdl)
 add_subdirectory(config/front-ends/sdl2)
