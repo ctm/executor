@@ -89,12 +89,6 @@ typedef struct PACKED
 /* Define asm constants for various CC bit combinations resulting from
  * compares.
  */
-#if !defined(SYN68K)
-#define F_GREATER_CODES "#0x00"
-#define F_EQUAL_CODES "#0x04"
-#define F_LESS_CODES "#0x19"
-#define F_UNORDERED_CODES "#0x02"
-#endif
 
 /* m68k "double". */
 typedef union {

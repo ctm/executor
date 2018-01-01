@@ -164,9 +164,7 @@ INTEGER Executor::ROMlib_no_windows;
 int ROMlib_drive_check = 0;
 #endif
 
-#if defined(SYN68K)
 static bool use_native_code_p = true;
-#endif
 
 /* the system version that executor is currently reporting to
    applications, set through the `-system' options.  contains the
@@ -302,11 +300,9 @@ const option_vec Executor::common_opts = {
     { "system",
       "specify the system version that executor reports to applications",
       opt_sep, "" },
-#if defined(SYN68K)
     { "notnative",
       "don't use native code in syn68k",
       opt_no_arg, "" },
-#endif
 
     { "grayscale", "\
 specify that executor should run in grayscale mode even if it is \
@@ -585,7 +581,6 @@ PUBLIC BOOLEAN Executor::ROMlib_startupscreen = true;
 
 char *Executor::program_name;
 
-#if defined(SYN68K)
 static syn68k_addr_t
 unhandled_trap(syn68k_addr_t callback_address, void *arg)
 {
@@ -706,7 +701,6 @@ setup_trap_vectors(void)
             *(GUEST<syn68k_addr_t> *)SYN68K_TO_US(i * 4) = CL(c);
         }
 }
-#endif /* SYN68K */
 
 static void illegal_mode(void) __attribute__((noreturn));
 
@@ -1225,9 +1219,7 @@ int main(int argc, char **argv)
         dcache_set_enabled(!nocache);
     }
 
-#if defined(SYN68K)
     use_native_code_p = !opt_val(common_db, "notnative", NULL);
-#endif
 
     if(opt_val(common_db, "netatalk", NULL))
         setup_resfork_format(ResForkFormat::netatalk);
@@ -1358,14 +1350,12 @@ int main(int argc, char **argv)
         uint32_t save_a7;
 
         save_a7 = EM_A7;
-#if defined(SYN68K)
         /* Set up syn68k. */
         initialize_68k_emulator(vdriver_system_busy,
                                 use_native_code_p,
                                 (uint32_t *)SYN68K_TO_US(0),
                                 0
                                 );
-#endif /* SYN68K */
 
         EM_A7 = save_a7;
     }
@@ -1382,10 +1372,8 @@ int main(int argc, char **argv)
         exit(-12);
     }
 
-#if defined(SYN68K)
     /* Save the trap vectors away. */
     memcpy(save_trap_vectors, SYN68K_TO_US(0), sizeof save_trap_vectors);
-#endif
 
     opt_int_val(common_db, "sticky", &ROMlib_sticky_menus_p, &bad_arg_p);
 
@@ -1488,8 +1476,6 @@ int main(int argc, char **argv)
     saveApplLimit = ApplLimit;
     memset(&nilhandle, ~0, (char *)&lastlowglobal - (char *)&nilhandle);
 
-    setupsignals();
-
     Ticks = 0;
     nilhandle = 0; /* so nil dereferences "work" */
 
@@ -1562,15 +1548,6 @@ int main(int argc, char **argv)
     SysVersion = CW(system_version);
     FSFCBLen = CWC(94);
     ScrapState = CWC(-1);
-
-#if defined(NEXT) && !defined(SYN68K)
-    ROMlib_install_ardi_mods();
-#endif /* NEXT && !SYN68K */
-
-#if defined(NEXT)
-    ROMlib_determine040ness();
-    ROMlib_checkadb();
-#endif /* NEXT */
 
     TheZone = SysZone;
     UTableBase = RM((DCtlHandlePtr)NewPtr(4 * NDEVICES));
@@ -1695,7 +1672,6 @@ int main(int argc, char **argv)
 
     TEDoText = RM((ProcPtr)P_ROMlib_dotext); /* where should this go ? */
 
-#if defined(SYN68K)
     {
         LONGINT save58;
 
@@ -1716,8 +1692,6 @@ int main(int argc, char **argv)
         fputs("Fatal error:  unable to initialize timer.\n", stderr);
         exit(-11);
     }
-
-#endif /* SYN68K */
 
     sound_init();
 

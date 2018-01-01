@@ -721,23 +721,11 @@ Executor::sound_callback(syn68k_addr_t interrupt_addr, void *unused)
     saved_ccv = cpu_state.ccv;
     saved_ccx = cpu_state.ccx;
 
-#if defined(SYN68K)
-
     /* There's no reason to think we need to decrement A7 by 32;
    * it's just a paranoid thing to do.
    */
     EM_A7 = (EM_A7 - 32) & ~3; /* Might as well long-align it. */
 
-#else /* !SYN68K */
-
-    /* Since we don't know which stack we were on when interrupted,
-   * switch stacks as appropriate.  If all stacks are busy,
-   * there's not much we can do other than return.  
-   */
-    if(!m68k_use_interrupt_stacks())
-        return 0;
-
-#endif /* !SYN68K */
 
     SOUND_HUNGER_START();
     info = SOUND_GET_HUNGER_INFO();
@@ -785,10 +773,6 @@ Executor::sound_callback(syn68k_addr_t interrupt_addr, void *unused)
     if(!did_something)
         SOUND_STOP();
 
-#if !defined(SYN68K)
-    m68k_restore_stacks();
-#endif
-
     memcpy(&cpu_state.regs, saved_regs, sizeof saved_regs);
     cpu_state.ccnz = saved_ccnz;
     cpu_state.ccn = saved_ccn;
@@ -796,11 +780,7 @@ Executor::sound_callback(syn68k_addr_t interrupt_addr, void *unused)
     cpu_state.ccv = saved_ccv;
     cpu_state.ccx = saved_ccx;
 
-#if defined(SYN68K)
     return MAGIC_RTE_ADDRESS;
-#else
-    return 0;
-#endif
 }
 
 P3(PUBLIC, pascal trap OSErr, SndDoCommand, SndChannelPtr, chanp,

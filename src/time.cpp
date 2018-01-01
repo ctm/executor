@@ -37,10 +37,8 @@ PUBLIC QHdr Executor::ROMlib_timehead;
 /* Actual time at which Executor started running, GMT. */
 PUBLIC struct timeval ROMlib_start_time;
 
-#if defined(SYN68K)
 /* Current state of virtual interrupt enabling. */
 PUBLIC virtual_int_state_t Executor::_virtual_interrupts_blocked = false;
-#endif
 
 /* Msecs during last interrupt. */
 PRIVATE unsigned long last_interrupt_msecs;
@@ -87,13 +85,8 @@ msecs_elapsed()
 
 #define REALLONGTIME 0x7FFFFFFF
 
-#if defined(SYN68K)
 A2(PUBLIC, syn68k_addr_t, catchalarm, syn68k_addr_t, interrupt_pc,
    void *, unused)
-#else
-A3(PRIVATE, LONGINT, catchalarm, LONGINT, volatile signo,
-   LONGINT, volatile code, struct sigcontext *, volatile scp)
-#endif
 {
     ULONGINT diff;
     TMTask *qp;
@@ -111,23 +104,10 @@ A3(PRIVATE, LONGINT, catchalarm, LONGINT, volatile signo,
     saved_ccv = cpu_state.ccv;
     saved_ccx = cpu_state.ccx;
 
-#if defined(SYN68K)
-
     /* There's no reason to think we need to decrement A7 by 32;
    * it's just a paranoid thing to do.
    */
     EM_A7 = (EM_A7 - 32) & ~3; /* Might as well long-align it. */
-
-#else /* !SYN68K */
-
-    /* Since we don't know which stack we were on when interrupted,
-   * switch stacks as appropriate.  If all stacks are busy,
-   * there's not much we can do other than return.  
-   */
-    if(!m68k_use_interrupt_stacks())
-        return 0;
-
-#endif /* !SYN68K */
 
     /* Loop while it's still time to do stuff sitting in the queue. */
     do
@@ -201,17 +181,7 @@ A3(PRIVATE, LONGINT, catchalarm, LONGINT, volatile signo,
        * timer interrupt to come in at the appropriate time.
        */
 
-#if defined(SYN68K)
         syncint_post(min * 1000);
-#else /* !SYN68K */
-        struct itimerval t;
-
-        t.it_value.tv_sec = min / 1000;
-        t.it_value.tv_usec = (min * 1000) % 1000000;
-        t.it_interval.tv_sec = 0;
-        t.it_interval.tv_usec = 0;
-        setitimer(ITIMER_REAL, &t, (struct itimerval *)0);
-#endif /* !SYN68K */
 
         next_interrupt_msecs = now_msecs + min;
     }
@@ -221,9 +191,6 @@ A3(PRIVATE, LONGINT, catchalarm, LONGINT, volatile signo,
         next_interrupt_msecs = 0;
     }
 
-#if !defined(SYN68K)
-    m68k_restore_stacks();
-#endif
 
     memcpy(&cpu_state.regs, saved_regs, sizeof saved_regs);
     cpu_state.ccnz = saved_ccnz;
@@ -232,11 +199,7 @@ A3(PRIVATE, LONGINT, catchalarm, LONGINT, volatile signo,
     cpu_state.ccv = saved_ccv;
     cpu_state.ccx = saved_ccx;
 
-#if defined(SYN68K)
     return MAGIC_RTE_ADDRESS;
-#else
-    return 0;
-#endif
 }
 
 namespace Executor
@@ -276,10 +239,6 @@ A2(PRIVATE, void, ROMlib_PrimeTime, QElemPtr, taskp, LONGINT, count)
         msecs_until_next = 0x7FFF0000; /* Arbitrary large value. */
         next_interrupt_msecs = now_msecs + msecs_until_next;
         beenhere = true;
-
-#if !defined(SYN68K)
-        signal(SIGALRM, (void *)catchalarm);
-#endif
     }
     else
     {
@@ -297,16 +256,7 @@ A2(PRIVATE, void, ROMlib_PrimeTime, QElemPtr, taskp, LONGINT, count)
 
     if(count < msecs_until_next || msecs_until_next <= 0)
     {
-#if defined(SYN68K)
         syncint_post(count * 1000);
-#else /* !SYN68K */
-        struct itimerval t;
-        t.it_value.tv_sec = count / 1000;
-        t.it_value.tv_usec = (count * 1000) % 1000000;
-        t.it_interval.tv_sec = 0;
-        t.it_interval.tv_usec = 0;
-        setitimer(ITIMER_REAL, &t, (struct itimerval *)0);
-#endif /* !SYN68K */
 
         next_interrupt_msecs = now_msecs + count;
     }

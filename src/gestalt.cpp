@@ -118,13 +118,9 @@ PRIVATE gestaltentry_t gtable[] = {
 // FIXME: #warning gestalt{ExtToolboxTable,ToolboxTable,OSTable} not initialized
 #endif
 
-#if defined(SYN68K)
     {
         gestaltFPUType, 0,
     }, /* gestaltNoFPU */
-#else
-    { gestaltFPUType, gestalt68881 + 2, /* 'tis a lie; we're an 040 */ },
-#endif
     {
         gestaltKeyboardType, gestaltMacKbd,
     },
@@ -137,24 +133,15 @@ PRIVATE gestaltentry_t gtable[] = {
     {
         gestaltLowMemorySize, 0x1000,
     },
-#if !defined(SYN68K)
-    { gestaltMMUType, gestalt68040MMu, /* ack */ },
-#else
     {
         gestaltMMUType, gestaltNoMMU,
     },
-#endif
     {
         gestaltPhysicalRAMSize, (LONGINT)3 * 1024 * 1024,
     },
-#if defined(SYN68K)
     {
         gestaltProcessorType, gestalt68040,
     },
-#else
-    { gestaltProcessorType, gestalt68040, /* TODO:  need to fill in
-						   different info on 030*/ },
-#endif
 
 #if defined(powerpc) || defined(__ppc__)
     {

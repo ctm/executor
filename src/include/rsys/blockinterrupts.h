@@ -12,16 +12,6 @@
 
 namespace Executor
 {
-
-#if !defined(SYN68K) || defined(MSDOS)
-typedef uint32_t real_int_state_t;
-#define block_real_ints() \
-    ((real_int_state_t)sigblock(sigmask(SIGALRM)))
-#define restore_real_ints(n) \
-    ((void)sigsetmask(n))
-#endif
-
-#if defined(SYN68K)
 typedef uint8 virtual_int_state_t;
 extern virtual_int_state_t _virtual_interrupts_blocked;
 
@@ -50,21 +40,12 @@ extern virtual_int_state_t _virtual_interrupts_blocked;
         cpu_state.interrupt_status_changed = INTERRUPT_STATUS_CHANGED;             \
     } while(0)
 
-#else /* !SYN68K */
-
-typedef real_int_state_t virtual_int_state_t;
-#define block_virtual_ints() ((virtual_int_state_t)block_real_ints())
-#define restore_virtual_ints(n) restore_real_ints((real_int_state_t)(n))
-
-#endif /* !SYN68K */
-
 #if defined(MSDOS)
 #define IF_MSDOS(x) x
 #else
 #define IF_MSDOS(x)
 #endif
 
-#if defined(SYN68K)
 
 extern void do_virtual_interrupt(void);
 #define check_virtual_interrupt()                    \
@@ -77,9 +58,6 @@ extern void do_virtual_interrupt(void);
                 do_virtual_interrupt();              \
         }                                            \
     } while(0)
-#else /* !SYN68K */
-#define check_virtual_interrupt()
-#endif /* !SYN68K */
 
 class BlockVirtualInterruptsGuard
 {

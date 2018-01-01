@@ -4,9 +4,6 @@
 
 #include "rsys/common.h"
 
-/* We only have synchronous interrupts under syn68k. */
-#if defined(SYN68K)
-
 #include "rsys/syncint.h"
 #include "rsys/blockinterrupts.h"
 
@@ -93,5 +90,3 @@ void Executor::syncint_post(unsigned long usecs)
     setitimer(ITIMER_REAL, &t, NULL);
 #endif
 }
-
-#endif /* SYN68K */

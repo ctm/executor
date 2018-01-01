@@ -1314,16 +1314,6 @@ OSErr dump_code_resources(const char *filename)
     return retval;
 }
 
-#if defined(SYN68K)
-/* This is just a linker hack to make sure we pull in the syn68k .o file
- * containing the m68kaddr function.
- */
-
-#include <syn68k_public.h>
-
-void (*m68kaddr_linker_hack)(const uint16_t *) = m68kaddr;
-#endif
-
 PRIVATE const char *
 just_name(unsigned char just)
 {

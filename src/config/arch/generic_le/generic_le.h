@@ -2,7 +2,6 @@
 #define __arch_x86_64_h__
 
 #define LITTLEENDIAN
-#define SYN68K
 
 /* TODO: only do these if the compiler supports it, check to see if we can
          get a better swap16 w/o using builtin_bswap32 */

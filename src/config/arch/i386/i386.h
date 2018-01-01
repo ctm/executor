@@ -3,8 +3,6 @@
 
 #define LITTLEENDIAN
 
-#define SYN68K
-
 #if !defined(i386)
 #define i386
 #endif

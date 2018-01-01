@@ -54,38 +54,6 @@ using namespace Executor;
 
 #define FASTALINETRAPS
 
-/*
- * For now the NEXT handles A-line traps differently than on the Sun.
- * The NEXT will bypass the A-line and priv instruction dispatches if
- * possible (meaning if there's no page fault during the dispatch).  If
- * not possible, we get here and are expected to force the page fault
- * ourselves so we can go back into kernel mode.  Pretty bizzare, eh?
- */
-
-#if defined(NEXT) && !defined(SYN68K)
-PRIVATE void emthandler(LONGINT wsignal, LONGINT code, struct sigcontext *scp)
-{
-    LONGINT saved2;
-    volatile LONGINT temp;
-    static int beenhere = 0;
-
-    if(!beenhere)
-    {
-        ROMlib_load_ardi_mods();
-        beenhere = 1;
-    }
-
-    asm("movel d2, %0"
-        : "=g"(saved2));
-
-    temp = *(volatile LONGINT *)0x5C; /* will get page 0 and the stack */
-
-    asm("movel %0, d2"
-        :
-        : "g"(saved2));
-}
-#endif /* NEXT && !SYN68K */
-
 LONGINT Executor::debugnumber, debugtable[1 << 12], cutoff = 20;
 
 #if !defined(NDEBUG)
@@ -240,76 +208,6 @@ void check_trap_watchpoints(const char *msg)
     }
 }
 #endif /* !NDEBUG */
-
-PRIVATE void setup28(void)
-{
-#if defined(MACOSX_) && !defined(SYN68K)
-#if 1
-    static LONGINT trap_dispatcher_callback = -1;
-
-    if(trap_dispatcher_callback == -1)
-        trap_dispatcher_callback = callback_install(aline_stub, NULL);
-    *(LONGINT *)0x28 = trap_dispatcher_callback;
-#else
-    *(LONGINT *)0x28 = (LONGINT)trapdispatcher;
-#endif
-
-    *(LONGINT *)0x20 = (LONGINT)privdispatcher;
-    *(LONGINT *)0x5C = (LONGINT)T('A', 'R', 'D', 'I');
-#endif /* NEXT && !SYN68K */
-}
-
-PUBLIC void Executor::setupsignals(void)
-{
-#if defined(NEXT)
-    LONGINT tocatch[] = {
-        SIGHUP,
-        SIGINT,
-        SIGQUIT,
-        SIGILL,
-        SIGTRAP,
-        SIGIOT,
-        SIGEMT,
-        SIGFPE,
-        SIGBUS,
-        SIGSEGV,
-        SIGSYS,
-        SIGPIPE,
-        SIGTERM,
-        SIGXCPU,
-        SIGXFSZ,
-        SIGVTALRM,
-        SIGPROF,
-        SIGUSR1,
-        SIGUSR2,
-        0
-    },
-            *tocatchp;
-#endif /* NEXT */
-#if !defined(FASTALINETRAPS) || defined(MACOSX_)
-#if defined(USE_BSD_SIGNALS)
-    typedef struct sigvec sigvec_t;
-    typedef struct sigstack sigstack_t;
-#endif
-#endif /* FASTALINETRAPS || NEXT */
-
-#if(!defined(FASTALINETRAPS) || defined(MACOSX_)) && !defined(SYN68K)
-    {
-        sigstack_t sigstackarg;
-        sigvec_t sigvecarg;
-        static char signalstack[3 * 1024];
-
-        sigstackarg.ss_sp = signalstack + sizeof(signalstack);
-        sigstackarg.ss_onstack = 0;
-        sigstack(&sigstackarg, (sigstack_t *)0);
-        sigvecarg.sv_handler = (void *)emthandler;
-        sigvecarg.sv_mask = 0;
-        sigvecarg.sv_flags = SV_ONSTACK;
-        sigvec(SIGEMT, &sigvecarg, (sigvec_t *)0);
-    }
-#endif /* (FASTALINETRAPS || NEXT) && !SYN68K */
-    setup28();
-}
 
 #define TOOLMASK (0x3FF)
 #define OSMASK (0xFF)
@@ -568,11 +466,8 @@ PUBLIC void Executor::executor_main(void)
 				   us to worry about the cache flushing
 				   overhead */
 
-#if !defined(NEXT) && !defined(SYN68K)
-    CPUFlag = 2; /* mc68020 */
-#else /* NEXT || SYN68K */
+    //CPUFlag = 2; /* mc68020 */
     CPUFlag = 4; /* mc68040 */
-#endif /* NEXT || SYN68K */
     UnitNtryCnt = 0; /* how many units in the table */
 
     TheZone = SysZone;
@@ -584,8 +479,6 @@ PUBLIC void Executor::executor_main(void)
 
     SCCRd = RM(NewPtrSysClear(SCC_SIZE));
     SCCWr = RM(NewPtrSysClear(SCC_SIZE));
-
-    setup28();
 
     SoundBase = RM(NewPtr(370 * sizeof(INTEGER)));
 #if 0
@@ -624,10 +517,9 @@ PUBLIC void Executor::executor_main(void)
     else
         thefile.fType = 0;
 
-#if defined(SYN68K)
 #define ALINETRAPNUMBER 0xA
     trap_install_handler(ALINETRAPNUMBER, alinehandler, (void *)0);
-#endif
+
     if(thefile.fType == CLC(T('A', 'P', 'P', 'L')))
     {
         ClrAppFiles(1);

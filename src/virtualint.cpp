@@ -3,9 +3,6 @@
  */
 
 #include "rsys/common.h"
-
-#if defined(SYN68K)
-
 #include "rsys/blockinterrupts.h"
 using namespace Executor;
 
@@ -19,5 +16,3 @@ void Executor::do_virtual_interrupt(void)
         interpret_code(hash_lookup_code_and_create_if_needed(pc));
     }
 }
-
-#endif /* SYN68K */

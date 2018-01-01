@@ -17,9 +17,7 @@ namespace Executor
 #if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 extern QHdr ROMlib_timehead;
 
-#if defined(SYN68K)
 extern syn68k_addr_t catchalarm(syn68k_addr_t pc, void *unused);
-#endif
 #endif
 }
 

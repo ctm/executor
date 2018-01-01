@@ -969,38 +969,22 @@ A2(PUBLIC trap, void, Environs, GUEST<INTEGER> *, rom, GUEST<INTEGER> *, machine
     *machine = CW(rom8 + 1);
 }
 
-#if !defined(NEXT) && !defined(SYN68K)
-INTEGER ROMlib_processor = env68020;
-#else
 INTEGER ROMlib_processor = env68040;
-#endif
 
-#if !defined(SYN68K)
-INTEGER ROMlib_hasFPU = true;
-#endif
 
 A2(PUBLIC trap, OSErrRET, SysEnvirons, INTEGER, vers, SysEnvRecPtr, p)
 {
-#if defined(NEXT)
-    ROMlib_processor = ROMlib_040 ? env68040 : env68030;
-#endif
-
     if(vers <= 0)
         /*-->*/ return envBadVers;
     p->environsVersion = CW(vers);
     p->machineType = CWC(53);
     p->systemVersion = SysVersion;
 
-#if !defined(SYN68K)
-    p->processor = CW(ROMlib_processor);
-    p->hasFPU = ROMlib_hasFPU;
-#else /* SYN68K */
     p->processor = CWC(env68040);
     p->hasFPU = false;
-#endif /* SYN68K */
     p->hasColorQD = true;
     p->keyBoardType = CWC(envAExtendKbd);
-p->atDrvrVersNum = 0;
+    p->atDrvrVersNum = 0;
     p->sysVRefNum = BootDrive;
 
     return vers <= SYSRECVNUM ? noErr : envVersTooBig;

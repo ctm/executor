@@ -318,10 +318,8 @@ PRIVATE void ParseConfigFile(StringPtr exefname, OSType type)
 
 PRIVATE void beginexecutingat(LONGINT startpc)
 {
-#if defined(SYN68K)
 #define ALINETRAPNUMBER 0xA
     trap_install_handler(ALINETRAPNUMBER, alinehandler, (void *)0);
-#endif
 
     EM_D0 = 0;
     EM_D1 = 0xFFFC000;
@@ -530,8 +528,6 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     SetVol((StringPtr)0, ROMlib_exevrefnum);
     CurApRefNum = CW(OpenResFile(ROMlib_exefname));
 
-    /* setupsignals(); */
-
     err = GetFInfo(ROMlib_exefname, ROMlib_exevrefnum, &finfo);
 
     process_create(false, CL(finfo.fdType), CL(finfo.fdCreator));
@@ -686,14 +682,8 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
 	 */
 /* #warning Stack is getting reinitialized even when Chain is called ... */
 
-#if defined(SYN68K)
         EM_A7 -= abovea5 + belowa5;
         CurStackBase = guest_cast<Ptr>(CL(EM_A7));
-#else /* !defined(SYN68K) */
-        ROMlib_foolgcc = alloca(abovea5 + belowa5);
-        CurStackBase
-            = CL(MAC_STACK_START + MAC_STACK_SIZE - (abovea5 + belowa5));
-#endif /* !defined(SYN68K) */
 
         CurrentA5 = RM(MR(CurStackBase) + belowa5); /* set CurrentA5 */
         BufPtr = RM(MR(CurrentA5) + abovea5);
@@ -1100,11 +1090,6 @@ PRIVATE void reset_low_globals(void)
 
     TheZone = ApplZone;
 
-#if !defined(SYN68K)
-    bzero((char *)&nilhandle, 0xc0); /* exception vectors */
-/* pagemaker 2.0 looks at 108
-					   and doesn't want to see -1 */
-#endif /* !defined(SYN68K) */
     *(GUEST<LONGINT> *)SYN68K_TO_US(0x20) = save20;
     *(GUEST<LONGINT> *)SYN68K_TO_US(0x28) = save28;
     *(GUEST<LONGINT> *)SYN68K_TO_US(0x58) = save58;
