@@ -133,7 +133,7 @@ PRIVATE OSErr
 start_playing(SndChannelPtr chanp, SndDoubleBufferHeaderPtr paramp,
               int which_buf)
 {
-    ProcPtr pp;
+    SndDoubleBackProcPtr pp;
     static bool task_inserted = false;
 
     pp = MR(paramp->dbhDoubleBack);
@@ -176,7 +176,7 @@ start_playing(SndChannelPtr chanp, SndDoubleBufferHeaderPtr paramp,
 A0(PUBLIC, void, C_sound_timer_handler)
 {
     SndDoubleBufferPtr dbp;
-    ProcPtr pp;
+    SndDoubleBackProcPtr pp;
     int current_buffer;
 
     if(call_back_info.headp)
@@ -188,7 +188,7 @@ A0(PUBLIC, void, C_sound_timer_handler)
         start_playing(call_back_info.chanp, call_back_info.headp,
                       current_buffer ^ 1);
         dbp->dbFlags.raw_and(CLC(~dbBufferReady));
-        CToPascalCall((void *)pp, CTOP_SetCTitle, call_back_info.chanp, dbp);
+        pp(call_back_info.chanp, dbp);
     }
 }
 

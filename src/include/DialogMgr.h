@@ -148,6 +148,12 @@ enum
     doFontName = 32768,
 };
 
+typedef UPP<void (INTEGER soundNumber)> SoundProcPtr;
+typedef UPP<Boolean (DialogPtr theDialog, EventRecord *theEvent, GUEST<INTEGER> *itemHit)> ModalFilterProcPtr;
+typedef UPP<Boolean (DialogPtr theDialog, EventRecord *theEvent, GUEST<INTEGER> *itemHit, void *yourDataPtr)> ModalFilterYDProcPtr;
+typedef UPP<void (DialogPtr theDialog, INTEGER itemNo)> UserItemProcPtr;
+
+
 #if 0
 #if !defined(ResumeProc_H)
 extern GUEST<ProcPtr> 	ResumeProc_H;

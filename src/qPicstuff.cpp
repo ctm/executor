@@ -1002,7 +1002,7 @@ PRIVATE Byte eatByte()
     Byte retval;
 
     if(procp)
-        CToPascalCall((void *)procp, CTOP_StdGetPic, &retval, sizeof(Byte));
+        CToPascalCall((void *)procp, ctop(&C_StdGetPic), &retval, sizeof(Byte));
     else
         retval = *nextbytep;
     ++nextbytep;
@@ -1014,7 +1014,7 @@ PRIVATE GUEST<INTEGER> eatINTEGERX()
     GUEST<INTEGER> retval;
 
     if(procp)
-        CToPascalCall((void *)procp, CTOP_StdGetPic, &retval, sizeof(GUEST<INTEGER>));
+        CToPascalCall((void *)procp, ctop(&C_StdGetPic), &retval, sizeof(GUEST<INTEGER>));
     else
         retval = *(GUEST<INTEGER> *)nextbytep;
     nextbytep += sizeof(GUEST<INTEGER>);
@@ -1034,7 +1034,7 @@ PRIVATE GUEST<LONGINT> eatLONGINTX()
     GUEST<LONGINT> retval;
 
     if(procp)
-        CToPascalCall((void *)procp, CTOP_StdGetPic, &retval, sizeof(GUEST<LONGINT>));
+        CToPascalCall((void *)procp, ctop(&C_StdGetPic), &retval, sizeof(GUEST<LONGINT>));
     else
         retval = *(GUEST<LONGINT> *)nextbytep;
     nextbytep += sizeof(GUEST<LONGINT>);
@@ -1053,7 +1053,7 @@ PRIVATE void eatString(Str255 str)
 {
     str[0] = eatByte();
     if(procp)
-        CToPascalCall((void *)procp, CTOP_StdGetPic, str + 1, str[0]);
+        CToPascalCall((void *)procp, ctop(&C_StdGetPic), str + 1, str[0]);
     else
         BlockMoveData((Ptr)nextbytep, (Ptr)str + 1, str[0]);
     nextbytep += str[0];
@@ -1067,7 +1067,7 @@ PRIVATE void eatNBytes(LONGINT n)
     {
         TEMP_ALLOC_DECL(temp_alloc_space);
         TEMP_ALLOC_ALLOCATE(bufp, temp_alloc_space, n);
-        CToPascalCall((void *)procp, CTOP_StdGetPic, bufp, n);
+        CToPascalCall((void *)procp, ctop(&C_StdGetPic), bufp, n);
         TEMP_ALLOC_FREE(temp_alloc_space);
     }
     nextbytep += n;
@@ -1082,7 +1082,7 @@ A2(PRIVATE, void, eatRegion, RgnHandle, rh, Size, hs)
     {
         state = HGetState((Handle)rh);
         HLock((Handle)rh);
-        CToPascalCall((void *)procp, CTOP_StdGetPic, (Ptr)STARH(rh) + sizeof(INTEGER),
+        CToPascalCall((void *)procp, ctop(&C_StdGetPic), (Ptr)STARH(rh) + sizeof(INTEGER),
                       hs - sizeof(INTEGER));
         HSetState((Handle)rh, state);
     }
@@ -1182,7 +1182,7 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
             HLock(h);
 
             if(procp)
-                CToPascalCall((void *)procp, CTOP_StdGetPic, STARH(h), pic_data_size);
+                CToPascalCall((void *)procp, ctop(&C_StdGetPic), STARH(h), pic_data_size);
             else if(pixmap->packType == CWC(2))
                 memcpy(STARH(h), nextbytep, pic_data_size);
 
@@ -1225,7 +1225,7 @@ A2(PRIVATE, Size, eatpixdata, PixMapPtr, pixmap, BOOLEAN *, freep)
             {
                 temph = NewHandle(length);
                 HLock(temph);
-                CToPascalCall((void *)procp, CTOP_StdGetPic, STARH(temph), length);
+                CToPascalCall((void *)procp, ctop(&C_StdGetPic), STARH(temph), length);
                 inp = (Byte *)STARH(temph);
             }
             else
@@ -1326,7 +1326,7 @@ A2(PRIVATE, void, eatbitdata, BitMap *, bp, BOOLEAN, packed)
                 TheZone = savezone;
             }
             HLock(h);
-            CToPascalCall((void *)procp, CTOP_StdGetPic, STARH(h), datasize);
+            CToPascalCall((void *)procp, ctop(&C_StdGetPic), STARH(h), datasize);
             bp->baseAddr = *h;
         }
         else
@@ -1354,7 +1354,7 @@ A2(PRIVATE, void, eatbitdata, BitMap *, bp, BOOLEAN, packed)
             {
                 temph = NewHandle(length);
                 HLock(temph);
-                CToPascalCall((void *)procp, CTOP_StdGetPic, STARH(temph), length);
+                CToPascalCall((void *)procp, ctop(&C_StdGetPic), STARH(temph), length);
                 inp = (Byte *)STARH(temph);
             }
             else
@@ -1758,7 +1758,7 @@ P2(PUBLIC pascal trap, void, DrawPicture, PicHandle, pic, Rect *, destrp)
                             {
                                 state2 = HGetState(hand);
                                 HLock(hand);
-                                CToPascalCall((void *)procp, CTOP_StdGetPic, STARH(hand),
+                                CToPascalCall((void *)procp, ctop(&C_StdGetPic), STARH(hand),
                                               hsize);
                                 HSetState(hand, state2);
                             }

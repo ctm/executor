@@ -194,7 +194,7 @@ A1(static inline, BOOLEAN, ROMlib_CALLCLICK, clickproc, fp)
 
     ROMlib_hook(list_clicknumber);
     HOOKSAVEREGS();
-    retval = CToPascalCall((void *)fp, CTOP_Button);
+    retval = CToPascalCall((void *)fp, ctop(&C_Button));
     HOOKRESTOREREGS();
     return retval;
 }

@@ -52,7 +52,8 @@ struct CProcRec
     GUEST<ProcPtr> compProc;
 };
 
-typedef void *DeviceLoopDrawingProcPtr;
+typedef UPP<void (INTEGER depth, INTEGER deviceFlags, GDHandle targetDevice, LONGINT userData)>
+    DeviceLoopDrawingProcPtr;
 
 struct GDevice
 {

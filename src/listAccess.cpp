@@ -117,7 +117,7 @@ A5(static inline, INTEGER, ROMlib_CALLCMP, Ptr, p1, Ptr, p2, INTEGER, l1,
     {
         ROMlib_hook(list_cmpnumber);
         HOOKSAVEREGS();
-        retval = CToPascalCall((void *)fp, CTOP_IUMagString, p1, p2, l1, l2);
+        retval = CToPascalCall((void *)fp, ctop(&C_IUMagString), p1, p2, l1, l2);
         HOOKRESTOREREGS();
     }
     return retval;

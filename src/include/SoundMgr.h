@@ -32,12 +32,15 @@ enum
     extSH = 0xFF, /* extended sound header */
 };
 
+struct SndChannel;
+typedef UPP<void (SndChannel*,SndCommand*)> SndCallbackProcPtr;
+
 typedef struct SndChannel
 {
     GUEST_STRUCT;
     GUEST<SndChannel *> nextChan;
     GUEST<Ptr> firstMod;
-    GUEST<ProcPtr> callBack;
+    GUEST<SndCallbackProcPtr> callBack;
     GUEST<LONGINT> userInfo;
     GUEST<LONGINT> wait;
     GUEST<SndCommand> cmdInProg;
@@ -176,6 +179,9 @@ enum
     dbLastBuffer = 4
 };
 
+
+typedef UPP<void (SndChannelPtr, SndDoubleBufferPtr)> SndDoubleBackProcPtr;
+
 typedef struct SndDoubleBufferHeader
 {
     GUEST_STRUCT;
@@ -185,7 +191,7 @@ typedef struct SndDoubleBufferHeader
     GUEST<INTEGER> dbhPacketSize;
     GUEST<Fixed> dbhSampleRate;
     GUEST<SndDoubleBufferPtr[2]> dbhBufferPtr;
-    GUEST<ProcPtr> dbhDoubleBack;
+    GUEST<SndDoubleBackProcPtr> dbhDoubleBack;
 } * SndDoubleBufferHeaderPtr;
 
 typedef struct _SCSTATUS
@@ -389,7 +395,7 @@ extern trap OSErr C_SndPlay(SndChannelPtr chanp, Handle sndh,
                             BOOLEAN async);
 PASCAL_TRAP(SndPlay, 0xA805);
 extern trap OSErr C_SndNewChannel(GUEST<SndChannelPtr> *chanpp,
-                                  INTEGER synth, LONGINT init, ProcPtr userroutinep);
+                                  INTEGER synth, LONGINT init, SndCallbackProcPtr userroutinep);
 PASCAL_TRAP(SndNewChannel, 0xA807);
 extern trap OSErr C_SndAddModifier(SndChannelPtr chanp,
                                    ProcPtr mod, INTEGER id, LONGINT init);

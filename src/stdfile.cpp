@@ -73,26 +73,20 @@ PUBLIC int Executor::nodrivesearch_p = false;
 
 using namespace Executor;
 
-typedef pascal BOOLEAN (*filtp)(DialogPtr dp, EventRecord *evp, GUEST<INTEGER> *ith);
 
 #define CALLFILTERPROC(dp, evt, ith, fp) \
-    ROMlib_CALLFILTERPROC((dp), (evt), (ith), (filtp)(fp))
-
-typedef pascal BOOLEAN (*custom_filtp)(DialogPtr dp, EventRecord *evp,
-                                       GUEST<INTEGER> *ith, UNIV Ptr data);
+    ROMlib_CALLFILTERPROC((dp), (evt), (ith), (fp))
 
 #define CALL_NEW_FILTER_PROC(dp, evt, ith, data, fp)        \
     ROMlib_CALL_NEW_FILTER_PROC((dp), (evt), (ith), (data), \
-                                (custom_filtp)(fp))
+                                (fp))
 
-typedef pascal BOOLEAN (*filefiltp)(ParmBlkPtr pbp);
 
-#define CALLFILEFILT(pbp, fp) ROMlib_CALLFILEFILT((pbp), (filefiltp)(fp))
+#define CALLFILEFILT(pbp, fp) ROMlib_CALLFILEFILT((pbp), (fp))
 
-typedef pascal BOOLEAN (*custom_file_filtp)(ParmBlkPtr pbp, UNIV Ptr data);
 
 #define CALL_CUSTOM_FILE_FILT(pbp, data, fp) \
-    ROMlib_CALL_CUSTOM_FILE_FILT((pbp), (data), (custom_file_filtp)(fp))
+    ROMlib_CALL_CUSTOM_FILE_FILT((pbp), (data), fp)
 
 typedef union {
     SFReply *oreplyp;
@@ -100,17 +94,17 @@ typedef union {
 } reply_u;
 
 typedef union {
-    ProcPtr oflfilef;
+    FileFilterProcPtr oflfilef;
     FileFilterYDProcPtr cflfilef;
 } file_filter_u;
 
 typedef union {
-    ProcPtr ofilterp;
+    ModalFilterProcPtr ofilterp;
     ModalFilterYDProcPtr cfilterp;
 } filter_u;
 
 typedef union {
-    ProcPtr odh;
+    DlgHookProcPtr odh;
     DlgHookYDProcPtr cdh;
 } dialog_hook_u;
 
@@ -142,7 +136,7 @@ typedef struct
     Str255 flcurdirname;
     filter_u magicfp;
     INTEGER fl_cancel_item;
-    UNIV Ptr mydata;
+    void* mydata;
 } fltype;
 
 namespace Executor
@@ -160,12 +154,12 @@ PRIVATE void settype(fltype *, INTEGER);
 PRIVATE INTEGER flwhich(fltype *, Point);
 PRIVATE void flmouse(fltype *, Point, ControlHandle);
 PRIVATE void getcurname(fltype *);
-static inline BOOLEAN ROMlib_CALLFILTERPROC(DialogPtr, EventRecord *, GUEST<INTEGER> *, filtp);
+static inline BOOLEAN ROMlib_CALLFILTERPROC(DialogPtr, EventRecord *, GUEST<INTEGER> *, ModalFilterProcPtr);
 PRIVATE void flfinit(fltype *);
 PRIVATE void flinsert(fltype *, StringPtr, INTEGER);
 PRIVATE int typeinarray(GUEST<OSType>, INTEGER, GUEST<SFTypeList>);
 PRIVATE LONGINT stdfcmp(char *, char *);
-static inline BOOLEAN ROMlib_CALLFILEFILT(ParmBlkPtr, filefiltp);
+static inline BOOLEAN ROMlib_CALLFILEFILT(CInfoPBPtr, FileFilterProcPtr);
 PRIVATE void flfill(fltype *);
 PRIVATE void realcd(DialogPeek, LONGINT);
 PRIVATE LONGINT getparent(LONGINT);
@@ -631,7 +625,7 @@ A3(PRIVATE, void, flmouse, fltype *, f, Point, p, ControlHandle, ch)
 }
 
 A4(static inline, BOOLEAN, ROMlib_CALLFILTERPROC, DialogPtr, dp,
-   EventRecord *, evtp, GUEST<INTEGER>, *ith, filtp, fp)
+   EventRecord *, evtp, GUEST<INTEGER>, *ith, ModalFilterProcPtr, fp)
 {
     BOOLEAN retval;
     LONGINT save_ref_con;
@@ -639,9 +633,7 @@ A4(static inline, BOOLEAN, ROMlib_CALLFILTERPROC, DialogPtr, dp,
     save_ref_con = GetWRefCon(dp);
     SetWRefCon(dp, TICK("stdf"));
     ROMlib_hook(stdfile_filtnumber);
-    HOOKSAVEREGS();
-    retval = CToPascalCall((void *)fp, CTOP_SectRect, dp, evtp, ith);
-    HOOKRESTOREREGS();
+    retval = CToPascalCall((void *)fp, ctop(&C_SectRect), dp, evtp, ith);
     SetWRefCon(dp, save_ref_con);
     return retval;
 }
@@ -655,7 +647,7 @@ P4 (PUBLIC pascal trap, BOOLEAN, unused_stdfile, DialogPtr, dp, EventRecord *,
 
 PRIVATE BOOLEAN
 ROMlib_CALL_NEW_FILTER_PROC(DialogPtr dp, EventRecord *evtp, GUEST<INTEGER> *ith,
-                            UNIV Ptr data, custom_filtp fp)
+                            void* data, ModalFilterYDProcPtr fp)
 {
     BOOLEAN retval;
     LONGINT save_ref_con;
@@ -663,9 +655,7 @@ ROMlib_CALL_NEW_FILTER_PROC(DialogPtr dp, EventRecord *evtp, GUEST<INTEGER> *ith
     save_ref_con = GetWRefCon(dp);
     SetWRefCon(dp, TICK("stdf"));
     ROMlib_hook(stdfile_filtnumber);
-    HOOKSAVEREGS();
-    retval = Executor::CToPascalCall((void *)fp, CTOP_unused_stdfile, dp, evtp, ith, data);
-    HOOKRESTOREREGS();
+    retval = fp(dp, evtp, ith, data);
     SetWRefCon(dp, save_ref_con);
     return retval;
 }
@@ -759,27 +749,23 @@ A2(PRIVATE, LONGINT, stdfcmp, char *, ip1, char *, ip2)
     return stdfcmpC(ip1, ip2);
 }
 
-A2(static inline, BOOLEAN, ROMlib_CALLFILEFILT, ParmBlkPtr, pbp, filefiltp, fp)
+A2(static inline, BOOLEAN, ROMlib_CALLFILEFILT, CInfoPBRec *, pbp, FileFilterProcPtr, fp)
 {
     BOOLEAN retval;
 
     ROMlib_hook(stdfile_filefiltnumber);
-    HOOKSAVEREGS();
-    retval = CToPascalCall((void *)fp, CTOP_SystemEvent, pbp);
-    HOOKRESTOREREGS();
+    retval = fp(pbp);
     return retval;
 }
 
 PRIVATE BOOLEAN
-ROMlib_CALL_CUSTOM_FILE_FILT(ParmBlkPtr pbp, UNIV Ptr data,
-                             custom_file_filtp fp)
+ROMlib_CALL_CUSTOM_FILE_FILT(CInfoPBRec * pbp, void* data,
+                             FileFilterYDProcPtr fp)
 {
     BOOLEAN retval;
 
     ROMlib_hook(stdfile_filefiltnumber);
-    HOOKSAVEREGS();
-    retval = CToPascalCall((void *)fp, CTOP_GetAuxCtl, pbp, data);
-    HOOKRESTOREREGS();
+    retval = fp(pbp, data);
     return retval;
 }
 
@@ -797,15 +783,15 @@ passes_filter(fltype *f, CInfoPBRec *cinfop, INTEGER numt)
             retval = (!f->flfilef.oflfilef
                       || (numt == 0
                           && (cinfop->hFileInfo.ioFlAttrib & ATTRIB_ISADIR))
-                      || !CALLFILEFILT((ParmBlkPtr)cinfop, f->flfilef.oflfilef));
+                      || !CALLFILEFILT(cinfop, f->flfilef.oflfilef));
         case new_sf:
             retval = (!f->flfilef.oflfilef
                       || (cinfop->hFileInfo.ioFlAttrib & ATTRIB_ISADIR)
-                      || !CALLFILEFILT((ParmBlkPtr)cinfop, f->flfilef.oflfilef));
+                      || !CALLFILEFILT(cinfop, f->flfilef.oflfilef));
             break;
         case new_custom_sf:
             retval = (!f->flfilef.cflfilef
-                      || !CALL_CUSTOM_FILE_FILT((ParmBlkPtr)cinfop, f->mydata,
+                      || !CALL_CUSTOM_FILE_FILT(cinfop, f->mydata,
                                                 f->flfilef.cflfilef));
             break;
         default:
@@ -1943,7 +1929,6 @@ ROMlib_CALLDHOOK(fltype *fl, INTEGER ihit, DialogPtr dp, dialog_hook_u dhu)
     LONGINT save_ref_con;
 
     ROMlib_hook(stdfile_dialhooknumber);
-    HOOKSAVEREGS();
 
     save_ref_con = GetWRefCon(dp);
     emergency_save_ref_con = save_ref_con;
@@ -1953,18 +1938,16 @@ ROMlib_CALLDHOOK(fltype *fl, INTEGER ihit, DialogPtr dp, dialog_hook_u dhu)
     {
         case original_sf:
         case new_sf:
-            retval = CToPascalCall((void *)dhu.odh, CTOP_Alert, ihit, dp);
+            retval = dhu.odh(ihit, dp);
             break;
         case new_custom_sf:
-            retval = CToPascalCall((void *)dhu.cdh, CTOP_unused_stdfile_2, ihit, dp,
-                                   fl->mydata);
+            retval = dhu.cdh(ihit, dp, fl->mydata);
             break;
         default:
             warning_unexpected("flavor = %d", fl->flavor);
             retval = 0;
             break;
     }
-    HOOKRESTOREREGS();
     SetWRefCon(dp, save_ref_con);
     return retval;
 }
@@ -2387,7 +2370,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
                       file_filter_u filef, INTEGER numt, GUEST<SFTypeList> tl,
                       getorput_t getorput, sf_flavor_t flavor,
                       Ptr activeList, ActivateYDProcPtr activateproc,
-                      UNIV Ptr yourdatap)
+                      void* yourdatap)
 {
     bool reply_valid;
     
@@ -2769,7 +2752,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
 }
 
 P7(PUBLIC pascal trap, void, SFPPutFile, Point, p, StringPtr, prompt,
-   StringPtr, name, ProcPtr, dh, SFReply *, rep, INTEGER, dig, ProcPtr, fp)
+   StringPtr, name, DlgHookProcPtr, dh, SFReply *, rep, INTEGER, dig, ModalFilterProcPtr, fp)
 {
     dialog_hook_u dhu;
     reply_u repu;
@@ -2785,14 +2768,14 @@ P7(PUBLIC pascal trap, void, SFPPutFile, Point, p, StringPtr, prompt,
 }
 
 P5(PUBLIC pascal trap, void, SFPutFile, Point, p, StringPtr, prompt,
-   StringPtr, name, ProcPtr, dh, SFReply *, rep)
+   StringPtr, name, DlgHookProcPtr, dh, SFReply *, rep)
 {
-    SFPPutFile(p, prompt, name, dh, rep, putDlgID, (ProcPtr)0);
+    SFPPutFile(p, prompt, name, dh, rep, putDlgID, nullptr);
 }
 
 P9(PUBLIC pascal trap, void, SFPGetFile, Point, p, StringPtr, prompt,
-   ProcPtr, filef, INTEGER, numt, GUEST<SFTypeList>, tl, ProcPtr, dh,
-   SFReply *, rep, INTEGER, dig, ProcPtr, fp)
+   FileFilterProcPtr, filef, INTEGER, numt, GUEST<SFTypeList>, tl, DlgHookProcPtr, dh,
+   SFReply *, rep, INTEGER, dig, ModalFilterProcPtr, fp)
 {
     dialog_hook_u dhu;
     reply_u repu;
@@ -2809,15 +2792,15 @@ P9(PUBLIC pascal trap, void, SFPGetFile, Point, p, StringPtr, prompt,
 }
 
 P7(PUBLIC pascal trap, void, SFGetFile, Point, p, StringPtr, prompt,
-   ProcPtr, filef, INTEGER, numt, GUEST<SFTypeList>, tl, ProcPtr, dh, SFReply *, rep)
+   FileFilterProcPtr, filef, INTEGER, numt, GUEST<SFTypeList>, tl, DlgHookProcPtr, dh, SFReply *, rep)
 {
-    SFPGetFile(p, prompt, filef, numt, tl, dh, rep, getDlgID, (ProcPtr)0);
+    SFPGetFile(p, prompt, filef, numt, tl, dh, rep, getDlgID, nullptr);
 }
 
 P10(PUBLIC pascal trap, void, CustomPutFile, Str255, prompt,
     Str255, defaultName, StandardFileReply *, replyp, INTEGER, dlgid,
     Point, where, DlgHookYDProcPtr, dlghook, ModalFilterYDProcPtr, filterproc,
-    Ptr, activeList, ActivateYDProcPtr, activateproc, UNIV Ptr, yourdatap)
+    Ptr, activeList, ActivateYDProcPtr, activateproc, void*, yourdatap)
 {
     dialog_hook_u dhu;
     reply_u repu;
@@ -2841,7 +2824,7 @@ P11(PUBLIC pascal trap, void, CustomGetFile, FileFilterYDProcPtr, filefilter,
     INTEGER, numtypes, GUEST<SFTypeList>, typelist, StandardFileReply *, replyp,
     INTEGER, dlgid, Point, where, DlgHookYDProcPtr, dlghook,
     ModalFilterYDProcPtr, filterproc, Ptr, activeList,
-    ActivateYDProcPtr, activateproc, UNIV Ptr, yourdatap)
+    ActivateYDProcPtr, activateproc, void*, yourdatap)
 {
     dialog_hook_u dhu;
     reply_u repu;
@@ -2862,7 +2845,7 @@ P11(PUBLIC pascal trap, void, CustomGetFile, FileFilterYDProcPtr, filefilter,
               yourdatap);
 }
 
-P4(PUBLIC pascal trap, void, StandardGetFile, ProcPtr, filef, INTEGER, numt,
+P4(PUBLIC pascal trap, void, StandardGetFile, FileFilterProcPtr, filef, INTEGER, numt,
    GUEST<SFTypeList>, tl, StandardFileReply *, replyp)
 {
     Point p;

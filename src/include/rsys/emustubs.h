@@ -52,8 +52,8 @@ struct initzonehiddenargs_t
     GUEST_STRUCT;
     GUEST<voidptr> startPtr;
     GUEST<voidptr> limitPtr;
-    GUEST<short> cMoreMasters;
-    GUEST<voidptr> pGrowZone;
+    GUEST<INTEGER> cMoreMasters;
+    GUEST<GrowZoneProcPtr> pGrowZone;
 };
 
 extern void ROMlib_GetTrapAddress_helper(uint32_t *d0p, uint32_t d1, uint32_t *a0p);

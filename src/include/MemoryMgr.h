@@ -35,6 +35,8 @@ enum
     memSCErr = (-116),
 };
 
+typedef UPP<LONGINT (Size)> GrowZoneProcPtr;
+
 struct Zone
 {
     GUEST_STRUCT;
@@ -42,7 +44,7 @@ struct Zone
     GUEST<Ptr> purgePtr;
     GUEST<Ptr> hFstFree;
     GUEST<LONGINT> zcbFree;
-    GUEST<ProcPtr> gzProc;
+    GUEST<GrowZoneProcPtr> gzProc;
     GUEST<INTEGER> moreMast;
     GUEST<INTEGER> flags;
     GUEST<INTEGER> cntRel;
@@ -172,7 +174,7 @@ extern void HClrRBit(Handle h);
 extern void InitApplZone(void);
 extern void SetApplBase(Ptr newbase);
 extern void MoreMasters(void);
-extern void InitZone(ProcPtr pGrowZone, int16_t cMoreMasters,
+extern void InitZone(GrowZoneProcPtr pGrowZone, int16_t cMoreMasters,
                      Ptr limitPtr, THz startPtr);
 extern THz GetZone(void);
 extern void SetZone(THz hz);
@@ -190,7 +192,7 @@ extern void BlockMoveData(Ptr src, Ptr dst, Size cnt);
 extern void MaxApplZone(void);
 extern void MoveHHi(Handle h);
 extern void SetApplLimit(Ptr newlimit);
-extern void SetGrowZone(ProcPtr newgz);
+extern void SetGrowZone(GrowZoneProcPtr newgz);
 extern void EmptyHandle(Handle h);
 extern THz SystemZone(void);
 extern THz ApplicZone(void);

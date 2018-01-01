@@ -392,7 +392,7 @@ P3(PUBLIC, pascal trap OSErr, SndPlay, SndChannelPtr, chanp, Handle, sndh,
 GUEST<SndChannelPtr> Executor::allchans;
 
 P4(PUBLIC pascal trap, OSErr, SndNewChannel, GUEST<SndChannelPtr> *, chanpp,
-   INTEGER, synth, LONGINT, init, ProcPtr, userroutinep)
+   INTEGER, synth, LONGINT, init, SndCallbackProcPtr, userroutinep)
 {
     SndChannelPtr chanp;
     OSErr retval;
@@ -523,7 +523,7 @@ BOOLEAN callasynth(SndChannelPtr chanp, SndCommand *cmdp, ModifierStubPtr mp)
  * NOTE: when we support sound, we'll have to check for known P_routines
  *	 to avoid invoking syn68k on our own stuff.
  */
-    return CToPascalCall((void *)MR(mp->code), CTOP_SectRect, chanp, cmdp, mp);
+    return CToPascalCall((void *)MR(mp->code), ctop(&C_SectRect), chanp, cmdp, mp);
 }
 
 #if defined(OLD_BROKEN_NEXTSTEP_SOUND)
@@ -622,8 +622,7 @@ do_current_command(SndChannelPtr chanp, struct hunger_info info)
         case callBackCmd:
             warning_sound_log("callBackCmd");
             cmd = chanp->cmdInProg;
-            CToPascalCall((void *)MR(chanp->callBack), CTOP_SetCTitle,
-                          chanp, &cmd);
+            MR(chanp->callBack)(chanp, &cmd);
             CMD_DONE(chanp);
             break;
 
@@ -697,8 +696,7 @@ do_current_db(SndChannelPtr chanp, struct hunger_info info)
 			 CL (dbp->dbUserInfo[0]),
 			 CL (dbp->dbUserInfo[1]));
 #endif
-        CToPascalCall((void *)MR(dbhp->dbhDoubleBack), CTOP_SetCTitle,
-                      chanp, dbp);
+        (dbhp->dbhDoubleBack)(chanp, dbp);
     }
 }
 

@@ -371,8 +371,7 @@ P4(PUBLIC pascal trap, void, DeviceLoop,
 
             if((flags & allDevices) || !EmptyRgn(sect_rgn))
             {
-                CToPascalCall((void *)drawing_proc, CTOP_DeviceLoopDrawingProcTemplate,
-                              PIXMAP_PIXEL_SIZE(GD_PMAP(gd)),
+                drawing_proc(PIXMAP_PIXEL_SIZE(GD_PMAP(gd)),
                               GD_FLAGS(gd), gd, user_data);
             }
         }

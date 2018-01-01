@@ -207,7 +207,7 @@ int32_t Executor::ROMlib_ctlcall(ControlHandle c, int16_t i, int32_t l)
         ROMlib_hook(ctl_cdefnumber);
         HLockGuard guard(defproc);
         retval = CToPascalCall((void *)(ctlfuncp)STARH(defproc),
-                               CTOP_cdef0, VAR(c), c, i, l);
+                               ctop(&C_cdef0), VAR(c), c, i, l);
     }
 
     return retval;

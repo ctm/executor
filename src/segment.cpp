@@ -709,8 +709,8 @@ P0(PUBLIC pascal trap, void, ExitToShell)
         {
             pt.h = 100;
             pt.v = 100;
-            SFGetFile(pt, (StringPtr) "", (ProcPtr)0, 1,
-                      applonly, (ProcPtr)0, &reply);
+            SFGetFile(pt, (StringPtr) "", nullptr, 1,
+                      applonly, nullptr, &reply);
 
             if(!reply.good)
                 ROMlib_exit = 1;

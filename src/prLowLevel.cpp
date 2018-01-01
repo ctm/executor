@@ -537,7 +537,7 @@ A2(static inline, TPPrDlg, ROMlib_CALLPRINITPROC, THPrint, hPrint,
     else
     {
         HOOKSAVEREGS();
-        retval = (TPPrDlg)CToPascalCall((void *)fp, CTOP_PrStlInit, hPrint);
+        retval = (TPPrDlg)CToPascalCall((void *)fp, ctop(&C_PrStlInit), hPrint);
         HOOKRESTOREREGS();
     }
     return retval;
@@ -557,7 +557,7 @@ A3(static inline, void, ROMlib_CALLPRITEMPROC, TPPrDlg, prrecptr,
     else
     {
         HOOKSAVEREGS();
-        CToPascalCall((void *)fp, CTOP_ROMlib_myjobproc, prrecptr, item);
+        CToPascalCall((void *)fp, ctop(&C_ROMlib_myjobproc), prrecptr, item);
         HOOKRESTOREREGS();
     }
 }

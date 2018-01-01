@@ -2472,7 +2472,7 @@ STUB(InitZone)
     initzonehiddenargs_t *ip;
 
     ip = (initzonehiddenargs_t *)SYN68K_TO_US(EM_A0);
-    InitZone((ProcPtr)MR(ip->pGrowZone), CW(ip->cMoreMasters),
+    InitZone(MR(ip->pGrowZone), CW(ip->cMoreMasters),
              (Ptr)MR(ip->limitPtr), (THz)MR(ip->startPtr));
     EM_D0 = CW(MemErr);
     RTS();
@@ -2606,7 +2606,7 @@ STUB(SetApplLimit)
 
 STUB(SetGrowZone)
 {
-    SetGrowZone((ProcPtr)SYN68K_TO_US_CHECK0(EM_A0));
+    SetGrowZone((GrowZoneProcPtr)SYN68K_TO_US_CHECK0(EM_A0));
     EM_D0 = CW(MemErr);
     RTS();
 }

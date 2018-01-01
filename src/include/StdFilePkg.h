@@ -75,10 +75,13 @@ struct StandardFileReply
     GUEST<INTEGER> sfReserved2;
 };
 
-typedef ProcPtr FileFilterYDProcPtr;
-typedef ProcPtr DlgHookYDProcPtr;
-typedef ProcPtr ModalFilterYDProcPtr;
-typedef ProcPtr ActivateYDProcPtr;
+typedef UPP<INTEGER (INTEGER item, DialogPtr theDialog)> DlgHookProcPtr;
+typedef UPP<Boolean (CInfoPBPtr pb)> FileFilterProcPtr;
+typedef UPP<INTEGER (INTEGER item, DialogPtr theDialog, void *yourDataPtr)> DlgHookYDProcPtr;
+/* ModalFilterYDProcPtr moved to Dialogs.h */
+typedef UPP<Boolean (CInfoPBPtr pb, void *yourDataPtr)> FileFilterYDProcPtr;
+typedef UPP<void (DialogPtr theDialog, INTEGER itemNo, Boolean activating, void *yourDataPtr)> ActivateYDProcPtr;
+
 
 enum
 {
@@ -103,31 +106,27 @@ enum
     sfGetDialogID = -6042
 };
 
-#if !defined(UNIV)
-#define UNIV
-#endif
-
 extern pascal void C_ROMlib_filebox(DialogPeek dp, INTEGER which);
 extern pascal void P_ROMlib_filebox(DialogPeek dp, INTEGER which);
 
 extern pascal trap void C_SFPPutFile(Point p, StringPtr prompt,
-                                     StringPtr name, ProcPtr dh, SFReply *rep, INTEGER dig, ProcPtr fp);
+                                     StringPtr name, DlgHookProcPtr dh, SFReply *rep, INTEGER dig, ModalFilterProcPtr fp);
 PASCAL_FUNCTION(SFPPutFile);
 
 extern pascal trap void C_SFPutFile(Point p, StringPtr prompt, StringPtr name,
-                                    ProcPtr dh, SFReply *rep);
+                                    DlgHookProcPtr dh, SFReply *rep);
 PASCAL_FUNCTION(SFPutFile);
 
-extern pascal trap void C_SFPGetFile(Point p, StringPtr prompt, ProcPtr filef,
-                                     INTEGER numt, GUEST<SFTypeList> tl, ProcPtr dh, SFReply *rep,
-                                     INTEGER dig, ProcPtr fp);
+extern pascal trap void C_SFPGetFile(Point p, StringPtr prompt, FileFilterProcPtr filef,
+                                     INTEGER numt, GUEST<SFTypeList> tl, DlgHookProcPtr dh, SFReply *rep,
+                                     INTEGER dig, ModalFilterProcPtr fp);
 PASCAL_FUNCTION(SFPGetFile);
 
-extern pascal trap void C_SFGetFile(Point p, StringPtr prompt, ProcPtr filef,
-                                    INTEGER numt, GUEST<SFTypeList> tl, ProcPtr dh, SFReply *rep);
+extern pascal trap void C_SFGetFile(Point p, StringPtr prompt, FileFilterProcPtr filef,
+                                    INTEGER numt, GUEST<SFTypeList> tl, DlgHookProcPtr dh, SFReply *rep);
 PASCAL_FUNCTION(SFGetFile);
 
-extern pascal trap void C_StandardGetFile(ProcPtr filef, INTEGER numt,
+extern pascal trap void C_StandardGetFile(FileFilterProcPtr filef, INTEGER numt,
                                           GUEST<SFTypeList> tl,
                                           StandardFileReply *replyp);
 PASCAL_FUNCTION(StandardGetFile);
@@ -143,7 +142,7 @@ extern pascal trap void C_CustomPutFile(Str255 prompt, Str255 defaultName,
                                         ModalFilterYDProcPtr filterproc,
                                         Ptr activeList,
                                         ActivateYDProcPtr activateproc,
-                                        UNIV Ptr yourdatap);
+                                        void* yourdatap);
 PASCAL_FUNCTION(CustomPutFile);
 
 extern pascal trap void C_CustomGetFile(FileFilterYDProcPtr filefilter,
@@ -155,7 +154,7 @@ extern pascal trap void C_CustomGetFile(FileFilterYDProcPtr filefilter,
                                         ModalFilterYDProcPtr filterproc,
                                         Ptr activeList,
                                         ActivateYDProcPtr activateproc,
-                                        UNIV Ptr yourdatap);
+                                        void* yourdatap);
 PASCAL_FUNCTION(CustomGetFile);
 
 }

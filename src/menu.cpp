@@ -1668,7 +1668,7 @@ void Executor::ROMlib_menucall(INTEGER mess, MenuHandle themenu, Rect *menrect, 
             ROMlib_hook(menu_mdefnumber);
             HLockGuard guard(defproc);
             CToPascalCall(STARH(defproc),
-                          CTOP_mdef0, mess, themenu, menrect, hit, which);
+                          ctop(&C_mdef0), mess, themenu, menrect, hit, which);
         }
     }
 }
@@ -1695,7 +1695,7 @@ Executor::ROMlib_mbdfcall(INTEGER msg, INTEGER param1, LONGINT param2)
         HLockGuard guard(defproc);
 
         retval = CToPascalCall(STARH(defproc),
-                               CTOP_mbdf0, (Hx(MENULIST, mufu) & 7), msg,
+                               ctop(&C_mbdf0), (Hx(MENULIST, mufu) & 7), msg,
                                param1, param2);
     }
 

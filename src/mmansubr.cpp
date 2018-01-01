@@ -970,7 +970,7 @@ retry:
         ZONE_ALLOC_PTR_X(current_zone) = CLC_NULL;
         ROMlib_hook(memory_gznumber);
         HOOKSAVEREGS();
-        retval = CToPascalCall((void *)ZONE_GZ_PROC(current_zone), CTOP_BitNot, size);
+        retval = current_zone->gzProc(size);
         HOOKRESTOREREGS();
 
         if(retval)

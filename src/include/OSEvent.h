@@ -141,7 +141,7 @@ typedef struct HighLevelEventMsg
     GUEST<int32_t> msgLength;
 } * HighLevelEventMsgPtr;
 
-typedef ProcPtr GetSpecificFilterProcPtr;
+typedef UPP<Boolean (Ptr, HighLevelEventMsgPtr, TargetID *)> GetSpecificFilterProcPtr;
 
 enum
 {

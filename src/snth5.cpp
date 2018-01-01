@@ -61,7 +61,7 @@ P3(PUBLIC pascal, BOOLEAN, snth5, SndChannelPtr, chanp, SndCommand *, cmdp,
 #if 0
 	printf("CB"); fflush(stdout);
 #endif
-            CToPascalCall((void *)MR(chanp->callBack), CTOP_StuffHex, chanp, cmdp);
+            CToPascalCall((void *)MR(chanp->callBack), ctop(&C_StuffHex), chanp, cmdp);
             break;
         case syncCmd:
             /* TODO */

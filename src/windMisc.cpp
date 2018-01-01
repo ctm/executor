@@ -530,7 +530,7 @@ int32_t Executor::ROMlib_windcall(WindowPtr wind, int16_t mess, int32_t param)
         ROMlib_hook(wind_wdefnumber);
         HLockGuard guard(defproc);
         retval = CToPascalCall(STARH(defproc),
-                               CTOP_wdef0, var(wind), wind, mess, param);
+                               ctop(&C_wdef0), var(wind), wind, mess, param);
 #if defined EVIL_ILLUSTRATOR_7_HACK
         ROMlib_evil_illustrator_7_hack = save_hack;
 #endif

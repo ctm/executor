@@ -731,7 +731,7 @@ P4(PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */
                     RectRgn(rh, &HxX(c, contrlRect));
                     dlp.ctl = c;
                     dlp.param = param;
-                    DeviceLoop(rh, P_new_draw_scroll, ptr_to_longint(&dlp), 0);
+                    DeviceLoop(rh, (DeviceLoopDrawingProcPtr) P_new_draw_scroll, ptr_to_longint(&dlp), 0);
                     DisposeRgn(rh);
                 }
                 SetPenState(&ps);
@@ -789,7 +789,7 @@ P4(PUBLIC pascal, LONGINT, cdef16, /* IMI-328 */
                 RectRgn(rh, &HxX(c, contrlRect));
                 dlp.ctl = c;
                 dlp.param = param;
-                DeviceLoop(rh, P_new_pos_ctl, ptr_to_longint(&dlp), 0);
+                DeviceLoop(rh, (DeviceLoopDrawingProcPtr) P_new_pos_ctl, ptr_to_longint(&dlp), 0);
                 DisposeRgn(rh);
             }
             break;

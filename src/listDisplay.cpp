@@ -280,7 +280,7 @@ void Executor::ROMlib_listcall(INTEGER mess, BOOLEAN sel, Rect *rp, Cell cell, I
         {
             ROMlib_hook(list_ldefnumber);
             HOOKSAVEREGS();
-            CToPascalCall((void *)lp, CTOP_ldef0, mess, sel, rp, cell, off, len, lhand);
+            CToPascalCall((void *)lp, ctop(&C_ldef0), mess, sel, rp, cell, off, len, lhand);
             HOOKRESTOREREGS();
         }
     }

@@ -558,7 +558,7 @@ void print_free(void)
 }
 #endif
 
-void InitZone(ProcPtr pGrowZone, int16_t cMoreMasters,
+void InitZone(GrowZoneProcPtr pGrowZone, int16_t cMoreMasters,
               Ptr limitPtr, THz zone)
 {
     block_header_t *last_block;
@@ -1893,7 +1893,7 @@ void SetApplLimit(Ptr new_limit)
     SET_MEM_ERR(noErr);
 }
 
-void SetGrowZone(ProcPtr newgz)
+void SetGrowZone(GrowZoneProcPtr newgz)
 {
     MM_SLAM("entry");
 
