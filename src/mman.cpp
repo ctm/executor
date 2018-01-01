@@ -359,7 +359,7 @@ void print_mem_full_message(void)
 
 unsigned long ROMlib_total_allocated_memory;
 
-void ROMlib_InitZones(offset_enum which)
+void ROMlib_InitZones()
 {
     static bool beenhere = false;
     static Ptr stack_begin, stack_end;
@@ -408,28 +408,7 @@ void ROMlib_InitZones(offset_enum which)
         gestalt_set_memory_size(total_mac_visible_memory);
 
         /* Allocate memory for SysZone, ApplZone, and stack, contiguously. */
-        memory = NULL;
-
-#if defined(TRY_TO_MMAP_ZONES)
-        /* Try to mmap if either malloc failed or bits are set in the high
-       * byte of any address in the space just allocated.
-       */
-        if(memory == NULL)
-            memory = (char *)mmap_permanent_memory(total_allocated_memory);
-#endif /* TRY_TO_MMAP_ZONES */
-
-#if defined(SBRK_PERMANENT_MEMORY)
-        if(memory == NULL)
-        {
-            memory = (char *)sbrk(total_allocated_memory);
-            if(memory == (char *)-1)
-                memory = NULL;
-        }
-#endif /* SBRK_PERMANENT_MEMORY) */
-
-        /* Allocate with malloc if we don't have it yet. */
-        if(memory == NULL)
-            memory = (char *)malloc(total_allocated_memory);
+        memory = (char *)malloc(total_allocated_memory);
 
         if(memory == NULL)
         {
@@ -448,28 +427,14 @@ void ROMlib_InitZones(offset_enum which)
 
         init_syszone_size = INIT_SYSZONE_SIZE;
 
-        switch(which)
-        {
-            case offset_none:
-                ROMlib_offset = 0;
-                break;
-            case offset_8k:
-                ROMlib_offset = 8192;
-                break;
-            case offset_big:
-                ROMlib_offset = (uintptr_t)memory;
+        ROMlib_offset = (uintptr_t)memory;
 #if SIZEOF_CHAR_P > 4
-                ROMlib_sizes[0] = total_allocated_memory;
+        ROMlib_sizes[0] = total_allocated_memory;
 #endif
-                {
-                    int low_global_room = (char *)&lastlowglobal - (char *)&nilhandle;
-                    memory += low_global_room;
-                    init_syszone_size -= low_global_room;
-                }
-                break;
-            default:
-                /* shouldn't get here */
-                break;
+        {
+            int low_global_room = (char *)&lastlowglobal - (char *)&nilhandle;
+            memory += low_global_room;
+            init_syszone_size -= low_global_room;
         }
 
         MemTop = RM(mem_top);

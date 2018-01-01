@@ -8,11 +8,8 @@
 
  */
 
-#ifdef __cplusplus
 namespace Executor
 {
-#endif
-extern BOOLEAN force_big_offset;
 
 #define nilhandle (*(GUEST<Ptr> *)(0x00 + ROMlib_offset))
 #define trapvectors (*(GUEST<LONGINT>(*)[10])(0x80 + ROMlib_offset))
@@ -260,8 +257,6 @@ extern BOOLEAN force_big_offset;
 #define TimeSCSIDB (*(GUEST<INTEGER> *)(0xDA6 + ROMlib_offset))
 #define lastlowglobal (*(GUEST<LONGINT> *)(0x2000 + ROMlib_offset))
 
-#ifdef __cplusplus
 }
-#endif
 
 #endif

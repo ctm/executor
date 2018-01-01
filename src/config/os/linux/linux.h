@@ -43,17 +43,6 @@
 #define PRIVATE static
 #endif
 
-#if !defined(MMAP_LOW_GLOBALS)
-/* define `MMAP_LOW_GLOBALS' if the zero page needs to be
-   `mmap ()'ed for the low globals (see main:main.c) */
-#define MMAP_LOW_GLOBALS
-#endif /* !MMAP_LOW_GLOBALS */
-
-extern void mmap_lowglobals(void);
-
-#define TRY_TO_MMAP_ZONES
-extern void *mmap_permanent_memory(unsigned long amount_wanted);
-
 #if !defined(REINSTALL_SIGNAL_HANDLER)
 /* define `REINSTALL_SIGNAL_HANDLER' if signal handlers are
    de-installed after the signals occur, and require reinstallation */

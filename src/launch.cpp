@@ -1329,7 +1329,7 @@ Executor::NewLaunch(StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockRe
         reinitialize_things();
         reset_traps();
         reset_low_globals();
-        ROMlib_InitZones(offset_no_change); /* too late to change memory offset */
+        ROMlib_InitZones();
         ROMlib_InitGWorlds();
         hle_reinit();
         AE_reinit();

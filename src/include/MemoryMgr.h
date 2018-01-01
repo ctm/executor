@@ -158,14 +158,7 @@ extern void _PurgeSpace_flags(Size *totalp, Size *contigp, bool sys_p);
 /* ### cliff bogofunc; should go away */
 extern void ROMlib_installhandle(Handle sh, Handle dh);
 
-typedef enum {
-    offset_no_change, /* for when we call InitZone a second time */
-    offset_none, /* use page 0 for page 0 */
-    offset_8k, /* offset is a fixed 8192 */
-    offset_big, /* offset is to big syszone+applzone block */
-} offset_enum;
-
-extern void ROMlib_InitZones(offset_enum which);
+extern void ROMlib_InitZones();
 extern OSErr MemError(void);
 
 extern SignedByte HGetState(Handle h);

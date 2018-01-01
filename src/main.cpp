@@ -103,11 +103,6 @@ PRIVATE void setstartdir(char *);
 #include <sys/wait.h>
 #endif
 
-#if defined(MMAP_LOW_GLOBALS)
-#include <sys/types.h>
-#include <sys/mman.h>
-#endif /* MMAP_LOW_GLOBALS */
-
 #if defined(CYGWIN32)
 #include "winfs.h"
 #include "dosdisk.h"
@@ -125,8 +120,6 @@ PRIVATE void setstartdir(char *);
 
 using namespace Executor;
 using namespace std;
-
-BOOLEAN Executor::force_big_offset = CONFIG_OFFSET_P;
 
 PUBLIC int Executor::ROMlib_noclock = 0;
 
@@ -314,10 +307,6 @@ capable of color.",
       opt_no_arg, "" },
     { "rsrc", "use native resource forks on Mac OS X",
       opt_no_arg, "" },
-
-#if CONFIG_OFFSET_P == 0
-    { "offset", "offset Mac memory (i.e. simulate Win32)", opt_no_arg, "" },
-#endif
 
     { "cities", "Don't use Helvetica for Geneva, Courier for Monaco and Times "
                 "for New York when generating PostScript",
@@ -1050,13 +1039,6 @@ int main(int argc, char **argv)
     /* Guarantee various time variables are set up properly. */
     msecs_elapsed();
 
-#if defined(MMAP_LOW_GLOBALS)
-    for(i = 1; i < argc && strcmp(argv[i], "-offset") != 0; ++i)
-        ;
-    if(i == argc)
-        mmap_lowglobals();
-#endif /* MMAP_LOW_GLOBALS */
-
     ROMlib_WriteWhen(WriteInOSEvent);
 
     setstartdir(argv[0]);
@@ -1232,9 +1214,6 @@ int main(int argc, char **argv)
     
     substitute_fonts_p = !opt_val(common_db, "cities", NULL);
 
-    if(opt_val(common_db, "offset", NULL))
-        force_big_offset = true;
-
 #if defined(CYGWIN32)
     if(opt_val(common_db, "die", NULL))
         uninstall_exception_handler();
@@ -1297,7 +1276,7 @@ int main(int argc, char **argv)
     check_arg("napplzones", &mm_n_applzones, 1, /* random */ 255);
 #endif /* !MM_MANY_APPLZONES */
 
-    ROMlib_InitZones(force_big_offset ? offset_big : offset_none);
+    ROMlib_InitZones();
 
 #if SIZEOF_CHAR_P > 4
     /*
