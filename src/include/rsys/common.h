@@ -14,7 +14,6 @@
 #undef USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 #endif
 
-#include "rsys/cruft.h"
 #include "rsys/macros.h"
 #include "rsys/types.h"
 #include "rsys/mactype.h"

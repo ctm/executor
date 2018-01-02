@@ -239,7 +239,6 @@ set(include_sources hintemplate.h
                   include/rsys/commonevt.h
                   include/rsys/cquick.h
                   include/rsys/crc.h
-                  include/rsys/cruft.h
                   include/rsys/ctl.h
                   include/rsys/dcache.h
                   include/rsys/depthconv.h

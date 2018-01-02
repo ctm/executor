@@ -15,8 +15,6 @@
 
 #if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 
-#include "rsys/cruft.h"
-
 #include <OSUtil.h>
 #include <FileMgr.h>
 

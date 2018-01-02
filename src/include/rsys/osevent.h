@@ -1,7 +1,6 @@
 #if !defined(_RSYS_OSEVENT_H_)
 #define _RSYS_OSEVENT_H_
 
-/* #include "rsys/cruft.h" This include shouldn't be necessary */
 namespace Executor
 {
 extern INTEGER ROMlib_mods;
