@@ -414,7 +414,7 @@ extern trap OSErr C_SndDisposeChannel(SndChannelPtr chanp,
 PASCAL_TRAP(SndDisposeChannel, 0xA801);
 extern void C_FinaleUnknown1(void);
 extern OSErr C_FinaleUnknown2(ResType, LONGINT, Ptr, Ptr);
-extern long C_DirectorUnknown3(void);
+extern LONGINT C_DirectorUnknown3(void);
 extern INTEGER C_DirectorUnknown4(ResType, INTEGER, Ptr, Ptr);
 }
 #endif /* __SOUNDMGR__ */

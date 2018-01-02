@@ -241,7 +241,6 @@ set(include_sources hintemplate.h
                   include/rsys/crc.h
                   include/rsys/cruft.h
                   include/rsys/ctl.h
-                  include/rsys/ctopflags.h
                   include/rsys/dcache.h
                   include/rsys/depthconv.h
                   include/rsys/desk.h
@@ -313,7 +312,6 @@ set(include_sources hintemplate.h
                   include/rsys/process.h
                   include/rsys/PSstrings.h
                   include/rsys/pstuff.h
-                  include/rsys/ptocflags.h
                   include/rsys/qcolor.h
                   include/rsys/quick.h
                   include/rsys/rawblt.h

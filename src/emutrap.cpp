@@ -66,7 +66,7 @@ PUBLIC syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t
     Point points[11];
     int point_count = 0;
 #endif
-    uint64_t magic;
+    uint64_t magic = infop->magic;
     int count, rettype;
     void *funcp;
     int sizeflag;
@@ -87,18 +87,6 @@ PUBLIC syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t
     count = 0;
 
     retaddr = POPADDR();
-    switch(infop->magic)
-    {
-        case PTOC_A10_MAGIC:
-            magic = PTOC_SPECIAL_A10_VALUE;
-            break;
-        case PTOC_A11_MAGIC:
-            magic = PTOC_SPECIAL_A11_VALUE;
-            break;
-        default:
-            magic = infop->magic;
-            break;
-    }
 
     rettype = magic & 7;
     magic >>= 3;
@@ -472,25 +460,11 @@ is_routine_descriptor_ptr(uint16_t *addr)
 }
 #endif
 
-PUBLIC uintptr_t Executor::CToPascalCall(void *wheretogo, uint64_t magic_in, ...)
+PUBLIC uintptr_t Executor::CToPascalCall(void *wheretogo, uint64_t magic, ...)
 {
     va_list ap;
     uintptr_t retval;
-    uint64_t magic;
-
-    switch(magic_in)
-    {
-        case CTOP_A10_MAGIC:
-            magic = CTOP_SPECIAL_A10_VALUE;
-            break;
-        case CTOP_A11_MAGIC:
-            magic = CTOP_SPECIAL_A11_VALUE;
-            break;
-        default:
-            magic = magic_in;
-            break;
-    }
-    va_start(ap, magic_in);
+    va_start(ap, magic);
 
 #if defined(powerpc) || defined(__ppc__)
     if(is_routine_descriptor_ptr(wheretogo))

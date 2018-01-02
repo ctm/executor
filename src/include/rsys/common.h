@@ -31,8 +31,6 @@
 #include "rsys/lowglobals.h"
 #endif
 
-#include "rsys/ctopflags.h"
-#include "rsys/ptocflags.h"
 #include "rsys/trapglue.h"
 
 #if !defined(COMPILE_FOR_BUILD)

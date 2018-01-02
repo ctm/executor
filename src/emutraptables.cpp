@@ -10,7 +10,6 @@
 #include "SysErr.h"
 
 #include "rsys/trapglue.h"
-#include "rsys/ptocflags.h"
 #include "rsys/stdfile.h"
 #include "rsys/tesave.h"
 #include "rsys/resource.h"

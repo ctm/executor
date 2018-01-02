@@ -434,7 +434,7 @@ P4(PUBLIC, pascal trap OSErr, FinaleUnknown2, ResType, arg1, LONGINT, arg2,
 /* various self-running demos (made by Macromedia Director, I think)
    seem to call this */
 
-P0(PUBLIC, pascal trap long, DirectorUnknown3)
+P0(PUBLIC, pascal trap LONGINT, DirectorUnknown3)
 {
     warning_sound_log(NULL_STRING);
     return 0;

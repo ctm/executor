@@ -406,11 +406,10 @@ _do_selector_table(uint32_t selector,
 
 #define PTOCBLOCK(name)               \
     {                                 \
-        (void *)C_##name, PTOC_##name \
+        (void *)C_##name, ptoc(&C_##name) \
     }
 
-#define C_ZERO (nullptr)
-#define PTOC_ZERO (0)
+#define ZERO_PTOCBLOCK {nullptr, 0}
 
 PRIVATE ptocblock_t scriptptoc0[] = {
     PTOCBLOCK(FontScript), /* 0 FontScript */
@@ -432,11 +431,11 @@ PRIVATE ptocblock_t scriptptoc0[] = {
     PTOCBLOCK(MeasureJust), /* 0x20 */
 
     PTOCBLOCK(ParseTable), /* 0x22 */
-    PTOCBLOCK(ZERO), /* PortionText 0x24 */
+    ZERO_PTOCBLOCK, /* PortionText 0x24 */
     PTOCBLOCK(FindScriptRun), /* 0x26 */
     PTOCBLOCK(VisibleLength), /* 0x28 */
-    PTOCBLOCK(ZERO), /* IsSpecialFont 0x2A */
-    PTOCBLOCK(ZERO), /* RawPrinterValues 0x2C */
+    ZERO_PTOCBLOCK, /* IsSpecialFont 0x2A */
+    ZERO_PTOCBLOCK, /* RawPrinterValues 0x2C */
     PTOCBLOCK(PixelToChar), /* 0x2E */
     PTOCBLOCK(CharToPixel), /* 0x30 */
     PTOCBLOCK(DrawJustified), /* 0x32 */
@@ -460,13 +459,13 @@ PRIVATE ptocblock_t scriptptoc1[] = {
     PTOCBLOCK(Str2Format), /* 0xec */
     PTOCBLOCK(ToggleDate), /* 0xee */
 #else
-    PTOCBLOCK(ZERO), /* 0xDE */
+    ZERO_PTOCBLOCK, /* 0xDE */
     PTOCBLOCK(TruncString), /* 0xE0 */
-    PTOCBLOCK(ZERO), /* 0xE2 */
-    PTOCBLOCK(ZERO), /* 0xE4 */
+    ZERO_PTOCBLOCK, /* 0xE2 */
+    ZERO_PTOCBLOCK, /* 0xE4 */
     PTOCBLOCK(StringToExtended), /* 0xE6 */
     PTOCBLOCK(ExtendedToString), /* 0xE8 */
-    PTOCBLOCK(ZERO), /* 0xEA */
+    ZERO_PTOCBLOCK, /* 0xEA */
     PTOCBLOCK(StringToFormatRec), /* 0xEC */
     PTOCBLOCK(ToggleDate), /* 0xEE */
 #endif
@@ -482,8 +481,8 @@ PRIVATE ptocblock_t scriptptoc1[] = {
     PTOCBLOCK(IntlTokenize), /* 0xfa */
     PTOCBLOCK(GetFormatOrder), /* 0xfc */
 #else
-    PTOCBLOCK(ZERO), /* 0xFA */
-    PTOCBLOCK(ZERO), /* 0xFC */
+    ZERO_PTOCBLOCK, /* 0xFA */
+    ZERO_PTOCBLOCK, /* 0xFC */
 #endif
     PTOCBLOCK(StyledLineBreak), /* 0xFE */
 
@@ -498,13 +497,13 @@ PRIVATE selectorblock_t scriptutil_block[] = {
 PRIVATE ptocblock_t high_scriptutil_ptoc0[] = {
     PTOCBLOCK(CharacterByteType), /* 0x10; 0xc2060010 */
     PTOCBLOCK(CharacterType), /* 0x12; 0xC2060012 */
-    PTOCBLOCK(ZERO), /* 0x14 */
-    PTOCBLOCK(ZERO), /* 0x16 */
+    ZERO_PTOCBLOCK, /* 0x14 */
+    ZERO_PTOCBLOCK, /* 0x16 */
     PTOCBLOCK(TransliterateText), /* 0x18; 0xC20E0018 */
-    PTOCBLOCK(ZERO), /* 0x1A */
-    PTOCBLOCK(ZERO), /* 0x1C */
-    PTOCBLOCK(ZERO), /* 0x1E */
-    PTOCBLOCK(ZERO), /* 0x20 */
+    ZERO_PTOCBLOCK, /* 0x1A */
+    ZERO_PTOCBLOCK, /* 0x1C */
+    ZERO_PTOCBLOCK, /* 0x1E */
+    ZERO_PTOCBLOCK, /* 0x20 */
     PTOCBLOCK(FillParseTable), /* 0x22; 0xC2040022 */
 #if 0
   GetScriptUtilityAddress /* 0x38; 0xC4040038 */
@@ -612,12 +611,12 @@ STUB(TEDispatch)
 PRIVATE ptocblock_t fontdispatch_ptoc[] = {
     PTOCBLOCK(IsOutline), /* 0x0 */
     PTOCBLOCK(SetOutlinePreferred), /* 0x1 */
-    PTOCBLOCK(ZERO), /* 0x2 */
-    PTOCBLOCK(ZERO), /* 0x3 */
-    PTOCBLOCK(ZERO), /* 0x4 */
-    PTOCBLOCK(ZERO), /* 0x5 */
-    PTOCBLOCK(ZERO), /* 0x6 */
-    PTOCBLOCK(ZERO), /* 0x7 */
+    ZERO_PTOCBLOCK, /* 0x2 */
+    ZERO_PTOCBLOCK, /* 0x3 */
+    ZERO_PTOCBLOCK, /* 0x4 */
+    ZERO_PTOCBLOCK, /* 0x5 */
+    ZERO_PTOCBLOCK, /* 0x6 */
+    ZERO_PTOCBLOCK, /* 0x7 */
     PTOCBLOCK(OutlineMetrics), /* 0x8 */
     PTOCBLOCK(GetOutlinePreferred), /* 0x9 */
     PTOCBLOCK(SetPreserveGlyph), /* 0xA */
@@ -860,17 +859,17 @@ STUB(NMRemove)
 
 PRIVATE ptocblock_t alias_dispatch_ptoc[] = {
     PTOCBLOCK(FindFolder), /* 00 */
-    PTOCBLOCK(ZERO),
+    ZERO_PTOCBLOCK,
     PTOCBLOCK(NewAlias), /* 02 */
     PTOCBLOCK(ResolveAlias), /* 03 */
-    PTOCBLOCK(ZERO),
+    ZERO_PTOCBLOCK,
     PTOCBLOCK(MatchAlias), /* 05 */
     PTOCBLOCK(UpdateAlias), /* 06 */
     PTOCBLOCK(GetAliasInfo), /* 07 */
     PTOCBLOCK(NewAliasMinimal), /* 08 */
     PTOCBLOCK(NewAliasMinimalFromFullPath), /* 09 */
-    PTOCBLOCK(ZERO),
-    PTOCBLOCK(ZERO),
+    ZERO_PTOCBLOCK,
+    ZERO_PTOCBLOCK,
     PTOCBLOCK(ResolveAliasFile), /* 0C */
 };
 
@@ -907,7 +906,7 @@ PRIVATE ptocblock_t pack4ptoc[] = {
     PTOCBLOCK(ROMlib_FsqrtX), /* 12 */
     PTOCBLOCK(ROMlib_FnextX), /* 13 */
     PTOCBLOCK(ROMlib_FrintX), /* 14 */
-    PTOCBLOCK(ZERO), /* 15 */
+    ZERO_PTOCBLOCK, /* 15 */
     PTOCBLOCK(ROMlib_FtintX), /* 16 */
     PTOCBLOCK(ROMlib_Fprocentry), /* 17 */
     PTOCBLOCK(ROMlib_FscalbX), /* 18 */
@@ -1014,7 +1013,7 @@ STUB(Pack0)
 PRIVATE ptocblock_t osdispatch_ptoc0[] = {
     PTOCBLOCK(TempMaxMem), /* 0x0015 */
     PTOCBLOCK(TempTopMem), /* 0x0016 */
-    PTOCBLOCK(ZERO), /* 0x0017 */
+    ZERO_PTOCBLOCK, /* 0x0017 */
     PTOCBLOCK(TempFreeMem), /* 0x0018 */
 };
 
@@ -1206,7 +1205,7 @@ STUB(Pack12)
 
 PRIVATE ptocblock_t palette_dispatch_ptoc_1[] = {
     PTOCBLOCK(Entry2Index), /* 0x00 */
-    PTOCBLOCK(ZERO), /* 0x01 */
+    ZERO_PTOCBLOCK, /* 0x01 */
     PTOCBLOCK(RestoreClutDevice), /* 0x02 */
     PTOCBLOCK(ResizePalette), /* 0x03 */
 };
@@ -1216,14 +1215,14 @@ PRIVATE ptocblock_t palette_dispatch_ptoc_2[] = {
     PTOCBLOCK(SaveBack), /* 0x40E */
     PTOCBLOCK(RestoreFore), /* 0x40F */
     PTOCBLOCK(RestoreBack), /* 0x410 */
-    PTOCBLOCK(ZERO), /* 0x11 */
-    PTOCBLOCK(ZERO), /* 0x12 */
+    ZERO_PTOCBLOCK, /* 0x11 */
+    ZERO_PTOCBLOCK, /* 0x12 */
     PTOCBLOCK(SetDepth), /* 0xA13 */
     PTOCBLOCK(HasDepth), /* 0xA14 */
     PTOCBLOCK(PMgrVersion), /* 0x15 */
     PTOCBLOCK(SetPaletteUpdates), /* 0x616 */
     PTOCBLOCK(GetPaletteUpdates), /* 0x417 */
-    PTOCBLOCK(ZERO), /* 0x18 */
+    ZERO_PTOCBLOCK, /* 0x18 */
     PTOCBLOCK(GetGray), /* 0x1219 */
 };
 
@@ -1443,24 +1442,24 @@ PRIVATE ptocblock_t pack11_ptoc0[] = {
 PRIVATE ptocblock_t pack11_ptoc1[] = {
     PTOCBLOCK(UnRegisterSection), /* 0x0206 */
     PTOCBLOCK(IsRegisteredSection), /* 0x0208 */
-    PTOCBLOCK(ZERO), /* 0x020A */
-    PTOCBLOCK(ZERO), /* 0x020C */
-    PTOCBLOCK(ZERO), /* 0x020E */
+    ZERO_PTOCBLOCK, /* 0x020A */
+    ZERO_PTOCBLOCK, /* 0x020C */
+    ZERO_PTOCBLOCK, /* 0x020E */
     PTOCBLOCK(DeleteEditionContainerFile) /* 0x0210 */
 };
 
 PRIVATE ptocblock_t pack11_ptoc2[] = {
     PTOCBLOCK(GoToPublisherSection), /* 0x0224 */
     PTOCBLOCK(GetLastEditionContainerUsed), /* 0x0226 */
-    PTOCBLOCK(ZERO), /* 0x0228 */
+    ZERO_PTOCBLOCK, /* 0x0228 */
     PTOCBLOCK(GetEditionOpenerProc), /* 0x022A */
     PTOCBLOCK(SetEditionOpenerProc), /* 0x022C */
-    PTOCBLOCK(ZERO), /* 0x022E */
-    PTOCBLOCK(ZERO), /* 0x0230 */
+    ZERO_PTOCBLOCK, /* 0x022E */
+    ZERO_PTOCBLOCK, /* 0x0230 */
     PTOCBLOCK(NewSubscriberDialog), /* 0x0232 */
-    PTOCBLOCK(ZERO), /* 0x0234 */
+    ZERO_PTOCBLOCK, /* 0x0234 */
     PTOCBLOCK(NewPublisherDialog), /* 0x0236 */
-    PTOCBLOCK(ZERO), /* 0x0238 */
+    ZERO_PTOCBLOCK, /* 0x0238 */
     PTOCBLOCK(SectionOptionsDialog), /* 0x023A */
 };
 
@@ -1470,8 +1469,8 @@ PRIVATE ptocblock_t pack11_ptoc3[] = {
 
 PRIVATE ptocblock_t pack11_ptoc4[] = {
     PTOCBLOCK(AssociateSection), /* 0x040C */
-    PTOCBLOCK(ZERO), /* 0x040E */
-    PTOCBLOCK(ZERO), /* 0x0410 */
+    ZERO_PTOCBLOCK, /* 0x040E */
+    ZERO_PTOCBLOCK, /* 0x0410 */
     PTOCBLOCK(OpenEdition), /* 0x0412 */
 };
 
@@ -1494,16 +1493,16 @@ PRIVATE ptocblock_t pack11_ptoc8[] = {
 
 PRIVATE ptocblock_t pack11_ptoc9[] = {
     PTOCBLOCK(EditionHasFormat), /* 0x0618 */
-    PTOCBLOCK(ZERO), /* 0x061A */
-    PTOCBLOCK(ZERO), /* 0x061C */
+    ZERO_PTOCBLOCK, /* 0x061A */
+    ZERO_PTOCBLOCK, /* 0x061C */
     PTOCBLOCK(GetEditionFormatMark), /* 0x061E */
     PTOCBLOCK(SetEditionFormatMark), /* 0x0620 */
 };
 
 PRIVATE ptocblock_t pack11_ptoc10[] = {
     PTOCBLOCK(OpenNewEdition), /* 0x0814 */
-    PTOCBLOCK(ZERO), /* 0x0816 */
-    PTOCBLOCK(ZERO), /* 0x0818 */
+    ZERO_PTOCBLOCK, /* 0x0816 */
+    ZERO_PTOCBLOCK, /* 0x0818 */
     PTOCBLOCK(ReadEdition), /* 0x081A */
     PTOCBLOCK(WriteEdition), /* 0x081C */
 };
@@ -1631,7 +1630,7 @@ PRIVATE ptocblock_t balloon_ptoc[] = {
     PTOCBLOCK(HMGetBalloons), /* 0x0003, */
     PTOCBLOCK(HMSetBalloons), /* 0x0104, */
     PTOCBLOCK(HMShowMenuBalloon), /* 0x0e05, */
-    PTOCBLOCK(ZERO), /* PTOCBLOCK (HMGetIndHelpMsg),		/ * 0x1306, */
+    ZERO_PTOCBLOCK, /* PTOCBLOCK (HMGetIndHelpMsg),		/ * 0x1306, */
     PTOCBLOCK(HMIsBalloon), /* 0x0007, */
     PTOCBLOCK(HMSetFont), /* 0x0108, */
     PTOCBLOCK(HMSetFontSize), /* 0x0109, */
@@ -1643,7 +1642,7 @@ PRIVATE ptocblock_t balloon_ptoc[] = {
     PTOCBLOCK(HMGetMenuResID), /* 0x040f, */
     PTOCBLOCK(HMScanTemplateItems), /* 0x0410, */
     PTOCBLOCK(HMExtractHelpMsg), /* 0x0711, */
-    PTOCBLOCK(ZERO), /* 0x0012, */
+    ZERO_PTOCBLOCK, /* 0x0012, */
     PTOCBLOCK(HMGetDialogResID), /* 0x0213, */
     PTOCBLOCK(HMGetMenuResID), /* 0x0314, */
     PTOCBLOCK(HMGetBalloonWindow), /* 0x0215, */
@@ -1884,16 +1883,16 @@ PRIVATE ptocblock_t prglueptoc[] = {
     PTOCBLOCK(PrValidate), /* 10 */
     PTOCBLOCK(PrJobMerge), /* 11 */
     PTOCBLOCK(PrPicFile), /* 12 */
-    PTOCBLOCK(ZERO), /* 13 */
+    ZERO_PTOCBLOCK, /* 13 */
     PTOCBLOCK(PrGeneral), /* 14 */
-    PTOCBLOCK(ZERO), /* 15 */
+    ZERO_PTOCBLOCK, /* 15 */
     PTOCBLOCK(PrDrvrOpen), /* 16 */
     PTOCBLOCK(PrDrvrClose), /* 17 */
     PTOCBLOCK(PrDrvrDCE), /* 18 */
     PTOCBLOCK(PrDrvrVers), /* 19 */
     PTOCBLOCK(PrCtlCall), /* 20 */
-    PTOCBLOCK(ZERO /*PrPurge*/), /* 21 */
-    PTOCBLOCK(ZERO /*PrNoPurge*/), /* 22 */
+    ZERO_PTOCBLOCK /*PrPurge*/, /* 21 */
+    ZERO_PTOCBLOCK /*PrNoPurge*/, /* 22 */
     PTOCBLOCK(PrError), /* 23 */
     PTOCBLOCK(PrSetError), /* 24 */
     PTOCBLOCK(PrOpen), /* 25 */
