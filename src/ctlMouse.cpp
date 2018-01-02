@@ -56,7 +56,7 @@ find_control_helper(Point p, ControlHandle c,
 }
 
 PUBLIC pascal trap INTEGER Executor::C_FindControl(Point p, /* IMI-323 */
-   WindowPtr w, GUEST<ControlHandle> * cp)
+                                                   WindowPtr w, GUEST<ControlHandle> *cp)
 {
     INTEGER retval;
 
@@ -67,7 +67,6 @@ PUBLIC pascal trap INTEGER Executor::C_FindControl(Point p, /* IMI-323 */
 }
 
 typedef pascal void (*actionp)(ControlHandle c, INTEGER part);
-
 
 PRIVATE inline void CALLACTION(ControlHandle ch, INTEGER inpart, ProcPtr a)
 {
@@ -83,7 +82,7 @@ PRIVATE inline void CALLACTION(ControlHandle ch, INTEGER inpart, ProcPtr a)
 }
 
 PUBLIC pascal trap INTEGER Executor::C_TrackControl(/* IMI-323 */
-   ControlHandle c, Point p, ProcPtr a)
+                                                    ControlHandle c, Point p, ProcPtr a)
 {
     INTEGER partstart, inpart;
     EventRecord ev;
@@ -214,7 +213,7 @@ done:;
 }
 
 PUBLIC pascal trap INTEGER Executor::C_TestControl(/* IMI-325 */
-   ControlHandle c, Point p)
+                                                   ControlHandle c, Point p)
 {
     int16_t retval;
 

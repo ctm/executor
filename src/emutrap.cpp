@@ -42,11 +42,11 @@ using namespace Executor;
  *
  */
 
-#define SYN68K_TO_US_CHECK0_CHECKNEG1(addr)                                   \
-    ({                                                                        \
-        syn68k_addr_t __t;                                                    \
-                                                                              \
-        __t = addr;                                                           \
+#define SYN68K_TO_US_CHECK0_CHECKNEG1(addr)                                     \
+    ({                                                                          \
+        syn68k_addr_t __t;                                                      \
+                                                                                \
+        __t = addr;                                                             \
         (__t == (syn68k_addr_t)-1) ? (uint16_t *)-1 : SYN68K_TO_US_CHECK0(__t); \
     })
 

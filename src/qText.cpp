@@ -121,7 +121,7 @@ PUBLIC pascal trap INTEGER Executor::C_TextWidth(Ptr tb, INTEGER fb, INTEGER bc)
         / ((LONGINT)CW(dp.h) << 8);
 }
 
-PUBLIC pascal trap void Executor::C_GetFontInfo(FontInfo * ip)
+PUBLIC pascal trap void Executor::C_GetFontInfo(FontInfo *ip)
 {
     GUEST<Point> pn, pd;
 

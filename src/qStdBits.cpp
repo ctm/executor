@@ -489,7 +489,7 @@ void Executor::StdBitsPicSaveFlag(BitMap *src_bogo_map,
 }
 
 PUBLIC pascal trap void Executor::C_StdBits(/* destination is alawys the current port */
-   BitMap * src_bogo_map, const Rect * src_rect, const Rect * dst_rect, INTEGER mode, RgnHandle mask)
+                                            BitMap *src_bogo_map, const Rect *src_rect, const Rect *dst_rect, INTEGER mode, RgnHandle mask)
 {
     StdBitsPicSaveFlag(src_bogo_map, src_rect, dst_rect, mode, mask, true);
 }

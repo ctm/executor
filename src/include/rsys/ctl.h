@@ -57,11 +57,11 @@ extern CTabHandle default_ctl_ctab;
 extern GUEST<AuxCtlHandle> *lookup_aux_ctl(ControlHandle ctl);
 
 extern int32_t C_cdef0(int16_t var, ControlHandle ctl, int16_t mess,
-                     int32_t param);
+                       int32_t param);
 extern int32_t C_cdef16(int16_t var, ControlHandle ctl, int16_t mess,
-                      int32_t param);
-extern int32_t C_cdef1008(int16_t var, ControlHandle ctl, int16_t mess,
                         int32_t param);
+extern int32_t C_cdef1008(int16_t var, ControlHandle ctl, int16_t mess,
+                          int32_t param);
 
 #define VAR(w) (GetCVariant((w)))
 

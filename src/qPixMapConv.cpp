@@ -510,7 +510,7 @@ void Executor::convert_pixmap(const PixMap *src, PixMap *dst,
                 target_itab = (ITabHandle)NewHandle(sizeof(ITab));
                 ITAB_SEED_X(target_itab) = CLC(-1);
             }
-// FIXME: #warning ctm added questionable caching here
+            // FIXME: #warning ctm added questionable caching here
             if(target_table != cached_target_table || ITAB_SEED_X(target_itab) != CTAB_SEED_X(target_table))
             {
                 MakeITable(target_table, target_itab, DEFAULT_ITABLE_RESOLUTION);

@@ -132,7 +132,7 @@ bool Executor::vdriver_set_mode(int width, int height, int bpp, bool grayscale_p
         default:
             std::abort();
     }
-    
+
     vdriver_fbuf = new uint8_t[vdriver_width * vdriver_height * 4];
 
 #if 1
@@ -266,8 +266,6 @@ static bool isModifier(unsigned char virt, uint16_t *modstore)
     return true;
 }
 
-
-
 void Executor::vdriver_pump_events()
 {
     SDL_Event event;
@@ -346,7 +344,7 @@ void Executor::vdriver_pump_events()
             break;
             case SDL_WINDOWEVENT_FOCUS_GAINED:
                 //if(!we_lost_clipboard())
-                    sendresumeevent(false);
+                sendresumeevent(false);
                 //else
                 //{
                 //    ZeroScrap();
@@ -364,8 +362,7 @@ void Executor::vdriver_pump_events()
     }
 }
 
-void
-Executor::ROMlib_SetTitle(char *title)
+void Executor::ROMlib_SetTitle(char *title)
 {
 }
 
@@ -376,8 +373,7 @@ Executor::ROMlib_GetTitle(void)
     return str;
 }
 
-void
-Executor::ROMlib_FreeTitle(char *title)
+void Executor::ROMlib_FreeTitle(char *title)
 {
 }
 

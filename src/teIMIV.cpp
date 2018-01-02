@@ -16,7 +16,7 @@
 using namespace Executor;
 
 PUBLIC pascal trap void Executor::C_TEPinScroll(int16_t dh, /* IMIV-57 */
-   int16_t dv, TEHandle te)
+                                                int16_t dv, TEHandle te)
 {
     Rect *view_rect;
     Rect *dest_rect;
@@ -149,7 +149,7 @@ PUBLIC pascal trap void Executor::C_TESelView(TEHandle teh) /* IMIV-57 */
 }
 
 PUBLIC pascal trap void Executor::C_TEAutoView(BOOLEAN autoflag, /* IMIV-57 */
-   TEHandle teh)
+                                               TEHandle teh)
 {
     if(autoflag)
         STARH(TEHIDDENH(teh))->flags.raw_or(CLC(TEAUTOVIEWBIT));

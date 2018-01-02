@@ -285,7 +285,7 @@ create_directory(INTEGER sys_vref, LONGINT sys_dirid, const char *sub_dirp,
     return paramErr;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FindFolder(int16_t vRefNum, OSType folderType, Boolean createFolder, GUEST<int16_t> * foundVRefNum, GUEST<int32_t> * foundDirID)
+PUBLIC pascal trap OSErr Executor::C_FindFolder(int16_t vRefNum, OSType folderType, Boolean createFolder, GUEST<int16_t> *foundVRefNum, GUEST<int32_t> *foundDirID)
 {
     OSErr retval;
     const char *sub_dir;
@@ -356,7 +356,7 @@ PUBLIC pascal trap OSErr Executor::C_FindFolder(int16_t vRefNum, OSType folderTy
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_NewAlias(FSSpecPtr fromFile, FSSpecPtr target, GUEST<AliasHandle> * alias)
+PUBLIC pascal trap OSErr Executor::C_NewAlias(FSSpecPtr fromFile, FSSpecPtr target, GUEST<AliasHandle> *alias)
 {
     OSErr retval;
 
@@ -367,7 +367,7 @@ PUBLIC pascal trap OSErr Executor::C_NewAlias(FSSpecPtr fromFile, FSSpecPtr targ
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_UpdateAlias(FSSpecPtr fromFile, FSSpecPtr target, AliasHandle alias, Boolean * wasChanged)
+PUBLIC pascal trap OSErr Executor::C_UpdateAlias(FSSpecPtr fromFile, FSSpecPtr target, AliasHandle alias, Boolean *wasChanged)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
@@ -387,7 +387,7 @@ enum
  * alias is supplied either.
  */
 
-PUBLIC pascal trap OSErr Executor::C_ResolveAlias(FSSpecPtr fromFile, AliasHandle alias, FSSpecPtr target, Boolean * wasAliased)
+PUBLIC pascal trap OSErr Executor::C_ResolveAlias(FSSpecPtr fromFile, AliasHandle alias, FSSpecPtr target, Boolean *wasAliased)
 {
     OSErr retval;
     alias_head_t *headp;
@@ -416,7 +416,7 @@ PUBLIC pascal trap OSErr Executor::C_ResolveAlias(FSSpecPtr fromFile, AliasHandl
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_ResolveAliasFile(FSSpecPtr theSpec, Boolean resolveAliasChains, Boolean * targetIsFolder, Boolean * wasAliased)
+PUBLIC pascal trap OSErr Executor::C_ResolveAliasFile(FSSpecPtr theSpec, Boolean resolveAliasChains, Boolean *targetIsFolder, Boolean *wasAliased)
 {
     HParamBlockRec hpb;
     OSErr retval;
@@ -439,7 +439,7 @@ PUBLIC pascal trap OSErr Executor::C_ResolveAliasFile(FSSpecPtr theSpec, Boolean
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_MatchAlias(FSSpecPtr fromFile, int32_t rulesMask, AliasHandle alias, int16_t * aliasCount, FSSpecArrayPtr aliasList, Boolean * needsUpdate, AliasFilterProcPtr aliasFilter, Ptr yourDataPtr)
+PUBLIC pascal trap OSErr Executor::C_MatchAlias(FSSpecPtr fromFile, int32_t rulesMask, AliasHandle alias, int16_t *aliasCount, FSSpecArrayPtr aliasList, Boolean *needsUpdate, AliasFilterProcPtr aliasFilter, Ptr yourDataPtr)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
@@ -659,7 +659,7 @@ FULL_PATH_TAG, path_len, fullPath,
 TAIL_TAG     , sizeof (tail)-2, &tail.weird_info)
 */
 
-PUBLIC pascal trap OSErr Executor::C_NewAliasMinimalFromFullPath(INTEGER path_len, Ptr fullPath, Str32 zoneName, Str31 serverName, GUEST<AliasHandle> * ahp)
+PUBLIC pascal trap OSErr Executor::C_NewAliasMinimalFromFullPath(INTEGER path_len, Ptr fullPath, Str32 zoneName, Str31 serverName, GUEST<AliasHandle> *ahp)
 {
     OSErr retval;
 
@@ -698,7 +698,7 @@ PUBLIC pascal trap OSErr Executor::C_NewAliasMinimalFromFullPath(INTEGER path_le
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_NewAliasMinimal(FSSpecPtr fsp, GUEST<AliasHandle> * ahp)
+PUBLIC pascal trap OSErr Executor::C_NewAliasMinimal(FSSpecPtr fsp, GUEST<AliasHandle> *ahp)
 {
     HParamBlockRec hpb;
     OSErr retval;

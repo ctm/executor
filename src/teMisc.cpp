@@ -24,7 +24,7 @@
 using namespace Executor;
 
 int16_t nextbreak(TEHandle teh, int16_t off, int16_t len,
-                int16_t max_width);
+                  int16_t max_width);
 
 #if ERROR_SUPPORTED_P(ERROR_TEXT_EDIT_SLAM)
 void Executor::ROMlib_sledgehammer_te(TEHandle te)
@@ -168,7 +168,7 @@ PUBLIC void Executor::SetClikLoop(ProcPtr cp, TEHandle teh)
     TE_SLAM(teh);
 }
 
-PUBLIC INTEGER Executor::ROMlib_wordb(char * p) /* INTERNAL */
+PUBLIC INTEGER Executor::ROMlib_wordb(char *p) /* INTERNAL */
 {
     return (U(*p) <= 0x20);
 }
@@ -176,7 +176,7 @@ PUBLIC INTEGER Executor::ROMlib_wordb(char * p) /* INTERNAL */
 #define MYWORDB(p) (U(p) <= 0x20)
 
 int16_t nextbreak(TEHandle teh, int16_t off, int16_t len,
-                int16_t max_width)
+                  int16_t max_width)
 {
     char *sp, *ep;
     char *minsp, *maxsp;

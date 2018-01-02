@@ -2827,7 +2827,7 @@ MakeDataExecutable(void *p, uint32_t len)
 {
     warning_trace_info("%p %d", p, len);
     warning_unimplemented("need to call mprotect here");
-// FIXME: #warning need to call mprotect here
+    // FIXME: #warning need to call mprotect here
 }
 
 PRIVATE map_entry_t
@@ -6555,7 +6555,7 @@ ROMlib_GetInterfaceLib(Str63 library, OSType arch, LoadFlags loadflags,
 #if !defined(CFM_PROBLEMS)
         cid = ROMlib_new_connection(1);
 #else
-// FIXME: #warning "Can't do the right thing without CFM"
+        // FIXME: #warning "Can't do the right thing without CFM"
         cid = 0;
 #endif
         if(!cid)

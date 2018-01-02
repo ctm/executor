@@ -1023,7 +1023,7 @@ PUBLIC pascal LONGINT Executor::C_wdef0(INTEGER varcode, WindowPtr window, INTEG
             if(!WINDOW_VISIBLE_X(w))
                 return 0;
             PenNormal();
-            
+
             switch(varcode)
             {
                 case documentProc:
@@ -1053,7 +1053,7 @@ PUBLIC pascal LONGINT Executor::C_wdef0(INTEGER varcode, WindowPtr window, INTEG
                     draw_alt_dialog_box((GrafPtr)w);
                     break;
             }
-            
+
             break;
         case wHit:
             switch(varcode)
@@ -1074,7 +1074,7 @@ PUBLIC pascal LONGINT Executor::C_wdef0(INTEGER varcode, WindowPtr window, INTEG
                 case documentProc:
                 case noGrowDocProc:
                 case movableDBoxProc:
-// FIXME: #warning TODO: correct frame for movableDBoxProc (toolbox essentials 4-10)
+                    // FIXME: #warning TODO: correct frame for movableDBoxProc (toolbox essentials 4-10)
                     calc_doc((GrafPtr)w);
                     break;
                 case dBoxProc:
@@ -1115,9 +1115,9 @@ PUBLIC pascal LONGINT Executor::C_wdef0(INTEGER varcode, WindowPtr window, INTEG
                 DisposHandle(WINDOW_DATA(w));
             break;
         case wGrow:
-            
+
             draw_grow_lines((Rect *)SYN68K_TO_US(parm));
-            
+
             break;
         case wDrawGIcon:
         {
@@ -1139,7 +1139,6 @@ PUBLIC pascal LONGINT Executor::C_wdef0(INTEGER varcode, WindowPtr window, INTEG
             SectRgn(PORT_CLIP_REGION(thePort), temp_rgn,
                     PORT_CLIP_REGION(thePort));
 
-            
             if(varcode == documentProc)
             {
                 if(WINDOW_HILITED_X(w))
@@ -1147,7 +1146,6 @@ PUBLIC pascal LONGINT Executor::C_wdef0(INTEGER varcode, WindowPtr window, INTEG
                 else
                     erase_grow_icon((GrafPtr)w);
             }
-            
 
             CopyRgn(save_clip, PORT_CLIP_REGION(thePort));
 
@@ -1322,7 +1320,7 @@ PUBLIC pascal LONGINT Executor::C_wdef16(INTEGER varcode, WindowPtr wp, INTEGER 
         case wDraw:
             if(!WINDOW_VISIBLE_X(w))
                 break;
-            
+
             switch(param)
             {
                 case 0:
@@ -1333,7 +1331,7 @@ PUBLIC pascal LONGINT Executor::C_wdef16(INTEGER varcode, WindowPtr wp, INTEGER 
                     toggle_go_away_box((GrafPtr)w);
                     break;
             }
-            
+
             break;
 
         case wHit:

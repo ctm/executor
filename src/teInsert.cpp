@@ -22,7 +22,7 @@
 using namespace Executor;
 
 int16_t Executor::ROMlib_StyleTextWidth(TEPtr tep,
-                                      int16_t start, int16_t count)
+                                        int16_t start, int16_t count)
 {
     Handle hText;
     SignedByte hText_flags;
@@ -410,7 +410,7 @@ void te_draw(TEPtr tep,
 							    screen */
     SectRect (view_rect, vis_rect, clip_rect);
 #else
-// FIXME: #warning this section of code should be cleaned up
+        // FIXME: #warning this section of code should be cleaned up
         SectRect(view_rect, view_rect, clip_rect);
 #endif
 
@@ -794,7 +794,7 @@ DONE:
    for calling conventions, see IM Text, 2-63 */
 
 PUBLIC int16_t Executor::C_ROMlib_dotext(TEPtr tep, /* INTERNAL */
-   int16_t start, int16_t end, int16_t what)
+                                         int16_t start, int16_t end, int16_t what)
 {
     if(what == teHilite)
         te_hilite(tep, start, end);

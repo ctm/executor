@@ -34,7 +34,7 @@ PRIVATE void rect2value(Rect *in, Rect *butnotin,
 PRIVATE void rectvalue(Rect *rp, INTEGER value,
                        ListHandle list, BOOLEAN hiliteempty);
 
-PRIVATE void findcell(GUEST<Cell> * cp, ListHandle list)
+PRIVATE void findcell(GUEST<Cell> *cp, ListHandle list)
 {
     cp->h = CW((CW(cp->h) - Hx(list, rView.left)) / Hx(list, cellSize.h) + Hx(list, visible.left));
     cp->v = CW((CW(cp->v) - Hx(list, rView.top)) / Hx(list, cellSize.v) + Hx(list, visible.top));
@@ -91,7 +91,7 @@ PRIVATE void setselectnilflag(BOOLEAN setit, Cell cell, ListHandle list, BOOLEAN
     }
 }
 
-PRIVATE void rectvalue(Rect * rp, INTEGER value, ListHandle list, BOOLEAN hiliteempty)
+PRIVATE void rectvalue(Rect *rp, INTEGER value, ListHandle list, BOOLEAN hiliteempty)
 {
     GUEST<INTEGER> *ip, *ep;
     GUEST<INTEGER> *sp;
@@ -115,7 +115,7 @@ PRIVATE void rectvalue(Rect * rp, INTEGER value, ListHandle list, BOOLEAN hilite
     LISTEND(list);
 }
 
-PRIVATE void rect2value(Rect * in, Rect * butnotin, INTEGER value, ListHandle list, BOOLEAN hiliteempty)
+PRIVATE void rect2value(Rect *in, Rect *butnotin, INTEGER value, ListHandle list, BOOLEAN hiliteempty)
 {
     GUEST<INTEGER> *ip;
     Cell c;
@@ -195,7 +195,7 @@ static inline BOOLEAN ROMlib_CALLCLICK(clickproc fp)
 #endif /* BINCOMPAT */
 
 PUBLIC pascal trap BOOLEAN Executor::C_LClick(Point pt, /* IMIV-273 */
-   INTEGER mods, ListHandle list)
+                                              INTEGER mods, ListHandle list)
 {
     ControlHandle ch, scrollh, scrollv;
     struct
@@ -224,7 +224,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_LClick(Point pt, /* IMIV-273 */
     doubleclick = false;
     if(PtInRect(pt, &HxX(list, rView)))
     {
-        
+
         flags = Hx(list, selFlags);
         newcell.h = CW(pt.h);
         newcell.v = CW(pt.v);
@@ -448,7 +448,6 @@ PUBLIC pascal trap BOOLEAN Executor::C_LClick(Point pt, /* IMIV-273 */
                 }
             }
         } while(!OSEventAvail(mUpMask, &evt) && (GlobalToLocal(&evt.where), true));
-        
     }
     else if(((ch = HxP(list, hScroll)) && PtInRect(pt, &HxX(ch, contrlRect))) || ((ch = HxP(list, vScroll)) && PtInRect(pt, &HxX(ch, contrlRect))))
     {
@@ -470,7 +469,7 @@ PUBLIC pascal trap LONGINT Executor::C_LLastClick(ListHandle list) /* IMIV-273 *
 }
 
 PUBLIC pascal trap void Executor::C_LSetSelect(BOOLEAN setit, /* IMIV-273 */
-   Cell cell, ListHandle list)
+                                               Cell cell, ListHandle list)
 {
     setselectnilflag(setit, cell, list, true);
 }

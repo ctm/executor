@@ -221,7 +221,7 @@ PUBLIC pascal trap void Executor::C_ShowWindow(WindowPtr w)
         /*-->*/ return;
     if(!WINDOW_VISIBLE_X(w))
     {
-        
+
         ShowHide(w, true);
         if(FrontWindow() == w && !WINDOW_HILITED_X(w))
         {
@@ -234,7 +234,6 @@ PUBLIC pascal trap void Executor::C_ShowWindow(WindowPtr w)
             HiliteWindow((WindowPtr)t, false);
             CurDeactive = RM((WindowPtr)t);
         }
-        
     }
 }
 

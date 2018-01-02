@@ -14,7 +14,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_StdRect(GrafVerb v, Rect * rp)
+PUBLIC pascal trap void Executor::C_StdRect(GrafVerb v, Rect *rp)
 {
     RgnHandle rh, rh2;
     PAUSEDECL;

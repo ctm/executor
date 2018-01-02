@@ -23,16 +23,16 @@
 #include "i386_djgpp_version.h"
 
 #define SWAP16_FUNC_DEFN            \
-    inline uint16_t                   \
-    swap16(uint16_t n)                \
+    inline uint16_t                 \
+    swap16(uint16_t n)              \
     {                               \
         return (n >> 8) | (n << 8); \
     }
 
 #if defined(ALWAYS_ON_I486)
 #define SWAP32_FUNC_DEFN                                           \
-    inline uint32_t                                                  \
-    swap32(uint32_t n)                                               \
+    inline uint32_t                                                \
+    swap32(uint32_t n)                                             \
     {                                                              \
         /* We can use bswap on the i486, but never on the i386. */ \
         __asm__("bswap %k0"                                        \
@@ -42,8 +42,8 @@
     }
 #else /* !ALWAYS_ON_I486 */
 #define SWAP32_FUNC_DEFN           \
-    inline uint32_t                  \
-    swap32(uint32_t n)               \
+    inline uint32_t                \
+    swap32(uint32_t n)             \
     {                              \
         __asm__("rorw $8,%w0\n\t"  \
                 "rorl $16,%k0\n\t" \

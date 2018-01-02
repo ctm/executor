@@ -217,7 +217,7 @@ ROMlib_new_dialog_common(DialogPtr dp,
         HxX(aux_win_h, dialogCItem) = RM(item_color_table_h);
     }
 
-// FIXME: #warning We no longer call TEStylNew, this helps LB password
+    // FIXME: #warning We no longer call TEStylNew, this helps LB password
 
     ThePortGuard guard((GrafPtr)dp);
 
@@ -285,7 +285,7 @@ ROMlib_new_dialog_common(DialogPtr dp,
 
 /* IM-MTE calls this NewColorDialog () */
 PUBLIC pascal trap CDialogPtr Executor::C_NewCDialog(Ptr storage, /* IMI-412 */
-   Rect * bounds, StringPtr title, BOOLEAN visible_p, INTEGER proc_id, WindowPtr behind, BOOLEAN go_away_flag, LONGINT ref_con, Handle items)
+                                                     Rect *bounds, StringPtr title, BOOLEAN visible_p, INTEGER proc_id, WindowPtr behind, BOOLEAN go_away_flag, LONGINT ref_con, Handle items)
 {
     return (CDialogPtr)ROMlib_new_dialog_common((DialogPtr)storage,
                                                 /* color */ true, NULL, NULL,
@@ -295,7 +295,7 @@ PUBLIC pascal trap CDialogPtr Executor::C_NewCDialog(Ptr storage, /* IMI-412 */
 }
 
 PUBLIC pascal trap DialogPtr Executor::C_NewDialog(Ptr storage, /* IMI-412 */
-   Rect * bounds, StringPtr title, BOOLEAN visible_p, INTEGER proc_id, WindowPtr behind, BOOLEAN go_away_flag, LONGINT ref_con, Handle items)
+                                                   Rect *bounds, StringPtr title, BOOLEAN visible_p, INTEGER proc_id, WindowPtr behind, BOOLEAN go_away_flag, LONGINT ref_con, Handle items)
 {
     return ROMlib_new_dialog_common((DialogPtr)storage,
                                     /* not color */ false, NULL, NULL,
@@ -369,7 +369,7 @@ void Executor::dialog_compute_rect(Rect *dialog_rect, Rect *dst_rect,
 }
 
 PUBLIC pascal trap DialogPtr Executor::C_GetNewDialog(INTEGER id, /* IMI-413 */
-   Ptr dst, WindowPtr behind)
+                                                      Ptr dst, WindowPtr behind)
 {
     dlogh dialog_res_h;
     Handle dialog_item_list_res_h;

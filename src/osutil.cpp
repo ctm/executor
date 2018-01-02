@@ -35,7 +35,7 @@ using namespace Executor;
  *	 Hence, the handle that hp points to is not swapped.
  */
 
-PUBLIC trap OSErrRET Executor::HandToHand(Handle * hp)
+PUBLIC trap OSErrRET Executor::HandToHand(Handle *hp)
 {
     Handle nh;
     Size s;
@@ -65,7 +65,7 @@ PUBLIC trap OSErrRET Executor::HandToHand(Handle * hp)
  *	 h points to isn't swapped.
  */
 
-PUBLIC trap OSErrRET Executor::PtrToHand(Ptr p, Handle * h, LONGINT s)
+PUBLIC trap OSErrRET Executor::PtrToHand(Ptr p, Handle *h, LONGINT s)
 {
     Handle nh;
     OSErr err;
@@ -204,7 +204,7 @@ PRIVATE unsigned char order[256] = {
     0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF,
 };
 
-PUBLIC LONGINT Executor::ROMlib_RelString(unsigned char * s1, unsigned char * s2, BOOLEAN casesig, BOOLEAN diacsig, LONGINT d0)
+PUBLIC LONGINT Executor::ROMlib_RelString(unsigned char *s1, unsigned char *s2, BOOLEAN casesig, BOOLEAN diacsig, LONGINT d0)
 {
     INTEGER n1, n2;
     unsigned char *s, *t;
@@ -282,7 +282,7 @@ PUBLIC trap BOOLEANRET Executor::EqualString(StringPtr s1, StringPtr s2, BOOLEAN
     return RelString(s1, s2, casesig, diacsig) ? false : true;
 }
 
-PUBLIC int Executor::ROMlib_strcmp(const Byte * s1, const Byte * s2) /* INTERNAL */
+PUBLIC int Executor::ROMlib_strcmp(const Byte *s1, const Byte *s2) /* INTERNAL */
 {
     int n1 = U(s1[0]), n2 = U(s2[0]);
     unsigned char *p1 = (unsigned char *)s1 + 1,
@@ -326,7 +326,7 @@ PUBLIC trap void Executor::UprString(StringPtr s, BOOLEAN diac)
     ROMlib_UprString(s + 1, diac, (INTEGER)(unsigned char)s[0]);
 }
 
-PUBLIC void Executor::GetDateTime(GUEST<ULONGINT> * mactimepointer)
+PUBLIC void Executor::GetDateTime(GUEST<ULONGINT> *mactimepointer)
 {
 #undef Time /* Why is this here? */
     if(mactimepointer)
@@ -339,7 +339,7 @@ PUBLIC void Executor::GetDateTime(GUEST<ULONGINT> * mactimepointer)
     }
 }
 
-PUBLIC trap OSErrRET Executor::ReadDateTime(GUEST<ULONGINT> * secs)
+PUBLIC trap OSErrRET Executor::ReadDateTime(GUEST<ULONGINT> *secs)
 {
     GetDateTime(secs);
     return (noErr);
@@ -358,7 +358,7 @@ PUBLIC trap OSErrRET Executor::SetDateTime(ULONGINT mactime)
     else
         return (noErr);
 #else /* defined(SYSV) */
-// FIXME: #warning "SetDateTime not implemented"
+    // FIXME: #warning "SetDateTime not implemented"
     return clkWrErr;
 #endif /* defined(SYSV) */
 }
@@ -598,7 +598,7 @@ Executor::date_to_swapped_fields(long long mactime, GUEST<INTEGER> *yearp, GUEST
  * NOTE: not callable from the outside world directly
  */
 
-PUBLIC trap void Executor::Date2Secs(DateTimeRec * d, ULONGINT * s)
+PUBLIC trap void Executor::Date2Secs(DateTimeRec *d, ULONGINT *s)
 {
     long long l;
 
@@ -607,14 +607,14 @@ PUBLIC trap void Executor::Date2Secs(DateTimeRec * d, ULONGINT * s)
     *s = (ULONGINT)l;
 }
 
-PUBLIC trap void Executor::Secs2Date(ULONGINT mactime, DateTimeRec * d)
+PUBLIC trap void Executor::Secs2Date(ULONGINT mactime, DateTimeRec *d)
 {
     date_to_swapped_fields((unsigned long)mactime, &d->year, &d->month,
                            &d->day, &d->hour, &d->minute, &d->second,
                            &d->dayOfWeek, 0, 0);
 }
 
-PUBLIC void Executor::GetTime(DateTimeRec * d)
+PUBLIC void Executor::GetTime(DateTimeRec *d)
 {
     GUEST<ULONGINT> secs;
 
@@ -622,7 +622,7 @@ PUBLIC void Executor::GetTime(DateTimeRec * d)
     Secs2Date(CL(secs), d);
 }
 
-PUBLIC void Executor::SetTime(DateTimeRec * d)
+PUBLIC void Executor::SetTime(DateTimeRec *d)
 {
     ULONGINT secs;
 
@@ -649,7 +649,7 @@ PRIVATE void setdefaults()
     SPMisc2 = 0x4C;
 }
 
-PRIVATE OSErr openparam(INTEGER * rnp)
+PRIVATE OSErr openparam(INTEGER *rnp)
 {
     static char paramname[] = PARAMRAMMACNAME;
     OSErr err;
@@ -838,7 +838,7 @@ PUBLIC LONGINT Executor::NGetTrapAddress(INTEGER n, INTEGER ttype) /* IMII-384 *
 #if !defined(BINCOMPAT)
 
 PUBLIC void Executor::SetTrapAddress(LONGINT addr, /* IMII-384 NOT SUPPORTED */
-   INTEGER n)
+                                     INTEGER n)
 {
 }
 #endif
@@ -861,7 +861,7 @@ PUBLIC void Executor::C_ROMlib_wakeup()
 
 /* argument n is in 1/60ths of a second */
 
-PUBLIC trap void Executor::Delay(LONGINT n, LONGINT * ftp) /* IMII-384 */
+PUBLIC trap void Executor::Delay(LONGINT n, LONGINT *ftp) /* IMII-384 */
 {
     if(n > 0)
     {
@@ -952,7 +952,7 @@ PUBLIC char Executor::ROMlib_phoneyrom[10] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0x06, 0x7C,
 };
 
-PUBLIC trap void Executor::Environs(GUEST<INTEGER> * rom, GUEST<INTEGER> * machine)
+PUBLIC trap void Executor::Environs(GUEST<INTEGER> *rom, GUEST<INTEGER> *machine)
 {
     unsigned char rom8, rom9;
 
@@ -964,7 +964,6 @@ PUBLIC trap void Executor::Environs(GUEST<INTEGER> * rom, GUEST<INTEGER> * machi
 }
 
 INTEGER ROMlib_processor = env68040;
-
 
 PUBLIC trap OSErrRET Executor::SysEnvirons(INTEGER vers, SysEnvRecPtr p)
 {
@@ -994,12 +993,12 @@ PUBLIC void Executor::RestoreA5()
 
 #define TRUE32b 1
 
-PUBLIC void Executor::GetMMUMode(GUEST<INTEGER> * ip) /* IMV-592 */
+PUBLIC void Executor::GetMMUMode(GUEST<INTEGER> *ip) /* IMV-592 */
 {
     *ip = CWC(TRUE32b);
 }
 
-PUBLIC void Executor::SwapMMUMode(Byte * bp) /* IMV-593 */
+PUBLIC void Executor::SwapMMUMode(Byte *bp) /* IMV-593 */
 {
     *bp = CB(TRUE32b);
 }

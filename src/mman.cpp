@@ -906,11 +906,11 @@ bad:
     SET_MEM_ERR(memFullErr);
 }
 
-#define HANDLE_IN_ZONE_P(handle, z)                  \
+#define HANDLE_IN_ZONE_P(handle, z)          \
     ((uintptr_t)(handle) >= (uintptr_t)MR(z) \
      && (uintptr_t)(handle) < (uintptr_t)ZONE_BK_LIM(MR(z)))
 
-#define PTR_IN_ZONE_P(ptr, z)                     \
+#define PTR_IN_ZONE_P(ptr, z)             \
     ((uintptr_t)(ptr) >= (uintptr_t)MR(z) \
      && (uintptr_t)(ptr) <= (uintptr_t)ZONE_BK_LIM(MR(z)))
 
@@ -1029,7 +1029,7 @@ _RecoverHandle_flags(Ptr p, bool sys_p)
     else
     {
         h = 0;
-// FIXME: #warning FIND OUT WHAT A REAL MAC DOES HERE
+        // FIXME: #warning FIND OUT WHAT A REAL MAC DOES HERE
     }
     return h;
 }
@@ -1274,7 +1274,7 @@ void SetPtrSize(Ptr p, Size newsize)
             /* First try and grow it forward */
             if(ROMlib_makespace(&nextblock, newsize - oldpsize))
             {
-// FIXME: #warning original code was endian-inconsistent
+                // FIXME: #warning original code was endian-inconsistent
                 ZONE_ZCB_FREE_X(current_zone)
                     = CL(ZONE_ZCB_FREE(current_zone) - PSIZE(nextblock));
 

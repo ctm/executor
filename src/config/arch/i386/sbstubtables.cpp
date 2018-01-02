@@ -126,53 +126,41 @@ const void **srcblt_noshift_stubs ARRAY[8] = { CURLY
                                                or_noshift_noseg_table,
                                                xor_noshift_noseg_table, notand_noshift_noseg_table,
                                                notcopy_noshift_noseg_table, notor_noshift_noseg_table,
-                                               notxor_noshift_noseg_table, and_noshift_noseg_table
-}
-;
+                                               notxor_noshift_noseg_table, and_noshift_noseg_table };
 
 const void **srcblt_noshift_fgbk_stubs ARRAY[8] = { CURLY
                                                         copy_noshift_fgbk_noseg_table,
                                                     or_noshift_fgbk_noseg_table,
                                                     xor_noshift_noseg_table, notand_noshift_fgbk_noseg_table,
                                                     notcopy_noshift_fgbk_noseg_table, notor_noshift_fgbk_noseg_table,
-                                                    notxor_noshift_noseg_table, and_noshift_fgbk_noseg_table
-}
-;
+                                                    notxor_noshift_noseg_table, and_noshift_fgbk_noseg_table };
 
 const void **srcblt_shift_i486_stubs ARRAY[8] = { CURLY
                                                       copy_shift_i486_noseg_table,
                                                   or_shift_i486_noseg_table,
                                                   xor_shift_i486_noseg_table, notand_shift_i486_noseg_table,
                                                   notcopy_shift_i486_noseg_table, notor_shift_i486_noseg_table,
-                                                  notxor_shift_i486_noseg_table, and_shift_i486_noseg_table
-}
-;
+                                                  notxor_shift_i486_noseg_table, and_shift_i486_noseg_table };
 
 const void **srcblt_shift_i386_stubs ARRAY[8] = { CURLY
                                                       copy_shift_i386_noseg_table,
                                                   or_shift_i386_noseg_table,
                                                   xor_shift_i386_noseg_table, notand_shift_i386_noseg_table,
                                                   notcopy_shift_i386_noseg_table, notor_shift_i386_noseg_table,
-                                                  notxor_shift_i386_noseg_table, and_shift_i386_noseg_table
-}
-;
+                                                  notxor_shift_i386_noseg_table, and_shift_i386_noseg_table };
 
 const void **srcblt_shift_fgbk_i486_stubs ARRAY[8] = { CURLY
                                                            copy_shift_fgbk_i486_noseg_table,
                                                        or_shift_fgbk_i486_noseg_table,
                                                        xor_shift_i486_noseg_table, notand_shift_fgbk_i486_noseg_table,
                                                        notcopy_shift_fgbk_i486_noseg_table, notor_shift_fgbk_i486_noseg_table,
-                                                       notxor_shift_i486_noseg_table, and_shift_fgbk_i486_noseg_table
-}
-;
+                                                       notxor_shift_i486_noseg_table, and_shift_fgbk_i486_noseg_table };
 
 const void **srcblt_shift_fgbk_i386_stubs ARRAY[8] = { CURLY
                                                            copy_shift_fgbk_i386_noseg_table,
                                                        or_shift_fgbk_i386_noseg_table,
                                                        xor_shift_i386_noseg_table, notand_shift_fgbk_i386_noseg_table,
                                                        notcopy_shift_fgbk_i386_noseg_table, notor_shift_fgbk_i386_noseg_table,
-                                                       notxor_shift_i386_noseg_table, and_shift_fgbk_i386_noseg_table
-}
-;
+                                                       notxor_shift_i386_noseg_table, and_shift_fgbk_i386_noseg_table };
 
 #endif /* !USE_PORTABLE_SRCBLT */

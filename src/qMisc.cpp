@@ -20,7 +20,7 @@ using namespace Executor;
 static BOOLEAN EquivRect(Rect *, Rect *);
 static INTEGER fromhex(char c);
 
-PRIVATE BOOLEAN EquivRect(Rect * rp1, Rect * rp2)
+PRIVATE BOOLEAN EquivRect(Rect *rp1, Rect *rp2)
 {
     return Cx(rp1->bottom) - Cx(rp1->top) == Cx(rp2->bottom) - Cx(rp2->top) && Cx(rp1->right) - Cx(rp1->left) == Cx(rp2->right) - Cx(rp2->left);
 }
@@ -97,7 +97,7 @@ PUBLIC pascal trap void Executor::C_StuffHex(Ptr p, StringPtr s)
         *p = (*p & 0xF) | (fromhex(*sp) << 4);
 }
 
-PUBLIC pascal trap void Executor::C_ScalePt(GUEST<Point> * pt, Rect * srcr, Rect * dstr)
+PUBLIC pascal trap void Executor::C_ScalePt(GUEST<Point> *pt, Rect *srcr, Rect *dstr)
 {
     INTEGER srcdh, srcdv, dstdh, dstdv;
 
@@ -118,7 +118,7 @@ PUBLIC pascal trap void Executor::C_ScalePt(GUEST<Point> * pt, Rect * srcr, Rect
     }
 }
 
-PUBLIC pascal trap void Executor::C_MapPt(GUEST<Point> * pt, Rect * srcr, Rect * dstr)
+PUBLIC pascal trap void Executor::C_MapPt(GUEST<Point> *pt, Rect *srcr, Rect *dstr)
 {
     INTEGER srcdh, srcdv, dstdh, dstdv;
 
@@ -135,7 +135,7 @@ PUBLIC pascal trap void Executor::C_MapPt(GUEST<Point> * pt, Rect * srcr, Rect *
     pt->v = CW(CW(pt->v) + (Cx(dstr->top)));
 }
 
-PUBLIC pascal trap void Executor::C_MapRect(Rect * r, Rect * srcr, Rect * dstr)
+PUBLIC pascal trap void Executor::C_MapRect(Rect *r, Rect *srcr, Rect *dstr)
 {
     MapPt((GUEST<Point> *)&r->top, srcr, dstr);
     MapPt((GUEST<Point> *)&r->bottom, srcr, dstr);
@@ -146,7 +146,7 @@ PUBLIC pascal trap void Executor::C_MapRect(Rect * r, Rect * srcr, Rect * dstr)
 #define MAPV(y) (y = UNFIX((y - yoff1) * ycoff) + yoff2)
 #define UNFIX(x) ((x) >> 16)
 
-PUBLIC pascal trap void Executor::C_MapRgn(RgnHandle rh, Rect * srcr, Rect * dstr)
+PUBLIC pascal trap void Executor::C_MapRgn(RgnHandle rh, Rect *srcr, Rect *dstr)
 {
     GUEST<INTEGER> *ip, *op, *saveop;
     INTEGER oldv, newv, *tempp, srcdh, dstdh, srcdv, dstdv;
@@ -249,7 +249,7 @@ PUBLIC pascal trap void Executor::C_MapRgn(RgnHandle rh, Rect * srcr, Rect * dst
     }
 }
 
-PUBLIC pascal trap void Executor::C_MapPoly(PolyHandle poly, Rect * srcr, Rect * dstr)
+PUBLIC pascal trap void Executor::C_MapPoly(PolyHandle poly, Rect *srcr, Rect *dstr)
 {
     GUEST<Point> *ip, *ep;
 

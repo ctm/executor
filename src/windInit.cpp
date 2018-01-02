@@ -170,7 +170,7 @@ Executor may die without warning because of this mismatch",
                     int i;
 
                     std::replace(warning_file.begin(), warning_file.end(), '/', '\\');
-                    
+
                     sprintf(buf, "From DOS or Windows, please read the "
                                  "file \"%s\".  "
                                  "If you don't, Executor won't be "
@@ -272,12 +272,12 @@ Executor may die without warning because of this mismatch",
     }
 }
 
-PUBLIC pascal trap void Executor::C_GetWMgrPort(GUEST<GrafPtr> * wp)
+PUBLIC pascal trap void Executor::C_GetWMgrPort(GUEST<GrafPtr> *wp)
 {
     *wp = WMgrPort;
 }
 
-PUBLIC pascal trap void Executor::C_GetCWMgrPort(GUEST<CGrafPtr> * wp)
+PUBLIC pascal trap void Executor::C_GetCWMgrPort(GUEST<CGrafPtr> *wp)
 {
     *wp = WMgrCPort;
 }
@@ -447,7 +447,7 @@ ROMlib_new_window_common(WindowPeek w,
     SetPort(save_port);
 }
 
-PUBLIC pascal trap WindowPtr Executor::C_NewWindow(Ptr window_storage, Rect * bounds, StringPtr title, BOOLEAN visible_p, INTEGER proc_id, WindowPtr behind, BOOLEAN go_away_flag, LONGINT ref_con)
+PUBLIC pascal trap WindowPtr Executor::C_NewWindow(Ptr window_storage, Rect *bounds, StringPtr title, BOOLEAN visible_p, INTEGER proc_id, WindowPtr behind, BOOLEAN go_away_flag, LONGINT ref_con)
 {
     WindowPeek w;
     int allocated_p = 0;
@@ -468,7 +468,7 @@ PUBLIC pascal trap WindowPtr Executor::C_NewWindow(Ptr window_storage, Rect * bo
 
 #define DARK_CASTLE_HACK
 #if defined(DARK_CASTLE_HACK)
-// FIXME: #warning DARK_CASTLE_HACK
+            // FIXME: #warning DARK_CASTLE_HACK
             if(strncmp((char *)title + 1, "Modal", 5) == 0)
                 size = sizeof(DialogRecord);
             else
@@ -488,7 +488,7 @@ PUBLIC pascal trap WindowPtr Executor::C_NewWindow(Ptr window_storage, Rect * bo
     return (WindowPtr)w;
 }
 
-PUBLIC pascal trap CWindowPtr Executor::C_NewCWindow(Ptr window_storage, Rect * bounds, StringPtr title, BOOLEAN visible_p, INTEGER proc_id, CWindowPtr behind, BOOLEAN go_away_flag, LONGINT ref_con)
+PUBLIC pascal trap CWindowPtr Executor::C_NewCWindow(Ptr window_storage, Rect *bounds, StringPtr title, BOOLEAN visible_p, INTEGER proc_id, CWindowPtr behind, BOOLEAN go_away_flag, LONGINT ref_con)
 {
     WindowPeek w;
     int allocated_p = 0;
@@ -639,7 +639,7 @@ PUBLIC pascal trap void Executor::C_CloseWindow(WindowPtr w)
     }
 
 #if defined(NOTAGOODIDEA)
-// FIXME: #warning "what the hell does this mean?! DANGER WILL ROBINSON!"
+    // FIXME: #warning "what the hell does this mean?! DANGER WILL ROBINSON!"
     Cx (*(Ptr *)Cx)(((WindowPeek)w)->windowDefProc) = 0;
     DisposHandle(Cx(((WindowPeek)w)->windowDefProc));
 #endif /* NOTAGOODIDEA */

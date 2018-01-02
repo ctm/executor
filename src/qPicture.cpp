@@ -100,7 +100,7 @@ PUBLIC PicHandle Executor::ROMlib_OpenPicture_helper(const Rect *pf,
     return (ph);
 }
 
-PUBLIC pascal trap PicHandle Executor::C_OpenPicture(Rect * pf)
+PUBLIC pascal trap PicHandle Executor::C_OpenPicture(Rect *pf)
 {
     PicHandle retval;
 

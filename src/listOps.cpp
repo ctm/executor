@@ -11,8 +11,8 @@
 
 using namespace Executor;
 
-PUBLIC GUEST<INTEGER> * Executor::ROMlib_getoffp(Cell cell, /* INTERNAL */
-   ListHandle list)
+PUBLIC GUEST<INTEGER> *Executor::ROMlib_getoffp(Cell cell, /* INTERNAL */
+                                                ListHandle list)
 {
     Rect *rp;
     INTEGER ncols;
@@ -108,19 +108,19 @@ PRIVATE void cellhelper(AddOrRep addorrep, Ptr dp, INTEGER dl, Cell cell, ListHa
 }
 
 PUBLIC pascal trap void Executor::C_LAddToCell(Ptr dp, INTEGER dl, /* IMIV-272 */
-   Cell cell, ListHandle list)
+                                               Cell cell, ListHandle list)
 {
     cellhelper(Add, dp, dl, cell, list);
 }
 
 PUBLIC pascal trap void Executor::C_LClrCell(Cell cell, /* IMIV-272 */
-   ListHandle list)
+                                             ListHandle list)
 {
     cellhelper(Rep, (Ptr)0, 0, cell, list);
 }
 
-PUBLIC pascal trap void Executor::C_LGetCell(Ptr dp, GUEST<INTEGER> * dlp, /* IMIV-272 */
-   Cell cell, ListHandle list)
+PUBLIC pascal trap void Executor::C_LGetCell(Ptr dp, GUEST<INTEGER> *dlp, /* IMIV-272 */
+                                             Cell cell, ListHandle list)
 {
     GUEST<INTEGER> *ip;
     INTEGER off1, off2;
@@ -139,13 +139,13 @@ PUBLIC pascal trap void Executor::C_LGetCell(Ptr dp, GUEST<INTEGER> * dlp, /* IM
 }
 
 PUBLIC pascal trap void Executor::C_LSetCell(Ptr dp, INTEGER dl, /* IMIV-272 */
-   Cell cell, ListHandle list)
+                                             Cell cell, ListHandle list)
 {
     cellhelper(Rep, dp, dl, cell, list);
 }
 
 PUBLIC pascal trap void Executor::C_LCellSize(Point csize, /* IMIV-273 */
-   ListHandle list)
+                                              ListHandle list)
 {
     ListPtr lp;
     GrafPtr gp;
@@ -199,7 +199,7 @@ PUBLIC pascal trap void Executor::C_LCellSize(Point csize, /* IMIV-273 */
 }
 
 PUBLIC pascal trap BOOLEAN Executor::C_LGetSelect(BOOLEAN next, /* IMIV-273 */
-   GUEST<Cell> * cellp, ListHandle list)
+                                                  GUEST<Cell> *cellp, ListHandle list)
 {
     GUEST<INTEGER> *ip, *ep;
     INTEGER nint, ncols, rown, coln;

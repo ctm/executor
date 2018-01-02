@@ -75,13 +75,12 @@ struct StandardFileReply
     GUEST<INTEGER> sfReserved2;
 };
 
-typedef UPP<INTEGER (INTEGER item, DialogPtr theDialog)> DlgHookProcPtr;
-typedef UPP<Boolean (CInfoPBPtr pb)> FileFilterProcPtr;
-typedef UPP<INTEGER (INTEGER item, DialogPtr theDialog, void *yourDataPtr)> DlgHookYDProcPtr;
+typedef UPP<INTEGER(INTEGER item, DialogPtr theDialog)> DlgHookProcPtr;
+typedef UPP<Boolean(CInfoPBPtr pb)> FileFilterProcPtr;
+typedef UPP<INTEGER(INTEGER item, DialogPtr theDialog, void *yourDataPtr)> DlgHookYDProcPtr;
 /* ModalFilterYDProcPtr moved to Dialogs.h */
-typedef UPP<Boolean (CInfoPBPtr pb, void *yourDataPtr)> FileFilterYDProcPtr;
-typedef UPP<void (DialogPtr theDialog, INTEGER itemNo, Boolean activating, void *yourDataPtr)> ActivateYDProcPtr;
-
+typedef UPP<Boolean(CInfoPBPtr pb, void *yourDataPtr)> FileFilterYDProcPtr;
+typedef UPP<void(DialogPtr theDialog, INTEGER itemNo, Boolean activating, void *yourDataPtr)> ActivateYDProcPtr;
 
 enum
 {
@@ -142,7 +141,7 @@ extern pascal trap void C_CustomPutFile(Str255 prompt, Str255 defaultName,
                                         ModalFilterYDProcPtr filterproc,
                                         Ptr activeList,
                                         ActivateYDProcPtr activateproc,
-                                        void* yourdatap);
+                                        void *yourdatap);
 PASCAL_FUNCTION(CustomPutFile);
 
 extern pascal trap void C_CustomGetFile(FileFilterYDProcPtr filefilter,
@@ -154,9 +153,8 @@ extern pascal trap void C_CustomGetFile(FileFilterYDProcPtr filefilter,
                                         ModalFilterYDProcPtr filterproc,
                                         Ptr activeList,
                                         ActivateYDProcPtr activateproc,
-                                        void* yourdatap);
+                                        void *yourdatap);
 PASCAL_FUNCTION(CustomGetFile);
-
 }
 
 #endif /* __STDFILE__ */

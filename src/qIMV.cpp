@@ -23,7 +23,7 @@ PUBLIC pascal trap void Executor::C_CharExtra(Fixed Extra) /* IMV-77 */
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC pascal trap void Executor::C_SetStdCProcs(CQDProcs * cProcs) /* IMV-77 */
+PUBLIC pascal trap void Executor::C_SetStdCProcs(CQDProcs *cProcs) /* IMV-77 */
 {
     cProcs->textProc = RM((Ptr)P_StdText);
     cProcs->lineProc = RM((Ptr)P_StdLine);
@@ -47,7 +47,7 @@ PUBLIC pascal trap void Executor::C_SetStdCProcs(CQDProcs * cProcs) /* IMV-77 */
     cProcs->newProc6Proc = RM((Ptr)0) /* ??? */;
 }
 
-PUBLIC pascal trap void Executor::C_GetCPixel(INTEGER h, INTEGER v, RGBColor * pixelp)
+PUBLIC pascal trap void Executor::C_GetCPixel(INTEGER h, INTEGER v, RGBColor *pixelp)
 {
     PixMap temp_pm;
     uint8 temp_fbuf[4];
@@ -125,7 +125,7 @@ PUBLIC pascal trap void Executor::C_GetCPixel(INTEGER h, INTEGER v, RGBColor * p
     }
 }
 
-PUBLIC pascal trap void Executor::C_SetCPixel(INTEGER h, INTEGER v, RGBColor * pixelp)
+PUBLIC pascal trap void Executor::C_SetCPixel(INTEGER h, INTEGER v, RGBColor *pixelp)
 {
     Rect temp_rect;
 
@@ -191,7 +191,7 @@ default_search_proc_stub(syn68k_addr_t dummy_addr, void *dummy)
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_SeedCFill(BitMap * srcbp, BitMap * dstbp, Rect * srcrp, Rect * dstrp, int16_t seedh, int16_t seedv, ProcPtr matchprocp, int32_t matchdata)
+PUBLIC pascal trap void Executor::C_SeedCFill(BitMap *srcbp, BitMap *dstbp, Rect *srcrp, Rect *dstrp, int16_t seedh, int16_t seedv, ProcPtr matchprocp, int32_t matchdata)
 {
     MatchRec mr;
     GUEST<LONGINT> save_ref_con;
@@ -273,7 +273,7 @@ PUBLIC pascal trap void Executor::C_SeedCFill(BitMap * srcbp, BitMap * dstbp, Re
     TEMP_ALLOC_FREE(temp_bitmap2_bits);
 }
 
-PUBLIC pascal trap void Executor::C_CalcCMask(BitMap * srcbp, BitMap * dstbp, Rect * srcrp, Rect * dstrp, RGBColor * seedrgbp, ProcPtr matchprocp, int32_t matchdata)
+PUBLIC pascal trap void Executor::C_CalcCMask(BitMap *srcbp, BitMap *dstbp, Rect *srcrp, Rect *dstrp, RGBColor *seedrgbp, ProcPtr matchprocp, int32_t matchdata)
 {
     MatchRec mr;
     GUEST<LONGINT> save_ref_con;

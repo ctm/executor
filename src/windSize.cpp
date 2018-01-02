@@ -30,7 +30,6 @@ PUBLIC pascal trap void Executor::C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER 
     Rect r;
     WindowPeek w;
 
-    
     w = (WindowPeek)wp;
     gp = thePort;
     if(WINDOW_VISIBLE_X(w))
@@ -153,10 +152,9 @@ PUBLIC pascal trap void Executor::C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER 
     if(front)
         SelectWindow((WindowPtr)w);
     SetPort(gp);
-    
 }
 
-PUBLIC pascal trap void Executor::C_DragWindow(WindowPtr wp, Point p, Rect * rp)
+PUBLIC pascal trap void Executor::C_DragWindow(WindowPtr wp, Point p, Rect *rp)
 {
     RgnHandle rh;
     LONGINT l;
@@ -203,7 +201,7 @@ PUBLIC pascal trap void Executor::C_DragWindow(WindowPtr wp, Point p, Rect * rp)
         SetPort(p);       \
     } while(false)
 
-PUBLIC pascal trap LONGINT Executor::C_GrowWindow(WindowPtr w, Point startp, Rect * rp)
+PUBLIC pascal trap LONGINT Executor::C_GrowWindow(WindowPtr w, Point startp, Rect *rp)
 {
     EventRecord ev;
     GrafPtr gp;

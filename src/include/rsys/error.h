@@ -96,8 +96,8 @@ extern bool error_set_enabled(int err, bool enabled_p);
 extern _NORET_1_ void _gui_fatal(const char *file, int line, const char *fn,
                                  const char *fmt, ...) _NORET_2_;
 
-#define warning_helper(error, type, ...) \
-    _warning(error, type, __FILE__, __LINE__,     \
+#define warning_helper(error, type, ...)      \
+    _warning(error, type, __FILE__, __LINE__, \
              __PRETTY_FUNCTION__, " " __VA_ARGS__)
 
 extern void _warning(int error, const char *type, const char *file, int line,
@@ -105,7 +105,7 @@ extern void _warning(int error, const char *type, const char *file, int line,
     ATTR_FORMAT(printf, 6, 7);
 
 #if ERROR_SUPPORTED_P(ERROR_UNIMPLEMENTED)
-#define warning_unimplemented(...) \
+#define warning_unimplemented(...)          \
     warning_helper(ERROR_UNIMPLEMENTED,     \
                    "unimplemented feature", \
                    __VA_ARGS__)
@@ -114,16 +114,16 @@ extern void _warning(int error, const char *type, const char *file, int line,
 #endif
 
 #if ERROR_SUPPORTED_P(ERROR_UNEXPECTED)
-#define warning_unexpected(...) \
-    warning_helper(ERROR_UNEXPECTED,     \
-                   "unexpected event",   \
+#define warning_unexpected(...)        \
+    warning_helper(ERROR_UNEXPECTED,   \
+                   "unexpected event", \
                    __VA_ARGS__)
 #else
 #define warning_unexpected(fmt, args...)
 #endif
 
 #if ERROR_SUPPORTED_P(ERROR_FILESYSTEM_LOG)
-#define warning_fs_log(...)     \
+#define warning_fs_log(...)              \
     warning_helper(ERROR_FILESYSTEM_LOG, \
                    "filesystem",         \
                    __VA_ARGS__)
@@ -132,18 +132,18 @@ extern void _warning(int error, const char *type, const char *file, int line,
 #endif
 
 #if ERROR_SUPPORTED_P(ERROR_TRACE_INFO)
-#define warning_trace_info(...) \
-    warning_helper(ERROR_TRACE_INFO,     \
-                   "trace info",         \
+#define warning_trace_info(...)      \
+    warning_helper(ERROR_TRACE_INFO, \
+                   "trace info",     \
                    __VA_ARGS__)
 #else
 #define warning_trace_info(fmt, args...)
 #endif
 
 #if ERROR_SUPPORTED_P(ERROR_TRAP_FAILURE)
-#define warning_trap_failure(...) \
-    warning_helper(ERROR_TRAP_FAILURE,     \
-                   "trap failure",         \
+#define warning_trap_failure(...)      \
+    warning_helper(ERROR_TRAP_FAILURE, \
+                   "trap failure",     \
                    __VA_ARGS__)
 #else
 #define warning_trap_failure(fmt, args...)
@@ -159,9 +159,9 @@ extern void _sound_warning(const char *file, int line, const char *fn,
 #endif
 
 #if ERROR_SUPPORTED_P(ERROR_FLOATING_POINT)
-#define warning_floating_point(...) \
-    warning_helper(ERROR_FLOATING_POINT,     \
-                   "FP",                     \
+#define warning_floating_point(...)      \
+    warning_helper(ERROR_FLOATING_POINT, \
+                   "FP",                 \
                    __VA_ARGS__)
 #else
 #define warning_floating_point(fmt, args...)

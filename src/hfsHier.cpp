@@ -134,10 +134,10 @@ PRIVATE OSErr cathelper(CInfoPBPtr pb, BOOLEAN async, catop op)
 
                 pbd->ioACUser = 0;
 
-/* NOTE: IMIV-155 claims that pbd->ioFRefNum is updated, but the Mac+
+                /* NOTE: IMIV-155 claims that pbd->ioFRefNum is updated, but the Mac+
 	 doesn't do the updating */
 
-// FIXME: #warning autc04: something is wrong here - right-shifting a 16-bit field into an 8 bit field is either wrong for big endian or wrong for little endian.
+                // FIXME: #warning autc04: something is wrong here - right-shifting a 16-bit field into an 8 bit field is either wrong for big endian or wrong for little endian.
                 // pbd->ioFlAttrib = drp->dirFlags >> 8;
                 pbd->ioFlAttrib = 0; // but no one will notice if we just return 0
                 // bit 0: directory locked?

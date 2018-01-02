@@ -129,16 +129,16 @@ typedef AEArrayData *AEArrayDataPointer;
 typedef ProcPtr IdleProcPtr;
 typedef ProcPtr EventFilterProcPtr;
 
-typedef UPP<OSErr (AppleEvent *evt, AppleEvent *reply, int32_t refcon)> EventHandlerProcPtr;
-typedef UPP<OSErr (DescType data_type, Ptr data, Size data_size, DescType to_type, int32_t refcon, AEDesc *desc_out)> CoercePtrProcPtr;
-typedef UPP<OSErr (AEDesc *desc, DescType to_type, int32_t refcon, AEDesc *desc_out)> CoerceDescProcPtr;
+typedef UPP<OSErr(AppleEvent *evt, AppleEvent *reply, int32_t refcon)> EventHandlerProcPtr;
+typedef UPP<OSErr(DescType data_type, Ptr data, Size data_size, DescType to_type, int32_t refcon, AEDesc *desc_out)> CoercePtrProcPtr;
+typedef UPP<OSErr(AEDesc *desc, DescType to_type, int32_t refcon, AEDesc *desc_out)> CoerceDescProcPtr;
 
 /* #### internal */
 
 typedef struct AE_hdlr
 {
     GUEST_STRUCT;
-    GUEST<void*> fn;
+    GUEST<void *> fn;
     GUEST<int32_t> refcon;
 } AE_hdlr_t;
 
@@ -306,8 +306,6 @@ enum
 
 /* #### OSL internal */
 extern syn68k_addr_t /*ProcPtr*/ AE_OSL_select_fn;
-
-
 
 /* prototypes go here */
 

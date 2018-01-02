@@ -110,7 +110,7 @@ PUBLIC void Executor::ROMlib_showhidecursor() /* INTERNAL */
         ROMlib_restorecursor();
 }
 
-PUBLIC pascal trap void Executor::C_SetCursor(Cursor * cp)
+PUBLIC pascal trap void Executor::C_SetCursor(Cursor *cp)
 {
     if(current_cursor_valid_p
        && !current_cursor_color_p
@@ -202,7 +202,7 @@ PUBLIC pascal trap void Executor::C_ObscureCursor() /* IMI-168 */
     wewantpointermovements(0);
 }
 
-PUBLIC pascal trap void Executor::C_ShieldCursor(Rect * rp, Point p) /* IMI-474 */
+PUBLIC pascal trap void Executor::C_ShieldCursor(Rect *rp, Point p) /* IMI-474 */
 {
     EventRecord evt;
     Point ep;

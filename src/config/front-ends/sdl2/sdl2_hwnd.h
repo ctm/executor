@@ -4,7 +4,7 @@
 #ifdef WIN32
 namespace Executor
 {
-    HWND getMainSDLWindow();
+HWND getMainSDLWindow();
 }
 #endif
 

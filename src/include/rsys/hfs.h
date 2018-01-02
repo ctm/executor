@@ -350,7 +350,7 @@ typedef struct
 struct wdentry
 {
     GUEST_STRUCT;
-// FIXME: #warning vcbp is stored as a native pointer.
+    // FIXME: #warning vcbp is stored as a native pointer.
     GUEST<HVCBPtr> vcbp; // stored as native pointer!
     GUEST<LONGINT> dirid;
     GUEST<LONGINT> cathint; /* ??? */
@@ -389,7 +389,7 @@ extern INTEGER SCSIFlags;
 
 #define ISWDNUM(v)                                                                     \
     ({                                                                                 \
-        uint16_t _v;                                                                     \
+        uint16_t _v;                                                                   \
                                                                                        \
         _v = (v);                                                                      \
         (_v & WDMASK) == WDMAGIC ? (_v ^ WDMAGIC) % sizeof(wdentry) == sizeof(INTEGER) \

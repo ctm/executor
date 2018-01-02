@@ -98,7 +98,7 @@ PUBLIC pascal trap PicHandle Executor::C_GetWindowPic(WindowPtr w)
  * Note, below we do what the mac does, rather than what IMI-294 says
  */
 
-PUBLIC pascal trap LONGINT Executor::C_PinRect(Rect * r, Point p)
+PUBLIC pascal trap LONGINT Executor::C_PinRect(Rect *r, Point p)
 {
     if(p.h < CW(r->left))
         p.h = CW(r->left);
@@ -112,7 +112,7 @@ PUBLIC pascal trap LONGINT Executor::C_PinRect(Rect * r, Point p)
     return (((LONGINT)p.v << 16) | (unsigned short)p.h);
 }
 
-PUBLIC pascal trap LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect * limit, Rect * slop, INTEGER axis, ProcPtr proc)
+PUBLIC pascal trap LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit, Rect *slop, INTEGER axis, ProcPtr proc)
 {
     RgnHandle rh;
     PenState ps;
@@ -200,7 +200,7 @@ PUBLIC pascal trap LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, R
         return 0x80008000;
 }
 
-PUBLIC pascal trap LONGINT Executor::C_DragGrayRgn(RgnHandle rgn, Point startp, Rect * limit, Rect * slop, INTEGER axis, ProcPtr proc)
+PUBLIC pascal trap LONGINT Executor::C_DragGrayRgn(RgnHandle rgn, Point startp, Rect *limit, Rect *slop, INTEGER axis, ProcPtr proc)
 {
     PATASSIGN(DragPattern, gray);
     return DragTheRgn(rgn, startp, limit, slop, axis, proc);
@@ -218,7 +218,7 @@ PUBLIC pascal trap void Executor::C_ClipAbove(WindowPeek w)
                     PORT_CLIP_REGION(MR(wmgr_port)));
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_CheckUpdate(EventRecord * ev)
+PUBLIC pascal trap BOOLEAN Executor::C_CheckUpdate(EventRecord *ev)
 {
     WindowPeek wp;
     Rect picr;

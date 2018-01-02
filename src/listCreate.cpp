@@ -14,8 +14,8 @@ using namespace Executor;
 
 #define STEF_lActivefix
 
-PUBLIC void Executor::ROMlib_vminmax(INTEGER * minp, /* INTERNAL */
-   INTEGER * maxp, ListPtr lp)
+PUBLIC void Executor::ROMlib_vminmax(INTEGER *minp, /* INTERNAL */
+                                     INTEGER *maxp, ListPtr lp)
 {
     *minp = CW(lp->dataBounds.top);
     *maxp = *minp + CW(lp->dataBounds.bottom) - CW(lp->visible.bottom) + CW(lp->visible.top);
@@ -23,8 +23,8 @@ PUBLIC void Executor::ROMlib_vminmax(INTEGER * minp, /* INTERNAL */
         ++*maxp;
 }
 
-PUBLIC void Executor::ROMlib_hminmax(INTEGER * minp, /* INTERNAL */
-   INTEGER * maxp, ListPtr lp)
+PUBLIC void Executor::ROMlib_hminmax(INTEGER *minp, /* INTERNAL */
+                                     INTEGER *maxp, ListPtr lp)
 {
     *minp = CW(lp->dataBounds.left);
     *maxp = *minp + CW(lp->dataBounds.right) - CW(lp->visible.right) + CW(lp->visible.left);
@@ -95,8 +95,8 @@ check_lists(void)
  * when people were thinking about having the scroll bars within "rview".
  */
 
-PUBLIC pascal trap ListHandle Executor::C_LNew(Rect * rview, /* IMIV-270 */
-   Rect * bounds, Point csize, INTEGER proc, WindowPtr wind, BOOLEAN draw, BOOLEAN grow, BOOLEAN scrollh, BOOLEAN scrollv)
+PUBLIC pascal trap ListHandle Executor::C_LNew(Rect *rview, /* IMIV-270 */
+                                               Rect *bounds, Point csize, INTEGER proc, WindowPtr wind, BOOLEAN draw, BOOLEAN grow, BOOLEAN scrollh, BOOLEAN scrollv)
 {
     ListHandle retval;
     ListPtr lp;
@@ -120,7 +120,6 @@ PUBLIC pascal trap ListHandle Executor::C_LNew(Rect * rview, /* IMIV-270 */
         /*-->*/ return 0; /* spooey list definition proc */
     }
 
-    
     tempdatah = RM((DataHandle)NewHandle(0));
     HxX(retval, cells) = tempdatah;
     HLock((Handle)retval);
@@ -192,7 +191,7 @@ PUBLIC pascal trap ListHandle Executor::C_LNew(Rect * rview, /* IMIV-270 */
     LISTBEGIN(retval);
     LISTCALL(lInitMsg, false, (Rect *)0, *(Cell *)&lp->clikLoc, 0, 0, retval);
     LISTEND(retval);
-    
+
 #if defined(LIST_DEBUG)
     add_list(retval);
 #endif

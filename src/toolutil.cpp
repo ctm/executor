@@ -90,7 +90,7 @@ PUBLIC pascal trap void Executor::C_SetString(StringHandle h, StringPtr s)
 }
 
 PUBLIC Handle Executor::ROMlib_getrestid(ResType rest, /* INTERNAL */
-   INTEGER id)
+                                         INTEGER id)
 {
     Handle retval;
 
@@ -158,7 +158,7 @@ PUBLIC void Executor::GetIndString(StringPtr s, INTEGER sid, INTEGER index)
         ;
 }
 
-PRIVATE int cmpstrings(char * p, char * ep, char * p1, LONGINT len)
+PRIVATE int cmpstrings(char *p, char *ep, char *p1, LONGINT len)
 {
     int retval = true;
 
@@ -238,7 +238,7 @@ DONE:
 }
 #undef RETURN
 
-PUBLIC pascal trap void Executor::C_PackBits(GUEST<Ptr> * sp, GUEST<Ptr> * dp, INTEGER len)
+PUBLIC pascal trap void Executor::C_PackBits(GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
 {
     char *ip, *op, *ep, *erp, *markp, c;
 
@@ -313,7 +313,7 @@ void Executor::unpack_int16_t_bits(GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
     UNPACK_BITS_BODY(int16_t);
 }
 
-PUBLIC pascal trap void Executor::C_UnpackBits(GUEST<Ptr> * sp, GUEST<Ptr> * dp, INTEGER len)
+PUBLIC pascal trap void Executor::C_UnpackBits(GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
 {
     UNPACK_BITS_BODY(int8);
 }
@@ -377,7 +377,7 @@ PUBLIC pascal trap INTEGER Executor::C_LoWord(LONGINT a)
     return (a & 0xFFFF);
 }
 
-PUBLIC pascal trap void Executor::C_LongMul(LONGINT a, LONGINT b, Int64Bit * c)
+PUBLIC pascal trap void Executor::C_LongMul(LONGINT a, LONGINT b, Int64Bit *c)
 {
     int sign;
     ULONGINT ha, hb, la, lb, halb, lahb;
@@ -423,7 +423,7 @@ PUBLIC pascal trap PatHandle Executor::C_GetPattern(INTEGER id)
     return ((PatHandle)ROMlib_getrestid(TICK("PAT "), id));
 }
 
-PUBLIC void Executor::GetIndPattern(Byte * op, INTEGER plistid, INTEGER index)
+PUBLIC void Executor::GetIndPattern(Byte *op, INTEGER plistid, INTEGER index)
 {
     Handle retval;
     char *p, *ep;
@@ -630,7 +630,7 @@ PUBLIC Extended Executor::Fix2X(Fixed x) /* IMIV-65 */
 #define MAXX2FIX MAXLONG2FIX
 #define MINX2FIX MINLONG2FIX
 
-PUBLIC Fixed Executor::X2Fix(Extended * xp) /* IMIV-65 */
+PUBLIC Fixed Executor::X2Fix(Extended *xp) /* IMIV-65 */
 {
     Extended x;
 
@@ -658,7 +658,7 @@ PUBLIC Extended Executor::Frac2X(Fract x) /* IMIV-65 */
 #define BEYONDMAXX2FRAC 2
 #define MINX2FRAC -2
 
-PUBLIC Fract Executor::X2Frac(Extended * xp) /* IMIV-65 */
+PUBLIC Fract Executor::X2Frac(Extended *xp) /* IMIV-65 */
 {
     Extended x;
 
@@ -680,8 +680,8 @@ PUBLIC Fract Executor::X2Frac(Extended * xp) /* IMIV-65 */
 
 #if defined(BINCOMPAT)
 
-PUBLIC trap void Executor::R_Fix2X(void * dummyretpc, Fixed x, /* INTERNAL */
-   extended80 * ret)
+PUBLIC trap void Executor::R_Fix2X(void *dummyretpc, Fixed x, /* INTERNAL */
+                                   extended80 *ret)
 {
 #if 0
     extended96 temp;
@@ -697,8 +697,8 @@ PUBLIC trap void Executor::R_Fix2X(void * dummyretpc, Fixed x, /* INTERNAL */
 #endif
 }
 
-PUBLIC trap void Executor::R_Frac2X(void * dummyretpc, Fract x, /* INTERNAL */
-   extended80 * ret)
+PUBLIC trap void Executor::R_Frac2X(void *dummyretpc, Fract x, /* INTERNAL */
+                                    extended80 *ret)
 {
 #if 0
     extended96 temp;
@@ -714,7 +714,7 @@ PUBLIC trap void Executor::R_Frac2X(void * dummyretpc, Fract x, /* INTERNAL */
 #endif
 }
 
-PUBLIC pascal trap Fixed Executor::C_R_X2Fix(extended80 * x)
+PUBLIC pascal trap Fixed Executor::C_R_X2Fix(extended80 *x)
 {
 #if 0
     extended96 temp;
@@ -732,7 +732,7 @@ PUBLIC pascal trap Fixed Executor::C_R_X2Fix(extended80 * x)
 #endif
 }
 
-PUBLIC pascal trap Fract Executor::C_R_X2Frac(extended80 * x)
+PUBLIC pascal trap Fract Executor::C_R_X2Frac(extended80 *x)
 {
 #if 0
     extended96 temp;

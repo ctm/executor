@@ -46,8 +46,7 @@ typedef enum { Copy,
 PRIVATE void transfer(INTEGER *, INTEGER *, INTEGER, INTEGER, INTEGER, INTEGER, transferop);
 PRIVATE void xSeedFill(unsigned char *, unsigned char *, INTEGER, INTEGER, INTEGER, INTEGER, BOOLEAN, INTEGER, INTEGER);
 
-
-PRIVATE void transfer(INTEGER * srcp, INTEGER * dstp, INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER widthw, transferop op)
+PRIVATE void transfer(INTEGER *srcp, INTEGER *dstp, INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER widthw, transferop op)
 {
     INTEGER sbump, dbump;
     INTEGER *ep0, *ep1;
@@ -119,7 +118,7 @@ PRIVATE void transfer(INTEGER * srcp, INTEGER * dstp, INTEGER srcr, INTEGER dstr
         --cur;                                                     \
     }
 
-PRIVATE void xSeedFill(unsigned char * srcp, unsigned char * dstp, INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width, BOOLEAN useseeds, INTEGER seedh, INTEGER seedv)
+PRIVATE void xSeedFill(unsigned char *srcp, unsigned char *dstp, INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width, BOOLEAN useseeds, INTEGER seedh, INTEGER seedv)
 {
     unsigned char *cur, *savecur, expanded, saveexpanded, seed, *edstp;
     stackentry bogusentry, *topleftp, *toprightp, *bottomleftp, *bottomrightp,
@@ -134,7 +133,6 @@ PRIVATE void xSeedFill(unsigned char * srcp, unsigned char * dstp, INTEGER srcr,
     /* should be a sanity check of seedh and seedv here with just a zering
        of the destrect and early return if they are bad */
 
-    
     transfer((INTEGER *)srcp, (INTEGER *)dstp, srcr, dstr, height, width,
              Copy);
     sp = stack;
@@ -238,7 +236,6 @@ PRIVATE void xSeedFill(unsigned char * srcp, unsigned char * dstp, INTEGER srcr,
                               CW(temprect.left) + (LONGINT)width * 16);
         }
     }
-    
 }
 
 #if defined(VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
@@ -328,7 +325,7 @@ SeedFill_handle_direct_screen_access(uint8 *srcp, uint8 *dstp,
 #endif
 
 PUBLIC pascal trap void Executor::C_SeedFill(Ptr srcp, Ptr dstp, /* IMIV-24 */
-   INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width, INTEGER seedh, INTEGER seedv)
+                                             INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width, INTEGER seedh, INTEGER seedv)
 {
     SeedFill_handle_direct_screen_access((uint8 *)srcp, (uint8 *)dstp,
                                          srcr, dstr,
@@ -336,7 +333,7 @@ PUBLIC pascal trap void Executor::C_SeedFill(Ptr srcp, Ptr dstp, /* IMIV-24 */
 }
 
 PUBLIC pascal trap void Executor::C_CalcMask(Ptr srcp, Ptr dstp, /* IMIV-24 */
-   INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width)
+                                             INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width)
 {
     SeedFill_handle_direct_screen_access((uint8 *)srcp, (uint8 *)dstp,
                                          srcr, dstr,
@@ -412,7 +409,7 @@ copy_mask_1(BitMap *src_bm, BitMap *mask_bm, BitMap *dst_bm,
 }
 
 PUBLIC pascal trap void Executor::C_CopyMask(/* IMIV-24 */
-   BitMap * src_bogo_map, BitMap * mask_bogo_map, BitMap * dst_bogo_map, Rect * src_rect, Rect * mask_rect, Rect * dst_rect)
+                                             BitMap *src_bogo_map, BitMap *mask_bogo_map, BitMap *dst_bogo_map, Rect *src_rect, Rect *mask_rect, Rect *dst_rect)
 {
     BitMap mask_bm;
     void *mask_bits;
@@ -441,7 +438,7 @@ PUBLIC pascal trap void Executor::C_CopyMask(/* IMIV-24 */
     TEMP_ALLOC_FREE(temp_mask_bits);
 }
 
-PUBLIC pascal trap void Executor::C_IMVI_CopyDeepMask(BitMap * srcBits, BitMap * maskBits, BitMap * dstBits, Rect * srcRect, Rect * maskRect, Rect * dstRect, INTEGER mode, RgnHandle maskRgn)
+PUBLIC pascal trap void Executor::C_IMVI_CopyDeepMask(BitMap *srcBits, BitMap *maskBits, BitMap *dstBits, Rect *srcRect, Rect *maskRect, Rect *dstRect, INTEGER mode, RgnHandle maskRgn)
 {
     warning_unimplemented("poorly implemented");
 
@@ -453,7 +450,7 @@ PUBLIC pascal trap void Executor::C_IMVI_CopyDeepMask(BitMap * srcBits, BitMap *
 
 /* MeasureText is in qd/qStdText.c */
 
-PUBLIC a0trap INTEGER * Executor::GetMaskTable() /* IMIV-25 */
+PUBLIC a0trap INTEGER *Executor::GetMaskTable() /* IMIV-25 */
 {
     static unsigned char table[] __attribute__((aligned(2))) = {
         0x00, 0x00, 0x80, 0x00, 0xC0, 0x00, 0xE0, 0x00,

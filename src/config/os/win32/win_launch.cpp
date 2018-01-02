@@ -74,8 +74,7 @@ enum
  * native launching is just for TTS's benefit for now.
  */
 
-int
-ROMlib_launch_native_app(int n_filenames, char **filenames)
+int ROMlib_launch_native_app(int n_filenames, char **filenames)
 {
     HINSTANCE hi;
     int buf_len;
@@ -83,12 +82,12 @@ ROMlib_launch_native_app(int n_filenames, char **filenames)
     char *args_buf;
 
     buf_len = strlen(filenames[0]) + sizeof COMMAND_SUFFIX;
-    command_buf = (char*)alloca(buf_len);
+    command_buf = (char *)alloca(buf_len);
     sprintf(command_buf, "%s%s", filenames[0], COMMAND_SUFFIX);
 
     buf_len = construct_command_line(NULL, n_filenames - 1, filenames + 1,
                                      DOCUMENT_SUFFIX);
-    args_buf = (char*)alloca(buf_len);
+    args_buf = (char *)alloca(buf_len);
     construct_command_line(args_buf, n_filenames - 1, filenames + 1,
                            DOCUMENT_SUFFIX);
     slash_replace(command_buf);

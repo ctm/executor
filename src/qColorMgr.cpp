@@ -197,7 +197,7 @@ ROMlib_search_proc(RGBColor *rgb)
     return retval;
 }
 
-PUBLIC pascal trap LONGINT Executor::C_Color2Index(RGBColor * rgb)
+PUBLIC pascal trap LONGINT Executor::C_Color2Index(RGBColor *rgb)
 {
     SProcHndl t;
     LONGINT success_p;
@@ -218,7 +218,7 @@ PUBLIC pascal trap LONGINT Executor::C_Color2Index(RGBColor * rgb)
     for(t = GD_SEARCH_PROC(MR(TheGDevice)), success_p = false;
         t && !success_p;)
     {
-        BOOLEAN (*search_fn)
+        BOOLEAN(*search_fn)
         ();
 
         search_fn = (BOOLEAN(*)())HxP(t, srchProc);
@@ -250,13 +250,13 @@ PUBLIC pascal trap LONGINT Executor::C_Color2Index(RGBColor * rgb)
         return CL(position); /* They filled this in in big endian order. */
 }
 
-PUBLIC pascal trap void Executor::C_Index2Color(LONGINT index, RGBColor * rgb)
+PUBLIC pascal trap void Executor::C_Index2Color(LONGINT index, RGBColor *rgb)
 {
     CTabHandle ctab = PIXMAP_TABLE(GD_PMAP(MR(TheGDevice)));
     *rgb = CTAB_TABLE(ctab)[index].rgb;
 }
 
-PUBLIC pascal trap void Executor::C_InvertColor(RGBColor * rgb)
+PUBLIC pascal trap void Executor::C_InvertColor(RGBColor *rgb)
 {
     /* #warning "only use default InvertColor complement procedure" */
 
@@ -266,7 +266,7 @@ PUBLIC pascal trap void Executor::C_InvertColor(RGBColor * rgb)
     rgb->blue.raw(~rgb->blue.raw());
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_RealColor(RGBColor * rgb)
+PUBLIC pascal trap BOOLEAN Executor::C_RealColor(RGBColor *rgb)
 {
     GDHandle gdev;
     ITabHandle inverse_table;
@@ -451,7 +451,7 @@ int Executor::average_color(GDHandle gd,
     }
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_GetGray(GDHandle gdev, RGBColor * bk, RGBColor * fg)
+PUBLIC pascal trap BOOLEAN Executor::C_GetGray(GDHandle gdev, RGBColor *bk, RGBColor *fg)
 {
     return average_color(gdev, bk, fg, 0x8000, fg);
 }
@@ -608,7 +608,7 @@ PUBLIC pascal trap void Executor::C_MakeITable(CTabHandle color_table, ITabHandl
     int head, tail;
     int i;
     int ctab_size;
-    ULONGINT (*rgb_error_func)
+    ULONGINT(*rgb_error_func)
     (unsigned);
     unsigned char *itab_table;
     const int *offset;
@@ -890,7 +890,7 @@ PUBLIC pascal trap void Executor::C_ReserveEntry(INTEGER index, BOOLEAN reserve)
         CTAB_SEED_X(ctab) = CL(GetCTSeed());
 }
 
-PUBLIC pascal trap void Executor::C_SetEntries(INTEGER start, INTEGER count, ColorSpec * atable)
+PUBLIC pascal trap void Executor::C_SetEntries(INTEGER start, INTEGER count, ColorSpec *atable)
 {
     /* ##### figure out exactly what the mac does */
     GDHandle gd;
@@ -1039,7 +1039,7 @@ PUBLIC pascal trap void Executor::C_SetClientID(INTEGER id)
     GD_ID_X(MR(TheGDevice)) = CW(id);
 }
 
-PUBLIC pascal trap void Executor::C_SaveEntries(CTabHandle src, CTabHandle result, ReqListRec * selection)
+PUBLIC pascal trap void Executor::C_SaveEntries(CTabHandle src, CTabHandle result, ReqListRec *selection)
 {
     int req_size, src_ctab_size;
     int req_error_p = false;
@@ -1079,7 +1079,7 @@ PUBLIC pascal trap void Executor::C_SaveEntries(CTabHandle src, CTabHandle resul
     }
 }
 
-PUBLIC pascal trap void Executor::C_RestoreEntries(CTabHandle src, CTabHandle dst, ReqListRec * selection)
+PUBLIC pascal trap void Executor::C_RestoreEntries(CTabHandle src, CTabHandle dst, ReqListRec *selection)
 {
     int req_size, dst_ctab_size;
     int req_error_p = false;

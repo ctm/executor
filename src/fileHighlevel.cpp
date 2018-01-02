@@ -392,12 +392,12 @@ open_helper(FSSpecPtr spec, SignedByte perms, GUEST<int16_t> *refoutp,
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpOpenDF(FSSpecPtr spec, SignedByte perms, GUEST<int16_t> * refoutp)
+PUBLIC pascal trap OSErr Executor::C_FSpOpenDF(FSSpecPtr spec, SignedByte perms, GUEST<int16_t> *refoutp)
 {
     return open_helper(spec, perms, refoutp, PBHOpen);
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpOpenRF(FSSpecPtr spec, SignedByte perms, GUEST<int16_t> * refoutp)
+PUBLIC pascal trap OSErr Executor::C_FSpOpenRF(FSSpecPtr spec, SignedByte perms, GUEST<int16_t> *refoutp)
 {
     return open_helper(spec, perms, refoutp, PBHOpenRF);
 }
@@ -411,7 +411,7 @@ PUBLIC pascal trap OSErr Executor::C_FSpCreate(FSSpecPtr spec, OSType creator, O
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpDirCreate(FSSpecPtr spec, ScriptCode script, GUEST<int32_t> * created_dir_id)
+PUBLIC pascal trap OSErr Executor::C_FSpDirCreate(FSSpecPtr spec, ScriptCode script, GUEST<int32_t> *created_dir_id)
 {
     OSErr retval;
     HParamBlockRec hpb;
@@ -437,7 +437,7 @@ PUBLIC pascal trap OSErr Executor::C_FSpDelete(FSSpecPtr spec)
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpGetFInfo(FSSpecPtr spec, FInfo * fndr_info)
+PUBLIC pascal trap OSErr Executor::C_FSpGetFInfo(FSSpecPtr spec, FInfo *fndr_info)
 {
     OSErr retval;
     HParamBlockRec hpb;
@@ -452,7 +452,7 @@ PUBLIC pascal trap OSErr Executor::C_FSpGetFInfo(FSSpecPtr spec, FInfo * fndr_in
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpSetFInfo(FSSpecPtr spec, FInfo * fndr_info)
+PUBLIC pascal trap OSErr Executor::C_FSpSetFInfo(FSSpecPtr spec, FInfo *fndr_info)
 {
     OSErr retval;
     HParamBlockRec hpb;

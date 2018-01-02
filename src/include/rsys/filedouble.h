@@ -99,10 +99,10 @@ extern BOOLEAN ROMlib_isresourcefork(const char *fullname);
 
 enum class ResForkFormat
 {
-	standard,
-	afpd,
-	netatalk,
-	native
+    standard,
+    afpd,
+    netatalk,
+    native
 };
 
 extern void setup_resfork_format(ResForkFormat rf);

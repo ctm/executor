@@ -112,7 +112,7 @@ PRIVATE void drawicon(INTEGER id,
 PRIVATE void dobuttons(INTEGER id, INTEGER offsetx,
                        INTEGER offsety, BOOLEAN demo_button_p);
 
-PRIVATE GUEST<INTEGER> * findid(INTEGER id)
+PRIVATE GUEST<INTEGER> *findid(INTEGER id)
 {
     int i;
     GUEST<INTEGER> *ip;
@@ -325,7 +325,7 @@ PUBLIC pascal void Executor::C_SysError(short errorcode)
     viscliprgn.rgnBBox = main_gd_rect;
 
     /* 5, 6. Draw alert box if the errorcode is >= 0 */
-    
+
     if(errorcode < 0)
         errorcode = -errorcode;
     else
@@ -370,6 +370,4 @@ PUBLIC pascal void Executor::C_SysError(short errorcode)
     if(ap->buttonid)
         dobuttons(/* CL(ResumeProc) ? Cx(ap->buttonid) + 1 : */ Cx(ap->buttonid),
                   offsetx, offsety, false);
-
-    
 }

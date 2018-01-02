@@ -64,7 +64,7 @@ using namespace Executor;
 
 #define HASHSIZE 101
 
-PRIVATE hashlink_t ** hashloc(VCBExtra * vcbp, LONGINT dir)
+PRIVATE hashlink_t **hashloc(VCBExtra *vcbp, LONGINT dir)
 {
     hashlink_t **hlpp;
     INTEGER index;
@@ -183,7 +183,7 @@ void recsetdp(VCBExtra *vcbp, datum *dp, hashlink_t *hlp, chain_t *therest)
     }
 }
 
-PUBLIC datum Executor::ROMlib_dbm_fetch(VCBExtra * vcbp, LONGINT dir) /* INTERNAL */
+PUBLIC datum Executor::ROMlib_dbm_fetch(VCBExtra *vcbp, LONGINT dir) /* INTERNAL */
 {
     datum foo;
     hashlink_t *hlp;
@@ -387,8 +387,8 @@ PRIVATE BOOLEAN hashinsert(VCBExtra *vcbp, char *pathname, LONGINT *diridp,
     return retval;
 }
 
-PUBLIC BOOLEAN Executor::ROMlib_dbm_store(VCBExtra * vcbp, char * pathname, /* INTERNAL */
-   LONGINT * diridp, BOOLEAN verify_p)
+PUBLIC BOOLEAN Executor::ROMlib_dbm_store(VCBExtra *vcbp, char *pathname, /* INTERNAL */
+                                          LONGINT *diridp, BOOLEAN verify_p)
 {
     BOOLEAN retval;
 
@@ -636,7 +636,7 @@ PRIVATE void writeadbm(const char *dbmname, VCBExtra *vcbp,
     }
 }
 
-PUBLIC void Executor::ROMlib_dbm_open(VCBExtra * vcbp) /* INTERNAL */
+PUBLIC void Executor::ROMlib_dbm_open(VCBExtra *vcbp) /* INTERNAL */
 {
     LONGINT size;
     LONGINT dirid;
@@ -653,7 +653,7 @@ PUBLIC void Executor::ROMlib_dbm_open(VCBExtra * vcbp) /* INTERNAL */
     hashinsert(vcbp, "", &dirid, 1, checked_val);
 }
 
-PUBLIC void Executor::ROMlib_dbm_close(VCBExtra * vcbp) /* INTERNAL */
+PUBLIC void Executor::ROMlib_dbm_close(VCBExtra *vcbp) /* INTERNAL */
 {
     hashlink_t *deletep;
     LONGINT oumask;
@@ -754,7 +754,7 @@ DONE:
 #undef RETURN
 
 PUBLIC OSErr Executor::GetVInfo(INTEGER drv, StringPtr voln, /* IMIV-107 */
-   GUEST<INTEGER> * vrn, GUEST<LONGINT> * freeb)
+                                GUEST<INTEGER> *vrn, GUEST<LONGINT> *freeb)
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -768,7 +768,7 @@ PUBLIC OSErr Executor::GetVInfo(INTEGER drv, StringPtr voln, /* IMIV-107 */
     return (temp);
 }
 
-PUBLIC OSErr Executor::GetVRefNum(INTEGER prn, GUEST<INTEGER> * vrn) /* IMIV-107 */
+PUBLIC OSErr Executor::GetVRefNum(INTEGER prn, GUEST<INTEGER> *vrn) /* IMIV-107 */
 {
     OSErr err;
     fcbrec *fp;
@@ -780,7 +780,7 @@ PUBLIC OSErr Executor::GetVRefNum(INTEGER prn, GUEST<INTEGER> * vrn) /* IMIV-107
     return (err);
 }
 
-PUBLIC OSErr Executor::GetVol(StringPtr voln, GUEST<INTEGER> * vrn) /* IMIV-107 */
+PUBLIC OSErr Executor::GetVol(StringPtr voln, GUEST<INTEGER> *vrn) /* IMIV-107 */
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -830,7 +830,7 @@ PUBLIC OSErr Executor::Eject(StringPtr voln, INTEGER vrn) /* IMIV-108 */
 static VCB *findvcb(StringPtr, INTEGER, BOOLEAN *, GUEST<INTEGER> *);
 static VCB *grabvcb(ParmBlkPtr, GUEST<INTEGER> *);
 
-PRIVATE VCB * findvcb(StringPtr sp, INTEGER vrn, BOOLEAN * iswd, GUEST<INTEGER> * vrnp)
+PRIVATE VCB *findvcb(StringPtr sp, INTEGER vrn, BOOLEAN *iswd, GUEST<INTEGER> *vrnp)
 {
     VCB *vcbptr;
 
@@ -859,7 +859,7 @@ PRIVATE VCB * findvcb(StringPtr sp, INTEGER vrn, BOOLEAN * iswd, GUEST<INTEGER> 
             if(ISWDNUM(vrn))
             {
                 *iswd = true;
-// FIXME: #warning autc04 ### This is a guess. The original was missing the MR.
+                // FIXME: #warning autc04 ### This is a guess. The original was missing the MR.
                 vcbptr = MR(WDNUMTOWDP(vrn)->vcbp);
             }
             else
@@ -880,7 +880,7 @@ PRIVATE VCB * findvcb(StringPtr sp, INTEGER vrn, BOOLEAN * iswd, GUEST<INTEGER> 
     return vcbptr;
 }
 
-PRIVATE VCB * grabvcb(ParmBlkPtr pb, GUEST<INTEGER> * vrefnump)
+PRIVATE VCB *grabvcb(ParmBlkPtr pb, GUEST<INTEGER> *vrefnump)
 {
     INTEGER i;
     VCB *vcbp;
@@ -964,7 +964,7 @@ find_pseudo_block_size(long n_blocks, long block_size)
     return retval;
 }
 
-PRIVATE VCB * common(ParmBlkPtr pb)
+PRIVATE VCB *common(ParmBlkPtr pb)
 {
     VCB *vcbp;
     struct statfs sbuf;
@@ -1013,7 +1013,7 @@ PRIVATE VCB * common(ParmBlkPtr pb)
 }
 
 PUBLIC OSErr Executor::ufsPBGetVInfo(ParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                     BOOLEAN a)
 {
     OSErr err = noErr;
     VCB *vcbp;
@@ -1025,7 +1025,7 @@ PUBLIC OSErr Executor::ufsPBGetVInfo(ParmBlkPtr pb, /* INTERNAL */
 }
 
 PUBLIC OSErr Executor::ufsPBHGetVInfo(HParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                      BOOLEAN a)
 {
     OSErr err = noErr;
     VCB *vcbp;
@@ -1059,7 +1059,7 @@ PUBLIC OSErr Executor::ufsPBHGetVInfo(HParmBlkPtr pb, /* INTERNAL */
 }
 
 PUBLIC OSErr Executor::ufsPBSetVInfo(HParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                     BOOLEAN a)
 {
     VCB *vcbp;
     int ntocopy;
@@ -1096,7 +1096,7 @@ PUBLIC OSErr Executor::ufsPBSetVInfo(HParmBlkPtr pb, /* INTERNAL */
 }
 
 PUBLIC OSErr Executor::ufsPBFlushVol(ParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                     BOOLEAN a)
 {
     OSErr err = noErr;
 

@@ -97,7 +97,7 @@ static const uint32_t flip_mask_for_mode[8] = { 0, 0, 0, ~(uint32_t)0, ~(uint32_
 #define RORL(count, n)                                        \
     do                                                        \
     {                                                         \
-        uint32_t _tmp_ = (n);                                   \
+        uint32_t _tmp_ = (n);                                 \
         int _count_ = (count);                                \
         (n) = (_tmp_ >> _count_) | (_tmp_ << (32 - _count_)); \
     } while(0)

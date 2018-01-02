@@ -31,6 +31,5 @@ PASCAL_TRAP(InitPack, 0xA9E5);
 
 extern pascal trap void C_InitAllPacks(void);
 PASCAL_TRAP(InitAllPacks, 0xA9E6);
-
 }
 #endif /* __PACKAGE__ */

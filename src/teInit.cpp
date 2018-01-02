@@ -31,7 +31,7 @@ PUBLIC pascal trap void Executor::C_TEInit()
  */
 static GUEST<uint16_t> default_clik_loop[2] = { CWC(0x7001), CWC(0x4E75) };
 
-PUBLIC pascal trap TEHandle Executor::C_TENew(Rect * dst, Rect * view)
+PUBLIC pascal trap TEHandle Executor::C_TENew(Rect *dst, Rect *view)
 {
     TEHandle teh;
     FontInfo finfo;

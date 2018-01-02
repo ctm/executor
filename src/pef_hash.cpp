@@ -85,7 +85,7 @@ PEFComputeHashTableExponent(int32_t count)
 
 #define PseudoRotate(x)         \
     ({                          \
-        int32_t _x;               \
+        int32_t _x;             \
                                 \
         _x = (x);               \
         (_x << 1) - (_x >> 16); \
@@ -302,7 +302,7 @@ lookup_by_name(const ConnectionID connp,
     const char *string_tablep;
 
 #if 1
-// FIXME: #warning get rid of this eventually
+    // FIXME: #warning get rid of this eventually
 
     if(connp == (ConnectionID)0x12348765)
         return NULL;
@@ -343,7 +343,7 @@ lookup_by_name(const ConnectionID connp,
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_CountSymbols(ConnectionID id, GUEST<LONGINT> * countp)
+PUBLIC pascal trap OSErr Executor::C_CountSymbols(ConnectionID id, GUEST<LONGINT> *countp)
 {
     OSErr retval;
 
@@ -353,7 +353,7 @@ PUBLIC pascal trap OSErr Executor::C_CountSymbols(ConnectionID id, GUEST<LONGINT
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_GetIndSymbol(ConnectionID id, LONGINT index, Str255 name, GUEST<Ptr> * addrp, SymClass * classp)
+PUBLIC pascal trap OSErr Executor::C_GetIndSymbol(ConnectionID id, LONGINT index, Str255 name, GUEST<Ptr> *addrp, SymClass *classp)
 {
     OSErr retval;
 
@@ -363,7 +363,7 @@ PUBLIC pascal trap OSErr Executor::C_GetIndSymbol(ConnectionID id, LONGINT index
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FindSymbol(ConnectionID connID, Str255 symName, GUEST<Ptr> * symAddr, SymClass * symClass)
+PUBLIC pascal trap OSErr Executor::C_FindSymbol(ConnectionID connID, Str255 symName, GUEST<Ptr> *symAddr, SymClass *symClass)
 {
     OSErr retval;
     PEFExportedSymbol *pefs;

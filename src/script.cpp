@@ -253,7 +253,7 @@ PUBLIC pascal trap INTEGER Executor::C_TransliterateText(Handle srch, Handle dst
     return Transliterate(srch, dsth, target, srcmask);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_Pixel2Char(Ptr textbufp, INTEGER len, INTEGER slop, INTEGER pixwidth, BOOLEAN * leftsidep)
+PUBLIC pascal trap INTEGER Executor::C_Pixel2Char(Ptr textbufp, INTEGER len, INTEGER slop, INTEGER pixwidth, BOOLEAN *leftsidep)
 {
     Point num, den;
     INTEGER retval;
@@ -286,7 +286,7 @@ PUBLIC pascal trap INTEGER Executor::C_Char2Pixel(Ptr textbufp, INTEGER len, INT
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_FindWord(Ptr textbufp, INTEGER length, INTEGER offset, BOOLEAN leftside, Ptr breaks, GUEST<INTEGER> * offsets)
+PUBLIC pascal trap void Executor::C_FindWord(Ptr textbufp, INTEGER length, INTEGER offset, BOOLEAN leftside, Ptr breaks, GUEST<INTEGER> *offsets)
 {
     INTEGER start, stop;
     bool chasing_spaces_p;
@@ -319,7 +319,7 @@ PUBLIC pascal trap void Executor::C_FindWord(Ptr textbufp, INTEGER length, INTEG
     warning_unimplemented("poorly implemented");
 }
 
-PUBLIC pascal trap void Executor::C_HiliteText(Ptr textbufp, INTEGER firstoffset, INTEGER secondoffset, GUEST<INTEGER> * offsets)
+PUBLIC pascal trap void Executor::C_HiliteText(Ptr textbufp, INTEGER firstoffset, INTEGER secondoffset, GUEST<INTEGER> *offsets)
 {
 #if defined(BINCOMPAT)
     ROMlib_hook(script_notsupported);
@@ -388,7 +388,7 @@ enum
     dateTimeNotFound = 0x8400
 };
 
-PUBLIC pascal trap String2DateStatus Executor::C_String2Time(Ptr textp, LONGINT len, Ptr cachep, GUEST<LONGINT> * lenusedp, GUEST<Ptr> * datetimep)
+PUBLIC pascal trap String2DateStatus Executor::C_String2Time(Ptr textp, LONGINT len, Ptr cachep, GUEST<LONGINT> *lenusedp, GUEST<Ptr> *datetimep)
 {
     warning_unimplemented(NULL_STRING);
     *lenusedp = CLC(0);
@@ -424,7 +424,7 @@ this_millennium(void)
     return retval;
 }
 
-PUBLIC pascal trap String2DateStatus Executor::C_String2Date(Ptr text, int32_t length, DateCachePtr cache, GUEST<int32_t> * length_used_ret, LongDatePtr date_time)
+PUBLIC pascal trap String2DateStatus Executor::C_String2Date(Ptr text, int32_t length, DateCachePtr cache, GUEST<int32_t> *length_used_ret, LongDatePtr date_time)
 {
     String2DateStatus retval;
 
@@ -466,7 +466,7 @@ PUBLIC pascal trap String2DateStatus Executor::C_String2Date(Ptr text, int32_t l
     return retval;
 }
 
-PUBLIC pascal trap StyledLineBreakCode Executor::C_StyledLineBreak(Ptr textp, int32_t length, int32_t text_start, int32_t text_end, int32_t flags, GUEST<Fixed> * text_width_fp, GUEST<int32_t> * text_offset)
+PUBLIC pascal trap StyledLineBreakCode Executor::C_StyledLineBreak(Ptr textp, int32_t length, int32_t text_start, int32_t text_end, int32_t flags, GUEST<Fixed> *text_width_fp, GUEST<int32_t> *text_offset)
 {
     char *text = (char *)textp;
     /* the index into `text' that began the last word, which is where we
@@ -561,7 +561,7 @@ PUBLIC pascal trap INTEGER Executor::C_ReplaceText(Handle base_text, Handle subs
 
 /* FormatStr2X is now StringToExtended */
 PUBLIC pascal trap FormatStatus Executor::C_StringToExtended(/* TTS TODO */
-   Str255 string, NumFormatStringRec * formatp, NumberParts * partsp, Extended80 * xp)
+                                                             Str255 string, NumFormatStringRec *formatp, NumberParts *partsp, Extended80 *xp)
 {
     FormatStatus retval;
     double d;
@@ -577,7 +577,7 @@ PUBLIC pascal trap FormatStatus Executor::C_StringToExtended(/* TTS TODO */
 }
 
 PUBLIC pascal trap FormatStatus Executor::C_ExtendedToString(/* TTS TODO */
-   Extended80 * xp, NumFormatStringRec * formatp, NumberParts * partsp, Str255 string)
+                                                             Extended80 *xp, NumFormatStringRec *formatp, NumberParts *partsp, Str255 string)
 {
     ieee_t val;
     FormatStatus retval;
@@ -587,7 +587,7 @@ PUBLIC pascal trap FormatStatus Executor::C_ExtendedToString(/* TTS TODO */
 #if !defined(CYGWIN32)
     sprintf(buf, "%Lg", val);
 #else
-// FIXME: #warning may lose bits of precision here
+    // FIXME: #warning may lose bits of precision here
     sprintf(buf, "%g", (double)val);
 #endif
     str255_from_c_string(string, buf);
@@ -597,7 +597,7 @@ PUBLIC pascal trap FormatStatus Executor::C_ExtendedToString(/* TTS TODO */
 }
 
 PUBLIC pascal trap FormatStatus Executor::C_StringToFormatRec(/* TTS TODO */
-   Str255 in_string, NumberParts * partsp, NumFormatStringRec * out_string)
+                                                              Str255 in_string, NumberParts *partsp, NumFormatStringRec *out_string)
 {
     FormatStatus retval;
 
@@ -607,7 +607,7 @@ PUBLIC pascal trap FormatStatus Executor::C_StringToFormatRec(/* TTS TODO */
 }
 
 PUBLIC pascal trap ToggleResults Executor::C_ToggleDate(/* TTS TODO */
-   LongDateTime * lsecsp, LongDateField field, DateDelta delta, INTEGER ch, TogglePB * paramsp)
+                                                        LongDateTime *lsecsp, LongDateField field, DateDelta delta, INTEGER ch, TogglePB *paramsp)
 {
     ToggleResults retval;
 
@@ -617,7 +617,7 @@ PUBLIC pascal trap ToggleResults Executor::C_ToggleDate(/* TTS TODO */
 }
 
 PUBLIC pascal trap INTEGER Executor::C_TruncString(/* TTS TODO */
-   INTEGER width, Str255 string, TruncCode code)
+                                                   INTEGER width, Str255 string, TruncCode code)
 {
     warning_unimplemented(NULL_STRING);
 
@@ -635,7 +635,7 @@ PUBLIC pascal trap LONGINT Executor::C_VisibleLength(Ptr textp, LONGINT len)
     return len;
 }
 
-PUBLIC pascal trap void Executor::C_LongDate2Secs(LongDateRec * ldatep, GUEST<ULONGINT> * secs_outp)
+PUBLIC pascal trap void Executor::C_LongDate2Secs(LongDateRec *ldatep, GUEST<ULONGINT> *secs_outp)
 {
     long long secs;
     LONGINT high, low;
@@ -654,7 +654,7 @@ PUBLIC pascal trap void Executor::C_LongDate2Secs(LongDateRec * ldatep, GUEST<UL
     secs_outp[1] = CL(low);
 }
 
-PUBLIC pascal trap void Executor::C_LongSecs2Date(GUEST<ULONGINT> * secs_inp, LongDateRec * ldatep)
+PUBLIC pascal trap void Executor::C_LongSecs2Date(GUEST<ULONGINT> *secs_inp, LongDateRec *ldatep)
 
 {
     long long secs;
@@ -796,14 +796,14 @@ PUBLIC pascal trap void Executor::C_DrawJustified(Ptr textPtr, LONGINT textLengt
                 text_helper_draw);
 }
 
-PUBLIC pascal trap ScriptRunStatus Executor::C_FindScriptRun(Ptr textPtr, LONGINT textLen, GUEST<LONGINT> * lenUsedp)
+PUBLIC pascal trap ScriptRunStatus Executor::C_FindScriptRun(Ptr textPtr, LONGINT textLen, GUEST<LONGINT> *lenUsedp)
 {
     warning_unimplemented(NULL_STRING);
     *lenUsedp = CLC(1);
     return 0;
 }
 
-PUBLIC pascal trap INTEGER Executor::C_PixelToChar(Ptr textBuf, LONGINT textLen, Fixed slop, Fixed pixelWidth, BOOLEAN * leadingEdgep, GUEST<Fixed> * widthRemainingp, JustStyleCode styleRunPosition, Point numer, Point denom)
+PUBLIC pascal trap INTEGER Executor::C_PixelToChar(Ptr textBuf, LONGINT textLen, Fixed slop, Fixed pixelWidth, BOOLEAN *leadingEdgep, GUEST<Fixed> *widthRemainingp, JustStyleCode styleRunPosition, Point numer, Point denom)
 {
     GUEST<INTEGER> *locs;
     INTEGER retval, i;

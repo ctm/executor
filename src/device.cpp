@@ -31,7 +31,7 @@ using namespace Executor;
  */
 
 PUBLIC OSErr Executor::ROMlib_dispatch(ParmBlkPtr p, /* INTERNAL */
-   BOOLEAN async, DriverRoutineType routine, INTEGER trapn)
+                                       BOOLEAN async, DriverRoutineType routine, INTEGER trapn)
 {
     int devicen;
     ramdriverhand ramdh;
@@ -284,7 +284,7 @@ PRIVATE driverinfo knowndrivers[] = {
 };
 
 PUBLIC OSErr Executor::ROMlib_driveropen(ParmBlkPtr pbp, /* INTERNAL */
-   BOOLEAN a)
+                                         BOOLEAN a)
 {
     driverinfo *dip, *edip;
     OSErr err;
@@ -403,7 +403,7 @@ PUBLIC OSErr Executor::ROMlib_driveropen(ParmBlkPtr pbp, /* INTERNAL */
     return err;
 }
 
-PUBLIC OSErr Executor::OpenDriver(StringPtr name, GUEST<INTEGER> * rnp) /* IMII-178 */
+PUBLIC OSErr Executor::OpenDriver(StringPtr name, GUEST<INTEGER> *rnp) /* IMII-178 */
 {
     ParamBlockRec pb;
     OSErr retval;

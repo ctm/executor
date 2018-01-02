@@ -32,7 +32,6 @@ bool native_resfork_p = true;
 PRIVATE unsigned char tohex(unsigned char);
 PRIVATE INTEGER Mac_to_UNIX7(unsigned char *, INTEGER, unsigned char *);
 
-
 /*
  * Coded more or less up to the spec:  APDA M0908LL/A
  *				       AppleSingle/AppleDouble Formats
@@ -143,7 +142,7 @@ Executor::double_dir_op(char *name, double_dir_op_t op)
     }
 }
 
-PUBLIC OSErr Executor::ROMlib_newresfork(char * name, LONGINT * fdp, bool unix_p)
+PUBLIC OSErr Executor::ROMlib_newresfork(char *name, LONGINT *fdp, bool unix_p)
 {
     LONGINT fd;
     OSErr retval;
@@ -162,11 +161,9 @@ PUBLIC OSErr Executor::ROMlib_newresfork(char * name, LONGINT * fdp, bool unix_p
     }
     initialize_ourdefault();
     if((fd = Uopen(name, (O_BINARY | O_RDWR | O_CREAT), 0666L)) < 0
-        || (!native_resfork_p &&
-            (write(fd, (char *)&ourdefault, sizeof(ourdefault)) != sizeof(ourdefault)
-        || write(fd, (char *)&ourentries, sizeof(ourentries)) != sizeof(ourentries)))
-        )
-        
+       || (!native_resfork_p && (write(fd, (char *)&ourdefault, sizeof(ourdefault)) != sizeof(ourdefault)
+                                 || write(fd, (char *)&ourentries, sizeof(ourentries)) != sizeof(ourentries))))
+
     {
         retval = ROMlib_maperrno();
         Uclose(fd);
@@ -180,14 +177,13 @@ PUBLIC OSErr Executor::ROMlib_newresfork(char * name, LONGINT * fdp, bool unix_p
     return retval;
 }
 
-    /*
+/*
  * Modifications to hiddenbyname:
  *
  * haven't thought it through yet.
  */
 
 #define OURBSIZE 512
-
 
 PRIVATE BOOLEAN getsetentry(GetOrSetType gors, LONGINT fd,
                             Single_ID sid, Single_descriptor *savesdp,
@@ -196,7 +192,7 @@ PRIVATE void writebyteat(LONGINT fd, LONGINT loc);
 PRIVATE BOOLEAN getsetpiece(GetOrSetType gors, LONGINT fd,
                             Single_descriptor *sdp, char *bufp, LONGINT length);
 
-PRIVATE BOOLEAN getsetentry(GetOrSetType gors, LONGINT fd, Single_ID sid, Single_descriptor * savesdp, ULONGINT * lengthp)
+PRIVATE BOOLEAN getsetentry(GetOrSetType gors, LONGINT fd, Single_ID sid, Single_descriptor *savesdp, ULONGINT *lengthp)
 {
     off_t saveloc;
     struct defaulthead *dfp;
@@ -253,14 +249,14 @@ PRIVATE BOOLEAN getsetentry(GetOrSetType gors, LONGINT fd, Single_ID sid, Single
 
 #define IDWANTED(fp) ((fp->fcflags & fcfisres) ? Resource_Fork_ID : Data_Fork_ID)
 
-PUBLIC LONGINT Executor::ROMlib_FORKOFFSET(fcbrec * fp) /* INTERNAL */
+PUBLIC LONGINT Executor::ROMlib_FORKOFFSET(fcbrec *fp) /* INTERNAL */
 {
     Single_descriptor d;
     Single_ID idwanted;
 
     if(native_resfork_p)
         return 0;
-    
+
     if(fp->fcfd != fp->hiddenfd)
         /*-->*/ return 0L;
     idwanted = IDWANTED(fp);
@@ -282,7 +278,7 @@ PRIVATE void writebyteat(LONGINT fd, LONGINT loc)
 
 /* TODO: better error checking */
 
-PUBLIC OSErr Executor::ROMlib_seteof(fcbrec * fp) /* INTERNAL */
+PUBLIC OSErr Executor::ROMlib_seteof(fcbrec *fp) /* INTERNAL */
 {
     ULONGINT leof, peof;
     off_t curloc;
@@ -347,7 +343,7 @@ PUBLIC OSErr Executor::ROMlib_seteof(fcbrec * fp) /* INTERNAL */
     return err;
 }
 
-PRIVATE BOOLEAN getsetpiece(GetOrSetType gors, LONGINT fd, Single_descriptor * sdp, char * bufp, LONGINT length)
+PRIVATE BOOLEAN getsetpiece(GetOrSetType gors, LONGINT fd, Single_descriptor *sdp, char *bufp, LONGINT length)
 {
     off_t saveloc;
     BOOLEAN retval;
@@ -378,7 +374,7 @@ PRIVATE BOOLEAN getsetpiece(GetOrSetType gors, LONGINT fd, Single_descriptor * s
  * 	    fp->fcleof (logical eof, same as above)
  *		fp->fcbFType (file type)
  */
-PUBLIC OSErr Executor::ROMlib_geteofostype(fcbrec * fp) /* INTERNAL */
+PUBLIC OSErr Executor::ROMlib_geteofostype(fcbrec *fp) /* INTERNAL */
 {
     LONGINT fd;
     Single_descriptor d;
@@ -411,7 +407,7 @@ PUBLIC OSErr Executor::ROMlib_geteofostype(fcbrec * fp) /* INTERNAL */
 #ifdef MACOSX
             if(native_resfork_p)
             {
-               /* struct {
+                /* struct {
                     FInfo finfo;
                     FXInfo fxinfo;
                 } buffer;
@@ -430,7 +426,7 @@ PUBLIC OSErr Executor::ROMlib_geteofostype(fcbrec * fp) /* INTERNAL */
             }
             else
 #endif
-            if(!getsetentry(Get, fd, Finder_Info_ID, &d, NULL) || (!getsetpiece(Get, fd, &d, (char *)&finfo, sizeof(finfo))))
+                if(!getsetentry(Get, fd, Finder_Info_ID, &d, NULL) || (!getsetpiece(Get, fd, &d, (char *)&finfo, sizeof(finfo))))
             {
                 uint32_t type;
 
@@ -461,7 +457,7 @@ PUBLIC OSErr Executor::ROMlib_geteofostype(fcbrec * fp) /* INTERNAL */
  */
 
 PUBLIC OSErr Executor::ROMlib_hiddenbyname(GetOrSetType gors, /* INTERNAL */
-   char * pathname, char * rpathname, Single_dates * datep, FInfo * finfop, FXInfo * fxinfop, GUEST<LONGINT> * lenp, GUEST<LONGINT> * rlenp)
+                                           char *pathname, char *rpathname, Single_dates *datep, FInfo *finfop, FXInfo *fxinfop, GUEST<LONGINT> *lenp, GUEST<LONGINT> *rlenp)
 {
     LONGINT rfd;
     struct stat sbuf;
@@ -478,7 +474,8 @@ PUBLIC OSErr Executor::ROMlib_hiddenbyname(GetOrSetType gors, /* INTERNAL */
 #ifdef MACOSX
         if(native_resfork_p)
         {
-            struct {
+            struct
+            {
                 FInfo finfo;
                 FXInfo fxinfo;
             } buffer;
@@ -492,7 +489,7 @@ PUBLIC OSErr Executor::ROMlib_hiddenbyname(GetOrSetType gors, /* INTERNAL */
                     *finfop = buffer.finfo;
                 if(fxinfop)
                     *fxinfop = buffer.fxinfo;
-                
+
                 if(datep)
                 {
                     datep->crdat = CL(UNIXTIMETOMACTIME(sbuf.st_birthtime));
@@ -523,7 +520,7 @@ PUBLIC OSErr Executor::ROMlib_hiddenbyname(GetOrSetType gors, /* INTERNAL */
                     buffer.finfo = *finfop;
                 if(fxinfop)
                     buffer.fxinfo = *fxinfop;
-                
+
                 if(setxattr(pathname, XATTR_FINDERINFO_NAME, &buffer, 32, 0, 0) < 0)
                     retval = ROMlib_maperrno();
                 fs_err_hook(retval);
@@ -632,7 +629,7 @@ fprintf(stderr, "%s(%d): open '%s' fails\n", __FILE__, __LINE__, rpathname);
     return retval;
 }
 
-    /*
+/*
  * Old algorithm:
  *
  * The new code is a little bit tricky; it would be just prepend a %, except
@@ -650,8 +647,8 @@ fprintf(stderr, "%s(%d): open '%s' fails\n", __FILE__, __LINE__, rpathname);
 
 #define ROOTS_PERCENT_FILE "%%2F"
 
-PUBLIC char * Executor::ROMlib_resname(char * pathname, /* INTERNAL */
-   char * filename, char * endname)
+PUBLIC char *Executor::ROMlib_resname(char *pathname, /* INTERNAL */
+                                      char *filename, char *endname)
 {
     int pathnamesize, filenamesize, newsize;
     char *newname;
@@ -670,8 +667,7 @@ PUBLIC char * Executor::ROMlib_resname(char * pathname, /* INTERNAL */
                filename, filenamesize);
         memcpy(newname + pathnamesize + apple_double_fork_prefix_length + filenamesize - 1,
                resfork_suffix, resfork_suffix_length);
-        newname[newsize-1] = 0;
-        
+        newname[newsize - 1] = 0;
     }
     else
     {
@@ -696,7 +692,7 @@ PRIVATE unsigned char tohex(unsigned char c)
     return retval;
 }
 
-PRIVATE INTEGER Mac_to_UNIX7(unsigned char * name, INTEGER length, unsigned char * out)
+PRIVATE INTEGER Mac_to_UNIX7(unsigned char *name, INTEGER length, unsigned char *out)
 {
     unsigned char c;
     INTEGER retval;
@@ -734,7 +730,7 @@ PRIVATE INTEGER Mac_to_UNIX7(unsigned char * name, INTEGER length, unsigned char
     return retval;
 }
 
-PUBLIC char * Executor::ROMlib_newunixfrommac(char * ip, INTEGER n)
+PUBLIC char *Executor::ROMlib_newunixfrommac(char *ip, INTEGER n)
 {
     char *retval;
 

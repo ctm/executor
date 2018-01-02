@@ -156,7 +156,7 @@ static const LONGINT high_bits_to_colors[2][2][2] = {
     },
 };
 
-PUBLIC pascal trap void Executor::C_RGBForeColor(RGBColor * color)
+PUBLIC pascal trap void Executor::C_RGBForeColor(RGBColor *color)
 {
     if(CGrafPort_p(thePort))
     {
@@ -180,7 +180,7 @@ PUBLIC pascal trap void Executor::C_RGBForeColor(RGBColor * color)
     }
 }
 
-PUBLIC pascal trap void Executor::C_RGBBackColor(RGBColor * color)
+PUBLIC pascal trap void Executor::C_RGBBackColor(RGBColor *color)
 {
 
 #if defined(EVIL_ILLUSTRATOR_7_HACK)
@@ -215,7 +215,7 @@ PUBLIC pascal trap void Executor::C_RGBBackColor(RGBColor * color)
     }
 }
 
-PUBLIC pascal trap void Executor::C_GetForeColor(RGBColor * color)
+PUBLIC pascal trap void Executor::C_GetForeColor(RGBColor *color)
 {
     if(CGrafPort_p(thePort))
         *color = CPORT_RGB_FG_COLOR(theCPort);
@@ -223,7 +223,7 @@ PUBLIC pascal trap void Executor::C_GetForeColor(RGBColor * color)
         *color = *(ROMlib_qd_color_to_rgb(PORT_FG_COLOR(thePort)));
 }
 
-PUBLIC pascal trap void Executor::C_GetBackColor(RGBColor * color)
+PUBLIC pascal trap void Executor::C_GetBackColor(RGBColor *color)
 {
     if(CGrafPort_p(thePort))
         *color = CPORT_RGB_BK_COLOR(theCPort);
@@ -292,7 +292,7 @@ void Executor::ROMlib_fill_pixpat(PixPatHandle new_fill)
 
 /* where is FillPixPat */
 
-PUBLIC pascal trap void Executor::C_OpColor(RGBColor * color)
+PUBLIC pascal trap void Executor::C_OpColor(RGBColor *color)
 {
     if(!CGrafPort_p(thePort))
         return;
@@ -300,7 +300,7 @@ PUBLIC pascal trap void Executor::C_OpColor(RGBColor * color)
     HxX(CPORT_GRAFVARS(theCPort), rgbOpColor) = *color;
 }
 
-PUBLIC pascal trap void Executor::C_HiliteColor(RGBColor * color)
+PUBLIC pascal trap void Executor::C_HiliteColor(RGBColor *color)
 {
     if(!CGrafPort_p(thePort))
         return;
@@ -526,7 +526,7 @@ PUBLIC pascal trap void Executor::C_CopyPixPat(PixPatHandle src, PixPatHandle ds
     PATASSIGN(PIXPAT_1DATA(dst), PIXPAT_1DATA(src));
 }
 
-PUBLIC pascal trap void Executor::C_MakeRGBPat(PixPatHandle pixpat, RGBColor * color)
+PUBLIC pascal trap void Executor::C_MakeRGBPat(PixPatHandle pixpat, RGBColor *color)
 {
     PixMapHandle patmap;
 

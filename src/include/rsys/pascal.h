@@ -10,7 +10,8 @@
 namespace Executor
 {
 
-template<typename F> struct UPP;
+template<typename F>
+struct UPP;
 
 using CTOPCode = uint64_t;
 
@@ -19,20 +20,20 @@ namespace ptoc_internal
     template<typename A, typename... Types>
     struct CTOP
     {
-        constexpr static CTOPCode value = 
-            CTOP<A>::value | (CTOP<Types...>::value << 3);
+        constexpr static CTOPCode value = CTOP<A>::value | (CTOP<Types...>::value << 3);
     };
 
     template<typename T>
     struct CTOP<T>
     {
         constexpr static
-        typename std::enable_if<std::is_integral<T>::value && sizeof(T) <= 4, CTOPCode>::type
-        value = sizeof(T);
+            typename std::enable_if<std::is_integral<T>::value && sizeof(T) <= 4, CTOPCode>::type
+                value
+            = sizeof(T);
     };
 
     template<typename T>
-    struct CTOP<T*>
+    struct CTOP<T *>
     {
         constexpr static CTOPCode value = 5;
     };
@@ -54,13 +55,11 @@ namespace ptoc_internal
         constexpr static CTOPCode value = 0;
     };
 
-
     template<typename A, typename... Types>
     struct PTOC
     {
         using Rec = PTOC<Types...>;
-        constexpr static CTOPCode value = 
-            (PTOC<A>::value << Rec::bits) | (Rec::value);
+        constexpr static CTOPCode value = (PTOC<A>::value << Rec::bits) | (Rec::value);
         constexpr static int bits = 3 + Rec::bits;
     };
 
@@ -77,7 +76,7 @@ namespace ptoc_internal
         constexpr static bool enable = false;
     };
     template<typename Ret>
-    struct helper<Ret ()>
+    struct helper<Ret()>
     {
         constexpr static bool enable = true;
         constexpr static CTOPCode ctop = CTOP<Ret>::value;
@@ -85,7 +84,7 @@ namespace ptoc_internal
     };
 
     template<typename Ret, typename... Args>
-    struct helper<Ret (Args...)>
+    struct helper<Ret(Args...)>
     {
         constexpr static bool enable = true;
         constexpr static CTOPCode ctop = CTOP<Ret, Args...>::value;
@@ -93,15 +92,13 @@ namespace ptoc_internal
     };
 }
 
-
-
 template<typename F, typename = std::enable_if<ptoc_internal::helper<F>::enable>>
-constexpr CTOPCode ptoc(F* = nullptr)
+constexpr CTOPCode ptoc(F * = nullptr)
 {
     return ptoc_internal::helper<F>::ptoc;
 }
 template<typename F, typename = std::enable_if<ptoc_internal::helper<F>::enable>>
-constexpr CTOPCode ctop(F* = nullptr)
+constexpr CTOPCode ctop(F * = nullptr)
 {
     return ptoc_internal::helper<F>::ctop;
 }
@@ -113,7 +110,8 @@ public:
     using ProcPtr = Ret (*)(Args...);
 
     constexpr PascalTrap(ProcPtr impl, uint16_t trapno)
-        : f(impl), trapno(trapno)
+        : f(impl)
+        , trapno(trapno)
     {
     }
 
@@ -123,9 +121,9 @@ public:
             return (*f)(args...);
         else
         {
-            syn68k_addr_t new_addr = tooltraptable[trapno & (NTOOLENTRIES-1)];
-        
-            if(new_addr == toolstuff[trapno & (NTOOLENTRIES-1)].orig)
+            syn68k_addr_t new_addr = tooltraptable[trapno & (NTOOLENTRIES - 1)];
+
+            if(new_addr == toolstuff[trapno & (NTOOLENTRIES - 1)].orig)
                 return (*f)(args...);
             else
                 return (Ret)CToPascalCall(SYN68K_TO_US(new_addr), ctop(f), args...);
@@ -137,49 +135,53 @@ private:
     uint16_t trapno;
 };
 
-template<typename Ret, typename... Args> constexpr PascalTrap<Ret, Args...> pascalTrap(Ret (*impl)(Args...), uint16_t trapno)
+template<typename Ret, typename... Args>
+constexpr PascalTrap<Ret, Args...> pascalTrap(Ret (*impl)(Args...), uint16_t trapno)
 {
     return PascalTrap<Ret, Args...>(impl, trapno);
 }
 
-#define PASCAL_TRAP(NAME, TRAP) constexpr auto NAME = pascalTrap(&C_ ## NAME, TRAP)
-#define PASCAL_FUNCTION(NAME) constexpr auto NAME = pascalTrap(&C_ ## NAME, 0)
-
-
+#define PASCAL_TRAP(NAME, TRAP) constexpr auto NAME = pascalTrap(&C_##NAME, TRAP)
+#define PASCAL_FUNCTION(NAME) constexpr auto NAME = pascalTrap(&C_##NAME, 0)
 
 template<typename F>
 struct UPP;
 
 template<typename Ret, typename... Args>
-struct UPP<Ret (Args...)>
+struct UPP<Ret(Args...)>
 {
     void *ptr;
 
     UPP() = default;
-    UPP(std::nullptr_t) : ptr(nullptr) {}
-    explicit UPP(void* ptr) : ptr(ptr) {}
+    UPP(std::nullptr_t)
+        : ptr(nullptr)
+    {
+    }
+    explicit UPP(void *ptr)
+        : ptr(ptr)
+    {
+    }
 
-    explicit operator void*() const { return ptr; }
-    
+    explicit operator void *() const { return ptr; }
+
     explicit operator bool() const { return ptr != nullptr; }
-    bool operator== (UPP<Ret (Args...)> other) const { return ptr == other.ptr; }
-    bool operator!= (UPP<Ret (Args...)> other) const { return ptr != other.ptr; }
+    bool operator==(UPP<Ret(Args...)> other) const { return ptr == other.ptr; }
+    bool operator!=(UPP<Ret(Args...)> other) const { return ptr != other.ptr; }
 
     Ret operator()(Args... args) const
     {
-        return (Ret)CToPascalCall(ptr, ctop<Ret (Args...)>(), args...);
+        return (Ret)CToPascalCall(ptr, ctop<Ret(Args...)>(), args...);
     }
 };
 
-
 template<typename Ret, typename... Args>
-struct GuestWrapperBase<UPP<Ret (Args...)>>
+struct GuestWrapperBase<UPP<Ret(Args...)>>
 {
 private:
     HiddenValue<uint32_t> p;
 
 public:
-    using WrappedType = UPP<Ret (Args...)>;
+    using WrappedType = UPP<Ret(Args...)>;
     using RawGuestType = uint32_t;
 
     WrappedType get() const
@@ -209,7 +211,7 @@ public:
         p.raw(x);
     }
 
-    Ret operator() (Args... args)
+    Ret operator()(Args... args)
     {
         return (this->get())(args...);
     }
@@ -226,8 +228,6 @@ UPP<TT> MR(GuestWrapper<UPP<TT>> p)
 {
     return p.get();
 }
-
-
 }
 
 #endif

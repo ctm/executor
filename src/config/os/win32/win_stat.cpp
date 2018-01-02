@@ -95,7 +95,7 @@ ino_from_name(const char *name)
         uint32_t len2;
 
         ++len;
-        p = (char*)alloca(len);
+        p = (char *)alloca(len);
         len2 = GetFullPathName(name, len, p, &filenamep);
         if(len2 >= len)
             p = (char *)name;

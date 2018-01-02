@@ -116,7 +116,7 @@ Executor::lookup_aux_ctl(ControlHandle ctl)
 }
 
 PUBLIC pascal trap void Executor::C_SetCRefCon(ControlHandle c, /* IMI-327 */
-   LONGINT data)
+                                               LONGINT data)
 {
     HxX(c, contrlRfCon) = CL(data);
 }
@@ -127,7 +127,7 @@ PUBLIC pascal trap LONGINT Executor::C_GetCRefCon(ControlHandle c) /* IMI-327 */
 }
 
 PUBLIC pascal trap void Executor::C_SetCtlAction(ControlHandle c, /* IMI-328 */
-   ProcPtr a)
+                                                 ProcPtr a)
 {
     if(a != (ProcPtr)-1)
         HxX(c, contrlAction) = RM(a);
@@ -153,7 +153,7 @@ PUBLIC pascal trap INTEGER Executor::C_GetCVariant(ControlHandle c) /* IMV-222 *
    `GetAuxiliaryControlRecord ()', possibly because of the
    inconsistency below, i can only assume they have the same trap word */
 PUBLIC pascal trap BOOLEAN Executor::C_GetAuxCtl(ControlHandle ctl, /* IMV-222 */
-   GUEST<AuxCtlHandle> * aux_ctl)
+                                                 GUEST<AuxCtlHandle> *aux_ctl)
 {
     /* according to testing on the Mac+
      `GetAuxCtl ()' returns false (not true) and leaves

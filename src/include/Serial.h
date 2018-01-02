@@ -106,11 +106,10 @@ struct SerStaRec
     GUEST<Byte> xOffHold;
 };
 
-
-const char* const MODEMINAME = ".AIn";
-const char* const MODEMONAME = ".AOut";
-const char* const PRNTRINAME = ".AIn";
-const char* const PRNTRONAME = ".AOut";
+const char *const MODEMINAME = ".AIn";
+const char *const MODEMONAME = ".AOut";
+const char *const PRNTRINAME = ".AIn";
+const char *const PRNTRONAME = ".AOut";
 
 enum
 {

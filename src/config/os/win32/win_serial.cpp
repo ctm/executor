@@ -11,14 +11,12 @@
 
 #include "win_serial.h"
 
-
 using namespace Executor;
 
 enum
 {
     PARAMETER_ERROR = -2
 };
-
 
 /*
  * A useful macro for looking up the value of a key in a mapping table.
@@ -294,7 +292,7 @@ port_to_handle(uint8 port)
             {
                 char *com_filename;
 
-                com_filename = (char*)alloca(sizeof COM_TEMPLATE);
+                com_filename = (char *)alloca(sizeof COM_TEMPLATE);
                 memcpy(com_filename, COM_TEMPLATE, sizeof COM_TEMPLATE);
                 com_filename[sizeof COM_TEMPLATE - 2] += com_minus_1;
                 retval = com_hands[com_minus_1]
@@ -356,7 +354,8 @@ dos_serial_bios_init_port(uint8 port,
     return retval;
 }
 
-template<typename xferfuncp_t> uint32_t
+template<typename xferfuncp_t>
+uint32_t
 serial_bios_xfer(LONGINT fd, void *buf, size_t count, xferfuncp_t funcp)
 {
     HANDLE h;

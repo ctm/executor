@@ -48,8 +48,8 @@ typedef struct rgb_spec
     rgb_extract_func_t pixel_to_rgbcolor;
 
     uint32_t (*rgbcolor_to_pixel)(const struct rgb_spec *rgb_spec,
-                                const RGBColor *color,
-                                bool big_endian_rgbcolor_p);
+                                  const RGBColor *color,
+                                  bool big_endian_rgbcolor_p);
 } rgb_spec_t;
 
 extern void rgbutil_init(void);

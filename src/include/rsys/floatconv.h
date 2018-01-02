@@ -193,7 +193,7 @@ x80_to_ieee(const x80_t *x)
             }
         }
     }
-// FIXME: #warning using 8 byte to represent x80; precision will be lost
+    // FIXME: #warning using 8 byte to represent x80; precision will be lost
     retval = d.d;
 #else
 // FIXME: #warning x80_to_ieee not yet supported on this architecture.
@@ -374,7 +374,7 @@ ieee_to_x80(ieee_t n, x80_t *x)
     }
     else
     {
-// FIXME: #warning Infinities and NaNs not supported here
+        // FIXME: #warning Infinities and NaNs not supported here
         SET_X80_EXP(x, d.ieee.exponent + 16383 - IEEE754_DOUBLE_BIAS);
         x->man.man = (((long long)d.ieee.mantissa0 << (32 + 11)) | ((long long)d.ieee.mantissa1 << 11) | ((long long)1 << 63));
     }

@@ -179,7 +179,7 @@ void Executor::convert_transparent(const PixMap *src1, const PixMap *src2,
 
 #define RGB_TO_DIRECT_PIXEL(bpp, rgb, pixel)                                   \
     ((void)({                                                                  \
-        uint32_t swapped_pixel;                                                  \
+        uint32_t swapped_pixel;                                                \
                                                                                \
         swapped_pixel = ((*rgb_spec->rgbcolor_to_pixel)(rgb_spec, rgb, true)); \
         switch(bpp)                                                            \
@@ -503,12 +503,12 @@ void Executor::convert_pixmap_with_IMV_mode(const PixMap *src1, const PixMap *sr
             for(x = 0; x < width; x++)                           \
             {                                                    \
                 /* source 1, 2 rgb's */                          \
-                uint32_t r1, g1, b1;                               \
-                uint32_t r2, g2, b2;                               \
+                uint32_t r1, g1, b1;                             \
+                uint32_t r2, g2, b2;                             \
                 /* result rgb's */                               \
-                uint32_t rr, gr, br;                               \
+                uint32_t rr, gr, br;                             \
                 /* final pixel value */                          \
-                uint32_t p1, p2, pr;                               \
+                uint32_t p1, p2, pr;                             \
                                                                  \
                 p1 = read1(src1_row_base, x + src1_deltax, bpp); \
                 p2 = read2(src2_row_base, x + src2_deltax, bpp); \

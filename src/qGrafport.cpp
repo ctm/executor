@@ -161,7 +161,7 @@ PUBLIC pascal trap void Executor::C_ClosePort(GrafPtr p)
     }
 }
 
-PUBLIC pascal trap void Executor::C_GetPort(GUEST<GrafPtr> * pp)
+PUBLIC pascal trap void Executor::C_GetPort(GUEST<GrafPtr> *pp)
 {
     *pp = thePortX;
 }
@@ -171,7 +171,7 @@ PUBLIC pascal trap void Executor::C_GrafDevice(INTEGER d)
     PORT_DEVICE_X(thePort) = Cx(d);
 }
 
-PUBLIC pascal trap void Executor::C_SetPortBits(BitMap * bm)
+PUBLIC pascal trap void Executor::C_SetPortBits(BitMap *bm)
 {
     if(!CGrafPort_p(thePort))
         PORT_BITS(thePort) = *bm;
@@ -234,7 +234,7 @@ PUBLIC pascal trap void Executor::C_GetClip(RgnHandle r)
     CopyRgn(PORT_CLIP_REGION(thePort), r);
 }
 
-PUBLIC pascal trap void Executor::C_ClipRect(Rect * r)
+PUBLIC pascal trap void Executor::C_ClipRect(Rect *r)
 {
     Rect r_copy;
 

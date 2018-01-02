@@ -15,27 +15,27 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_FrameRect(Rect * r)
+PUBLIC pascal trap void Executor::C_FrameRect(Rect *r)
 {
     CALLRECT(frame, r);
 }
 
-PUBLIC pascal trap void Executor::C_PaintRect(Rect * r)
+PUBLIC pascal trap void Executor::C_PaintRect(Rect *r)
 {
     CALLRECT(paint, r);
 }
 
-PUBLIC pascal trap void Executor::C_EraseRect(Rect * r)
+PUBLIC pascal trap void Executor::C_EraseRect(Rect *r)
 {
     CALLRECT(erase, r);
 }
 
-PUBLIC pascal trap void Executor::C_InvertRect(Rect * r)
+PUBLIC pascal trap void Executor::C_InvertRect(Rect *r)
 {
     CALLRECT(invert, r);
 }
 
-PUBLIC pascal trap void Executor::C_FillRect(Rect * r, Pattern pat)
+PUBLIC pascal trap void Executor::C_FillRect(Rect *r, Pattern pat)
 {
     if(!EmptyRgn(PORT_VIS_REGION(thePort)))
     {
@@ -44,27 +44,27 @@ PUBLIC pascal trap void Executor::C_FillRect(Rect * r, Pattern pat)
     }
 }
 
-PUBLIC pascal trap void Executor::C_FrameOval(Rect * r)
+PUBLIC pascal trap void Executor::C_FrameOval(Rect *r)
 {
     CALLOVAL(frame, r);
 }
 
-PUBLIC pascal trap void Executor::C_PaintOval(Rect * r)
+PUBLIC pascal trap void Executor::C_PaintOval(Rect *r)
 {
     CALLOVAL(paint, r);
 }
 
-PUBLIC pascal trap void Executor::C_EraseOval(Rect * r)
+PUBLIC pascal trap void Executor::C_EraseOval(Rect *r)
 {
     CALLOVAL(erase, r);
 }
 
-PUBLIC pascal trap void Executor::C_InvertOval(Rect * r)
+PUBLIC pascal trap void Executor::C_InvertOval(Rect *r)
 {
     CALLOVAL(invert, r);
 }
 
-PUBLIC pascal trap void Executor::C_FillOval(Rect * r, Pattern pat)
+PUBLIC pascal trap void Executor::C_FillOval(Rect *r, Pattern pat)
 {
     ROMlib_fill_pat(pat);
     CALLOVAL(fill, r);
@@ -88,7 +88,7 @@ rect_matches_control_item(WindowPtr w, Rect *rp)
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_FrameRoundRect(Rect * r, INTEGER ow, INTEGER oh)
+PUBLIC pascal trap void Executor::C_FrameRoundRect(Rect *r, INTEGER ow, INTEGER oh)
 {
     bool do_rect;
 
@@ -109,48 +109,48 @@ PUBLIC pascal trap void Executor::C_FrameRoundRect(Rect * r, INTEGER ow, INTEGER
         CALLRRECT(frame, r, ow, oh);
 }
 
-PUBLIC pascal trap void Executor::C_PaintRoundRect(Rect * r, INTEGER ow, INTEGER oh)
+PUBLIC pascal trap void Executor::C_PaintRoundRect(Rect *r, INTEGER ow, INTEGER oh)
 {
     CALLRRECT(paint, r, ow, oh);
 }
 
-PUBLIC pascal trap void Executor::C_EraseRoundRect(Rect * r, INTEGER ow, INTEGER oh)
+PUBLIC pascal trap void Executor::C_EraseRoundRect(Rect *r, INTEGER ow, INTEGER oh)
 {
     CALLRRECT(erase, r, ow, oh);
 }
 
-PUBLIC pascal trap void Executor::C_InvertRoundRect(Rect * r, INTEGER ow, INTEGER oh)
+PUBLIC pascal trap void Executor::C_InvertRoundRect(Rect *r, INTEGER ow, INTEGER oh)
 {
     CALLRRECT(invert, r, ow, oh);
 }
 
-PUBLIC pascal trap void Executor::C_FillRoundRect(Rect * r, INTEGER ow, INTEGER oh, Pattern pat)
+PUBLIC pascal trap void Executor::C_FillRoundRect(Rect *r, INTEGER ow, INTEGER oh, Pattern pat)
 {
     ROMlib_fill_pat(pat);
     CALLRRECT(fill, r, ow, oh);
 }
 
-PUBLIC pascal trap void Executor::C_FrameArc(Rect * r, INTEGER start, INTEGER angle)
+PUBLIC pascal trap void Executor::C_FrameArc(Rect *r, INTEGER start, INTEGER angle)
 {
     CALLARC(frame, r, start, angle);
 }
 
-PUBLIC pascal trap void Executor::C_PaintArc(Rect * r, INTEGER start, INTEGER angle)
+PUBLIC pascal trap void Executor::C_PaintArc(Rect *r, INTEGER start, INTEGER angle)
 {
     CALLARC(paint, r, start, angle);
 }
 
-PUBLIC pascal trap void Executor::C_EraseArc(Rect * r, INTEGER start, INTEGER angle)
+PUBLIC pascal trap void Executor::C_EraseArc(Rect *r, INTEGER start, INTEGER angle)
 {
     CALLARC(erase, r, start, angle);
 }
 
-PUBLIC pascal trap void Executor::C_InvertArc(Rect * r, INTEGER start, INTEGER angle)
+PUBLIC pascal trap void Executor::C_InvertArc(Rect *r, INTEGER start, INTEGER angle)
 {
     CALLARC(invert, r, start, angle);
 }
 
-PUBLIC pascal trap void Executor::C_FillArc(Rect * r, INTEGER start, INTEGER angle, Pattern pat)
+PUBLIC pascal trap void Executor::C_FillArc(Rect *r, INTEGER start, INTEGER angle, Pattern pat)
 {
     ROMlib_fill_pat(pat);
     CALLARC(fill, r, start, angle);

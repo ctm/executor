@@ -9,11 +9,10 @@
 
 using namespace Executor;
 
-PRIVATE void draw(BOOLEAN sel, Rect * rect, INTEGER doff, INTEGER dl, ListHandle list)
+PRIVATE void draw(BOOLEAN sel, Rect *rect, INTEGER doff, INTEGER dl, ListHandle list)
 {
     GrafPtr savePort;
 
-    
     savePort = thePort;
     SetPort(HxP(list, port));
     EraseRect(rect);
@@ -24,10 +23,9 @@ PRIVATE void draw(BOOLEAN sel, Rect * rect, INTEGER doff, INTEGER dl, ListHandle
     if(sel)
         InvertRect(rect);
     SetPort(savePort);
-    
 }
 
-PUBLIC pascal void Executor::C_ldef0(INTEGER msg, BOOLEAN sel, Rect * rect, Cell cell, INTEGER doff, INTEGER dl, ListHandle list) /* IMIV-276 */
+PUBLIC pascal void Executor::C_ldef0(INTEGER msg, BOOLEAN sel, Rect *rect, Cell cell, INTEGER doff, INTEGER dl, ListHandle list) /* IMIV-276 */
 {
     GrafPtr savePort;
     FontInfo fi;

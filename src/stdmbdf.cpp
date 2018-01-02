@@ -525,7 +525,7 @@ restore(void)
         = CW(Hx(MBSAVELOC, lastMBSave) - sizeof(mbdfentry));
 }
 
-PRIVATE Rect * getrect(LONGINT offset)
+PRIVATE Rect *getrect(LONGINT offset)
 {
     INTEGER hiword;
     static Rect r;
@@ -563,7 +563,7 @@ PRIVATE Rect * getrect(LONGINT offset)
     return &r;
 }
 
-PRIVATE mbdfentry * offtomep(LONGINT offset)
+PRIVATE mbdfentry *offtomep(LONGINT offset)
 {
     mbdfentry *mbdfp, *mbdfep;
 

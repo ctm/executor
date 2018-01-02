@@ -42,7 +42,6 @@ extern void ROMlib_WriteWhen(WriteWhenType when);
 extern void do_dump_screen(void);
 extern std::string ROMlib_configfilename;
 extern FILE *configfile;
-
 }
 
 #endif /* !defined(__RSYS_PREFS__) */

@@ -29,9 +29,9 @@ typedef GUEST<itmp> *itmh;
       + ((HxX(dlogh, dlglen) + 2) & ~1)  \
       + 2)                               \
      == GetHandleSize((Handle)(dlogh)))
-#define DIALOG_RES_POSITION_X(dlogh)               \
+#define DIALOG_RES_POSITION_X(dlogh)                 \
     (*(GUEST<int16_t> *)((char *)&HxX(dlogh, dlglen) \
-                       + ((HxX(dlogh, dlglen) + 2) & ~1)))
+                         + ((HxX(dlogh, dlglen) + 2) & ~1)))
 
 #define DIALOG_RES_POSITION(dlog) \
     CW(DIALOG_RES_POSITION_X(dlog))

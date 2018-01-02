@@ -468,7 +468,7 @@ typedef BitMap blt_bitmap_t;
     ({                                                                            \
         Handle _icon;                                                             \
         CIconHandle _cicon;                                                       \
-        uint32_t icon_size;                                                         \
+        uint32_t icon_size;                                                       \
                                                                                   \
         _icon = (Handle)(icon);                                                   \
         icon_size = GetHandleSize(_icon);                                         \
@@ -477,7 +477,7 @@ typedef BitMap blt_bitmap_t;
         ((icon_size < sizeof(CIcon))                                              \
              ? false                                                              \
              : (icon_size == (sizeof(CIcon)                                       \
-                              - sizeof(int16_t)                                     \
+                              - sizeof(int16_t)                                   \
                               + (RECT_HEIGHT(&BITMAP_BOUNDS(&CICON_PMAP(_cicon))) \
                                  * (BITMAP_ROWBYTES(&CICON_BMAP(_cicon))          \
                                     + BITMAP_ROWBYTES(&CICON_MASK(_cicon)))))));  \
@@ -713,7 +713,7 @@ extern int average_color(GDHandle gdev,
                          RGBColor *out);
 
 extern int16_t xStdTxMeas(int16_t n, uint8 *p, GUEST<Point> *nump, GUEST<Point> *denp,
-                        FontInfo *finfop, GUEST<int16_t> *charlocp);
+                          FontInfo *finfop, GUEST<int16_t> *charlocp);
 
 extern void ROMlib_fg_bk(uint32_t *fg_pixel_out, uint32_t *bk_pixel_out,
                          RGBColor *fg_rgb_out, RGBColor *bk_rgb_out,
@@ -748,7 +748,7 @@ public:
         : savePort(thePortX)
     {
     }
-    ThePortGuard(const ThePortGuard&) = delete;
+    ThePortGuard(const ThePortGuard &) = delete;
     ~ThePortGuard()
     {
         thePortX = savePort;

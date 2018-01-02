@@ -32,8 +32,7 @@ PUBLIC pascal trap PScrapStuff Executor::C_InfoScrap()
     return ((PScrapStuff)&ScrapSize);
 }
 
-
-PRIVATE OSErr cropen(INTEGER * fp)
+PRIVATE OSErr cropen(INTEGER *fp)
 {
     OSErr retval;
 
@@ -243,7 +242,7 @@ get_scrap_helper(void *vh, void *lp, int len, bool convert_text)
 
 #define RETURN(x) return (temph ? (DisposHandle(temph), 0) : 0), x
 
-PUBLIC pascal trap LONGINT Executor::C_GetScrap(Handle h, ResType rest, GUEST<LONGINT> * off)
+PUBLIC pascal trap LONGINT Executor::C_GetScrap(Handle h, ResType rest, GUEST<LONGINT> *off)
 {
     OSErr retval;
     LONGINT l = 0, incr, s, ltoread;

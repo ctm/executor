@@ -61,13 +61,13 @@ PUBLIC pascal trap UniversalProcPtr Executor::C_NewFatRoutineDescriptor(ProcPtr 
     return NULL;
 }
 
-PUBLIC pascal trap OSErr Executor::C_SaveMixedModeState(void * statep, uint32_t vers)
+PUBLIC pascal trap OSErr Executor::C_SaveMixedModeState(void *statep, uint32_t vers)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-PUBLIC pascal trap OSErr Executor::C_RestoreMixedModeState(void * statep, uint32_t vers)
+PUBLIC pascal trap OSErr Executor::C_RestoreMixedModeState(void *statep, uint32_t vers)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;

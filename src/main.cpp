@@ -419,7 +419,7 @@ check_arg(string argname, int *arg, int min, int max)
  *	 It has the side effect of acknowledging the death of other children.
  */
 
-PUBLIC LONGINT Executor::wait4(LONGINT pid, union wait * statusp, LONGINT options, struct rusage * rusage)
+PUBLIC LONGINT Executor::wait4(LONGINT pid, union wait *statusp, LONGINT options, struct rusage *rusage)
 {
     LONGINT retval;
 
@@ -464,7 +464,7 @@ set_appname(char *argv0)
     ROMlib_appname = p;
 }
 
-PRIVATE void setstartdir(char * argv0)
+PRIVATE void setstartdir(char *argv0)
 {
 #if !defined(WIN32)
     LONGINT p[2], pid;
@@ -1200,7 +1200,7 @@ int main(int argc, char **argv)
         setup_resfork_format(ResForkFormat::native);
     else
         setup_resfork_format(ResForkFormat::standard);
-    
+
     substitute_fonts_p = !opt_val(common_db, "cities", NULL);
 
 #if defined(CYGWIN32)
@@ -1322,8 +1322,7 @@ int main(int argc, char **argv)
         initialize_68k_emulator(vdriver_system_busy,
                                 use_native_code_p,
                                 (uint32_t *)SYN68K_TO_US(0),
-                                0
-                                );
+                                0);
 
         EM_A7 = save_a7;
     }

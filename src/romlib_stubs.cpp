@@ -17,7 +17,7 @@ using namespace Executor;
 
 #undef putchar
 
-PUBLIC void Executor::ROMlib_printstring(unsigned char * p)
+PUBLIC void Executor::ROMlib_printstring(unsigned char *p)
 {
     int i;
 

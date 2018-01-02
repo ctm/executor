@@ -35,7 +35,7 @@ enum
     memSCErr = (-116),
 };
 
-typedef UPP<LONGINT (Size)> GrowZoneProcPtr;
+typedef UPP<LONGINT(Size)> GrowZoneProcPtr;
 
 struct Zone
 {

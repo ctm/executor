@@ -157,7 +157,7 @@ PUBLIC OSErr Executor::SerClrBrk(INTEGER rn) /* IMII-253 */
 
 #define SERGETBUF 2 /* IMII-253 */
 
-PUBLIC OSErr Executor::SerGetBuf(INTEGER rn, LONGINT * lp) /* IMII-253 */
+PUBLIC OSErr Executor::SerGetBuf(INTEGER rn, LONGINT *lp) /* IMII-253 */
 {
     INTEGER status[11];
     OSErr err;
@@ -169,7 +169,7 @@ PUBLIC OSErr Executor::SerGetBuf(INTEGER rn, LONGINT * lp) /* IMII-253 */
 
 #define SERSTATUS 8 /* IMII-253 */
 
-PUBLIC OSErr Executor::SerStatus(INTEGER rn, SerStaRec * serstap) /* IMII-253 */
+PUBLIC OSErr Executor::SerStatus(INTEGER rn, SerStaRec *serstap) /* IMII-253 */
 {
     INTEGER status[11];
     OSErr err;
@@ -327,7 +327,7 @@ PRIVATE const char *lockname;
 #endif
 
 PUBLIC OSErr Executor::ROMlib_serialopen(ParmBlkPtr pbp, /* INTERNAL */
-   DCtlPtr dcp)
+                                         DCtlPtr dcp)
 {
     OSErr err;
     DCtlPtr otherp; /* auto due to old compiler bug */
@@ -421,7 +421,7 @@ PUBLIC OSErr Executor::ROMlib_serialopen(ParmBlkPtr pbp, /* INTERNAL */
 }
 
 PUBLIC OSErr Executor::ROMlib_serialprime(ParmBlkPtr pbp, /* INTERNAL */
-   DCtlPtr dcp)
+                                          DCtlPtr dcp)
 {
     OSErr err;
     hiddenh h;
@@ -681,7 +681,7 @@ PRIVATE OSErr serset(LONGINT fd, INTEGER param)
 #endif
 }
 
-PRIVATE OSErr serxhshake(LONGINT fd, SerShk * sershkp)
+PRIVATE OSErr serxhshake(LONGINT fd, SerShk *sershkp)
 {
 #if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
@@ -871,7 +871,7 @@ PRIVATE OSErr flow(LONGINT fd, LONGINT flag)
 #define SERKILLIO 1
 
 PUBLIC OSErr Executor::ROMlib_serialctl(ParmBlkPtr pbp, /* INTERNAL */
-   DCtlPtr dcp)
+                                        DCtlPtr dcp)
 {
     OSErr err;
     hiddenh h;
@@ -973,7 +973,7 @@ PUBLIC OSErr Executor::ROMlib_serialctl(ParmBlkPtr pbp, /* INTERNAL */
  */
 
 PUBLIC OSErr Executor::ROMlib_serialstatus(ParmBlkPtr pbp, /* INTERNAL */
-   DCtlPtr dcp)
+                                           DCtlPtr dcp)
 {
     OSErr err;
     hiddenh h;
@@ -1051,7 +1051,7 @@ PRIVATE void restorecloseanddispose(hiddenh h)
 }
 
 PUBLIC OSErr Executor::ROMlib_serialclose(ParmBlkPtr pbp, /* INTERNAL */
-   DCtlPtr dcp)
+                                          DCtlPtr dcp)
 {
     OSErr err;
     hiddenh h;

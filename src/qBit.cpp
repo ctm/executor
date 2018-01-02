@@ -18,14 +18,14 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_CopyBits(BitMap * src_bitmap, BitMap * dst_bitmap, const Rect * src_rect, const Rect * dst_rect, INTEGER mode, RgnHandle mask)
+PUBLIC pascal trap void Executor::C_CopyBits(BitMap *src_bitmap, BitMap *dst_bitmap, const Rect *src_rect, const Rect *dst_rect, INTEGER mode, RgnHandle mask)
 {
     if(ROMlib_text_output_disabled_p)
         /*-->*/ return;
 
 #define StdBits_TOOLTRAP_NUMBER (0xEB)
 
-// FIXME: #warning ctm hack below (mode = srcCopy) -- might not be best solution
+    // FIXME: #warning ctm hack below (mode = srcCopy) -- might not be best solution
 
     TheZoneGuard guard(SysZone);
     int dst_is_theport_p;
@@ -153,7 +153,7 @@ PUBLIC pascal trap void Executor::C_CopyBits(BitMap * src_bitmap, BitMap * dst_b
 #endif
 }
 
-PUBLIC pascal trap void Executor::C_ScrollRect(Rect * rp, INTEGER dh, INTEGER dv, RgnHandle updatergn)
+PUBLIC pascal trap void Executor::C_ScrollRect(Rect *rp, INTEGER dh, INTEGER dv, RgnHandle updatergn)
 {
     Rect srcr, dstr;
     RgnHandle temp, temp2, updatergn2, srcregion;
@@ -162,7 +162,6 @@ PUBLIC pascal trap void Executor::C_ScrollRect(Rect * rp, INTEGER dh, INTEGER dv
     int cgrafport_p;
     PAUSEDECL;
 
-    
     PAUSERECORDING;
 
     cgrafport_p = CGrafPort_p(thePort);
@@ -251,5 +250,4 @@ PUBLIC pascal trap void Executor::C_ScrollRect(Rect * rp, INTEGER dh, INTEGER dv
     DisposeRgn(updatergn2);
 
     RESUMERECORDING;
-    
 }

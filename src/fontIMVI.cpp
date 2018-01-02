@@ -25,7 +25,7 @@ PUBLIC pascal trap Boolean Executor::C_IsOutline(Point numer, Point denom)
     return false;
 }
 
-PUBLIC pascal trap OSErr Executor::C_OutlineMetrics(int16_t byte_count, Ptr text, Point numer, Point denom, int16_t * y_max, int16_t * y_min, Fixed * aw_array, Fixed * lsb_array, Rect * bounds_array)
+PUBLIC pascal trap OSErr Executor::C_OutlineMetrics(int16_t byte_count, Ptr text, Point numer, Point denom, int16_t *y_max, int16_t *y_min, Fixed *aw_array, Fixed *lsb_array, Rect *bounds_array)
 {
     warning_unimplemented(NULL_STRING);
     /* ### paramErr */

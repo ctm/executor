@@ -23,7 +23,7 @@ using namespace Executor;
  */
 
 PUBLIC OSErr Executor::ufsPBGetCatInfo(CInfoPBPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                       BOOLEAN a)
 {
     GUEST<LONGINT> swapped_dir;
     OSErr retval;
@@ -48,7 +48,7 @@ PUBLIC OSErr Executor::ufsPBGetCatInfo(CInfoPBPtr pb, /* INTERNAL */
 }
 
 PUBLIC OSErr Executor::ufsPBSetCatInfo(CInfoPBPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                       BOOLEAN a)
 {
     GUEST<LONGINT> swapped_dir;
     OSErr retval;
@@ -59,7 +59,7 @@ PUBLIC OSErr Executor::ufsPBSetCatInfo(CInfoPBPtr pb, /* INTERNAL */
 }
 
 PUBLIC OSErr Executor::ROMlib_PBMoveOrRename(ParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a, LONGINT dir, LONGINT newdir, char * newname, MoveOrRenameType op)
+                                             BOOLEAN a, LONGINT dir, LONGINT newdir, char *newname, MoveOrRenameType op)
 {
     ParamBlockRec npb;
     OSErr err;
@@ -148,7 +148,7 @@ PUBLIC OSErr Executor::ROMlib_PBMoveOrRename(ParmBlkPtr pb, /* INTERNAL */
 }
 
 PUBLIC OSErr Executor::ufsPBCatMove(CMovePBPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                    BOOLEAN a)
 {
     return ROMlib_PBMoveOrRename((ParmBlkPtr)pb, a, Cx(pb->ioDirID),
                                  Cx(pb->ioNewDirID), (char *)MR(pb->ioNewName), CatMove);

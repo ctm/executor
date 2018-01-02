@@ -40,7 +40,7 @@ static icon_item_template_t icon_item_template = {
 };
 
 PUBLIC pascal trap INTEGER Executor::C_Alert(INTEGER id, /* IMI-418 */
-   ProcPtr fp)
+                                             ProcPtr fp)
 {
     alth ah;
     Handle h;
@@ -174,21 +174,21 @@ PUBLIC pascal trap INTEGER Executor::C_Alert(INTEGER id, /* IMI-418 */
 }
 
 PUBLIC pascal trap INTEGER Executor::C_StopAlert(INTEGER id, /* IMI-419 */
-   ProcPtr fp)
+                                                 ProcPtr fp)
 {
     alert_extra_icon_id = stopIcon;
     return Alert(id, fp);
 }
 
 PUBLIC pascal trap INTEGER Executor::C_NoteAlert(INTEGER id, /* IMI-420 */
-   ProcPtr fp)
+                                                 ProcPtr fp)
 {
     alert_extra_icon_id = noteIcon;
     return Alert(id, fp);
 }
 
 PUBLIC pascal trap INTEGER Executor::C_CautionAlert(INTEGER id, /* IMI-420 */
-   ProcPtr fp)
+                                                    ProcPtr fp)
 {
     alert_extra_icon_id = cautionIcon;
     return Alert(id, fp);

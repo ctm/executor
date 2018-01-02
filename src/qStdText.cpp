@@ -36,8 +36,8 @@ namespace Executor
 #include "ultable.ctable"
 }
 
-PRIVATE void charblit(BitMap * fbmp, BitMap * tbmp, /* INTERNAL */
-   Rect * srect, Rect * drect, INTEGER firsttime)
+PRIVATE void charblit(BitMap *fbmp, BitMap *tbmp, /* INTERNAL */
+                      Rect *srect, Rect *drect, INTEGER firsttime)
 {
     INTEGER firstfrom, lastfrom, firstto, lastto;
     INTEGER firstmaskend, lastmaskend, wordstodo, wordsfromdo, shiftsize;
@@ -755,18 +755,18 @@ Executor::xStdTxMeas(INTEGER n, Byte *p, GUEST<Point> *nump, GUEST<Point> *denp,
     return retval;
 }
 
-PUBLIC pascal trap INTEGER Executor::C_StdTxMeas(INTEGER n, Ptr p, GUEST<Point> * nump, GUEST<Point> * denp, FontInfo * finfop)
+PUBLIC pascal trap INTEGER Executor::C_StdTxMeas(INTEGER n, Ptr p, GUEST<Point> *nump, GUEST<Point> *denp, FontInfo *finfop)
 {
     return xStdTxMeas(n, (unsigned char *)p, nump, denp, finfop, nullptr);
 }
 
-PUBLIC INTEGER Executor::ROMlib_StdTxMeas(LONGINT n, Ptr p, GUEST<Point> * nump, GUEST<Point> * denp, FontInfo * finfop)
+PUBLIC INTEGER Executor::ROMlib_StdTxMeas(LONGINT n, Ptr p, GUEST<Point> *nump, GUEST<Point> *denp, FontInfo *finfop)
 {
     return xStdTxMeas(n, (unsigned char *)p, nump, denp, finfop, nullptr);
 }
 
 PUBLIC pascal trap void Executor::C_MeasureText(INTEGER n, Ptr text, /* IMIV-25 */
-   Ptr chars)
+                                                Ptr chars)
 {
     GUEST<Point> num, den;
 

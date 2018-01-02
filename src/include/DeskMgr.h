@@ -52,6 +52,5 @@ PASCAL_TRAP(SystemEvent, 0xA9B2);
 
 extern pascal trap void C_SystemMenu(LONGINT menu);
 PASCAL_TRAP(SystemMenu, 0xA9B5);
-
 }
 #endif /* __DESKMGR__ */

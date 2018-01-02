@@ -26,13 +26,13 @@ PUBLIC pascal trap void Executor::C_ShowPen()
         PORT_PEN_VIS_X(thePort) = CW(PORT_PEN_VIS(thePort) + 1);
 }
 
-PUBLIC pascal trap void Executor::C_GetPen(GUEST<Point> * ptp)
+PUBLIC pascal trap void Executor::C_GetPen(GUEST<Point> *ptp)
 {
     if(thePortX)
         *ptp = PORT_PEN_LOC(thePort);
 }
 
-PUBLIC pascal trap void Executor::C_GetPenState(PenState * ps)
+PUBLIC pascal trap void Executor::C_GetPenState(PenState *ps)
 {
     if(!thePortX)
         return;
@@ -65,7 +65,7 @@ PUBLIC pascal trap void Executor::C_GetPenState(PenState * ps)
         *ps = *(PenState *)&PORT_PEN_LOC(thePort);
 }
 
-PUBLIC pascal trap void Executor::C_SetPenState(PenState * ps)
+PUBLIC pascal trap void Executor::C_SetPenState(PenState *ps)
 {
     if(!thePortX)
         return;

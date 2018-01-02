@@ -155,7 +155,7 @@ PUBLIC void Executor::ROMlib_alarmoffmbar()
         ROMlib_togglealarm();
 }
 
-PUBLIC pascal trap LONGINT Executor::C_KeyTrans(Ptr mapp, unsigned short code, LONGINT * state)
+PUBLIC pascal trap LONGINT Executor::C_KeyTrans(Ptr mapp, unsigned short code, LONGINT *state)
 {
     LONGINT ascii;
     int table_num;
@@ -896,7 +896,7 @@ PRIVATE void doquitreallyquits(void)
 
 extern void ROMlib_updateworkspace(void);
 
-PRIVATE BOOLEAN doevent(INTEGER em, EventRecord * evt, BOOLEAN remflag) /* no DA support */
+PRIVATE BOOLEAN doevent(INTEGER em, EventRecord *evt, BOOLEAN remflag) /* no DA support */
 {
     BOOLEAN retval;
     GUEST<ULONGINT> now_s;
@@ -1134,7 +1134,7 @@ done:
     return retval;
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_GetNextEvent(INTEGER em, EventRecord * evt)
+PUBLIC pascal trap BOOLEAN Executor::C_GetNextEvent(INTEGER em, EventRecord *evt)
 {
     BOOLEAN retval;
 
@@ -1155,7 +1155,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_GetNextEvent(INTEGER em, EventRecord * ev
  *	 we'd never get the mouse moved messages we need)
  */
 
-PUBLIC pascal trap BOOLEAN Executor::C_WaitNextEvent(INTEGER mask, EventRecord * evp, LONGINT sleep, RgnHandle mousergn)
+PUBLIC pascal trap BOOLEAN Executor::C_WaitNextEvent(INTEGER mask, EventRecord *evp, LONGINT sleep, RgnHandle mousergn)
 {
     BOOLEAN retval;
     Point p;
@@ -1189,12 +1189,12 @@ PUBLIC pascal trap BOOLEAN Executor::C_WaitNextEvent(INTEGER mask, EventRecord *
     return retval;
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_EventAvail(INTEGER em, EventRecord * evt)
+PUBLIC pascal trap BOOLEAN Executor::C_EventAvail(INTEGER em, EventRecord *evt)
 {
     return (doevent(em, evt, false));
 }
 
-PUBLIC pascal trap void Executor::C_GetMouse(GUEST<Point> * p)
+PUBLIC pascal trap void Executor::C_GetMouse(GUEST<Point> *p)
 {
     EventRecord evt;
 
@@ -1240,7 +1240,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_WaitMouseUp()
     return (retval);
 }
 
-PUBLIC pascal trap void Executor::C_GetKeys(unsigned char * keys)
+PUBLIC pascal trap void Executor::C_GetKeys(unsigned char *keys)
 {
     BlockMoveData((Ptr)KeyMap, (Ptr)keys, (Size)sizeof_KeyMap);
 }

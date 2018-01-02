@@ -12,7 +12,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_InvalRect(Rect * r)
+PUBLIC pascal trap void Executor::C_InvalRect(Rect *r)
 {
     if(thePort)
     {
@@ -48,7 +48,7 @@ PUBLIC pascal trap void Executor::C_InvalRgn(RgnHandle r)
     OffsetRgn(r, left, top);
 }
 
-PUBLIC pascal trap void Executor::C_ValidRect(Rect * r)
+PUBLIC pascal trap void Executor::C_ValidRect(Rect *r)
 {
     RgnHandle rh;
 

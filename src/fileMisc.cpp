@@ -61,7 +61,7 @@ PUBLIC trap QHdrPtr Executor::GetDrvQHdr() /* IMIV-182 */
 }
 
 PUBLIC OSErr Executor::ufsPBGetFCBInfo(FCBPBPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                       BOOLEAN a)
 {
     int rn;
     OSErr err;
@@ -279,7 +279,7 @@ PUBLIC std::string Executor::ROMlib_volumename;
 
 PRIVATE void ROMlib_automount_helper(const char *cpath, char *aliasp)
 {
-    char *path = (char*) alloca(strlen(cpath) + 1);
+    char *path = (char *)alloca(strlen(cpath) + 1);
     strcpy(path, cpath);
 
     struct stat sbuf;
@@ -418,7 +418,6 @@ PUBLIC void ROMlib_volume_alias(const char *path, const char *alias_name)
     ROMlib_automount_helper((char *)path, (char *)alias_name);
 }
 
-
 PUBLIC std::string
 Executor::expandPath(std::string name)
 {
@@ -431,17 +430,17 @@ Executor::expandPath(std::string name)
             name = ROMlib_startdir + name.substr(1);
             break;
         case '~':
+        {
+            auto home = getenv("HOME");
+            if(home)
             {
-                auto home = getenv("HOME");
-                if(home)
-                {
-                    name = home + name.substr(1);
-                    break;
-                }
+                name = home + name.substr(1);
+                break;
             }
-            break;
+        }
+        break;
     }
-    
+
 #if defined(MSDOS) || defined(CYGWIN32)
     std::replace(name.begin(), name.end(), '/', '\\');
 #endif
@@ -582,7 +581,7 @@ PUBLIC void Executor::ROMlib_fileinit() /* INTERNAL */
     char *sysname;
     int sysnamelen;
     char *p, *ep;
-   
+
     CurDirStore = CLC(2);
 
     savezone = TheZone;
@@ -657,7 +656,7 @@ PUBLIC void Executor::ROMlib_fileinit() /* INTERNAL */
 	    ROMlib_openharddisk(ROMlib_DefaultFolder, &m);
 #else
     m = 0;
-    p = (char*) alloca(ROMlib_MacVolumes.size() + 1);
+    p = (char *)alloca(ROMlib_MacVolumes.size() + 1);
     strcpy(p, ROMlib_MacVolumes.c_str());
     while(p && *p)
     {

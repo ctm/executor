@@ -23,9 +23,8 @@ PRIVATE itmp htoip(Handle h,
                    WindowPeek *wp_return, int16_t *nop_return,
                    SignedByte *flags_return);
 
-
 PUBLIC pascal trap void Executor::C_ParamText(StringPtr p0, /* IMI-421 */
-   StringPtr p1, StringPtr p2, StringPtr p3)
+                                              StringPtr p1, StringPtr p2, StringPtr p3)
 {
     if(p0)
         PtrToXHand((Ptr)p0, MR(DAStrings[0]), (LONGINT)U(p0[0]) + 1);
@@ -38,7 +37,7 @@ PUBLIC pascal trap void Executor::C_ParamText(StringPtr p0, /* IMI-421 */
 }
 
 PUBLIC itmp Executor::ROMlib_dpnotoip(DialogPeek dp, /* INTERNAL */
-   INTEGER itemno, SignedByte * flags)
+                                      INTEGER itemno, SignedByte *flags)
 {
     Handle items;
     GUEST<INTEGER> *intp;
@@ -58,7 +57,7 @@ PUBLIC itmp Executor::ROMlib_dpnotoip(DialogPeek dp, /* INTERNAL */
     return retval;
 }
 
-PRIVATE itmp htoip(Handle h, WindowPeek * wp_return, int16_t * nop_return, SignedByte * flags_return)
+PRIVATE itmp htoip(Handle h, WindowPeek *wp_return, int16_t *nop_return, SignedByte *flags_return)
 {
     WindowPeek wp;
     GUEST<INTEGER> *ip;
@@ -96,7 +95,7 @@ PRIVATE itmp htoip(Handle h, WindowPeek * wp_return, int16_t * nop_return, Signe
 }
 
 PUBLIC pascal trap void Executor::C_GetDItem(DialogPtr dp, /* IMI-421 */
-   INTEGER itemno, GUEST<INTEGER> * itype, GUEST<Handle> * item, Rect * r)
+                                             INTEGER itemno, GUEST<INTEGER> *itype, GUEST<Handle> *item, Rect *r)
 {
     SignedByte flags;
     itmp ip = ROMlib_dpnotoip((DialogPeek)dp, itemno, &flags);
@@ -256,7 +255,7 @@ settexth(DialogPeek dp, itmp ip, int item_no)
 }
 
 PUBLIC pascal trap void Executor::C_SetDItem(DialogPtr dp, /* IMI-421 */
-   INTEGER itemno, INTEGER itype, Handle item, Rect * r)
+                                             INTEGER itemno, INTEGER itype, Handle item, Rect *r)
 {
 
     SignedByte flags;
@@ -282,7 +281,7 @@ PUBLIC pascal trap void Executor::C_SetDItem(DialogPtr dp, /* IMI-421 */
 }
 
 PUBLIC pascal trap void Executor::C_GetIText(Handle item, /* IMI-422 */
-   StringPtr text)
+                                             StringPtr text)
 {
     Size hs;
 
@@ -302,7 +301,7 @@ PUBLIC pascal trap void Executor::C_GetIText(Handle item, /* IMI-422 */
 }
 
 PUBLIC pascal trap void Executor::C_SetIText(Handle item, /* IMI-422 */
-   StringPtr text)
+                                             StringPtr text)
 {
     if(item) /* put this test in for Golf 6.0's sake */
     {
@@ -385,7 +384,7 @@ PUBLIC void Executor::ROMlib_dpntoteh(DialogPeek dp, INTEGER no) /* INTERNAL */
 }
 
 PUBLIC pascal trap void Executor::C_SelIText(DialogPtr dp, /* IMI-422 */
-   INTEGER itemno, INTEGER start, INTEGER stop)
+                                             INTEGER itemno, INTEGER start, INTEGER stop)
 {
     ROMlib_dpntoteh((DialogPeek)dp, itemno);
     TESetSelect(start, stop, DIALOG_TEXTH(dp));
@@ -402,7 +401,7 @@ PUBLIC void Executor::ResetAlrtStage() /* IMI-423 */
 }
 
 PUBLIC pascal trap void Executor::C_HideDItem(DialogPtr dp, /* IMIV-59 */
-   INTEGER item)
+                                              INTEGER item)
 {
     itmp ip;
     Rect r;
@@ -442,7 +441,7 @@ PUBLIC pascal trap void Executor::C_HideDItem(DialogPtr dp, /* IMIV-59 */
 }
 
 PUBLIC pascal trap void Executor::C_ShowDItem(DialogPtr dp, /* IMIV-59 */
-   INTEGER item)
+                                              INTEGER item)
 {
     itmp ip;
     Rect r;

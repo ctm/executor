@@ -46,7 +46,6 @@ extern virtual_int_state_t _virtual_interrupts_blocked;
 #define IF_MSDOS(x)
 #endif
 
-
 extern void do_virtual_interrupt(void);
 #define check_virtual_interrupt()                    \
     do                                               \
@@ -73,7 +72,6 @@ public:
         restore_virtual_ints(state);
     }
 };
-
 }
 
 #endif /* !_BLOCKINTERRUPTS_H_ */

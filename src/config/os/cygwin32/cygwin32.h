@@ -83,11 +83,11 @@ struct timezone
 extern int geteuid(void);
 extern int Timer32_Init(void);
 
-#define ST_INO(buf)                                         \
-    ({                                                      \
-        struct stat tmp;                                    \
-                                                            \
-        tmp = buf;                                          \
+#define ST_INO(buf)                                             \
+    ({                                                          \
+        struct stat tmp;                                        \
+                                                                \
+        tmp = buf;                                              \
         ((uint16_t)tmp.st_ino << 16) | ((uint16_t)tmp.st_rdev); \
     })
 

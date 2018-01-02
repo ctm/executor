@@ -32,7 +32,7 @@ using namespace Executor;
 
 #define _FindControl(arg0, arg1, arg2)             \
     ({                                             \
-        int16_t retval;                              \
+        int16_t retval;                            \
         GUEST<ControlHandle> bogo_c;               \
                                                    \
         retval = FindControl(arg0, arg1, &bogo_c); \

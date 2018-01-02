@@ -19,7 +19,7 @@ PUBLIC OSErr Executor::SetTagBuffer(Ptr bp)
     return paramErr;
 }
 
-PUBLIC OSErr Executor::DriveStatus(INTEGER dn, DrvSts * statp)
+PUBLIC OSErr Executor::DriveStatus(INTEGER dn, DrvSts *statp)
 {
     return paramErr;
 }

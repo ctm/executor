@@ -384,22 +384,23 @@ PRIVATE OSErr
 check_existing_connections(Str63 library, OSType arch, LoadFlags loadflags,
                            ConnectionID *cidp, Ptr *mainaddrp, Str255 errName)
 {
-/* TODO */
-// FIXME: #warning TODO
+    /* TODO */
+    // FIXME: #warning TODO
     return fragLibNotFound;
 }
 
 PRIVATE void
 get_root_and_app(INTEGER *root_vrefp, LONGINT *root_diridp,
-                 INTEGER *app_vrefp, LONGINT *app_diridp){
-// FIXME: #warning TODO
+                 INTEGER *app_vrefp, LONGINT *app_diridp)
+{
+    // FIXME: #warning TODO
     /* TODO */
 }
 
 PRIVATE OSErr
-    check_file(INTEGER vref, LONGINT dirid, Str255 file, bool shlb_test_p,
-               Str63 library, OSType arch, LoadFlags loadflags,
-               ConnectionID *cidp, Ptr *mainaddrp, Str255 errName)
+check_file(INTEGER vref, LONGINT dirid, Str255 file, bool shlb_test_p,
+           Str63 library, OSType arch, LoadFlags loadflags,
+           ConnectionID *cidp, Ptr *mainaddrp, Str255 errName)
 {
     OSErr retval;
     FSSpec fs;
@@ -521,7 +522,7 @@ check_vanddir(INTEGER vref, LONGINT dirid, int descend_count, Str63 library,
  *
  */
 
-PUBLIC pascal trap OSErr Executor::C_GetSharedLibrary(Str63 library, OSType arch, LoadFlags loadflags, ConnectionID * cidp, Ptr * mainaddrp, Str255 errName)
+PUBLIC pascal trap OSErr Executor::C_GetSharedLibrary(Str63 library, OSType arch, LoadFlags loadflags, ConnectionID *cidp, Ptr *mainaddrp, Str255 errName)
 {
     OSErr retval;
 
@@ -575,7 +576,7 @@ PUBLIC pascal trap OSErr Executor::C_GetSharedLibrary(Str63 library, OSType arch
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_CloseConnection(ConnectionID * cidp)
+PUBLIC pascal trap OSErr Executor::C_CloseConnection(ConnectionID *cidp)
 {
     warning_trace_info("cidp = %p, cid = 0x%x", cidp, (uint32_t)*cidp);
     return noErr;
@@ -926,7 +927,7 @@ begin_closure(uint32_t n_libs, PEFImportedLibrary_t *libs,
     retval = (decltype(retval))NewPtr(sizeof *retval + n_libs * sizeof(lib_t));
     N_LIBS_X(retval) = CL(n_libs);
 
-// FIXME: #warning eventually need to worry about errors
+    // FIXME: #warning eventually need to worry about errors
 
     for(err = noErr, i = 0; /* err == noErr && */ i < n_libs; ++i)
     {
@@ -1244,7 +1245,7 @@ ROMlib_new_connection(uint32_t n_sects)
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_GetMemFragment(void * addr, uint32_t length, Str63 fragname, LoadFlags flags, ConnectionID * connp, Ptr * mainAddrp, Str255 errname)
+PUBLIC pascal trap OSErr Executor::C_GetMemFragment(void *addr, uint32_t length, Str63 fragname, LoadFlags flags, ConnectionID *connp, Ptr *mainAddrp, Str255 errname)
 {
     OSErr retval;
 
@@ -1498,7 +1499,7 @@ try_to_mmap_file(FSSpecPtr fsp, LONGINT offset, LONGINT length,
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_GetDiskFragment(FSSpecPtr fsp, LONGINT offset, LONGINT length, Str63 fragname, LoadFlags flags, ConnectionID * connp, Ptr * mainAddrp, Str255 errname)
+PUBLIC pascal trap OSErr Executor::C_GetDiskFragment(FSSpecPtr fsp, LONGINT offset, LONGINT length, Str63 fragname, LoadFlags flags, ConnectionID *connp, Ptr *mainAddrp, Str255 errname)
 {
     OSErr retval;
     int context;

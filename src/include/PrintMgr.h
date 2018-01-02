@@ -50,7 +50,7 @@ enum
     iPrIOCtl = 5,
 };
 
-const char* const sPrDrvr = ".Print";
+const char *const sPrDrvr = ".Print";
 enum
 {
     iPrDrvrRef = (-3),

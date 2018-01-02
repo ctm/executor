@@ -137,7 +137,6 @@ typedef struct
 
 extern driverinfo *__ROMlib_otherdrivers;
 
-
 extern OSErr PBControl(ParmBlkPtr pbp, BOOLEAN a);
 extern OSErr PBStatus(ParmBlkPtr pbp, BOOLEAN a);
 extern OSErr PBKillIO(ParmBlkPtr pbp, BOOLEAN a);

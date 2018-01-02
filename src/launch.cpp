@@ -159,7 +159,7 @@ PRIVATE void ParseConfigFile(StringPtr exefname, OSType type)
     reset_string(&ROMlib_Comments);
     ROMlib_desired_bpp = 0;
     fname0 = name0stripappl(exefname);
-    std::string appname(exefname+1, exefname + 1 + fname0);
+    std::string appname(exefname + 1, exefname + 1 + fname0);
 
     ROMlib_configfilename = ROMlib_ConfigurationFolder + "/" + appname + CONFIGEXTENSION;
     configfile = Ufopen(ROMlib_configfilename.c_str(), "r");
@@ -271,18 +271,18 @@ PRIVATE void ParseConfigFile(StringPtr exefname, OSType type)
 
 #else
 
-#define SetTitle(x)                     \
-    do                                  \
-    {                                   \
-        char *_x;                       \
-        char *_title;                   \
-        int len;                        \
-                                        \
-        _x = (x);                       \
-        len = strlen(_x) + 1;           \
-        _title = (char *)alloca(len);   \
-        memcpy(_title, _x, len);        \
-        ROMlib_SetTitle(_title);        \
+#define SetTitle(x)                   \
+    do                                \
+    {                                 \
+        char *_x;                     \
+        char *_title;                 \
+        int len;                      \
+                                      \
+        _x = (x);                     \
+        len = strlen(_x) + 1;         \
+        _title = (char *)alloca(len); \
+        memcpy(_title, _x, len);      \
+        ROMlib_SetTitle(_title);      \
     } while(0)
 
 #endif
@@ -674,11 +674,11 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
         jumplen = CL(*lp++);
         jumpoff = CL(*lp++);
 
-/*
+        /*
 	 * NOTE: The stack initialization code that was here has been moved
 	 *	     to ROMlib_InitZones in mman.c
 	 */
-/* #warning Stack is getting reinitialized even when Chain is called ... */
+        /* #warning Stack is getting reinitialized even when Chain is called ... */
 
         EM_A7 -= abovea5 + belowa5;
         CurStackBase = guest_cast<Ptr>(CL(EM_A7));

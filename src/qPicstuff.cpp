@@ -145,7 +145,7 @@ PRIVATE void nop()
 {
 }
 
-PRIVATE void thepat(Pattern * p)
+PRIVATE void thepat(Pattern *p)
 {
     ROMlib_fill_pat(*p);
 }
@@ -283,7 +283,7 @@ PRIVATE void eatPattern(Pattern pat);
 PRIVATE void eatPixPat(PixPatHandle pixpat);
 PRIVATE unsigned short nextop(INTEGER vers);
 
-PRIVATE void longtext(Point pt, StringPtr s, GUEST<Point> * pp)
+PRIVATE void longtext(Point pt, StringPtr s, GUEST<Point> *pp)
 {
     GUEST<Point> save;
     Point numer, denom;
@@ -298,7 +298,7 @@ PRIVATE void longtext(Point pt, StringPtr s, GUEST<Point> * pp)
     PORT_PEN_LOC(thePort) = save;
 }
 
-PRIVATE void dhtext(unsigned char dh, StringPtr s, GUEST<Point> * pp)
+PRIVATE void dhtext(unsigned char dh, StringPtr s, GUEST<Point> *pp)
 {
     GUEST<Point> save;
     Point numer, denom;
@@ -311,7 +311,7 @@ PRIVATE void dhtext(unsigned char dh, StringPtr s, GUEST<Point> * pp)
     PORT_PEN_LOC(thePort) = save;
 }
 
-PRIVATE void dvtext(unsigned char dv, StringPtr s, GUEST<Point> * pp)
+PRIVATE void dvtext(unsigned char dv, StringPtr s, GUEST<Point> *pp)
 {
     GUEST<Point> save;
     Point numer, denom;
@@ -324,7 +324,7 @@ PRIVATE void dvtext(unsigned char dv, StringPtr s, GUEST<Point> * pp)
     PORT_PEN_LOC(thePort) = save;
 }
 
-PRIVATE void dhdvtext(Byte dh, Byte dv, StringPtr s, GUEST<Point> * pp)
+PRIVATE void dhdvtext(Byte dh, Byte dv, StringPtr s, GUEST<Point> *pp)
 {
     GUEST<Point> save;
     Point numer, denom;
@@ -338,22 +338,22 @@ PRIVATE void dhdvtext(Byte dh, Byte dv, StringPtr s, GUEST<Point> * pp)
     PORT_PEN_LOC(thePort) = save;
 }
 
-PRIVATE void fillrct(Rect * r)
+PRIVATE void fillrct(Rect *r)
 {
     CALLRECT(fill, r);
 }
 
-PRIVATE void fillrrct(Rect * r, INTEGER ow, INTEGER oh)
+PRIVATE void fillrrct(Rect *r, INTEGER ow, INTEGER oh)
 {
     CALLRRECT(fill, r, ow, oh);
 }
 
-PRIVATE void fillovl(Rect * r)
+PRIVATE void fillovl(Rect *r)
 {
     CALLOVAL(fill, r);
 }
 
-PRIVATE void fillarc(Rect * r, INTEGER stang, INTEGER arcang)
+PRIVATE void fillarc(Rect *r, INTEGER stang, INTEGER arcang)
 {
     CALLARC(fill, r, stang, arcang);
 }
@@ -1086,7 +1086,7 @@ PRIVATE void eatRegion(RgnHandle rh, Size hs)
     nextbytep += hs - sizeof(INTEGER);
 }
 
-PRIVATE void eatRect(Rect * rp)
+PRIVATE void eatRect(Rect *rp)
 {
     rp->top = eatINTEGERX();
     rp->left = eatINTEGERX();
@@ -1117,14 +1117,14 @@ PRIVATE void eatPixMap(PixMapPtr pixp, INTEGER rowb)
     pixp->pmReserved = eatLONGINTX();
 }
 
-PRIVATE void eatBitMap(BitMap * bp, INTEGER rowb)
+PRIVATE void eatBitMap(BitMap *bp, INTEGER rowb)
 {
     bp->baseAddr = 0;
     bp->rowBytes = rowb ? CW(rowb) : eatINTEGERX();
     eatRect(&bp->bounds);
 }
 
-PRIVATE Size eatpixdata(PixMapPtr pixmap, BOOLEAN * freep)
+PRIVATE Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
 {
     int rowb;
     Size pic_data_size, final_data_size;
@@ -1290,7 +1290,7 @@ PRIVATE Size eatpixdata(PixMapPtr pixmap, BOOLEAN * freep)
     return final_data_size;
 }
 
-PRIVATE void eatbitdata(BitMap * bp, BOOLEAN packed)
+PRIVATE void eatbitdata(BitMap *bp, BOOLEAN packed)
 {
     INTEGER rowb;
     Size datasize;
@@ -1373,7 +1373,7 @@ PRIVATE void eatbitdata(BitMap * bp, BOOLEAN packed)
     }
 }
 
-PRIVATE void eatRGBColor(RGBColor * rgbp)
+PRIVATE void eatRGBColor(RGBColor *rgbp)
 {
     rgbp->red = eatINTEGERX();
     rgbp->green = eatINTEGERX();
@@ -1487,7 +1487,7 @@ PRIVATE unsigned short nextop(INTEGER vers)
 
 #define SE(x) ((x & 0x80) ? x | (~0 ^ 0xff) : x & 0xff) /* sign extend */
 
-PUBLIC pascal trap void Executor::C_DrawPicture(PicHandle pic, Rect * destrp)
+PUBLIC pascal trap void Executor::C_DrawPicture(PicHandle pic, Rect *destrp)
 {
     INTEGER words[2], *wp;
     Point points[2], *pp;

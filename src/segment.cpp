@@ -116,7 +116,7 @@ PUBLIC trap void Executor::HWPriv(LONGINT d0, LONGINT a0)
     }
 }
 
-PUBLIC char * Executor::ROMlib_undotdot(char * origp)
+PUBLIC char *Executor::ROMlib_undotdot(char *origp)
 {
     int dotcount, nleft;
     char *p, *oldloc;
@@ -309,11 +309,10 @@ colon_colon_copy(StringPtr dst, const char *src)
         retval;                                                         \
     })
 
-
 PRIVATE BOOLEAN argv_to_appfile(char *, AppFile *);
 PUBLIC void ROMlib_seginit(LONGINT, char **); /* INTERNAL */
 
-PRIVATE BOOLEAN argv_to_appfile(char * uname, AppFile * ap)
+PRIVATE BOOLEAN argv_to_appfile(char *uname, AppFile *ap)
 {
     int namelen, pathlen;
     unsigned char *path, *p;
@@ -443,7 +442,7 @@ PUBLIC int Executor::ROMlib_print;
 #define PATH_SEPARATER ';'
 #endif
 
-PUBLIC void Executor::ROMlib_seginit(LONGINT argc, char ** argv) /* INTERNAL */
+PUBLIC void Executor::ROMlib_seginit(LONGINT argc, char **argv) /* INTERNAL */
 {
     char *path, *firstcolon;
     char *fullpathname;
@@ -560,7 +559,7 @@ PUBLIC void Executor::ROMlib_seginit(LONGINT argc, char ** argv) /* INTERNAL */
         }
 }
 
-PUBLIC void Executor::CountAppFiles(GUEST<INTEGER> * messagep, GUEST<INTEGER> * countp) /* IMII-57 */
+PUBLIC void Executor::CountAppFiles(GUEST<INTEGER> *messagep, GUEST<INTEGER> *countp) /* IMII-57 */
 {
     if(AppParmHandle)
     {
@@ -573,7 +572,7 @@ PUBLIC void Executor::CountAppFiles(GUEST<INTEGER> * messagep, GUEST<INTEGER> * 
         *countp = 0;
 }
 
-PUBLIC void Executor::GetAppFiles(INTEGER index, AppFile * filep) /* IMII-58 */
+PUBLIC void Executor::GetAppFiles(INTEGER index, AppFile *filep) /* IMII-58 */
 {
     *filep = STARH((finderinfohand)MR(AppParmHandle))->files[index - 1];
 }
@@ -588,7 +587,7 @@ PUBLIC void Executor::ClrAppFiles(INTEGER index) /* IMII-58 */
 }
 
 PUBLIC pascal trap void Executor::C_GetAppParms(StringPtr namep, /* IMII-58 */
-   GUEST<INTEGER> * rnp, GUEST<Handle> * aphandp)
+                                                GUEST<INTEGER> *rnp, GUEST<Handle> *aphandp)
 {
     str255assign(namep, CurApName);
     *rnp = CurApRefNum;

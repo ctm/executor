@@ -66,7 +66,7 @@ PUBLIC pascal trap INTEGER Executor::C_CountResources(ResType typ)
 }
 
 PUBLIC pascal trap INTEGER Executor::C_Count1Resources(/* IMIV-15 */
-   ResType typ)
+                                                       ResType typ)
 {
     resmaphand map;
 
@@ -79,7 +79,7 @@ PUBLIC pascal trap INTEGER Executor::C_Count1Resources(/* IMIV-15 */
     return (countmapresources(map, typ));
 }
 
-PRIVATE Handle getindmapresource(resmaphand map, ResType typ, INTEGER * indx)
+PRIVATE Handle getindmapresource(resmaphand map, ResType typ, INTEGER *indx)
 {
     INTEGER i, j, nr;
     typref *tr;
@@ -121,7 +121,7 @@ PUBLIC pascal trap Handle Executor::C_GetIndResource(ResType typ, INTEGER indx)
 }
 
 PUBLIC pascal trap Handle Executor::C_Get1IndResource(ResType typ, /* IMIV-15 */
-   INTEGER i)
+                                                      INTEGER i)
 {
     resmaphand map;
     Handle retval;
@@ -150,7 +150,7 @@ PUBLIC pascal trap Handle Executor::C_Get1IndResource(ResType typ, /* IMIV-15 */
 				    *ptr is filled in appropriately */
 
 PUBLIC OSErr Executor::ROMlib_maptypidtop(resmaphand map, /* INTERNAL */
-   ResType typ, INTEGER id, resref ** ptr)
+                                          ResType typ, INTEGER id, resref **ptr)
 {
     INTEGER i, j;
     typref *tr;
@@ -176,7 +176,7 @@ PUBLIC OSErr Executor::ROMlib_maptypidtop(resmaphand map, /* INTERNAL */
                 with a resmap handle and a resref pointer */
 
 PUBLIC OSErr Executor::ROMlib_typidtop(ResType typ, INTEGER id, /* INTERNAL */
-   resmaphand * pth, resref ** ptr)
+                                       resmaphand *pth, resref **ptr)
 {
     resmaphand map;
 
@@ -369,7 +369,7 @@ PUBLIC pascal trap Handle Executor::C_GetResource(ResType typ, INTEGER id)
 }
 
 PUBLIC pascal trap Handle Executor::C_Get1Resource(ResType typ, /* IMIV-16 */
-   INTEGER id)
+                                                   INTEGER id)
 {
     Handle retval;
     resmaphand map;
@@ -448,7 +448,7 @@ DONE:
 }
 
 PUBLIC pascal trap Handle Executor::C_Get1NamedResource(ResType typ, /* IMIV-16 */
-   StringPtr s)
+                                                        StringPtr s)
 {
     resmaphand map;
 

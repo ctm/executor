@@ -681,7 +681,7 @@ restore(const save_t *sp)
 }
 
 PUBLIC pascal LONGINT Executor::C_cdef16(/* IMI-328 */
-   INTEGER var, ControlHandle c, INTEGER mess, LONGINT param)
+                                         INTEGER var, ControlHandle c, INTEGER mess, LONGINT param)
 {
     Point p;
     PenState ps;
@@ -718,7 +718,7 @@ PUBLIC pascal LONGINT Executor::C_cdef16(/* IMI-328 */
                            &HxX(c, contrlRect), &r))
             {
                 validate_colors_for_control(c);
-                
+
                 GetPenState(&ps);
                 PenNormal();
                 {
@@ -729,11 +729,11 @@ PUBLIC pascal LONGINT Executor::C_cdef16(/* IMI-328 */
                     RectRgn(rh, &HxX(c, contrlRect));
                     dlp.ctl = c;
                     dlp.param = param;
-                    DeviceLoop(rh, (DeviceLoopDrawingProcPtr) P_new_draw_scroll, ptr_to_longint(&dlp), 0);
+                    DeviceLoop(rh, (DeviceLoopDrawingProcPtr)P_new_draw_scroll, ptr_to_longint(&dlp), 0);
                     DisposeRgn(rh);
                 }
                 SetPenState(&ps);
-                
+
                 break;
             }
         case testCntl:
@@ -787,7 +787,7 @@ PUBLIC pascal LONGINT Executor::C_cdef16(/* IMI-328 */
                 RectRgn(rh, &HxX(c, contrlRect));
                 dlp.ctl = c;
                 dlp.param = param;
-                DeviceLoop(rh, (DeviceLoopDrawingProcPtr) P_new_pos_ctl, ptr_to_longint(&dlp), 0);
+                DeviceLoop(rh, (DeviceLoopDrawingProcPtr)P_new_pos_ctl, ptr_to_longint(&dlp), 0);
                 DisposeRgn(rh);
             }
             break;

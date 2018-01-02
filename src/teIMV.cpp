@@ -423,7 +423,7 @@ te_add_attrs_to_range(TEHandle te,
     te_style_combine_runs(te_style);
 }
 
-PUBLIC pascal trap TEHandle Executor::C_TEStylNew(Rect * dst, Rect * view)
+PUBLIC pascal trap TEHandle Executor::C_TEStylNew(Rect *dst, Rect *view)
 {
     FontInfo font_info;
     int16_t font_height;
@@ -662,7 +662,7 @@ PUBLIC pascal trap int32_t Executor::C_TEGetHeight(LONGINT endLine, LONGINT star
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_TEGetStyle(int16_t sel, TextStyle * attrs, GUEST<int16_t> * line_height, GUEST<int16_t> * font_ascent, TEHandle te)
+PUBLIC pascal trap void Executor::C_TEGetStyle(int16_t sel, TextStyle *attrs, GUEST<int16_t> *line_height, GUEST<int16_t> *font_ascent, TEHandle te)
 {
     if(TE_STYLIZED_P(te))
     {
@@ -756,7 +756,7 @@ te_do_redraw(TEHandle te)
     TERESTORE();
 }
 
-PUBLIC pascal trap void Executor::C_TESetStyle(int16_t mode, TextStyle * new_attrs, BOOLEAN redraw, TEHandle te)
+PUBLIC pascal trap void Executor::C_TESetStyle(int16_t mode, TextStyle *new_attrs, BOOLEAN redraw, TEHandle te)
 {
     int16_t start, end;
 
@@ -816,7 +816,7 @@ PUBLIC pascal trap void Executor::C_TESetStyle(int16_t mode, TextStyle * new_att
     TE_SLAM(te);
 }
 
-PUBLIC pascal trap void Executor::C_TEReplaceStyle(int16_t mode, TextStyle * attrs_to_replace, TextStyle * replacement_attrs, BOOLEAN redraw, TEHandle te)
+PUBLIC pascal trap void Executor::C_TEReplaceStyle(int16_t mode, TextStyle *attrs_to_replace, TextStyle *replacement_attrs, BOOLEAN redraw, TEHandle te)
 {
     TEStyleHandle te_style;
     SignedByte te_style_flags;
@@ -898,7 +898,7 @@ PUBLIC pascal trap void Executor::C_TEReplaceStyle(int16_t mode, TextStyle * att
     TE_SLAM(te);
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_TEContinuousStyle(GUEST<INTEGER> * modep, TextStyle * ts_out, TEHandle teh)
+PUBLIC pascal trap BOOLEAN Executor::C_TEContinuousStyle(GUEST<INTEGER> *modep, TextStyle *ts_out, TEHandle teh)
 {
     int16_t sel_start, sel_end;
     TEStyleHandle te_style;
@@ -1063,7 +1063,7 @@ PUBLIC pascal trap void Executor::C_SetStylScrap(int32_t start, int32_t stop, St
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC pascal trap void Executor::C_TECustomHook(int16_t sel, GUEST<ProcPtr> * addr, TEHandle te)
+PUBLIC pascal trap void Executor::C_TECustomHook(int16_t sel, GUEST<ProcPtr> *addr, TEHandle te)
 {
     ROMlib_hook(te_notsupported);
     warning_unimplemented(NULL_STRING);

@@ -19,7 +19,7 @@
 using namespace Executor;
 
 PUBLIC OSErr Executor::Create(StringPtr filen, INTEGER vrn, /* IMIV-112 */
-   OSType creator, OSType filtyp)
+                              OSType creator, OSType filtyp)
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -155,13 +155,13 @@ PUBLIC OSErr Executor::ufsPBCreate(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 }
 
 PUBLIC OSErr Executor::ufsPBHCreate(HParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                    BOOLEAN a)
 {
     return PBCreateForD((ParmBlkPtr)pb, a, File, Cx(pb->fileParam.ioDirID));
 }
 
 PUBLIC OSErr Executor::ufsPBDirCreate(HParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                      BOOLEAN a)
 {
     return PBCreateForD((ParmBlkPtr)pb, a, Directory, Cx(pb->fileParam.ioDirID));
 }
@@ -187,7 +187,7 @@ PRIVATE OSErr PBDeleteForD(ParmBlkPtr pb, BOOLEAN a, FOrDType ford, LONGINT dir)
         deletefailed = Uunlink(rpathname);
         double_dir_op(pathname, rmdir_op);
         if(!deletefailed || errno == ENOTDIR || errno == ENOENT || errno == ENOTSUP)
-                // ENOTSUP triggered by trying to delete ..namedfork/rsrc on Mac OS X
+            // ENOTSUP triggered by trying to delete ..namedfork/rsrc on Mac OS X
             deletefailed = Uunlink(pathname);
         if(deletefailed && ford == Directory)
         {
@@ -285,7 +285,7 @@ PUBLIC OSErr Executor::ufsPBDelete(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 }
 
 PUBLIC OSErr Executor::ufsPBHDelete(HParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                    BOOLEAN a)
 {
     return PBDeleteForD((ParmBlkPtr)pb, a, Directory, Cx(pb->fileParam.ioDirID));
 }

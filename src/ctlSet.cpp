@@ -14,7 +14,7 @@
 using namespace Executor;
 
 PUBLIC pascal trap void Executor::C_SetCtlValue(ControlHandle c, /* IMI-326 */
-   INTEGER v)
+                                                INTEGER v)
 {
     CtlCallGuard guard(c);
     if(v < Hx(c, contrlMin))
@@ -29,13 +29,13 @@ PUBLIC pascal trap void Executor::C_SetCtlValue(ControlHandle c, /* IMI-326 */
 }
 
 PUBLIC pascal trap INTEGER Executor::C_GetCtlValue(/* IMI-326 */
-   ControlHandle c)
+                                                   ControlHandle c)
 {
     return Hx(c, contrlValue);
 }
 
 PUBLIC pascal trap void Executor::C_SetCtlMin(ControlHandle c, /* IMI-326 */
-   INTEGER v)
+                                              INTEGER v)
 {
     CtlCallGuard guard(c);
     HxX(c, contrlMin) = CW(v);
@@ -50,7 +50,7 @@ PUBLIC pascal trap INTEGER Executor::C_GetCtlMin(ControlHandle c) /* IMI-327 */
 }
 
 PUBLIC pascal trap void Executor::C_SetCtlMax(ControlHandle c, /* IMI-327 */
-   INTEGER v)
+                                              INTEGER v)
 {
     CtlCallGuard guard(c);
     /* #### TEST ON MAC MacBreadboard's behaviour suggests that

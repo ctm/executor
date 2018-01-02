@@ -182,7 +182,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_IsMovieDone(Movie movie)
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_NewMovieFromFile(Movie * moviep, INTEGER refnum, INTEGER * residp, StringPtr resnamep, INTEGER flags, BOOLEAN * datarefwaschangedp)
+PUBLIC pascal trap OSErr Executor::C_NewMovieFromFile(Movie *moviep, INTEGER refnum, INTEGER *residp, StringPtr resnamep, INTEGER flags, BOOLEAN *datarefwaschangedp)
 {
     OSErr retval;
 
@@ -208,17 +208,17 @@ PUBLIC pascal trap Fixed Executor::C_GetMoviePreferredRate(Movie movie)
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_GetMovieBox(Movie movie, Rect * boxp)
+PUBLIC pascal trap void Executor::C_GetMovieBox(Movie movie, Rect *boxp)
 {
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC pascal trap void Executor::C_SetMovieBox(Movie movie, const Rect * boxp)
+PUBLIC pascal trap void Executor::C_SetMovieBox(Movie movie, const Rect *boxp)
 {
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC pascal trap ComponentInstance Executor::C_NewMovieController(Movie movie, const Rect * movierectp, LONGINT flags)
+PUBLIC pascal trap ComponentInstance Executor::C_NewMovieController(Movie movie, const Rect *movierectp, LONGINT flags)
 {
     ComponentInstance retval;
 
@@ -236,7 +236,7 @@ PUBLIC pascal trap void Executor::C_DisposeMovieController(ComponentInstance con
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC pascal trap OSErr Executor::C_OpenMovieFile(const FSSpec * filespecp, INTEGER * refnump, uint8 perm)
+PUBLIC pascal trap OSErr Executor::C_OpenMovieFile(const FSSpec *filespecp, INTEGER *refnump, uint8 perm)
 {
     OSErr retval;
 

@@ -256,7 +256,6 @@ namespace Executor
 #define HiliteRGB (*(GUEST<RGBColor> *)(0xDA0 + ROMlib_offset))
 #define TimeSCSIDB (*(GUEST<INTEGER> *)(0xDA6 + ROMlib_offset))
 #define lastlowglobal (*(GUEST<LONGINT> *)(0x2000 + ROMlib_offset))
-
 }
 
 #endif

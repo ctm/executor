@@ -12,7 +12,7 @@ using namespace Executor;
 
 /* traps from the DialogDispatch trap */
 
-PUBLIC pascal trap OSErr Executor::C_GetStdFilterProc(GUEST<ProcPtr> * proc)
+PUBLIC pascal trap OSErr Executor::C_GetStdFilterProc(GUEST<ProcPtr> *proc)
 {
     *proc = RM((ProcPtr)P_ROMlib_myfilt);
     warning_unimplemented("no specs"); /* i.e. no documentation on how this

@@ -49,7 +49,7 @@ PUBLIC trap void Executor::NumToString(LONGINT l, StringPtr s)
     s[0] = p - (s + 1);
 }
 
-PUBLIC trap void Executor::StringToNum(StringPtr s, LONGINT * lp)
+PUBLIC trap void Executor::StringToNum(StringPtr s, LONGINT *lp)
 {
     char *p = (char *)s + 1;
     char *ep = p + s[0];

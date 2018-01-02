@@ -1,8 +1,6 @@
 #if !defined(_RSYS_VERSION_H_)
 #define _RSYS_VERSION_H_
 
-
-
 #ifdef __cplusplus
 extern "C" {
 #endif

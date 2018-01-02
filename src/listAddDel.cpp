@@ -12,7 +12,7 @@
 using namespace Executor;
 
 PUBLIC pascal trap INTEGER Executor::C_LAddColumn(INTEGER count, /* IMIV-271 */
-   INTEGER coln, ListHandle list)
+                                                  INTEGER coln, ListHandle list)
 {
     Rect todraw;
     Point c;
@@ -34,7 +34,7 @@ PUBLIC pascal trap INTEGER Executor::C_LAddColumn(INTEGER count, /* IMIV-271 */
 
     if(noffsets)
     {
-        
+
         SetHandleSize((Handle)list,
                       GetHandleSize((Handle)list) + noffsets * sizeof(INTEGER));
         ncols = Hx(list, dataBounds.right) - Hx(list, dataBounds.left);
@@ -75,13 +75,12 @@ PUBLIC pascal trap INTEGER Executor::C_LAddColumn(INTEGER count, /* IMIV-271 */
                 for(c.h = CW(todraw.left); c.h < CW(todraw.right); c.h++)
                     C_LDraw(c, list);
         }
-        
     }
     return coln;
 }
 
 PUBLIC pascal trap INTEGER Executor::C_LAddRow(INTEGER count, /* IMIV-271 */
-   INTEGER rown, ListHandle list)
+                                               INTEGER rown, ListHandle list)
 {
     Rect todraw;
     Cell c;
@@ -102,7 +101,7 @@ PUBLIC pascal trap INTEGER Executor::C_LAddRow(INTEGER count, /* IMIV-271 */
 
     if(noffsets)
     {
-        
+
         SetHandleSize((Handle)list,
                       GetHandleSize((Handle)list) + noffsets * sizeof(INTEGER));
         nrows = Hx(list, dataBounds.bottom) - Hx(list, dataBounds.top);
@@ -132,7 +131,6 @@ PUBLIC pascal trap INTEGER Executor::C_LAddRow(INTEGER count, /* IMIV-271 */
                 for(c.h = CW(todraw.left); c.h < CW(todraw.right); c.h++)
                     C_LDraw(c, list);
         }
-        
     }
     return rown;
 }
@@ -161,7 +159,7 @@ compute_visible_rect(Rect *rp, ListHandle list, INTEGER top, INTEGER left,
 }
 
 PUBLIC pascal trap void Executor::C_LDelColumn(INTEGER count, /* IMIV-271 */
-   INTEGER coln, ListHandle list)
+                                               INTEGER coln, ListHandle list)
 {
     Rect todraw;
     Cell c;
@@ -208,7 +206,6 @@ PUBLIC pascal trap void Executor::C_LDelColumn(INTEGER count, /* IMIV-271 */
     {
         INTEGER visible_right, bounds_right;
 
-        
         ncols = Hx(list, dataBounds.right) - Hx(list, dataBounds.left);
         nbefore = (coln - Hx(list, dataBounds.left));
         nafter = ncols - nbefore;
@@ -297,12 +294,11 @@ PUBLIC pascal trap void Executor::C_LDelColumn(INTEGER count, /* IMIV-271 */
                 for(c.h = CW(todraw.left); c.h < CW(todraw.right); c.h++)
                     C_LDraw(c, list);
         }
-        
     }
 }
 
 PUBLIC pascal trap void Executor::C_LDelRow(INTEGER count, /* IMIV-272 */
-   INTEGER rown, ListHandle list)
+                                            INTEGER rown, ListHandle list)
 {
     Rect todraw;
     Cell c;
@@ -346,7 +342,6 @@ PUBLIC pascal trap void Executor::C_LDelRow(INTEGER count, /* IMIV-272 */
     {
         INTEGER visible_bottom, bounds_bottom;
 
-        
         nrows = Hx(list, dataBounds.bottom) - Hx(list, dataBounds.top);
         nbefore = (rown - Hx(list, dataBounds.top)) * ncols;
         nafter = nrows * ncols - nbefore;
@@ -415,6 +410,5 @@ PUBLIC pascal trap void Executor::C_LDelRow(INTEGER count, /* IMIV-272 */
                 for(c.h = CW(todraw.left); c.h < CW(todraw.right); c.h++)
                     C_LDraw(c, list);
         }
-        
     }
 }

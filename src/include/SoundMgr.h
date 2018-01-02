@@ -33,7 +33,7 @@ enum
 };
 
 struct SndChannel;
-typedef UPP<void (SndChannel*,SndCommand*)> SndCallbackProcPtr;
+typedef UPP<void(SndChannel *, SndCommand *)> SndCallbackProcPtr;
 
 typedef struct SndChannel
 {
@@ -179,8 +179,7 @@ enum
     dbLastBuffer = 4
 };
 
-
-typedef UPP<void (SndChannelPtr, SndDoubleBufferPtr)> SndDoubleBackProcPtr;
+typedef UPP<void(SndChannelPtr, SndDoubleBufferPtr)> SndDoubleBackProcPtr;
 
 typedef struct SndDoubleBufferHeader
 {

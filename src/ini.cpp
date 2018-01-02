@@ -82,8 +82,8 @@ Executor::new_key_value_pair(heading_t heading, unsigned char *keystart, int key
                              unsigned char *valuestart, int valuelen)
 {
     pair_link_t *pairp = new pair_link_t;
-    pairp->key = std::string(keystart, keystart+keylen);
-    pairp->value = std::string(valuestart, valuestart+valuelen);
+    pairp->key = std::string(keystart, keystart + keylen);
+    pairp->value = std::string(valuestart, valuestart + valuelen);
 
     heading_link_t *headingp = find_heading(heading);
     pairp->next = 0;

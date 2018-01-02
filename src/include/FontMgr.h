@@ -253,7 +253,6 @@ PASCAL_TRAP(SetFScaleDisable, 0xA834);
 extern pascal trap void C_SetFractEnable(BOOLEAN enable);
 PASCAL_TRAP(SetFractEnable, 0xA814);
 
-
 extern pascal trap void C_SetOutlinePreferred(Boolean _outline_perferred_p);
 PASCAL_FUNCTION(SetOutlinePreferred);
 extern pascal trap Boolean C_GetOutlinePreferred(void);

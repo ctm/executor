@@ -13,8 +13,8 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_LFind(GUEST<INTEGER> * offsetp, /* IMIV-274 */
-   GUEST<INTEGER> * lenp, Cell cell, ListHandle list)
+PUBLIC pascal trap void Executor::C_LFind(GUEST<INTEGER> *offsetp, /* IMIV-274 */
+                                          GUEST<INTEGER> *lenp, Cell cell, ListHandle list)
 {
     GUEST<INTEGER> *ip;
 
@@ -28,7 +28,7 @@ PUBLIC pascal trap void Executor::C_LFind(GUEST<INTEGER> * offsetp, /* IMIV-274 
 }
 
 PUBLIC pascal trap BOOLEAN Executor::C_LNextCell(BOOLEAN hnext, /* IMIV-274 */
-   BOOLEAN vnext, GUEST<Cell> * cellp, ListHandle list)
+                                                 BOOLEAN vnext, GUEST<Cell> *cellp, ListHandle list)
 {
     BOOLEAN retval;
     Point scratch;
@@ -66,8 +66,8 @@ PUBLIC pascal trap BOOLEAN Executor::C_LNextCell(BOOLEAN hnext, /* IMIV-274 */
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_LRect(Rect * cellrect, /* IMIV-274 */
-   Cell cell, ListHandle list)
+PUBLIC pascal trap void Executor::C_LRect(Rect *cellrect, /* IMIV-274 */
+                                          Cell cell, ListHandle list)
 {
     Point csize;
     INTEGER temp;
@@ -125,7 +125,7 @@ static inline INTEGER Executor::ROMlib_CALLCMP(Ptr p1, Ptr p2, INTEGER l1, INTEG
 #endif /* BINCOMPAT */
 
 PUBLIC pascal trap BOOLEAN Executor::C_LSearch(Ptr dp, /* IMIV-274 */
-   INTEGER dl, Ptr proc, GUEST<Cell> * cellp, ListHandle list)
+                                               INTEGER dl, Ptr proc, GUEST<Cell> *cellp, ListHandle list)
 {
     GUEST<INTEGER> offS, lenS;
     INTEGER off, len;
@@ -170,7 +170,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_LSearch(Ptr dp, /* IMIV-274 */
 }
 
 PUBLIC pascal trap void Executor::C_LSize(INTEGER width, /* IMIV-274 */
-   INTEGER height, ListHandle list)
+                                          INTEGER height, ListHandle list)
 {
     INTEGER oldright, oldbottom, newright, newbottom;
     ControlHandle cv, ch;
@@ -178,7 +178,6 @@ PUBLIC pascal trap void Executor::C_LSize(INTEGER width, /* IMIV-274 */
     Rect r;
     Point p;
 
-    
     oldright = Hx(list, rView.right);
     oldbottom = Hx(list, rView.bottom);
     newright = Hx(list, rView.left) + width;
@@ -255,5 +254,4 @@ PUBLIC pascal trap void Executor::C_LSize(INTEGER width, /* IMIV-274 */
     C_LUpdate(updatergn, list);
     DisposeRgn(updatergn);
     DisposeRgn(rectrgn);
-    
 }

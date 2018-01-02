@@ -202,6 +202,5 @@ extern trap OSErrRET ReplaceGestalt(OSType selector, ProcPtr selFunc,
 extern trap OSErrRET C_GestaltTablesOnly(OSType selector,
                                          GUEST<LONGINT> *responsep);
 PASCAL_FUNCTION(GestaltTablesOnly);
-
 }
 #endif

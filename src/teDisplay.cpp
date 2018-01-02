@@ -25,23 +25,23 @@ PUBLIC pascal trap void Executor::C_TESetJust(INTEGER j, TEHandle teh)
     TE_SLAM(teh);
 }
 
-PUBLIC pascal trap void Executor::C_TEUpdate(Rect * r, TEHandle te)
+PUBLIC pascal trap void Executor::C_TEUpdate(Rect *r, TEHandle te)
 {
     TE_SLAM(te);
     if(!ROMlib_emptyvis)
     {
         TESAVE(te);
-        
+
         TE_DO_TEXT(te, 0, TE_LENGTH(te), teDraw);
         if(TE_ACTIVE(te) && TE_CARET_STATE(te) != 255)
             ROMlib_togglelite(te);
-        
+
         TERESTORE();
     }
     TE_SLAM(te);
 }
 
-PUBLIC pascal trap void Executor::C_TextBox(Ptr p, int32_t ln, Rect * r, int16_t j)
+PUBLIC pascal trap void Executor::C_TextBox(Ptr p, int32_t ln, Rect *r, int16_t j)
 {
     TEHandle teh;
     Rect viewrect;
@@ -75,7 +75,7 @@ PUBLIC pascal trap void Executor::C_TEScroll(int16_t dh, int16_t dv, TEHandle te
 
     TESAVE(te);
     TE_SLAM(te);
-    
+
     rh = NewRgn();
 
     r = TE_VIEW_RECT(te);
@@ -93,7 +93,6 @@ PUBLIC pascal trap void Executor::C_TEScroll(int16_t dh, int16_t dv, TEHandle te
     PORT_VIS_REGION_X(thePort) = RM(save_vis);
     DisposeRgn(rh);
 
-    
     TE_SLAM(te);
     TERESTORE();
 }

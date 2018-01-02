@@ -49,11 +49,11 @@
 #define str255assign(d, s) \
     (BlockMove((Ptr)(s), (Ptr)(d), (Size)((unsigned char)(s)[0]) + 1))
 
-#define PATASSIGN(dest, src)                             \
+#define PATASSIGN(dest, src)                                 \
     (((uint32_t *)(dest))[0] = ((const uint32_t *)(src))[0], \
      ((uint32_t *)(dest))[1] = ((const uint32_t *)(src))[1])
 
-#define PATTERNS_EQUAL_P(p1, p2)                            \
+#define PATTERNS_EQUAL_P(p1, p2)                                \
     (((const uint32_t *)(p1))[0] == ((const uint32_t *)(p2))[0] \
      && ((const uint32_t *)(p1))[1] == ((const uint32_t *)(p2))[1])
 

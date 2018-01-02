@@ -115,7 +115,7 @@ extern int16_t te_char_to_lineno(TEPtr te, int16_t sel);
 extern void ROMlib_teautoloop(TEHandle teh);
 
 extern int16_t ROMlib_call_TEDoText(TEPtr tp, int16_t first, int16_t last,
-                                  int16_t what);
+                                    int16_t what);
 
 struct tehidden
 {

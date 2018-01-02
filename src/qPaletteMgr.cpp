@@ -1225,7 +1225,7 @@ enum
     usePM = 1
 };
 
-PUBLIC pascal trap void Executor::C_SaveFore(ColorSpec * cp)
+PUBLIC pascal trap void Executor::C_SaveFore(ColorSpec *cp)
 {
     warning_unimplemented("always uses RGB");
 
@@ -1233,7 +1233,7 @@ PUBLIC pascal trap void Executor::C_SaveFore(ColorSpec * cp)
     cp->value = CWC(useRGB);
 }
 
-PUBLIC pascal trap void Executor::C_RestoreFore(ColorSpec * cp)
+PUBLIC pascal trap void Executor::C_RestoreFore(ColorSpec *cp)
 {
     switch(CW(cp->value))
     {
@@ -1251,7 +1251,7 @@ PUBLIC pascal trap void Executor::C_RestoreFore(ColorSpec * cp)
     }
 }
 
-PUBLIC pascal trap void Executor::C_SaveBack(ColorSpec * cp)
+PUBLIC pascal trap void Executor::C_SaveBack(ColorSpec *cp)
 {
     warning_unimplemented("always uses RGB");
 
@@ -1259,7 +1259,7 @@ PUBLIC pascal trap void Executor::C_SaveBack(ColorSpec * cp)
     cp->value = CWC(useRGB);
 }
 
-PUBLIC pascal trap void Executor::C_RestoreBack(ColorSpec * cp)
+PUBLIC pascal trap void Executor::C_RestoreBack(ColorSpec *cp)
 {
     switch(CW(cp->value))
     {
@@ -1279,7 +1279,7 @@ PUBLIC pascal trap void Executor::C_RestoreBack(ColorSpec * cp)
 
 static int update_host_colors_p = true;
 
-PUBLIC pascal trap void Executor::C_AnimateEntry(WindowPtr dst_window, INTEGER dst_entry, RGBColor * src_rgb_color)
+PUBLIC pascal trap void Executor::C_AnimateEntry(WindowPtr dst_window, INTEGER dst_entry, RGBColor *src_rgb_color)
 {
     PalettePtr palette;
     PaletteHandle dst_palette_h;
@@ -1368,7 +1368,7 @@ PUBLIC pascal trap void Executor::C_AnimatePalette(WindowPtr dst_window, CTabHan
     }
 }
 
-PUBLIC pascal trap void Executor::C_GetEntryColor(PaletteHandle src_palette, INTEGER entry_index, RGBColor * dst_rgb_color)
+PUBLIC pascal trap void Executor::C_GetEntryColor(PaletteHandle src_palette, INTEGER entry_index, RGBColor *dst_rgb_color)
 {
     ColorInfo *entry;
 
@@ -1376,7 +1376,7 @@ PUBLIC pascal trap void Executor::C_GetEntryColor(PaletteHandle src_palette, INT
     *dst_rgb_color = entry->ciRGB;
 }
 
-PUBLIC pascal trap void Executor::C_SetEntryColor(PaletteHandle dst_palette, INTEGER entry_index, RGBColor * src_rgb_color)
+PUBLIC pascal trap void Executor::C_SetEntryColor(PaletteHandle dst_palette, INTEGER entry_index, RGBColor *src_rgb_color)
 {
     ColorInfo *entry;
 
@@ -1393,7 +1393,7 @@ PUBLIC pascal trap void Executor::C_SetEntryColor(PaletteHandle dst_palette, INT
     PALETTE_SET_MODIFIED(dst_palette);
 }
 
-PUBLIC pascal trap void Executor::C_GetEntryUsage(PaletteHandle src_palette, INTEGER entry_index, GUEST<INTEGER> * dst_usage, GUEST<INTEGER> * dst_tolerance)
+PUBLIC pascal trap void Executor::C_GetEntryUsage(PaletteHandle src_palette, INTEGER entry_index, GUEST<INTEGER> *dst_usage, GUEST<INTEGER> *dst_tolerance)
 {
     ColorInfo *entry;
 

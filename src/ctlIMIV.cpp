@@ -24,7 +24,7 @@ PUBLIC pascal trap void Executor::C_Draw1Control(ControlHandle c) /* IMIV-53 */
 }
 
 PUBLIC pascal trap void Executor::C_UpdtControl(WindowPtr wp, /* IMIV-53 */
-   RgnHandle rh)
+                                                RgnHandle rh)
 {
     ControlHandle c;
 

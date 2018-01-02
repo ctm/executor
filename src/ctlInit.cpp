@@ -22,7 +22,7 @@ using namespace Executor;
 
 PUBLIC BOOLEAN Executor::ROMlib_cdef0_is_rectangular = false;
 
-PUBLIC pascal trap ControlHandle Executor::C_NewControl(WindowPtr wst, Rect * r, StringPtr title, BOOLEAN vis, INTEGER value, INTEGER min, INTEGER max, INTEGER procid, LONGINT rc) /* IMI-319 */
+PUBLIC pascal trap ControlHandle Executor::C_NewControl(WindowPtr wst, Rect *r, StringPtr title, BOOLEAN vis, INTEGER value, INTEGER min, INTEGER max, INTEGER procid, LONGINT rc) /* IMI-319 */
 {
     ControlHandle retval;
     GrafPtr gp;
@@ -100,7 +100,7 @@ PUBLIC pascal trap ControlHandle Executor::C_NewControl(WindowPtr wst, Rect * r,
 }
 
 PUBLIC pascal trap ControlHandle Executor::C_GetNewControl(/* IMI-321 */
-   INTEGER cid, WindowPtr wst)
+                                                           INTEGER cid, WindowPtr wst)
 {
     typedef contrlrestype *wp;
 

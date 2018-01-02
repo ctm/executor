@@ -14,7 +14,7 @@
 using namespace Executor;
 
 PUBLIC pascal trap void Executor::C_SetCTitle(ControlHandle c, /* IMI-321 */
-   StringPtr t)
+                                              StringPtr t)
 {
     if(c)
     {
@@ -31,7 +31,7 @@ PUBLIC pascal trap void Executor::C_SetCTitle(ControlHandle c, /* IMI-321 */
 }
 
 PUBLIC pascal trap void Executor::C_GetCTitle(ControlHandle c, /* IMI-321 */
-   StringPtr t)
+                                              StringPtr t)
 {
     if(c)
         str255assign(t, HxX(c, contrlTitle));
@@ -109,7 +109,7 @@ PUBLIC pascal trap void Executor::C_ShowControl(ControlHandle c) /* IMI-322 */
 }
 
 PUBLIC pascal trap void Executor::C_HiliteControl(ControlHandle c, /* IMI-322 */
-   INTEGER state)
+                                                  INTEGER state)
 {
     if(c && *c)
     {

@@ -303,7 +303,6 @@ PASCAL_FUNCTION(InitDateCache);
 extern pascal trap INTEGER C_CharByte(Ptr textBuf, INTEGER textOffset);
 PASCAL_FUNCTION(CharByte);
 
-
 extern pascal trap String2DateStatus C_String2Date(Ptr text, int32_t length,
                                                    DateCachePtr cache,
                                                    GUEST<int32_t> *length_used_ret,

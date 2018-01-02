@@ -38,7 +38,7 @@ checksum_strip(int which_strip)
 
     strip_rows = vdriver_height / NUM_AUTOREFRESH_STRIPS;
     base = (const uint32_t *)(vdriver_fbuf
-                            + which_strip * strip_rows * vdriver_row_bytes);
+                              + which_strip * strip_rows * vdriver_row_bytes);
     row_size = vdriver_row_bytes / (4U * sizeof(uint32_t));
     next_row_delta = (vdriver_row_bytes * 2 / sizeof(uint32_t)) - (row_size * 4U);
 

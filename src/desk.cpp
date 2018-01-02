@@ -67,7 +67,7 @@ PUBLIC pascal trap void Executor::C_CloseDeskAcc(INTEGER rn)
     CloseDriver(rn);
 }
 
-PUBLIC pascal trap void Executor::C_SystemClick(EventRecord * evp, WindowPtr wp)
+PUBLIC pascal trap void Executor::C_SystemClick(EventRecord *evp, WindowPtr wp)
 {
     Point p;
     LONGINT pointaslong, val;
@@ -151,7 +151,7 @@ PUBLIC pascal trap void Executor::C_SystemTask()
     }
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_SystemEvent(EventRecord * evp)
+PUBLIC pascal trap BOOLEAN Executor::C_SystemEvent(EventRecord *evp)
 {
     BOOLEAN retval;
     WindowPeek wp;

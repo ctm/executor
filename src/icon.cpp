@@ -39,7 +39,7 @@ using namespace Executor;
         _err_;                                                     \
     })
 
-PUBLIC pascal trap OSErr Executor::C_PlotIconID(const Rect * rect, IconAlignmentType align, IconTransformType transform, short res_id)
+PUBLIC pascal trap OSErr Executor::C_PlotIconID(const Rect *rect, IconAlignmentType align, IconTransformType transform, short res_id)
 {
     Handle icon_suite;
     OSErr err;
@@ -57,13 +57,13 @@ PUBLIC pascal trap OSErr Executor::C_PlotIconID(const Rect * rect, IconAlignment
     ICON_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_PlotIconMethod(const Rect * rect, IconAlignmentType align, IconTransformType transform, IconGetterProcPtr method, void * data)
+PUBLIC pascal trap OSErr Executor::C_PlotIconMethod(const Rect *rect, IconAlignmentType align, IconTransformType transform, IconGetterProcPtr method, void *data)
 {
     warning_unimplemented(NULL_STRING);
     ICON_RETURN_ERROR(paramErr);
 }
 
-PUBLIC pascal trap void Executor::C_PlotIcon(const Rect * rect, Handle icon)
+PUBLIC pascal trap void Executor::C_PlotIcon(const Rect *rect, Handle icon)
 {
     if(icon == NULL)
         return;
@@ -92,7 +92,7 @@ PUBLIC pascal trap void Executor::C_PlotIcon(const Rect * rect, Handle icon)
              srcCopy, NULL);
 }
 
-PUBLIC pascal trap OSErr Executor::C_PlotIconHandle(const Rect * rect, IconAlignmentType align, IconTransformType transform, Handle icon)
+PUBLIC pascal trap OSErr Executor::C_PlotIconHandle(const Rect *rect, IconAlignmentType align, IconTransformType transform, Handle icon)
 {
     /* #### change plotting routines to respect alignment and transform */
     if(align != atNone)
@@ -105,7 +105,7 @@ PUBLIC pascal trap OSErr Executor::C_PlotIconHandle(const Rect * rect, IconAlign
     ICON_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap void Executor::C_PlotCIcon(const Rect * rect, CIconHandle icon)
+PUBLIC pascal trap void Executor::C_PlotCIcon(const Rect *rect, CIconHandle icon)
 {
     /* when plotting, `ignore' the current fg/bk colors */
     GrafPtr current_port;
@@ -200,7 +200,7 @@ PUBLIC pascal trap void Executor::C_PlotCIcon(const Rect * rect, CIconHandle ico
     PORT_BK_COLOR_X(current_port) = bk_color;
 }
 
-PUBLIC pascal trap OSErr Executor::C_PlotCIconHandle(const Rect * rect, IconAlignmentType align, IconTransformType transform, CIconHandle icon)
+PUBLIC pascal trap OSErr Executor::C_PlotCIconHandle(const Rect *rect, IconAlignmentType align, IconTransformType transform, CIconHandle icon)
 {
     /* #### change plotting routines to respect alignment and transform */
     if(align != atNone)
@@ -213,7 +213,7 @@ PUBLIC pascal trap OSErr Executor::C_PlotCIconHandle(const Rect * rect, IconAlig
     ICON_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_PlotSICNHandle(const Rect * rect, IconAlignmentType align, IconTransformType transform, Handle icon)
+PUBLIC pascal trap OSErr Executor::C_PlotSICNHandle(const Rect *rect, IconAlignmentType align, IconTransformType transform, Handle icon)
 {
     /* #### change plotting routines to respect alignment and transform */
     if(align != atNone)
@@ -357,7 +357,7 @@ restype_to_index(ResType type)
     gui_fatal("unknown icon restype `%d'");
 }
 
-PUBLIC pascal trap OSErr Executor::C_GetIconSuite(GUEST<Handle> * icon_suite_return, short res_id, IconSelectorValue selector)
+PUBLIC pascal trap OSErr Executor::C_GetIconSuite(GUEST<Handle> *icon_suite_return, short res_id, IconSelectorValue selector)
 {
     Handle icon_suite, *icons;
     int i;
@@ -387,7 +387,7 @@ PUBLIC pascal trap OSErr Executor::C_GetIconSuite(GUEST<Handle> * icon_suite_ret
     ICON_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_NewIconSuite(GUEST<Handle> * icon_suite_return)
+PUBLIC pascal trap OSErr Executor::C_NewIconSuite(GUEST<Handle> *icon_suite_return)
 {
     Handle icon_suite;
 
@@ -410,7 +410,7 @@ PUBLIC pascal trap OSErr Executor::C_AddIconToSuite(Handle icon_data, Handle ico
     ICON_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_GetIconFromSuite(GUEST<Handle> * icon_data_return, Handle icon_suite, ResType type)
+PUBLIC pascal trap OSErr Executor::C_GetIconFromSuite(GUEST<Handle> *icon_data_return, Handle icon_suite, ResType type)
 {
     Handle *icons, icon_data;
 
@@ -476,7 +476,7 @@ find_best_icon(bool small_p, int bpp,
     ICON_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_PlotIconSuite(const Rect * rect, IconAlignmentType align, IconTransformType transform, Handle icon_suite)
+PUBLIC pascal trap OSErr Executor::C_PlotIconSuite(const Rect *rect, IconAlignmentType align, IconTransformType transform, Handle icon_suite)
 {
     GrafPtr current_port;
     int port_bpp, icon_bpp;
@@ -545,7 +545,7 @@ PUBLIC pascal trap OSErr Executor::C_PlotIconSuite(const Rect * rect, IconAlignm
     ICON_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_ForEachIconDo(Handle suite, IconSelectorValue selector, IconActionProcPtr action, void * data)
+PUBLIC pascal trap OSErr Executor::C_ForEachIconDo(Handle suite, IconSelectorValue selector, IconActionProcPtr action, void *data)
 {
     warning_unimplemented(NULL_STRING);
     ICON_RETURN_ERROR(paramErr);
@@ -624,7 +624,7 @@ PRIVATE label_info_t labels[7] = {
     },
 };
 
-PUBLIC pascal trap OSErr Executor::C_GetLabel(short label, RGBColor * label_color, Str255 label_string)
+PUBLIC pascal trap OSErr Executor::C_GetLabel(short label, RGBColor *label_color, Str255 label_string)
 {
     unsigned int index;
     OSErr retval;
@@ -689,31 +689,31 @@ PUBLIC pascal trap OSErr Executor::C_DisposeIconSuite(Handle suite, Boolean disp
     ICON_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_IconSuiteToRgn(RgnHandle rgn, const Rect * rect, IconAlignmentType align, Handle suite)
+PUBLIC pascal trap OSErr Executor::C_IconSuiteToRgn(RgnHandle rgn, const Rect *rect, IconAlignmentType align, Handle suite)
 {
     warning_unimplemented(NULL_STRING);
     ICON_RETURN_ERROR(paramErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_IconIDToRgn(RgnHandle rgn, const Rect * rect, IconAlignmentType align, short icon_id)
+PUBLIC pascal trap OSErr Executor::C_IconIDToRgn(RgnHandle rgn, const Rect *rect, IconAlignmentType align, short icon_id)
 {
     warning_unimplemented(NULL_STRING);
     ICON_RETURN_ERROR(paramErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_IconMethodToRgn(RgnHandle rgn, const Rect * rect, IconAlignmentType align, IconGetterProcPtr method, void * data)
+PUBLIC pascal trap OSErr Executor::C_IconMethodToRgn(RgnHandle rgn, const Rect *rect, IconAlignmentType align, IconGetterProcPtr method, void *data)
 {
     warning_unimplemented(NULL_STRING);
     ICON_RETURN_ERROR(paramErr);
 }
 
-PUBLIC pascal trap Boolean Executor::C_PtInIconSuite(Point test_pt, const Rect * rect, IconAlignmentType align, Handle suite)
+PUBLIC pascal trap Boolean Executor::C_PtInIconSuite(Point test_pt, const Rect *rect, IconAlignmentType align, Handle suite)
 {
     warning_unimplemented(NULL_STRING);
     return false;
 }
 
-PUBLIC pascal trap Boolean Executor::C_PtInIconID(Point test_pt, const Rect * rect, IconAlignmentType align, short icon_id)
+PUBLIC pascal trap Boolean Executor::C_PtInIconID(Point test_pt, const Rect *rect, IconAlignmentType align, short icon_id)
 {
     Boolean retval;
 
@@ -722,55 +722,55 @@ PUBLIC pascal trap Boolean Executor::C_PtInIconID(Point test_pt, const Rect * re
     return retval;
 }
 
-PUBLIC pascal trap Boolean Executor::C_PtInIconMethod(Point test_pt, const Rect * rect, IconAlignmentType align, IconGetterProcPtr method, void * data)
+PUBLIC pascal trap Boolean Executor::C_PtInIconMethod(Point test_pt, const Rect *rect, IconAlignmentType align, IconGetterProcPtr method, void *data)
 {
     warning_unimplemented(NULL_STRING);
     return false;
 }
 
-PUBLIC pascal trap Boolean Executor::C_RectInIconSuite(const Rect * test_rect, const Rect * rect, IconAlignmentType align, Handle suite)
+PUBLIC pascal trap Boolean Executor::C_RectInIconSuite(const Rect *test_rect, const Rect *rect, IconAlignmentType align, Handle suite)
 {
     warning_unimplemented(NULL_STRING);
     return false;
 }
 
-PUBLIC pascal trap Boolean Executor::C_RectInIconID(const Rect * test_rect, const Rect * rect, IconAlignmentType align, short icon_id)
+PUBLIC pascal trap Boolean Executor::C_RectInIconID(const Rect *test_rect, const Rect *rect, IconAlignmentType align, short icon_id)
 {
     warning_unimplemented(NULL_STRING);
     return false;
 }
 
-PUBLIC pascal trap Boolean Executor::C_RectInIconMethod(const Rect * test_rect, const Rect * rect, IconAlignmentType align, IconGetterProcPtr method, void * data)
+PUBLIC pascal trap Boolean Executor::C_RectInIconMethod(const Rect *test_rect, const Rect *rect, IconAlignmentType align, IconGetterProcPtr method, void *data)
 {
     warning_unimplemented(NULL_STRING);
     return false;
 }
 
-PUBLIC pascal trap OSErr Executor::C_MakeIconCache(Handle * cache, IconGetterProcPtr make_icon, void * data)
+PUBLIC pascal trap OSErr Executor::C_MakeIconCache(Handle *cache, IconGetterProcPtr make_icon, void *data)
 {
     warning_unimplemented(NULL_STRING);
     ICON_RETURN_ERROR(paramErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_LoadIconCache(const Rect * rect, IconAlignmentType align, IconTransformType transform, Handle cache)
+PUBLIC pascal trap OSErr Executor::C_LoadIconCache(const Rect *rect, IconAlignmentType align, IconTransformType transform, Handle cache)
 {
     warning_unimplemented(NULL_STRING);
     ICON_RETURN_ERROR(paramErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_GetIconCacheData(Handle cache, void ** data)
+PUBLIC pascal trap OSErr Executor::C_GetIconCacheData(Handle cache, void **data)
 {
     warning_unimplemented(NULL_STRING);
     ICON_RETURN_ERROR(paramErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_SetIconCacheData(Handle cache, void * data)
+PUBLIC pascal trap OSErr Executor::C_SetIconCacheData(Handle cache, void *data)
 {
     warning_unimplemented(NULL_STRING);
     ICON_RETURN_ERROR(paramErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_GetIconCacheProc(Handle cache, IconGetterProcPtr * proc)
+PUBLIC pascal trap OSErr Executor::C_GetIconCacheProc(Handle cache, IconGetterProcPtr *proc)
 {
     warning_unimplemented(NULL_STRING);
     ICON_RETURN_ERROR(paramErr);

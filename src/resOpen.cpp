@@ -398,7 +398,7 @@ Executor::ROMlib_mgetres2(resmaphand map, resref *rr)
                is it filled in if pph is nil */
 
 PUBLIC resmaphand Executor::ROMlib_rntohandl(INTEGER rn, /* INTERNAL */
-   Handle * pph)
+                                             Handle *pph)
 {
     resmaphand map, ph;
 
@@ -415,7 +415,7 @@ PUBLIC resmaphand Executor::ROMlib_rntohandl(INTEGER rn, /* INTERNAL */
 }
 
 PUBLIC pascal trap INTEGER Executor::C_OpenRFPerm(StringPtr fn, /* IMIV-17 */
-   INTEGER vref, Byte perm)
+                                                  INTEGER vref, Byte perm)
 {
     INTEGER retval;
 

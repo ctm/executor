@@ -47,7 +47,7 @@ PUBLIC pascal trap LONGINT Executor::C_MenuChoice()
     return Cx(MenuDisable);
 }
 
-PUBLIC pascal trap void Executor::C_GetItemCmd(MenuHandle mh, INTEGER item, GUEST<CharParameter> * cmdp)
+PUBLIC pascal trap void Executor::C_GetItemCmd(MenuHandle mh, INTEGER item, GUEST<CharParameter> *cmdp)
 {
     mextp mep;
 

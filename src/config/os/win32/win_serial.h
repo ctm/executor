@@ -16,9 +16,12 @@ namespace Executor
  * This should really be divided into public and private .h files
  */
 
-enum parity_t : uint32_t { parity_none,
-               parity_odd,
-               parity_even };
+enum parity_t : uint32_t
+{
+    parity_none,
+    parity_odd,
+    parity_even
+};
 
 typedef enum {
     win32_serial_parity_no,

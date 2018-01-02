@@ -220,7 +220,7 @@ typedef Byte Chars[1], *CharsPtr, **CharsHandle;
 
 #define TE_DO_TEXT(te, start, end, what)                            \
     ({                                                              \
-        int16_t retval;                                               \
+        int16_t retval;                                             \
                                                                     \
         HLockGuard guard(te);                                       \
         retval = ROMlib_call_TEDoText(STARH(te), start, end, what); \
@@ -523,7 +523,7 @@ extern bool adjust_attrs(TextStyle *orig_attrs, TextStyle *new_attrs,
                          int16_t mode);
 extern int16_t make_style_run_at(TEStyleHandle te_style, int16_t sel);
 extern int16_t get_style_index(TEStyleHandle te_style, TextStyle *attrs,
-                             int incr_count_p);
+                               int incr_count_p);
 extern void release_style_index(TEStyleHandle te_style, int16_t style_index);
 extern void stabilize_style_info(TEStyleHandle te_style);
 extern void te_style_combine_runs(TEStyleHandle te_style);
@@ -671,7 +671,7 @@ extern Handle TEScrapHandle(void);
 extern LONGINT TEGetScrapLen(void);
 extern void TESetScrapLen(LONGINT ln);
 extern pascal trap int16_t C_TEFeatureFlag(int16_t feature, int16_t action,
-                                         TEHandle te);
+                                           TEHandle te);
 PASCAL_FUNCTION(TEFeatureFlag);
 }
 #endif /* _TEXTEDIT_H_ */

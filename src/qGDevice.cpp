@@ -294,7 +294,7 @@ PUBLIC pascal trap GDHandle Executor::C_GetMainDevice()
     return retval;
 }
 
-PUBLIC pascal trap GDHandle Executor::C_GetMaxDevice(Rect * globalRect)
+PUBLIC pascal trap GDHandle Executor::C_GetMaxDevice(Rect *globalRect)
 {
     /* FIXME:
      currently we have only a single device, so that has
@@ -356,7 +356,7 @@ PUBLIC pascal trap void Executor::C_DeviceLoop(RgnHandle rgn, DeviceLoopDrawingP
             if((flags & allDevices) || !EmptyRgn(sect_rgn))
             {
                 drawing_proc(PIXMAP_PIXEL_SIZE(GD_PMAP(gd)),
-                              GD_FLAGS(gd), gd, user_data);
+                             GD_FLAGS(gd), gd, user_data);
             }
         }
 
@@ -375,7 +375,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_TestDeviceAttribute(GDHandle gdh, INTEGER
 }
 
 // FIXME: #warning ScreenRes is duplicate with toolutil.cpp
-PUBLIC pascal trap void Executor::C_ScreenRes(GUEST<INTEGER> * h_res, GUEST<INTEGER> * v_res)
+PUBLIC pascal trap void Executor::C_ScreenRes(GUEST<INTEGER> *h_res, GUEST<INTEGER> *v_res)
 {
     *h_res = CW(PIXMAP_HRES(GD_PMAP(MR(MainDevice))) >> 16);
     *v_res = CW(PIXMAP_VRES(GD_PMAP(MR(MainDevice))) >> 16);

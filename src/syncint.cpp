@@ -26,7 +26,7 @@ handle_sdltimer_tick(Uint32_t n)
 //  SDL_mutexV (ROMlib_shouldbeawake_mutex);
 
 #if !defined(SDL_TIMER_FIXED)
-// FIXME: #warning returning 1 here to work around SDL timer bug(s)
+    // FIXME: #warning returning 1 here to work around SDL timer bug(s)
     return 1;
 #endif
 

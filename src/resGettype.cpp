@@ -21,7 +21,6 @@ PRIVATE INTEGER initar(INTEGER);
 #define ARRN_NOTINITTED (-1)
 #define ARRN_ALL (-2)
 
-
 PRIVATE INTEGER arrn = ARRN_NOTINITTED;
 
 PUBLIC void Executor::ROMlib_invalar() /* INTERNAL */
@@ -122,7 +121,7 @@ PUBLIC pascal trap INTEGER Executor::C_Count1Types() /* IMIV-15 */
     return initar(Cx(CurMap));
 }
 
-PUBLIC pascal trap void Executor::C_GetIndType(GUEST<ResType> * typ, INTEGER indx)
+PUBLIC pascal trap void Executor::C_GetIndType(GUEST<ResType> *typ, INTEGER indx)
 {
     if(indx <= 0 || indx > initar(ARRN_ALL))
         *typ = 0;
@@ -130,8 +129,8 @@ PUBLIC pascal trap void Executor::C_GetIndType(GUEST<ResType> * typ, INTEGER ind
         *typ = STARH(ar)[indx - 1];
 }
 
-PUBLIC pascal trap void Executor::C_Get1IndType(GUEST<ResType> * typ, /* IMIV-15 */
-   INTEGER indx)
+PUBLIC pascal trap void Executor::C_Get1IndType(GUEST<ResType> *typ, /* IMIV-15 */
+                                                INTEGER indx)
 {
     if(indx <= 0 || indx > initar(Cx(CurMap)))
         *typ = 0;

@@ -26,7 +26,6 @@ using namespace Executor;
 #define OUT(y, x) (*op2++ = (*op++ = (y)) + offy, \
                    *op2++ = (*op++ = (x)) + offx)
 
-
 PRIVATE void scodydxx1x2(LONGINT y1, INTEGER x1,
                          INTEGER dy, INTEGER dx, INTEGER **opp, INTEGER **opp2,
                          INTEGER offy, INTEGER offx);
@@ -50,7 +49,7 @@ PRIVATE INTEGER *scrdxdyx2x1(INTEGER y1, LONGINT x1,
 PRIVATE void regionify1(INTEGER *ip1,
                         INTEGER *ip2, RgnPtr rp);
 
-PRIVATE void scodydxx1x2(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER ** opp, INTEGER ** opp2, INTEGER offy, INTEGER offx)
+PRIVATE void scodydxx1x2(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER **opp, INTEGER **opp2, INTEGER offy, INTEGER offx)
 {
     INTEGER *op, *op2;
     INTEGER x2;
@@ -85,7 +84,7 @@ PRIVATE void scodydxx1x2(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER
                          *op++ = CW_RAW(x2), \
                          *op++ = RGN_STOP_X)
 
-PRIVATE INTEGER * scrdydxx1x2(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER * op)
+PRIVATE INTEGER *scrdydxx1x2(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER *op)
 {
     INTEGER x2;
     LONGINT incr;
@@ -113,7 +112,7 @@ PRIVATE INTEGER * scrdydxx1x2(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, IN
     return op;
 }
 
-PRIVATE void scodydxx2x1(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER ** opp, INTEGER ** opp2, INTEGER offy, INTEGER offx)
+PRIVATE void scodydxx2x1(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER **opp, INTEGER **opp2, INTEGER offy, INTEGER offx)
 {
     INTEGER x2;
     LONGINT incr;
@@ -143,7 +142,7 @@ PRIVATE void scodydxx2x1(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER
     *opp2 = op2;
 }
 
-PRIVATE INTEGER * scrdydxx2x1(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER * op)
+PRIVATE INTEGER *scrdydxx2x1(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER *op)
 {
     INTEGER x2;
     LONGINT incr;
@@ -167,7 +166,7 @@ PRIVATE INTEGER * scrdydxx2x1(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, IN
     return op;
 }
 
-PRIVATE void scodxdyx1x2(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER ** opp, INTEGER ** opp2, INTEGER offy, INTEGER offx)
+PRIVATE void scodxdyx1x2(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER **opp, INTEGER **opp2, INTEGER offy, INTEGER offx)
 {
     INTEGER y2;
     LONGINT incr;
@@ -187,7 +186,7 @@ PRIVATE void scodxdyx1x2(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER
     *opp2 = op2;
 }
 
-PRIVATE INTEGER * scrdxdyx1x2(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER * op)
+PRIVATE INTEGER *scrdxdyx1x2(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER *op)
 {
     INTEGER y2, ox, x2;
     LONGINT incr;
@@ -215,7 +214,7 @@ PRIVATE INTEGER * scrdxdyx1x2(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, IN
     return op;
 }
 
-PRIVATE void scodxdyx2x1(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER ** opp, INTEGER ** opp2, INTEGER offy, INTEGER offx)
+PRIVATE void scodxdyx2x1(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER **opp, INTEGER **opp2, INTEGER offy, INTEGER offx)
 {
     INTEGER y2;
     LONGINT incr;
@@ -235,7 +234,7 @@ PRIVATE void scodxdyx2x1(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER
     *opp2 = op2;
 }
 
-PRIVATE INTEGER * scrdxdyx2x1(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER * op)
+PRIVATE INTEGER *scrdxdyx2x1(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER *op)
 {
     INTEGER y2, ox;
     LONGINT incr;
@@ -258,7 +257,7 @@ PRIVATE INTEGER * scrdxdyx2x1(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, IN
  *	 pairs.  2)  the start stop pairs are kept in native endianness.
  */
 
-PRIVATE void regionify1(INTEGER * ip1, INTEGER * ip2, RgnPtr rp)
+PRIVATE void regionify1(INTEGER *ip1, INTEGER *ip2, RgnPtr rp)
 {
     INTEGER *tempp;
     INTEGER *op;

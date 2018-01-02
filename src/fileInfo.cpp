@@ -44,7 +44,7 @@ PRIVATE char line_no[] = "123\r\n";
 #endif
 
 PUBLIC OSErr Executor::GetFInfo(StringPtr filen, INTEGER vrn, /* IMIV-113 */
-   FInfo * fndrinfo)
+                                FInfo *fndrinfo)
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -89,7 +89,7 @@ PUBLIC OSErr HGetFInfo(INTEGER vref, LONGINT dirid, Str255 name,
 }
 
 PUBLIC OSErr Executor::SetFInfo(StringPtr filen, INTEGER vrn, /* IMIV-114 */
-   FInfo * fndrinfo)
+                                FInfo *fndrinfo)
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -135,7 +135,7 @@ PUBLIC OSErr Executor::RstFLock(StringPtr filen, INTEGER vrn) /* IMIV-114 */
 }
 
 PUBLIC OSErr Executor::Rename(StringPtr filen, INTEGER vrn, /* IMIV-114 */
-   StringPtr newf)
+                              StringPtr newf)
 {
     ParamBlockRec pbr;
 
@@ -246,7 +246,7 @@ quoted_character(unsigned char *name, int length)
     return retval;
 }
 
-PUBLIC INTEGER Executor::ROMlib_UNIX7_to_Mac(char * cname, INTEGER length)
+PUBLIC INTEGER Executor::ROMlib_UNIX7_to_Mac(char *cname, INTEGER length)
 {
     INTEGER retval;
     unsigned char *name;
@@ -303,7 +303,7 @@ Executor::open_attrib_bits(LONGINT file_id, VCB *vcbp, GUEST<INTEGER> *refnump)
 }
 
 PUBLIC OSErr Executor::ROMlib_PBGetSetFInfoD(ParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a, GetOrSetType op, GUEST<LONGINT> * dir, BOOLEAN dodirs)
+                                             BOOLEAN a, GetOrSetType op, GUEST<LONGINT> *dir, BOOLEAN dodirs)
 {
     OSErr err;
     char *pathname, *filename, *endname, *rpathname;
@@ -576,13 +576,13 @@ theend:
 }
 
 PUBLIC OSErr Executor::ufsPBGetFInfo(ParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                     BOOLEAN a)
 {
     return ROMlib_PBGetSetFInfoD(pb, a, Get, (GUEST<LONGINT> *)0, false);
 }
 
 PUBLIC OSErr Executor::ufsPBHGetFInfo(HParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                      BOOLEAN a)
 {
     GUEST<LONGINT> d;
     OSErr err;
@@ -597,13 +597,13 @@ PUBLIC OSErr Executor::ufsPBHGetFInfo(HParmBlkPtr pb, /* INTERNAL */
 }
 
 PUBLIC OSErr Executor::ufsPBSetFInfo(ParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                     BOOLEAN a)
 {
     return ROMlib_PBGetSetFInfoD(pb, a, Set, (GUEST<LONGINT> *)0, false);
 }
 
 PUBLIC OSErr Executor::ufsPBHSetFInfo(HParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                      BOOLEAN a)
 {
     GUEST<LONGINT> d;
 
@@ -614,7 +614,7 @@ PUBLIC OSErr Executor::ufsPBHSetFInfo(HParmBlkPtr pb, /* INTERNAL */
 PRIVATE int flipwritebits(char *, LockOrUnlockType);
 PRIVATE OSErr PBLockUnlock(ParmBlkPtr, BOOLEAN, LONGINT, LockOrUnlockType);
 
-PRIVATE int flipwritebits(char * file, LockOrUnlockType op)
+PRIVATE int flipwritebits(char *file, LockOrUnlockType op)
 {
     struct stat sbuf;
     int retval;
@@ -734,45 +734,46 @@ PRIVATE OSErr PBLockUnlock(ParmBlkPtr pb, BOOLEAN a, LONGINT dir, LockOrUnlockTy
 }
 
 PUBLIC OSErr Executor::ufsPBSetFLock(ParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                     BOOLEAN a)
 {
     return PBLockUnlock(pb, a, (LONGINT)0, Lock);
 }
 
 PUBLIC OSErr Executor::ufsPBHSetFLock(HParmBlkPtr /* INTERNAL */
-   pb, BOOLEAN a)
+                                      pb,
+                                      BOOLEAN a)
 {
     return PBLockUnlock((ParmBlkPtr)pb, a, CL(pb->fileParam.ioDirID), Lock);
 }
 
 PUBLIC OSErr Executor::ufsPBRstFLock(ParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                     BOOLEAN a)
 {
     return PBLockUnlock(pb, a, (LONGINT)0, Unlock);
 }
 
 PUBLIC OSErr Executor::ufsPBHRstFLock(HParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                      BOOLEAN a)
 {
     return PBLockUnlock((ParmBlkPtr)pb, a, CL(pb->fileParam.ioDirID), Unlock);
 }
 
 PUBLIC OSErr Executor::ufsPBSetFVers(ParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                     BOOLEAN a)
 {
     /* NOP */
     return noErr;
 }
 
 PUBLIC OSErr Executor::ufsPBRename(ParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                   BOOLEAN a)
 {
     return ROMlib_PBMoveOrRename(pb, a, (LONGINT)0, (LONGINT)0,
                                  MR(guest_cast<char *>(pb->ioParam.ioMisc)), FRename);
 }
 
 PUBLIC OSErr Executor::ufsPBHRename(HParmBlkPtr pb, /* INTERNAL */
-   BOOLEAN a)
+                                    BOOLEAN a)
 {
     return ROMlib_PBMoveOrRename((ParmBlkPtr)pb, a, CL(pb->fileParam.ioDirID),
                                  CL(pb->fileParam.ioDirID), MR(guest_cast<char *>(pb->ioParam.ioMisc)),

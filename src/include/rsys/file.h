@@ -176,31 +176,31 @@ typedef enum { NoIndex,
     ROMlib_hook(file_badreturn)
 #endif /* !defined(NDEBUG) */
 
-#define CALLCOMPLETION(pb, compp, err)            \
-    do                                            \
-    {                                             \
-        LONGINT saved0, saved1, saved2, saved3,   \
-            savea0, savea1, savea2, savea3;       \
-                                                  \
-        saved0 = EM_D0;                           \
-        saved1 = EM_D1;                           \
-        saved2 = EM_D2;                           \
-        saved3 = EM_D3;                           \
-        savea0 = EM_A0;                           \
-        savea1 = EM_A1;                           \
-        savea2 = EM_A2;                           \
-        savea3 = EM_A3;                           \
-        EM_A0 = US_TO_SYN68K(pb);                 \
-        EM_D0 = err;                              \
-        CALL_EMULATOR(US_TO_SYN68K(compp));       \
-        EM_D0 = saved0;                           \
-        EM_D1 = saved1;                           \
-        EM_D2 = saved2;                           \
-        EM_D3 = saved3;                           \
-        EM_A0 = savea0;                           \
-        EM_A1 = savea1;                           \
-        EM_A2 = savea2;                           \
-        EM_A3 = savea3;                           \
+#define CALLCOMPLETION(pb, compp, err)          \
+    do                                          \
+    {                                           \
+        LONGINT saved0, saved1, saved2, saved3, \
+            savea0, savea1, savea2, savea3;     \
+                                                \
+        saved0 = EM_D0;                         \
+        saved1 = EM_D1;                         \
+        saved2 = EM_D2;                         \
+        saved3 = EM_D3;                         \
+        savea0 = EM_A0;                         \
+        savea1 = EM_A1;                         \
+        savea2 = EM_A2;                         \
+        savea3 = EM_A3;                         \
+        EM_A0 = US_TO_SYN68K(pb);               \
+        EM_D0 = err;                            \
+        CALL_EMULATOR(US_TO_SYN68K(compp));     \
+        EM_D0 = saved0;                         \
+        EM_D1 = saved1;                         \
+        EM_D2 = saved2;                         \
+        EM_D3 = saved3;                         \
+        EM_A0 = savea0;                         \
+        EM_A1 = savea1;                         \
+        EM_A2 = savea2;                         \
+        EM_A3 = savea3;                         \
     } while(0)
 
 #define FAKEASYNC(pb, a, err)                                          \

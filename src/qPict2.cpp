@@ -29,12 +29,12 @@ PUBLIC pascal trap OSErr Executor::C_RecordPixMapInfo(PictInfoID pict_info_id, P
     gui_fatal("unimplemented");
 }
 
-PUBLIC pascal trap OSErr Executor::C_RetrievePictInfo(PictInfoID pict_info_id, PictInfo * pict_info, int16_t colors_requested)
+PUBLIC pascal trap OSErr Executor::C_RetrievePictInfo(PictInfoID pict_info_id, PictInfo *pict_info, int16_t colors_requested)
 {
     gui_fatal("unimplemented");
 }
 
-PUBLIC pascal trap OSErr Executor::C_NewPictInfo(GUEST<PictInfoID> * pict_info_id, int16_t verb, int16_t colors_requested, int16_t color_pick_method, int16_t version)
+PUBLIC pascal trap OSErr Executor::C_NewPictInfo(GUEST<PictInfoID> *pict_info_id, int16_t verb, int16_t colors_requested, int16_t color_pick_method, int16_t version)
 {
     gui_fatal("unimplemented");
 #if !defined(LETGCCWAIL)
@@ -42,7 +42,7 @@ PUBLIC pascal trap OSErr Executor::C_NewPictInfo(GUEST<PictInfoID> * pict_info_i
 #endif
 }
 
-PUBLIC pascal trap OSErr Executor::C_GetPictInfo(PicHandle pic_h, PictInfo * pict_info, int16_t verb, int16_t color_version, int16_t color_pick_method, int16_t version)
+PUBLIC pascal trap OSErr Executor::C_GetPictInfo(PicHandle pic_h, PictInfo *pict_info, int16_t verb, int16_t color_version, int16_t color_pick_method, int16_t version)
 {
     gui_fatal("unimplemented");
 #if !defined(LETGCCWAIL)
@@ -89,8 +89,8 @@ PUBLIC pascal trap OSErr Executor::C_GetPictInfo(PicHandle pic_h, PictInfo * pic
         {                                                              \
             for(x = 0; x < width; x++)                                 \
             {                                                          \
-                uint32_t r, g, b;                                        \
-                uint32_t pixel;                                          \
+                uint32_t r, g, b;                                      \
+                uint32_t pixel;                                        \
                                                                        \
                 pixel = read(row_base, x, bpp);                        \
                                                                        \
@@ -117,7 +117,7 @@ struct link
     struct link *next, *prev;
 };
 
-PUBLIC pascal trap OSErr Executor::C_GetPixMapInfo(PixMapHandle pixmap, PictInfo * pict_info, int16_t verb, int16_t colors_requested, int16_t color_pick_method, int16_t version)
+PUBLIC pascal trap OSErr Executor::C_GetPixMapInfo(PixMapHandle pixmap, PictInfo *pict_info, int16_t verb, int16_t colors_requested, int16_t color_pick_method, int16_t version)
 {
     CTabHandle pixmap_color_table;
     uint8 *row_base;
@@ -164,8 +164,8 @@ PUBLIC pascal trap OSErr Executor::C_GetPixMapInfo(PixMapHandle pixmap, PictInfo
 #define RECORD_555(red, green, blue)                                               \
     ({                                                                             \
         int bank_index;                                                            \
-        const uint16_t mask = 0xF100;                                                \
-        uint16_t count;                                                              \
+        const uint16_t mask = 0xF100;                                              \
+        uint16_t count;                                                            \
                                                                                    \
         bank_index                                                                 \
             = ((red & mask) >> 1) | ((green & mask) >> 6) | ((blue & mask) >> 11); \

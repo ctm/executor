@@ -30,7 +30,7 @@ using namespace Executor;
         asm ("movl %%ebp, %0" : "=g" (from));                         \
         from = *(char **)(from+4);                                    \
         warning_unexpected ("name = \"%s\" from = %p", str, from); */ \
-        retval = (char*)alloca(strlen(str) + 1);                      \
+        retval = (char *)alloca(strlen(str) + 1);                     \
         last_was_slash_p = false;                                     \
         for(ip = str, op = retval; *ip; ++ip)                         \
         {                                                             \
@@ -155,7 +155,7 @@ int Uutimes(const char *path, struct timeval tvp[2])
   path = DOUBLE_SLASH_REMOVE (path);
   return utimes(path, tvp);
 #else
-// FIXME: #warning "Blowing off utimes"
+    // FIXME: #warning "Blowing off utimes"
     return -1;
 #endif
 }

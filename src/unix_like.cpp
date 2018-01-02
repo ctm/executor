@@ -196,5 +196,4 @@ Executor::host_spfcommon(host_spf_reply_block *replyp, const char *prompt,
     return false;
 }
 
-
 #endif /* defined (LINUX) || defined (MACOSX) */

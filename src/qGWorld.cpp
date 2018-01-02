@@ -119,7 +119,7 @@ void delete_gw_info(gw_info_t *gw_info)
     gw_info_free = gw_info;
 }
 
-PUBLIC pascal trap QDErr Executor::C_NewGWorld(GUEST<GWorldPtr> * graphics_world_out, INTEGER depth, Rect * bounds, CTabHandle ctab, GDHandle gw_gd, GWorldFlags flags)
+PUBLIC pascal trap QDErr Executor::C_NewGWorld(GUEST<GWorldPtr> *graphics_world_out, INTEGER depth, Rect *bounds, CTabHandle ctab, GDHandle gw_gd, GWorldFlags flags)
 {
     PixMapHandle gw_pixmap, gd_pixmap;
     GWorldPtr graphics_world;
@@ -345,7 +345,7 @@ PUBLIC pascal trap void Executor::C_UnlockPixels(PixMapHandle pixels)
     }
 }
 
-PUBLIC pascal trap GWorldFlags Executor::C_UpdateGWorld(GUEST<GWorldPtr> * graphics_world, INTEGER depth, Rect * bounds, CTabHandle ctab, GDHandle a_gdevice, GWorldFlags flags)
+PUBLIC pascal trap GWorldFlags Executor::C_UpdateGWorld(GUEST<GWorldPtr> *graphics_world, INTEGER depth, Rect *bounds, CTabHandle ctab, GDHandle a_gdevice, GWorldFlags flags)
 {
     gw_info_t *gw_info;
     GWorldPtr gw;
@@ -518,7 +518,7 @@ PUBLIC pascal trap void Executor::C_DisposeGWorld(GWorldPtr graphics_world)
     delete_gw_info(gw_info);
 }
 
-PUBLIC pascal trap void Executor::C_GetGWorld(GUEST<CGrafPtr> * port, GUEST<GDHandle> * graphics_device)
+PUBLIC pascal trap void Executor::C_GetGWorld(GUEST<CGrafPtr> *port, GUEST<GDHandle> *graphics_device)
 {
     *port = theCPortX;
     *graphics_device = TheGDevice;
@@ -642,7 +642,7 @@ PUBLIC pascal trap Ptr Executor::C_GetPixBaseAddr(PixMapHandle pixels)
         return STARH((Handle)PIXMAP_BASEADDR(pixels));
 }
 
-PUBLIC pascal trap QDErr Executor::C_NewScreenBuffer(Rect * global_rect, Boolean purgeable_p, GUEST<GDHandle> * graphics_device, GUEST<PixMapHandle> * offscreen_pixmap)
+PUBLIC pascal trap QDErr Executor::C_NewScreenBuffer(Rect *global_rect, Boolean purgeable_p, GUEST<GDHandle> *graphics_device, GUEST<PixMapHandle> *offscreen_pixmap)
 {
     GDHandle max_graphics_device;
     PixMapHandle pixels, gd_pixmap;
@@ -748,7 +748,7 @@ PUBLIC pascal trap PixMapHandle Executor::C_GetGWorldPixMap(GWorldPtr port)
         return CPORT_PIXMAP(port);
 }
 
-PUBLIC pascal trap QDErr Executor::C_NewTempScreenBuffer(Rect * global_rect, Boolean purgeable_p, GUEST<GDHandle> * graphics_device, GUEST<PixMapHandle> * offscreen_pixmap)
+PUBLIC pascal trap QDErr Executor::C_NewTempScreenBuffer(Rect *global_rect, Boolean purgeable_p, GUEST<GDHandle> *graphics_device, GUEST<PixMapHandle> *offscreen_pixmap)
 {
     gui_fatal("unimplemented");
 #if !defined(LETGCCWAIL)

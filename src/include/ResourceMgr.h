@@ -219,7 +219,6 @@ PASCAL_TRAP(HomeResFile, 0xA9A4);
 extern pascal trap void C_UseResFile(INTEGER rn);
 PASCAL_TRAP(UseResFile, 0xA998);
 
-
 extern pascal trap void C_ReadPartialResource(Handle resource,
                                               int32_t offset,
                                               Ptr buffer, int32_t count);

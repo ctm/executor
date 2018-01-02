@@ -140,7 +140,7 @@ hdlr_table_elt(AE_hdlr_table_h table,
     AE_RETURN_ERROR(errAEHandlerNotFound);
 }
 
-PUBLIC pascal trap OSErr Executor::C__AE_hdlr_table_alloc(int32_t unknown_1, int32_t unknown_2, int32_t unknown_3, int8 unknown_p, GUEST<AE_hdlr_table_h> * table_return)
+PUBLIC pascal trap OSErr Executor::C__AE_hdlr_table_alloc(int32_t unknown_1, int32_t unknown_2, int32_t unknown_3, int8 unknown_p, GUEST<AE_hdlr_table_h> *table_return)
 {
     AE_hdlr_table_h table;
 
@@ -163,7 +163,7 @@ PUBLIC pascal trap OSErr Executor::C__AE_hdlr_table_alloc(int32_t unknown_1, int
     AE_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C__AE_hdlr_delete(AE_hdlr_table_h table, int32_t unknown_1, AE_hdlr_selector_t * selector)
+PUBLIC pascal trap OSErr Executor::C__AE_hdlr_delete(AE_hdlr_table_h table, int32_t unknown_1, AE_hdlr_selector_t *selector)
 {
     AE_hdlr_table_elt_t *elt, *elts;
     int n_elts, elt_offset;
@@ -187,7 +187,7 @@ PUBLIC pascal trap OSErr Executor::C__AE_hdlr_delete(AE_hdlr_table_h table, int3
     AE_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C__AE_hdlr_lookup(AE_hdlr_table_h table, int32_t unknown_1, AE_hdlr_selector_t * selector, AE_hdlr_t * hdlr_return)
+PUBLIC pascal trap OSErr Executor::C__AE_hdlr_lookup(AE_hdlr_table_h table, int32_t unknown_1, AE_hdlr_selector_t *selector, AE_hdlr_t *hdlr_return)
 {
     AE_hdlr_table_elt_t *elt;
     OSErr err;
@@ -202,7 +202,7 @@ PUBLIC pascal trap OSErr Executor::C__AE_hdlr_lookup(AE_hdlr_table_h table, int3
     AE_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C__AE_hdlr_install(AE_hdlr_table_h table, int32_t unknown_1, AE_hdlr_selector_t * selector, AE_hdlr_t * hdlr)
+PUBLIC pascal trap OSErr Executor::C__AE_hdlr_install(AE_hdlr_table_h table, int32_t unknown_1, AE_hdlr_selector_t *selector, AE_hdlr_t *hdlr)
 {
     AE_hdlr_table_elt_t *elt;
     OSErr err;
@@ -235,7 +235,7 @@ PUBLIC pascal trap OSErr Executor::C_AEInstallEventHandler(AEEventClass event_cl
     selector.sel0 = CL(event_class);
     selector.sel1 = CL(event_id);
 
-    hdlr.fn = RM((void*) hdlr_fn);
+    hdlr.fn = RM((void *)hdlr_fn);
     hdlr.refcon = CL(refcon);
 
     err = hdlr_table_elt(table, &selector, &hdlr, true, &elt);
@@ -259,7 +259,7 @@ dummy(void)
 {
 }
 
-PUBLIC pascal trap OSErr Executor::C_AEGetEventHandler(AEEventClass event_class, AEEventID event_id, GUEST<EventHandlerProcPtr> * hdlr, GUEST<int32_t> * refcon, Boolean system_handler_p)
+PUBLIC pascal trap OSErr Executor::C_AEGetEventHandler(AEEventClass event_class, AEEventID event_id, GUEST<EventHandlerProcPtr> *hdlr, GUEST<int32_t> *refcon, Boolean system_handler_p)
 {
     AE_hdlr_table_h table;
     AE_hdlr_table_elt_t *elt;
@@ -286,7 +286,7 @@ PUBLIC pascal trap OSErr Executor::C_AEGetEventHandler(AEEventClass event_class,
         AE_RETURN_ERROR(err);
 
     /* warning: `elt' is a pointer into an unlocked handle */
-    *hdlr = guest_cast<EventHandlerProcPtr>( elt->hdlr.fn );
+    *hdlr = guest_cast<EventHandlerProcPtr>(elt->hdlr.fn);
     *refcon = elt->hdlr.refcon;
 
     /* hack because various applications complain if they get sent
@@ -328,7 +328,7 @@ PUBLIC pascal trap OSErr Executor::C_AEInstallCoercionHandler(DescType from_type
     selector.sel0 = CL(from_type);
     selector.sel1 = CL(to_type);
 
-    hdlr.fn = RM((void*) hdlr_fn);
+    hdlr.fn = RM((void *)hdlr_fn);
     hdlr.refcon = CL(refcon);
 
     err = hdlr_table_elt(table, &selector, &hdlr, true, &elt);
@@ -343,7 +343,7 @@ PUBLIC pascal trap OSErr Executor::C_AEInstallCoercionHandler(DescType from_type
     AE_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_AEGetCoercionHandler(DescType from_type, DescType to_type, GUEST<CoerceDescProcPtr> * hdlr_out, GUEST<int32_t> * refcon_out, GUEST<Boolean> * from_type_is_desc_p_out, Boolean system_handler_p)
+PUBLIC pascal trap OSErr Executor::C_AEGetCoercionHandler(DescType from_type, DescType to_type, GUEST<CoerceDescProcPtr> *hdlr_out, GUEST<int32_t> *refcon_out, GUEST<Boolean> *from_type_is_desc_p_out, Boolean system_handler_p)
 {
     AE_hdlr_table_h table;
     AE_hdlr_table_elt_t *elt;
@@ -360,7 +360,7 @@ PUBLIC pascal trap OSErr Executor::C_AEGetCoercionHandler(DescType from_type, De
         AE_RETURN_ERROR(err);
 
     /* warning: `elt' is a pointer into an unlocked handle */
-    *hdlr_out = guest_cast<CoerceDescProcPtr>( elt->hdlr.fn );
+    *hdlr_out = guest_cast<CoerceDescProcPtr>(elt->hdlr.fn);
     *refcon_out = elt->hdlr.refcon;
 
     /* #### *from_type_is_desc_p_out = elt->flag; */
@@ -402,7 +402,7 @@ PUBLIC pascal trap OSErr Executor::C_AEInstallSpecialHandler(AEKeyword function_
     /* #### OSL internal */
     if(function_class == keySelectProc)
     {
-        AE_OSL_select_fn = US_TO_SYN68K((void*) hdlr_fn);
+        AE_OSL_select_fn = US_TO_SYN68K((void *)hdlr_fn);
         AE_RETURN_ERROR(noErr);
     }
 
@@ -411,7 +411,7 @@ PUBLIC pascal trap OSErr Executor::C_AEInstallSpecialHandler(AEKeyword function_
     selector.sel0 = CL(function_class);
     selector.sel1 = CL(k_special_sel1);
 
-    hdlr.fn = RM((void*) hdlr_fn);
+    hdlr.fn = RM((void *)hdlr_fn);
     hdlr.refcon = CL(-1);
 
     err = hdlr_table_elt(table, &selector, &hdlr, true, &elt);
@@ -424,7 +424,7 @@ PUBLIC pascal trap OSErr Executor::C_AEInstallSpecialHandler(AEKeyword function_
     AE_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_AEGetSpecialHandler(AEKeyword function_class, GUEST<EventHandlerProcPtr> * hdlr_out, Boolean system_handler_p)
+PUBLIC pascal trap OSErr Executor::C_AEGetSpecialHandler(AEKeyword function_class, GUEST<EventHandlerProcPtr> *hdlr_out, Boolean system_handler_p)
 {
     AE_hdlr_table_h table;
     AE_hdlr_table_elt_t *elt;
@@ -441,7 +441,7 @@ PUBLIC pascal trap OSErr Executor::C_AEGetSpecialHandler(AEKeyword function_clas
         AE_RETURN_ERROR(err);
 
     /* warning: `elt' is a pointer into an unlocked handle */
-    *hdlr_out = guest_cast<EventHandlerProcPtr>( elt->hdlr.fn );
+    *hdlr_out = guest_cast<EventHandlerProcPtr>(elt->hdlr.fn);
 
     AE_RETURN_ERROR(noErr);
 }

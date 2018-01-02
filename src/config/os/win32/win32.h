@@ -15,7 +15,6 @@
 #include <sys/param.h>
 //#include <sys/errno.h>
 
-
 #if !defined(PRIVATE)
 #define PRIVATE static
 #endif
@@ -34,6 +33,5 @@ typedef struct
     char *dptr;
     unsigned dsize;
 } datum;
-
 
 inline int geteuid() { return 1; }

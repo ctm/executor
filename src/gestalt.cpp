@@ -154,7 +154,7 @@ PRIVATE gestaltentry_t gtable[] = {
     {
         gestaltSysArchitecture, gestaltPowerPC,
     },
-// FIXME: #warning questionable gestalt values for StuffitExpander
+    // FIXME: #warning questionable gestalt values for StuffitExpander
     { gestaltOSAttr, 0x3FF },
     { T('t', 'h', 'd', 's'), 0 },
 #else
@@ -506,7 +506,7 @@ Executor::ROMlib_add_to_gestalt_list(OSType selector, OSErr retval, uint32_t new
     }
 }
 
-PUBLIC trap OSErrRET Executor::Gestalt(OSType selector, GUEST<LONGINT> * responsep)
+PUBLIC trap OSErrRET Executor::Gestalt(OSType selector, GUEST<LONGINT> *responsep)
 {
     static bool been_here = false;
 
@@ -551,7 +551,7 @@ PUBLIC trap OSErrRET Executor::Gestalt(OSType selector, GUEST<LONGINT> * respons
     return gestalt_helper(selector, responsep, true, gtable, NELEM(gtable));
 }
 
-PUBLIC pascal trap OSErrRET Executor::C_PhysicalGestalt(OSType selector, GUEST<LONGINT> * responsep)
+PUBLIC pascal trap OSErrRET Executor::C_PhysicalGestalt(OSType selector, GUEST<LONGINT> *responsep)
 {
     OSErrRET retval;
 
@@ -577,7 +577,7 @@ PUBLIC pascal trap OSErrRET Executor::C_PhysicalGestalt(OSType selector, GUEST<L
     return retval;
 }
 
-PUBLIC pascal trap OSErrRET Executor::C_GestaltTablesOnly(OSType selector, GUEST<LONGINT> * responsep)
+PUBLIC pascal trap OSErrRET Executor::C_GestaltTablesOnly(OSType selector, GUEST<LONGINT> *responsep)
 {
     return gestalt_helper(selector, responsep, false, gtable, NELEM(gtable));
 }
@@ -631,7 +631,7 @@ PUBLIC trap OSErrRET Executor::NewGestalt(OSType selector, ProcPtr selFunc)
     return retval;
 }
 
-PUBLIC trap OSErrRET Executor::ReplaceGestalt(OSType selector, ProcPtr selFunc, ProcPtr * oldSelFuncp)
+PUBLIC trap OSErrRET Executor::ReplaceGestalt(OSType selector, ProcPtr selFunc, ProcPtr *oldSelFuncp)
 {
     OSErr retval;
     gestalt_link_t *gp;

@@ -52,9 +52,8 @@ typedef pascal LONGINT (*mbarhookp)(Rect *rp);
 
 namespace Executor
 {
-    PUBLIC int ROMlib_sticky_menus_p = 0;
+PUBLIC int ROMlib_sticky_menus_p = 0;
 }
-
 
 PRIVATE void dirtymenusize(MenuHandle);
 PRIVATE BOOLEAN findroot(INTEGER menuid, INTEGER *root_unswp);
@@ -324,7 +323,7 @@ PRIVATE void app(StringPtr, char, char, char, char, char, endinfo *);
 PRIVATE void handleinsert(Handle, StringPtr);
 PRIVATE void xInsertResMenu(MenuHandle, StringPtr, ResType, INTEGER);
 
-PRIVATE void toend(MenuHandle mh, endinfo * eip)
+PRIVATE void toend(MenuHandle mh, endinfo *eip)
 {
     char *menuop;
 
@@ -340,7 +339,7 @@ PRIVATE void toend(MenuHandle mh, endinfo * eip)
     eip->menoff = menuop - (char *)STARH(mh);
 }
 
-PRIVATE void app(StringPtr str, char icon, char marker, char style, char keyequiv, char disflag, endinfo * eip)
+PRIVATE void app(StringPtr str, char icon, char marker, char style, char keyequiv, char disflag, endinfo *eip)
 {
     char *ip, *ep, *menuop;
     Size newsize;
@@ -540,7 +539,7 @@ PUBLIC pascal trap void Executor::C_AddResMenu(MenuHandle mh, ResType restype)
 }
 
 PUBLIC mextp Executor::ROMlib_mitemtop(MenuHandle mh, /* INTERNAL */
-   INTEGER item, StringPtr * stashstringp)
+                                       INTEGER item, StringPtr *stashstringp)
 {
     mextp retval;
     StringPtr stashstring;
@@ -570,7 +569,7 @@ PUBLIC mextp Executor::ROMlib_mitemtop(MenuHandle mh, /* INTERNAL */
 }
 
 PUBLIC pascal trap void Executor::C_DelMenuItem(MenuHandle mh, /* IMIV-56 */
-   INTEGER item)
+                                                INTEGER item)
 {
     if(mh)
     {
@@ -910,7 +909,7 @@ static inline void ROMlib_CALLMENUHOOK(menuhookp fp)
 
 #define CALLMBARHOOK(arg, fp) ROMlib_CALLMBARHOOK(arg, (mbarhookp)(fp))
 
-static inline LONGINT ROMlib_CALLMBARHOOK(Rect * rp, mbarhookp fp)
+static inline LONGINT ROMlib_CALLMBARHOOK(Rect *rp, mbarhookp fp)
 {
     ROMlib_hook(menu_mbarhooknumber);
 
@@ -930,7 +929,7 @@ PRIVATE INTEGER wheretowhich(LONGINT offset)
     return p - ep;
 }
 
-PRIVATE void shadowrect(Rect * rp)
+PRIVATE void shadowrect(Rect *rp)
 {
     rp->top = CW(CW(rp->top) - 1);
     rp->left = CW(CW(rp->left) - 1);
@@ -938,7 +937,7 @@ PRIVATE void shadowrect(Rect * rp)
     rp->right = CW(CW(rp->right) + 2);
 }
 
-PRIVATE void restoren(INTEGER ntodrop, RgnHandle restoredrgn, Rect * rp)
+PRIVATE void restoren(INTEGER ntodrop, RgnHandle restoredrgn, Rect *rp)
 {
     mbdfentry *p;
     RgnHandle tmprgn;
@@ -972,7 +971,7 @@ PRIVATE void restoren(INTEGER ntodrop, RgnHandle restoredrgn, Rect * rp)
         *rp = p[-1].mbRectSave;
 }
 
-PRIVATE MenuHandle menunumtomh(INTEGER mid, INTEGER * sixp)
+PRIVATE MenuHandle menunumtomh(INTEGER mid, INTEGER *sixp)
 {
     muelem *mp, *mpend;
 
@@ -987,7 +986,7 @@ PRIVATE MenuHandle menunumtomh(INTEGER mid, INTEGER * sixp)
     return 0;
 }
 
-PRIVATE MenuHandle itemishierarchical(MenuHandle mh, INTEGER item, INTEGER * sixp)
+PRIVATE MenuHandle itemishierarchical(MenuHandle mh, INTEGER item, INTEGER *sixp)
 {
     mextp mep;
 
@@ -999,8 +998,8 @@ PRIVATE MenuHandle itemishierarchical(MenuHandle mh, INTEGER item, INTEGER * six
 #define HIERRECTBIT (1L << 16)
 
 int32_t Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
-                                  int32_t oldwhere, BOOLEAN ispopup,
-                                  int16_t nmenusdisplayed)
+                                    int32_t oldwhere, BOOLEAN ispopup,
+                                    int16_t nmenusdisplayed)
 {
     mbdfentry *oldentry, *newentry;
     Rect r, r2;
@@ -1342,7 +1341,7 @@ PUBLIC pascal trap void Executor::C_FlashMenuBar(INTEGER mid)
     MBDFCALL(mbHilite, 0, l);
 }
 
-PRIVATE BOOLEAN findroot(INTEGER menuid, INTEGER * root_unswp)
+PRIVATE BOOLEAN findroot(INTEGER menuid, INTEGER *root_unswp)
 {
     INTEGER loopcount, i, maxi;
     enum
@@ -1528,7 +1527,7 @@ PUBLIC pascal trap void Executor::C_SetItemMark(MenuHandle mh, INTEGER item, Cha
         mep->mmarker = mark;
 }
 
-PUBLIC pascal trap void Executor::C_GetItemMark(MenuHandle mh, INTEGER item, GUEST<INTEGER> * markp)
+PUBLIC pascal trap void Executor::C_GetItemMark(MenuHandle mh, INTEGER item, GUEST<INTEGER> *markp)
 {
     mextp mep;
 
@@ -1547,7 +1546,7 @@ PUBLIC pascal trap void Executor::C_SetItemIcon(MenuHandle mh, INTEGER item, Byt
     }
 }
 
-PUBLIC pascal trap void Executor::C_GetItemIcon(MenuHandle mh, INTEGER item, GUEST<INTEGER> * iconp)
+PUBLIC pascal trap void Executor::C_GetItemIcon(MenuHandle mh, INTEGER item, GUEST<INTEGER> *iconp)
 {
     mextp mep;
 
@@ -1566,7 +1565,7 @@ PUBLIC pascal trap void Executor::C_SetItemStyle(MenuHandle mh, INTEGER item, IN
     }
 }
 
-PUBLIC pascal trap void Executor::C_GetItemStyle(MenuHandle mh, INTEGER item, GUEST<INTEGER> * stylep)
+PUBLIC pascal trap void Executor::C_GetItemStyle(MenuHandle mh, INTEGER item, GUEST<INTEGER> *stylep)
 {
     mextp mep;
 

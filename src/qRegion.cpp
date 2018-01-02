@@ -229,7 +229,7 @@ PUBLIC pascal trap void Executor::C_SetRectRgn(RgnHandle rh, INTEGER left, INTEG
     RGN_SET_SMALL(rh);
 }
 
-PUBLIC pascal trap void Executor::C_RectRgn(RgnHandle rh, Rect * rect)
+PUBLIC pascal trap void Executor::C_RectRgn(RgnHandle rh, Rect *rect)
 {
     Rect r;
 
@@ -619,7 +619,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_PtInRgn(Point p, RgnHandle rh)
 
 #if !defined(NDEBUG)
 
-PRIVATE void assertincreasing(INTEGER * ip)
+PRIVATE void assertincreasing(INTEGER *ip)
 {
     LONGINT lastx = -327680;
     while(*ip != RGN_STOP)
@@ -1115,7 +1115,7 @@ static INTEGER npairs;
 
 #include "hintemplate.h"
 
-PRIVATE LONGINT comparex(const void * cp1, const void * cp2)
+PRIVATE LONGINT comparex(const void *cp1, const void *cp2)
 {
     const INTEGER *p1, *p2;
     LONGINT retval;
@@ -1140,7 +1140,7 @@ PRIVATE LONGINT comparex(const void * cp1, const void * cp2)
     return retval;
 }
 
-PRIVATE LONGINT comparey(const void * cp1, const void * cp2)
+PRIVATE LONGINT comparey(const void *cp1, const void *cp2)
 {
     const INTEGER *p1, *p2;
     LONGINT retval;
@@ -1169,7 +1169,7 @@ PRIVATE LONGINT comparey(const void * cp1, const void * cp2)
  * BEWARE:  ptorh can trash memory... regions can grow by being inset (honest)
  */
 
-PRIVATE void ptorh(INTEGER * p, RgnHandle rh)
+PRIVATE void ptorh(INTEGER *p, RgnHandle rh)
 {
     INTEGER y, oy, *op;
 
@@ -1475,8 +1475,8 @@ PUBLIC pascal trap void Executor::C_XorRgn(RgnHandle s1, RgnHandle s2, RgnHandle
     ALLOCAEND
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_RectInRgn(Rect * rp, /* IMIV-23 */
-   RgnHandle rh)
+PUBLIC pascal trap BOOLEAN Executor::C_RectInRgn(Rect *rp, /* IMIV-23 */
+                                                 RgnHandle rh)
 {
     RgnHandle newrh;
     BOOLEAN retval;
@@ -1499,7 +1499,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_EqualRgn(RgnHandle r1, RgnHandle r2)
 
 PUBLIC pascal trap BOOLEAN Executor::C_EmptyRgn(RgnHandle rh)
 {
-// FIXME: #warning What does a mac do with a NULL HANDLE here?
+    // FIXME: #warning What does a mac do with a NULL HANDLE here?
     BOOLEAN retval;
 
     retval = rh ? EmptyRect(&RGN_BBOX(rh)) : true;

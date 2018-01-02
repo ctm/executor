@@ -315,7 +315,7 @@ PRIVATE OSErr writemap(resmaphand map)
 	      resource file associated with map is updated to include
 	      the resource pointed to by rr */
 
-PUBLIC void Executor::ROMlib_wr(resmaphand map, resref * rr) /* INTERNAL */
+PUBLIC void Executor::ROMlib_wr(resmaphand map, resref *rr) /* INTERNAL */
 {
     LONGINT rsize, newloc, lc;
     GUEST<LONGINT> swappedrsize;
@@ -352,7 +352,7 @@ PUBLIC void Executor::ROMlib_wr(resmaphand map, resref * rr) /* INTERNAL */
         ROMlib_setreserr(noErr);
 }
 
-PRIVATE void fillst(sorttypehand st, resref * rp, resref * rep)
+PRIVATE void fillst(sorttypehand st, resref *rp, resref *rep)
 {
     res_sorttype_t *end = STARH(st), *sp;
     LONGINT newoff;
@@ -375,7 +375,7 @@ PRIVATE void fillst(sorttypehand st, resref * rp, resref * rep)
     }
 }
 
-PRIVATE void getdat(INTEGER fn, LONGINT datoff, LONGINT doff, Handle * h)
+PRIVATE void getdat(INTEGER fn, LONGINT datoff, LONGINT doff, Handle *h)
 {
     LONGINT size, lc;
     GUEST<LONGINT> size_s;
@@ -397,7 +397,7 @@ PRIVATE void getdat(INTEGER fn, LONGINT datoff, LONGINT doff, Handle * h)
     HUnlock(*h);
 }
 
-PRIVATE void putdat(INTEGER fn, LONGINT datoff, LONGINT * doffp, Handle h)
+PRIVATE void putdat(INTEGER fn, LONGINT datoff, LONGINT *doffp, Handle h)
 {
     LONGINT size = GetHandleSize(h), lc;
     GUEST<LONGINT> swappedsize;
@@ -416,7 +416,7 @@ PRIVATE void putdat(INTEGER fn, LONGINT datoff, LONGINT * doffp, Handle h)
     *doffp += sizeof(LONGINT) + size;
 }
 
-PRIVATE LONGINT walkst(res_sorttype_t * sp, res_sorttype_t * sep, INTEGER fn, LONGINT datoff)
+PRIVATE LONGINT walkst(res_sorttype_t *sp, res_sorttype_t *sep, INTEGER fn, LONGINT datoff)
 {
     LONGINT size;
     LONGINT doff;

@@ -404,12 +404,15 @@ _do_selector_table(uint32_t selector,
     abort();
 }
 
-#define PTOCBLOCK(name)               \
-    {                                 \
+#define PTOCBLOCK(name)                   \
+    {                                     \
         (void *)C_##name, ptoc(&C_##name) \
     }
 
-#define ZERO_PTOCBLOCK {nullptr, 0}
+#define ZERO_PTOCBLOCK \
+    {                  \
+        nullptr, 0     \
+    }
 
 PRIVATE ptocblock_t scriptptoc0[] = {
     PTOCBLOCK(FontScript), /* 0 FontScript */
@@ -700,10 +703,10 @@ STUB(Frac2X)
     return retaddr;
 }
 
-#define SAVE_A1_D1_D2()            \
+#define SAVE_A1_D1_D2()              \
     uint32_t savea1, saved1, saved2; \
-    savea1 = EM_A1;                \
-    saved1 = EM_D1;                \
+    savea1 = EM_A1;                  \
+    saved1 = EM_D1;                  \
     saved2 = EM_D2
 
 #define RESTORE_A1_D1_D2() \
@@ -1736,7 +1739,7 @@ STUB(PostEvent)
 {
     GUEST<EvQElPtr> qelemp;
 
-// FIXME: #warning the first argument to PPostEvent looks suspicious
+    // FIXME: #warning the first argument to PPostEvent looks suspicious
     EM_D0 = PPostEvent(EM_A0, EM_D0,
                        (GUEST<EvQElPtr> *)&qelemp);
     EM_A0 = qelemp.raw();
@@ -1826,7 +1829,7 @@ STUB(Delay)
 {
     LONGINT tempp;
 
-// FIXME: #warning is a0 really the argument to delay?  That sounds weird
+    // FIXME: #warning is a0 really the argument to delay?  That sounds weird
     Delay(EM_A0, &tempp);
     EM_D0 = tempp;
     RTS();
@@ -1926,7 +1929,7 @@ STUB(PrGlue)
     return do_selector_block(prglueblock, ul >> 27, PrGlue);
 }
 
-typedef OSErrRET (*fsprocp_t)(void*, BOOLEAN);
+typedef OSErrRET (*fsprocp_t)(void *, BOOLEAN);
 
 fsprocp_t hfstab[] = {
     (fsprocp_t)apparent_nop, /* 0 */
@@ -2338,7 +2341,7 @@ STUB(Gestalt)
         case 0xA5AD:
             EM_D0 = ReplaceGestalt(EM_D0, (ProcPtr)SYN68K_TO_US_CHECK0(EM_A0),
                                    &oldp);
-            EM_A0 = US_TO_SYN68K_CHECK0((void*)oldp);
+            EM_A0 = US_TO_SYN68K_CHECK0((void *)oldp);
             break;
         case 0xA7AD:
             gui_abort();
@@ -2629,7 +2632,7 @@ STUB(NewHandle)
     /* #### d1 options */
 
     EM_A0 = (uint32_t)US_TO_SYN68K_CHECK0(_NewHandle_flags(EM_D0, SYS_P(EM_D1, 0xA122),
-                                                         CLEAR_P(EM_D1, 0xA122)));
+                                                           CLEAR_P(EM_D1, 0xA122)));
     EM_D0 = CW(MemErr);
     RTS();
 }

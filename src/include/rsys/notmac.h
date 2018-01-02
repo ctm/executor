@@ -7,7 +7,6 @@
  * Question. What do the things in this header file have in common???
  */
 
-
 #if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 
 #include "rsys/commonevt.h"

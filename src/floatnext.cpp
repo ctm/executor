@@ -51,7 +51,7 @@ mp_increment_big_endian(uint8 *bytes, int num_bytes)
  * Note that most SANE traps replace the dst operand with the
  * result.  This one replaces the src operand (really!)
  */
-PUBLIC pascal trap void Executor::C_ROMlib_FnextX(uint8 * x, uint8 * y, unsigned short sel)
+PUBLIC pascal trap void Executor::C_ROMlib_FnextX(uint8 *x, uint8 *y, unsigned short sel)
 {
     CCRElement saved_ccc, saved_ccn, saved_ccv, saved_ccnz, saved_ccx;
     INTEGER x_class, y_class, x_class_swapped, y_class_swapped;

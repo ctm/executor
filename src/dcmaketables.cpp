@@ -113,7 +113,7 @@ static const int
     ind_src_conversion_funcs[(log2_in_bpp) - (log2_out_bpp) + 5]
 #define TABLE_SIZE(log2_in_bpp, log2_out_bpp)                          \
     ((ind_src_unaligned_table_size[(log2_in_bpp) - (log2_out_bpp) + 5] \
-      + sizeof(uint32_t) /* First long specifies log2_in_bpp. */         \
+      + sizeof(uint32_t) /* First long specifies log2_in_bpp. */       \
       + DEPTHCONV_TABLE_ALIGNMENT(log2_in_bpp, log2_out_bpp) - 1)      \
      & (DEPTHCONV_TABLE_ALIGNMENT(log2_in_bpp, log2_out_bpp) - 1))
 
@@ -124,14 +124,14 @@ static const int
  */
 #define DEPTH_INCREASING_BY_FACTOR_OF_2(bpp1, bpp2)                             \
     static void                                                                 \
-        maketable_##bpp1##_##bpp2(void *d, const uint32_t *map)                   \
+        maketable_##bpp1##_##bpp2(void *d, const uint32_t *map)                 \
     {                                                                           \
         int c;                                                                  \
-        uint16_t *dst;                                                            \
+        uint16_t *dst;                                                          \
                                                                                 \
-        for(c = 0, dst = (uint16_t *)d; c < 256; c++)                             \
+        for(c = 0, dst = (uint16_t *)d; c < 256; c++)                           \
         {                                                                       \
-            uint16_t new1;                                                        \
+            uint16_t new1;                                                      \
             int r, l;                                                           \
                                                                                 \
             /* Compute initial left shift count. */                             \
@@ -140,7 +140,7 @@ static const int
             /* Loop over all input pixels and create the lookup table entry. */ \
             for(new1 = 0, r = 8 - bpp1; r >= 0; r -= bpp1)                      \
             {                                                                   \
-                uint32_t v = map[(c >> r) & ((1UL << bpp1) - 1)];                 \
+                uint32_t v = map[(c >> r) & ((1UL << bpp1) - 1)];               \
                 new1 |= (v & ((1UL << bpp2) - 1)) << l;                         \
                 if(l == 0)                                                      \
                 {                                                               \
@@ -164,7 +164,7 @@ DEPTH_INCREASING_BY_FACTOR_OF_2(8, 16)
 /* This macro handles the cases where the pixel depth is not decreasing. */
 #define DEPTH_NONDECREASING(bpp1, bpp2, new_type)                               \
     static void                                                                 \
-        maketable_##bpp1##_##bpp2(void *d, const uint32_t *map)                   \
+        maketable_##bpp1##_##bpp2(void *d, const uint32_t *map)                 \
     {                                                                           \
         int c;                                                                  \
         new_type *dst;                                                          \
@@ -180,7 +180,7 @@ DEPTH_INCREASING_BY_FACTOR_OF_2(8, 16)
             /* Loop over all input pixels and create the lookup table entry. */ \
             for(new1 = 0, r = 8 - bpp1; r >= 0; r -= bpp1)                      \
             {                                                                   \
-                uint32_t v = map[(c >> r) & ((1UL << bpp1) - 1)];                 \
+                uint32_t v = map[(c >> r) & ((1UL << bpp1) - 1)];               \
                 new1 |= (v & (0xFFFFFFFFUL >> (32 - bpp2))) << l;               \
                 if(l == 0)                                                      \
                 {                                                               \
@@ -218,7 +218,7 @@ DEPTH_NONDECREASING(8, 32, uint32_t)
 
 #define DEPTH_DECREASING(bpp1, bpp2)                                            \
     static void                                                                 \
-        maketable_##bpp1##_##bpp2(void *d, const uint32_t *map)                   \
+        maketable_##bpp1##_##bpp2(void *d, const uint32_t *map)                 \
     {                                                                           \
         int c;                                                                  \
         uint8 *dst;                                                             \

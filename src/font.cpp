@@ -88,7 +88,7 @@ Executor::ROMlib_shutdown_font_manager(void)
 }
 
 PUBLIC pascal trap void Executor::C_GetFontName(INTEGER fnum, /* IMI-223 */
-   StringPtr fnam)
+                                                StringPtr fnam)
 {
     Handle h;
     GUEST<INTEGER> i;
@@ -114,13 +114,13 @@ PUBLIC pascal trap void Executor::C_GetFontName(INTEGER fnum, /* IMI-223 */
  * callable w/o pascal conventions
  */
 
-PUBLIC void Executor::ROMlib_GetFontName(LONGINT fnum, char * fnam)
+PUBLIC void Executor::ROMlib_GetFontName(LONGINT fnum, char *fnam)
 {
     GetFontName(fnum, (StringPtr)fnam);
 }
 
 PUBLIC pascal trap void Executor::C_GetFNum(StringPtr fnam, /* IMI-223 */
-   GUEST<INTEGER> * fnum)
+                                            GUEST<INTEGER> *fnum)
 {
     Handle h;
     GUEST<ResType> rest;
@@ -210,7 +210,7 @@ PRIVATE void findclosestfond(FHandle fh, INTEGER size, INTEGER *powerof2p,
 PRIVATE INTEGER closestface();
 PRIVATE void newwidthtable(FMInput *fmip);
 
-PRIVATE void mungfmo(ctrip cp, FMOutput * fmop)
+PRIVATE void mungfmo(ctrip cp, FMOutput *fmop)
 {
     Byte *p;
     INTEGER i;
@@ -228,7 +228,7 @@ PRIVATE void mungfmo(ctrip cp, FMOutput * fmop)
 
 #define MAXTABLES 12
 
-PRIVATE BOOLEAN widthlistmatch(FMInput * fmip)
+PRIVATE BOOLEAN widthlistmatch(FMInput *fmip)
 {
 
     GUEST<WHandle> *whp, *ewhp;
@@ -287,7 +287,7 @@ static INTEGER nhappybits(unsigned short want, unsigned short have)
 
 #define WIDTHBIT (1 << 1)
 
-PRIVATE GUEST<INTEGER> * findfondwidths()
+PRIVATE GUEST<INTEGER> *findfondwidths()
 {
     GUEST<INTEGER> *retval, *numentriesminusone;
     LONGINT offset;
@@ -479,7 +479,7 @@ PRIVATE void buildtable(INTEGER extra)
     buildtabdata(howtobuild, extra, fondwidthtable);
 }
 
-PRIVATE void findclosestfont(INTEGER family, INTEGER size, INTEGER * lesserp, INTEGER * greaterp)
+PRIVATE void findclosestfont(INTEGER family, INTEGER size, INTEGER *lesserp, INTEGER *greaterp)
 {
     INTEGER i, lesser, greater, newsize, nres;
     GUEST<ResType> rest;
@@ -514,7 +514,7 @@ PRIVATE void findclosestfont(INTEGER family, INTEGER size, INTEGER * lesserp, IN
     *greaterp = greater == 32767 ? 0 : greater;
 }
 
-PRIVATE void findclosestfond(FHandle fh, INTEGER size, INTEGER * powerof2p, INTEGER * lesserp, INTEGER * greaterp)
+PRIVATE void findclosestfond(FHandle fh, INTEGER size, INTEGER *powerof2p, INTEGER *lesserp, INTEGER *greaterp)
 {
     fatabentry *p, *ep;
     INTEGER newsize;
@@ -555,7 +555,7 @@ PRIVATE void findclosestfond(FHandle fh, INTEGER size, INTEGER * powerof2p, INTE
 }
 
 PUBLIC pascal trap BOOLEAN Executor::C_RealFont(INTEGER fnum, /* IMI-223 */
-   INTEGER sz)
+                                                INTEGER sz)
 {
     Handle h;
     int retval;
@@ -638,7 +638,7 @@ at_least_one_fond_entry(INTEGER family)
 
 #define AVAILABLE(x) (WIDTHPTR->fSize = CW((x)), WIDTHPTR->tabFont = RM(GetResource(TICK("FONT"), FONTRESID(family, (x)))))
 
-PRIVATE void newwidthtable(FMInput * fmip)
+PRIVATE void newwidthtable(FMInput *fmip)
 {
     FHandle fh;
     INTEGER lesser, greater, wanted_family, family, fontresid, powerof2;
@@ -804,7 +804,7 @@ PRIVATE void newwidthtable(FMInput * fmip)
                            (LONGINT)Cx(fmip->family));
 }
 
-PUBLIC pascal trap FMOutPtr Executor::C_FMSwapFont(FMInput * fmip) /* IMI-223 */
+PUBLIC pascal trap FMOutPtr Executor::C_FMSwapFont(FMInput *fmip) /* IMI-223 */
 {
     Style style;
     FontRec *fp;
@@ -912,7 +912,7 @@ PUBLIC pascal trap FMOutPtr Executor::C_FMSwapFont(FMInput * fmip) /* IMI-223 */
 
 #define SCALE(x) FixRatio(x *CW(fmop->numer.v), CW(fmop->denom.v))
 
-PUBLIC pascal trap void Executor::C_FontMetrics(FMetricRec * metrp) /* IMIV-32 */
+PUBLIC pascal trap void Executor::C_FontMetrics(FMetricRec *metrp) /* IMIV-32 */
 {
     FMInput fmi;
     FMOutPtr fmop;
@@ -940,7 +940,7 @@ PUBLIC pascal trap void Executor::C_FontMetrics(FMetricRec * metrp) /* IMIV-32 *
 }
 
 PUBLIC pascal trap void Executor::C_SetFScaleDisable(/* IMIV-32 */
-   BOOLEAN disable)
+                                                     BOOLEAN disable)
 {
     if(FScaleDisable != (Byte)disable)
     {

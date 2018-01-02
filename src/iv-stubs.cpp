@@ -29,7 +29,8 @@
 using namespace Executor;
 
 #define print_errno_error_message(call, msg)   \
-    do {                                       \
+    do                                         \
+    {                                          \
         fprintf(stderr, "%s:%d; %s: %s; %s\n", \
                 __FILE__, __LINE__,            \
                 call, strerror(errno),         \

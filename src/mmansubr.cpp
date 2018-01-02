@@ -78,7 +78,7 @@ mm_slam_hook(void)
         }                                                             \
         mm_slam_hook();                                               \
         /* d'oh! */                                                   \
-        *(volatile uint32_t *)-1;                                       \
+        *(volatile uint32_t *)-1;                                     \
     } while(false)
 #endif
 

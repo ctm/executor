@@ -381,8 +381,8 @@ xdata_for_raw_data(PixMap *target, xdata_t *x, uint32_t *raw_bits,
 	   */
             x->raw_pat_bits_mem = NewPtr(height * sizeof(uint32_t) + 3);
             x->pat_bits = (uint32_t *)(((uintptr_t)x->raw_pat_bits_mem
-                                      + 3)
-                                     & ~3);
+                                        + 3)
+                                       & ~3);
             for(i = 0; i < height; i++)
                 x->pat_bits[i] = raw_bits[i * row_longs];
             x->stub_table_for_mode = xdblt_tall_narrow_stubs;
@@ -410,8 +410,8 @@ xdata_for_raw_data(PixMap *target, xdata_t *x, uint32_t *raw_bits,
             /* Allocate long-aligned memory, as described above. */
             x->raw_pat_bits_mem = NewPtr(x->byte_size + 3);
             x->pat_bits = (uint32_t *)(((uintptr_t)x->raw_pat_bits_mem
-                                      + 3)
-                                     & ~3);
+                                        + 3)
+                                       & ~3);
             memcpy(x->pat_bits, raw_bits, x->byte_size);
 
             if(height == 1)

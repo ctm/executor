@@ -85,8 +85,8 @@ msecs_elapsed()
 
 #define REALLONGTIME 0x7FFFFFFF
 
-PUBLIC syn68k_addr_t Executor::catchalarm( syn68k_addr_t interrupt_pc,
-   void * unused)
+PUBLIC syn68k_addr_t Executor::catchalarm(syn68k_addr_t interrupt_pc,
+                                          void *unused)
 {
     ULONGINT diff;
     TMTask *qp;
@@ -177,7 +177,7 @@ PUBLIC syn68k_addr_t Executor::catchalarm( syn68k_addr_t interrupt_pc,
 
     if(min < REALLONGTIME)
     {
-/* If there's anything left in the queue, set up another
+        /* If there's anything left in the queue, set up another
        * timer interrupt to come in at the appropriate time.
        */
 
@@ -190,7 +190,6 @@ PUBLIC syn68k_addr_t Executor::catchalarm( syn68k_addr_t interrupt_pc,
         /* Note that there's no interrupt queued up. */
         next_interrupt_msecs = 0;
     }
-
 
     memcpy(&cpu_state.regs, saved_regs, sizeof saved_regs);
     cpu_state.ccnz = saved_ccnz;

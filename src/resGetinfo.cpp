@@ -48,7 +48,7 @@ PUBLIC pascal trap INTEGER Executor::C_Unique1ID(ResType typ) /* IMIV-16 */
     return (startid);
 }
 
-PUBLIC pascal trap void Executor::C_GetResInfo(Handle res, GUEST<INTEGER> * id, GUEST<ResType> * typ, StringPtr name)
+PUBLIC pascal trap void Executor::C_GetResInfo(Handle res, GUEST<INTEGER> *id, GUEST<ResType> *typ, StringPtr name)
 {
     resmaphand map;
     typref *tr;

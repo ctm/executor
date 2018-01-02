@@ -107,8 +107,7 @@ static struct
       "Morten Welinder \321 misc.\r"
       "Eli Zaretskii \321 Some DOS-related library functions\r"
       "\rThis product includes software developed by "
-      "the University of California, Berkeley and its contributors\r"
-      ,
+      "the University of California, Berkeley and its contributors\r",
       NULL },
     { TIPS_BUTTON_NAME,
       "Don't delete tips.txt.  If you do, that will be your only tip.\r", NULL },
@@ -626,7 +625,7 @@ event_loop(bool executor_p)
 
 #define _FindControl(arg0, arg1, arg2)             \
     ({                                             \
-        int16_t retval;                              \
+        int16_t retval;                            \
         GUEST<ControlHandle> bogo_c;               \
                                                    \
         retval = FindControl(arg0, arg1, &bogo_c); \

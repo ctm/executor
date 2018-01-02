@@ -145,7 +145,7 @@ PUBLIC pascal void Executor::C_ROMlib_myjobproc(DialogPtr dp, INTEGER itemno)
                 HxX(hPrint, prJob.iCopies) = CW(num_copies);
             }
 #if defined(CYGWIN32)
-// FIXME: #warning TODO use better x and y coords
+            // FIXME: #warning TODO use better x and y coords
             warning_trace_info("ROMlib_printer = %s, WIN32_TOKEN = %s",
                                ROMlib_printer, WIN32_TOKEN);
             if(strcmp(ROMlib_printer, WIN32_TOKEN) == 0)
@@ -560,7 +560,7 @@ static inline void Executor::ROMlib_CALLPRITEMPROC(TPPrDlg prrecptr, INTEGER ite
 }
 #endif /* BINCOMPAT */
 
-PUBLIC pascal BOOLEAN Executor::C_ROMlib_stlfilterproc(DialogPeek dp, EventRecord * evt, GUEST<INTEGER> * ith)
+PUBLIC pascal BOOLEAN Executor::C_ROMlib_stlfilterproc(DialogPeek dp, EventRecord *evt, GUEST<INTEGER> *ith)
 {
     BOOLEAN retval;
     char *keyp;
@@ -653,7 +653,7 @@ PUBLIC pascal BOOLEAN Executor::C_ROMlib_stlfilterproc(DialogPeek dp, EventRecor
     return retval;
 }
 
-PUBLIC pascal BOOLEAN Executor::C_ROMlib_numsonlyfilterproc(DialogPeek dp, EventRecord * evt, GUEST<INTEGER> * ith)
+PUBLIC pascal BOOLEAN Executor::C_ROMlib_numsonlyfilterproc(DialogPeek dp, EventRecord *evt, GUEST<INTEGER> *ith)
 {
     char c;
 

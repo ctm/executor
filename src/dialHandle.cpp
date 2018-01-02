@@ -34,7 +34,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal BOOLEAN Executor::C_ROMlib_myfilt(DialogPeek dp, EventRecord * evt, GUEST<INTEGER> * ith) /* IMI-415 */
+PUBLIC pascal BOOLEAN Executor::C_ROMlib_myfilt(DialogPeek dp, EventRecord *evt, GUEST<INTEGER> *ith) /* IMI-415 */
 {
     itmp ip;
     ControlHandle c;
@@ -140,7 +140,7 @@ ROMlib_CALLUSERITEM(DialogPtr dp,
    we have a lot of replicated code.  This is scary and should be fixed. */
 
 PUBLIC pascal trap void Executor::C_ModalDialog(ProcPtr fp, /* IMI-415 */
-   GUEST<INTEGER> * item)
+                                                GUEST<INTEGER> *item)
 {
     /*
    * The code used to save thePort and restore it at the end of the
@@ -214,7 +214,7 @@ PUBLIC pascal trap void Executor::C_ModalDialog(ProcPtr fp, /* IMI-415 */
 #else /* defined (ALLOW_MOVABLE_MODAL) */
 
 PUBLIC pascal trap void Executor::C_ModalDialog(ProcPtr fp, /* IMI-415 */
-   GUEST<INTEGER> * item)
+                                                GUEST<INTEGER> *item)
 {
     /*
    * The code used to save thePort and restore it at the end of the
@@ -289,7 +289,7 @@ PUBLIC pascal trap void Executor::C_ModalDialog(ProcPtr fp, /* IMI-415 */
 #endif
 
 PUBLIC pascal trap BOOLEAN Executor::C_IsDialogEvent(/* IMI-416 */
-   EventRecord * evt)
+                                                     EventRecord *evt)
 {
     GUEST<WindowPtr> wp;
     DialogPeek dp;
@@ -446,11 +446,11 @@ void Executor::dialog_draw_item(DialogPtr dp, itmp itemp, int itemno)
     {
         Rect r;
 
-// FIXME: #warning This fix helps Energy Scheming, but we really should find out the
-// FIXME: #warning exact semantics for when we should try to draw items, different
-// FIXME: #warning item types may have different behaviors, we also might want to
-// FIXME: #warning look at visRgn and clipRgn.  BTW, we should also test to see
-// FIXME: #warning whether SectRect will really write to location 0
+        // FIXME: #warning This fix helps Energy Scheming, but we really should find out the
+        // FIXME: #warning exact semantics for when we should try to draw items, different
+        // FIXME: #warning item types may have different behaviors, we also might want to
+        // FIXME: #warning look at visRgn and clipRgn.  BTW, we should also test to see
+        // FIXME: #warning whether SectRect will really write to location 0
 
         if(SectRect(&itemp->itmr, &dp->portRect, &r))
             ROMlib_drawiptext(dp, itemp, itemno);
@@ -513,7 +513,7 @@ PUBLIC pascal trap void Executor::C_DrawDialog(DialogPtr dp) /* IMI-418 */
 }
 
 PUBLIC pascal trap INTEGER Executor::C_FindDItem(DialogPtr dp, /* IMIV-60 */
-   Point pt)
+                                                 Point pt)
 {
     GUEST<INTEGER> *intp;
     INTEGER i, inum;
@@ -528,7 +528,7 @@ PUBLIC pascal trap INTEGER Executor::C_FindDItem(DialogPtr dp, /* IMIV-60 */
 }
 
 PUBLIC pascal trap void Executor::C_UpdtDialog(DialogPtr dp, /* IMIV-60 */
-   RgnHandle rgn)
+                                               RgnHandle rgn)
 {
     GUEST<INTEGER> *intp;
     INTEGER i, inum;
@@ -556,7 +556,7 @@ PUBLIC pascal trap void Executor::C_UpdtDialog(DialogPtr dp, /* IMIV-60 */
 }
 
 PUBLIC pascal trap BOOLEAN Executor::C_DialogSelect(/* IMI-417 */
-   EventRecord * evt, GUEST<DialogPtr> * dpp, GUEST<INTEGER> * itemp)
+                                                    EventRecord *evt, GUEST<DialogPtr> *dpp, GUEST<INTEGER> *itemp)
 {
     DialogPeek dp;
     Byte c;

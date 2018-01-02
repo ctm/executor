@@ -38,7 +38,7 @@ dbm_open(const char *name, int flags, int mode)
     fp = fopen(name, open_mode);
     if(fp != NULL)
     {
-        retval = (DBM*) malloc(sizeof *retval);
+        retval = (DBM *)malloc(sizeof *retval);
         retval->fp = fp;
     }
 

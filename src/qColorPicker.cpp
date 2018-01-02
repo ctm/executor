@@ -35,7 +35,7 @@ using namespace Executor;
 
 #define _FindControl(arg0, arg1, arg2)             \
     ({                                             \
-        int16_t retval;                              \
+        int16_t retval;                            \
         GUEST<ControlHandle> bogo_c;               \
                                                    \
         retval = FindControl(arg0, arg1, &bogo_c); \
@@ -1295,7 +1295,7 @@ color_wheel_notice_lightness_change(void)
 
 /* color picker entry point */
 
-PUBLIC pascal trap BOOLEAN Executor::C_GetColor(Point where, Str255 prompt, RGBColor * in_color, RGBColor * out_color)
+PUBLIC pascal trap BOOLEAN Executor::C_GetColor(Point where, Str255 prompt, RGBColor *in_color, RGBColor *out_color)
 {
     PaletteHandle palette;
     bool retval;

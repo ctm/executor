@@ -14,7 +14,7 @@
 using namespace Executor;
 
 PUBLIC pascal trap void Executor::C_LDraw(Cell cell, /* IMIV-275 */
-   ListHandle list)
+                                          ListHandle list)
 {
     GrafPtr saveport;
     GUEST<RgnHandle> saveclip;
@@ -47,7 +47,7 @@ PUBLIC pascal trap void Executor::C_LDraw(Cell cell, /* IMIV-275 */
 }
 
 PUBLIC pascal trap void Executor::C_LDoDraw(BOOLEAN draw, /* IMIV-275 */
-   ListHandle list)
+                                            ListHandle list)
 {
     if(draw)
     {
@@ -65,7 +65,7 @@ PUBLIC pascal trap void Executor::C_LDoDraw(BOOLEAN draw, /* IMIV-275 */
 }
 
 PUBLIC pascal trap void Executor::C_LScroll(INTEGER ncol, /* IMIV-275 */
-   INTEGER nrow, ListHandle list)
+                                            INTEGER nrow, ListHandle list)
 {
     RgnHandle rh;
     Rect r;
@@ -73,7 +73,6 @@ PUBLIC pascal trap void Executor::C_LScroll(INTEGER ncol, /* IMIV-275 */
     INTEGER tmpi;
     Point p;
 
-    
     r = HxX(list, rView);
 
     /*
@@ -129,7 +128,6 @@ PUBLIC pascal trap void Executor::C_LScroll(INTEGER ncol, /* IMIV-275 */
         C_LUpdate(rh, list);
         DisposeRgn(rh);
     }
-    
 }
 
 PUBLIC pascal trap void Executor::C_LAutoScroll(ListHandle list) /* IMIV-275 */
@@ -151,7 +149,7 @@ PUBLIC pascal trap void Executor::C_LAutoScroll(ListHandle list) /* IMIV-275 */
 }
 
 PUBLIC pascal trap void Executor::C_LUpdate(RgnHandle rgn, /* IMIV-275 */
-   ListHandle list)
+                                            ListHandle list)
 {
     Rect r;
     Cell c, csize;
@@ -159,7 +157,6 @@ PUBLIC pascal trap void Executor::C_LUpdate(RgnHandle rgn, /* IMIV-275 */
     INTEGER top, left, bottom, right;
     ControlHandle ch;
 
-    
     cleft = c.h = Hx(list, visible.left);
     c.v = Hx(list, visible.top);
     csize.h = Hx(list, cellSize.h);
@@ -196,11 +193,10 @@ PUBLIC pascal trap void Executor::C_LUpdate(RgnHandle rgn, /* IMIV-275 */
         if(RectInRgn(&HxX(ch, contrlRect), rgn))
             Draw1Control(ch);
     }
-    
 }
 
 PUBLIC pascal trap void Executor::C_LActivate(BOOLEAN act, /* IMIV-276 */
-   ListHandle list)
+                                              ListHandle list)
 {
     Cell c;
     Rect r;
@@ -213,7 +209,7 @@ PUBLIC pascal trap void Executor::C_LActivate(BOOLEAN act, /* IMIV-276 */
 
     if(!act ^ !Hx(list, lActive))
     {
-        
+
         if(act)
         {
             sel = true;
@@ -253,7 +249,6 @@ PUBLIC pascal trap void Executor::C_LActivate(BOOLEAN act, /* IMIV-276 */
         }
         LISTEND(list);
         HxX(list, lActive) = !!act;
-        
     }
 }
 
