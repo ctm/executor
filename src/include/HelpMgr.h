@@ -123,13 +123,15 @@ extern trap OSErr C_HMExtractHelpMsg(ResType type, INTEGER resid,
                                      HMMessageRecord *helpmsgp);
 PASCAL_FUNCTION(HMExtractHelpMsg);
 
-extern OSErr HMGetIndHelpMsg(ResType type, INTEGER resid,
-                             INTEGER msg, INTEGER state,
-                             GUEST<LONGINT> *options, Point tip,
-                             Rect *altrectp, GUEST<INTEGER> *theprocp,
-                             INTEGER *variantp,
-                             HMMessageRecord *helpmsgp,
-                             GUEST<INTEGER> *count);
+extern OSErr C_HMGetIndHelpMsg(ResType type, INTEGER resid,
+                               INTEGER msg, INTEGER state,
+                               GUEST<LONGINT> *options, Point tip,
+                               Rect *altrectp, GUEST<INTEGER> *theprocp,
+                               GUEST<INTEGER> *variantp,
+                               HMMessageRecord *helpmsgp,
+                               GUEST<INTEGER> *count);
+
+PASCAL_FUNCTION(HMGetIndHelpMsg);
 }
 
 #endif /* !_HELPMGR_H_ */

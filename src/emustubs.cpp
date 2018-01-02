@@ -1633,7 +1633,7 @@ PRIVATE ptocblock_t balloon_ptoc[] = {
     PTOCBLOCK(HMGetBalloons), /* 0x0003, */
     PTOCBLOCK(HMSetBalloons), /* 0x0104, */
     PTOCBLOCK(HMShowMenuBalloon), /* 0x0e05, */
-    ZERO_PTOCBLOCK, /* PTOCBLOCK (HMGetIndHelpMsg),		/ * 0x1306, */
+    PTOCBLOCK(HMGetIndHelpMsg), /* 0x1306, */
     PTOCBLOCK(HMIsBalloon), /* 0x0007, */
     PTOCBLOCK(HMSetFont), /* 0x0108, */
     PTOCBLOCK(HMSetFontSize), /* 0x0109, */

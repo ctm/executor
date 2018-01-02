@@ -136,25 +136,14 @@ OSErr Executor::C_HMExtractHelpMsg(ResType type, INTEGER resid, INTEGER msg,
     return hmHelpManagerNotInited;
 }
 
-/* #warning HMGetIndHelpMsg totally broken -- it would need a P11 */
-
-#if 0
-P 9 (PUBLIC pascal trap, OSErr, HMGetIndHelpMsg, ResType, type, INTEGER, resid,
-     INTEGER, msg, INTEGER, state, LONGINT *, options, Point, tip,
-     Rect *, altrectp, INTEGER *, theprocp, INTEGER *, variantp,
-     HMMessageRecord *, helpmsgp, INTEGER *, count)
-{
-  warning_unimplemented (NULL_STRING);
-  return hmHelpManagerNotInited;
-}
-#else
-PUBLIC OSErr
-HMGetIndHelpMsg(ResType type, INTEGER resid,
-                INTEGER msg, INTEGER state, GUEST<LONGINT> *options, Point tip,
-                Rect *altrectp, GUEST<INTEGER> *theprocp, GUEST<INTEGER> *variantp,
-                HMMessageRecord *helpmsgp, GUEST<INTEGER> *count)
+OSErr Executor::C_HMGetIndHelpMsg(ResType type, INTEGER resid, INTEGER msg,
+                                  INTEGER state, GUEST<LONGINT> *options,
+                                  Point tip, Rect *altrectp,
+                                  GUEST<INTEGER> *theprocp,
+                                  GUEST<INTEGER> *variantp,
+                                  HMMessageRecord *helpmsgp,
+                                  GUEST<INTEGER> *count)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
-#endif
