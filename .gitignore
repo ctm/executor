@@ -33,3 +33,4 @@ src/.deps/
 OSX-only/CocoaExecutor/ExecutorVolume/
 .hg
 .hgtags
+.vscode
