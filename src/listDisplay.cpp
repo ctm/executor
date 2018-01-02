@@ -13,8 +13,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_LDraw(Cell cell, /* IMIV-275 */
-                                          ListHandle list)
+void Executor::C_LDraw(Cell cell, ListHandle list) /* IMIV-275 */
 {
     GrafPtr saveport;
     GUEST<RgnHandle> saveclip;
@@ -46,8 +45,7 @@ PUBLIC pascal trap void Executor::C_LDraw(Cell cell, /* IMIV-275 */
     }
 }
 
-PUBLIC pascal trap void Executor::C_LDoDraw(BOOLEAN draw, /* IMIV-275 */
-                                            ListHandle list)
+void Executor::C_LDoDraw(BOOLEAN draw, ListHandle list) /* IMIV-275 */
 {
     if(draw)
     {
@@ -64,8 +62,8 @@ PUBLIC pascal trap void Executor::C_LDoDraw(BOOLEAN draw, /* IMIV-275 */
         HxX(list, listFlags) &= ~DODRAW;
 }
 
-PUBLIC pascal trap void Executor::C_LScroll(INTEGER ncol, /* IMIV-275 */
-                                            INTEGER nrow, ListHandle list)
+void Executor::C_LScroll(INTEGER ncol, INTEGER nrow,
+                         ListHandle list) /* IMIV-275 */
 {
     RgnHandle rh;
     Rect r;
@@ -130,7 +128,7 @@ PUBLIC pascal trap void Executor::C_LScroll(INTEGER ncol, /* IMIV-275 */
     }
 }
 
-PUBLIC pascal trap void Executor::C_LAutoScroll(ListHandle list) /* IMIV-275 */
+void Executor::C_LAutoScroll(ListHandle list) /* IMIV-275 */
 {
     GUEST<Cell> gcell;
     Cell cell;
@@ -148,8 +146,7 @@ PUBLIC pascal trap void Executor::C_LAutoScroll(ListHandle list) /* IMIV-275 */
     }
 }
 
-PUBLIC pascal trap void Executor::C_LUpdate(RgnHandle rgn, /* IMIV-275 */
-                                            ListHandle list)
+void Executor::C_LUpdate(RgnHandle rgn, ListHandle list) /* IMIV-275 */
 {
     Rect r;
     Cell c, csize;
@@ -195,8 +192,7 @@ PUBLIC pascal trap void Executor::C_LUpdate(RgnHandle rgn, /* IMIV-275 */
     }
 }
 
-PUBLIC pascal trap void Executor::C_LActivate(BOOLEAN act, /* IMIV-276 */
-                                              ListHandle list)
+void Executor::C_LActivate(BOOLEAN act, ListHandle list) /* IMIV-276 */
 {
     Cell c;
     Rect r;

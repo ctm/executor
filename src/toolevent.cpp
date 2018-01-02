@@ -71,7 +71,7 @@ PUBLIC int Executor::ROMlib_delay = 0; /* number of ticks to wait when we
 
 PUBLIC BOOLEAN Executor::ROMlib_beepedonce = false;
 
-PRIVATE void ROMlib_togglealarm()
+static void ROMlib_togglealarm()
 {
     Handle alarmh;
     static const unsigned char hard_coded_alarm[] = {
@@ -149,13 +149,13 @@ PRIVATE void ROMlib_togglealarm()
     }
 }
 
-PUBLIC void Executor::ROMlib_alarmoffmbar()
+void Executor::ROMlib_alarmoffmbar()
 {
     if(ROMlib_alarmonmbar)
         ROMlib_togglealarm();
 }
 
-PUBLIC pascal trap LONGINT Executor::C_KeyTrans(Ptr mapp, unsigned short code, LONGINT *state)
+LONGINT Executor::C_KeyTrans(Ptr mapp, unsigned short code, LONGINT *state)
 {
     LONGINT ascii;
     int table_num;
@@ -216,7 +216,7 @@ PUBLIC pascal trap LONGINT Executor::C_KeyTrans(Ptr mapp, unsigned short code, L
     return ascii;
 }
 
-PUBLIC void Executor::ROMlib_circledefault(DialogPtr dp)
+void Executor::ROMlib_circledefault(DialogPtr dp)
 {
     GUEST<INTEGER> type;
     GUEST<Handle> h;
@@ -236,7 +236,7 @@ PUBLIC void Executor::ROMlib_circledefault(DialogPtr dp)
     SetPort(saveport);
 }
 
-PUBLIC void Executor::dofloppymount(void)
+void Executor::dofloppymount(void)
 {
 #if !defined(MSDOS) && !defined(LINUX) && !defined(CYGWIN32)
     SysBeep(5);
@@ -245,7 +245,7 @@ PUBLIC void Executor::dofloppymount(void)
 #endif
 }
 
-PRIVATE void doscreendumptoprinter(void)
+static void doscreendumptoprinter(void)
 {
     SysBeep(5);
 }
@@ -708,8 +708,8 @@ int saveprefvalues(const char *savefilename, LONGINT locationx, LONGINT location
 typedef enum { disable,
                enable } enableness_t;
 
-PRIVATE void mod_item_enableness(DialogPtr dp, INTEGER item,
-                                 enableness_t enableness_wanted)
+static void mod_item_enableness(DialogPtr dp, INTEGER item,
+                                enableness_t enableness_wanted)
 {
     INTEGER type;
     GUEST<INTEGER> type_s;
@@ -756,7 +756,7 @@ set_sound_on_string(DialogPtr dp)
  * our System file.
  */
 
-PRIVATE void enable_disable_pref_items(DialogPtr dp)
+static void enable_disable_pref_items(DialogPtr dp)
 {
     static INTEGER to_enable[] = /* put only controls in this list */
         {
@@ -810,7 +810,7 @@ PRIVATE void enable_disable_pref_items(DialogPtr dp)
     }
 }
 
-PRIVATE void dopreferences(void)
+static void dopreferences(void)
 {
     DialogPtr dp;
     INTEGER ihit;
@@ -889,14 +889,15 @@ PRIVATE void dopreferences(void)
     }
 }
 
-PRIVATE void doquitreallyquits(void)
+static void doquitreallyquits(void)
 {
     ROMlib_exit = !ROMlib_exit;
 }
 
 extern void ROMlib_updateworkspace(void);
 
-PRIVATE BOOLEAN doevent(INTEGER em, EventRecord *evt, BOOLEAN remflag) /* no DA support */
+static BOOLEAN doevent(INTEGER em, EventRecord *evt,
+                       BOOLEAN remflag) /* no DA support */
 {
     BOOLEAN retval;
     GUEST<ULONGINT> now_s;
@@ -1134,7 +1135,7 @@ done:
     return retval;
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_GetNextEvent(INTEGER em, EventRecord *evt)
+BOOLEAN Executor::C_GetNextEvent(INTEGER em, EventRecord *evt)
 {
     BOOLEAN retval;
 
@@ -1155,7 +1156,8 @@ PUBLIC pascal trap BOOLEAN Executor::C_GetNextEvent(INTEGER em, EventRecord *evt
  *	 we'd never get the mouse moved messages we need)
  */
 
-PUBLIC pascal trap BOOLEAN Executor::C_WaitNextEvent(INTEGER mask, EventRecord *evp, LONGINT sleep, RgnHandle mousergn)
+BOOLEAN Executor::C_WaitNextEvent(INTEGER mask, EventRecord *evp,
+                                  LONGINT sleep, RgnHandle mousergn)
 {
     BOOLEAN retval;
     Point p;
@@ -1189,12 +1191,12 @@ PUBLIC pascal trap BOOLEAN Executor::C_WaitNextEvent(INTEGER mask, EventRecord *
     return retval;
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_EventAvail(INTEGER em, EventRecord *evt)
+BOOLEAN Executor::C_EventAvail(INTEGER em, EventRecord *evt)
 {
     return (doevent(em, evt, false));
 }
 
-PUBLIC pascal trap void Executor::C_GetMouse(GUEST<Point> *p)
+void Executor::C_GetMouse(GUEST<Point> *p)
 {
     EventRecord evt;
 
@@ -1204,7 +1206,7 @@ PUBLIC pascal trap void Executor::C_GetMouse(GUEST<Point> *p)
 }
 
 // FIXME: #warning Button not coded per IM Macintosh Toolbox Essentials 2-108
-PUBLIC pascal trap BOOLEAN Executor::C_Button()
+BOOLEAN Executor::C_Button()
 {
     EventRecord evt;
     BOOLEAN retval;
@@ -1215,7 +1217,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_Button()
 }
 
 // FIXME: #warning StillDown not coded per IM Macintosh Toolbox Essentials 2-109
-PUBLIC pascal trap BOOLEAN Executor::C_StillDown() /* IMI-259 */
+BOOLEAN Executor::C_StillDown() /* IMI-259 */
 {
     EventRecord evt;
 
@@ -1229,7 +1231,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_StillDown() /* IMI-259 */
  * might be retiring soon.
  */
 
-PUBLIC pascal trap BOOLEAN Executor::C_WaitMouseUp()
+BOOLEAN Executor::C_WaitMouseUp()
 {
     EventRecord evt;
     int retval;
@@ -1240,12 +1242,12 @@ PUBLIC pascal trap BOOLEAN Executor::C_WaitMouseUp()
     return (retval);
 }
 
-PUBLIC pascal trap void Executor::C_GetKeys(unsigned char *keys)
+void Executor::C_GetKeys(unsigned char *keys)
 {
     BlockMoveData((Ptr)KeyMap, (Ptr)keys, (Size)sizeof_KeyMap);
 }
 
-PUBLIC pascal trap LONGINT Executor::C_TickCount()
+LONGINT Executor::C_TickCount()
 {
     unsigned long ticks;
     unsigned long new_time;
@@ -1266,12 +1268,12 @@ PUBLIC pascal trap LONGINT Executor::C_TickCount()
     return ticks;
 }
 
-PUBLIC LONGINT Executor::GetDblTime()
+LONGINT Executor::GetDblTime()
 {
     return (Cx(DoubleTime));
 }
 
-PUBLIC LONGINT Executor::GetCaretTime()
+LONGINT Executor::GetCaretTime()
 {
     return (Cx(CaretTime));
 }

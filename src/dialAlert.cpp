@@ -39,8 +39,7 @@ static icon_item_template_t icon_item_template = {
     /* to be filled in later */ CWC((short)-1),
 };
 
-PUBLIC pascal trap INTEGER Executor::C_Alert(INTEGER id, /* IMI-418 */
-                                             ProcPtr fp)
+INTEGER Executor::C_Alert(INTEGER id, ProcPtr fp) /* IMI-418 */
 {
     alth ah;
     Handle h;
@@ -173,28 +172,25 @@ PUBLIC pascal trap INTEGER Executor::C_Alert(INTEGER id, /* IMI-418 */
     return CW(hit);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_StopAlert(INTEGER id, /* IMI-419 */
-                                                 ProcPtr fp)
+INTEGER Executor::C_StopAlert(INTEGER id, ProcPtr fp) /* IMI-419 */
 {
     alert_extra_icon_id = stopIcon;
     return Alert(id, fp);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_NoteAlert(INTEGER id, /* IMI-420 */
-                                                 ProcPtr fp)
+INTEGER Executor::C_NoteAlert(INTEGER id, ProcPtr fp) /* IMI-420 */
 {
     alert_extra_icon_id = noteIcon;
     return Alert(id, fp);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_CautionAlert(INTEGER id, /* IMI-420 */
-                                                    ProcPtr fp)
+INTEGER Executor::C_CautionAlert(INTEGER id, ProcPtr fp) /* IMI-420 */
 {
     alert_extra_icon_id = cautionIcon;
     return Alert(id, fp);
 }
 
-PRIVATE Handle lockres(ResType rt, INTEGER id, BOOLEAN flag)
+static Handle lockres(ResType rt, INTEGER id, BOOLEAN flag)
 {
     Handle retval;
 
@@ -211,7 +207,7 @@ PRIVATE Handle lockres(ResType rt, INTEGER id, BOOLEAN flag)
 
 #define RESCTL (ctrlItem | resCtrl)
 
-PRIVATE void lockditl(INTEGER id, BOOLEAN flag)
+static void lockditl(INTEGER id, BOOLEAN flag)
 {
     Handle ih, h;
     INTEGER nitem, procid;
@@ -239,7 +235,7 @@ PRIVATE void lockditl(INTEGER id, BOOLEAN flag)
     }
 }
 
-PRIVATE void lockalert(INTEGER id, BOOLEAN flag)
+static void lockalert(INTEGER id, BOOLEAN flag)
 {
     alth ah;
 
@@ -253,17 +249,17 @@ PRIVATE void lockalert(INTEGER id, BOOLEAN flag)
     }
 }
 
-PUBLIC pascal trap void Executor::C_CouldAlert(INTEGER id) /* IMI-420 */
+void Executor::C_CouldAlert(INTEGER id) /* IMI-420 */
 {
     lockalert(id, true);
 }
 
-PUBLIC pascal trap void Executor::C_FreeAlert(INTEGER id) /* IMI-420 */
+void Executor::C_FreeAlert(INTEGER id) /* IMI-420 */
 {
     lockalert(id, false);
 }
 
-PRIVATE void lockdialog(INTEGER id, BOOLEAN flag)
+static void lockdialog(INTEGER id, BOOLEAN flag)
 {
     dlogh dh;
 
@@ -274,12 +270,12 @@ PRIVATE void lockdialog(INTEGER id, BOOLEAN flag)
     }
 }
 
-PUBLIC pascal trap void Executor::C_CouldDialog(INTEGER id) /* IMI-415 */
+void Executor::C_CouldDialog(INTEGER id) /* IMI-415 */
 {
     lockdialog(id, true);
 }
 
-PUBLIC pascal trap void Executor::C_FreeDialog(INTEGER id) /* IMI-415 */
+void Executor::C_FreeDialog(INTEGER id) /* IMI-415 */
 {
     lockdialog(id, false);
 }

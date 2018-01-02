@@ -38,19 +38,19 @@ namespace Executor
 int ROMlib_nosync = 0; /* if non-zero, we don't call sync () or fsync () */
 }
 
-PRIVATE OSErr PBLockUnlockRange(ParmBlkPtr, BOOLEAN, lockunlock_t);
-PRIVATE VCB *vlookupbydrive(INTEGER);
-PRIVATE char *dirindex(char *, LONGINT, BOOLEAN, struct stat *);
-PRIVATE BOOLEAN myscandir(char *, char, char *, INTEGER);
-PRIVATE LONGINT weasel(char *, struct stat *);
-PRIVATE OSErr macopen(char *, short, LONGINT *, BOOLEAN, Byte *);
-PRIVATE void freeprn(fcbrec *);
-PRIVATE OSErr getprn(INTEGER *);
-PRIVATE OSErr PBOpenForkD(ParmBlkPtr, BOOLEAN, ForkType, LONGINT);
-PRIVATE OSErr PBLockUnlockRange(ParmBlkPtr, BOOLEAN a, lockunlock_t op);
+static OSErr PBLockUnlockRange(ParmBlkPtr, BOOLEAN, lockunlock_t);
+static VCB *vlookupbydrive(INTEGER);
+static char *dirindex(char *, LONGINT, BOOLEAN, struct stat *);
+static BOOLEAN myscandir(char *, char, char *, INTEGER);
+static LONGINT weasel(char *, struct stat *);
+static OSErr macopen(char *, short, LONGINT *, BOOLEAN, Byte *);
+static void freeprn(fcbrec *);
+static OSErr getprn(INTEGER *);
+static OSErr PBOpenForkD(ParmBlkPtr, BOOLEAN, ForkType, LONGINT);
+static OSErr PBLockUnlockRange(ParmBlkPtr, BOOLEAN a, lockunlock_t op);
 
 #if !defined(NDEBUG)
-PUBLIC void Executor::fs_err_hook(OSErr err)
+void Executor::fs_err_hook(OSErr err)
 {
 }
 #endif
@@ -66,7 +66,7 @@ PUBLIC int ROMlib_lasterrnomapped;
         xtable[uerr] = merr;              \
     } while(false);
 
-PUBLIC OSErr Executor::ROMlib_maperrno() /* INTERNAL */
+OSErr Executor::ROMlib_maperrno() /* INTERNAL */
 {
     OSErr retval;
     static OSErr xtable[MAX_ERRNO + 1];
@@ -129,8 +129,7 @@ PUBLIC OSErr Executor::ROMlib_maperrno() /* INTERNAL */
     return retval;
 }
 
-PUBLIC OSErr Executor::FSOpen(StringPtr filen, INTEGER vrn, /* IMIV-109 */
-                              INTEGER *rn)
+OSErr Executor::FSOpen(StringPtr filen, INTEGER vrn, INTEGER *rn) /* IMIV-109 */
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -146,8 +145,7 @@ PUBLIC OSErr Executor::FSOpen(StringPtr filen, INTEGER vrn, /* IMIV-109 */
     return (temp);
 }
 
-PUBLIC OSErr Executor::OpenRF(StringPtr filen, INTEGER vrn, /* IMIV-109 */
-                              INTEGER *rn)
+OSErr Executor::OpenRF(StringPtr filen, INTEGER vrn, INTEGER *rn) /* IMIV-109 */
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -163,8 +161,7 @@ PUBLIC OSErr Executor::OpenRF(StringPtr filen, INTEGER vrn, /* IMIV-109 */
     return (temp);
 }
 
-PUBLIC OSErr Executor::FSRead(INTEGER rn, LONGINT *count, /* IMIV-109 */
-                              Ptr buffp)
+OSErr Executor::FSRead(INTEGER rn, LONGINT *count, Ptr buffp) /* IMIV-109 */
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -192,8 +189,7 @@ Executor::FSReadAll(INTEGER rn, LONGINT *countp, Ptr buffp)
     return retval;
 }
 
-PUBLIC OSErr Executor::FSWrite(INTEGER rn, LONGINT *count, /* IMIV-110 */
-                               Ptr buffp)
+OSErr Executor::FSWrite(INTEGER rn, LONGINT *count, Ptr buffp) /* IMIV-110 */
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -221,7 +217,7 @@ Executor::FSWriteAll(INTEGER rn, LONGINT *countp, Ptr buffp)
     return retval;
 }
 
-PUBLIC OSErr Executor::GetFPos(INTEGER rn, LONGINT *filep) /* IMIV-110 */
+OSErr Executor::GetFPos(INTEGER rn, LONGINT *filep) /* IMIV-110 */
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -233,8 +229,8 @@ PUBLIC OSErr Executor::GetFPos(INTEGER rn, LONGINT *filep) /* IMIV-110 */
     return (temp);
 }
 
-PUBLIC OSErr Executor::SetFPos(INTEGER rn, INTEGER posmode, /* IMIV-110 */
-                               LONGINT possoff)
+OSErr Executor::SetFPos(INTEGER rn, INTEGER posmode,
+                        LONGINT possoff) /* IMIV-110 */
 {
     ParamBlockRec pbr;
     OSErr err;
@@ -247,7 +243,7 @@ PUBLIC OSErr Executor::SetFPos(INTEGER rn, INTEGER posmode, /* IMIV-110 */
     return err;
 }
 
-PUBLIC OSErr Executor::GetEOF(INTEGER rn, LONGINT *eof) /* IMIV-111 */
+OSErr Executor::GetEOF(INTEGER rn, LONGINT *eof) /* IMIV-111 */
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -259,7 +255,7 @@ PUBLIC OSErr Executor::GetEOF(INTEGER rn, LONGINT *eof) /* IMIV-111 */
     return (temp);
 }
 
-PUBLIC OSErr Executor::SetEOF(INTEGER rn, LONGINT eof) /* IMIV-111 */
+OSErr Executor::SetEOF(INTEGER rn, LONGINT eof) /* IMIV-111 */
 {
     ParamBlockRec pbr;
     OSErr err;
@@ -271,7 +267,7 @@ PUBLIC OSErr Executor::SetEOF(INTEGER rn, LONGINT eof) /* IMIV-111 */
     return (err);
 }
 
-PUBLIC OSErr Executor::Allocate(INTEGER rn, GUEST<LONGINT> *count) /* IMIV-112 */
+OSErr Executor::Allocate(INTEGER rn, GUEST<LONGINT> *count) /* IMIV-112 */
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -284,7 +280,7 @@ PUBLIC OSErr Executor::Allocate(INTEGER rn, GUEST<LONGINT> *count) /* IMIV-112 *
     return (temp);
 }
 
-PUBLIC OSErr Executor::AllocContig(INTEGER rn, GUEST<LONGINT> *count)
+OSErr Executor::AllocContig(INTEGER rn, GUEST<LONGINT> *count)
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -297,7 +293,7 @@ PUBLIC OSErr Executor::AllocContig(INTEGER rn, GUEST<LONGINT> *count)
     return (temp);
 }
 
-PUBLIC OSErr Executor::FSClose(INTEGER rn) /* IMIV-112 */
+OSErr Executor::FSClose(INTEGER rn) /* IMIV-112 */
 {
     ParamBlockRec pbr;
     OSErr err;
@@ -308,7 +304,7 @@ PUBLIC OSErr Executor::FSClose(INTEGER rn) /* IMIV-112 */
     return err;
 }
 
-PUBLIC VCB *Executor::vlookupbyname(const char *namep, const char *endp)
+VCB *Executor::vlookupbyname(const char *namep, const char *endp)
 {
     VCB *retval;
     int n;
@@ -328,7 +324,7 @@ PUBLIC VCB *Executor::vlookupbyname(const char *namep, const char *endp)
     return 0;
 }
 
-PRIVATE VCB *vlookupbydrive(INTEGER drive)
+static VCB *vlookupbydrive(INTEGER drive)
 {
     VCB *retval;
 
@@ -341,7 +337,7 @@ PRIVATE VCB *vlookupbydrive(INTEGER drive)
 
 PRIVATE LONGINT cacheindex = 0x7fffffff;
 
-PUBLIC void Executor::ROMlib_rewinddir()
+void Executor::ROMlib_rewinddir()
 {
     cacheindex = 0x7fffffff;
 }
@@ -373,7 +369,8 @@ dislike_name(char *namep)
     return retval;
 }
 
-PRIVATE char *dirindex(char *dir, LONGINT index, BOOLEAN nodirectories, struct stat *sbufp)
+static char *dirindex(char *dir, LONGINT index, BOOLEAN nodirectories,
+                      struct stat *sbufp)
 {
     GUEST<THz> saveZone;
     static char *cachedir = 0, *cachedirend;
@@ -527,7 +524,7 @@ PUBLIC VCB *Executor::ROMlib_breakoutioname(ParmBlkPtr pb, /* INTERNAL */
  *	     done after "dirname" has been used.
  */
 
-PRIVATE BOOLEAN myscandir(char *dirname, char save, char *rest, INTEGER restlen)
+static BOOLEAN myscandir(char *dirname, char save, char *rest, INTEGER restlen)
 {
     DIR *dirp;
 #if defined(USE_STRUCT_DIRECT)
@@ -562,7 +559,7 @@ PRIVATE BOOLEAN myscandir(char *dirname, char save, char *rest, INTEGER restlen)
     return retval;
 }
 
-PRIVATE LONGINT weasel(char *fullpathname, struct stat *sbufp)
+static LONGINT weasel(char *fullpathname, struct stat *sbufp)
 {
     char *start, *nextslash, save;
     INTEGER length;
@@ -633,8 +630,10 @@ PRIVATE LONGINT weasel(char *fullpathname, struct stat *sbufp)
  *	 you can call ROMlib_nami and not have to do a stat afterward.
  */
 
-PUBLIC OSErr Executor::ROMlib_nami(ParmBlkPtr pb, LONGINT dir, /* INTERNAL */
-                                   IndexType indextype, char **pathname, char **filename, char **endname, BOOLEAN nodirs, VCBExtra **vcbpp, struct stat *sbufp)
+OSErr Executor::ROMlib_nami(ParmBlkPtr pb, LONGINT dir, IndexType indextype,
+                            char **pathname, char **filename, char **endname,
+                            BOOLEAN nodirs, VCBExtra **vcbpp,
+                            struct stat *sbufp) /* INTERNAL */
 {
     char *temp1, *temp2, *temp3;
     INTEGER index;
@@ -856,7 +855,8 @@ loop:
  * the file descriptor of the opened file is filled in where fdp points
  */
 
-PRIVATE OSErr macopen(char *file, short perm, LONGINT *fdp, BOOLEAN isres, Byte *flagp)
+static OSErr macopen(char *file, short perm, LONGINT *fdp, BOOLEAN isres,
+                     Byte *flagp)
 {
     int newperm;
     int flockret;
@@ -914,12 +914,12 @@ PRIVATE OSErr macopen(char *file, short perm, LONGINT *fdp, BOOLEAN isres, Byte 
     return err;
 }
 
-PRIVATE void freeprn(fcbrec *fp)
+static void freeprn(fcbrec *fp)
 {
     fp->fdfnum = 0;
 }
 
-PRIVATE OSErr getprn(INTEGER *pprn)
+static OSErr getprn(INTEGER *pprn)
 {
     INTEGER length;
     fcbrec *fcbp, *efcbp;
@@ -948,7 +948,7 @@ PRIVATE OSErr getprn(INTEGER *pprn)
     return err;
 }
 
-PRIVATE OSErr PBOpenForkD(ParmBlkPtr pb, BOOLEAN a, ForkType fork, LONGINT dir)
+static OSErr PBOpenForkD(ParmBlkPtr pb, BOOLEAN a, ForkType fork, LONGINT dir)
 {
     OSErr err;
     int temp;
@@ -1078,7 +1078,7 @@ PRIVATE OSErr PBOpenForkD(ParmBlkPtr pb, BOOLEAN a, ForkType fork, LONGINT dir)
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBOpen(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
+OSErr Executor::ufsPBOpen(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     OSErr err;
 
@@ -1087,8 +1087,8 @@ PUBLIC OSErr Executor::ufsPBOpen(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBHOpen(HParmBlkPtr pb, /* INTERNAL */
-                                  BOOLEAN a) /* IMIV-136 */
+OSErr Executor::ufsPBHOpen(HParmBlkPtr pb,
+                           BOOLEAN a) /* INTERNAL */ /* IMIV-136 */
 {
     OSErr err;
 
@@ -1097,8 +1097,7 @@ PUBLIC OSErr Executor::ufsPBHOpen(HParmBlkPtr pb, /* INTERNAL */
     return err;
 }
 
-PUBLIC trap OSErrRET Executor::OpenDeny(HParmBlkPtr pb, /* IMV-397 */
-                                        BOOLEAN a)
+OSErrRET Executor::OpenDeny(HParmBlkPtr pb, BOOLEAN a) /* IMV-397 */
 { /* HACK */
     HParamBlockRec block;
     OSErr retval;
@@ -1132,8 +1131,7 @@ PUBLIC trap OSErrRET Executor::OpenDeny(HParmBlkPtr pb, /* IMV-397 */
     return retval;
 }
 
-PUBLIC OSErr Executor::ufsPBOpenRF(ParmBlkPtr pb, /* INTERNAL */
-                                   BOOLEAN a)
+OSErr Executor::ufsPBOpenRF(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     OSErr err;
 
@@ -1142,8 +1140,7 @@ PUBLIC OSErr Executor::ufsPBOpenRF(ParmBlkPtr pb, /* INTERNAL */
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBHOpenRF(HParmBlkPtr pb, /* INTERNAL */
-                                    BOOLEAN a)
+OSErr Executor::ufsPBHOpenRF(HParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     OSErr err;
 
@@ -1233,7 +1230,7 @@ pbfpos(ParmBlkPtr pb, LONGINT *toseekp, bool can_go_past_eof)
     return err;
 }
 
-PRIVATE OSErr PBLockUnlockRange(ParmBlkPtr pb, BOOLEAN a, lockunlock_t op)
+static OSErr PBLockUnlockRange(ParmBlkPtr pb, BOOLEAN a, lockunlock_t op)
 {
     OSErr err;
     LONGINT toseek;
@@ -1279,8 +1276,7 @@ PRIVATE OSErr PBLockUnlockRange(ParmBlkPtr pb, BOOLEAN a, lockunlock_t op)
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBLockRange(ParmBlkPtr pb, /* INTERNAL */
-                                      BOOLEAN a)
+OSErr Executor::ufsPBLockRange(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     OSErr err;
 
@@ -1289,8 +1285,7 @@ PUBLIC OSErr Executor::ufsPBLockRange(ParmBlkPtr pb, /* INTERNAL */
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBUnlockRange(ParmBlkPtr pb, /* INTERNAL */
-                                        BOOLEAN a)
+OSErr Executor::ufsPBUnlockRange(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     OSErr err;
 
@@ -1332,8 +1327,8 @@ PUBLIC int Executor::ROMlib_newlinetocr = true;
 
 PUBLIC int Executor::ROMlib_flushoften = 0;
 
-PUBLIC unsigned long Executor::ROMlib_destroy_blocks(syn68k_addr_t start, uint32_t count,
-                                                     BOOLEAN flush_only_faulty_checksums)
+unsigned long Executor::ROMlib_destroy_blocks(
+    syn68k_addr_t start, uint32_t count, BOOLEAN flush_only_faulty_checksums)
 {
     unsigned long num_blocks_destroyed;
 
@@ -1355,7 +1350,7 @@ PUBLIC unsigned long Executor::ROMlib_destroy_blocks(syn68k_addr_t start, uint32
     return num_blocks_destroyed;
 }
 
-PUBLIC OSErr Executor::ufsPBRead(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
+OSErr Executor::ufsPBRead(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     OSErr err;
     LONGINT nread;
@@ -1421,7 +1416,7 @@ PUBLIC OSErr Executor::ufsPBRead(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBWrite(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
+OSErr Executor::ufsPBWrite(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     OSErr err;
     LONGINT nwrite, rc;
@@ -1485,8 +1480,7 @@ PUBLIC OSErr Executor::ufsPBWrite(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBGetFPos(ParmBlkPtr pb, /* INTERNAL */
-                                    BOOLEAN a)
+OSErr Executor::ufsPBGetFPos(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     OSErr err;
     INTEGER forkoffset;
@@ -1504,8 +1498,7 @@ PUBLIC OSErr Executor::ufsPBGetFPos(ParmBlkPtr pb, /* INTERNAL */
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBSetFPos(ParmBlkPtr pb, /* INTERNAL */
-                                    BOOLEAN a)
+OSErr Executor::ufsPBSetFPos(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     OSErr err = pbsetfpos(pb, false);
 
@@ -1532,7 +1525,7 @@ PUBLIC OSErr Executor::ufsPBSetFPos(ParmBlkPtr pb, /* INTERNAL */
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBGetEOF(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
+OSErr Executor::ufsPBGetEOF(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     fcbrec *fp;
     OSErr err;
@@ -1544,7 +1537,7 @@ PUBLIC OSErr Executor::ufsPBGetEOF(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBSetEOF(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
+OSErr Executor::ufsPBSetEOF(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     fcbrec *fp;
     OSErr err;
@@ -1559,8 +1552,7 @@ PUBLIC OSErr Executor::ufsPBSetEOF(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBAllocate(ParmBlkPtr pb, /* INTERNAL */
-                                     BOOLEAN a)
+OSErr Executor::ufsPBAllocate(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     fcbrec *fp;
     OSErr err;
@@ -1576,8 +1568,7 @@ PUBLIC OSErr Executor::ufsPBAllocate(ParmBlkPtr pb, /* INTERNAL */
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBAllocContig(ParmBlkPtr pb, /* INTERNAL */
-                                        BOOLEAN a)
+OSErr Executor::ufsPBAllocContig(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     OSErr err;
 
@@ -1587,8 +1578,7 @@ PUBLIC OSErr Executor::ufsPBAllocContig(ParmBlkPtr pb, /* INTERNAL */
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBFlushFile(ParmBlkPtr pb, /* INTERNAL */
-                                      BOOLEAN a)
+OSErr Executor::ufsPBFlushFile(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     fcbrec *fp;
     OSErr err;
@@ -1602,7 +1592,7 @@ PUBLIC OSErr Executor::ufsPBFlushFile(ParmBlkPtr pb, /* INTERNAL */
     return err;
 }
 
-PUBLIC OSErr Executor::ufsPBClose(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
+OSErr Executor::ufsPBClose(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     OSErr err;
     fcbrec *fp;
@@ -1628,7 +1618,7 @@ PUBLIC OSErr Executor::ufsPBClose(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
     return err;
 }
 
-PUBLIC trap OSErrRET Executor::PBHGetLogInInfo(HParmBlkPtr pb, BOOLEAN a)
+OSErrRET Executor::PBHGetLogInInfo(HParmBlkPtr pb, BOOLEAN a)
 {
     OSErrRET retval;
 
@@ -1637,7 +1627,7 @@ PUBLIC trap OSErrRET Executor::PBHGetLogInInfo(HParmBlkPtr pb, BOOLEAN a)
     return retval;
 }
 
-PUBLIC trap OSErrRET Executor::PBHGetDirAccess(HParmBlkPtr pb, BOOLEAN a)
+OSErrRET Executor::PBHGetDirAccess(HParmBlkPtr pb, BOOLEAN a)
 {
     OSErrRET retval;
 
@@ -1646,7 +1636,7 @@ PUBLIC trap OSErrRET Executor::PBHGetDirAccess(HParmBlkPtr pb, BOOLEAN a)
     return retval;
 }
 
-PUBLIC trap OSErrRET Executor::PBHCopyFile(HParmBlkPtr pb, BOOLEAN a)
+OSErrRET Executor::PBHCopyFile(HParmBlkPtr pb, BOOLEAN a)
 {
     OSErrRET retval;
 
@@ -1655,7 +1645,7 @@ PUBLIC trap OSErrRET Executor::PBHCopyFile(HParmBlkPtr pb, BOOLEAN a)
     return retval;
 }
 
-PUBLIC trap OSErrRET Executor::PBHMapName(HParmBlkPtr pb, BOOLEAN a)
+OSErrRET Executor::PBHMapName(HParmBlkPtr pb, BOOLEAN a)
 {
     OSErrRET retval;
 
@@ -1664,7 +1654,7 @@ PUBLIC trap OSErrRET Executor::PBHMapName(HParmBlkPtr pb, BOOLEAN a)
     return retval;
 }
 
-PUBLIC trap OSErrRET Executor::PBHMapID(HParmBlkPtr pb, BOOLEAN a)
+OSErrRET Executor::PBHMapID(HParmBlkPtr pb, BOOLEAN a)
 {
     OSErrRET retval;
 
@@ -1673,7 +1663,7 @@ PUBLIC trap OSErrRET Executor::PBHMapID(HParmBlkPtr pb, BOOLEAN a)
     return retval;
 }
 
-PUBLIC trap OSErrRET Executor::PBHSetDirAccess(HParmBlkPtr pb, BOOLEAN a)
+OSErrRET Executor::PBHSetDirAccess(HParmBlkPtr pb, BOOLEAN a)
 {
     OSErrRET retval;
 
@@ -1682,7 +1672,7 @@ PUBLIC trap OSErrRET Executor::PBHSetDirAccess(HParmBlkPtr pb, BOOLEAN a)
     return retval;
 }
 
-PUBLIC trap OSErrRET Executor::PBHMoveRename(HParmBlkPtr pb, BOOLEAN a)
+OSErrRET Executor::PBHMoveRename(HParmBlkPtr pb, BOOLEAN a)
 {
     OSErrRET retval;
 

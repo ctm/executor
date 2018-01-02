@@ -42,7 +42,7 @@ is_window_ptr(WindowPeek w)
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_SetWRefCon(WindowPtr w, LONGINT data)
+void Executor::C_SetWRefCon(WindowPtr w, LONGINT data)
 {
     if(is_window_ptr((WindowPeek)w))
         WINDOW_REF_CON_X(w) = CL(data);
@@ -54,7 +54,7 @@ PUBLIC pascal trap void Executor::C_SetWRefCon(WindowPtr w, LONGINT data)
  * to how the dialoghook from stdfile is supposed to work.
  */
 
-PUBLIC pascal trap LONGINT Executor::C_GetWRefCon(WindowPtr w)
+LONGINT Executor::C_GetWRefCon(WindowPtr w)
 {
     LONGINT retval;
 
@@ -76,13 +76,13 @@ PUBLIC pascal trap LONGINT Executor::C_GetWRefCon(WindowPtr w)
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_SetWindowPic(WindowPtr w, PicHandle p)
+void Executor::C_SetWindowPic(WindowPtr w, PicHandle p)
 {
     if(is_window_ptr((WindowPeek)w))
         WINDOW_PIC_X(w) = RM(p);
 }
 
-PUBLIC pascal trap PicHandle Executor::C_GetWindowPic(WindowPtr w)
+PicHandle Executor::C_GetWindowPic(WindowPtr w)
 {
     PicHandle retval;
 
@@ -98,7 +98,7 @@ PUBLIC pascal trap PicHandle Executor::C_GetWindowPic(WindowPtr w)
  * Note, below we do what the mac does, rather than what IMI-294 says
  */
 
-PUBLIC pascal trap LONGINT Executor::C_PinRect(Rect *r, Point p)
+LONGINT Executor::C_PinRect(Rect *r, Point p)
 {
     if(p.h < CW(r->left))
         p.h = CW(r->left);
@@ -112,7 +112,8 @@ PUBLIC pascal trap LONGINT Executor::C_PinRect(Rect *r, Point p)
     return (((LONGINT)p.v << 16) | (unsigned short)p.h);
 }
 
-PUBLIC pascal trap LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit, Rect *slop, INTEGER axis, ProcPtr proc)
+LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
+                               Rect *slop, INTEGER axis, ProcPtr proc)
 {
     RgnHandle rh;
     PenState ps;
@@ -200,13 +201,14 @@ PUBLIC pascal trap LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, R
         return 0x80008000;
 }
 
-PUBLIC pascal trap LONGINT Executor::C_DragGrayRgn(RgnHandle rgn, Point startp, Rect *limit, Rect *slop, INTEGER axis, ProcPtr proc)
+LONGINT Executor::C_DragGrayRgn(RgnHandle rgn, Point startp, Rect *limit,
+                                Rect *slop, INTEGER axis, ProcPtr proc)
 {
     PATASSIGN(DragPattern, gray);
     return DragTheRgn(rgn, startp, limit, slop, axis, proc);
 }
 
-PUBLIC pascal trap void Executor::C_ClipAbove(WindowPeek w)
+void Executor::C_ClipAbove(WindowPeek w)
 {
     WindowPeek wp;
 
@@ -218,7 +220,7 @@ PUBLIC pascal trap void Executor::C_ClipAbove(WindowPeek w)
                     PORT_CLIP_REGION(MR(wmgr_port)));
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_CheckUpdate(EventRecord *ev)
+BOOLEAN Executor::C_CheckUpdate(EventRecord *ev)
 {
     WindowPeek wp;
     Rect picr;
@@ -245,7 +247,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_CheckUpdate(EventRecord *ev)
     return false;
 }
 
-PUBLIC pascal trap void Executor::C_SaveOld(WindowPeek w)
+void Executor::C_SaveOld(WindowPeek w)
 {
     OldStructure = RM(NewRgn());
     OldContent = RM(NewRgn());
@@ -253,7 +255,7 @@ PUBLIC pascal trap void Executor::C_SaveOld(WindowPeek w)
     CopyRgn(WINDOW_CONT_REGION(w), MR(OldContent));
 }
 
-PUBLIC pascal trap void Executor::C_PaintOne(WindowPeek w, RgnHandle clobbered)
+void Executor::C_PaintOne(WindowPeek w, RgnHandle clobbered)
 {
     RgnHandle rh;
 
@@ -314,7 +316,7 @@ PUBLIC pascal trap void Executor::C_PaintOne(WindowPeek w, RgnHandle clobbered)
     }
 }
 
-PUBLIC pascal trap void Executor::C_PaintBehind(WindowPeek w, RgnHandle clobbered)
+void Executor::C_PaintBehind(WindowPeek w, RgnHandle clobbered)
 {
     RgnHandle rh, testrgn;
     WindowPeek wp;
@@ -344,7 +346,7 @@ PUBLIC pascal trap void Executor::C_PaintBehind(WindowPeek w, RgnHandle clobbere
     DisposeRgn(rh);
 }
 
-PUBLIC pascal trap void Executor::C_CalcVis(WindowPeek w)
+void Executor::C_CalcVis(WindowPeek w)
 {
     WindowPeek wp;
 
@@ -361,7 +363,7 @@ PUBLIC pascal trap void Executor::C_CalcVis(WindowPeek w)
     }
 }
 
-PUBLIC pascal trap void Executor::C_CalcVisBehind(WindowPeek w, RgnHandle clobbered)
+void Executor::C_CalcVisBehind(WindowPeek w, RgnHandle clobbered)
 {
     RgnHandle rh, testrgn;
     WindowPeek wp;
@@ -390,7 +392,7 @@ PUBLIC pascal trap void Executor::C_CalcVisBehind(WindowPeek w, RgnHandle clobbe
     DisposeRgn(testrgn);
 }
 
-PUBLIC pascal trap void Executor::C_DrawNew(WindowPeek w, BOOLEAN flag)
+void Executor::C_DrawNew(WindowPeek w, BOOLEAN flag)
 {
     RgnHandle r1, r2;
 
@@ -417,7 +419,7 @@ PUBLIC pascal trap void Executor::C_DrawNew(WindowPeek w, BOOLEAN flag)
     DisposeRgn(r2);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_GetWVariant(WindowPtr w) /* IMV-208 */
+INTEGER Executor::C_GetWVariant(WindowPtr w) /* IMV-208 */
 {
     AuxWinHandle h;
     INTEGER retval;

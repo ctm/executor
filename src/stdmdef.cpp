@@ -131,7 +131,7 @@ int Executor::get_icon_info(mextp item_info, icon_info_t *info, int need_icon_p)
 
 /* See IMV-236 */
 
-PRIVATE BOOLEAN iskeyequiv(struct table::tableentry *tp)
+static BOOLEAN iskeyequiv(struct table::tableentry *tp)
 {
     BOOLEAN retval;
 
@@ -282,11 +282,10 @@ draw_arrow(Rect *menu_rect, MenuHandle mh, arrowtype arrdir)
     RGBBackColor(&ROMlib_white_rgb_color);
 }
 
-PRIVATE void erasearrow(Rect *, tablePtr, BOOLEAN);
-PRIVATE void popuprect(MenuHandle, Rect *, Point,
-                       GUEST<INTEGER> *, tablePtr);
+static void erasearrow(Rect *, tablePtr, BOOLEAN);
+static void popuprect(MenuHandle, Rect *, Point, GUEST<INTEGER> *, tablePtr);
 
-PRIVATE void erasearrow(Rect *rp, tablePtr tablep, BOOLEAN upordown)
+static void erasearrow(Rect *rp, tablePtr tablep, BOOLEAN upordown)
 {
     Rect r;
     INTEGER x, y;
@@ -686,7 +685,8 @@ void choose_menu(MenuHandle mh, Rect *rp, Point p, GUEST<int16_t> *itemp, tableP
     ClipRect(&clip_rect);
 }
 
-PRIVATE void popuprect(MenuHandle mh, Rect *rp, Point p, GUEST<INTEGER> *itemp, tablePtr tablep)
+static void popuprect(MenuHandle mh, Rect *rp, Point p, GUEST<INTEGER> *itemp,
+                      tablePtr tablep)
 {
     struct table::tableentry *tp;
     INTEGER vmax;
@@ -711,7 +711,8 @@ PRIVATE void popuprect(MenuHandle mh, Rect *rp, Point p, GUEST<INTEGER> *itemp, 
         rp->top = CW(CW(rp->top) + (tp[1].top - tp[0].top));
 }
 
-PUBLIC pascal void Executor::C_mdef0(INTEGER mess, MenuHandle mh, Rect *rp, Point p, GUEST<INTEGER> *item)
+void Executor::C_mdef0(INTEGER mess, MenuHandle mh, Rect *rp, Point p,
+                       GUEST<INTEGER> *item)
 {
     FontInfo fi;
     char *sp;

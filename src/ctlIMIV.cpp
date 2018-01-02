@@ -13,7 +13,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_Draw1Control(ControlHandle c) /* IMIV-53 */
+void Executor::C_Draw1Control(ControlHandle c) /* IMIV-53 */
 {
     if(CTL_VIS_X(c))
     {
@@ -23,8 +23,7 @@ PUBLIC pascal trap void Executor::C_Draw1Control(ControlHandle c) /* IMIV-53 */
     }
 }
 
-PUBLIC pascal trap void Executor::C_UpdtControl(WindowPtr wp, /* IMIV-53 */
-                                                RgnHandle rh)
+void Executor::C_UpdtControl(WindowPtr wp, RgnHandle rh) /* IMIV-53 */
 {
     ControlHandle c;
 

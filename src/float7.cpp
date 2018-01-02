@@ -15,7 +15,8 @@ using namespace Executor;
 
 #if defined(BINCOMPAT)
 
-PUBLIC pascal trap void Executor::C_ROMlib_Fdec2str(DecForm *volatile sp2, Decimal *volatile sp, Decstr volatile dp)
+void Executor::C_ROMlib_Fdec2str(DecForm *volatile sp2, Decimal *volatile sp,
+                                 Decstr volatile dp)
 
 {
     int i, j, exponent, expsize, beforedecimal, afterdecimal;
@@ -158,7 +159,9 @@ PUBLIC pascal trap void Executor::C_ROMlib_Fdec2str(DecForm *volatile sp2, Decim
     };
 }
 
-PUBLIC pascal trap void Executor::C_ROMlib_Fxstr2dec(Decstr volatile sp2, INTEGER *volatile sp, Decimal *volatile dp2, Byte *volatile dp, INTEGER lastchar)
+void Executor::C_ROMlib_Fxstr2dec(Decstr volatile sp2, INTEGER *volatile sp,
+                                  Decimal *volatile dp2, Byte *volatile dp,
+                                  INTEGER lastchar)
 {
     int index, expsgn, implicitexp;
 
@@ -248,7 +251,8 @@ abortlookahead:
                            dp2->sig[0], dp2->sig + 1, CW(dp2->exp));
 }
 
-PUBLIC pascal trap void Executor::C_ROMlib_Fcstr2dec(Decstr volatile sp2, INTEGER *volatile sp, Decimal *volatile dp2, Byte *volatile dp)
+void Executor::C_ROMlib_Fcstr2dec(Decstr volatile sp2, INTEGER *volatile sp,
+                                  Decimal *volatile dp2, Byte *volatile dp)
 /*
  * NOTE: sp2 is really supposed to be a Decstr, but it is going to
  * be used as a C *char or a Pascal string depending upon the
@@ -339,7 +343,8 @@ abortlookahead:
 #endif /* 0 */
 }
 
-PUBLIC pascal trap void Executor::C_ROMlib_Fpstr2dec(Decstr volatile sp2, INTEGER *volatile sp, Decimal *volatile dp2, Byte *volatile dp)
+void Executor::C_ROMlib_Fpstr2dec(Decstr volatile sp2, INTEGER *volatile sp,
+                                  Decimal *volatile dp2, Byte *volatile dp)
 /*
  * NOTE: sp2 is really supposed to be a Decstr, but it is going to
  * be used as a C *char or a Pascal string depending upon the

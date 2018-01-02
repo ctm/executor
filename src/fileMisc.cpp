@@ -41,27 +41,26 @@ using namespace Executor;
 /* NOTE:  calling most of the routines here is a sign that the user may
 	  be depending on the internal layout of things a bit too much */
 
-PUBLIC trap void Executor::FInitQueue() /* IMIV-128 */
+void Executor::FInitQueue() /* IMIV-128 */
 {
 }
 
-PUBLIC trap QHdrPtr Executor::GetFSQHdr() /* IMIV-175 */
+QHdrPtr Executor::GetFSQHdr() /* IMIV-175 */
 {
     return (&FSQHdr); /* in UNIX domain, everything is synchronous */
 }
 
-PUBLIC trap QHdrPtr Executor::GetVCBQHdr() /* IMIV-178 */
+QHdrPtr Executor::GetVCBQHdr() /* IMIV-178 */
 {
     return (&VCBQHdr);
 }
 
-PUBLIC trap QHdrPtr Executor::GetDrvQHdr() /* IMIV-182 */
+QHdrPtr Executor::GetDrvQHdr() /* IMIV-182 */
 {
     return (&DrvQHdr);
 }
 
-PUBLIC OSErr Executor::ufsPBGetFCBInfo(FCBPBPtr pb, /* INTERNAL */
-                                       BOOLEAN a)
+OSErr Executor::ufsPBGetFCBInfo(FCBPBPtr pb, BOOLEAN a) /* INTERNAL */
 {
     int rn;
     OSErr err;
@@ -277,7 +276,7 @@ root_directory_p(const char *path, dev_t our_dev)
 
 PUBLIC std::string Executor::ROMlib_volumename;
 
-PRIVATE void ROMlib_automount_helper(const char *cpath, char *aliasp)
+static void ROMlib_automount_helper(const char *cpath, char *aliasp)
 {
     char *path = (char *)alloca(strlen(cpath) + 1);
     strcpy(path, cpath);
@@ -408,12 +407,12 @@ PRIVATE void ROMlib_automount_helper(const char *cpath, char *aliasp)
     }
 }
 
-PUBLIC void Executor::ROMlib_automount(const char *path)
+void Executor::ROMlib_automount(const char *path)
 {
     ROMlib_automount_helper(path, NULL);
 }
 
-PUBLIC void ROMlib_volume_alias(const char *path, const char *alias_name)
+void ROMlib_volume_alias(const char *path, const char *alias_name)
 {
     ROMlib_automount_helper((char *)path, (char *)alias_name);
 }
@@ -568,7 +567,7 @@ is_unix_path(const char *pathname)
     return retval;
 }
 
-PUBLIC void Executor::ROMlib_fileinit() /* INTERNAL */
+void Executor::ROMlib_fileinit() /* INTERNAL */
 {
     INTEGER i;
     CInfoPBRec cpb;

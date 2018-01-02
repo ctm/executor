@@ -15,7 +15,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap PolyHandle Executor::C_OpenPoly()
+PolyHandle Executor::C_OpenPoly()
 {
     PolyHandle ph;
 
@@ -26,7 +26,7 @@ PUBLIC pascal trap PolyHandle Executor::C_OpenPoly()
     return (ph);
 }
 
-PUBLIC pascal trap void Executor::C_ClosePoly()
+void Executor::C_ClosePoly()
 {
     INTEGER top = 32767, left = 32767, bottom = -32767, right = -32767;
     GUEST<INTEGER> *ip, *ep;
@@ -57,12 +57,13 @@ PUBLIC pascal trap void Executor::C_ClosePoly()
     ShowPen();
 }
 
-PUBLIC pascal trap void Executor::C_KillPoly(PolyHandle poly)
+void Executor::C_KillPoly(PolyHandle poly)
 {
     DisposHandle((Handle)poly);
 }
 
-PUBLIC pascal trap void Executor::C_OffsetPoly(PolyHandle poly, INTEGER dh, INTEGER dv) /* Note: IM I-191 is wrong */
+void Executor::C_OffsetPoly(PolyHandle poly, INTEGER dh,
+                            INTEGER dv) /* Note: IM I-191 is wrong */
 {
     GUEST<Point> *pp, *ep;
 

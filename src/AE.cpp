@@ -27,7 +27,7 @@ using namespace Executor;
 
 /* dispatching apple events */
 
-PUBLIC pascal trap OSErr Executor::C_AEProcessAppleEvent(EventRecord *evtrec)
+OSErr Executor::C_AEProcessAppleEvent(EventRecord *evtrec)
 {
     GUEST<AEEventID> event_id_s;
     GUEST<AEEventClass> event_class_s;
@@ -133,7 +133,10 @@ PUBLIC pascal trap OSErr Executor::C_AEProcessAppleEvent(EventRecord *evtrec)
     AE_RETURN_ERROR(retval);
 }
 
-PUBLIC pascal trap OSErr Executor::C_AESend(AppleEvent *evt, AppleEvent *reply, AESendMode send_mode, AESendPriority send_priority, int32_t timeout, IdleProcPtr idle_proc, EventFilterProcPtr filter_proc)
+OSErr Executor::C_AESend(AppleEvent *evt, AppleEvent *reply,
+                         AESendMode send_mode, AESendPriority send_priority,
+                         int32_t timeout, IdleProcPtr idle_proc,
+                         EventFilterProcPtr filter_proc)
 {
     AEDesc *target = (AEDesc *)alloca(sizeof *target);
     GUEST<DescType> target_type_s, dummy_type;
@@ -252,25 +255,27 @@ PUBLIC pascal trap OSErr Executor::C_AESend(AppleEvent *evt, AppleEvent *reply, 
     }
 }
 
-PUBLIC pascal trap OSErr Executor::C_AESuspendTheCurrentEvent(AppleEvent *evt)
+OSErr Executor::C_AESuspendTheCurrentEvent(AppleEvent *evt)
 {
     warning_unimplemented(NULL_STRING);
     AE_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_AEResumeTheCurrentEvent(AppleEvent *evt, AppleEvent *reply, EventHandlerProcPtr dispatcher, int32_t refcon)
+OSErr Executor::C_AEResumeTheCurrentEvent(
+    AppleEvent *evt, AppleEvent *reply, EventHandlerProcPtr dispatcher,
+    int32_t refcon)
 {
     warning_unimplemented(NULL_STRING);
     AE_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_AEGetTheCurrentEvent(AppleEvent *return_evt)
+OSErr Executor::C_AEGetTheCurrentEvent(AppleEvent *return_evt)
 {
     warning_unimplemented(NULL_STRING);
     AE_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_AESetTheCurrentEvent(AppleEvent *evt)
+OSErr Executor::C_AESetTheCurrentEvent(AppleEvent *evt)
 {
     warning_unimplemented(NULL_STRING);
     AE_RETURN_ERROR(noErr);
@@ -278,13 +283,19 @@ PUBLIC pascal trap OSErr Executor::C_AESetTheCurrentEvent(AppleEvent *evt)
 
 /* array spew */
 
-PUBLIC pascal trap OSErr Executor::C_AEGetArray(AEDescList *list, AEArrayType array_type, AEArrayDataPointer array_ptr, Size max_size, GUEST<DescType> *return_item_type, GUEST<Size> *return_item_size, GUEST<int32_t> *return_item_count)
+OSErr Executor::C_AEGetArray(AEDescList *list, AEArrayType array_type,
+                             AEArrayDataPointer array_ptr, Size max_size,
+                             GUEST<DescType> *return_item_type,
+                             GUEST<Size> *return_item_size,
+                             GUEST<int32_t> *return_item_count)
 {
     warning_unimplemented(NULL_STRING);
     AE_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_AEPutArray(AEDescList *list, AEArrayType type, AEArrayDataPointer array_data, DescType item_type, Size item_size, int32_t item_count)
+OSErr Executor::C_AEPutArray(AEDescList *list, AEArrayType type,
+                             AEArrayDataPointer array_data, DescType item_type,
+                             Size item_size, int32_t item_count)
 {
     warning_unimplemented(NULL_STRING);
     AE_RETURN_ERROR(noErr);
@@ -294,7 +305,7 @@ PUBLIC pascal trap OSErr Executor::C_AEPutArray(AEDescList *list, AEArrayType ty
 
 AEInteractionAllowed interaction_level = kAEInteractWithSelf;
 
-PUBLIC pascal trap OSErr Executor::C_AESetInteractionAllowed(AEInteractionAllowed level)
+OSErr Executor::C_AESetInteractionAllowed(AEInteractionAllowed level)
 {
     /* do nothing; since all levels are a superset of
      kAEInteractWithSelf, which is the only interaction currently
@@ -304,19 +315,20 @@ PUBLIC pascal trap OSErr Executor::C_AESetInteractionAllowed(AEInteractionAllowe
     AE_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_AEGetInteractionAllowed(AEInteractionAllowed *level_out)
+OSErr Executor::C_AEGetInteractionAllowed(AEInteractionAllowed *level_out)
 {
     *level_out = interaction_level;
     AE_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_AEInteractWithUser(int32_t timeout, NMRecPtr nm_req, IdleProcPtr idle_proc)
+OSErr Executor::C_AEInteractWithUser(int32_t timeout, NMRecPtr nm_req,
+                                     IdleProcPtr idle_proc)
 {
     warning_unimplemented(NULL_STRING);
     AE_RETURN_ERROR(noErr);
 }
 
-PUBLIC pascal trap OSErr Executor::C_AEResetTimer(AppleEvent *evt)
+OSErr Executor::C_AEResetTimer(AppleEvent *evt)
 {
     warning_unimplemented(NULL_STRING);
     AE_RETURN_ERROR(noErr);
@@ -326,7 +338,8 @@ PUBLIC pascal trap OSErr Executor::C_AEResetTimer(AppleEvent *evt)
 
 /* type coersion */
 
-PUBLIC pascal trap OSErr Executor::C_AECoercePtr(DescType data_type, Ptr data, Size data_size, DescType result_type, AEDesc *desc_out)
+OSErr Executor::C_AECoercePtr(DescType data_type, Ptr data, Size data_size,
+                              DescType result_type, AEDesc *desc_out)
 {
     GUEST<CoerceDescProcPtr> coercion_hdlr_s;
     GUEST<int32_t> refcon_s;
@@ -450,7 +463,8 @@ parse_evt(const AppleEvent *evtp, AEDesc *desc_out)
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_AECoerceDesc(AEDesc *desc, DescType result_type, AEDesc *desc_out)
+OSErr Executor::C_AECoerceDesc(AEDesc *desc, DescType result_type,
+                               AEDesc *desc_out)
 {
     GUEST<CoerceDescProcPtr> coercion_hdlr_s;
     GUEST<int32_t> refcon_s;
@@ -523,7 +537,7 @@ fail:
     AE_RETURN_ERROR(errAECoercionFail);
 }
 
-PUBLIC pascal trap OSErr Executor::C_AEManagerInfo(GUEST<LONGINT> *resultp)
+OSErr Executor::C_AEManagerInfo(GUEST<LONGINT> *resultp)
 {
     OSErr retval;
 
@@ -535,43 +549,62 @@ PUBLIC pascal trap OSErr Executor::C_AEManagerInfo(GUEST<LONGINT> *resultp)
 
 /* stubs added by Cliff after reading documentation on Apple's web site */
 
-PUBLIC pascal trap OSErr Executor::C_AEDisposeToken(AEDesc *theToken)
+OSErr Executor::C_AEDisposeToken(AEDesc *theToken)
 {
     warning_unimplemented(NULL_STRING);
     return noErr;
 }
 
-PUBLIC pascal trap OSErr Executor::C_AEREesolve(AEDesc *objectSpecifier, INTEGER callbackFlags, AEDesc *theToken)
+OSErr Executor::C_AEREesolve(AEDesc *objectSpecifier, INTEGER callbackFlags,
+                             AEDesc *theToken)
 {
     warning_unimplemented(NULL_STRING);
     return noErr;
 }
 
-PUBLIC pascal trap OSErr Executor::C_AERemoveObjectAccessor(DescType desiredClass, DescType containerType, ProcPtr theAccessor, BOOLEAN isSysHandler)
+OSErr Executor::C_AERemoveObjectAccessor(
+    DescType desiredClass, DescType containerType, ProcPtr theAccessor,
+    BOOLEAN isSysHandler)
 {
     warning_unimplemented(NULL_STRING);
     return noErr;
 }
 
-PUBLIC pascal trap OSErr Executor::C_AEInstallObjectAccessor(DescType desiredClass, DescType containerType, ProcPtr theAccessor, LONGINT refcon, BOOLEAN isSysHandler)
+OSErr Executor::C_AEInstallObjectAccessor(
+    DescType desiredClass, DescType containerType, ProcPtr theAccessor,
+    LONGINT refcon, BOOLEAN isSysHandler)
 {
     warning_unimplemented(NULL_STRING);
     return noErr;
 }
 
-PUBLIC pascal trap OSErr Executor::C_AEGetObjectAccessor(DescType desiredClass, DescType containerType, ProcPtr *theAccessor, LONGINT *accessorRefcon, BOOLEAN isSysHandler)
+OSErr Executor::C_AEGetObjectAccessor(DescType desiredClass,
+                                      DescType containerType,
+                                      ProcPtr *theAccessor,
+                                      LONGINT *accessorRefcon,
+                                      BOOLEAN isSysHandler)
 {
     warning_unimplemented(NULL_STRING);
     return noErr;
 }
 
-PUBLIC pascal trap OSErr Executor::C_AECallObjectAccessor(DescType desiredClass, AEDesc *containerToken, DescType containerClass, DescType keyForm, AEDesc *keyData, AEDesc *theToken)
+OSErr Executor::C_AECallObjectAccessor(DescType desiredClass,
+                                       AEDesc *containerToken,
+                                       DescType containerClass,
+                                       DescType keyForm, AEDesc *keyData,
+                                       AEDesc *theToken)
 {
     warning_unimplemented(NULL_STRING);
     return noErr;
 }
 
-PUBLIC pascal trap OSErr Executor::C_AESetObjectCallbacks(ProcPtr myCompareProc, ProcPtr myCountProc, ProcPtr myDisposeTokenProc, ProcPtr myGetMarkTokenProc, ProcPtr myMarkProc, ProcPtr myAdjustMarksProc, ProcPtr myGetErrDescProc)
+OSErr Executor::C_AESetObjectCallbacks(ProcPtr myCompareProc,
+                                       ProcPtr myCountProc,
+                                       ProcPtr myDisposeTokenProc,
+                                       ProcPtr myGetMarkTokenProc,
+                                       ProcPtr myMarkProc,
+                                       ProcPtr myAdjustMarksProc,
+                                       ProcPtr myGetErrDescProc)
 {
     warning_unimplemented(NULL_STRING);
     return noErr;

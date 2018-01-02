@@ -28,7 +28,7 @@ reset_myfmi(void)
     ROMlib_myfmi.face = -1;
 }
 
-PUBLIC pascal trap void Executor::C_InitFonts() /* IMI-222 */
+void Executor::C_InitFonts() /* IMI-222 */
 {
     static BOOLEAN beenhere = false;
     GUEST<THz> saveZone;
@@ -87,8 +87,7 @@ Executor::ROMlib_shutdown_font_manager(void)
     invalidate_all_widths();
 }
 
-PUBLIC pascal trap void Executor::C_GetFontName(INTEGER fnum, /* IMI-223 */
-                                                StringPtr fnam)
+void Executor::C_GetFontName(INTEGER fnum, StringPtr fnam) /* IMI-223 */
 {
     Handle h;
     GUEST<INTEGER> i;
@@ -114,13 +113,12 @@ PUBLIC pascal trap void Executor::C_GetFontName(INTEGER fnum, /* IMI-223 */
  * callable w/o pascal conventions
  */
 
-PUBLIC void Executor::ROMlib_GetFontName(LONGINT fnum, char *fnam)
+void Executor::ROMlib_GetFontName(LONGINT fnum, char *fnam)
 {
     GetFontName(fnum, (StringPtr)fnam);
 }
 
-PUBLIC pascal trap void Executor::C_GetFNum(StringPtr fnam, /* IMI-223 */
-                                            GUEST<INTEGER> *fnum)
+void Executor::C_GetFNum(StringPtr fnam, GUEST<INTEGER> *fnum) /* IMI-223 */
 {
     Handle h;
     GUEST<ResType> rest;
@@ -147,7 +145,7 @@ PUBLIC pascal trap void Executor::C_GetFNum(StringPtr fnam, /* IMI-223 */
     SetResLoad(true);
 }
 
-PUBLIC pascal trap void Executor::C_SetFontLock(BOOLEAN lflag) /* IMI-223 */
+void Executor::C_SetFontLock(BOOLEAN lflag) /* IMI-223 */
 {
     INTEGER attrs;
 
@@ -198,19 +196,19 @@ PRIVATE fchartstr ftstr = {
     }, /* undert */
 };
 
-PRIVATE void mungfmo(ctrip, FMOutput *);
-PRIVATE BOOLEAN widthlistmatch(FMInput *);
-PRIVATE int countones(unsigned short);
-PRIVATE GUEST<INTEGER> *findfondwidths();
-PRIVATE void buildtable(INTEGER);
-PRIVATE void findclosestfont(INTEGER family, INTEGER size,
-                             INTEGER *lesserp, INTEGER *greaterp);
-PRIVATE void findclosestfond(FHandle fh, INTEGER size, INTEGER *powerof2p,
-                             INTEGER *lesserp, INTEGER *greaterp);
-PRIVATE INTEGER closestface();
-PRIVATE void newwidthtable(FMInput *fmip);
+static void mungfmo(ctrip, FMOutput *);
+static BOOLEAN widthlistmatch(FMInput *);
+static int countones(unsigned short);
+static GUEST<INTEGER> *findfondwidths();
+static void buildtable(INTEGER);
+static void findclosestfont(INTEGER family, INTEGER size, INTEGER *lesserp,
+                            INTEGER *greaterp);
+static void findclosestfond(FHandle fh, INTEGER size, INTEGER *powerof2p,
+                            INTEGER *lesserp, INTEGER *greaterp);
+static INTEGER closestface();
+static void newwidthtable(FMInput *fmip);
 
-PRIVATE void mungfmo(ctrip cp, FMOutput *fmop)
+static void mungfmo(ctrip cp, FMOutput *fmop)
 {
     Byte *p;
     INTEGER i;
@@ -228,7 +226,7 @@ PRIVATE void mungfmo(ctrip cp, FMOutput *fmop)
 
 #define MAXTABLES 12
 
-PRIVATE BOOLEAN widthlistmatch(FMInput *fmip)
+static BOOLEAN widthlistmatch(FMInput *fmip)
 {
 
     GUEST<WHandle> *whp, *ewhp;
@@ -249,7 +247,7 @@ PRIVATE BOOLEAN widthlistmatch(FMInput *fmip)
     return false;
 }
 
-PRIVATE int countones(unsigned short i)
+static int countones(unsigned short i)
 {
     int retval;
     static int counts[] = {
@@ -287,7 +285,7 @@ static INTEGER nhappybits(unsigned short want, unsigned short have)
 
 #define WIDTHBIT (1 << 1)
 
-PRIVATE GUEST<INTEGER> *findfondwidths()
+static GUEST<INTEGER> *findfondwidths()
 {
     GUEST<INTEGER> *retval, *numentriesminusone;
     LONGINT offset;
@@ -343,8 +341,8 @@ typedef enum { FontFract,
                FontInt,
                FondFract } howtobuild_t;
 
-PRIVATE void buildtabdata(howtobuild_t howtobuild, INTEGER extra,
-                          GUEST<INTEGER> *fondwidthtable)
+static void buildtabdata(howtobuild_t howtobuild, INTEGER extra,
+                         GUEST<INTEGER> *fondwidthtable)
 {
     INTEGER c, firstchar, lastchar;
     GUEST<INTEGER> *widp, width;
@@ -414,7 +412,7 @@ PRIVATE void buildtabdata(howtobuild_t howtobuild, INTEGER extra,
     WIDTHPTR->tabData[(unsigned)' '] = CL(Cx(WIDTHPTR->tabData[(unsigned)' ']) + Cx(WIDTHPTR->sExtra));
 }
 
-PRIVATE void buildtable(INTEGER extra)
+static void buildtable(INTEGER extra)
 {
     howtobuild_t howtobuild;
     GUEST<INTEGER> *fondwidthtable;
@@ -479,7 +477,8 @@ PRIVATE void buildtable(INTEGER extra)
     buildtabdata(howtobuild, extra, fondwidthtable);
 }
 
-PRIVATE void findclosestfont(INTEGER family, INTEGER size, INTEGER *lesserp, INTEGER *greaterp)
+static void findclosestfont(INTEGER family, INTEGER size, INTEGER *lesserp,
+                            INTEGER *greaterp)
 {
     INTEGER i, lesser, greater, newsize, nres;
     GUEST<ResType> rest;
@@ -514,7 +513,8 @@ PRIVATE void findclosestfont(INTEGER family, INTEGER size, INTEGER *lesserp, INT
     *greaterp = greater == 32767 ? 0 : greater;
 }
 
-PRIVATE void findclosestfond(FHandle fh, INTEGER size, INTEGER *powerof2p, INTEGER *lesserp, INTEGER *greaterp)
+static void findclosestfond(FHandle fh, INTEGER size, INTEGER *powerof2p,
+                            INTEGER *lesserp, INTEGER *greaterp)
 {
     fatabentry *p, *ep;
     INTEGER newsize;
@@ -554,8 +554,7 @@ PRIVATE void findclosestfond(FHandle fh, INTEGER size, INTEGER *powerof2p, INTEG
     *greaterp = greater == 32767 ? 0 : greater;
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_RealFont(INTEGER fnum, /* IMI-223 */
-                                                INTEGER sz)
+BOOLEAN Executor::C_RealFont(INTEGER fnum, INTEGER sz) /* IMI-223 */
 {
     Handle h;
     int retval;
@@ -582,7 +581,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_RealFont(INTEGER fnum, /* IMI-223 */
     return retval;
 }
 
-PRIVATE INTEGER closestface() /* no args, uses WIDTHPTR */
+static INTEGER closestface() /* no args, uses WIDTHPTR */
 {
     fatabentry *p, *ep, *bestp;
     INTEGER size;
@@ -638,7 +637,7 @@ at_least_one_fond_entry(INTEGER family)
 
 #define AVAILABLE(x) (WIDTHPTR->fSize = CW((x)), WIDTHPTR->tabFont = RM(GetResource(TICK("FONT"), FONTRESID(family, (x)))))
 
-PRIVATE void newwidthtable(FMInput *fmip)
+static void newwidthtable(FMInput *fmip)
 {
     FHandle fh;
     INTEGER lesser, greater, wanted_family, family, fontresid, powerof2;
@@ -804,7 +803,7 @@ PRIVATE void newwidthtable(FMInput *fmip)
                            (LONGINT)Cx(fmip->family));
 }
 
-PUBLIC pascal trap FMOutPtr Executor::C_FMSwapFont(FMInput *fmip) /* IMI-223 */
+FMOutPtr Executor::C_FMSwapFont(FMInput *fmip) /* IMI-223 */
 {
     Style style;
     FontRec *fp;
@@ -912,7 +911,7 @@ PUBLIC pascal trap FMOutPtr Executor::C_FMSwapFont(FMInput *fmip) /* IMI-223 */
 
 #define SCALE(x) FixRatio(x *CW(fmop->numer.v), CW(fmop->denom.v))
 
-PUBLIC pascal trap void Executor::C_FontMetrics(FMetricRec *metrp) /* IMIV-32 */
+void Executor::C_FontMetrics(FMetricRec *metrp) /* IMIV-32 */
 {
     FMInput fmi;
     FMOutPtr fmop;
@@ -939,8 +938,7 @@ PUBLIC pascal trap void Executor::C_FontMetrics(FMetricRec *metrp) /* IMIV-32 */
     metrp->wTabHandle = guest_cast<Handle>(WidthTabHandle);
 }
 
-PUBLIC pascal trap void Executor::C_SetFScaleDisable(/* IMIV-32 */
-                                                     BOOLEAN disable)
+void Executor::C_SetFScaleDisable(BOOLEAN disable) /* IMIV-32 */
 {
     if(FScaleDisable != (Byte)disable)
     {
@@ -950,7 +948,7 @@ PUBLIC pascal trap void Executor::C_SetFScaleDisable(/* IMIV-32 */
     }
 }
 
-PUBLIC pascal trap void Executor::C_SetFractEnable(BOOLEAN enable) /* IMIV-32 */
+void Executor::C_SetFractEnable(BOOLEAN enable) /* IMIV-32 */
 {
     FractEnable = enable;
 }

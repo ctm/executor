@@ -44,7 +44,8 @@ extract_name(Str255 dest, StringPtr source)
     memmove(dest + 1, p + 1, new_len);
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSMakeFSSpec(int16_t vRefNum, int32_t dir_id, Str255 file_name, FSSpecPtr spec)
+OSErr Executor::C_FSMakeFSSpec(int16_t vRefNum, int32_t dir_id,
+                               Str255 file_name, FSSpecPtr spec)
 {
     Str255 local_file_name;
     OSErr retval;
@@ -296,7 +297,7 @@ create_temp_name(Str63 name, int i)
  * so for now we do the same thing on both.
  */
 
-PUBLIC pascal trap OSErr Executor::C_FSpExchangeFiles(FSSpecPtr src, FSSpecPtr dst)
+OSErr Executor::C_FSpExchangeFiles(FSSpecPtr src, FSSpecPtr dst)
 {
 #if 0
   save_fcb_info_t *src_fcb_info, *dst_fcb_info;
@@ -392,17 +393,20 @@ open_helper(FSSpecPtr spec, SignedByte perms, GUEST<int16_t> *refoutp,
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpOpenDF(FSSpecPtr spec, SignedByte perms, GUEST<int16_t> *refoutp)
+OSErr Executor::C_FSpOpenDF(FSSpecPtr spec, SignedByte perms,
+                            GUEST<int16_t> *refoutp)
 {
     return open_helper(spec, perms, refoutp, PBHOpen);
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpOpenRF(FSSpecPtr spec, SignedByte perms, GUEST<int16_t> *refoutp)
+OSErr Executor::C_FSpOpenRF(FSSpecPtr spec, SignedByte perms,
+                            GUEST<int16_t> *refoutp)
 {
     return open_helper(spec, perms, refoutp, PBHOpenRF);
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpCreate(FSSpecPtr spec, OSType creator, OSType file_type, ScriptCode script)
+OSErr Executor::C_FSpCreate(FSSpecPtr spec, OSType creator, OSType file_type,
+                            ScriptCode script)
 {
     OSErr retval;
 
@@ -411,7 +415,8 @@ PUBLIC pascal trap OSErr Executor::C_FSpCreate(FSSpecPtr spec, OSType creator, O
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpDirCreate(FSSpecPtr spec, ScriptCode script, GUEST<int32_t> *created_dir_id)
+OSErr Executor::C_FSpDirCreate(FSSpecPtr spec, ScriptCode script,
+                               GUEST<int32_t> *created_dir_id)
 {
     OSErr retval;
     HParamBlockRec hpb;
@@ -425,7 +430,7 @@ PUBLIC pascal trap OSErr Executor::C_FSpDirCreate(FSSpecPtr spec, ScriptCode scr
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpDelete(FSSpecPtr spec)
+OSErr Executor::C_FSpDelete(FSSpecPtr spec)
 {
     OSErr retval;
     HParamBlockRec hpb;
@@ -437,7 +442,7 @@ PUBLIC pascal trap OSErr Executor::C_FSpDelete(FSSpecPtr spec)
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpGetFInfo(FSSpecPtr spec, FInfo *fndr_info)
+OSErr Executor::C_FSpGetFInfo(FSSpecPtr spec, FInfo *fndr_info)
 {
     OSErr retval;
     HParamBlockRec hpb;
@@ -452,7 +457,7 @@ PUBLIC pascal trap OSErr Executor::C_FSpGetFInfo(FSSpecPtr spec, FInfo *fndr_inf
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpSetFInfo(FSSpecPtr spec, FInfo *fndr_info)
+OSErr Executor::C_FSpSetFInfo(FSSpecPtr spec, FInfo *fndr_info)
 {
     OSErr retval;
     HParamBlockRec hpb;
@@ -487,17 +492,17 @@ lock_helper(FSSpecPtr spec, lock_procp procp)
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpSetFLock(FSSpecPtr spec)
+OSErr Executor::C_FSpSetFLock(FSSpecPtr spec)
 {
     return lock_helper(spec, PBHSetFLock);
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpRstFLock(FSSpecPtr spec)
+OSErr Executor::C_FSpRstFLock(FSSpecPtr spec)
 {
     return lock_helper(spec, PBHRstFLock);
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpRename(FSSpecPtr spec, Str255 new_name)
+OSErr Executor::C_FSpRename(FSSpecPtr spec, Str255 new_name)
 {
     OSErr retval;
     HParamBlockRec hpb;
@@ -510,7 +515,7 @@ PUBLIC pascal trap OSErr Executor::C_FSpRename(FSSpecPtr spec, Str255 new_name)
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FSpCatMove(FSSpecPtr src, FSSpecPtr dst)
+OSErr Executor::C_FSpCatMove(FSSpecPtr src, FSSpecPtr dst)
 {
     OSErr retval;
     CMovePBRec cbr;
@@ -529,13 +534,14 @@ PUBLIC pascal trap OSErr Executor::C_FSpCatMove(FSSpecPtr src, FSSpecPtr dst)
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_FSpCreateResFile(FSSpecPtr spec, OSType creator, OSType file_type, ScriptCode script)
+void Executor::C_FSpCreateResFile(FSSpecPtr spec, OSType creator,
+                                  OSType file_type, ScriptCode script)
 {
     HCreateResFile_helper(CW(spec->vRefNum), CL(spec->parID),
                           spec->name, creator, file_type, script);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_FSpOpenResFile(FSSpecPtr spec, SignedByte perms)
+INTEGER Executor::C_FSpOpenResFile(FSSpecPtr spec, SignedByte perms)
 {
     INTEGER retval;
 

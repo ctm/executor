@@ -410,7 +410,8 @@ draw(ControlHandle ctl, draw_state_t draw_state,
     }
 }
 
-PUBLIC pascal int32_t Executor::C_cdef1008(int16_t var, ControlHandle ctl, int16_t message, int32_t param)
+int32_t Executor::C_cdef1008(int16_t var, ControlHandle ctl, int16_t message,
+                             int32_t param)
 {
     bool draw_p;
     int32_t retval = /* dummy */ 0;

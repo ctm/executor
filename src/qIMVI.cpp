@@ -37,7 +37,7 @@ using namespace Executor;
 
 #define MAXRGNSIZE 32767
 
-PUBLIC pascal trap OSErr Executor::C_BitMapToRegion(RgnHandle rh, const BitMap *bmp)
+OSErr Executor::C_BitMapToRegion(RgnHandle rh, const BitMap *bmp)
 {
     INTEGER top, left, bottom, right, rowbytes, linelen, rgnsize;
     INTEGER x, y;
@@ -154,7 +154,7 @@ PUBLIC pascal trap OSErr Executor::C_BitMapToRegion(RgnHandle rh, const BitMap *
     return noErr;
 }
 
-PUBLIC pascal trap PicHandle Executor::C_OpenCPicture(OpenCPicParams *newheaderp)
+PicHandle Executor::C_OpenCPicture(OpenCPicParams *newheaderp)
 {
     PicHandle retval;
 

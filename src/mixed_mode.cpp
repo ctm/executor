@@ -15,7 +15,8 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap UniversalProcPtr Executor::C_NewRoutineDescriptor(ProcPtr proc, ProcInfoType info, ISAType isa)
+UniversalProcPtr Executor::C_NewRoutineDescriptor(
+    ProcPtr proc, ProcInfoType info, ISAType isa)
 {
     UniversalProcPtr retval;
 
@@ -48,26 +49,27 @@ PUBLIC pascal trap UniversalProcPtr Executor::C_NewRoutineDescriptor(ProcPtr pro
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_DisposeRoutineDescriptor(UniversalProcPtr ptr)
+void Executor::C_DisposeRoutineDescriptor(UniversalProcPtr ptr)
 {
     DisposPtr((Ptr)ptr);
     warning_trace_info(NULL_STRING);
 }
 
-PUBLIC pascal trap UniversalProcPtr Executor::C_NewFatRoutineDescriptor(ProcPtr m68k, ProcPtr ppc, ProcInfoType info)
+UniversalProcPtr Executor::C_NewFatRoutineDescriptor(
+    ProcPtr m68k, ProcPtr ppc, ProcInfoType info)
 {
     warning_unimplemented(NULL_STRING);
     *(long *)-1 = -1; /* abort */
     return NULL;
 }
 
-PUBLIC pascal trap OSErr Executor::C_SaveMixedModeState(void *statep, uint32_t vers)
+OSErr Executor::C_SaveMixedModeState(void *statep, uint32_t vers)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-PUBLIC pascal trap OSErr Executor::C_RestoreMixedModeState(void *statep, uint32_t vers)
+OSErr Executor::C_RestoreMixedModeState(void *statep, uint32_t vers)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;

@@ -10,12 +10,12 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap INTEGER Executor::C_PrError()
+INTEGER Executor::C_PrError()
 {
     return CW(PrintErr);
 }
 
-PUBLIC pascal trap void Executor::C_PrSetError(INTEGER iErr)
+void Executor::C_PrSetError(INTEGER iErr)
 {
     PrintErr = CW(iErr);
 }

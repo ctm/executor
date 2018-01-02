@@ -23,7 +23,7 @@ using namespace Executor;
  *	 as possible and probably have only one CalcVisBehind
  */
 
-PUBLIC pascal trap void Executor::C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER v, BOOLEAN front)
+void Executor::C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER v, BOOLEAN front)
 {
     GrafPtr gp;
     RgnHandle movepart, updatepart, behindpart;
@@ -154,7 +154,7 @@ PUBLIC pascal trap void Executor::C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER 
     SetPort(gp);
 }
 
-PUBLIC pascal trap void Executor::C_DragWindow(WindowPtr wp, Point p, Rect *rp)
+void Executor::C_DragWindow(WindowPtr wp, Point p, Rect *rp)
 {
     RgnHandle rh;
     LONGINT l;
@@ -201,7 +201,7 @@ PUBLIC pascal trap void Executor::C_DragWindow(WindowPtr wp, Point p, Rect *rp)
         SetPort(p);       \
     } while(false)
 
-PUBLIC pascal trap LONGINT Executor::C_GrowWindow(WindowPtr w, Point startp, Rect *rp)
+LONGINT Executor::C_GrowWindow(WindowPtr w, Point startp, Rect *rp)
 {
     EventRecord ev;
     GrafPtr gp;
@@ -274,7 +274,8 @@ PUBLIC pascal trap LONGINT Executor::C_GrowWindow(WindowPtr w, Point startp, Rec
 
 /* #### speedup? bag saveold, drawnew */
 
-PUBLIC pascal trap void Executor::C_SizeWindow(WindowPtr w, INTEGER width, INTEGER height, BOOLEAN flag)
+void Executor::C_SizeWindow(WindowPtr w, INTEGER width, INTEGER height,
+                            BOOLEAN flag)
 {
     if(width || height)
     {

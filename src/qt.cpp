@@ -53,7 +53,7 @@ qt_init (void)
 
 #endif
 
-PUBLIC pascal trap OSErr Executor::C_EnterMovies()
+OSErr Executor::C_EnterMovies()
 {
     OSErr retval;
 
@@ -70,7 +70,7 @@ PUBLIC pascal trap OSErr Executor::C_EnterMovies()
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_ExitMovies()
+void Executor::C_ExitMovies()
 {
 #if !defined(CYGWIN32)
     warning_unimplemented(NULL_STRING);
@@ -82,50 +82,12 @@ PUBLIC pascal trap void Executor::C_ExitMovies()
 #endif
 }
 
-PUBLIC pascal trap void Executor::C_MoviesTask(Movie movie, LONGINT maxmillisecs)
+void Executor::C_MoviesTask(Movie movie, LONGINT maxmillisecs)
 {
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC pascal trap OSErr Executor::C_PrerollMovie(Movie movie, TimeValue time, Fixed rate)
-{
-    OSErr retval;
-
-#if !defined(CYGWIN32)
-    warning_unimplemented(NULL_STRING);
-    retval = noErr;
-#else
-    retval = 0;
-#endif
-    return retval;
-}
-
-PUBLIC pascal trap void Executor::C_SetMovieActive(Movie movie, BOOLEAN active)
-{
-    warning_unimplemented(NULL_STRING);
-}
-
-PUBLIC pascal trap void Executor::C_StartMovie(Movie movie)
-{
-    warning_unimplemented(NULL_STRING);
-}
-
-PUBLIC pascal trap void Executor::C_StopMovie(Movie movie)
-{
-    warning_unimplemented(NULL_STRING);
-}
-
-PUBLIC pascal trap void Executor::C_GoToBeginningOfMovie(Movie movie)
-{
-    warning_unimplemented(NULL_STRING);
-}
-
-PUBLIC pascal trap void Executor::C_SetMovieGWorld(Movie movie, CGrafPtr cgrafp, GDHandle gdh)
-{
-    warning_unimplemented(NULL_STRING);
-}
-
-PUBLIC pascal trap OSErr Executor::C_UpdateMovie(Movie movie)
+OSErr Executor::C_PrerollMovie(Movie movie, TimeValue time, Fixed rate)
 {
     OSErr retval;
 
@@ -138,12 +100,50 @@ PUBLIC pascal trap OSErr Executor::C_UpdateMovie(Movie movie)
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_DisposeMovie(Movie movie)
+void Executor::C_SetMovieActive(Movie movie, BOOLEAN active)
 {
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_GetMovieVolume(Movie movie)
+void Executor::C_StartMovie(Movie movie)
+{
+    warning_unimplemented(NULL_STRING);
+}
+
+void Executor::C_StopMovie(Movie movie)
+{
+    warning_unimplemented(NULL_STRING);
+}
+
+void Executor::C_GoToBeginningOfMovie(Movie movie)
+{
+    warning_unimplemented(NULL_STRING);
+}
+
+void Executor::C_SetMovieGWorld(Movie movie, CGrafPtr cgrafp, GDHandle gdh)
+{
+    warning_unimplemented(NULL_STRING);
+}
+
+OSErr Executor::C_UpdateMovie(Movie movie)
+{
+    OSErr retval;
+
+#if !defined(CYGWIN32)
+    warning_unimplemented(NULL_STRING);
+    retval = noErr;
+#else
+    retval = 0;
+#endif
+    return retval;
+}
+
+void Executor::C_DisposeMovie(Movie movie)
+{
+    warning_unimplemented(NULL_STRING);
+}
+
+INTEGER Executor::C_GetMovieVolume(Movie movie)
 {
     INTEGER retval;
 
@@ -156,7 +156,7 @@ PUBLIC pascal trap INTEGER Executor::C_GetMovieVolume(Movie movie)
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_CloseMovieFile(INTEGER refnum)
+OSErr Executor::C_CloseMovieFile(INTEGER refnum)
 {
     OSErr retval;
 
@@ -169,7 +169,7 @@ PUBLIC pascal trap OSErr Executor::C_CloseMovieFile(INTEGER refnum)
     return retval;
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_IsMovieDone(Movie movie)
+BOOLEAN Executor::C_IsMovieDone(Movie movie)
 {
     BOOLEAN retval;
 
@@ -182,7 +182,9 @@ PUBLIC pascal trap BOOLEAN Executor::C_IsMovieDone(Movie movie)
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_NewMovieFromFile(Movie *moviep, INTEGER refnum, INTEGER *residp, StringPtr resnamep, INTEGER flags, BOOLEAN *datarefwaschangedp)
+OSErr Executor::C_NewMovieFromFile(Movie *moviep, INTEGER refnum,
+                                   INTEGER *residp, StringPtr resnamep,
+                                   INTEGER flags, BOOLEAN *datarefwaschangedp)
 {
     OSErr retval;
 
@@ -195,7 +197,7 @@ PUBLIC pascal trap OSErr Executor::C_NewMovieFromFile(Movie *moviep, INTEGER ref
     return retval;
 }
 
-PUBLIC pascal trap Fixed Executor::C_GetMoviePreferredRate(Movie movie)
+Fixed Executor::C_GetMoviePreferredRate(Movie movie)
 {
     Fixed retval;
 
@@ -208,17 +210,18 @@ PUBLIC pascal trap Fixed Executor::C_GetMoviePreferredRate(Movie movie)
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_GetMovieBox(Movie movie, Rect *boxp)
+void Executor::C_GetMovieBox(Movie movie, Rect *boxp)
 {
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC pascal trap void Executor::C_SetMovieBox(Movie movie, const Rect *boxp)
+void Executor::C_SetMovieBox(Movie movie, const Rect *boxp)
 {
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC pascal trap ComponentInstance Executor::C_NewMovieController(Movie movie, const Rect *movierectp, LONGINT flags)
+ComponentInstance Executor::C_NewMovieController(
+    Movie movie, const Rect *movierectp, LONGINT flags)
 {
     ComponentInstance retval;
 
@@ -231,12 +234,13 @@ PUBLIC pascal trap ComponentInstance Executor::C_NewMovieController(Movie movie,
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_DisposeMovieController(ComponentInstance controller)
+void Executor::C_DisposeMovieController(ComponentInstance controller)
 {
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC pascal trap OSErr Executor::C_OpenMovieFile(const FSSpec *filespecp, INTEGER *refnump, uint8 perm)
+OSErr Executor::C_OpenMovieFile(const FSSpec *filespecp, INTEGER *refnump,
+                                uint8 perm)
 {
     OSErr retval;
 

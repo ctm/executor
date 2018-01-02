@@ -9,12 +9,12 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_InitPack(INTEGER packid)
+void Executor::C_InitPack(INTEGER packid)
 {
     /* NOP */
 }
 
-PUBLIC pascal trap void Executor::C_InitAllPacks()
+void Executor::C_InitAllPacks()
 {
     /* NOP */
 }

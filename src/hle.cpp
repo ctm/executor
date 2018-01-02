@@ -71,7 +71,10 @@ bool Executor::hle_get_event(EventRecord *evt, bool remflag)
     return false;
 }
 
-PUBLIC pascal trap OSErr Executor::C_AcceptHighLevelEvent(TargetID *sender_id_return, GUEST<int32_t> *refcon_return, Ptr msg_buf, GUEST<int32_t> *msg_buf_length_return)
+OSErr Executor::C_AcceptHighLevelEvent(TargetID *sender_id_return,
+                                       GUEST<int32_t> *refcon_return,
+                                       Ptr msg_buf,
+                                       GUEST<int32_t> *msg_buf_length_return)
 {
     OSErr retval = noErr;
 
@@ -93,7 +96,8 @@ PUBLIC pascal trap OSErr Executor::C_AcceptHighLevelEvent(TargetID *sender_id_re
     return retval;
 }
 
-PUBLIC pascal trap Boolean Executor::C_GetSpecificHighLevelEvent(GetSpecificFilterProcPtr fn, Ptr data, OSErr *err_return)
+Boolean Executor::C_GetSpecificHighLevelEvent(
+    GetSpecificFilterProcPtr fn, Ptr data, OSErr *err_return)
 {
     hle_q_elt_t *t, **prev;
 
@@ -112,7 +116,9 @@ PUBLIC pascal trap Boolean Executor::C_GetSpecificHighLevelEvent(GetSpecificFilt
     return false;
 }
 
-PUBLIC pascal trap OSErr Executor::C_PostHighLevelEvent(EventRecord *evt, Ptr receiver_id, int32_t refcon, Ptr msg_buf, int32_t msg_length, int32_t post_options)
+OSErr Executor::C_PostHighLevelEvent(EventRecord *evt, Ptr receiver_id,
+                                     int32_t refcon, Ptr msg_buf,
+                                     int32_t msg_length, int32_t post_options)
 {
     HighLevelEventMsgPtr hle_msg;
     Ptr msg_buf_copy;

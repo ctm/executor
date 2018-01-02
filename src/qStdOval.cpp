@@ -13,7 +13,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_StdOval(GrafVerb v, Rect *rp)
+void Executor::C_StdOval(GrafVerb v, Rect *rp)
 {
     Rect r;
     RgnHandle rh, rh2;

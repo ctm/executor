@@ -15,37 +15,37 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_TextFont(INTEGER f)
+void Executor::C_TextFont(INTEGER f)
 {
     if(thePort)
         PORT_TX_FONT_X(thePort) = CW(f);
 }
 
-PUBLIC pascal trap void Executor::C_TextFace(INTEGER thef)
+void Executor::C_TextFace(INTEGER thef)
 {
     if(thePort)
         PORT_TX_FACE_X(thePort) = thef;
 }
 
-PUBLIC pascal trap void Executor::C_TextMode(INTEGER m)
+void Executor::C_TextMode(INTEGER m)
 {
     if(thePort)
         PORT_TX_MODE_X(thePort) = CW(m);
 }
 
-PUBLIC pascal trap void Executor::C_TextSize(INTEGER s)
+void Executor::C_TextSize(INTEGER s)
 {
     if(thePort)
         PORT_TX_SIZE_X(thePort) = CW(s);
 }
 
-PUBLIC pascal trap void Executor::C_SpaceExtra(Fixed e)
+void Executor::C_SpaceExtra(Fixed e)
 {
     if(thePort)
         PORT_SP_EXTRA_X(thePort) = CL(e);
 }
 
-PUBLIC pascal trap void Executor::C_DrawChar(CharParameter thec)
+void Executor::C_DrawChar(CharParameter thec)
 {
     Point p;
     Byte c;
@@ -56,7 +56,7 @@ PUBLIC pascal trap void Executor::C_DrawChar(CharParameter thec)
     CALLTEXT(1, (Ptr)&c, p, p);
 }
 
-PUBLIC pascal trap void Executor::C_DrawString(StringPtr s)
+void Executor::C_DrawString(StringPtr s)
 {
     Point p;
 
@@ -65,7 +65,7 @@ PUBLIC pascal trap void Executor::C_DrawString(StringPtr s)
     CALLTEXT((INTEGER)U(s[0]), (Ptr)(s + 1), p, p);
 }
 
-PUBLIC pascal trap void Executor::C_DrawText(Ptr tb, INTEGER fb, INTEGER bc)
+void Executor::C_DrawText(Ptr tb, INTEGER fb, INTEGER bc)
 {
     Point p;
 
@@ -82,7 +82,7 @@ void Executor::DrawText_c_string(const char *string)
     DrawText((Ptr)string, 0, strlen(string));
 }
 
-PUBLIC pascal trap INTEGER Executor::C_CharWidth(CharParameter thec)
+INTEGER Executor::C_CharWidth(CharParameter thec)
 {
     GUEST<Point> np, dp;
     INTEGER retval;
@@ -95,7 +95,7 @@ PUBLIC pascal trap INTEGER Executor::C_CharWidth(CharParameter thec)
     return FixMul((LONGINT)retval << 16, (Fixed)CW(np.h) << 8) / ((LONGINT)CW(dp.h) << 8);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_StringWidth(StringPtr s)
+INTEGER Executor::C_StringWidth(StringPtr s)
 {
     GUEST<Point> np, dp;
     INTEGER retval;
@@ -108,7 +108,7 @@ PUBLIC pascal trap INTEGER Executor::C_StringWidth(StringPtr s)
         / ((LONGINT)CW(dp.h) << 8);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_TextWidth(Ptr tb, INTEGER fb, INTEGER bc)
+INTEGER Executor::C_TextWidth(Ptr tb, INTEGER fb, INTEGER bc)
 {
     GUEST<Point> np, dp;
     INTEGER retval;
@@ -121,7 +121,7 @@ PUBLIC pascal trap INTEGER Executor::C_TextWidth(Ptr tb, INTEGER fb, INTEGER bc)
         / ((LONGINT)CW(dp.h) << 8);
 }
 
-PUBLIC pascal trap void Executor::C_GetFontInfo(FontInfo *ip)
+void Executor::C_GetFontInfo(FontInfo *ip)
 {
     GUEST<Point> pn, pd;
 

@@ -19,7 +19,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_TEInit()
+void Executor::C_TEInit()
 {
     TEScrpHandle = RM(NewHandle(0));
     TEScrpLength = CWC(0);
@@ -31,7 +31,7 @@ PUBLIC pascal trap void Executor::C_TEInit()
  */
 static GUEST<uint16_t> default_clik_loop[2] = { CWC(0x7001), CWC(0x4E75) };
 
-PUBLIC pascal trap TEHandle Executor::C_TENew(Rect *dst, Rect *view)
+TEHandle Executor::C_TENew(Rect *dst, Rect *view)
 {
     TEHandle teh;
     FontInfo finfo;
@@ -84,7 +84,7 @@ PUBLIC pascal trap TEHandle Executor::C_TENew(Rect *dst, Rect *view)
     return teh;
 }
 
-PUBLIC pascal trap void Executor::C_TEDispose(TEHandle teh)
+void Executor::C_TEDispose(TEHandle teh)
 {
     DisposHandle((Handle)TEHIDDENH(teh));
     DisposHandle(TE_HTEXT(teh));

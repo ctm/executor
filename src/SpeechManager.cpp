@@ -16,7 +16,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal NumVersion Executor::C_SpeechManagerVersion()
+NumVersion Executor::C_SpeechManagerVersion()
 {
 #ifdef MACOSX_
     return MacBridge::SpeechManagerVersion();
@@ -26,7 +26,7 @@ PUBLIC pascal NumVersion Executor::C_SpeechManagerVersion()
 #endif
 }
 
-PUBLIC pascal int16_t Executor::C_SpeechBusy()
+int16_t Executor::C_SpeechBusy()
 {
 #ifdef MACOSX_
     return MacBridge::SpeechBusy();
@@ -36,7 +36,7 @@ PUBLIC pascal int16_t Executor::C_SpeechBusy()
 #endif
 }
 
-PUBLIC pascal int16_t Executor::C_SpeechBusySystemWide()
+int16_t Executor::C_SpeechBusySystemWide()
 {
 #ifdef MACOSX_
     return MacBridge::SpeechBusySystemWide();
@@ -46,7 +46,7 @@ PUBLIC pascal int16_t Executor::C_SpeechBusySystemWide()
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_CountVoices(int16_t *numVoices)
+OSErr Executor::C_CountVoices(int16_t *numVoices)
 {
 #ifdef MACOSX_
     return MacBridge::CountVoices(numVoices);
@@ -56,7 +56,7 @@ PUBLIC pascal OSErr Executor::C_CountVoices(int16_t *numVoices)
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_DisposeSpeechChannel(SpeechChannel chan)
+OSErr Executor::C_DisposeSpeechChannel(SpeechChannel chan)
 {
 #ifdef MACOSX_
     return MacBridge::DisposeSpeechChannel(chan);
@@ -66,7 +66,7 @@ PUBLIC pascal OSErr Executor::C_DisposeSpeechChannel(SpeechChannel chan)
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_SpeakString(Str255 textToBeSpoken)
+OSErr Executor::C_SpeakString(Str255 textToBeSpoken)
 {
 #ifdef MACOSX_
     return MacBridge::SpeakString(textToBeSpoken);
@@ -76,7 +76,7 @@ PUBLIC pascal OSErr Executor::C_SpeakString(Str255 textToBeSpoken)
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_StopSpeech(SpeechChannel chan)
+OSErr Executor::C_StopSpeech(SpeechChannel chan)
 {
 #ifdef MACOSX_
     return MacBridge::StopSpeech(chan);
@@ -86,7 +86,7 @@ PUBLIC pascal OSErr Executor::C_StopSpeech(SpeechChannel chan)
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_ContinueSpeech(SpeechChannel chan)
+OSErr Executor::C_ContinueSpeech(SpeechChannel chan)
 {
 #ifdef MACOSX_
     return MacBridge::ContinueSpeech(chan);
@@ -96,7 +96,7 @@ PUBLIC pascal OSErr Executor::C_ContinueSpeech(SpeechChannel chan)
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_GetIndVoice(int16_t index, VoiceSpec *voice)
+OSErr Executor::C_GetIndVoice(int16_t index, VoiceSpec *voice)
 {
 #ifdef MACOSX_
     return MacBridge::GetIndVoice(index, voice);
@@ -106,7 +106,7 @@ PUBLIC pascal OSErr Executor::C_GetIndVoice(int16_t index, VoiceSpec *voice)
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_NewSpeechChannel(VoiceSpec *voice, SpeechChannel *chan)
+OSErr Executor::C_NewSpeechChannel(VoiceSpec *voice, SpeechChannel *chan)
 {
 #ifdef MACOSX_
     return MacBridge::NewSpeechChannel(voice, chan);
@@ -116,7 +116,7 @@ PUBLIC pascal OSErr Executor::C_NewSpeechChannel(VoiceSpec *voice, SpeechChannel
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_StopSpeechAt(SpeechChannel chan, int32_t whereToStop)
+OSErr Executor::C_StopSpeechAt(SpeechChannel chan, int32_t whereToStop)
 {
 #ifdef MACOSX_
     return MacBridge::StopSpeechAt(chan, whereToStop);
@@ -126,7 +126,7 @@ PUBLIC pascal OSErr Executor::C_StopSpeechAt(SpeechChannel chan, int32_t whereTo
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_PauseSpeechAt(SpeechChannel chan, int32_t whereToPause)
+OSErr Executor::C_PauseSpeechAt(SpeechChannel chan, int32_t whereToPause)
 {
 #ifdef MACOSX_
     return MacBridge::PauseSpeechAt(chan, whereToPause);
@@ -136,7 +136,7 @@ PUBLIC pascal OSErr Executor::C_PauseSpeechAt(SpeechChannel chan, int32_t whereT
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_SetSpeechRate(SpeechChannel chan, Fixed rate)
+OSErr Executor::C_SetSpeechRate(SpeechChannel chan, Fixed rate)
 {
 #ifdef MACOSX_
     return MacBridge::SetSpeechRate(chan, rate);
@@ -146,7 +146,7 @@ PUBLIC pascal OSErr Executor::C_SetSpeechRate(SpeechChannel chan, Fixed rate)
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_GetSpeechRate(SpeechChannel chan, Fixed *rate)
+OSErr Executor::C_GetSpeechRate(SpeechChannel chan, Fixed *rate)
 {
 #ifdef MACOSX_
     return MacBridge::GetSpeechRate(chan, rate);
@@ -156,7 +156,7 @@ PUBLIC pascal OSErr Executor::C_GetSpeechRate(SpeechChannel chan, Fixed *rate)
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_SetSpeechPitch(SpeechChannel chan, Fixed pitch)
+OSErr Executor::C_SetSpeechPitch(SpeechChannel chan, Fixed pitch)
 {
 #ifdef MACOSX_
     return MacBridge::SetSpeechPitch(chan, pitch);
@@ -166,7 +166,7 @@ PUBLIC pascal OSErr Executor::C_SetSpeechPitch(SpeechChannel chan, Fixed pitch)
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_GetSpeechPitch(SpeechChannel chan, Fixed *pitch)
+OSErr Executor::C_GetSpeechPitch(SpeechChannel chan, Fixed *pitch)
 {
 #ifdef MACOSX_
     return MacBridge::GetSpeechPitch(chan, pitch);
@@ -176,7 +176,7 @@ PUBLIC pascal OSErr Executor::C_GetSpeechPitch(SpeechChannel chan, Fixed *pitch)
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_UseDictionary(SpeechChannel chan, Handle dictionary)
+OSErr Executor::C_UseDictionary(SpeechChannel chan, Handle dictionary)
 {
 #ifdef MACOSX_
     return MacBridge::UseDictionary(chan, dictionary);
@@ -186,7 +186,7 @@ PUBLIC pascal OSErr Executor::C_UseDictionary(SpeechChannel chan, Handle diction
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_MakeVoiceSpec(OSType creator, OSType id, VoiceSpec *voice)
+OSErr Executor::C_MakeVoiceSpec(OSType creator, OSType id, VoiceSpec *voice)
 {
 #ifdef MACOSX_
     return MacBridge::MakeVoiceSpec(creator, id, voice);
@@ -196,7 +196,9 @@ PUBLIC pascal OSErr Executor::C_MakeVoiceSpec(OSType creator, OSType id, VoiceSp
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_GetVoiceDescription(const VoiceSpec *voice, VoiceDescription *info, LONGINT infoLength)
+OSErr Executor::C_GetVoiceDescription(const VoiceSpec *voice,
+                                      VoiceDescription *info,
+                                      LONGINT infoLength)
 {
 #ifdef MACOSX_
     return MacBridge::GetVoiceDescription(voice, info, infoLength);
@@ -206,7 +208,8 @@ PUBLIC pascal OSErr Executor::C_GetVoiceDescription(const VoiceSpec *voice, Voic
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_GetVoiceInfo(const VoiceSpec *voice, OSType selector, void *voiceInfo)
+OSErr Executor::C_GetVoiceInfo(const VoiceSpec *voice, OSType selector,
+                               void *voiceInfo)
 {
 #ifdef MACOSX_
     return MacBridge::GetVoiceInfo(voice, selector, voiceInfo);
@@ -216,7 +219,8 @@ PUBLIC pascal OSErr Executor::C_GetVoiceInfo(const VoiceSpec *voice, OSType sele
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_SpeakText(SpeechChannel chan, const void *textBuf, ULONGINT textBytes)
+OSErr Executor::C_SpeakText(SpeechChannel chan, const void *textBuf,
+                            ULONGINT textBytes)
 {
 #ifdef MACOSX_
     return MacBridge::SpeakText(chan, textBuf, textBytes);
@@ -226,7 +230,8 @@ PUBLIC pascal OSErr Executor::C_SpeakText(SpeechChannel chan, const void *textBu
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_SetSpeechInfo(SpeechChannel chan, OSType selector, const void *speechInfo)
+OSErr Executor::C_SetSpeechInfo(SpeechChannel chan, OSType selector,
+                                const void *speechInfo)
 {
 #ifdef MACOSX_
     return MacBridge::SetSpeechInfo(chan, selector, speechInfo);
@@ -236,7 +241,8 @@ PUBLIC pascal OSErr Executor::C_SetSpeechInfo(SpeechChannel chan, OSType selecto
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_GetSpeechInfo(SpeechChannel chan, OSType selector, void *speechInfo)
+OSErr Executor::C_GetSpeechInfo(SpeechChannel chan, OSType selector,
+                                void *speechInfo)
 {
 #ifdef MACOSX_
     return MacBridge::GetSpeechInfo(chan, selector, speechInfo);
@@ -246,7 +252,8 @@ PUBLIC pascal OSErr Executor::C_GetSpeechInfo(SpeechChannel chan, OSType selecto
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_SpeakBuffer(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, int32_t controlFlags)
+OSErr Executor::C_SpeakBuffer(SpeechChannel chan, const void *textBuf,
+                              ULONGINT textBytes, int32_t controlFlags)
 {
 #ifdef MACOSX_
     return MacBridge::SpeakBuffer(chan, textBuf, textBytes, controlFlags);
@@ -256,7 +263,9 @@ PUBLIC pascal OSErr Executor::C_SpeakBuffer(SpeechChannel chan, const void *text
 #endif
 }
 
-PUBLIC pascal OSErr Executor::C_TextToPhonemes(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, Handle phonemeBuf, GUEST<LONGINT> *phonemeBytes)
+OSErr Executor::C_TextToPhonemes(SpeechChannel chan, const void *textBuf,
+                                 ULONGINT textBytes, Handle phonemeBuf,
+                                 GUEST<LONGINT> *phonemeBytes)
 {
 #ifdef MACOSX_
     return MacBridge::TextToPhonemes(chan, textBuf, textBytes, phonemeBuf, phonemeBytes);

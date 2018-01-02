@@ -240,7 +240,7 @@ Executor::ROMlib_parse_appearance(const char *appearance_str)
     return retval;
 }
 
-PUBLIC appearance_t Executor::ROMlib_get_appearance(void)
+appearance_t Executor::ROMlib_get_appearance(void)
 {
     return appearance;
 }

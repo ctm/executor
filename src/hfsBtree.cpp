@@ -71,7 +71,7 @@
 using namespace Executor;
 
 #if 0
-PUBLIC ULONGINT blockchecksum(void *blockp)
+ULONGINT blockchecksum(void *blockp)
 {
     ULONGINT retval, *ulp;
     INTEGER i;
@@ -81,7 +81,7 @@ PUBLIC ULONGINT blockchecksum(void *blockp)
     return retval;
 }
 
-PRIVATE void checkcache(short refnum)
+static void checkcache(short refnum)
 {
     cacheentry *cachep;
     cachehead *headp;
@@ -110,7 +110,7 @@ PRIVATE void checkcache(short refnum)
 }
 #endif
 
-PUBLIC cacheentry *Executor::ROMlib_addrtocachep(Ptr addr, HVCB *vcbp)
+cacheentry *Executor::ROMlib_addrtocachep(Ptr addr, HVCB *vcbp)
 {
     cachehead *headp;
     cacheentry *retval;
@@ -139,7 +139,7 @@ PUBLIC cacheentry *Executor::ROMlib_addrtocachep(Ptr addr, HVCB *vcbp)
  * the file is already there.
  */
 
-PUBLIC OSErr Executor::ROMlib_errortype(btparam *btpb)
+OSErr Executor::ROMlib_errortype(btparam *btpb)
 {
     trailentry *tep;
     btnode *btp;
@@ -174,7 +174,7 @@ PUBLIC OSErr Executor::ROMlib_errortype(btparam *btpb)
 
 #if defined(CATFILEDEBUG)
 
-PRIVATE void checkbtp(btnode *btp)
+static void checkbtp(btnode *btp)
 {
     ULONGINT flink, blink;
     short *offsetp, expected;
@@ -252,8 +252,8 @@ PRIVATE void checkbtp(btnode *btp)
 }
 #endif /* CATFILEDEBUG */
 
-PUBLIC BOOLEAN Executor::ROMlib_searchnode(btnode *btp, void *key, compfp fp,
-                                           anykey **keypp, INTEGER *afterp)
+BOOLEAN Executor::ROMlib_searchnode(btnode *btp, void *key, compfp fp,
+                                    anykey **keypp, INTEGER *afterp)
 {
     INTEGER low, high, mid;
     anykey *totest, *totest2;
@@ -318,7 +318,7 @@ PUBLIC BOOLEAN Executor::ROMlib_searchnode(btnode *btp, void *key, compfp fp,
 #endif
 }
 
-PRIVATE void makefirst(cachehead *headp, cacheentry *entryp)
+static void makefirst(cachehead *headp, cacheentry *entryp)
 {
     if(MR(headp->flink) != entryp)
     {
@@ -333,7 +333,7 @@ PRIVATE void makefirst(cachehead *headp, cacheentry *entryp)
     }
 }
 
-PUBLIC OSErr Executor::ROMlib_putcache(cacheentry *cachep)
+OSErr Executor::ROMlib_putcache(cacheentry *cachep)
 {
     OSErr err;
     HVCB *vcbp;
@@ -373,8 +373,8 @@ PUBLIC LONGINT tagtfs1;
 
 PRIVATE BOOLEAN ROMlib_index_cached = false;
 
-PUBLIC OSErr Executor::ROMlib_getcache(cacheentry **retpp, uint16_t refnum, ULONGINT logbno,
-                                       cacheflagtype flags)
+OSErr Executor::ROMlib_getcache(cacheentry **retpp, uint16_t refnum,
+                                ULONGINT logbno, cacheflagtype flags)
 {
     cacheentry *retval, *lastp, *lastdirtyp, *lastfreep;
     cachehead *headp;
@@ -486,7 +486,7 @@ PUBLIC OSErr Executor::ROMlib_getcache(cacheentry **retpp, uint16_t refnum, ULON
 }
 
 #if defined(CATFILEDEBUG)
-PUBLIC void Executor::ROMlib_checkleaves(INTEGER refnum)
+void Executor::ROMlib_checkleaves(INTEGER refnum)
 {
     OSErr err;
     cacheentry *block0cachep, *cachep;
@@ -519,7 +519,7 @@ PUBLIC void Executor::ROMlib_checkleaves(INTEGER refnum)
 }
 #endif /* CATFILEDEBUG */
 
-PUBLIC OSErr Executor::ROMlib_cleancache(HVCB *vcbp)
+OSErr Executor::ROMlib_cleancache(HVCB *vcbp)
 {
     INTEGER i;
     cachehead *headp;
@@ -538,7 +538,7 @@ PUBLIC OSErr Executor::ROMlib_cleancache(HVCB *vcbp)
     return err;
 }
 
-PUBLIC OSErr Executor::ROMlib_flushcachevcbp(HVCB *vcbp)
+OSErr Executor::ROMlib_flushcachevcbp(HVCB *vcbp)
 {
     INTEGER i;
     cachehead *headp;
@@ -574,7 +574,7 @@ PUBLIC OSErr Executor::ROMlib_flushcachevcbp(HVCB *vcbp)
  * first and last node have the CACHEBUSY bit set.
  */
 
-PUBLIC OSErr Executor::ROMlib_keyfind(btparam *btpb)
+OSErr Executor::ROMlib_keyfind(btparam *btpb)
 {
     cacheentry *cachep;
     OSErr err;
@@ -645,7 +645,7 @@ PUBLIC OSErr Executor::ROMlib_keyfind(btparam *btpb)
  *       computation..
  */
 
-PUBLIC OSErr Executor::ROMlib_btnext(anykey **nextpp, anykey *keyp, HVCB *vcbp)
+OSErr Executor::ROMlib_btnext(anykey **nextpp, anykey *keyp, HVCB *vcbp)
 {
     cacheentry *cachep;
     btnode *btp;
@@ -685,8 +685,7 @@ PUBLIC OSErr Executor::ROMlib_btnext(anykey **nextpp, anykey *keyp, HVCB *vcbp)
  * index at the end of a node.
  */
 
-PRIVATE OSErr MapBitSetOrClr(cacheentry *block0cachep, LONGINT bit,
-                             BOOLEAN set)
+static OSErr MapBitSetOrClr(cacheentry *block0cachep, LONGINT bit, BOOLEAN set)
 {
     INTEGER refnum;
     btblock0 *block0p;
@@ -750,7 +749,7 @@ enum
     MAP_PAGE_MAP_END = 0x1FA
 };
 
-PRIVATE OSErr add_free_nodes(cacheentry *block0cachep, ULONGINT n_new_nodes)
+static OSErr add_free_nodes(cacheentry *block0cachep, ULONGINT n_new_nodes)
 {
     btblock0 *block0p;
     LONGINT first_free_node;
@@ -823,7 +822,7 @@ PRIVATE OSErr add_free_nodes(cacheentry *block0cachep, ULONGINT n_new_nodes)
     return noErr;
 }
 
-PRIVATE ULONGINT findfirstzero(unsigned char *cp)
+static ULONGINT findfirstzero(unsigned char *cp)
 {
     ULONGINT retval;
     unsigned char c, bit;
@@ -837,8 +836,8 @@ PRIVATE ULONGINT findfirstzero(unsigned char *cp)
     return retval;
 }
 
-PRIVATE OSErr MapFindFirstBitAndSet(cacheentry *block0cachep,
-                                    ULONGINT *newblockpbit)
+static OSErr MapFindFirstBitAndSet(cacheentry *block0cachep,
+                                   ULONGINT *newblockpbit)
 {
     INTEGER refnum;
     btblock0 *block0p;
@@ -899,7 +898,7 @@ PRIVATE OSErr MapFindFirstBitAndSet(cacheentry *block0cachep,
     return noErr;
 }
 
-PRIVATE OSErr deletenode(cacheentry *todeletep)
+static OSErr deletenode(cacheentry *todeletep)
 {
     cacheentry *block0cachep, *linkcachep;
     btblock0 *block0p;
@@ -979,7 +978,7 @@ typedef enum { leavealone,
  *       left.  If you find a bug here, look for a corresponding one below.
  */
 
-PRIVATE OSErr merge(cacheentry *leftp, cacheentry *rightp)
+static OSErr merge(cacheentry *leftp, cacheentry *rightp)
 {
     INTEGER n, nrecs, datasize, i;
     btnode *leftbtp, *rightbtp;
@@ -1021,7 +1020,7 @@ PRIVATE OSErr merge(cacheentry *leftp, cacheentry *rightp)
     return retval;
 }
 
-PRIVATE OSErr shuffle(cacheentry *leftp, cacheentry *rightp)
+static OSErr shuffle(cacheentry *leftp, cacheentry *rightp)
 {
     btnode *leftbtp, *rightbtp;
     INTEGER leftfreesize, rightfreesize, numtocopy, n, recsize,
@@ -1133,7 +1132,7 @@ PRIVATE OSErr shuffle(cacheentry *leftp, cacheentry *rightp)
     return noErr;
 }
 
-PRIVATE OSErr btsetkey(cacheentry *cachep, INTEGER index, anykey *srckeyp)
+static OSErr btsetkey(cacheentry *cachep, INTEGER index, anykey *srckeyp)
 {
     anykey *dstkeyp;
 
@@ -1157,8 +1156,9 @@ PRIVATE OSErr btsetkey(cacheentry *cachep, INTEGER index, anykey *srckeyp)
     return noErr;
 }
 
-PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
-                      cacheentry *parentcachep, INTEGER parentindex, INTEGER *todeletep)
+static OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
+                     cacheentry *parentcachep, INTEGER parentindex,
+                     INTEGER *todeletep)
 {
     cacheentry *leftcachep = NULL, *rightcachep = NULL;
     btnode *btp, *parentbtp, *leftbtp, *rightbtp;
@@ -1358,7 +1358,7 @@ PRIVATE OSErr pullout(cacheentry *selfcachep, INTEGER selfindex,
     return err;
 }
 
-PRIVATE OSErr maketrailentrybusy(trailentry *tep, uint16_t refnum)
+static OSErr maketrailentrybusy(trailentry *tep, uint16_t refnum)
 {
     OSErr err;
     GUEST<HVCB *> SWvcbp;
@@ -1375,7 +1375,7 @@ PRIVATE OSErr maketrailentrybusy(trailentry *tep, uint16_t refnum)
     return err;
 }
 
-PRIVATE OSErr btlegitimize(btparam *btpb)
+static OSErr btlegitimize(btparam *btpb)
 {
     OSErr err;
 
@@ -1387,7 +1387,7 @@ PRIVATE OSErr btlegitimize(btparam *btpb)
     return err;
 }
 
-PRIVATE OSErr deleteroot(cacheentry *oldrootp, cacheentry *block0cachep)
+static OSErr deleteroot(cacheentry *oldrootp, cacheentry *block0cachep)
 {
     btblock0 *block0p;
     OSErr err;
@@ -1404,7 +1404,7 @@ PRIVATE OSErr deleteroot(cacheentry *oldrootp, cacheentry *block0cachep)
     return err;
 }
 
-PRIVATE OSErr btdeletetree(cacheentry *block0cachep, cacheentry *leafcachep)
+static OSErr btdeletetree(cacheentry *block0cachep, cacheentry *leafcachep)
 {
     OSErr err;
     btblock0 *block0p;
@@ -1425,7 +1425,7 @@ PRIVATE OSErr btdeletetree(cacheentry *block0cachep, cacheentry *leafcachep)
     return err;
 }
 
-PRIVATE OSErr updatenumentries(cacheentry *block0cachep, INTEGER adjust)
+static OSErr updatenumentries(cacheentry *block0cachep, INTEGER adjust)
 {
     btblock0 *block0p;
 
@@ -1437,7 +1437,7 @@ PRIVATE OSErr updatenumentries(cacheentry *block0cachep, INTEGER adjust)
     return noErr;
 }
 
-PUBLIC OSErr Executor::ROMlib_btdelete(btparam *btpb)
+OSErr Executor::ROMlib_btdelete(btparam *btpb)
 {
     OSErr err;
     trailentry *tep;
@@ -1580,8 +1580,8 @@ PUBLIC OSErr Executor::ROMlib_btdelete(btparam *btpb)
     return err;
 }
 
-PUBLIC OSErr Executor::ROMlib_makecatparam(btparam *btpb, HVCB *vcbp, LONGINT dirid,
-                                           INTEGER namelen, Ptr namep)
+OSErr Executor::ROMlib_makecatparam(btparam *btpb, HVCB *vcbp, LONGINT dirid,
+                                    INTEGER namelen, Ptr namep)
 {
     OSErr retval;
 
@@ -1594,7 +1594,7 @@ PUBLIC OSErr Executor::ROMlib_makecatparam(btparam *btpb, HVCB *vcbp, LONGINT di
     return retval;
 }
 
-PUBLIC OSErr Executor::ROMlib_dirtyleaf(void *p, HVCB *vcbp)
+OSErr Executor::ROMlib_dirtyleaf(void *p, HVCB *vcbp)
 {
     OSErr err;
     cacheentry *cachep;
@@ -1618,7 +1618,7 @@ PUBLIC OSErr Executor::ROMlib_dirtyleaf(void *p, HVCB *vcbp)
     return err;
 }
 
-PRIVATE OSErr valenceadjust(btparam *btpb, INTEGER toadjust, filekind kind)
+static OSErr valenceadjust(btparam *btpb, INTEGER toadjust, filekind kind)
 {
     OSErr err;
     GUEST<LONGINT> *countadj;
@@ -1701,7 +1701,7 @@ PRIVATE OSErr valenceadjust(btparam *btpb, INTEGER toadjust, filekind kind)
  * ROMlib_filedelete calls ROMlib_btdelete but adjusts valences (is called by ROMlib_dirdelete)
  */
 
-PUBLIC OSErr Executor::ROMlib_filedelete(btparam *btpb, filekind kind)
+OSErr Executor::ROMlib_filedelete(btparam *btpb, filekind kind)
 {
     OSErr err;
 
@@ -1716,7 +1716,7 @@ PUBLIC OSErr Executor::ROMlib_filedelete(btparam *btpb, filekind kind)
  * ROMlib_dirdelete calls ROMlib_filedelete but also deletes the thread record
  */
 
-PUBLIC OSErr Executor::ROMlib_dirdelete(btparam *btpb)
+OSErr Executor::ROMlib_dirdelete(btparam *btpb)
 {
     OSErr err;
     directoryrec *drp;
@@ -1742,7 +1742,7 @@ typedef struct
     ULONGINT logbno;
 } saverec_t;
 
-PRIVATE OSErr savebusybuffers(HVCB *vcbp, GUEST<saverec_t *> **savehandlep)
+static OSErr savebusybuffers(HVCB *vcbp, GUEST<saverec_t *> **savehandlep)
 {
     INTEGER count;
     cacheentry *cachep;
@@ -1779,7 +1779,7 @@ PRIVATE OSErr savebusybuffers(HVCB *vcbp, GUEST<saverec_t *> **savehandlep)
     return noErr;
 }
 
-PRIVATE OSErr restorebusybuffers(GUEST<saverec_t *> *savehandle)
+static OSErr restorebusybuffers(GUEST<saverec_t *> *savehandle)
 {
     INTEGER nentries;
     saverec_t *savep;
@@ -1801,7 +1801,7 @@ PRIVATE OSErr restorebusybuffers(GUEST<saverec_t *> *savehandle)
     return retval;
 }
 
-PRIVATE OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
+static OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
 {
     OSErr err, err1;
     cacheentry *newcachep;
@@ -1887,7 +1887,7 @@ PRIVATE OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
     return err;
 }
 
-PRIVATE OSErr getnewnode(cacheentry **newcachepp, cacheentry *leftp)
+static OSErr getnewnode(cacheentry **newcachepp, cacheentry *leftp)
 {
     cacheentry *newcachep, *block0cachep, *linkcachep;
     btblock0 *block0p;
@@ -1956,8 +1956,8 @@ PRIVATE OSErr getnewnode(cacheentry **newcachepp, cacheentry *leftp)
  *       the computation.
  */
 
-PRIVATE OSErr slipin(cacheentry *cachep, INTEGER after, anykey *keyp,
-                     char *data, INTEGER datasize, cacheentry **cachepp)
+static OSErr slipin(cacheentry *cachep, INTEGER after, anykey *keyp,
+                    char *data, INTEGER datasize, cacheentry **cachepp)
 {
     INTEGER sizeneeded, nrecs, keysize, freesize, offsetsize, noffsets, i;
     INTEGER newfirst, sizeused, shim;
@@ -2079,8 +2079,8 @@ PRIVATE OSErr slipin(cacheentry *cachep, INTEGER after, anykey *keyp,
     return err;
 }
 
-PRIVATE OSErr makenewroot(cacheentry *leftp, cacheentry *rightp,
-                          cacheentry *block0cachep)
+static OSErr makenewroot(cacheentry *leftp, cacheentry *rightp,
+                         cacheentry *block0cachep)
 {
     OSErr err;
     btblock0 *block0p;
@@ -2152,7 +2152,7 @@ PRIVATE OSErr makenewroot(cacheentry *leftp, cacheentry *rightp,
 
 /* TODO: makefirstentry should create just one leaf node! */
 
-PRIVATE OSErr makefirstentry(btparam *btpb, char *datap, INTEGER datasize)
+static OSErr makefirstentry(btparam *btpb, char *datap, INTEGER datasize)
 {
     OSErr err;
     cacheentry *block0cachep, *leafp;
@@ -2200,7 +2200,7 @@ PRIVATE OSErr makefirstentry(btparam *btpb, char *datap, INTEGER datasize)
     return noErr;
 }
 
-PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
+static OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
 {
     OSErr err;
     trailentry *tep;
@@ -2346,7 +2346,8 @@ PRIVATE OSErr btcreate(btparam *btpb, void *datap, INTEGER datasize)
     return err;
 }
 
-PRIVATE void makethreadrec(threadrec *recp, GUEST<LONGINT> SWparid, StringPtr namep)
+static void makethreadrec(threadrec *recp, GUEST<LONGINT> SWparid,
+                          StringPtr namep)
 {
     memset(recp, 0, sizeof(*recp));
     recp->cdrType = THREADTYPE;
@@ -2359,7 +2360,7 @@ PRIVATE void makethreadrec(threadrec *recp, GUEST<LONGINT> SWparid, StringPtr na
  * NOTE: ROMlib_filecreate IS used to create directories as well (see ROMlib_dircreate below)
  */
 
-PUBLIC OSErr Executor::ROMlib_filecreate(btparam *btpb, void *data, filekind kind)
+OSErr Executor::ROMlib_filecreate(btparam *btpb, void *data, filekind kind)
 {
     OSErr err;
     INTEGER datasize;
@@ -2376,7 +2377,7 @@ PUBLIC OSErr Executor::ROMlib_filecreate(btparam *btpb, void *data, filekind kin
  * ROMlib_dircreate calls ROMlib_filecreate but also creates a thread record
  */
 
-PUBLIC OSErr Executor::ROMlib_dircreate(btparam *btpb, directoryrec *data)
+OSErr Executor::ROMlib_dircreate(btparam *btpb, directoryrec *data)
 {
     OSErr err;
     threadrec rec;
@@ -2395,7 +2396,8 @@ PUBLIC OSErr Executor::ROMlib_dircreate(btparam *btpb, directoryrec *data)
     return err;
 }
 
-PUBLIC xtntkey *Executor::ROMlib_newextentrecord(filecontrolblock *fcbp, uint16_t newabn)
+xtntkey *Executor::ROMlib_newextentrecord(
+    filecontrolblock *fcbp, uint16_t newabn)
 {
     xtntrec rec;
     HVCB *vcbp;
@@ -2422,7 +2424,7 @@ PUBLIC xtntkey *Executor::ROMlib_newextentrecord(filecontrolblock *fcbp, uint16_
     return (xtntkey *)btparamrec.foundp;
 }
 
-PUBLIC OSErr Executor::ROMlib_btrename(btparam *btpb, StringPtr newnamep)
+OSErr Executor::ROMlib_btrename(btparam *btpb, StringPtr newnamep)
 {
     btparam newbtparam;
     OSErr err;
@@ -2504,7 +2506,7 @@ enum
     STARTFLAGS = 0
 };
 
-PUBLIC OSErr Executor::ROMlib_btcreateemptyfile(btparam *btpb)
+OSErr Executor::ROMlib_btcreateemptyfile(btparam *btpb)
 {
     OSErr err;
     filerec rec;
@@ -2526,7 +2528,7 @@ PUBLIC OSErr Executor::ROMlib_btcreateemptyfile(btparam *btpb)
     return err;
 }
 
-PUBLIC OSErr Executor::ROMlib_btcreateemptydir(btparam *btpb, GUEST<LONGINT> *newidp)
+OSErr Executor::ROMlib_btcreateemptydir(btparam *btpb, GUEST<LONGINT> *newidp)
 {
     directoryrec rec;
     HVCB *vcbp;
@@ -2549,8 +2551,9 @@ PUBLIC OSErr Executor::ROMlib_btcreateemptydir(btparam *btpb, GUEST<LONGINT> *ne
  * NOTE: ROMlib_getcache clears the ROMlib_index_cached flag
  */
 
-PUBLIC OSErr Executor::ROMlib_btpbindex(IOParam *pb, LONGINT dirid, HVCB **vcbpp,
-                                        filerec **frpp, catkey **catkeypp, BOOLEAN filesonly)
+OSErr Executor::ROMlib_btpbindex(IOParam *pb, LONGINT dirid, HVCB **vcbpp,
+                                 filerec **frpp, catkey **catkeypp,
+                                 BOOLEAN filesonly)
 {
     IOParam newpb;
     btparam btparamrec;

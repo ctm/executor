@@ -51,12 +51,12 @@ typedef enum { NO,
                YES } boolean;
 #endif
 
-PRIVATE DPSContext DPSGetCurrentContext(void)
+static DPSContext DPSGetCurrentContext(void)
 {
     return 0;
 }
 
-PRIVATE void DPSPrintf(DPSContext unused, const char *format, ...)
+static void DPSPrintf(DPSContext unused, const char *format, ...)
 {
     va_list ap;
 
@@ -66,178 +66,178 @@ PRIVATE void DPSPrintf(DPSContext unused, const char *format, ...)
     va_end(ap);
 }
 
-PRIVATE void DPSWritePostScript(DPSContext unused, Ptr bufp, int n)
+static void DPSWritePostScript(DPSContext unused, Ptr bufp, int n)
 {
     if(ROMlib_printfile)
         fwrite(bufp, n, 1, ROMlib_printfile);
 }
 
-PRIVATE void PSFontDirectory(void)
+static void PSFontDirectory(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "FontDirectory\n");
 }
 
-PRIVATE void PSarc(float x, float y, float radius, float angle1, float angle2)
+static void PSarc(float x, float y, float radius, float angle1, float angle2)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%f %f %f %f %f arc\n",
                 x, y, radius, angle1, angle2);
 }
 
-PRIVATE void PSarcn(float x, float y, float radius, float angle1, float angle2)
+static void PSarcn(float x, float y, float radius, float angle1, float angle2)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%f %f %f %f %f arcn\n",
                 x, y, radius, angle1, angle2);
 }
 
-PRIVATE void PSarct(float x1, float y1, float x2, float y2, float radius)
+static void PSarct(float x1, float y1, float x2, float y2, float radius)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%f %f %f %f %f arcto pop pop pop pop\n",
                 x1, y1, x2, y2, radius);
 }
 
-PRIVATE void PSbegin(void)
+static void PSbegin(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "begin\n");
 }
 
-PRIVATE void PSclip(void)
+static void PSclip(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "clip\n");
 }
 
-PRIVATE void PSclippath(void)
+static void PSclippath(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "clippath\n");
 }
 
-PRIVATE void PSclosepath(void)
+static void PSclosepath(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "closepath\n");
 }
 
-PRIVATE void PScurrentdict(void)
+static void PScurrentdict(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "currentdict\n");
 }
 
-PRIVATE void PSdefinefont(void)
+static void PSdefinefont(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "definefont\n");
 }
 
-PRIVATE void PSdiv(void)
+static void PSdiv(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "div\n");
 }
 
-PRIVATE void PSdup(void)
+static void PSdup(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "dup\n");
 }
 
-PRIVATE void PSend(void)
+static void PSend(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "end\n");
 }
 
-PRIVATE void PSexch(void)
+static void PSexch(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "exch\n");
 }
 
-PRIVATE void PSfill(void)
+static void PSfill(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "fill\n");
 }
 
-PRIVATE void PSget(void)
+static void PSget(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "get\n");
 }
 
-PRIVATE void PSgrestore(void)
+static void PSgrestore(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "grestore\n");
 }
 
-PRIVATE void PSgsave(void)
+static void PSgsave(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "gsave\n");
 }
 
-PRIVATE void PSimage(void)
+static void PSimage(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "image\n");
 }
 
-PRIVATE void PScolorimage(void)
+static void PScolorimage(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "colorimage\n");
 }
 
-PRIVATE void PSimagemask(void)
+static void PSimagemask(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "imagemask\n");
 }
 
-PRIVATE void PSindex(int n)
+static void PSindex(int n)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%d index\n", n);
 }
 
-PRIVATE void PSlineto(float x, float y)
+static void PSlineto(float x, float y)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%f %f lineto\n", x, y);
 }
 
-PRIVATE void PSmoveto(float x, float y)
+static void PSmoveto(float x, float y)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%f %f moveto\n", x, y);
 }
 
-PRIVATE void PSmul(void)
+static void PSmul(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "mul\n");
 }
 
-PRIVATE void PSnewpath(void)
+static void PSnewpath(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "newpath\n");
 }
 
-PRIVATE void PSpop(void)
+static void PSpop(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "pop\n");
 }
 
-PRIVATE void PSrectclip(float x, float y, float width, float height)
+static void PSrectclip(float x, float y, float width, float height)
 {
     if(ROMlib_printfile)
     {
@@ -258,37 +258,37 @@ PRIVATE void PSrectclip(float x, float y, float width, float height)
     }
 }
 
-PRIVATE void PSrlineto(float x, float y)
+static void PSrlineto(float x, float y)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%f %f rlineto\n", x, y);
 }
 
-PRIVATE void PSroll(int n, int j)
+static void PSroll(int n, int j)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%d %d roll\n", n, j);
 }
 
-PRIVATE void PSrotate(float angle)
+static void PSrotate(float angle)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%f rotate\n", angle);
 }
 
-PRIVATE void PSscale(float sx, float sy)
+static void PSscale(float sx, float sy)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%f %f scale\n", sx, sy);
 }
 
-PRIVATE void PSsendboolean(Executor::Boolean flag)
+static void PSsendboolean(Executor::Boolean flag)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%s\n", flag ? "true" : "false");
 }
 
-PRIVATE void output_quoted_character(unsigned char c)
+static void output_quoted_character(unsigned char c)
 {
     if(isprint(c))
     {
@@ -309,7 +309,7 @@ PRIVATE void output_quoted_character(unsigned char c)
         fprintf(ROMlib_printfile, "\\%03o", c);
 }
 
-PRIVATE void PSsendchararray(const char *stringp, int size)
+static void PSsendchararray(const char *stringp, int size)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "(");
@@ -319,13 +319,13 @@ PRIVATE void PSsendchararray(const char *stringp, int size)
         fprintf(ROMlib_printfile, ")\n");
 }
 
-PRIVATE void PSsendfloat(float value)
+static void PSsendfloat(float value)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%f\n", value);
 }
 
-PRIVATE void PSsendfloatarray(const float *arrayp, int size)
+static void PSsendfloatarray(const float *arrayp, int size)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "[\n");
@@ -337,31 +337,31 @@ PRIVATE void PSsendfloatarray(const float *arrayp, int size)
         fprintf(ROMlib_printfile, "]\n");
 }
 
-PRIVATE void PSsendint(int value)
+static void PSsendint(int value)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%d\n", value);
 }
 
-PRIVATE void PSsetgray(float num)
+static void PSsetgray(float num)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%f setgray\n", num);
 }
 
-PRIVATE void PSstroke(void)
+static void PSstroke(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "stroke\n");
 }
 
-PRIVATE void PSsub(void)
+static void PSsub(void)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "sub\n");
 }
 
-PRIVATE void PStranslate(float x, float y)
+static void PStranslate(float x, float y)
 {
     if(ROMlib_printfile)
         fprintf(ROMlib_printfile, "%f %f translate\n", x, y);

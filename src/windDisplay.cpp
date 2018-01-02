@@ -16,7 +16,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_SetWTitle(WindowPtr w, StringPtr t)
+void Executor::C_SetWTitle(WindowPtr w, StringPtr t)
 {
     if(!w)
         return;
@@ -33,14 +33,14 @@ PUBLIC pascal trap void Executor::C_SetWTitle(WindowPtr w, StringPtr t)
     }
 }
 
-PUBLIC pascal trap void Executor::C_GetWTitle(WindowPtr w, StringPtr t)
+void Executor::C_GetWTitle(WindowPtr w, StringPtr t)
 {
     if(!w)
         /*-->*/ return;
     str255assign(t, STARH(WINDOW_TITLE(w)));
 }
 
-PUBLIC WindowPeek Executor::ROMlib_firstvisible(WindowPtr w) /* INTERNAL */
+WindowPeek Executor::ROMlib_firstvisible(WindowPtr w) /* INTERNAL */
 {
     WindowPeek wp;
 
@@ -52,7 +52,7 @@ PUBLIC WindowPeek Executor::ROMlib_firstvisible(WindowPtr w) /* INTERNAL */
     return wp;
 }
 
-PUBLIC pascal trap WindowPtr Executor::C_FrontWindow()
+WindowPtr Executor::C_FrontWindow()
 {
     WindowPtr retval;
 
@@ -60,7 +60,7 @@ PUBLIC pascal trap WindowPtr Executor::C_FrontWindow()
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_HiliteWindow(WindowPtr w, BOOLEAN flag)
+void Executor::C_HiliteWindow(WindowPtr w, BOOLEAN flag)
 {
     if(!w)
         return;
@@ -79,7 +79,7 @@ PUBLIC pascal trap void Executor::C_HiliteWindow(WindowPtr w, BOOLEAN flag)
     }
 }
 
-PUBLIC pascal trap void Executor::C_BringToFront(WindowPtr w)
+void Executor::C_BringToFront(WindowPtr w)
 {
     WindowPeek wp;
     RgnHandle hidden;
@@ -117,7 +117,7 @@ PUBLIC pascal trap void Executor::C_BringToFront(WindowPtr w)
     }
 }
 
-PUBLIC pascal trap void Executor::C_SelectWindow(WindowPtr w)
+void Executor::C_SelectWindow(WindowPtr w)
 {
     WindowPtr cactive;
 
@@ -132,7 +132,7 @@ PUBLIC pascal trap void Executor::C_SelectWindow(WindowPtr w)
     HiliteWindow(w, true);
 }
 
-PUBLIC pascal trap void Executor::C_ShowHide(WindowPtr w, BOOLEAN flag)
+void Executor::C_ShowHide(WindowPtr w, BOOLEAN flag)
 {
     if(flag && !WINDOW_VISIBLE_X(w))
     {
@@ -192,7 +192,7 @@ PUBLIC pascal trap void Executor::C_ShowHide(WindowPtr w, BOOLEAN flag)
     }
 }
 
-PUBLIC pascal trap void Executor::C_HideWindow(WindowPtr w)
+void Executor::C_HideWindow(WindowPtr w)
 {
     WindowPeek nextvis;
 
@@ -213,7 +213,7 @@ PUBLIC pascal trap void Executor::C_HideWindow(WindowPtr w)
     }
 }
 
-PUBLIC pascal trap void Executor::C_ShowWindow(WindowPtr w)
+void Executor::C_ShowWindow(WindowPtr w)
 {
     WindowPeek t;
 
@@ -237,7 +237,7 @@ PUBLIC pascal trap void Executor::C_ShowWindow(WindowPtr w)
     }
 }
 
-PUBLIC pascal trap void Executor::C_SendBehind(WindowPtr w, WindowPtr behind)
+void Executor::C_SendBehind(WindowPtr w, WindowPtr behind)
 {
     GUEST<WindowPeek> *wpp;
     WindowPeek oldfront, newfront, oldbehind;
@@ -315,7 +315,7 @@ PUBLIC pascal trap void Executor::C_SendBehind(WindowPtr w, WindowPtr behind)
 #endif /* 0 */
 }
 
-PUBLIC pascal trap void Executor::C_DrawGrowIcon(WindowPtr w)
+void Executor::C_DrawGrowIcon(WindowPtr w)
 {
     if(!ROMlib_emptyvis && WINDOW_VISIBLE(w))
     {

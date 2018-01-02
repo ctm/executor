@@ -15,7 +15,7 @@ using namespace Executor;
  * TODO: use this working directory stuff in ROMlib
  */
 
-PUBLIC OSErr Executor::ROMlib_dirbusy(LONGINT dirid, HVCB *vcbp)
+OSErr Executor::ROMlib_dirbusy(LONGINT dirid, HVCB *vcbp)
 {
 #if defined(MAC)
     wdentry *wdp, *ewdp;
@@ -30,7 +30,8 @@ PUBLIC OSErr Executor::ROMlib_dirbusy(LONGINT dirid, HVCB *vcbp)
 #endif
 }
 
-PUBLIC OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid, LONGINT procid)
+OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid,
+                            LONGINT procid)
 {
     wdentry *wdp, *ewdp, *firstfreep;
     OSErr retval;
@@ -84,7 +85,7 @@ PUBLIC OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid, LONGIN
     return retval;
 }
 
-PUBLIC OSErr Executor::hfsPBOpenWD(WDPBPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBOpenWD(WDPBPtr pb, BOOLEAN async)
 {
     LONGINT dirid;
     OSErr retval;
@@ -112,7 +113,7 @@ PUBLIC OSErr Executor::hfsPBOpenWD(WDPBPtr pb, BOOLEAN async)
     PBRETURN(pb, retval);
 }
 
-PUBLIC OSErr Executor::hfsPBCloseWD(WDPBPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBCloseWD(WDPBPtr pb, BOOLEAN async)
 {
     wdentry *wdp;
     OSErr retval;
@@ -129,7 +130,7 @@ PUBLIC OSErr Executor::hfsPBCloseWD(WDPBPtr pb, BOOLEAN async)
     PBRETURN(pb, retval);
 }
 
-PUBLIC OSErr Executor::hfsPBGetWDInfo(WDPBPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBGetWDInfo(WDPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
     wdentry *wdp, *ewdp;
@@ -221,7 +222,7 @@ Executor::GetWDInfo(INTEGER wd, GUEST<INTEGER> *vrefp, GUEST<LONGINT> *dirp, GUE
     return retval;
 }
 
-PUBLIC void Executor::ROMlib_adjustdirid(LONGINT *diridp, HVCB *vcbp, INTEGER vrefnum)
+void Executor::ROMlib_adjustdirid(LONGINT *diridp, HVCB *vcbp, INTEGER vrefnum)
 {
     wdentry *wdp;
 

@@ -14,7 +14,7 @@ using namespace Executor;
 typedef enum { catGet,
                catSet } catop;
 
-PRIVATE OSErr cathelper(CInfoPBPtr pb, BOOLEAN async, catop op)
+static OSErr cathelper(CInfoPBPtr pb, BOOLEAN async, catop op)
 {
     filekind kind;
     filerec *frp;
@@ -188,7 +188,7 @@ done:
     PBRETURN((IOParam *)pb, err);
 }
 
-PUBLIC OSErr Executor::hfsPBGetCatInfo(CInfoPBPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBGetCatInfo(CInfoPBPtr pb, BOOLEAN async)
 {
     OSErr err;
     err = cathelper(pb, async, catGet);
@@ -196,7 +196,7 @@ PUBLIC OSErr Executor::hfsPBGetCatInfo(CInfoPBPtr pb, BOOLEAN async)
     return err;
 }
 
-PUBLIC OSErr Executor::hfsPBSetCatInfo(CInfoPBPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBSetCatInfo(CInfoPBPtr pb, BOOLEAN async)
 {
     OSErr err;
     err = cathelper(pb, async, catSet);
@@ -204,8 +204,9 @@ PUBLIC OSErr Executor::hfsPBSetCatInfo(CInfoPBPtr pb, BOOLEAN async)
     return err;
 }
 
-PRIVATE OSErr parentchild(HVCB *vcbp, catkey *parentcatp,
-                          directoryrec *parentdirp, catkey *childcatp, directoryrec *childdirp)
+static OSErr parentchild(HVCB *vcbp, catkey *parentcatp,
+                         directoryrec *parentdirp, catkey *childcatp,
+                         directoryrec *childdirp)
 {
     OSErr err;
     LONGINT parid, newid;
@@ -245,7 +246,7 @@ PRIVATE OSErr parentchild(HVCB *vcbp, catkey *parentcatp,
     return err;
 }
 
-PUBLIC OSErr Executor::hfsPBCatMove(CMovePBPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBCatMove(CMovePBPtr pb, BOOLEAN async)
 {
     OSErr err, err1;
     filekind srccurkind, dstcurkind;

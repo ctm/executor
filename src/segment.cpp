@@ -64,12 +64,12 @@ using namespace Executor;
 
 PUBLIC int Executor::ROMlib_cacheheuristic = false;
 
-PUBLIC void Executor::flushcache()
+void Executor::flushcache()
 {
     ROMlib_destroy_blocks((syn68k_addr_t)0, (uint32_t)~0, true);
 }
 
-PUBLIC trap void Executor::HWPriv(LONGINT d0, LONGINT a0)
+void Executor::HWPriv(LONGINT d0, LONGINT a0)
 {
     static char d_cache_enabled = true, i_cache_enabled = true;
     int new_state;
@@ -116,7 +116,7 @@ PUBLIC trap void Executor::HWPriv(LONGINT d0, LONGINT a0)
     }
 }
 
-PUBLIC char *Executor::ROMlib_undotdot(char *origp)
+char *Executor::ROMlib_undotdot(char *origp)
 {
     int dotcount, nleft;
     char *p, *oldloc;
@@ -170,7 +170,7 @@ PUBLIC char *Executor::ROMlib_undotdot(char *origp)
     return origp;
 }
 
-PRIVATE void lastcomponent(StringPtr dest, StringPtr src)
+static void lastcomponent(StringPtr dest, StringPtr src)
 {
     unsigned char *c, *lastcolon;
     int n;
@@ -309,10 +309,10 @@ colon_colon_copy(StringPtr dst, const char *src)
         retval;                                                         \
     })
 
-PRIVATE BOOLEAN argv_to_appfile(char *, AppFile *);
-PUBLIC void ROMlib_seginit(LONGINT, char **); /* INTERNAL */
+static BOOLEAN argv_to_appfile(char *, AppFile *);
+void ROMlib_seginit(LONGINT, char **); /* INTERNAL */
 
-PRIVATE BOOLEAN argv_to_appfile(char *uname, AppFile *ap)
+static BOOLEAN argv_to_appfile(char *uname, AppFile *ap)
 {
     int namelen, pathlen;
     unsigned char *path, *p;
@@ -442,7 +442,7 @@ PUBLIC int Executor::ROMlib_print;
 #define PATH_SEPARATER ';'
 #endif
 
-PUBLIC void Executor::ROMlib_seginit(LONGINT argc, char **argv) /* INTERNAL */
+void Executor::ROMlib_seginit(LONGINT argc, char **argv) /* INTERNAL */
 {
     char *path, *firstcolon;
     char *fullpathname;
@@ -559,7 +559,8 @@ PUBLIC void Executor::ROMlib_seginit(LONGINT argc, char **argv) /* INTERNAL */
         }
 }
 
-PUBLIC void Executor::CountAppFiles(GUEST<INTEGER> *messagep, GUEST<INTEGER> *countp) /* IMII-57 */
+void Executor::CountAppFiles(GUEST<INTEGER> *messagep,
+                             GUEST<INTEGER> *countp) /* IMII-57 */
 {
     if(AppParmHandle)
     {
@@ -572,12 +573,12 @@ PUBLIC void Executor::CountAppFiles(GUEST<INTEGER> *messagep, GUEST<INTEGER> *co
         *countp = 0;
 }
 
-PUBLIC void Executor::GetAppFiles(INTEGER index, AppFile *filep) /* IMII-58 */
+void Executor::GetAppFiles(INTEGER index, AppFile *filep) /* IMII-58 */
 {
     *filep = STARH((finderinfohand)MR(AppParmHandle))->files[index - 1];
 }
 
-PUBLIC void Executor::ClrAppFiles(INTEGER index) /* IMII-58 */
+void Executor::ClrAppFiles(INTEGER index) /* IMII-58 */
 {
     if(STARH((finderinfohand)MR(AppParmHandle))->files[index - 1].fType)
     {
@@ -586,8 +587,8 @@ PUBLIC void Executor::ClrAppFiles(INTEGER index) /* IMII-58 */
     }
 }
 
-PUBLIC pascal trap void Executor::C_GetAppParms(StringPtr namep, /* IMII-58 */
-                                                GUEST<INTEGER> *rnp, GUEST<Handle> *aphandp)
+void Executor::C_GetAppParms(StringPtr namep, GUEST<INTEGER> *rnp,
+                             GUEST<Handle> *aphandp) /* IMII-58 */
 {
     str255assign(namep, CurApName);
     *rnp = CurApRefNum;
@@ -599,7 +600,7 @@ PUBLIC char ROMlib_exit = 0;
 
 PUBLIC int Executor::ROMlib_nobrowser = 0;
 
-PRIVATE BOOLEAN valid_browser(void)
+static BOOLEAN valid_browser(void)
 {
     OSErr err;
     FInfo finfo;
@@ -608,7 +609,7 @@ PRIVATE BOOLEAN valid_browser(void)
     return !ROMlib_nobrowser && err == noErr && finfo.fdType == TICKX("APPL");
 }
 
-PRIVATE void launch_browser(void)
+static void launch_browser(void)
 {
     /* Set the depth to what was specified on the command line;
    * if nothing was specified there, set the depth to the maximum
@@ -622,7 +623,7 @@ PRIVATE void launch_browser(void)
     Launch(FinderName, CW(BootDrive));
 }
 
-PUBLIC pascal trap void Executor::C_ExitToShell()
+void Executor::C_ExitToShell()
 {
     static char beenhere = false;
     ALLOCABEGIN
@@ -765,7 +766,7 @@ PUBLIC pascal trap void Executor::C_ExitToShell()
 
 #if !defined(BINCOMPAT)
 
-PUBLIC pascal trap void Executor::C_UnloadSeg(Ptr addr) /* INTERNAL */
+void Executor::C_UnloadSeg(Ptr addr) /* INTERNAL */
 {
     /* NOP */
 }
@@ -776,7 +777,7 @@ PUBLIC pascal trap void Executor::C_UnloadSeg(Ptr addr) /* INTERNAL */
 #define MOVESPINSTR 0x3F3C
 #define LOADSEGTRAP 0xA9F0
 
-PUBLIC pascal trap void Executor::C_LoadSeg(INTEGER volatile segno)
+void Executor::C_LoadSeg(INTEGER volatile segno)
 {
     Handle newcode;
     unsigned short offbytes;
@@ -823,7 +824,7 @@ PUBLIC pascal trap void Executor::C_LoadSeg(INTEGER volatile segno)
 
 #define SEGNOOFP(p) (CW(((GUEST<INTEGER> *)p)[-1]))
 
-PRIVATE void unpatch(Ptr segstart, Ptr p)
+static void unpatch(Ptr segstart, Ptr p)
 {
     GUEST<INTEGER> *ip;
     Ptr firstpc;
@@ -837,7 +838,7 @@ PRIVATE void unpatch(Ptr segstart, Ptr p)
     ip[2] = CWC(LOADSEGTRAP);
 }
 
-PUBLIC pascal trap void Executor::C_UnloadSeg(Ptr addr)
+void Executor::C_UnloadSeg(Ptr addr)
 {
     Ptr p, segstart;
     char *top, *bottom;

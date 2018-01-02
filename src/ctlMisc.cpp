@@ -115,19 +115,17 @@ Executor::lookup_aux_ctl(ControlHandle ctl)
     return t;
 }
 
-PUBLIC pascal trap void Executor::C_SetCRefCon(ControlHandle c, /* IMI-327 */
-                                               LONGINT data)
+void Executor::C_SetCRefCon(ControlHandle c, LONGINT data) /* IMI-327 */
 {
     HxX(c, contrlRfCon) = CL(data);
 }
 
-PUBLIC pascal trap LONGINT Executor::C_GetCRefCon(ControlHandle c) /* IMI-327 */
+LONGINT Executor::C_GetCRefCon(ControlHandle c) /* IMI-327 */
 {
     return Hx(c, contrlRfCon);
 }
 
-PUBLIC pascal trap void Executor::C_SetCtlAction(ControlHandle c, /* IMI-328 */
-                                                 ProcPtr a)
+void Executor::C_SetCtlAction(ControlHandle c, ProcPtr a) /* IMI-328 */
 {
     if(a != (ProcPtr)-1)
         HxX(c, contrlAction) = RM(a);
@@ -135,12 +133,12 @@ PUBLIC pascal trap void Executor::C_SetCtlAction(ControlHandle c, /* IMI-328 */
         HxX(c, contrlAction) = guest_cast<ProcPtr>(CLC(-1));
 }
 
-PUBLIC pascal trap ProcPtr Executor::C_GetCtlAction(ControlHandle c) /* IMI-328 */
+ProcPtr Executor::C_GetCtlAction(ControlHandle c) /* IMI-328 */
 {
     return HxP(c, contrlAction);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_GetCVariant(ControlHandle c) /* IMV-222 */
+INTEGER Executor::C_GetCVariant(ControlHandle c) /* IMV-222 */
 {
     AuxCtlHandle h;
 
@@ -152,8 +150,8 @@ PUBLIC pascal trap INTEGER Executor::C_GetCVariant(ControlHandle c) /* IMV-222 *
 /* according to IM-MTE; this has been renamed
    `GetAuxiliaryControlRecord ()', possibly because of the
    inconsistency below, i can only assume they have the same trap word */
-PUBLIC pascal trap BOOLEAN Executor::C_GetAuxCtl(ControlHandle ctl, /* IMV-222 */
-                                                 GUEST<AuxCtlHandle> *aux_ctl)
+BOOLEAN Executor::C_GetAuxCtl(ControlHandle ctl,
+                              GUEST<AuxCtlHandle> *aux_ctl) /* IMV-222 */
 {
     /* according to testing on the Mac+
      `GetAuxCtl ()' returns false (not true) and leaves

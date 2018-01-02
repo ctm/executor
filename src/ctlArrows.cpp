@@ -488,7 +488,8 @@ void draw_thumb(ControlHandle ctl)
     }
 }
 
-PUBLIC pascal void Executor::C_new_draw_scroll(INTEGER depth, INTEGER flags, GDHandle target, LONGINT l)
+void Executor::C_new_draw_scroll(INTEGER depth, INTEGER flags, GDHandle target,
+                                 LONGINT l)
 {
     device_loop_param *dlp;
     ControlHandle ctl;
@@ -569,7 +570,8 @@ where(ControlHandle ctl, Point p)
     }
 }
 
-PUBLIC pascal void Executor::C_new_pos_ctl(INTEGER depth, INTEGER flags, GDHandle target, LONGINT l)
+void Executor::C_new_pos_ctl(INTEGER depth, INTEGER flags, GDHandle target,
+                             LONGINT l)
 {
     device_loop_param *dlp;
     ControlHandle ctl;
@@ -680,8 +682,8 @@ restore(const save_t *sp)
     DisposHandle((Handle)PPR(sp->cp.portPixMap));
 }
 
-PUBLIC pascal LONGINT Executor::C_cdef16(/* IMI-328 */
-                                         INTEGER var, ControlHandle c, INTEGER mess, LONGINT param)
+LONGINT Executor::C_cdef16(INTEGER var, ControlHandle c, INTEGER mess,
+                           LONGINT param) /* IMI-328 */
 {
     Point p;
     PenState ps;

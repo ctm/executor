@@ -68,32 +68,35 @@ printstate_t Executor::printstate;
 LONGINT Executor::pagewanted = 0;
 PRIVATE int lastpagewanted = 0;
 
-PUBLIC pascal trap void Executor::C_donotPrArc(GrafVerb verb, Rect *r, INTEGER starta, INTEGER arca)
+void Executor::C_donotPrArc(GrafVerb verb, Rect *r, INTEGER starta,
+                            INTEGER arca)
 {
 }
 
-PUBLIC pascal trap void Executor::C_PrArc(GrafVerb verb, Rect *r, INTEGER starta, INTEGER arca)
+void Executor::C_PrArc(GrafVerb verb, Rect *r, INTEGER starta, INTEGER arca)
 {
     if(pageno >= pagewanted && pageno <= lastpagewanted)
         NeXTPrArc(verb, r, starta, arca, thePort);
 }
 
-PUBLIC pascal trap void Executor::C_donotPrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp, INTEGER mode, RgnHandle mask)
+void Executor::C_donotPrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp,
+                             INTEGER mode, RgnHandle mask)
 {
 }
 
-PUBLIC pascal trap void Executor::C_PrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp, INTEGER mode, RgnHandle mask)
+void Executor::C_PrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp, INTEGER mode,
+                        RgnHandle mask)
 {
     if(pageno >= pagewanted && pageno <= lastpagewanted)
         NeXTPrBits(srcbmp, srcrp, dstrp,
                    mode, mask, thePort);
 }
 
-PUBLIC pascal trap void Executor::C_donotPrLine(Point p)
+void Executor::C_donotPrLine(Point p)
 {
 }
 
-PUBLIC pascal trap void Executor::C_PrLine(Point p)
+void Executor::C_PrLine(Point p)
 {
     if(pageno >= pagewanted && pageno <= lastpagewanted)
     {
@@ -105,17 +108,17 @@ PUBLIC pascal trap void Executor::C_PrLine(Point p)
     }
 }
 
-PUBLIC pascal trap void Executor::C_donotPrOval(GrafVerb v, Rect *rp)
+void Executor::C_donotPrOval(GrafVerb v, Rect *rp)
 {
 }
 
-PUBLIC pascal trap void Executor::C_PrOval(GrafVerb v, Rect *rp)
+void Executor::C_PrOval(GrafVerb v, Rect *rp)
 {
     if(pageno >= pagewanted && pageno <= lastpagewanted)
         NeXTPrOval(v, rp, thePort);
 }
 
-PUBLIC pascal trap void Executor::C_textasPS(INTEGER n, Ptr textbufp, Point num, Point den)
+void Executor::C_textasPS(INTEGER n, Ptr textbufp, Point num, Point den)
 {
 #if 1
     if(pageno >= pagewanted && pageno <= lastpagewanted)
@@ -130,80 +133,82 @@ PUBLIC pascal trap void Executor::C_textasPS(INTEGER n, Ptr textbufp, Point num,
 #endif
 }
 
-PUBLIC pascal trap void Executor::C_donotPrGetPic(Ptr dp, INTEGER bc)
+void Executor::C_donotPrGetPic(Ptr dp, INTEGER bc)
 {
     gui_abort();
 }
 
-PUBLIC pascal trap void Executor::C_PrGetPic(Ptr dp, INTEGER bc)
+void Executor::C_PrGetPic(Ptr dp, INTEGER bc)
 {
     gui_abort();
     if(pageno >= pagewanted && pageno <= lastpagewanted)
         NeXTPrGetPic(dp, bc, thePort);
 }
 
-PUBLIC pascal trap void Executor::C_donotPrPutPic(Ptr sp, INTEGER bc)
+void Executor::C_donotPrPutPic(Ptr sp, INTEGER bc)
 {
 }
 
-PUBLIC pascal trap void Executor::C_PrPutPic(Ptr sp, INTEGER bc)
+void Executor::C_PrPutPic(Ptr sp, INTEGER bc)
 {
     if(pageno >= pagewanted && pageno <= lastpagewanted)
         NeXTPrPutPic(sp, bc, thePort);
 }
 
-PUBLIC pascal trap void Executor::C_donotPrPoly(GrafVerb verb, PolyHandle ph)
+void Executor::C_donotPrPoly(GrafVerb verb, PolyHandle ph)
 {
 }
 
-PUBLIC pascal trap void Executor::C_PrPoly(GrafVerb verb, PolyHandle ph)
+void Executor::C_PrPoly(GrafVerb verb, PolyHandle ph)
 {
     if(pageno >= pagewanted && pageno <= lastpagewanted)
         NeXTPrPoly(verb, ph, thePort);
 }
 
-PUBLIC pascal trap void Executor::C_donotPrRRect(GrafVerb verb, Rect *r, INTEGER width, INTEGER height)
+void Executor::C_donotPrRRect(GrafVerb verb, Rect *r, INTEGER width,
+                              INTEGER height)
 {
 }
 
-PUBLIC pascal trap void Executor::C_PrRRect(GrafVerb verb, Rect *r, INTEGER width, INTEGER height)
+void Executor::C_PrRRect(GrafVerb verb, Rect *r, INTEGER width, INTEGER height)
 {
     if(pageno >= pagewanted && pageno <= lastpagewanted)
         NeXTPrRRect(verb, r, width, height, thePort);
 }
 
-PUBLIC pascal trap void Executor::C_donotPrRect(GrafVerb v, Rect *rp)
+void Executor::C_donotPrRect(GrafVerb v, Rect *rp)
 {
 }
 
-PUBLIC pascal trap void Executor::C_PrRect(GrafVerb v, Rect *rp)
+void Executor::C_PrRect(GrafVerb v, Rect *rp)
 {
     if(pageno >= pagewanted && pageno <= lastpagewanted)
         NeXTPrRect(v, rp, thePort);
 }
 
-PUBLIC pascal trap void Executor::C_donotPrRgn(GrafVerb verb, RgnHandle rgn)
+void Executor::C_donotPrRgn(GrafVerb verb, RgnHandle rgn)
 {
 }
 
-PUBLIC pascal trap void Executor::C_PrRgn(GrafVerb verb, RgnHandle rgn)
+void Executor::C_PrRgn(GrafVerb verb, RgnHandle rgn)
 {
     if(pageno >= pagewanted && pageno <= lastpagewanted)
         NeXTPrRgn(verb, rgn, thePort);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_PrTxMeas(INTEGER n, Ptr p, GUEST<Point> *nump, GUEST<Point> *denp, FontInfo *finfop)
+INTEGER Executor::C_PrTxMeas(INTEGER n, Ptr p, GUEST<Point> *nump,
+                             GUEST<Point> *denp, FontInfo *finfop)
 {
     StdTxMeas(n, p, nump, denp, finfop);
     return NeXTPrTxMeas(n, p, nump, denp,
                         finfop, thePort);
 }
 
-PUBLIC pascal trap void Executor::C_donotPrText(INTEGER n, Ptr textbufp, Point num, Point den)
+void Executor::C_donotPrText(INTEGER n, Ptr textbufp, Point num, Point den)
 {
 }
 
-PUBLIC pascal trap void Executor::C_PrText(INTEGER n, Ptr textbufp, Point num, Point den)
+void Executor::C_PrText(INTEGER n, Ptr textbufp, Point num, Point den)
 {
     if(pageno >= pagewanted && pageno <= lastpagewanted)
     {
@@ -215,7 +220,7 @@ PRIVATE QDProcs prprocs;
 PRIVATE QDProcs sendpsprocs;
 PRIVATE bool need_restore;
 
-PUBLIC pascal trap void Executor::C_PrComment(INTEGER kind, INTEGER size, Handle hand)
+void Executor::C_PrComment(INTEGER kind, INTEGER size, Handle hand)
 {
     SignedByte state;
     GUEST<INTEGER> *ip;
@@ -486,7 +491,7 @@ Executor::ROMlib_acknowledge_job_dialog(THPrint thprint)
 #endif
 }
 
-PUBLIC pascal trap TPPrPort Executor::C_PrOpenDoc(THPrint hPrint, TPPrPort port, Ptr pIOBuf)
+TPPrPort Executor::C_PrOpenDoc(THPrint hPrint, TPPrPort port, Ptr pIOBuf)
 {
     call_job_dialog_if_needed(hPrint);
     if(port)
@@ -554,7 +559,7 @@ PUBLIC pascal trap TPPrPort Executor::C_PrOpenDoc(THPrint hPrint, TPPrPort port,
     return port;
 }
 
-PUBLIC pascal trap void Executor::C_PrOpenPage(TPPrPort port, TPRect pPageFrame)
+void Executor::C_PrOpenPage(TPPrPort port, TPRect pPageFrame)
 {
     ++pageno;
     ourinit(port, true);
@@ -576,7 +581,7 @@ PUBLIC pascal trap void Executor::C_PrOpenPage(TPPrPort port, TPRect pPageFrame)
     page_is_open = true;
 }
 
-PUBLIC pascal trap void Executor::C_PrClosePage(TPPrPort pPrPort)
+void Executor::C_PrClosePage(TPPrPort pPrPort)
 {
     if(page_is_open)
     {
@@ -649,7 +654,7 @@ invoke_print_batch_file(const char *filename, ini_key_t printer, ini_key_t port)
 }
 #endif
 
-PUBLIC pascal trap void Executor::C_PrCloseDoc(TPPrPort port)
+void Executor::C_PrCloseDoc(TPPrPort port)
 {
 #if !defined(MACOSX_)
     if(ROMlib_printfile)
@@ -723,7 +728,8 @@ PUBLIC pascal trap void Executor::C_PrCloseDoc(TPPrPort port)
     }
 }
 
-PUBLIC pascal trap void Executor::C_PrPicFile(THPrint hPrint, TPPrPort pPrPort, Ptr pIOBuf, Ptr pDevBuf, TPrStatus *prStatus) /* TODO */
+void Executor::C_PrPicFile(THPrint hPrint, TPPrPort pPrPort, Ptr pIOBuf,
+                           Ptr pDevBuf, TPrStatus *prStatus) /* TODO */
 {
     warning_unimplemented(NULL_STRING);
 }

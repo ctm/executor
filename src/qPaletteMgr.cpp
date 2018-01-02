@@ -201,7 +201,7 @@ int window_p(WindowPtr w)
     return false;
 }
 
-PUBLIC pascal trap INTEGER Executor::C_PMgrVersion()
+INTEGER Executor::C_PMgrVersion()
 {
     return 0x200; /* original 32-bit QD system */
 #if 0
@@ -599,7 +599,7 @@ pm_do_updates_gd_changed(void)
 
 static WindowPtr cached_front_window = NULL;
 
-PUBLIC pascal trap void Executor::C_ActivatePalette(WindowPtr src_window)
+void Executor::C_ActivatePalette(WindowPtr src_window)
 {
     pm_resource_holder_t *holders;
     PaletteHandle palette;
@@ -706,7 +706,7 @@ PUBLIC pascal trap void Executor::C_ActivatePalette(WindowPtr src_window)
         PALETTE_SEED_X(palette) = CTAB_SEED_X(gd_ctab);
 }
 
-PUBLIC pascal trap void Executor::C_RestoreClutDevice(GDHandle gd)
+void Executor::C_RestoreClutDevice(GDHandle gd)
 {
     bool gd_ctab_changed_p = false;
     pm_resource_holder_t *holders;
@@ -771,7 +771,7 @@ PUBLIC pascal trap void Executor::C_RestoreClutDevice(GDHandle gd)
         pm_do_updates_gd_changed();
 }
 
-PUBLIC pascal trap void Executor::C_InitPalettes()
+void Executor::C_InitPalettes()
 {
     ColorInfo *default_palette_info;
     PaletteHandle default_palette;
@@ -836,7 +836,8 @@ PUBLIC pascal trap void Executor::C_InitPalettes()
     free_list = NULL;
 }
 
-PUBLIC pascal trap PaletteHandle Executor::C_NewPalette(INTEGER entries, CTabHandle src_colors, INTEGER src_usage, INTEGER src_tolerance)
+PaletteHandle Executor::C_NewPalette(INTEGER entries, CTabHandle src_colors,
+                                     INTEGER src_usage, INTEGER src_tolerance)
 {
     PaletteHandle new_palette;
     ColorInfo *info;
@@ -878,7 +879,7 @@ PUBLIC pascal trap PaletteHandle Executor::C_NewPalette(INTEGER entries, CTabHan
     return new_palette;
 }
 
-PUBLIC pascal trap PaletteHandle Executor::C_GetNewPalette(INTEGER id)
+PaletteHandle Executor::C_GetNewPalette(INTEGER id)
 {
     /* since the resource for a palette is identical to the layout
      of a palette, the type of the palette resource is
@@ -963,7 +964,7 @@ void Executor::pm_window_closed(WindowPtr w)
     }
 }
 
-PUBLIC pascal trap void Executor::C_DisposePalette(PaletteHandle palette)
+void Executor::C_DisposePalette(PaletteHandle palette)
 {
     int i;
 
@@ -1011,7 +1012,7 @@ PUBLIC pascal trap void Executor::C_DisposePalette(PaletteHandle palette)
     DisposHandle((Handle)palette);
 }
 
-PUBLIC pascal trap void Executor::C_ResizePalette(PaletteHandle palette, INTEGER new_size)
+void Executor::C_ResizePalette(PaletteHandle palette, INTEGER new_size)
 {
     ColorInfo *entries;
     int old_size;
@@ -1125,30 +1126,32 @@ set_palette_common(WindowPtr dst_window, PaletteHandle src_palette,
         ActivatePalette(dst_window);
 }
 
-PUBLIC pascal trap void Executor::C_SetPalette(WindowPtr dst_window, PaletteHandle src_palette, BOOLEAN c_update)
+void Executor::C_SetPalette(WindowPtr dst_window, PaletteHandle src_palette,
+                            BOOLEAN c_update)
 {
     set_palette_common(dst_window, src_palette,
                        c_update ? pmAllUpdates : pmNoUpdates);
 }
 
-PUBLIC pascal trap void Executor::C_NSetPalette(WindowPtr dst_window, PaletteHandle src_palette, INTEGER nc_update)
+void Executor::C_NSetPalette(WindowPtr dst_window, PaletteHandle src_palette,
+                             INTEGER nc_update)
 {
     set_palette_common(dst_window, src_palette,
                        (pmUpdates)(nc_update & 0xff ? pmAllUpdates : nc_update));
 }
 
-PUBLIC pascal trap void Executor::C_SetPaletteUpdates(PaletteHandle palette, INTEGER update)
+void Executor::C_SetPaletteUpdates(PaletteHandle palette, INTEGER update)
 {
     PALETTE_PRIVATE_X(palette).raw_and(~PALETTE_UPDATE_FLAG_BITS_X);
     PALETTE_PRIVATE_X(palette).raw_or(CW(update));
 }
 
-PUBLIC pascal trap INTEGER Executor::C_GetPaletteUpdates(PaletteHandle palette)
+INTEGER Executor::C_GetPaletteUpdates(PaletteHandle palette)
 {
     return PALETTE_PRIVATE(palette) & PALETTE_UPDATE_FLAG_BITS;
 }
 
-PUBLIC pascal trap PaletteHandle Executor::C_GetPalette(WindowPtr src_window)
+PaletteHandle Executor::C_GetPalette(WindowPtr src_window)
 {
     window_palette_alist_t elt;
 
@@ -1207,13 +1210,13 @@ PUBLIC pascal trap PaletteHandle Executor::C_GetPalette(WindowPtr src_window)
             warning_unexpected("unknown usage type");                                  \
     }
 
-PUBLIC pascal trap void Executor::C_PmForeColor(INTEGER entry)
+void Executor::C_PmForeColor(INTEGER entry)
 {
     pm_xxx_color(PORT_FG_COLOR_X, CPORT_RGB_FG_COLOR, RGBForeColor,
                  (int)entry);
 }
 
-PUBLIC pascal trap void Executor::C_PmBackColor(INTEGER entry)
+void Executor::C_PmBackColor(INTEGER entry)
 {
     pm_xxx_color(PORT_BK_COLOR_X, CPORT_RGB_BK_COLOR, RGBBackColor,
                  (int)entry);
@@ -1225,7 +1228,7 @@ enum
     usePM = 1
 };
 
-PUBLIC pascal trap void Executor::C_SaveFore(ColorSpec *cp)
+void Executor::C_SaveFore(ColorSpec *cp)
 {
     warning_unimplemented("always uses RGB");
 
@@ -1233,7 +1236,7 @@ PUBLIC pascal trap void Executor::C_SaveFore(ColorSpec *cp)
     cp->value = CWC(useRGB);
 }
 
-PUBLIC pascal trap void Executor::C_RestoreFore(ColorSpec *cp)
+void Executor::C_RestoreFore(ColorSpec *cp)
 {
     switch(CW(cp->value))
     {
@@ -1251,7 +1254,7 @@ PUBLIC pascal trap void Executor::C_RestoreFore(ColorSpec *cp)
     }
 }
 
-PUBLIC pascal trap void Executor::C_SaveBack(ColorSpec *cp)
+void Executor::C_SaveBack(ColorSpec *cp)
 {
     warning_unimplemented("always uses RGB");
 
@@ -1259,7 +1262,7 @@ PUBLIC pascal trap void Executor::C_SaveBack(ColorSpec *cp)
     cp->value = CWC(useRGB);
 }
 
-PUBLIC pascal trap void Executor::C_RestoreBack(ColorSpec *cp)
+void Executor::C_RestoreBack(ColorSpec *cp)
 {
     switch(CW(cp->value))
     {
@@ -1279,7 +1282,8 @@ PUBLIC pascal trap void Executor::C_RestoreBack(ColorSpec *cp)
 
 static int update_host_colors_p = true;
 
-PUBLIC pascal trap void Executor::C_AnimateEntry(WindowPtr dst_window, INTEGER dst_entry, RGBColor *src_rgb_color)
+void Executor::C_AnimateEntry(WindowPtr dst_window, INTEGER dst_entry,
+                              RGBColor *src_rgb_color)
 {
     PalettePtr palette;
     PaletteHandle dst_palette_h;
@@ -1332,7 +1336,9 @@ PUBLIC pascal trap void Executor::C_AnimateEntry(WindowPtr dst_window, INTEGER d
     }
 }
 
-PUBLIC pascal trap void Executor::C_AnimatePalette(WindowPtr dst_window, CTabHandle src_ctab, INTEGER src_index, INTEGER dst_entry, INTEGER dst_length)
+void Executor::C_AnimatePalette(WindowPtr dst_window, CTabHandle src_ctab,
+                                INTEGER src_index, INTEGER dst_entry,
+                                INTEGER dst_length)
 {
     PaletteHandle dst_window_palette_h;
     PalettePtr palette;
@@ -1368,7 +1374,8 @@ PUBLIC pascal trap void Executor::C_AnimatePalette(WindowPtr dst_window, CTabHan
     }
 }
 
-PUBLIC pascal trap void Executor::C_GetEntryColor(PaletteHandle src_palette, INTEGER entry_index, RGBColor *dst_rgb_color)
+void Executor::C_GetEntryColor(PaletteHandle src_palette, INTEGER entry_index,
+                               RGBColor *dst_rgb_color)
 {
     ColorInfo *entry;
 
@@ -1376,7 +1383,8 @@ PUBLIC pascal trap void Executor::C_GetEntryColor(PaletteHandle src_palette, INT
     *dst_rgb_color = entry->ciRGB;
 }
 
-PUBLIC pascal trap void Executor::C_SetEntryColor(PaletteHandle dst_palette, INTEGER entry_index, RGBColor *src_rgb_color)
+void Executor::C_SetEntryColor(PaletteHandle dst_palette, INTEGER entry_index,
+                               RGBColor *src_rgb_color)
 {
     ColorInfo *entry;
 
@@ -1393,7 +1401,9 @@ PUBLIC pascal trap void Executor::C_SetEntryColor(PaletteHandle dst_palette, INT
     PALETTE_SET_MODIFIED(dst_palette);
 }
 
-PUBLIC pascal trap void Executor::C_GetEntryUsage(PaletteHandle src_palette, INTEGER entry_index, GUEST<INTEGER> *dst_usage, GUEST<INTEGER> *dst_tolerance)
+void Executor::C_GetEntryUsage(PaletteHandle src_palette, INTEGER entry_index,
+                               GUEST<INTEGER> *dst_usage,
+                               GUEST<INTEGER> *dst_tolerance)
 {
     ColorInfo *entry;
 
@@ -1402,7 +1412,8 @@ PUBLIC pascal trap void Executor::C_GetEntryUsage(PaletteHandle src_palette, INT
     *dst_tolerance = entry->ciTolerance;
 }
 
-PUBLIC pascal trap void Executor::C_SetEntryUsage(PaletteHandle dst_palette, INTEGER entry_index, INTEGER src_usage, INTEGER src_tolerance)
+void Executor::C_SetEntryUsage(PaletteHandle dst_palette, INTEGER entry_index,
+                               INTEGER src_usage, INTEGER src_tolerance)
 {
     ColorInfo *entry;
 
@@ -1421,7 +1432,8 @@ PUBLIC pascal trap void Executor::C_SetEntryUsage(PaletteHandle dst_palette, INT
     PALETTE_SET_MODIFIED(dst_palette);
 }
 
-PUBLIC pascal trap void Executor::C_CTab2Palette(CTabHandle src_ctab, PaletteHandle dst_palette, INTEGER src_usage, INTEGER src_tolerance)
+void Executor::C_CTab2Palette(CTabHandle src_ctab, PaletteHandle dst_palette,
+                              INTEGER src_usage, INTEGER src_tolerance)
 {
     int ctab_size;
     ColorSpec *ctab_table;
@@ -1457,7 +1469,7 @@ PUBLIC pascal trap void Executor::C_CTab2Palette(CTabHandle src_ctab, PaletteHan
     PALETTE_SET_MODIFIED(dst_palette);
 }
 
-PUBLIC pascal trap void Executor::C_Palette2CTab(PaletteHandle src_palette, CTabHandle dst_ctab)
+void Executor::C_Palette2CTab(PaletteHandle src_palette, CTabHandle dst_ctab)
 {
     int palette_entries;
     ColorInfo *palette_info;
@@ -1487,7 +1499,7 @@ PUBLIC pascal trap void Executor::C_Palette2CTab(PaletteHandle src_palette, CTab
     }
 }
 
-PUBLIC pascal trap LONGINT Executor::C_Entry2Index(INTEGER entry_index)
+LONGINT Executor::C_Entry2Index(INTEGER entry_index)
 {
     PaletteHandle palette;
     ColorInfo *entry;
@@ -1522,7 +1534,9 @@ PUBLIC pascal trap LONGINT Executor::C_Entry2Index(INTEGER entry_index)
         gui_fatal("unhandled entry usage `%d'", CW(entry->ciUsage));
 }
 
-PUBLIC pascal trap void Executor::C_CopyPalette(PaletteHandle src_palette, PaletteHandle dst_palette, int16_t src_start, int16_t dst_start, int16_t n_entries)
+void Executor::C_CopyPalette(PaletteHandle src_palette,
+                             PaletteHandle dst_palette, int16_t src_start,
+                             int16_t dst_start, int16_t n_entries)
 {
     int src_n_entries, dst_n_entries;
     ColorInfo *src_info, *dst_info;

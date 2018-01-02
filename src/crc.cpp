@@ -44,7 +44,7 @@ long polydivide(long l)
     return l;
 }
 
-PUBLIC unsigned short Executor::ROMlib_crcccitt(unsigned char *data, long length)
+unsigned short Executor::ROMlib_crcccitt(unsigned char *data, long length)
 {
     unsigned long l;
 

@@ -14,8 +14,8 @@ using namespace Executor;
 
 #define STEF_lActivefix
 
-PUBLIC void Executor::ROMlib_vminmax(INTEGER *minp, /* INTERNAL */
-                                     INTEGER *maxp, ListPtr lp)
+void Executor::ROMlib_vminmax(INTEGER *minp, INTEGER *maxp,
+                              ListPtr lp) /* INTERNAL */
 {
     *minp = CW(lp->dataBounds.top);
     *maxp = *minp + CW(lp->dataBounds.bottom) - CW(lp->visible.bottom) + CW(lp->visible.top);
@@ -23,8 +23,8 @@ PUBLIC void Executor::ROMlib_vminmax(INTEGER *minp, /* INTERNAL */
         ++*maxp;
 }
 
-PUBLIC void Executor::ROMlib_hminmax(INTEGER *minp, /* INTERNAL */
-                                     INTEGER *maxp, ListPtr lp)
+void Executor::ROMlib_hminmax(INTEGER *minp, INTEGER *maxp,
+                              ListPtr lp) /* INTERNAL */
 {
     *minp = CW(lp->dataBounds.left);
     *maxp = *minp + CW(lp->dataBounds.right) - CW(lp->visible.right) + CW(lp->visible.left);
@@ -95,8 +95,10 @@ check_lists(void)
  * when people were thinking about having the scroll bars within "rview".
  */
 
-PUBLIC pascal trap ListHandle Executor::C_LNew(Rect *rview, /* IMIV-270 */
-                                               Rect *bounds, Point csize, INTEGER proc, WindowPtr wind, BOOLEAN draw, BOOLEAN grow, BOOLEAN scrollh, BOOLEAN scrollv)
+ListHandle Executor::C_LNew(Rect *rview, Rect *bounds, Point csize,
+                            INTEGER proc, WindowPtr wind, BOOLEAN draw,
+                            BOOLEAN grow, BOOLEAN scrollh,
+                            BOOLEAN scrollv) /* IMIV-270 */
 {
     ListHandle retval;
     ListPtr lp;
@@ -198,7 +200,7 @@ PUBLIC pascal trap ListHandle Executor::C_LNew(Rect *rview, /* IMIV-270 */
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_LDispose(ListHandle list) /* IMIV-271 */
+void Executor::C_LDispose(ListHandle list) /* IMIV-271 */
 {
     if(list)
     {

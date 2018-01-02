@@ -10,7 +10,8 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_SetRect(Rect *r, INTEGER left, INTEGER top, INTEGER right, INTEGER bottom)
+void Executor::C_SetRect(Rect *r, INTEGER left, INTEGER top, INTEGER right,
+                         INTEGER bottom)
 {
     r->top = CW(top);
     r->left = CW(left);
@@ -18,7 +19,7 @@ PUBLIC pascal trap void Executor::C_SetRect(Rect *r, INTEGER left, INTEGER top, 
     r->right = CW(right);
 }
 
-PUBLIC pascal trap void Executor::C_OffsetRect(Rect *r, INTEGER dh, INTEGER dv)
+void Executor::C_OffsetRect(Rect *r, INTEGER dh, INTEGER dv)
 {
     SWAPPED_OPW(r->top, +, dv);
     SWAPPED_OPW(r->bottom, +, dv);
@@ -26,7 +27,7 @@ PUBLIC pascal trap void Executor::C_OffsetRect(Rect *r, INTEGER dh, INTEGER dv)
     SWAPPED_OPW(r->right, +, dh);
 }
 
-PUBLIC pascal trap void Executor::C_InsetRect(Rect *r, INTEGER dh, INTEGER dv)
+void Executor::C_InsetRect(Rect *r, INTEGER dh, INTEGER dv)
 {
     SWAPPED_OPW(r->top, +, dv);
     SWAPPED_OPW(r->bottom, -, dv);
@@ -39,7 +40,7 @@ PUBLIC pascal trap void Executor::C_InsetRect(Rect *r, INTEGER dh, INTEGER dv)
 #endif /* INCOMPATIBLEBUTSANE */
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_SectRect(const Rect *s1, const Rect *s2, Rect *dest)
+BOOLEAN Executor::C_SectRect(const Rect *s1, const Rect *s2, Rect *dest)
 {
     if(CW(s1->top) < CW(s2->bottom)
        && CW(s2->top) < CW(s1->bottom)
@@ -59,12 +60,12 @@ PUBLIC pascal trap BOOLEAN Executor::C_SectRect(const Rect *s1, const Rect *s2, 
     }
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_EmptyRect(Rect *r)
+BOOLEAN Executor::C_EmptyRect(Rect *r)
 {
     return (CW(r->top) >= CW(r->bottom) || CW(r->left) >= CW(r->right));
 }
 
-PUBLIC pascal trap void Executor::C_UnionRect(Rect *s1, Rect *s2, Rect *dest)
+void Executor::C_UnionRect(Rect *s1, Rect *s2, Rect *dest)
 {
     if(EmptyRect(s1))
         *dest = *s2;
@@ -79,7 +80,7 @@ PUBLIC pascal trap void Executor::C_UnionRect(Rect *s1, Rect *s2, Rect *dest)
     }
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_PtInRect(Point p, Rect *r)
+BOOLEAN Executor::C_PtInRect(Point p, Rect *r)
 {
     BOOLEAN retval;
 
@@ -90,7 +91,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_PtInRect(Point p, Rect *r)
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_Pt2Rect(Point p1, Point p2, Rect *dest)
+void Executor::C_Pt2Rect(Point p1, Point p2, Rect *dest)
 {
     dest->top = CW(MIN(p1.v, p2.v));
     dest->left = CW(MIN(p1.h, p2.h));
@@ -98,7 +99,7 @@ PUBLIC pascal trap void Executor::C_Pt2Rect(Point p1, Point p2, Rect *dest)
     dest->right = CW(MAX(p1.h, p2.h));
 }
 
-PUBLIC pascal trap void Executor::C_PtToAngle(Rect *rp, Point p, GUEST<INTEGER> *angle)
+void Executor::C_PtToAngle(Rect *rp, Point p, GUEST<INTEGER> *angle)
 {
     int a, dx, dy;
 
@@ -132,7 +133,7 @@ PUBLIC pascal trap void Executor::C_PtToAngle(Rect *rp, Point p, GUEST<INTEGER> 
     *angle = CW(a);
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_EqualRect(const Rect *r1, const Rect *r2)
+BOOLEAN Executor::C_EqualRect(const Rect *r1, const Rect *r2)
 {
     return RECT_EQUAL_P(r1, r2);
 }

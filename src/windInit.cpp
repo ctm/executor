@@ -56,7 +56,7 @@ PRIVATE std::string reinstall = "System and %System";
 PRIVATE char *reinstall = "EXSYSTEM.HFV";
 #endif
 
-PUBLIC pascal trap void Executor::C_InitWindows()
+void Executor::C_InitWindows()
 {
     PatHandle ph;
     PixPatHandle new_ph;
@@ -272,17 +272,17 @@ Executor may die without warning because of this mismatch",
     }
 }
 
-PUBLIC pascal trap void Executor::C_GetWMgrPort(GUEST<GrafPtr> *wp)
+void Executor::C_GetWMgrPort(GUEST<GrafPtr> *wp)
 {
     *wp = WMgrPort;
 }
 
-PUBLIC pascal trap void Executor::C_GetCWMgrPort(GUEST<CGrafPtr> *wp)
+void Executor::C_GetCWMgrPort(GUEST<CGrafPtr> *wp)
 {
     *wp = WMgrCPort;
 }
 
-PUBLIC pascal trap void Executor::C_SetDeskCPat(PixPatHandle ph)
+void Executor::C_SetDeskCPat(PixPatHandle ph)
 {
     PatHandle bw_ph;
 
@@ -447,7 +447,10 @@ ROMlib_new_window_common(WindowPeek w,
     SetPort(save_port);
 }
 
-PUBLIC pascal trap WindowPtr Executor::C_NewWindow(Ptr window_storage, Rect *bounds, StringPtr title, BOOLEAN visible_p, INTEGER proc_id, WindowPtr behind, BOOLEAN go_away_flag, LONGINT ref_con)
+WindowPtr Executor::C_NewWindow(Ptr window_storage, Rect *bounds,
+                                StringPtr title, BOOLEAN visible_p,
+                                INTEGER proc_id, WindowPtr behind,
+                                BOOLEAN go_away_flag, LONGINT ref_con)
 {
     WindowPeek w;
     int allocated_p = 0;
@@ -488,7 +491,10 @@ PUBLIC pascal trap WindowPtr Executor::C_NewWindow(Ptr window_storage, Rect *bou
     return (WindowPtr)w;
 }
 
-PUBLIC pascal trap CWindowPtr Executor::C_NewCWindow(Ptr window_storage, Rect *bounds, StringPtr title, BOOLEAN visible_p, INTEGER proc_id, CWindowPtr behind, BOOLEAN go_away_flag, LONGINT ref_con)
+CWindowPtr Executor::C_NewCWindow(Ptr window_storage, Rect *bounds,
+                                  StringPtr title, BOOLEAN visible_p,
+                                  INTEGER proc_id, CWindowPtr behind,
+                                  BOOLEAN go_away_flag, LONGINT ref_con)
 {
     WindowPeek w;
     int allocated_p = 0;
@@ -512,7 +518,8 @@ typedef windrestype *windrestypeptr;
 
 typedef GUEST<windrestypeptr> *windrestypehand;
 
-PUBLIC pascal trap CWindowPtr Executor::C_GetNewCWindow(INTEGER window_id, Ptr window_storage, CWindowPtr behind)
+CWindowPtr Executor::C_GetNewCWindow(INTEGER window_id, Ptr window_storage,
+                                     CWindowPtr behind)
 {
 
     CWindowPtr new_cwin;
@@ -548,7 +555,7 @@ PUBLIC pascal trap CWindowPtr Executor::C_GetNewCWindow(INTEGER window_id, Ptr w
     return new_cwin;
 }
 
-PUBLIC pascal trap WindowPtr Executor::C_GetNewWindow(INTEGER wid, Ptr wst, WindowPtr behind)
+WindowPtr Executor::C_GetNewWindow(INTEGER wid, Ptr wst, WindowPtr behind)
 {
     windrestypehand wh;
     WindowPtr tp;
@@ -571,7 +578,7 @@ PUBLIC pascal trap WindowPtr Executor::C_GetNewWindow(INTEGER wid, Ptr wst, Wind
  *		window is non-visible, it will shuffle things.
  */
 
-PUBLIC pascal trap void Executor::C_CloseWindow(WindowPtr w)
+void Executor::C_CloseWindow(WindowPtr w)
 {
     WindowPeek wptmp;
     GrafPtr savgp;
@@ -676,7 +683,7 @@ PUBLIC pascal trap void Executor::C_CloseWindow(WindowPtr w)
     WINDCALL((WindowPtr)w, wDispose, 0);
 }
 
-PUBLIC pascal trap void Executor::C_DisposeWindow(WindowPtr w)
+void Executor::C_DisposeWindow(WindowPtr w)
 {
     CloseWindow(w);
     DisposPtr((Ptr)w);

@@ -12,7 +12,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap LONGINT Executor::C_MaxSizeRsrc(Handle h) /* IMIV-16 */
+LONGINT Executor::C_MaxSizeRsrc(Handle h) /* IMIV-16 */
 {
     resmaphand map;
     typref *tr;
@@ -37,7 +37,7 @@ PUBLIC pascal trap LONGINT Executor::C_MaxSizeRsrc(Handle h) /* IMIV-16 */
         return (GetHandleSize((Handle)MR(rr->rhand)));
 }
 
-PUBLIC pascal trap LONGINT Executor::C_RsrcMapEntry(Handle h) /* IMIV-16 */
+LONGINT Executor::C_RsrcMapEntry(Handle h) /* IMIV-16 */
 {
     resmaphand map;
     typref *tr;
@@ -51,7 +51,7 @@ PUBLIC pascal trap LONGINT Executor::C_RsrcMapEntry(Handle h) /* IMIV-16 */
 
 /* OpenRFPerm is in resOpen.c */
 
-PUBLIC pascal trap Handle Executor::C_RGetResource(ResType typ, INTEGER id)
+Handle Executor::C_RGetResource(ResType typ, INTEGER id)
 {
     return GetResource(typ, id);
 }

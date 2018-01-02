@@ -227,17 +227,17 @@ mbdf_draw(int32_t draw_p)
     RGBBackColor(&ROMlib_white_rgb_color);
 }
 
-PRIVATE LONGINT hit(LONGINT);
-PRIVATE void calc(LONGINT offset);
-PRIVATE void dispose();
-PRIVATE void height();
-PRIVATE Rect *getrect(LONGINT);
-PRIVATE mbdfentry *offtomep(LONGINT);
-PRIVATE void savealt(LONGINT);
-PRIVATE void resetalt(LONGINT);
-PRIVATE RgnHandle menurgn(RgnHandle);
+static LONGINT hit(LONGINT);
+static void calc(LONGINT offset);
+static void dispose();
+static void height();
+static Rect *getrect(LONGINT);
+static mbdfentry *offtomep(LONGINT);
+static void savealt(LONGINT);
+static void resetalt(LONGINT);
+static RgnHandle menurgn(RgnHandle);
 
-PRIVATE LONGINT hit(LONGINT mousept)
+static LONGINT hit(LONGINT mousept)
 {
     Point p;
     muelem *mp, *mpend;
@@ -269,7 +269,7 @@ PRIVATE LONGINT hit(LONGINT mousept)
     }
 }
 
-PRIVATE void calc(LONGINT offset)
+static void calc(LONGINT offset)
 {
     MenuHandle mh;
     INTEGER left, titsize;
@@ -321,7 +321,7 @@ init()
     HxX(MBSAVELOC, lastMBSave) = CWC(0);
 }
 
-PRIVATE void dispose()
+static void dispose()
 {
 }
 
@@ -342,7 +342,7 @@ mbdfhilite(int32_t hilitestate)
     }
 }
 
-PRIVATE void height()
+static void height()
 {
     FontInfo fi;
 
@@ -525,7 +525,7 @@ restore(void)
         = CW(Hx(MBSAVELOC, lastMBSave) - sizeof(mbdfentry));
 }
 
-PRIVATE Rect *getrect(LONGINT offset)
+static Rect *getrect(LONGINT offset)
 {
     INTEGER hiword;
     static Rect r;
@@ -563,7 +563,7 @@ PRIVATE Rect *getrect(LONGINT offset)
     return &r;
 }
 
-PRIVATE mbdfentry *offtomep(LONGINT offset)
+static mbdfentry *offtomep(LONGINT offset)
 {
     mbdfentry *mbdfp, *mbdfep;
 
@@ -574,7 +574,7 @@ PRIVATE mbdfentry *offtomep(LONGINT offset)
     return mbdfp == mbdfep ? 0 : mbdfp;
 }
 
-PRIVATE void savealt(LONGINT offset)
+static void savealt(LONGINT offset)
 {
     mbdfentry *mep;
 
@@ -583,7 +583,7 @@ PRIVATE void savealt(LONGINT offset)
     mep->mbBotScroll = AtMenuBottom;
 }
 
-PRIVATE void resetalt(LONGINT offset)
+static void resetalt(LONGINT offset)
 {
     mbdfentry *mep;
 
@@ -592,7 +592,7 @@ PRIVATE void resetalt(LONGINT offset)
     AtMenuBottom = mep->mbBotScroll;
 }
 
-PRIVATE RgnHandle menurgn(RgnHandle rgn)
+static RgnHandle menurgn(RgnHandle rgn)
 {
     Rect r;
 
@@ -605,7 +605,8 @@ PRIVATE RgnHandle menurgn(RgnHandle rgn)
     return rgn;
 }
 
-PUBLIC pascal int32_t Executor::C_mbdf0(int16_t sel, int16_t mess, int16_t param1, int32_t param2)
+int32_t Executor::C_mbdf0(int16_t sel, int16_t mess, int16_t param1,
+                          int32_t param2)
 {
     int32_t retval;
     GUEST<GrafPtr> saveport;

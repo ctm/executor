@@ -1295,7 +1295,8 @@ color_wheel_notice_lightness_change(void)
 
 /* color picker entry point */
 
-PUBLIC pascal trap BOOLEAN Executor::C_GetColor(Point where, Str255 prompt, RGBColor *in_color, RGBColor *out_color)
+BOOLEAN Executor::C_GetColor(Point where, Str255 prompt, RGBColor *in_color,
+                             RGBColor *out_color)
 {
     PaletteHandle palette;
     bool retval;

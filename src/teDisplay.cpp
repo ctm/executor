@@ -17,7 +17,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_TESetJust(INTEGER j, TEHandle teh)
+void Executor::C_TESetJust(INTEGER j, TEHandle teh)
 {
     TE_SLAM(teh);
     HxX(teh, just) = CW(j);
@@ -25,7 +25,7 @@ PUBLIC pascal trap void Executor::C_TESetJust(INTEGER j, TEHandle teh)
     TE_SLAM(teh);
 }
 
-PUBLIC pascal trap void Executor::C_TEUpdate(Rect *r, TEHandle te)
+void Executor::C_TEUpdate(Rect *r, TEHandle te)
 {
     TE_SLAM(te);
     if(!ROMlib_emptyvis)
@@ -41,7 +41,7 @@ PUBLIC pascal trap void Executor::C_TEUpdate(Rect *r, TEHandle te)
     TE_SLAM(te);
 }
 
-PUBLIC pascal trap void Executor::C_TextBox(Ptr p, int32_t ln, Rect *r, int16_t j)
+void Executor::C_TextBox(Ptr p, int32_t ln, Rect *r, int16_t j)
 {
     TEHandle teh;
     Rect viewrect;
@@ -68,7 +68,7 @@ PUBLIC pascal trap void Executor::C_TextBox(Ptr p, int32_t ln, Rect *r, int16_t 
     TEDispose(teh);
 }
 
-PUBLIC pascal trap void Executor::C_TEScroll(int16_t dh, int16_t dv, TEHandle te)
+void Executor::C_TEScroll(int16_t dh, int16_t dv, TEHandle te)
 {
     RgnHandle rh, save_vis;
     Rect r, vis_rgn_bbox;

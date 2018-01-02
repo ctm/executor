@@ -181,7 +181,7 @@ Executor::ROMlib_xlate(INTEGER virt, INTEGER modifiers, bool down_p)
 
 char ROMlib_started; /* flag used by Mac frontend */
 
-PUBLIC void Executor::ROMlib_eventinit(bool graphics_valid_p) /* INTERNAL */
+void Executor::ROMlib_eventinit(bool graphics_valid_p) /* INTERNAL */
 {
     static int beenhere = 0;
     EvQEl *p, *ep;
@@ -208,13 +208,13 @@ PUBLIC void Executor::ROMlib_eventinit(bool graphics_valid_p) /* INTERNAL */
     }
 }
 
-PRIVATE void dropevent(EvQEl *);
-PRIVATE OSErrRET _PPostEvent(INTEGER evcode,
-                             LONGINT evmsg, GUEST<EvQElPtr> *qelpp);
-PRIVATE BOOLEAN OSEventCommon(INTEGER evmask, EventRecord *eventp,
-                              BOOLEAN dropit);
+static void dropevent(EvQEl *);
+static OSErrRET _PPostEvent(INTEGER evcode, LONGINT evmsg,
+                            GUEST<EvQElPtr> *qelpp);
+static BOOLEAN OSEventCommon(INTEGER evmask, EventRecord *eventp,
+                             BOOLEAN dropit);
 
-PRIVATE void dropevent(EvQEl *qp)
+static void dropevent(EvQEl *qp)
 {
     Dequeue((QElemPtr)qp, &EventQueue);
     qp->qLink = RM((QElemPtr)freeelem);
@@ -253,7 +253,7 @@ Executor::ROMlib_get_index_and_bit(LONGINT loc, int *indexp, uint8 *bitp)
     return retval;
 }
 
-PUBLIC void Executor::ROMlib_zapmap(LONGINT loc, LONGINT val)
+void Executor::ROMlib_zapmap(LONGINT loc, LONGINT val)
 {
     int i;
     uint8 bit;
@@ -281,8 +281,8 @@ key_down(uint8 loc)
     return retval;
 }
 
-PUBLIC trap OSErrRET Executor::PPostEvent(INTEGER evcode, /* IMIV-85 */
-                                          LONGINT evmsg, GUEST<EvQElPtr> *qelp)
+OSErrRET Executor::PPostEvent(INTEGER evcode, LONGINT evmsg,
+                              GUEST<EvQElPtr> *qelp) /* IMIV-85 */
 {
     EvQEl *qp;
     LONGINT tmpticks;
@@ -344,7 +344,8 @@ PUBLIC trap OSErrRET Executor::PPostEvent(INTEGER evcode, /* IMIV-85 */
     return noErr;
 }
 
-PRIVATE OSErrRET _PPostEvent(INTEGER evcode, LONGINT evmsg, GUEST<EvQElPtr> *qelpp)
+static OSErrRET _PPostEvent(INTEGER evcode, LONGINT evmsg,
+                            GUEST<EvQElPtr> *qelpp)
 {
     OSErrRET ret;
     syn68k_addr_t proc;
@@ -371,7 +372,9 @@ PRIVATE OSErrRET _PPostEvent(INTEGER evcode, LONGINT evmsg, GUEST<EvQElPtr> *qel
     return ret;
 }
 
-PUBLIC OSErrRET Executor::ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg, GUEST<EvQElPtr> *qelp, LONGINT when, Point where, INTEGER butmods)
+OSErrRET Executor::ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg,
+                                     GUEST<EvQElPtr> *qelp, LONGINT when,
+                                     Point where, INTEGER butmods)
 {
     MouseLocation2.h = ROMlib_curs.h = CW(where.h);
     MouseLocation2.v = ROMlib_curs.v = CW(where.v);
@@ -380,12 +383,12 @@ PUBLIC OSErrRET Executor::ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg, GUEST
     return _PPostEvent(evcode, evmsg, qelp);
 }
 
-PUBLIC trap OSErrRET Executor::PostEvent(INTEGER evcode, LONGINT evmsg)
+OSErrRET Executor::PostEvent(INTEGER evcode, LONGINT evmsg)
 {
     return _PPostEvent(evcode, evmsg, (GUEST<EvQElPtr> *)0);
 }
 
-PUBLIC trap void Executor::FlushEvents(INTEGER evmask, INTEGER stopmask) /* II-69 */
+void Executor::FlushEvents(INTEGER evmask, INTEGER stopmask) /* II-69 */
 {
     EvQEl *qp, *next;
     int x;
@@ -407,7 +410,8 @@ PUBLIC BOOLEAN Executor::ROMlib_bewaremovement;
 
 PUBLIC int Executor::ROMlib_refresh = 0;
 
-PRIVATE BOOLEAN OSEventCommon(INTEGER evmask, EventRecord *eventp, BOOLEAN dropit)
+static BOOLEAN OSEventCommon(INTEGER evmask, EventRecord *eventp,
+                             BOOLEAN dropit)
 {
     EvQEl *qp;
     virtual_int_state_t block;
@@ -603,22 +607,22 @@ PRIVATE BOOLEAN OSEventCommon(INTEGER evmask, EventRecord *eventp, BOOLEAN dropi
     return retval;
 }
 
-PUBLIC trap BOOLEANRET Executor::GetOSEvent(INTEGER evmask, EventRecord *eventp)
+BOOLEANRET Executor::GetOSEvent(INTEGER evmask, EventRecord *eventp)
 {
     return OSEventCommon(evmask, eventp, true);
 }
 
-PUBLIC trap BOOLEANRET Executor::OSEventAvail(INTEGER evmask, EventRecord *eventp)
+BOOLEANRET Executor::OSEventAvail(INTEGER evmask, EventRecord *eventp)
 {
     return OSEventCommon(evmask, eventp, false);
 }
 
-PUBLIC trap void Executor::SetEventMask(INTEGER evmask)
+void Executor::SetEventMask(INTEGER evmask)
 {
     SysEvtMask = CW(evmask);
 }
 
-PUBLIC QHdrPtr Executor::GetEvQHdr()
+QHdrPtr Executor::GetEvQHdr()
 {
     return &EventQueue;
 }

@@ -13,8 +13,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_SetCTitle(ControlHandle c, /* IMI-321 */
-                                              StringPtr t)
+void Executor::C_SetCTitle(ControlHandle c, StringPtr t) /* IMI-321 */
 {
     if(c)
     {
@@ -30,14 +29,13 @@ PUBLIC pascal trap void Executor::C_SetCTitle(ControlHandle c, /* IMI-321 */
     }
 }
 
-PUBLIC pascal trap void Executor::C_GetCTitle(ControlHandle c, /* IMI-321 */
-                                              StringPtr t)
+void Executor::C_GetCTitle(ControlHandle c, StringPtr t) /* IMI-321 */
 {
     if(c)
         str255assign(t, HxX(c, contrlTitle));
 }
 
-PUBLIC pascal trap void Executor::C_HideControl(ControlHandle c) /* IMI-322 */
+void Executor::C_HideControl(ControlHandle c) /* IMI-322 */
 {
     if(c)
     {
@@ -83,7 +81,7 @@ PUBLIC pascal trap void Executor::C_HideControl(ControlHandle c) /* IMI-322 */
    into ctlDisplay a long time ago, and with no fanfare.  Perhaps
    there is more going on here; I don't know. */
 
-PUBLIC pascal trap void Executor::C_ShowControl(ControlHandle c) /* IMI-322 */
+void Executor::C_ShowControl(ControlHandle c) /* IMI-322 */
 {
     if(c)
     {
@@ -108,8 +106,7 @@ PUBLIC pascal trap void Executor::C_ShowControl(ControlHandle c) /* IMI-322 */
     }
 }
 
-PUBLIC pascal trap void Executor::C_HiliteControl(ControlHandle c, /* IMI-322 */
-                                                  INTEGER state)
+void Executor::C_HiliteControl(ControlHandle c, INTEGER state) /* IMI-322 */
 {
     if(c && *c)
     {
@@ -133,7 +130,7 @@ PUBLIC pascal trap void Executor::C_HiliteControl(ControlHandle c, /* IMI-322 */
     }
 }
 
-PUBLIC pascal trap void Executor::C_DrawControls(WindowPtr w) /* IMI-322 */
+void Executor::C_DrawControls(WindowPtr w) /* IMI-322 */
 {
     ControlHandle c;
 

@@ -85,7 +85,7 @@
 
 #include "paramline.h"
 
-PRIVATE void setstartdir(char *);
+static void setstartdir(char *);
 
 #include <ctype.h>
 
@@ -419,7 +419,8 @@ check_arg(string argname, int *arg, int min, int max)
  *	 It has the side effect of acknowledging the death of other children.
  */
 
-PUBLIC LONGINT Executor::wait4(LONGINT pid, union wait *statusp, LONGINT options, struct rusage *rusage)
+LONGINT Executor::wait4(LONGINT pid, union wait *statusp, LONGINT options,
+                        struct rusage *rusage)
 {
     LONGINT retval;
 
@@ -464,7 +465,7 @@ set_appname(char *argv0)
     ROMlib_appname = p;
 }
 
-PRIVATE void setstartdir(char *argv0)
+static void setstartdir(char *argv0)
 {
 #if !defined(WIN32)
     LONGINT p[2], pid;

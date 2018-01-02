@@ -13,8 +13,8 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_LFind(GUEST<INTEGER> *offsetp, /* IMIV-274 */
-                                          GUEST<INTEGER> *lenp, Cell cell, ListHandle list)
+void Executor::C_LFind(GUEST<INTEGER> *offsetp, GUEST<INTEGER> *lenp,
+                       Cell cell, ListHandle list) /* IMIV-274 */
 {
     GUEST<INTEGER> *ip;
 
@@ -27,8 +27,8 @@ PUBLIC pascal trap void Executor::C_LFind(GUEST<INTEGER> *offsetp, /* IMIV-274 *
         *offsetp = *lenp = CWC(-1);
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_LNextCell(BOOLEAN hnext, /* IMIV-274 */
-                                                 BOOLEAN vnext, GUEST<Cell> *cellp, ListHandle list)
+BOOLEAN Executor::C_LNextCell(BOOLEAN hnext, BOOLEAN vnext, GUEST<Cell> *cellp,
+                              ListHandle list) /* IMIV-274 */
 {
     BOOLEAN retval;
     Point scratch;
@@ -66,8 +66,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_LNextCell(BOOLEAN hnext, /* IMIV-274 */
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_LRect(Rect *cellrect, /* IMIV-274 */
-                                          Cell cell, ListHandle list)
+void Executor::C_LRect(Rect *cellrect, Cell cell, ListHandle list) /* IMIV-274 */
 {
     Point csize;
     INTEGER temp;
@@ -124,8 +123,8 @@ static inline INTEGER Executor::ROMlib_CALLCMP(Ptr p1, Ptr p2, INTEGER l1, INTEG
 
 #endif /* BINCOMPAT */
 
-PUBLIC pascal trap BOOLEAN Executor::C_LSearch(Ptr dp, /* IMIV-274 */
-                                               INTEGER dl, Ptr proc, GUEST<Cell> *cellp, ListHandle list)
+BOOLEAN Executor::C_LSearch(Ptr dp, INTEGER dl, Ptr proc, GUEST<Cell> *cellp,
+                            ListHandle list) /* IMIV-274 */
 {
     GUEST<INTEGER> offS, lenS;
     INTEGER off, len;
@@ -169,8 +168,8 @@ PUBLIC pascal trap BOOLEAN Executor::C_LSearch(Ptr dp, /* IMIV-274 */
         return false;
 }
 
-PUBLIC pascal trap void Executor::C_LSize(INTEGER width, /* IMIV-274 */
-                                          INTEGER height, ListHandle list)
+void Executor::C_LSize(INTEGER width, INTEGER height,
+                       ListHandle list) /* IMIV-274 */
 {
     INTEGER oldright, oldbottom, newright, newbottom;
     ControlHandle cv, ch;

@@ -343,7 +343,7 @@ lookup_by_name(const ConnectionID connp,
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_CountSymbols(ConnectionID id, GUEST<LONGINT> *countp)
+OSErr Executor::C_CountSymbols(ConnectionID id, GUEST<LONGINT> *countp)
 {
     OSErr retval;
 
@@ -353,7 +353,8 @@ PUBLIC pascal trap OSErr Executor::C_CountSymbols(ConnectionID id, GUEST<LONGINT
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_GetIndSymbol(ConnectionID id, LONGINT index, Str255 name, GUEST<Ptr> *addrp, SymClass *classp)
+OSErr Executor::C_GetIndSymbol(ConnectionID id, LONGINT index, Str255 name,
+                               GUEST<Ptr> *addrp, SymClass *classp)
 {
     OSErr retval;
 
@@ -363,7 +364,8 @@ PUBLIC pascal trap OSErr Executor::C_GetIndSymbol(ConnectionID id, LONGINT index
     return retval;
 }
 
-PUBLIC pascal trap OSErr Executor::C_FindSymbol(ConnectionID connID, Str255 symName, GUEST<Ptr> *symAddr, SymClass *symClass)
+OSErr Executor::C_FindSymbol(ConnectionID connID, Str255 symName,
+                             GUEST<Ptr> *symAddr, SymClass *symClass)
 {
     OSErr retval;
     PEFExportedSymbol *pefs;

@@ -9,17 +9,17 @@
 
 using namespace Executor;
 
-PUBLIC OSErr Executor::DiskEject(INTEGER rn)
+OSErr Executor::DiskEject(INTEGER rn)
 {
     return paramErr;
 }
 
-PUBLIC OSErr Executor::SetTagBuffer(Ptr bp)
+OSErr Executor::SetTagBuffer(Ptr bp)
 {
     return paramErr;
 }
 
-PUBLIC OSErr Executor::DriveStatus(INTEGER dn, DrvSts *statp)
+OSErr Executor::DriveStatus(INTEGER dn, DrvSts *statp)
 {
     return paramErr;
 }

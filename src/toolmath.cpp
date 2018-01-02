@@ -11,7 +11,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap Fract Executor::C_FracSqrt(Fract x) /* IMIV-64 */
+Fract Executor::C_FracSqrt(Fract x) /* IMIV-64 */
 {
     Extended z;
 
@@ -21,7 +21,7 @@ PUBLIC pascal trap Fract Executor::C_FracSqrt(Fract x) /* IMIV-64 */
 
 #define POVER4 (ULONGINT)0x0000C910 /* IMIV-64 */
 
-PUBLIC pascal trap Fract Executor::C_FracSin(Fixed x) /* IMIV-64 */
+Fract Executor::C_FracSin(Fixed x) /* IMIV-64 */
 {
     Extended z;
     LONGINT oct;
@@ -60,7 +60,7 @@ PUBLIC pascal trap Fract Executor::C_FracSin(Fixed x) /* IMIV-64 */
     return X2Frac(&z);
 }
 
-PUBLIC Fixed Executor::FixATan2(LONGINT x, LONGINT y) /* IMIV-65 */
+Fixed Executor::FixATan2(LONGINT x, LONGINT y) /* IMIV-65 */
 {
     Extended z;
 
@@ -73,12 +73,12 @@ PUBLIC Fixed Executor::FixATan2(LONGINT x, LONGINT y) /* IMIV-65 */
     z = atan2((double)y, (double)x);
     return X2Fix(&z);
 }
-PUBLIC pascal trap Fixed Executor::C_FixAtan2(LONGINT x, LONGINT y) /* IMIV-65 */
+Fixed Executor::C_FixAtan2(LONGINT x, LONGINT y) /* IMIV-65 */
 {
     return FixATan2(x, y);
 }
 
-PUBLIC pascal trap Fract Executor::C_FracCos(Fixed x) /* IMIV-64 */
+Fract Executor::C_FracCos(Fixed x) /* IMIV-64 */
 {
     return FracSin(x + POVER4 * 2); /* could produce overflow ! */
 }

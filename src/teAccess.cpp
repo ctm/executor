@@ -17,7 +17,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_TESetText(Ptr p, LONGINT length, TEHandle teh)
+void Executor::C_TESetText(Ptr p, LONGINT length, TEHandle teh)
 {
     TE_SLAM(teh);
     if(PtrToXHand(p, TE_HTEXT(teh), length) != noErr)
@@ -68,7 +68,7 @@ PUBLIC pascal trap void Executor::C_TESetText(Ptr p, LONGINT length, TEHandle te
     TE_SLAM(teh);
 }
 
-PUBLIC pascal trap CharsHandle Executor::C_TEGetText(TEHandle teh)
+CharsHandle Executor::C_TEGetText(TEHandle teh)
 {
     return (CharsHandle)TE_HTEXT(teh);
 }

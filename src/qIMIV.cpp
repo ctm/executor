@@ -43,10 +43,13 @@ typedef enum { Copy,
                Xor,
                Negate } transferop;
 
-PRIVATE void transfer(INTEGER *, INTEGER *, INTEGER, INTEGER, INTEGER, INTEGER, transferop);
-PRIVATE void xSeedFill(unsigned char *, unsigned char *, INTEGER, INTEGER, INTEGER, INTEGER, BOOLEAN, INTEGER, INTEGER);
+static void transfer(INTEGER *, INTEGER *, INTEGER, INTEGER, INTEGER, INTEGER,
+                     transferop);
+static void xSeedFill(unsigned char *, unsigned char *, INTEGER, INTEGER,
+                      INTEGER, INTEGER, BOOLEAN, INTEGER, INTEGER);
 
-PRIVATE void transfer(INTEGER *srcp, INTEGER *dstp, INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER widthw, transferop op)
+static void transfer(INTEGER *srcp, INTEGER *dstp, INTEGER srcr, INTEGER dstr,
+                     INTEGER height, INTEGER widthw, transferop op)
 {
     INTEGER sbump, dbump;
     INTEGER *ep0, *ep1;
@@ -118,7 +121,9 @@ PRIVATE void transfer(INTEGER *srcp, INTEGER *dstp, INTEGER srcr, INTEGER dstr, 
         --cur;                                                     \
     }
 
-PRIVATE void xSeedFill(unsigned char *srcp, unsigned char *dstp, INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width, BOOLEAN useseeds, INTEGER seedh, INTEGER seedv)
+static void xSeedFill(unsigned char *srcp, unsigned char *dstp, INTEGER srcr,
+                      INTEGER dstr, INTEGER height, INTEGER width,
+                      BOOLEAN useseeds, INTEGER seedh, INTEGER seedv)
 {
     unsigned char *cur, *savecur, expanded, saveexpanded, seed, *edstp;
     stackentry bogusentry, *topleftp, *toprightp, *bottomleftp, *bottomrightp,
@@ -324,16 +329,17 @@ SeedFill_handle_direct_screen_access(uint8 *srcp, uint8 *dstp,
 #define SeedFill_handle_direct_screen_access xSeedFill
 #endif
 
-PUBLIC pascal trap void Executor::C_SeedFill(Ptr srcp, Ptr dstp, /* IMIV-24 */
-                                             INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width, INTEGER seedh, INTEGER seedv)
+void Executor::C_SeedFill(Ptr srcp, Ptr dstp, INTEGER srcr, INTEGER dstr,
+                          INTEGER height, INTEGER width, INTEGER seedh,
+                          INTEGER seedv) /* IMIV-24 */
 {
     SeedFill_handle_direct_screen_access((uint8 *)srcp, (uint8 *)dstp,
                                          srcr, dstr,
                                          height, width, true, seedh, seedv);
 }
 
-PUBLIC pascal trap void Executor::C_CalcMask(Ptr srcp, Ptr dstp, /* IMIV-24 */
-                                             INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width)
+void Executor::C_CalcMask(Ptr srcp, Ptr dstp, INTEGER srcr, INTEGER dstr,
+                          INTEGER height, INTEGER width) /* IMIV-24 */
 {
     SeedFill_handle_direct_screen_access((uint8 *)srcp, (uint8 *)dstp,
                                          srcr, dstr,
@@ -408,8 +414,9 @@ copy_mask_1(BitMap *src_bm, BitMap *mask_bm, BitMap *dst_bm,
     }
 }
 
-PUBLIC pascal trap void Executor::C_CopyMask(/* IMIV-24 */
-                                             BitMap *src_bogo_map, BitMap *mask_bogo_map, BitMap *dst_bogo_map, Rect *src_rect, Rect *mask_rect, Rect *dst_rect)
+void Executor::C_CopyMask(BitMap *src_bogo_map, BitMap *mask_bogo_map,
+                          BitMap *dst_bogo_map, Rect *src_rect,
+                          Rect *mask_rect, Rect *dst_rect) /* IMIV-24 */
 {
     BitMap mask_bm;
     void *mask_bits;
@@ -438,7 +445,10 @@ PUBLIC pascal trap void Executor::C_CopyMask(/* IMIV-24 */
     TEMP_ALLOC_FREE(temp_mask_bits);
 }
 
-PUBLIC pascal trap void Executor::C_IMVI_CopyDeepMask(BitMap *srcBits, BitMap *maskBits, BitMap *dstBits, Rect *srcRect, Rect *maskRect, Rect *dstRect, INTEGER mode, RgnHandle maskRgn)
+void Executor::C_IMVI_CopyDeepMask(BitMap *srcBits, BitMap *maskBits,
+                                   BitMap *dstBits, Rect *srcRect,
+                                   Rect *maskRect, Rect *dstRect, INTEGER mode,
+                                   RgnHandle maskRgn)
 {
     warning_unimplemented("poorly implemented");
 
@@ -450,7 +460,7 @@ PUBLIC pascal trap void Executor::C_IMVI_CopyDeepMask(BitMap *srcBits, BitMap *m
 
 /* MeasureText is in qd/qStdText.c */
 
-PUBLIC a0trap INTEGER *Executor::GetMaskTable() /* IMIV-25 */
+a0trap INTEGER *Executor::GetMaskTable() /* IMIV-25 */
 {
     static unsigned char table[] __attribute__((aligned(2))) = {
         0x00, 0x00, 0x80, 0x00, 0xC0, 0x00, 0xE0, 0x00,

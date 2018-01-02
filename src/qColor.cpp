@@ -71,7 +71,7 @@ Executor::ROMlib_qd_color_to_rgb(LONGINT qd_color)
    that we should do this, although there's still the lingering question
    of whether or not a call to SetPort (0) should be blown off */
 
-PUBLIC pascal trap void Executor::C_ForeColor(LONGINT c)
+void Executor::C_ForeColor(LONGINT c)
 {
     GrafPtr the_port;
 
@@ -85,7 +85,7 @@ PUBLIC pascal trap void Executor::C_ForeColor(LONGINT c)
     }
 }
 
-PUBLIC pascal trap void Executor::C_BackColor(LONGINT c)
+void Executor::C_BackColor(LONGINT c)
 {
     GrafPtr the_port;
 
@@ -99,7 +99,7 @@ PUBLIC pascal trap void Executor::C_BackColor(LONGINT c)
     }
 }
 
-PUBLIC pascal trap void Executor::C_ColorBit(INTEGER b)
+void Executor::C_ColorBit(INTEGER b)
 {
     PORT_COLR_BIT_X(thePort) = CW(b);
 }
@@ -113,7 +113,7 @@ ColorSpec *Executor::default_ctab_colors[] = {
     ctab_8bpp_values,
 };
 
-PUBLIC pascal trap CTabHandle Executor::C_GetCTable(INTEGER ctab_res_id)
+CTabHandle Executor::C_GetCTable(INTEGER ctab_res_id)
 {
     CTabHandle ctab;
     clut_res_handle clut;
@@ -216,7 +216,7 @@ PUBLIC pascal trap CTabHandle Executor::C_GetCTable(INTEGER ctab_res_id)
     }
 }
 
-PUBLIC pascal trap void Executor::C_DisposCTable(CTabHandle ctab)
+void Executor::C_DisposCTable(CTabHandle ctab)
 {
     DisposHandle((Handle)ctab);
 }

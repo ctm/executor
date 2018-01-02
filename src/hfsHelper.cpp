@@ -51,7 +51,7 @@ PRIVATE LONGINT pipefd[2];
 
 PUBLIC LONGINT Executor::ROMlib_sock;
 
-PUBLIC void Executor::ROMlib_hfsinit(void)
+void Executor::ROMlib_hfsinit(void)
 {
 }
 
@@ -93,7 +93,7 @@ Executor::ROMlib_priv_open(const char *filename, long mode)
     return retval;
 }
 
-PRIVATE void eject_floppy_notify(void)
+static void eject_floppy_notify(void)
 {
 
     /*
@@ -108,7 +108,7 @@ PRIVATE void eject_floppy_notify(void)
         Alert(EJECTALERTID, (ProcPtr)0);
 }
 
-PUBLIC OSErr Executor::ROMlib_ejectfloppy(LONGINT floppyfd)
+OSErr Executor::ROMlib_ejectfloppy(LONGINT floppyfd)
 {
     OSErr err;
 
@@ -147,7 +147,7 @@ PUBLIC OSErr Executor::ROMlib_ejectfloppy(LONGINT floppyfd)
     return err;
 }
 
-PUBLIC void Executor::ROMlib_OurClose(void)
+void Executor::ROMlib_OurClose(void)
 {
     HVCB *vcbp, *next;
     ParamBlockRec pbr;
@@ -171,7 +171,7 @@ PUBLIC void Executor::ROMlib_OurClose(void)
 }
 
 #if 0
-PRIVATE BOOLEAN isejectable( const charCx( *dname), LONGINT fd )
+static BOOLEAN isejectable(const charCx( *dname), LONGINT fd)
 {
     BOOLEAN retval;
 #if defined(MACOSX_) || defined(MACOSX_)
@@ -219,9 +219,9 @@ PRIVATE BOOLEAN isejectable( const charCx( *dname), LONGINT fd )
  *	 a disk can be read (probably use a signal on the pipe).
  */
 
-PRIVATE LONGINT try_to_open_disk(const char *dname,
-                                 LONGINT *bsizep, LONGINT *maxbytesp, drive_flags_t *flagsp,
-                                 uint32_t *offsetp)
+static LONGINT try_to_open_disk(const char *dname, LONGINT *bsizep,
+                                LONGINT *maxbytesp, drive_flags_t *flagsp,
+                                uint32_t *offsetp)
 {
     LONGINT floppyfd;
     int len;
@@ -463,7 +463,7 @@ Executor::try_to_mount_disk(const char *dname, LONGINT floppyfd, GUEST<LONGINT> 
     }
 }
 
-PUBLIC void Executor::ROMlib_openfloppy(const char *dname, GUEST<LONGINT> *messp)
+void Executor::ROMlib_openfloppy(const char *dname, GUEST<LONGINT> *messp)
 {
     LONGINT floppyfd;
     LONGINT bsize, maxbytes;
@@ -477,7 +477,7 @@ PUBLIC void Executor::ROMlib_openfloppy(const char *dname, GUEST<LONGINT> *messp
                           offset);
 }
 
-PUBLIC void Executor::ROMlib_openharddisk(const char *dname, GUEST<LONGINT> *messp)
+void Executor::ROMlib_openharddisk(const char *dname, GUEST<LONGINT> *messp)
 {
     char *newbuf;
     long len;
@@ -500,8 +500,9 @@ PUBLIC void Executor::ROMlib_openharddisk(const char *dname, GUEST<LONGINT> *mes
         goto DONE;      \
     }
 
-PUBLIC OSErr Executor::ROMlib_readwrite(LONGINT fd, char *buffer, LONGINT count, LONGINT offset,
-                                        accesstype rw, LONGINT blocksize, LONGINT maxtransfer)
+OSErr Executor::ROMlib_readwrite(LONGINT fd, char *buffer, LONGINT count,
+                                 LONGINT offset, accesstype rw,
+                                 LONGINT blocksize, LONGINT maxtransfer)
 {
     char *newbuffer;
     LONGINT remainder, totransfer;
@@ -663,7 +664,7 @@ Executor::ROMlib_transphysblk(hfs_access_t *hfsp, LONGINT physblock, short nphys
     return err;
 }
 
-PUBLIC char *Executor::ROMlib_indexn(char *str, char tofind, INTEGER length)
+char *Executor::ROMlib_indexn(char *str, char tofind, INTEGER length)
 {
     while(--length >= 0)
         if(*str++ == tofind)
@@ -672,7 +673,7 @@ PUBLIC char *Executor::ROMlib_indexn(char *str, char tofind, INTEGER length)
 }
 
 #if !defined(str255assign)
-PUBLIC void Executor::str255assign(StringPtr dstp, StringPtr srcp)
+void Executor::str255assign(StringPtr dstp, StringPtr srcp)
 {
     memmove(dstp, srcp, (size_t)srcp[0] + 1);
 }
@@ -683,7 +684,7 @@ PUBLIC void Executor::str255assign(StringPtr dstp, StringPtr srcp)
  * ROMlib_indexqueue is one based; not zero based.
  */
 
-PUBLIC void *Executor::ROMlib_indexqueue(QHdr *qp, short index)
+void *Executor::ROMlib_indexqueue(QHdr *qp, short index)
 {
     QElemPtr p;
 
@@ -692,7 +693,7 @@ PUBLIC void *Executor::ROMlib_indexqueue(QHdr *qp, short index)
     return p;
 }
 
-PUBLIC OSErr Executor::ROMlib_writefcbp(filecontrolblock *fcbp)
+OSErr Executor::ROMlib_writefcbp(filecontrolblock *fcbp)
 {
     Byte flags;
     OSErr retval;
@@ -707,7 +708,7 @@ PUBLIC OSErr Executor::ROMlib_writefcbp(filecontrolblock *fcbp)
     return retval;
 }
 
-PUBLIC OSErr Executor::ROMlib_writevcbp(HVCB *vcbp)
+OSErr Executor::ROMlib_writevcbp(HVCB *vcbp)
 {
     INTEGER vflags;
     OSErr retval;

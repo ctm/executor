@@ -84,7 +84,7 @@ void Executor::cursor_reset_current_cursor(void)
         SetCursor(&current_crsr);
 }
 
-PUBLIC void Executor::ROMlib_showcursor()
+void Executor::ROMlib_showcursor()
 {
     if(!CrsrVis)
     {
@@ -93,7 +93,7 @@ PUBLIC void Executor::ROMlib_showcursor()
     }
 }
 
-PUBLIC void Executor::ROMlib_restorecursor()
+void Executor::ROMlib_restorecursor()
 {
     if(CrsrVis)
     {
@@ -102,7 +102,7 @@ PUBLIC void Executor::ROMlib_restorecursor()
     }
 }
 
-PUBLIC void Executor::ROMlib_showhidecursor() /* INTERNAL */
+void Executor::ROMlib_showhidecursor() /* INTERNAL */
 {
     if(CrsrState == CWC(0))
         ROMlib_showcursor();
@@ -110,7 +110,7 @@ PUBLIC void Executor::ROMlib_showhidecursor() /* INTERNAL */
         ROMlib_restorecursor();
 }
 
-PUBLIC pascal trap void Executor::C_SetCursor(Cursor *cp)
+void Executor::C_SetCursor(Cursor *cp)
 {
     if(current_cursor_valid_p
        && !current_cursor_color_p
@@ -168,7 +168,7 @@ PUBLIC pascal trap void Executor::C_SetCursor(Cursor *cp)
     }
 }
 
-PUBLIC pascal trap void Executor::C_InitCursor()
+void Executor::C_InitCursor()
 {
     CrsrState = 0;
     SetCursor(&arrowX);
@@ -176,13 +176,13 @@ PUBLIC pascal trap void Executor::C_InitCursor()
     ROMlib_showcursor();
 }
 
-PUBLIC pascal trap void Executor::C_HideCursor() /* IMI-168 */
+void Executor::C_HideCursor() /* IMI-168 */
 {
     ROMlib_restorecursor();
     CrsrState = CW(CW(CrsrState) - 1);
 }
 
-PUBLIC pascal trap void Executor::C_ShowCursor() /* IMI-168 */
+void Executor::C_ShowCursor() /* IMI-168 */
 {
     if((CrsrState = CW(CW(CrsrState) + 1)) == CWC(0))
         ROMlib_showcursor();
@@ -190,19 +190,19 @@ PUBLIC pascal trap void Executor::C_ShowCursor() /* IMI-168 */
         CrsrState = 0;
 }
 
-PRIVATE void wewantpointermovements(INTEGER x)
+static void wewantpointermovements(INTEGER x)
 {
     CrsrState = CW(CW(CrsrState) + x);
     ROMlib_bewaremovement = true;
 }
 
-PUBLIC pascal trap void Executor::C_ObscureCursor() /* IMI-168 */
+void Executor::C_ObscureCursor() /* IMI-168 */
 {
     ROMlib_restorecursor();
     wewantpointermovements(0);
 }
 
-PUBLIC pascal trap void Executor::C_ShieldCursor(Rect *rp, Point p) /* IMI-474 */
+void Executor::C_ShieldCursor(Rect *rp, Point p) /* IMI-474 */
 {
     EventRecord evt;
     Point ep;
@@ -218,7 +218,7 @@ PUBLIC pascal trap void Executor::C_ShieldCursor(Rect *rp, Point p) /* IMI-474 *
 
 typedef GUEST<ccrsr_res_ptr> *ccrsr_res_handle;
 
-PUBLIC pascal trap CCrsrHandle Executor::C_GetCCursor(INTEGER crsr_id)
+CCrsrHandle Executor::C_GetCCursor(INTEGER crsr_id)
 {
     CCrsrHandle ccrsr_handle;
     ccrsr_res_handle res_handle;
@@ -305,7 +305,7 @@ pixmap_eq_p(PixMapHandle pm0, PixMapHandle pm1)
                        sizeof(Rect)));
 }
 
-PUBLIC pascal trap void Executor::C_SetCCursor(CCrsrHandle ccrsr)
+void Executor::C_SetCCursor(CCrsrHandle ccrsr)
 {
     if(current_cursor_valid_p
        && current_cursor_color_p)
@@ -439,13 +439,13 @@ PUBLIC pascal trap void Executor::C_SetCCursor(CCrsrHandle ccrsr)
     }
 }
 
-PUBLIC pascal trap void Executor::C_DisposCCursor(CCrsrHandle ccrsr)
+void Executor::C_DisposCCursor(CCrsrHandle ccrsr)
 {
     /* #warning "implement DisposCCursor" */
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC pascal trap void Executor::C_AllocCursor()
+void Executor::C_AllocCursor()
 {
     /* This function is a NOP for us as far as I know. */
     warning_unexpected("AllocCursor called -- this is unusual");

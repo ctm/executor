@@ -15,22 +15,22 @@ using namespace Executor;
 typedef GUEST<ResType> *restypeptr;
 
 PRIVATE GUEST<restypeptr> *ar = 0;
-PRIVATE INTEGER inserttypes(resmaphand, INTEGER, BOOLEAN);
-PRIVATE INTEGER initar(INTEGER);
+static INTEGER inserttypes(resmaphand, INTEGER, BOOLEAN);
+static INTEGER initar(INTEGER);
 
 #define ARRN_NOTINITTED (-1)
 #define ARRN_ALL (-2)
 
 PRIVATE INTEGER arrn = ARRN_NOTINITTED;
 
-PUBLIC void Executor::ROMlib_invalar() /* INTERNAL */
+void Executor::ROMlib_invalar() /* INTERNAL */
 {
     if(ar)
         EmptyHandle((Handle)ar);
     arrn = ARRN_NOTINITTED;
 }
 
-PRIVATE INTEGER inserttypes(resmaphand map, INTEGER ninserted, BOOLEAN first)
+static INTEGER inserttypes(resmaphand map, INTEGER ninserted, BOOLEAN first)
 {
     typref *tr;
     INTEGER i, j;
@@ -61,7 +61,7 @@ PRIVATE INTEGER inserttypes(resmaphand map, INTEGER ninserted, BOOLEAN first)
     return next - STARH(ar);
 }
 
-PRIVATE INTEGER initar(INTEGER rn)
+static INTEGER initar(INTEGER rn)
 {
     Size mostbytesneeded;
     INTEGER ninserted;
@@ -111,17 +111,17 @@ PRIVATE INTEGER initar(INTEGER rn)
     return GetHandleSize((Handle)ar) / sizeof(ResType);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_CountTypes()
+INTEGER Executor::C_CountTypes()
 {
     return initar(ARRN_ALL);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_Count1Types() /* IMIV-15 */
+INTEGER Executor::C_Count1Types() /* IMIV-15 */
 {
     return initar(Cx(CurMap));
 }
 
-PUBLIC pascal trap void Executor::C_GetIndType(GUEST<ResType> *typ, INTEGER indx)
+void Executor::C_GetIndType(GUEST<ResType> *typ, INTEGER indx)
 {
     if(indx <= 0 || indx > initar(ARRN_ALL))
         *typ = 0;
@@ -129,8 +129,7 @@ PUBLIC pascal trap void Executor::C_GetIndType(GUEST<ResType> *typ, INTEGER indx
         *typ = STARH(ar)[indx - 1];
 }
 
-PUBLIC pascal trap void Executor::C_Get1IndType(GUEST<ResType> *typ, /* IMIV-15 */
-                                                INTEGER indx)
+void Executor::C_Get1IndType(GUEST<ResType> *typ, INTEGER indx) /* IMIV-15 */
 {
     if(indx <= 0 || indx > initar(Cx(CurMap)))
         *typ = 0;

@@ -29,8 +29,8 @@ int resfork_suffix_length = 0;
 bool native_resfork_p = true;
 }
 
-PRIVATE unsigned char tohex(unsigned char);
-PRIVATE INTEGER Mac_to_UNIX7(unsigned char *, INTEGER, unsigned char *);
+static unsigned char tohex(unsigned char);
+static INTEGER Mac_to_UNIX7(unsigned char *, INTEGER, unsigned char *);
 
 /*
  * Coded more or less up to the spec:  APDA M0908LL/A
@@ -66,7 +66,7 @@ PRIVATE defaulthead_t ourdefault;
 #define LEN1 (LEN0 + sizeof(Single_attribs))
 #define LEN2 (LEN1 + sizeof(Single_dates))
 
-PRIVATE void initialize_ourdefault(void)
+static void initialize_ourdefault(void)
 {
     static int beenhere = 0;
 
@@ -142,7 +142,7 @@ Executor::double_dir_op(char *name, double_dir_op_t op)
     }
 }
 
-PUBLIC OSErr Executor::ROMlib_newresfork(char *name, LONGINT *fdp, bool unix_p)
+OSErr Executor::ROMlib_newresfork(char *name, LONGINT *fdp, bool unix_p)
 {
     LONGINT fd;
     OSErr retval;
@@ -185,14 +185,14 @@ PUBLIC OSErr Executor::ROMlib_newresfork(char *name, LONGINT *fdp, bool unix_p)
 
 #define OURBSIZE 512
 
-PRIVATE BOOLEAN getsetentry(GetOrSetType gors, LONGINT fd,
-                            Single_ID sid, Single_descriptor *savesdp,
-                            ULONGINT *lengthp);
-PRIVATE void writebyteat(LONGINT fd, LONGINT loc);
-PRIVATE BOOLEAN getsetpiece(GetOrSetType gors, LONGINT fd,
-                            Single_descriptor *sdp, char *bufp, LONGINT length);
+static BOOLEAN getsetentry(GetOrSetType gors, LONGINT fd, Single_ID sid,
+                           Single_descriptor *savesdp, ULONGINT *lengthp);
+static void writebyteat(LONGINT fd, LONGINT loc);
+static BOOLEAN getsetpiece(GetOrSetType gors, LONGINT fd,
+                           Single_descriptor *sdp, char *bufp, LONGINT length);
 
-PRIVATE BOOLEAN getsetentry(GetOrSetType gors, LONGINT fd, Single_ID sid, Single_descriptor *savesdp, ULONGINT *lengthp)
+static BOOLEAN getsetentry(GetOrSetType gors, LONGINT fd, Single_ID sid,
+                           Single_descriptor *savesdp, ULONGINT *lengthp)
 {
     off_t saveloc;
     struct defaulthead *dfp;
@@ -249,7 +249,7 @@ PRIVATE BOOLEAN getsetentry(GetOrSetType gors, LONGINT fd, Single_ID sid, Single
 
 #define IDWANTED(fp) ((fp->fcflags & fcfisres) ? Resource_Fork_ID : Data_Fork_ID)
 
-PUBLIC LONGINT Executor::ROMlib_FORKOFFSET(fcbrec *fp) /* INTERNAL */
+LONGINT Executor::ROMlib_FORKOFFSET(fcbrec *fp) /* INTERNAL */
 {
     Single_descriptor d;
     Single_ID idwanted;
@@ -266,7 +266,7 @@ PUBLIC LONGINT Executor::ROMlib_FORKOFFSET(fcbrec *fp) /* INTERNAL */
         return RESOURCEPREAMBLE;
 }
 
-PRIVATE void writebyteat(LONGINT fd, LONGINT loc)
+static void writebyteat(LONGINT fd, LONGINT loc)
 {
     off_t saveloc;
 
@@ -278,7 +278,7 @@ PRIVATE void writebyteat(LONGINT fd, LONGINT loc)
 
 /* TODO: better error checking */
 
-PUBLIC OSErr Executor::ROMlib_seteof(fcbrec *fp) /* INTERNAL */
+OSErr Executor::ROMlib_seteof(fcbrec *fp) /* INTERNAL */
 {
     ULONGINT leof, peof;
     off_t curloc;
@@ -343,7 +343,8 @@ PUBLIC OSErr Executor::ROMlib_seteof(fcbrec *fp) /* INTERNAL */
     return err;
 }
 
-PRIVATE BOOLEAN getsetpiece(GetOrSetType gors, LONGINT fd, Single_descriptor *sdp, char *bufp, LONGINT length)
+static BOOLEAN getsetpiece(GetOrSetType gors, LONGINT fd,
+                           Single_descriptor *sdp, char *bufp, LONGINT length)
 {
     off_t saveloc;
     BOOLEAN retval;
@@ -374,7 +375,7 @@ PRIVATE BOOLEAN getsetpiece(GetOrSetType gors, LONGINT fd, Single_descriptor *sd
  * 	    fp->fcleof (logical eof, same as above)
  *		fp->fcbFType (file type)
  */
-PUBLIC OSErr Executor::ROMlib_geteofostype(fcbrec *fp) /* INTERNAL */
+OSErr Executor::ROMlib_geteofostype(fcbrec *fp) /* INTERNAL */
 {
     LONGINT fd;
     Single_descriptor d;
@@ -456,8 +457,11 @@ PUBLIC OSErr Executor::ROMlib_geteofostype(fcbrec *fp) /* INTERNAL */
  *		rlenp	resource fork length
  */
 
-PUBLIC OSErr Executor::ROMlib_hiddenbyname(GetOrSetType gors, /* INTERNAL */
-                                           char *pathname, char *rpathname, Single_dates *datep, FInfo *finfop, FXInfo *fxinfop, GUEST<LONGINT> *lenp, GUEST<LONGINT> *rlenp)
+OSErr Executor::ROMlib_hiddenbyname(GetOrSetType gors, char *pathname,
+                                    char *rpathname, Single_dates *datep,
+                                    FInfo *finfop, FXInfo *fxinfop,
+                                    GUEST<LONGINT> *lenp,
+                                    GUEST<LONGINT> *rlenp) /* INTERNAL */
 {
     LONGINT rfd;
     struct stat sbuf;
@@ -683,7 +687,7 @@ PUBLIC char *Executor::ROMlib_resname(char *pathname, /* INTERNAL */
  * NOTE: we must use capital letters in tohex below.  Code depends on it.
  */
 
-PRIVATE unsigned char tohex(unsigned char c)
+static unsigned char tohex(unsigned char c)
 {
     unsigned char retval;
 
@@ -692,7 +696,8 @@ PRIVATE unsigned char tohex(unsigned char c)
     return retval;
 }
 
-PRIVATE INTEGER Mac_to_UNIX7(unsigned char *name, INTEGER length, unsigned char *out)
+static INTEGER Mac_to_UNIX7(unsigned char *name, INTEGER length,
+                            unsigned char *out)
 {
     unsigned char c;
     INTEGER retval;
@@ -730,7 +735,7 @@ PRIVATE INTEGER Mac_to_UNIX7(unsigned char *name, INTEGER length, unsigned char 
     return retval;
 }
 
-PUBLIC char *Executor::ROMlib_newunixfrommac(char *ip, INTEGER n)
+char *Executor::ROMlib_newunixfrommac(char *ip, INTEGER n)
 {
     char *retval;
 
@@ -787,7 +792,7 @@ void Executor::report_resfork_problem()
  * are two upper case hex digits.
  */
 
-PUBLIC BOOLEAN Executor::ROMlib_isresourcefork(const char *fullname)
+BOOLEAN Executor::ROMlib_isresourcefork(const char *fullname)
 {
     LONGINT fd;
     LONGINT magic;

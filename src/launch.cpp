@@ -82,7 +82,7 @@ using namespace Executor;
 
 PRIVATE bool ppc_launch_p = false;
 
-PUBLIC void Executor::ROMlib_set_ppc(bool val)
+void Executor::ROMlib_set_ppc(bool val)
 {
     ppc_launch_p = val;
 }
@@ -148,7 +148,7 @@ void reset_string(char **strp)
 
 int Executor::ROMlib_desired_bpp;
 
-PRIVATE void ParseConfigFile(StringPtr exefname, OSType type)
+static void ParseConfigFile(StringPtr exefname, OSType type)
 {
     int strwidth;
     char *newtitle;
@@ -314,7 +314,7 @@ PRIVATE void ParseConfigFile(StringPtr exefname, OSType type)
     remalloc(&ROMlib_Comments);
 }
 
-PRIVATE void beginexecutingat(LONGINT startpc)
+static void beginexecutingat(LONGINT startpc)
 {
 #define ALINETRAPNUMBER 0xA
     trap_install_handler(ALINETRAPNUMBER, alinehandler, (void *)0);
@@ -352,7 +352,7 @@ LONGINT Executor::ROMlib_creator;
 
 PUBLIC void *ROMlib_foolgcc; /* to force the alloca to be done */
 
-PUBLIC void Executor::SFSaveDisk_Update(INTEGER vrefnum, Str255 filename)
+void Executor::SFSaveDisk_Update(INTEGER vrefnum, Str255 filename)
 {
     ParamBlockRec pbr;
     Str255 save_name;
@@ -461,8 +461,8 @@ PUBLIC int Executor::ROMlib_uaf;
 PUBLIC launch_failure_t Executor::ROMlib_launch_failure = launch_no_failure;
 PUBLIC INTEGER Executor::ROMlib_exevrefnum;
 
-PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
-                         LaunchParamBlockRec *lpbp)
+static void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
+                        LaunchParamBlockRec *lpbp)
 {
     OSErr err;
     FInfo finfo;
@@ -738,12 +738,12 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     }
 }
 
-PUBLIC trap void Executor::Chain(StringPtr fName, INTEGER vRefNum)
+void Executor::Chain(StringPtr fName, INTEGER vRefNum)
 {
     launchchain(fName, vRefNum, false, 0);
 }
 
-PRIVATE void reset_low_globals(void)
+static void reset_low_globals(void)
 {
     /*
  * we're about to smash applzone ... we may want to verify a few low-mem
@@ -1118,7 +1118,7 @@ PRIVATE void reset_low_globals(void)
     CurrentA5 = guest_cast<Ptr>(CL(EM_A5));
 }
 
-PRIVATE void reset_traps(void)
+static void reset_traps(void)
 {
     static syn68k_addr_t savetooltraptable[0x400];
     static syn68k_addr_t saveostraptable[0x100];
@@ -1179,7 +1179,7 @@ void Executor::empty_timer_queues(void)
     restore_virtual_ints(bt);
 }
 
-PRIVATE void reinitialize_things(void)
+static void reinitialize_things(void)
 {
     resmaphand map, nextmap;
     filecontrolblock *fcbp, *efcbp;
@@ -1387,7 +1387,7 @@ Executor::NewLaunch(StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockRe
     return retval;
 }
 
-PUBLIC trap void Executor::Launch(StringPtr fName_arg, INTEGER vRefNum_arg)
+void Executor::Launch(StringPtr fName_arg, INTEGER vRefNum_arg)
 {
 #if 0
   /* NOTE: we're messing with launch between Executor 2 beta 1 and Executor 2

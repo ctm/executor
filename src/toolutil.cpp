@@ -26,17 +26,17 @@
 
 using namespace Executor;
 
-PRIVATE Fixed minvert(Fixed);
-PRIVATE int cmpstrings(char *p, char *ep, char *p1, LONGINT len);
+static Fixed minvert(Fixed);
+static int cmpstrings(char *p, char *ep, char *p1, LONGINT len);
 
-PUBLIC pascal trap Fixed Executor::C_FixRatio(INTEGER n, INTEGER d)
+Fixed Executor::C_FixRatio(INTEGER n, INTEGER d)
 {
     if(!d)
         return (n < 0 ? 0x80000001 : 0x7fffffff);
     return (((LONGINT)n << 16) / d);
 }
 
-PUBLIC pascal trap Fixed Executor::C_FixMul(Fixed a, Fixed b)
+Fixed Executor::C_FixMul(Fixed a, Fixed b)
 {
     int sign = 1;
     ULONGINT ms1, ms2, ls1, ls2, mm, ml, lm, ll;
@@ -71,12 +71,12 @@ PUBLIC pascal trap Fixed Executor::C_FixMul(Fixed a, Fixed b)
     return (sign * mm);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_FixRound(Fixed x)
+INTEGER Executor::C_FixRound(Fixed x)
 {
     return ((x >> 16) + ((x & 0x8000L) != 0));
 }
 
-PUBLIC pascal trap StringHandle Executor::C_NewString(StringPtr s)
+StringHandle Executor::C_NewString(StringPtr s)
 {
     Handle retval;
 
@@ -84,13 +84,12 @@ PUBLIC pascal trap StringHandle Executor::C_NewString(StringPtr s)
     return ((StringHandle)retval);
 }
 
-PUBLIC pascal trap void Executor::C_SetString(StringHandle h, StringPtr s)
+void Executor::C_SetString(StringHandle h, StringPtr s)
 {
     PtrToXHand((Ptr)s, (Handle)h, (LONGINT)U(s[0]) + 1);
 }
 
-PUBLIC Handle Executor::ROMlib_getrestid(ResType rest, /* INTERNAL */
-                                         INTEGER id)
+Handle Executor::ROMlib_getrestid(ResType rest, INTEGER id) /* INTERNAL */
 {
     Handle retval;
 
@@ -129,7 +128,7 @@ get_phoney_name_resource(void)
     return ROMlib_phoney_name_string;
 }
 
-PUBLIC pascal trap StringHandle Executor::C_GetString(INTEGER i)
+StringHandle Executor::C_GetString(INTEGER i)
 {
     StringHandle retval;
 
@@ -139,7 +138,7 @@ PUBLIC pascal trap StringHandle Executor::C_GetString(INTEGER i)
     return retval;
 }
 
-PUBLIC void Executor::GetIndString(StringPtr s, INTEGER sid, INTEGER index)
+void Executor::GetIndString(StringPtr s, INTEGER sid, INTEGER index)
 {
     Handle retval;
     char *p, *ep, *op;
@@ -158,7 +157,7 @@ PUBLIC void Executor::GetIndString(StringPtr s, INTEGER sid, INTEGER index)
         ;
 }
 
-PRIVATE int cmpstrings(char *p, char *ep, char *p1, LONGINT len)
+static int cmpstrings(char *p, char *ep, char *p1, LONGINT len)
 {
     int retval = true;
 
@@ -187,7 +186,8 @@ PRIVATE int cmpstrings(char *p, char *ep, char *p1, LONGINT len)
 
 // FIXME: #warning We also return -1 even though the Mac may return something different
 
-PUBLIC pascal trap LONGINT Executor::C_Munger(Handle h, LONGINT off, Ptr p1, LONGINT len1, Ptr p2, LONGINT len2)
+LONGINT Executor::C_Munger(Handle h, LONGINT off, Ptr p1, LONGINT len1, Ptr p2,
+                           LONGINT len2)
 {
     char *p, *ep;
     LONGINT hs, tomove;
@@ -238,7 +238,7 @@ DONE:
 }
 #undef RETURN
 
-PUBLIC pascal trap void Executor::C_PackBits(GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
+void Executor::C_PackBits(GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
 {
     char *ip, *op, *ep, *erp, *markp, c;
 
@@ -313,50 +313,50 @@ void Executor::unpack_int16_t_bits(GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
     UNPACK_BITS_BODY(int16_t);
 }
 
-PUBLIC pascal trap void Executor::C_UnpackBits(GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
+void Executor::C_UnpackBits(GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
 {
     UNPACK_BITS_BODY(int8);
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_BitTst(Ptr bp, LONGINT bn)
+BOOLEAN Executor::C_BitTst(Ptr bp, LONGINT bn)
 {
     bp += bn / 8;
     return ((*bp & (1 << ((7 - bn) & 7))) != 0);
 }
 
-PUBLIC pascal trap void Executor::C_BitSet(Ptr bp, LONGINT bn)
+void Executor::C_BitSet(Ptr bp, LONGINT bn)
 {
     bp += bn / 8;
     *bp |= 1 << ((7 - bn) & 7);
 }
 
-PUBLIC pascal trap void Executor::C_BitClr(Ptr bp, LONGINT bn)
+void Executor::C_BitClr(Ptr bp, LONGINT bn)
 {
     bp += bn / 8;
     *bp &= ~(1 << ((7 - bn) & 7));
 }
 
-PUBLIC pascal trap LONGINT Executor::C_BitAnd(LONGINT a, LONGINT b)
+LONGINT Executor::C_BitAnd(LONGINT a, LONGINT b)
 {
     return (a & b);
 }
 
-PUBLIC pascal trap LONGINT Executor::C_BitOr(LONGINT a, LONGINT b)
+LONGINT Executor::C_BitOr(LONGINT a, LONGINT b)
 {
     return (a | b);
 }
 
-PUBLIC pascal trap LONGINT Executor::C_BitXor(LONGINT a, LONGINT b)
+LONGINT Executor::C_BitXor(LONGINT a, LONGINT b)
 {
     return (a ^ b);
 }
 
-PUBLIC pascal trap LONGINT Executor::C_BitNot(LONGINT a)
+LONGINT Executor::C_BitNot(LONGINT a)
 {
     return (~a);
 }
 
-PUBLIC pascal trap LONGINT Executor::C_BitShift(LONGINT a, INTEGER n)
+LONGINT Executor::C_BitShift(LONGINT a, INTEGER n)
 {
     if(n < 0)
     {
@@ -367,17 +367,17 @@ PUBLIC pascal trap LONGINT Executor::C_BitShift(LONGINT a, INTEGER n)
         return ((n %= 64) & 32) ? 0 : (ULONGINT)a << n;
 }
 
-PUBLIC pascal trap INTEGER Executor::C_HiWord(LONGINT a)
+INTEGER Executor::C_HiWord(LONGINT a)
 {
     return (a >> 16);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_LoWord(LONGINT a)
+INTEGER Executor::C_LoWord(LONGINT a)
 {
     return (a & 0xFFFF);
 }
 
-PUBLIC pascal trap void Executor::C_LongMul(LONGINT a, LONGINT b, Int64Bit *c)
+void Executor::C_LongMul(LONGINT a, LONGINT b, Int64Bit *c)
 {
     int sign;
     ULONGINT ha, hb, la, lb, halb, lahb;
@@ -418,12 +418,12 @@ PUBLIC pascal trap void Executor::C_LongMul(LONGINT a, LONGINT b, Int64Bit *c)
     }
 }
 
-PUBLIC pascal trap PatHandle Executor::C_GetPattern(INTEGER id)
+PatHandle Executor::C_GetPattern(INTEGER id)
 {
     return ((PatHandle)ROMlib_getrestid(TICK("PAT "), id));
 }
 
-PUBLIC void Executor::GetIndPattern(Byte *op, INTEGER plistid, INTEGER index)
+void Executor::GetIndPattern(Byte *op, INTEGER plistid, INTEGER index)
 {
     Handle retval;
     char *p, *ep;
@@ -439,7 +439,7 @@ PUBLIC void Executor::GetIndPattern(Byte *op, INTEGER plistid, INTEGER index)
         ;
 }
 
-PUBLIC pascal trap CursHandle Executor::C_GetCursor(INTEGER id)
+CursHandle Executor::C_GetCursor(INTEGER id)
 {
     return ((CursHandle)ROMlib_getrestid(TICK("CURS"), id));
 }
@@ -448,7 +448,7 @@ PUBLIC pascal trap CursHandle Executor::C_GetCursor(INTEGER id)
  * Note:  ShieldCursor is found in qd/qCursor.c
  */
 
-PUBLIC pascal trap PicHandle Executor::C_GetPicture(INTEGER id)
+PicHandle Executor::C_GetPicture(INTEGER id)
 {
     PicHandle retval;
 
@@ -456,12 +456,12 @@ PUBLIC pascal trap PicHandle Executor::C_GetPicture(INTEGER id)
     return retval;
 }
 
-PUBLIC pascal trap LONGINT Executor::C_DeltaPoint(Point a, Point b)
+LONGINT Executor::C_DeltaPoint(Point a, Point b)
 {
     return (((LONGINT)a.v - b.v) << 16) | (unsigned short)(a.h - b.h);
 }
 
-PRIVATE Fixed minvert(Fixed f) /* wants postive number */
+static Fixed minvert(Fixed f) /* wants postive number */
 {
     return (((0x80000000 / (ULONGINT)f) << 1) & 0x7FFFFFFF);
 }
@@ -479,7 +479,7 @@ PRIVATE Fixed sloptab[46] = {
     0x00010000
 };
 
-PUBLIC pascal trap Fixed Executor::C_SlopeFromAngle(INTEGER a)
+Fixed Executor::C_SlopeFromAngle(INTEGER a)
 {
     int sign, recip;
     Fixed retval; /* cc -a problems */
@@ -512,7 +512,7 @@ PUBLIC pascal trap Fixed Executor::C_SlopeFromAngle(INTEGER a)
     return retval;
 }
 
-PUBLIC pascal trap INTEGER Executor::C_AngleFromSlope(Fixed s)
+INTEGER Executor::C_AngleFromSlope(Fixed s)
 {
     int neg, inv, retval;
     ULONGINT *ulp;
@@ -555,7 +555,7 @@ PUBLIC pascal trap INTEGER Executor::C_AngleFromSlope(Fixed s)
     return (retval ? retval : 180);
 }
 
-PUBLIC pascal trap Fract Executor::C_FracMul(Fract x, Fract y) /* IMIV-64 */
+Fract Executor::C_FracMul(Fract x, Fract y) /* IMIV-64 */
 {
     Extended z;
 
@@ -566,7 +566,7 @@ PUBLIC pascal trap Fract Executor::C_FracMul(Fract x, Fract y) /* IMIV-64 */
     return X2Frac(&z);
 }
 
-PUBLIC pascal trap Fixed Executor::C_FixDiv(Fixed x, Fixed y) /* IMIV-64 */
+Fixed Executor::C_FixDiv(Fixed x, Fixed y) /* IMIV-64 */
 {
     Extended z;
 
@@ -574,7 +574,7 @@ PUBLIC pascal trap Fixed Executor::C_FixDiv(Fixed x, Fixed y) /* IMIV-64 */
     return X2Fix(&z);
 }
 
-PUBLIC pascal trap Fract Executor::C_FracDiv(Fract x, Fract y) /* IMIV-64 */
+Fract Executor::C_FracDiv(Fract x, Fract y) /* IMIV-64 */
 {
     Extended z;
 
@@ -587,7 +587,7 @@ PUBLIC pascal trap Fract Executor::C_FracDiv(Fract x, Fract y) /* IMIV-64 */
 #define POSOVERFLOW 0x7FFFFFFF
 #define NEGOVERFLOW 0x80000000
 
-PUBLIC pascal trap Fixed Executor::C_Long2Fix(LONGINT x) /* IMIV-65 */
+Fixed Executor::C_Long2Fix(LONGINT x) /* IMIV-65 */
 {
     if(x > MAXLONG2FIX)
         /*-->*/ return POSOVERFLOW;
@@ -597,7 +597,7 @@ PUBLIC pascal trap Fixed Executor::C_Long2Fix(LONGINT x) /* IMIV-65 */
         /*-->*/ return x << 16;
 }
 
-PUBLIC pascal trap LONGINT Executor::C_Fix2Long(Fixed x) /* IMIV-65 */
+LONGINT Executor::C_Fix2Long(Fixed x) /* IMIV-65 */
 {
     return x >= 0 ? (x + (1L << 15)) >> 16
                   : 0xFFFF0000 | ((x + (1L << 15)) >> 16);
@@ -606,7 +606,7 @@ PUBLIC pascal trap LONGINT Executor::C_Fix2Long(Fixed x) /* IMIV-65 */
 #define MAXFIX2FRAC 0x1FFFF
 #define MINFIX2FRAC -((LONGINT)MAXFIX2FRAC + 1)
 
-PUBLIC pascal trap Fract Executor::C_Fix2Frac(Fixed x) /* IMIV-65 */
+Fract Executor::C_Fix2Frac(Fixed x) /* IMIV-65 */
 {
     if(x > MAXFIX2FRAC)
         /*-->*/ return POSOVERFLOW;
@@ -616,13 +616,13 @@ PUBLIC pascal trap Fract Executor::C_Fix2Frac(Fixed x) /* IMIV-65 */
         /*-->*/ return x << 14;
 }
 
-PUBLIC pascal trap Fixed Executor::C_Frac2Fix(Fract x) /* IMIV-65 */
+Fixed Executor::C_Frac2Fix(Fract x) /* IMIV-65 */
 {
     return x >= 0 ? (x + (1 << 13)) >> 14
                   : 0xFFFC0000 | ((x + (1 << 13)) >> 14);
 }
 
-PUBLIC Extended Executor::Fix2X(Fixed x) /* IMIV-65 */
+Extended Executor::Fix2X(Fixed x) /* IMIV-65 */
 {
     return (Extended)x / (1L << 16);
 }
@@ -630,7 +630,7 @@ PUBLIC Extended Executor::Fix2X(Fixed x) /* IMIV-65 */
 #define MAXX2FIX MAXLONG2FIX
 #define MINX2FIX MINLONG2FIX
 
-PUBLIC Fixed Executor::X2Fix(Extended *xp) /* IMIV-65 */
+Fixed Executor::X2Fix(Extended *xp) /* IMIV-65 */
 {
     Extended x;
 
@@ -650,7 +650,7 @@ PUBLIC Fixed Executor::X2Fix(Extended *xp) /* IMIV-65 */
     }
 }
 
-PUBLIC Extended Executor::Frac2X(Fract x) /* IMIV-65 */
+Extended Executor::Frac2X(Fract x) /* IMIV-65 */
 {
     return (Extended)x / (1L << 30);
 }
@@ -658,7 +658,7 @@ PUBLIC Extended Executor::Frac2X(Fract x) /* IMIV-65 */
 #define BEYONDMAXX2FRAC 2
 #define MINX2FRAC -2
 
-PUBLIC Fract Executor::X2Frac(Extended *xp) /* IMIV-65 */
+Fract Executor::X2Frac(Extended *xp) /* IMIV-65 */
 {
     Extended x;
 
@@ -680,8 +680,7 @@ PUBLIC Fract Executor::X2Frac(Extended *xp) /* IMIV-65 */
 
 #if defined(BINCOMPAT)
 
-PUBLIC trap void Executor::R_Fix2X(void *dummyretpc, Fixed x, /* INTERNAL */
-                                   extended80 *ret)
+void Executor::R_Fix2X(void *dummyretpc, Fixed x, extended80 *ret) /* INTERNAL */
 {
 #if 0
     extended96 temp;
@@ -697,8 +696,8 @@ PUBLIC trap void Executor::R_Fix2X(void *dummyretpc, Fixed x, /* INTERNAL */
 #endif
 }
 
-PUBLIC trap void Executor::R_Frac2X(void *dummyretpc, Fract x, /* INTERNAL */
-                                    extended80 *ret)
+void Executor::R_Frac2X(void *dummyretpc, Fract x,
+                        extended80 *ret) /* INTERNAL */
 {
 #if 0
     extended96 temp;
@@ -714,7 +713,7 @@ PUBLIC trap void Executor::R_Frac2X(void *dummyretpc, Fract x, /* INTERNAL */
 #endif
 }
 
-PUBLIC pascal trap Fixed Executor::C_R_X2Fix(extended80 *x)
+Fixed Executor::C_R_X2Fix(extended80 *x)
 {
 #if 0
     extended96 temp;
@@ -732,7 +731,7 @@ PUBLIC pascal trap Fixed Executor::C_R_X2Fix(extended80 *x)
 #endif
 }
 
-PUBLIC pascal trap Fract Executor::C_R_X2Frac(extended80 *x)
+Fract Executor::C_R_X2Frac(extended80 *x)
 {
 #if 0
     extended96 temp;

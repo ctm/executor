@@ -17,8 +17,8 @@ typedef enum {
     UnlockOp
 } changeop;
 
-PRIVATE OSErr PBFInfoHelper(changeop op, FileParam *pb, LONGINT dirid,
-                            BOOLEAN async)
+static OSErr PBFInfoHelper(changeop op, FileParam *pb, LONGINT dirid,
+                           BOOLEAN async)
 {
     OSErr err, err1;
     HVCB *vcbp;
@@ -98,48 +98,48 @@ PRIVATE OSErr PBFInfoHelper(changeop op, FileParam *pb, LONGINT dirid,
     PBRETURN(pb, err);
 }
 
-PUBLIC OSErr Executor::hfsPBGetFInfo(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBGetFInfo(ParmBlkPtr pb, BOOLEAN async)
 {
     return PBFInfoHelper(GetOp, (FileParam *)pb, 0L, async);
 }
 
-PUBLIC OSErr Executor::hfsPBHGetFInfo(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBHGetFInfo(HParmBlkPtr pb, BOOLEAN async)
 {
     return PBFInfoHelper(GetOp, (FileParam *)pb, CL(pb->fileParam.ioDirID), async);
 }
 
-PUBLIC OSErr Executor::hfsPBSetFInfo(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBSetFInfo(ParmBlkPtr pb, BOOLEAN async)
 {
     return PBFInfoHelper(SetOp, (FileParam *)pb, 0L, async);
 }
 
-PUBLIC OSErr Executor::hfsPBHSetFInfo(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBHSetFInfo(HParmBlkPtr pb, BOOLEAN async)
 {
     return PBFInfoHelper(SetOp, (FileParam *)pb, CL(pb->fileParam.ioDirID), async);
 }
 
-PUBLIC OSErr Executor::hfsPBSetFLock(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBSetFLock(ParmBlkPtr pb, BOOLEAN async)
 {
     return PBFInfoHelper(LockOp, (FileParam *)pb, 0L, async);
 }
 
-PUBLIC OSErr Executor::hfsPBHSetFLock(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBHSetFLock(HParmBlkPtr pb, BOOLEAN async)
 {
     return PBFInfoHelper(LockOp, (FileParam *)pb, CL(pb->fileParam.ioDirID), async);
 }
 
-PUBLIC OSErr Executor::hfsPBRstFLock(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBRstFLock(ParmBlkPtr pb, BOOLEAN async)
 {
     return PBFInfoHelper(UnlockOp, (FileParam *)pb, 0L, async);
 }
 
-PUBLIC OSErr Executor::hfsPBHRstFLock(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBHRstFLock(HParmBlkPtr pb, BOOLEAN async)
 {
     return PBFInfoHelper(UnlockOp, (FileParam *)pb,
                          CL(pb->fileParam.ioDirID), async);
 }
 
-PUBLIC OSErr Executor::hfsPBSetFVers(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBSetFVers(ParmBlkPtr pb, BOOLEAN async)
 {
     PBRETURN((IOParam *)pb, wrgVolTypErr);
 }
@@ -226,12 +226,12 @@ renamehelper(IOParam *pb, BOOLEAN async, LONGINT dirid, filekind kind)
     PBRETURN(pb, err);
 }
 
-PUBLIC OSErr Executor::hfsPBRename(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBRename(ParmBlkPtr pb, BOOLEAN async)
 {
     return renamehelper((IOParam *)pb, async, 0L, regular);
 }
 
-PUBLIC OSErr Executor::hfsPBHRename(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBHRename(HParmBlkPtr pb, BOOLEAN async)
 {
     return renamehelper((IOParam *)pb, async, CL(pb->fileParam.ioDirID),
                         (filekind)(regular | directory));

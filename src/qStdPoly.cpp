@@ -16,7 +16,7 @@
 
 using namespace Executor;
 
-PRIVATE void polyrgn(PolyHandle ph, RgnHandle rh)
+static void polyrgn(PolyHandle ph, RgnHandle rh)
 {
     GUEST<Point> *pp, *ep;
     Point firstp;
@@ -48,7 +48,7 @@ PRIVATE void polyrgn(PolyHandle ph, RgnHandle rh)
     HSetState((Handle)ph, state);
 }
 
-PUBLIC pascal trap void Executor::C_StdPoly(GrafVerb verb, PolyHandle ph)
+void Executor::C_StdPoly(GrafVerb verb, PolyHandle ph)
 {
     RgnHandle rh;
     Point p;

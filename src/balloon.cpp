@@ -7,122 +7,130 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap BOOLEAN Executor::C_HMGetBalloons()
+BOOLEAN Executor::C_HMGetBalloons()
 {
     warning_unimplemented(NULL_STRING);
     return false;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMSetBalloons(BOOLEAN flag)
+OSErr Executor::C_HMSetBalloons(BOOLEAN flag)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_HMIsBalloon()
+BOOLEAN Executor::C_HMIsBalloon()
 {
     warning_unimplemented(NULL_STRING);
     return false;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMShowBalloon(HMMessageRecord *msgp, Point tip, RectPtr alternaterectp, Ptr tipprocptr, INTEGER proc, INTEGER variant, INTEGER method)
+OSErr Executor::C_HMShowBalloon(HMMessageRecord *msgp, Point tip,
+                                RectPtr alternaterectp, Ptr tipprocptr,
+                                INTEGER proc, INTEGER variant, INTEGER method)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMShowMenuBalloon(INTEGER item, INTEGER menuid, LONGINT flags, LONGINT itemreserved, Point tip, RectPtr alternaterectp, Ptr tipproc, INTEGER proc, INTEGER variant)
+OSErr Executor::C_HMShowMenuBalloon(INTEGER item, INTEGER menuid,
+                                    LONGINT flags, LONGINT itemreserved,
+                                    Point tip, RectPtr alternaterectp,
+                                    Ptr tipproc, INTEGER proc, INTEGER variant)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMRemoveBalloon()
+OSErr Executor::C_HMRemoveBalloon()
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMGetHelpMenuHandle(GUEST<MenuHandle> *mhp)
+OSErr Executor::C_HMGetHelpMenuHandle(GUEST<MenuHandle> *mhp)
 {
     warning_unimplemented(NULL_STRING);
     *mhp = nullptr;
     return noErr;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMGetFont(GUEST<INTEGER> *fontp)
+OSErr Executor::C_HMGetFont(GUEST<INTEGER> *fontp)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMGetFontSize(GUEST<INTEGER> *sizep)
+OSErr Executor::C_HMGetFontSize(GUEST<INTEGER> *sizep)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMSetFont(INTEGER font)
+OSErr Executor::C_HMSetFont(INTEGER font)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMSetFontSize(INTEGER size)
+OSErr Executor::C_HMSetFontSize(INTEGER size)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMSetDialogResID(INTEGER resid)
+OSErr Executor::C_HMSetDialogResID(INTEGER resid)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMGetDialogResID(GUEST<INTEGER> *residp)
+OSErr Executor::C_HMGetDialogResID(GUEST<INTEGER> *residp)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMSetMenuResID(INTEGER menuid, INTEGER resid)
+OSErr Executor::C_HMSetMenuResID(INTEGER menuid, INTEGER resid)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMGetMenuResID(GUEST<INTEGER> *menuidp, GUEST<INTEGER> *residp)
+OSErr Executor::C_HMGetMenuResID(GUEST<INTEGER> *menuidp,
+                                 GUEST<INTEGER> *residp)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMScanTemplateItems(INTEGER whichid, INTEGER whicresfile, ResType whictype)
+OSErr Executor::C_HMScanTemplateItems(INTEGER whichid, INTEGER whicresfile,
+                                      ResType whictype)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMBalloonRect(HMMessageRecord *messp, Rect *rectp)
+OSErr Executor::C_HMBalloonRect(HMMessageRecord *messp, Rect *rectp)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMBalloonPict(HMMessageRecord *messp, GUEST<PicHandle> *pictp)
+OSErr Executor::C_HMBalloonPict(HMMessageRecord *messp, GUEST<PicHandle> *pictp)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMGetBalloonWindow(GUEST<WindowPtr> *windowpp)
+OSErr Executor::C_HMGetBalloonWindow(GUEST<WindowPtr> *windowpp)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;
 }
 
-PUBLIC pascal trap OSErr Executor::C_HMExtractHelpMsg(ResType type, INTEGER resid, INTEGER msg, INTEGER state, HMMessageRecord *helpmsgp)
+OSErr Executor::C_HMExtractHelpMsg(ResType type, INTEGER resid, INTEGER msg,
+                                   INTEGER state, HMMessageRecord *helpmsgp)
 {
     warning_unimplemented(NULL_STRING);
     return hmHelpManagerNotInited;

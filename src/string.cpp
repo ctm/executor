@@ -37,7 +37,7 @@ Executor::pstr_index_after(StringPtr p, char c, int i)
         return NULL;
 }
 
-PRIVATE void strNassign(Str63 new1, const StringPtr old, int n)
+static void strNassign(Str63 new1, const StringPtr old, int n)
 {
     int old_length, new_length;
 

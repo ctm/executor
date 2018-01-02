@@ -135,17 +135,17 @@ PRIVATE unsigned short scalevalues[16] = {
 
 #define ARGMASK 0x0FFFFFFF /* everything except the scale bits */
 
-PRIVATE void nop();
-PRIVATE void thepat(Pattern *p);
-PRIVATE void txratio(Point num, Point den);
-PRIVATE void line(Point op, Point np);
-PRIVATE void shrtline(Point op, SignedByte dh, SignedByte dv);
+static void nop();
+static void thepat(Pattern *p);
+static void txratio(Point num, Point den);
+static void line(Point op, Point np);
+static void shrtline(Point op, SignedByte dh, SignedByte dv);
 
-PRIVATE void nop()
+static void nop()
 {
 }
 
-PRIVATE void thepat(Pattern *p)
+static void thepat(Pattern *p)
 {
     ROMlib_fill_pat(*p);
 }
@@ -165,7 +165,7 @@ PRIVATE GUEST<Point> txtpoint;
  *	 arguments as pointers into syn space
  */
 
-PRIVATE void reduce(LONGINT *nump, LONGINT *denp)
+static void reduce(LONGINT *nump, LONGINT *denp)
 {
     LONGINT num, den, max, i;
 
@@ -202,7 +202,7 @@ PRIVATE void reduce(LONGINT *nump, LONGINT *denp)
     }
 }
 
-PRIVATE void txratio(Point num, Point den)
+static void txratio(Point num, Point den)
 {
     txnumh = num.h;
     txnumv = num.v;
@@ -212,7 +212,7 @@ PRIVATE void txratio(Point num, Point den)
     reduce(&txnumv, &txdenv);
 }
 
-PRIVATE void line(Point op, Point np)
+static void line(Point op, Point np)
 {
     PORT_PEN_LOC(thePort).h = CW(op.h);
     PORT_PEN_LOC(thePort).v = CW(op.v);
@@ -221,7 +221,7 @@ PRIVATE void line(Point op, Point np)
     PORT_PEN_LOC(thePort).v = CW(np.v);
 }
 
-PRIVATE void shrtline(Point op, SignedByte dh, SignedByte dv)
+static void shrtline(Point op, SignedByte dh, SignedByte dv)
 {
     PORT_PEN_LOC(thePort).h = CW(op.h);
     PORT_PEN_LOC(thePort).v = CW(op.v);
@@ -232,7 +232,7 @@ PRIVATE void shrtline(Point op, SignedByte dh, SignedByte dv)
     PORT_PEN_LOC(thePort).v = CW(op.v);
 }
 
-PRIVATE void setnumerdenom(Point *nump, Point *denp)
+static void setnumerdenom(Point *nump, Point *denp)
 {
     LONGINT numerh, numerv, denomh, denomv;
 
@@ -248,42 +248,41 @@ PRIVATE void setnumerdenom(Point *nump, Point *denp)
     denp->v = denomv;
 }
 
-PRIVATE void longtext(Point, StringPtr, GUEST<Point> *);
-PRIVATE void dhtext(unsigned char, StringPtr, GUEST<Point> *);
-PRIVATE void defhilite();
-PRIVATE void dvtext(unsigned char, StringPtr, GUEST<Point> *);
-PRIVATE void fillrct(Rect *r);
-PRIVATE void dhdvtext(Byte dh, Byte dv,
-                      StringPtr s, GUEST<Point> *pp);
-PRIVATE void fillrrct(Rect *r, INTEGER ow, INTEGER oh);
-PRIVATE void fillovl(Rect *r);
-PRIVATE void fillarc(Rect *r, INTEGER stang, INTEGER arcang);
-PRIVATE void fillpoly(PolyHandle p);
-PRIVATE void fillrgn(RgnHandle r);
-PRIVATE void origin(INTEGER dh, INTEGER dv);
-PRIVATE void pnlochfrac(INTEGER f);
-PRIVATE void myreadcment(INTEGER kind);
-PRIVATE void defhilite();
-PRIVATE void hilitemode();
-PRIVATE void fillpixpat(PixPatHandle ph);
-PRIVATE void pnsize(INTEGER pv, INTEGER ph);
-PRIVATE void textface(Byte f);
-PRIVATE void charextra(INTEGER extra);
-PRIVATE void shrtlinefrom(SignedByte dh, SignedByte dv);
-PRIVATE void setpicclip(RgnHandle rh);
-PRIVATE void eatRegion(RgnHandle rh, Size hs);
-PRIVATE void eatRect(Rect *rp);
-PRIVATE void eatPixMap(PixMapPtr pixp, INTEGER rowb);
-PRIVATE void eatBitMap(BitMap *bp, INTEGER rowb);
-PRIVATE Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep);
-PRIVATE void eatbitdata(BitMap *bp, BOOLEAN packed);
-PRIVATE void eatRGBColor(RGBColor *rgbp);
-PRIVATE void eatColorTable(PixMapPtr pixmap);
-PRIVATE void eatPattern(Pattern pat);
-PRIVATE void eatPixPat(PixPatHandle pixpat);
-PRIVATE unsigned short nextop(INTEGER vers);
+static void longtext(Point, StringPtr, GUEST<Point> *);
+static void dhtext(unsigned char, StringPtr, GUEST<Point> *);
+static void defhilite();
+static void dvtext(unsigned char, StringPtr, GUEST<Point> *);
+static void fillrct(Rect *r);
+static void dhdvtext(Byte dh, Byte dv, StringPtr s, GUEST<Point> *pp);
+static void fillrrct(Rect *r, INTEGER ow, INTEGER oh);
+static void fillovl(Rect *r);
+static void fillarc(Rect *r, INTEGER stang, INTEGER arcang);
+static void fillpoly(PolyHandle p);
+static void fillrgn(RgnHandle r);
+static void origin(INTEGER dh, INTEGER dv);
+static void pnlochfrac(INTEGER f);
+static void myreadcment(INTEGER kind);
+static void defhilite();
+static void hilitemode();
+static void fillpixpat(PixPatHandle ph);
+static void pnsize(INTEGER pv, INTEGER ph);
+static void textface(Byte f);
+static void charextra(INTEGER extra);
+static void shrtlinefrom(SignedByte dh, SignedByte dv);
+static void setpicclip(RgnHandle rh);
+static void eatRegion(RgnHandle rh, Size hs);
+static void eatRect(Rect *rp);
+static void eatPixMap(PixMapPtr pixp, INTEGER rowb);
+static void eatBitMap(BitMap *bp, INTEGER rowb);
+static Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep);
+static void eatbitdata(BitMap *bp, BOOLEAN packed);
+static void eatRGBColor(RGBColor *rgbp);
+static void eatColorTable(PixMapPtr pixmap);
+static void eatPattern(Pattern pat);
+static void eatPixPat(PixPatHandle pixpat);
+static unsigned short nextop(INTEGER vers);
 
-PRIVATE void longtext(Point pt, StringPtr s, GUEST<Point> *pp)
+static void longtext(Point pt, StringPtr s, GUEST<Point> *pp)
 {
     GUEST<Point> save;
     Point numer, denom;
@@ -298,7 +297,7 @@ PRIVATE void longtext(Point pt, StringPtr s, GUEST<Point> *pp)
     PORT_PEN_LOC(thePort) = save;
 }
 
-PRIVATE void dhtext(unsigned char dh, StringPtr s, GUEST<Point> *pp)
+static void dhtext(unsigned char dh, StringPtr s, GUEST<Point> *pp)
 {
     GUEST<Point> save;
     Point numer, denom;
@@ -311,7 +310,7 @@ PRIVATE void dhtext(unsigned char dh, StringPtr s, GUEST<Point> *pp)
     PORT_PEN_LOC(thePort) = save;
 }
 
-PRIVATE void dvtext(unsigned char dv, StringPtr s, GUEST<Point> *pp)
+static void dvtext(unsigned char dv, StringPtr s, GUEST<Point> *pp)
 {
     GUEST<Point> save;
     Point numer, denom;
@@ -324,7 +323,7 @@ PRIVATE void dvtext(unsigned char dv, StringPtr s, GUEST<Point> *pp)
     PORT_PEN_LOC(thePort) = save;
 }
 
-PRIVATE void dhdvtext(Byte dh, Byte dv, StringPtr s, GUEST<Point> *pp)
+static void dhdvtext(Byte dh, Byte dv, StringPtr s, GUEST<Point> *pp)
 {
     GUEST<Point> save;
     Point numer, denom;
@@ -338,39 +337,39 @@ PRIVATE void dhdvtext(Byte dh, Byte dv, StringPtr s, GUEST<Point> *pp)
     PORT_PEN_LOC(thePort) = save;
 }
 
-PRIVATE void fillrct(Rect *r)
+static void fillrct(Rect *r)
 {
     CALLRECT(fill, r);
 }
 
-PRIVATE void fillrrct(Rect *r, INTEGER ow, INTEGER oh)
+static void fillrrct(Rect *r, INTEGER ow, INTEGER oh)
 {
     CALLRRECT(fill, r, ow, oh);
 }
 
-PRIVATE void fillovl(Rect *r)
+static void fillovl(Rect *r)
 {
     CALLOVAL(fill, r);
 }
 
-PRIVATE void fillarc(Rect *r, INTEGER stang, INTEGER arcang)
+static void fillarc(Rect *r, INTEGER stang, INTEGER arcang)
 {
     CALLARC(fill, r, stang, arcang);
 }
 
-PRIVATE void fillpoly(PolyHandle p)
+static void fillpoly(PolyHandle p)
 {
     CALLPOLY(fill, p);
 }
 
-PRIVATE void fillrgn(RgnHandle r)
+static void fillrgn(RgnHandle r)
 {
     CALLRGN(fill, r);
 }
 
 PRIVATE RgnHandle saveclip;
 
-PRIVATE void origin(INTEGER dh, INTEGER dv)
+static void origin(INTEGER dh, INTEGER dv)
 {
     OffsetRect(&srcpicframe, dh, dv);
 
@@ -378,30 +377,30 @@ PRIVATE void origin(INTEGER dh, INTEGER dv)
     txtpoint.v = CW(CW(txtpoint.v) - dv);
 }
 
-PRIVATE void pnlochfrac(INTEGER f)
+static void pnlochfrac(INTEGER f)
 {
     /* make sure that we scale f, since it's fixed and can't be scaled
        automatically */
 }
 
-PRIVATE void myreadcment(INTEGER kind)
+static void myreadcment(INTEGER kind)
 {
     C_ReadComment(kind, 0, (Handle)0);
 }
 
 PRIVATE RGBColor saveHiliteRGB;
 
-PRIVATE void defhilite()
+static void defhilite()
 {
     HiliteRGB = saveHiliteRGB;
 }
 
-PRIVATE void hilitemode()
+static void hilitemode()
 {
     HiliteMode &= ~(0x80);
 }
 
-PRIVATE void fillpixpat(PixPatHandle ph)
+static void fillpixpat(PixPatHandle ph)
 {
     if(CGrafPort_p(thePort))
     {
@@ -411,7 +410,7 @@ PRIVATE void fillpixpat(PixPatHandle ph)
     }
 }
 
-PRIVATE void pnsize(INTEGER pv, INTEGER ph)
+static void pnsize(INTEGER pv, INTEGER ph)
 {
     GUEST<Point> p;
 
@@ -421,28 +420,28 @@ PRIVATE void pnsize(INTEGER pv, INTEGER ph)
     PenSize(CW(p.h), CW(p.v));
 }
 
-PRIVATE void textface(Byte f)
+static void textface(Byte f)
 {
     TextFace(f);
 }
 
-PRIVATE void charextra(INTEGER extra)
+static void charextra(INTEGER extra)
 {
     /* TODO:  Can't use CharExtra 'cause argument is Fixed */
 }
 
-PRIVATE void shrtlinefrom(SignedByte dh, SignedByte dv)
+static void shrtlinefrom(SignedByte dh, SignedByte dv)
 {
     Line(dh, dv);
 }
 
-PRIVATE void setpicclip(RgnHandle rh)
+static void setpicclip(RgnHandle rh)
 {
     SectRgn(rh, saveclip, rh);
     SetClip(rh);
 }
 
-PRIVATE void W_BackPat(Pattern pp)
+static void W_BackPat(Pattern pp)
 {
     BackPat(pp);
 }
@@ -540,7 +539,7 @@ end_assoc(void)
     assoc_headp = 0;
 }
 
-PRIVATE void W_TextFont(INTEGER f)
+static void W_TextFont(INTEGER f)
 {
     StringPtr sp;
 
@@ -555,17 +554,17 @@ PRIVATE void W_TextFont(INTEGER f)
     TextFont(f);
 }
 
-PRIVATE void W_TextMode(INTEGER m)
+static void W_TextMode(INTEGER m)
 {
     TextMode(m);
 }
 
-PRIVATE void W_SpaceExtra(Fixed e)
+static void W_SpaceExtra(Fixed e)
 {
     SpaceExtra(e);
 }
 
-PRIVATE void W_PenMode(INTEGER m)
+static void W_PenMode(INTEGER m)
 {
 
 #define BACHMAN_HACK
@@ -577,72 +576,72 @@ PRIVATE void W_PenMode(INTEGER m)
     PenMode(m);
 }
 
-PRIVATE void W_PenPat(Pattern pp)
+static void W_PenPat(Pattern pp)
 {
     PenPat(pp);
 }
 
-PRIVATE void W_TextSize(INTEGER s)
+static void W_TextSize(INTEGER s)
 {
     TextSize(s);
 }
 
-PRIVATE void W_ForeColor(LONGINT c)
+static void W_ForeColor(LONGINT c)
 {
     ForeColor(c);
 }
 
-PRIVATE void W_BackColor(LONGINT c)
+static void W_BackColor(LONGINT c)
 {
     BackColor(c);
 }
 
-PRIVATE void W_BackPixPat(PixPatHandle ph)
+static void W_BackPixPat(PixPatHandle ph)
 {
     BackPixPat(ph);
 }
 
-PRIVATE void W_PenPixPat(PixPatHandle ph)
+static void W_PenPixPat(PixPatHandle ph)
 {
     PenPixPat(ph);
 }
 
-PRIVATE void W_RGBForeColor(RGBColor *colorp)
+static void W_RGBForeColor(RGBColor *colorp)
 {
     RGBForeColor(colorp);
 }
 
-PRIVATE void W_RGBBackColor(RGBColor *colorp)
+static void W_RGBBackColor(RGBColor *colorp)
 {
     RGBBackColor(colorp);
 }
 
-PRIVATE void W_HiliteColor(RGBColor *colorp)
+static void W_HiliteColor(RGBColor *colorp)
 {
     HiliteColor(colorp);
 }
 
-PRIVATE void W_OpColor(RGBColor *colorp)
+static void W_OpColor(RGBColor *colorp)
 {
     OpColor(colorp);
 }
 
-PRIVATE void W_LineTo(INTEGER h, INTEGER v)
+static void W_LineTo(INTEGER h, INTEGER v)
 {
     LineTo(h, v);
 }
 
-PRIVATE void W_FrameRect(Rect *r)
+static void W_FrameRect(Rect *r)
 {
     FrameRect(r);
 }
 
-PRIVATE void W_PaintRect(Rect *r)
+static void W_PaintRect(Rect *r)
 {
     PaintRect(r);
 }
 
-PRIVATE void W_EraseRect(Rect *r)
+static void W_EraseRect(Rect *r)
 {
     EraseRect(r);
 }
@@ -653,118 +652,118 @@ reset_hilite_mode(void)
     HiliteMode |= 0x80;
 }
 
-PRIVATE void W_InvertRect(Rect *r)
+static void W_InvertRect(Rect *r)
 {
     InvertRect(r);
     reset_hilite_mode();
 }
 
-PRIVATE void W_FrameRoundRect(Rect *r, INTEGER ow, INTEGER oh)
+static void W_FrameRoundRect(Rect *r, INTEGER ow, INTEGER oh)
 {
     FrameRoundRect(r, ow, oh);
 }
 
-PRIVATE void W_PaintRoundRect(Rect *r, INTEGER ow, INTEGER oh)
+static void W_PaintRoundRect(Rect *r, INTEGER ow, INTEGER oh)
 {
     PaintRoundRect(r, ow, oh);
 }
 
-PRIVATE void W_EraseRoundRect(Rect *r, INTEGER ow, INTEGER oh)
+static void W_EraseRoundRect(Rect *r, INTEGER ow, INTEGER oh)
 {
     EraseRoundRect(r, ow, oh);
 }
 
-PRIVATE void W_InvertRoundRect(Rect *r, INTEGER ow, INTEGER oh)
+static void W_InvertRoundRect(Rect *r, INTEGER ow, INTEGER oh)
 {
     InvertRoundRect(r, ow, oh);
     reset_hilite_mode();
 }
 
-PRIVATE void W_FrameOval(Rect *r)
+static void W_FrameOval(Rect *r)
 {
     FrameOval(r);
 }
 
-PRIVATE void W_PaintOval(Rect *r)
+static void W_PaintOval(Rect *r)
 {
     PaintOval(r);
 }
 
-PRIVATE void W_EraseOval(Rect *r)
+static void W_EraseOval(Rect *r)
 {
     EraseOval(r);
 }
 
-PRIVATE void W_InvertOval(Rect *r)
+static void W_InvertOval(Rect *r)
 {
     InvertOval(r);
     reset_hilite_mode();
 }
 
-PRIVATE void W_FrameArc(Rect *r, INTEGER start, INTEGER angle)
+static void W_FrameArc(Rect *r, INTEGER start, INTEGER angle)
 {
     FrameArc(r, start, angle);
 }
 
-PRIVATE void W_PaintArc(Rect *r, INTEGER start, INTEGER angle)
+static void W_PaintArc(Rect *r, INTEGER start, INTEGER angle)
 {
     PaintArc(r, start, angle);
 }
 
-PRIVATE void W_EraseArc(Rect *r, INTEGER start, INTEGER angle)
+static void W_EraseArc(Rect *r, INTEGER start, INTEGER angle)
 {
     EraseArc(r, start, angle);
 }
 
-PRIVATE void W_InvertArc(Rect *r, INTEGER start, INTEGER angle)
+static void W_InvertArc(Rect *r, INTEGER start, INTEGER angle)
 {
     InvertArc(r, start, angle);
     reset_hilite_mode();
 }
 
-PRIVATE void W_FramePoly(PolyHandle poly)
+static void W_FramePoly(PolyHandle poly)
 {
     FramePoly(poly);
 }
 
-PRIVATE void W_PaintPoly(PolyHandle poly)
+static void W_PaintPoly(PolyHandle poly)
 {
     PaintPoly(poly);
 }
 
-PRIVATE void W_ErasePoly(PolyHandle poly)
+static void W_ErasePoly(PolyHandle poly)
 {
     ErasePoly(poly);
 }
 
-PRIVATE void W_InvertPoly(PolyHandle poly)
+static void W_InvertPoly(PolyHandle poly)
 {
     InvertPoly(poly);
     reset_hilite_mode();
 }
 
-PRIVATE void W_FrameRgn(RgnHandle rh)
+static void W_FrameRgn(RgnHandle rh)
 {
     FrameRgn(rh);
 }
 
-PRIVATE void W_PaintRgn(RgnHandle rh)
+static void W_PaintRgn(RgnHandle rh)
 {
     PaintRgn(rh);
 }
 
-PRIVATE void W_EraseRgn(RgnHandle rh)
+static void W_EraseRgn(RgnHandle rh)
 {
     EraseRgn(rh);
 }
 
-PRIVATE void W_InvertRgn(RgnHandle rh)
+static void W_InvertRgn(RgnHandle rh)
 {
     InvertRgn(rh);
     reset_hilite_mode();
 }
 
-PRIVATE void W_ReadComment(INTEGER kind, INTEGER size, Handle hand)
+static void W_ReadComment(INTEGER kind, INTEGER size, Handle hand)
 {
     C_ReadComment(kind, size, hand);
 }
@@ -990,7 +989,7 @@ PRIVATE wps wparray[] = {
  *	 so we can maintain the proper alignment in nextop()
  */
 
-PRIVATE Byte eatByte()
+static Byte eatByte()
 {
     Byte retval;
 
@@ -1002,7 +1001,7 @@ PRIVATE Byte eatByte()
     return retval;
 }
 
-PRIVATE GUEST<INTEGER> eatINTEGERX()
+static GUEST<INTEGER> eatINTEGERX()
 {
     GUEST<INTEGER> retval;
 
@@ -1014,7 +1013,7 @@ PRIVATE GUEST<INTEGER> eatINTEGERX()
     return retval;
 }
 
-PRIVATE INTEGER eatINTEGER()
+static INTEGER eatINTEGER()
 {
     GUEST<INTEGER> retval;
 
@@ -1022,7 +1021,7 @@ PRIVATE INTEGER eatINTEGER()
     return CW(retval);
 }
 
-PRIVATE GUEST<LONGINT> eatLONGINTX()
+static GUEST<LONGINT> eatLONGINTX()
 {
     GUEST<LONGINT> retval;
 
@@ -1034,7 +1033,7 @@ PRIVATE GUEST<LONGINT> eatLONGINTX()
     return retval;
 }
 
-PRIVATE LONGINT eatLONGINT()
+static LONGINT eatLONGINT()
 {
     GUEST<LONGINT> retval;
 
@@ -1042,7 +1041,7 @@ PRIVATE LONGINT eatLONGINT()
     return CL(retval);
 }
 
-PRIVATE void eatString(Str255 str)
+static void eatString(Str255 str)
 {
     str[0] = eatByte();
     if(procp)
@@ -1052,7 +1051,7 @@ PRIVATE void eatString(Str255 str)
     nextbytep += str[0];
 }
 
-PRIVATE void eatNBytes(LONGINT n)
+static void eatNBytes(LONGINT n)
 {
     char *bufp;
 
@@ -1066,7 +1065,7 @@ PRIVATE void eatNBytes(LONGINT n)
     nextbytep += n;
 }
 
-PRIVATE void eatRegion(RgnHandle rh, Size hs)
+static void eatRegion(RgnHandle rh, Size hs)
 {
     SignedByte state;
 
@@ -1086,7 +1085,7 @@ PRIVATE void eatRegion(RgnHandle rh, Size hs)
     nextbytep += hs - sizeof(INTEGER);
 }
 
-PRIVATE void eatRect(Rect *rp)
+static void eatRect(Rect *rp)
 {
     rp->top = eatINTEGERX();
     rp->left = eatINTEGERX();
@@ -1094,7 +1093,7 @@ PRIVATE void eatRect(Rect *rp)
     rp->right = eatINTEGERX();
 }
 
-PRIVATE void eatPixMap(PixMapPtr pixp, INTEGER rowb)
+static void eatPixMap(PixMapPtr pixp, INTEGER rowb)
 {
     /* TODO:  byte swapping stuff, testing */
 
@@ -1117,14 +1116,14 @@ PRIVATE void eatPixMap(PixMapPtr pixp, INTEGER rowb)
     pixp->pmReserved = eatLONGINTX();
 }
 
-PRIVATE void eatBitMap(BitMap *bp, INTEGER rowb)
+static void eatBitMap(BitMap *bp, INTEGER rowb)
 {
     bp->baseAddr = 0;
     bp->rowBytes = rowb ? CW(rowb) : eatINTEGERX();
     eatRect(&bp->bounds);
 }
 
-PRIVATE Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
+static Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
 {
     int rowb;
     Size pic_data_size, final_data_size;
@@ -1290,7 +1289,7 @@ PRIVATE Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
     return final_data_size;
 }
 
-PRIVATE void eatbitdata(BitMap *bp, BOOLEAN packed)
+static void eatbitdata(BitMap *bp, BOOLEAN packed)
 {
     INTEGER rowb;
     Size datasize;
@@ -1373,14 +1372,14 @@ PRIVATE void eatbitdata(BitMap *bp, BOOLEAN packed)
     }
 }
 
-PRIVATE void eatRGBColor(RGBColor *rgbp)
+static void eatRGBColor(RGBColor *rgbp)
 {
     rgbp->red = eatINTEGERX();
     rgbp->green = eatINTEGERX();
     rgbp->blue = eatINTEGERX();
 }
 
-PRIVATE void eatColorTable(PixMapPtr pixmap)
+static void eatColorTable(PixMapPtr pixmap)
 {
     CTabPtr cp;
     ColorSpec *cspecp, *cspecep;
@@ -1401,7 +1400,7 @@ PRIVATE void eatColorTable(PixMapPtr pixmap)
     }
 }
 
-PRIVATE void eatPattern(Pattern pat)
+static void eatPattern(Pattern pat)
 {
     pat[0] = eatByte();
     pat[1] = eatByte();
@@ -1413,7 +1412,7 @@ PRIVATE void eatPattern(Pattern pat)
     pat[7] = eatByte();
 }
 
-PRIVATE void eatPixPat(PixPatHandle pixpat)
+static void eatPixPat(PixPatHandle pixpat)
 {
     RGBColor rgb;
     Size datasize;
@@ -1467,7 +1466,7 @@ PRIVATE void eatPixPat(PixPatHandle pixpat)
 
 #define opEndPic 0xff
 
-PRIVATE unsigned short nextop(INTEGER vers)
+static unsigned short nextop(INTEGER vers)
 {
     unsigned int retval;
 
@@ -1487,7 +1486,7 @@ PRIVATE unsigned short nextop(INTEGER vers)
 
 #define SE(x) ((x & 0x80) ? x | (~0 ^ 0xff) : x & 0xff) /* sign extend */
 
-PUBLIC pascal trap void Executor::C_DrawPicture(PicHandle pic, Rect *destrp)
+void Executor::C_DrawPicture(PicHandle pic, Rect *destrp)
 {
     INTEGER words[2], *wp;
     Point points[2], *pp;

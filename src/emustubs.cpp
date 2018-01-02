@@ -1165,7 +1165,7 @@ STUB(Pack8)
 }
 }
 
-PUBLIC pascal void Executor::C_pack8_unknown_selector()
+void Executor::C_pack8_unknown_selector()
 {
     do_selector_error(EM_D0 & 0xFFFF, "Pack8", _Pack8);
 }
@@ -2122,7 +2122,7 @@ STUB(HFSRoutines)
 
 #define UNIMPLEMENTEDINDEX (0x9F)
 
-PRIVATE long istool(uint32_t *d0p, uint32_t d1)
+static long istool(uint32_t *d0p, uint32_t d1)
 {
     long retval;
 
@@ -2142,7 +2142,7 @@ PRIVATE long istool(uint32_t *d0p, uint32_t d1)
     return retval;
 }
 
-PRIVATE long unimplementedos(long d0)
+static long unimplementedos(long d0)
 {
     long retval;
 
@@ -2169,7 +2169,7 @@ PRIVATE long unimplementedos(long d0)
     return retval;
 }
 
-PRIVATE long unimplementedtool(long d0)
+static long unimplementedtool(long d0)
 {
     long retval;
 

@@ -24,7 +24,7 @@ using namespace Executor;
 
 #endif
 
-PUBLIC pascal trap INTEGER Executor::C_FindWindow(Point p, GUEST<WindowPtr> *wpp)
+INTEGER Executor::C_FindWindow(Point p, GUEST<WindowPtr> *wpp)
 {
     WindowPeek wp;
     LONGINT pointaslong, val;
@@ -59,7 +59,7 @@ DONE:
     return retval;
 }
 
-PRIVATE BOOLEAN xTrackBox(WindowPtr wp, Point pt, INTEGER part) /* IMIV-50 */
+static BOOLEAN xTrackBox(WindowPtr wp, Point pt, INTEGER part) /* IMIV-50 */
 {
     BOOLEAN inpart = true, inp;
     EventRecord ev;
@@ -89,21 +89,20 @@ PRIVATE BOOLEAN xTrackBox(WindowPtr wp, Point pt, INTEGER part) /* IMIV-50 */
     return inpart;
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_TrackBox(WindowPtr wp, /* IMIV-50 */
-                                                Point pt, INTEGER part)
+BOOLEAN Executor::C_TrackBox(WindowPtr wp, Point pt, INTEGER part) /* IMIV-50 */
 {
     if(part)
         part -= 2;
     return xTrackBox(wp, pt, part);
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_TrackGoAway(WindowPtr w, Point p)
+BOOLEAN Executor::C_TrackGoAway(WindowPtr w, Point p)
 {
     return xTrackBox(w, p, wInGoAway);
 }
 
-PUBLIC pascal trap void Executor::C_ZoomWindow(WindowPtr wp, /* IMIV-50 */
-                                               INTEGER part, BOOLEAN front)
+void Executor::C_ZoomWindow(WindowPtr wp, INTEGER part,
+                            BOOLEAN front) /* IMIV-50 */
 {
     RgnHandle behind;
 #if !defined(No_STEF_zoommods)

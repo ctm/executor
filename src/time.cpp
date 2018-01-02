@@ -85,8 +85,7 @@ msecs_elapsed()
 
 #define REALLONGTIME 0x7FFFFFFF
 
-PUBLIC syn68k_addr_t Executor::catchalarm(syn68k_addr_t interrupt_pc,
-                                          void *unused)
+syn68k_addr_t Executor::catchalarm(syn68k_addr_t interrupt_pc, void *unused)
 {
     ULONGINT diff;
     TMTask *qp;
@@ -201,7 +200,7 @@ PUBLIC syn68k_addr_t Executor::catchalarm(syn68k_addr_t interrupt_pc,
     return MAGIC_RTE_ADDRESS;
 }
 
-PRIVATE void ROMlib_PrimeTime(QElemPtr taskp, LONGINT count)
+static void ROMlib_PrimeTime(QElemPtr taskp, LONGINT count)
 {
     static char beenhere = false;
     LONGINT msecs_until_next;
@@ -258,18 +257,18 @@ PRIVATE void ROMlib_PrimeTime(QElemPtr taskp, LONGINT count)
     restore_virtual_ints(block);
 }
 
-PUBLIC void Executor::InsTime(QElemPtr taskp)
+void Executor::InsTime(QElemPtr taskp)
 {
     ((TMTask *)taskp)->tmCount = CLC(-1);
     Enqueue(taskp, &ROMlib_timehead);
 }
 
-PUBLIC void Executor::RmvTime(QElemPtr taskp)
+void Executor::RmvTime(QElemPtr taskp)
 {
     Dequeue(taskp, &ROMlib_timehead);
 }
 
-PUBLIC void Executor::PrimeTime(QElemPtr taskp, LONGINT count)
+void Executor::PrimeTime(QElemPtr taskp, LONGINT count)
 {
     ROMlib_PrimeTime(taskp, count);
 }

@@ -76,7 +76,7 @@ using namespace Executor;
 #define SER_START (1)
 #define SER_STOP (0)
 
-PUBLIC OSErr Executor::RAMSDOpen(SPortSel port) /* IMII-249 */
+OSErr Executor::RAMSDOpen(SPortSel port) /* IMII-249 */
 {
     OSErr err;
     GUEST<INTEGER> rn;
@@ -98,7 +98,7 @@ PUBLIC OSErr Executor::RAMSDOpen(SPortSel port) /* IMII-249 */
     return err;
 }
 
-PUBLIC void Executor::RAMSDClose(SPortSel port) /* IMII-250 */
+void Executor::RAMSDClose(SPortSel port) /* IMII-250 */
 {
     switch(port)
     {
@@ -115,7 +115,7 @@ PUBLIC void Executor::RAMSDClose(SPortSel port) /* IMII-250 */
 
 #define SERSET 8 /* IMII-250 */
 
-PUBLIC OSErr Executor::SerReset(INTEGER rn, INTEGER config) /* IMII-250 */
+OSErr Executor::SerReset(INTEGER rn, INTEGER config) /* IMII-250 */
 {
     GUEST<INTEGER> config_s = CW(config);
 
@@ -124,7 +124,7 @@ PUBLIC OSErr Executor::SerReset(INTEGER rn, INTEGER config) /* IMII-250 */
 
 #define SERSETBUF 9 /* IMII-251 */
 
-PUBLIC OSErr Executor::SerSetBuf(INTEGER rn, Ptr p, INTEGER len) /* IMII-251 */
+OSErr Executor::SerSetBuf(INTEGER rn, Ptr p, INTEGER len) /* IMII-251 */
 {
     sersetbuf_t temp;
 
@@ -136,28 +136,28 @@ PUBLIC OSErr Executor::SerSetBuf(INTEGER rn, Ptr p, INTEGER len) /* IMII-251 */
 
 #define SERHSHAKE 10 /* IMII-251 */
 
-PUBLIC OSErr Executor::SerHShake(INTEGER rn, SerShk flags) /* IMII-251 */
+OSErr Executor::SerHShake(INTEGER rn, SerShk flags) /* IMII-251 */
 {
     return Control(rn, SERHSHAKE, (Ptr)&flags);
 }
 
 #define SERSETBRK 12 /* IMII-252 */
 
-PUBLIC OSErr Executor::SerSetBrk(INTEGER rn) /* IMII-252 */
+OSErr Executor::SerSetBrk(INTEGER rn) /* IMII-252 */
 {
     return Control(rn, SERSETBRK, (Ptr)0);
 }
 
 #define SERCLRBRK 11 /* IMII-253 */
 
-PUBLIC OSErr Executor::SerClrBrk(INTEGER rn) /* IMII-253 */
+OSErr Executor::SerClrBrk(INTEGER rn) /* IMII-253 */
 {
     return Control(rn, SERCLRBRK, (Ptr)0);
 }
 
 #define SERGETBUF 2 /* IMII-253 */
 
-PUBLIC OSErr Executor::SerGetBuf(INTEGER rn, LONGINT *lp) /* IMII-253 */
+OSErr Executor::SerGetBuf(INTEGER rn, LONGINT *lp) /* IMII-253 */
 {
     INTEGER status[11];
     OSErr err;
@@ -169,7 +169,7 @@ PUBLIC OSErr Executor::SerGetBuf(INTEGER rn, LONGINT *lp) /* IMII-253 */
 
 #define SERSTATUS 8 /* IMII-253 */
 
-PUBLIC OSErr Executor::SerStatus(INTEGER rn, SerStaRec *serstap) /* IMII-253 */
+OSErr Executor::SerStatus(INTEGER rn, SerStaRec *serstap) /* IMII-253 */
 {
     INTEGER status[11];
     OSErr err;
@@ -213,14 +213,14 @@ typedef struct
 
 typedef GUEST<hiddenp> *hiddenh;
 
-PRIVATE DCtlPtr otherdctl(ParmBlkPtr);
-PRIVATE OSErr serset(LONGINT fd, INTEGER param);
-PRIVATE OSErr serxhshake(LONGINT fd, SerShk *sershkp);
-PRIVATE OSErr setbaud(LONGINT fd, INTEGER baud);
-PRIVATE OSErr flow(LONGINT fd, LONGINT flag);
-PRIVATE OSErr ctlbrk(LONGINT fd, INTEGER flag);
+static DCtlPtr otherdctl(ParmBlkPtr);
+static OSErr serset(LONGINT fd, INTEGER param);
+static OSErr serxhshake(LONGINT fd, SerShk *sershkp);
+static OSErr setbaud(LONGINT fd, INTEGER baud);
+static OSErr flow(LONGINT fd, LONGINT flag);
+static OSErr ctlbrk(LONGINT fd, INTEGER flag);
 
-PRIVATE DCtlPtr otherdctl(ParmBlkPtr pbp)
+static DCtlPtr otherdctl(ParmBlkPtr pbp)
 {
     DCtlHandle h;
 
@@ -326,8 +326,7 @@ void callcomp(ParmBlkPtr pbp, ProcPtr comp, OSErr err)
 PRIVATE const char *lockname;
 #endif
 
-PUBLIC OSErr Executor::ROMlib_serialopen(ParmBlkPtr pbp, /* INTERNAL */
-                                         DCtlPtr dcp)
+OSErr Executor::ROMlib_serialopen(ParmBlkPtr pbp, DCtlPtr dcp) /* INTERNAL */
 {
     OSErr err;
     DCtlPtr otherp; /* auto due to old compiler bug */
@@ -420,8 +419,7 @@ PUBLIC OSErr Executor::ROMlib_serialopen(ParmBlkPtr pbp, /* INTERNAL */
     DOCOMPLETION(pbp, err);
 }
 
-PUBLIC OSErr Executor::ROMlib_serialprime(ParmBlkPtr pbp, /* INTERNAL */
-                                          DCtlPtr dcp)
+OSErr Executor::ROMlib_serialprime(ParmBlkPtr pbp, DCtlPtr dcp) /* INTERNAL */
 {
     OSErr err;
     hiddenh h;
@@ -518,7 +516,7 @@ PUBLIC OSErr Executor::ROMlib_serialprime(ParmBlkPtr pbp, /* INTERNAL */
 
 #endif
 
-PRIVATE OSErr serset(LONGINT fd, INTEGER param)
+static OSErr serset(LONGINT fd, INTEGER param)
 {
 #if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
@@ -681,7 +679,7 @@ PRIVATE OSErr serset(LONGINT fd, INTEGER param)
 #endif
 }
 
-PRIVATE OSErr serxhshake(LONGINT fd, SerShk *sershkp)
+static OSErr serxhshake(LONGINT fd, SerShk *sershkp)
 {
 #if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
@@ -754,7 +752,7 @@ PRIVATE OSErr serxhshake(LONGINT fd, SerShk *sershkp)
 #endif
 }
 
-PRIVATE OSErr setbaud(LONGINT fd, INTEGER baud)
+static OSErr setbaud(LONGINT fd, INTEGER baud)
 {
 #if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
@@ -801,7 +799,7 @@ PRIVATE OSErr setbaud(LONGINT fd, INTEGER baud)
 #endif
 }
 
-PRIVATE OSErr ctlbrk(LONGINT fd, INTEGER flag)
+static OSErr ctlbrk(LONGINT fd, INTEGER flag)
 {
 #if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
@@ -826,7 +824,7 @@ PRIVATE OSErr ctlbrk(LONGINT fd, INTEGER flag)
 #endif
 }
 
-PRIVATE OSErr flow(LONGINT fd, LONGINT flag)
+static OSErr flow(LONGINT fd, LONGINT flag)
 {
 #if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
@@ -870,8 +868,7 @@ PRIVATE OSErr flow(LONGINT fd, LONGINT flag)
 
 #define SERKILLIO 1
 
-PUBLIC OSErr Executor::ROMlib_serialctl(ParmBlkPtr pbp, /* INTERNAL */
-                                        DCtlPtr dcp)
+OSErr Executor::ROMlib_serialctl(ParmBlkPtr pbp, DCtlPtr dcp) /* INTERNAL */
 {
     OSErr err;
     hiddenh h;
@@ -972,8 +969,7 @@ PUBLIC OSErr Executor::ROMlib_serialctl(ParmBlkPtr pbp, /* INTERNAL */
  * NOTE:  SERSTATUS lies about everything except rdPend.
  */
 
-PUBLIC OSErr Executor::ROMlib_serialstatus(ParmBlkPtr pbp, /* INTERNAL */
-                                           DCtlPtr dcp)
+OSErr Executor::ROMlib_serialstatus(ParmBlkPtr pbp, DCtlPtr dcp) /* INTERNAL */
 {
     OSErr err;
     hiddenh h;
@@ -1034,7 +1030,7 @@ PUBLIC OSErr Executor::ROMlib_serialstatus(ParmBlkPtr pbp, /* INTERNAL */
     DOCOMPLETION(pbp, err);
 }
 
-PRIVATE void restorecloseanddispose(hiddenh h)
+static void restorecloseanddispose(hiddenh h)
 {
 #if defined(LINUX) || defined(MACOSX)
 #if defined(TERMIO)
@@ -1050,8 +1046,7 @@ PRIVATE void restorecloseanddispose(hiddenh h)
     DisposHandle((Handle)h);
 }
 
-PUBLIC OSErr Executor::ROMlib_serialclose(ParmBlkPtr pbp, /* INTERNAL */
-                                          DCtlPtr dcp)
+OSErr Executor::ROMlib_serialclose(ParmBlkPtr pbp, DCtlPtr dcp) /* INTERNAL */
 {
     OSErr err;
     hiddenh h;

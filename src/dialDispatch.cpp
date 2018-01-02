@@ -12,7 +12,7 @@ using namespace Executor;
 
 /* traps from the DialogDispatch trap */
 
-PUBLIC pascal trap OSErr Executor::C_GetStdFilterProc(GUEST<ProcPtr> *proc)
+OSErr Executor::C_GetStdFilterProc(GUEST<ProcPtr> *proc)
 {
     *proc = RM((ProcPtr)P_ROMlib_myfilt);
     warning_unimplemented("no specs"); /* i.e. no documentation on how this
@@ -22,7 +22,7 @@ PUBLIC pascal trap OSErr Executor::C_GetStdFilterProc(GUEST<ProcPtr> *proc)
     return noErr;
 }
 
-PUBLIC pascal trap OSErr Executor::C_SetDialogDefaultItem(DialogPtr dialog, int16_t new_item)
+OSErr Executor::C_SetDialogDefaultItem(DialogPtr dialog, int16_t new_item)
 {
     DialogPeek dp;
 
@@ -35,13 +35,13 @@ PUBLIC pascal trap OSErr Executor::C_SetDialogDefaultItem(DialogPtr dialog, int1
 
 /* These two probably adjust stuff that doesn't appear in Stock System 7 */
 
-PUBLIC pascal trap OSErr Executor::C_SetDialogCancelItem(DialogPtr dialog, int16_t new_item)
+OSErr Executor::C_SetDialogCancelItem(DialogPtr dialog, int16_t new_item)
 {
     warning_unimplemented(NULL_STRING);
     return noErr; /* noErr is likely to be less upsetting than paramErr -- ctm */
 }
 
-PUBLIC pascal trap OSErr Executor::C_SetDialogTracksCursor(DialogPtr dialog, Boolean tracks)
+OSErr Executor::C_SetDialogTracksCursor(DialogPtr dialog, Boolean tracks)
 {
     warning_unimplemented(NULL_STRING);
     return noErr; /* paramErr is too harsh */

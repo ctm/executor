@@ -12,24 +12,24 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_ShutDwnPower()
+void Executor::C_ShutDwnPower()
 {
     ROMlib_exit = true;
     ExitToShell();
 }
 
-PUBLIC pascal trap void Executor::C_ShutDwnStart()
+void Executor::C_ShutDwnStart()
 {
     ExitToShell();
 }
 
-PUBLIC pascal trap void Executor::C_ShutDwnInstall(ProcPtr shutdown_proc, int16_t flags)
+void Executor::C_ShutDwnInstall(ProcPtr shutdown_proc, int16_t flags)
 {
     /* #warning "ShutDwnInstall unimplemented" */
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC pascal trap void Executor::C_ShutDwnRemove(ProcPtr shutdown_proc)
+void Executor::C_ShutDwnRemove(ProcPtr shutdown_proc)
 {
     /* #warning "ShutDwnRemove unimplemented" */
     warning_unimplemented(NULL_STRING);

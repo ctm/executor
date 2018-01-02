@@ -311,7 +311,7 @@ void Executor::ROMlib_terestore(tesave *t)
     thePortX = t->_tport;
 }
 
-PUBLIC pascal trap void Executor::C_TEIdle(TEHandle teh)
+void Executor::C_TEIdle(TEHandle teh)
 {
     INTEGER sel, state;
     LONGINT ticks;
@@ -793,8 +793,8 @@ DONE:
    
    for calling conventions, see IM Text, 2-63 */
 
-PUBLIC int16_t Executor::C_ROMlib_dotext(TEPtr tep, /* INTERNAL */
-                                         int16_t start, int16_t end, int16_t what)
+int16_t Executor::C_ROMlib_dotext(TEPtr tep, int16_t start, int16_t end,
+                                  int16_t what) /* INTERNAL */
 {
     if(what == teHilite)
         te_hilite(tep, start, end);
@@ -805,7 +805,7 @@ PUBLIC int16_t Executor::C_ROMlib_dotext(TEPtr tep, /* INTERNAL */
     return 0;
 }
 
-PUBLIC INTEGERRET ROMlib_dotext(void)
+INTEGERRET ROMlib_dotext(void)
 {
     INTEGERRET retval;
     TEPtr tep;
@@ -931,7 +931,7 @@ done:
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_TEClick(Point pt, BOOLEAN extend, TEHandle te)
+void Executor::C_TEClick(Point pt, BOOLEAN extend, TEHandle te)
 {
     EventRecord evt;
     SignedByte te_flags;
@@ -1183,7 +1183,7 @@ PUBLIC pascal trap void Executor::C_TEClick(Point pt, BOOLEAN extend, TEHandle t
     TERESTORE();
 }
 
-PUBLIC pascal trap void Executor::C_TESetSelect(int32_t start, int32_t stop, TEHandle teh)
+void Executor::C_TESetSelect(int32_t start, int32_t stop, TEHandle teh)
 {
     int16_t length;
 
@@ -1216,7 +1216,7 @@ PUBLIC pascal trap void Executor::C_TESetSelect(int32_t start, int32_t stop, TEH
     TE_SLAM(teh);
 }
 
-PUBLIC pascal trap void Executor::C_TEActivate(TEHandle teh)
+void Executor::C_TEActivate(TEHandle teh)
 {
     int16_t start, end;
 
@@ -1239,7 +1239,7 @@ PUBLIC pascal trap void Executor::C_TEActivate(TEHandle teh)
     TE_SLAM(teh);
 }
 
-PUBLIC pascal trap void Executor::C_TEDeactivate(TEHandle teh)
+void Executor::C_TEDeactivate(TEHandle teh)
 {
     TE_SLAM(teh);
 

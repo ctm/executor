@@ -23,18 +23,17 @@ using namespace Executor;
 typedef pascal BOOLEAN (*clickproc)(void);
 #endif
 
-PRIVATE void findcell(GUEST<Cell> *, ListHandle);
-PRIVATE void setselectnilflag(BOOLEAN setit, Cell cell,
-                              ListHandle list, BOOLEAN hiliteempty);
+static void findcell(GUEST<Cell> *, ListHandle);
+static void setselectnilflag(BOOLEAN setit, Cell cell, ListHandle list,
+                             BOOLEAN hiliteempty);
 static inline BOOLEAN ROMlib_CALLCLICK(clickproc);
-PRIVATE void scrollbyvalues(ListHandle);
-PRIVATE void rect2value(Rect *in, Rect *butnotin,
-                        INTEGER value, ListHandle list,
-                        BOOLEAN hiliteempty);
-PRIVATE void rectvalue(Rect *rp, INTEGER value,
+static void scrollbyvalues(ListHandle);
+static void rect2value(Rect *in, Rect *butnotin, INTEGER value,
                        ListHandle list, BOOLEAN hiliteempty);
+static void rectvalue(Rect *rp, INTEGER value, ListHandle list,
+                      BOOLEAN hiliteempty);
 
-PRIVATE void findcell(GUEST<Cell> *cp, ListHandle list)
+static void findcell(GUEST<Cell> *cp, ListHandle list)
 {
     cp->h = CW((CW(cp->h) - Hx(list, rView.left)) / Hx(list, cellSize.h) + Hx(list, visible.left));
     cp->v = CW((CW(cp->v) - Hx(list, rView.top)) / Hx(list, cellSize.v) + Hx(list, visible.top));
@@ -45,7 +44,8 @@ PRIVATE void findcell(GUEST<Cell> *cp, ListHandle list)
         cp->v = CWC(32767);
 }
 
-PRIVATE void setselectnilflag(BOOLEAN setit, Cell cell, ListHandle list, BOOLEAN hiliteempty)
+static void setselectnilflag(BOOLEAN setit, Cell cell, ListHandle list,
+                             BOOLEAN hiliteempty)
 {
     GrafPtr saveport;
     GUEST<RgnHandle> saveclip;
@@ -91,7 +91,8 @@ PRIVATE void setselectnilflag(BOOLEAN setit, Cell cell, ListHandle list, BOOLEAN
     }
 }
 
-PRIVATE void rectvalue(Rect *rp, INTEGER value, ListHandle list, BOOLEAN hiliteempty)
+static void rectvalue(Rect *rp, INTEGER value, ListHandle list,
+                      BOOLEAN hiliteempty)
 {
     GUEST<INTEGER> *ip, *ep;
     GUEST<INTEGER> *sp;
@@ -115,7 +116,8 @@ PRIVATE void rectvalue(Rect *rp, INTEGER value, ListHandle list, BOOLEAN hilitee
     LISTEND(list);
 }
 
-PRIVATE void rect2value(Rect *in, Rect *butnotin, INTEGER value, ListHandle list, BOOLEAN hiliteempty)
+static void rect2value(Rect *in, Rect *butnotin, INTEGER value,
+                       ListHandle list, BOOLEAN hiliteempty)
 {
     GUEST<INTEGER> *ip;
     Cell c;
@@ -127,7 +129,7 @@ PRIVATE void rect2value(Rect *in, Rect *butnotin, INTEGER value, ListHandle list
                     setselectnilflag(value, c, list, hiliteempty);
 }
 
-PRIVATE void scrollbyvalues(ListHandle list)
+static void scrollbyvalues(ListHandle list)
 {
     INTEGER h, v;
     ControlHandle ch;
@@ -143,7 +145,7 @@ PRIVATE void scrollbyvalues(ListHandle list)
     C_LCellSize(p, list);
 }
 
-PUBLIC pascal void Executor::C_ROMlib_mytrack(ControlHandle ch, INTEGER part)
+void Executor::C_ROMlib_mytrack(ControlHandle ch, INTEGER part)
 {
     INTEGER quant, page;
     ListPtr lp;
@@ -194,8 +196,8 @@ static inline BOOLEAN ROMlib_CALLCLICK(clickproc fp)
 
 #endif /* BINCOMPAT */
 
-PUBLIC pascal trap BOOLEAN Executor::C_LClick(Point pt, /* IMIV-273 */
-                                              INTEGER mods, ListHandle list)
+BOOLEAN Executor::C_LClick(Point pt, INTEGER mods,
+                           ListHandle list) /* IMIV-273 */
 {
     ControlHandle ch, scrollh, scrollv;
     struct
@@ -463,13 +465,13 @@ PUBLIC pascal trap BOOLEAN Executor::C_LClick(Point pt, /* IMIV-273 */
     return 0;
 }
 
-PUBLIC pascal trap LONGINT Executor::C_LLastClick(ListHandle list) /* IMIV-273 */
+LONGINT Executor::C_LLastClick(ListHandle list) /* IMIV-273 */
 {
     return ((LONGINT)Hx(list, lastClick.v) << 16) | (unsigned short)Hx(list, lastClick.h);
 }
 
-PUBLIC pascal trap void Executor::C_LSetSelect(BOOLEAN setit, /* IMIV-273 */
-                                               Cell cell, ListHandle list)
+void Executor::C_LSetSelect(BOOLEAN setit, Cell cell,
+                            ListHandle list) /* IMIV-273 */
 {
     setselectnilflag(setit, cell, list, true);
 }

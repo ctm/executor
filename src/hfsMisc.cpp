@@ -12,7 +12,7 @@
 using namespace Executor;
 
 #if defined(TESTFCB)
-PUBLIC void testfcb()
+void testfcb()
 {
     short length;
     filecontrolblock *fp;
@@ -43,17 +43,17 @@ PUBLIC void testfcb()
 #endif /* TESTFCB */
 
 #if 0
-PUBLIC void myFInitQueue( void )    /* IMIV-128 */
+void myFInitQueue(void)/* IMIV-128 */
 {
     /* When we support asynchronous stuff we'll have to do this */
 }
 
-PUBLIC QHdrPtr myGetFSQHdr( void )
+QHdrPtr myGetFSQHdr(void)
 {
     return &FSQHdr;
 }
 
-PUBLIC QHdrPtr myGetVCBQHdr( void )
+QHdrPtr myGetVCBQHdr(void)
 {
     return &VCBQHdr;
 }
@@ -64,7 +64,7 @@ PUBLIC QHdrPtr myGetVCBQHdr( void )
  *	  we're looking at hfs or ufs stuff.
  */
 
-PUBLIC trap OSErrRET Executor::PBGetFCBInfo(FCBPBPtr pb, BOOLEAN async)
+OSErrRET Executor::PBGetFCBInfo(FCBPBPtr pb, BOOLEAN async)
 {
     filecontrolblock *fcbp, *efcbp;
     INTEGER i;
@@ -126,7 +126,7 @@ PUBLIC trap OSErrRET Executor::PBGetFCBInfo(FCBPBPtr pb, BOOLEAN async)
 }
 
 #if 0
-PUBLIC QHdrPtr myGetDrvQHdr( void )
+QHdrPtr myGetDrvQHdr(void)
 {
     return &DrvQHdr;
 }

@@ -26,17 +26,16 @@
 
 using namespace Executor;
 
-PRIVATE INTEGER countmapresources(resmaphand, ResType);
-PRIVATE Handle getindmapresource(resmaphand, ResType,
-                                 INTEGER *);
-PRIVATE Handle getnamedmapresource(resmaphand, ResType, StringPtr);
+static INTEGER countmapresources(resmaphand, ResType);
+static Handle getindmapresource(resmaphand, ResType, INTEGER *);
+static Handle getnamedmapresource(resmaphand, ResType, StringPtr);
 
-PUBLIC pascal trap void Executor::C_SetResLoad(BOOLEAN load)
+void Executor::C_SetResLoad(BOOLEAN load)
 {
     ResLoad = load;
 }
 
-PRIVATE INTEGER countmapresources(resmaphand map, ResType typ)
+static INTEGER countmapresources(resmaphand map, ResType typ)
 {
     INTEGER i, retval;
     typref *tr;
@@ -52,7 +51,7 @@ PRIVATE INTEGER countmapresources(resmaphand map, ResType typ)
     return (retval);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_CountResources(ResType typ)
+INTEGER Executor::C_CountResources(ResType typ)
 {
     resmaphand map;
     INTEGER n;
@@ -65,8 +64,7 @@ PUBLIC pascal trap INTEGER Executor::C_CountResources(ResType typ)
     return (n);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_Count1Resources(/* IMIV-15 */
-                                                       ResType typ)
+INTEGER Executor::C_Count1Resources(ResType typ) /* IMIV-15 */
 {
     resmaphand map;
 
@@ -79,7 +77,7 @@ PUBLIC pascal trap INTEGER Executor::C_Count1Resources(/* IMIV-15 */
     return (countmapresources(map, typ));
 }
 
-PRIVATE Handle getindmapresource(resmaphand map, ResType typ, INTEGER *indx)
+static Handle getindmapresource(resmaphand map, ResType typ, INTEGER *indx)
 {
     INTEGER i, j, nr;
     typref *tr;
@@ -98,7 +96,7 @@ PRIVATE Handle getindmapresource(resmaphand map, ResType typ, INTEGER *indx)
     return ((Handle)0);
 }
 
-PUBLIC pascal trap Handle Executor::C_GetIndResource(ResType typ, INTEGER indx)
+Handle Executor::C_GetIndResource(ResType typ, INTEGER indx)
 {
     resmaphand map;
     Handle retval;
@@ -120,8 +118,7 @@ PUBLIC pascal trap Handle Executor::C_GetIndResource(ResType typ, INTEGER indx)
     return 0;
 }
 
-PUBLIC pascal trap Handle Executor::C_Get1IndResource(ResType typ, /* IMIV-15 */
-                                                      INTEGER i)
+Handle Executor::C_Get1IndResource(ResType typ, INTEGER i) /* IMIV-15 */
 {
     resmaphand map;
     Handle retval;
@@ -149,8 +146,8 @@ PUBLIC pascal trap Handle Executor::C_Get1IndResource(ResType typ, /* IMIV-15 */
 /* ROMlib_maptypidtop: given a map, typ and an id,
 				    *ptr is filled in appropriately */
 
-PUBLIC OSErr Executor::ROMlib_maptypidtop(resmaphand map, /* INTERNAL */
-                                          ResType typ, INTEGER id, resref **ptr)
+OSErr Executor::ROMlib_maptypidtop(resmaphand map, ResType typ, INTEGER id,
+                                   resref **ptr) /* INTERNAL */
 {
     INTEGER i, j;
     typref *tr;
@@ -175,8 +172,8 @@ PUBLIC OSErr Executor::ROMlib_maptypidtop(resmaphand map, /* INTERNAL */
 		ROMlib_typidtop fills in *pth and *ptr
                 with a resmap handle and a resref pointer */
 
-PUBLIC OSErr Executor::ROMlib_typidtop(ResType typ, INTEGER id, /* INTERNAL */
-                                       resmaphand *pth, resref **ptr)
+OSErr Executor::ROMlib_typidtop(ResType typ, INTEGER id, resmaphand *pth,
+                                resref **ptr) /* INTERNAL */
 {
     resmaphand map;
 
@@ -211,12 +208,12 @@ PRIVATE GUEST<LONGINT> ROMlib_defs[NUM_ROMLIB_DEFS];
  * nn is the offset into ROMlib_defs (0, 4, 8, ...)
  */
 
-PRIVATE BOOLEAN acceptable(unsigned long addr)
+static BOOLEAN acceptable(unsigned long addr)
 {
     return !(islower(addr & 0xFF) || islower((addr >> 8) & 0xFF) || islower((addr >> 16) & 0xFF) || islower((addr >> 24) & 0xFF));
 }
 
-PRIVATE void ROMlib_init_xdefs(void)
+static void ROMlib_init_xdefs(void)
 {
 #if !defined(MAELSTROM_HACK)
     ROMlib_defs[0] = guest_cast<LONGINT>(RM(P_cdef0));
@@ -307,7 +304,7 @@ pseudo_get_rom_resource(ResType typ, INTEGER id)
 PUBLIC bool Executor::ROMlib_ultima_iii_hack;
 #endif
 
-PUBLIC pascal trap Handle Executor::C_GetResource(ResType typ, INTEGER id)
+Handle Executor::C_GetResource(ResType typ, INTEGER id)
 {
     resmaphand map;
     resref *rr;
@@ -368,8 +365,7 @@ PUBLIC pascal trap Handle Executor::C_GetResource(ResType typ, INTEGER id)
     return retval;
 }
 
-PUBLIC pascal trap Handle Executor::C_Get1Resource(ResType typ, /* IMIV-16 */
-                                                   INTEGER id)
+Handle Executor::C_Get1Resource(ResType typ, INTEGER id) /* IMIV-16 */
 {
     Handle retval;
     resmaphand map;
@@ -395,7 +391,7 @@ PUBLIC pascal trap Handle Executor::C_Get1Resource(ResType typ, /* IMIV-16 */
     return retval;
 }
 
-PRIVATE Handle getnamedmapresource(resmaphand map, ResType typ, StringPtr nam)
+static Handle getnamedmapresource(resmaphand map, ResType typ, StringPtr nam)
 {
     INTEGER i, j;
     typref *tr;
@@ -416,7 +412,7 @@ PRIVATE Handle getnamedmapresource(resmaphand map, ResType typ, StringPtr nam)
     return (0);
 }
 
-PUBLIC pascal trap Handle Executor::C_GetNamedResource(ResType typ, StringPtr nam)
+Handle Executor::C_GetNamedResource(ResType typ, StringPtr nam)
 {
     Handle retval;
 
@@ -447,8 +443,7 @@ DONE:
     return retval;
 }
 
-PUBLIC pascal trap Handle Executor::C_Get1NamedResource(ResType typ, /* IMIV-16 */
-                                                        StringPtr s)
+Handle Executor::C_Get1NamedResource(ResType typ, StringPtr s) /* IMIV-16 */
 {
     resmaphand map;
 
@@ -461,7 +456,7 @@ PUBLIC pascal trap Handle Executor::C_Get1NamedResource(ResType typ, /* IMIV-16 
     return (getnamedmapresource(map, typ, s));
 }
 
-PUBLIC pascal trap void Executor::C_LoadResource(Handle volatile res)
+void Executor::C_LoadResource(Handle volatile res)
 {
     resmaphand map;
     typref *tr;
@@ -503,7 +498,7 @@ PUBLIC pascal trap void Executor::C_LoadResource(Handle volatile res)
     EM_A0 = savea0d0[1];
 }
 
-PUBLIC pascal trap void Executor::C_ReleaseResource(Handle res)
+void Executor::C_ReleaseResource(Handle res)
 {
     resmaphand map;
     typref *tr;
@@ -523,7 +518,7 @@ PUBLIC pascal trap void Executor::C_ReleaseResource(Handle res)
     rr->rhand = 0;
 }
 
-PUBLIC pascal trap void Executor::C_DetachResource(Handle res)
+void Executor::C_DetachResource(Handle res)
 {
     resmaphand map;
     typref *tr;

@@ -104,15 +104,13 @@ PRIVATE myalerttab_t myalerttab = {
 
 char syserr_msg[256];
 
-PRIVATE GUEST<INTEGER> *findid(INTEGER);
-PRIVATE void drawtextstring(INTEGER id, INTEGER offsetx,
-                            INTEGER offsety);
-PRIVATE void drawicon(INTEGER id,
-                      INTEGER offsetx, INTEGER offsety);
-PRIVATE void dobuttons(INTEGER id, INTEGER offsetx,
-                       INTEGER offsety, BOOLEAN demo_button_p);
+static GUEST<INTEGER> *findid(INTEGER);
+static void drawtextstring(INTEGER id, INTEGER offsetx, INTEGER offsety);
+static void drawicon(INTEGER id, INTEGER offsetx, INTEGER offsety);
+static void dobuttons(INTEGER id, INTEGER offsetx, INTEGER offsety,
+                      BOOLEAN demo_button_p);
 
-PRIVATE GUEST<INTEGER> *findid(INTEGER id)
+static GUEST<INTEGER> *findid(INTEGER id)
 {
     int i;
     GUEST<INTEGER> *ip;
@@ -125,7 +123,7 @@ PRIVATE GUEST<INTEGER> *findid(INTEGER id)
     return i > 0 ? ip : nullptr;
 }
 
-PRIVATE void drawtextstring(INTEGER id, INTEGER offsetx, INTEGER offsety)
+static void drawtextstring(INTEGER id, INTEGER offsetx, INTEGER offsety)
 {
     struct tdef *tp;
 
@@ -136,7 +134,7 @@ PRIVATE void drawtextstring(INTEGER id, INTEGER offsetx, INTEGER offsety)
     }
 }
 
-PRIVATE void drawicon(INTEGER id, INTEGER offsetx, INTEGER offsety)
+static void drawicon(INTEGER id, INTEGER offsetx, INTEGER offsety)
 {
     struct idef *ip;
     BitMap bm;
@@ -157,7 +155,8 @@ PRIVATE void drawicon(INTEGER id, INTEGER offsetx, INTEGER offsety)
     }
 }
 
-PRIVATE void dobuttons(INTEGER id, INTEGER offsetx, INTEGER offsety, BOOLEAN demo_button_p)
+static void dobuttons(INTEGER id, INTEGER offsetx, INTEGER offsety,
+                      BOOLEAN demo_button_p)
 {
     struct bdef *bp;
     struct sdef *sp;
@@ -251,7 +250,7 @@ PRIVATE void dobuttons(INTEGER id, INTEGER offsetx, INTEGER offsety, BOOLEAN dem
  *	 to call syn68k appropriately.
  */
 
-PUBLIC pascal void Executor::C_SysError(short errorcode)
+void Executor::C_SysError(short errorcode)
 {
     GrafPort alertport;
     Region viscliprgn;

@@ -31,24 +31,19 @@ typedef struct
 
 typedef INTEGER (*locptype)(Ptr ptr, INTEGER len, sorttype *sp);
 
-PRIVATE void outl(LONGINT, char **);
-PRIVATE void outs(StringPtr, INTEGER, char **);
-PRIVATE void outn(INTEGER, BOOLEAN, char **);
-PRIVATE void month(INTEGER, Intl0Ptr, char, char **);
-PRIVATE void day(INTEGER, Intl0Ptr, char, char **);
-PRIVATE void year(INTEGER, Intl0Ptr, char, char **);
-PRIVATE INTEGER defaultorder(unsigned char *, INTEGER,
-                             sorttype *);
-PRIVATE INTEGER germanylocalization(unsigned char *, INTEGER,
-                                    sorttype *);
-PRIVATE INTEGER britainlocalization(unsigned char *, INTEGER,
-                                    sorttype *);
-PRIVATE INTEGER defaultlocalization(unsigned char *, INTEGER,
-                                    sorttype *);
-PRIVATE INTEGER iuhelper(Ptr, Ptr, INTEGER,
-                         INTEGER, BOOLEAN);
+static void outl(LONGINT, char **);
+static void outs(StringPtr, INTEGER, char **);
+static void outn(INTEGER, BOOLEAN, char **);
+static void month(INTEGER, Intl0Ptr, char, char **);
+static void day(INTEGER, Intl0Ptr, char, char **);
+static void year(INTEGER, Intl0Ptr, char, char **);
+static INTEGER defaultorder(unsigned char *, INTEGER, sorttype *);
+static INTEGER germanylocalization(unsigned char *, INTEGER, sorttype *);
+static INTEGER britainlocalization(unsigned char *, INTEGER, sorttype *);
+static INTEGER defaultlocalization(unsigned char *, INTEGER, sorttype *);
+static INTEGER iuhelper(Ptr, Ptr, INTEGER, INTEGER, BOOLEAN);
 
-PRIVATE void outl(LONGINT l, char **opp)
+static void outl(LONGINT l, char **opp)
 {
     if(l & 0xFF000000)
     {
@@ -76,7 +71,7 @@ PRIVATE void outl(LONGINT l, char **opp)
  * n is the number of characters to transfer, or 0 for entire string
  */
 
-PRIVATE void outs(StringPtr p, INTEGER n, char **opp)
+static void outs(StringPtr p, INTEGER n, char **opp)
 {
     int ntocopy;
 
@@ -92,7 +87,7 @@ PRIVATE void outs(StringPtr p, INTEGER n, char **opp)
  * is less than 10, a leading zero is output.
  */
 
-PRIVATE void outn(INTEGER n, BOOLEAN leading0, char **opp)
+static void outn(INTEGER n, BOOLEAN leading0, char **opp)
 {
     Str255 s;
 
@@ -108,7 +103,7 @@ PRIVATE void outn(INTEGER n, BOOLEAN leading0, char **opp)
  * form of the month and, if non-null, a separator.
  */
 
-PRIVATE void month(INTEGER n, Intl0Ptr int0p, char sep, char **opp)
+static void month(INTEGER n, Intl0Ptr int0p, char sep, char **opp)
 {
     outn(n, Cx(int0p->shrtDateFmt) & mntLdingZ, opp);
     if(sep)
@@ -119,7 +114,7 @@ PRIVATE void month(INTEGER n, Intl0Ptr int0p, char sep, char **opp)
  * day is similar to month
  */
 
-PRIVATE void day(INTEGER n, Intl0Ptr int0p, char sep, char **opp)
+static void day(INTEGER n, Intl0Ptr int0p, char sep, char **opp)
 {
     outn(n, Cx(int0p->shrtDateFmt) & dayLdingZ, opp);
     if(sep)
@@ -130,15 +125,15 @@ PRIVATE void day(INTEGER n, Intl0Ptr int0p, char sep, char **opp)
  * year is similar to month and day
  */
 
-PRIVATE void year(INTEGER n, Intl0Ptr int0p, char sep, char **opp)
+static void year(INTEGER n, Intl0Ptr int0p, char sep, char **opp)
 {
     outn(Cx(int0p->shrtDateFmt) & century ? n : n % 100, false, opp);
     if(sep)
         *(*opp)++ = sep;
 }
 
-PUBLIC pascal trap void Executor::C_IUDatePString(LONGINT date, /* IMI-505 */
-                                                  DateForm form, StringPtr p, Handle h)
+void Executor::C_IUDatePString(LONGINT date, DateForm form, StringPtr p,
+                               Handle h) /* IMI-505 */
 {
     Intl1Ptr int1p;
     Intl0Ptr int0p;
@@ -206,7 +201,7 @@ PUBLIC pascal trap void Executor::C_IUDatePString(LONGINT date, /* IMI-505 */
     p[0] = op - (char *)p - 1;
 }
 
-PUBLIC pascal trap Handle Executor::C_IUGetIntl(INTEGER id) /* IMI-505 */
+Handle Executor::C_IUGetIntl(INTEGER id) /* IMI-505 */
 {
     INTEGER oldres;
     Handle retval;
@@ -240,14 +235,14 @@ PUBLIC pascal trap Handle Executor::C_IUGetIntl(INTEGER id) /* IMI-505 */
     return retval;
 }
 
-PUBLIC pascal trap void Executor::C_IUDateString(LONGINT date, /* IMI-504 */
-                                                 DateForm form, StringPtr p)
+void Executor::C_IUDateString(LONGINT date, DateForm form,
+                              StringPtr p) /* IMI-504 */
 {
     IUDatePString(date, form, p, IUGetIntl(form == shortDate ? 0 : 1));
 }
 
-PUBLIC pascal trap void Executor::C_IUTimePString(LONGINT date, /* IMI-505 */
-                                                  BOOLEAN secs, StringPtr p, Handle h)
+void Executor::C_IUTimePString(LONGINT date, BOOLEAN secs, StringPtr p,
+                               Handle h) /* IMI-505 */
 {
     Intl0Ptr int0p;
     char *op;
@@ -292,13 +287,13 @@ PUBLIC pascal trap void Executor::C_IUTimePString(LONGINT date, /* IMI-505 */
     p[0] = op - (char *)p - 1;
 }
 
-PUBLIC pascal trap void Executor::C_IUTimeString(LONGINT date, /* IMI-505 */
-                                                 BOOLEAN secs, StringPtr p)
+void Executor::C_IUTimeString(LONGINT date, BOOLEAN secs,
+                              StringPtr p) /* IMI-505 */
 {
     IUTimePString(date, secs, p, IUGetIntl(0));
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_IUMetric() /* IMI-505 */
+BOOLEAN Executor::C_IUMetric() /* IMI-505 */
 {
     Handle h;
 
@@ -306,8 +301,7 @@ PUBLIC pascal trap BOOLEAN Executor::C_IUMetric() /* IMI-505 */
     return h ? ((Intl0Ptr)STARH(h))->metricSys : false;
 }
 
-PUBLIC pascal trap void Executor::C_IUSetIntl(INTEGER rn, /* IMI-506 */
-                                              INTEGER id, Handle newh)
+void Executor::C_IUSetIntl(INTEGER rn, INTEGER id, Handle newh) /* IMI-506 */
 {
     INTEGER oldcurmap;
     Handle h;
@@ -335,7 +329,8 @@ PRIVATE sorttype highsortvalues[] = {
     { 'A', 0x02 }, { 'A', 0x04 }, { 'C', 0x01 }, { 'E', 0x01 }, { 'N', 0x01 }, { 'O', 0x01 }, { 'U', 0x01 }, { 'A', 0x81 }, { 'A', 0x82 }, { 'A', 0x83 }, { 'A', 0x84 }, { 'A', 0x85 }, { 'A', 0x86 }, { 'C', 0x81 }, { 'E', 0x81 }, { 'E', 0x82 }, { 'E', 0x83 }, { 'E', 0x84 }, { 'I', 0x81 }, { 'I', 0x82 }, { 'I', 0x83 }, { 'I', 0x84 }, { 'N', 0x81 }, { 'O', 0x81 }, { 'O', 0x82 }, { 'O', 0x83 }, { 'O', 0x84 }, { 'O', 0x85 }, { 'U', 0x81 }, { 'U', 0x82 }, { 'U', 0x83 }, { 'U', 0x84 }, { 0xA0, 0x00 }, { 0xA1, 0x00 }, { 0xA2, 0x00 }, { 0xA3, 0x00 }, { 0xA4, 0x00 }, { 0xA5, 0x00 }, { 0xA6, 0x00 }, { 0xA7, 0x00 }, { 0xA8, 0x00 }, { 0xA9, 0x00 }, { 0xAA, 0x00 }, { 0xAB, 0x00 }, { 0xAC, 0x00 }, { 0xAD, 0x00 }, { 0xAE, 0x00 }, { 'O', 0x03 }, { 0xB0, 0x00 }, { 0xB1, 0x00 }, { 0xB2, 0x00 }, { 0xB3, 0x00 }, { 0xB4, 0x00 }, { 0xB5, 0x00 }, { 0xB6, 0x00 }, { 0xB7, 0x00 }, { 0xB8, 0x00 }, { 0xB9, 0x00 }, { 0xBA, 0x00 }, { 0xBB, 0x00 }, { 0xBC, 0x00 }, { 0xBD, 0x00 }, { 0xAE, 0x01 }, { 'O', 0x86 }, { 0xC0, 0x00 }, { 0xC1, 0x00 }, { 0xC2, 0x00 }, { 0xC3, 0x00 }, { 0xC4, 0x00 }, { 0xC5, 0x00 }, { 0xC6, 0x00 }, { 0x22, 0x01 }, { 0x22, 0x02 }, { 0xC9, 0x00 }, { 0x20, 0x01 }, { 'A', 0x01 }, { 'A', 0x03 }, { 'O', 0x02 }, { 0xAE, 0x02 }, { 0xAE, 0x03 }, { 0xD0, 0x00 }, { 0xD1, 0x00 }, { 0x22, 0x03 }, { 0x22, 0x04 }, { 0x27, 0x01 }, { 0x27, 0x02 }, { 0xD6, 0x00 }, { 0xD7, 0x00 }, { 'Y', 0x00 },
 };
 
-PRIVATE INTEGER defaultorder(unsigned char *cp, INTEGER len, sorttype *rp) /* i.e. U.S. order */
+static INTEGER defaultorder(unsigned char *cp, INTEGER len,
+                            sorttype *rp) /* i.e. U.S. order */
 {
     int index;
     int c;
@@ -368,7 +363,7 @@ PRIVATE INTEGER defaultorder(unsigned char *cp, INTEGER len, sorttype *rp) /* i.
     return 1;
 }
 
-PRIVATE INTEGER germanylocalization(unsigned char *cp, INTEGER len, sorttype *rp)
+static INTEGER germanylocalization(unsigned char *cp, INTEGER len, sorttype *rp)
 {
     INTEGER retval;
 
@@ -494,7 +489,7 @@ PRIVATE INTEGER germanylocalization(unsigned char *cp, INTEGER len, sorttype *rp
     return retval;
 }
 
-PRIVATE INTEGER britainlocalization(unsigned char *cp, INTEGER len, sorttype *rp)
+static INTEGER britainlocalization(unsigned char *cp, INTEGER len, sorttype *rp)
 {
     (void)defaultorder(cp, len, rp);
     if(rp->primary >= 0x23 && rp->primary <= 0xA3)
@@ -507,7 +502,7 @@ PRIVATE INTEGER britainlocalization(unsigned char *cp, INTEGER len, sorttype *rp
     return 1;
 }
 
-PRIVATE INTEGER defaultlocalization(unsigned char *cp, INTEGER len, sorttype *rp)
+static INTEGER defaultlocalization(unsigned char *cp, INTEGER len, sorttype *rp)
 {
     return 0; /* never consume anything */
 }
@@ -518,7 +513,8 @@ PRIVATE INTEGER defaultlocalization(unsigned char *cp, INTEGER len, sorttype *rp
  *	 the exact format of localization routines, we don't care, for now.
  */
 
-PRIVATE INTEGER iuhelper(Ptr ptr1, Ptr ptr2, INTEGER len1, INTEGER len2, BOOLEAN ignoresec)
+static INTEGER iuhelper(Ptr ptr1, Ptr ptr2, INTEGER len1, INTEGER len2,
+                        BOOLEAN ignoresec)
 {
     Intl0Hndl h;
     locptype locp;
@@ -586,25 +582,24 @@ PRIVATE INTEGER iuhelper(Ptr ptr1, Ptr ptr2, INTEGER len1, INTEGER len2, BOOLEAN
         return (len1 < len2 ? -1 : 1);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_IUMagString(Ptr ptr1, /* IMI-506 */
-                                                   Ptr ptr2, INTEGER len1, INTEGER len2)
+INTEGER Executor::C_IUMagString(Ptr ptr1, Ptr ptr2, INTEGER len1,
+                                INTEGER len2) /* IMI-506 */
 {
     return iuhelper(ptr1, ptr2, len1, len2, false);
 }
 
-PUBLIC INTEGER Executor::IUCompString(StringPtr str1, StringPtr str2) /* IMI-506 */
+INTEGER Executor::IUCompString(StringPtr str1, StringPtr str2) /* IMI-506 */
 {
     return IUMagString((Ptr)(str1 + 1), (Ptr)(str2 + 1), str1[0], str2[0]);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_IUMagIDString(Ptr ptr1, /* IMI-507 */
-                                                     Ptr ptr2, INTEGER len1, INTEGER len2)
+INTEGER Executor::C_IUMagIDString(Ptr ptr1, Ptr ptr2, INTEGER len1,
+                                  INTEGER len2) /* IMI-507 */
 {
     return iuhelper(ptr1, ptr2, len1, len2, true);
 }
 
-PUBLIC INTEGER Executor::IUEqualString(StringPtr str1, /* IMI-506 */
-                                       StringPtr str2)
+INTEGER Executor::IUEqualString(StringPtr str1, StringPtr str2) /* IMI-506 */
 {
     return IUMagIDString((Ptr)(str1 + 1), (Ptr)(str2 + 1), str1[0], str2[0]);
 }
@@ -622,58 +617,66 @@ PUBLIC pascal trap /* INTEGER */ void Executor::C_IUMystery(Ptr arg1, Ptr arg2, 
 /* NOTE: none of the below are done yet */
 /* #warning A bunch of IU routines are not implemented yet */
 
-PUBLIC pascal trap void Executor::C_IULDateString(LongDateTime *datetimep, DateForm longflag, Str255 result, Handle intlhand)
+void Executor::C_IULDateString(LongDateTime *datetimep, DateForm longflag,
+                               Str255 result, Handle intlhand)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);
 }
 
-PUBLIC pascal trap void Executor::C_IULTimeString(LongDateTime *datetimep, BOOLEAN wantseconds, Str255 result, Handle intlhand)
+void Executor::C_IULTimeString(LongDateTime *datetimep, BOOLEAN wantseconds,
+                               Str255 result, Handle intlhand)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);
 }
 
-PUBLIC pascal trap void Executor::C_IUClearCache()
+void Executor::C_IUClearCache()
 {
 }
 
-PUBLIC pascal trap INTEGER Executor::C_IUMagPString(Ptr ptra, Ptr ptrb, INTEGER lena, INTEGER lenb, Handle itl2hand)
-{
-    warning_unimplemented(NULL_STRING);
-    ROMlib_hook(iu_unimplementednumber);
-    return 0;
-}
-
-PUBLIC pascal trap INTEGER Executor::C_IUMagIDPString(Ptr ptra, Ptr ptrb, INTEGER lena, INTEGER lenb, Handle itl2hand)
+INTEGER Executor::C_IUMagPString(Ptr ptra, Ptr ptrb, INTEGER lena,
+                                 INTEGER lenb, Handle itl2hand)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);
     return 0;
 }
 
-PUBLIC pascal trap INTEGER Executor::C_IUScriptOrder(ScriptCode script1, ScriptCode script2)
+INTEGER Executor::C_IUMagIDPString(Ptr ptra, Ptr ptrb, INTEGER lena,
+                                   INTEGER lenb, Handle itl2hand)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);
     return 0;
 }
 
-PUBLIC pascal trap INTEGER Executor::C_IULangOrder(LangCode l1, LangCode l2)
+INTEGER Executor::C_IUScriptOrder(ScriptCode script1, ScriptCode script2)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);
     return 0;
 }
 
-PUBLIC pascal trap INTEGER Executor::C_IUTextOrder(Ptr ptra, Ptr ptrb, INTEGER lena, INTEGER lenb, ScriptCode scripta, ScriptCode bscript, LangCode langa, LangCode langb)
+INTEGER Executor::C_IULangOrder(LangCode l1, LangCode l2)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);
     return 0;
 }
 
-PUBLIC pascal trap void Executor::C_IUGetItlTable(ScriptCode script, INTEGER tablecode, Handle *itlhandlep, LONGINT *offsetp, LONGINT *lengthp)
+INTEGER Executor::C_IUTextOrder(Ptr ptra, Ptr ptrb, INTEGER lena, INTEGER lenb,
+                                ScriptCode scripta, ScriptCode bscript,
+                                LangCode langa, LangCode langb)
+{
+    warning_unimplemented(NULL_STRING);
+    ROMlib_hook(iu_unimplementednumber);
+    return 0;
+}
+
+void Executor::C_IUGetItlTable(ScriptCode script, INTEGER tablecode,
+                               Handle *itlhandlep, LONGINT *offsetp,
+                               LONGINT *lengthp)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);

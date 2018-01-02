@@ -26,7 +26,7 @@ namespace Executor
 
 #if 1
 
-PUBLIC BOOLEAN ROMlib_window_zoomed(WindowPeek wp)
+BOOLEAN ROMlib_window_zoomed(WindowPeek wp)
 {
     BOOLEAN retval;
     const Rect *portrp, *staterp, *boundsrp;
@@ -990,7 +990,8 @@ struct draw_save
     LONGINT bk;
 };
 
-PUBLIC pascal LONGINT Executor::C_wdef0(INTEGER varcode, WindowPtr window, INTEGER message, LONGINT parm)
+LONGINT Executor::C_wdef0(INTEGER varcode, WindowPtr window, INTEGER message,
+                          LONGINT parm)
 {
     WindowPeek w = (WindowPeek)window;
     draw_state_t draw_state;
@@ -1295,7 +1296,8 @@ void calc_rounded_doc(GrafPtr w, INTEGER curve_code)
     DisposeRgn(rh);
 }
 
-PUBLIC pascal LONGINT Executor::C_wdef16(INTEGER varcode, WindowPtr wp, INTEGER message, LONGINT param)
+LONGINT Executor::C_wdef16(INTEGER varcode, WindowPtr wp, INTEGER message,
+                           LONGINT param)
 {
     WindowPeek w = (WindowPeek)wp;
     draw_state_t draw_state;

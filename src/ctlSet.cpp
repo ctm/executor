@@ -13,8 +13,7 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_SetCtlValue(ControlHandle c, /* IMI-326 */
-                                                INTEGER v)
+void Executor::C_SetCtlValue(ControlHandle c, INTEGER v) /* IMI-326 */
 {
     CtlCallGuard guard(c);
     if(v < Hx(c, contrlMin))
@@ -28,14 +27,12 @@ PUBLIC pascal trap void Executor::C_SetCtlValue(ControlHandle c, /* IMI-326 */
     EM_D0 = 0;
 }
 
-PUBLIC pascal trap INTEGER Executor::C_GetCtlValue(/* IMI-326 */
-                                                   ControlHandle c)
+INTEGER Executor::C_GetCtlValue(ControlHandle c) /* IMI-326 */
 {
     return Hx(c, contrlValue);
 }
 
-PUBLIC pascal trap void Executor::C_SetCtlMin(ControlHandle c, /* IMI-326 */
-                                              INTEGER v)
+void Executor::C_SetCtlMin(ControlHandle c, INTEGER v) /* IMI-326 */
 {
     CtlCallGuard guard(c);
     HxX(c, contrlMin) = CW(v);
@@ -44,13 +41,12 @@ PUBLIC pascal trap void Executor::C_SetCtlMin(ControlHandle c, /* IMI-326 */
     CTLCALL(c, drawCntl, ALLINDICATORS);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_GetCtlMin(ControlHandle c) /* IMI-327 */
+INTEGER Executor::C_GetCtlMin(ControlHandle c) /* IMI-327 */
 {
     return Hx(c, contrlMin);
 }
 
-PUBLIC pascal trap void Executor::C_SetCtlMax(ControlHandle c, /* IMI-327 */
-                                              INTEGER v)
+void Executor::C_SetCtlMax(ControlHandle c, INTEGER v) /* IMI-327 */
 {
     CtlCallGuard guard(c);
     /* #### TEST ON MAC MacBreadboard's behaviour suggests that
@@ -64,7 +60,7 @@ PUBLIC pascal trap void Executor::C_SetCtlMax(ControlHandle c, /* IMI-327 */
     CTLCALL(c, drawCntl, ALLINDICATORS);
 }
 
-PUBLIC pascal trap INTEGER Executor::C_GetCtlMax(ControlHandle c) /* IMI-327 */
+INTEGER Executor::C_GetCtlMax(ControlHandle c) /* IMI-327 */
 {
     return Hx(c, contrlMax);
 }

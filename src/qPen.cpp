@@ -14,25 +14,25 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_HidePen()
+void Executor::C_HidePen()
 {
     if(thePortX)
         PORT_PEN_VIS_X(thePort) = CW(PORT_PEN_VIS(thePort) - 1);
 }
 
-PUBLIC pascal trap void Executor::C_ShowPen()
+void Executor::C_ShowPen()
 {
     if(thePortX)
         PORT_PEN_VIS_X(thePort) = CW(PORT_PEN_VIS(thePort) + 1);
 }
 
-PUBLIC pascal trap void Executor::C_GetPen(GUEST<Point> *ptp)
+void Executor::C_GetPen(GUEST<Point> *ptp)
 {
     if(thePortX)
         *ptp = PORT_PEN_LOC(thePort);
 }
 
-PUBLIC pascal trap void Executor::C_GetPenState(PenState *ps)
+void Executor::C_GetPenState(PenState *ps)
 {
     if(!thePortX)
         return;
@@ -65,7 +65,7 @@ PUBLIC pascal trap void Executor::C_GetPenState(PenState *ps)
         *ps = *(PenState *)&PORT_PEN_LOC(thePort);
 }
 
-PUBLIC pascal trap void Executor::C_SetPenState(PenState *ps)
+void Executor::C_SetPenState(PenState *ps)
 {
     if(!thePortX)
         return;
@@ -127,7 +127,7 @@ void Executor::draw_state_restore(draw_state_t *draw_state)
     PORT_TX_MODE_X(current_port) = draw_state->tx_mode;
 }
 
-PUBLIC pascal trap void Executor::C_PenSize(INTEGER w, INTEGER h)
+void Executor::C_PenSize(INTEGER w, INTEGER h)
 {
     if(thePortX)
     {
@@ -136,13 +136,13 @@ PUBLIC pascal trap void Executor::C_PenSize(INTEGER w, INTEGER h)
     }
 }
 
-PUBLIC pascal trap void Executor::C_PenMode(INTEGER m)
+void Executor::C_PenMode(INTEGER m)
 {
     if(thePortX)
         PORT_PEN_MODE_X(thePort) = CW(m);
 }
 
-PUBLIC pascal trap void Executor::C_PenPat(Pattern pp)
+void Executor::C_PenPat(Pattern pp)
 {
     if(thePortX)
     {
@@ -169,7 +169,7 @@ PUBLIC pascal trap void Executor::C_PenPat(Pattern pp)
     }
 }
 
-PUBLIC pascal trap void Executor::C_PenNormal()
+void Executor::C_PenNormal()
 {
     if(thePortX)
     {
@@ -179,7 +179,7 @@ PUBLIC pascal trap void Executor::C_PenNormal()
     }
 }
 
-PUBLIC pascal trap void Executor::C_MoveTo(INTEGER h, INTEGER v)
+void Executor::C_MoveTo(INTEGER h, INTEGER v)
 {
     if(thePortX)
     {
@@ -188,7 +188,7 @@ PUBLIC pascal trap void Executor::C_MoveTo(INTEGER h, INTEGER v)
     }
 }
 
-PUBLIC pascal trap void Executor::C_Move(INTEGER dh, INTEGER dv)
+void Executor::C_Move(INTEGER dh, INTEGER dv)
 {
     if(thePortX)
     {
@@ -197,7 +197,7 @@ PUBLIC pascal trap void Executor::C_Move(INTEGER dh, INTEGER dv)
     }
 }
 
-PUBLIC pascal trap void Executor::C_LineTo(INTEGER h, INTEGER v)
+void Executor::C_LineTo(INTEGER h, INTEGER v)
 {
     Point p;
 
@@ -211,7 +211,7 @@ PUBLIC pascal trap void Executor::C_LineTo(INTEGER h, INTEGER v)
     }
 }
 
-PUBLIC pascal trap void Executor::C_Line(INTEGER dh, INTEGER dv)
+void Executor::C_Line(INTEGER dh, INTEGER dv)
 {
     Point p;
 

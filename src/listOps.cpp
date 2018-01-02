@@ -31,7 +31,8 @@ PUBLIC GUEST<INTEGER> *Executor::ROMlib_getoffp(Cell cell, /* INTERNAL */
 typedef enum { Add,
                Rep } AddOrRep;
 
-PRIVATE void cellhelper(AddOrRep addorrep, Ptr dp, INTEGER dl, Cell cell, ListHandle list)
+static void cellhelper(AddOrRep addorrep, Ptr dp, INTEGER dl, Cell cell,
+                       ListHandle list)
 {
     GUEST<INTEGER> *ip, *ep;
     INTEGER off0, off1, off2, delta, len;
@@ -107,20 +108,19 @@ PRIVATE void cellhelper(AddOrRep addorrep, Ptr dp, INTEGER dl, Cell cell, ListHa
     }
 }
 
-PUBLIC pascal trap void Executor::C_LAddToCell(Ptr dp, INTEGER dl, /* IMIV-272 */
-                                               Cell cell, ListHandle list)
+void Executor::C_LAddToCell(Ptr dp, INTEGER dl, Cell cell,
+                            ListHandle list) /* IMIV-272 */
 {
     cellhelper(Add, dp, dl, cell, list);
 }
 
-PUBLIC pascal trap void Executor::C_LClrCell(Cell cell, /* IMIV-272 */
-                                             ListHandle list)
+void Executor::C_LClrCell(Cell cell, ListHandle list) /* IMIV-272 */
 {
     cellhelper(Rep, (Ptr)0, 0, cell, list);
 }
 
-PUBLIC pascal trap void Executor::C_LGetCell(Ptr dp, GUEST<INTEGER> *dlp, /* IMIV-272 */
-                                             Cell cell, ListHandle list)
+void Executor::C_LGetCell(Ptr dp, GUEST<INTEGER> *dlp, Cell cell,
+                          ListHandle list) /* IMIV-272 */
 {
     GUEST<INTEGER> *ip;
     INTEGER off1, off2;
@@ -138,14 +138,13 @@ PUBLIC pascal trap void Executor::C_LGetCell(Ptr dp, GUEST<INTEGER> *dlp, /* IMI
     }
 }
 
-PUBLIC pascal trap void Executor::C_LSetCell(Ptr dp, INTEGER dl, /* IMIV-272 */
-                                             Cell cell, ListHandle list)
+void Executor::C_LSetCell(Ptr dp, INTEGER dl, Cell cell,
+                          ListHandle list) /* IMIV-272 */
 {
     cellhelper(Rep, dp, dl, cell, list);
 }
 
-PUBLIC pascal trap void Executor::C_LCellSize(Point csize, /* IMIV-273 */
-                                              ListHandle list)
+void Executor::C_LCellSize(Point csize, ListHandle list) /* IMIV-273 */
 {
     ListPtr lp;
     GrafPtr gp;
@@ -198,8 +197,8 @@ PUBLIC pascal trap void Executor::C_LCellSize(Point csize, /* IMIV-273 */
     }
 }
 
-PUBLIC pascal trap BOOLEAN Executor::C_LGetSelect(BOOLEAN next, /* IMIV-273 */
-                                                  GUEST<Cell> *cellp, ListHandle list)
+BOOLEAN Executor::C_LGetSelect(BOOLEAN next, GUEST<Cell> *cellp,
+                               ListHandle list) /* IMIV-273 */
 {
     GUEST<INTEGER> *ip, *ep;
     INTEGER nint, ncols, rown, coln;

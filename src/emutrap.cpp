@@ -58,7 +58,8 @@ using namespace Executor;
         (__t == (void *)-1) ? (syn68k_addr_t)-1 : US_TO_SYN68K_CHECK0(__t); \
     })
 
-PUBLIC syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop)
+syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme,
+                                      ptocblock_t *infop)
 {
     unsigned short pth, ptv;
     uintptr_t args[11], retval;
@@ -460,7 +461,7 @@ is_routine_descriptor_ptr(uint16_t *addr)
 }
 #endif
 
-PUBLIC uintptr_t Executor::CToPascalCall(void *wheretogo, uint64_t magic, ...)
+uintptr_t Executor::CToPascalCall(void *wheretogo, uint64_t magic, ...)
 {
     va_list ap;
     uintptr_t retval;

@@ -11,7 +11,7 @@
 
 using namespace Executor;
 
-PUBLIC filecontrolblock *Executor::ROMlib_getfreefcbp(void)
+filecontrolblock *Executor::ROMlib_getfreefcbp(void)
 {
     short length;
     filecontrolblock *fcbp, *efcbp;
@@ -25,7 +25,7 @@ PUBLIC filecontrolblock *Executor::ROMlib_getfreefcbp(void)
     return fcbp < efcbp ? fcbp : 0;
 }
 
-PUBLIC filecontrolblock *Executor::ROMlib_refnumtofcbp(uint16_t refnum)
+filecontrolblock *Executor::ROMlib_refnumtofcbp(uint16_t refnum)
 {
     uint16_t len;
     filecontrolblock *retval;
@@ -41,7 +41,7 @@ PUBLIC filecontrolblock *Executor::ROMlib_refnumtofcbp(uint16_t refnum)
     return retval;
 }
 
-PRIVATE LONGINT pbabsoffset(IOParam *pb, filecontrolblock *fcbp)
+static LONGINT pbabsoffset(IOParam *pb, filecontrolblock *fcbp)
 {
     switch(CW(pb->ioPosMode) & 0x3)
     {
@@ -58,8 +58,8 @@ PRIVATE LONGINT pbabsoffset(IOParam *pb, filecontrolblock *fcbp)
     }
 }
 
-PRIVATE LONGINT xtntbnotophys(xtntrec xtr, unsigned short bno,
-                              unsigned short *nphyscontigp)
+static LONGINT xtntbnotophys(xtntrec xtr, unsigned short bno,
+                             unsigned short *nphyscontigp)
 {
     unsigned short bc;
     LONGINT retblock;
@@ -95,7 +95,7 @@ PRIVATE LONGINT xtntbnotophys(xtntrec xtr, unsigned short bno,
     return retblock;
 }
 
-PUBLIC compretval Executor::ROMlib_xtntcompare(void *firstp, void *secondp)
+compretval Executor::ROMlib_xtntcompare(void *firstp, void *secondp)
 {
     xtntkey *xp1 = (xtntkey *)firstp;
     xtntkey *xp2 = (xtntkey *)secondp;
@@ -122,7 +122,7 @@ PUBLIC compretval Executor::ROMlib_xtntcompare(void *firstp, void *secondp)
     }
 }
 
-PUBLIC compretval Executor::ROMlib_catcompare(void *firstp, void *secondp)
+compretval Executor::ROMlib_catcompare(void *firstp, void *secondp)
 {
     catkey *ckp1 = (catkey *)firstp;
     catkey *ckp2 = (catkey *)secondp;
@@ -136,8 +136,8 @@ PUBLIC compretval Executor::ROMlib_catcompare(void *firstp, void *secondp)
                                                false, true);
 }
 
-PUBLIC void Executor::ROMlib_makextntkey(xtntkey *keyp, Forktype forkwanted, LONGINT flnum,
-                                         uint16_t bno)
+void Executor::ROMlib_makextntkey(xtntkey *keyp, Forktype forkwanted,
+                                  LONGINT flnum, uint16_t bno)
 {
     keyp->xkrKeyLen = 7;
     keyp->xkrFkType = forkwanted;
@@ -145,8 +145,9 @@ PUBLIC void Executor::ROMlib_makextntkey(xtntkey *keyp, Forktype forkwanted, LON
     keyp->xkrFABN = CW(bno);
 }
 
-PUBLIC void Executor::ROMlib_makextntparam(btparam *btpb, HVCB *vcbp, Forktype forkwanted,
-                                           LONGINT flnum, uint16_t bno)
+void Executor::ROMlib_makextntparam(btparam *btpb, HVCB *vcbp,
+                                    Forktype forkwanted, LONGINT flnum,
+                                    uint16_t bno)
 {
     btpb->vcbp = vcbp;
     ROMlib_makextntkey((xtntkey *)&btpb->tofind, forkwanted, flnum, bno);
@@ -155,7 +156,7 @@ PUBLIC void Executor::ROMlib_makextntparam(btparam *btpb, HVCB *vcbp, Forktype f
     btpb->leafindex = -1;
 }
 
-PRIVATE xtntkey *fcbpbnotoxkeyp(filecontrolblock *fcbp, uint16_t bno)
+static xtntkey *fcbpbnotoxkeyp(filecontrolblock *fcbp, uint16_t bno)
 {
     Forktype forkwanted;
     xtntkey *xkeyp;
@@ -175,8 +176,8 @@ PRIVATE xtntkey *fcbpbnotoxkeyp(filecontrolblock *fcbp, uint16_t bno)
     return xkeyp;
 }
 
-PUBLIC LONGINT Executor::ROMlib_logtophys(filecontrolblock *fcbp, LONGINT absoffset,
-                                          LONGINT *nphyscontigp)
+LONGINT Executor::ROMlib_logtophys(filecontrolblock *fcbp, LONGINT absoffset,
+                                   LONGINT *nphyscontigp)
 {
     uint16_t bno;
     HVCB *vcbp;
@@ -206,7 +207,7 @@ PUBLIC LONGINT Executor::ROMlib_logtophys(filecontrolblock *fcbp, LONGINT absoff
     return Cx(vcbp->vcbAlBlSt) * (LONGINT)PHYSBSIZE + retblock * alblksiz + skip;
 }
 
-PRIVATE OSErr pbtofcbp(IOParam *pb, filecontrolblock **fcbpp, accesstype rw)
+static OSErr pbtofcbp(IOParam *pb, filecontrolblock **fcbpp, accesstype rw)
 {
     OSErr retval;
 
@@ -227,7 +228,8 @@ PRIVATE OSErr pbtofcbp(IOParam *pb, filecontrolblock **fcbpp, accesstype rw)
     return retval;
 }
 
-PRIVATE void setbits(HVCB *vcbp, ULONGINT bno, ULONGINT ntoset, unsigned char lookfor)
+static void setbits(HVCB *vcbp, ULONGINT bno, ULONGINT ntoset,
+                    unsigned char lookfor)
 {
     unsigned char *cp, *ecp;
     ULONGINT ebno;
@@ -286,7 +288,7 @@ PRIVATE void setbits(HVCB *vcbp, ULONGINT bno, ULONGINT ntoset, unsigned char lo
     vcbsync(vcbp);
 }
 
-PRIVATE ULONGINT countbits(HVCB *vcbp, ULONGINT bno, unsigned char lookfor)
+static ULONGINT countbits(HVCB *vcbp, ULONGINT bno, unsigned char lookfor)
 {
     unsigned char *cp, c;
     unsigned char mask, want;
@@ -346,8 +348,8 @@ PRIVATE ULONGINT countbits(HVCB *vcbp, ULONGINT bno, unsigned char lookfor)
     return MIN(max, retval);
 }
 
-PRIVATE BOOLEAN fillextent(xtntdesc *xp, ULONGINT *nallocneededp, HVCB *vcbp,
-                           uint16_t *newabnp)
+static BOOLEAN fillextent(xtntdesc *xp, ULONGINT *nallocneededp, HVCB *vcbp,
+                          uint16_t *newabnp)
 {
     INTEGER nempty;
     ULONGINT toextend;
@@ -447,7 +449,7 @@ PRIVATE BOOLEAN fillextent(xtntdesc *xp, ULONGINT *nallocneededp, HVCB *vcbp,
     return retval;
 }
 
-PRIVATE void smokexpvcbp(ULONGINT tosmoke, xtntdesc *xp, HVCB *vcbp)
+static void smokexpvcbp(ULONGINT tosmoke, xtntdesc *xp, HVCB *vcbp)
 {
     if(tosmoke <= CW(xp[2].blockcount))
     {
@@ -476,8 +478,8 @@ PRIVATE void smokexpvcbp(ULONGINT tosmoke, xtntdesc *xp, HVCB *vcbp)
     }
 }
 
-PUBLIC OSErr Executor::ROMlib_allochelper(IOParam *pb, BOOLEAN async, alloctype alloc,
-                                          BOOLEAN writefcbp)
+OSErr Executor::ROMlib_allochelper(IOParam *pb, BOOLEAN async, alloctype alloc,
+                                   BOOLEAN writefcbp)
 {
     filecontrolblock *fcbp;
     OSErr err, err1;
@@ -712,7 +714,7 @@ done:
     PBRETURN(pb, err);
 }
 
-PUBLIC OSErr Executor::hfsPBSetEOF(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBSetEOF(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr err;
     err = ROMlib_allochelper((IOParam *)pb, async, seteof, true);
@@ -720,7 +722,7 @@ PUBLIC OSErr Executor::hfsPBSetEOF(ParmBlkPtr pb, BOOLEAN async)
     return err;
 }
 
-PUBLIC OSErr Executor::hfsPBAllocate(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBAllocate(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr err;
     err = ROMlib_allochelper((IOParam *)pb, async, allocany, true);
@@ -728,7 +730,7 @@ PUBLIC OSErr Executor::hfsPBAllocate(ParmBlkPtr pb, BOOLEAN async)
     return err;
 }
 
-PUBLIC OSErr Executor::hfsPBAllocContig(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBAllocContig(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr err;
 
@@ -744,7 +746,7 @@ PUBLIC OSErr Executor::hfsPBAllocContig(ParmBlkPtr pb, BOOLEAN async)
         goto DONE;            \
     } while(0)
 
-PRIVATE OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
+static OSErr PBReadWrite(IOParam *pb, BOOLEAN async, accesstype rw)
 {
     filecontrolblock *fcbp;
     LONGINT absoffset, totransfer, neweot, templ, physblock, actl;
@@ -1007,7 +1009,7 @@ DONE:
 
 #undef RETURN
 
-PUBLIC OSErr Executor::hfsPBRead(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBRead(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr err;
     err = PBReadWrite((IOParam *)pb, async, reading);
@@ -1015,7 +1017,7 @@ PUBLIC OSErr Executor::hfsPBRead(ParmBlkPtr pb, BOOLEAN async)
     return err;
 }
 
-PUBLIC OSErr Executor::hfsPBWrite(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBWrite(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr err;
 
@@ -1024,7 +1026,7 @@ PUBLIC OSErr Executor::hfsPBWrite(ParmBlkPtr pb, BOOLEAN async)
     return err;
 }
 
-PRIVATE OSErr dirtyfcbp(filecontrolblock *fcbp)
+static OSErr dirtyfcbp(filecontrolblock *fcbp)
 {
     ULONGINT catpos;
     short refnum;
@@ -1128,7 +1130,7 @@ PRIVATE OSErr dirtyfcbp(filecontrolblock *fcbp)
         return noErr;
 }
 
-PUBLIC OSErr Executor::hfsPBFlushFile(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBFlushFile(ParmBlkPtr pb, BOOLEAN async)
 {
     filecontrolblock *fcbp;
     OSErr err;
@@ -1145,7 +1147,7 @@ PUBLIC OSErr Executor::hfsPBFlushFile(ParmBlkPtr pb, BOOLEAN async)
     PBRETURN((IOParam *)pb, err);
 }
 
-PUBLIC OSErr Executor::hfsPBClose(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBClose(ParmBlkPtr pb, BOOLEAN async)
 {
     filecontrolblock *fcbp;
     OSErr err;
@@ -1162,8 +1164,8 @@ PUBLIC OSErr Executor::hfsPBClose(ParmBlkPtr pb, BOOLEAN async)
     PBRETURN((IOParam *)pb, err);
 }
 
-PUBLIC OSErr Executor::ROMlib_makecatkey(catkey *keyp, LONGINT dirid, INTEGER namelen,
-                                         Ptr namep)
+OSErr Executor::ROMlib_makecatkey(catkey *keyp, LONGINT dirid, INTEGER namelen,
+                                  Ptr namep)
 {
     OSErr retval;
 
@@ -1193,8 +1195,8 @@ PUBLIC OSErr Executor::ROMlib_makecatkey(catkey *keyp, LONGINT dirid, INTEGER na
  * the catalog key instead.
  */
 
-PRIVATE OSErr findentry(LONGINT dirid, StringPtr name, btparam *btpb,
-                        filekind *kindp, BOOLEAN ignorename)
+static OSErr findentry(LONGINT dirid, StringPtr name, btparam *btpb,
+                       filekind *kindp, BOOLEAN ignorename)
 {
     filerec *retval;
     INTEGER namelen;
@@ -1368,7 +1370,7 @@ PRIVATE OSErr findentry(LONGINT dirid, StringPtr name, btparam *btpb,
 /* #warning Use of memcmp is WRONG here.  All filesystem name matching code */
 /* #warning should do the right things with case and diacritical marks */
 
-PRIVATE BOOLEAN dir_prefixes_volume(StringPtr dirnamep, StringPtr volnamep)
+static BOOLEAN dir_prefixes_volume(StringPtr dirnamep, StringPtr volnamep)
 {
     if(!dirnamep) /* don't dereference 0 if it's passed in */
         return false;
@@ -1379,8 +1381,9 @@ PRIVATE BOOLEAN dir_prefixes_volume(StringPtr dirnamep, StringPtr volnamep)
     return dirnamep[volnamep[0] + 1] == ':';
 }
 
-PUBLIC OSErr Executor::ROMlib_findvcbandfile(IOParam *pb, LONGINT dirid, btparam *btpb,
-                                             filekind *kindp, BOOLEAN ignorename)
+OSErr Executor::ROMlib_findvcbandfile(IOParam *pb, LONGINT dirid,
+                                      btparam *btpb, filekind *kindp,
+                                      BOOLEAN ignorename)
 {
     OSErr err;
     int badness;
@@ -1458,8 +1461,9 @@ PUBLIC OSErr Executor::ROMlib_findvcbandfile(IOParam *pb, LONGINT dirid, btparam
  * so whether that causes a conflict (the conflicting refnum is filled in).
  */
 
-PUBLIC OSErr Executor::ROMlib_alreadyopen(HVCB *vcbp, LONGINT flnum, SignedByte *permp,
-                                          GUEST<INTEGER> *refnump, busyconcern_t busy)
+OSErr Executor::ROMlib_alreadyopen(HVCB *vcbp, LONGINT flnum,
+                                   SignedByte *permp, GUEST<INTEGER> *refnump,
+                                   busyconcern_t busy)
 {
     short length;
     filecontrolblock *fcbp, *efcbp;
@@ -1516,7 +1520,8 @@ PUBLIC OSErr Executor::ROMlib_alreadyopen(HVCB *vcbp, LONGINT flnum, SignedByte 
     return noErr;
 }
 
-PRIVATE OSErr PBOpenHelper(IOParam *pb, Forktype ft, LONGINT dirid, BOOLEAN async)
+static OSErr PBOpenHelper(IOParam *pb, Forktype ft, LONGINT dirid,
+                          BOOLEAN async)
 {
     filecontrolblock *fcbp;
     OSErr err;
@@ -1649,7 +1654,7 @@ PRIVATE OSErr PBOpenHelper(IOParam *pb, Forktype ft, LONGINT dirid, BOOLEAN asyn
 
 #undef RETURN
 
-PUBLIC OSErr Executor::hfsPBOpen(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBOpen(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr err;
     err = PBOpenHelper((IOParam *)pb, datafork, 0L, async);
@@ -1657,7 +1662,7 @@ PUBLIC OSErr Executor::hfsPBOpen(ParmBlkPtr pb, BOOLEAN async)
     return err;
 }
 
-PUBLIC OSErr Executor::hfsPBOpenRF(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBOpenRF(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr err;
     err = PBOpenHelper((IOParam *)pb, resourcefork, 0L, async);
@@ -1665,7 +1670,7 @@ PUBLIC OSErr Executor::hfsPBOpenRF(ParmBlkPtr pb, BOOLEAN async)
     return err;
 }
 
-PUBLIC OSErr Executor::hfsPBHOpen(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBHOpen(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr err;
 
@@ -1675,7 +1680,7 @@ PUBLIC OSErr Executor::hfsPBHOpen(HParmBlkPtr pb, BOOLEAN async)
     return err;
 }
 
-PUBLIC OSErr Executor::hfsPBHOpenRF(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBHOpenRF(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr err;
 
@@ -1693,17 +1698,17 @@ PUBLIC OSErr Executor::hfsPBHOpenRF(HParmBlkPtr pb, BOOLEAN async)
  *        on a network.
  */
 
-PUBLIC OSErr Executor::hfsPBLockRange(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBLockRange(ParmBlkPtr pb, BOOLEAN async)
 {
     PBRETURN((IOParam *)pb, noErr);
 }
 
-PUBLIC OSErr Executor::hfsPBUnlockRange(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBUnlockRange(ParmBlkPtr pb, BOOLEAN async)
 {
     PBRETURN((IOParam *)pb, noErr);
 }
 
-PUBLIC OSErr Executor::hfsPBGetFPos(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBGetFPos(ParmBlkPtr pb, BOOLEAN async)
 {
     filecontrolblock *fcbp;
     OSErr err;
@@ -1723,7 +1728,7 @@ PUBLIC OSErr Executor::hfsPBGetFPos(ParmBlkPtr pb, BOOLEAN async)
     PBRETURN((IOParam *)pb, noErr);
 }
 
-PUBLIC OSErr Executor::hfsPBSetFPos(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBSetFPos(ParmBlkPtr pb, BOOLEAN async)
 {
     filecontrolblock *fcbp;
     LONGINT newpos;
@@ -1752,7 +1757,7 @@ PUBLIC OSErr Executor::hfsPBSetFPos(ParmBlkPtr pb, BOOLEAN async)
     PBRETURN((IOParam *)pb, retval);
 }
 
-PUBLIC OSErr Executor::hfsPBGetEOF(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBGetEOF(ParmBlkPtr pb, BOOLEAN async)
 {
     filecontrolblock *fcbp;
     OSErr err;

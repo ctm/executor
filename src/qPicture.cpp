@@ -14,8 +14,8 @@
 
 using namespace Executor;
 
-PUBLIC PicHandle Executor::ROMlib_OpenPicture_helper(const Rect *pf,
-                                                     const OpenCPicParams *params)
+PicHandle Executor::ROMlib_OpenPicture_helper(
+    const Rect *pf, const OpenCPicParams *params)
 {
     piccachehand pch;
     PicHandle ph;
@@ -100,7 +100,7 @@ PUBLIC PicHandle Executor::ROMlib_OpenPicture_helper(const Rect *pf,
     return (ph);
 }
 
-PUBLIC pascal trap PicHandle Executor::C_OpenPicture(Rect *pf)
+PicHandle Executor::C_OpenPicture(Rect *pf)
 {
     PicHandle retval;
 
@@ -108,7 +108,7 @@ PUBLIC pascal trap PicHandle Executor::C_OpenPicture(Rect *pf)
     return retval;
 }
 
-PRIVATE void updateclip(void)
+static void updateclip(void)
 {
     piccachehand pch;
     SignedByte state;
@@ -126,7 +126,7 @@ PRIVATE void updateclip(void)
     }
 }
 
-PRIVATE BOOLEAN EqualPat(Pattern pat1, Pattern pat2)
+static BOOLEAN EqualPat(Pattern pat1, Pattern pat2)
 {
     LONGINT *lp1, *lp2;
 
@@ -135,7 +135,7 @@ PRIVATE BOOLEAN EqualPat(Pattern pat1, Pattern pat2)
     return lp1[0] == lp2[0] && lp1[1] == lp2[1];
 }
 
-PRIVATE void updateapat(Pattern srcpat, Pattern dstpat, INTEGER opcode)
+static void updateapat(Pattern srcpat, Pattern dstpat, INTEGER opcode)
 {
     if(!EqualPat(srcpat, dstpat))
     {
@@ -145,7 +145,7 @@ PRIVATE void updateapat(Pattern srcpat, Pattern dstpat, INTEGER opcode)
     }
 }
 
-PRIVATE void updateaninteger(INTEGER src, GUEST<INTEGER> *dstp, INTEGER opcode)
+static void updateaninteger(INTEGER src, GUEST<INTEGER> *dstp, INTEGER opcode)
 {
     GUEST<INTEGER> gsrc = CW(src);
     if(*dstp != gsrc)
@@ -156,8 +156,8 @@ PRIVATE void updateaninteger(INTEGER src, GUEST<INTEGER> *dstp, INTEGER opcode)
     }
 }
 
-PRIVATE void updatealongint(const GUEST<LONGINT> *srcp, GUEST<LONGINT> *dstp,
-                            INTEGER opcode)
+static void updatealongint(const GUEST<LONGINT> *srcp, GUEST<LONGINT> *dstp,
+                           INTEGER opcode)
 {
     if(*dstp != *srcp)
     {
@@ -167,7 +167,7 @@ PRIVATE void updatealongint(const GUEST<LONGINT> *srcp, GUEST<LONGINT> *dstp,
     }
 }
 
-PRIVATE void updatebkpat(void)
+static void updatebkpat(void)
 {
     piccachehand pch;
 
@@ -181,7 +181,7 @@ PRIVATE void updatebkpat(void)
         updateapat(PORT_BK_PAT(thePort), HxX(pch, picbkpat), OP_BkPat);
 }
 
-PRIVATE void updatepnpat(void)
+static void updatepnpat(void)
 {
     piccachehand pch;
 
@@ -195,7 +195,7 @@ PRIVATE void updatepnpat(void)
         updateapat(PORT_PEN_PAT(thePort), HxX(pch, picpnpat), OP_PnPat);
 }
 
-PRIVATE void updatefillpat(void)
+static void updatefillpat(void)
 {
     piccachehand pch;
 
@@ -208,7 +208,7 @@ PRIVATE void updatefillpat(void)
         updateapat(PORT_FILL_PAT(thePort), HxX(pch, picfillpat), OP_FillPat);
 }
 
-PRIVATE void updatefont(void)
+static void updatefont(void)
 {
     piccachehand pch;
 
@@ -216,7 +216,7 @@ PRIVATE void updatefont(void)
     updateaninteger(PORT_TX_FONT(thePort), &HxX(pch, picfont), OP_TxFont);
 }
 
-PRIVATE void updatetxmode(void)
+static void updatetxmode(void)
 {
     piccachehand pch;
 
@@ -224,7 +224,7 @@ PRIVATE void updatetxmode(void)
     updateaninteger(PORT_TX_MODE(thePort), &HxX(pch, pictxmode), OP_TxMode);
 }
 
-PRIVATE void updatetxsize(void)
+static void updatetxsize(void)
 {
     piccachehand pch;
 
@@ -232,7 +232,7 @@ PRIVATE void updatetxsize(void)
     updateaninteger(PORT_TX_SIZE(thePort), &HxX(pch, pictxsize), OP_TxSize);
 }
 
-PRIVATE void updatepnmode(void)
+static void updatepnmode(void)
 {
     piccachehand pch;
 
@@ -240,7 +240,7 @@ PRIVATE void updatepnmode(void)
     updateaninteger(PORT_PEN_MODE(thePort), &HxX(pch, picpnmode), OP_PnMode);
 }
 
-PRIVATE void updateforeColor(void)
+static void updateforeColor(void)
 {
     piccachehand pch;
 
@@ -260,7 +260,7 @@ PRIVATE void updateforeColor(void)
                        OP_FgColor);
 }
 
-PRIVATE void updatebackColor(void)
+static void updatebackColor(void)
 {
     piccachehand pch;
 
@@ -278,7 +278,7 @@ PRIVATE void updatebackColor(void)
                        OP_BkColor);
 }
 
-PRIVATE void updatespextra(void)
+static void updatespextra(void)
 {
     piccachehand pch;
 
@@ -286,7 +286,7 @@ PRIVATE void updatespextra(void)
     updatealongint(&PORT_SP_EXTRA_X(thePort), &HxX(pch, picspextra), OP_SpExtra);
 }
 
-PRIVATE void updatetxnumtxden(Point num, Point den)
+static void updatetxnumtxden(Point num, Point den)
 {
     piccachehand pch;
 
@@ -306,7 +306,7 @@ PRIVATE void updatetxnumtxden(Point num, Point den)
     }
 }
 
-PRIVATE void updatepnsize(void)
+static void updatepnsize(void)
 {
     piccachehand pch;
 
@@ -315,7 +315,7 @@ PRIVATE void updatepnsize(void)
                    (GUEST<LONGINT> *)&HxX(pch, picpnsize), OP_PnSize);
 }
 
-PRIVATE void updatetxface(void)
+static void updatetxface(void)
 {
     piccachehand pch;
     Style f;
@@ -332,7 +332,7 @@ PRIVATE void updatetxface(void)
     }
 }
 
-PRIVATE void updateoval(GUEST<Point> *ovp)
+static void updateoval(GUEST<Point> *ovp)
 {
     piccachehand pch;
 
@@ -345,7 +345,7 @@ PRIVATE void updateoval(GUEST<Point> *ovp)
     }
 }
 
-PUBLIC void Executor::ROMlib_textpicupdate(Point num, Point den)
+void Executor::ROMlib_textpicupdate(Point num, Point den)
 {
     updateclip();
     updatefont();
@@ -358,7 +358,7 @@ PUBLIC void Executor::ROMlib_textpicupdate(Point num, Point den)
     updatebackColor();
 }
 
-PUBLIC void Executor::ROMlib_drawingpicupdate(void)
+void Executor::ROMlib_drawingpicupdate(void)
 {
     updateclip();
     updatepnsize();
@@ -368,7 +368,7 @@ PUBLIC void Executor::ROMlib_drawingpicupdate(void)
     updatebackColor();
 }
 
-PUBLIC void Executor::ROMlib_drawingverbpicupdate(GrafVerb v)
+void Executor::ROMlib_drawingverbpicupdate(GrafVerb v)
 {
     ROMlib_drawingpicupdate();
     switch(v)
@@ -392,7 +392,7 @@ PUBLIC void Executor::ROMlib_drawingverbpicupdate(GrafVerb v)
     }
 }
 
-PUBLIC void Executor::ROMlib_drawingverbrectpicupdate(GrafVerb v, Rect *rp)
+void Executor::ROMlib_drawingverbrectpicupdate(GrafVerb v, Rect *rp)
 {
     piccachehand pch;
 
@@ -401,14 +401,14 @@ PUBLIC void Executor::ROMlib_drawingverbrectpicupdate(GrafVerb v, Rect *rp)
     HxX(pch, piclastrect) = *rp; /* currently unused */
 }
 
-PUBLIC void Executor::ROMlib_drawingverbrectovalpicupdate(GrafVerb v, Rect *rp,
-                                                          GUEST<Point> *ovp)
+void Executor::ROMlib_drawingverbrectovalpicupdate(
+    GrafVerb v, Rect *rp, GUEST<Point> *ovp)
 {
     ROMlib_drawingverbrectpicupdate(v, rp);
     updateoval(ovp);
 }
 
-PUBLIC pascal trap void Executor::C_ClosePicture()
+void Executor::C_ClosePicture()
 {
     piccachehand pch;
 
@@ -426,19 +426,19 @@ PUBLIC pascal trap void Executor::C_ClosePicture()
     }
 }
 
-PUBLIC pascal trap void Executor::C_PicComment(INTEGER kind, INTEGER size, Handle hand)
+void Executor::C_PicComment(INTEGER kind, INTEGER size, Handle hand)
 {
     CALLCOMMENT(kind, size, hand);
 }
 
-PUBLIC pascal trap void Executor::C_ReadComment(INTEGER kind, INTEGER size, Handle hand)
+void Executor::C_ReadComment(INTEGER kind, INTEGER size, Handle hand)
 {
     CALLCOMMENT(kind, size, hand);
 }
 
 /* look in qPicStuff.c for DrawPicture */
 
-PUBLIC pascal trap void Executor::C_KillPicture(PicHandle pic)
+void Executor::C_KillPicture(PicHandle pic)
 {
     /*
  * It's not clear what the Mac does in the case below.  We really should

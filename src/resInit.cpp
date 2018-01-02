@@ -78,7 +78,7 @@ extract_vers_num(Handle h)
     return retval;
 }
 
-PUBLIC pascal trap INTEGER Executor::C_InitResources()
+INTEGER Executor::C_InitResources()
 {
     /* Initialize globals */
     TheZoneGuard guard(SysZone);
@@ -114,6 +114,6 @@ PUBLIC pascal trap INTEGER Executor::C_InitResources()
     return CW(SysMap);
 }
 
-PUBLIC pascal trap void Executor::C_RsrcZoneInit() /* no op */
+void Executor::C_RsrcZoneInit() /* no op */
 {
 }

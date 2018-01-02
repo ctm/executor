@@ -271,7 +271,7 @@ compare_zone_infos(uint16_t trapn, zone_info_t current[3], zone_info_t new[3])
 }
 #endif
 
-PUBLIC syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
+syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
 {
     syn68k_addr_t retval;
     unsigned short trapno, status;
@@ -418,7 +418,7 @@ PUBLIC syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
     return retval;
 }
 
-PUBLIC void Executor::executor_main(void)
+void Executor::executor_main(void)
 {
     char quickbytes[grafSize];
     LONGINT tmpA5;

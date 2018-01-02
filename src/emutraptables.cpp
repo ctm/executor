@@ -1593,7 +1593,7 @@ osstuff_t Executor::osstuff[0x100] = {
     { 0, (void *)_Unimplemented },
 };
 
-PUBLIC void Executor::filltables(void)
+void Executor::filltables(void)
 {
     int i, fsindex;
     syn68k_addr_t unimpl = 0;

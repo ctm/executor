@@ -12,7 +12,7 @@ using namespace Executor;
 typedef enum { create,
                delete1 } createop;
 
-PRIVATE OSErr freeallblocks(HVCB *vcbp, filerec *frp)
+static OSErr freeallblocks(HVCB *vcbp, filerec *frp)
 {
     OSErr retval;
     filecontrolblock *fcbp;
@@ -45,8 +45,8 @@ PRIVATE OSErr freeallblocks(HVCB *vcbp, filerec *frp)
     return retval;
 }
 
-PRIVATE OSErr createhelper(IOParam *pb, BOOLEAN async, createop op,
-                           LONGINT dirid, filekind kind)
+static OSErr createhelper(IOParam *pb, BOOLEAN async, createop op,
+                          LONGINT dirid, filekind kind)
 {
     OSErr err, err1;
     filekind curkind;
@@ -129,30 +129,30 @@ PRIVATE OSErr createhelper(IOParam *pb, BOOLEAN async, createop op,
     PBRETURN(pb, err);
 }
 
-PUBLIC OSErr Executor::hfsPBCreate(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBCreate(ParmBlkPtr pb, BOOLEAN async)
 {
     return createhelper((IOParam *)pb, async, create, (LONGINT)0, regular);
 }
 
-PUBLIC OSErr Executor::hfsPBHCreate(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBHCreate(HParmBlkPtr pb, BOOLEAN async)
 {
     return createhelper((IOParam *)pb, async, create, CL(pb->fileParam.ioDirID),
                         regular);
 }
 
-PUBLIC OSErr Executor::hfsPBDirCreate(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBDirCreate(HParmBlkPtr pb, BOOLEAN async)
 {
     return createhelper((IOParam *)pb, async, create, CL(pb->fileParam.ioDirID),
                         directory);
 }
 
-PUBLIC OSErr Executor::hfsPBDelete(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBDelete(ParmBlkPtr pb, BOOLEAN async)
 {
     return createhelper((IOParam *)pb, async, delete1, (LONGINT)0,
                         (filekind)(regular | directory));
 }
 
-PUBLIC OSErr Executor::hfsPBHDelete(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBHDelete(HParmBlkPtr pb, BOOLEAN async)
 {
     return createhelper((IOParam *)pb, async, delete1, CL(pb->fileParam.ioDirID),
                         (filekind)(regular | directory));

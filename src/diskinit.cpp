@@ -17,20 +17,20 @@
 
 using namespace Executor;
 
-PUBLIC pascal trap void Executor::C_DILoad()
+void Executor::C_DILoad()
 {
 }
 
-PUBLIC pascal trap void Executor::C_DIUnload()
+void Executor::C_DIUnload()
 {
 }
 
-PUBLIC pascal trap INTEGER Executor::C_DIBadMount(Point pt, LONGINT evtmess)
+INTEGER Executor::C_DIBadMount(Point pt, LONGINT evtmess)
 {
     return paramErr;
 }
 
-PUBLIC pascal trap OSErr Executor::C_DIFormat(INTEGER dn)
+OSErr Executor::C_DIFormat(INTEGER dn)
 {
     return noErr; /* We don't do low-level formats right now */
 }
@@ -105,7 +105,7 @@ enum
                      * FLOPPY_SECTORS_PER_TRACK)
 };
 
-PUBLIC pascal trap OSErr Executor::C_DIVerify(INTEGER dn)
+OSErr Executor::C_DIVerify(INTEGER dn)
 {
     int i;
     char buf[N_TRACK_BYTES];
@@ -222,7 +222,7 @@ end_track_buffering_for_write(our_file_info_t *ofitp)
  * Hacky -- assumes 1.4 MB, but it's a start
  */
 
-PUBLIC pascal trap OSErr Executor::C_DIZero(INTEGER dn, StringPtr vname)
+OSErr Executor::C_DIZero(INTEGER dn, StringPtr vname)
 {
     OSErr err;
     GUEST<ULONGINT> time;

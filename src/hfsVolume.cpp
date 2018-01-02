@@ -39,7 +39,7 @@ using namespace Executor;
 #define NewPtr_aligned_4(x, y) NewPtr(x)
 
 #if !defined(NewPtr_aligned_4)
-PRIVATE Ptr NewPtr_aligned_4(Size size, INTEGER align)
+static Ptr NewPtr_aligned_4(Size size, INTEGER align)
 {
     Ptr p, p2, p3;
     Size shim;
@@ -84,7 +84,7 @@ PRIVATE Ptr NewPtr_aligned_4(Size size, INTEGER align)
 }
 #endif
 
-PRIVATE OSErr readvolumebitmap(HVCB *vcbp, volumeinfoPtr vp)
+static OSErr readvolumebitmap(HVCB *vcbp, volumeinfoPtr vp)
 {
     OSErr err;
     short nphysrequired;
@@ -118,7 +118,7 @@ PRIVATE OSErr readvolumebitmap(HVCB *vcbp, volumeinfoPtr vp)
     return err;
 }
 
-PRIVATE OSErr initcache(HVCB *vcbp)
+static OSErr initcache(HVCB *vcbp)
 {
     GUEST<THz> savezone;
     cachehead *headp;
@@ -190,7 +190,7 @@ check_volume_size(volumeinfoPtr vp)
     return retval;
 }
 
-PRIVATE OSErr readvolumeinfo(HVCB *vcbp) /* call once during mounting */
+static OSErr readvolumeinfo(HVCB *vcbp) /* call once during mounting */
 {
     OSErr err;
 
@@ -224,7 +224,7 @@ void Executor::vcbsync(HVCB *vcbp)
         fsync(((VCBExtra *)vcbp)->u.hfs.fd);
 }
 
-PRIVATE OSErr writevolumeinfo(HVCB *vcbp, Ptr p)
+static OSErr writevolumeinfo(HVCB *vcbp, Ptr p)
 {
     OSErr err;
 
@@ -274,7 +274,7 @@ OSErr Executor::ROMlib_flushvcbp(HVCB *vcbp)
     return retval;
 }
 
-PRIVATE HVCB *vcbbyname(StringPtr name)
+static HVCB *vcbbyname(StringPtr name)
 {
     HVCB *vcbp;
 
@@ -292,7 +292,7 @@ PRIVATE HVCB *vcbbyname(StringPtr name)
 #define VCB_CMP_FUNC strcmp
 #endif
 
-PUBLIC HVCB *Executor::ROMlib_vcbbybiggestunixname(const char *name)
+HVCB *Executor::ROMlib_vcbbybiggestunixname(const char *name)
 {
     HVCB *vcbp, *bestvcbp;
     int namesize, bestsize;
@@ -340,7 +340,7 @@ Executor::ROMlib_vcbbyunixname(const char *name)
     return (VCBExtra *)vcbp;
 }
 
-PUBLIC HVCB *Executor::ROMlib_vcbbydrive(short vrefnum)
+HVCB *Executor::ROMlib_vcbbydrive(short vrefnum)
 {
     HVCB *vcbp;
 
@@ -368,7 +368,7 @@ Executor::ROMlib_dqbydrive(short vrefnum)
     return dp ? retval : 0;
 }
 
-PUBLIC HVCB *Executor::ROMlib_vcbbyvrn(short vrefnum)
+HVCB *Executor::ROMlib_vcbbyvrn(short vrefnum)
 {
     HVCB *vcbp;
 
@@ -424,7 +424,7 @@ PUBLIC HVCB *Executor::ROMlib_findvcb(short vrefnum, StringPtr name, LONGINT *di
     return vcbp;
 }
 
-PRIVATE INTEGER drvtodref(INTEGER vref) /* TODO:  flesh this out */
+static INTEGER drvtodref(INTEGER vref) /* TODO:  flesh this out */
 {
 #if 0
   switch (vref) {
@@ -442,8 +442,8 @@ PRIVATE INTEGER drvtodref(INTEGER vref) /* TODO:  flesh this out */
 #endif
 }
 
-PRIVATE INTEGER openxtnt(LONGINT filnum, LONGINT clpsize, LONGINT filsize, xtntrec xtr,
-                         HVCB *vcbp)
+static INTEGER openxtnt(LONGINT filnum, LONGINT clpsize, LONGINT filsize,
+                        xtntrec xtr, HVCB *vcbp)
 {
     filecontrolblock *fcbp;
     INTEGER retval;
@@ -612,7 +612,7 @@ Executor::hfsPBMountVol(ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGINT
     PBRETURN((VolumeParam *)pb, err);
 }
 
-PRIVATE void goofyclip(GUEST<uint16_t> *up)
+static void goofyclip(GUEST<uint16_t> *up)
 {
     if(CW(*up) > 0x7C00) /* IMIV-130 */
         *up = CWC(0x7C00);
@@ -622,7 +622,7 @@ PRIVATE void goofyclip(GUEST<uint16_t> *up)
  * getworkingdir returns the directory id associated with vrefnum
  */
 
-PRIVATE LONGINT getworkingdir(INTEGER vrefnum)
+static LONGINT getworkingdir(INTEGER vrefnum)
 {
     LONGINT retval;
     wdentry *wdp;
@@ -641,7 +641,7 @@ PRIVATE LONGINT getworkingdir(INTEGER vrefnum)
  * getnmfls finds a directory's valence
  */
 
-PRIVATE unsigned short getnmfls(HVCB *vcbp, INTEGER workingdirnum)
+static unsigned short getnmfls(HVCB *vcbp, INTEGER workingdirnum)
 {
     LONGINT dirid;
     catkey key;
@@ -674,7 +674,7 @@ PRIVATE unsigned short getnmfls(HVCB *vcbp, INTEGER workingdirnum)
 }
 
 #define RETURN return
-PRIVATE OSErr commonGetVInfo(HVolumeParam *pb, BOOLEAN async, fstype fs)
+static OSErr commonGetVInfo(HVolumeParam *pb, BOOLEAN async, fstype fs)
 {
     HVCB *vcbp;
     INTEGER workingdirnum;
@@ -751,19 +751,19 @@ PRIVATE OSErr commonGetVInfo(HVolumeParam *pb, BOOLEAN async, fstype fs)
 }
 #undef RETURN
 
-PUBLIC OSErr Executor::hfsPBGetVInfo(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBGetVInfo(ParmBlkPtr pb, BOOLEAN async)
 {
     return commonGetVInfo((HVolumeParam *)pb, async, mfs);
 }
 
-PUBLIC OSErr Executor::hfsPBHGetVInfo(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBHGetVInfo(HParmBlkPtr pb, BOOLEAN async)
 {
     return commonGetVInfo((HVolumeParam *)pb, async, hfs);
 }
 
 #define ATRBMASK VSOFTLOCKBIT
 
-PUBLIC OSErr Executor::hfsPBSetVInfo(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBSetVInfo(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr err;
     HVCB *vcbp;
@@ -796,7 +796,7 @@ PUBLIC OSErr Executor::hfsPBSetVInfo(HParmBlkPtr pb, BOOLEAN async)
     PBRETURN((VolumeParam *)pb, err);
 }
 
-PRIVATE OSErr getvolcommon(VolumeParam *pb)
+static OSErr getvolcommon(VolumeParam *pb)
 {
     OSErr err;
 
@@ -812,7 +812,7 @@ PRIVATE OSErr getvolcommon(VolumeParam *pb)
     return err;
 }
 
-PUBLIC OSErr Executor::hfsPBGetVol(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBGetVol(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr err;
 
@@ -822,7 +822,7 @@ PUBLIC OSErr Executor::hfsPBGetVol(ParmBlkPtr pb, BOOLEAN async)
 
 PUBLIC GUEST<LONGINT> Executor::DefDirID = CLC(2);
 
-PUBLIC OSErr Executor::hfsPBHGetVol(WDPBPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBHGetVol(WDPBPtr pb, BOOLEAN async)
 {
     wdentry *wdp;
     OSErr err;
@@ -855,8 +855,8 @@ PUBLIC OSErr Executor::hfsPBHGetVol(WDPBPtr pb, BOOLEAN async)
  *
  */
 
-PRIVATE OSErr setvolhelper(VolumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
-                           BOOLEAN convertzeros)
+static OSErr setvolhelper(VolumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
+                          BOOLEAN convertzeros)
 {
     HVCB *vcbp;
     GUEST<HVCB *> newDefVCBPtr;
@@ -938,17 +938,17 @@ PRIVATE OSErr setvolhelper(VolumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
     PBRETURN(pb, err);
 }
 
-PUBLIC OSErr Executor::hfsPBSetVol(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBSetVol(ParmBlkPtr pb, BOOLEAN async)
 {
     return setvolhelper((VolumeParam *)pb, async, 0, true);
 }
 
-PUBLIC OSErr Executor::hfsPBHSetVol(WDPBPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBHSetVol(WDPBPtr pb, BOOLEAN async)
 {
     return setvolhelper((VolumeParam *)pb, async, Cx(pb->ioWDDirID), false);
 }
 
-PUBLIC OSErr Executor::hfsPBFlushVol(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::hfsPBFlushVol(ParmBlkPtr pb, BOOLEAN async)
 {
     VCB *vcbp;
     OSErr err;
@@ -962,7 +962,7 @@ PUBLIC OSErr Executor::hfsPBFlushVol(ParmBlkPtr pb, BOOLEAN async)
     PBRETURN((VolumeParam *)pb, err);
 }
 
-PRIVATE void closeallvcbfiles(HVCB *vcbp)
+static void closeallvcbfiles(HVCB *vcbp)
 {
     filecontrolblock *fcbp, *efcbp;
     IOParam iopb;
@@ -979,7 +979,7 @@ PRIVATE void closeallvcbfiles(HVCB *vcbp)
         }
 }
 
-PUBLIC OSErr Executor::hfsPBUnmountVol(ParmBlkPtr pb)
+OSErr Executor::hfsPBUnmountVol(ParmBlkPtr pb)
 {
     OSErr err;
     HVCB *vcbp;
@@ -1001,7 +1001,7 @@ PUBLIC OSErr Executor::hfsPBUnmountVol(ParmBlkPtr pb)
     PBRETURN((VolumeParam *)pb, err);
 }
 
-PRIVATE OSErr offlinehelper(VolumeParam *pb, HVCB *vcbp)
+static OSErr offlinehelper(VolumeParam *pb, HVCB *vcbp)
 {
     OSErr err, err1, err2;
     IOParam iop;
@@ -1044,7 +1044,7 @@ PRIVATE OSErr offlinehelper(VolumeParam *pb, HVCB *vcbp)
     return err;
 }
 
-PUBLIC OSErr Executor::hfsPBOffLine(ParmBlkPtr pb)
+OSErr Executor::hfsPBOffLine(ParmBlkPtr pb)
 {
     OSErr err;
     HVCB *vcbp;
@@ -1066,7 +1066,7 @@ PUBLIC OSErr Executor::hfsPBOffLine(ParmBlkPtr pb)
     PBRETURN((VolumeParam *)pb, err);
 }
 
-PUBLIC OSErr Executor::hfsPBEject(ParmBlkPtr pb)
+OSErr Executor::hfsPBEject(ParmBlkPtr pb)
 {
     OSErr err;
     HVCB *vcbp;
@@ -1103,7 +1103,7 @@ PUBLIC OSErr Executor::hfsPBEject(ParmBlkPtr pb)
     PBRETURN((VolumeParam *)pb, err);
 }
 
-PUBLIC OSErr Executor::ROMlib_pbvolrename(IOParam *pb, StringPtr newnamep)
+OSErr Executor::ROMlib_pbvolrename(IOParam *pb, StringPtr newnamep)
 {
     OSErr err;
     HParamBlockRec hpb;

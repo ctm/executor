@@ -182,7 +182,7 @@ ROMlib_launch_native_app(int n_filenames, char **filenames)
     return 0;
 }
 
-PUBLIC bool Executor::host_has_spfcommon(void)
+bool Executor::host_has_spfcommon(void)
 {
     return false;
 }
