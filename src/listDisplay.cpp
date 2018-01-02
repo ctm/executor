@@ -248,7 +248,6 @@ void Executor::C_LActivate(BOOLEAN act, ListHandle list) /* IMIV-276 */
     }
 }
 
-#if defined(BINCOMPAT)
 void Executor::ROMlib_listcall(INTEGER mess, BOOLEAN sel, Rect *rp, Cell cell, INTEGER off,
                                INTEGER len, ListHandle lhand)
 {
@@ -276,4 +275,3 @@ void Executor::ROMlib_listcall(INTEGER mess, BOOLEAN sel, Rect *rp, Cell cell, I
         }
     }
 }
-#endif /* BINCOMPAT */

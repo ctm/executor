@@ -13,7 +13,6 @@ using namespace Executor;
 
 #define LOWER(x) ((x) | 0x20) /* converts to lower case if x is A-Z */
 
-#if defined(BINCOMPAT)
 
 void Executor::C_ROMlib_Fdec2str(DecForm *volatile sp2, Decimal *volatile sp,
                                  Decstr volatile dp)
@@ -436,4 +435,3 @@ abortlookahead:
 #endif /* 0 */
 }
 
-#endif /* BINCOMPAT */

@@ -57,9 +57,7 @@ LONGINT Executor::C_GetEnvirons(INTEGER verb)
 
 OSErr Executor::C_SetEnvirons(INTEGER verb, LONGINT param)
 {
-#if defined(BINCOMPAT)
     ROMlib_hook(script_notsupported);
-#endif /* BINCOMPAT */
     return smVerbNotFound;
 }
 
@@ -170,9 +168,7 @@ INTEGER Executor::C_CharType(Ptr textbufp, INTEGER offset)
 {
     INTEGER retval;
     unsigned char c;
-#if defined(BINCOMPAT)
     ROMlib_hook(script_notsupported);
-#endif /* BINCOMPAT */
 
     retval = 0;
     c = textbufp[offset];
@@ -300,9 +296,7 @@ void Executor::C_FindWord(Ptr textbufp, INTEGER length, INTEGER offset,
 {
     INTEGER start, stop;
     bool chasing_spaces_p;
-#if defined(BINCOMPAT)
     ROMlib_hook(script_notsupported);
-#endif /* BINCOMPAT */
 
     if(!leftside)
         --offset;
@@ -332,9 +326,7 @@ void Executor::C_FindWord(Ptr textbufp, INTEGER length, INTEGER offset,
 void Executor::C_HiliteText(Ptr textbufp, INTEGER firstoffset,
                             INTEGER secondoffset, GUEST<INTEGER> *offsets)
 {
-#if defined(BINCOMPAT)
     ROMlib_hook(script_notsupported);
-#endif /* BINCOMPAT */
     offsets[0] = CW(firstoffset);
     offsets[1] = CW(secondoffset);
     offsets[2] = CWC(0);

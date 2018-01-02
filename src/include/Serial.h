@@ -66,12 +66,6 @@ enum
     xOffWasSent = 0x80,
 };
 
-#if !defined(BINCOMPAT)
-
-typedef enum { sPortA,
-               sPortB } SPortSel;
-
-#else /* BINCOMPAT */
 
 typedef SignedByte SPortSel;
 enum
@@ -80,7 +74,6 @@ enum
     sPortB = 1,
 };
 
-#endif /* BINCOMPAT */
 
 struct SerShk
 {

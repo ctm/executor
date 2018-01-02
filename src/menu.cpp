@@ -41,11 +41,7 @@ using namespace Executor;
 
 typedef void (*menuhookp)(void);
 
-#if !defined(BINCOMPAT)
-typedef void (*mbarhookp)(Rect *rp);
-#else /* defined(BINCOMPAT) */
 typedef LONGINT (*mbarhookp)(Rect *rp);
-#endif /* defined(BINCOMPAT) */
 
 #define CALLMENUHOOK(fp) ROMlib_CALLMENUHOOK((menuhookp)(fp))
 #define CALLMBARHOOK(arg, fp) ROMlib_CALLMBARHOOK(arg, (mbarhookp)(fp))

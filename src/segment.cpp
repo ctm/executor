@@ -430,10 +430,6 @@ static BOOLEAN argv_to_appfile(char *uname, AppFile *ap)
     return retval;
 }
 
-#if defined(MACOSX_) && defined(BINCOMPAT)
-INTEGER Executor::ROMlib_acceptsanotherfile = true;
-#endif
-
 int Executor::ROMlib_print;
 
 #if !defined(MSDOS) && !defined(CYGWIN32)
@@ -513,50 +509,20 @@ void Executor::ROMlib_seginit(LONGINT argc, char **argv) /* INTERNAL */
     HxX(fh, message) = ROMlib_print ? CWC(appPrint) : CWC(appOpen);
     if(fullpathname && fullpathname != argv[0])
         DisposPtr((Ptr)fullpathname);
-#if defined(NEXTSTEP) && defined(BINCOMPAT)
-    ROMlib_acceptsanotherfile = false;
-    if(ROMlib_toexec)
+    while(--argc > 0)
     {
-        if(ROMlib_toopen)
-            ROMlib_toexec = *(char **)ROMlib_toexec; /* ick! */
-        if(argv_to_appfile(ROMlib_toexec, &app))
+        ++argv;
+        if(argv_to_appfile(argv[0], &app))
         {
             ROMlib_startupscreen = false;
             ROMlib_exit = true;
             newcount = Hx(fh, count) + 1;
             HxX(fh, count) = CW(newcount);
             SetHandleSize((Handle)fh,
-                          (char *)&HxX(fh, files)[newcount] - (char *)STARH(fh));
+                            (char *)&HxX(fh, files)[newcount] - (char *)STARH(fh));
             HxX(fh, files)[Hx(fh, count) - 1] = app;
         }
-        if(ROMlib_toopen)
-        {
-            if(argv_to_appfile(ROMlib_toopen, &app))
-            {
-                newcount = Hx(fh, count) + 1;
-                HxX(fh, count) = CW(newcount);
-                SetHandleSize((Handle)fh,
-                              (char *)&HxX(fh, files)[newcount] - (char *)STARH(fh));
-                HxX(fh, files)[Hx(fh, count) - 1] = app;
-            }
-        }
     }
-    else
-#endif
-        while(--argc > 0)
-        {
-            ++argv;
-            if(argv_to_appfile(argv[0], &app))
-            {
-                ROMlib_startupscreen = false;
-                ROMlib_exit = true;
-                newcount = Hx(fh, count) + 1;
-                HxX(fh, count) = CW(newcount);
-                SetHandleSize((Handle)fh,
-                              (char *)&HxX(fh, files)[newcount] - (char *)STARH(fh));
-                HxX(fh, files)[Hx(fh, count) - 1] = app;
-            }
-        }
 }
 
 void Executor::CountAppFiles(GUEST<INTEGER> *messagep,
@@ -764,14 +730,6 @@ void Executor::C_ExitToShell()
     ALLOCAEND /* yeah, right, if exit fails... */
 }
 
-#if !defined(BINCOMPAT)
-
-void Executor::C_UnloadSeg(Ptr addr) /* INTERNAL */
-{
-    /* NOP */
-}
-
-#else /* BINCOMPAT */
 
 #define JMPLINSTR 0x4EF9
 #define MOVESPINSTR 0x3F3C
@@ -871,4 +829,3 @@ void Executor::C_UnloadSeg(Ptr addr)
     }
 }
 
-#endif /* BINCOMPAT */

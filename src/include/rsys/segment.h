@@ -22,7 +22,6 @@ extern void SFSaveDisk_Update(INTEGER vrefnum, Str255 filename);
 extern char *ROMlib_undotdot(char *origp);
 
 extern LONGINT ROMlib_appbit, ROMlib_whichapps;
-extern INTEGER ROMlib_acceptsanotherfile;
 
 extern void ROMlib_seginit(LONGINT argc, char **argv);
 extern void empty_timer_queues(void);

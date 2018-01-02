@@ -91,11 +91,6 @@ void Executor::C_LRect(Rect *cellrect, Cell cell, ListHandle list) /* IMIV-274 *
 
 typedef INTEGER (*cmpf)(Ptr p1, Ptr p2, INTEGER len1, INTEGER len2);
 
-#if !defined(BINCOMPAT)
-
-#define CALLCMP(a1, a2, a3, a4, fp) ((*(cmpffp))(a1, a2, a3, a4))
-
-#else /* BINCOMPAT */
 
 #define CALLCMP(a1, a2, a3, a4, fp) \
     ROMlib_CALLCMP(a1, a2, a3, a4, (cmpf)fp)
@@ -121,7 +116,6 @@ static inline INTEGER Executor::ROMlib_CALLCMP(Ptr p1, Ptr p2, INTEGER l1, INTEG
     return retval;
 }
 
-#endif /* BINCOMPAT */
 
 BOOLEAN Executor::C_LSearch(Ptr dp, INTEGER dl, Ptr proc, GUEST<Cell> *cellp,
                             ListHandle list) /* IMIV-274 */

@@ -11,7 +11,6 @@
 
 using namespace Executor;
 
-#if defined(BINCOMPAT)
 
 static bool text_is_enabled_p = true;
 
@@ -241,4 +240,3 @@ void Executor::ROMlib_PICWRITE(Ptr addr, INTEGER count)
         C_StdPutPic(addr, count);
 }
 
-#endif /* BINCOMPAT */

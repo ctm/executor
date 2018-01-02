@@ -95,7 +95,6 @@ static gestaltentry_t gtable[] = {
  * HALF-DONE: we're using intptr_t now, so it works on 64bit as well.
  */
 
-#if defined(BINCOMPAT)
     {
         gestaltExtToolboxTable, (intptr_t)(tooltraptable + 0x200),
     },
@@ -105,18 +104,6 @@ static gestaltentry_t gtable[] = {
     {
         gestaltOSTable, (intptr_t)ostraptable,
     },
-#else
-    {
-        gestaltExtToolboxTable, UNKNOWN,
-    },
-    {
-        gestaltOSTable, UNKNOWN,
-    },
-    {
-        gestaltToolboxTable, UNKNOWN,
-    },
-// FIXME: #warning gestalt{ExtToolboxTable,ToolboxTable,OSTable} not initialized
-#endif
 
     {
         gestaltFPUType, 0,

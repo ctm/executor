@@ -838,13 +838,6 @@ LONGINT Executor::NGetTrapAddress(INTEGER n, INTEGER ttype) /* IMII-384 */
     return retval;
 }
 
-#if !defined(BINCOMPAT)
-
-void Executor::SetTrapAddress(LONGINT addr,
-                              INTEGER n) /* IMII-384 NOT SUPPORTED */
-{
-}
-#endif
 
 static BOOLEAN shouldbeawake;
 

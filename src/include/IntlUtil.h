@@ -129,13 +129,6 @@ typedef GUEST<Intl1Ptr> *Intl1Hndl;
 
 typedef comp LongDateTime;
 
-#if !defined(BINCOMPAT)
-
-typedef enum { shortDate,
-               longDate,
-               abbrevDate } DateForm;
-
-#else /* BINCOMPAT */
 
 typedef SignedByte DateForm;
 enum
@@ -145,7 +138,6 @@ enum
     abbrevDate = 2,
 };
 
-#endif /* BINCOMPAT */
 
 /* DO NOT DELETE THIS LINE */
 

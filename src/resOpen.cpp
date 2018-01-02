@@ -71,7 +71,6 @@ void Executor::C_HCreateResFile(INTEGER vrefnum, LONGINT parid, Str255 name)
     HCreateResFile_helper(vrefnum, parid, name, TICK("????"), TICK("????"), 0);
 }
 
-#if defined(BINCOMPAT)
 
 Handle Executor::ROMlib_mgetres(resmaphand map, resref *rr)
 {
@@ -114,16 +113,6 @@ Handle Executor::ROMlib_mgetres(resmaphand map, resref *rr)
     return retval;
 }
 
-#else
-
-void Executor::ROMlib_mgetres2(resmaphand unused1, resref *unused2)
-{
-    gui_abort();
-}
-
-#define ROMlib_mgetres2 ROMlib_mgetres
-
-#endif
 
 namespace Executor
 {

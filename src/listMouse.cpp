@@ -19,9 +19,7 @@
 
 using namespace Executor;
 
-#if defined(BINCOMPAT)
 typedef BOOLEAN (*clickproc)(void);
-#endif
 
 static void findcell(GUEST<Cell> *, ListHandle);
 static void setselectnilflag(BOOLEAN setit, Cell cell, ListHandle list,
@@ -178,9 +176,6 @@ void Executor::C_ROMlib_mytrack(ControlHandle ch, INTEGER part)
     scrollbyvalues(MR(guest_cast<ListHandle>(HxX(ch, contrlRfCon))));
 }
 
-#if !defined(BINCOMPAT)
-#define CALLCLICK(f) (CallPascalB(f))
-#else /* BINCOMPAT */
 #define CALLCLICK(f) ROMlib_CALLCLICK((clickproc)(f))
 
 static inline BOOLEAN ROMlib_CALLCLICK(clickproc fp)
@@ -194,7 +189,6 @@ static inline BOOLEAN ROMlib_CALLCLICK(clickproc fp)
     return retval;
 }
 
-#endif /* BINCOMPAT */
 
 BOOLEAN Executor::C_LClick(Point pt, INTEGER mods,
                            ListHandle list) /* IMIV-273 */

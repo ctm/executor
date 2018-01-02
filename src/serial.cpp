@@ -291,7 +291,6 @@ static char *specialname(ParmBlkPtr pbp, const char **lockfilep,
 
 typedef void (*compfuncp)(void);
 
-#if defined(BINCOMPAT)
 
 void callcomp(ParmBlkPtr pbp, ProcPtr comp, OSErr err)
 {
@@ -308,17 +307,6 @@ void callcomp(ParmBlkPtr pbp, ProcPtr comp, OSErr err)
         callcomp(pbp, MR((pbp)->ioParam.ioCompletion), err);                     \
     return err
 
-#else
-
-// FIXME: #warning BINCOMPAT not defined
-
-#define DOCOMPLETION(pbp, err)                       \
-    (pbp)->ioParam.ioResult = CW(err);               \
-    if(CW((pbp)->ioParam.ioTrap) & asyncTrpBit)      \
-        (*(compfuncp)(pbp)->ioParam.ioCompletion)(); \
-    return err
-
-#endif
 
 #define SERIALDEBUG
 

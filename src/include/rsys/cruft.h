@@ -5,8 +5,5 @@
  * I don't understand why we want them.
  */
 
-#if !defined(BINCOMPAT)
-#define BINCOMPAT
-#endif
 
 #endif /* !_CRUFT_H_ */

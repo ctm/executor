@@ -678,7 +678,6 @@ Fract Executor::X2Frac(Extended *xp) /* IMIV-65 */
     }
 }
 
-#if defined(BINCOMPAT)
 
 void Executor::R_Fix2X(void *dummyretpc, Fixed x, extended80 *ret) /* INTERNAL */
 {
@@ -749,4 +748,3 @@ Fract Executor::C_R_X2Frac(extended80 *x)
 #endif
 }
 
-#endif /* BINCOMPAT */

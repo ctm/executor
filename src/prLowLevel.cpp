@@ -507,14 +507,6 @@ typedef TPPrDlg (*prinitprocp)(THPrint hPrint);
 
 typedef void (*pritemprocp)(TPPrDlg prrecptr, INTEGER item);
 
-#if !defined(BINCOMPAT)
-
-#define CALLPRINITPROC(hPrint, fp) (*(prinitprocpfp))(hPrint)
-
-#define CALLPRITEMPROC(prrecptr, item, fp) \
-    (*(pritemprocp fp))(prrecptr, item)
-
-#else /* BINCOMPAT */
 
 #define CALLPRINITPROC(hPrint, fp) \
     ROMlib_CALLPRINITPROC((hPrint), (prinitprocp)(fp))
@@ -559,7 +551,6 @@ static inline void Executor::ROMlib_CALLPRITEMPROC(TPPrDlg prrecptr, INTEGER ite
         HOOKRESTOREREGS();
     }
 }
-#endif /* BINCOMPAT */
 
 BOOLEAN Executor::C_ROMlib_stlfilterproc(
     DialogPeek dp, EventRecord *evt, GUEST<INTEGER> *ith)

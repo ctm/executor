@@ -261,9 +261,7 @@ void Executor::C_SysError(short errorcode)
     INTEGER offsetx, offsety;
     Rect main_gd_rect;
 
-#if defined(BINCOMPAT)
     LONGINT tmpa5;
-#endif /* BINCOMPAT */
 
     main_gd_rect = PIXMAP_BOUNDS(GD_PMAP(MR(MainDevice)));
 
@@ -310,10 +308,8 @@ void Executor::C_SysError(short errorcode)
     }
 
 /* 4. Allocate and re-initialize QuickDraw */
-#if defined(BINCOMPAT)
     EM_A5 = US_TO_SYN68K(&tmpa5);
     CurrentA5 = guest_cast<Ptr>(CL(EM_A5));
-#endif /* BINCOMPAT */
     InitGraf((Ptr)quickbytes + sizeof(quickbytes) - 4);
     ROMlib_initport(&alertport);
     SetPort(&alertport);

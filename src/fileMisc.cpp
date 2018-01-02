@@ -838,7 +838,6 @@ void Executor::ROMlib_fileinit() /* INTERNAL */
 #endif
 }
 
-#if defined(BINCOMPAT)
 fcbrec *
 Executor::PRNTOFPERR(INTEGER prn, OSErr *errp)
 {
@@ -864,4 +863,3 @@ Executor::PRNTOFPERR(INTEGER prn, OSErr *errp)
     *errp = err;
     return retval;
 }
-#endif /* BINCOMPAT */
