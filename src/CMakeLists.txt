@@ -60,8 +60,6 @@ linkheader("config/arch" "host-arch-config.h" ${HOST_ARCH})
 linkheader("config/front-ends" "front-end-config.h" ${FRONT_END})
 linkheader("config/sound" "sound-config.h" "dummy" "dummy-sound.h")
 
-configure_file(config-cmake.h.in config.h)
-
 add_executable(map_to_c map_to_c/map_to_c.cpp)
 add_executable(mkseedtables mkseedtables/mkseedtables.c)
 add_executable(mkultable mkultable/mkultable.c)
