@@ -22,28 +22,10 @@
 namespace Executor
 {
 bool send_application_open_aevt_p;
-PUBLIC pascal OSErr C_EventHandlerTemplate(AppleEvent *evt, AppleEvent *reply,
-                                           int32_t refcon);
-PUBLIC pascal OSErr C_CoercePtrTemplate(DescType data_type, Ptr data, Size data_size,
-                                        DescType to_type, int32_t refcon, AEDesc *desc_out);
-
-PUBLIC pascal OSErr C_CoerceDescTemplate(AEDesc *desc, DescType to_type, int32_t refcon,
-                                         AEDesc *desc_out);
 }
 using namespace Executor;
 
 /* dispatching apple events */
-
-P3(PUBLIC pascal, OSErr, EventHandlerTemplate,
-   AppleEvent *, evt, AppleEvent *, reply,
-   int32_t, refcon)
-{
-    /* template for CTOP_... and PTOC_... flags generation */
-    abort();
-#if !defined(LETGCCWAIL)
-    return paramErr;
-#endif
-}
 
 P1(PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
    EventRecord *, evtrec)
@@ -144,10 +126,7 @@ P1(PUBLIC pascal trap, OSErr, AEProcessAppleEvent,
                                  /* dummy */ -1, /* dummy */ -1,
                                  reply);
 
-        retval = CToPascalCall((void *)hdlr,
-                               CTOP_EventHandlerTemplate,
-                               evt, reply, refcon);
-
+        retval = hdlr(evt, reply, refcon);
         AEDisposeDesc(reply);
     }
 
@@ -370,34 +349,12 @@ P1(PUBLIC pascal trap, OSErr, AEResetTimer,
 
 /* type coersion */
 
-P6(PUBLIC pascal, OSErr, CoercePtrTemplate,
-   DescType, data_type, Ptr, data, Size, data_size,
-   DescType, to_type, int32_t, refcon, AEDesc *, desc_out)
-{
-    /* template for CTOP_... and PTOC_... flags generation */
-    abort();
-#if !defined(LETGCCWAIL)
-    return paramErr;
-#endif
-}
-
-P4(PUBLIC pascal, OSErr, CoerceDescTemplate,
-   AEDesc *, desc, DescType, to_type, int32_t, refcon,
-   AEDesc *, desc_out)
-{
-    /* template for CTOP_... and PTOC_... flags generation */
-    abort();
-#if !defined(LETGCCWAIL)
-    return paramErr;
-#endif
-}
-
 P5(PUBLIC pascal trap, OSErr, AECoercePtr,
    DescType, data_type,
    Ptr, data, Size, data_size,
    DescType, result_type, AEDesc *, desc_out)
 {
-    GUEST<ProcPtr> coercion_hdlr_s;
+    GUEST<CoerceDescProcPtr> coercion_hdlr_s;
     GUEST<int32_t> refcon_s;
     Boolean is_desc_hdlr_p;
     OSErr err;
@@ -424,7 +381,7 @@ P5(PUBLIC pascal trap, OSErr, AECoercePtr,
     }
 
     /* swap things to a normal state */
-    ProcPtr coercion_hdlr = MR(coercion_hdlr_s);
+    CoerceDescProcPtr coercion_hdlr = MR(coercion_hdlr_s);
     int32_t refcon = CL(refcon_s);
 
     if(is_desc_hdlr_p)
@@ -435,16 +392,15 @@ P5(PUBLIC pascal trap, OSErr, AECoercePtr,
         if(err != noErr)
             return memFullErr;
 
-        err = CToPascalCall((void *)coercion_hdlr, PTOC_CoerceDescTemplate,
-                            desc, result_type, refcon, desc_out);
+        err = coercion_hdlr(desc, result_type, refcon, desc_out);
 
         AEDisposeDesc(desc);
     }
     else
     {
-        err = CToPascalCall((void *)coercion_hdlr, PTOC_CoercePtrTemplate,
-                            data_type, data, data_size, result_type,
-                            refcon, desc_out);
+        CoercePtrProcPtr ptr_coercion_hdlr((void *)coercion_hdlr);
+        err = ptr_coercion_hdlr(data_type, data, data_size, result_type,
+                                refcon, desc_out);
     }
 
     if(err != noErr)
@@ -523,9 +479,9 @@ parse_evt(const AppleEvent *evtp, AEDesc *desc_out)
 P3(PUBLIC pascal trap, OSErr, AECoerceDesc,
    AEDesc *, desc, DescType, result_type, AEDesc *, desc_out)
 {
-    GUEST<ProcPtr> coercion_hdlr_s;
+    GUEST<CoerceDescProcPtr> coercion_hdlr_s;
     GUEST<int32_t> refcon_s;
-    ProcPtr coercion_hdlr;
+    CoerceDescProcPtr coercion_hdlr;
     int32_t refcon;
     GUEST<Boolean> is_desc_hdlr_p;
     DescType desc_type;
@@ -566,8 +522,7 @@ P3(PUBLIC pascal trap, OSErr, AECoerceDesc,
 
     if(is_desc_hdlr_p)
     {
-        err = CToPascalCall((void *)coercion_hdlr, PTOC_CoerceDescTemplate,
-                            desc, result_type, refcon, desc_out);
+        err = coercion_hdlr(desc, result_type, refcon, desc_out);
     }
     else
     {
@@ -577,10 +532,10 @@ P3(PUBLIC pascal trap, OSErr, AECoerceDesc,
 
         {
             HLockGuard guard(desc_data);
-            err = CToPascalCall((void *)coercion_hdlr, PTOC_CoercePtrTemplate,
-                                desc_type, STARH(desc_data),
-                                GetHandleSize(desc_data),
-                                result_type, refcon, desc_out);
+            CoercePtrProcPtr ptr_coercion_hdlr((void *)coercion_hdlr);
+            err = ptr_coercion_hdlr(desc_type, STARH(desc_data),
+                                    GetHandleSize(desc_data),
+                                    result_type, refcon, desc_out);
         }
     }
 

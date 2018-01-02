@@ -126,16 +126,19 @@ typedef union AEArrayData {
 
 typedef AEArrayData *AEArrayDataPointer;
 
-typedef ProcPtr EventHandlerProcPtr;
 typedef ProcPtr IdleProcPtr;
 typedef ProcPtr EventFilterProcPtr;
+
+typedef UPP<OSErr (AppleEvent *evt, AppleEvent *reply, int32_t refcon)> EventHandlerProcPtr;
+typedef UPP<OSErr (DescType data_type, Ptr data, Size data_size, DescType to_type, int32_t refcon, AEDesc *desc_out)> CoercePtrProcPtr;
+typedef UPP<OSErr (AEDesc *desc, DescType to_type, int32_t refcon, AEDesc *desc_out)> CoerceDescProcPtr;
 
 /* #### internal */
 
 typedef struct AE_hdlr
 {
     GUEST_STRUCT;
-    GUEST<ProcPtr> fn;
+    GUEST<void*> fn;
     GUEST<int32_t> refcon;
 } AE_hdlr_t;
 
@@ -304,10 +307,12 @@ enum
 /* #### OSL internal */
 extern syn68k_addr_t /*ProcPtr*/ AE_OSL_select_fn;
 
+
+
 /* prototypes go here */
 
 extern pascal trap OSErr C_AEGetCoercionHandler(DescType from_type, DescType to_type,
-                                                GUEST<ProcPtr> *hdlr_out, GUEST<int32_t> *refcon_out,
+                                                GUEST<CoerceDescProcPtr> *hdlr_out, GUEST<int32_t> *refcon_out,
                                                 GUEST<Boolean> *from_type_is_desc_p_out, Boolean system_handler_p);
 PASCAL_FUNCTION(AEGetCoercionHandler);
 
@@ -390,16 +395,16 @@ extern pascal trap OSErr C_AEDeleteKeyDesc(AERecord *record, AEKeyword keyword);
 PASCAL_FUNCTION(AEDeleteKeyDesc);
 
 extern pascal trap OSErr C_AEInstallSpecialHandler(AEKeyword function_class,
-                                                   ProcPtr hdlr,
+                                                   EventHandlerProcPtr hdlr,
                                                    Boolean system_handler_p);
 PASCAL_FUNCTION(AEInstallSpecialHandler);
 
 extern pascal trap OSErr C_AERemoveSpecialHandler(AEKeyword function_class,
-                                                  ProcPtr hdlr,
+                                                  EventHandlerProcPtr hdlr,
                                                   Boolean system_handler_p);
 PASCAL_FUNCTION(AERemoveSpecialHandler);
 extern pascal trap OSErr C_AEGetSpecialHandler(AEKeyword function_class,
-                                               GUEST<ProcPtr> *hdlr_out,
+                                               GUEST<EventHandlerProcPtr> *hdlr_out,
                                                Boolean system_handler_p);
 PASCAL_FUNCTION(AEGetSpecialHandler);
 
@@ -464,7 +469,7 @@ extern pascal trap OSErr C_AECreateAppleEvent(AEEventClass event_class, AEEventI
 PASCAL_FUNCTION(AECreateAppleEvent);
 
 extern pascal trap OSErr C_AEInstallCoercionHandler(DescType from_type, DescType to_type,
-                                                    ProcPtr hdlr, int32_t refcon, Boolean from_type_is_desc_p, Boolean system_handler_p);
+                                                    CoerceDescProcPtr hdlr, int32_t refcon, Boolean from_type_is_desc_p, Boolean system_handler_p);
 PASCAL_FUNCTION(AEInstallCoercionHandler);
 
 extern pascal trap OSErr C_AEInstallEventHandler(AEEventClass event_class, AEEventID event_id,
@@ -472,7 +477,7 @@ extern pascal trap OSErr C_AEInstallEventHandler(AEEventClass event_class, AEEve
 PASCAL_FUNCTION(AEInstallEventHandler);
 
 extern pascal trap OSErr C_AERemoveCoercionHandler(DescType from_type, DescType to_type,
-                                                   ProcPtr hdlr, Boolean system_handler_p);
+                                                   CoerceDescProcPtr hdlr, Boolean system_handler_p);
 PASCAL_FUNCTION(AERemoveCoercionHandler);
 
 extern pascal trap OSErr C_AEPutArray(AEDescList *list, AEArrayType type,

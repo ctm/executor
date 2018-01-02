@@ -160,7 +160,10 @@ struct UPP<Ret (Args...)>
     explicit UPP(void* ptr) : ptr(ptr) {}
 
     explicit operator void*() const { return ptr; }
+    
     explicit operator bool() const { return ptr != nullptr; }
+    bool operator== (UPP<Ret (Args...)> other) const { return ptr == other.ptr; }
+    bool operator!= (UPP<Ret (Args...)> other) const { return ptr != other.ptr; }
 
     Ret operator()(Args... args) const
     {

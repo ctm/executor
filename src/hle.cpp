@@ -115,20 +115,6 @@ P3(PUBLIC pascal trap, Boolean, GetSpecificHighLevelEvent,
     return false;
 }
 
-namespace Executor
-{
-PUBLIC pascal Boolean C_GetSpecificHighLevelEventProcTemplate(Ptr, HighLevelEventMsgPtr, TargetID *);
-}
-
-P3(PUBLIC pascal, Boolean, GetSpecificHighLevelEventProcTemplate, Ptr, data, HighLevelEventMsgPtr, hle_msg, TargetID *, target_id)
-{
-    /* template for CTOP_... and PTOC_... flags generation */
-    abort();
-#if !defined(LETGCCWAIL)
-    return false;
-#endif
-}
-
 P6(PUBLIC pascal trap, OSErr, PostHighLevelEvent,
    EventRecord *, evt, Ptr, receiver_id, int32_t, refcon,
    Ptr, msg_buf, int32_t, msg_length, int32_t, post_options)

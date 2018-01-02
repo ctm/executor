@@ -239,7 +239,7 @@ P5(PUBLIC pascal trap, OSErr, AEInstallEventHandler,
     AE_hdlr_t hdlr;
     OSErr err;
 
-    if(hdlr_fn == NULL)
+    if(!hdlr_fn)
         AE_RETURN_ERROR(paramErr);
 
     table = hdlr_table(system_handler_p, event);
@@ -247,7 +247,7 @@ P5(PUBLIC pascal trap, OSErr, AEInstallEventHandler,
     selector.sel0 = CL(event_class);
     selector.sel1 = CL(event_id);
 
-    hdlr.fn = RM(hdlr_fn);
+    hdlr.fn = RM((void*) hdlr_fn);
     hdlr.refcon = CL(refcon);
 
     err = hdlr_table_elt(table, &selector, &hdlr, true, &elt);
@@ -301,7 +301,7 @@ P5(PUBLIC pascal trap, OSErr, AEGetEventHandler,
         AE_RETURN_ERROR(err);
 
     /* warning: `elt' is a pointer into an unlocked handle */
-    *hdlr = elt->hdlr.fn;
+    *hdlr = guest_cast<EventHandlerProcPtr>( elt->hdlr.fn );
     *refcon = elt->hdlr.refcon;
 
     /* hack because various applications complain if they get sent
@@ -332,7 +332,7 @@ P4(PUBLIC pascal trap, OSErr, AERemoveEventHandler,
 
 P6(PUBLIC pascal trap, OSErr, AEInstallCoercionHandler,
    DescType, from_type, DescType, to_type,
-   ProcPtr, hdlr_fn, int32_t, refcon,
+   CoerceDescProcPtr, hdlr_fn, int32_t, refcon,
    Boolean, from_type_is_desc_p,
    Boolean, system_handler_p)
 {
@@ -350,7 +350,7 @@ P6(PUBLIC pascal trap, OSErr, AEInstallCoercionHandler,
     selector.sel0 = CL(from_type);
     selector.sel1 = CL(to_type);
 
-    hdlr.fn = RM(hdlr_fn);
+    hdlr.fn = RM((void*) hdlr_fn);
     hdlr.refcon = CL(refcon);
 
     err = hdlr_table_elt(table, &selector, &hdlr, true, &elt);
@@ -367,7 +367,7 @@ P6(PUBLIC pascal trap, OSErr, AEInstallCoercionHandler,
 
 P6(PUBLIC pascal trap, OSErr, AEGetCoercionHandler,
    DescType, from_type, DescType, to_type,
-   GUEST<ProcPtr> *, hdlr_out, GUEST<int32_t> *, refcon_out,
+   GUEST<CoerceDescProcPtr> *, hdlr_out, GUEST<int32_t> *, refcon_out,
    GUEST<Boolean> *, from_type_is_desc_p_out,
    Boolean, system_handler_p)
 {
@@ -386,7 +386,7 @@ P6(PUBLIC pascal trap, OSErr, AEGetCoercionHandler,
         AE_RETURN_ERROR(err);
 
     /* warning: `elt' is a pointer into an unlocked handle */
-    *hdlr_out = elt->hdlr.fn;
+    *hdlr_out = guest_cast<CoerceDescProcPtr>( elt->hdlr.fn );
     *refcon_out = elt->hdlr.refcon;
 
     /* #### *from_type_is_desc_p_out = elt->flag; */
@@ -396,7 +396,7 @@ P6(PUBLIC pascal trap, OSErr, AEGetCoercionHandler,
 
 P4(PUBLIC pascal trap, OSErr, AERemoveCoercionHandler,
    DescType, from_type, DescType, to_type,
-   ProcPtr, hdlr, Boolean, system_handler_p)
+   CoerceDescProcPtr, hdlr, Boolean, system_handler_p)
 {
     AE_hdlr_table_h table;
     AE_hdlr_selector_t selector;
@@ -417,7 +417,7 @@ P4(PUBLIC pascal trap, OSErr, AERemoveCoercionHandler,
 syn68k_addr_t Executor::AE_OSL_select_fn;
 
 P3(PUBLIC pascal trap, OSErr, AEInstallSpecialHandler,
-   AEKeyword, function_class, ProcPtr, hdlr_fn,
+   AEKeyword, function_class, EventHandlerProcPtr, hdlr_fn,
    Boolean, system_handler_p)
 {
     AE_hdlr_table_h table;
@@ -432,7 +432,7 @@ P3(PUBLIC pascal trap, OSErr, AEInstallSpecialHandler,
     /* #### OSL internal */
     if(function_class == keySelectProc)
     {
-        AE_OSL_select_fn = US_TO_SYN68K(hdlr_fn);
+        AE_OSL_select_fn = US_TO_SYN68K((void*) hdlr_fn);
         AE_RETURN_ERROR(noErr);
     }
 
@@ -441,7 +441,7 @@ P3(PUBLIC pascal trap, OSErr, AEInstallSpecialHandler,
     selector.sel0 = CL(function_class);
     selector.sel1 = CL(k_special_sel1);
 
-    hdlr.fn = RM(hdlr_fn);
+    hdlr.fn = RM((void*) hdlr_fn);
     hdlr.refcon = CL(-1);
 
     err = hdlr_table_elt(table, &selector, &hdlr, true, &elt);
@@ -455,7 +455,7 @@ P3(PUBLIC pascal trap, OSErr, AEInstallSpecialHandler,
 }
 
 P3(PUBLIC pascal trap, OSErr, AEGetSpecialHandler,
-   AEKeyword, function_class, GUEST<ProcPtr> *, hdlr_out,
+   AEKeyword, function_class, GUEST<EventHandlerProcPtr> *, hdlr_out,
    Boolean, system_handler_p)
 {
     AE_hdlr_table_h table;
@@ -473,13 +473,13 @@ P3(PUBLIC pascal trap, OSErr, AEGetSpecialHandler,
         AE_RETURN_ERROR(err);
 
     /* warning: `elt' is a pointer into an unlocked handle */
-    *hdlr_out = elt->hdlr.fn;
+    *hdlr_out = guest_cast<EventHandlerProcPtr>( elt->hdlr.fn );
 
     AE_RETURN_ERROR(noErr);
 }
 
 P3(PUBLIC pascal trap, OSErr, AERemoveSpecialHandler,
-   AEKeyword, function_class, ProcPtr, hdlr,
+   AEKeyword, function_class, EventHandlerProcPtr, hdlr,
    Boolean, system_handler_p)
 {
     AE_hdlr_table_h table;

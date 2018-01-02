@@ -382,19 +382,6 @@ P4(PUBLIC pascal trap, void, DeviceLoop,
     DisposeRgn(sect_rgn);
 }
 
-namespace Executor
-{
-PUBLIC pascal trap void C_DeviceLoopDrawingProcTemplate(INTEGER depth, INTEGER deviceFlags, GDHandle targetDevice,
-                                                        LONGINT userData);
-}
-
-P4(PUBLIC pascal trap, void, DeviceLoopDrawingProcTemplate,
-   INTEGER, depth, INTEGER, deviceFlags, GDHandle, targetDevice,
-   LONGINT, userData)
-{
-    /* Never used: only a dummy function to generate ctopflags! */
-}
-
 P2(PUBLIC pascal trap, BOOLEAN, TestDeviceAttribute,
    GDHandle, gdh,
    INTEGER, attribute)
