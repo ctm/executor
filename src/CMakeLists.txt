@@ -103,8 +103,6 @@ add_custom_command(OUTPUT parse.tab.cpp
 list(APPEND GENERATED_FILES rawpatstubs.ctable rawsrcstubs.ctable parse.tab.cpp)
 
 
-add_executable(genfndecls genfndecls.cpp)
-
 set(ctl_sources ctlArrows.cpp ctlDisplay.cpp ctlIMIV.cpp ctlInit.cpp ctlMisc.cpp
     ctlMouse.cpp ctlSet.cpp ctlSize.cpp ctlStddef.cpp ctlPopup.cpp)
 source_group(Controls FILES ${ctl_sources})
@@ -384,12 +382,6 @@ set(sources ${ctl_sources} ${dial_sources}
     ${sound_sources} ${num_sources} ${misc_sources}
     ${file_sources} ${hfs_sources}
     ${include_sources})
-
-add_custom_command(OUTPUT fndecls.tmp fndecls # BYPRODUCTS fndecls
-    DEPENDS ${sources}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMAND genfndecls ${sources} > ${CMAKE_CURRENT_BINARY_DIR}/fndecls.tmp
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/fndecls.tmp ${CMAKE_CURRENT_BINARY_DIR}/fndecls)
 
 add_executable(executor ${sources}
         ${GENERATED_FILES}
