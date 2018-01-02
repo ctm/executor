@@ -70,7 +70,7 @@ void Executor::C_FillOval(Rect *r, Pattern pat)
     CALLOVAL(fill, r);
 }
 
-PRIVATE bool
+static bool
 rect_matches_control_item(WindowPtr w, Rect *rp)
 {
     bool retval;

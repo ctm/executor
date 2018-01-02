@@ -24,7 +24,7 @@
  * fold lower to uppper and fold slash to back-slash
  */
 
-PRIVATE uint32_t
+static uint32_t
 char_val(int c)
 {
     uint32_t retval;
@@ -46,7 +46,7 @@ char_val(int c)
  * is what you see now, and it's been tested on 27,483 different files.
  */
 
-PRIVATE uint32_t
+static uint32_t
 hash_func(const char *p)
 {
     uint32_t retval, u;
@@ -78,7 +78,7 @@ hash_func(const char *p)
     return retval;
 }
 
-PUBLIC uint32_t
+uint32_t
 ino_from_name(const char *name)
 {
     char fullname[2048];

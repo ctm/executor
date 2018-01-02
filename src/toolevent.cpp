@@ -62,14 +62,14 @@ LONGINT Executor::eventstate = 0;
 #define TRACE(n)
 #endif /* !defined(EVENTTRACE) */
 
-PRIVATE BOOLEAN ROMlib_alarmonmbar = false;
+static BOOLEAN ROMlib_alarmonmbar = false;
 
-PUBLIC int Executor::ROMlib_delay = 0; /* number of ticks to wait when we
+int Executor::ROMlib_delay = 0; /* number of ticks to wait when we
 										 * haven't gotten anything interesting */
 
 #define ALARMSICN -16385
 
-PUBLIC BOOLEAN Executor::ROMlib_beepedonce = false;
+BOOLEAN Executor::ROMlib_beepedonce = false;
 
 static void ROMlib_togglealarm()
 {
@@ -577,7 +577,7 @@ void readprefvalues(DialogPtr dp)
  * string.  Look at yylex() in parse.y.
  */
 
-PRIVATE void
+static void
 clean(char *strp)
 {
     char c;
@@ -1293,7 +1293,7 @@ static int sane_debugging_on = 0; /* Leave this off and let the person doing the
 			      very nice thing to do. */
 #endif /* SANE_DEBUGGING */
 
-PUBLIC void
+void
 Executor::sendsuspendevent(void)
 {
     Point p;
@@ -1322,7 +1322,7 @@ Executor::sendsuspendevent(void)
     }
 }
 
-PUBLIC void
+void
 Executor::sendresumeevent(bool cvtclip)
 {
     LONGINT what;
@@ -1348,7 +1348,7 @@ Executor::sendresumeevent(bool cvtclip)
     }
 }
 
-PUBLIC void
+void
 sendcopy(void)
 {
     Point p;
@@ -1361,7 +1361,7 @@ sendcopy(void)
                       (GUEST<EvQElPtr> *)0, TickCount(), p, cmdKey | btnState);
 }
 
-PUBLIC void
+void
 sendpaste(void)
 {
     Point p;
@@ -1382,7 +1382,7 @@ sendpaste(void)
  *       something.  Ick.
  */
 
-PRIVATE void
+static void
 post_helper(INTEGER code, uint8 raw, uint8 mapped, INTEGER mods)
 {
     Point p;
@@ -1394,7 +1394,7 @@ post_helper(INTEGER code, uint8 raw, uint8 mapped, INTEGER mods)
                       TickCount(), p, btnState | mods);
 }
 
-PUBLIC void
+void
 Executor::ROMlib_send_quit(void)
 {
     post_helper(keyDown, MKV_CLOVER, 0, 0);

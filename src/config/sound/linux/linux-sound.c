@@ -209,7 +209,7 @@ loop(void *unused)
     }
 }
 
-PRIVATE bool
+static bool
 valid_rate(int got, int wanted)
 {
     bool retval;

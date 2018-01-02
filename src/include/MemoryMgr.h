@@ -199,19 +199,19 @@ extern THz ApplicZone(void);
 extern Size StackSpace(void);
 
 /* temporary memory functions; see tempmem.c */
-extern pascal trap int32_t C_TempFreeMem(void);
+extern int32_t C_TempFreeMem(void);
 PASCAL_FUNCTION(TempFreeMem);
-extern pascal trap Size C_TempMaxMem(GUEST<Size> *grow);
+extern Size C_TempMaxMem(GUEST<Size> *grow);
 PASCAL_FUNCTION(TempMaxMem);
-extern pascal trap Ptr C_TempTopMem(void);
+extern Ptr C_TempTopMem(void);
 PASCAL_FUNCTION(TempTopMem);
-extern pascal trap Handle C_TempNewHandle(Size logical_size, GUEST<OSErr> *result_code);
+extern Handle C_TempNewHandle(Size logical_size, GUEST<OSErr> *result_code);
 PASCAL_FUNCTION(TempNewHandle);
-extern pascal trap void C_TempHLock(Handle h, GUEST<OSErr> *result_code);
+extern void C_TempHLock(Handle h, GUEST<OSErr> *result_code);
 PASCAL_FUNCTION(TempHLock);
-extern pascal trap void C_TempHUnlock(Handle h, GUEST<OSErr> *result_code);
+extern void C_TempHUnlock(Handle h, GUEST<OSErr> *result_code);
 PASCAL_FUNCTION(TempHUnlock);
-extern pascal trap void C_TempDisposeHandle(Handle h, GUEST<OSErr> *result_code);
+extern void C_TempDisposeHandle(Handle h, GUEST<OSErr> *result_code);
 PASCAL_FUNCTION(TempDisposeHandle);
 }
 #endif /* _MEMORY_MGR_H_ */

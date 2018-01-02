@@ -135,7 +135,7 @@ INTEGER Executor::C_LAddRow(INTEGER count, INTEGER rown,
     return rown;
 }
 
-PRIVATE void
+static void
 compute_visible_rect(Rect *rp, ListHandle list, INTEGER top, INTEGER left,
                      INTEGER bottom, INTEGER right)
 {

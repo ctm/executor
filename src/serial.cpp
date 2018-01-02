@@ -250,7 +250,7 @@ static DCtlPtr otherdctl(ParmBlkPtr pbp)
  *	  delay the opening until we know just what type of flow
  *	  control the user wants to do.
  */
-PRIVATE char *specialname(ParmBlkPtr pbp, const char **lockfilep,
+static char *specialname(ParmBlkPtr pbp, const char **lockfilep,
                           const char **tempfilep)
 {
     char *retval;
@@ -323,7 +323,7 @@ void callcomp(ParmBlkPtr pbp, ProcPtr comp, OSErr err)
 #define SERIALDEBUG
 
 #if defined(LINUX) || defined(MACOSX)
-PRIVATE const char *lockname;
+static const char *lockname;
 #endif
 
 OSErr Executor::ROMlib_serialopen(ParmBlkPtr pbp, DCtlPtr dcp) /* INTERNAL */

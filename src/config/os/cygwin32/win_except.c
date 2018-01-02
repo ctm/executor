@@ -57,7 +57,7 @@ static CALLBACK LONG my_fault_proc(LPEXCEPTION_POINTERS unused)
     C_ExitToShell();
 }
 
-PRIVATE LPTOP_LEVEL_EXCEPTION_FILTER old_filter;
+static LPTOP_LEVEL_EXCEPTION_FILTER old_filter;
 
 void install_exception_handler(void)
 {

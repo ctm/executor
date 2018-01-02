@@ -11,7 +11,7 @@
 
 using namespace Executor;
 
-PUBLIC GUEST<INTEGER> *Executor::ROMlib_getoffp(Cell cell, /* INTERNAL */
+GUEST<INTEGER> *Executor::ROMlib_getoffp(Cell cell, /* INTERNAL */
                                                 ListHandle list)
 {
     Rect *rp;

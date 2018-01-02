@@ -28,7 +28,7 @@ using namespace Executor;
  * aaa:bbb:ccc: -> ccc
  */
 
-PRIVATE void
+static void
 extract_name(Str255 dest, StringPtr source)
 {
     int len, new_len;
@@ -141,7 +141,7 @@ typedef struct save_fcb_info_str
 }
 save_fcb_info_t;
 
-PRIVATE LONGINT
+static LONGINT
 get_file_num (FSSpecPtr fsp)
 {
   return 0; /* TODO */
@@ -153,7 +153,7 @@ get_file_num (FSSpecPtr fsp)
  * open without trouble.
  */
 
-PRIVATE save_fcb_info_t *
+static save_fcb_info_t *
 get_fcb_info (FSSpecPtr fsp)
 {
   filecontrolblock *fcbp, *efcbp;
@@ -196,14 +196,14 @@ get_fcb_info (FSSpecPtr fsp)
   return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 exchange_forks (FSSpecPtr src, FSSpecPtr dst, forktype type)
 {
   /* TODO */
   return paramErr;
 }
 
-PRIVATE void
+static void
 exchange_fcb (const save_fcb_info_t *dstp, const save_fcb_info_t *srcp)
 {
   /* TODO */
@@ -214,7 +214,7 @@ exchange_fcb (const save_fcb_info_t *dstp, const save_fcb_info_t *srcp)
  * when we only have information about one side
  */
 
-PRIVATE save_fcb_info_t *
+static save_fcb_info_t *
 make_fcb_info (FSSpecPtr fsp)
 {
   save_fcb_info_t *retval;
@@ -226,7 +226,7 @@ make_fcb_info (FSSpecPtr fsp)
   return retval;
 }
 
-PRIVATE void
+static void
 exchange_fcbs (FSSpecPtr fs1, const save_fcb_info_t *savefcbp1,
 	       FSSpecPtr fs2, const save_fcb_info_t *savefcbp2)
 {
@@ -241,7 +241,7 @@ exchange_fcbs (FSSpecPtr fs1, const save_fcb_info_t *savefcbp1,
   exchange_fcb (savefcbp2, savefcbp1);
 }
 
-PRIVATE void
+static void
 restore_fcb (const save_fcb_info_t *infop)
 {
   char *fcbsptr;
@@ -260,7 +260,7 @@ restore_fcb (const save_fcb_info_t *infop)
     }
 }
 
-PRIVATE void
+static void
 release_fcb_info (save_fcb_info_t *infop)
 {
   if (infop)
@@ -276,7 +276,7 @@ release_fcb_info (save_fcb_info_t *infop)
  * Part of ugly PAUP-specific hack below
  */
 
-PRIVATE void
+static void
 create_temp_name(Str63 name, int i)
 {
     OSErr err;
@@ -370,7 +370,7 @@ OSErr Executor::C_FSpExchangeFiles(FSSpecPtr src, FSSpecPtr dst)
 
 typedef OSErrRET (*open_procp)(HParmBlkPtr pb, BOOLEAN sync);
 
-PRIVATE OSErr
+static OSErr
 open_helper(FSSpecPtr spec, SignedByte perms, GUEST<int16_t> *refoutp,
             open_procp procp)
 {
@@ -479,7 +479,7 @@ OSErr Executor::C_FSpSetFInfo(FSSpecPtr spec, FInfo *fndr_info)
 
 typedef OSErrRET (*lock_procp)(HParmBlkPtr pb, BOOLEAN async);
 
-PRIVATE OSErr
+static OSErr
 lock_helper(FSSpecPtr spec, lock_procp procp)
 {
     OSErr retval;
@@ -553,7 +553,7 @@ INTEGER Executor::C_FSpOpenResFile(FSSpecPtr spec, SignedByte perms)
 /* NOTE: the HCreate and HOpenRF are not traps, they're just high level
    calls that are handy to use elsewhere, so they're included here. */
 
-PUBLIC OSErr
+OSErr
 Executor::HCreate(INTEGER vref, LONGINT dirid, Str255 name, OSType creator, OSType type)
 {
     HParamBlockRec hpb;
@@ -578,7 +578,7 @@ Executor::HCreate(INTEGER vref, LONGINT dirid, Str255 name, OSType creator, OSTy
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::HOpenRF(INTEGER vref, LONGINT dirid, Str255 name, SignedByte perm,
                   INTEGER *refp)
 {

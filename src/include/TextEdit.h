@@ -542,127 +542,127 @@ enum
 };
 #endif
 
-extern pascal trap void C_TESetText(Ptr p, LONGINT ln, TEHandle teh);
+extern void C_TESetText(Ptr p, LONGINT ln, TEHandle teh);
 PASCAL_TRAP(TESetText, 0xA9CF);
 
-extern pascal trap CharsHandle C_TEGetText(TEHandle teh);
+extern CharsHandle C_TEGetText(TEHandle teh);
 PASCAL_TRAP(TEGetText, 0xA9CB);
 
-extern pascal trap void C_TESetJust(INTEGER j, TEHandle teh);
+extern void C_TESetJust(INTEGER j, TEHandle teh);
 PASCAL_TRAP(TESetJust, 0xA9DF);
 
-extern pascal trap void C_TEUpdate(Rect *r, TEHandle teh);
+extern void C_TEUpdate(Rect *r, TEHandle teh);
 PASCAL_TRAP(TEUpdate, 0xA9D3);
 
-extern pascal trap void C_TextBox(Ptr p, LONGINT ln, Rect *r,
+extern void C_TextBox(Ptr p, LONGINT ln, Rect *r,
                                   INTEGER j);
 PASCAL_TRAP(TextBox, 0xA9CE);
-extern pascal trap void C_TEScroll(INTEGER dh, INTEGER dv, TEHandle teh);
+extern void C_TEScroll(INTEGER dh, INTEGER dv, TEHandle teh);
 PASCAL_TRAP(TEScroll, 0xA9DD);
 
-extern pascal trap void C_TEKey(CharParameter thec, TEHandle teh);
+extern void C_TEKey(CharParameter thec, TEHandle teh);
 PASCAL_TRAP(TEKey, 0xA9DC);
 
-extern pascal trap void C_TECopy(TEHandle teh);
+extern void C_TECopy(TEHandle teh);
 PASCAL_TRAP(TECopy, 0xA9D5);
 
-extern pascal trap void C_TECut(TEHandle teh);
+extern void C_TECut(TEHandle teh);
 PASCAL_TRAP(TECut, 0xA9D6);
 
-extern pascal trap void C_TEPaste(TEHandle teh);
+extern void C_TEPaste(TEHandle teh);
 PASCAL_TRAP(TEPaste, 0xA9DB);
 
-extern pascal trap void C_TEDelete(TEHandle teh);
+extern void C_TEDelete(TEHandle teh);
 PASCAL_TRAP(TEDelete, 0xA9D7);
 
-extern pascal trap void C_TEInsert(Ptr p, LONGINT ln, TEHandle teh);
+extern void C_TEInsert(Ptr p, LONGINT ln, TEHandle teh);
 PASCAL_TRAP(TEInsert, 0xA9DE);
 
-extern pascal trap void C_TEPinScroll(INTEGER dh,
+extern void C_TEPinScroll(INTEGER dh,
                                       INTEGER dv, TEHandle teh);
 PASCAL_TRAP(TEPinScroll, 0xA812);
 extern void ROMlib_teautoloop(TEHandle teh);
-extern pascal trap void C_TESelView(TEHandle teh);
+extern void C_TESelView(TEHandle teh);
 PASCAL_TRAP(TESelView, 0xA811);
 
-extern pascal trap void C_TEAutoView(BOOLEAN autoflag,
+extern void C_TEAutoView(BOOLEAN autoflag,
                                      TEHandle teh);
 PASCAL_TRAP(TEAutoView, 0xA813);
-extern pascal trap TEHandle C_TEStylNew(Rect *dst, Rect *view);
+extern TEHandle C_TEStylNew(Rect *dst, Rect *view);
 PASCAL_TRAP(TEStylNew, 0xA83E);
 
-extern pascal trap void C_SetStylHandle(TEStyleHandle theHandle,
+extern void C_SetStylHandle(TEStyleHandle theHandle,
                                         TEHandle teh);
 PASCAL_FUNCTION(SetStylHandle);
-extern pascal trap TEStyleHandle C_GetStylHandle(TEHandle teh);
+extern TEStyleHandle C_GetStylHandle(TEHandle teh);
 PASCAL_FUNCTION(GetStylHandle);
 
-extern pascal trap StScrpHandle C_GetStylScrap(TEHandle teh);
+extern StScrpHandle C_GetStylScrap(TEHandle teh);
 PASCAL_FUNCTION(GetStylScrap);
 
-extern pascal trap void C_TEStylInsert(Ptr text, LONGINT length,
+extern void C_TEStylInsert(Ptr text, LONGINT length,
                                        StScrpHandle hST, TEHandle teh);
 PASCAL_FUNCTION(TEStylInsert);
-extern pascal trap INTEGER C_TEGetOffset(Point pt, TEHandle teh);
+extern INTEGER C_TEGetOffset(Point pt, TEHandle teh);
 PASCAL_TRAP(TEGetOffset, 0xA83C);
 
-extern pascal trap LONGINT C_TEGetPoint(INTEGER offset, TEHandle teh);
+extern LONGINT C_TEGetPoint(INTEGER offset, TEHandle teh);
 PASCAL_FUNCTION(TEGetPoint);
 
-extern pascal trap int32_t C_TEGetHeight(LONGINT endLine, LONGINT startLine, TEHandle teh);
+extern int32_t C_TEGetHeight(LONGINT endLine, LONGINT startLine, TEHandle teh);
 PASCAL_FUNCTION(TEGetHeight);
-extern pascal trap void C_TEGetStyle(INTEGER offset,
+extern void C_TEGetStyle(INTEGER offset,
                                      TextStyle *theStyle, GUEST<INTEGER> *lineHeight, GUEST<INTEGER> *fontAscent,
                                      TEHandle teh);
 PASCAL_FUNCTION(TEGetStyle);
-extern pascal trap void C_TEStylPaste(TEHandle teh);
+extern void C_TEStylPaste(TEHandle teh);
 PASCAL_FUNCTION(TEStylPaste);
 
-extern pascal trap void C_TESetStyle(INTEGER mode, TextStyle *newStyle,
+extern void C_TESetStyle(INTEGER mode, TextStyle *newStyle,
                                      BOOLEAN redraw, TEHandle teh);
 PASCAL_FUNCTION(TESetStyle);
-extern pascal trap void C_TEReplaceStyle(INTEGER mode,
+extern void C_TEReplaceStyle(INTEGER mode,
                                          TextStyle *oldStyle, TextStyle *newStyle, BOOLEAN redraw, TEHandle teh);
 PASCAL_FUNCTION(TEReplaceStyle);
-extern pascal trap BOOLEAN C_TEContinuousStyle(GUEST<INTEGER> *modep,
+extern BOOLEAN C_TEContinuousStyle(GUEST<INTEGER> *modep,
                                                TextStyle *thestyle, TEHandle teh);
 PASCAL_FUNCTION(TEContinuousStyle);
-extern pascal trap void C_SetStylScrap(LONGINT start, LONGINT stop,
+extern void C_SetStylScrap(LONGINT start, LONGINT stop,
                                        StScrpHandle newstyles, BOOLEAN redraw, TEHandle teh);
 PASCAL_FUNCTION(SetStylScrap);
-extern pascal trap void C_TECustomHook(INTEGER sel, GUEST<ProcPtr> *addr,
+extern void C_TECustomHook(INTEGER sel, GUEST<ProcPtr> *addr,
                                        TEHandle teh);
 PASCAL_FUNCTION(TECustomHook);
-extern pascal trap LONGINT C_TENumStyles(LONGINT start, LONGINT stop,
+extern LONGINT C_TENumStyles(LONGINT start, LONGINT stop,
                                          TEHandle teh);
 PASCAL_FUNCTION(TENumStyles);
-extern pascal trap void C_TEInit(void);
+extern void C_TEInit(void);
 PASCAL_TRAP(TEInit, 0xA9CC);
 
-extern pascal trap TEHandle C_TENew(Rect *dst, Rect *view);
+extern TEHandle C_TENew(Rect *dst, Rect *view);
 PASCAL_TRAP(TENew, 0xA9D2);
 
-extern pascal trap void C_TEDispose(TEHandle teh);
+extern void C_TEDispose(TEHandle teh);
 PASCAL_TRAP(TEDispose, 0xA9CD);
 
-extern pascal trap void C_TEIdle(TEHandle teh);
+extern void C_TEIdle(TEHandle teh);
 PASCAL_TRAP(TEIdle, 0xA9DA);
 
-extern pascal trap void C_TEClick(Point p, BOOLEAN ext, TEHandle teh);
+extern void C_TEClick(Point p, BOOLEAN ext, TEHandle teh);
 PASCAL_TRAP(TEClick, 0xA9D4);
 
-extern pascal trap void C_TESetSelect(LONGINT start, LONGINT stop,
+extern void C_TESetSelect(LONGINT start, LONGINT stop,
                                       TEHandle teh);
 PASCAL_TRAP(TESetSelect, 0xA9D1);
-extern pascal trap void C_TEActivate(TEHandle teh);
+extern void C_TEActivate(TEHandle teh);
 PASCAL_TRAP(TEActivate, 0xA9D8);
 
-extern pascal trap void C_TEDeactivate(TEHandle teh);
+extern void C_TEDeactivate(TEHandle teh);
 PASCAL_TRAP(TEDeactivate, 0xA9D9);
 
 extern void SetWordBreak(ProcPtr wb, TEHandle teh);
 extern void SetClikLoop(ProcPtr cp, TEHandle teh);
-extern pascal trap void C_TECalText(TEHandle teh);
+extern void C_TECalText(TEHandle teh);
 PASCAL_TRAP(TECalText, 0xA9D0);
 
 extern OSErr TEFromScrap(void);
@@ -670,7 +670,7 @@ extern OSErr TEToScrap(void);
 extern Handle TEScrapHandle(void);
 extern LONGINT TEGetScrapLen(void);
 extern void TESetScrapLen(LONGINT ln);
-extern pascal trap int16_t C_TEFeatureFlag(int16_t feature, int16_t action,
+extern int16_t C_TEFeatureFlag(int16_t feature, int16_t action,
                                            TEHandle te);
 PASCAL_FUNCTION(TEFeatureFlag);
 }

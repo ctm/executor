@@ -52,7 +52,7 @@ static struct
  * xxx = 0 for modem, 1 for printer
  */
 
-PRIVATE int
+static int
 set_xxx_port_mapping_to_pc_port(int xxx, int pc_port)
 {
     int retval;
@@ -68,7 +68,7 @@ set_xxx_port_mapping_to_pc_port(int xxx, int pc_port)
     return retval;
 }
 
-PUBLIC int
+int
 set_modem_port_mapping_to_pc_port(int pc_port)
 {
     int retval;
@@ -77,7 +77,7 @@ set_modem_port_mapping_to_pc_port(int pc_port)
     return retval;
 }
 
-PUBLIC int
+int
 set_printer_port_mapping_to_pc_port(int pc_port)
 {
     int retval;
@@ -93,7 +93,7 @@ set_printer_port_mapping_to_pc_port(int pc_port)
  * 0
  */
 
-PRIVATE int
+static int
 baud_to_win32_baud(DWORD *win32_baudp, uint32_t baud)
 {
     int retval;
@@ -137,7 +137,7 @@ baud_to_win32_baud(DWORD *win32_baudp, uint32_t baud)
     return retval;
 }
 
-PRIVATE int
+static int
 parity_to_win32_parity(BYTE *win32_parityp, unsigned parity)
 {
     int retval;
@@ -161,7 +161,7 @@ parity_to_win32_parity(BYTE *win32_parityp, unsigned parity)
     return retval;
 }
 
-PRIVATE int
+static int
 stop_to_win32_stop(BYTE *win32_stopp, uint32_t stop_bits)
 {
     int retval;
@@ -185,7 +185,7 @@ stop_to_win32_stop(BYTE *win32_stopp, uint32_t stop_bits)
     return retval;
 }
 
-PRIVATE int
+static int
 length_to_win32_length(BYTE *win32_lengthp, uint32_t data_length)
 {
     int retval;
@@ -262,7 +262,7 @@ enum
 
 #define COM_TEMPLATE "COM1"
 
-PRIVATE HANDLE
+static HANDLE
 port_to_handle(uint8 port)
 {
     HANDLE retval;
@@ -310,7 +310,7 @@ port_to_handle(uint8 port)
  * we write our own drivers).
  */
 
-PRIVATE int
+static int
 dos_serial_bios_init_port(uint8 port,
                           uint32_t baud,
                           uint32_t parity,
@@ -387,7 +387,7 @@ serial_bios_xfer(LONGINT fd, void *buf, size_t count, xferfuncp_t funcp)
  * these routines, even the write routine.
  */
 
-PUBLIC uint32_t
+uint32_t
 Executor::serial_bios_read(LONGINT fd, void *buf, size_t count)
 {
     uint32_t retval;
@@ -396,7 +396,7 @@ Executor::serial_bios_read(LONGINT fd, void *buf, size_t count)
     return retval;
 }
 
-PUBLIC uint32_t
+uint32_t
 Executor::serial_bios_write(LONGINT fd, void *buf, size_t count)
 {
     uint32_t retval;
@@ -405,7 +405,7 @@ Executor::serial_bios_write(LONGINT fd, void *buf, size_t count)
     return retval;
 }
 
-PUBLIC int32_t
+int32_t
 Executor::serial_bios_serset(LONGINT fd, INTEGER param)
 {
     int32_t retval;
@@ -424,7 +424,7 @@ Executor::serial_bios_serset(LONGINT fd, INTEGER param)
     return retval;
 }
 
-PUBLIC int32_t
+int32_t
 Executor::serial_bios_serxhshake(LONGINT fd, SerShk *sershkp)
 {
     int32_t retval;
@@ -440,7 +440,7 @@ Executor::serial_bios_serxhshake(LONGINT fd, SerShk *sershkp)
  * not hard to do, but we just don't do it yet.
  */
 
-PUBLIC int32_t
+int32_t
 Executor::serial_bios_setbaud(LONGINT fd, INTEGER baud)
 {
     int32_t retval;
@@ -450,7 +450,7 @@ Executor::serial_bios_setbaud(LONGINT fd, INTEGER baud)
     return retval;
 }
 
-PUBLIC int32_t
+int32_t
 Executor::serial_bios_ctlbrk(LONGINT fd, INTEGER flag)
 {
     int32_t retval;
@@ -460,7 +460,7 @@ Executor::serial_bios_ctlbrk(LONGINT fd, INTEGER flag)
     return retval;
 }
 
-PUBLIC int32_t
+int32_t
 Executor::serial_bios_setflow(LONGINT fd, LONGINT flag)
 {
     int32_t retval;
@@ -470,7 +470,7 @@ Executor::serial_bios_setflow(LONGINT fd, LONGINT flag)
     return retval;
 }
 
-PUBLIC int32_t
+int32_t
 Executor::serial_bios_setdtr(LONGINT fd)
 {
     int32_t retval;
@@ -480,7 +480,7 @@ Executor::serial_bios_setdtr(LONGINT fd)
     return retval;
 }
 
-PUBLIC int32_t
+int32_t
 Executor::serial_bios_clrdtr(LONGINT fd)
 {
     int32_t retval;
@@ -490,7 +490,7 @@ Executor::serial_bios_clrdtr(LONGINT fd)
     return retval;
 }
 
-PUBLIC int
+int
 Executor::serial_bios_fionread(LONGINT fd, LONGINT *np)
 {
     HANDLE h;

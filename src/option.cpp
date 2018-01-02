@@ -321,7 +321,7 @@ Executor::opt_alloc_db(void)
     return retval;
 }
 
-PRIVATE opt_val_t *
+static opt_val_t *
 opt_lookup_helper(opt_database_t &db, const string &opt)
 {
     opt_val_t *retval = nullptr;

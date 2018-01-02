@@ -14,7 +14,7 @@
 
 using namespace Executor;
 
-PUBLIC INTEGER
+INTEGER
 Executor::CRMGetCRMVersion(void)
 {
     INTEGER retval;
@@ -23,9 +23,9 @@ Executor::CRMGetCRMVersion(void)
     return retval;
 }
 
-PRIVATE QHdr commtool_head;
+static QHdr commtool_head;
 
-PUBLIC QHdrPtr
+QHdrPtr
 Executor::CRMGetHeader(void)
 {
     QHdrPtr retval;
@@ -34,7 +34,7 @@ Executor::CRMGetHeader(void)
     return retval;
 }
 
-PUBLIC void
+void
 Executor::CRMInstall(QElemPtr qp)
 {
     virtual_int_state_t block;
@@ -54,7 +54,7 @@ Executor::CRMInstall(QElemPtr qp)
     restore_virtual_ints(block);
 }
 
-PUBLIC OSErr
+OSErr
 Executor::CRMRemove(QElemPtr qp)
 {
     OSErr retval;
@@ -63,7 +63,7 @@ Executor::CRMRemove(QElemPtr qp)
     return retval;
 }
 
-PUBLIC QElemPtr
+QElemPtr
 Executor::CRMSearch(QElemPtr qp)
 {
     QElemPtr retval;
@@ -83,7 +83,7 @@ Executor::CRMSearch(QElemPtr qp)
     return retval;
 }
 
-PRIVATE CRMErr
+static CRMErr
 serial_insert(const char *input, const char *output, const char *name)
 {
     CRMErr retval;
@@ -126,7 +126,7 @@ serial_insert(const char *input, const char *output, const char *name)
     return retval;
 }
 
-PUBLIC CRMErr
+CRMErr
 Executor::InitCRM(void)
 {
     static bool beenhere;

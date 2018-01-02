@@ -14,7 +14,7 @@ using namespace Executor;
 
 #if defined(_WIN32)
 
-PRIVATE int
+static int
 os_specific_really_quit(void)
 {
     /* This should really be an internal ROMlib dialog */
@@ -38,7 +38,7 @@ os_specific_really_quit(void)
 
 #else
 
-PRIVATE int
+static int
 os_specific_really_quit(void)
 {
     int retval;

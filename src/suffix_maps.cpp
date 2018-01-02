@@ -28,9 +28,9 @@ typedef struct suffix_entry
     struct suffix_entry *next;
 } suffix_entry_t;
 
-PRIVATE suffix_entry_t *suffix_head;
+static suffix_entry_t *suffix_head;
 
-PRIVATE bool
+static bool
 str_to_hex(const char *str, uint32_t *valp)
 {
     bool retval;
@@ -54,7 +54,7 @@ str_to_hex(const char *str, uint32_t *valp)
     return retval;
 }
 
-PUBLIC void
+void
 ROMlib_add_suffix_quad(const char *suffixp, const char *creator_hexp,
                        const char *type_hexp, const char *applicationp)
 {
@@ -81,7 +81,7 @@ ROMlib_add_suffix_quad(const char *suffixp, const char *creator_hexp,
     }
 }
 
-PRIVATE suffix_entry_t **
+static suffix_entry_t **
 find_suffixpp(const char *suffix)
 {
     suffix_entry_t **retval;
@@ -101,7 +101,7 @@ find_suffixpp(const char *suffix)
  * worst is (X, type)
  */
 
-PUBLIC const char *
+const char *
 ROMlib_find_best_creator_type_match(uint32_t creator, uint32_t type)
 {
     enum
@@ -151,7 +151,7 @@ ROMlib_find_best_creator_type_match(uint32_t creator, uint32_t type)
     return retval;
 }
 
-PRIVATE bool
+static bool
 filename_suffix_match(const char *suffix, int len, const char *filename)
 {
     bool retval;
@@ -162,7 +162,7 @@ filename_suffix_match(const char *suffix, int len, const char *filename)
     return retval;
 }
 
-PRIVATE suffix_entry_t **
+static suffix_entry_t **
 find_filenamepp(int len, const char *filename)
 {
     suffix_entry_t **retval;
@@ -175,7 +175,7 @@ find_filenamepp(int len, const char *filename)
     return retval;
 }
 
-PUBLIC bool
+bool
 ROMlib_creator_and_type_from_suffix(const char *suffix, uint32_t *creatorp,
                                     uint32_t *typep)
 {
@@ -196,7 +196,7 @@ ROMlib_creator_and_type_from_suffix(const char *suffix, uint32_t *creatorp,
     return retval;
 }
 
-PUBLIC bool
+bool
 ROMlib_creator_and_type_from_filename(int len, const char *filename,
                                       uint32_t *creatorp, uint32_t *typep)
 {
@@ -217,14 +217,14 @@ ROMlib_creator_and_type_from_filename(int len, const char *filename,
     return retval;
 }
 
-PRIVATE void
+static void
 release_entry(suffix_entry_t *to_release)
 {
     free(to_release->suffix);
     free(to_release);
 }
 
-PUBLIC bool
+bool
 ROMlib_delete_suffix(const char *suffix)
 {
     bool retval;

@@ -28,8 +28,8 @@
 #define CYGWIN32
 #endif
 
-#if !defined(PRIVATE)
-#define PRIVATE static
+#if !defined(static)
+
 #endif
 
 typedef struct

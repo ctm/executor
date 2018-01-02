@@ -32,19 +32,19 @@ struct itimerval *ovalue;
 }
 #endif /* SYSV */
 
-PUBLIC QHdr Executor::ROMlib_timehead;
+QHdr Executor::ROMlib_timehead;
 
 /* Actual time at which Executor started running, GMT. */
-PUBLIC struct timeval ROMlib_start_time;
+struct timeval ROMlib_start_time;
 
 /* Current state of virtual interrupt enabling. */
-PUBLIC virtual_int_state_t Executor::_virtual_interrupts_blocked = false;
+virtual_int_state_t Executor::_virtual_interrupts_blocked = false;
 
 /* Msecs during last interrupt. */
-PRIVATE unsigned long last_interrupt_msecs;
+static unsigned long last_interrupt_msecs;
 
 /* Msecs during next anticipated interrupt. */
-PRIVATE unsigned long next_interrupt_msecs;
+static unsigned long next_interrupt_msecs;
 
 #if !defined(CYGWIN32)
 unsigned long

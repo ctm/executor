@@ -69,7 +69,7 @@ extern BOOLEAN ROMlib_dirtyvariant;
 
 extern void sb_ctl_init(void);
 
-typedef pascal LONGINT (*ctlfuncp)(INTEGER var, ControlHandle ctl, INTEGER mess, LONGINT param);
+typedef LONGINT (*ctlfuncp)(INTEGER var, ControlHandle ctl, INTEGER mess, LONGINT param);
 
 extern LONGINT ROMlib_ctlcall(ControlHandle c, INTEGER i, LONGINT l);
 #define CTLCALL(c, i, l) ROMlib_ctlcall((c), (i), (l))

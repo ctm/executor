@@ -7,15 +7,15 @@
 
 #define EIGHTHPOWEROF(x) ((x) * (x) * (x) * (x) * (x) * (x) * (x) * (x))
 
-#undef PRIVATE
-#define PRIVATE static
-#define PUBLIC
 
-PRIVATE void buildexpandtable4(void)
+
+
+
+static void buildexpandtable4(void)
 {
     LONGINT i, j, retval;
 
-    printf("PRIVATE LONGINT expandtable4[] = {\n");
+    printf("static LONGINT expandtable4[] = {\n");
     for(i = 0; i < EIGHTHPOWEROF(2); i++)
     {
         retval = 0;
@@ -44,11 +44,11 @@ PRIVATE void buildexpandtable4(void)
     printf("};\n");
 }
 
-PRIVATE void buildexpandtable2(void)
+static void buildexpandtable2(void)
 {
     LONGINT i, j, retval;
 
-    printf("PRIVATE INTEGER expandtable2[] = {\n");
+    printf("static INTEGER expandtable2[] = {\n");
     for(i = 0; i < EIGHTHPOWEROF(2); i++)
     {
         retval = 0;
@@ -70,11 +70,11 @@ PRIVATE void buildexpandtable2(void)
     printf("};\n");
 }
 
-PRIVATE void buildshrinktable2(void)
+static void buildshrinktable2(void)
 {
     LONGINT i, j, retval;
 
-    printf("PRIVATE unsigned char shrinktable2[] = {\n");
+    printf("static unsigned char shrinktable2[] = {\n");
     for(i = 0; i < EIGHTHPOWEROF(2); i++)
     {
         retval = 0;
@@ -92,11 +92,11 @@ PRIVATE void buildshrinktable2(void)
 }
 
 #if defined(BUILDSHRINKTABLE4)
-PRIVATE void buildshrinktable4(void)
+static void buildshrinktable4(void)
 {
     LONGINT i, j, retval;
 
-    printf("PRIVATE unsigned char shrinktable4[] = {\n");
+    printf("static unsigned char shrinktable4[] = {\n");
     for(i = 0; i < EIGHTHPOWEROF(2); i++)
     {
         retval = 0;

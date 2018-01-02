@@ -53,32 +53,32 @@ using namespace Executor;
 
 #define NEVENT 20
 
-PRIVATE int nevent = 0;
-PRIVATE EvQEl evs[NEVENT], *freeelem = evs + NEVENT - 1;
+static int nevent = 0;
+static EvQEl evs[NEVENT], *freeelem = evs + NEVENT - 1;
 
 #define ROMlib_curs MouseLocation
 
-PUBLIC INTEGER Executor::ROMlib_mods = btnState;
-PRIVATE LONGINT autoticks;
-PRIVATE LONGINT lastdown = -1;
+INTEGER Executor::ROMlib_mods = btnState;
+static LONGINT autoticks;
+static LONGINT lastdown = -1;
 
 #if !defined(MACOSX_)
-PUBLIC short ROMlib_pinned = false;
+short ROMlib_pinned = false;
 #else
-PUBLIC short ROMlib_pinned = true;
+short ROMlib_pinned = true;
 #endif
 
-PRIVATE Ptr kchr_ptr;
+static Ptr kchr_ptr;
 
-PUBLIC void
+void
 Executor::invalidate_kchr_ptr(void)
 {
     kchr_ptr = 0;
 }
 
-PRIVATE INTEGER kchr_id = 0;
+static INTEGER kchr_id = 0;
 
-PUBLIC Ptr
+Ptr
 Executor::ROMlib_kchr_ptr(void)
 {
     if(!kchr_ptr)
@@ -95,7 +95,7 @@ Executor::ROMlib_kchr_ptr(void)
     return kchr_ptr;
 }
 
-PUBLIC bool
+bool
 Executor::ROMlib_set_keyboard(const char *keyboardname)
 {
     Handle new_h;
@@ -124,9 +124,9 @@ Executor::ROMlib_set_keyboard(const char *keyboardname)
     return !!new_h;
 }
 
-PRIVATE bool map_right_to_left = true;
+static bool map_right_to_left = true;
 
-PUBLIC uint16_t
+uint16_t
 Executor::ROMlib_right_to_left_key_map(uint16_t what)
 {
     uint16_t retval;
@@ -158,7 +158,7 @@ Executor::ROMlib_right_to_left_key_map(uint16_t what)
  * of what's going on here.
  */
 
-PUBLIC LONGINT
+LONGINT
 Executor::ROMlib_xlate(INTEGER virt, INTEGER modifiers, bool down_p)
 {
     static uint16_t down_value[VIRT_MASK + 1];
@@ -237,7 +237,7 @@ Executor::geteventelem(void)
     return retval;
 }
 
-PUBLIC bool
+bool
 Executor::ROMlib_get_index_and_bit(LONGINT loc, int *indexp, uint8 *bitp)
 {
     bool retval;
@@ -267,7 +267,7 @@ void Executor::ROMlib_zapmap(LONGINT loc, LONGINT val)
     }
 }
 
-PRIVATE bool
+static bool
 key_down(uint8 loc)
 {
     bool retval;
@@ -406,9 +406,9 @@ void Executor::FlushEvents(INTEGER evmask, INTEGER stopmask) /* II-69 */
     /* NOTE:  According to IMII-69 we should be leaving stuff in d0 */
 }
 
-PUBLIC BOOLEAN Executor::ROMlib_bewaremovement;
+BOOLEAN Executor::ROMlib_bewaremovement;
 
-PUBLIC int Executor::ROMlib_refresh = 0;
+int Executor::ROMlib_refresh = 0;
 
 static BOOLEAN OSEventCommon(INTEGER evmask, EventRecord *eventp,
                              BOOLEAN dropit)
@@ -627,7 +627,7 @@ QHdrPtr Executor::GetEvQHdr()
     return &EventQueue;
 }
 
-PUBLIC void
+void
 Executor::post_keytrans_key_events(INTEGER evcode, LONGINT keywhat, int32_t when,
                                    Point where, uint16_t button_state, unsigned char virt)
 {
@@ -649,7 +649,7 @@ Executor::post_keytrans_key_events(INTEGER evcode, LONGINT keywhat, int32_t when
                           button_state);
 }
 
-PRIVATE int
+static int
 compare(const void *p1, const void *p2)
 {
     int retval;
@@ -658,7 +658,7 @@ compare(const void *p1, const void *p2)
     return retval;
 }
 
-PUBLIC void
+void
 Executor::display_keyboard_choices(void)
 {
     INTEGER nres, i, nfound;
@@ -689,7 +689,7 @@ Executor::display_keyboard_choices(void)
     exit(0);
 }
 
-PUBLIC void
+void
 Executor::maybe_wait_for_keyup(void)
 {
 #if defined(SDL) && defined(CYGWIN32)

@@ -280,7 +280,7 @@ void Executor::ROMlib_teinsertstyleinfo(TEHandle te,
         DisposHandle((Handle)scrap);
 }
 
-PUBLIC int Executor::ROMlib_forward_del_p = false;
+int Executor::ROMlib_forward_del_p = false;
 
 void Executor::ROMlib_tedoitall(TEHandle teh, Ptr ptr, /* INTERNAL */
                                 int16_t len, bool insert, StScrpHandle styleh)

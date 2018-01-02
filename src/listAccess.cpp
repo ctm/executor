@@ -89,7 +89,7 @@ void Executor::C_LRect(Rect *cellrect, Cell cell, ListHandle list) /* IMIV-274 *
     }
 }
 
-typedef pascal INTEGER (*cmpf)(Ptr p1, Ptr p2, INTEGER len1, INTEGER len2);
+typedef INTEGER (*cmpf)(Ptr p1, Ptr p2, INTEGER len1, INTEGER len2);
 
 #if !defined(BINCOMPAT)
 

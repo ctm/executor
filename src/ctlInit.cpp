@@ -20,7 +20,7 @@
 
 using namespace Executor;
 
-PUBLIC BOOLEAN Executor::ROMlib_cdef0_is_rectangular = false;
+BOOLEAN Executor::ROMlib_cdef0_is_rectangular = false;
 
 ControlHandle Executor::C_NewControl(WindowPtr wst, Rect *r, StringPtr title,
                                      BOOLEAN vis, INTEGER value, INTEGER min,

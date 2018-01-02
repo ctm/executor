@@ -99,9 +99,9 @@ Handle Executor::ROMlib_getrestid(ResType rest, INTEGER id) /* INTERNAL */
     return retval;
 }
 
-PUBLIC StringHandle Executor::ROMlib_phoney_name_string;
+StringHandle Executor::ROMlib_phoney_name_string;
 
-PRIVATE StringHandle
+static StringHandle
 get_phoney_name_resource(void)
 {
     using namespace std;
@@ -466,7 +466,7 @@ static Fixed minvert(Fixed f) /* wants postive number */
     return (((0x80000000 / (ULONGINT)f) << 1) & 0x7FFFFFFF);
 }
 
-PRIVATE Fixed sloptab[46] = {
+static Fixed sloptab[46] = {
     static_cast<Fixed>(0x80000001), 0x00394a30, 0x001ca2d7, 0x001314bd, 0x000e4cf5,
     0x000b6e17, 0x000983ad, 0x000824f3, 0x00071d88, 0x00065051,
     0x0005abd9, 0x00052501, 0x00046462, 0x000454db, 0x000402c2,

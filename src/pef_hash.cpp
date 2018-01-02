@@ -38,7 +38,7 @@ using namespace Executor;
 
 #if !defined(__USE_ISOC9X)
 
-PRIVATE uint32_t
+static uint32_t
 floor_log2(double d)
 {
     uint32_t retval;
@@ -61,7 +61,7 @@ floor_log2(double d)
 }
 #endif
 
-PRIVATE uint8
+static uint8
 PEFComputeHashTableExponent(int32_t count)
 {
     int retval;
@@ -128,7 +128,7 @@ typedef struct
     GUEST<void *> value;
 } sort_entry_t;
 
-PRIVATE int
+static int
 hash_index_compare(const void *p1, const void *p2)
 {
     const sort_entry_t *sp1 = (const sort_entry_t *)p1;
@@ -139,7 +139,7 @@ hash_index_compare(const void *p1, const void *p2)
     return retval;
 }
 
-PRIVATE void
+static void
 update_export_hash_table(uint32_t *hashp, int hash_index, int first_index,
                          int run_count)
 {
@@ -149,7 +149,7 @@ update_export_hash_table(uint32_t *hashp, int hash_index, int first_index,
     hashp[hash_index] = CL_RAW(new_value);
 }
 
-PUBLIC PEFLoaderInfoHeader_t *
+PEFLoaderInfoHeader_t *
 ROMlib_build_pef_hash(const map_entry_t table[], int count)
 {
     PEFLoaderInfoHeader_t *retval;
@@ -282,7 +282,7 @@ lookup_by_index (const pef_hash_t *hashp, int index,
 
 #define SYMBOL_NAME(pefexp, str) (str + PEFEXS_NAME(pefexp))
 
-PRIVATE PEFExportedSymbol *
+static PEFExportedSymbol *
 lookup_by_name(const ConnectionID connp,
                const char *name, int name_len)
 {

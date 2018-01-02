@@ -11,7 +11,7 @@ using namespace Executor;
 
 /* Forward declarations in NotifyMgr.h (DO NOT DELETE THIS LINE) */
 
-typedef pascal void nmfunc(NMRecPtr nmptr);
+typedef void nmfunc(NMRecPtr nmptr);
 
 /*
  * The stubs routine will take care of the trap conventions:

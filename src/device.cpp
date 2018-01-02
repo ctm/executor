@@ -258,9 +258,9 @@ DCtlHandle Executor::GetDCtlEntry(INTEGER rn)
  * beginning with * a period.
  */
 
-PUBLIC driverinfo *ROMlib_otherdrivers = 0; /* for extensibility */
+driverinfo *ROMlib_otherdrivers = 0; /* for extensibility */
 
-PRIVATE driverinfo knowndrivers[] = {
+static driverinfo knowndrivers[] = {
 #if defined(LINUX) || defined(MACOSX_) || defined(MSDOS) || defined(CYGWIN32)
     {
         (OSErr(*)())ROMlib_serialopen, (OSErr(*)())ROMlib_serialprime, (OSErr(*)())ROMlib_serialctl,

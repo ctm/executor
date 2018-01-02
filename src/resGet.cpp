@@ -194,7 +194,7 @@ OSErr Executor::ROMlib_typidtop(ResType typ, INTEGER id, resmaphand *pth,
 #define NUM_ROMLIB_DEFS 10
 
 #if !defined(MAELSTROM_HACK)
-PRIVATE GUEST<LONGINT> ROMlib_defs[NUM_ROMLIB_DEFS];
+static GUEST<LONGINT> ROMlib_defs[NUM_ROMLIB_DEFS];
 #endif
 
 /*
@@ -273,7 +273,7 @@ typedef struct
     INTEGER id;
 } pseudo_rom_entry_t;
 
-PRIVATE Handle
+static Handle
 pseudo_get_rom_resource(ResType typ, INTEGER id)
 {
     Handle retval;
@@ -301,7 +301,7 @@ pseudo_get_rom_resource(ResType typ, INTEGER id)
 }
 
 #if defined(ULTIMA_III_HACK)
-PUBLIC bool Executor::ROMlib_ultima_iii_hack;
+bool Executor::ROMlib_ultima_iii_hack;
 #endif
 
 Handle Executor::C_GetResource(ResType typ, INTEGER id)

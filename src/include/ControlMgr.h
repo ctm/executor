@@ -151,98 +151,98 @@ struct AuxCtlRec
     GUEST<LONGINT> acRefCon;
 };
 
-extern pascal trap void C_SetCTitle(ControlHandle c,
+extern void C_SetCTitle(ControlHandle c,
                                     StringPtr t);
 PASCAL_TRAP(SetCTitle, 0xA95F);
-extern pascal trap void C_GetCTitle(ControlHandle c,
+extern void C_GetCTitle(ControlHandle c,
                                     StringPtr t);
 PASCAL_TRAP(GetCTitle, 0xA95E);
-extern pascal trap void C_HideControl(ControlHandle c);
+extern void C_HideControl(ControlHandle c);
 PASCAL_TRAP(HideControl, 0xA958);
 
-extern pascal trap void C_ShowControl(ControlHandle c);
+extern void C_ShowControl(ControlHandle c);
 PASCAL_TRAP(ShowControl, 0xA957);
 
-extern pascal trap void C_HiliteControl(ControlHandle c,
+extern void C_HiliteControl(ControlHandle c,
                                         INTEGER state);
 PASCAL_TRAP(HiliteControl, 0xA95D);
-extern pascal trap void C_DrawControls(WindowPtr w);
+extern void C_DrawControls(WindowPtr w);
 PASCAL_TRAP(DrawControls, 0xA969);
 
-extern pascal trap void C_Draw1Control(ControlHandle c);
+extern void C_Draw1Control(ControlHandle c);
 PASCAL_TRAP(Draw1Control, 0xA96D);
 
-extern pascal trap void C_UpdtControl(WindowPtr wp,
+extern void C_UpdtControl(WindowPtr wp,
                                       RgnHandle rh);
 PASCAL_TRAP(UpdtControl, 0xA953);
-extern pascal trap ControlHandle C_NewControl(WindowPtr wst, Rect *r,
+extern ControlHandle C_NewControl(WindowPtr wst, Rect *r,
                                               StringPtr title, BOOLEAN vis, INTEGER value, INTEGER min,
                                               INTEGER max, INTEGER procid, LONGINT rc);
 PASCAL_TRAP(NewControl, 0xA954);
-extern pascal trap ControlHandle C_GetNewControl(
+extern ControlHandle C_GetNewControl(
     INTEGER cid, WindowPtr wst);
 PASCAL_TRAP(GetNewControl, 0xA9BE);
-extern pascal trap void C_DisposeControl(ControlHandle c);
+extern void C_DisposeControl(ControlHandle c);
 PASCAL_TRAP(DisposeControl, 0xA955);
 
-extern pascal trap void C_KillControls(WindowPtr w);
+extern void C_KillControls(WindowPtr w);
 PASCAL_TRAP(KillControls, 0xA956);
 
-extern pascal trap void C_SetCRefCon(ControlHandle c,
+extern void C_SetCRefCon(ControlHandle c,
                                      LONGINT data);
 PASCAL_TRAP(SetCRefCon, 0xA95B);
-extern pascal trap LONGINT C_GetCRefCon(ControlHandle c);
+extern LONGINT C_GetCRefCon(ControlHandle c);
 PASCAL_TRAP(GetCRefCon, 0xA95A);
 
-extern pascal trap void C_SetCtlAction(ControlHandle c,
+extern void C_SetCtlAction(ControlHandle c,
                                        ProcPtr a);
 PASCAL_TRAP(SetCtlAction, 0xA96B);
-extern pascal trap ProcPtr C_GetCtlAction(ControlHandle c);
+extern ProcPtr C_GetCtlAction(ControlHandle c);
 PASCAL_TRAP(GetCtlAction, 0xA96A);
 
-extern pascal trap INTEGER C_GetCVariant(ControlHandle c);
+extern INTEGER C_GetCVariant(ControlHandle c);
 PASCAL_TRAP(GetCVariant, 0xA809);
 
-extern pascal trap BOOLEAN C_GetAuxCtl(ControlHandle c,
+extern BOOLEAN C_GetAuxCtl(ControlHandle c,
                                        GUEST<AuxCtlHandle> *acHndl);
 PASCAL_TRAP(GetAuxCtl, 0xAA44);
-extern pascal trap INTEGER C_FindControl(Point p,
+extern INTEGER C_FindControl(Point p,
                                          WindowPtr w, GUEST<ControlHandle> *cp);
 PASCAL_TRAP(FindControl, 0xA96C);
-extern pascal trap INTEGER C_TrackControl(
+extern INTEGER C_TrackControl(
     ControlHandle c, Point p, ProcPtr a);
 PASCAL_TRAP(TrackControl, 0xA968);
-extern pascal trap INTEGER C_TestControl(
+extern INTEGER C_TestControl(
     ControlHandle c, Point p);
 PASCAL_TRAP(TestControl, 0xA966);
-extern pascal trap void C_SetCtlValue(ControlHandle c,
+extern void C_SetCtlValue(ControlHandle c,
                                       INTEGER v);
 PASCAL_TRAP(SetCtlValue, 0xA963);
-extern pascal trap INTEGER C_GetCtlValue(
+extern INTEGER C_GetCtlValue(
     ControlHandle c);
 PASCAL_TRAP(GetCtlValue, 0xA960);
-extern pascal trap void C_SetCtlMin(ControlHandle c,
+extern void C_SetCtlMin(ControlHandle c,
                                     INTEGER v);
 PASCAL_TRAP(SetCtlMin, 0xA964);
-extern pascal trap INTEGER C_GetCtlMin(ControlHandle c);
+extern INTEGER C_GetCtlMin(ControlHandle c);
 PASCAL_TRAP(GetCtlMin, 0xA961);
 
-extern pascal trap void C_SetCtlMax(ControlHandle c,
+extern void C_SetCtlMax(ControlHandle c,
                                     INTEGER v);
 PASCAL_TRAP(SetCtlMax, 0xA965);
-extern pascal trap INTEGER C_GetCtlMax(ControlHandle c);
+extern INTEGER C_GetCtlMax(ControlHandle c);
 PASCAL_TRAP(GetCtlMax, 0xA962);
 
-extern pascal trap void C_MoveControl(ControlHandle c,
+extern void C_MoveControl(ControlHandle c,
                                       INTEGER h, INTEGER v);
 PASCAL_TRAP(MoveControl, 0xA959);
-extern pascal trap void C_DragControl(ControlHandle c,
+extern void C_DragControl(ControlHandle c,
                                       Point p, Rect *limit, Rect *slop, INTEGER axis);
 PASCAL_TRAP(DragControl, 0xA967);
-extern pascal trap void C_SizeControl(ControlHandle c,
+extern void C_SizeControl(ControlHandle c,
                                       INTEGER width, INTEGER height);
 PASCAL_TRAP(SizeControl, 0xA95C);
-extern pascal trap void C_SetCtlColor(ControlHandle ctl, CCTabHandle ctab);
+extern void C_SetCtlColor(ControlHandle ctl, CCTabHandle ctab);
 PASCAL_TRAP(SetCtlColor, 0xAA43);
 }
 #endif /* __CONTROL__ */

@@ -128,7 +128,7 @@ OSErrRET Executor::PtrAndHand(Ptr p, Handle h, LONGINT s1)
 	  the Mac.  It replaces the tables that were hand created from
 	  (incomplete) information in Inside Macintosh */
 
-PRIVATE unsigned char casefold[256] = {
+static unsigned char casefold[256] = {
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
     0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
     0x20, '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
@@ -147,7 +147,7 @@ PRIVATE unsigned char casefold[256] = {
     0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF,
 };
 
-PRIVATE unsigned char diacfold[256] = {
+static unsigned char diacfold[256] = {
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
     0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
     0x20, '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
@@ -166,7 +166,7 @@ PRIVATE unsigned char diacfold[256] = {
     0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF,
 };
 
-PRIVATE unsigned char bothfold[256] = {
+static unsigned char bothfold[256] = {
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
     0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
     0x20, '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
@@ -185,7 +185,7 @@ PRIVATE unsigned char bothfold[256] = {
     0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF,
 };
 
-PRIVATE unsigned char order[256] = {
+static unsigned char order[256] = {
     0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
     0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F,
     0x21, 0x22, 0x23, 0x28, 0x29, 0x2A, 0x2B, 0x2C, 0x2F, 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36,
@@ -368,25 +368,25 @@ OSErrRET Executor::SetDateTime(ULONGINT mactime)
 
 /* beginning of code to test */
 
-PRIVATE unsigned long long
+static unsigned long long
 secsinminutes(unsigned long long nminutes)
 {
     return nminutes * 60;
 }
 
-PRIVATE unsigned long long
+static unsigned long long
 secsinhours(unsigned long long nhours)
 {
     return nhours * secsinminutes((LONGINT)60);
 }
 
-PRIVATE unsigned long long
+static unsigned long long
 secsindays(unsigned long long ndays)
 {
     return ndays * secsinhours((LONGINT)24);
 }
 
-PRIVATE INTEGER daysinmonths[13] = {
+static INTEGER daysinmonths[13] = {
     0,
     31,
     31 + 28,
@@ -402,7 +402,7 @@ PRIVATE INTEGER daysinmonths[13] = {
     31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + 31,
 };
 
-PRIVATE INTEGER daysinleapmonths[13] = {
+static INTEGER daysinleapmonths[13] = {
     0,
     31,
     31 + 29,
@@ -418,19 +418,19 @@ PRIVATE INTEGER daysinleapmonths[13] = {
     31 + 29 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + 31,
 };
 
-PRIVATE unsigned long long
+static unsigned long long
 secsinmonths(ULONGINT nmonths)
 {
     return secsindays((ULONGINT)daysinmonths[nmonths]);
 }
 
-PRIVATE unsigned long long
+static unsigned long long
 secsinleapmonths(ULONGINT nmonths)
 {
     return secsindays((ULONGINT)daysinleapmonths[nmonths]);
 }
 
-PRIVATE unsigned long long
+static unsigned long long
 daysinyears(ULONGINT year)
 {
     return (ULONGINT)365 * year + year / 4 - year / 100 + year / 400;
@@ -448,7 +448,7 @@ static BOOLEAN isleap(ULONGINT year)
 
 /* month January = 1, hour Midnight = 0 */
 
-PUBLIC long long
+long long
 Executor::ROMlib_long_long_secs(INTEGER year, INTEGER month, INTEGER day, INTEGER hour,
                                 INTEGER minute, INTEGER second)
 {
@@ -474,9 +474,9 @@ Executor::ROMlib_long_long_secs(INTEGER year, INTEGER month, INTEGER day, INTEGE
 #define N_SECS_IN_YEAR (365L * N_SECS_IN_DAY)
 #define N_SECS_IN_LEAP_YEAR (366L * N_SECS_IN_DAY)
 
-PRIVATE long long cutoffs[(1LL << 32) / N_SECS_IN_YEAR + 1];
+static long long cutoffs[(1LL << 32) / N_SECS_IN_YEAR + 1];
 
-PRIVATE void
+static void
 init_cutoffs(void)
 {
     int i;
@@ -497,7 +497,7 @@ init_cutoffs(void)
     cutoffs[i] = cutoff;
 }
 
-PUBLIC void
+void
 Executor::date_to_swapped_fields(long long mactime, GUEST<INTEGER> *yearp, GUEST<INTEGER> *monthp,
                                  GUEST<INTEGER> *dayp, GUEST<INTEGER> *hourp, GUEST<INTEGER> *minutep,
                                  GUEST<INTEGER> *secondp, GUEST<INTEGER> *dayofweekp,
@@ -668,7 +668,7 @@ static OSErr openparam(INTEGER *rnp)
     return err;
 }
 
-PUBLIC LONGINT Executor::ROMlib_GMTcorrect;
+LONGINT Executor::ROMlib_GMTcorrect;
 
 static void deriveglobals()
 {
@@ -846,7 +846,7 @@ void Executor::SetTrapAddress(LONGINT addr,
 }
 #endif
 
-PRIVATE BOOLEAN shouldbeawake;
+static BOOLEAN shouldbeawake;
 
 void Executor::C_ROMlib_wakeup()
 {
@@ -951,7 +951,7 @@ void Executor::C_SysBeep(INTEGER i) /* SYSTEM DEPENDENT */
 #endif
 }
 
-PUBLIC char Executor::ROMlib_phoneyrom[10] = {
+char Executor::ROMlib_phoneyrom[10] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0x06, 0x7C,
 };
 

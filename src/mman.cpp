@@ -51,8 +51,8 @@ int ROMlib_stack_size = DEFAULT_STACK_SIZE;
    0xFFFF0048 both here and on a Mac.  On a Mac, this doesn't cause a crash.
    */
 
-PUBLIC uintptr_t ROMlib_syszone;
-PUBLIC uintptr_t ROMlib_memtop;
+uintptr_t ROMlib_syszone;
+uintptr_t ROMlib_memtop;
 
 #if defined(MM_MANY_APPLZONES)
 /* for debugging, we can have multiple applzones which are used
@@ -1297,7 +1297,7 @@ void SetPtrSize(Ptr p, Size newsize)
     MM_SLAM("exit");
 }
 
-PRIVATE bool
+static bool
 legit_addr_p(void *addr)
 {
     bool retval;
@@ -1306,7 +1306,7 @@ legit_addr_p(void *addr)
     return retval;
 }
 
-PRIVATE bool
+static bool
 legit_zone_p(THz zone)
 {
     bool retval;
@@ -1692,7 +1692,7 @@ void _PurgeMem_flags(Size sizeneeded, bool sys_p)
     MM_SLAM("exit");
 }
 
-PRIVATE void
+static void
 BlockMove_and_possibly_flush_cache(Ptr src, Ptr dst, Size cnt,
                                    bool flush_p)
 {

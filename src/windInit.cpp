@@ -39,7 +39,7 @@
 
 using namespace Executor;
 
-PUBLIC BOOLEAN Executor::ROMlib_dirtyvariant = false;
+BOOLEAN Executor::ROMlib_dirtyvariant = false;
 
 bool Executor::system_file_version_skew_p;
 
@@ -51,9 +51,9 @@ exit_executor(void)
 }
 
 #if !defined(MSDOS)
-PRIVATE std::string reinstall = "System and %System";
+static std::string reinstall = "System and %System";
 #else
-PRIVATE char *reinstall = "EXSYSTEM.HFV";
+static char *reinstall = "EXSYSTEM.HFV";
 #endif
 
 void Executor::C_InitWindows()

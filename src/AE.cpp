@@ -398,7 +398,7 @@ OSErr Executor::C_AECoercePtr(DescType data_type, Ptr data, Size data_size,
 
 #define AEGetParamDesc AEGetKeyDesc
 
-PRIVATE OSErr
+static OSErr
 parse_evt(const AppleEvent *evtp, AEDesc *desc_out)
 {
     OSErr retval;

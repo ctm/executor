@@ -15,7 +15,7 @@ using namespace Executor;
  * function is called when we're done.
  */
 
-typedef pascal void (*callbackfp)(SndChannelPtr, SndCommand *);
+typedef void (*callbackfp)(SndChannelPtr, SndCommand *);
 
 BOOLEAN Executor::C_snth5(SndChannelPtr chanp, SndCommand *cmdp,
                           ModifierStubPtr mp)

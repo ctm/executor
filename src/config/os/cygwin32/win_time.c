@@ -11,7 +11,7 @@
 #include <windows.h>
 #include "mmsystem.h"
 
-PRIVATE uint64_t
+static uint64_t
 system_time_to_micro_time(const SYSTEMTIME *timep)
 {
     FILETIME file_time;
@@ -22,7 +22,7 @@ system_time_to_micro_time(const SYSTEMTIME *timep)
     return retval;
 }
 
-PRIVATE void
+static void
 gettimeofday(struct timeval *tvp, void *ignored)
 {
     SYSTEMTIME system_time, unix_epoch;

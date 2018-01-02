@@ -14,14 +14,14 @@ using namespace Executor;
 
 typedef GUEST<ResType> *restypeptr;
 
-PRIVATE GUEST<restypeptr> *ar = 0;
+static GUEST<restypeptr> *ar = 0;
 static INTEGER inserttypes(resmaphand, INTEGER, BOOLEAN);
 static INTEGER initar(INTEGER);
 
 #define ARRN_NOTINITTED (-1)
 #define ARRN_ALL (-2)
 
-PRIVATE INTEGER arrn = ARRN_NOTINITTED;
+static INTEGER arrn = ARRN_NOTINITTED;
 
 void Executor::ROMlib_invalar() /* INTERNAL */
 {

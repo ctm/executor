@@ -16,7 +16,7 @@
 
 using namespace Executor;
 
-PRIVATE void
+static void
 num2dec(/* const */ DecForm *f, double d, uint32_t unused1, uint32_t unused2,
         Decimal *dp)
 {
@@ -26,7 +26,7 @@ num2dec(/* const */ DecForm *f, double d, uint32_t unused1, uint32_t unused2,
     ROMlib_Fx2dec(f, &d, dp, FD_OPERAND);
 }
 
-PRIVATE double
+static double
 dec2num(const Decimal *decp)
 {
     double retval;
@@ -36,7 +36,7 @@ dec2num(const Decimal *decp)
     return retval;
 }
 
-PRIVATE void
+static void
 str2dec(const char *str, INTEGER *indexp, Decimal *decp, INTEGER *successp)
 {
     Byte success;
@@ -46,7 +46,7 @@ str2dec(const char *str, INTEGER *indexp, Decimal *decp, INTEGER *successp)
     *successp = success;
 }
 
-PRIVATE void
+static void
 dec2str(const DecForm *sp2, const Decimal *sp, char *dp)
 {
     C_ROMlib_Fdec2str((DecForm *)sp2, (Decimal *)sp, dp);
@@ -54,35 +54,35 @@ dec2str(const DecForm *sp2, const Decimal *sp, char *dp)
     ROMlib_p2cstr(dp);
 }
 
-PRIVATE double
+static double
 ceil_wrapper(double x)
 {
     warning_trace_info("%f", x);
     return ceil(x);
 }
 
-PRIVATE double
+static double
 asin_wrapper(double x)
 {
     warning_trace_info("%f", x);
     return asin(x);
 }
 
-PRIVATE double
+static double
 fmod_wrapper(double x, double y)
 {
     warning_trace_info("%f %f", x, y);
     return fmod(x, y);
 }
 
-PRIVATE double
+static double
 acos_wrapper(double x)
 {
     warning_trace_info("%f", x);
     return acos(x);
 }
 
-PRIVATE double
+static double
 fmin_wrapper(double x, double y)
 {
     double retval;
@@ -92,7 +92,7 @@ fmin_wrapper(double x, double y)
     return retval;
 }
 
-PRIVATE double
+static double
 fmax_wrapper(double x, double y)
 {
     double retval;
@@ -102,35 +102,35 @@ fmax_wrapper(double x, double y)
     return retval;
 }
 
-PRIVATE double
+static double
 atan_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return atan(x);
 }
 
-PRIVATE double
+static double
 atan2_wrapper(double x, double y)
 {
     warning_trace_info(NULL_STRING);
     return atan2(x, y);
 }
 
-PRIVATE double
+static double
 cos_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return cos(x);
 }
 
-PRIVATE double
+static double
 tan_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return tan(x);
 }
 
-PRIVATE long
+static long
 __isfinited_wrapper(double x)
 {
     long retval;
@@ -140,7 +140,7 @@ __isfinited_wrapper(double x)
     return retval;
 }
 
-PRIVATE long
+static long
 __isnand_wrapper(double x)
 {
     long retval;
@@ -150,7 +150,7 @@ __isnand_wrapper(double x)
     return retval;
 }
 
-PRIVATE double
+static double
 round_wrapper(double x)
 {
     double retval;
@@ -175,70 +175,70 @@ round_wrapper(double x)
     return retval;
 }
 
-PRIVATE double
+static double
 sqrt_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return sqrt(x);
 }
 
-PRIVATE double
+static double
 pow_wrapper(double x, double y)
 {
     warning_trace_info(NULL_STRING);
     return pow(x, y);
 }
 
-PRIVATE double
+static double
 sin_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return sin(x);
 }
 
-PRIVATE double
+static double
 exp_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return exp(x);
 }
 
-PRIVATE double
+static double
 log_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return log(x);
 }
 
-PRIVATE double
+static double
 __inf_wrapper(void)
 {
     warning_trace_info(NULL_STRING);
     return HUGE_VAL;
 }
 
-PRIVATE double
+static double
 floor_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return floor(x);
 }
 
-PRIVATE double
+static double
 fabs_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return fabs(x);
 }
 
-PRIVATE double
+static double
 log10_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return log10(x);
 }
 
-PRIVATE double
+static double
 nan_wrapper(void)
 {
     x80_t x;
@@ -251,7 +251,7 @@ nan_wrapper(void)
     return retval;
 }
 
-PRIVATE void
+static void
 feclearexcept_stub(uint32_t bits)
 {
     warning_trace_info("bits = 0x%x", bits);
@@ -260,14 +260,14 @@ feclearexcept_stub(uint32_t bits)
 
 typedef uint32_t fexcept_t;
 
-PRIVATE void
+static void
 fesetexcept_stub(const fexcept_t *flagp, int bits)
 {
     warning_trace_info(NULL_STRING);
     warning_unimplemented(NULL_STRING);
 }
 
-PRIVATE uint32_t
+static uint32_t
 fetestexcept_stub(uint32_t bits)
 {
     warning_trace_info(NULL_STRING);
@@ -275,49 +275,49 @@ fetestexcept_stub(uint32_t bits)
     return 0;
 }
 
-PRIVATE double
+static double
 frexp_wrapper(double x, int *exp)
 {
     warning_trace_info(NULL_STRING);
     return frexp(x, exp);
 }
 
-PRIVATE double
+static double
 ldexp_wrapper(double x, int exp)
 {
     warning_trace_info(NULL_STRING);
     return ldexp(x, exp);
 }
 
-PRIVATE double
+static double
 cosh_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return cosh(x);
 }
 
-PRIVATE double
+static double
 sinh_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return sinh(x);
 }
 
-PRIVATE double
+static double
 tanh_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return tanh(x);
 }
 
-PRIVATE double
+static double
 trunc_wrapper(double x)
 {
     warning_trace_info(NULL_STRING);
     return trunc(x);
 }
 
-PRIVATE map_entry_t
+static map_entry_t
     mathlib_map[]
     = {
         {
@@ -434,7 +434,7 @@ PRIVATE map_entry_t
 
       };
 
-PUBLIC OSErr
+OSErr
 ROMlib_GetMathLib(Str63 library, OSType arch, LoadFlags loadflags,
                   ConnectionID *cidp, Ptr *mainaddrp, Str255 errName)
 {

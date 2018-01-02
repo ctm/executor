@@ -48,7 +48,7 @@ void Executor::SetSoundVol(INTEGER vol)
 }
 #endif
 
-PUBLIC int Executor::ROMlib_PretendSound = soundpretend;
+int Executor::ROMlib_PretendSound = soundpretend;
 
 static inline bool
 qfull_p(SndChannelPtr chanp)
@@ -514,7 +514,7 @@ static void dumpcmd(SndCommand *cmdp)
 }
 #endif
 
-typedef pascal BOOLEAN (*snthfp)(SndChannelPtr, SndCommand *, ModifierStubPtr);
+typedef BOOLEAN (*snthfp)(SndChannelPtr, SndCommand *, ModifierStubPtr);
 
 BOOLEAN callasynth(SndChannelPtr chanp, SndCommand *cmdp, ModifierStubPtr mp)
 {

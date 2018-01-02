@@ -35,7 +35,7 @@ LONGINT Executor::C_GetCTSeed()
     return seed++;
 }
 
-PRIVATE uint32_t
+static uint32_t
 itab_base_size(int res)
 {
     uint32_t retval;
@@ -50,7 +50,7 @@ itab_base_size(int res)
 
 /* TODO: look for better hash function */
 
-PRIVATE int
+static int
 itable_hash(RGBColor *rgbp, int resolution)
 {
     uint32_t hash;
@@ -86,7 +86,7 @@ itable_hash(RGBColor *rgbp, int resolution)
 /*
  */
 
-PRIVATE uint32_t
+static uint32_t
 rgb_diff(RGBColor *rgb1p, RGBColor *rgb2p)
 {
     uint32_t retval;
@@ -564,7 +564,7 @@ init_offsets(void)
 }
 
 #if defined(ITABLE_HASH_SIZE)
-PRIVATE void
+static void
 add_hash_table(CTabHandle color_table, ITabHandle inverse_table,
                int resolution)
 {

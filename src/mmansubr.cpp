@@ -459,7 +459,7 @@ void Executor::ROMlib_sledgehammer_zones(const char *fn, const char *file, int l
 
 #endif
 
-PRIVATE void
+static void
 mm_set_block_fields_common(block_header_t *block,
                            unsigned state, unsigned use,
                            unsigned size_correction,

@@ -45,18 +45,18 @@ enum
 };
 #endif
 
-extern pascal trap PScrapStuff C_InfoScrap(void);
+extern PScrapStuff C_InfoScrap(void);
 PASCAL_TRAP(InfoScrap, 0xA9F9);
-extern pascal trap LONGINT C_UnloadScrap(void);
+extern LONGINT C_UnloadScrap(void);
 PASCAL_TRAP(UnloadScrap, 0xA9FA);
-extern pascal trap LONGINT C_LoadScrap(void);
+extern LONGINT C_LoadScrap(void);
 PASCAL_TRAP(LoadScrap, 0xA9FB);
 extern LONGINT ROMlib_ZeroScrap(void);
-extern pascal trap LONGINT C_ZeroScrap(void);
+extern LONGINT C_ZeroScrap(void);
 PASCAL_TRAP(ZeroScrap, 0xA9FC);
-extern pascal trap LONGINT C_PutScrap(LONGINT len, ResType rest, Ptr p);
+extern LONGINT C_PutScrap(LONGINT len, ResType rest, Ptr p);
 PASCAL_TRAP(PutScrap, 0xA9FE);
-extern pascal trap LONGINT C_GetScrap(Handle h, ResType rest,
+extern LONGINT C_GetScrap(Handle h, ResType rest,
                                       GUEST<LONGINT> *off);
 PASCAL_TRAP(GetScrap, 0xA9FD);
 }

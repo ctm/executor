@@ -212,7 +212,7 @@ static char *copystring(const char *orig, newness_t new1)
     return retval;
 }
 
-PRIVATE const char *
+static const char *
 filename_from_pathname(const char *path)
 {
     const char *last_slash;
@@ -248,7 +248,7 @@ filename_from_pathname(const char *path)
         __retval;                                                \
     })
 
-PRIVATE bool
+static bool
 filename_match(const char *prefix, const char *path1, const char *path2)
 {
     bool retval;
@@ -447,11 +447,11 @@ static BOOLEAN no_hostname(rkey_t *keyp)
 #define OURMAXHOSTNAMELEN 64
 
 #if !defined(MSDOS) && !defined(CYGWIN32)
-PUBLIC char ROMlib_hostname[OURMAXHOSTNAMELEN + 1];
-PUBLIC INTEGER ROMlib_hostnamelen = -1;
+char ROMlib_hostname[OURMAXHOSTNAMELEN + 1];
+INTEGER ROMlib_hostnamelen = -1;
 #else /* defined(MSDOS) */
-PUBLIC char ROMlib_hostname[] = "MSDOS";
-PUBLIC INTEGER ROMlib_hostnamelen = sizeof(ROMlib_hostname) - 1;
+char ROMlib_hostname[] = "MSDOS";
+INTEGER ROMlib_hostnamelen = sizeof(ROMlib_hostname) - 1;
 #endif /* defined(MSDOS) */
 
 static void ourgethostname(void)
@@ -932,7 +932,7 @@ static VCB *grabvcb(ParmBlkPtr pb, GUEST<INTEGER> *vrefnump)
     return vcbp;
 }
 
-PRIVATE unsigned short
+static unsigned short
 find_pseudo_block_size(long n_blocks, long block_size)
 {
     unsigned short retval;

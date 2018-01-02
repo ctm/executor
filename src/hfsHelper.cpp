@@ -47,9 +47,9 @@ using namespace Executor;
 #define HFSXFERDOTFS "/usr/filesystems/HFS_XFer.fs"
 #define HFSXFERUTIL HFSXFERDOTFS "/HFS_XFer.util"
 
-PRIVATE LONGINT pipefd[2];
+static LONGINT pipefd[2];
 
-PUBLIC LONGINT Executor::ROMlib_sock;
+LONGINT Executor::ROMlib_sock;
 
 void Executor::ROMlib_hfsinit(void)
 {
@@ -81,7 +81,7 @@ void Executor::ROMlib_hfsinit(void)
 
 #define NRETRIES 5
 
-PUBLIC long
+long
 Executor::ROMlib_priv_open(const char *filename, long mode)
 {
     long retval;
@@ -266,7 +266,7 @@ static LONGINT try_to_open_disk(const char *dname, LONGINT *bsizep,
     return floppyfd;
 }
 
-PRIVATE LONGINT
+static LONGINT
 read_driver_block_size(LONGINT fd, LONGINT bsize, LONGINT maxbytes,
                        char aligned_buf[])
 {
@@ -286,7 +286,7 @@ read_driver_block_size(LONGINT fd, LONGINT bsize, LONGINT maxbytes,
     return retval;
 }
 
-PUBLIC void
+void
 Executor::try_to_mount_disk(const char *dname, LONGINT floppyfd, GUEST<LONGINT> *messp,
                             LONGINT bsize, LONGINT maxbytes, drive_flags_t flags,
                             uint32_t offset_in)
@@ -614,7 +614,7 @@ DONE:
     return err;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::ROMlib_transphysblk(hfs_access_t *hfsp, LONGINT physblock, short nphysblocks,
                               Ptr bufp, accesstype rw, GUEST<LONGINT> *actp)
 {

@@ -38,7 +38,7 @@
 
 using namespace Executor;
 
-PUBLIC uint32_t ROMlib_PrDrvrVers = 70;
+uint32_t ROMlib_PrDrvrVers = 70;
 
 void Executor::C_PrDrvrOpen() /* TODO */
 {
@@ -69,7 +69,7 @@ INTEGER Executor::C_PrDrvrVers()
     return retval;
 }
 
-PRIVATE ControlHandle
+static ControlHandle
 GetDControl(DialogPtr dp, INTEGER itemno)
 {
     GUEST<Handle> h;
@@ -81,7 +81,7 @@ GetDControl(DialogPtr dp, INTEGER itemno)
     return retval;
 }
 
-PRIVATE Handle
+static Handle
 GetDIText(DialogPtr dp, INTEGER itemno)
 {
     GUEST<Handle> h;
@@ -94,7 +94,7 @@ GetDIText(DialogPtr dp, INTEGER itemno)
     return retval;
 }
 
-PUBLIC LONGINT
+LONGINT
 GetDILong(DialogPtr dp, INTEGER item, LONGINT _default)
 {
     Str255 str;
@@ -111,7 +111,7 @@ GetDILong(DialogPtr dp, INTEGER item, LONGINT _default)
 }
 
 #if defined(CYGWIN32)
-PUBLIC win_printp_t ROMlib_wp;
+win_printp_t ROMlib_wp;
 #endif
 
 void Executor::C_ROMlib_myjobproc(DialogPtr dp, INTEGER itemno)
@@ -187,7 +187,7 @@ void Executor::C_ROMlib_myjobproc(DialogPtr dp, INTEGER itemno)
     }
 }
 
-PRIVATE void
+static void
 add_orientation_icons_to_update_region(DialogPtr dp)
 {
     GrafPtr gp;
@@ -203,7 +203,7 @@ add_orientation_icons_to_update_region(DialogPtr dp)
     SetPort(gp);
 }
 
-PRIVATE void
+static void
 update_orientation(DialogPtr dp, INTEGER button)
 {
     switch(button)
@@ -228,7 +228,7 @@ update_orientation(DialogPtr dp, INTEGER button)
     }
 }
 
-PUBLIC char *
+char *
 Executor::cstring_from_str255(Str255 text)
 {
     int len;
@@ -246,17 +246,17 @@ Executor::cstring_from_str255(Str255 text)
 
 namespace Executor
 {
-PUBLIC ini_key_t ROMlib_printer = "";
-PRIVATE ini_key_t ROMlib_paper = "";
-PUBLIC ini_key_t ROMlib_port = "";
-PUBLIC ini_key_t ROMlib_paper_orientation = "";
-PRIVATE ini_key_t ROMlib_spool_template = "";
+ini_key_t ROMlib_printer = "";
+static ini_key_t ROMlib_paper = "";
+ini_key_t ROMlib_port = "";
+ini_key_t ROMlib_paper_orientation = "";
+static ini_key_t ROMlib_spool_template = "";
 #if defined(MSDOS) || defined(CYGWIN32)
-PRIVATE ini_key_t ROMlib_print_filter = "";
+static ini_key_t ROMlib_print_filter = "";
 #endif
 }
 
-PRIVATE MenuHandle
+static MenuHandle
 GetPopUpMenu(ControlHandle ch)
 {
     MenuHandle retval;
@@ -268,7 +268,7 @@ GetPopUpMenu(ControlHandle ch)
     return retval;
 }
 
-PRIVATE ini_key_t
+static ini_key_t
 find_item_key(DialogPtr dlg, INTEGER itemno)
 {
     MenuHandle mh;
@@ -283,9 +283,9 @@ find_item_key(DialogPtr dlg, INTEGER itemno)
     return retval;
 }
 
-PUBLIC char *Executor::ROMlib_spool_file;
+char *Executor::ROMlib_spool_file;
 
-PUBLIC void
+void
 Executor::update_printing_globals(void)
 {
     {
@@ -321,7 +321,7 @@ Executor::update_printing_globals(void)
     }
 }
 
-PRIVATE void
+static void
 update_ROMlib_printer_vars(TPPrDlg dp)
 {
     ROMlib_printer = find_item_key((DialogPtr)dp, LAYOUT_PRINTER_TYPE_NO);
@@ -375,7 +375,7 @@ update_ROMlib_printer_vars(TPPrDlg dp)
 }
 
 #if !defined(LINUX)
-PRIVATE void
+static void
 get_popup_bounding_box(Rect *rp, DialogPtr dp, INTEGER itemno)
 {
     GUEST<INTEGER> unused;
@@ -395,11 +395,11 @@ typedef enum {
     PRINT_TO_NEXTSTEP
 } print_where_t;
 
-PRIVATE print_where_t print_where;
+static print_where_t print_where;
 
-PRIVATE bool filename_chosen_p = false;
+static bool filename_chosen_p = false;
 
-PRIVATE void
+static void
 update_port(DialogPtr dp)
 {
     GrafPtr gp;
@@ -503,9 +503,9 @@ void Executor::C_ROMlib_mystlproc(DialogPtr dp, INTEGER itemno)
     }
 }
 
-typedef pascal TPPrDlg (*prinitprocp)(THPrint hPrint);
+typedef TPPrDlg (*prinitprocp)(THPrint hPrint);
 
-typedef pascal void (*pritemprocp)(TPPrDlg prrecptr, INTEGER item);
+typedef void (*pritemprocp)(TPPrDlg prrecptr, INTEGER item);
 
 #if !defined(BINCOMPAT)
 
@@ -679,7 +679,7 @@ BOOLEAN Executor::C_ROMlib_numsonlyfilterproc(
     return false;
 }
 
-PRIVATE void
+static void
 set_userItem(DialogPtr dp, INTEGER itemno, void *funcp)
 {
     Rect r;
@@ -689,7 +689,7 @@ set_userItem(DialogPtr dp, INTEGER itemno, void *funcp)
     SetDItem(dp, itemno, userItem, (Handle)funcp, &r);
 }
 
-PRIVATE void
+static void
 adjust_num_copies(TPPrDlg dlg, THPrint hPrint)
 {
     Str255 text;
@@ -706,7 +706,7 @@ adjust_num_copies(TPPrDlg dlg, THPrint hPrint)
 #endif
 }
 
-PRIVATE void
+static void
 adjust_print_range_controls(TPPrDlg dlg, THPrint hPrint)
 {
     ControlHandle ch;
@@ -715,7 +715,7 @@ adjust_print_range_controls(TPPrDlg dlg, THPrint hPrint)
     SetCtlValue(ch, 1);
 }
 
-PRIVATE ini_key_t
+static ini_key_t
 get_default_key(ini_key_t key, ini_key_t default_if_not_found)
 {
     ini_key_t retval = find_key("Defaults", key);
@@ -734,7 +734,7 @@ get_default_key(ini_key_t key, ini_key_t default_if_not_found)
     return retval;
 }
 
-PRIVATE void
+static void
 str255assignc(Str255 str, const char *cstr)
 {
     if(!cstr)
@@ -746,7 +746,7 @@ str255assignc(Str255 str, const char *cstr)
     }
 }
 
-PRIVATE void
+static void
 get_all_defaults(void)
 {
     static struct temp
@@ -784,7 +784,7 @@ get_all_defaults(void)
         ROMlib_spool_template = "+/execout*.ps";
 }
 
-PRIVATE void
+static void
 adjust_print_name(DialogPtr dp)
 {
     Str255 name;
@@ -873,10 +873,10 @@ void Executor::C_ROMlib_orientation(DialogPeek dp, INTEGER which)
     PenPat(black);
 }
 
-PUBLIC std::string Executor::ROMlib_PrintersIni;
-PUBLIC std::string Executor::ROMlib_PrintDef;
+std::string Executor::ROMlib_PrintersIni;
+std::string Executor::ROMlib_PrintDef;
 
-PRIVATE void
+static void
 adjust_menu_common(TPPrDlg dlg, INTEGER item, heading_t heading, ini_key_t defkey)
 {
     ControlHandle ch;
@@ -955,19 +955,19 @@ adjust_menu_common(TPPrDlg dlg, INTEGER item, heading_t heading, ini_key_t defke
     }
 }
 
-PRIVATE void
+static void
 adjust_paper_menu(TPPrDlg dlg)
 {
     adjust_menu_common(dlg, LAYOUT_PAPER_NO, "Paper Size", ROMlib_paper);
 }
 
-PRIVATE void
+static void
 adjust_printer_type_menu(TPPrDlg dlg)
 {
     adjust_menu_common(dlg, LAYOUT_PRINTER_TYPE_NO, "Printer", ROMlib_printer);
 }
 
-PRIVATE void
+static void
 adjust_port(TPPrDlg dlg)
 {
 #if !defined(LINUX)
@@ -979,7 +979,7 @@ adjust_port(TPPrDlg dlg)
 #endif
 }
 
-PRIVATE void
+static void
 set_default_orientation(TPPrDlg dlg)
 {
     INTEGER orientation_button;
@@ -990,7 +990,7 @@ set_default_orientation(TPPrDlg dlg)
     update_orientation((DialogPtr)dlg, orientation_button);
 }
 
-PUBLIC void
+void
 Executor::printer_init(void)
 {
     static bool ini_read_p = false;

@@ -19,7 +19,7 @@
 
 using namespace Executor;
 
-PUBLIC void
+void
 Executor::HCreateResFile_helper(INTEGER vrefnum, LONGINT parid, Str255 name,
                                 OSType creator, OSType type, ScriptCode script)
 {
@@ -138,7 +138,7 @@ void Executor::C_dcmp_template(Ptr source, Ptr dest, Ptr working, Size len)
    we need to adjust down the size of "dlen" down below where we read
    the compressed info. */
 
-PRIVATE bool
+static bool
 decompress_setup(INTEGER rn, int32_t *dlenp, int32_t *final_sizep, int32_t *offsetp,
                  Handle *dcmp_handlep, Ptr *workspacep)
 {
@@ -497,7 +497,7 @@ void Executor::C_CloseResFile(INTEGER rn)
         ROMlib_setreserr(resFNotFound);
 }
 
-PRIVATE INTEGER
+static INTEGER
 already_open_res_file(GUEST<INTEGER> swapped_vref, GUEST<LONGINT> swapped_file_num)
 {
     resmaphand map;

@@ -9,7 +9,7 @@
 
 namespace Executor
 {
-extern trap void NumToString(LONGINT l, StringPtr s);
-extern trap void StringToNum(StringPtr s, LONGINT *lp);
+extern void NumToString(LONGINT l, StringPtr s);
+extern void StringToNum(StringPtr s, LONGINT *lp);
 }
 #endif /* __BINDEC__ */

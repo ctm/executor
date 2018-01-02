@@ -44,7 +44,7 @@ HWND SDL_Window;
 #endif /* OS */
 
 /* Initialize the system dependent variables */
-PUBLIC int
+int
 sdl_syswm_init(void)
 {
     int retval;
@@ -88,7 +88,7 @@ sdl_syswm_init(void)
 #if defined(linux)
 
 /* Handle system dependent events */
-PUBLIC int
+int
 sdl_syswm_event(const SDL_Event *event)
 {
     int retval;
@@ -113,7 +113,7 @@ sdl_syswm_event(const SDL_Event *event)
 #elif defined(CYGWIN32)
 
 /* Handle system dependent events */
-PUBLIC int
+int
 sdl_syswm_event(const SDL_Event *event)
 {
     int retval;
@@ -148,7 +148,7 @@ sdl_syswm_event(const SDL_Event *event)
 #else
 
 /* Handle system dependent events */
-PUBLIC int
+int
 sdl_syswm_event(const SDL_Event *event)
 {
     int retval;

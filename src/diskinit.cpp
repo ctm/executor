@@ -44,7 +44,7 @@ enum
         * FLOPPY_SECTORS_PER_TRACK,
 };
 
-PRIVATE OSErr
+static OSErr
 get_vref_dref(INTEGER rn, INTEGER *vrefp, INTEGER *drefp)
 {
     OSErr retval;
@@ -64,7 +64,7 @@ typedef struct
 
 typedef OSErrRET (*func_t)(ParmBlkPtr pb, BOOLEAN async);
 
-PRIVATE OSErr
+static OSErr
 raw_read_write(func_t func, our_file_info_t *op, LONGINT *lengthp,
                char buf[])
 {
@@ -87,13 +87,13 @@ raw_read_write(func_t func, our_file_info_t *op, LONGINT *lengthp,
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 raw_read(our_file_info_t *op, LONGINT *lengthp, char buf[])
 {
     return raw_read_write(PBRead, op, lengthp, buf);
 }
 
-PRIVATE OSErr
+static OSErr
 raw_write(our_file_info_t *op, LONGINT *lengthp, char buf[])
 {
     return raw_read_write(PBWrite, op, lengthp, buf);
@@ -135,11 +135,11 @@ OSErr Executor::C_DIVerify(INTEGER dn)
  *       we format floppies, but eventually we need something better here.
  */
 
-PRIVATE Ptr track_bufp;
-PRIVATE long offset;
-PRIVATE long length;
+static Ptr track_bufp;
+static long offset;
+static long length;
 
-PRIVATE OSErr
+static OSErr
 begin_track_buffering_for_write(void)
 {
     OSErr retval;
@@ -156,7 +156,7 @@ begin_track_buffering_for_write(void)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 flush_buffer(our_file_info_t *ofitp)
 {
     OSErr retval;
@@ -175,7 +175,7 @@ flush_buffer(our_file_info_t *ofitp)
     return retval;
 }
 
-PRIVATE size_t
+static size_t
 writefunc(int magic, const void *buf, size_t buf_len)
 {
     OSErr err = noErr;
@@ -204,7 +204,7 @@ writefunc(int magic, const void *buf, size_t buf_len)
     return err ? 0 : buf_len;
 }
 
-PRIVATE OSErr
+static OSErr
 end_track_buffering_for_write(our_file_info_t *ofitp)
 {
     OSErr retval;

@@ -112,7 +112,7 @@ OSErr Executor::ufsPBGetFCBInfo(FCBPBPtr pb, BOOLEAN a) /* INTERNAL */
     return err;
 }
 
-PRIVATE bool
+static bool
 charcmp(char c1, char c2)
 {
     bool retval;
@@ -128,7 +128,7 @@ charcmp(char c1, char c2)
     return retval;
 }
 
-PRIVATE int
+static int
 slashstrcmp(const char *p1, const char *p2)
 {
     int retval;
@@ -148,8 +148,8 @@ slashstrcmp(const char *p1, const char *p2)
     return retval;
 }
 
-PRIVATE INTEGER ROMlib_driveno = 3;
-PRIVATE INTEGER ROMlib_ejdriveno = 2;
+static INTEGER ROMlib_driveno = 3;
+static INTEGER ROMlib_ejdriveno = 2;
 
 /*
  * NOTE: The way we handle drive information is pretty messed up right now.
@@ -161,7 +161,7 @@ PRIVATE INTEGER ROMlib_ejdriveno = 2;
  * we can pull the information out of the Mac filesystem.
  */
 
-PUBLIC DrvQExtra *
+DrvQExtra *
 Executor::ROMlib_addtodq(ULONGINT drvsize, const char *devicename, INTEGER partition,
                          INTEGER drefnum, drive_flags_t flags, hfs_access_t *hfsp)
 {
@@ -240,7 +240,7 @@ Executor::ROMlib_addtodq(ULONGINT drvsize, const char *devicename, INTEGER parti
     return dqp;
 }
 
-PRIVATE bool
+static bool
 root_directory_p(const char *path, dev_t our_dev)
 {
     const char *slash;
@@ -274,7 +274,7 @@ root_directory_p(const char *path, dev_t our_dev)
  * way to map the "drive number" into such a string)
  */
 
-PUBLIC std::string Executor::ROMlib_volumename;
+std::string Executor::ROMlib_volumename;
 
 static void ROMlib_automount_helper(const char *cpath, char *aliasp)
 {
@@ -417,7 +417,7 @@ void ROMlib_volume_alias(const char *path, const char *alias_name)
     ROMlib_automount_helper((char *)path, (char *)alias_name);
 }
 
-PUBLIC std::string
+std::string
 Executor::expandPath(std::string name)
 {
     if(name.empty())
@@ -448,15 +448,15 @@ Executor::expandPath(std::string name)
 }
 
 #if defined(MSDOS) || defined(CYGWIN32)
-PUBLIC bool cd_mounted_by_trickery_p = false;
+bool cd_mounted_by_trickery_p = false;
 
 #define MACCDROM \
     (ROMlib_mac_cdromp ? (char *)ROMlib_mac_cdromp->chars : "DOS/EXTRA/LIBRARY/MACCDROM.HFV")
 
 #if defined(MSDOS) || defined(CYGWIN32)
-PRIVATE char *cd_big_hfv = 0;
+static char *cd_big_hfv = 0;
 
-PRIVATE void
+static void
 check_for_executor_cd(const char *drive)
 {
     if(!cd_big_hfv)
@@ -473,7 +473,7 @@ check_for_executor_cd(const char *drive)
     }
 }
 
-PRIVATE bool
+static bool
 e2_is_mounted(void)
 {
     bool retval;
@@ -486,8 +486,8 @@ e2_is_mounted(void)
 
 #endif
 
-PUBLIC StringPtr Executor::ROMlib_exefname;
-PUBLIC char *Executor::ROMlib_exeuname;
+StringPtr Executor::ROMlib_exefname;
+char *Executor::ROMlib_exeuname;
 
 std::string Executor::ROMlib_ConfigurationFolder;
 std::string Executor::ROMlib_SystemFolder;
@@ -498,9 +498,9 @@ static std::string ROMlib_MacVolumes;
 std::string Executor::ROMlib_ScreenDumpFile;
 static std::string ROMlib_OffsetFile;
 
-PUBLIC LONGINT Executor::ROMlib_magic_offset = -1;
+LONGINT Executor::ROMlib_magic_offset = -1;
 
-PRIVATE void
+static void
 skip_comments(FILE *fp)
 {
     int c;
@@ -513,7 +513,7 @@ skip_comments(FILE *fp)
     ungetc(c, fp);
 }
 
-PRIVATE void
+static void
 parse_offset_file(void)
 {
     FILE *fp;
@@ -539,7 +539,7 @@ parse_offset_file(void)
 
 #if defined(MSDOS)
 
-PRIVATE uint32_t
+static uint32_t
 drive_char_to_bit(char c)
 {
     uint32_t retval;
@@ -554,7 +554,7 @@ drive_char_to_bit(char c)
 }
 #endif
 
-PRIVATE bool
+static bool
 is_unix_path(const char *pathname)
 {
     bool retval;

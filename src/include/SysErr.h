@@ -29,7 +29,7 @@ enum
 
 extern char syserr_msg[];
 
-extern pascal void C_SysError(short errorcode);
+extern void C_SysError(short errorcode);
 }
 
 #endif /* !_SYSERR_H_ */

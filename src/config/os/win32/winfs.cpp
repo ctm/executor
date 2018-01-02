@@ -4,7 +4,7 @@
  */
 
 /* NOTE: we have to include common.h since it sets up some macros that
-   we need, including PUBLIC and PRIVATE.  However, since this is file's
+   we need, including and static.  However, since this is file's
    purpose is to export routines that are definitely not Mac-routines, we
    included common.h first and then include windows.h later so that we have
    access to all the Windows data types and structures. */
@@ -44,7 +44,7 @@ using namespace Executor;
  * any outstanding code that it needs to free up.
  */
 
-PUBLIC DIR *
+DIR *
 opendir (const char *path)
 {
   HANDLE found;
@@ -112,7 +112,7 @@ OUT_OF_MEMORY:
  * readdir() is contained in dirp->showme
  */
 
-PUBLIC struct dirent *
+struct dirent *
 readdir (DIR *dirp)
 {
   WIN32_FIND_DATA file_info;
@@ -147,7 +147,7 @@ readdir (DIR *dirp)
     }
 }
 
-PUBLIC int
+int
 closedir (DIR *dirp)
 {
   HANDLE dir_handle;
@@ -173,7 +173,7 @@ closedir (DIR *dirp)
 }
 #endif
 
-PUBLIC int
+int
 fsync(int fd)
 {
     int retval;
@@ -182,7 +182,7 @@ fsync(int fd)
     return retval;
 }
 
-PUBLIC int
+int
 sync(void)
 {
     int retval;
@@ -191,7 +191,7 @@ sync(void)
     return retval;
 }
 
-PUBLIC char *
+char *
 getwd(char *buf)
 {
     char *retval;
@@ -204,7 +204,7 @@ getwd(char *buf)
 /* verify that we can spoof in all contexts that it's used */
 /* serial.c and main.c */
 
-PUBLIC int
+int
 link(const char *oldpath, const char *newpath)
 {
     int retval;
@@ -223,7 +223,7 @@ link(const char *oldpath, const char *newpath)
 
 #warning statfs is spoofed
 
-PUBLIC int
+int
 statfs(const char *path, struct statfs *bufp)
 {
     int retval;
@@ -259,7 +259,7 @@ statfs(const char *path, struct statfs *bufp)
     return retval;
 }
 
-PUBLIC int
+int
 ROMlib_lockunlockrange(int fd, uint32_t begin, uint32_t count, lockunlock_t op)
 {
     int retval;

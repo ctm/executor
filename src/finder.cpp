@@ -11,7 +11,7 @@
 
 using namespace Executor;
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTGetPath(DTPBPtr dtp)
 {
     OSErr retval;
@@ -20,7 +20,7 @@ Executor::PBDTGetPath(DTPBPtr dtp)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTOpenInform(DTPBPtr dtp)
 {
     OSErr retval;
@@ -29,7 +29,7 @@ Executor::PBDTOpenInform(DTPBPtr dtp)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTCloseDown(DTPBPtr dtp)
 {
     OSErr retval;
@@ -38,7 +38,7 @@ Executor::PBDTCloseDown(DTPBPtr dtp)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTGetIcon(DTPBPtr dtp, BOOLEAN async)
 {
     OSErr retval;
@@ -48,7 +48,7 @@ Executor::PBDTGetIcon(DTPBPtr dtp, BOOLEAN async)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTGetIconInfo(DTPBPtr dtp, BOOLEAN async)
 {
     OSErr retval;
@@ -58,7 +58,7 @@ Executor::PBDTGetIconInfo(DTPBPtr dtp, BOOLEAN async)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTGetAPPL(DTPBPtr dtp, BOOLEAN async)
 {
     OSErr retval;
@@ -68,7 +68,7 @@ Executor::PBDTGetAPPL(DTPBPtr dtp, BOOLEAN async)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTGetComment(DTPBPtr dtp, BOOLEAN async)
 {
     OSErr retval;
@@ -78,7 +78,7 @@ Executor::PBDTGetComment(DTPBPtr dtp, BOOLEAN async)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTAddIcon(DTPBPtr dtp, BOOLEAN async)
 {
     OSErr retval;
@@ -88,7 +88,7 @@ Executor::PBDTAddIcon(DTPBPtr dtp, BOOLEAN async)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTAddAPPL(DTPBPtr dtp, BOOLEAN async)
 {
     OSErr retval;
@@ -98,7 +98,7 @@ Executor::PBDTAddAPPL(DTPBPtr dtp, BOOLEAN async)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTSetComment(DTPBPtr dtp, BOOLEAN async)
 {
     OSErr retval;
@@ -108,7 +108,7 @@ Executor::PBDTSetComment(DTPBPtr dtp, BOOLEAN async)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTRemoveAPPL(DTPBPtr dtp, BOOLEAN async)
 {
     OSErr retval;
@@ -118,7 +118,7 @@ Executor::PBDTRemoveAPPL(DTPBPtr dtp, BOOLEAN async)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTRemoveComment(DTPBPtr dtp, BOOLEAN async)
 {
     OSErr retval;
@@ -128,7 +128,7 @@ Executor::PBDTRemoveComment(DTPBPtr dtp, BOOLEAN async)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTFlush(DTPBPtr dtp, BOOLEAN async)
 {
     OSErr retval;
@@ -138,7 +138,7 @@ Executor::PBDTFlush(DTPBPtr dtp, BOOLEAN async)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTGetInfo(DTPBPtr dtp, BOOLEAN async)
 {
     OSErr retval;
@@ -148,7 +148,7 @@ Executor::PBDTGetInfo(DTPBPtr dtp, BOOLEAN async)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTReset(DTPBPtr dtp, BOOLEAN async)
 {
     OSErr retval;
@@ -158,7 +158,7 @@ Executor::PBDTReset(DTPBPtr dtp, BOOLEAN async)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::PBDTDelete(DTPBPtr dtp, BOOLEAN async)
 {
     OSErr retval;

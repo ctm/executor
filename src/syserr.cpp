@@ -28,7 +28,7 @@
 
 using namespace Executor;
 
-PRIVATE myalerttab_t myalerttab = {
+static myalerttab_t myalerttab = {
     CWC(8),
 
 #define WELCOME_CODE 0x28

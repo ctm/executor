@@ -188,7 +188,7 @@ LONGINT Executor::C_PutScrap(LONGINT len, ResType rest, Ptr p)
 }
 
 #if defined(CYGWIN32)
-PUBLIC int
+int
 count_char(const char *p, int len, char c)
 {
     int retval;
@@ -200,7 +200,7 @@ count_char(const char *p, int len, char c)
     return retval;
 }
 
-PRIVATE void
+static void
 memcpy_but_delete_char(char *destp, const char *srcp, int len, char to_del)
 {
     while(--len >= 0)
@@ -213,7 +213,7 @@ memcpy_but_delete_char(char *destp, const char *srcp, int len, char to_del)
     }
 }
 
-PUBLIC int
+int
 get_scrap_helper(void *vh, void *lp, int len, bool convert_text)
 {
     int retval;
@@ -354,7 +354,7 @@ LONGINT Executor::C_GetScrap(Handle h, ResType rest, GUEST<LONGINT> *off)
 
 #include "SDL/SDL.h"
 
-PRIVATE int
+static int
 SDL_Surface_depth(const SDL_Surface *surfp)
 {
     int retval;
@@ -362,7 +362,7 @@ SDL_Surface_depth(const SDL_Surface *surfp)
     return retval;
 }
 
-PRIVATE int
+static int
 SDL_Surface_width(const SDL_Surface *surfp)
 {
     int retval;
@@ -370,7 +370,7 @@ SDL_Surface_width(const SDL_Surface *surfp)
     return retval;
 }
 
-PRIVATE int
+static int
 SDL_Surface_height(const SDL_Surface *surfp)
 {
     int retval;
@@ -378,7 +378,7 @@ SDL_Surface_height(const SDL_Surface *surfp)
     return retval;
 }
 
-PUBLIC void *
+void *
 SDL_Surface_pixels(const SDL_Surface *surfp)
 {
     void *retval;
@@ -386,7 +386,7 @@ SDL_Surface_pixels(const SDL_Surface *surfp)
     return retval;
 }
 
-PUBLIC int
+int
 SDL_Surface_pitch(const SDL_Surface *surfp)
 {
     int retval;
@@ -394,7 +394,7 @@ SDL_Surface_pitch(const SDL_Surface *surfp)
     return retval;
 }
 
-PUBLIC int
+int
 SDL_n_colors(const SDL_Surface *surfp)
 {
     int retval;
@@ -402,7 +402,7 @@ SDL_n_colors(const SDL_Surface *surfp)
     return retval;
 }
 
-PUBLIC SDL_Color *
+SDL_Color *
 SDL_colors(const SDL_Surface *surfp)
 {
     SDL_Color *retval;
@@ -441,7 +441,7 @@ typedef struct
         (_x << 8) | (uint8)_x;             \
     })
 
-PRIVATE CTabHandle
+static CTabHandle
 ctab_from_surface(SDL_Surface *surfp)
 {
     CTabHandle retval;
@@ -471,7 +471,7 @@ ctab_from_surface(SDL_Surface *surfp)
     return retval;
 }
 
-PRIVATE GWorldPtr
+static GWorldPtr
 gworld_from_surface(SDL_Surface *surfp)
 {
     GWorldPtr retval;
@@ -576,7 +576,7 @@ gworld_from_surface(SDL_Surface *surfp)
     return retval;
 }
 
-PRIVATE PicHandle
+static PicHandle
 pict_from_gworld(GWorldPtr gp, int *lenp)
 {
     PicHandle retval;
@@ -604,7 +604,7 @@ pict_from_gworld(GWorldPtr gp, int *lenp)
     return retval;
 }
 
-PUBLIC int
+int
 get_scrap_helper_dib(void *vh, void *lp)
 {
     SDL_Surface *surfp;
@@ -633,7 +633,7 @@ get_scrap_helper_dib(void *vh, void *lp)
     return retval;
 }
 
-PRIVATE PicHandle
+static PicHandle
 pict_from_lp(const void *lp)
 {
     PicHandle retval;
@@ -665,7 +665,7 @@ pict_from_lp(const void *lp)
     return retval;
 }
 
-PRIVATE GWorldPtr
+static GWorldPtr
 gworld_from_pict(PicHandle ph)
 {
     GWorldPtr retval;
@@ -710,7 +710,7 @@ gworld_from_pict(PicHandle ph)
     return retval;
 }
 
-PRIVATE SDL_Surface *
+static SDL_Surface *
 surface_from_gworld(GWorldPtr gp)
 {
     SDL_Surface *retval;
@@ -759,7 +759,7 @@ surface_from_gworld(GWorldPtr gp)
 
 /* write_surfp_to_clipboard */
 
-PUBLIC void
+void
 put_scrap_helper_dib(void *lp)
 {
     PicHandle pich;

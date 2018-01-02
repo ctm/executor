@@ -35,10 +35,10 @@ extern QHdr 	VBLQueue;
 #endif
 
 extern void ROMlib_clockonoff(LONGINT onoroff);
-extern trap OSErrRET VInstall(VBLTaskPtr vtaskp);
-extern trap OSErrRET VRemove(VBLTaskPtr vtaskp);
+extern OSErrRET VInstall(VBLTaskPtr vtaskp);
+extern OSErrRET VRemove(VBLTaskPtr vtaskp);
 extern QHdrPtr GetVBLQHdr(void);
-extern trap OSErrRET SlotVInstall(VBLTaskPtr vtaskp, INTEGER slot);
-extern trap OSErrRET SlotVRemove(VBLTaskPtr vtaskp, INTEGER slot);
+extern OSErrRET SlotVInstall(VBLTaskPtr vtaskp, INTEGER slot);
+extern OSErrRET SlotVRemove(VBLTaskPtr vtaskp, INTEGER slot);
 }
 #endif /* __VRETRACE__ */

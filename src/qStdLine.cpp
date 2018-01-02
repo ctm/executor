@@ -29,22 +29,22 @@ using namespace Executor;
 static void scodydxx1x2(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx,
                         INTEGER **opp, INTEGER **opp2, INTEGER offy,
                         INTEGER offx);
-PRIVATE INTEGER *scrdydxx1x2(LONGINT y1, INTEGER x1,
+static INTEGER *scrdydxx1x2(LONGINT y1, INTEGER x1,
                              INTEGER dy, INTEGER dx, INTEGER *op);
 static void scodydxx2x1(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx,
                         INTEGER **opp, INTEGER **opp2, INTEGER offy,
                         INTEGER offx);
-PRIVATE INTEGER *scrdydxx2x1(LONGINT y1, INTEGER x1,
+static INTEGER *scrdydxx2x1(LONGINT y1, INTEGER x1,
                              INTEGER dy, INTEGER dx, INTEGER *op);
 static void scodxdyx1x2(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx,
                         INTEGER **opp, INTEGER **opp2, INTEGER offy,
                         INTEGER offx);
-PRIVATE INTEGER *scrdxdyx1x2(INTEGER y1, LONGINT x1,
+static INTEGER *scrdxdyx1x2(INTEGER y1, LONGINT x1,
                              INTEGER dy, INTEGER dx, INTEGER *op);
 static void scodxdyx2x1(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx,
                         INTEGER **opp, INTEGER **opp2, INTEGER offy,
                         INTEGER offx);
-PRIVATE INTEGER *scrdxdyx2x1(INTEGER y1, LONGINT x1,
+static INTEGER *scrdxdyx2x1(INTEGER y1, LONGINT x1,
                              INTEGER dy, INTEGER dx, INTEGER *op);
 static void regionify1(INTEGER *ip1, INTEGER *ip2, RgnPtr rp);
 

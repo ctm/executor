@@ -56,7 +56,7 @@ static struct
  * xxx = 0 for modem, 1 for printer
  */
 
-PRIVATE int
+static int
 set_xxx_port_mapping_to_pc_port(int xxx, int pc_port)
 {
     int retval;
@@ -97,7 +97,7 @@ set_printer_port_mapping_to_pc_port(int pc_port)
  * 0
  */
 
-PRIVATE int
+static int
 baud_to_win32_baud(DWORD *win32_baudp, uint32_t baud)
 {
     int retval;
@@ -141,7 +141,7 @@ baud_to_win32_baud(DWORD *win32_baudp, uint32_t baud)
     return retval;
 }
 
-PRIVATE int
+static int
 parity_to_win32_parity(BYTE *win32_parityp, parity_t parity)
 {
     int retval;
@@ -165,7 +165,7 @@ parity_to_win32_parity(BYTE *win32_parityp, parity_t parity)
     return retval;
 }
 
-PRIVATE int
+static int
 stop_to_win32_stop(BYTE *win32_stopp, uint32_t stop_bits)
 {
     int retval;
@@ -189,7 +189,7 @@ stop_to_win32_stop(BYTE *win32_stopp, uint32_t stop_bits)
     return retval;
 }
 
-PRIVATE int
+static int
 length_to_win32_length(BYTE *win32_lengthp, uint32_t data_length)
 {
     int retval;
@@ -266,7 +266,7 @@ enum
 
 #define COM_TEMPLATE "COM1"
 
-PRIVATE HANDLE
+static HANDLE
 port_to_handle(uint8 port)
 {
     HANDLE retval;
@@ -314,7 +314,7 @@ port_to_handle(uint8 port)
  * we write our own drivers).
  */
 
-PRIVATE int
+static int
 dos_serial_bios_init_port(uint8 port,
                           uint32_t baud,
                           uint32_t parity,

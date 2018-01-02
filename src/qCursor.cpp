@@ -36,7 +36,7 @@ using namespace Executor;
 
 using namespace Executor;
 
-PRIVATE void
+static void
 cursor_debug(const uint8 *datap, const uint8 *maskp, int hot_x, int hot_y)
 {
     int y;

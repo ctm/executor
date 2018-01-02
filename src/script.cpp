@@ -343,7 +343,7 @@ void Executor::C_HiliteText(Ptr textbufp, INTEGER firstoffset,
     offsets[5] = CWC(0);
 }
 
-PRIVATE int16_t
+static int16_t
 count_spaces(Ptr textbufp, int16_t length)
 {
     int16_t retval;
@@ -374,7 +374,7 @@ void Executor::C_DrawJust(Ptr textbufp, int16_t length, int16_t slop)
     PORT_SP_EXTRA_X(thePort) = save_sp_extra_x;
 }
 
-PRIVATE int
+static int
 snag_date_part(Ptr text, int *offsetp, LONGINT len)
 {
     int retval;
@@ -408,7 +408,7 @@ String2DateStatus Executor::C_String2Time(
     return (String2DateStatus)dateTimeNotFound;
 }
 
-PRIVATE void
+static void
 this_date_rec(DateTimeRec *p)
 {
     GUEST<ULONGINT> now;
@@ -417,7 +417,7 @@ this_date_rec(DateTimeRec *p)
     Secs2Date(CL(now), p);
 }
 
-PRIVATE int
+static int
 this_century(void)
 {
     DateTimeRec d;
@@ -428,7 +428,7 @@ this_century(void)
     return retval;
 }
 
-PRIVATE int
+static int
 this_millennium(void)
 {
     int retval;

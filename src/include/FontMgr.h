@@ -226,51 +226,51 @@ enum
 };
 #endif
 
-extern pascal trap void C_InitFonts(void);
+extern void C_InitFonts(void);
 PASCAL_TRAP(InitFonts, 0xA8FE);
 
-extern pascal trap void C_GetFontName(INTEGER fnum,
+extern void C_GetFontName(INTEGER fnum,
                                       StringPtr fnam);
 PASCAL_TRAP(GetFontName, 0xA8FF);
 extern void ROMlib_GetFontName(LONGINT fnum, char *fnam);
-extern pascal trap void C_GetFNum(StringPtr fnam,
+extern void C_GetFNum(StringPtr fnam,
                                   GUEST<INTEGER> *fnum);
 PASCAL_TRAP(GetFNum, 0xA900);
-extern pascal trap BOOLEAN C_RealFont(INTEGER fnum,
+extern BOOLEAN C_RealFont(INTEGER fnum,
                                       INTEGER sz);
 PASCAL_TRAP(RealFont, 0xA902);
-extern pascal trap void C_SetFontLock(BOOLEAN lflag);
+extern void C_SetFontLock(BOOLEAN lflag);
 PASCAL_TRAP(SetFontLock, 0xA903);
 
-extern pascal trap FMOutPtr C_FMSwapFont(FMInput *fmip);
+extern FMOutPtr C_FMSwapFont(FMInput *fmip);
 PASCAL_TRAP(FMSwapFont, 0xA901);
-extern pascal trap void C_FontMetrics(FMetricRec *metrp);
+extern void C_FontMetrics(FMetricRec *metrp);
 PASCAL_TRAP(FontMetrics, 0xA835);
 
-extern pascal trap void C_SetFScaleDisable(
+extern void C_SetFScaleDisable(
     BOOLEAN disable);
 PASCAL_TRAP(SetFScaleDisable, 0xA834);
-extern pascal trap void C_SetFractEnable(BOOLEAN enable);
+extern void C_SetFractEnable(BOOLEAN enable);
 PASCAL_TRAP(SetFractEnable, 0xA814);
 
-extern pascal trap void C_SetOutlinePreferred(Boolean _outline_perferred_p);
+extern void C_SetOutlinePreferred(Boolean _outline_perferred_p);
 PASCAL_FUNCTION(SetOutlinePreferred);
-extern pascal trap Boolean C_GetOutlinePreferred(void);
+extern Boolean C_GetOutlinePreferred(void);
 PASCAL_FUNCTION(GetOutlinePreferred);
-extern pascal trap Boolean C_IsOutline(Point numer, Point denom);
+extern Boolean C_IsOutline(Point numer, Point denom);
 PASCAL_FUNCTION(IsOutline);
-extern pascal trap OSErr C_OutlineMetrics(int16_t byte_count, Ptr text,
+extern OSErr C_OutlineMetrics(int16_t byte_count, Ptr text,
                                           Point numer, Point denom,
                                           int16_t *y_max, int16_t *y_min,
                                           Fixed *aw_array, Fixed *lsb_array,
                                           Rect *bounds_array);
 PASCAL_FUNCTION(OutlineMetrics);
 
-extern pascal trap void C_SetPreserveGlyph(Boolean preserve_glyph);
+extern void C_SetPreserveGlyph(Boolean preserve_glyph);
 PASCAL_FUNCTION(SetPreserveGlyph);
-extern pascal trap Boolean C_GetPreserveGlyph(void);
+extern Boolean C_GetPreserveGlyph(void);
 PASCAL_FUNCTION(GetPreserveGlyph);
-extern pascal trap OSErr C_FlushFonts(void);
+extern OSErr C_FlushFonts(void);
 PASCAL_FUNCTION(FlushFonts);
 }
 #endif /* _FONTMGR_H_ */

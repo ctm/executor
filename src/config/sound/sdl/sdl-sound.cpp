@@ -30,9 +30,9 @@ enum
     NON_RUNNING_SOUND_RATE = 22255
 };
 
-PRIVATE char *sdl_audio_driver_name = NULL;
+static char *sdl_audio_driver_name = NULL;
 
-PUBLIC void
+void
 ROMlib_set_sdl_audio_driver_name(const char *str)
 {
     if(sdl_audio_driver_name)

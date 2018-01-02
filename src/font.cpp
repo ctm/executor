@@ -20,7 +20,7 @@ using namespace Executor;
 
 #define MAXTABLES 12
 
-PRIVATE void
+static void
 reset_myfmi(void)
 {
     ROMlib_myfmi.family = CWC(-1);
@@ -62,7 +62,7 @@ void Executor::C_InitFonts() /* IMI-222 */
     reset_myfmi();
 }
 
-PRIVATE void
+static void
 invalidate_all_widths(void)
 {
     int i, n_entries;
@@ -81,7 +81,7 @@ invalidate_all_widths(void)
     HUnlock(wlh);
 }
 
-PUBLIC void
+void
 Executor::ROMlib_shutdown_font_manager(void)
 {
     invalidate_all_widths();
@@ -168,7 +168,7 @@ typedef struct
     ctrip boldt, italt, nat, outt, shadt, condt, extt, undert;
 } fchartstr;
 
-PRIVATE fchartstr ftstr = {
+static fchartstr ftstr = {
     80, 80, /* dpiv, dpih */
     {
         0, 1, 1,
@@ -328,7 +328,7 @@ static GUEST<INTEGER> *findfondwidths()
 #define FIXED8(n) ((LONGINT)((unsigned short)n) << 8)
 #define FIXED4(n) (((LONGINT)((unsigned short)n) << 4) * (Cx(WIDTHPTR->aSize)))
 
-PUBLIC Fixed
+Fixed
 Executor::font_width_expand(Fixed width, Fixed fixed_extra, Fixed hOutputInverse)
 {
     Fixed retval;
@@ -614,7 +614,7 @@ static INTEGER closestface() /* no args, uses WIDTHPTR */
     return Cx(bestp->fontresid);
 }
 
-PRIVATE FHandle
+static FHandle
 at_least_one_fond_entry(INTEGER family)
 {
     FHandle retval;

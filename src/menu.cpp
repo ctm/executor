@@ -39,12 +39,12 @@
 
 using namespace Executor;
 
-typedef pascal void (*menuhookp)(void);
+typedef void (*menuhookp)(void);
 
 #if !defined(BINCOMPAT)
-typedef pascal void (*mbarhookp)(Rect *rp);
+typedef void (*mbarhookp)(Rect *rp);
 #else /* defined(BINCOMPAT) */
-typedef pascal LONGINT (*mbarhookp)(Rect *rp);
+typedef LONGINT (*mbarhookp)(Rect *rp);
 #endif /* defined(BINCOMPAT) */
 
 #define CALLMENUHOOK(fp) ROMlib_CALLMENUHOOK((menuhookp)(fp))
@@ -52,7 +52,7 @@ typedef pascal LONGINT (*mbarhookp)(Rect *rp);
 
 namespace Executor
 {
-PUBLIC int ROMlib_sticky_menus_p = 0;
+int ROMlib_sticky_menus_p = 0;
 }
 
 static void dirtymenusize(MenuHandle);
@@ -122,7 +122,7 @@ void Executor::C_ClearMenuBar()
         , CWC((unsigned short)0xFFFF), CWC((unsigned short)0xFFFF) \
     }
 #define RESERVED_RGB /* arbitrary */ WHITE_RGB
-PRIVATE MCEntry default_menu_ctab[] = {
+static MCEntry default_menu_ctab[] = {
     {
         CWC(0), CWC(0),
         BLACK_RGB, WHITE_RGB, BLACK_RGB, WHITE_RGB,
@@ -139,7 +139,7 @@ PRIVATE MCEntry default_menu_ctab[] = {
 #undef WHITE_RGB
 #undef RESERVED_RGB
 
-PRIVATE void
+static void
 append_end_marker_if_necessary(MCTableHandle h)
 {
     Size size;

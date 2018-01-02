@@ -106,7 +106,7 @@ bool Executor::os_init(void)
     return true;
 }
 
-PUBLIC int
+int
 Executor::ROMlib_lockunlockrange(int fd, uint32_t begin, uint32_t count, lockunlock_t op)
 {
     int retval;
@@ -168,7 +168,7 @@ Executor::ROMlib_lockunlockrange(int fd, uint32_t begin, uint32_t count, lockunl
     return retval;
 }
 
-PUBLIC int
+int
 ROMlib_launch_native_app(int n_filenames, char **filenames)
 {
     char **v;
@@ -187,7 +187,7 @@ bool Executor::host_has_spfcommon(void)
     return false;
 }
 
-PUBLIC bool
+bool
 Executor::host_spfcommon(host_spf_reply_block *replyp, const char *prompt,
                          const char *incoming_filename, void *fp, void *filef, int numt,
                          void *tl, getorput_t getorput, sf_flavor_t flavor,

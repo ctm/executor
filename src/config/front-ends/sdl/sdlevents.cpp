@@ -23,9 +23,9 @@
 
 using namespace Executor;
 
-PRIVATE bool use_scan_codes = false;
+static bool use_scan_codes = false;
 
-PUBLIC void
+void
 ROMlib_set_use_scancodes(bool val)
 {
     use_scan_codes = val;
@@ -35,7 +35,7 @@ ROMlib_set_use_scancodes(bool val)
 
 #include "sdlk_to_mkv.h"
 
-PRIVATE void
+static void
 init_sdlk_to_mkv(void)
 {
 }
@@ -46,7 +46,7 @@ enum
     NOTAKEY = 0x89
 };
 
-PRIVATE unsigned char sdlk_to_mkv[SDLK_LAST];
+static unsigned char sdlk_to_mkv[SDLK_LAST];
 
 typedef struct
 {
@@ -54,7 +54,7 @@ typedef struct
     unsigned char mkv;
 } sdl_to_mkv_map_t;
 
-PRIVATE sdl_to_mkv_map_t map[] = {
+static sdl_to_mkv_map_t map[] = {
     { SDLK_BACKSPACE, MKV_BACKSPACE },
     {
         SDLK_TAB, MKV_TAB,
@@ -388,7 +388,7 @@ PRIVATE sdl_to_mkv_map_t map[] = {
     },
 };
 
-PRIVATE void
+static void
 init_sdlk_to_mkv(void)
 {
     static bool been_here = false;
@@ -619,8 +619,8 @@ int sdl_event_interrupt(const SDL_Event *event)
     return (1);
 }
 
-PUBLIC SDL_cond *ROMlib_shouldbeawake_cond = NULL;
-PUBLIC SDL_mutex *ROMlib_shouldbeawake_mutex = NULL;
+SDL_cond *ROMlib_shouldbeawake_cond = NULL;
+SDL_mutex *ROMlib_shouldbeawake_mutex = NULL;
 
 void sdl_events_init(void)
 {

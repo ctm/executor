@@ -142,7 +142,7 @@ OSErrRET Executor::PBHDelete(HParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-PRIVATE void
+static void
 try_to_reopen(DrvQExtra *dqp)
 {
 #if defined(LINUX)
@@ -156,7 +156,7 @@ try_to_reopen(DrvQExtra *dqp)
 #endif
 }
 
-PUBLIC int Executor::ROMlib_directdiskaccess = false;
+int Executor::ROMlib_directdiskaccess = false;
 
 OSErrRET Executor::PBRead(ParmBlkPtr pb, BOOLEAN async)
 {
@@ -397,7 +397,7 @@ OSErrRET Executor::PBHOpenRF(HParmBlkPtr pb, BOOLEAN async)
 }
 
 #if 0
-PRIVATE void
+static void
 swappedstr255print (const char *prefix, Str255 sp)
 {
   printf ("%s", prefix);

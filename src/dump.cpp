@@ -1314,7 +1314,7 @@ OSErr dump_code_resources(const char *filename)
     return retval;
 }
 
-PRIVATE const char *
+static const char *
 just_name(unsigned char just)
 {
     const char *names[] = {
@@ -1326,7 +1326,7 @@ just_name(unsigned char just)
     return retval;
 }
 
-PRIVATE const char *
+static const char *
 flop_name(unsigned char flop)
 {
     const char *names[] = {
@@ -1338,7 +1338,7 @@ flop_name(unsigned char flop)
     return retval;
 }
 
-PUBLIC void
+void
 dump_textbegin(TTxtPicHdl h)
 {
     iprintf((o_fp, "just = %d(%s)\n", TEXTPIC_JUST(h),
@@ -1352,14 +1352,14 @@ dump_textbegin(TTxtPicHdl h)
         iprintf((o_fp, "angle_fixed = 0x%08x\n", TEXTPIC_ANGLE_FIXED(h)));
 }
 
-PUBLIC void
+void
 dump_textcenter(TCenterRecHdl h)
 {
     iprintf((o_fp, "y = 0x%08x\n", TEXTCENTER_Y(h)));
     iprintf((o_fp, "x = 0x%08x\n", TEXTCENTER_X(h)));
 }
 
-PUBLIC void
+void
 dump_zone_stats(void)
 {
     iprintf((o_fp, "applzone free = %d\n", ZONE_ZCB_FREE(MR(ApplZone))));

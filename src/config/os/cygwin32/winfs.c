@@ -4,7 +4,7 @@
  */
 
 /* NOTE: we have to include common.h since it sets up some macros that
-   we need, including PUBLIC and PRIVATE.  However, since this is file's
+   we need, including PUBLIC and static.  However, since this is file's
    purpose is to export routines that are definitely not Mac-routines, we
    included common.h first and then include windows.h later so that we have
    access to all the Windows data types and structures. */

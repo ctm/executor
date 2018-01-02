@@ -585,14 +585,14 @@ extern OSErr AllocContig(INTEGER rn, GUEST<LONGINT> *count);
 extern OSErr FSClose(INTEGER rn);
 
 extern void ROMlib_rewinddir(void);
-extern trap OSErrRET OpenDeny(HParmBlkPtr pb, BOOLEAN a);
-extern trap OSErrRET PBHGetLogInInfo(HParmBlkPtr pb, BOOLEAN a);
-extern trap OSErrRET PBHGetDirAccess(HParmBlkPtr pb, BOOLEAN a);
-extern trap OSErrRET PBHCopyFile(HParmBlkPtr pb, BOOLEAN a);
-extern trap OSErrRET PBHMapID(HParmBlkPtr pb, BOOLEAN a);
-extern trap OSErrRET PBHMapName(HParmBlkPtr pb, BOOLEAN a);
-extern trap OSErrRET PBHSetDirAccess(HParmBlkPtr pb, BOOLEAN a);
-extern trap OSErrRET PBHMoveRename(HParmBlkPtr pb, BOOLEAN a);
+extern OSErrRET OpenDeny(HParmBlkPtr pb, BOOLEAN a);
+extern OSErrRET PBHGetLogInInfo(HParmBlkPtr pb, BOOLEAN a);
+extern OSErrRET PBHGetDirAccess(HParmBlkPtr pb, BOOLEAN a);
+extern OSErrRET PBHCopyFile(HParmBlkPtr pb, BOOLEAN a);
+extern OSErrRET PBHMapID(HParmBlkPtr pb, BOOLEAN a);
+extern OSErrRET PBHMapName(HParmBlkPtr pb, BOOLEAN a);
+extern OSErrRET PBHSetDirAccess(HParmBlkPtr pb, BOOLEAN a);
+extern OSErrRET PBHMoveRename(HParmBlkPtr pb, BOOLEAN a);
 extern OSErr Create(StringPtr filen, INTEGER vrn, OSType creator,
                     OSType filtyp);
 extern OSErr FSDelete(StringPtr filen, INTEGER vrn);
@@ -607,10 +607,10 @@ extern OSErr Rename(StringPtr filen, INTEGER vrn,
                     StringPtr newf);
 extern unsigned char ROMlib_fromhex(unsigned char c);
 extern INTEGER ROMlib_UNIX7_to_Mac(char *name, INTEGER length);
-extern trap void FInitQueue(void);
-extern trap QHdrPtr GetFSQHdr(void);
-extern trap QHdrPtr GetVCBQHdr(void);
-extern trap QHdrPtr GetDrvQHdr(void);
+extern void FInitQueue(void);
+extern QHdrPtr GetFSQHdr(void);
+extern QHdrPtr GetVCBQHdr(void);
+extern QHdrPtr GetDrvQHdr(void);
 extern OSErr GetVInfo(INTEGER drv, StringPtr voln,
                       GUEST<INTEGER> *vrn, GUEST<LONGINT> *freeb);
 extern OSErr GetVRefNum(INTEGER prn, GUEST<INTEGER> *vrn);
@@ -619,109 +619,109 @@ extern OSErr SetVol(StringPtr voln, INTEGER vrn);
 extern OSErr FlushVol(StringPtr voln, INTEGER vrn);
 extern OSErr UnmountVol(StringPtr voln, INTEGER vrn);
 extern OSErr Eject(StringPtr voln, INTEGER vrn);
-extern trap OSErrRET PBHRename(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBHCreate(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBDirCreate(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBHDelete(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBRead(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBWrite(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBClose(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBHOpen(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBOpenDF(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBHOpenRF(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBGetCatInfo(CInfoPBPtr pb, BOOLEAN async);
-extern trap OSErrRET PBSetCatInfo(CInfoPBPtr pb, BOOLEAN async);
-extern trap OSErrRET PBCatMove(CMovePBPtr pb, BOOLEAN async);
-extern trap OSErrRET PBGetVInfo(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBUnmountVol(ParmBlkPtr pb);
-extern trap OSErrRET PBEject(ParmBlkPtr pb);
-extern trap OSErrRET PBAllocate(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBAllocContig(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBHGetFInfo(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBSetEOF(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBOpen(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBOpenRF(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBLockRange(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBUnlockRange(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBGetFPos(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBSetFPos(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBGetEOF(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBFlushFile(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBCreate(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBDelete(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBOpenWD(WDPBPtr pb, BOOLEAN async);
-extern trap OSErrRET PBCloseWD(WDPBPtr pb, BOOLEAN async);
-extern trap OSErrRET PBGetWDInfo(WDPBPtr pb, BOOLEAN async);
-extern trap OSErrRET PBGetFInfo(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBSetFInfo(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBHSetFInfo(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBSetFLock(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBHSetFLock(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBRstFLock(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBHRstFLock(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBSetFVers(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBRename(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBGetFCBInfo(FCBPBPtr pb, BOOLEAN async);
-extern trap OSErr PBMountVol(ParmBlkPtr pb);
-extern trap OSErrRET PBHGetVInfo(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBHGetVolParms(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBSetVInfo(HParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBGetVol(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBHGetVol(WDPBPtr pb, BOOLEAN async);
-extern trap OSErrRET PBSetVol(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBHSetVol(WDPBPtr pb, BOOLEAN async);
-extern trap OSErrRET PBFlushVol(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBOffLine(ParmBlkPtr pb);
-extern trap OSErrRET PBExchangeFiles(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBCatSearch(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBCreateFileIDRef(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBDeleteFileIDRef(ParmBlkPtr pb, BOOLEAN async);
-extern trap OSErrRET PBResolveFileIDRef(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBHRename(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBHCreate(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBDirCreate(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBHDelete(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBRead(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBWrite(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBClose(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBHOpen(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBOpenDF(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBHOpenRF(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBGetCatInfo(CInfoPBPtr pb, BOOLEAN async);
+extern OSErrRET PBSetCatInfo(CInfoPBPtr pb, BOOLEAN async);
+extern OSErrRET PBCatMove(CMovePBPtr pb, BOOLEAN async);
+extern OSErrRET PBGetVInfo(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBUnmountVol(ParmBlkPtr pb);
+extern OSErrRET PBEject(ParmBlkPtr pb);
+extern OSErrRET PBAllocate(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBAllocContig(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBHGetFInfo(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBSetEOF(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBOpen(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBOpenRF(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBLockRange(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBUnlockRange(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBGetFPos(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBSetFPos(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBGetEOF(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBFlushFile(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBCreate(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBDelete(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBOpenWD(WDPBPtr pb, BOOLEAN async);
+extern OSErrRET PBCloseWD(WDPBPtr pb, BOOLEAN async);
+extern OSErrRET PBGetWDInfo(WDPBPtr pb, BOOLEAN async);
+extern OSErrRET PBGetFInfo(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBSetFInfo(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBHSetFInfo(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBSetFLock(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBHSetFLock(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBRstFLock(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBHRstFLock(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBSetFVers(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBRename(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBGetFCBInfo(FCBPBPtr pb, BOOLEAN async);
+extern OSErr PBMountVol(ParmBlkPtr pb);
+extern OSErrRET PBHGetVInfo(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBHGetVolParms(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBSetVInfo(HParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBGetVol(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBHGetVol(WDPBPtr pb, BOOLEAN async);
+extern OSErrRET PBSetVol(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBHSetVol(WDPBPtr pb, BOOLEAN async);
+extern OSErrRET PBFlushVol(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBOffLine(ParmBlkPtr pb);
+extern OSErrRET PBExchangeFiles(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBCatSearch(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBCreateFileIDRef(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBDeleteFileIDRef(ParmBlkPtr pb, BOOLEAN async);
+extern OSErrRET PBResolveFileIDRef(ParmBlkPtr pb, BOOLEAN async);
 
 /* prototypes for the high level filesystem dispatch traps */
-extern pascal trap OSErr C_FSMakeFSSpec(int16_t vRefNum, int32_t dir_id,
+extern OSErr C_FSMakeFSSpec(int16_t vRefNum, int32_t dir_id,
                                         Str255 file_name, FSSpecPtr spec);
 PASCAL_FUNCTION(FSMakeFSSpec);
-extern pascal trap OSErr C_FSpExchangeFiles(FSSpecPtr src, FSSpecPtr dst);
+extern OSErr C_FSpExchangeFiles(FSSpecPtr src, FSSpecPtr dst);
 PASCAL_FUNCTION(FSpExchangeFiles);
-extern pascal trap OSErr C_FSpOpenDF(FSSpecPtr spec, SignedByte perms,
+extern OSErr C_FSpOpenDF(FSSpecPtr spec, SignedByte perms,
                                      GUEST<int16_t> *refNum_out);
 PASCAL_FUNCTION(FSpOpenDF);
-extern pascal trap OSErr C_FSpOpenRF(FSSpecPtr spec, SignedByte perms,
+extern OSErr C_FSpOpenRF(FSSpecPtr spec, SignedByte perms,
                                      GUEST<int16_t> *refNum_out);
 PASCAL_FUNCTION(FSpOpenRF);
-extern pascal trap OSErr C_FSpCreate(FSSpecPtr spec,
+extern OSErr C_FSpCreate(FSSpecPtr spec,
                                      OSType creator, OSType file_type,
                                      ScriptCode script);
 PASCAL_FUNCTION(FSpCreate);
-extern pascal trap OSErr C_FSpDirCreate(FSSpecPtr spec, ScriptCode script,
+extern OSErr C_FSpDirCreate(FSSpecPtr spec, ScriptCode script,
                                         GUEST<int32_t> *created_dir_id);
 PASCAL_FUNCTION(FSpDirCreate);
-extern pascal trap OSErr C_FSpDelete(FSSpecPtr spec);
+extern OSErr C_FSpDelete(FSSpecPtr spec);
 PASCAL_FUNCTION(FSpDelete);
 
-extern pascal trap OSErr C_FSpGetFInfo(FSSpecPtr spec, FInfo *fndr_info);
+extern OSErr C_FSpGetFInfo(FSSpecPtr spec, FInfo *fndr_info);
 PASCAL_FUNCTION(FSpGetFInfo);
-extern pascal trap OSErr C_FSpSetFInfo(FSSpecPtr spec, FInfo *fndr_info);
+extern OSErr C_FSpSetFInfo(FSSpecPtr spec, FInfo *fndr_info);
 PASCAL_FUNCTION(FSpSetFInfo);
-extern pascal trap OSErr C_FSpSetFLock(FSSpecPtr spec);
+extern OSErr C_FSpSetFLock(FSSpecPtr spec);
 PASCAL_FUNCTION(FSpSetFLock);
-extern pascal trap OSErr C_FSpRstFLock(FSSpecPtr spec);
+extern OSErr C_FSpRstFLock(FSSpecPtr spec);
 PASCAL_FUNCTION(FSpRstFLock);
-extern pascal trap OSErr C_FSpRename(FSSpecPtr spec, Str255 new_name);
+extern OSErr C_FSpRename(FSSpecPtr spec, Str255 new_name);
 PASCAL_FUNCTION(FSpRename);
-extern pascal trap OSErr C_FSpCatMove(FSSpecPtr src, FSSpecPtr dst);
+extern OSErr C_FSpCatMove(FSSpecPtr src, FSSpecPtr dst);
 PASCAL_FUNCTION(FSpCatMove);
-extern pascal trap void C_FSpCreateResFile(FSSpecPtr spec,
+extern void C_FSpCreateResFile(FSSpecPtr spec,
                                            OSType creator, OSType file_type,
                                            ScriptCode script);
 PASCAL_FUNCTION(FSpCreateResFile);
-extern pascal trap INTEGER C_FSpOpenResFile(FSSpecPtr spec, SignedByte perms);
+extern INTEGER C_FSpOpenResFile(FSSpecPtr spec, SignedByte perms);
 PASCAL_FUNCTION(FSpOpenResFile);
-extern pascal trap INTEGER C_HOpenResFile(INTEGER vref, LONGINT dirid,
+extern INTEGER C_HOpenResFile(INTEGER vref, LONGINT dirid,
                                           Str255 file_name, SignedByte perm);
 PASCAL_TRAP(HOpenResFile, 0xA81A);
-extern pascal trap void C_HCreateResFile(INTEGER vrefnum, LONGINT parid,
+extern void C_HCreateResFile(INTEGER vrefnum, LONGINT parid,
                                          Str255 name);
 PASCAL_TRAP(HCreateResFile, 0xA81B);
 

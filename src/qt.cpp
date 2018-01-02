@@ -21,7 +21,7 @@ using namespace Executor;
     } while(0)
 
 #if 0
-PRIVATE void
+static void
 qt_init (void)
 {
   HINSTANCE qtlib;

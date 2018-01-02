@@ -15,9 +15,7 @@
 #include <sys/param.h>
 #include <sys/errno.h>
 
-#undef trap
 #include <signal.h>
-#define trap
 
 #if !defined(__GLIBC__) || __GLIBC__ < 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ < 1)
 
@@ -37,11 +35,6 @@
 #if !defined(O_BINARY)
 #define O_BINARY 0
 #endif
-
-#if !defined(PRIVATE)
-#define PRIVATE static
-#endif
-
 #if !defined(REINSTALL_SIGNAL_HANDLER)
 /* define `REINSTALL_SIGNAL_HANDLER' if signal handlers are
    de-installed after the signals occur, and require reinstallation */

@@ -126,7 +126,7 @@ typedef struct
     unsigned short unused4 PACKED;
 } i387_env_t;
 
-PUBLIC uint32_t
+uint32_t
 ROMlib_get_fcw_fsw(void)
 {
     i387_env_t i387_env;
@@ -136,7 +136,7 @@ ROMlib_get_fcw_fsw(void)
     return (i387_env.fcw << 16) | i387_env.fsw;
 }
 
-PUBLIC void
+void
 ROMlib_set_fcw_fsw(uint32_t fcwfsw)
 {
     i387_env_t i387_env;
@@ -150,7 +150,7 @@ ROMlib_set_fcw_fsw(uint32_t fcwfsw)
         : "m"(i387_env));
 }
 
-PUBLIC void
+void
 ROMlib_compare_fcw_fsw(uint32_t fcwfsw, const char *func, int line)
 {
     uint16_t old_fcw;
@@ -600,7 +600,7 @@ void Executor::C_ROMlib_Fmulx(void *sp, x80_t *dp, unsigned short sel)
     SIMPLE_OP("mul", *=, IS_BINARY_OP);
 }
 
-PRIVATE LONGINT halt_vec;
+static LONGINT halt_vec;
 
 void Executor::C_ROMlib_Fsethv(LONGINT *hvp, unsigned short sel)
 {
@@ -1005,7 +1005,7 @@ void Executor::C_ROMlib_Fx2dec(DecForm *sp2, void *sp, Decimal *dp,
 #if defined(CYGWIN32)
 #define pow(a, b) my_pow10(b)
 
-PRIVATE double
+static double
 my_pow10(int i)
 {
     double retval;

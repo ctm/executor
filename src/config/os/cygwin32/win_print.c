@@ -36,7 +36,7 @@ typedef struct
     int y_pts;
 } win_page_size_t;
 
-PRIVATE win_page_size_t
+static win_page_size_t
     paper_sizes[]
     = {
         {
@@ -164,7 +164,7 @@ PRIVATE win_page_size_t
         }, /* DMPAPER_FANFOLD_LGL_GERMAN 41 */
       };
 
-PRIVATE HWND
+static HWND
 main_window(void)
 {
     HWND retval;
@@ -176,35 +176,35 @@ main_window(void)
 /* ugly globals needed because the callback doesn't pass in a user
    supplied argument */
 
-PRIVATE HDC global_hdc;
-PRIVATE LONG global_right;
-PRIVATE LONG global_bottom;
+static HDC global_hdc;
+static LONG global_right;
+static LONG global_bottom;
 
-PRIVATE int GSDLLAPI (*gsdll_revision)(char **product, char **copyright,
+static int GSDLLAPI (*gsdll_revision)(char **product, char **copyright,
                                        long *gs_revision,
                                        long *gs_revisiondate);
 
-PRIVATE int GSDLLAPI (*gsdll_init)(GSDLL_CALLBACK callback, HWND hwnd,
+static int GSDLLAPI (*gsdll_init)(GSDLL_CALLBACK callback, HWND hwnd,
                                    int argc, const char *argv[]);
 
-PRIVATE int GSDLLAPI (*gsdll_execute_begin)(void);
+static int GSDLLAPI (*gsdll_execute_begin)(void);
 
-PRIVATE int GSDLLAPI (*gsdll_execute_cont)(const char *str, int len);
+static int GSDLLAPI (*gsdll_execute_cont)(const char *str, int len);
 
-PRIVATE int GSDLLAPI (*gsdll_execute_end)(void);
+static int GSDLLAPI (*gsdll_execute_end)(void);
 
-PRIVATE int GSDLLAPI (*gsdll_exit)(void);
+static int GSDLLAPI (*gsdll_exit)(void);
 
-PRIVATE int GSDLLAPI (*gsdll_lock_device)(unsigned char *device, int flag);
+static int GSDLLAPI (*gsdll_lock_device)(unsigned char *device, int flag);
 
-PRIVATE HGLOBAL GSDLLAPI (*gsdll_copy_dib)(unsigned char *device);
+static HGLOBAL GSDLLAPI (*gsdll_copy_dib)(unsigned char *device);
 
-PRIVATE HPALETTE GSDLLAPI (*gsdll_copy_palette)(unsigned char *device);
+static HPALETTE GSDLLAPI (*gsdll_copy_palette)(unsigned char *device);
 
-PRIVATE void GSDLLAPI (*gsdll_draw)(unsigned char *device, HDC hdc,
+static void GSDLLAPI (*gsdll_draw)(unsigned char *device, HDC hdc,
                                     LPRECT dest, LPRECT src);
 
-PRIVATE int GSDLLAPI (*gsdll_get_bitmap_row)(unsigned char *device,
+static int GSDLLAPI (*gsdll_get_bitmap_row)(unsigned char *device,
                                              LPBITMAPINFOHEADER pbmih,
                                              RGBQUAD *prgbquad, LPBYTE *ppbyte,
                                              unsigned int row);
@@ -245,7 +245,7 @@ enum
     "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\gsdll32.dll"
 #define DEFAULT_DLL_VALUENAME ""
 
-PRIVATE char *
+static char *
 combine_key(const char *left, const char *right)
 {
     char *retval;
@@ -256,7 +256,7 @@ combine_key(const char *left, const char *right)
     return retval;
 }
 
-PRIVATE char *
+static char *
 valid_valuename(HKEY key, const char *valuename, char **valuep)
 {
     char *retval;
@@ -285,7 +285,7 @@ valid_valuename(HKEY key, const char *valuename, char **valuep)
     return retval;
 }
 
-PRIVATE void
+static void
 free_dll_info(dll_info_t *dllp)
 {
     free(dllp->dll_key);
@@ -302,7 +302,7 @@ free_dll_info(dll_info_t *dllp)
  * pointed to by dllp and retrun NULL
  */
 
-PRIVATE char *
+static char *
 string_from_dllp(dll_info_t *dllp, char **libstringpp)
 {
     HKEY key;
@@ -348,7 +348,7 @@ string_from_dllp(dll_info_t *dllp, char **libstringpp)
     return retval;
 }
 
-PRIVATE char *
+static char *
 new_find_preferred_dll(const char *name, dll_info_t *dllp, char **libstringpp)
 {
     char *retval;
@@ -427,7 +427,7 @@ new_find_preferred_dll(const char *name, dll_info_t *dllp, char **libstringpp)
  * registry values that the stock Aladdin Ghostscript installer gives us.
  */
 
-PRIVATE char *
+static char *
 find_preferred_dll(char **libstringpp)
 {
     dll_info_t dll_info;
@@ -521,9 +521,9 @@ complain_if_no_ghostscript(void)
     RESTORE_FP_ENVIRONMENT();
 }
 
-PRIVATE HINSTANCE lib;
+static HINSTANCE lib;
 
-PRIVATE void
+static void
 loadgs(void)
 {
     char *gs_dll;
@@ -545,7 +545,7 @@ loadgs(void)
     free(gs_dll);
 }
 
-PRIVATE void
+static void
 unloadgs(void)
 {
     if(lib)
@@ -567,7 +567,7 @@ unloadgs(void)
     gsdll_get_bitmap_row = NULL;
 }
 
-PRIVATE bool
+static bool
 release_info(win_printp_t wp, uint32_t *last_errorp)
 {
     bool retval;
@@ -578,7 +578,7 @@ release_info(win_printp_t wp, uint32_t *last_errorp)
     return retval;
 }
 
-PRIVATE int
+static int
 gsdll_callback(int message, char *str, unsigned long count)
 {
     switch(message)

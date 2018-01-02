@@ -160,34 +160,34 @@ enum
 extern void process_create(bool desk_accessory_p,
                            uint32_t type, uint32_t signature);
 
-extern pascal trap OSErr C_GetCurrentProcess(ProcessSerialNumber *serial_number);
+extern OSErr C_GetCurrentProcess(ProcessSerialNumber *serial_number);
 PASCAL_FUNCTION(GetCurrentProcess);
 
-extern pascal trap OSErr C_GetNextProcess(ProcessSerialNumber *serial_number);
+extern OSErr C_GetNextProcess(ProcessSerialNumber *serial_number);
 PASCAL_FUNCTION(GetNextProcess);
 
-extern pascal trap OSErr C_GetProcessInformation(ProcessSerialNumber *serial_number,
+extern OSErr C_GetProcessInformation(ProcessSerialNumber *serial_number,
                                                  ProcessInfoPtr info);
 PASCAL_FUNCTION(GetProcessInformation);
 
-extern pascal trap OSErr C_SameProcess(ProcessSerialNumber *serial_number0,
+extern OSErr C_SameProcess(ProcessSerialNumber *serial_number0,
                                        ProcessSerialNumber *serial_number1,
                                        Boolean *same_out);
 PASCAL_FUNCTION(SameProcess);
-extern pascal trap OSErr C_GetFrontProcess(ProcessSerialNumber *serial_number, void *dummy);
+extern OSErr C_GetFrontProcess(ProcessSerialNumber *serial_number, void *dummy);
 PASCAL_FUNCTION(GetFrontProcess);
 
-extern pascal trap OSErr C_SetFrontProcess(ProcessSerialNumber *serial_number);
+extern OSErr C_SetFrontProcess(ProcessSerialNumber *serial_number);
 PASCAL_FUNCTION(SetFrontProcess);
 
-extern pascal trap OSErr C_WakeUpProcess(ProcessSerialNumber *serial_number);
+extern OSErr C_WakeUpProcess(ProcessSerialNumber *serial_number);
 PASCAL_FUNCTION(WakeUpProcess);
 
-extern pascal trap OSErr C_GetProcessSerialNumberFromPortName(PPCPortPtr port_name,
+extern OSErr C_GetProcessSerialNumberFromPortName(PPCPortPtr port_name,
                                                               ProcessSerialNumber *serial_number);
 PASCAL_FUNCTION(GetProcessSerialNumberFromPortName);
 
-extern pascal trap OSErr C_GetPortNameFromProcessSerialNumber(PPCPortPtr port_name,
+extern OSErr C_GetPortNameFromProcessSerialNumber(PPCPortPtr port_name,
                                                               ProcessSerialNumber *serial_number);
 PASCAL_FUNCTION(GetPortNameFromProcessSerialNumber);
 

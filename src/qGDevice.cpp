@@ -29,7 +29,7 @@ using namespace Executor;
  * 8, since 8bpp will be translated to 0x83.
  */
 
-PRIVATE LONGINT
+static LONGINT
 mode_from_bpp(int bpp)
 {
     LONGINT retval;

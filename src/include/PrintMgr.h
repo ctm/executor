@@ -183,126 +183,126 @@ typedef struct TPrDlg
 extern INTEGER PrintErr;
 #endif
 
-extern pascal trap INTEGER C_PrError(void);
+extern INTEGER C_PrError(void);
 PASCAL_FUNCTION(PrError);
-extern pascal trap void C_PrSetError(INTEGER iErr);
+extern void C_PrSetError(INTEGER iErr);
 PASCAL_FUNCTION(PrSetError);
-extern pascal trap void C_PrOpen(void);
+extern void C_PrOpen(void);
 PASCAL_FUNCTION(PrOpen);
-extern pascal trap void C_PrClose(void);
+extern void C_PrClose(void);
 PASCAL_FUNCTION(PrClose);
-extern pascal trap void C_PrDrvrOpen(void);
+extern void C_PrDrvrOpen(void);
 PASCAL_FUNCTION(PrDrvrOpen);
-extern pascal trap void C_PrDrvrClose(void);
+extern void C_PrDrvrClose(void);
 PASCAL_FUNCTION(PrDrvrClose);
-extern pascal trap void C_PrCtlCall(INTEGER iWhichCtl, LONGINT lParam1,
+extern void C_PrCtlCall(INTEGER iWhichCtl, LONGINT lParam1,
                                     LONGINT lParam2, LONGINT lParam3);
 PASCAL_FUNCTION(PrCtlCall);
-extern pascal trap Handle C_PrDrvrDCE(void);
+extern Handle C_PrDrvrDCE(void);
 PASCAL_FUNCTION(PrDrvrDCE);
-extern pascal trap INTEGER C_PrDrvrVers(void);
+extern INTEGER C_PrDrvrVers(void);
 PASCAL_FUNCTION(PrDrvrVers);
-extern pascal void C_ROMlib_myjobproc(DialogPtr dp, INTEGER itemno);
-extern pascal BOOLEAN C_ROMlib_stlfilterproc(DialogPeek dp,
+extern void C_ROMlib_myjobproc(DialogPtr dp, INTEGER itemno);
+extern BOOLEAN C_ROMlib_stlfilterproc(DialogPeek dp,
                                              EventRecord *evt, GUEST<INTEGER> *ith);
 
-extern pascal BOOLEAN C_ROMlib_numsonlyfilterproc(DialogPeek dp,
+extern BOOLEAN C_ROMlib_numsonlyfilterproc(DialogPeek dp,
                                                   EventRecord *evt,
                                                   GUEST<INTEGER> *ith);
 
-extern pascal void C_ROMlib_mystlproc(DialogPtr dp, INTEGER itemno);
-extern pascal trap TPPrDlg C_PrJobInit(THPrint hPrint);
+extern void C_ROMlib_mystlproc(DialogPtr dp, INTEGER itemno);
+extern TPPrDlg C_PrJobInit(THPrint hPrint);
 PASCAL_FUNCTION(PrJobInit);
-extern pascal trap TPPrDlg C_PrStlInit(THPrint hPrint);
+extern TPPrDlg C_PrStlInit(THPrint hPrint);
 PASCAL_FUNCTION(PrStlInit);
-extern pascal trap BOOLEAN C_PrDlgMain(THPrint hPrint, ProcPtr initfptr);
+extern BOOLEAN C_PrDlgMain(THPrint hPrint, ProcPtr initfptr);
 PASCAL_FUNCTION(PrDlgMain);
-extern pascal trap void C_PrGeneral(Ptr pData);
+extern void C_PrGeneral(Ptr pData);
 PASCAL_FUNCTION(PrGeneral);
-extern pascal trap void C_donotPrArc(GrafVerb verb, Rect *r,
+extern void C_donotPrArc(GrafVerb verb, Rect *r,
                                      INTEGER starta, INTEGER arca);
 PASCAL_FUNCTION(donotPrArc);
-extern pascal trap void C_PrArc(GrafVerb verb, Rect *r, INTEGER starta,
+extern void C_PrArc(GrafVerb verb, Rect *r, INTEGER starta,
                                 INTEGER arca);
 PASCAL_FUNCTION(PrArc);
-extern pascal trap void C_donotPrBits(BitMap *srcbmp, Rect *srcrp,
+extern void C_donotPrBits(BitMap *srcbmp, Rect *srcrp,
                                       Rect *dstrp, INTEGER mode,
                                       RgnHandle mask);
 PASCAL_FUNCTION(donotPrBits);
-extern pascal trap void C_PrBits(BitMap *srcbmp, Rect *srcrp,
+extern void C_PrBits(BitMap *srcbmp, Rect *srcrp,
                                  Rect *dstrp, INTEGER mode, RgnHandle mask);
 PASCAL_FUNCTION(PrBits);
-extern pascal trap void C_donotPrLine(Point p);
+extern void C_donotPrLine(Point p);
 PASCAL_FUNCTION(donotPrLine);
-extern pascal trap void C_PrLine(Point p);
+extern void C_PrLine(Point p);
 PASCAL_FUNCTION(PrLine);
-extern pascal trap void C_donotPrOval(GrafVerb v, Rect *rp);
+extern void C_donotPrOval(GrafVerb v, Rect *rp);
 PASCAL_FUNCTION(donotPrOval);
-extern pascal trap void C_PrOval(GrafVerb v, Rect *rp);
+extern void C_PrOval(GrafVerb v, Rect *rp);
 PASCAL_FUNCTION(PrOval);
-extern pascal trap void C_textasPS(INTEGER n, Ptr textbufp,
+extern void C_textasPS(INTEGER n, Ptr textbufp,
                                    Point num, Point den);
 PASCAL_FUNCTION(textasPS);
-extern pascal trap void C_donotPrGetPic(Ptr dp, INTEGER bc);
+extern void C_donotPrGetPic(Ptr dp, INTEGER bc);
 PASCAL_FUNCTION(donotPrGetPic);
-extern pascal trap void C_PrGetPic(Ptr dp, INTEGER bc);
+extern void C_PrGetPic(Ptr dp, INTEGER bc);
 PASCAL_FUNCTION(PrGetPic);
-extern pascal trap void C_donotPrPutPic(Ptr sp, INTEGER bc);
+extern void C_donotPrPutPic(Ptr sp, INTEGER bc);
 PASCAL_FUNCTION(donotPrPutPic);
-extern pascal trap void C_PrPutPic(Ptr sp, INTEGER bc);
+extern void C_PrPutPic(Ptr sp, INTEGER bc);
 PASCAL_FUNCTION(PrPutPic);
-extern pascal trap void C_donotPrPoly(GrafVerb verb, PolyHandle ph);
+extern void C_donotPrPoly(GrafVerb verb, PolyHandle ph);
 PASCAL_FUNCTION(donotPrPoly);
-extern pascal trap void C_PrPoly(GrafVerb verb, PolyHandle ph);
+extern void C_PrPoly(GrafVerb verb, PolyHandle ph);
 PASCAL_FUNCTION(PrPoly);
-extern pascal trap void C_donotPrRRect(GrafVerb verb, Rect *r,
+extern void C_donotPrRRect(GrafVerb verb, Rect *r,
                                        INTEGER width, INTEGER height);
 PASCAL_FUNCTION(donotPrRRect);
-extern pascal trap void C_PrRRect(GrafVerb verb, Rect *r, INTEGER width,
+extern void C_PrRRect(GrafVerb verb, Rect *r, INTEGER width,
                                   INTEGER height);
 PASCAL_FUNCTION(PrRRect);
 
-extern pascal trap void C_donotPrRect(GrafVerb v, Rect *rp);
+extern void C_donotPrRect(GrafVerb v, Rect *rp);
 PASCAL_FUNCTION(donotPrRect);
-extern pascal trap void C_PrRect(GrafVerb v, Rect *rp);
+extern void C_PrRect(GrafVerb v, Rect *rp);
 PASCAL_FUNCTION(PrRect);
-extern pascal trap void C_donotPrRgn(GrafVerb verb, RgnHandle rgn);
+extern void C_donotPrRgn(GrafVerb verb, RgnHandle rgn);
 PASCAL_FUNCTION(donotPrRgn);
-extern pascal trap void C_PrRgn(GrafVerb verb, RgnHandle rgn);
+extern void C_PrRgn(GrafVerb verb, RgnHandle rgn);
 PASCAL_FUNCTION(PrRgn);
-extern pascal trap INTEGER C_PrTxMeas(INTEGER n, Ptr p, GUEST<Point> *nump,
+extern INTEGER C_PrTxMeas(INTEGER n, Ptr p, GUEST<Point> *nump,
                                       GUEST<Point> *denp, FontInfo *finfop);
 PASCAL_FUNCTION(PrTxMeas);
-extern pascal trap void C_donotPrText(INTEGER n, Ptr textbufp, Point num,
+extern void C_donotPrText(INTEGER n, Ptr textbufp, Point num,
                                       Point den);
 PASCAL_FUNCTION(donotPrText);
-extern pascal trap void C_PrText(INTEGER n, Ptr textbufp, Point num,
+extern void C_PrText(INTEGER n, Ptr textbufp, Point num,
                                  Point den);
 PASCAL_FUNCTION(PrText);
-extern pascal trap void C_PrComment(INTEGER kind, INTEGER size, Handle hand);
+extern void C_PrComment(INTEGER kind, INTEGER size, Handle hand);
 PASCAL_FUNCTION(PrComment);
-extern pascal trap TPPrPort C_PrOpenDoc(THPrint hPrint, TPPrPort port,
+extern TPPrPort C_PrOpenDoc(THPrint hPrint, TPPrPort port,
                                         Ptr pIOBuf);
 PASCAL_FUNCTION(PrOpenDoc);
-extern pascal trap void C_PrOpenPage(TPPrPort port, TPRect pPageFrame);
+extern void C_PrOpenPage(TPPrPort port, TPRect pPageFrame);
 PASCAL_FUNCTION(PrOpenPage);
-extern pascal trap void C_PrClosePage(TPPrPort pPrPort);
+extern void C_PrClosePage(TPPrPort pPrPort);
 PASCAL_FUNCTION(PrClosePage);
-extern pascal trap void C_PrCloseDoc(TPPrPort port);
+extern void C_PrCloseDoc(TPPrPort port);
 PASCAL_FUNCTION(PrCloseDoc);
-extern pascal trap void C_PrPicFile(THPrint hPrint, TPPrPort pPrPort,
+extern void C_PrPicFile(THPrint hPrint, TPPrPort pPrPort,
                                     Ptr pIOBuf, Ptr pDevBuf,
                                     TPrStatus *prStatus);
 PASCAL_FUNCTION(PrPicFile);
-extern pascal trap void C_PrintDefault(THPrint hPrint);
+extern void C_PrintDefault(THPrint hPrint);
 PASCAL_FUNCTION(PrintDefault);
-extern pascal trap BOOLEAN C_PrValidate(THPrint hPrint);
+extern BOOLEAN C_PrValidate(THPrint hPrint);
 PASCAL_FUNCTION(PrValidate);
-extern pascal trap BOOLEAN C_PrStlDialog(THPrint hPrint);
+extern BOOLEAN C_PrStlDialog(THPrint hPrint);
 PASCAL_FUNCTION(PrStlDialog);
-extern pascal trap BOOLEAN C_PrJobDialog(THPrint hPrint);
+extern BOOLEAN C_PrJobDialog(THPrint hPrint);
 PASCAL_FUNCTION(PrJobDialog);
-extern pascal trap void C_PrJobMerge(THPrint hPrintSrc, THPrint hPrintDst);
+extern void C_PrJobMerge(THPrint hPrintSrc, THPrint hPrintDst);
 PASCAL_FUNCTION(PrJobMerge);
 }
 #endif /* __PRINTING__ */

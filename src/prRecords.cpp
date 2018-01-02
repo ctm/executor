@@ -15,13 +15,13 @@
 
 using namespace Executor;
 
-PRIVATE void
+static void
 set_wDev(THPrint hPrint)
 {
     HxX(hPrint, prStl.wDev) = CWC(0x307);
 }
 
-PUBLIC void
+void
 Executor::ROMlib_set_default_resolution(THPrint hPrint, INTEGER vres, INTEGER hres)
 {
     printer_init();

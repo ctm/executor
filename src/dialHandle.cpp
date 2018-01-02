@@ -68,7 +68,7 @@ BOOLEAN Executor::C_ROMlib_myfilt(DialogPeek dp, EventRecord *evt,
 #define DIALOGEVTS \
     (mDownMask | mUpMask | keyDownMask | autoKeyMask | updateMask | activMask)
 
-typedef pascal BOOLEAN (*modalprocp)(DialogPtr dial, EventRecord *evtp,
+typedef BOOLEAN (*modalprocp)(DialogPtr dial, EventRecord *evtp,
                                      GUEST<INTEGER> *iht);
 
 #define CALLMODALPROC(dp, evtp, ip, fp2) \
@@ -98,7 +98,7 @@ ROMlib_CALLMODALPROC(DialogPtr dp,
     return retval;
 }
 
-typedef pascal void (*useritemp)(WindowPtr wp, INTEGER item);
+typedef void (*useritemp)(WindowPtr wp, INTEGER item);
 
 #define CALLUSERITEM(dp, inum, temph) \
     ROMlib_CALLUSERITEM(dp, inum, (useritemp)(temph))
@@ -690,7 +690,7 @@ void Executor::BEEPER(INTEGER n)
 {
     if(DABeeper)
     {
-        if((pascal void (*)(INTEGER))MR(DABeeper) == P_ROMlib_mysound)
+        if((void (*)(INTEGER))MR(DABeeper) == P_ROMlib_mysound)
             C_ROMlib_mysound((n));
         else
         {

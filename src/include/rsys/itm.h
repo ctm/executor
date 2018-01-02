@@ -136,7 +136,7 @@ extern void dialog_draw_item(DialogPtr dp, itmp itemp, int itemno);
         (ip) = (itmp)((char *)(ip) + ITEM_LEN(ip)); \
     }))
 
-typedef pascal void (*soundprocp)(INTEGER sound);
+typedef void (*soundprocp)(INTEGER sound);
 
 extern void BEEPER(INTEGER n);
 #define BEEP(n) BEEPER(n)

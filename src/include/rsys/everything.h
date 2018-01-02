@@ -1,12 +1,3 @@
-#undef pascal
-#define pascal
-
-#undef a0trap
-#define a0trap
-
-#undef trap
-#define trap
-
 #include "rsys/common.h"
 
 #include "QuickDraw.h"

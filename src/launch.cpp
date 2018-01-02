@@ -80,7 +80,7 @@
 
 using namespace Executor;
 
-PRIVATE bool ppc_launch_p = false;
+static bool ppc_launch_p = false;
 
 void Executor::ROMlib_set_ppc(bool val)
 {
@@ -115,14 +115,14 @@ static int16_t name0stripappl(StringPtr name)
  * the user has changed things by hand).
  */
 
-PUBLIC int Executor::ROMlib_nowarn32;
+int Executor::ROMlib_nowarn32;
 
 std::string Executor::ROMlib_configfilename;
 
-PUBLIC int Executor::ROMlib_pretend_help = false;
-PUBLIC int Executor::ROMlib_pretend_alias = false;
-PUBLIC int Executor::ROMlib_pretend_edition = false;
-PUBLIC int Executor::ROMlib_pretend_script = false;
+int Executor::ROMlib_pretend_help = false;
+int Executor::ROMlib_pretend_alias = false;
+int Executor::ROMlib_pretend_edition = false;
+int Executor::ROMlib_pretend_script = false;
 
 void remalloc(char **strp)
 {
@@ -341,7 +341,7 @@ static void beginexecutingat(LONGINT startpc)
     C_ExitToShell();
 }
 
-PUBLIC LONGINT Executor::ROMlib_appbit;
+LONGINT Executor::ROMlib_appbit;
 
 size_info_t Executor::size_info;
 
@@ -350,7 +350,7 @@ size_info_t Executor::size_info;
 
 LONGINT Executor::ROMlib_creator;
 
-PUBLIC void *ROMlib_foolgcc; /* to force the alloca to be done */
+void *ROMlib_foolgcc; /* to force the alloca to be done */
 
 void Executor::SFSaveDisk_Update(INTEGER vrefnum, Str255 filename)
 {
@@ -365,9 +365,9 @@ void Executor::SFSaveDisk_Update(INTEGER vrefnum, Str255 filename)
     SFSaveDisk = CW(-CW(pbr.volumeParam.ioVRefNum));
 }
 
-PUBLIC uint32_t Executor::ROMlib_version_long;
+uint32_t Executor::ROMlib_version_long;
 
-PRIVATE bool
+static bool
 cfrg_match(const cfir_t *cfirp, GUEST<OSType> arch_x, uint8 type_x, Str255 name)
 {
     bool retval;
@@ -377,7 +377,7 @@ cfrg_match(const cfir_t *cfirp, GUEST<OSType> arch_x, uint8 type_x, Str255 name)
     return retval;
 }
 
-PUBLIC cfir_t *
+cfir_t *
 Executor::ROMlib_find_cfrg(Handle cfrg, OSType arch, uint8 type, Str255 name)
 {
     cfrg_resource_t *cfrgp;
@@ -400,7 +400,7 @@ Executor::ROMlib_find_cfrg(Handle cfrg, OSType arch, uint8 type, Str255 name)
     return retval;
 }
 
-PRIVATE void
+static void
 cfm_launch(Handle cfrg0, OSType desired_arch, FSSpecPtr fsp)
 {
     cfir_t *cfirp;
@@ -456,10 +456,10 @@ cfm_launch(Handle cfrg0, OSType desired_arch, FSSpecPtr fsp)
     C_ExitToShell();
 }
 
-PUBLIC int Executor::ROMlib_uaf;
+int Executor::ROMlib_uaf;
 
-PUBLIC launch_failure_t Executor::ROMlib_launch_failure = launch_no_failure;
-PUBLIC INTEGER Executor::ROMlib_exevrefnum;
+launch_failure_t Executor::ROMlib_launch_failure = launch_no_failure;
+INTEGER Executor::ROMlib_exevrefnum;
 
 static void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
                         LaunchParamBlockRec *lpbp)
@@ -1142,7 +1142,7 @@ static void reset_traps(void)
     }
 }
 
-PRIVATE bool
+static bool
 our_special_map(resmaphand map)
 {
     bool retval;
@@ -1238,7 +1238,7 @@ static void reinitialize_things(void)
     ROMlib_destroy_blocks(0, ~0, false);
 }
 
-PRIVATE OSErr
+static OSErr
 ROMlib_filename_from_fsspec(char **strp, FSSpec *fsp)
 {
     OSErr retval;
@@ -1255,7 +1255,7 @@ ROMlib_filename_from_fsspec(char **strp, FSSpec *fsp)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::NewLaunch(StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockRec *lpbp)
 {
     OSErr retval;

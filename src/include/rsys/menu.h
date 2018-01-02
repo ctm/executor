@@ -208,9 +208,9 @@ extern GUEST<Handle> MBDFHndl_H;
 
 #define SLOP 13
 
-typedef pascal void (*menuprocp)(INTEGER mess, MenuHandle themenu,
+typedef void (*menuprocp)(INTEGER mess, MenuHandle themenu,
                                  Rect *menrect, Point hit, INTEGER *which);
-typedef pascal LONGINT (*mbdfprocp)(INTEGER variant, INTEGER msg,
+typedef LONGINT (*mbdfprocp)(INTEGER variant, INTEGER msg,
                                     INTEGER param1, intptr_t param2);
 
 extern void ROMlib_menucall(INTEGER mess, MenuHandle themenu, Rect *menrect,

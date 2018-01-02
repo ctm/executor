@@ -153,7 +153,7 @@ bool Executor::parse_size_opt(string opt, string arg1)
  * It's silly for us to do this by hand, but it was real quick to write.
  */
 
-PUBLIC bool
+bool
 Executor::parse_prres_opt(INTEGER *outx, INTEGER *outy, string arg1)
 {
     bool retval;

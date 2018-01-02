@@ -66,7 +66,7 @@ void Executor::str31assign(Str63 new1, const StringPtr old)
     strNassign(new1, old, 31);
 }
 
-PUBLIC StringHandle
+StringHandle
 Executor::stringhandle_from_c_string(const char *c_stringp)
 {
     int len;

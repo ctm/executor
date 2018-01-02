@@ -68,9 +68,9 @@
 
 #include "x_keycodes.h"
 
-PRIVATE bool use_scan_codes = false;
+static bool use_scan_codes = false;
 
-PUBLIC void
+void
 ROMlib_set_use_scancodes(bool val)
 {
     use_scan_codes = val;
@@ -868,7 +868,7 @@ x_keysym_to_mac_keywhat(unsigned int keysym, int16_t button_state,
     return true;
 }
 
-PRIVATE bool
+static bool
 keydown(uint8 key)
 {
     bool retval;
@@ -883,7 +883,7 @@ keydown(uint8 key)
     return retval;
 }
 
-PRIVATE uint16_t
+static uint16_t
 x_to_mac_state(unsigned int x_state)
 {
     uint16_t retval;

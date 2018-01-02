@@ -38,13 +38,13 @@ typedef struct ll_elem_str
 {
     ListHandle list;
     GrafPtr orig_port;
-    pascal trap void (*lastTextProc)(INTEGER bc, Ptr p, Point num, Point den);
+    void (*lastTextProc)(INTEGER bc, Ptr p, Point num, Point den);
     struct ll_elem_str *next;
 } ll_elem;
 
-PRIVATE ll_elem *ll_head;
+static ll_elem *ll_head;
 
-PRIVATE void
+static void
 add_list(ListHandle list)
 {
     ll_elem *new_elemp;
@@ -56,7 +56,7 @@ add_list(ListHandle list)
     ll_head = new_elemp;
 }
 
-PRIVATE void
+static void
 delete_list(ListHandle list)
 {
     ll_elem **pp;
@@ -73,7 +73,7 @@ delete_list(ListHandle list)
     }
 }
 
-PUBLIC void
+void
 check_lists(void)
 {
     ll_elem **pp;

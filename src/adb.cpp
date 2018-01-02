@@ -39,20 +39,20 @@
 
 using namespace Executor;
 
-PUBLIC void
+void
 Executor::ADBReInit(void)
 {
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC OSErr
+OSErr
 Executor::ADBOp(Ptr data, ProcPtr procp, Ptr buffer, INTEGER command)
 {
     warning_unimplemented(NULL_STRING);
     return noErr;
 }
 
-PUBLIC INTEGER
+INTEGER
 Executor::CountADBs(void)
 {
     warning_unimplemented(NULL_STRING);
@@ -64,21 +64,21 @@ enum
     SPOOFED_MOUSE_ADDR = 3
 };
 
-PRIVATE GUEST<Ptr> adb_service_procp = nullptr; /* stored as though in lowglobal */
-PRIVATE Ptr adb_data_ptr = (Ptr)0x90ABCDEF;
+static GUEST<Ptr> adb_service_procp = nullptr; /* stored as though in lowglobal */
+static Ptr adb_data_ptr = (Ptr)0x90ABCDEF;
 
-PUBLIC void
+void
 Executor::C_adb_service_stub(void)
 {
 }
 
-PUBLIC void
+void
 Executor::reset_adb_vector(void)
 {
     adb_service_procp = nullptr;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::GetIndADB(ADBDataBlock *adbp, INTEGER index)
 {
     OSErr retval;
@@ -99,7 +99,7 @@ Executor::GetIndADB(ADBDataBlock *adbp, INTEGER index)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::GetADBInfo(ADBDataBlock *adbp, INTEGER address)
 {
     OSErr retval;
@@ -112,7 +112,7 @@ Executor::GetADBInfo(ADBDataBlock *adbp, INTEGER address)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::SetADBInfo(ADBSetInfoBlock *adbp, INTEGER address)
 {
     OSErr retval;
@@ -129,13 +129,13 @@ Executor::SetADBInfo(ADBSetInfoBlock *adbp, INTEGER address)
     return retval;
 }
 
-PRIVATE bool
+static bool
 adb_vector_is_not_our_own(void)
 {
     return adb_service_procp && adb_service_procp != RM((Ptr)P_adb_service_stub);
 }
 
-PRIVATE void
+static void
 call_patched_adb_vector(char *message)
 {
     uint32_t save_d0, save_a0;
@@ -185,7 +185,7 @@ enum
 // NOTE: deltas_p should be a bool, but is passed as int,
 //       because va_start requires it.
 
-PUBLIC void
+void
 Executor::adb_apeiron_hack(int /*bool*/ deltas_p, ...)
 {
     static bool been_here = false;

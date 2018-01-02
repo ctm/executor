@@ -224,7 +224,7 @@ togglecaret(TEHandle teh, int16_t sel, bool paint_p)
     PenMode(pm);
 }
 
-PUBLIC void
+void
 Executor::ROMlib_recompute_caret(TEHandle te)
 {
     int16_t state;

@@ -364,14 +364,14 @@ OSErr Executor::ROMlib_putcache(cacheentry *cachep)
     return err;
 }
 
-PUBLIC LONGINT tagfnum;
-PUBLIC INTEGER tagflag;
-PUBLIC INTEGER tagbknm;
-PUBLIC LONGINT tagdate;
-PUBLIC LONGINT tagtfs0;
-PUBLIC LONGINT tagtfs1;
+LONGINT tagfnum;
+INTEGER tagflag;
+INTEGER tagbknm;
+LONGINT tagdate;
+LONGINT tagtfs0;
+LONGINT tagtfs1;
 
-PRIVATE BOOLEAN ROMlib_index_cached = false;
+static BOOLEAN ROMlib_index_cached = false;
 
 OSErr Executor::ROMlib_getcache(cacheentry **retpp, uint16_t refnum,
                                 ULONGINT logbno, cacheflagtype flags)

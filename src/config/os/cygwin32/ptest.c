@@ -20,11 +20,11 @@ main_window(void)
 /* ugly globals needed because the callback doesn't pass in a user
    supplied argument */
 
-#define PRIVATE static
 
-PRIVATE HDC global_hdc;
-PRIVATE RECT global_src;
-PRIVATE RECT global_dest;
+
+static HDC global_hdc;
+static RECT global_src;
+static RECT global_dest;
 
 #if !defined(NELEM)
 #define NELEM(x) ((sizeof(x)) / sizeof((x)[0]))
@@ -45,31 +45,31 @@ enum
 
 typedef int (*GSDLL_CALLBACK)(int, char *, unsigned long);
 
-PRIVATE int GSDLLAPI (*gsdll_revision)(char **product, char **copyright,
+static int GSDLLAPI (*gsdll_revision)(char **product, char **copyright,
                                        long *gs_revision,
                                        long *gs_revisiondate);
 
-PRIVATE int GSDLLAPI (*gsdll_init)(GSDLL_CALLBACK callback, HWND hwnd,
+static int GSDLLAPI (*gsdll_init)(GSDLL_CALLBACK callback, HWND hwnd,
                                    int argc, const char *argv[]);
 
-PRIVATE int GSDLLAPI (*gsdll_execute_begin)(void);
+static int GSDLLAPI (*gsdll_execute_begin)(void);
 
-PRIVATE int GSDLLAPI (*gsdll_execute_cont)(const char *str, int len);
+static int GSDLLAPI (*gsdll_execute_cont)(const char *str, int len);
 
-PRIVATE int GSDLLAPI (*gsdll_execute_end)(void);
+static int GSDLLAPI (*gsdll_execute_end)(void);
 
-PRIVATE int GSDLLAPI (*gsdll_exit)(void);
+static int GSDLLAPI (*gsdll_exit)(void);
 
-PRIVATE int GSDLLAPI (*gsdll_lock_device)(unsigned char *device, int flag);
+static int GSDLLAPI (*gsdll_lock_device)(unsigned char *device, int flag);
 
-PRIVATE HGLOBAL GSDLLAPI (*gsdll_copy_dib)(unsigned char *device);
+static HGLOBAL GSDLLAPI (*gsdll_copy_dib)(unsigned char *device);
 
-PRIVATE HPALETTE GSDLLAPI (*gsdll_copy_palette)(unsigned char *device);
+static HPALETTE GSDLLAPI (*gsdll_copy_palette)(unsigned char *device);
 
-PRIVATE void GSDLLAPI (*gsdll_draw)(unsigned char *device, HDC hdc,
+static void GSDLLAPI (*gsdll_draw)(unsigned char *device, HDC hdc,
                                     LPRECT dest, LPRECT src);
 
-PRIVATE int GSDLLAPI (*gsdll_get_bitmap_row)(unsigned char *device,
+static int GSDLLAPI (*gsdll_get_bitmap_row)(unsigned char *device,
                                              LPBITMAPINFOHEADER pbmih,
                                              RGBQUAD *prgbquad, LPBYTE *ppbyte,
                                              unsigned int row);
@@ -88,7 +88,7 @@ PRIVATE int GSDLLAPI (*gsdll_get_bitmap_row)(unsigned char *device,
         }                                              \
     } while(0)
 
-PRIVATE void
+static void
 loadgs(void)
 {
     HINSTANCE lib;
@@ -107,7 +107,7 @@ loadgs(void)
     GETPROCADDRESS(lib, gsdll_get_bitmap_row);
 }
 
-PRIVATE int
+static int
 gsdll_callback(int message, char *str, unsigned long count)
 {
     if(message != GSDLL_POLL)

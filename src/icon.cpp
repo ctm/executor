@@ -590,7 +590,7 @@ typedef struct
     Str255 string;
 } label_info_t;
 
-PRIVATE label_info_t labels[7] = {
+static label_info_t labels[7] = {
     {
         {
             CWC(0), CWC(0), CWC(0),

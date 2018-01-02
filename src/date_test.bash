@@ -19,7 +19,7 @@ enum\
   };\
 \
 \
-PRIVATE void\
+static void\
 field_complain (long long mac_seconds, long long unix_seconds,\
 		const char *field1, int value1,\
 		const char *field2, int value2)\
@@ -99,7 +99,7 @@ main (void)\
 #include <time.h>\
 #include <stdlib.h>\
 \
-#define PRIVATE static\
+
 #define PUBLIC\
 #define NULL_STRING ""\
 \

@@ -170,106 +170,106 @@ enum
 };
 #endif
 
-extern pascal trap INTEGER C_Alert(INTEGER id,
+extern INTEGER C_Alert(INTEGER id,
                                    ProcPtr fp);
 PASCAL_TRAP(Alert, 0xA985);
-extern pascal trap INTEGER C_StopAlert(INTEGER id,
+extern INTEGER C_StopAlert(INTEGER id,
                                        ProcPtr fp);
 PASCAL_TRAP(StopAlert, 0xA986);
-extern pascal trap INTEGER C_NoteAlert(INTEGER id,
+extern INTEGER C_NoteAlert(INTEGER id,
                                        ProcPtr fp);
 PASCAL_TRAP(NoteAlert, 0xA987);
-extern pascal trap INTEGER C_CautionAlert(INTEGER id,
+extern INTEGER C_CautionAlert(INTEGER id,
                                           ProcPtr fp);
 PASCAL_TRAP(CautionAlert, 0xA988);
-extern pascal trap void C_CouldAlert(INTEGER id);
+extern void C_CouldAlert(INTEGER id);
 PASCAL_TRAP(CouldAlert, 0xA989);
-extern pascal trap void C_FreeAlert(INTEGER id);
+extern void C_FreeAlert(INTEGER id);
 PASCAL_TRAP(FreeAlert, 0xA98A);
-extern pascal trap void C_CouldDialog(INTEGER id);
+extern void C_CouldDialog(INTEGER id);
 PASCAL_TRAP(CouldDialog, 0xA979);
-extern pascal trap void C_FreeDialog(INTEGER id);
+extern void C_FreeDialog(INTEGER id);
 PASCAL_TRAP(FreeDialog, 0xA97A);
-extern pascal trap DialogPtr C_NewDialog(Ptr dst,
+extern DialogPtr C_NewDialog(Ptr dst,
                                          Rect *r, StringPtr tit, BOOLEAN vis, INTEGER procid,
                                          WindowPtr behind, BOOLEAN gaflag, LONGINT rc, Handle items);
 PASCAL_TRAP(NewDialog, 0xA97D);
-extern pascal trap DialogPtr C_GetNewDialog(INTEGER id,
+extern DialogPtr C_GetNewDialog(INTEGER id,
                                             Ptr dst, WindowPtr behind);
 PASCAL_TRAP(GetNewDialog, 0xA97C);
-extern pascal trap void C_CloseDialog(DialogPtr dp);
+extern void C_CloseDialog(DialogPtr dp);
 PASCAL_TRAP(CloseDialog, 0xA982);
-extern pascal trap void C_DisposDialog(DialogPtr dp);
+extern void C_DisposDialog(DialogPtr dp);
 PASCAL_TRAP(DisposDialog, 0xA983);
-extern pascal BOOLEAN C_ROMlib_myfilt(DialogPeek dp, EventRecord *evt,
+extern BOOLEAN C_ROMlib_myfilt(DialogPeek dp, EventRecord *evt,
                                       GUEST<INTEGER> *ith);
 
-extern pascal trap void C_ModalDialog(ProcPtr fp,
+extern void C_ModalDialog(ProcPtr fp,
                                       GUEST<INTEGER> *item);
 PASCAL_TRAP(ModalDialog, 0xA991);
-extern pascal trap BOOLEAN C_IsDialogEvent(
+extern BOOLEAN C_IsDialogEvent(
     EventRecord *evt);
 PASCAL_TRAP(IsDialogEvent, 0xA97F);
-extern pascal trap void C_DrawDialog(DialogPtr dp);
+extern void C_DrawDialog(DialogPtr dp);
 PASCAL_TRAP(DrawDialog, 0xA981);
-extern pascal trap INTEGER C_FindDItem(DialogPtr dp,
+extern INTEGER C_FindDItem(DialogPtr dp,
                                        Point pt);
 PASCAL_TRAP(FindDItem, 0xA984);
-extern pascal trap void C_UpdtDialog(DialogPtr dp,
+extern void C_UpdtDialog(DialogPtr dp,
                                      RgnHandle rgn);
 PASCAL_TRAP(UpdtDialog, 0xA978);
-extern pascal trap BOOLEAN C_DialogSelect(
+extern BOOLEAN C_DialogSelect(
     EventRecord *evt, GUEST<DialogPtr> *dpp, GUEST<INTEGER> *item);
 PASCAL_TRAP(DialogSelect, 0xA980);
 extern void DlgCut(DialogPtr dp);
 extern void DlgCopy(DialogPtr dp);
 extern void DlgPaste(DialogPtr dp);
 extern void DlgDelete(DialogPtr dp);
-extern pascal void C_ROMlib_mysound(INTEGER i);
-extern pascal trap void C_ErrorSound(ProcPtr sp);
+extern void C_ROMlib_mysound(INTEGER i);
+extern void C_ErrorSound(ProcPtr sp);
 PASCAL_TRAP(ErrorSound, 0xA98C);
-extern pascal trap void C_InitDialogs(ProcPtr rp);
+extern void C_InitDialogs(ProcPtr rp);
 PASCAL_TRAP(InitDialogs, 0xA97B);
 extern void SetDAFont(INTEGER i);
-extern pascal trap void C_ParamText(StringPtr p0,
+extern void C_ParamText(StringPtr p0,
                                     StringPtr p1, StringPtr p2, StringPtr p3);
 PASCAL_TRAP(ParamText, 0xA98B);
-extern pascal trap void C_GetDItem(DialogPtr dp,
+extern void C_GetDItem(DialogPtr dp,
                                    INTEGER itemno, GUEST<INTEGER> *itype, GUEST<Handle> *item, Rect *r);
 PASCAL_TRAP(GetDItem, 0xA98D);
-extern pascal trap void C_SetDItem(DialogPtr dp,
+extern void C_SetDItem(DialogPtr dp,
                                    INTEGER itemno, INTEGER itype, Handle item, Rect *r);
 PASCAL_TRAP(SetDItem, 0xA98E);
-extern pascal trap void C_GetIText(Handle item,
+extern void C_GetIText(Handle item,
                                    StringPtr text);
 PASCAL_TRAP(GetIText, 0xA990);
-extern pascal trap void C_SetIText(Handle item,
+extern void C_SetIText(Handle item,
                                    StringPtr text);
 PASCAL_TRAP(SetIText, 0xA98F);
-extern pascal trap void C_SelIText(DialogPtr dp,
+extern void C_SelIText(DialogPtr dp,
                                    INTEGER itemno, INTEGER start, INTEGER stop);
 PASCAL_TRAP(SelIText, 0xA97E);
 extern INTEGER GetAlrtStage(void);
 extern void ResetAlrtStage(void);
-extern pascal trap void C_HideDItem(DialogPtr dp,
+extern void C_HideDItem(DialogPtr dp,
                                     INTEGER item);
 PASCAL_TRAP(HideDItem, 0xA827);
-extern pascal trap void C_ShowDItem(DialogPtr dp,
+extern void C_ShowDItem(DialogPtr dp,
                                     INTEGER item);
 PASCAL_TRAP(ShowDItem, 0xA828);
 
-extern pascal trap CDialogPtr C_NewCDialog(Ptr, Rect *, StringPtr, BOOLEAN, INTEGER, WindowPtr, BOOLEAN, LONGINT, Handle);
+extern CDialogPtr C_NewCDialog(Ptr, Rect *, StringPtr, BOOLEAN, INTEGER, WindowPtr, BOOLEAN, LONGINT, Handle);
 PASCAL_TRAP(NewCDialog, 0xAA4B);
 
-extern pascal trap OSErr C_GetStdFilterProc(GUEST<ProcPtr> *proc);
+extern OSErr C_GetStdFilterProc(GUEST<ProcPtr> *proc);
 PASCAL_FUNCTION(GetStdFilterProc);
-extern pascal trap OSErr C_SetDialogDefaultItem(DialogPtr dialog,
+extern OSErr C_SetDialogDefaultItem(DialogPtr dialog,
                                                 int16_t new_item);
 PASCAL_FUNCTION(SetDialogDefaultItem);
-extern pascal trap OSErr C_SetDialogCancelItem(DialogPtr dialog,
+extern OSErr C_SetDialogCancelItem(DialogPtr dialog,
                                                int16_t new_item);
 PASCAL_FUNCTION(SetDialogCancelItem);
-extern pascal trap OSErr C_SetDialogTracksCursor(DialogPtr dialog,
+extern OSErr C_SetDialogTracksCursor(DialogPtr dialog,
                                                  Boolean tracks);
 PASCAL_FUNCTION(SetDialogTracksCursor);
 

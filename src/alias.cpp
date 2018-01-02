@@ -28,7 +28,7 @@ using namespace Executor;
    resource that will have in it: type, four bytes of 0, pascal string,
    potential padding to even things up, type, four bytes of 0, ... */
 
-PRIVATE const char *
+static const char *
 find_sub_dir(OSType folderType)
 {
     typedef struct
@@ -72,7 +72,7 @@ find_sub_dir(OSType folderType)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 get_sys_vref_and_dirid(INTEGER *sys_vrefp, LONGINT *sys_diridp)
 {
     OSErr err;
@@ -90,7 +90,7 @@ get_sys_vref_and_dirid(INTEGER *sys_vrefp, LONGINT *sys_diridp)
     return err;
 }
 
-PRIVATE OSErr
+static OSErr
 try_to_find(INTEGER vref, const char *str, INTEGER *vrefp, LONGINT *diridp)
 {
     OSErr err;
@@ -134,7 +134,7 @@ try_to_find(INTEGER vref, const char *str, INTEGER *vrefp, LONGINT *diridp)
     return err;
 }
 
-PRIVATE OSErr
+static OSErr
 look_for_volume(const char *vol_name, INTEGER *vrefp, LONGINT *diridp)
 {
     OSErr retval;
@@ -159,7 +159,7 @@ look_for_volume(const char *vol_name, INTEGER *vrefp, LONGINT *diridp)
  * try to construct something ourselves.
  */
 
-PRIVATE OSErr
+static OSErr
 last_chance_tmp_vref_and_dirid(INTEGER vref, INTEGER *tmp_vrefp,
                                LONGINT *tmp_diridp)
 {
@@ -200,7 +200,7 @@ last_chance_tmp_vref_and_dirid(INTEGER vref, INTEGER *tmp_vrefp,
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 get_tmp_vref_and_dirid(INTEGER vref, INTEGER *tmp_vrefp, LONGINT *tmp_diridp)
 {
     int i;
@@ -256,7 +256,7 @@ get_tmp_vref_and_dirid(INTEGER vref, INTEGER *tmp_vrefp, LONGINT *tmp_diridp)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 test_directory(INTEGER vref, LONGINT dirid, const char *sub_dirp,
                LONGINT *new_idp)
 {
@@ -277,7 +277,7 @@ test_directory(INTEGER vref, LONGINT dirid, const char *sub_dirp,
     return err;
 }
 
-PRIVATE OSErr
+static OSErr
 create_directory(INTEGER sys_vref, LONGINT sys_dirid, const char *sub_dirp,
                  LONGINT *new_idp)
 {
@@ -463,7 +463,7 @@ OSErr Executor::C_GetAliasInfo(AliasHandle alias, AliasTypeInfo index,
     return paramErr;
 }
 
-PRIVATE int
+static int
 EVENUP(int n)
 {
     int retval = n;
@@ -474,7 +474,7 @@ EVENUP(int n)
 }
 
 #if 0
-PRIVATE OSErr
+static OSErr
 parse2 (AliasHandle ah, const void *addrs[], int count)
 {
   OSErr retval;
@@ -510,7 +510,7 @@ parse2 (AliasHandle ah, const void *addrs[], int count)
 }
 #endif
 
-PRIVATE OSErr
+static OSErr
 decompose_full_path(INTEGER path_len, Ptr fullPath, Str27 volumeName,
                     Str31 fileName)
 {
@@ -553,7 +553,7 @@ decompose_full_path(INTEGER path_len, Ptr fullPath, Str27 volumeName,
     return retval;
 }
 
-PRIVATE void
+static void
 init_head(alias_head_t *headp, Str27 volumeName, Str31 fileName)
 {
     memset(headp, 0, sizeof *headp);
@@ -565,7 +565,7 @@ init_head(alias_head_t *headp, Str27 volumeName, Str31 fileName)
     headp->mystery_words[3] = CWC(17);
 }
 
-PRIVATE void
+static void
 init_tail(alias_tail_t *tailp, Str32 zoneName, Str31 serverName,
           Str27 volumeName)
 {
@@ -597,7 +597,7 @@ init_tail(alias_tail_t *tailp, Str32 zoneName, Str31 serverName,
     tailp->weird_info[11] = CWC(0x009E);
 }
 
-PRIVATE OSErr
+static OSErr
 assemble_pieces(GUEST<AliasHandle> *ahp, alias_head_t *headp, int n_pieces, ...)
 {
     Size n_bytes_needed;

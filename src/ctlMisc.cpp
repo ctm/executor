@@ -72,7 +72,7 @@ const ColorSpec Executor::default_ctl_colors[] = {
 #define KEEP_DEFAULT_CTL_CTAB_AROUND_FOR_OLD_SYSTEM_FILE_USERS
 
 #if defined(KEEP_DEFAULT_CTL_CTAB_AROUND_FOR_OLD_SYSTEM_FILE_USERS)
-PUBLIC CTabHandle Executor::default_ctl_ctab;
+CTabHandle Executor::default_ctl_ctab;
 #endif
 
 void Executor::ctl_color_init(void)

@@ -51,7 +51,7 @@ using namespace Executor;
 
 #if 1
 
-PRIVATE int
+static int
 SDL_bpp(const SDL_Surface *surfp)
 {
     int retval;
@@ -60,7 +60,7 @@ SDL_bpp(const SDL_Surface *surfp)
     return retval;
 }
 
-PRIVATE int
+static int
 SDL_pixels_per_line(const SDL_Surface *surfp)
 {
     int retval;
@@ -69,7 +69,7 @@ SDL_pixels_per_line(const SDL_Surface *surfp)
     return retval;
 }
 
-PRIVATE int
+static int
 SDL_n_lines(const SDL_Surface *surfp)
 {
     int retval;
@@ -78,7 +78,7 @@ SDL_n_lines(const SDL_Surface *surfp)
     return retval;
 }
 
-PUBLIC SDL_Surface *
+SDL_Surface *
 surface_from_dib(void *lp)
 {
     SDL_Surface *retval;
@@ -132,7 +132,7 @@ surface_from_dib(void *lp)
     return retval;
 }
 #else
-PUBLIC SDL_Surface *
+SDL_Surface *
 surface_from_dib(void *lp)
 {
     BITMAPINFOHEADER *bp;
@@ -252,7 +252,7 @@ typedef UINT scrap_type;
 
 #define FORMAT_PREFIX "SDL_scrap_0x"
 
-PRIVATE scrap_type
+static scrap_type
 convert_format(int type)
 {
     switch(type)
@@ -289,7 +289,7 @@ convert_format(int type)
 }
 
 /* Convert internal data to scrap format */
-PRIVATE int
+static int
 convert_data(int type, char *dst, char *src, int srclen)
 {
     int dstlen;
@@ -368,7 +368,7 @@ convert_data(int type, char *dst, char *src, int srclen)
 }
 
 /* Convert scrap data to internal format */
-PRIVATE int
+static int
 convert_scrap(int type, char *dst, char *src, int srclen)
 {
     int dstlen;
@@ -432,7 +432,7 @@ convert_scrap(int type, char *dst, char *src, int srclen)
     return dstlen;
 }
 
-PUBLIC bool
+bool
 we_lost_clipboard(void)
 {
 #if defined(X11_SCRAP)
@@ -446,7 +446,7 @@ we_lost_clipboard(void)
 #endif /* scrap type */
 }
 
-PUBLIC void
+void
 put_scrap(int type, int srclen, char *src)
 {
     scrap_type format;
@@ -490,7 +490,7 @@ put_scrap(int type, int srclen, char *src)
 #endif /* scrap type */
 }
 
-PUBLIC void
+void
 get_scrap(int type, int *dstlen, Handle dst)
 {
     scrap_type format;
@@ -588,7 +588,7 @@ get_scrap(int type, int *dstlen, Handle dst)
 #endif /* scrap type */
 }
 
-PUBLIC void export_scrap(const SDL_Event *event)
+void export_scrap(const SDL_Event *event)
 {
 #if defined(X11_SCRAP)
     /* * */
@@ -655,7 +655,7 @@ void Executor::PutScrapX(LONGINT type, LONGINT length, char *p, int scrap_count)
 #if defined(MACOSX)
 #warning "Need to support clipboard"
 
-PUBLIC bool
+bool
 we_lost_clipboard(void)
 {
     return false; /* TODO */

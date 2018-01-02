@@ -12,7 +12,7 @@ typedef struct
     unsigned char mkv;
 } sdl_to_mkv_map_t;
 
-PRIVATE sdl_to_mkv_map_t map[] = {
+static sdl_to_mkv_map_t map[] = {
     { SDLK_BACKSPACE, MKV_BACKSPACE },
     { SDLK_TAB, MKV_TAB },
     { SDLK_CLEAR, NOTAKEY },

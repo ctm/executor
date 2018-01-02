@@ -37,7 +37,7 @@ namespace Executor
 
 extern int ROMlib_strcmp(const Byte *s1, const Byte *s2);
 extern void futzwithdosdisks(void);
-extern pascal void C_ROMlib_stdftrack(ControlHandle, INTEGER);
+extern void C_ROMlib_stdftrack(ControlHandle, INTEGER);
 extern INTEGER C_ROMlib_stdffilt(DialogPeek, EventRecord *, GUEST<INTEGER> *);
 extern void ROMlib_init_stdfile(void);
 

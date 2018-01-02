@@ -40,13 +40,13 @@ extern WindowPeek ROMlib_firstvisible(WindowPtr w);
 extern BOOLEAN ROMlib_window_zoomed(WindowPeek wp);
 extern void wind_color_init(void);
 
-typedef pascal void (*draghookp)(void);
+typedef void (*draghookp)(void);
 
 #define var(w) (GetWVariant((w)))
 
 extern BOOLEAN ROMlib_dirtyvariant;
 
-typedef pascal LONGINT (*windprocp)(INTEGER var, WindowPtr wind, INTEGER mess,
+typedef LONGINT (*windprocp)(INTEGER var, WindowPtr wind, INTEGER mess,
                                     LONGINT param);
 
 extern void CALLDRAGHOOK(void);

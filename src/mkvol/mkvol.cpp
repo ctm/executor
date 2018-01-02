@@ -29,8 +29,8 @@
 #include "mkvol_internal.h"
 #include "mkvol.h"
 
-#if !defined(PRIVATE)
-#define PRIVATE static
+#if !defined(static)
+
 #endif
 
 #if !defined(noErr)
@@ -54,7 +54,7 @@ typedef enum { false,
 
 using namespace Executor;
 
-PRIVATE bool write_zeros = false;
+static bool write_zeros = false;
 
 static inline void
 my_bzero(void *ptr, size_t nbytes)
@@ -113,7 +113,7 @@ typedef struct
     if((infop)->writefuncp((infop)->user_arg, (buf), length) != length) \
     return ioErr
 
-PRIVATE int
+static int
 write_startup(info_t *infop) /* 0 - 1023 */
 {
     char buf[2 * SECSIZE];
@@ -132,7 +132,7 @@ static union {
     volumeinfo vi;
 } bufu;
 
-PRIVATE int
+static int
 write_volume_info(info_t *infop)
 {
     unsigned short nalblks;
@@ -207,7 +207,7 @@ write_volume_info(info_t *infop)
     return noErr;
 }
 
-PRIVATE int
+static int
 write_volume_bitmap(info_t *infop)
 {
     int32_t nalblocks_in_use;
@@ -237,7 +237,7 @@ typedef enum {
     catalog
 } btree_enum_t;
 
-PRIVATE int
+static int
 fill_btblock0(info_t *infop, btree_enum_t btree_enum)
 {
     btblock0 bt;
@@ -300,7 +300,7 @@ fill_btblock0(info_t *infop, btree_enum_t btree_enum)
     return noErr;
 }
 
-PRIVATE int
+static int
 write_extents(info_t *infop)
 {
     char buf[SECSIZE];
@@ -320,7 +320,7 @@ write_extents(info_t *infop)
 
 #define DESKTOP "Desktop"
 
-PRIVATE void
+static void
 set_key_len(catkey *keyp)
 {
     keyp->ckrKeyLen = (1 + sizeof(LONGINT) + 1 + keyp->ckrCName[0]) | 1;
@@ -330,7 +330,7 @@ set_key_len(catkey *keyp)
 #define EVENUP(x) ((void *)(((long)(x) + 1) & ~1))
 #endif /* !defined(EVENUP) */
 
-PRIVATE int
+static int
 write_catalog(info_t *infop)
 {
     char buf[SECSIZE];
@@ -461,7 +461,7 @@ write_catalog(info_t *infop)
 #define DATLEN (sizeof(LONGINT) + sizeof(STR_NAME) - 1)
 #define MAPLEN (sizeof(map_t))
 
-PRIVATE int
+static int
 write_desktop(info_t *infop)
 {
 #pragma pack(push, 2)
@@ -542,7 +542,7 @@ write_desktop(info_t *infop)
 #pragma pack(pop)
 }
 
-PRIVATE int
+static int
 write_rest(info_t *infop)
 {
     char buf[SECSIZE];
@@ -634,7 +634,7 @@ DONE:
 //#define DEFAULT_SUFFIX ".hfv"
 #define DEFAULT_SUFFIX ".img"
 
-PRIVATE int
+static int
 mixed_case_match(const char *str1, const char *str2)
 {
     int retval;
@@ -648,7 +648,7 @@ mixed_case_match(const char *str1, const char *str2)
     return retval;
 }
 
-PRIVATE void
+static void
 adjust_hfv_name(char **namepp)
 {
     char *namep = *namepp, *suffixp;
@@ -687,9 +687,9 @@ adjust_hfv_name(char **namepp)
     *namepp = namep;
 }
 
-PRIVATE const char *magic_file_to_delete_because_at_exit_is_flawed;
+static const char *magic_file_to_delete_because_at_exit_is_flawed;
 
-PRIVATE void
+static void
 cleanup(void)
 {
     if(magic_file_to_delete_because_at_exit_is_flawed)
@@ -701,7 +701,7 @@ cleanup(void)
  * the argument list.
  */
 
-PRIVATE bool
+static bool
 find_and_remove_switch_p(const char *switch_name, int *argcp, char *argv[])
 {
     int in, out;
@@ -725,7 +725,7 @@ find_and_remove_switch_p(const char *switch_name, int *argcp, char *argv[])
     return present_p;
 }
 
-PRIVATE bool
+static bool
 check_hfv_name(const char *hfv_name)
 {
     bool success_p;
@@ -741,7 +741,7 @@ check_hfv_name(const char *hfv_name)
     return success_p;
 }
 
-PRIVATE bool
+static bool
 check_volume_name(const char *volume_name)
 {
     size_t len = strlen(volume_name);
@@ -770,7 +770,7 @@ check_volume_name(const char *volume_name)
     return success_p;
 }
 
-PRIVATE bool
+static bool
 check_volume_size(const char *volume_size_string)
 {
     bool success_p;
@@ -825,7 +825,7 @@ cleanup_string(char *s)
         s[--len] = '\0';
 }
 
-PRIVATE bool
+static bool
 read_parameter(const char *prompt, char **s,
                bool (*verify_func)(const char *))
 {
@@ -858,7 +858,7 @@ done:
 #define OS_NAME "Mac OS X"
 #endif
 
-PRIVATE bool
+static bool
 prompt_for_parameters(char **hfv_name, char **volume_name, char **volume_size)
 {
     bool success_p;

@@ -24,7 +24,7 @@ using namespace Executor;
  * () == 0, any invalid string == -1
  */
 
-PRIVATE int32_t
+static int32_t
 extract_vers_num(Handle h)
 {
     uint32_t retval, old_retval;

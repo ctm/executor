@@ -131,7 +131,7 @@ GetScrapX(LONGINT type, char **h)
     return retval;
 }
 
-PRIVATE int
+static int
 calc_length_and_format(UINT *formatp, LONGINT type, LONGINT length,
                        const char *p)
 {
@@ -151,7 +151,7 @@ calc_length_and_format(UINT *formatp, LONGINT type, LONGINT length,
     return retval;
 }
 
-PRIVATE void
+static void
 fill_in_data(char *destp, LONGINT type, LONGINT length, const char *p)
 {
     switch(type)
@@ -175,7 +175,7 @@ fill_in_data(char *destp, LONGINT type, LONGINT length, const char *p)
     }
 }
 
-PRIVATE HANDLE clip_data = NULL; /* to hold a PICT that may need conversion
+static HANDLE clip_data = NULL; /* to hold a PICT that may need conversion
 				    to a CF_DIB */
 
 PUBLIC void

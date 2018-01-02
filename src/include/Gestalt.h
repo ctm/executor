@@ -194,12 +194,12 @@ enum
     gestaltLocationErr = -5553,
 };
 
-extern trap OSErrRET Gestalt(OSType selector, GUEST<LONGINT> *responsep);
-extern trap OSErrRET NewGestalt(OSType selector, ProcPtr selFunc);
-extern trap OSErrRET ReplaceGestalt(OSType selector, ProcPtr selFunc,
+extern OSErrRET Gestalt(OSType selector, GUEST<LONGINT> *responsep);
+extern OSErrRET NewGestalt(OSType selector, ProcPtr selFunc);
+extern OSErrRET ReplaceGestalt(OSType selector, ProcPtr selFunc,
                                     ProcPtr *oldSelFuncp);
 
-extern trap OSErrRET C_GestaltTablesOnly(OSType selector,
+extern OSErrRET C_GestaltTablesOnly(OSType selector,
                                          GUEST<LONGINT> *responsep);
 PASCAL_FUNCTION(GestaltTablesOnly);
 }

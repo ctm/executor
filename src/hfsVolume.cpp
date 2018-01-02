@@ -152,9 +152,9 @@ static OSErr initcache(HVCB *vcbp)
     return noErr;
 }
 
-PUBLIC bool Executor::ROMlib_hfs_plus_support = false;
+bool Executor::ROMlib_hfs_plus_support = false;
 
-PRIVATE bool
+static bool
 is_hfs_plus_wrapper(volumeinfoPtr vp)
 {
     bool retval;
@@ -163,7 +163,7 @@ is_hfs_plus_wrapper(volumeinfoPtr vp)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 check_volume_size(volumeinfoPtr vp)
 {
     OSErr retval;
@@ -329,7 +329,7 @@ HVCB *Executor::ROMlib_vcbbybiggestunixname(const char *name)
     return bestvcbp;
 }
 
-PUBLIC VCBExtra *
+VCBExtra *
 Executor::ROMlib_vcbbyunixname(const char *name)
 {
     HVCB *vcbp;
@@ -351,7 +351,7 @@ HVCB *Executor::ROMlib_vcbbydrive(short vrefnum)
     return vcbp;
 }
 
-PUBLIC DrvQExtra *
+DrvQExtra *
 Executor::ROMlib_dqbydrive(short vrefnum)
 {
     DrvQEl *dp;
@@ -379,7 +379,7 @@ HVCB *Executor::ROMlib_vcbbyvrn(short vrefnum)
     return vcbp;
 }
 
-PUBLIC HVCB *Executor::ROMlib_findvcb(short vrefnum, StringPtr name, LONGINT *diridp,
+HVCB *Executor::ROMlib_findvcb(short vrefnum, StringPtr name, LONGINT *diridp,
                                       BOOLEAN usedefault)
 {
     HVCB *vcbp;
@@ -478,9 +478,9 @@ static INTEGER openxtnt(LONGINT filnum, LONGINT clpsize, LONGINT filsize,
 #define XTNUM 3
 #define CTNUM 4
 
-PUBLIC INTEGER Executor::ROMlib_nextvrn = 0; /* TODO: low memory global */
+INTEGER Executor::ROMlib_nextvrn = 0; /* TODO: low memory global */
 
-PUBLIC OSErr
+OSErr
 Executor::hfsPBMountVol(ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGINT bsize,
                         LONGINT maxbytes, drive_flags_t flags, DrvQExtra *dqp)
 {
@@ -820,7 +820,7 @@ OSErr Executor::hfsPBGetVol(ParmBlkPtr pb, BOOLEAN async)
     PBRETURN((VolumeParam *)pb, err);
 }
 
-PUBLIC GUEST<LONGINT> Executor::DefDirID = CLC(2);
+GUEST<LONGINT> Executor::DefDirID = CLC(2);
 
 OSErr Executor::hfsPBHGetVol(WDPBPtr pb, BOOLEAN async)
 {

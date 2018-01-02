@@ -15,7 +15,7 @@
  * returns number of characters written (or needed if bufp is NULL).
  */
 
-PRIVATE int
+static int
 construct_command_line(char *bufp, int n_filenames, char **filenames,
                        const char *suffix)
 {
@@ -43,7 +43,7 @@ construct_command_line(char *bufp, int n_filenames, char **filenames,
     return retval;
 }
 
-PRIVATE void
+static void
 slash_replace(char *p)
 {
     while(*p)

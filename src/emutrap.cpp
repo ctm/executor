@@ -193,7 +193,7 @@ syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme,
     return retaddr;
 }
 
-PRIVATE uintptr_t
+static uintptr_t
 CToPascalCall_m68k(void *wheretogo, uint64_t magic, va_list ap)
 {
     uintptr_t retval;
@@ -278,7 +278,7 @@ CToPascalCall_m68k(void *wheretogo, uint64_t magic, va_list ap)
 
 #if defined(powerpc) || defined(__ppc__)
 
-PRIVATE long
+static long
 CToRoutineDescriptorCall(const RoutineDescriptor *p, unsigned long long magic,
                          va_list ap)
 {
@@ -451,7 +451,7 @@ CToRoutineDescriptorCall(const RoutineDescriptor *p, unsigned long long magic,
     return retval;
 }
 
-PRIVATE bool
+static bool
 is_routine_descriptor_ptr(uint16_t *addr)
 {
     bool retval;

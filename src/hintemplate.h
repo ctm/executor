@@ -11,7 +11,7 @@
  *  efficiently, trading codesize for speed
  */
 
-PRIVATE
+static
 DECL
 {
     STATEDECL

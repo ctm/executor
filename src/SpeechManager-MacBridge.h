@@ -13,49 +13,49 @@
 
 namespace MacBridge
 {
-PUBLIC Executor::NumVersion SpeechManagerVersion(void);
-PUBLIC int16_t SpeechBusy(void);
-PUBLIC int16_t SpeechBusySystemWide(void);
-PUBLIC Executor::OSErr CountVoices(int16_t *numVoices);
-PUBLIC Executor::OSErr DisposeSpeechChannel(Executor::SpeechChannel chan);
-PUBLIC Executor::OSErr SpeakString(Executor::Str255 textToBeSpoken);
+Executor::NumVersion SpeechManagerVersion(void);
+int16_t SpeechBusy(void);
+int16_t SpeechBusySystemWide(void);
+Executor::OSErr CountVoices(int16_t *numVoices);
+Executor::OSErr DisposeSpeechChannel(Executor::SpeechChannel chan);
+Executor::OSErr SpeakString(Executor::Str255 textToBeSpoken);
 
-PUBLIC Executor::OSErr StopSpeech(Executor::SpeechChannel chan);
-PUBLIC Executor::OSErr ContinueSpeech(Executor::SpeechChannel chan);
+Executor::OSErr StopSpeech(Executor::SpeechChannel chan);
+Executor::OSErr ContinueSpeech(Executor::SpeechChannel chan);
 
-PUBLIC Executor::OSErr GetIndVoice(int16_t index, Executor::VoiceSpec *voice);
-PUBLIC Executor::OSErr NewSpeechChannel(Executor::VoiceSpec *voice, Executor::SpeechChannel *chan);
-PUBLIC Executor::OSErr StopSpeechAt(Executor::SpeechChannel chan, int32_t whereToStop);
-PUBLIC Executor::OSErr PauseSpeechAt(Executor::SpeechChannel chan, int32_t whereToPause);
-PUBLIC Executor::OSErr SetSpeechRate(Executor::SpeechChannel chan, Executor::Fixed rate);
-PUBLIC Executor::OSErr GetSpeechRate(Executor::SpeechChannel chan, Executor::Fixed *rate);
-PUBLIC Executor::OSErr SetSpeechPitch(Executor::SpeechChannel chan, Executor::Fixed pitch);
-PUBLIC Executor::OSErr GetSpeechPitch(Executor::SpeechChannel chan, Executor::Fixed *pitch);
-PUBLIC Executor::OSErr UseDictionary(Executor::SpeechChannel chan, Executor::Handle dictionary);
-PUBLIC Executor::OSErr MakeVoiceSpec(Executor::OSType creator, Executor::OSType id, Executor::VoiceSpec *voice);
-PUBLIC Executor::OSErr GetVoiceDescription(
+Executor::OSErr GetIndVoice(int16_t index, Executor::VoiceSpec *voice);
+Executor::OSErr NewSpeechChannel(Executor::VoiceSpec *voice, Executor::SpeechChannel *chan);
+Executor::OSErr StopSpeechAt(Executor::SpeechChannel chan, int32_t whereToStop);
+Executor::OSErr PauseSpeechAt(Executor::SpeechChannel chan, int32_t whereToPause);
+Executor::OSErr SetSpeechRate(Executor::SpeechChannel chan, Executor::Fixed rate);
+Executor::OSErr GetSpeechRate(Executor::SpeechChannel chan, Executor::Fixed *rate);
+Executor::OSErr SetSpeechPitch(Executor::SpeechChannel chan, Executor::Fixed pitch);
+Executor::OSErr GetSpeechPitch(Executor::SpeechChannel chan, Executor::Fixed *pitch);
+Executor::OSErr UseDictionary(Executor::SpeechChannel chan, Executor::Handle dictionary);
+Executor::OSErr MakeVoiceSpec(Executor::OSType creator, Executor::OSType id, Executor::VoiceSpec *voice);
+Executor::OSErr GetVoiceDescription(
     const Executor::VoiceSpec *voice,
     Executor::VoiceDescription *info,
     Executor::LONGINT infoLength);
-PUBLIC Executor::OSErr GetVoiceInfo(
+Executor::OSErr GetVoiceInfo(
     const Executor::VoiceSpec *voice,
     Executor::OSType selector,
     void *voiceInfo);
-PUBLIC Executor::OSErr SpeakText(Executor::SpeechChannel chan, const void *textBuf, Executor::ULONGINT textBytes);
-PUBLIC Executor::OSErr SetSpeechInfo(
+Executor::OSErr SpeakText(Executor::SpeechChannel chan, const void *textBuf, Executor::ULONGINT textBytes);
+Executor::OSErr SetSpeechInfo(
     Executor::SpeechChannel chan,
     Executor::OSType selector,
     const void *speechInfo);
-PUBLIC Executor::OSErr GetSpeechInfo(
+Executor::OSErr GetSpeechInfo(
     Executor::SpeechChannel chan,
     Executor::OSType selector,
     void *speechInfo);
-PUBLIC Executor::OSErr SpeakBuffer(
+Executor::OSErr SpeakBuffer(
     Executor::SpeechChannel chan,
     const void *textBuf,
     Executor::ULONGINT textBytes,
     int32_t controlFlags);
-PUBLIC Executor::OSErr TextToPhonemes(Executor::SpeechChannel chan, const void *textBuf, Executor::ULONGINT textBytes, Executor::Handle phonemeBuf, Executor::GUEST<Executor::LONGINT> *phonemeBytes);
+Executor::OSErr TextToPhonemes(Executor::SpeechChannel chan, const void *textBuf, Executor::ULONGINT textBytes, Executor::Handle phonemeBuf, Executor::GUEST<Executor::LONGINT> *phonemeBytes);
 }
 
 #endif /* defined(__CocoaExecutor__SpeechManager_MacBridge__) */

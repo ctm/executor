@@ -8,7 +8,7 @@
 
 #include <windows.h>
 
-PRIVATE bool timer_driven_events_p = true;
+static bool timer_driven_events_p = true;
 
 PUBLIC void
 win_queue(volatile uint8 *pendingp)

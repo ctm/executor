@@ -21,7 +21,7 @@
 
 #include "rsys/fauxdbm.h"
 
-PUBLIC DBM *
+DBM *
 dbm_open(const char *name, int flags, int mode)
 {
     DBM *retval;
@@ -45,7 +45,7 @@ dbm_open(const char *name, int flags, int mode)
     return retval;
 }
 
-PUBLIC datum
+datum
 dbm_firstkey(DBM *file)
 {
     datum retval;
@@ -66,7 +66,7 @@ dbm_firstkey(DBM *file)
 #define KEY_ID "key" /* 4 bytes long, counting NUL */
 #define CONTENT_ID "content" /* 8 bytes long, counting NUL */
 
-PRIVATE void
+static void
 read_datum(DBM *file)
 {
     if(file)
@@ -104,7 +104,7 @@ read_datum(DBM *file)
     }
 }
 
-PUBLIC datum
+datum
 dbm_nextkey(DBM *file)
 {
     datum retval;
@@ -126,7 +126,7 @@ dbm_nextkey(DBM *file)
     return retval;
 }
 
-PUBLIC datum
+datum
 dbm_fetch(DBM *file, datum key)
 {
     datum retval;
@@ -153,7 +153,7 @@ dbm_fetch(DBM *file, datum key)
         _n % 4 ? 4 - _n % 4 : 0; \
     })
 
-PRIVATE void
+static void
 buf_from_datum(char **opp, datum d, const char *tag)
 {
     char *op;
@@ -170,7 +170,7 @@ buf_from_datum(char **opp, datum d, const char *tag)
     *opp = op;
 }
 
-PUBLIC int
+int
 dbm_store(DBM *file, datum key, datum content, int flags)
 {
     int retval;
@@ -202,7 +202,7 @@ dbm_store(DBM *file, datum key, datum content, int flags)
     return retval;
 }
 
-PUBLIC void
+void
 dbm_close(DBM *file)
 {
     if(file)

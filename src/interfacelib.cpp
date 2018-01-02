@@ -95,56 +95,56 @@ C_DragTheRgn( RgnHandle rgn, Point startp,
 
 /* here are some low-memory global accessors */
 
-PRIVATE int32_t
+static int32_t
 LMGetLastSPExtra(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(LastSPExtra);
 }
 
-PRIVATE GDHandle
+static GDHandle
 LMGetTheGDevice(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(TheGDevice);
 }
 
-PRIVATE Ptr
+static Ptr
 LMGetROMBase(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(ROMBase);
 }
 
-PRIVATE Handle
+static Handle
 LMGetMenuList(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(MenuList);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetResErr(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(ResErr);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetPrintErr(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(PrintErr);
 }
 
-PRIVATE Ptr
+static Ptr
 LMGetWidthPtr(void)
 {
     warning_trace_info(NULL_STRING);
     return (Ptr)MR(WidthPtr);
 }
 
-PRIVATE uint32_t
+static uint32_t
 LMGetCaretTime(void)
 {
     warning_trace_info(NULL_STRING);
@@ -152,7 +152,7 @@ LMGetCaretTime(void)
 }
 
 #if 0
-PRIVATE Handle
+static Handle
 LMGetQDColors (void)
 {
   warning_trace_info (NULL_STRING);
@@ -160,21 +160,21 @@ LMGetQDColors (void)
 }
 #endif
 
-PRIVATE Ptr
+static Ptr
 LMGetDefVCBPtr(void)
 {
     warning_trace_info(NULL_STRING);
     return (Ptr)MR(DefVCBPtr);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetAtMenuBottom(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(AtMenuBottom);
 }
 
-PRIVATE uint8
+static uint8
 LMGetSdVolume(void)
 {
     warning_trace_info(NULL_STRING);
@@ -185,280 +185,280 @@ LMGetSdVolume(void)
 typedef void *DragGrayRgnUPP;
 #endif
 
-PRIVATE DragGrayRgnUPP
+static DragGrayRgnUPP
 LMGetDragHook(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(DragHook);
 }
 
-PRIVATE Handle
+static Handle
 LMGetWidthListHand(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(WidthListHand);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetTopMenuItem(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(TopMenuItem);
 }
 
-PRIVATE uint32_t
+static uint32_t
 LMGetDoubleTime(void)
 {
     warning_trace_info(NULL_STRING);
     return CL(DoubleTime);
 }
 
-PRIVATE StringHandle
+static StringHandle
 LMGetDAStrings(short which)
 {
     warning_trace_info(NULL_STRING);
     return (StringHandle)MR(DAStrings_H[which].p);
 }
 
-PRIVATE GDHandle
+static GDHandle
 LMGetMainDevice(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(MainDevice);
 }
 
-PRIVATE Handle
+static Handle
 LMGetWidthTabHandle(void)
 {
     warning_trace_info(NULL_STRING);
     return (Handle)MR(WidthTabHandle);
 }
 
-PRIVATE int16_t
+static int16_t
 LMGetROM85(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(ROM85);
 }
 
-PRIVATE uint8
+static uint8
 LMGetKbdType(void)
 {
     warning_trace_info(NULL_STRING);
     return CB(KbdType);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetScrHRes(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(ScrHRes);
 }
 
-PRIVATE StringPtr
+static StringPtr
 LMGetCurApName(void)
 {
     warning_trace_info(NULL_STRING);
     return CurApName; /* don't swap: is an array */
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetSysMap(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(SysMap);
 }
 
-PRIVATE THz
+static THz
 LMGetTheZone(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(TheZone);
 }
 
-PRIVATE RgnHandle
+static RgnHandle
 LMGetGrayRgn(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(GrayRgn);
 }
 
-PRIVATE QHdrPtr
+static QHdrPtr
 LMGetEventQueue(void)
 {
     warning_trace_info(NULL_STRING);
     return &EventQueue;
 }
 
-PRIVATE THz
+static THz
 LMGetApplZone(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(ApplZone);
 }
 
-PRIVATE uint32_t
+static uint32_t
 LMGetTicks(void)
 {
     warning_trace_info(NULL_STRING);
     return CL(Ticks);
 }
 
-PRIVATE uint8
+static uint8
 LMGetResLoad(void)
 {
     warning_trace_info(NULL_STRING);
     return CB(ResLoad);
 }
 
-PRIVATE StringPtr
+static StringPtr
 LMGetFinderName(void)
 {
     warning_trace_info(NULL_STRING);
     return FinderName;
 }
 
-PRIVATE Ptr
+static Ptr
 LMGetApplLimit(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(ApplLimit);
 }
 
-PRIVATE Ptr
+static Ptr
 LMGetHeapEnd(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(HeapEnd);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetMBarHeight(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(MBarHeight);
 }
 
-PRIVATE Handle
+static Handle
 LMGetTopMapHndl(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(TopMapHndl);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetScrVRes(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(ScrVRes);
 }
 
-PRIVATE void
+static void
 LMSetMenuDisable(int32_t val)
 {
     warning_trace_info(NULL_STRING);
     MenuDisable = CL(val);
 }
 
-PRIVATE void
+static void
 LMSetAtMenuBottom(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
     AtMenuBottom = CW(val);
 }
 
-PRIVATE void
+static void
 LMSetTopMenuItem(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
     TopMenuItem = CW(val);
 }
 
-PRIVATE void
+static void
 LMSetSFSaveDisk(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
     SFSaveDisk = CW(val);
 }
 
-PRIVATE void
+static void
 LMSetTheZone(THz val)
 {
     warning_trace_info(NULL_STRING);
     TheZone = RM(val);
 }
 
-PRIVATE void
+static void
 LMSetApplZone(THz val)
 {
     warning_trace_info(NULL_STRING);
     ApplZone = RM(val);
 }
 
-PRIVATE void
+static void
 LMSetResLoad(uint8 val)
 {
     warning_trace_info(NULL_STRING);
     ResLoad = CB(val);
 }
 
-PRIVATE void
+static void
 LMSetApplLimit(Ptr val)
 {
     warning_trace_info(NULL_STRING);
     ApplLimit = RM(val);
 }
 
-PRIVATE void
+static void
 LMSetResErr(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
     ResErr = CW(val);
 }
 
-PRIVATE void
+static void
 LMSetHeapEnd(Ptr val)
 {
     warning_trace_info(NULL_STRING);
     HeapEnd = RM(val);
 }
 
-PRIVATE void
+static void
 LMSetCurDirStore(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
     CurDirStore = CW(val);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetCurApRefNum(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(CurApRefNum);
 }
 
-PRIVATE LONGINT
+static LONGINT
 LMGetCurDirStore(void)
 {
     warning_trace_info(NULL_STRING);
     return CL(CurDirStore);
 }
 
-PRIVATE uint8
+static uint8
 LMGetCrsrBusy(void)
 {
     warning_trace_info(NULL_STRING);
     return CB(CrsrBusy);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetSysFontSize(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(SysFontSiz);
 }
 
-PRIVATE INTEGER
+static INTEGER
 GetDefFontSize(void)
 {
     INTEGER retval;
@@ -470,77 +470,77 @@ GetDefFontSize(void)
     return retval;
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetSFSaveDisk(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(SFSaveDisk);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetSysFontFam(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(SysFontFam);
 }
 
-PRIVATE Handle
+static Handle
 LMGetGZRootHnd(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(GZRootHnd);
 }
 
-PRIVATE void
+static void
 LMSetSysFontFam(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
     SysFontFam = CW(val);
 }
 
-PRIVATE void
+static void
 LMSetSysFontSize(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
     SysFontSiz = CW(val);
 }
 
-PRIVATE WindowPtr
+static WindowPtr
 LMGetCurActivate(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(CurActivate);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetCurJTOffset(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(CurJTOffset);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetCurMap(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(CurMap);
 }
 
-PRIVATE Ptr
+static Ptr
 LMGetCurStackBase(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(CurStackBase);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetFSFCBLen(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(FSFCBLen);
 }
 
-PRIVATE Handle
+static Handle
 LMGetGZMoveHnd(void)
 {
     warning_trace_info(NULL_STRING);
@@ -548,56 +548,56 @@ LMGetGZMoveHnd(void)
     return (Handle)CLC(-1);
 }
 
-PRIVATE WindowPtr
+static WindowPtr
 LMGetGhostWindow(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(GhostWindow);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetHWCfgFlags(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(SCSIFlags);
 }
 
-PRIVATE Byte
+static Byte
 LMGetHiliteMode(void)
 {
     warning_trace_info(NULL_STRING);
     return CB(HiliteMode);
 }
 
-PRIVATE void
+static void
 LMGetHiliteRGB(RGBColor *rgbp)
 {
     warning_trace_info(NULL_STRING);
     *rgbp = HiliteRGB;
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetKeyThresh(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(KeyThresh);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetSysEvtMask(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(SysEvtMask);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetTEScrpLength(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(TEScrpLength);
 }
 
-PRIVATE uint32_t
+static uint32_t
 LMGetTime(void)
 {
     warning_trace_info(NULL_STRING);
@@ -605,35 +605,35 @@ LMGetTime(void)
     return CL(Time);
 }
 
-PRIVATE WindowPeek
+static WindowPeek
 LMGetWindowList(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(WindowList);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetTESysJust(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(TESysJust);
 }
 
-PRIVATE INTEGER
+static INTEGER
 LMGetBootDrive(void)
 {
     warning_trace_info(NULL_STRING);
     return CW(BootDrive);
 }
 
-PRIVATE Byte
+static Byte
 LMGetFractEnable(void)
 {
     warning_trace_info(NULL_STRING);
     return CB(FractEnable);
 }
 
-PRIVATE Ptr
+static Ptr
 LMGetRAMBase(void)
 {
     warning_trace_info(NULL_STRING);
@@ -641,56 +641,56 @@ LMGetRAMBase(void)
     return (Ptr)MR(SysZone);
 }
 
-PRIVATE Ptr
+static Ptr
 LMGetBufPtr(void)
 {
     warning_trace_info(NULL_STRING);
     return MR(BufPtr);
 }
 
-PRIVATE void
+static void
 LMSetTESysJust(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
     TESysJust = CW(val);
 }
 
-PRIVATE void
+static void
 LMSetCurActivate(WindowPtr val)
 {
     warning_trace_info(NULL_STRING);
     CurActivate = RM(val);
 }
 
-PRIVATE void
+static void
 LMSetCurDeactive(WindowPtr val)
 {
     warning_trace_info(NULL_STRING);
     CurDeactive = RM(val);
 }
 
-PRIVATE void
+static void
 LMSetCurMap(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
     CurMap = CW(val);
 }
 
-PRIVATE void
+static void
 LMSetGrayRgn(RgnHandle val)
 {
     warning_trace_info(NULL_STRING);
     GrayRgn = RM(val);
 }
 
-PRIVATE void
+static void
 LMSetHiliteMode(Byte val)
 {
     warning_trace_info(NULL_STRING);
     HiliteMode = CB(val);
 }
 
-PRIVATE void
+static void
 LMSetLastSPExtra(LONGINT val)
 {
     warning_trace_info(NULL_STRING);
@@ -698,14 +698,14 @@ LMSetLastSPExtra(LONGINT val)
     LastSPExtra = CL(val);
 }
 
-PRIVATE void
+static void
 LMSetMBarHeight(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
     MBarHeight = CW(val);
 }
 
-PRIVATE void
+static void
 LMSetROMMapInsert(Byte val)
 {
     warning_trace_info(NULL_STRING);
@@ -713,21 +713,21 @@ LMSetROMMapInsert(Byte val)
     RomMapInsert = CB(val);
 }
 
-PRIVATE void
+static void
 LMSetTEScrpLength(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
     TEScrpLength = CW(val);
 }
 
-PRIVATE void
+static void
 LMSetTopMapHndl(Handle val)
 {
     warning_trace_info(NULL_STRING);
     TopMapHndl = RM(val);
 }
 
-PRIVATE void
+static void
 LMSetFractEnable(Byte value)
 {
     warning_trace_info("%d", value);
@@ -736,7 +736,7 @@ LMSetFractEnable(Byte value)
 
 /* provide some routines we don't normally use in ROMlib */
 
-PUBLIC char *
+char *
 ROMlib_p2cstr(StringPtr str)
 {
     int len;
@@ -748,7 +748,7 @@ ROMlib_p2cstr(StringPtr str)
     return str;
 }
 
-PRIVATE StringPtr
+static StringPtr
 c2pstr(char *str)
 {
     int len;
@@ -761,7 +761,7 @@ c2pstr(char *str)
 }
 
 /* wrap FrontWindow because we know Illustrator patches it out */
-PRIVATE WindowPtr
+static WindowPtr
 FrontWindow_wrapper(void)
 {
     WindowPtr retval;
@@ -773,7 +773,7 @@ FrontWindow_wrapper(void)
 
 /* wrap functions around #defines */
 
-PRIVATE Size
+static Size
 MaxMemSys_wrapper(Size *grow)
 {
     Size retval;
@@ -783,7 +783,7 @@ MaxMemSys_wrapper(Size *grow)
     return retval;
 }
 
-PRIVATE Size
+static Size
 MaxMem_wrapper(Size *grow)
 {
     Size retval;
@@ -793,7 +793,7 @@ MaxMem_wrapper(Size *grow)
     return retval;
 }
 
-PRIVATE Ptr
+static Ptr
 NewPtr_wrapper(Size s)
 {
     Ptr retval;
@@ -803,49 +803,49 @@ NewPtr_wrapper(Size s)
     return retval;
 }
 
-PRIVATE Size
+static Size
 CompactMem_wrapper(Size s)
 {
     warning_trace_info(NULL_STRING);
     return CompactMem(s);
 }
 
-PRIVATE Ptr
+static Ptr
 NewPtrClear_wrapper(Size s)
 {
     warning_trace_info(NULL_STRING);
     return NewPtrClear(s);
 }
 
-PRIVATE Ptr
+static Ptr
 NewPtrSys_wrapper(Size s)
 {
     warning_trace_info(NULL_STRING);
     return NewPtrSys(s);
 }
 
-PRIVATE Ptr
+static Ptr
 NewPtrSysClear_wrapper(Size s)
 {
     warning_trace_info(NULL_STRING);
     return NewPtrSysClear(s);
 }
 
-PRIVATE Handle
+static Handle
 NewHandleClear_wrapper(Size s)
 {
     warning_trace_info(NULL_STRING);
     return NewHandleClear(s);
 }
 
-PRIVATE Handle
+static Handle
 NewHandleClearSys_wrapper(Size s)
 {
     warning_trace_info(NULL_STRING);
     return NewHandleSysClear(s);
 }
 
-PRIVATE Handle
+static Handle
 NewHandle_wrapper(Size s)
 {
     Handle retval;
@@ -855,98 +855,98 @@ NewHandle_wrapper(Size s)
     return retval;
 }
 
-PRIVATE Handle
+static Handle
 NewHandleSys_wrapper(Size s)
 {
     warning_trace_info(NULL_STRING);
     return NewHandleSys(s);
 }
 
-PRIVATE void
+static void
 PurgeMem_wrapper(Size needed)
 {
     warning_trace_info("%d", needed);
     PurgeMem(needed);
 }
 
-PRIVATE OSErr
+static OSErr
 PBFlushVolSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBFlushVol(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHSetVolSync(WDPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHSetVol(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBFlushFileSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBFlushFile(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBCatSearchAsync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBCatSearch(pb, true);
 }
 
-PRIVATE OSErr
+static OSErr
 PBLockRangeSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBLockRange(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBUnlockRangeSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBUnlockRange(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBDTGetIconSync(DTPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBDTGetIcon(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBDTGetIconInfoSync(DTPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBDTGetIconInfo(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHRstFLockSync(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHRstFLock(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHSetFLockSync(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHSetFLock(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBCloseWDSync(WDPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBCloseWD(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 CloseWD(INTEGER wdref)
 {
     OSErr retval;
@@ -959,42 +959,42 @@ CloseWD(INTEGER wdref)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 PBHGetVInfoSync(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHGetVInfo(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBGetWDInfoSync(WDPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBGetWDInfo(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBAllocateSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBAllocate(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBAllocContigSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBAllocContig(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBGetEOFSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBGetEOF(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 HRstFLock(INTEGER vref, LONGINT dirid, Str255 file)
 {
     OSErr retval;
@@ -1009,7 +1009,7 @@ HRstFLock(INTEGER vref, LONGINT dirid, Str255 file)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 HDelete(INTEGER vrefnum, LONGINT dirid, Str255 filename)
 {
     OSErr retval;
@@ -1025,7 +1025,7 @@ HDelete(INTEGER vrefnum, LONGINT dirid, Str255 filename)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 HOpenDF(INTEGER vref, LONGINT dirid, Str255 file, int8 perm, INTEGER *refp)
 {
     OSErr retval;
@@ -1045,13 +1045,13 @@ HOpenDF(INTEGER vref, LONGINT dirid, Str255 file, int8 perm, INTEGER *refp)
 
 /* nops */
 
-PRIVATE void
+static void
 DisableIdle_nop(void)
 {
     warning_trace_info(NULL_STRING);
 }
 
-PRIVATE void
+static void
 EnableIdle_nop(void)
 {
     warning_trace_info(NULL_STRING);
@@ -1059,7 +1059,7 @@ EnableIdle_nop(void)
 
 /* routines that pass points by value */
 
-PRIVATE LONGINT
+static LONGINT
 PinRect_PC(Rect *r, PointAsLong pal)
 {
     Point p;
@@ -1070,7 +1070,7 @@ PinRect_PC(Rect *r, PointAsLong pal)
     return PinRect(r, p);
 }
 
-PRIVATE void
+static void
 AddPt_PC(PointAsLong src, Point *dst)
 {
     Point p;
@@ -1081,7 +1081,7 @@ AddPt_PC(PointAsLong src, Point *dst)
     AddPt(p, dst);
 }
 
-PRIVATE void
+static void
 SubPt_PC(PointAsLong src, Point *dst)
 {
     Point p;
@@ -1092,7 +1092,7 @@ SubPt_PC(PointAsLong src, Point *dst)
     SubPt(p, dst);
 }
 
-PRIVATE Boolean
+static Boolean
 IsOutline_PC(PointAsLong numerAL, PointAsLong denomAL)
 {
     Point numer;
@@ -1106,7 +1106,7 @@ IsOutline_PC(PointAsLong numerAL, PointAsLong denomAL)
     return IsOutline(numer, denom);
 }
 
-PRIVATE INTEGER
+static INTEGER
 DIBadMount_PC(PointAsLong pal, LONGINT evtmess)
 {
     Point p;
@@ -1117,7 +1117,7 @@ DIBadMount_PC(PointAsLong pal, LONGINT evtmess)
     return C_DIBadMount(p, evtmess);
 }
 
-PRIVATE INTEGER
+static INTEGER
 TrackControl_PC(ControlHandle c, PointAsLong pal, ProcPtr a)
 {
     Point p;
@@ -1128,7 +1128,7 @@ TrackControl_PC(ControlHandle c, PointAsLong pal, ProcPtr a)
     return TrackControl(c, p, a);
 }
 
-PRIVATE void
+static void
 DragWindow_PC(WindowPtr wp, PointAsLong pal, Rect *rp)
 {
     Point p;
@@ -1139,7 +1139,7 @@ DragWindow_PC(WindowPtr wp, PointAsLong pal, Rect *rp)
     DragWindow(wp, p, rp);
 }
 
-PRIVATE INTEGER
+static INTEGER
 FindWindow_PC(PointAsLong pal, GUEST<WindowPtr> *wpp)
 {
     Point p;
@@ -1152,7 +1152,7 @@ FindWindow_PC(PointAsLong pal, GUEST<WindowPtr> *wpp)
     return retval;
 }
 
-PRIVATE LONGINT
+static LONGINT
 MenuSelect_PC(PointAsLong pal)
 {
     Point p;
@@ -1166,7 +1166,7 @@ MenuSelect_PC(PointAsLong pal)
     return retval;
 }
 
-PRIVATE INTEGER
+static INTEGER
 FindControl_PC(PointAsLong pal, WindowPtr w, GUEST<ControlHandle> *cp)
 {
     Point p;
@@ -1177,7 +1177,7 @@ FindControl_PC(PointAsLong pal, WindowPtr w, GUEST<ControlHandle> *cp)
     return FindControl(p, w, cp);
 }
 
-PRIVATE BOOLEAN
+static BOOLEAN
 PtInRect_PC(PointAsLong pal, Rect *r)
 {
     Point p;
@@ -1188,7 +1188,7 @@ PtInRect_PC(PointAsLong pal, Rect *r)
     return PtInRect(p, r);
 }
 
-PRIVATE void
+static void
 SFPPutFile_PC(PointAsLong pal, StringPtr prompt, StringPtr name, ProcPtr dh,
               SFReply *rep, INTEGER dig, ProcPtr fp)
 {
@@ -1200,7 +1200,7 @@ SFPPutFile_PC(PointAsLong pal, StringPtr prompt, StringPtr name, ProcPtr dh,
     SFPPutFile(p, prompt, name, dh, rep, dig, fp);
 }
 
-PRIVATE void
+static void
 SFGetFile_PC(PointAsLong pal, StringPtr prompt, ProcPtr filef, INTEGER numt,
              SFTypeList tl, ProcPtr dh, SFReply *rep)
 {
@@ -1212,7 +1212,7 @@ SFGetFile_PC(PointAsLong pal, StringPtr prompt, ProcPtr filef, INTEGER numt,
     SFGetFile(p, prompt, filef, numt, tl, dh, rep);
 }
 
-PRIVATE void
+static void
 SFPutFile_PC(PointAsLong pal, StringPtr prompt, StringPtr name, ProcPtr dh,
              SFReply *rep)
 {
@@ -1224,7 +1224,7 @@ SFPutFile_PC(PointAsLong pal, StringPtr prompt, StringPtr name, ProcPtr dh,
     SFPutFile(p, prompt, name, dh, rep);
 }
 
-PUBLIC void
+void
 SFPGetFile_SYSV4(PointAsLong pal, StringPtr prompt, ProcPtr filef,
                  INTEGER numt, SFTypeList tl, ProcPtr dh, SFReply *rep,
                  const sfpgetfile_aixtosysv4 *pbp)
@@ -1237,7 +1237,7 @@ SFPGetFile_SYSV4(PointAsLong pal, StringPtr prompt, ProcPtr filef,
     SFPGetFile(p, prompt, filef, numt, tl, dh, rep, pbp->dig, pbp->fp);
 }
 
-PUBLIC OSErr
+OSErr
 HMShowMenuBalloon_SYSV4(INTEGER item, INTEGER menuid, LONGINT flags,
                         LONGINT itemreserved, PointAsLong pal,
                         RectPtr alternaterectp, Ptr tipproc,
@@ -1252,7 +1252,7 @@ HMShowMenuBalloon_SYSV4(INTEGER item, INTEGER menuid, LONGINT flags,
                                argp->variant);
 }
 
-PUBLIC OSErr
+OSErr
 HMGetIndHelpMsg_SYSV4(ResType type, INTEGER resid, INTEGER msg,
                       INTEGER state, LONGINT *options, PointAsLong pal,
                       Rect *altrectp, const hmgetindhelpmsg_aixtosysv4 *pbp)
@@ -1266,7 +1266,7 @@ HMGetIndHelpMsg_SYSV4(ResType type, INTEGER resid, INTEGER msg,
                            pbp->count);
 }
 
-PUBLIC ControlHandle
+ControlHandle
 NewControl_SYSV4(WindowPtr wst, Rect *r, StringPtr title, BOOLEAN vis,
                  INTEGER value, INTEGER min, INTEGER max,
                  const newcontrol_aixtosysv4 *pbp)
@@ -1275,14 +1275,14 @@ NewControl_SYSV4(WindowPtr wst, Rect *r, StringPtr title, BOOLEAN vis,
                       pbp->rc);
 }
 
-PUBLIC CDialogPtr
+CDialogPtr
 NewCDialog_SYSV4(Ptr p, Rect *rp, StringPtr sp, BOOLEAN b1, INTEGER i,
                  WindowPtr wp, BOOLEAN b2, const newcdialog_aixtosysv4 *pbp)
 {
     return NewCDialog(p, rp, sp, b1, i, wp, b2, pbp->l, pbp->h);
 }
 
-PUBLIC DialogPtr
+DialogPtr
 NewDialog_SYSV4(Ptr dst, Rect *r, StringPtr tit, BOOLEAN vis, INTEGER procid,
                 WindowPtr behind, BOOLEAN gaflag,
                 const newdialog_aixtosysv4 *pbp)
@@ -1291,7 +1291,7 @@ NewDialog_SYSV4(Ptr dst, Rect *r, StringPtr tit, BOOLEAN vis, INTEGER procid,
                      pbp->items);
 }
 
-PUBLIC OSErr
+OSErr
 OutlineMetrics_SYSV4(int16_t byte_count, Ptr text, PointAsLong numerAL,
                      PointAsLong denomAL, int16_t *y_max, int16_t *y_min,
                      Fixed *aw_array, const outlinemetrics_aixtosysv4 *pbp)
@@ -1308,7 +1308,7 @@ OutlineMetrics_SYSV4(int16_t byte_count, Ptr text, PointAsLong numerAL,
                           aw_array, pbp->lsb_array, pbp->bounds_array);
 }
 
-PUBLIC ListHandle
+ListHandle
 LNew_SYSV4(Rect *rview, Rect *bounds, PointAsLong pal, INTEGER proc,
            WindowPtr wind, BOOLEAN draw, BOOLEAN grow,
            const lnew_aixtosysv4 *pbp)
@@ -1321,7 +1321,7 @@ LNew_SYSV4(Rect *rview, Rect *bounds, PointAsLong pal, INTEGER proc,
                 pbp->scrollv);
 }
 
-PUBLIC INTEGER
+INTEGER
 PixelToChar_SYSV4(Ptr textBuf, LONGINT textLen, Fixed slop,
                   Fixed pixelWidth, BOOLEAN *leadingEdgep,
                   Fixed *widthRemainingp, JustStyleCode styleRunPosition,
@@ -1332,7 +1332,7 @@ PixelToChar_SYSV4(Ptr textBuf, LONGINT textLen, Fixed slop,
                          pbp->denom);
 }
 
-PUBLIC void
+void
 CustomPutFile_SYSV4(Str255 prompt, Str255 defaultName,
                     StandardFileReply *replyp, INTEGER dlgid, PointAsLong pal,
                     DlgHookYDProcPtr dlghook,
@@ -1347,7 +1347,7 @@ CustomPutFile_SYSV4(Str255 prompt, Str255 defaultName,
                     pbp->activeList, pbp->activateproc, pbp->yourdatap);
 }
 
-PUBLIC void
+void
 CustomGetFile_SYSV4(FileFilterYDProcPtr filefilter, INTEGER numtypes,
                     SFTypeList typelist, StandardFileReply *replyp,
                     INTEGER dlgid, PointAsLong pal, DlgHookYDProcPtr dlghook,
@@ -1362,7 +1362,7 @@ CustomGetFile_SYSV4(FileFilterYDProcPtr filefilter, INTEGER numtypes,
                     pbp->yourdatap);
 }
 
-PRIVATE LONGINT
+static LONGINT
 GrowWindow_PC(WindowPtr w, PointAsLong pal, Rect *rp)
 {
     Point p;
@@ -1373,7 +1373,7 @@ GrowWindow_PC(WindowPtr w, PointAsLong pal, Rect *rp)
     return GrowWindow(w, p, rp);
 }
 
-PRIVATE BOOLEAN
+static BOOLEAN
 TrackGoAway_PC(WindowPtr w, PointAsLong pal)
 {
     Point p;
@@ -1384,7 +1384,7 @@ TrackGoAway_PC(WindowPtr w, PointAsLong pal)
     return TrackGoAway(w, p);
 }
 
-PRIVATE BOOLEAN
+static BOOLEAN
 LClick_PC(PointAsLong pal, INTEGER mods, ListHandle list)
 {
     Point p;
@@ -1395,7 +1395,7 @@ LClick_PC(PointAsLong pal, INTEGER mods, ListHandle list)
     return LClick(p, mods, list);
 }
 
-PRIVATE BOOLEAN
+static BOOLEAN
 GetColor_PC(PointAsLong pal, Str255 prompt, RGBColor *in, RGBColor *out)
 {
     Point p;
@@ -1406,7 +1406,7 @@ GetColor_PC(PointAsLong pal, Str255 prompt, RGBColor *in, RGBColor *out)
     return GetColor(p, prompt, in, out);
 }
 
-PRIVATE BOOLEAN
+static BOOLEAN
 EqualPt_PC(PointAsLong pal1, PointAsLong pal2)
 {
     Point p1, p2;
@@ -1419,7 +1419,7 @@ EqualPt_PC(PointAsLong pal1, PointAsLong pal2)
     return EqualPt(p1, p2);
 }
 
-PRIVATE void
+static void
 ShieldCursor_PC(Rect *rp, PointAsLong pal)
 {
     Point p;
@@ -1430,7 +1430,7 @@ ShieldCursor_PC(Rect *rp, PointAsLong pal)
     ShieldCursor(rp, p);
 }
 
-PRIVATE void
+static void
 PtToAngle_PC(Rect *rp, PointAsLong pal, INTEGER *angle)
 {
     Point p;
@@ -1441,7 +1441,7 @@ PtToAngle_PC(Rect *rp, PointAsLong pal, INTEGER *angle)
     PtToAngle(rp, p, angle);
 }
 
-PRIVATE void
+static void
 TEClick_PC(PointAsLong pal, BOOLEAN ext, TEHandle teh)
 {
     Point p;
@@ -1452,7 +1452,7 @@ TEClick_PC(PointAsLong pal, BOOLEAN ext, TEHandle teh)
     TEClick(p, ext, teh);
 }
 
-PRIVATE void
+static void
 Pt2Rect_PC(PointAsLong pal1, PointAsLong pal2, Rect *dest)
 {
     Point p1, p2;
@@ -1465,7 +1465,7 @@ Pt2Rect_PC(PointAsLong pal1, PointAsLong pal2, Rect *dest)
     Pt2Rect(p1, p2, dest);
 }
 
-PRIVATE LONGINT
+static LONGINT
 DragGrayRgn_PC(RgnHandle rgn, PointAsLong pal, Rect *limit, Rect *slop,
                INTEGER axis, ProcPtr proc)
 {
@@ -1477,7 +1477,7 @@ DragGrayRgn_PC(RgnHandle rgn, PointAsLong pal, Rect *limit, Rect *slop,
     return DragGrayRgn(rgn, p, limit, slop, axis, proc);
 }
 
-PRIVATE BOOLEAN
+static BOOLEAN
 PtInRgn_PC(PointAsLong pal, RgnHandle rh)
 {
     Point p;
@@ -1488,7 +1488,7 @@ PtInRgn_PC(PointAsLong pal, RgnHandle rh)
     return PtInRgn(p, rh);
 }
 
-PRIVATE OSErr
+static OSErr
 HMShowBalloon_PC(HMMessageRecord *msgp, PointAsLong pal,
                  RectPtr alternaterectp, Ptr tipprocptr, INTEGER proc,
                  INTEGER variant, INTEGER method)
@@ -1502,7 +1502,7 @@ HMShowBalloon_PC(HMMessageRecord *msgp, PointAsLong pal,
                            variant, method);
 }
 
-PRIVATE INTEGER
+static INTEGER
 TestControl_PC(ControlHandle c, PointAsLong pal)
 {
     Point p;
@@ -1513,7 +1513,7 @@ TestControl_PC(ControlHandle c, PointAsLong pal)
     return TestControl(c, p);
 }
 
-PRIVATE void
+static void
 TEGetPoint_PC(Point *retvalp, INTEGER offset, TEHandle teh)
 {
     PointAsLong pal;
@@ -1526,7 +1526,7 @@ TEGetPoint_PC(Point *retvalp, INTEGER offset, TEHandle teh)
     *retvalp = p;
 }
 
-PRIVATE INTEGER
+static INTEGER
 TEGetOffset_PC(PointAsLong pal, TEHandle te)
 {
     INTEGER retval;
@@ -1538,7 +1538,7 @@ TEGetOffset_PC(PointAsLong pal, TEHandle te)
     return retval;
 }
 
-PRIVATE void
+static void
 StdLine_PC(PointAsLong pal)
 {
     Point p;
@@ -1549,7 +1549,7 @@ StdLine_PC(PointAsLong pal)
     StdLine(p);
 }
 
-PRIVATE void
+static void
 StdText_PC(INTEGER n, Ptr textbufp, PointAsLong numAL, PointAsLong denAL)
 {
     Point num;
@@ -1565,7 +1565,7 @@ StdText_PC(INTEGER n, Ptr textbufp, PointAsLong numAL, PointAsLong denAL)
 
 typedef uint32_t CellAsLong;
 
-PRIVATE void
+static void
 LFind_PC(INTEGER *offsetp, INTEGER *lenp, CellAsLong cellAL, ListHandle list)
 {
     Cell cell;
@@ -1576,7 +1576,7 @@ LFind_PC(INTEGER *offsetp, INTEGER *lenp, CellAsLong cellAL, ListHandle list)
     LFind(offsetp, lenp, cell, list);
 }
 
-PRIVATE void
+static void
 LRect_PC(Rect *cellrect, CellAsLong cellAL, ListHandle list)
 {
     Cell cell;
@@ -1587,7 +1587,7 @@ LRect_PC(Rect *cellrect, CellAsLong cellAL, ListHandle list)
     LRect(cellrect, cell, list);
 }
 
-PRIVATE void
+static void
 LDraw_PC(CellAsLong cellAL, ListHandle list)
 {
     Cell cell;
@@ -1598,7 +1598,7 @@ LDraw_PC(CellAsLong cellAL, ListHandle list)
     LDraw(cell, list);
 }
 
-PRIVATE void
+static void
 LSetSelect_PC(BOOLEAN setit, CellAsLong cellAL, ListHandle list)
 {
     Cell cell;
@@ -1609,7 +1609,7 @@ LSetSelect_PC(BOOLEAN setit, CellAsLong cellAL, ListHandle list)
     LSetSelect(setit, cell, list);
 }
 
-PRIVATE void
+static void
 LAddToCell_PC(Ptr dp, INTEGER dl, CellAsLong cellAL, ListHandle list)
 {
     Cell cell;
@@ -1620,7 +1620,7 @@ LAddToCell_PC(Ptr dp, INTEGER dl, CellAsLong cellAL, ListHandle list)
     LAddToCell(dp, dl, cell, list);
 }
 
-PRIVATE void
+static void
 LClrCell_PC(CellAsLong cellAL, ListHandle list)
 {
     Cell cell;
@@ -1631,7 +1631,7 @@ LClrCell_PC(CellAsLong cellAL, ListHandle list)
     LClrCell(cell, list);
 }
 
-PRIVATE void
+static void
 LGetCell_PC(Ptr dp, INTEGER *dlp, CellAsLong cellAL, ListHandle list)
 {
     Cell cell;
@@ -1642,7 +1642,7 @@ LGetCell_PC(Ptr dp, INTEGER *dlp, CellAsLong cellAL, ListHandle list)
     LGetCell(dp, dlp, cell, list);
 }
 
-PRIVATE void
+static void
 LSetCell_PC(Ptr dp, INTEGER dl, CellAsLong cellAL, ListHandle list)
 {
     Cell cell;
@@ -1653,7 +1653,7 @@ LSetCell_PC(Ptr dp, INTEGER dl, CellAsLong cellAL, ListHandle list)
     LSetCell(dp, dl, cell, list);
 }
 
-PRIVATE void
+static void
 LCellSize_PC(PointAsLong csizeAL, ListHandle list)
 {
     Point p;
@@ -1664,7 +1664,7 @@ LCellSize_PC(PointAsLong csizeAL, ListHandle list)
     LCellSize(p, list);
 }
 
-PRIVATE BOOLEAN
+static BOOLEAN
 TrackBox_PC(WindowPtr wp, PointAsLong ptAL, INTEGER part)
 {
     Point p;
@@ -1681,14 +1681,14 @@ TrackBox_PC(WindowPtr wp, PointAsLong ptAL, INTEGER part)
 
 typedef int32_t OSStatus;
 
-PRIVATE OSStatus
+static OSStatus
 RegisterAppearanceClient_stub(void)
 {
     warning_trace_info(NULL_STRING);
     return noErr;
 }
 
-PRIVATE void
+static void
 LowerText_stub(unsigned char *p, INTEGER len)
 {
     while(len-- > 0)
@@ -1699,7 +1699,7 @@ LowerText_stub(unsigned char *p, INTEGER len)
     warning_trace_info(NULL_STRING);
 }
 
-PRIVATE void
+static void
 UpperText_stub(unsigned char *p, INTEGER len)
 {
     while(len-- > 0)
@@ -1720,7 +1720,7 @@ enum
 
 // #warning we should really merge this with what is in emustubs.c
 
-PRIVATE void
+static void
 NSetTrapAddress_stub(UniversalProcPtr addr, uint16_t trapnum, TrapType typ)
 {
     switch(typ)
@@ -1740,14 +1740,14 @@ NSetTrapAddress_stub(UniversalProcPtr addr, uint16_t trapnum, TrapType typ)
     warning_trace_info(NULL_STRING);
 }
 
-PRIVATE void
+static void
 SetOSTrapAddress(UniversalProcPtr addr, uint16_t trapnum)
 {
     warning_trace_info(NULL_STRING);
     NSetTrapAddress_stub(addr, trapnum, kOSTrapType);
 }
 
-PRIVATE UniversalProcPtr
+static UniversalProcPtr
 GetToolTrapAddress(uint16_t trap_no)
 {
     UniversalProcPtr retval;
@@ -1760,7 +1760,7 @@ GetToolTrapAddress(uint16_t trap_no)
     return retval;
 }
 
-PRIVATE UniversalProcPtr
+static UniversalProcPtr
 GetOSTrapAddress(uint16_t trap_no)
 {
     UniversalProcPtr retval;
@@ -1773,7 +1773,7 @@ GetOSTrapAddress(uint16_t trap_no)
     return retval;
 }
 
-PRIVATE long
+static long
 SetA5(long val)
 {
     long retval;
@@ -1784,7 +1784,7 @@ SetA5(long val)
     return retval;
 }
 
-PRIVATE int
+static int
 count_and_reverse_args(uint32_t *infop)
 {
     uint32_t info_in;
@@ -1802,7 +1802,7 @@ count_and_reverse_args(uint32_t *infop)
     return retval;
 }
 
-PRIVATE int
+static int
 extract_stack_parameters(ProcInfoType info, va_list ap,
                          uint32_t params[13], int widths[13],
                          where_args_t where)
@@ -1882,7 +1882,7 @@ extract_stack_parameters(ProcInfoType info, va_list ap,
     return n_params;
 }
 
-PRIVATE int
+static int
 extract_68k_reg_parameters(ProcInfoType orig_info, uint32_t params[13],
                            int widths[13])
 {
@@ -1950,7 +1950,7 @@ extract_68k_reg_parameters(ProcInfoType orig_info, uint32_t params[13],
     return retval;
 }
 
-PRIVATE long
+static long
 Call68KProc_from_native(void *addr, ProcInfoType info, va_list ap)
 {
     long retval;
@@ -2092,7 +2092,7 @@ Call68KProc_from_native(void *addr, ProcInfoType info, va_list ap)
     return retval;
 }
 
-PUBLIC long
+long
 CallUniversalProc_from_native_common(va_list ap, where_args_t where,
                                      ProcPtr proc, ProcInfoType info)
 {
@@ -2263,7 +2263,7 @@ CallUniversalProc_from_native_common(va_list ap, where_args_t where,
     return retval;
 }
 
-PUBLIC long
+long
 CallUniversalProc_from_native(UniversalProcPtr proc, ProcInfoType info, ...)
 {
     va_list ap;
@@ -2286,21 +2286,21 @@ CallUniversalProc_from_native(UniversalProcPtr proc, ProcInfoType info, ...)
     return retval;
 }
 
-PRIVATE void
+static void
 microseconds(uint64_t *retp)
 {
     warning_trace_info(NULL_STRING);
     *retp = (uint64_t)(uint32_t)msecs_elapsed() * 1000;
 }
 
-PRIVATE void
+static void
 PurgeSpace_wrapper(uint32_t *totalp, uint32_t *contigp)
 {
     PurgeSpace(totalp, contigp);
     warning_trace_info("%d %d", *totalp, *contigp);
 }
 
-PRIVATE void
+static void
 HLockHi_wrapper(Handle h)
 {
     warning_trace_info(NULL_STRING);
@@ -2308,21 +2308,21 @@ HLockHi_wrapper(Handle h)
     HLock(h);
 }
 
-PRIVATE LONGINT
+static LONGINT
 MaxBlock_wrapper(void)
 {
     warning_trace_info(NULL_STRING);
     return MaxBlock();
 }
 
-PRIVATE Handle
+static Handle
 RecoverHandle_wrapper(Ptr p)
 {
     warning_trace_info(NULL_STRING);
     return RecoverHandle(p);
 }
 
-PRIVATE uint32_t
+static uint32_t
 FreeMem_wrapper(void)
 {
     uint32_t retval;
@@ -2332,7 +2332,7 @@ FreeMem_wrapper(void)
     return retval;
 }
 
-PRIVATE uint32_t
+static uint32_t
 FreeMemSys_wrapper(void)
 {
     uint32_t retval;
@@ -2342,14 +2342,14 @@ FreeMemSys_wrapper(void)
     return retval;
 }
 
-PRIVATE void
+static void
 ReserveMem_wrapper(Size size)
 {
     warning_trace_info(NULL_STRING);
     ResrvMem(size);
 }
 
-PRIVATE uint32_t
+static uint32_t
 SetCurrentA5(void)
 {
     uint32_t retval;
@@ -2360,119 +2360,119 @@ SetCurrentA5(void)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 PBCloseSync_wrapper(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBClose(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBDeleteSync_wrapper(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBDelete(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBExchangeFilesSync_wrapper(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBExchangeFiles(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBGetCatInfoSync_wrapper(CInfoPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBGetCatInfo(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBGetFCBInfoSync_wrapper(FCBPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBGetFCBInfo(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBGetFCBInfoAsync_wrapper(FCBPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBGetFCBInfo(pb, true);
 }
 
-PRIVATE OSErr
+static OSErr
 PBGetVInfoSync_wrapper(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBGetVInfo(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHCreateSync_wrapper(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHCreate(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBGetFInfoSync_wrapper(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBGetFInfo(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHGetFInfoSync_wrapper(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHGetFInfo(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHGetFInfoAsync_wrapper(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHGetFInfo(pb, true);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHGetVolParmsSync_wrapper(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHGetVolParms(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHGetVolSync_wrapper(WDPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHGetVol(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHOpenSync_wrapper(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHOpen(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHSetFInfoSync_wrapper(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHSetFInfo(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBSetFInfoSync_wrapper(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBSetFInfo(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 OpenWD(INTEGER vref, LONGINT dirid, LONGINT procid, INTEGER *wdrefp)
 {
     WDPBRec wdpb;
@@ -2489,7 +2489,7 @@ OpenWD(INTEGER vref, LONGINT dirid, LONGINT procid, INTEGER *wdrefp)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 DirCreate(INTEGER vref, LONGINT parid, Str255 dirname, LONGINT *outdir)
 {
     OSErr retval;
@@ -2506,196 +2506,196 @@ DirCreate(INTEGER vref, LONGINT parid, Str255 dirname, LONGINT *outdir)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 PBOpenWDSync_wrapper(WDPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBOpenWD(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBReadSync_wrapper(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBRead(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBReadAsync_wrapper(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBRead(pb, true);
 }
 
-PRIVATE OSErr
+static OSErr
 PBRenameSync_wrapper(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBRename(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBSetCatInfoSync_wrapper(CInfoPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBSetCatInfo(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBSetEOFSync_wrapper(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBSetEOF(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBStatusSync_wrapper(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBStatus(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBWriteSync_wrapper(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBWrite(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBWriteAsync_wrapper(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBWrite(pb, true);
 }
 
-PRIVATE OSErr
+static OSErr
 PBDTAddAPPLSync(DTPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBDTAddAPPL(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBDTGetAPPLSync(DTPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBDTGetAPPL(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBDirCreateSync(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBDirCreate(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBGetFPosSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBGetFPos(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBSetFPosSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBSetFPos(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBDTAddIconSync(DTPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBDTAddIcon(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBDTSetCommentSync(DTPBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBDTSetComment(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBSetVolSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBSetVol(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBSetVInfoSync(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBSetVInfo(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHDeleteSync(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHDelete(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBCatSearchSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBCatSearch(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBCatMoveSync(CMovePBPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBCatMove(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHRenameSync(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHRename(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBOpenSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBOpen(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHOpenDFSync(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBOpenDF(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHOpenRFSync(HParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBHOpenRF(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBOpenRFSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBOpenRF(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBControlSync(ParmBlkPtr pb)
 {
     warning_trace_info(NULL_STRING);
     return PBControl(pb, false);
 }
 
-PRIVATE OSErr
+static OSErr
 PBHOpenDenySync(HParmBlkPtr pb)
 {
     OSErr retval;
@@ -2705,7 +2705,7 @@ PBHOpenDenySync(HParmBlkPtr pb)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 HGetVol(StringPtr volName, INTEGER *vrefp, LONGINT *diridp)
 {
     OSErr retval;
@@ -2722,7 +2722,7 @@ HGetVol(StringPtr volName, INTEGER *vrefp, LONGINT *diridp)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 HSetVol(StringPtr volName, INTEGER vref, LONGINT dirid)
 {
     OSErr retval;
@@ -2736,7 +2736,7 @@ HSetVol(StringPtr volName, INTEGER vref, LONGINT dirid)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 HOpen(INTEGER vref, LONGINT dirid, Str255 filename, SignedByte perm,
       INTEGER *refp)
 {
@@ -2756,7 +2756,7 @@ HOpen(INTEGER vref, LONGINT dirid, Str255 filename, SignedByte perm,
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 HSetFInfo(INTEGER vref, LONGINT dirid, Str255 filename, FInfo *finfop)
 {
     OSErr retval;
@@ -2773,28 +2773,28 @@ HSetFInfo(INTEGER vref, LONGINT dirid, Str255 filename, FInfo *finfop)
 
 /* AppleTalk stubs -- ick */
 
-PRIVATE void
+static void
 NBPSetEntity_stub(Ptr bufp, Str32 obj, Str32 typ, Str32 zone)
 {
     *bufp = 0;
     warning_trace_info(NULL_STRING);
 }
 
-PRIVATE Boolean
+static Boolean
 IsMPPOpen(void)
 {
     warning_trace_info(NULL_STRING);
     return false;
 }
 
-PRIVATE Boolean
+static Boolean
 IsATPOpen(void)
 {
     warning_trace_info(NULL_STRING);
     return false;
 }
 
-PRIVATE OSErr
+static OSErr
 MPPOpen_stub(void)
 {
     warning_trace_info(NULL_STRING);
@@ -2803,7 +2803,7 @@ MPPOpen_stub(void)
 
 /* Misc. PPC-only */
 
-PRIVATE void
+static void
 SetDialogFont(INTEGER font)
 {
     DlgFont = CW(font);
@@ -2812,7 +2812,7 @@ SetDialogFont(INTEGER font)
 
 /* Fixed point Math */
 
-PRIVATE Fixed
+static Fixed
 X2Fix_wrapper(double x)
 {
     Fixed retval;
@@ -2822,7 +2822,7 @@ X2Fix_wrapper(double x)
     return retval;
 }
 
-PRIVATE void
+static void
 MakeDataExecutable(void *p, uint32_t len)
 {
     warning_trace_info("%p %d", p, len);
@@ -2830,7 +2830,7 @@ MakeDataExecutable(void *p, uint32_t len)
     // FIXME: #warning need to call mprotect here
 }
 
-PRIVATE map_entry_t
+static map_entry_t
     interfacelib_map[]
     = {
         {
@@ -6538,7 +6538,7 @@ PRIVATE map_entry_t
         },
       };
 
-PUBLIC OSErr
+OSErr
 ROMlib_GetInterfaceLib(Str63 library, OSType arch, LoadFlags loadflags,
                        ConnectionID *cidp, Ptr *mainaddrp, Str255 errName)
 {

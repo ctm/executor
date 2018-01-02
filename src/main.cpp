@@ -111,25 +111,25 @@ static void setstartdir(char *);
 using namespace Executor;
 using namespace std;
 
-PUBLIC int Executor::ROMlib_noclock = 0;
+int Executor::ROMlib_noclock = 0;
 
 #if defined(NOMOUSE_COMMAND_LINE_OPTION)
-PUBLIC int ROMlib_no_mouse = 1;
+int ROMlib_no_mouse = 1;
 #endif
 
 /* optional resolution other than 72dpix72dpi for printing */
-PUBLIC INTEGER Executor::ROMlib_optional_res_x, Executor::ROMlib_optional_res_y;
+INTEGER Executor::ROMlib_optional_res_x, Executor::ROMlib_optional_res_y;
 
 /* A string approximating the original command line. */
-PUBLIC const char *Executor::ROMlib_command_line;
+const char *Executor::ROMlib_command_line;
 
 /* Set to true if there was any error parsing arguments. */
-PRIVATE bool bad_arg_p = false;
+static bool bad_arg_p = false;
 
 /* Set to false when we know that the command line switches will result
    in no graphics. */
 
-PRIVATE bool graphics_p = true;
+static bool graphics_p = true;
 
 /* for a description of flags declared here, see <rsys/flags.h> */
 
@@ -433,12 +433,12 @@ LONGINT Executor::wait4(LONGINT pid, union wait *statusp, LONGINT options,
 }
 #endif /* NEED_WAIT4 */
 
-PUBLIC char Executor::ROMlib_startdir[MAXPATHLEN];
-PUBLIC INTEGER ROMlib_startdirlen;
+char Executor::ROMlib_startdir[MAXPATHLEN];
+INTEGER ROMlib_startdirlen;
 #if defined(WIN32)
-PUBLIC char Executor::ROMlib_start_drive;
+char Executor::ROMlib_start_drive;
 #endif
-PUBLIC std::string Executor::ROMlib_appname;
+std::string Executor::ROMlib_appname;
 
 #if !defined(LINUX)
 #define SHELL "/bin/sh"
@@ -450,7 +450,7 @@ PUBLIC std::string Executor::ROMlib_appname;
 
 #define APPWRAP "/Executor.app"
 
-PRIVATE void
+static void
 set_appname(char *argv0)
 {
     char *p = strrchr(argv0, '/');
@@ -556,7 +556,7 @@ static void setstartdir(char *argv0)
 #endif /* defined(MSDOS) */
 }
 
-PUBLIC BOOLEAN Executor::ROMlib_startupscreen = true;
+BOOLEAN Executor::ROMlib_startupscreen = true;
 
 char *Executor::program_name;
 
@@ -715,11 +715,11 @@ illegal_mode(void)
 }
 
 #if defined(MSDOS) || defined(CYGWIN32)
-PUBLIC uint32_t ROMlib_macdrives; /* default computed at runtime */
-PUBLIC uint32_t ROMlib_dosdrives = ~0;
-PRIVATE uint32_t skipdrives = 0;
+uint32_t ROMlib_macdrives; /* default computed at runtime */
+uint32_t ROMlib_dosdrives = ~0;
+static uint32_t skipdrives = 0;
 
-PRIVATE bool
+static bool
 drive_number_from_letter(char c, int *nump)
 {
     bool retval;
@@ -739,7 +739,7 @@ drive_number_from_letter(char c, int *nump)
     return retval;
 }
 
-PRIVATE void
+static void
 drive_error(const char *opt)
 {
     fprintf(stderr, "Invalid drive specification.\nUse something like "
@@ -748,7 +748,7 @@ drive_error(const char *opt)
     bad_arg_p = true;
 }
 
-PRIVATE const char *
+static const char *
 munch_next_char(const char *p, uint32_t *destp, const char *opt)
 {
     const char *retval;
@@ -789,7 +789,7 @@ munch_next_char(const char *p, uint32_t *destp, const char *opt)
     return retval;
 }
 
-PUBLIC uint32_t
+uint32_t
 parse_drive_opt(const char *opt_name, const char *opt_value)
 {
     uint32_t retval;
@@ -871,7 +871,7 @@ construct_command_line_string(int argc, char **argv)
     return s;
 }
 
-PRIVATE int
+static int
 zap_comments(char *buf, int n_left)
 {
     char *ip, *op;
@@ -903,19 +903,19 @@ zap_comments(char *buf, int n_left)
     return retval;
 }
 
-PUBLIC FILE *
+FILE *
 Executor::executor_dir_fopen(const char *file, const char *perm)
 {
     return fopen(expandPath(std::string("+/") + file).c_str(), perm);
 }
 
-PUBLIC int
+int
 Executor::executor_dir_remove(const char *file)
 {
     return remove(expandPath(std::string("+/") + file).c_str());
 }
 
-PRIVATE void
+static void
 read_args_from_file(const char *filename, int *argcp, char ***argvpp)
 {
     FILE *fp;
@@ -943,7 +943,7 @@ read_args_from_file(const char *filename, int *argcp, char ***argvpp)
 }
 
 #if defined(CYGWIN32)
-PRIVATE uint32_t
+static uint32_t
 win_drive_to_bit(const char *drive_namep)
 {
     uint32_t retval;

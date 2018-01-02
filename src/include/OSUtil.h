@@ -157,41 +157,41 @@ extern Byte MMUType;
 extern Byte KbdType;
 #endif
 
-extern trap OSErrRET HandToHand(Handle *h);
-extern trap OSErrRET PtrToHand(Ptr p, Handle *h, LONGINT s);
-extern trap OSErrRET PtrToXHand(Ptr p, Handle h, LONGINT s);
-extern trap OSErrRET HandAndHand(Handle h1, Handle h2);
-extern trap OSErrRET PtrAndHand(Ptr p, Handle h, LONGINT s1);
+extern OSErrRET HandToHand(Handle *h);
+extern OSErrRET PtrToHand(Ptr p, Handle *h, LONGINT s);
+extern OSErrRET PtrToXHand(Ptr p, Handle h, LONGINT s);
+extern OSErrRET HandAndHand(Handle h1, Handle h2);
+extern OSErrRET PtrAndHand(Ptr p, Handle h, LONGINT s1);
 extern LONGINT ROMlib_RelString(unsigned char *s1, unsigned char *s2,
                                 BOOLEAN casesig, BOOLEAN diacsig, LONGINT d0);
-extern trap INTEGERRET RelString(StringPtr s1, StringPtr s2,
+extern INTEGERRET RelString(StringPtr s1, StringPtr s2,
                                  BOOLEAN casesig, BOOLEAN diacsig);
-extern trap BOOLEANRET EqualString(StringPtr s1, StringPtr s2,
+extern BOOLEANRET EqualString(StringPtr s1, StringPtr s2,
                                    BOOLEAN casesig, BOOLEAN diacsig);
 extern void ROMlib_UprString(StringPtr s, BOOLEAN diac, INTEGER len);
-extern trap void UprString(StringPtr s, BOOLEAN diac);
+extern void UprString(StringPtr s, BOOLEAN diac);
 extern void GetDateTime(GUEST<ULONGINT> *mactimepointer);
-extern trap OSErrRET ReadDateTime(GUEST<ULONGINT> *secs);
-extern trap OSErrRET SetDateTime(ULONGINT mactime);
-extern trap void Date2Secs(DateTimeRec *d, ULONGINT *s);
-extern trap void Secs2Date(ULONGINT mactime, DateTimeRec *d);
+extern OSErrRET ReadDateTime(GUEST<ULONGINT> *secs);
+extern OSErrRET SetDateTime(ULONGINT mactime);
+extern void Date2Secs(DateTimeRec *d, ULONGINT *s);
+extern void Secs2Date(ULONGINT mactime, DateTimeRec *d);
 extern void GetTime(DateTimeRec *d);
 extern void SetTime(DateTimeRec *d);
-extern trap OSErrRET InitUtil(void);
+extern OSErrRET InitUtil(void);
 extern SysPPtr GetSysPPtr(void);
-extern trap OSErrRET WriteParam(void);
-extern trap void Enqueue(QElemPtr e, QHdrPtr h);
-extern trap OSErrRET Dequeue(QElemPtr e, QHdrPtr h);
+extern OSErrRET WriteParam(void);
+extern void Enqueue(QElemPtr e, QHdrPtr h);
+extern OSErrRET Dequeue(QElemPtr e, QHdrPtr h);
 extern LONGINT GetTrapAddress(INTEGER n);
 extern LONGINT NGetTrapAddress(INTEGER n, INTEGER ttype);
 extern void SetTrapAddress(LONGINT addr,
                            INTEGER n);
-extern trap void Delay(LONGINT n, LONGINT *ftp);
-extern pascal trap void C_SysBeep(INTEGER i);
+extern void Delay(LONGINT n, LONGINT *ftp);
+extern void C_SysBeep(INTEGER i);
 PASCAL_TRAP(SysBeep, 0xA9C8);
 
-extern trap void Environs(GUEST<INTEGER> *rom, GUEST<INTEGER> *machine);
-extern trap OSErrRET SysEnvirons(INTEGER vers, SysEnvRecPtr p);
+extern void Environs(GUEST<INTEGER> *rom, GUEST<INTEGER> *machine);
+extern OSErrRET SysEnvirons(INTEGER vers, SysEnvRecPtr p);
 extern void Restart(void);
 extern void SetUpA5(void);
 extern void RestoreA5(void);
@@ -201,7 +201,7 @@ extern void GetMMUMode(GUEST<INTEGER> *ip);
 extern void SwapMMUMode(Byte *bp);
 extern LONGINT StripAddress(LONGINT l);
 
-extern pascal trap void C_DebugStr(StringPtr p);
+extern void C_DebugStr(StringPtr p);
 PASCAL_TRAP(DebugStr, 0xABFF);
 }
 #endif /* __OSUTIL__ */

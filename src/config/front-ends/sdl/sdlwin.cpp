@@ -50,8 +50,8 @@ void Executor::vdriver_opt_register(void)
 {
 }
 
-PUBLIC bool ROMlib_fullscreen_p = false;
-PUBLIC bool ROMlib_hwsurface_p = false;
+bool ROMlib_fullscreen_p = false;
+bool ROMlib_hwsurface_p = false;
 
 bool Executor::vdriver_init(int _max_width, int _max_height, int _max_bpp,
                             bool fixed_p, int *argc, char *argv[])

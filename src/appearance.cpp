@@ -17,13 +17,13 @@
 
 using namespace Executor;
 
-PRIVATE appearance_t appearance = appearance_sys7;
+static appearance_t appearance = appearance_sys7;
 
 /*
  * NOTE:  Order of following entries must correspond to appearance_t enum
  */
 
-PRIVATE StringPtr res_filenames[] = {
+static StringPtr res_filenames[] = {
     (StringPtr) "\010mac.rsrc",
     (StringPtr) "\014windows.rsrc",
 };
@@ -31,7 +31,7 @@ PRIVATE StringPtr res_filenames[] = {
 /* Exactly the same as CountTypes, except only the resource file with the
    refnum of rn is consulted.  */
 
-PRIVATE INTEGER
+static INTEGER
 CountTypesRN(INTEGER rn)
 {
     INTEGER savern, retval;
@@ -46,7 +46,7 @@ CountTypesRN(INTEGER rn)
 /* Exactly the same as CountResources, except only the resource file with the
    refnum rn is consulted.  */
 
-PRIVATE INTEGER
+static INTEGER
 CountResourcesRN(INTEGER rn, ResType type)
 {
     INTEGER savern, retval;
@@ -60,7 +60,7 @@ CountResourcesRN(INTEGER rn, ResType type)
 
 /* Exactly like GetResource, except limited to the file specified by rn.  */
 
-PRIVATE Handle
+static Handle
 GetResourceRN(INTEGER rn, ResType type, INTEGER id)
 {
     INTEGER savern;
@@ -76,7 +76,7 @@ GetResourceRN(INTEGER rn, ResType type, INTEGER id)
 /* Exactly the same as AddResource, except its action is limited to the file
    with the refnum rn.  */
 
-PRIVATE void
+static void
 AddResourceRN(INTEGER rn, Handle h, ResType type, INTEGER id, Str255 name)
 {
     Handle current_handle;
@@ -135,7 +135,7 @@ AddResourceRN(INTEGER rn, Handle h, ResType type, INTEGER id, Str255 name)
 /* Exactly the same as GetIndType, except its action is limited to the file
    with the refnum rn.  */
 
-PRIVATE void
+static void
 GetIndTypeRN(INTEGER rn, GUEST<ResType> *typep, INTEGER type_num)
 {
     INTEGER savern;
@@ -149,7 +149,7 @@ GetIndTypeRN(INTEGER rn, GUEST<ResType> *typep, INTEGER type_num)
 /* Exactly the same as GetIndResource except limited to resources from the
    file with refnum rn. */
 
-PRIVATE Handle
+static Handle
 GetIndResourceRN(INTEGER rn, ResType type, INTEGER id)
 {
     INTEGER savern;
@@ -162,7 +162,7 @@ GetIndResourceRN(INTEGER rn, ResType type, INTEGER id)
     return retval;
 }
 
-PRIVATE void
+static void
 silently_replace_resources(INTEGER master_file_rn, INTEGER from_file_rn)
 {
     THz save_zone;
@@ -204,7 +204,7 @@ silently_replace_resources(INTEGER master_file_rn, INTEGER from_file_rn)
     SetZone(save_zone);
 }
 
-PUBLIC void
+void
 Executor::ROMlib_set_appearance(void)
 {
     INTEGER res_file;
@@ -222,7 +222,7 @@ Executor::ROMlib_set_appearance(void)
     }
 }
 
-PUBLIC bool
+bool
 Executor::ROMlib_parse_appearance(const char *appearance_str)
 {
     bool retval = true;

@@ -124,7 +124,7 @@ enum
     THROTTLE_TICKS = 4
 };
 
-PRIVATE bool
+static bool
 enough_time_has_passed(void)
 {
     static ULONGINT old_ticks;

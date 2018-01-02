@@ -27,7 +27,7 @@
 
 using namespace Executor;
 
-PUBLIC WriteWhenType Executor::ROMlib_when = WriteInBltrgn;
+WriteWhenType Executor::ROMlib_when = WriteInBltrgn;
 
 void Executor::ROMlib_WriteWhen(WriteWhenType when)
 {
@@ -636,7 +636,7 @@ theport_bpp(void)
     return bpp;
 }
 
-PUBLIC void
+void
 Executor::ROMlib_blt_pn(RgnHandle rh, INTEGER mode)
 {
     int bpp = theport_bpp();

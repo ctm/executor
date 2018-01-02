@@ -34,10 +34,10 @@ typedef struct
     uint32_t count;
 } lock_entry_t;
 
-PRIVATE lock_entry_t *entries;
-PRIVATE int n_entries;
+static lock_entry_t *entries;
+static int n_entries;
 
-PRIVATE void
+static void
 delete_entry(lock_entry_t *entry)
 {
     size_t n_bytes;
@@ -48,7 +48,7 @@ delete_entry(lock_entry_t *entry)
         memmove(entry, &entry[1], n_bytes);
 }
 
-PUBLIC OSErr
+OSErr
 Executor::ROMlib_fd_clear_locks_after_open(int fd, bool be_surprised_p)
 {
     int i;
@@ -82,7 +82,7 @@ Executor::ROMlib_fd_clear_locks_after_open(int fd, bool be_surprised_p)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::ROMlib_fd_release_locks_for_close(int fd)
 {
     OSErr err;
@@ -108,7 +108,7 @@ Executor::ROMlib_fd_release_locks_for_close(int fd)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::ROMlib_fd_add_range(int fd, uint32_t start_byte, uint32_t count)
 {
     OSErr retval;
@@ -140,7 +140,7 @@ Executor::ROMlib_fd_add_range(int fd, uint32_t start_byte, uint32_t count)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::ROMlib_fd_range_overlap(int fd, uint32_t start_byte, uint32_t count)
 {
     OSErr retval;
@@ -183,7 +183,7 @@ Executor::ROMlib_fd_range_overlap(int fd, uint32_t start_byte, uint32_t count)
     return retval;
 }
 
-PRIVATE lock_entry_t *
+static lock_entry_t *
 find_fd_start_count_helper(int fd, uint32_t start_byte, uint32_t count)
 {
     int i;
@@ -203,7 +203,7 @@ find_fd_start_count_helper(int fd, uint32_t start_byte, uint32_t count)
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::ROMlib_find_fd_start_count(int fd, uint32_t start_byte, uint32_t count)
 {
     OSErr retval;
@@ -215,7 +215,7 @@ Executor::ROMlib_find_fd_start_count(int fd, uint32_t start_byte, uint32_t count
     return retval;
 }
 
-PUBLIC OSErr
+OSErr
 Executor::ROMlib_fd_remove_range(int fd, uint32_t start_byte, uint32_t count)
 {
     OSErr retval;

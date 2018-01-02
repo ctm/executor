@@ -237,8 +237,8 @@ extern void do_textend(void);
 
 extern void print_reinit(void);
 
-extern pascal void C_ROMlib_circle_ok(DialogPeek dp, INTEGER which);
-extern pascal void C_ROMlib_orientation(DialogPeek dp, INTEGER which);
+extern void C_ROMlib_circle_ok(DialogPeek dp, INTEGER which);
+extern void C_ROMlib_orientation(DialogPeek dp, INTEGER which);
 
 extern void printer_init(void);
 extern void update_printing_globals(void);

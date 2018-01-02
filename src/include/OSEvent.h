@@ -105,17 +105,17 @@ enum
 extern void ROMlib_eventdep(void);
 extern void insertcommonevent(char *xeventp, commonevent *comevtp);
 extern void ROMlib_zapmap(LONGINT loc, LONGINT val);
-extern trap OSErrRET PPostEvent(INTEGER evcode,
+extern OSErrRET PPostEvent(INTEGER evcode,
                                 LONGINT evmsg, GUEST<EvQElPtr> *qelp);
 extern OSErrRET ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg,
                                   GUEST<EvQElPtr> *qelp, LONGINT when, Point where, INTEGER butmods);
-extern trap OSErrRET PostEvent(INTEGER evcode, LONGINT evmsg);
-extern trap void FlushEvents(INTEGER evmask,
+extern OSErrRET PostEvent(INTEGER evcode, LONGINT evmsg);
+extern void FlushEvents(INTEGER evmask,
                              INTEGER stopmask);
-extern trap BOOLEANRET GetOSEvent(INTEGER evmask, EventRecord *eventp);
-extern trap BOOLEANRET OSEventAvail(INTEGER evmask,
+extern BOOLEANRET GetOSEvent(INTEGER evmask, EventRecord *eventp);
+extern BOOLEANRET OSEventAvail(INTEGER evmask,
                                     EventRecord *eventp);
-extern trap void SetEventMask(INTEGER evmask);
+extern void SetEventMask(INTEGER evmask);
 extern QHdrPtr GetEvQHdr(void);
 
 extern EvQEl *geteventelem(void);
@@ -149,11 +149,11 @@ enum
     bufferIsSmall = (-608),
 };
 
-extern pascal trap OSErr C_AcceptHighLevelEvent(TargetID *sender_id_return, GUEST<int32_t> *refcon_return, Ptr msg_buf, GUEST<int32_t> *msg_length_return);
+extern OSErr C_AcceptHighLevelEvent(TargetID *sender_id_return, GUEST<int32_t> *refcon_return, Ptr msg_buf, GUEST<int32_t> *msg_length_return);
 PASCAL_FUNCTION(AcceptHighLevelEvent);
-extern pascal trap Boolean C_GetSpecificHighLevelEvent(GetSpecificFilterProcPtr fn, Ptr data, OSErr *err_return);
+extern Boolean C_GetSpecificHighLevelEvent(GetSpecificFilterProcPtr fn, Ptr data, OSErr *err_return);
 PASCAL_FUNCTION(GetSpecificHighLevelEvent);
-extern pascal trap OSErr C_PostHighLevelEvent(EventRecord *evt, Ptr receiver_id, int32_t refcon, Ptr msg_buf, int32_t msg_length, int32_t post_options);
+extern OSErr C_PostHighLevelEvent(EventRecord *evt, Ptr receiver_id, int32_t refcon, Ptr msg_buf, int32_t msg_length, int32_t post_options);
 PASCAL_FUNCTION(PostHighLevelEvent);
 
 /* #### move to rsys/foo.h */

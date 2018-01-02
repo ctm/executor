@@ -398,21 +398,21 @@ void thumb_rect(ControlHandle ctl, Rect *thumb_rect_out)
     }
 }
 
-PRIVATE void
+static void
 GlobalToLocalRect(Rect *rp)
 {
     GlobalToLocal((GUEST<Point> *)&rp->top);
     GlobalToLocal((GUEST<Point> *)&rp->bottom);
 }
 
-PRIVATE void
+static void
 LocalToGlobalRect(Rect *rp)
 {
     LocalToGlobal((GUEST<Point> *)&rp->top);
     LocalToGlobal((GUEST<Point> *)&rp->bottom);
 }
 
-PRIVATE void
+static void
 GlobalToLocalRgn(RgnHandle rgn)
 {
     OffsetRgn(rgn, CW(PORT_BOUNDS(thePort).left),
@@ -630,7 +630,7 @@ typedef struct
     CGrafPort cp;
 } save_t;
 
-PRIVATE Handle
+static Handle
 CopyMacHandle(Handle h)
 {
     Handle retval;
@@ -642,7 +642,7 @@ CopyMacHandle(Handle h)
     return retval;
 }
 
-PRIVATE bool
+static bool
 save_and_switch_to_color_port_if_needed(save_t *sp)
 {
     bool retval;
@@ -675,7 +675,7 @@ save_and_switch_to_color_port_if_needed(save_t *sp)
     return retval;
 }
 
-PRIVATE void
+static void
 restore(const save_t *sp)
 {
     SetPort(sp->port);

@@ -13,7 +13,7 @@ static void buildbinarytotrinary()
 {
     LONGINT i, retval;
 
-    printf("PRIVATE INTEGER binarytotrinary[] = {\n");
+    printf("static INTEGER binarytotrinary[] = {\n");
     for(i = 0; i < EIGHTHPOWEROF(2); i++)
     {
         retval = 0;
@@ -55,7 +55,7 @@ static void buildexpandtable()
     LONGINT x, y;
     unsigned char toexpand, seed, retval;
 
-    printf("PRIVATE unsigned char expandtable[] = {\n");
+    printf("static unsigned char expandtable[] = {\n");
     for(i = 0; i < EIGHTHPOWEROF(3); i++)
     {
         toexpand = seed = retval = 0;

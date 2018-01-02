@@ -62,7 +62,7 @@ typedef GUEST<finderinfoptr> *finderinfohand;
 
 using namespace Executor;
 
-PUBLIC int Executor::ROMlib_cacheheuristic = false;
+int Executor::ROMlib_cacheheuristic = false;
 
 void Executor::flushcache()
 {
@@ -191,7 +191,7 @@ static void lastcomponent(StringPtr dest, StringPtr src)
 }
 
 #if defined(MSDOS) || defined(CYGWIN32)
-PRIVATE char *
+static char *
 canonicalize_potential_windows_path(char *uname)
 {
     char *p;
@@ -204,7 +204,7 @@ canonicalize_potential_windows_path(char *uname)
 }
 #endif
 
-PRIVATE bool
+static bool
 full_pathname_p(char *uname)
 {
     bool retval;
@@ -217,7 +217,7 @@ full_pathname_p(char *uname)
     return retval;
 }
 
-PRIVATE uint8
+static uint8
 hexval(char c)
 {
     uint8 retval;
@@ -239,7 +239,7 @@ hexval(char c)
  * (where X and Y are hex digits) into the character 0xXY.
  */
 
-PRIVATE void
+static void
 colon_colon_copy(StringPtr dst, const char *src)
 {
     StringPtr save_dst;
@@ -431,10 +431,10 @@ static BOOLEAN argv_to_appfile(char *uname, AppFile *ap)
 }
 
 #if defined(MACOSX_) && defined(BINCOMPAT)
-PUBLIC INTEGER Executor::ROMlib_acceptsanotherfile = true;
+INTEGER Executor::ROMlib_acceptsanotherfile = true;
 #endif
 
-PUBLIC int Executor::ROMlib_print;
+int Executor::ROMlib_print;
 
 #if !defined(MSDOS) && !defined(CYGWIN32)
 #define PATH_SEPARATER ':'
@@ -595,10 +595,10 @@ void Executor::C_GetAppParms(StringPtr namep, GUEST<INTEGER> *rnp,
     *aphandp = AppParmHandle;
 }
 
-PUBLIC char *ROMlib_errorstring;
-PUBLIC char ROMlib_exit = 0;
+char *ROMlib_errorstring;
+char ROMlib_exit = 0;
 
-PUBLIC int Executor::ROMlib_nobrowser = 0;
+int Executor::ROMlib_nobrowser = 0;
 
 static BOOLEAN valid_browser(void)
 {

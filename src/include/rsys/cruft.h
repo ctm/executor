@@ -9,24 +9,4 @@
 #define BINCOMPAT
 #endif
 
-#if !defined(PRIVATE)
-#define PRIVATE
-#endif
-
-#if !defined(PUBLIC)
-#define PUBLIC
-#endif
-
-#if !defined(pascal)
-#define pascal
-#endif
-
-#if !defined(trap)
-#define trap
-#endif
-
-#if !defined(a0trap)
-#define a0trap
-#endif
-
 #endif /* !_CRUFT_H_ */

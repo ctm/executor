@@ -86,151 +86,151 @@ enum
 
 extern BOOLEAN ROMlib_InstallxDEF(ProcPtr thedef, ResType typ,
                                   INTEGER id);
-extern pascal trap void C_SetResLoad(BOOLEAN load);
+extern void C_SetResLoad(BOOLEAN load);
 PASCAL_TRAP(SetResLoad, 0xA99B);
 
-extern pascal trap INTEGER C_CountResources(ResType typ);
+extern INTEGER C_CountResources(ResType typ);
 PASCAL_TRAP(CountResources, 0xA99C);
 
-extern pascal trap INTEGER C_Count1Resources(
+extern INTEGER C_Count1Resources(
     ResType typ);
 PASCAL_TRAP(Count1Resources, 0xA80D);
-extern pascal trap Handle C_GetIndResource(ResType typ, INTEGER indx);
+extern Handle C_GetIndResource(ResType typ, INTEGER indx);
 PASCAL_TRAP(GetIndResource, 0xA99D);
 
-extern pascal trap Handle C_Get1IndResource(ResType typ,
+extern Handle C_Get1IndResource(ResType typ,
                                             INTEGER i);
 PASCAL_TRAP(Get1IndResource, 0xA80E);
-extern pascal trap Handle C_GetResource(ResType typ, INTEGER id);
+extern Handle C_GetResource(ResType typ, INTEGER id);
 PASCAL_FUNCTION(GetResource);
 
-extern pascal trap Handle C_Get1Resource(ResType typ,
+extern Handle C_Get1Resource(ResType typ,
                                          INTEGER id);
 PASCAL_TRAP(Get1Resource, 0xA81F);
-extern pascal trap Handle C_GetNamedResource(ResType typ, StringPtr nam);
+extern Handle C_GetNamedResource(ResType typ, StringPtr nam);
 PASCAL_TRAP(GetNamedResource, 0xA9A1);
 
-extern pascal trap Handle C_Get1NamedResource(ResType typ,
+extern Handle C_Get1NamedResource(ResType typ,
                                               StringPtr s);
 PASCAL_TRAP(Get1NamedResource, 0xA820);
-extern pascal trap void C_LoadResource(Handle volatile res);
+extern void C_LoadResource(Handle volatile res);
 PASCAL_TRAP(LoadResource, 0xA9A2);
 
-extern pascal trap void C_ReleaseResource(Handle res);
+extern void C_ReleaseResource(Handle res);
 PASCAL_TRAP(ReleaseResource, 0xA9A3);
 
-extern pascal trap void C_DetachResource(Handle res);
+extern void C_DetachResource(Handle res);
 PASCAL_TRAP(DetachResource, 0xA992);
 
-extern pascal trap INTEGER C_UniqueID(ResType typ);
+extern INTEGER C_UniqueID(ResType typ);
 PASCAL_TRAP(UniqueID, 0xA9C1);
 
-extern pascal trap INTEGER C_Unique1ID(ResType typ);
+extern INTEGER C_Unique1ID(ResType typ);
 PASCAL_TRAP(Unique1ID, 0xA810);
 
-extern pascal trap void C_GetResInfo(Handle res, GUEST<INTEGER> *id1,
+extern void C_GetResInfo(Handle res, GUEST<INTEGER> *id1,
                                      GUEST<ResType> *typ, StringPtr name);
 PASCAL_TRAP(GetResInfo, 0xA9A8);
-extern pascal trap INTEGER C_GetResAttrs(Handle res);
+extern INTEGER C_GetResAttrs(Handle res);
 PASCAL_TRAP(GetResAttrs, 0xA9A6);
 
 extern LONGINT ROMlib_SizeResource(Handle res, BOOLEAN usehandle);
-extern pascal trap LONGINT C_SizeResource(Handle res);
+extern LONGINT C_SizeResource(Handle res);
 PASCAL_TRAP(SizeResource, 0xA9A5);
 
-extern pascal trap INTEGER C_CountTypes(void);
+extern INTEGER C_CountTypes(void);
 PASCAL_TRAP(CountTypes, 0xA99E);
 
-extern pascal trap INTEGER C_Count1Types(void);
+extern INTEGER C_Count1Types(void);
 PASCAL_TRAP(Count1Types, 0xA81C);
 
-extern pascal trap void C_GetIndType(GUEST<ResType> *typ, INTEGER indx);
+extern void C_GetIndType(GUEST<ResType> *typ, INTEGER indx);
 PASCAL_TRAP(GetIndType, 0xA99F);
 
-extern pascal trap void C_Get1IndType(GUEST<ResType> *typ,
+extern void C_Get1IndType(GUEST<ResType> *typ,
                                       INTEGER indx);
 PASCAL_TRAP(Get1IndType, 0xA80F);
-extern pascal trap LONGINT C_MaxSizeRsrc(Handle h);
+extern LONGINT C_MaxSizeRsrc(Handle h);
 PASCAL_TRAP(MaxSizeRsrc, 0xA821);
 
-extern pascal trap LONGINT C_RsrcMapEntry(Handle h);
+extern LONGINT C_RsrcMapEntry(Handle h);
 PASCAL_TRAP(RsrcMapEntry, 0xA9C5);
 
-extern pascal trap Handle C_RGetResource(ResType typ, INTEGER id);
+extern Handle C_RGetResource(ResType typ, INTEGER id);
 PASCAL_TRAP(RGetResource, 0xA80C);
 
-extern pascal trap INTEGER C_InitResources(void);
+extern INTEGER C_InitResources(void);
 PASCAL_TRAP(InitResources, 0xA995);
 
-extern pascal trap void C_RsrcZoneInit(void);
+extern void C_RsrcZoneInit(void);
 PASCAL_TRAP(RsrcZoneInit, 0xA996);
 
-extern pascal trap INTEGER C_ResError(void);
+extern INTEGER C_ResError(void);
 PASCAL_TRAP(ResError, 0xA9AF);
 
-extern pascal trap INTEGER C_GetResFileAttrs(INTEGER rn);
+extern INTEGER C_GetResFileAttrs(INTEGER rn);
 PASCAL_TRAP(GetResFileAttrs, 0xA9F6);
 
-extern pascal trap void C_SetResFileAttrs(INTEGER rn, INTEGER attrs);
+extern void C_SetResFileAttrs(INTEGER rn, INTEGER attrs);
 PASCAL_TRAP(SetResFileAttrs, 0xA9F7);
 
-extern pascal trap void C_SetResInfo(Handle res, INTEGER id,
+extern void C_SetResInfo(Handle res, INTEGER id,
                                      StringPtr name);
 PASCAL_TRAP(SetResInfo, 0xA9A9);
-extern pascal trap void C_SetResAttrs(Handle res, INTEGER attrs);
+extern void C_SetResAttrs(Handle res, INTEGER attrs);
 PASCAL_TRAP(SetResAttrs, 0xA9A7);
 
-extern pascal trap void C_ChangedResource(Handle res);
+extern void C_ChangedResource(Handle res);
 PASCAL_TRAP(ChangedResource, 0xA9AA);
 
-extern pascal trap void C_AddResource(Handle data, ResType typ,
+extern void C_AddResource(Handle data, ResType typ,
                                       INTEGER id, StringPtr name);
 PASCAL_TRAP(AddResource, 0xA9AB);
-extern pascal trap void C_RmveResource(Handle res);
+extern void C_RmveResource(Handle res);
 PASCAL_TRAP(RmveResource, 0xA9AD);
 
-extern pascal trap void C_UpdateResFile(INTEGER rn);
+extern void C_UpdateResFile(INTEGER rn);
 PASCAL_TRAP(UpdateResFile, 0xA999);
 
-extern pascal trap void C_WriteResource(Handle res);
+extern void C_WriteResource(Handle res);
 PASCAL_TRAP(WriteResource, 0xA9B0);
 
-extern pascal trap void C_SetResPurge(BOOLEAN install);
+extern void C_SetResPurge(BOOLEAN install);
 PASCAL_TRAP(SetResPurge, 0xA993);
 
-extern pascal trap void C_CreateResFile(StringPtr fn);
+extern void C_CreateResFile(StringPtr fn);
 PASCAL_TRAP(CreateResFile, 0xA9B1);
 
-extern pascal trap INTEGER C_OpenRFPerm(StringPtr fn,
+extern INTEGER C_OpenRFPerm(StringPtr fn,
                                         INTEGER vref, Byte perm);
 PASCAL_TRAP(OpenRFPerm, 0xA9C4);
-extern pascal trap INTEGER C_OpenResFile(StringPtr fn);
+extern INTEGER C_OpenResFile(StringPtr fn);
 PASCAL_TRAP(OpenResFile, 0xA997);
 
-extern pascal trap void C_CloseResFile(INTEGER rn);
+extern void C_CloseResFile(INTEGER rn);
 PASCAL_TRAP(CloseResFile, 0xA99A);
 
-extern pascal trap INTEGER C_CurResFile(void);
+extern INTEGER C_CurResFile(void);
 PASCAL_TRAP(CurResFile, 0xA994);
 
-extern pascal trap INTEGER C_HomeResFile(Handle res);
+extern INTEGER C_HomeResFile(Handle res);
 PASCAL_TRAP(HomeResFile, 0xA9A4);
 
-extern pascal trap void C_UseResFile(INTEGER rn);
+extern void C_UseResFile(INTEGER rn);
 PASCAL_TRAP(UseResFile, 0xA998);
 
-extern pascal trap void C_ReadPartialResource(Handle resource,
+extern void C_ReadPartialResource(Handle resource,
                                               int32_t offset,
                                               Ptr buffer, int32_t count);
 PASCAL_FUNCTION(ReadPartialResource);
-extern pascal trap void C_WritePartialResource(Handle resource,
+extern void C_WritePartialResource(Handle resource,
                                                int32_t offset,
                                                Ptr buffer, int32_t count);
 PASCAL_FUNCTION(WritePartialResource);
-extern pascal trap void C_SetResourceSize(Handle resource, int32_t size);
+extern void C_SetResourceSize(Handle resource, int32_t size);
 PASCAL_FUNCTION(SetResourceSize);
 
-extern pascal Handle C_GetNextFOND(Handle fondHandle);
+extern Handle C_GetNextFOND(Handle fondHandle);
 }
 
 #endif /* _RESOURCE_H_ */

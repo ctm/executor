@@ -36,7 +36,7 @@ C_ldef0(INTEGER, BOOLEAN, Rect *, Cell, INTEGER, INTEGER, ListHandle);
 
 #else /* BINCOMPAT */
 
-typedef pascal void (*listprocp)(INTEGER mess, BOOLEAN sel, Rect *rectp,
+typedef void (*listprocp)(INTEGER mess, BOOLEAN sel, Rect *rectp,
                                  Cell cell, INTEGER off, INTEGER len, ListHandle lhand);
 
 extern void ROMlib_listcall(INTEGER mess, BOOLEAN sel, Rect *rp, Cell cell,

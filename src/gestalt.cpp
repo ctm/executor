@@ -26,7 +26,7 @@ typedef struct
 
 #define UNKNOWN 0xFFFF
 
-PRIVATE gestaltentry_t gtable[] = {
+static gestaltentry_t gtable[] = {
     {
         gestaltAddressingModeAttr, gestalt32BitAddressing | gestalt32BitSysZone | gestalt32BitCapable,
     },
@@ -255,7 +255,7 @@ PRIVATE gestaltentry_t gtable[] = {
 
 };
 
-PRIVATE OSType gtable_selectors_to_patch[] = {
+static OSType gtable_selectors_to_patch[] = {
     gestaltExtToolboxTable,
     gestaltToolboxTable,
     gestaltOSTable,
@@ -268,7 +268,7 @@ gestaltPhysicalRAMSize		'ram '
 
 #define TO_BE_FILLED_IN (0)
 
-PRIVATE gestaltentry_t phystable[] = {
+static gestaltentry_t phystable[] = {
     { gestaltSystemVersion, EXECUTOR_VERSION_NUMERIC },
 #if SIZEOF_CHAR_P == 4
     { gestaltExecutorVersionString, (long)EXECUTOR_VERSION },
@@ -284,7 +284,7 @@ PRIVATE gestaltentry_t phystable[] = {
 #endif
 };
 
-PRIVATE OSType phystable_selectors_to_patch[] = {
+static OSType phystable_selectors_to_patch[] = {
     gestaltExecutorVersionString,
 };
 
@@ -295,9 +295,9 @@ typedef struct gestalt_link_str
     struct gestalt_link_str *next;
 } gestalt_link_t;
 
-PRIVATE gestalt_link_t *gestalt_head;
+static gestalt_link_t *gestalt_head;
 
-PRIVATE gestalt_link_t *
+static gestalt_link_t *
 find_selector_on_list(OSType selector)
 {
     gestalt_link_t *gp;
@@ -307,7 +307,7 @@ find_selector_on_list(OSType selector)
     return gp;
 }
 
-PRIVATE gestaltentry_t *
+static gestaltentry_t *
 find_selector_in_table(OSType selector, gestaltentry_t table[],
                        int table_length)
 {
@@ -347,7 +347,7 @@ find_selector_in_table(OSType selector, gestaltentry_t table[],
     return retval;
 }
 
-PRIVATE void
+static void
 replace_selector_in_table(OSType selector, LONGINT new_value,
                           gestaltentry_t table[], int table_length)
 {
@@ -361,26 +361,26 @@ replace_selector_in_table(OSType selector, LONGINT new_value,
 #define REPLACE_SELECTOR_IN_TABLE(selector, new_value, table) \
     replace_selector_in_table(selector, new_value, table, NELEM(table))
 
-PUBLIC void
+void
 Executor::replace_physgestalt_selector(OSType selector, uint32_t new_value)
 {
     REPLACE_SELECTOR_IN_TABLE(selector, new_value, phystable);
 }
 
-PUBLIC void
+void
 Executor::gestalt_set_memory_size(uint32_t size)
 {
     REPLACE_SELECTOR_IN_TABLE(gestaltLogicalRAMSize, size, gtable);
     REPLACE_SELECTOR_IN_TABLE(gestaltPhysicalRAMSize, size, gtable);
 }
 
-PUBLIC void
+void
 Executor::gestalt_set_system_version(uint32_t version)
 {
     REPLACE_SELECTOR_IN_TABLE(gestaltSystemVersion, version, gtable);
 }
 
-PUBLIC void
+void
 gestalt_set_physical_gestalt_callback(void)
 {
     REPLACE_SELECTOR_IN_TABLE(gestaltPHYSICAL,
@@ -388,14 +388,14 @@ gestalt_set_physical_gestalt_callback(void)
 }
 
 #if defined(powerpc) || defined(__ppc__)
-PUBLIC void
+void
 gestalt_set_cpu_type(uint32_t type)
 {
     REPLACE_SELECTOR_IN_TABLE(gestaltPHYSICAL, type, gtable);
 }
 #endif
 
-PRIVATE OSErrRET
+static OSErrRET
 gestalt_helper(OSType selector, GUEST<LONGINT> *responsep, BOOLEAN searchlist,
                gestaltentry_t table[], int length)
 {
@@ -441,7 +441,7 @@ gestalt_helper(OSType selector, GUEST<LONGINT> *responsep, BOOLEAN searchlist,
     return retval;
 }
 
-PRIVATE void
+static void
 offset_address(gestaltentry_t *gp, int ngp, OSType sel)
 {
     for(; ngp > 0 && gp->selector != sel; --ngp, ++gp)
@@ -450,7 +450,7 @@ offset_address(gestaltentry_t *gp, int ngp, OSType sel)
         gp->value = US_TO_SYN68K(gp->value);
 }
 
-PRIVATE void
+static void
 offset_addresses(gestaltentry_t *gp, int ngp, OSType *selp, int nsels)
 {
     while(nsels-- > 0)
@@ -474,10 +474,10 @@ typedef struct
     GUEST<uint32_t> value;
 } gestalt_list_entry_t;
 
-PRIVATE gestalt_list_entry_t *gestalt_listp = NULL;
-PRIVATE size_t listp_size = 0;
+static gestalt_list_entry_t *gestalt_listp = NULL;
+static size_t listp_size = 0;
 
-PUBLIC void
+void
 Executor::ROMlib_clear_gestalt_list(void)
 {
     free(gestalt_listp);
@@ -485,7 +485,7 @@ Executor::ROMlib_clear_gestalt_list(void)
     listp_size = 0;
 }
 
-PUBLIC void
+void
 Executor::ROMlib_add_to_gestalt_list(OSType selector, OSErr retval, uint32_t new_value)
 {
     decltype(gestalt_listp) new_listp;
@@ -583,7 +583,7 @@ OSErrRET Executor::C_GestaltTablesOnly(OSType selector,
     return gestalt_helper(selector, responsep, false, gtable, NELEM(gtable));
 }
 
-PRIVATE BOOLEAN
+static BOOLEAN
 syszone_p(ProcPtr p)
 {
     THz syszone;
@@ -593,7 +593,7 @@ syszone_p(ProcPtr p)
             && (uintptr_t)p < (uintptr_t)MR(syszone->bkLim));
 }
 
-PRIVATE OSErr
+static OSErr
 new_link(OSType selector, ProcPtr selFunc)
 {
     OSErr retval;

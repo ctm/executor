@@ -64,14 +64,9 @@
 
 namespace Executor
 {
-
-#define PUBLIC
-#undef PRIVATE
-#define PRIVATE static
-
 #define RTS() return POPADDR()
 
-#define STUB(x) PUBLIC syn68k_addr_t _##x(syn68k_addr_t ignoreme, \
+#define STUB(x) syn68k_addr_t _##x(syn68k_addr_t ignoreme, \
                                           void **ignoreme2)
 
 #define ADJUST_CC_BASED_ON_D0()                         \
@@ -339,7 +334,7 @@ typedef struct
 
 typedef syn68k_addr_t (*trap_stuff)(syn68k_addr_t, void **);
 
-PRIVATE syn68k_addr_t
+static syn68k_addr_t
 _do_selector_block(const selectorblock_t *sbp, unsigned long sel,
                    const char *trap_name,
                    trap_stuff trap_fp)
@@ -414,7 +409,7 @@ _do_selector_table(uint32_t selector,
         nullptr, 0     \
     }
 
-PRIVATE ptocblock_t scriptptoc0[] = {
+static ptocblock_t scriptptoc0[] = {
     PTOCBLOCK(FontScript), /* 0 FontScript */
     PTOCBLOCK(IntlScript), /* 2 IntlScript */
     PTOCBLOCK(KeyScript), /* 4 KybdScript */
@@ -448,7 +443,7 @@ PRIVATE ptocblock_t scriptptoc0[] = {
 
 /* D0 IsCmdChar */
 
-PRIVATE ptocblock_t scriptptoc1[] = {
+static ptocblock_t scriptptoc1[] = {
     PTOCBLOCK(ReplaceText), /* 0xDC */
 
 #if defined(NEWSTUBS)
@@ -491,13 +486,13 @@ PRIVATE ptocblock_t scriptptoc1[] = {
 
 };
 
-PRIVATE selectorblock_t scriptutil_block[] = {
+static selectorblock_t scriptutil_block[] = {
     { 0, 0x36, 2, scriptptoc0 },
     { 0xDC, 0xFE, 2, scriptptoc1 },
     { 0, 0, 0, 0 },
 };
 
-PRIVATE ptocblock_t high_scriptutil_ptoc0[] = {
+static ptocblock_t high_scriptutil_ptoc0[] = {
     PTOCBLOCK(CharacterByteType), /* 0x10; 0xc2060010 */
     PTOCBLOCK(CharacterType), /* 0x12; 0xC2060012 */
     ZERO_PTOCBLOCK, /* 0x14 */
@@ -516,19 +511,19 @@ PRIVATE ptocblock_t high_scriptutil_ptoc0[] = {
 #endif
 };
 
-PRIVATE selectorblock_t high_scriptutil_block[] = {
+static selectorblock_t high_scriptutil_block[] = {
     { 0x10, 0x22, 2, high_scriptutil_ptoc0 },
     { 0, 0, 0, 0 },
 };
 
-PRIVATE ptocblock_t textutils_ptoc[] = {
+static ptocblock_t textutils_ptoc[] = {
     PTOCBLOCK(LowercaseText), /* 0x0000 */
     PTOCBLOCK(StripDiacritics), /* 0x0200 */
     PTOCBLOCK(UppercaseText), /* 0x0400 */
     PTOCBLOCK(UppercaseStripDiacritics), /* 0x0600 */
 };
 
-PRIVATE selectorblock_t textutils_block[] = {
+static selectorblock_t textutils_block[] = {
     { 0x0000, 0x0600, 0x0200, textutils_ptoc },
     { 0, 0, 0, 0 },
 };
@@ -576,7 +571,7 @@ STUB(ScriptUtil)
 }
 #endif
 
-PRIVATE ptocblock_t tedispatchptoc[] = {
+static ptocblock_t tedispatchptoc[] = {
     PTOCBLOCK(TEStylPaste), /* 0 */
     PTOCBLOCK(TESetStyle), /* 1 */
     PTOCBLOCK(TEReplaceStyle), /* 2 */
@@ -594,7 +589,7 @@ PRIVATE ptocblock_t tedispatchptoc[] = {
     PTOCBLOCK(TEFeatureFlag), /* 14 */
 };
 
-PRIVATE selectorblock_t tedispatchblock[] = {
+static selectorblock_t tedispatchblock[] = {
     { 0, 14, 1, tedispatchptoc },
     { 0, 0, 0, 0 },
 };
@@ -611,7 +606,7 @@ STUB(TEDispatch)
     return do_selector_block(tedispatchblock, us, TEDispatch);
 }
 
-PRIVATE ptocblock_t fontdispatch_ptoc[] = {
+static ptocblock_t fontdispatch_ptoc[] = {
     PTOCBLOCK(IsOutline), /* 0x0 */
     PTOCBLOCK(SetOutlinePreferred), /* 0x1 */
     ZERO_PTOCBLOCK, /* 0x2 */
@@ -627,7 +622,7 @@ PRIVATE ptocblock_t fontdispatch_ptoc[] = {
     PTOCBLOCK(FlushFonts), /* 0xC */
 };
 
-PRIVATE selectorblock_t fontdispatch_block[] = {
+static selectorblock_t fontdispatch_block[] = {
     { 0x0, 0xC, 1, fontdispatch_ptoc },
     { 0, 0, 0, 0 },
 };
@@ -637,17 +632,17 @@ STUB(FontDispatch)
     return do_selector_block(fontdispatch_block, EM_D0 & 0xF, FontDispatch);
 }
 
-PRIVATE ptocblock_t resource_dispatch_ptoc[] = {
+static ptocblock_t resource_dispatch_ptoc[] = {
     PTOCBLOCK(ReadPartialResource), /* 0x1 */
     PTOCBLOCK(WritePartialResource), /* 0x2 */
     PTOCBLOCK(SetResourceSize), /* 0x3 */
 };
 
-PRIVATE ptocblock_t resource_dispatch_ptoc10[] = {
+static ptocblock_t resource_dispatch_ptoc10[] = {
     PTOCBLOCK(GetNextFOND), /* 10 */
 };
 
-PRIVATE selectorblock_t resource_dispatch_block[] = {
+static selectorblock_t resource_dispatch_block[] = {
     { 0x1, 0x3, 1, resource_dispatch_ptoc },
     { 10, 10, 1, resource_dispatch_ptoc10 },
     { 0, 0, 0, 0 },
@@ -860,7 +855,7 @@ STUB(NMRemove)
     RTS();
 }
 
-PRIVATE ptocblock_t alias_dispatch_ptoc[] = {
+static ptocblock_t alias_dispatch_ptoc[] = {
     PTOCBLOCK(FindFolder), /* 00 */
     ZERO_PTOCBLOCK,
     PTOCBLOCK(NewAlias), /* 02 */
@@ -876,7 +871,7 @@ PRIVATE ptocblock_t alias_dispatch_ptoc[] = {
     PTOCBLOCK(ResolveAliasFile), /* 0C */
 };
 
-PRIVATE selectorblock_t alias_dispatch_block[] = {
+static selectorblock_t alias_dispatch_block[] = {
     { 0, 0xC, 1, alias_dispatch_ptoc },
     { 0, 0, 0, 0 },
 };
@@ -887,7 +882,7 @@ STUB(AliasDispatch)
                              EM_D0 & 0xFFFF, AliasDispatch);
 }
 
-PRIVATE ptocblock_t pack4ptoc[] = {
+static ptocblock_t pack4ptoc[] = {
     PTOCBLOCK(ROMlib_Faddx), /* 00 */
     PTOCBLOCK(ROMlib_Fsetenv), /* 01 */
     PTOCBLOCK(ROMlib_Fsubx), /* 02 */
@@ -919,7 +914,7 @@ PRIVATE ptocblock_t pack4ptoc[] = {
     PTOCBLOCK(ROMlib_Fclassx), /* 1C */
 };
 
-PRIVATE selectorblock_t pack4block[] = {
+static selectorblock_t pack4block[] = {
     { 0, 0x1C, 1, pack4ptoc },
     { 0, 0, 0, 0 },
 };
@@ -932,7 +927,7 @@ STUB(Pack4)
     return do_selector_block(pack4block, us & 0xFF, Pack4);
 }
 
-PRIVATE ptocblock_t pack5ptoc[] = {
+static ptocblock_t pack5ptoc[] = {
     PTOCBLOCK(ROMlib_FlnX), /* 00 */
     PTOCBLOCK(ROMlib_Flog2X), /* 02 */
     PTOCBLOCK(ROMlib_Fln1X), /* 04 */
@@ -952,7 +947,7 @@ PRIVATE ptocblock_t pack5ptoc[] = {
     PTOCBLOCK(ROMlib_FrandX), /* 20 */
 };
 
-PRIVATE selectorblock_t pack5block[] = {
+static selectorblock_t pack5block[] = {
     { 0, 0x20, 2, pack5ptoc },
     { 0, 0, 0, 0 },
 };
@@ -968,7 +963,7 @@ STUB(Pack5)
     return do_selector_block(pack5block, uw & 0xFF, Pack5);
 }
 
-PRIVATE ptocblock_t pack0ptoc[] = {
+static ptocblock_t pack0ptoc[] = {
     PTOCBLOCK(LActivate), /* 0 */
     PTOCBLOCK(LAddColumn), /* 1 */
     PTOCBLOCK(LAddRow), /* 2 */
@@ -997,7 +992,7 @@ PRIVATE ptocblock_t pack0ptoc[] = {
     PTOCBLOCK(LUpdate), /* 25 */
 };
 
-PRIVATE selectorblock_t pack0block[] = {
+static selectorblock_t pack0block[] = {
     { 0, 100, 4, pack0ptoc },
     { 0, 0, 0, 0 },
 };
@@ -1013,21 +1008,21 @@ STUB(Pack0)
     return do_selector_block(pack0block, uw, Pack0);
 }
 
-PRIVATE ptocblock_t osdispatch_ptoc0[] = {
+static ptocblock_t osdispatch_ptoc0[] = {
     PTOCBLOCK(TempMaxMem), /* 0x0015 */
     PTOCBLOCK(TempTopMem), /* 0x0016 */
     ZERO_PTOCBLOCK, /* 0x0017 */
     PTOCBLOCK(TempFreeMem), /* 0x0018 */
 };
 
-PRIVATE ptocblock_t osdispatch_ptoc2[] = {
+static ptocblock_t osdispatch_ptoc2[] = {
     PTOCBLOCK(TempNewHandle), /* 0x001D */
     PTOCBLOCK(TempHLock), /* 0x001E */
     PTOCBLOCK(TempHUnlock), /* 0x001F */
     PTOCBLOCK(TempDisposeHandle), /* 0x0020 */
 };
 
-PRIVATE ptocblock_t osdispatch_ptoc3[] = {
+static ptocblock_t osdispatch_ptoc3[] = {
     PTOCBLOCK(AcceptHighLevelEvent), /* 0x0033 */
     PTOCBLOCK(PostHighLevelEvent), /* 0x0034 */
     PTOCBLOCK(GetProcessSerialNumberFromPortName), /* 0x0035 */
@@ -1036,7 +1031,7 @@ PRIVATE ptocblock_t osdispatch_ptoc3[] = {
 #endif
 };
 
-PRIVATE ptocblock_t osdispatch_ptoc4[] = {
+static ptocblock_t osdispatch_ptoc4[] = {
     PTOCBLOCK(GetCurrentProcess), /* 0x0037 */
     PTOCBLOCK(GetNextProcess), /* 0x0038 */
     PTOCBLOCK(GetFrontProcess), /* 0x0039 */
@@ -1046,12 +1041,12 @@ PRIVATE ptocblock_t osdispatch_ptoc4[] = {
     PTOCBLOCK(SameProcess), /* 0x003D */
 };
 
-PRIVATE ptocblock_t osdispatch_ptoc5[] = {
+static ptocblock_t osdispatch_ptoc5[] = {
     PTOCBLOCK(GetSpecificHighLevelEvent), /* 0x0045 */
     PTOCBLOCK(GetPortNameFromProcessSerialNumber), /* 0x0046 */
 };
 
-PRIVATE selectorblock_t osdispatch_block[] = {
+static selectorblock_t osdispatch_block[] = {
     { 0x0015, 0x0018, 1, osdispatch_ptoc0 },
     { 0x001D, 0x0020, 1, osdispatch_ptoc2 },
 
@@ -1072,7 +1067,7 @@ STUB(OSDispatch)
     return do_selector_block(osdispatch_block, uw, OSDispatch);
 }
 
-PRIVATE selector_table_entry_t pack8_table[] = {
+static selector_table_entry_t pack8_table[] = {
     { 0x011E, PTOCBLOCK(AESetInteractionAllowed) },
     { 0x0204, PTOCBLOCK(AEDisposeDesc) },
     { 0x0219, PTOCBLOCK(AEResetTimer) },
@@ -1173,7 +1168,7 @@ void Executor::C_pack8_unknown_selector()
 namespace Executor
 {
 
-PRIVATE ptocblock_t pack12ptoc[] = {
+static ptocblock_t pack12ptoc[] = {
     PTOCBLOCK(Fix2SmallFract), /* 1 */
     PTOCBLOCK(SmallFract2Fix), /* 2 */
     PTOCBLOCK(CMY2RGB), /* 3 */
@@ -1185,7 +1180,7 @@ PRIVATE ptocblock_t pack12ptoc[] = {
     PTOCBLOCK(GetColor), /* 9 */
 };
 
-PRIVATE selectorblock_t pack12block[] = {
+static selectorblock_t pack12block[] = {
     { 1, 9, 1, pack12ptoc },
     { 0, 0, 0, 0 },
 };
@@ -1206,14 +1201,14 @@ STUB(Pack12)
  *	 Apps don't load the other bytes "properly".
  */
 
-PRIVATE ptocblock_t palette_dispatch_ptoc_1[] = {
+static ptocblock_t palette_dispatch_ptoc_1[] = {
     PTOCBLOCK(Entry2Index), /* 0x00 */
     ZERO_PTOCBLOCK, /* 0x01 */
     PTOCBLOCK(RestoreClutDevice), /* 0x02 */
     PTOCBLOCK(ResizePalette), /* 0x03 */
 };
 
-PRIVATE ptocblock_t palette_dispatch_ptoc_2[] = {
+static ptocblock_t palette_dispatch_ptoc_2[] = {
     PTOCBLOCK(SaveFore), /* 0x40D */
     PTOCBLOCK(SaveBack), /* 0x40E */
     PTOCBLOCK(RestoreFore), /* 0x40F */
@@ -1229,7 +1224,7 @@ PRIVATE ptocblock_t palette_dispatch_ptoc_2[] = {
     PTOCBLOCK(GetGray), /* 0x1219 */
 };
 
-PRIVATE selectorblock_t palette_dispatch_block[] = {
+static selectorblock_t palette_dispatch_block[] = {
     { 0x00, 0x03, 1, palette_dispatch_ptoc_1 },
     { 0x0D, 0x19, 1, palette_dispatch_ptoc_2 },
     { 0, 0, 0, 0 },
@@ -1244,7 +1239,7 @@ STUB(PaletteDispatch)
                              EM_D0 & 0xFF, PaletteDispatch);
 }
 
-PRIVATE ptocblock_t QDExtensions_ptoc[] = {
+static ptocblock_t QDExtensions_ptoc[] = {
     PTOCBLOCK(NewGWorld), /* 0 */
     PTOCBLOCK(LockPixels), /* 1 */
     PTOCBLOCK(UnlockPixels), /* 2 */
@@ -1271,7 +1266,7 @@ PRIVATE ptocblock_t QDExtensions_ptoc[] = {
     PTOCBLOCK(GetGWorldPixMap),
 };
 
-PRIVATE selectorblock_t QDExtensions_block[] = {
+static selectorblock_t QDExtensions_block[] = {
     { 0x0, 0x17, 1, QDExtensions_ptoc },
     { 0, 0, 0, 0 },
 };
@@ -1286,14 +1281,14 @@ STUB(QDExtensions)
     return do_selector_block(QDExtensions_block, selector, QDExtensions);
 }
 
-PRIVATE ptocblock_t shutdwn_ptoc[] = {
+static ptocblock_t shutdwn_ptoc[] = {
     PTOCBLOCK(ShutDwnPower),
     PTOCBLOCK(ShutDwnStart),
     PTOCBLOCK(ShutDwnInstall),
     PTOCBLOCK(ShutDwnRemove),
 };
 
-PRIVATE selectorblock_t shutdwn_block[] = {
+static selectorblock_t shutdwn_block[] = {
     {
         1, 4, 1, shutdwn_ptoc,
     },
@@ -1311,7 +1306,7 @@ STUB(ShutDown)
     return do_selector_block(shutdwn_block, uw, ShutDown);
 }
 
-PRIVATE ptocblock_t pack3ptoc[] = {
+static ptocblock_t pack3ptoc[] = {
     PTOCBLOCK(SFPutFile), /* 1 */
     PTOCBLOCK(SFGetFile), /* 2 */
     PTOCBLOCK(SFPPutFile), /* 3 */
@@ -1322,7 +1317,7 @@ PRIVATE ptocblock_t pack3ptoc[] = {
     PTOCBLOCK(CustomGetFile), /* 8 */
 };
 
-PRIVATE selectorblock_t pack3block[] = {
+static selectorblock_t pack3block[] = {
     { 1, 8, 1, pack3ptoc },
     { 0, 0, 0, 0 },
 };
@@ -1338,7 +1333,7 @@ STUB(Pack3)
     return do_selector_block(pack3block, uw, Pack3);
 }
 
-PRIVATE ptocblock_t pack2ptoc[] = {
+static ptocblock_t pack2ptoc[] = {
     PTOCBLOCK(DIBadMount), /* 0 */
     PTOCBLOCK(DILoad), /* 2 */
     PTOCBLOCK(DIUnload), /* 4 */
@@ -1347,7 +1342,7 @@ PRIVATE ptocblock_t pack2ptoc[] = {
     PTOCBLOCK(DIZero), /* 10 */
 };
 
-PRIVATE selectorblock_t pack2block[] = {
+static selectorblock_t pack2block[] = {
     { 0, 10, 2, pack2ptoc },
     { 0, 0, 0, 0 },
 };
@@ -1363,7 +1358,7 @@ STUB(Pack2)
     return do_selector_block(pack2block, uw, Pack2);
 }
 
-PRIVATE ptocblock_t pack6ptoc[] = {
+static ptocblock_t pack6ptoc[] = {
     PTOCBLOCK(IUDateString), /* 0x00 */
     PTOCBLOCK(IUTimeString), /* 0x02 */
     PTOCBLOCK(IUMetric), /* 0x04 */
@@ -1386,7 +1381,7 @@ PRIVATE ptocblock_t pack6ptoc[] = {
 
 };
 
-PRIVATE selectorblock_t pack6block[] = {
+static selectorblock_t pack6block[] = {
     { 0, 36, 2, pack6ptoc },
     { 0, 0, 0, 0 },
 };
@@ -1402,13 +1397,13 @@ STUB(Pack6)
     return do_selector_block(pack6block, uw, Pack6);
 }
 
-PRIVATE ptocblock_t pack7ptoc[] = {
+static ptocblock_t pack7ptoc[] = {
     PTOCBLOCK(ROMlib_Fpstr2dec), /* 02 */
     PTOCBLOCK(ROMlib_Fdec2str), /* 03 */
     PTOCBLOCK(ROMlib_Fcstr2dec), /* 04 */
 };
 
-PRIVATE selectorblock_t pack7block[] = {
+static selectorblock_t pack7block[] = {
     { 2, 4, 1, pack7ptoc },
     { 0, 0, 0, 0 },
 };
@@ -1438,11 +1433,11 @@ STUB(Pack7)
     RTS();
 }
 
-PRIVATE ptocblock_t pack11_ptoc0[] = {
+static ptocblock_t pack11_ptoc0[] = {
     PTOCBLOCK(InitEditionPack), /* 0x0100 */
 };
 
-PRIVATE ptocblock_t pack11_ptoc1[] = {
+static ptocblock_t pack11_ptoc1[] = {
     PTOCBLOCK(UnRegisterSection), /* 0x0206 */
     PTOCBLOCK(IsRegisteredSection), /* 0x0208 */
     ZERO_PTOCBLOCK, /* 0x020A */
@@ -1451,7 +1446,7 @@ PRIVATE ptocblock_t pack11_ptoc1[] = {
     PTOCBLOCK(DeleteEditionContainerFile) /* 0x0210 */
 };
 
-PRIVATE ptocblock_t pack11_ptoc2[] = {
+static ptocblock_t pack11_ptoc2[] = {
     PTOCBLOCK(GoToPublisherSection), /* 0x0224 */
     PTOCBLOCK(GetLastEditionContainerUsed), /* 0x0226 */
     ZERO_PTOCBLOCK, /* 0x0228 */
@@ -1466,35 +1461,35 @@ PRIVATE ptocblock_t pack11_ptoc2[] = {
     PTOCBLOCK(SectionOptionsDialog), /* 0x023A */
 };
 
-PRIVATE ptocblock_t pack11_ptoc3[] = {
+static ptocblock_t pack11_ptoc3[] = {
     PTOCBLOCK(CloseEdition), /* 0x0316 */
 };
 
-PRIVATE ptocblock_t pack11_ptoc4[] = {
+static ptocblock_t pack11_ptoc4[] = {
     PTOCBLOCK(AssociateSection), /* 0x040C */
     ZERO_PTOCBLOCK, /* 0x040E */
     ZERO_PTOCBLOCK, /* 0x0410 */
     PTOCBLOCK(OpenEdition), /* 0x0412 */
 };
 
-PRIVATE ptocblock_t pack11_ptoc5[] = {
+static ptocblock_t pack11_ptoc5[] = {
     PTOCBLOCK(GetEditionInfo), /* 0x0422 */
 };
 
-PRIVATE ptocblock_t pack11_ptoc6[] = {
+static ptocblock_t pack11_ptoc6[] = {
     PTOCBLOCK(CreateEditionContainerFile), /* 0x050E */
 };
 
-PRIVATE ptocblock_t pack11_ptoc7[] = {
+static ptocblock_t pack11_ptoc7[] = {
     PTOCBLOCK(CallEditionOpenerProc), /* 0x052E */
     PTOCBLOCK(CallFormatIOProc), /* 0x0530 */
 };
 
-PRIVATE ptocblock_t pack11_ptoc8[] = {
+static ptocblock_t pack11_ptoc8[] = {
     PTOCBLOCK(RegisterSection), /* 0x0604 */
 };
 
-PRIVATE ptocblock_t pack11_ptoc9[] = {
+static ptocblock_t pack11_ptoc9[] = {
     PTOCBLOCK(EditionHasFormat), /* 0x0618 */
     ZERO_PTOCBLOCK, /* 0x061A */
     ZERO_PTOCBLOCK, /* 0x061C */
@@ -1502,7 +1497,7 @@ PRIVATE ptocblock_t pack11_ptoc9[] = {
     PTOCBLOCK(SetEditionFormatMark), /* 0x0620 */
 };
 
-PRIVATE ptocblock_t pack11_ptoc10[] = {
+static ptocblock_t pack11_ptoc10[] = {
     PTOCBLOCK(OpenNewEdition), /* 0x0814 */
     ZERO_PTOCBLOCK, /* 0x0816 */
     ZERO_PTOCBLOCK, /* 0x0818 */
@@ -1510,21 +1505,21 @@ PRIVATE ptocblock_t pack11_ptoc10[] = {
     PTOCBLOCK(WriteEdition), /* 0x081C */
 };
 
-PRIVATE ptocblock_t pack11_ptoc11[] = {
+static ptocblock_t pack11_ptoc11[] = {
     PTOCBLOCK(NewSection), /* 0x0A02 */
 };
 
-PRIVATE ptocblock_t pack11_ptoc12[] = {
+static ptocblock_t pack11_ptoc12[] = {
     PTOCBLOCK(GetStandardFormats), /* 0x0A28 */
 };
 
-PRIVATE ptocblock_t pack11_ptoc13[] = {
+static ptocblock_t pack11_ptoc13[] = {
     PTOCBLOCK(NewSubscriberExpDialog), /* 0x0B34 */
     PTOCBLOCK(NewPublisherExpDialog), /* 0x0B38 */
     PTOCBLOCK(SectionOptionsExpDialog), /* 0x0B3C */
 };
 
-PRIVATE selectorblock_t pack11block[] = {
+static selectorblock_t pack11block[] = {
     { 0x0100, 0x0100, 1, pack11_ptoc0 },
     { 0x0206, 0x0210, 2, pack11_ptoc1 },
     { 0x0224, 0x023A, 2, pack11_ptoc2 },
@@ -1547,7 +1542,7 @@ STUB(Pack11)
     return do_selector_block(pack11block, EM_D0 & 0xFFFF, Pack11);
 }
 
-PRIVATE ptocblock_t highlevel_fs_dispatch_ptoc[] = {
+static ptocblock_t highlevel_fs_dispatch_ptoc[] = {
     PTOCBLOCK(FSMakeFSSpec), /* 0x0001 */
     PTOCBLOCK(FSpOpenDF), /* 0x0002 */
     PTOCBLOCK(FSpOpenRF), /* 0x0003 */
@@ -1565,7 +1560,7 @@ PRIVATE ptocblock_t highlevel_fs_dispatch_ptoc[] = {
     PTOCBLOCK(FSpExchangeFiles), /* 0x000F */
 };
 
-PRIVATE selectorblock_t highlevel_fs_dispatch_block[] = {
+static selectorblock_t highlevel_fs_dispatch_block[] = {
     { 0x0001, 0x000F, 1, highlevel_fs_dispatch_ptoc },
 };
 
@@ -1575,17 +1570,17 @@ STUB(HighLevelFSDispatch)
                              EM_D0 & 0xF, HighLevelFSDispatch);
 }
 
-PRIVATE ptocblock_t dialog_dispatch_ptoc0[] = {
+static ptocblock_t dialog_dispatch_ptoc0[] = {
     PTOCBLOCK(GetStdFilterProc), /* 0x0203 */
 };
 
-PRIVATE ptocblock_t dialog_dispatch_ptoc1[] = {
+static ptocblock_t dialog_dispatch_ptoc1[] = {
     PTOCBLOCK(SetDialogDefaultItem), /* 0x0304 */
     PTOCBLOCK(SetDialogCancelItem), /* 0x0305 */
     PTOCBLOCK(SetDialogTracksCursor), /* 0x0306 */
 };
 
-PRIVATE selectorblock_t dialog_dispatch_block[] = {
+static selectorblock_t dialog_dispatch_block[] = {
     { 0x0203, 0x0203, 1, dialog_dispatch_ptoc0 },
     { 0x0304, 0x0306, 1, dialog_dispatch_ptoc1 },
 };
@@ -1626,7 +1621,7 @@ STUB(IMVI_PPC)
 
 #endif
 
-PRIVATE ptocblock_t balloon_ptoc[] = {
+static ptocblock_t balloon_ptoc[] = {
     PTOCBLOCK(HMGetHelpMenuHandle), /* 0x0200, */
     PTOCBLOCK(HMShowBalloon), /* 0x0b01, */
     PTOCBLOCK(HMRemoveBalloon), /* 0x0002, */
@@ -1651,7 +1646,7 @@ PRIVATE ptocblock_t balloon_ptoc[] = {
     PTOCBLOCK(HMGetBalloonWindow), /* 0x0215, */
 };
 
-PRIVATE selectorblock_t balloon_block[] = {
+static selectorblock_t balloon_block[] = {
     { 0x00, 0x015, 1, balloon_ptoc },
     { 0, 0, 0, 0 },
 };
@@ -1661,7 +1656,7 @@ STUB(Pack14)
     return do_selector_block(balloon_block, EM_D0 & 0xFF, Pack14);
 }
 
-PRIVATE ptocblock_t pack15_ptoc[] = {
+static ptocblock_t pack15_ptoc[] = {
     PTOCBLOCK(GetPictInfo), /* 0x00 */
     PTOCBLOCK(GetPixMapInfo), /* 0x01 */
     PTOCBLOCK(NewPictInfo), /* 0x02 */
@@ -1671,7 +1666,7 @@ PRIVATE ptocblock_t pack15_ptoc[] = {
     PTOCBLOCK(DisposePictInfo), /* 0x06 */
 };
 
-PRIVATE selectorblock_t pack15_block[] = {
+static selectorblock_t pack15_block[] = {
     { 0x00, 0x06, 1, pack15_ptoc },
     { 0, 0, 0, 0 },
 };
@@ -1872,7 +1867,7 @@ STUB(StripAddress)
     RTS();
 }
 
-PRIVATE ptocblock_t prglueptoc[] = {
+static ptocblock_t prglueptoc[] = {
     PTOCBLOCK(PrOpenDoc), /* 0 */
     PTOCBLOCK(PrCloseDoc), /* 1 */
     PTOCBLOCK(PrOpenPage), /* 2 */
@@ -1902,12 +1897,12 @@ PRIVATE ptocblock_t prglueptoc[] = {
     PTOCBLOCK(PrClose), /* 26 */
 };
 
-PRIVATE selectorblock_t prglueblock[] = {
+static selectorblock_t prglueblock[] = {
     { 0, 26, 1, prglueptoc },
     { 0, 0, 0, 0 },
 };
 
-PRIVATE long
+static long
 apparent_nop(long unused1, long unused2)
 {
     long retval;
@@ -2200,16 +2195,16 @@ static long unimplementedtool(long d0)
  * buy us much, anyway
  */
 
-PRIVATE uint16_t bad_traps[10];
-PRIVATE int n_bad_traps = 0;
+static uint16_t bad_traps[10];
+static int n_bad_traps = 0;
 
-PUBLIC void
+void
 ROMlib_reset_bad_trap_addresses(void)
 {
     n_bad_traps = 0;
 }
 
-PRIVATE void
+static void
 add_to_bad_trap_addresses(bool tool_p, unsigned short index)
 {
     int i;
@@ -2269,7 +2264,7 @@ STUB(bad_trap_unimplemented)
     return /* dummy */ -1;
 }
 
-PUBLIC void
+void
 ROMlib_GetTrapAddress_helper(uint32_t *d0p, uint32_t d1, uint32_t *a0p)
 {
     bool tool_p;
@@ -2718,7 +2713,7 @@ STUB(Microseconds)
     RTS();
 }
 
-PRIVATE selector_table_entry_t icon_dispatch_table[] = {
+static selector_table_entry_t icon_dispatch_table[] = {
     { 0x0207, PTOCBLOCK(NewIconSuite) },
     { 0x0217, PTOCBLOCK(GetSuiteLabel) },
     { 0x0302, PTOCBLOCK(DisposeIconSuite) },
@@ -2790,13 +2785,13 @@ STUB(IconDispatch)
  * 0x0a5c000c TextToPhonemes
  */
 
-PRIVATE selector_table_entry_t speech_table[] = {
+static selector_table_entry_t speech_table[] = {
     { 0x0000000c, PTOCBLOCK(SpeechManagerVersion) },
     { 0x003c000c, PTOCBLOCK(SpeechBusy) },
     { 0x0040000c, PTOCBLOCK(SpeechBusySystemWide) }
 };
 
-PRIVATE selector_table_entry_t sound_table[] = {
+static selector_table_entry_t sound_table[] = {
     { 0x00000000, PTOCBLOCK(FinaleUnknown1) },
     { 0x00000004, PTOCBLOCK(DirectorUnknown3) },
     { 0x00000010, PTOCBLOCK(MACEVersion) },
@@ -2878,7 +2873,7 @@ STUB(IMVI_ReadXPRam)
 /* These are the QuickTime routines called by Quicken Preview from Quicken 6
    Deluxe, which is going to be our first QT 3.0 test application */
 
-PRIVATE selector_table_entry_t qt_table[] = {
+static selector_table_entry_t qt_table[] = {
     { 1, PTOCBLOCK(EnterMovies) },
     { 2, PTOCBLOCK(ExitMovies) },
     { 5, PTOCBLOCK(MoviesTask) },
@@ -3052,7 +3047,7 @@ STUB(modeswitch)
     return retaddr;
 }
 
-PRIVATE ptocblock_t codefrag_ptoc[] = {
+static ptocblock_t codefrag_ptoc[] = {
     PTOCBLOCK(GetSharedLibrary),
     PTOCBLOCK(GetDiskFragment),
     PTOCBLOCK(GetMemFragment),
@@ -3062,7 +3057,7 @@ PRIVATE ptocblock_t codefrag_ptoc[] = {
     PTOCBLOCK(GetIndSymbol),
 };
 
-PRIVATE selectorblock_t codefrag_block[] = {
+static selectorblock_t codefrag_block[] = {
     {
         1, 7, 1, codefrag_ptoc,
     },
@@ -3080,7 +3075,7 @@ STUB(CodeFragment)
     return do_selector_block(codefrag_block, uw, CodeFragment);
 }
 
-PRIVATE ptocblock_t mixed_modedispatch_ptoc[] = {
+static ptocblock_t mixed_modedispatch_ptoc[] = {
     PTOCBLOCK(NewRoutineDescriptor), /* 0x0 */
     PTOCBLOCK(DisposeRoutineDescriptor), /* 0x1 */
     PTOCBLOCK(NewFatRoutineDescriptor), /* 0x2 */
@@ -3088,7 +3083,7 @@ PRIVATE ptocblock_t mixed_modedispatch_ptoc[] = {
     PTOCBLOCK(RestoreMixedModeState), /* 0x4 */
 };
 
-PRIVATE selectorblock_t mixed_modedispatch_block[] = {
+static selectorblock_t mixed_modedispatch_block[] = {
     { 0x0, 0xC, 1, mixed_modedispatch_ptoc },
     { 0, 0, 0, 0 },
 };

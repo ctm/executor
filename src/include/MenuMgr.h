@@ -109,144 +109,144 @@ enum
 };
 #endif
 
-extern pascal trap void C_DrawMenuBar(void);
+extern void C_DrawMenuBar(void);
 PASCAL_TRAP(DrawMenuBar, 0xA937);
 
-extern pascal trap void C_ClearMenuBar(void);
+extern void C_ClearMenuBar(void);
 PASCAL_TRAP(ClearMenuBar, 0xA934);
 
-extern pascal trap void C_InitMenus(void);
+extern void C_InitMenus(void);
 PASCAL_TRAP(InitMenus, 0xA930);
 
-extern pascal trap MenuHandle C_NewMenu(INTEGER mid, StringPtr str);
+extern MenuHandle C_NewMenu(INTEGER mid, StringPtr str);
 PASCAL_TRAP(NewMenu, 0xA931);
 
-extern pascal trap void C_CalcMenuSize(MenuHandle mh);
+extern void C_CalcMenuSize(MenuHandle mh);
 PASCAL_TRAP(CalcMenuSize, 0xA948);
 
-extern pascal trap MenuHandle C_GetMenu(INTEGER rid);
+extern MenuHandle C_GetMenu(INTEGER rid);
 PASCAL_TRAP(GetMenu, 0xA9BF);
 
-extern pascal trap void C_DisposeMenu(MenuHandle mh);
+extern void C_DisposeMenu(MenuHandle mh);
 PASCAL_TRAP(DisposeMenu, 0xA932);
 
-extern pascal trap void C_AppendMenu(MenuHandle mh, StringPtr str);
+extern void C_AppendMenu(MenuHandle mh, StringPtr str);
 PASCAL_TRAP(AppendMenu, 0xA933);
 
-extern pascal trap void C_AddResMenu(MenuHandle mh, ResType restype);
+extern void C_AddResMenu(MenuHandle mh, ResType restype);
 PASCAL_TRAP(AddResMenu, 0xA94D);
 
-extern pascal trap void C_DelMenuItem(MenuHandle mh,
+extern void C_DelMenuItem(MenuHandle mh,
                                       INTEGER item);
 PASCAL_TRAP(DelMenuItem, 0xA952);
-extern pascal trap void C_InsertResMenu(MenuHandle mh, ResType restype,
+extern void C_InsertResMenu(MenuHandle mh, ResType restype,
                                         INTEGER after);
 PASCAL_TRAP(InsertResMenu, 0xA951);
-extern pascal trap void C_InsMenuItem(MenuHandle mh, StringPtr str,
+extern void C_InsMenuItem(MenuHandle mh, StringPtr str,
                                       INTEGER after);
 PASCAL_TRAP(InsMenuItem, 0xA826);
-extern pascal trap void C_InsertMenu(MenuHandle mh, INTEGER before);
+extern void C_InsertMenu(MenuHandle mh, INTEGER before);
 PASCAL_TRAP(InsertMenu, 0xA935);
 
-extern pascal trap void C_DeleteMenu(INTEGER mid);
+extern void C_DeleteMenu(INTEGER mid);
 PASCAL_TRAP(DeleteMenu, 0xA936);
 
-extern pascal trap Handle C_GetNewMBar(INTEGER mbarid);
+extern Handle C_GetNewMBar(INTEGER mbarid);
 PASCAL_TRAP(GetNewMBar, 0xA9C0);
 
-extern pascal trap Handle C_GetMenuBar(void);
+extern Handle C_GetMenuBar(void);
 PASCAL_TRAP(GetMenuBar, 0xA93B);
 
-extern pascal trap void C_SetMenuBar(Handle ml);
+extern void C_SetMenuBar(Handle ml);
 PASCAL_TRAP(SetMenuBar, 0xA93C);
 
 extern INTEGER ROMlib_mentosix(INTEGER menuid);
-extern pascal trap void C_HiliteMenu(INTEGER mid);
+extern void C_HiliteMenu(INTEGER mid);
 PASCAL_TRAP(HiliteMenu, 0xA938);
 
 extern LONGINT ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
                                  LONGINT oldwhere, BOOLEAN ispopup, INTEGER nmenusdisplayed);
-extern pascal trap LONGINT C_MenuSelect(Point p);
+extern LONGINT C_MenuSelect(Point p);
 PASCAL_TRAP(MenuSelect, 0xA93D);
 
-extern pascal trap void C_FlashMenuBar(INTEGER mid);
+extern void C_FlashMenuBar(INTEGER mid);
 PASCAL_TRAP(FlashMenuBar, 0xA94C);
 
-extern pascal trap LONGINT C_MenuKey(CharParameter thec);
+extern LONGINT C_MenuKey(CharParameter thec);
 PASCAL_TRAP(MenuKey, 0xA93E);
 
-extern pascal trap void C_SetItem(MenuHandle mh, INTEGER item,
+extern void C_SetItem(MenuHandle mh, INTEGER item,
                                   StringPtr str);
 PASCAL_TRAP(SetItem, 0xA947);
-extern pascal trap void C_GetItem(MenuHandle mh, INTEGER item,
+extern void C_GetItem(MenuHandle mh, INTEGER item,
                                   StringPtr str);
 PASCAL_TRAP(GetItem, 0xA946);
-extern pascal trap void C_DisableItem(MenuHandle mh, INTEGER item);
+extern void C_DisableItem(MenuHandle mh, INTEGER item);
 PASCAL_TRAP(DisableItem, 0xA93A);
 
-extern pascal trap void C_EnableItem(MenuHandle mh, INTEGER item);
+extern void C_EnableItem(MenuHandle mh, INTEGER item);
 PASCAL_TRAP(EnableItem, 0xA939);
 
-extern pascal trap void C_CheckItem(MenuHandle mh, INTEGER item,
+extern void C_CheckItem(MenuHandle mh, INTEGER item,
                                     BOOLEAN cflag);
 PASCAL_TRAP(CheckItem, 0xA945);
-extern pascal trap void C_SetItemMark(MenuHandle mh, INTEGER item,
+extern void C_SetItemMark(MenuHandle mh, INTEGER item,
                                       CharParameter mark);
 PASCAL_TRAP(SetItemMark, 0xA944);
-extern pascal trap void C_GetItemMark(MenuHandle mh, INTEGER item,
+extern void C_GetItemMark(MenuHandle mh, INTEGER item,
                                       GUEST<INTEGER> *markp);
 PASCAL_TRAP(GetItemMark, 0xA943);
-extern pascal trap void C_SetItemIcon(MenuHandle mh, INTEGER item,
+extern void C_SetItemIcon(MenuHandle mh, INTEGER item,
                                       Byte icon);
 PASCAL_TRAP(SetItemIcon, 0xA940);
-extern pascal trap void C_GetItemIcon(MenuHandle mh, INTEGER item,
+extern void C_GetItemIcon(MenuHandle mh, INTEGER item,
                                       GUEST<INTEGER> *iconp);
 PASCAL_TRAP(GetItemIcon, 0xA93F);
-extern pascal trap void C_SetItemStyle(MenuHandle mh, INTEGER item,
+extern void C_SetItemStyle(MenuHandle mh, INTEGER item,
                                        INTEGER style);
 PASCAL_TRAP(SetItemStyle, 0xA942);
-extern pascal trap void C_GetItemStyle(MenuHandle mh, INTEGER item,
+extern void C_GetItemStyle(MenuHandle mh, INTEGER item,
                                        GUEST<INTEGER> *stylep);
 PASCAL_TRAP(GetItemStyle, 0xA941);
-extern pascal trap INTEGER C_CountMItems(MenuHandle mh);
+extern INTEGER C_CountMItems(MenuHandle mh);
 PASCAL_TRAP(CountMItems, 0xA950);
 
-extern pascal trap MenuHandle C_GetMHandle(INTEGER mid);
+extern MenuHandle C_GetMHandle(INTEGER mid);
 PASCAL_TRAP(GetMHandle, 0xA949);
 
-extern pascal trap void C_SetMenuFlash(INTEGER i);
+extern void C_SetMenuFlash(INTEGER i);
 PASCAL_TRAP(SetMenuFlash, 0xA94A);
 
 extern BOOLEAN ROMlib_shouldalarm(void);
-extern pascal trap void C_InitProcMenu(INTEGER mbid);
+extern void C_InitProcMenu(INTEGER mbid);
 PASCAL_TRAP(InitProcMenu, 0xA808);
 
-extern pascal trap LONGINT C_MenuChoice(void);
+extern LONGINT C_MenuChoice(void);
 PASCAL_TRAP(MenuChoice, 0xAA66);
 
-extern pascal trap void C_GetItemCmd(MenuHandle mh, INTEGER item,
+extern void C_GetItemCmd(MenuHandle mh, INTEGER item,
                                      GUEST<CharParameter> *cmdp);
 PASCAL_TRAP(GetItemCmd, 0xA84E);
-extern pascal trap void C_SetItemCmd(MenuHandle mh, INTEGER item,
+extern void C_SetItemCmd(MenuHandle mh, INTEGER item,
                                      CharParameter cmd);
 PASCAL_TRAP(SetItemCmd, 0xA84F);
-extern pascal trap LONGINT C_PopUpMenuSelect(MenuHandle mh, INTEGER top,
+extern LONGINT C_PopUpMenuSelect(MenuHandle mh, INTEGER top,
                                              INTEGER left, INTEGER item);
 PASCAL_TRAP(PopUpMenuSelect, 0xA80B);
 
-extern pascal trap void C_DelMCEntries(INTEGER, INTEGER);
+extern void C_DelMCEntries(INTEGER, INTEGER);
 PASCAL_TRAP(DelMCEntries, 0xAA60);
-extern pascal trap MCTableHandle C_GetMCInfo();
+extern MCTableHandle C_GetMCInfo();
 PASCAL_TRAP(GetMCInfo, 0xAA61);
-extern pascal trap void C_SetMCInfo(MCTableHandle);
+extern void C_SetMCInfo(MCTableHandle);
 PASCAL_TRAP(SetMCInfo, 0xAA62);
-extern pascal trap void C_DispMCInfo(MCTableHandle);
+extern void C_DispMCInfo(MCTableHandle);
 PASCAL_TRAP(DispMCInfo, 0xAA63);
-extern pascal trap MCEntryPtr C_GetMCEntry(INTEGER, INTEGER);
+extern MCEntryPtr C_GetMCEntry(INTEGER, INTEGER);
 PASCAL_TRAP(GetMCEntry, 0xAA64);
-extern pascal trap void C_SetMCEntries(INTEGER, MCTablePtr);
+extern void C_SetMCEntries(INTEGER, MCTablePtr);
 PASCAL_TRAP(SetMCEntries, 0xAA65);
-extern pascal trap void C_InvalMenuBar(void);
+extern void C_InvalMenuBar(void);
 PASCAL_TRAP(InvalMenuBar, 0xA81D);
 }
 

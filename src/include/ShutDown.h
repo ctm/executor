@@ -12,13 +12,13 @@ enum
     sdOnRestartOrPower = (sdOnPowerOff + sdOnRestart),
 };
 
-extern pascal trap void C_ShutDwnPower(void);
+extern void C_ShutDwnPower(void);
 PASCAL_FUNCTION(ShutDwnPower);
-extern pascal trap void C_ShutDwnStart(void);
+extern void C_ShutDwnStart(void);
 PASCAL_FUNCTION(ShutDwnStart);
-extern pascal trap void C_ShutDwnInstall(ProcPtr shutdown_proc,
+extern void C_ShutDwnInstall(ProcPtr shutdown_proc,
                                          int16_t flags);
 PASCAL_FUNCTION(ShutDwnInstall);
-extern pascal trap void C_ShutDwnRemove(ProcPtr shutdown_proc);
+extern void C_ShutDwnRemove(ProcPtr shutdown_proc);
 PASCAL_FUNCTION(ShutDwnRemove);
 }

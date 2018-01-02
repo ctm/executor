@@ -46,7 +46,7 @@ Routines that have more than 8 arguments require special work
 
 #include <string.h>
 
-PRIVATE int
+static int
 compare (const void *a, const void *b)
 {
   const char *p1, *p2;
@@ -58,7 +58,7 @@ compare (const void *a, const void *b)
   return retval;
 }
 
-PRIVATE bool
+static bool
 ignore_func_p (const char *func_name)
 {
   static const char *exceptions[] =
@@ -151,7 +151,7 @@ ignore_func_p (const char *func_name)
 }
 
 
-PRIVATE void
+static void
 dump_header (void)
 {
   printf (
@@ -237,7 +237,7 @@ typedef enum
 }
 arg_t;
 
-PRIVATE void
+static void
 process_a_func (int n_args, const char *name, arg_t ret_type, ...);
 
 #define void struct {}
@@ -311,7 +311,7 @@ main ()
 
 #undef void
 
-PRIVATE char *
+static char *
 arg_type (arg_t t)
 {
   char *retval;
@@ -340,7 +340,7 @@ arg_type (arg_t t)
   return retval;
 }
 
-PRIVATE void
+static void
 process_a_func (int n_args, const char *name, arg_t ret_type, ...)
 {
   if (!ignore_func_p (name))

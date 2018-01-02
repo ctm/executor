@@ -22,7 +22,7 @@
 
 using namespace Executor;
 
-PRIVATE bool
+static bool
 is_window_ptr(WindowPeek w)
 {
     WindowPeek wp;
@@ -485,7 +485,7 @@ void Executor::WINDCALLDESKHOOK(void)
 }
 
 #if defined(EVIL_ILLUSTRATOR_7_HACK)
-PUBLIC BOOLEAN Executor::ROMlib_evil_illustrator_7_hack = false;
+BOOLEAN Executor::ROMlib_evil_illustrator_7_hack = false;
 #endif
 
 int32_t Executor::ROMlib_windcall(WindowPtr wind, int16_t mess, int32_t param)

@@ -16,10 +16,10 @@
 #include "win_hasp.h"
 #include "win_dll.h"
 
-PRIVATE HINSTANCE sentinel_lib;
-PRIVATE HINSTANCE hasp_lib;
+static HINSTANCE sentinel_lib;
+static HINSTANCE hasp_lib;
 
-#define DLL_DECLARE(x) PRIVATE decltype(x) *D##x
+#define DLL_DECLARE(x) static decltype(x) *D##x
 
 DLL_DECLARE(RNBOproQuery);
 DLL_DECLARE(RNBOproGetFullStatus);
@@ -45,7 +45,7 @@ DLL_DECLARE(hasp);
         }                                                 \
     } while(0)
 
-PRIVATE bool
+static bool
 load_sent(const char *dll_name)
 {
     bool retval;
@@ -59,7 +59,7 @@ load_sent(const char *dll_name)
     return retval;
 }
 
-PRIVATE bool
+static bool
 load_hasp(const char *dll_name)
 {
     bool retval;
@@ -70,7 +70,7 @@ load_hasp(const char *dll_name)
     return retval;
 }
 
-PRIVATE PRO_STATUS
+static PRO_STATUS
 raw_query(RB_WORD *full_statusp, RB_WORD *resultp,
           RB_PRO_APIPACKET *packetp, const char *string)
 {
@@ -107,7 +107,7 @@ enum
     FAMILY_COMMAND_PREFIX_1 = '4',
 };
 
-PRIVATE PRO_STATUS
+static PRO_STATUS
 family_query(const char *family, RB_WORD *full_statusp, RB_WORD *resultp,
              RB_PRO_APIPACKET *packetp, const char *string)
 {
@@ -139,7 +139,7 @@ family_query(const char *family, RB_WORD *full_statusp, RB_WORD *resultp,
     return retval;
 }
 
-PRIVATE int
+static int
 sentinel_dongle_query(uint32_t *valuep)
 {
     int retval;
@@ -180,7 +180,7 @@ sentinel_dongle_query(uint32_t *valuep)
     return retval;
 }
 
-PRIVATE int
+static int
 hasp_dongle_query(hasp_param_block *valuep)
 {
     int retval;
@@ -263,7 +263,7 @@ hasp_dongle_query(hasp_param_block *valuep)
     return retval;
 }
 
-PRIVATE int
+static int
 dll_query(dll_param_block *dp)
 {
     int retval;

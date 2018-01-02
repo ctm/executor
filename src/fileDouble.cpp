@@ -56,7 +56,7 @@ static INTEGER Mac_to_UNIX7(unsigned char *, INTEGER, unsigned char *);
 #include "rsys/suffix_maps.h"
 #include "rsys/osutil.h"
 
-PRIVATE defaulthead_t ourdefault;
+static defaulthead_t ourdefault;
 
 /*
  * Fill it in by hand, writing a proper constructor would be as much work
@@ -95,9 +95,9 @@ static void initialize_ourdefault(void)
     }
 }
 
-PRIVATE defaultentries_t ourentries;
+static defaultentries_t ourentries;
 
-PUBLIC void
+void
 Executor::double_dir_op(char *name, double_dir_op_t op)
 {
     if(!netatalk_conventions_p)
@@ -651,7 +651,7 @@ fprintf(stderr, "%s(%d): open '%s' fails\n", __FILE__, __LINE__, rpathname);
 
 #define ROOTS_PERCENT_FILE "%%2F"
 
-PUBLIC char *Executor::ROMlib_resname(char *pathname, /* INTERNAL */
+char *Executor::ROMlib_resname(char *pathname, /* INTERNAL */
                                       char *filename, char *endname)
 {
     int pathnamesize, filenamesize, newsize;

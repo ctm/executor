@@ -31,7 +31,7 @@ typedef enum {
     CLOCKONSOUND,
 } clockstatus_t;
 
-PUBLIC int Executor::ROMlib_clock = CLOCKOFF;
+int Executor::ROMlib_clock = CLOCKOFF;
 
 /*
  * ROMlib_vcatch is called by the time manager, hence it doesn't need to
@@ -49,7 +49,7 @@ PUBLIC int Executor::ROMlib_clock = CLOCKOFF;
 
 VBLTask vblshim = { nullptr, CWC(vType), guest_cast<ProcPtr>(CLC(0xAEDCBA98)), CWC(0), CWC(0) };
 
-PRIVATE TMTask vbltm;
+static TMTask vbltm;
 
 #define VBUSY (1 << 6)
 
@@ -134,7 +134,7 @@ void Executor::C_ROMlib_vcatch()
     cpu_state.ccx = saved_ccx;
 }
 
-PRIVATE void
+static void
 startclock(void)
 {
     vbltm.tmAddr = RM((ProcPtr)P_ROMlib_vcatch);
@@ -143,7 +143,7 @@ startclock(void)
     /* don't adjust ROMlib_clock; it could be temporary */
 }
 
-PRIVATE void
+static void
 stopclock(void)
 {
     if(!VBLQueue.qTail)

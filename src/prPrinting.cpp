@@ -27,37 +27,37 @@
 #include <stdarg.h>
 #include "rsys/cleanup.h"
 
-PUBLIC bool deferred_printing_p = false /* true */;
+bool deferred_printing_p = false /* true */;
 
 #endif
 
 using namespace Executor;
 using namespace std;
 
-PUBLIC int pageno = 0; /* This isn't really the way to do it */
+int pageno = 0; /* This isn't really the way to do it */
 namespace Executor
 {
-PUBLIC int ROMlib_passpostscript = true;
-PUBLIC int ROMlib_fontsubstitution = false;
+int ROMlib_passpostscript = true;
+int ROMlib_fontsubstitution = false;
 
-PUBLIC string ROMlib_document_paper_sizes;
-PUBLIC string ROMlib_paper_size;
-PUBLIC string ROMlib_paper_size_name;
-PUBLIC string ROMlib_paper_size_name_terminator;
-PUBLIC int ROMlib_rotation = 0;
-PUBLIC int ROMlib_translate_x = 0;
-PUBLIC int ROMlib_translate_y = 0;
-PUBLIC int ROMlib_resolution_x = 72;
-PUBLIC int ROMlib_resolution_y = 72;
+string ROMlib_document_paper_sizes;
+string ROMlib_paper_size;
+string ROMlib_paper_size_name;
+string ROMlib_paper_size_name_terminator;
+int ROMlib_rotation = 0;
+int ROMlib_translate_x = 0;
+int ROMlib_translate_y = 0;
+int ROMlib_resolution_x = 72;
+int ROMlib_resolution_y = 72;
 
-PUBLIC int ROMlib_paper_x = 0;
-PUBLIC int ROMlib_paper_y = 0;
+int ROMlib_paper_x = 0;
+int ROMlib_paper_y = 0;
 
 /* This boolean is here to prevent Energy Scheming from causing trouble.
    ES calls PrPageClose twice at the end.  This fix is sub-optimal, but
    probably won't hurt anything. */
 
-PRIVATE bool page_is_open = false;
+static bool page_is_open = false;
 }
 #include "rsys/nextprint.h"
 
@@ -66,7 +66,7 @@ printstate_t Executor::printstate;
 #endif
 
 LONGINT Executor::pagewanted = 0;
-PRIVATE int lastpagewanted = 0;
+static int lastpagewanted = 0;
 
 void Executor::C_donotPrArc(GrafVerb verb, Rect *r, INTEGER starta,
                             INTEGER arca)
@@ -216,9 +216,9 @@ void Executor::C_PrText(INTEGER n, Ptr textbufp, Point num, Point den)
     }
 }
 
-PRIVATE QDProcs prprocs;
-PRIVATE QDProcs sendpsprocs;
-PRIVATE bool need_restore;
+static QDProcs prprocs;
+static QDProcs sendpsprocs;
+static bool need_restore;
 
 void Executor::C_PrComment(INTEGER kind, INTEGER size, Handle hand)
 {
@@ -304,9 +304,9 @@ void Executor::C_PrComment(INTEGER kind, INTEGER size, Handle hand)
     }
 }
 
-PRIVATE bool printport_open_p = false;
+static bool printport_open_p = false;
 
-PRIVATE void
+static void
 ourinit(TPPrPort port, BOOLEAN preserve_font)
 {
     GUEST<INTEGER> saved_font = port->gPort.txFont;
@@ -384,14 +384,14 @@ ourinit(TPPrPort port, BOOLEAN preserve_font)
 
 #include <stdio.h>
 
-PRIVATE bool need_pclose;
+static bool need_pclose;
 
 #if defined(LINUX)
-PRIVATE void (*old_pipe_signal)(int);
+static void (*old_pipe_signal)(int);
 #endif
 
 #if !defined(MACOSX_)
-PRIVATE FILE *
+static FILE *
 open_ps_file(bool *need_pclosep)
 {
     FILE *retval;
@@ -456,19 +456,19 @@ open_ps_file(bool *need_pclosep)
 }
 #endif /* !MACOSX_ */
 
-PRIVATE bool already_open = false;
+static bool already_open = false;
 
 #if defined(QUESTIONABLE_FIX_FOR_LOGBOOK_THAT_BREAKS_PRINTING_UNDER_TESTGEN)
-PRIVATE Byte save_FractEnable;
+static Byte save_FractEnable;
 #endif
 
 #if defined(CYGWIN32)
-PRIVATE THPrint last_thprint;
-PRIVATE uint32_t job_dialog_count;
-PRIVATE uint32_t job_dialog_desired = 1;
+static THPrint last_thprint;
+static uint32_t job_dialog_count;
+static uint32_t job_dialog_desired = 1;
 #endif
 
-PRIVATE void
+static void
 call_job_dialog_if_needed(THPrint thprint)
 {
 #if defined(CYGWIN32)
@@ -482,7 +482,7 @@ call_job_dialog_if_needed(THPrint thprint)
 #endif
 }
 
-PUBLIC void
+void
 Executor::ROMlib_acknowledge_job_dialog(THPrint thprint)
 {
 #if defined(CYGWIN32)
@@ -609,7 +609,7 @@ void Executor::C_PrClosePage(TPPrPort pPrPort)
 
 #define BATCH_FILE_NAME "+\\print.bat"
 
-PRIVATE void
+static void
 backslash_string(char *p)
 {
     for(; *p; ++p)
@@ -617,7 +617,7 @@ backslash_string(char *p)
             *p = '\\';
 }
 
-PRIVATE void
+static void
 invoke_print_batch_file(const char *filename, ini_key_t printer, ini_key_t port)
 {
     int spawn_result;
@@ -734,7 +734,7 @@ void Executor::C_PrPicFile(THPrint hPrint, TPPrPort pPrPort, Ptr pIOBuf,
     warning_unimplemented(NULL_STRING);
 }
 
-PUBLIC void
+void
 Executor::print_reinit(void)
 {
     printport_open_p = false;

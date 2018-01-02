@@ -11,7 +11,7 @@
 #include <string.h>
 #include "win_temp.h"
 
-PRIVATE void
+static void
 normalize_directory_name(char *str)
 {
     for(; *str; ++str)

@@ -144,7 +144,7 @@ OSErr Executor::hfsPBSetFVers(ParmBlkPtr pb, BOOLEAN async)
     PBRETURN((IOParam *)pb, wrgVolTypErr);
 }
 
-PUBLIC void
+void
 ROMlib_fcbrename(HVCB *vcbp, GUEST<LONGINT> swapped_parid, StringPtr oldnamep,
                  StringPtr newnamep)
 {
@@ -166,7 +166,7 @@ ROMlib_fcbrename(HVCB *vcbp, GUEST<LONGINT> swapped_parid, StringPtr oldnamep,
     }
 }
 
-PRIVATE OSErr
+static OSErr
 renamehelper(IOParam *pb, BOOLEAN async, LONGINT dirid, filekind kind)
 {
     OSErr err, err1;

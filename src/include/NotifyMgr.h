@@ -24,11 +24,11 @@ typedef struct NMRec
     GUEST<Handle> nmIcon;
     GUEST<Handle> nmSound;
     GUEST<StringPtr> nmStr;
-    GUEST<ProcPtr> nmResp; /* pascal void myresponse(NMRecPtr foo) */
+    GUEST<ProcPtr> nmResp; /* void myresponse(NMRecPtr foo) */
     GUEST<LONGINT> nmRefCon;
 } * NMRecPtr;
 
-extern trap OSErrRET NMInstall(NMRecPtr nmptr);
-extern trap OSErrRET NMRemove(NMRecPtr nmptr);
+extern OSErrRET NMInstall(NMRecPtr nmptr);
+extern OSErrRET NMRemove(NMRecPtr nmptr);
 }
 #endif /* __NOTIFYMGR__ */

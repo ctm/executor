@@ -15,7 +15,7 @@
 
 using namespace Executor;
 
-PUBLIC void
+void
 add_to_cleanup(const char *s, ...)
 {
     std::string batch_file;
@@ -45,7 +45,7 @@ add_to_cleanup(const char *s, ...)
     }
 }
 
-PUBLIC void
+void
 call_cleanup_bat(void)
 {
     std::string batch_file;

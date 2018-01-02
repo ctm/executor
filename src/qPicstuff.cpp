@@ -37,8 +37,8 @@ using namespace Executor;
  * Apple's isn't.
  */
 
-PRIVATE unsigned char *nextbytep;
-PRIVATE pascal void (*procp)(Ptr, INTEGER);
+static unsigned char *nextbytep;
+static void (*procp)(Ptr, INTEGER);
 
 typedef void (*pfv)();
 
@@ -55,7 +55,7 @@ typedef struct assoc_link
     INTEGER i;
 } assoc_link_t;
 
-PRIVATE assoc_link_t *assoc_headp = 0;
+static assoc_link_t *assoc_headp = 0;
 
 /*
  * The top four bits that are used to describe how an opcode behaves are an
@@ -88,7 +88,7 @@ PRIVATE assoc_link_t *assoc_headp = 0;
 #define SCALEIT 1L
 #define VONLY 2L
 
-PRIVATE unsigned short scalevalues[16] = {
+static unsigned short scalevalues[16] = {
     0x000, /* 00000000 0000 0000 NOSCALE   */
     0x001, /* 00000000 0000 0001 SCALE0    */
     0x005, /* 00000000 0000 0101 SCALE01   */
@@ -150,11 +150,11 @@ static void thepat(Pattern *p)
     ROMlib_fill_pat(*p);
 }
 
-PRIVATE LONGINT txnumh, txnumv, txdenh, txdenv;
-PRIVATE Rect srcpicframe, dstpicframe;
-PRIVATE LONGINT picnumh, picnumv, picdenh, picdenv;
+static LONGINT txnumh, txnumv, txdenh, txdenv;
+static Rect srcpicframe, dstpicframe;
+static LONGINT picnumh, picnumv, picdenh, picdenv;
 
-PRIVATE GUEST<Point> txtpoint;
+static GUEST<Point> txtpoint;
 
 /*
  * TODO: reduce is exceedingly inefficient.  Reconsider its use here.
@@ -367,7 +367,7 @@ static void fillrgn(RgnHandle r)
     CALLRGN(fill, r);
 }
 
-PRIVATE RgnHandle saveclip;
+static RgnHandle saveclip;
 
 static void origin(INTEGER dh, INTEGER dv)
 {
@@ -388,7 +388,7 @@ static void myreadcment(INTEGER kind)
     C_ReadComment(kind, 0, (Handle)0);
 }
 
-PRIVATE RGBColor saveHiliteRGB;
+static RGBColor saveHiliteRGB;
 
 static void defhilite()
 {
@@ -448,13 +448,13 @@ static void W_BackPat(Pattern pp)
 
 /* routines that associate a PICT font number with a font name */
 
-PRIVATE void
+static void
 begin_assoc(void)
 {
     /* Don't do anything */
 }
 
-PRIVATE assoc_link_t **
+static assoc_link_t **
 assoc_find_str(StringPtr sp)
 {
     assoc_link_t **retval;
@@ -466,7 +466,7 @@ assoc_find_str(StringPtr sp)
     return retval;
 }
 
-PRIVATE assoc_link_t **
+static assoc_link_t **
 assoc_find_i(INTEGER i)
 {
     assoc_link_t **retval;
@@ -478,7 +478,7 @@ assoc_find_i(INTEGER i)
     return retval;
 }
 
-PRIVATE StringPtr
+static StringPtr
 makestr(StringPtr sp)
 {
     StringPtr retval;
@@ -490,7 +490,7 @@ makestr(StringPtr sp)
     return retval;
 }
 
-PRIVATE void
+static void
 add_assoc(INTEGER i, StringPtr sp)
 {
     assoc_link_t **pp;
@@ -510,7 +510,7 @@ add_assoc(INTEGER i, StringPtr sp)
     }
 }
 
-PRIVATE StringPtr
+static StringPtr
 assoc(INTEGER i)
 {
     StringPtr retval;
@@ -525,7 +525,7 @@ assoc(INTEGER i)
     return retval;
 }
 
-PRIVATE void
+static void
 end_assoc(void)
 {
     assoc_link_t *p, *nextp;
@@ -646,7 +646,7 @@ static void W_EraseRect(Rect *r)
     EraseRect(r);
 }
 
-PRIVATE void
+static void
 reset_hilite_mode(void)
 {
     HiliteMode |= 0x80;
@@ -768,7 +768,7 @@ static void W_ReadComment(INTEGER kind, INTEGER size, Handle hand)
     C_ReadComment(kind, size, hand);
 }
 
-PRIVATE void
+static void
 fontname(INTEGER hsize, Handle hand)
 {
     char *p;
@@ -781,7 +781,7 @@ fontname(INTEGER hsize, Handle hand)
     add_assoc(i, sp);
 }
 
-PRIVATE void
+static void
 glyphstate(INTEGER hsize, Handle hand)
 {
     char *p;
@@ -793,7 +793,7 @@ glyphstate(INTEGER hsize, Handle hand)
     SetFScaleDisable(p[3]);
 }
 
-PRIVATE wps wparray[] = {
+static wps wparray[] = {
     { (pfv)nop, xxx0(), /* 00 */ },
     { (pfv)setpicclip, yyy1(SCALE0, RGN), /* 01 */ },
     { (pfv)W_BackPat, xxx1(PAT), /* 02 */ },

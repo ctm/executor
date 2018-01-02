@@ -25,7 +25,7 @@ using namespace Executor;
 #if 0
 #if defined(CYGWIN32)
 
-PRIVATE char line_no[] = "123\r\n";
+static char line_no[] = "123\r\n";
 
 #define LOG()                                 \
     do                                        \
@@ -197,7 +197,7 @@ unsigned char Executor::ROMlib_fromhex(unsigned char c)
  * error message.
  */
 
-PRIVATE bool
+static bool
 islowerxdigit(unsigned char c)
 {
     bool retval;
@@ -206,7 +206,7 @@ islowerxdigit(unsigned char c)
     return retval;
 }
 
-PRIVATE bool
+static bool
 iscandidate_for_quoting(unsigned char c1, unsigned char c2)
 {
     bool retval;
@@ -223,7 +223,7 @@ iscandidate_for_quoting(unsigned char c1, unsigned char c2)
     return retval;
 }
 
-PRIVATE bool
+static bool
 quoted_character(unsigned char *name, int length)
 {
     bool retval;
@@ -275,7 +275,7 @@ INTEGER Executor::ROMlib_UNIX7_to_Mac(char *cname, INTEGER length)
     return retval;
 }
 
-PUBLIC Byte
+Byte
 Executor::open_attrib_bits(LONGINT file_id, VCB *vcbp, GUEST<INTEGER> *refnump)
 {
     Byte retval;

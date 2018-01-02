@@ -204,7 +204,7 @@ OSErr Executor::hfsPBGetWDInfo(WDPBPtr pb, BOOLEAN async)
     PBRETURN(pb, retval);
 }
 
-PUBLIC OSErr
+OSErr
 Executor::GetWDInfo(INTEGER wd, GUEST<INTEGER> *vrefp, GUEST<LONGINT> *dirp, GUEST<LONGINT> *procp)
 {
     OSErr retval;

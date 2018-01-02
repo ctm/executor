@@ -198,154 +198,154 @@ enum
 };
 #endif
 
-extern pascal trap void C_SetWTitle(WindowPtr w, StringPtr t);
+extern void C_SetWTitle(WindowPtr w, StringPtr t);
 PASCAL_TRAP(SetWTitle, 0xA91A);
 
-extern pascal trap void C_GetWTitle(WindowPtr w, StringPtr t);
+extern void C_GetWTitle(WindowPtr w, StringPtr t);
 PASCAL_TRAP(GetWTitle, 0xA919);
 
-extern pascal trap WindowPtr C_FrontWindow(void);
+extern WindowPtr C_FrontWindow(void);
 PASCAL_TRAP(FrontWindow, 0xA924);
 
-extern pascal trap void C_HiliteWindow(WindowPtr w, BOOLEAN flag);
+extern void C_HiliteWindow(WindowPtr w, BOOLEAN flag);
 PASCAL_TRAP(HiliteWindow, 0xA91C);
 
-extern pascal trap void C_BringToFront(WindowPtr w);
+extern void C_BringToFront(WindowPtr w);
 PASCAL_TRAP(BringToFront, 0xA920);
 
-extern pascal trap void C_SelectWindow(WindowPtr w);
+extern void C_SelectWindow(WindowPtr w);
 PASCAL_TRAP(SelectWindow, 0xA91F);
 
-extern pascal trap void C_ShowHide(WindowPtr w, BOOLEAN flag);
+extern void C_ShowHide(WindowPtr w, BOOLEAN flag);
 PASCAL_TRAP(ShowHide, 0xA908);
 
-extern pascal trap void C_HideWindow(WindowPtr w);
+extern void C_HideWindow(WindowPtr w);
 PASCAL_TRAP(HideWindow, 0xA916);
 
-extern pascal trap void C_ShowWindow(WindowPtr w);
+extern void C_ShowWindow(WindowPtr w);
 PASCAL_TRAP(ShowWindow, 0xA915);
 
-extern pascal trap void C_SendBehind(WindowPtr w, WindowPtr behind);
+extern void C_SendBehind(WindowPtr w, WindowPtr behind);
 PASCAL_TRAP(SendBehind, 0xA921);
 
-extern pascal trap void C_DrawGrowIcon(WindowPtr w);
+extern void C_DrawGrowIcon(WindowPtr w);
 PASCAL_TRAP(DrawGrowIcon, 0xA904);
 
-extern pascal trap void C_InitWindows(void);
+extern void C_InitWindows(void);
 PASCAL_TRAP(InitWindows, 0xA912);
 
-extern pascal trap void C_GetWMgrPort(GUEST<GrafPtr> *wp);
+extern void C_GetWMgrPort(GUEST<GrafPtr> *wp);
 PASCAL_TRAP(GetWMgrPort, 0xA910);
 
-extern pascal trap WindowPtr C_NewWindow(Ptr wst, Rect *r,
+extern WindowPtr C_NewWindow(Ptr wst, Rect *r,
                                          StringPtr title, BOOLEAN vis, INTEGER procid, WindowPtr behind,
                                          BOOLEAN gaflag, LONGINT rc);
 PASCAL_TRAP(NewWindow, 0xA913);
-extern pascal trap WindowPtr C_GetNewWindow(INTEGER wid, Ptr wst,
+extern WindowPtr C_GetNewWindow(INTEGER wid, Ptr wst,
                                             WindowPtr behind);
 PASCAL_TRAP(GetNewWindow, 0xA9BD);
-extern pascal trap void C_CloseWindow(WindowPtr w);
+extern void C_CloseWindow(WindowPtr w);
 PASCAL_TRAP(CloseWindow, 0xA92D);
 
-extern pascal trap void C_DisposeWindow(WindowPtr w);
+extern void C_DisposeWindow(WindowPtr w);
 PASCAL_TRAP(DisposeWindow, 0xA914);
 
-extern pascal trap void C_SetWRefCon(WindowPtr w, LONGINT data);
+extern void C_SetWRefCon(WindowPtr w, LONGINT data);
 PASCAL_TRAP(SetWRefCon, 0xA918);
 
-extern pascal trap LONGINT C_GetWRefCon(WindowPtr w);
+extern LONGINT C_GetWRefCon(WindowPtr w);
 PASCAL_TRAP(GetWRefCon, 0xA917);
 
-extern pascal trap void C_SetWindowPic(WindowPtr w, PicHandle p);
+extern void C_SetWindowPic(WindowPtr w, PicHandle p);
 PASCAL_TRAP(SetWindowPic, 0xA92E);
 
-extern pascal trap PicHandle C_GetWindowPic(WindowPtr w);
+extern PicHandle C_GetWindowPic(WindowPtr w);
 PASCAL_TRAP(GetWindowPic, 0xA92F);
 
-extern pascal trap LONGINT C_PinRect(Rect *r, Point p);
+extern LONGINT C_PinRect(Rect *r, Point p);
 PASCAL_TRAP(PinRect, 0xA94E);
 
-extern pascal trap LONGINT C_DragTheRgn(RgnHandle rgn, Point startp,
+extern LONGINT C_DragTheRgn(RgnHandle rgn, Point startp,
                                         Rect *limit, Rect *slop, INTEGER axis, ProcPtr proc);
 PASCAL_TRAP(DragTheRgn, 0xA926);
-extern pascal trap LONGINT C_DragGrayRgn(RgnHandle rgn, Point startp,
+extern LONGINT C_DragGrayRgn(RgnHandle rgn, Point startp,
                                          Rect *limit, Rect *slop, INTEGER axis, ProcPtr proc);
 PASCAL_TRAP(DragGrayRgn, 0xA905);
-extern pascal trap void C_ClipAbove(WindowPeek w);
+extern void C_ClipAbove(WindowPeek w);
 PASCAL_TRAP(ClipAbove, 0xA90B);
 
-extern pascal trap BOOLEAN C_CheckUpdate(EventRecord *ev);
+extern BOOLEAN C_CheckUpdate(EventRecord *ev);
 PASCAL_TRAP(CheckUpdate, 0xA911);
 
-extern pascal trap void C_SaveOld(WindowPeek w);
+extern void C_SaveOld(WindowPeek w);
 PASCAL_TRAP(SaveOld, 0xA90E);
 
-extern pascal trap void C_PaintOne(WindowPeek w, RgnHandle clobbered);
+extern void C_PaintOne(WindowPeek w, RgnHandle clobbered);
 PASCAL_TRAP(PaintOne, 0xA90C);
 
-extern pascal trap void C_PaintBehind(WindowPeek w, RgnHandle clobbered);
+extern void C_PaintBehind(WindowPeek w, RgnHandle clobbered);
 PASCAL_TRAP(PaintBehind, 0xA90D);
 
-extern pascal trap void C_CalcVis(WindowPeek w);
+extern void C_CalcVis(WindowPeek w);
 PASCAL_TRAP(CalcVis, 0xA909);
 
-extern pascal trap void C_CalcVisBehind(WindowPeek w,
+extern void C_CalcVisBehind(WindowPeek w,
                                         RgnHandle clobbered);
 PASCAL_TRAP(CalcVisBehind, 0xA90A);
-extern pascal trap void C_DrawNew(WindowPeek w, BOOLEAN flag);
+extern void C_DrawNew(WindowPeek w, BOOLEAN flag);
 PASCAL_TRAP(DrawNew, 0xA90F);
 
-extern pascal trap INTEGER C_GetWVariant(WindowPtr w);
+extern INTEGER C_GetWVariant(WindowPtr w);
 PASCAL_TRAP(GetWVariant, 0xA80A);
 
-extern pascal trap INTEGER C_FindWindow(Point p, GUEST<WindowPtr> *wpp);
+extern INTEGER C_FindWindow(Point p, GUEST<WindowPtr> *wpp);
 PASCAL_TRAP(FindWindow, 0xA92C);
 
-extern pascal trap BOOLEAN C_TrackBox(WindowPtr wp,
+extern BOOLEAN C_TrackBox(WindowPtr wp,
                                       Point pt, INTEGER part);
 PASCAL_TRAP(TrackBox, 0xA83B);
-extern pascal trap BOOLEAN C_TrackGoAway(WindowPtr w, Point p);
+extern BOOLEAN C_TrackGoAway(WindowPtr w, Point p);
 PASCAL_TRAP(TrackGoAway, 0xA91E);
 
-extern pascal trap void C_ZoomWindow(WindowPtr wp,
+extern void C_ZoomWindow(WindowPtr wp,
                                      INTEGER part, BOOLEAN front);
 PASCAL_TRAP(ZoomWindow, 0xA83A);
-extern pascal trap void C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER v,
+extern void C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER v,
                                      BOOLEAN front);
 PASCAL_TRAP(MoveWindow, 0xA91B);
-extern pascal trap void C_DragWindow(WindowPtr wp, Point p, Rect *rp);
+extern void C_DragWindow(WindowPtr wp, Point p, Rect *rp);
 PASCAL_TRAP(DragWindow, 0xA925);
 
-extern pascal trap LONGINT C_GrowWindow(WindowPtr w, Point startp,
+extern LONGINT C_GrowWindow(WindowPtr w, Point startp,
                                         Rect *rp);
 PASCAL_TRAP(GrowWindow, 0xA92B);
-extern pascal trap void C_SizeWindow(WindowPtr w, INTEGER width,
+extern void C_SizeWindow(WindowPtr w, INTEGER width,
                                      INTEGER height, BOOLEAN flag);
 PASCAL_TRAP(SizeWindow, 0xA91D);
-extern pascal trap void C_InvalRect(Rect *r);
+extern void C_InvalRect(Rect *r);
 PASCAL_TRAP(InvalRect, 0xA928);
 
-extern pascal trap void C_InvalRgn(RgnHandle r);
+extern void C_InvalRgn(RgnHandle r);
 PASCAL_TRAP(InvalRgn, 0xA927);
 
-extern pascal trap void C_ValidRect(Rect *r);
+extern void C_ValidRect(Rect *r);
 PASCAL_TRAP(ValidRect, 0xA92A);
 
-extern pascal trap void C_ValidRgn(RgnHandle r);
+extern void C_ValidRgn(RgnHandle r);
 PASCAL_TRAP(ValidRgn, 0xA929);
 
-extern pascal trap void C_BeginUpdate(WindowPtr w);
+extern void C_BeginUpdate(WindowPtr w);
 PASCAL_TRAP(BeginUpdate, 0xA922);
 
-extern pascal trap void C_EndUpdate(WindowPtr w);
+extern void C_EndUpdate(WindowPtr w);
 PASCAL_TRAP(EndUpdate, 0xA923);
 
-extern pascal trap void C_SetWinColor(WindowPtr w, CTabHandle new_w_ctab);
+extern void C_SetWinColor(WindowPtr w, CTabHandle new_w_ctab);
 PASCAL_TRAP(SetWinColor, 0xAA41);
-extern pascal trap void C_SetDeskCPat(PixPatHandle);
+extern void C_SetDeskCPat(PixPatHandle);
 PASCAL_TRAP(SetDeskCPat, 0xAA47);
 
-extern pascal trap BOOLEAN C_GetAuxWin(WindowPtr, GUEST<AuxWinHandle> *);
+extern BOOLEAN C_GetAuxWin(WindowPtr, GUEST<AuxWinHandle> *);
 PASCAL_TRAP(GetAuxWin, 0xAA42);
 }
 #endif /* __WINDOW__ */

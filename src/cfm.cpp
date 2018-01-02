@@ -77,7 +77,7 @@ enum
         __n / m *m;      \
     })
 
-PRIVATE OSErr
+static OSErr
 try_to_get_memory(void **addrp, syn68k_addr_t default_syn_address,
                   uint32_t total_size, int alignment)
 {
@@ -111,7 +111,7 @@ enum
     executable_section = (1 << 2),
 };
 
-PRIVATE OSErr
+static OSErr
 load_unpacked_section(const void *mmapped_addr,
                       syn68k_addr_t default_address, uint32_t total_size,
                       uint32_t packed_size, uint32_t unpacked_size,
@@ -147,7 +147,7 @@ load_unpacked_section(const void *mmapped_addr,
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 repeat_block(uint32_t repeat_count, uint32_t block_size, uint8 **destpp,
              const uint8 **srcpp, uint32_t *dest_lengthp, uint32_t *src_lengthp)
 {
@@ -172,7 +172,7 @@ repeat_block(uint32_t repeat_count, uint32_t block_size, uint8 **destpp,
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 extract_count(const uint8 **srcpp, uint32_t *lengthp, uint32_t *countp)
 {
     OSErr retval;
@@ -197,7 +197,7 @@ extract_count(const uint8 **srcpp, uint32_t *lengthp, uint32_t *countp)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 interleave(uint32_t repeat_count, uint32_t custom_size, uint8 **destpp,
            const uint8 **srcpp, uint32_t *dest_lengthp, uint32_t *src_lengthp,
            uint32_t common_size, const uint8 *common_mem)
@@ -233,7 +233,7 @@ interleave(uint32_t repeat_count, uint32_t custom_size, uint8 **destpp,
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 pattern_initialize(uint8 *addr, const uint8 *patmem, uint32_t packed_size,
                    uint32_t unpacked_size)
 {
@@ -338,7 +338,7 @@ pattern_initialize(uint8 *addr, const uint8 *patmem, uint32_t packed_size,
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 load_pattern_section(const void *mmapped_addr,
                      syn68k_addr_t default_address, uint32_t total_size,
                      uint32_t packed_size, uint32_t unpacked_size,
@@ -367,7 +367,7 @@ load_pattern_section(const void *mmapped_addr,
     return retval;
 }
 
-PRIVATE void
+static void
 repeatedly_relocate(uint32_t count, uint8 **relocAddressp, uint32_t val)
 {
     uint32_t *p;
@@ -380,7 +380,7 @@ repeatedly_relocate(uint32_t count, uint8 **relocAddressp, uint32_t val)
     *relocAddressp = (uint8 *)p;
 }
 
-PRIVATE OSErr
+static OSErr
 check_existing_connections(Str63 library, OSType arch, LoadFlags loadflags,
                            ConnectionID *cidp, Ptr *mainaddrp, Str255 errName)
 {
@@ -389,7 +389,7 @@ check_existing_connections(Str63 library, OSType arch, LoadFlags loadflags,
     return fragLibNotFound;
 }
 
-PRIVATE void
+static void
 get_root_and_app(INTEGER *root_vrefp, LONGINT *root_diridp,
                  INTEGER *app_vrefp, LONGINT *app_diridp)
 {
@@ -397,7 +397,7 @@ get_root_and_app(INTEGER *root_vrefp, LONGINT *root_diridp,
     /* TODO */
 }
 
-PRIVATE OSErr
+static OSErr
 check_file(INTEGER vref, LONGINT dirid, Str255 file, bool shlb_test_p,
            Str63 library, OSType arch, LoadFlags loadflags,
            ConnectionID *cidp, Ptr *mainaddrp, Str255 errName)
@@ -456,7 +456,7 @@ check_file(INTEGER vref, LONGINT dirid, Str255 file, bool shlb_test_p,
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 check_vanddir(INTEGER vref, LONGINT dirid, int descend_count, Str63 library,
               OSType arch, LoadFlags loadflags, ConnectionID *cidp,
               Ptr *mainaddrp, Str255 errName)
@@ -588,10 +588,10 @@ enum
 {
     tracking_val_start = 0x88123456
 };
-PRIVATE uint32_t num_tracking_vals;
-PRIVATE char **tracking_symbols;
+static uint32_t num_tracking_vals;
+static char **tracking_symbols;
 
-PRIVATE void
+static void
 tracking_handler(int signum, struct sigcontext sc)
 {
     uint32_t r12;
@@ -604,7 +604,7 @@ tracking_handler(int signum, struct sigcontext sc)
     ExitToShell();
 }
 
-PUBLIC void
+void
 ROMlib_release_tracking_values(void)
 {
     if(num_tracking_vals > 0)
@@ -619,7 +619,7 @@ ROMlib_release_tracking_values(void)
     signal(SIGSEGV, (void *)tracking_handler);
 }
 
-PRIVATE uint32_t
+static uint32_t
 tracking_value(const char *symbol_name)
 {
     uint32_t retval;
@@ -632,7 +632,7 @@ tracking_value(const char *symbol_name)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 symbol_lookup(uint32_t *indexp, Ptr *valp, uint8 imports[][4],
               const char *symbol_names, CFragClosureID closure_id)
 {
@@ -683,7 +683,7 @@ symbol_lookup(uint32_t *indexp, Ptr *valp, uint8 imports[][4],
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 relocate(const PEFLoaderRelocationHeader_t reloc_headers[],
          int section, uint32_t reloc_count, uint8 reloc_instrs[][2],
          uint8 imports[][4], const char *symbol_names,
@@ -918,7 +918,7 @@ relocate(const PEFLoaderRelocationHeader_t reloc_headers[],
     return retval;
 }
 
-PRIVATE CFragClosureID
+static CFragClosureID
 begin_closure(uint32_t n_libs, PEFImportedLibrary_t *libs,
               const char *symbol_names, OSType arch)
 {
@@ -957,7 +957,7 @@ begin_closure(uint32_t n_libs, PEFImportedLibrary_t *libs,
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 load_loader_section(const void *addr,
                     syn68k_addr_t default_address, uint32_t total_size,
                     uint32_t packed_size, uint32_t unpacked_size,
@@ -1041,7 +1041,7 @@ load_loader_section(const void *addr,
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 do_pef_section(ConnectionID connp, const void *addr,
                const PEFSectionHeader_t *sections, int i,
                bool instantiate_p,
@@ -1136,7 +1136,7 @@ do_pef_section(ConnectionID connp, const void *addr,
 
 typedef enum { ICACHE } flush_type_t;
 
-PRIVATE void
+static void
 cacheflush(void *start, uint32_t length, flush_type_t flush)
 {
 #if defined(powerpc) || defined(__ppc__)
@@ -1178,7 +1178,7 @@ cacheflush(void *start, uint32_t length, flush_type_t flush)
 #endif
 }
 
-PRIVATE OSErr
+static OSErr
 do_pef_sections(ConnectionID connp, const PEFContainerHeader_t *headp,
                 syn68k_addr_t *mainAddrp, OSType arch)
 {
@@ -1234,7 +1234,7 @@ do_pef_sections(ConnectionID connp, const PEFContainerHeader_t *headp,
     return retval;
 }
 
-PUBLIC ConnectionID
+ConnectionID
 ROMlib_new_connection(uint32_t n_sects)
 {
     ConnectionID retval;
@@ -1305,11 +1305,11 @@ typedef struct
     int refcount;
 } context_t;
 
-PRIVATE int n_context_slots = 0;
-PRIVATE int n_active_contexts = 0;
-PRIVATE context_t *contexts = 0;
+static int n_context_slots = 0;
+static int n_active_contexts = 0;
+static context_t *contexts = 0;
 
-PRIVATE bool
+static bool
 fsmatch(FSSpecPtr fsp1, FSSpecPtr fsp2)
 {
     bool retval;
@@ -1318,7 +1318,7 @@ fsmatch(FSSpecPtr fsp1, FSSpecPtr fsp2)
     return retval;
 }
 
-PRIVATE bool
+static bool
 match(FSSpecPtr fsp, LONGINT offset, LONGINT length, const context_t *cp)
 {
     bool retval;
@@ -1328,11 +1328,11 @@ match(FSSpecPtr fsp, LONGINT offset, LONGINT length, const context_t *cp)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 get_context(int *contextidp, bool *exists_pp, FSSpecPtr fsp,
             LONGINT offset, LONGINT length)
 {
-    PRIVATE OSErr retval;
+    static OSErr retval;
     int i;
     int free_slot;
 
@@ -1387,7 +1387,7 @@ get_context(int *contextidp, bool *exists_pp, FSSpecPtr fsp,
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 release_context(int context)
 {
     OSErr retval;
@@ -1406,7 +1406,7 @@ release_context(int context)
     return retval;
 }
 
-PRIVATE context_t *
+static context_t *
 contextp_from_id(int context)
 {
     context_t *retval;
@@ -1418,7 +1418,7 @@ contextp_from_id(int context)
     return retval;
 }
 
-PRIVATE OSErr
+static OSErr
 try_to_mmap_file(FSSpecPtr fsp, LONGINT offset, LONGINT length,
                  int *contextidp)
 {

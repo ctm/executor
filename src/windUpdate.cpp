@@ -71,7 +71,7 @@ void Executor::C_ValidRgn(RgnHandle r)
               CW(PORT_BOUNDS(thePort).top));
 }
 
-PUBLIC int Executor::ROMlib_emptyvis = 0;
+int Executor::ROMlib_emptyvis = 0;
 
 void Executor::C_BeginUpdate(WindowPtr w)
 {

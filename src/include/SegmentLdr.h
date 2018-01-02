@@ -12,7 +12,7 @@
 
 namespace Executor
 {
-extern _NORET_1_ pascal trap void C_ExitToShell(void) _NORET_2_;
+extern _NORET_1_ void C_ExitToShell(void) _NORET_2_;
 PASCAL_TRAP(ExitToShell, 0xA9F4);
 
 #if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
@@ -56,23 +56,23 @@ enum
 
 extern void flushcache(void);
 
-extern trap void HWPriv(LONGINT d0, LONGINT a0);
+extern void HWPriv(LONGINT d0, LONGINT a0);
 extern char *ROMlib_undotdot(char *origp);
 extern void CountAppFiles(GUEST<INTEGER> *messagep,
                           GUEST<INTEGER> *countp);
 extern void GetAppFiles(INTEGER index, AppFile *filep);
 extern void ClrAppFiles(INTEGER index);
-extern pascal trap void Launch(StringPtr appl, INTEGER vrefnum);
-extern pascal trap void Chain(StringPtr appl, INTEGER vrefnum);
+extern void Launch(StringPtr appl, INTEGER vrefnum);
+extern void Chain(StringPtr appl, INTEGER vrefnum);
 
-extern pascal trap void C_GetAppParms(StringPtr namep,
+extern void C_GetAppParms(StringPtr namep,
                                       GUEST<INTEGER> *rnp, GUEST<Handle> *aphandp);
 PASCAL_TRAP(GetAppParms, 0xA9F5);
 
-extern pascal trap void C_UnloadSeg(Ptr addr);
+extern void C_UnloadSeg(Ptr addr);
 PASCAL_TRAP(UnloadSeg, 0xA9F1);
 
-extern pascal trap void C_LoadSeg(INTEGER volatile segno);
+extern void C_LoadSeg(INTEGER volatile segno);
 PASCAL_FUNCTION(LoadSeg);
 
 #endif

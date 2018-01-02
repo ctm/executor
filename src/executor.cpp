@@ -45,9 +45,9 @@
 #include "rsys/suffix_maps.h"
 #include "rsys/string.h"
 
-#undef PRIVATE
-#define PRIVATE
-#define PUBLIC
+
+#define static
+
 
 using namespace Executor;
 
@@ -247,7 +247,7 @@ unsigned short Executor::mostrecenttrap;
 
 int memory_watch = 0;
 
-PRIVATE void
+static void
 dump_difference(uint16_t trapn, int i,
                 zone_info_t *currentp, const zone_info_t *newp)
 {
@@ -258,7 +258,7 @@ dump_difference(uint16_t trapn, int i,
     *currentp = *newp;
 }
 
-PRIVATE void
+static void
 compare_zone_infos(uint16_t trapn, zone_info_t current[3], zone_info_t new[3])
 {
     int i;

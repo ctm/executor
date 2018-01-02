@@ -23,9 +23,9 @@ typedef struct heading_link_str
     pair_link_t *pairs;
 } heading_link_t;
 
-PRIVATE heading_link_t *headings;
+static heading_link_t *headings;
 
-PUBLIC heading_t
+heading_t
 Executor::new_heading(unsigned char *start, int len)
 {
     heading_t retval;
@@ -57,7 +57,7 @@ Executor::new_heading(unsigned char *start, int len)
     return retval;
 }
 
-PRIVATE heading_link_t *
+static heading_link_t *
 find_heading(heading_t heading)
 {
     static heading_link_t *cachep;
@@ -77,7 +77,7 @@ find_heading(heading_t heading)
     return retval;
 }
 
-PUBLIC void
+void
 Executor::new_key_value_pair(heading_t heading, unsigned char *keystart, int keylen,
                              unsigned char *valuestart, int valuelen)
 {
@@ -107,7 +107,7 @@ Executor::new_key_value_pair(heading_t heading, unsigned char *keystart, int key
 #if 0
 /* This routine is currently unsafe to use because it might result in
    dangling pointers */
-PUBLIC void
+void
 discard_all_inis (void)
 {
   heading_link_t *headerp, *nextheaderp;
@@ -131,7 +131,7 @@ discard_all_inis (void)
 }
 #endif
 
-PUBLIC bool
+bool
 Executor::read_ini_file(const char *filename)
 {
     using namespace std;
@@ -197,7 +197,7 @@ Executor::read_ini_file(const char *filename)
     return retval;
 }
 
-PUBLIC pair_link_t *
+pair_link_t *
 Executor::get_pair_link_n(heading_t heading, int n)
 {
     pair_link_t *retval;
@@ -218,7 +218,7 @@ Executor::get_pair_link_n(heading_t heading, int n)
     return retval;
 }
 
-PUBLIC FILE *
+FILE *
 Executor::open_ini_file_for_writing(const char *filename)
 {
     FILE *retval;
@@ -227,7 +227,7 @@ Executor::open_ini_file_for_writing(const char *filename)
     return retval;
 }
 
-PUBLIC bool
+bool
 Executor::add_heading_to_file(FILE *fp, heading_t heading)
 {
     bool retval;
@@ -236,7 +236,7 @@ Executor::add_heading_to_file(FILE *fp, heading_t heading)
     return retval;
 }
 
-PUBLIC bool
+bool
 Executor::add_key_value_to_file(FILE *fp, ini_key_t key, value_t value)
 {
     bool retval;
@@ -245,7 +245,7 @@ Executor::add_key_value_to_file(FILE *fp, ini_key_t key, value_t value)
     return retval;
 }
 
-PUBLIC bool
+bool
 Executor::close_ini_file(FILE *fp)
 {
     bool retval;
@@ -254,7 +254,7 @@ Executor::close_ini_file(FILE *fp)
     return retval;
 }
 
-PUBLIC value_t
+value_t
 Executor::find_key(heading_t heading, ini_key_t key)
 {
     value_t retval;

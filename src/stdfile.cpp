@@ -60,7 +60,7 @@
 
 #include "rsys/osevent.h"
 
-PUBLIC int Executor::nodrivesearch_p = false;
+int Executor::nodrivesearch_p = false;
 
 #if defined(MSDOS) || defined(CYGWIN32)
 #include "dosdisk.h"
@@ -344,7 +344,7 @@ static void flscroll(fltype *f, INTEGER from, INTEGER to)
 
 static LONGINT emergency_save_ref_con;
 
-PRIVATE fltype *
+static fltype *
 WINDFL(void *dp)
 {
     GUEST<LONGINT> retval;
@@ -395,12 +395,12 @@ void Executor::C_ROMlib_stdftrack(ControlHandle sh, INTEGER part)
     flscroll(CTLFL(sh), from, GetCtlValue(sh));
 }
 
-PRIVATE GUEST<INTEGER> cachedvrn = CWC(32767);
-PRIVATE INTEGER savesel = -1;
-PRIVATE LONGINT oldticks = -1000;
-PRIVATE LONGINT lastkeydowntime = 0;
-PRIVATE Str255 prefix = { 0 };
-PRIVATE GUEST<char *> *holdstr;
+static GUEST<INTEGER> cachedvrn = CWC(32767);
+static INTEGER savesel = -1;
+static LONGINT oldticks = -1000;
+static LONGINT lastkeydowntime = 0;
+static Str255 prefix = { 0 };
+static GUEST<char *> *holdstr;
 
 void Executor::ROMlib_init_stdfile(void)
 {
@@ -511,7 +511,7 @@ static LONGINT getdirid(StringPtr fname)
 
 #define MAXPREFIX 64
 
-PRIVATE void
+static void
 set_type_and_name(fltype *f, OSType type, Str255 name)
 {
     switch(f->flavor)
@@ -692,7 +692,7 @@ static LONGINT stdfcmp(char *ip1, char *ip2)
     return stdfcmpC(ip1, ip2);
 }
 
-PRIVATE bool
+static bool
 passes_filter(fltype *f, CInfoPBRec *cinfop, INTEGER numt)
 {
     bool retval;
@@ -1021,7 +1021,7 @@ BOOLEAN keyarrow(fltype *fl, INTEGER incr) /* -1: up, 1: down */
     return true;
 }
 
-PRIVATE bool
+static bool
 folder_selected_p(fltype *fl)
 {
     bool retval;
@@ -1044,7 +1044,7 @@ folder_selected_p(fltype *fl)
     return retval;
 }
 
-PRIVATE BOOLEAN
+static BOOLEAN
 call_magicfp(fltype *fl, DialogPtr dp, EventRecord *evt, GUEST<INTEGER> *ith)
 {
     BOOLEAN retval;
@@ -1510,7 +1510,7 @@ static BOOLEAN trackdirs(DialogPeek dp)
     return false;
 }
 
-PRIVATE void
+static void
 makeworking(fltype *f)
 {
 
@@ -1636,9 +1636,9 @@ typedef struct
 
 #define N_DRIVES (32)
 
-PRIVATE bool drive_loaded[N_DRIVES] = { 0 };
+static bool drive_loaded[N_DRIVES] = { 0 };
 
-PRIVATE char *
+static char *
 drive_name_of(int i)
 {
     static char retval[] = "A:";
@@ -1653,7 +1653,7 @@ enum
     NON_FLOPPY_BIT = 0x80
 };
 
-PRIVATE int
+static int
 fd_of(int i)
 {
     int retval;
@@ -1844,7 +1844,7 @@ static void bumpsavedisk(DialogPtr dp, BOOLEAN always)
  * notice that we add) items the Format menu.
  */
 
-PRIVATE INTEGER
+static INTEGER
 ROMlib_CALLDHOOK(fltype *fl, INTEGER ihit, DialogPtr dp, dialog_hook_u dhu)
 {
     INTEGER retval;
@@ -1979,7 +1979,7 @@ static GUEST<OSType> gettypeX(StringPtr name, INTEGER vref, LONGINT dirid)
         return CLC(0);
 }
 
-PRIVATE OSErr
+static OSErr
 unixcore(StringPtr namep, INTEGER *vrefnump, LONGINT *diridp)
 {
     INTEGER vrefnum;
@@ -2085,7 +2085,7 @@ static void unixcd(fltype *f)
 	    rep->fName[0] = 63;
 #endif
 
-PRIVATE void
+static void
 get_starting_point(Point *pp)
 {
     INTEGER screen_width, screen_height;
@@ -2098,7 +2098,7 @@ get_starting_point(Point *pp)
     pp->v = (screen_height - STANDARD_HEIGHT) / 2;
 }
 
-PRIVATE ControlHandle
+static ControlHandle
 create_new_folder_button(DialogPtr dp)
 {
     ControlHandle retval;
@@ -2122,7 +2122,7 @@ create_new_folder_button(DialogPtr dp)
     return retval;
 }
 
-PRIVATE void
+static void
 destroy_new_folder_button(DialogPtr dp, ControlHandle ch)
 {
     /* May not need to do anything since CloseDialog should clean up all
@@ -2153,7 +2153,7 @@ destroy_new_folder_button(DialogPtr dp, ControlHandle ch)
 
 #define SF_DIRID(fp) (CL(SF_DIRID_X(fp)))
 
-PRIVATE void
+static void
 getditext(DialogPtr dp, INTEGER item, StringPtr text)
 {
     GUEST<INTEGER> i;
@@ -2170,7 +2170,7 @@ getditext(DialogPtr dp, INTEGER item, StringPtr text)
     }
 }
 
-PRIVATE void
+static void
 report_new_folder_failure(OSErr err)
 {
     char *message = (char *)alloca(256);
@@ -2203,7 +2203,7 @@ report_new_folder_failure(OSErr err)
     NoteAlert(GENERIC_COMPLAINT_ID, (ProcPtr)0);
 }
 
-PRIVATE bool
+static bool
 new_folder_from_dp(DialogPtr dp, fltype *f)
 {
     Str255 str;
@@ -2229,7 +2229,7 @@ new_folder_from_dp(DialogPtr dp, fltype *f)
     return retval;
 }
 
-PRIVATE bool
+static bool
 do_new_folder(fltype *f)
 {
     bool retval;
@@ -2273,13 +2273,13 @@ do_new_folder(fltype *f)
     return retval;
 }
 
-PRIVATE void
+static void
 rep_from_host_reply_block(reply_u *repp,
                           const host_spf_reply_block *host_reply)
 {
 }
 
-PRIVATE bool
+static bool
 is_normal_dlgid(getorput_t getorput, INTEGER dig)
 {
     return getorput == get

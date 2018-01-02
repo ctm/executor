@@ -66,7 +66,7 @@ INTEGER Executor::C_FindControl(Point p, WindowPtr w,
     return retval;
 }
 
-typedef pascal void (*actionp)(ControlHandle c, INTEGER part);
+typedef void (*actionp)(ControlHandle c, INTEGER part);
 
 static inline void CALLACTION(ControlHandle ch, INTEGER inpart, ProcPtr a)
 {

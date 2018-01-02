@@ -55,8 +55,8 @@ win32_log_end (void)
 }
 #endif
 
-PRIVATE HMODULE hB2Win32 = 0;
-PRIVATE bool cdrom_realmode_p = false;
+static HMODULE hB2Win32 = 0;
+static bool cdrom_realmode_p = false;
 
 PUBLIC int
 ROMlib_set_realmodecd(int value)
@@ -85,17 +85,17 @@ typedef struct
     HANDLE win_nt_handle;
 } dosdisk_info_t;
 
-PRIVATE dosdisk_info_t disks[MAX_OPEN_DISKS];
+static dosdisk_info_t disks[MAX_OPEN_DISKS];
 
-PRIVATE which_win32_t which = WIN32_UNKNOWN;
-PRIVATE HANDLE vwin32_handle;
+static which_win32_t which = WIN32_UNKNOWN;
+static HANDLE vwin32_handle;
 
 /*
  * Maps a disk number to the dosdisk_info_t for that disk, iff there exists
  * one.  Returns NULL if there isn't one.
  */
 
-PRIVATE dosdisk_info_t *
+static dosdisk_info_t *
 disk_number_to_disk_info(int number)
 {
     dosdisk_info_t *retval;
@@ -108,7 +108,7 @@ disk_number_to_disk_info(int number)
     return retval;
 }
 
-PRIVATE void
+static void
 shutdown(void)
 {
     VxdFinal();
@@ -119,7 +119,7 @@ shutdown(void)
     }
 }
 
-PRIVATE void
+static void
 init_vwin32(void)
 {
     if(which == WIN32_UNKNOWN)
@@ -155,7 +155,7 @@ init_vwin32(void)
 
 #define DRIVE_TEMPLATE "a:\\"
 
-PRIVATE char *
+static char *
     drive_num_to_string(disk)
 {
     char *retval;
@@ -171,7 +171,7 @@ PRIVATE char *
     return retval;
 }
 
-PRIVATE UINT
+static UINT
 drive_type(int disk)
 {
     char *drive_string;
@@ -196,7 +196,7 @@ drive_type(int disk)
                              non-NUL character.                           \
                              See Below. */
 
-PRIVATE bool
+static bool
 win_nt_open_common(int disk, HANDLE *handlep, const char *str,
                    int str_len, int offset, char expect_char,
                    drive_flags_t *flagsp)
@@ -228,7 +228,7 @@ win_nt_open_common(int disk, HANDLE *handlep, const char *str,
     return retval;
 }
 
-PRIVATE bool
+static bool
 win_nt_open(int disk, HANDLE *handlep, drive_flags_t *flagsp)
 {
     bool retval;
@@ -351,7 +351,7 @@ dosdisk_open(int disk, LONGINT *bsizep, drive_flags_t *flagsp)
 
 #if !defined(NEW_LOCK)
 
-PRIVATE int
+static int
 disk_to_volume(int disk)
 {
     int retval;
@@ -360,7 +360,7 @@ disk_to_volume(int disk)
     return retval;
 }
 
-PRIVATE bool
+static bool
 win_95_lock(int disk)
 {
     bool retval;
@@ -384,7 +384,7 @@ win_95_lock(int disk)
     return retval;
 }
 
-PRIVATE bool
+static bool
 win_95_unlock(int disk)
 {
     bool retval;
@@ -407,9 +407,9 @@ win_95_unlock(int disk)
     return retval;
 }
 #else
-PRIVATE int cat_list[] = { 0x48, 0x08 };
+static int cat_list[] = { 0x48, 0x08 };
 
-PRIVATE bool
+static bool
 win_95_lock(int disk)
 {
     bool retval;
@@ -442,7 +442,7 @@ win_95_lock(int disk)
     return retval;
 }
 
-PRIVATE bool
+static bool
 win_95_unlock(int disk)
 {
     bool retval;
@@ -523,7 +523,7 @@ dosdisk_seek(int disk, off_t pos, int unused)
     return retval;
 }
 
-PRIVATE int
+static int
 win_nt_dosdisk_xfer(int disk, dosdisk_info_t *d, void *buf, uint32_t offset,
                     int num_bytes, DeviceIoControl_function_t func)
 {
@@ -559,7 +559,7 @@ win_nt_dosdisk_xfer(int disk, dosdisk_info_t *d, void *buf, uint32_t offset,
     return retval;
 }
 
-PRIVATE int
+static int
 win_95_dosdisk_disk_xfer(int disk, dosdisk_info_t *d, void *buf,
                          uint32_t offset, int num_bytes,
                          DeviceIoControl_function_t func)
@@ -599,7 +599,7 @@ win_95_dosdisk_disk_xfer(int disk, dosdisk_info_t *d, void *buf,
     return retval;
 }
 
-PRIVATE int
+static int
 win_95_dosdisk_cdrom_xfer(int disk, dosdisk_info_t *d, void *buf,
                           uint32_t offset, int num_bytes,
                           DeviceIoControl_function_t func)
@@ -634,7 +634,7 @@ win_95_dosdisk_cdrom_xfer(int disk, dosdisk_info_t *d, void *buf,
     return retval;
 }
 
-PRIVATE int
+static int
 win_95_dosdisk_xfer(int disk, dosdisk_info_t *d, void *buf, uint32_t offset,
                     int num_bytes, DeviceIoControl_function_t func)
 {
@@ -646,7 +646,7 @@ win_95_dosdisk_xfer(int disk, dosdisk_info_t *d, void *buf, uint32_t offset,
     return retval;
 }
 
-PRIVATE int
+static int
 dosdisk_xfer(int disk, void *buf, uint32_t offset, int num_bytes,
              DeviceIoControl_function_t func)
 {
@@ -679,7 +679,7 @@ dosdisk_xfer(int disk, void *buf, uint32_t offset, int num_bytes,
     return retval;
 }
 
-PRIVATE uint32_t
+static uint32_t
 read_in(uint32_t fd, void *buf, uint32_t offset, uint32_t count)
 {
     uint32_t retval;
@@ -707,7 +707,7 @@ dosdisk_read(int disk, void *buf, int num_bytes)
     return retval;
 }
 
-PRIVATE uint32_t
+static uint32_t
 write_back(uint32_t fd, const void *buf, uint32_t offset, uint32_t count)
 {
     uint32_t retval;

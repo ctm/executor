@@ -93,33 +93,33 @@ typedef struct DelimiterInfo
 
 #pragma pack(pop)
 
-PUBLIC pascal NumVersion C_SpeechManagerVersion(void);
-PUBLIC pascal int16_t C_SpeechBusy(void);
-PUBLIC pascal int16_t C_SpeechBusySystemWide(void);
-PUBLIC pascal OSErr C_CountVoices(int16_t *numVoices);
-PUBLIC pascal OSErr C_DisposeSpeechChannel(SpeechChannel chan);
-PUBLIC pascal OSErr C_SpeakString(Str255 textToBeSpoken);
+NumVersion C_SpeechManagerVersion(void);
+int16_t C_SpeechBusy(void);
+int16_t C_SpeechBusySystemWide(void);
+OSErr C_CountVoices(int16_t *numVoices);
+OSErr C_DisposeSpeechChannel(SpeechChannel chan);
+OSErr C_SpeakString(Str255 textToBeSpoken);
 
-PUBLIC pascal OSErr C_StopSpeech(SpeechChannel chan);
-PUBLIC pascal OSErr C_ContinueSpeech(SpeechChannel chan);
+OSErr C_StopSpeech(SpeechChannel chan);
+OSErr C_ContinueSpeech(SpeechChannel chan);
 
-PUBLIC pascal OSErr C_GetIndVoice(int16_t index, VoiceSpec *voice);
-PUBLIC pascal OSErr C_NewSpeechChannel(VoiceSpec *voice, SpeechChannel *chan);
-PUBLIC pascal OSErr C_StopSpeechAt(SpeechChannel chan, int32_t whereToStop);
-PUBLIC pascal OSErr C_PauseSpeechAt(SpeechChannel chan, int32_t whereToPause);
-PUBLIC pascal OSErr C_SetSpeechRate(SpeechChannel chan, Fixed rate);
-PUBLIC pascal OSErr C_GetSpeechRate(SpeechChannel chan, Fixed *rate);
-PUBLIC pascal OSErr C_SetSpeechPitch(SpeechChannel chan, Fixed pitch);
-PUBLIC pascal OSErr C_GetSpeechPitch(SpeechChannel chan, Fixed *pitch);
-PUBLIC pascal OSErr C_UseDictionary(SpeechChannel chan, Handle dictionary);
-PUBLIC pascal OSErr C_MakeVoiceSpec(OSType creator, OSType id, VoiceSpec *voice);
-PUBLIC pascal OSErr C_GetVoiceDescription(const VoiceSpec *voice, VoiceDescription *info, LONGINT infoLength);
-PUBLIC pascal OSErr C_GetVoiceInfo(const VoiceSpec *voice, OSType selector, void *voiceInfo);
-PUBLIC pascal OSErr C_SpeakText(SpeechChannel chan, const void *textBuf, ULONGINT textBytes);
-PUBLIC pascal OSErr C_SetSpeechInfo(SpeechChannel chan, OSType selector, const void *speechInfo);
-PUBLIC pascal OSErr C_GetSpeechInfo(SpeechChannel chan, OSType selector, void *speechInfo);
-PUBLIC pascal OSErr C_SpeakBuffer(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, int32_t controlFlags);
-PUBLIC pascal OSErr C_TextToPhonemes(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, Handle phonemeBuf, GUEST<LONGINT> *phonemeBytes);
+OSErr C_GetIndVoice(int16_t index, VoiceSpec *voice);
+OSErr C_NewSpeechChannel(VoiceSpec *voice, SpeechChannel *chan);
+OSErr C_StopSpeechAt(SpeechChannel chan, int32_t whereToStop);
+OSErr C_PauseSpeechAt(SpeechChannel chan, int32_t whereToPause);
+OSErr C_SetSpeechRate(SpeechChannel chan, Fixed rate);
+OSErr C_GetSpeechRate(SpeechChannel chan, Fixed *rate);
+OSErr C_SetSpeechPitch(SpeechChannel chan, Fixed pitch);
+OSErr C_GetSpeechPitch(SpeechChannel chan, Fixed *pitch);
+OSErr C_UseDictionary(SpeechChannel chan, Handle dictionary);
+OSErr C_MakeVoiceSpec(OSType creator, OSType id, VoiceSpec *voice);
+OSErr C_GetVoiceDescription(const VoiceSpec *voice, VoiceDescription *info, LONGINT infoLength);
+OSErr C_GetVoiceInfo(const VoiceSpec *voice, OSType selector, void *voiceInfo);
+OSErr C_SpeakText(SpeechChannel chan, const void *textBuf, ULONGINT textBytes);
+OSErr C_SetSpeechInfo(SpeechChannel chan, OSType selector, const void *speechInfo);
+OSErr C_GetSpeechInfo(SpeechChannel chan, OSType selector, void *speechInfo);
+OSErr C_SpeakBuffer(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, int32_t controlFlags);
+OSErr C_TextToPhonemes(SpeechChannel chan, const void *textBuf, ULONGINT textBytes, Handle phonemeBuf, GUEST<LONGINT> *phonemeBytes);
 }
 
 #endif /* defined(__CocoaExecutor__SpeechManager__) */

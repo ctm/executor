@@ -55,7 +55,7 @@ void Executor::fs_err_hook(OSErr err)
 }
 #endif
 
-PUBLIC int ROMlib_lasterrnomapped;
+int ROMlib_lasterrnomapped;
 
 #define MAX_ERRNO 50
 
@@ -176,7 +176,7 @@ OSErr Executor::FSRead(INTEGER rn, LONGINT *count, Ptr buffp) /* IMIV-109 */
     return (temp);
 }
 
-PUBLIC OSErr
+OSErr
 Executor::FSReadAll(INTEGER rn, LONGINT *countp, Ptr buffp)
 {
     LONGINT orig_count;
@@ -204,7 +204,7 @@ OSErr Executor::FSWrite(INTEGER rn, LONGINT *count, Ptr buffp) /* IMIV-110 */
     return (temp);
 }
 
-PUBLIC OSErr
+OSErr
 Executor::FSWriteAll(INTEGER rn, LONGINT *countp, Ptr buffp)
 {
     LONGINT orig_count;
@@ -335,7 +335,7 @@ static VCB *vlookupbydrive(INTEGER drive)
     return 0;
 }
 
-PRIVATE LONGINT cacheindex = 0x7fffffff;
+static LONGINT cacheindex = 0x7fffffff;
 
 void Executor::ROMlib_rewinddir()
 {
@@ -453,7 +453,7 @@ DONE:
  *		 a directory, UNLESS it's already at the top).
  */
 
-PUBLIC VCB *Executor::ROMlib_breakoutioname(ParmBlkPtr pb, /* INTERNAL */
+VCB *Executor::ROMlib_breakoutioname(ParmBlkPtr pb, /* INTERNAL */
                                             LONGINT *diridp, char **therestp, BOOLEAN *fullpathp, BOOLEAN usedefault)
 {
     VCB *retval;
@@ -1152,7 +1152,7 @@ OSErr Executor::ufsPBHOpenRF(HParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 
 #define POSMASK 0x3 /* IMIV-121 */
 
-PRIVATE OSErr
+static OSErr
 pbfpos(ParmBlkPtr pb, LONGINT *toseekp, bool can_go_past_eof)
 {
     OSErr err;
@@ -1294,7 +1294,7 @@ OSErr Executor::ufsPBUnlockRange(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
     return err;
 }
 
-PRIVATE OSErr
+static OSErr
 pbsetfpos(ParmBlkPtr pb, bool can_go_past_eof)
 {
     OSErr err;
@@ -1315,7 +1315,7 @@ pbsetfpos(ParmBlkPtr pb, bool can_go_past_eof)
     return err;
 }
 
-PUBLIC int Executor::ROMlib_newlinetocr = true;
+int Executor::ROMlib_newlinetocr = true;
 
 /*
  * NOTE: ROMlib_destroy_blocks is a wrapper routine that either destroys
@@ -1325,7 +1325,7 @@ PUBLIC int Executor::ROMlib_newlinetocr = true;
  *	 addresses.
  */
 
-PUBLIC int Executor::ROMlib_flushoften = 0;
+int Executor::ROMlib_flushoften = 0;
 
 unsigned long Executor::ROMlib_destroy_blocks(
     syn68k_addr_t start, uint32_t count, BOOLEAN flush_only_faulty_checksums)

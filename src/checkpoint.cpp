@@ -11,10 +11,10 @@
 #include <string.h>
 typedef unsigned char bool;
 typedef unsigned int uint32_t;
-#define PUBLIC
-#define PRIVATE static
-PRIVATE uint32_t ROMlib_macdrives;
-PRIVATE uint32_t ROMlib_dosdrives;
+
+
+static uint32_t ROMlib_macdrives;
+static uint32_t ROMlib_dosdrives;
 enum
 {
     false,
@@ -34,16 +34,16 @@ enum
 #include "winfs.h"
 #endif
 
-PRIVATE bool checkpointing_p = true;
+static bool checkpointing_p = true;
 
-PUBLIC checkpoint_t *checkpointp; /* globals are bad, but we use one in
+checkpoint_t *checkpointp; /* globals are bad, but we use one in
 				     this case because checkpointing is
 				     effectively a global issue currently
 				     and we don't want to modify the various
 				     routines that we checkpoint to take
 				     an additional argument */
 
-PRIVATE uint32_t
+static uint32_t
 extract_bad_drives_from_string(const char *opt, const char *str)
 {
     int len;
@@ -63,7 +63,7 @@ extract_bad_drives_from_string(const char *opt, const char *str)
     return retval;
 }
 
-PUBLIC checkpoint_t *
+checkpoint_t *
 checkpoint_init(void)
 {
     checkpoint_t *retval;
@@ -96,7 +96,7 @@ checkpoint_init(void)
     return retval;
 }
 
-PRIVATE void
+static void
 write_drive_string(FILE *fp, uint32_t drive)
 {
     drive &= (1 << 26) - 1; /* only represent A-Z */
@@ -153,7 +153,7 @@ write_drive_string(FILE *fp, uint32_t drive)
     "# DO NOT ALTER THIS FILE unless you know what you're doing and even then\n"  \
     "# make sure you make a backup, first.\n"
 
-PRIVATE void
+static void
 write_checkpoint_file(checkpoint_t *cp)
 {
     FILE *fp;
@@ -197,7 +197,7 @@ write_checkpoint_file(checkpoint_t *cp)
     }
 }
 
-PUBLIC void
+void
 checkpoint_sound(checkpoint_t *cp, checkpoint_option option)
 {
     if(checkpointing_p && cp)
@@ -207,7 +207,7 @@ checkpoint_sound(checkpoint_t *cp, checkpoint_option option)
     }
 }
 
-PUBLIC void
+void
 checkpoint_aspi(checkpoint_t *cp, checkpoint_option option)
 {
     if(checkpointing_p && cp)
@@ -217,7 +217,7 @@ checkpoint_aspi(checkpoint_t *cp, checkpoint_option option)
     }
 }
 
-PUBLIC void
+void
 checkpoint_macdrive(checkpoint_t *cp, checkpoint_option option, uint32_t drive)
 {
     if(checkpointing_p && cp)
@@ -230,7 +230,7 @@ checkpoint_macdrive(checkpoint_t *cp, checkpoint_option option, uint32_t drive)
     }
 }
 
-PUBLIC void
+void
 checkpoint_dosdrives(checkpoint_t *cp, checkpoint_option option, uint32_t drive)
 {
     if(checkpointing_p && cp)
@@ -243,14 +243,14 @@ checkpoint_dosdrives(checkpoint_t *cp, checkpoint_option option, uint32_t drive)
     }
 }
 
-PUBLIC void
+void
 disable_checkpointing(void)
 {
     checkpointing_p = false;
 }
 
 #if defined(STANDALONE_TEST)
-PUBLIC int
+int
 main(void)
 {
     checkpoint_t *cp;

@@ -460,7 +460,7 @@ void Executor::C_IMVI_CopyDeepMask(BitMap *srcBits, BitMap *maskBits,
 
 /* MeasureText is in qd/qStdText.c */
 
-a0trap INTEGER *Executor::GetMaskTable() /* IMIV-25 */
+INTEGER *Executor::GetMaskTable() /* IMIV-25 */
 {
     static unsigned char table[] __attribute__((aligned(2))) = {
         0x00, 0x00, 0x80, 0x00, 0xC0, 0x00, 0xE0, 0x00,

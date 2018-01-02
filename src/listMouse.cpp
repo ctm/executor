@@ -20,7 +20,7 @@
 using namespace Executor;
 
 #if defined(BINCOMPAT)
-typedef pascal BOOLEAN (*clickproc)(void);
+typedef BOOLEAN (*clickproc)(void);
 #endif
 
 static void findcell(GUEST<Cell> *, ListHandle);

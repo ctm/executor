@@ -250,7 +250,7 @@ static void charblit(BitMap *fbmp, BitMap *tbmp, Rect *srect, Rect *drect,
  * measurement routines call.
  */
 
-PUBLIC LONGINT
+LONGINT
 Executor::text_helper(LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point> *denp,
                       FontInfo *finfop, GUEST<INTEGER> *charlocp, text_helper_action_t action)
 {
@@ -708,9 +708,9 @@ Executor::text_helper(LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point> 
     return retval;
 }
 
-PUBLIC bool Executor::ROMlib_text_output_disabled_p;
+bool Executor::ROMlib_text_output_disabled_p;
 
-PUBLIC bool
+bool
 Executor::disable_text_printing(void)
 {
     bool retval;
@@ -720,7 +720,7 @@ Executor::disable_text_printing(void)
     return retval;
 }
 
-PUBLIC void
+void
 Executor::set_text_printing(bool state)
 {
     ROMlib_text_output_disabled_p = state;
@@ -744,7 +744,7 @@ void Executor::C_StdText(INTEGER n, Ptr textbufp, Point num, Point den)
 
 #define FIXEDONEHALF (1L << 15)
 
-PUBLIC INTEGER
+INTEGER
 Executor::xStdTxMeas(INTEGER n, Byte *p, GUEST<Point> *nump, GUEST<Point> *denp,
                      FontInfo *finfop, GUEST<INTEGER> *charlocp)
 {

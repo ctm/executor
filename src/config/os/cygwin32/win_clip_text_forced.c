@@ -50,7 +50,7 @@ ROMlib_executor_format(LONGINT type)
     return retval;
 }
 
-PRIVATE bool support_cf_dib_p = true;
+static bool support_cf_dib_p = true;
 
 PUBLIC LONGINT
 GetScrapX(LONGINT type, char **h)
@@ -121,7 +121,7 @@ GetScrapX(LONGINT type, char **h)
     return retval;
 }
 
-PRIVATE int
+static int
 calc_length_and_format(UINT *formatp, LONGINT type, LONGINT length,
                        const char *p)
 {
@@ -141,7 +141,7 @@ calc_length_and_format(UINT *formatp, LONGINT type, LONGINT length,
     return retval;
 }
 
-PRIVATE void
+static void
 fill_in_data(char *destp, LONGINT type, LONGINT length, const char *p)
 {
     switch(type)
@@ -166,9 +166,9 @@ fill_in_data(char *destp, LONGINT type, LONGINT length, const char *p)
 }
 
 #warning DO NOT CHECK THIS IN
-PRIVATE bool old_paste_code_p = false;
+static bool old_paste_code_p = false;
 
-PRIVATE HANDLE clip_data = NULL;
+static HANDLE clip_data = NULL;
 
 PUBLIC void
 PutScrapX(LONGINT type, LONGINT length, char *p, int scrap_count)

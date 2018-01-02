@@ -100,7 +100,7 @@ OSErr Executor::C_SndStopFilePlay(SndChannelPtr chanp, BOOLEAN async)
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-PRIVATE struct
+static struct
 {
     SndDoubleBufferHeaderPtr headp;
     SndChannelPtr chanp;
@@ -128,7 +128,7 @@ void Executor::clear_pending_sounds(void)
  * NOTE: we're not really playing anything here, although we could.
  */
 
-PRIVATE OSErr
+static OSErr
 start_playing(SndChannelPtr chanp, SndDoubleBufferHeaderPtr paramp,
               int which_buf)
 {

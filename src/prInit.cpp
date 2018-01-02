@@ -15,7 +15,7 @@
 
 using namespace Executor;
 
-PUBLIC INTEGER Executor::ROMlib_printresfile = -1;
+INTEGER Executor::ROMlib_printresfile = -1;
 
 void Executor::C_PrOpen()
 {

@@ -42,9 +42,9 @@ typedef struct
     float angle;
 } rotation_t;
 
-PRIVATE rotation_t rotation;
+static rotation_t rotation;
 
-PUBLIC FILE *ROMlib_printfile;
+FILE *ROMlib_printfile;
 #define DPSContext long
 #if !defined(MACOSX_)
 typedef enum { NO,
@@ -500,7 +500,7 @@ dumpcolorimage(unsigned char *p, int numrows, int numbytes,
     }
 }
 
-PRIVATE float
+static float
 mac_old_color_to_ps_gray(long color)
 {
     float retval;
@@ -523,7 +523,7 @@ mac_old_color_to_ps_gray(long color)
     return retval;
 }
 
-PRIVATE bool
+static bool
 graymatch(unsigned char patp[8], INTEGER pnMode,
           GrafPtr thePortp, float *grayp)
 {
@@ -749,7 +749,7 @@ void Executor::ROMlib_grestore(void)
 char Executor::ROMlib_suppressclip = NO;
 static char reloadclip = NO;
 
-PRIVATE double save_xoffset, save_yoffset;
+static double save_xoffset, save_yoffset;
 
 void Executor::ROMlib_rotatebegin(LONGINT flippage, LONGINT angle)
 {
@@ -887,7 +887,7 @@ static char match255c(StringPtr str, char *p)
         return strncmp((char *)str + 1, p, n) == 0;
 }
 
-PRIVATE void
+static void
 substitute_chars(char *string, char find, char replace)
 {
     while(*string)
@@ -1136,9 +1136,9 @@ typedef struct
     float multiplier;
 } substitute_t;
 
-PUBLIC bool Executor::substitute_fonts_p = false;
+bool Executor::substitute_fonts_p = false;
 
-PRIVATE float
+static float
 substitute_font_if_needed(char **fontp, LONGINT orig_size,
                           bool *need_to_freep)
 {
@@ -1220,7 +1220,7 @@ void NeXTSetText(StringPtr fname, LONGINT txFace, LONGINT txSize,
         free(font);
 }
 
-PRIVATE void
+static void
 SmartGetFontName(GrafPtr thePortp, StringPtr fname)
 {
     C_GetFontName(CW(thePortp->txFont), fname);
@@ -1325,7 +1325,7 @@ void Executor::NeXTPrArc(LONGINT verb, Rect *rp, LONGINT starta, LONGINT arca,
     }
 }
 
-PRIVATE int
+static int
 num_image_bytes(int numbytes, int pixelsize, int direct_color_p)
 {
     int retval;
@@ -1979,7 +1979,7 @@ enum symbol_char
         is_symbol = true;         \
         break
 
-PRIVATE unsigned char
+static unsigned char
 symbol_translate_char(unsigned char c, bool *is_symbolp)
 {
     unsigned char retval;
@@ -2020,7 +2020,7 @@ symbol_translate_char(unsigned char c, bool *is_symbolp)
 
 /* end of ugly parallel enums and parallel switches */
 
-PRIVATE bool
+static bool
 is_symbol(unsigned char c)
 {
     bool retval;
@@ -2029,7 +2029,7 @@ is_symbol(unsigned char c)
     return retval;
 }
 
-PRIVATE void
+static void
 find_run_of_symbol_chars(LONGINT n, Ptr textbufp, int *run_startp,
                          int *run_stopp)
 {
@@ -2167,16 +2167,16 @@ void Executor::NeXTOpenPage(void)
  */
 }
 
-PRIVATE bool text_state;
+static bool text_state;
 
-PRIVATE void
+static void
 disable_copybits(void)
 {
     if(!ROMlib_text_output_disabled_p)
         text_state = disable_text_printing();
 }
 
-PRIVATE void
+static void
 enable_copybits(void)
 {
     set_text_printing(text_state);
@@ -2184,7 +2184,7 @@ enable_copybits(void)
 
 #define FIX_TO_FLOAT(x) ((float)(x) / (1 << 16))
 
-PUBLIC void
+void
 Executor::do_textbegin(TTxtPicHdl h)
 {
     disable_copybits();
@@ -2194,14 +2194,14 @@ Executor::do_textbegin(TTxtPicHdl h)
     rotation.rotated_p = true;
 }
 
-PUBLIC void
+void
 Executor::do_textcenter(TCenterRecHdl h)
 {
     rotation.center_x = FIX_TO_FLOAT(TEXTCENTER_X(h));
     rotation.center_y = FIX_TO_FLOAT(TEXTCENTER_Y(h));
 }
 
-PUBLIC void
+void
 Executor::do_textend(void)
 {
     if(rotation.rotated_p)

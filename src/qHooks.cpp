@@ -13,16 +13,16 @@ using namespace Executor;
 
 #if defined(BINCOMPAT)
 
-PRIVATE bool text_is_enabled_p = true;
+static bool text_is_enabled_p = true;
 
-PUBLIC void
+void
 Executor::disable_stdtext(void)
 {
     if(ROMlib_options & ROMLIB_TEXT_DISABLE_BIT)
         text_is_enabled_p = false;
 }
 
-PUBLIC void
+void
 Executor::enable_stdtext(void)
 {
     text_is_enabled_p = true;
@@ -31,7 +31,7 @@ Executor::enable_stdtext(void)
 void Executor::ROMlib_CALLTEXT(INTEGER bc, Ptr bufp, Point num, Point den)
 {
     QDProcsPtr gp;
-    pascal trap void (*pp)(INTEGER, Ptr, Point, Point);
+    void (*pp)(INTEGER, Ptr, Point, Point);
 
     if(text_is_enabled_p)
     {
@@ -51,7 +51,7 @@ void Executor::ROMlib_CALLTEXT(INTEGER bc, Ptr bufp, Point num, Point den)
 void Executor::ROMlib_CALLLINE(Point p)
 {
     QDProcsPtr gp;
-    pascal trap void (*pp)(Point);
+    void (*pp)(Point);
 
     if((gp = MR(thePort->grafProcs))
        && (pp = MR(gp->lineProc)) != P_StdLine)
@@ -68,7 +68,7 @@ void Executor::ROMlib_CALLLINE(Point p)
 void Executor::ROMlib_CALLRECT(GrafVerb v, Rect *rp)
 {
     QDProcsPtr gp;
-    pascal trap void (*pp)(GrafVerb, Rect *);
+    void (*pp)(GrafVerb, Rect *);
 
     if((gp = MR(thePort->grafProcs))
        && (pp = MR(gp->rectProc)) != P_StdRect)
@@ -85,7 +85,7 @@ void Executor::ROMlib_CALLRECT(GrafVerb v, Rect *rp)
 void Executor::ROMlib_CALLOVAL(GrafVerb v, Rect *rp)
 {
     QDProcsPtr gp;
-    pascal trap void (*pp)(GrafVerb, Rect *);
+    void (*pp)(GrafVerb, Rect *);
 
     if((gp = MR(thePort->grafProcs))
        && (pp = MR(gp->ovalProc)) != P_StdOval)
@@ -102,7 +102,7 @@ void Executor::ROMlib_CALLOVAL(GrafVerb v, Rect *rp)
 void Executor::ROMlib_CALLRRECT(GrafVerb v, Rect *rp, INTEGER ow, INTEGER oh)
 {
     QDProcsPtr gp;
-    pascal trap void (*pp)(GrafVerb, Rect *, INTEGER, INTEGER);
+    void (*pp)(GrafVerb, Rect *, INTEGER, INTEGER);
 
     if((gp = MR(thePort->grafProcs))
        && (pp = MR(gp->rRectProc)) != P_StdRRect)
@@ -119,7 +119,7 @@ void Executor::ROMlib_CALLRRECT(GrafVerb v, Rect *rp, INTEGER ow, INTEGER oh)
 void Executor::ROMlib_CALLARC(GrafVerb v, Rect *rp, INTEGER starta, INTEGER arca)
 {
     QDProcsPtr gp;
-    pascal trap void (*pp)(GrafVerb, Rect *, INTEGER, INTEGER);
+    void (*pp)(GrafVerb, Rect *, INTEGER, INTEGER);
 
     if((gp = MR(thePort->grafProcs))
        && (pp = MR(gp->arcProc)) != P_StdArc)
@@ -136,7 +136,7 @@ void Executor::ROMlib_CALLARC(GrafVerb v, Rect *rp, INTEGER starta, INTEGER arca
 void Executor::ROMlib_CALLRGN(GrafVerb v, RgnHandle rh)
 {
     QDProcsPtr gp;
-    pascal trap void (*pp)(GrafVerb, RgnHandle);
+    void (*pp)(GrafVerb, RgnHandle);
 
     if((gp = MR(thePort->grafProcs))
        && (pp = MR(gp->rgnProc)) != P_StdRgn)
@@ -153,7 +153,7 @@ void Executor::ROMlib_CALLRGN(GrafVerb v, RgnHandle rh)
 void Executor::ROMlib_CALLPOLY(GrafVerb v, PolyHandle rh)
 {
     QDProcsPtr gp;
-    pascal trap void (*pp)(GrafVerb, PolyHandle);
+    void (*pp)(GrafVerb, PolyHandle);
 
     if((gp = MR(thePort->grafProcs))
        && (pp = MR(gp->polyProc)) != P_StdPoly)
@@ -171,7 +171,7 @@ void Executor::ROMlib_CALLBITS(BitMap *bmp, const Rect *srcrp, const Rect *dstrp
                                INTEGER mode, RgnHandle maskrh)
 {
     QDProcsPtr gp;
-    pascal trap void (*pp)(BitMap *, Rect *, Rect *, INTEGER, RgnHandle);
+    void (*pp)(BitMap *, Rect *, Rect *, INTEGER, RgnHandle);
 
     if((gp = MR(thePort->grafProcs))
        && (pp = MR(gp->bitsProc)) != P_StdBits)
@@ -188,7 +188,7 @@ void Executor::ROMlib_CALLBITS(BitMap *bmp, const Rect *srcrp, const Rect *dstrp
 void Executor::ROMlib_CALLCOMMENT(INTEGER kind, INTEGER size, Handle datah)
 {
     QDProcsPtr gp;
-    pascal trap void (*pp)(INTEGER, INTEGER, Handle);
+    void (*pp)(INTEGER, INTEGER, Handle);
 
     if((gp = MR(thePort->grafProcs))
        && (pp = MR(gp->commentProc)) != P_StdComment)
@@ -227,7 +227,7 @@ Executor::ROMlib_CALLTXMEAS(INTEGER bc, Ptr bufp, GUEST<Point> *nump, GUEST<Poin
 void Executor::ROMlib_PICWRITE(Ptr addr, INTEGER count)
 {
     QDProcsPtr gp;
-    pascal trap void (*pp)(Ptr, INTEGER);
+    void (*pp)(Ptr, INTEGER);
 
     if((gp = MR(thePort->grafProcs))
        && (pp = MR(gp->putPicProc)) != P_StdPutPic)
