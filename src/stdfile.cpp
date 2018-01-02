@@ -1830,13 +1830,6 @@ A2(PRIVATE, void, bumpsavedisk, DialogPtr, dp, BOOLEAN, always)
     }
 }
 
-#if 0 /* needed to construct ctopflags */
-P3 (PUBLIC pascal trap, INTEGER, unused_stdfile_2, INTEGER, ihit,
-    DialogPtr, dp, UNIV Ptr, data)
-{
-}
-#endif
-
 /*
  * NOTE: we no longer swap out the refcon when making the sfHookFirstCall (-1)
  *       or the sfHookLastCall (-2).  This fixes the bug that had Photoshop 3.0
