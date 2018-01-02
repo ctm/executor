@@ -1187,7 +1187,6 @@ bool Executor::vdriver_init(int _max_width, int _max_height, int _max_bpp,
     int num_green_bits, low_green_bit;
     int num_blue_bits, low_blue_bit;
     char *geom;
-    int t_int;
     char *t_str;
 
     char *xdefs;
@@ -1647,7 +1646,7 @@ void Executor::host_set_cursor(char *cursor_data,
     if(cursor_visible_p)
         XDefineCursor(x_dpy, x_window, x_cursor);
 
-    if(orig_x_cursor != -1)
+    if(orig_x_cursor != (Cursor)-1)
         XFreeCursor(x_dpy, orig_x_cursor);
 }
 
@@ -2088,7 +2087,7 @@ void Executor::vdriver_set_colors(int first_color, int num_colors,
     colors_initialized_p = true;
 }
 
-int Executor::vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r,
+void Executor::vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r,
                                           bool cursor_p)
 {
     bool convert_p;
@@ -2141,10 +2140,9 @@ int Executor::vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r
                            left, top, left, top, right - left, bottom - top);
         }
     }
-    return 0;
 }
 
-int Executor::vdriver_update_screen(int top, int left, int bottom, int right,
+void Executor::vdriver_update_screen(int top, int left, int bottom, int right,
                                     bool cursor_p)
 {
     vdriver_rect_t r;
@@ -2164,7 +2162,7 @@ int Executor::vdriver_update_screen(int top, int left, int bottom, int right,
     r.bottom = bottom;
     r.right = right;
 
-    return vdriver_update_screen_rects(1, &r, cursor_p);
+    vdriver_update_screen_rects(1, &r, cursor_p);
 }
 
 void Executor::vdriver_shutdown(void)

@@ -673,7 +673,9 @@ static unsigned short getnmfls(HVCB *vcbp, INTEGER workingdirnum)
     return retval;
 }
 
-#define RETURN return
+typedef enum { mfs,
+               hfs } fstype;
+
 static OSErr commonGetVInfo(HVolumeParam *pb, BOOLEAN async, fstype fs)
 {
     HVCB *vcbp;
@@ -749,7 +751,6 @@ static OSErr commonGetVInfo(HVolumeParam *pb, BOOLEAN async, fstype fs)
     }
     PBRETURN(pb, noErr);
 }
-#undef RETURN
 
 OSErr Executor::hfsPBGetVInfo(ParmBlkPtr pb, BOOLEAN async)
 {

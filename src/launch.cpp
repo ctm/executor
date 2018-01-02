@@ -470,7 +470,6 @@ static void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     Handle cfrg0;
     Handle h;
     vers_t *vp;
-    int namelen;
     LONGINT abovea5, belowa5, jumplen, jumpoff;
     GUEST<LONGINT> *lp;
     INTEGER toskip;

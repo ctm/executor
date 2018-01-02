@@ -2783,13 +2783,12 @@ STUB(IconDispatch)
  * 0x0658000c GetSpeechInfo
  * 0x0828000c SpeakBuffer
  * 0x0a5c000c TextToPhonemes
- */
 
 static selector_table_entry_t speech_table[] = {
     { 0x0000000c, PTOCBLOCK(SpeechManagerVersion) },
     { 0x003c000c, PTOCBLOCK(SpeechBusy) },
     { 0x0040000c, PTOCBLOCK(SpeechBusySystemWide) }
-};
+}; */
 
 static selector_table_entry_t sound_table[] = {
     { 0x00000000, PTOCBLOCK(FinaleUnknown1) },

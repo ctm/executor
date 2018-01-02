@@ -183,7 +183,6 @@ static uint8 halts_enabled;
 void Executor::C_ROMlib_Fsetenv(INTEGER *dp, INTEGER sel)
 {
     unsigned short env;
-    int i;
 
     /* Note which halts are enabled, but don't enable them in hardware.
    * This is a hack so we don't get real floating point exceptions
@@ -212,12 +211,12 @@ void Executor::C_ROMlib_Fsetenv(INTEGER *dp, INTEGER sel)
         fpsr &= ~FPSR_BITS_WE_USE;
 
         /* Compute bits for the fpcr. */
-        for(i = NELEM(m68k_fpcr_envword_table) - 1; i >= 0; i--)
+        for(int i = NELEM(m68k_fpcr_envword_table) - 1; i >= 0; i--)
             if(env & m68k_fpcr_envword_table[i])
                 fpcr |= (1 << i);
 
         /* Compute bits for the fpsr. */
-        for(i = NELEM(m68k_fpsr_envword_table) - 1; i >= 0; i--)
+        for(int i = NELEM(m68k_fpsr_envword_table) - 1; i >= 0; i--)
             if(env & m68k_fpsr_envword_table[i])
                 fpsr |= (1 << i);
 
@@ -285,12 +284,12 @@ void Executor::C_ROMlib_Fsetenv(INTEGER *dp, INTEGER sel)
 
         /* Compute bits for the fcw. */
         fcw |= 0x3D; /* Start out with exceptions masked, so ^ 1 turns them "on". */
-        for(i = NELEM(i387_fcw_envword_table) - 1; i >= 0; i--)
+        for(int i = NELEM(i387_fcw_envword_table) - 1; i >= 0; i--)
             if(env & i387_fcw_envword_table[i])
                 fcw ^= (1 << i);
 
         /* Compute bits for the fsw. */
-        for(i = NELEM(i387_fsw_envword_table) - 1; i >= 0; i--)
+        for(int i = NELEM(i387_fsw_envword_table) - 1; i >= 0; i--)
             if(env & i387_fsw_envword_table[i])
                 fsw |= (1 << i);
 
@@ -315,7 +314,6 @@ void Executor::C_ROMlib_Fsetenv(INTEGER *dp, INTEGER sel)
 void Executor::C_ROMlib_Fgetenv(INTEGER *dp, INTEGER sel)
 {
     unsigned short env;
-    int i;
 
 #if defined(mc68000)
     ULONGINT fpcr, fpsr;
@@ -328,12 +326,12 @@ void Executor::C_ROMlib_Fgetenv(INTEGER *dp, INTEGER sel)
         : "=g"(fpcr), "=g"(fpsr));
 
     /* Grab bits from the fpcr. */
-    for(i = NELEM(m68k_fpcr_envword_table) - 1; i >= 0; i--)
+    for(int i = NELEM(m68k_fpcr_envword_table) - 1; i >= 0; i--)
         if(fpcr & (1 << i))
             env |= m68k_fpcr_envword_table[i];
 
     /* Grab bits from the fpsr. */
-    for(i = NELEM(m68k_fpsr_envword_table) - 1; i >= 0; i--)
+    for(int i = NELEM(m68k_fpsr_envword_table) - 1; i >= 0; i--)
         if(fpsr & (1 << i))
             env |= m68k_fpsr_envword_table[i];
 
@@ -363,12 +361,12 @@ void Executor::C_ROMlib_Fgetenv(INTEGER *dp, INTEGER sel)
     fsw = mem_fsw;
 
     /* Grab bits from the fcw. */
-    for(i = NELEM(i387_fcw_envword_table) - 1; i >= 0; i--)
+    for(int i = NELEM(i387_fcw_envword_table) - 1; i >= 0; i--)
         if(fcw & (1 << i))
             env ^= i387_fcw_envword_table[i];
 
     /* Grab bits from the fsw. */
-    for(i = NELEM(i387_fsw_envword_table) - 1; i >= 0; i--)
+    for(int i = NELEM(i387_fsw_envword_table) - 1; i >= 0; i--)
         if(fsw & (1 << i))
             env ^= i387_fsw_envword_table[i];
 

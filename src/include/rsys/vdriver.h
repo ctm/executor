@@ -67,12 +67,12 @@ extern void vdriver_shutdown(void);
 #endif
 
 #if !defined(vdriver_update_screen)
-extern int vdriver_update_screen(int top, int left, int bottom, int right,
+extern void vdriver_update_screen(int top, int left, int bottom, int right,
                                  bool cursor_p);
 #endif
 
 #if !defined(vdriver_update_screen_rects)
-extern int vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r,
+extern void vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r,
                                        bool cursor_p);
 #endif
 

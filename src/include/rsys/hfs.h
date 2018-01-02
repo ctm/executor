@@ -264,9 +264,6 @@ struct btblock0
 
 #define DATAPFROMKEY(p) ((char *)(p) + ((((catkey *)p)->ckrKeyLen + 2) & ~1))
 
-typedef enum { mfs,
-               hfs,
-               hfsp } fstype;
 typedef enum { regular = 1,
                directory = 2,
                thread = 4 } filekind;

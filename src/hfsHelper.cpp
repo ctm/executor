@@ -47,8 +47,6 @@ using namespace Executor;
 #define HFSXFERDOTFS "/usr/filesystems/HFS_XFer.fs"
 #define HFSXFERUTIL HFSXFERDOTFS "/HFS_XFer.util"
 
-static LONGINT pipefd[2];
-
 LONGINT Executor::ROMlib_sock;
 
 void Executor::ROMlib_hfsinit(void)
@@ -231,10 +229,6 @@ static LONGINT try_to_open_disk(const char *dname, LONGINT *bsizep,
     len += strlen(dname + len) + 1; /* second component: permission */
     if(!dname[len])
         *flagsp |= DRIVE_FLAGS_FIXED; /* third component: ejectable */
-#if defined(MACOSX_)
-    if(pipefd[1] != -1)
-        write(pipefd[1], dname, len);
-#endif /* NEXT */
 
 #if !defined(CYGWIN32)
 #define EXTRA_BITS O_EXCL

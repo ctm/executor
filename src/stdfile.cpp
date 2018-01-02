@@ -140,7 +140,7 @@ static void getcurname(fltype *);
 static void flfinit(fltype *);
 static void flinsert(fltype *, StringPtr, INTEGER);
 static int typeinarray(GUEST<OSType>, INTEGER, GUEST<SFTypeList>);
-static LONGINT stdfcmp(char *, char *);
+static LONGINT stdfcmp(const void *, const void *);
 static void flfill(fltype *);
 static void realcd(DialogPeek, LONGINT);
 static LONGINT getparent(LONGINT);
@@ -670,13 +670,9 @@ static int typeinarray(GUEST<OSType> ft, INTEGER numt, GUEST<SFTypeList> tl)
     return (false);
 }
 
-/*
- * NOTE: stdfcmp is called from qsort, so we can't smash d2.
- */
-
 /* ip1 and ip2 would really be "void *" in ANSI C */
 
-static LONGINT stdfcmpC(const void *ip1, const void *ip2)
+static LONGINT stdfcmp(const void *ip1, const void *ip2)
 {
     fltype::flinfostr *fp1 = (fltype::flinfostr *)ip1;
     fltype::flinfostr *fp2 = (fltype::flinfostr *)ip2;
@@ -685,11 +681,6 @@ static LONGINT stdfcmpC(const void *ip1, const void *ip2)
     retval = ROMlib_strcmp((StringPtr)(MR(*holdstr) + fp1->floffs),
                            (StringPtr)(MR(*holdstr) + fp2->floffs));
     return retval;
-}
-
-static LONGINT stdfcmp(char *ip1, char *ip2)
-{
-    return stdfcmpC(ip1, ip2);
 }
 
 static bool
@@ -783,7 +774,7 @@ static void flfill(fltype *f)
     if(f->flnmfil > 0)
     {
         holdstr = f->flstrs;
-        ::qsort(MR(*f->flinfo), f->flnmfil, sizeof(fltype::flinfostr), stdfcmpC);
+        ::qsort(MR(*f->flinfo), f->flnmfil, sizeof(fltype::flinfostr), stdfcmp);
         if(!(MR(*f->flinfo)[0].flicns & GRAYBIT) && !f->flgraynondirs)
         {
             f->flsel = 0;

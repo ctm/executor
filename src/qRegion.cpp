@@ -640,8 +640,6 @@ typedef enum {
 
 static void binop(optype op, RgnHandle srcrgn1, RgnHandle srcrgn2,
                   RgnHandle dstrgn);
-static LONGINT comparex(char *cp1, char *cp2);
-static LONGINT comparey(char *cp1, char *cp2);
 static void ptorh(INTEGER *p, RgnHandle rh);
 
 static void sectbinop(RgnHandle srcrgn1, RgnHandle srcrgn2, RgnHandle dstrgn)

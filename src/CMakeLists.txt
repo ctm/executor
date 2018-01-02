@@ -30,7 +30,12 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     #                    anonymous enums in the headers.
     #                    Code like (blah ? noErr : paramErr) triggers the enum-compare warning.
 
-	add_definitions(-Wno-enum-compare)
+    add_definitions(
+        -Wall
+        -Wno-unused-but-set-variable
+        -Wno-sign-compare
+        -Werror=return-type
+        -Wno-enum-compare)
 endif()
 
 add_subdirectory(config/front-ends/x)

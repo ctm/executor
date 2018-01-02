@@ -40,8 +40,8 @@ namespace
 {
 vdriver_modes_t sdl_impotent_modes = { 0, 0 };
 SDL_Window *sdlWindow;
-SDL_Renderer *sdlRenderer;
-SDL_Texture *sdlTexture;
+/*SDL_Renderer *sdlRenderer;
+SDL_Texture *sdlTexture;*/
 SDL_Surface *sdlSurface;
 }
 
@@ -184,7 +184,7 @@ void Executor::vdriver_get_colors(int first_color, int num_colors, ColorSpec *co
         colors[i].rgb.blue = CW(c.b << 8 | c.b);
     }
 }
-int Executor::vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r,
+void Executor::vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r,
                                           bool cursor_p)
 {
     /*SDL_UpdateTexture(sdlTexture, NULL, vdriver_fbuf, vdriver_row_bytes);
@@ -194,7 +194,7 @@ int Executor::vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r
     SDL_UpdateWindowSurface(sdlWindow);
 }
 
-int Executor::vdriver_update_screen(int top, int left, int bottom, int right,
+void Executor::vdriver_update_screen(int top, int left, int bottom, int right,
                                     bool cursor_p)
 {
     /*SDL_UpdateTexture(sdlTexture, NULL, vdriver_fbuf, vdriver_row_bytes);

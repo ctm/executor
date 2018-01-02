@@ -118,7 +118,10 @@ addr_in_zone_p(THz zone, char *addr)
             && addr <= (char *)ZONE_BK_LIM(zone));
 }
 
-static void
+/** addr_info
+ * Unused, but hopefully very useful when called from a debugger
+ */
+void
 addr_info(char *addr)
 {
     THz zones[3], addr_zone;
@@ -221,7 +224,6 @@ addr_info(char *addr)
     return;
 
 handle_addr_info:
-{
     block_header_t *handle_block;
     SignedByte state;
 
@@ -305,7 +307,6 @@ handle_addr_info:
                 id, &res_name[1]);
     }
     return;
-}
 }
 
 void Executor::ROMlib_sledgehammer_zone(THz zone, bool print_p,

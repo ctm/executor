@@ -206,7 +206,7 @@ void Executor::vdriver_get_colors(int first_color, int num_colors, ColorSpec *co
     gui_fatal("`!vdriver_fixed_clut_p' and `vdriver_get_colors ()' called");
 }
 
-int Executor::vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r,
+void Executor::vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r,
                                           bool cursor_p)
 {
     SDL_Rect *rects;
@@ -221,10 +221,9 @@ int Executor::vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r
         rects[i].h = r[i].bottom - r[i].top;
     }
     SDL_UpdateRects(screen, num_rects, rects);
-    return (0);
 }
 
-int Executor::vdriver_update_screen(int top, int left, int bottom, int right,
+void Executor::vdriver_update_screen(int top, int left, int bottom, int right,
                                     bool cursor_p)
 {
     SDL_Rect rect;
@@ -244,8 +243,6 @@ int Executor::vdriver_update_screen(int top, int left, int bottom, int right,
     rect.y = top;
     rect.h = bottom - top;
     SDL_UpdateRects(screen, 1, &rect);
-
-    return (0);
 }
 
 void Executor::vdriver_flush_display(void)

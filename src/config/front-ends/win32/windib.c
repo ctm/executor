@@ -259,7 +259,7 @@ void vdriver_get_colors(int first_color, int num_colors, ColorSpec *colors)
     gui_fatal("`!vdriver_fixed_clut_p' and `vdriver_get_colors ()' called");
 }
 
-int vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r,
+void vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r,
                                 bool cursor_p)
 {
     HDC hdc, mdc;
@@ -284,10 +284,9 @@ int vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r,
     }
     DeleteDC(mdc);
     ReleaseDC(Win_Window, hdc);
-    return (0);
 }
 
-int vdriver_update_screen(int top, int left, int bottom, int right,
+void vdriver_update_screen(int top, int left, int bottom, int right,
                           bool cursor_p)
 {
     vdriver_rect_t r;
@@ -307,7 +306,7 @@ int vdriver_update_screen(int top, int left, int bottom, int right,
     r.bottom = bottom;
     r.right = right;
 
-    return vdriver_update_screen_rects(1, &r, cursor_p);
+    vdriver_update_screen_rects(1, &r, cursor_p);
 }
 
 void vdriver_flush_display(void)

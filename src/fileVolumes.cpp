@@ -290,11 +290,9 @@ static BOOLEAN hashinsert(VCBExtra *vcbp, const char *cpathname, LONGINT *diridp
     hashlink_t **hlpp, *newlink;
     struct stat sbuf;
     char *savep, save;
-    char *pathname;
-    int len;
-
-    len = strlen(pathname) + 1;
-    pathname = (char *)alloca(len);
+    
+    int len = strlen(cpathname) + 1;
+    char *pathname = (char *)alloca(len);
     memcpy(pathname, cpathname, len);
     ROMlib_undotdot(pathname);
     if(*diridp == 0)
