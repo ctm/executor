@@ -17,8 +17,8 @@
 
 #include "rsys/cruft.h"
 
-#include "OSUtil.h"
-#include "FileMgr.h"
+#include <OSUtil.h>
+#include <FileMgr.h>
 
 #include "rsys/file.h"
 
