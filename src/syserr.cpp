@@ -107,8 +107,7 @@ char syserr_msg[256];
 static GUEST<INTEGER> *findid(INTEGER);
 static void drawtextstring(INTEGER id, INTEGER offsetx, INTEGER offsety);
 static void drawicon(INTEGER id, INTEGER offsetx, INTEGER offsety);
-static void dobuttons(INTEGER id, INTEGER offsetx, INTEGER offsety,
-                      BOOLEAN demo_button_p);
+static void dobuttons(INTEGER id, INTEGER offsetx, INTEGER offsety);
 
 static GUEST<INTEGER> *findid(INTEGER id)
 {
@@ -155,8 +154,7 @@ static void drawicon(INTEGER id, INTEGER offsetx, INTEGER offsety)
     }
 }
 
-static void dobuttons(INTEGER id, INTEGER offsetx, INTEGER offsety,
-                      BOOLEAN demo_button_p)
+static void dobuttons(INTEGER id, INTEGER offsetx, INTEGER offsety)
 {
     struct bdef *bp;
     struct sdef *sp;
@@ -184,10 +182,7 @@ static void dobuttons(INTEGER id, INTEGER offsetx, INTEGER offsety,
             C_OffsetRect(&bp->buts[i].butloc, offsetx, offsety);
             if((sp = (struct sdef *)findid(CW(bp->buts[i].butstrid))))
             {
-                if(demo_button_p && sp->text[0] == 'O' && sp->text[1] == 'K')
-                    textp = "Demo";
-                else
-                    textp = sp->text;
+                textp = sp->text;
                 tcnt = strlen(textp);
                 twid = TextWidth((Ptr)textp, 0, tcnt);
                 MoveTo((CW(bp->buts[i].butloc.left) + CW(bp->buts[i].butloc.right) - twid) / 2,
@@ -364,5 +359,5 @@ void Executor::C_SysError(short errorcode)
     /* #warning We blow off ResumeProc until we can properly handle it */
     if(ap->buttonid)
         dobuttons(/* CL(ResumeProc) ? Cx(ap->buttonid) + 1 : */ Cx(ap->buttonid),
-                  offsetx, offsety, false);
+                  offsetx, offsety);
 }

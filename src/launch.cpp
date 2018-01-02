@@ -470,7 +470,6 @@ static void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     Handle cfrg0;
     Handle h;
     vers_t *vp;
-    char *versbuf, *namebuf;
     int namelen;
     LONGINT abovea5, belowa5, jumplen, jumpoff;
     GUEST<LONGINT> *lp;
@@ -562,18 +561,9 @@ static void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     if(h)
     {
         vp = (vers_t *)STARH(h);
-        versbuf = (char *)alloca(VERSSIZE(vp));
-        memcpy(versbuf, vp->shortname + 1, vp->shortname[0]);
-        sprintf(versbuf + vp->shortname[0], VERSFMT,
-                (LONGINT)vp->c[0],
-                (LONGINT)vp->c[1],
-                (LONGINT)vp->c[2],
-                (LONGINT)vp->c[3],
-                (LONGINT)CW(vp->loc));
         ROMlib_version_long = ((vp->c[0] << 24) | (vp->c[1] << 16) | (vp->c[2] << 8) | (vp->c[3] << 0));
     }
-    else
-        versbuf = "";
+    
 
     ROMlib_ScreenSize.first = INITIALPAIRVALUE;
     ROMlib_MacSize.first = INITIALPAIRVALUE;
@@ -644,17 +634,6 @@ static void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
             && ((size_flags & SZisHighLevelEventAware)
                 == SZisHighLevelEventAware);
     }
-
-    h = GetResource(CL(finfo.fdCreator), 0);
-    if(h)
-    {
-        namelen = *MR(*h);
-        namebuf = (char *)alloca(namelen + 1);
-        memcpy(namebuf, (char *)STARH(h) + 1, namelen);
-        namebuf[namelen] = 0;
-    }
-    else
-        namebuf = "";
 
     if(!code0)
     {

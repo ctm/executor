@@ -2,7 +2,7 @@
  * Development, Inc.  All rights reserved.
  */
 
-#warning Has some hard-coded Executors in it
+// #warning Has some hard-coded Executors in it
 
 #define Region Mac_Region
 #define Cursor Mac_Cursor

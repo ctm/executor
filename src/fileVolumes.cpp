@@ -283,21 +283,20 @@ filename_match(const char *prefix, const char *path1, const char *path2)
  * hashinsert returns true if the entry is already there
  */
 
-static BOOLEAN hashinsert(VCBExtra *vcbp, char *pathname, LONGINT *diridp,
+static BOOLEAN hashinsert(VCBExtra *vcbp, const char *cpathname, LONGINT *diridp,
                           LONGINT parid, newness_t new1)
 {
     BOOLEAN retval;
     hashlink_t **hlpp, *newlink;
     struct stat sbuf;
     char *savep, save;
-    char *newpathname;
+    char *pathname;
     int len;
 
     len = strlen(pathname) + 1;
-    newpathname = (char *)alloca(len);
-    memcpy(newpathname, pathname, len);
-    ROMlib_undotdot(newpathname);
-    pathname = newpathname;
+    pathname = (char *)alloca(len);
+    memcpy(pathname, cpathname, len);
+    ROMlib_undotdot(pathname);
     if(*diridp == 0)
     {
         if(Ustat(pathname, &sbuf) == 0 && S_ISDIR(sbuf.st_mode))

@@ -96,7 +96,6 @@ void opt_put_int_val(opt_database_t &db, const std::string &opt, int value,
                      priority_t pri, int temp_val_p);
 
 char *opt_help_message(void);
-void opt_register_pre_note(char *note);
 void opt_register_pre_note(std::string note);
 
 extern uint32_t parse_drive_opt(const char *opt_name, const char *opt_value);

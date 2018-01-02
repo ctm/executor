@@ -27,6 +27,7 @@ bool Executor::ROMlib_parse_version(string vers, uint32_t *version_out)
     int major_version, minor_version, teeny_version;
     char *major_str, *minor_str, *teeny_str;
     char *temp_str, *system_str;
+    char zero_str[] = "0";
 
     /* Copy the version to a temp string we can manipulate. */
     system_str = (char *)alloca(vers.length() + 1);
@@ -41,7 +42,7 @@ bool Executor::ROMlib_parse_version(string vers, uint32_t *version_out)
         minor_str = &temp_str[1];
     }
     else
-        minor_str = "0";
+        minor_str = zero_str;
 
     temp_str = strchr(minor_str, '.');
     if(temp_str)
@@ -50,7 +51,7 @@ bool Executor::ROMlib_parse_version(string vers, uint32_t *version_out)
         teeny_str = &temp_str[1];
     }
     else
-        teeny_str = "0";
+        teeny_str = zero_str;
 
     major_version = atoi(major_str);
     minor_version = atoi(minor_str);

@@ -175,6 +175,7 @@ flush_buffer(our_file_info_t *ofitp)
     return retval;
 }
 
+#if 0
 static size_t
 writefunc(int magic, const void *buf, size_t buf_len)
 {
@@ -203,6 +204,7 @@ writefunc(int magic, const void *buf, size_t buf_len)
     }
     return err ? 0 : buf_len;
 }
+#endif
 
 static OSErr
 end_track_buffering_for_write(our_file_info_t *ofitp)

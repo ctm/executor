@@ -2,7 +2,7 @@
  * Development, Inc.  All rights reserved.
  */
 
-#warning Insert is not giving us a 0x72
+// #warning Insert is not giving us a 0x72
 
 #include "rsys/common.h"
 #include "rsys/keyboard.h"

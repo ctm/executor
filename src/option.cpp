@@ -30,9 +30,7 @@ typedef struct opt_block
 typedef vector<opt_block> optBlocks;
 static optBlocks opt_blocks;
 
-static int max_pre_notes;
-static int n_pre_notes;
-static char **pre_notes;
+static std::vector<std::string> pre_notes;
 
 static char *wrap_buf;
 static int wrap_buf_size;
@@ -58,20 +56,16 @@ void Executor::opt_shutdown(void)
         help_buf = nullptr;
     }
 
-    if(pre_notes)
-    {
-        free(pre_notes);
-        pre_notes = nullptr;
-    }
-
+    pre_notes.clear();
     opt_blocks.clear();
 }
 
 static void
-strcpy_to_wrap_buf(char *text)
+strcpy_to_wrap_buf(const char *text)
 {
     int text_len;
-    char *src, *dst;
+    const char *src;
+    char *dst;
 
     text_len = strlen(text) + 1;
 
@@ -176,10 +170,10 @@ void _generate_help_message(void)
     int i;
     char *buf;
 
-    for(i = 0; i < n_pre_notes; i++)
+    for(i = 0; i < pre_notes.size(); i++)
     {
         int out_len, next_len;
-        char *pre_note = pre_notes[i];
+        const char *pre_note = pre_notes[i].c_str();
 
         strcpy_to_wrap_buf(pre_note);
 
@@ -248,25 +242,7 @@ Executor::opt_help_message(void)
 
 void Executor::opt_register_pre_note(string note)
 {
-    char *aPreNote = strdup(note.c_str());
-
-    opt_register_pre_note(aPreNote);
-}
-
-void Executor::opt_register_pre_note(char *note)
-{
-    if(!pre_notes)
-    {
-        n_pre_notes = 0;
-        max_pre_notes = 4;
-        pre_notes = (char **)malloc(max_pre_notes * sizeof *pre_notes);
-    }
-    if(n_pre_notes == max_pre_notes)
-    {
-        max_pre_notes *= 2;
-        pre_notes = (char **)realloc(pre_notes, max_pre_notes * sizeof *pre_notes);
-    }
-    pre_notes[n_pre_notes++] = note;
+    pre_notes.push_back(std::move(note));
 }
 
 #define ERRMSG_STREAM stderr

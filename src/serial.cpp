@@ -250,10 +250,10 @@ static DCtlPtr otherdctl(ParmBlkPtr pbp)
  *	  delay the opening until we know just what type of flow
  *	  control the user wants to do.
  */
-static char *specialname(ParmBlkPtr pbp, const char **lockfilep,
+static const char *specialname(ParmBlkPtr pbp, const char **lockfilep,
                           const char **tempfilep)
 {
-    char *retval;
+    const char *retval;
     *lockfilep = 0;
     *tempfilep = 0;
     retval = 0;
