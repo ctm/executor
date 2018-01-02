@@ -73,21 +73,6 @@ PUBLIC int Executor::nodrivesearch_p = false;
 
 using namespace Executor;
 
-
-#define CALLFILTERPROC(dp, evt, ith, fp) \
-    ROMlib_CALLFILTERPROC((dp), (evt), (ith), (fp))
-
-#define CALL_NEW_FILTER_PROC(dp, evt, ith, data, fp)        \
-    ROMlib_CALL_NEW_FILTER_PROC((dp), (evt), (ith), (data), \
-                                (fp))
-
-
-#define CALLFILEFILT(pbp, fp) ROMlib_CALLFILEFILT((pbp), (fp))
-
-
-#define CALL_CUSTOM_FILE_FILT(pbp, data, fp) \
-    ROMlib_CALL_CUSTOM_FILE_FILT((pbp), (data), fp)
-
 typedef union {
     SFReply *oreplyp;
     StandardFileReply *nreplyp;
@@ -154,12 +139,10 @@ PRIVATE void settype(fltype *, INTEGER);
 PRIVATE INTEGER flwhich(fltype *, Point);
 PRIVATE void flmouse(fltype *, Point, ControlHandle);
 PRIVATE void getcurname(fltype *);
-static inline BOOLEAN ROMlib_CALLFILTERPROC(DialogPtr, EventRecord *, GUEST<INTEGER> *, ModalFilterProcPtr);
 PRIVATE void flfinit(fltype *);
 PRIVATE void flinsert(fltype *, StringPtr, INTEGER);
 PRIVATE int typeinarray(GUEST<OSType>, INTEGER, GUEST<SFTypeList>);
 PRIVATE LONGINT stdfcmp(char *, char *);
-static inline BOOLEAN ROMlib_CALLFILEFILT(CInfoPBPtr, FileFilterProcPtr);
 PRIVATE void flfill(fltype *);
 PRIVATE void realcd(DialogPeek, LONGINT);
 PRIVATE LONGINT getparent(LONGINT);
@@ -624,42 +607,6 @@ A3(PRIVATE, void, flmouse, fltype *, f, Point, p, ControlHandle, ch)
     } while(!GetNextEvent(mUpMask, &evt));
 }
 
-A4(static inline, BOOLEAN, ROMlib_CALLFILTERPROC, DialogPtr, dp,
-   EventRecord *, evtp, GUEST<INTEGER>, *ith, ModalFilterProcPtr, fp)
-{
-    BOOLEAN retval;
-    LONGINT save_ref_con;
-
-    save_ref_con = GetWRefCon(dp);
-    SetWRefCon(dp, TICK("stdf"));
-    ROMlib_hook(stdfile_filtnumber);
-    retval = CToPascalCall((void *)fp, ctop(&C_SectRect), dp, evtp, ith);
-    SetWRefCon(dp, save_ref_con);
-    return retval;
-}
-
-#if 0 /* Needed to generate a CTOP value */
-P4 (PUBLIC pascal trap, BOOLEAN, unused_stdfile, DialogPtr, dp, EventRecord *,
-    evp, INTEGER *, ith, UNIV Ptr, data)
-{
-}
-#endif
-
-PRIVATE BOOLEAN
-ROMlib_CALL_NEW_FILTER_PROC(DialogPtr dp, EventRecord *evtp, GUEST<INTEGER> *ith,
-                            void* data, ModalFilterYDProcPtr fp)
-{
-    BOOLEAN retval;
-    LONGINT save_ref_con;
-
-    save_ref_con = GetWRefCon(dp);
-    SetWRefCon(dp, TICK("stdf"));
-    ROMlib_hook(stdfile_filtnumber);
-    retval = fp(dp, evtp, ith, data);
-    SetWRefCon(dp, save_ref_con);
-    return retval;
-}
-
 A1(PRIVATE, void, getcurname, fltype *, f)
 {
     int w;
@@ -749,31 +696,12 @@ A2(PRIVATE, LONGINT, stdfcmp, char *, ip1, char *, ip2)
     return stdfcmpC(ip1, ip2);
 }
 
-A2(static inline, BOOLEAN, ROMlib_CALLFILEFILT, CInfoPBRec *, pbp, FileFilterProcPtr, fp)
-{
-    BOOLEAN retval;
-
-    ROMlib_hook(stdfile_filefiltnumber);
-    retval = fp(pbp);
-    return retval;
-}
-
-PRIVATE BOOLEAN
-ROMlib_CALL_CUSTOM_FILE_FILT(CInfoPBRec * pbp, void* data,
-                             FileFilterYDProcPtr fp)
-{
-    BOOLEAN retval;
-
-    ROMlib_hook(stdfile_filefiltnumber);
-    retval = fp(pbp, data);
-    return retval;
-}
-
 PRIVATE bool
 passes_filter(fltype *f, CInfoPBRec *cinfop, INTEGER numt)
 {
     bool retval;
 
+    ROMlib_hook(stdfile_filefiltnumber);
     switch(f->flavor)
     {
         case original_sf:
@@ -783,16 +711,15 @@ passes_filter(fltype *f, CInfoPBRec *cinfop, INTEGER numt)
             retval = (!f->flfilef.oflfilef
                       || (numt == 0
                           && (cinfop->hFileInfo.ioFlAttrib & ATTRIB_ISADIR))
-                      || !CALLFILEFILT(cinfop, f->flfilef.oflfilef));
+                      || !f->flfilef.oflfilef(cinfop));
         case new_sf:
             retval = (!f->flfilef.oflfilef
                       || (cinfop->hFileInfo.ioFlAttrib & ATTRIB_ISADIR)
-                      || !CALLFILEFILT(cinfop, f->flfilef.oflfilef));
+                      || !f->flfilef.oflfilef(cinfop));
             break;
         case new_custom_sf:
             retval = (!f->flfilef.cflfilef
-                      || !CALL_CUSTOM_FILE_FILT(cinfop, f->mydata,
-                                                f->flfilef.cflfilef));
+                      || !f->flfilef.cflfilef(cinfop, f->mydata));
             break;
         default:
             warning_unexpected("flavor = %d", f->flavor);
@@ -1121,29 +1048,35 @@ folder_selected_p(fltype *fl)
     return retval;
 }
 
-PRIVATE INTEGER
-call_magicfp(fltype *fl, DialogPeek dp, EventRecord *evt, GUEST<INTEGER> *ith)
+PRIVATE BOOLEAN
+call_magicfp(fltype *fl, DialogPtr dp, EventRecord *evt, GUEST<INTEGER> *ith)
 {
-    INTEGER retval;
+    BOOLEAN retval;
+    LONGINT save_ref_con;
+
+    save_ref_con = GetWRefCon(dp);
+    SetWRefCon(dp, TICK("stdf"));
+    ROMlib_hook(stdfile_filtnumber);
 
     switch(fl->flavor)
     {
         case original_sf:
         case new_sf:
             retval = fl->magicfp.ofilterp
-                ? CALLFILTERPROC((DialogPtr)dp, evt, ith, fl->magicfp.ofilterp)
+                ? fl->magicfp.ofilterp(dp, evt, ith)
                 : false;
             break;
         case new_custom_sf:
             retval = fl->magicfp.cfilterp
-                ? CALL_NEW_FILTER_PROC((DialogPtr)dp, evt, ith, fl->mydata,
-                                       fl->magicfp.cfilterp)
+                ? fl->magicfp.cfilterp(dp, evt, ith, fl->mydata)
                 : false;
             break;
         default:
             warning_unexpected("flavor = %d", fl->flavor);
             retval = false;
     }
+
+    SetWRefCon(dp, save_ref_con);
 
     return retval;
 }
@@ -1325,7 +1258,7 @@ P3(PUBLIC, pascal INTEGER, ROMlib_stdffilt, DialogPeek, dp,
             *ith = CWC(100);
             break;
     }
-    retval2 = call_magicfp(fl, dp, evt, ith);
+    retval2 = call_magicfp(fl, (DialogPtr) dp, evt, ith);
 
     if(*ith == CWC(getOpen) && folder_selected_p(fl)) /* 1 is getOpen and putSave */
         *ith = CWC(FAKEOPENDIR);
