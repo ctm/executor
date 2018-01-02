@@ -467,7 +467,7 @@ GUEST<TO*> guest_ptr_cast(GUEST<FROM*> p)
 {
     return GUEST<TO*>((FROM*)p);
 }*/
-template<typename TO, typename FROM>
+template<typename TO, typename FROM, typename = std::enable_if<sizeof(GUEST<TO>) == sizeof(GUEST<FROM>)>>
 GUEST<TO> guest_cast(GuestWrapper<FROM> p)
 {
     //return GUEST<TO>((TO)(FROM)p);
