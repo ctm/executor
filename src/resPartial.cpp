@@ -11,8 +11,7 @@
 
 using namespace Executor;
 
-P4(PUBLIC pascal trap, void, ReadPartialResource,
-   Handle, res, int32_t, offset, Ptr, buffer, int32_t, count)
+PUBLIC pascal trap void Executor::C_ReadPartialResource(Handle res, int32_t offset, Ptr buffer, int32_t count)
 {
     resmaphand map;
     typref *tr;
@@ -57,14 +56,12 @@ P4(PUBLIC pascal trap, void, ReadPartialResource,
     ROMlib_setreserr(err);
 }
 
-P4(PUBLIC pascal trap, void, WritePartialResource,
-   Handle, resource, int32_t, offset, Ptr, buffer, int32_t, count)
+PUBLIC pascal trap void Executor::C_WritePartialResource(Handle resource, int32_t offset, Ptr buffer, int32_t count)
 {
     warning_unimplemented(NULL_STRING);
 }
 
-P2(PUBLIC pascal trap, void, SetResourceSize,
-   Handle, resource, int32_t, size)
+PUBLIC pascal trap void Executor::C_SetResourceSize(Handle resource, int32_t size)
 {
     warning_unimplemented(NULL_STRING);
 }
@@ -82,7 +79,7 @@ P2(PUBLIC pascal trap, void, SetResourceSize,
 
 **************************************/
 
-P1(PUBLIC pascal trap, Handle, GetNextFOND, Handle, fondHandle)
+PUBLIC pascal trap Handle Executor::C_GetNextFOND(Handle fondHandle)
 {
     Handle retval;
     warning_unimplemented(NULL_STRING);

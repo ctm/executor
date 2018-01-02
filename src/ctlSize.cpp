@@ -15,8 +15,8 @@
 
 using namespace Executor;
 
-P3(PUBLIC pascal trap, void, MoveControl, ControlHandle, c, /* IMI-325 */
-   INTEGER, h, INTEGER, v)
+PUBLIC pascal trap void Executor::C_MoveControl(ControlHandle c, /* IMI-325 */
+   INTEGER h, INTEGER v)
 {
     if(Hx(c, contrlVis))
     {
@@ -38,8 +38,8 @@ P3(PUBLIC pascal trap, void, MoveControl, ControlHandle, c, /* IMI-325 */
     }
 }
 
-P5(PUBLIC pascal trap, void, DragControl, ControlHandle, c, /* IMI-325 */
-   Point, p, Rect *, limit, Rect *, slop, INTEGER, axis)
+PUBLIC pascal trap void Executor::C_DragControl(ControlHandle c, /* IMI-325 */
+   Point p, Rect * limit, Rect * slop, INTEGER axis)
 {
     RgnHandle rh;
     LONGINT l;
@@ -59,8 +59,8 @@ P5(PUBLIC pascal trap, void, DragControl, ControlHandle, c, /* IMI-325 */
     }
 }
 
-P3(PUBLIC pascal trap, void, SizeControl, ControlHandle, c, /* IMI-326 */
-   INTEGER, width, INTEGER, height)
+PUBLIC pascal trap void Executor::C_SizeControl(ControlHandle c, /* IMI-326 */
+   INTEGER width, INTEGER height)
 {
     if(Hx(c, contrlVis))
     {

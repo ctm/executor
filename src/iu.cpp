@@ -23,8 +23,6 @@ using namespace Executor;
  * by opp is incremented for each character that is added.
  */
 
-namespace Executor
-{
 typedef struct
 {
     unsigned char primary;
@@ -49,9 +47,8 @@ PRIVATE INTEGER defaultlocalization(unsigned char *, INTEGER,
                                     sorttype *);
 PRIVATE INTEGER iuhelper(Ptr, Ptr, INTEGER,
                          INTEGER, BOOLEAN);
-}
 
-A2(PRIVATE, void, outl, LONGINT, l, char **, opp)
+PRIVATE void outl(LONGINT l, char ** opp)
 {
     if(l & 0xFF000000)
     {
@@ -79,7 +76,7 @@ A2(PRIVATE, void, outl, LONGINT, l, char **, opp)
  * n is the number of characters to transfer, or 0 for entire string
  */
 
-A3(PRIVATE, void, outs, StringPtr, p, INTEGER, n, char **, opp)
+PRIVATE void outs(StringPtr p, INTEGER n, char ** opp)
 {
     int ntocopy;
 
@@ -95,7 +92,7 @@ A3(PRIVATE, void, outs, StringPtr, p, INTEGER, n, char **, opp)
  * is less than 10, a leading zero is output.
  */
 
-A3(PRIVATE, void, outn, INTEGER, n, BOOLEAN, leading0, char **, opp)
+PRIVATE void outn(INTEGER n, BOOLEAN leading0, char ** opp)
 {
     Str255 s;
 
@@ -111,7 +108,7 @@ A3(PRIVATE, void, outn, INTEGER, n, BOOLEAN, leading0, char **, opp)
  * form of the month and, if non-null, a separator.
  */
 
-A4(PRIVATE, void, month, INTEGER, n, Intl0Ptr, int0p, char, sep, char **, opp)
+PRIVATE void month(INTEGER n, Intl0Ptr int0p, char sep, char ** opp)
 {
     outn(n, Cx(int0p->shrtDateFmt) & mntLdingZ, opp);
     if(sep)
@@ -122,7 +119,7 @@ A4(PRIVATE, void, month, INTEGER, n, Intl0Ptr, int0p, char, sep, char **, opp)
  * day is similar to month
  */
 
-A4(PRIVATE, void, day, INTEGER, n, Intl0Ptr, int0p, char, sep, char **, opp)
+PRIVATE void day(INTEGER n, Intl0Ptr int0p, char sep, char ** opp)
 {
     outn(n, Cx(int0p->shrtDateFmt) & dayLdingZ, opp);
     if(sep)
@@ -133,15 +130,15 @@ A4(PRIVATE, void, day, INTEGER, n, Intl0Ptr, int0p, char, sep, char **, opp)
  * year is similar to month and day
  */
 
-A4(PRIVATE, void, year, INTEGER, n, Intl0Ptr, int0p, char, sep, char **, opp)
+PRIVATE void year(INTEGER n, Intl0Ptr int0p, char sep, char ** opp)
 {
     outn(Cx(int0p->shrtDateFmt) & century ? n : n % 100, false, opp);
     if(sep)
         *(*opp)++ = sep;
 }
 
-P4(PUBLIC pascal trap, void, IUDatePString, LONGINT, date, /* IMI-505 */
-   DateForm, form, StringPtr, p, Handle, h)
+PUBLIC pascal trap void Executor::C_IUDatePString(LONGINT date, /* IMI-505 */
+   DateForm form, StringPtr p, Handle h)
 {
     Intl1Ptr int1p;
     Intl0Ptr int0p;
@@ -209,7 +206,7 @@ P4(PUBLIC pascal trap, void, IUDatePString, LONGINT, date, /* IMI-505 */
     p[0] = op - (char *)p - 1;
 }
 
-P1(PUBLIC pascal trap, Handle, IUGetIntl, INTEGER, id) /* IMI-505 */
+PUBLIC pascal trap Handle Executor::C_IUGetIntl(INTEGER id) /* IMI-505 */
 {
     INTEGER oldres;
     Handle retval;
@@ -243,14 +240,14 @@ P1(PUBLIC pascal trap, Handle, IUGetIntl, INTEGER, id) /* IMI-505 */
     return retval;
 }
 
-P3(PUBLIC pascal trap, void, IUDateString, LONGINT, date, /* IMI-504 */
-   DateForm, form, StringPtr, p)
+PUBLIC pascal trap void Executor::C_IUDateString(LONGINT date, /* IMI-504 */
+   DateForm form, StringPtr p)
 {
     IUDatePString(date, form, p, IUGetIntl(form == shortDate ? 0 : 1));
 }
 
-P4(PUBLIC pascal trap, void, IUTimePString, LONGINT, date, /* IMI-505 */
-   BOOLEAN, secs, StringPtr, p, Handle, h)
+PUBLIC pascal trap void Executor::C_IUTimePString(LONGINT date, /* IMI-505 */
+   BOOLEAN secs, StringPtr p, Handle h)
 {
     Intl0Ptr int0p;
     char *op;
@@ -295,13 +292,13 @@ P4(PUBLIC pascal trap, void, IUTimePString, LONGINT, date, /* IMI-505 */
     p[0] = op - (char *)p - 1;
 }
 
-P3(PUBLIC pascal trap, void, IUTimeString, LONGINT, date, /* IMI-505 */
-   BOOLEAN, secs, StringPtr, p)
+PUBLIC pascal trap void Executor::C_IUTimeString(LONGINT date, /* IMI-505 */
+   BOOLEAN secs, StringPtr p)
 {
     IUTimePString(date, secs, p, IUGetIntl(0));
 }
 
-P0(PUBLIC pascal trap, BOOLEAN, IUMetric) /* IMI-505 */
+PUBLIC pascal trap BOOLEAN Executor::C_IUMetric() /* IMI-505 */
 {
     Handle h;
 
@@ -309,8 +306,8 @@ P0(PUBLIC pascal trap, BOOLEAN, IUMetric) /* IMI-505 */
     return h ? ((Intl0Ptr)STARH(h))->metricSys : false;
 }
 
-P3(PUBLIC pascal trap, void, IUSetIntl, INTEGER, rn, /* IMI-506 */
-   INTEGER, id, Handle, newh)
+PUBLIC pascal trap void Executor::C_IUSetIntl(INTEGER rn, /* IMI-506 */
+   INTEGER id, Handle newh)
 {
     INTEGER oldcurmap;
     Handle h;
@@ -338,8 +335,7 @@ PRIVATE sorttype highsortvalues[] = {
     { 'A', 0x02 }, { 'A', 0x04 }, { 'C', 0x01 }, { 'E', 0x01 }, { 'N', 0x01 }, { 'O', 0x01 }, { 'U', 0x01 }, { 'A', 0x81 }, { 'A', 0x82 }, { 'A', 0x83 }, { 'A', 0x84 }, { 'A', 0x85 }, { 'A', 0x86 }, { 'C', 0x81 }, { 'E', 0x81 }, { 'E', 0x82 }, { 'E', 0x83 }, { 'E', 0x84 }, { 'I', 0x81 }, { 'I', 0x82 }, { 'I', 0x83 }, { 'I', 0x84 }, { 'N', 0x81 }, { 'O', 0x81 }, { 'O', 0x82 }, { 'O', 0x83 }, { 'O', 0x84 }, { 'O', 0x85 }, { 'U', 0x81 }, { 'U', 0x82 }, { 'U', 0x83 }, { 'U', 0x84 }, { 0xA0, 0x00 }, { 0xA1, 0x00 }, { 0xA2, 0x00 }, { 0xA3, 0x00 }, { 0xA4, 0x00 }, { 0xA5, 0x00 }, { 0xA6, 0x00 }, { 0xA7, 0x00 }, { 0xA8, 0x00 }, { 0xA9, 0x00 }, { 0xAA, 0x00 }, { 0xAB, 0x00 }, { 0xAC, 0x00 }, { 0xAD, 0x00 }, { 0xAE, 0x00 }, { 'O', 0x03 }, { 0xB0, 0x00 }, { 0xB1, 0x00 }, { 0xB2, 0x00 }, { 0xB3, 0x00 }, { 0xB4, 0x00 }, { 0xB5, 0x00 }, { 0xB6, 0x00 }, { 0xB7, 0x00 }, { 0xB8, 0x00 }, { 0xB9, 0x00 }, { 0xBA, 0x00 }, { 0xBB, 0x00 }, { 0xBC, 0x00 }, { 0xBD, 0x00 }, { 0xAE, 0x01 }, { 'O', 0x86 }, { 0xC0, 0x00 }, { 0xC1, 0x00 }, { 0xC2, 0x00 }, { 0xC3, 0x00 }, { 0xC4, 0x00 }, { 0xC5, 0x00 }, { 0xC6, 0x00 }, { 0x22, 0x01 }, { 0x22, 0x02 }, { 0xC9, 0x00 }, { 0x20, 0x01 }, { 'A', 0x01 }, { 'A', 0x03 }, { 'O', 0x02 }, { 0xAE, 0x02 }, { 0xAE, 0x03 }, { 0xD0, 0x00 }, { 0xD1, 0x00 }, { 0x22, 0x03 }, { 0x22, 0x04 }, { 0x27, 0x01 }, { 0x27, 0x02 }, { 0xD6, 0x00 }, { 0xD7, 0x00 }, { 'Y', 0x00 },
 };
 
-A3(PRIVATE, INTEGER, defaultorder, unsigned char *, cp, INTEGER, len,
-   sorttype *, rp) /* i.e. U.S. order */
+PRIVATE INTEGER defaultorder(unsigned char * cp, INTEGER len, sorttype * rp) /* i.e. U.S. order */
 {
     int index;
     int c;
@@ -372,8 +368,7 @@ A3(PRIVATE, INTEGER, defaultorder, unsigned char *, cp, INTEGER, len,
     return 1;
 }
 
-A3(PRIVATE, INTEGER, germanylocalization, unsigned char *, cp, INTEGER, len,
-   sorttype *, rp)
+PRIVATE INTEGER germanylocalization(unsigned char * cp, INTEGER len, sorttype * rp)
 {
     INTEGER retval;
 
@@ -499,8 +494,7 @@ A3(PRIVATE, INTEGER, germanylocalization, unsigned char *, cp, INTEGER, len,
     return retval;
 }
 
-A3(PRIVATE, INTEGER, britainlocalization, unsigned char *, cp, INTEGER, len,
-   sorttype *, rp)
+PRIVATE INTEGER britainlocalization(unsigned char * cp, INTEGER len, sorttype * rp)
 {
     (void)defaultorder(cp, len, rp);
     if(rp->primary >= 0x23 && rp->primary <= 0xA3)
@@ -513,8 +507,7 @@ A3(PRIVATE, INTEGER, britainlocalization, unsigned char *, cp, INTEGER, len,
     return 1;
 }
 
-A3(PRIVATE, INTEGER, defaultlocalization, unsigned char *, cp, INTEGER, len,
-   sorttype *, rp)
+PRIVATE INTEGER defaultlocalization(unsigned char * cp, INTEGER len, sorttype * rp)
 {
     return 0; /* never consume anything */
 }
@@ -525,8 +518,7 @@ A3(PRIVATE, INTEGER, defaultlocalization, unsigned char *, cp, INTEGER, len,
  *	 the exact format of localization routines, we don't care, for now.
  */
 
-A5(PRIVATE, INTEGER, iuhelper, Ptr, ptr1, Ptr, ptr2, INTEGER, len1,
-   INTEGER, len2, BOOLEAN, ignoresec)
+PRIVATE INTEGER iuhelper(Ptr ptr1, Ptr ptr2, INTEGER len1, INTEGER len2, BOOLEAN ignoresec)
 {
     Intl0Hndl h;
     locptype locp;
@@ -594,32 +586,30 @@ A5(PRIVATE, INTEGER, iuhelper, Ptr, ptr1, Ptr, ptr2, INTEGER, len1,
         return (len1 < len2 ? -1 : 1);
 }
 
-P4(PUBLIC pascal trap, INTEGER, IUMagString, Ptr, ptr1, /* IMI-506 */
-   Ptr, ptr2, INTEGER, len1, INTEGER, len2)
+PUBLIC pascal trap INTEGER Executor::C_IUMagString(Ptr ptr1, /* IMI-506 */
+   Ptr ptr2, INTEGER len1, INTEGER len2)
 {
     return iuhelper(ptr1, ptr2, len1, len2, false);
 }
 
-A2(PUBLIC, INTEGER, IUCompString, StringPtr, str1,
-   StringPtr, str2) /* IMI-506 */
+PUBLIC INTEGER Executor::IUCompString(StringPtr str1, StringPtr str2) /* IMI-506 */
 {
     return IUMagString((Ptr)(str1 + 1), (Ptr)(str2 + 1), str1[0], str2[0]);
 }
 
-P4(PUBLIC pascal trap, INTEGER, IUMagIDString, Ptr, ptr1, /* IMI-507 */
-   Ptr, ptr2, INTEGER, len1, INTEGER, len2)
+PUBLIC pascal trap INTEGER Executor::C_IUMagIDString(Ptr ptr1, /* IMI-507 */
+   Ptr ptr2, INTEGER len1, INTEGER len2)
 {
     return iuhelper(ptr1, ptr2, len1, len2, true);
 }
 
-A2(PUBLIC, INTEGER, IUEqualString, StringPtr, str1, /* IMI-506 */
-   StringPtr, str2)
+PUBLIC INTEGER Executor::IUEqualString(StringPtr str1, /* IMI-506 */
+   StringPtr str2)
 {
     return IUMagIDString((Ptr)(str1 + 1), (Ptr)(str2 + 1), str1[0], str2[0]);
 }
 
-P4(PUBLIC pascal trap, /* INTEGER */ void, IUMystery, Ptr, arg1, Ptr, arg2,
-   INTEGER, arg3, INTEGER, arg4)
+PUBLIC pascal trap /* INTEGER */ void Executor::C_IUMystery(Ptr arg1, Ptr arg2, INTEGER arg3, INTEGER arg4)
 {
     /* Microsoft Excel calls Pack6 with a selector of 18.
        This is being done on the Mac+.
@@ -632,67 +622,58 @@ P4(PUBLIC pascal trap, /* INTEGER */ void, IUMystery, Ptr, arg1, Ptr, arg2,
 /* NOTE: none of the below are done yet */
 /* #warning A bunch of IU routines are not implemented yet */
 
-P4(PUBLIC pascal trap, void, IULDateString, LongDateTime *, datetimep,
-   DateForm, longflag, Str255, result, Handle, intlhand)
+PUBLIC pascal trap void Executor::C_IULDateString(LongDateTime * datetimep, DateForm longflag, Str255 result, Handle intlhand)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);
 }
 
-P4(PUBLIC pascal trap, void, IULTimeString, LongDateTime *, datetimep,
-   BOOLEAN, wantseconds, Str255, result, Handle, intlhand)
+PUBLIC pascal trap void Executor::C_IULTimeString(LongDateTime * datetimep, BOOLEAN wantseconds, Str255 result, Handle intlhand)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);
 }
 
-P0(PUBLIC pascal trap, void, IUClearCache)
+PUBLIC pascal trap void Executor::C_IUClearCache()
 {
 }
 
-P5(PUBLIC pascal trap, INTEGER, IUMagPString, Ptr, ptra, Ptr, ptrb,
-   INTEGER, lena, INTEGER, lenb, Handle, itl2hand)
+PUBLIC pascal trap INTEGER Executor::C_IUMagPString(Ptr ptra, Ptr ptrb, INTEGER lena, INTEGER lenb, Handle itl2hand)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);
     return 0;
 }
 
-P5(PUBLIC pascal trap, INTEGER, IUMagIDPString, Ptr, ptra, Ptr, ptrb,
-   INTEGER, lena, INTEGER, lenb, Handle, itl2hand)
+PUBLIC pascal trap INTEGER Executor::C_IUMagIDPString(Ptr ptra, Ptr ptrb, INTEGER lena, INTEGER lenb, Handle itl2hand)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);
     return 0;
 }
 
-P2(PUBLIC pascal trap, INTEGER, IUScriptOrder, ScriptCode, script1,
-   ScriptCode, script2)
+PUBLIC pascal trap INTEGER Executor::C_IUScriptOrder(ScriptCode script1, ScriptCode script2)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);
     return 0;
 }
 
-P2(PUBLIC pascal trap, INTEGER, IULangOrder, LangCode, l1, LangCode, l2)
+PUBLIC pascal trap INTEGER Executor::C_IULangOrder(LangCode l1, LangCode l2)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);
     return 0;
 }
 
-P8(PUBLIC pascal trap, INTEGER, IUTextOrder, Ptr, ptra, Ptr, ptrb,
-   INTEGER, lena, INTEGER, lenb, ScriptCode, scripta,
-   ScriptCode, bscript, LangCode, langa, LangCode, langb)
+PUBLIC pascal trap INTEGER Executor::C_IUTextOrder(Ptr ptra, Ptr ptrb, INTEGER lena, INTEGER lenb, ScriptCode scripta, ScriptCode bscript, LangCode langa, LangCode langb)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);
     return 0;
 }
 
-P5(PUBLIC pascal trap, void, IUGetItlTable, ScriptCode, script,
-   INTEGER, tablecode, Handle *, itlhandlep, LONGINT *, offsetp,
-   LONGINT *, lengthp)
+PUBLIC pascal trap void Executor::C_IUGetItlTable(ScriptCode script, INTEGER tablecode, Handle * itlhandlep, LONGINT * offsetp, LONGINT * lengthp)
 {
     warning_unimplemented(NULL_STRING);
     ROMlib_hook(iu_unimplementednumber);

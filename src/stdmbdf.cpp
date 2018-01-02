@@ -227,8 +227,6 @@ mbdf_draw(int32_t draw_p)
     RGBBackColor(&ROMlib_white_rgb_color);
 }
 
-namespace Executor
-{
 PRIVATE LONGINT hit(LONGINT);
 PRIVATE void calc(LONGINT offset);
 PRIVATE void dispose();
@@ -238,9 +236,8 @@ PRIVATE mbdfentry *offtomep(LONGINT);
 PRIVATE void savealt(LONGINT);
 PRIVATE void resetalt(LONGINT);
 PRIVATE RgnHandle menurgn(RgnHandle);
-}
 
-A1(PRIVATE, LONGINT, hit, LONGINT, mousept)
+PRIVATE LONGINT hit(LONGINT mousept)
 {
     Point p;
     muelem *mp, *mpend;
@@ -272,7 +269,7 @@ A1(PRIVATE, LONGINT, hit, LONGINT, mousept)
     }
 }
 
-A1(PRIVATE, void, calc, LONGINT, offset)
+PRIVATE void calc(LONGINT offset)
 {
     MenuHandle mh;
     INTEGER left, titsize;
@@ -324,7 +321,7 @@ init()
     HxX(MBSAVELOC, lastMBSave) = CWC(0);
 }
 
-A0(PRIVATE, void, dispose)
+PRIVATE void dispose()
 {
 }
 
@@ -345,7 +342,7 @@ mbdfhilite(int32_t hilitestate)
     }
 }
 
-A0(PRIVATE, void, height)
+PRIVATE void height()
 {
     FontInfo fi;
 
@@ -528,7 +525,7 @@ restore(void)
         = CW(Hx(MBSAVELOC, lastMBSave) - sizeof(mbdfentry));
 }
 
-A1(PRIVATE, Rect *, getrect, LONGINT, offset)
+PRIVATE Rect * getrect(LONGINT offset)
 {
     INTEGER hiword;
     static Rect r;
@@ -566,7 +563,7 @@ A1(PRIVATE, Rect *, getrect, LONGINT, offset)
     return &r;
 }
 
-A1(PRIVATE, mbdfentry *, offtomep, LONGINT, offset)
+PRIVATE mbdfentry * offtomep(LONGINT offset)
 {
     mbdfentry *mbdfp, *mbdfep;
 
@@ -577,7 +574,7 @@ A1(PRIVATE, mbdfentry *, offtomep, LONGINT, offset)
     return mbdfp == mbdfep ? 0 : mbdfp;
 }
 
-A1(PRIVATE, void, savealt, LONGINT, offset)
+PRIVATE void savealt(LONGINT offset)
 {
     mbdfentry *mep;
 
@@ -586,7 +583,7 @@ A1(PRIVATE, void, savealt, LONGINT, offset)
     mep->mbBotScroll = AtMenuBottom;
 }
 
-A1(PRIVATE, void, resetalt, LONGINT, offset)
+PRIVATE void resetalt(LONGINT offset)
 {
     mbdfentry *mep;
 
@@ -595,7 +592,7 @@ A1(PRIVATE, void, resetalt, LONGINT, offset)
     AtMenuBottom = mep->mbBotScroll;
 }
 
-A1(PRIVATE, RgnHandle, menurgn, RgnHandle, rgn)
+PRIVATE RgnHandle menurgn(RgnHandle rgn)
 {
     Rect r;
 
@@ -608,8 +605,7 @@ A1(PRIVATE, RgnHandle, menurgn, RgnHandle, rgn)
     return rgn;
 }
 
-P4(PUBLIC, pascal int32_t, mbdf0, int16_t, sel, int16_t, mess,
-   int16_t, param1, int32_t, param2)
+PUBLIC pascal int32_t Executor::C_mbdf0(int16_t sel, int16_t mess, int16_t param1, int32_t param2)
 {
     int32_t retval;
     GUEST<GrafPtr> saveport;

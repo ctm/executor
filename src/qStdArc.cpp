@@ -22,13 +22,11 @@ using namespace Executor;
         return;          \
     }
 
-namespace Executor
-{
+
 PRIVATE void getpoint(INTEGER, Rect *, Point *);
 PRIVATE INTEGER findwall(Rect *r, INTEGER h, INTEGER v);
-}
 
-A3(PRIVATE, void, getpoint, INTEGER, angle, Rect *, r, Point *, ptp)
+PRIVATE void getpoint(INTEGER angle, Rect * r, Point * ptp)
 {
     INTEGER left = CW(r->left), top = CW(r->top),
             right = CW(r->right), bottom = CW(r->bottom);
@@ -83,7 +81,7 @@ A3(PRIVATE, void, getpoint, INTEGER, angle, Rect *, r, Point *, ptp)
 #define RBottom 2
 #define RLeft 3
 
-A3(PRIVATE, INTEGER, findwall, Rect *, r, INTEGER, h, INTEGER, v)
+PRIVATE INTEGER findwall(Rect * r, INTEGER h, INTEGER v)
 {
     if(v == CW(r->top)) /* the order of tests is important */
         return (RTop); /* don't change them if you don't see */
@@ -95,8 +93,7 @@ A3(PRIVATE, INTEGER, findwall, Rect *, r, INTEGER, h, INTEGER, v)
         return (RLeft);
 }
 
-P4(PUBLIC pascal trap, void, StdArc, GrafVerb, verb, Rect *, r,
-   INTEGER, starta, INTEGER, arca)
+PUBLIC pascal trap void Executor::C_StdArc(GrafVerb verb, Rect * r, INTEGER starta, INTEGER arca)
 {
     INTEGER left = CW(r->left), top = CW(r->top),
             right = CW(r->right), bottom = CW(r->bottom);

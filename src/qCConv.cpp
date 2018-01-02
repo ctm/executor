@@ -10,18 +10,14 @@ using namespace Executor;
 
 /* cmy and rgb color spaces are simply complements */
 
-P2(PUBLIC pascal trap, void, CMY2RGB,
-   CMYColor *, cmy_color,
-   RGBColor *, rgb_color)
+PUBLIC pascal trap void Executor::C_CMY2RGB(CMYColor * cmy_color, RGBColor * rgb_color)
 {
     rgb_color->red.raw(~cmy_color->cyan.raw());
     rgb_color->green.raw(~cmy_color->magenta.raw());
     rgb_color->blue.raw(~cmy_color->yellow.raw());
 }
 
-P2(PUBLIC pascal trap, void, RGB2CMY,
-   RGBColor *, rgb_color,
-   CMYColor *, cmy_color)
+PUBLIC pascal trap void Executor::C_RGB2CMY(RGBColor * rgb_color, CMYColor * cmy_color)
 {
     /* use `bar = ~foo' instead of `bar = CW (MaxSmallFract - CW (foo))'
      to compute the complement value */
@@ -55,9 +51,7 @@ value(unsigned long n1, unsigned long n2, unsigned long hue)
         return CW(n1);
 }
 
-P2(PUBLIC pascal trap, void, HSL2RGB,
-   HSLColor *, hsl_color,
-   RGBColor *, rgb_color)
+PUBLIC pascal trap void Executor::C_HSL2RGB(HSLColor * hsl_color, RGBColor * rgb_color)
 {
     if(hsl_color->saturation == CWC(0))
     {
@@ -90,9 +84,7 @@ P2(PUBLIC pascal trap, void, HSL2RGB,
     }
 }
 
-P2(PUBLIC pascal trap, void, RGB2HSL,
-   RGBColor *, rgb_color,
-   HSLColor *, hsl_color)
+PUBLIC pascal trap void Executor::C_RGB2HSL(RGBColor * rgb_color, HSLColor * hsl_color)
 {
     unsigned long r = CW(rgb_color->red);
     unsigned long g = CW(rgb_color->green);
@@ -159,9 +151,7 @@ P2(PUBLIC pascal trap, void, RGB2HSL,
     hsl_color->lightness = CW(l);
 }
 
-P2(PUBLIC pascal trap, void, HSV2RGB,
-   HSVColor *, hsv_color,
-   RGBColor *, rgb_color)
+PUBLIC pascal trap void Executor::C_HSV2RGB(HSVColor * hsv_color, RGBColor * rgb_color)
 {
     if(hsv_color->saturation == CWC(0))
     {
@@ -226,9 +216,7 @@ P2(PUBLIC pascal trap, void, HSV2RGB,
     }
 }
 
-P2(PUBLIC pascal trap, void, RGB2HSV,
-   RGBColor *, rgb_color,
-   HSVColor *, hsv_color)
+PUBLIC pascal trap void Executor::C_RGB2HSV(RGBColor * rgb_color, HSVColor * hsv_color)
 {
     unsigned long r = CW(rgb_color->red);
     unsigned long g = CW(rgb_color->green);
@@ -289,14 +277,12 @@ P2(PUBLIC pascal trap, void, RGB2HSV,
     hsv_color->value = CW(v);
 }
 
-P1(PUBLIC pascal trap, SmallFract, Fix2SmallFract,
-   Fixed, f)
+PUBLIC pascal trap SmallFract Executor::C_Fix2SmallFract(Fixed f)
 {
     return f & 0xFFFF;
 }
 
-P1(PUBLIC pascal trap, Fixed, SmallFract2Fix,
-   SmallFract, sf)
+PUBLIC pascal trap Fixed Executor::C_SmallFract2Fix(SmallFract sf)
 {
     return sf;
 }

@@ -22,9 +22,7 @@ using namespace Executor;
 
 PUBLIC BOOLEAN Executor::ROMlib_cdef0_is_rectangular = false;
 
-P9(PUBLIC pascal trap, ControlHandle, NewControl, WindowPtr, wst, Rect *, r,
-   StringPtr, title, BOOLEAN, vis, INTEGER, value, INTEGER, min,
-   INTEGER, max, INTEGER, procid, LONGINT, rc) /* IMI-319 */
+PUBLIC pascal trap ControlHandle Executor::C_NewControl(WindowPtr wst, Rect * r, StringPtr title, BOOLEAN vis, INTEGER value, INTEGER min, INTEGER max, INTEGER procid, LONGINT rc) /* IMI-319 */
 {
     ControlHandle retval;
     GrafPtr gp;
@@ -101,8 +99,8 @@ P9(PUBLIC pascal trap, ControlHandle, NewControl, WindowPtr, wst, Rect *, r,
     return retval;
 }
 
-P2(PUBLIC pascal trap, ControlHandle, GetNewControl, /* IMI-321 */
-   INTEGER, cid, WindowPtr, wst)
+PUBLIC pascal trap ControlHandle Executor::C_GetNewControl(/* IMI-321 */
+   INTEGER cid, WindowPtr wst)
 {
     typedef contrlrestype *wp;
 
@@ -126,7 +124,7 @@ P2(PUBLIC pascal trap, ControlHandle, GetNewControl, /* IMI-321 */
     return retval;
 }
 
-P2(PUBLIC pascal trap, void, SetCtlColor, ControlHandle, ctl, CCTabHandle, ctab)
+PUBLIC pascal trap void Executor::C_SetCtlColor(ControlHandle ctl, CCTabHandle ctab)
 {
     AuxCtlHandle aux_c;
 
@@ -162,7 +160,7 @@ P2(PUBLIC pascal trap, void, SetCtlColor, ControlHandle, ctl, CCTabHandle, ctab)
     }
 }
 
-P1(PUBLIC pascal trap, void, DisposeControl, ControlHandle, c) /* IMI-321 */
+PUBLIC pascal trap void Executor::C_DisposeControl(ControlHandle c) /* IMI-321 */
 {
 
     GUEST<ControlHandle> *t;
@@ -195,7 +193,7 @@ P1(PUBLIC pascal trap, void, DisposeControl, ControlHandle, c) /* IMI-321 */
     DisposHandle((Handle)c);
 }
 
-P1(PUBLIC pascal trap, void, KillControls, WindowPtr, w) /* IMI-321 */
+PUBLIC pascal trap void Executor::C_KillControls(WindowPtr w) /* IMI-321 */
 {
     ControlHandle c, t;
 

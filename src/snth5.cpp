@@ -17,8 +17,7 @@ using namespace Executor;
 
 typedef pascal void (*callbackfp)(SndChannelPtr, SndCommand *);
 
-P3(PUBLIC pascal, BOOLEAN, snth5, SndChannelPtr, chanp, SndCommand *, cmdp,
-   ModifierStubPtr, mp)
+PUBLIC pascal BOOLEAN Executor::C_snth5(SndChannelPtr chanp, SndCommand * cmdp, ModifierStubPtr mp)
 {
 #if defined(MACOSX_)
     soundbuffer_t *bufp;

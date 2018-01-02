@@ -506,7 +506,7 @@ Executor::ROMlib_add_to_gestalt_list(OSType selector, OSErr retval, uint32_t new
     }
 }
 
-A2(PUBLIC trap, OSErrRET, Gestalt, OSType, selector, GUEST<LONGINT> *, responsep)
+PUBLIC trap OSErrRET Executor::Gestalt(OSType selector, GUEST<LONGINT> * responsep)
 {
     static bool been_here = false;
 
@@ -551,8 +551,7 @@ A2(PUBLIC trap, OSErrRET, Gestalt, OSType, selector, GUEST<LONGINT> *, responsep
     return gestalt_helper(selector, responsep, true, gtable, NELEM(gtable));
 }
 
-P2(PUBLIC pascal trap, OSErrRET, PhysicalGestalt, OSType, selector,
-   GUEST<LONGINT> *, responsep)
+PUBLIC pascal trap OSErrRET Executor::C_PhysicalGestalt(OSType selector, GUEST<LONGINT> * responsep)
 {
     OSErrRET retval;
 
@@ -578,8 +577,7 @@ P2(PUBLIC pascal trap, OSErrRET, PhysicalGestalt, OSType, selector,
     return retval;
 }
 
-P2(PUBLIC pascal trap, OSErrRET, GestaltTablesOnly, OSType, selector,
-   GUEST<LONGINT> *, responsep)
+PUBLIC pascal trap OSErrRET Executor::C_GestaltTablesOnly(OSType selector, GUEST<LONGINT> * responsep)
 {
     return gestalt_helper(selector, responsep, false, gtable, NELEM(gtable));
 }
@@ -621,7 +619,7 @@ new_link(OSType selector, ProcPtr selFunc)
     return retval;
 }
 
-A2(PUBLIC trap, OSErrRET, NewGestalt, OSType, selector, ProcPtr, selFunc)
+PUBLIC trap OSErrRET Executor::NewGestalt(OSType selector, ProcPtr selFunc)
 {
     OSErr retval;
 
@@ -633,8 +631,7 @@ A2(PUBLIC trap, OSErrRET, NewGestalt, OSType, selector, ProcPtr, selFunc)
     return retval;
 }
 
-A3(PUBLIC trap, OSErrRET, ReplaceGestalt, OSType, selector, ProcPtr, selFunc,
-   ProcPtr *, oldSelFuncp)
+PUBLIC trap OSErrRET Executor::ReplaceGestalt(OSType selector, ProcPtr selFunc, ProcPtr * oldSelFuncp)
 {
     OSErr retval;
     gestalt_link_t *gp;

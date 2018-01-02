@@ -15,27 +15,27 @@
 
 using namespace Executor;
 
-P1(PUBLIC pascal trap, void, FrameRect, Rect *, r)
+PUBLIC pascal trap void Executor::C_FrameRect(Rect * r)
 {
     CALLRECT(frame, r);
 }
 
-P1(PUBLIC pascal trap, void, PaintRect, Rect *, r)
+PUBLIC pascal trap void Executor::C_PaintRect(Rect * r)
 {
     CALLRECT(paint, r);
 }
 
-P1(PUBLIC pascal trap, void, EraseRect, Rect *, r)
+PUBLIC pascal trap void Executor::C_EraseRect(Rect * r)
 {
     CALLRECT(erase, r);
 }
 
-P1(PUBLIC pascal trap, void, InvertRect, Rect *, r)
+PUBLIC pascal trap void Executor::C_InvertRect(Rect * r)
 {
     CALLRECT(invert, r);
 }
 
-P2(PUBLIC pascal trap, void, FillRect, Rect *, r, Pattern, pat)
+PUBLIC pascal trap void Executor::C_FillRect(Rect * r, Pattern pat)
 {
     if(!EmptyRgn(PORT_VIS_REGION(thePort)))
     {
@@ -44,27 +44,27 @@ P2(PUBLIC pascal trap, void, FillRect, Rect *, r, Pattern, pat)
     }
 }
 
-P1(PUBLIC pascal trap, void, FrameOval, Rect *, r)
+PUBLIC pascal trap void Executor::C_FrameOval(Rect * r)
 {
     CALLOVAL(frame, r);
 }
 
-P1(PUBLIC pascal trap, void, PaintOval, Rect *, r)
+PUBLIC pascal trap void Executor::C_PaintOval(Rect * r)
 {
     CALLOVAL(paint, r);
 }
 
-P1(PUBLIC pascal trap, void, EraseOval, Rect *, r)
+PUBLIC pascal trap void Executor::C_EraseOval(Rect * r)
 {
     CALLOVAL(erase, r);
 }
 
-P1(PUBLIC pascal trap, void, InvertOval, Rect *, r)
+PUBLIC pascal trap void Executor::C_InvertOval(Rect * r)
 {
     CALLOVAL(invert, r);
 }
 
-P2(PUBLIC pascal trap, void, FillOval, Rect *, r, Pattern, pat)
+PUBLIC pascal trap void Executor::C_FillOval(Rect * r, Pattern pat)
 {
     ROMlib_fill_pat(pat);
     CALLOVAL(fill, r);
@@ -88,8 +88,7 @@ rect_matches_control_item(WindowPtr w, Rect *rp)
     return retval;
 }
 
-P3(PUBLIC pascal trap, void, FrameRoundRect, Rect *, r, INTEGER, ow,
-   INTEGER, oh)
+PUBLIC pascal trap void Executor::C_FrameRoundRect(Rect * r, INTEGER ow, INTEGER oh)
 {
     bool do_rect;
 
@@ -110,109 +109,100 @@ P3(PUBLIC pascal trap, void, FrameRoundRect, Rect *, r, INTEGER, ow,
         CALLRRECT(frame, r, ow, oh);
 }
 
-P3(PUBLIC pascal trap, void, PaintRoundRect, Rect *, r, INTEGER, ow,
-   INTEGER, oh)
+PUBLIC pascal trap void Executor::C_PaintRoundRect(Rect * r, INTEGER ow, INTEGER oh)
 {
     CALLRRECT(paint, r, ow, oh);
 }
 
-P3(PUBLIC pascal trap, void, EraseRoundRect, Rect *, r, INTEGER, ow,
-   INTEGER, oh)
+PUBLIC pascal trap void Executor::C_EraseRoundRect(Rect * r, INTEGER ow, INTEGER oh)
 {
     CALLRRECT(erase, r, ow, oh);
 }
 
-P3(PUBLIC pascal trap, void, InvertRoundRect, Rect *, r, INTEGER, ow,
-   INTEGER, oh)
+PUBLIC pascal trap void Executor::C_InvertRoundRect(Rect * r, INTEGER ow, INTEGER oh)
 {
     CALLRRECT(invert, r, ow, oh);
 }
 
-P4(PUBLIC pascal trap, void, FillRoundRect, Rect *, r, INTEGER, ow,
-   INTEGER, oh, Pattern, pat)
+PUBLIC pascal trap void Executor::C_FillRoundRect(Rect * r, INTEGER ow, INTEGER oh, Pattern pat)
 {
     ROMlib_fill_pat(pat);
     CALLRRECT(fill, r, ow, oh);
 }
 
-P3(PUBLIC pascal trap, void, FrameArc, Rect *, r, INTEGER, start,
-   INTEGER, angle)
+PUBLIC pascal trap void Executor::C_FrameArc(Rect * r, INTEGER start, INTEGER angle)
 {
     CALLARC(frame, r, start, angle);
 }
 
-P3(PUBLIC pascal trap, void, PaintArc, Rect *, r, INTEGER, start,
-   INTEGER, angle)
+PUBLIC pascal trap void Executor::C_PaintArc(Rect * r, INTEGER start, INTEGER angle)
 {
     CALLARC(paint, r, start, angle);
 }
 
-P3(PUBLIC pascal trap, void, EraseArc, Rect *, r, INTEGER, start,
-   INTEGER, angle)
+PUBLIC pascal trap void Executor::C_EraseArc(Rect * r, INTEGER start, INTEGER angle)
 {
     CALLARC(erase, r, start, angle);
 }
 
-P3(PUBLIC pascal trap, void, InvertArc, Rect *, r, INTEGER, start,
-   INTEGER, angle)
+PUBLIC pascal trap void Executor::C_InvertArc(Rect * r, INTEGER start, INTEGER angle)
 {
     CALLARC(invert, r, start, angle);
 }
 
-P4(PUBLIC pascal trap, void, FillArc, Rect *, r, INTEGER, start,
-   INTEGER, angle, Pattern, pat)
+PUBLIC pascal trap void Executor::C_FillArc(Rect * r, INTEGER start, INTEGER angle, Pattern pat)
 {
     ROMlib_fill_pat(pat);
     CALLARC(fill, r, start, angle);
 }
 
-P1(PUBLIC pascal trap, void, FrameRgn, RgnHandle, rh)
+PUBLIC pascal trap void Executor::C_FrameRgn(RgnHandle rh)
 {
     CALLRGN(frame, rh);
 }
 
-P1(PUBLIC pascal trap, void, PaintRgn, RgnHandle, rh)
+PUBLIC pascal trap void Executor::C_PaintRgn(RgnHandle rh)
 {
     CALLRGN(paint, rh);
 }
 
-P1(PUBLIC pascal trap, void, EraseRgn, RgnHandle, rh)
+PUBLIC pascal trap void Executor::C_EraseRgn(RgnHandle rh)
 {
     CALLRGN(erase, rh);
 }
 
-P1(PUBLIC pascal trap, void, InvertRgn, RgnHandle, rh)
+PUBLIC pascal trap void Executor::C_InvertRgn(RgnHandle rh)
 {
     CALLRGN(invert, rh);
 }
 
-P2(PUBLIC pascal trap, void, FillRgn, RgnHandle, rh, Pattern, pat)
+PUBLIC pascal trap void Executor::C_FillRgn(RgnHandle rh, Pattern pat)
 {
     ROMlib_fill_pat(pat);
     CALLRGN(fill, rh);
 }
 
-P1(PUBLIC pascal trap, void, FramePoly, PolyHandle, poly)
+PUBLIC pascal trap void Executor::C_FramePoly(PolyHandle poly)
 {
     CALLPOLY(frame, poly);
 }
 
-P1(PUBLIC pascal trap, void, PaintPoly, PolyHandle, poly)
+PUBLIC pascal trap void Executor::C_PaintPoly(PolyHandle poly)
 {
     CALLPOLY(paint, poly);
 }
 
-P1(PUBLIC pascal trap, void, ErasePoly, PolyHandle, poly)
+PUBLIC pascal trap void Executor::C_ErasePoly(PolyHandle poly)
 {
     CALLPOLY(erase, poly);
 }
 
-P1(PUBLIC pascal trap, void, InvertPoly, PolyHandle, poly)
+PUBLIC pascal trap void Executor::C_InvertPoly(PolyHandle poly)
 {
     CALLPOLY(invert, poly);
 }
 
-P2(PUBLIC pascal trap, void, FillPoly, PolyHandle, poly, Pattern, pat)
+PUBLIC pascal trap void Executor::C_FillPoly(PolyHandle poly, Pattern pat)
 {
     ROMlib_fill_pat(pat);
     CALLPOLY(fill, poly);

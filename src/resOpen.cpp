@@ -61,13 +61,12 @@ Executor::HCreateResFile_helper(INTEGER vrefnum, LONGINT parid, Str255 name,
     ROMlib_setreserr(FSClose(f));
 }
 
-P1(PUBLIC pascal trap, void, CreateResFile, StringPtr, fn)
+PUBLIC pascal trap void Executor::C_CreateResFile(StringPtr fn)
 {
     HCreateResFile_helper(0, 0, fn, TICK("????"), TICK("????"), 0);
 }
 
-P3(PUBLIC pascal trap, void, HCreateResFile, INTEGER, vrefnum, LONGINT, parid,
-   Str255, name)
+PUBLIC pascal trap void Executor::C_HCreateResFile(INTEGER vrefnum, LONGINT parid, Str255 name)
 {
     HCreateResFile_helper(vrefnum, parid, name, TICK("????"), TICK("????"), 0);
 }
@@ -131,8 +130,7 @@ namespace Executor
 PUBLIC pascal trap void C_dcmp_template(Ptr, Ptr, Ptr, Size);
 }
 
-P4(PUBLIC pascal trap, void, dcmp_template, Ptr, source, Ptr, dest,
-   Ptr, working, Size, len)
+PUBLIC pascal trap void Executor::C_dcmp_template(Ptr source, Ptr dest, Ptr working, Size len)
 {
 }
 
@@ -399,8 +397,8 @@ Executor::ROMlib_mgetres2(resmaphand map, resref *rr)
                file.  Note pph is undefined if rn is at the top, nor
                is it filled in if pph is nil */
 
-A2(PUBLIC, resmaphand, ROMlib_rntohandl, INTEGER, rn, /* INTERNAL */
-   Handle *, pph)
+PUBLIC resmaphand Executor::ROMlib_rntohandl(INTEGER rn, /* INTERNAL */
+   Handle * pph)
 {
     resmaphand map, ph;
 
@@ -416,8 +414,8 @@ A2(PUBLIC, resmaphand, ROMlib_rntohandl, INTEGER, rn, /* INTERNAL */
     return (map);
 }
 
-P3(PUBLIC pascal trap, INTEGER, OpenRFPerm, StringPtr, fn, /* IMIV-17 */
-   INTEGER, vref, Byte, perm)
+PUBLIC pascal trap INTEGER Executor::C_OpenRFPerm(StringPtr fn, /* IMIV-17 */
+   INTEGER vref, Byte perm)
 {
     INTEGER retval;
 
@@ -425,12 +423,12 @@ P3(PUBLIC pascal trap, INTEGER, OpenRFPerm, StringPtr, fn, /* IMIV-17 */
     return retval;
 }
 
-P1(PUBLIC pascal trap, INTEGER, OpenResFile, StringPtr, fn)
+PUBLIC pascal trap INTEGER Executor::C_OpenResFile(StringPtr fn)
 {
     return OpenRFPerm(fn, 0, fsCurPerm);
 }
 
-P1(PUBLIC pascal trap, void, CloseResFile, INTEGER, rn)
+PUBLIC pascal trap void Executor::C_CloseResFile(INTEGER rn)
 {
     resmaphand map, ph, nextmap;
     INTEGER i, j;
@@ -522,8 +520,7 @@ already_open_res_file(GUEST<INTEGER> swapped_vref, GUEST<LONGINT> swapped_file_n
     return retval;
 }
 
-P4(PUBLIC pascal trap, INTEGER, HOpenResFile, INTEGER, vref, LONGINT, dirid,
-   Str255, fn, SignedByte, perm)
+PUBLIC pascal trap INTEGER Executor::C_HOpenResFile(INTEGER vref, LONGINT dirid, Str255 fn, SignedByte perm)
 {
     INTEGER f;
     reshead hd;

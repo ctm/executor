@@ -30,8 +30,8 @@ using namespace Executor;
  *	  that get us to the routines.
  */
 
-A4(PUBLIC, OSErr, ROMlib_dispatch, ParmBlkPtr, p, /* INTERNAL */
-   BOOLEAN, async, DriverRoutineType, routine, INTEGER, trapn)
+PUBLIC OSErr Executor::ROMlib_dispatch(ParmBlkPtr p, /* INTERNAL */
+   BOOLEAN async, DriverRoutineType routine, INTEGER trapn)
 {
     int devicen;
     ramdriverhand ramdh;
@@ -165,7 +165,7 @@ A4(PUBLIC, OSErr, ROMlib_dispatch, ParmBlkPtr, p, /* INTERNAL */
 
 /* PBOpen, PBClose, PBRead and PBWrite are part of the file manager */
 
-A2(PUBLIC, OSErr, PBControl, ParmBlkPtr, pbp, BOOLEAN, a) /* IMII-186 */
+PUBLIC OSErr Executor::PBControl(ParmBlkPtr pbp, BOOLEAN a) /* IMII-186 */
 {
     OSErr err;
 
@@ -174,7 +174,7 @@ A2(PUBLIC, OSErr, PBControl, ParmBlkPtr, pbp, BOOLEAN, a) /* IMII-186 */
     return err;
 }
 
-A2(PUBLIC, OSErr, PBStatus, ParmBlkPtr, pbp, BOOLEAN, a) /* IMII-186 */
+PUBLIC OSErr Executor::PBStatus(ParmBlkPtr pbp, BOOLEAN a) /* IMII-186 */
 {
     OSErr err;
 
@@ -183,7 +183,7 @@ A2(PUBLIC, OSErr, PBStatus, ParmBlkPtr, pbp, BOOLEAN, a) /* IMII-186 */
     return err;
 }
 
-A2(PUBLIC, OSErr, PBKillIO, ParmBlkPtr, pbp, BOOLEAN, a) /* IMII-187 */
+PUBLIC OSErr Executor::PBKillIO(ParmBlkPtr pbp, BOOLEAN a) /* IMII-187 */
 {
     OSErr err;
 
@@ -200,8 +200,7 @@ A2(PUBLIC, OSErr, PBKillIO, ParmBlkPtr, pbp, BOOLEAN, a) /* IMII-187 */
 
 /* FSRead, FSWrite are part of the file manager */
 
-A3(PUBLIC, OSErr, Control, INTEGER, rn, INTEGER, code,
-   Ptr, param) /* IMII-179 */
+PUBLIC OSErr Executor::Control(INTEGER rn, INTEGER code, Ptr param) /* IMII-179 */
 {
     ParamBlockRec pb;
     OSErr err;
@@ -217,7 +216,7 @@ A3(PUBLIC, OSErr, Control, INTEGER, rn, INTEGER, code,
     return err;
 }
 
-A3(PUBLIC, OSErr, Status, INTEGER, rn, INTEGER, code, Ptr, param) /* IMII-179 */
+PUBLIC OSErr Executor::Status(INTEGER rn, INTEGER code, Ptr param) /* IMII-179 */
 {
     ParamBlockRec pb;
     OSErr retval;
@@ -233,7 +232,7 @@ A3(PUBLIC, OSErr, Status, INTEGER, rn, INTEGER, code, Ptr, param) /* IMII-179 */
     return retval;
 }
 
-A1(PUBLIC, OSErr, KillIO, INTEGER, rn) /* IMII-179 */
+PUBLIC OSErr Executor::KillIO(INTEGER rn) /* IMII-179 */
 {
     ParamBlockRec pb;
     OSErr err;
@@ -244,7 +243,7 @@ A1(PUBLIC, OSErr, KillIO, INTEGER, rn) /* IMII-179 */
     return err;
 }
 
-A1(PUBLIC, DCtlHandle, GetDCtlEntry, INTEGER, rn)
+PUBLIC DCtlHandle Executor::GetDCtlEntry(INTEGER rn)
 {
     int devicen;
 
@@ -284,8 +283,8 @@ PRIVATE driverinfo knowndrivers[] = {
 #endif
 };
 
-A2(PUBLIC, OSErr, ROMlib_driveropen, ParmBlkPtr, pbp, /* INTERNAL */
-   BOOLEAN, a)
+PUBLIC OSErr Executor::ROMlib_driveropen(ParmBlkPtr pbp, /* INTERNAL */
+   BOOLEAN a)
 {
     driverinfo *dip, *edip;
     OSErr err;
@@ -404,7 +403,7 @@ A2(PUBLIC, OSErr, ROMlib_driveropen, ParmBlkPtr, pbp, /* INTERNAL */
     return err;
 }
 
-A2(PUBLIC, OSErr, OpenDriver, StringPtr, name, GUEST<INTEGER> *, rnp) /* IMII-178 */
+PUBLIC OSErr Executor::OpenDriver(StringPtr name, GUEST<INTEGER> * rnp) /* IMII-178 */
 {
     ParamBlockRec pb;
     OSErr retval;
@@ -418,7 +417,7 @@ A2(PUBLIC, OSErr, OpenDriver, StringPtr, name, GUEST<INTEGER> *, rnp) /* IMII-17
     return retval;
 }
 
-A1(PUBLIC, OSErr, CloseDriver, INTEGER, rn) /* IMII-178 */
+PUBLIC OSErr Executor::CloseDriver(INTEGER rn) /* IMII-178 */
 {
     ParamBlockRec pb;
     OSErr err;

@@ -104,8 +104,6 @@ PRIVATE myalerttab_t myalerttab = {
 
 char syserr_msg[256];
 
-namespace Executor
-{
 PRIVATE GUEST<INTEGER> *findid(INTEGER);
 PRIVATE void drawtextstring(INTEGER id, INTEGER offsetx,
                             INTEGER offsety);
@@ -113,9 +111,8 @@ PRIVATE void drawicon(INTEGER id,
                       INTEGER offsetx, INTEGER offsety);
 PRIVATE void dobuttons(INTEGER id, INTEGER offsetx,
                        INTEGER offsety, BOOLEAN demo_button_p);
-}
 
-A1(PRIVATE, GUEST<INTEGER> *, findid, INTEGER, id)
+PRIVATE GUEST<INTEGER> * findid(INTEGER id)
 {
     int i;
     GUEST<INTEGER> *ip;
@@ -128,8 +125,7 @@ A1(PRIVATE, GUEST<INTEGER> *, findid, INTEGER, id)
     return i > 0 ? ip : nullptr;
 }
 
-A3(PRIVATE, void, drawtextstring, INTEGER, id, INTEGER, offsetx,
-   INTEGER, offsety)
+PRIVATE void drawtextstring(INTEGER id, INTEGER offsetx, INTEGER offsety)
 {
     struct tdef *tp;
 
@@ -140,8 +136,7 @@ A3(PRIVATE, void, drawtextstring, INTEGER, id, INTEGER, offsetx,
     }
 }
 
-A3(PRIVATE, void, drawicon, INTEGER, id,
-   INTEGER, offsetx, INTEGER, offsety)
+PRIVATE void drawicon(INTEGER id, INTEGER offsetx, INTEGER offsety)
 {
     struct idef *ip;
     BitMap bm;
@@ -162,8 +157,7 @@ A3(PRIVATE, void, drawicon, INTEGER, id,
     }
 }
 
-A4(PRIVATE, void, dobuttons, INTEGER, id, INTEGER, offsetx,
-   INTEGER, offsety, BOOLEAN, demo_button_p)
+PRIVATE void dobuttons(INTEGER id, INTEGER offsetx, INTEGER offsety, BOOLEAN demo_button_p)
 {
     struct bdef *bp;
     struct sdef *sp;
@@ -257,7 +251,7 @@ A4(PRIVATE, void, dobuttons, INTEGER, id, INTEGER, offsetx,
  *	 to call syn68k appropriately.
  */
 
-P1(PUBLIC pascal, void, SysError, short, errorcode)
+PUBLIC pascal void Executor::C_SysError(short errorcode)
 {
     GrafPort alertport;
     Region viscliprgn;

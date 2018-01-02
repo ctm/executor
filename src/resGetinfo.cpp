@@ -16,7 +16,7 @@
 
 using namespace Executor;
 
-P1(PUBLIC pascal trap, INTEGER, UniqueID, ResType, typ)
+PUBLIC pascal trap INTEGER Executor::C_UniqueID(ResType typ)
 {
     static INTEGER startid = 0;
     GUEST<INTEGER> curmap;
@@ -31,7 +31,7 @@ P1(PUBLIC pascal trap, INTEGER, UniqueID, ResType, typ)
     return (startid);
 }
 
-P1(PUBLIC pascal trap, INTEGER, Unique1ID, ResType, typ) /* IMIV-16 */
+PUBLIC pascal trap INTEGER Executor::C_Unique1ID(ResType typ) /* IMIV-16 */
 {
     resmaphand map;
     static INTEGER startid = 0;
@@ -48,8 +48,7 @@ P1(PUBLIC pascal trap, INTEGER, Unique1ID, ResType, typ) /* IMIV-16 */
     return (startid);
 }
 
-P4(PUBLIC pascal trap, void, GetResInfo, Handle, res, GUEST<INTEGER> *, id,
-   GUEST<ResType> *, typ, StringPtr, name)
+PUBLIC pascal trap void Executor::C_GetResInfo(Handle res, GUEST<INTEGER> * id, GUEST<ResType> * typ, StringPtr name)
 {
     resmaphand map;
     typref *tr;
@@ -86,7 +85,7 @@ P4(PUBLIC pascal trap, void, GetResInfo, Handle, res, GUEST<INTEGER> *, id,
     }
 }
 
-P1(PUBLIC pascal trap, INTEGER, GetResAttrs, Handle, res)
+PUBLIC pascal trap INTEGER Executor::C_GetResAttrs(Handle res)
 {
     resmaphand map;
     typref *tr;
@@ -98,7 +97,7 @@ P1(PUBLIC pascal trap, INTEGER, GetResAttrs, Handle, res)
     return (Cx(rr->ratr));
 }
 
-A2(PUBLIC, LONGINT, ROMlib_SizeResource, Handle, res, BOOLEAN, usehandle)
+PUBLIC LONGINT Executor::ROMlib_SizeResource(Handle res, BOOLEAN usehandle)
 {
     resmaphand map;
     typref *tr;
@@ -165,7 +164,7 @@ A2(PUBLIC, LONGINT, ROMlib_SizeResource, Handle, res, BOOLEAN, usehandle)
     return retval;
 }
 
-P1(PUBLIC pascal trap, LONGINT, SizeResource, Handle, res)
+PUBLIC pascal trap LONGINT Executor::C_SizeResource(Handle res)
 {
     return ROMlib_SizeResource(res, true);
 }

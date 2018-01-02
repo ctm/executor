@@ -23,7 +23,7 @@ using namespace Executor;
     (*ip++ = CW_RAW((y)), *ip++ = CW_RAW((x1)), *ip++ = CW_RAW((x2)), \
      *ip++ = CW_RAW((x3)), *ip++ = CW_RAW((x4)), TERM)
 
-A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r) /* INTERNAL */
+PUBLIC RgnHandle Executor::ROMlib_circrgn(Rect * r) /* INTERNAL */
 {
     RgnHandle rh;
     INTEGER x, y, temp; /* some variables need to be longs */
@@ -200,8 +200,7 @@ A1(PUBLIC, RgnHandle, ROMlib_circrgn, Rect *, r) /* INTERNAL */
  * TODO:  speed up this code... it is ridiculously slow
  */
 
-P4(PUBLIC pascal trap, void, StdRRect, GrafVerb, verb, Rect *, r,
-   INTEGER, width, INTEGER, height)
+PUBLIC pascal trap void Executor::C_StdRRect(GrafVerb verb, Rect * r, INTEGER width, INTEGER height)
 {
     RgnHandle rh, oval, corner, smallr;
     Rect tempr;

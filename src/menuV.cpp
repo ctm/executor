@@ -19,7 +19,7 @@
 
 using namespace Executor;
 
-P1(PUBLIC pascal trap, void, InitProcMenu, INTEGER, mbid)
+PUBLIC pascal trap void Executor::C_InitProcMenu(INTEGER mbid)
 {
     if(!MenuList)
         InitMenus();
@@ -42,13 +42,12 @@ P1(PUBLIC pascal trap, void, InitProcMenu, INTEGER, mbid)
     MBDFCALL(mbInit, 0, 0L);
 }
 
-P0(PUBLIC pascal trap, LONGINT, MenuChoice)
+PUBLIC pascal trap LONGINT Executor::C_MenuChoice()
 {
     return Cx(MenuDisable);
 }
 
-P3(PUBLIC pascal trap, void, GetItemCmd, MenuHandle, mh, INTEGER, item,
-   GUEST<CharParameter> *, cmdp)
+PUBLIC pascal trap void Executor::C_GetItemCmd(MenuHandle mh, INTEGER item, GUEST<CharParameter> * cmdp)
 {
     mextp mep;
 
@@ -56,8 +55,7 @@ P3(PUBLIC pascal trap, void, GetItemCmd, MenuHandle, mh, INTEGER, item,
         *cmdp = CW((unsigned short)(unsigned char)mep->mkeyeq);
 }
 
-P3(PUBLIC pascal trap, void, SetItemCmd, MenuHandle, mh, INTEGER, item,
-   CharParameter, cmd)
+PUBLIC pascal trap void Executor::C_SetItemCmd(MenuHandle mh, INTEGER item, CharParameter cmd)
 {
     mextp mep;
 
@@ -68,8 +66,7 @@ P3(PUBLIC pascal trap, void, SetItemCmd, MenuHandle, mh, INTEGER, item,
     }
 }
 
-P4(PUBLIC pascal trap, LONGINT, PopUpMenuSelect, MenuHandle, mh, INTEGER, top,
-   INTEGER, left, INTEGER, item)
+PUBLIC pascal trap LONGINT Executor::C_PopUpMenuSelect(MenuHandle mh, INTEGER top, INTEGER left, INTEGER item)
 {
     Point p;
     Rect saver;

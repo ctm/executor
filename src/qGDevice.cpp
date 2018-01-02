@@ -103,9 +103,7 @@ void Executor::gd_allocate_main_device(void)
                        CTAB_TABLE(PIXMAP_TABLE(GD_PMAP(graphics_device))));
 }
 
-P2(PUBLIC pascal trap, GDHandle, NewGDevice,
-   INTEGER, ref_num,
-   LONGINT, mode)
+PUBLIC pascal trap GDHandle Executor::C_NewGDevice(INTEGER ref_num, LONGINT mode)
 {
     GDHandle this2;
     GUEST<Handle> h;
@@ -238,17 +236,11 @@ void Executor::gd_set_bpp(GDHandle gd, bool color_p, bool fixed_p, int bpp)
 
    i'm not sure how this2 relates to NeXT/vga video hardware, for now,
    we do nothing */
-P3(PUBLIC pascal trap, void, InitGDevice,
-   INTEGER, gd_ref_num,
-   LONGINT, mode,
-   GDHandle, gdh)
+PUBLIC pascal trap void Executor::C_InitGDevice(INTEGER gd_ref_num, LONGINT mode, GDHandle gdh)
 {
 }
 
-P3(PUBLIC pascal trap, void, SetDeviceAttribute,
-   GDHandle, gdh,
-   INTEGER, attribute,
-   BOOLEAN, value)
+PUBLIC pascal trap void Executor::C_SetDeviceAttribute(GDHandle gdh, INTEGER attribute, BOOLEAN value)
 {
     if(value)
         GD_FLAGS_X(gdh).raw_or(CW(1 << attribute));
@@ -256,8 +248,7 @@ P3(PUBLIC pascal trap, void, SetDeviceAttribute,
         GD_FLAGS_X(gdh).raw_and(CW(~(1 << attribute)));
 }
 
-P1(PUBLIC pascal trap, void, SetGDevice,
-   GDHandle, gdh)
+PUBLIC pascal trap void Executor::C_SetGDevice(GDHandle gdh)
 {
     if(TheGDevice != RM(gdh))
     {
@@ -266,8 +257,7 @@ P1(PUBLIC pascal trap, void, SetGDevice,
     }
 }
 
-P1(PUBLIC pascal trap, void, DisposeGDevice,
-   GDHandle, gdh)
+PUBLIC pascal trap void Executor::C_DisposeGDevice(GDHandle gdh)
 {
     DisposHandle((Handle)GD_ITABLE(gdh));
     DisposPixMap(GD_PMAP(gdh));
@@ -276,17 +266,17 @@ P1(PUBLIC pascal trap, void, DisposeGDevice,
     DisposHandle((Handle)gdh);
 }
 
-P0(PUBLIC pascal trap, GDHandle, GetGDevice)
+PUBLIC pascal trap GDHandle Executor::C_GetGDevice()
 {
     return MR(TheGDevice);
 }
 
-P0(PUBLIC pascal trap, GDHandle, GetDeviceList)
+PUBLIC pascal trap GDHandle Executor::C_GetDeviceList()
 {
     return MR(DeviceList);
 }
 
-P0(PUBLIC pascal trap, GDHandle, GetMainDevice)
+PUBLIC pascal trap GDHandle Executor::C_GetMainDevice()
 {
     GDHandle retval;
 
@@ -304,8 +294,7 @@ P0(PUBLIC pascal trap, GDHandle, GetMainDevice)
     return retval;
 }
 
-P1(PUBLIC pascal trap, GDHandle, GetMaxDevice,
-   Rect *, globalRect)
+PUBLIC pascal trap GDHandle Executor::C_GetMaxDevice(Rect * globalRect)
 {
     /* FIXME:
      currently we have only a single device, so that has
@@ -315,17 +304,12 @@ P1(PUBLIC pascal trap, GDHandle, GetMaxDevice,
     return MR(MainDevice);
 }
 
-P1(PUBLIC pascal trap, GDHandle, GetNextDevice,
-   GDHandle, cur_device)
+PUBLIC pascal trap GDHandle Executor::C_GetNextDevice(GDHandle cur_device)
 {
     return GD_NEXT_GD(cur_device);
 }
 
-P4(PUBLIC pascal trap, void, DeviceLoop,
-   RgnHandle, rgn,
-   DeviceLoopDrawingProcPtr, drawing_proc,
-   LONGINT, user_data,
-   DeviceLoopFlags, flags)
+PUBLIC pascal trap void Executor::C_DeviceLoop(RgnHandle rgn, DeviceLoopDrawingProcPtr drawing_proc, LONGINT user_data, DeviceLoopFlags flags)
 {
     GDHandle gd;
     GUEST<RgnHandle> save_vis_rgn_x;
@@ -382,9 +366,7 @@ P4(PUBLIC pascal trap, void, DeviceLoop,
     DisposeRgn(sect_rgn);
 }
 
-P2(PUBLIC pascal trap, BOOLEAN, TestDeviceAttribute,
-   GDHandle, gdh,
-   INTEGER, attribute)
+PUBLIC pascal trap BOOLEAN Executor::C_TestDeviceAttribute(GDHandle gdh, INTEGER attribute)
 {
     BOOLEAN retval;
 
@@ -393,19 +375,13 @@ P2(PUBLIC pascal trap, BOOLEAN, TestDeviceAttribute,
 }
 
 // FIXME: #warning ScreenRes is duplicate with toolutil.cpp
-P2(PUBLIC pascal trap, void, ScreenRes,
-   GUEST<INTEGER> *, h_res,
-   GUEST<INTEGER> *, v_res)
+PUBLIC pascal trap void Executor::C_ScreenRes(GUEST<INTEGER> * h_res, GUEST<INTEGER> * v_res)
 {
     *h_res = CW(PIXMAP_HRES(GD_PMAP(MR(MainDevice))) >> 16);
     *v_res = CW(PIXMAP_VRES(GD_PMAP(MR(MainDevice))) >> 16);
 }
 
-P4(PUBLIC pascal trap, INTEGER, HasDepth,
-   GDHandle, gdh,
-   INTEGER, bpp,
-   INTEGER, which_flags,
-   INTEGER, flags)
+PUBLIC pascal trap INTEGER Executor::C_HasDepth(GDHandle gdh, INTEGER bpp, INTEGER which_flags, INTEGER flags)
 {
     flags &= ~1;
     which_flags &= ~1;
@@ -420,11 +396,7 @@ P4(PUBLIC pascal trap, INTEGER, HasDepth,
                                       false));
 }
 
-P4(PUBLIC pascal trap, OSErr, SetDepth,
-   GDHandle, gdh,
-   INTEGER, bpp,
-   INTEGER, which_flags,
-   INTEGER, flags)
+PUBLIC pascal trap OSErr Executor::C_SetDepth(GDHandle gdh, INTEGER bpp, INTEGER which_flags, INTEGER flags)
 {
     PixMapHandle gd_pixmap;
     WindowPeek tw;

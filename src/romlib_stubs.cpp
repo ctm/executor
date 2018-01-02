@@ -17,7 +17,7 @@ using namespace Executor;
 
 #undef putchar
 
-A1(PUBLIC, void, ROMlib_printstring, unsigned char *, p)
+PUBLIC void Executor::ROMlib_printstring(unsigned char * p)
 {
     int i;
 
@@ -26,7 +26,7 @@ A1(PUBLIC, void, ROMlib_printstring, unsigned char *, p)
     putchar('\n');
 }
 
-A1(PUBLIC, void, ROMlib_printostype, OSType, t)
+PUBLIC void Executor::ROMlib_printostype(OSType t)
 {
     putchar(t >> 24);
     putchar(t >> 16);
@@ -37,7 +37,7 @@ A1(PUBLIC, void, ROMlib_printostype, OSType, t)
 #endif /* !defined(NDEBUG) && !defined(MSDOS) */
 
 #if !defined(NDEBUG)
-A1(PUBLIC, void, ROMlib_hook, LONGINT, hn)
+PUBLIC void Executor::ROMlib_hook(LONGINT hn)
 {
     /* don't do anything; This is just here for gdbing */
 }

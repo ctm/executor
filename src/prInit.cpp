@@ -17,7 +17,7 @@ using namespace Executor;
 
 PUBLIC INTEGER Executor::ROMlib_printresfile = -1;
 
-P0(PUBLIC pascal trap, void, PrOpen)
+PUBLIC pascal trap void Executor::C_PrOpen()
 {
     StringHandle h;
 
@@ -36,7 +36,7 @@ P0(PUBLIC pascal trap, void, PrOpen)
     PrintErr = ROMlib_printresfile == -1 ? CWC((OSErr)fnfErr) : CWC((OSErr)noErr);
 }
 
-P0(PUBLIC pascal trap, void, PrClose)
+PUBLIC pascal trap void Executor::C_PrClose()
 {
     if(ROMlib_printresfile != -1)
     {

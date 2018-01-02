@@ -24,7 +24,7 @@
 
 using namespace Executor;
 
-P1(PUBLIC pascal trap, INTEGER, OpenDeskAcc, Str255, acc) /* IMI-440 */
+PUBLIC pascal trap INTEGER Executor::C_OpenDeskAcc(Str255 acc) /* IMI-440 */
 {
     // THINK Reference says that OpenDeskAcc's return value
     // is undefined on error. This returns zero - otherwise
@@ -62,12 +62,12 @@ done:
     return retval;
 }
 
-P1(PUBLIC pascal trap, void, CloseDeskAcc, INTEGER, rn)
+PUBLIC pascal trap void Executor::C_CloseDeskAcc(INTEGER rn)
 {
     CloseDriver(rn);
 }
 
-P2(PUBLIC pascal trap, void, SystemClick, EventRecord *, evp, WindowPtr, wp)
+PUBLIC pascal trap void Executor::C_SystemClick(EventRecord * evp, WindowPtr wp)
 {
     Point p;
     LONGINT pointaslong, val;
@@ -119,7 +119,7 @@ P2(PUBLIC pascal trap, void, SystemClick, EventRecord *, evp, WindowPtr, wp)
     }
 }
 
-P1(PUBLIC pascal trap, BOOLEAN, SystemEdit, INTEGER, editcmd)
+PUBLIC pascal trap BOOLEAN Executor::C_SystemEdit(INTEGER editcmd)
 {
     WindowPeek wp;
     BOOLEAN retval;
@@ -135,7 +135,7 @@ P1(PUBLIC pascal trap, BOOLEAN, SystemEdit, INTEGER, editcmd)
 #define rntodctlh(rn) (MR(MR(UTableBase)[-((rn) + 1)]))
 #define itorn(i) ((-i) - 1)
 
-P0(PUBLIC pascal trap, void, SystemTask)
+PUBLIC pascal trap void Executor::C_SystemTask()
 {
     DCtlHandle dctlh;
     INTEGER i;
@@ -151,7 +151,7 @@ P0(PUBLIC pascal trap, void, SystemTask)
     }
 }
 
-P1(PUBLIC pascal trap, BOOLEAN, SystemEvent, EventRecord *, evp)
+PUBLIC pascal trap BOOLEAN Executor::C_SystemEvent(EventRecord * evp)
 {
     BOOLEAN retval;
     WindowPeek wp;
@@ -211,7 +211,7 @@ P1(PUBLIC pascal trap, BOOLEAN, SystemEvent, EventRecord *, evp)
     return retval;
 }
 
-P1(PUBLIC pascal trap, void, SystemMenu, LONGINT, menu)
+PUBLIC pascal trap void Executor::C_SystemMenu(LONGINT menu)
 {
     INTEGER i;
     DCtlHandle dctlh;

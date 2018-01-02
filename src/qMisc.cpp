@@ -17,19 +17,16 @@
 
 using namespace Executor;
 
-namespace Executor
-{
 static BOOLEAN EquivRect(Rect *, Rect *);
 static INTEGER fromhex(char c);
-}
 
-A2(PRIVATE, BOOLEAN, EquivRect, Rect *, rp1, Rect *, rp2)
+PRIVATE BOOLEAN EquivRect(Rect * rp1, Rect * rp2)
 {
     return Cx(rp1->bottom) - Cx(rp1->top) == Cx(rp2->bottom) - Cx(rp2->top) && Cx(rp1->right) - Cx(rp1->left) == Cx(rp2->right) - Cx(rp2->left);
 }
 
 #define RANDSEED ((ULONGINT)randSeed)
-P0(PUBLIC pascal trap, INTEGER, Random)
+PUBLIC pascal trap INTEGER Executor::C_Random()
 {
     INTEGER retval;
 
@@ -45,7 +42,7 @@ P0(PUBLIC pascal trap, INTEGER, Random)
     return retval == -32768 ? 0 : retval;
 }
 
-P2(PUBLIC pascal trap, BOOLEAN, GetPixel, INTEGER, h, INTEGER, v)
+PUBLIC pascal trap BOOLEAN Executor::C_GetPixel(INTEGER h, INTEGER v)
 {
     BitMap temp_bm;
     unsigned char temp_fbuf[4];
@@ -75,7 +72,7 @@ P2(PUBLIC pascal trap, BOOLEAN, GetPixel, INTEGER, h, INTEGER, v)
 
 /* fromhex: converts from '0'-'9' to 0-9, 'a-z' and 'A-Z' similarly */
 
-A1(PRIVATE, INTEGER, fromhex, char, c)
+PRIVATE INTEGER fromhex(char c)
 {
     if(c >= '0' && c <= '9')
         return (c - '0');
@@ -85,7 +82,7 @@ A1(PRIVATE, INTEGER, fromhex, char, c)
         return (c - 'a' + 10);
 }
 
-P2(PUBLIC pascal trap, void, StuffHex, Ptr, p, StringPtr, s)
+PUBLIC pascal trap void Executor::C_StuffHex(Ptr p, StringPtr s)
 {
     char *sp, *ep;
     unsigned len;
@@ -100,7 +97,7 @@ P2(PUBLIC pascal trap, void, StuffHex, Ptr, p, StringPtr, s)
         *p = (*p & 0xF) | (fromhex(*sp) << 4);
 }
 
-P3(PUBLIC pascal trap, void, ScalePt, GUEST<Point> *, pt, Rect *, srcr, Rect *, dstr)
+PUBLIC pascal trap void Executor::C_ScalePt(GUEST<Point> * pt, Rect * srcr, Rect * dstr)
 {
     INTEGER srcdh, srcdv, dstdh, dstdv;
 
@@ -121,7 +118,7 @@ P3(PUBLIC pascal trap, void, ScalePt, GUEST<Point> *, pt, Rect *, srcr, Rect *, 
     }
 }
 
-P3(PUBLIC pascal trap, void, MapPt, GUEST<Point> *, pt, Rect *, srcr, Rect *, dstr)
+PUBLIC pascal trap void Executor::C_MapPt(GUEST<Point> * pt, Rect * srcr, Rect * dstr)
 {
     INTEGER srcdh, srcdv, dstdh, dstdv;
 
@@ -138,7 +135,7 @@ P3(PUBLIC pascal trap, void, MapPt, GUEST<Point> *, pt, Rect *, srcr, Rect *, ds
     pt->v = CW(CW(pt->v) + (Cx(dstr->top)));
 }
 
-P3(PUBLIC pascal trap, void, MapRect, Rect *, r, Rect *, srcr, Rect *, dstr)
+PUBLIC pascal trap void Executor::C_MapRect(Rect * r, Rect * srcr, Rect * dstr)
 {
     MapPt((GUEST<Point> *)&r->top, srcr, dstr);
     MapPt((GUEST<Point> *)&r->bottom, srcr, dstr);
@@ -149,7 +146,7 @@ P3(PUBLIC pascal trap, void, MapRect, Rect *, r, Rect *, srcr, Rect *, dstr)
 #define MAPV(y) (y = UNFIX((y - yoff1) * ycoff) + yoff2)
 #define UNFIX(x) ((x) >> 16)
 
-P3(PUBLIC pascal trap, void, MapRgn, RgnHandle, rh, Rect *, srcr, Rect *, dstr)
+PUBLIC pascal trap void Executor::C_MapRgn(RgnHandle rh, Rect * srcr, Rect * dstr)
 {
     GUEST<INTEGER> *ip, *op, *saveop;
     INTEGER oldv, newv, *tempp, srcdh, dstdh, srcdv, dstdv;
@@ -252,8 +249,7 @@ P3(PUBLIC pascal trap, void, MapRgn, RgnHandle, rh, Rect *, srcr, Rect *, dstr)
     }
 }
 
-P3(PUBLIC pascal trap, void, MapPoly, PolyHandle, poly, Rect *, srcr,
-   Rect *, dstr)
+PUBLIC pascal trap void Executor::C_MapPoly(PolyHandle poly, Rect * srcr, Rect * dstr)
 {
     GUEST<Point> *ip, *ep;
 

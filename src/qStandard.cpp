@@ -10,7 +10,7 @@
 
 using namespace Executor;
 
-P1(PUBLIC pascal trap, void, SetStdProcs, QDProcs *, procs)
+PUBLIC pascal trap void Executor::C_SetStdProcs(QDProcs * procs)
 {
     procs->textProc = RM((textProc_t)P_StdText);
     procs->lineProc = RM((lineProc_t)P_StdLine);

@@ -14,7 +14,7 @@
 
 using namespace Executor;
 
-A0(PUBLIC, OSErr, TEFromScrap)
+PUBLIC OSErr Executor::TEFromScrap()
 {
     GUEST<int32_t> l;
     int32_t m;
@@ -30,7 +30,7 @@ A0(PUBLIC, OSErr, TEFromScrap)
     return m < 0 ? m : noErr;
 }
 
-A0(PUBLIC, OSErr, TEToScrap)
+PUBLIC OSErr Executor::TEToScrap()
 {
     int32_t m;
 
@@ -41,17 +41,17 @@ A0(PUBLIC, OSErr, TEToScrap)
     return m < 0 ? m : 0;
 }
 
-A0(PUBLIC, Handle, TEScrapHandle)
+PUBLIC Handle Executor::TEScrapHandle()
 {
     return MR(TEScrpHandle);
 }
 
-A0(PUBLIC, int32_t, TEGetScrapLen)
+PUBLIC int32_t Executor::TEGetScrapLen()
 {
     return CW(TEScrpLength);
 }
 
-A1(PUBLIC, void, TESetScrapLen, int32_t, ln)
+PUBLIC void Executor::TESetScrapLen(int32_t ln)
 {
     TEScrpLength = CW(ln);
 }

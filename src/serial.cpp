@@ -76,7 +76,7 @@ using namespace Executor;
 #define SER_START (1)
 #define SER_STOP (0)
 
-A1(PUBLIC, OSErr, RAMSDOpen, SPortSel, port) /* IMII-249 */
+PUBLIC OSErr Executor::RAMSDOpen(SPortSel port) /* IMII-249 */
 {
     OSErr err;
     GUEST<INTEGER> rn;
@@ -98,7 +98,7 @@ A1(PUBLIC, OSErr, RAMSDOpen, SPortSel, port) /* IMII-249 */
     return err;
 }
 
-A1(PUBLIC, void, RAMSDClose, SPortSel, port) /* IMII-250 */
+PUBLIC void Executor::RAMSDClose(SPortSel port) /* IMII-250 */
 {
     switch(port)
     {
@@ -115,7 +115,7 @@ A1(PUBLIC, void, RAMSDClose, SPortSel, port) /* IMII-250 */
 
 #define SERSET 8 /* IMII-250 */
 
-A2(PUBLIC, OSErr, SerReset, INTEGER, rn, INTEGER, config) /* IMII-250 */
+PUBLIC OSErr Executor::SerReset(INTEGER rn, INTEGER config) /* IMII-250 */
 {
     GUEST<INTEGER> config_s = CW(config);
 
@@ -124,7 +124,7 @@ A2(PUBLIC, OSErr, SerReset, INTEGER, rn, INTEGER, config) /* IMII-250 */
 
 #define SERSETBUF 9 /* IMII-251 */
 
-A3(PUBLIC, OSErr, SerSetBuf, INTEGER, rn, Ptr, p, INTEGER, len) /* IMII-251 */
+PUBLIC OSErr Executor::SerSetBuf(INTEGER rn, Ptr p, INTEGER len) /* IMII-251 */
 {
     sersetbuf_t temp;
 
@@ -136,28 +136,28 @@ A3(PUBLIC, OSErr, SerSetBuf, INTEGER, rn, Ptr, p, INTEGER, len) /* IMII-251 */
 
 #define SERHSHAKE 10 /* IMII-251 */
 
-A2(PUBLIC, OSErr, SerHShake, INTEGER, rn, SerShk, flags) /* IMII-251 */
+PUBLIC OSErr Executor::SerHShake(INTEGER rn, SerShk flags) /* IMII-251 */
 {
     return Control(rn, SERHSHAKE, (Ptr)&flags);
 }
 
 #define SERSETBRK 12 /* IMII-252 */
 
-A1(PUBLIC, OSErr, SerSetBrk, INTEGER, rn) /* IMII-252 */
+PUBLIC OSErr Executor::SerSetBrk(INTEGER rn) /* IMII-252 */
 {
     return Control(rn, SERSETBRK, (Ptr)0);
 }
 
 #define SERCLRBRK 11 /* IMII-253 */
 
-A1(PUBLIC, OSErr, SerClrBrk, INTEGER, rn) /* IMII-253 */
+PUBLIC OSErr Executor::SerClrBrk(INTEGER rn) /* IMII-253 */
 {
     return Control(rn, SERCLRBRK, (Ptr)0);
 }
 
 #define SERGETBUF 2 /* IMII-253 */
 
-A2(PUBLIC, OSErr, SerGetBuf, INTEGER, rn, LONGINT *, lp) /* IMII-253 */
+PUBLIC OSErr Executor::SerGetBuf(INTEGER rn, LONGINT * lp) /* IMII-253 */
 {
     INTEGER status[11];
     OSErr err;
@@ -169,7 +169,7 @@ A2(PUBLIC, OSErr, SerGetBuf, INTEGER, rn, LONGINT *, lp) /* IMII-253 */
 
 #define SERSTATUS 8 /* IMII-253 */
 
-A2(PUBLIC, OSErr, SerStatus, INTEGER, rn, SerStaRec *, serstap) /* IMII-253 */
+PUBLIC OSErr Executor::SerStatus(INTEGER rn, SerStaRec * serstap) /* IMII-253 */
 {
     INTEGER status[11];
     OSErr err;
@@ -213,17 +213,14 @@ typedef struct
 
 typedef GUEST<hiddenp> *hiddenh;
 
-namespace Executor
-{
 PRIVATE DCtlPtr otherdctl(ParmBlkPtr);
 PRIVATE OSErr serset(LONGINT fd, INTEGER param);
 PRIVATE OSErr serxhshake(LONGINT fd, SerShk *sershkp);
 PRIVATE OSErr setbaud(LONGINT fd, INTEGER baud);
 PRIVATE OSErr flow(LONGINT fd, LONGINT flag);
 PRIVATE OSErr ctlbrk(LONGINT fd, INTEGER flag);
-}
 
-A1(PRIVATE, DCtlPtr, otherdctl, ParmBlkPtr, pbp)
+PRIVATE DCtlPtr otherdctl(ParmBlkPtr pbp)
 {
     DCtlHandle h;
 
@@ -329,8 +326,8 @@ void callcomp(ParmBlkPtr pbp, ProcPtr comp, OSErr err)
 PRIVATE const char *lockname;
 #endif
 
-A2(PUBLIC, OSErr, ROMlib_serialopen, ParmBlkPtr, pbp, /* INTERNAL */
-   DCtlPtr, dcp)
+PUBLIC OSErr Executor::ROMlib_serialopen(ParmBlkPtr pbp, /* INTERNAL */
+   DCtlPtr dcp)
 {
     OSErr err;
     DCtlPtr otherp; /* auto due to old compiler bug */
@@ -423,8 +420,8 @@ A2(PUBLIC, OSErr, ROMlib_serialopen, ParmBlkPtr, pbp, /* INTERNAL */
     DOCOMPLETION(pbp, err);
 }
 
-A2(PUBLIC, OSErr, ROMlib_serialprime, ParmBlkPtr, pbp, /* INTERNAL */
-   DCtlPtr, dcp)
+PUBLIC OSErr Executor::ROMlib_serialprime(ParmBlkPtr pbp, /* INTERNAL */
+   DCtlPtr dcp)
 {
     OSErr err;
     hiddenh h;
@@ -521,7 +518,7 @@ A2(PUBLIC, OSErr, ROMlib_serialprime, ParmBlkPtr, pbp, /* INTERNAL */
 
 #endif
 
-A2(PRIVATE, OSErr, serset, LONGINT, fd, INTEGER, param)
+PRIVATE OSErr serset(LONGINT fd, INTEGER param)
 {
 #if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
@@ -684,7 +681,7 @@ A2(PRIVATE, OSErr, serset, LONGINT, fd, INTEGER, param)
 #endif
 }
 
-A2(PRIVATE, OSErr, serxhshake, LONGINT, fd, SerShk *, sershkp)
+PRIVATE OSErr serxhshake(LONGINT fd, SerShk * sershkp)
 {
 #if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
@@ -757,7 +754,7 @@ A2(PRIVATE, OSErr, serxhshake, LONGINT, fd, SerShk *, sershkp)
 #endif
 }
 
-A2(PRIVATE, OSErr, setbaud, LONGINT, fd, INTEGER, baud)
+PRIVATE OSErr setbaud(LONGINT fd, INTEGER baud)
 {
 #if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
@@ -804,7 +801,7 @@ A2(PRIVATE, OSErr, setbaud, LONGINT, fd, INTEGER, baud)
 #endif
 }
 
-A2(PRIVATE, OSErr, ctlbrk, LONGINT, fd, INTEGER, flag)
+PRIVATE OSErr ctlbrk(LONGINT fd, INTEGER flag)
 {
 #if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
@@ -829,7 +826,7 @@ A2(PRIVATE, OSErr, ctlbrk, LONGINT, fd, INTEGER, flag)
 #endif
 }
 
-A2(PRIVATE, OSErr, flow, LONGINT, fd, LONGINT, flag)
+PRIVATE OSErr flow(LONGINT fd, LONGINT flag)
 {
 #if defined(MSDOS) || defined(CYGWIN32) || defined(WIN32)
     OSErr retval;
@@ -873,8 +870,8 @@ A2(PRIVATE, OSErr, flow, LONGINT, fd, LONGINT, flag)
 
 #define SERKILLIO 1
 
-A2(PUBLIC, OSErr, ROMlib_serialctl, ParmBlkPtr, pbp, /* INTERNAL */
-   DCtlPtr, dcp)
+PUBLIC OSErr Executor::ROMlib_serialctl(ParmBlkPtr pbp, /* INTERNAL */
+   DCtlPtr dcp)
 {
     OSErr err;
     hiddenh h;
@@ -975,8 +972,8 @@ A2(PUBLIC, OSErr, ROMlib_serialctl, ParmBlkPtr, pbp, /* INTERNAL */
  * NOTE:  SERSTATUS lies about everything except rdPend.
  */
 
-A2(PUBLIC, OSErr, ROMlib_serialstatus, ParmBlkPtr, pbp, /* INTERNAL */
-   DCtlPtr, dcp)
+PUBLIC OSErr Executor::ROMlib_serialstatus(ParmBlkPtr pbp, /* INTERNAL */
+   DCtlPtr dcp)
 {
     OSErr err;
     hiddenh h;
@@ -1053,8 +1050,8 @@ PRIVATE void restorecloseanddispose(hiddenh h)
     DisposHandle((Handle)h);
 }
 
-A2(PUBLIC, OSErr, ROMlib_serialclose, ParmBlkPtr, pbp, /* INTERNAL */
-   DCtlPtr, dcp)
+PUBLIC OSErr Executor::ROMlib_serialclose(ParmBlkPtr pbp, /* INTERNAL */
+   DCtlPtr dcp)
 {
     OSErr err;
     hiddenh h;

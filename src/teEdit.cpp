@@ -542,7 +542,7 @@ static void doarrow(TEHandle te, CharParameter thec)
     TERESTORE();
 }
 
-P2(PUBLIC pascal trap, void, TEKey, CharParameter, thec, TEHandle, te)
+PUBLIC pascal trap void Executor::C_TEKey(CharParameter thec, TEHandle te)
 {
     Byte c;
 
@@ -575,7 +575,7 @@ P2(PUBLIC pascal trap, void, TEKey, CharParameter, thec, TEHandle, te)
     TE_SLAM(te);
 }
 
-P1(PUBLIC pascal trap, void, TECopy, TEHandle, te)
+PUBLIC pascal trap void Executor::C_TECopy(TEHandle te)
 {
     Handle hText;
     SignedByte hText_flags;
@@ -666,13 +666,13 @@ P1(PUBLIC pascal trap, void, TECopy, TEHandle, te)
     HSetState(hText, hText_flags);
 }
 
-P1(PUBLIC pascal trap, void, TECut, TEHandle, teh)
+PUBLIC pascal trap void Executor::C_TECut(TEHandle teh)
 {
     TECopy(teh);
     ROMlib_tedoitall(teh, NULL, 0, false, NULL);
 }
 
-P1(PUBLIC pascal trap, void, TEPaste, TEHandle, teh)
+PUBLIC pascal trap void Executor::C_TEPaste(TEHandle teh)
 {
 #if defined(X) || defined(MACOSX_) || defined(SDL)
     Size s;
@@ -686,12 +686,12 @@ P1(PUBLIC pascal trap, void, TEPaste, TEHandle, teh)
                      false, NULL);
 }
 
-P1(PUBLIC pascal trap, void, TEDelete, TEHandle, teh)
+PUBLIC pascal trap void Executor::C_TEDelete(TEHandle teh)
 {
     ROMlib_tedoitall(teh, NULL, 0, false, NULL);
 }
 
-P3(PUBLIC pascal trap, void, TEInsert, Ptr, p, LONGINT, ln, TEHandle, teh)
+PUBLIC pascal trap void Executor::C_TEInsert(Ptr p, LONGINT ln, TEHandle teh)
 {
     ROMlib_tedoitall(teh, p, ln, true, NULL);
 }

@@ -180,8 +180,7 @@ ROMlib_compare_fcw_fsw(uint32_t fcwfsw, const char *func, int line)
  */
 static uint8 halts_enabled;
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fsetenv, INTEGER *,
-                 dp, INTEGER, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fsetenv(INTEGER * dp, INTEGER sel)
 {
     unsigned short env;
     int i;
@@ -313,8 +312,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fsetenv, INTEGER *,
     warning_floating_point("setenv(0x%04X)", (unsigned)(uint16_t)CW_RAW(*dp));
 }
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fgetenv, INTEGER *,
-                 dp, INTEGER, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fgetenv(INTEGER * dp, INTEGER sel)
 {
     unsigned short env;
     int i;
@@ -401,8 +399,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fgetenv, INTEGER *,
     warning_floating_point("Returning 0x%04X", (unsigned)env);
 }
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fprocentry, INTEGER *,
-                 dp, INTEGER, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fprocentry(INTEGER * dp, INTEGER sel)
 {
     static INTEGER default_environment = 0; /* Always == 0. */
 
@@ -414,8 +411,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fprocentry, INTEGER *,
     C_ROMlib_Fsetenv(&default_environment, 0);
 }
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fprocexit, INTEGER *, dp,
-                 INTEGER, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fprocexit(INTEGER * dp, INTEGER sel)
 {
     INTEGER swapped_old_env;
     INTEGER swapped_new_env;
@@ -438,8 +434,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fprocexit, INTEGER *, dp,
     C_ROMlib_Fsetenv(&swapped_new_env, 0);
 }
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Ftestxcp, INTEGER *,
-                 dp, INTEGER, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Ftestxcp(INTEGER * dp, INTEGER sel)
 {
     INTEGER env;
 
@@ -456,8 +451,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Ftestxcp, INTEGER *,
         *dp |= CWC_RAW(0x100); /* Return 1 in the high byte. */
 }
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_FsqrtX, x80_t *,
-                 dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_FsqrtX(x80_t * dp, unsigned short sel)
 {
     DECLAREINOUT();
     /* FIXME - may lose precision! */
@@ -467,8 +461,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_FsqrtX, x80_t *,
                            (IEEE_T_PRINT_CAST)in, (IEEE_T_PRINT_CAST)out);
 }
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_FscalbX, INTEGER *,
-                 sp, x80_t *, dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_FscalbX(INTEGER * sp, x80_t * dp, unsigned short sel)
 {
     int scale;
     DECLAREINOUT();
@@ -481,8 +474,7 @@ P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_FscalbX, INTEGER *,
                            (IEEE_T_PRINT_CAST)in, scale, (IEEE_T_PRINT_CAST)out);
 }
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_FlogbX, x80_t *,
-                 dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_FlogbX(x80_t * dp, unsigned short sel)
 {
     DECLAREINOUT();
     /* FIXME - may lose precision! */
@@ -490,15 +482,13 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_FlogbX, x80_t *,
     warning_floating_point("logb(" IEEE_T_FORMAT ") == " IEEE_T_FORMAT "", (IEEE_T_PRINT_CAST)in, (IEEE_T_PRINT_CAST)out);
 }
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_FabsX, x80_t *,
-                 dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_FabsX(x80_t * dp, unsigned short sel)
 {
     warning_floating_point(NULL_STRING);
     SET_X80_SGN(dp, 0);
 }
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_FnegX, x80_t *,
-                 dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_FnegX(x80_t * dp, unsigned short sel)
 {
 #if ERROR_SUPPORTED_P(ERROR_FLOATING_POINT)
     ieee_t before;
@@ -509,8 +499,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_FnegX, x80_t *,
                            (IEEE_T_PRINT_CAST)before, (IEEE_T_PRINT_CAST)x80_to_ieee(dp));
 }
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fcpysgnx, x80_t *,
-                 sp, x80_t *, dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fcpysgnx(x80_t * sp, x80_t * dp, unsigned short sel)
 {
     warning_floating_point(NULL_STRING);
     /* This looks strange because we are copying dst's sign to src, but
@@ -520,8 +509,7 @@ P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fcpysgnx, x80_t *,
     SET_X80_SGN(sp, GET_X80_SGN(dp));
 }
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_FrintX, x80_t *,
-                 dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_FrintX(x80_t * dp, unsigned short sel)
 {
     DECLAREINOUT();
     /* FIXME - may lose precision! */
@@ -529,8 +517,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_FrintX, x80_t *,
     warning_floating_point("rint(" IEEE_T_FORMAT ") == " IEEE_T_FORMAT "", (IEEE_T_PRINT_CAST)in, (IEEE_T_PRINT_CAST)out);
 }
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_FtintX, x80_t *,
-                 dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_FtintX(x80_t * dp, unsigned short sel)
 {
     DECLAREINOUT();
     ieee_t n = x80_to_ieee(dp);
@@ -598,46 +585,39 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_FtintX, x80_t *,
                                    (IEEE_T_PRINT_CAST)in1, (IEEE_T_PRINT_CAST)out);                         \
     } while(0)
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Faddx, void *, sp,
-                 x80_t *, dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Faddx(void * sp, x80_t * dp, unsigned short sel)
 {
     SIMPLE_OP("add", +=, IS_BINARY_OP);
 }
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fsubx, void *, sp,
-                 x80_t *, dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fsubx(void * sp, x80_t * dp, unsigned short sel)
 {
     SIMPLE_OP("sub", -=, IS_BINARY_OP);
 }
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fmulx, void *, sp,
-                 x80_t *, dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fmulx(void * sp, x80_t * dp, unsigned short sel)
 {
     SIMPLE_OP("mul", *=, IS_BINARY_OP);
 }
 
 PRIVATE LONGINT halt_vec;
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fsethv, LONGINT *, hvp,
-                 unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fsethv(LONGINT * hvp, unsigned short sel)
 {
     halt_vec = *hvp;
 }
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fgethv, LONGINT *, hvp,
-                 unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fgethv(LONGINT * hvp, unsigned short sel)
 {
     *hvp = halt_vec;
 }
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fdivx, void *, sp,
-                 x80_t *, dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fdivx(void * sp, x80_t * dp, unsigned short sel)
 {
     SIMPLE_OP("div", /=, IS_BINARY_OP);
 }
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fx2X, void *, sp,
-                 x80_t *, dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fx2X(void * sp, x80_t * dp, unsigned short sel)
 {
     /* NOTE: this is way slower than it needs to be for the case where we are
    * assigning one x80 to another.
@@ -645,8 +625,7 @@ P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fx2X, void *, sp,
     SIMPLE_OP("assign", =, NOT_BINARY_OP);
 }
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_FX2x, x80_t *,
-                 sp, void *, dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_FX2x(x80_t * sp, void * dp, unsigned short sel)
 {
     DECLAREIN();
     ieee_t val = x80_to_ieee(sp);
@@ -687,8 +666,7 @@ P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_FX2x, x80_t *,
     }
 }
 
-P_SAVED1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fremx, void *, sp,
-               x80_t *, dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fremx(void * sp, x80_t * dp, unsigned short sel)
 {
     DECLAREIN2OUT();
     ieee_t n1, n2, ratio;
@@ -754,8 +732,7 @@ P_SAVED1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fremx, void *, sp,
 #define CCX cpu_state.ccx
 #define CCNZ cpu_state.ccnz
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, FCMP_RETURN_TYPE, ROMlib_Fcmpx,
-                 void *, sp, x80_t *, dp, unsigned short, sel)
+PUBLIC pascal trap FCMP_RETURN_TYPE Executor::C_ROMlib_Fcmpx(void * sp, x80_t * dp, unsigned short sel)
 {
     DECLAREIN2();
     ieee_t n1, n2;
@@ -821,8 +798,7 @@ P_SAVED0D1A0A1_3(PUBLIC pascal trap, FCMP_RETURN_TYPE, ROMlib_Fcmpx,
                            CCC, CCN, CCV, CCX, !CCNZ);
 }
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, FCMP_RETURN_TYPE, ROMlib_FcpXx,
-                 void *, sp, x80_t *, dp, unsigned short, sel)
+PUBLIC pascal trap FCMP_RETURN_TYPE Executor::C_ROMlib_FcpXx(void * sp, x80_t * dp, unsigned short sel)
 {
     warning_floating_point(NULL_STRING);
     /* FIXME - this should signal; calling Fcmpx is only a stopgap hack
@@ -885,8 +861,7 @@ round_string(const char *in, char *out, bool negative_p,
     return exponent_change;
 }
 
-P_SAVED0D1A0A1_4(PUBLIC pascal trap, void, ROMlib_Fx2dec, DecForm *,
-                 sp2, void *, sp, Decimal *, dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fx2dec(DecForm * sp2, void * sp, Decimal * dp, unsigned short sel)
 {
     DECLAREIN();
     ieee_t n;
@@ -1039,8 +1014,7 @@ my_pow10(int i)
 }
 #endif
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fdec2x, Decimal *,
-                 sp, void *, dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fdec2x(Decimal * sp, void * dp, unsigned short sel)
 {
     DECLAREIN();
     long double n;
@@ -1122,8 +1096,7 @@ P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fdec2x, Decimal *,
                            CW(sp->exp), (IEEE_T_PRINT_CAST)in);
 }
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fclassx, void *,
-                 sp, INTEGER *, dp, unsigned short, sel)
+PUBLIC pascal trap void Executor::C_ROMlib_Fclassx(void * sp, INTEGER * dp, unsigned short sel)
 {
     static const unsigned char eight_zeros[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     unsigned short first_word = CW_RAW(*(unsigned short *)sp);

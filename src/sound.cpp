@@ -26,24 +26,24 @@ bool Executor::sound_disabled_p;
  */
 
 #if defined(SOUNDGLUEROUTINES)
-A3(PUBLIC, void, StartSound, Ptr, srec, LONGINT, nb, ProcPtr, comp)
+PUBLIC void Executor::StartSound(Ptr srec, LONGINT nb, ProcPtr comp)
 {
 }
 
-A0(PUBLIC, void, StopSound)
+PUBLIC void Executor::StopSound()
 {
 }
 
-A0(PUBLIC, BOOLEAN, SoundDone)
+PUBLIC BOOLEAN Executor::SoundDone()
 {
     return true;
 }
 
-A1(PUBLIC, void, GetSoundVol, INTEGER *, volp)
+PUBLIC void Executor::GetSoundVol(INTEGER * volp)
 {
 }
 
-A1(PUBLIC, void, SetSoundVol, INTEGER, vol)
+PUBLIC void Executor::SetSoundVol(INTEGER vol)
 {
 }
 #endif
@@ -304,8 +304,7 @@ PUBLIC int Executor::ROMlib_get_snd_cmds(Handle sndh, SndCommand **cmdsp)
     return retval;
 }
 
-P3(PUBLIC, pascal trap OSErr, SndPlay, SndChannelPtr, chanp, Handle, sndh,
-   BOOLEAN, async)
+PUBLIC pascal trap OSErr Executor::C_SndPlay(SndChannelPtr chanp, Handle sndh, BOOLEAN async)
 {
     OSErr retval;
     Ptr resp;
@@ -391,8 +390,7 @@ P3(PUBLIC, pascal trap OSErr, SndPlay, SndChannelPtr, chanp, Handle, sndh,
 
 GUEST<SndChannelPtr> Executor::allchans;
 
-P4(PUBLIC pascal trap, OSErr, SndNewChannel, GUEST<SndChannelPtr> *, chanpp,
-   INTEGER, synth, LONGINT, init, SndCallbackProcPtr, userroutinep)
+PUBLIC pascal trap OSErr Executor::C_SndNewChannel(GUEST<SndChannelPtr> * chanpp, INTEGER synth, LONGINT init, SndCallbackProcPtr userroutinep)
 {
     SndChannelPtr chanp;
     OSErr retval;
@@ -441,8 +439,7 @@ P4(PUBLIC pascal trap, OSErr, SndNewChannel, GUEST<SndChannelPtr> *, chanpp,
 
 #define MOD_SYNTH_FLAG 1
 
-P4(PUBLIC, pascal trap OSErr, SndAddModifier, SndChannelPtr, chanp,
-   ProcPtr, mod, INTEGER, id, LONGINT, init)
+PUBLIC pascal trap OSErr Executor::C_SndAddModifier(SndChannelPtr chanp, ProcPtr mod, INTEGER id, LONGINT init)
 {
 #if defined(OLD_BROKEN_NEXTSTEP_SOUND)
     Handle h;
@@ -781,8 +778,7 @@ Executor::sound_callback(syn68k_addr_t interrupt_addr, void *unused)
     return MAGIC_RTE_ADDRESS;
 }
 
-P3(PUBLIC, pascal trap OSErr, SndDoCommand, SndChannelPtr, chanp,
-   SndCommand *, cmdp, BOOLEAN, nowait)
+PUBLIC pascal trap OSErr Executor::C_SndDoCommand(SndChannelPtr chanp, SndCommand * cmdp, BOOLEAN nowait)
 {
     OSErr retval;
 
@@ -847,8 +843,7 @@ P3(PUBLIC, pascal trap OSErr, SndDoCommand, SndChannelPtr, chanp,
     return retval;
 }
 
-P2(PUBLIC, pascal trap OSErr, SndDoImmediate, SndChannelPtr, chanp,
-   SndCommand *, cmdp)
+PUBLIC pascal trap OSErr Executor::C_SndDoImmediate(SndChannelPtr chanp, SndCommand * cmdp)
 {
     OSErr retval;
     SndCommand cmd;
@@ -911,8 +906,7 @@ P2(PUBLIC, pascal trap OSErr, SndDoImmediate, SndChannelPtr, chanp,
     return retval;
 }
 
-P3(PUBLIC, pascal trap OSErr, SndChannelStatus, SndChannelPtr, chanp,
-   INTEGER, length, SCStatusPtr, statusp)
+PUBLIC pascal trap OSErr Executor::C_SndChannelStatus(SndChannelPtr chanp, INTEGER length, SCStatusPtr statusp)
 {
     OSErr ret;
 
@@ -948,7 +942,7 @@ P3(PUBLIC, pascal trap OSErr, SndChannelStatus, SndChannelPtr, chanp,
     return ret;
 }
 
-P2(PUBLIC, pascal trap OSErr, SndControl, INTEGER, id, SndCommand *, cmdp)
+PUBLIC pascal trap OSErr Executor::C_SndControl(INTEGER id, SndCommand * cmdp)
 {
     OSErr retval;
 #if defined(OLD_BROKEN_NEXTSTEP_SOUND)
@@ -992,8 +986,7 @@ P2(PUBLIC, pascal trap OSErr, SndControl, INTEGER, id, SndCommand *, cmdp)
     return retval;
 }
 
-P2(PUBLIC, pascal trap OSErr, SndDisposeChannel, SndChannelPtr, chanp,
-   BOOLEAN, quitnow)
+PUBLIC pascal trap OSErr Executor::C_SndDisposeChannel(SndChannelPtr chanp, BOOLEAN quitnow)
 {
     OSErr retval;
     SndCommand cmd;

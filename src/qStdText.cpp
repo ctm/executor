@@ -34,12 +34,10 @@ using namespace Executor;
 namespace Executor
 {
 #include "ultable.ctable"
-PRIVATE void charblit(BitMap *fbmp, BitMap *tbmp,
-                      Rect *srect, Rect *drect, INTEGER firsttime);
 }
 
-A5(PRIVATE, void, charblit, BitMap *, fbmp, BitMap *, tbmp, /* INTERNAL */
-   Rect *, srect, Rect *, drect, INTEGER, firsttime)
+PRIVATE void charblit(BitMap * fbmp, BitMap * tbmp, /* INTERNAL */
+   Rect * srect, Rect * drect, INTEGER firsttime)
 {
     INTEGER firstfrom, lastfrom, firstto, lastto;
     INTEGER firstmaskend, lastmaskend, wordstodo, wordsfromdo, shiftsize;
@@ -728,8 +726,7 @@ Executor::set_text_printing(bool state)
     ROMlib_text_output_disabled_p = state;
 }
 
-P4(PUBLIC pascal trap, void, StdText, INTEGER, n, Ptr, textbufp,
-   Point, num, Point, den)
+PUBLIC pascal trap void Executor::C_StdText(INTEGER n, Ptr textbufp, Point num, Point den)
 {
     /*  if (!ROMlib_text_output_disabled_p) */
     {
@@ -758,20 +755,18 @@ Executor::xStdTxMeas(INTEGER n, Byte *p, GUEST<Point> *nump, GUEST<Point> *denp,
     return retval;
 }
 
-P5(PUBLIC pascal trap, INTEGER, StdTxMeas, INTEGER, n, Ptr, p,
-   GUEST<Point> *, nump, GUEST<Point> *, denp, FontInfo *, finfop)
+PUBLIC pascal trap INTEGER Executor::C_StdTxMeas(INTEGER n, Ptr p, GUEST<Point> * nump, GUEST<Point> * denp, FontInfo * finfop)
 {
     return xStdTxMeas(n, (unsigned char *)p, nump, denp, finfop, nullptr);
 }
 
-A5(PUBLIC, INTEGER, ROMlib_StdTxMeas, LONGINT, n, Ptr, p,
-   GUEST<Point> *, nump, GUEST<Point> *, denp, FontInfo *, finfop)
+PUBLIC INTEGER Executor::ROMlib_StdTxMeas(LONGINT n, Ptr p, GUEST<Point> * nump, GUEST<Point> * denp, FontInfo * finfop)
 {
     return xStdTxMeas(n, (unsigned char *)p, nump, denp, finfop, nullptr);
 }
 
-P3(PUBLIC pascal trap, void, MeasureText, INTEGER, n, Ptr, text, /* IMIV-25 */
-   Ptr, chars)
+PUBLIC pascal trap void Executor::C_MeasureText(INTEGER n, Ptr text, /* IMIV-25 */
+   Ptr chars)
 {
     GUEST<Point> num, den;
 

@@ -21,7 +21,7 @@ static TMTask refresh_tm_task;
 
 static bool refresh_tm_task_installed_p = false;
 
-A0(PUBLIC, void, C_handle_refresh)
+PUBLIC void Executor::C_handle_refresh()
 {
     static bool busy_p = false;
 

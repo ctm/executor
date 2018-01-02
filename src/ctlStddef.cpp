@@ -354,8 +354,7 @@ draw_radio(ControlHandle c, int16_t part)
     }
 }
 
-P4(PUBLIC, pascal LONGINT, cdef0, INTEGER, var, ControlHandle, c,
-   INTEGER, mess, LONGINT, param) /* IMI-328 */
+PUBLIC pascal LONGINT Executor::C_cdef0(INTEGER var, ControlHandle c, INTEGER mess, LONGINT param) /* IMI-328 */
 {
     Point p;
     Rect r;

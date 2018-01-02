@@ -107,9 +107,7 @@ Executor::lookup_aux_win(WindowPtr w)
     return t;
 }
 
-P2(PUBLIC pascal trap, void, SetWinColor,
-   WindowPtr, w,
-   CTabHandle, new_w_ctab)
+PUBLIC pascal trap void Executor::C_SetWinColor(WindowPtr w, CTabHandle new_w_ctab)
 {
     if(w)
     {
@@ -196,9 +194,7 @@ P2(PUBLIC pascal trap, void, SetWinColor,
 
    they named it correctly, but noone got the documentation right */
 
-P2(PUBLIC pascal trap, BOOLEAN, GetAuxWin,
-   WindowPtr, w,
-   GUEST<AuxWinHandle> *, aux_win_out)
+PUBLIC pascal trap BOOLEAN Executor::C_GetAuxWin(WindowPtr w, GUEST<AuxWinHandle> * aux_win_out)
 {
     if(!w)
     {

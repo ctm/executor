@@ -10,7 +10,7 @@
 
 using namespace Executor;
 
-A2(PUBLIC trap, void, NumToString, LONGINT, l, StringPtr, s)
+PUBLIC trap void Executor::NumToString(LONGINT l, StringPtr s)
 {
     Byte *p = s + 1;
     LONGINT d;
@@ -49,7 +49,7 @@ A2(PUBLIC trap, void, NumToString, LONGINT, l, StringPtr, s)
     s[0] = p - (s + 1);
 }
 
-A2(PUBLIC trap, void, StringToNum, StringPtr, s, LONGINT *, lp)
+PUBLIC trap void Executor::StringToNum(StringPtr s, LONGINT * lp)
 {
     char *p = (char *)s + 1;
     char *ep = p + s[0];

@@ -23,8 +23,7 @@ using namespace Executor;
  *	 as possible and probably have only one CalcVisBehind
  */
 
-P4(PUBLIC pascal trap, void, MoveWindow, WindowPtr, wp, INTEGER, h, INTEGER, v,
-   BOOLEAN, front)
+PUBLIC pascal trap void Executor::C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER v, BOOLEAN front)
 {
     GrafPtr gp;
     RgnHandle movepart, updatepart, behindpart;
@@ -157,7 +156,7 @@ P4(PUBLIC pascal trap, void, MoveWindow, WindowPtr, wp, INTEGER, h, INTEGER, v,
     
 }
 
-P3(PUBLIC pascal trap, void, DragWindow, WindowPtr, wp, Point, p, Rect *, rp)
+PUBLIC pascal trap void Executor::C_DragWindow(WindowPtr wp, Point p, Rect * rp)
 {
     RgnHandle rh;
     LONGINT l;
@@ -204,8 +203,7 @@ P3(PUBLIC pascal trap, void, DragWindow, WindowPtr, wp, Point, p, Rect *, rp)
         SetPort(p);       \
     } while(false)
 
-P3(PUBLIC pascal trap, LONGINT, GrowWindow, WindowPtr, w, Point, startp,
-   Rect *, rp)
+PUBLIC pascal trap LONGINT Executor::C_GrowWindow(WindowPtr w, Point startp, Rect * rp)
 {
     EventRecord ev;
     GrafPtr gp;
@@ -278,8 +276,7 @@ P3(PUBLIC pascal trap, LONGINT, GrowWindow, WindowPtr, w, Point, startp,
 
 /* #### speedup? bag saveold, drawnew */
 
-P4(PUBLIC pascal trap, void, SizeWindow, WindowPtr, w,
-   INTEGER, width, INTEGER, height, BOOLEAN, flag)
+PUBLIC pascal trap void Executor::C_SizeWindow(WindowPtr w, INTEGER width, INTEGER height, BOOLEAN flag)
 {
     if(width || height)
     {

@@ -17,8 +17,7 @@
 
 using namespace Executor;
 
-P1(PUBLIC pascal trap, void, OpenCPort,
-   CGrafPtr, port)
+PUBLIC pascal trap void Executor::C_OpenCPort(CGrafPtr port)
 {
     PixPatHandle temp_pixpat;
 
@@ -53,7 +52,7 @@ P1(PUBLIC pascal trap, void, OpenCPort,
     InitCPort(port);
 }
 
-P1(PUBLIC pascal trap, void, CloseCPort, CGrafPtr, port)
+PUBLIC pascal trap void Executor::C_CloseCPort(CGrafPtr port)
 {
     ClosePort((GrafPtr)port);
 }
@@ -61,8 +60,7 @@ P1(PUBLIC pascal trap, void, CloseCPort, CGrafPtr, port)
 /* FIXME:
    do these belong here */
 
-P1(PUBLIC pascal trap, void, InitCPort,
-   CGrafPtr, p)
+PUBLIC pascal trap void Executor::C_InitCPort(CGrafPtr p)
 {
     GDHandle gd;
     RgnHandle rh;
@@ -138,7 +136,7 @@ P1(PUBLIC pascal trap, void, InitCPort,
     SetRectRgn(rh, -32767, -32767, 32767, 32767);
 }
 
-P1(PUBLIC pascal trap, void, SetPortPix, PixMapHandle, pixmap)
+PUBLIC pascal trap void Executor::C_SetPortPix(PixMapHandle pixmap)
 {
     CPORT_PIXMAP_X(theCPort) = RM(pixmap);
 }
@@ -158,8 +156,7 @@ static const LONGINT high_bits_to_colors[2][2][2] = {
     },
 };
 
-P1(PUBLIC pascal trap, void, RGBForeColor,
-   RGBColor *, color)
+PUBLIC pascal trap void Executor::C_RGBForeColor(RGBColor * color)
 {
     if(CGrafPort_p(thePort))
     {
@@ -183,8 +180,7 @@ P1(PUBLIC pascal trap, void, RGBForeColor,
     }
 }
 
-P1(PUBLIC pascal trap, void, RGBBackColor,
-   RGBColor *, color)
+PUBLIC pascal trap void Executor::C_RGBBackColor(RGBColor * color)
 {
 
 #if defined(EVIL_ILLUSTRATOR_7_HACK)
@@ -219,8 +215,7 @@ P1(PUBLIC pascal trap, void, RGBBackColor,
     }
 }
 
-P1(PUBLIC pascal trap, void, GetForeColor,
-   RGBColor *, color)
+PUBLIC pascal trap void Executor::C_GetForeColor(RGBColor * color)
 {
     if(CGrafPort_p(thePort))
         *color = CPORT_RGB_FG_COLOR(theCPort);
@@ -228,8 +223,7 @@ P1(PUBLIC pascal trap, void, GetForeColor,
         *color = *(ROMlib_qd_color_to_rgb(PORT_FG_COLOR(thePort)));
 }
 
-P1(PUBLIC pascal trap, void, GetBackColor,
-   RGBColor *, color)
+PUBLIC pascal trap void Executor::C_GetBackColor(RGBColor * color)
 {
     if(CGrafPort_p(thePort))
         *color = CPORT_RGB_BK_COLOR(theCPort);
@@ -237,8 +231,7 @@ P1(PUBLIC pascal trap, void, GetBackColor,
         *color = *(ROMlib_qd_color_to_rgb(PORT_BK_COLOR(thePort)));
 }
 
-P1(PUBLIC pascal trap, void, PenPixPat,
-   PixPatHandle, new_pen)
+PUBLIC pascal trap void Executor::C_PenPixPat(PixPatHandle new_pen)
 {
     if(CGrafPort_p(thePort))
     {
@@ -257,8 +250,7 @@ P1(PUBLIC pascal trap, void, PenPixPat,
         PATASSIGN(PORT_PEN_PAT(thePort), PIXPAT_1DATA(new_pen));
 }
 
-P1(PUBLIC pascal trap, void, BackPixPat,
-   PixPatHandle, new_bk)
+PUBLIC pascal trap void Executor::C_BackPixPat(PixPatHandle new_bk)
 {
     if(CGrafPort_p(thePort))
     {
@@ -300,8 +292,7 @@ void Executor::ROMlib_fill_pixpat(PixPatHandle new_fill)
 
 /* where is FillPixPat */
 
-P1(PUBLIC pascal trap, void, OpColor,
-   RGBColor *, color)
+PUBLIC pascal trap void Executor::C_OpColor(RGBColor * color)
 {
     if(!CGrafPort_p(thePort))
         return;
@@ -309,8 +300,7 @@ P1(PUBLIC pascal trap, void, OpColor,
     HxX(CPORT_GRAFVARS(theCPort), rgbOpColor) = *color;
 }
 
-P1(PUBLIC pascal trap, void, HiliteColor,
-   RGBColor *, color)
+PUBLIC pascal trap void Executor::C_HiliteColor(RGBColor * color)
 {
     if(!CGrafPort_p(thePort))
         return;
@@ -320,7 +310,7 @@ P1(PUBLIC pascal trap, void, HiliteColor,
 
 /* PixMap operations */
 
-P0(PUBLIC pascal trap, PixMapHandle, NewPixMap)
+PUBLIC pascal trap PixMapHandle Executor::C_NewPixMap()
 {
     PixMapHandle pixmap;
 
@@ -363,8 +353,7 @@ P0(PUBLIC pascal trap, PixMapHandle, NewPixMap)
     return pixmap;
 }
 
-P1(PUBLIC pascal trap, void, DisposPixMap,
-   PixMapHandle, pixmap)
+PUBLIC pascal trap void Executor::C_DisposPixMap(PixMapHandle pixmap)
 {
     if(pixmap)
     {
@@ -373,9 +362,7 @@ P1(PUBLIC pascal trap, void, DisposPixMap,
     }
 }
 
-P2(PUBLIC pascal trap, void, CopyPixMap,
-   PixMapHandle, src,
-   PixMapHandle, dst)
+PUBLIC pascal trap void Executor::C_CopyPixMap(PixMapHandle src, PixMapHandle dst)
 {
     CTabHandle dst_ctab;
 
@@ -391,7 +378,7 @@ P2(PUBLIC pascal trap, void, CopyPixMap,
 
 /* PixPat operations */
 
-P0(PUBLIC pascal trap, PixPatHandle, NewPixPat)
+PUBLIC pascal trap PixPatHandle Executor::C_NewPixPat()
 {
     PixPatHandle pixpat;
     Handle xdata;
@@ -415,7 +402,7 @@ typedef struct pixpat_res *pixpat_res_ptr;
 
 typedef GUEST<pixpat_res_ptr> *pixpat_res_handle;
 
-P1(PUBLIC pascal trap, PixPatHandle, GetPixPat, INTEGER, pixpat_id)
+PUBLIC pascal trap PixPatHandle Executor::C_GetPixPat(INTEGER pixpat_id)
 {
     pixpat_res_handle pixpat_res;
     PixPatHandle pixpat;
@@ -507,8 +494,7 @@ P1(PUBLIC pascal trap, PixPatHandle, GetPixPat, INTEGER, pixpat_id)
     return pixpat;
 }
 
-P1(PUBLIC pascal trap, void, DisposPixPat,
-   PixPatHandle, pixpat_h)
+PUBLIC pascal trap void Executor::C_DisposPixPat(PixPatHandle pixpat_h)
 {
     if(pixpat_h)
     {
@@ -526,9 +512,7 @@ P1(PUBLIC pascal trap, void, DisposPixPat,
     }
 }
 
-P2(PUBLIC pascal trap, void, CopyPixPat,
-   PixPatHandle, src,
-   PixPatHandle, dst)
+PUBLIC pascal trap void Executor::C_CopyPixPat(PixPatHandle src, PixPatHandle dst)
 {
     int data_size;
 
@@ -542,9 +526,7 @@ P2(PUBLIC pascal trap, void, CopyPixPat,
     PATASSIGN(PIXPAT_1DATA(dst), PIXPAT_1DATA(src));
 }
 
-P2(PUBLIC pascal trap, void, MakeRGBPat,
-   PixPatHandle, pixpat,
-   RGBColor *, color)
+PUBLIC pascal trap void Executor::C_MakeRGBPat(PixPatHandle pixpat, RGBColor * color)
 {
     PixMapHandle patmap;
 

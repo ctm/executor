@@ -18,7 +18,7 @@
 
 using namespace Executor;
 
-P1(PUBLIC pascal trap, void, InitGraf, Ptr, gp)
+PUBLIC pascal trap void Executor::C_InitGraf(Ptr gp)
 {
     PixMapHandle main_gd_pixmap;
 
@@ -74,7 +74,7 @@ P1(PUBLIC pascal trap, void, InitGraf, Ptr, gp)
  * vis without using the memory manager.
  */
 
-A1(PUBLIC, void, ROMlib_initport, GrafPtr, p) /* INTERNAL */
+PUBLIC void Executor::ROMlib_initport(GrafPtr p) /* INTERNAL */
 {
     /* this is a grafport, not a cgrafport, so the flag bits must not be
      set.  when we get here, it is likely they they contain garbage,
@@ -108,14 +108,14 @@ A1(PUBLIC, void, ROMlib_initport, GrafPtr, p) /* INTERNAL */
     PORT_GRAF_PROCS_X(p) = nullptr;
 }
 
-P1(PUBLIC pascal trap, void, SetPort, GrafPtr, p)
+PUBLIC pascal trap void Executor::C_SetPort(GrafPtr p)
 {
     if(p == NULL)
         warning_unexpected("SetPort(NULL_STRING)");
     thePortX = RM(p);
 }
 
-P1(PUBLIC pascal trap, void, InitPort, GrafPtr, p)
+PUBLIC pascal trap void Executor::C_InitPort(GrafPtr p)
 {
     ROMlib_initport(p);
     SetEmptyRgn(PORT_VIS_REGION(p));
@@ -126,7 +126,7 @@ P1(PUBLIC pascal trap, void, InitPort, GrafPtr, p)
     SetPort(p);
 }
 
-P1(PUBLIC pascal trap, void, OpenPort, GrafPtr, p)
+PUBLIC pascal trap void Executor::C_OpenPort(GrafPtr p)
 {
     PORT_VIS_REGION_X(p) = RM(NewRgn());
     PORT_CLIP_REGION_X(p) = RM(NewRgn());
@@ -139,7 +139,7 @@ P1(PUBLIC pascal trap, void, OpenPort, GrafPtr, p)
  * I'm not sure how the Mac gets around it.
  */
 
-P1(PUBLIC pascal trap, void, ClosePort, GrafPtr, p)
+PUBLIC pascal trap void Executor::C_ClosePort(GrafPtr p)
 {
     DisposeRgn(PORT_VIS_REGION(p));
     if(MemErr == CWC(noErr))
@@ -161,29 +161,29 @@ P1(PUBLIC pascal trap, void, ClosePort, GrafPtr, p)
     }
 }
 
-P1(PUBLIC pascal trap, void, GetPort, GUEST<GrafPtr> *, pp)
+PUBLIC pascal trap void Executor::C_GetPort(GUEST<GrafPtr> * pp)
 {
     *pp = thePortX;
 }
 
-P1(PUBLIC pascal trap, void, GrafDevice, INTEGER, d)
+PUBLIC pascal trap void Executor::C_GrafDevice(INTEGER d)
 {
     PORT_DEVICE_X(thePort) = Cx(d);
 }
 
-P1(PUBLIC pascal trap, void, SetPortBits, BitMap *, bm)
+PUBLIC pascal trap void Executor::C_SetPortBits(BitMap * bm)
 {
     if(!CGrafPort_p(thePort))
         PORT_BITS(thePort) = *bm;
 }
 
-P2(PUBLIC pascal trap, void, PortSize, INTEGER, w, INTEGER, h)
+PUBLIC pascal trap void Executor::C_PortSize(INTEGER w, INTEGER h)
 {
     PORT_RECT(thePort).bottom = CW(CW(PORT_RECT(thePort).top) + h);
     PORT_RECT(thePort).right = CW(CW(PORT_RECT(thePort).left) + w);
 }
 
-P2(PUBLIC pascal trap, void, MovePortTo, INTEGER, lg, INTEGER, tg)
+PUBLIC pascal trap void Executor::C_MovePortTo(INTEGER lg, INTEGER tg)
 {
     GrafPtr current_port;
     Rect *port_bounds, *port_rect;
@@ -199,7 +199,7 @@ P2(PUBLIC pascal trap, void, MovePortTo, INTEGER, lg, INTEGER, tg)
     SetRect(port_bounds, lg, tg, lg + w, tg + h);
 }
 
-P2(PUBLIC pascal trap, void, SetOrigin, INTEGER, h, INTEGER, v)
+PUBLIC pascal trap void Executor::C_SetOrigin(INTEGER h, INTEGER v)
 {
     int32_t dh, dv;
 
@@ -224,17 +224,17 @@ P2(PUBLIC pascal trap, void, SetOrigin, INTEGER, h, INTEGER, v)
         OffsetRgn(MR(SaveVisRgn), dh, dv);
 }
 
-P1(PUBLIC pascal trap, void, SetClip, RgnHandle, r)
+PUBLIC pascal trap void Executor::C_SetClip(RgnHandle r)
 {
     CopyRgn(r, PORT_CLIP_REGION(thePort));
 }
 
-P1(PUBLIC pascal trap, void, GetClip, RgnHandle, r)
+PUBLIC pascal trap void Executor::C_GetClip(RgnHandle r)
 {
     CopyRgn(PORT_CLIP_REGION(thePort), r);
 }
 
-P1(PUBLIC pascal trap, void, ClipRect, Rect *, r)
+PUBLIC pascal trap void Executor::C_ClipRect(Rect * r)
 {
     Rect r_copy;
 
@@ -245,7 +245,7 @@ P1(PUBLIC pascal trap, void, ClipRect, Rect *, r)
     RectRgn(PORT_CLIP_REGION(thePort), &r_copy);
 }
 
-P1(PUBLIC pascal trap, void, BackPat, Pattern, pp)
+PUBLIC pascal trap void Executor::C_BackPat(Pattern pp)
 {
     if(CGrafPort_p(thePort))
     {
@@ -273,7 +273,7 @@ P1(PUBLIC pascal trap, void, BackPat, Pattern, pp)
         PATASSIGN(PORT_BK_PAT(thePort), pp);
 }
 
-A1(PUBLIC, void, ROMlib_fill_pat, Pattern, pp) /* INTERNAL */
+PUBLIC void Executor::ROMlib_fill_pat(Pattern pp) /* INTERNAL */
 {
     if(CGrafPort_p(thePort))
     {

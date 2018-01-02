@@ -181,7 +181,7 @@ Executor::ROMlib_xlate(INTEGER virt, INTEGER modifiers, bool down_p)
 
 char ROMlib_started; /* flag used by Mac frontend */
 
-A1(PUBLIC, void, ROMlib_eventinit, bool, graphics_valid_p) /* INTERNAL */
+PUBLIC void Executor::ROMlib_eventinit(bool graphics_valid_p) /* INTERNAL */
 {
     static int beenhere = 0;
     EvQEl *p, *ep;
@@ -208,16 +208,13 @@ A1(PUBLIC, void, ROMlib_eventinit, bool, graphics_valid_p) /* INTERNAL */
     }
 }
 
-namespace Executor
-{
 PRIVATE void dropevent(EvQEl *);
 PRIVATE OSErrRET _PPostEvent(INTEGER evcode,
                              LONGINT evmsg, GUEST<EvQElPtr> *qelpp);
 PRIVATE BOOLEAN OSEventCommon(INTEGER evmask, EventRecord *eventp,
                               BOOLEAN dropit);
-}
 
-A1(PRIVATE, void, dropevent, EvQEl *, qp)
+PRIVATE void dropevent(EvQEl * qp)
 {
     Dequeue((QElemPtr)qp, &EventQueue);
     qp->qLink = RM((QElemPtr)freeelem);
@@ -256,7 +253,7 @@ Executor::ROMlib_get_index_and_bit(LONGINT loc, int *indexp, uint8 *bitp)
     return retval;
 }
 
-A2(PUBLIC, void, ROMlib_zapmap, LONGINT, loc, LONGINT, val)
+PUBLIC void Executor::ROMlib_zapmap(LONGINT loc, LONGINT val)
 {
     int i;
     uint8 bit;
@@ -284,8 +281,8 @@ key_down(uint8 loc)
     return retval;
 }
 
-A3(PUBLIC trap, OSErrRET, PPostEvent, INTEGER, evcode, /* IMIV-85 */
-   LONGINT, evmsg, GUEST<EvQElPtr> *, qelp)
+PUBLIC trap OSErrRET Executor::PPostEvent(INTEGER evcode, /* IMIV-85 */
+   LONGINT evmsg, GUEST<EvQElPtr> * qelp)
 {
     EvQEl *qp;
     LONGINT tmpticks;
@@ -347,8 +344,7 @@ A3(PUBLIC trap, OSErrRET, PPostEvent, INTEGER, evcode, /* IMIV-85 */
     return noErr;
 }
 
-A3(PRIVATE, OSErrRET, _PPostEvent, INTEGER, evcode,
-   LONGINT, evmsg, GUEST<EvQElPtr> *, qelpp)
+PRIVATE OSErrRET _PPostEvent(INTEGER evcode, LONGINT evmsg, GUEST<EvQElPtr> * qelpp)
 {
     OSErrRET ret;
     syn68k_addr_t proc;
@@ -375,8 +371,7 @@ A3(PRIVATE, OSErrRET, _PPostEvent, INTEGER, evcode,
     return ret;
 }
 
-A6(PUBLIC, OSErrRET, ROMlib_PPostEvent, INTEGER, evcode, LONGINT, evmsg,
-   GUEST<EvQElPtr> *, qelp, LONGINT, when, Point, where, INTEGER, butmods)
+PUBLIC OSErrRET Executor::ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg, GUEST<EvQElPtr> * qelp, LONGINT when, Point where, INTEGER butmods)
 {
     MouseLocation2.h = ROMlib_curs.h = CW(where.h);
     MouseLocation2.v = ROMlib_curs.v = CW(where.v);
@@ -385,13 +380,12 @@ A6(PUBLIC, OSErrRET, ROMlib_PPostEvent, INTEGER, evcode, LONGINT, evmsg,
     return _PPostEvent(evcode, evmsg, qelp);
 }
 
-A2(PUBLIC trap, OSErrRET, PostEvent, INTEGER, evcode, LONGINT, evmsg)
+PUBLIC trap OSErrRET Executor::PostEvent(INTEGER evcode, LONGINT evmsg)
 {
     return _PPostEvent(evcode, evmsg, (GUEST<EvQElPtr> *)0);
 }
 
-A2(PUBLIC trap, void, FlushEvents, INTEGER, evmask,
-   INTEGER, stopmask) /* II-69 */
+PUBLIC trap void Executor::FlushEvents(INTEGER evmask, INTEGER stopmask) /* II-69 */
 {
     EvQEl *qp, *next;
     int x;
@@ -413,8 +407,7 @@ PUBLIC BOOLEAN Executor::ROMlib_bewaremovement;
 
 PUBLIC int Executor::ROMlib_refresh = 0;
 
-A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
-   BOOLEAN, dropit)
+PRIVATE BOOLEAN OSEventCommon(INTEGER evmask, EventRecord * eventp, BOOLEAN dropit)
 {
     EvQEl *qp;
     virtual_int_state_t block;
@@ -610,23 +603,22 @@ A3(PRIVATE, BOOLEAN, OSEventCommon, INTEGER, evmask, EventRecord *, eventp,
     return retval;
 }
 
-A2(PUBLIC trap, BOOLEANRET, GetOSEvent, INTEGER, evmask, EventRecord *, eventp)
+PUBLIC trap BOOLEANRET Executor::GetOSEvent(INTEGER evmask, EventRecord * eventp)
 {
     return OSEventCommon(evmask, eventp, true);
 }
 
-A2(PUBLIC trap, BOOLEANRET, OSEventAvail, INTEGER, evmask,
-   EventRecord *, eventp)
+PUBLIC trap BOOLEANRET Executor::OSEventAvail(INTEGER evmask, EventRecord * eventp)
 {
     return OSEventCommon(evmask, eventp, false);
 }
 
-A1(PUBLIC trap, void, SetEventMask, INTEGER, evmask)
+PUBLIC trap void Executor::SetEventMask(INTEGER evmask)
 {
     SysEvtMask = CW(evmask);
 }
 
-A0(PUBLIC, QHdrPtr, GetEvQHdr)
+PUBLIC QHdrPtr Executor::GetEvQHdr()
 {
     return &EventQueue;
 }

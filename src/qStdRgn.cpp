@@ -666,8 +666,7 @@ Executor::ROMlib_blt_pn(RgnHandle rh, INTEGER mode)
     }
 }
 
-P2(PUBLIC pascal trap, void, StdRgn,
-   GrafVerb, verb, RgnHandle, rgn)
+PUBLIC pascal trap void Executor::C_StdRgn(GrafVerb verb, RgnHandle rgn)
 {
     RgnHandle rh;
     Rect r;

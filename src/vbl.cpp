@@ -53,7 +53,7 @@ PRIVATE TMTask vbltm;
 
 #define VBUSY (1 << 6)
 
-A0(PUBLIC, void, C_ROMlib_vcatch)
+PUBLIC void Executor::C_ROMlib_vcatch()
 {
     VBLTaskPtr vp, next;
     ULONGINT old_ticks, new_ticks, ticks_elapsed;
@@ -155,7 +155,7 @@ stopclock(void)
         ROMlib_clock = CLOCKTEMPON;
 }
 
-A1(PUBLIC, void, ROMlib_clockonoff, LONGINT, onoroff)
+PUBLIC void Executor::ROMlib_clockonoff(LONGINT onoroff)
 {
     if(onoroff)
     {
@@ -167,14 +167,12 @@ A1(PUBLIC, void, ROMlib_clockonoff, LONGINT, onoroff)
         stopclock();
 }
 
-A2(PUBLIC trap, OSErrRET, SlotVInstall,
-   VBLTaskPtr, vtaskp,
-   INTEGER, slot)
+PUBLIC trap OSErrRET Executor::SlotVInstall(VBLTaskPtr vtaskp, INTEGER slot)
 {
     return VInstall(vtaskp);
 }
 
-A1(PUBLIC trap, OSErrRET, VInstall, VBLTaskPtr, vtaskp)
+PUBLIC trap OSErrRET Executor::VInstall(VBLTaskPtr vtaskp)
 {
     static GUEST<uint16_t> m68k_rts = CWC(0x4E75); /* RTS */
 
@@ -198,14 +196,12 @@ A1(PUBLIC trap, OSErrRET, VInstall, VBLTaskPtr, vtaskp)
         return vTypErr;
 }
 
-A2(PUBLIC trap, OSErrRET, SlotVRemove,
-   VBLTaskPtr, vtaskp,
-   INTEGER, slot)
+PUBLIC trap OSErrRET Executor::SlotVRemove(VBLTaskPtr vtaskp, INTEGER slot)
 {
     return VRemove(vtaskp);
 }
 
-A1(PUBLIC trap, OSErrRET, VRemove, VBLTaskPtr, vtaskp)
+PUBLIC trap OSErrRET Executor::VRemove(VBLTaskPtr vtaskp)
 {
     if(vtaskp->qType == CWC((INTEGER)vType))
     {
@@ -223,7 +219,7 @@ A1(PUBLIC trap, OSErrRET, VRemove, VBLTaskPtr, vtaskp)
         return vTypErr;
 }
 
-A0(PUBLIC, QHdrPtr, GetVBLQHdr)
+PUBLIC QHdrPtr Executor::GetVBLQHdr()
 {
     return &VBLQueue;
 }

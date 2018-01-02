@@ -71,12 +71,7 @@ PUBLIC int Executor::ROMlib_delay = 0; /* number of ticks to wait when we
 
 PUBLIC BOOLEAN Executor::ROMlib_beepedonce = false;
 
-namespace Executor
-{
-PRIVATE void ROMlib_togglealarm();
-}
-
-A0(PRIVATE, void, ROMlib_togglealarm)
+PRIVATE void ROMlib_togglealarm()
 {
     Handle alarmh;
     static const unsigned char hard_coded_alarm[] = {
@@ -154,14 +149,13 @@ A0(PRIVATE, void, ROMlib_togglealarm)
     }
 }
 
-A0(PUBLIC, void, ROMlib_alarmoffmbar)
+PUBLIC void Executor::ROMlib_alarmoffmbar()
 {
     if(ROMlib_alarmonmbar)
         ROMlib_togglealarm();
 }
 
-P3(PUBLIC pascal trap, LONGINT, KeyTrans, Ptr, mapp, unsigned short, code,
-   LONGINT *, state)
+PUBLIC pascal trap LONGINT Executor::C_KeyTrans(Ptr mapp, unsigned short code, LONGINT * state)
 {
     LONGINT ascii;
     int table_num;
@@ -902,13 +896,7 @@ PRIVATE void doquitreallyquits(void)
 
 extern void ROMlib_updateworkspace(void);
 
-namespace Executor
-{
-PRIVATE BOOLEAN doevent(INTEGER, EventRecord *, BOOLEAN);
-}
-
-A3(PRIVATE, BOOLEAN, doevent, INTEGER, em, EventRecord *, evt,
-   BOOLEAN, remflag) /* no DA support */
+PRIVATE BOOLEAN doevent(INTEGER em, EventRecord * evt, BOOLEAN remflag) /* no DA support */
 {
     BOOLEAN retval;
     GUEST<ULONGINT> now_s;
@@ -1146,7 +1134,7 @@ done:
     return retval;
 }
 
-P2(PUBLIC pascal trap, BOOLEAN, GetNextEvent, INTEGER, em, EventRecord *, evt)
+PUBLIC pascal trap BOOLEAN Executor::C_GetNextEvent(INTEGER em, EventRecord * evt)
 {
     BOOLEAN retval;
 
@@ -1167,8 +1155,7 @@ P2(PUBLIC pascal trap, BOOLEAN, GetNextEvent, INTEGER, em, EventRecord *, evt)
  *	 we'd never get the mouse moved messages we need)
  */
 
-P4(PUBLIC pascal trap, BOOLEAN, WaitNextEvent, INTEGER, mask,
-   EventRecord *, evp, LONGINT, sleep, RgnHandle, mousergn)
+PUBLIC pascal trap BOOLEAN Executor::C_WaitNextEvent(INTEGER mask, EventRecord * evp, LONGINT sleep, RgnHandle mousergn)
 {
     BOOLEAN retval;
     Point p;
@@ -1202,12 +1189,12 @@ P4(PUBLIC pascal trap, BOOLEAN, WaitNextEvent, INTEGER, mask,
     return retval;
 }
 
-P2(PUBLIC pascal trap, BOOLEAN, EventAvail, INTEGER, em, EventRecord *, evt)
+PUBLIC pascal trap BOOLEAN Executor::C_EventAvail(INTEGER em, EventRecord * evt)
 {
     return (doevent(em, evt, false));
 }
 
-P1(PUBLIC pascal trap, void, GetMouse, GUEST<Point> *, p)
+PUBLIC pascal trap void Executor::C_GetMouse(GUEST<Point> * p)
 {
     EventRecord evt;
 
@@ -1217,7 +1204,7 @@ P1(PUBLIC pascal trap, void, GetMouse, GUEST<Point> *, p)
 }
 
 // FIXME: #warning Button not coded per IM Macintosh Toolbox Essentials 2-108
-P0(PUBLIC pascal trap, BOOLEAN, Button)
+PUBLIC pascal trap BOOLEAN Executor::C_Button()
 {
     EventRecord evt;
     BOOLEAN retval;
@@ -1228,7 +1215,7 @@ P0(PUBLIC pascal trap, BOOLEAN, Button)
 }
 
 // FIXME: #warning StillDown not coded per IM Macintosh Toolbox Essentials 2-109
-P0(PUBLIC pascal trap, BOOLEAN, StillDown) /* IMI-259 */
+PUBLIC pascal trap BOOLEAN Executor::C_StillDown() /* IMI-259 */
 {
     EventRecord evt;
 
@@ -1242,7 +1229,7 @@ P0(PUBLIC pascal trap, BOOLEAN, StillDown) /* IMI-259 */
  * might be retiring soon.
  */
 
-P0(PUBLIC pascal trap, BOOLEAN, WaitMouseUp)
+PUBLIC pascal trap BOOLEAN Executor::C_WaitMouseUp()
 {
     EventRecord evt;
     int retval;
@@ -1253,12 +1240,12 @@ P0(PUBLIC pascal trap, BOOLEAN, WaitMouseUp)
     return (retval);
 }
 
-P1(PUBLIC pascal trap, void, GetKeys, unsigned char *, keys)
+PUBLIC pascal trap void Executor::C_GetKeys(unsigned char * keys)
 {
     BlockMoveData((Ptr)KeyMap, (Ptr)keys, (Size)sizeof_KeyMap);
 }
 
-P0(PUBLIC pascal trap, LONGINT, TickCount)
+PUBLIC pascal trap LONGINT Executor::C_TickCount()
 {
     unsigned long ticks;
     unsigned long new_time;
@@ -1279,12 +1266,12 @@ P0(PUBLIC pascal trap, LONGINT, TickCount)
     return ticks;
 }
 
-A0(PUBLIC, LONGINT, GetDblTime)
+PUBLIC LONGINT Executor::GetDblTime()
 {
     return (Cx(DoubleTime));
 }
 
-A0(PUBLIC, LONGINT, GetCaretTime)
+PUBLIC LONGINT Executor::GetCaretTime()
 {
     return (Cx(CaretTime));
 }

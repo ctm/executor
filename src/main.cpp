@@ -85,16 +85,7 @@
 
 #include "paramline.h"
 
-#if defined(MACOSX_)
-namespace Executor
-{
-void NeXTMain();
-}
-#endif
-namespace Executor
-{
 PRIVATE void setstartdir(char *);
-}
 
 #include <ctype.h>
 
@@ -428,8 +419,7 @@ check_arg(string argname, int *arg, int min, int max)
  *	 It has the side effect of acknowledging the death of other children.
  */
 
-A4(PUBLIC, LONGINT, wait4, LONGINT, pid, union wait *, statusp, LONGINT,
-   options, struct rusage *, rusage)
+PUBLIC LONGINT Executor::wait4(LONGINT pid, union wait * statusp, LONGINT options, struct rusage * rusage)
 {
     LONGINT retval;
 
@@ -474,7 +464,7 @@ set_appname(char *argv0)
     ROMlib_appname = p;
 }
 
-A1(PRIVATE, void, setstartdir, char *, argv0)
+PRIVATE void setstartdir(char * argv0)
 {
 #if !defined(WIN32)
     LONGINT p[2], pid;

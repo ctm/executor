@@ -521,9 +521,7 @@ check_vanddir(INTEGER vref, LONGINT dirid, int descend_count, Str63 library,
  *
  */
 
-P6(PUBLIC pascal trap, OSErr, GetSharedLibrary, Str63, library, OSType, arch,
-   LoadFlags, loadflags, ConnectionID *, cidp, Ptr *, mainaddrp, Str255,
-   errName)
+PUBLIC pascal trap OSErr Executor::C_GetSharedLibrary(Str63 library, OSType arch, LoadFlags loadflags, ConnectionID * cidp, Ptr * mainaddrp, Str255 errName)
 {
     OSErr retval;
 
@@ -577,7 +575,7 @@ P6(PUBLIC pascal trap, OSErr, GetSharedLibrary, Str63, library, OSType, arch,
     return retval;
 }
 
-P1(PUBLIC pascal trap, OSErr, CloseConnection, ConnectionID *, cidp)
+PUBLIC pascal trap OSErr Executor::C_CloseConnection(ConnectionID * cidp)
 {
     warning_trace_info("cidp = %p, cid = 0x%x", cidp, (uint32_t)*cidp);
     return noErr;
@@ -1246,9 +1244,7 @@ ROMlib_new_connection(uint32_t n_sects)
     return retval;
 }
 
-P7(PUBLIC pascal trap, OSErr, GetMemFragment, void *, addr,
-   uint32_t, length, Str63, fragname, LoadFlags, flags,
-   ConnectionID *, connp, Ptr *, mainAddrp, Str255, errname)
+PUBLIC pascal trap OSErr Executor::C_GetMemFragment(void * addr, uint32_t length, Str63 fragname, LoadFlags flags, ConnectionID * connp, Ptr * mainAddrp, Str255 errname)
 {
     OSErr retval;
 
@@ -1502,9 +1498,7 @@ try_to_mmap_file(FSSpecPtr fsp, LONGINT offset, LONGINT length,
     return retval;
 }
 
-P8(PUBLIC pascal trap, OSErr, GetDiskFragment, FSSpecPtr, fsp,
-   LONGINT, offset, LONGINT, length, Str63, fragname, LoadFlags, flags,
-   ConnectionID *, connp, Ptr *, mainAddrp, Str255, errname)
+PUBLIC pascal trap OSErr Executor::C_GetDiskFragment(FSSpecPtr fsp, LONGINT offset, LONGINT length, Str63 fragname, LoadFlags flags, ConnectionID * connp, Ptr * mainAddrp, Str255 errname)
 {
     OSErr retval;
     int context;

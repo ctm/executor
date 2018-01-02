@@ -26,8 +26,7 @@ using namespace Executor;
 #define OUT(y, x) (*op2++ = (*op++ = (y)) + offy, \
                    *op2++ = (*op++ = (x)) + offx)
 
-namespace Executor
-{
+
 PRIVATE void scodydxx1x2(LONGINT y1, INTEGER x1,
                          INTEGER dy, INTEGER dx, INTEGER **opp, INTEGER **opp2,
                          INTEGER offy, INTEGER offx);
@@ -50,11 +49,8 @@ PRIVATE INTEGER *scrdxdyx2x1(INTEGER y1, LONGINT x1,
                              INTEGER dy, INTEGER dx, INTEGER *op);
 PRIVATE void regionify1(INTEGER *ip1,
                         INTEGER *ip2, RgnPtr rp);
-}
 
-A8(PRIVATE, void, scodydxx1x2, LONGINT, y1, INTEGER, x1,
-   INTEGER, dy, INTEGER, dx, INTEGER **, opp, INTEGER **, opp2,
-   INTEGER, offy, INTEGER, offx)
+PRIVATE void scodydxx1x2(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER ** opp, INTEGER ** opp2, INTEGER offy, INTEGER offx)
 {
     INTEGER *op, *op2;
     INTEGER x2;
@@ -89,8 +85,7 @@ A8(PRIVATE, void, scodydxx1x2, LONGINT, y1, INTEGER, x1,
                          *op++ = CW_RAW(x2), \
                          *op++ = RGN_STOP_X)
 
-A5(PRIVATE, INTEGER *, scrdydxx1x2, LONGINT, y1, INTEGER, x1,
-   INTEGER, dy, INTEGER, dx, INTEGER *, op)
+PRIVATE INTEGER * scrdydxx1x2(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER * op)
 {
     INTEGER x2;
     LONGINT incr;
@@ -118,9 +113,7 @@ A5(PRIVATE, INTEGER *, scrdydxx1x2, LONGINT, y1, INTEGER, x1,
     return op;
 }
 
-A8(PRIVATE, void, scodydxx2x1, LONGINT, y1, INTEGER, x1,
-   INTEGER, dy, INTEGER, dx, INTEGER **, opp, INTEGER **, opp2,
-   INTEGER, offy, INTEGER, offx)
+PRIVATE void scodydxx2x1(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER ** opp, INTEGER ** opp2, INTEGER offy, INTEGER offx)
 {
     INTEGER x2;
     LONGINT incr;
@@ -150,8 +143,7 @@ A8(PRIVATE, void, scodydxx2x1, LONGINT, y1, INTEGER, x1,
     *opp2 = op2;
 }
 
-A5(PRIVATE, INTEGER *, scrdydxx2x1, LONGINT, y1, INTEGER, x1,
-   INTEGER, dy, INTEGER, dx, INTEGER *, op)
+PRIVATE INTEGER * scrdydxx2x1(LONGINT y1, INTEGER x1, INTEGER dy, INTEGER dx, INTEGER * op)
 {
     INTEGER x2;
     LONGINT incr;
@@ -175,9 +167,7 @@ A5(PRIVATE, INTEGER *, scrdydxx2x1, LONGINT, y1, INTEGER, x1,
     return op;
 }
 
-A8(PRIVATE, void, scodxdyx1x2, INTEGER, y1, LONGINT, x1,
-   INTEGER, dy, INTEGER, dx, INTEGER **, opp,
-   INTEGER **, opp2, INTEGER, offy, INTEGER, offx)
+PRIVATE void scodxdyx1x2(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER ** opp, INTEGER ** opp2, INTEGER offy, INTEGER offx)
 {
     INTEGER y2;
     LONGINT incr;
@@ -197,8 +187,7 @@ A8(PRIVATE, void, scodxdyx1x2, INTEGER, y1, LONGINT, x1,
     *opp2 = op2;
 }
 
-A5(PRIVATE, INTEGER *, scrdxdyx1x2, INTEGER, y1, LONGINT, x1,
-   INTEGER, dy, INTEGER, dx, INTEGER *, op)
+PRIVATE INTEGER * scrdxdyx1x2(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER * op)
 {
     INTEGER y2, ox, x2;
     LONGINT incr;
@@ -226,9 +215,7 @@ A5(PRIVATE, INTEGER *, scrdxdyx1x2, INTEGER, y1, LONGINT, x1,
     return op;
 }
 
-A8(PRIVATE, void, scodxdyx2x1, INTEGER, y1, LONGINT, x1,
-   INTEGER, dy, INTEGER, dx, INTEGER **, opp,
-   INTEGER **, opp2, INTEGER, offy, INTEGER, offx)
+PRIVATE void scodxdyx2x1(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER ** opp, INTEGER ** opp2, INTEGER offy, INTEGER offx)
 {
     INTEGER y2;
     LONGINT incr;
@@ -248,8 +235,7 @@ A8(PRIVATE, void, scodxdyx2x1, INTEGER, y1, LONGINT, x1,
     *opp2 = op2;
 }
 
-A5(PRIVATE, INTEGER *, scrdxdyx2x1, INTEGER, y1, LONGINT, x1,
-   INTEGER, dy, INTEGER, dx, INTEGER *, op)
+PRIVATE INTEGER * scrdxdyx2x1(INTEGER y1, LONGINT x1, INTEGER dy, INTEGER dx, INTEGER * op)
 {
     INTEGER y2, ox;
     LONGINT incr;
@@ -272,8 +258,7 @@ A5(PRIVATE, INTEGER *, scrdxdyx2x1, INTEGER, y1, LONGINT, x1,
  *	 pairs.  2)  the start stop pairs are kept in native endianness.
  */
 
-A3(PRIVATE, void, regionify1, INTEGER *, ip1,
-   INTEGER *, ip2, RgnPtr, rp)
+PRIVATE void regionify1(INTEGER * ip1, INTEGER * ip2, RgnPtr rp)
 {
     INTEGER *tempp;
     INTEGER *op;
@@ -341,7 +326,7 @@ A3(PRIVATE, void, regionify1, INTEGER *, ip1,
 #define SWAP std::swap
 #define MAXNPOINTS(dy) ((dy + 3) * 2 + 1)
 
-P1(PUBLIC pascal trap, void, StdLine, Point, p)
+PUBLIC pascal trap void Executor::C_StdLine(Point p)
 {
     INTEGER x1, x2, y1, y2, px, py, dx, dy;
     INTEGER *oip;

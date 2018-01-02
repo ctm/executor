@@ -25,19 +25,15 @@
 
 using namespace Executor;
 
-P0(PUBLIC pascal trap, PScrapStuff, InfoScrap)
+PUBLIC pascal trap PScrapStuff Executor::C_InfoScrap()
 {
     if(Cx(ScrapState) < 0)
         ZeroScrap();
     return ((PScrapStuff)&ScrapSize);
 }
 
-namespace Executor
-{
-PRIVATE OSErr cropen(INTEGER *);
-}
 
-A1(PRIVATE, OSErr, cropen, INTEGER *, fp)
+PRIVATE OSErr cropen(INTEGER * fp)
 {
     OSErr retval;
 
@@ -52,7 +48,7 @@ A1(PRIVATE, OSErr, cropen, INTEGER *, fp)
     return (retval);
 }
 
-P0(PUBLIC pascal trap, LONGINT, UnloadScrap)
+PUBLIC pascal trap LONGINT Executor::C_UnloadScrap()
 {
     OSErr retval;
     INTEGER f;
@@ -76,7 +72,7 @@ P0(PUBLIC pascal trap, LONGINT, UnloadScrap)
     return noErr;
 }
 
-P0(PUBLIC pascal trap, LONGINT, LoadScrap)
+PUBLIC pascal trap LONGINT Executor::C_LoadScrap()
 {
     OSErr retval;
     INTEGER f;
@@ -104,7 +100,7 @@ P0(PUBLIC pascal trap, LONGINT, LoadScrap)
     return (Cx(ScrapState) > 0 ? noErr : noScrapErr);
 }
 
-A0(PUBLIC, LONGINT, ROMlib_ZeroScrap)
+PUBLIC LONGINT Executor::ROMlib_ZeroScrap()
 {
     OSErr retval;
     INTEGER f;
@@ -137,12 +133,12 @@ A0(PUBLIC, LONGINT, ROMlib_ZeroScrap)
     return noErr;
 }
 
-P0(PUBLIC pascal trap, LONGINT, ZeroScrap)
+PUBLIC pascal trap LONGINT Executor::C_ZeroScrap()
 {
     return ROMlib_ZeroScrap();
 }
 
-P3(PUBLIC pascal trap, LONGINT, PutScrap, LONGINT, len, ResType, rest, Ptr, p)
+PUBLIC pascal trap LONGINT Executor::C_PutScrap(LONGINT len, ResType rest, Ptr p)
 {
     OSErr retval;
     LONGINT l;
@@ -247,8 +243,7 @@ get_scrap_helper(void *vh, void *lp, int len, bool convert_text)
 
 #define RETURN(x) return (temph ? (DisposHandle(temph), 0) : 0), x
 
-P3(PUBLIC pascal trap, LONGINT, GetScrap, Handle, h, ResType, rest,
-   GUEST<LONGINT> *, off)
+PUBLIC pascal trap LONGINT Executor::C_GetScrap(Handle h, ResType rest, GUEST<LONGINT> * off)
 {
     OSErr retval;
     LONGINT l = 0, incr, s, ltoread;

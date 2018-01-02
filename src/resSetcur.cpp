@@ -10,7 +10,7 @@
 
 using namespace Executor;
 
-P0(PUBLIC pascal trap, INTEGER, CurResFile)
+PUBLIC pascal trap INTEGER Executor::C_CurResFile()
 {
     ROMlib_setreserr(noErr);
     return (Cx(CurMap));
@@ -19,8 +19,8 @@ P0(PUBLIC pascal trap, INTEGER, CurResFile)
 /* ROMlib_findmapres:
       does same as ROMlib_findres (see below) except map is specified */
 
-A4(PUBLIC, OSErr, ROMlib_findmapres, resmaphand, map, Handle, r, /* INTERNAL */
-   typref **, trp, resref **, rrp)
+PUBLIC OSErr Executor::ROMlib_findmapres(resmaphand map, Handle r, /* INTERNAL */
+   typref ** trp, resref ** rrp)
 {
     INTEGER i, j;
     typref *tr;
@@ -42,8 +42,8 @@ A4(PUBLIC, OSErr, ROMlib_findmapres, resmaphand, map, Handle, r, /* INTERNAL */
              *trp, *rrp with the Handle to the map, and pointers to
              the typref and the resref */
 
-A4(PUBLIC, OSErr, ROMlib_findres, Handle, r, resmaphand *, mapp, /* INTERNAL */
-   typref **, trp, resref **, rrp)
+PUBLIC OSErr Executor::ROMlib_findres(Handle r, resmaphand * mapp, /* INTERNAL */
+   typref ** trp, resref ** rrp)
 {
     resmaphand map;
 
@@ -59,7 +59,7 @@ A4(PUBLIC, OSErr, ROMlib_findres, Handle, r, resmaphand *, mapp, /* INTERNAL */
     return (resNotFound);
 }
 
-P1(PUBLIC pascal trap, INTEGER, HomeResFile, Handle, res)
+PUBLIC pascal trap INTEGER Executor::C_HomeResFile(Handle res)
 {
     resmaphand map;
     typref *tr;
@@ -72,7 +72,7 @@ P1(PUBLIC pascal trap, INTEGER, HomeResFile, Handle, res)
         return (Hx(map, resfn));
 }
 
-P1(PUBLIC pascal trap, void, UseResFile, INTEGER, rn)
+PUBLIC pascal trap void Executor::C_UseResFile(INTEGER rn)
 {
     Handle map;
 

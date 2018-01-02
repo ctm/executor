@@ -64,7 +64,7 @@ PUBLIC QHdrPtr myGetVCBQHdr( void )
  *	  we're looking at hfs or ufs stuff.
  */
 
-A2(PUBLIC trap, OSErrRET, PBGetFCBInfo, FCBPBPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBGetFCBInfo(FCBPBPtr pb, BOOLEAN async)
 {
     filecontrolblock *fcbp, *efcbp;
     INTEGER i;

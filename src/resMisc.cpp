@@ -11,7 +11,7 @@
 
 using namespace Executor;
 
-A1(PUBLIC, INTEGER, ROMlib_setreserr, INTEGER, reserr) /* INTERNAL */
+PUBLIC INTEGER Executor::ROMlib_setreserr(INTEGER reserr) /* INTERNAL */
 {
     ResErr = CW(reserr);
     if(ResErr != CWC(noErr) && ResErrProc)
@@ -25,12 +25,12 @@ A1(PUBLIC, INTEGER, ROMlib_setreserr, INTEGER, reserr) /* INTERNAL */
     return CW(ResErr);
 }
 
-P0(PUBLIC pascal trap, INTEGER, ResError)
+PUBLIC pascal trap INTEGER Executor::C_ResError()
 {
     return CW(ResErr);
 }
 
-P1(PUBLIC pascal trap, INTEGER, GetResFileAttrs, INTEGER, rn)
+PUBLIC pascal trap INTEGER Executor::C_GetResFileAttrs(INTEGER rn)
 {
     resmaphand map;
 
@@ -45,7 +45,7 @@ P1(PUBLIC pascal trap, INTEGER, GetResFileAttrs, INTEGER, rn)
         return (Hx(map, resfatr));
 }
 
-P2(PUBLIC pascal trap, void, SetResFileAttrs, INTEGER, rn, INTEGER, attrs)
+PUBLIC pascal trap void Executor::C_SetResFileAttrs(INTEGER rn, INTEGER attrs)
 {
     resmaphand map;
 

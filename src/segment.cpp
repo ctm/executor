@@ -64,12 +64,12 @@ using namespace Executor;
 
 PUBLIC int Executor::ROMlib_cacheheuristic = false;
 
-A0(PUBLIC, void, flushcache)
+PUBLIC void Executor::flushcache()
 {
     ROMlib_destroy_blocks((syn68k_addr_t)0, (uint32_t)~0, true);
 }
 
-A2(PUBLIC trap, void, HWPriv, LONGINT, d0, LONGINT, a0)
+PUBLIC trap void Executor::HWPriv(LONGINT d0, LONGINT a0)
 {
     static char d_cache_enabled = true, i_cache_enabled = true;
     int new_state;
@@ -116,7 +116,7 @@ A2(PUBLIC trap, void, HWPriv, LONGINT, d0, LONGINT, a0)
     }
 }
 
-A1(PUBLIC, char *, ROMlib_undotdot, char *, origp)
+PUBLIC char * Executor::ROMlib_undotdot(char * origp)
 {
     int dotcount, nleft;
     char *p, *oldloc;
@@ -309,13 +309,11 @@ colon_colon_copy(StringPtr dst, const char *src)
         retval;                                                         \
     })
 
-namespace Executor
-{
+
 PRIVATE BOOLEAN argv_to_appfile(char *, AppFile *);
 PUBLIC void ROMlib_seginit(LONGINT, char **); /* INTERNAL */
-}
 
-A2(PRIVATE, BOOLEAN, argv_to_appfile, char *, uname, AppFile *, ap)
+PRIVATE BOOLEAN argv_to_appfile(char * uname, AppFile * ap)
 {
     int namelen, pathlen;
     unsigned char *path, *p;
@@ -445,7 +443,7 @@ PUBLIC int Executor::ROMlib_print;
 #define PATH_SEPARATER ';'
 #endif
 
-A2(PUBLIC, void, ROMlib_seginit, LONGINT, argc, char **, argv) /* INTERNAL */
+PUBLIC void Executor::ROMlib_seginit(LONGINT argc, char ** argv) /* INTERNAL */
 {
     char *path, *firstcolon;
     char *fullpathname;
@@ -562,8 +560,7 @@ A2(PUBLIC, void, ROMlib_seginit, LONGINT, argc, char **, argv) /* INTERNAL */
         }
 }
 
-A2(PUBLIC, void, CountAppFiles, GUEST<INTEGER> *, messagep,
-   GUEST<INTEGER> *, countp) /* IMII-57 */
+PUBLIC void Executor::CountAppFiles(GUEST<INTEGER> * messagep, GUEST<INTEGER> * countp) /* IMII-57 */
 {
     if(AppParmHandle)
     {
@@ -576,12 +573,12 @@ A2(PUBLIC, void, CountAppFiles, GUEST<INTEGER> *, messagep,
         *countp = 0;
 }
 
-A2(PUBLIC, void, GetAppFiles, INTEGER, index, AppFile *, filep) /* IMII-58 */
+PUBLIC void Executor::GetAppFiles(INTEGER index, AppFile * filep) /* IMII-58 */
 {
     *filep = STARH((finderinfohand)MR(AppParmHandle))->files[index - 1];
 }
 
-A1(PUBLIC, void, ClrAppFiles, INTEGER, index) /* IMII-58 */
+PUBLIC void Executor::ClrAppFiles(INTEGER index) /* IMII-58 */
 {
     if(STARH((finderinfohand)MR(AppParmHandle))->files[index - 1].fType)
     {
@@ -590,8 +587,8 @@ A1(PUBLIC, void, ClrAppFiles, INTEGER, index) /* IMII-58 */
     }
 }
 
-P3(PUBLIC pascal trap, void, GetAppParms, StringPtr, namep, /* IMII-58 */
-   GUEST<INTEGER> *, rnp, GUEST<Handle> *, aphandp)
+PUBLIC pascal trap void Executor::C_GetAppParms(StringPtr namep, /* IMII-58 */
+   GUEST<INTEGER> * rnp, GUEST<Handle> * aphandp)
 {
     str255assign(namep, CurApName);
     *rnp = CurApRefNum;
@@ -626,7 +623,7 @@ PRIVATE void launch_browser(void)
     Launch(FinderName, CW(BootDrive));
 }
 
-P0(PUBLIC pascal trap, void, ExitToShell)
+PUBLIC pascal trap void Executor::C_ExitToShell()
 {
     static char beenhere = false;
     ALLOCABEGIN
@@ -769,7 +766,7 @@ P0(PUBLIC pascal trap, void, ExitToShell)
 
 #if !defined(BINCOMPAT)
 
-P1(PUBLIC pascal trap, void, UnloadSeg, Ptr, addr) /* INTERNAL */
+PUBLIC pascal trap void Executor::C_UnloadSeg(Ptr addr) /* INTERNAL */
 {
     /* NOP */
 }
@@ -780,7 +777,7 @@ P1(PUBLIC pascal trap, void, UnloadSeg, Ptr, addr) /* INTERNAL */
 #define MOVESPINSTR 0x3F3C
 #define LOADSEGTRAP 0xA9F0
 
-P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
+PUBLIC pascal trap void Executor::C_LoadSeg(INTEGER volatile segno)
 {
     Handle newcode;
     unsigned short offbytes;
@@ -827,12 +824,7 @@ P1(PUBLIC pascal trap, void, LoadSeg, INTEGER volatile, segno)
 
 #define SEGNOOFP(p) (CW(((GUEST<INTEGER> *)p)[-1]))
 
-namespace Executor
-{
-PRIVATE void unpatch(Ptr, Ptr);
-}
-
-A2(PRIVATE, void, unpatch, Ptr, segstart, Ptr, p)
+PRIVATE void unpatch(Ptr segstart, Ptr p)
 {
     GUEST<INTEGER> *ip;
     Ptr firstpc;
@@ -846,7 +838,7 @@ A2(PRIVATE, void, unpatch, Ptr, segstart, Ptr, p)
     ip[2] = CWC(LOADSEGTRAP);
 }
 
-P1(PUBLIC pascal trap, void, UnloadSeg, Ptr, addr)
+PUBLIC pascal trap void Executor::C_UnloadSeg(Ptr addr)
 {
     Ptr p, segstart;
     char *top, *bottom;

@@ -124,8 +124,6 @@ typedef struct
     void* mydata;
 } fltype;
 
-namespace Executor
-{
 PRIVATE INTEGER movealert(INTEGER);
 PRIVATE void drawminiicon(INTEGER);
 PRIVATE void drawinboxwithicon(StringPtr, Rect *, INTEGER);
@@ -155,9 +153,9 @@ PRIVATE void bumpsavedisk(DialogPtr, BOOLEAN);
 PRIVATE void transformsfpdialog(DialogPtr, Point *, Rect *, BOOLEAN);
 PRIVATE void doeject(DialogPtr);
 PRIVATE GUEST<OSType> gettypeX(StringPtr, INTEGER, LONGINT);
-}
 
-A1(PRIVATE, INTEGER, movealert, INTEGER, id)
+
+PRIVATE INTEGER movealert(INTEGER id)
 {
     Handle h;
     INTEGER dh, dv;
@@ -178,7 +176,7 @@ A1(PRIVATE, INTEGER, movealert, INTEGER, id)
 
 #define SICONS -15744
 
-A1(PRIVATE, void, drawminiicon, INTEGER, icon)
+PRIVATE void drawminiicon(INTEGER icon)
 {
     Handle h;
     BitMap bm;
@@ -207,7 +205,7 @@ A1(PRIVATE, void, drawminiicon, INTEGER, icon)
  *	  text, not the real bottom.
  */
 
-A3(PRIVATE, void, drawinboxwithicon, StringPtr, str, Rect *, rp, INTEGER, icon)
+PRIVATE void drawinboxwithicon(StringPtr str, Rect * rp, INTEGER icon)
 {
     Rect r;
     INTEGER width, strlen, lengthavail;
@@ -250,7 +248,7 @@ A3(PRIVATE, void, drawinboxwithicon, StringPtr, str, Rect *, rp, INTEGER, icon)
     ClipRect(&r);
 }
 
-A2(PRIVATE, void, safeflflip, fltype *, f, INTEGER, sel)
+PRIVATE void safeflflip(fltype * f, INTEGER sel)
 {
     Rect r;
     INTEGER fltop = GetCtlValue(f->flsh);
@@ -271,7 +269,7 @@ A2(PRIVATE, void, safeflflip, fltype *, f, INTEGER, sel)
 #define GRAYBIT (1 << 5)
 #define ICONMASK (~GRAYBIT)
 
-A3(PRIVATE, void, flupdate, fltype *, f, INTEGER, st, INTEGER, n)
+PRIVATE void flupdate(fltype * f, INTEGER st, INTEGER n)
 {
     INTEGER i;
     fltype::flinfostr *ip;
@@ -309,7 +307,7 @@ A3(PRIVATE, void, flupdate, fltype *, f, INTEGER, st, INTEGER, n)
         safeflflip(f, sel);
 }
 
-A3(PRIVATE, void, flscroll, fltype *, f, INTEGER, from, INTEGER, to)
+PRIVATE void flscroll(fltype * f, INTEGER from, INTEGER to)
 {
     RgnHandle rh;
     INTEGER toscroll;
@@ -364,7 +362,7 @@ WINDFL(void *dp)
     ((fltype *)(long)MR(((WindowPeek)dp)->refCon))
 #endif
 
-P2(PUBLIC, pascal void, ROMlib_stdftrack, ControlHandle, sh, INTEGER, part)
+PUBLIC pascal void Executor::C_ROMlib_stdftrack(ControlHandle sh, INTEGER part)
 {
     const uint32_t min_between_scroll_msecs = 100;
     static uint32_t last_scroll_msecs;
@@ -415,8 +413,7 @@ PUBLIC void Executor::ROMlib_init_stdfile(void)
     holdstr = 0;
 }
 
-A2(PRIVATE, StringPtr, getdiskname, BOOLEAN *, ejectablep,
-   bool *, writablep)
+PRIVATE StringPtr getdiskname(BOOLEAN * ejectablep, bool * writablep)
 {
     static BOOLEAN ejectable;
     static bool writable;
@@ -453,7 +450,7 @@ A2(PRIVATE, StringPtr, getdiskname, BOOLEAN *, ejectablep,
     return retval;
 }
 
-A1(PRIVATE, void, drawjobberattop, DialogPeek, dp)
+PRIVATE void drawjobberattop(DialogPeek dp)
 {
     INTEGER icon;
     Rect *rp;
@@ -491,7 +488,7 @@ A1(PRIVATE, void, drawjobberattop, DialogPeek, dp)
     SetPenState(&ps);
 }
 
-A1(PRIVATE, LONGINT, getdirid, StringPtr, fname)
+PRIVATE LONGINT getdirid(StringPtr fname)
 {
     CInfoPBRec hpb;
     LONGINT retval;
@@ -536,7 +533,7 @@ set_type_and_name(fltype *f, OSType type, Str255 name)
     }
 }
 
-A2(PRIVATE, void, settype, fltype *, f, INTEGER, newsel)
+PRIVATE void settype(fltype * f, INTEGER newsel)
 {
     StringPtr ip;
 
@@ -547,7 +544,7 @@ A2(PRIVATE, void, settype, fltype *, f, INTEGER, newsel)
         set_type_and_name(f, 0, ip);
 }
 
-A2(PRIVATE, INTEGER, flwhich, fltype *, f, Point, p)
+PRIVATE INTEGER flwhich(fltype * f, Point p)
 {
     INTEGER retval;
     INTEGER bump, from;
@@ -573,7 +570,7 @@ A2(PRIVATE, INTEGER, flwhich, fltype *, f, Point, p)
     return (retval);
 }
 
-A3(PRIVATE, void, flmouse, fltype *, f, Point, p, ControlHandle, ch)
+PRIVATE void flmouse(fltype * f, Point p, ControlHandle ch)
 {
     INTEGER newsel;
     EventRecord evt;
@@ -607,7 +604,7 @@ A3(PRIVATE, void, flmouse, fltype *, f, Point, p, ControlHandle, ch)
     } while(!GetNextEvent(mUpMask, &evt));
 }
 
-A1(PRIVATE, void, getcurname, fltype *, f)
+PRIVATE void getcurname(fltype * f)
 {
     int w;
     CInfoPBRec hpb;
@@ -645,14 +642,14 @@ A1(PRIVATE, void, getcurname, fltype *, f)
 #endif /* 1 */
 }
 
-A1(PRIVATE, void, flfinit, fltype *, fp)
+PRIVATE void flfinit(fltype * fp)
 {
     DisposeControl(fp->flsh);
     DisposHandle((Handle)fp->flinfo);
     DisposHandle((Handle)fp->flstrs);
 }
 
-A3(PRIVATE, void, flinsert, fltype *, f, StringPtr, p, INTEGER, micon)
+PRIVATE void flinsert(fltype * f, StringPtr p, INTEGER micon)
 {
     fltype::flinfostr finfo;
 
@@ -664,7 +661,7 @@ A3(PRIVATE, void, flinsert, fltype *, f, StringPtr, p, INTEGER, micon)
     ++f->flnmfil;
 }
 
-A3(PRIVATE, int, typeinarray, GUEST<OSType>, ft, INTEGER, numt, GUEST<SFTypeList>, tl)
+PRIVATE int typeinarray(GUEST<OSType> ft, INTEGER numt, GUEST<SFTypeList> tl)
 {
     GUEST<OSType> *ostp = tl;
 
@@ -691,7 +688,7 @@ static LONGINT stdfcmpC(const void *ip1, const void *ip2)
     return retval;
 }
 
-A2(PRIVATE, LONGINT, stdfcmp, char *, ip1, char *, ip2)
+PRIVATE LONGINT stdfcmp(char * ip1, char * ip2)
 {
     return stdfcmpC(ip1, ip2);
 }
@@ -729,7 +726,7 @@ passes_filter(fltype *f, CInfoPBRec *cinfop, INTEGER numt)
     return retval;
 }
 
-A1(PRIVATE, void, flfill, fltype *, f)
+PRIVATE void flfill(fltype * f)
 {
     CInfoPBRec pb;
     OSErr err;
@@ -807,7 +804,7 @@ A1(PRIVATE, void, flfill, fltype *, f)
  * dotted line (whopee!)
  */
 
-P2(PUBLIC, pascal void, ROMlib_filebox, DialogPeek, dp, INTEGER, which)
+PUBLIC pascal void Executor::C_ROMlib_filebox(DialogPeek dp, INTEGER which)
 {
     GUEST<Handle> h;
     Rect r, r2;
@@ -861,7 +858,7 @@ P2(PUBLIC, pascal void, ROMlib_filebox, DialogPeek, dp, INTEGER, which)
     SetPenState(&ps);
 }
 
-A2(PRIVATE, void, realcd, DialogPeek, dp, LONGINT, dir)
+PRIVATE void realcd(DialogPeek dp, LONGINT dir)
 {
     fltype *fp;
 
@@ -888,7 +885,7 @@ A2(PRIVATE, void, realcd, DialogPeek, dp, LONGINT, dir)
         C_ROMlib_filebox(dp, getNmList);
 }
 
-A1(PRIVATE, LONGINT, getparent, LONGINT, dirid)
+PRIVATE LONGINT getparent(LONGINT dirid)
 {
     OSErr err;
     CInfoPBRec cb;
@@ -947,7 +944,7 @@ PRIVATE BOOLEAN findparent(GUEST<INTEGER> *vrefp, GUEST<LONGINT> *diridp)
     return retval;
 }
 
-A1(PRIVATE, BOOLEAN, moveuponedir, DialogPtr, dp)
+PRIVATE BOOLEAN moveuponedir(DialogPtr dp)
 {
     LONGINT parent;
     GUEST<INTEGER> vrn;
@@ -1083,8 +1080,7 @@ call_magicfp(fltype *fl, DialogPtr dp, EventRecord *evt, GUEST<INTEGER> *ith)
 
 #define keydownbit 0x1000
 
-P3(PUBLIC, pascal INTEGER, ROMlib_stdffilt, DialogPeek, dp,
-   EventRecord *, evt, GUEST<INTEGER> *, ith) /* handle disk insert */
+PUBLIC pascal INTEGER Executor::C_ROMlib_stdffilt(DialogPeek dp, EventRecord * evt, GUEST<INTEGER> * ith) /* handle disk insert */
 {
     LONGINT ticks;
     GUEST<INTEGER> i;
@@ -1266,7 +1262,7 @@ P3(PUBLIC, pascal INTEGER, ROMlib_stdffilt, DialogPeek, dp,
     return retval ? retval : retval2;
 }
 
-A3(PRIVATE, void, flinit, fltype *, f, Rect *, r, ControlHandle, sh)
+PRIVATE void flinit(fltype * f, Rect * r, ControlHandle sh)
 {
     FontInfo fi;
     GUEST<THz> savezone;
@@ -1292,7 +1288,7 @@ A3(PRIVATE, void, flinit, fltype *, f, Rect *, r, ControlHandle, sh)
     TheZone = savezone;
 }
 
-A3(PRIVATE, void, stdfflip, Rect *, rp, INTEGER, n, INTEGER, height)
+PRIVATE void stdfflip(Rect * rp, INTEGER n, INTEGER height)
 {
     GUEST<INTEGER> savetop = rp->top;
 
@@ -1302,7 +1298,7 @@ A3(PRIVATE, void, stdfflip, Rect *, rp, INTEGER, n, INTEGER, height)
     rp->top = savetop;
 }
 
-A1(PRIVATE, BOOLEAN, trackdirs, DialogPeek, dp)
+PRIVATE BOOLEAN trackdirs(DialogPeek dp)
 {
     WRAPPER_PIXMAP_FOR_COPY(wrapper);
     PixMapHandle save_bits;
@@ -1547,7 +1543,7 @@ makeworking(fltype *f)
     }
 }
 
-A1(PRIVATE, BOOLEAN, ejected, HParmBlkPtr, pb)
+PRIVATE BOOLEAN ejected(HParmBlkPtr pb)
 {
     return pb->volumeParam.ioVDrvInfo == CWC(0);
 }
@@ -1771,7 +1767,7 @@ PUBLIC void Executor::futzwithdosdisks(void)
 #endif
 }
 
-A2(PRIVATE, void, bumpsavedisk, DialogPtr, dp, BOOLEAN, always)
+PRIVATE void bumpsavedisk(DialogPtr dp, BOOLEAN always)
 {
     GUEST<INTEGER> current;
     HParamBlockRec pb;
@@ -1878,8 +1874,7 @@ ROMlib_CALLDHOOK(fltype *fl, INTEGER ihit, DialogPtr dp, dialog_hook_u dhu)
     return retval;
 }
 
-A4(PRIVATE, void, transformsfpdialog, DialogPtr, dp, Point *, offset,
-   Rect *, scrollrect, BOOLEAN, getting)
+PRIVATE void transformsfpdialog(DialogPtr dp, Point * offset, Rect * scrollrect, BOOLEAN getting)
 {
     INTEGER numitems, windheight, i, j, extrasizeneeded;
     GUEST<INTEGER> swapped_itype;
@@ -1959,14 +1954,14 @@ void adjustdrivebutton(DialogPtr dp)
     HiliteControl((ControlHandle)drhand, count > 1 ? 0 : 255);
 }
 
-A1(PRIVATE, void, doeject, DialogPtr, dp)
+PRIVATE void doeject(DialogPtr dp)
 {
     Eject((StringPtr) "", -CW(SFSaveDisk));
     adjustdrivebutton(dp);
     bumpsavedisk(dp, true);
 }
 
-A3(PRIVATE, GUEST<OSType>, gettypeX, StringPtr, name, INTEGER, vref, LONGINT, dirid)
+PRIVATE GUEST<OSType> gettypeX(StringPtr name, INTEGER vref, LONGINT dirid)
 {
     OSErr err;
     HParamBlockRec pbr;
@@ -2042,7 +2037,7 @@ unixcore(StringPtr namep, INTEGER *vrefnump, LONGINT *diridp)
     return err;
 }
 
-P1(PUBLIC pascal trap, OSErr, unixmount, CInfoPBRec *, cbp)
+PUBLIC pascal trap OSErr Executor::C_unixmount(CInfoPBRec * cbp)
 {
     OSErr err;
 
@@ -2677,8 +2672,7 @@ PUBLIC void spfcommon(Point p, StringPtr prompt, StringPtr name,
     
 }
 
-P7(PUBLIC pascal trap, void, SFPPutFile, Point, p, StringPtr, prompt,
-   StringPtr, name, DlgHookProcPtr, dh, SFReply *, rep, INTEGER, dig, ModalFilterProcPtr, fp)
+PUBLIC pascal trap void Executor::C_SFPPutFile(Point p, StringPtr prompt, StringPtr name, DlgHookProcPtr dh, SFReply * rep, INTEGER dig, ModalFilterProcPtr fp)
 {
     dialog_hook_u dhu;
     reply_u repu;
@@ -2693,15 +2687,12 @@ P7(PUBLIC pascal trap, void, SFPPutFile, Point, p, StringPtr, prompt,
               nullptr, put, original_sf, 0, 0, 0);
 }
 
-P5(PUBLIC pascal trap, void, SFPutFile, Point, p, StringPtr, prompt,
-   StringPtr, name, DlgHookProcPtr, dh, SFReply *, rep)
+PUBLIC pascal trap void Executor::C_SFPutFile(Point p, StringPtr prompt, StringPtr name, DlgHookProcPtr dh, SFReply * rep)
 {
     SFPPutFile(p, prompt, name, dh, rep, putDlgID, nullptr);
 }
 
-P9(PUBLIC pascal trap, void, SFPGetFile, Point, p, StringPtr, prompt,
-   FileFilterProcPtr, filef, INTEGER, numt, GUEST<SFTypeList>, tl, DlgHookProcPtr, dh,
-   SFReply *, rep, INTEGER, dig, ModalFilterProcPtr, fp)
+PUBLIC pascal trap void Executor::C_SFPGetFile(Point p, StringPtr prompt, FileFilterProcPtr filef, INTEGER numt, GUEST<SFTypeList> tl, DlgHookProcPtr dh, SFReply * rep, INTEGER dig, ModalFilterProcPtr fp)
 {
     dialog_hook_u dhu;
     reply_u repu;
@@ -2717,16 +2708,12 @@ P9(PUBLIC pascal trap, void, SFPGetFile, Point, p, StringPtr, prompt,
               numt, tl, get, original_sf, 0, 0, 0);
 }
 
-P7(PUBLIC pascal trap, void, SFGetFile, Point, p, StringPtr, prompt,
-   FileFilterProcPtr, filef, INTEGER, numt, GUEST<SFTypeList>, tl, DlgHookProcPtr, dh, SFReply *, rep)
+PUBLIC pascal trap void Executor::C_SFGetFile(Point p, StringPtr prompt, FileFilterProcPtr filef, INTEGER numt, GUEST<SFTypeList> tl, DlgHookProcPtr dh, SFReply * rep)
 {
     SFPGetFile(p, prompt, filef, numt, tl, dh, rep, getDlgID, nullptr);
 }
 
-P10(PUBLIC pascal trap, void, CustomPutFile, Str255, prompt,
-    Str255, defaultName, StandardFileReply *, replyp, INTEGER, dlgid,
-    Point, where, DlgHookYDProcPtr, dlghook, ModalFilterYDProcPtr, filterproc,
-    Ptr, activeList, ActivateYDProcPtr, activateproc, void*, yourdatap)
+PUBLIC pascal trap void Executor::C_CustomPutFile(Str255 prompt, Str255 defaultName, StandardFileReply * replyp, INTEGER dlgid, Point where, DlgHookYDProcPtr dlghook, ModalFilterYDProcPtr filterproc, Ptr activeList, ActivateYDProcPtr activateproc, void* yourdatap)
 {
     dialog_hook_u dhu;
     reply_u repu;
@@ -2746,11 +2733,7 @@ P10(PUBLIC pascal trap, void, CustomPutFile, Str255, prompt,
               activateproc, yourdatap);
 }
 
-P11(PUBLIC pascal trap, void, CustomGetFile, FileFilterYDProcPtr, filefilter,
-    INTEGER, numtypes, GUEST<SFTypeList>, typelist, StandardFileReply *, replyp,
-    INTEGER, dlgid, Point, where, DlgHookYDProcPtr, dlghook,
-    ModalFilterYDProcPtr, filterproc, Ptr, activeList,
-    ActivateYDProcPtr, activateproc, void*, yourdatap)
+PUBLIC pascal trap void Executor::C_CustomGetFile(FileFilterYDProcPtr filefilter, INTEGER numtypes, GUEST<SFTypeList> typelist, StandardFileReply * replyp, INTEGER dlgid, Point where, DlgHookYDProcPtr dlghook, ModalFilterYDProcPtr filterproc, Ptr activeList, ActivateYDProcPtr activateproc, void* yourdatap)
 {
     dialog_hook_u dhu;
     reply_u repu;
@@ -2771,8 +2754,7 @@ P11(PUBLIC pascal trap, void, CustomGetFile, FileFilterYDProcPtr, filefilter,
               yourdatap);
 }
 
-P4(PUBLIC pascal trap, void, StandardGetFile, FileFilterProcPtr, filef, INTEGER, numt,
-   GUEST<SFTypeList>, tl, StandardFileReply *, replyp)
+PUBLIC pascal trap void Executor::C_StandardGetFile(FileFilterProcPtr filef, INTEGER numt, GUEST<SFTypeList> tl, StandardFileReply * replyp)
 {
     Point p;
     reply_u repu;
@@ -2791,8 +2773,7 @@ P4(PUBLIC pascal trap, void, StandardGetFile, FileFilterProcPtr, filef, INTEGER,
               filteru, file_filteru, numt, tl, get, new_sf, 0, 0, 0);
 }
 
-P3(PUBLIC pascal trap, void, StandardPutFile, Str255, prompt,
-   Str255, defaultname, StandardFileReply *, replyp)
+PUBLIC pascal trap void Executor::C_StandardPutFile(Str255 prompt, Str255 defaultname, StandardFileReply * replyp)
 {
     Point p;
     reply_u repu;

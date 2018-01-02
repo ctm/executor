@@ -22,8 +22,8 @@ using namespace Executor;
  * Remember, vrn and wdn are negative numbers
  */
 
-A2(PUBLIC, OSErr, ufsPBGetCatInfo, CInfoPBPtr, pb, /* INTERNAL */
-   BOOLEAN, a)
+PUBLIC OSErr Executor::ufsPBGetCatInfo(CInfoPBPtr pb, /* INTERNAL */
+   BOOLEAN a)
 {
     GUEST<LONGINT> swapped_dir;
     OSErr retval;
@@ -47,8 +47,8 @@ A2(PUBLIC, OSErr, ufsPBGetCatInfo, CInfoPBPtr, pb, /* INTERNAL */
     return retval;
 }
 
-A2(PUBLIC, OSErr, ufsPBSetCatInfo, CInfoPBPtr, pb, /* INTERNAL */
-   BOOLEAN, a)
+PUBLIC OSErr Executor::ufsPBSetCatInfo(CInfoPBPtr pb, /* INTERNAL */
+   BOOLEAN a)
 {
     GUEST<LONGINT> swapped_dir;
     OSErr retval;
@@ -58,9 +58,8 @@ A2(PUBLIC, OSErr, ufsPBSetCatInfo, CInfoPBPtr, pb, /* INTERNAL */
     return retval;
 }
 
-A6(PUBLIC, OSErr, ROMlib_PBMoveOrRename, ParmBlkPtr, pb, /* INTERNAL */
-   BOOLEAN, a, LONGINT, dir, LONGINT, newdir, char *, newname,
-   MoveOrRenameType, op)
+PUBLIC OSErr Executor::ROMlib_PBMoveOrRename(ParmBlkPtr pb, /* INTERNAL */
+   BOOLEAN a, LONGINT dir, LONGINT newdir, char * newname, MoveOrRenameType op)
 {
     ParamBlockRec npb;
     OSErr err;
@@ -148,14 +147,14 @@ A6(PUBLIC, OSErr, ROMlib_PBMoveOrRename, ParmBlkPtr, pb, /* INTERNAL */
     ALLOCAEND
 }
 
-A2(PUBLIC, OSErr, ufsPBCatMove, CMovePBPtr, pb, /* INTERNAL */
-   BOOLEAN, a)
+PUBLIC OSErr Executor::ufsPBCatMove(CMovePBPtr pb, /* INTERNAL */
+   BOOLEAN a)
 {
     return ROMlib_PBMoveOrRename((ParmBlkPtr)pb, a, Cx(pb->ioDirID),
                                  Cx(pb->ioNewDirID), (char *)MR(pb->ioNewName), CatMove);
 }
 
-A2(PUBLIC, OSErr, ufsPBOpenWD, WDPBPtr, pb, BOOLEAN, a) /* INTERNAL */
+PUBLIC OSErr Executor::ufsPBOpenWD(WDPBPtr pb, BOOLEAN a) /* INTERNAL */
 {
     OSErr err;
     ParamBlockRec newpb;

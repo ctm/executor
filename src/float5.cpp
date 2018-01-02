@@ -12,7 +12,7 @@
 
 using namespace Executor;
 
-P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_FlnX, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_FlnX(x80_t * dp)
 {
     DECLAREINOUT();
 
@@ -21,7 +21,7 @@ P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_FlnX, x80_t *, dp)
     warning_floating_point("ln(%f) == %f", (double)in, (double)out);
 }
 
-P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_Flog2X, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_Flog2X(x80_t * dp)
 {
     DECLAREINOUT();
 
@@ -30,7 +30,7 @@ P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_Flog2X, x80_t *, dp)
     warning_floating_point("log2(%f) == %f", (double)in, (double)out);
 }
 
-P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_Fln1X, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_Fln1X(x80_t * dp)
 {
     DECLAREINOUT();
 
@@ -39,7 +39,7 @@ P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_Fln1X, x80_t *, dp)
     warning_floating_point("ln1(%f) == %f", (double)in, (double)out);
 }
 
-P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_Flog21X, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_Flog21X(x80_t * dp)
 {
     DECLAREINOUT();
 
@@ -48,7 +48,7 @@ P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_Flog21X, x80_t *, dp)
     warning_floating_point("log21(%f) == %f", (double)in, (double)out);
 }
 
-P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_FexpX, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_FexpX(x80_t * dp)
 {
     DECLAREINOUT();
 
@@ -57,7 +57,7 @@ P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_FexpX, x80_t *, dp)
     warning_floating_point("exp(%f) == %f", (double)in, (double)out);
 }
 
-P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_Fexp2X, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_Fexp2X(x80_t * dp)
 {
     DECLAREINOUT();
 
@@ -66,7 +66,7 @@ P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_Fexp2X, x80_t *, dp)
     warning_floating_point("exp2(%f) == %f", (double)in, (double)out);
 }
 
-P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_Fexp1X, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_Fexp1X(x80_t * dp)
 {
     DECLAREINOUT();
 
@@ -75,7 +75,7 @@ P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_Fexp1X, x80_t *, dp)
     warning_floating_point("exp1(%f) == %f", (double)in, (double)out);
 }
 
-P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_Fexp21X, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_Fexp21X(x80_t * dp)
 {
     DECLAREINOUT();
 
@@ -84,8 +84,7 @@ P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_Fexp21X, x80_t *, dp)
     warning_floating_point("exp21(%f) == %f", (double)in, (double)out);
 }
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fxpwri, INTEGER *, sp,
-                 x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_Fxpwri(INTEGER * sp, x80_t * dp)
 {
     DECLAREIN2OUT();
 
@@ -95,8 +94,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fxpwri, INTEGER *, sp,
                            (double)in1, (double)in2, (double)out);
 }
 
-P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fxpwry, x80_t *, sp,
-                 x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_Fxpwry(x80_t * sp, x80_t * dp)
 {
     ieee_t r, n;
     DECLAREIN2OUT();
@@ -111,8 +109,7 @@ P_SAVED0D1A0A1_2(PUBLIC pascal trap, void, ROMlib_Fxpwry, x80_t *, sp,
                            (double)in1, (double)in2, (double)out);
 }
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fcompound, x80_t *, sp2,
-                 x80_t *, sp, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_Fcompound(x80_t * sp2, x80_t * sp, x80_t * dp)
 {
     DECLAREIN2OUT();
 
@@ -125,8 +122,7 @@ P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fcompound, x80_t *, sp2,
                            (double)in1, (double)in2, (double)out);
 }
 
-P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fannuity, x80_t *, sp2,
-                 x80_t *, sp, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_Fannuity(x80_t * sp2, x80_t * sp, x80_t * dp)
 {
     DECLAREIN2OUT();
 
@@ -138,7 +134,7 @@ P_SAVED0D1A0A1_3(PUBLIC pascal trap, void, ROMlib_Fannuity, x80_t *, sp2,
                            (double)in1, (double)in2, (double)out);
 }
 
-P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_FsinX, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_FsinX(x80_t * dp)
 {
     DECLAREINOUT();
 
@@ -148,7 +144,7 @@ P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_FsinX, x80_t *, dp)
                            (double)in, (double)out);
 }
 
-P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_FcosX, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_FcosX(x80_t * dp)
 {
     DECLAREINOUT();
 
@@ -158,7 +154,7 @@ P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_FcosX, x80_t *, dp)
                            (double)in, (double)out);
 }
 
-P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_FtanX, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_FtanX(x80_t * dp)
 {
     DECLAREINOUT();
 
@@ -168,7 +164,7 @@ P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_FtanX, x80_t *, dp)
                            (double)in, (double)out);
 }
 
-P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_FatanX, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_FatanX(x80_t * dp)
 {
     DECLAREINOUT();
 
@@ -178,7 +174,7 @@ P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_FatanX, x80_t *, dp)
                            (double)in, (double)out);
 }
 
-P_SAVED0D1A0A1_1(PUBLIC pascal trap, void, ROMlib_FrandX, x80_t *, dp)
+PUBLIC pascal trap void Executor::C_ROMlib_FrandX(x80_t * dp)
 {
     DECLAREINOUT();
 

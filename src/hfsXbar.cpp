@@ -98,7 +98,7 @@ PRIVATE BOOLEAN hfsfil(IOParam *pb)
         return false;
 }
 
-A2(PUBLIC trap, OSErrRET, PBHRename, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBHRename(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -109,7 +109,7 @@ A2(PUBLIC trap, OSErrRET, PBHRename, HParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBHCreate, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBHCreate(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -120,7 +120,7 @@ A2(PUBLIC trap, OSErrRET, PBHCreate, HParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBDirCreate, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBDirCreate(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -131,7 +131,7 @@ A2(PUBLIC trap, OSErrRET, PBDirCreate, HParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBHDelete, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBHDelete(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -158,7 +158,7 @@ try_to_reopen(DrvQExtra *dqp)
 
 PUBLIC int Executor::ROMlib_directdiskaccess = false;
 
-A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBRead(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
     DrvQExtra *dqp;
@@ -281,7 +281,7 @@ A2(PUBLIC trap, OSErrRET, PBRead, ParmBlkPtr, pb, BOOLEAN, async)
 #define SOUND_DRIVER_REF (-4)
 #define ffMode 0
 
-A2(PUBLIC trap, OSErrRET, PBWrite, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBWrite(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
     HVCB *vcbp;
@@ -338,7 +338,7 @@ A2(PUBLIC trap, OSErrRET, PBWrite, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBClose, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBClose(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -360,7 +360,7 @@ A2(PUBLIC trap, OSErrRET, PBClose, ParmBlkPtr, pb, BOOLEAN, async)
  * PBOpen doesn't require ioBuffer to be 0 in order to open a driver.
  */
 
-A2(PUBLIC trap, OSErrRET, PBHOpen, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBHOpen(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -374,7 +374,7 @@ A2(PUBLIC trap, OSErrRET, PBHOpen, HParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBOpenDF, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBOpenDF(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -385,7 +385,7 @@ A2(PUBLIC trap, OSErrRET, PBOpenDF, HParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBHOpenRF, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBHOpenRF(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -417,7 +417,7 @@ swappedstr255print (const char *prefix, Str255 sp)
 }
 #endif
 
-A2(PUBLIC trap, OSErrRET, PBGetCatInfo, CInfoPBPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBGetCatInfo(CInfoPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
     BOOLEAN ishfs;
@@ -442,7 +442,7 @@ A2(PUBLIC trap, OSErrRET, PBGetCatInfo, CInfoPBPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBSetCatInfo, CInfoPBPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBSetCatInfo(CInfoPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -453,7 +453,7 @@ A2(PUBLIC trap, OSErrRET, PBSetCatInfo, CInfoPBPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBCatMove, CMovePBPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBCatMove(CMovePBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -464,7 +464,7 @@ A2(PUBLIC trap, OSErrRET, PBCatMove, CMovePBPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBGetVInfo, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBGetVInfo(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -475,7 +475,7 @@ A2(PUBLIC trap, OSErrRET, PBGetVInfo, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A1(PUBLIC trap, OSErrRET, PBUnmountVol, ParmBlkPtr, pb)
+PUBLIC trap OSErrRET Executor::PBUnmountVol(ParmBlkPtr pb)
 {
     OSErr retval;
 
@@ -486,7 +486,7 @@ A1(PUBLIC trap, OSErrRET, PBUnmountVol, ParmBlkPtr, pb)
     PBRETURN(pb, retval);
 }
 
-A1(PUBLIC trap, OSErrRET, PBEject, ParmBlkPtr, pb)
+PUBLIC trap OSErrRET Executor::PBEject(ParmBlkPtr pb)
 {
     OSErr retval;
 
@@ -497,7 +497,7 @@ A1(PUBLIC trap, OSErrRET, PBEject, ParmBlkPtr, pb)
     PBRETURN(pb, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBAllocate, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBAllocate(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -508,7 +508,7 @@ A2(PUBLIC trap, OSErrRET, PBAllocate, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBAllocContig, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBAllocContig(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -519,7 +519,7 @@ A2(PUBLIC trap, OSErrRET, PBAllocContig, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBHGetFInfo, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBHGetFInfo(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
     BOOLEAN ishfs;
@@ -538,7 +538,7 @@ A2(PUBLIC trap, OSErrRET, PBHGetFInfo, HParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBSetEOF, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBSetEOF(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -549,7 +549,7 @@ A2(PUBLIC trap, OSErrRET, PBSetEOF, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBOpen, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBOpen(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -582,7 +582,7 @@ PUBLIC void test_serial(void)
 }
 #endif
 
-A2(PUBLIC trap, OSErrRET, PBOpenRF, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBOpenRF(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -593,7 +593,7 @@ A2(PUBLIC trap, OSErrRET, PBOpenRF, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBLockRange, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBLockRange(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -604,7 +604,7 @@ A2(PUBLIC trap, OSErrRET, PBLockRange, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBUnlockRange, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBUnlockRange(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -615,7 +615,7 @@ A2(PUBLIC trap, OSErrRET, PBUnlockRange, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBGetFPos, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBGetFPos(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -626,7 +626,7 @@ A2(PUBLIC trap, OSErrRET, PBGetFPos, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBSetFPos, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBSetFPos(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -637,7 +637,7 @@ A2(PUBLIC trap, OSErrRET, PBSetFPos, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBGetEOF, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBGetEOF(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -648,7 +648,7 @@ A2(PUBLIC trap, OSErrRET, PBGetEOF, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBFlushFile, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBFlushFile(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -659,7 +659,7 @@ A2(PUBLIC trap, OSErrRET, PBFlushFile, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBCreate, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBCreate(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -670,7 +670,7 @@ A2(PUBLIC trap, OSErrRET, PBCreate, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBDelete, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBDelete(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -681,7 +681,7 @@ A2(PUBLIC trap, OSErrRET, PBDelete, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBOpenWD, WDPBPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBOpenWD(WDPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -692,7 +692,7 @@ A2(PUBLIC trap, OSErrRET, PBOpenWD, WDPBPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBCloseWD, WDPBPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBCloseWD(WDPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -700,7 +700,7 @@ A2(PUBLIC trap, OSErrRET, PBCloseWD, WDPBPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBGetWDInfo, WDPBPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBGetWDInfo(WDPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -708,7 +708,7 @@ A2(PUBLIC trap, OSErrRET, PBGetWDInfo, WDPBPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBGetFInfo, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBGetFInfo(ParmBlkPtr pb, BOOLEAN async)
 {
     BOOLEAN ishfs;
     GUEST<StringPtr> savep;
@@ -727,7 +727,7 @@ A2(PUBLIC trap, OSErrRET, PBGetFInfo, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBSetFInfo, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBSetFInfo(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -738,7 +738,7 @@ A2(PUBLIC trap, OSErrRET, PBSetFInfo, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBHSetFInfo, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBHSetFInfo(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -749,7 +749,7 @@ A2(PUBLIC trap, OSErrRET, PBHSetFInfo, HParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBSetFLock, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBSetFLock(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -760,7 +760,7 @@ A2(PUBLIC trap, OSErrRET, PBSetFLock, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBHSetFLock, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBHSetFLock(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -771,7 +771,7 @@ A2(PUBLIC trap, OSErrRET, PBHSetFLock, HParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBRstFLock, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBRstFLock(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -782,7 +782,7 @@ A2(PUBLIC trap, OSErrRET, PBRstFLock, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBHRstFLock, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBHRstFLock(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -793,7 +793,7 @@ A2(PUBLIC trap, OSErrRET, PBHRstFLock, HParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBSetFVers, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBSetFVers(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -804,7 +804,7 @@ A2(PUBLIC trap, OSErrRET, PBSetFVers, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBRename, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBRename(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -836,7 +836,7 @@ A2(PUBLIC trap, OSErrRET, PBRename, ParmBlkPtr, pb, BOOLEAN, async)
 
 /* #warning hacked PBMountVol */
 
-A1(PUBLIC trap, OSErr, PBMountVol, ParmBlkPtr, pb)
+PUBLIC trap OSErr Executor::PBMountVol(ParmBlkPtr pb)
 {
 #if 0
     if (hfsfil((IOParam *) pb))
@@ -856,7 +856,7 @@ A1(PUBLIC trap, OSErr, PBMountVol, ParmBlkPtr, pb)
 #endif
 }
 
-A2(PUBLIC trap, OSErrRET, PBHGetVInfo, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBHGetVInfo(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -882,7 +882,7 @@ enum
                 | (1L << bNoMiniFndr))
 };
 
-A2(PUBLIC trap, OSErrRET, PBHGetVolParms, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBHGetVolParms(HParmBlkPtr pb, BOOLEAN async)
 {
     LONGINT dir;
     HVCB *vcbp;
@@ -937,7 +937,7 @@ A2(PUBLIC trap, OSErrRET, PBHGetVolParms, HParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, err);
 }
 
-A2(PUBLIC trap, OSErrRET, PBSetVInfo, HParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBSetVInfo(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -948,7 +948,7 @@ A2(PUBLIC trap, OSErrRET, PBSetVInfo, HParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBGetVol, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBGetVol(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -956,7 +956,7 @@ A2(PUBLIC trap, OSErrRET, PBGetVol, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBHGetVol, WDPBPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBHGetVol(WDPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -964,7 +964,7 @@ A2(PUBLIC trap, OSErrRET, PBHGetVol, WDPBPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBSetVol, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBSetVol(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -972,7 +972,7 @@ A2(PUBLIC trap, OSErrRET, PBSetVol, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBHSetVol, WDPBPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBHSetVol(WDPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -980,7 +980,7 @@ A2(PUBLIC trap, OSErrRET, PBHSetVol, WDPBPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBFlushVol, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBFlushVol(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -991,7 +991,7 @@ A2(PUBLIC trap, OSErrRET, PBFlushVol, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A1(PUBLIC trap, OSErrRET, PBOffLine, ParmBlkPtr, pb)
+PUBLIC trap OSErrRET Executor::PBOffLine(ParmBlkPtr pb)
 {
     OSErr retval;
 
@@ -1002,7 +1002,7 @@ A1(PUBLIC trap, OSErrRET, PBOffLine, ParmBlkPtr, pb)
     PBRETURN(pb, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBExchangeFiles, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBExchangeFiles(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -1011,7 +1011,7 @@ A2(PUBLIC trap, OSErrRET, PBExchangeFiles, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBCatSearch, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBCatSearch(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -1020,7 +1020,7 @@ A2(PUBLIC trap, OSErrRET, PBCatSearch, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBCreateFileIDRef, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBCreateFileIDRef(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -1029,7 +1029,7 @@ A2(PUBLIC trap, OSErrRET, PBCreateFileIDRef, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBDeleteFileIDRef, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBDeleteFileIDRef(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -1038,7 +1038,7 @@ A2(PUBLIC trap, OSErrRET, PBDeleteFileIDRef, ParmBlkPtr, pb, BOOLEAN, async)
     FAKEASYNC(pb, async, retval);
 }
 
-A2(PUBLIC trap, OSErrRET, PBResolveFileIDRef, ParmBlkPtr, pb, BOOLEAN, async)
+PUBLIC trap OSErrRET Executor::PBResolveFileIDRef(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 

@@ -34,8 +34,7 @@
 
 using namespace Executor;
 
-P3(PUBLIC pascal, BOOLEAN, ROMlib_myfilt, DialogPeek, dp, EventRecord *, evt,
-   GUEST<INTEGER> *, ith) /* IMI-415 */
+PUBLIC pascal BOOLEAN Executor::C_ROMlib_myfilt(DialogPeek dp, EventRecord * evt, GUEST<INTEGER> * ith) /* IMI-415 */
 {
     itmp ip;
     ControlHandle c;
@@ -140,8 +139,8 @@ ROMlib_CALLUSERITEM(DialogPtr dp,
    small, but THEGDEVICE_SAVE_EXCURSION prevents us from using #if, so
    we have a lot of replicated code.  This is scary and should be fixed. */
 
-P2(PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp, /* IMI-415 */
-   GUEST<INTEGER> *, item)
+PUBLIC pascal trap void Executor::C_ModalDialog(ProcPtr fp, /* IMI-415 */
+   GUEST<INTEGER> * item)
 {
     /*
    * The code used to save thePort and restore it at the end of the
@@ -214,8 +213,8 @@ P2(PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp, /* IMI-415 */
 
 #else /* defined (ALLOW_MOVABLE_MODAL) */
 
-P2(PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp, /* IMI-415 */
-   GUEST<INTEGER> *, item)
+PUBLIC pascal trap void Executor::C_ModalDialog(ProcPtr fp, /* IMI-415 */
+   GUEST<INTEGER> * item)
 {
     /*
    * The code used to save thePort and restore it at the end of the
@@ -289,8 +288,8 @@ P2(PUBLIC pascal trap, void, ModalDialog, ProcPtr, fp, /* IMI-415 */
 }
 #endif
 
-P1(PUBLIC pascal trap, BOOLEAN, IsDialogEvent, /* IMI-416 */
-   EventRecord *, evt)
+PUBLIC pascal trap BOOLEAN Executor::C_IsDialogEvent(/* IMI-416 */
+   EventRecord * evt)
 {
     GUEST<WindowPtr> wp;
     DialogPeek dp;
@@ -483,7 +482,7 @@ void Executor::dialog_draw_item(DialogPtr dp, itmp itemp, int itemno)
 
 /* #### look into having DrawDialog not draw stuff that can't be seen */
 
-P1(PUBLIC pascal trap, void, DrawDialog, DialogPtr, dp) /* IMI-418 */
+PUBLIC pascal trap void Executor::C_DrawDialog(DialogPtr dp) /* IMI-418 */
 {
     GUEST<INTEGER> *intp;
     INTEGER i, inum;
@@ -513,8 +512,8 @@ P1(PUBLIC pascal trap, void, DrawDialog, DialogPtr, dp) /* IMI-418 */
     }
 }
 
-P2(PUBLIC pascal trap, INTEGER, FindDItem, DialogPtr, dp, /* IMIV-60 */
-   Point, pt)
+PUBLIC pascal trap INTEGER Executor::C_FindDItem(DialogPtr dp, /* IMIV-60 */
+   Point pt)
 {
     GUEST<INTEGER> *intp;
     INTEGER i, inum;
@@ -528,8 +527,8 @@ P2(PUBLIC pascal trap, INTEGER, FindDItem, DialogPtr, dp, /* IMIV-60 */
     return -1;
 }
 
-P2(PUBLIC pascal trap, void, UpdtDialog, DialogPtr, dp, /* IMIV-60 */
-   RgnHandle, rgn)
+PUBLIC pascal trap void Executor::C_UpdtDialog(DialogPtr dp, /* IMIV-60 */
+   RgnHandle rgn)
 {
     GUEST<INTEGER> *intp;
     INTEGER i, inum;
@@ -556,8 +555,8 @@ P2(PUBLIC pascal trap, void, UpdtDialog, DialogPtr, dp, /* IMIV-60 */
     SetPort(gp);
 }
 
-P3(PUBLIC pascal trap, BOOLEAN, DialogSelect, /* IMI-417 */
-   EventRecord *, evt, GUEST<DialogPtr> *, dpp, GUEST<INTEGER> *, itemp)
+PUBLIC pascal trap BOOLEAN Executor::C_DialogSelect(/* IMI-417 */
+   EventRecord * evt, GUEST<DialogPtr> * dpp, GUEST<INTEGER> * itemp)
 {
     DialogPeek dp;
     Byte c;
@@ -667,25 +666,25 @@ P3(PUBLIC pascal trap, BOOLEAN, DialogSelect, /* IMI-417 */
     return retval;
 }
 
-A1(PUBLIC, void, DlgCut, DialogPtr, dp) /* IMI-418 */
+PUBLIC void Executor::DlgCut(DialogPtr dp) /* IMI-418 */
 {
     if((((DialogPeek)dp)->editField) != CWC(-1))
         TECut(MR(((DialogPeek)dp)->textH));
 }
 
-A1(PUBLIC, void, DlgCopy, DialogPtr, dp) /* IMI-418 */
+PUBLIC void Executor::DlgCopy(DialogPtr dp) /* IMI-418 */
 {
     if((((DialogPeek)dp)->editField) != CWC(-1))
         TECopy(MR(((DialogPeek)dp)->textH));
 }
 
-A1(PUBLIC, void, DlgPaste, DialogPtr, dp) /* IMI-418 */
+PUBLIC void Executor::DlgPaste(DialogPtr dp) /* IMI-418 */
 {
     if((((DialogPeek)dp)->editField) != CWC(-1))
         TEPaste(MR(((DialogPeek)dp)->textH));
 }
 
-A1(PUBLIC, void, DlgDelete, DialogPtr, dp) /* IMI-418 */
+PUBLIC void Executor::DlgDelete(DialogPtr dp) /* IMI-418 */
 {
     if((((DialogPeek)dp)->editField) != CWC(-1))
         TEDelete(MR(((DialogPeek)dp)->textH));

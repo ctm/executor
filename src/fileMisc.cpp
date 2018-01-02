@@ -41,27 +41,27 @@ using namespace Executor;
 /* NOTE:  calling most of the routines here is a sign that the user may
 	  be depending on the internal layout of things a bit too much */
 
-A0(PUBLIC trap, void, FInitQueue) /* IMIV-128 */
+PUBLIC trap void Executor::FInitQueue() /* IMIV-128 */
 {
 }
 
-A0(PUBLIC trap, QHdrPtr, GetFSQHdr) /* IMIV-175 */
+PUBLIC trap QHdrPtr Executor::GetFSQHdr() /* IMIV-175 */
 {
     return (&FSQHdr); /* in UNIX domain, everything is synchronous */
 }
 
-A0(PUBLIC trap, QHdrPtr, GetVCBQHdr) /* IMIV-178 */
+PUBLIC trap QHdrPtr Executor::GetVCBQHdr() /* IMIV-178 */
 {
     return (&VCBQHdr);
 }
 
-A0(PUBLIC trap, QHdrPtr, GetDrvQHdr) /* IMIV-182 */
+PUBLIC trap QHdrPtr Executor::GetDrvQHdr() /* IMIV-182 */
 {
     return (&DrvQHdr);
 }
 
-A2(PUBLIC, OSErr, ufsPBGetFCBInfo, FCBPBPtr, pb, /* INTERNAL */
-   BOOLEAN, a)
+PUBLIC OSErr Executor::ufsPBGetFCBInfo(FCBPBPtr pb, /* INTERNAL */
+   BOOLEAN a)
 {
     int rn;
     OSErr err;
@@ -569,7 +569,7 @@ is_unix_path(const char *pathname)
     return retval;
 }
 
-A0(PUBLIC, void, ROMlib_fileinit) /* INTERNAL */
+PUBLIC void Executor::ROMlib_fileinit() /* INTERNAL */
 {
     INTEGER i;
     CInfoPBRec cpb;

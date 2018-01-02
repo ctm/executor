@@ -20,8 +20,6 @@ typedef res_sorttype_t *sorttypeptr;
 
 typedef GUEST<sorttypeptr> *sorttypehand;
 
-namespace Executor
-{
 PRIVATE LONGINT addtype(resmaphand, ResType);
 PRIVATE LONGINT addname(resmaphand, StringPtr);
 PRIVATE OSErr writemap(resmaphand);
@@ -30,10 +28,8 @@ PRIVATE void getdat(INTEGER, LONGINT, LONGINT, Handle *);
 PRIVATE void putdat(INTEGER, LONGINT, LONGINT *, Handle);
 PRIVATE LONGINT walkst(res_sorttype_t *, res_sorttype_t *, INTEGER, LONGINT);
 PRIVATE void compactdata(resmaphand);
-}
 
-P3(PUBLIC pascal trap, void, SetResInfo, Handle, res, INTEGER, id,
-   StringPtr, name)
+PUBLIC pascal trap void Executor::C_SetResInfo(Handle res, INTEGER id, StringPtr name)
 {
     resmaphand map;
     typref *tr;
@@ -69,7 +65,7 @@ P3(PUBLIC pascal trap, void, SetResInfo, Handle, res, INTEGER, id,
     }
 }
 
-P2(PUBLIC pascal trap, void, SetResAttrs, Handle, res, INTEGER, attrs)
+PUBLIC pascal trap void Executor::C_SetResAttrs(Handle res, INTEGER attrs)
 {
     resmaphand map;
     typref *tr;
@@ -81,7 +77,7 @@ P2(PUBLIC pascal trap, void, SetResAttrs, Handle, res, INTEGER, attrs)
     rr->ratr = attrs;
 }
 
-P1(PUBLIC pascal trap, void, ChangedResource, Handle, res)
+PUBLIC pascal trap void Executor::C_ChangedResource(Handle res)
 {
     resmaphand map;
     typref *tr;
@@ -110,7 +106,7 @@ P1(PUBLIC pascal trap, void, ChangedResource, Handle, res)
     }
 }
 
-A2(PRIVATE, LONGINT, addtype, resmaphand, map, ResType, typ)
+PRIVATE LONGINT addtype(resmaphand map, ResType typ)
 {
     typref *tr, t;
     INTEGER i;
@@ -135,7 +131,7 @@ A2(PRIVATE, LONGINT, addtype, resmaphand, map, ResType, typ)
     return (off);
 }
 
-A2(PRIVATE, LONGINT, addname, resmaphand, map, StringPtr, name)
+PRIVATE LONGINT addname(resmaphand map, StringPtr name)
 {
     LONGINT retval;
 
@@ -155,8 +151,7 @@ A2(PRIVATE, LONGINT, addname, resmaphand, map, StringPtr, name)
     return retval;
 }
 
-P4(PUBLIC pascal trap, void, AddResource, Handle, data, ResType, typ,
-   INTEGER, id, StringPtr, name)
+PUBLIC pascal trap void Executor::C_AddResource(Handle data, ResType typ, INTEGER id, StringPtr name)
 {
     LONGINT toff, roff;
     typref *tr, *tr2;
@@ -217,7 +212,7 @@ P4(PUBLIC pascal trap, void, AddResource, Handle, data, ResType, typ,
     EWALKTR(tr)
 }
 
-P1(PUBLIC pascal trap, void, RmveResource, Handle, res)
+PUBLIC pascal trap void Executor::C_RmveResource(Handle res)
 {
     resmaphand map;
     typref *tr;
@@ -294,7 +289,7 @@ P1(PUBLIC pascal trap, void, RmveResource, Handle, res)
 
 /* writemap:  given a map, writemap writes it out */
 
-A1(PRIVATE, OSErr, writemap, resmaphand, map)
+PRIVATE OSErr writemap(resmaphand map)
 {
     OSErr terr;
     LONGINT lc;
@@ -320,7 +315,7 @@ A1(PRIVATE, OSErr, writemap, resmaphand, map)
 	      resource file associated with map is updated to include
 	      the resource pointed to by rr */
 
-A2(PUBLIC, void, ROMlib_wr, resmaphand, map, resref *, rr) /* INTERNAL */
+PUBLIC void Executor::ROMlib_wr(resmaphand map, resref * rr) /* INTERNAL */
 {
     LONGINT rsize, newloc, lc;
     GUEST<LONGINT> swappedrsize;
@@ -357,7 +352,7 @@ A2(PUBLIC, void, ROMlib_wr, resmaphand, map, resref *, rr) /* INTERNAL */
         ROMlib_setreserr(noErr);
 }
 
-A3(PRIVATE, void, fillst, sorttypehand, st, resref *, rp, resref *, rep)
+PRIVATE void fillst(sorttypehand st, resref * rp, resref * rep)
 {
     res_sorttype_t *end = STARH(st), *sp;
     LONGINT newoff;
@@ -380,8 +375,7 @@ A3(PRIVATE, void, fillst, sorttypehand, st, resref *, rp, resref *, rep)
     }
 }
 
-A4(PRIVATE, void, getdat, INTEGER, fn, LONGINT, datoff, LONGINT, doff,
-   Handle *, h)
+PRIVATE void getdat(INTEGER fn, LONGINT datoff, LONGINT doff, Handle * h)
 {
     LONGINT size, lc;
     GUEST<LONGINT> size_s;
@@ -403,8 +397,7 @@ A4(PRIVATE, void, getdat, INTEGER, fn, LONGINT, datoff, LONGINT, doff,
     HUnlock(*h);
 }
 
-A4(PRIVATE, void, putdat, INTEGER, fn, LONGINT, datoff, LONGINT *, doffp,
-   Handle, h)
+PRIVATE void putdat(INTEGER fn, LONGINT datoff, LONGINT * doffp, Handle h)
 {
     LONGINT size = GetHandleSize(h), lc;
     GUEST<LONGINT> swappedsize;
@@ -423,8 +416,7 @@ A4(PRIVATE, void, putdat, INTEGER, fn, LONGINT, datoff, LONGINT *, doffp,
     *doffp += sizeof(LONGINT) + size;
 }
 
-A4(PRIVATE, LONGINT, walkst, res_sorttype_t *, sp, res_sorttype_t *, sep, INTEGER, fn,
-   LONGINT, datoff)
+PRIVATE LONGINT walkst(res_sorttype_t * sp, res_sorttype_t * sep, INTEGER fn, LONGINT datoff)
 {
     LONGINT size;
     LONGINT doff;
@@ -478,7 +470,7 @@ A4(PRIVATE, LONGINT, walkst, res_sorttype_t *, sp, res_sorttype_t *, sep, INTEGE
     return doff;
 }
 
-A1(PRIVATE, void, compactdata, resmaphand, map)
+PRIVATE void compactdata(resmaphand map)
 {
     INTEGER nres;
     LONGINT resoff, datlen;
@@ -506,7 +498,7 @@ A1(PRIVATE, void, compactdata, resmaphand, map)
     DisposHandle((Handle)st);
 }
 
-P1(PUBLIC pascal trap, void, UpdateResFile, INTEGER, rn)
+PUBLIC pascal trap void Executor::C_UpdateResFile(INTEGER rn)
 {
     resmaphand map;
     INTEGER i, j;
@@ -556,7 +548,7 @@ P1(PUBLIC pascal trap, void, UpdateResFile, INTEGER, rn)
     }
 }
 
-P1(PUBLIC pascal trap, void, WriteResource, Handle, res)
+PUBLIC pascal trap void Executor::C_WriteResource(Handle res)
 {
     resmaphand map;
     typref *tr;
@@ -568,7 +560,7 @@ P1(PUBLIC pascal trap, void, WriteResource, Handle, res)
     ROMlib_wr(map, rr);
 }
 
-P1(PUBLIC pascal trap, void, SetResPurge, BOOLEAN, install)
+PUBLIC pascal trap void Executor::C_SetResPurge(BOOLEAN install)
 {
     /* NOP */
     ROMlib_setreserr(noErr);

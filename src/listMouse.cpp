@@ -23,8 +23,6 @@ using namespace Executor;
 typedef pascal BOOLEAN (*clickproc)(void);
 #endif
 
-namespace Executor
-{
 PRIVATE void findcell(GUEST<Cell> *, ListHandle);
 PRIVATE void setselectnilflag(BOOLEAN setit, Cell cell,
                               ListHandle list, BOOLEAN hiliteempty);
@@ -35,9 +33,8 @@ PRIVATE void rect2value(Rect *in, Rect *butnotin,
                         BOOLEAN hiliteempty);
 PRIVATE void rectvalue(Rect *rp, INTEGER value,
                        ListHandle list, BOOLEAN hiliteempty);
-}
 
-A2(PRIVATE, void, findcell, GUEST<Cell> *, cp, ListHandle, list)
+PRIVATE void findcell(GUEST<Cell> * cp, ListHandle list)
 {
     cp->h = CW((CW(cp->h) - Hx(list, rView.left)) / Hx(list, cellSize.h) + Hx(list, visible.left));
     cp->v = CW((CW(cp->v) - Hx(list, rView.top)) / Hx(list, cellSize.v) + Hx(list, visible.top));
@@ -48,8 +45,7 @@ A2(PRIVATE, void, findcell, GUEST<Cell> *, cp, ListHandle, list)
         cp->v = CWC(32767);
 }
 
-A4(PRIVATE, void, setselectnilflag, BOOLEAN, setit, Cell, cell,
-   ListHandle, list, BOOLEAN, hiliteempty)
+PRIVATE void setselectnilflag(BOOLEAN setit, Cell cell, ListHandle list, BOOLEAN hiliteempty)
 {
     GrafPtr saveport;
     GUEST<RgnHandle> saveclip;
@@ -95,8 +91,7 @@ A4(PRIVATE, void, setselectnilflag, BOOLEAN, setit, Cell, cell,
     }
 }
 
-A4(PRIVATE, void, rectvalue, Rect *, rp, INTEGER, value,
-   ListHandle, list, BOOLEAN, hiliteempty)
+PRIVATE void rectvalue(Rect * rp, INTEGER value, ListHandle list, BOOLEAN hiliteempty)
 {
     GUEST<INTEGER> *ip, *ep;
     GUEST<INTEGER> *sp;
@@ -120,9 +115,7 @@ A4(PRIVATE, void, rectvalue, Rect *, rp, INTEGER, value,
     LISTEND(list);
 }
 
-A5(PRIVATE, void, rect2value, Rect *, in, Rect *, butnotin,
-   INTEGER, value, ListHandle, list,
-   BOOLEAN, hiliteempty)
+PRIVATE void rect2value(Rect * in, Rect * butnotin, INTEGER value, ListHandle list, BOOLEAN hiliteempty)
 {
     GUEST<INTEGER> *ip;
     Cell c;
@@ -134,7 +127,7 @@ A5(PRIVATE, void, rect2value, Rect *, in, Rect *, butnotin,
                     setselectnilflag(value, c, list, hiliteempty);
 }
 
-A1(PRIVATE, void, scrollbyvalues, ListHandle, list)
+PRIVATE void scrollbyvalues(ListHandle list)
 {
     INTEGER h, v;
     ControlHandle ch;
@@ -150,7 +143,7 @@ A1(PRIVATE, void, scrollbyvalues, ListHandle, list)
     C_LCellSize(p, list);
 }
 
-P2(PUBLIC, pascal void, ROMlib_mytrack, ControlHandle, ch, INTEGER, part)
+PUBLIC pascal void Executor::C_ROMlib_mytrack(ControlHandle ch, INTEGER part)
 {
     INTEGER quant, page;
     ListPtr lp;
@@ -188,7 +181,7 @@ P2(PUBLIC, pascal void, ROMlib_mytrack, ControlHandle, ch, INTEGER, part)
 #else /* BINCOMPAT */
 #define CALLCLICK(f) ROMlib_CALLCLICK((clickproc)(f))
 
-A1(static inline, BOOLEAN, ROMlib_CALLCLICK, clickproc, fp)
+static inline BOOLEAN ROMlib_CALLCLICK(clickproc fp)
 {
     BOOLEAN retval;
 
@@ -201,8 +194,8 @@ A1(static inline, BOOLEAN, ROMlib_CALLCLICK, clickproc, fp)
 
 #endif /* BINCOMPAT */
 
-P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt, /* IMIV-273 */
-   INTEGER, mods, ListHandle, list)
+PUBLIC pascal trap BOOLEAN Executor::C_LClick(Point pt, /* IMIV-273 */
+   INTEGER mods, ListHandle list)
 {
     ControlHandle ch, scrollh, scrollv;
     struct
@@ -471,13 +464,13 @@ P3(PUBLIC pascal trap, BOOLEAN, LClick, Point, pt, /* IMIV-273 */
     return 0;
 }
 
-P1(PUBLIC pascal trap, LONGINT, LLastClick, ListHandle, list) /* IMIV-273 */
+PUBLIC pascal trap LONGINT Executor::C_LLastClick(ListHandle list) /* IMIV-273 */
 {
     return ((LONGINT)Hx(list, lastClick.v) << 16) | (unsigned short)Hx(list, lastClick.h);
 }
 
-P3(PUBLIC pascal trap, void, LSetSelect, BOOLEAN, setit, /* IMIV-273 */
-   Cell, cell, ListHandle, list)
+PUBLIC pascal trap void Executor::C_LSetSelect(BOOLEAN setit, /* IMIV-273 */
+   Cell cell, ListHandle list)
 {
     setselectnilflag(setit, cell, list, true);
 }

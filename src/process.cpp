@@ -119,15 +119,13 @@ get_process_info(ProcessSerialNumber *serial_number)
     return NULL;
 }
 
-P1(PUBLIC pascal trap, OSErr, GetCurrentProcess,
-   ProcessSerialNumber *, serial_number)
+PUBLIC pascal trap OSErr Executor::C_GetCurrentProcess(ProcessSerialNumber * serial_number)
 {
     *serial_number = current_process_info->serial_number;
     return noErr;
 }
 
-P1(PUBLIC pascal trap, OSErr, GetNextProcess,
-   ProcessSerialNumber *, serial_number)
+PUBLIC pascal trap OSErr Executor::C_GetNextProcess(ProcessSerialNumber * serial_number)
 {
     process_info_t *t;
 
@@ -157,9 +155,7 @@ P1(PUBLIC pascal trap, OSErr, GetNextProcess,
     }
 }
 
-P2(PUBLIC pascal trap, OSErr, GetProcessInformation,
-   ProcessSerialNumber *, serial_number,
-   ProcessInfoPtr, process_info)
+PUBLIC pascal trap OSErr Executor::C_GetProcessInformation(ProcessSerialNumber * serial_number, ProcessInfoPtr process_info)
 {
     process_info_t *info;
     int32_t current_ticks;
@@ -189,10 +185,7 @@ P2(PUBLIC pascal trap, OSErr, GetProcessInformation,
     return noErr;
 }
 
-P3(PUBLIC pascal trap, OSErr, SameProcess,
-   ProcessSerialNumber *, serial_number0,
-   ProcessSerialNumber *, serial_number1,
-   Boolean *, same_out)
+PUBLIC pascal trap OSErr Executor::C_SameProcess(ProcessSerialNumber * serial_number0, ProcessSerialNumber * serial_number1, Boolean * same_out)
 {
     process_info_t *info0, *info1;
 
@@ -207,38 +200,31 @@ P3(PUBLIC pascal trap, OSErr, SameProcess,
     return noErr;
 }
 
-P2(PUBLIC pascal trap, OSErr, GetFrontProcess,
-   ProcessSerialNumber *, serial_number, void *, dummy)
+PUBLIC pascal trap OSErr Executor::C_GetFrontProcess(ProcessSerialNumber * serial_number, void * dummy)
 {
     *serial_number = current_process_info->serial_number;
     return noErr;
 }
 
-P1(PUBLIC pascal trap, OSErr, SetFrontProcess,
-   ProcessSerialNumber *, serial_number)
+PUBLIC pascal trap OSErr Executor::C_SetFrontProcess(ProcessSerialNumber * serial_number)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P1(PUBLIC pascal trap, OSErr, WakeUpProcess,
-   ProcessSerialNumber *, serial_number)
+PUBLIC pascal trap OSErr Executor::C_WakeUpProcess(ProcessSerialNumber * serial_number)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P2(PUBLIC pascal trap, OSErr, GetProcessSerialNumberFromPortName,
-   PPCPortPtr, port_name,
-   ProcessSerialNumber *, serial_number)
+PUBLIC pascal trap OSErr Executor::C_GetProcessSerialNumberFromPortName(PPCPortPtr port_name, ProcessSerialNumber * serial_number)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P2(PUBLIC pascal trap, OSErr, GetPortNameFromProcessSerialNumber,
-   PPCPortPtr, port_name,
-   ProcessSerialNumber *, serial_number)
+PUBLIC pascal trap OSErr Executor::C_GetPortNameFromProcessSerialNumber(PPCPortPtr port_name, ProcessSerialNumber * serial_number)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;

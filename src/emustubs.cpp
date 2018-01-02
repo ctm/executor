@@ -1162,7 +1162,7 @@ STUB(Pack8)
 }
 }
 
-P0(PUBLIC pascal, void, pack8_unknown_selector)
+PUBLIC pascal void Executor::C_pack8_unknown_selector()
 {
     do_selector_error(EM_D0 & 0xFFFF, "Pack8", _Pack8);
 }

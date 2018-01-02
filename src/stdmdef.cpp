@@ -282,14 +282,11 @@ draw_arrow(Rect *menu_rect, MenuHandle mh, arrowtype arrdir)
     RGBBackColor(&ROMlib_white_rgb_color);
 }
 
-namespace Executor
-{
 PRIVATE void erasearrow(Rect *, tablePtr, BOOLEAN);
 PRIVATE void popuprect(MenuHandle, Rect *, Point,
                        GUEST<INTEGER> *, tablePtr);
-}
 
-A3(PRIVATE, void, erasearrow, Rect *, rp, tablePtr, tablep, BOOLEAN, upordown)
+PRIVATE void erasearrow(Rect * rp, tablePtr tablep, BOOLEAN upordown)
 {
     Rect r;
     INTEGER x, y;
@@ -689,8 +686,7 @@ void choose_menu(MenuHandle mh, Rect *rp, Point p, GUEST<int16_t> *itemp, tableP
     ClipRect(&clip_rect);
 }
 
-A5(PRIVATE, void, popuprect, MenuHandle, mh, Rect *, rp, Point, p,
-   GUEST<INTEGER> *, itemp, tablePtr, tablep)
+PRIVATE void popuprect(MenuHandle mh, Rect * rp, Point p, GUEST<INTEGER> * itemp, tablePtr tablep)
 {
     struct table::tableentry *tp;
     INTEGER vmax;
@@ -715,8 +711,7 @@ A5(PRIVATE, void, popuprect, MenuHandle, mh, Rect *, rp, Point, p,
         rp->top = CW(CW(rp->top) + (tp[1].top - tp[0].top));
 }
 
-P5(PUBLIC, pascal void, mdef0, INTEGER, mess, MenuHandle, mh, Rect *, rp,
-   Point, p, GUEST<INTEGER> *, item)
+PUBLIC pascal void Executor::C_mdef0(INTEGER mess, MenuHandle mh, Rect * rp, Point p, GUEST<INTEGER> * item)
 {
     FontInfo fi;
     char *sp;

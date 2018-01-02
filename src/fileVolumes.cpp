@@ -64,12 +64,7 @@ using namespace Executor;
 
 #define HASHSIZE 101
 
-namespace Executor
-{
-static hashlink_t **hashloc(VCBExtra *, LONGINT);
-}
-
-A2(PRIVATE, hashlink_t **, hashloc, VCBExtra *, vcbp, LONGINT, dir)
+PRIVATE hashlink_t ** hashloc(VCBExtra * vcbp, LONGINT dir)
 {
     hashlink_t **hlpp;
     INTEGER index;
@@ -188,7 +183,7 @@ void recsetdp(VCBExtra *vcbp, datum *dp, hashlink_t *hlp, chain_t *therest)
     }
 }
 
-A2(PUBLIC, datum, ROMlib_dbm_fetch, VCBExtra *, vcbp, LONGINT, dir) /* INTERNAL */
+PUBLIC datum Executor::ROMlib_dbm_fetch(VCBExtra * vcbp, LONGINT dir) /* INTERNAL */
 {
     datum foo;
     hashlink_t *hlp;
@@ -392,8 +387,8 @@ PRIVATE BOOLEAN hashinsert(VCBExtra *vcbp, char *pathname, LONGINT *diridp,
     return retval;
 }
 
-A4(PUBLIC, BOOLEAN, ROMlib_dbm_store, VCBExtra *, vcbp, char *, pathname, /* INTERNAL */
-   LONGINT *, diridp, BOOLEAN, verify_p)
+PUBLIC BOOLEAN Executor::ROMlib_dbm_store(VCBExtra * vcbp, char * pathname, /* INTERNAL */
+   LONGINT * diridp, BOOLEAN verify_p)
 {
     BOOLEAN retval;
 
@@ -641,7 +636,7 @@ PRIVATE void writeadbm(const char *dbmname, VCBExtra *vcbp,
     }
 }
 
-A1(PUBLIC, void, ROMlib_dbm_open, VCBExtra *, vcbp) /* INTERNAL */
+PUBLIC void Executor::ROMlib_dbm_open(VCBExtra * vcbp) /* INTERNAL */
 {
     LONGINT size;
     LONGINT dirid;
@@ -658,7 +653,7 @@ A1(PUBLIC, void, ROMlib_dbm_open, VCBExtra *, vcbp) /* INTERNAL */
     hashinsert(vcbp, "", &dirid, 1, checked_val);
 }
 
-A1(PUBLIC, void, ROMlib_dbm_close, VCBExtra *, vcbp) /* INTERNAL */
+PUBLIC void Executor::ROMlib_dbm_close(VCBExtra * vcbp) /* INTERNAL */
 {
     hashlink_t *deletep;
     LONGINT oumask;
@@ -673,7 +668,7 @@ A1(PUBLIC, void, ROMlib_dbm_close, VCBExtra *, vcbp) /* INTERNAL */
     freedeletelist(deletep);
 }
 
-A1(PUBLIC, OSErr, ufsPBMountVol, ParmBlkPtr, pb) /* INTERNAL */
+PUBLIC OSErr Executor::ufsPBMountVol(ParmBlkPtr pb) /* INTERNAL */
 {
     VCBExtra *vp;
     const char *name;
@@ -758,8 +753,8 @@ DONE:
 }
 #undef RETURN
 
-A4(PUBLIC, OSErr, GetVInfo, INTEGER, drv, StringPtr, voln, /* IMIV-107 */
-   GUEST<INTEGER> *, vrn, GUEST<LONGINT> *, freeb)
+PUBLIC OSErr Executor::GetVInfo(INTEGER drv, StringPtr voln, /* IMIV-107 */
+   GUEST<INTEGER> * vrn, GUEST<LONGINT> * freeb)
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -773,7 +768,7 @@ A4(PUBLIC, OSErr, GetVInfo, INTEGER, drv, StringPtr, voln, /* IMIV-107 */
     return (temp);
 }
 
-A2(PUBLIC, OSErr, GetVRefNum, INTEGER, prn, GUEST<INTEGER> *, vrn) /* IMIV-107 */
+PUBLIC OSErr Executor::GetVRefNum(INTEGER prn, GUEST<INTEGER> * vrn) /* IMIV-107 */
 {
     OSErr err;
     fcbrec *fp;
@@ -785,7 +780,7 @@ A2(PUBLIC, OSErr, GetVRefNum, INTEGER, prn, GUEST<INTEGER> *, vrn) /* IMIV-107 *
     return (err);
 }
 
-A2(PUBLIC, OSErr, GetVol, StringPtr, voln, GUEST<INTEGER> *, vrn) /* IMIV-107 */
+PUBLIC OSErr Executor::GetVol(StringPtr voln, GUEST<INTEGER> * vrn) /* IMIV-107 */
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -796,7 +791,7 @@ A2(PUBLIC, OSErr, GetVol, StringPtr, voln, GUEST<INTEGER> *, vrn) /* IMIV-107 */
     return (temp);
 }
 
-A2(PUBLIC, OSErr, SetVol, StringPtr, voln, INTEGER, vrn) /* IMIV-107 */
+PUBLIC OSErr Executor::SetVol(StringPtr voln, INTEGER vrn) /* IMIV-107 */
 {
     ParamBlockRec pbr;
 
@@ -805,7 +800,7 @@ A2(PUBLIC, OSErr, SetVol, StringPtr, voln, INTEGER, vrn) /* IMIV-107 */
     return (PBSetVol(&pbr, 0));
 }
 
-A2(PUBLIC, OSErr, FlushVol, StringPtr, voln, INTEGER, vrn) /* IMIV-108 */
+PUBLIC OSErr Executor::FlushVol(StringPtr voln, INTEGER vrn) /* IMIV-108 */
 {
     ParamBlockRec pbr;
 
@@ -814,7 +809,7 @@ A2(PUBLIC, OSErr, FlushVol, StringPtr, voln, INTEGER, vrn) /* IMIV-108 */
     return (PBFlushVol(&pbr, 0));
 }
 
-A2(PUBLIC, OSErr, UnmountVol, StringPtr, voln, INTEGER, vrn) /* IMIV-108 */
+PUBLIC OSErr Executor::UnmountVol(StringPtr voln, INTEGER vrn) /* IMIV-108 */
 {
     ParamBlockRec pbr;
 
@@ -823,7 +818,7 @@ A2(PUBLIC, OSErr, UnmountVol, StringPtr, voln, INTEGER, vrn) /* IMIV-108 */
     return (PBUnmountVol(&pbr));
 }
 
-A2(PUBLIC, OSErr, Eject, StringPtr, voln, INTEGER, vrn) /* IMIV-108 */
+PUBLIC OSErr Executor::Eject(StringPtr voln, INTEGER vrn) /* IMIV-108 */
 {
     ParamBlockRec pbr;
 
@@ -832,14 +827,10 @@ A2(PUBLIC, OSErr, Eject, StringPtr, voln, INTEGER, vrn) /* IMIV-108 */
     return (PBEject(&pbr));
 }
 
-namespace Executor
-{
 static VCB *findvcb(StringPtr, INTEGER, BOOLEAN *, GUEST<INTEGER> *);
 static VCB *grabvcb(ParmBlkPtr, GUEST<INTEGER> *);
-}
 
-A4(PRIVATE, VCB *, findvcb, StringPtr, sp, INTEGER, vrn, BOOLEAN *, iswd,
-   GUEST<INTEGER> *, vrnp)
+PRIVATE VCB * findvcb(StringPtr sp, INTEGER vrn, BOOLEAN * iswd, GUEST<INTEGER> * vrnp)
 {
     VCB *vcbptr;
 
@@ -889,7 +880,7 @@ A4(PRIVATE, VCB *, findvcb, StringPtr, sp, INTEGER, vrn, BOOLEAN *, iswd,
     return vcbptr;
 }
 
-A2(PRIVATE, VCB *, grabvcb, ParmBlkPtr, pb, GUEST<INTEGER> *, vrefnump)
+PRIVATE VCB * grabvcb(ParmBlkPtr pb, GUEST<INTEGER> * vrefnump)
 {
     INTEGER i;
     VCB *vcbp;
@@ -973,12 +964,7 @@ find_pseudo_block_size(long n_blocks, long block_size)
     return retval;
 }
 
-namespace Executor
-{
-static VCB *common(ParmBlkPtr);
-}
-
-A1(PRIVATE, VCB *, common, ParmBlkPtr, pb)
+PRIVATE VCB * common(ParmBlkPtr pb)
 {
     VCB *vcbp;
     struct statfs sbuf;
@@ -1026,8 +1012,8 @@ A1(PRIVATE, VCB *, common, ParmBlkPtr, pb)
     return vcbp;
 }
 
-A2(PUBLIC, OSErr, ufsPBGetVInfo, ParmBlkPtr, pb, /* INTERNAL */
-   BOOLEAN, a)
+PUBLIC OSErr Executor::ufsPBGetVInfo(ParmBlkPtr pb, /* INTERNAL */
+   BOOLEAN a)
 {
     OSErr err = noErr;
     VCB *vcbp;
@@ -1038,8 +1024,8 @@ A2(PUBLIC, OSErr, ufsPBGetVInfo, ParmBlkPtr, pb, /* INTERNAL */
     return err;
 }
 
-A2(PUBLIC, OSErr, ufsPBHGetVInfo, HParmBlkPtr, pb, /* INTERNAL */
-   BOOLEAN, a)
+PUBLIC OSErr Executor::ufsPBHGetVInfo(HParmBlkPtr pb, /* INTERNAL */
+   BOOLEAN a)
 {
     OSErr err = noErr;
     VCB *vcbp;
@@ -1072,8 +1058,8 @@ A2(PUBLIC, OSErr, ufsPBHGetVInfo, HParmBlkPtr, pb, /* INTERNAL */
     return err;
 }
 
-A2(PUBLIC, OSErr, ufsPBSetVInfo, HParmBlkPtr, pb, /* INTERNAL */
-   BOOLEAN, a)
+PUBLIC OSErr Executor::ufsPBSetVInfo(HParmBlkPtr pb, /* INTERNAL */
+   BOOLEAN a)
 {
     VCB *vcbp;
     int ntocopy;
@@ -1109,8 +1095,8 @@ A2(PUBLIC, OSErr, ufsPBSetVInfo, HParmBlkPtr, pb, /* INTERNAL */
     return err;
 }
 
-A2(PUBLIC, OSErr, ufsPBFlushVol, ParmBlkPtr, pb, /* INTERNAL */
-   BOOLEAN, a)
+PUBLIC OSErr Executor::ufsPBFlushVol(ParmBlkPtr pb, /* INTERNAL */
+   BOOLEAN a)
 {
     OSErr err = noErr;
 
@@ -1126,7 +1112,7 @@ A2(PUBLIC, OSErr, ufsPBFlushVol, ParmBlkPtr, pb, /* INTERNAL */
  *	 we could probably free up some more memory if it's worth it.
  */
 
-A1(PUBLIC, OSErr, ufsPBUnmountVol, ParmBlkPtr, pb) /* INTERNAL */
+PUBLIC OSErr Executor::ufsPBUnmountVol(ParmBlkPtr pb) /* INTERNAL */
 {
     OSErr temp;
     int i;
@@ -1144,7 +1130,7 @@ A1(PUBLIC, OSErr, ufsPBUnmountVol, ParmBlkPtr, pb) /* INTERNAL */
         return (nsDrvErr);
 }
 
-A1(PUBLIC, OSErr, ufsPBOffLine, ParmBlkPtr, pb) /* INTERNAL */
+PUBLIC OSErr Executor::ufsPBOffLine(ParmBlkPtr pb) /* INTERNAL */
 {
     OSErr temp;
 
@@ -1155,7 +1141,7 @@ A1(PUBLIC, OSErr, ufsPBOffLine, ParmBlkPtr, pb) /* INTERNAL */
         return (noErr);
 }
 
-A1(PUBLIC, OSErr, ufsPBEject, ParmBlkPtr, pb) /* INTERNAL */
+PUBLIC OSErr Executor::ufsPBEject(ParmBlkPtr pb) /* INTERNAL */
 {
     OSErr temp;
 

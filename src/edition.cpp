@@ -8,239 +8,181 @@
 
 using namespace Executor;
 
-P1(PUBLIC pascal trap, OSErr, InitEditionPack, INTEGER, unused)
+PUBLIC pascal trap OSErr Executor::C_InitEditionPack(INTEGER unused)
 {
     warning_unimplemented("someone is calling the edition manager");
     return noErr;
 }
 
-P6(PUBLIC pascal trap, OSErr, NewSection,
-   EditionContainerSpecPtr, container,
-   FSSpecPtr, section_doc, SectionType, kind, int32_t, section_id,
-   UpdateMode, initial_mode, SectionHandle *, section_out)
+PUBLIC pascal trap OSErr Executor::C_NewSection(EditionContainerSpecPtr container, FSSpecPtr section_doc, SectionType kind, int32_t section_id, UpdateMode initial_mode, SectionHandle * section_out)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P3(PUBLIC pascal trap, OSErr, RegisterSection,
-   FSSpecPtr, section_doc, SectionHandle, section,
-   Boolean *, alias_was_updated_p_out)
+PUBLIC pascal trap OSErr Executor::C_RegisterSection(FSSpecPtr section_doc, SectionHandle section, Boolean * alias_was_updated_p_out)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P1(PUBLIC pascal trap, OSErr, UnRegisterSection,
-   SectionHandle, section)
+PUBLIC pascal trap OSErr Executor::C_UnRegisterSection(SectionHandle section)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P1(PUBLIC pascal trap, OSErr, IsRegisteredSection,
-   SectionHandle, section)
+PUBLIC pascal trap OSErr Executor::C_IsRegisteredSection(SectionHandle section)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P2(PUBLIC pascal trap, OSErr, AssociateSection,
-   SectionHandle, section, FSSpecPtr, new_section_doc)
+PUBLIC pascal trap OSErr Executor::C_AssociateSection(SectionHandle section, FSSpecPtr new_section_doc)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P3(PUBLIC pascal trap, OSErr, CreateEditionContainerFile,
-   FSSpecPtr, edition_file,
-   OSType, creator, ScriptCode, edition_file_name_script)
+PUBLIC pascal trap OSErr Executor::C_CreateEditionContainerFile(FSSpecPtr edition_file, OSType creator, ScriptCode edition_file_name_script)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P1(PUBLIC pascal trap, OSErr, DeleteEditionContainerFile,
-   FSSpecPtr, edition_file)
+PUBLIC pascal trap OSErr Executor::C_DeleteEditionContainerFile(FSSpecPtr edition_file)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P3(PUBLIC pascal trap, OSErr, SetEditionFormatMark,
-   EditionRefNum, edition, FormatType, format,
-   int32_t, mark)
+PUBLIC pascal trap OSErr Executor::C_SetEditionFormatMark(EditionRefNum edition, FormatType format, int32_t mark)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P3(PUBLIC pascal trap, OSErr, GetEditionFormatMark,
-   EditionRefNum, edition, FormatType, format,
-   int32_t *, currentMark)
+PUBLIC pascal trap OSErr Executor::C_GetEditionFormatMark(EditionRefNum edition, FormatType format, int32_t * currentMark)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P2(PUBLIC pascal trap, OSErr, OpenEdition,
-   SectionHandle, subscriber_section,
-   EditionRefNum *, ref_num)
+PUBLIC pascal trap OSErr Executor::C_OpenEdition(SectionHandle subscriber_section, EditionRefNum * ref_num)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P3(PUBLIC pascal trap, OSErr, EditionHasFormat,
-   EditionRefNum, edition, FormatType, format,
-   Size *, format_size)
+PUBLIC pascal trap OSErr Executor::C_EditionHasFormat(EditionRefNum edition, FormatType format, Size * format_size)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P4(PUBLIC pascal trap, OSErr, ReadEdition,
-   EditionRefNum, edition, FormatType, format,
-   Ptr, buffer, Size, buffer_size)
+PUBLIC pascal trap OSErr Executor::C_ReadEdition(EditionRefNum edition, FormatType format, Ptr buffer, Size buffer_size)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P4(PUBLIC pascal trap, OSErr, OpenNewEdition,
-   SectionHandle, publisher_section, OSType, creator,
-   FSSpecPtr, publisher_section_doc, EditionRefNum *, ref_num)
+PUBLIC pascal trap OSErr Executor::C_OpenNewEdition(SectionHandle publisher_section, OSType creator, FSSpecPtr publisher_section_doc, EditionRefNum * ref_num)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P4(PUBLIC pascal trap, OSErr, WriteEdition,
-   EditionRefNum, edition, FormatType, format,
-   Ptr, buffer, Size, buffer_size)
+PUBLIC pascal trap OSErr Executor::C_WriteEdition(EditionRefNum edition, FormatType format, Ptr buffer, Size buffer_size)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P2(PUBLIC pascal trap, OSErr, CloseEdition,
-   EditionRefNum, edition, Boolean, success_p)
+PUBLIC pascal trap OSErr Executor::C_CloseEdition(EditionRefNum edition, Boolean success_p)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P1(PUBLIC pascal trap, OSErr, GetLastEditionContainerUsed,
-   EditionContainerSpecPtr, container)
+PUBLIC pascal trap OSErr Executor::C_GetLastEditionContainerUsed(EditionContainerSpecPtr container)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P1(PUBLIC pascal trap, OSErr, NewSubscriberDialog,
-   NewSubscriberReplyPtr, reply)
+PUBLIC pascal trap OSErr Executor::C_NewSubscriberDialog(NewSubscriberReplyPtr reply)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P1(PUBLIC pascal trap, OSErr, NewPublisherDialog,
-   NewSubscriberReplyPtr, reply)
+PUBLIC pascal trap OSErr Executor::C_NewPublisherDialog(NewSubscriberReplyPtr reply)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P1(PUBLIC pascal trap, OSErr, SectionOptionsDialog,
-   SectionOptionsReply *, reply)
+PUBLIC pascal trap OSErr Executor::C_SectionOptionsDialog(SectionOptionsReply * reply)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P6(PUBLIC pascal trap, OSErr, NewSubscriberExpDialog,
-   NewSubscriberReplyPtr, reply,
-   Point, where, int16_t, expnasion_ditl_res_id,
-   ExpDialogHookProcPtr, dialog_hook,
-   ExpModalFilterProcPtr, filter_hook,
-   Ptr, data)
+PUBLIC pascal trap OSErr Executor::C_NewSubscriberExpDialog(NewSubscriberReplyPtr reply, Point where, int16_t expnasion_ditl_res_id, ExpDialogHookProcPtr dialog_hook, ExpModalFilterProcPtr filter_hook, Ptr data)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P6(PUBLIC pascal trap, OSErr, NewPublisherExpDialog,
-   NewPublisherReplyPtr, reply,
-   Point, where, int16_t, expnasion_ditl_res_id,
-   ExpDialogHookProcPtr, dialog_hook,
-   ExpModalFilterProcPtr, filter_hook,
-   Ptr, data)
+PUBLIC pascal trap OSErr Executor::C_NewPublisherExpDialog(NewPublisherReplyPtr reply, Point where, int16_t expnasion_ditl_res_id, ExpDialogHookProcPtr dialog_hook, ExpModalFilterProcPtr filter_hook, Ptr data)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P6(PUBLIC pascal trap, OSErr, SectionOptionsExpDialog,
-   SectionOptionsReply *, reply,
-   Point, where, int16_t, expnasion_ditl_res_id,
-   ExpDialogHookProcPtr, dialog_hook,
-   ExpModalFilterProcPtr, filter_hook,
-   Ptr, data)
+PUBLIC pascal trap OSErr Executor::C_SectionOptionsExpDialog(SectionOptionsReply * reply, Point where, int16_t expnasion_ditl_res_id, ExpDialogHookProcPtr dialog_hook, ExpModalFilterProcPtr filter_hook, Ptr data)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P2(PUBLIC pascal trap, OSErr, GetEditionInfo,
-   SectionHandle, section, EditionInfoPtr, edition_info)
+PUBLIC pascal trap OSErr Executor::C_GetEditionInfo(SectionHandle section, EditionInfoPtr edition_info)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P1(PUBLIC pascal trap, OSErr, GoToPublisherSection,
-   EditionContainerSpecPtr, container)
+PUBLIC pascal trap OSErr Executor::C_GoToPublisherSection(EditionContainerSpecPtr container)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P5(PUBLIC pascal trap, OSErr, GetStandardFormats,
-   EditionContainerSpecPtr, container,
-   FormatType *, preview_format,
-   Handle, preview, Handle, publisher_alias, Handle, formats)
+PUBLIC pascal trap OSErr Executor::C_GetStandardFormats(EditionContainerSpecPtr container, FormatType * preview_format, Handle preview, Handle publisher_alias, Handle formats)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P1(PUBLIC pascal trap, OSErr, GetEditionOpenerProc,
-   EditionOpenerProcPtr *, opener)
+PUBLIC pascal trap OSErr Executor::C_GetEditionOpenerProc(EditionOpenerProcPtr * opener)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P1(PUBLIC pascal trap, OSErr, SetEditionOpenerProc,
-   EditionOpenerProcPtr, opener)
+PUBLIC pascal trap OSErr Executor::C_SetEditionOpenerProc(EditionOpenerProcPtr opener)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P3(PUBLIC pascal trap, OSErr, CallEditionOpenerProc,
-   EditionOpenerVerb, selector,
-   EditionOpenerParamBlock *, param_block,
-   EditionOpenerProcPtr, opener)
+PUBLIC pascal trap OSErr Executor::C_CallEditionOpenerProc(EditionOpenerVerb selector, EditionOpenerParamBlock * param_block, EditionOpenerProcPtr opener)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;
 }
 
-P3(PUBLIC pascal trap, OSErr, CallFormatIOProc,
-   FormatIOVerb, selector,
-   FormatIOParamBlock *, param_block,
-   FormatIOProcPtr, proc)
+PUBLIC pascal trap OSErr Executor::C_CallFormatIOProc(FormatIOVerb selector, FormatIOParamBlock * param_block, FormatIOProcPtr proc)
 {
     warning_unimplemented(NULL_STRING);
     return paramErr;

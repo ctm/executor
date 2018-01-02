@@ -19,28 +19,27 @@
 
 using namespace Executor;
 
-P1(PUBLIC, pascal trap void, SndGetSysBeepState, GUEST<INTEGER> *, statep)
+PUBLIC pascal trap void Executor::C_SndGetSysBeepState(GUEST<INTEGER> * statep)
 {
     /* #warning SndGetSysBeepState not implemented */
     warning_sound_log(NULL_STRING);
 }
 
-P1(PUBLIC, pascal trap OSErr, SndSetSysBeepState, INTEGER, state)
+PUBLIC pascal trap OSErr Executor::C_SndSetSysBeepState(INTEGER state)
 {
     /* #warning SndSetSysBeepState not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P2(PUBLIC, pascal trap OSErr, SndManagerStatus, INTEGER, length,
-   SMStatusPtr, statusp)
+PUBLIC pascal trap OSErr Executor::C_SndManagerStatus(INTEGER length, SMStatusPtr statusp)
 {
     /* #warning SndManagerStatus not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P0(PUBLIC, pascal trap NumVersion, SndSoundManagerVersion)
+PUBLIC pascal trap NumVersion Executor::C_SndSoundManagerVersion()
 {
     NumVersion ret;
 
@@ -62,39 +61,35 @@ P0(PUBLIC, pascal trap NumVersion, SndSoundManagerVersion)
     return ret;
 }
 
-P0(PUBLIC, pascal trap NumVersion, MACEVersion)
+PUBLIC pascal trap NumVersion Executor::C_MACEVersion()
 {
     /* #warning MACEVersion not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? 0x2000000 : 0;
 }
 
-P0(PUBLIC, pascal trap NumVersion, SPBVersion)
+PUBLIC pascal trap NumVersion Executor::C_SPBVersion()
 {
     /* #warning SPBVersion not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? 0x1000000 : 0;
 }
 
-P8(PUBLIC, pascal trap OSErr, SndStartFilePlay, SndChannelPtr, chanp,
-   INTEGER, refnum, INTEGER, resnum, LONGINT, buffersize, Ptr, bufferp,
-   AudioSelectionPtr, theselectionp, ProcPtr, completionp,
-   BOOLEAN, async)
+PUBLIC pascal trap OSErr Executor::C_SndStartFilePlay(SndChannelPtr chanp, INTEGER refnum, INTEGER resnum, LONGINT buffersize, Ptr bufferp, AudioSelectionPtr theselectionp, ProcPtr completionp, BOOLEAN async)
 {
     /* #warning SndStartFilePlay not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P1(PUBLIC, pascal trap OSErr, SndPauseFilePlay, SndChannelPtr, chanp)
+PUBLIC pascal trap OSErr Executor::C_SndPauseFilePlay(SndChannelPtr chanp)
 {
     /* #warning SndPauseFilePlay not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P2(PUBLIC, pascal trap OSErr, SndStopFilePlay, SndChannelPtr, chanp,
-   BOOLEAN, async)
+PUBLIC pascal trap OSErr Executor::C_SndStopFilePlay(SndChannelPtr chanp, BOOLEAN async)
 {
     /* #warning SndStopFilePlay not implemented */
     warning_sound_log(NULL_STRING);
@@ -173,7 +168,7 @@ start_playing(SndChannelPtr chanp, SndDoubleBufferHeaderPtr paramp,
     return noErr;
 }
 
-A0(PUBLIC, void, C_sound_timer_handler)
+PUBLIC void Executor::C_sound_timer_handler()
 {
     SndDoubleBufferPtr dbp;
     SndDoubleBackProcPtr pp;
@@ -192,8 +187,7 @@ A0(PUBLIC, void, C_sound_timer_handler)
     }
 }
 
-P2(PUBLIC, pascal trap OSErr, SndPlayDoubleBuffer, SndChannelPtr, chanp,
-   SndDoubleBufferHeaderPtr, paramp)
+PUBLIC pascal trap OSErr Executor::C_SndPlayDoubleBuffer(SndChannelPtr chanp, SndDoubleBufferHeaderPtr paramp)
 {
     OSErr retval;
     /* #warning SndPlayDoubleBuffer not implemented */
@@ -236,195 +230,170 @@ P2(PUBLIC, pascal trap OSErr, SndPlayDoubleBuffer, SndChannelPtr, chanp,
     return retval;
 }
 
-P7(PUBLIC, pascal trap void, Comp3to1, Ptr, inp, Ptr, outp, LONGINT, cnt,
-   Ptr, instatep, Ptr, outstatep, LONGINT, numchannels,
-   LONGINT, whichchannel)
+PUBLIC pascal trap void Executor::C_Comp3to1(Ptr inp, Ptr outp, LONGINT cnt, Ptr instatep, Ptr outstatep, LONGINT numchannels, LONGINT whichchannel)
 {
     /* #warning Comp3to1 not implemented */
     warning_sound_log(NULL_STRING);
 }
 
-P7(PUBLIC, pascal trap void, Comp6to1, Ptr, inp, Ptr, outp, LONGINT, cnt,
-   Ptr, instatep, Ptr, outstatep, LONGINT, numchannels,
-   LONGINT, whichchannel)
+PUBLIC pascal trap void Executor::C_Comp6to1(Ptr inp, Ptr outp, LONGINT cnt, Ptr instatep, Ptr outstatep, LONGINT numchannels, LONGINT whichchannel)
 {
     /* #warning Comp6to1 not implemented */
     warning_sound_log(NULL_STRING);
 }
 
-P7(PUBLIC, pascal trap void, Exp1to3, Ptr, inp, Ptr, outp, LONGINT, cnt,
-   Ptr, instatep, Ptr, outstatep, LONGINT, numchannels,
-   LONGINT, whichchannel)
+PUBLIC pascal trap void Executor::C_Exp1to3(Ptr inp, Ptr outp, LONGINT cnt, Ptr instatep, Ptr outstatep, LONGINT numchannels, LONGINT whichchannel)
 {
     /* #warning Exp1to3 not implemented */
     warning_sound_log(NULL_STRING);
 }
 
-P7(PUBLIC, pascal trap void, Exp1to6, Ptr, inp, Ptr, outp, LONGINT, cnt,
-   Ptr, instatep, Ptr, outstatep, LONGINT, numchannels,
-   LONGINT, whichchannel)
+PUBLIC pascal trap void Executor::C_Exp1to6(Ptr inp, Ptr outp, LONGINT cnt, Ptr instatep, Ptr outstatep, LONGINT numchannels, LONGINT whichchannel)
 {
     /* #warning Exp1to6 not implemented */
     warning_sound_log(NULL_STRING);
 }
 
-P4(PUBLIC, pascal trap OSErr, SndRecord, ProcPtr, filterp, Point, corner,
-   OSType, quality, GUEST<Handle> *, sndhandlep)
+PUBLIC pascal trap OSErr Executor::C_SndRecord(ProcPtr filterp, Point corner, OSType quality, GUEST<Handle> * sndhandlep)
 {
     /* #warning SPBRecord not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P4(PUBLIC, pascal trap OSErr, SndRecordToFile, ProcPtr, filterp,
-   Point, corner, OSType, quality, INTEGER, refnum)
+PUBLIC pascal trap OSErr Executor::C_SndRecordToFile(ProcPtr filterp, Point corner, OSType quality, INTEGER refnum)
 {
     /* #warning SPBRecordToFile not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P3(PUBLIC, pascal trap OSErr, SPBOpenDevice, Str255, name, INTEGER, permission,
-   GUEST<LONGINT> *, inrefnump)
+PUBLIC pascal trap OSErr Executor::C_SPBOpenDevice(Str255 name, INTEGER permission, GUEST<LONGINT> * inrefnump)
 {
     /* #warning SPBOpenDevice not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P1(PUBLIC, pascal trap OSErr, SPBCloseDevice, LONGINT, inrefnum)
+PUBLIC pascal trap OSErr Executor::C_SPBCloseDevice(LONGINT inrefnum)
 {
     /* #warning SPBCloseDevice not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P2(PUBLIC, pascal trap OSErr, SPBRecord, SPBPtr, inparamp, BOOLEAN, async)
+PUBLIC pascal trap OSErr Executor::C_SPBRecord(SPBPtr inparamp, BOOLEAN async)
 {
     /* #warning SPBRecord not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P3(PUBLIC, pascal trap OSErr, SPBRecordToFile, INTEGER, refnum,
-   SPBPtr, inparamp, BOOLEAN, async)
+PUBLIC pascal trap OSErr Executor::C_SPBRecordToFile(INTEGER refnum, SPBPtr inparamp, BOOLEAN async)
 {
     /* #warning SPBRecordToFile not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P1(PUBLIC, pascal trap OSErr, SPBPauseRecording, LONGINT, refnum)
+PUBLIC pascal trap OSErr Executor::C_SPBPauseRecording(LONGINT refnum)
 {
     /* #warning SPBPauseRecording not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P1(PUBLIC, pascal trap OSErr, SPBResumeRecording, LONGINT, refnum)
+PUBLIC pascal trap OSErr Executor::C_SPBResumeRecording(LONGINT refnum)
 {
     /* #warning SPBResumeRecording not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P1(PUBLIC, pascal trap OSErr, SPBStopRecording, LONGINT, refnum)
+PUBLIC pascal trap OSErr Executor::C_SPBStopRecording(LONGINT refnum)
 {
     /* #warning PPBStopRecording not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P7(PUBLIC, pascal trap OSErr, SPBGetRecordingStatus, LONGINT, refnum,
-   GUEST<INTEGER> *, recordingstatus, GUEST<INTEGER> *, meterlevel, GUEST<LONGINT> *,
-   totalsampstorecord, GUEST<LONGINT> *, numsampsrecorded, GUEST<LONGINT> *,
-   totalmsecstorecord, GUEST<LONGINT> *, numbermsecsrecorded)
+PUBLIC pascal trap OSErr Executor::C_SPBGetRecordingStatus(LONGINT refnum, GUEST<INTEGER> * recordingstatus, GUEST<INTEGER> * meterlevel, GUEST<LONGINT> * totalsampstorecord, GUEST<LONGINT> * numsampsrecorded, GUEST<LONGINT> * totalmsecstorecord, GUEST<LONGINT> * numbermsecsrecorded)
 {
     /* #warning SPBGetRecordingStatus not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P3(PUBLIC, pascal trap OSErr, SPBGetDeviceInfo, LONGINT, refnum, OSType, info,
-   Ptr, infop)
+PUBLIC pascal trap OSErr Executor::C_SPBGetDeviceInfo(LONGINT refnum, OSType info, Ptr infop)
 {
     /* #warning SPBGetDeviceInfo not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P3(PUBLIC, pascal trap OSErr, SPBSetDeviceInfo, LONGINT, refnum, OSType,
-   info, Ptr, infop)
+PUBLIC pascal trap OSErr Executor::C_SPBSetDeviceInfo(LONGINT refnum, OSType info, Ptr infop)
 {
     /* #warning SPBSetDeviceInfo not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P8(PUBLIC, pascal trap OSErr, SetupSndHeader, Handle, sndhandle, INTEGER,
-   numchannels, Fixed, rate, INTEGER, size, OSType, compresion, INTEGER,
-   basefreq, LONGINT, numbytes, GUEST<INTEGER> *, headerlenp)
+PUBLIC pascal trap OSErr Executor::C_SetupSndHeader(Handle sndhandle, INTEGER numchannels, Fixed rate, INTEGER size, OSType compresion, INTEGER basefreq, LONGINT numbytes, GUEST<INTEGER> * headerlenp)
 {
     /* #warning SetupSndHeader not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P7(PUBLIC, pascal trap OSErr, SetupAIFFHeader, INTEGER, refnum, INTEGER,
-   numchannels, Fixed, samplerate, INTEGER, samplesize,
-   OSType, compression, LONGINT, numbytes, LONGINT, numframes)
+PUBLIC pascal trap OSErr Executor::C_SetupAIFFHeader(INTEGER refnum, INTEGER numchannels, Fixed samplerate, INTEGER samplesize, OSType compression, LONGINT numbytes, LONGINT numframes)
 {
     /* #warning SetupAIFFHeader not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P2(PUBLIC, pascal trap OSErr, SPBSignInDevice, INTEGER, refnum, Str255, name)
+PUBLIC pascal trap OSErr Executor::C_SPBSignInDevice(INTEGER refnum, Str255 name)
 {
     /* #warning SPBSignInDevice not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P1(PUBLIC, pascal trap OSErr, SPBSignOutDevice, INTEGER, refnum)
+PUBLIC pascal trap OSErr Executor::C_SPBSignOutDevice(INTEGER refnum)
 {
     /* #warning SPBSignOutDevice not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P3(PUBLIC, pascal trap OSErr, SPBGetIndexedDevice, INTEGER, count,
-   Str255, name, GUEST<Handle> *, deviceiconhandlep)
+PUBLIC pascal trap OSErr Executor::C_SPBGetIndexedDevice(INTEGER count, Str255 name, GUEST<Handle> * deviceiconhandlep)
 {
     /* #warning SPBGetIndexedDevice not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P2(PUBLIC, pascal trap OSErr, SPBMillisecondsToBytes, LONGINT, refnum,
-   GUEST<LONGINT> *, millip)
+PUBLIC pascal trap OSErr Executor::C_SPBMillisecondsToBytes(LONGINT refnum, GUEST<LONGINT> * millip)
 {
     /* #warning SPBMillisecondsToBytes not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P2(PUBLIC, pascal trap OSErr, SPBBytesToMilliseconds, LONGINT, refnum,
-   GUEST<LONGINT> *, bytecountp)
+PUBLIC pascal trap OSErr Executor::C_SPBBytesToMilliseconds(LONGINT refnum, GUEST<LONGINT> * bytecountp)
 {
     /* #warning SPBBytesToMilliseconds not implemented */
     warning_sound_log(NULL_STRING);
     return ROMlib_PretendSound == soundpretend ? noErr : notEnoughHardware;
 }
 
-P0(PUBLIC, pascal trap void, FinaleUnknown1)
+PUBLIC pascal trap void Executor::C_FinaleUnknown1()
 {
     /* Finale calls this */
     warning_sound_log(NULL_STRING);
 }
 
-P4(PUBLIC, pascal trap OSErr, FinaleUnknown2, ResType, arg1, LONGINT, arg2,
-   Ptr, arg3, Ptr, arg4)
+PUBLIC pascal trap OSErr Executor::C_FinaleUnknown2(ResType arg1, LONGINT arg2, Ptr arg3, Ptr arg4)
 {
     /* Finale calls this */
     warning_sound_log(NULL_STRING);
@@ -434,14 +403,13 @@ P4(PUBLIC, pascal trap OSErr, FinaleUnknown2, ResType, arg1, LONGINT, arg2,
 /* various self-running demos (made by Macromedia Director, I think)
    seem to call this */
 
-P0(PUBLIC, pascal trap LONGINT, DirectorUnknown3)
+PUBLIC pascal trap LONGINT Executor::C_DirectorUnknown3()
 {
     warning_sound_log(NULL_STRING);
     return 0;
 }
 
-P4(PUBLIC, pascal trap INTEGER, DirectorUnknown4, ResType, arg1, INTEGER, arg2,
-   Ptr, arg3, Ptr, arg4)
+PUBLIC pascal trap INTEGER Executor::C_DirectorUnknown4(ResType arg1, INTEGER arg2, Ptr arg3, Ptr arg4)
 {
     warning_sound_log(NULL_STRING);
     return paramErr;
@@ -454,7 +422,7 @@ enum
     half_volume = 0x50
 };
 
-P1(PUBLIC, pascal trap OSErr, GetSysBeepVolume, GUEST<LONGINT> *, levelp)
+PUBLIC pascal trap OSErr Executor::C_GetSysBeepVolume(GUEST<LONGINT> * levelp)
 {
     OSErr retval;
 
@@ -464,7 +432,7 @@ P1(PUBLIC, pascal trap OSErr, GetSysBeepVolume, GUEST<LONGINT> *, levelp)
     return retval;
 }
 
-P1(PUBLIC, pascal trap OSErr, SetSysBeepVolume, LONGINT, level)
+PUBLIC pascal trap OSErr Executor::C_SetSysBeepVolume(LONGINT level)
 {
     OSErr retval;
 
@@ -473,7 +441,7 @@ P1(PUBLIC, pascal trap OSErr, SetSysBeepVolume, LONGINT, level)
     return retval;
 }
 
-P1(PUBLIC, pascal trap OSErr, GetDefaultOutputVolume, GUEST<LONGINT> *, levelp)
+PUBLIC pascal trap OSErr Executor::C_GetDefaultOutputVolume(GUEST<LONGINT> * levelp)
 {
     OSErr retval;
 
@@ -483,7 +451,7 @@ P1(PUBLIC, pascal trap OSErr, GetDefaultOutputVolume, GUEST<LONGINT> *, levelp)
     return retval;
 }
 
-P1(PUBLIC, pascal trap OSErr, SetDefaultOutputVolume, LONGINT, level)
+PUBLIC pascal trap OSErr Executor::C_SetDefaultOutputVolume(LONGINT level)
 {
     OSErr retval;
 
@@ -492,8 +460,7 @@ P1(PUBLIC, pascal trap OSErr, SetDefaultOutputVolume, LONGINT, level)
     return retval;
 }
 
-P2(PUBLIC, pascal trap OSErr, GetSoundHeaderOffset, Handle, sndHandle,
-   GUEST<LONGINT> *, offset)
+PUBLIC pascal trap OSErr Executor::C_GetSoundHeaderOffset(Handle sndHandle, GUEST<LONGINT> * offset)
 {
     OSErr retval;
     int num_commands;
@@ -518,8 +485,7 @@ P2(PUBLIC, pascal trap OSErr, GetSoundHeaderOffset, Handle, sndHandle,
     return retval;
 }
 
-P3(PUBLIC, pascal trap UnsignedFixed, UnsignedFixedMulDiv, UnsignedFixed, value,
-   UnsignedFixed, multiplier, UnsignedFixed, divisor)
+PUBLIC pascal trap UnsignedFixed Executor::C_UnsignedFixedMulDiv(UnsignedFixed value, UnsignedFixed multiplier, UnsignedFixed divisor)
 {
     UnsignedFixed retval;
 
@@ -529,9 +495,7 @@ P3(PUBLIC, pascal trap UnsignedFixed, UnsignedFixedMulDiv, UnsignedFixed, value,
     return retval;
 }
 
-P5(PUBLIC, pascal trap OSErr, GetCompressionInfo, INTEGER, compressionID,
-   OSType, format, INTEGER, numChannels, INTEGER, sampleSize,
-   CompressionInfoPtr, cp)
+PUBLIC pascal trap OSErr Executor::C_GetCompressionInfo(INTEGER compressionID, OSType format, INTEGER numChannels, INTEGER sampleSize, CompressionInfoPtr cp)
 {
     OSErr retval;
 
@@ -541,8 +505,7 @@ P5(PUBLIC, pascal trap OSErr, GetCompressionInfo, INTEGER, compressionID,
     return retval;
 }
 
-P3(PUBLIC, pascal trap OSErr, SetSoundPreference, OSType, theType, Str255, name,
-   Handle, settings)
+PUBLIC pascal trap OSErr Executor::C_SetSoundPreference(OSType theType, Str255 name, Handle settings)
 {
     OSErr retval;
 
@@ -552,8 +515,7 @@ P3(PUBLIC, pascal trap OSErr, SetSoundPreference, OSType, theType, Str255, name,
     return retval;
 }
 
-P3(PUBLIC, pascal trap OSErr, GetSoundPreference, OSType, theType, Str255, name,
-   Handle, settings)
+PUBLIC pascal trap OSErr Executor::C_GetSoundPreference(OSType theType, Str255 name, Handle settings)
 {
     OSErr retval;
 
@@ -565,8 +527,7 @@ P3(PUBLIC, pascal trap OSErr, GetSoundPreference, OSType, theType, Str255, name,
 
 /* Sound Manager 3.1 */
 
-P3(PUBLIC, pascal trap OSErr, SndGetInfo, SndChannelPtr, chan, OSType, selector,
-   void *, infoPtr)
+PUBLIC pascal trap OSErr Executor::C_SndGetInfo(SndChannelPtr chan, OSType selector, void * infoPtr)
 {
     OSErr retval;
 
@@ -576,8 +537,7 @@ P3(PUBLIC, pascal trap OSErr, SndGetInfo, SndChannelPtr, chan, OSType, selector,
     return retval;
 }
 
-P3(PUBLIC, pascal trap OSErr, SndSetInfo, SndChannelPtr, chan, OSType, selector,
-   void *, infoPtr)
+PUBLIC pascal trap OSErr Executor::C_SndSetInfo(SndChannelPtr chan, OSType selector, void * infoPtr)
 {
     OSErr retval;
 

@@ -143,7 +143,7 @@ void Executor::ROMlib_sledgehammer_te(TEHandle te)
 }
 #endif
 
-A2(PUBLIC, void, SetWordBreak, ProcPtr, wb, TEHandle, teh)
+PUBLIC void Executor::SetWordBreak(ProcPtr wb, TEHandle teh)
 {
     TE_SLAM(teh);
     HxX(teh, wordBreak) = RM(wb);
@@ -161,14 +161,14 @@ A2(PUBLIC, void, SetWordBreak, ProcPtr, wb, TEHandle, teh)
  *       So this routine is only useful on the PPC.
  */
 
-A2(PUBLIC, void, SetClikLoop, ProcPtr, cp, TEHandle, teh)
+PUBLIC void Executor::SetClikLoop(ProcPtr cp, TEHandle teh)
 {
     TE_SLAM(teh);
     HxX(teh, clikLoop) = RM(cp);
     TE_SLAM(teh);
 }
 
-A1(PUBLIC, INTEGER, ROMlib_wordb, char *, p) /* INTERNAL */
+PUBLIC INTEGER Executor::ROMlib_wordb(char * p) /* INTERNAL */
 {
     return (U(*p) <= 0x20);
 }
@@ -559,7 +559,7 @@ void Executor::ROMlib_caltext(TEHandle te,
         *last_changed_out = last_changed;
 }
 
-P1(PUBLIC pascal trap, void, TECalText, TEHandle, te)
+PUBLIC pascal trap void Executor::C_TECalText(TEHandle te)
 {
     /* don't do this check because people call this caltext when the TE
      has been frobbed and is in a wacky state */
@@ -569,8 +569,7 @@ P1(PUBLIC pascal trap, void, TECalText, TEHandle, te)
     TE_SLAM(te);
 }
 
-P3(PUBLIC pascal trap, int16_t, TEFeatureFlag,
-   int16_t, feature, int16_t, action, TEHandle, te)
+PUBLIC pascal trap int16_t Executor::C_TEFeatureFlag(int16_t feature, int16_t action, TEHandle te)
 {
     switch(feature)
     {

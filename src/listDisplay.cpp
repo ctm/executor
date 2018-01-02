@@ -13,8 +13,8 @@
 
 using namespace Executor;
 
-P2(PUBLIC pascal trap, void, LDraw, Cell, cell, /* IMIV-275 */
-   ListHandle, list)
+PUBLIC pascal trap void Executor::C_LDraw(Cell cell, /* IMIV-275 */
+   ListHandle list)
 {
     GrafPtr saveport;
     GUEST<RgnHandle> saveclip;
@@ -46,8 +46,8 @@ P2(PUBLIC pascal trap, void, LDraw, Cell, cell, /* IMIV-275 */
     }
 }
 
-P2(PUBLIC pascal trap, void, LDoDraw, BOOLEAN, draw, /* IMIV-275 */
-   ListHandle, list)
+PUBLIC pascal trap void Executor::C_LDoDraw(BOOLEAN draw, /* IMIV-275 */
+   ListHandle list)
 {
     if(draw)
     {
@@ -64,8 +64,8 @@ P2(PUBLIC pascal trap, void, LDoDraw, BOOLEAN, draw, /* IMIV-275 */
         HxX(list, listFlags) &= ~DODRAW;
 }
 
-P3(PUBLIC pascal trap, void, LScroll, INTEGER, ncol, /* IMIV-275 */
-   INTEGER, nrow, ListHandle, list)
+PUBLIC pascal trap void Executor::C_LScroll(INTEGER ncol, /* IMIV-275 */
+   INTEGER nrow, ListHandle list)
 {
     RgnHandle rh;
     Rect r;
@@ -132,7 +132,7 @@ P3(PUBLIC pascal trap, void, LScroll, INTEGER, ncol, /* IMIV-275 */
     
 }
 
-P1(PUBLIC pascal trap, void, LAutoScroll, ListHandle, list) /* IMIV-275 */
+PUBLIC pascal trap void Executor::C_LAutoScroll(ListHandle list) /* IMIV-275 */
 {
     GUEST<Cell> gcell;
     Cell cell;
@@ -150,8 +150,8 @@ P1(PUBLIC pascal trap, void, LAutoScroll, ListHandle, list) /* IMIV-275 */
     }
 }
 
-P2(PUBLIC pascal trap, void, LUpdate, RgnHandle, rgn, /* IMIV-275 */
-   ListHandle, list)
+PUBLIC pascal trap void Executor::C_LUpdate(RgnHandle rgn, /* IMIV-275 */
+   ListHandle list)
 {
     Rect r;
     Cell c, csize;
@@ -199,8 +199,8 @@ P2(PUBLIC pascal trap, void, LUpdate, RgnHandle, rgn, /* IMIV-275 */
     
 }
 
-P2(PUBLIC pascal trap, void, LActivate, BOOLEAN, act, /* IMIV-276 */
-   ListHandle, list)
+PUBLIC pascal trap void Executor::C_LActivate(BOOLEAN act, /* IMIV-276 */
+   ListHandle list)
 {
     Cell c;
     Rect r;

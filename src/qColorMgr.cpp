@@ -22,13 +22,13 @@ using namespace Executor;
 
 INTEGER ROMlib_qd_error;
 
-P0(PUBLIC pascal trap, INTEGER, QDError)
+PUBLIC pascal trap INTEGER Executor::C_QDError()
 {
     /* #warning "make QDError work for real" */
     return ROMlib_qd_error;
 }
 
-P0(PUBLIC pascal trap, LONGINT, GetCTSeed)
+PUBLIC pascal trap LONGINT Executor::C_GetCTSeed()
 {
     static LONGINT seed = minSeed;
 
@@ -197,8 +197,7 @@ ROMlib_search_proc(RGBColor *rgb)
     return retval;
 }
 
-P1(PUBLIC pascal trap, LONGINT, Color2Index,
-   RGBColor *, rgb)
+PUBLIC pascal trap LONGINT Executor::C_Color2Index(RGBColor * rgb)
 {
     SProcHndl t;
     LONGINT success_p;
@@ -251,16 +250,13 @@ P1(PUBLIC pascal trap, LONGINT, Color2Index,
         return CL(position); /* They filled this in in big endian order. */
 }
 
-P2(PUBLIC pascal trap, void, Index2Color,
-   LONGINT, index,
-   RGBColor *, rgb)
+PUBLIC pascal trap void Executor::C_Index2Color(LONGINT index, RGBColor * rgb)
 {
     CTabHandle ctab = PIXMAP_TABLE(GD_PMAP(MR(TheGDevice)));
     *rgb = CTAB_TABLE(ctab)[index].rgb;
 }
 
-P1(PUBLIC pascal trap, void, InvertColor,
-   RGBColor *, rgb)
+PUBLIC pascal trap void Executor::C_InvertColor(RGBColor * rgb)
 {
     /* #warning "only use default InvertColor complement procedure" */
 
@@ -270,8 +266,7 @@ P1(PUBLIC pascal trap, void, InvertColor,
     rgb->blue.raw(~rgb->blue.raw());
 }
 
-P1(PUBLIC pascal trap, BOOLEAN, RealColor,
-   RGBColor *, rgb)
+PUBLIC pascal trap BOOLEAN Executor::C_RealColor(RGBColor * rgb)
 {
     GDHandle gdev;
     ITabHandle inverse_table;
@@ -303,10 +298,7 @@ P1(PUBLIC pascal trap, BOOLEAN, RealColor,
              || ((rgb->blue.raw() ^ closest->blue.raw()) & mask));
 }
 
-P3(PUBLIC pascal trap, void, GetSubTable,
-   CTabHandle, in_ctab,
-   INTEGER, resolution,
-   CTabHandle, target_ctab)
+PUBLIC pascal trap void Executor::C_GetSubTable(CTabHandle in_ctab, INTEGER resolution, CTabHandle target_ctab)
 {
     /* cached itable from the last transaction */
     static ITabHandle cached_itab = NULL;
@@ -459,9 +451,7 @@ int Executor::average_color(GDHandle gd,
     }
 }
 
-P3(PUBLIC pascal trap, BOOLEAN, GetGray,
-   GDHandle, gdev,
-   RGBColor *, bk, RGBColor *, fg)
+PUBLIC pascal trap BOOLEAN Executor::C_GetGray(GDHandle gdev, RGBColor * bk, RGBColor * fg)
 {
     return average_color(gdev, bk, fg, 0x8000, fg);
 }
@@ -607,10 +597,7 @@ add_hash_table(CTabHandle color_table, ITabHandle inverse_table,
 }
 #endif
 
-P3(PUBLIC pascal trap, void, MakeITable,
-   CTabHandle, color_table,
-   ITabHandle, inverse_table,
-   INTEGER, resolution)
+PUBLIC pascal trap void Executor::C_MakeITable(CTabHandle color_table, ITabHandle inverse_table, INTEGER resolution)
 {
     /* this also counts the number of elements in the queue */
     int itab_elt_count;
@@ -837,8 +824,7 @@ P3(PUBLIC pascal trap, void, MakeITable,
     ITAB_SEED_X(inverse_table) = CTAB_SEED_X(color_table);
 }
 
-P2(PUBLIC pascal trap, void, ProtectEntry,
-   INTEGER, index, BOOLEAN, protect)
+PUBLIC pascal trap void Executor::C_ProtectEntry(INTEGER index, BOOLEAN protect)
 {
     GDHandle gdev;
     ColorSpec *entry;
@@ -865,8 +851,7 @@ P2(PUBLIC pascal trap, void, ProtectEntry,
      current graphics device's colortable is unchanged */
 }
 
-P2(PUBLIC pascal trap, void, ReserveEntry,
-   INTEGER, index, BOOLEAN, reserve)
+PUBLIC pascal trap void Executor::C_ReserveEntry(INTEGER index, BOOLEAN reserve)
 {
     GDHandle gdev;
     CTabHandle ctab;
@@ -905,9 +890,7 @@ P2(PUBLIC pascal trap, void, ReserveEntry,
         CTAB_SEED_X(ctab) = CL(GetCTSeed());
 }
 
-P3(PUBLIC pascal trap, void, SetEntries,
-   INTEGER, start, INTEGER, count,
-   ColorSpec *, atable /* cSpecArray, atable */)
+PUBLIC pascal trap void Executor::C_SetEntries(INTEGER start, INTEGER count, ColorSpec * atable)
 {
     /* ##### figure out exactly what the mac does */
     GDHandle gd;
@@ -995,8 +978,7 @@ P3(PUBLIC pascal trap, void, SetEntries,
     }
 }
 
-P1(PUBLIC pascal trap, void, AddSearch,
-   ProcPtr, searchProc)
+PUBLIC pascal trap void Executor::C_AddSearch(ProcPtr searchProc)
 {
     GDHandle gdev;
     SProcHndl search_list_elt;
@@ -1013,14 +995,12 @@ P1(PUBLIC pascal trap, void, AddSearch,
     ROMlib_invalidate_conversion_tables();
 }
 
-P1(PUBLIC pascal trap, void, AddComp,
-   ProcPtr, compProc)
+PUBLIC pascal trap void Executor::C_AddComp(ProcPtr compProc)
 {
     warning_unimplemented(NULL_STRING);
 }
 
-P1(PUBLIC pascal trap, void, DelSearch,
-   ProcPtr, searchProc)
+PUBLIC pascal trap void Executor::C_DelSearch(ProcPtr searchProc)
 {
     GDHandle gdev;
     SProcHndl s, prev;
@@ -1049,20 +1029,17 @@ P1(PUBLIC pascal trap, void, DelSearch,
         warning_unimplemented(NULL_STRING);
 }
 
-P1(PUBLIC pascal trap, void, DelComp,
-   ProcPtr, compProc)
+PUBLIC pascal trap void Executor::C_DelComp(ProcPtr compProc)
 {
     warning_unimplemented(NULL_STRING);
 }
 
-P1(PUBLIC pascal trap, void, SetClientID,
-   INTEGER, id)
+PUBLIC pascal trap void Executor::C_SetClientID(INTEGER id)
 {
     GD_ID_X(MR(TheGDevice)) = CW(id);
 }
 
-P3(PUBLIC pascal trap, void, SaveEntries, CTabHandle, src, CTabHandle, result,
-   ReqListRec *, selection)
+PUBLIC pascal trap void Executor::C_SaveEntries(CTabHandle src, CTabHandle result, ReqListRec * selection)
 {
     int req_size, src_ctab_size;
     int req_error_p = false;
@@ -1102,8 +1079,7 @@ P3(PUBLIC pascal trap, void, SaveEntries, CTabHandle, src, CTabHandle, result,
     }
 }
 
-P3(PUBLIC pascal trap, void, RestoreEntries, CTabHandle, src, CTabHandle, dst,
-   ReqListRec *, selection)
+PUBLIC pascal trap void Executor::C_RestoreEntries(CTabHandle src, CTabHandle dst, ReqListRec * selection)
 {
     int req_size, dst_ctab_size;
     int req_error_p = false;

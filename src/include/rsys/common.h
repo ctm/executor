@@ -24,7 +24,6 @@
 
 #include "rsys/pascal.h"
 #include "ExMacTypes.h"
-#include "rsys/trapdecl.h"
 #include "rsys/slash.h"
 #include "rsys/error.h"
 #if !defined USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES

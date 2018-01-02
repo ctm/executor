@@ -16,18 +16,18 @@
 
 using namespace Executor;
 
-P1(PUBLIC, pascal void, ROMlib_mysound, INTEGER, i)
+PUBLIC pascal void Executor::C_ROMlib_mysound(INTEGER i)
 {
     while(i--)
         SysBeep(5);
 }
 
-P1(PUBLIC pascal trap, void, ErrorSound, ProcPtr, sp) /* IMI-411 */
+PUBLIC pascal trap void Executor::C_ErrorSound(ProcPtr sp) /* IMI-411 */
 {
     DABeeper = RM(sp);
 }
 
-P1(PUBLIC pascal trap, void, InitDialogs, ProcPtr, rp) /* IMI-411 */
+PUBLIC pascal trap void Executor::C_InitDialogs(ProcPtr rp) /* IMI-411 */
 {
     Ptr nothing = (Ptr) "";
 
@@ -47,7 +47,7 @@ P1(PUBLIC pascal trap, void, InitDialogs, ProcPtr, rp) /* IMI-411 */
     DAStrings[3] = RM(tmp);
 }
 
-A1(PUBLIC, void, SetDAFont, INTEGER, i) /* IMI-412 */
+PUBLIC void Executor::SetDAFont(INTEGER i) /* IMI-412 */
 {
     DlgFont = CW(i);
 }

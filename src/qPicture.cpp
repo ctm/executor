@@ -100,7 +100,7 @@ PUBLIC PicHandle Executor::ROMlib_OpenPicture_helper(const Rect *pf,
     return (ph);
 }
 
-P1(PUBLIC pascal trap, PicHandle, OpenPicture, Rect *, pf)
+PUBLIC pascal trap PicHandle Executor::C_OpenPicture(Rect * pf)
 {
     PicHandle retval;
 
@@ -408,7 +408,7 @@ PUBLIC void Executor::ROMlib_drawingverbrectovalpicupdate(GrafVerb v, Rect *rp,
     updateoval(ovp);
 }
 
-P0(PUBLIC pascal trap, void, ClosePicture)
+PUBLIC pascal trap void Executor::C_ClosePicture()
 {
     piccachehand pch;
 
@@ -426,21 +426,19 @@ P0(PUBLIC pascal trap, void, ClosePicture)
     }
 }
 
-P3(PUBLIC pascal trap, void, PicComment, INTEGER, kind, INTEGER, size,
-   Handle, hand)
+PUBLIC pascal trap void Executor::C_PicComment(INTEGER kind, INTEGER size, Handle hand)
 {
     CALLCOMMENT(kind, size, hand);
 }
 
-P3(PUBLIC pascal trap, void, ReadComment, INTEGER, kind, INTEGER, size,
-   Handle, hand)
+PUBLIC pascal trap void Executor::C_ReadComment(INTEGER kind, INTEGER size, Handle hand)
 {
     CALLCOMMENT(kind, size, hand);
 }
 
 /* look in qPicStuff.c for DrawPicture */
 
-P1(PUBLIC pascal trap, void, KillPicture, PicHandle, pic)
+PUBLIC pascal trap void Executor::C_KillPicture(PicHandle pic)
 {
     /*
  * It's not clear what the Mac does in the case below.  We really should

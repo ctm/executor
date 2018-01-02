@@ -119,13 +119,7 @@ void delete_gw_info(gw_info_t *gw_info)
     gw_info_free = gw_info;
 }
 
-P6(PUBLIC pascal trap, QDErr, NewGWorld,
-   GUEST<GWorldPtr> *, graphics_world_out,
-   INTEGER, depth,
-   Rect *, bounds,
-   CTabHandle, ctab,
-   GDHandle, gw_gd,
-   GWorldFlags, flags)
+PUBLIC pascal trap QDErr Executor::C_NewGWorld(GUEST<GWorldPtr> * graphics_world_out, INTEGER depth, Rect * bounds, CTabHandle ctab, GDHandle gw_gd, GWorldFlags flags)
 {
     PixMapHandle gw_pixmap, gd_pixmap;
     GWorldPtr graphics_world;
@@ -292,8 +286,7 @@ P6(PUBLIC pascal trap, QDErr, NewGWorld,
     return noErr;
 }
 
-P1(PUBLIC pascal trap, Boolean, LockPixels,
-   PixMapHandle, pixels)
+PUBLIC pascal trap Boolean Executor::C_LockPixels(PixMapHandle pixels)
 {
     gw_info_t *gw_info = lookup_gw_info_by_gw_pixmap(pixels);
     Handle pixels_baseaddr_h;
@@ -321,8 +314,7 @@ P1(PUBLIC pascal trap, Boolean, LockPixels,
     return true;
 }
 
-P1(PUBLIC pascal trap, void, UnlockPixels,
-   PixMapHandle, pixels)
+PUBLIC pascal trap void Executor::C_UnlockPixels(PixMapHandle pixels)
 {
     gw_info_t *gw_info = lookup_gw_info_by_gw_pixmap(pixels);
     Handle pixels_baseaddr_h;
@@ -353,13 +345,7 @@ P1(PUBLIC pascal trap, void, UnlockPixels,
     }
 }
 
-P6(PUBLIC pascal trap, GWorldFlags, UpdateGWorld,
-   GUEST<GWorldPtr> *, graphics_world,
-   INTEGER, depth,
-   Rect *, bounds,
-   CTabHandle, ctab,
-   GDHandle, a_gdevice,
-   GWorldFlags, flags)
+PUBLIC pascal trap GWorldFlags Executor::C_UpdateGWorld(GUEST<GWorldPtr> * graphics_world, INTEGER depth, Rect * bounds, CTabHandle ctab, GDHandle a_gdevice, GWorldFlags flags)
 {
     gw_info_t *gw_info;
     GWorldPtr gw;
@@ -494,8 +480,7 @@ P6(PUBLIC pascal trap, GWorldFlags, UpdateGWorld,
     return retval;
 }
 
-P1(PUBLIC pascal trap, void, DisposeGWorld,
-   GWorldPtr, graphics_world)
+PUBLIC pascal trap void Executor::C_DisposeGWorld(GWorldPtr graphics_world)
 {
     gw_info_t *gw_info;
 
@@ -533,17 +518,13 @@ P1(PUBLIC pascal trap, void, DisposeGWorld,
     delete_gw_info(gw_info);
 }
 
-P2(PUBLIC pascal trap, void, GetGWorld,
-   GUEST<CGrafPtr> *, port,
-   GUEST<GDHandle> *, graphics_device)
+PUBLIC pascal trap void Executor::C_GetGWorld(GUEST<CGrafPtr> * port, GUEST<GDHandle> * graphics_device)
 {
     *port = theCPortX;
     *graphics_device = TheGDevice;
 }
 
-P2(PUBLIC pascal trap, void, SetGWorld,
-   CGrafPtr, port,
-   GDHandle, graphics_device)
+PUBLIC pascal trap void Executor::C_SetGWorld(CGrafPtr port, GDHandle graphics_device)
 {
     if(port && GRAPHICS_WORLD_P(port))
     {
@@ -573,8 +554,7 @@ P2(PUBLIC pascal trap, void, SetGWorld,
     theCPortX = RM(port);
 }
 
-P1(PUBLIC pascal trap, void, AllowPurgePixels,
-   PixMapHandle, pixels)
+PUBLIC pascal trap void Executor::C_AllowPurgePixels(PixMapHandle pixels)
 {
     gw_info_t *gw_info;
     Handle pixels_baseaddr_h;
@@ -590,8 +570,7 @@ P1(PUBLIC pascal trap, void, AllowPurgePixels,
     }
 }
 
-P1(PUBLIC pascal trap, void, NoPurgePixels,
-   PixMapHandle, pixels)
+PUBLIC pascal trap void Executor::C_NoPurgePixels(PixMapHandle pixels)
 {
     gw_info_t *gw_info;
     Handle pixels_baseaddr_h;
@@ -609,8 +588,7 @@ P1(PUBLIC pascal trap, void, NoPurgePixels,
 
 #define FLAGMASK (pixelsPurgeable | pixelsLocked | keepLocal)
 
-P1(PUBLIC pascal trap, GWorldFlags, GetPixelsState,
-   PixMapHandle, pixels)
+PUBLIC pascal trap GWorldFlags Executor::C_GetPixelsState(PixMapHandle pixels)
 {
     gw_info_t *gw_info;
 
@@ -619,9 +597,7 @@ P1(PUBLIC pascal trap, GWorldFlags, GetPixelsState,
     return gw_info ? (gw_info->flags & FLAGMASK) : 0;
 }
 
-P2(PUBLIC pascal trap, void, SetPixelsState,
-   PixMapHandle, pixels,
-   GWorldFlags, state)
+PUBLIC pascal trap void Executor::C_SetPixelsState(PixMapHandle pixels, GWorldFlags state)
 {
     gw_info_t *gw_info;
 
@@ -645,8 +621,7 @@ P2(PUBLIC pascal trap, void, SetPixelsState,
     }
 }
 
-P1(PUBLIC pascal trap, Ptr, GetPixBaseAddr,
-   PixMapHandle, pixels)
+PUBLIC pascal trap Ptr Executor::C_GetPixBaseAddr(PixMapHandle pixels)
 {
     gw_info_t *gw_info = lookup_gw_info_by_gw_pixmap(pixels);
 
@@ -667,11 +642,7 @@ P1(PUBLIC pascal trap, Ptr, GetPixBaseAddr,
         return STARH((Handle)PIXMAP_BASEADDR(pixels));
 }
 
-P4(PUBLIC pascal trap, QDErr, NewScreenBuffer,
-   Rect *, global_rect,
-   Boolean, purgeable_p,
-   GUEST<GDHandle> *, graphics_device,
-   GUEST<PixMapHandle> *, offscreen_pixmap)
+PUBLIC pascal trap QDErr Executor::C_NewScreenBuffer(Rect * global_rect, Boolean purgeable_p, GUEST<GDHandle> * graphics_device, GUEST<PixMapHandle> * offscreen_pixmap)
 {
     GDHandle max_graphics_device;
     PixMapHandle pixels, gd_pixmap;
@@ -727,8 +698,7 @@ P4(PUBLIC pascal trap, QDErr, NewScreenBuffer,
     return noErr;
 }
 
-P1(PUBLIC pascal trap, void, DisposeScreenBuffer,
-   PixMapHandle, pixels)
+PUBLIC pascal trap void Executor::C_DisposeScreenBuffer(PixMapHandle pixels)
 {
     gw_info_t *gw_info = lookup_gw_info_by_gw_pixmap(pixels);
 
@@ -752,24 +722,21 @@ P1(PUBLIC pascal trap, void, DisposeScreenBuffer,
     }
 }
 
-P1(PUBLIC pascal trap, GDHandle, GetGWorldDevice,
-   GWorldPtr, graphics_world)
+PUBLIC pascal trap GDHandle Executor::C_GetGWorldDevice(GWorldPtr graphics_world)
 {
     gw_info_t *gw_info = lookup_gw_info_by_gw(graphics_world);
 
     return gw_info->gw_gd;
 }
 
-P1(PUBLIC pascal trap, Boolean, PixMap32Bit,
-   PixMapHandle, pixels)
+PUBLIC pascal trap Boolean Executor::C_PixMap32Bit(PixMapHandle pixels)
 {
     warning_unimplemented("poorly implemented");
     return true;
     /* #warning "Haven't verified that true is better than 0xff or 0 in PixMap32Bit" */
 }
 
-P1(PUBLIC pascal trap, PixMapHandle, GetGWorldPixMap,
-   GWorldPtr, port)
+PUBLIC pascal trap PixMapHandle Executor::C_GetGWorldPixMap(GWorldPtr port)
 {
     gw_info_t *gw_info = lookup_gw_info_by_gw(port);
 
@@ -781,11 +748,7 @@ P1(PUBLIC pascal trap, PixMapHandle, GetGWorldPixMap,
         return CPORT_PIXMAP(port);
 }
 
-P4(PUBLIC pascal trap, QDErr, NewTempScreenBuffer,
-   Rect *, global_rect,
-   Boolean, purgeable_p,
-   GUEST<GDHandle> *, graphics_device,
-   GUEST<PixMapHandle> *, offscreen_pixmap)
+PUBLIC pascal trap QDErr Executor::C_NewTempScreenBuffer(Rect * global_rect, Boolean purgeable_p, GUEST<GDHandle> * graphics_device, GUEST<PixMapHandle> * offscreen_pixmap)
 {
     gui_fatal("unimplemented");
 #if !defined(LETGCCWAIL)
@@ -793,47 +756,42 @@ P4(PUBLIC pascal trap, QDErr, NewTempScreenBuffer,
 #endif
 }
 
-P0(PUBLIC pascal trap, LONGINT, OffscreenVersion)
+PUBLIC pascal trap LONGINT Executor::C_OffscreenVersion()
 {
     /* #warning OffscreenVersion not properly implemented */
     warning_unimplemented("poorly implemented");
     return 0x130;
 }
 
-P1(PUBLIC pascal trap, void, GDeviceChanged,
-   GDHandle, graphics_device)
+PUBLIC pascal trap void Executor::C_GDeviceChanged(GDHandle graphics_device)
 {
     /* #warning GDeviceChanged not implemented */
     ROMlib_invalidate_conversion_tables();
     warning_unimplemented(NULL_STRING);
 }
 
-P1(PUBLIC pascal trap, void, PortChanged,
-   GrafPtr, port)
+PUBLIC pascal trap void Executor::C_PortChanged(GrafPtr port)
 {
     /* #warning "PortChanged not implemented; worked around for hypercard" */
     ROMlib_invalidate_conversion_tables();
     warning_unimplemented(NULL_STRING);
 }
 
-P1(PUBLIC pascal trap, void, PixPatChanged,
-   PixPatHandle, pixpat)
+PUBLIC pascal trap void Executor::C_PixPatChanged(PixPatHandle pixpat)
 {
     /* #warning "PixPatChanged not implemented" */
     ROMlib_invalidate_conversion_tables();
     warning_unimplemented(NULL_STRING);
 }
 
-P1(PUBLIC pascal trap, void, CTabChanged,
-   CTabHandle, ctab)
+PUBLIC pascal trap void Executor::C_CTabChanged(CTabHandle ctab)
 {
     /* #warning "CTabChanged not implemented" */
     ROMlib_invalidate_conversion_tables();
     warning_unimplemented(NULL_STRING);
 }
 
-P1(PUBLIC pascal trap, Boolean, QDDone,
-   GrafPtr, port)
+PUBLIC pascal trap Boolean Executor::C_QDDone(GrafPtr port)
 {
     /* #warning "QDDone not implemented" */
     warning_unimplemented(NULL_STRING);

@@ -18,10 +18,7 @@
 
 using namespace Executor;
 
-P6(PUBLIC pascal trap, void, CopyBits,
-   BitMap *, src_bitmap, BitMap *, dst_bitmap,
-   const Rect *, src_rect, const Rect *, dst_rect,
-   INTEGER, mode, RgnHandle, mask)
+PUBLIC pascal trap void Executor::C_CopyBits(BitMap * src_bitmap, BitMap * dst_bitmap, const Rect * src_rect, const Rect * dst_rect, INTEGER mode, RgnHandle mask)
 {
     if(ROMlib_text_output_disabled_p)
         /*-->*/ return;
@@ -156,8 +153,7 @@ P6(PUBLIC pascal trap, void, CopyBits,
 #endif
 }
 
-P4(PUBLIC pascal trap, void, ScrollRect, Rect *, rp, INTEGER, dh, INTEGER, dv,
-   RgnHandle, updatergn)
+PUBLIC pascal trap void Executor::C_ScrollRect(Rect * rp, INTEGER dh, INTEGER dv, RgnHandle updatergn)
 {
     Rect srcr, dstr;
     RgnHandle temp, temp2, updatergn2, srcregion;

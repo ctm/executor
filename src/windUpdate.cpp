@@ -12,7 +12,7 @@
 
 using namespace Executor;
 
-P1(PUBLIC pascal trap, void, InvalRect, Rect *, r)
+PUBLIC pascal trap void Executor::C_InvalRect(Rect * r)
 {
     if(thePort)
     {
@@ -30,7 +30,7 @@ P1(PUBLIC pascal trap, void, InvalRect, Rect *, r)
     }
 }
 
-P1(PUBLIC pascal trap, void, InvalRgn, RgnHandle, r)
+PUBLIC pascal trap void Executor::C_InvalRgn(RgnHandle r)
 {
     GrafPtr current_port;
     RgnHandle update_rgn;
@@ -48,7 +48,7 @@ P1(PUBLIC pascal trap, void, InvalRgn, RgnHandle, r)
     OffsetRgn(r, left, top);
 }
 
-P1(PUBLIC pascal trap, void, ValidRect, Rect *, r)
+PUBLIC pascal trap void Executor::C_ValidRect(Rect * r)
 {
     RgnHandle rh;
 
@@ -61,7 +61,7 @@ P1(PUBLIC pascal trap, void, ValidRect, Rect *, r)
     DisposeRgn(rh);
 }
 
-P1(PUBLIC pascal trap, void, ValidRgn, RgnHandle, r)
+PUBLIC pascal trap void Executor::C_ValidRgn(RgnHandle r)
 {
     OffsetRgn(r, -CW(PORT_BOUNDS(thePort).left),
               -CW(PORT_BOUNDS(thePort).top));
@@ -73,7 +73,7 @@ P1(PUBLIC pascal trap, void, ValidRgn, RgnHandle, r)
 
 PUBLIC int Executor::ROMlib_emptyvis = 0;
 
-P1(PUBLIC pascal trap, void, BeginUpdate, WindowPtr, w)
+PUBLIC pascal trap void Executor::C_BeginUpdate(WindowPtr w)
 {
     /* #warning Should SaveVisRgn ever become 0? */
     if(!SaveVisRgn)
@@ -98,7 +98,7 @@ P1(PUBLIC pascal trap, void, BeginUpdate, WindowPtr, w)
     }
 }
 
-P1(PUBLIC pascal trap, void, EndUpdate, WindowPtr, w)
+PUBLIC pascal trap void Executor::C_EndUpdate(WindowPtr w)
 {
     CopyRgn(MR(SaveVisRgn), PORT_VIS_REGION(w));
     CopyRgn(WINDOW_CONT_REGION(w), MR(SaveVisRgn));

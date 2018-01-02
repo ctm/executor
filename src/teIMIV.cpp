@@ -15,8 +15,8 @@
 
 using namespace Executor;
 
-P3(PUBLIC pascal trap, void, TEPinScroll, int16_t, dh, /* IMIV-57 */
-   int16_t, dv, TEHandle, te)
+PUBLIC pascal trap void Executor::C_TEPinScroll(int16_t dh, /* IMIV-57 */
+   int16_t dv, TEHandle te)
 {
     Rect *view_rect;
     Rect *dest_rect;
@@ -98,7 +98,7 @@ P3(PUBLIC pascal trap, void, TEPinScroll, int16_t, dh, /* IMIV-57 */
  * conventions.
  */
 
-A1(PUBLIC, void, ROMlib_teautoloop, TEHandle, teh)
+PUBLIC void Executor::ROMlib_teautoloop(TEHandle teh)
 {
     GUEST<Point> pt;
 
@@ -130,7 +130,7 @@ getdelta(int16_t selstart, int16_t selstop,
  * NOTE:  We should be using SelRect in TESelView and elsewhere (sigh).
  */
 
-P1(PUBLIC pascal trap, void, TESelView, TEHandle, teh) /* IMIV-57 */
+PUBLIC pascal trap void Executor::C_TESelView(TEHandle teh) /* IMIV-57 */
 {
     int16_t dh, dv;
     Point start, stop;
@@ -148,8 +148,8 @@ P1(PUBLIC pascal trap, void, TESelView, TEHandle, teh) /* IMIV-57 */
     }
 }
 
-P2(PUBLIC pascal trap, void, TEAutoView, BOOLEAN, autoflag, /* IMIV-57 */
-   TEHandle, teh)
+PUBLIC pascal trap void Executor::C_TEAutoView(BOOLEAN autoflag, /* IMIV-57 */
+   TEHandle teh)
 {
     if(autoflag)
         STARH(TEHIDDENH(teh))->flags.raw_or(CLC(TEAUTOVIEWBIT));

@@ -10,30 +10,30 @@
 
 using namespace Executor;
 
-P2(PUBLIC pascal trap, void, AddPt, Point, src, GUEST<Point> *, dst)
+PUBLIC pascal trap void Executor::C_AddPt(Point src, GUEST<Point> * dst)
 {
     dst->h = CW(CW(dst->h) + (src.h));
     dst->v = CW(CW(dst->v) + (src.v));
 }
 
-P2(PUBLIC pascal trap, void, SubPt, Point, src, GUEST<Point> *, dst)
+PUBLIC pascal trap void Executor::C_SubPt(Point src, GUEST<Point> * dst)
 {
     dst->h = CW(CW(dst->h) - (src.h));
     dst->v = CW(CW(dst->v) - (src.v));
 }
 
-P3(PUBLIC pascal trap, void, SetPt, GUEST<Point> *, pt, INTEGER, h, INTEGER, v)
+PUBLIC pascal trap void Executor::C_SetPt(GUEST<Point> * pt, INTEGER h, INTEGER v)
 {
     pt->h = CW(h);
     pt->v = CW(v);
 }
 
-P2(PUBLIC pascal trap, BOOLEAN, EqualPt, Point, p1, Point, p2)
+PUBLIC pascal trap BOOLEAN Executor::C_EqualPt(Point p1, Point p2)
 {
     return (p1.h == p2.h && p1.v == p2.v);
 }
 
-P1(PUBLIC pascal trap, void, LocalToGlobal, GUEST<Point> *, pt)
+PUBLIC pascal trap void Executor::C_LocalToGlobal(GUEST<Point> * pt)
 {
     if(thePortX)
     {
@@ -42,7 +42,7 @@ P1(PUBLIC pascal trap, void, LocalToGlobal, GUEST<Point> *, pt)
     }
 }
 
-P1(PUBLIC pascal trap, void, GlobalToLocal, GUEST<Point> *, pt)
+PUBLIC pascal trap void Executor::C_GlobalToLocal(GUEST<Point> * pt)
 {
     if(thePortX)
     {

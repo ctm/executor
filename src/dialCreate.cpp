@@ -283,10 +283,9 @@ ROMlib_new_dialog_common(DialogPtr dp,
     return (DialogPtr)dp;
 }
 
-/* IM-MTE calls this `NewColorDialog ()' */
-P9(PUBLIC pascal trap, CDialogPtr, NewCDialog, Ptr, storage, /* IMI-412 */
-   Rect *, bounds, StringPtr, title, BOOLEAN, visible_p, INTEGER, proc_id,
-   WindowPtr, behind, BOOLEAN, go_away_flag, LONGINT, ref_con, Handle, items)
+/* IM-MTE calls this NewColorDialog () */
+PUBLIC pascal trap CDialogPtr Executor::C_NewCDialog(Ptr storage, /* IMI-412 */
+   Rect * bounds, StringPtr title, BOOLEAN visible_p, INTEGER proc_id, WindowPtr behind, BOOLEAN go_away_flag, LONGINT ref_con, Handle items)
 {
     return (CDialogPtr)ROMlib_new_dialog_common((DialogPtr)storage,
                                                 /* color */ true, NULL, NULL,
@@ -295,9 +294,8 @@ P9(PUBLIC pascal trap, CDialogPtr, NewCDialog, Ptr, storage, /* IMI-412 */
                                                 items);
 }
 
-P9(PUBLIC pascal trap, DialogPtr, NewDialog, Ptr, storage, /* IMI-412 */
-   Rect *, bounds, StringPtr, title, BOOLEAN, visible_p, INTEGER, proc_id,
-   WindowPtr, behind, BOOLEAN, go_away_flag, LONGINT, ref_con, Handle, items)
+PUBLIC pascal trap DialogPtr Executor::C_NewDialog(Ptr storage, /* IMI-412 */
+   Rect * bounds, StringPtr title, BOOLEAN visible_p, INTEGER proc_id, WindowPtr behind, BOOLEAN go_away_flag, LONGINT ref_con, Handle items)
 {
     return ROMlib_new_dialog_common((DialogPtr)storage,
                                     /* not color */ false, NULL, NULL,
@@ -370,8 +368,8 @@ void Executor::dialog_compute_rect(Rect *dialog_rect, Rect *dst_rect,
     }
 }
 
-P3(PUBLIC pascal trap, DialogPtr, GetNewDialog, INTEGER, id, /* IMI-413 */
-   Ptr, dst, WindowPtr, behind)
+PUBLIC pascal trap DialogPtr Executor::C_GetNewDialog(INTEGER id, /* IMI-413 */
+   Ptr dst, WindowPtr behind)
 {
     dlogh dialog_res_h;
     Handle dialog_item_list_res_h;
@@ -421,7 +419,7 @@ P3(PUBLIC pascal trap, DialogPtr, GetNewDialog, INTEGER, id, /* IMI-413 */
     return retval;
 }
 
-P1(PUBLIC pascal trap, void, CloseDialog, DialogPtr, dp) /* IMI-413 */
+PUBLIC pascal trap void Executor::C_CloseDialog(DialogPtr dp) /* IMI-413 */
 {
     Handle items;
     GUEST<INTEGER> *ip;
@@ -445,7 +443,7 @@ P1(PUBLIC pascal trap, void, CloseDialog, DialogPtr, dp) /* IMI-413 */
     CloseWindow((WindowPtr)dp);
 }
 
-P1(PUBLIC pascal trap, void, DisposDialog, DialogPtr, dp) /* IMI-415 */
+PUBLIC pascal trap void Executor::C_DisposDialog(DialogPtr dp) /* IMI-415 */
 {
     TEHandle teh;
 

@@ -35,7 +35,7 @@ using namespace Executor;
  *	 Hence, the handle that hp points to is not swapped.
  */
 
-A1(PUBLIC trap, OSErrRET, HandToHand, Handle *, hp)
+PUBLIC trap OSErrRET Executor::HandToHand(Handle * hp)
 {
     Handle nh;
     Size s;
@@ -65,7 +65,7 @@ A1(PUBLIC trap, OSErrRET, HandToHand, Handle *, hp)
  *	 h points to isn't swapped.
  */
 
-A3(PUBLIC trap, OSErrRET, PtrToHand, Ptr, p, Handle *, h, LONGINT, s)
+PUBLIC trap OSErrRET Executor::PtrToHand(Ptr p, Handle * h, LONGINT s)
 {
     Handle nh;
     OSErr err;
@@ -80,7 +80,7 @@ A3(PUBLIC trap, OSErrRET, PtrToHand, Ptr, p, Handle *, h, LONGINT, s)
     return (noErr);
 }
 
-A3(PUBLIC trap, OSErrRET, PtrToXHand, Ptr, p, Handle, h, LONGINT, s)
+PUBLIC trap OSErrRET Executor::PtrToXHand(Ptr p, Handle h, LONGINT s)
 {
     OSErr err;
 
@@ -96,7 +96,7 @@ A3(PUBLIC trap, OSErrRET, PtrToXHand, Ptr, p, Handle, h, LONGINT, s)
     return (noErr);
 }
 
-A2(PUBLIC trap, OSErrRET, HandAndHand, Handle, h1, Handle, h2)
+PUBLIC trap OSErrRET Executor::HandAndHand(Handle h1, Handle h2)
 {
     Size s1 = GetHandleSize(h1), s2 = GetHandleSize(h2);
     OSErr err;
@@ -110,7 +110,7 @@ A2(PUBLIC trap, OSErrRET, HandAndHand, Handle, h1, Handle, h2)
     return (noErr);
 }
 
-A3(PUBLIC trap, OSErrRET, PtrAndHand, Ptr, p, Handle, h, LONGINT, s1)
+PUBLIC trap OSErrRET Executor::PtrAndHand(Ptr p, Handle h, LONGINT s1)
 {
     Size s2 = GetHandleSize(h);
     OSErr err;
@@ -204,8 +204,7 @@ PRIVATE unsigned char order[256] = {
     0xF0, 0xF1, 0xF2, 0xF3, 0xF4, 0xF5, 0xF6, 0xF7, 0xF8, 0xF9, 0xFA, 0xFB, 0xFC, 0xFD, 0xFE, 0xFF,
 };
 
-A5(PUBLIC, LONGINT, ROMlib_RelString, unsigned char *, s1, unsigned char *, s2,
-   BOOLEAN, casesig, BOOLEAN, diacsig, LONGINT, d0)
+PUBLIC LONGINT Executor::ROMlib_RelString(unsigned char * s1, unsigned char * s2, BOOLEAN casesig, BOOLEAN diacsig, LONGINT d0)
 {
     INTEGER n1, n2;
     unsigned char *s, *t;
@@ -271,21 +270,19 @@ A5(PUBLIC, LONGINT, ROMlib_RelString, unsigned char *, s1, unsigned char *, s2,
     return 0;
 }
 
-A4(PUBLIC trap, INTEGERRET, RelString, StringPtr, s1, StringPtr, s2,
-   BOOLEAN, casesig, BOOLEAN, diacsig)
+PUBLIC trap INTEGERRET Executor::RelString(StringPtr s1, StringPtr s2, BOOLEAN casesig, BOOLEAN diacsig)
 {
     return ROMlib_RelString((unsigned char *)s1 + 1, (unsigned char *)s2 + 1,
                             casesig, diacsig,
                             (LONGINT)(unsigned char)s1[0] << 16 | (unsigned char)s2[0]);
 }
 
-A4(PUBLIC trap, BOOLEANRET, EqualString, StringPtr, s1, StringPtr, s2,
-   BOOLEAN, casesig, BOOLEAN, diacsig)
+PUBLIC trap BOOLEANRET Executor::EqualString(StringPtr s1, StringPtr s2, BOOLEAN casesig, BOOLEAN diacsig)
 {
     return RelString(s1, s2, casesig, diacsig) ? false : true;
 }
 
-A2(PUBLIC, int, ROMlib_strcmp, const Byte *, s1, const Byte *, s2) /* INTERNAL */
+PUBLIC int Executor::ROMlib_strcmp(const Byte * s1, const Byte * s2) /* INTERNAL */
 {
     int n1 = U(s1[0]), n2 = U(s2[0]);
     unsigned char *p1 = (unsigned char *)s1 + 1,
@@ -311,7 +308,7 @@ A2(PUBLIC, int, ROMlib_strcmp, const Byte *, s1, const Byte *, s2) /* INTERNAL *
         return c1 < c2 ? -1 : 1;
 }
 
-A3(PUBLIC, void, ROMlib_UprString, StringPtr, s, BOOLEAN, diac, INTEGER, len)
+PUBLIC void Executor::ROMlib_UprString(StringPtr s, BOOLEAN diac, INTEGER len)
 {
     unsigned char *p, *ep, *base;
 
@@ -324,12 +321,12 @@ A3(PUBLIC, void, ROMlib_UprString, StringPtr, s, BOOLEAN, diac, INTEGER, len)
         *p = base[U(*p)];
 }
 
-A2(PUBLIC trap, void, UprString, StringPtr, s, BOOLEAN, diac)
+PUBLIC trap void Executor::UprString(StringPtr s, BOOLEAN diac)
 {
     ROMlib_UprString(s + 1, diac, (INTEGER)(unsigned char)s[0]);
 }
 
-A1(PUBLIC, void, GetDateTime, GUEST<ULONGINT> *, mactimepointer)
+PUBLIC void Executor::GetDateTime(GUEST<ULONGINT> * mactimepointer)
 {
 #undef Time /* Why is this here? */
     if(mactimepointer)
@@ -342,13 +339,13 @@ A1(PUBLIC, void, GetDateTime, GUEST<ULONGINT> *, mactimepointer)
     }
 }
 
-A1(PUBLIC trap, OSErrRET, ReadDateTime, GUEST<ULONGINT> *, secs)
+PUBLIC trap OSErrRET Executor::ReadDateTime(GUEST<ULONGINT> * secs)
 {
     GetDateTime(secs);
     return (noErr);
 }
 
-A1(PUBLIC trap, OSErrRET, SetDateTime, ULONGINT, mactime)
+PUBLIC trap OSErrRET Executor::SetDateTime(ULONGINT mactime)
 {
 #if !defined(SYSV) && !defined(WIN32)
     struct timeval thetime;
@@ -436,15 +433,12 @@ daysinyears(ULONGINT year)
     return (ULONGINT)365 * year + year / 4 - year / 100 + year / 400;
 }
 
-namespace Executor
-{
 PRIVATE BOOLEAN isleap(ULONGINT);
 PRIVATE void setdefaults();
 PRIVATE OSErr openparam(INTEGER *);
 PRIVATE void deriveglobals();
-}
 
-A1(PRIVATE, BOOLEAN, isleap, ULONGINT, year)
+PRIVATE BOOLEAN isleap(ULONGINT year)
 {
     return !(year % 4) && (year % 100 || !(year % 400));
 }
@@ -604,7 +598,7 @@ Executor::date_to_swapped_fields(long long mactime, GUEST<INTEGER> *yearp, GUEST
  * NOTE: not callable from the outside world directly
  */
 
-A2(PUBLIC trap, void, Date2Secs, DateTimeRec *, d, ULONGINT *, s)
+PUBLIC trap void Executor::Date2Secs(DateTimeRec * d, ULONGINT * s)
 {
     long long l;
 
@@ -613,14 +607,14 @@ A2(PUBLIC trap, void, Date2Secs, DateTimeRec *, d, ULONGINT *, s)
     *s = (ULONGINT)l;
 }
 
-A2(PUBLIC trap, void, Secs2Date, ULONGINT, mactime, DateTimeRec *, d)
+PUBLIC trap void Executor::Secs2Date(ULONGINT mactime, DateTimeRec * d)
 {
     date_to_swapped_fields((unsigned long)mactime, &d->year, &d->month,
                            &d->day, &d->hour, &d->minute, &d->second,
                            &d->dayOfWeek, 0, 0);
 }
 
-A1(PUBLIC, void, GetTime, DateTimeRec *, d)
+PUBLIC void Executor::GetTime(DateTimeRec * d)
 {
     GUEST<ULONGINT> secs;
 
@@ -628,7 +622,7 @@ A1(PUBLIC, void, GetTime, DateTimeRec *, d)
     Secs2Date(CL(secs), d);
 }
 
-A1(PUBLIC, void, SetTime, DateTimeRec *, d)
+PUBLIC void Executor::SetTime(DateTimeRec * d)
 {
     ULONGINT secs;
 
@@ -641,7 +635,7 @@ typedef enum { Read,
 
 #define VALID 0xA8
 
-A0(PRIVATE, void, setdefaults)
+PRIVATE void setdefaults()
 {
     SPValid = VALID;
     SPAlarm = CLC(0);
@@ -655,7 +649,7 @@ A0(PRIVATE, void, setdefaults)
     SPMisc2 = 0x4C;
 }
 
-A1(PRIVATE, OSErr, openparam, INTEGER *, rnp)
+PRIVATE OSErr openparam(INTEGER * rnp)
 {
     static char paramname[] = PARAMRAMMACNAME;
     OSErr err;
@@ -673,7 +667,7 @@ A1(PRIVATE, OSErr, openparam, INTEGER *, rnp)
 
 PUBLIC LONGINT Executor::ROMlib_GMTcorrect;
 
-A0(PRIVATE, void, deriveglobals)
+PRIVATE void deriveglobals()
 {
     struct tm *tm, tml, tmg, *tmlater, *tmearlier;
     time_t unixtimenow, gmtimenow, ltimenow;
@@ -705,7 +699,7 @@ A0(PRIVATE, void, deriveglobals)
     DoubleTime = CL((short)(SPClikCaret & 0xF0) / 4);
 }
 
-A0(PUBLIC trap, OSErrRET, InitUtil) /* IMII-380 */
+PUBLIC trap OSErrRET Executor::InitUtil() /* IMII-380 */
 {
     INTEGER rn;
     SysParmType sp;
@@ -749,12 +743,12 @@ A0(PUBLIC trap, OSErrRET, InitUtil) /* IMII-380 */
     return err;
 }
 
-A0(PUBLIC, SysPPtr, GetSysPPtr) /* IMII-381 */
+PUBLIC SysPPtr Executor::GetSysPPtr() /* IMII-381 */
 {
     return (SysPPtr)&SPValid;
 }
 
-A0(PUBLIC trap, OSErrRET, WriteParam) /* IMII-382 */
+PUBLIC trap OSErrRET Executor::WriteParam() /* IMII-382 */
 {
     INTEGER rn;
     SysParmType sp;
@@ -787,7 +781,7 @@ A0(PUBLIC trap, OSErrRET, WriteParam) /* IMII-382 */
     return err;
 }
 
-A2(PUBLIC trap, void, Enqueue, QElemPtr, e, QHdrPtr, h)
+PUBLIC trap void Executor::Enqueue(QElemPtr e, QHdrPtr h)
 {
     GUEST<QElemPtr> *qpp;
     virtual_int_state_t block;
@@ -808,7 +802,7 @@ A2(PUBLIC trap, void, Enqueue, QElemPtr, e, QHdrPtr, h)
     restore_virtual_ints(block);
 }
 
-A2(PUBLIC trap, OSErrRET, Dequeue, QElemPtr, e, QHdrPtr, h)
+PUBLIC trap OSErrRET Executor::Dequeue(QElemPtr e, QHdrPtr h)
 {
     GUEST<QElemPtr> *qpp;
     OSErr retval;
@@ -830,7 +824,7 @@ A2(PUBLIC trap, OSErrRET, Dequeue, QElemPtr, e, QHdrPtr, h)
     return retval;
 }
 
-A2(PUBLIC, LONGINT, NGetTrapAddress, INTEGER, n, INTEGER, ttype) /* IMII-384 */
+PUBLIC LONGINT Executor::NGetTrapAddress(INTEGER n, INTEGER ttype) /* IMII-384 */
 {
     LONGINT retval;
 
@@ -843,15 +837,15 @@ A2(PUBLIC, LONGINT, NGetTrapAddress, INTEGER, n, INTEGER, ttype) /* IMII-384 */
 
 #if !defined(BINCOMPAT)
 
-A2(PUBLIC, void, SetTrapAddress, LONGINT, addr, /* IMII-384 NOT SUPPORTED */
-   INTEGER, n)
+PUBLIC void Executor::SetTrapAddress(LONGINT addr, /* IMII-384 NOT SUPPORTED */
+   INTEGER n)
 {
 }
 #endif
 
 PRIVATE BOOLEAN shouldbeawake;
 
-A0(PUBLIC, void, C_ROMlib_wakeup)
+PUBLIC void Executor::C_ROMlib_wakeup()
 {
 //  fprintf (stderr, "W");
 //  fflush (stderr);
@@ -867,7 +861,7 @@ A0(PUBLIC, void, C_ROMlib_wakeup)
 
 /* argument n is in 1/60ths of a second */
 
-A2(PUBLIC trap, void, Delay, LONGINT, n, LONGINT *, ftp) /* IMII-384 */
+PUBLIC trap void Executor::Delay(LONGINT n, LONGINT * ftp) /* IMII-384 */
 {
     if(n > 0)
     {
@@ -943,7 +937,7 @@ A2(PUBLIC trap, void, Delay, LONGINT, n, LONGINT *, ftp) /* IMII-384 */
         *ftp = TickCount();
 }
 
-P1(PUBLIC pascal trap, void, SysBeep, INTEGER, i) /* SYSTEM DEPENDENT */
+PUBLIC pascal trap void Executor::C_SysBeep(INTEGER i) /* SYSTEM DEPENDENT */
 {
 #if defined(MAC)
     DebugStr("\004Beep");
@@ -958,7 +952,7 @@ PUBLIC char Executor::ROMlib_phoneyrom[10] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0x06, 0x7C,
 };
 
-A2(PUBLIC trap, void, Environs, GUEST<INTEGER> *, rom, GUEST<INTEGER> *, machine)
+PUBLIC trap void Executor::Environs(GUEST<INTEGER> * rom, GUEST<INTEGER> * machine)
 {
     unsigned char rom8, rom9;
 
@@ -972,7 +966,7 @@ A2(PUBLIC trap, void, Environs, GUEST<INTEGER> *, rom, GUEST<INTEGER> *, machine
 INTEGER ROMlib_processor = env68040;
 
 
-A2(PUBLIC trap, OSErrRET, SysEnvirons, INTEGER, vers, SysEnvRecPtr, p)
+PUBLIC trap OSErrRET Executor::SysEnvirons(INTEGER vers, SysEnvRecPtr p)
 {
     if(vers <= 0)
         /*-->*/ return envBadVers;
@@ -990,32 +984,32 @@ A2(PUBLIC trap, OSErrRET, SysEnvirons, INTEGER, vers, SysEnvRecPtr, p)
     return vers <= SYSRECVNUM ? noErr : envVersTooBig;
 }
 
-A0(PUBLIC, void, SetUpA5)
+PUBLIC void Executor::SetUpA5()
 {
 }
 
-A0(PUBLIC, void, RestoreA5)
+PUBLIC void Executor::RestoreA5()
 {
 }
 
 #define TRUE32b 1
 
-A1(PUBLIC, void, GetMMUMode, GUEST<INTEGER> *, ip) /* IMV-592 */
+PUBLIC void Executor::GetMMUMode(GUEST<INTEGER> * ip) /* IMV-592 */
 {
     *ip = CWC(TRUE32b);
 }
 
-A1(PUBLIC, void, SwapMMUMode, Byte *, bp) /* IMV-593 */
+PUBLIC void Executor::SwapMMUMode(Byte * bp) /* IMV-593 */
 {
     *bp = CB(TRUE32b);
 }
 
-A1(PUBLIC, LONGINT, StripAddress, LONGINT, l) /* IMV-593 */
+PUBLIC LONGINT Executor::StripAddress(LONGINT l) /* IMV-593 */
 {
     return l;
 }
 
-P1(PUBLIC pascal trap, void, DebugStr, StringPtr, p)
+PUBLIC pascal trap void Executor::C_DebugStr(StringPtr p)
 {
     int i;
 

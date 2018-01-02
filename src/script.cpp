@@ -30,7 +30,7 @@ using namespace Executor;
  * NOTE: these are stubs to help me make FileMaker Pro go.
  */
 
-P1(PUBLIC pascal trap, LONGINT, GetEnvirons, INTEGER, verb)
+PUBLIC pascal trap LONGINT Executor::C_GetEnvirons(INTEGER verb)
 {
     LONGINT retval;
 
@@ -55,7 +55,7 @@ P1(PUBLIC pascal trap, LONGINT, GetEnvirons, INTEGER, verb)
     return retval;
 }
 
-P2(PUBLIC pascal trap, OSErr, SetEnvirons, INTEGER, verb, LONGINT, param)
+PUBLIC pascal trap OSErr Executor::C_SetEnvirons(INTEGER verb, LONGINT param)
 {
 #if defined(BINCOMPAT)
     ROMlib_hook(script_notsupported);
@@ -63,20 +63,19 @@ P2(PUBLIC pascal trap, OSErr, SetEnvirons, INTEGER, verb, LONGINT, param)
     return smVerbNotFound;
 }
 
-P2(PUBLIC pascal trap, LONGINT, GetScript, INTEGER, script, INTEGER, verb)
+PUBLIC pascal trap LONGINT Executor::C_GetScript(INTEGER script, INTEGER verb)
 {
     warning_unimplemented(NULL_STRING);
     return 0;
 }
 
-P3(PUBLIC pascal trap, OSErr, SetScript, INTEGER, script, INTEGER, verb,
-   LONGINT, param)
+PUBLIC pascal trap OSErr Executor::C_SetScript(INTEGER script, INTEGER verb, LONGINT param)
 {
     warning_unimplemented(NULL_STRING);
     return smVerbNotFound;
 }
 
-P1(PUBLIC pascal trap, INTEGER, Font2Script, INTEGER, fontnum)
+PUBLIC pascal trap INTEGER Executor::C_Font2Script(INTEGER fontnum)
 {
     warning_unimplemented(NULL_STRING);
     return 0;
@@ -86,14 +85,11 @@ P1(PUBLIC pascal trap, INTEGER, Font2Script, INTEGER, fontnum)
  * butchered Transliterate provided for Excel 3.0
  */
 
-namespace Executor
-{
 PRIVATE char upper(char);
 PRIVATE char lower(char);
-}
 
 #define LOWERTOUPPEROFFSET 'A' - 'a'
-A1(PRIVATE, char, upper, char, ch)
+PRIVATE char upper(char ch)
 {
     if(ch >= 'a' && ch <= 'z')
 #if 1
@@ -106,7 +102,7 @@ A1(PRIVATE, char, upper, char, ch)
 }
 
 #define UPPERTOLOWEROFFSET ('a' - 'A')
-A1(PRIVATE, char, lower, char, ch)
+PRIVATE char lower(char ch)
 {
     if(ch >= 'A' && ch <= 'Z')
 #if 1
@@ -118,8 +114,7 @@ A1(PRIVATE, char, lower, char, ch)
         return ch;
 }
 
-P4(PUBLIC pascal trap, INTEGER, Transliterate, Handle, srch, Handle, dsth,
-   INTEGER, target, LONGINT, srcmask)
+PUBLIC pascal trap INTEGER Executor::C_Transliterate(Handle srch, Handle dsth, INTEGER target, LONGINT srcmask)
 {
     char *sp, *dp, *ep;
 
@@ -153,24 +148,24 @@ P4(PUBLIC pascal trap, INTEGER, Transliterate, Handle, srch, Handle, dsth,
  *	 not necessarily correct!
  */
 
-P0(PUBLIC pascal trap, INTEGER, FontScript)
+PUBLIC pascal trap INTEGER Executor::C_FontScript()
 {
     warning_unimplemented(NULL_STRING);
     return smRoman;
 }
 
-P0(PUBLIC pascal trap, INTEGER, IntlScript)
+PUBLIC pascal trap INTEGER Executor::C_IntlScript()
 {
     warning_unimplemented(NULL_STRING);
     return smRoman;
 }
 
-P1(PUBLIC pascal trap, void, KeyScript, INTEGER, scriptcode)
+PUBLIC pascal trap void Executor::C_KeyScript(INTEGER scriptcode)
 {
     warning_unimplemented(NULL_STRING);
 }
 
-P2(PUBLIC pascal trap, INTEGER, CharType, Ptr, textbufp, INTEGER, offset)
+PUBLIC pascal trap INTEGER Executor::C_CharType(Ptr textbufp, INTEGER offset)
 {
     INTEGER retval;
     unsigned char c;
@@ -204,17 +199,14 @@ P2(PUBLIC pascal trap, INTEGER, CharType, Ptr, textbufp, INTEGER, offset)
     return retval;
 }
 
-P4(PUBLIC pascal trap, void, MeasureJust, Ptr, textbufp, int16_t, length,
-   int16_t, slop, Ptr, charlocs)
+PUBLIC pascal trap void Executor::C_MeasureJust(Ptr textbufp, int16_t length, int16_t slop, Ptr charlocs)
 {
     if(slop)
         warning_unimplemented("slop = %d", slop);
     MeasureText(length, textbufp, charlocs);
 }
 
-P7(PUBLIC pascal trap, void, NMeasureJust, Ptr, text, int32_t, length,
-   Fixed, slop, Ptr, charLocs, JustStyleCode, run_pos,
-   Point, numer, Point, denom)
+PUBLIC pascal trap void Executor::C_NMeasureJust(Ptr text, int32_t length, Fixed slop, Ptr charLocs, JustStyleCode run_pos, Point numer, Point denom)
 {
     GUEST<Point> numerx, denomx;
 
@@ -229,45 +221,39 @@ P7(PUBLIC pascal trap, void, NMeasureJust, Ptr, text, int32_t, length,
                NULL, (GUEST<int16_t> *)charLocs);
 }
 
-P1(PUBLIC pascal trap, Boolean, ParseTable,
-   CharByteTable, table)
+PUBLIC pascal trap Boolean Executor::C_ParseTable(CharByteTable table)
 {
     memset(table, 0, sizeof(CharByteTable));
     return true;
 }
 
-P2(PUBLIC pascal trap, Boolean, FillParseTable,
-   CharByteTable, table, ScriptCode, script)
+PUBLIC pascal trap Boolean Executor::C_FillParseTable(CharByteTable table, ScriptCode script)
 {
     /* ### should we even look at `script' */
     memset(table, 0, sizeof(CharByteTable));
     return true;
 }
 
-P3(PUBLIC pascal trap, INTEGER, CharacterByteType, Ptr, textBuf,
-   INTEGER, textOffset, ScriptCode, script)
+PUBLIC pascal trap INTEGER Executor::C_CharacterByteType(Ptr textBuf, INTEGER textOffset, ScriptCode script)
 {
     warning_unimplemented(NULL_STRING);
     /* Single-byte character */
     return 0;
 }
 
-P3(PUBLIC pascal trap, INTEGER, CharacterType, Ptr, textbufp,
-   INTEGER, offset, ScriptCode, script)
+PUBLIC pascal trap INTEGER Executor::C_CharacterType(Ptr textbufp, INTEGER offset, ScriptCode script)
 {
     warning_unimplemented(NULL_STRING);
     return CharType(textbufp, offset);
 }
 
-P5(PUBLIC pascal trap, INTEGER, TransliterateText, Handle, srch, Handle, dsth,
-   INTEGER, target, LONGINT, srcmask, ScriptCode, script)
+PUBLIC pascal trap INTEGER Executor::C_TransliterateText(Handle srch, Handle dsth, INTEGER target, LONGINT srcmask, ScriptCode script)
 {
     warning_unimplemented(NULL_STRING);
     return Transliterate(srch, dsth, target, srcmask);
 }
 
-P5(PUBLIC pascal trap, INTEGER, Pixel2Char, Ptr, textbufp, INTEGER, len,
-   INTEGER, slop, INTEGER, pixwidth, BOOLEAN *, leftsidep)
+PUBLIC pascal trap INTEGER Executor::C_Pixel2Char(Ptr textbufp, INTEGER len, INTEGER slop, INTEGER pixwidth, BOOLEAN * leftsidep)
 {
     Point num, den;
     INTEGER retval;
@@ -283,8 +269,7 @@ P5(PUBLIC pascal trap, INTEGER, Pixel2Char, Ptr, textbufp, INTEGER, len,
     return retval;
 }
 
-P5(PUBLIC pascal trap, INTEGER, Char2Pixel, Ptr, textbufp, INTEGER, len,
-   INTEGER, slop, INTEGER, offset, SignedByte, dir)
+PUBLIC pascal trap INTEGER Executor::C_Char2Pixel(Ptr textbufp, INTEGER len, INTEGER slop, INTEGER offset, SignedByte dir)
 {
     INTEGER retval;
     Point num, den;
@@ -301,8 +286,7 @@ P5(PUBLIC pascal trap, INTEGER, Char2Pixel, Ptr, textbufp, INTEGER, len,
     return retval;
 }
 
-P6(PUBLIC pascal trap, void, FindWord, Ptr, textbufp, INTEGER, length,
-   INTEGER, offset, BOOLEAN, leftside, Ptr, breaks, GUEST<INTEGER> *, offsets)
+PUBLIC pascal trap void Executor::C_FindWord(Ptr textbufp, INTEGER length, INTEGER offset, BOOLEAN leftside, Ptr breaks, GUEST<INTEGER> * offsets)
 {
     INTEGER start, stop;
     bool chasing_spaces_p;
@@ -335,8 +319,7 @@ P6(PUBLIC pascal trap, void, FindWord, Ptr, textbufp, INTEGER, length,
     warning_unimplemented("poorly implemented");
 }
 
-P4(PUBLIC pascal trap, void, HiliteText, Ptr, textbufp, INTEGER, firstoffset,
-   INTEGER, secondoffset, GUEST<INTEGER> *, offsets)
+PUBLIC pascal trap void Executor::C_HiliteText(Ptr textbufp, INTEGER firstoffset, INTEGER secondoffset, GUEST<INTEGER> * offsets)
 {
 #if defined(BINCOMPAT)
     ROMlib_hook(script_notsupported);
@@ -362,8 +345,7 @@ count_spaces(Ptr textbufp, int16_t length)
     return retval;
 }
 
-P3(PUBLIC pascal trap, void, DrawJust, Ptr, textbufp,
-   int16_t, length, int16_t, slop)
+PUBLIC pascal trap void Executor::C_DrawJust(Ptr textbufp, int16_t length, int16_t slop)
 {
     GUEST<Fixed> save_sp_extra_x;
     int n_spaces;
@@ -406,8 +388,7 @@ enum
     dateTimeNotFound = 0x8400
 };
 
-P5(PUBLIC pascal trap, String2DateStatus, String2Time, Ptr, textp,
-   LONGINT, len, Ptr, cachep, GUEST<LONGINT> *, lenusedp, GUEST<Ptr> *, datetimep)
+PUBLIC pascal trap String2DateStatus Executor::C_String2Time(Ptr textp, LONGINT len, Ptr cachep, GUEST<LONGINT> * lenusedp, GUEST<Ptr> * datetimep)
 {
     warning_unimplemented(NULL_STRING);
     *lenusedp = CLC(0);
@@ -443,9 +424,7 @@ this_millennium(void)
     return retval;
 }
 
-P5(PUBLIC pascal trap, String2DateStatus, String2Date,
-   Ptr, text, int32_t, length, DateCachePtr, cache,
-   GUEST<int32_t> *, length_used_ret, LongDatePtr, date_time)
+PUBLIC pascal trap String2DateStatus Executor::C_String2Date(Ptr text, int32_t length, DateCachePtr cache, GUEST<int32_t> * length_used_ret, LongDatePtr date_time)
 {
     String2DateStatus retval;
 
@@ -487,10 +466,7 @@ P5(PUBLIC pascal trap, String2DateStatus, String2Date,
     return retval;
 }
 
-P7(PUBLIC pascal trap, StyledLineBreakCode, StyledLineBreak,
-   Ptr, textp, int32_t, length,
-   int32_t, text_start, int32_t, text_end, int32_t, flags,
-   GUEST<Fixed> *, text_width_fp, GUEST<int32_t> *, text_offset)
+PUBLIC pascal trap StyledLineBreakCode Executor::C_StyledLineBreak(Ptr textp, int32_t length, int32_t text_start, int32_t text_end, int32_t flags, GUEST<Fixed> * text_width_fp, GUEST<int32_t> * text_offset)
 {
     char *text = (char *)textp;
     /* the index into `text' that began the last word, which is where we
@@ -554,9 +530,7 @@ P7(PUBLIC pascal trap, StyledLineBreakCode, StyledLineBreak,
     return smBreakOverflow;
 }
 
-P3(PUBLIC pascal trap, INTEGER, ReplaceText,
-   Handle, base_text, Handle, subst_text,
-   Str15, key)
+PUBLIC pascal trap INTEGER Executor::C_ReplaceText(Handle base_text, Handle subst_text, Str15 key)
 {
     INTEGER retval;
 
@@ -586,11 +560,8 @@ P3(PUBLIC pascal trap, INTEGER, ReplaceText,
 }
 
 /* FormatStr2X is now StringToExtended */
-P4(PUBLIC pascal trap, FormatStatus, StringToExtended, /* TTS TODO */
-   Str255, string,
-   NumFormatStringRec *, formatp,
-   NumberParts *, partsp,
-   Extended80 *, xp)
+PUBLIC pascal trap FormatStatus Executor::C_StringToExtended(/* TTS TODO */
+   Str255 string, NumFormatStringRec * formatp, NumberParts * partsp, Extended80 * xp)
 {
     FormatStatus retval;
     double d;
@@ -605,11 +576,8 @@ P4(PUBLIC pascal trap, FormatStatus, StringToExtended, /* TTS TODO */
     return retval;
 }
 
-P4(PUBLIC pascal trap, FormatStatus, ExtendedToString, /* TTS TODO */
-   Extended80 *, xp,
-   NumFormatStringRec *, formatp,
-   NumberParts *, partsp,
-   Str255, string)
+PUBLIC pascal trap FormatStatus Executor::C_ExtendedToString(/* TTS TODO */
+   Extended80 * xp, NumFormatStringRec * formatp, NumberParts * partsp, Str255 string)
 {
     ieee_t val;
     FormatStatus retval;
@@ -628,10 +596,8 @@ P4(PUBLIC pascal trap, FormatStatus, ExtendedToString, /* TTS TODO */
     return retval;
 }
 
-P3(PUBLIC pascal trap, FormatStatus, StringToFormatRec, /* TTS TODO */
-   Str255, in_string,
-   NumberParts *, partsp,
-   NumFormatStringRec *, out_string)
+PUBLIC pascal trap FormatStatus Executor::C_StringToFormatRec(/* TTS TODO */
+   Str255 in_string, NumberParts * partsp, NumFormatStringRec * out_string)
 {
     FormatStatus retval;
 
@@ -640,12 +606,8 @@ P3(PUBLIC pascal trap, FormatStatus, StringToFormatRec, /* TTS TODO */
     return retval;
 }
 
-P5(PUBLIC pascal trap, ToggleResults, ToggleDate, /* TTS TODO */
-   LongDateTime *, lsecsp,
-   LongDateField, field,
-   DateDelta, delta,
-   INTEGER, ch,
-   TogglePB *, paramsp)
+PUBLIC pascal trap ToggleResults Executor::C_ToggleDate(/* TTS TODO */
+   LongDateTime * lsecsp, LongDateField field, DateDelta delta, INTEGER ch, TogglePB * paramsp)
 {
     ToggleResults retval;
 
@@ -654,9 +616,8 @@ P5(PUBLIC pascal trap, ToggleResults, ToggleDate, /* TTS TODO */
     return retval;
 }
 
-P3(PUBLIC pascal trap, INTEGER, TruncString, /* TTS TODO */
-   INTEGER, width, Str255, string,
-   TruncCode, code)
+PUBLIC pascal trap INTEGER Executor::C_TruncString(/* TTS TODO */
+   INTEGER width, Str255 string, TruncCode code)
 {
     warning_unimplemented(NULL_STRING);
 
@@ -664,7 +625,7 @@ P3(PUBLIC pascal trap, INTEGER, TruncString, /* TTS TODO */
     return Truncated;
 }
 
-P2(PUBLIC pascal trap, LONGINT, VisibleLength, Ptr, textp, LONGINT, len)
+PUBLIC pascal trap LONGINT Executor::C_VisibleLength(Ptr textp, LONGINT len)
 {
     warning_unimplemented("poorly implemented -- what about other white space");
 
@@ -674,8 +635,7 @@ P2(PUBLIC pascal trap, LONGINT, VisibleLength, Ptr, textp, LONGINT, len)
     return len;
 }
 
-P2(PUBLIC pascal trap, void, LongDate2Secs, LongDateRec *, ldatep,
-   GUEST<ULONGINT> *, secs_outp)
+PUBLIC pascal trap void Executor::C_LongDate2Secs(LongDateRec * ldatep, GUEST<ULONGINT> * secs_outp)
 {
     long long secs;
     LONGINT high, low;
@@ -694,8 +654,7 @@ P2(PUBLIC pascal trap, void, LongDate2Secs, LongDateRec *, ldatep,
     secs_outp[1] = CL(low);
 }
 
-P2(PUBLIC pascal trap, void, LongSecs2Date, GUEST<ULONGINT> *, secs_inp,
-   LongDateRec *, ldatep)
+PUBLIC pascal trap void Executor::C_LongSecs2Date(GUEST<ULONGINT> * secs_inp, LongDateRec * ldatep)
 
 {
     long long secs;
@@ -764,7 +723,7 @@ IntlTokenize
 GetFormatOrder
 #endif
 
-A0(PUBLIC, INTEGER, GetAppFont)
+PUBLIC INTEGER Executor::GetAppFont()
 {
     return CW(ApFontID);
 }
@@ -776,50 +735,45 @@ A0(PUBLIC, INTEGER, GetAppFont)
  *	 ROMlib again but are not needed for Executor.
  */
 
-A0(PUBLIC, INTEGER, GetDefFontSize)
+PUBLIC INTEGER Executor::GetDefFontSize()
 {
   return 0;
 }
 
-A0(PUBLIC, INTEGER, GetSysFont)
+PUBLIC INTEGER Executor::GetSysFont()
 {
     return 0;
 }
 
-A0(PUBLIC, INTEGER, GetMBarHeight)
+PUBLIC INTEGER Executor::GetMBarHeight()
 {
     return 0;
 }
 
-A0(PUBLIC, INTEGER, GetSysJust)
+PUBLIC INTEGER Executor::GetSysJust()
 {
     return 0;
 }
 
-A1(PUBLIC, void, SetSysJust, INTEGER, just)
+PUBLIC void Executor::SetSysJust(INTEGER just)
 {
 }
 #endif
 
-P1(PUBLIC pascal trap, OSErr, InitDateCache, DateCachePtr, cache) /* TTS TODO */
+PUBLIC pascal trap OSErr Executor::C_InitDateCache(DateCachePtr cache) /* TTS TODO */
 {
     warning_unimplemented(NULL_STRING);
     return noErr;
 }
 
-P2(PUBLIC pascal trap, INTEGER, CharByte, Ptr, textBuf, INTEGER, textOffset)
+PUBLIC pascal trap INTEGER Executor::C_CharByte(Ptr textBuf, INTEGER textOffset)
 {
     warning_unimplemented(NULL_STRING);
     /* Single-byte character */
     return 0;
 }
 
-P5(PUBLIC pascal trap, Fixed, PortionLine,
-   Ptr, textPtr,
-   LONGINT, textLen,
-   JustStyleCode, styleRunPosition,
-   Point, numer,
-   Point, denom)
+PUBLIC pascal trap Fixed Executor::C_PortionLine(Ptr textPtr, LONGINT textLen, JustStyleCode styleRunPosition, Point numer, Point denom)
 {
     Fixed retval;
 
@@ -828,13 +782,7 @@ P5(PUBLIC pascal trap, Fixed, PortionLine,
     return retval;
 }
 
-P6(PUBLIC pascal trap, void, DrawJustified,
-   Ptr, textPtr,
-   LONGINT, textLength,
-   Fixed, slop,
-   JustStyleCode, styleRunPosition,
-   Point, numer,
-   Point, denom)
+PUBLIC pascal trap void Executor::C_DrawJustified(Ptr textPtr, LONGINT textLength, Fixed slop, JustStyleCode styleRunPosition, Point numer, Point denom)
 {
     GUEST<Point> swapped_numer;
     GUEST<Point> swapped_denom;
@@ -848,26 +796,14 @@ P6(PUBLIC pascal trap, void, DrawJustified,
                 text_helper_draw);
 }
 
-P3(PUBLIC pascal trap, ScriptRunStatus, FindScriptRun,
-   Ptr, textPtr,
-   LONGINT, textLen,
-   GUEST<LONGINT> *, lenUsedp)
+PUBLIC pascal trap ScriptRunStatus Executor::C_FindScriptRun(Ptr textPtr, LONGINT textLen, GUEST<LONGINT> * lenUsedp)
 {
     warning_unimplemented(NULL_STRING);
     *lenUsedp = CLC(1);
     return 0;
 }
 
-P9(PUBLIC pascal trap, INTEGER, PixelToChar,
-   Ptr, textBuf,
-   LONGINT, textLen,
-   Fixed, slop,
-   Fixed, pixelWidth,
-   BOOLEAN *, leadingEdgep,
-   GUEST<Fixed> *, widthRemainingp,
-   JustStyleCode, styleRunPosition,
-   Point, numer,
-   Point, denom)
+PUBLIC pascal trap INTEGER Executor::C_PixelToChar(Ptr textBuf, LONGINT textLen, Fixed slop, Fixed pixelWidth, BOOLEAN * leadingEdgep, GUEST<Fixed> * widthRemainingp, JustStyleCode styleRunPosition, Point numer, Point denom)
 {
     GUEST<INTEGER> *locs;
     INTEGER retval, i;
@@ -918,15 +854,7 @@ P9(PUBLIC pascal trap, INTEGER, PixelToChar,
     return retval;
 }
 
-P8(PUBLIC pascal trap, INTEGER, CharToPixel,
-   Ptr, textBuf,
-   LONGINT, textLen,
-   Fixed, slop,
-   LONGINT, offset,
-   INTEGER, direction,
-   JustStyleCode, styleRunPosition,
-   Point, numer,
-   Point, denom)
+PUBLIC pascal trap INTEGER Executor::C_CharToPixel(Ptr textBuf, LONGINT textLen, Fixed slop, LONGINT offset, INTEGER direction, JustStyleCode styleRunPosition, Point numer, Point denom)
 {
     INTEGER retval;
     GUEST<Point> swapped_numer, swapped_denom;
@@ -943,34 +871,22 @@ P8(PUBLIC pascal trap, INTEGER, CharToPixel,
     return retval;
 }
 
-P3(PUBLIC pascal trap, void, LowercaseText,
-   Ptr, textp,
-   INTEGER, len,
-   ScriptCode, script)
+PUBLIC pascal trap void Executor::C_LowercaseText(Ptr textp, INTEGER len, ScriptCode script)
 {
     warning_unimplemented("poorly implemented");
 }
 
-P3(PUBLIC pascal trap, void, UppercaseText,
-   Ptr, textp,
-   INTEGER, len,
-   ScriptCode, script)
+PUBLIC pascal trap void Executor::C_UppercaseText(Ptr textp, INTEGER len, ScriptCode script)
 {
     ROMlib_UprString((StringPtr)textp, false, len);
 }
 
-P3(PUBLIC pascal trap, void, StripDiacritics,
-   Ptr, textp,
-   INTEGER, len,
-   ScriptCode, script)
+PUBLIC pascal trap void Executor::C_StripDiacritics(Ptr textp, INTEGER len, ScriptCode script)
 {
     warning_unimplemented("poorly implemented");
 }
 
-P3(PUBLIC pascal trap, void, UppercaseStripDiacritics,
-   Ptr, textp,
-   INTEGER, len,
-   ScriptCode, script)
+PUBLIC pascal trap void Executor::C_UppercaseStripDiacritics(Ptr textp, INTEGER len, ScriptCode script)
 {
     ROMlib_UprString((StringPtr)textp, true, len);
 }

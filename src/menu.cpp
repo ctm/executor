@@ -52,7 +52,10 @@ typedef pascal LONGINT (*mbarhookp)(Rect *rp);
 
 namespace Executor
 {
-PUBLIC int ROMlib_sticky_menus_p = 0;
+    PUBLIC int ROMlib_sticky_menus_p = 0;
+}
+
+
 PRIVATE void dirtymenusize(MenuHandle);
 PRIVATE BOOLEAN findroot(INTEGER menuid, INTEGER *root_unswp);
 static inline void ROMlib_CALLMENUHOOK(menuhookp fp);
@@ -64,9 +67,8 @@ PRIVATE void initpairs(startendpairs pairs);
 PRIVATE BOOLEAN mtoggle(INTEGER mid, highstate h);
 PRIVATE MenuHandle menunumtomh(INTEGER mid, INTEGER *sixp);
 PRIVATE MenuHandle itemishierarchical(MenuHandle, INTEGER, INTEGER *);
-}
 
-A1(PRIVATE, void, dirtymenusize, MenuHandle, mh)
+PRIVATE void dirtymenusize(MenuHandle mh)
 {
     if(mh)
     {
@@ -75,12 +77,12 @@ A1(PRIVATE, void, dirtymenusize, MenuHandle, mh)
     }
 }
 
-P0(PUBLIC pascal trap, void, InvalMenuBar)
+PUBLIC pascal trap void Executor::C_InvalMenuBar()
 {
     DrawMenuBar();
 }
 
-P0(PUBLIC pascal trap, void, DrawMenuBar)
+PUBLIC pascal trap void Executor::C_DrawMenuBar()
 {
     if(MBDFHndl)
     {
@@ -97,7 +99,7 @@ P0(PUBLIC pascal trap, void, DrawMenuBar)
 
 #define MINMENULISTSIZE ((Size)sizeof(INTEGER) * 4 + sizeof(GUEST<Handle>))
 
-P0(PUBLIC pascal trap, void, ClearMenuBar)
+PUBLIC pascal trap void Executor::C_ClearMenuBar()
 {
     if(MenuList)
         SetHandleSize(MR(MenuList), MINMENULISTSIZE);
@@ -162,7 +164,7 @@ append_end_marker_if_necessary(MCTableHandle h)
     }
 }
 
-P0(PUBLIC pascal trap, void, InitMenus)
+PUBLIC pascal trap void Executor::C_InitMenus()
 {
     Handle default_mcinfo;
 
@@ -198,7 +200,7 @@ P0(PUBLIC pascal trap, void, InitMenus)
     DrawMenuBar();
 }
 
-P2(PUBLIC pascal trap, MenuHandle, NewMenu, INTEGER, mid, StringPtr, str)
+PUBLIC pascal trap MenuHandle Executor::C_NewMenu(INTEGER mid, StringPtr str)
 {
     MenuHandle retval;
     GUEST<Handle> temph;
@@ -218,7 +220,7 @@ P2(PUBLIC pascal trap, MenuHandle, NewMenu, INTEGER, mid, StringPtr, str)
     return (retval);
 }
 
-P1(PUBLIC pascal trap, void, CalcMenuSize, MenuHandle, mh)
+PUBLIC pascal trap void Executor::C_CalcMenuSize(MenuHandle mh)
 {
     Point dummy_pt;
     Rect rect;
@@ -246,7 +248,7 @@ P1(PUBLIC pascal trap, void, CalcMenuSize, MenuHandle, mh)
  *	 from a resource id to a handle.
  */
 
-P1(PUBLIC pascal trap, MenuHandle, GetMenu, int16_t, rid)
+PUBLIC pascal trap MenuHandle Executor::C_GetMenu(int16_t rid)
 {
     MenuHandle retval;
     Handle mct_res_h;
@@ -300,7 +302,7 @@ P1(PUBLIC pascal trap, MenuHandle, GetMenu, int16_t, rid)
     return retval;
 }
 
-P1(PUBLIC pascal trap, void, DisposeMenu, MenuHandle, mh)
+PUBLIC pascal trap void Executor::C_DisposeMenu(MenuHandle mh)
 {
     if(mh)
     {
@@ -317,15 +319,12 @@ typedef struct
     INTEGER menoff; /* although *menh will still need to be swapped */
 } endinfo;
 
-namespace Executor
-{
 PRIVATE void toend(MenuHandle, endinfo *);
 PRIVATE void app(StringPtr, char, char, char, char, char, endinfo *);
 PRIVATE void handleinsert(Handle, StringPtr);
 PRIVATE void xInsertResMenu(MenuHandle, StringPtr, ResType, INTEGER);
-}
 
-A2(PRIVATE, void, toend, MenuHandle, mh, endinfo *, eip)
+PRIVATE void toend(MenuHandle mh, endinfo * eip)
 {
     char *menuop;
 
@@ -341,8 +340,7 @@ A2(PRIVATE, void, toend, MenuHandle, mh, endinfo *, eip)
     eip->menoff = menuop - (char *)STARH(mh);
 }
 
-A7(PRIVATE, void, app, StringPtr, str, char, icon, char, marker,
-   char, style, char, keyequiv, char, disflag, endinfo *, eip)
+PRIVATE void app(StringPtr str, char icon, char marker, char style, char keyequiv, char disflag, endinfo * eip)
 {
     char *ip, *ep, *menuop;
     Size newsize;
@@ -381,7 +379,7 @@ A7(PRIVATE, void, app, StringPtr, str, char, icon, char, marker,
     eip->menoff = menuop - (char *)STARH(eip->menh);
 }
 
-P2(PUBLIC pascal trap, void, AppendMenu, MenuHandle, mh, StringPtr, str)
+PUBLIC pascal trap void Executor::C_AppendMenu(MenuHandle mh, StringPtr str)
 {
     Str255 tempstr;
     char *ip, *op;
@@ -459,7 +457,7 @@ P2(PUBLIC pascal trap, void, AppendMenu, MenuHandle, mh, StringPtr, str)
     }
 }
 
-A2(PRIVATE, void, handleinsert, Handle, h, StringPtr, strp)
+PRIVATE void handleinsert(Handle h, StringPtr strp)
 {
     LONGINT n;
     StringPtr sp;
@@ -487,7 +485,7 @@ A2(PRIVATE, void, handleinsert, Handle, h, StringPtr, strp)
     Munger(h, sp - (StringPtr)STARH(h), (Ptr)0, 0, (Ptr)strp, strp[0] + 1);
 }
 
-P2(PUBLIC pascal trap, void, AddResMenu, MenuHandle, mh, ResType, restype)
+PUBLIC pascal trap void Executor::C_AddResMenu(MenuHandle mh, ResType restype)
 {
     if(mh)
     {
@@ -541,8 +539,8 @@ P2(PUBLIC pascal trap, void, AddResMenu, MenuHandle, mh, ResType, restype)
    */
 }
 
-A3(PUBLIC, mextp, ROMlib_mitemtop, MenuHandle, mh, /* INTERNAL */
-   INTEGER, item, StringPtr *, stashstringp)
+PUBLIC mextp Executor::ROMlib_mitemtop(MenuHandle mh, /* INTERNAL */
+   INTEGER item, StringPtr * stashstringp)
 {
     mextp retval;
     StringPtr stashstring;
@@ -571,8 +569,8 @@ A3(PUBLIC, mextp, ROMlib_mitemtop, MenuHandle, mh, /* INTERNAL */
     return retval;
 }
 
-P2(PUBLIC pascal trap, void, DelMenuItem, MenuHandle, mh, /* IMIV-56 */
-   INTEGER, item)
+PUBLIC pascal trap void Executor::C_DelMenuItem(MenuHandle mh, /* IMIV-56 */
+   INTEGER item)
 {
     if(mh)
     {
@@ -593,8 +591,7 @@ P2(PUBLIC pascal trap, void, DelMenuItem, MenuHandle, mh, /* IMIV-56 */
     }
 }
 
-A4(PRIVATE, void, xInsertResMenu, MenuHandle, mh, StringPtr, str,
-   ResType, restype, INTEGER, after)
+PRIVATE void xInsertResMenu(MenuHandle mh, StringPtr str, ResType restype, INTEGER after)
 {
     LONGINT oldeflags;
     Size hsize;
@@ -655,15 +652,13 @@ A4(PRIVATE, void, xInsertResMenu, MenuHandle, mh, StringPtr, str,
     }
 }
 
-P3(PUBLIC pascal trap, void, InsertResMenu, MenuHandle, mh, ResType, restype,
-   INTEGER, after)
+PUBLIC pascal trap void Executor::C_InsertResMenu(MenuHandle mh, ResType restype, INTEGER after)
 {
     if(mh)
         xInsertResMenu(mh, (StringPtr)0, restype, after);
 }
 
-P3(PUBLIC pascal trap, void, InsMenuItem, MenuHandle, mh, StringPtr, str,
-   INTEGER, after) /* IMIV-55 */
+PUBLIC pascal trap void Executor::C_InsMenuItem(MenuHandle mh, StringPtr str, INTEGER after) /* IMIV-55 */
 {
     if(mh)
         xInsertResMenu(mh, str, (ResType)0, after);
@@ -672,7 +667,7 @@ P3(PUBLIC pascal trap, void, InsMenuItem, MenuHandle, mh, StringPtr, str,
 #define FIRSTHIER \
     ((muelem *)((char *)STARH(MENULIST) + Hx(MENULIST, muoff)) + 2)
 
-P2(PUBLIC pascal trap, void, InsertMenu, MenuHandle, mh, INTEGER, before)
+PUBLIC pascal trap void Executor::C_InsertMenu(MenuHandle mh, INTEGER before)
 {
     muelem *mp, *mpend, *bindex, newmuelem;
     INTEGER mid1, mid2;
@@ -729,7 +724,7 @@ P2(PUBLIC pascal trap, void, InsertMenu, MenuHandle, mh, INTEGER, before)
     }
 }
 
-P1(PUBLIC pascal trap, void, DeleteMenu, int16_t, mid)
+PUBLIC pascal trap void Executor::C_DeleteMenu(int16_t mid)
 {
     muelem *mp, *mpend;
     int32_t deleteloc;
@@ -769,7 +764,7 @@ typedef mbartype *mbarptr;
 
 typedef GUEST<mbarptr> *mbarhandle;
 
-P1(PUBLIC pascal trap, Handle, GetNewMBar, INTEGER, mbarid)
+PUBLIC pascal trap Handle Executor::C_GetNewMBar(INTEGER mbarid)
 {
     mbarhandle mb;
     mlhandle saveml;
@@ -809,7 +804,7 @@ P1(PUBLIC pascal trap, Handle, GetNewMBar, INTEGER, mbarid)
     return retval;
 }
 
-P0(PUBLIC pascal trap, Handle, GetMenuBar)
+PUBLIC pascal trap Handle Executor::C_GetMenuBar()
 {
     Handle retval;
 
@@ -818,7 +813,7 @@ P0(PUBLIC pascal trap, Handle, GetMenuBar)
     return retval;
 }
 
-P1(PUBLIC pascal trap, void, SetMenuBar, Handle, ml)
+PUBLIC pascal trap void Executor::C_SetMenuBar(Handle ml)
 {
     Handle temph;
 
@@ -834,7 +829,7 @@ enum
     hier = 1
 };
 
-A1(PRIVATE, void, initpairs, startendpairs, pairs)
+PRIVATE void initpairs(startendpairs pairs)
 {
     pairs[(int)nonhier].startp = HxX(MENULIST, mulist);
     pairs[(int)nonhier].endp = HxX(MENULIST, mulist) + Hx(MENULIST, muoff) / sizeof(muelem);
@@ -857,7 +852,7 @@ menu_id_exists_p(int id)
     return false;
 }
 
-A1(PUBLIC, INTEGER, ROMlib_mentosix, INTEGER, menuid)
+PUBLIC INTEGER Executor::ROMlib_mentosix(INTEGER menuid)
 {
     muelem *mp, *mpend;
     startendpairs mps;
@@ -875,7 +870,7 @@ A1(PUBLIC, INTEGER, ROMlib_mentosix, INTEGER, menuid)
     return -1;
 }
 
-A2(PRIVATE, BOOLEAN, mtoggle, INTEGER, mid, highstate, h)
+PRIVATE BOOLEAN mtoggle(INTEGER mid, highstate h)
 {
     LONGINT l;
 
@@ -889,7 +884,7 @@ A2(PRIVATE, BOOLEAN, mtoggle, INTEGER, mid, highstate, h)
     return false;
 }
 
-P1(PUBLIC pascal trap, void, HiliteMenu, INTEGER, mid)
+PUBLIC pascal trap void Executor::C_HiliteMenu(INTEGER mid)
 {
     if(mid != CW(TheMenu))
     {
@@ -907,7 +902,7 @@ P1(PUBLIC pascal trap, void, HiliteMenu, INTEGER, mid)
     TheMenu = CW(mid);
 }
 
-A1(static inline, void, ROMlib_CALLMENUHOOK, menuhookp, fp)
+static inline void ROMlib_CALLMENUHOOK(menuhookp fp)
 {
     ROMlib_hook(menu_menuhooknumber);
     CALL_EMULATOR(US_TO_SYN68K(fp));
@@ -915,7 +910,7 @@ A1(static inline, void, ROMlib_CALLMENUHOOK, menuhookp, fp)
 
 #define CALLMBARHOOK(arg, fp) ROMlib_CALLMBARHOOK(arg, (mbarhookp)(fp))
 
-A2(static inline, LONGINT, ROMlib_CALLMBARHOOK, Rect *, rp, mbarhookp, fp)
+static inline LONGINT ROMlib_CALLMBARHOOK(Rect * rp, mbarhookp fp)
 {
     ROMlib_hook(menu_mbarhooknumber);
 
@@ -924,7 +919,7 @@ A2(static inline, LONGINT, ROMlib_CALLMBARHOOK, Rect *, rp, mbarhookp, fp)
     return EM_D0;
 }
 
-A1(PRIVATE, INTEGER, wheretowhich, LONGINT, offset)
+PRIVATE INTEGER wheretowhich(LONGINT offset)
 {
     mbdfentry *p, *ep;
 
@@ -935,7 +930,7 @@ A1(PRIVATE, INTEGER, wheretowhich, LONGINT, offset)
     return p - ep;
 }
 
-A1(PRIVATE, void, shadowrect, Rect *, rp)
+PRIVATE void shadowrect(Rect * rp)
 {
     rp->top = CW(CW(rp->top) - 1);
     rp->left = CW(CW(rp->left) - 1);
@@ -943,8 +938,7 @@ A1(PRIVATE, void, shadowrect, Rect *, rp)
     rp->right = CW(CW(rp->right) + 2);
 }
 
-A3(PRIVATE, void, restoren, INTEGER, ntodrop, RgnHandle, restoredrgn,
-   Rect *, rp)
+PRIVATE void restoren(INTEGER ntodrop, RgnHandle restoredrgn, Rect * rp)
 {
     mbdfentry *p;
     RgnHandle tmprgn;
@@ -978,7 +972,7 @@ A3(PRIVATE, void, restoren, INTEGER, ntodrop, RgnHandle, restoredrgn,
         *rp = p[-1].mbRectSave;
 }
 
-A2(PRIVATE, MenuHandle, menunumtomh, INTEGER, mid, INTEGER *, sixp)
+PRIVATE MenuHandle menunumtomh(INTEGER mid, INTEGER * sixp)
 {
     muelem *mp, *mpend;
 
@@ -993,8 +987,7 @@ A2(PRIVATE, MenuHandle, menunumtomh, INTEGER, mid, INTEGER *, sixp)
     return 0;
 }
 
-A3(PRIVATE, MenuHandle, itemishierarchical, MenuHandle, mh, INTEGER, item,
-   INTEGER *, sixp)
+PRIVATE MenuHandle itemishierarchical(MenuHandle mh, INTEGER item, INTEGER * sixp)
 {
     mextp mep;
 
@@ -1320,7 +1313,7 @@ out:
         return ((LONGINT)mid << 16) | (unsigned short)item;
 }
 
-P1(PUBLIC pascal trap, LONGINT, MenuSelect, Point, p)
+PUBLIC pascal trap LONGINT Executor::C_MenuSelect(Point p)
 {
     Rect spooeyr;
     LONGINT retval;
@@ -1330,7 +1323,7 @@ P1(PUBLIC pascal trap, LONGINT, MenuSelect, Point, p)
     return retval;
 }
 
-P1(PUBLIC pascal trap, void, FlashMenuBar, INTEGER, mid)
+PUBLIC pascal trap void Executor::C_FlashMenuBar(INTEGER mid)
 {
     LONGINT l;
 
@@ -1349,7 +1342,7 @@ P1(PUBLIC pascal trap, void, FlashMenuBar, INTEGER, mid)
     MBDFCALL(mbHilite, 0, l);
 }
 
-A2(PRIVATE, BOOLEAN, findroot, INTEGER, menuid, INTEGER *, root_unswp)
+PRIVATE BOOLEAN findroot(INTEGER menuid, INTEGER * root_unswp)
 {
     INTEGER loopcount, i, maxi;
     enum
@@ -1403,7 +1396,7 @@ A2(PRIVATE, BOOLEAN, findroot, INTEGER, menuid, INTEGER *, root_unswp)
     return false;
 }
 
-P1(PUBLIC pascal trap, LONGINT, MenuKey, CharParameter, thec)
+PUBLIC pascal trap LONGINT Executor::C_MenuKey(CharParameter thec)
 {
     muelem *mp, *mpend;
     startendpairs mps;
@@ -1456,8 +1449,7 @@ P1(PUBLIC pascal trap, LONGINT, MenuKey, CharParameter, thec)
     return (0L);
 }
 
-P3(PUBLIC pascal trap, void, SetItem, MenuHandle, mh, INTEGER, item,
-   StringPtr, str)
+PUBLIC pascal trap void Executor::C_SetItem(MenuHandle mh, INTEGER item, StringPtr str)
 {
     int oldsize, newsize, growth;
     Size hsize, nbyte;
@@ -1495,8 +1487,7 @@ P3(PUBLIC pascal trap, void, SetItem, MenuHandle, mh, INTEGER, item,
     }
 }
 
-P3(PUBLIC pascal trap, void, GetItem, MenuHandle, mh, INTEGER, item,
-   StringPtr, str)
+PUBLIC pascal trap void Executor::C_GetItem(MenuHandle mh, INTEGER item, StringPtr str)
 {
     StringPtr stashstring;
 
@@ -1506,20 +1497,19 @@ P3(PUBLIC pascal trap, void, GetItem, MenuHandle, mh, INTEGER, item,
         str[0] = 0;
 }
 
-P2(PUBLIC pascal trap, void, DisableItem, MenuHandle, mh, INTEGER, item)
+PUBLIC pascal trap void Executor::C_DisableItem(MenuHandle mh, INTEGER item)
 {
     if(mh)
         HxX(mh, enableFlags) = CL(Hx(mh, enableFlags) & ~((LONGINT)1 << item));
 }
 
-P2(PUBLIC pascal trap, void, EnableItem, MenuHandle, mh, INTEGER, item)
+PUBLIC pascal trap void Executor::C_EnableItem(MenuHandle mh, INTEGER item)
 {
     if(mh)
         HxX(mh, enableFlags) = CL(Hx(mh, enableFlags) | (LONGINT)1 << item);
 }
 
-P3(PUBLIC pascal trap, void, CheckItem, MenuHandle, mh, INTEGER, item,
-   BOOLEAN, cflag)
+PUBLIC pascal trap void Executor::C_CheckItem(MenuHandle mh, INTEGER item, BOOLEAN cflag)
 {
     if(mh)
     {
@@ -1530,8 +1520,7 @@ P3(PUBLIC pascal trap, void, CheckItem, MenuHandle, mh, INTEGER, item,
     }
 }
 
-P3(PUBLIC pascal trap, void, SetItemMark, MenuHandle, mh, INTEGER, item,
-   CharParameter, mark)
+PUBLIC pascal trap void Executor::C_SetItemMark(MenuHandle mh, INTEGER item, CharParameter mark)
 {
     mextp mep;
 
@@ -1539,8 +1528,7 @@ P3(PUBLIC pascal trap, void, SetItemMark, MenuHandle, mh, INTEGER, item,
         mep->mmarker = mark;
 }
 
-P3(PUBLIC pascal trap, void, GetItemMark, MenuHandle, mh, INTEGER, item,
-   GUEST<INTEGER> *, markp)
+PUBLIC pascal trap void Executor::C_GetItemMark(MenuHandle mh, INTEGER item, GUEST<INTEGER> * markp)
 {
     mextp mep;
 
@@ -1548,8 +1536,7 @@ P3(PUBLIC pascal trap, void, GetItemMark, MenuHandle, mh, INTEGER, item,
         *markp = CW((INTEGER)(unsigned char)mep->mmarker);
 }
 
-P3(PUBLIC pascal trap, void, SetItemIcon, MenuHandle, mh, INTEGER, item,
-   Byte, icon)
+PUBLIC pascal trap void Executor::C_SetItemIcon(MenuHandle mh, INTEGER item, Byte icon)
 {
     mextp mep;
 
@@ -1560,8 +1547,7 @@ P3(PUBLIC pascal trap, void, SetItemIcon, MenuHandle, mh, INTEGER, item,
     }
 }
 
-P3(PUBLIC pascal trap, void, GetItemIcon, MenuHandle, mh, INTEGER, item,
-   GUEST<INTEGER> *, iconp)
+PUBLIC pascal trap void Executor::C_GetItemIcon(MenuHandle mh, INTEGER item, GUEST<INTEGER> * iconp)
 {
     mextp mep;
 
@@ -1569,8 +1555,7 @@ P3(PUBLIC pascal trap, void, GetItemIcon, MenuHandle, mh, INTEGER, item,
         *iconp = CW((INTEGER)(unsigned char)Cx(mep->micon));
 }
 
-P3(PUBLIC pascal trap, void, SetItemStyle, MenuHandle, mh, INTEGER, item,
-   INTEGER, style)
+PUBLIC pascal trap void Executor::C_SetItemStyle(MenuHandle mh, INTEGER item, INTEGER style)
 {
     mextp mep;
 
@@ -1581,8 +1566,7 @@ P3(PUBLIC pascal trap, void, SetItemStyle, MenuHandle, mh, INTEGER, item,
     }
 }
 
-P3(PUBLIC pascal trap, void, GetItemStyle, MenuHandle, mh, INTEGER, item,
-   GUEST<INTEGER> *, stylep)
+PUBLIC pascal trap void Executor::C_GetItemStyle(MenuHandle mh, INTEGER item, GUEST<INTEGER> * stylep)
 {
     mextp mep;
 
@@ -1590,7 +1574,7 @@ P3(PUBLIC pascal trap, void, GetItemStyle, MenuHandle, mh, INTEGER, item,
         *stylep = CW((INTEGER)(unsigned char)Cx(mep->mstyle));
 }
 
-P1(PUBLIC pascal trap, INTEGER, CountMItems, MenuHandle, mh)
+PUBLIC pascal trap INTEGER Executor::C_CountMItems(MenuHandle mh)
 {
     endinfo endinf;
 
@@ -1603,7 +1587,7 @@ P1(PUBLIC pascal trap, INTEGER, CountMItems, MenuHandle, mh)
         return 0;
 }
 
-P1(PUBLIC pascal trap, MenuHandle, GetMHandle, INTEGER, mid)
+PUBLIC pascal trap MenuHandle Executor::C_GetMHandle(INTEGER mid)
 {
     MenuHandle retval;
 
@@ -1634,12 +1618,12 @@ P1(PUBLIC pascal trap, MenuHandle, GetMHandle, INTEGER, mid)
     return retval;
 }
 
-P1(PUBLIC pascal trap, void, SetMenuFlash, INTEGER, i)
+PUBLIC pascal trap void Executor::C_SetMenuFlash(INTEGER i)
 {
     MenuFlash = CW(i);
 }
 
-A0(PUBLIC, BOOLEAN, ROMlib_shouldalarm)
+PUBLIC BOOLEAN Executor::ROMlib_shouldalarm()
 {
     return MENULIST && Hx(HxP(MENULIST, mulist[0].muhandle), menuData[0]) == 1;
 }

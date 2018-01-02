@@ -14,6 +14,8 @@
 #include "winfs.h"
 #endif
 
+using namespace Executor;
+
 namespace Executor
 {
 int afpd_conventions_p;
@@ -27,13 +29,9 @@ int resfork_suffix_length = 0;
 bool native_resfork_p = true;
 }
 
-namespace Executor
-{
 PRIVATE unsigned char tohex(unsigned char);
 PRIVATE INTEGER Mac_to_UNIX7(unsigned char *, INTEGER, unsigned char *);
-}
 
-using namespace Executor;
 
 /*
  * Coded more or less up to the spec:  APDA M0908LL/A
@@ -145,8 +143,7 @@ Executor::double_dir_op(char *name, double_dir_op_t op)
     }
 }
 
-A3(PUBLIC, OSErr, ROMlib_newresfork, char *, name, LONGINT *, fdp,
-   bool, unix_p)
+PUBLIC OSErr Executor::ROMlib_newresfork(char * name, LONGINT * fdp, bool unix_p)
 {
     LONGINT fd;
     OSErr retval;
@@ -191,19 +188,15 @@ A3(PUBLIC, OSErr, ROMlib_newresfork, char *, name, LONGINT *, fdp,
 
 #define OURBSIZE 512
 
-namespace Executor
-{
+
 PRIVATE BOOLEAN getsetentry(GetOrSetType gors, LONGINT fd,
                             Single_ID sid, Single_descriptor *savesdp,
                             ULONGINT *lengthp);
 PRIVATE void writebyteat(LONGINT fd, LONGINT loc);
 PRIVATE BOOLEAN getsetpiece(GetOrSetType gors, LONGINT fd,
                             Single_descriptor *sdp, char *bufp, LONGINT length);
-}
 
-A5(PRIVATE, BOOLEAN, getsetentry, GetOrSetType, gors, LONGINT, fd,
-   Single_ID, sid, Single_descriptor *, savesdp,
-   ULONGINT *, lengthp)
+PRIVATE BOOLEAN getsetentry(GetOrSetType gors, LONGINT fd, Single_ID sid, Single_descriptor * savesdp, ULONGINT * lengthp)
 {
     off_t saveloc;
     struct defaulthead *dfp;
@@ -260,7 +253,7 @@ A5(PRIVATE, BOOLEAN, getsetentry, GetOrSetType, gors, LONGINT, fd,
 
 #define IDWANTED(fp) ((fp->fcflags & fcfisres) ? Resource_Fork_ID : Data_Fork_ID)
 
-A1(PUBLIC, LONGINT, ROMlib_FORKOFFSET, fcbrec *, fp) /* INTERNAL */
+PUBLIC LONGINT Executor::ROMlib_FORKOFFSET(fcbrec * fp) /* INTERNAL */
 {
     Single_descriptor d;
     Single_ID idwanted;
@@ -277,7 +270,7 @@ A1(PUBLIC, LONGINT, ROMlib_FORKOFFSET, fcbrec *, fp) /* INTERNAL */
         return RESOURCEPREAMBLE;
 }
 
-A2(PRIVATE, void, writebyteat, LONGINT, fd, LONGINT, loc)
+PRIVATE void writebyteat(LONGINT fd, LONGINT loc)
 {
     off_t saveloc;
 
@@ -289,7 +282,7 @@ A2(PRIVATE, void, writebyteat, LONGINT, fd, LONGINT, loc)
 
 /* TODO: better error checking */
 
-A1(PUBLIC, OSErr, ROMlib_seteof, fcbrec *, fp) /* INTERNAL */
+PUBLIC OSErr Executor::ROMlib_seteof(fcbrec * fp) /* INTERNAL */
 {
     ULONGINT leof, peof;
     off_t curloc;
@@ -354,8 +347,7 @@ A1(PUBLIC, OSErr, ROMlib_seteof, fcbrec *, fp) /* INTERNAL */
     return err;
 }
 
-A5(PRIVATE, BOOLEAN, getsetpiece, GetOrSetType, gors, LONGINT, fd,
-   Single_descriptor *, sdp, char *, bufp, LONGINT, length)
+PRIVATE BOOLEAN getsetpiece(GetOrSetType gors, LONGINT fd, Single_descriptor * sdp, char * bufp, LONGINT length)
 {
     off_t saveloc;
     BOOLEAN retval;
@@ -386,7 +378,7 @@ A5(PRIVATE, BOOLEAN, getsetpiece, GetOrSetType, gors, LONGINT, fd,
  * 	    fp->fcleof (logical eof, same as above)
  *		fp->fcbFType (file type)
  */
-A1(PUBLIC, OSErr, ROMlib_geteofostype, fcbrec *, fp) /* INTERNAL */
+PUBLIC OSErr Executor::ROMlib_geteofostype(fcbrec * fp) /* INTERNAL */
 {
     LONGINT fd;
     Single_descriptor d;
@@ -468,10 +460,8 @@ A1(PUBLIC, OSErr, ROMlib_geteofostype, fcbrec *, fp) /* INTERNAL */
  *		rlenp	resource fork length
  */
 
-A8(PUBLIC, OSErr, ROMlib_hiddenbyname, GetOrSetType, gors, /* INTERNAL */
-   char *, pathname, char *, rpathname, Single_dates *, datep,
-   FInfo *, finfop, FXInfo *, fxinfop, GUEST<LONGINT> *, lenp,
-   GUEST<LONGINT> *, rlenp)
+PUBLIC OSErr Executor::ROMlib_hiddenbyname(GetOrSetType gors, /* INTERNAL */
+   char * pathname, char * rpathname, Single_dates * datep, FInfo * finfop, FXInfo * fxinfop, GUEST<LONGINT> * lenp, GUEST<LONGINT> * rlenp)
 {
     LONGINT rfd;
     struct stat sbuf;
@@ -660,8 +650,8 @@ fprintf(stderr, "%s(%d): open '%s' fails\n", __FILE__, __LINE__, rpathname);
 
 #define ROOTS_PERCENT_FILE "%%2F"
 
-A3(PUBLIC, char *, ROMlib_resname, char *, pathname, /* INTERNAL */
-   char *, filename, char *, endname)
+PUBLIC char * Executor::ROMlib_resname(char * pathname, /* INTERNAL */
+   char * filename, char * endname)
 {
     int pathnamesize, filenamesize, newsize;
     char *newname;
@@ -697,7 +687,7 @@ A3(PUBLIC, char *, ROMlib_resname, char *, pathname, /* INTERNAL */
  * NOTE: we must use capital letters in tohex below.  Code depends on it.
  */
 
-A1(PRIVATE, unsigned char, tohex, unsigned char, c)
+PRIVATE unsigned char tohex(unsigned char c)
 {
     unsigned char retval;
 
@@ -706,8 +696,7 @@ A1(PRIVATE, unsigned char, tohex, unsigned char, c)
     return retval;
 }
 
-A3(PRIVATE, INTEGER, Mac_to_UNIX7, unsigned char *, name, INTEGER, length,
-   unsigned char *, out)
+PRIVATE INTEGER Mac_to_UNIX7(unsigned char * name, INTEGER length, unsigned char * out)
 {
     unsigned char c;
     INTEGER retval;
@@ -745,7 +734,7 @@ A3(PRIVATE, INTEGER, Mac_to_UNIX7, unsigned char *, name, INTEGER, length,
     return retval;
 }
 
-A2(PUBLIC, char *, ROMlib_newunixfrommac, char *, ip, INTEGER, n)
+PUBLIC char * Executor::ROMlib_newunixfrommac(char * ip, INTEGER n)
 {
     char *retval;
 

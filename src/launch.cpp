@@ -738,7 +738,7 @@ PRIVATE void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     }
 }
 
-A2(PUBLIC trap, void, Chain, StringPtr, fName, INTEGER, vRefNum)
+PUBLIC trap void Executor::Chain(StringPtr fName, INTEGER vRefNum)
 {
     launchchain(fName, vRefNum, false, 0);
 }
@@ -1387,7 +1387,7 @@ Executor::NewLaunch(StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockRe
     return retval;
 }
 
-A2(PUBLIC trap, void, Launch, StringPtr, fName_arg, INTEGER, vRefNum_arg)
+PUBLIC trap void Executor::Launch(StringPtr fName_arg, INTEGER vRefNum_arg)
 {
 #if 0
   /* NOTE: we're messing with launch between Executor 2 beta 1 and Executor 2

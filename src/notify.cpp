@@ -20,12 +20,12 @@ typedef pascal void nmfunc(NMRecPtr nmptr);
  * D0: result code
  */
 
-A1(PUBLIC trap, OSErrRET, NMRemove, NMRecPtr, nmptr)
+PUBLIC trap OSErrRET Executor::NMRemove(NMRecPtr nmptr)
 {
     return noErr;
 }
 
-A1(PUBLIC trap, OSErrRET, NMInstall, NMRecPtr, nmptr)
+PUBLIC trap OSErrRET Executor::NMInstall(NMRecPtr nmptr)
 {
     /* The multiple beeps and delays that used to be here make OpenProlog
    * really irritating to use.

@@ -78,7 +78,7 @@ ROMlib_sledgehammer_rgn(RgnHandle rgn)
 
 #endif
 
-P0(PUBLIC pascal trap, RgnHandle, NewRgn)
+PUBLIC pascal trap RgnHandle Executor::C_NewRgn()
 {
     RgnHandle h;
 
@@ -87,7 +87,7 @@ P0(PUBLIC pascal trap, RgnHandle, NewRgn)
     return h;
 }
 
-P0(PUBLIC pascal trap, void, OpenRgn)
+PUBLIC pascal trap void Executor::C_OpenRgn()
 {
     RgnHandle rh;
 
@@ -185,7 +185,7 @@ void Executor::ROMlib_sizergn(RgnHandle rh, bool special_p) /* INTERNAL */
     }
 }
 
-P2(PUBLIC pascal trap, void, CopyRgn, RgnHandle, s, RgnHandle, d)
+PUBLIC pascal trap void Executor::C_CopyRgn(RgnHandle s, RgnHandle d)
 {
     Size size;
 
@@ -196,7 +196,7 @@ P2(PUBLIC pascal trap, void, CopyRgn, RgnHandle, s, RgnHandle, d)
     memcpy((Ptr)STARH(d), (Ptr)STARH(s), size);
 }
 
-P1(PUBLIC pascal trap, void, CloseRgn, RgnHandle, rh)
+PUBLIC pascal trap void Executor::C_CloseRgn(RgnHandle rh)
 {
     RgnHandle rgn_save = (RgnHandle)PORT_REGION_SAVE(thePort);
 
@@ -210,27 +210,26 @@ P1(PUBLIC pascal trap, void, CloseRgn, RgnHandle, rh)
     ShowPen();
 }
 
-P1(PUBLIC pascal trap, void, DisposeRgn, RgnHandle, rh)
+PUBLIC pascal trap void Executor::C_DisposeRgn(RgnHandle rh)
 {
     DisposHandle((Handle)rh);
 }
 
-P1(PUBLIC pascal trap, void, SetEmptyRgn, RgnHandle, rh)
+PUBLIC pascal trap void Executor::C_SetEmptyRgn(RgnHandle rh)
 {
     SetHandleSize((Handle)rh, RGN_SMALL_SIZE);
     RGN_SET_SMALL(rh);
     RECT_ZERO(&RGN_BBOX(rh));
 }
 
-P5(PUBLIC pascal trap, void, SetRectRgn, RgnHandle, rh, INTEGER, left,
-   INTEGER, top, INTEGER, right, INTEGER, bottom)
+PUBLIC pascal trap void Executor::C_SetRectRgn(RgnHandle rh, INTEGER left, INTEGER top, INTEGER right, INTEGER bottom)
 {
     SetHandleSize((Handle)rh, RGN_SMALL_SIZE);
     SetRect(&RGN_BBOX(rh), left, top, right, bottom);
     RGN_SET_SMALL(rh);
 }
 
-P2(PUBLIC pascal trap, void, RectRgn, RgnHandle, rh, Rect *, rect)
+PUBLIC pascal trap void Executor::C_RectRgn(RgnHandle rh, Rect * rect)
 {
     Rect r;
 
@@ -244,8 +243,7 @@ P2(PUBLIC pascal trap, void, RectRgn, RgnHandle, rh, Rect *, rect)
 }
 
 /* IM is wrong... not based on offsets */
-P3(PUBLIC pascal trap, void, OffsetRgn, RgnHandle, rh,
-   INTEGER, dh, INTEGER, dv)
+PUBLIC pascal trap void Executor::C_OffsetRgn(RgnHandle rh, INTEGER dh, INTEGER dv)
 {
     if(dh || dv)
     {
@@ -273,7 +271,7 @@ P3(PUBLIC pascal trap, void, OffsetRgn, RgnHandle, rh,
 
 #define NHPAIR 1024
 
-P2(PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
+PUBLIC pascal trap BOOLEAN Executor::C_PtInRgn(Point p, RgnHandle rh)
 {
     if(!PtInRect(p, &RGN_BBOX(rh)))
         return false;
@@ -621,12 +619,7 @@ P2(PUBLIC pascal trap, BOOLEAN, PtInRgn, Point, p, RgnHandle, rh)
 
 #if !defined(NDEBUG)
 
-namespace Executor
-{
-PRIVATE void assertincreasing(INTEGER *ip);
-}
-
-A1(PRIVATE, void, assertincreasing, INTEGER *, ip)
+PRIVATE void assertincreasing(INTEGER * ip)
 {
     LONGINT lastx = -327680;
     while(*ip != RGN_STOP)
@@ -637,8 +630,6 @@ A1(PRIVATE, void, assertincreasing, INTEGER *, ip)
 }
 #endif /* NDEBUG */
 
-namespace Executor
-{
 PRIVATE void sectbinop(RgnHandle srcrgn1, RgnHandle srcrgn2,
                        RgnHandle dstrgn);
 typedef enum {
@@ -652,10 +643,8 @@ PRIVATE void binop(optype op, RgnHandle srcrgn1, RgnHandle srcrgn2,
 PRIVATE LONGINT comparex(char *cp1, char *cp2);
 PRIVATE LONGINT comparey(char *cp1, char *cp2);
 PRIVATE void ptorh(INTEGER *p, RgnHandle rh);
-}
 
-A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
-   RgnHandle, dstrgn)
+PRIVATE void sectbinop(RgnHandle srcrgn1, RgnHandle srcrgn2, RgnHandle dstrgn)
 {
     /* note that the buffers will not be restricted to the endpoints
        that their name implies.  The pointers will always point to
@@ -860,8 +849,7 @@ A3(PRIVATE, void, sectbinop, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
     ALLOCAEND
 }
 
-A4(PRIVATE, void, binop, optype, op, RgnHandle, srcrgn1, RgnHandle, srcrgn2,
-   RgnHandle, dstrgn)
+PRIVATE void binop(optype op, RgnHandle srcrgn1, RgnHandle srcrgn2, RgnHandle dstrgn)
 {
     /* note that the buffers will not be restricted to the endpoints
        that their name implies.  The pointers will always point to
@@ -1127,23 +1115,13 @@ static INTEGER npairs;
 
 #include "hintemplate.h"
 
-static int comparex(const void *cp1, const void *cp2)
+PRIVATE LONGINT comparex(const void * cp1, const void * cp2)
 {
-    return Executor::comparex((char *)cp1, (char *)cp2);
-}
-
-static int comparey(const void *cp1, const void *cp2)
-{
-    return Executor::comparey((char *)cp1, (char *)cp2);
-}
-
-A2(PRIVATE, LONGINT, comparex, char *, cp1, char *, cp2)
-{
-    INTEGER *p1, *p2;
+    const INTEGER *p1, *p2;
     LONGINT retval;
 
-    p1 = (INTEGER *)cp1 + 1;
-    p2 = (INTEGER *)cp2 + 1;
+    p1 = (const INTEGER *)cp1 + 1;
+    p2 = (const INTEGER *)cp2 + 1;
     if(*p1 < *p2)
         retval = -1;
     else if(*p1 > *p2)
@@ -1162,13 +1140,13 @@ A2(PRIVATE, LONGINT, comparex, char *, cp1, char *, cp2)
     return retval;
 }
 
-A2(PRIVATE, LONGINT, comparey, char *, cp1, char *, cp2)
+PRIVATE LONGINT comparey(const void * cp1, const void * cp2)
 {
-    INTEGER *p1, *p2;
+    const INTEGER *p1, *p2;
     LONGINT retval;
 
-    p1 = (INTEGER *)cp1;
-    p2 = (INTEGER *)cp2;
+    p1 = (const INTEGER *)cp1;
+    p2 = (const INTEGER *)cp2;
     if(*p1 < *p2)
         retval = -1;
     else if(*p1 > *p2)
@@ -1191,7 +1169,7 @@ A2(PRIVATE, LONGINT, comparey, char *, cp1, char *, cp2)
  * BEWARE:  ptorh can trash memory... regions can grow by being inset (honest)
  */
 
-A2(PRIVATE, void, ptorh, INTEGER *, p, RgnHandle, rh)
+PRIVATE void ptorh(INTEGER * p, RgnHandle rh)
 {
     INTEGER y, oy, *op;
 
@@ -1216,7 +1194,7 @@ A2(PRIVATE, void, ptorh, INTEGER *, p, RgnHandle, rh)
     *op++ = RGN_STOP_X; /* need one or two? */
 }
 
-P3(PUBLIC pascal trap, void, InsetRgn, RgnHandle, rh, INTEGER, dh, INTEGER, dv)
+PUBLIC pascal trap void Executor::C_InsetRgn(RgnHandle rh, INTEGER dh, INTEGER dv)
 {
     Handle h;
     INTEGER *p;
@@ -1242,9 +1220,9 @@ P3(PUBLIC pascal trap, void, InsetRgn, RgnHandle, rh, INTEGER, dh, INTEGER, dv)
         p = (INTEGER *)STARH(h);
         rhtopandinseth(rh, p, dh); /* must be combined for efficiency */
         gui_assert(npairs * (int)sizeof(INTEGER) * 2 <= newsize);
-        qsort(p, npairs, sizeof(INTEGER) * 2, ::comparex);
+        qsort(p, npairs, sizeof(INTEGER) * 2, comparex);
         hinset(p, dv);
-        qsort(p, npairs, sizeof(INTEGER) * 2, ::comparey);
+        qsort(p, npairs, sizeof(INTEGER) * 2, comparey);
         ReallocHandle((Handle)rh, newsize);
         ptorh(p, rh);
         ROMlib_sizergn(rh, false);
@@ -1271,8 +1249,7 @@ justone(const Rect *rp, RgnHandle rgn, RgnHandle dest)
         return false;
 }
 
-P3(PUBLIC pascal trap, void, SectRgn, RgnHandle, s1, RgnHandle, s2,
-   RgnHandle, dest)
+PUBLIC pascal trap void Executor::C_SectRgn(RgnHandle s1, RgnHandle s2, RgnHandle dest)
 {
     Rect dummy;
     const Region *rp1, *rp2;
@@ -1304,8 +1281,7 @@ P3(PUBLIC pascal trap, void, SectRgn, RgnHandle, s1, RgnHandle, s2,
         SetEmptyRgn(dest);
 }
 
-P3(PUBLIC pascal trap, void, UnionRgn, RgnHandle, s1, RgnHandle, s2,
-   RgnHandle, dest)
+PUBLIC pascal trap void Executor::C_UnionRgn(RgnHandle s1, RgnHandle s2, RgnHandle dest)
 {
     if(EmptyRgn(s1))
         CopyRgn(s2, dest);
@@ -1315,8 +1291,7 @@ P3(PUBLIC pascal trap, void, UnionRgn, RgnHandle, s1, RgnHandle, s2,
         binop(unionop, s1, s2, dest);
 }
 
-P3(PUBLIC pascal trap, void, DiffRgn, RgnHandle, s1, RgnHandle, s2,
-   RgnHandle, dest)
+PUBLIC pascal trap void Executor::C_DiffRgn(RgnHandle s1, RgnHandle s2, RgnHandle dest)
 {
     if(EmptyRgn(s1) || EmptyRgn(s2))
         CopyRgn(s1, dest);
@@ -1324,8 +1299,7 @@ P3(PUBLIC pascal trap, void, DiffRgn, RgnHandle, s1, RgnHandle, s2,
         binop(diffop, s1, s2, dest);
 }
 
-P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
-   RgnHandle, dest)
+PUBLIC pascal trap void Executor::C_XorRgn(RgnHandle s1, RgnHandle s2, RgnHandle dest)
 {
     INTEGER y1, y2, x1, x2;
     INTEGER *ip1, *ip2, *op;
@@ -1501,8 +1475,8 @@ P3(PUBLIC pascal trap, void, XorRgn, RgnHandle, s1, RgnHandle, s2,
     ALLOCAEND
 }
 
-P2(PUBLIC pascal trap, BOOLEAN, RectInRgn, Rect *, rp, /* IMIV-23 */
-   RgnHandle, rh)
+PUBLIC pascal trap BOOLEAN Executor::C_RectInRgn(Rect * rp, /* IMIV-23 */
+   RgnHandle rh)
 {
     RgnHandle newrh;
     BOOLEAN retval;
@@ -1515,7 +1489,7 @@ P2(PUBLIC pascal trap, BOOLEAN, RectInRgn, Rect *, rp, /* IMIV-23 */
     return retval;
 }
 
-P2(PUBLIC pascal trap, BOOLEAN, EqualRgn, RgnHandle, r1, RgnHandle, r2)
+PUBLIC pascal trap BOOLEAN Executor::C_EqualRgn(RgnHandle r1, RgnHandle r2)
 {
     /* Since the first field of the region is the size, this
    * will return false if the sizes differ, too.
@@ -1523,7 +1497,7 @@ P2(PUBLIC pascal trap, BOOLEAN, EqualRgn, RgnHandle, r1, RgnHandle, r2)
     return !memcmp(STARH(r1), STARH(r2), RGN_SIZE(r1));
 }
 
-P1(PUBLIC pascal trap, BOOLEAN, EmptyRgn, RgnHandle, rh)
+PUBLIC pascal trap BOOLEAN Executor::C_EmptyRgn(RgnHandle rh)
 {
 // FIXME: #warning What does a mac do with a NULL HANDLE here?
     BOOLEAN retval;
@@ -1533,7 +1507,7 @@ P1(PUBLIC pascal trap, BOOLEAN, EmptyRgn, RgnHandle, rh)
 }
 
 #if !defined(NDEBUG)
-A1(PUBLIC, void, ROMlib_printrgn, RgnHandle, h)
+PUBLIC void Executor::ROMlib_printrgn(RgnHandle h)
 {
     INTEGER *ip, x, y;
     INTEGER special, size, newsize;

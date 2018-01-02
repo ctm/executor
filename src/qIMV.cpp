@@ -16,14 +16,14 @@ using namespace Executor;
 
 /* these stubs are here to make my Pic V2 code work */
 
-P1(PUBLIC pascal trap, void, CharExtra, Fixed, Extra) /* IMV-77 */
+PUBLIC pascal trap void Executor::C_CharExtra(Fixed Extra) /* IMV-77 */
 {
     /* TODO */
     /* #warning CharExtra not implemented */
     warning_unimplemented(NULL_STRING);
 }
 
-P1(PUBLIC pascal trap, void, SetStdCProcs, CQDProcs *, cProcs) /* IMV-77 */
+PUBLIC pascal trap void Executor::C_SetStdCProcs(CQDProcs * cProcs) /* IMV-77 */
 {
     cProcs->textProc = RM((Ptr)P_StdText);
     cProcs->lineProc = RM((Ptr)P_StdLine);
@@ -47,8 +47,7 @@ P1(PUBLIC pascal trap, void, SetStdCProcs, CQDProcs *, cProcs) /* IMV-77 */
     cProcs->newProc6Proc = RM((Ptr)0) /* ??? */;
 }
 
-P3(PUBLIC pascal trap, void, GetCPixel, INTEGER, h, INTEGER, v,
-   RGBColor *, pixelp)
+PUBLIC pascal trap void Executor::C_GetCPixel(INTEGER h, INTEGER v, RGBColor * pixelp)
 {
     PixMap temp_pm;
     uint8 temp_fbuf[4];
@@ -126,8 +125,7 @@ P3(PUBLIC pascal trap, void, GetCPixel, INTEGER, h, INTEGER, v,
     }
 }
 
-P3(PUBLIC pascal trap, void, SetCPixel, INTEGER, h, INTEGER, v,
-   RGBColor *, pixelp)
+PUBLIC pascal trap void Executor::C_SetCPixel(INTEGER h, INTEGER v, RGBColor * pixelp)
 {
     Rect temp_rect;
 
@@ -193,9 +191,7 @@ default_search_proc_stub(syn68k_addr_t dummy_addr, void *dummy)
     return retval;
 }
 
-P8(PUBLIC pascal trap, void, SeedCFill, BitMap *, srcbp, BitMap *, dstbp,
-   Rect *, srcrp, Rect *, dstrp, int16_t, seedh, int16_t, seedv,
-   ProcPtr, matchprocp, int32_t, matchdata)
+PUBLIC pascal trap void Executor::C_SeedCFill(BitMap * srcbp, BitMap * dstbp, Rect * srcrp, Rect * dstrp, int16_t seedh, int16_t seedv, ProcPtr matchprocp, int32_t matchdata)
 {
     MatchRec mr;
     GUEST<LONGINT> save_ref_con;
@@ -277,9 +273,7 @@ P8(PUBLIC pascal trap, void, SeedCFill, BitMap *, srcbp, BitMap *, dstbp,
     TEMP_ALLOC_FREE(temp_bitmap2_bits);
 }
 
-P7(PUBLIC pascal trap, void, CalcCMask, BitMap *, srcbp, BitMap *, dstbp,
-   Rect *, srcrp, Rect *, dstrp, RGBColor *, seedrgbp, ProcPtr, matchprocp,
-   int32_t, matchdata)
+PUBLIC pascal trap void Executor::C_CalcCMask(BitMap * srcbp, BitMap * dstbp, Rect * srcrp, Rect * dstrp, RGBColor * seedrgbp, ProcPtr matchprocp, int32_t matchdata)
 {
     MatchRec mr;
     GUEST<LONGINT> save_ref_con;

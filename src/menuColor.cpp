@@ -120,8 +120,7 @@ void Executor::menu_delete_entries(int16_t menu_id)
     }
 }
 
-P2(PUBLIC pascal trap, void, DelMCEntries,
-   INTEGER, menu_id, INTEGER, menu_item)
+PUBLIC pascal trap void Executor::C_DelMCEntries(INTEGER menu_id, INTEGER menu_item)
 {
     MCTableHandle menu_c_info;
     MCEntryPtr entries;
@@ -147,7 +146,7 @@ P2(PUBLIC pascal trap, void, DelMCEntries,
     }
 }
 
-P0(PUBLIC pascal trap, MCTableHandle, GetMCInfo)
+PUBLIC pascal trap MCTableHandle Executor::C_GetMCInfo()
 {
     MCTableHandle retval, menu_c_info;
     int menu_c_info_size;
@@ -162,8 +161,7 @@ P0(PUBLIC pascal trap, MCTableHandle, GetMCInfo)
     return retval;
 }
 
-P1(PUBLIC pascal trap, void, SetMCInfo,
-   MCTableHandle, menu_ctab)
+PUBLIC pascal trap void Executor::C_SetMCInfo(MCTableHandle menu_ctab)
 {
     DispMCInfo(MR(MenuCInfo));
 
@@ -177,14 +175,12 @@ P1(PUBLIC pascal trap, void, SetMCInfo,
     MenuCInfo = RM((MCTableHandle)t);
 }
 
-P1(PUBLIC pascal trap, void, DispMCInfo,
-   MCTableHandle, menu_ctab)
+PUBLIC pascal trap void Executor::C_DispMCInfo(MCTableHandle menu_ctab)
 {
     DisposHandle((Handle)menu_ctab);
 }
 
-P2(PUBLIC pascal trap, MCEntryPtr, GetMCEntry,
-   INTEGER, menu_id, INTEGER, menu_item)
+PUBLIC pascal trap MCEntryPtr Executor::C_GetMCEntry(INTEGER menu_id, INTEGER menu_item)
 {
     MCTableHandle menu_c_info;
     MCEntryPtr t;
@@ -200,8 +196,7 @@ P2(PUBLIC pascal trap, MCEntryPtr, GetMCEntry,
     return 0;
 }
 
-P2(PUBLIC pascal trap, void, SetMCEntries,
-   INTEGER, n_entries, MCTablePtr, entries)
+PUBLIC pascal trap void Executor::C_SetMCEntries(INTEGER n_entries, MCTablePtr entries)
 {
     MCTableHandle menu_c_info;
     int menu_c_info_size;

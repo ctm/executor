@@ -34,48 +34,33 @@ using namespace Executor;
         }                                                            \
     } while(false)
 
-P2(PUBLIC pascal trap, void, FillCRect,
-   Rect *, r, PixPatHandle, pixpat)
+PUBLIC pascal trap void Executor::C_FillCRect(Rect * r, PixPatHandle pixpat)
 {
     /* #warning "restore settings after FillCxxx?" */
     FillCxxx(CALLRECT(fill, r));
 }
 
-P4(PUBLIC pascal trap, void, FillCRoundRect,
-   const Rect *, r,
-   short, ovalWidth,
-   short, ovalHeight,
-   PixPatHandle, pixpat)
+PUBLIC pascal trap void Executor::C_FillCRoundRect(const Rect * r, short ovalWidth, short ovalHeight, PixPatHandle pixpat)
 {
     FillCxxx(CALLRRECT(fill, (Rect *)r, ovalWidth, ovalHeight));
 }
 
-P2(PUBLIC pascal trap, void, FillCOval,
-   const Rect *, r,
-   PixPatHandle, pixpat)
+PUBLIC pascal trap void Executor::C_FillCOval(const Rect * r, PixPatHandle pixpat)
 {
     FillCxxx(CALLOVAL(fill, (Rect *)r));
 }
 
-P4(PUBLIC pascal trap, void, FillCArc,
-   const Rect *, r,
-   short, startAngle,
-   short, arcAngle,
-   PixPatHandle, pixpat)
+PUBLIC pascal trap void Executor::C_FillCArc(const Rect * r, short startAngle, short arcAngle, PixPatHandle pixpat)
 {
     FillCxxx(CALLARC(fill, (Rect *)r, startAngle, arcAngle));
 }
 
-P2(PUBLIC pascal trap, void, FillCPoly,
-   PolyHandle, poly,
-   PixPatHandle, pixpat)
+PUBLIC pascal trap void Executor::C_FillCPoly(PolyHandle poly, PixPatHandle pixpat)
 {
     FillCxxx(CALLPOLY(fill, poly));
 }
 
-P2(PUBLIC pascal trap, void, FillCRgn,
-   RgnHandle, rgn,
-   PixPatHandle, pixpat)
+PUBLIC pascal trap void Executor::C_FillCRgn(RgnHandle rgn, PixPatHandle pixpat)
 {
     FillCxxx(CALLRGN(fill, rgn));
 }

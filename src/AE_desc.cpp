@@ -671,11 +671,7 @@ dump_desc (descriptor_t *desc)
 
 /* apple events descriptor stuff */
 
-P6(PUBLIC pascal trap, OSErr, AECreateAppleEvent,
-   AEEventClass, event_class, AEEventID, event_id,
-   AEAddressDesc *, target,
-   int16_t, return_id, int32_t, transaction_id,
-   AppleEvent *, evt_out)
+PUBLIC pascal trap OSErr Executor::C_AECreateAppleEvent(AEEventClass event_class, AEEventID event_id, AEAddressDesc * target, int16_t return_id, int32_t transaction_id, AppleEvent * evt_out)
 {
     Handle target_data;
     DescType target_type;
@@ -724,10 +720,7 @@ P6(PUBLIC pascal trap, OSErr, AECreateAppleEvent,
 
 /* generic descriptor functions */
 
-P4(PUBLIC pascal trap, OSErr, AECreateDesc,
-   DescType, type,
-   Ptr, data, Size, data_size,
-   AEDesc *, desc_out)
+PUBLIC pascal trap OSErr Executor::C_AECreateDesc(DescType type, Ptr data, Size data_size, AEDesc * desc_out)
 {
     Handle h;
 
@@ -750,16 +743,14 @@ P4(PUBLIC pascal trap, OSErr, AECreateDesc,
     AE_RETURN_ERROR(noErr);
 }
 
-P1(PUBLIC pascal trap, OSErr, AEDisposeDesc,
-   AEDesc *, desc)
+PUBLIC pascal trap OSErr Executor::C_AEDisposeDesc(AEDesc * desc)
 {
     DisposHandle(DESC_DATA(desc));
 
     AE_RETURN_ERROR(noErr);
 }
 
-P2(PUBLIC pascal trap, OSErr, AEDuplicateDesc,
-   AEDesc *, src, AEDesc *, dst)
+PUBLIC pascal trap OSErr Executor::C_AEDuplicateDesc(AEDesc * src, AEDesc * dst)
 {
     OSErr err;
     Handle src_data;
@@ -777,9 +768,7 @@ P2(PUBLIC pascal trap, OSErr, AEDuplicateDesc,
 
 /* descriptor functions for lists */
 
-P4(PUBLIC pascal trap, OSErr, AECreateList,
-   Ptr, list_elt_prefix, Size, list_elt_prefix_size,
-   Boolean, is_record_p, AEDescList *, list_out)
+PUBLIC pascal trap OSErr Executor::C_AECreateList(Ptr list_elt_prefix, Size list_elt_prefix_size, Boolean is_record_p, AEDescList * list_out)
 {
     list_header_t header;
     DescType type;
@@ -799,8 +788,7 @@ P4(PUBLIC pascal trap, OSErr, AECreateList,
                                  list_out));
 }
 
-P2(PUBLIC pascal trap, OSErr, AECountItems,
-   AEDescList *, list, GUEST<int32_t> *, count_out)
+PUBLIC pascal trap OSErr Executor::C_AECountItems(AEDescList * list, GUEST<int32_t> * count_out)
 {
     subdesc_info_t info;
     Handle aggr_desc_h;
@@ -816,10 +804,7 @@ P2(PUBLIC pascal trap, OSErr, AECountItems,
     AE_RETURN_ERROR(noErr);
 }
 
-P5(PUBLIC pascal trap, OSErr, AEGetNthDesc,
-   AEDescList *, list, int32_t, index,
-   DescType, desired_type, GUEST<AEKeyword> *, keyword_out,
-   AEDesc *, desc_out)
+PUBLIC pascal trap OSErr Executor::C_AEGetNthDesc(AEDescList * list, int32_t index, DescType desired_type, GUEST<AEKeyword> * keyword_out, AEDesc * desc_out)
 {
     descriptor_t *desc = (descriptor_t *)alloca(sizeof *desc);
 
@@ -832,11 +817,7 @@ P5(PUBLIC pascal trap, OSErr, AEGetNthDesc,
     AE_RETURN_ERROR(AECoerceDesc(desc, desired_type, desc_out));
 }
 
-P8(PUBLIC pascal trap, OSErr, AEGetNthPtr,
-   AEDescList *, list, int32_t, index,
-   DescType, desired_type, GUEST<AEKeyword> *, keyword_out,
-   GUEST<DescType> *, type_out,
-   Ptr, data, int32_t, max_size, GUEST<Size> *, size_out)
+PUBLIC pascal trap OSErr Executor::C_AEGetNthPtr(AEDescList * list, int32_t index, DescType desired_type, GUEST<AEKeyword> * keyword_out, GUEST<DescType> * type_out, Ptr data, int32_t max_size, GUEST<Size> * size_out)
 {
     descriptor_t *desc = (descriptor_t *)alloca(sizeof *desc);
     descriptor_t *coerced_desc = (descriptor_t *)alloca(sizeof *coerced_desc);
@@ -858,9 +839,7 @@ P8(PUBLIC pascal trap, OSErr, AEGetNthPtr,
     AE_RETURN_ERROR(AEDisposeDesc(coerced_desc));
 }
 
-P3(PUBLIC pascal trap, OSErr, AEPutDesc,
-   AEDescList *, list, int32_t, index,
-   AEDesc *, desc)
+PUBLIC pascal trap OSErr Executor::C_AEPutDesc(AEDescList * list, int32_t index, AEDesc * desc)
 {
     OSErr retval = noErr;
 
@@ -871,9 +850,7 @@ P3(PUBLIC pascal trap, OSErr, AEPutDesc,
     AE_RETURN_ERROR(retval);
 }
 
-P5(PUBLIC pascal trap, OSErr, AEPutPtr,
-   AEDescList *, list, int32_t, index, DescType, type,
-   Ptr, data, Size, data_size)
+PUBLIC pascal trap OSErr Executor::C_AEPutPtr(AEDescList * list, int32_t index, DescType type, Ptr data, Size data_size)
 {
     descriptor_t *desc;
     OSErr err, retval;
@@ -891,8 +868,7 @@ P5(PUBLIC pascal trap, OSErr, AEPutPtr,
     AE_RETURN_ERROR(retval);
 }
 
-P2(PUBLIC pascal trap, OSErr, AEDeleteItem,
-   AEDescList *, list, int32_t, index)
+PUBLIC pascal trap OSErr Executor::C_AEDeleteItem(AEDescList * list, int32_t index)
 {
     if(!LIST_CLASS_P(list))
         AE_RETURN_ERROR(errAEWrongDataType);
@@ -903,9 +879,7 @@ P2(PUBLIC pascal trap, OSErr, AEDeleteItem,
         AE_RETURN_ERROR(noErr);
 }
 
-P4(PUBLIC pascal trap, OSErr, AESizeOfNthItem,
-   AEDescList *, list, int32_t, index,
-   GUEST<DescType> *, type_out, GUEST<Size> *, size_out)
+PUBLIC pascal trap OSErr Executor::C_AESizeOfNthItem(AEDescList * list, int32_t index, GUEST<DescType> * type_out, GUEST<Size> * size_out)
 {
     descriptor_t *desc = (descriptor_t *)alloca(sizeof *desc);
 
@@ -923,9 +897,7 @@ P4(PUBLIC pascal trap, OSErr, AESizeOfNthItem,
 
 /* descriptor functions for key pair records */
 
-P4(PUBLIC pascal trap, OSErr, AEGetKeyDesc,
-   AERecord *, record, AEKeyword, keyword,
-   DescType, desired_type, AEDesc *, desc_out)
+PUBLIC pascal trap OSErr Executor::C_AEGetKeyDesc(AERecord * record, AEKeyword keyword, DescType desired_type, AEDesc * desc_out)
 {
     descriptor_t *desc;
 
@@ -940,9 +912,7 @@ P4(PUBLIC pascal trap, OSErr, AEGetKeyDesc,
     AE_RETURN_ERROR(AECoerceDesc(desc, desired_type, desc_out));
 }
 
-P3(PUBLIC pascal trap, OSErr, AEPutKeyDesc,
-   AERecord *, record, AEKeyword, keyword,
-   AEDesc *, desc)
+PUBLIC pascal trap OSErr Executor::C_AEPutKeyDesc(AERecord * record, AEKeyword keyword, AEDesc * desc)
 {
     if(!RECORD_CLASS_P(record))
         AE_RETURN_ERROR(errAEWrongDataType);
@@ -953,10 +923,7 @@ P3(PUBLIC pascal trap, OSErr, AEPutKeyDesc,
         AE_RETURN_ERROR(memFullErr);
 }
 
-P7(PUBLIC pascal trap, OSErr, AEGetKeyPtr,
-   AERecord *, record, AEKeyword, keyword,
-   DescType, desired_type, GUEST<DescType> *, type_out,
-   Ptr, data, Size, max_size, GUEST<Size> *, size_out)
+PUBLIC pascal trap OSErr Executor::C_AEGetKeyPtr(AERecord * record, AEKeyword keyword, DescType desired_type, GUEST<DescType> * type_out, Ptr data, Size max_size, GUEST<Size> * size_out)
 {
     descriptor_t *desc = (descriptor_t *)alloca(sizeof *desc);
     descriptor_t *coerced_desc = (descriptor_t *)alloca(sizeof *coerced_desc);
@@ -978,9 +945,7 @@ P7(PUBLIC pascal trap, OSErr, AEGetKeyPtr,
     AE_RETURN_ERROR(AEDisposeDesc(coerced_desc));
 }
 
-P5(PUBLIC pascal trap, OSErr, AEPutKeyPtr,
-   AERecord *, record, AEKeyword, keyword,
-   DescType, type, Ptr, data, Size, data_size)
+PUBLIC pascal trap OSErr Executor::C_AEPutKeyPtr(AERecord * record, AEKeyword keyword, DescType type, Ptr data, Size data_size)
 {
     descriptor_t *desc;
     OSErr err, retval;
@@ -1001,8 +966,7 @@ P5(PUBLIC pascal trap, OSErr, AEPutKeyPtr,
     AE_RETURN_ERROR(retval);
 }
 
-P2(PUBLIC pascal trap, OSErr, AEDeleteKeyDesc,
-   AERecord *, record, AEKeyword, keyword)
+PUBLIC pascal trap OSErr Executor::C_AEDeleteKeyDesc(AERecord * record, AEKeyword keyword)
 {
     if(!RECORD_CLASS_P(record))
         AE_RETURN_ERROR(errAEWrongDataType);
@@ -1013,9 +977,7 @@ P2(PUBLIC pascal trap, OSErr, AEDeleteKeyDesc,
         AE_RETURN_ERROR(noErr);
 }
 
-P4(PUBLIC pascal trap, OSErr, AESizeOfKeyDesc,
-   AERecord *, record, AEKeyword, keyword,
-   GUEST<DescType> *, type_out, GUEST<Size> *, size_out)
+PUBLIC pascal trap OSErr Executor::C_AESizeOfKeyDesc(AERecord * record, AEKeyword keyword, GUEST<DescType> * type_out, GUEST<Size> * size_out)
 {
     descriptor_t *desc = (descriptor_t *)alloca(sizeof *desc);
 
@@ -1033,9 +995,7 @@ P4(PUBLIC pascal trap, OSErr, AESizeOfKeyDesc,
 
 /* descriptor functions for apple events */
 
-P5(PUBLIC pascal trap, OSErr, AEPutAttributePtr,
-   AppleEvent *, evt, AEKeyword, keyword,
-   DescType, type, Ptr, data, Size, data_size)
+PUBLIC pascal trap OSErr Executor::C_AEPutAttributePtr(AppleEvent * evt, AEKeyword keyword, DescType type, Ptr data, Size data_size)
 {
     descriptor_t *desc;
     OSErr err, retval;
@@ -1056,9 +1016,7 @@ P5(PUBLIC pascal trap, OSErr, AEPutAttributePtr,
     AE_RETURN_ERROR(retval);
 }
 
-P3(PUBLIC pascal trap, OSErr, AEPutAttributeDesc,
-   AppleEvent *, evt, AEKeyword, keyword,
-   AEDesc *, desc)
+PUBLIC pascal trap OSErr Executor::C_AEPutAttributeDesc(AppleEvent * evt, AEKeyword keyword, AEDesc * desc)
 {
     if(!APPLE_EVENT_CLASS_P(evt))
         AE_RETURN_ERROR(errAEWrongDataType);
@@ -1069,9 +1027,7 @@ P3(PUBLIC pascal trap, OSErr, AEPutAttributeDesc,
         AE_RETURN_ERROR(memFullErr);
 }
 
-P4(PUBLIC pascal trap, OSErr, AEGetAttributeDesc,
-   AppleEvent *, evt, AEKeyword, keyword,
-   DescType, desired_type, AEDesc *, desc_out)
+PUBLIC pascal trap OSErr Executor::C_AEGetAttributeDesc(AppleEvent * evt, AEKeyword keyword, DescType desired_type, AEDesc * desc_out)
 {
     descriptor_t *desc;
 
@@ -1086,10 +1042,7 @@ P4(PUBLIC pascal trap, OSErr, AEGetAttributeDesc,
     AE_RETURN_ERROR(AECoerceDesc(desc, desired_type, desc_out));
 }
 
-P7(PUBLIC pascal trap, OSErr, AEGetAttributePtr,
-   AppleEvent *, evt, AEKeyword, keyword,
-   DescType, desired_type, GUEST<DescType> *, type_out,
-   Ptr, data, Size, max_size, GUEST<Size> *, size_out)
+PUBLIC pascal trap OSErr Executor::C_AEGetAttributePtr(AppleEvent * evt, AEKeyword keyword, DescType desired_type, GUEST<DescType> * type_out, Ptr data, Size max_size, GUEST<Size> * size_out)
 {
     descriptor_t *desc;
     descriptor_t *coerced_desc = (descriptor_t *)alloca(sizeof *coerced_desc);
@@ -1113,8 +1066,7 @@ P7(PUBLIC pascal trap, OSErr, AEGetAttributePtr,
     AE_RETURN_ERROR(AEDisposeDesc(coerced_desc));
 }
 
-P2(PUBLIC pascal trap, OSErr, AEDeleteAttribute,
-   AppleEvent *, evt, AEKeyword, keyword)
+PUBLIC pascal trap OSErr Executor::C_AEDeleteAttribute(AppleEvent * evt, AEKeyword keyword)
 {
     if(!APPLE_EVENT_CLASS_P(evt))
         AE_RETURN_ERROR(errAEWrongDataType);
@@ -1125,9 +1077,7 @@ P2(PUBLIC pascal trap, OSErr, AEDeleteAttribute,
         AE_RETURN_ERROR(noErr);
 }
 
-P4(PUBLIC pascal trap, OSErr, AESizeOfAttribute,
-   AppleEvent *, evt, AEKeyword, keyword,
-   GUEST<DescType> *, type_out, GUEST<Size> *, size_out)
+PUBLIC pascal trap OSErr Executor::C_AESizeOfAttribute(AppleEvent * evt, AEKeyword keyword, GUEST<DescType> * type_out, GUEST<Size> * size_out)
 {
     descriptor_t *desc;
 

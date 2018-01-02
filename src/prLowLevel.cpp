@@ -40,28 +40,27 @@ using namespace Executor;
 
 PUBLIC uint32_t ROMlib_PrDrvrVers = 70;
 
-P0(PUBLIC pascal trap, void, PrDrvrOpen) /* TODO */
+PUBLIC pascal trap void Executor::C_PrDrvrOpen() /* TODO */
 {
     warning_unimplemented(NULL_STRING);
 }
 
-P0(PUBLIC pascal trap, void, PrDrvrClose) /* TODO */
+PUBLIC pascal trap void Executor::C_PrDrvrClose() /* TODO */
 {
     warning_unimplemented(NULL_STRING);
 }
 
-P4(PUBLIC pascal trap, void, PrCtlCall, INTEGER, iWhichCtl, LONGINT, lParam1,
-   LONGINT, lParam2, LONGINT, lParam3) /* TODO */
+PUBLIC pascal trap void Executor::C_PrCtlCall(INTEGER iWhichCtl, LONGINT lParam1, LONGINT lParam2, LONGINT lParam3) /* TODO */
 {
     warning_unimplemented(NULL_STRING);
 }
 
-P0(PUBLIC pascal trap, Handle, PrDrvrDCE) /* TODO */
+PUBLIC pascal trap Handle Executor::C_PrDrvrDCE() /* TODO */
 {
     return (Handle)0;
 }
 
-P0(PUBLIC pascal trap, INTEGER, PrDrvrVers)
+PUBLIC pascal trap INTEGER Executor::C_PrDrvrVers()
 {
     INTEGER retval;
 
@@ -114,7 +113,7 @@ GetDILong(DialogPtr dp, INTEGER item, LONGINT _default)
 PUBLIC win_printp_t ROMlib_wp;
 #endif
 
-P2(PUBLIC pascal, void, ROMlib_myjobproc, DialogPtr, dp, INTEGER, itemno)
+PUBLIC pascal void Executor::C_ROMlib_myjobproc(DialogPtr dp, INTEGER itemno)
 {
     switch(itemno)
     {
@@ -479,7 +478,7 @@ update_port(DialogPtr dp)
     SetPort(gp);
 }
 
-P2(PUBLIC pascal, void, ROMlib_mystlproc, DialogPtr, dp, INTEGER, itemno)
+PUBLIC pascal void Executor::C_ROMlib_mystlproc(DialogPtr dp, INTEGER itemno)
 {
     switch(itemno)
     {
@@ -525,8 +524,7 @@ static inline TPPrDlg ROMlib_CALLPRINITPROC(THPrint, prinitprocp);
 static inline void ROMlib_CALLPRITEMPROC(TPPrDlg, INTEGER, pritemprocp);
 }
 
-A2(static inline, TPPrDlg, ROMlib_CALLPRINITPROC, THPrint, hPrint,
-   prinitprocp, fp)
+static inline TPPrDlg Executor::ROMlib_CALLPRINITPROC(THPrint hPrint, prinitprocp fp)
 {
     TPPrDlg retval;
     ROMlib_hook(pr_initnumber);
@@ -546,8 +544,7 @@ A2(static inline, TPPrDlg, ROMlib_CALLPRINITPROC, THPrint, hPrint,
 #define CALLPRITEMPROC(prrecptr, item, fp) \
     ROMlib_CALLPRITEMPROC((prrecptr), (item), (pritemprocp)(fp))
 
-A3(static inline, void, ROMlib_CALLPRITEMPROC, TPPrDlg, prrecptr,
-   INTEGER, item, pritemprocp, fp)
+static inline void Executor::ROMlib_CALLPRITEMPROC(TPPrDlg prrecptr, INTEGER item, pritemprocp fp)
 {
     ROMlib_hook(pr_itemnumber);
     if(fp == (pritemprocp)P_ROMlib_myjobproc)
@@ -563,8 +560,7 @@ A3(static inline, void, ROMlib_CALLPRITEMPROC, TPPrDlg, prrecptr,
 }
 #endif /* BINCOMPAT */
 
-P3(PUBLIC, pascal BOOLEAN, ROMlib_stlfilterproc, DialogPeek, dp,
-   EventRecord *, evt, GUEST<INTEGER> *, ith)
+PUBLIC pascal BOOLEAN Executor::C_ROMlib_stlfilterproc(DialogPeek dp, EventRecord * evt, GUEST<INTEGER> * ith)
 {
     BOOLEAN retval;
     char *keyp;
@@ -657,8 +653,7 @@ P3(PUBLIC, pascal BOOLEAN, ROMlib_stlfilterproc, DialogPeek, dp,
     return retval;
 }
 
-P3(PUBLIC, pascal BOOLEAN, ROMlib_numsonlyfilterproc, DialogPeek, dp,
-   EventRecord *, evt, GUEST<INTEGER> *, ith)
+PUBLIC pascal BOOLEAN Executor::C_ROMlib_numsonlyfilterproc(DialogPeek dp, EventRecord * evt, GUEST<INTEGER> * ith)
 {
     char c;
 
@@ -806,7 +801,7 @@ adjust_print_name(DialogPtr dp)
     SetIText(GetDIText(dp, 3), name);
 }
 
-P1(PUBLIC pascal trap, TPPrDlg, PrJobInit, THPrint, hPrint)
+PUBLIC pascal trap TPPrDlg Executor::C_PrJobInit(THPrint hPrint)
 {
     TPPrDlg retval;
 
@@ -845,7 +840,7 @@ P1(PUBLIC pascal trap, TPPrDlg, PrJobInit, THPrint, hPrint)
     return retval;
 }
 
-P2(PUBLIC, pascal void, ROMlib_circle_ok, DialogPeek, dp, INTEGER, which)
+PUBLIC pascal void Executor::C_ROMlib_circle_ok(DialogPeek dp, INTEGER which)
 {
     Rect r;
     GUEST<INTEGER> unused;
@@ -860,7 +855,7 @@ P2(PUBLIC, pascal void, ROMlib_circle_ok, DialogPeek, dp, INTEGER, which)
         FrameRect(&r);
 }
 
-P2(PUBLIC, pascal void, ROMlib_orientation, DialogPeek, dp, INTEGER, which)
+PUBLIC pascal void Executor::C_ROMlib_orientation(DialogPeek dp, INTEGER which)
 {
     Rect r;
     GUEST<INTEGER> unused;
@@ -1006,7 +1001,7 @@ Executor::printer_init(void)
     }
 }
 
-P1(PUBLIC pascal trap, TPPrDlg, PrStlInit, THPrint, hPrint)
+PUBLIC pascal trap TPPrDlg Executor::C_PrStlInit(THPrint hPrint)
 {
     TPPrDlg retval;
 
@@ -1130,7 +1125,7 @@ P1(PUBLIC pascal trap, TPPrDlg, PrStlInit, THPrint, hPrint)
 
 #define SUNPATH_HACK (ROMlib_options & ROMLIB_PRINTING_HACK_BIT)
 
-P2(PUBLIC pascal trap, BOOLEAN, PrDlgMain, THPrint, hPrint, ProcPtr, initfptr)
+PUBLIC pascal trap BOOLEAN Executor::C_PrDlgMain(THPrint hPrint, ProcPtr initfptr)
 {
     GUEST<INTEGER> item_swapped;
     INTEGER item;
@@ -1204,7 +1199,7 @@ P2(PUBLIC pascal trap, BOOLEAN, PrDlgMain, THPrint, hPrint, ProcPtr, initfptr)
     return retval;
 }
 
-P1(PUBLIC pascal trap, void, PrGeneral, Ptr, pData) /* IMV-410 */
+PUBLIC pascal trap void Executor::C_PrGeneral(Ptr pData) /* IMV-410 */
 {
     TGnlData *tgp;
 

@@ -10,30 +10,28 @@
 #include "rsys/resource.h"
 #include "rsys/mman.h"
 
-namespace Executor
-{
+using namespace Executor;
+
 typedef GUEST<ResType> *restypeptr;
 
 PRIVATE GUEST<restypeptr> *ar = 0;
 PRIVATE INTEGER inserttypes(resmaphand, INTEGER, BOOLEAN);
 PRIVATE INTEGER initar(INTEGER);
-}
+
 #define ARRN_NOTINITTED (-1)
 #define ARRN_ALL (-2)
 
-using namespace Executor;
 
 PRIVATE INTEGER arrn = ARRN_NOTINITTED;
 
-A0(PUBLIC, void, ROMlib_invalar) /* INTERNAL */
+PUBLIC void Executor::ROMlib_invalar() /* INTERNAL */
 {
     if(ar)
         EmptyHandle((Handle)ar);
     arrn = ARRN_NOTINITTED;
 }
 
-A3(PRIVATE, INTEGER, inserttypes, resmaphand, map, INTEGER, ninserted,
-   BOOLEAN, first)
+PRIVATE INTEGER inserttypes(resmaphand map, INTEGER ninserted, BOOLEAN first)
 {
     typref *tr;
     INTEGER i, j;
@@ -64,7 +62,7 @@ A3(PRIVATE, INTEGER, inserttypes, resmaphand, map, INTEGER, ninserted,
     return next - STARH(ar);
 }
 
-A1(PRIVATE, INTEGER, initar, INTEGER, rn)
+PRIVATE INTEGER initar(INTEGER rn)
 {
     Size mostbytesneeded;
     INTEGER ninserted;
@@ -114,17 +112,17 @@ A1(PRIVATE, INTEGER, initar, INTEGER, rn)
     return GetHandleSize((Handle)ar) / sizeof(ResType);
 }
 
-P0(PUBLIC pascal trap, INTEGER, CountTypes)
+PUBLIC pascal trap INTEGER Executor::C_CountTypes()
 {
     return initar(ARRN_ALL);
 }
 
-P0(PUBLIC pascal trap, INTEGER, Count1Types) /* IMIV-15 */
+PUBLIC pascal trap INTEGER Executor::C_Count1Types() /* IMIV-15 */
 {
     return initar(Cx(CurMap));
 }
 
-P2(PUBLIC pascal trap, void, GetIndType, GUEST<ResType> *, typ, INTEGER, indx)
+PUBLIC pascal trap void Executor::C_GetIndType(GUEST<ResType> * typ, INTEGER indx)
 {
     if(indx <= 0 || indx > initar(ARRN_ALL))
         *typ = 0;
@@ -132,8 +130,8 @@ P2(PUBLIC pascal trap, void, GetIndType, GUEST<ResType> *, typ, INTEGER, indx)
         *typ = STARH(ar)[indx - 1];
 }
 
-P2(PUBLIC pascal trap, void, Get1IndType, GUEST<ResType> *, typ, /* IMIV-15 */
-   INTEGER, indx)
+PUBLIC pascal trap void Executor::C_Get1IndType(GUEST<ResType> * typ, /* IMIV-15 */
+   INTEGER indx)
 {
     if(indx <= 0 || indx > initar(Cx(CurMap)))
         *typ = 0;

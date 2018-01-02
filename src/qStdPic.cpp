@@ -16,8 +16,7 @@
 
 using namespace Executor;
 
-P3(PUBLIC pascal trap, void, StdComment, INTEGER, kind, INTEGER, size,
-   Handle, hand)
+PUBLIC pascal trap void Executor::C_StdComment(INTEGER kind, INTEGER size, Handle hand)
 {
     SignedByte state;
     GUEST<INTEGER> swappedsize;
@@ -55,12 +54,12 @@ P3(PUBLIC pascal trap, void, StdComment, INTEGER, kind, INTEGER, size,
     }
 }
 
-P2(PUBLIC pascal trap, void, StdGetPic, Ptr, dp, INTEGER, bc) /* TODO */
+PUBLIC pascal trap void Executor::C_StdGetPic(Ptr dp, INTEGER bc) /* TODO */
 {
     warning_unimplemented(NULL_STRING);
 }
 
-P2(PUBLIC pascal trap, void, StdPutPic, Ptr, sp, INTEGER, bc)
+PUBLIC pascal trap void Executor::C_StdPutPic(Ptr sp, INTEGER bc)
 {
     piccachehand pch;
     PicHandle ph;

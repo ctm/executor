@@ -43,7 +43,7 @@ Executor::ROMlib_set_default_resolution(THPrint hPrint, INTEGER vres, INTEGER hr
     ROMlib_resolution_y = vres;
 }
 
-P1(PUBLIC pascal trap, void, PrintDefault, THPrint, hPrint)
+PUBLIC pascal trap void Executor::C_PrintDefault(THPrint hPrint)
 {
     /* TODO:  fill this information in from the currently open
        printer resource file.  I don't know where it's kept so
@@ -80,7 +80,7 @@ P1(PUBLIC pascal trap, void, PrintDefault, THPrint, hPrint)
     HxX(hPrint, prJob.fFromUsr) = 1;
 }
 
-P1(PUBLIC pascal trap, BOOLEAN, PrValidate, THPrint, hPrint) /* IMII-158 */
+PUBLIC pascal trap BOOLEAN Executor::C_PrValidate(THPrint hPrint) /* IMII-158 */
 {
     /* TODO: figure out what are problem areas for us and adjust
 	     accordingly */
@@ -115,7 +115,7 @@ P1(PUBLIC pascal trap, BOOLEAN, PrValidate, THPrint, hPrint) /* IMII-158 */
     return false;
 }
 
-P1(PUBLIC pascal trap, BOOLEAN, PrStlDialog, THPrint, hPrint)
+PUBLIC pascal trap BOOLEAN Executor::C_PrStlDialog(THPrint hPrint)
 {
     BOOLEAN retval;
 
@@ -123,14 +123,13 @@ P1(PUBLIC pascal trap, BOOLEAN, PrStlDialog, THPrint, hPrint)
     return retval;
 }
 
-P1(PUBLIC pascal trap, BOOLEAN, PrJobDialog, THPrint, hPrint)
+PUBLIC pascal trap BOOLEAN Executor::C_PrJobDialog(THPrint hPrint)
 {
     ROMlib_acknowledge_job_dialog(hPrint);
     return C_PrDlgMain(hPrint, (ProcPtr)P_PrJobInit);
 }
 
-P2(PUBLIC pascal trap, void, PrJobMerge, THPrint, hPrintSrc,
-   THPrint, hPrintDst) /* TODO */
+PUBLIC pascal trap void Executor::C_PrJobMerge(THPrint hPrintSrc, THPrint hPrintDst) /* TODO */
 {
     warning_unimplemented(NULL_STRING);
 }

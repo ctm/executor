@@ -5,15 +5,11 @@
 #include "rsys/common.h"
 #include "ListMgr.h"
 #include "MemoryMgr.h"
+#include "rsys/list.h"
 
-namespace Executor
-{
-PRIVATE void draw(BOOLEAN, Rect *, INTEGER, INTEGER, ListHandle);
-void C_ldef0(INTEGER, BOOLEAN, Rect *, Cell, INTEGER, INTEGER, ListHandle);
-}
+using namespace Executor;
 
-A5(PRIVATE, void, draw, BOOLEAN, sel, Rect *, rect, INTEGER, doff,
-   INTEGER, dl, ListHandle, list)
+PRIVATE void draw(BOOLEAN sel, Rect * rect, INTEGER doff, INTEGER dl, ListHandle list)
 {
     GrafPtr savePort;
 
@@ -31,9 +27,7 @@ A5(PRIVATE, void, draw, BOOLEAN, sel, Rect *, rect, INTEGER, doff,
     
 }
 
-P7(PUBLIC pascal, void, ldef0, INTEGER, msg, BOOLEAN, sel, Rect *, rect,
-   Cell, cell, INTEGER, doff, INTEGER, dl,
-   ListHandle, list) /* IMIV-276 */
+PUBLIC pascal void Executor::C_ldef0(INTEGER msg, BOOLEAN sel, Rect * rect, Cell cell, INTEGER doff, INTEGER dl, ListHandle list) /* IMIV-276 */
 {
     GrafPtr savePort;
     FontInfo fi;

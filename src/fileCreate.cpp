@@ -18,8 +18,8 @@
 
 using namespace Executor;
 
-A4(PUBLIC, OSErr, Create, StringPtr, filen, INTEGER, vrn, /* IMIV-112 */
-   OSType, creator, OSType, filtyp)
+PUBLIC OSErr Executor::Create(StringPtr filen, INTEGER vrn, /* IMIV-112 */
+   OSType creator, OSType filtyp)
 {
     ParamBlockRec pbr;
     OSErr temp;
@@ -53,7 +53,7 @@ A4(PUBLIC, OSErr, Create, StringPtr, filen, INTEGER, vrn, /* IMIV-112 */
     return temp == fnfErr ? noErr : temp;
 }
 
-A2(PUBLIC, OSErr, FSDelete, StringPtr, filen, INTEGER, vrn) /* IMIV-113 */
+PUBLIC OSErr Executor::FSDelete(StringPtr filen, INTEGER vrn) /* IMIV-113 */
 {
     ParamBlockRec pbr;
 
@@ -63,14 +63,10 @@ A2(PUBLIC, OSErr, FSDelete, StringPtr, filen, INTEGER, vrn) /* IMIV-113 */
     return (PBDelete(&pbr, 0));
 }
 
-namespace Executor
-{
 static OSErr PBCreateForD(ParmBlkPtr, BOOLEAN, FOrDType, LONGINT);
 static OSErr PBDeleteForD(ParmBlkPtr, BOOLEAN, FOrDType, LONGINT);
-}
 
-A4(PRIVATE, OSErr, PBCreateForD, ParmBlkPtr, pb, BOOLEAN, a,
-   FOrDType, ford, LONGINT, dir)
+PRIVATE OSErr PBCreateForD(ParmBlkPtr pb, BOOLEAN a, FOrDType ford, LONGINT dir)
 {
     char *pathname;
     OSErr err;
@@ -153,25 +149,24 @@ A4(PRIVATE, OSErr, PBCreateForD, ParmBlkPtr, pb, BOOLEAN, a,
     return err;
 }
 
-A2(PUBLIC, OSErr, ufsPBCreate, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
+PUBLIC OSErr Executor::ufsPBCreate(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     return PBCreateForD(pb, a, File, 0);
 }
 
-A2(PUBLIC, OSErr, ufsPBHCreate, HParmBlkPtr, pb, /* INTERNAL */
-   BOOLEAN, a)
+PUBLIC OSErr Executor::ufsPBHCreate(HParmBlkPtr pb, /* INTERNAL */
+   BOOLEAN a)
 {
     return PBCreateForD((ParmBlkPtr)pb, a, File, Cx(pb->fileParam.ioDirID));
 }
 
-A2(PUBLIC, OSErr, ufsPBDirCreate, HParmBlkPtr, pb, /* INTERNAL */
-   BOOLEAN, a)
+PUBLIC OSErr Executor::ufsPBDirCreate(HParmBlkPtr pb, /* INTERNAL */
+   BOOLEAN a)
 {
     return PBCreateForD((ParmBlkPtr)pb, a, Directory, Cx(pb->fileParam.ioDirID));
 }
 
-A4(PRIVATE, OSErr, PBDeleteForD, ParmBlkPtr, pb, BOOLEAN, a,
-   FOrDType, ford, LONGINT, dir)
+PRIVATE OSErr PBDeleteForD(ParmBlkPtr pb, BOOLEAN a, FOrDType ford, LONGINT dir)
 {
     char *pathname, *filename, *endname, *rpathname;
     OSErr err;
@@ -284,13 +279,13 @@ A4(PRIVATE, OSErr, PBDeleteForD, ParmBlkPtr, pb, BOOLEAN, a,
     return err;
 }
 
-A2(PUBLIC, OSErr, ufsPBDelete, ParmBlkPtr, pb, BOOLEAN, a) /* INTERNAL */
+PUBLIC OSErr Executor::ufsPBDelete(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
 {
     return PBDeleteForD(pb, a, File, 0);
 }
 
-A2(PUBLIC, OSErr, ufsPBHDelete, HParmBlkPtr, pb, /* INTERNAL */
-   BOOLEAN, a)
+PUBLIC OSErr Executor::ufsPBHDelete(HParmBlkPtr pb, /* INTERNAL */
+   BOOLEAN a)
 {
     return PBDeleteForD((ParmBlkPtr)pb, a, Directory, Cx(pb->fileParam.ioDirID));
 }

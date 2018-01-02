@@ -11,8 +11,8 @@
 
 using namespace Executor;
 
-P3(PUBLIC pascal trap, INTEGER, LAddColumn, INTEGER, count, /* IMIV-271 */
-   INTEGER, coln, ListHandle, list)
+PUBLIC pascal trap INTEGER Executor::C_LAddColumn(INTEGER count, /* IMIV-271 */
+   INTEGER coln, ListHandle list)
 {
     Rect todraw;
     Point c;
@@ -80,8 +80,8 @@ P3(PUBLIC pascal trap, INTEGER, LAddColumn, INTEGER, count, /* IMIV-271 */
     return coln;
 }
 
-P3(PUBLIC pascal trap, INTEGER, LAddRow, INTEGER, count, /* IMIV-271 */
-   INTEGER, rown, ListHandle, list)
+PUBLIC pascal trap INTEGER Executor::C_LAddRow(INTEGER count, /* IMIV-271 */
+   INTEGER rown, ListHandle list)
 {
     Rect todraw;
     Cell c;
@@ -160,8 +160,8 @@ compute_visible_rect(Rect *rp, ListHandle list, INTEGER top, INTEGER left,
     SectRect(rp, &HxX(list, rView), rp);
 }
 
-P3(PUBLIC pascal trap, void, LDelColumn, INTEGER, count, /* IMIV-271 */
-   INTEGER, coln, ListHandle, list)
+PUBLIC pascal trap void Executor::C_LDelColumn(INTEGER count, /* IMIV-271 */
+   INTEGER coln, ListHandle list)
 {
     Rect todraw;
     Cell c;
@@ -301,8 +301,8 @@ P3(PUBLIC pascal trap, void, LDelColumn, INTEGER, count, /* IMIV-271 */
     }
 }
 
-P3(PUBLIC pascal trap, void, LDelRow, INTEGER, count, /* IMIV-272 */
-   INTEGER, rown, ListHandle, list)
+PUBLIC pascal trap void Executor::C_LDelRow(INTEGER count, /* IMIV-272 */
+   INTEGER rown, ListHandle list)
 {
     Rect todraw;
     Cell c;

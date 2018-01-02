@@ -990,9 +990,7 @@ struct draw_save
     LONGINT bk;
 };
 
-P4(PUBLIC pascal, LONGINT, wdef0,
-   INTEGER, varcode, WindowPtr, window,
-   INTEGER, message, LONGINT, parm)
+PUBLIC pascal LONGINT Executor::C_wdef0(INTEGER varcode, WindowPtr window, INTEGER message, LONGINT parm)
 {
     WindowPeek w = (WindowPeek)window;
     draw_state_t draw_state;
@@ -1299,9 +1297,7 @@ void calc_rounded_doc(GrafPtr w, INTEGER curve_code)
     DisposeRgn(rh);
 }
 
-P4(PUBLIC pascal, LONGINT, wdef16,
-   INTEGER, varcode, WindowPtr, wp,
-   INTEGER, message, LONGINT, param)
+PUBLIC pascal LONGINT Executor::C_wdef16(INTEGER varcode, WindowPtr wp, INTEGER message, LONGINT param)
 {
     WindowPeek w = (WindowPeek)wp;
     draw_state_t draw_state;

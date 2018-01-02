@@ -12,7 +12,7 @@ using namespace Executor;
 /* #define TEMP_MEM_FAIL */
 #define paramErr (-50)
 
-P0(PUBLIC pascal trap, int32_t, TempFreeMem)
+PUBLIC pascal trap int32_t Executor::C_TempFreeMem()
 {
 #if defined(TEMP_MEM_FAIL)
     return 0;
@@ -30,8 +30,7 @@ P0(PUBLIC pascal trap, int32_t, TempFreeMem)
 #endif
 }
 
-P1(PUBLIC pascal trap, Size, TempMaxMem,
-   GUEST<Size> *, grow_s)
+PUBLIC pascal trap Size Executor::C_TempMaxMem(GUEST<Size> * grow_s)
 {
 #if defined(TEMP_MEM_FAIL)
     return 0;
@@ -52,14 +51,13 @@ P1(PUBLIC pascal trap, Size, TempMaxMem,
 #endif
 }
 
-P0(PUBLIC pascal trap, Ptr, TempTopMem)
+PUBLIC pascal trap Ptr Executor::C_TempTopMem()
 {
     warning_unimplemented(NULL_STRING);
     return NULL;
 }
 
-P2(PUBLIC pascal trap, Handle, TempNewHandle,
-   Size, logical_size, GUEST<OSErr> *, result_code)
+PUBLIC pascal trap Handle Executor::C_TempNewHandle(Size logical_size, GUEST<OSErr> * result_code)
 {
 #if defined(TEMP_MEM_FAIL)
     *result_code = CWC(memFullErr);
@@ -80,22 +78,19 @@ P2(PUBLIC pascal trap, Handle, TempNewHandle,
 #endif
 }
 
-P2(PUBLIC pascal trap, void, TempHLock,
-   Handle, h, GUEST<OSErr> *, result_code)
+PUBLIC pascal trap void Executor::C_TempHLock(Handle h, GUEST<OSErr> * result_code)
 {
     HLock(h);
     *result_code = MemErr;
 }
 
-P2(PUBLIC pascal trap, void, TempHUnlock,
-   Handle, h, GUEST<OSErr> *, result_code)
+PUBLIC pascal trap void Executor::C_TempHUnlock(Handle h, GUEST<OSErr> * result_code)
 {
     HUnlock(h);
     *result_code = MemErr;
 }
 
-P2(PUBLIC pascal trap, void, TempDisposeHandle,
-   Handle, h, GUEST<OSErr> *, result_code)
+PUBLIC pascal trap void Executor::C_TempDisposeHandle(Handle h, GUEST<OSErr> * result_code)
 {
     DisposHandle(h);
     *result_code = MemErr;
