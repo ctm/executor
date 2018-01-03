@@ -179,8 +179,7 @@ syn68k_addr_t Executor::catchalarm(syn68k_addr_t interrupt_pc, void *unused)
         /* If there's anything left in the queue, set up another
        * timer interrupt to come in at the appropriate time.
        */
-
-        syncint_post(min * 1000);
+        syncint_post(std::chrono::milliseconds(min));
 
         next_interrupt_msecs = now_msecs + min;
     }
@@ -249,7 +248,7 @@ static void ROMlib_PrimeTime(QElemPtr taskp, LONGINT count)
 
     if(count < msecs_until_next || msecs_until_next <= 0)
     {
-        syncint_post(count * 1000);
+        syncint_post(std::chrono::milliseconds(count));
 
         next_interrupt_msecs = now_msecs + count;
     }

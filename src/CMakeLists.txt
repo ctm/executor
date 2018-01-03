@@ -9,6 +9,7 @@ find_path(DB_INCLUDE_PATH db.h ndbm.h)
 include_directories(${DB_INCLUDE_PATH})
 
 find_program(BISON_COMMAND bison)
+find_package(Threads REQUIRED)
 
 include_directories(include/)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
@@ -397,4 +398,4 @@ else()
     target_link_libraries(executor ${DB_LIBRARY})
 endif()
 
-target_link_libraries(executor syn68k)
+target_link_libraries(executor Threads::Threads syn68k)

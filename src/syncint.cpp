@@ -9,84 +9,113 @@
 
 using namespace Executor;
 
-#if defined(SDL)
+#if defined(WIN32)
 
-static Uint32_t
-handle_sdltimer_tick(Uint32_t n)
+#undef store    /* namespace pollution from db.h */
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <chrono>
+#include <iostream>
+
+using namespace std::literals::chrono_literals;
+
+namespace
 {
-//  fprintf (stderr, "T");
-//  fflush (stderr);
-#if defined(CYGWIN32)
-    win_queue(&cpu_state.interrupt_pending[M68K_EVENT_PRIORITY]);
-#endif
-    cpu_state.interrupt_pending[M68K_TIMER_PRIORITY] = true;
-    SET_INTERRUPT_STATUS(INTERRUPT_STATUS_CHANGED);
-    //  SDL_mutexP (ROMlib_shouldbeawake_mutex);
-    SDL_CondSignal(ROMlib_shouldbeawake_cond);
-//  SDL_mutexV (ROMlib_shouldbeawake_mutex);
-
-#if !defined(SDL_TIMER_FIXED)
-    // FIXME: #warning returning 1 here to work around SDL timer bug(s)
-    return 1;
-#endif
-
-    return 0;
+    using clock = std::chrono::steady_clock;
+    std::mutex mutex;
+    std::condition_variable cond;
+    std::condition_variable wake_cond;
+    clock::time_point last_interrupt;
+    clock::time_point scheduled_interrupt;
+    std::thread timer_thread;
 }
 
+int Executor::syncint_init(void)
+{
+    std::thread([]() {
+        std::unique_lock<std::mutex> lock(mutex);
+        for(;;)
+        {
+            if(scheduled_interrupt > last_interrupt)
+            {
+                auto status = cond.wait_until(lock, scheduled_interrupt);
+                if(status == std::cv_status::timeout)
+                {
+                    last_interrupt = scheduled_interrupt;
+
+                    interrupt_generate(M68K_TIMER_PRIORITY);
+                    wake_cond.notify_all();
+                }
+            }
+            else
+            {
+                cond.wait(lock);
+            }
+        }
+    }).detach();
+    return true;
+}
+
+void Executor::syncint_wait()
+{
+    std::unique_lock<std::mutex> lock(mutex);
+    wake_cond.wait_for(lock, 1s, []() { return INTERRUPT_PENDING(); });
+}
+
+void Executor::syncint_post(std::chrono::microseconds usecs, bool fromLast)
+{
+    std::unique_lock<std::mutex> lock(mutex);
+
+    auto time = (fromLast ? last_interrupt : clock::now()) + usecs;
+
+    if(time <= last_interrupt)
+        last_interrupt = clock::time_point();
+    if(scheduled_interrupt <= last_interrupt || time < scheduled_interrupt)
+        scheduled_interrupt = time;
+    
+    cond.notify_one();
+}
 #else
+
+#include <chrono>
+#include <iostream>
+#include <unistd.h>
+#include <sys/time.h>
 
 static void
 handle_itimer_tick(int n)
 {
-    cpu_state.interrupt_pending[M68K_TIMER_PRIORITY] = true;
-    SET_INTERRUPT_STATUS(INTERRUPT_STATUS_CHANGED);
+    interrupt_generate(M68K_TIMER_PRIORITY);
 }
-
-#endif
 
 int Executor::syncint_init(void)
 {
-#if defined(SDL)
-
-    return (SDL_Init(SDL_INIT_TIMER) == 0);
-
-#else /* !SDL */
-
-#if !defined(USE_BSD_SIGNALS)
-
     struct sigaction s;
 
     s.sa_handler = handle_itimer_tick;
     sigemptyset(&s.sa_mask);
     s.sa_flags = 0;
     return (sigaction(SIGALRM, &s, NULL) == 0);
-
-#else
-    struct sigvec s;
-
-    s.sv_handler = handle_itimer_tick;
-    s.sv_mask = 0;
-    s.sv_flags = 0;
-    return sigvec(SIGALRM, &s, NULL) == 0;
-#endif
-
-#endif
 }
 
 /* Posting a delay of 0 will clear any pending interrupt. */
-void Executor::syncint_post(unsigned long usecs)
+void Executor::syncint_post(std::chrono::microseconds usecs, bool fromLast)
 {
-#if defined(SDL)
-    //  fprintf (stderr, "P(%ul)", usecs);
-    //  fflush (stderr);
-    SDL_SetTimer(usecs / 1000, handle_sdltimer_tick);
-#else
     struct itimerval t;
 
-    t.it_value.tv_sec = usecs / 1000000;
-    t.it_value.tv_usec = usecs % 1000000;
+    t.it_value.tv_sec = std::chrono::duration_cast<std::chrono::seconds>(usecs).count();
+    t.it_value.tv_usec = usecs.count() % 1000000;
     t.it_interval.tv_sec = 0;
     t.it_interval.tv_usec = 0;
     setitimer(ITIMER_REAL, &t, NULL);
-#endif
 }
+
+void Executor::syncint_wait()
+{
+    sigset_t zero_mask;
+    sigemptyset(&zero_mask);
+    sigsuspend(&zero_mask);
+}
+
+#endif

@@ -203,8 +203,7 @@ loop(void *unused)
         /* Request interrupt */
         if(sound_on)
         {
-            cpu_state.interrupt_pending[M68K_SOUND_PRIORITY] = 1;
-            cpu_state.interrupt_status_changed = INTERRUPT_STATUS_CHANGED;
+            generate_interrup(M68K_SOUND_PRIORITY);
         }
     }
 }

@@ -27,6 +27,7 @@
 #include "rsys/time.h"
 #include "rsys/toolevent.h"
 #include "rsys/stdfile.h"
+#include "rsys/syncint.h"
 
 using namespace Executor;
 
@@ -843,17 +844,8 @@ static BOOLEAN shouldbeawake;
 
 void Executor::C_ROMlib_wakeup()
 {
-//  fprintf (stderr, "W");
-//  fflush (stderr);
-
-#if defined(SDL)
-    SDL_mutexP(ROMlib_shouldbeawake_mutex);
-#endif
     shouldbeawake = true;
-#if defined(SDL)
-    SDL_mutexV(ROMlib_shouldbeawake_mutex);
-#endif
-};
+}
 
 /* argument n is in 1/60ths of a second */
 
@@ -861,33 +853,7 @@ void Executor::Delay(LONGINT n, LONGINT *ftp) /* IMII-384 */
 {
     if(n > 0)
     {
-#if defined(WIN32)
-        clock_t finish_clocks;
-        void __attribute__((stdcall)) Sleep(int32_t dwMilliseconds);
-
-        finish_clocks = clock() + n * CLOCKS_PER_SEC / 60;
-        while(clock() < finish_clocks)
-        {
-            Sleep(0); /* Give up current CPU timeslice */
-            check_virtual_interrupt();
-        }
-#else /* !MSDOS */
         TMTask tm;
-#if defined(USE_BSD_SIGNALS)
-        int old_mask;
-        old_mask = sigblock(sigmask(SIGALRM));
-#else
-        sigset_t to_block;
-        sigset_t old_mask;
-
-        sigemptyset(&to_block);
-        sigaddset(&to_block, SIGALRM);
-        sigprocmask(SIG_BLOCK, &to_block, &old_mask);
-#endif
-
-#if defined(SDL)
-        SDL_mutexP(ROMlib_shouldbeawake_mutex);
-#endif
         shouldbeawake = false;
 
         tm.tmAddr = RM((ProcPtr)P_ROMlib_wakeup);
@@ -898,34 +864,10 @@ void Executor::Delay(LONGINT n, LONGINT *ftp) /* IMII-384 */
         PrimeTime((QElemPtr)&tm, n * 1000 / 60);
         while(!shouldbeawake)
         {
-#if defined(SDL)
-            //	  fprintf (stderr, "C");
-            //	  fflush (stderr);
-            SDL_CondWait(ROMlib_shouldbeawake_cond, ROMlib_shouldbeawake_mutex);
-//	  fprintf (stderr, "c");
-//	  fflush (stderr);
-#elif !defined(USE_BSD_SIGNALS)
-            sigset_t zero_mask;
-            sigemptyset(&zero_mask);
-            sigsuspend(&zero_mask); /* NOTE: this will allow both UNIX signals
-				       and our thread_set_state kludges */
-#else
-            sigsetmask(0);
-#endif
+            syncint_wait();
             check_virtual_interrupt();
         }
         RmvTime((QElemPtr)&tm);
-
-#if defined(SDL)
-        SDL_mutexV(ROMlib_shouldbeawake_mutex);
-#endif
-
-#if defined(USE_BSD_SIGNALS)
-        sigsetmask(old_mask);
-#else
-        sigprocmask(SIG_SETMASK, &old_mask, NULL);
-#endif
-#endif /* !MSDOS */
     }
 
     /* Note:  we're really called from a stub, so no CL() is needed here. */

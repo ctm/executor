@@ -1169,8 +1169,7 @@ post_pending_x_events(syn68k_addr_t interrupt_addr, void *unused)
 void x_event_handler(int signo)
 {
     /* request syncint */
-    cpu_state.interrupt_pending[M68K_EVENT_PRIORITY] = 1;
-    cpu_state.interrupt_status_changed = INTERRUPT_STATUS_CHANGED;
+    interrupt_generate(M68K_EVENT_PRIORITY);
 }
 
 bool Executor::vdriver_init(int _max_width, int _max_height, int _max_bpp,

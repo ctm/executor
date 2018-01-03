@@ -597,8 +597,7 @@ int sdl_event_interrupt(const SDL_Event *event)
     {
         mouseloc.h = CW(event->motion.x);
         mouseloc.v = CW(event->motion.y);
-        cpu_state.interrupt_pending[M68K_MOUSE_MOVED_PRIORITY] = 1;
-        cpu_state.interrupt_status_changed = INTERRUPT_STATUS_CHANGED;
+        interrupt_generate(M68K_MOUSE_MOVED_PRIORITY);
         return (0); /* Drop the event */
     }
     else if(event->type == SDL_QUIT)
@@ -614,8 +613,7 @@ int sdl_event_interrupt(const SDL_Event *event)
     }
 
     /* All other events go here */
-    cpu_state.interrupt_pending[M68K_EVENT_PRIORITY] = 1;
-    cpu_state.interrupt_status_changed = INTERRUPT_STATUS_CHANGED;
+    interrupt_generate(M68K_EVENT_PRIORITY);
     return (1);
 }
 
