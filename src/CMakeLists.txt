@@ -4,9 +4,12 @@ set(CMAKE_CXX_STANDARD 14)
 
 find_program(PERL_COMMAND perl)
 
+if(WIN32)
+else()
 find_library(DB_LIBRARY db libdb48.lib)
 find_path(DB_INCLUDE_PATH db.h ndbm.h)
 include_directories(${DB_INCLUDE_PATH})
+endif()
 
 find_program(BISON_COMMAND bison)
 find_package(Threads REQUIRED)
