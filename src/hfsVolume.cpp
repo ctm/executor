@@ -10,7 +10,7 @@
 #include "rsys/file.h"
 #include "rsys/hfs_plus.h"
 
-#if defined(CYGWIN32)
+#if defined(WIN32)
 #include "winfs.h"
 #endif
 
