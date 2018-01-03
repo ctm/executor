@@ -305,7 +305,7 @@ void Executor::C_ROMlib_Fsetenv(INTEGER *dp, INTEGER sel)
     signal(SIGFPE, SIG_IGN);
 #else
     // FIXME: #warning ROMlib_Fsetenv not implemented!
-    gui_abort();
+    //gui_abort();
 #endif
 
     warning_floating_point("setenv(0x%04X)", (unsigned)(uint16_t)CW_RAW(*dp));
