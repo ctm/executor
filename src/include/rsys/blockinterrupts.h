@@ -40,19 +40,12 @@ extern virtual_int_state_t _virtual_interrupts_blocked;
         cpu_state.interrupt_status_changed = INTERRUPT_STATUS_CHANGED;             \
     } while(0)
 
-#if defined(MSDOS)
-#define IF_MSDOS(x) x
-#else
-#define IF_MSDOS(x)
-#endif
-
 extern void do_virtual_interrupt(void);
 #define check_virtual_interrupt()                    \
     do                                               \
     {                                                \
         if(!_virtual_interrupts_blocked)             \
         {                                            \
-            IF_MSDOS(dosevq_note_mouse_interrupt()); \
             if(INTERRUPT_PENDING())                  \
                 do_virtual_interrupt();              \
         }                                            \
