@@ -115,8 +115,8 @@
     do                                                                         \
     {                                                                          \
         if(sizeof(type) != expected_size)                                      \
-            fprintf(stderr, "Expected sizeof(" #type ") to be %zu, got %zu\n", \
-                    (size_t)expected_size, sizeof(type));                      \
+            fprintf(stderr, "Expected sizeof(" #type ") to be %u, got %u\n", \
+                    (unsigned)expected_size, (unsigned) sizeof(type));                      \
     } while(false)
 
 using namespace Executor;
