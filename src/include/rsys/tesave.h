@@ -16,23 +16,9 @@ namespace Executor
 typedef struct
 {
     GUEST_STRUCT;
-#if 0
-  /* true if the save pattern is in _tpat, false if it was placed in
-     _tpixpat */
-  INTEGER _tinpat;
-  Pattern _tpat;
-  PACKED_MEMBER(PixPatHandle, _tpixpat);
-  Point _tploc;
-  Point _tpsize;
-  INTEGER _tpmode;
-#else
     GUEST<PenState> _tpstate;
-#endif
-
     GUEST<GrafPtr> _tport;
-
     GUEST<INTEGER> _tpvis;
-
     GUEST<INTEGER> _tfont;
     GUEST<INTEGER> _tmode;
     GUEST<INTEGER> _tsize;

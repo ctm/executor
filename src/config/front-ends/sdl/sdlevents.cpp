@@ -617,16 +617,10 @@ int sdl_event_interrupt(const SDL_Event *event)
     return (1);
 }
 
-SDL_cond *ROMlib_shouldbeawake_cond = NULL;
-SDL_mutex *ROMlib_shouldbeawake_mutex = NULL;
-
 void sdl_events_init(void)
 {
     syn68k_addr_t mouse_callback;
     syn68k_addr_t event_callback;
-
-    ROMlib_shouldbeawake_cond = SDL_CreateCond();
-    ROMlib_shouldbeawake_mutex = SDL_CreateMutex();
 
     /* hook into syn68k synchronous interrupts */
     mouse_callback = callback_install(handle_sdl_mouse, NULL);

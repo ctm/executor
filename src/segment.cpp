@@ -697,34 +697,12 @@ void Executor::C_ExitToShell()
 #if defined(X)
     autorepeatonX();
 #endif /* X */
-
-#if defined(SUN) && !defined(X) && !defined(MACOSX_)
-    close(_windowfd); /* may be bad choice */
-    BlockMoveData(_savebits, _addr, (Size)_nb);
-#endif /* SUN && !defined */
-
-#if defined(SCO)
-    ev_close();
-    ioctl(1, (MODESWITCH | _savemode), 0);
-    restorekb();
-#endif /* SCO */
     if(ROMlib_errorstring)
     {
         write(2, ROMlib_errorstring, strlen(ROMlib_errorstring));
         gui_abort();
     }
-#if defined(NEXT)
-    stopprotectingus();
-#endif
-#if 0
-    if (FinderName[0]) {
-	toexec = ALLOCA(FinderName[0]+1);
-	BlockMoveData((Ptr) FinderName+1, (Ptr) toexec, (Size) FinderName[0]);
-	toexec[FinderName[0]] = 0;
-	execlp(toexec, toexec, (char *) 0); 
-	/* if it fails we'll exit */
-    }
-#endif
+
 
     exit(ROMlib_exit == 1 ? 0 : ROMlib_exit); /* 1 is historically good */
     ALLOCAEND /* yeah, right, if exit fails... */
