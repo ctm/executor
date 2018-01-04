@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
 $variables{'BINCOMPAT'} = 1;
-
-
+$variables{'USE_BIOS_TIMER'} = 0;
+$variables{'DOS'} = 0;
 
 sub checkcond {
     my $cond = $1;
@@ -23,7 +23,8 @@ sub checkcond {
     return 'boring';
 }
 
-while($f = <*.cpp include/*.h include/rsys/*.h>) {
+#while($f = <*.cpp include/*.h include/rsys/*.h>) {
+foreach $f (@ARGV) {
 #$f = "include/rsys/list.h";
     open(SRC, $f);
     open($OUT, ">temp.cpp");
