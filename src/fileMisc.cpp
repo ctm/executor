@@ -293,7 +293,7 @@ static void ROMlib_automount_helper(const char *cpath, char *aliasp)
     char *savep;
     char save;
 
-#if defined(MSDOS) || defined(CYGWIN32)
+#if defined(WIN32)
     {
         char *temppath, *op, c;
         int len;
@@ -303,7 +303,7 @@ static void ROMlib_automount_helper(const char *cpath, char *aliasp)
         /* If we don't have x:/ then we need to prepend the start drive */
         if(path[0] && (path[1] != ':' || path[2] != '/'))
             len += 2;
-        temppath = alloca(len);
+        temppath = (char*)alloca(len);
         if(path[0] && (path[1] != ':' || path[2] != '/'))
         {
             temppath[0] = ROMlib_start_drive;
@@ -325,15 +325,15 @@ static void ROMlib_automount_helper(const char *cpath, char *aliasp)
     save = 0;
 #endif
     if(path[0] == '/'
-#if defined(MSDOS) || defined(CYGWIN32)
+#if defined(WIN32)
        || (path[1] == ':' && path[2] == '/')
 #endif
            )
     {
-#if !defined(MSDOS) || defined(CYGWIN32)
+#if 1 /*!defined(WIN32)*/
         ROMlib_undotdot(path);
 #else
-        char *newpath = alloca(strlen(path) + 3); /* one for null, two for drive */
+        char *newpath = (char*)alloca(strlen(path) + 3); /* one for null, two for drive */
         _fixpath(path, newpath);
         path = newpath;
 #endif
@@ -440,7 +440,7 @@ Executor::expandPath(std::string name)
         break;
     }
 
-#if defined(MSDOS) || defined(CYGWIN32)
+#if defined(WIN32)
     std::replace(name.begin(), name.end(), '/', '\\');
 #endif
 

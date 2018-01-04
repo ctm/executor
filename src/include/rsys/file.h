@@ -327,7 +327,7 @@ typedef struct
 /* After a pathname has been normalized, the offset of the first
    slash.  It's 2 under DOS because a normalized path is, e.g., C:/etc */
 
-#if defined(MSDOS) || defined(CYGWIN32)
+#if defined(WIN32)
 enum
 {
     SLASH_CHAR_OFFSET = 2

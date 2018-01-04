@@ -540,7 +540,7 @@ static void setstartdir(char *argv0)
         strcpy(ROMlib_startdir, argv0);
 #endif
         lastslash = strrchr(ROMlib_startdir, '/');
-#if defined(CYGWIN32)
+#if defined(WIN32)
         if(!lastslash)
             lastslash = strrchr(ROMlib_startdir, '\\');
 #endif
