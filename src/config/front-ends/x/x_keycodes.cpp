@@ -4,10 +4,9 @@
 
 // #warning Insert is not giving us a 0x72
 
+#include "x_keycodes.h"
 #include "rsys/common.h"
 #include "rsys/keyboard.h"
-
-#if defined(X)
 
 unsigned char x_keycode_to_mac_virt[] = {
     0xFF, /* unused 0 */
@@ -147,4 +146,3 @@ unsigned char x_keycode_to_mac_virt[] = {
     MKV_PAGEDOWN, /* <PGDN> = 134; */
     MKV_HOME, /* <HOME> = 135; */
 };
-#endif

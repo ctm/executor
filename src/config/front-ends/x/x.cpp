@@ -4,16 +4,11 @@
 
 // #warning Has some hard-coded Executors in it
 
-#define Region Mac_Region
-#define Cursor Mac_Cursor
 
 #include "rsys/common.h"
 #include "QuickDraw.h"
 #include "ScrapMgr.h"
 #include "OSUtil.h"
-
-#undef Region
-#undef Cursor
 
 #include "rsys/commonevt.h"
 #include "rsys/dirtyrect.h"
@@ -155,7 +150,7 @@ static int (*x_put_image)(Display *x_dpy, Window x_window, GC copy_gc,
 static int max_width, max_height, max_bpp;
 
 /* x cursor stuff */
-static Cursor x_hidden_cursor, x_cursor = -1;
+static ::Cursor x_hidden_cursor, x_cursor = -1;
 
 static XImage *x_image_cursor_data, *x_image_cursor_mask;
 static Pixmap pixmap_cursor_data, pixmap_cursor_mask;
@@ -1588,11 +1583,11 @@ void alloc_x_window(int width, int height, int bpp, bool grayscale_p)
 
 int Executor::host_cursor_depth = 1;
 
-Cursor
+::Cursor
 create_x_cursor(char *data, char *mask,
                 int hotspot_x, int hotspot_y)
 {
-    Cursor retval;
+    ::Cursor retval;
     char x_mask[32], x_data[32];
     int i;
 
@@ -1636,7 +1631,7 @@ void Executor::host_set_cursor(char *cursor_data,
                                unsigned short cursor_mask[16],
                                int hotspot_x, int hotspot_y)
 {
-    Cursor orig_x_cursor = x_cursor;
+    ::Cursor orig_x_cursor = x_cursor;
 
     x_cursor = create_x_cursor(cursor_data, (char *)cursor_mask,
                                hotspot_x, hotspot_y);
@@ -1645,7 +1640,7 @@ void Executor::host_set_cursor(char *cursor_data,
     if(cursor_visible_p)
         XDefineCursor(x_dpy, x_window, x_cursor);
 
-    if(orig_x_cursor != (Cursor)-1)
+    if(orig_x_cursor != (::Cursor)-1)
         XFreeCursor(x_dpy, orig_x_cursor);
 }
 

@@ -4,8 +4,6 @@
 
 #include "rsys/common.h"
 
-#if defined(LINUX) || defined(MACOSX_) || defined(MACOSX_)
-
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/time.h>
@@ -113,5 +111,3 @@ void sigio_multiplex_remove_handler(int fd, sigio_hdlr_t hdlr)
 
     warning_unexpected("fd, hdlr pair not found");
 }
-
-#endif /* LINUX || MACOSX_ */
