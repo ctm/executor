@@ -279,7 +279,7 @@ pseudo_get_rom_resource(ResType typ, INTEGER id)
     Handle retval;
     int i;
     static pseudo_rom_entry_t pseudo_rom_table[] = {
-        { T('F', 'O', 'N', 'D'), 3 }
+        { FOURCC('F', 'O', 'N', 'D'), 3 }
     };
 
     for(i = 0; (i < (int)NELEM(pseudo_rom_table) && (pseudo_rom_table[i].type != typ
@@ -337,7 +337,7 @@ Handle Executor::C_GetResource(ResType typ, INTEGER id)
     { /* fake out code resources */
 #define ICKYHACK
 #if defined(ICKYHACK)
-        case T('P', 'A', 'C', 'K'):
+        case FOURCC('P', 'A', 'C', 'K'):
             return GetResource(TICK("ALRT"), -3995);
 #endif /* ICKYHACK */
     }

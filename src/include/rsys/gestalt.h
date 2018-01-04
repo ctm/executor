@@ -21,7 +21,7 @@ extern void ROMlib_add_to_gestalt_list(OSType selector, OSErr retval,
 /* GhostScript DLL version number */
 enum
 {
-    gestaltGhostScriptVersion = T('g', 'o', 's', 't')
+    gestaltGhostScriptVersion = FOURCC('g', 'o', 's', 't')
 };
 
 #if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
@@ -35,18 +35,18 @@ enum
 /* Executor Version as string */
 enum
 {
-    gestaltExecutorVersionString = T('x', 'q', 't', 'r')
+    gestaltExecutorVersionString = FOURCC('x', 'q', 't', 'r')
 };
 
 /* screen size */
 enum
 {
-    gestaltScreenSize = T('s', 'c', 'r', 'n')
+    gestaltScreenSize = FOURCC('s', 'c', 'r', 'n')
 };
 
 enum
 {
-    gestaltPHYSICAL = T('M', 'U', 'L', '8')
+    gestaltPHYSICAL = FOURCC('M', 'U', 'L', '8')
 };
 
 enum

@@ -98,8 +98,8 @@ enum
 
 enum
 {
-    kPowerPCArch = T('p', 'w', 'p', 'c'),
-    kMotorola68KArch = T('m', '6', '8', 'k'),
+    kPowerPCArch = FOURCC('p', 'w', 'p', 'c'),
+    kMotorola68KArch = FOURCC('m', '6', '8', 'k'),
 };
 
 typedef enum {

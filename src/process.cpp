@@ -28,9 +28,9 @@ get_size_resource()
 {
     Handle size;
 
-    size = Get1Resource(T('S', 'I', 'Z', 'E'), 0);
+    size = Get1Resource(FOURCC('S', 'I', 'Z', 'E'), 0);
     if(size == NULL)
-        size = Get1Resource(T('S', 'I', 'Z', 'E'), -1);
+        size = Get1Resource(FOURCC('S', 'I', 'Z', 'E'), -1);
     return (size_resource_handle)size;
 }
 

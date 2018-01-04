@@ -410,7 +410,7 @@ OSErr Executor::C_AERemoveCoercionHandler(
 
 /* special handler functions */
 
-#define k_special_sel1 (T('\000', '\000', '\000', '\000'))
+#define k_special_sel1 (FOURCC('\000', '\000', '\000', '\000'))
 
 syn68k_addr_t Executor::AE_OSL_select_fn;
 

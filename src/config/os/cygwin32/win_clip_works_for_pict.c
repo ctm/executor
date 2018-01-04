@@ -71,12 +71,12 @@ GetScrapX(LONGINT type, char **h)
     retval = -1;
     switch(type)
     {
-        case T('T', 'E', 'X', 'T'):
+        case FOURCC('T', 'E', 'X', 'T'):
             format = CF_TEXT;
             break;
         default:
             format = ROMlib_executor_format(type);
-            if(support_cf_dib_p && type == T('P', 'I', 'C', 'T'))
+            if(support_cf_dib_p && type == FOURCC('P', 'I', 'C', 'T'))
             {
                 decltype(format) newval;
                 UINT formats[2] = { format, CF_DIB };
@@ -99,7 +99,7 @@ GetScrapX(LONGINT type, char **h)
             lp = GlobalLock(data);
             switch(type)
             {
-                case T('T', 'E', 'X', 'T'):
+                case FOURCC('T', 'E', 'X', 'T'):
                 {
                     int len;
 
@@ -139,7 +139,7 @@ calc_length_and_format(UINT *formatp, LONGINT type, LONGINT length,
 
     switch(type)
     {
-        case T('T', 'E', 'X', 'T'):
+        case FOURCC('T', 'E', 'X', 'T'):
             retval = length + count_char(p, length, '\r') + 1;
             *formatp = CF_TEXT;
             break;
@@ -156,7 +156,7 @@ fill_in_data(char *destp, LONGINT type, LONGINT length, const char *p)
 {
     switch(type)
     {
-        case T('T', 'E', 'X', 'T'):
+        case FOURCC('T', 'E', 'X', 'T'):
             while(--length >= 0)
             {
                 char c;
@@ -186,7 +186,7 @@ PutScrapX(LONGINT type, LONGINT length, char *p, int scrap_count)
 
     fprintf(stderr, "type = '%c%c%c%c'\n", type >> 24, type >> 16, type >> 8,
             type);
-    if(type != T('P', 'I', 'C', 'T'))
+    if(type != FOURCC('P', 'I', 'C', 'T'))
     {
         fprintf(stderr, "not type type we want, so we're leaving\n");
         return;
@@ -273,7 +273,7 @@ write_pict_as_pict_to_clipboard(void)
             lp = GlobalLock(hg);
             memcpy(lp, clip_data, len);
             GlobalUnlock(hg);
-            SetClipboardData(ROMlib_executor_format(T('P', 'I', 'C', 'T')), hg);
+            SetClipboardData(ROMlib_executor_format(FOURCC('P', 'I', 'C', 'T')), hg);
         }
     }
 }

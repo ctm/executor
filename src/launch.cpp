@@ -552,9 +552,9 @@ static void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
     ROMlib_ultima_iii_hack = (finfo.fdCreator == CL(TICK("Ult3")));
 #endif
 
-    h = GetResource(T('v', 'e', 'r', 's'), 2);
+    h = GetResource(FOURCC('v', 'e', 'r', 's'), 2);
     if(!h)
-        h = GetResource(T('v', 'e', 'r', 's'), 1);
+        h = GetResource(FOURCC('v', 'e', 'r', 's'), 1);
 
     ROMlib_version_long = 0;
     if(h)
@@ -579,17 +579,17 @@ static void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
         if(ROMlib_MacSize.first == INITIALPAIRVALUE)
             ROMlib_MacSize = ROMlib_ScreenSize;
     }
-    code0 = Get1Resource(T('C', 'O', 'D', 'E'), 0);
-    cfrg0 = Get1Resource(T('c', 'f', 'r', 'g'), 0);
+    code0 = Get1Resource(FOURCC('C', 'O', 'D', 'E'), 0);
+    cfrg0 = Get1Resource(FOURCC('c', 'f', 'r', 'g'), 0);
 
-    if(cfrg0 && ppc_launch_p && ROMlib_find_cfrg(cfrg0, T('p', 'w', 'p', 'c'), kApplicationCFrag,
+    if(cfrg0 && ppc_launch_p && ROMlib_find_cfrg(cfrg0, FOURCC('p', 'w', 'p', 'c'), kApplicationCFrag,
                                                  (StringPtr) ""))
         code0 = NULL;
     else if(!code0)
     {
         if(cfrg0)
         {
-            if(ROMlib_find_cfrg(cfrg0, T('m', '6', '8', 'k'),
+            if(ROMlib_find_cfrg(cfrg0, FOURCC('m', '6', '8', 'k'),
                                 kApplicationCFrag, (StringPtr) ""))
                 ROMlib_launch_failure = launch_cfm_requiring;
             else
@@ -604,9 +604,9 @@ static void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
         Handle size_resource_h;
         int16_t size_flags;
 
-        size_resource_h = Get1Resource(T('S', 'I', 'Z', 'E'), 0);
+        size_resource_h = Get1Resource(FOURCC('S', 'I', 'Z', 'E'), 0);
         if(size_resource_h == NULL)
-            size_resource_h = Get1Resource(T('S', 'I', 'Z', 'E'), -1);
+            size_resource_h = Get1Resource(FOURCC('S', 'I', 'Z', 'E'), -1);
         if(size_resource_h)
         {
             SIZEResource *size_resource;
@@ -712,7 +712,7 @@ static void launchchain(StringPtr fName, INTEGER vRefNum, BOOLEAN resetmemory,
         FSSpec fs;
 
         FSMakeFSSpec(ROMlib_exevrefnum, 0, ROMlib_exefname, &fs);
-        cfm_launch(cfrg0, T('p', 'w', 'p', 'c'), &fs);
+        cfm_launch(cfrg0, FOURCC('p', 'w', 'p', 'c'), &fs);
     }
 }
 

@@ -7,15 +7,15 @@
 
  */
 
-#define large1BitMask (T('I', 'C', 'N', '#'))
-#define large4BitData (T('i', 'c', 'l', '4'))
-#define large8BitData (T('i', 'c', 'l', '8'))
-#define small1BitMask (T('i', 'c', 's', '#'))
-#define small4BitData (T('i', 'c', 's', '4'))
-#define small8BitData (T('i', 'c', 's', '8'))
-#define mini1BitMask (T('i', 'c', 'm', '#'))
-#define mini4BitData (T('i', 'c', 'm', '4'))
-#define mini8BitData (T('i', 'c', 'm', '8'))
+#define large1BitMask (FOURCC('I', 'C', 'N', '#'))
+#define large4BitData (FOURCC('i', 'c', 'l', '4'))
+#define large8BitData (FOURCC('i', 'c', 'l', '8'))
+#define small1BitMask (FOURCC('i', 'c', 's', '#'))
+#define small4BitData (FOURCC('i', 'c', 's', '4'))
+#define small8BitData (FOURCC('i', 'c', 's', '8'))
+#define mini1BitMask (FOURCC('i', 'c', 'm', '#'))
+#define mini4BitData (FOURCC('i', 'c', 'm', '4'))
+#define mini8BitData (FOURCC('i', 'c', 'm', '8'))
 
 namespace Executor
 {

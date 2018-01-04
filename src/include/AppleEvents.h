@@ -275,34 +275,34 @@ enum
 
 /* types */
 
-#define typeFSS (T('f', 's', 's', ' '))
+#define typeFSS (FOURCC('f', 's', 's', ' '))
 
-#define typeAEList (T('l', 'i', 's', 't'))
-#define typeAERecord (T('r', 'e', 'c', 'o'))
-#define typeAppleEvent (T('a', 'e', 'v', 't'))
-#define typeProcessSerialNumber (T('p', 's', 'n', ' '))
-#define typeNull (T('n', 'u', 'l', 'l'))
-#define typeApplSignature (T('s', 'i', 'g', 'n'))
+#define typeAEList (FOURCC('l', 'i', 's', 't'))
+#define typeAERecord (FOURCC('r', 'e', 'c', 'o'))
+#define typeAppleEvent (FOURCC('a', 'e', 'v', 't'))
+#define typeProcessSerialNumber (FOURCC('p', 's', 'n', ' '))
+#define typeNull (FOURCC('n', 'u', 'l', 'l'))
+#define typeApplSignature (FOURCC('s', 'i', 'g', 'n'))
 
-#define typeType (T('t', 'y', 'p', 'e'))
-#define typeWildCard (T('*', '*', '*', '*'))
-#define typeAlias (T('a', 'l', 'i', 's'))
+#define typeType (FOURCC('t', 'y', 'p', 'e'))
+#define typeWildCard (FOURCC('*', '*', '*', '*'))
+#define typeAlias (FOURCC('a', 'l', 'i', 's'))
 
-#define keyAddressAttr (T('a', 'd', 'd', 'r'))
-#define keyEventClassAttr (T('e', 'v', 'c', 'l'))
-#define keyEventIDAttr (T('e', 'v', 'i', 'd'))
-#define keyProcessSerialNumber (T('p', 's', 'n', ' '))
+#define keyAddressAttr (FOURCC('a', 'd', 'd', 'r'))
+#define keyEventClassAttr (FOURCC('e', 'v', 'c', 'l'))
+#define keyEventIDAttr (FOURCC('e', 'v', 'i', 'd'))
+#define keyProcessSerialNumber (FOURCC('p', 's', 'n', ' '))
 
-#define keyDirectObject (T('-', '-', '-', '-'))
+#define keyDirectObject (FOURCC('-', '-', '-', '-'))
 
-#define kCoreEventClass (T('a', 'e', 'v', 't'))
-#define kAEOpenApplication (T('o', 'a', 'p', 'p'))
-#define kAEOpenDocuments (T('o', 'd', 'o', 'c'))
-#define kAEPrintDocuments (T('p', 'd', 'o', 'c'))
-#define kAEAnswer (T('a', 'n', 's', 'r'))
-#define kAEQuitApplication (T('q', 'u', 'i', 't'))
+#define kCoreEventClass (FOURCC('a', 'e', 'v', 't'))
+#define kAEOpenApplication (FOURCC('o', 'a', 'p', 'p'))
+#define kAEOpenDocuments (FOURCC('o', 'd', 'o', 'c'))
+#define kAEPrintDocuments (FOURCC('p', 'd', 'o', 'c'))
+#define kAEAnswer (FOURCC('a', 'n', 's', 'r'))
+#define kAEQuitApplication (FOURCC('q', 'u', 'i', 't'))
 
-#define keySelectProc (T('s', 'e', 'l', 'h'))
+#define keySelectProc (FOURCC('s', 'e', 'l', 'h'))
 
 /* #### OSL internal */
 extern syn68k_addr_t /*ProcPtr*/ AE_OSL_select_fn;

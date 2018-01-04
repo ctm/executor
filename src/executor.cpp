@@ -519,7 +519,7 @@ void Executor::executor_main(void)
 #define ALINETRAPNUMBER 0xA
     trap_install_handler(ALINETRAPNUMBER, alinehandler, (void *)0);
 
-    if(thefile.fType == CLC(T('A', 'P', 'P', 'L')))
+    if(thefile.fType == CLC(FOURCC('A', 'P', 'P', 'L')))
     {
         ClrAppFiles(1);
         Munger(MR(AppParmHandle), 2L * sizeof(INTEGER), (Ptr)0,
@@ -531,7 +531,7 @@ void Executor::executor_main(void)
     hpb.hFileInfo.ioDirID = CLC(0);
     PBGetCatInfo(&hpb, false);
 
-    if(thefile.fType == CLC(T('A', 'P', 'P', 'L')))
+    if(thefile.fType == CLC(FOURCC('A', 'P', 'P', 'L')))
         fName = thefile.fName;
     else
     {
@@ -581,7 +581,7 @@ void Executor::executor_main(void)
     wdpb.ioWDDirID = hpb.hFileInfo.ioFlParID;
     SFSaveDisk_Update(CW(hpb.hFileInfo.ioVRefNum), fName);
     CurDirStore = hpb.hFileInfo.ioFlParID;
-    wdpb.ioWDProcID = CLC(T('X', 'c', 't', 'r'));
+    wdpb.ioWDProcID = CLC(FOURCC('X', 'c', 't', 'r'));
     wdpb.ioNamePtr = 0;
     PBOpenWD(&wdpb, false);
     exevrefnum = CW(wdpb.ioVRefNum);

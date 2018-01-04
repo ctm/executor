@@ -597,7 +597,7 @@ void Executor::C_ExitToShell()
 #if 1
 
     Point pt;
-    static GUEST<SFTypeList> applonly = { CLC(T('A', 'P', 'P', 'L')) };
+    static GUEST<SFTypeList> applonly = { CLC(FOURCC('A', 'P', 'P', 'L')) };
     SFReply reply;
     struct
     {

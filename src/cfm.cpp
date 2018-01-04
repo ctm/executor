@@ -430,7 +430,7 @@ check_file(INTEGER vref, LONGINT dirid, Str255 file, bool shlb_test_p,
             {
                 Handle cfrg0;
 
-                cfrg0 = Get1Resource(T('c', 'f', 'r', 'g'), 0);
+                cfrg0 = Get1Resource(FOURCC('c', 'f', 'r', 'g'), 0);
                 if(!cfrg0)
                     retval = fragLibNotFound;
                 else
@@ -1263,14 +1263,14 @@ OSErr Executor::C_GetMemFragment(void *addr, uint32_t length, Str63 fragname,
 
     headp = addr;
 
-    if(PEF_CONTAINER_TAG1_X(headp) != CLC(T('J', 'o', 'y', '!')))
+    if(PEF_CONTAINER_TAG1_X(headp) != CLC(FOURCC('J', 'o', 'y', '!')))
         warning_unexpected("0x%x", PEF_CONTAINER_TAG1(headp));
 
-    if(PEF_CONTAINER_TAG2_X(headp) != CLC(T('p', 'e', 'f', 'f')))
+    if(PEF_CONTAINER_TAG2_X(headp) != CLC(FOURCC('p', 'e', 'f', 'f')))
         warning_unexpected("0x%x", PEF_CONTAINER_TAG2(headp));
 
     if(PEF_CONTAINER_ARCHITECTURE_X(headp)
-       != CLC(T('p', 'w', 'p', 'c')))
+       != CLC(FOURCC('p', 'w', 'p', 'c')))
         warning_unexpected("0x%x",
                            PEF_CONTAINER_ARCHITECTURE(headp));
 

@@ -12,18 +12,18 @@ typedef int16_t AliasTypeInfo;
 
 enum
 {
-    kSystemFolderType = T('m', 'a', 'c', 's'),
-    kDesktopFolderType = T('d', 'e', 's', 'k'),
-    kTrashFolderType = T('t', 'r', 's', 'h'),
-    kWhereToEmptyTrashFolderType = T('e', 'm', 'p', 't'),
-    kPrintMonitorDocsFolderType = T('p', 'r', 'n', 't'),
-    kStartupFolderType = T('s', 't', 'r', 't'),
-    kAppleMenuFolderType = T('a', 'm', 'n', 'u'),
-    kControlPanelFolderType = T('c', 't', 'r', 'l'),
-    kExtensionFolderType = T('e', 'x', 't', 'n'),
-    kPreferencesFolderType = T('p', 'r', 'e', 'f'),
-    kTemporaryFolderType = T('t', 'e', 'm', 'p'),
-    kFontFolderType = T('f', 'o', 'n', 't'),
+    kSystemFolderType = FOURCC('m', 'a', 'c', 's'),
+    kDesktopFolderType = FOURCC('d', 'e', 's', 'k'),
+    kTrashFolderType = FOURCC('t', 'r', 's', 'h'),
+    kWhereToEmptyTrashFolderType = FOURCC('e', 'm', 'p', 't'),
+    kPrintMonitorDocsFolderType = FOURCC('p', 'r', 'n', 't'),
+    kStartupFolderType = FOURCC('s', 't', 'r', 't'),
+    kAppleMenuFolderType = FOURCC('a', 'm', 'n', 'u'),
+    kControlPanelFolderType = FOURCC('c', 't', 'r', 'l'),
+    kExtensionFolderType = FOURCC('e', 'x', 't', 'n'),
+    kPreferencesFolderType = FOURCC('p', 'r', 'e', 'f'),
+    kTemporaryFolderType = FOURCC('t', 'e', 'm', 'p'),
+    kFontFolderType = FOURCC('f', 'o', 'n', 't'),
 };
 
 extern OSErr C_FindFolder(int16_t vRefNum, OSType folderType,

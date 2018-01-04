@@ -57,7 +57,7 @@
     (((const uint32_t *)(p1))[0] == ((const uint32_t *)(p2))[0] \
      && ((const uint32_t *)(p1))[1] == ((const uint32_t *)(p2))[1])
 
-#define T(a, b, c, d) ((((uint32_t)(uint8)(a)) << 24)   \
+#define FOURCC(a, b, c, d) ((((uint32_t)(uint8)(a)) << 24)   \
                        | (((uint32_t)(uint8)(b)) << 16) \
                        | (((uint32_t)(uint8)(c)) << 8)  \
                        | (((uint32_t)(uint8)(d)) << 0))
