@@ -366,8 +366,8 @@ Executor::text_helper(LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point> 
 
     extra = Cx(fmop->extra);
     fixed_extra = FIXED(extra);
-    widthstate = HGetState((Handle)MR(WidthTabHandle));
-    HLock((Handle)MR(WidthTabHandle));
+    widthstate = HGetState((Handle)MR(LM(WidthTabHandle)));
+    HLock((Handle)MR(LM(WidthTabHandle)));
     if((PORT_TX_FACE(thePort) & (int)underline) && Cx(fmop->descent) < 2)
         descent = 2;
     else
@@ -513,7 +513,7 @@ Executor::text_helper(LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point> 
                 charblit(&fmap, bmp, &misrect, &drect, true);
                 ASSERT_SAFE(MR(stylemap.baseAddr));
             }
-            if(FractEnable)
+            if(LM(FractEnable))
                 left += width;
             else
                 left += misfixwidth;
@@ -532,7 +532,7 @@ Executor::text_helper(LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point> 
                 charblit(&fmap, bmp, &srect, &drect, true);
                 ASSERT_SAFE(MR(stylemap.baseAddr));
             }
-            if(FractEnable)
+            if(LM(FractEnable))
                 left += width;
             else
             {
@@ -702,7 +702,7 @@ Executor::text_helper(LONGINT n, Ptr textbufp, GUEST<Point> *nump, GUEST<Point> 
         ASSERT_SAFE(MR(stylemap.baseAddr));
     }
     HSetState(MR(fmop->fontHandle), fmopstate);
-    HSetState((Handle)MR(WidthTabHandle), widthstate);
+    HSetState((Handle)MR(LM(WidthTabHandle)), widthstate);
     RESUMERECORDING;
     ALLOCAEND
     return retval;

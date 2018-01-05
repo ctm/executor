@@ -81,27 +81,27 @@ extract_vers_num(Handle h)
 INTEGER Executor::C_InitResources()
 {
     /* Initialize globals */
-    TheZoneGuard guard(SysZone);
+    TheZoneGuard guard(LM(SysZone));
 
     Handle versh;
     int32_t versnum;
 
     ROMlib_setreserr(noErr);
-    str255assign(SysResName, SYSMACNAME);
-    SysMap = CW(OpenRFPerm((StringPtr)SYSMACNAME, Cx(BootDrive),
+    str255assign(LM(SysResName), SYSMACNAME);
+    LM(SysMap) = CW(OpenRFPerm((StringPtr)SYSMACNAME, Cx(LM(BootDrive)),
                            fsCurPerm));
 
-    if(SysMap == CWC(-1))
+    if(LM(SysMap) == CWC(-1))
     {
         fprintf(stderr, "OpenRFPerm (\"%.*s\", 0x%x, fsCurPerm) failed\n",
-                SYSMACNAME[0], SYSMACNAME + 1, (uint16_t)Cx(BootDrive));
+                SYSMACNAME[0], SYSMACNAME + 1, (uint16_t)Cx(LM(BootDrive)));
 
         report_resfork_problem();
 
         exit(1);
     }
 
-    SysMapHndl = TopMapHndl;
+    LM(SysMapHndl) = LM(TopMapHndl);
     ROMlib_invalar();
     SetResLoad(true);
     versh = GetResource(TICK("vers"), 1);
@@ -111,7 +111,7 @@ INTEGER Executor::C_InitResources()
 
     ROMlib_set_appearance();
 
-    return CW(SysMap);
+    return CW(LM(SysMap));
 }
 
 void Executor::C_RsrcZoneInit() /* no op */

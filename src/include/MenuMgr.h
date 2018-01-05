@@ -81,33 +81,19 @@ typedef MCEntry *MCTablePtr;
 
 typedef GUEST<MCTablePtr> *MCTableHandle;
 
-#if 0
-#if !defined(MenuList_H)
-extern GUEST<Handle> 	MenuList_H;
-extern GUEST<ProcPtr> 	MBarHook_H;
-extern GUEST<ProcPtr> 	MenuHook_H;
-extern GUEST<Handle> 	MBDFHndl_H;
-extern GUEST<Handle> 	MBSaveLoc_H;
-extern GUEST<MCTableHandle> MenuCInfo_H;
-extern INTEGER 	TopMenuItem;
-extern INTEGER 	AtMenuBottom;
-extern INTEGER 	MBarEnable;
-extern INTEGER 	MenuFlash;
-extern INTEGER 	TheMenu;
-extern LONGINT 	MenuDisable;
-extern INTEGER 	MBarHeight;
-#endif
-
-enum
-{
-    MenuList = (MenuList_H.p),
-    MBarHook = (MBarHook_H.p),
-    MenuHook = (MenuHook_H.p),
-    MBDFHndl = (MBDFHndl_H.p),
-    MBSaveLoc = (MBSaveLoc_H.p),
-    MenuCInfo = (MenuCInfo_H.p),
-};
-#endif
+const LowMemGlobal<INTEGER> TopMenuItem { 0xA0A }; // MenuMgr IMV-249 (true);
+const LowMemGlobal<INTEGER> AtMenuBottom { 0xA0C }; // MenuMgr IMV-249 (true);
+const LowMemGlobal<Handle> MenuList { 0xA1C }; // MenuMgr IMI-346 (true);
+const LowMemGlobal<INTEGER> MBarEnable { 0xA20 }; // MenuMgr IMI-356 (true);
+const LowMemGlobal<INTEGER> MenuFlash { 0xA24 }; // MenuMgr IMI-361 (true);
+const LowMemGlobal<INTEGER> TheMenu { 0xA26 }; // MenuMgr IMI-357 (true);
+const LowMemGlobal<ProcPtr> MBarHook { 0xA2C }; // MenuMgr IMI-356 (true);
+const LowMemGlobal<ProcPtr> MenuHook { 0xA30 }; // MenuMgr IMI-356 (true);
+const LowMemGlobal<LONGINT> MenuDisable { 0xB54 }; // MenuMgr IMV-249 (true);
+const LowMemGlobal<Handle> MBDFHndl { 0xB58 }; // MenuMgr Private.a (true);
+const LowMemGlobal<Handle> MBSaveLoc { 0xB5C }; // MenuMgr Private.a (true);
+const LowMemGlobal<INTEGER> MBarHeight { 0xBAA }; // MenuMgr IMV-253 (true);
+const LowMemGlobal<MCTableHandle> MenuCInfo { 0xD50 }; // QuickDraw IMV-242 (true);
 
 extern void C_DrawMenuBar(void);
 PASCAL_TRAP(DrawMenuBar, 0xA937);

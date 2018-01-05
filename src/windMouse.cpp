@@ -35,7 +35,7 @@ INTEGER Executor::C_FindWindow(Point p, GUEST<WindowPtr> *wpp)
     *wpp = 0;
     if(MBDFCALL(mbHit, 0, pointaslong) != -1)
         return inMenuBar;
-    for(wp = MR(WindowList); wp; wp = WINDOW_NEXT_WINDOW(wp))
+    for(wp = MR(LM(WindowList)); wp; wp = WINDOW_NEXT_WINDOW(wp))
     {
         if(WINDOW_VISIBLE_X(wp) && PtInRgn(p, WINDOW_STRUCT_REGION(wp)))
         {
@@ -47,7 +47,7 @@ INTEGER Executor::C_FindWindow(Point p, GUEST<WindowPtr> *wpp)
             }
             val = WINDCALL((WindowPtr)wp, wHit, pointaslong);
             if(val == wNoHit)
-                retval = DeskHook ? inSysWindow : inDesk;
+                retval = LM(DeskHook) ? inSysWindow : inDesk;
             else
                 retval = val + 2; /* datadesk showed us that this is how it's
 				   done */
@@ -66,7 +66,7 @@ static BOOLEAN xTrackBox(WindowPtr wp, Point pt, INTEGER part) /* IMIV-50 */
 
     ThePortGuard guard(MR(wmgr_port));
 
-    SetClip(MR(GrayRgn));
+    SetClip(MR(LM(GrayRgn)));
 
     WINDCALL(wp, wDraw, part);
     while(!GetOSEvent(mUpMask, &ev))

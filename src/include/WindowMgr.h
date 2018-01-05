@@ -157,46 +157,24 @@ struct AuxWinRec
     GUEST<LONGINT> awRefCon;
 };
 
-#if 0
-#if !defined(WindowList_H)
-extern GUEST<WindowPeek> 	WindowList_H;
-extern GUEST<GrafPtr> 		WMgrPort_H;
-extern GUEST<CGrafPtr> 		WMgrCPort_H;
-extern GUEST<RgnHandle> 	OldStructure_H;
-extern GUEST<RgnHandle> 	OldContent_H;
-extern GUEST<RgnHandle> 	GrayRgn_H;
-extern GUEST<RgnHandle> 	SaveVisRgn_H;
-extern GUEST<ProcPtr> 		DragHook_H;
-extern GUEST<WindowPtr> 	CurActivate_H;
-extern GUEST<WindowPtr> 	CurDeactive_H;
-extern GUEST<ProcPtr> 		DeskHook_H;
-extern GUEST<WindowPtr> 	GhostWindow_H;
-extern GUEST<AuxWinHandle>	AuxWinHead_H;
-extern GUEST<PixPatHandle> DeskCPat_H;
-extern INTEGER 	SaveUpdate;
-extern INTEGER 	PaintWhite;
-extern Pattern 	DragPattern;
-extern Pattern 	DeskPattern;
-#endif
-
-enum
-{
-    WindowList = (WindowList_H.p),
-    WMgrPort = (WMgrPort_H.p),
-    WMgrCPort = (WMgrCPort_H.p),
-    OldStructure = (OldStructure_H.p),
-    OldContent = (OldContent_H.p),
-    GrayRgn = (GrayRgn_H.p),
-    SaveVisRgn = (SaveVisRgn_H.p),
-    DragHook = (DragHook_H.p),
-    CurActivate = (CurActivate_H.p),
-    CurDeactive = (CurDeactive_H.p),
-    DeskHook = (DeskHook_H.p),
-    GhostWindow = (GhostWindow_H.p),
-    AuxWinHead = (AuxWinHead_H.p),
-    DeskCPat = (DeskCPat_H.p),
-};
-#endif
+const LowMemGlobal<WindowPeek> WindowList { 0x9D6 }; // WindowMgr IMI-274 (true);
+const LowMemGlobal<INTEGER> SaveUpdate { 0x9DA }; // WindowMgr IMI-297 (true);
+const LowMemGlobal<INTEGER> PaintWhite { 0x9DC }; // WindowMgr IMI-297 (true);
+const LowMemGlobal<GrafPtr> WMgrPort { 0x9DE }; // WindowMgr IMI-282 (true);
+const LowMemGlobal<CGrafPtr> WMgrCPort { 0xD2C }; // QuickDraw IMV-205 (false);
+const LowMemGlobal<RgnHandle> OldStructure { 0x9E6 }; // WindowMgr IMI-296 (true);
+const LowMemGlobal<RgnHandle> OldContent { 0x9EA }; // WindowMgr IMI-296 (true);
+const LowMemGlobal<RgnHandle> GrayRgn { 0x9EE }; // WindowMgr IMI-282 (true);
+const LowMemGlobal<RgnHandle> SaveVisRgn { 0x9F2 }; // WindowMgr IMI-293 (true);
+const LowMemGlobal<ProcPtr> DragHook { 0x9F6 }; // WindowMgr IMI-324 (true);
+const LowMemGlobal<Pattern> DragPattern { 0xA34 }; // WindowMgr IMI-324 (true);
+const LowMemGlobal<Pattern> DeskPattern { 0xA3C }; // WindowMgr IMI-282 (true);
+const LowMemGlobal<WindowPtr> CurActivate { 0xA64 }; // WindowMgr IMI-280 (true);
+const LowMemGlobal<WindowPtr> CurDeactive { 0xA68 }; // WindowMgr IMI-280 (true);
+const LowMemGlobal<ProcPtr> DeskHook { 0xA6C }; // WindowMgr IMI-282 (true);
+const LowMemGlobal<WindowPtr> GhostWindow { 0xA84 }; // WindowMgr IMI-287 (true);
+const LowMemGlobal<AuxWinHandle> AuxWinHead { 0xCD0 }; // WindowMgr IMV-200 (true);
+const LowMemGlobal<PixPatHandle> DeskCPat { 0xCD8 }; // WindowMgr SysEqua.a (true);
 
 extern void C_SetWTitle(WindowPtr w, StringPtr t);
 PASCAL_TRAP(SetWTitle, 0xA91A);

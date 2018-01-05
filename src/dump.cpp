@@ -726,12 +726,12 @@ void Executor::dump_gdevice(GDHandle gdev)
 
 void Executor::dump_thegdevice(void)
 {
-    dump_gdevice(MR(TheGDevice));
+    dump_gdevice(MR(LM(TheGDevice)));
 }
 
 void Executor::dump_maindevice(void)
 {
-    dump_gdevice(MR(MainDevice));
+    dump_gdevice(MR(LM(MainDevice)));
 }
 
 void Executor::dump_string(unsigned char *s)
@@ -840,12 +840,12 @@ void Executor::dump_ccrsr(CCrsrHandle ccrsr)
 
 void Executor::dump_wmgrport(void)
 {
-    dump_grafport(MR(WMgrPort));
+    dump_grafport(MR(LM(WMgrPort)));
 }
 
 void Executor::dump_wmgrcport(void)
 {
-    dump_grafport((GrafPtr)MR(WMgrCPort));
+    dump_grafport((GrafPtr)MR(LM(WMgrCPort)));
 }
 
 void Executor::dump_string_handle(StringHandle sh)
@@ -940,7 +940,7 @@ void Executor::dump_aux_win_list(void)
 {
     AuxWinHandle t;
 
-    for(t = MR(AuxWinHead); t; t = MR(deref(t)->awNext))
+    for(t = MR(LM(AuxWinHead)); t; t = MR(deref(t)->awNext))
     {
         dump_aux_win(t);
     }
@@ -970,7 +970,7 @@ void Executor::dump_window_list(WindowPeek w)
     WindowPeek front_w;
 
     front_w = (WindowPeek)FrontWindow();
-    for(t_w = MR(WindowList);
+    for(t_w = MR(LM(WindowList));
         t_w;
         t_w = WINDOW_NEXT_WINDOW(t_w))
     {
@@ -1214,13 +1214,13 @@ class MapSaveGuard
 
 public:
     MapSaveGuard(GUEST<INTEGER> map)
-        : saveMap(CurMap)
+        : saveMap(LM(CurMap))
     {
-        CurMap = map;
+        LM(CurMap) = map;
     }
     ~MapSaveGuard()
     {
-        CurMap = saveMap;
+        LM(CurMap) = saveMap;
     }
 };
 
@@ -1252,8 +1252,8 @@ copy_resources(INTEGER new_rn, INTEGER old_rn, LONGINT type)
     BOOLEAN save_res_load;
     INTEGER i;
 
-    save_res_load = ResLoad;
-    ResLoad = true;
+    save_res_load = LM(ResLoad);
+    LM(ResLoad) = true;
     num_res = CountResourcesRN(type, old_rn);
     for(i = 1; i <= num_res; ++i)
     {
@@ -1267,7 +1267,7 @@ copy_resources(INTEGER new_rn, INTEGER old_rn, LONGINT type)
         DetachResource(h);
         AddResourceRN(h, type, CW(id), name, new_rn);
     }
-    ResLoad = save_res_load;
+    LM(ResLoad) = save_res_load;
     return noErr;
 }
 
@@ -1362,8 +1362,8 @@ dump_textcenter(TCenterRecHdl h)
 void
 dump_zone_stats(void)
 {
-    iprintf((o_fp, "applzone free = %d\n", ZONE_ZCB_FREE(MR(ApplZone))));
-    iprintf((o_fp, " syszone free = %d\n", ZONE_ZCB_FREE(MR(SysZone))));
+    iprintf((o_fp, "applzone free = %d\n", ZONE_ZCB_FREE(MR(LM(ApplZone)))));
+    iprintf((o_fp, " syszone free = %d\n", ZONE_ZCB_FREE(MR(LM(SysZone)))));
 }
 
 #endif /* !NDEBUG */

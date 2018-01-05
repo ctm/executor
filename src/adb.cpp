@@ -177,7 +177,7 @@ enum
 
 /*
  * if deltas_p is true, dx and dy are supplied as arguments, otherwise they
- * have to be computed as deltas off the last known MouseLocation.  Eventually
+ * have to be computed as deltas off the last known LM(MouseLocation).  Eventually
  * we should probably always have them be supplied as arguments since we
  * should probably make our mouse handling more true to real life.
  */
@@ -195,23 +195,23 @@ Executor::adb_apeiron_hack(int /*bool*/ deltas_p, ...)
     bool button_is_down;
     char message[3];
 
-    x = CW(MouseLocation.h);
-    y = CW(MouseLocation.v);
+    x = CW(LM(MouseLocation).h);
+    y = CW(LM(MouseLocation).v);
     button_is_down = !(ROMlib_mods & btnState);
 
     /* begin code for PegLeg */
 
     if(button_is_down)
-        MBState = 0;
+        LM(MBState) = 0;
     else
-        MBState = 0xFF;
+        LM(MBState) = 0xFF;
 
-    MTemp.h = MouseLocation.h;
-    MTemp.v = MouseLocation.v;
+    LM(MTemp).h = LM(MouseLocation).h;
+    LM(MTemp).v = LM(MouseLocation).v;
 
     /* end code for PegLeg */
 
-    MouseLocation2 = MouseLocation;
+    LM(MouseLocation2) = LM(MouseLocation);
 
     if(!been_here)
     {

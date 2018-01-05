@@ -56,9 +56,9 @@ ControlHandle Executor::C_NewControl(WindowPtr wst, Rect *r, StringPtr title,
     gp = thePort;
     SetPort((GrafPtr)wst);
 
-    tmp = MR(AuxCtlHead);
+    tmp = MR(LM(AuxCtlHead));
     auxctlhead = (AuxCtlHandle)NewHandle(sizeof(AuxCtlRec));
-    AuxCtlHead = RM(auxctlhead);
+    LM(AuxCtlHead) = RM(auxctlhead);
 
     HASSIGN_6(auxctlhead,
               acNext, RM(tmp),
@@ -138,9 +138,9 @@ void Executor::C_SetCtlColor(ControlHandle ctl, CCTabHandle ctab)
             AuxCtlHandle t_aux_c;
 
             /* allocate one */
-            t_aux_c = MR(AuxCtlHead);
+            t_aux_c = MR(LM(AuxCtlHead));
             aux_c = (AuxCtlHandle)NewHandle(sizeof(AuxCtlRec));
-            AuxCtlHead = RM(aux_c);
+            LM(AuxCtlHead) = RM(aux_c);
             HxX(aux_c, acNext) = RM(t_aux_c);
             HxX(aux_c, acOwner) = RM(ctl);
 
@@ -182,7 +182,7 @@ void Executor::C_DisposeControl(ControlHandle c) /* IMI-321 */
         ;
     if((*t))
         (*t) = HxX(c, nextControl);
-    for(auxhp = (GUEST<AuxCtlHandle> *)&AuxCtlHead; (*auxhp) && MR((STARH(STARH(auxhp)))->acOwner) != c;
+    for(auxhp = (GUEST<AuxCtlHandle> *)&LM(AuxCtlHead); (*auxhp) && MR((STARH(STARH(auxhp)))->acOwner) != c;
         auxhp = (GUEST<AuxCtlHandle> *)&(STARH(STARH(auxhp)))->acNext)
         ;
     if((*auxhp))

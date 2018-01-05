@@ -16,11 +16,11 @@ filecontrolblock *Executor::ROMlib_getfreefcbp(void)
     short length;
     filecontrolblock *fcbp, *efcbp;
 
-    length = CW(*(GUEST<INTEGER> *)MR(FCBSPtr));
-    fcbp = (filecontrolblock *)((short *)MR(FCBSPtr) + 1);
-    efcbp = (filecontrolblock *)((char *)MR(FCBSPtr) + length);
+    length = CW(*(GUEST<INTEGER> *)MR(LM(FCBSPtr)));
+    fcbp = (filecontrolblock *)((short *)MR(LM(FCBSPtr)) + 1);
+    efcbp = (filecontrolblock *)((char *)MR(LM(FCBSPtr)) + length);
     for(; fcbp < efcbp && Cx(fcbp->fcbFlNum);
-        fcbp = (filecontrolblock *)((char *)fcbp + CW(FSFCBLen)))
+        fcbp = (filecontrolblock *)((char *)fcbp + CW(LM(FSFCBLen))))
         ;
     return fcbp < efcbp ? fcbp : 0;
 }
@@ -30,12 +30,12 @@ filecontrolblock *Executor::ROMlib_refnumtofcbp(uint16_t refnum)
     uint16_t len;
     filecontrolblock *retval;
 
-    if(refnum < sizeof(short) || refnum % CW(FSFCBLen) != sizeof(short))
+    if(refnum < sizeof(short) || refnum % CW(LM(FSFCBLen)) != sizeof(short))
         return 0;
-    len = CW(*(GUEST<uint16_t> *)MR(FCBSPtr));
+    len = CW(*(GUEST<uint16_t> *)MR(LM(FCBSPtr)));
     if(refnum >= len)
         return 0;
-    retval = (filecontrolblock *)((char *)MR(FCBSPtr) + refnum);
+    retval = (filecontrolblock *)((char *)MR(LM(FCBSPtr)) + refnum);
     if(retval->fcbFlNum == CLC(0))
         retval = 0;
     return retval;
@@ -1041,7 +1041,7 @@ static OSErr dirtyfcbp(filecontrolblock *fcbp)
 
     if(fcbp->fcbMdRByt & DIRTYBIT)
     {
-        refnum = (char *)fcbp - (char *)MR(FCBSPtr);
+        refnum = (char *)fcbp - (char *)MR(LM(FCBSPtr));
         vcbp = MR(fcbp->fcbVPtr);
         if((catpos = Cx(fcbp->fcbCatPos)))
         {
@@ -1484,10 +1484,10 @@ OSErr Executor::ROMlib_alreadyopen(HVCB *vcbp, LONGINT flnum,
     if(*permp == fsRdPerm)
         return noErr;
     busybit = busy == resourcebusy ? RESOURCEBIT : 0;
-    length = CW(*(GUEST<INTEGER> *)MR(FCBSPtr));
-    fcbp = (filecontrolblock *)((GUEST<INTEGER> *)MR(FCBSPtr) + 1);
-    efcbp = (filecontrolblock *)((char *)MR(FCBSPtr) + length);
-    for(; fcbp < efcbp; fcbp = (filecontrolblock *)((char *)fcbp + CW(FSFCBLen)))
+    length = CW(*(GUEST<INTEGER> *)MR(LM(FCBSPtr)));
+    fcbp = (filecontrolblock *)((GUEST<INTEGER> *)MR(LM(FCBSPtr)) + 1);
+    efcbp = (filecontrolblock *)((char *)MR(LM(FCBSPtr)) + length);
+    for(; fcbp < efcbp; fcbp = (filecontrolblock *)((char *)fcbp + CW(LM(FSFCBLen))))
         if(MR(fcbp->fcbVPtr) == vcbp && CL(fcbp->fcbFlNum) == flnum && (busy == eitherbusy
                                                                         || (fcbp->fcbMdRByt & RESOURCEBIT) == busybit)
            && ((fcbp->fcbMdRByt & WRITEBIT) || permp == &temp))
@@ -1502,7 +1502,7 @@ OSErr Executor::ROMlib_alreadyopen(HVCB *vcbp, LONGINT flnum,
                     break;
                 case fsWrPerm:
                 case fsRdWrPerm:
-                    *refnump = CW((char *)fcbp - (char *)MR(FCBSPtr));
+                    *refnump = CW((char *)fcbp - (char *)MR(LM(FCBSPtr)));
                     err = opWrErr;
                     fs_err_hook(err);
                     return err;
@@ -1510,7 +1510,7 @@ OSErr Executor::ROMlib_alreadyopen(HVCB *vcbp, LONGINT flnum,
                 case fsRdWrShPerm:
                     if(!(fcbp->fcbMdRByt & SHAREDBIT))
                     {
-                        *refnump = CW((char *)fcbp - (char *)MR(FCBSPtr));
+                        *refnump = CW((char *)fcbp - (char *)MR(LM(FCBSPtr)));
                         err = opWrErr;
                         fs_err_hook(err);
                         return err;
@@ -1648,7 +1648,7 @@ static OSErr PBOpenHelper(IOParam *pb, Forktype ft, LONGINT dirid,
     fcbp->fcbCatPos = cachep->logblk;
     fcbp->fcbDirID = catkeyp->ckrParID;
     str255assign(fcbp->fcbCName, catkeyp->ckrCName);
-    pb->ioRefNum = CW((char *)fcbp - (char *)MR(FCBSPtr));
+    pb->ioRefNum = CW((char *)fcbp - (char *)MR(LM(FCBSPtr)));
     PBRETURN(pb, noErr);
 }
 

@@ -128,6 +128,19 @@ typedef struct
     INTEGER refnum;
 } driverinfo;
 
+const LowMemGlobal<DCtlHandlePtr> UTableBase { 0x11C }; // DeviceMgr IMII-192 (false);
+const LowMemGlobal<ProcPtr[8]> Lvl1DT { 0x192 }; // DeviceMgr IMII-197 (false);
+const LowMemGlobal<ProcPtr[8]> Lvl2DT { 0x1B2 }; // DeviceMgr IMII-198 (false);
+const LowMemGlobal<INTEGER> UnitNtryCnt { 0x1D2 }; // DeviceMgr ThinkC (true-b);
+const LowMemGlobal<Ptr> VIA { 0x1D4 }; // DeviceMgr IMIII-39 (true-b);
+const LowMemGlobal<Ptr> SCCRd { 0x1D8 }; // DeviceMgr IMII-199 (false);
+const LowMemGlobal<Ptr> SCCWr { 0x1DC }; // DeviceMgr IMII-199 (false);
+const LowMemGlobal<Ptr> IWM { 0x1E0 }; // DeviceMgr ThinkC (false);
+const LowMemGlobal<ProcPtr[4]> ExtStsDT { 0x2BE }; // DeviceMgr IMII-199 (false);
+const LowMemGlobal<Ptr> JFetch { 0x8F4 }; // DeviceMgr IMII-194 (false);
+const LowMemGlobal<Ptr> JStash { 0x8F8 }; // DeviceMgr IMII-195 (false);
+const LowMemGlobal<Ptr> JIODone { 0x8FC }; // DeviceMgr IMII-195 (false);
+
 /*
  * __ROMlib_otherdrivers is initialized to null, but can be used to allow
  * extra drivers to be called.  Have __ROMlib_otherdrivers point to an array

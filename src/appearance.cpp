@@ -117,7 +117,7 @@ AddResourceRN(INTEGER rn, Handle h, ResType type, INTEGER id, Str255 name)
         Handle hh;
 
         hh = h;
-        if(HandleZone(h) != MR(SysZone))
+        if(HandleZone(h) != MR(LM(SysZone)))
         {
             Handle save_hand;
 
@@ -170,9 +170,9 @@ silently_replace_resources(INTEGER master_file_rn, INTEGER from_file_rn)
     INTEGER save_resload;
 
     save_zone = GetZone();
-    SetZone(MR(SysZone));
+    SetZone(MR(LM(SysZone)));
     type_num_max = CountTypesRN(from_file_rn);
-    save_resload = ResLoad;
+    save_resload = LM(ResLoad);
     SetResLoad(false);
     for(type_num = 1; type_num <= type_num_max; ++type_num)
     {
@@ -209,10 +209,10 @@ Executor::ROMlib_set_appearance(void)
 {
     INTEGER res_file;
 
-    res_file = OpenRFPerm(res_filenames[appearance], CW(BootDrive), fsRdPerm);
+    res_file = OpenRFPerm(res_filenames[appearance], CW(LM(BootDrive)), fsRdPerm);
     if(res_file != -1)
     {
-        silently_replace_resources(CW(SysMap), res_file);
+        silently_replace_resources(CW(LM(SysMap)), res_file);
         CloseResFile(res_file);
     }
     else if(appearance != 0)

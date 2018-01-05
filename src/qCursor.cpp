@@ -86,25 +86,25 @@ void Executor::cursor_reset_current_cursor(void)
 
 void Executor::ROMlib_showcursor()
 {
-    if(!CrsrVis)
+    if(!LM(CrsrVis))
     {
         host_set_cursor_visible(true);
-        CrsrVis = true;
+        LM(CrsrVis) = true;
     }
 }
 
 void Executor::ROMlib_restorecursor()
 {
-    if(CrsrVis)
+    if(LM(CrsrVis))
     {
         host_set_cursor_visible(false);
-        CrsrVis = false;
+        LM(CrsrVis) = false;
     }
 }
 
 void Executor::ROMlib_showhidecursor() /* INTERNAL */
 {
-    if(CrsrState == CWC(0))
+    if(LM(CrsrState) == CWC(0))
         ROMlib_showcursor();
     else
         ROMlib_restorecursor();
@@ -161,38 +161,38 @@ void Executor::C_SetCursor(Cursor *cp)
     current_cursor_color_p = false;
     current_cursor_valid_p = true;
 
-    if(CrsrState == CWC(0))
+    if(LM(CrsrState) == CWC(0))
     {
-        CrsrVis = false;
+        LM(CrsrVis) = false;
         ROMlib_showcursor();
     }
 }
 
 void Executor::C_InitCursor()
 {
-    CrsrState = 0;
+    LM(CrsrState) = 0;
     SetCursor(&arrowX);
-    CrsrVis = false;
+    LM(CrsrVis) = false;
     ROMlib_showcursor();
 }
 
 void Executor::C_HideCursor() /* IMI-168 */
 {
     ROMlib_restorecursor();
-    CrsrState = CW(CW(CrsrState) - 1);
+    LM(CrsrState) = CW(CW(LM(CrsrState)) - 1);
 }
 
 void Executor::C_ShowCursor() /* IMI-168 */
 {
-    if((CrsrState = CW(CW(CrsrState) + 1)) == CWC(0))
+    if((LM(CrsrState) = CW(CW(LM(CrsrState)) + 1)) == CWC(0))
         ROMlib_showcursor();
-    if(CW(CrsrState) > 0)
-        CrsrState = 0;
+    if(CW(LM(CrsrState)) > 0)
+        LM(CrsrState) = 0;
 }
 
 static void wewantpointermovements(INTEGER x)
 {
-    CrsrState = CW(CW(CrsrState) + x);
+    LM(CrsrState) = CW(CW(LM(CrsrState)) + x);
     ROMlib_bewaremovement = true;
 }
 
@@ -340,7 +340,7 @@ void Executor::C_SetCCursor(CCrsrHandle ccrsr)
         PixMapHandle gd_pmap;
         GUEST<Point> *hot_spot;
 
-        gdev = MR(MainDevice);
+        gdev = MR(LM(MainDevice));
         gd_pmap = GD_PMAP(gdev);
 
         hot_spot = &CCRSR_HOT_SPOT(ccrsr);
@@ -406,7 +406,7 @@ void Executor::C_SetCCursor(CCrsrHandle ccrsr)
 
         if(!current_ccrsr)
         {
-            TheZoneGuard guard(SysZone);
+            TheZoneGuard guard(LM(SysZone));
             current_ccrsr = (CCrsrHandle)NewHandle(sizeof(CCrsr));
             CCRSR_DATA_X(current_ccrsr) = RM(NewHandle(0));
             CCRSR_XDATA_X(current_ccrsr) = nullptr;

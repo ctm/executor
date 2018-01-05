@@ -25,15 +25,15 @@ void Executor::C_PrOpen()
     {
         h = GetString(-8192);
         HLock((Handle)h);
-        ROMlib_printresfile = OpenRFPerm(STARH(h), Cx(BootDrive), fsCurPerm);
+        ROMlib_printresfile = OpenRFPerm(STARH(h), Cx(LM(BootDrive)), fsCurPerm);
 #if defined(NEXTSTEP)
         if(ROMlib_printresfile == -1)
             ROMlib_printresfile
-                = OpenRFPerm("\020NeXTLaserPrinter", Cx(BootDrive), fsCurPerm);
+                = OpenRFPerm("\020NeXTLaserPrinter", Cx(LM(BootDrive)), fsCurPerm);
 #endif
         HUnlock((Handle)h);
     }
-    PrintErr = ROMlib_printresfile == -1 ? CWC((OSErr)fnfErr) : CWC((OSErr)noErr);
+    LM(PrintErr) = ROMlib_printresfile == -1 ? CWC((OSErr)fnfErr) : CWC((OSErr)noErr);
 }
 
 void Executor::C_PrClose()
@@ -43,5 +43,5 @@ void Executor::C_PrClose()
         CloseResFile(ROMlib_printresfile);
         ROMlib_printresfile = -1;
     }
-    PrintErr = CWC(noErr);
+    LM(PrintErr) = CWC(noErr);
 }

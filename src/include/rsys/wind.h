@@ -58,7 +58,7 @@ extern LONGINT ROMlib_windcall(WindowPtr wind, INTEGER mess, LONGINT param);
 #define ZOOMBIT 8
 
 #define USE_DESKCPAT_BIT 0x80
-#define USE_DESKCPAT_VAR SPMisc2
+#define USE_DESKCPAT_VAR LM(SPMisc2)
 
 extern const ColorSpec default_color_win_ctab[];
 extern int ROMlib_emptyvis;
@@ -69,10 +69,10 @@ extern RGBColor *validate_colors_for_window(GrafPtr w);
    windowmanager ports (bw and color), and since we couldn't hope to
    keep them in sync, we use one or the other.
 
-   of course, our definition files use only the WMgrCPort */
+   of course, our definition files use only the LM(WMgrCPort) */
 
-//#define wmgr_port ((GrafPtr) (WMgrCPort))
-#define wmgr_port (guest_cast<GrafPtr>(WMgrCPort))
+//#define wmgr_port ((GrafPtr) (LM(WMgrCPort)))
+#define wmgr_port (guest_cast<GrafPtr>(LM(WMgrCPort)))
 
 /* WindowPeek accessors;
    note these functions cast thier argument to type (WindowPeek),

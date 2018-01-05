@@ -433,66 +433,66 @@ void Executor::executor_main(void)
     Str255 name;
     StringPtr fName;
 
-    SCSIFlags = CWC(0xEC00); /* scsi+clock+xparam+mmu+adb
+    LM(SCSIFlags) = CWC(0xEC00); /* scsi+clock+xparam+mmu+adb
 				 (no fpu,aux or pwrmgr) */
 
-    MCLKPCmiss1 = 0; /* &MCLKPCmiss1 = 0x358 + 72 (MacLinkPC starts
+    LM(MCLKPCmiss1) = 0; /* &LM(MCLKPCmiss1) = 0x358 + 72 (MacLinkPC starts
 			   adding the 72 byte offset to VCB pointers too
 			   soon, starting with 0x358, which is not the
 			   address of a VCB) */
 
-    MCLKPCmiss2 = 0; /* &MCLKPCmiss1 = 0x358 + 78 (MacLinkPC misses) */
-    AuxCtlHead = 0;
-    CurDeactive = 0;
-    CurActivate = 0;
-    macfpstate[0] = 0;
-    fondid = 0;
-    PrintErr = 0;
-    mouseoffset = 0;
-    heapcheck = 0;
-    DefltStack = CLC(0x2000); /* nobody really cares about these two */
-    MinStack = CLC(0x400); /* values ... */
-    IAZNotify = 0;
-    CurPitch = 0;
-    JSwapFont = RM((ProcPtr)P_FMSwapFont);
-    JInitCrsr = RM((ProcPtr)P_InitCursor);
+    LM(MCLKPCmiss2) = 0; /* &LM(MCLKPCmiss1) = 0x358 + 78 (MacLinkPC misses) */
+    LM(AuxCtlHead) = 0;
+    LM(CurDeactive) = 0;
+    LM(CurActivate) = 0;
+    LM(macfpstate)[0] = 0;
+    LM(fondid) = 0;
+    LM(PrintErr) = 0;
+    LM(mouseoffset) = 0;
+    LM(heapcheck) = 0;
+    LM(DefltStack) = CLC(0x2000); /* nobody really cares about these two */
+    LM(MinStack) = CLC(0x400); /* values ... */
+    LM(IAZNotify) = 0;
+    LM(CurPitch) = 0;
+    LM(JSwapFont) = RM((ProcPtr)P_FMSwapFont);
+    LM(JInitCrsr) = RM((ProcPtr)P_InitCursor);
 
-    Key1Trans = RM((Ptr)P_Key1Trans);
-    Key2Trans = RM((Ptr)P_Key2Trans);
-    JFLUSH = RM((ProcPtr)P_flushcache);
-    JResUnknown1 = JFLUSH; /* I don't know what these are supposed to */
-    JResUnknown2 = JFLUSH; /* do, but they're not called enough for
+    LM(Key1Trans) = RM((Ptr)P_Key1Trans);
+    LM(Key2Trans) = RM((Ptr)P_Key2Trans);
+    LM(JFLUSH) = RM((ProcPtr)P_flushcache);
+    LM(JResUnknown1) = LM(JFLUSH); /* I don't know what these are supposed to */
+    LM(JResUnknown2) = LM(JFLUSH); /* do, but they're not called enough for
 				   us to worry about the cache flushing
 				   overhead */
 
-    //CPUFlag = 2; /* mc68020 */
-    CPUFlag = 4; /* mc68040 */
-    UnitNtryCnt = 0; /* how many units in the table */
+    //LM(CPUFlag) = 2; /* mc68020 */
+    LM(CPUFlag) = 4; /* mc68040 */
+    LM(UnitNtryCnt) = 0; /* how many units in the table */
 
-    TheZone = SysZone;
-    VIA = RM(NewPtr(16 * 512)); /* IMIII-43 */
-    memset(MR(VIA), 0, (LONGINT)16 * 512);
-    *(char *)MR(VIA) = 0x80; /* Sound Off */
+    LM(TheZone) = LM(SysZone);
+    LM(VIA) = RM(NewPtr(16 * 512)); /* IMIII-43 */
+    memset(MR(LM(VIA)), 0, (LONGINT)16 * 512);
+    *(char *)MR(LM(VIA)) = 0x80; /* Sound Off */
 
 #define SCC_SIZE 1024
 
-    SCCRd = RM(NewPtrSysClear(SCC_SIZE));
-    SCCWr = RM(NewPtrSysClear(SCC_SIZE));
+    LM(SCCRd) = RM(NewPtrSysClear(SCC_SIZE));
+    LM(SCCWr) = RM(NewPtrSysClear(SCC_SIZE));
 
-    SoundBase = RM(NewPtr(370 * sizeof(INTEGER)));
+    LM(SoundBase) = RM(NewPtr(370 * sizeof(INTEGER)));
 #if 0
-    memset(CL(SoundBase), 0, (LONGINT) 370 * sizeof(INTEGER));
+    memset(CL(LM(SoundBase)), 0, (LONGINT) 370 * sizeof(INTEGER));
 #else /* !0 */
     for(i = 0; i < 370; ++i)
-        ((GUEST<INTEGER> *)MR(SoundBase))[i] = CWC(0x8000); /* reference 0 sound */
+        ((GUEST<INTEGER> *)MR(LM(SoundBase)))[i] = CWC(0x8000); /* reference 0 sound */
 #endif /* !0 */
-    TheZone = ApplZone;
-    HiliteMode = CB(0xFF);
+    LM(TheZone) = LM(ApplZone);
+    LM(HiliteMode) = CB(0xFF);
     /* Mac II has 0x3FFF here */
-    ROM85 = CWC(0x3FFF);
+    LM(ROM85) = CWC(0x3FFF);
 
     EM_A5 = US_TO_SYN68K(&tmpA5);
-    CurrentA5 = guest_cast<Ptr>(CL(EM_A5));
+    LM(CurrentA5) = guest_cast<Ptr>(CL(EM_A5));
     InitGraf((Ptr)quickbytes + sizeof(quickbytes) - 4);
     InitFonts();
     InitCRM();
@@ -502,12 +502,12 @@ void Executor::executor_main(void)
     InitDialogs((ProcPtr)0);
     InitCursor();
 
-    loadtrap = 0;
+    LM(loadtrap) = 0;
 
     /* ROMlib_WriteWhen(WriteInOSEvent); */
 
-    FinderName[0] = MIN(strlen(BROWSER_NAME), sizeof(FinderName) - 1);
-    memcpy(FinderName + 1, BROWSER_NAME, FinderName[0]);
+    LM(FinderName)[0] = MIN(strlen(BROWSER_NAME), sizeof(LM(FinderName)) - 1);
+    memcpy(LM(FinderName) + 1, BROWSER_NAME, LM(FinderName)[0]);
 
     CountAppFiles(&mess, &count_s);
     count = CW(count_s);
@@ -522,7 +522,7 @@ void Executor::executor_main(void)
     if(thefile.fType == CLC(FOURCC('A', 'P', 'P', 'L')))
     {
         ClrAppFiles(1);
-        Munger(MR(AppParmHandle), 2L * sizeof(INTEGER), (Ptr)0,
+        Munger(MR(LM(AppParmHandle)), 2L * sizeof(INTEGER), (Ptr)0,
                (LONGINT)sizeof(AppFile), (Ptr) "", 0L);
     }
     hpb.hFileInfo.ioNamePtr = RM(&thefile.fName[0]);
@@ -573,17 +573,17 @@ void Executor::executor_main(void)
         p > fName && *--p != ':';)
         ;
     toskip = p - fName;
-    CurApName[0] = MIN(fName[0] - toskip, 31);
-    BlockMoveData((Ptr)fName + 1 + toskip, (Ptr)CurApName + 1,
-                  (Size)CurApName[0]);
+    LM(CurApName)[0] = MIN(fName[0] - toskip, 31);
+    BlockMoveData((Ptr)fName + 1 + toskip, (Ptr)LM(CurApName) + 1,
+                  (Size)LM(CurApName)[0]);
 
     wdpb.ioVRefNum = hpb.hFileInfo.ioVRefNum;
     wdpb.ioWDDirID = hpb.hFileInfo.ioFlParID;
     SFSaveDisk_Update(CW(hpb.hFileInfo.ioVRefNum), fName);
-    CurDirStore = hpb.hFileInfo.ioFlParID;
+    LM(CurDirStore) = hpb.hFileInfo.ioFlParID;
     wdpb.ioWDProcID = CLC(FOURCC('X', 'c', 't', 'r'));
     wdpb.ioNamePtr = 0;
     PBOpenWD(&wdpb, false);
     exevrefnum = CW(wdpb.ioVRefNum);
-    Launch(CurApName, exevrefnum);
+    Launch(LM(CurApName), exevrefnum);
 }

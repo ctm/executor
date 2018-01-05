@@ -38,12 +38,12 @@ void Executor::mman_heap_death(const char *func, const char *where)
         warning_unexpected("%s", err_msg);
 
         /* Operating on the theory that the application zone is most likely
-       * to get smashed, switch to the SysZone and bring up a window
-       * explaining the death.  If the SysZone is (also?) smashed, we
+       * to get smashed, switch to the LM(SysZone) and bring up a window
+       * explaining the death.  If the LM(SysZone) is (also?) smashed, we
        * may crash or try to recurse here.  But at least we got the
        * warning_unexpected out.
        */
-        TheZone = SysZone;
+        LM(TheZone) = LM(SysZone);
         system_error(err_msg, 0, "Exit", NULL, NULL, NULL, NULL, NULL);
     }
 
@@ -133,9 +133,9 @@ addr_info(char *addr)
     int i;
 
     /* get the zone for `addr' */
-    zones[0] = MR(ApplZone);
-    zones[1] = MR(SysZone);
-    zones[2] = MR(TheZone);
+    zones[0] = MR(LM(ApplZone));
+    zones[1] = MR(LM(SysZone));
+    zones[2] = MR(LM(TheZone));
 
     for(i = 0, addr_zone = NULL; i < (int)NELEM(zones); i++)
     {
@@ -157,7 +157,7 @@ addr_info(char *addr)
                        ? "ApplicZone"
                        : ((addr_zone == zones[1])
                               ? "SystemZone"
-                              : "TheZone")),
+                              : "LM(TheZone)")),
             addr_zone,
             ZONE_HEAP_DATA(addr_zone), ZONE_BK_LIM(addr_zone));
 
@@ -288,7 +288,7 @@ handle_addr_info:
 
         GetResInfo(handle, &id_s, &type_s, (StringPtr)res_name);
 
-        if(ResErr)
+        if(LM(ResErr))
             return;
 
         /* blah */
@@ -445,15 +445,15 @@ void Executor::ROMlib_sledgehammer_zone(THz zone, bool print_p,
 void Executor::ROMlib_sledgehammer_zones(const char *fn, const char *file, int lineno,
                                          const char *where, zone_info_t *info_array)
 {
-    ROMlib_sledgehammer_zone(MR(SysZone), false,
+    ROMlib_sledgehammer_zone(MR(LM(SysZone)), false,
                              fn, file, lineno, where,
                              info_array ? &info_array[0] : NULL);
-    ROMlib_sledgehammer_zone(MR(ApplZone), false,
+    ROMlib_sledgehammer_zone(MR(LM(ApplZone)), false,
                              fn, file, lineno, where,
                              info_array ? &info_array[1] : NULL);
-    if(TheZone != SysZone
-       && TheZone != ApplZone)
-        ROMlib_sledgehammer_zone(MR(TheZone), false,
+    if(LM(TheZone) != LM(SysZone)
+       && LM(TheZone) != LM(ApplZone))
+        ROMlib_sledgehammer_zone(MR(LM(TheZone)), false,
                                  fn, file, lineno, where,
                                  info_array ? &info_array[2] : NULL);
 }
@@ -511,7 +511,7 @@ void Executor::ROMlib_setupblock(block_header_t *block,
     uint32_t physical_size;
     unsigned size_correction;
 
-    current_zone = MR(TheZone);
+    current_zone = MR(LM(TheZone));
 
     asize = size;
     if(asize < MIN_BLOCK_SIZE)
@@ -600,7 +600,7 @@ void Executor::ROMlib_coalesce(block_header_t *block)
     int32_t total_free;
     THz current_zone;
 
-    current_zone = MR(TheZone);
+    current_zone = MR(LM(TheZone));
 
     total_free = 0;
     for(t_block = block;
@@ -625,7 +625,7 @@ void Executor::ROMlib_freeblock(block_header_t *block)
 {
     THz current_zone;
 
-    current_zone = MR(TheZone);
+    current_zone = MR(LM(TheZone));
     ZONE_ZCB_FREE_X(current_zone) = CL(ZONE_ZCB_FREE(current_zone)
                                        + PSIZE(block));
 
@@ -643,7 +643,7 @@ void Executor::ROMlib_moveblock(block_header_t *oldl, block_header_t *newl,
     Handle master;
     THz current_zone;
 
-    current_zone = MR(TheZone);
+    current_zone = MR(LM(TheZone));
 
     master = BLOCK_TO_HANDLE(current_zone, oldl);
 
@@ -663,7 +663,7 @@ bool Executor::ROMlib_pushblock(block_header_t *block, block_header_t *after)
     block_header_t *t_block;
     THz current_zone;
 
-    current_zone = MR(TheZone);
+    current_zone = MR(LM(TheZone));
     for(t_block = after;
         t_block != ZONE_BK_LIM(current_zone) && t_block != block;
         t_block = BLOCK_NEXT(t_block))
@@ -697,7 +697,7 @@ bool Executor::ROMlib_makespace(block_header_t **block_out, uint32_t size)
 
     gui_assert(size > 0);
 
-    current_zone = MR(TheZone);
+    current_zone = MR(LM(TheZone));
     total_size = 0;
     old_block = block = *block_out;
     bk_lim = ZONE_BK_LIM(current_zone);
@@ -765,8 +765,8 @@ bool Executor::ROMlib_locked(block_header_t *block)
 
     gui_assert(USE(block) == REL);
 
-    h = BLOCK_TO_HANDLE(MR(TheZone), block);
-    return (HANDLE_STATE(h, block) & LOCKBIT) || (h == MR(GZRootHnd));
+    h = BLOCK_TO_HANDLE(MR(LM(TheZone)), block);
+    return (HANDLE_STATE(h, block) & LOCKBIT) || (h == MR(LM(GZRootHnd)));
 }
 
 /* Find the total amount of free space starting at block.  Compress them
@@ -777,7 +777,7 @@ int32_t Executor::ROMlib_amtfree(block_header_t *block)
     block_header_t *b;
     THz current_zone;
 
-    current_zone = MR(TheZone);
+    current_zone = MR(LM(TheZone));
 
     for(total = 0, b = block;
         USE(b) == FREE && b != ZONE_BK_LIM(current_zone);
@@ -804,7 +804,7 @@ void Executor::checkallocptr(void)
     block_header_t *b;
     THz current_zone;
 
-    current_zone = MR(TheZone);
+    current_zone = MR(LM(TheZone));
 
     if(ZONE_ALLOC_PTR_X(current_zone) == nullptr)
         return;
@@ -832,7 +832,7 @@ OSErr Executor::ROMlib_relalloc(Size size, block_header_t **newblk)
     int32_t biggest_block, old_biggest_block;
     THz current_zone;
 
-    current_zone = MR(TheZone);
+    current_zone = MR(LM(TheZone));
 
     /* If we get a negative size, we don't want to loop forever thinking
    * the request is easily satisfied.  This works around that problem.
@@ -898,7 +898,7 @@ retry:
 
     /* Try a purge */
     PurgeMem(size);
-    if(MemErr == CWC(noErr))
+    if(LM(MemErr) == CWC(noErr))
         goto retry;
     /* After a purge, we might be able to compact unlocked relocatable
      blocks and gain enough space, so redo the compact. */
@@ -906,8 +906,8 @@ retry:
     if(biggest_block >= size)
         goto retry;
 
-    /* Finally, extend the heap if it's ApplZone */
-    if(TheZone == ApplZone)
+    /* Finally, extend the heap if it's LM(ApplZone) */
+    if(LM(TheZone) == LM(ApplZone))
     {
         int32_t newsize;
 
@@ -922,23 +922,23 @@ retry:
 
 /* As best as I can tell this extension code isn't really doing
 	 as good a job as it could, since extending the heap to
-	 ApplLimit and then doing a compact could get us enough
+	 LM(ApplLimit) and then doing a compact could get us enough
 	 memory, when just doing the extension itself doesn't.  The
 	 big question of course is what does the Mac do. --ctm */
 
 /* #define SCAREY_NEW_OLD_CODE
- * When cotton rewrote the memory manager he made it so that ApplZone starts
+ * When cotton rewrote the memory manager he made it so that LM(ApplZone) starts
  * out as large as it will ever grow and commented out this code.  The problem
  * is at least one program (a flight simulator named DogFight something or
  * other) depends on MaxMem returning a relatively small value that can be
  * grown later.  To make DogFight go more we need to enable this code and
- * then Juke InitApplZone to start ApplZone out a much smaller size.  However,
+ * then Juke InitApplZone to start LM(ApplZone) out a much smaller size.  However,
  * the program has other problems beyond that so it doesn't make sense to 
  * enable this code before we have time to do a lot of testing.
  */
 
 #if defined(SCAREY_NEW_OLD_CODE)
-        if((uint32_t)MR(ApplLimit) - (uint32_t)HEAPEND >= newsize)
+        if((uint32_t)MR(LM(ApplLimit)) - (uint32_t)HEAPEND >= newsize)
         {
             /* Do the extension */
             /* The new block */
@@ -957,7 +957,7 @@ retry:
 
             ZONE_ZCB_FREE_X(current_zone) = CL(ZONE_ZCB_FREE(current_zone)
                                                + newsize);
-            HeapEnd = (Ptr)ZONE_BK_LIM(current_zone);
+            LM(HeapEnd) = (Ptr)ZONE_BK_LIM(current_zone);
             return noErr;
         }
 #endif

@@ -47,17 +47,17 @@ void Executor::FInitQueue() /* IMIV-128 */
 
 QHdrPtr Executor::GetFSQHdr() /* IMIV-175 */
 {
-    return (&FSQHdr); /* in UNIX domain, everything is synchronous */
+    return (&LM(FSQHdr)); /* in UNIX domain, everything is synchronous */
 }
 
 QHdrPtr Executor::GetVCBQHdr() /* IMIV-178 */
 {
-    return (&VCBQHdr);
+    return (&LM(VCBQHdr));
 }
 
 QHdrPtr Executor::GetDrvQHdr() /* IMIV-182 */
 {
-    return (&DrvQHdr);
+    return (&LM(DrvQHdr));
 }
 
 OSErr Executor::ufsPBGetFCBInfo(FCBPBPtr pb, BOOLEAN a) /* INTERNAL */
@@ -86,7 +86,7 @@ OSErr Executor::ufsPBGetFCBInfo(FCBPBPtr pb, BOOLEAN a) /* INTERNAL */
         if(count == Cx(pb->ioFCBIndx))
         {
             fp = ROMlib_fcblocks + i - 1;
-            rn = (Ptr)fp - MR(FCBSPtr);
+            rn = (Ptr)fp - MR(LM(FCBSPtr));
         }
         else
             err = paramErr;
@@ -172,13 +172,13 @@ Executor::ROMlib_addtodq(ULONGINT drvsize, const char *devicename, INTEGER parti
     GUEST<THz> saveZone;
     static bool seen_floppy = false;
 
-    saveZone = TheZone;
-    TheZone = SysZone;
+    saveZone = LM(TheZone);
+    LM(TheZone) = LM(SysZone);
 #if !defined(LETGCCWAIL)
     dqp = (DrvQExtra *)0;
 #endif
     dno = 0;
-    for(dp = (DrvQEl *)MR(DrvQHdr.qHead); dp; dp = (DrvQEl *)MR(dp->qLink))
+    for(dp = (DrvQEl *)MR(LM(DrvQHdr).qHead); dp; dp = (DrvQEl *)MR(dp->qLink))
     {
         dqp = (DrvQExtra *)((char *)dp - sizeof(LONGINT));
         if(dqp->partition == CW(partition) && slashstrcmp((char *)dqp->devicename, devicename) == 0)
@@ -234,9 +234,9 @@ Executor::ROMlib_addtodq(ULONGINT drvsize, const char *devicename, INTEGER parti
             memset(&dqp->hfs, 0, sizeof(dqp->hfs));
             dqp->hfs.fd = -1;
         }
-        Enqueue((QElemPtr)&dqp->dq, &DrvQHdr);
+        Enqueue((QElemPtr)&dqp->dq, &LM(DrvQHdr));
     }
-    TheZone = saveZone;
+    LM(TheZone) = saveZone;
     return dqp;
 }
 
@@ -581,12 +581,12 @@ void Executor::ROMlib_fileinit() /* INTERNAL */
     int sysnamelen;
     char *p, *ep;
 
-    CurDirStore = CLC(2);
+    LM(CurDirStore) = CLC(2);
 
-    savezone = TheZone;
-    TheZone = SysZone;
-    FCBSPtr = RM(NewPtr((Size)sizeof(fcbhidden)));
-    ((fcbhidden *)MR(FCBSPtr))->nbytes = CW(sizeof(fcbhidden));
+    savezone = LM(TheZone);
+    LM(TheZone) = LM(SysZone);
+    LM(FCBSPtr) = RM(NewPtr((Size)sizeof(fcbhidden)));
+    ((fcbhidden *)MR(LM(FCBSPtr)))->nbytes = CW(sizeof(fcbhidden));
 
     for(i = 0; i < NFCB; i++)
     {
@@ -609,10 +609,10 @@ void Executor::ROMlib_fileinit() /* INTERNAL */
 
 #define NWDENTRIES 40
     wdlen = NWDENTRIES * sizeof(wdentry) + sizeof(INTEGER);
-    WDCBsPtr = RM(NewPtr((Size)wdlen));
-    TheZone = savezone;
-    memset(MR(WDCBsPtr), 0, wdlen);
-    *(GUEST<INTEGER> *)MR(WDCBsPtr) = CW(wdlen);
+    LM(WDCBsPtr) = RM(NewPtr((Size)wdlen));
+    LM(TheZone) = savezone;
+    memset(MR(LM(WDCBsPtr)), 0, wdlen);
+    *(GUEST<INTEGER> *)MR(LM(WDCBsPtr)) = CW(wdlen);
 
     auto initpath = [](const char *varname, const char *defval) {
         if(auto v = getenv(varname))
@@ -712,9 +712,9 @@ void Executor::ROMlib_fileinit() /* INTERNAL */
     if(is_unix_path(ROMlib_DefaultFolder.c_str())
        && Ustat(ROMlib_DefaultFolder.c_str(), &sbuf) == 0)
     {
-        CurDirStore = CL((LONGINT)ST_INO(sbuf));
+        LM(CurDirStore) = CL((LONGINT)ST_INO(sbuf));
         vcbp = ROMlib_vcbbybiggestunixname(ROMlib_DefaultFolder.c_str());
-        SFSaveDisk = CW(-CW(vcbp->vcbVRefNum));
+        LM(SFSaveDisk) = CW(-CW(vcbp->vcbVRefNum));
     }
     if(is_unix_path(ROMlib_SystemFolder.c_str()))
     {
@@ -745,7 +745,7 @@ void Executor::ROMlib_fileinit() /* INTERNAL */
         wpb.ioWDProcID = TICKX("unix");
         wpb.ioWDDirID = cpb.hFileInfo.ioFlParID;
         if(PBOpenWD(&wpb, false) == noErr)
-            BootDrive = wpb.ioVRefNum;
+            LM(BootDrive) = wpb.ioVRefNum;
     }
     else
     {
@@ -844,14 +844,14 @@ Executor::PRNTOFPERR(INTEGER prn, OSErr *errp)
     fcbrec *retval;
     OSErr err;
 
-    if(prn < 0 || prn >= CW(*(GUEST<INTEGER> *)MR(FCBSPtr)) || (prn % 94) != 2)
+    if(prn < 0 || prn >= CW(*(GUEST<INTEGER> *)MR(LM(FCBSPtr))) || (prn % 94) != 2)
     {
         retval = 0;
         err = rfNumErr;
     }
     else
     {
-        retval = (fcbrec *)((char *)MR(FCBSPtr) + prn);
+        retval = (fcbrec *)((char *)MR(LM(FCBSPtr)) + prn);
         if(!retval->fdfnum)
         {
             retval = 0;

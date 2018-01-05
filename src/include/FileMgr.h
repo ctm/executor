@@ -546,26 +546,28 @@ typedef struct FSSpec FSSpec;
 typedef FSSpec *FSSpecPtr;
 typedef FSSpecPtr FSSpecArrayPtr;
 
-#if 0
-#if !defined(FCBSPtr_H)
-extern GUEST<Ptr> 	FCBSPtr_H;
-extern GUEST<VCBPtr> 	DefVCBPtr_H;
-extern GUEST<Ptr> 	WDCBsPtr_H;
-extern INTEGER 	BootDrive;
-extern QHdr 	DrvQHdr;
-extern QHdr 	VCBQHdr;
-extern QHdr 	FSQHdr;
-extern INTEGER 	DefVRefNum;
-extern INTEGER 	FSFCBLen;
-#endif
+const LowMemGlobal<INTEGER> BootDrive { 0x210 }; // FileMgr IMIV-212 (true);
+const LowMemGlobal<QHdr> DrvQHdr { 0x308 }; // FileMgr IMIV-182 (true);
+const LowMemGlobal<ProcPtr> EjectNotify { 0x338 }; // FileMgr ThinkC (false);
+const LowMemGlobal<Ptr> FCBSPtr { 0x34E }; // FileMgr IMIV-179 (true);
+const LowMemGlobal<VCBPtr> DefVCBPtr { 0x352 }; // FileMgr IMIV-178 (true);
+const LowMemGlobal<QHdr> VCBQHdr { 0x356 }; // FileMgr IMIV-178 (true);
+const LowMemGlobal<QHdr> FSQHdr { 0x360 }; // FileMgr IMIV-176 (true);
+const LowMemGlobal<Ptr> WDCBsPtr { 0x372 }; // FileMgr idunno (true);
+const LowMemGlobal<INTEGER> DefVRefNum { 0x384 }; // FileMgr MPW (true);
 
-enum
-{
-    FCBSPtr = (FCBSPtr_H.p),
-    DefVCBPtr = (DefVCBPtr_H.p),
-    WDCBsPtr = (WDCBsPtr_H.p),
-};
-#endif
+/*
+ * Note: MacLinkPC+ loads 0x358 into a register (i.e. the address of the
+ * pointer to the first element on the VCB queue) and then uses
+ * 72 off of it (0x3A0) and 78 off of it (0x3A6). As LONGINT as
+ * there are zeros there, that doesn't hurt us, but normally,
+ * we'd have negative ones in there. Hence we describe them
+ * here and set them to zero in executor.
+ */
+/* const LowMemGlobal<Ptr> FmtDefaults { 0x39E }; // FileMgr ThinkC (false); */
+const LowMemGlobal<Ptr> ToExtFS { 0x3F2 }; // FileMgr IMIV-212 (false);
+const LowMemGlobal<INTEGER> FSFCBLen { 0x3F6 }; // FileMgr IMIV-97 (true);
+
 
 #pragma pack(pop)
 

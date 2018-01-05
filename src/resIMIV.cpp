@@ -21,7 +21,7 @@ LONGINT Executor::C_MaxSizeRsrc(Handle h) /* IMIV-16 */
     INTEGER i, j;
 
     ROMlib_setreserr(ROMlib_findres(h, &map, &tr, &rr));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         return (-1);
     if(!rr->rhand || !(*(Handle)MR(rr->rhand)))
     { /* STARH is overkill */
@@ -44,7 +44,7 @@ LONGINT Executor::C_RsrcMapEntry(Handle h) /* IMIV-16 */
     resref *rr;
 
     ROMlib_setreserr(ROMlib_findres(h, &map, &tr, &rr));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         return (0);
     return ((char *)rr - (char *)STARH(map));
 }

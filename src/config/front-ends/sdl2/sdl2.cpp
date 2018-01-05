@@ -276,8 +276,8 @@ void Executor::vdriver_pump_events()
         switch(event.type)
         {
             case SDL_MOUSEMOTION:
-                MouseLocation.h = CW(event.motion.x);
-                MouseLocation.v = CW(event.motion.y);
+                LM(MouseLocation).h = CW(event.motion.x);
+                LM(MouseLocation).v = CW(event.motion.y);
 
                 adb_apeiron_hack(false);
                 break;
@@ -334,8 +334,8 @@ void Executor::vdriver_pump_events()
                         keymod &= ~mod;
                 }
                 when = TickCount();
-                where.h = CW(MouseLocation.h);
-                where.v = CW(MouseLocation.v);
+                where.h = CW(LM(MouseLocation).h);
+                where.v = CW(LM(MouseLocation).v);
                 keywhat = ROMlib_xlate(mkvkey, keymod, down_p);
                 post_keytrans_key_events(down_p ? keyDown : keyUp,
                                          keywhat, when, where,

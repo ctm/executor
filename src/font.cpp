@@ -23,9 +23,9 @@ using namespace Executor;
 static void
 reset_myfmi(void)
 {
-    ROMlib_myfmi.family = CWC(-1);
-    ROMlib_myfmi.size = CWC(-1);
-    ROMlib_myfmi.face = -1;
+    LM(ROMlib_myfmi).family = CWC(-1);
+    LM(ROMlib_myfmi).size = CWC(-1);
+    LM(ROMlib_myfmi).face = -1;
 }
 
 void Executor::C_InitFonts() /* IMI-222 */
@@ -35,30 +35,30 @@ void Executor::C_InitFonts() /* IMI-222 */
 
     if(!beenhere)
     {
-        saveZone = TheZone;
-        TheZone = SysZone;
+        saveZone = LM(TheZone);
+        LM(TheZone) = LM(SysZone);
         SetResLoad(true);
-        ROMFont0 = RM(GetResource(TICK("FONT"), FONTRESID(systemFont, 12)));
-        WidthListHand = RM(NewHandle(MAXTABLES * sizeof(GUEST<Handle>)));
-        memset(STARH(MR(WidthListHand)), 0, MAXTABLES * sizeof(GUEST<Handle>));
-        TheZone = saveZone;
+        LM(ROMFont0) = RM(GetResource(TICK("FONT"), FONTRESID(systemFont, 12)));
+        LM(WidthListHand) = RM(NewHandle(MAXTABLES * sizeof(GUEST<Handle>)));
+        memset(STARH(MR(LM(WidthListHand))), 0, MAXTABLES * sizeof(GUEST<Handle>));
+        LM(TheZone) = saveZone;
         beenhere = true;
     }
-    ApFontID = CW(Cx(SPFont) + 1);
-    SysFontSiz = CWC(12);
-    SysFontFam = 0;
+    LM(ApFontID) = CW(Cx(LM(SPFont)) + 1);
+    LM(SysFontSiz) = CWC(12);
+    LM(SysFontFam) = 0;
 #if 0
     /* 95-09-20: PAUP uses a built in font that has fried width tables.
-       The bad tables won't hurt us if FractEnable is not set, so I ran
-       a test program on the Mac and found that FractEnable wasn't set
+       The bad tables won't hurt us if LM(FractEnable) is not set, so I ran
+       a test program on the Mac and found that LM(FractEnable) wasn't set
        at the beginning of the program or even after InitFonts was called.
        This suggests that the hack for WordPerfect is wrong.  Perhaps
        there's some bit in the Size resource that controls this thing,
        perhpas the WordPerfect hack was always fried.  Yahoo. */
 
-    FractEnable = 0xff;	/* new mod for WordPerfect */
+    LM(FractEnable) = 0xff;	/* new mod for WordPerfect */
 #endif
-    FScaleDisable = 0;
+    LM(FScaleDisable) = 0;
     reset_myfmi();
 }
 
@@ -69,7 +69,7 @@ invalidate_all_widths(void)
     GUEST<Handle> *hp;
     Handle wlh;
 
-    wlh = MR(WidthListHand);
+    wlh = MR(LM(WidthListHand));
     HLock(wlh);
     n_entries = GetHandleSize(wlh) / sizeof(GUEST<Handle>);
     hp = (GUEST<Handle> *)STARH(wlh);
@@ -94,9 +94,9 @@ void Executor::C_GetFontName(INTEGER fnum, StringPtr fnam) /* IMI-223 */
     GUEST<ResType> rest;
 
     if(fnum == systemFont)
-        fnum = CW(SysFontFam);
+        fnum = CW(LM(SysFontFam));
     else if(fnum == applFont)
-        fnum = CW(ApFontID);
+        fnum = CW(LM(ApFontID));
     SetResLoad(false);
     h = GetResource(TICK("FONT"), FONTRESID(fnum, 0));
     if(!h)
@@ -149,15 +149,15 @@ void Executor::C_SetFontLock(BOOLEAN lflag) /* IMI-223 */
 {
     INTEGER attrs;
 
-    attrs = GetResAttrs(MR(ROMlib_fmo.fontHandle));
+    attrs = GetResAttrs(MR(LM(ROMlib_fmo).fontHandle));
     if(lflag)
     {
-        LoadResource(MR(ROMlib_fmo.fontHandle));
-        SetResAttrs(MR(ROMlib_fmo.fontHandle), attrs & ~resPurgeable);
+        LoadResource(MR(LM(ROMlib_fmo).fontHandle));
+        SetResAttrs(MR(LM(ROMlib_fmo).fontHandle), attrs & ~resPurgeable);
     }
     else
     { /* TODO: is the next line necessary */
-        SetResAttrs(MR(ROMlib_fmo.fontHandle), attrs | resPurgeable);
+        SetResAttrs(MR(LM(ROMlib_fmo).fontHandle), attrs | resPurgeable);
     }
 }
 
@@ -235,11 +235,11 @@ static BOOLEAN widthlistmatch(FMInput *fmip)
     {
         if(*whp && (LONGINT)(*whp).raw() != (LONGINT)-1)
         {
-            WidthPtr = *(MR(*whp));
-            if(WIDTHPTR->aFID == fmip->family && WIDTHPTR->aSize == fmip->size && (char)WIDTHPTR->aFace == (char)fmip->face && WIDTHPTR->device == fmip->device && WIDTHPTR->inNumer.h == fmip->numer.h && WIDTHPTR->inNumer.v == fmip->numer.v && WIDTHPTR->inDenom.h == fmip->denom.h && WIDTHPTR->inDenom.v == fmip->denom.v && WIDTHPTR->fSize != CWC(-1) && WIDTHPTR->fSize != CWC(0) && !WIDTHPTR->usedFam == !FractEnable)
+            LM(WidthPtr) = *(MR(*whp));
+            if(WIDTHPTR->aFID == fmip->family && WIDTHPTR->aSize == fmip->size && (char)WIDTHPTR->aFace == (char)fmip->face && WIDTHPTR->device == fmip->device && WIDTHPTR->inNumer.h == fmip->numer.h && WIDTHPTR->inNumer.v == fmip->numer.v && WIDTHPTR->inDenom.h == fmip->denom.h && WIDTHPTR->inDenom.v == fmip->denom.v && WIDTHPTR->fSize != CWC(-1) && WIDTHPTR->fSize != CWC(0) && !WIDTHPTR->usedFam == !LM(FractEnable))
             {
-                WidthTabHandle = guest_cast<WidthTableHandle>(*whp);
-                HLock((Handle)MR(WidthTabHandle));
+                LM(WidthTabHandle) = guest_cast<WidthTableHandle>(*whp);
+                HLock((Handle)MR(LM(WidthTabHandle)));
                 return true;
             }
         }
@@ -296,7 +296,7 @@ static GUEST<INTEGER> *findfondwidths()
     INTEGER i;
 
     retval = 0;
-    if(STARH((FHandle)MR(LastFOND))->ffFamID == WIDTHPTR->aFID && (offset = CL(STARH((FHandle)MR(LastFOND))->ffWTabOff)))
+    if(STARH((FHandle)MR(LM(LastFOND)))->ffFamID == WIDTHPTR->aFID && (offset = CL(STARH((FHandle)MR(LM(LastFOND)))->ffWTabOff)))
     {
         bitsmatched = -1;
         want = Cx(WIDTHPTR->aFace);
@@ -304,10 +304,10 @@ static GUEST<INTEGER> *findfondwidths()
  * NOTE: we add 3 to lastchar - firstchar to include the missing character
  *	 entry and what appears to be a zero entry located thereafter.
  */
-        tabsize = (CW(STARH((FHandle)MR(LastFOND))->ffLastChar) - CW(STARH((FHandle)MR(LastFOND))->ffFirstChar) + 3)
+        tabsize = (CW(STARH((FHandle)MR(LM(LastFOND)))->ffLastChar) - CW(STARH((FHandle)MR(LM(LastFOND)))->ffFirstChar) + 3)
                 * sizeof(INTEGER)
             + sizeof(INTEGER);
-        numentriesminusone = (GUEST<INTEGER> *)((char *)&STARH((FHandle)MR(LastFOND))->ffFlags + offset);
+        numentriesminusone = (GUEST<INTEGER> *)((char *)&STARH((FHandle)MR(LM(LastFOND)))->ffFlags + offset);
         i = Cx(*numentriesminusone) + 1;
         widp = (widentry_t *)(numentriesminusone + 1);
         for(; --i >= 0; widp = (widentry_t *)((char *)widp + tabsize))
@@ -422,7 +422,7 @@ static void buildtable(INTEGER extra)
 #if !defined(LETGCCWAIL)
     fondwidthtable = 0;
 #endif
-    if(!FractEnable)
+    if(!LM(FractEnable))
         howtobuild = FontInt;
     else if(MR(*(GUEST<FontRec *> *)MR(WIDTHPTR->tabFont))->fontType & CWC(WIDTHBIT))
     {
@@ -455,7 +455,7 @@ static void buildtable(INTEGER extra)
         WIDTHPTR->vOutput = CW(FixRatio(numerv, denomv) >> 8);
         WIDTHPTR->hFactor = WIDTHPTR->vFactor = CWC(256);
     }
-    else if(Cx(WIDTHPTR->fSize) < Cx(WIDTHPTR->aSize) && FScaleDisable)
+    else if(Cx(WIDTHPTR->fSize) < Cx(WIDTHPTR->aSize) && LM(FScaleDisable))
     {
         WIDTHPTR->hOutput = CW(FixRatio(numerh, denomh) >> 8);
         WIDTHPTR->vOutput = CW(FixRatio(numerv, denomv) >> 8);
@@ -590,7 +590,7 @@ static INTEGER closestface() /* no args, uses WIDTHPTR */
 
     bestp = 0;
     size = Cx(WIDTHPTR->fSize);
-    ip = &STARH((FHandle)MR(LastFOND))->ffVersion + 1;
+    ip = &STARH((FHandle)MR(LM(LastFOND)))->ffVersion + 1;
     nmatch = -1;
     want = Cx(WIDTHPTR->aFace);
     for(p = (fatabentry *)(ip + 1), ep = p + CW(*ip) + 1;
@@ -646,12 +646,12 @@ static void newwidthtable(FMInput *fmip)
     bool tried_app_font;
     int n_tried_sys_font;
 
-    savezone = TheZone;
-    TheZone = SysZone;
-    WidthTabHandle = RM((WidthTableHandle)NewHandle((Size)sizeof(WidthTable)));
-    TheZone = savezone;
-    Munger((Handle)MR(WidthListHand), (LONGINT)0, (Ptr)0, 0,
-           (Ptr)&WidthTabHandle, sizeof(WidthTabHandle));
+    savezone = LM(TheZone);
+    LM(TheZone) = LM(SysZone);
+    LM(WidthTabHandle) = RM((WidthTableHandle)NewHandle((Size)sizeof(WidthTable)));
+    LM(TheZone) = savezone;
+    Munger((Handle)MR(LM(WidthListHand)), (LONGINT)0, (Ptr)0, 0,
+           (Ptr)&LM(WidthTabHandle), sizeof(LM(WidthTabHandle)));
 
     /*
  * NOTE: the code below is a bit confusing.  What is going on is we always want
@@ -660,26 +660,26 @@ static void newwidthtable(FMInput *fmip)
  *	 neither we delete the last entry.
  */
 
-    if(GetHandleSize((Handle)MR(WidthListHand)) > (int)sizeof(GUEST<Handle>) * MAXTABLES)
+    if(GetHandleSize((Handle)MR(LM(WidthListHand))) > (int)sizeof(GUEST<Handle>) * MAXTABLES)
     {
         todelete = 0;
-        if(Munger((Handle)MR(WidthListHand), (LONGINT)0, (Ptr)&todelete,
+        if(Munger((Handle)MR(LM(WidthListHand)), (LONGINT)0, (Ptr)&todelete,
                   sizeof(todelete), (Ptr) "", 0)
            < 0)
         {
             todelete = -1;
-            if(Munger((Handle)MR(WidthListHand), (LONGINT)0, (Ptr)&todelete,
+            if(Munger((Handle)MR(LM(WidthListHand)), (LONGINT)0, (Ptr)&todelete,
                       sizeof(todelete), (Ptr) "", 0)
                < 0)
             {
                 DisposHandle((Handle)MR(STARH(WIDTHLISTHAND)[MAXTABLES]));
-                SetHandleSize(MR(WidthListHand),
+                SetHandleSize(MR(LM(WidthListHand)),
                               (Size)sizeof(GUEST<Handle>) * MAXTABLES);
             }
         }
     }
-    HLock((Handle)MR(WidthTabHandle));
-    WidthPtr = *MR(WidthTabHandle);
+    HLock((Handle)MR(LM(WidthTabHandle)));
+    LM(WidthPtr) = *MR(LM(WidthTabHandle));
 
     WIDTHPTR->sExtra = PORT_SP_EXTRA_X(thePort);
     WIDTHPTR->inNumer = fmip->numer;
@@ -700,16 +700,16 @@ static void newwidthtable(FMInput *fmip)
        || GetResource(TICK("FONT"), FONTRESID(wanted_family, Cx(fmip->size)))
        || GetResource(TICK("FONT"), FONTRESID(wanted_family, 0)))
         family = wanted_family;
-    else if((fh = at_least_one_fond_entry(Cx(ApFontID)))
-            || GetResource(TICK("FONT"), FONTRESID(Cx(ApFontID), 0)))
+    else if((fh = at_least_one_fond_entry(Cx(LM(ApFontID))))
+            || GetResource(TICK("FONT"), FONTRESID(Cx(LM(ApFontID)), 0)))
     {
-        family = Cx(ApFontID);
+        family = Cx(LM(ApFontID));
         tried_app_font = true;
     }
     else
     {
-        fh = at_least_one_fond_entry(Cx(SysFontFam));
-        family = Cx(SysFontFam);
+        fh = at_least_one_fond_entry(Cx(LM(SysFontFam)));
+        family = Cx(LM(SysFontFam));
         tried_app_font = true;
         ++n_tried_sys_font;
     }
@@ -720,14 +720,14 @@ static void newwidthtable(FMInput *fmip)
         WIDTHPTR->fID = CW(family);
         if(fh)
         {
-            LastFOND = RM((FamRecHandle)fh);
+            LM(LastFOND) = RM((FamRecHandle)fh);
 
             findclosestfond(fh, Cx(fmip->size), &powerof2, &lesser, &greater);
             if(powerof2 == Cx(fmip->size))
                 WIDTHPTR->fSize = CW(powerof2);
             else
             {
-                if(FScaleDisable)
+                if(LM(FScaleDisable))
                     WIDTHPTR->fSize = lesser ? CW(lesser) : CW(greater);
                 else
                 {
@@ -759,7 +759,7 @@ static void newwidthtable(FMInput *fmip)
 
             if(!AVAILABLE(Cx(fmip->size)))
             {
-                if(FScaleDisable)
+                if(LM(FScaleDisable))
                 {
                     findclosestfont(family, Cx(fmip->size), &lesser, &greater);
                     WIDTHPTR->fSize = lesser ? CW(lesser) : CW(greater);
@@ -786,13 +786,13 @@ static void newwidthtable(FMInput *fmip)
             if(!tried_app_font)
             {
                 tried_app_font = true;
-                family = Cx(ApFontID);
+                family = Cx(LM(ApFontID));
                 fh = at_least_one_fond_entry(family);
             }
             else if(n_tried_sys_font < 2)
             {
                 ++n_tried_sys_font;
-                family = Cx(SysFontFam);
+                family = Cx(LM(SysFontFam));
                 fh = at_least_one_fond_entry(family);
             }
         }
@@ -812,7 +812,7 @@ FMOutPtr Executor::C_FMSwapFont(FMInput *fmip) /* IMI-223 */
 
     savesize = fmip->size;
     if(Cx(fmip->size) <= 0)
-        fmip->size = SysFontSiz;
+        fmip->size = LM(SysFontSiz);
 
     if(Cx(fmip->size) <= 0)
         fmip->size = CWC(12);
@@ -831,7 +831,7 @@ FMOutPtr Executor::C_FMSwapFont(FMInput *fmip) /* IMI-223 */
     if(Cx(fmip->family) == applFont)
     {
         savefamily = fmip->family;
-        fmip->family = ApFontID;
+        fmip->family = LM(ApFontID);
     }
     else
         savefamily = fmip->family;
@@ -839,74 +839,74 @@ FMOutPtr Executor::C_FMSwapFont(FMInput *fmip) /* IMI-223 */
     if(fmip->family == CW(0))
     {
         savefamily = 0;
-        fmip->family = SysFontFam;
+        fmip->family = LM(SysFontFam);
     }
 
-    if(fmip->family != ROMlib_myfmi.family || fmip->size != ROMlib_myfmi.size || fmip->face != ROMlib_myfmi.face || fmip->device != ROMlib_myfmi.device || fmip->numer.h != ROMlib_myfmi.numer.h || fmip->numer.v != ROMlib_myfmi.numer.v || fmip->denom.h != ROMlib_myfmi.denom.h || fmip->denom.v != ROMlib_myfmi.denom.v || WIDTHPTR->fSize == CW(-1) || WIDTHPTR->fSize == CW(0) || (fmip->needBits && !ROMlib_myfmi.needBits))
+    if(fmip->family != LM(ROMlib_myfmi).family || fmip->size != LM(ROMlib_myfmi).size || fmip->face != LM(ROMlib_myfmi).face || fmip->device != LM(ROMlib_myfmi).device || fmip->numer.h != LM(ROMlib_myfmi).numer.h || fmip->numer.v != LM(ROMlib_myfmi).numer.v || fmip->denom.h != LM(ROMlib_myfmi).denom.h || fmip->denom.v != LM(ROMlib_myfmi).denom.v || WIDTHPTR->fSize == CW(-1) || WIDTHPTR->fSize == CW(0) || (fmip->needBits && !LM(ROMlib_myfmi).needBits))
     {
         if((needtobuild = !widthlistmatch(fmip)))
             newwidthtable(fmip);
 
-        ROMlib_myfmi = *fmip;
-        ROMlib_fmo.errNum = 0;
-        ROMlib_fmo.bold = 0;
-        ROMlib_fmo.italic = 0;
-        ROMlib_fmo.ulOffset = 0;
-        ROMlib_fmo.ulShadow = 0;
-        ROMlib_fmo.ulThick = 0;
-        ROMlib_fmo.shadow = 0;
-        ROMlib_fmo.extra = 0;
-        ROMlib_fmo.numer.h = CW(
+        LM(ROMlib_myfmi) = *fmip;
+        LM(ROMlib_fmo).errNum = 0;
+        LM(ROMlib_fmo).bold = 0;
+        LM(ROMlib_fmo).italic = 0;
+        LM(ROMlib_fmo).ulOffset = 0;
+        LM(ROMlib_fmo).ulShadow = 0;
+        LM(ROMlib_fmo).ulThick = 0;
+        LM(ROMlib_fmo).shadow = 0;
+        LM(ROMlib_fmo).extra = 0;
+        LM(ROMlib_fmo).numer.h = CW(
             (LONGINT)Cx(fmip->numer.h) * 256 * Cx(fmip->size) / Cx(fmip->denom.h) / Cx(WIDTHPTR->fSize));
-        ROMlib_fmo.numer.v = CW(
+        LM(ROMlib_fmo).numer.v = CW(
             (LONGINT)Cx(fmip->numer.v) * 256 * Cx(fmip->size) / Cx(fmip->denom.v) / Cx(WIDTHPTR->fSize));
-        ROMlib_fmo.denom.h = CWC(256);
-        ROMlib_fmo.denom.v = CWC(256);
-        ROMlib_fmo.fontHandle = WIDTHPTR->tabFont;
-        LoadResource(MR(ROMlib_fmo.fontHandle));
-        fp = (FontRec *)STARH((MR(ROMlib_fmo.fontHandle)));
+        LM(ROMlib_fmo).denom.h = CWC(256);
+        LM(ROMlib_fmo).denom.v = CWC(256);
+        LM(ROMlib_fmo).fontHandle = WIDTHPTR->tabFont;
+        LoadResource(MR(LM(ROMlib_fmo).fontHandle));
+        fp = (FontRec *)STARH((MR(LM(ROMlib_fmo).fontHandle)));
         style = Cx(fmip->face) ^ Cx(WIDTHPTR->face);
         if(style & (int)bold)
-            mungfmo(ftstr.boldt, &ROMlib_fmo);
+            mungfmo(ftstr.boldt, &LM(ROMlib_fmo));
         if(style & (int)italic)
-            mungfmo(ftstr.italt, &ROMlib_fmo);
+            mungfmo(ftstr.italt, &LM(ROMlib_fmo));
         if(style & (int)outline)
-            mungfmo(ftstr.outt, &ROMlib_fmo);
+            mungfmo(ftstr.outt, &LM(ROMlib_fmo));
         if(style & (int)shadow)
-            mungfmo(ftstr.shadt, &ROMlib_fmo);
+            mungfmo(ftstr.shadt, &LM(ROMlib_fmo));
         if(style & (int)condense)
-            mungfmo(ftstr.condt, &ROMlib_fmo);
+            mungfmo(ftstr.condt, &LM(ROMlib_fmo));
         if(style & (int)extend)
-            mungfmo(ftstr.extt, &ROMlib_fmo);
+            mungfmo(ftstr.extt, &LM(ROMlib_fmo));
         if(style & (int)underline)
         {
-            ROMlib_fmo.ulOffset += ftstr.undert[0];
-            ROMlib_fmo.ulShadow += ftstr.undert[1];
-            ROMlib_fmo.ulThick += ftstr.undert[2];
+            LM(ROMlib_fmo).ulOffset += ftstr.undert[0];
+            LM(ROMlib_fmo).ulShadow += ftstr.undert[1];
+            LM(ROMlib_fmo).ulThick += ftstr.undert[2];
         }
         if(needtobuild)
-            buildtable(ROMlib_fmo.extra);
+            buildtable(LM(ROMlib_fmo).extra);
         /*
 	 * TODO:  examine the stuff below, particularly widMax.  I don't think
 	 *	  widMax will be correct if scaling is disabled and we expand
 	 *	  characters.  This will cause serious trouble when we allocate
 	 *	  too small a bitmap
 	 */
-        ROMlib_fmo.ascent = CW(fp->ascent) + !!ROMlib_fmo.shadow;
-        ROMlib_fmo.descent = CW(fp->descent) + ROMlib_fmo.shadow;
-        ROMlib_fmo.widMax = CW(fp->widMax) + !!ROMlib_fmo.shadow + ROMlib_fmo.shadow + ROMlib_fmo.bold;
-        ROMlib_fmo.leading = CW(fp->leading);
+        LM(ROMlib_fmo).ascent = CW(fp->ascent) + !!LM(ROMlib_fmo).shadow;
+        LM(ROMlib_fmo).descent = CW(fp->descent) + LM(ROMlib_fmo).shadow;
+        LM(ROMlib_fmo).widMax = CW(fp->widMax) + !!LM(ROMlib_fmo).shadow + LM(ROMlib_fmo).shadow + LM(ROMlib_fmo).bold;
+        LM(ROMlib_fmo).leading = CW(fp->leading);
     }
     else
     {
-        LoadResource(MR(ROMlib_fmo.fontHandle));
-        WidthPtr = *MR(WidthTabHandle);
+        LoadResource(MR(LM(ROMlib_fmo).fontHandle));
+        LM(WidthPtr) = *MR(LM(WidthTabHandle));
     }
     fmip->size = savesize;
     fmip->family = savefamily;
-    HUnlock((Handle)MR(WidthTabHandle));
-    LastFOND = guest_cast<FamRecHandle>(WIDTHPTR->fHand);
-    return &ROMlib_fmo;
+    HUnlock((Handle)MR(LM(WidthTabHandle)));
+    LM(LastFOND) = guest_cast<FamRecHandle>(WIDTHPTR->fHand);
+    return &LM(ROMlib_fmo);
 }
 
 #define SCALE(x) FixRatio(x *CW(fmop->numer.v), CW(fmop->denom.v))
@@ -935,14 +935,14 @@ void Executor::C_FontMetrics(FMetricRec *metrp) /* IMIV-32 */
     metrp->descent = CL(SCALE(Cx(fmop->descent)));
     metrp->leading = CL(SCALE(Cx(fmop->leading)));
     metrp->widMax = CL(SCALE(Cx(fmop->widMax)));
-    metrp->wTabHandle = guest_cast<Handle>(WidthTabHandle);
+    metrp->wTabHandle = guest_cast<Handle>(LM(WidthTabHandle));
 }
 
 void Executor::C_SetFScaleDisable(BOOLEAN disable) /* IMIV-32 */
 {
-    if(FScaleDisable != (Byte)disable)
+    if(LM(FScaleDisable) != (Byte)disable)
     {
-        FScaleDisable = disable;
+        LM(FScaleDisable) = disable;
         invalidate_all_widths();
         reset_myfmi();
     }
@@ -950,5 +950,5 @@ void Executor::C_SetFScaleDisable(BOOLEAN disable) /* IMIV-32 */
 
 void Executor::C_SetFractEnable(BOOLEAN enable) /* IMIV-32 */
 {
-    FractEnable = enable;
+    LM(FractEnable) = enable;
 }

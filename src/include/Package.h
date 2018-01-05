@@ -20,11 +20,7 @@ enum
     bdConv = 7,
 };
 
-#if 0
-#if !defined(AppPacks_H)
-extern GUEST<Handle> AppPacks_H[8];
-#endif
-#endif
+const LowMemGlobal<Handle[8]> AppPacks { 0xAB8 }; // PackageMgr ThinkC (true-b);
 
 extern void C_InitPack(INTEGER packid);
 PASCAL_TRAP(InitPack, 0xA9E5);

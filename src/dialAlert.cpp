@@ -49,10 +49,10 @@ INTEGER Executor::C_Alert(INTEGER id, ProcPtr fp) /* IMI-418 */
     Handle alert_ctab_res_h;
     Handle item_ctab_res_h;
 
-    if(id != Cx(ANumber))
+    if(id != Cx(LM(ANumber)))
     {
-        ANumber = CW(id);
-        ACount = 0;
+        LM(ANumber) = CW(id);
+        LM(ACount) = 0;
     }
     ah = (alth)GetResource(TICK("ALRT"), id);
     if(!ah)
@@ -62,10 +62,10 @@ INTEGER Executor::C_Alert(INTEGER id, ProcPtr fp) /* IMI-418 */
     }
 
     LoadResource((Handle)ah);
-    n = (Hx(ah, altstag) >> (4 * CW(ACount))) & 0xF;
-    ACount = CW(CW(ACount) + 1);
-    if(CW(ACount) > 3)
-        ACount = CWC(3);
+    n = (Hx(ah, altstag) >> (4 * CW(LM(ACount)))) & 0xF;
+    LM(ACount) = CW(CW(LM(ACount)) + 1);
+    if(CW(LM(ACount)) > 3)
+        LM(ACount) = CWC(3);
     BEEP(n & 3);
     if(!(n & 4))
         return -1;
@@ -79,7 +79,7 @@ INTEGER Executor::C_Alert(INTEGER id, ProcPtr fp) /* IMI-418 */
     h = ih;
     HandToHand(&h);
 
-    TheGDeviceGuard guard(MR(MainDevice));
+    TheGDeviceGuard guard(MR(LM(MainDevice)));
 
     Rect adjusted_rect;
     bool color_p;

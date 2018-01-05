@@ -119,7 +119,7 @@ raw_bits_for_pattern(const Pattern pattern, PixMap *target,
        && active_screen_addr_p(target))
         dst_pixmap_tmpl.pixelType = CWC(vdriver_rgb_pixel_type);
 
-    dst_pixmap_tmpl.pmTable = PIXMAP_TABLE_X(GD_PMAP(MR(TheGDevice)));
+    dst_pixmap_tmpl.pmTable = PIXMAP_TABLE_X(GD_PMAP(MR(LM(TheGDevice))));
     dst_pixmap_tmpl.baseAddr = RM((Ptr)bits);
 
     convert_pixmap(&pattern_pixmap_tmpl, &dst_pixmap_tmpl,

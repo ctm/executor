@@ -78,7 +78,7 @@ get_sys_vref_and_dirid(INTEGER *sys_vrefp, LONGINT *sys_diridp)
     OSErr err;
     WDPBRec wdp;
 
-    wdp.ioVRefNum = BootDrive;
+    wdp.ioVRefNum = LM(BootDrive);
     wdp.ioWDIndex = CWC(0);
     wdp.ioNamePtr = nullptr;
     err = PBGetWDInfo(&wdp, false);

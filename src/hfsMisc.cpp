@@ -18,8 +18,8 @@ void testfcb()
     filecontrolblock *fp;
     INTEGER i;
 
-    length = CW(*(short *)CL(FCBSPtr));
-    fp = (filecontrolblock *)((short *)CL(FCBSPtr) + 1);
+    length = CW(*(short *)CL(LM(FCBSPtr)));
+    fp = (filecontrolblock *)((short *)CL(LM(FCBSPtr)) + 1);
     printf("length = %d, length / 94 = %d, length mod 94 = %d\n",
            length, length / 94, length % 94);
     for(i = 0; i < 40 && i < length / 94; i++, fp++)
@@ -50,12 +50,12 @@ void myFInitQueue(void)/* IMIV-128 */
 
 QHdrPtr myGetFSQHdr(void)
 {
-    return &FSQHdr;
+    return &LM(FSQHdr);
 }
 
 QHdrPtr myGetVCBQHdr(void)
 {
-    return &VCBQHdr;
+    return &LM(VCBQHdr);
 }
 #endif
 
@@ -71,8 +71,8 @@ OSErrRET Executor::PBGetFCBInfo(FCBPBPtr pb, BOOLEAN async)
 
     if((i = CW(pb->ioFCBIndx)) > 0)
     {
-        fcbp = (filecontrolblock *)(MR(FCBSPtr) + sizeof(INTEGER));
-        efcbp = (filecontrolblock *)(MR(FCBSPtr) + CW(*(GUEST<INTEGER> *)MR(FCBSPtr)));
+        fcbp = (filecontrolblock *)(MR(LM(FCBSPtr)) + sizeof(INTEGER));
+        efcbp = (filecontrolblock *)(MR(LM(FCBSPtr)) + CW(*(GUEST<INTEGER> *)MR(LM(FCBSPtr))));
         if(CW(pb->ioVRefNum) < 0)
         {
             for(; fcbp != efcbp; fcbp++)
@@ -92,7 +92,7 @@ OSErrRET Executor::PBGetFCBInfo(FCBPBPtr pb, BOOLEAN async)
         }
         if(fcbp == efcbp)
             PBRETURN(pb, fnOpnErr);
-        pb->ioRefNum = CW((char *)fcbp - (char *)MR(FCBSPtr));
+        pb->ioRefNum = CW((char *)fcbp - (char *)MR(LM(FCBSPtr)));
     }
     else
     {
@@ -128,6 +128,6 @@ OSErrRET Executor::PBGetFCBInfo(FCBPBPtr pb, BOOLEAN async)
 #if 0
 QHdrPtr myGetDrvQHdr(void)
 {
-    return &DrvQHdr;
+    return &LM(DrvQHdr);
 }
 #endif

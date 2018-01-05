@@ -10,252 +10,73 @@
 
 namespace Executor
 {
+template<class T>
+struct LowMemGlobal
+{
+    uint32_t address;
+};
 
-#define nilhandle (*(GUEST<Ptr> *)(0x00 + ROMlib_offset))
-#define trapvectors (*(GUEST<LONGINT>(*)[10])(0x80 + ROMlib_offset))
-#define dodusesit (*(GUEST<Ptr> *)(0xE4 + ROMlib_offset))
-#define monkeylives (*(GUEST<INTEGER> *)(0x100 + ROMlib_offset))
-#define ScrVRes (*(GUEST<INTEGER> *)(0x102 + ROMlib_offset))
-#define ScrHRes (*(GUEST<INTEGER> *)(0x104 + ROMlib_offset))
-#define ScreenRow (*(GUEST<INTEGER> *)(0x106 + ROMlib_offset))
-#define MemTop (*(GUEST<Ptr> *)(0x108 + ROMlib_offset))
-#define BufPtr (*(GUEST<Ptr> *)(0x10C + ROMlib_offset))
-#define HeapEnd (*(GUEST<Ptr> *)(0x114 + ROMlib_offset))
-#define TheZone (*(GUEST<THz> *)(0x118 + ROMlib_offset))
-#define UTableBase (*(GUEST<DCtlHandlePtr> *)(0x11C + ROMlib_offset))
-#define loadtrap (*(GUEST<Byte> *)(0x12D + ROMlib_offset))
-#define CPUFlag (*(GUEST<Byte> *)(0x12F + ROMlib_offset))
-#define ApplLimit (*(GUEST<Ptr> *)(0x130 + ROMlib_offset))
-#define SysEvtMask (*(GUEST<INTEGER> *)(0x144 + ROMlib_offset))
-#define EventQueue (*(GUEST<QHdr> *)(0x14A + ROMlib_offset))
-#define RndSeed (*(GUEST<LONGINT> *)(0x156 + ROMlib_offset))
-#define SysVersion (*(GUEST<INTEGER> *)(0x15A + ROMlib_offset))
-#define SEvtEnb (*(GUEST<Byte> *)(0x15C + ROMlib_offset))
-#define VBLQueue (*(GUEST<QHdr> *)(0x160 + ROMlib_offset))
-#define Ticks (*(GUEST<LONGINT> *)(0x16A + ROMlib_offset))
-#define MBState (*(GUEST<Byte> *)(0x172 + ROMlib_offset))
-#define KeyMap (*(GUEST<unsigned char>(*)[16])(0x174 + ROMlib_offset))
-#define KeyThresh (*(GUEST<INTEGER> *)(0x18E + ROMlib_offset))
-#define KeyRepThresh (*(GUEST<INTEGER> *)(0x190 + ROMlib_offset))
-#define Lvl1DT (*(GUEST<ProcPtr>(*)[8])(0x192 + ROMlib_offset))
-#define hyperlong (*(GUEST<LONGINT> *)(0x1AA + ROMlib_offset))
-#define Lvl2DT (*(GUEST<ProcPtr>(*)[8])(0x1B2 + ROMlib_offset))
-#define UnitNtryCnt (*(GUEST<INTEGER> *)(0x1D2 + ROMlib_offset))
-#define VIA (*(GUEST<Ptr> *)(0x1D4 + ROMlib_offset))
-#define SCCRd (*(GUEST<Ptr> *)(0x1D8 + ROMlib_offset))
-#define SCCWr (*(GUEST<Ptr> *)(0x1DC + ROMlib_offset))
-#define IWM (*(GUEST<Ptr> *)(0x1E0 + ROMlib_offset))
-#define Scratch20 (*(GUEST<Byte>(*)[20])(0x1E4 + ROMlib_offset))
-#define SPValid (*(GUEST<Byte> *)(0x1F8 + ROMlib_offset))
-#define SPATalkA (*(GUEST<Byte> *)(0x1F9 + ROMlib_offset))
-#define SPATalkB (*(GUEST<Byte> *)(0x1FA + ROMlib_offset))
-#define SPConfig (*(GUEST<Byte> *)(0x1FB + ROMlib_offset))
-#define SPPortA (*(GUEST<INTEGER> *)(0x1FC + ROMlib_offset))
-#define SPPortB (*(GUEST<INTEGER> *)(0x1FE + ROMlib_offset))
-#define SPAlarm (*(GUEST<LONGINT> *)(0x200 + ROMlib_offset))
-#define SPFont (*(GUEST<INTEGER> *)(0x204 + ROMlib_offset))
-#define SPKbd (*(GUEST<Byte> *)(0x206 + ROMlib_offset))
-#define SPPrint (*(GUEST<Byte> *)(0x207 + ROMlib_offset))
-#define SPVolCtl (*(GUEST<Byte> *)(0x208 + ROMlib_offset))
-#define SPClikCaret (*(GUEST<Byte> *)(0x209 + ROMlib_offset))
-#define SPMisc2 (*(GUEST<Byte> *)(0x20B + ROMlib_offset))
-#define Time (*(GUEST<ULONGINT> *)(0x20C + ROMlib_offset))
-#define BootDrive (*(GUEST<INTEGER> *)(0x210 + ROMlib_offset))
-#define SFSaveDisk (*(GUEST<INTEGER> *)(0x214 + ROMlib_offset))
-#define KbdLast (*(GUEST<Byte> *)(0x218 + ROMlib_offset))
-#define KbdType (*(GUEST<Byte> *)(0x21E + ROMlib_offset))
-#define MemErr (*(GUEST<INTEGER> *)(0x220 + ROMlib_offset))
-#define SdVolume (*(GUEST<Byte> *)(0x260 + ROMlib_offset))
-#define SoundPtr (*(GUEST<FTSndRecPtr> *)(0x262 + ROMlib_offset))
-#define SoundBase (*(GUEST<Ptr> *)(0x266 + ROMlib_offset))
-#define SoundActive (*(GUEST<Byte> *)(0x27E + ROMlib_offset))
-#define SoundLevel (*(GUEST<Byte> *)(0x27F + ROMlib_offset))
-#define CurPitch (*(GUEST<INTEGER> *)(0x280 + ROMlib_offset))
-#define mathones (*(GUEST<LONGINT> *)(0x282 + ROMlib_offset))
-#define ROM85 (*(GUEST<INTEGER> *)(0x28E + ROMlib_offset))
-#define PortBUse (*(GUEST<Byte> *)(0x291 + ROMlib_offset))
-#define ScreenVars (*(GUEST<Byte>(*)[8])(0x292 + ROMlib_offset))
-#define Key1Trans (*(GUEST<Ptr> *)(0x29E + ROMlib_offset))
-#define Key2Trans (*(GUEST<Ptr> *)(0x2A2 + ROMlib_offset))
-#define SysZone (*(GUEST<THz> *)(0x2A6 + ROMlib_offset))
-#define ApplZone (*(GUEST<THz> *)(0x2AA + ROMlib_offset))
-#define ROMBase (*(GUEST<Ptr> *)(0x2AE + ROMlib_offset))
-#define RAMBase (*(GUEST<Ptr> *)(0x2B2 + ROMlib_offset))
-#define AE_info (*(GUEST<AE_info_ptr> *)(0x2B6 + ROMlib_offset))
-#define DSAlertTab (*(GUEST<Ptr> *)(0x2BA + ROMlib_offset))
-#define ExtStsDT (*(GUEST<ProcPtr>(*)[4])(0x2BE + ROMlib_offset))
-#define ABusVars (*(GUEST<Ptr> *)(0x2D8 + ROMlib_offset))
-#define ABusDCE (*(GUEST<Ptr> *)(0x2DC + ROMlib_offset))
-#define FinderName (*(GUEST<Byte>(*)[16])(0x2E0 + ROMlib_offset))
-#define DoubleTime (*(GUEST<LONGINT> *)(0x2F0 + ROMlib_offset))
-#define CaretTime (*(GUEST<LONGINT> *)(0x2F4 + ROMlib_offset))
-#define ScrDmpEnb (*(GUEST<Byte> *)(0x2F8 + ROMlib_offset))
-#define BufTgFNum (*(GUEST<LONGINT> *)(0x2FC + ROMlib_offset))
-#define BufTgFFlg (*(GUEST<INTEGER> *)(0x300 + ROMlib_offset))
-#define BufTgFBkNum (*(GUEST<INTEGER> *)(0x302 + ROMlib_offset))
-#define BufTgDate (*(GUEST<LONGINT> *)(0x304 + ROMlib_offset))
-#define DrvQHdr (*(GUEST<QHdr> *)(0x308 + ROMlib_offset))
-#define heapcheck (*(GUEST<Ptr> *)(0x316 + ROMlib_offset))
-#define Lo3Bytes (*(GUEST<LONGINT> *)(0x31A + ROMlib_offset))
-#define MinStack (*(GUEST<LONGINT> *)(0x31E + ROMlib_offset))
-#define DefltStack (*(GUEST<LONGINT> *)(0x322 + ROMlib_offset))
-#define GZRootHnd (*(GUEST<Handle> *)(0x328 + ROMlib_offset))
-#define EjectNotify (*(GUEST<ProcPtr> *)(0x338 + ROMlib_offset))
-#define IAZNotify (*(GUEST<ProcPtr> *)(0x33C + ROMlib_offset))
-#define FCBSPtr (*(GUEST<Ptr> *)(0x34E + ROMlib_offset))
-#define DefVCBPtr (*(GUEST<VCBPtr> *)(0x352 + ROMlib_offset))
-#define VCBQHdr (*(GUEST<QHdr> *)(0x356 + ROMlib_offset))
-#define FSQHdr (*(GUEST<QHdr> *)(0x360 + ROMlib_offset))
-#define WDCBsPtr (*(GUEST<Ptr> *)(0x372 + ROMlib_offset))
-#define DefVRefNum (*(GUEST<INTEGER> *)(0x384 + ROMlib_offset))
-#define CurDirStore (*(GUEST<LONGINT> *)(0x398 + ROMlib_offset))
-#define MCLKPCmiss1 (*(GUEST<INTEGER> *)(0x3A0 + ROMlib_offset))
-#define MCLKPCmiss2 (*(GUEST<INTEGER> *)(0x3A6 + ROMlib_offset))
-#define ToExtFS (*(GUEST<Ptr> *)(0x3F2 + ROMlib_offset))
-#define FSFCBLen (*(GUEST<INTEGER> *)(0x3F6 + ROMlib_offset))
-#define DSAlertRect (*(GUEST<Rect> *)(0x3F8 + ROMlib_offset))
-#define JADBProc (*(GUEST<ProcPtr> *)(0x6B8 + ROMlib_offset))
-#define JFLUSH (*(GUEST<ProcPtr> *)(0x6F4 + ROMlib_offset))
-#define JResUnknown1 (*(GUEST<ProcPtr> *)(0x700 + ROMlib_offset))
-#define JResUnknown2 (*(GUEST<ProcPtr> *)(0x714 + ROMlib_offset))
-#define JHideCursor (*(GUEST<ProcPtr> *)(0x800 + ROMlib_offset))
-#define JShowCursor (*(GUEST<ProcPtr> *)(0x804 + ROMlib_offset))
-#define JShieldCursor (*(GUEST<ProcPtr> *)(0x808 + ROMlib_offset))
-#define JScrnAddr (*(GUEST<ProcPtr> *)(0x80C + ROMlib_offset))
-#define JScrnSize (*(GUEST<ProcPtr> *)(0x810 + ROMlib_offset))
-#define JInitCrsr (*(GUEST<ProcPtr> *)(0x814 + ROMlib_offset))
-#define JSetCrsr (*(GUEST<ProcPtr> *)(0x818 + ROMlib_offset))
-#define JCrsrObscure (*(GUEST<ProcPtr> *)(0x81C + ROMlib_offset))
-#define JUpdateProc (*(GUEST<ProcPtr> *)(0x820 + ROMlib_offset))
-#define ScrnBase (*(GUEST<Ptr> *)(0x824 + ROMlib_offset))
-#define MTemp (*(GUEST<Point> *)(0x828 + ROMlib_offset))
-#define MouseLocation (*(GUEST<Point> *)(0x82C + ROMlib_offset))
-#define MouseLocation2 (*(GUEST<Point> *)(0x830 + ROMlib_offset))
-#define CrsrPin (*(GUEST<Rect> *)(0x834 + ROMlib_offset))
-#define MainDevice (*(GUEST<GDHandle> *)(0x8A4 + ROMlib_offset))
-#define DeviceList (*(GUEST<GDHandle> *)(0x8A8 + ROMlib_offset))
-#define QDColors (*(GUEST<Byte> *)(0x8B0 + ROMlib_offset))
-#define CrsrVis (*(GUEST<BOOLEAN> *)(0x8CC + ROMlib_offset))
-#define CrsrBusy (*(GUEST<Byte> *)(0x8CD + ROMlib_offset))
-#define CrsrState (*(GUEST<INTEGER> *)(0x8D0 + ROMlib_offset))
-#define mousemask (*(GUEST<LONGINT> *)(0x8D6 + ROMlib_offset))
-#define mouseoffset (*(GUEST<LONGINT> *)(0x8DA + ROMlib_offset))
-#define JournalFlag (*(GUEST<INTEGER> *)(0x8DE + ROMlib_offset))
-#define JSwapFont (*(GUEST<ProcPtr> *)(0x8E0 + ROMlib_offset))
-#define WidthListHand (*(GUEST<Handle> *)(0x8E4 + ROMlib_offset))
-#define JournalRef (*(GUEST<INTEGER> *)(0x8E8 + ROMlib_offset))
-#define CrsrThresh (*(GUEST<INTEGER> *)(0x8EC + ROMlib_offset))
-#define JCrsrTask (*(GUEST<ProcPtr> *)(0x8EE + ROMlib_offset))
-#define WWExist (*(GUEST<Byte> *)(0x8F2 + ROMlib_offset))
-#define QDExist (*(GUEST<Byte> *)(0x8F3 + ROMlib_offset))
-#define JFetch (*(GUEST<Ptr> *)(0x8F4 + ROMlib_offset))
-#define JStash (*(GUEST<Ptr> *)(0x8F8 + ROMlib_offset))
-#define JIODone (*(GUEST<Ptr> *)(0x8FC + ROMlib_offset))
-#define CurApRefNum (*(GUEST<INTEGER> *)(0x900 + ROMlib_offset))
-#define CurrentA5 (*(GUEST<Ptr> *)(0x904 + ROMlib_offset))
-#define CurStackBase (*(GUEST<Ptr> *)(0x908 + ROMlib_offset))
-#define CurApName (*(GUEST<Byte>(*)[34])(0x910 + ROMlib_offset))
-#define CurJTOffset (*(GUEST<INTEGER> *)(0x934 + ROMlib_offset))
-#define CurPageOption (*(GUEST<INTEGER> *)(0x936 + ROMlib_offset))
-#define HiliteMode (*(GUEST<Byte> *)(0x938 + ROMlib_offset))
-#define PrintErr (*(GUEST<INTEGER> *)(0x944 + ROMlib_offset))
-#define graphlooksat (*(GUEST<INTEGER> *)(0x952 + ROMlib_offset))
-#define macwritespace (*(GUEST<LONGINT> *)(0x954 + ROMlib_offset))
-#define ScrapSize (*(GUEST<LONGINT> *)(0x960 + ROMlib_offset))
-#define ScrapHandle (*(GUEST<Handle> *)(0x964 + ROMlib_offset))
-#define ScrapCount (*(GUEST<INTEGER> *)(0x968 + ROMlib_offset))
-#define ScrapState (*(GUEST<INTEGER> *)(0x96A + ROMlib_offset))
-#define ScrapName (*(GUEST<StringPtr> *)(0x96C + ROMlib_offset))
-#define ROMFont0 (*(GUEST<Handle> *)(0x980 + ROMlib_offset))
-#define ApFontID (*(GUEST<INTEGER> *)(0x984 + ROMlib_offset))
-#define ROMlib_myfmi (*(GUEST<FMInput> *)(0x988 + ROMlib_offset))
-#define ROMlib_fmo (*(GUEST<FMOutput> *)(0x998 + ROMlib_offset))
-#define ToolScratch (*(GUEST<Byte>(*)[8])(0x9CE + ROMlib_offset))
-#define WindowList (*(GUEST<WindowPeek> *)(0x9D6 + ROMlib_offset))
-#define SaveUpdate (*(GUEST<INTEGER> *)(0x9DA + ROMlib_offset))
-#define PaintWhite (*(GUEST<INTEGER> *)(0x9DC + ROMlib_offset))
-#define WMgrPort (*(GUEST<GrafPtr> *)(0x9DE + ROMlib_offset))
-#define OldStructure (*(GUEST<RgnHandle> *)(0x9E6 + ROMlib_offset))
-#define OldContent (*(GUEST<RgnHandle> *)(0x9EA + ROMlib_offset))
-#define GrayRgn (*(GUEST<RgnHandle> *)(0x9EE + ROMlib_offset))
-#define SaveVisRgn (*(GUEST<RgnHandle> *)(0x9F2 + ROMlib_offset))
-#define DragHook (*(GUEST<ProcPtr> *)(0x9F6 + ROMlib_offset))
-#define Scratch8 (*(GUEST<Byte>(*)[8])(0x9FA + ROMlib_offset))
-#define OneOne (*(GUEST<LONGINT> *)(0xA02 + ROMlib_offset))
-#define MinusOne (*(GUEST<LONGINT> *)(0xA06 + ROMlib_offset))
-#define TopMenuItem (*(GUEST<INTEGER> *)(0xA0A + ROMlib_offset))
-#define AtMenuBottom (*(GUEST<INTEGER> *)(0xA0C + ROMlib_offset))
-#define MenuList (*(GUEST<Handle> *)(0xA1C + ROMlib_offset))
-#define MBarEnable (*(GUEST<INTEGER> *)(0xA20 + ROMlib_offset))
-#define MenuFlash (*(GUEST<INTEGER> *)(0xA24 + ROMlib_offset))
-#define TheMenu (*(GUEST<INTEGER> *)(0xA26 + ROMlib_offset))
-#define MBarHook (*(GUEST<ProcPtr> *)(0xA2C + ROMlib_offset))
-#define MenuHook (*(GUEST<ProcPtr> *)(0xA30 + ROMlib_offset))
-#define DragPattern (*(GUEST<Pattern> *)(0xA34 + ROMlib_offset))
-#define DeskPattern (*(GUEST<Pattern> *)(0xA3C + ROMlib_offset))
-#define macfpstate (*(GUEST<Byte>(*)[6])(0xA4A + ROMlib_offset))
-#define TopMapHndl (*(GUEST<Handle> *)(0xA50 + ROMlib_offset))
-#define SysMapHndl (*(GUEST<Handle> *)(0xA54 + ROMlib_offset))
-#define SysMap (*(GUEST<INTEGER> *)(0xA58 + ROMlib_offset))
-#define CurMap (*(GUEST<INTEGER> *)(0xA5A + ROMlib_offset))
-#define resreadonly (*(GUEST<INTEGER> *)(0xA5C + ROMlib_offset))
-#define ResLoad (*(GUEST<BOOLEAN> *)(0xA5E + ROMlib_offset))
-#define ResErr (*(GUEST<INTEGER> *)(0xA60 + ROMlib_offset))
-#define FScaleDisable (*(GUEST<Byte> *)(0xA63 + ROMlib_offset))
-#define CurActivate (*(GUEST<WindowPtr> *)(0xA64 + ROMlib_offset))
-#define CurDeactive (*(GUEST<WindowPtr> *)(0xA68 + ROMlib_offset))
-#define DeskHook (*(GUEST<ProcPtr> *)(0xA6C + ROMlib_offset))
-#define TEDoText (*(GUEST<ProcPtr> *)(0xA70 + ROMlib_offset))
-#define TERecal (*(GUEST<ProcPtr> *)(0xA74 + ROMlib_offset))
-#define ApplScratch (*(GUEST<Byte>(*)[12])(0xA78 + ROMlib_offset))
-#define GhostWindow (*(GUEST<WindowPtr> *)(0xA84 + ROMlib_offset))
-#define ResumeProc (*(GUEST<ProcPtr> *)(0xA8C + ROMlib_offset))
-#define ANumber (*(GUEST<INTEGER> *)(0xA98 + ROMlib_offset))
-#define ACount (*(GUEST<INTEGER> *)(0xA9A + ROMlib_offset))
-#define DABeeper (*(GUEST<ProcPtr> *)(0xA9C + ROMlib_offset))
-#define DAStrings (*(GUEST<Handle>(*)[4])(0xAA0 + ROMlib_offset))
-#define TEScrpLength (*(GUEST<INTEGER> *)(0xAB0 + ROMlib_offset))
-#define TEScrpHandle (*(GUEST<Handle> *)(0xAB4 + ROMlib_offset))
-#define AppPacks (*(GUEST<Handle>(*)[8])(0xAB8 + ROMlib_offset))
-#define SysResName (*(GUEST<Byte>(*)[20])(0xAD8 + ROMlib_offset))
-#define AppParmHandle (*(GUEST<Handle> *)(0xAEC + ROMlib_offset))
-#define DSErrCode (*(GUEST<INTEGER> *)(0xAF0 + ROMlib_offset))
-#define ResErrProc (*(GUEST<ProcPtr> *)(0xAF2 + ROMlib_offset))
-#define DlgFont (*(GUEST<INTEGER> *)(0xAFA + ROMlib_offset))
-#define WidthPtr (*(GUEST<WidthTablePtr> *)(0xB10 + ROMlib_offset))
-#define SCSIFlags (*(GUEST<INTEGER> *)(0xB22 + ROMlib_offset))
-#define WidthTabHandle (*(GUEST<WidthTableHandle> *)(0xB2A + ROMlib_offset))
-#define LastSPExtra (*(GUEST<LONGINT> *)(0xB4C + ROMlib_offset))
-#define MenuDisable (*(GUEST<LONGINT> *)(0xB54 + ROMlib_offset))
-#define MBDFHndl (*(GUEST<Handle> *)(0xB58 + ROMlib_offset))
-#define MBSaveLoc (*(GUEST<Handle> *)(0xB5C + ROMlib_offset))
-#define RomMapInsert (*(GUEST<Byte> *)(0xB9E + ROMlib_offset))
-#define TmpResLoad (*(GUEST<Byte> *)(0xB9F + ROMlib_offset))
-#define IntlSpec (*(GUEST<LONGINT> *)(0xBA0 + ROMlib_offset))
-#define SysFontFam (*(GUEST<INTEGER> *)(0xBA6 + ROMlib_offset))
-#define SysFontSiz (*(GUEST<INTEGER> *)(0xBA8 + ROMlib_offset))
-#define MBarHeight (*(GUEST<INTEGER> *)(0xBAA + ROMlib_offset))
-#define TESysJust (*(GUEST<INTEGER> *)(0xBAC + ROMlib_offset))
-#define LastFOND (*(GUEST<FamRecHandle> *)(0xBC2 + ROMlib_offset))
-#define fondid (*(GUEST<INTEGER> *)(0xBC6 + ROMlib_offset))
-#define FractEnable (*(GUEST<Byte> *)(0xBF4 + ROMlib_offset))
-#define MMUType (*(GUEST<Byte> *)(0xCB1 + ROMlib_offset))
-#define MMU32Bit (*(GUEST<Byte> *)(0xCB2 + ROMlib_offset))
-#define TheGDevice (*(GUEST<GDHandle> *)(0xCC8 + ROMlib_offset))
-#define AuxWinHead (*(GUEST<AuxWinHandle> *)(0xCD0 + ROMlib_offset))
-#define AuxCtlHead (*(GUEST<AuxCtlHandle> *)(0xCD4 + ROMlib_offset))
-#define DeskCPat (*(GUEST<PixPatHandle> *)(0xCD8 + ROMlib_offset))
-#define TimeDBRA (*(GUEST<INTEGER> *)(0xD00 + ROMlib_offset))
-#define TimeSCCDB (*(GUEST<INTEGER> *)(0xD02 + ROMlib_offset))
-#define JVBLTask (*(GUEST<ProcPtr> *)(0xD28 + ROMlib_offset))
-#define WMgrCPort (*(GUEST<CGrafPtr> *)(0xD2C + ROMlib_offset))
-#define SynListHandle (*(GUEST<Handle> *)(0xD32 + ROMlib_offset))
-#define MenuCInfo (*(GUEST<MCTableHandle> *)(0xD50 + ROMlib_offset))
-#define DTQueue (*(GUEST<QHdr> *)(0xD92 + ROMlib_offset))
-#define JDTInstall (*(GUEST<ProcPtr> *)(0xD9C + ROMlib_offset))
-#define HiliteRGB (*(GUEST<RGBColor> *)(0xDA0 + ROMlib_offset))
-#define TimeSCSIDB (*(GUEST<INTEGER> *)(0xDA6 + ROMlib_offset))
-#define lastlowglobal (*(GUEST<LONGINT> *)(0x2000 + ROMlib_offset))
+template<class T>
+inline GUEST<T>& LM(LowMemGlobal<T> lm)
+{
+    return *(GUEST<T>*)(ROMlib_offset + lm.address);
+}
+
+// Declarations of low memory globals which haven't been put anywhere else
+// yet follow. Whenever a low memory global clearly belongs to one manager/module,
+// put it should live in the appropriate header.
+// There is also a complete list of low memory globals in globals.cpp,
+// which is not used but might be nice to have.
+
+const LowMemGlobal<Ptr> nilhandle { 0x00 }; // rsys/misc MADEUP (true-b);
+/*
+ * NOTE: MacWrite starts writing longwords at location 0x80 for TRAPs
+ */
+const LowMemGlobal<LONGINT[10]> trapvectors { 0x80 }; // rsys/misc WHOKNOWS (true-b);
+const LowMemGlobal<Ptr> dodusesit { 0xE4 }; // rsys/misc WHOKNOWS (true-b);
+/*
+ * Hypercard does a movel to this location.
+ */
+const LowMemGlobal<LONGINT> hyperlong { 0x1AA }; // rsys/misc WHOKNOWS (true-b);
+/*
+ * NOTE: mathones is a LONGINT that Mathematica looks at that contains -1
+ * on a Mac+
+ */
+const LowMemGlobal<LONGINT> mathones { 0x282 }; // rsys/misc WHOKNOWS (true-b);
+/*
+ * NOTE: Theoretically ROM85 is mentioned in IMV, but I don't know where.
+ * On a Mac+ the value 0x7FFF is stored there.
+ * tim: It is at least on page IMV-328.
+ */
+const LowMemGlobal<INTEGER> ROM85 { 0x28E }; // MacTypes IMV-328 (true-b);
+const LowMemGlobal<LONGINT> BufTgFNum { 0x2FC }; // DiskDvr IMII-212 (false);
+const LowMemGlobal<INTEGER> BufTgFFlg { 0x300 }; // DiskDvr IMII-212 (false);
+const LowMemGlobal<INTEGER> BufTgFBkNum { 0x302 }; // DiskDvr IMII-212 (false);
+const LowMemGlobal<LONGINT> BufTgDate { 0x304 }; // DiskDvr IMII-212 (false);
+
+
+const LowMemGlobal<INTEGER> MCLKPCmiss1 { 0x3A0 }; // MacLinkPC badaccess (true-b);
+const LowMemGlobal<INTEGER> MCLKPCmiss2 { 0x3A6 }; // MacLinkPC badaccess (true-b);
+
+/*
+ * JFLUSH is a guess from disassembling some of Excel 3.0
+ */
+const LowMemGlobal<ProcPtr> JFLUSH { 0x6F4 }; // idunno guess (true-b);
+const LowMemGlobal<ProcPtr> JResUnknown1 { 0x700 }; // idunno resedit (true-b);
+const LowMemGlobal<ProcPtr> JResUnknown2 { 0x714 }; // idunno resedit (true-b);
+
+/*
+ * NOTE: The graphing program looks for a -1 in 0x952
+ */
+const LowMemGlobal<INTEGER> graphlooksat { 0x952 }; // rsys/misc WHOKNOWS (true-b);
+/*
+ * NOTE: MacWrite stores a copy of the trap address for LoadSeg in 954
+ */
+const LowMemGlobal<LONGINT> macwritespace { 0x954 }; // rsys/misc WHOKNOWS (true-b);
+const LowMemGlobal<INTEGER> DSErrCode { 0xAF0 }; // MacTypes IMII-362 (true);
+const LowMemGlobal<INTEGER> SCSIFlags { 0xB22 }; // uknown Private.a (true-b);
+const LowMemGlobal<LONGINT> LastSPExtra { 0xB4C }; // rsys/misc WHOKNOWS (true-b);
+const LowMemGlobal<LONGINT> lastlowglobal { 0x2000 }; // rsys/misc MadeUp (true-b);
 }
 
 #endif

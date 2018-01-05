@@ -143,8 +143,5 @@ inline bool RECT_EQUAL_P(const Rect *r1, const Rect *r2)
 typedef INTEGER ScriptCode;
 typedef INTEGER LangCode;
 
-/* DO NOT DELETE THIS LINE */
-extern INTEGER ROM85;
-extern INTEGER DSErrCode;
 }
 #endif /* _MACTYPES_H_ */

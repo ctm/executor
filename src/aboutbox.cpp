@@ -340,7 +340,7 @@ create_tips_text(void)
     b = find_button(TIPS_BUTTON_NAME);
     if(!orig_text)
     {
-        srand(Ticks.get()); /* NOTE: we don't care that rand/srand is not a
+        srand(LM(Ticks).get()); /* NOTE: we don't care that rand/srand is not a
 			   particular good way to generate random numbers */
         orig_text = (char *)about_box_buttons[b].text;
     }
@@ -524,14 +524,14 @@ draw_status_info(bool executor_p)
     else
         sprintf(total_ram_string, "%s??? MB", ram_tag);
 
-    /* Compute a string for ApplZone RAM. */
+    /* Compute a string for LM(ApplZone) RAM. */
     {
-        TheZoneGuard guard(ApplZone);
+        TheZoneGuard guard(LM(ApplZone));
         sprintf(applzone_ram_string, "%s%lu KB / %u KB", application_ram_tag,
                 FreeMem() / 1024UL, ROMlib_applzone_size / 1024U);
     }
 
-    /* Compute a string for SysZone RAM. */
+    /* Compute a string for LM(SysZone) RAM. */
     sprintf(syszone_ram_string, "%s%lu KB / %u KB", system_ram_tag,
             FreeMemSys() / 1024UL, ROMlib_syszone_size / 1024U);
 
@@ -715,7 +715,7 @@ void Executor::do_about_box(void)
             scroll_bar_callback = (ProcPtr)SYN68K_TO_US(callback_install(scroll_stub, NULL));
 
         {
-            TheZoneGuard guard(SysZone);
+            TheZoneGuard guard(LM(SysZone));
             create_about_box();
 
             {

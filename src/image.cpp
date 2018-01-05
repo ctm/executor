@@ -21,7 +21,7 @@ Executor::image_init(pixel_image_desc_t *image_desc)
     pixel_image_t *retval;
     int i;
 
-    TheZoneGuard guard(SysZone);
+    TheZoneGuard guard(LM(SysZone));
 
     retval = (pixel_image_t *)NewPtr(sizeof *retval);
 
@@ -122,7 +122,7 @@ void Executor::image_validate_x_bits(pixel_image_t *image, int color_p /* visual
     GUEST<INTEGER> gd_bpp_x;
     int bits_ctab_seed_x;
 
-    gdev = MR(TheGDevice);
+    gdev = MR(LM(TheGDevice));
     gd_pixmap = GD_PMAP(gdev);
     gd_pixmap_ctab = PIXMAP_TABLE(gd_pixmap);
     gd_bpp_x = PIXMAP_PIXEL_SIZE_X(gd_pixmap);

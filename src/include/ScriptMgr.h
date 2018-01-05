@@ -226,9 +226,7 @@ enum
     smSystemScript = -1
 };
 
-#if !defined(TESysJust)
-extern INTEGER TESysJust;
-#endif
+const LowMemGlobal<INTEGER> TESysJust { 0xBAC }; // ScriptMgr ToolEqu.a (true-b);
 
 extern LONGINT C_VisibleLength(Ptr textp, LONGINT len);
 PASCAL_FUNCTION(VisibleLength);
@@ -292,8 +290,6 @@ PASCAL_FUNCTION(DrawJust);
 extern String2DateStatus C_String2Time(Ptr textp,
                                                    LONGINT len, Ptr cachep, GUEST<LONGINT> *lenusedp, GUEST<Ptr> *datetimep);
 PASCAL_FUNCTION(String2Time);
-extern INTEGER GetSysFont(void);
-extern INTEGER GetAppFont(void);
 extern INTEGER GetMBarHeight(void);
 extern INTEGER GetSysJust(void);
 extern void SetSysJust(INTEGER just);

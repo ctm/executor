@@ -29,21 +29,11 @@ struct ScrapStuff
 };
 typedef ScrapStuff *PScrapStuff;
 
-#if 0
-#if !defined(ScrapHandle_H)
-extern GUEST<Handle> 	ScrapHandle_H;
-extern GUEST<StringPtr> 	ScrapName_H;
-extern LONGINT 	ScrapSize;
-extern INTEGER 	ScrapCount;
-extern INTEGER 	ScrapState;
-#endif
-
-enum
-{
-    ScrapHandle = (ScrapHandle_H.p),
-    ScrapName = (ScrapName_H.p),
-};
-#endif
+const LowMemGlobal<LONGINT> ScrapSize { 0x960 }; // ScrapMgr IMI-457 (true);
+const LowMemGlobal<Handle> ScrapHandle { 0x964 }; // ScrapMgr IMI-457 (true);
+const LowMemGlobal<INTEGER> ScrapCount { 0x968 }; // ScrapMgr IMI-457 (true);
+const LowMemGlobal<INTEGER> ScrapState { 0x96A }; // ScrapMgr IMI-457 (true);
+const LowMemGlobal<StringPtr> ScrapName { 0x96C }; // ScrapMgr IMI-457 (true);
 
 extern PScrapStuff C_InfoScrap(void);
 PASCAL_TRAP(InfoScrap, 0xA9F9);

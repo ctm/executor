@@ -7,10 +7,10 @@
 namespace Executor
 {
 #define SET_HILITE_BIT() \
-    (BitSet((Ptr)&HiliteMode, pHiliteBit))
+    (BitSet((Ptr)&LM(HiliteMode), pHiliteBit))
 
 #define CLEAR_HILITE_BIT() \
-    (BitClr((Ptr)&HiliteMode, pHiliteBit))
+    (BitClr((Ptr)&LM(HiliteMode), pHiliteBit))
 
 typedef struct GrafVars
 {
@@ -537,7 +537,7 @@ extern void cursor_reset_current_cursor(void);
 
 #define IMV_XFER_MODE_P(mode) ((mode) >= blend && (mode) <= adMin)
 #define active_screen_addr_p(bitmap) \
-    ((bitmap)->baseAddr == PIXMAP_BASEADDR_X(GD_PMAP(PPR(MainDevice))))
+    ((bitmap)->baseAddr == PIXMAP_BASEADDR_X(GD_PMAP(PPR(LM(MainDevice)))))
 
 /* gd flags */
 #define gdDevType 0
@@ -727,7 +727,7 @@ extern void canonical_from_bogo_color(uint32_t index,
                                       RGBColor *rgb_out);
 
 #define AVERAGE_COLOR(c1, c2, ratio, out) \
-    (average_color(PPR(TheGDevice), (c1), (c2), (ratio), (out)))
+    (average_color(PPR(LM(TheGDevice)), (c1), (c2), (ratio), (out)))
 
 extern Handle ROMlib_copy_handle(Handle);
 
@@ -761,7 +761,7 @@ class TheGDeviceGuard
 
 public:
     TheGDeviceGuard(GDHandle device)
-        : saveDevice(MR(TheGDevice))
+        : saveDevice(MR(LM(TheGDevice)))
     {
         SetGDevice(device);
     }

@@ -320,8 +320,8 @@ OSErr Executor::ROMlib_PBGetSetFInfoD(ParmBlkPtr pb, BOOLEAN a,
     LONGINT errval;
     INTEGER tozeroout;
 
-    savezone = TheZone;
-    TheZone = SysZone;
+    savezone = LM(TheZone);
+    LM(TheZone) = LM(SysZone);
     pathname = 0;
     rpathname = 0;
 
@@ -571,7 +571,7 @@ theend:
         free(pathname);
     if(rpathname)
         free(rpathname);
-    TheZone = savezone;
+    LM(TheZone) = savezone;
     return err;
 }
 

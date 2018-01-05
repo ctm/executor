@@ -22,9 +22,9 @@ using namespace Executor;
 static Rect *current_menu_rect;
 
 #define TOP_ARROW_P() \
-    (CW(TopMenuItem) < CW(current_menu_rect->top))
+    (CW(LM(TopMenuItem)) < CW(current_menu_rect->top))
 #define BOTTOM_ARROW_P() \
-    (CW(AtMenuBottom) > CW(current_menu_rect->bottom))
+    (CW(LM(AtMenuBottom)) > CW(current_menu_rect->bottom))
 
 static int16_t checksize, cloversize, lineheight, ascent;
 
@@ -325,8 +325,8 @@ draw_item(Rect *rp, struct table::tableentry *tp, int32_t bit, int item, MenuHan
     active_p = !((MI_ENABLE_FLAGS(mh) & bit) != bit
                  || divider_p);
 
-    top = tp[0].top + CW(TopMenuItem);
-    bottom = tp[1].top + CW(TopMenuItem);
+    top = tp[0].top + CW(LM(TopMenuItem));
+    bottom = tp[1].top + CW(LM(TopMenuItem));
 
     v = top + ascent;
 
@@ -483,13 +483,13 @@ draw_menu(MenuHandle mh, Rect *rp, tablePtr tablep)
     struct table::tableentry *tp, *ep;
     int16_t topcutoff, bottomcutoff;
 
-    if(CW(TopMenuItem) < CW(rp->top))
-        topcutoff = CW(rp->top) - CW(TopMenuItem) + lineheight;
+    if(CW(LM(TopMenuItem)) < CW(rp->top))
+        topcutoff = CW(rp->top) - CW(LM(TopMenuItem)) + lineheight;
     else
         topcutoff = 0;
 
-    if(CW(AtMenuBottom) > CW(rp->bottom))
-        bottomcutoff = CW(rp->bottom) - CW(TopMenuItem) - lineheight;
+    if(CW(LM(AtMenuBottom)) > CW(rp->bottom))
+        bottomcutoff = CW(rp->bottom) - CW(LM(TopMenuItem)) - lineheight;
     else
         bottomcutoff = 32767;
 
@@ -505,9 +505,9 @@ draw_menu(MenuHandle mh, Rect *rp, tablePtr tablep)
             bit = 1 << nitem;
             draw_item(rp, tp, bit, nitem, mh, false);
         }
-    if(CW(rp->top) > CW(TopMenuItem))
+    if(CW(rp->top) > CW(LM(TopMenuItem)))
         draw_arrow(rp, mh, uparrow);
-    if(CW(rp->bottom) < CW(AtMenuBottom))
+    if(CW(rp->bottom) < CW(LM(AtMenuBottom)))
         draw_arrow(rp, mh, downarrow);
     HxX(MBSAVELOC, mbUglyScroll) = CWC(0);
 }
@@ -520,8 +520,8 @@ fliprect(Rect *rp, int16_t i, tablePtr tablep, Rect *flipr)
     tp = &tablep->entry[i - 1];
     flipr->left = rp->left;
     flipr->right = rp->right;
-    flipr->top = CW(tp[0].top + CW(TopMenuItem));
-    flipr->bottom = CW(tp[1].top + CW(TopMenuItem));
+    flipr->top = CW(tp[0].top + CW(LM(TopMenuItem)));
+    flipr->bottom = CW(tp[1].top + CW(LM(TopMenuItem)));
 }
 
 static void
@@ -554,9 +554,9 @@ doupdown(MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
 
         if(upordown == UP)
         {
-            offset = MIN(lineheight, CW(rp->top) - CW(TopMenuItem));
-            TopMenuItem = CW(CW(TopMenuItem) + offset);
-            AtMenuBottom = CW(CW(AtMenuBottom) + offset);
+            offset = MIN(lineheight, CW(rp->top) - CW(LM(TopMenuItem)));
+            LM(TopMenuItem) = CW(CW(LM(TopMenuItem)) + offset);
+            LM(AtMenuBottom) = CW(CW(LM(AtMenuBottom)) + offset);
             if(TOP_ARROW_P())
             {
                 updater.top = scrollr.top;
@@ -571,9 +571,9 @@ doupdown(MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
         }
         else
         {
-            offset = MAX(-lineheight, CW(rp->bottom) - CW(AtMenuBottom));
-            TopMenuItem = CW(CW(TopMenuItem) + offset);
-            AtMenuBottom = CW(CW(AtMenuBottom) + offset);
+            offset = MAX(-lineheight, CW(rp->bottom) - CW(LM(AtMenuBottom)));
+            LM(TopMenuItem) = CW(CW(LM(TopMenuItem)) + offset);
+            LM(AtMenuBottom) = CW(CW(LM(AtMenuBottom)) + offset);
             if(BOTTOM_ARROW_P())
             {
                 updater.bottom = scrollr.bottom;
@@ -591,9 +591,9 @@ doupdown(MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
         DisposeRgn(updatergn);
         ClipRect(&updater);
         for(tp = tablep->entry, ep = tp + tablep->count, bit = 1 << 1;
-            tp[0].top < CW(updater.bottom) - CW(TopMenuItem) && tp != ep;
+            tp[0].top < CW(updater.bottom) - CW(LM(TopMenuItem)) && tp != ep;
             tp++, bit <<= 1)
-            if(tp[1].top > CW(updater.top) - CW(TopMenuItem))
+            if(tp[1].top > CW(updater.top) - CW(LM(TopMenuItem)))
                 draw_item(rp, tp, tp - tablep->entry + 1, bit, mh, false);
         rtmp.top = rtmp.left = CWC(-32767);
         rtmp.bottom = rtmp.right = CWC(32767);
@@ -603,12 +603,12 @@ doupdown(MenuHandle mh, Rect *rp, tablePtr tablep, BOOLEAN upordown,
         HxX(MBSAVELOC, mbUglyScroll) = CWC(1);
     if(upordown == DOWN)
     {
-        if(CW(AtMenuBottom) >= CW(rp->bottom))
+        if(CW(LM(AtMenuBottom)) >= CW(rp->bottom))
             draw_arrow(rp, mh, downarrow);
     }
     else
     {
-        if(CW(TopMenuItem) <= CW(rp->top))
+        if(CW(LM(TopMenuItem)) <= CW(rp->top))
             draw_arrow(rp, mh, uparrow);
     }
 }
@@ -624,8 +624,8 @@ void choose_menu(MenuHandle mh, Rect *rp, Point p, GUEST<int16_t> *itemp, tableP
 
     valid_rect.left = rp->left;
     valid_rect.right = rp->right;
-    valid_rect.top = CW(MAX(CW(rp->top), CW(TopMenuItem)));
-    valid_rect.bottom = CW(MIN(CW(rp->bottom), CW(AtMenuBottom)));
+    valid_rect.top = CW(MAX(CW(rp->top), CW(LM(TopMenuItem))));
+    valid_rect.bottom = CW(MIN(CW(rp->bottom), CW(LM(AtMenuBottom))));
 
     clip_rect.left = rp->left;
     clip_rect.right = rp->right;
@@ -650,11 +650,11 @@ void choose_menu(MenuHandle mh, Rect *rp, Point p, GUEST<int16_t> *itemp, tableP
             int32_t bit;
 
             for(tp = tablep->entry, ep = tp + tablep->count;
-                tp != ep && p.v >= tp->top + CW(TopMenuItem);
+                tp != ep && p.v >= tp->top + CW(LM(TopMenuItem));
                 tp++)
                 ;
             nitem = tp - tablep->entry;
-            MenuDisable = CL((menu_id << 16) | (uint16_t)nitem);
+            LM(MenuDisable) = CL((menu_id << 16) | (uint16_t)nitem);
 
             bit = (1 << nitem) | 1;
             if((MI_ENABLE_FLAGS(mh) & bit) != bit
@@ -698,7 +698,7 @@ static void popuprect(MenuHandle mh, Rect *rp, Point p, GUEST<INTEGER> *itemp,
     rp->right = CW(CW(rp->left) + Hx(mh, menuWidth));
     *itemp = rp->top;
 
-    for(tp = tablep->entry; CW(rp->top) < CW(MBarHeight); tp++)
+    for(tp = tablep->entry; CW(rp->top) < CW(LM(MBarHeight)); tp++)
         rp->top = CW(CW(rp->top) + (tp[1].top - tp[0].top));
 
     rp->bottom = CW(CW(rp->top) + Hx(mh, menuHeight));
@@ -707,7 +707,7 @@ static void popuprect(MenuHandle mh, Rect *rp, Point p, GUEST<INTEGER> *itemp,
     for(tp = tablep->entry + tablep->count - 1; CW(rp->bottom) > vmax; --tp)
         rp->bottom = CW(CW(rp->bottom) - (tp[1].top - tp[0].top));
     rp->top = CW(CW(rp->bottom) - Hx(mh, menuHeight));
-    for(tp = tablep->entry; CW(rp->top) < CW(MBarHeight); tp++)
+    for(tp = tablep->entry; CW(rp->top) < CW(LM(MBarHeight)); tp++)
         rp->top = CW(CW(rp->top) + (tp[1].top - tp[0].top));
 }
 
@@ -731,7 +731,7 @@ void Executor::C_mdef0(INTEGER mess, MenuHandle mh, Rect *rp, Point p,
 
 #define MSWTEST
 #if defined(MSWTEST)
-    PORT_TX_FONT_X(thePort) = SysFontFam;
+    PORT_TX_FONT_X(thePort) = LM(SysFontFam);
     PORT_TX_FACE_X(thePort) = 0;
     PORT_TX_MODE_X(thePort) = CWC(srcOr);
 #endif /* MSWTEST */
@@ -765,7 +765,7 @@ void Executor::C_mdef0(INTEGER mess, MenuHandle mh, Rect *rp, Point p,
         v += icon_info.height ? MAX(icon_info.height, lineheight) : lineheight;
     }
     tabp->top = v;
-    AtMenuBottom = CW(CW(TopMenuItem) + v);
+    LM(AtMenuBottom) = CW(CW(LM(TopMenuItem)) + v);
 
     switch(mess)
     {

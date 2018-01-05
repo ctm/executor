@@ -159,7 +159,7 @@ INTEGER Executor::C_TrackControl(ControlHandle c, Point p,
 
             CTLCALL(c, calcThumbRgn, ptr_to_longint(rh));
 
-            PATASSIGN(DragPattern, ltGray);
+            PATASSIGN(LM(DragPattern), ltGray);
             l = DragTheRgn(rh, p, &thumb._tlimit, &thumb._tslop,
                            CW(thumb._taxis), a);
             if((uint32_t)l != 0x80008000)

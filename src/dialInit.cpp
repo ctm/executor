@@ -24,30 +24,30 @@ void Executor::C_ROMlib_mysound(INTEGER i)
 
 void Executor::C_ErrorSound(ProcPtr sp) /* IMI-411 */
 {
-    DABeeper = RM(sp);
+    LM(DABeeper) = RM(sp);
 }
 
 void Executor::C_InitDialogs(ProcPtr rp) /* IMI-411 */
 {
     Ptr nothing = (Ptr) "";
 
-    TheZoneGuard guard(SysZone);
+    TheZoneGuard guard(LM(SysZone));
 
-    DlgFont = CWC(systemFont);
-    ResumeProc = RM(rp);
+    LM(DlgFont) = CWC(systemFont);
+    LM(ResumeProc) = RM(rp);
     ErrorSound((ProcPtr)P_ROMlib_mysound);
     Handle tmp;
     PtrToHand(nothing, &tmp, (LONGINT)1);
-    DAStrings[0] = RM(tmp);
+    LM(DAStrings)[0] = RM(tmp);
     PtrToHand(nothing, &tmp, (LONGINT)1);
-    DAStrings[1] = RM(tmp);
+    LM(DAStrings)[1] = RM(tmp);
     PtrToHand(nothing, &tmp, (LONGINT)1);
-    DAStrings[2] = RM(tmp);
+    LM(DAStrings)[2] = RM(tmp);
     PtrToHand(nothing, &tmp, (LONGINT)1);
-    DAStrings[3] = RM(tmp);
+    LM(DAStrings)[3] = RM(tmp);
 }
 
 void Executor::SetDAFont(INTEGER i) /* IMI-412 */
 {
-    DlgFont = CW(i);
+    LM(DlgFont) = CW(i);
 }

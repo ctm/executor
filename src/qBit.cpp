@@ -29,7 +29,7 @@ void Executor::C_CopyBits(BitMap *src_bitmap, BitMap *dst_bitmap,
 
     // FIXME: #warning ctm hack below (mode = srcCopy) -- might not be best solution
 
-    TheZoneGuard guard(SysZone);
+    TheZoneGuard guard(LM(SysZone));
     int dst_is_theport_p;
 
     /* use `->portBits' instead of `PORT_BITS ()', because here we want

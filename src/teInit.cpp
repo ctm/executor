@@ -21,9 +21,9 @@ using namespace Executor;
 
 void Executor::C_TEInit()
 {
-    TEScrpHandle = RM(NewHandle(0));
-    TEScrpLength = CWC(0);
-    TEDoText = RM((ProcPtr)P_ROMlib_dotext);
+    LM(TEScrpHandle) = RM(NewHandle(0));
+    LM(TEScrpLength) = CWC(0);
+    LM(TEDoText) = RM((ProcPtr)P_ROMlib_dotext);
 }
 
 /* This code just does "moveql #1,d0 ; rts".  We use it because

@@ -318,7 +318,7 @@ void Executor::C_TEIdle(TEHandle teh)
 
     TESAVE(teh);
     TE_SLAM(teh);
-    if((ticks = TickCount()) > Hx(teh, caretTime) + CL(CaretTime)
+    if((ticks = TickCount()) > Hx(teh, caretTime) + CL(LM(CaretTime))
        && Hx(teh, active)
        && (sel = Hx(teh, selStart)) == Hx(teh, selEnd)
        && (state = Hx(teh, caretState)))
@@ -789,7 +789,7 @@ DONE:
 }
 
 /* custom text hook; this is the defualt text hook stored in
-   `TEDoText'.
+   `LM(TEDoText)'.
    
    for calling conventions, see IM Text, 2-63 */
 
@@ -832,7 +832,7 @@ double_click_p(TEHandle te, int16_t cl)
 
     ticks = TickCount();
     if(cl == TE_CLICK_LOC(te)
-       && ticks <= TE_CLICK_TIME(te) + CL(DoubleTime))
+       && ticks <= TE_CLICK_TIME(te) + CL(LM(DoubleTime)))
         return true;
 
     TE_CLICK_LOC_X(te) = CW(cl);

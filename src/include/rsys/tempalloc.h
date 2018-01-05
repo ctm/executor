@@ -62,12 +62,12 @@ typedef struct
         else                                                          \
         {                                                             \
             {                                                         \
-                TheZoneGuard guard(SysZone); /* Try SysZone first. */ \
+                TheZoneGuard guard(LM(SysZone)); /* Try LM(SysZone) first. */ \
                 (name).u.handle = NewHandle(size);                    \
             }                                                         \
             if(!(name).u.handle)                                      \
             {                                                         \
-                TheZoneGuard guard(ApplZone); /* Then ApplZone. */    \
+                TheZoneGuard guard(LM(ApplZone)); /* Then LM(ApplZone). */    \
                 (name).u.handle = NewHandle(size);                    \
             }                                                         \
             if((name).u.handle)                                       \

@@ -332,7 +332,6 @@ void Executor::UprString(StringPtr s, BOOLEAN diac)
 
 void Executor::GetDateTime(GUEST<ULONGINT> *mactimepointer)
 {
-#undef Time /* Why is this here? */
     if(mactimepointer)
     {
         unsigned long msecs;
@@ -641,16 +640,16 @@ typedef enum { Read,
 
 static void setdefaults()
 {
-    SPValid = VALID;
-    SPAlarm = CLC(0);
-    SPATalkB = SPATalkA = SPConfig = 0;
-    SPPortB = SPPortA = CW(baud9600 | stop10 | data8 | noParity);
-    SPPrint = 0;
-    SPFont = CW(geneva - 1);
-    SPKbd = 0x63;
-    SPVolCtl = 3;
-    SPClikCaret = 0x88;
-    SPMisc2 = 0x4C;
+    LM(SPValid) = VALID;
+    LM(SPAlarm) = CLC(0);
+    LM(SPATalkB) = LM(SPATalkA) = LM(SPConfig) = 0;
+    LM(SPPortB) = LM(SPPortA) = CW(baud9600 | stop10 | data8 | noParity);
+    LM(SPPrint) = 0;
+    LM(SPFont) = CW(geneva - 1);
+    LM(SPKbd) = 0x63;
+    LM(SPVolCtl) = 3;
+    LM(SPClikCaret) = 0x88;
+    LM(SPMisc2) = 0x4C;
 }
 
 static OSErr openparam(INTEGER *rnp)
@@ -658,13 +657,13 @@ static OSErr openparam(INTEGER *rnp)
     static char paramname[] = PARAMRAMMACNAME;
     OSErr err;
 
-    err = FSOpen((StringPtr)paramname, Cx(BootDrive), rnp);
+    err = FSOpen((StringPtr)paramname, Cx(LM(BootDrive)), rnp);
     if(err == fnfErr)
     {
-        if((err = Create((StringPtr)paramname, Cx(BootDrive), TICK("unix"),
+        if((err = Create((StringPtr)paramname, Cx(LM(BootDrive)), TICK("unix"),
                          TICK("pram")))
            == noErr)
-            err = FSOpen((StringPtr)paramname, Cx(BootDrive), rnp);
+            err = FSOpen((StringPtr)paramname, Cx(LM(BootDrive)), rnp);
     }
     return err;
 }
@@ -696,11 +695,11 @@ static void deriveglobals()
     gmtimenow = (tmg.tm_yday * 24 * 60 * 60) + (tmg.tm_hour * 60 * 60) + (tmg.tm_min * 60) + tmg.tm_sec;
     ROMlib_GMTcorrect = gmtimenow - ltimenow;
 
-    KeyThresh = CW((short)((SPKbd >> 4) & 0xF) * 4);
-    KeyRepThresh = CW((short)(SPKbd & 0xF) * 4);
-    MenuFlash = CW((short)(SPMisc2 >> 2) & 3);
-    CaretTime = CL((short)(SPClikCaret & 0xF) * 4);
-    DoubleTime = CL((short)(SPClikCaret & 0xF0) / 4);
+    LM(KeyThresh) = CW((short)((LM(SPKbd) >> 4) & 0xF) * 4);
+    LM(KeyRepThresh) = CW((short)(LM(SPKbd) & 0xF) * 4);
+    LM(MenuFlash) = CW((short)(LM(SPMisc2) >> 2) & 3);
+    LM(CaretTime) = CL((short)(LM(SPClikCaret) & 0xF) * 4);
+    LM(DoubleTime) = CL((short)(LM(SPClikCaret) & 0xF0) / 4);
 }
 
 OSErrRET Executor::InitUtil() /* IMII-380 */
@@ -719,19 +718,19 @@ OSErrRET Executor::InitUtil() /* IMII-380 */
         count = sizeof(sp);
         if(FSRead(rn, &count, (Ptr)&sp) == noErr && sp.valid == VALID && count == sizeof(sp))
         {
-            SPValid = sp.valid;
-            SPATalkA = sp.aTalkA;
-            SPATalkB = sp.aTalkB;
-            SPConfig = sp.config;
-            SPPortA = sp.portA;
-            SPPortB = sp.portB;
-            SPAlarm = sp.alarm;
-            SPFont = sp.font;
-            SPKbd = CW(sp.kbdPrint) >> 8;
-            SPPrint = CW(sp.kbdPrint);
-            SPVolCtl = CW(sp.volClik) >> 8;
-            SPClikCaret = CW(sp.volClik);
-            SPMisc2 = CW(sp.misc);
+            LM(SPValid) = sp.valid;
+            LM(SPATalkA) = sp.aTalkA;
+            LM(SPATalkB) = sp.aTalkB;
+            LM(SPConfig) = sp.config;
+            LM(SPPortA) = sp.portA;
+            LM(SPPortB) = sp.portB;
+            LM(SPAlarm) = sp.alarm;
+            LM(SPFont) = sp.font;
+            LM(SPKbd) = CW(sp.kbdPrint) >> 8;
+            LM(SPPrint) = CW(sp.kbdPrint);
+            LM(SPVolCtl) = CW(sp.volClik) >> 8;
+            LM(SPClikCaret) = CW(sp.volClik);
+            LM(SPMisc2) = CW(sp.misc);
             badread = false;
         }
         else
@@ -749,7 +748,7 @@ OSErrRET Executor::InitUtil() /* IMII-380 */
 
 SysPPtr Executor::GetSysPPtr() /* IMII-381 */
 {
-    return (SysPPtr)&SPValid;
+    return (SysPPtr)&LM(SPValid);
 }
 
 OSErrRET Executor::WriteParam() /* IMII-382 */
@@ -762,17 +761,17 @@ OSErrRET Executor::WriteParam() /* IMII-382 */
     err = prWrErr;
     if(openparam(&rn) == noErr)
     {
-        sp.valid = SPValid;
-        sp.aTalkA = SPATalkA;
-        sp.aTalkB = SPATalkB;
-        sp.config = SPConfig;
-        sp.portA = SPPortA;
-        sp.portB = SPPortB;
-        sp.alarm = SPAlarm;
-        sp.font = SPFont;
-        sp.kbdPrint = CW((short)(SPKbd << 8) | (SPPrint & 0xff));
-        sp.volClik = CW((short)(SPVolCtl << 8) | (SPClikCaret & 0xff));
-        sp.misc = CW(SPMisc2);
+        sp.valid = LM(SPValid);
+        sp.aTalkA = LM(SPATalkA);
+        sp.aTalkB = LM(SPATalkB);
+        sp.config = LM(SPConfig);
+        sp.portA = LM(SPPortA);
+        sp.portB = LM(SPPortB);
+        sp.alarm = LM(SPAlarm);
+        sp.font = LM(SPFont);
+        sp.kbdPrint = CW((short)(LM(SPKbd) << 8) | (LM(SPPrint) & 0xff));
+        sp.volClik = CW((short)(LM(SPVolCtl) << 8) | (LM(SPClikCaret) & 0xff));
+        sp.misc = CW(LM(SPMisc2));
         count = sizeof(sp);
         if(FSWrite(rn, &count, (Ptr)&sp) == noErr && count == sizeof(sp))
             err = noErr;
@@ -909,14 +908,14 @@ OSErrRET Executor::SysEnvirons(INTEGER vers, SysEnvRecPtr p)
         /*-->*/ return envBadVers;
     p->environsVersion = CW(vers);
     p->machineType = CWC(53);
-    p->systemVersion = SysVersion;
+    p->systemVersion = LM(SysVersion);
 
     p->processor = CWC(env68040);
     p->hasFPU = false;
     p->hasColorQD = true;
     p->keyBoardType = CWC(envAExtendKbd);
     p->atDrvrVersNum = 0;
-    p->sysVRefNum = BootDrive;
+    p->sysVRefNum = LM(BootDrive);
 
     return vers <= SYSRECVNUM ? noErr : envVersTooBig;
 }

@@ -108,12 +108,12 @@ extern Handle ROMlib_mgetres2(resmaphand map, resref *rr);
 #define REF0 0 /* special refrence number signifying system file */
 
 #define WALKMAPCUR(map)                                       \
-    for(map = ROMlib_rntohandl(CW(CurMap), (Handle *)0); map; \
+    for(map = ROMlib_rntohandl(CW(LM(CurMap)), (Handle *)0); map; \
         map = (resmaphand)HxP(map, nextmap))                  \
     {
 
 #define WALKMAPTOP(map)                        \
-    for(map = (resmaphand)MR(TopMapHndl); map; \
+    for(map = (resmaphand)MR(LM(TopMapHndl)); map; \
         map = (resmaphand)HxP(map, nextmap))   \
     {
 

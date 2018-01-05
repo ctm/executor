@@ -488,23 +488,23 @@ void Executor::ROMlib_seginit(LONGINT argc, char **argv) /* INTERNAL */
     if(argv_to_appfile(fullpathname, &app))
     {
 #if 0
-	CurApRefNum = CW(OpenRFPerm(app.fName, CW(app.vRefNum), fsCurPerm));
+	LM(CurApRefNum) = CW(OpenRFPerm(app.fName, CW(app.vRefNum), fsCurPerm));
 #endif
-        CurApName[0] = MIN(app.fName[0], sizeof(CurApName) - 1);
-        BlockMoveData((Ptr)app.fName + 1, (Ptr)CurApName + 1, (Size)CurApName[0]);
+        LM(CurApName)[0] = MIN(app.fName[0], sizeof(LM(CurApName)) - 1);
+        BlockMoveData((Ptr)app.fName + 1, (Ptr)LM(CurApName) + 1, (Size)LM(CurApName)[0]);
     }
     else
     {
-        CurApRefNum = CWC(-1);
-        CurApName[0] = 0;
+        LM(CurApRefNum) = CWC(-1);
+        LM(CurApName)[0] = 0;
     }
-    saveZone = TheZone;
-    TheZone = SysZone;
+    saveZone = LM(TheZone);
+    LM(TheZone) = LM(SysZone);
     fh = (finderinfohand)
         NewHandle((Size)sizeof(finderinfo) - sizeof(AppFile));
-    TheZone = saveZone;
+    LM(TheZone) = saveZone;
 
-    AppParmHandle = RM((Handle)fh);
+    LM(AppParmHandle) = RM((Handle)fh);
     HxX(fh, count) = 0;
     HxX(fh, message) = ROMlib_print ? CWC(appPrint) : CWC(appOpen);
     if(fullpathname && fullpathname != argv[0])
@@ -528,12 +528,12 @@ void Executor::ROMlib_seginit(LONGINT argc, char **argv) /* INTERNAL */
 void Executor::CountAppFiles(GUEST<INTEGER> *messagep,
                              GUEST<INTEGER> *countp) /* IMII-57 */
 {
-    if(AppParmHandle)
+    if(LM(AppParmHandle))
     {
         if(messagep)
-            *messagep = STARH((finderinfohand)MR(AppParmHandle))->message;
+            *messagep = STARH((finderinfohand)MR(LM(AppParmHandle)))->message;
         if(countp)
-            *countp = STARH((finderinfohand)MR(AppParmHandle))->count;
+            *countp = STARH((finderinfohand)MR(LM(AppParmHandle)))->count;
     }
     else
         *countp = 0;
@@ -541,24 +541,24 @@ void Executor::CountAppFiles(GUEST<INTEGER> *messagep,
 
 void Executor::GetAppFiles(INTEGER index, AppFile *filep) /* IMII-58 */
 {
-    *filep = STARH((finderinfohand)MR(AppParmHandle))->files[index - 1];
+    *filep = STARH((finderinfohand)MR(LM(AppParmHandle)))->files[index - 1];
 }
 
 void Executor::ClrAppFiles(INTEGER index) /* IMII-58 */
 {
-    if(STARH((finderinfohand)MR(AppParmHandle))->files[index - 1].fType)
+    if(STARH((finderinfohand)MR(LM(AppParmHandle)))->files[index - 1].fType)
     {
-        STARH((finderinfohand)MR(AppParmHandle))->files[index - 1].fType = 0;
-        STARH((finderinfohand)MR(AppParmHandle))->count = CW(CW(STARH((finderinfohand)MR(AppParmHandle))->count) - 1);
+        STARH((finderinfohand)MR(LM(AppParmHandle)))->files[index - 1].fType = 0;
+        STARH((finderinfohand)MR(LM(AppParmHandle)))->count = CW(CW(STARH((finderinfohand)MR(LM(AppParmHandle)))->count) - 1);
     }
 }
 
 void Executor::C_GetAppParms(StringPtr namep, GUEST<INTEGER> *rnp,
                              GUEST<Handle> *aphandp) /* IMII-58 */
 {
-    str255assign(namep, CurApName);
-    *rnp = CurApRefNum;
-    *aphandp = AppParmHandle;
+    str255assign(namep, LM(CurApName));
+    *rnp = LM(CurApRefNum);
+    *aphandp = LM(AppParmHandle);
 }
 
 char *ROMlib_errorstring;
@@ -571,7 +571,7 @@ static BOOLEAN valid_browser(void)
     OSErr err;
     FInfo finfo;
 
-    err = GetFInfo(FinderName, CW(BootDrive), &finfo);
+    err = GetFInfo(LM(FinderName), CW(LM(BootDrive)), &finfo);
     return !ROMlib_nobrowser && err == noErr && finfo.fdType == TICKX("APPL");
 }
 
@@ -581,12 +581,12 @@ static void launch_browser(void)
    * if nothing was specified there, set the depth to the maximum
    * supported bits per pixel.
    */
-    SetDepth(MR(MainDevice),
+    SetDepth(MR(LM(MainDevice)),
              (flag_bpp
                   ? MIN(flag_bpp, vdriver_max_bpp)
                   : vdriver_max_bpp),
              0, 0);
-    Launch(FinderName, CW(BootDrive));
+    Launch(LM(FinderName), CW(LM(BootDrive)));
 }
 
 void Executor::C_ExitToShell()
@@ -623,19 +623,19 @@ void Executor::C_ExitToShell()
 
     empty_timer_queues();
 
-    if(WWExist == EXIST_YES)
+    if(LM(WWExist) == EXIST_YES)
     {
         /* remove global datastructures associated with each window
            remaining in the application's window list */
-        for(t_w = MR(WindowList); t_w; t_w = WINDOW_NEXT_WINDOW(t_w))
+        for(t_w = MR(LM(WindowList)); t_w; t_w = WINDOW_NEXT_WINDOW(t_w))
             pm_window_closed((WindowPtr)t_w);
     }
-    WindowList = 0;
+    LM(WindowList) = 0;
 
     if(!ROMlib_exit
        && (!beenhere
-           || strncmp((char *)CurApName + 1,
-                      BROWSER_NAME, CurApName[0])
+           || strncmp((char *)LM(CurApName) + 1,
+                      BROWSER_NAME, LM(CurApName)[0])
                != 0))
     {
         beenhere = true;
@@ -644,19 +644,19 @@ void Executor::C_ExitToShell()
 	   about 32bit uncleanliness, &c */
         size_info.application_p = false;
 
-        if(QDExist == EXIST_NO)
+        if(LM(QDExist) == EXIST_NO)
         {
             EM_A5 = US_TO_SYN68K(&a5space.tmpA5);
-            CurrentA5 = guest_cast<Ptr>(CL(EM_A5));
+            LM(CurrentA5) = guest_cast<Ptr>(CL(EM_A5));
             InitGraf((Ptr)&a5space.qdthePort);
         }
         InitFonts();
         FlushEvents(everyEvent, 0);
-        if(WWExist == EXIST_NO)
+        if(LM(WWExist) == EXIST_NO)
             InitWindows();
-        if(TEScrpHandle == guest_cast<Handle>(CLC(-1)) || TEScrpHandle == nullptr)
+        if(LM(TEScrpHandle) == guest_cast<Handle>(CLC(-1)) || LM(TEScrpHandle) == nullptr)
             TEInit();
-        if(DlgFont == CWC(0) || DlgFont == CWC(-1))
+        if(LM(DlgFont) == CWC(0) || LM(DlgFont) == CWC(-1))
             InitDialogs((ProcPtr)0);
         InitCursor();
 
@@ -679,10 +679,10 @@ void Executor::C_ExitToShell()
                 ROMlib_exit = 1;
             else
             {
-                CurApName[0] = MIN(reply.fName[0], 31);
-                BlockMoveData((Ptr)reply.fName + 1, (Ptr)CurApName + 1,
-                              (Size)CurApName[0]);
-                Launch(CurApName, CW(reply.vRefNum));
+                LM(CurApName)[0] = MIN(reply.fName[0], 31);
+                BlockMoveData((Ptr)reply.fName + 1, (Ptr)LM(CurApName) + 1,
+                              (Size)LM(CurApName)[0]);
+                Launch(LM(CurApName), CW(reply.vRefNum));
             }
         }
     }
@@ -724,7 +724,7 @@ void Executor::C_LoadSeg(INTEGER volatile segno)
         ExitToShell();
 #endif
 
-    ResLoad = -1; /* CricketDraw III's behaviour suggested this */
+    LM(ResLoad) = -1; /* CricketDraw III's behaviour suggested this */
     newcode = GetResource(TICK("CODE"), segno);
     HLock(newcode);
     taboff = CW(((GUEST<INTEGER> *)STARH(newcode))[0]);
@@ -740,7 +740,7 @@ void Executor::C_LoadSeg(INTEGER volatile segno)
     }
     savenentries = nentries = CW(((GUEST<INTEGER> *)STARH(newcode))[1]);
 
-    saveptr = ptr = (GUEST<int16_t> *)((char *)SYN68K_TO_US(EM_A5) + taboff + Cx(CurJTOffset));
+    saveptr = ptr = (GUEST<int16_t> *)((char *)SYN68K_TO_US(EM_A5) + taboff + Cx(LM(CurJTOffset)));
     while(--nentries >= 0)
     {
         if(ptr[1] != CWC(JMPLINSTR))

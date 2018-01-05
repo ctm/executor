@@ -125,13 +125,13 @@ static OSErr initcache(HVCB *vcbp)
     cacheentry *cachep;
     INTEGER align;
 
-    savezone = TheZone;
-    TheZone = SysZone;
+    savezone = LM(TheZone);
+    LM(TheZone) = LM(SysZone);
     align = ((char *)&cachep->buf - (char *)&cachep) & 3;
     vcbp->vcbCtlBuf = RM(NewPtr_aligned_4(sizeof(cachehead) + NCACHEENTRIES * sizeof(cacheentry), align));
     if(!vcbp->vcbCtlBuf)
         return MemError();
-    TheZone = savezone;
+    LM(TheZone) = savezone;
     headp = (cachehead *)MR(vcbp->vcbCtlBuf);
     headp->nitems = CW(NCACHEENTRIES);
     headp->flags = 0;
@@ -257,12 +257,12 @@ OSErr Executor::ROMlib_flushvcbp(HVCB *vcbp)
             vip = (volumeinfoPtr)p;
             memmove(&vip->drSigWord, &vcbp->vcbSigWord, (LONGINT)64);
             memmove(&vip->drVolBkUp, &vcbp->vcbVolBkUp, (LONGINT)66);
-            fcbp = (filecontrolblock *)((char *)MR(FCBSPtr)
+            fcbp = (filecontrolblock *)((char *)MR(LM(FCBSPtr))
                                         + Cx(vcbp->vcbXTRef));
             vip->drXTFlSize = fcbp->fcbPLen;
             memmove(&vip->drXTExtRec, &fcbp->fcbExtRec,
                     (LONGINT)sizeof(fcbp->fcbExtRec));
-            fcbp = (filecontrolblock *)((char *)MR(FCBSPtr)
+            fcbp = (filecontrolblock *)((char *)MR(LM(FCBSPtr))
                                         + Cx(vcbp->vcbCTRef));
             vip->drCTFlSize = fcbp->fcbPLen;
             memmove(&vip->drCTExtRec, &fcbp->fcbExtRec,
@@ -278,7 +278,7 @@ static HVCB *vcbbyname(StringPtr name)
 {
     HVCB *vcbp;
 
-    for(vcbp = (HVCB *)MR(VCBQHdr.qHead); vcbp && !EqualString(vcbp->vcbVN, name, false, true);
+    for(vcbp = (HVCB *)MR(LM(VCBQHdr).qHead); vcbp && !EqualString(vcbp->vcbVN, name, false, true);
         vcbp = (HVCB *)MR(vcbp->qLink))
         ;
     return vcbp;
@@ -313,7 +313,7 @@ HVCB *Executor::ROMlib_vcbbybiggestunixname(const char *name)
 
     bestvcbp = 0;
     bestsize = -1;
-    for(vcbp = (HVCB *)MR(VCBQHdr.qHead); vcbp;
+    for(vcbp = (HVCB *)MR(LM(VCBQHdr).qHead); vcbp;
         vcbp = (HVCB *)MR(vcbp->qLink))
     {
         if(!vcbp->vcbCTRef)
@@ -334,7 +334,7 @@ Executor::ROMlib_vcbbyunixname(const char *name)
 {
     HVCB *vcbp;
 
-    for(vcbp = (HVCB *)MR(VCBQHdr.qHead); vcbp && (vcbp->vcbCTRef || VCB_CMP_FUNC(((VCBExtra *)vcbp)->unixname, name) != 0);
+    for(vcbp = (HVCB *)MR(LM(VCBQHdr).qHead); vcbp && (vcbp->vcbCTRef || VCB_CMP_FUNC(((VCBExtra *)vcbp)->unixname, name) != 0);
         vcbp = (HVCB *)MR(vcbp->qLink))
         ;
     return (VCBExtra *)vcbp;
@@ -344,7 +344,7 @@ HVCB *Executor::ROMlib_vcbbydrive(short vrefnum)
 {
     HVCB *vcbp;
 
-    for(vcbp = (HVCB *)MR(VCBQHdr.qHead);
+    for(vcbp = (HVCB *)MR(LM(VCBQHdr).qHead);
         vcbp && Cx(vcbp->vcbDrvNum) != vrefnum;
         vcbp = (HVCB *)MR(vcbp->qLink))
         ;
@@ -360,7 +360,7 @@ Executor::ROMlib_dqbydrive(short vrefnum)
 
     swapped_vrefnum = CW(vrefnum);
     retval = 0;
-    for(dp = (DrvQEl *)MR(DrvQHdr.qHead);
+    for(dp = (DrvQEl *)MR(LM(DrvQHdr).qHead);
         dp && (retval = (DrvQExtra *)((char *)dp - sizeof(LONGINT)),
               retval->dq.dQDrive != swapped_vrefnum);
         dp = (DrvQEl *)MR(dp->qLink))
@@ -372,7 +372,7 @@ HVCB *Executor::ROMlib_vcbbyvrn(short vrefnum)
 {
     HVCB *vcbp;
 
-    for(vcbp = (HVCB *)MR(VCBQHdr.qHead);
+    for(vcbp = (HVCB *)MR(LM(VCBQHdr).qHead);
         vcbp && Cx(vcbp->vcbVRefNum) != vrefnum;
         vcbp = (HVCB *)MR(vcbp->qLink))
         ;
@@ -416,7 +416,7 @@ HVCB *Executor::ROMlib_findvcb(short vrefnum, StringPtr name, LONGINT *diridp,
         }
         else if(usedefault || (!name && !vrefnum))
         {
-            vcbp = (HVCB *)MR(DefVCBPtr);
+            vcbp = (HVCB *)MR(LM(DefVCBPtr));
             if(diridp)
                 *diridp = CL(DefDirID);
         }
@@ -468,7 +468,7 @@ static INTEGER openxtnt(LONGINT filnum, LONGINT clpsize, LONGINT filsize,
         fcbp->fcbCatPos = 0;
         fcbp->fcbDirID = 0;
         fcbp->fcbCName[0] = 0;
-        retval = (char *)fcbp - (char *)MR(FCBSPtr);
+        retval = (char *)fcbp - (char *)MR(LM(FCBSPtr));
     }
     else
         retval = 0;
@@ -494,8 +494,8 @@ Executor::hfsPBMountVol(ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGINT
     warning_fs_log("floppyfd = 0x%x, offset = %d, bsize = %d, maxbytes = %d "
                    "flags = 0x%x",
                    floppyfd, offset, bsize, maxbytes, flags);
-    saveZone = TheZone;
-    TheZone = SysZone;
+    saveZone = LM(TheZone);
+    LM(TheZone) = LM(SysZone);
     vcbp = ROMlib_vcbbydrive(CW(pb->volumeParam.ioVRefNum));
     if(vcbp)
         err = volOnLinErr;
@@ -515,7 +515,7 @@ Executor::hfsPBMountVol(ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGINT
             {
                 vip = (volumeinfoPtr)MR(vcbp->vcbBufAdr);
                 alreadythere = false;
-                for(vcbp2 = (HVCB *)MR(VCBQHdr.qHead); vcbp2;
+                for(vcbp2 = (HVCB *)MR(LM(VCBQHdr).qHead); vcbp2;
                     vcbp2 = (HVCB *)MR(vcbp2->qLink))
                     if(EqualString(vcbp2->vcbVN, vip->drVN, true, true)
                        && vcbp2->vcbDrvNum == CWC(0))
@@ -595,19 +595,19 @@ Executor::hfsPBMountVol(ParmBlkPtr pb, LONGINT floppyfd, LONGINT offset, LONGINT
                     if(flags & DRIVE_FLAGS_LOCKED)
                         vcbp->vcbAtrb |= CW(VHARDLOCKBIT);
                     if(!alreadythere)
-                        Enqueue((QElemPtr)vcbp, &VCBQHdr);
+                        Enqueue((QElemPtr)vcbp, &LM(VCBQHdr));
                     pb->volumeParam.ioVRefNum = vcbp->vcbVRefNum;
-                    if(!DefVCBPtr)
+                    if(!LM(DefVCBPtr))
                     {
-                        DefVCBPtr = RM(vcbp);
-                        DefVRefNum = vcbp->vcbVRefNum;
+                        LM(DefVCBPtr) = RM(vcbp);
+                        LM(DefVRefNum) = vcbp->vcbVRefNum;
                         DefDirID = CLC(2);
                     }
                 }
             }
         }
     }
-    TheZone = saveZone;
+    LM(TheZone) = saveZone;
     warning_fs_log("err = %d", err);
     PBRETURN((VolumeParam *)pb, err);
 }
@@ -683,7 +683,7 @@ static OSErr commonGetVInfo(HVolumeParam *pb, BOOLEAN async, fstype fs)
 
     if(Cx(pb->ioVolIndex) > 0)
     {
-        vcbp = (HVCB *)ROMlib_indexqueue(&VCBQHdr, Cx(pb->ioVolIndex));
+        vcbp = (HVCB *)ROMlib_indexqueue(&LM(VCBQHdr), Cx(pb->ioVolIndex));
         workingdirnum = 0;
     }
     else
@@ -801,14 +801,14 @@ static OSErr getvolcommon(VolumeParam *pb)
 {
     OSErr err;
 
-    if(!DefVCBPtr)
+    if(!LM(DefVCBPtr))
         err = nsvErr;
     else
     {
         err = noErr;
         if(pb->ioNamePtr)
-            str255assign(MR(pb->ioNamePtr), (StringPtr)MR(DefVCBPtr)->vcbVN);
-        pb->ioVRefNum = DefVRefNum;
+            str255assign(MR(pb->ioNamePtr), (StringPtr)MR(LM(DefVCBPtr))->vcbVN);
+        pb->ioVRefNum = LM(DefVRefNum);
     }
     return err;
 }
@@ -832,16 +832,16 @@ OSErr Executor::hfsPBHGetVol(WDPBPtr pb, BOOLEAN async)
     pb->ioWDDirID = DefDirID;
     if(err == noErr)
     {
-        if(ISWDNUM(Cx(DefVRefNum)))
+        if(ISWDNUM(Cx(LM(DefVRefNum))))
         {
-            wdp = WDNUMTOWDP(Cx(DefVRefNum));
+            wdp = WDNUMTOWDP(Cx(LM(DefVRefNum)));
             pb->ioWDProcID = wdp->procid;
             pb->ioWDVRefNum = MR(wdp->vcbp)->vcbVRefNum;
         }
         else
         {
             pb->ioWDProcID = 0;
-            pb->ioWDVRefNum = DefVRefNum;
+            pb->ioWDVRefNum = LM(DefVRefNum);
         }
     }
     PBRETURN(pb, err);
@@ -931,10 +931,10 @@ static OSErr setvolhelper(VolumeParam *pb, BOOLEAN aysnc, LONGINT dirid,
         }
         if(newDefDirID)
             DefDirID = newDefDirID;
-        else if(DefVCBPtr != newDefVCBPtr || DefVRefNum != newDefVRefNum)
+        else if(LM(DefVCBPtr) != newDefVCBPtr || LM(DefVRefNum) != newDefVRefNum)
             DefDirID = CLC(2);
-        DefVCBPtr = newDefVCBPtr;
-        DefVRefNum = newDefVRefNum;
+        LM(DefVCBPtr) = newDefVCBPtr;
+        LM(DefVRefNum) = newDefVRefNum;
     }
     PBRETURN(pb, err);
 }
@@ -969,13 +969,13 @@ static void closeallvcbfiles(HVCB *vcbp)
     IOParam iopb;
     short length;
 
-    length = CW(*(GUEST<INTEGER> *)MR(FCBSPtr));
-    fcbp = (filecontrolblock *)((short *)MR(FCBSPtr) + 1);
-    efcbp = (filecontrolblock *)((char *)MR(FCBSPtr) + length);
-    for(; fcbp < efcbp; fcbp = (filecontrolblock *)((char *)fcbp + Cx(FSFCBLen)))
+    length = CW(*(GUEST<INTEGER> *)MR(LM(FCBSPtr)));
+    fcbp = (filecontrolblock *)((short *)MR(LM(FCBSPtr)) + 1);
+    efcbp = (filecontrolblock *)((char *)MR(LM(FCBSPtr)) + length);
+    for(; fcbp < efcbp; fcbp = (filecontrolblock *)((char *)fcbp + Cx(LM(FSFCBLen))))
         if(fcbp->fcbFlNum && MR(fcbp->fcbVPtr) == vcbp)
         {
-            iopb.ioRefNum = CW((char *)fcbp - (char *)MR(FCBSPtr));
+            iopb.ioRefNum = CW((char *)fcbp - (char *)MR(LM(FCBSPtr)));
             /* my */ PBFlushFile((ParmBlkPtr)&iopb, false);
         }
 }
@@ -991,7 +991,7 @@ OSErr Executor::hfsPBUnmountVol(ParmBlkPtr pb)
     {
         closeallvcbfiles(vcbp);
         err = ROMlib_flushvcbp(vcbp);
-        Dequeue((QElemPtr)vcbp, &VCBQHdr);
+        Dequeue((QElemPtr)vcbp, &LM(VCBQHdr));
         DisposPtr(MR(vcbp->vcbMAdr));
         DisposPtr(MR(vcbp->vcbBufAdr));
         DisposPtr(MR(vcbp->vcbCtlBuf));

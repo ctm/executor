@@ -153,22 +153,12 @@ typedef UPP<Boolean(DialogPtr theDialog, EventRecord *theEvent, GUEST<INTEGER> *
 typedef UPP<Boolean(DialogPtr theDialog, EventRecord *theEvent, GUEST<INTEGER> *itemHit, void *yourDataPtr)> ModalFilterYDProcPtr;
 typedef UPP<void(DialogPtr theDialog, INTEGER itemNo)> UserItemProcPtr;
 
-#if 0
-#if !defined(ResumeProc_H)
-extern GUEST<ProcPtr> 	ResumeProc_H;
-extern GUEST<ProcPtr> 	DABeeper_H;
-extern GUEST<Handle> 	DAStrings_H[4];
-extern INTEGER 	ANumber;
-extern INTEGER 	ACount;
-extern INTEGER 	DlgFont;
-#endif
-
-enum
-{
-    ResumeProc = (ResumeProc_H.p),
-    DABeeper = (DABeeper_H.p),
-};
-#endif
+const LowMemGlobal<ProcPtr> ResumeProc { 0xA8C }; // DialogMgr IMI-411 (true);
+const LowMemGlobal<INTEGER> ANumber { 0xA98 }; // DialogMgr IMI-423 (true);
+const LowMemGlobal<INTEGER> ACount { 0xA9A }; // DialogMgr IMI-423 (true);
+const LowMemGlobal<ProcPtr> DABeeper { 0xA9C }; // DialogMgr IMI-411 (true);
+const LowMemGlobal<Handle[4]> DAStrings { 0xAA0 }; // DialogMgr IMI-421 (true);
+const LowMemGlobal<INTEGER> DlgFont { 0xAFA }; // DialogMgr IMI-412 (true);
 
 extern INTEGER C_Alert(INTEGER id,
                                    ProcPtr fp);

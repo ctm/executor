@@ -397,7 +397,7 @@ void Executor::convert_pixmap(const PixMap *src, PixMap *dst,
                && (src_bpp & (src_bpp - 1)) == 0
                && (dst_bpp & (dst_bpp - 1)) == 0);
 
-    the_gd = MR(TheGDevice);
+    the_gd = MR(LM(TheGDevice));
 
 #define BPP_PIXEL_TYPE(bpp) ((bpp) > 8 ? RGBDirect : Indirect)
 #define MUNGE(a, b) ((a) + (b)*0x100)
@@ -505,7 +505,7 @@ void Executor::convert_pixmap(const PixMap *src, PixMap *dst,
 
             if(!target_itab)
             {
-                TheZoneGuard guard(SysZone);
+                TheZoneGuard guard(LM(SysZone));
 
                 target_itab = (ITabHandle)NewHandle(sizeof(ITab));
                 ITAB_SEED_X(target_itab) = CLC(-1);

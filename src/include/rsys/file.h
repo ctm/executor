@@ -68,8 +68,8 @@ typedef struct
 extern int ROMlib_nosync;
 
 #if 0
-#if !defined(VCBQHdr)
-extern QHdr VCBQHdr, DrvQHdr;
+#if !defined(LM(VCBQHdr))
+extern QHdr LM(VCBQHdr), LM(DrvQHdr);
 extern GUEST<VCBPtr> DefVCBPtr_H;
 #endif
 #endif
@@ -127,7 +127,7 @@ typedef struct
     GUEST<fcbrec[NFCB]> fc;
 } fcbhidden;
 
-#define ROMlib_fcblocks (((fcbhidden *)MR(FCBSPtr))->fc)
+#define ROMlib_fcblocks (((fcbhidden *)MR(LM(FCBSPtr)))->fc)
 
 typedef struct
 {

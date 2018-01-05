@@ -58,7 +58,7 @@ INTEGER Executor::C_OpenDeskAcc(Str255 acc) /* IMI-440 */
 
 done:
 
-    SEvtEnb = true;
+    LM(SEvtEnb) = true;
     return retval;
 }
 
@@ -94,10 +94,10 @@ void Executor::C_SystemClick(EventRecord *evp, WindowPtr wp)
                         SelectWindow(wp);
                     break;
                 case wInDrag:
-                    bounds.top = CW(CW(MBarHeight) + 4);
-                    bounds.left = CW(CW(GD_BOUNDS(MR(TheGDevice)).left) + 4);
-                    bounds.bottom = CW(CW(GD_BOUNDS(MR(TheGDevice)).bottom) - 4);
-                    bounds.right = CW(CW(GD_BOUNDS(MR(TheGDevice)).right) - 4);
+                    bounds.top = CW(CW(LM(MBarHeight)) + 4);
+                    bounds.left = CW(CW(GD_BOUNDS(MR(LM(TheGDevice))).left) + 4);
+                    bounds.bottom = CW(CW(GD_BOUNDS(MR(LM(TheGDevice))).bottom) - 4);
+                    bounds.right = CW(CW(GD_BOUNDS(MR(LM(TheGDevice))).right) - 4);
                     DragWindow(wp, p, &bounds);
                     break;
                 case wInGoAway:
@@ -108,12 +108,12 @@ void Executor::C_SystemClick(EventRecord *evp, WindowPtr wp)
         }
         else
         {
-            if(DeskHook)
+            if(LM(DeskHook))
             {
                 ROMlib_hook(desk_deskhooknumber);
                 EM_D0 = -1;
                 EM_A0 = US_TO_SYN68K(evp);
-                CALL_EMULATOR((syn68k_addr_t)CL(guest_cast<LONGINT>(DeskHook)));
+                CALL_EMULATOR((syn68k_addr_t)CL(guest_cast<LONGINT>(LM(DeskHook))));
             }
         }
     }
@@ -132,7 +132,7 @@ BOOLEAN Executor::C_SystemEdit(INTEGER editcmd)
     return retval;
 }
 
-#define rntodctlh(rn) (MR(MR(UTableBase)[-((rn) + 1)]))
+#define rntodctlh(rn) (MR(MR(LM(UTableBase))[-((rn) + 1)]))
 #define itorn(i) ((-i) - 1)
 
 void Executor::C_SystemTask()
@@ -140,9 +140,9 @@ void Executor::C_SystemTask()
     DCtlHandle dctlh;
     INTEGER i;
 
-    for(i = 0; i < CW(UnitNtryCnt); ++i)
+    for(i = 0; i < CW(LM(UnitNtryCnt)); ++i)
     {
-        dctlh = MR(MR(UTableBase)[i]);
+        dctlh = MR(MR(LM(UTableBase))[i]);
         if((HxX(dctlh, dCtlFlags) & CWC(NEEDTIMEBIT)) && TickCount() >= Hx(dctlh, dCtlCurTicks))
         {
             Control(itorn(i), accRun, (Ptr)0);
@@ -159,7 +159,7 @@ BOOLEAN Executor::C_SystemEvent(EventRecord *evp)
     DCtlHandle dctlh;
     GUEST<LONGINT> templ;
 
-    if(SEvtEnb)
+    if(LM(SEvtEnb))
     {
         wp = 0;
         switch(CW(evp->what))
@@ -217,10 +217,10 @@ void Executor::C_SystemMenu(LONGINT menu)
     DCtlHandle dctlh;
     GUEST<LONGINT> menu_s;
 
-    for(i = 0; i < CW(UnitNtryCnt); ++i)
+    for(i = 0; i < CW(LM(UnitNtryCnt)); ++i)
     {
-        dctlh = MR(MR(UTableBase)[i]);
-        if(HxX(dctlh, dCtlMenu) == MBarEnable)
+        dctlh = MR(MR(LM(UTableBase))[i]);
+        if(HxX(dctlh, dCtlMenu) == LM(MBarEnable))
         {
             menu_s = CL(menu);
             Control(itorn(i), accMenu, (Ptr)&menu_s);

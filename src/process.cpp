@@ -69,7 +69,7 @@ void Executor::process_create(bool desk_accessory_p,
     size = get_size_resource();
 
     {
-        TheZoneGuard guard(SysZone);
+        TheZoneGuard guard(LM(SysZone));
 
         info = (process_info_t *)NewPtr(sizeof *info);
     }
@@ -88,7 +88,7 @@ void Executor::process_create(bool desk_accessory_p,
     info->signature = signature;
 
     /* ### fixme; major bogosity */
-    info->size = (zone_size(MR(ApplZone))
+    info->size = (zone_size(MR(LM(ApplZone)))
                   /* + A5 world size */
                   /* + stack size */);
     info->launch_ticks = TickCount();
@@ -170,7 +170,7 @@ OSErr Executor::C_GetProcessInformation(ProcessSerialNumber *serial_number,
     PROCESS_INFO_TYPE_X(process_info) = CL(info->type);
     PROCESS_INFO_SIGNATURE_X(process_info) = CL(info->signature);
     PROCESS_INFO_MODE_X(process_info) = CL(info->mode);
-    PROCESS_INFO_LOCATION_X(process_info) = guest_cast<Ptr>(ApplZone);
+    PROCESS_INFO_LOCATION_X(process_info) = guest_cast<Ptr>(LM(ApplZone));
     PROCESS_INFO_SIZE_X(process_info) = CL(info->size);
 
     /* ### set current zone to applzone? */

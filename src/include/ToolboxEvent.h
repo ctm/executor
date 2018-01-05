@@ -11,15 +11,13 @@
 #include "EventMgr.h"
 namespace Executor
 {
-#if 0
-#if !defined(KeyThresh)
-extern INTEGER 	KeyThresh;
-extern INTEGER 	KeyRepThresh;
-extern LONGINT 	DoubleTime;
-extern LONGINT 	CaretTime;
-extern Byte 	ScrDmpEnb;
-#endif
-#endif
+const LowMemGlobal<INTEGER> KeyThresh { 0x18E }; // ToolboxEvent IMI-246 (true);
+const LowMemGlobal<INTEGER> KeyRepThresh { 0x190 }; // ToolboxEvent IMI-246 (true);
+const LowMemGlobal<LONGINT> DoubleTime { 0x2F0 }; // ToolboxEvent IMI-260 (true);
+const LowMemGlobal<LONGINT> CaretTime { 0x2F4 }; // ToolboxEvent IMI-260 (true);
+const LowMemGlobal<Byte> ScrDmpEnb { 0x2F8 }; // ToolboxEvent IMI-258 (true);
+const LowMemGlobal<INTEGER> JournalFlag { 0x8DE }; // ToolboxEvent IMI-261 (false);
+const LowMemGlobal<INTEGER> JournalRef { 0x8E8 }; // ToolboxEvent IMI-261 (false);
 
 extern void ROMlib_alarmoffmbar(void);
 extern LONGINT C_KeyTrans(Ptr mapp, unsigned short code,

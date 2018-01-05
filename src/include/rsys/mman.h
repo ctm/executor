@@ -101,13 +101,13 @@ class TheZoneGuard
 
 public:
     TheZoneGuard(GUEST<THz> zone)
-        : saveZone(TheZone)
+        : saveZone(LM(TheZone))
     {
-        TheZone = zone;
+        LM(TheZone) = zone;
     }
     ~TheZoneGuard()
     {
-        TheZone = saveZone;
+        LM(TheZone) = saveZone;
     }
 };
 

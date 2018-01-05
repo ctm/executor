@@ -528,19 +528,10 @@ extern void release_style_index(TEStyleHandle te_style, int16_t style_index);
 extern void stabilize_style_info(TEStyleHandle te_style);
 extern void te_style_combine_runs(TEStyleHandle te_style);
 
-#if 0
-#if !defined(TEDoText_H)
-extern GUEST<ProcPtr> 	TEDoText_H;
-extern GUEST<Handle> 	TEScrpHandle_H;
-extern INTEGER 	TEScrpLength;
-#endif
-
-enum
-{
-    TEDoText = (TEDoText_H.p),
-    TEScrpHandle = (TEScrpHandle_H.p),
-};
-#endif
+const LowMemGlobal<ProcPtr> TEDoText { 0xA70 }; // TextEdit IMI-391 (true);
+const LowMemGlobal<ProcPtr> TERecal { 0xA74 }; // TextEdit IMI-391 (false);
+const LowMemGlobal<INTEGER> TEScrpLength { 0xAB0 }; // TextEdit IMI-389 (true);
+const LowMemGlobal<Handle> TEScrpHandle { 0xAB4 }; // TextEdit IMI-389 (true);
 
 extern void C_TESetText(Ptr p, LONGINT ln, TEHandle teh);
 PASCAL_TRAP(TESetText, 0xA9CF);

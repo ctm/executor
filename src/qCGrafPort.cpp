@@ -75,7 +75,7 @@ void Executor::C_InitCPort(CGrafPtr p)
     CPORT_VERSION_X(p) = CPORT_FLAG_BITS_X;
     // | CWC (/* color quickdraw version */ 0));
 
-    gd = MR(TheGDevice);
+    gd = MR(LM(TheGDevice));
     *STARH(CPORT_PIXMAP(p)) = *STARH(GD_PMAP(gd));
 
     PORT_DEVICE_X(p) = CWC(0);
@@ -120,7 +120,7 @@ void Executor::C_InitCPort(CGrafPtr p)
     /* #warning "p->grafVars not initialized" */
 
     CPORT_OP_COLOR(p) = ROMlib_black_rgb_color;
-    CPORT_HILITE_COLOR(p) = HiliteRGB;
+    CPORT_HILITE_COLOR(p) = LM(HiliteRGB);
 
     CPORT_CH_EXTRA_X(p) = CWC(0);
     /* represents the low word of a Fixed number
@@ -326,16 +326,16 @@ PixMapHandle Executor::C_NewPixMap()
     HLock((Handle)pixmap); /* so we can use accessor macros even when we're
   				calling routines that move memory */
 
-    /* All PixMap fields except the ColorTable come from TheGDevice.
+    /* All PixMap fields except the ColorTable come from LM(TheGDevice).
    * The ColorTable is allocated but not initialized.  (IMV-70)
    */
-    if(TheGDevice)
+    if(LM(TheGDevice))
     {
-        *STARH(pixmap) = *STARH(GD_PMAP(MR(TheGDevice)));
+        *STARH(pixmap) = *STARH(GD_PMAP(MR(LM(TheGDevice))));
     }
     else
     {
-        /* If TheGDevice is NULL, we fill in some useful default values.
+        /* If LM(TheGDevice) is NULL, we fill in some useful default values.
        * This is a hack to make Executor bootstrap properly.
        */
         memset(STARH(pixmap), 0, sizeof(PixMap));

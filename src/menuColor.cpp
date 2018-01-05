@@ -100,7 +100,7 @@ void Executor::menu_delete_entries(int16_t menu_id)
     int menu_c_info_size;
     int i;
 
-    menu_c_info = MR(MenuCInfo);
+    menu_c_info = MR(LM(MenuCInfo));
     menu_c_info_size = GetHandleSize((Handle)menu_c_info);
     entries = STARH(menu_c_info);
     for(i = 0; MCENTRY_ID_X(&entries[i]) != CWC(-99);)
@@ -127,7 +127,7 @@ void Executor::C_DelMCEntries(INTEGER menu_id, INTEGER menu_item)
     int menu_c_info_size;
     int i;
 
-    menu_c_info = MR(MenuCInfo);
+    menu_c_info = MR(LM(MenuCInfo));
     menu_c_info_size = GetHandleSize((Handle)menu_c_info);
     entries = STARH(menu_c_info);
     for(i = 0; MCENTRY_ID_X(&entries[i]) != CWC(-99); i++)
@@ -151,7 +151,7 @@ MCTableHandle Executor::C_GetMCInfo()
     MCTableHandle retval, menu_c_info;
     int menu_c_info_size;
 
-    menu_c_info = MR(MenuCInfo);
+    menu_c_info = MR(LM(MenuCInfo));
     menu_c_info_size = GetHandleSize((Handle)menu_c_info);
     retval = (MCTableHandle)NewHandle(menu_c_info_size);
     if(retval)
@@ -163,16 +163,16 @@ MCTableHandle Executor::C_GetMCInfo()
 
 void Executor::C_SetMCInfo(MCTableHandle menu_ctab)
 {
-    DispMCInfo(MR(MenuCInfo));
+    DispMCInfo(MR(LM(MenuCInfo)));
 
-    TheZoneGuard guard(SysZone);
+    TheZoneGuard guard(LM(SysZone));
     Handle t;
     int size;
 
     size = GetHandleSize((Handle)menu_ctab);
     t = NewHandle(size);
     BlockMoveData((Ptr)STARH(menu_ctab), (Ptr)STARH(t), size);
-    MenuCInfo = RM((MCTableHandle)t);
+    LM(MenuCInfo) = RM((MCTableHandle)t);
 }
 
 void Executor::C_DispMCInfo(MCTableHandle menu_ctab)
@@ -185,7 +185,7 @@ MCEntryPtr Executor::C_GetMCEntry(INTEGER menu_id, INTEGER menu_item)
     MCTableHandle menu_c_info;
     MCEntryPtr t;
 
-    menu_c_info = MR(MenuCInfo);
+    menu_c_info = MR(LM(MenuCInfo));
     for(t = STARH(menu_c_info); MCENTRY_ID_X(t) != CWC(-99); t++)
     {
         if(MCENTRY_ID(t) == menu_id
@@ -203,7 +203,7 @@ void Executor::C_SetMCEntries(INTEGER n_entries, MCTablePtr entries)
     int menu_c_info_n_entries;
     int i;
 
-    menu_c_info = MR(MenuCInfo);
+    menu_c_info = MR(LM(MenuCInfo));
     menu_c_info_size = GetHandleSize((Handle)menu_c_info);
     gui_assert(!(menu_c_info_size % sizeof(MCEntry)));
     menu_c_info_n_entries = (menu_c_info_size / sizeof(MCEntry));

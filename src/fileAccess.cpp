@@ -310,13 +310,13 @@ VCB *Executor::vlookupbyname(const char *namep, const char *endp)
     int n;
 
     n = endp - namep;
-    for(retval = (VCB *)MR(VCBQHdr.qHead); retval;
+    for(retval = (VCB *)MR(LM(VCBQHdr).qHead); retval;
         retval = (VCB *)MR(retval->qLink))
         if(n == retval->vcbVN[0] && strncmp(namep, (char *)retval->vcbVN + 1, n) == 0)
             return retval;
 
 #if defined(MSDOS) || defined(CYGWIN32)
-    for(retval = (VCB *)MR(VCBQHdr.qHead); retval;
+    for(retval = (VCB *)MR(LM(VCBQHdr).qHead); retval;
         retval = (VCB *)MR(retval->qLink))
         if(n == retval->vcbVN[0] && strncasecmp(namep, (char *)retval->vcbVN + 1, n) == 0)
             return retval;
@@ -328,7 +328,7 @@ static VCB *vlookupbydrive(INTEGER drive)
 {
     VCB *retval;
 
-    for(retval = (VCB *)MR(VCBQHdr.qHead); retval;
+    for(retval = (VCB *)MR(LM(VCBQHdr).qHead); retval;
         retval = (VCB *)MR(retval->qLink))
         if(drive == Cx(retval->vcbDrvNum))
             return retval;
@@ -409,10 +409,10 @@ static char *dirindex(char *dir, LONGINT index, BOOLEAN nodirectories,
 #define MAXNAMLEN 1024
 #endif /* !defined(MAXNAMLEN) */
 
-        saveZone = TheZone;
-        TheZone = SysZone;
+        saveZone = LM(TheZone);
+        LM(TheZone) = LM(SysZone);
         cachedir = (char *)malloc(dirnamelen + 1 + MAXNAMLEN + 1);
-        TheZone = saveZone;
+        LM(TheZone) = saveZone;
         if(!cachedir)
             /*-->*/ return 0;
         strcpy(cachedir, dir);
@@ -508,7 +508,7 @@ VCB *Executor::ROMlib_breakoutioname(ParmBlkPtr pb, /* INTERNAL */
         }
         if(!retval && (usedefault || (!pb->ioParam.ioNamePtr && !pb->ioParam.ioVRefNum)))
         {
-            retval = MR(DefVCBPtr);
+            retval = MR(LM(DefVCBPtr));
             *diridp = CL(DefDirID);
         }
     }
@@ -931,15 +931,15 @@ static OSErr getprn(INTEGER *pprn)
     *pprn = 2 + 94 * n++;
     return noErr;
 #endif
-    length = CW(*(GUEST<int16_t> *)MR(FCBSPtr));
-    fcbp = (fcbrec *)((GUEST<int16_t> *)MR(FCBSPtr) + 1);
-    efcbp = (fcbrec *)((char *)MR(FCBSPtr) + length);
+    length = CW(*(GUEST<int16_t> *)MR(LM(FCBSPtr)));
+    fcbp = (fcbrec *)((GUEST<int16_t> *)MR(LM(FCBSPtr)) + 1);
+    efcbp = (fcbrec *)((char *)MR(LM(FCBSPtr)) + length);
     for(; fcbp < efcbp && fcbp->fdfnum;
-        fcbp = (fcbrec *)((char *)fcbp + Cx(FSFCBLen)))
+        fcbp = (fcbrec *)((char *)fcbp + Cx(LM(FSFCBLen))))
         ;
     if(fcbp < efcbp)
     {
-        *pprn = (char *)fcbp - (char *)MR(FCBSPtr);
+        *pprn = (char *)fcbp - (char *)MR(LM(FCBSPtr));
         err = noErr;
     }
     else
@@ -967,8 +967,8 @@ static OSErr PBOpenForkD(ParmBlkPtr pb, BOOLEAN a, ForkType fork, LONGINT dir)
     pb->ioParam.ioRefNum = CWC(0); /* in case some goofy program,
 					   like StuffIt Lite decides to
 					   ignore error codes */
-    savezone = TheZone;
-    TheZone = SysZone;
+    savezone = LM(TheZone);
+    LM(TheZone) = LM(SysZone);
     pathname = 0;
     /*
  * We have to pass in sbuf below or we won't be weaseled like we should be.
@@ -980,7 +980,7 @@ static OSErr PBOpenForkD(ParmBlkPtr pb, BOOLEAN a, ForkType fork, LONGINT dir)
         err = getprn(&prn);
         if(err == noErr)
         {
-            fp = (fcbrec *)(MR(FCBSPtr) + prn);
+            fp = (fcbrec *)(MR(LM(FCBSPtr)) + prn);
             fp->fdfnum = CL((LONGINT)ST_INO(sbuf));
             fp->fcfd = -1;
             fp->fcflags = 0;
@@ -1073,7 +1073,7 @@ static OSErr PBOpenForkD(ParmBlkPtr pb, BOOLEAN a, ForkType fork, LONGINT dir)
 
     if(pathname)
         free(pathname);
-    TheZone = savezone;
+    LM(TheZone) = savezone;
     fs_err_hook(err);
     return err;
 }

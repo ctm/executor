@@ -39,7 +39,7 @@ Rect Executor::ROMlib_pattern_bounds = {
 /* end global color quickdraw stuff */
 
 /* FIXME: replace this with a correct references
-   to the low global QDColors */
+   to the low global LM(QDColors) */
 struct qd_color_elt Executor::ROMlib_QDColors[] = {
     { { CWC(0x0000), CWC(0x0000), CWC(0x0000) }, blackColor },
     { { CWC((unsigned short)0xFC00), CWC((unsigned short)0xF37D), CWC(0x052F) }, yellowColor },

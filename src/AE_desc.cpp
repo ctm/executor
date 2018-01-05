@@ -197,8 +197,8 @@ OSErr aggr_desc_get_addr(Handle aggr_desc_h,
             diff = new_size - old_size;
 
             SetHandleSize(aggr_desc_h, aggr_desc_size + diff);
-            if(MemErr != CWC(noErr))
-                AE_RETURN_ERROR(CW(MemErr));
+            if(LM(MemErr) != CWC(noErr))
+                AE_RETURN_ERROR(CW(LM(MemErr)));
             aggr_desc_p = (char *)STARH(aggr_desc_h);
             if(aggr_desc_size < offset + old_size)
                 abort();
@@ -216,8 +216,8 @@ OSErr aggr_desc_get_addr(Handle aggr_desc_h,
                     aggr_desc_p + offset + new_size,
                     aggr_desc_size - offset - old_size);
             SetHandleSize(aggr_desc_h, aggr_desc_size - diff);
-            if(MemErr != CWC(noErr))
-                AE_RETURN_ERROR(CW(MemErr));
+            if(LM(MemErr) != CWC(noErr))
+                AE_RETURN_ERROR(CW(LM(MemErr)));
             aggr_desc_p = (char *)STARH(aggr_desc_h);
         }
         memset(aggr_desc_p + offset, '\000', new_size);

@@ -20,7 +20,7 @@ int32_t Executor::C_TempFreeMem()
     int32_t sysfree, applfree, retval;
 
     {
-        TheZoneGuard guard(ApplZone);
+        TheZoneGuard guard(LM(ApplZone));
 
         applfree = FreeMem();
     }
@@ -39,7 +39,7 @@ Size Executor::C_TempMaxMem(GUEST<Size> *grow_s)
     Size grow;
 
     {
-        TheZoneGuard guard(ApplZone);
+        TheZoneGuard guard(LM(ApplZone));
 
         applmax = MaxMem(&grow);
     }
@@ -66,13 +66,13 @@ Handle Executor::C_TempNewHandle(Size logical_size, GUEST<OSErr> *result_code)
     {
         Handle retval;
 
-        TheZoneGuard guard(ApplZone);
+        TheZoneGuard guard(LM(ApplZone));
         if(FreeMemSys() >= FreeMem())
-            TheZone = SysZone;
+            LM(TheZone) = LM(SysZone);
 
         retval = NewHandle(logical_size);
         if(result_code)
-            *result_code = MemErr;
+            *result_code = LM(MemErr);
         return retval;
     }
 #endif
@@ -81,17 +81,17 @@ Handle Executor::C_TempNewHandle(Size logical_size, GUEST<OSErr> *result_code)
 void Executor::C_TempHLock(Handle h, GUEST<OSErr> *result_code)
 {
     HLock(h);
-    *result_code = MemErr;
+    *result_code = LM(MemErr);
 }
 
 void Executor::C_TempHUnlock(Handle h, GUEST<OSErr> *result_code)
 {
     HUnlock(h);
-    *result_code = MemErr;
+    *result_code = LM(MemErr);
 }
 
 void Executor::C_TempDisposeHandle(Handle h, GUEST<OSErr> *result_code)
 {
     DisposHandle(h);
-    *result_code = MemErr;
+    *result_code = LM(MemErr);
 }

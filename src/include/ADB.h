@@ -26,6 +26,9 @@ struct ADBSetInfoBlock
     GUEST<Ptr> siDataAreaAddr;
 };
 
+const LowMemGlobal<Byte> KbdLast { 0x218 }; // QuickDraw IMV-367 (false);
+const LowMemGlobal<Byte> KbdType { 0x21E }; // QuickDraw IMV-367 (false);
+
 extern void ADBReInit(void);
 extern OSErr ADBOp(Ptr data, ProcPtr procp, Ptr buffer, INTEGER command);
 extern INTEGER CountADBs(void);

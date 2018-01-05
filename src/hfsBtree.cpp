@@ -94,7 +94,7 @@ static void checkcache(short refnum)
 	return;
     
     printf("\n");
-    fcbp = (filecontrolblock *)((char *)CL(FCBSPtr) + refnum);
+    fcbp = (filecontrolblock *)((char *)CL(LM(FCBSPtr)) + refnum);
     vcbp = CL(fcbp->fcbVPtr);
     headp = (cachehead *) CL(vcbp->vcbCtlBuf);
     printf("headp = 0x%lx, nitems = %d, flink = 0x%lx, blink = 0x%lx\n",
@@ -344,10 +344,10 @@ OSErr Executor::ROMlib_putcache(cacheentry *cachep)
     if((cachep->flags & (CACHEDIRTY | CACHEFREE)) == CACHEDIRTY)
     {
 #if 0
-	BufTgFNum = cachep->fileno;
+	LM(BufTgFNum) = cachep->fileno;
 	BufTgFFlag = cachep->forktype == datafork ? 0 : 2;
-	BufTgFBkNum = cachep->logblk;
-	BufTgDate = Time;
+	LM(BufTgFBkNum) = cachep->logblk;
+	LM(BufTgDate) = LM(Time);
 #endif
         err = ROMlib_transphysblk(&((VCBExtra *)vcbp)->u.hfs,
                                   CL(cachep->physblock) * PHYSBSIZE, 1,
@@ -391,7 +391,7 @@ OSErr Executor::ROMlib_getcache(cacheentry **retpp, uint16_t refnum,
 #endif
 
     ROMlib_index_cached = false;
-    fcbp = (filecontrolblock *)((char *)MR(FCBSPtr) + refnum);
+    fcbp = (filecontrolblock *)((char *)MR(LM(FCBSPtr)) + refnum);
     vcbp = MR(fcbp->fcbVPtr);
     filenum = CL(fcbp->fcbFlNum);
     forkwanted = fcbp->fcbMdRByt & RESOURCEBIT ? resourcefork : datafork;
@@ -1363,7 +1363,7 @@ static OSErr maketrailentrybusy(trailentry *tep, uint16_t refnum)
     OSErr err;
     GUEST<HVCB *> SWvcbp;
 
-    SWvcbp = ((filecontrolblock *)((char *)MR(FCBSPtr) + refnum))->fcbVPtr;
+    SWvcbp = ((filecontrolblock *)((char *)MR(LM(FCBSPtr)) + refnum))->fcbVPtr;
     if(CW(tep->cachep->refnum) != refnum || CL(tep->cachep->logblk) != tep->logbno || tep->cachep->vptr != SWvcbp)
         err = ROMlib_getcache(&tep->cachep, refnum, tep->logbno, GETCACHESAVE);
     else
@@ -1816,7 +1816,7 @@ static OSErr getfreenode(cacheentry **newcachepp, cacheentry *block0cachep)
     block0p = (btblock0 *)block0cachep->buf;
     if(block0p->nfreenodes == CLC(0))
     {
-        fcbp = (filecontrolblock *)((char *)MR(FCBSPtr) + refnum);
+        fcbp = (filecontrolblock *)((char *)MR(LM(FCBSPtr)) + refnum);
         iop.ioRefNum = CW(refnum);
         iop.ioReqCount = fcbp->fcbClmpSize;
 
@@ -2519,7 +2519,7 @@ OSErr Executor::ROMlib_btcreateemptyfile(btparam *btpb)
     rec.filFlNum = vcbp->vcbNxtCNID;
     vcbp->vcbNxtCNID = CL(CL(vcbp->vcbNxtCNID) + 1);
     vcbp->vcbFlags |= CWC(VCBDIRTY);
-    rec.filMdDat = rec.filCrDat = Time;
+    rec.filMdDat = rec.filCrDat = LM(Time);
     err = ROMlib_filecreate(btpb, &rec, regular);
 #if defined(CATFILEDEBUG)
     ROMlib_checkleaves(CW(vcbp->vcbCTRef));
@@ -2541,7 +2541,7 @@ OSErr Executor::ROMlib_btcreateemptydir(btparam *btpb, GUEST<LONGINT> *newidp)
     *newidp = rec.dirDirID = vcbp->vcbNxtCNID;
     vcbp->vcbNxtCNID = CL(CL(vcbp->vcbNxtCNID) + 1);
     vcbp->vcbFlags |= CWC(VCBDIRTY);
-    rec.dirMdDat = rec.dirCrDat = Time;
+    rec.dirMdDat = rec.dirCrDat = LM(Time);
     err = ROMlib_dircreate(btpb, &rec);
     fs_err_hook(err);
     return err;

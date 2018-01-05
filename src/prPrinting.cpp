@@ -516,8 +516,8 @@ TPPrPort Executor::C_PrOpenDoc(THPrint hPrint, TPPrPort port, Ptr pIOBuf)
     if(!already_open)
     {
 #if defined(QUESTIONABLE_FIX_FOR_LOGBOOK_THAT_BREAKS_PRINTING_UNDER_TESTGEN)
-        save_FractEnable = FractEnable;
-        FractEnable = 0xff;
+        save_FractEnable = LM(FractEnable);
+        LM(FractEnable) = 0xff;
 #endif
 
         if(!ROMlib_printfile)
@@ -717,7 +717,7 @@ void Executor::C_PrCloseDoc(TPPrPort port)
     if(port->fOurPtr)
         DisposPtr((Ptr)port);
 #if defined(QUESTIONABLE_FIX_FOR_LOGBOOK_THAT_BREAKS_PRINTING_UNDER_TESTGEN)
-    FractEnable = save_FractEnable;
+    LM(FractEnable) = save_FractEnable;
 #endif
     already_open = false;
 

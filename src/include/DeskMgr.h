@@ -27,9 +27,7 @@ enum
     accUndo = 68,
 };
 
-#if !defined(SEvtEnb)
-extern Byte SEvtEnb;
-#endif
+const LowMemGlobal<Byte> SEvtEnb { 0x15C }; // DeskMgr IMI-443 (false);
 
 /* DO NOT DELETE THIS LINE */
 extern INTEGER C_OpenDeskAcc(

@@ -575,7 +575,7 @@ syszone_p(ProcPtr p)
 {
     THz syszone;
 
-    syszone = MR(SysZone);
+    syszone = MR(LM(SysZone));
     return ((uintptr_t)p >= (uintptr_t)&syszone->heapData
             && (uintptr_t)p < (uintptr_t)MR(syszone->bkLim));
 }
@@ -589,7 +589,7 @@ new_link(OSType selector, ProcPtr selFunc)
         retval = gestaltLocationErr;
     else
     {
-        TheZoneGuard guard(SysZone);
+        TheZoneGuard guard(LM(SysZone));
         gestalt_link_t *gp;
 
         gp = (gestalt_link_t *)NewPtr(sizeof(*gp));

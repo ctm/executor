@@ -49,7 +49,7 @@ void Executor::ROMlib_blt_rgn_update_dirty_rect(RgnHandle rh,
     else if(mode >= hilite
             || ((mode == patXor
                  || mode == srcXor)
-                && !(HiliteMode & 128)))
+                && !(LM(HiliteMode) & 128)))
         mode = hilite;
 
     if(mode == grayishTextOr)
@@ -155,8 +155,8 @@ void Executor::ROMlib_blt_rgn_update_dirty_rect(RgnHandle rh,
             CTabHandle ctab;
             ITabHandle itab;
 
-            ctab = PIXMAP_TABLE(GD_PMAP(MR(TheGDevice)));
-            itab = GD_ITABLE(MR(TheGDevice));
+            ctab = PIXMAP_TABLE(GD_PMAP(MR(LM(TheGDevice))));
+            itab = GD_ITABLE(MR(LM(TheGDevice)));
 
             convert_pixmap_with_IMV_mode(src_pm, dst_pm, new_src_pm,
                                          ctab, ctab, itab,
@@ -279,7 +279,7 @@ const uint32_t Executor::ROMlib_pixel_size_mask[6] = {
         else if(active_screen_addr_p(&the_port->portBits))                    \
         {                                                                     \
             PixMap copy_of_screen;                                            \
-            copy_of_screen = *(STARH(GD_PMAP(MR(TheGDevice))));               \
+            copy_of_screen = *(STARH(GD_PMAP(MR(LM(TheGDevice)))));               \
             copy_of_screen.bounds = the_port->portBits.bounds;                \
             blt_fancy_pat_mode_to_pixmap(rh, mode, NULL,                      \
                                          pattern_accessor(the_port),          \
@@ -307,7 +307,7 @@ blt_pattern_to_bitmap_simple_mode(RgnHandle rh, INTEGER mode,
     GrafPtr the_port;
     bool update_dirty_p;
 
-    main_gd = MR(MainDevice);
+    main_gd = MR(LM(MainDevice));
     main_gd_pmap = GD_PMAP(main_gd);
     screen_dst_p = active_screen_addr_p(dst);
     bpp = PIXMAP_PIXEL_SIZE(main_gd_pmap);
@@ -572,8 +572,8 @@ blt_fancy_pat_mode_to_pixmap(RgnHandle rh, int mode,
         CTabHandle ctab;
         ITabHandle itab;
 
-        ctab = PIXMAP_TABLE(GD_PMAP(MR(TheGDevice)));
-        itab = GD_ITABLE(MR(TheGDevice));
+        ctab = PIXMAP_TABLE(GD_PMAP(MR(LM(TheGDevice))));
+        itab = GD_ITABLE(MR(LM(TheGDevice)));
 
         if(CGrafPort_p(thePort))
             op_color = CPORT_OP_COLOR(theCPort);
@@ -629,7 +629,7 @@ theport_bpp(void)
     if(CGrafPort_p(the_port))
         bpp = PIXMAP_PIXEL_SIZE(CPORT_PIXMAP((CGrafPtr)the_port));
     else if(active_screen_addr_p(&the_port->portBits))
-        bpp = PIXMAP_PIXEL_SIZE(GD_PMAP(MR(MainDevice)));
+        bpp = PIXMAP_PIXEL_SIZE(GD_PMAP(MR(LM(MainDevice))));
     else
         bpp = 1;
 
@@ -644,7 +644,7 @@ Executor::ROMlib_blt_pn(RgnHandle rh, INTEGER mode)
     mode &= 0x3F;
     if(mode < 8)
         mode |= 8;
-    if(mode >= hilite || (mode == patXor && !(HiliteMode & 128)))
+    if(mode >= hilite || (mode == patXor && !(LM(HiliteMode) & 128)))
         mode = hilite;
 
     if(bpp == 1 || (!IMV_XFER_MODE_P(mode) && mode != hilite))
@@ -747,7 +747,7 @@ void Executor::C_StdRgn(GrafVerb verb, RgnHandle rgn)
             int bpp = theport_bpp();
             /* FIXME: is it ok to thrash the fill pattern here? */
             ROMlib_fill_pat(black);
-            if(bpp == 1 || (HiliteMode & 128))
+            if(bpp == 1 || (LM(HiliteMode) & 128))
                 BLT_PAT_SIMPLE(rh, patXor, CPORT_FILL_PIXPAT, PORT_FILL_PAT);
             else
                 BLT_PAT_FANCY(rh, hilite, CPORT_FILL_PIXPAT, PORT_FILL_PAT);

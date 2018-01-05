@@ -1439,89 +1439,89 @@ int main(int argc, char **argv)
     ostraptable[0xFC] = US_TO_SYN68K(jmpl_to_ResourceStub);
     osstuff[0xFC].orig = US_TO_SYN68K(jmpl_to_ResourceStub);
 
-    saveSysZone = SysZone;
-    saveApplZone = ApplZone;
-    saveApplLimit = ApplLimit;
-    memset(&nilhandle, ~0, (char *)&lastlowglobal - (char *)&nilhandle);
+    saveSysZone = LM(SysZone);
+    saveApplZone = LM(ApplZone);
+    saveApplLimit = LM(ApplLimit);
+    memset(&LM(nilhandle), ~0, (char *)&LM(lastlowglobal) - (char *)&LM(nilhandle));
 
-    Ticks = 0;
-    nilhandle = 0; /* so nil dereferences "work" */
+    LM(Ticks) = 0;
+    LM(nilhandle) = 0; /* so nil dereferences "work" */
 
-    memset(&EventQueue, 0, sizeof(EventQueue));
-    memset(&VBLQueue, 0, sizeof(VBLQueue));
-    memset(&DrvQHdr, 0, sizeof(DrvQHdr));
-    memset(&VCBQHdr, 0, sizeof(VCBQHdr));
-    memset(&FSQHdr, 0, sizeof(FSQHdr));
-    TESysJust = 0;
-    SysZone = saveSysZone;
-    ApplZone = saveApplZone;
-    ApplLimit = saveApplLimit;
-    BootDrive = 0;
-    DefVCBPtr = 0;
-    CurMap = 0;
-    TopMapHndl = 0;
-    DSAlertTab = 0;
-    ResumeProc = 0;
-    SFSaveDisk = 0;
-    GZRootHnd = 0;
-    ANumber = 0;
-    ResErrProc = 0;
-    FractEnable = 0;
-    SEvtEnb = 0;
-    MenuList = 0;
-    MBarEnable = 0;
-    MenuFlash = 0;
-    TheMenu = 0;
-    MBarHook = 0;
-    MenuHook = 0;
-    MenuCInfo = NULL;
-    HeapEnd = 0;
-    ApplLimit = 0;
-    SoundActive = soundactiveoff;
-    PortBUse = 2; /* configured for Serial driver */
-    memset(KeyMap, 0, sizeof_KeyMap);
+    memset(&LM(EventQueue), 0, sizeof(LM(EventQueue)));
+    memset(&LM(VBLQueue), 0, sizeof(LM(VBLQueue)));
+    memset(&LM(DrvQHdr), 0, sizeof(LM(DrvQHdr)));
+    memset(&LM(VCBQHdr), 0, sizeof(LM(VCBQHdr)));
+    memset(&LM(FSQHdr), 0, sizeof(LM(FSQHdr)));
+    LM(TESysJust) = 0;
+    LM(SysZone) = saveSysZone;
+    LM(ApplZone) = saveApplZone;
+    LM(ApplLimit) = saveApplLimit;
+    LM(BootDrive) = 0;
+    LM(DefVCBPtr) = 0;
+    LM(CurMap) = 0;
+    LM(TopMapHndl) = 0;
+    LM(DSAlertTab) = 0;
+    LM(ResumeProc) = 0;
+    LM(SFSaveDisk) = 0;
+    LM(GZRootHnd) = 0;
+    LM(ANumber) = 0;
+    LM(ResErrProc) = 0;
+    LM(FractEnable) = 0;
+    LM(SEvtEnb) = 0;
+    LM(MenuList) = 0;
+    LM(MBarEnable) = 0;
+    LM(MenuFlash) = 0;
+    LM(TheMenu) = 0;
+    LM(MBarHook) = 0;
+    LM(MenuHook) = 0;
+    LM(MenuCInfo) = NULL;
+    LM(HeapEnd) = 0;
+    LM(ApplLimit) = 0;
+    LM(SoundActive) = soundactiveoff;
+    LM(PortBUse) = 2; /* configured for Serial driver */
+    memset(LM(KeyMap), 0, sizeof_KeyMap);
     if(vdriver_grayscale_p || grayscale_p)
     {
         /* Choose a nice light gray hilite color. */
-        HiliteRGB.red = CWC((unsigned short)0xAAAA);
-        HiliteRGB.green = CWC((unsigned short)0xAAAA);
-        HiliteRGB.blue = CWC((unsigned short)0xAAAA);
+        LM(HiliteRGB).red = CWC((unsigned short)0xAAAA);
+        LM(HiliteRGB).green = CWC((unsigned short)0xAAAA);
+        LM(HiliteRGB).blue = CWC((unsigned short)0xAAAA);
     }
     else
     {
         /* how about a nice yellow hilite color? no, it's ugly. */
-        HiliteRGB.red = CWC((unsigned short)0xAAAA);
-        HiliteRGB.green = CWC((unsigned short)0xAAAA);
-        HiliteRGB.blue = CWC((unsigned short)0xFFFF);
+        LM(HiliteRGB).red = CWC((unsigned short)0xAAAA);
+        LM(HiliteRGB).green = CWC((unsigned short)0xAAAA);
+        LM(HiliteRGB).blue = CWC((unsigned short)0xFFFF);
     }
 
     {
         static GUEST<uint16_t> ret = CWC((unsigned short)0x4E75);
 
-        JCrsrTask = RM((ProcPtr)&ret);
+        LM(JCrsrTask) = RM((ProcPtr)&ret);
     }
 
     SET_HILITE_BIT();
-    TheGDevice = MainDevice = DeviceList = CLC_NULL;
+    LM(TheGDevice) = LM(MainDevice) = LM(DeviceList) = CLC_NULL;
 
-    OneOne = CLC(0x00010001);
-    Lo3Bytes = CLC(0xFFFFFF);
-    DragHook = 0;
-    TopMapHndl = 0;
-    SysMapHndl = 0;
-    MBDFHndl = 0;
-    MenuList = 0;
-    MBSaveLoc = 0;
+    LM(OneOne) = CLC(0x00010001);
+    LM(Lo3Bytes) = CLC(0xFFFFFF);
+    LM(DragHook) = 0;
+    LM(TopMapHndl) = 0;
+    LM(SysMapHndl) = 0;
+    LM(MBDFHndl) = 0;
+    LM(MenuList) = 0;
+    LM(MBSaveLoc) = 0;
 
-    SysVersion = CW(system_version);
-    FSFCBLen = CWC(94);
-    ScrapState = CWC(-1);
+    LM(SysVersion) = CW(system_version);
+    LM(FSFCBLen) = CWC(94);
+    LM(ScrapState) = CWC(-1);
 
-    TheZone = SysZone;
-    UTableBase = RM((DCtlHandlePtr)NewPtr(4 * NDEVICES));
-    memset(MR(UTableBase), 0, 4 * NDEVICES);
-    UnitNtryCnt = CW(NDEVICES);
-    TheZone = ApplZone;
+    LM(TheZone) = LM(SysZone);
+    LM(UTableBase) = RM((DCtlHandlePtr)NewPtr(4 * NDEVICES));
+    memset(MR(LM(UTableBase)), 0, 4 * NDEVICES);
+    LM(UnitNtryCnt) = CW(NDEVICES);
+    LM(TheZone) = LM(ApplZone);
 
     if(graphics_p)
     {
@@ -1638,7 +1638,7 @@ int main(int argc, char **argv)
         ROMlib_Fsetenv(&env, 0);
     }
 
-    TEDoText = RM((ProcPtr)P_ROMlib_dotext); /* where should this go ? */
+    LM(TEDoText) = RM((ProcPtr)P_ROMlib_dotext); /* where should this go ? */
 
     {
         LONGINT save58;
@@ -1667,7 +1667,7 @@ int main(int argc, char **argv)
 
     restore_virtual_ints(int_state);
 
-    WWExist = QDExist = EXIST_NO;
+    LM(WWExist) = LM(QDExist) = EXIST_NO;
 
 #if defined(CYGWIN32)
     complain_if_no_ghostscript();

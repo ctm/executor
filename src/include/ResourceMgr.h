@@ -64,25 +64,17 @@ enum
     mapChanged = 32,
 };
 
-#if 0
-#if !defined(TopMapHndl_H)
-extern GUEST<Handle> 	TopMapHndl_H;
-extern GUEST<Handle> 	SysMapHndl_H;
-extern GUEST<ProcPtr> 	ResErrProc_H;
-extern INTEGER 	SysMap;
-extern INTEGER 	CurMap;
-extern BOOLEAN 	ResLoad;
-extern INTEGER 	ResErr;
-extern Byte 	SysResName[20];
-#endif
-
-enum
-{
-    TopMapHndl = (TopMapHndl_H.p),
-    SysMapHndl = (SysMapHndl_H.p),
-    ResErrProc = (ResErrProc_H.p),
-};
-#endif
+const LowMemGlobal<Handle> TopMapHndl { 0xA50 }; // ResourceMgr IMI-115 (true);
+const LowMemGlobal<Handle> SysMapHndl { 0xA54 }; // ResourceMgr IMI-114 (true);
+const LowMemGlobal<INTEGER> SysMap { 0xA58 }; // ResourceMgr IMI-114 (true);
+const LowMemGlobal<INTEGER> CurMap { 0xA5A }; // ResourceMgr IMI-117 (true);
+const LowMemGlobal<INTEGER> resreadonly { 0xA5C }; // ResourceMgr ToolEqu.a (false);
+const LowMemGlobal<BOOLEAN> ResLoad { 0xA5E }; // ResourceMgr IMI-118 (true);
+const LowMemGlobal<INTEGER> ResErr { 0xA60 }; // ResourceMgr IMI-118 (true);
+const LowMemGlobal<ProcPtr> ResErrProc { 0xAF2 }; // ResourceMgr IMI-116 (true);
+const LowMemGlobal<Byte[20]> SysResName { 0xAD8 }; // ResourceMgr IMI-114 (true);
+const LowMemGlobal<Byte> RomMapInsert { 0xB9E }; // ResourceMgr IMIV-19 (false);
+const LowMemGlobal<Byte> TmpResLoad { 0xB9F }; // ResourceMgr IMIV-19 (false);
 
 extern BOOLEAN ROMlib_InstallxDEF(ProcPtr thedef, ResType typ,
                                   INTEGER id);

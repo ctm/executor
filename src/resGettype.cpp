@@ -87,7 +87,7 @@ static INTEGER initar(INTEGER rn)
             ReallocHandle((Handle)ar, mostbytesneeded);
         else
         {
-            TheZoneGuard guard(SysZone);
+            TheZoneGuard guard(LM(SysZone));
 
             ar = (GUEST<restypeptr> *)NewHandle(mostbytesneeded);
         }
@@ -118,7 +118,7 @@ INTEGER Executor::C_CountTypes()
 
 INTEGER Executor::C_Count1Types() /* IMIV-15 */
 {
-    return initar(Cx(CurMap));
+    return initar(Cx(LM(CurMap)));
 }
 
 void Executor::C_GetIndType(GUEST<ResType> *typ, INTEGER indx)
@@ -131,7 +131,7 @@ void Executor::C_GetIndType(GUEST<ResType> *typ, INTEGER indx)
 
 void Executor::C_Get1IndType(GUEST<ResType> *typ, INTEGER indx) /* IMIV-15 */
 {
-    if(indx <= 0 || indx > initar(Cx(CurMap)))
+    if(indx <= 0 || indx > initar(Cx(LM(CurMap))))
         *typ = 0;
     else
         *typ = STARH(ar)[indx - 1];

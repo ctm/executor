@@ -55,10 +55,8 @@ struct SFReply
 
 typedef OSType SFTypeList[4];
 
-#if !defined(SFSaveDisk)
-extern INTEGER SFSaveDisk;
-extern LONGINT CurDirStore;
-#endif
+const LowMemGlobal<INTEGER> SFSaveDisk { 0x214 }; // StdFilePkg IMIV-72 (true);
+const LowMemGlobal<LONGINT> CurDirStore { 0x398 }; // StdFilePkg IMIV-72 (true);
 
 struct StandardFileReply
 {

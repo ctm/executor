@@ -590,7 +590,7 @@ void Executor::C_TECopy(TEHandle te)
     HLock(hText);
     Text = (char *)STARH(hText);
 
-    PtrToXHand((Ptr)&Text[start], MR(TEScrpHandle), len);
+    PtrToXHand((Ptr)&Text[start], MR(LM(TEScrpHandle)), len);
     if(TE_STYLIZED_P(te))
     {
         TEStyleHandle te_style;
@@ -653,11 +653,11 @@ void Executor::C_TECopy(TEHandle te)
 
         HSetState((Handle)te_style, te_style_flags);
     }
-    TEScrpLength = CW(len);
+    LM(TEScrpLength) = CW(len);
 #if defined(X) || defined(MACOSX_) || defined(SDL)
-    /* ### should this lock `TEScrpHandle'? */
-    PutScrapX(TICK("TEXT"), CW(TEScrpLength),
-              (char *)STARH(MR(TEScrpHandle)), CW(ScrapCount));
+    /* ### should this lock `LM(TEScrpHandle)'? */
+    PutScrapX(TICK("TEXT"), CW(LM(TEScrpLength)),
+              (char *)STARH(MR(LM(TEScrpHandle))), CW(LM(ScrapCount)));
 #endif /* defined(X) */
 
     HSetState(hText, hText_flags);
@@ -674,12 +674,12 @@ void Executor::C_TEPaste(TEHandle teh)
 #if defined(X) || defined(MACOSX_) || defined(SDL)
     Size s;
 
-    s = GetScrapX(TICK("TEXT"), MR(TEScrpHandle));
+    s = GetScrapX(TICK("TEXT"), MR(LM(TEScrpHandle)));
     if(s >= 0)
-        TEScrpLength = CW(s);
+        LM(TEScrpLength) = CW(s);
 #endif /* defined(X) */
-    HLockGuard guard(MR(TEScrpHandle));
-    ROMlib_tedoitall(teh, STARH(MR(TEScrpHandle)), CW(TEScrpLength),
+    HLockGuard guard(MR(LM(TEScrpHandle)));
+    ROMlib_tedoitall(teh, STARH(MR(LM(TEScrpHandle))), CW(LM(TEScrpLength)),
                      false, NULL);
 }
 

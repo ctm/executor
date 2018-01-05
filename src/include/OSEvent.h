@@ -88,19 +88,14 @@ typedef struct size_info
 
 extern size_info_t size_info;
 
-#if 0
-#if !defined(Ticks_UL)
-extern GUEST<ULONGINT> Ticks_UL;
-extern INTEGER 	monkeylives;
-extern INTEGER 	SysEvtMask;
-extern QHdr 	EventQueue;
-#endif
-
-enum
-{
-    Ticks = (Ticks_UL.u),
-};
-#endif
+const LowMemGlobal<INTEGER> monkeylives { 0x100 }; // OSEvent SysEqu.a (true-b);
+const LowMemGlobal<INTEGER> SysEvtMask { 0x144 }; // OSEvent IMII-70 (true);
+const LowMemGlobal<QHdr> EventQueue { 0x14A }; // OSEvent IMII-71 (true);
+const LowMemGlobal<ULONGINT> Ticks { 0x16A }; // OSEvent IMI-260 (true);
+const LowMemGlobal<Byte> MBState { 0x172 }; // EventMgr PegLeg (True-b);
+const LowMemGlobal<Point> MTemp { 0x828 }; // QuickDraw PegLeg (True-b);
+const LowMemGlobal<Point> MouseLocation { 0x82C }; // QuickDraw Vamp (true);
+const LowMemGlobal<Point> MouseLocation2 { 0x830 }; // QuickDraw MacAttack (true);
 
 extern void ROMlib_eventdep(void);
 extern void insertcommonevent(char *xeventp, commonevent *comevtp);

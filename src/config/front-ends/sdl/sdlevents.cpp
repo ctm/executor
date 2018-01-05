@@ -458,7 +458,7 @@ static int modifier_p(unsigned char virt, uint16_t *modstore)
 syn68k_addr_t
 handle_sdl_mouse(syn68k_addr_t interrupt_addr, void *unused)
 {
-    MouseLocation = mouseloc;
+    LM(MouseLocation) = mouseloc;
     adb_apeiron_hack(false);
     return (MAGIC_RTE_ADDRESS);
 }
@@ -570,8 +570,8 @@ handle_sdl_events(syn68k_addr_t interrupt_addr, void *unused)
                         keymod &= ~mod;
                 }
                 when = TickCount();
-                where.h = CW(MouseLocation.h);
-                where.v = CW(MouseLocation.v);
+                where.h = CW(LM(MouseLocation).h);
+                where.v = CW(LM(MouseLocation).v);
                 keywhat = ROMlib_xlate(mkvkey, keymod, down_p);
                 post_keytrans_key_events(down_p ? keyDown : keyUp,
                                          keywhat, when, where,

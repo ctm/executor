@@ -148,7 +148,7 @@ void Executor::C_ModalDialog(ProcPtr fp, GUEST<INTEGER> *item) /* IMI-415 */
    * caused a bug in Macwrite II when size/fontsize... and clicking on
    * a size on the left.
    */
-    TheGDeviceGuard guard(MR(MainDevice));
+    TheGDeviceGuard guard(MR(LM(MainDevice)));
 
     EventRecord evt;
     DialogPeek dp;
@@ -222,7 +222,7 @@ void Executor::C_ModalDialog(ProcPtr fp, GUEST<INTEGER> *item) /* IMI-415 */
    * a size on the left.
    */
 
-    TheGDeviceGuard guard(MR(MainDevice));
+    TheGDeviceGuard guard(MR(LM(MainDevice)));
 
     EventRecord evt;
     DialogPeek dp;
@@ -397,7 +397,7 @@ void Executor::ROMlib_drawiptext(DialogPtr dp, itmp ip, int item_no)
 
         HandToHand(&nh);
 
-        for(*sp = '0', hp = (GUEST<Handle> *)DAStrings;
+        for(*sp = '0', hp = (GUEST<Handle> *)LM(DAStrings);
             *sp != '4'; ++*sp, hp++)
         {
             if(hp)
@@ -688,15 +688,15 @@ void Executor::DlgDelete(DialogPtr dp) /* IMI-418 */
 
 void Executor::BEEPER(INTEGER n)
 {
-    if(DABeeper)
+    if(LM(DABeeper))
     {
-        if((void (*)(INTEGER))MR(DABeeper) == P_ROMlib_mysound)
+        if((void (*)(INTEGER))MR(LM(DABeeper)) == P_ROMlib_mysound)
             C_ROMlib_mysound((n));
         else
         {
             HOOKSAVEREGS();
             ROMlib_hook(dial_soundprocnumber);
-            Executor::CToPascalCall((void *)(soundprocp)MR(DABeeper), ctop(&C_ROMlib_mysound), n);
+            Executor::CToPascalCall((void *)(soundprocp)MR(LM(DABeeper)), ctop(&C_ROMlib_mysound), n);
             HOOKRESTOREREGS();
         }
     }

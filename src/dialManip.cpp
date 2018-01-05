@@ -26,13 +26,13 @@ void Executor::C_ParamText(StringPtr p0, StringPtr p1, StringPtr p2,
                            StringPtr p3) /* IMI-421 */
 {
     if(p0)
-        PtrToXHand((Ptr)p0, MR(DAStrings[0]), (LONGINT)U(p0[0]) + 1);
+        PtrToXHand((Ptr)p0, MR(LM(DAStrings)[0]), (LONGINT)U(p0[0]) + 1);
     if(p1)
-        PtrToXHand((Ptr)p1, MR(DAStrings[1]), (LONGINT)U(p1[0]) + 1);
+        PtrToXHand((Ptr)p1, MR(LM(DAStrings)[1]), (LONGINT)U(p1[0]) + 1);
     if(p2)
-        PtrToXHand((Ptr)p2, MR(DAStrings[2]), (LONGINT)U(p2[0]) + 1);
+        PtrToXHand((Ptr)p2, MR(LM(DAStrings)[2]), (LONGINT)U(p2[0]) + 1);
     if(p3)
-        PtrToXHand((Ptr)p3, MR(DAStrings[3]), (LONGINT)U(p3[0]) + 1);
+        PtrToXHand((Ptr)p3, MR(LM(DAStrings)[3]), (LONGINT)U(p3[0]) + 1);
 }
 
 itmp Executor::ROMlib_dpnotoip(DialogPeek dp, INTEGER itemno,
@@ -64,7 +64,7 @@ static itmp htoip(Handle h, WindowPeek *wp_return, int16_t *nop_return,
     INTEGER i, nop;
     itmp retval;
 
-    for(wp = MR(WindowList); wp; wp = WINDOW_NEXT_WINDOW(wp))
+    for(wp = MR(LM(WindowList)); wp; wp = WINDOW_NEXT_WINDOW(wp))
     {
         if(WINDOW_KIND_X(wp) == CWC(dialogKind)
            || WINDOW_KIND(wp) < 0)
@@ -315,7 +315,7 @@ void Executor::C_SetIText(Handle item, StringPtr text) /* IMI-422 */
 
         /* test on Mac shows that if the size can't be set, the copy
 	 isn't done, but the rest is */
-        if(MemErr == CWC(noErr))
+        if(LM(MemErr) == CWC(noErr))
             BlockMoveData((Ptr)&text[1], STARH(item), hs);
         ip = htoip(item, &wp, &no, &flags);
         if(ip)
@@ -390,12 +390,12 @@ void Executor::C_SelIText(DialogPtr dp, INTEGER itemno, INTEGER start,
 
 INTEGER Executor::GetAlrtStage() /* IMI-422 */
 {
-    return Cx(ACount);
+    return Cx(LM(ACount));
 }
 
 void Executor::ResetAlrtStage() /* IMI-423 */
 {
-    ACount = 0;
+    LM(ACount) = 0;
 }
 
 void Executor::C_HideDItem(DialogPtr dp, INTEGER item) /* IMIV-59 */

@@ -27,22 +27,22 @@ using namespace Executor;
 
 PScrapStuff Executor::C_InfoScrap()
 {
-    if(Cx(ScrapState) < 0)
+    if(Cx(LM(ScrapState)) < 0)
         ZeroScrap();
-    return ((PScrapStuff)&ScrapSize);
+    return ((PScrapStuff)&LM(ScrapSize));
 }
 
 static OSErr cropen(INTEGER *fp)
 {
     OSErr retval;
 
-    retval = FSOpen(MR(ScrapName), CW(BootDrive), fp);
+    retval = FSOpen(MR(LM(ScrapName)), CW(LM(BootDrive)), fp);
     if(retval == fnfErr)
     {
-        retval = Create(MR(ScrapName), CW(BootDrive), TICK("MACS"), TICK("CLIP"));
+        retval = Create(MR(LM(ScrapName)), CW(LM(BootDrive)), TICK("MACS"), TICK("CLIP"));
         if(retval != noErr)
             return (retval);
-        return (FSOpen(MR(ScrapName), CW(BootDrive), fp));
+        return (FSOpen(MR(LM(ScrapName)), CW(LM(BootDrive)), fp));
     }
     return (retval);
 }
@@ -51,22 +51,22 @@ LONGINT Executor::C_UnloadScrap()
 {
     OSErr retval;
     INTEGER f;
-    LONGINT l = Cx(ScrapSize);
+    LONGINT l = Cx(LM(ScrapSize));
 
-    if(Cx(ScrapState) > 0)
+    if(Cx(LM(ScrapState)) > 0)
     {
         retval = cropen(&f);
         if(retval != noErr)
             /*-->*/ return (retval);
-        HLock(MR(ScrapHandle));
-        retval = FSWriteAll(f, &l, STARH(MR(ScrapHandle)));
-        HUnlock(MR(ScrapHandle));
+        HLock(MR(LM(ScrapHandle)));
+        retval = FSWriteAll(f, &l, STARH(MR(LM(ScrapHandle))));
+        HUnlock(MR(LM(ScrapHandle)));
         if(retval != noErr)
             /*-->*/ return (retval);
         retval = FSClose(f);
         if(retval != noErr)
             /*-->*/ return (retval);
-        ScrapState = CWC(0);
+        LM(ScrapState) = CWC(0);
     }
     return noErr;
 }
@@ -75,28 +75,28 @@ LONGINT Executor::C_LoadScrap()
 {
     OSErr retval;
     INTEGER f;
-    LONGINT l = Cx(ScrapSize);
+    LONGINT l = Cx(LM(ScrapSize));
 
-    if(ScrapState == CWC(0))
+    if(LM(ScrapState) == CWC(0))
     {
-        retval = FSOpen(MR(ScrapName), CW(BootDrive), &f);
+        retval = FSOpen(MR(LM(ScrapName)), CW(LM(BootDrive)), &f);
         if(retval != noErr)
             return (retval);
 
-        HUnlock(MR(ScrapHandle));
-        ReallocHandle(MR(ScrapHandle), (Size)Cx(ScrapSize));
-        if(MemErr != CWC(noErr))
-            /*-->*/ return Cx(MemErr);
-        HLock(MR(ScrapHandle));
-        retval = FSReadAll(f, &l, STARH(MR(ScrapHandle)));
-        HUnlock(MR(ScrapHandle));
+        HUnlock(MR(LM(ScrapHandle)));
+        ReallocHandle(MR(LM(ScrapHandle)), (Size)Cx(LM(ScrapSize)));
+        if(LM(MemErr) != CWC(noErr))
+            /*-->*/ return Cx(LM(MemErr));
+        HLock(MR(LM(ScrapHandle)));
+        retval = FSReadAll(f, &l, STARH(MR(LM(ScrapHandle))));
+        HUnlock(MR(LM(ScrapHandle)));
         if(retval != noErr)
             return (retval);
         SetEOF(f, (LONGINT)0);
         FSClose(f);
-        ScrapState = CWC(1);
+        LM(ScrapState) = CWC(1);
     }
-    return (Cx(ScrapState) > 0 ? noErr : noScrapErr);
+    return (Cx(LM(ScrapState)) > 0 ? noErr : noScrapErr);
 }
 
 LONGINT Executor::ROMlib_ZeroScrap()
@@ -105,17 +105,17 @@ LONGINT Executor::ROMlib_ZeroScrap()
     INTEGER f;
     GUEST<THz> saveZone;
 
-    if(Cx(ScrapState) < 0)
+    if(Cx(LM(ScrapState)) < 0)
     {
-        ScrapCount = 0;
-        saveZone = TheZone;
-        TheZone = SysZone;
-        ScrapHandle = RM(NewHandle((Size)0));
-        TheZone = saveZone;
-        ScrapState = CWC(1);
-        ScrapName = RM((StringPtr) "\016Clipboard File");
+        LM(ScrapCount) = 0;
+        saveZone = LM(TheZone);
+        LM(TheZone) = LM(SysZone);
+        LM(ScrapHandle) = RM(NewHandle((Size)0));
+        LM(TheZone) = saveZone;
+        LM(ScrapState) = CWC(1);
+        LM(ScrapName) = RM((StringPtr) "\016Clipboard File");
     }
-    else if(Cx(ScrapState) == 0)
+    else if(Cx(LM(ScrapState)) == 0)
     {
         retval = cropen(&f);
         if(retval != noErr)
@@ -125,10 +125,10 @@ LONGINT Executor::ROMlib_ZeroScrap()
             return retval;
         FSClose(f);
     }
-    else if(Cx(ScrapState) > 0)
-        SetHandleSize(MR(ScrapHandle), (Size)0);
-    ScrapSize = 0;
-    ScrapCount = CW(CW(ScrapCount) + 1);
+    else if(Cx(LM(ScrapState)) > 0)
+        SetHandleSize(MR(LM(ScrapHandle)), (Size)0);
+    LM(ScrapSize) = 0;
+    LM(ScrapCount) = CW(CW(LM(ScrapCount)) + 1);
     return noErr;
 }
 
@@ -146,21 +146,21 @@ LONGINT Executor::C_PutScrap(LONGINT len, ResType rest, Ptr p)
 
     GUEST<LONGINT> *lp;
 
-    if(Cx(ScrapState) < 0)
+    if(Cx(LM(ScrapState)) < 0)
     {
         retval = ZeroScrap();
         if(retval != noErr)
             /*-->*/ return (retval);
     }
 #if defined(X) || defined(MACOSX_) || defined(SDL)
-    PutScrapX(rest, len, (char *)p, CW(ScrapCount));
+    PutScrapX(rest, len, (char *)p, CW(LM(ScrapCount)));
 #endif /* defined(X) */
-    if(Cx(ScrapState) == 0)
+    if(Cx(LM(ScrapState)) == 0)
     {
-        retval = FSOpen(MR(ScrapName), CW(BootDrive), &f);
+        retval = FSOpen(MR(LM(ScrapName)), CW(LM(BootDrive)), &f);
         if(retval != noErr)
             /*-->*/ return (retval);
-        SetFPos(f, fsFromStart, (LONGINT)Cx(ScrapSize));
+        SetFPos(f, fsFromStart, (LONGINT)Cx(LM(ScrapSize)));
         l = 4;
         GUEST<ResType> rest_s = CL(rest);
         FSWriteAll(f, &l, (Ptr)&rest_s);
@@ -173,17 +173,17 @@ LONGINT Executor::C_PutScrap(LONGINT len, ResType rest, Ptr p)
     }
     else
     {
-        SetHandleSize(MR(ScrapHandle), (Size)Cx(ScrapSize) + 8);
-        if(MemErr != CWC(noErr))
-            /*-->*/ return CW(MemErr);
+        SetHandleSize(MR(LM(ScrapHandle)), (Size)Cx(LM(ScrapSize)) + 8);
+        if(LM(MemErr) != CWC(noErr))
+            /*-->*/ return CW(LM(MemErr));
         /* alignment stuff */
-        lp = (GUEST<LONGINT> *)((char *)STARH(MR(ScrapHandle)) + Cx(ScrapSize));
+        lp = (GUEST<LONGINT> *)((char *)STARH(MR(LM(ScrapHandle))) + Cx(LM(ScrapSize)));
         *lp++ = CL(rest);
         *lp++ = CL(len);
         len = (len + 1) & -2L;
-        PtrAndHand(p, MR(ScrapHandle), (Size)len);
+        PtrAndHand(p, MR(LM(ScrapHandle)), (Size)len);
     }
-    ScrapSize = CL(CL(ScrapSize) + 8 + len);
+    LM(ScrapSize) = CL(CL(LM(ScrapSize)) + 8 + len);
     return noErr;
 }
 
@@ -226,7 +226,7 @@ get_scrap_helper(void *vh, void *lp, int len, bool convert_text)
         new_len = len;
     h = (Handle)vh;
     ReallocHandle(h, new_len);
-    if(MemErr != CWC(noErr))
+    if(LM(MemErr) != CWC(noErr))
         retval = -1;
     else
     {
@@ -271,19 +271,19 @@ LONGINT Executor::C_GetScrap(Handle h, ResType rest, GUEST<LONGINT> *off)
         /*-->*/ RETURN(s);
     }
 #endif /* defined(X) */
-    if(Cx(ScrapState) < 0)
+    if(Cx(LM(ScrapState)) < 0)
     {
         retval = ZeroScrap();
         if(retval != noErr)
             /*-->*/ RETURN(retval);
     }
-    if(ScrapState == CWC(0))
+    if(LM(ScrapState) == CWC(0))
     {
-        retval = FSOpen(MR(ScrapName), CW(BootDrive), &f);
+        retval = FSOpen(MR(LM(ScrapName)), CW(LM(BootDrive)), &f);
         if(retval != noErr)
             /*-->*/ RETURN(retval);
         found = false;
-        while(l < Cx(ScrapSize) && !found)
+        while(l < Cx(LM(ScrapSize)) && !found)
         {
             ltoread = 8;
             FSReadAll(f, &ltoread, (Ptr)restlen);
@@ -297,14 +297,14 @@ LONGINT Executor::C_GetScrap(Handle h, ResType rest, GUEST<LONGINT> *off)
                 SetFPos(f, fsFromMark, incr);
             }
         }
-        if(l >= Cx(ScrapSize))
+        if(l >= Cx(LM(ScrapSize)))
         {
             FSClose(f);
             /*-->*/ RETURN(noTypeErr);
         }
         ReallocHandle(h, s);
-        if(MemErr != CWC(noErr))
-            /*-->*/ RETURN(CW(MemErr));
+        if(LM(MemErr) != CWC(noErr))
+            /*-->*/ RETURN(CW(LM(MemErr)));
         HLock(h);
         ltoread = s;
         FSReadAll(f, &ltoread, STARH(h));
@@ -313,38 +313,38 @@ LONGINT Executor::C_GetScrap(Handle h, ResType rest, GUEST<LONGINT> *off)
     }
     else
     {
-        HLock(MR(ScrapHandle));
-        p = (unsigned char *)MR(*MR(ScrapHandle));
+        HLock(MR(LM(ScrapHandle)));
+        p = (unsigned char *)MR(*MR(LM(ScrapHandle)));
 #if 1 || !defined(QUADALIGN)
-        while(l < Cx(ScrapSize) && rest != CL(*(GUEST<LONGINT> *)p))
+        while(l < Cx(LM(ScrapSize)) && rest != CL(*(GUEST<LONGINT> *)p))
         {
             s = CL(*((GUEST<LONGINT> *)p + 1));
             incr = (8 + s + 1) & ~1L;
             l += incr;
             p += incr;
         }
-        if(l >= Cx(ScrapSize))
+        if(l >= Cx(LM(ScrapSize)))
         {
-            HUnlock(MR(ScrapHandle));
+            HUnlock(MR(LM(ScrapHandle)));
             /*-->*/ RETURN(noTypeErr);
         }
         s = CL(*((GUEST<LONGINT> *)p + 1));
 #else /* QUADALIGN */
-        while(l < Cx(ScrapSize) && rest != SNAGLONG(p))
+        while(l < Cx(LM(ScrapSize)) && rest != SNAGLONG(p))
         {
             incr = 8 + ((s = SNAGLONG(p + sizeof(LONGINT))) + 1) & -2L;
             l += incr;
             p += incr;
         }
-        if(l >= Cx(ScrapSize))
+        if(l >= Cx(LM(ScrapSize)))
         {
-            HUnlock(MR(ScrapHandle));
+            HUnlock(MR(LM(ScrapHandle)));
             /*-->*/ RETURN(noTypeErr);
         }
         s = *((LONGINT *)p + 1);
 #endif /* QUADALIGN */
         PtrToXHand((Ptr)(p + 8), h, s);
-        HUnlock(MR(ScrapHandle));
+        HUnlock(MR(LM(ScrapHandle)));
     }
     *off = CL(l + 8);
     RETURN(s);
@@ -622,7 +622,7 @@ get_scrap_helper_dib(void *vh, void *lp)
     h = (Handle)vh;
     len = GetHandleSize((Handle)pich);
     ReallocHandle(h, len);
-    if(MemErr != CWC(noErr))
+    if(LM(MemErr) != CWC(noErr))
         retval = -1;
     else
     {

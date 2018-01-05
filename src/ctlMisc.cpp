@@ -108,7 +108,7 @@ Executor::lookup_aux_ctl(ControlHandle ctl)
 {
     GUEST<AuxCtlHandle> *t;
 
-    for(t = &AuxCtlHead;
+    for(t = &LM(AuxCtlHead);
         *t && HxP(MR(*t), acOwner) != ctl;
         t = &HxX(MR(*t), acNext))
         ;
@@ -142,7 +142,7 @@ INTEGER Executor::C_GetCVariant(ControlHandle c) /* IMV-222 */
 {
     AuxCtlHandle h;
 
-    for(h = MR(AuxCtlHead); h != 0 && HxP(h, acOwner) != c; h = HxP(h, acNext))
+    for(h = MR(LM(AuxCtlHead)); h != 0 && HxP(h, acOwner) != c; h = HxP(h, acNext))
         ;
     return h != 0 ? Hx(h, acFlags) : (INTEGER)0;
 }

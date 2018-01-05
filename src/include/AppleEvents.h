@@ -307,6 +307,8 @@ enum
 /* #### OSL internal */
 extern syn68k_addr_t /*ProcPtr*/ AE_OSL_select_fn;
 
+const LowMemGlobal<AE_info_ptr> AE_info { 0x2B6 }; // AppleEvents AEGizmo (true);
+
 /* prototypes go here */
 
 extern OSErr C_AEGetCoercionHandler(DescType from_type, DescType to_type,
@@ -518,17 +520,6 @@ extern void AE_reinit(void);
 
 extern OSErr C_AEManagerInfo(GUEST<LONGINT> *resultp);
 PASCAL_FUNCTION(AEManagerInfo);
-
-#if 0
-#if !defined(AE_info_H)
-extern GUEST<AE_info_ptr> AE_info_H;
-#endif
-
-enum
-{
-    AE_info = (AE_info_H.p),
-};
-#endif
 
 extern OSErr C_AEDisposeToken(AEDesc *theToken);
 PASCAL_FUNCTION(AEDisposeToken);

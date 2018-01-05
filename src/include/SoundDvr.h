@@ -80,19 +80,12 @@ struct FTSynthRec
 };
 typedef FTSynthRec *FTsynthPtr;
 
-#if 0
-#if !defined(SoundBase_H)
-extern GUEST<Ptr> 	SoundBase_H;
-extern Byte 	SdVolume;
-extern Byte 	SoundActive;
-extern INTEGER 	CurPitch;
-#endif
+const LowMemGlobal<Byte> SdVolume { 0x260 }; // SoundDvr IMII-232 (true-b);
+const LowMemGlobal<FTSndRecPtr> SoundPtr { 0x262 }; // SoundDvr IMII-227 (false);
+const LowMemGlobal<Ptr> SoundBase { 0x266 }; // SoundDvr IMIII-21 (true-b);
+const LowMemGlobal<Byte> SoundLevel { 0x27F }; // SoundDvr IMII-234 (false);
+const LowMemGlobal<INTEGER> CurPitch { 0x280 }; // SoundDvr IMII-226 (true-b);
 
-enum
-{
-    SoundBase = (SoundBase_H.p),
-};
-#endif
 }
 
 #endif /* __SOUND__ */

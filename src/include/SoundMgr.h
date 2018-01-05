@@ -152,9 +152,7 @@ enum
     resProblem = (-204),
 };
 
-#if !defined(SoundActive)
-extern Byte SoundActive;
-#endif
+const LowMemGlobal<Byte> SoundActive { 0x27E }; // SoundDvr MPW (true);
 
 enum
 {

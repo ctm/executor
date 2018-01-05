@@ -490,7 +490,7 @@ void Executor::C_DisposeGWorld(GWorldPtr graphics_world)
     gw_info_t *gw_info;
 
     if((GrafPtr)graphics_world == thePort)
-        thePortX = WMgrPort;
+        thePortX = LM(WMgrPort);
     /* FIXME: set the gdevice to something sane as well? */
 
     gw_info = lookup_gw_info_by_gw(graphics_world);
@@ -527,7 +527,7 @@ void Executor::C_GetGWorld(GUEST<CGrafPtr> *port,
                            GUEST<GDHandle> *graphics_device)
 {
     *port = theCPortX;
-    *graphics_device = TheGDevice;
+    *graphics_device = LM(TheGDevice);
 }
 
 void Executor::C_SetGWorld(CGrafPtr port, GDHandle graphics_device)
@@ -539,21 +539,21 @@ void Executor::C_SetGWorld(CGrafPtr port, GDHandle graphics_device)
         gw_info = lookup_gw_info_by_gw((GWorldPtr)port);
         gui_assert(gw_info);
 
-        TheGDevice = RM(gw_info->gw_gd);
+        LM(TheGDevice) = RM(gw_info->gw_gd);
     }
     else
     {
         if(graphics_device)
-            TheGDevice = RM(graphics_device);
+            LM(TheGDevice) = RM(graphics_device);
         else
         {
             PixMapHandle gd_pixmap;
 
-            gd_pixmap = GD_PMAP(MR(MainDevice));
+            gd_pixmap = GD_PMAP(MR(LM(MainDevice)));
 
             if(port
                && (PIXMAP_BASEADDR_X(gd_pixmap) == PORT_BASEADDR_X(port)))
-                TheGDevice = MainDevice;
+                LM(TheGDevice) = LM(MainDevice);
         }
     }
 
@@ -637,7 +637,7 @@ Ptr Executor::C_GetPixBaseAddr(PixMapHandle pixels)
 
         if(gw_info == NULL
            /* don't dereference the screen baseaddr! */
-           || gw_info->gw_gd == MR(MainDevice))
+           || gw_info->gw_gd == MR(LM(MainDevice)))
             return PIXMAP_BASEADDR(pixels);
         else
             return STARH((Handle)PIXMAP_BASEADDR(pixels));

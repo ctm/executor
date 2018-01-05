@@ -13,19 +13,10 @@ namespace Executor
 typedef enum { EXIST_YES = 0,
                EXIST_NO = 0xFF } exist_enum_t;
 
-#if 0
-#if !defined(DSAlertTab_H)
-extern GUEST<Ptr> DSAlertTab_H;
-extern Rect DSAlertRect;
-extern Byte 	WWExist;
-extern Byte 	QDExist;
-#endif
-
-enum
-{
-    DSAlertTab = (DSAlertTab_H.p),
-};
-#endif
+const LowMemGlobal<Ptr> DSAlertTab { 0x2BA }; // SysErr IMII-359 (true);
+const LowMemGlobal<Rect> DSAlertRect { 0x3F8 }; // SysErr IMII-362 (true);
+const LowMemGlobal<Byte> WWExist { 0x8F2 }; // SysError SysEqu.a (true);
+const LowMemGlobal<Byte> QDExist { 0x8F3 }; // SysError SysEqu.a (true);
 
 extern char syserr_msg[];
 

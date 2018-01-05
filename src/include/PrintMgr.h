@@ -179,9 +179,7 @@ typedef struct TPrDlg
     GUEST<INTEGER> iNumLst;
 } * TPPrDlg;
 
-#if !defined(PrintErr)
-extern INTEGER PrintErr;
-#endif
+const LowMemGlobal<INTEGER> PrintErr { 0x944 }; // PrintMgr IMII-161 (true-b);
 
 extern INTEGER C_PrError(void);
 PASCAL_FUNCTION(PrError);

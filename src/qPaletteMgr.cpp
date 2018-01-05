@@ -87,7 +87,7 @@ lookup_pm_resource_holders(void)
 
     for(i = 0; i < n_resource_holders; i++)
     {
-        if(device_to_resholder[i] == MR(TheGDevice))
+        if(device_to_resholder[i] == MR(LM(TheGDevice)))
             return pm_resource_holders[i];
         else if(device_to_resholder[i] == NULL)
             null_index = i;
@@ -122,7 +122,7 @@ lookup_pm_resource_holders(void)
         index = null_index;
     }
 
-    device_to_resholder[index] = MR(TheGDevice);
+    device_to_resholder[index] = MR(LM(TheGDevice));
     pm_resource_holders[index]
         = (pm_resource_holder_t *)malloc(256 * sizeof *pm_resource_holders[index]);
 
@@ -191,7 +191,7 @@ int window_p(WindowPtr w)
 {
     WindowPeek t_w;
 
-    for(t_w = MR(WindowList);
+    for(t_w = MR(LM(WindowList));
         t_w;
         t_w = WINDOW_NEXT_WINDOW(t_w))
     {
@@ -265,7 +265,7 @@ void pm_deallocate_entry(ColorInfo *entry, int change_color_env_p)
 
     index = CI_ENTRY_INDEX(entry);
 
-    gd_pixmap = GD_PMAP(MR(TheGDevice));
+    gd_pixmap = GD_PMAP(MR(LM(TheGDevice)));
     gd_ctab = PIXMAP_TABLE(gd_pixmap);
     gd_ctab_table = CTAB_TABLE(gd_ctab);
 
@@ -560,7 +560,7 @@ pm_do_updates_gd_changed(void)
     window_palette_alist_t t;
     WindowPtr front_w;
 
-    gd = MR(TheGDevice);
+    gd = MR(LM(TheGDevice));
 
     if(!GD_CLUT_P(gd))
         /* no updates to do here */
@@ -571,13 +571,13 @@ pm_do_updates_gd_changed(void)
 
     CTAB_SEED_X(gd_ctab) = CL(GetCTSeed());
 
-    PaintWhite = 0;
+    LM(PaintWhite) = 0;
     front_w = FrontWindow();
     for(t = window_palette_alist; t; t = t->next)
     {
         if(t->w == (WindowPtr)-1)
         {
-            PaintOne((WindowPeek)NULL, MR(GrayRgn));
+            PaintOne((WindowPeek)NULL, MR(LM(GrayRgn)));
         }
         else if(!window_p(t->w))
             continue;
@@ -589,7 +589,7 @@ pm_do_updates_gd_changed(void)
             PaintOne((WindowPeek)t->w, WINDOW_STRUCT_REGION(t->w));
         }
     }
-    PaintWhite = CWC(-1);
+    LM(PaintWhite) = CWC(-1);
 
     dirty_rect_update_screen();
     vdriver_set_colors(0, CTAB_SIZE(gd_ctab) + 1, CTAB_TABLE(gd_ctab));
@@ -627,7 +627,7 @@ void Executor::C_ActivatePalette(WindowPtr src_window)
     entries = PALETTE_ENTRIES(palette);
     palette_info = PALETTE_INFO(palette);
 
-    gd = MR(TheGDevice);
+    gd = MR(LM(TheGDevice));
     gd_pixmap = GD_PMAP(gd);
     gd_bpp = PIXMAP_PIXEL_SIZE(gd_pixmap);
     gd_ctab = PIXMAP_TABLE(gd_pixmap);
@@ -717,9 +717,9 @@ void Executor::C_RestoreClutDevice(GDHandle gd)
     warning_unimplemented("RestoreClutDevice implementation may be shaky.");
 
     if(gd == NULL)
-        gd = MR(MainDevice);
+        gd = MR(LM(MainDevice));
 
-    if(gd != MR(MainDevice) || !GD_CLUT_P(gd))
+    if(gd != MR(LM(MainDevice)) || !GD_CLUT_P(gd))
         return;
 
     gd_pixmap = GD_PMAP(gd);
@@ -1180,7 +1180,7 @@ PaletteHandle Executor::C_GetPalette(WindowPtr src_window)
         {                                                                              \
             int gd_index_mask;                                                         \
                                                                                        \
-            gd_index_mask = CTAB_SIZE(PIXMAP_TABLE(GD_PMAP(MR(TheGDevice))));          \
+            gd_index_mask = CTAB_SIZE(PIXMAP_TABLE(GD_PMAP(MR(LM(TheGDevice)))));          \
             index_macro_x(thePort) = CL((entry)&gd_index_mask);                        \
         }                                                                              \
         else if(CI_USAGE_X(info) & CWC(pmAnimated))                                    \
@@ -1311,9 +1311,9 @@ void Executor::C_AnimateEntry(WindowPtr dst_window, INTEGER dst_entry,
         /* FIXME - this should really loop over all devices which
        * use this window's palette.  It's not obvious to me how to do
        * this, so for now we'll assume the window's palette is
-       * used by TheGDevice.  This is fairly reasonable.
+       * used by LM(TheGDevice).  This is fairly reasonable.
        */
-        gdev = MR(TheGDevice);
+        gdev = MR(LM(TheGDevice));
         gd_ctab = PIXMAP_TABLE(GD_PMAP(gdev));
         ctab_index = CI_ENTRY_INDEX(entry);
 
@@ -1369,7 +1369,7 @@ void Executor::C_AnimatePalette(WindowPtr dst_window, CTabHandle src_ctab,
     {
         CTabHandle ctab;
         dirty_rect_update_screen();
-        ctab = PIXMAP_TABLE(GD_PMAP(MR(TheGDevice)));
+        ctab = PIXMAP_TABLE(GD_PMAP(MR(LM(TheGDevice))));
         vdriver_set_colors(0, CTAB_SIZE(ctab) + 1, CTAB_TABLE(ctab));
     }
 }
@@ -1523,7 +1523,7 @@ LONGINT Executor::C_Entry2Index(INTEGER entry_index)
     {
         int gd_index_mask;
 
-        gd_index_mask = CTAB_SIZE(PIXMAP_TABLE(GD_PMAP(MR(TheGDevice))));
+        gd_index_mask = CTAB_SIZE(PIXMAP_TABLE(GD_PMAP(MR(LM(TheGDevice)))));
         return ((long)entry_index) & gd_index_mask;
     }
     else if(CI_ALLOCATED_ENTRY_P(entry))

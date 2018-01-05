@@ -102,7 +102,7 @@ static void eject_floppy_notify(void)
  * for another day.
  */
 
-    if(WWExist == EXIST_YES && GetResource(TICK("ALRT"), EJECTALERTID))
+    if(LM(WWExist) == EXIST_YES && GetResource(TICK("ALRT"), EJECTALERTID))
         Alert(EJECTALERTID, (ProcPtr)0);
 }
 
@@ -150,7 +150,7 @@ void Executor::ROMlib_OurClose(void)
     HVCB *vcbp, *next;
     ParamBlockRec pbr;
 
-    for(vcbp = (HVCB *)MR(VCBQHdr.qHead); vcbp; vcbp = next)
+    for(vcbp = (HVCB *)MR(LM(VCBQHdr).qHead); vcbp; vcbp = next)
     {
         next = (HVCB *)MR(vcbp->qLink);
         pbr.ioParam.ioNamePtr = 0;

@@ -56,7 +56,7 @@ draw_menu_title(muelem *elt,
     menu_title_color(MI_ID(muhandle), &title_color);
 
     dstr.top = CW(hilite_p ? 1 : 0);
-    dstr.bottom = CW(CW(MBarHeight) - 1);
+    dstr.bottom = CW(CW(LM(MBarHeight)) - 1);
     dstr.left = elt->muleft;
     if(last_menu_p)
         dstr.right = CW(muright);
@@ -71,7 +71,7 @@ draw_menu_title(muelem *elt,
     title = (char *)MI_DATA(muhandle);
 
 #if defined(COLOR_APPLE_MENU_ICON)
-    gd = CL(MainDevice);
+    gd = CL(LM(MainDevice));
     if(*title == 1
        && title[1] == '\024'
        && PIXMAP_PIXEL_SIZE(GD_PMAP(gd)) > 2)
@@ -136,7 +136,7 @@ realhilite(int16_t offset, highstate h)
     {
         if(offset > 0)
         {
-            mp = (muelem *)((char *)STARH(MR(MenuList)) + offset);
+            mp = (muelem *)((char *)STARH(MR(LM(MenuList))) + offset);
 
             draw_menu_title(mp,
                             offset == Hx(MENULIST, muoff),
@@ -152,7 +152,7 @@ realhilite(int16_t offset, highstate h)
             Rect r;
 
             /* toggle the entire menu bar */
-            mbar_height = CW(MBarHeight);
+            mbar_height = CW(LM(MBarHeight));
 
             r = PORT_RECT(MR(wmgr_port));
             r.bottom = CW(mbar_height - 1);
@@ -169,13 +169,13 @@ realhilite(int16_t offset, highstate h)
             MoveTo(CW(r.left), mbar_height - 1);
             LineTo(CW(r.right) - 1, mbar_height - 1);
 
-            HLock(MR(MenuList));
+            HLock(MR(LM(MenuList)));
             menulistp = STARH(MENULIST);
             mpend = menulistp->mulist + CW(menulistp->muoff) / sizeof(muelem);
             for(mp = menulistp->mulist; mp != mpend; mp++)
                 draw_menu_title(mp, mp == mpend - 1,
                                 h == HILITE, CW(menulistp->muright));
-            HUnlock(MR(MenuList));
+            HUnlock(MR(LM(MenuList)));
         }
     }
 }
@@ -189,7 +189,7 @@ mbdf_draw(int32_t draw_p)
     Rect r;
 
     r = PORT_RECT(MR(wmgr_port));
-    r.bottom = CW(CW(MBarHeight) - 1);
+    r.bottom = CW(CW(LM(MBarHeight)) - 1);
     ClipRect(&r);
 
     menu_bar_color(&bar_color);
@@ -197,26 +197,26 @@ mbdf_draw(int32_t draw_p)
     EraseRect(&r);
 
     PenSize(1, 1);
-    MoveTo(CW(r.left), CW(MBarHeight) - 1);
-    LineTo(CW(r.right) - 1, CW(MBarHeight) - 1);
+    MoveTo(CW(r.left), CW(LM(MBarHeight)) - 1);
+    LineTo(CW(r.right) - 1, CW(LM(MBarHeight)) - 1);
     if(draw_p == DRAWMENUBAR)
     {
         /* draw titles */
         r.bottom = CW(CW(r.bottom) - 1);
 
         PORT_TX_FACE_X(MR(wmgr_port)) = (Style)CB(0);
-        PORT_TX_FONT_X(MR(wmgr_port)) = SysFontFam;
+        PORT_TX_FONT_X(MR(wmgr_port)) = LM(SysFontFam);
 
-        HLock(MR(MenuList));
+        HLock(MR(LM(MenuList)));
         menulistp = STARH(MENULIST);
         mpend = menulistp->mulist + CW(menulistp->muoff) / sizeof(muelem);
         for(mp = menulistp->mulist; mp != mpend; mp++)
             draw_menu_title(mp, mp == mpend - 1, false, CW(menulistp->muright));
-        HUnlock(MR(MenuList));
+        HUnlock(MR(LM(MenuList)));
 
         /* highlite title if necessary */
-        if(TheMenu)
-            realhilite(ROMlib_mentosix(CW(TheMenu)), HILITE);
+        if(LM(TheMenu))
+            realhilite(ROMlib_mentosix(CW(LM(TheMenu))), HILITE);
 
         /* set ClipRgn to full open */
         ClipRect(&PORT_RECT(MR(wmgr_port)));
@@ -246,7 +246,7 @@ static LONGINT hit(LONGINT mousept)
     p.h = LoWord(mousept);
     p.v = HiWord(mousept);
 
-    if(p.v < CW(MBarHeight))
+    if(p.v < CW(LM(MBarHeight)))
     {
         mpend = HxX(MENULIST, mulist) + Hx(MENULIST, muoff) / sizeof(muelem);
         for(mp = HxX(MENULIST, mulist); mp != mpend && CW(mp->muleft) <= p.h; mp++)
@@ -254,11 +254,11 @@ static LONGINT hit(LONGINT mousept)
         if(mp == HxX(MENULIST, mulist) || p.h > Hx(MENULIST, muright))
             /*-->*/ return NOTHITINMBAR;
         else
-            /*-->*/ return (char *)(mp - 1) - (char *)STARH(MR(MenuList));
+            /*-->*/ return (char *)(mp - 1) - (char *)STARH(MR(LM(MenuList)));
     }
     else
     {
-        mbdfep = (mbdfentry *)STARH(MR(MBSaveLoc));
+        mbdfep = (mbdfentry *)STARH(MR(LM(MBSaveLoc)));
         for(mbdfp = (mbdfentry *)((char *)mbdfep + CW(((mbdfheader *)mbdfep)->lastMBSave));
             mbdfp != mbdfep && !PtInRect(p, &mbdfp->mbRectSave); mbdfp--)
             ;
@@ -277,9 +277,9 @@ static void calc(LONGINT offset)
     menulist *menulistp;
 
     PORT_TX_FACE_X(MR(wmgr_port)) = (Style)CB(0);
-    PORT_TX_FONT_X(MR(wmgr_port)) = SysFontFam;
+    PORT_TX_FONT_X(MR(wmgr_port)) = LM(SysFontFam);
 
-    HLock(MR(MenuList));
+    HLock(MR(LM(MenuList)));
     menulistp = STARH(MENULIST);
     firstmp = menulistp->mulist;
     if(offset == 0)
@@ -307,15 +307,15 @@ static void calc(LONGINT offset)
         left += titsize;
     }
     menulistp->muright = CW(left);
-    HUnlock(MR(MenuList));
+    HUnlock(MR(LM(MenuList)));
 }
 
 static void
 init()
 {
-    if(!MBSaveLoc)
+    if(!LM(MBSaveLoc))
     {
-        MBSaveLoc = RM(NewHandle((Size)MBDFSTRUCTBYTES));
+        LM(MBSaveLoc) = RM(NewHandle((Size)MBDFSTRUCTBYTES));
         HxX(MBSAVELOC, mbCustomStorage) = nullptr;
     }
     HxX(MBSAVELOC, lastMBSave) = CWC(0);
@@ -347,7 +347,7 @@ static void height()
     FontInfo fi;
 
     GetFontInfo(&fi);
-    MBarHeight = CW(CW(fi.ascent) + CW(fi.descent) + CW(fi.leading) + 4);
+    LM(MBarHeight) = CW(CW(fi.ascent) + CW(fi.descent) + CW(fi.leading) + 4);
 }
 
 static void
@@ -360,7 +360,7 @@ save(int16_t offset, Rect *rect)
     Rect save_rect;
     Ptr p;
 
-    gd = MR(TheGDevice);
+    gd = MR(LM(TheGDevice));
     gd_pixmap = GD_PMAP(gd);
 
 #define FAIL goto failure
@@ -380,7 +380,7 @@ save(int16_t offset, Rect *rect)
     }
 
     {
-        HLockGuard guard(MR(MBSaveLoc));
+        HLockGuard guard(MR(LM(MBSaveLoc)));
 
         int current_mb_save;
 
@@ -405,7 +405,7 @@ save(int16_t offset, Rect *rect)
 	   
 	   mep->mbMenuDir = CWC (MBRIGHTDIR);
 	   mep->mbMLOffset = CW (offset);
-	   mup = (muelem *) ((char *) STARH (MR (MenuList)) + offset);
+	   mup = (muelem *) ((char *) STARH (MR (LM(MenuList))) + offset);
 	   mep->mbMLHandle = mup->muhandle;
 	   mep->mbReserved = CLC (0);
 	   save_rect.top    = CW (CW (rect->top) - 1);
@@ -435,7 +435,7 @@ save(int16_t offset, Rect *rect)
 	   PIXMAP_SET_ROWBYTES_X (save_pmh, CW (row_bytes));
 	   
 	   p = NewPtr (height * row_bytes);
-	   if (MemErr != CWC (noErr))
+	   if (LM(MemErr) != CWC (noErr))
 	   {
 		   DisposPixMap (save_pmh);
 		   FAIL;
@@ -482,7 +482,7 @@ save(int16_t offset, Rect *rect)
 static void
 restore(void)
 {
-    HLockGuard guard(MR(MBSaveLoc));
+    HLockGuard guard(MR(LM(MBSaveLoc)));
     mbdfentry *mep;
     PixMapHandle save_pmh;
     Rect save_rect;
@@ -534,21 +534,21 @@ static Rect *getrect(LONGINT offset)
     INTEGER dh, dv;
 
     hiword = HiWord(offset);
-    mp = (muelem *)((char *)STARH(MR(MenuList)) + LoWord(offset));
+    mp = (muelem *)((char *)STARH(MR(LM(MenuList))) + LoWord(offset));
     mh = MR(mp->muhandle);
     if(Hx(mh, menuWidth) == -1 || Hx(mh, menuHeight) == -1)
         CalcMenuSize(mh);
     if(hiword)
     { /* hierarchical */
         /* note 7 and 5 below are guesses */
-        r.top = CW(MAX(Hx(MBSAVELOC, mbItemRect.top), CW(MBarHeight) + 7));
+        r.top = CW(MAX(Hx(MBSAVELOC, mbItemRect.top), CW(LM(MBarHeight)) + 7));
         r.left = CW(Hx(MBSAVELOC, mbItemRect.right) - 5);
         r.bottom = CW(CW(r.top) + Hx(mh, menuHeight));
         r.right = CW(CW(r.left) + Hx(mh, menuWidth));
     }
     else
     { /* regular */
-        r.top = MBarHeight;
+        r.top = LM(MBarHeight);
         r.left = mp->muleft;
         r.bottom = CW(CW(r.top) + Hx(mh, menuHeight));
         r.right = CW(CW(r.left) + Hx(mh, menuWidth));
@@ -567,7 +567,7 @@ static mbdfentry *offtomep(LONGINT offset)
 {
     mbdfentry *mbdfp, *mbdfep;
 
-    mbdfep = (mbdfentry *)STARH(MR(MBSaveLoc));
+    mbdfep = (mbdfentry *)STARH(MR(LM(MBSaveLoc)));
     for(mbdfp = (mbdfentry *)((char *)mbdfep + CW(((mbdfheader *)mbdfep)->lastMBSave));
         mbdfp != mbdfep && CW(mbdfp->mbMLOffset) != offset; mbdfp--)
         ;
@@ -579,8 +579,8 @@ static void savealt(LONGINT offset)
     mbdfentry *mep;
 
     mep = offtomep(offset);
-    mep->mbTopScroll = TopMenuItem;
-    mep->mbBotScroll = AtMenuBottom;
+    mep->mbTopScroll = LM(TopMenuItem);
+    mep->mbBotScroll = LM(AtMenuBottom);
 }
 
 static void resetalt(LONGINT offset)
@@ -588,20 +588,20 @@ static void resetalt(LONGINT offset)
     mbdfentry *mep;
 
     mep = offtomep(offset);
-    TopMenuItem = mep->mbTopScroll;
-    AtMenuBottom = mep->mbBotScroll;
+    LM(TopMenuItem) = mep->mbTopScroll;
+    LM(AtMenuBottom) = mep->mbBotScroll;
 }
 
 static RgnHandle menurgn(RgnHandle rgn)
 {
     Rect r;
 
-    if(CW(MBarHeight) <= 0)
+    if(CW(LM(MBarHeight)) <= 0)
         height();
     r = PORT_RECT(MR(wmgr_port));
-    r.bottom = MBarHeight;
+    r.bottom = LM(MBarHeight);
     RectRgn(rgn, &r);
-    SectRgn(rgn, MR(GrayRgn), rgn);
+    SectRgn(rgn, MR(LM(GrayRgn)), rgn);
     return rgn;
 }
 

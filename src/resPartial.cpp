@@ -30,7 +30,7 @@ void Executor::C_ReadPartialResource(Handle res, int32_t offset, Ptr buffer,
             LONGINT loc;
 
             cur_size = ROMlib_SizeResource(res, false);
-            err = CW(ResErr);
+            err = CW(LM(ResErr));
             if(err == noErr && (uint32_t)offset + count > (uint32_t)cur_size)
                 err = inputOutOfBounds;
             else

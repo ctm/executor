@@ -62,15 +62,15 @@ void Executor::C_InitWindows()
     PixPatHandle new_ph;
     RgnHandle mrgn, corners;
 
-    AuxWinHead = RM(default_aux_win);
-    SaveVisRgn = NULL;
+    LM(AuxWinHead) = RM(default_aux_win);
+    LM(SaveVisRgn) = NULL;
 
     {
         ThePortGuard guard(thePort);
 
         /* FIXME: is this a memory leak, to just call InitPort () again? */
-        InitPort(MR(WMgrPort));
-        InitCPort(MR(WMgrCPort));
+        InitPort(MR(LM(WMgrPort)));
+        InitCPort(MR(LM(WMgrCPort)));
 
         ph = GetPattern(deskPatID);
         if(ph == NULL)
@@ -85,56 +85,56 @@ void Executor::C_InitWindows()
         }
         new_ph = GetPixPat(deskPatID);
         if(new_ph)
-            DeskCPat = RM(new_ph);
+            LM(DeskCPat) = RM(new_ph);
         else
             USE_DESKCPAT_VAR &= ~USE_DESKCPAT_BIT;
         InitPalettes();
         InitMenus();
-        PATASSIGN(DeskPattern, STARH(ph));
-        GrayRgn = RM(NewRgn());
+        PATASSIGN(LM(DeskPattern), STARH(ph));
+        LM(GrayRgn) = RM(NewRgn());
 
         OpenRgn();
         if(ROMlib_creator && !(ROMlib_options & ROMLIB_RECT_SCREEN_BIT))
-            FrameRoundRect(&GD_BOUNDS(MR(TheGDevice)), 16, 16);
+            FrameRoundRect(&GD_BOUNDS(MR(LM(TheGDevice))), 16, 16);
         else
-            FrameRect(&GD_BOUNDS(MR(TheGDevice)));
-        CloseRgn(MR(GrayRgn));
+            FrameRect(&GD_BOUNDS(MR(LM(TheGDevice))));
+        CloseRgn(MR(LM(GrayRgn)));
         mrgn = NewRgn();
-        SetRectRgn(mrgn, 0, 0, CW(GD_BOUNDS(MR(TheGDevice)).right),
-                   CW(MBarHeight));
-        SectRgn(MR(GrayRgn), mrgn, mrgn);
+        SetRectRgn(mrgn, 0, 0, CW(GD_BOUNDS(MR(LM(TheGDevice))).right),
+                   CW(LM(MBarHeight)));
+        SectRgn(MR(LM(GrayRgn)), mrgn, mrgn);
         corners = NewRgn();
-        SetRectRgn(corners, 0, 0, CW(GD_BOUNDS(MR(TheGDevice)).right),
-                   CW(GD_BOUNDS(MR(TheGDevice)).bottom));
-        DiffRgn(corners, MR(GrayRgn), corners);
+        SetRectRgn(corners, 0, 0, CW(GD_BOUNDS(MR(LM(TheGDevice))).right),
+                   CW(GD_BOUNDS(MR(LM(TheGDevice))).bottom));
+        DiffRgn(corners, MR(LM(GrayRgn)), corners);
         PaintRgn(corners);
-        CopyRgn(MR(GrayRgn), PORT_VIS_REGION(MR(wmgr_port)));
-        DiffRgn(MR(GrayRgn), mrgn, MR(GrayRgn));
+        CopyRgn(MR(LM(GrayRgn)), PORT_VIS_REGION(MR(wmgr_port)));
+        DiffRgn(MR(LM(GrayRgn)), mrgn, MR(LM(GrayRgn)));
         PenPat(white);
         PaintRgn(mrgn);
         PenPat(black);
-        MoveTo(0, CW(MBarHeight) - 1);
-        Line(CW(GD_BOUNDS(MR(TheGDevice)).right), 0);
+        MoveTo(0, CW(LM(MBarHeight)) - 1);
+        Line(CW(GD_BOUNDS(MR(LM(TheGDevice))).right), 0);
         if((USE_DESKCPAT_VAR & USE_DESKCPAT_BIT)
-           && PIXMAP_PIXEL_SIZE(GD_PMAP(MR(MainDevice))) > 2)
-            FillCRgn(MR(GrayRgn), MR(DeskCPat));
+           && PIXMAP_PIXEL_SIZE(GD_PMAP(MR(LM(MainDevice)))) > 2)
+            FillCRgn(MR(LM(GrayRgn)), MR(LM(DeskCPat)));
         else
-            FillRgn(MR(GrayRgn), DeskPattern);
+            FillRgn(MR(LM(GrayRgn)), LM(DeskPattern));
         DisposeRgn(mrgn);
         DisposeRgn(corners);
-        CopyRgn(MR(GrayRgn), PORT_CLIP_REGION(MR(wmgr_port)));
-        WindowList = NULL;
-        SaveUpdate = CWC(-1);
-        PaintWhite = CWC(-1);
-        DeskHook = NULL;
-        GhostWindow = NULL;
-        PATASSIGN(DragPattern, gray);
+        CopyRgn(MR(LM(GrayRgn)), PORT_CLIP_REGION(MR(wmgr_port)));
+        LM(WindowList) = NULL;
+        LM(SaveUpdate) = CWC(-1);
+        LM(PaintWhite) = CWC(-1);
+        LM(DeskHook) = NULL;
+        LM(GhostWindow) = NULL;
+        PATASSIGN(LM(DragPattern), gray);
     }
 
     /* since there is no `InitControls ()', we do this here */
     ctl_color_init();
 
-    WWExist = EXIST_YES;
+    LM(WWExist) = EXIST_YES;
 
     {
         static bool issued_system_file_version_skew_warning_p = false;
@@ -274,12 +274,12 @@ Executor may die without warning because of this mismatch",
 
 void Executor::C_GetWMgrPort(GUEST<GrafPtr> *wp)
 {
-    *wp = WMgrPort;
+    *wp = LM(WMgrPort);
 }
 
 void Executor::C_GetCWMgrPort(GUEST<CGrafPtr> *wp)
 {
-    *wp = WMgrCPort;
+    *wp = LM(WMgrCPort);
 }
 
 void Executor::C_SetDeskCPat(PixPatHandle ph)
@@ -288,16 +288,16 @@ void Executor::C_SetDeskCPat(PixPatHandle ph)
 
     if(ph)
     {
-        DeskCPat = RM(ph);
+        LM(DeskCPat) = RM(ph);
         USE_DESKCPAT_VAR |= USE_DESKCPAT_BIT;
     }
     else
     {
         bw_ph = GetPattern(deskPatID);
-        PATASSIGN(DeskPattern, STARH(bw_ph));
+        PATASSIGN(LM(DeskPattern), STARH(bw_ph));
         USE_DESKCPAT_VAR &= ~USE_DESKCPAT_BIT;
     }
-    PaintOne((WindowPeek)0, MR(GrayRgn));
+    PaintOne((WindowPeek)0, MR(LM(GrayRgn)));
 }
 
 static void
@@ -317,9 +317,9 @@ ROMlib_new_window_common(WindowPeek w,
     if(!behind)
     {
         WINDOW_NEXT_WINDOW_X(w) = nullptr;
-        if(WindowList)
+        if(LM(WindowList))
         {
-            for(t_w = MR(WindowList);
+            for(t_w = MR(LM(WindowList));
                 WINDOW_NEXT_WINDOW_X(t_w);
                 t_w = WINDOW_NEXT_WINDOW(t_w))
                 ;
@@ -327,7 +327,7 @@ ROMlib_new_window_common(WindowPeek w,
         }
         else
         {
-            WindowList = RM(w);
+            LM(WindowList) = RM(w);
             if(visible_p)
             {
                 /* notify the palette manager that the `FrontWindow ()'
@@ -338,8 +338,8 @@ ROMlib_new_window_common(WindowPeek w,
     }
     else if(behind == (WindowPtr)-1L)
     {
-        WINDOW_NEXT_WINDOW_X(w) = WindowList;
-        WindowList = RM((WindowPeek)w);
+        WINDOW_NEXT_WINDOW_X(w) = LM(WindowList);
+        LM(WindowList) = RM((WindowPeek)w);
         if(visible_p)
         {
             /* notify the palette manager that the `FrontWindow ()' may have
@@ -354,14 +354,14 @@ ROMlib_new_window_common(WindowPeek w,
     }
     WINDOW_KIND_X(w) = CWC(userKind);
     WINDOW_VISIBLE_X(w) = visible_p;
-    for(t_w = MR(WindowList);
+    for(t_w = MR(LM(WindowList));
         t_w && !WINDOW_VISIBLE(t_w);
         t_w = WINDOW_NEXT_WINDOW(t_w))
         ;
     WINDOW_HILITED_X(w) = visible_p && (t_w == w);
     if(WINDOW_HILITED_X(w))
     {
-        CurActivate = RM((WindowPtr)w);
+        LM(CurActivate) = RM((WindowPtr)w);
         for(t_w = WINDOW_NEXT_WINDOW(t_w);
             t_w && !WINDOW_HILITED_X(t_w);
             t_w = WINDOW_NEXT_WINDOW(t_w))
@@ -389,14 +389,14 @@ ROMlib_new_window_common(WindowPeek w,
     }
 
     t_aux_w = (AuxWinHandle)NewHandle(sizeof(AuxWinRec));
-    HxX(t_aux_w, awNext) = AuxWinHead;
+    HxX(t_aux_w, awNext) = LM(AuxWinHead);
     HxX(t_aux_w, awOwner) = RM((WindowPtr)w);
     HxX(t_aux_w, awCTable) = RM((CTabHandle)GetResource(TICK("wctb"), 0));
     HxX(t_aux_w, dialogCItem) = 0;
     HxX(t_aux_w, awFlags) = CL((proc_id & 0xF) << 24);
     HxX(t_aux_w, awReserved) = 0;
     HxX(t_aux_w, awRefCon) = 0;
-    AuxWinHead = RM(t_aux_w);
+    LM(AuxWinHead) = RM(t_aux_w);
 
     {
         Handle t;
@@ -441,7 +441,7 @@ ROMlib_new_window_common(WindowPeek w,
     if(t_w)
     {
         HiliteWindow((WindowPtr)t_w, false);
-        CurDeactive = RM((WindowPtr)t_w);
+        LM(CurDeactive) = RM((WindowPtr)t_w);
     }
 
     SetPort(save_port);
@@ -593,17 +593,17 @@ void Executor::C_CloseWindow(WindowPtr w)
         if(wptmp)
         {
             HiliteWindow((WindowPtr)wptmp, true);
-            CurActivate = RM((WindowPtr)wptmp);
+            LM(CurActivate) = RM((WindowPtr)wptmp);
         }
     }
-    if(MR(WindowList) == (WindowPeek)w)
+    if(MR(LM(WindowList)) == (WindowPeek)w)
     {
-        WindowList = WINDOW_NEXT_WINDOW_X(w);
-        wptmp = MR(WindowList);
+        LM(WindowList) = WINDOW_NEXT_WINDOW_X(w);
+        wptmp = MR(LM(WindowList));
     }
     else
     {
-        for(wptmp = MR(WindowList);
+        for(wptmp = MR(LM(WindowList));
             wptmp && WINDOW_NEXT_WINDOW(wptmp) != (WindowPeek)w;
             wptmp = WINDOW_NEXT_WINDOW(wptmp))
             ;
@@ -625,7 +625,7 @@ void Executor::C_CloseWindow(WindowPtr w)
        odd behavior */
     savgp = thePort == (GrafPtr)w ? (GrafPtr)MR(wmgr_port) : thePort;
     SetPort(MR(wmgr_port));
-    SetClip(MR(GrayRgn));
+    SetClip(MR(LM(GrayRgn)));
     PaintBehind(WINDOW_NEXT_WINDOW(w), WINDOW_STRUCT_REGION(w));
     if(WINDOW_NEXT_WINDOW_X(w))
         CalcVisBehind(WINDOW_NEXT_WINDOW(w), WINDOW_STRUCT_REGION(w));
@@ -634,7 +634,7 @@ void Executor::C_CloseWindow(WindowPtr w)
     DisposeRgn(WINDOW_CONT_REGION(w));
     DisposeRgn(WINDOW_UPDATE_REGION(w));
     DisposHandle((Handle)WINDOW_TITLE(w));
-    for(auxhp = (GUEST<AuxWinHandle> *)&AuxWinHead;
+    for(auxhp = (GUEST<AuxWinHandle> *)&LM(AuxWinHead);
         *auxhp && STARH(STARH(auxhp))->awOwner != RM(w);
         auxhp = (GUEST<AuxWinHandle> *)&STARH(STARH(auxhp))->awNext)
         ;
@@ -676,10 +676,10 @@ void Executor::C_CloseWindow(WindowPtr w)
         KillPicture(WINDOW_PIC(w));
     ClosePort((GrafPtr)w);
     SetPort(savgp);
-    if(MR(CurActivate) == w)
-        CurActivate = 0;
-    if(MR(CurDeactive) == w)
-        CurDeactive = 0;
+    if(MR(LM(CurActivate)) == w)
+        LM(CurActivate) = 0;
+    if(MR(LM(CurDeactive)) == w)
+        LM(CurDeactive) = 0;
     WINDCALL((WindowPtr)w, wDispose, 0);
 }
 

@@ -152,7 +152,7 @@ typedef GUEST<menulistp> *mlhandle;
 #define MCENTRY_ID(entry) (CW(MCENTRY_ID_X(entry)))
 #define MCENTRY_ITEM(entry) (CW(MCENTRY_ITEM_X(entry)))
 
-#define MENULIST ((mlhandle)MR(MenuList))
+#define MENULIST ((mlhandle)MR(LM(MenuList)))
 
 #define MENULEFT 10
 
@@ -181,10 +181,10 @@ struct mbdfentry
     GUEST<Rect> mbRectSave; /* where it is on screen */
     GUEST<Handle> mbBitsSave; /* where the bits are */
     GUEST<INTEGER> mbMenuDir; /* what direction the menu was placed */
-    GUEST<INTEGER> mbMLOffset; /* 6 byte offset into MenuList */
-    GUEST<MenuHandle> mbMLHandle; /* the handle from MenuList */
-    GUEST<INTEGER> mbTopScroll; /* copy of TopMenuItem */
-    GUEST<INTEGER> mbBotScroll; /* copy of AtMenuBottom */
+    GUEST<INTEGER> mbMLOffset; /* 6 byte offset into LM(MenuList) */
+    GUEST<MenuHandle> mbMLHandle; /* the handle from LM(MenuList) */
+    GUEST<INTEGER> mbTopScroll; /* copy of LM(TopMenuItem) */
+    GUEST<INTEGER> mbBotScroll; /* copy of LM(AtMenuBottom) */
     GUEST<LONGINT> mbReserved; /* i dunno */
 };
 
@@ -200,11 +200,11 @@ extern GUEST<Handle> MBSaveLoc_H;
 extern GUEST<Handle> MBDFHndl_H;
 #endif
 
-#define MBSaveLoc (MBSaveLoc_H.p)
-#define MBDFHndl (MBDFHndl_H.p)
+#define LM(MBSaveLoc) (MBSaveLoc_H.p)
+#define LM(MBDFHndl) (MBDFHndl_H.p)
 #endif
 
-#define MBSAVELOC ((mbdfheaderhand)MR(MBSaveLoc))
+#define MBSAVELOC ((mbdfheaderhand)MR(LM(MBSaveLoc)))
 
 #define SLOP 13
 
@@ -222,10 +222,10 @@ extern LONGINT ROMlib_mbdfcall(INTEGER msg, INTEGER param1, LONGINT param2);
 
 #define MBDFDECL() INTEGER mbdfstate
 
-#define MBDFBEGIN() (mbdfstate = HGetState(MR(MBDFHndl)), HSetState(MR(MBDFHndl), \
+#define MBDFBEGIN() (mbdfstate = HGetState(MR(LM(MBDFHndl))), HSetState(MR(LM(MBDFHndl)), \
                                                                     mbdfstate | LOCKBIT))
 
-#define MBDFEND() HSetState(MR(MBDFHndl), mbdfstate)
+#define MBDFEND() HSetState(MR(LM(MBDFHndl)), mbdfstate)
 
 #define NOTHITINMBAR 0
 #define NOTHIT (-1)

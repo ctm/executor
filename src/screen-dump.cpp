@@ -303,7 +303,7 @@ void Executor::do_dump_screen(void)
     GDHandle gd;
     PixMapHandle gd_pmh;
 
-    gd = MR(MainDevice);
+    gd = MR(LM(MainDevice));
     gd_pmh = GD_PMAP(gd);
 
     HLockGuard guard(gd_pmh);

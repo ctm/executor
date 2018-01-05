@@ -34,11 +34,11 @@ BOOLEAN Executor::C_snth5(SndChannelPtr chanp, SndCommand *cmdp,
     switch(Cx(cmdp->cmd))
     {
         case initCmd:
-            SoundActive = soundactive5;
+            LM(SoundActive) = soundactive5;
             /* TODO */
             break;
         case freeCmd:
-            SoundActive = 0;
+            LM(SoundActive) = 0;
             done = false;
             /* TODO */
             break;

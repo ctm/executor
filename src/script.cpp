@@ -736,43 +736,6 @@ IntlTokenize
 GetFormatOrder
 #endif
 
-INTEGER Executor::GetAppFont()
-{
-    return CW(ApFontID);
-}
-
-#if 0
-/*
- * NOTE: the following is stuff I typed in before noticing that these are
- *       provided by glue.  Hence they will be necessary if we ever support
- *	 ROMlib again but are not needed for Executor.
- */
-
-INTEGER Executor::GetDefFontSize()
-{
-  return 0;
-}
-
-INTEGER Executor::GetSysFont()
-{
-    return 0;
-}
-
-INTEGER Executor::GetMBarHeight()
-{
-    return 0;
-}
-
-INTEGER Executor::GetSysJust()
-{
-    return 0;
-}
-
-void Executor::SetSysJust(INTEGER just)
-{
-}
-#endif
-
 OSErr Executor::C_InitDateCache(DateCachePtr cache) /* TTS TODO */
 {
     warning_unimplemented(NULL_STRING);

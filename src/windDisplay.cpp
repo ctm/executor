@@ -46,7 +46,7 @@ WindowPeek Executor::ROMlib_firstvisible(WindowPtr w) /* INTERNAL */
 
     for(wp = (WindowPeek)w;
         wp && (!WINDOW_VISIBLE_X(wp)
-               || wp == (WindowPeek)MR(GhostWindow));
+               || wp == (WindowPeek)MR(LM(GhostWindow)));
         wp = WINDOW_NEXT_WINDOW(wp))
         ;
     return wp;
@@ -56,7 +56,7 @@ WindowPtr Executor::C_FrontWindow()
 {
     WindowPtr retval;
 
-    retval = (WindowPtr)ROMlib_firstvisible((WindowPtr)MR(WindowList));
+    retval = (WindowPtr)ROMlib_firstvisible((WindowPtr)MR(LM(WindowList)));
     return retval;
 }
 
@@ -84,19 +84,19 @@ void Executor::C_BringToFront(WindowPtr w)
     WindowPeek wp;
     RgnHandle hidden;
 
-    if(MR(WindowList) != (WindowPeek)w)
+    if(MR(LM(WindowList)) != (WindowPeek)w)
     {
         ThePortGuard guard(MR(wmgr_port));
-        SetClip(MR(GrayRgn));
-        for(wp = MR(WindowList);
+        SetClip(MR(LM(GrayRgn)));
+        for(wp = MR(LM(WindowList));
             wp && WINDOW_NEXT_WINDOW(wp) != (WindowPeek)w;
             wp = WINDOW_NEXT_WINDOW(wp))
             ;
         if(wp)
         {
             WINDOW_NEXT_WINDOW_X(wp) = WINDOW_NEXT_WINDOW_X(w);
-            WINDOW_NEXT_WINDOW_X(w) = WindowList;
-            WindowList = RM((WindowPeek)w);
+            WINDOW_NEXT_WINDOW_X(w) = LM(WindowList);
+            LM(WindowList) = RM((WindowPeek)w);
             if(WINDOW_VISIBLE_X(w))
             {
                 /* notify the palette manager that the `FrontWindow ()'
@@ -125,8 +125,8 @@ void Executor::C_SelectWindow(WindowPtr w)
     if(cactive != w)
     {
         HiliteWindow(cactive, false);
-        CurDeactive = RM(cactive);
-        CurActivate = RM(w);
+        LM(CurDeactive) = RM(cactive);
+        LM(CurActivate) = RM(w);
     }
     BringToFront(w);
     HiliteWindow(w, true);
@@ -185,7 +185,7 @@ void Executor::C_ShowHide(WindowPtr w, BOOLEAN flag)
 	 changed */
         pm_front_window_maybe_changed_hook();
         ThePortGuard guard(MR(wmgr_port));
-        SetClip(MR(GrayRgn));
+        SetClip(MR(LM(GrayRgn)));
         SetEmptyRgn(PORT_VIS_REGION(w));
         PaintBehind(WINDOW_NEXT_WINDOW(w), WINDOW_STRUCT_REGION(w));
         CalcVisBehind(WINDOW_NEXT_WINDOW(w), WINDOW_STRUCT_REGION(w));
@@ -206,7 +206,7 @@ void Executor::C_HideWindow(WindowPtr w)
             if(nextvis)
                 SelectWindow((WindowPtr)nextvis);
             else
-                CurDeactive = RM(w);
+                LM(CurDeactive) = RM(w);
             WINDOW_HILITED_X(w) = false;
         }
         ShowHide(w, false);
@@ -226,13 +226,13 @@ void Executor::C_ShowWindow(WindowPtr w)
         if(FrontWindow() == w && !WINDOW_HILITED_X(w))
         {
             HiliteWindow(w, true);
-            CurActivate = RM(w);
+            LM(CurActivate) = RM(w);
             for(t = WINDOW_NEXT_WINDOW(w);
                 t && !WINDOW_HILITED_X(t);
                 t = WINDOW_NEXT_WINDOW(t))
                 ;
             HiliteWindow((WindowPtr)t, false);
-            CurDeactive = RM((WindowPtr)t);
+            LM(CurDeactive) = RM((WindowPtr)t);
         }
     }
 }
@@ -248,7 +248,7 @@ void Executor::C_SendBehind(WindowPtr w, WindowPtr behind)
 
     /* NOTE: the following nasty code is to make our SendBehind behave like the Mac
 	 send behind, which is that it looks for a new FrontWindow with the
-	 WindowList as it would be if w were totally removed from the list
+	 LM(WindowList) as it would be if w were totally removed from the list
    BEGINNING of nasty code */
 
     if(oldfront == (WindowPeek)w && (newfront = ROMlib_firstvisible((WindowPtr)WINDOW_NEXT_WINDOW(oldfront))))
@@ -259,7 +259,7 @@ void Executor::C_SendBehind(WindowPtr w, WindowPtr behind)
     if((!WINDOW_NEXT_WINDOW(w) && !behind)
        || WINDOW_NEXT_WINDOW(w) == (WindowPeek)w)
         /*-->*/ return;
-    for(wpp = (GUEST<WindowPeek> *)&WindowList;
+    for(wpp = (GUEST<WindowPeek> *)&LM(WindowList);
         *wpp && STARH(wpp) != (WindowPeek)w;
         wpp = (GUEST<WindowPeek> *)&WINDOW_NEXT_WINDOW_X(STARH(wpp)))
         ;
@@ -277,7 +277,7 @@ void Executor::C_SendBehind(WindowPtr w, WindowPtr behind)
 #define SEND_BEHIND
 #if defined(SEND_BEHIND)
         if(!*wpp) /* what if 'w' is the only window? */
-            wpp = (GUEST<WindowPeek> *)&WindowList;
+            wpp = (GUEST<WindowPeek> *)&LM(WindowList);
         for(; WINDOW_NEXT_WINDOW_X(STARH(wpp));
             wpp = (GUEST<WindowPeek> *)&WINDOW_NEXT_WINDOW_X(STARH(wpp)))
             ;
@@ -299,13 +299,13 @@ void Executor::C_SendBehind(WindowPtr w, WindowPtr behind)
 #if 0
     newfront = (WindowPeek) FrontWindow ();
     if (oldfront != newfront) {
-	CurDeactive = CL((WindowPtr) oldfront);
+	LM(CurDeactive) = CL((WindowPtr) oldfront);
 	HiliteWindow((WindowPtr) oldfront, false);
-	CurActivate = CL((WindowPtr) newfront);
+	LM(CurActivate) = CL((WindowPtr) newfront);
 	HiliteWindow((WindowPtr) newfront, true);
     }
 #else /* 0 */
-    if(oldfront == (WindowPeek)w && MR(WindowList) != (WindowPeek)w)
+    if(oldfront == (WindowPeek)w && MR(LM(WindowList)) != (WindowPeek)w)
     {
         ThePortGuard guard(w);
         r = HxX(PORT_VIS_REGION(w), rgnBBox);

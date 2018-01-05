@@ -24,7 +24,7 @@ void Executor::C_InitGraf(Ptr gp)
 
     (*(GUEST<Ptr> *)SYN68K_TO_US(EM_A5)) = RM(gp);
 
-    main_gd_pixmap = GD_PMAP(MR(MainDevice));
+    main_gd_pixmap = GD_PMAP(MR(LM(MainDevice)));
 
     /* screenBitsX flag bits must not be set */
     screenBitsX.baseAddr = PIXMAP_BASEADDR_X(main_gd_pixmap);
@@ -33,7 +33,7 @@ void Executor::C_InitGraf(Ptr gp)
 
 #define patinit(d, s) (*(GUEST<LONGINT> *)d = CLC(s), *((GUEST<LONGINT> *)d + 1) = CLC(s))
 
-    TheZoneGuard guard(SysZone);
+    TheZoneGuard guard(LM(SysZone));
 
     patinit(white, 0x00000000);
     patinit(black, 0xffffffff);
@@ -41,14 +41,14 @@ void Executor::C_InitGraf(Ptr gp)
     patinit(ltGray, 0x88228822);
     patinit(dkGray, 0x77dd77dd);
 
-    WMgrPort = RM((WindowPtr)NewPtr(sizeof(GrafPort)));
-    OpenPort(MR(WMgrPort));
+    LM(WMgrPort) = RM((WindowPtr)NewPtr(sizeof(GrafPort)));
+    OpenPort(MR(LM(WMgrPort)));
 
-    WMgrCPort = RM((CWindowPtr)NewPtr(sizeof(CGrafPort)));
-    OpenCPort(MR(WMgrCPort));
+    LM(WMgrCPort) = RM((CWindowPtr)NewPtr(sizeof(CGrafPort)));
+    OpenCPort(MR(LM(WMgrCPort)));
 
-    thePortX = guest_cast<GrafPtr>(WMgrCPort);
-    ScrnBase = screenBitsX.baseAddr;
+    thePortX = guest_cast<GrafPtr>(LM(WMgrCPort));
+    LM(ScrnBase) = screenBitsX.baseAddr;
 
     StuffHex((Ptr)arrowX.data,
              (StringPtr)("\100000040006000700078007c007e007f"
@@ -57,13 +57,13 @@ void Executor::C_InitGraf(Ptr gp)
              (StringPtr)("\100c000e000f000f800fc00fe00ff00ff"
                          "80ffc0ffe0fe00ef00cf00878007800380"));
     arrowX.hotSpot.h = arrowX.hotSpot.v = CWC(1);
-    CrsrState = 0;
+    LM(CrsrState) = 0;
 
-    RndSeed = CL(TickCount());
-    ScrVRes = ScrHRes = CWC(72);
-    ScreenRow = screenBitsX.rowBytes;
+    LM(RndSeed) = CL(TickCount());
+    LM(ScrVRes) = LM(ScrHRes) = CWC(72);
+    LM(ScreenRow) = screenBitsX.rowBytes;
     randSeedX = CLC(1);
-    QDExist = EXIST_YES;
+    LM(QDExist) = EXIST_YES;
 }
 
 /*
@@ -133,18 +133,18 @@ void Executor::C_OpenPort(GrafPtr p)
 
 /*
  * "Five of a Kind" calls CloseWindow (x) followed by ClosePort (x).
- * That used to kill us, but checking MemErr gets around that problem.
+ * That used to kill us, but checking LM(MemErr) gets around that problem.
  * I'm not sure how the Mac gets around it.
  */
 
 void Executor::C_ClosePort(GrafPtr p)
 {
     DisposeRgn(PORT_VIS_REGION(p));
-    if(MemErr == CWC(noErr))
+    if(LM(MemErr) == CWC(noErr))
     {
         DisposeRgn(PORT_CLIP_REGION(p));
 
-        if(MemErr == CWC(noErr))
+        if(LM(MemErr) == CWC(noErr))
         {
             if(CGrafPort_p(p))
             {
@@ -218,8 +218,8 @@ void Executor::C_SetOrigin(INTEGER h, INTEGER v)
     OffsetRect(&PORT_BOUNDS(thePort), dh, dv);
     OffsetRect(&PORT_RECT(thePort), dh, dv);
     OffsetRgn(PORT_VIS_REGION(thePort), dh, dv);
-    if(SaveVisRgn)
-        OffsetRgn(MR(SaveVisRgn), dh, dv);
+    if(LM(SaveVisRgn))
+        OffsetRgn(MR(LM(SaveVisRgn)), dh, dv);
 }
 
 void Executor::C_SetClip(RgnHandle r)

@@ -196,35 +196,22 @@ typedef WidthTable *WidthTablePtr;
 
 typedef GUEST<WidthTablePtr> *WidthTableHandle;
 
-#if 0
-#if !defined(JSwapFont_H)
-extern GUEST<ProcPtr> 	JSwapFont_H;
-extern GUEST<Handle> 	WidthListHand_H;
-extern GUEST<Handle> 	ROMFont0_H;
-extern INTEGER 	ApFontID;
-extern FMInput 	ROMlib_myfmi;
-extern FMOutput 	ROMlib_fmo;
-extern Byte 	FScaleDisable;
-extern GUEST<WidthTablePtr> WidthPtr_H;
-extern GUEST<WidthTableHandle> WidthTabHandle_H;
-extern LONGINT 	IntlSpec;
-extern INTEGER 	SysFontFam;
-extern INTEGER 	SysFontSiz;
-extern GUEST<FamRecHandle> LastFOND_H;
-extern INTEGER 	fondid;
-extern Byte 	FractEnable;
-#endif
-
-enum
-{
-    JSwapFont = (JSwapFont_H.p),
-    WidthListHand = (WidthListHand_H.p),
-    ROMFont0 = (ROMFont0_H.p),
-    WidthPtr = (WidthPtr_H.p),
-    WidthTabHandle = (WidthTabHandle_H.p),
-    LastFOND = (LastFOND_H.p),
-};
-#endif
+const LowMemGlobal<ProcPtr> JSwapFont { 0x8E0 }; // FontMgr Private.a (true-b);
+const LowMemGlobal<Handle> WidthListHand { 0x8E4 }; // FontMgr IMIV-42 (true);
+const LowMemGlobal<Handle> ROMFont0 { 0x980 }; // FontMgr IMI-233 (true);
+const LowMemGlobal<INTEGER> ApFontID { 0x984 }; // FontMgr IMIV-31 (true);
+const LowMemGlobal<FMInput> ROMlib_myfmi { 0x988 }; // FontMgr ToolEqu.a (true);
+const LowMemGlobal<FMOutput> ROMlib_fmo { 0x998 }; // FontMgr Private.a (true);
+const LowMemGlobal<Byte> FScaleDisable { 0xA63 }; // FontMgr IMI-222 (true);
+const LowMemGlobal<WidthTablePtr> WidthPtr { 0xB10 }; // FontMgr IMIV-42 (true);
+const LowMemGlobal<WidthTableHandle> WidthTabHandle { 0xB2A }; // FontMgr IMIV-42 (true);
+const LowMemGlobal<LONGINT> IntlSpec { 0xBA0 }; // FontMgr IMIV-42 (true);
+const LowMemGlobal<INTEGER> SysFontFam { 0xBA6 }; // FontMgr IMIV-31 (true);
+const LowMemGlobal<INTEGER> SysFontSiz { 0xBA8 }; // FontMgr IMIV-31 (true);
+const LowMemGlobal<FamRecHandle> LastFOND { 0xBC2 }; // FontMgr IMIV-36 (true);
+const LowMemGlobal<INTEGER> fondid { 0xBC6 }; // FontMgr ToolEqu.a (true-b);
+const LowMemGlobal<Byte> FractEnable { 0xBF4 }; // FontMgr IMIV-32 (true);
+const LowMemGlobal<Handle> SynListHandle { 0xD32 }; // FontMgr IMV-182 (false);
 
 extern void C_InitFonts(void);
 PASCAL_TRAP(InitFonts, 0xA8FE);

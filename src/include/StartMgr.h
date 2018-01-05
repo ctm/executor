@@ -38,9 +38,10 @@ typedef struct
     SignedByte sdOSType;
 } DefOSRec, *DefOSPtr;
 
-#if !defined(CPUFlag)
-extern Byte CPUFlag;
-#endif
+const LowMemGlobal<Byte> CPUFlag { 0x12F }; // StartMgr IMV-348 (true-b);
+const LowMemGlobal<INTEGER> TimeDBRA { 0xD00 }; // StartMgr IMV (false);
+const LowMemGlobal<INTEGER> TimeSCCDB { 0xD02 }; // StartMgr IMV (false);
+const LowMemGlobal<INTEGER> TimeSCSIDB { 0xDA6 }; // StartMgr IMV (false);
 }
 
 #endif

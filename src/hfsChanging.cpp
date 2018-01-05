@@ -153,11 +153,11 @@ ROMlib_fcbrename(HVCB *vcbp, GUEST<LONGINT> swapped_parid, StringPtr oldnamep,
     GUEST<HVCB *> swapped_vcbp;
 
     swapped_vcbp = RM(vcbp);
-    length = CW(*(GUEST<INTEGER> *)MR(FCBSPtr));
-    fcbp = (filecontrolblock *)((GUEST<INTEGER> *)MR(FCBSPtr) + 1);
-    efcbp = (filecontrolblock *)((char *)MR(FCBSPtr) + length);
+    length = CW(*(GUEST<INTEGER> *)MR(LM(FCBSPtr)));
+    fcbp = (filecontrolblock *)((GUEST<INTEGER> *)MR(LM(FCBSPtr)) + 1);
+    efcbp = (filecontrolblock *)((char *)MR(LM(FCBSPtr)) + length);
     for(; fcbp < efcbp;
-        fcbp = (filecontrolblock *)((char *)fcbp + CW(FSFCBLen)))
+        fcbp = (filecontrolblock *)((char *)fcbp + CW(LM(FSFCBLen))))
     {
         if(fcbp->fcbDirID == swapped_parid
            && fcbp->fcbVPtr == swapped_vcbp

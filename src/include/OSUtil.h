@@ -136,26 +136,26 @@ enum
     ToolTrap = 1,
 };
 
-#if !defined(SysVersion)
-extern INTEGER SysVersion;
-extern Byte SPValid;
-extern Byte SPATalkA;
-extern Byte SPATalkB;
-extern Byte SPConfig;
-extern INTEGER SPPortA;
-extern INTEGER SPPortB;
-extern LONGINT SPAlarm;
-extern INTEGER SPFont;
-extern Byte SPKbd;
-extern Byte SPPrint;
-extern Byte SPVolCtl;
-extern Byte SPClikCaret;
-extern Byte SPMisc2;
-extern ULONGINT Time;
-extern Byte MMU32Bit;
-extern Byte MMUType;
-extern Byte KbdType;
-#endif
+const LowMemGlobal<INTEGER> SysVersion { 0x15A }; // OSUtil ThinkC (true);
+const LowMemGlobal<Byte> SPValid { 0x1F8 }; // OSUtil IMII-392 (true);
+const LowMemGlobal<Byte> SPATalkA { 0x1F9 }; // OSUtil IMII-392 (true);
+const LowMemGlobal<Byte> SPATalkB { 0x1FA }; // OSUtil IMII-392 (true);
+const LowMemGlobal<Byte> SPConfig { 0x1FB }; // OSUtil IMII-392 (true);
+const LowMemGlobal<INTEGER> SPPortA { 0x1FC }; // OSUtil IMII-392 (true);
+const LowMemGlobal<INTEGER> SPPortB { 0x1FE }; // OSUtil IMII-392 (true);
+const LowMemGlobal<LONGINT> SPAlarm { 0x200 }; // OSUtil IMII-392 (true);
+const LowMemGlobal<INTEGER> SPFont { 0x204 }; // OSUtil IMII-392 (true);
+const LowMemGlobal<Byte> SPKbd { 0x206 }; // OSUtil IMII-369 (true);
+const LowMemGlobal<Byte> SPPrint { 0x207 }; // OSUtil IMII-392 (true);
+const LowMemGlobal<Byte> SPVolCtl { 0x208 }; // OSUtil IMII-392 (true);
+const LowMemGlobal<Byte> SPClikCaret { 0x209 }; // OSUtil IMII-392 (true);
+const LowMemGlobal<Byte> SPMisc2 { 0x20B }; // OSUtil IMII-392 (true);
+const LowMemGlobal<ULONGINT> Time { 0x20C }; // OSUtil IMI-260 (true);
+const LowMemGlobal<INTEGER> CrsrThresh { 0x8EC }; // OSUtil IMII-372 (false);
+const LowMemGlobal<Byte> MMUType { 0xCB1 }; // OSUtil MPW (false);
+const LowMemGlobal<Byte> MMU32Bit { 0xCB2 }; // OSUtil IMV-592 (true-b);
+const LowMemGlobal<QHdr> DTQueue { 0xD92 }; // OSUtil IMV-466 (false);
+const LowMemGlobal<ProcPtr> JDTInstall { 0xD9C }; // OSUtil IMV (false);
 
 extern OSErrRET HandToHand(Handle *h);
 extern OSErrRET PtrToHand(Ptr p, Handle *h, LONGINT s);

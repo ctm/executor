@@ -207,7 +207,7 @@ compute_bounds(Point maybe_top_left)
         int gd_width;
         int gd_height;
 
-        gd_rect = &GD_RECT(MR(MainDevice));
+        gd_rect = &GD_RECT(MR(LM(MainDevice)));
         gd_width = RECT_WIDTH(gd_rect);
         gd_height = RECT_HEIGHT(gd_rect);
 
@@ -1121,7 +1121,7 @@ color_wheel_init(void)
      really 208 pixels to handle target overlap */
     InsetRect(color_wheel_bounds, -8, -8);
 
-    bpp = PIXMAP_PIXEL_SIZE(GD_PMAP(MR(MainDevice)));
+    bpp = PIXMAP_PIXEL_SIZE(GD_PMAP(MR(LM(MainDevice))));
     color_wheel_pixmap.baseAddr = RM((Ptr)((bpp == 8)
                                                ? color_wheel_bits_8
                                                : (bpp == 4
@@ -1372,7 +1372,7 @@ BOOLEAN Executor::C_GetColor(Point where, Str255 prompt, RGBColor *in_color,
 
     /* sometimes the animated palette entries suck up the hilite color */
     SetEntryUsage(palette, 14, pmTolerant, 1);
-    SetEntryColor(palette, 14, &HiliteRGB);
+    SetEntryColor(palette, 14, &LM(HiliteRGB));
 
     /* #### add palette entries for the {current, orig}_colors? */
 

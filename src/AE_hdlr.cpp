@@ -18,7 +18,7 @@ using namespace Executor;
         AE_info_t *info;                                  \
         AE_zone_tables_h zone_tables;                     \
                                                           \
-        info = MR(AE_info);                               \
+        info = MR(LM(AE_info));                           \
                                                           \
         zone_tables = ((system_p)                         \
                            ? MR(info->system_zone_tables) \
@@ -34,7 +34,7 @@ void Executor::AE_init(void)
 
     info = (AE_info_t *)NewPtrSysClear(sizeof *info);
 
-    TheZoneGuard guard(SysZone);
+    TheZoneGuard guard(LM(SysZone));
 
     AE_zone_tables_h zone_tables;
 
@@ -55,7 +55,7 @@ void Executor::AE_init(void)
                                &HxX(zone_tables, special_hdlr_table));
     info->system_zone_tables = RM(zone_tables);
 
-    AE_info = RM(info);
+    LM(AE_info) = RM(info);
 }
 
 void Executor::AE_reinit(void)
@@ -63,9 +63,9 @@ void Executor::AE_reinit(void)
     AE_info_t *info;
     OSErr err;
 
-    info = MR(AE_info);
+    info = MR(LM(AE_info));
 
-    TheZoneGuard guard(ApplZone);
+    TheZoneGuard guard(LM(ApplZone));
 
     AE_zone_tables_h zone_tables;
 
@@ -123,8 +123,8 @@ hdlr_table_elt(AE_hdlr_table_h table,
                       (sizeof(AE_hdlr_table_t)
                        + n_elts * sizeof(AE_hdlr_table_elt_t)));
 
-        if(MemErr != CWC(noErr))
-            AE_RETURN_ERROR(CW(MemErr));
+        if(LM(MemErr) != CWC(noErr))
+            AE_RETURN_ERROR(CW(LM(MemErr)));
 
         elts = AE_TABLE_ELTS(table);
         elt = &elts[n_elts - 1];
@@ -155,8 +155,8 @@ OSErr Executor::C__AE_hdlr_table_alloc(int32_t unknown_1, int32_t unknown_2,
     /* #### actual initial allocation size is probably a function of the
      first argument */
     table = (AE_hdlr_table_h)NewHandleClear(52);
-    if(MemErr != CWC(noErr))
-        AE_RETURN_ERROR(CW(MemErr));
+    if(LM(MemErr) != CWC(noErr))
+        AE_RETURN_ERROR(CW(LM(MemErr)));
 
     AE_TABLE_N_ALLOCATED_BYTES_X(table) = CLC(52);
     AE_TABLE_N_ELTS_X(table) = CLC(0);

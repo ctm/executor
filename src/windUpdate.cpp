@@ -75,11 +75,11 @@ int Executor::ROMlib_emptyvis = 0;
 
 void Executor::C_BeginUpdate(WindowPtr w)
 {
-    /* #warning Should SaveVisRgn ever become 0? */
-    if(!SaveVisRgn)
-        SaveVisRgn = RM((RgnHandle)NewHandle(0));
+    /* #warning Should LM(SaveVisRgn) ever become 0? */
+    if(!LM(SaveVisRgn))
+        LM(SaveVisRgn) = RM((RgnHandle)NewHandle(0));
 
-    CopyRgn(PORT_VIS_REGION(w), MR(SaveVisRgn));
+    CopyRgn(PORT_VIS_REGION(w), MR(LM(SaveVisRgn)));
 
     if(EmptyRgn(WINDOW_UPDATE_REGION(w)))
         ROMlib_emptyvis = 1;
@@ -92,7 +92,7 @@ void Executor::C_BeginUpdate(WindowPtr w)
         OffsetRgn(PORT_VIS_REGION(w),
                   CW(PORT_BOUNDS(w).left),
                   CW(PORT_BOUNDS(w).top));
-        SectRgn(PORT_VIS_REGION(w), MR(SaveVisRgn), PORT_VIS_REGION(w));
+        SectRgn(PORT_VIS_REGION(w), MR(LM(SaveVisRgn)), PORT_VIS_REGION(w));
         SetEmptyRgn(WINDOW_UPDATE_REGION(w));
         ROMlib_emptyvis = EmptyRgn(PORT_VIS_REGION(w));
     }
@@ -100,9 +100,9 @@ void Executor::C_BeginUpdate(WindowPtr w)
 
 void Executor::C_EndUpdate(WindowPtr w)
 {
-    CopyRgn(MR(SaveVisRgn), PORT_VIS_REGION(w));
-    CopyRgn(WINDOW_CONT_REGION(w), MR(SaveVisRgn));
-    OffsetRgn(MR(SaveVisRgn),
+    CopyRgn(MR(LM(SaveVisRgn)), PORT_VIS_REGION(w));
+    CopyRgn(WINDOW_CONT_REGION(w), MR(LM(SaveVisRgn)));
+    OffsetRgn(MR(LM(SaveVisRgn)),
               CW(PORT_BOUNDS(w).left),
               CW(PORT_BOUNDS(w).top));
     ROMlib_emptyvis = 0;

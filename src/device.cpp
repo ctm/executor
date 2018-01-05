@@ -44,7 +44,7 @@ OSErr Executor::ROMlib_dispatch(ParmBlkPtr p, BOOLEAN async,
     devicen = -CW(p->cntrlParam.ioCRefNum) - 1;
     if(devicen < 0 || devicen >= NDEVICES)
         retval = badUnitErr;
-    else if(UTableBase == guest_cast<DCtlHandlePtr>(CLC(-1)) || (h = MR(MR(UTableBase)[devicen])) == 0 || *h == 0)
+    else if(LM(UTableBase) == guest_cast<DCtlHandlePtr>(CLC(-1)) || (h = MR(MR(LM(UTableBase))[devicen])) == 0 || *h == 0)
         retval = unitEmptyErr;
     else
     {
@@ -148,11 +148,11 @@ OSErr Executor::ROMlib_dispatch(ParmBlkPtr p, BOOLEAN async,
                 HxX(h, dCtlFlags).raw_and(~CWC(DRIVEROPENBIT));
                 HUnlock((Handle)h);
                 HUnlock((Handle)ramdh);
-                MBarEnable = 0;
+                LM(MBarEnable) = 0;
                 /* NOTE: It's not clear whether we should zero out this
 		   field or just check for DRIVEROPEN bit up above and never
 		   send messages except open to non-open drivers.  */
-                MR(UTableBase)
+                MR(LM(UTableBase))
                 [devicen] = nullptr;
             }
 
@@ -250,7 +250,7 @@ DCtlHandle Executor::GetDCtlEntry(INTEGER rn)
 
     devicen = -rn - 1;
     return (devicen < 0 || devicen >= NDEVICES) ? 0
-                                                : MR(MR(UTableBase)[devicen]);
+                                                : MR(MR(LM(UTableBase))[devicen]);
 }
 
 /*
@@ -295,7 +295,7 @@ OSErr Executor::ROMlib_driveropen(ParmBlkPtr pbp, BOOLEAN a) /* INTERNAL */
     GUEST<ResType> typ;
     BOOLEAN alreadyopen;
 
-    TheZoneGuard guard(SysZone);
+    TheZoneGuard guard(LM(SysZone));
 
     err = noErr;
 
@@ -306,9 +306,9 @@ OSErr Executor::ROMlib_driveropen(ParmBlkPtr pbp, BOOLEAN a) /* INTERNAL */
         GUEST<INTEGER> resid;
         GetResInfo((Handle)ramdh, &resid, &typ, (StringPtr)0);
         devicen = CW(resid);
-        h = MR(MR(UTableBase)[devicen]);
+        h = MR(MR(LM(UTableBase))[devicen]);
         alreadyopen = h && (HxX(h, dCtlFlags) & CWC(DRIVEROPENBIT));
-        if(!h && !(h = MR(MR(UTableBase)[devicen] = RM((DCtlHandle)NewHandle(sizeof(DCtlEntry))))))
+        if(!h && !(h = MR(MR(LM(UTableBase))[devicen] = RM((DCtlHandle)NewHandle(sizeof(DCtlEntry))))))
             err = MemError();
         else if(!alreadyopen)
         {
@@ -362,14 +362,14 @@ OSErr Executor::ROMlib_driveropen(ParmBlkPtr pbp, BOOLEAN a) /* INTERNAL */
             devicen = -dip->refnum - 1;
             if(devicen < 0 || devicen >= NDEVICES)
                 err = badUnitErr;
-            else if(MR(UTableBase)[devicen])
+            else if(MR(LM(UTableBase))[devicen])
                 err = noErr; /* note:  if we choose to support desk */
             /*	  accessories, we will have to */
             /*	  check to see if this is one and */
             /*	  call the open routine if it is */
             else
             {
-                if(!(h = MR(MR(UTableBase)[devicen] = RM((DCtlHandle)NewHandle(sizeof(DCtlEntry))))))
+                if(!(h = MR(MR(LM(UTableBase))[devicen] = RM((DCtlHandle)NewHandle(sizeof(DCtlEntry))))))
                     err = MemError();
                 else
                 {

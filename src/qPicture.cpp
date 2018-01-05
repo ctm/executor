@@ -380,10 +380,10 @@ void Executor::ROMlib_drawingverbpicupdate(GrafVerb v)
             updatefillpat();
             break;
         case invert:
-            if(!(HiliteMode & 0x80))
+            if(!(LM(HiliteMode) & 0x80))
             {
                 PICOP(OP_HiliteColor);
-                PICWRITE(&HiliteRGB, sizeof HiliteRGB);
+                PICWRITE(&LM(HiliteRGB), sizeof LM(HiliteRGB));
                 PICOP(OP_HiliteMode);
             }
             break;

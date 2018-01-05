@@ -35,7 +35,7 @@ void Executor::C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER v, BOOLEAN front)
     if(WINDOW_VISIBLE_X(w))
     {
         SetPort(MR(wmgr_port));
-        ClipRect(&GD_BOUNDS(MR(TheGDevice)));
+        ClipRect(&GD_BOUNDS(MR(LM(TheGDevice))));
         ClipAbove(w);
         movepart = NewRgn();
         updatepart = NewRgn();
@@ -55,7 +55,7 @@ void Executor::C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER v, BOOLEAN front)
             Rect tmpr;
             RgnHandle last_three_pixels;
 
-            tmpr = GD_BOUNDS(MR(TheGDevice));
+            tmpr = GD_BOUNDS(MR(LM(TheGDevice)));
             tmpr.top = CW(CW(tmpr.bottom) - 1);
             tmpr.left = CW(CW(tmpr.right) - 3);
             last_three_pixels = NewRgn();
@@ -97,9 +97,9 @@ void Executor::C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER v, BOOLEAN front)
         OffsetRect(&r, h, v);
         OffsetRgn(movepart, h, v);
         SectRgn(movepart, PORT_CLIP_REGION(MR(wmgr_port)), movepart);
-        ClipRect(&GD_BOUNDS(MR(TheGDevice)));
+        ClipRect(&GD_BOUNDS(MR(LM(TheGDevice))));
 
-        WRAPPER_SET_PIXMAP_X(wrapper, GD_PMAP_X(MR(TheGDevice)));
+        WRAPPER_SET_PIXMAP_X(wrapper, GD_PMAP_X(MR(LM(TheGDevice))));
 
 #define NEW_CLIP_HACK
 #if defined(NEW_CLIP_HACK)
@@ -114,9 +114,9 @@ void Executor::C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER v, BOOLEAN front)
             Rect srcr, dstr;
 
             SectRect(&HxX(WINDOW_STRUCT_REGION(w), rgnBBox),
-                     &GD_BOUNDS(MR(TheGDevice)), &srcr);
+                     &GD_BOUNDS(MR(LM(TheGDevice))), &srcr);
 
-            dstr = GD_BOUNDS(MR(TheGDevice));
+            dstr = GD_BOUNDS(MR(LM(TheGDevice)));
             OffsetRect(&dstr, h, v);
             SectRect(&dstr, &r, &dstr);
             CopyBits(wrapper, wrapper, &srcr, &dstr, srcCopy, movepart);
@@ -133,7 +133,7 @@ void Executor::C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER v, BOOLEAN front)
     OffsetRect(&PORT_BOUNDS(w), -h, -v);
     if(WINDOW_VISIBLE_X(w))
     {
-        ClipRect(&GD_BOUNDS(MR(TheGDevice)));
+        ClipRect(&GD_BOUNDS(MR(LM(TheGDevice))));
         ClipAbove(w);
         DiffRgn(WINDOW_STRUCT_REGION(w), movepart, updatepart);
         SectRgn(PORT_CLIP_REGION(MR(wmgr_port)), updatepart, updatepart);
@@ -164,7 +164,7 @@ void Executor::C_DragWindow(WindowPtr wp, Point p, Rect *rp)
 
     ThePortGuard guard(MR(wmgr_port));
     GetOSEvent(0, &ev);
-    SetClip(MR(GrayRgn));
+    SetClip(MR(LM(GrayRgn)));
     cmddown = (bool)(ev.modifiers & CWC(cmdKey));
     if(cmddown)
         ClipAbove((WindowPeek)wp);
@@ -241,9 +241,9 @@ LONGINT Executor::C_GrowWindow(WindowPtr w, Point startp, Rect *rp)
         pinr.bottom = CWC(32767);
 
     gp = thePort;
-    SETUP_PORT((GrafPtr)MR(WMgrPort));
+    SETUP_PORT((GrafPtr)MR(LM(WMgrPort)));
     SETUP_PORT(MR(wmgr_port));
-    ClipRect(&GD_BOUNDS(MR(TheGDevice)));
+    ClipRect(&GD_BOUNDS(MR(LM(TheGDevice))));
     ClipAbove((WindowPeek)w);
     WINDCALL((WindowPtr)w, wGrow, ptr_to_longint(&r));
     while(!GetOSEvent(mUpMask, &ev))
@@ -264,7 +264,7 @@ LONGINT Executor::C_GrowWindow(WindowPtr w, Point startp, Rect *rp)
         CALLDRAGHOOK();
     }
     WINDCALL((WindowPtr)w, wGrow, ptr_to_longint(&r));
-    RESTORE_PORT((GrafPtr)MR(WMgrPort));
+    RESTORE_PORT((GrafPtr)MR(LM(WMgrPort)));
     RESTORE_PORT(gp);
     if(p.h != startp.h || p.v != startp.v)
         /*-->*/ return (((LONGINT)(CW(r.bottom) - CW(r.top)) << 16) | (unsigned short)(CW(r.right) - CW(r.left)));

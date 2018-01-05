@@ -3,19 +3,7 @@
  * All rights reserved.
  */
 
-/* NOTE: we have to include common.h since it sets up some macros that
-   we need, including and static.  However, since this is file's
-   purpose is to export routines that are definitely not Mac-routines, we
-   included common.h first and then include windows.h later so that we have
-   access to all the Windows data types and structures. */
-
-#define _STUBIFY_H_ /* prevent conflicts between stubify.h and windows.h */
-#define BOOLEAN MAC_BOOLEAN /* we want the Windows version of these two */
-#define CHAR MAC_CHAR
 #include "rsys/common.h"
-#undef BOOLEAN
-#undef CHAR
-#undef Time
 
 #include <windows.h>
 #include <stdio.h>

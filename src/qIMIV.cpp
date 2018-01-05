@@ -256,7 +256,7 @@ create_scratch_bitmap_if_necessary(uint8 **_fbuf,
     int screen_row_bytes;
     int screen_height;
 
-    gd_pmap = GD_PMAP(MR(MainDevice));
+    gd_pmap = GD_PMAP(MR(LM(MainDevice)));
     screen_fbuf = PIXMAP_BASEADDR(gd_pmap);
     screen_row_bytes = PIXMAP_ROWBYTES(gd_pmap);
     screen_height = RECT_HEIGHT(&PIXMAP_BOUNDS(gd_pmap));

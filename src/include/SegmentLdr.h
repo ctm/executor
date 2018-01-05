@@ -38,22 +38,17 @@ enum
     hwParamErr = (-502),
 };
 
-#if 0
-#if !defined(AppParmHandle_H)
-extern GUEST<Handle> 	AppParmHandle_H;
-extern Byte 	loadtrap;
-extern Byte 	FinderName[16];
-extern INTEGER 	CurApRefNum;
-extern Byte 	CurApName[34];
-extern INTEGER 	CurJTOffset;
-extern INTEGER 	CurPageOption;
-#endif
-
-enum
-{
-    AppParmHandle = (AppParmHandle_H.p),
-};
-#endif
+const LowMemGlobal<Byte> loadtrap { 0x12D }; // SegmentLdr SysEqu.a (true-b);
+const LowMemGlobal<Byte[16]> FinderName { 0x2E0 }; // SegmentLdr IMII-59 (true);
+const LowMemGlobal<INTEGER> CurApRefNum { 0x900 }; // SegmentLdr IMII-58 (true);
+/*
+ * NOTE: IMIII says CurApName is 32 bytes LONGINT, but it looks to me like
+ * it is really 34 bytes LONGINT.
+ */
+const LowMemGlobal<Byte[34]> CurApName { 0x910 }; // SegmentLdr IMII-58 (true);
+const LowMemGlobal<INTEGER> CurJTOffset { 0x934 }; // SegmentLdr IMII-62 (true-b);
+const LowMemGlobal<INTEGER> CurPageOption { 0x936 }; // SegmentLdr IMII-60 (true);
+const LowMemGlobal<Handle> AppParmHandle { 0xAEC }; // SegmentLdr IMII-57 (true);
 
 extern void flushcache(void);
 

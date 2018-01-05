@@ -32,7 +32,7 @@ is_window_ptr(WindowPeek w)
         retval = false;
     else
     {
-        for(wp = MR(WindowList);
+        for(wp = MR(LM(WindowList));
             wp && wp != w;
             wp = WINDOW_NEXT_WINDOW(wp))
             ;
@@ -129,7 +129,7 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
     p.h = startp.h;
     p.v = startp.v;
     GetPenState(&ps);
-    PenPat(DragPattern);
+    PenPat(LM(DragPattern));
     PenMode(notPatXor);
     if((drawn = PtInRect(p, slop)))
         PaintRgn(rgn); /* was Frame */
@@ -204,7 +204,7 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
 LONGINT Executor::C_DragGrayRgn(RgnHandle rgn, Point startp, Rect *limit,
                                 Rect *slop, INTEGER axis, ProcPtr proc)
 {
-    PATASSIGN(DragPattern, gray);
+    PATASSIGN(LM(DragPattern), gray);
     return DragTheRgn(rgn, startp, limit, slop, axis, proc);
 }
 
@@ -212,9 +212,9 @@ void Executor::C_ClipAbove(WindowPeek w)
 {
     WindowPeek wp;
 
-    SectRgn(PORT_CLIP_REGION(MR(wmgr_port)), MR(GrayRgn),
+    SectRgn(PORT_CLIP_REGION(MR(wmgr_port)), MR(LM(GrayRgn)),
             PORT_CLIP_REGION(MR(wmgr_port)));
-    for(wp = MR(WindowList); wp != w; wp = WINDOW_NEXT_WINDOW(wp))
+    for(wp = MR(LM(WindowList)); wp != w; wp = WINDOW_NEXT_WINDOW(wp))
         if(WINDOW_VISIBLE_X(wp))
             DiffRgn(PORT_CLIP_REGION(MR(wmgr_port)), WINDOW_STRUCT_REGION(wp),
                     PORT_CLIP_REGION(MR(wmgr_port)));
@@ -225,7 +225,7 @@ BOOLEAN Executor::C_CheckUpdate(EventRecord *ev)
     WindowPeek wp;
     Rect picr;
 
-    for(wp = MR(WindowList); wp; wp = WINDOW_NEXT_WINDOW(wp))
+    for(wp = MR(LM(WindowList)); wp; wp = WINDOW_NEXT_WINDOW(wp))
         if(WINDOW_VISIBLE_X(wp) && !EmptyRgn(WINDOW_UPDATE_REGION(wp)))
         {
             if(WINDOW_PIC(wp))
@@ -249,10 +249,10 @@ BOOLEAN Executor::C_CheckUpdate(EventRecord *ev)
 
 void Executor::C_SaveOld(WindowPeek w)
 {
-    OldStructure = RM(NewRgn());
-    OldContent = RM(NewRgn());
-    CopyRgn(WINDOW_STRUCT_REGION(w), MR(OldStructure));
-    CopyRgn(WINDOW_CONT_REGION(w), MR(OldContent));
+    LM(OldStructure) = RM(NewRgn());
+    LM(OldContent) = RM(NewRgn());
+    CopyRgn(WINDOW_STRUCT_REGION(w), MR(LM(OldStructure)));
+    CopyRgn(WINDOW_CONT_REGION(w), MR(LM(OldContent)));
 }
 
 void Executor::C_PaintOne(WindowPeek w, RgnHandle clobbered)
@@ -263,7 +263,7 @@ void Executor::C_PaintOne(WindowPeek w, RgnHandle clobbered)
     if(w)
         SetClip(WINDOW_STRUCT_REGION(w));
     else
-        ClipRect(&GD_BOUNDS(MR(TheGDevice)));
+        ClipRect(&GD_BOUNDS(MR(LM(TheGDevice))));
     ClipAbove(w);
     SectRgn(PORT_CLIP_REGION(MR(wmgr_port)), clobbered,
             PORT_CLIP_REGION(MR(wmgr_port)));
@@ -279,12 +279,12 @@ void Executor::C_PaintOne(WindowPeek w, RgnHandle clobbered)
                     WINDOW_CONT_REGION(w), rh);
             if(!EmptyRgn(rh))
             {
-                if(SaveUpdate)
+                if(LM(SaveUpdate))
                     UnionRgn(rh, WINDOW_UPDATE_REGION(w),
                              WINDOW_UPDATE_REGION(w));
                 /* erase the region with the window's background
 		      color and pattern */
-                if(PaintWhite)
+                if(LM(PaintWhite))
                 {
                     RGBColor *window_colors;
 
@@ -303,15 +303,15 @@ void Executor::C_PaintOne(WindowPeek w, RgnHandle clobbered)
     }
     else if(!EmptyRgn(PORT_CLIP_REGION(MR(wmgr_port))))
     {
-        if(DeskHook)
+        if(LM(DeskHook))
             WINDCALLDESKHOOK();
         else
         {
             if((USE_DESKCPAT_VAR & USE_DESKCPAT_BIT)
-               && PIXMAP_PIXEL_SIZE(GD_PMAP(MR(MainDevice))) > 2)
-                FillCRgn(clobbered, MR(DeskCPat));
+               && PIXMAP_PIXEL_SIZE(GD_PMAP(MR(LM(MainDevice)))) > 2)
+                FillCRgn(clobbered, MR(LM(DeskCPat)));
             else
-                FillRgn(clobbered, DeskPattern);
+                FillRgn(clobbered, LM(DeskPattern));
         }
     }
 }
@@ -324,8 +324,8 @@ void Executor::C_PaintBehind(WindowPeek w, RgnHandle clobbered)
     rh = NewRgn();
     testrgn = NewRgn();
     CopyRgn(clobbered, rh);
-    PaintWhite = CWC(-1);
-    SaveUpdate = CWC(-1);
+    LM(PaintWhite) = CWC(-1);
+    LM(SaveUpdate) = CWC(-1);
     for(wp = w; wp; wp = WINDOW_NEXT_WINDOW(wp))
     {
         if(WINDOW_VISIBLE_X(wp))
@@ -352,8 +352,8 @@ void Executor::C_CalcVis(WindowPeek w)
 
     if(w && WINDOW_VISIBLE_X(w))
     {
-        SectRgn(MR(GrayRgn), WINDOW_CONT_REGION(w), PORT_VIS_REGION(w));
-        for(wp = MR(WindowList); wp != w; wp = WINDOW_NEXT_WINDOW(wp))
+        SectRgn(MR(LM(GrayRgn)), WINDOW_CONT_REGION(w), PORT_VIS_REGION(w));
+        for(wp = MR(LM(WindowList)); wp != w; wp = WINDOW_NEXT_WINDOW(wp))
             if(WINDOW_VISIBLE_X(wp))
                 DiffRgn(PORT_VIS_REGION(w), WINDOW_STRUCT_REGION(wp),
                         PORT_VIS_REGION(w));
@@ -402,8 +402,8 @@ void Executor::C_DrawNew(WindowPeek w, BOOLEAN flag)
    * This works as IM describes, but I had to spend some time fiddling with
    * it so the code is still suspect.
    */
-    XorRgn(WINDOW_STRUCT_REGION(w), MR(OldStructure), r1);
-    XorRgn(MR(OldContent), WINDOW_CONT_REGION(w), r2);
+    XorRgn(WINDOW_STRUCT_REGION(w), MR(LM(OldStructure)), r1);
+    XorRgn(MR(LM(OldContent)), WINDOW_CONT_REGION(w), r2);
     UnionRgn(r1, r2, r2);
 
     ThePortGuard guard(MR(wmgr_port));
@@ -424,7 +424,7 @@ INTEGER Executor::C_GetWVariant(WindowPtr w) /* IMV-208 */
     AuxWinHandle h;
     INTEGER retval;
 
-    for(h = MR(AuxWinHead); h != 0 && HxP(h, awOwner) != w; h = HxP(h, awNext))
+    for(h = MR(LM(AuxWinHead)); h != 0 && HxP(h, awOwner) != w; h = HxP(h, awNext))
         ;
     retval = h != 0 ? (Hx(h, awFlags) >> 24) & 0xFF : 0;
     return retval;
@@ -432,7 +432,7 @@ INTEGER Executor::C_GetWVariant(WindowPtr w) /* IMV-208 */
 
 void Executor::CALLDRAGHOOK(void)
 {
-    if(DragHook)
+    if(LM(DragHook))
     {
         LONGINT saved0, saved1, saved2, saved3,
             savea0, savea1, savea2, savea3;
@@ -448,7 +448,7 @@ void Executor::CALLDRAGHOOK(void)
         savea2 = EM_A2;
         savea3 = EM_A3;
         EM_D0 = 0;
-        CALL_EMULATOR((syn68k_addr_t)CL_RAW(DragHook.raw()));
+        CALL_EMULATOR((syn68k_addr_t)CL_RAW(LM(DragHook).raw()));
         EM_D0 = saved0;
         EM_D1 = saved1;
         EM_D2 = saved2;
@@ -473,7 +473,7 @@ void Executor::WINDCALLDESKHOOK(void)
     savea2 = EM_A2;
     savea3 = EM_A3;
     EM_D0 = 0;
-    CALL_EMULATOR((syn68k_addr_t)CL_RAW(DeskHook.raw()));
+    CALL_EMULATOR((syn68k_addr_t)CL_RAW(LM(DeskHook).raw()));
     EM_D0 = saved0;
     EM_D1 = saved1;
     EM_D2 = saved2;

@@ -392,12 +392,12 @@ static RGBColor saveHiliteRGB;
 
 static void defhilite()
 {
-    HiliteRGB = saveHiliteRGB;
+    LM(HiliteRGB) = saveHiliteRGB;
 }
 
 static void hilitemode()
 {
-    HiliteMode &= ~(0x80);
+    LM(HiliteMode) &= ~(0x80);
 }
 
 static void fillpixpat(PixPatHandle ph)
@@ -649,7 +649,7 @@ static void W_EraseRect(Rect *r)
 static void
 reset_hilite_mode(void)
 {
-    HiliteMode |= 0x80;
+    LM(HiliteMode) |= 0x80;
 }
 
 static void W_InvertRect(Rect *r)
@@ -1156,7 +1156,7 @@ static Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
            || pixmap->packType == CWC(2))
         {
             h = NewHandle(final_data_size);
-            /* The practice of trying again in SysZone comes from the
+            /* The practice of trying again in LM(SysZone) comes from the
 	       database "Panorama" which calls MaxMem, subtracts a
 	       small number from that, then calls NewPtr with the
 	       result (i.e. asking for all of memory minus a small
@@ -1167,7 +1167,7 @@ static Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
 
             if(h == NULL)
             {
-                TheZoneGuard guard(SysZone);
+                TheZoneGuard guard(LM(SysZone));
 
                 h = NewHandle(final_data_size);
             }
@@ -1197,7 +1197,7 @@ static Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
         h = NewHandle(final_data_size);
         if(h == NULL)
         {
-            TheZoneGuard guard(SysZone);
+            TheZoneGuard guard(LM(SysZone));
 
             h = NewHandle(final_data_size);
         }
@@ -1312,10 +1312,10 @@ static void eatbitdata(BitMap *bp, BOOLEAN packed)
             {
                 GUEST<THz> savezone;
 
-                savezone = TheZone;
-                TheZone = SysZone;
+                savezone = LM(TheZone);
+                LM(TheZone) = LM(SysZone);
                 h = NewHandle(datasize);
-                TheZone = savezone;
+                LM(TheZone) = savezone;
             }
             HLock(h);
             CToPascalCall((void *)procp, ctop(&C_StdGetPic), STARH(h), datasize);
@@ -1332,10 +1332,10 @@ static void eatbitdata(BitMap *bp, BOOLEAN packed)
         {
             GUEST<THz> savezone;
 
-            savezone = TheZone;
-            TheZone = SysZone;
+            savezone = LM(TheZone);
+            LM(TheZone) = LM(SysZone);
             h = NewHandle(datasize);
-            TheZone = savezone;
+            LM(TheZone) = savezone;
         }
         HLock(h);
         bp->baseAddr = *h; /* can't use STARH */
@@ -1561,10 +1561,10 @@ void Executor::C_DrawPicture(PicHandle pic, Rect *destrp)
         return;
 #endif
 
-    saveHiliteMode = HiliteMode;
-    saveHiliteRGB = HiliteRGB;
-    saveFractEnable = FractEnable;
-    saveFScaleDisable = FScaleDisable;
+    saveHiliteMode = LM(HiliteMode);
+    saveHiliteRGB = LM(HiliteRGB);
+    saveFractEnable = LM(FractEnable);
+    saveFScaleDisable = LM(FScaleDisable);
     begin_assoc();
     the_port = thePort;
     if(CGrafPort_p(the_port))
@@ -2048,6 +2048,6 @@ void Executor::C_DrawPicture(PicHandle pic, Rect *destrp)
     end_assoc();
     SetFractEnable(saveFractEnable);
     SetFScaleDisable(saveFScaleDisable);
-    HiliteRGB = saveHiliteRGB;
-    HiliteMode = saveHiliteMode;
+    LM(HiliteRGB) = saveHiliteRGB;
+    LM(HiliteMode) = saveHiliteMode;
 }

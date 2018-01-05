@@ -823,7 +823,7 @@ CONVERT_FUNC(depthconv_32_32, CONVERT_32_32, 0, 0, COMPUTE_ADD_32_32,
 #define EXTRA_SETUP()                                  \
     do                                                 \
     {                                                  \
-        gdev = MR(TheGDevice);                         \
+        gdev = MR(LM(TheGDevice));                         \
         gd_pmap = GD_PMAP(gdev);                       \
         gdev_ctab_save = PIXMAP_TABLE_X(gd_pmap);      \
         gdev_itab_save = GD_ITABLE_X(gdev);            \

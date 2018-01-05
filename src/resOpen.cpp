@@ -30,13 +30,13 @@ Executor::HCreateResFile_helper(INTEGER vrefnum, LONGINT parid, Str255 name,
     ROMlib_setreserr(HCreate(vrefnum, parid, name, creator, type)); /* ????
 								       might
 								    be wrong */
-    if(ResErr != CWC(noErr) && Cx(ResErr) != dupFNErr)
+    if(LM(ResErr) != CWC(noErr) && Cx(LM(ResErr)) != dupFNErr)
         return;
     ROMlib_setreserr(HOpenRF(vrefnum, parid, name, fsRdWrPerm, &f));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         return;
     ROMlib_setreserr(GetEOF(f, &leof));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
     {
         FSClose(f);
         return;
@@ -56,7 +56,7 @@ Executor::HCreateResFile_helper(INTEGER vrefnum, LONGINT parid, Str255 name,
     buf.negone = CWC(-1); /* zero types (0 - 1) */
     lc = sizeof(buf);
     ROMlib_setreserr(FSWriteAll(f, &lc, (Ptr)&buf));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         return;
     ROMlib_setreserr(FSClose(f));
 }
@@ -148,7 +148,7 @@ decompress_setup(INTEGER rn, int32_t *dlenp, int32_t *final_sizep, int32_t *offs
 
     /*
    * If we can't read the entire header in or if we don't get the correct tag
-   * then we'll return false, but clear ResErr.  This is a sign that the
+   * then we'll return false, but clear LM(ResErr).  This is a sign that the
    * resource is to be treated as a non-compressed resource.
    */
 
@@ -241,7 +241,7 @@ static Handle mgetres_helper(resmaphand map, resref *rr, int32_t dlen,
         if(!decompress_setup(Hx(map, resfn), &dlen, &uncompressed_size,
                              &dcmp_offset, &dcmp_handle, &dcmp_workspace))
         {
-            if(ResErr == CWC(noErr))
+            if(LM(ResErr) == CWC(noErr))
                 compressed_p = false;
             else
             {
@@ -263,8 +263,8 @@ static Handle mgetres_helper(resmaphand map, resref *rr, int32_t dlen,
 
         if(!rr->rhand)
         {
-            TheZone = ((rr->ratr & resSysHeap)
-                           ? SysZone
+            LM(TheZone) = ((rr->ratr & resSysHeap)
+                           ? LM(SysZone)
                            : (GUEST<THz>)RM(HandleZone((Handle)map)));
             retval = NewHandle(uncompressed_size + dcmp_offset);
             rr->rhand = RM(retval);
@@ -332,11 +332,11 @@ Executor::ROMlib_mgetres2(resmaphand map, resref *rr)
         SignedByte state;
         int32_t loc;
 
-        savezone = TheZone;
+        savezone = LM(TheZone);
         state = hlock_return_orig_state((Handle)map);
         loc = Hx(map, rh.rdatoff) + B3TOLONG(rr->doff);
         ROMlib_setreserr(SetFPos(Hx(map, resfn), fsFromStart, loc));
-        if(ResErr != CWC(noErr))
+        if(LM(ResErr) != CWC(noErr))
             retval = NULL;
         else
         {
@@ -347,17 +347,17 @@ Executor::ROMlib_mgetres2(resmaphand map, resref *rr)
             lc = sizeof(Size);
             err = FSReadAll(Hx(map, resfn), &lc, (Ptr)&dlen_s);
             ROMlib_setreserr(err);
-            if(ResErr != CWC(noErr))
+            if(LM(ResErr) != CWC(noErr))
                 retval = NULL;
             else
             {
                 int32_t dlen = CL(dlen_s);
-                if(ResLoad)
+                if(LM(ResLoad))
                     retval = mgetres_helper(map, rr, dlen, retval);
                 else if(!rr->rhand)
                 {
-                    TheZone = ((rr->ratr & resSysHeap)
-                                   ? SysZone
+                    LM(TheZone) = ((rr->ratr & resSysHeap)
+                                   ? LM(SysZone)
                                    : (GUEST<THz>)RM(HandleZone((Handle)map)));
                     retval = NewEmptyHandle();
                     rr->rhand = RM(retval);
@@ -374,7 +374,7 @@ Executor::ROMlib_mgetres2(resmaphand map, resref *rr)
             }
         }
         HSetState((Handle)map, state);
-        TheZone = savezone;
+        LM(TheZone) = savezone;
     }
     return retval;
 }
@@ -428,7 +428,7 @@ void Executor::C_CloseResFile(INTEGER rn)
     ROMlib_invalar();
     if(rn == REF0)
     {
-        for(map = (resmaphand)MR(TopMapHndl); map; map = nextmap)
+        for(map = (resmaphand)MR(LM(TopMapHndl)); map; map = nextmap)
         {
             nextmap = (resmaphand)HxP(map, nextmap);
             CloseResFile(Hx(map, resfn));
@@ -447,22 +447,22 @@ void Executor::C_CloseResFile(INTEGER rn)
         OSErr save_ResErr;
 
         UpdateResFile(rn);
-        save_ResErr = CW(ResErr);
+        save_ResErr = CW(LM(ResErr));
 
         /* update linked list */
 
-        if(map == (resmaphand)MR(TopMapHndl))
-            TopMapHndl = HxX(map, nextmap);
+        if(map == (resmaphand)MR(LM(TopMapHndl)))
+            LM(TopMapHndl) = HxX(map, nextmap);
         else
             HxX(ph, nextmap) = HxX(map, nextmap);
 
-        if(Cx(CurMap) == rn)
+        if(Cx(LM(CurMap)) == rn)
         {
-            //                printf("curmap %02x topmaphndl %08x\n", (int) CurMap.raw(), (int)TopMapHndl.raw());
-            if(TopMapHndl)
-                CurMap = STARH((resmaphand)MR(TopMapHndl))->resfn;
+            //                printf("curmap %02x topmaphndl %08x\n", (int) LM(CurMap).raw(), (int)LM(TopMapHndl).raw());
+            if(LM(TopMapHndl))
+                LM(CurMap) = STARH((resmaphand)MR(LM(TopMapHndl)))->resfn;
             else
-                CurMap = 0;
+                LM(CurMap) = 0;
         }
 
         /* release individual resource memory */
@@ -555,13 +555,13 @@ INTEGER Executor::C_HOpenResFile(INTEGER vref, LONGINT dirid, Str255 fn,
                                          cpb.hFileInfo.ioDirID);
             if(fref != -1)
             {
-                CurMap = CW(fref);
+                LM(CurMap) = CW(fref);
                 /*-->*/ return fref;
             }
         }
     }
 
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         /*-->*/ return -1;
 
     ROMlib_invalar();
@@ -572,12 +572,12 @@ INTEGER Executor::C_HOpenResFile(INTEGER vref, LONGINT dirid, Str255 fn,
     pbr.ioParam.ioMisc = CLC(0);
     pbr.fileParam.ioDirID = CL(dirid);
     ROMlib_setreserr(PBHOpenRF(&pbr, false));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         return (-1);
     f = CW(pbr.ioParam.ioRefNum);
     lc = sizeof(hd);
     ROMlib_setreserr(FSReadAll(f, &lc, (Ptr)&hd));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
     {
         FSClose(f);
         return (-1);
@@ -591,7 +591,7 @@ INTEGER Executor::C_HOpenResFile(INTEGER vref, LONGINT dirid, Str255 fn,
     }
 
     ROMlib_setreserr(SetFPos(f, fsFromStart, Cx(hd.rmapoff)));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
     {
         DisposHandle((Handle)map);
         FSClose(f);
@@ -599,7 +599,7 @@ INTEGER Executor::C_HOpenResFile(INTEGER vref, LONGINT dirid, Str255 fn,
     }
     lc = CL(hd.maplen);
     ROMlib_setreserr(FSReadAll(f, &lc, (Ptr)STARH(map)));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
     {
         DisposHandle((Handle)map);
         FSClose(f);
@@ -638,10 +638,10 @@ INTEGER Executor::C_HOpenResFile(INTEGER vref, LONGINT dirid, Str255 fn,
         return (-1);
     }
 
-    HxX(map, nextmap) = TopMapHndl;
+    HxX(map, nextmap) = LM(TopMapHndl);
     HxX(map, resfn) = CW(f);
-    TopMapHndl = RM((Handle)map);
-    CurMap = CW(f);
+    LM(TopMapHndl) = RM((Handle)map);
+    LM(CurMap) = CW(f);
 
     /* check for resprload bits */
 

@@ -99,56 +99,56 @@ static int32_t
 LMGetLastSPExtra(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(LastSPExtra);
+    return CW(LM(LastSPExtra));
 }
 
 static GDHandle
 LMGetTheGDevice(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(TheGDevice);
+    return MR(LM(TheGDevice));
 }
 
 static Ptr
 LMGetROMBase(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(ROMBase);
+    return MR(LM(ROMBase));
 }
 
 static Handle
 LMGetMenuList(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(MenuList);
+    return MR(LM(MenuList));
 }
 
 static INTEGER
 LMGetResErr(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(ResErr);
+    return CW(LM(ResErr));
 }
 
 static INTEGER
 LMGetPrintErr(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(PrintErr);
+    return CW(LM(PrintErr));
 }
 
 static Ptr
 LMGetWidthPtr(void)
 {
     warning_trace_info(NULL_STRING);
-    return (Ptr)MR(WidthPtr);
+    return (Ptr)MR(LM(WidthPtr));
 }
 
 static uint32_t
 LMGetCaretTime(void)
 {
     warning_trace_info(NULL_STRING);
-    return CL(CaretTime);
+    return CL(LM(CaretTime));
 }
 
 #if 0
@@ -156,7 +156,7 @@ static Handle
 LMGetQDColors (void)
 {
   warning_trace_info (NULL_STRING);
-  return MR (QDColors);
+  return MR (LM(QDColors));
 }
 #endif
 
@@ -164,21 +164,21 @@ static Ptr
 LMGetDefVCBPtr(void)
 {
     warning_trace_info(NULL_STRING);
-    return (Ptr)MR(DefVCBPtr);
+    return (Ptr)MR(LM(DefVCBPtr));
 }
 
 static INTEGER
 LMGetAtMenuBottom(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(AtMenuBottom);
+    return CW(LM(AtMenuBottom));
 }
 
 static uint8
 LMGetSdVolume(void)
 {
     warning_trace_info(NULL_STRING);
-    return CB(SdVolume);
+    return CB(LM(SdVolume));
 }
 
 #if 1
@@ -189,28 +189,28 @@ static DragGrayRgnUPP
 LMGetDragHook(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(DragHook);
+    return MR(LM(DragHook));
 }
 
 static Handle
 LMGetWidthListHand(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(WidthListHand);
+    return MR(LM(WidthListHand));
 }
 
 static INTEGER
 LMGetTopMenuItem(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(TopMenuItem);
+    return CW(LM(TopMenuItem));
 }
 
 static uint32_t
 LMGetDoubleTime(void)
 {
     warning_trace_info(NULL_STRING);
-    return CL(DoubleTime);
+    return CL(LM(DoubleTime));
 }
 
 static StringHandle
@@ -224,238 +224,238 @@ static GDHandle
 LMGetMainDevice(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(MainDevice);
+    return MR(LM(MainDevice));
 }
 
 static Handle
 LMGetWidthTabHandle(void)
 {
     warning_trace_info(NULL_STRING);
-    return (Handle)MR(WidthTabHandle);
+    return (Handle)MR(LM(WidthTabHandle));
 }
 
 static int16_t
 LMGetROM85(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(ROM85);
+    return CW(LM(ROM85));
 }
 
 static uint8
 LMGetKbdType(void)
 {
     warning_trace_info(NULL_STRING);
-    return CB(KbdType);
+    return CB(LM(KbdType));
 }
 
 static INTEGER
 LMGetScrHRes(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(ScrHRes);
+    return CW(LM(ScrHRes));
 }
 
 static StringPtr
 LMGetCurApName(void)
 {
     warning_trace_info(NULL_STRING);
-    return CurApName; /* don't swap: is an array */
+    return LM(CurApName); /* don't swap: is an array */
 }
 
 static INTEGER
 LMGetSysMap(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(SysMap);
+    return CW(LM(SysMap));
 }
 
 static THz
 LMGetTheZone(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(TheZone);
+    return MR(LM(TheZone));
 }
 
 static RgnHandle
 LMGetGrayRgn(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(GrayRgn);
+    return MR(LM(GrayRgn));
 }
 
 static QHdrPtr
 LMGetEventQueue(void)
 {
     warning_trace_info(NULL_STRING);
-    return &EventQueue;
+    return &LM(EventQueue);
 }
 
 static THz
 LMGetApplZone(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(ApplZone);
+    return MR(LM(ApplZone));
 }
 
 static uint32_t
 LMGetTicks(void)
 {
     warning_trace_info(NULL_STRING);
-    return CL(Ticks);
+    return CL(LM(Ticks));
 }
 
 static uint8
 LMGetResLoad(void)
 {
     warning_trace_info(NULL_STRING);
-    return CB(ResLoad);
+    return CB(LM(ResLoad));
 }
 
 static StringPtr
 LMGetFinderName(void)
 {
     warning_trace_info(NULL_STRING);
-    return FinderName;
+    return LM(FinderName);
 }
 
 static Ptr
 LMGetApplLimit(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(ApplLimit);
+    return MR(LM(ApplLimit));
 }
 
 static Ptr
 LMGetHeapEnd(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(HeapEnd);
+    return MR(LM(HeapEnd));
 }
 
 static INTEGER
 LMGetMBarHeight(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(MBarHeight);
+    return CW(LM(MBarHeight));
 }
 
 static Handle
 LMGetTopMapHndl(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(TopMapHndl);
+    return MR(LM(TopMapHndl));
 }
 
 static INTEGER
 LMGetScrVRes(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(ScrVRes);
+    return CW(LM(ScrVRes));
 }
 
 static void
 LMSetMenuDisable(int32_t val)
 {
     warning_trace_info(NULL_STRING);
-    MenuDisable = CL(val);
+    LM(MenuDisable) = CL(val);
 }
 
 static void
 LMSetAtMenuBottom(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
-    AtMenuBottom = CW(val);
+    LM(AtMenuBottom) = CW(val);
 }
 
 static void
 LMSetTopMenuItem(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
-    TopMenuItem = CW(val);
+    LM(TopMenuItem) = CW(val);
 }
 
 static void
 LMSetSFSaveDisk(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
-    SFSaveDisk = CW(val);
+    LM(SFSaveDisk) = CW(val);
 }
 
 static void
 LMSetTheZone(THz val)
 {
     warning_trace_info(NULL_STRING);
-    TheZone = RM(val);
+    LM(TheZone) = RM(val);
 }
 
 static void
 LMSetApplZone(THz val)
 {
     warning_trace_info(NULL_STRING);
-    ApplZone = RM(val);
+    LM(ApplZone) = RM(val);
 }
 
 static void
 LMSetResLoad(uint8 val)
 {
     warning_trace_info(NULL_STRING);
-    ResLoad = CB(val);
+    LM(ResLoad) = CB(val);
 }
 
 static void
 LMSetApplLimit(Ptr val)
 {
     warning_trace_info(NULL_STRING);
-    ApplLimit = RM(val);
+    LM(ApplLimit) = RM(val);
 }
 
 static void
 LMSetResErr(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
-    ResErr = CW(val);
+    LM(ResErr) = CW(val);
 }
 
 static void
 LMSetHeapEnd(Ptr val)
 {
     warning_trace_info(NULL_STRING);
-    HeapEnd = RM(val);
+    LM(HeapEnd) = RM(val);
 }
 
 static void
 LMSetCurDirStore(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
-    CurDirStore = CW(val);
+    LM(CurDirStore) = CW(val);
 }
 
 static INTEGER
 LMGetCurApRefNum(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(CurApRefNum);
+    return CW(LM(CurApRefNum));
 }
 
 static LONGINT
 LMGetCurDirStore(void)
 {
     warning_trace_info(NULL_STRING);
-    return CL(CurDirStore);
+    return CL(LM(CurDirStore));
 }
 
 static uint8
 LMGetCrsrBusy(void)
 {
     warning_trace_info(NULL_STRING);
-    return CB(CrsrBusy);
+    return CB(LM(CrsrBusy));
 }
 
 static INTEGER
 LMGetSysFontSize(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(SysFontSiz);
+    return CW(LM(SysFontSiz));
 }
 
 static INTEGER
@@ -474,70 +474,70 @@ static INTEGER
 LMGetSFSaveDisk(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(SFSaveDisk);
+    return CW(LM(SFSaveDisk));
 }
 
 static INTEGER
 LMGetSysFontFam(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(SysFontFam);
+    return CW(LM(SysFontFam));
 }
 
 static Handle
 LMGetGZRootHnd(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(GZRootHnd);
+    return MR(LM(GZRootHnd));
 }
 
 static void
 LMSetSysFontFam(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
-    SysFontFam = CW(val);
+    LM(SysFontFam) = CW(val);
 }
 
 static void
 LMSetSysFontSize(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
-    SysFontSiz = CW(val);
+    LM(SysFontSiz) = CW(val);
 }
 
 static WindowPtr
 LMGetCurActivate(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(CurActivate);
+    return MR(LM(CurActivate));
 }
 
 static INTEGER
 LMGetCurJTOffset(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(CurJTOffset);
+    return CW(LM(CurJTOffset));
 }
 
 static INTEGER
 LMGetCurMap(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(CurMap);
+    return CW(LM(CurMap));
 }
 
 static Ptr
 LMGetCurStackBase(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(CurStackBase);
+    return MR(LM(CurStackBase));
 }
 
 static INTEGER
 LMGetFSFCBLen(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(FSFCBLen);
+    return CW(LM(FSFCBLen));
 }
 
 static Handle
@@ -552,85 +552,85 @@ static WindowPtr
 LMGetGhostWindow(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(GhostWindow);
+    return MR(LM(GhostWindow));
 }
 
 static INTEGER
 LMGetHWCfgFlags(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(SCSIFlags);
+    return CW(LM(SCSIFlags));
 }
 
 static Byte
 LMGetHiliteMode(void)
 {
     warning_trace_info(NULL_STRING);
-    return CB(HiliteMode);
+    return CB(LM(HiliteMode));
 }
 
 static void
 LMGetHiliteRGB(RGBColor *rgbp)
 {
     warning_trace_info(NULL_STRING);
-    *rgbp = HiliteRGB;
+    *rgbp = LM(HiliteRGB);
 }
 
 static INTEGER
 LMGetKeyThresh(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(KeyThresh);
+    return CW(LM(KeyThresh));
 }
 
 static INTEGER
 LMGetSysEvtMask(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(SysEvtMask);
+    return CW(LM(SysEvtMask));
 }
 
 static INTEGER
 LMGetTEScrpLength(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(TEScrpLength);
+    return CW(LM(TEScrpLength));
 }
 
 static uint32_t
 LMGetTime(void)
 {
     warning_trace_info(NULL_STRING);
-    GetDateTime(&Time);
-    return CL(Time);
+    GetDateTime(&LM(Time));
+    return CL(LM(Time));
 }
 
 static WindowPeek
 LMGetWindowList(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(WindowList);
+    return MR(LM(WindowList));
 }
 
 static INTEGER
 LMGetTESysJust(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(TESysJust);
+    return CW(LM(TESysJust));
 }
 
 static INTEGER
 LMGetBootDrive(void)
 {
     warning_trace_info(NULL_STRING);
-    return CW(BootDrive);
+    return CW(LM(BootDrive));
 }
 
 static Byte
 LMGetFractEnable(void)
 {
     warning_trace_info(NULL_STRING);
-    return CB(FractEnable);
+    return CB(LM(FractEnable));
 }
 
 static Ptr
@@ -638,56 +638,56 @@ LMGetRAMBase(void)
 {
     warning_trace_info(NULL_STRING);
     warning_unimplemented(NULL_STRING);
-    return (Ptr)MR(SysZone);
+    return (Ptr)MR(LM(SysZone));
 }
 
 static Ptr
 LMGetBufPtr(void)
 {
     warning_trace_info(NULL_STRING);
-    return MR(BufPtr);
+    return MR(LM(BufPtr));
 }
 
 static void
 LMSetTESysJust(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
-    TESysJust = CW(val);
+    LM(TESysJust) = CW(val);
 }
 
 static void
 LMSetCurActivate(WindowPtr val)
 {
     warning_trace_info(NULL_STRING);
-    CurActivate = RM(val);
+    LM(CurActivate) = RM(val);
 }
 
 static void
 LMSetCurDeactive(WindowPtr val)
 {
     warning_trace_info(NULL_STRING);
-    CurDeactive = RM(val);
+    LM(CurDeactive) = RM(val);
 }
 
 static void
 LMSetCurMap(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
-    CurMap = CW(val);
+    LM(CurMap) = CW(val);
 }
 
 static void
 LMSetGrayRgn(RgnHandle val)
 {
     warning_trace_info(NULL_STRING);
-    GrayRgn = RM(val);
+    LM(GrayRgn) = RM(val);
 }
 
 static void
 LMSetHiliteMode(Byte val)
 {
     warning_trace_info(NULL_STRING);
-    HiliteMode = CB(val);
+    LM(HiliteMode) = CB(val);
 }
 
 static void
@@ -695,14 +695,14 @@ LMSetLastSPExtra(LONGINT val)
 {
     warning_trace_info(NULL_STRING);
     warning_unimplemented("val = 0x%x", val);
-    LastSPExtra = CL(val);
+    LM(LastSPExtra) = CL(val);
 }
 
 static void
 LMSetMBarHeight(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
-    MBarHeight = CW(val);
+    LM(MBarHeight) = CW(val);
 }
 
 static void
@@ -710,28 +710,28 @@ LMSetROMMapInsert(Byte val)
 {
     warning_trace_info(NULL_STRING);
     warning_unimplemented(NULL_STRING);
-    RomMapInsert = CB(val);
+    LM(RomMapInsert) = CB(val);
 }
 
 static void
 LMSetTEScrpLength(INTEGER val)
 {
     warning_trace_info(NULL_STRING);
-    TEScrpLength = CW(val);
+    LM(TEScrpLength) = CW(val);
 }
 
 static void
 LMSetTopMapHndl(Handle val)
 {
     warning_trace_info(NULL_STRING);
-    TopMapHndl = RM(val);
+    LM(TopMapHndl) = RM(val);
 }
 
 static void
 LMSetFractEnable(Byte value)
 {
     warning_trace_info("%d", value);
-    FractEnable = CB(value);
+    LM(FractEnable) = CB(value);
 }
 
 /* provide some routines we don't normally use in ROMlib */
@@ -2355,7 +2355,7 @@ SetCurrentA5(void)
     uint32_t retval;
 
     retval = (uint32_t)SYN68K_TO_US(EM_A5);
-    EM_A5 = (uint32_t)CL(CurrentA5);
+    EM_A5 = (uint32_t)CL(LM(CurrentA5));
     warning_trace_info("old = 0x%x, new = 0x%x", retval, EM_A5);
     return retval;
 }
@@ -2806,7 +2806,7 @@ MPPOpen_stub(void)
 static void
 SetDialogFont(INTEGER font)
 {
-    DlgFont = CW(font);
+    LM(DlgFont) = CW(font);
     warning_trace_info(NULL_STRING);
 }
 
@@ -5480,9 +5480,6 @@ static map_entry_t
         },
         {
             "LongSecondsToDate", C_LongSecs2Date,
-        },
-        {
-            "GetAppFont", GetAppFont,
         },
         {
             "SetControlReference", C_SetCRefCon,

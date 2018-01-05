@@ -74,12 +74,12 @@ void Executor::C_ROMlib_vcatch()
 
     EM_A7 = (EM_A7 - 32) & ~3; /* Might as well long-align it. */
 
-    /* Save the old Ticks value & compute new value. */
-    old_ticks = CL(Ticks);
+    /* Save the old LM(Ticks) value & compute new value. */
+    old_ticks = CL(LM(Ticks));
     new_ticks = C_TickCount();
     ticks_elapsed = new_ticks - old_ticks;
 
-    /* Compute the milliseconds until Ticks changes again.
+    /* Compute the milliseconds until LM(Ticks) changes again.
    * Here we rely on the fact that 1000 / 60 == 50 / 3, to avoid overflow.
    */
     msecs_to_next_tick = (((new_ticks + 1) * 50 + 2) / 3) - msecs_elapsed();
@@ -88,7 +88,7 @@ void Executor::C_ROMlib_vcatch()
 
     PrimeTime((QElemPtr)&vbltm, msecs_to_next_tick);
 
-    for(vp = (VBLTaskPtr)MR(VBLQueue.qHead); vp; vp = next)
+    for(vp = (VBLTaskPtr)MR(LM(VBLQueue).qHead); vp; vp = next)
     {
         INTEGER old_vbl_count, new_vbl_count;
 
@@ -108,7 +108,7 @@ void Executor::C_ROMlib_vcatch()
         vp->vblCount = CW(new_vbl_count);
         if(new_vbl_count == 0)
         {
-            VBLQueue.qFlags.raw_or(CWC(VBUSY));
+            LM(VBLQueue).qFlags.raw_or(CWC(VBUSY));
             ROMlib_hook(vbl_number);
 
             /* No need to save/restore syn68k regs here; we do that
@@ -120,9 +120,9 @@ void Executor::C_ROMlib_vcatch()
 
             CALL_EMULATOR((syn68k_addr_t)EM_A1);
 
-            VBLQueue.qFlags.raw_and(CWC(~VBUSY));
+            LM(VBLQueue).qFlags.raw_and(CWC(~VBUSY));
             if(vp->vblCount == CWC(0))
-                Dequeue((QElemPtr)vp, &VBLQueue);
+                Dequeue((QElemPtr)vp, &LM(VBLQueue));
         }
     }
 
@@ -146,7 +146,7 @@ startclock(void)
 static void
 stopclock(void)
 {
-    if(!VBLQueue.qTail)
+    if(!LM(VBLQueue).qTail)
     {
         RmvTime((QElemPtr)&vbltm);
         ROMlib_clock = CLOCKOFF;
@@ -179,12 +179,12 @@ OSErrRET Executor::VInstall(VBLTaskPtr vtaskp)
     vtaskp->vblCount = CW(CW(vtaskp->vblCount) + CW(vtaskp->vblPhase));
     if(vtaskp->qType == CWC((INTEGER)vType))
     {
-        if(!VBLQueue.qHead)
+        if(!LM(VBLQueue).qHead)
         {
             vblshim.vblAddr = RM((ProcPtr)&m68k_rts); /* legal 68k code. */
-            Enqueue((QElemPtr)&vblshim, &VBLQueue);
+            Enqueue((QElemPtr)&vblshim, &LM(VBLQueue));
         }
-        Enqueue((QElemPtr)vtaskp, &VBLQueue);
+        Enqueue((QElemPtr)vtaskp, &LM(VBLQueue));
         if(ROMlib_clock == CLOCKOFF)
         {
             ROMlib_clock = CLOCKTEMPON;
@@ -205,11 +205,11 @@ OSErrRET Executor::VRemove(VBLTaskPtr vtaskp)
 {
     if(vtaskp->qType == CWC((INTEGER)vType))
     {
-        Dequeue((QElemPtr)vtaskp, &VBLQueue);
-        if((VBLTaskPtr)MR(VBLQueue.qHead) == &vblshim
-           && (VBLTaskPtr)MR(VBLQueue.qTail) == &vblshim)
+        Dequeue((QElemPtr)vtaskp, &LM(VBLQueue));
+        if((VBLTaskPtr)MR(LM(VBLQueue).qHead) == &vblshim
+           && (VBLTaskPtr)MR(LM(VBLQueue).qTail) == &vblshim)
         {
-            Dequeue((QElemPtr)&vblshim, &VBLQueue);
+            Dequeue((QElemPtr)&vblshim, &LM(VBLQueue));
             if(ROMlib_clock == CLOCKTEMPON)
                 stopclock();
         }
@@ -221,5 +221,5 @@ OSErrRET Executor::VRemove(VBLTaskPtr vtaskp)
 
 QHdrPtr Executor::GetVBLQHdr()
 {
-    return &VBLQueue;
+    return &LM(VBLQueue);
 }

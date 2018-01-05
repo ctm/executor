@@ -79,9 +79,9 @@ void Executor::C_InvalMenuBar()
 
 void Executor::C_DrawMenuBar()
 {
-    if(MBDFHndl)
+    if(LM(MBDFHndl))
     {
-        TheMenu = 0;
+        LM(TheMenu) = 0;
         MBDFCALL(mbDraw, 0, 0L);
     }
 }
@@ -96,10 +96,10 @@ void Executor::C_DrawMenuBar()
 
 void Executor::C_ClearMenuBar()
 {
-    if(MenuList)
-        SetHandleSize(MR(MenuList), MINMENULISTSIZE);
+    if(LM(MenuList))
+        SetHandleSize(MR(LM(MenuList)), MINMENULISTSIZE);
     else
-        MenuList = RM(NewHandle(MINMENULISTSIZE));
+        LM(MenuList) = RM(NewHandle(MINMENULISTSIZE));
     HxX(MENULIST, muoff) = 0; /* int 1 */
     HxX(MENULIST, muright) = CWC(MENULEFT); /* int 2 */
 
@@ -163,7 +163,7 @@ void Executor::C_InitMenus()
 {
     Handle default_mcinfo;
 
-    MenuHook = MBarHook = 0;
+    LM(MenuHook) = LM(MBarHook) = 0;
     ClearMenuBar();
     default_mcinfo = ROMlib_getrestid(TICK("mctb"), 0);
     if(!default_mcinfo)
@@ -171,8 +171,8 @@ void Executor::C_InitMenus()
         /* try to load 'mctb' resource 0; otherwise use default
 	 built into `ROM' */
 
-        MenuCInfo = RM((MCTableHandle)NewHandle(sizeof default_menu_ctab));
-        BlockMoveData((Ptr)default_menu_ctab, (Ptr)STARH(MR(MenuCInfo)),
+        LM(MenuCInfo) = RM((MCTableHandle)NewHandle(sizeof default_menu_ctab));
+        BlockMoveData((Ptr)default_menu_ctab, (Ptr)STARH(MR(LM(MenuCInfo))),
                       sizeof default_menu_ctab);
     }
     else
@@ -180,12 +180,12 @@ void Executor::C_InitMenus()
         int n_entries;
 
         n_entries = CW(*(GUEST<uint16_t> *)STARH(default_mcinfo));
-        MenuCInfo = RM((MCTableHandle)NewHandle(n_entries
+        LM(MenuCInfo) = RM((MCTableHandle)NewHandle(n_entries
                                                 * sizeof(MCEntry)));
         BlockMoveData((Ptr)(&((uint16_t *)STARH(default_mcinfo))[1]),
-                      (Ptr)STARH(MR(MenuCInfo)),
+                      (Ptr)STARH(MR(LM(MenuCInfo))),
                       n_entries * sizeof(MCEntry));
-        append_end_marker_if_necessary(MR(MenuCInfo));
+        append_end_marker_if_necessary(MR(LM(MenuCInfo)));
     }
 
     InitProcMenu(0); /* sets mbResID */ /* int 3 */
@@ -283,7 +283,7 @@ MenuHandle Executor::C_GetMenu(int16_t rid)
         {
             Handle temph;
 
-            MemErr = CWC(noErr);
+            LM(MemErr) = CWC(noErr);
             temph = GetResource(TICK("MDEF"),
                                 CW(*(GUEST<int16_t> *)&HxX(retval, menuProc)));
             if(SIZEOFMINFO != 15)
@@ -302,7 +302,7 @@ void Executor::C_DisposeMenu(MenuHandle mh)
     if(mh)
     {
         ReleaseResource((Handle)mh);
-        if(Cx(ResErr) == resNotFound)
+        if(Cx(LM(ResErr)) == resNotFound)
             DisposHandle((Handle)mh);
     }
 }
@@ -682,7 +682,7 @@ void Executor::C_InsertMenu(MenuHandle mh, INTEGER before)
                 ;
             if(mp != mpend) /* already there */
                 /*-->*/ return;
-            SetHandleSize(MR(MenuList), (Size)HIEROFF + 2 * sizeof(muelem));
+            SetHandleSize(MR(LM(MenuList)), (Size)HIEROFF + 2 * sizeof(muelem));
             mpend = HxX(MENULIST, mulist) + HIEROFF / sizeof(muelem);
             mpend->muhandle = RM(mh);
             mpend->muleft = 0;
@@ -702,7 +702,7 @@ void Executor::C_InsertMenu(MenuHandle mh, INTEGER before)
             if(bindex == 0)
             {
                 newmuelem.muleft = HxX(MENULIST, muright);
-                Munger(MR(MenuList), Hx(MENULIST, muoff) + sizeof(muelem),
+                Munger(MR(LM(MenuList)), Hx(MENULIST, muoff) + sizeof(muelem),
                        (Ptr)0, (LONGINT)0, (Ptr)&newmuelem,
                        (LONGINT)sizeof(newmuelem));
                 binoff = Hx(MENULIST, muoff);
@@ -710,8 +710,8 @@ void Executor::C_InsertMenu(MenuHandle mh, INTEGER before)
             else
             {
                 newmuelem.muleft = bindex->muleft;
-                binoff = (char *)bindex - (char *)STARH(MR(MenuList));
-                Munger(MR(MenuList), binoff, (Ptr)0, (LONGINT)0,
+                binoff = (char *)bindex - (char *)STARH(MR(LM(MenuList)));
+                Munger(MR(LM(MenuList)), binoff, (Ptr)0, (LONGINT)0,
                        (Ptr)&newmuelem, (LONGINT)sizeof(newmuelem));
             }
             HxX(MENULIST, muoff) = CW(Hx(MENULIST, muoff) + sizeof(muelem));
@@ -735,8 +735,8 @@ void Executor::C_DeleteMenu(int16_t mid)
         ;
     if(mp != mpend)
     {
-        deleteloc = (LONGINT)((char *)mp - (char *)STARH(MR(MenuList)));
-        Munger(MR(MenuList), deleteloc, (Ptr)0, (int32_t)sizeof(muelem),
+        deleteloc = (LONGINT)((char *)mp - (char *)STARH(MR(LM(MenuList))));
+        Munger(MR(LM(MenuList)), deleteloc, (Ptr)0, (int32_t)sizeof(muelem),
                (Ptr) "", (int32_t)0);
         HxX(MENULIST, muoff) = CW(Hx(MENULIST, muoff) - sizeof(muelem));
         MBDFCALL(mbCalc, 0, deleteloc);
@@ -750,8 +750,8 @@ void Executor::C_DeleteMenu(int16_t mid)
             ;
         if(mp == mpend)
             /*-->*/ return; /* not there */
-        Munger(MR(MenuList),
-               (int32_t)((char *)mp - (char *)STARH(MR(MenuList))),
+        Munger(MR(LM(MenuList)),
+               (int32_t)((char *)mp - (char *)STARH(MR(LM(MenuList)))),
                (Ptr)0, (int32_t)sizeof(muelem), (Ptr) "", (int32_t)0);
     }
     HIEROFFX = CW(HIEROFF - sizeof(muelem));
@@ -783,9 +783,9 @@ Handle Executor::C_GetNewMBar(INTEGER mbarid)
         ep = ip + Hx(mb, nmen);
         saveml = MENULIST;
 
-        MenuList = 0;
+        LM(MenuList) = 0;
         ClearMenuBar();
-        retval = MR(MenuList);
+        retval = MR(LM(MenuList));
 
         HxX(MENULIST, mufu) = HxX(saveml, mufu); /* int 3 */
 
@@ -796,7 +796,7 @@ Handle Executor::C_GetNewMBar(INTEGER mbarid)
             ip++;
         }
 
-        MenuList = RM((Handle)saveml);
+        LM(MenuList) = RM((Handle)saveml);
     }
     return retval;
 }
@@ -805,7 +805,7 @@ Handle Executor::C_GetMenuBar()
 {
     Handle retval;
 
-    retval = MR(MenuList);
+    retval = MR(LM(MenuList));
     HandToHand(&retval);
     return retval;
 }
@@ -814,10 +814,10 @@ void Executor::C_SetMenuBar(Handle ml)
 {
     Handle temph;
 
-    DisposHandle(MR(MenuList));
+    DisposHandle(MR(LM(MenuList)));
     temph = ml;
     HandToHand(&temph);
-    MenuList = RM(temph);
+    LM(MenuList) = RM(temph);
 }
 
 enum
@@ -862,7 +862,7 @@ INTEGER Executor::ROMlib_mentosix(INTEGER menuid)
             mp < mpend && CW(STARH(MR(mp->muhandle))->menuID) != menuid; mp++)
             ;
         if(mp < mpend)
-            /*-->*/ return (char *)mp - (char *)STARH(MR(MenuList));
+            /*-->*/ return (char *)mp - (char *)STARH(MR(LM(MenuList)));
     }
     return -1;
 }
@@ -883,10 +883,10 @@ static BOOLEAN mtoggle(INTEGER mid, highstate h)
 
 void Executor::C_HiliteMenu(INTEGER mid)
 {
-    if(mid != CW(TheMenu))
+    if(mid != CW(LM(TheMenu)))
     {
-        if(TheMenu)
-            mtoggle(CW(TheMenu), RESTORE);
+        if(LM(TheMenu))
+            mtoggle(CW(LM(TheMenu)), RESTORE);
         if(!menu_id_exists_p(mid))
             mid = 0;
         if(mid)
@@ -896,7 +896,7 @@ void Executor::C_HiliteMenu(INTEGER mid)
             mtoggle(mid, HILITE);
         }
     }
-    TheMenu = CW(mid);
+    LM(TheMenu) = CW(mid);
 }
 
 static inline void ROMlib_CALLMENUHOOK(menuhookp fp)
@@ -920,8 +920,8 @@ static INTEGER wheretowhich(LONGINT offset)
 {
     mbdfentry *p, *ep;
 
-    ep = (mbdfentry *)STARH(MR(MBSaveLoc));
-    for(p = (mbdfentry *)((char *)STARH(MR(MBSaveLoc)) + Hx(MBSAVELOC, lastMBSave));
+    ep = (mbdfentry *)STARH(MR(LM(MBSaveLoc)));
+    for(p = (mbdfentry *)((char *)STARH(MR(LM(MBSaveLoc))) + Hx(MBSAVELOC, lastMBSave));
         p != ep && Cx(p->mbMLOffset) != offset; p--)
         ;
     return p - ep;
@@ -942,7 +942,7 @@ static void restoren(INTEGER ntodrop, RgnHandle restoredrgn, Rect *rp)
 
     if(restoredrgn)
     {
-        p = (mbdfentry *)((char *)STARH(MR(MBSaveLoc)) + Hx(MBSAVELOC, lastMBSave));
+        p = (mbdfentry *)((char *)STARH(MR(LM(MBSaveLoc))) + Hx(MBSAVELOC, lastMBSave));
         RectRgn(restoredrgn, &p->mbRectSave);
         shadowrect(&HxX(restoredrgn, rgnBBox));
     }
@@ -978,7 +978,7 @@ static MenuHandle menunumtomh(INTEGER mid, INTEGER *sixp)
         ;
     if(mp != mpend)
     {
-        *sixp = (char *)mp - (char *)STARH(MR(MenuList));
+        *sixp = (char *)mp - (char *)STARH(MR(LM(MenuList)));
         /*-->*/ return MR(mp->muhandle);
     }
     return 0;
@@ -1048,8 +1048,8 @@ int32_t Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
         pt = ptTmp.get();
         pointaslong = ((int32_t)pt.v << 16) | (unsigned short)pt.h;
         where = MBDFCALL(mbHit, 0, pointaslong);
-        if(MenuHook)
-            CALLMENUHOOK(MR(MenuHook));
+        if(LM(MenuHook))
+            CALLMENUHOOK(MR(LM(MenuHook)));
         if(where == oldwhere)
         {
             if(mh)
@@ -1094,19 +1094,19 @@ int32_t Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
                         r2 = *ptr_from_longint<Rect *>(MBDFCALL(mbRect, 0,
                                                                 tempi | HIERRECTBIT));
                         MBDFCALL(mbSave, tempi, ptr_to_longint(&r2));
-                        if(MBarHook)
+                        if(LM(MBarHook))
                         {
-                            myd0 = CALLMBARHOOK(&r2, MR(MBarHook));
+                            myd0 = CALLMBARHOOK(&r2, MR(LM(MBarHook)));
                             if(myd0 != 0)
                                 goto out;
                         }
-                        ((mbdfentry *)STARH(MR(MBSaveLoc)))
+                        ((mbdfentry *)STARH(MR(LM(MBSaveLoc))))
                             [wheretowhich(tempi)]
                                 .mbReserved
                             = CLC(0);
-                        auto oldtopmenuitem = TopMenuItem;
-                        auto saveatmenubottom = AtMenuBottom;
-                        TopMenuItem = r2.top;
+                        auto oldtopmenuitem = LM(TopMenuItem);
+                        auto saveatmenubottom = LM(AtMenuBottom);
+                        LM(TopMenuItem) = r2.top;
                         PORT_TX_FACE_X(MR(wmgr_port)) = (Style)CB(0);
                         PORT_TX_FONT_X(MR(wmgr_port)) = CWC(0);
                         saveclip = PORT_CLIP_REGION_X(thePort);
@@ -1117,8 +1117,8 @@ int32_t Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
                         PORT_CLIP_REGION_X(thePort) = saveclip;
                         nmenusdisplayed++;
                         MBDFCALL(mbSaveAlt, 0, tempi);
-                        TopMenuItem = oldtopmenuitem;
-                        AtMenuBottom = saveatmenubottom;
+                        LM(TopMenuItem) = oldtopmenuitem;
+                        LM(AtMenuBottom) = saveatmenubottom;
                     }
                     olditem = item;
                 }
@@ -1126,7 +1126,7 @@ int32_t Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
         }
         else
         {
-            if(pt.v < Cx(MBarHeight) && !ispopup)
+            if(pt.v < Cx(LM(MBarHeight)) && !ispopup)
             {
                 if(nmenusdisplayed)
                 {
@@ -1141,18 +1141,18 @@ int32_t Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
                 }
                 else
                 {
-                    mh = MR(((muelem *)((char *)STARH(MR(MenuList)) + where))->muhandle);
+                    mh = MR(((muelem *)((char *)STARH(MR(LM(MenuList))) + where))->muhandle);
                     HiliteMenu(Hx(mh, menuID));
                     r = *ptr_from_longint<Rect *>(MBDFCALL(mbRect, 0, where));
                     MBDFCALL(mbSave, where, ptr_to_longint(&r));
-                    if(MBarHook)
+                    if(LM(MBarHook))
                     {
-                        myd0 = CALLMBARHOOK(&r, MR(MBarHook));
+                        myd0 = CALLMBARHOOK(&r, MR(LM(MBarHook)));
                         if(myd0 != 0)
                             goto out;
                     }
                     olditem = item = 0;
-                    TopMenuItem = MBarHeight;
+                    LM(TopMenuItem) = LM(MBarHeight);
                     PORT_TX_FACE_X(MR(wmgr_port)) = (Style)CB(0);
                     PORT_TX_FONT_X(MR(wmgr_port)) = CWC(0);
                     saveclip = PORT_CLIP_REGION_X(thePort); /* ick */
@@ -1165,7 +1165,7 @@ int32_t Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
                     whichmenuhit = wheretowhich(where);
                 }
             }
-            else if(where == NOTHIT || (ispopup && pt.v < Cx(MBarHeight)))
+            else if(where == NOTHIT || (ispopup && pt.v < Cx(LM(MBarHeight))))
             {
                 if((i = nmenusdisplayed - whichmenuhit))
                 {
@@ -1188,12 +1188,12 @@ int32_t Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
             else
             {
                 whichmenuhit = wheretowhich(where);
-                newentry = (mbdfentry *)STARH(MR(MBSaveLoc)) + whichmenuhit;
-                oldentry = (mbdfentry *)STARH(MR(MBSaveLoc)) + oldwhichmenuhit;
+                newentry = (mbdfentry *)STARH(MR(LM(MBSaveLoc))) + whichmenuhit;
+                oldentry = (mbdfentry *)STARH(MR(LM(MBSaveLoc))) + oldwhichmenuhit;
                 oldentry->mbReserved = CL((ULONGINT)item);
                 olditem = item = CL(newentry->mbReserved);
                 changedmenus = true;
-                mh = MR(((muelem *)((char *)STARH(MR(MenuList)) + where))->muhandle);
+                mh = MR(((muelem *)((char *)STARH(MR(LM(MenuList))) + where))->muhandle);
                 templ = where;
                 if(where > Hx(MENULIST, muoff))
                     templ |= HIERRECTBIT;
@@ -1248,9 +1248,9 @@ out:
             MENUCALL(mChooseMsg, mh, &r, tempp, &item_swapped);
             tempi = CW(item_swapped);
 #if !defined(MACOSX_)
-            if(MenuFlash)
+            if(LM(MenuFlash))
             {
-                for(i = 0; i < Cx(MenuFlash); i++)
+                for(i = 0; i < Cx(LM(MenuFlash)); i++)
                 {
                     Delay(3L, (LONGINT *)0);
                     PORT_TX_FACE_X(MR(wmgr_port)) = (Style)CB(0);
@@ -1281,7 +1281,7 @@ out:
     }
     if(!mid)
         HiliteMenu(0);
-    SetPort(saveport); /* Does SystemMenu() expect the WMgrPort also? */
+    SetPort(saveport); /* Does SystemMenu() expect the LM(WMgrPort) also? */
 
     /* Illustrator 5.5 behavior suggests that hits on hierarchical menus
    * for non leaf-node menus are handled differently.  [PR #1683].
@@ -1301,7 +1301,7 @@ out:
         item = 0;
     }
 
-    if(MBarEnable)
+    if(LM(MBarEnable))
     {
         SystemMenu(((LONGINT)mid << 16) | (unsigned short)item);
         return 0;
@@ -1315,7 +1315,7 @@ LONGINT Executor::C_MenuSelect(Point p)
     Rect spooeyr;
     LONGINT retval;
 
-    TopMenuItem = MBarHeight;
+    LM(TopMenuItem) = LM(MBarHeight);
     retval = ROMlib_menuhelper((MenuHandle)0, &spooeyr, 0, false, 0);
     return retval;
 }
@@ -1326,15 +1326,15 @@ void Executor::C_FlashMenuBar(INTEGER mid)
 
     if(mid == 0 || (l = ROMlib_mentosix(mid)) == -1)
         l = 0;
-    else if(mid == Cx(TheMenu))
+    else if(mid == Cx(LM(TheMenu)))
     {
         l |= (LONGINT)RESTORE << 16;
-        TheMenu = 0;
+        LM(TheMenu) = 0;
     }
     else
     {
         l |= (LONGINT)HILITE << 16;
-        TheMenu = CW(mid);
+        LM(TheMenu) = CW(mid);
     }
     MBDFCALL(mbHilite, 0, l);
 }
@@ -1589,7 +1589,7 @@ MenuHandle Executor::C_GetMHandle(INTEGER mid)
 {
     MenuHandle retval;
 
-    if(!MenuList)
+    if(!LM(MenuList))
         retval = 0;
     else
     {
@@ -1618,7 +1618,7 @@ MenuHandle Executor::C_GetMHandle(INTEGER mid)
 
 void Executor::C_SetMenuFlash(INTEGER i)
 {
-    MenuFlash = CW(i);
+    LM(MenuFlash) = CW(i);
 }
 
 BOOLEAN Executor::ROMlib_shouldalarm()
@@ -1662,7 +1662,7 @@ Executor::ROMlib_mbdfcall(INTEGER msg, INTEGER param1, LONGINT param2)
     LONGINT retval;
     mbdfprocp mp;
 
-    defproc = MR(MBDFHndl);
+    defproc = MR(LM(MBDFHndl));
 
     if(*defproc == NULL)
         LoadResource(defproc);

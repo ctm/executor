@@ -30,7 +30,7 @@ static OSErr freeallblocks(HVCB *vcbp, filerec *frp)
                 (LONGINT)sizeof(frp->filExtRec));
         fcbp->fcbMdRByt = WRITEBIT;
         pbr.ioParam.ioMisc = 0;
-        pbr.ioParam.ioRefNum = CW((char *)fcbp - (char *)MR(FCBSPtr));
+        pbr.ioParam.ioRefNum = CW((char *)fcbp - (char *)MR(LM(FCBSPtr)));
         retval = ROMlib_allochelper((IOParam *)&pbr, false, seteof, false);
         if(retval == noErr)
         {

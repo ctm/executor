@@ -21,13 +21,13 @@ using namespace Executor;
 
 void Executor::C_InitProcMenu(INTEGER mbid)
 {
-    if(!MenuList)
+    if(!LM(MenuList))
         InitMenus();
 
 #if 0
     /* NOTE:  We don't dispose this guy because it is a phoney resource */
-    if (MBDFHndl)
-	DisposHandle(Cx(MBDFHndl));
+    if (LM(MBDFHndl))
+	DisposHandle(Cx(LM(MBDFHndl)));
 #endif
 
     /* NOTE: even though the docs imply that the low three bits of the
@@ -37,14 +37,14 @@ void Executor::C_InitProcMenu(INTEGER mbid)
      * GetResource to fail.  A small test program then confirmed that
      * the bits are not masked off.
      */
-    MBDFHndl = RM(GetResource(TICK("MBDF"), mbid));
+    LM(MBDFHndl) = RM(GetResource(TICK("MBDF"), mbid));
     HxX(MENULIST, mufu) = CW(mbid);
     MBDFCALL(mbInit, 0, 0L);
 }
 
 LONGINT Executor::C_MenuChoice()
 {
-    return Cx(MenuDisable);
+    return Cx(LM(MenuDisable));
 }
 
 void Executor::C_GetItemCmd(MenuHandle mh, INTEGER item,
@@ -111,7 +111,7 @@ LONGINT Executor::C_PopUpMenuSelect(MenuHandle mh, INTEGER top, INTEGER left,
     ThePortGuard guard(MR(wmgr_port));
     tempi = CW(item);
     MENUCALL(mPopUpRect, mh, &saver, p, &tempi);
-    TopMenuItem = tempi;
+    LM(TopMenuItem) = tempi;
     where = ROMlib_mentosix(Hx(mh, menuID));
 
     MBDFCALL(mbSave, where, ptr_to_longint(&saver));

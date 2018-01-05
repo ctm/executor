@@ -113,7 +113,7 @@ static void ROMlib_togglealarm()
 
     if(ROMlib_alarmonmbar)
     {
-        CopyBits(&save_alarm_bitmap, (BitMap *)STARH(GD_PMAP(MR(TheGDevice))),
+        CopyBits(&save_alarm_bitmap, (BitMap *)STARH(GD_PMAP(MR(LM(TheGDevice)))),
                  &save_alarm_bitmap.bounds, &screen_alarm_rect,
                  srcCopy, NULL);
         ROMlib_alarmonmbar = false;
@@ -137,11 +137,11 @@ static void ROMlib_togglealarm()
                 src_alarm_bitmap.baseAddr = RM((Ptr)hard_coded_alarm);
 
             /* save the screen to save_alarm_bitmap */
-            CopyBits((BitMap *)STARH(GD_PMAP(MR(TheGDevice))), &save_alarm_bitmap,
+            CopyBits((BitMap *)STARH(GD_PMAP(MR(LM(TheGDevice)))), &save_alarm_bitmap,
                      &screen_alarm_rect, &save_alarm_bitmap.bounds,
                      srcCopy, NULL);
             /* and copy the new alarm to the screen */
-            CopyBits(&src_alarm_bitmap, (BitMap *)STARH(GD_PMAP(MR(TheGDevice))),
+            CopyBits(&src_alarm_bitmap, (BitMap *)STARH(GD_PMAP(MR(LM(TheGDevice)))),
                      &src_alarm_bitmap.bounds, &screen_alarm_rect,
                      srcCopy, NULL);
             ROMlib_alarmonmbar = true;
@@ -337,7 +337,7 @@ set_depth(DialogPtr dp, int16_t item_to_set)
         depth_t *depth = &depths_list[i];
 
         if(item_to_set == depth->item)
-            C_SetDepth(MR(MainDevice), depth->bpp, 0, 0);
+            C_SetDepth(MR(LM(MainDevice)), depth->bpp, 0, 0);
     }
 
     current_depth_item = item_to_set;
@@ -487,7 +487,7 @@ void setupprefvalues(DialogPtr dp)
     {
         int bpp, i;
 
-        bpp = PIXMAP_PIXEL_SIZE(GD_PMAP(MR(MainDevice)));
+        bpp = PIXMAP_PIXEL_SIZE(GD_PMAP(MR(LM(MainDevice))));
         for(i = 0; i < (int)NELEM(depths_list); i++)
         {
             depth_t *depth = &depths_list[i];
@@ -629,7 +629,7 @@ int saveprefvalues(const char *savefilename, LONGINT locationx, LONGINT location
 #endif /* defined(VDRIVER_DISPLAYED_IN_WINDOW) */
         }
         fprintf(fp, "BitsPerPixel = %d;\n",
-                PIXMAP_PIXEL_SIZE(GD_PMAP(MR(MainDevice))));
+                PIXMAP_PIXEL_SIZE(GD_PMAP(MR(LM(MainDevice)))));
 
 #if 0 && defined(MACOSX_)
 	fprintf(fp, "ScreenSize = { %ld, %ld };\n", (long) curr_width, (long) curr_height);
@@ -803,7 +803,7 @@ static void enable_disable_pref_items(DialogPtr dp)
     {
         depth_t *depth = &depths_list[i];
 
-        if(C_HasDepth(MR(MainDevice), depth->bpp, 0, 0))
+        if(C_HasDepth(MR(LM(MainDevice)), depth->bpp, 0, 0))
             mod_item_enableness(dp, depth->item, enable);
         else
             mod_item_enableness(dp, depth->item, disable);
@@ -818,7 +818,7 @@ static void dopreferences(void)
 
     if(!(ROMlib_options & ROMLIB_NOPREFS_BIT))
     {
-        if(WWExist != EXIST_YES)
+        if(LM(WWExist) != EXIST_YES)
             SysBeep(5);
         else
         {
@@ -828,7 +828,7 @@ static void dopreferences(void)
             {
                 am_already_here = true;
 
-                ParamText(CurApName, 0, 0, 0);
+                ParamText(LM(CurApName), 0, 0, 0);
 
                 dp = GetNewDialog(PREFDIALID, (Ptr)0, (WindowPtr)-1);
                 enable_disable_pref_items(dp);
@@ -919,13 +919,13 @@ static BOOLEAN doevent(INTEGER em, EventRecord *evt,
 
     evt->message = CLC(0);
     TRACE(2);
-    if(SPVolCtl & 0x80)
+    if(LM(SPVolCtl) & 0x80)
     {
         TRACE(3);
         GetDateTime(&now_s);
         now = CL(now_s);
         TRACE(4);
-        if(now >= (ULONGINT)Cx(SPAlarm))
+        if(now >= (ULONGINT)Cx(LM(SPAlarm)))
         {
             TRACE(5);
             if(now & 1)
@@ -957,28 +957,28 @@ static BOOLEAN doevent(INTEGER em, EventRecord *evt,
     if(em & activMask)
     {
         TRACE(11);
-        if(CurDeactive)
+        if(LM(CurDeactive))
         {
             TRACE(12);
             GetOSEvent(0, evt);
             TRACE(13);
             evt->what = CW(activateEvt);
-            evt->message = guest_cast<LONGINT>(CurDeactive);
+            evt->message = guest_cast<LONGINT>(LM(CurDeactive));
             if(remflag)
-                CurDeactive = nullptr;
+                LM(CurDeactive) = nullptr;
             retval = true;
             /*-->*/ goto done;
         }
-        if(CurActivate)
+        if(LM(CurActivate))
         {
             TRACE(14);
             GetOSEvent(0, evt);
             TRACE(15);
             evt->what = CW(activateEvt);
-            evt->message = guest_cast<LONGINT>(CurActivate);
+            evt->message = guest_cast<LONGINT>(LM(CurActivate));
             evt->modifiers.raw_or(CW(activeFlag));
             if(remflag)
-                CurActivate = nullptr;
+                LM(CurActivate) = nullptr;
             retval = true;
             /*-->*/ goto done;
         }
@@ -997,7 +997,7 @@ static BOOLEAN doevent(INTEGER em, EventRecord *evt,
         TRACE(16);
         retval = GetOSEvent(em, evt);
         TRACE(17);
-        if(retval && Cx(evt->what) == keyDown && ScrDmpEnb && (Cx(evt->modifiers) & (shiftKey | cmdKey)) == (shiftKey | cmdKey))
+        if(retval && Cx(evt->what) == keyDown && LM(ScrDmpEnb) && (Cx(evt->modifiers) & (shiftKey | cmdKey)) == (shiftKey | cmdKey))
         {
             TRACE(18);
             switch((Cx(evt->message) & charCodeMask))
@@ -1226,7 +1226,7 @@ BOOLEAN Executor::C_StillDown() /* IMI-259 */
 
 /*
  * The weirdness below is because Word 5.1a gets very unhappy if
- * TickCount makes large adjustments to Ticks.  Even when we
+ * TickCount makes large adjustments to LM(Ticks).  Even when we
  * just increase by one there are problems... The "no clock" option
  * might be retiring soon.
  */
@@ -1244,7 +1244,7 @@ BOOLEAN Executor::C_WaitMouseUp()
 
 void Executor::C_GetKeys(unsigned char *keys)
 {
-    BlockMoveData((Ptr)KeyMap, (Ptr)keys, (Size)sizeof_KeyMap);
+    BlockMoveData((Ptr)LM(KeyMap), (Ptr)keys, (Size)sizeof_KeyMap);
 }
 
 LONGINT Executor::C_TickCount()
@@ -1254,28 +1254,28 @@ LONGINT Executor::C_TickCount()
 
     ticks = msecs_elapsed() * 3.0 / 50; /* == 60 / 1000 */
 
-    /* Update Ticks and Time.  We only update Ticks if the clock is on;
+    /* Update LM(Ticks) and LM(Time).  We only update LM(Ticks) if the clock is on;
    * this seems to be necessary to make Word happy.
    */
 
     if(ROMlib_clock)
-        Ticks = CL(ticks);
+        LM(Ticks) = CL(ticks);
 
     new_time = (UNIXTIMETOMACTIME(ROMlib_start_time.tv_sec)
                 + (long)((ROMlib_start_time.tv_usec / (1000000.0 / 60) + ticks) / 60));
 
-    Time = CL(new_time);
+    LM(Time) = CL(new_time);
     return ticks;
 }
 
 LONGINT Executor::GetDblTime()
 {
-    return (Cx(DoubleTime));
+    return (Cx(LM(DoubleTime)));
 }
 
 LONGINT Executor::GetCaretTime()
 {
-    return (Cx(CaretTime));
+    return (Cx(LM(CaretTime)));
 }
 
 /*
@@ -1315,8 +1315,8 @@ Executor::sendsuspendevent(void)
         && (!(ROMlib_options & ROMLIB_NOSUSPEND_BIT) /* ||
 	  !(size_info.size_flags & SZcanBackground) */))
     {
-        p.h = CW(MouseLocation.h);
-        p.v = CW(MouseLocation.v);
+        p.h = CW(LM(MouseLocation).h);
+        p.v = CW(LM(MouseLocation).v);
         ROMlib_PPostEvent(osEvt, SUSPENDRESUMEBITS | SUSPEND | CONVERTCLIPBOARD,
                           (GUEST<EvQElPtr> *)0, TickCount(), p, ROMlib_mods);
     }
@@ -1341,8 +1341,8 @@ Executor::sendresumeevent(bool cvtclip)
         what = SUSPENDRESUMEBITS | RESUME;
         if(cvtclip)
             what |= CONVERTCLIPBOARD;
-        p.h = CW(MouseLocation.h);
-        p.v = CW(MouseLocation.v);
+        p.h = CW(LM(MouseLocation).h);
+        p.v = CW(LM(MouseLocation).v);
         ROMlib_PPostEvent(osEvt, what, (GUEST<EvQElPtr> *)0, TickCount(),
                           p, ROMlib_mods);
     }
@@ -1353,8 +1353,8 @@ sendcopy(void)
 {
     Point p;
 
-    p.h = CW(MouseLocation.h);
-    p.v = CW(MouseLocation.v);
+    p.h = CW(LM(MouseLocation).h);
+    p.v = CW(LM(MouseLocation).v);
     ROMlib_PPostEvent(keyDown, 0x0863, /* 0x63 == 'c' */
                       (GUEST<EvQElPtr> *)0, TickCount(), p, cmdKey | btnState);
     ROMlib_PPostEvent(keyUp, 0x0863,
@@ -1366,8 +1366,8 @@ sendpaste(void)
 {
     Point p;
 
-    p.h = CW(MouseLocation.h);
-    p.v = CW(MouseLocation.v);
+    p.h = CW(LM(MouseLocation).h);
+    p.v = CW(LM(MouseLocation).v);
     ROMlib_PPostEvent(keyDown, 0x0976, /* 0x76 == 'v' */
                       (GUEST<EvQElPtr> *)0, TickCount(), p, cmdKey | btnState);
     ROMlib_PPostEvent(keyUp, 0x0976,
@@ -1387,8 +1387,8 @@ post_helper(INTEGER code, uint8 raw, uint8 mapped, INTEGER mods)
 {
     Point p;
 
-    p.h = CW(MouseLocation.h);
-    p.v = CW(MouseLocation.v);
+    p.h = CW(LM(MouseLocation).h);
+    p.v = CW(LM(MouseLocation).v);
 
     ROMlib_PPostEvent(code, (raw << 8) | mapped, (GUEST<EvQElPtr> *)0,
                       TickCount(), p, btnState | mods);

@@ -1097,7 +1097,7 @@ LONGINT Executor::C_wdef0(INTEGER varcode, WindowPtr window, INTEGER message,
                 WINDOW_DATA_X(w) = RM(NewHandle((Size)sizeof(WStateData)));
                 wsp = MR(*(GUEST<WStateData *> *)WINDOW_DATA(w));
 
-                wsp->stdState = GD_BOUNDS(MR(TheGDevice));
+                wsp->stdState = GD_BOUNDS(MR(LM(TheGDevice)));
                 InsetRect(&wsp->stdState, 3, 3);
                 wsp->stdState.top = CW(CW(wsp->stdState.top) + 38);
                 wsp->userState = PORT_RECT(w);

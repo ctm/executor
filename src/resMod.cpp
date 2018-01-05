@@ -39,7 +39,7 @@ void Executor::C_SetResInfo(Handle res, INTEGER id, StringPtr name)
     OSErr err;
 
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         return;
     if(rr->ratr & resProtected)
     {
@@ -72,7 +72,7 @@ void Executor::C_SetResAttrs(Handle res, INTEGER attrs)
     resref *rr;
 
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         return;
     rr->ratr = attrs;
 }
@@ -85,7 +85,7 @@ void Executor::C_ChangedResource(Handle res)
     Size oldsize, newsize;
 
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         return;
     if(rr->ratr & resProtected)
     {
@@ -166,7 +166,7 @@ void Executor::C_AddResource(Handle data, ResType typ, INTEGER id,
         return;
     }
     ROMlib_setreserr(noErr);
-    map = ROMlib_rntohandl(Cx(CurMap), (Handle *)0);
+    map = ROMlib_rntohandl(Cx(LM(CurMap)), (Handle *)0);
     if(!map)
     {
         ROMlib_setreserr(resFNotFound);
@@ -230,14 +230,14 @@ void Executor::C_RmveResource(Handle res)
         ROMlib_setreserr(rmvResFailed);
         /*-->*/ return;
     }
-    map = ROMlib_rntohandl(Cx(CurMap), (Handle *)0);
+    map = ROMlib_rntohandl(Cx(LM(CurMap)), (Handle *)0);
     if(!map)
     {
         ROMlib_setreserr(resFNotFound);
         /*-->*/ return;
     }
     ROMlib_setreserr(ROMlib_findmapres(map, res, &tr, &rr));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         /*-->*/ return;
     if(rr->ratr & resProtected)
     {
@@ -336,16 +336,16 @@ void Executor::ROMlib_wr(resmaphand map, resref *rr) /* INTERNAL */
         else
             newloc = B3TOLONG(rr->doff);
         ROMlib_setreserr(SetFPos(Hx(map, resfn), fsFromStart, Hx(map, rh.rdatoff) + newloc));
-        if(ResErr != CWC(noErr))
+        if(LM(ResErr) != CWC(noErr))
             return;
         lc = sizeof(LONGINT);
         swappedrsize = CL(rsize);
         ROMlib_setreserr(FSWriteAll(Hx(map, resfn), &lc, (Ptr)&swappedrsize));
-        if(ResErr != CWC(noErr))
+        if(LM(ResErr) != CWC(noErr))
             return;
         lc = rsize;
         ROMlib_setreserr(FSWriteAll(Hx(map, resfn), &lc, STARH(res)));
-        if(ResErr != CWC(noErr))
+        if(LM(ResErr) != CWC(noErr))
             return;
         rr->ratr &= ~resChanged;
     }
@@ -537,12 +537,12 @@ void Executor::C_UpdateResFile(INTEGER rn)
             {
                 WALKTANDR(map, i, tr, j, rr)
                 ROMlib_wr(map, rr);
-                if(ResErr != CWC(noErr))
+                if(LM(ResErr) != CWC(noErr))
                     return;
                 EWALKTANDR(tr, rr)
             }
             ROMlib_setreserr(writemap(map));
-            if(ResErr != CWC(noErr))
+            if(LM(ResErr) != CWC(noErr))
                 return;
         }
         iopb.ioRefNum = HxX(map, resfn);
@@ -557,7 +557,7 @@ void Executor::C_WriteResource(Handle res)
     resref *rr;
 
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         return;
     ROMlib_wr(map, rr);
 }

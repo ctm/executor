@@ -61,50 +61,33 @@ struct Zone
 };
 typedef Zone *THz;
 
-#if 0
-#if !defined(MemErr)
-extern int16_t MemErr;
-extern GUEST<Ptr> 	MemTop_H;
-extern GUEST<Ptr> 	BufPtr_H;
-extern GUEST<Ptr> 	HeapEnd_H;
-extern GUEST<THz> 	TheZone_H;
-extern GUEST<Ptr> 	ApplLimit_H;
-extern GUEST<THz> 	SysZone_H;
-extern GUEST<THz> 	ApplZone_H;
-extern GUEST<Ptr> 	ROMBase_H;
-extern GUEST<Ptr> 	heapcheck_H;
-extern GUEST<Handle> 	GZRootHnd_H;
-extern GUEST<ProcPtr> 	IAZNotify_H;
-extern GUEST<Ptr> 	CurrentA5_H;
-extern GUEST<Ptr> 	CurStackBase_H;
-extern Byte 	Scratch20[20];
-extern LONGINT 	Lo3Bytes;
-extern LONGINT 	MinStack;
-extern LONGINT 	DefltStack;
-extern Byte 	ToolScratch[8];
-extern Byte 	Scratch8[8];
-extern LONGINT 	OneOne;
-extern LONGINT 	MinusOne;
-extern Byte 	ApplScratch[12];
-#endif
+const LowMemGlobal<Ptr> MemTop { 0x108 }; // MemoryMgr IMII-19 (true);
+const LowMemGlobal<Ptr> BufPtr { 0x10C }; // MemoryMgr IMII-19 (true-b);
+const LowMemGlobal<Ptr> HeapEnd { 0x114 }; // MemoryMgr IMII-19 (true);
+const LowMemGlobal<THz> TheZone { 0x118 }; // MemoryMgr IMII-31 (true);
+const LowMemGlobal<Ptr> ApplLimit { 0x130 }; // MemoryMgr IMII-19 (true);
+const LowMemGlobal<INTEGER> MemErr { 0x220 }; // MemoryMgr IMIV-80 (true);
+const LowMemGlobal<THz> SysZone { 0x2A6 }; // MemoryMgr IMII-19 (true);
+const LowMemGlobal<THz> ApplZone { 0x2AA }; // MemoryMgr IMII-19 (true);
+const LowMemGlobal<Ptr> ROMBase { 0x2AE }; // MemoryMgr IMIV-236 (true-b);
+const LowMemGlobal<Ptr> RAMBase { 0x2B2 }; // MemoryMgr IMI-87 (false);
+const LowMemGlobal<Ptr> heapcheck { 0x316 }; // MemoryMgr SysEqu.a (true-b);
+const LowMemGlobal<LONGINT> Lo3Bytes { 0x31A }; // MemoryMgr IMI-85 (true);
+const LowMemGlobal<LONGINT> MinStack { 0x31E }; // MemoryMgr IMII-17 (true-b);
+const LowMemGlobal<LONGINT> DefltStack { 0x322 }; // MemoryMgr IMII-17 (true-b);
+const LowMemGlobal<Handle> GZRootHnd { 0x328 }; // MemoryMgr IMI-43 (true);
+const LowMemGlobal<Handle> GZMoveHnd { 0x330 }; // MemoryMgr LowMem.h (false);
+const LowMemGlobal<ProcPtr> IAZNotify { 0x33C }; // MemoryMgr ThinkC (true-b);
+const LowMemGlobal<Ptr> CurrentA5 { 0x904 }; // MemoryMgr IMI-95 (true);
+const LowMemGlobal<Ptr> CurStackBase { 0x908 }; // MemoryMgr IMII-19 (true-b);
 
-enum
-{
-    MemTop = (MemTop_H.p),
-    BufPtr = (BufPtr_H.p),
-    HeapEnd = (HeapEnd_H.p),
-    TheZone = (TheZone_H.p),
-    ApplLimit = (ApplLimit_H.p),
-    SysZone = (SysZone_H.p),
-    ApplZone = (ApplZone_H.p),
-    ROMBase = (ROMBase_H.p),
-    heapcheck = (heapcheck_H.p),
-    GZRootHnd = (GZRootHnd_H.p),
-    IAZNotify = (IAZNotify_H.p),
-    CurrentA5 = (CurrentA5_H.p),
-    CurStackBase = (CurStackBase_H.p),
-};
-#endif
+const LowMemGlobal<Byte[20]> Scratch20 { 0x1E4 }; // MemoryMgr IMI-85 (true);
+const LowMemGlobal<Byte[8]> ToolScratch { 0x9CE }; // MemoryMgr IMI-85 (true);
+const LowMemGlobal<Byte[8]> Scratch8 { 0x9FA }; // MemoryMgr IMI-85 (true);
+const LowMemGlobal<LONGINT> OneOne { 0xA02 }; // MemoryMgr IMI-85 (true);
+const LowMemGlobal<LONGINT> MinusOne { 0xA06 }; // MemoryMgr IMI-85 (true);
+const LowMemGlobal<Byte[12]> ApplScratch { 0xA78 }; // MemoryMgr IMI-85 (true);
+
 /* traps which can have a `sys' or `clear' bit set */
 
 #define NewEmptyHandle() (_NewEmptyHandle_flags(false))

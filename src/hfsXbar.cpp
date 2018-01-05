@@ -66,7 +66,7 @@ static BOOLEAN hfsIvol(VolumeParam *pb) /* potentially Indexed vol */
     retval = false;
     if(Cx(pb->ioVolIndex) > 0)
     {
-        vcbp = (HVCB *)ROMlib_indexqueue(&VCBQHdr, Cx(pb->ioVolIndex));
+        vcbp = (HVCB *)ROMlib_indexqueue(&LM(VCBQHdr), Cx(pb->ioVolIndex));
         if(vcbp && vcbp->vcbCTRef)
             retval = true;
     }

@@ -9,6 +9,7 @@
 
 #include "ResourceMgr.h"
 #include "MemoryMgr.h"
+#include "OSUtil.h"
 
 using namespace Executor;
 
@@ -48,10 +49,10 @@ const char *ROMlib_executor_full_name = "Executor " EXECUTOR_VERSION
                                                         \
         _typ = (typ);                                   \
         len = snprintf(str, sizeof str, fmt, args);     \
-        save_map = CurMap;                              \
-        CurMap = SysMap;                                \
+        save_map = LM(CurMap);                              \
+        LM(CurMap) = LM(SysMap);                                \
         h = C_Get1Resource(_typ, (id));                 \
-        CurMap = save_map;                              \
+        LM(CurMap) = save_map;                              \
         LoadResource(h);                                \
         HUnlock(h); /* safe to do -- app not running */ \
         SetHandleSize(h, len);                          \
@@ -91,7 +92,7 @@ ROMlib_set_system_version(uint32_t version)
         };
 
         system_version = version;
-        SysVersion = CW(version);
+        LM(SysVersion) = CW(version);
 
         major = version >> 8;
         minor = (version >> 4) & MINOR_MASK;

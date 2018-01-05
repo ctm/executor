@@ -55,9 +55,9 @@ void Executor::gd_allocate_main_device(void)
     GDHandle graphics_device;
 
     if(vdriver_fbuf == NULL)
-        gui_fatal("vdriver not initialized, unable to allocate `MainDevice'");
+        gui_fatal("vdriver not initialized, unable to allocate `LM(MainDevice)'");
 
-    TheZoneGuard guard(SysZone);
+    TheZoneGuard guard(LM(SysZone));
 
     PixMapHandle gd_pixmap;
     Rect *gd_rect;
@@ -66,7 +66,7 @@ void Executor::gd_allocate_main_device(void)
                                  mode_from_bpp(vdriver_bpp));
 
     /* we are the main device, since there are currently no others */
-    TheGDevice = MainDevice = RM(graphics_device);
+    LM(TheGDevice) = LM(MainDevice) = RM(graphics_device);
 
     /* set gd flags reflective of the main device */
     GD_FLAGS_X(graphics_device).raw_or(CWC((1 << mainScreen) | (1 << screenDevice) | (1 << screenActive)
@@ -95,8 +95,8 @@ void Executor::gd_allocate_main_device(void)
     PIXMAP_BOUNDS(gd_pixmap) = *gd_rect;
 
     /* add ourselves to the device list */
-    GD_NEXT_GD_X(graphics_device) = DeviceList;
-    DeviceList = RM(graphics_device);
+    GD_NEXT_GD_X(graphics_device) = LM(DeviceList);
+    LM(DeviceList) = RM(graphics_device);
 
     /* Assure that we're using the correct colors. */
     vdriver_set_colors(0, 1 << vdriver_bpp,
@@ -109,7 +109,7 @@ GDHandle Executor::C_NewGDevice(INTEGER ref_num, LONGINT mode)
     GUEST<Handle> h;
     GUEST<PixMapHandle> pmh;
 
-    TheZoneGuard guard(SysZone);
+    TheZoneGuard guard(LM(SysZone));
 
     this2 = (GDHandle)NewHandle((Size)sizeof(GDevice));
 
@@ -170,7 +170,7 @@ GDHandle Executor::C_NewGDevice(INTEGER ref_num, LONGINT mode)
 void Executor::gd_set_bpp(GDHandle gd, bool color_p, bool fixed_p, int bpp)
 {
     PixMapHandle gd_pixmap;
-    bool main_device_p = (gd == MR(MainDevice));
+    bool main_device_p = (gd == MR(LM(MainDevice)));
 
     /* set the color bit, all other flag bits should be the same */
     if(color_p)
@@ -251,9 +251,9 @@ void Executor::C_SetDeviceAttribute(GDHandle gdh, INTEGER attribute,
 
 void Executor::C_SetGDevice(GDHandle gdh)
 {
-    if(TheGDevice != RM(gdh))
+    if(LM(TheGDevice) != RM(gdh))
     {
-        TheGDevice = RM(gdh);
+        LM(TheGDevice) = RM(gdh);
         ROMlib_invalidate_conversion_tables();
     }
 }
@@ -269,19 +269,19 @@ void Executor::C_DisposeGDevice(GDHandle gdh)
 
 GDHandle Executor::C_GetGDevice()
 {
-    return MR(TheGDevice);
+    return MR(LM(TheGDevice));
 }
 
 GDHandle Executor::C_GetDeviceList()
 {
-    return MR(DeviceList);
+    return MR(LM(DeviceList));
 }
 
 GDHandle Executor::C_GetMainDevice()
 {
     GDHandle retval;
 
-    retval = MR(MainDevice);
+    retval = MR(LM(MainDevice));
 
     /* Unfortunately, Realmz winds up dereferencing non-existent
      memory unless noDriver is set, but PacMan Deluxe will have
@@ -302,7 +302,7 @@ GDHandle Executor::C_GetMaxDevice(Rect *globalRect)
      the max pixel depth for any given region (tho we would
      probably see if it intersects the main screen and return
      NULL otherwise */
-    return MR(MainDevice);
+    return MR(LM(MainDevice));
 }
 
 GDHandle Executor::C_GetNextDevice(GDHandle cur_device)
@@ -324,7 +324,7 @@ void Executor::C_DeviceLoop(RgnHandle rgn,
     gd_rect_rgn = NewRgn();
 
     /* Loop over all GDevices, looking for active screens. */
-    for(gd = MR(DeviceList); gd; gd = GD_NEXT_GD(gd))
+    for(gd = MR(LM(DeviceList)); gd; gd = GD_NEXT_GD(gd))
         if((GD_FLAGS_X(gd) & CWC((1 << screenDevice)
                                  | (1 << screenActive)))
            == CWC((1 << screenDevice) | (1 << screenActive)))
@@ -380,8 +380,8 @@ BOOLEAN Executor::C_TestDeviceAttribute(GDHandle gdh, INTEGER attribute)
 // FIXME: #warning ScreenRes is duplicate with toolutil.cpp
 void Executor::C_ScreenRes(GUEST<INTEGER> *h_res, GUEST<INTEGER> *v_res)
 {
-    *h_res = CW(PIXMAP_HRES(GD_PMAP(MR(MainDevice))) >> 16);
-    *v_res = CW(PIXMAP_VRES(GD_PMAP(MR(MainDevice))) >> 16);
+    *h_res = CW(PIXMAP_HRES(GD_PMAP(MR(LM(MainDevice)))) >> 16);
+    *v_res = CW(PIXMAP_VRES(GD_PMAP(MR(LM(MainDevice)))) >> 16);
 }
 
 INTEGER Executor::C_HasDepth(GDHandle gdh, INTEGER bpp, INTEGER which_flags,
@@ -390,7 +390,7 @@ INTEGER Executor::C_HasDepth(GDHandle gdh, INTEGER bpp, INTEGER which_flags,
     flags &= ~1;
     which_flags &= ~1;
 
-    if(gdh != MR(MainDevice)
+    if(gdh != MR(LM(MainDevice))
        || bpp == 0)
         return false;
 
@@ -407,7 +407,7 @@ OSErr Executor::C_SetDepth(GDHandle gdh, INTEGER bpp, INTEGER which_flags,
     WindowPeek tw;
     virtual_int_state_t int_state;
 
-    if(gdh != MR(MainDevice))
+    if(gdh != MR(LM(MainDevice)))
     {
         warning_unexpected("Setting the depth of a device not the screen; "
                            "this violates bogus assumptions in SetDepth.");
@@ -450,9 +450,9 @@ OSErr Executor::C_SetDepth(GDHandle gdh, INTEGER bpp, INTEGER which_flags,
     /* set the pixel size, rowbytes, etc
      of windows and the window manager color graphics port */
 
-    if(WWExist == EXIST_YES)
+    if(LM(WWExist) == EXIST_YES)
     {
-        for(tw = MR(WindowList); tw; tw = WINDOW_NEXT_WINDOW(tw))
+        for(tw = MR(LM(WindowList)); tw; tw = WINDOW_NEXT_WINDOW(tw))
         {
             GrafPtr gp;
 
@@ -484,11 +484,11 @@ OSErr Executor::C_SetDepth(GDHandle gdh, INTEGER bpp, INTEGER which_flags,
             }
         }
 
-        /* do the same for the WMgrCPort */
+        /* do the same for the LM(WMgrCPort) */
         {
             PixMapHandle wmgr_cport_pixmap;
 
-            wmgr_cport_pixmap = CPORT_PIXMAP(MR(WMgrCPort));
+            wmgr_cport_pixmap = CPORT_PIXMAP(MR(LM(WMgrCPort)));
 
             PIXMAP_PIXEL_SIZE_X(wmgr_cport_pixmap)
                 = PIXMAP_PIXEL_SIZE_X(gd_pixmap);
@@ -507,7 +507,7 @@ OSErr Executor::C_SetDepth(GDHandle gdh, INTEGER bpp, INTEGER which_flags,
     }
 
     /* Redraw the screen if that's what changed. */
-    if(gdh == MR(MainDevice))
+    if(gdh == MR(LM(MainDevice)))
         redraw_screen();
 
     return noErr;

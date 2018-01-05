@@ -152,7 +152,7 @@ begin_track_buffering_for_write(void)
         length = 0;
     }
     else
-        retval = CW(MemErr);
+        retval = CW(LM(MemErr));
     return retval;
 }
 

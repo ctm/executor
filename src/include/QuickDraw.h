@@ -474,53 +474,43 @@ typedef Byte *BytePtr;
 #define randSeed CL(*(GUEST<LONGINT> *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 126))
 #define randSeedX ((*(GUEST<LONGINT> *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 126)))
 
-#if 0
-extern GUEST<LONGINT> RndSeed_L;
-extern Byte HiliteMode;	/* not really supported in ROMlib-V1.0 */
-extern RGBColor HiliteRGB;	/* not really supported in ROMlib-V1.0 */
-extern GUEST<ProcPtr> 	JInitCrsr_H;
+const LowMemGlobal<INTEGER> ScrVRes { 0x102 }; // QuickDraw IMI-473 (true);
+const LowMemGlobal<INTEGER> ScrHRes { 0x104 }; // QuickDraw IMI-473 (true);
+const LowMemGlobal<INTEGER> ScreenRow { 0x106 }; // QuickDraw ThinkC (true);
+const LowMemGlobal<LONGINT> RndSeed { 0x156 }; // QuickDraw IMI-195 (true);
+const LowMemGlobal<Byte[8]> ScreenVars { 0x292 }; // QuickDraw MPW (false);
+/*
+ * NOTE: Key1Trans in the keyboard translator procedure, and Key2Trans in the
+ * numeric keypad translator procedure (MPW).
+ */
+const LowMemGlobal<Ptr> Key1Trans { 0x29E }; // QuickDraw MPW (false);
+const LowMemGlobal<Ptr> Key2Trans { 0x2A2 }; // QuickDraw MPW (false);
+const LowMemGlobal<ProcPtr> JUnknown574 { 0x574 }; // QuickDraw IMV (true-b);
+const LowMemGlobal<ProcPtr> JADBProc { 0x6B8 }; // QuickDraw IMV (false);
+const LowMemGlobal<ProcPtr> JHideCursor { 0x800 }; // QuickDraw Private.a (true-b);
+const LowMemGlobal<ProcPtr> JShowCursor { 0x804 }; // QuickDraw Private.a (true-b);
+const LowMemGlobal<ProcPtr> JShieldCursor { 0x808 }; // QuickDraw Private.a (true-b);
+const LowMemGlobal<ProcPtr> JScrnAddr { 0x80C }; // QuickDraw Private.a (false);
+const LowMemGlobal<ProcPtr> JScrnSize { 0x810 }; // QuickDraw Private.a (false);
+const LowMemGlobal<ProcPtr> JInitCrsr { 0x814 }; // QuickDraw Private.a (true-b);
+const LowMemGlobal<ProcPtr> JSetCrsr { 0x818 }; // QuickDraw Private.a (true-b);
+const LowMemGlobal<ProcPtr> JCrsrObscure { 0x81C }; // QuickDraw Private.a (true-b);
+const LowMemGlobal<ProcPtr> JUpdateProc { 0x820 }; // QuickDraw Private.a (false);
+const LowMemGlobal<Ptr> ScrnBase { 0x824 }; // QuickDraw IMII-19 (true);
+/*
+ * MouseLocation used to be 0x830, but that doesn't jibe with what I've
+ * seen of Crystal Quest --ctm
+ */
+const LowMemGlobal<Rect> CrsrPin { 0x834 }; // QuickDraw ThinkC (false);
+const LowMemGlobal<Byte> QDColors { 0x8B0 }; // QuickDraw IMV (false);
+const LowMemGlobal<BOOLEAN> CrsrVis { 0x8CC }; // QuickDraw SysEqu.a (true);
+const LowMemGlobal<Byte> CrsrBusy { 0x8CD }; // QuickDraw SysEqu.a (true);
+const LowMemGlobal<INTEGER> CrsrState { 0x8D0 }; // QuickDraw SysEqu.a (true);
+const LowMemGlobal<LONGINT> mousemask { 0x8D6 }; // QuickDraw .a (true-b);
+const LowMemGlobal<LONGINT> mouseoffset { 0x8DA }; // QuickDraw SysEqu.a (true-b);
+const LowMemGlobal<ProcPtr> JCrsrTask { 0x8EE }; //   (true);
+const LowMemGlobal<Byte> HiliteMode { 0x938 }; // QuickDraw IMV (true-b);
 
-extern GUEST<ProcPtr> JHideCursor_H;
-extern GUEST<ProcPtr> JShowCursor_H;
-extern GUEST<ProcPtr> JShieldCursor_H;
-extern GUEST<ProcPtr> JSetCrsr_H;
-extern GUEST<ProcPtr> JCrsrObscure_H;
-extern GUEST<ProcPtr> JUnknown574_H;
-
-extern GUEST<Ptr> 	ScrnBase_H;
-extern GUEST<ProcPtr>	JCrsrTask_H;
-extern GUEST<Ptr>	Key1Trans_H;
-extern GUEST<Ptr>	Key2Trans_H;
-extern INTEGER 	ScrVRes;
-extern INTEGER 	ScrHRes;
-extern INTEGER 	ScreenRow;
-extern Point 	MouseLocation;
-extern Point	MouseLocation2;
-extern BOOLEAN 	CrsrVis;
-extern Byte 	CrsrBusy;
-extern INTEGER 	CrsrState;
-extern LONGINT 	mousemask;
-extern LONGINT 	mouseoffset;
-extern Byte 	HiliteMode;
-#endif
-
-#if 0
-enum
-{
-    RndSeed = (RndSeed_L.l),
-    JInitCrsr = (JInitCrsr_H.p),
-    JHideCursor = (JHideCursor_H.p),
-    JShowCursor = (JShowCursor_H.p),
-    JShieldCursor = (JShieldCursor_H.p),
-    JSetCrsr = (JSetCrsr_H.p),
-    JCrsrObscure = (JCrsrObscure_H.p),
-    JUnknown574 = (JUnknown574_H.p),
-    JCrsrTask = (JCrsrTask_H.p),
-    ScrnBase = (ScrnBase_H.p),
-    Key1Trans = (Key1Trans_H.p),
-    Key2Trans = (Key2Trans_H.p),
-};
-#endif
 
 extern void C_CopyBits(BitMap *src_bitmap, BitMap *dst_bitmap,
                             const Rect *src_rect, const Rect *dst_rect,

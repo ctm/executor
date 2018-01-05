@@ -24,8 +24,6 @@
 
 #include "sigio_multiplex.h"
 
-#undef Time
-
 #include <X11/X.h>
 #include <X11/Xlib.h>
 /* declares a data type `Region' */
@@ -872,7 +870,7 @@ keydown(uint8 key)
 
     retval = false;
 
-    if(ROMlib_get_index_and_bit(key, &i, &bit) && (KeyMap[i] & bit))
+    if(ROMlib_get_index_and_bit(key, &i, &bit) && (LM(KeyMap)[i] & bit))
         retval = true;
 
     return retval;
@@ -1152,8 +1150,8 @@ post_pending_x_events(syn68k_addr_t interrupt_addr, void *unused)
                 sendsuspendevent();
                 break;
             case MotionNotify:
-                MouseLocation.h = CW(evt.xmotion.x);
-                MouseLocation.v = CW(evt.xmotion.y);
+                LM(MouseLocation).h = CW(evt.xmotion.x);
+                LM(MouseLocation).v = CW(evt.xmotion.y);
                 adb_apeiron_hack(false);
                 break;
         }
@@ -2422,7 +2420,7 @@ int Executor::GetScrapX(OSType type, Handle h)
                 if(rettype == XA_STRING && actfmt == 8)
                 {
                     SetHandleSize((Handle)h, nitems);
-                    if(MemErr == CWC(noErr))
+                    if(LM(MemErr) == CWC(noErr))
                     {
                         memcpy(MR(*h), propreturn, nitems);
                         for(ul = nitems, p = MR(*h); ul > 0; ul--)

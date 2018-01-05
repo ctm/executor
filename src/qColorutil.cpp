@@ -48,7 +48,7 @@ Executor::validate_fg_bk_ctab(void)
     ColorSpec *ctab_table, *gd_ctab_table;
     RGBColor old_fg, old_bk, *fg, *bk;
 
-    gd = MR(TheGDevice);
+    gd = MR(LM(TheGDevice));
     gd_pmap = GD_PMAP(gd);
     pixel_size = PIXMAP_PIXEL_SIZE(gd_pmap);
     gd_ctab_table = CTAB_TABLE(PIXMAP_TABLE(gd_pmap));
@@ -80,7 +80,7 @@ Executor::validate_fg_bk_ctab(void)
     else
     {
         /* determine rgb values of the current bk/fg
-	 via `QDColors' */
+	 via `LM(QDColors)' */
         *fg = *ROMlib_qd_color_to_rgb(PORT_FG_COLOR(thePort));
         *bk = *ROMlib_qd_color_to_rgb(PORT_BK_COLOR(thePort));
     }
@@ -101,7 +101,7 @@ Executor::validate_relative_bw_ctab(void)
     RGBColor old_entry0, old_entry1, *entry0, *entry1;
     int pixel_size;
 
-    gd = MR(TheGDevice);
+    gd = MR(LM(TheGDevice));
     gd_pmap = GD_PMAP(gd);
     pixel_size = PIXMAP_PIXEL_SIZE(gd_pmap);
 
@@ -152,7 +152,7 @@ void Executor::ROMlib_color_init(void)
 {
     ColorSpec *bw_ctab_table;
 
-    TheZoneGuard guard(SysZone);
+    TheZoneGuard guard(LM(SysZone));
     /* allocate and initialize ROMlib_bw_ctab */
     ROMlib_bw_ctab = (CTabHandle)NewHandle(CTAB_STORAGE_FOR_SIZE(1));
     CTAB_SIZE_X(ROMlib_bw_ctab) = CWC(1);

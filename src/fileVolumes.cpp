@@ -676,8 +676,8 @@ OSErr Executor::ufsPBMountVol(ParmBlkPtr pb) /* INTERNAL */
     ALLOCABEGIN
 
     err = noErr;
-    savezone = TheZone;
-    TheZone = SysZone;
+    savezone = LM(TheZone);
+    LM(TheZone) = LM(SysZone);
     if(Ustat(ROMlib_volumename.c_str(), &sbuf) < 0)
         /*-->*/ RETURN(badMDBErr) if(ROMlib_vcbbydrive(Cx(pb->volumeParam.ioVRefNum)) || ROMlib_vcbbyunixname(ROMlib_volumename.c_str()))
             RETURN(volOnLinErr);
@@ -734,17 +734,17 @@ OSErr Executor::ufsPBMountVol(ParmBlkPtr pb) /* INTERNAL */
     vp->vcb.vcbClpSiz = CLC(1);
     vp->vcb.vcbAlBlSt = CWC(10);
     vp->vcb.vcbNxtCNID = CLC(1000);
-    if(!DefVCBPtr)
+    if(!LM(DefVCBPtr))
     {
-        DefVCBPtr = RM((VCB *)vp);
-        DefVRefNum = vp->vcb.vcbVRefNum;
+        LM(DefVCBPtr) = RM((VCB *)vp);
+        LM(DefVRefNum) = vp->vcb.vcbVRefNum;
         DefDirID = CLC(2); /* top level */
     }
 
     pb->ioParam.ioVRefNum = vp->vcb.vcbVRefNum;
-    Enqueue((QElemPtr)vp, &VCBQHdr);
+    Enqueue((QElemPtr)vp, &LM(VCBQHdr));
 DONE:
-    TheZone = savezone;
+    LM(TheZone) = savezone;
     ALLOCAEND
     return err;
 }
@@ -835,7 +835,7 @@ static VCB *findvcb(StringPtr sp, INTEGER vrn, BOOLEAN *iswd,
     *iswd = false;
     if(sp && sp[U(sp[0])] == VOLCHAR)
     {
-        for(vcbptr = (VCB *)MR(VCBQHdr.qHead);
+        for(vcbptr = (VCB *)MR(LM(VCBQHdr).qHead);
             vcbptr && !EqualString(sp, (StringPtr)vcbptr->vcbVN, false, true);
             vcbptr = (VCB *)MR(vcbptr->qLink))
             ;
@@ -845,11 +845,11 @@ static VCB *findvcb(StringPtr sp, INTEGER vrn, BOOLEAN *iswd,
     {
         if(vrn == 0)
         {
-            if(DefVCBPtr)
-                *vrnp = MR(DefVCBPtr)->vcbVRefNum;
+            if(LM(DefVCBPtr))
+                *vrnp = MR(LM(DefVCBPtr))->vcbVRefNum;
             else
                 *vrnp = 0;
-            /*-->*/ return MR(DefVCBPtr);
+            /*-->*/ return MR(LM(DefVCBPtr));
         }
         if(vrn < 0)
         {
@@ -865,7 +865,7 @@ static VCB *findvcb(StringPtr sp, INTEGER vrn, BOOLEAN *iswd,
         }
         else
         {
-            for(vcbptr = (VCB *)MR(VCBQHdr.qHead);
+            for(vcbptr = (VCB *)MR(LM(VCBQHdr).qHead);
                 vcbptr && Cx(vcbptr->vcbDrvNum) != vrn;
                 vcbptr = (VCB *)MR(vcbptr->qLink))
                 ;
@@ -889,7 +889,7 @@ static VCB *grabvcb(ParmBlkPtr pb, GUEST<INTEGER> *vrefnump)
     therest = 0;
     dir = 1;
     if((i = Cx(pb->volumeParam.ioVolIndex)) > 0)
-        for(vcbp = (VCB *)MR(VCBQHdr.qHead); i > 1 && vcbp;
+        for(vcbp = (VCB *)MR(LM(VCBQHdr).qHead); i > 1 && vcbp;
             vcbp = (VCB *)MR(vcbp->qLink), i--)
             ;
     else if(Cx(pb->volumeParam.ioVolIndex) == 0)
@@ -922,7 +922,7 @@ static VCB *grabvcb(ParmBlkPtr pb, GUEST<INTEGER> *vrefnump)
             if(pb->volumeParam.ioVRefNum != CWC(0))
                 *vrefnump = pb->volumeParam.ioVRefNum;
             else
-                *vrefnump = DefVRefNum;
+                *vrefnump = LM(DefVRefNum);
         }
     }
 
@@ -1044,9 +1044,9 @@ OSErr Executor::ufsPBHGetVInfo(HParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
         pb->volumeParam.ioVDirCnt = vcbp->vcbDirCnt;
         BlockMoveData((Ptr)vcbp->vcbFndrInfo, (Ptr)pb->volumeParam.ioVFndrInfo,
                       (Size)sizeof(vcbp->vcbFndrInfo));
-        if(ISWDNUM(Cx(BootDrive)))
+        if(ISWDNUM(Cx(LM(BootDrive))))
         {
-            wdp = WDNUMTOWDP(Cx(BootDrive));
+            wdp = WDNUMTOWDP(Cx(LM(BootDrive)));
             if(MR(wdp->vcbp) == vcbp)
                 pb->volumeParam.ioVFndrInfo[1] = wdp->dirid;
         }

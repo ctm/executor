@@ -1225,9 +1225,9 @@ SmartGetFontName(GrafPtr thePortp, StringPtr fname)
 {
     C_GetFontName(CW(thePortp->txFont), fname);
     if(!fname[0])
-        C_GetFontName(CW(ApFontID), fname);
+        C_GetFontName(CW(LM(ApFontID)), fname);
     if(!fname[0])
-        C_GetFontName(CW(SysFontFam), fname);
+        C_GetFontName(CW(LM(SysFontFam)), fname);
 }
 
 /*

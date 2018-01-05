@@ -145,7 +145,7 @@ void Executor::C_PlotCIcon(const Rect *rect, CIconHandle icon)
     mask_bm = &CICON_MASK(icon);
     BITMAP_BASEADDR_X(mask_bm) = RM((Ptr)CICON_MASK_DATA(icon));
 
-    gd_pixmap = GD_PMAP(MR(MainDevice));
+    gd_pixmap = GD_PMAP(MR(LM(MainDevice)));
 
     if((PORT_BASEADDR_X(current_port) == PIXMAP_BASEADDR_X(gd_pixmap)
         && PIXMAP_PIXEL_SIZE(gd_pixmap) > 2)
@@ -370,7 +370,7 @@ OSErr Executor::C_GetIconSuite(GUEST<Handle> *icon_suite_return, short res_id,
     int i;
 
     icon_suite = NewHandleClear(sizeof(cotton_suite_layout_t));
-    if(MemErr != CWC(noErr))
+    if(LM(MemErr) != CWC(noErr))
         ICON_RETURN_ERROR(memFullErr);
 
     HLockGuard guard(icon_suite);
@@ -399,7 +399,7 @@ OSErr Executor::C_NewIconSuite(GUEST<Handle> *icon_suite_return)
     Handle icon_suite;
 
     icon_suite = NewHandleClear(sizeof(cotton_suite_layout_t));
-    if(MemErr != CWC(noErr))
+    if(LM(MemErr) != CWC(noErr))
         ICON_RETURN_ERROR(memFullErr);
 
     *icon_suite_return = RM(icon_suite);

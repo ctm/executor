@@ -14,11 +14,11 @@ using namespace Executor;
 
 void Executor::redraw_screen(void)
 {
-    TheGDeviceGuard guard(MR(MainDevice));
+    TheGDeviceGuard guard(MR(LM(MainDevice)));
     vdriver_set_colors(0, 1 << vdriver_bpp,
-                       CTAB_TABLE(PIXMAP_TABLE(GD_PMAP(MR(MainDevice)))));
+                       CTAB_TABLE(PIXMAP_TABLE(GD_PMAP(MR(LM(MainDevice))))));
 
-    if(WWExist == EXIST_YES)
+    if(LM(WWExist) == EXIST_YES)
     {
         WindowPeek frontp;
         frontp = (WindowPeek)FrontWindow();
@@ -27,7 +27,7 @@ void Executor::redraw_screen(void)
             RgnHandle screen_rgn;
             Rect b;
 
-            b = PIXMAP_BOUNDS(GD_PMAP(MR(MainDevice)));
+            b = PIXMAP_BOUNDS(GD_PMAP(MR(LM(MainDevice))));
             screen_rgn = NewRgn();
             RectRgn(screen_rgn, &b);
             PaintBehind(frontp, screen_rgn);

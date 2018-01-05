@@ -5,11 +5,6 @@ namespace Executor
 {
 extern INTEGER ROMlib_mods;
 
-#if !defined(MBState)
-extern Byte MBState;
-extern Point MTemp;
-#endif
-
 extern Ptr ROMlib_kchr_ptr(void);
 
 extern void invalidate_kchr_ptr(void);
@@ -33,7 +28,7 @@ enum
 enum
 {
     sizeof_KeyMap = 16
-}; /* can't use sizeof(KeyMap) */
+}; /* can't use sizeof(LM(KeyMap)) */
 
 extern LONGINT ROMlib_xlate(INTEGER virt, INTEGER modifiers,
                             bool down_p);

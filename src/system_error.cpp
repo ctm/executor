@@ -279,7 +279,7 @@ int Executor::system_error(const char *_message, int _default_button,
             int top;
             int left;
 
-            gd_rect = &GD_RECT(MR(MainDevice));
+            gd_rect = &GD_RECT(MR(LM(MainDevice)));
             gd_width = RECT_WIDTH(gd_rect);
             gd_height = RECT_HEIGHT(gd_rect);
 

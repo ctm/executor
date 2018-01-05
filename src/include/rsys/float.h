@@ -15,9 +15,7 @@
 
 namespace Executor
 {
-#if !defined(macfpstate)
-extern Byte macfpstate[6];
-#endif
+const LowMemGlobal<Byte[6]> macfpstate { 0xA4A }; // unknown ToolEqu.a (true-b);
 
 #define NATIVE_COMP_IS_NAN(c) \
     ((c).val == (signed long long)0x8000000000000000ULL)

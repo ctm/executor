@@ -23,11 +23,11 @@ INTEGER Executor::C_UniqueID(ResType typ)
     resmaphand map;
     resref *rr;
 
-    curmap = CurMap;
-    CurMap = ((resmap *)STARH(MR(TopMapHndl)))->resfn;
+    curmap = LM(CurMap);
+    LM(CurMap) = ((resmap *)STARH(MR(LM(TopMapHndl))))->resfn;
     while(ROMlib_typidtop(typ, ++startid, &map, &rr) != resNotFound)
         ;
-    CurMap = curmap;
+    LM(CurMap) = curmap;
     return (startid);
 }
 
@@ -37,7 +37,7 @@ INTEGER Executor::C_Unique1ID(ResType typ) /* IMIV-16 */
     static INTEGER startid = 0;
     resref *rr;
 
-    map = ROMlib_rntohandl(Cx(CurMap), (Handle *)0);
+    map = ROMlib_rntohandl(Cx(LM(CurMap)), (Handle *)0);
     if(!map)
     {
         ROMlib_setreserr(resFNotFound);
@@ -58,10 +58,10 @@ void Executor::C_GetResInfo(Handle res, GUEST<INTEGER> *id,
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
 
 #if !defined(STEF_GetResInfoFix)
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         return;
 #else
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
     {
         if(id)
             *id = CWC(-1);
@@ -93,7 +93,7 @@ INTEGER Executor::C_GetResAttrs(Handle res)
     resref *rr;
 
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         /*-->*/ return 0;
     return (Cx(rr->ratr));
 }
@@ -107,7 +107,7 @@ LONGINT Executor::ROMlib_SizeResource(Handle res, BOOLEAN usehandle)
     LONGINT loc, lc;
 
     ROMlib_setreserr(ROMlib_findres(res, &map, &tr, &rr));
-    if(ResErr != CWC(noErr))
+    if(LM(ResErr) != CWC(noErr))
         /*-->*/ return -1;
 
     if(usehandle && *res) /* STARH is overkill */
@@ -116,7 +116,7 @@ LONGINT Executor::ROMlib_SizeResource(Handle res, BOOLEAN usehandle)
     {
         loc = Hx(map, rh.rdatoff) + B3TOLONG(rr->doff);
         ROMlib_setreserr(SetFPos(Hx(map, resfn), fsFromStart, loc));
-        if(ResErr != CWC(noErr))
+        if(LM(ResErr) != CWC(noErr))
             /*-->*/ return -1;
 
         /* If the resource is compressed and we want the memory size, not
@@ -134,7 +134,7 @@ LONGINT Executor::ROMlib_SizeResource(Handle res, BOOLEAN usehandle)
             lc = sizeof(l);
             GetFPos(Hx(map, resfn), &master_save_pos);
             ROMlib_setreserr(FSReadAll(Hx(map, resfn), &lc, (Ptr)l));
-            if(ResErr != CWC(noErr) || l[1] != CLC(COMPRESSED_TAG))
+            if(LM(ResErr) != CWC(noErr) || l[1] != CLC(COMPRESSED_TAG))
             {
                 SetFPos(Hx(map, resfn), fsFromStart, master_save_pos);
                 goto not_compressed_after_all;
@@ -157,7 +157,7 @@ LONGINT Executor::ROMlib_SizeResource(Handle res, BOOLEAN usehandle)
             GUEST<Size> tmpRet;
             ROMlib_setreserr(FSReadAll(Hx(map, resfn), &lc, (Ptr)&tmpRet));
             retval = CL(tmpRet);
-            if(ResErr != CWC(noErr))
+            if(LM(ResErr) != CWC(noErr))
                 /*-->*/ return -1;
         }
     }

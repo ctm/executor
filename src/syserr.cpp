@@ -114,8 +114,8 @@ static GUEST<INTEGER> *findid(INTEGER id)
     int i;
     GUEST<INTEGER> *ip;
 
-    for(i = CW(*(GUEST<INTEGER> *)MR(DSAlertTab)),
-    ip = (GUEST<INTEGER> *)MR(DSAlertTab) + 1;
+    for(i = CW(*(GUEST<INTEGER> *)MR(LM(DSAlertTab))),
+    ip = (GUEST<INTEGER> *)MR(LM(DSAlertTab)) + 1;
         i > 0 && CW(*ip) != id;
         --i, ip = (GUEST<INTEGER> *)((char *)ip + CW(ip[1]) + 2 * sizeof(INTEGER)))
         ;
@@ -258,29 +258,29 @@ void Executor::C_SysError(short errorcode)
 
     LONGINT tmpa5;
 
-    main_gd_rect = PIXMAP_BOUNDS(GD_PMAP(MR(MainDevice)));
+    main_gd_rect = PIXMAP_BOUNDS(GD_PMAP(MR(LM(MainDevice))));
 
-    if(!DSAlertTab)
+    if(!LM(DSAlertTab))
     {
 #if defined(CLIFF_CENTERING_ALGORITHM)
-        DSAlertTab = CL((Ptr)&myalerttab);
-        DSAlertRect.top = CWC(64);
-        DSAlertRect.left = CWC(32);
-        DSAlertRect.bottom = CWC(190);
-        DSAlertRect.right = CWC(480);
+        LM(DSAlertTab) = CL((Ptr)&myalerttab);
+        LM(DSAlertRect).top = CWC(64);
+        LM(DSAlertRect).left = CWC(32);
+        LM(DSAlertRect).bottom = CWC(190);
+        LM(DSAlertRect).right = CWC(480);
 #else
         INTEGER screen_width = CW(main_gd_rect.right);
         INTEGER screen_height = CW(main_gd_rect.bottom);
 
-        DSAlertTab = RM((Ptr)&myalerttab);
-        DSAlertRect.top = CW((screen_height - 126) / 3);
-        DSAlertRect.left = CW((screen_width - 448) / 2);
-        DSAlertRect.bottom = CW(CW(DSAlertRect.top) + 126);
-        DSAlertRect.right = CW(CW(DSAlertRect.left) + 448);
+        LM(DSAlertTab) = RM((Ptr)&myalerttab);
+        LM(DSAlertRect).top = CW((screen_height - 126) / 3);
+        LM(DSAlertRect).left = CW((screen_width - 448) / 2);
+        LM(DSAlertRect).bottom = CW(CW(LM(DSAlertRect).top) + 126);
+        LM(DSAlertRect).right = CW(CW(LM(DSAlertRect).left) + 448);
 #endif
 
-        offsetx = CW(DSAlertRect.left) - 32;
-        offsety = CW(DSAlertRect.top) - 64;
+        offsetx = CW(LM(DSAlertRect).left) - 32;
+        offsety = CW(LM(DSAlertRect).top) - 64;
     }
     else
     {
@@ -291,11 +291,11 @@ void Executor::C_SysError(short errorcode)
     /* 1. Save registers and Stack Pointer */
     /*	  NOT DONE YET... signal handlers sort of do that anyway */
 
-    /* 2. Store errorcode in DSErrCode */
-    DSErrCode = CW(errorcode);
+    /* 2. Store errorcode in LM(DSErrCode) */
+    LM(DSErrCode) = CW(errorcode);
 
-    /* 3. If no Cx(DSAlertTab), bitch */
-    if(!DSAlertTab)
+    /* 3. If no Cx(LM(DSAlertTab)), bitch */
+    if(!LM(DSAlertTab))
     {
         write(2, "This machine thinks its a sadmac\n",
               sizeof("This machine thinks its a sadmac\n") - 1);
@@ -304,7 +304,7 @@ void Executor::C_SysError(short errorcode)
 
 /* 4. Allocate and re-initialize QuickDraw */
     EM_A5 = US_TO_SYN68K(&tmpa5);
-    CurrentA5 = guest_cast<Ptr>(CL(EM_A5));
+    LM(CurrentA5) = guest_cast<Ptr>(CL(EM_A5));
     InitGraf((Ptr)quickbytes + sizeof(quickbytes) - 4);
     ROMlib_initport(&alertport);
     SetPort(&alertport);
@@ -320,7 +320,7 @@ void Executor::C_SysError(short errorcode)
         errorcode = -errorcode;
     else
     {
-        r = DSAlertRect;
+        r = LM(DSAlertRect);
         FillRect(&r, white);
 #if defined(OLDSTYLEALERT)
         r.right = CW(CW(r.right) - (2));
@@ -344,7 +344,7 @@ void Executor::C_SysError(short errorcode)
 
     ap = (struct adef *)findid(errorcode);
     if(!ap)
-        ap = (struct adef *)((INTEGER *)MR(DSAlertTab) + 1);
+        ap = (struct adef *)((INTEGER *)MR(LM(DSAlertTab)) + 1);
 
     /* 7. text strings */
     drawtextstring(CW(ap->primetextid), offsetx, offsety);
@@ -356,8 +356,8 @@ void Executor::C_SysError(short errorcode)
     /* 9. TODO: figure out what to do with the proc ... */
 
     /* 10, 11, 12, 13. check for non-zero button id */
-    /* #warning We blow off ResumeProc until we can properly handle it */
+    /* #warning We blow off LM(ResumeProc) until we can properly handle it */
     if(ap->buttonid)
-        dobuttons(/* CL(ResumeProc) ? Cx(ap->buttonid) + 1 : */ Cx(ap->buttonid),
+        dobuttons(/* CL(LM(ResumeProc)) ? Cx(ap->buttonid) + 1 : */ Cx(ap->buttonid),
                   offsetx, offsety);
 }

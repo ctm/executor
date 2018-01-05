@@ -30,7 +30,7 @@ INTEGER Executor::C_Random()
 {
     INTEGER retval;
 
-    RndSeed = Cx(TickCount()); /* what better? */
+    LM(RndSeed) = Cx(TickCount()); /* what better? */
     if(RANDSEED >= 0x80000000)
         randSeedX = CL((RANDSEED & 0x7FFFFFFF) + 1);
     randSeedX = CL((RANDSEED * 16807 + ((((RANDSEED >> 14) * 16807) + (((RANDSEED & ((1 << 14) - 1)) * 16807) >> 14))

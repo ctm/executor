@@ -47,7 +47,7 @@ void Executor::dialog_create_item(DialogPeek dp, itmp dst, itmp src,
     OffsetRect(&dst->itmr, base_pt.h, base_pt.v);
     data = ITEM_DATA(dst);
 
-    gd_bpp = PIXMAP_PIXEL_SIZE(GD_PMAP(MR(MainDevice)));
+    gd_bpp = PIXMAP_PIXEL_SIZE(GD_PMAP(MR(LM(MainDevice))));
 
     /* many items have a resource id at the beginning of the resource
      data */
@@ -223,7 +223,7 @@ ROMlib_new_dialog_common(DialogPtr dp,
 
     Rect newr;
 
-    TextFont(CW(DlgFont));
+    TextFont(CW(LM(DlgFont)));
     newr.top = newr.left = CWC(0);
     newr.bottom = CW(CW(bounds->bottom) - CW(bounds->top));
     newr.right = CW(CW(bounds->right) - CW(bounds->left));
@@ -317,7 +317,7 @@ void Executor::dialog_compute_rect(Rect *dialog_rect, Rect *dst_rect,
     dialog_width = RECT_WIDTH(dialog_rect);
     dialog_height = RECT_HEIGHT(dialog_rect);
 
-    screen_rect = &GD_RECT(MR(MainDevice));
+    screen_rect = &GD_RECT(MR(LM(MainDevice)));
     screen_width = RECT_WIDTH(screen_rect);
     screen_height = RECT_HEIGHT(screen_rect);
 

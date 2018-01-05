@@ -332,13 +332,13 @@ void _gui_fatal(const char *file, int line, const char *fn,
     vsprintf(errbuf, fmt, ap);
     va_end(ap);
 
-    if(WWExist == EXIST_YES)
+    if(LM(WWExist) == EXIST_YES)
     {
         char buf[10240];
 
         /* Make sure the screen is sane. */
-        SetGDevice(MR(MainDevice));
-        RestoreClutDevice(MR(MainDevice));
+        SetGDevice(MR(LM(MainDevice)));
+        RestoreClutDevice(MR(LM(MainDevice)));
 
         sprintf(buf,
                 "Fatal error.\r"

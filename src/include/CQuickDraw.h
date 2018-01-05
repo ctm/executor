@@ -292,6 +292,11 @@ enum
     colReqErr = (-158),
 };
 
+const LowMemGlobal<GDHandle> TheGDevice { 0xCC8 }; // QuickDraw IMV (true);
+const LowMemGlobal<GDHandle> MainDevice { 0x8A4 }; // QuickDraw IMV (true);
+const LowMemGlobal<GDHandle> DeviceList { 0x8A8 }; // QuickDraw IMV (true);
+const LowMemGlobal<RGBColor> HiliteRGB { 0xDA0 }; // QuickDraw IMV-62 (true);
+
 extern void C_SetStdCProcs(CQDProcs *cProcs);
 PASCAL_TRAP(SetStdCProcs, 0xAA4E);
 
@@ -601,33 +606,5 @@ PASCAL_FUNCTION(GetPixMapInfo);
 
 extern PicHandle C_OpenCPicture(OpenCPicParams *newheaderp);
 PASCAL_TRAP(OpenCPicture, 0xAA20);
-
-#if 0
-#if !defined(TheGDevice_H)
-extern GUEST<GDHandle>	TheGDevice_H;
-extern GUEST<GDHandle>	MainDevice_H;
-extern GUEST<GDHandle>	DeviceList_H;
-#endif
-
-#if SIZEOF_CHAR_P == 4 && !FORCE_EXPERIMENTAL_PACKED_MACROS
-
-enum
-{
-    TheGDevice = (TheGDevice_H.p),
-    MainDevice = (MainDevice_H.p),
-    DeviceList = (DeviceList_H.p),
-};
-
-#else
-
-enum
-{
-    TheGDevice = ((decltype(TheGDevice_H.type[0]))(TheGDevice_H.pp)),
-    MainDevice = ((decltype MainDevice_H.type[0])(MainDevice_H.p)),
-    DeviceList = ((decltype DeviceList_H.type[0])(DeviceList_H.p)),
-};
-
-#endif
-#endif
 }
 #endif /* _CQUICKDRAW_H_ */

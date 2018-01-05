@@ -230,7 +230,7 @@ void Executor::convert_transparent(const PixMap *src1, const PixMap *src2,
     if(CGrafPort_p(thePort))
         hilite_rgb = &CPORT_HILITE_COLOR(theCPort);
     else
-        hilite_rgb = &HiliteRGB;
+        hilite_rgb = &LM(HiliteRGB);
     RGB_TO_PIXEL(bits_per_pixel, hilite_rgb, hilite_color);
 
 #define CONVERT_BITS(read1, read2, write, next1, transform, bpp)     \

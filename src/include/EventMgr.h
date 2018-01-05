@@ -90,9 +90,9 @@ struct EventRecord
     GUEST<INTEGER> modifiers;
 };
 
-#if !defined(KeyMap)
-extern unsigned char KeyMap[16];
-#endif
+const LowMemGlobal<unsigned char[16]> KeyMap { 0x174 }; // EventMgr SysEqu.a (true-b);
+/* was LONGINT KeypadMap[2]; */
+
 }
 
 #endif /* __EVENT__ */

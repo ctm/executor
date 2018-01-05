@@ -28,11 +28,8 @@ struct VBLTask
 };
 typedef VBLTask *VBLTaskPtr;
 
-#if 0
-#if !defined(VBLQueue)
-extern QHdr 	VBLQueue;
-#endif
-#endif
+const LowMemGlobal<QHdr> VBLQueue { 0x160 }; // VRetraceMgr IMII-352 (true);
+const LowMemGlobal<ProcPtr> JVBLTask { 0xD28 }; // VRetraceMgr IMV (false);
 
 extern void ROMlib_clockonoff(LONGINT onoroff);
 extern OSErrRET VInstall(VBLTaskPtr vtaskp);

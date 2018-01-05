@@ -162,7 +162,7 @@ default_search_proc(RGBColor *rgb, GUEST<int32_t> *pixel)
 {
     MatchRec *mr;
 
-    mr = ptr_from_longint<MatchRec *>(GD_REF_CON(MR(TheGDevice)));
+    mr = ptr_from_longint<MatchRec *>(GD_REF_CON(MR(LM(TheGDevice))));
 
     if(mr->red == rgb->red
        && mr->green == rgb->green
@@ -210,7 +210,7 @@ void Executor::C_SeedCFill(BitMap *srcbp, BitMap *dstbp, Rect *srcrp,
     TEMP_ALLOC_DECL(temp_bitmap1_bits);
     TEMP_ALLOC_DECL(temp_bitmap2_bits);
 
-    gdev = MR(TheGDevice);
+    gdev = MR(LM(TheGDevice));
 
     if(!matchprocp)
     {
@@ -293,7 +293,7 @@ void Executor::C_CalcCMask(BitMap *srcbp, BitMap *dstbp, Rect *srcrp,
     TEMP_ALLOC_DECL(temp_bitmap1_bits);
     TEMP_ALLOC_DECL(temp_bitmap2_bits);
 
-    gdev = MR(TheGDevice);
+    gdev = MR(LM(TheGDevice));
 
     if(!matchprocp)
     {

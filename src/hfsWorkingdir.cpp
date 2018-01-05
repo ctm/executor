@@ -20,8 +20,8 @@ OSErr Executor::ROMlib_dirbusy(LONGINT dirid, HVCB *vcbp)
 #if defined(MAC)
     wdentry *wdp, *ewdp;
 
-    for(wdp = (wdentry *)(CL(WDCBsPtr) + sizeof(INTEGER)),
-    ewdp = (wdentry *)(CL(WDCBsPtr) + CW(*(INTEGER *)CL(WDCBsPtr)));
+    for(wdp = (wdentry *)(CL(LM(WDCBsPtr)) + sizeof(INTEGER)),
+    ewdp = (wdentry *)(CL(LM(WDCBsPtr)) + CW(*(INTEGER *)CL(LM(WDCBsPtr))));
         wdp != ewdp; wdp++)
         ;
     return wdp == ewdp ? noErr : fBsyErr;
@@ -40,8 +40,8 @@ OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid,
     GUEST<THz> saveZone;
 
     firstfreep = 0;
-    for(wdp = (wdentry *)(MR(WDCBsPtr) + sizeof(INTEGER)),
-    ewdp = (wdentry *)(MR(WDCBsPtr) + CW(*(GUEST<INTEGER> *)MR(WDCBsPtr)));
+    for(wdp = (wdentry *)(MR(LM(WDCBsPtr)) + sizeof(INTEGER)),
+    ewdp = (wdentry *)(MR(LM(WDCBsPtr)) + CW(*(GUEST<INTEGER> *)MR(LM(WDCBsPtr))));
         wdp != ewdp; wdp++)
     {
         if(!firstfreep && !wdp->vcbp)
@@ -54,19 +54,19 @@ OSErr Executor::ROMlib_mkwd(WDPBPtr pb, HVCB *vcbp, LONGINT dirid,
     }
     if(!firstfreep)
     {
-        n_wd_bytes = CW(*(GUEST<INTEGER> *)MR(WDCBsPtr));
+        n_wd_bytes = CW(*(GUEST<INTEGER> *)MR(LM(WDCBsPtr)));
         new_n_wd_bytes = (n_wd_bytes - sizeof(INTEGER)) * 2 + sizeof(INTEGER);
-        saveZone = TheZone;
-        TheZone = SysZone;
+        saveZone = LM(TheZone);
+        LM(TheZone) = LM(SysZone);
         newptr = NewPtr(new_n_wd_bytes);
-        SysZone = TheZone;
+        LM(SysZone) = LM(TheZone);
         if(!newptr)
             retval = tmwdoErr;
         else
         {
-            BlockMoveData(MR(WDCBsPtr), newptr, n_wd_bytes);
-            DisposPtr(MR(WDCBsPtr));
-            WDCBsPtr = RM(newptr);
+            BlockMoveData(MR(LM(WDCBsPtr)), newptr, n_wd_bytes);
+            DisposPtr(MR(LM(WDCBsPtr)));
+            LM(WDCBsPtr) = RM(newptr);
             *(GUEST<INTEGER> *)newptr = CW(new_n_wd_bytes);
             firstfreep = (wdentry *)(newptr + n_wd_bytes);
             retval = noErr;
@@ -144,8 +144,8 @@ OSErr Executor::hfsPBGetWDInfo(WDPBPtr pb, BOOLEAN async)
     if(Cx(pb->ioWDIndex) > 0)
     {
         i = Cx(pb->ioWDIndex);
-        wdp = (wdentry *)(MR(WDCBsPtr) + sizeof(INTEGER));
-        ewdp = (wdentry *)(MR(WDCBsPtr) + CW(*(GUEST<INTEGER> *)MR(WDCBsPtr)));
+        wdp = (wdentry *)(MR(LM(WDCBsPtr)) + sizeof(INTEGER));
+        ewdp = (wdentry *)(MR(LM(WDCBsPtr)) + CW(*(GUEST<INTEGER> *)MR(LM(WDCBsPtr))));
         if(Cx(pb->ioVRefNum) < 0)
         {
             for(; wdp != ewdp; wdp++)
@@ -179,7 +179,7 @@ OSErr Executor::hfsPBGetWDInfo(WDPBPtr pb, BOOLEAN async)
                 str255assign(MR(pb->ioNamePtr), (StringPtr)vcbp->vcbVN);
             pb->ioWDProcID = 0;
             pb->ioVRefNum = pb->ioWDVRefNum = vcbp->vcbVRefNum;
-            pb->ioWDDirID = (vcbp == MR(DefVCBPtr)) ? DefDirID : CLC(2);
+            pb->ioWDDirID = (vcbp == MR(LM(DefVCBPtr))) ? DefDirID : CLC(2);
             foundelsewhere = true;
         }
     }
@@ -232,7 +232,7 @@ void Executor::ROMlib_adjustdirid(LONGINT *diridp, HVCB *vcbp, INTEGER vrefnum)
         if(MR(wdp->vcbp) == vcbp)
             *diridp = CL(wdp->dirid);
     }
-    else if(*diridp == 0 && !vrefnum /* vcbp == CL(DefVCBPtr) */)
+    else if(*diridp == 0 && !vrefnum /* vcbp == CL(LM(DefVCBPtr)) */)
         *diridp = CL(DefDirID);
     if(*diridp == 0)
         *diridp = 2;

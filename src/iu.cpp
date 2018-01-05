@@ -306,9 +306,9 @@ void Executor::C_IUSetIntl(INTEGER rn, INTEGER id, Handle newh) /* IMI-506 */
     INTEGER oldcurmap;
     Handle h;
 
-    oldcurmap = Cx(CurMap);
+    oldcurmap = Cx(LM(CurMap));
     UseResFile(rn);
-    if(ResErr == CWC(noErr))
+    if(LM(ResErr) == CWC(noErr))
     {
         h = IUGetIntl(id);
         if(h && HomeResFile(h) == rn)

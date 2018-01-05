@@ -394,7 +394,7 @@ OSErr Executor::ROMlib_serialopen(ParmBlkPtr pbp, DCtlPtr dcp) /* INTERNAL */
 #endif
                     dcp->dCtlFlags.raw_or(CWC(OPENBIT));
                     SerReset(CW(pbp->cntrlParam.ioCRefNum),
-                             (CW(pbp->cntrlParam.ioCRefNum) == AINREFNUM || CW(pbp->cntrlParam.ioCRefNum) == AOUTREFNUM) ? CW(SPPortA) : CW(SPPortB));
+                             (CW(pbp->cntrlParam.ioCRefNum) == AINREFNUM || CW(pbp->cntrlParam.ioCRefNum) == AOUTREFNUM) ? CW(LM(SPPortA)) : CW(LM(SPPortB)));
 #if defined(LINUX) || defined(MACOSX)
                 }
 #endif

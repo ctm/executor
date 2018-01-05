@@ -13,21 +13,21 @@ using namespace Executor;
 
 INTEGER Executor::ROMlib_setreserr(INTEGER reserr) /* INTERNAL */
 {
-    ResErr = CW(reserr);
-    if(ResErr != CWC(noErr) && ResErrProc)
+    LM(ResErr) = CW(reserr);
+    if(LM(ResErr) != CWC(noErr) && LM(ResErrProc))
     {
         ROMlib_hook(res_reserrprocnumber);
 
         EM_D0 = (unsigned short)reserr; /* TODO: is unsigned short
 							 correct? */
-        CALL_EMULATOR((syn68k_addr_t)CL_RAW((long)ResErrProc.raw()));
+        CALL_EMULATOR((syn68k_addr_t)CL_RAW((long)LM(ResErrProc).raw()));
     }
-    return CW(ResErr);
+    return CW(LM(ResErr));
 }
 
 INTEGER Executor::C_ResError()
 {
-    return CW(ResErr);
+    return CW(LM(ResErr));
 }
 
 INTEGER Executor::C_GetResFileAttrs(INTEGER rn)

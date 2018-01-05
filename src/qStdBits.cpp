@@ -105,7 +105,7 @@ void Executor::canonicalize_bogo_map(BitMap *bogo_map, PixMap **canonical_addr,
 
             canonical->vRes = canonical->hRes = CLC(72 << 16);
 
-            gd_pmap = GD_PMAP(MR(TheGDevice));
+            gd_pmap = GD_PMAP(MR(LM(TheGDevice)));
             if(canonical->baseAddr == PIXMAP_BASEADDR_X(gd_pmap))
             {
                 pixmap_set_pixel_fields(canonical, PIXMAP_PIXEL_SIZE(gd_pmap));
@@ -226,10 +226,10 @@ write_copybits_picdata(PixMap *src, PixMap *dst,
         _src = (PixMap *)alloca(sizeof *_src);
         _src_rect = (Rect *)alloca(sizeof *_src_rect);
 
-        TheZoneGuard guard(ApplZone);
+        TheZoneGuard guard(LM(ApplZone));
 
         if(FreeMemSys() >= FreeMem())
-            TheZone = SysZone;
+            LM(TheZone) = LM(SysZone);
 
         pixmap_copy(src, src_rect,
                     _src, _src_rect);
@@ -528,7 +528,7 @@ ROMlib_real_copy_bits_helper(PixMap *src, PixMap *dst,
     TEMP_ALLOC_DECL(temp_scale_bits);
     TEMP_ALLOC_DECL(temp_overlap_bits);
 
-    the_gd = MR(TheGDevice);
+    the_gd = MR(LM(TheGDevice));
     the_gd_pmap = GD_PMAP(the_gd);
     current_port = thePort;
 

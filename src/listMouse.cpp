@@ -225,7 +225,7 @@ BOOLEAN Executor::C_LClick(Point pt, INTEGER mods,
         newcell.h = CW(pt.h);
         newcell.v = CW(pt.v);
         findcell(&newcell, list);
-        if(newcell.h == HxX(list, lastClick.h) && newcell.v == HxX(list, lastClick.v) && TickCount() < Hx(list, clikTime) + CL(DoubleTime))
+        if(newcell.h == HxX(list, lastClick.h) && newcell.v == HxX(list, lastClick.v) && TickCount() < Hx(list, clikTime) + CL(LM(DoubleTime)))
             doubleclick = true;
         HxX(list, lastClick) = newcell;
         hiliteempty = !(flags & lNoNilHilite);

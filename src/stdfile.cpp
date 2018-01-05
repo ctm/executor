@@ -419,15 +419,15 @@ static StringPtr getdiskname(BOOLEAN *ejectablep, bool *writablep)
     static Str255 retval;
     ParamBlockRec pbr;
 
-    if(SFSaveDisk != cachedvrn)
+    if(LM(SFSaveDisk) != cachedvrn)
     {
         OSErr err;
 
         pbr.volumeParam.ioNamePtr = RM(&retval[0]);
         pbr.volumeParam.ioVolIndex = 0;
-        pbr.volumeParam.ioVRefNum = CW(-CW(SFSaveDisk));
+        pbr.volumeParam.ioVRefNum = CW(-CW(LM(SFSaveDisk)));
         err = PBGetVInfo(&pbr, false);
-        cachedvrn = SFSaveDisk;
+        cachedvrn = LM(SFSaveDisk);
         if(err == noErr)
         {
             ejectable = !(pbr.volumeParam.ioVAtrb & CWC(VNONEJECTABLEBIT));
@@ -460,7 +460,7 @@ static void drawjobberattop(DialogPeek dp)
 
     GetPenState(&ps);
     PenNormal();
-    if(CL(CurDirStore) == 2)
+    if(CL(LM(CurDirStore)) == 2)
     {
 #if 1
         /* TODO: ask cliff about a better way to do this */
@@ -495,9 +495,9 @@ static LONGINT getdirid(StringPtr fname)
 
     hpb.dirInfo.ioCompletion = 0;
     hpb.dirInfo.ioNamePtr = RM(fname);
-    hpb.dirInfo.ioVRefNum = CW(-CW(SFSaveDisk));
+    hpb.dirInfo.ioVRefNum = CW(-CW(LM(SFSaveDisk)));
     hpb.dirInfo.ioFDirIndex = CWC(0);
-    hpb.dirInfo.ioDrDirID = CurDirStore;
+    hpb.dirInfo.ioDrDirID = LM(CurDirStore);
     err = PBGetCatInfo(&hpb, false);
     if(err == noErr)
         retval = CL(hpb.dirInfo.ioDrDirID);
@@ -613,9 +613,9 @@ static void getcurname(fltype *f)
     hpb.dirInfo.ioCompletion = 0;
     hpb.dirInfo.ioNamePtr = RM(&f->flcurdirname[0]);
     f->flcurdirname[0] = 0;
-    hpb.dirInfo.ioVRefNum = CW(-CW(SFSaveDisk));
+    hpb.dirInfo.ioVRefNum = CW(-CW(LM(SFSaveDisk)));
     hpb.dirInfo.ioFDirIndex = CWC(-1);
-    hpb.dirInfo.ioDrDirID = CurDirStore;
+    hpb.dirInfo.ioDrDirID = LM(CurDirStore);
     err = PBGetCatInfo(&hpb, false);
     if(err != noErr)
     {
@@ -729,13 +729,13 @@ static void flfill(fltype *f)
     SetCursor(STARH((watchh = GetCursor(watchCursor))));
 
     pb.hFileInfo.ioNamePtr = RM(&s[0]);
-    pb.hFileInfo.ioVRefNum = CW(-CW(SFSaveDisk));
+    pb.hFileInfo.ioVRefNum = CW(-CW(LM(SFSaveDisk)));
     err = noErr;
     errcount = 0;
     for(dirindex = 1; err != fnfErr && errcount != 3; dirindex++)
     {
         pb.hFileInfo.ioFDirIndex = CW(dirindex);
-        pb.hFileInfo.ioDirID = CurDirStore;
+        pb.hFileInfo.ioDirID = LM(CurDirStore);
         err = PBGetCatInfo(&pb, false);
         if(err)
         {
@@ -852,7 +852,7 @@ static void realcd(DialogPeek dp, LONGINT dir)
 {
     fltype *fp;
 
-    CurDirStore = CL(dir);
+    LM(CurDirStore) = CL(dir);
     fp = WINDFL(dp);
     SetHandleSize((Handle)fp->flinfo, (Size)0);
     SetHandleSize((Handle)fp->flstrs, (Size)0);
@@ -883,7 +883,7 @@ static LONGINT getparent(LONGINT dirid)
 
     cb.dirInfo.ioCompletion = 0;
     cb.dirInfo.ioNamePtr = 0;
-    cb.dirInfo.ioVRefNum = CW(-CW(SFSaveDisk));
+    cb.dirInfo.ioVRefNum = CW(-CW(LM(SFSaveDisk)));
     cb.dirInfo.ioFDirIndex = CWC(-1);
     cb.dirInfo.ioDrDirID = CL(dirid);
     err = PBGetCatInfo(&cb, false);
@@ -940,17 +940,17 @@ static BOOLEAN moveuponedir(DialogPtr dp)
     GUEST<INTEGER> vrn;
     BOOLEAN retval;
 
-    parent = getparent(CL(CurDirStore));
-    if(parent != CL(CurDirStore) && parent != 1)
+    parent = getparent(CL(LM(CurDirStore)));
+    if(parent != CL(LM(CurDirStore)) && parent != 1)
     {
-        CurDirStore = CL(parent);
+        LM(CurDirStore) = CL(parent);
         retval = true;
     }
     else
     {
-        vrn = CW(-CW(SFSaveDisk));
-        retval = findparent(&vrn, &CurDirStore);
-        SFSaveDisk = CW(-CW(vrn));
+        vrn = CW(-CW(LM(SFSaveDisk)));
+        retval = findparent(&vrn, &LM(CurDirStore));
+        LM(SFSaveDisk) = CW(-CW(vrn));
     }
     return retval;
 }
@@ -1153,7 +1153,7 @@ INTEGER Executor::C_ROMlib_stdffilt(DialogPeek dp, EventRecord *evt,
                     if(!fl->flgraynondirs && dp->editField == CWC(-1))
                     {
                         flep = MR(*fl->flinfo) + fl->flnmfil - 1;
-                        if(CL(evt->when) > lastkeydowntime + CL(DoubleTime))
+                        if(CL(evt->when) > lastkeydowntime + CL(LM(DoubleTime)))
                         {
                             flp = MR(*fl->flinfo);
                             prefix[0] = 0;
@@ -1194,7 +1194,7 @@ INTEGER Executor::C_ROMlib_stdffilt(DialogPeek dp, EventRecord *evt,
                 h = (ControlHandle)MR(h_s);
                 flmouse(fl, evt->where.get(), h);
                 ticks = TickCount();
-                if(fl->flsel != -1 && savesel == fl->flsel && (ticks < oldticks + CL(DoubleTime)))
+                if(fl->flsel != -1 && savesel == fl->flsel && (ticks < oldticks + CL(LM(DoubleTime))))
                 {
                     prefix[0] = 0;
                     *ith = CWC(opentoken);
@@ -1272,11 +1272,11 @@ static void flinit(fltype *f, Rect *r, ControlHandle sh)
     f->flnmlin = (CW(r->bottom) - CW(r->top)) / f->fllinht;
     f->flnmfil = 0;
     f->flsel = -1;
-    savezone = TheZone;
-    TheZone = SysZone;
+    savezone = LM(TheZone);
+    LM(TheZone) = LM(SysZone);
     f->flinfo = (GUEST<fltype::flinfostr *> *)NewHandle((Size)0);
     f->flstrs = (GUEST<char *> *)NewHandle((Size)0);
-    TheZone = savezone;
+    LM(TheZone) = savezone;
 }
 
 static void stdfflip(Rect *rp, INTEGER n, INTEGER height)
@@ -1322,9 +1322,9 @@ static BOOLEAN trackdirs(DialogPeek dp)
         hpb.dirInfo.ioCompletion = 0;
         hpb.dirInfo.ioNamePtr = RM(&next->name[0]);
         next->name[0] = 0;
-        hpb.dirInfo.ioVRefNum = CW(-CW(SFSaveDisk));
+        hpb.dirInfo.ioVRefNum = CW(-CW(LM(SFSaveDisk)));
         hpb.dirInfo.ioFDirIndex = CWC(-1);
-        hpb.dirInfo.ioDrDirID = CurDirStore;
+        hpb.dirInfo.ioDrDirID = LM(CurDirStore);
         max_width = 0;
         count = 0;
         done = false;
@@ -1490,8 +1490,8 @@ static BOOLEAN trackdirs(DialogPeek dp)
     {
         for(i = 0, next = &first; i != sel; ++i, next = next->next)
             ;
-        CurDirStore = CL(next->dirid);
-        SFSaveDisk = CW(-next->vrefnum);
+        LM(CurDirStore) = CL(next->dirid);
+        LM(SFSaveDisk) = CW(-next->vrefnum);
         return true;
     }
     ALLOCAEND
@@ -1512,8 +1512,8 @@ makeworking(fltype *f)
             WDPBRec wdpb;
             OSErr err;
 
-            wdpb.ioVRefNum = CW(-CW(SFSaveDisk));
-            wdpb.ioWDDirID = CurDirStore;
+            wdpb.ioVRefNum = CW(-CW(LM(SFSaveDisk)));
+            wdpb.ioWDDirID = LM(CurDirStore);
             wdpb.ioWDProcID = TICKX("STDF");
             wdpb.ioNamePtr = 0;
             err = PBOpenWD(&wdpb, false);
@@ -1525,8 +1525,8 @@ makeworking(fltype *f)
         break;
         case new_sf:
         case new_custom_sf:
-            f->flreplyp.nreplyp->sfFile.vRefNum = CW(-CW(SFSaveDisk));
-            f->flreplyp.nreplyp->sfFile.parID = CurDirStore;
+            f->flreplyp.nreplyp->sfFile.vRefNum = CW(-CW(LM(SFSaveDisk)));
+            f->flreplyp.nreplyp->sfFile.parID = LM(CurDirStore);
             break;
         default:
             warning_unexpected("flavor = %d", f->flavor);
@@ -1775,14 +1775,14 @@ static void bumpsavedisk(DialogPtr dp, BOOLEAN always)
         /*      beenhere = true; */
     }
 #endif
-    pb.volumeParam.ioVRefNum = CW(-CW(SFSaveDisk));
+    pb.volumeParam.ioVRefNum = CW(-CW(LM(SFSaveDisk)));
     pb.volumeParam.ioNamePtr = 0;
     pb.volumeParam.ioVolIndex = 0;
     err = PBHGetVInfo(&pb, false);
     if(err != noErr)
         warning_unexpected("PBHGetVInfo returns %d", err);
-    else if(!SFSaveDisk || ISWDNUM(-CW(SFSaveDisk)))
-        SFSaveDisk = CW(-CW(pb.volumeParam.ioVRefNum));
+    else if(!LM(SFSaveDisk) || ISWDNUM(-CW(LM(SFSaveDisk))))
+        LM(SFSaveDisk) = CW(-CW(pb.volumeParam.ioVRefNum));
     if(always || pb.ioParam.ioResult != CWC(noErr) || ejected(&pb))
     {
         current = pb.volumeParam.ioVRefNum;
@@ -1811,8 +1811,8 @@ static void bumpsavedisk(DialogPtr dp, BOOLEAN always)
         } while(err == noErr);
         if(vref)
         {
-            SFSaveDisk = CW(-vref);
-            CurDirStore = CLC(2);
+            LM(SFSaveDisk) = CW(-vref);
+            LM(CurDirStore) = CLC(2);
         }
     }
 }
@@ -1929,7 +1929,7 @@ void adjustdrivebutton(DialogPtr dp)
 
     count = 0;
     seenunix = false;
-    for(vcbp = (HVCB *)MR(VCBQHdr.qHead); vcbp;
+    for(vcbp = (HVCB *)MR(LM(VCBQHdr).qHead); vcbp;
         vcbp = (HVCB *)MR(vcbp->qLink))
         if(vcbp->vcbCTRef && vcbp->vcbDrvNum)
             ++count;
@@ -1948,7 +1948,7 @@ void adjustdrivebutton(DialogPtr dp)
 
 static void doeject(DialogPtr dp)
 {
-    Eject((StringPtr) "", -CW(SFSaveDisk));
+    Eject((StringPtr) "", -CW(LM(SFSaveDisk)));
     adjustdrivebutton(dp);
     bumpsavedisk(dp, true);
 }
@@ -2062,12 +2062,12 @@ static void unixcd(fltype *f)
     LONGINT dirid;
 
     name = (StringPtr)(MR(*f->flstrs) + MR(*f->flinfo)[f->flsel].floffs);
-    vrefnum = -CW(SFSaveDisk);
-    dirid = CL(CurDirStore);
+    vrefnum = -CW(LM(SFSaveDisk));
+    dirid = CL(LM(CurDirStore));
     if(unixcore(name, &vrefnum, &dirid) == noErr)
     {
-        SFSaveDisk = CW(-vrefnum);
-        CurDirStore = CL(dirid);
+        LM(SFSaveDisk) = CW(-vrefnum);
+        LM(CurDirStore) = CL(dirid);
     }
 }
 
@@ -2082,7 +2082,7 @@ get_starting_point(Point *pp)
     INTEGER screen_width, screen_height;
     Rect main_gd_rect;
 
-    main_gd_rect = PIXMAP_BOUNDS(GD_PMAP(MR(MainDevice)));
+    main_gd_rect = PIXMAP_BOUNDS(GD_PMAP(MR(LM(MainDevice))));
     screen_width = CW(main_gd_rect.right);
     screen_height = CW(main_gd_rect.bottom);
     pp->h = (screen_width - STANDARD_WIDTH) / 2;
@@ -2203,8 +2203,8 @@ new_folder_from_dp(DialogPtr dp, fltype *f)
     bool retval;
 
     getditext(dp, 3, str);
-    hpb.ioParam.ioVRefNum = CW(-CW(SFSaveDisk));
-    hpb.fileParam.ioDirID = CurDirStore;
+    hpb.ioParam.ioVRefNum = CW(-CW(LM(SFSaveDisk)));
+    hpb.fileParam.ioDirID = LM(CurDirStore);
     if(str[0] > 31)
         str[0] = 31;
     hpb.ioParam.ioNamePtr = RM(&str[0]);
@@ -2335,7 +2335,7 @@ void spfcommon(Point p, StringPtr prompt, StringPtr name, dialog_hook_u dh,
         f.flavor = flavor;
         f.flreplyp = rep;
 
-        if(p.h < 2 || p.v < CW(MBarHeight) + 7)
+        if(p.h < 2 || p.v < CW(LM(MBarHeight)) + 7)
             get_starting_point(&p);
 
         *SF_GOOD_XP(&f) = CBC(false);
@@ -2506,8 +2506,8 @@ void spfcommon(Point p, StringPtr prompt, StringPtr name, dialog_hook_u dh,
         SetWRefCon((WindowPtr)dp, US_TO_SYN68K(&f));
         if(CW(dp->portRect.bottom) + p.v + 7 > CW(screenBitsX.bounds.bottom))
             p.v = CW(screenBitsX.bounds.bottom) - CW(dp->portRect.bottom) - 7;
-        if(p.v < CW(MBarHeight) + 7)
-            p.v = CW(MBarHeight) + 7;
+        if(p.v < CW(LM(MBarHeight)) + 7)
+            p.v = CW(LM(MBarHeight)) + 7;
         MoveWindow((WindowPtr)dp, p.h, p.v, false);
 
         ihit = -1;
@@ -2601,7 +2601,7 @@ void spfcommon(Point p, StringPtr prompt, StringPtr name, dialog_hook_u dh,
             }
             else if(ihit == FAKEOPENDIR)
             {
-                CurDirStore = *SF_FTYPE_XP(&f);
+                LM(CurDirStore) = *SF_FTYPE_XP(&f);
                 unixcd(&f);
                 ihit = FAKEREDRAW;
             }
@@ -2609,7 +2609,7 @@ void spfcommon(Point p, StringPtr prompt, StringPtr name, dialog_hook_u dh,
             {
                 if(do_new_folder(&f))
                 {
-                    CurDirStore = *SF_FTYPE_XP(&f);
+                    LM(CurDirStore) = *SF_FTYPE_XP(&f);
                     unixcd(&f);
                     ihit = FAKEREDRAW;
                 }
@@ -2643,13 +2643,13 @@ void spfcommon(Point p, StringPtr prompt, StringPtr name, dialog_hook_u dh,
                 if(err == noErr)
                 {
                     adjustdrivebutton(dp);
-                    SFSaveDisk = CW(-CW(pbr.volumeParam.ioVRefNum));
-                    CurDirStore = CLC(2);
+                    LM(SFSaveDisk) = CW(-CW(pbr.volumeParam.ioVRefNum));
+                    LM(CurDirStore) = CLC(2);
                     ihit = FAKEREDRAW;
                 }
             }
             if(ihit == FAKEREDRAW)
-                realcd((DialogPeek)dp, CL(CurDirStore));
+                realcd((DialogPeek)dp, CL(LM(CurDirStore)));
         }
         if(f.flavor != original_sf && dh.odh)
             ihit = ROMlib_CALLDHOOK(&f, -2, dp, dh); /* the mac does this */

@@ -354,27 +354,27 @@ struct wdentry
 
 #if 0
 #if defined(MAC)
-extern Ptr WDCBsPtr : 0x372;
-extern LONGINT BufTgFNum : 0x2FC;
+extern Ptr LM(WDCBsPtr) : 0x372;
+extern LONGINT LM(BufTgFNum) : 0x2FC;
 extern INTEGER BufTgFFlag : 0x300;
-extern INTEGER BufTgFBkNum : 0x302;
-extern LONGINT BufTgDate : 0x304;
+extern INTEGER LM(BufTgFBkNum) : 0x302;
+extern LONGINT LM(BufTgDate) : 0x304;
 extern LONGINT TFSTagData0 : 0x38A;
 extern LONGINT TFSTagData1 : 0x38E;
 #else
 
 #if !defined(WDCBsPtr_H)
 extern GUEST<Ptr> WDCBsPtr_H;
-extern LONGINT BufTgFNum;
+extern LONGINT LM(BufTgFNum);
 extern INTEGER BufTgFFlag;
-extern INTEGER BufTgFBkNum;
-extern LONGINT BufTgDate;
+extern INTEGER LM(BufTgFBkNum);
+extern LONGINT LM(BufTgDate);
 extern LONGINT TFSTagData0;
 extern LONGINT TFSTagData1;
-extern INTEGER SCSIFlags;
+extern INTEGER LM(SCSIFlags);
 #endif
 
-#define WDCBsPtr (WDCBsPtr_H.p)
+#define LM(WDCBsPtr) (WDCBsPtr_H.p)
 
 #endif
 #endif
@@ -391,8 +391,8 @@ extern INTEGER SCSIFlags;
                                  : false;                                              \
     })
 
-#define WDNUMTOWDP(v) ((wdentry *)(MR(WDCBsPtr) + (INTEGER)((v) ^ WDMAGIC)))
-#define WDPTOWDNUM(p) (((char *)(p) - (char *)MR(WDCBsPtr)) ^ WDMAGIC)
+#define WDNUMTOWDP(v) ((wdentry *)(MR(LM(WDCBsPtr)) + (INTEGER)((v) ^ WDMAGIC)))
+#define WDPTOWDNUM(p) (((char *)(p) - (char *)MR(LM(WDCBsPtr))) ^ WDMAGIC)
 
 typedef enum { seteof,
                allocany,
@@ -415,9 +415,9 @@ enum
 };
 
 #if !defined(MAC)
-#define CurTime (GetDateTime(&Time), Cx(Time))
+#define CurTime (GetDateTime(&LM(Time)), Cx(LM(Time)))
 #else
-#define CurTime Cx(Time)
+#define CurTime Cx(LM(Time))
 #endif
 
 #define EJECTALERTID (-4061)

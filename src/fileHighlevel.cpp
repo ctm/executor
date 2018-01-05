@@ -169,11 +169,11 @@ get_fcb_info (FSSpecPtr fsp)
   swapped_vrefnum = fsp->vRefNum;
   swapped_fnum = CL (get_file_num (fsp));
 
-  fcbsptr = (char *) CL (FCBSPtr);
+  fcbsptr = (char *) CL (LM(FCBSPtr));
   total_length = CW(*(short *)fcbsptr);
-  fcbp = (filecontrolblock *) ((short *)CL(FCBSPtr)+1);
-  efcbp = (filecontrolblock *) ((char *)CL(FCBSPtr) + total_length);
-  fcb_size = CW (FSFCBLen);
+  fcbp = (filecontrolblock *) ((short *)CL(LM(FCBSPtr))+1);
+  efcbp = (filecontrolblock *) ((char *)CL(LM(FCBSPtr)) + total_length);
+  fcb_size = CW (LM(FSFCBLen));
   for (;fcbp < efcbp; fcbp = (filecontrolblock *) ((char *)fcbp + fcb_size))
     {
       HVCB *vptr;
@@ -246,7 +246,7 @@ restore_fcb (const save_fcb_info_t *infop)
 {
   char *fcbsptr;
 
-  fcbsptr = (char *) CL (FCBSPtr);
+  fcbsptr = (char *) CL (LM(FCBSPtr));
   if (infop)
     {
       if (infop->refnum)

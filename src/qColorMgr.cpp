@@ -127,7 +127,7 @@ ROMlib_search_proc(RGBColor *rgb)
     int pixel_size;
     uint32_t retval;
 
-    gd = MR(TheGDevice);
+    gd = MR(LM(TheGDevice));
     pixel_size = PIXMAP_PIXEL_SIZE(GD_PMAP(gd));
     if(pixel_size > 8)
     {
@@ -209,13 +209,13 @@ LONGINT Executor::C_Color2Index(RGBColor *rgb)
 
     /* rebuild the inverse table for the current graphics device
      if the color table is newer than the inverse table */
-    gdev = MR(TheGDevice);
+    gdev = MR(LM(TheGDevice));
     gd_ctab = PIXMAP_TABLE(GD_PMAP(gdev));
     gd_itab = GD_ITABLE(gdev);
     if(CTAB_SEED_X(gd_ctab) != ITAB_SEED_X(gd_itab))
         MakeITable(gd_ctab, gd_itab, GD_RES_PREF(gdev));
 
-    for(t = GD_SEARCH_PROC(MR(TheGDevice)), success_p = false;
+    for(t = GD_SEARCH_PROC(MR(LM(TheGDevice))), success_p = false;
         t && !success_p;)
     {
         BOOLEAN(*search_fn)
@@ -252,7 +252,7 @@ LONGINT Executor::C_Color2Index(RGBColor *rgb)
 
 void Executor::C_Index2Color(LONGINT index, RGBColor *rgb)
 {
-    CTabHandle ctab = PIXMAP_TABLE(GD_PMAP(MR(TheGDevice)));
+    CTabHandle ctab = PIXMAP_TABLE(GD_PMAP(MR(LM(TheGDevice))));
     *rgb = CTAB_TABLE(ctab)[index].rgb;
 }
 
@@ -278,7 +278,7 @@ BOOLEAN Executor::C_RealColor(RGBColor *rgb)
 
     /* rebuild the inverse table for the current graphics device
      if the color table is newer than the inverse table */
-    gdev = MR(TheGDevice);
+    gdev = MR(LM(TheGDevice));
     table = PIXMAP_TABLE(GD_PMAP(gdev));
     inverse_table = GD_ITABLE(gdev);
     if(CTAB_SEED_X(table) != ITAB_SEED_X(inverse_table))
@@ -309,7 +309,7 @@ void Executor::C_GetSubTable(CTabHandle in_ctab, INTEGER resolution,
     PixMapHandle gd_pmap;
     int i;
 
-    gdev = MR(TheGDevice);
+    gdev = MR(LM(TheGDevice));
     gd_pmap = GD_PMAP(gdev);
 
     if(!target_ctab)
@@ -342,7 +342,7 @@ void Executor::C_GetSubTable(CTabHandle in_ctab, INTEGER resolution,
 	     this itab around forever */
             if(cached_itab == NULL)
             {
-                TheZoneGuard guard(SysZone);
+                TheZoneGuard guard(LM(SysZone));
 
                 cached_itab = (ITabHandle)NewHandle((Size)sizeof(ITab));
             }
@@ -626,24 +626,24 @@ void Executor::C_MakeITable(CTabHandle color_table, ITabHandle inverse_table,
     }
 
     /* We are supposed to override a resolution of zero with the
-   * resolution of TheGDevice (IMV-142).  */
+   * resolution of LM(TheGDevice) (IMV-142).  */
     if(resolution == 0)
-        resolution = GD_RES_PREF(MR(TheGDevice));
+        resolution = GD_RES_PREF(MR(LM(TheGDevice)));
 
     /* We are supposed to override a color_table of NULL with the color
-   * table of TheGDevice (IMV-142).  */
+   * table of LM(TheGDevice) (IMV-142).  */
     if(color_table == NULL)
-        color_table = PIXMAP_TABLE(GD_PMAP(MR(TheGDevice)));
+        color_table = PIXMAP_TABLE(GD_PMAP(MR(LM(TheGDevice))));
 
     /* We are supposed to override an inverse_table of NULL with the
-   * inverse table of TheGDevice (IMV-142).  */
+   * inverse table of LM(TheGDevice) (IMV-142).  */
     if(inverse_table == NULL)
     {
-        inverse_table = GD_ITABLE(MR(TheGDevice));
+        inverse_table = GD_ITABLE(MR(LM(TheGDevice)));
         if(!inverse_table)
         {
             inverse_table = (ITabHandle)NewHandle(0);
-            GD_ITABLE_X(MR(TheGDevice)) = RM(inverse_table);
+            GD_ITABLE_X(MR(LM(TheGDevice))) = RM(inverse_table);
         }
     }
 
@@ -831,7 +831,7 @@ void Executor::C_ProtectEntry(INTEGER index, BOOLEAN protect)
     GDHandle gdev;
     ColorSpec *entry;
 
-    gdev = MR(TheGDevice);
+    gdev = MR(LM(TheGDevice));
     entry = &CTAB_TABLE(PIXMAP_TABLE(GD_PMAP(gdev)))[index];
     if(protect)
     {
@@ -860,7 +860,7 @@ void Executor::C_ReserveEntry(INTEGER index, BOOLEAN reserve)
     ColorSpec *entry;
     GUEST<INTEGER> old_value;
 
-    gdev = MR(TheGDevice);
+    gdev = MR(LM(TheGDevice));
     ctab = PIXMAP_TABLE(GD_PMAP(gdev));
     entry = &CTAB_TABLE(ctab)[index];
 
@@ -904,7 +904,7 @@ void Executor::C_SetEntries(INTEGER start, INTEGER count, ColorSpec *atable)
     /* for calling `vdriver_set_colors ()' */
     int first_color, num_colors;
 
-    gd = MR(TheGDevice);
+    gd = MR(LM(TheGDevice));
 
     if(GD_TYPE_X(gd) != CWC(clutType))
         /* #### return error code? */
@@ -968,7 +968,7 @@ void Executor::C_SetEntries(INTEGER start, INTEGER count, ColorSpec *atable)
     if(ctab_changed_p)
     {
         CTAB_SEED_X(ctab) = CL(GetCTSeed());
-        if(gd == MR(MainDevice))
+        if(gd == MR(LM(MainDevice)))
         {
             if(num_colors > 0)
             {
@@ -985,7 +985,7 @@ void Executor::C_AddSearch(ProcPtr searchProc)
     GDHandle gdev;
     SProcHndl search_list_elt;
 
-    gdev = MR(TheGDevice);
+    gdev = MR(LM(TheGDevice));
 
     search_list_elt = (SProcHndl)NewHandle(sizeof(SProcRec));
     HxX(search_list_elt, srchProc) = RM(searchProc);
@@ -1007,7 +1007,7 @@ void Executor::C_DelSearch(ProcPtr searchProc)
     GDHandle gdev;
     SProcHndl s, prev;
 
-    gdev = MR(TheGDevice);
+    gdev = MR(LM(TheGDevice));
 
     prev = NULL;
     for(s = GD_SEARCH_PROC(gdev); s != NULL; s = HxP(s, nxtSrch))
@@ -1038,7 +1038,7 @@ void Executor::C_DelComp(ProcPtr compProc)
 
 void Executor::C_SetClientID(INTEGER id)
 {
-    GD_ID_X(MR(TheGDevice)) = CW(id);
+    GD_ID_X(MR(LM(TheGDevice))) = CW(id);
 }
 
 void Executor::C_SaveEntries(CTabHandle src, CTabHandle result,
@@ -1049,7 +1049,7 @@ void Executor::C_SaveEntries(CTabHandle src, CTabHandle result,
     int i;
 
     if(src == NULL)
-        src = PIXMAP_TABLE(GD_PMAP(MR(TheGDevice)));
+        src = PIXMAP_TABLE(GD_PMAP(MR(LM(TheGDevice))));
 
     src_ctab_size = CTAB_SIZE(src);
     req_size = CW(selection->reqLSize);
@@ -1090,7 +1090,7 @@ void Executor::C_RestoreEntries(CTabHandle src, CTabHandle dst,
     int i;
 
     if(dst == NULL)
-        dst = PIXMAP_TABLE(GD_PMAP(MR(TheGDevice)));
+        dst = PIXMAP_TABLE(GD_PMAP(MR(LM(TheGDevice))));
 
     dst_ctab_size = CTAB_SIZE(dst);
     req_size = CW(selection->reqLSize);

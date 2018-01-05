@@ -1462,7 +1462,7 @@ try_to_mmap_file(FSSpecPtr fsp, LONGINT offset, LONGINT length,
                     size_t pagesize;
 
                     pagesize = getpagesize();
-                    fp = (const fcbrec *)(MR(FCBSPtr) + rn);
+                    fp = (const fcbrec *)(MR(LM(FCBSPtr)) + rn);
                     /* NOTE: right now we let them place it anywhere they
 		     want -- eventually it probably makes sense to try to
 		     get it placed high */

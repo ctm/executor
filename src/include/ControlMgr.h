@@ -151,6 +151,8 @@ struct AuxCtlRec
     GUEST<LONGINT> acRefCon;
 };
 
+const LowMemGlobal<AuxCtlHandle> AuxCtlHead { 0xCD4 }; // ControlMgr IMV-216 (true);
+
 extern void C_SetCTitle(ControlHandle c,
                                     StringPtr t);
 PASCAL_TRAP(SetCTitle, 0xA95F);

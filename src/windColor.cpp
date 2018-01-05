@@ -82,7 +82,7 @@ const ColorSpec default_system6_color_win_ctab[] = {
 void Executor::wind_color_init(void)
 {
     /* initalize the default window colortable */
-    TheZoneGuard guard(SysZone);
+    TheZoneGuard guard(LM(SysZone));
 
     default_aux_win = (AuxWinHandle)NewHandle(sizeof(AuxWinRec));
     HxX(default_aux_win, awNext) = 0;
@@ -100,7 +100,7 @@ Executor::lookup_aux_win(WindowPtr w)
 {
     GUEST<AuxWinHandle> *t;
 
-    for(t = &AuxWinHead;
+    for(t = &LM(AuxWinHead);
         *t && HxP(MR(*t), awOwner) != w;
         t = &HxX(MR(*t), awNext))
         ;
@@ -119,9 +119,9 @@ void Executor::C_SetWinColor(WindowPtr w, CTabHandle new_w_ctab)
         {
             GUEST<AuxWinHandle> t_aux_w;
 
-            t_aux_w = AuxWinHead;
+            t_aux_w = LM(AuxWinHead);
             aux_w = (AuxWinHandle)NewHandle(sizeof(AuxWinRec));
-            AuxWinHead = RM(aux_w);
+            LM(AuxWinHead) = RM(aux_w);
             HxX(aux_w, awNext) = t_aux_w;
             HxX(aux_w, awOwner) = RM((WindowPtr)w);
             /* FIXME: copy? */

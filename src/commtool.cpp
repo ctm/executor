@@ -136,7 +136,7 @@ Executor::InitCRM(void)
         retval = noErr;
     else
     {
-        TheZoneGuard guard(SysZone);
+        TheZoneGuard guard(LM(SysZone));
         retval = serial_insert(".AIn", ".AOut", "COM1");
         if(retval == noErr)
             retval = serial_insert(".BIn", ".BOut", "COM2");
