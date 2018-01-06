@@ -11,12 +11,9 @@ addons:
       - cmake
       - libsdl2-dev
 
-before_script:
-  - wget https://cmake.org/files/v3.10/cmake-3.10.0-Linux-x86_64.sh
-  - sudo sh cmake-3.10.0-Linux-x86_64.sh --prefix=/usr/local --exclude-subdir
 
 script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DCMAKE_C_COMPILER=gcc-7 -DCMAKE_CXX_COMPILER=g++-7
   - make
