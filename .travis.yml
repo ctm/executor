@@ -1,25 +1,22 @@
-language: cpp
-matrix:
-  include:
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-            - george-edison55-precise-backports
-          packages:
-            - g++-7
-            - cmake-data
-            - cmake
-            - sdl2
-      env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-before_install:
-  - eval "$MATRIX_EVAL"
+dist: trusty
+compiler: gcc
+sudo: required
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - gcc-7
+      - cmake-data
+      - cmake
+      - libsdl2-dev
 
 before_script:
+  - wget https://cmake.org/files/v3.10/cmake-3.10.0-Linux-x86_64.sh
+  - sudo sh cmake-3.10.0-Linux-x86_64.sh --prefix=/usr/local --exclude-subdir
+
+script:
   - mkdir build
   - cd build
   - cmake ..
-
-script: make
+  - make
