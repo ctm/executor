@@ -610,12 +610,14 @@ int32_t Executor::C_mbdf0(int16_t sel, int16_t mess, int16_t param1,
 {
     int32_t retval;
     GUEST<GrafPtr> saveport;
-
+    draw_state_t draw_state;
+        
     retval = 0;
     if(mess != mbInit) /* fun w/ Word 6 */
     {
         GetPort(&saveport);
         SetPort(MR(wmgr_port));
+        draw_state_save(&draw_state);
     }
 
     switch(mess)
@@ -665,6 +667,9 @@ int32_t Executor::C_mbdf0(int16_t sel, int16_t mess, int16_t param1,
             break;
     }
     if(mess != mbInit)
+    {
+        draw_state_restore(&draw_state);
         SetPort(MR(saveport));
+    }
     return retval;
 }
