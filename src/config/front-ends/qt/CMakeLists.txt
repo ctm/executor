@@ -5,6 +5,7 @@ if(TARGET Qt5::Widgets)
             host_vdriver.h
             qt.h
             qt.cpp
+            ../x/x_keycodes.cpp
         )
 
     target_link_libraries(front-end-qt syn68k Qt5::Widgets)

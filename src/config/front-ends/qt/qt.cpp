@@ -29,6 +29,7 @@
 #ifdef MACOSX
 void macosx_hide_menu_bar(int mouseY);
 #endif
+#include "../x/x_keycodes.h"
 
 namespace Executor
 {
@@ -281,6 +282,10 @@ public:
         if(ev->nativeVirtualKey())
             mkvkey = ev->nativeVirtualKey();
 #endif
+        if(ev->nativeScanCode() > 1 && ev->nativeScanCode() < NELEM(x_keycode_to_mac_virt))
+        {
+            mkvkey = x_keycode_to_mac_virt[ev->nativeScanCode()];
+        }
         mkvkey = ROMlib_right_to_left_key_map(mkvkey);
         if(isModifier(mkvkey, &mod))
         {
@@ -310,6 +315,25 @@ public:
         std::cout << "release\n";
         if(!ev->isAutoRepeat())
             keyEvent(ev, false);
+    }
+
+    bool event(QEvent *ev)
+    {
+        switch(ev->type())
+        {
+            case QEvent::FocusIn:
+                std::cout << "focusin\n";
+                sendresumeevent(true);
+                break;
+            case QEvent::FocusOut:
+                std::cout << "focusout\n";
+                sendsuspendevent();
+                break;
+
+            default:
+                ;
+        }
+        return QRasterWindow::event(ev);
     }
 };
 
