@@ -7,6 +7,7 @@
 #include "QuickDraw.h"
 #include "DialogMgr.h"
 #include "Iconutil.h"
+#include "ControlMgr.h"
 
 #include "rsys/itm.h"
 #include "rsys/cquick.h"

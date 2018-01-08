@@ -8,6 +8,9 @@
 
  */
 
+#include "QuickDraw.h"
+#include "WindowMgr.h"
+
 namespace Executor
 {
 enum
@@ -97,13 +100,7 @@ enum
     cTingeDark = 14,
 };
 
-typedef struct __cr ControlRecord;
-typedef ControlRecord *ControlPtr;
-
-typedef GUEST<ControlPtr> *ControlHandle;
 }
-
-#include "WindowMgr.h"
 
 namespace Executor
 {

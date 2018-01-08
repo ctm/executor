@@ -96,9 +96,13 @@ typedef GrafPtr WindowPtr;
 
 typedef CGrafPtr CWindowPtr;
 }
-#include "ControlMgr.h"
 namespace Executor
 {
+typedef struct __cr ControlRecord;
+typedef ControlRecord *ControlPtr;
+
+typedef GUEST<ControlPtr> *ControlHandle;
+
 struct WindowRecord
 {
     GUEST_STRUCT;

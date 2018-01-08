@@ -8,6 +8,9 @@
 
  */
 
+#include <rsys/common.h>
+#include "ExMacTypes.h"
+
 namespace Executor
 {
 
