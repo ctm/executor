@@ -1,7 +1,5 @@
 #if !defined(_DIRTYRECT_H_)
 #define _DIRTYRECT_H_
-
-#include "host_bltmacros.h"
 namespace Executor
 {
 extern void dirty_rect_accrue(int top, int left, int bottom, int right);

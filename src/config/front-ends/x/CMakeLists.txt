@@ -6,7 +6,6 @@ if(X11_LIBRARY AND Xext_LIBRARY)
 	add_library(front-end-x
 			x.cpp
 			x_keycodes.cpp
-			host_bltmacros.h
 			host_vdriver.h
 			x.h
             x_keycodes.h

@@ -25,7 +25,6 @@ if(SDL_LIBRARY AND SDL_INCLUDE_DIR AND X11_LIBRARY AND Xext_LIBRARY)
         sdlwm.cpp
         syswm_map.cpp
         for_sam.h
-        host_bltmacros.h
         host_vdriver.h
         map.h
         sdl.h

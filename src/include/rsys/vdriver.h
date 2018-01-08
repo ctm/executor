@@ -8,7 +8,6 @@ struct ColorSpec;
 }
 
 #include "rsys/rgbutil.h"
-#include "host_bltmacros.h"
 
 namespace Executor
 {
@@ -167,10 +166,6 @@ extern rgb_spec_t *vdriver_rgb_spec;
 
 #if defined(VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
 
-#if !defined(vdriver_real_screen_blit_possible_p)
-extern bool vdriver_real_screen_blit_possible_p;
-#endif
-
 #if !defined(vdriver_flip_real_screen_pixels_p)
 extern bool vdriver_flip_real_screen_pixels_p;
 #endif
@@ -199,6 +194,10 @@ extern bool vdriver_fixed_clut_p;
 
 #ifdef VDRIVER_PUMP_EVENTS
 extern void vdriver_pump_events();
+#endif
+
+#ifdef VDRIVER_ROOTLESS
+extern void vdriver_set_rootless_region(RgnHandle rgn);
 #endif
 }
 #endif /* !_VDRIVER_H_ */

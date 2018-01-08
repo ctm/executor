@@ -2,7 +2,6 @@ find_package(SDL2)
 
 if(SDL2_FOUND)
     add_library(front-end-sdl2
-        host_bltmacros.h
         sdl2.h sdl2.cpp
         keycode_map.cpp
         sdl2_hwnd.h

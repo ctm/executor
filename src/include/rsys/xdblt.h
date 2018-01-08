@@ -6,7 +6,6 @@
 #include "rsys/cquick.h"
 #include "rsys/xdata.h"
 #include "rsys/region.h"
-#include "host_bltmacros.h"
 
 #if !defined(ARCH_PROVIDES_RAW_PATBLT)
 #define USE_PORTABLE_PATBLT
