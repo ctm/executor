@@ -12,7 +12,7 @@
 #include "WindowMgr.h"
 #include "MemoryMgr.h"
 #include "ResourceMgr.h"
-#include "OSUtil.h"
+#include <OSUtil.h>
 
 #include "rsys/mman.h"
 #include "rsys/pstuff.h"
