@@ -179,8 +179,6 @@ Executor::ROMlib_xlate(INTEGER virt, INTEGER modifiers, bool down_p)
     return retval;
 }
 
-char ROMlib_started; /* flag used by Mac frontend */
-
 void Executor::ROMlib_eventinit(bool graphics_valid_p) /* INTERNAL */
 {
     static int beenhere = 0;
@@ -198,7 +196,6 @@ void Executor::ROMlib_eventinit(bool graphics_valid_p) /* INTERNAL */
         for(p = evs + 1, ep = evs + NEVENT; p != ep; p++)
             p->qLink = RM((QElemPtr)(p - 1));
         LM(SysEvtMask) = CWC(~(1L << keyUp)); /* EVERYTHING except keyUp */
-        ROMlib_started = 3;
         if(graphics_valid_p)
         {
             Rect *main_gd_bounds;
