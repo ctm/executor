@@ -177,6 +177,8 @@ void Executor::C_ShowHide(WindowPtr w, BOOLEAN flag)
         FillRgn(WINDOW_CONT_REGION(w), white);
         if(content_color)
             RGBBackColor(&ROMlib_white_rgb_color);
+
+        ROMlib_rootless_update();
     }
     else if(!flag && WINDOW_VISIBLE_X(w))
     {
@@ -189,6 +191,8 @@ void Executor::C_ShowHide(WindowPtr w, BOOLEAN flag)
         SetEmptyRgn(PORT_VIS_REGION(w));
         PaintBehind(WINDOW_NEXT_WINDOW(w), WINDOW_STRUCT_REGION(w));
         CalcVisBehind(WINDOW_NEXT_WINDOW(w), WINDOW_STRUCT_REGION(w));
+
+        ROMlib_rootless_update();
     }
 }
 

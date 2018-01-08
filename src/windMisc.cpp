@@ -362,7 +362,6 @@ void Executor::C_CalcVis(WindowPeek w)
                   CW(PORT_BOUNDS(w).top));
     }
 }
-
 void Executor::C_CalcVisBehind(WindowPeek w, RgnHandle clobbered)
 {
     RgnHandle rh, testrgn;
@@ -388,6 +387,7 @@ void Executor::C_CalcVisBehind(WindowPeek w, RgnHandle clobbered)
             }
         }
     }
+
     DisposeRgn(rh);
     DisposeRgn(testrgn);
 }

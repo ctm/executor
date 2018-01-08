@@ -1534,7 +1534,7 @@ int main(int argc, char **argv)
             abort();
         ROMlib_offsets[1] = (uintptr_t)vdriver_fbuf;
         ROMlib_offsets[1] -= (1UL << 30);
-        ROMlib_sizes[1] = vdriver_row_bytes * vdriver_height;
+        ROMlib_sizes[1] = vdriver_width * vdriver_height * 5; // ### //vdriver_row_bytes * vdriver_height;
 #endif
 
         /* initialize the mac rgb_spec's */

@@ -40,6 +40,11 @@ extern WindowPeek ROMlib_firstvisible(WindowPtr w);
 extern BOOLEAN ROMlib_window_zoomed(WindowPeek wp);
 extern void wind_color_init(void);
 
+void ROMlib_rootless_update();
+void ROMlib_rootless_openmenu(Rect r);
+void ROMlib_rootless_closemenu();
+
+
 typedef void (*draghookp)(void);
 
 #define var(w) (GetWVariant((w)))

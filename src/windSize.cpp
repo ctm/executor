@@ -152,6 +152,11 @@ void Executor::C_MoveWindow(WindowPtr wp, INTEGER h, INTEGER v, BOOLEAN front)
     if(front)
         SelectWindow((WindowPtr)w);
     SetPort(gp);
+
+    if(WINDOW_VISIBLE_X(w))
+    {
+        ROMlib_rootless_update();
+    }
 }
 
 void Executor::C_DragWindow(WindowPtr wp, Point p, Rect *rp)
@@ -288,6 +293,10 @@ void Executor::C_SizeWindow(WindowPtr w, INTEGER width, INTEGER height,
         ThePortGuard guard(MR(wmgr_port));
         WINDCALL(w, wCalcRgns, 0);
         if(WINDOW_VISIBLE_X(w))
+        {
             DrawNew((WindowPeek)w, flag);
+
+            ROMlib_rootless_update();
+        }
     }
 }

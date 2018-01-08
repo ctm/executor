@@ -130,6 +130,7 @@ void Executor::C_InitWindows()
         LM(GhostWindow) = NULL;
         PATASSIGN(LM(DragPattern), gray);
     }
+    ROMlib_rootless_update();
 
     /* since there is no `InitControls ()', we do this here */
     ctl_color_init();
@@ -435,6 +436,8 @@ ROMlib_new_window_common(WindowPeek w,
         CopyRgn(WINDOW_CONT_REGION(w), WINDOW_UPDATE_REGION(w));
         if(WINDOW_NEXT_WINDOW_X(w))
             CalcVisBehind(WINDOW_NEXT_WINDOW(w), WINDOW_STRUCT_REGION(w));
+
+        ROMlib_rootless_update();
     }
     else
         SetEmptyRgn(PORT_VIS_REGION(w));
@@ -681,6 +684,8 @@ void Executor::C_CloseWindow(WindowPtr w)
     if(MR(LM(CurDeactive)) == w)
         LM(CurDeactive) = 0;
     WINDCALL((WindowPtr)w, wDispose, 0);
+
+    ROMlib_rootless_update();
 }
 
 void Executor::C_DisposeWindow(WindowPtr w)

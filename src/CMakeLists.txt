@@ -45,6 +45,7 @@ endif()
 add_subdirectory(config/front-ends/x)
 add_subdirectory(config/front-ends/sdl)
 add_subdirectory(config/front-ends/sdl2)
+add_subdirectory(config/front-ends/qt)
 add_subdirectory(config/arch/generic_le)
 add_subdirectory(config/os/win32)
 
@@ -158,7 +159,7 @@ set(te_sources teAccess.cpp teDisplay.cpp teEdit.cpp teIMIV.cpp teIMV.cpp teInit
 source_group(TextEdit FILES ${te_sources})
 
 set(wind_sources windColor.cpp windDisplay.cpp windDocdef.cpp windInit.cpp windMisc.cpp
-    windMouse.cpp windSize.cpp windUpdate.cpp)
+    windMouse.cpp windSize.cpp windUpdate.cpp windRootless.cpp)
 source_group(Windows FILES ${wind_sources})
 
 set(ae_sources AE.cpp AE_desc.cpp AE_hdlr.cpp AE_coercion.cpp)

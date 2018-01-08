@@ -951,6 +951,7 @@ static void restoren(INTEGER ntodrop, RgnHandle restoredrgn, Rect *rp)
         p = (mbdfentry *)-1;
 #endif /* LETGCCWAIL */
     MBDFCALL(mbRestore, 0, 0L);
+    ROMlib_rootless_closemenu();
 
     while(--ntodrop > 0)
     {
@@ -964,6 +965,7 @@ static void restoren(INTEGER ntodrop, RgnHandle restoredrgn, Rect *rp)
             DisposeRgn(tmprgn);
         }
         MBDFCALL(mbRestore, 0, 0L);
+        ROMlib_rootless_closemenu();
     }
     if(restoredrgn && rp)
         *rp = p[-1].mbRectSave;
@@ -1100,6 +1102,7 @@ int32_t Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
                             if(myd0 != 0)
                                 goto out;
                         }
+                        ROMlib_rootless_openmenu(r2);
                         ((mbdfentry *)STARH(MR(LM(MBSaveLoc))))
                             [wheretowhich(tempi)]
                                 .mbReserved
@@ -1151,6 +1154,7 @@ int32_t Executor::ROMlib_menuhelper(MenuHandle mh, Rect *saverp,
                         if(myd0 != 0)
                             goto out;
                     }
+                    ROMlib_rootless_openmenu(r);                    
                     olditem = item = 0;
                     LM(TopMenuItem) = LM(MBarHeight);
                     PORT_TX_FACE_X(MR(wmgr_port)) = (Style)CB(0);
