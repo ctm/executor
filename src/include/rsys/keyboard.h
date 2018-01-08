@@ -105,6 +105,7 @@ typedef GUEST<kchr_ptr_t> *kchr_hand;
 #define MKV_F14 0x6b
 #define MKV_F15 0x71
 
+#define MKV_PARAGRAPH 0x0a
 #define MKV_BACKTICK 0x32
 #define MKV_1 0x12
 #define MKV_2 0x13

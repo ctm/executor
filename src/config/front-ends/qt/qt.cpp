@@ -24,6 +24,11 @@
 
 #include <iostream>
 #include <memory>
+#include <unordered_map>
+
+#ifdef MACOSX
+void macosx_hide_menu_bar(int mouseY);
+#endif
 
 namespace Executor
 {
@@ -57,6 +62,125 @@ QImage *qimage;
 uint16_t keymod = 0;
 ExecutorWindow *window;
 
+
+std::unordered_map<Qt::Key,int> keycodeMap {
+    { Qt::Key_Backspace, MKV_BACKSPACE },
+    { Qt::Key_Tab, MKV_TAB },
+    //{ Qt::Key_Clear, NOTAKEY },
+    { Qt::Key_Return, MKV_RETURN },
+    { Qt::Key_Escape, MKV_ESCAPE },
+    { Qt::Key_Space, MKV_SPACE },
+    { Qt::Key_Apostrophe, MKV_TICK },
+    { Qt::Key_Comma, MKV_COMMA },
+    { Qt::Key_Minus, MKV_MINUS },
+    { Qt::Key_Period, MKV_PERIOD },
+    { Qt::Key_Slash, MKV_SLASH },
+    { Qt::Key_0, MKV_0 },
+    { Qt::Key_1, MKV_1 },
+    { Qt::Key_2, MKV_2 },
+    { Qt::Key_3, MKV_3 },
+    { Qt::Key_4, MKV_4 },
+    { Qt::Key_5, MKV_5 },
+    { Qt::Key_6, MKV_6 },
+    { Qt::Key_7, MKV_7 },
+    { Qt::Key_8, MKV_8 },
+    { Qt::Key_9, MKV_9 },
+    { Qt::Key_Semicolon, MKV_SEMI },
+    { Qt::Key_Colon, MKV_SEMI },
+    { Qt::Key_Equal, MKV_EQUAL },
+    /*{ Qt::Key_Kp_0, MKV_NUM0 },
+    { Qt::Key_Kp_1, MKV_NUM1 },
+    { Qt::Key_Kp_2, MKV_NUM2 },
+    { Qt::Key_Kp_3, MKV_NUM3 },
+    { Qt::Key_Kp_4, MKV_NUM4 },
+    { Qt::Key_Kp_5, MKV_NUM5 },
+    { Qt::Key_Kp_6, MKV_NUM6 },
+    { Qt::Key_Kp_7, MKV_NUM7 },
+    { Qt::Key_Kp_8, MKV_NUM8 },
+    { Qt::Key_Kp_9, MKV_NUM9 },
+    { Qt::Key_Kp_PERIOD, MKV_NUMPOINT },
+    { Qt::Key_Kp_DIVIDE, MKV_NUMDIVIDE },
+    { Qt::Key_Kp_MULTIPLY, MKV_NUMMULTIPLY },
+    { Qt::Key_Kp_MINUS, MKV_NUMMINUS },
+    { Qt::Key_Kp_PLUS, MKV_NUMPLUS },*/
+    { Qt::Key_Enter, MKV_NUMENTER },
+    { Qt::Key_BracketLeft, MKV_LEFTBRACKET },
+    { Qt::Key_Backslash, MKV_BACKSLASH },
+    { Qt::Key_BracketRight, MKV_RIGHTBRACKET },
+    { Qt::Key_QuoteLeft, MKV_BACKTICK },
+    { Qt::Key_BraceLeft, MKV_LEFTBRACKET },
+    { Qt::Key_BraceRight, MKV_RIGHTBRACKET },
+    { Qt::Key_section, MKV_PARAGRAPH },
+    { Qt::Key_A, MKV_a },
+    { Qt::Key_B, MKV_b },
+    { Qt::Key_C, MKV_c },
+    { Qt::Key_D, MKV_d },
+    { Qt::Key_E, MKV_e },
+    { Qt::Key_F, MKV_f },
+    { Qt::Key_G, MKV_g },
+    { Qt::Key_H, MKV_h },
+    { Qt::Key_I, MKV_i },
+    { Qt::Key_J, MKV_j },
+    { Qt::Key_K, MKV_k },
+    { Qt::Key_L, MKV_l },
+    { Qt::Key_M, MKV_m },
+    { Qt::Key_N, MKV_n },
+    { Qt::Key_O, MKV_o },
+    { Qt::Key_P, MKV_p },
+    { Qt::Key_Q, MKV_q },
+    { Qt::Key_R, MKV_r },
+    { Qt::Key_S, MKV_s },
+    { Qt::Key_T, MKV_t },
+    { Qt::Key_U, MKV_u },
+    { Qt::Key_V, MKV_v },
+    { Qt::Key_W, MKV_w },
+    { Qt::Key_X, MKV_x },
+    { Qt::Key_Y, MKV_y },
+    { Qt::Key_Z, MKV_z },
+    { Qt::Key_Delete, MKV_DELFORWARD },
+    { Qt::Key_F1, MKV_F1 },
+    { Qt::Key_F2, MKV_F2 },
+    { Qt::Key_F3, MKV_F3 },
+    { Qt::Key_F4, MKV_F4 },
+    { Qt::Key_F5, MKV_F5 },
+    { Qt::Key_F6, MKV_F6 },
+    { Qt::Key_F7, MKV_F7 },
+    { Qt::Key_F8, MKV_F8 },
+    { Qt::Key_F9, MKV_F9 },
+    { Qt::Key_F10, MKV_F10 },
+    { Qt::Key_F11, MKV_F11 },
+    { Qt::Key_F12, MKV_F12 },
+    { Qt::Key_F13, MKV_F13 },
+    { Qt::Key_F14, MKV_F14 },
+    { Qt::Key_F15, MKV_F15 },
+    { Qt::Key_Pause, MKV_PAUSE },
+    { Qt::Key_NumLock, MKV_NUMCLEAR },
+    { Qt::Key_Up, MKV_UPARROW },
+    { Qt::Key_Down, MKV_DOWNARROW },
+    { Qt::Key_Right, MKV_RIGHTARROW },
+    { Qt::Key_Left, MKV_LEFTARROW },
+    { Qt::Key_Insert, MKV_HELP },
+    { Qt::Key_Home, MKV_HOME },
+    { Qt::Key_End, MKV_END },
+    { Qt::Key_PageUp, MKV_PAGEUP },
+    { Qt::Key_PageDown, MKV_PAGEDOWN },
+    { Qt::Key_CapsLock, MKV_CAPS },
+    { Qt::Key_ScrollLock, MKV_SCROLL_LOCK },
+    { Qt::Key_Shift, MKV_LEFTSHIFT },
+#ifdef MACOSX
+    { Qt::Key_Control, MKV_CLOVER },
+    { Qt::Key_Alt, MKV_LEFTOPTION },
+    { Qt::Key_Meta, MKV_LEFTCNTL },
+#else
+    { Qt::Key_Control, MKV_CLOVER },
+    { Qt::Key_Alt, MKV_LEFTOPTION },
+    { Qt::Key_Meta, MKV_LEFTCNTL },
+#endif
+    //{ Qt::Key_Help, MKV_HELP },
+    { Qt::Key_Print, MKV_PRINT_SCREEN },
+};
+
+
 class ExecutorWindow : public QRasterWindow
 {
 public:
@@ -75,6 +199,9 @@ public:
 
     void mouseMoveEvent(QMouseEvent *ev)
     {
+#ifdef MACOSX
+        macosx_hide_menu_bar(ev->y());
+#endif
         LM(MouseLocation).h = CW(ev->x());
         LM(MouseLocation).v = CW(ev->y());
 
@@ -107,6 +234,83 @@ public:
     {
         mousePressRelease(ev);
     }
+    
+    bool isModifier(unsigned char virt, uint16_t *modstore)
+    {
+        /* Note: shift and control can be cleared if right* and left* are pressed */
+        switch(virt)
+        {
+            case MKV_LEFTSHIFT:
+            case MKV_RIGHTSHIFT:
+                *modstore = shiftKey;
+                break;
+            case MKV_CAPS:
+                *modstore = alphaLock;
+                break;
+            case MKV_LEFTCNTL:
+            case MKV_RIGHTCNTL:
+                *modstore = ControlKey;
+                break;
+            case MKV_CLOVER:
+                *modstore = cmdKey;
+                break;
+            case MKV_LEFTOPTION:
+            case MKV_RIGHTOPTION:
+                *modstore = optionKey;
+                break;
+            default:
+                *modstore = 0;
+                return false;
+        }
+        return true;
+    }
+    void keyEvent(QKeyEvent *ev, bool down_p)
+    {
+        unsigned char mkvkey;
+        uint16_t mod;
+        LONGINT keywhat;
+        int32_t when;
+        Point where;
+
+        auto p = keycodeMap.find(Qt::Key(ev->key()));
+        if(p == keycodeMap.end())
+            mkvkey = 0x89;// NOTAKEY
+        else
+            mkvkey = p->second;
+#ifdef MACOSX
+        if(ev->nativeVirtualKey())
+            mkvkey = ev->nativeVirtualKey();
+#endif
+        mkvkey = ROMlib_right_to_left_key_map(mkvkey);
+        if(isModifier(mkvkey, &mod))
+        {
+            if(down_p)
+                keymod |= mod;
+            else
+                keymod &= ~mod;
+        }
+        when = TickCount();
+        where.h = CW(LM(MouseLocation).h);
+        where.v = CW(LM(MouseLocation).v);
+        keywhat = ROMlib_xlate(mkvkey, keymod, down_p);
+        post_keytrans_key_events(down_p ? keyDown : keyUp,
+                             keywhat, when, where,
+                             keymod, mkvkey);
+
+    }
+    
+    void keyPressEvent(QKeyEvent *ev)
+    {
+        std::cout << "press: " << std::hex << ev->key() << " " << ev->nativeScanCode() << " " << ev->nativeVirtualKey() << std::dec << std::endl;
+        if(!ev->isAutoRepeat())
+            keyEvent(ev, true);
+    }
+    void keyReleaseEvent(QKeyEvent *ev)
+    {
+        std::cout << "release\n";
+        if(!ev->isAutoRepeat())
+            keyEvent(ev, false);
+    }
 };
 
 }
@@ -117,8 +321,9 @@ void Executor::vdriver_set_rootless_region(RgnHandle rgn)
     GrafPort grayRegionPort;
 
     C_OpenPort(&grayRegionPort);
+    short rowBytes = ((vdriver_width + 31) & ~31) / 8;
     grayRegionPort.portBits.baseAddr = RM((Ptr) vdriver_fbuf + vdriver_row_bytes * vdriver_height * 4);
-    grayRegionPort.portBits.rowBytes = CW( ((vdriver_width + 31) & ~31) / 8 );
+    grayRegionPort.portBits.rowBytes = CW( rowBytes );
     grayRegionPort.portBits.bounds = { CW(0), CW(0), CW(vdriver_height), CW(vdriver_width) };
     grayRegionPort.portRect = grayRegionPort.portBits.bounds;
 
@@ -128,7 +333,9 @@ void Executor::vdriver_set_rootless_region(RgnHandle rgn)
 
     C_ClosePort(&grayRegionPort);
 
-    window->setMask(QBitmap::fromData(QSize(vdriver_width, vdriver_height), (const uchar*)MR(grayRegionPort.portBits.baseAddr), QImage::Format_Mono));
+    window->setMask(QBitmap::fromData(
+        QSize((vdriver_width + 31)&~31, vdriver_height),
+        (const uchar*)MR(grayRegionPort.portBits.baseAddr), QImage::Format_Mono));
 }
 
 void Executor::vdriver_opt_register(void)
@@ -160,9 +367,10 @@ bool Executor::vdriver_set_mode(int width, int height, int bpp, bool grayscale_p
     printf("set_mode: %d %d %d\n", width, height, bpp);
     if(vdriver_fbuf)
         delete[] vdriver_fbuf;
+    QRect geom = screen->geometry();//screen->availableGeometry();
 
-    vdriver_width = screen->availableGeometry().width();
-    vdriver_height = screen->availableGeometry().height();
+    vdriver_width = geom.width();
+    vdriver_height = geom.height();
     if(width)
         vdriver_width = width;
     if(height)
@@ -184,6 +392,9 @@ bool Executor::vdriver_set_mode(int width, int height, int bpp, bool grayscale_p
 
     window->resize(vdriver_width, vdriver_height);
     window->show();
+#ifdef MACOSX
+    macosx_hide_menu_bar(0);
+#endif
     return true;
 }
 void Executor::vdriver_set_colors(int first_color, int num_colors, const ColorSpec *colors)
@@ -242,79 +453,6 @@ void Executor::vdriver_pump_events()
 {
     qapp->processEvents();
 #if 0
-    SDL_Event event;
-
-    while(SDL_PollEvent(&event))
-    {
-        switch(event.type)
-        {
-            case SDL_MOUSEMOTION:
-                LM(MouseLocation).h = CW(event.motion.x);
-                LM(MouseLocation).v = CW(event.motion.y);
-
-                adb_apeiron_hack(false);
-                break;
-            case SDL_MOUSEBUTTONDOWN:
-            case SDL_MOUSEBUTTONUP:
-            {
-                bool down_p;
-                int32_t when;
-                Point where;
-
-                down_p = (event.button.state == SDL_PRESSED);
-                if(down_p)
-                    keymod &= ~btnState;
-                else
-                    keymod |= btnState;
-                when = TickCount();
-                where.h = event.button.x;
-                where.v = event.button.y;
-                ROMlib_PPostEvent(down_p ? mouseDown : mouseUp,
-                                  0, (GUEST<EvQElPtr> *)0, when, where,
-                                  keymod);
-                adb_apeiron_hack(false);
-            }
-            break;
-            case SDL_KEYDOWN:
-            case SDL_KEYUP:
-            {
-                bool down_p;
-                unsigned char mkvkey;
-                uint16_t mod;
-                LONGINT keywhat;
-                int32_t when;
-                Point where;
-
-                init_sdlk_to_mkv();
-                down_p = (event.key.state == SDL_PRESSED);
-
-                /*if(use_scan_codes)
-                    mkvkey = ibm_virt_to_mac_virt[event.key.keysym.scancode];
-                else*/
-                {
-                    auto p = sdlk_to_mkv.find(event.key.keysym.sym);
-                    if(p == sdlk_to_mkv.end())
-                        mkvkey = NOTAKEY;
-                    else
-                        mkvkey = p->second;
-                }
-                mkvkey = ROMlib_right_to_left_key_map(mkvkey);
-                if(isModifier(mkvkey, &mod))
-                {
-                    if(down_p)
-                        keymod |= mod;
-                    else
-                        keymod &= ~mod;
-                }
-                when = TickCount();
-                where.h = CW(LM(MouseLocation).h);
-                where.v = CW(LM(MouseLocation).v);
-                keywhat = ROMlib_xlate(mkvkey, keymod, down_p);
-                post_keytrans_key_events(down_p ? keyDown : keyUp,
-                                         keywhat, when, where,
-                                         keymod, mkvkey);
-            }
-            break;
             case SDL_WINDOWEVENT_FOCUS_GAINED:
                 //if(!we_lost_clipboard())
                 sendresumeevent(false);
@@ -331,8 +469,6 @@ void Executor::vdriver_pump_events()
                 if(ConfirmQuit())
                     ExitToShell();
                 break;
-        }
-    }
 #endif
 }
 

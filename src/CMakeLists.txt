@@ -48,6 +48,7 @@ add_subdirectory(config/front-ends/sdl2)
 add_subdirectory(config/front-ends/qt)
 add_subdirectory(config/arch/generic_le)
 add_subdirectory(config/os/win32)
+add_subdirectory(config/os/macosx)
 
 
 function(linkheader from to variant)
@@ -396,7 +397,7 @@ add_executable(executor ${sources}
 
 target_link_libraries(executor front-end-${FRONT_END} arch-${HOST_ARCH})
 
-if(HOST_OS STREQUAL win32)
+if(HOST_OS STREQUAL win32 OR HOST_OS STREQUAL macosx)
     target_link_libraries(executor os-${HOST_OS})
 else()
     target_link_libraries(executor ${DB_LIBRARY})
