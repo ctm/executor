@@ -902,12 +902,6 @@ static BOOLEAN doevent(INTEGER em, EventRecord *evt,
     BOOLEAN retval;
     GUEST<ULONGINT> now_s;
     ULONGINT now;
-#if defined(MACOSX_)
-    struct sockaddr sockname;
-    socklen_t addrlen;
-    char device[DEVNAMELEN];
-    LONGINT ns, nread;
-#endif
     static int beenhere = 0;
     ALLOCABEGIN
 
@@ -1071,21 +1065,6 @@ static BOOLEAN doevent(INTEGER em, EventRecord *evt,
     if(!retval && remflag && (em & diskMask))
     {
         TRACE(26);
-#if defined(MACOSX_)
-        addrlen = sizeof(sockname);
-        if((ns = accept(ROMlib_sock, &sockname, &addrlen)) >= 0)
-        {
-            fcntl(ns, F_SETFL, 0); /* turn off FNDELAY */
-            nread = read(ns, device, sizeof(device));
-            ROMlib_updateworkspace();
-            ROMlib_openfloppy(device, &evt->message);
-            evt->what = CW(diskEvt);
-            retval = true;
-        }
-        else
-        {
-            gui_assert(errno == EWOULDBLOCK);
-#endif /* defined(MACOSX_) */
             if(!beenhere)
             {
                 TRACE(26);
@@ -1098,9 +1077,6 @@ static BOOLEAN doevent(INTEGER em, EventRecord *evt,
                     retval = true;
                 }
             }
-#if defined(MACOSX_)
-        }
-#endif /* defined(MACOSX_) */
     }
     if(!retval && (em & updateMask))
     {

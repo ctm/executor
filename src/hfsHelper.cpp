@@ -47,8 +47,6 @@ using namespace Executor;
 #define HFSXFERDOTFS "/usr/filesystems/HFS_XFer.fs"
 #define HFSXFERUTIL HFSXFERDOTFS "/HFS_XFer.util"
 
-LONGINT Executor::ROMlib_sock;
-
 void Executor::ROMlib_hfsinit(void)
 {
 }
