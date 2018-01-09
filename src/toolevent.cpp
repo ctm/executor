@@ -896,6 +896,9 @@ static void doquitreallyquits(void)
 
 extern void ROMlib_updateworkspace(void);
 
+static bool isSuspended = false;
+static bool shouldBeSuspended = false;
+
 static BOOLEAN doevent(INTEGER em, EventRecord *evt,
                        BOOLEAN remflag) /* no DA support */
 {
@@ -1065,18 +1068,18 @@ static BOOLEAN doevent(INTEGER em, EventRecord *evt,
     if(!retval && remflag && (em & diskMask))
     {
         TRACE(26);
-            if(!beenhere)
+        if(!beenhere)
+        {
+            TRACE(26);
+            beenhere = 1;
+            ROMlib_openharddisk("/tmp/testvol\0\0", &evt->message);
+            if(evt->message)
             {
-                TRACE(26);
-                beenhere = 1;
-                ROMlib_openharddisk("/tmp/testvol\0\0", &evt->message);
-                if(evt->message)
-                {
-                    TRACE(27);
-                    evt->what = CW(diskEvt);
-                    retval = true;
-                }
+                TRACE(27);
+                evt->what = CW(diskEvt);
+                retval = true;
             }
+        }
     }
     if(!retval && (em & updateMask))
     {
@@ -1107,6 +1110,23 @@ done:
         retval = false;
     }
     TRACE(33);
+
+    if(!retval)
+    {
+        if(isSuspended != shouldBeSuspended)
+        {
+            WindowPtr w = C_FrontWindow();
+            if(w)
+            {
+                if(shouldBeSuspended)
+                    LM(CurDeactive) = RM(w);
+                else
+                    LM(CurActivate) = RM(w);
+                C_HiliteWindow(w, !shouldBeSuspended);
+                isSuspended = shouldBeSuspended;
+            }
+        }
+    }
 
     return retval;
 }
@@ -1274,6 +1294,7 @@ Executor::sendsuspendevent(void)
 {
     Point p;
 
+    shouldBeSuspended = true;
     if(
 #if defined(MACOSX_) || defined(MACOSX_)
         printstate == __idle &&
@@ -1304,6 +1325,7 @@ Executor::sendresumeevent(bool cvtclip)
     LONGINT what;
     Point p;
 
+    shouldBeSuspended = false;
     if(
 #if defined(MACOSX_) || defined(MACOSX_)
         printstate == __idle &&
