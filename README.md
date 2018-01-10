@@ -21,7 +21,9 @@ cmake .. -DFRONT_END=qt -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt/5.10.0/lib/cmak
 cmake --build .
 ````
 
-Other frontends are 'sdl2', 'sdl', and 'x'.
+Other frontends are 'sdl2', 'sdl', and 'x', which will give you a more "traditional" experience.
+The sdl and x frontends are the "old", time-tested frontends, the sdl2 frontend is currently inefficient
+and always copies the entire screen... however, the slowness is not really noticeable on current systems.
 
 Next, make a copy of the `sc/skel/volume` directory in a place of your choosing;
 
