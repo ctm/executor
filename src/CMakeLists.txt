@@ -6,7 +6,7 @@ find_program(PERL_COMMAND perl)
 
 if(WIN32)
 else()
-find_library(DB_LIBRARY db libdb48.lib)
+find_library(DB_LIBRARY db)
 find_path(DB_INCLUDE_PATH db.h ndbm.h)
 include_directories(${DB_INCLUDE_PATH})
 endif()
@@ -17,7 +17,7 @@ find_package(Threads REQUIRED)
 include_directories(include/)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-set(FRONT_END sdl2)
+set(FRONT_END qt CACHE STRING "which front-end to use (qt, sdl2, sdl, x)")
 set(HOST_ARCH generic_le)
 
 if(WIN32)

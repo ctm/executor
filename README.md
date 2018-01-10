@@ -1,33 +1,43 @@
-Current Status
-==============
+Executor 2018
+=============
 
-This version of Executor now builds and runs on 64-bit Linux.
+This version of Executor now builds and runs on 64-bit Linux and macOS High Sierra (10.13).
 
-Grab a matching version of syn68k and build it:
-
-```
-./configure && make && sudo make install
-```
-
-... and then build executor. If you have SDL 1.2:
+Building with the (rootless) Qt frontend:
 ````
-./configure --with-sound=dummy
-````
-... and for the X frontend:
-````
-./configure --with-front-end=x --with-sound=dummy
+mkdir build
+cd build
+cmake .. -DFRONT_END=qt
+cmake --build .
 ````
 
-Sound does not currently work.
-There are also known problems with 16 and 32 bpp mode.
+Qt front-end on macoOS:
+````
+brew install berkeley-db
+brew install qt
+mkdir build
+cd build
+cmake .. -DFRONT_END=qt -DCMAKE_PREFIX_PATH=/usr/local/Cellar/qt/5.10.0/lib/cmake/ 
+cmake --build .
+````
 
-On startup, Executor prints several warnings about unexpected sizes of
-structures. I currently believe that these structures are not part of
-the ABI for Mac applications, and changes in these sizes is thus harmless.
-This needs double-checking, though.
+Other frontends are 'sdl2', 'sdl', and 'x'.
 
-What's been done
-================
+Next, make a copy of the `sc/skel/volume` directory in a place of your choosing;
+
+````
+cp src/skel/volume ~/ExecutorVolume
+export SystemFolder=~/ExecutorVolume/System\ Folder
+```` 
+
+Now you can launch executor.
+
+
+----------------------------
+
+
+About the 64-bit port
+=====================
 
 This is based on MaddTheSane's cpp port of executor.
 Most big-endian values are now no longer stored as plain values, but
