@@ -19,6 +19,7 @@
 #include "ToolboxEvent.h"
 #include "SegmentLdr.h"
 #include "ScrapMgr.h"
+#include "rsys/refresh.h"
 
 //#include "keycode_map.h"
 
@@ -195,7 +196,11 @@ public:
     void paintEvent(QPaintEvent *e)
     {
         QPainter painter(this);
-        painter.drawImage(0,0, *qimage);
+        if(qimage)
+        {
+            for(const QRect& r : e->region())
+                painter.drawImage(r, *qimage, r);
+    }
     }
 
     void mouseMoveEvent(QMouseEvent *ev)
@@ -451,13 +456,19 @@ void Executor::vdriver_get_colors(int first_color, int num_colors, ColorSpec *co
 void Executor::vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r,
                                            bool cursor_p)
 {
-    window->update();
+    QRegion rgn;
+    for(int i = 0; i < num_rects; i++)
+    {
+        rgn += QRect(r[i].left, r[i].top, r[i].right-r[i].left, r[i].bottom-r[i].top);
+        //vdriver_update_screen(r[i].top, r[i].left, r[i].bottom, r[i].right, cursor_p);
+}
+    window->update(rgn);
 }
 
 void Executor::vdriver_update_screen(int top, int left, int bottom, int right,
                                      bool cursor_p)
 {
-    window->update();
+    window->update(QRect(left, top, right-left, bottom-top));
 }
 
 void Executor::vdriver_flush_display(void)
@@ -467,11 +478,6 @@ void Executor::vdriver_flush_display(void)
 void Executor::vdriver_shutdown(void)
 {
 }
-
-void Executor::host_flush_shadow_screen(void)
-{
-}
-
 
 void Executor::vdriver_pump_events()
 {
@@ -540,4 +546,57 @@ int Executor::host_set_cursor_visible(int show_p)
     else
         window->setCursor(Qt::BlankCursor);*/
     return true;
+}
+        uchar data2[32];
+        uchar *mask2 = (uchar*)cursor_mask;
+        std::copy(cursor_data, cursor_data+32, data2);
+        for(int i = 0; i<32; i++)
+            mask2[i] |= data2[i];
+        QBitmap crsr = QBitmap::fromData(QSize(16, 16), (const uchar*)data2, QImage::Format_Mono);
+        QBitmap mask = QBitmap::fromData(QSize(16, 16), (const uchar*)mask2, QImage::Format_Mono);
+        
+        theCursor = QCursor(crsr, mask, hotspot_x, hotspot_y);
+    }
+    window->setCursor(theCursor);   // TODO: should we check for visibility?
+}
+
+int Executor::host_set_cursor_visible(int show_p)
+{
+ /*   if(show_p)
+        host_set_cursor(NULL, NULL, 0, 0);
+    else
+        window->setCursor(Qt::BlankCursor);*/
+    return true;
+}
+
+
+/* shadow buffer; created on demand */
+unsigned char *vdriver_shadow_fbuf = NULL;
+
+void Executor::host_flush_shadow_screen(void)
+{
+    int top_long, left_long, bottom_long, right_long;
+
+    /* Lazily allocate a shadow screen.  We won't be doing refresh that often,
+   * so don't waste the memory unless we need it.  Note: memory never reclaimed
+   */
+    if(vdriver_shadow_fbuf == NULL)
+    {
+        vdriver_shadow_fbuf = (uint8_t *)malloc(vdriver_row_bytes * vdriver_height);
+        memcpy(vdriver_shadow_fbuf, vdriver_fbuf,
+               vdriver_row_bytes * vdriver_height);
+        vdriver_update_screen(0, 0, vdriver_height, vdriver_width, false);
+    }
+    else if(find_changed_rect_and_update_shadow((uint32_t *)vdriver_fbuf,
+                                                (uint32_t *)vdriver_shadow_fbuf,
+                                                (vdriver_row_bytes
+                                                 / sizeof(uint32_t)),
+                                                vdriver_height,
+                                                &top_long, &left_long,
+                                                &bottom_long, &right_long))
+    {
+        vdriver_update_screen(top_long, (left_long * 32) >> vdriver_log2_bpp,
+                              bottom_long,
+                              (right_long * 32) >> vdriver_log2_bpp, false);
+    }
 }
