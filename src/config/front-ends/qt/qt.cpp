@@ -392,9 +392,10 @@ bool Executor::vdriver_set_mode(int width, int height, int bpp, bool grayscale_p
     qapp = new QGuiApplication(fakeArgc, fakeArgv);
 #ifdef MACOSX
     macosx_hide_menu_bar(0);
-#endif
-
+    QVector<QRect> screenGeometries = getScreenGeometries();
+#else
     QVector<QRect> screenGeometries = getAvailableScreenGeometries();
+#endif
 
     printf("set_mode: %d %d %d\n", width, height, bpp);
     if(vdriver_fbuf)
@@ -426,7 +427,11 @@ bool Executor::vdriver_set_mode(int width, int height, int bpp, bool grayscale_p
 
     window = new ExecutorWindow();
     window->setGeometry(geom);
+#ifdef MACOSX
+    window->show();//Maximized();
+#else
     window->showMaximized();
+#endif
     return true;
 }
 void Executor::vdriver_set_colors(int first_color, int num_colors, const ColorSpec *colors)
@@ -459,19 +464,26 @@ void Executor::vdriver_get_colors(int first_color, int num_colors, ColorSpec *co
 void Executor::vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *r,
                                            bool cursor_p)
 {
+#ifdef MACOSX   /* something went wrong on the mac; quick fix */
+    window->update();
+#else
     QRegion rgn;
     for(int i = 0; i < num_rects; i++)
     {
         rgn += QRect(r[i].left, r[i].top, r[i].right-r[i].left, r[i].bottom-r[i].top);
-        //vdriver_update_screen(r[i].top, r[i].left, r[i].bottom, r[i].right, cursor_p);
     }
     window->update(rgn);
+#endif
 }
 
 void Executor::vdriver_update_screen(int top, int left, int bottom, int right,
                                      bool cursor_p)
 {
+#ifdef MACOSX   /* something went wrong on the mac; quick fix */
+    window->update();
+#else
     window->update(QRect(left, top, right-left, bottom-top));
+#endif
 }
 
 void Executor::vdriver_flush_display(void)

@@ -8,6 +8,15 @@
 
 #include "host-os-config.h"
 
+QVector<QRect> getScreenGeometries()
+{
+    QVector<QRect> geometries;
+    for(QScreen *screen : QGuiApplication::screens())
+        geometries.push_back(screen->geometry());
+
+    return geometries;
+}
+
 #ifndef LINUX
 
 /* Actually, this should be the Qt-on-anything-but-X11 case. */
