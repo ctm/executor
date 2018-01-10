@@ -495,8 +495,6 @@ extern OSErr ROMlib_ejectfloppy(LONGINT floppyfd);
 extern OSErr ROMlib_readwrite(LONGINT fd, char *buffer, LONGINT count, LONGINT off,
                               accesstype rw, LONGINT blocksize, LONGINT maxtransfer);
 
-extern LONGINT ROMlib_sock;
-
 /* public entries in volume.c */
 
 extern HVCB *ROMlib_findvcb(short vrefnum, StringPtr name, LONGINT *diridp,
