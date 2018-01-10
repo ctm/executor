@@ -29,5 +29,18 @@ void macosx_hide_menu_bar(int mouseY)
             | NSApplicationPresentationAutoHideDock];
         dock = true;
     }
+
+    if(!inited)
+    {
+        // Zap keyboard equivalents in the application menu.
+        // Emulated mac apps are used to owning Command-H,
+        // and they really need to handle Command-Q.
+        NSMenuItem *menutitle = [[NSApp mainMenu] itemAtIndex: 0];
+        NSMenu *menu = [menutitle submenu];
+        for(NSMenuItem *item in [menu itemArray])
+        {
+            item.keyEquivalent = @"";
+        }
+    }
     inited = true;
 }
