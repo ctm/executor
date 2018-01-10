@@ -13,6 +13,5 @@ extern int host_set_cursor_visible(int show_p);
 extern bool host_hide_cursor_if_intersects(int top, int left,
                                            int bottom, int right);
 extern void host_beep_at_user(void);
-extern void host_flush_shadow_screen(void);
 }
 #endif /* !__HOST__ */

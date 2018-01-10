@@ -81,7 +81,6 @@ void Executor::dirty_rect_accrue(int top, int left, int bottom, int right)
 {
     unsigned long best_area_added;
     int ndr, i, best;
-    bool done;
 
     if(bottom <= top || right <= left
        || ROMlib_refresh
@@ -105,7 +104,7 @@ void Executor::dirty_rect_accrue(int top, int left, int bottom, int right)
     }
 
     /* Otherwise, glom away! */
-    for(done = false; !done;)
+    for(bool done = false; !done;)
     {
         int new_area;
 

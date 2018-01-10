@@ -20,6 +20,7 @@ using namespace Executor;
 static TMTask refresh_tm_task;
 
 static bool refresh_tm_task_installed_p = false;
+static void flush_shadow_screen();
 
 void Executor::C_handle_refresh()
 {
@@ -51,7 +52,7 @@ void Executor::C_handle_refresh()
         PrimeTime((QElemPtr)&refresh_tm_task, ROMlib_refresh * 1000 / 60);
 
         if(!old_busy_p)
-            host_flush_shadow_screen();
+            flush_shadow_screen();
         busy_p = old_busy_p;
     }
 }
@@ -79,9 +80,9 @@ void Executor::set_refresh_rate(int new1)
         new1 = 0;
 
 #if defined(VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
-    if(!last_refresh_set && new)
+    if(!last_refresh_set && new1)
         vdriver_set_up_internal_screen();
-    else if(last_refresh_set && !new)
+    else if(last_refresh_set && !new1)
         dirty_rect_update_screen();
 #endif /* VDRIVER_SUPPORTS_REAL_SCREEN_BLITS */
 
@@ -287,4 +288,33 @@ found_rect:
     shadow_screen_invalid_p = false;
 
     return true;
+}
+
+static void flush_shadow_screen()
+{
+    int top_long, left_long, bottom_long, right_long;
+    static unsigned char *shadow_fbuf = NULL;
+
+    /* Lazily allocate a shadow screen.  We won't be doing refresh that often,
+   * so don't waste the memory unless we need it.  Note: memory never reclaimed
+   */
+    if(shadow_fbuf == NULL)
+    {
+        shadow_fbuf = (uint8_t *)malloc(vdriver_row_bytes * vdriver_height);
+        memcpy(shadow_fbuf, vdriver_fbuf,
+               vdriver_row_bytes * vdriver_height);
+        vdriver_update_screen(0, 0, vdriver_height, vdriver_width, false);
+    }
+    else if(find_changed_rect_and_update_shadow((uint32_t *)vdriver_fbuf,
+                                                (uint32_t *)shadow_fbuf,
+                                                (vdriver_row_bytes
+                                                 / sizeof(uint32_t)),
+                                                vdriver_height,
+                                                &top_long, &left_long,
+                                                &bottom_long, &right_long))
+    {
+        vdriver_update_screen(top_long, (left_long * 32) >> vdriver_log2_bpp,
+                              bottom_long,
+                              (right_long * 32) >> vdriver_log2_bpp, false);
+    }
 }

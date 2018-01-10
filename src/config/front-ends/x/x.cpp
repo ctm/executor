@@ -129,9 +129,6 @@ static XImage *x_image;
 /* bytes per row of internal frame buffer */
 static int fbuf_allocated_row_bytes;
 
-/* shadow buffer; created on demand */
-static unsigned char *shadow_fbuf;
-
 static XImage *x_x_image;
 static unsigned char *x_fbuf;
 static int x_fbuf_bpp;
@@ -2481,33 +2478,4 @@ void Executor::querypointerX(int *xp, int *yp, int *modp)
                   &child_window, &dummy_int, &dummy_int,
                   xp, yp, &mods);
     *modp = X_TO_MAC_STATE(mods);
-}
-
-/* host functions that should go away */
-
-void Executor::host_flush_shadow_screen(void)
-{
-    int top_long, left_long, bottom_long, right_long;
-
-    /* Lazily allocate a shadow screen.  We won't be doing refresh that often,
-   * so don't waste the memory unless we need it.
-   */
-    if(shadow_fbuf == NULL)
-    {
-        shadow_fbuf = (unsigned char *)malloc(fbuf_size);
-        memcpy(shadow_fbuf, vdriver_fbuf, vdriver_row_bytes * vdriver_height);
-        vdriver_update_screen(0, 0, vdriver_height, vdriver_width, false);
-    }
-    else if(find_changed_rect_and_update_shadow((uint32_t *)vdriver_fbuf,
-                                                (uint32_t *)shadow_fbuf,
-                                                (vdriver_row_bytes
-                                                 / sizeof(uint32_t)),
-                                                vdriver_height,
-                                                &top_long, &left_long,
-                                                &bottom_long, &right_long))
-    {
-        vdriver_update_screen(top_long, (left_long * 32) >> vdriver_log2_bpp,
-                              bottom_long,
-                              (right_long * 32) >> vdriver_log2_bpp, false);
-    }
 }

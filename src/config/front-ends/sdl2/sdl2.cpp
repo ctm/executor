@@ -212,10 +212,6 @@ void Executor::vdriver_shutdown(void)
 {
 }
 
-void Executor::host_flush_shadow_screen(void)
-{
-}
-
 static bool ConfirmQuit()
 {
     const SDL_MessageBoxButtonData buttons[] = {
