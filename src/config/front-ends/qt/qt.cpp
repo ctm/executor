@@ -1,5 +1,5 @@
 
-#include <QApplication>
+#include <QGuiApplication>
 #include <QPainter>
 #include <QRasterWindow>
 #include <QMouseEvent>
@@ -20,6 +20,8 @@
 #include "SegmentLdr.h"
 #include "ScrapMgr.h"
 #include "rsys/refresh.h"
+
+#include "available_geometry.h"
 
 //#include "keycode_map.h"
 
@@ -59,7 +61,7 @@ namespace
 {
 class ExecutorWindow;
 vdriver_modes_t zero_modes = { 0, 0 };
-QApplication *qapp;
+QGuiApplication *qapp;
 QImage *qimage;
 uint16_t keymod = 0;
 ExecutorWindow *window;
@@ -188,7 +190,6 @@ class ExecutorWindow : public QRasterWindow
 public:
     ExecutorWindow()
     {
-        resize(vdriver_width, vdriver_height);
         setFlag(Qt::FramelessWindowHint, true);
         setFlag(Qt::NoDropShadowWindowHint, true);
     }
@@ -200,7 +201,7 @@ public:
         {
             for(const QRect& r : e->region())
                 painter.drawImage(r, *qimage, r);
-    }
+        }
     }
 
     void mouseMoveEvent(QMouseEvent *ev)
@@ -370,6 +371,7 @@ void Executor::vdriver_set_rootless_region(RgnHandle rgn)
 void Executor::vdriver_opt_register(void)
 {
 }
+
 bool Executor::vdriver_init(int _max_width, int _max_height, int _max_bpp,
                             bool fixed_p, int *argc, char *argv[])
 {
@@ -385,18 +387,20 @@ bool Executor::vdriver_acceptable_mode_p(int width, int height, int bpp,
         return false;
 }
 
-
 bool Executor::vdriver_set_mode(int width, int height, int bpp, bool grayscale_p)
 {
-    qapp = new QApplication(fakeArgc, fakeArgv);
-    window = new ExecutorWindow();
+    qapp = new QGuiApplication(fakeArgc, fakeArgv);
+#ifdef MACOSX
+    macosx_hide_menu_bar(0);
+#endif
 
-    QScreen *screen = qapp->screens()[0];
+    QVector<QRect> screenGeometries = getAvailableScreenGeometries();
 
     printf("set_mode: %d %d %d\n", width, height, bpp);
     if(vdriver_fbuf)
         delete[] vdriver_fbuf;
-    QRect geom = screen->geometry();//screen->availableGeometry();
+    
+    QRect geom = screenGeometries[0];
 
     vdriver_width = geom.width();
     vdriver_height = geom.height();
@@ -407,6 +411,7 @@ bool Executor::vdriver_set_mode(int width, int height, int bpp, bool grayscale_p
     if(bpp)
         vdriver_bpp = bpp;
     vdriver_row_bytes = vdriver_width * vdriver_bpp / 8;
+    vdriver_row_bytes = (vdriver_row_bytes+3) & ~3;
     vdriver_log2_bpp = ROMlib_log2[vdriver_bpp];
     vdriver_mode_list = &zero_modes;
 
@@ -415,15 +420,13 @@ bool Executor::vdriver_set_mode(int width, int height, int bpp, bool grayscale_p
 
     vdriver_fbuf = new uint8_t[vdriver_row_bytes * vdriver_height * 5];
 
+    qimage = new QImage(vdriver_fbuf, vdriver_width, vdriver_height, vdriver_row_bytes,
+        vdriver_bpp == 1 ? QImage::Format_Mono : QImage::Format_Indexed8);
+    qimage->setColorTable({qRgb(0,0,0),qRgb(255,255,255)});
 
-
-    qimage = new QImage(vdriver_fbuf, vdriver_width, vdriver_height, vdriver_row_bytes, QImage::Format_Indexed8);
-
-    window->resize(vdriver_width, vdriver_height);
-    window->show();
-#ifdef MACOSX
-    macosx_hide_menu_bar(0);
-#endif
+    window = new ExecutorWindow();
+    window->setGeometry(geom);
+    window->showMaximized();
     return true;
 }
 void Executor::vdriver_set_colors(int first_color, int num_colors, const ColorSpec *colors)
@@ -461,7 +464,7 @@ void Executor::vdriver_update_screen_rects(int num_rects, const vdriver_rect_t *
     {
         rgn += QRect(r[i].left, r[i].top, r[i].right-r[i].left, r[i].bottom-r[i].top);
         //vdriver_update_screen(r[i].top, r[i].left, r[i].bottom, r[i].right, cursor_p);
-}
+    }
     window->update(rgn);
 }
 
@@ -541,31 +544,10 @@ void Executor::host_set_cursor(char *cursor_data,
 
 int Executor::host_set_cursor_visible(int show_p)
 {
- /*   if(show_p)
+    if(show_p)
         host_set_cursor(NULL, NULL, 0, 0);
     else
-        window->setCursor(Qt::BlankCursor);*/
-    return true;
-}
-        uchar data2[32];
-        uchar *mask2 = (uchar*)cursor_mask;
-        std::copy(cursor_data, cursor_data+32, data2);
-        for(int i = 0; i<32; i++)
-            mask2[i] |= data2[i];
-        QBitmap crsr = QBitmap::fromData(QSize(16, 16), (const uchar*)data2, QImage::Format_Mono);
-        QBitmap mask = QBitmap::fromData(QSize(16, 16), (const uchar*)mask2, QImage::Format_Mono);
-        
-        theCursor = QCursor(crsr, mask, hotspot_x, hotspot_y);
-    }
-    window->setCursor(theCursor);   // TODO: should we check for visibility?
-}
-
-int Executor::host_set_cursor_visible(int show_p)
-{
- /*   if(show_p)
-        host_set_cursor(NULL, NULL, 0, 0);
-    else
-        window->setCursor(Qt::BlankCursor);*/
+        window->setCursor(Qt::BlankCursor);
     return true;
 }
 
