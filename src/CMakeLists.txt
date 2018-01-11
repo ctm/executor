@@ -168,6 +168,9 @@ source_group(AppleEvents FILES ${ae_sources})
 
 set(sound_sources sounddriver.cpp sound.cpp soundIMVI.cpp soundfake.cpp snth5.cpp
     SpeechManager.cpp)
+if(HOST_OS STREQUAL macosx)
+set(sound_sources ${sound_sources} SpeechManager-MacBridge.mm)
+endif()
 source_group(Sound FILES ${sound_sources})
 
 set(num_sources bindec.cpp float4.cpp float5.cpp float7.cpp floatnext.cpp toolmath.cpp
@@ -370,6 +373,7 @@ set(include_sources hintemplate.h
                   include/ShutDown.h
                   include/SoundDvr.h
                   include/SoundMgr.h
+                  include/SpeechManager.h
                   include/StartMgr.h
                   include/StdFilePkg.h
                   include/SysErr.h
