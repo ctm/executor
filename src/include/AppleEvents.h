@@ -240,13 +240,13 @@ extern bool application_accepts_open_app_aevt_p;
 /*  error codes */
 
 #define AE_RETURN_ERROR(error)                         \
-    ({                                                 \
+    do {                                               \
         OSErr _error_ = (error);                       \
                                                        \
         if(_error_ != noErr)                           \
             warning_unexpected("error `%d'", _error_); \
         return _error_;                                \
-    })
+    } while(0)
 
 enum
 {

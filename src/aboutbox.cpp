@@ -623,17 +623,6 @@ event_loop(bool executor_p)
             }
             break;
 
-#define _FindControl(arg0, arg1, arg2)             \
-    ({                                             \
-        int16_t retval;                            \
-        GUEST<ControlHandle> bogo_c;               \
-                                                   \
-        retval = FindControl(arg0, arg1, &bogo_c); \
-        *(arg2) = MR(bogo_c);                      \
-                                                   \
-        retval;                                    \
-    })
-
             case mouseDown:
             {
                 Point local_pt;
@@ -644,7 +633,9 @@ event_loop(bool executor_p)
                 GlobalToLocal(&tmpPt);
                 local_pt = tmpPt.get();
 
-                control_p = _FindControl(local_pt, about_box, &c);
+                GUEST<ControlHandle> bogo_c;
+                control_p = _FindControl(local_pt, about_box, &bogo_c);
+                c = MR(bogo_c);
                 if(!control_p)
                     SysBeep(1);
                 else

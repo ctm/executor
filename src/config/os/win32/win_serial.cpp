@@ -23,21 +23,22 @@ enum
  * It uses the gcc-specific construct of ({ ... })
  */
 
-#define LOOKUP_KEY(valp, thekey, map)        \
-    ({                                       \
-        int i;                               \
-        int retval;                          \
-                                             \
-        retval = PARAMETER_ERROR;            \
-        for(i = 0; i < (int)NELEM(map); ++i) \
-            if(map[i].key == thekey)         \
-            {                                \
-                *valp = map[i].val;          \
-                retval = 0;                  \
-                break;                       \
-            }                                \
-        retval;                              \
-    })
+template<typename ValType, typename KeyType, typename MapType, size_t n>
+int LOOKUP_KEY(ValType *valp, KeyType thekey, const MapType (&map)[n])
+{
+    int i;
+    int retval;
+
+    retval = PARAMETER_ERROR;
+    for(i = 0; i < n; ++i)
+        if(map[i].key == thekey)
+        {
+            *valp = map[i].val;
+            retval = 0;
+            break;
+        }
+    return retval;
+}
 
 static struct
 {

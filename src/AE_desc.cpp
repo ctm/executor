@@ -9,6 +9,7 @@
 
 #include "rsys/mman.h"
 #include "rsys/apple_events.h"
+#include <algorithm>
 
 using namespace Executor;
 
@@ -564,7 +565,7 @@ ae_desc_to_ptr(descriptor_t *desc,
     desc_data = DESC_DATA(desc);
     desc_size = GetHandleSize(desc_data);
 
-    copy_size = MIN(desc_size, max_size);
+    copy_size = std::min(desc_size, max_size);
 
     memcpy(data, STARH(desc_data), copy_size);
 

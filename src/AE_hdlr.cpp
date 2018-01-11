@@ -13,19 +13,12 @@
 
 using namespace Executor;
 
-#define hdlr_table(system_p, class)                       \
-    ({                                                    \
-        AE_info_t *info;                                  \
-        AE_zone_tables_h zone_tables;                     \
-                                                          \
-        info = MR(LM(AE_info));                           \
-                                                          \
-        zone_tables = ((system_p)                         \
-                           ? MR(info->system_zone_tables) \
-                           : MR(info->appl_zone_tables)); \
-                                                          \
-        HxP(zone_tables, class##_hdlr_table);             \
-    })
+inline AE_zone_tables_h get_zone_tables(bool system_p)
+{
+    auto info = MR(LM(AE_info));
+    return system_p ? MR(info->system_zone_tables) : MR(info->appl_zone_tables);
+}
+#define hdlr_table(system_p, class) HxP(get_zone_tables(system_p), class##_hdlr_table)
 
 void Executor::AE_init(void)
 {
