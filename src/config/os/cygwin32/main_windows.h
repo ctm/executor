@@ -1,4 +1,4 @@
-#if !defined (__main_windows_h__)
+#if !defined(__main_windows_h__)
 #define __main_windows_h__
 
 /*

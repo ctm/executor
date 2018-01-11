@@ -1,69 +1,72 @@
-#if !defined (__VDRIVER__)
+#if !defined(__VDRIVER__)
 #define __VDRIVER__
 
 /*
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: VDriver.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 #include "FileMgr.h"
 
-typedef struct PACKED
+namespace Executor
 {
-  COMMONFSQUEUEDEFS;
-  INTEGER ioRefNum;
-  INTEGER csCode;
-  PACKED_MEMBER(Ptr, csParam);
-} VDParamBlock;
+struct VDParamBlock
+{
+    GUEST_STRUCT;
+    COMMONFSQUEUEDEFS;
+    GUEST<INTEGER> ioRefNum;
+    GUEST<INTEGER> csCode;
+    GUEST<Ptr> csParam;
+};
 
 typedef VDParamBlock *VDParamBlockPtr;
 
-
-typedef struct PACKED
+struct VDEntryRecord
 {
-  PACKED_MEMBER(Ptr, csTable);
-  INTEGER csStart;
-  INTEGER csCount;
-} VDEntryRecord;
+    GUEST_STRUCT;
+    GUEST<Ptr> csTable;
+    GUEST<INTEGER> csStart;
+    GUEST<INTEGER> csCount;
+};
 
 typedef VDEntryRecord *VDEntRecPtr;
 
-
-typedef struct PACKED
+struct VDGammaRecord
 {
-  PACKED_MEMBER(Ptr, csGTable);
-} VDGammaRecord;
+    GUEST_STRUCT;
+    GUEST<Ptr> csGTable;
+};
 
 typedef VDGammaRecord *VDGamRecPtr;
 
-
-typedef struct PACKED
+struct VDPgInfo
 {
-  INTEGER csMode;
-  LONGINT csData;
-  INTEGER csPage;
-  PACKED_MEMBER(Ptr, csBaseAddr);
-} VDPgInfo;
+    GUEST_STRUCT;
+    GUEST<INTEGER> csMode;
+    GUEST<LONGINT> csData;
+    GUEST<INTEGER> csPage;
+    GUEST<Ptr> csBaseAddr;
+};
 
 typedef VDPgInfo *VDPgInfoPtr;
 
-
-typedef struct PACKED
+struct VDFlagRec
 {
-  SignedByte flag;
-} VDFlagRec;
+    GUEST_STRUCT;
+    GUEST<SignedByte> flag;
+};
 
 typedef VDFlagRec *VDFlagPtr;
 
-
-typedef struct PACKED
+struct VDDefModeRec
 {
-  SignedByte spID;
-} VDDefModeRec;
+    GUEST_STRUCT;
+    GUEST<SignedByte> spID;
+};
 
 typedef VDDefModeRec *VDDefModePtr;
-
+}
 
 #endif /* !__VDRIVER__ */

@@ -1,6 +1,0 @@
-splash splash.8bp.ppm
-button empty_button.ppm
-out splash.8bp
-bpp 8
-n_buttons 0
-bk_color 0 0 0

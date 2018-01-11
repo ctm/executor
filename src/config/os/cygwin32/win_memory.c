@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_win_memory[] = "$Id: win_memory.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #define USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 
 #include "rsys/common.h"
@@ -17,13 +13,13 @@ char ROMlib_rcsid_win_memory[] = "$Id: win_memory.c 63 2004-12-24 18:19:43Z ctm 
 #include <windows.h>
 
 PUBLIC ULONGINT
-physical_memory (void)
+physical_memory(void)
 {
-  MEMORYSTATUS status;
-  ULONGINT retval;
+    MEMORYSTATUS status;
+    ULONGINT retval;
 
-  GlobalMemoryStatus (&status);
-  retval = status.dwTotalPhys;
-  replace_physgestalt_selector (gestaltPhysicalRAMSize, retval);
-  return retval;
+    GlobalMemoryStatus(&status);
+    retval = status.dwTotalPhys;
+    replace_physgestalt_selector(gestaltPhysicalRAMSize, retval);
+    return retval;
 }

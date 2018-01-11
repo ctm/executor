@@ -1,3 +1,0 @@
-#!/bin/sh
-
-/ardi/executor/util/configure.sh  '--host=i486-linux' '--target=i386-msdos' '--front-end=dos' '--cflags=-O2 -DNDEBUG -Wall -DRELEASE_DEMO' '--root=/ardi/executor' '--target-gcc=i386-msdos-go32-gcc' '--sound=djgpp'

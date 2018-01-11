@@ -46,7 +46,7 @@ Routines that have more than 8 arguments require special work
 
 #include <string.h>
 
-PRIVATE int
+static int
 compare (const void *a, const void *b)
 {
   const char *p1, *p2;
@@ -58,7 +58,7 @@ compare (const void *a, const void *b)
   return retval;
 }
 
-PRIVATE boolean_t
+static bool
 ignore_func_p (const char *func_name)
 {
   static const char *exceptions[] =
@@ -136,13 +136,13 @@ ignore_func_p (const char *func_name)
     "_AE_hdlr_lookup",
     "_AE_hdlr_install",
   };
-  static boolean_t been_here = FALSE;
-  boolean_t retval;
+  static bool been_here = false;
+  bool retval;
 
   if (!been_here)
     {
       qsort (exceptions, NELEM (exceptions), sizeof exceptions[0], compare);
-      been_here = TRUE;
+      been_here = true;
     }
 
   retval = !!bsearch (&func_name, exceptions, NELEM (exceptions),
@@ -151,7 +151,7 @@ ignore_func_p (const char *func_name)
 }
 
 
-PRIVATE void
+static void
 dump_header (void)
 {
   printf (
@@ -217,7 +217,7 @@ dump_header (void)
 "#include \"rsys/emustubs.h\"\n"
 "#include \"rsys/mixed_mode.h\"\n\n"
 "#define SetPalette C_SetPalette\n\n"
-"typedef uint32 PointAsLong;\n"
+"typedef uint32_t PointAsLong;\n"
 );
 }
 
@@ -237,7 +237,7 @@ typedef enum
 }
 arg_t;
 
-PRIVATE void
+static void
 process_a_func (int n_args, const char *name, arg_t ret_type, ...);
 
 #define void struct {}
@@ -311,7 +311,7 @@ main ()
 
 #undef void
 
-PRIVATE char *
+static char *
 arg_type (arg_t t)
 {
   char *retval;
@@ -325,13 +325,13 @@ arg_type (arg_t t)
       retval = "uint8";
       break;
     case two_byte_arg:
-      retval = "uint16";
+      retval = "uint16_t";
       break;
     case point_arg:
       retval = "PointAsLong";
       break;
     case four_byte_arg:
-      retval = "uint32";
+      retval = "uint32_t";
       break;
     case pointer_arg:
       retval = "void *";
@@ -340,7 +340,7 @@ arg_type (arg_t t)
   return retval;
 }
 
-PRIVATE void
+static void
 process_a_func (int n_args, const char *name, arg_t ret_type, ...)
 {
   if (!ignore_func_p (name))

@@ -1,4 +1,4 @@
-#if !defined (_win_temp_h_)
+#if !defined(_win_temp_h_)
 #define _win_temp_h_
 
 /*
@@ -6,6 +6,6 @@
  * All rights reserved.
  */
 
-extern char *win_temp (void);
+extern char *win_temp(void);
 
 #endif

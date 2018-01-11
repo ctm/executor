@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/4a524735.ecf) was built by Executor
-Comments = "Gravitation Limited 5.0";
-// WindowName = "Gravitation Ltd. 5.0";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitOften, SoundOn, PassPostscript, NewLineToCR, NoWarn32};

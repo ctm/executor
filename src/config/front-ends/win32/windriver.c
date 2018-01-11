@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_windriver[] = "$Id: windriver.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 /* Implementation of the framebuffer portion of win32 vdriver */
 
 #include <windows.h>
@@ -35,63 +31,28 @@ rgb_spec_t *vdriver_rgb_spec;
 #endif /* WIN_MGL */
 #endif /* WIN_DIB */
 
-
 /* Used as a replacement for fprintf() for printing messages to display */
 /* This should probably go in some sort of compatibility library...
    The redefinition of fprintf is currently in win32.h
 */
 void Win_Message(FILE *stream, const char *fmt, ...)
 {
-  char *title_str = NULL;
-  char  buffer[1024];
-  va_list ap;
+    char *title_str = NULL;
+    char buffer[1024];
+    va_list ap;
 
-  if ( stream == stdout )
-    title_str = "Executor Message";
-  else if ( stream == stderr )
-    title_str = "Executor Error";
-  else
-    title_str = NULL;
+    if(stream == stdout)
+        title_str = "Executor Message";
+    else if(stream == stderr)
+        title_str = "Executor Error";
+    else
+        title_str = NULL;
 
-  va_start(ap, fmt);
-  vsprintf(buffer, fmt, ap);
-  if ( title_str )
-    MessageBox(GetActiveWindow(), buffer, title_str, MB_OK);
-  else
-    fprintf(stream, "%s", buffer);
-  va_end(ap);
-}
-
-/* host functions that should go away */
-
-/* shadow buffer; created on demand */
-unsigned char *vdriver_shadow_fbuf = NULL;
-
-void
-host_flush_shadow_screen (void)
-{
-  int top_long, left_long, bottom_long, right_long;
-
-  /* Lazily allocate a shadow screen.  We won't be doing refresh that often,
-   * so don't waste the memory unless we need it.  Note: memory never reclaimed
-   */
-  if (vdriver_shadow_fbuf == NULL)
-    {
-      vdriver_shadow_fbuf = malloc(vdriver_row_bytes * vdriver_height);
-      memcpy (vdriver_shadow_fbuf, vdriver_fbuf, 
-                                 vdriver_row_bytes * vdriver_height);
-      vdriver_update_screen (0, 0, vdriver_height, vdriver_width, FALSE);
-    }
-  else if (find_changed_rect_and_update_shadow ((uint32 *) vdriver_fbuf,
-						(uint32 *) vdriver_shadow_fbuf,
-						(vdriver_row_bytes
-						 / sizeof (uint32)),
-						vdriver_height,
-						&top_long, &left_long,
-						&bottom_long, &right_long))
-    {
-      vdriver_update_screen (top_long, (left_long * 32) >> vdriver_log2_bpp,
-			     bottom_long,
-			     (right_long * 32) >> vdriver_log2_bpp, FALSE);
-    }
+    va_start(ap, fmt);
+    vsprintf(buffer, fmt, ap);
+    if(title_str)
+        MessageBox(GetActiveWindow(), buffer, title_str, MB_OK);
+    else
+        fprintf(stream, "%s", buffer);
+    va_end(ap);
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# $Id: makerawblt.pl,v 1.4 1995/10/29 23:49:06 mat Exp $
+
 
 # This is how many times to unwrap the blitting loop
 $max_unwrap_factor = 8;
@@ -113,7 +113,7 @@ sub output_func {
 	   "\};\n" .
 	   "\#if defined (mc68000)\n" .
 	   "/* Convince gcc to use one register addl, not two addqw's */\n" .
-	   "register uint32 sec_size = sizeof (section[0]);\n" .
+	   "register uint32_t sec_size = sizeof (section[0]);\n" .
 	   "\#elif !defined (sec_size)\n" .
 	   "#define sec_size (sizeof (section[0]))\n" .
 	   "\#endif\n" .
@@ -121,14 +121,14 @@ sub output_func {
 	   "  do \{\n" .
 	   $inloop .
 	   "  const blt_section_t *s = section;\n" .
-	   "  int32 arg = s->arg;\n");
+	   "  int32_t arg = s->arg;\n");
 
 	   if ($patblt) {
-	       print "uint32 *dst = (uint32 *) \&row_base\[s->offset\];\n";
+	       print "uint32_t *dst = (uint32_t *) \&row_base\[s->offset\];\n";
 	   } else {
-	       print ("const uint32 *src = (const uint32 *) " .
+	       print ("const uint32_t *src = (const uint32_t *) " .
 		      "\&src_row_base\[s->offset\];\n" .
-		      "uint32 *dst = (uint32 *) " .
+		      "uint32_t *dst = (uint32_t *) " .
 		      "\&dst_row_base\[s->offset\];\n");
 	   }
 
@@ -226,7 +226,7 @@ sub process_mode {
 
     $this_label_array .= "   \&\&$mask_label,\n";
     $this_label_array .= "   \&\&done,\n";
-    $this_label_array .= "   $prefix" . "_func_$func_number,\n";
+    $this_label_array .= "  (void*) $prefix" . "_func_$func_number,\n";
 
     if (defined ($label_arrays_seen{$this_label_array})) {
 	$index = $label_arrays_seen{$this_label_array};

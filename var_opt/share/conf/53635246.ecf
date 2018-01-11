@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/53635246.ecf) was built by Executor
-Comments = "Scruffy ][ wants to run in 16 color mode and to have Sound On.";
-// WindowName = "Scruffy II";
-BitsPerPixel = 4;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 10;
-Delay = 0;
-Options = {BlitOften, SoundOn, PassPostscript, NewLineToCR, NoWarn32};

@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/72706db5.ecf) was built by Executor
-Comments = "Super MANDELZOOM is black and white";
-// WindowName = "Super MANDELZOOM 1.06";
-BitsPerPixel = 1;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR, NoWarn32};

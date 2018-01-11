@@ -1,4 +1,4 @@
-build
+build*
 *.o
 src/apple.c
 src/active.c
@@ -26,4 +26,7 @@ src/config.status
 src/config.log
 src/config.h
 .deps/
+**.o
+*~
 .DS_Store
+.vscode

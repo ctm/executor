@@ -1,62 +1,59 @@
-#if !defined (__DISK__)
+#if !defined(__DISK__)
 #define __DISK__
 
 /*
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: Disk.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
-#define nsDrvErr	(-56)
-#define paramErr	(-50)
-#define wPrErr		(-44)
-#define firstDskErr	(-84)
-#define sectNFErr	(-81)
-#define seekErr		(-80)
-#define spdAdjErr	(-79)
-#define twoSideErr	(-78)
-#define initIWMErr	(-77)
-#define tk0BadErr	(-76)
-#define cantStepErr	(-75)
-#define wrUnderrun	(-74)
-#define badDBtSlp	(-73)
-#define badDCksum	(-72)
-#define noDtaMkErr	(-71)
-#define badBtSlpErr	(-70)
-#define badCksmErr	(-69)
-#define dataVerErr	(-68)
-#define noAdrMkErr	(-67)
-#define noNybErr	(-66)
-#define offLinErr	(-65)
-#define noDriveErr	(-64)
-#define lastDskErr	(-64)
+namespace Executor
+{
+enum
+{
+    firstDskErr = (-84),
+    sectNFErr = (-81),
+    seekErr = (-80),
+    spdAdjErr = (-79),
+    twoSideErr = (-78),
+    initIWMErr = (-77),
+    tk0BadErr = (-76),
+    cantStepErr = (-75),
+    wrUnderrun = (-74),
+    badDBtSlp = (-73),
+    badDCksum = (-72),
+    noDtaMkErr = (-71),
+    badBtSlpErr = (-70),
+    badCksmErr = (-69),
+    dataVerErr = (-68),
+    noAdrMkErr = (-67),
+    noNybErr = (-66),
+    offLinErr = (-65),
+    noDriveErr = (-64),
+    lastDskErr = (-64),
+};
 
-typedef struct PACKED {
-  INTEGER track;
-  SignedByte writeProt;
-  SignedByte diskInPlace;
-  SignedByte installed;
-  SignedByte sides;
-  PACKED_MEMBER(QElemPtr, qLink);
-  INTEGER qType;
-  INTEGER dQDrive;
-  INTEGER dQRefNum;
-  INTEGER dQFSID;
-  SignedByte twoSideFmt;
-  SignedByte needsFlush;
-  INTEGER diskErrs;
-} DrvSts;
+struct DrvSts
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> track;
+    GUEST<SignedByte> writeProt;
+    GUEST<SignedByte> diskInPlace;
+    GUEST<SignedByte> installed;
+    GUEST<SignedByte> sides;
+    GUEST<QElemPtr> qLink;
+    GUEST<INTEGER> qType;
+    GUEST<INTEGER> dQDrive;
+    GUEST<INTEGER> dQRefNum;
+    GUEST<INTEGER> dQFSID;
+    GUEST<SignedByte> twoSideFmt;
+    GUEST<SignedByte> needsFlush;
+    GUEST<INTEGER> diskErrs;
+};
 
-
-/* DO NOT DELETE THIS LINE */
-#if !defined (__STDC__)
-extern OSErr DiskEject(); 
-extern OSErr SetTagBuffer(); 
-extern OSErr DriveStatus(); 
-#else /* __STDC__ */
-extern OSErr DiskEject( INTEGER rn ); 
-extern OSErr SetTagBuffer( Ptr bp ); 
-extern OSErr DriveStatus( INTEGER dn, DrvSts *statp ); 
-#endif /* __STDC__ */
+extern OSErr DiskEject(INTEGER rn);
+extern OSErr SetTagBuffer(Ptr bp);
+extern OSErr DriveStatus(INTEGER dn, DrvSts *statp);
+}
 #endif /* __DISK__ */

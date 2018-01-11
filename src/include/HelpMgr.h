@@ -1,111 +1,137 @@
-#if !defined (_HELPMGR_H_)
+#if !defined(_HELPMGR_H_)
 #define _HELPMGR_H_
 
 /*
  * Copyright 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: HelpMgr.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 #include "TextEdit.h"
 #include "MenuMgr.h"
 #include "WindowMgr.h"
 
-typedef struct PACKED HMStringResType
+namespace Executor
 {
-  INTEGER hmmResID;
-  INTEGER hmmIndex;
-} HMStringResType;
+struct HMStringResType
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> hmmResID;
+    GUEST<INTEGER> hmmIndex;
+};
 
-typedef struct PACKED HMMessageRecord
+typedef struct HMMessageRecord
 {
-  INTEGER hmmHelpType;
-  union
-  {
-    Str255 hmmString;
-    INTEGER hmmPict;
-    HMStringResType hmmStringRes;
-    PACKED_MEMBER(TEHandle, hmmTEHandle);
-    PACKED_MEMBER(PicHandle, hmmPictHandle);
-    INTEGER hmmTERes;
-    INTEGER hmmSTRRes;
-  } u;
+    GUEST_STRUCT;
+    GUEST<INTEGER> hmmHelpType;
+    union {
+        GUEST<Str255> hmmString;
+        GUEST<INTEGER> hmmPict;
+        GUEST<HMStringResType> hmmStringRes;
+        GUEST<TEHandle> hmmTEHandle;
+        GUEST<PicHandle> hmmPictHandle;
+        GUEST<INTEGER> hmmTERes;
+        GUEST<INTEGER> hmmSTRRes;
+    } u;
 } HMMessageRecord, *HMMessageRecPtr;
 
 enum
 {
-  hmHelpDisabled = -850,
-  hmBalloonAborted = -853,
-  hmSameAsLastBalloon = -854,
-  hmHelpManagerNotInited = -855,
-  hmSkippedBalloon = -857,
-  hmWrongVersion = -858,
-  hmUnknownHelpType = -859,
-  hmOperationUnsupported = -861,
-  hmNoBalloonUp = -862,
-  hmCloseViewActive = -863
+    hmHelpDisabled = -850,
+    hmBalloonAborted = -853,
+    hmSameAsLastBalloon = -854,
+    hmHelpManagerNotInited = -855,
+    hmSkippedBalloon = -857,
+    hmWrongVersion = -858,
+    hmUnknownHelpType = -859,
+    hmOperationUnsupported = -861,
+    hmNoBalloonUp = -862,
+    hmCloseViewActive = -863
 };
 
-extern trap BOOLEAN C_HMGetBalloons (void);
+extern BOOLEAN C_HMGetBalloons(void);
+PASCAL_FUNCTION(HMGetBalloons);
 
-extern trap OSErr C_HMSetBalloons (BOOLEAN flag);
+extern OSErr C_HMSetBalloons(BOOLEAN flag);
+PASCAL_FUNCTION(HMSetBalloons);
 
-extern trap BOOLEAN C_HMIsBalloon (void);
+extern BOOLEAN C_HMIsBalloon(void);
+PASCAL_FUNCTION(HMIsBalloon);
 
-extern trap OSErr C_HMShowBalloon (HMMessageRecord *msgp, Point tip,
-					RectPtr alternaterectp, Ptr tipprocptr,
-					INTEGER proc, INTEGER variant,
-					INTEGER method);
+extern OSErr C_HMShowBalloon(HMMessageRecord *msgp, Point tip,
+                                  RectPtr alternaterectp, Ptr tipprocptr,
+                                  INTEGER proc, INTEGER variant,
+                                  INTEGER method);
+PASCAL_FUNCTION(HMShowBalloon);
 
-extern trap OSErr C_HMShowMenuBalloon (INTEGER item, INTEGER menuid,
-					    LONGINT flags,
-					    LONGINT itemreserved, Point tip,
-					    RectPtr alternaterectp,
-					    Ptr tipproc, INTEGER proc,
-					    INTEGER variant);
+extern OSErr C_HMShowMenuBalloon(INTEGER item, INTEGER menuid,
+                                      LONGINT flags,
+                                      LONGINT itemreserved, Point tip,
+                                      RectPtr alternaterectp,
+                                      Ptr tipproc, INTEGER proc,
+                                      INTEGER variant);
+PASCAL_FUNCTION(HMShowMenuBalloon);
 
-extern trap OSErr C_HMRemoveBalloon (void);
+extern OSErr C_HMRemoveBalloon(void);
+PASCAL_FUNCTION(HMRemoveBalloon);
 
-extern trap OSErr C_HMGetHelpMenuHandle (MenuHandle *mhp);
+extern OSErr C_HMGetHelpMenuHandle(GUEST<MenuHandle> *mhp);
+PASCAL_FUNCTION(HMGetHelpMenuHandle);
 
-extern trap OSErr C_HMGetFont (INTEGER *fontp);
+extern OSErr C_HMGetFont(GUEST<INTEGER> *fontp);
+PASCAL_FUNCTION(HMGetFont);
 
-extern trap OSErr C_HMGetFontSize (INTEGER *sizep);
+extern OSErr C_HMGetFontSize(GUEST<INTEGER> *sizep);
+PASCAL_FUNCTION(HMGetFontSize);
 
-extern trap OSErr C_HMSetFont (INTEGER font);
+extern OSErr C_HMSetFont(INTEGER font);
+PASCAL_FUNCTION(HMSetFont);
 
-extern trap OSErr C_HMSetFontSize (INTEGER size);
+extern OSErr C_HMSetFontSize(INTEGER size);
+PASCAL_FUNCTION(HMSetFontSize);
 
-extern trap OSErr C_HMSetDialogResID (INTEGER resid);
+extern OSErr C_HMSetDialogResID(INTEGER resid);
+PASCAL_FUNCTION(HMSetDialogResID);
 
-extern trap OSErr C_HMGetDialogResID (INTEGER *residp);
+extern OSErr C_HMGetDialogResID(GUEST<INTEGER> *residp);
+PASCAL_FUNCTION(HMGetDialogResID);
 
-extern trap OSErr C_HMSetMenuResID (INTEGER menuid, INTEGER resid);
+extern OSErr C_HMSetMenuResID(INTEGER menuid, INTEGER resid);
+PASCAL_FUNCTION(HMSetMenuResID);
 
-extern trap OSErr C_HMGetMenuResID (INTEGER *menuidp, INTEGER *residp);
+extern OSErr C_HMGetMenuResID(GUEST<INTEGER> *menuidp, GUEST<INTEGER> *residp);
+PASCAL_FUNCTION(HMGetMenuResID);
 
-extern trap OSErr C_HMScanTemplateItems (INTEGER whichid,
-					      INTEGER whicresfile,
-					      ResType whictype);
+extern OSErr C_HMScanTemplateItems(INTEGER whichid,
+                                        INTEGER whicresfile,
+                                        ResType whictype);
+PASCAL_FUNCTION(HMScanTemplateItems);
 
-extern trap OSErr C_HMBalloonRect (HMMessageRecord *messp, Rect *rectp);
+extern OSErr C_HMBalloonRect(HMMessageRecord *messp, Rect *rectp);
+PASCAL_FUNCTION(HMBalloonRect);
 
-extern trap OSErr C_HMBalloonPict (HMMessageRecord *messp,
-					PicHandle *pictp);
+extern OSErr C_HMBalloonPict(HMMessageRecord *messp,
+                                  GUEST<PicHandle> *pictp);
+PASCAL_FUNCTION(HMBalloonPict);
 
-extern trap OSErr C_HMGetBalloonWindow (WindowPtr *windowpp);
+extern OSErr C_HMGetBalloonWindow(GUEST<WindowPtr> *windowpp);
+PASCAL_FUNCTION(HMGetBalloonWindow);
 
-extern trap OSErr C_HMExtractHelpMsg (ResType type, INTEGER resid,
-					   INTEGER msg, INTEGER state,
-					   HMMessageRecord *helpmsgp);
+extern OSErr C_HMExtractHelpMsg(ResType type, INTEGER resid,
+                                     INTEGER msg, INTEGER state,
+                                     HMMessageRecord *helpmsgp);
+PASCAL_FUNCTION(HMExtractHelpMsg);
 
-extern OSErr HMGetIndHelpMsg (ResType type, INTEGER resid,
-			      INTEGER msg, INTEGER state,
-			      LONGINT *options, Point tip,
-			      Rect *altrectp, INTEGER *theprocp,
-			      INTEGER *variantp,
-			      HMMessageRecord *helpmsgp,
-			      INTEGER *count);
+extern OSErr C_HMGetIndHelpMsg(ResType type, INTEGER resid,
+                               INTEGER msg, INTEGER state,
+                               GUEST<LONGINT> *options, Point tip,
+                               Rect *altrectp, GUEST<INTEGER> *theprocp,
+                               GUEST<INTEGER> *variantp,
+                               HMMessageRecord *helpmsgp,
+                               GUEST<INTEGER> *count);
+
+PASCAL_FUNCTION(HMGetIndHelpMsg);
+}
 
 #endif /* !_HELPMGR_H_ */

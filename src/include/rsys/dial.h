@@ -1,14 +1,16 @@
-#if !defined (__rsys_dial_h__)
-#  define __rsys_dial_h__
-
-typedef struct PACKED
+#if !defined(__rsys_dial_h__)
+#define __rsys_dial_h__
+namespace Executor
 {
-  int16 count;
-  PACKED_MEMBER(Handle, h);
-  Rect r;
-  uint8 type;
-  uint8 len;
-  int16 res_id;
-} icon_item_template_t;
-
+struct icon_item_template_t
+{
+    GUEST_STRUCT;
+    GUEST<int16_t> count;
+    GUEST<Handle> h;
+    GUEST<Rect> r;
+    GUEST<uint8> type;
+    GUEST<uint8> len;
+    GUEST<int16_t> res_id;
+};
+}
 #endif /* !defined (__rsys_dial_h__) */

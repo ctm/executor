@@ -1,13 +1,18 @@
 #if !defined(__RSYS_PREFS__)
 #define __RSYS_PREFS__
 
+#include <string>
+
+namespace Executor
+{
+
 typedef enum {
-  WriteAlways,
-  WriteInBltrgn,
-  WriteInOSEvent,
-  WriteAtEndOfTrap,
-  WriteNever
-} WriteWhenType;	/* This is an extension */
+    WriteAlways,
+    WriteInBltrgn,
+    WriteInOSEvent,
+    WriteAtEndOfTrap,
+    WriteNever
+} WriteWhenType; /* This is an extension */
 
 extern WriteWhenType ROMlib_when;
 extern int ROMlib_PretendSound;
@@ -28,15 +33,15 @@ extern int ROMlib_pretend_alias;
 extern int ROMlib_pretend_script;
 extern int ROMlib_pretend_edition;
 
-extern char *ROMlib_configfilename;
+extern uint32_t system_version;
+
+#define ROMLIB_DEBUG_BIT (1 << 1)
+
+extern void ROMlib_WriteWhen(WriteWhenType when);
+
+extern void do_dump_screen(void);
+extern std::string ROMlib_configfilename;
 extern FILE *configfile;
-
-extern uint32 system_version;
-
-#define ROMLIB_DEBUG_BIT                (1 <<  1)
-
-extern void ROMlib_WriteWhen (WriteWhenType when); 
-
-extern void do_dump_screen (void);
+}
 
 #endif /* !defined(__RSYS_PREFS__) */

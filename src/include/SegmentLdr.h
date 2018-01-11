@@ -1,61 +1,76 @@
-#if !defined (__SEGMENT__)
+#if !defined(__SEGMENT__)
 #define __SEGMENT__
 
 /*
  * Copyright 1989 - 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: SegmentLdr.h 63 2004-12-24 18:19:43Z ctm $
- */
 
+ */
 
 #include "rsys/noreturn.h"
 
-extern _NORET_1_ pascal trap void C_ExitToShell( void ) _NORET_2_;
+namespace Executor
+{
+//extern _NORET_1_ void C_ExitToShell(void) _NORET_2_;
+extern void C_ExitToShell(void);
+PASCAL_TRAP(ExitToShell, 0xA9F4);
 
-#if !defined (USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
+#if !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
 
-#define appOpen		0
-#define appPrint	1
+enum
+{
+    appOpen = 0,
+    appPrint = 1,
+};
 
-typedef struct PACKED {
-  INTEGER vRefNum;
-  OSType fType;
-  INTEGER versNum;
-  Str255 fName;
-} AppFile;
+struct AppFile
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> vRefNum;
+    GUEST<OSType> fType;
+    GUEST<INTEGER> versNum;
+    GUEST<Str255> fName;
+};
 
-#define hwParamErr (-502)
+enum
+{
+    hwParamErr = (-502),
+};
 
-#if !defined (AppParmHandle_H)
-extern HIDDEN_Handle 	AppParmHandle_H;
-extern Byte 	loadtrap;
-extern Byte 	FinderName[16];
-extern INTEGER 	CurApRefNum;
-extern Byte 	CurApName[34];
-extern INTEGER 	CurJTOffset;
-extern INTEGER 	CurPageOption;
+const LowMemGlobal<Byte> loadtrap { 0x12D }; // SegmentLdr SysEqu.a (true-b);
+const LowMemGlobal<Byte[16]> FinderName { 0x2E0 }; // SegmentLdr IMII-59 (true);
+const LowMemGlobal<INTEGER> CurApRefNum { 0x900 }; // SegmentLdr IMII-58 (true);
+/*
+ * NOTE: IMIII says CurApName is 32 bytes LONGINT, but it looks to me like
+ * it is really 34 bytes LONGINT.
+ */
+const LowMemGlobal<Byte[34]> CurApName { 0x910 }; // SegmentLdr IMII-58 (true);
+const LowMemGlobal<INTEGER> CurJTOffset { 0x934 }; // SegmentLdr IMII-62 (true-b);
+const LowMemGlobal<INTEGER> CurPageOption { 0x936 }; // SegmentLdr IMII-60 (true);
+const LowMemGlobal<Handle> AppParmHandle { 0xAEC }; // SegmentLdr IMII-57 (true);
+
+extern void flushcache(void);
+
+extern void HWPriv(LONGINT d0, LONGINT a0);
+extern char *ROMlib_undotdot(char *origp);
+extern void CountAppFiles(GUEST<INTEGER> *messagep,
+                          GUEST<INTEGER> *countp);
+extern void GetAppFiles(INTEGER index, AppFile *filep);
+extern void ClrAppFiles(INTEGER index);
+extern void Launch(StringPtr appl, INTEGER vrefnum);
+extern void Chain(StringPtr appl, INTEGER vrefnum);
+
+extern void C_GetAppParms(StringPtr namep,
+                                      GUEST<INTEGER> *rnp, GUEST<Handle> *aphandp);
+PASCAL_TRAP(GetAppParms, 0xA9F5);
+
+extern void C_UnloadSeg(Ptr addr);
+PASCAL_TRAP(UnloadSeg, 0xA9F1);
+
+extern void C_LoadSeg(INTEGER volatile segno);
+PASCAL_FUNCTION(LoadSeg);
+
 #endif
-
-#define AppParmHandle	(AppParmHandle_H.p)
-
-extern void flushcache (void); 
-
-extern trap void HWPriv( LONGINT d0, LONGINT a0 ); 
-extern char *ROMlib_undotdot( char *origp ); 
-extern void CountAppFiles( INTEGER *messagep, 
- INTEGER *countp ); 
-extern void GetAppFiles( INTEGER index, AppFile *filep ); 
-extern void ClrAppFiles( INTEGER index ); 
-extern pascal trap void C_GetAppParms( StringPtr namep, 
- INTEGER *rnp, HIDDEN_Handle *aphandp ); extern pascal trap void P_GetAppParms( StringPtr namep, 
- INTEGER *rnp, HIDDEN_Handle *aphandp ); 
-extern pascal trap void P_ExitToShell( void ); 
-extern pascal trap void Launch( StringPtr appl, INTEGER vrefnum );
-extern pascal trap void Chain( StringPtr appl, INTEGER vrefnum );
-extern pascal trap void C_UnloadSeg( Ptr addr ); extern pascal trap void P_UnloadSeg( Ptr addr); 
-extern pascal trap void C_LoadSeg( INTEGER volatile segno ); extern pascal trap void P_LoadSeg( INTEGER volatile segno); 
-extern pascal trap void C_UnloadSeg( Ptr addr ); extern pascal trap void P_UnloadSeg( Ptr addr); 
-#endif
-
+}
 #endif /* __SEGMENT__ */

@@ -1,4 +1,4 @@
-#if !defined (__STDFILE__)
+#if !defined(__STDFILE__)
 #define __STDFILE__
 
 #include "DialogMgr.h"
@@ -8,147 +8,151 @@
  * Copyright 1986, 1989, 1990, 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: StdFilePkg.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
-#define putDlgID	(-3999)
-
-#define putSave		1
-#define putCancel	2
-#define putEject	5
-#define putDrive	6
-#define putName		7
-
-#define getDlgID	(-4000)
-
-#define getOpen		1
-#define getCancel	3
-#define getEject	5
-#define getDrive	6
-#define getNmList	7
-#define getScroll	8
-
-typedef struct PACKED {
-  BOOLEAN good;
-  BOOLEAN copy;
-  OSType fType;
-  INTEGER vRefNum;
-  INTEGER version;
-  Str63 fName;
-} SFReply;
-
-typedef OSType SFTypeList[4];
-
-#if !defined (SFSaveDisk)
-extern INTEGER 	SFSaveDisk;
-extern LONGINT 	CurDirStore;
-#endif
-
-typedef struct PACKED
+namespace Executor
 {
-  BOOLEAN sfGood;
-  BOOLEAN sfReplacing;
-  OSType sfType;
-  FSSpec sfFile;
-  ScriptCode sfScript;
-  INTEGER sfFlags;
-  BOOLEAN sfIsFolder;
-  BOOLEAN sfIsVolume;
-  LONGINT sfReserved1;
-  INTEGER sfReserved2;
-} StandardFileReply;
-
-typedef ProcPtr FileFilterYDProcPtr;
-typedef ProcPtr DlgHookYDProcPtr;
-typedef ProcPtr ModalFilterYDProcPtr;
-typedef ProcPtr ActivateYDProcPtr;
+enum
+{
+    putDlgID = (-3999),
+};
 
 enum
 {
-  sfItemOpenButton = 1,
-  sfItemCancelButton = 2,
-  sfItemBalloonHelp = 3,
-  sfItemVolumeUser = 4,
-  sfItemEjectButton = 5,
-  sfItemDesktopButton = 6,
-  sfItemFileListUser = 7,
-  sfItemPopUpMenuUser = 8,
-  sfItemDividerLinePict = 9,
-  
-  sfItemFileNameTextEdit = 10, /* Put only */
-  sfItemPromptStaticText = 11,
-  sfItemNewFolderUser = 12,
+    putSave = 1,
+    putCancel = 2,
+    putEject = 5,
+    putDrive = 6,
+    putName = 7,
 };
 
-enum { sfPutDialogID = -6043, sfGetDialogID = -6042 };
+enum
+{
+    getDlgID = (-4000),
+};
 
-#if !defined (UNIV)
-#define UNIV
-#endif
+enum
+{
+    getOpen = 1,
+    getCancel = 3,
+    getEject = 5,
+    getDrive = 6,
+    getNmList = 7,
+    getScroll = 8,
+};
 
-#if !defined (__STDC__)
+struct SFReply
+{
+    GUEST_STRUCT;
+    GUEST<BOOLEAN> good;
+    GUEST<BOOLEAN> copy;
+    GUEST<OSType> fType;
+    GUEST<INTEGER> vRefNum;
+    GUEST<INTEGER> version;
+    GUEST<Str63> fName;
+};
 
-extern pascal void ROMlib_filebox();
-extern void SFPPutFile();
-extern void SFPutFile();
-extern void SFPGetFile();
-extern void SFGetFile();
+typedef OSType SFTypeList[4];
 
-#else /* __STDC__ */
+const LowMemGlobal<INTEGER> SFSaveDisk { 0x214 }; // StdFilePkg IMIV-72 (true);
+const LowMemGlobal<LONGINT> CurDirStore { 0x398 }; // StdFilePkg IMIV-72 (true);
 
-extern pascal void C_ROMlib_filebox( DialogPeek dp, INTEGER which );
-extern pascal void P_ROMlib_filebox( DialogPeek dp, INTEGER which );
+struct StandardFileReply
+{
+    GUEST_STRUCT;
+    GUEST<BOOLEAN> sfGood;
+    GUEST<BOOLEAN> sfReplacing;
+    GUEST<OSType> sfType;
+    GUEST<FSSpec> sfFile;
+    GUEST<ScriptCode> sfScript;
+    GUEST<INTEGER> sfFlags;
+    GUEST<BOOLEAN> sfIsFolder;
+    GUEST<BOOLEAN> sfIsVolume;
+    GUEST<LONGINT> sfReserved1;
+    GUEST<INTEGER> sfReserved2;
+};
 
-extern pascal trap void C_SFPPutFile( Point p, StringPtr prompt,
-	   StringPtr name, ProcPtr dh, SFReply *rep, INTEGER dig, ProcPtr fp );
-extern pascal trap void P_SFPPutFile( Point p, StringPtr prompt,
-	   StringPtr name, ProcPtr dh, SFReply *rep, INTEGER dig, ProcPtr fp );
+typedef UPP<INTEGER(INTEGER item, DialogPtr theDialog)> DlgHookProcPtr;
+typedef UPP<Boolean(CInfoPBPtr pb)> FileFilterProcPtr;
+typedef UPP<INTEGER(INTEGER item, DialogPtr theDialog, void *yourDataPtr)> DlgHookYDProcPtr;
+/* ModalFilterYDProcPtr moved to Dialogs.h */
+typedef UPP<Boolean(CInfoPBPtr pb, void *yourDataPtr)> FileFilterYDProcPtr;
+typedef UPP<void(DialogPtr theDialog, INTEGER itemNo, Boolean activating, void *yourDataPtr)> ActivateYDProcPtr;
 
-extern pascal trap void C_SFPutFile( Point p, StringPtr prompt, StringPtr name,
-						    ProcPtr dh, SFReply *rep );
-extern pascal trap void P_SFPutFile( Point p, StringPtr prompt, StringPtr name,
-						    ProcPtr dh, SFReply *rep );
+enum
+{
+    sfItemOpenButton = 1,
+    sfItemCancelButton = 2,
+    sfItemBalloonHelp = 3,
+    sfItemVolumeUser = 4,
+    sfItemEjectButton = 5,
+    sfItemDesktopButton = 6,
+    sfItemFileListUser = 7,
+    sfItemPopUpMenuUser = 8,
+    sfItemDividerLinePict = 9,
 
-extern pascal trap void C_SFPGetFile( Point p, StringPtr prompt, ProcPtr filef,
-		         INTEGER numt, SFTypeList tl, ProcPtr dh, SFReply *rep,
-						     INTEGER dig, ProcPtr fp );
-extern pascal trap void P_SFPGetFile( Point p, StringPtr prompt, ProcPtr filef,
-		         INTEGER numt, SFTypeList tl, ProcPtr dh, SFReply *rep,
-						     INTEGER dig, ProcPtr fp );
+    sfItemFileNameTextEdit = 10, /* Put only */
+    sfItemPromptStaticText = 11,
+    sfItemNewFolderUser = 12,
+};
 
-extern pascal trap void C_SFGetFile( Point p, StringPtr prompt, ProcPtr filef,
-		       INTEGER numt, SFTypeList tl, ProcPtr dh, SFReply *rep );
-extern pascal trap void P_SFGetFile( Point p, StringPtr prompt, ProcPtr filef,
-		       INTEGER numt, SFTypeList tl, ProcPtr dh, SFReply *rep );
+enum
+{
+    sfPutDialogID = -6043,
+    sfGetDialogID = -6042
+};
 
-extern pascal trap void C_StandardGetFile (ProcPtr filef, INTEGER numt,
-					   SFTypeList tl,
-					   StandardFileReply *replyp);
+extern void C_ROMlib_filebox(DialogPeek dp, INTEGER which);
+extern void P_ROMlib_filebox(DialogPeek dp, INTEGER which);
 
-extern pascal trap void C_StandardPutFile (Str255 prompt, Str255 defaultname,
-					   StandardFileReply *replyp);
+extern void C_SFPPutFile(Point p, StringPtr prompt,
+                                     StringPtr name, DlgHookProcPtr dh, SFReply *rep, INTEGER dig, ModalFilterProcPtr fp);
+PASCAL_FUNCTION(SFPPutFile);
 
-extern pascal trap void C_CustomPutFile (Str255 prompt, Str255 defaultName,
-					 StandardFileReply *replyp,
-					 INTEGER dlgid, Point where,
-					 DlgHookYDProcPtr dlghook,
-					 ModalFilterYDProcPtr filterproc,
-					 Ptr activeList,
-					 ActivateYDProcPtr activateproc,
-					 UNIV Ptr yourdatap);
+extern void C_SFPutFile(Point p, StringPtr prompt, StringPtr name,
+                                    DlgHookProcPtr dh, SFReply *rep);
+PASCAL_FUNCTION(SFPutFile);
 
-extern pascal trap void C_CustomGetFile (FileFilterYDProcPtr filefilter,
-					 INTEGER numtypes,
-					 SFTypeList typelist,
-					 StandardFileReply *replyp,
-					 INTEGER dlgid, Point where,
-					 DlgHookYDProcPtr dlghook,
-					 ModalFilterYDProcPtr filterproc,
-					 Ptr activeList,
-					 ActivateYDProcPtr activateproc,
-					 UNIV Ptr yourdatap);
+extern void C_SFPGetFile(Point p, StringPtr prompt, FileFilterProcPtr filef,
+                                     INTEGER numt, GUEST<SFTypeList> tl, DlgHookProcPtr dh, SFReply *rep,
+                                     INTEGER dig, ModalFilterProcPtr fp);
+PASCAL_FUNCTION(SFPGetFile);
 
-#endif /* __STDC__ */
+extern void C_SFGetFile(Point p, StringPtr prompt, FileFilterProcPtr filef,
+                                    INTEGER numt, GUEST<SFTypeList> tl, DlgHookProcPtr dh, SFReply *rep);
+PASCAL_FUNCTION(SFGetFile);
 
+extern void C_StandardGetFile(FileFilterProcPtr filef, INTEGER numt,
+                                          GUEST<SFTypeList> tl,
+                                          StandardFileReply *replyp);
+PASCAL_FUNCTION(StandardGetFile);
+
+extern void C_StandardPutFile(Str255 prompt, Str255 defaultname,
+                                          StandardFileReply *replyp);
+PASCAL_FUNCTION(StandardPutFile);
+
+extern void C_CustomPutFile(Str255 prompt, Str255 defaultName,
+                                        StandardFileReply *replyp,
+                                        INTEGER dlgid, Point where,
+                                        DlgHookYDProcPtr dlghook,
+                                        ModalFilterYDProcPtr filterproc,
+                                        Ptr activeList,
+                                        ActivateYDProcPtr activateproc,
+                                        void *yourdatap);
+PASCAL_FUNCTION(CustomPutFile);
+
+extern void C_CustomGetFile(FileFilterYDProcPtr filefilter,
+                                        INTEGER numtypes,
+                                        GUEST<SFTypeList> typelist,
+                                        StandardFileReply *replyp,
+                                        INTEGER dlgid, Point where,
+                                        DlgHookYDProcPtr dlghook,
+                                        ModalFilterYDProcPtr filterproc,
+                                        Ptr activeList,
+                                        ActivateYDProcPtr activateproc,
+                                        void *yourdatap);
+PASCAL_FUNCTION(CustomGetFile);
+}
 
 #endif /* __STDFILE__ */

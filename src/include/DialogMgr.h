@@ -1,208 +1,271 @@
-#if !defined (_DIALOG_H_)
+#if !defined(_DIALOG_H_)
 #define _DIALOG_H_
 
 /*
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: DialogMgr.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 #include "WindowMgr.h"
 #include "TextEdit.h"
 
-#define ctrlItem	4
-#define btnCtrl		0
-#define chkCtrl		1
-#define radCtrl		2
-#define resCtrl		3
-#define statText	8
-#define editText	16
-#define iconItem	32
-#define picItem		64
-#define userItem	0
-#define itemDisable	128
+namespace Executor
+{
+enum
+{
+    ctrlItem = 4,
+    btnCtrl = 0,
+    chkCtrl = 1,
+    radCtrl = 2,
+    resCtrl = 3,
+    statText = 8,
+    editText = 16,
+    iconItem = 32,
+    picItem = 64,
+    userItem = 0,
+    itemDisable = 128,
+};
 
-#define OK		1
-#define Cancel		2
+enum
+{
+    OK = 1,
+    Cancel = 2,
+};
 
-#define stopIcon	0
-#define noteIcon	1
-#define cautionIcon	2
+enum
+{
+    stopIcon = 0,
+    noteIcon = 1,
+    cautionIcon = 2,
+};
 
-typedef struct PACKED
- {
-   WindowRecord window;
-   PACKED_MEMBER(Handle, items);
-   PACKED_MEMBER(TEHandle, textH);
-   INTEGER editField;
-   INTEGER editOpen;
-   INTEGER aDefItem;
-} DialogRecord;
+struct DialogRecord
+{
+    GUEST_STRUCT;
+    GUEST<WindowRecord> window;
+    GUEST<Handle> items;
+    GUEST<TEHandle> textH;
+    GUEST<INTEGER> editField;
+    GUEST<INTEGER> editOpen;
+    GUEST<INTEGER> aDefItem;
+};
 typedef DialogRecord *DialogPeek;
 
 typedef CWindowPtr CDialogPtr;
 typedef WindowPtr DialogPtr;
-typedef HIDDEN_WindowPtr HIDDEN_DialogPtr;
 
 /* dialog record accessors */
-#define DIALOG_WINDOW(dialog)		((WindowPtr) &((DialogPeek) dialog)->window)
+#define DIALOG_WINDOW(dialog) ((WindowPtr) & ((DialogPeek)dialog)->window)
 
-#define DIALOG_ITEMS_X(dialog)		(((DialogPeek) (dialog))->items)
-#define DIALOG_TEXTH_X(dialog)		(((DialogPeek) (dialog))->textH)
-#define DIALOG_EDIT_FIELD_X(dialog)	(((DialogPeek) (dialog))->editField)
-#define DIALOG_EDIT_OPEN_X(dialog)	(((DialogPeek) (dialog))->editOpen)
-#define DIALOG_ADEF_ITEM_X(dialog)	(((DialogPeek) (dialog))->aDefItem)
+#define DIALOG_ITEMS_X(dialog) (((DialogPeek)(dialog))->items)
+#define DIALOG_TEXTH_X(dialog) (((DialogPeek)(dialog))->textH)
+#define DIALOG_EDIT_FIELD_X(dialog) (((DialogPeek)(dialog))->editField)
+#define DIALOG_EDIT_OPEN_X(dialog) (((DialogPeek)(dialog))->editOpen)
+#define DIALOG_ADEF_ITEM_X(dialog) (((DialogPeek)(dialog))->aDefItem)
 
-#define DIALOG_ITEMS(dialog)		(MR (DIALOG_ITEMS_X (dialog)))
-#define DIALOG_TEXTH(dialog)		(MR (DIALOG_TEXTH_X (dialog)))
-#define DIALOG_EDIT_FIELD(dialog)	(CW (DIALOG_EDIT_FIELD_X (dialog)))
-#define DIALOG_EDIT_OPEN(dialog)	(CW (DIALOG_EDIT_OPEN_X (dialog)))
-#define DIALOG_ADEF_ITEM(dialog)	(CW (DIALOG_ADEF_ITEM_X (dialog)))
+#define DIALOG_ITEMS(dialog) (MR(DIALOG_ITEMS_X(dialog)))
+#define DIALOG_TEXTH(dialog) (MR(DIALOG_TEXTH_X(dialog)))
+#define DIALOG_EDIT_FIELD(dialog) (CW(DIALOG_EDIT_FIELD_X(dialog)))
+#define DIALOG_EDIT_OPEN(dialog) (CW(DIALOG_EDIT_OPEN_X(dialog)))
+#define DIALOG_ADEF_ITEM(dialog) (CW(DIALOG_ADEF_ITEM_X(dialog)))
 
-typedef struct PACKED
+struct DialogTemplate
 {
-  Rect boundsRect;
-  INTEGER procID;
-  BOOLEAN visible;
-  BOOLEAN filler1;
-  BOOLEAN goAwayFlag;
-  BOOLEAN filler2;
-  LONGINT refCon;
-  INTEGER itemsID;
-  Str255 title;
-} DialogTemplate;
+    GUEST_STRUCT;
+    GUEST<Rect> boundsRect;
+    GUEST<INTEGER> procID;
+    GUEST<BOOLEAN> visible;
+    GUEST<BOOLEAN> filler1;
+    GUEST<BOOLEAN> goAwayFlag;
+    GUEST<BOOLEAN> filler2;
+    GUEST<LONGINT> refCon;
+    GUEST<INTEGER> itemsID;
+    GUEST<Str255> title;
+};
 
 typedef DialogTemplate *DialogTPtr;
-MAKE_HIDDEN(DialogTPtr);
-typedef HIDDEN_DialogTPtr *DialogTHndl;
 
-typedef struct PACKED {
-  unsigned boldItm4: 1;
-  unsigned boxDrwn4: 1;
-  unsigned sound4: 2;
-  unsigned boldItm3: 1;
-  unsigned boxDrwn3: 1;
-  unsigned sound3: 2;
-  unsigned boldItm2: 1;
-  unsigned boxDrwn2: 1;
-  unsigned sound2: 2;
-  unsigned boldItm1: 1;
-  unsigned boxDrwn1: 1;
-  unsigned sound1: 2;
+typedef GUEST<DialogTPtr> *DialogTHndl;
+
+// This has a 50% chance of being right.
+// It does not seem to be used, however.
+typedef struct PACKED
+{
+    unsigned boldItm4 : 1;
+    unsigned boxDrwn4 : 1;
+    unsigned sound4 : 2;
+    unsigned boldItm3 : 1;
+    unsigned boxDrwn3 : 1;
+    unsigned sound3 : 2;
+    unsigned boldItm2 : 1;
+    unsigned boxDrwn2 : 1;
+    unsigned sound2 : 2;
+    unsigned boldItm1 : 1;
+    unsigned boxDrwn1 : 1;
+    unsigned sound1 : 2;
 } StageList;
 
-typedef struct PACKED {
-  Rect boundsRect;
-  INTEGER itemsID;
-  StageList stages;
-} AlertTemplate;
+struct AlertTemplate
+{
+    GUEST_STRUCT;
+    GUEST<Rect> boundsRect;
+    GUEST<INTEGER> itemsID;
+    GUEST<StageList> stages;
+};
 typedef AlertTemplate *AlertTPtr;
-MAKE_HIDDEN(AlertTPtr);
-typedef HIDDEN_AlertTPtr *AlertTHndl;
 
-#define overlayDITL		0
-#define appendDITLRight 	1
-#define appendDITLBottom	2
+typedef GUEST<AlertTPtr> *AlertTHndl;
 
-typedef int16 DITLMethod;
+enum
+{
+    overlayDITL = 0,
+    appendDITLRight = 1,
+    appendDITLBottom = 2,
+};
 
-#define TEdoFont 	1
-#define TEdoFace 	2
-#define TEdoSize 	4
-#define TEdoColor 	8
-#define TEdoAll 	15
+typedef int16_t DITLMethod;
 
-#define TEaddSize 	16
+enum
+{
+    TEdoFont = 1,
+    TEdoFace = 2,
+    TEdoSize = 4,
+    TEdoColor = 8,
+    TEdoAll = 15,
+};
 
-#define doBColor 	8192
-#define doMode 		16384
-#define doFontName 	32768
+enum
+{
+    TEaddSize = 16,
+};
 
-#if !defined (ResumeProc_H)
-extern HIDDEN_ProcPtr 	ResumeProc_H;
-extern HIDDEN_ProcPtr 	DABeeper_H;
-extern HIDDEN_Handle 	DAStrings_H[4];
-extern INTEGER 	ANumber;
-extern INTEGER 	ACount;
-extern INTEGER 	DlgFont;
-#endif
+enum
+{
+    doBColor = 8192,
+    doMode = 16384,
+    doFontName = 32768,
+};
 
-#define ResumeProc	(ResumeProc_H.p)
-#define DABeeper	(DABeeper_H.p)
+typedef UPP<void(INTEGER soundNumber)> SoundProcPtr;
+typedef UPP<Boolean(DialogPtr theDialog, EventRecord *theEvent, GUEST<INTEGER> *itemHit)> ModalFilterProcPtr;
+typedef UPP<Boolean(DialogPtr theDialog, EventRecord *theEvent, GUEST<INTEGER> *itemHit, void *yourDataPtr)> ModalFilterYDProcPtr;
+typedef UPP<void(DialogPtr theDialog, INTEGER itemNo)> UserItemProcPtr;
 
-extern pascal trap INTEGER C_Alert( INTEGER id, 
- ProcPtr fp );
-extern pascal trap INTEGER C_StopAlert( INTEGER id, 
- ProcPtr fp );
-extern pascal trap INTEGER C_NoteAlert( INTEGER id, 
- ProcPtr fp );
-extern pascal trap INTEGER C_CautionAlert( INTEGER id, 
- ProcPtr fp );
-extern pascal trap void C_CouldAlert( INTEGER id );
-extern pascal trap void C_FreeAlert( INTEGER id );
-extern pascal trap void C_CouldDialog( INTEGER id );
-extern pascal trap void C_FreeDialog( INTEGER id );
-extern pascal trap DialogPtr C_NewDialog( Ptr dst, 
- Rect *r, StringPtr tit, BOOLEAN vis, INTEGER procid, 
- WindowPtr behind, BOOLEAN gaflag, LONGINT rc, Handle items );
-extern pascal trap DialogPtr C_GetNewDialog( INTEGER id, 
- Ptr dst, WindowPtr behind );
-extern pascal trap void C_CloseDialog( DialogPtr dp );
-extern pascal trap void C_DisposDialog( DialogPtr dp );
-extern pascal BOOLEAN C_ROMlib_myfilt( DialogPeek dp, EventRecord *evt, 
- INTEGER *ith );
+const LowMemGlobal<ProcPtr> ResumeProc { 0xA8C }; // DialogMgr IMI-411 (true);
+const LowMemGlobal<INTEGER> ANumber { 0xA98 }; // DialogMgr IMI-423 (true);
+const LowMemGlobal<INTEGER> ACount { 0xA9A }; // DialogMgr IMI-423 (true);
+const LowMemGlobal<ProcPtr> DABeeper { 0xA9C }; // DialogMgr IMI-411 (true);
+const LowMemGlobal<Handle[4]> DAStrings { 0xAA0 }; // DialogMgr IMI-421 (true);
+const LowMemGlobal<INTEGER> DlgFont { 0xAFA }; // DialogMgr IMI-412 (true);
 
-extern pascal trap void C_ModalDialog( ProcPtr fp, 
- INTEGER *item );
-extern pascal trap BOOLEAN C_IsDialogEvent( 
- EventRecord *evt );
-extern pascal trap void C_DrawDialog( DialogPtr dp );
-extern pascal trap INTEGER C_FindDItem( DialogPtr dp, 
- Point pt );
-extern pascal trap void C_UpdtDialog( DialogPtr dp, 
- RgnHandle rgn );
-extern pascal trap BOOLEAN C_DialogSelect( 
- EventRecord *evt, HIDDEN_DialogPtr *dpp, INTEGER *item );
-extern void DlgCut( DialogPtr dp );
-extern void DlgCopy( DialogPtr dp );
-extern void DlgPaste( DialogPtr dp );
-extern void DlgDelete( DialogPtr dp );
-extern pascal void C_ROMlib_mysound( INTEGER i );
-extern pascal trap void C_ErrorSound( ProcPtr sp );
-extern pascal trap void C_InitDialogs( ProcPtr rp );
-extern void SetDAFont( INTEGER i ); 
-extern pascal trap void C_ParamText( StringPtr p0, 
- StringPtr p1, StringPtr p2, StringPtr p3 );
-extern pascal trap void C_GetDItem( DialogPtr dp, 
- INTEGER itemno, INTEGER *itype, HIDDEN_Handle *item, Rect *r );
-extern pascal trap void C_SetDItem( DialogPtr dp, 
- INTEGER itemno, INTEGER itype, Handle item, Rect *r );
-extern pascal trap void C_GetIText( Handle item, 
- StringPtr text );
-extern pascal trap void C_SetIText( Handle item, 
- StringPtr text );
-extern pascal trap void C_SelIText( DialogPtr dp, 
- INTEGER itemno, INTEGER start, INTEGER stop );
-extern INTEGER GetAlrtStage( void  ); 
-extern void ResetAlrtStage( void  ); 
-extern pascal trap void C_HideDItem( DialogPtr dp, 
- INTEGER item );
-extern pascal trap void C_ShowDItem( DialogPtr dp, 
- INTEGER item );
+extern INTEGER C_Alert(INTEGER id,
+                                   ProcPtr fp);
+PASCAL_TRAP(Alert, 0xA985);
+extern INTEGER C_StopAlert(INTEGER id,
+                                       ProcPtr fp);
+PASCAL_TRAP(StopAlert, 0xA986);
+extern INTEGER C_NoteAlert(INTEGER id,
+                                       ProcPtr fp);
+PASCAL_TRAP(NoteAlert, 0xA987);
+extern INTEGER C_CautionAlert(INTEGER id,
+                                          ProcPtr fp);
+PASCAL_TRAP(CautionAlert, 0xA988);
+extern void C_CouldAlert(INTEGER id);
+PASCAL_TRAP(CouldAlert, 0xA989);
+extern void C_FreeAlert(INTEGER id);
+PASCAL_TRAP(FreeAlert, 0xA98A);
+extern void C_CouldDialog(INTEGER id);
+PASCAL_TRAP(CouldDialog, 0xA979);
+extern void C_FreeDialog(INTEGER id);
+PASCAL_TRAP(FreeDialog, 0xA97A);
+extern DialogPtr C_NewDialog(Ptr dst,
+                                         Rect *r, StringPtr tit, BOOLEAN vis, INTEGER procid,
+                                         WindowPtr behind, BOOLEAN gaflag, LONGINT rc, Handle items);
+PASCAL_TRAP(NewDialog, 0xA97D);
+extern DialogPtr C_GetNewDialog(INTEGER id,
+                                            Ptr dst, WindowPtr behind);
+PASCAL_TRAP(GetNewDialog, 0xA97C);
+extern void C_CloseDialog(DialogPtr dp);
+PASCAL_TRAP(CloseDialog, 0xA982);
+extern void C_DisposDialog(DialogPtr dp);
+PASCAL_TRAP(DisposDialog, 0xA983);
+extern BOOLEAN C_ROMlib_myfilt(DialogPeek dp, EventRecord *evt,
+                                      GUEST<INTEGER> *ith);
 
-extern pascal trap CDialogPtr C_NewCDialog (Ptr, Rect *, StringPtr, BOOLEAN, INTEGER, WindowPtr, BOOLEAN, LONGINT, Handle);
+extern void C_ModalDialog(ProcPtr fp,
+                                      GUEST<INTEGER> *item);
+PASCAL_TRAP(ModalDialog, 0xA991);
+extern BOOLEAN C_IsDialogEvent(
+    EventRecord *evt);
+PASCAL_TRAP(IsDialogEvent, 0xA97F);
+extern void C_DrawDialog(DialogPtr dp);
+PASCAL_TRAP(DrawDialog, 0xA981);
+extern INTEGER C_FindDItem(DialogPtr dp,
+                                       Point pt);
+PASCAL_TRAP(FindDItem, 0xA984);
+extern void C_UpdtDialog(DialogPtr dp,
+                                     RgnHandle rgn);
+PASCAL_TRAP(UpdtDialog, 0xA978);
+extern BOOLEAN C_DialogSelect(
+    EventRecord *evt, GUEST<DialogPtr> *dpp, GUEST<INTEGER> *item);
+PASCAL_TRAP(DialogSelect, 0xA980);
+extern void DlgCut(DialogPtr dp);
+extern void DlgCopy(DialogPtr dp);
+extern void DlgPaste(DialogPtr dp);
+extern void DlgDelete(DialogPtr dp);
+extern void C_ROMlib_mysound(INTEGER i);
+extern void C_ErrorSound(ProcPtr sp);
+PASCAL_TRAP(ErrorSound, 0xA98C);
+extern void C_InitDialogs(ProcPtr rp);
+PASCAL_TRAP(InitDialogs, 0xA97B);
+extern void SetDAFont(INTEGER i);
+extern void C_ParamText(StringPtr p0,
+                                    StringPtr p1, StringPtr p2, StringPtr p3);
+PASCAL_TRAP(ParamText, 0xA98B);
+extern void C_GetDItem(DialogPtr dp,
+                                   INTEGER itemno, GUEST<INTEGER> *itype, GUEST<Handle> *item, Rect *r);
+PASCAL_TRAP(GetDItem, 0xA98D);
+extern void C_SetDItem(DialogPtr dp,
+                                   INTEGER itemno, INTEGER itype, Handle item, Rect *r);
+PASCAL_TRAP(SetDItem, 0xA98E);
+extern void C_GetIText(Handle item,
+                                   StringPtr text);
+PASCAL_TRAP(GetIText, 0xA990);
+extern void C_SetIText(Handle item,
+                                   StringPtr text);
+PASCAL_TRAP(SetIText, 0xA98F);
+extern void C_SelIText(DialogPtr dp,
+                                   INTEGER itemno, INTEGER start, INTEGER stop);
+PASCAL_TRAP(SelIText, 0xA97E);
+extern INTEGER GetAlrtStage(void);
+extern void ResetAlrtStage(void);
+extern void C_HideDItem(DialogPtr dp,
+                                    INTEGER item);
+PASCAL_TRAP(HideDItem, 0xA827);
+extern void C_ShowDItem(DialogPtr dp,
+                                    INTEGER item);
+PASCAL_TRAP(ShowDItem, 0xA828);
 
-extern pascal trap OSErr C_GetStdFilterProc (ProcPtr *proc);
-extern pascal trap OSErr C_SetDialogDefaultItem (DialogPtr dialog,
-						 int16 new_item);
-extern pascal trap OSErr C_SetDialogCancelItem (DialogPtr dialog, 
-						int16 new_item);
-extern pascal trap OSErr C_SetDialogTracksCursor (DialogPtr dialog,
-						  Boolean tracks);
+extern CDialogPtr C_NewCDialog(Ptr, Rect *, StringPtr, BOOLEAN, INTEGER, WindowPtr, BOOLEAN, LONGINT, Handle);
+PASCAL_TRAP(NewCDialog, 0xAA4B);
 
-extern void AppendDITL (DialogPtr, Handle, DITLMethod);
-extern void ShortenDITL (DialogPtr, int16);
-extern int16 CountDITL (DialogPtr);
+extern OSErr C_GetStdFilterProc(GUEST<ProcPtr> *proc);
+PASCAL_FUNCTION(GetStdFilterProc);
+extern OSErr C_SetDialogDefaultItem(DialogPtr dialog,
+                                                int16_t new_item);
+PASCAL_FUNCTION(SetDialogDefaultItem);
+extern OSErr C_SetDialogCancelItem(DialogPtr dialog,
+                                               int16_t new_item);
+PASCAL_FUNCTION(SetDialogCancelItem);
+extern OSErr C_SetDialogTracksCursor(DialogPtr dialog,
+                                                 Boolean tracks);
+PASCAL_FUNCTION(SetDialogTracksCursor);
+
+extern void AppendDITL(DialogPtr, Handle, DITLMethod);
+extern void ShortenDITL(DialogPtr, int16_t);
+extern int16_t CountDITL(DialogPtr);
+}
 
 #endif /* _DIALOG_H_ */

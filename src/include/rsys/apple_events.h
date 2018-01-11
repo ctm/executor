@@ -1,112 +1,111 @@
-#if !defined (__rsys_apple_events_h__)
-#  define __rsys_apple_events_h__
-
+#if !defined(__rsys_apple_events_h__)
+#define __rsys_apple_events_h__
+namespace Executor
+{
 /* #### internal */
 
-typedef struct PACKED
+struct inline_desc_t
 {
-  DescType type;
-  uint32 size;
-  char data[0];
-} inline_desc_t;
+    GUEST_STRUCT;
+    GUEST<DescType> type;
+    GUEST<uint32_t> size;
+    GUEST<char> data[0];
+};
 
-typedef struct PACKED
+struct inline_key_desc_t
 {
-  int32 key;
-  DescType type;
-  uint32 size;
-  char data[0];
-} inline_key_desc_t;
+    GUEST_STRUCT;
+    GUEST<int32_t> key;
+    GUEST<DescType> type;
+    GUEST<uint32_t> size;
+    GUEST<char> data[0];
+};
 
-typedef struct PACKED list_header
-{
-  /* #### always zero (?) */
-  uint32 unknown_1;
-  
-  /* #### contains an applzone address */
-  uint32 unknown_2;
-  
-  uint32 param_offset;
-  
-  /* contains a tick that identifies the object, either `list' or
+/* #### always zero (?) */
+
+/* #### contains an applzone address */
+
+/* contains a tick that identifies the object, either `list' or
      `reco'; for an apple event, this fiend contains the offset to the
      parameter section */
-  uint32 attribute_count;
-  
-  uint32 param_count;
-  
-  /* ### always zero (?) */
-  int32 unknown_3;
-  
-   /* offset: 0x18 */
-  char data[0];
+
+/* ### always zero (?) */
+
+/* offset: 0x18 */
+typedef struct list_header
+{
+    GUEST_STRUCT;
+    GUEST<uint32_t> unknown_1;
+    GUEST<uint32_t> unknown_2;
+    GUEST<uint32_t> param_offset;
+    GUEST<uint32_t> attribute_count;
+    GUEST<uint32_t> param_count;
+    GUEST<int32_t> unknown_3;
+    GUEST<char> data[0];
 } list_header_t;
 
 typedef list_header_t *list_header_ptr;
-MAKE_HIDDEN(list_header_ptr);
-typedef HIDDEN_list_header_ptr *list_header_h;
 
-#define PARAM_OFFSET_X(aggr_desc_h)					\
-  (HxX ((list_header_h) aggr_desc_h, param_offset))
-#define PARAM_COUNT_X(aggr_desc_h)					\
-  (HxX ((list_header_h) aggr_desc_h, param_count))
-#define ATTRIBUTE_COUNT_X(aggr_desc_h)					\
-  (HxX ((list_header_h) aggr_desc_h, attribute_count))
+typedef GUEST<list_header_ptr> *list_header_h;
 
-#define PARAM_COUNT(aggr_desc_h)	(CL (PARAM_COUNT_X (aggr_desc_h)))
-#define PARAM_OFFSET(aggr_desc_h)	(CL (PARAM_OFFSET_X (aggr_desc_h)))
-#define ATTRIBUTE_COUNT(aggr_desc_h)	(CL (ATTRIBUTE_COUNT_X (aggr_desc_h)))
+#define PARAM_OFFSET_X(aggr_desc_h) \
+    (HxX((list_header_h)aggr_desc_h, param_offset))
+#define PARAM_COUNT_X(aggr_desc_h) \
+    (HxX((list_header_h)aggr_desc_h, param_count))
+#define ATTRIBUTE_COUNT_X(aggr_desc_h) \
+    (HxX((list_header_h)aggr_desc_h, attribute_count))
 
-typedef struct PACKED ae_header
-{
-  /* #### always zero (?) */
-  uint32 unknown_1;
-  
-  /* #### contains unknown values */
-  uint32 unknown_2;
-  
-  uint32 param_offset;
-  
-  uint32 attribute_count;
-  uint32 param_count;
-  
-  /* #### zero pad, use unknown */
-  char pad_1[26];
-  
-  AEEventClass event_class;
-  AEEventID event_id;
-  
-  /* #### takes on various values, no idea */
-  uint32 unknown_3;
-  
-  /* beginning of target inline descriptor; `target->size' determines
+#define PARAM_COUNT(aggr_desc_h) (CL(PARAM_COUNT_X(aggr_desc_h)))
+#define PARAM_OFFSET(aggr_desc_h) (CL(PARAM_OFFSET_X(aggr_desc_h)))
+#define ATTRIBUTE_COUNT(aggr_desc_h) (CL(ATTRIBUTE_COUNT_X(aggr_desc_h)))
+
+/* #### always zero (?) */
+
+/* #### contains unknown values */
+
+/* #### zero pad, use unknown */
+
+/* #### takes on various values, no idea */
+
+/* beginning of target inline descriptor; `target->size' determines
      target's actual size */
-  inline_desc_t target;
-  
+
+/* for show */
+/* #### contains `aevt' tick */
+
+/* contains 0x00010001 */
+
+/* marker containing tick `;;;;' */
+
+typedef struct ae_header
+{
+    GUEST_STRUCT;
+    GUEST<uint32_t> unknown_1;
+    GUEST<uint32_t> unknown_2;
+    GUEST<uint32_t> param_offset;
+    GUEST<uint32_t> attribute_count;
+    GUEST<uint32_t> param_count;
+    GUEST<char[26]> pad_1;
+    GUEST<AEEventClass> event_class;
+    GUEST<AEEventID> event_id;
+    GUEST<uint32_t> unknown_3;
+    GUEST<inline_desc_t> target;
 #if 0
-  /* for show */
-  /* #### contains `aevt' tick */
-  uint32 unknown_4;
-  
-  /* contains 0x00010001 */
-  uint32 unknown_5;
-  
-  char attribute_data[...];
-  
-  /* marker containing tick `;;;;' */
-  uint32 unknown_6;
-  
-  char param_data[...];
+    GUEST< uint32_t> unknown_4;
+    GUEST< uint32_t> unknown_5;
+    GUEST< char[...]> attribute_data;
+    GUEST< uint32_t> unknown_6;
+    GUEST< char[...]> param_data;
 #endif
 } ae_header_t;
 
 typedef struct subdesc_info
 {
-  int count;
-  int base_offset;
-  uint32 *count_p;
-  boolean_t key_p;
-  int inline_desc_header_size;
+    int count;
+    int base_offset;
+    GUEST<uint32_t> *count_p;
+    bool key_p;
+    int inline_desc_header_size;
 } subdesc_info_t;
-
+}
 #endif /* !defined (__rsys_apple_events_h__) */

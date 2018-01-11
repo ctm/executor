@@ -1,4 +1,4 @@
-#if !defined (__SCRAP__)
+#if !defined(__SCRAP__)
 #define __SCRAP__
 
 #include "ResourceMgr.h"
@@ -7,50 +7,47 @@
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: ScrapMgr.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
-#define noScrapErr	(-100)
-#define noTypeErr	(-102)
+enum
+{
+    noScrapErr = (-100),
+    noTypeErr = (-102),
+};
 
-typedef struct PACKED {
-  LONGINT scrapSize;
-  PACKED_MEMBER(Handle, scrapHandle);
-  INTEGER scrapCount;
-  INTEGER scrapState;
-  PACKED_MEMBER(StringPtr, scrapName);
-} ScrapStuff;
+namespace Executor
+{
+struct ScrapStuff
+{
+    GUEST_STRUCT;
+    GUEST<LONGINT> scrapSize;
+    GUEST<Handle> scrapHandle;
+    GUEST<INTEGER> scrapCount;
+    GUEST<INTEGER> scrapState;
+    GUEST<StringPtr> scrapName;
+};
 typedef ScrapStuff *PScrapStuff;
 
+const LowMemGlobal<LONGINT> ScrapSize { 0x960 }; // ScrapMgr IMI-457 (true);
+const LowMemGlobal<Handle> ScrapHandle { 0x964 }; // ScrapMgr IMI-457 (true);
+const LowMemGlobal<INTEGER> ScrapCount { 0x968 }; // ScrapMgr IMI-457 (true);
+const LowMemGlobal<INTEGER> ScrapState { 0x96A }; // ScrapMgr IMI-457 (true);
+const LowMemGlobal<StringPtr> ScrapName { 0x96C }; // ScrapMgr IMI-457 (true);
 
-#if !defined (ScrapHandle_H)
-extern HIDDEN_Handle 	ScrapHandle_H;
-extern HIDDEN_StringPtr 	ScrapName_H;
-extern LONGINT 	ScrapSize;
-extern INTEGER 	ScrapCount;
-extern INTEGER 	ScrapState;
-#endif
-
-#define ScrapHandle	(ScrapHandle_H.p)
-#define ScrapName	(ScrapName_H.p)
-
-#if !defined (__STDC__)
-extern PScrapStuff InfoScrap(); 
-extern LONGINT UnloadScrap(); 
-extern LONGINT LoadScrap(); 
-extern LONGINT ROMlib_ZeroScrap(); 
-extern LONGINT ZeroScrap(); 
-extern LONGINT PutScrap(); 
-extern LONGINT GetScrap(); 
-#else /* __STDC__ */
-extern pascal trap PScrapStuff C_InfoScrap( void  ); extern pascal trap PScrapStuff P_InfoScrap( void ); 
-extern pascal trap LONGINT C_UnloadScrap( void  ); extern pascal trap LONGINT P_UnloadScrap( void ); 
-extern pascal trap LONGINT C_LoadScrap( void  ); extern pascal trap LONGINT P_LoadScrap( void ); 
-extern LONGINT ROMlib_ZeroScrap( void  ); 
-extern pascal trap LONGINT C_ZeroScrap( void  ); extern pascal trap LONGINT P_ZeroScrap( void ); 
-extern pascal trap LONGINT C_PutScrap( LONGINT len, ResType rest, Ptr p ); extern pascal trap LONGINT P_PutScrap( LONGINT len, ResType rest, Ptr p); 
-extern pascal trap LONGINT C_GetScrap( Handle h, ResType rest, 
- LONGINT *off ); extern pascal trap LONGINT P_GetScrap( Handle h, ResType rest, 
- LONGINT *off ); 
-#endif /* __STDC__ */
+extern PScrapStuff C_InfoScrap(void);
+PASCAL_TRAP(InfoScrap, 0xA9F9);
+extern LONGINT C_UnloadScrap(void);
+PASCAL_TRAP(UnloadScrap, 0xA9FA);
+extern LONGINT C_LoadScrap(void);
+PASCAL_TRAP(LoadScrap, 0xA9FB);
+extern LONGINT ROMlib_ZeroScrap(void);
+extern LONGINT C_ZeroScrap(void);
+PASCAL_TRAP(ZeroScrap, 0xA9FC);
+extern LONGINT C_PutScrap(LONGINT len, ResType rest, Ptr p);
+PASCAL_TRAP(PutScrap, 0xA9FE);
+extern LONGINT C_GetScrap(Handle h, ResType rest,
+                                      GUEST<LONGINT> *off);
+PASCAL_TRAP(GetScrap, 0xA9FD);
+}
 #endif /* __SCRAP__ */

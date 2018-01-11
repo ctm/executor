@@ -45,13 +45,13 @@ the Windows-specific code base, but only those written by me.
 extern "C" {
 #endif
 
-int VxdReadCdSectors( int drive, ULONG LBA, int count, char *buf );
-int VxdReadHdSectors( int drive, ULONG LBA, int count, char *buf );
-int VxdWriteHdSectors( int drive, ULONG LBA, int count, char *buf );
-BOOL VxdInit( void );
-void VxdFinal( void );
-int VxdPatch( int onoff );
-void set_cd_instance( HINSTANCE h );
+int VxdReadCdSectors(int drive, ULONG LBA, int count, char *buf);
+int VxdReadHdSectors(int drive, ULONG LBA, int count, char *buf);
+int VxdWriteHdSectors(int drive, ULONG LBA, int count, char *buf);
+BOOL VxdInit(void);
+void VxdFinal(void);
+int VxdPatch(int onoff);
+void set_cd_instance(HINSTANCE h);
 
 #ifdef __cplusplus
 } // extern "C"

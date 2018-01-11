@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/57504332.ecf) was built by Executor
-Comments = "WordPerfect 3.x";
-// WindowName = "WordPerfect-US";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

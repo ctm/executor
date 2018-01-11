@@ -11,7 +11,7 @@
 #import <sys/param.h> /* for MAXPATHLEN */
 #import <unistd.h>
 
-@interface SDLMain : NSObject
+@interface SDLMain : NSObject <NSApplicationDelegate>
 @end
 
 /* For some reaon, Apple removed setAppleMenu from the headers in 10.4,
@@ -43,7 +43,7 @@ extern OSErr	CPSSetFrontProcess( CPSProcessSerNum *psn);
 static int    gArgc;
 static char  **gArgv;
 static BOOL   gFinderLaunch;
-static BOOL   gCalledAppMainline = FALSE;
+static BOOL   gCalledAppMainline = false;
 
 static NSString *getApplicationName(void)
 {
@@ -94,7 +94,7 @@ static NSString *getApplicationName(void)
 		CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle());
 		CFURLRef url2 = CFURLCreateCopyDeletingLastPathComponent(0, url);
 		if (CFURLGetFileSystemRepresentation(url2, true, (UInt8 *)parentdir, MAXPATHLEN)) {
-	        assert ( chdir (parentdir) == 0 );   /* chdir to the binary app's parent */
+	        chdir (parentdir);   /* chdir to the binary app's parent */
 		}
 		CFRelease(url);
 		CFRelease(url2);
@@ -262,29 +262,29 @@ static void CustomApplicationMain (int argc, char **argv)
     char **newargv;
 
     if (!gFinderLaunch)  /* MacOS is passing command line args. */
-        return FALSE;
+        return false;
 
     if (gCalledAppMainline)  /* app has started, ignore this document. */
-        return FALSE;
+        return false;
 
     temparg = [filename UTF8String];
     arglen = SDL_strlen(temparg) + 1;
     arg = (char *) SDL_malloc(arglen);
     if (arg == NULL)
-        return FALSE;
+        return false;
 
     newargv = (char **) realloc(gArgv, sizeof (char *) * (gArgc + 2));
     if (newargv == NULL)
     {
         SDL_free(arg);
-        return FALSE;
+        return false;
     }
     gArgv = newargv;
 
     SDL_strlcpy(arg, temparg, arglen);
     gArgv[gArgc++] = arg;
     gArgv[gArgc] = NULL;
-    return TRUE;
+    return true;
 }
 
 
@@ -302,7 +302,7 @@ static void CustomApplicationMain (int argc, char **argv)
 #endif
 
     /* Hand off to main application code */
-    gCalledAppMainline = TRUE;
+    gCalledAppMainline = true;
     status = SDL_main (gArgc, gArgv);
 
     /* We're done, thank you for playing */

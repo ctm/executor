@@ -13,233 +13,223 @@
 #if !defined(_MKVOL_INTERNAL_H_)
 #define _MKVOL_INTERNAL_H_
 
-#if defined(__alpha) || defined(i386) || defined(__BORLANDC__) || defined (__x86_64__)
+#if defined(__alpha) || defined(i386) || defined(__BORLANDC__) || defined(__x86_64__) || defined(__LITTLE_ENDIAN__)
 #define LITTLEENDIAN
-#elif defined(mc68000) || defined (powerpc) || defined (__ppc__)
+#elif defined(mc68000) || defined(powerpc) || defined(__ppc__) || defined(__BIG_ENDIAN__)
 #else
 #error "I don't know enough about this machine"
 #endif
 
-#if defined(__GNUC__)
-
-#if !defined(mc68000)
-#define PACKED  __attribute__((packed))
-#else /* defined(mc68000) */
-#define PACKED
-#endif /* defined(mc68000) */
-
-#else /* defined(__GNUC__) */
-
-#if defined(__BORLANDC__)
-#define PACKED
-#else
-#error "Don't know how to handle PACKED"
-#endif
-
-#endif /* !defined(__GNUC__) */
-
-#define TICK(str)       (((LONGINT) (unsigned char) str[0] << 24) | \
-												 ((LONGINT) (unsigned char) str[1] << 16) | \
-												 ((LONGINT) (unsigned char) str[2] <<  8) | \
-												 ((LONGINT) (unsigned char) str[3] <<  0))
+#define TICK(str) (((LONGINT)(unsigned char)str[0] << 24) | ((LONGINT)(unsigned char)str[1] << 16) | ((LONGINT)(unsigned char)str[2] << 8) | ((LONGINT)(unsigned char)str[3] << 0))
 
 #if !defined(LITTLEENDIAN)
 
-#define CW(rhs)                 (rhs)
-#define CWC(rhs)                (rhs)
-#define CL(rhs)                 (rhs)
-#define CLC(rhs)                (rhs)
-#define CWC(rhs)                (rhs)
-#define CB(rhs)     (rhs)
-#define CBC(rhs)    (rhs)
+#define CW(rhs) (rhs)
+#define CWC(rhs) (rhs)
+#define CL(rhs) (rhs)
+#define CLC(rhs) (rhs)
+#define CWC(rhs) (rhs)
+#define CB(rhs) (rhs)
+#define CBC(rhs) (rhs)
 
 #else /* defined(LITTLEENDIAN) */
 
-#define CWCreal(rhs)  \
-				( (signed short) ((((rhs) << 8) & 0xFF00) | \
-				(((rhs) >> 8) & 0x00FF)))
+#define CWCreal(rhs) \
+    ((signed short)((((rhs) << 8) & 0xFF00) | (((rhs) >> 8) & 0x00FF)))
 
-#define CLCreal(rhs) ( ((((unsigned long) (rhs) & 0x000000FF) << 24) |\
-						(((unsigned long) (rhs) & 0x0000FF00) <<  8) |\
-			(((unsigned long) (rhs) & 0x00FF0000) >>  8) |\
-			(((unsigned long) (rhs) & 0xFF000000) >> 24)) )
+#define CLCreal(rhs) (((((unsigned int)(rhs)&0x000000FF) << 24) | (((unsigned int)(rhs)&0x0000FF00) << 8) | (((unsigned int)(rhs)&0x00FF0000) >> 8) | (((unsigned int)(rhs)&0xFF000000) >> 24)))
 
-#define CW(rhs)  CWCreal(rhs)
-#define CWC(rhs)  CWCreal(rhs)
-#define CL(rhs)  CLCreal(rhs)
-#define CLC(rhs)  CLCreal(rhs)
-#define CB(rhs)     (rhs)
-#define CBC(rhs)    (rhs)
+#define CW(rhs) CWCreal(rhs)
+#define CWC(rhs) CWCreal(rhs)
+#define CL(rhs) CLCreal(rhs)
+#define CLC(rhs) CLCreal(rhs)
+#define CB(rhs) (rhs)
+#define CBC(rhs) (rhs)
 
 #endif /* defined(LITTLEENDIAN) */
 
-#define fInvisible      16384
+#define fInvisible 16384
 
-typedef long OSType;
+#pragma pack(push, 2)
 
-typedef struct {
-		short v PACKED;
-		short h PACKED;
+typedef unsigned int OSType;
+
+typedef struct
+{
+    short v;
+    short h;
 } Point;
 
-#if !defined(LPACKED)
-#  define LPACKED
-#endif
-
-typedef struct {
-		OSType fdType       PACKED;
-		OSType fdCreator    PACKED;
-		unsigned short fdFlags      PACKED;
-		Point fdLocation    LPACKED;
-		unsigned short fdFldr       PACKED;
+typedef struct
+{
+    OSType fdType;
+    OSType fdCreator;
+    unsigned short fdFlags;
+    Point fdLocation;
+    unsigned short fdFldr;
 } FInfo;
 
-
-typedef struct {
-		unsigned short blockstart PACKED;
-		unsigned short blockcount PACKED;
+typedef struct
+{
+    unsigned short blockstart;
+    unsigned short blockcount;
 } xtntdesc, xtntrec[3]; /* WILL NEED Cx() */
 
-typedef struct {
-		unsigned short drSigWord  PACKED; /* 0 */
-		long drCrDate PACKED;   /* 2 */
-		long drLsMod  PACKED;   /* 6 */
-		unsigned short drAtrb PACKED; /* 10 */
-		unsigned short drNmFls  PACKED; /* 12 */
-		unsigned short drVBMSt  PACKED; /* 14 */
-		unsigned short drAllocPtr PACKED; /* 16 */
-		unsigned short drNmAlBlks PACKED; /* 18 */
-		long drAlBlkSiz PACKED;   /* 20 */
-		long drClpSiz PACKED;
-		unsigned short drAlBlSt PACKED;
-		long drNxtCNID  PACKED;
-		unsigned short drFreeBks  PACKED;
-		unsigned char drVN[28]  LPACKED;
-		long drVolBkUp  PACKED;
-		unsigned short drVSeqNum  PACKED;
-		long drWrCnt  PACKED;
-		long drXTClpSiz PACKED;
-		long drCTClpSiz PACKED;
-		unsigned short drNmRtDirs PACKED;
-		long drFilCnt PACKED;
-		long drDirCnt PACKED;
-		long drFndrInfo[8]  PACKED;
-		unsigned short drVCSize PACKED;
-		unsigned short drVCBMSize PACKED;
-		unsigned short drCtlCSize PACKED;
-		long drXTFlSize PACKED;
-		xtntrec drXTExtRec  LPACKED;
-		long drCTFlSize PACKED;
-		xtntrec drCTExtRec  LPACKED;
+typedef struct
+{
+    unsigned short drSigWord; /* 0 */
+    int drCrDate; /* 2 */
+    int drLsMod; /* 6 */
+    unsigned short drAtrb; /* 10 */
+    unsigned short drNmFls; /* 12 */
+    unsigned short drVBMSt; /* 14 */
+    unsigned short drAllocPtr; /* 16 */
+    unsigned short drNmAlBlks; /* 18 */
+    int drAlBlkSiz; /* 20 */
+    int drClpSiz;
+    unsigned short drAlBlSt;
+    int drNxtCNID;
+    unsigned short drFreeBks;
+    unsigned char drVN[28];
+    int drVolBkUp;
+    unsigned short drVSeqNum;
+    int drWrCnt;
+    int drXTClpSiz;
+    int drCTClpSiz;
+    unsigned short drNmRtDirs;
+    int drFilCnt;
+    int drDirCnt;
+    int drFndrInfo[8];
+    unsigned short drVCSize;
+    unsigned short drVCBMSize;
+    unsigned short drCtlCSize;
+    int drXTFlSize;
+    xtntrec drXTExtRec;
+    int drCTFlSize;
+    xtntrec drCTExtRec;
 } volumeinfo, *volumeinfoPtr, **volumeinfoHandle;
 
-typedef struct {
-		long ndFLink  PACKED;
-		long ndBLink  PACKED;
-		unsigned char ndType  LPACKED;
-		char ndLevel  LPACKED;
-		short ndNRecs PACKED;
-		unsigned short idunno PACKED;
+typedef struct
+{
+    int ndFLink;
+    int ndBLink;
+    unsigned char ndType;
+    char ndLevel;
+    short ndNRecs;
+    unsigned short idunno;
 } btnode;
 
-typedef enum { indexnode, leafnode = 0xFF } btnodetype;
+typedef enum { indexnode,
+               leafnode = 0xFF } btnodetype;
 
-typedef struct {
-		unsigned char ckrKeyLen LPACKED;
-		char ckrResrv1  LPACKED;
-		long ckrParID PACKED;
-		unsigned char ckrCName[32]  LPACKED;
+typedef struct
+{
+    unsigned char ckrKeyLen;
+    char ckrResrv1;
+    int ckrParID;
+    unsigned char ckrCName[32];
 } catkey;
 
-typedef struct {
-		unsigned char xkrKeyLen LPACKED;
-		unsigned char xkrFkType LPACKED;
-		long xkrFNum  PACKED;
-		unsigned short xkrFABN  PACKED;
+typedef struct
+{
+    unsigned char xkrKeyLen;
+    unsigned char xkrFkType;
+    int xkrFNum;
+    unsigned short xkrFABN;
 } xtntkey;
 
 typedef union {
-		unsigned char keylen;
-		catkey catk;
-		xtntkey xtntk;
+    unsigned char keylen;
+    catkey catk;
+    xtntkey xtntk;
 } anykey;
 
-#define FILETYPE    2
+#define FILETYPE 2
 
-typedef struct {
-		char cdrType  LPACKED;
-		char cdrResrv2  LPACKED;
-		char filFlags LPACKED;
-		char filTyp LPACKED;
-		FInfo filUsrWds LPACKED;    /* not sure what form */
-		long filFlNum PACKED;
-		unsigned short filStBlk PACKED; /* I don't think this is used */
-		long filLgLen PACKED;
-		long filPyLen PACKED;
-		unsigned short filRStBlk  PACKED;    /* not used? */
-		long filRLgLen  PACKED;
-		long filRPyLen  PACKED;
-		long filCrDat PACKED;
-		long filMdDat PACKED;
-		long filBkDat PACKED;
-		long filFndrInfo[4] PACKED;
-		unsigned short filClpSize PACKED;
-		xtntrec filExtRec LPACKED;
-		xtntrec filRExtRec  LPACKED;
-		long filResrv PACKED;
+typedef struct
+{
+    char cdrType;
+    char cdrResrv2;
+    char filFlags;
+    char filTyp;
+    FInfo filUsrWds; /* not sure what form */
+    int filFlNum;
+    unsigned short filStBlk; /* I don't think this is used */
+    int filLgLen;
+    int filPyLen;
+    unsigned short filRStBlk; /* not used? */
+    int filRLgLen;
+    int filRPyLen;
+    int filCrDat;
+    int filMdDat;
+    int filBkDat;
+    int filFndrInfo[4];
+    unsigned short filClpSize;
+    xtntrec filExtRec;
+    xtntrec filRExtRec;
+    int filResrv;
 } filerec;
 
 #define DIRTYPE 1
 
-typedef struct {
-		char cdrType  LPACKED;
-		char cdrResrv2  LPACKED;
-		unsigned short dirFlags PACKED;
-		unsigned short dirVal PACKED;
-		long dirDirID PACKED;
-		long dirCrDat PACKED;
-		long dirMdDat PACKED;
-		long dirBkDat PACKED;
-		long dirUsrInfo[4]  PACKED;
-		long dirFndrInfo[4] PACKED;
-		long dirResrv[4]  PACKED;
+typedef struct
+{
+    char cdrType;
+    char cdrResrv2;
+    unsigned short dirFlags;
+    unsigned short dirVal;
+    int dirDirID;
+    int dirCrDat;
+    int dirMdDat;
+    int dirBkDat;
+    int dirUsrInfo[4];
+    int dirFndrInfo[4];
+    int dirResrv[4];
 } directoryrec;
 
-#define THREADTYPE  3
+#define THREADTYPE 3
 
-typedef struct {
-		char cdrType  LPACKED;
-		char cdrResrv2  LPACKED;
-		char thdResrv[8]  LPACKED;
-		long thdParID PACKED;
-		unsigned char thdCName[32] LPACKED;
+typedef struct
+{
+    char cdrType;
+    char cdrResrv2;
+    char thdResrv[8];
+    int thdParID;
+    unsigned char thdCName[32];
 } threadrec;
 
-typedef enum { datafork, resourcefork = 0xFF } forktype;
+typedef enum { datafork,
+               resourcefork = 0xFF } forktype;
 
-typedef enum { databusy, resourcebusy, eitherbusy } busyconcern_t;
+typedef enum { databusy,
+               resourcebusy,
+               eitherbusy } busyconcern_t;
 
-typedef enum { reading, writing } accesstype;
+typedef enum { reading,
+               writing } accesstype;
 
-typedef struct {
-		long    flink PACKED;              /* 0 */
-		long    blink PACKED;              /* 4 */
-		unsigned char type  LPACKED;         /* 8 */
-		unsigned char dummy LPACKED;        /* 9 */
-		unsigned short   hesthreejim  PACKED;        /* 10 */
-		long    height  PACKED;             /* 12 */
-		long    root  PACKED;               /* 16 */
-		long    numentries  PACKED;         /* 20 */
-		long    firstleaf PACKED;          /* 24 */
-		long    lastleaf  PACKED;           /* 28 */
-		unsigned short   btnodesize PACKED;         /* 32 */
-		unsigned short   indexkeylen  PACKED;        /* 34 */
-		long    nnodes  PACKED;             /* 36 */
-		long    nfreenodes  PACKED;         /* 40 */
-		unsigned char reserved[72]  LPACKED; /* 44 */
-		unsigned char dummy2[132] LPACKED;  /* 116 */
-		unsigned char map[256]  LPACKED;     /* 248 */
-		long unknown2[2]  PACKED;           /* 504 */
+typedef struct
+{
+    int flink; /* 0 */
+    int blink; /* 4 */
+    unsigned char type; /* 8 */
+    unsigned char dummy; /* 9 */
+    unsigned short hesthreejim; /* 10 */
+    int height; /* 12 */
+    int root; /* 16 */
+    int numentries; /* 20 */
+    int firstleaf; /* 24 */
+    int lastleaf; /* 28 */
+    unsigned short btnodesize; /* 32 */
+    unsigned short indexkeylen; /* 34 */
+    int nnodes; /* 36 */
+    int nfreenodes; /* 40 */
+    unsigned char reserved[72]; /* 44 */
+    unsigned char dummy2[132]; /* 116 */
+    unsigned char map[256]; /* 248 */
+    int unknown2[2]; /* 504 */
 } btblock0;
+
+#pragma pack(pop)
 
 #endif

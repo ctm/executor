@@ -1,4 +1,4 @@
-#if !defined (__WIN_DONGLE_H__)
+#if !defined(__WIN_DONGLE_H__)
 #define __WIN_DONGLE_H__
 
 #define SENTINEL_DLL "sp32w.dll"
@@ -7,7 +7,7 @@
 
 #define HASP_DLL "haspms32.dll"
 
-extern int dongle_query (uint32 *valuep);
+extern int dongle_query(uint32_t *valuep);
 
 extern char *ROMlib_DongleFamily;
 

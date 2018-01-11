@@ -7,53 +7,62 @@
  *	  by HFS_XFer.util.c, which doesn't know our Mac stuff
  */
 
+namespace Executor
+{
 #if !defined(PACKED)
 #define PACKED __attribute__((packed))
 typedef unsigned long ULONGINT;
 #endif
 
-typedef struct PACKED {
-  unsigned short pmSig;	/* 0x504D == 'PM' */
-  unsigned short pmSigPad;
-  ULONGINT pmMapBlkCnt;
-  ULONGINT pmPyPartStart;
-  ULONGINT pmPartBlkCnt;
-  unsigned char pmPartName[32];	/* NUL terminated */
-  unsigned char pmPartType[32];	/* NUL terminated */
-  ULONGINT pmLgDataStart;
-  ULONGINT pmDataCnt;
-  ULONGINT pmPartStatus;
-  ULONGINT pmLgBootStart;
-  ULONGINT pmBootSize;
-  ULONGINT pmBootLoad;
-  ULONGINT pmBootLoad2;
-  ULONGINT pmBootEntry;
-  ULONGINT pmBootEntry2;
-  ULONGINT pmBootCksum;
-  unsigned char pmProcessor[16];	/* NUL terminated */
-  unsigned char bootargs[120];	/* IMV-579 says 128, but they probably
+struct partmapentry_t
+{
+    GUEST_STRUCT;
+    GUEST<unsigned short> pmSig; /* 0x504D == 'PM' */
+    GUEST<unsigned short> pmSigPad;
+    GUEST<ULONGINT> pmMapBlkCnt;
+    GUEST<ULONGINT> pmPyPartStart;
+    GUEST<ULONGINT> pmPartBlkCnt;
+    GUEST<unsigned char[32]> pmPartName; /* NUL terminated */
+    GUEST<unsigned char[32]> pmPartType; /* NUL terminated */
+    GUEST<ULONGINT> pmLgDataStart;
+    GUEST<ULONGINT> pmDataCnt;
+    GUEST<ULONGINT> pmPartStatus;
+    GUEST<ULONGINT> pmLgBootStart;
+    GUEST<ULONGINT> pmBootSize;
+    GUEST<ULONGINT> pmBootLoad;
+    GUEST<ULONGINT> pmBootLoad2;
+    GUEST<ULONGINT> pmBootEntry;
+    GUEST<ULONGINT> pmBootEntry2;
+    GUEST<ULONGINT> pmBootCksum;
+    GUEST<unsigned char[16]> pmProcessor; /* NUL terminated */
+    GUEST<unsigned char[120]> bootargs; /* IMV-579 says 128, but they probably
 					   mean that the total should be 512 */
-} partmapentry_t;
+};
 
-#define PARMAPSIG0	'P'
-#define PARMAPSIG1	'M'
+#define PARMAPSIG0 'P'
+#define PARMAPSIG1 'M'
 
-#define HFSPARTTYPE	"Apple_HFS"
+#define HFSPARTTYPE "Apple_HFS"
 
-typedef struct PACKED {
-  ULONGINT pdStart;
-  ULONGINT pdSize;
-  ULONGINT pdFSID;
-} oldmapentry_t;
+struct oldmapentry_t
+{
+    GUEST_STRUCT;
+    GUEST<ULONGINT> pdStart;
+    GUEST<ULONGINT> pdSize;
+    GUEST<ULONGINT> pdFSID;
+};
 
-#define NOLDENTRIES	42
+#define NOLDENTRIES 42
 
-typedef struct PACKED {
-  unsigned short pdSig;	/* 0x5453 == 'TS' */
-  oldmapentry_t oldmapentry[NOLDENTRIES];
-} oldblock1_t;
+struct oldblock1_t
+{
+    GUEST_STRUCT;
+    GUEST<unsigned short> pdSig; /* 0x5453 == 'TS' */
+    GUEST<oldmapentry_t[NOLDENTRIES]> oldmapentry;
+};
 
-#define OLDMAPSIG0	'T'
-#define OLDMAPSIG1	'S'
+#define OLDMAPSIG0 'T'
+#define OLDMAPSIG1 'S'
 
-#define PARTOFFSET	1
+#define PARTOFFSET 1
+}

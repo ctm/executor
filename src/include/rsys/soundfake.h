@@ -1,8 +1,43 @@
-#if !defined (_RSYS_SOUNDFAKE_H_)
+#if !defined(_RSYS_SOUNDFAKE_H_)
 #define _RSYS_SOUNDFAKE_H_
 
 #include "rsys/sounddriver.h"
 
-extern boolean_t sound_fake_init (sound_driver_t *);
+namespace Executor
+{
+class SoundFake : public SoundDriver
+{
+public:
+    virtual bool sound_init();
+    virtual void sound_shutdown();
+    virtual bool sound_works();
+    virtual bool sound_silent();
+    virtual void HungerFinish();
+    virtual void sound_go();
+    virtual void sound_stop();
+    virtual void HungerStart();
+    virtual struct hunger_info GetHungerInfo();
+    virtual void sound_clear_pending();
+    virtual bool HasSoundClearPending()
+    {
+        return true;
+    }
+
+private:
+    snd_time t1;
+    /* # of fake buffers currently enqueued. */
+    int num_fake_buffers_enqueued;
+    syn68k_addr_t fake_sound_callback;
+
+    /* Set to true when we're shutting down, and don't want any new sound
+     * to creep in.
+     */
+    bool no_more_sound_p;
+
+    static syn68k_addr_t handle_fake_sound_callback(syn68k_addr_t addr, void *junk);
+    void NoteSoundInterrupt();
+    void set_up_tm_task();
+};
+}
 
 #endif /* !_RSYS_SOUNDFAKE_H_ */
