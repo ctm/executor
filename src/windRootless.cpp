@@ -31,7 +31,7 @@ void Executor::ROMlib_rootless_update(RgnHandle extra)
     }
     if(extra)
         UnionRgn(rgn, extra, rgn);
-        
+
     vdriver_set_rootless_region(rgn);
     DisposeRgn(tmp);
     DisposeRgn(rgn);
@@ -54,7 +54,19 @@ void Executor::ROMlib_rootless_closemenu()
 {
     std::cout << "ROMlib_rootless_closemenu\n";
 #ifdef VDRIVER_ROOTLESS
+    if(rootlessMenus.empty())
+        return;
     rootlessMenus.pop_back();
     ROMlib_rootless_update();
+#endif
+}
+
+bool Executor::ROMlib_rootless_drawdesk(RgnHandle desk)
+{
+#ifdef VDRIVER_ROOTLESS
+    EraseRgn(desk);
+    return true;
+#else
+    return false;
 #endif
 }

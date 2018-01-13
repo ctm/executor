@@ -111,6 +111,7 @@ LONGINT Executor::C_PopUpMenuSelect(MenuHandle mh, INTEGER top, INTEGER left,
     ThePortGuard guard(MR(wmgr_port));
     tempi = CW(item);
     MENUCALL(mPopUpRect, mh, &saver, p, &tempi);
+    ROMlib_rootless_openmenu(saver);
     LM(TopMenuItem) = tempi;
     where = ROMlib_mentosix(Hx(mh, menuID));
 
@@ -123,6 +124,6 @@ LONGINT Executor::C_PopUpMenuSelect(MenuHandle mh, INTEGER top, INTEGER left,
     DisposeRgn(PORT_CLIP_REGION(thePort));
     PORT_CLIP_REGION_X(thePort) = saveclip;
     MBDFCALL(mbSaveAlt, 0, where);
-
+    
     return ROMlib_menuhelper(mh, &saver, where, true, 1);
 }

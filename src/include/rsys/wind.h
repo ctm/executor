@@ -43,6 +43,7 @@ extern void wind_color_init(void);
 void ROMlib_rootless_update(RgnHandle extra = nullptr);
 void ROMlib_rootless_openmenu(Rect r);
 void ROMlib_rootless_closemenu();
+bool ROMlib_rootless_drawdesk(RgnHandle desk);
 
 
 typedef void (*draghookp)(void);

@@ -313,15 +313,18 @@ void Executor::C_PaintOne(WindowPeek w, RgnHandle clobbered)
     }
     else if(!EmptyRgn(PORT_CLIP_REGION(MR(wmgr_port))))
     {
-        if(LM(DeskHook))
-            WINDCALLDESKHOOK();
-        else
+        if(!ROMlib_rootless_drawdesk(clobbered))
         {
-            if((USE_DESKCPAT_VAR & USE_DESKCPAT_BIT)
-               && PIXMAP_PIXEL_SIZE(GD_PMAP(MR(LM(MainDevice)))) > 2)
-                FillCRgn(clobbered, MR(LM(DeskCPat)));
+            if(LM(DeskHook))
+                WINDCALLDESKHOOK();
             else
-                FillRgn(clobbered, LM(DeskPattern));
+            {
+                if((USE_DESKCPAT_VAR & USE_DESKCPAT_BIT)
+                && PIXMAP_PIXEL_SIZE(GD_PMAP(MR(LM(MainDevice)))) > 2)
+                    FillCRgn(clobbered, MR(LM(DeskCPat)));
+                else
+                    FillRgn(clobbered, LM(DeskPattern));
+            }
         }
     }
 }

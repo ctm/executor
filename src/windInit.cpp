@@ -115,11 +115,14 @@ void Executor::C_InitWindows()
         PenPat(black);
         MoveTo(0, CW(LM(MBarHeight)) - 1);
         Line(CW(GD_BOUNDS(MR(LM(TheGDevice))).right), 0);
-        if((USE_DESKCPAT_VAR & USE_DESKCPAT_BIT)
-           && PIXMAP_PIXEL_SIZE(GD_PMAP(MR(LM(MainDevice)))) > 2)
-            FillCRgn(MR(LM(GrayRgn)), MR(LM(DeskCPat)));
-        else
-            FillRgn(MR(LM(GrayRgn)), LM(DeskPattern));
+        if(!ROMlib_rootless_drawdesk(MR(LM(GrayRgn))))
+        {
+            if((USE_DESKCPAT_VAR & USE_DESKCPAT_BIT)
+            && PIXMAP_PIXEL_SIZE(GD_PMAP(MR(LM(MainDevice)))) > 2)
+                FillCRgn(MR(LM(GrayRgn)), MR(LM(DeskCPat)));
+            else
+                FillRgn(MR(LM(GrayRgn)), LM(DeskPattern));
+        }
         DisposeRgn(mrgn);
         DisposeRgn(corners);
         CopyRgn(MR(LM(GrayRgn)), PORT_CLIP_REGION(MR(wmgr_port)));
