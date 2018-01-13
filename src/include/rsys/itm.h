@@ -131,10 +131,10 @@ extern void dialog_draw_item(DialogPtr dp, itmp itemp, int itemno);
 #define ITEM_DATA(itemp) \
     ((GUEST<INTEGER> *)((itemp) + 1))
 
-#define BUMPIP(ip)                                  \
-    do {                                            \
-        (ip) = (itmp)((char *)(ip) + ITEM_LEN(ip)); \
-    } while(0)
+inline void BUMPIP(itmp& ip)
+{
+    ip = (itmp)((char *)(ip) + ITEM_LEN(ip));
+}
 
 typedef void (*soundprocp)(INTEGER sound);
 

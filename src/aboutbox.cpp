@@ -634,7 +634,7 @@ event_loop(bool executor_p)
                 local_pt = tmpPt.get();
 
                 GUEST<ControlHandle> bogo_c;
-                control_p = _FindControl(local_pt, about_box, &bogo_c);
+                control_p = FindControl(local_pt, about_box, &bogo_c);
                 c = MR(bogo_c);
                 if(!control_p)
                     SysBeep(1);
