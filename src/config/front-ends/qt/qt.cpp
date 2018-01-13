@@ -242,35 +242,6 @@ public:
         mousePressRelease(ev);
     }
     
-    bool isModifier(unsigned char virt, uint16_t *modstore)
-    {
-        /* Note: shift and control can be cleared if right* and left* are pressed */
-        switch(virt)
-        {
-            case MKV_LEFTSHIFT:
-            case MKV_RIGHTSHIFT:
-                *modstore = shiftKey;
-                break;
-            case MKV_CAPS:
-                *modstore = alphaLock;
-                break;
-            case MKV_LEFTCNTL:
-            case MKV_RIGHTCNTL:
-                *modstore = ControlKey;
-                break;
-            case MKV_CLOVER:
-                *modstore = cmdKey;
-                break;
-            case MKV_LEFTOPTION:
-            case MKV_RIGHTOPTION:
-                *modstore = optionKey;
-                break;
-            default:
-                *modstore = 0;
-                return false;
-        }
-        return true;
-    }
     void keyEvent(QKeyEvent *ev, bool down_p)
     {
         unsigned char mkvkey;
@@ -284,21 +255,40 @@ public:
             mkvkey = 0x89;// NOTAKEY
         else
             mkvkey = p->second;
-#ifdef MACOSX
-        if(ev->nativeVirtualKey())
-            mkvkey = ev->nativeVirtualKey();
-#endif
         if(ev->nativeScanCode() > 1 && ev->nativeScanCode() < NELEM(x_keycode_to_mac_virt))
         {
             mkvkey = x_keycode_to_mac_virt[ev->nativeScanCode()];
         }
+#ifdef MACOSX
+        if(ev->nativeVirtualKey())
+            mkvkey = ev->nativeVirtualKey();
+#endif
         mkvkey = ROMlib_right_to_left_key_map(mkvkey);
-        if(isModifier(mkvkey, &mod))
+        keymod &= ~(shiftKey | ControlKey | cmdKey | optionKey);
+        Qt::KeyboardModifiers qtmods = ev->modifiers();
+        if(qtmods & Qt::ShiftModifier)
+            keymod |= shiftKey;
+#if true || defined(MACOSX)
+        if(qtmods & Qt::ControlModifier)
+            keymod |= cmdKey;
+        if(qtmods & Qt::AltModifier)
+            keymod |= optionKey;
+        if(qtmods & Qt::MetaModifier)
+            keymod |= ControlKey;
+#else
+        if(qtmods & Qt::ControlModifier)
+            keymod |= ControlKey;
+        if(qtmods & Qt::AltModifier)
+            keymod |= cmdKey;
+        if(qtmods & Qt::MetaModifier)
+            keymod |= optionKey;
+#endif
+        if(mkvkey == MKV_CAPS)
         {
             if(down_p)
-                keymod |= mod;
+                keymod |= alphaLock;
             else
-                keymod &= ~mod;
+                keymod &= ~alphaLock;
         }
         when = TickCount();
         where.h = CW(LM(MouseLocation).h);
