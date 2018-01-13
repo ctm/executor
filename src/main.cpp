@@ -959,8 +959,7 @@ win_drive_to_bit(const char *drive_namep)
 }
 #endif
 
-#if defined(LINUX)
-#define PERSONALITY_HACK
+#if defined(LINUX) && defined(PERSONALITY_HACK)
 #include <sys/personality.h>
 #define READ_IMPLIES_EXEC 0x0400000
 #endif
@@ -989,9 +988,12 @@ int main(int argc, char **argv)
     };
     string arg;
 
-#if defined(PERSONALITY_HACK)
+#if defined(LINUX) && defined(PERSONALITY_HACK)
     int pers;
 
+    // TODO: figure out how much of this is still necessary.
+    // MMAP_PAGE_ZERO should be unnecessary now,
+    // but the 32-bit optimized assembly stuff might need READ_IMPLIES_EXEC.
     pers = personality(0xffffffff);
     if((pers & MMAP_PAGE_ZERO) == 0)
     {
