@@ -183,9 +183,7 @@ static inline BOOLEAN ROMlib_CALLCLICK(clickproc fp)
     BOOLEAN retval;
 
     ROMlib_hook(list_clicknumber);
-    HOOKSAVEREGS();
     retval = CToPascalCall((void *)fp, ctop(&C_Button));
-    HOOKRESTOREREGS();
     return retval;
 }
 

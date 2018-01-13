@@ -91,9 +91,7 @@ ROMlib_CALLMODALPROC(DialogPtr dp,
     else
     {
         ROMlib_hook(dial_modalnumber);
-        HOOKSAVEREGS();
         retval = CToPascalCall((void *)fp, ctop(&C_ROMlib_myfilt), dp, evtp, ip);
-        HOOKRESTOREREGS();
     }
     return retval;
 }
@@ -694,10 +692,8 @@ void Executor::BEEPER(INTEGER n)
             C_ROMlib_mysound((n));
         else
         {
-            HOOKSAVEREGS();
             ROMlib_hook(dial_soundprocnumber);
             Executor::CToPascalCall((void *)(soundprocp)MR(LM(DABeeper)), ctop(&C_ROMlib_mysound), n);
-            HOOKRESTOREREGS();
         }
     }
 }

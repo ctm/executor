@@ -109,9 +109,7 @@ static inline INTEGER Executor::ROMlib_CALLCMP(Ptr p1, Ptr p2, INTEGER l1, INTEG
     else
     {
         ROMlib_hook(list_cmpnumber);
-        HOOKSAVEREGS();
         retval = CToPascalCall((void *)fp, ctop(&C_IUMagString), p1, p2, l1, l2);
-        HOOKRESTOREREGS();
     }
     return retval;
 }

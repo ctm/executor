@@ -71,14 +71,12 @@ typedef void (*actionp)(ControlHandle c, INTEGER part);
 static inline void CALLACTION(ControlHandle ch, INTEGER inpart, ProcPtr a)
 {
     ROMlib_hook(ctl_cdefnumber);
-    HOOKSAVEREGS();
     if(a == (ProcPtr)P_ROMlib_mytrack)
         C_ROMlib_mytrack(ch, inpart);
     else if(a == (ProcPtr)P_ROMlib_stdftrack)
         C_ROMlib_stdftrack(ch, inpart);
     else
         CToPascalCall((void *)a, ctop(&C_ROMlib_mytrack), ch, inpart);
-    HOOKRESTOREREGS();
 }
 
 INTEGER Executor::C_TrackControl(ControlHandle c, Point p,
