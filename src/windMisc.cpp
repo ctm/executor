@@ -132,7 +132,10 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
     PenPat(LM(DragPattern));
     PenMode(notPatXor);
     if((drawn = PtInRect(p, slop)))
+    {
         PaintRgn(rgn); /* was Frame */
+        ROMlib_rootless_update(rgn);
+    }
     while(!GetOSEvent(mUpMask, &ev))
     {
         GlobalToLocal(&ev.where);
@@ -155,6 +158,7 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
                 drawn = true;
                 OffsetRgn(rgn, ep.h - p.h, ep.v - p.v);
                 PaintRgn(rgn);
+                ROMlib_rootless_update(rgn);
                 p.h = ep.h;
                 p.v = ep.v;
             }
@@ -162,7 +166,10 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
         else
         {
             if(drawn)
+            {
                 PaintRgn(rgn);
+                ROMlib_rootless_update(nullptr);
+            }
             drawn = false;
         }
         if(proc)
@@ -192,7 +199,10 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
         PenMode(notPatXor);
     }
     if(drawn)
+    {
         PaintRgn(rgn);
+        ROMlib_rootless_update(nullptr);
+    }
     SetPenState(&ps);
     DisposeRgn(rh);
     if(drawn)

@@ -7,14 +7,13 @@
 
 using namespace Executor;
 
-
 static std::vector<Rect> rootlessMenus;
 
-void Executor::ROMlib_rootless_update()
+void Executor::ROMlib_rootless_update(RgnHandle extra)
 {
     std::cout << "ROMlib_rootless_update\n";
 #ifdef VDRIVER_ROOTLESS
-    RgnHandle rgn = NewRgn();//MR(LM(GrayRgn));
+    RgnHandle rgn = NewRgn();
     SetRectRgn(rgn, 0,0, CW(screenBitsX.bounds.right), CW(LM(MBarHeight)));
 
     for(WindowPeek wp = MR(LM(WindowList)); wp; wp = WINDOW_NEXT_WINDOW(wp))
@@ -30,6 +29,9 @@ void Executor::ROMlib_rootless_update()
         RectRgn(tmp, &r);
         UnionRgn(rgn, tmp, rgn);
     }
+    if(extra)
+        UnionRgn(rgn, extra, rgn);
+        
     vdriver_set_rootless_region(rgn);
     DisposeRgn(tmp);
     DisposeRgn(rgn);
