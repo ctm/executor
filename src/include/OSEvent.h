@@ -76,9 +76,8 @@ struct SIZEResource
     GUEST<int32_t> minimum_size;
 };
 
-typedef struct size_info
+typedef struct size_info    /* executor-only struct */
 {
-    GUEST_STRUCT;
     int16_t size_flags;
     int32_t preferred_size;
     int32_t minimum_size;

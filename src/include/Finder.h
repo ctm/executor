@@ -15,6 +15,7 @@ typedef struct DTPBRec
     GUEST_STRUCT;
     GUEST<QElemPtr> qLink;
     GUEST<INTEGER> qType;
+    GUEST<INTEGER> ioTrap;
     GUEST<Ptr> ioCmdAddr;
     GUEST<ProcPtr> ioCompletion;
     GUEST<OSErr> ioResult;

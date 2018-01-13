@@ -178,7 +178,7 @@ struct NumFormatStringRec
     GUEST_STRUCT;
     GUEST<Byte> fLength;
     GUEST<Byte> fVersion;
-    GUEST<SignedByte[253]> data;
+    GUEST<SignedByte[254]> data;
 };
 
 typedef union {

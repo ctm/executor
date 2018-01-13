@@ -115,6 +115,8 @@ struct MemFragment
     GUEST<Ptr> address;
     GUEST<uint32_t> length;
     GUEST<BOOLEAN> inPlace;
+    GUEST<uint8_t> reservedA;
+    GUEST<uint16_t> reservedB;
 };
 
 struct DiskFragment
@@ -131,6 +133,7 @@ struct SegmentedFragment
     GUEST<FSSpecPtr> fileSpec;
     GUEST<OSType> rsrcType;
     GUEST<INTEGER> rsrcID;
+    GUEST<uint16_t> reservedA;
 };
 
 typedef struct FragmentLocator
@@ -149,12 +152,10 @@ struct InitBlock
     GUEST_STRUCT;
     GUEST<uint32_t> contextID;
     GUEST<uint32_t> closureID;
+    GUEST<uint32_t> connectionID;
     GUEST<FragmentLocator> fragLocator;
-    GUEST<Ptr> libName;
-    GUEST<uint32_t> reserved4a;
-    GUEST<uint32_t> reserved4b;
-    GUEST<uint32_t> reserved4c;
-    GUEST<uint32_t> reserved4d;
+    GUEST<StringPtr> libName;
+    GUEST<uint32_t> reserved4;
 };
 
 typedef struct CFragConnection *ConnectionID;
@@ -182,8 +183,7 @@ struct section_info_t
     GUEST<uint32_t> length;
     GUEST<uint32_t> ref_count;
     GUEST<uint8> perms;
-    /* TODO: should probably pad this with three bytes and then PACK the entire
-     structure, but only after verifying that it works that way on a Mac. */
+    GUEST<uint8> pad[3];/* TODO: verifying that it works this way on a Mac. */
 };
 
 typedef struct CFragConnection
@@ -235,7 +235,6 @@ typedef CFragClosure_t *CFragClosureID;
 
 struct map_entry_t
 {
-    GUEST_STRUCT;
     const char *symbol_name;
     void *value;
 };

@@ -97,6 +97,8 @@ struct SerStaRec
     GUEST<Byte> wrPend;
     GUEST<Byte> ctsHold;
     GUEST<Byte> xOffHold;
+    GUEST<Byte> dsrHold;    // unimplemented
+    GUEST<Byte> modemStatus;// unimplemented
 };
 
 const char *const MODEMINAME = ".AIn";

@@ -9,7 +9,7 @@
  */
 
 #include "QuickDraw.h"
-
+#include "SANE.h"
 namespace Executor
 {
 struct SndCommand
@@ -107,7 +107,7 @@ typedef struct _SoundHeader
     GUEST<LONGINT> loopEnd;
     GUEST<Byte> encode;
     GUEST<Byte> baseFrequency;
-    GUEST<Byte> sampleArea[0];
+    GUEST<Byte> sampleArea[1];
 } SoundHeader, *SoundHeaderPtr;
 
 typedef struct _ExtSoundHeader
@@ -121,7 +121,7 @@ typedef struct _ExtSoundHeader
     GUEST<Byte> encode;
     GUEST<Byte> baseFrequency;
     GUEST<LONGINT> numFrames;
-    GUEST<Extended> AIFFSampleRate; /* ???  should be Extended80 */
+    GUEST<extended80> AIFFSampleRate; /* ???  should be Extended80 */
     GUEST<Ptr> MarkerChunk;
     GUEST<Ptr> instrumentChunks;
     GUEST<Ptr> AESRecording;
@@ -130,7 +130,7 @@ typedef struct _ExtSoundHeader
     GUEST<LONGINT> futureUse2;
     GUEST<LONGINT> futureUse3;
     GUEST<LONGINT> futureUse4;
-    GUEST<Byte> sampleArea[0];
+    GUEST<Byte> sampleArea[1];
 } ExtSoundHeader, *ExtSoundHeaderPtr;
 
 enum
@@ -168,7 +168,7 @@ typedef struct SndDoubleBuffer
     GUEST<LONGINT> dbNumFrames;
     GUEST<LONGINT> dbFlags;
     GUEST<LONGINT[2]> dbUserInfo;
-    GUEST<Byte> dbSoundData[0];
+    GUEST<Byte> dbSoundData[1];
 } * SndDoubleBufferPtr;
 
 enum

@@ -159,7 +159,7 @@ void Executor::check_structs(void)
     check(AuxCtlRec, 22);
 
     /* CQuickDraw.h */
-    check(ITab, 7);
+    check(ITab, 8);
     check(SProcRec, 8);
     check(CProcRec, 8);
     check(GDevice, 62);
@@ -174,7 +174,7 @@ void Executor::check_structs(void)
     /* DeskMgr.h has no structs or unions */
 
     /* DeviceMgr.h */
-    check(ramdriver, 19);
+    check(ramdriver, 20);
     check(DCtlEntry, 40);
 
     /* DialogMgr.h */
@@ -226,7 +226,7 @@ void Executor::check_structs(void)
     check(FSSpec, 70);
 
     /* Finder.h */
-    check(DTPBRec, 102);
+    check(DTPBRec, 104);
 
     /* FontMgr.h */
     check(FMetricRec, 20);
@@ -269,8 +269,7 @@ void Executor::check_structs(void)
 
     /* OSEvent.h */
     check(EvQEl, 22);
-    check(size_info_t, 18);
-    check(TargetID, 179);
+    check(TargetID, 252);
     check(HighLevelEventMsg, 36);
 
     /* OSUtil.h */
@@ -282,8 +281,8 @@ void Executor::check_structs(void)
     /* Package.h has no structs or unions */
 
     /* PPC.h */
-    check(LocationNameRec, 35);
-    check(PPCPortRec, 70);
+    check(LocationNameRec, 104);
+    check(PPCPortRec, 72);
 
     /* PrintMgr.h */
     check(TPrPort, 178);
@@ -344,10 +343,10 @@ void Executor::check_structs(void)
     /* ScriptMgr.h */
     check(DateCacheRec, 512);
     check(LongDateRec, 28);
-    check(NumFormatStringRec, 255);
-    check(WideChar, 4);
-    check(WideCharArr, 42);
-    check(NumberParts, 334);
+    check(NumFormatStringRec, 256);
+    check(WideChar, 2);
+    check(WideCharArr, 22);
+    check(NumberParts, 172);
     check(Extended80, 10);
     check(ToggleResults, 2);
     check(LongDateField, 1);
@@ -359,12 +358,12 @@ void Executor::check_structs(void)
 
     /* Serial.h */
     check(SerShk, 8);
-    check(SerStaRec, 6);
+    check(SerStaRec, 8);
 
     /* ShutDown.h has no structs or unions */
 
     /* SoundDvr.h */
-    check(FFSynthRec, 30007);
+    check(FFSynthRec, 30008);
     check(Tone, 6);
     check(SWSynthRec, 30008);
     check(FTSoundRec, 50);
@@ -373,10 +372,10 @@ void Executor::check_structs(void)
     /* SoundMgr.h */
     check(SndCommand, 8);
     check(SndChannel, 1060);
-    check(soundbuffer_t, 23);
-    check(SoundHeader, 22);
-    check(ExtSoundHeader, 62);
-    check(SndDoubleBuffer, 16);
+    check(soundbuffer_t, 24);
+    check(SoundHeader, 24);
+    check(ExtSoundHeader, 66);
+    check(SndDoubleBuffer, 18);
     check(SndDoubleBufferHeader, 24);
     check(SCStatus, 24);
 
@@ -431,9 +430,9 @@ void Executor::check_structs(void)
     /* rsys/alias.h */
     check(Str27, 28);
     check(alias_head_t, 150);
-    check(alias_parent_t, 3);
+    check(alias_parent_t, 4);
     check(alias_unknown_000100_t, 10);
-    check(alias_fullpath_t, 3);
+    check(alias_fullpath_t, 4);
     check(alias_tail_t, 170);
     check(alias_parsed_t, 20);
 
@@ -445,17 +444,17 @@ void Executor::check_structs(void)
 
     /* rsys/cfm.h */
     check(cfrg_resource_t, 32);
-    check(cfir_t, 43);
-    check(MemFragment, 9);
+    check(cfir_t, 44);
+    check(MemFragment, 12);
     check(DiskFragment, 12);
-    check(SegmentedFragment, 10);
+    check(SegmentedFragment, 12);
     check(FragmentLocator, 16);
-    check(InitBlock, 44);
+    check(InitBlock, 36);
     check(section_info_t, 16);
     check(CFragConnection_t, 28);
     check(lib_t, 12);
     check(CFragClosure_t, 4);
-    check(map_entry_t, 8);
+    //check(map_entry_t, 8);     // not a GUEST struct, contains native pointers
 
     /* rsys/cquick.h */
     check(GrafVars, 26);
@@ -463,7 +462,7 @@ void Executor::check_structs(void)
     /* rsys/ctl.h */
     check(struct popup_data, 12);
     check(thumbstr, 18);
-    check(contrlrestype, 23);
+    check(contrlrestype, 24);
     check(struct lsastr, 18);
 
     /* rsys/emustubs.h */
@@ -485,10 +484,10 @@ void Executor::check_structs(void)
 
     /* rsys/file.h */
     check(hfs_access_t, 16);
-    check(DrvQExtra, 46);
+    //check(DrvQExtra, 46); // not a GUEST struct, contains native pointers
     check(fcbrec, 94);
     check(fcbhidden, 32714);
-    check(VCBExtra, 202);
+    //check(VCBExtra, 202);   // not a GUEST struct, contains native pointers
     check(getvolparams_info_t, 20);
 
 /* rsys/float.h */
@@ -546,12 +545,12 @@ void Executor::check_structs(void)
     check(HFSPlusAttrExtents, 72);
 
     /* rsys/icon.h */
-    check(cotton_suite_layout_t, 26);
+    //check(cotton_suite_layout_t, 26);  // not a GUEST struct, contains native pointers
 
     /* rsys/itm.h */
     check(itmstr, 14);
     check(altstr, 12);
-    check(dlogstr, 21);
+    check(dlogstr, 22);
     check(item_style_info_t, 20);
     check(item_color_info_t, 4);
 
@@ -562,20 +561,20 @@ void Executor::check_structs(void)
     check(kchr_str, 262);
 
     /* rsys/launch.h */
-    check(vers_t, 7);
+    check(vers_t, 8);
 
     /* rsys/menu.h */
     check(mext, 5);
     check(muelem, 6);
-    check(menu_elt, 8);
-    check(menu_list, 7);
+    //check(menu_elt, 8);  // not a GUEST struct, contains native pointers
+    check(menu_list, 8);
     check(menulist, 102);
     check(mbdfheader, 20);
     check(mbdfentry, 28);
     check(mct_res_t, 32);
     check(mbartype, 4);
-    check(startendpairs, 16);
-    check(table, 16);
+    //check(startendpairs, 16);   // not a GUEST struct, contains native pointers
+    //check(table, 16);    // not a GUEST struct, contains native pointers
 
     /* rsys/mixed_mode.h */
     check(RoutineRecord, 20);
@@ -614,7 +613,7 @@ void Executor::check_structs(void)
     check(size_resource_t, 10);
 
     /* rsys/quick.h */
-    check(ccrsr_res, 147);
+    check(ccrsr_res, 148);
 
     /* rsys/resource.h */
     check(reshead, 16);
@@ -624,7 +623,7 @@ void Executor::check_structs(void)
     check(resref, 12);
     check(empty_resource_template_t, 286);
     check(dcomp_info_t, 16);
-    check(res_sorttype_t, 8);
+    //check(res_sorttype_t, 8);   // not a GUEST struct, contains native pointers
 
     /* rsys/screen-dump.h */
     check(struct header, 8);
@@ -638,16 +637,16 @@ void Executor::check_structs(void)
     check(sersetbuf_t, 6);
 
     /* rsys/soundopts.h */
-    check(ModifierStub, 47); /* was 52 before I PACKED the structure */
+    //check(ModifierStub, 47); // not a GUEST struct, contains native pointers
 
     /* rsys/syserr.h */
     check(myalerttab_t, 326);
     check(struct adef, 14);
-    check(struct tdef, 9);
+    check(struct tdef, 10);
     check(struct idef, 140);
     check(struct pdef, 8);
     check(struct bdef, 18);
-    check(struct sdef, 5);
+    check(struct sdef, 6);
 
     /* rsys/tesave.h */
     check(tesave, 56);
@@ -658,7 +657,7 @@ void Executor::check_structs(void)
     check(keymap, 644);
 
     /* rsys/wind.h */
-    check(windrestype, 19);
+    check(windrestype, 20);
 
     /* config/arch/powerpc/ppc_stubs.h */
 

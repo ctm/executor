@@ -15,8 +15,24 @@ typedef int16_t PPCLocationKind;
 
 typedef struct EntityName
 {
-    /* #### bogus */
+  Str32 objStr;
+  Str32 typeStr;
+  Str32 zoneStr;
 } EntityName;
+
+struct PPCXTIAddress
+{
+    GUEST_STRUCT;
+    int16_t fAddressType;
+    uint8_t fAddress[96];
+};
+struct PPCAddrRec
+{
+    GUEST_STRUCT;
+    uint8_t Reserved[3];
+    uint8_t xtiAddrLen;
+    PPCXTIAddress xtiAddr;
+};
 
 struct LocationNameRec
 {
@@ -26,6 +42,7 @@ struct LocationNameRec
     union {
         GUEST<EntityName> npbEntity;
         GUEST<Str32> npbType;
+        GUEST<PPCAddrRec> xtiType;
     } u;
 };
 
