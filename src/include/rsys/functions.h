@@ -103,46 +103,9 @@ constexpr CTOPCode ctop(F * = nullptr)
     return ptoc_internal::helper<F>::ctop;
 }
 
-template<typename Ret, typename... Args>
-class PascalTrap
-{
-public:
-    using ProcPtr = Ret (*)(Args...);
 
-    constexpr PascalTrap(ProcPtr impl, uint16_t trapno)
-        : f(impl)
-        , trapno(trapno)
-    {
-    }
-
-    Ret operator()(Args... args) const
-    {
-        if((trapno & TOOLBIT) == 0)
-            return (*f)(args...);
-        else
-        {
-            syn68k_addr_t new_addr = tooltraptable[trapno & (NTOOLENTRIES - 1)];
-
-            if(new_addr == toolstuff[trapno & (NTOOLENTRIES - 1)].orig)
-                return (*f)(args...);
-            else
-                return (Ret)CToPascalCall(SYN68K_TO_US(new_addr), ctop(f), args...);
-        }
-    }
-
-private:
-    ProcPtr f;
-    uint16_t trapno;
-};
-
-template<typename Ret, typename... Args>
-constexpr PascalTrap<Ret, Args...> pascalTrap(Ret (*impl)(Args...), uint16_t trapno)
-{
-    return PascalTrap<Ret, Args...>(impl, trapno);
-}
-
-#define PASCAL_TRAP(NAME, TRAP) constexpr auto NAME = pascalTrap(&C_##NAME, TRAP)
-#define PASCAL_FUNCTION(NAME) constexpr auto NAME = pascalTrap(&C_##NAME, 0)
+//#define PASCAL_TRAP(NAME, TRAP) constexpr auto NAME = &C_##NAME
+//#define PASCAL_FUNCTION(NAME) constexpr auto NAME = &C_##NAME
 
 template<typename F>
 struct UPP;
@@ -152,12 +115,12 @@ struct UPP<Ret(Args...)>
 {
     void *ptr;
 
-    UPP() = default;
-    UPP(std::nullptr_t)
+    constexpr UPP() = default;
+    constexpr UPP(std::nullptr_t)
         : ptr(nullptr)
     {
     }
-    explicit UPP(void *ptr)
+    explicit constexpr UPP(void *ptr)
         : ptr(ptr)
     {
     }
@@ -228,6 +191,76 @@ UPP<TT> MR(GuestWrapper<UPP<TT>> p)
 {
     return p.get();
 }
+
+
+template<typename F, F* fptr>
+class PascalFunction {};
+
+template<typename Ret, typename... Args, Ret (*fptr)(Args...)>
+class PascalFunction<Ret (Args...), fptr>
+{
+public:
+    Ret operator()(Args... args)
+    {
+        return (*fptr)(args...);
+    }
+
+    operator UPP<Ret (Args...)>()
+    {
+        return guestFP;
+    }
+private:
+    UPP<Ret (Args...)> guestFP;
+};
+
+
+
+
+template<typename F, F* fptr, int trapno>
+class PascalTrap {};
+
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno>
+class PascalTrap<Ret (Args...), fptr, trapno> : public PascalFunction<Ret (Args...), fptr>
+{
+public:
+    using ProcPtr = Ret (*)(Args...);
+
+    Ret operator()(Args... args) const
+    {
+        if((trapno & TOOLBIT) == 0)
+            return (*fptr)(args...);
+        else
+        {
+            // TODO
+            syn68k_addr_t new_addr = tooltraptable[trapno & (NTOOLENTRIES - 1)];
+
+            if(new_addr == toolstuff[trapno & (NTOOLENTRIES - 1)].orig)
+                return (*fptr)(args...);
+            else
+                return (Ret)CToPascalCall(SYN68K_TO_US(new_addr), ctop(fptr), args...);
+        }
+    }
+};
+
+#if !defined(FUNCTION_WRAPPER_IMPLEMENTATION) /* defined in functions.cpp */
+
+#define CREATE_FUNCTION_WRAPPER(TYPE, NAME) \
+    extern TYPE NAME;   \
+    extern template class TYPE
+
+#else
+
+#define CREATE_FUNCTION_WRAPPER(TYPE, NAME) \
+    TYPE NAME;   \
+    template class TYPE
+
+#endif
+
+#define COMMA ,
+#define PASCAL_TRAP(NAME, TRAP) CREATE_FUNCTION_WRAPPER(PascalTrap<decltype(C_##NAME) COMMA &C_##NAME COMMA TRAP>, NAME)
+#define PASCAL_FUNCTION(NAME) CREATE_FUNCTION_WRAPPER(PascalFunction<decltype(C_##NAME) COMMA &C_##NAME>, NAME)
+
+
 }
 
 #endif

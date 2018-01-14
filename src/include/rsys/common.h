@@ -21,7 +21,7 @@
 
 #include <syn68k_public.h>
 
-#include "rsys/pascal.h"
+#include "rsys/functions.h"
 #include "ExMacTypes.h"
 #include "rsys/slash.h"
 #include "rsys/error.h"

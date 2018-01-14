@@ -31,11 +31,11 @@ using namespace Executor;
 syn68k_addr_t Executor::tooltraptable[0x400]; /* Gets filled in at run time */
 syn68k_addr_t Executor::ostraptable[0x100]; /* Gets filled in at run time */
 
-#define C_Pack9 _Unimplemented /* PPCBrowser */
-#define C_Pack10 _Unimplemented
+#define _Pack9 _Unimplemented /* PPCBrowser */
+#define _Pack10 _Unimplemented
 
-#define C_Pack13 _Unimplemented /* DB stuff */
-#define C_Pack1 _Unimplemented
+#define _Pack13 _Unimplemented /* DB stuff */
+#define _Pack1 _Unimplemented
 
 #define _AddDrive _Unimplemented
 #define _RDrvrInstall _Unimplemented
@@ -110,11 +110,11 @@ toolstuff_t Executor::toolstuff[0x400] = {
     { { (void *)&C_ShowDItem, ptoc(&C_ShowDItem) }, 0 },
     unimplemented_toolstuff,
     unimplemented_toolstuff,
-    { { (void *)&C_Pack9, static_cast<ULONGINT>(-1) }, 0 },
-    { { (void *)&C_Pack10, static_cast<ULONGINT>(-1) }, 0 },
+    { { (void *)&_Pack9, static_cast<ULONGINT>(-1) }, 0 },
+    { { (void *)&_Pack10, static_cast<ULONGINT>(-1) }, 0 },
     { { (void *)&_Pack11, static_cast<ULONGINT>(-1) }, 0 },
     { { (void *)&_Pack12, static_cast<ULONGINT>(-1) }, 0 },
-    { { (void *)&C_Pack13, static_cast<ULONGINT>(-1) }, 0 },
+    { { (void *)&_Pack13, static_cast<ULONGINT>(-1) }, 0 },
     { { (void *)&_Pack14, static_cast<ULONGINT>(-1) }, 0 },
     { { (void *)&_Pack15, static_cast<ULONGINT>(-1) }, 0 },
     unimplemented_toolstuff,
@@ -555,7 +555,7 @@ toolstuff_t Executor::toolstuff[0x400] = {
     { { (void *)&C_InitPack, ptoc(&C_InitPack) }, 0 },
     { { (void *)&C_InitAllPacks, ptoc(&C_InitAllPacks) }, 0 },
     { { (void *)&_Pack0, static_cast<ULONGINT>(-1) }, 0 },
-    { { (void *)&C_Pack1, static_cast<ULONGINT>(-1) }, 0 },
+    { { (void *)&_Pack1, static_cast<ULONGINT>(-1) }, 0 },
     { { (void *)&_Pack2, static_cast<ULONGINT>(-1) }, 0 },
     { { (void *)&_Pack3, static_cast<ULONGINT>(-1) }, 0 },
     { { (void *)&_Pack4, static_cast<ULONGINT>(-1) }, 0 },

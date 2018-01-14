@@ -186,7 +186,7 @@ set(misc_sources desk.cpp device.cpp disk.cpp diskinit.cpp dump.cpp trapname.cpp
   icon.cpp redrawscreen.cpp ini.cpp checkpoint.cpp qt.cpp
   paramline.c fauxdbm.cpp commtool.cpp cfm.cpp pef_hash.cpp
   interfacelib.cpp mixed_mode.cpp suffix_maps.cpp appearance.cpp lockrange.cpp
-  emutrap.cpp emutraptables.cpp emustubs.cpp unix_like.cpp parse.ypp check_structs.cpp
+  emutrap.cpp emutraptables.cpp emustubs.cpp functions.cpp unix_like.cpp parse.ypp check_structs.cpp
   executor.cpp  crc.cpp)
 
 set(include_sources hintemplate.h

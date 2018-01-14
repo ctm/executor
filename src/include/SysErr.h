@@ -21,6 +21,7 @@ const LowMemGlobal<Byte> QDExist { 0x8F3 }; // SysError SysEqu.a (true);
 extern char syserr_msg[];
 
 extern void C_SysError(short errorcode);
+PASCAL_TRAP(SysError, 0xA9C9);
 }
 
 #endif /* !_SYSERR_H_ */
