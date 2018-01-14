@@ -665,12 +665,12 @@ void Executor::BEEPER(INTEGER n)
 {
     if(LM(DABeeper))
     {
-        if(MR(LM(DABeeper)) == (ProcPtr)&ROMlib_mysound)
+        if(MR(LM(DABeeper)) == &ROMlib_mysound)
             C_ROMlib_mysound((n));
         else
         {
             ROMlib_hook(dial_soundprocnumber);
-            Executor::CToPascalCall((void *)(soundprocp)MR(LM(DABeeper)), ctop(&C_ROMlib_mysound), n);
+            MR(LM(DABeeper))(n);
         }
     }
 }

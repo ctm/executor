@@ -159,8 +159,8 @@ using rgnProc_t = UPP<void(GrafVerb verb, RgnHandle rgn)>;
 using bitsProc_t = UPP<void(const BitMap *srcb, const Rect *srcr, const Rect *dstr, INTEGER mod, RgnHandle mask)>;
 using commentProc_t = UPP<void(INTEGER kind, INTEGER size, Handle data)>;
 using txMeasProc_t = UPP<INTEGER(INTEGER bc, Ptr texta, GUEST<Point> *numer, GUEST<Point> *denom, FontInfo *info)>;
-using getPicProc_t = UPP<void(Ptr data, INTEGER bc)>;
-using putPicProc_t = UPP<void(Ptr data, INTEGER bc)>;
+using getPicProc_t = UPP<void(void * data, INTEGER bc)>;
+using putPicProc_t = UPP<void(const void * data, INTEGER bc)>;
 
 struct QDProcs
 {
@@ -826,9 +826,9 @@ PASCAL_TRAP(StdOval, 0xA8B6);
 extern void C_StdComment(INTEGER kind, INTEGER size,
                                      Handle hand);
 PASCAL_TRAP(StdComment, 0xA8F1);
-extern void C_StdGetPic(Ptr dp, INTEGER bc);
+extern void C_StdGetPic(void *dp, INTEGER bc);
 PASCAL_TRAP(StdGetPic, 0xA8EE);
-extern void C_StdPutPic(Ptr sp, INTEGER bc);
+extern void C_StdPutPic(const void *sp, INTEGER bc);
 PASCAL_TRAP(StdPutPic, 0xA8F0);
 extern void C_StdPoly(GrafVerb verb, PolyHandle ph);
 PASCAL_TRAP(StdPoly, 0xA8C5);

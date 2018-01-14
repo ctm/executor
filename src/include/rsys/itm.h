@@ -135,7 +135,6 @@ inline void BUMPIP(itmp& ip)
     ip = (itmp)((char *)(ip) + ITEM_LEN(ip));
 }
 
-typedef void (*soundprocp)(INTEGER sound);
 
 extern void BEEPER(INTEGER n);
 #define BEEP(n) BEEPER(n)

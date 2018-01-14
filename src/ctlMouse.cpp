@@ -65,17 +65,16 @@ INTEGER Executor::C_FindControl(Point p, WindowPtr w,
     return retval;
 }
 
-typedef void (*actionp)(ControlHandle c, INTEGER part);
 
-static inline void CALLACTION(ControlHandle ch, INTEGER inpart, ProcPtr a)
+static inline void CALLACTION(ControlHandle ch, INTEGER inpart, ControlActionUPP a)
 {
     ROMlib_hook(ctl_cdefnumber);
-    if(a == (ProcPtr)&ROMlib_mytrack)
+    if(a == &ROMlib_mytrack)
         ROMlib_mytrack(ch, inpart);
-    else if(a == (ProcPtr)&ROMlib_stdftrack)
+    else if(a == &ROMlib_stdftrack)
         ROMlib_stdftrack(ch, inpart);
     else
-        CToPascalCall((void *)a, ctop(&C_ROMlib_mytrack), ch, inpart);
+        a(ch, inpart);
 }
 
 INTEGER Executor::C_TrackControl(ControlHandle c, Point p,
@@ -188,7 +187,7 @@ INTEGER Executor::C_TrackControl(ControlHandle c, Point p,
                 CTLCALL(c, drawCntl, partstart);
             }
             if(a && inpart)
-                CALLACTION(c, inpart, (ProcPtr)a);
+                CALLACTION(c, inpart, a);
         }
         GetOSEvent(mUpMask, &ev);
         GlobalToLocal(&ev.where);

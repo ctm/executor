@@ -2301,7 +2301,7 @@ STUB(SetTrapAddress)
 STUB(Gestalt)
 {
     GUEST<LONGINT> l;
-    ProcPtr oldp;
+    SelectorFunctionUPP oldp;
 
     switch(EM_D1 & 0xFFFF)
     {
@@ -2315,10 +2315,10 @@ STUB(Gestalt)
             if(EM_D0 == DONGLE_GESTALT)
                 EM_D0 = Gestalt(EM_D0, (GUEST<LONGINT> *)SYN68K_TO_US_CHECK0(EM_A0));
             else
-                EM_D0 = NewGestalt(EM_D0, (ProcPtr)SYN68K_TO_US_CHECK0(EM_A0));
+                EM_D0 = NewGestalt(EM_D0, (SelectorFunctionUPP)SYN68K_TO_US_CHECK0(EM_A0));
             break;
         case 0xA5AD:
-            EM_D0 = ReplaceGestalt(EM_D0, (ProcPtr)SYN68K_TO_US_CHECK0(EM_A0),
+            EM_D0 = ReplaceGestalt(EM_D0, (SelectorFunctionUPP)SYN68K_TO_US_CHECK0(EM_A0),
                                    &oldp);
             EM_A0 = US_TO_SYN68K_CHECK0((void *)oldp);
             break;

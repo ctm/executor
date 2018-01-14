@@ -526,7 +526,7 @@ static inline TPPrDlg Executor::ROMlib_CALLPRINITPROC(THPrint hPrint, prinitproc
         retval = C_PrJobInit(hPrint);
     else
     {
-        retval = (TPPrDlg)CToPascalCall((void *)fp, ctop(&C_PrStlInit), hPrint);
+        retval = fp(hPrint);
     }
     return retval;
 }
@@ -543,7 +543,7 @@ static inline void Executor::ROMlib_CALLPRITEMPROC(TPPrDlg prrecptr, INTEGER ite
         C_ROMlib_mystlproc((DialogPtr)prrecptr, item);
     else
     {
-        CToPascalCall((void *)fp, ctop(&C_ROMlib_myjobproc), prrecptr, item);
+        fp((GrafPtr)prrecptr, item);
     }
 }
 

@@ -727,7 +727,7 @@ static void reset_low_globals(void)
  * globals beforehand
  */
 
-    GUEST<ProcPtr> saveDABeeper;
+    GUEST<SoundProcPtr> saveDABeeper;
     GUEST<THz> saveSysZone;
     GUEST<uint32_t> saveTicks;
     GUEST<INTEGER> saveBootDrive;

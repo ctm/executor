@@ -278,7 +278,7 @@ static OSType phystable_selectors_to_patch[] = {
 typedef struct gestalt_link_str
 {
     OSType selector;
-    ProcPtr selectorFunction;
+    SelectorFunctionUPP selectorFunction;
     struct gestalt_link_str *next;
 } gestalt_link_t;
 
@@ -382,7 +382,7 @@ gestalt_set_cpu_type(uint32_t type)
 }
 #endif
 
-static OSErrRET
+static OSErr
 gestalt_helper(OSType selector, GUEST<LONGINT> *responsep, BOOLEAN searchlist,
                gestaltentry_t table[], int length)
 {
@@ -397,8 +397,7 @@ gestalt_helper(OSType selector, GUEST<LONGINT> *responsep, BOOLEAN searchlist,
     *responsep = CLC(0); /* better safe than sorry */
 
     if(searchlist && (gp = find_selector_on_list(selector)))
-        retval = CToPascalCall((void *)gp->selectorFunction, ctop(&C_GestaltTablesOnly),
-                               selector, responsep);
+        retval = gp->selectorFunction(selector, responsep);
     else
     {
         gestaltentry_t *gep;
@@ -493,7 +492,7 @@ Executor::ROMlib_add_to_gestalt_list(OSType selector, OSErr retval, uint32_t new
     }
 }
 
-OSErrRET Executor::Gestalt(OSType selector, GUEST<LONGINT> *responsep)
+OSErr Executor::Gestalt(OSType selector, GUEST<LONGINT> *responsep)
 {
     static bool been_here = false;
 
@@ -505,7 +504,7 @@ OSErrRET Executor::Gestalt(OSType selector, GUEST<LONGINT> *responsep)
 #if defined(CYGWIN32)
     if((uint32_t)selector == 0xb7d20e84)
     {
-        OSErrRET retval;
+        OSErr retval;
 
         warning_trace_info("about to dongle_query");
         retval = dongle_query(responsep);
@@ -538,9 +537,9 @@ OSErrRET Executor::Gestalt(OSType selector, GUEST<LONGINT> *responsep)
     return gestalt_helper(selector, responsep, true, gtable, NELEM(gtable));
 }
 
-OSErrRET Executor::C_PhysicalGestalt(OSType selector, GUEST<LONGINT> *responsep)
+OSErr Executor::C_PhysicalGestalt(OSType selector, GUEST<LONGINT> *responsep)
 {
-    OSErrRET retval;
+    OSErr retval;
 
     switch(selector)
     {
@@ -564,7 +563,7 @@ OSErrRET Executor::C_PhysicalGestalt(OSType selector, GUEST<LONGINT> *responsep)
     return retval;
 }
 
-OSErrRET Executor::C_GestaltTablesOnly(OSType selector,
+OSErr Executor::C_GestaltTablesOnly(OSType selector,
                                        GUEST<LONGINT> *responsep)
 {
     return gestalt_helper(selector, responsep, false, gtable, NELEM(gtable));
@@ -581,11 +580,11 @@ syszone_p(ProcPtr p)
 }
 
 static OSErr
-new_link(OSType selector, ProcPtr selFunc)
+new_link(OSType selector, SelectorFunctionUPP selFunc)
 {
     OSErr retval;
 
-    if(!syszone_p(selFunc))
+    if(!syszone_p((ProcPtr)selFunc))
         retval = gestaltLocationErr;
     else
     {
@@ -607,7 +606,7 @@ new_link(OSType selector, ProcPtr selFunc)
     return retval;
 }
 
-OSErrRET Executor::NewGestalt(OSType selector, ProcPtr selFunc)
+OSErr Executor::NewGestalt(OSType selector, SelectorFunctionUPP selFunc)
 {
     OSErr retval;
 
@@ -619,8 +618,8 @@ OSErrRET Executor::NewGestalt(OSType selector, ProcPtr selFunc)
     return retval;
 }
 
-OSErrRET Executor::ReplaceGestalt(OSType selector, ProcPtr selFunc,
-                                  ProcPtr *oldSelFuncp)
+OSErr Executor::ReplaceGestalt(OSType selector, SelectorFunctionUPP selFunc,
+                                  SelectorFunctionUPP *oldSelFuncp)
 {
     OSErr retval;
     gestalt_link_t *gp;
@@ -628,7 +627,7 @@ OSErrRET Executor::ReplaceGestalt(OSType selector, ProcPtr selFunc,
     gp = find_selector_on_list(selector);
     if(gp)
     {
-        if(syszone_p(selFunc))
+        if(syszone_p((ProcPtr)selFunc))
         {
             *oldSelFuncp = gp->selectorFunction;
             gp->selectorFunction = selFunc;
@@ -646,7 +645,7 @@ OSErrRET Executor::ReplaceGestalt(OSType selector, ProcPtr selFunc,
             retval = gestaltUndefSelectorErr;
         else
         {
-            *oldSelFuncp = (ProcPtr)&GestaltTablesOnly;
+            *oldSelFuncp = &GestaltTablesOnly;
             retval = new_link(selector, selFunc);
         }
     }

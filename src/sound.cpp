@@ -514,7 +514,6 @@ static void dumpcmd(SndCommand *cmdp)
 }
 #endif
 
-typedef BOOLEAN (*snthfp)(SndChannelPtr, SndCommand *, ModifierStubPtr);
 
 BOOLEAN callasynth(SndChannelPtr chanp, SndCommand *cmdp, ModifierStubPtr mp)
 {
@@ -522,7 +521,7 @@ BOOLEAN callasynth(SndChannelPtr chanp, SndCommand *cmdp, ModifierStubPtr mp)
  * NOTE: when we support sound, we'll have to check for known P_routines
  *	 to avoid invoking syn68k on our own stuff.
  */
-    return CToPascalCall((void *)MR(mp->code), ctop(&C_SectRect), chanp, cmdp, mp);
+    return mp->code(chanp, cmdp, mp);
 }
 
 #if defined(OLD_BROKEN_NEXTSTEP_SOUND)

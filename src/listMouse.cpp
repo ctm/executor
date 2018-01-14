@@ -18,12 +18,11 @@
 
 using namespace Executor;
 
-typedef BOOLEAN (*clickproc)(void);
 
 static void findcell(GUEST<Cell> *, ListHandle);
 static void setselectnilflag(BOOLEAN setit, Cell cell, ListHandle list,
                              BOOLEAN hiliteempty);
-static inline BOOLEAN ROMlib_CALLCLICK(clickproc);
+static inline BOOLEAN ROMlib_CALLCLICK(ListClickLoopUPP);
 static void scrollbyvalues(ListHandle);
 static void rect2value(Rect *in, Rect *butnotin, INTEGER value,
                        ListHandle list, BOOLEAN hiliteempty);
@@ -175,14 +174,12 @@ void Executor::C_ROMlib_mytrack(ControlHandle ch, INTEGER part)
     scrollbyvalues(MR(guest_cast<ListHandle>(HxX(ch, contrlRfCon))));
 }
 
-#define CALLCLICK(f) ROMlib_CALLCLICK((clickproc)(f))
-
-static inline BOOLEAN ROMlib_CALLCLICK(clickproc fp)
+static inline BOOLEAN CALLCLICK(ListClickLoopUPP fp)
 {
     BOOLEAN retval;
 
     ROMlib_hook(list_clicknumber);
-    retval = CToPascalCall((void *)fp, ctop(&C_Button));
+    retval = fp();
     return retval;
 }
 

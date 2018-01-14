@@ -25,6 +25,8 @@ typedef DataArray *DataPtr;
 
 typedef GUEST<DataPtr> *DataHandle;
 
+using ListClickLoopUPP = UPP<Boolean(void)>;
+
 struct ListRec
 {
     GUEST_STRUCT;
@@ -42,7 +44,7 @@ struct ListRec
     GUEST<LONGINT> clikTime;
     GUEST<Point> clikLoc;
     GUEST<Point> mouseLoc;
-    GUEST<Ptr> lClikLoop;
+    GUEST<ListClickLoopUPP> lClikLoop;
     GUEST<Cell> lastClick;
     GUEST<LONGINT> refCon;
     GUEST<Handle> listDefProc;

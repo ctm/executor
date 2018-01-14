@@ -156,7 +156,7 @@ typedef UPP<void(DialogPtr theDialog, INTEGER itemNo)> UserItemProcPtr;
 const LowMemGlobal<ProcPtr> ResumeProc { 0xA8C }; // DialogMgr IMI-411 (true);
 const LowMemGlobal<INTEGER> ANumber { 0xA98 }; // DialogMgr IMI-423 (true);
 const LowMemGlobal<INTEGER> ACount { 0xA9A }; // DialogMgr IMI-423 (true);
-const LowMemGlobal<ProcPtr> DABeeper { 0xA9C }; // DialogMgr IMI-411 (true);
+const LowMemGlobal<SoundProcPtr> DABeeper { 0xA9C }; // DialogMgr IMI-411 (true);
 const LowMemGlobal<Handle[4]> DAStrings { 0xAA0 }; // DialogMgr IMI-421 (true);
 const LowMemGlobal<INTEGER> DlgFont { 0xAFA }; // DialogMgr IMI-412 (true);
 
@@ -218,7 +218,7 @@ extern void DlgPaste(DialogPtr dp);
 extern void DlgDelete(DialogPtr dp);
 extern void C_ROMlib_mysound(INTEGER i);
 PASCAL_FUNCTION(ROMlib_mysound);
-extern void C_ErrorSound(ProcPtr sp);
+extern void C_ErrorSound(SoundProcPtr sp);
 PASCAL_TRAP(ErrorSound, 0xA98C);
 extern void C_InitDialogs(ProcPtr rp);
 PASCAL_TRAP(InitDialogs, 0xA97B);

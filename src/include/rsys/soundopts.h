@@ -55,10 +55,15 @@ typedef LONGINT TimeL;
 
 // ###autc04 TODO: snd_time? 64 bit values on the mac?
 //                 is this an internal executor-only struct?
-typedef struct _ModifierStub
+
+struct ModifierStub;
+typedef ModifierStub *ModifierStubPtr;
+
+using snthfp = UPP<BOOLEAN(SndChannelPtr, SndCommand *, ModifierStubPtr)>;
+struct ModifierStub
 {
     GUEST<struct _ModifierStub *> nextStub;
-    GUEST<ProcPtr> code;
+    GUEST<snthfp> code;
     LONGINT userInfo;
     TimeL count;
     TimeL every;
@@ -69,7 +74,7 @@ typedef struct _ModifierStub
     GUEST<uint8> prev_samp;
     SndDoubleBufferHeader *dbhp;
     int current_db;
-} ModifierStub, *ModifierStubPtr;
+};
 
 #define SND_CHAN_FIRSTMOD(c) ((ModifierStubPtr)MR(c->firstMod))
 #define SND_CHAN_CURRENT_START(c) (SND_CHAN_FIRSTMOD(c)->current_start)

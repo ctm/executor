@@ -15,7 +15,6 @@ using namespace Executor;
  * function is called when we're done.
  */
 
-typedef void (*callbackfp)(SndChannelPtr, SndCommand *);
 
 BOOLEAN Executor::C_snth5(SndChannelPtr chanp, SndCommand *cmdp,
                           ModifierStubPtr mp)
@@ -61,7 +60,7 @@ BOOLEAN Executor::C_snth5(SndChannelPtr chanp, SndCommand *cmdp,
 #if 0
 	printf("CB"); fflush(stdout);
 #endif
-            CToPascalCall((void *)MR(chanp->callBack), ctop(&C_StuffHex), chanp, cmdp);
+            MR(chanp->callBack)(chanp, cmdp);
             break;
         case syncCmd:
             /* TODO */

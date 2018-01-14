@@ -104,11 +104,6 @@ constexpr CTOPCode ctop(F * = nullptr)
     return ptoc_internal::helper<F>::ctop;
 }
 
-
-//#define PASCAL_TRAP(NAME, TRAP) constexpr auto NAME = &C_##NAME
-//#define PASCAL_FUNCTION(NAME) constexpr auto NAME = &C_##NAME
-
-//typedef int (*ProcPtr)();
 struct OpaqueUntyped68KProc;
 typedef OpaqueUntyped68KProc* ProcPtr;
 
