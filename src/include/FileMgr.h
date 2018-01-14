@@ -683,43 +683,43 @@ extern OSErrRET PBResolveFileIDRef(ParmBlkPtr pb, BOOLEAN async);
 /* prototypes for the high level filesystem dispatch traps */
 extern OSErr C_FSMakeFSSpec(int16_t vRefNum, int32_t dir_id,
                                         Str255 file_name, FSSpecPtr spec);
-PASCAL_FUNCTION(FSMakeFSSpec);
+PASCAL_SUBTRAP(FSMakeFSSpec, 0xAA52, HighLevelFSDispatch);
 extern OSErr C_FSpExchangeFiles(FSSpecPtr src, FSSpecPtr dst);
-PASCAL_FUNCTION(FSpExchangeFiles);
+PASCAL_SUBTRAP(FSpExchangeFiles, 0xAA52, HighLevelFSDispatch);
 extern OSErr C_FSpOpenDF(FSSpecPtr spec, SignedByte perms,
                                      GUEST<int16_t> *refNum_out);
-PASCAL_FUNCTION(FSpOpenDF);
+PASCAL_SUBTRAP(FSpOpenDF, 0xAA52, HighLevelFSDispatch);
 extern OSErr C_FSpOpenRF(FSSpecPtr spec, SignedByte perms,
                                      GUEST<int16_t> *refNum_out);
-PASCAL_FUNCTION(FSpOpenRF);
+PASCAL_SUBTRAP(FSpOpenRF, 0xAA52, HighLevelFSDispatch);
 extern OSErr C_FSpCreate(FSSpecPtr spec,
                                      OSType creator, OSType file_type,
                                      ScriptCode script);
-PASCAL_FUNCTION(FSpCreate);
+PASCAL_SUBTRAP(FSpCreate, 0xAA52, HighLevelFSDispatch);
 extern OSErr C_FSpDirCreate(FSSpecPtr spec, ScriptCode script,
                                         GUEST<int32_t> *created_dir_id);
-PASCAL_FUNCTION(FSpDirCreate);
+PASCAL_SUBTRAP(FSpDirCreate, 0xAA52, HighLevelFSDispatch);
 extern OSErr C_FSpDelete(FSSpecPtr spec);
-PASCAL_FUNCTION(FSpDelete);
+PASCAL_SUBTRAP(FSpDelete, 0xAA52, HighLevelFSDispatch);
 
 extern OSErr C_FSpGetFInfo(FSSpecPtr spec, FInfo *fndr_info);
-PASCAL_FUNCTION(FSpGetFInfo);
+PASCAL_SUBTRAP(FSpGetFInfo, 0xAA52, HighLevelFSDispatch);
 extern OSErr C_FSpSetFInfo(FSSpecPtr spec, FInfo *fndr_info);
-PASCAL_FUNCTION(FSpSetFInfo);
+PASCAL_SUBTRAP(FSpSetFInfo, 0xAA52, HighLevelFSDispatch);
 extern OSErr C_FSpSetFLock(FSSpecPtr spec);
-PASCAL_FUNCTION(FSpSetFLock);
+PASCAL_SUBTRAP(FSpSetFLock, 0xAA52, HighLevelFSDispatch);
 extern OSErr C_FSpRstFLock(FSSpecPtr spec);
-PASCAL_FUNCTION(FSpRstFLock);
+PASCAL_SUBTRAP(FSpRstFLock, 0xAA52, HighLevelFSDispatch);
 extern OSErr C_FSpRename(FSSpecPtr spec, Str255 new_name);
-PASCAL_FUNCTION(FSpRename);
+PASCAL_SUBTRAP(FSpRename, 0xAA52, HighLevelFSDispatch);
 extern OSErr C_FSpCatMove(FSSpecPtr src, FSSpecPtr dst);
-PASCAL_FUNCTION(FSpCatMove);
+PASCAL_SUBTRAP(FSpCatMove, 0xAA52, HighLevelFSDispatch);
 extern void C_FSpCreateResFile(FSSpecPtr spec,
                                            OSType creator, OSType file_type,
                                            ScriptCode script);
-PASCAL_FUNCTION(FSpCreateResFile);
+PASCAL_SUBTRAP(FSpCreateResFile, 0xAA52, HighLevelFSDispatch);
 extern INTEGER C_FSpOpenResFile(FSSpecPtr spec, SignedByte perms);
-PASCAL_FUNCTION(FSpOpenResFile);
+PASCAL_SUBTRAP(FSpOpenResFile, 0xAA52, HighLevelFSDispatch);
 extern INTEGER C_HOpenResFile(INTEGER vref, LONGINT dirid,
                                           Str255 file_name, SignedByte perm);
 PASCAL_TRAP(HOpenResFile, 0xA81A);

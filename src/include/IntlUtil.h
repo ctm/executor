@@ -143,73 +143,73 @@ enum
 
 extern void C_IUDatePString(LONGINT date,
                                         DateForm form, StringPtr p, Handle h);
-PASCAL_FUNCTION(IUDatePString);
+PASCAL_SUBTRAP(IUDatePString, 0xA9ED, Pack6);
 extern Handle C_IUGetIntl(INTEGER id);
-PASCAL_FUNCTION(IUGetIntl);
+PASCAL_SUBTRAP(IUGetIntl, 0xA9ED, Pack6);
 
 extern void C_IUDateString(LONGINT date,
                                        DateForm form, StringPtr p);
-PASCAL_FUNCTION(IUDateString);
+PASCAL_SUBTRAP(IUDateString, 0xA9ED, Pack6);
 extern void C_IUTimePString(LONGINT date,
                                         BOOLEAN secs, StringPtr p, Handle h);
-PASCAL_FUNCTION(IUTimePString);
+PASCAL_SUBTRAP(IUTimePString, 0xA9ED, Pack6);
 extern void C_IUTimeString(LONGINT date,
                                        BOOLEAN secs, StringPtr p);
-PASCAL_FUNCTION(IUTimeString);
+PASCAL_SUBTRAP(IUTimeString, 0xA9ED, Pack6);
 extern BOOLEAN C_IUMetric(void);
-PASCAL_FUNCTION(IUMetric);
+PASCAL_SUBTRAP(IUMetric, 0xA9ED, Pack6);
 
 extern void C_IUSetIntl(INTEGER rn,
                                     INTEGER id, Handle newh);
-PASCAL_FUNCTION(IUSetIntl);
+PASCAL_SUBTRAP(IUSetIntl, 0xA9ED, Pack6);
 
 extern INTEGER C_IUMagString(Ptr ptr1, Ptr ptr2, INTEGER len1, INTEGER len2);
-PASCAL_FUNCTION(IUMagString);
+PASCAL_SUBTRAP(IUMagString, 0xA9ED, Pack6);
 
 extern INTEGER IUCompString(StringPtr str1,
                             StringPtr str2);
 extern INTEGER C_IUMagIDString(Ptr ptr1,
                                            Ptr ptr2, INTEGER len1, INTEGER len2);
-PASCAL_FUNCTION(IUMagIDString);
+PASCAL_SUBTRAP(IUMagIDString, 0xA9ED, Pack6);
 extern INTEGER IUEqualString(StringPtr str1,
                              StringPtr str2);
 extern void C_IUMystery(Ptr arg1, Ptr arg2,
                                     INTEGER arg3, INTEGER arg4);
-PASCAL_FUNCTION(IUMystery);
+PASCAL_SUBTRAP(IUMystery, 0xA9ED, Pack6);
 
 extern void C_IULDateString(LongDateTime *datetimep,
                                         DateForm longflag, Str255 result, Handle intlhand);
-PASCAL_FUNCTION(IULDateString);
+PASCAL_SUBTRAP(IULDateString, 0xA9ED, Pack6);
 
 extern void C_IULTimeString(LongDateTime *datetimep,
                                         BOOLEAN wantseconds, Str255 result, Handle intlhand);
-PASCAL_FUNCTION(IULTimeString);
+PASCAL_SUBTRAP(IULTimeString, 0xA9ED, Pack6);
 
 extern void C_IUClearCache(void);
-PASCAL_FUNCTION(IUClearCache);
+PASCAL_SUBTRAP(IUClearCache, 0xA9ED, Pack6);
 
 extern INTEGER C_IUMagPString(Ptr ptra, Ptr ptrb, INTEGER lena,
                                           INTEGER lenb, Handle itl2hand);
-PASCAL_FUNCTION(IUMagPString);
+PASCAL_SUBTRAP(IUMagPString, 0xA9ED, Pack6);
 
 extern INTEGER C_IUMagIDPString(Ptr ptra, Ptr ptrb, INTEGER lena,
                                             INTEGER lenb, Handle itl2hand);
-PASCAL_FUNCTION(IUMagIDPString);
+PASCAL_SUBTRAP(IUMagIDPString, 0xA9ED, Pack6);
 
 extern INTEGER C_IUScriptOrder(ScriptCode script1,
                                            ScriptCode script2);
-PASCAL_FUNCTION(IUScriptOrder);
+PASCAL_SUBTRAP(IUScriptOrder, 0xA9ED, Pack6);
 
 extern INTEGER C_IULangOrder(LangCode l1, LangCode l2);
-PASCAL_FUNCTION(IULangOrder);
+PASCAL_SUBTRAP(IULangOrder, 0xA9ED, Pack6);
 
 extern INTEGER C_IUTextOrder(Ptr ptra, Ptr ptrb, INTEGER lena,
                                          INTEGER lenb, ScriptCode scripta, ScriptCode bscript, LangCode langa,
                                          LangCode langb);
-PASCAL_FUNCTION(IUTextOrder);
+PASCAL_SUBTRAP(IUTextOrder, 0xA9ED, Pack6);
 
 extern void C_IUGetItlTable(ScriptCode script, INTEGER tablecode,
                                         Handle *itlhandlep, LONGINT *offsetp, LONGINT *lengthp);
-PASCAL_FUNCTION(IUGetItlTable);
+PASCAL_SUBTRAP(IUGetItlTable, 0xA9ED, Pack6);
 }
 #endif /* _INTLUTIL_H_ */

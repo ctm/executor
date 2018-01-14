@@ -182,24 +182,24 @@ typedef struct TPrDlg
 const LowMemGlobal<INTEGER> PrintErr { 0x944 }; // PrintMgr IMII-161 (true-b);
 
 extern INTEGER C_PrError(void);
-PASCAL_FUNCTION(PrError);
+PASCAL_SUBTRAP(PrError, 0xA8FD, _PrGlue);
 extern void C_PrSetError(INTEGER iErr);
-PASCAL_FUNCTION(PrSetError);
+PASCAL_SUBTRAP(PrSetError, 0xA8FD, _PrGlue);
 extern void C_PrOpen(void);
-PASCAL_FUNCTION(PrOpen);
+PASCAL_SUBTRAP(PrOpen, 0xA8FD, _PrGlue);
 extern void C_PrClose(void);
-PASCAL_FUNCTION(PrClose);
+PASCAL_SUBTRAP(PrClose, 0xA8FD, _PrGlue);
 extern void C_PrDrvrOpen(void);
-PASCAL_FUNCTION(PrDrvrOpen);
+PASCAL_SUBTRAP(PrDrvrOpen, 0xA8FD, _PrGlue);
 extern void C_PrDrvrClose(void);
-PASCAL_FUNCTION(PrDrvrClose);
+PASCAL_SUBTRAP(PrDrvrClose, 0xA8FD, _PrGlue);
 extern void C_PrCtlCall(INTEGER iWhichCtl, LONGINT lParam1,
                                     LONGINT lParam2, LONGINT lParam3);
-PASCAL_FUNCTION(PrCtlCall);
+PASCAL_SUBTRAP(PrCtlCall, 0xA8FD, _PrGlue);
 extern Handle C_PrDrvrDCE(void);
-PASCAL_FUNCTION(PrDrvrDCE);
+PASCAL_SUBTRAP(PrDrvrDCE, 0xA8FD, _PrGlue);
 extern INTEGER C_PrDrvrVers(void);
-PASCAL_FUNCTION(PrDrvrVers);
+PASCAL_SUBTRAP(PrDrvrVers, 0xA8FD, _PrGlue);
 extern void C_ROMlib_myjobproc(DialogPtr dp, INTEGER itemno);
 extern BOOLEAN C_ROMlib_stlfilterproc(DialogPeek dp,
                                              EventRecord *evt, GUEST<INTEGER> *ith);
@@ -210,13 +210,13 @@ extern BOOLEAN C_ROMlib_numsonlyfilterproc(DialogPeek dp,
 
 extern void C_ROMlib_mystlproc(DialogPtr dp, INTEGER itemno);
 extern TPPrDlg C_PrJobInit(THPrint hPrint);
-PASCAL_FUNCTION(PrJobInit);
+PASCAL_SUBTRAP(PrJobInit, 0xA8FD, _PrGlue);
 extern TPPrDlg C_PrStlInit(THPrint hPrint);
-PASCAL_FUNCTION(PrStlInit);
+PASCAL_SUBTRAP(PrStlInit, 0xA8FD, _PrGlue);
 extern BOOLEAN C_PrDlgMain(THPrint hPrint, ProcPtr initfptr);
-PASCAL_FUNCTION(PrDlgMain);
+PASCAL_SUBTRAP(PrDlgMain, 0xA8FD, _PrGlue);
 extern void C_PrGeneral(Ptr pData);
-PASCAL_FUNCTION(PrGeneral);
+PASCAL_SUBTRAP(PrGeneral, 0xA8FD, _PrGlue);
 extern void C_donotPrArc(GrafVerb verb, Rect *r,
                                      INTEGER starta, INTEGER arca);
 PASCAL_FUNCTION(donotPrArc);
@@ -281,26 +281,26 @@ extern void C_PrComment(INTEGER kind, INTEGER size, Handle hand);
 PASCAL_FUNCTION(PrComment);
 extern TPPrPort C_PrOpenDoc(THPrint hPrint, TPPrPort port,
                                         Ptr pIOBuf);
-PASCAL_FUNCTION(PrOpenDoc);
+PASCAL_SUBTRAP(PrOpenDoc, 0xA8FD, _PrGlue);
 extern void C_PrOpenPage(TPPrPort port, TPRect pPageFrame);
-PASCAL_FUNCTION(PrOpenPage);
+PASCAL_SUBTRAP(PrOpenPage, 0xA8FD, _PrGlue);
 extern void C_PrClosePage(TPPrPort pPrPort);
-PASCAL_FUNCTION(PrClosePage);
+PASCAL_SUBTRAP(PrClosePage, 0xA8FD, _PrGlue);
 extern void C_PrCloseDoc(TPPrPort port);
-PASCAL_FUNCTION(PrCloseDoc);
+PASCAL_SUBTRAP(PrCloseDoc, 0xA8FD, _PrGlue);
 extern void C_PrPicFile(THPrint hPrint, TPPrPort pPrPort,
                                     Ptr pIOBuf, Ptr pDevBuf,
                                     TPrStatus *prStatus);
-PASCAL_FUNCTION(PrPicFile);
+PASCAL_SUBTRAP(PrPicFile, 0xA8FD, _PrGlue);
 extern void C_PrintDefault(THPrint hPrint);
-PASCAL_FUNCTION(PrintDefault);
+PASCAL_SUBTRAP(PrintDefault, 0xA8FD, _PrGlue);
 extern BOOLEAN C_PrValidate(THPrint hPrint);
-PASCAL_FUNCTION(PrValidate);
+PASCAL_SUBTRAP(PrValidate, 0xA8FD, _PrGlue);
 extern BOOLEAN C_PrStlDialog(THPrint hPrint);
-PASCAL_FUNCTION(PrStlDialog);
+PASCAL_SUBTRAP(PrStlDialog, 0xA8FD, _PrGlue);
 extern BOOLEAN C_PrJobDialog(THPrint hPrint);
-PASCAL_FUNCTION(PrJobDialog);
+PASCAL_SUBTRAP(PrJobDialog, 0xA8FD, _PrGlue);
 extern void C_PrJobMerge(THPrint hPrintSrc, THPrint hPrintDst);
-PASCAL_FUNCTION(PrJobMerge);
+PASCAL_SUBTRAP(PrJobMerge, 0xA8FD, _PrGlue);
 }
 #endif /* __PRINTING__ */

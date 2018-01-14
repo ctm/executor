@@ -13,12 +13,12 @@ enum
 };
 
 extern void C_ShutDwnPower(void);
-PASCAL_FUNCTION(ShutDwnPower);
+PASCAL_SUBTRAP(ShutDwnPower, 0xA895, ShutDown);
 extern void C_ShutDwnStart(void);
-PASCAL_FUNCTION(ShutDwnStart);
+PASCAL_SUBTRAP(ShutDwnStart, 0xA895, ShutDown);
 extern void C_ShutDwnInstall(ProcPtr shutdown_proc,
                                          int16_t flags);
-PASCAL_FUNCTION(ShutDwnInstall);
+PASCAL_SUBTRAP(ShutDwnInstall, 0xA895, ShutDown);
 extern void C_ShutDwnRemove(ProcPtr shutdown_proc);
-PASCAL_FUNCTION(ShutDwnRemove);
+PASCAL_SUBTRAP(ShutDwnRemove, 0xA895, ShutDown);
 }

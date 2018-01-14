@@ -219,18 +219,18 @@ typedef AE_info_t *AE_info_ptr;
 
 extern OSErr C__AE_hdlr_table_alloc(int32_t, int32_t, int32_t, int8,
                                                 GUEST<AE_hdlr_table_h> *);
-PASCAL_FUNCTION(_AE_hdlr_table_alloc);
+PASCAL_SUBTRAP(_AE_hdlr_table_alloc, 0xA816, Pack8);
 extern OSErr C__AE_hdlr_delete(AE_hdlr_table_h, int32_t,
                                            AE_hdlr_selector_t *);
-PASCAL_FUNCTION(_AE_hdlr_delete);
+PASCAL_SUBTRAP(_AE_hdlr_delete, 0xA816, Pack8);
 extern OSErr C__AE_hdlr_lookup(AE_hdlr_table_h, int32_t,
                                            AE_hdlr_selector_t *,
                                            AE_hdlr_t *);
-PASCAL_FUNCTION(_AE_hdlr_lookup);
+PASCAL_SUBTRAP(_AE_hdlr_lookup, 0xA816, Pack8);
 extern OSErr C__AE_hdlr_install(AE_hdlr_table_h, int32_t,
                                             AE_hdlr_selector_t *,
                                             AE_hdlr_t *);
-PASCAL_FUNCTION(_AE_hdlr_install);
+PASCAL_SUBTRAP(_AE_hdlr_install, 0xA816, Pack8);
 
 /* private */
 
@@ -314,65 +314,65 @@ const LowMemGlobal<AE_info_ptr> AE_info { 0x2B6 }; // AppleEvents AEGizmo (true)
 extern OSErr C_AEGetCoercionHandler(DescType from_type, DescType to_type,
                                                 GUEST<CoerceDescProcPtr> *hdlr_out, GUEST<int32_t> *refcon_out,
                                                 GUEST<Boolean> *from_type_is_desc_p_out, Boolean system_handler_p);
-PASCAL_FUNCTION(AEGetCoercionHandler);
+PASCAL_SUBTRAP(AEGetCoercionHandler, 0xA816, Pack8);
 
 extern OSErr C_AECreateDesc(DescType type,
                                         Ptr data, Size data_size,
                                         AEDesc *desc_out);
-PASCAL_FUNCTION(AECreateDesc);
+PASCAL_SUBTRAP(AECreateDesc, 0xA816, Pack8);
 extern OSErr C_AEDisposeDesc(AEDesc *desc);
-PASCAL_FUNCTION(AEDisposeDesc);
+PASCAL_SUBTRAP(AEDisposeDesc, 0xA816, Pack8);
 
 extern OSErr C_AECoerceDesc(AEDesc *desc, DescType result_type,
                                         AEDesc *desc_out);
-PASCAL_FUNCTION(AECoerceDesc);
+PASCAL_SUBTRAP(AECoerceDesc, 0xA816, Pack8);
 
 extern OSErr C_AEGetKeyPtr(AERecord *record, AEKeyword keyword,
                                        DescType desired_type, GUEST<DescType> *type_out,
                                        Ptr data, Size max_size, GUEST<Size> *size_out);
-PASCAL_FUNCTION(AEGetKeyPtr);
+PASCAL_SUBTRAP(AEGetKeyPtr, 0xA816, Pack8);
 
 extern OSErr C_AEGetKeyDesc(AERecord *record, AEKeyword keyword,
                                         DescType desired_type, AEDesc *desc_out);
-PASCAL_FUNCTION(AEGetKeyDesc);
+PASCAL_SUBTRAP(AEGetKeyDesc, 0xA816, Pack8);
 
 extern OSErr C_AEPutKeyPtr(AERecord *record, AEKeyword keyword,
                                        DescType type, Ptr data, Size data_size);
-PASCAL_FUNCTION(AEPutKeyPtr);
+PASCAL_SUBTRAP(AEPutKeyPtr, 0xA816, Pack8);
 extern OSErr C_AEPutKeyDesc(AERecord *record, AEKeyword keyword,
                                         AEDesc *desc);
-PASCAL_FUNCTION(AEPutKeyDesc);
+PASCAL_SUBTRAP(AEPutKeyDesc, 0xA816, Pack8);
 
 /*
 extern OSErr C_AEDeleteParam(AppleEvent *evt, AEKeyword keyword);
-PASCAL_FUNCTION(AEDeleteParam);
+PASCAL_SUBTRAP(AEDeleteParam, 0xA816, Pack8);
 */
 
 extern OSErr C_AEDeleteAttribute(AppleEvent *evt,
                                              AEKeyword keyword);
-PASCAL_FUNCTION(AEDeleteAttribute);
+PASCAL_SUBTRAP(AEDeleteAttribute, 0xA816, Pack8);
 
 extern OSErr C_AESizeOfKeyDesc(AERecord *record, AEKeyword keyword,
                                            GUEST<DescType> *type_out, GUEST<Size> *size_out);
-PASCAL_FUNCTION(AESizeOfKeyDesc);
+PASCAL_SUBTRAP(AESizeOfKeyDesc, 0xA816, Pack8);
 
 extern OSErr C_AESetInteractionAllowed(AEInteractionAllowed level);
-PASCAL_FUNCTION(AESetInteractionAllowed);
+PASCAL_SUBTRAP(AESetInteractionAllowed, 0xA816, Pack8);
 
 extern OSErr C_AEResetTimer(AppleEvent *evt);
-PASCAL_FUNCTION(AEResetTimer);
+PASCAL_SUBTRAP(AEResetTimer, 0xA816, Pack8);
 
 extern OSErr C_AEGetTheCurrentEvent(AppleEvent *return_evt);
-PASCAL_FUNCTION(AEGetTheCurrentEvent);
+PASCAL_SUBTRAP(AEGetTheCurrentEvent, 0xA816, Pack8);
 extern OSErr C_AESetTheCurrentEvent(AppleEvent *evt);
-PASCAL_FUNCTION(AESetTheCurrentEvent);
+PASCAL_SUBTRAP(AESetTheCurrentEvent, 0xA816, Pack8);
 extern OSErr C_AESuspendTheCurrentEvent(AppleEvent *evt);
-PASCAL_FUNCTION(AESuspendTheCurrentEvent);
+PASCAL_SUBTRAP(AESuspendTheCurrentEvent, 0xA816, Pack8);
 
 extern OSErr C_AEResumeTheCurrentEvent(AppleEvent *evt, AppleEvent *reply,
                                                    EventHandlerProcPtr dispatcher,
                                                    int32_t refcon);
-PASCAL_FUNCTION(AEResumeTheCurrentEvent);
+PASCAL_SUBTRAP(AEResumeTheCurrentEvent, 0xA816, Pack8);
 
 /*
 extern OSErr C_AEProcessEvent(EventRecord *evt);
@@ -380,81 +380,81 @@ PASCAL_FUNCTION(AEProcessEvent);
 */
 
 extern OSErr C_AEGetInteractionAllowed(AEInteractionAllowed *return_level);
-PASCAL_FUNCTION(AEGetInteractionAllowed);
+PASCAL_SUBTRAP(AEGetInteractionAllowed, 0xA816, Pack8);
 
 extern OSErr C_AEDuplicateDesc(AEDesc *src, AEDesc *dst);
-PASCAL_FUNCTION(AEDuplicateDesc);
+PASCAL_SUBTRAP(AEDuplicateDesc, 0xA816, Pack8);
 
 extern OSErr C_AECountItems(AEDescList *list, GUEST<int32_t> *count_out);
-PASCAL_FUNCTION(AECountItems);
+PASCAL_SUBTRAP(AECountItems, 0xA816, Pack8);
 
 extern OSErr C_AEDeleteItem(AEDescList *list, int32_t index);
-PASCAL_FUNCTION(AEDeleteItem);
+PASCAL_SUBTRAP(AEDeleteItem, 0xA816, Pack8);
 
 extern OSErr C_AEDeleteKeyDesc(AERecord *record, AEKeyword keyword);
-PASCAL_FUNCTION(AEDeleteKeyDesc);
+PASCAL_SUBTRAP(AEDeleteKeyDesc, 0xA816, Pack8);
 
 extern OSErr C_AEInstallSpecialHandler(AEKeyword function_class,
                                                    EventHandlerProcPtr hdlr,
                                                    Boolean system_handler_p);
-PASCAL_FUNCTION(AEInstallSpecialHandler);
+PASCAL_SUBTRAP(AEInstallSpecialHandler, 0xA816, Pack8);
 
 extern OSErr C_AERemoveSpecialHandler(AEKeyword function_class,
                                                   EventHandlerProcPtr hdlr,
                                                   Boolean system_handler_p);
-PASCAL_FUNCTION(AERemoveSpecialHandler);
+PASCAL_SUBTRAP(AERemoveSpecialHandler, 0xA816, Pack8);
 extern OSErr C_AEGetSpecialHandler(AEKeyword function_class,
                                                GUEST<EventHandlerProcPtr> *hdlr_out,
                                                Boolean system_handler_p);
-PASCAL_FUNCTION(AEGetSpecialHandler);
+PASCAL_SUBTRAP(AEGetSpecialHandler, 0xA816, Pack8);
 
 extern OSErr C_AESend(AppleEvent *evt, AppleEvent *reply,
                                   AESendMode send_mode, AESendPriority send_priority,
                                   int32_t timeout, IdleProcPtr idle_proc,
                                   EventFilterProcPtr filter_proc);
-PASCAL_FUNCTION(AESend);
+PASCAL_SUBTRAP(AESend, 0xA816, Pack8);
 
 extern OSErr C_AECoercePtr(DescType data_type, Ptr data, Size data_size,
                                        DescType result_type, AEDesc *desc_out);
-PASCAL_FUNCTION(AECoercePtr);
+PASCAL_SUBTRAP(AECoercePtr, 0xA816, Pack8);
 
 extern OSErr C_AEGetEventHandler(AEEventClass event_class,
                                              AEEventID event_id,
                                              GUEST<EventHandlerProcPtr> *hdlr, GUEST<int32_t> *refcon,
                                              Boolean system_handler_p);
-PASCAL_FUNCTION(AEGetEventHandler);
+PASCAL_SUBTRAP(AEGetEventHandler, 0xA816, Pack8);
 
 extern OSErr C_AERemoveEventHandler(AEEventClass event_class,
                                                 AEEventID event_id,
                                                 EventHandlerProcPtr hdlr,
                                                 Boolean system_handler_p);
-PASCAL_FUNCTION(AERemoveEventHandler);
+PASCAL_SUBTRAP(AERemoveEventHandler, 0xA816, Pack8);
 
 extern OSErr C_AEProcessAppleEvent(EventRecord *evt);
-PASCAL_FUNCTION(AEProcessAppleEvent);
+PASCAL_SUBTRAP(AEProcessAppleEvent, 0xA816, Pack8);
 
 extern OSErr C_AEPutDesc(AEDescList *list, int32_t index,
                                      AEDesc *desc);
-PASCAL_FUNCTION(AEPutDesc);
+PASCAL_SUBTRAP(AEPutDesc, 0xA816, Pack8);
 
 extern OSErr C_AEPutAttributePtr(AppleEvent *evt, AEKeyword keyword,
                                              DescType type, Ptr data, Size size);
-PASCAL_FUNCTION(AEPutAttributePtr);
+PASCAL_SUBTRAP(AEPutAttributePtr, 0xA816, Pack8);
 
 extern OSErr C_AEPutAttributeDesc(AppleEvent *evt, AEKeyword keyword,
                                               AEDesc *desc);
-PASCAL_FUNCTION(AEPutAttributeDesc);
+PASCAL_SUBTRAP(AEPutAttributeDesc, 0xA816, Pack8);
 
 extern OSErr C_AEGetNthPtr(AEDescList *list, int32_t index,
                                        DescType desired_type, GUEST<AEKeyword> *keyword_out,
                                        GUEST<DescType> *type_out,
                                        Ptr data, int32_t max_size, GUEST<int32_t> *size_out);
-PASCAL_FUNCTION(AEGetNthPtr);
+PASCAL_SUBTRAP(AEGetNthPtr, 0xA816, Pack8);
 
 extern OSErr C_AEGetAttributePtr(AppleEvent *evt, AEKeyword keyword,
                                              DescType desired_type, GUEST<DescType> *type_out,
                                              Ptr data, Size max_size, GUEST<Size> *size_out);
-PASCAL_FUNCTION(AEGetAttributePtr);
+PASCAL_SUBTRAP(AEGetAttributePtr, 0xA816, Pack8);
 
 extern OSErr C_AEGetArray(AEDescList *list,
                                       AEArrayType array_type,
@@ -462,95 +462,95 @@ extern OSErr C_AEGetArray(AEDescList *list,
                                       GUEST<DescType> *return_item_type,
                                       GUEST<Size> *return_item_size,
                                       GUEST<int32_t> *return_item_count);
-PASCAL_FUNCTION(AEGetArray);
+PASCAL_SUBTRAP(AEGetArray, 0xA816, Pack8);
 
 extern OSErr C_AECreateAppleEvent(AEEventClass event_class, AEEventID event_id,
                                               AEAddressDesc *target, int16_t return_id, int32_t transaction_id, AppleEvent *evt);
-PASCAL_FUNCTION(AECreateAppleEvent);
+PASCAL_SUBTRAP(AECreateAppleEvent, 0xA816, Pack8);
 
 extern OSErr C_AEInstallCoercionHandler(DescType from_type, DescType to_type,
                                                     CoerceDescProcPtr hdlr, int32_t refcon, Boolean from_type_is_desc_p, Boolean system_handler_p);
-PASCAL_FUNCTION(AEInstallCoercionHandler);
+PASCAL_SUBTRAP(AEInstallCoercionHandler, 0xA816, Pack8);
 
 extern OSErr C_AEInstallEventHandler(AEEventClass event_class, AEEventID event_id,
                                                  EventHandlerProcPtr hdlr, int32_t refcon, Boolean system_handler_p);
-PASCAL_FUNCTION(AEInstallEventHandler);
+PASCAL_SUBTRAP(AEInstallEventHandler, 0xA816, Pack8);
 
 extern OSErr C_AERemoveCoercionHandler(DescType from_type, DescType to_type,
                                                    CoerceDescProcPtr hdlr, Boolean system_handler_p);
-PASCAL_FUNCTION(AERemoveCoercionHandler);
+PASCAL_SUBTRAP(AERemoveCoercionHandler, 0xA816, Pack8);
 
 extern OSErr C_AEPutArray(AEDescList *list, AEArrayType type,
                                       AEArrayDataPointer array_data,
                                       DescType item_type,
                                       Size item_size, int32_t item_count);
-PASCAL_FUNCTION(AEPutArray);
+PASCAL_SUBTRAP(AEPutArray, 0xA816, Pack8);
 
 extern OSErr C_AECreateList(Ptr list_elt_prefix, Size list_elt_prefix_size,
                                         Boolean is_record_p, AEDescList *list_out);
-PASCAL_FUNCTION(AECreateList);
+PASCAL_SUBTRAP(AECreateList, 0xA816, Pack8);
 
 extern OSErr C_AEGetAttributeDesc(AppleEvent *evt, AEKeyword keyword,
                                               DescType desired_type, AEDesc *desc_out);
-PASCAL_FUNCTION(AEGetAttributeDesc);
+PASCAL_SUBTRAP(AEGetAttributeDesc, 0xA816, Pack8);
 
 extern OSErr C_AESizeOfAttribute(AppleEvent *evt, AEKeyword keyword,
                                              GUEST<DescType> *type_out, GUEST<Size> *size_out);
-PASCAL_FUNCTION(AESizeOfAttribute);
+PASCAL_SUBTRAP(AESizeOfAttribute, 0xA816, Pack8);
 
 extern OSErr C_AEGetNthDesc(AEDescList *list, int32_t index,
                                         DescType desired_type, GUEST<AEKeyword> *keyword_out,
                                         AEDesc *desc_out);
-PASCAL_FUNCTION(AEGetNthDesc);
+PASCAL_SUBTRAP(AEGetNthDesc, 0xA816, Pack8);
 
 extern OSErr C_AESizeOfNthItem(AEDescList *list, int32_t index,
                                            GUEST<DescType> *type_out, GUEST<Size> *size_out);
-PASCAL_FUNCTION(AESizeOfNthItem);
+PASCAL_SUBTRAP(AESizeOfNthItem, 0xA816, Pack8);
 
 extern OSErr C_AEPutPtr(AEDescList *list, int32_t index, DescType type,
                                     Ptr data, Size data_size);
-PASCAL_FUNCTION(AEPutPtr);
+PASCAL_SUBTRAP(AEPutPtr, 0xA816, Pack8);
 
 extern OSErr C_AEInteractWithUser(int32_t timeout, NMRecPtr nm_req,
                                               IdleProcPtr idle_proc);
-PASCAL_FUNCTION(AEInteractWithUser);
+PASCAL_SUBTRAP(AEInteractWithUser, 0xA816, Pack8);
 
 extern void AE_init(void);
 extern void AE_reinit(void);
 
 extern OSErr C_AEManagerInfo(GUEST<LONGINT> *resultp);
-PASCAL_FUNCTION(AEManagerInfo);
+PASCAL_SUBTRAP(AEManagerInfo, 0xA816, Pack8);
 
 extern OSErr C_AEDisposeToken(AEDesc *theToken);
-PASCAL_FUNCTION(AEDisposeToken);
+PASCAL_SUBTRAP(AEDisposeToken, 0xA816, Pack8);
 extern OSErr C_AEREesolve(AEDesc *objectSpecifier,
                                       INTEGER callbackFlags,
                                       AEDesc *theToken);
-PASCAL_FUNCTION(AEREesolve);
+PASCAL_SUBTRAP(AEREesolve, 0xA816, Pack8);
 extern OSErr C_AERemoveObjectAccessor(DescType desiredClass,
                                                   DescType containerType,
                                                   ProcPtr theAccessor,
                                                   BOOLEAN isSysHandler);
-PASCAL_FUNCTION(AERemoveObjectAccessor);
+PASCAL_SUBTRAP(AERemoveObjectAccessor, 0xA816, Pack8);
 extern OSErr C_AEInstallObjectAccessor(DescType desiredClass,
                                                    DescType containerType,
                                                    ProcPtr theAccessor,
                                                    LONGINT refcon,
                                                    BOOLEAN isSysHandler);
-PASCAL_FUNCTION(AEInstallObjectAccessor);
+PASCAL_SUBTRAP(AEInstallObjectAccessor, 0xA816, Pack8);
 extern OSErr C_AEGetObjectAccessor(DescType desiredClass,
                                                DescType containerType,
                                                ProcPtr *theAccessor,
                                                LONGINT *accessorRefcon,
                                                BOOLEAN isSysHandler);
-PASCAL_FUNCTION(AEGetObjectAccessor);
+PASCAL_SUBTRAP(AEGetObjectAccessor, 0xA816, Pack8);
 extern OSErr C_AECallObjectAccessor(DescType desiredClass,
                                                 AEDesc *containerToken,
                                                 DescType containerClass,
                                                 DescType keyForm,
                                                 AEDesc *keyData,
                                                 AEDesc *theToken);
-PASCAL_FUNCTION(AECallObjectAccessor);
+PASCAL_SUBTRAP(AECallObjectAccessor, 0xA816, Pack8);
 extern OSErr C_AESetObjectCallbacks(ProcPtr myCompareProc,
                                                 ProcPtr myCountProc,
                                                 ProcPtr myDisposeTokenProc,
@@ -558,7 +558,7 @@ extern OSErr C_AESetObjectCallbacks(ProcPtr myCompareProc,
                                                 ProcPtr myMarkProc,
                                                 ProcPtr myAdjustMarksProc,
                                                 ProcPtr myGetErrDescProc);
-PASCAL_FUNCTION(AESetObjectCallbacks);
+PASCAL_SUBTRAP(AESetObjectCallbacks, 0xA816, Pack8);
 }
 
 #endif /* ! _AppleEvents_H_ */

@@ -241,23 +241,23 @@ extern void C_SetFractEnable(BOOLEAN enable);
 PASCAL_TRAP(SetFractEnable, 0xA814);
 
 extern void C_SetOutlinePreferred(Boolean _outline_perferred_p);
-PASCAL_FUNCTION(SetOutlinePreferred);
+PASCAL_SUBTRAP(SetOutlinePreferred, 0xA854, FontDispatch);
 extern Boolean C_GetOutlinePreferred(void);
-PASCAL_FUNCTION(GetOutlinePreferred);
+PASCAL_SUBTRAP(GetOutlinePreferred, 0xA854, FontDispatch);
 extern Boolean C_IsOutline(Point numer, Point denom);
-PASCAL_FUNCTION(IsOutline);
+PASCAL_SUBTRAP(IsOutline, 0xA854, FontDispatch);
 extern OSErr C_OutlineMetrics(int16_t byte_count, Ptr text,
                                           Point numer, Point denom,
                                           int16_t *y_max, int16_t *y_min,
                                           Fixed *aw_array, Fixed *lsb_array,
                                           Rect *bounds_array);
-PASCAL_FUNCTION(OutlineMetrics);
+PASCAL_SUBTRAP(OutlineMetrics, 0xA854, FontDispatch);
 
 extern void C_SetPreserveGlyph(Boolean preserve_glyph);
-PASCAL_FUNCTION(SetPreserveGlyph);
+PASCAL_SUBTRAP(SetPreserveGlyph, 0xA854, FontDispatch);
 extern Boolean C_GetPreserveGlyph(void);
-PASCAL_FUNCTION(GetPreserveGlyph);
+PASCAL_SUBTRAP(GetPreserveGlyph, 0xA854, FontDispatch);
 extern OSErr C_FlushFonts(void);
-PASCAL_FUNCTION(FlushFonts);
+PASCAL_SUBTRAP(FlushFonts, 0xA854, FontDispatch);
 }
 #endif /* _FONTMGR_H_ */

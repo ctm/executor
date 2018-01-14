@@ -108,29 +108,29 @@ extern void P_ROMlib_filebox(DialogPeek dp, INTEGER which);
 
 extern void C_SFPPutFile(Point p, StringPtr prompt,
                                      StringPtr name, DlgHookProcPtr dh, SFReply *rep, INTEGER dig, ModalFilterProcPtr fp);
-PASCAL_FUNCTION(SFPPutFile);
+PASCAL_SUBTRAP(SFPPutFile, 0xA9EA, Pack3);
 
 extern void C_SFPutFile(Point p, StringPtr prompt, StringPtr name,
                                     DlgHookProcPtr dh, SFReply *rep);
-PASCAL_FUNCTION(SFPutFile);
+PASCAL_SUBTRAP(SFPutFile, 0xA9EA, Pack3);
 
 extern void C_SFPGetFile(Point p, StringPtr prompt, FileFilterProcPtr filef,
                                      INTEGER numt, GUEST<SFTypeList> tl, DlgHookProcPtr dh, SFReply *rep,
                                      INTEGER dig, ModalFilterProcPtr fp);
-PASCAL_FUNCTION(SFPGetFile);
+PASCAL_SUBTRAP(SFPGetFile, 0xA9EA, Pack3);
 
 extern void C_SFGetFile(Point p, StringPtr prompt, FileFilterProcPtr filef,
                                     INTEGER numt, GUEST<SFTypeList> tl, DlgHookProcPtr dh, SFReply *rep);
-PASCAL_FUNCTION(SFGetFile);
+PASCAL_SUBTRAP(SFGetFile, 0xA9EA, Pack3);
 
 extern void C_StandardGetFile(FileFilterProcPtr filef, INTEGER numt,
                                           GUEST<SFTypeList> tl,
                                           StandardFileReply *replyp);
-PASCAL_FUNCTION(StandardGetFile);
+PASCAL_SUBTRAP(StandardGetFile, 0xA9EA, Pack3);
 
 extern void C_StandardPutFile(Str255 prompt, Str255 defaultname,
                                           StandardFileReply *replyp);
-PASCAL_FUNCTION(StandardPutFile);
+PASCAL_SUBTRAP(StandardPutFile, 0xA9EA, Pack3);
 
 extern void C_CustomPutFile(Str255 prompt, Str255 defaultName,
                                         StandardFileReply *replyp,
@@ -140,7 +140,7 @@ extern void C_CustomPutFile(Str255 prompt, Str255 defaultName,
                                         Ptr activeList,
                                         ActivateYDProcPtr activateproc,
                                         void *yourdatap);
-PASCAL_FUNCTION(CustomPutFile);
+PASCAL_SUBTRAP(CustomPutFile, 0xA9EA, Pack3);
 
 extern void C_CustomGetFile(FileFilterYDProcPtr filefilter,
                                         INTEGER numtypes,
@@ -152,7 +152,7 @@ extern void C_CustomGetFile(FileFilterYDProcPtr filefilter,
                                         Ptr activeList,
                                         ActivateYDProcPtr activateproc,
                                         void *yourdatap);
-PASCAL_FUNCTION(CustomGetFile);
+PASCAL_SUBTRAP(CustomGetFile, 0xA9EA, Pack3);
 }
 
 #endif /* __STDFILE__ */

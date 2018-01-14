@@ -144,11 +144,11 @@ enum
 };
 
 extern OSErr C_AcceptHighLevelEvent(TargetID *sender_id_return, GUEST<int32_t> *refcon_return, Ptr msg_buf, GUEST<int32_t> *msg_length_return);
-PASCAL_FUNCTION(AcceptHighLevelEvent);
+PASCAL_SUBTRAP(AcceptHighLevelEvent, 0xA88F, OSDispatch);
 extern Boolean C_GetSpecificHighLevelEvent(GetSpecificFilterProcPtr fn, Ptr data, OSErr *err_return);
-PASCAL_FUNCTION(GetSpecificHighLevelEvent);
+PASCAL_SUBTRAP(GetSpecificHighLevelEvent, 0xA88F, OSDispatch);
 extern OSErr C_PostHighLevelEvent(EventRecord *evt, Ptr receiver_id, int32_t refcon, Ptr msg_buf, int32_t msg_length, int32_t post_options);
-PASCAL_FUNCTION(PostHighLevelEvent);
+PASCAL_SUBTRAP(PostHighLevelEvent, 0xA88F, OSDispatch);
 
 /* #### move to rsys/foo.h */
 extern bool hle_get_event(EventRecord *evt, bool remflag);

@@ -252,16 +252,16 @@ extern CDialogPtr C_NewCDialog(Ptr, Rect *, StringPtr, BOOLEAN, INTEGER, WindowP
 PASCAL_TRAP(NewCDialog, 0xAA4B);
 
 extern OSErr C_GetStdFilterProc(GUEST<ProcPtr> *proc);
-PASCAL_FUNCTION(GetStdFilterProc);
+PASCAL_SUBTRAP(GetStdFilterProc, 0xAA68, DialogDispatch);
 extern OSErr C_SetDialogDefaultItem(DialogPtr dialog,
                                                 int16_t new_item);
-PASCAL_FUNCTION(SetDialogDefaultItem);
+PASCAL_SUBTRAP(SetDialogDefaultItem, 0xAA68, DialogDispatch);
 extern OSErr C_SetDialogCancelItem(DialogPtr dialog,
                                                int16_t new_item);
-PASCAL_FUNCTION(SetDialogCancelItem);
+PASCAL_SUBTRAP(SetDialogCancelItem, 0xAA68, DialogDispatch);
 extern OSErr C_SetDialogTracksCursor(DialogPtr dialog,
                                                  Boolean tracks);
-PASCAL_FUNCTION(SetDialogTracksCursor);
+PASCAL_SUBTRAP(SetDialogTracksCursor, 0xAA68, DialogDispatch);
 
 extern void AppendDITL(DialogPtr, Handle, DITLMethod);
 extern void ShortenDITL(DialogPtr, int16_t);

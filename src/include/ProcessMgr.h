@@ -161,35 +161,35 @@ extern void process_create(bool desk_accessory_p,
                            uint32_t type, uint32_t signature);
 
 extern OSErr C_GetCurrentProcess(ProcessSerialNumber *serial_number);
-PASCAL_FUNCTION(GetCurrentProcess);
+PASCAL_SUBTRAP(GetCurrentProcess, 0xA88F, OSDispatch);
 
 extern OSErr C_GetNextProcess(ProcessSerialNumber *serial_number);
-PASCAL_FUNCTION(GetNextProcess);
+PASCAL_SUBTRAP(GetNextProcess, 0xA88F, OSDispatch);
 
 extern OSErr C_GetProcessInformation(ProcessSerialNumber *serial_number,
                                                  ProcessInfoPtr info);
-PASCAL_FUNCTION(GetProcessInformation);
+PASCAL_SUBTRAP(GetProcessInformation, 0xA88F, OSDispatch);
 
 extern OSErr C_SameProcess(ProcessSerialNumber *serial_number0,
                                        ProcessSerialNumber *serial_number1,
                                        Boolean *same_out);
-PASCAL_FUNCTION(SameProcess);
+PASCAL_SUBTRAP(SameProcess, 0xA88F, OSDispatch);
 extern OSErr C_GetFrontProcess(ProcessSerialNumber *serial_number, void *dummy);
-PASCAL_FUNCTION(GetFrontProcess);
+PASCAL_SUBTRAP(GetFrontProcess, 0xA88F, OSDispatch);
 
 extern OSErr C_SetFrontProcess(ProcessSerialNumber *serial_number);
-PASCAL_FUNCTION(SetFrontProcess);
+PASCAL_SUBTRAP(SetFrontProcess, 0xA88F, OSDispatch);
 
 extern OSErr C_WakeUpProcess(ProcessSerialNumber *serial_number);
-PASCAL_FUNCTION(WakeUpProcess);
+PASCAL_SUBTRAP(WakeUpProcess, 0xA88F, OSDispatch);
 
 extern OSErr C_GetProcessSerialNumberFromPortName(PPCPortPtr port_name,
                                                               ProcessSerialNumber *serial_number);
-PASCAL_FUNCTION(GetProcessSerialNumberFromPortName);
+PASCAL_SUBTRAP(GetProcessSerialNumberFromPortName, 0xA88F, OSDispatch);
 
 extern OSErr C_GetPortNameFromProcessSerialNumber(PPCPortPtr port_name,
                                                               ProcessSerialNumber *serial_number);
-PASCAL_FUNCTION(GetPortNameFromProcessSerialNumber);
+PASCAL_SUBTRAP(GetPortNameFromProcessSerialNumber, 0xA88F, OSDispatch);
 
 extern OSErr NewLaunch(StringPtr appl, INTEGER vrefnum,
                        LaunchParamBlockRec *lpbp);

@@ -258,8 +258,9 @@ public:
 
 #define COMMA ,
 #define PASCAL_TRAP(NAME, TRAP) CREATE_FUNCTION_WRAPPER(PascalTrap<decltype(C_##NAME) COMMA &C_##NAME COMMA TRAP>, NAME)
+#define PASCAL_SUBTRAP(NAME, TRAP, TRAPNAME) const auto NAME = &C_##NAME
 #define PASCAL_FUNCTION(NAME) CREATE_FUNCTION_WRAPPER(PascalFunction<decltype(C_##NAME) COMMA &C_##NAME>, NAME)
-
+#define NOTRAP_FUNCTION(NAME) const auto NAME = &C_##NAME
 
 }
 

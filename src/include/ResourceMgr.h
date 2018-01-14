@@ -94,7 +94,7 @@ extern Handle C_Get1IndResource(ResType typ,
                                             INTEGER i);
 PASCAL_TRAP(Get1IndResource, 0xA80E);
 extern Handle C_GetResource(ResType typ, INTEGER id);
-PASCAL_FUNCTION(GetResource);
+PASCAL_TRAP(GetResource, 0xA9A0);
 
 extern Handle C_Get1Resource(ResType typ,
                                          INTEGER id);
@@ -214,13 +214,13 @@ PASCAL_TRAP(UseResFile, 0xA998);
 extern void C_ReadPartialResource(Handle resource,
                                               int32_t offset,
                                               Ptr buffer, int32_t count);
-PASCAL_FUNCTION(ReadPartialResource);
+PASCAL_SUBTRAP(ReadPartialResource, 0xA822, ResourceDispatch);
 extern void C_WritePartialResource(Handle resource,
                                                int32_t offset,
                                                Ptr buffer, int32_t count);
-PASCAL_FUNCTION(WritePartialResource);
+PASCAL_SUBTRAP(WritePartialResource, 0xA822, ResourceDispatch);
 extern void C_SetResourceSize(Handle resource, int32_t size);
-PASCAL_FUNCTION(SetResourceSize);
+PASCAL_SUBTRAP(SetResourceSize, 0xA822, ResourceDispatch);
 
 extern Handle C_GetNextFOND(Handle fondHandle);
 }

@@ -69,7 +69,6 @@ extern void C_UnloadSeg(Ptr addr);
 PASCAL_TRAP(UnloadSeg, 0xA9F1);
 
 extern void C_LoadSeg(INTEGER volatile segno);
-PASCAL_FUNCTION(LoadSeg);
 
 #endif
 }
