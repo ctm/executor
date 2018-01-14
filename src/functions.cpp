@@ -21,10 +21,15 @@ namespace
 #include "rsys/refresh.h"
 #include "rsys/gestalt.h"
 
+#include "rsys/ctop_ptoc.h"
+
 #include <iostream>
 
 using namespace Executor;
 using namespace Executor::functions;
+
+bool toolflags[0x400];
+bool osflags[0x100];
 
 template<syn68k_addr_t (*fptr)(syn68k_addr_t, void **)>
 void Raw68KFunction<fptr>::init()
@@ -40,12 +45,48 @@ WrappedFunction<Ret (Args...), fptr>::init()
     guestFP = (UPP<Ret (Args...)>)SYN68K_TO_US(callback_install((callback_handler_t)&PascalToCCall, &ptocblock));    
 }
 
-/*template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno>
+template<syn68k_addr_t (*fptr)(syn68k_addr_t, void **), int trapno>
+void
+Raw68KTrap<fptr, trapno>::init()
+{
+    Raw68KFunction<fptr>::init();
+    if(trapno & TOOLBIT)
+        toolflags[trapno & 0x3FF] = true;
+    else
+        osflags[trapno & 0xFF] = true;
+}
+
+
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno>
 void
 PascalTrap<Ret (Args...), fptr, trapno>::init()
 {
+    WrappedFunction<Ret (Args...), fptr>::init();
+    if(trapno & TOOLBIT)
+        toolflags[trapno & 0x3FF] = true;
+    else
+        osflags[trapno & 0xFF] = true;
 }
-*/
+
+
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno>
+Ret
+PascalTrap<Ret (Args...), fptr, trapno>::operator()(Args... args) const
+{
+    if((trapno & TOOLBIT) == 0)
+        return (*fptr)(args...);
+    else
+    {
+        // TODO
+        syn68k_addr_t new_addr = tooltraptable[trapno & (NTOOLENTRIES - 1)];
+
+        if(new_addr == toolstuff[trapno & (NTOOLENTRIES - 1)].orig)
+            return (*fptr)(args...);
+        else
+            return UPP<Ret(Args...)>(SYN68K_TO_US(new_addr))(args...);
+    }
+}
+
 
 InitAction::InitAction(void (*f)())
 {
@@ -56,4 +97,28 @@ void InitAction::execute()
 {
     for(auto f : initFunctions)
         (*f)();
+
+    for(int i = 0; i < 0x400; i++)
+    {
+        bool shouldhave = toolstuff[i].ptoc.wheretogo != (void*)&_Unimplemented;
+        if(toolflags[i] != shouldhave)
+        {
+            if(shouldhave)
+                std::cout << "Missing " << std::hex << (0xA800 | i) << std::endl;
+            else
+                std::cout << "Surprising " << std::hex << (0xA800 | i) << std::endl;
+        }
+    }
+    for(int i = 0; i < 0x100; i++)
+    {
+        bool shouldhave = osstuff[i].func != (void*)&_Unimplemented;
+        if(osflags[i] != shouldhave)
+        {
+            if(shouldhave)
+                std::cout << "Missing " << std::hex << (0xA000 | i) << std::endl;
+            else
+                std::cout << "Surprising " << std::hex << (0xA000 | i) << std::endl;
+        }
+    }
+
 }

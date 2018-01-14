@@ -8,101 +8,12 @@
 #include "rsys/trapglue.h"
 #include "rsys/mactype.h"
 
+#include "rsys/ctop_ptoc.h"
 namespace Executor
 {
 
 template<typename F>
 struct UPP;
-
-using CTOPCode = uint64_t;
-
-namespace ptoc_internal
-{
-    template<typename A, typename... Types>
-    struct CTOP
-    {
-        constexpr static CTOPCode value = CTOP<A>::value | (CTOP<Types...>::value << 3);
-    };
-
-    template<typename T>
-    struct CTOP<T>
-    {
-        constexpr static
-            typename std::enable_if<std::is_integral<T>::value && sizeof(T) <= 4, CTOPCode>::type
-                value
-            = sizeof(T);
-    };
-
-    template<typename T>
-    struct CTOP<T *>
-    {
-        constexpr static CTOPCode value = 5;
-    };
-
-    template<typename T>
-    struct CTOP<UPP<T>>
-    {
-        constexpr static CTOPCode value = 5;
-    };
-
-    template<>
-    struct CTOP<Point>
-    {
-        constexpr static CTOPCode value = 3;
-    };
-    template<>
-    struct CTOP<void>
-    {
-        constexpr static CTOPCode value = 0;
-    };
-
-    template<typename A, typename... Types>
-    struct PTOC
-    {
-        using Rec = PTOC<Types...>;
-        constexpr static CTOPCode value = (PTOC<A>::value << Rec::bits) | (Rec::value);
-        constexpr static int bits = 3 + Rec::bits;
-    };
-
-    template<typename T>
-    struct PTOC<T>
-    {
-        constexpr static CTOPCode value = CTOP<T>::value;
-        constexpr static int bits = 3;
-    };
-
-    template<typename T>
-    struct helper
-    {
-        constexpr static bool enable = false;
-    };
-    template<typename Ret>
-    struct helper<Ret()>
-    {
-        constexpr static bool enable = true;
-        constexpr static CTOPCode ctop = CTOP<Ret>::value;
-        constexpr static CTOPCode ptoc = PTOC<Ret>::value;
-    };
-
-    template<typename Ret, typename... Args>
-    struct helper<Ret(Args...)>
-    {
-        constexpr static bool enable = true;
-        constexpr static CTOPCode ctop = CTOP<Ret, Args...>::value;
-        constexpr static CTOPCode ptoc = PTOC<Ret>::value | (PTOC<Args...>::value << 3);
-    };
-}
-
-template<typename F, typename = std::enable_if<ptoc_internal::helper<F>::enable>>
-constexpr CTOPCode ptoc(F * = nullptr)
-{
-    return ptoc_internal::helper<F>::ptoc;
-}
-template<typename F, typename = std::enable_if<ptoc_internal::helper<F>::enable>>
-constexpr CTOPCode ctop(F * = nullptr)
-{
-    return ptoc_internal::helper<F>::ctop;
-}
 
 struct OpaqueUntyped68KProc;
 typedef OpaqueUntyped68KProc* ProcPtr;
@@ -214,6 +125,14 @@ protected:
     ProcPtr guestFP;
 };
 
+template<syn68k_addr_t (*fptr)(syn68k_addr_t, void **), int trapno>
+class Raw68KTrap : public Raw68KFunction<fptr>
+{
+public:
+    void init();
+};
+
+
 template<typename F, F* fptr>
 class WrappedFunction {};
 
@@ -231,6 +150,8 @@ public:
         return guestFP;
     }
 
+    syn68k_addr_t invokeFrom68K(syn68k_addr_t, void **);
+
     void init();
 protected:
     UPP<Ret (Args...)> guestFP;
@@ -243,21 +164,8 @@ template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno>
 class PascalTrap<Ret (Args...), fptr, trapno> : public WrappedFunction<Ret (Args...), fptr>
 {
 public:
-    Ret operator()(Args... args) const
-    {
-        if((trapno & TOOLBIT) == 0)
-            return (*fptr)(args...);
-        else
-        {
-            // TODO
-            syn68k_addr_t new_addr = tooltraptable[trapno & (NTOOLENTRIES - 1)];
-
-            if(new_addr == toolstuff[trapno & (NTOOLENTRIES - 1)].orig)
-                return (*fptr)(args...);
-            else
-                return (Ret)CToPascalCall(SYN68K_TO_US(new_addr), ctop(fptr), args...);
-        }
-    }
+    Ret operator()(Args... args) const;
+    void init();
 };
 
 #if !defined(FUNCTION_WRAPPER_IMPLEMENTATION) /* defined in functions.cpp */
@@ -283,7 +191,12 @@ public:
 #define PASCAL_SUBTRAP(NAME, TRAP, TRAPNAME) CREATE_FUNCTION_WRAPPER(PascalTrap<decltype(C_##NAME) COMMA &C_##NAME COMMA 0>, NAME)
 #define NOTRAP_FUNCTION(NAME) CREATE_FUNCTION_WRAPPER(WrappedFunction<decltype(C_##NAME) COMMA &C_##NAME>, NAME)
 #define PASCAL_FUNCTION(NAME) CREATE_FUNCTION_WRAPPER(WrappedFunction<decltype(C_##NAME) COMMA &C_##NAME>, NAME)
-#define RAW_68K_FUNCTION(NAME) CREATE_FUNCTION_WRAPPER(Raw68KFunction<&_##NAME>, stub_##NAME)
+#define RAW_68K_FUNCTION(NAME) \
+    syn68k_addr_t _##NAME(syn68k_addr_t, void **); \
+    CREATE_FUNCTION_WRAPPER(Raw68KFunction<&_##NAME>, stub_##NAME)
+#define RAW_68K_TRAP(NAME, TRAP) \
+    syn68k_addr_t _##NAME(syn68k_addr_t, void **); \
+    CREATE_FUNCTION_WRAPPER(Raw68KTrap<&_##NAME COMMA TRAP>, stub_##NAME)
 
 class InitAction
 {

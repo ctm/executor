@@ -319,6 +319,7 @@ syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
         togoto = tooltraptable[trapno];
         if(trapword & POPBIT)
             retval = POPADDR();
+#if 1
         if(togoto == toolstuff[trapno].orig)
         {
             if(toolstuff[trapno].ptoc.magic == (ULONGINT)-1)
@@ -336,6 +337,7 @@ syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
                 FAKEPascalToCCall(&toolstuff[trapno].ptoc);
         }
         else
+#endif
         {
             PUSHADDR(retval); /* Where they'll return to */
             retval = (syn68k_addr_t)togoto; /* Where they have patched */
@@ -346,6 +348,7 @@ syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
     {
         trapno = trapword & OSMASK;
         togoto = ostraptable[trapno];
+#if 1        
         if(togoto == osstuff[trapno].orig)
         {
             saved1 = EM_D1;
@@ -367,6 +370,7 @@ syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
             EM_A2 = savea2;
         }
         else
+#endif
         {
             PUSHADDR(retval);
             PUSHUW(status);
