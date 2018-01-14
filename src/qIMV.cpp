@@ -8,7 +8,6 @@
 #include "QuickDraw.h"
 #include "MemoryMgr.h"
 
-#include "rsys/pstuff.h"
 #include "rsys/cquick.h"
 #include "rsys/tempalloc.h"
 

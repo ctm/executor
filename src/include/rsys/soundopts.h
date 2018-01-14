@@ -2,7 +2,6 @@
 #define __RSYS_SOUNDOPTS__
 
 #include "SoundMgr.h"
-#include "rsys/pstuff.h"
 /* to get extern for `ROMlib_PretendSound' */
 #include "rsys/prefs.h"
 

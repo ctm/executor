@@ -1,7 +1,6 @@
 #if !defined(__RSYS_STDFILE__)
 #define __RSYS_STDFILE__
 
-#include "rsys/pstuff.h"
 #include "FileMgr.h"
 #include "EventMgr.h"
 #include "ControlMgr.h"

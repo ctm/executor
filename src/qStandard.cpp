@@ -6,7 +6,6 @@
 
 #include "rsys/common.h"
 #include "QuickDraw.h"
-#include "rsys/pstuff.h"
 
 using namespace Executor;
 

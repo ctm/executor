@@ -25,7 +25,6 @@
 #include "rsys/mman.h"
 #include "rsys/itm.h"
 #include "rsys/prefs.h"
-#include "rsys/pstuff.h"
 #include "rsys/stdfile.h"
 #include "rsys/print.h"
 #include "rsys/hook.h"

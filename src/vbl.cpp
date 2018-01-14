@@ -13,7 +13,6 @@
 #include "OSEvent.h"
 #include "ToolboxEvent.h"
 
-#include "rsys/pstuff.h"
 #include "rsys/vbl.h"
 #include "rsys/time.h"
 #include "rsys/hook.h"

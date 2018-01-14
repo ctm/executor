@@ -4,7 +4,6 @@
 
 #include "rsys/common.h"
 #include "EventMgr.h"
-#include "rsys/pstuff.h"
 
 #include "DialogMgr.h"
 

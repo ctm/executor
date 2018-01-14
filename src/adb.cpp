@@ -8,7 +8,6 @@
 #include "ADB.h"
 #include "rsys/adb.h"
 #include "rsys/osevent.h"
-#include "rsys/pstuff.h"
 
 #include <stdarg.h>
 /*

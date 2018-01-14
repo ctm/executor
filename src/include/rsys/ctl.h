@@ -15,7 +15,6 @@
 
 #include "rsys/mman.h"
 #include "rsys/cquick.h"
-#include "rsys/pstuff.h"
 
 namespace Executor
 {

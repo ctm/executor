@@ -8,8 +8,6 @@
 
  */
 
-#include "rsys/pstuff.h"
-
 /* include trapglue.h for prototype for CToPascalCall () used
    in inline functions below */
 #include "rsys/trapglue.h"

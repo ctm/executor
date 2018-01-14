@@ -319,7 +319,6 @@ set(include_sources hintemplate.h
                   include/rsys/print.h
                   include/rsys/process.h
                   include/rsys/PSstrings.h
-                  include/rsys/pstuff.h
                   include/rsys/qcolor.h
                   include/rsys/quick.h
                   include/rsys/rawblt.h

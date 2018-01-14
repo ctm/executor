@@ -1101,116 +1101,7 @@ toolstuff_t Executor::toolstuff[0x400] = {
     unimplemented_toolstuff,
     { { (void *)&C_DebugStr, ptoc(&C_DebugStr) }, 0 },
 };
-#if 0
-pstuff_t Executor::pstuff[] = {
-    { { (void *)&C_ROMlib_mytrack, ptoc(&C_ROMlib_mytrack) }, 0 },
-    { { (void *)&C_ROMlib_stdftrack, ptoc(&C_ROMlib_stdftrack) }, 0 },
-    { { (void *)&C_ROMlib_myfilt, ptoc(&C_ROMlib_myfilt) }, 0 },
-    { { (void *)&C_ROMlib_stdffilt, ptoc(&C_ROMlib_stdffilt) }, 0 },
-    { { (void *)&C_ROMlib_numsonlyfilterproc,
-        ptoc(&C_ROMlib_numsonlyfilterproc) },
-      0 },
-    { { (void *)&C_ROMlib_stlfilterproc, ptoc(&C_ROMlib_stlfilterproc) }, 0 },
 
-    /* NOTE: the following four routines don't really use pascal calling
-	 conventions, but we do need pstuff entries for them so we can
-	 look for their addresses and short circuit calls to them.  The
-	 zero is correct because they take no args and return no value */
-
-    { { (void *)&C_ROMlib_wakeup, 0 }, 0 },
-    { { (void *)&C_ROMlib_vcatch, 0 }, 0 },
-    { { (void *)C_ROMlib_dotext, 0 }, 0 },
-    { { (void *)&C_handle_refresh, 0 }, 0 },
-
-    { { (void *)&C_ROMlib_mysound, ptoc(&C_ROMlib_mysound) }, 0 },
-    { { (void *)&C_ROMlib_myjobproc, ptoc(&C_ROMlib_myjobproc) }, 0 },
-    { { (void *)&C_ROMlib_mystlproc, ptoc(&C_ROMlib_mystlproc) }, 0 },
-
-    { { (void *)C_cdef0, ptoc(&C_cdef0) }, 0 },
-    { { (void *)&C_cdef16, ptoc(&C_cdef16) }, 0 },
-    { { (void *)&C_ldef0, ptoc(&C_ldef0) }, 0 },
-    { { (void *)&C_mdef0, ptoc(&C_mdef0) }, 0 },
-    { { (void *)&C_mbdf0, ptoc(&C_mbdf0) }, 0 },
-    { { (void *)C_wdef0, ptoc(&C_wdef0) }, 0 },
-    { { (void *)&C_wdef16, ptoc(&C_wdef16) }, 0 },
-    { { (void *)&C_snth5, ptoc(&C_snth5) }, 0 },
-
-    { { (void *)&C_IUMagString, ptoc(&C_IUMagString) }, 0 },
-    { { (void *)&C_PrStlInit, ptoc(&C_PrStlInit) }, 0 },
-    { { (void *)C_PrJobInit, ptoc(&C_PrJobInit) }, 0 },
-
-    { { (void *)C_StdText, ptoc(&C_StdText) }, 0 },
-    { { (void *)C_StdLine, ptoc(&C_StdLine) }, 0 },
-    { { (void *)C_StdRect, ptoc(&C_StdRect) }, 0 },
-    { { (void *)&C_StdOval, ptoc(&C_StdOval) }, 0 },
-    { { (void *)C_StdRRect, ptoc(&C_StdRRect) }, 0 },
-    { { (void *)C_StdArc, ptoc(&C_StdArc) }, 0 },
-    { { (void *)&C_StdRgn, ptoc(&C_StdRgn) }, 0 },
-    { { (void *)&C_StdPoly, ptoc(&C_StdPoly) }, 0 },
-    { { (void *)C_StdBits, ptoc(&C_StdBits) }, 0 },
-    { { (void *)&C_StdComment, ptoc(&C_StdComment) }, 0 },
-    { { (void *)C_StdTxMeas, ptoc(&C_StdTxMeas) }, 0 },
-    { { (void *)C_StdPutPic, ptoc(&C_StdPutPic) }, 0 },
-
-    { { (void *)&C_FMSwapFont, ptoc(&C_FMSwapFont) }, 0 },
-    { { (void *)&C_InitCursor, ptoc(&C_InitCursor) }, 0 },
-
-    { { (void *)&C_textasPS, ptoc(&C_textasPS) }, 0 },
-    { { (void *)&C_PrText, ptoc(&C_PrText) }, 0 },
-    { { (void *)&C_PrLine, ptoc(&C_PrLine) }, 0 },
-    { { (void *)&C_PrRect, ptoc(&C_PrRect) }, 0 },
-    { { (void *)&C_PrRRect, ptoc(&C_PrRRect) }, 0 },
-    { { (void *)&C_PrOval, ptoc(&C_PrOval) }, 0 },
-    { { (void *)&C_PrArc, ptoc(&C_PrArc) }, 0 },
-    { { (void *)&C_PrPoly, ptoc(&C_PrPoly) }, 0 },
-    { { (void *)&C_PrRgn, ptoc(&C_PrRgn) }, 0 },
-    { { (void *)&C_PrBits, ptoc(&C_PrBits) }, 0 },
-    { { (void *)&C_PrComment, ptoc(&C_PrComment) }, 0 },
-    { { (void *)&C_PrTxMeas, ptoc(&C_PrTxMeas) }, 0 },
-    { { (void *)&C_PrGetPic, ptoc(&C_PrGetPic) }, 0 },
-    { { (void *)&C_PrPutPic, ptoc(&C_PrPutPic) }, 0 },
-    { { (void *)&C_donotPrText, ptoc(&C_donotPrText) }, 0 },
-    { { (void *)&C_donotPrLine, ptoc(&C_donotPrLine) }, 0 },
-    { { (void *)&C_donotPrRect, ptoc(&C_donotPrRect) }, 0 },
-    { { (void *)&C_donotPrRRect, ptoc(&C_donotPrRRect) }, 0 },
-    { { (void *)&C_donotPrOval, ptoc(&C_donotPrOval) }, 0 },
-    { { (void *)&C_donotPrArc, ptoc(&C_donotPrArc) }, 0 },
-    { { (void *)&C_donotPrPoly, ptoc(&C_donotPrPoly) }, 0 },
-    { { (void *)&C_donotPrRgn, ptoc(&C_donotPrRgn) }, 0 },
-    { { (void *)&C_donotPrBits, ptoc(&C_donotPrBits) }, 0 },
-    { { (void *)&C_donotPrGetPic, ptoc(&C_donotPrGetPic) }, 0 },
-    { { (void *)&C_donotPrPutPic, ptoc(&C_donotPrPutPic) }, 0 },
-    { { (void *)&C_ROMlib_filebox, ptoc(&C_ROMlib_filebox) }, 0 },
-    { { (void *)&C_StdGetPic, ptoc(&C_StdGetPic) }, 0 },
-
-    { { (void *)&_flushcache, static_cast<ULONGINT>(-1) }, 0 },
-    { { (void *)&_Key1Trans, static_cast<ULONGINT>(-1) }, 0 },
-    { { (void *)&_Key2Trans, static_cast<ULONGINT>(-1) }, 0 },
-
-    { { NULL /* was C_ROMlib_licensefilt */, 0 /* was ptoc(&C_ROMlib_licensefilt) */ }, 0 },
-    { { (void *)&C_unixmount, ptoc(&C_unixmount) }, 0 },
-    { { (void *)&C_GestaltTablesOnly, ptoc(&C_GestaltTablesOnly) }, 0 },
-    { { (void *)&C_sound_timer_handler, 0 }, 0 },
-    { { (void *)&C_adb_service_stub, 0 }, 0 },
-    { { (void *)&C_cdef1008, ptoc(&C_cdef1008) }, 0 },
-    { { (void *)&_bad_trap_unimplemented, static_cast<ULONGINT>(-1) }, 0 },
-    { { (void *)&C_pack8_unknown_selector, ptoc(&C_pack8_unknown_selector) }, 0 },
-    { { (void *)&C_PhysicalGestalt, ptoc(&C_PhysicalGestalt) }, 0 },
-
-    { { (void *)&C_HideCursor, ptoc(&C_HideCursor) }, 0 },
-    { { (void *)&C_ShowCursor, ptoc(&C_ShowCursor) }, 0 },
-    { { (void *)&C_ShieldCursor, ptoc(&C_ShieldCursor) }, 0 },
-    { { (void *)&C_SetCursor, ptoc(&C_SetCursor) }, 0 },
-    { { (void *)&C_ObscureCursor, ptoc(&C_ObscureCursor) }, 0 },
-    { { (void *)&C_unknown574, ptoc(&C_ShowCursor) }, 0 },
-
-    { { (void *)&C_ROMlib_circle_ok, ptoc(&C_ROMlib_circle_ok) }, 0 },
-    { { (void *)&C_ROMlib_orientation, ptoc(&C_ROMlib_orientation) }, 0 },
-
-    { { (void *)&C_new_draw_scroll, ptoc(&C_new_draw_scroll) }, 0 },
-    { { (void *)&C_new_pos_ctl, ptoc(&C_new_pos_ctl) }, 0 },
-};
-#endif
 static void *fsroutines[][2] = {
     { /* 0xA000 */ (void *)PBOpen, (void *)PBHOpen /*  0 */ },
 #define OPENTRAP 0
@@ -1606,16 +1497,6 @@ void Executor::filltables(void)
                                                                                                        : callback_install((callback_handler_t)(toolstuff[i].ptoc.magic != (ULONGINT)-1 ? (void *)PascalToCCall
                                                                                                                                                                                        : toolstuff[i].ptoc.wheretogo),
                                                                                                                           &toolstuff[i].ptoc);
-#if 0
-    for(i = 0; i < (int)NELEM(pstuff); ++i)
-        pstuff[i].orig = (pstuff[i].ptoc.wheretogo == (void *)_Unimplemented)
-            ? SYN68K_TO_US(unimpl)
-            : SYN68K_TO_US(callback_install((callback_handler_t)((pstuff[i].ptoc.magic
-                                                                  != (ULONGINT)-1)
-                                                                     ? (void *)PascalToCCall
-                                                                     : pstuff[i].ptoc.wheretogo),
-                                            &pstuff[i].ptoc));
-#endif
     for(i = 0; i < (int)NELEM(ostraptable); ++i)
     {
         switch(i)

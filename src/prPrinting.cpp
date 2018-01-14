@@ -9,7 +9,6 @@
 #include "FontMgr.h"
 #include "ResourceMgr.h"
 
-#include "rsys/pstuff.h"
 #include "rsys/PSstrings.h"
 #include "rsys/notmac.h"
 #include "rsys/mman.h"

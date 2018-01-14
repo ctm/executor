@@ -16,7 +16,6 @@
 
 #include "rsys/ctl.h"
 #include "rsys/wind.h"
-#include "rsys/pstuff.h"
 #include "rsys/stdfile.h"
 #include "rsys/hook.h"
 

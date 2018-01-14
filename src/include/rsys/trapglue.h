@@ -22,12 +22,6 @@ typedef struct
     void *func;
 } osstuff_t;
 
-typedef struct
-{
-    ptocblock_t ptoc;
-    void *orig;
-} pstuff_t;
-
 #define TOOLBIT (0x0800)
 #define NTOOLENTRIES (0x400)
 #define NOSENTRIES (0x100)

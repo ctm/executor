@@ -10,7 +10,6 @@
 #include "TimeMgr.h"
 
 #include "rsys/blockinterrupts.h"
-#include "rsys/pstuff.h"
 #include "rsys/osutil.h"
 #include "rsys/vbl.h"
 #include "rsys/time.h"

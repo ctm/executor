@@ -8,8 +8,6 @@
 
  */
 
-#include "rsys/pstuff.h"
-
 namespace Executor
 {
 

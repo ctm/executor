@@ -9,7 +9,6 @@
 #include "CQuickDraw.h"
 #include "MemoryMgr.h"
 #include "rsys/quick.h"
-#include "rsys/pstuff.h"
 #include "rsys/region.h"
 #include "rsys/picture.h"
 

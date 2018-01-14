@@ -48,7 +48,6 @@
 #include "CommTool.h"
 #include "SpeechManager.h"
 
-#include "rsys/pstuff.h"
 #include "rsys/file.h"
 #include "rsys/time.h"
 #include "rsys/mman.h"

@@ -44,7 +44,6 @@
 #include "rsys/arrowkeys.h"
 #include "rsys/glue.h"
 #include "rsys/resource.h"
-#include "rsys/pstuff.h"
 #include "rsys/hfs.h"
 #include "rsys/time.h"
 #include "rsys/flags.h"

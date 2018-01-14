@@ -19,7 +19,6 @@
 #include "rsys/wind.h"
 #include "rsys/soundopts.h"
 #include "rsys/file.h"
-#include "rsys/pstuff.h"
 #include "rsys/aboutbox.h"
 #include "rsys/stdfile.h" /* for unixmount */
 

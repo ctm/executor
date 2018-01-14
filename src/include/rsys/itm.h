@@ -8,7 +8,6 @@
 
  */
 
-#include "rsys/pstuff.h"
 namespace Executor
 {
 struct itmstr

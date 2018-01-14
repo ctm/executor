@@ -30,7 +30,6 @@
 #include "rsys/cquick.h"
 #include "rsys/file.h"
 #include "rsys/soundopts.h"
-#include "rsys/pstuff.h"
 #include "rsys/prefs.h"
 #include "rsys/aboutpanel.h"
 #include "rsys/segment.h"

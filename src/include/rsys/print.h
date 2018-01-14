@@ -8,7 +8,6 @@
 
  */
 
-#include "rsys/pstuff.h"
 #include "DialogMgr.h"
 #include "PrintMgr.h"
 #include "rsys/nextprint.h"

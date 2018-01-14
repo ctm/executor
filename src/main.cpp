@@ -37,7 +37,6 @@
 #include "rsys/tesave.h"
 #include "rsys/mman.h"
 #include "rsys/menu.h"
-#include "rsys/pstuff.h"
 #include "rsys/prefs.h"
 #include "rsys/flags.h"
 #include "rsys/option.h"
