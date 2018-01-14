@@ -289,7 +289,6 @@ PASCAL_SUBTRAP(ROMlib_Fdec2str, 0xA9EE, Pack7);
 extern void C_ROMlib_Fxstr2dec(Decstr sp2,
                                            INTEGER *sp, Decimal *dp2, Byte *dp,
                                            INTEGER lastchar);
-PASCAL_FUNCTION(ROMlib_Fxstr2dec);
 extern void C_ROMlib_Fcstr2dec(Decstr sp2,
                                            INTEGER *sp, Decimal *dp2, Byte *dp);
 PASCAL_SUBTRAP(ROMlib_Fcstr2dec, 0xA9EE, Pack7);
@@ -297,12 +296,12 @@ extern void C_ROMlib_Fpstr2dec(Decstr sp2,
                                            INTEGER *sp, Decimal *dp2, Byte *dp);
 PASCAL_SUBTRAP(ROMlib_Fpstr2dec, 0xA9EE, Pack7);
 extern void C_ROMlib_Fsethv(LONGINT *hvp, unsigned short sel);
-PASCAL_FUNCTION(ROMlib_Fsethv);
+PASCAL_SUBTRAP(ROMlib_Fsethv, 0xA9EB, Pack4);
 extern void C_ROMlib_Fgethv(LONGINT *hvp, unsigned short sel);
-PASCAL_FUNCTION(ROMlib_Fgethv);
+PASCAL_SUBTRAP(ROMlib_Fgethv, 0xA9EB, Pack4);
 
 extern void C_ROMlib_FnextX(uint8 *x, uint8 *y,
                                         unsigned short sel);
-PASCAL_FUNCTION(ROMlib_FnextX);
+PASCAL_SUBTRAP(ROMlib_FnextX, 0xA9EB, Pack4);
 }
 #endif

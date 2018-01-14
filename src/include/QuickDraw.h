@@ -644,7 +644,7 @@ extern void C_PicComment(INTEGER kind, INTEGER size,
 PASCAL_TRAP(PicComment, 0xA8F2);
 extern void C_ReadComment(INTEGER kind, INTEGER size,
                                       Handle hand);
-PASCAL_FUNCTION(ReadComment);
+
 extern void C_KillPicture(PicHandle pic);
 PASCAL_TRAP(KillPicture, 0xA8F5);
 extern void C_AddPt(Point src, GUEST<Point> *dst);
