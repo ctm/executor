@@ -447,11 +447,11 @@ BOOLEAN Executor::C_LClick(Point pt, INTEGER mods,
     {
         if(TestControl(ch, pt) == inThumb)
         {
-            TrackControl(ch, pt, (ProcPtr)0);
+            TrackControl(ch, pt, nullptr);
             scrollbyvalues(list);
         }
         else
-            TrackControl(ch, pt, (ProcPtr)P_ROMlib_mytrack);
+            TrackControl(ch, pt, &ROMlib_mytrack);
     }
     return doubleclick;
     return 0;

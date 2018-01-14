@@ -40,6 +40,7 @@ extern void ROMlib_CONDITION_WAIT(LONGINT lp);
 extern void ROMlib_MUTEX_CONDITION_DESTROY(LONGINT lp);
 
 extern void C_sound_timer_handler(void);
+PASCAL_FUNCTION(sound_timer_handler);
 extern void clear_pending_sounds(void);
 
 /* patl stuff */
@@ -102,6 +103,7 @@ extern bool sound_disabled_p;
 extern int ROMlib_get_snd_cmds(Handle sndh, SndCommand **cmdsp);
 
 BOOLEAN C_snth5(SndChannelPtr, SndCommand *, ModifierStubPtr);
+PASCAL_FUNCTION(snth5);
 }
 
 #endif /* !defined(__RSYS_SOUNDOPTS__) */

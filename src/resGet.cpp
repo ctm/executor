@@ -21,6 +21,7 @@
 #include "rsys/file.h"
 #include "rsys/pstuff.h"
 #include "rsys/aboutbox.h"
+#include "rsys/stdfile.h" /* for unixmount */
 
 #include <ctype.h>
 
@@ -216,16 +217,16 @@ static BOOLEAN acceptable(unsigned long addr)
 static void ROMlib_init_xdefs(void)
 {
 #if !defined(MAELSTROM_HACK)
-    ROMlib_defs[0] = guest_cast<LONGINT>(RM(P_cdef0));
-    ROMlib_defs[1] = guest_cast<LONGINT>(RM(P_cdef16));
-    ROMlib_defs[2] = guest_cast<LONGINT>(RM(P_wdef0));
-    ROMlib_defs[3] = guest_cast<LONGINT>(RM(P_wdef16));
-    ROMlib_defs[4] = guest_cast<LONGINT>(RM(P_mdef0));
-    ROMlib_defs[5] = guest_cast<LONGINT>(RM(P_ldef0));
-    ROMlib_defs[6] = guest_cast<LONGINT>(RM(P_mbdf0));
-    ROMlib_defs[7] = guest_cast<LONGINT>(RM(P_snth5));
-    ROMlib_defs[8] = guest_cast<LONGINT>(RM(P_unixmount));
-    ROMlib_defs[9] = guest_cast<LONGINT>(RM(P_cdef1008));
+    ROMlib_defs[0] = guest_cast<LONGINT>(RM(&cdef0));
+    ROMlib_defs[1] = guest_cast<LONGINT>(RM(&cdef16));
+    ROMlib_defs[2] = guest_cast<LONGINT>(RM(&wdef0));
+    ROMlib_defs[3] = guest_cast<LONGINT>(RM(&wdef16));
+    ROMlib_defs[4] = guest_cast<LONGINT>(RM(&mdef0));
+    ROMlib_defs[5] = guest_cast<LONGINT>(RM(&ldef0));
+    ROMlib_defs[6] = guest_cast<LONGINT>(RM(&mbdf0));
+    ROMlib_defs[7] = guest_cast<LONGINT>(RM(&snth5));
+    ROMlib_defs[8] = guest_cast<LONGINT>(RM(&unixmount));
+    ROMlib_defs[9] = guest_cast<LONGINT>(RM(&cdef1008));
 
     *(LONGINT *)SYN68K_TO_US(0x58) = RM((LONGINT)ROMlib_defs);
 #else
@@ -252,16 +253,16 @@ static void ROMlib_init_xdefs(void)
 #endif
     HLock(newhandle);
     ROMlib_defs = (GUEST<LONGINT> *)STARH(newhandle);
-    ROMlib_defs[0] = guest_cast<LONGINT>(RM(P_cdef0));
-    ROMlib_defs[1] = guest_cast<LONGINT>(RM(P_cdef16));
-    ROMlib_defs[2] = guest_cast<LONGINT>(RM(P_wdef0));
-    ROMlib_defs[3] = guest_cast<LONGINT>(RM(P_wdef16));
-    ROMlib_defs[4] = guest_cast<LONGINT>(RM(P_mdef0));
-    ROMlib_defs[5] = guest_cast<LONGINT>(RM(P_ldef0));
-    ROMlib_defs[6] = guest_cast<LONGINT>(RM(P_mbdf0));
-    ROMlib_defs[7] = guest_cast<LONGINT>(RM(P_snth5));
-    ROMlib_defs[8] = guest_cast<LONGINT>(RM(P_unixmount));
-    ROMlib_defs[9] = guest_cast<LONGINT>(RM(P_cdef1008));
+    ROMlib_defs[0] = guest_cast<LONGINT>(RM(&cdef0));
+    ROMlib_defs[1] = guest_cast<LONGINT>(RM(&cdef16));
+    ROMlib_defs[2] = guest_cast<LONGINT>(RM(&wdef0));
+    ROMlib_defs[3] = guest_cast<LONGINT>(RM(&wdef16));
+    ROMlib_defs[4] = guest_cast<LONGINT>(RM(&mdef0));
+    ROMlib_defs[5] = guest_cast<LONGINT>(RM(&ldef0));
+    ROMlib_defs[6] = guest_cast<LONGINT>(RM(&mbdf0));
+    ROMlib_defs[7] = guest_cast<LONGINT>(RM(&snth5));
+    ROMlib_defs[8] = guest_cast<LONGINT>(RM(&unixmount));
+    ROMlib_defs[9] = guest_cast<LONGINT>(RM(&cdef1008));
     *(LONGINT *)SYN68K_TO_US(0x58) = (LONGINT)(*newhandle).raw(); // ### use standard low mem access method
     LM(TheZone) = save_zone;
 #endif

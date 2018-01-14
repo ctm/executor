@@ -222,12 +222,6 @@ extern void C_ROMlib_myjobproc(DialogPtr dp, INTEGER itemno);
 
 extern void C_ROMlib_mystlproc(DialogPtr dp, INTEGER itemno);
 
-extern BOOLEAN C_ROMlib_numsonlyfilterproc(DialogPeek dp,
-                                           EventRecord *evt, GUEST<INTEGER> *ith);
-
-extern BOOLEAN C_ROMlib_stlfilterproc(DialogPeek dp,
-                                      EventRecord *evt, GUEST<INTEGER> *ith);
-
 extern void ROMlib_set_default_resolution(THPrint hPrint,
                                           INTEGER vres, INTEGER hres);
 
@@ -237,8 +231,10 @@ extern void do_textend(void);
 
 extern void print_reinit(void);
 
-extern void C_ROMlib_circle_ok(DialogPeek dp, INTEGER which);
-extern void C_ROMlib_orientation(DialogPeek dp, INTEGER which);
+extern void C_ROMlib_circle_ok(DialogPtr dp, INTEGER which);
+PASCAL_FUNCTION(ROMlib_circle_ok);
+extern void C_ROMlib_orientation(DialogPtr dp, INTEGER which);
+PASCAL_FUNCTION(ROMlib_orientation);
 
 extern void printer_init(void);
 extern void update_printing_globals(void);

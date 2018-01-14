@@ -37,10 +37,7 @@ typedef Byte *StringPtr;
 #endif
 
 typedef GUEST<StringPtr> *StringHandle;
-#if !defined(__MACTYPES__) || defined(__cplusplus)
 
-typedef int (*ProcPtr)();
-#endif
 
 #if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef LONGINT Fixed, Fract;

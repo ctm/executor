@@ -23,7 +23,7 @@ void Executor::C_TEInit()
 {
     LM(TEScrpHandle) = RM(NewHandle(0));
     LM(TEScrpLength) = CWC(0);
-    LM(TEDoText) = RM((ProcPtr)P_ROMlib_dotext);
+    LM(TEDoText) = RM((ProcPtr)&ROMlib_dotext);
 }
 
 /* This code just does "moveql #1,d0 ; rts".  We use it because

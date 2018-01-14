@@ -350,19 +350,19 @@ void Executor::dump_qdprocs(QDProcsPtr x)
     indent += 2;
     if(x != NULL)
     {
-        iprintf((o_fp, "textProc    %p;\n", MR(x->textProc)));
-        iprintf((o_fp, "lineProc    %p;\n", MR(x->lineProc)));
-        iprintf((o_fp, "rectProc    %p;\n", MR(x->rectProc)));
-        iprintf((o_fp, "rRectProc   %p;\n", MR(x->rRectProc)));
-        iprintf((o_fp, "ovalProc    %p;\n", MR(x->ovalProc)));
-        iprintf((o_fp, "arcProc     %p;\n", MR(x->arcProc)));
-        iprintf((o_fp, "polyProc    %p;\n", MR(x->polyProc)));
-        iprintf((o_fp, "rgnProc     %p;\n", MR(x->rgnProc)));
-        iprintf((o_fp, "bitsProc    %p;\n", MR(x->bitsProc)));
-        iprintf((o_fp, "commentProc %p;\n", MR(x->commentProc)));
-        iprintf((o_fp, "txMeasProc  %p;\n", MR(x->txMeasProc)));
-        iprintf((o_fp, "getPicProc  %p;\n", MR(x->getPicProc)));
-        iprintf((o_fp, "putPicProc  %p;\n", MR(x->putPicProc)));
+        iprintf((o_fp, "textProc    %p;\n", (ProcPtr)MR(x->textProc)));
+        iprintf((o_fp, "lineProc    %p;\n", (ProcPtr)MR(x->lineProc)));
+        iprintf((o_fp, "rectProc    %p;\n", (ProcPtr)MR(x->rectProc)));
+        iprintf((o_fp, "rRectProc   %p;\n", (ProcPtr)MR(x->rRectProc)));
+        iprintf((o_fp, "ovalProc    %p;\n", (ProcPtr)MR(x->ovalProc)));
+        iprintf((o_fp, "arcProc     %p;\n", (ProcPtr)MR(x->arcProc)));
+        iprintf((o_fp, "polyProc    %p;\n", (ProcPtr)MR(x->polyProc)));
+        iprintf((o_fp, "rgnProc     %p;\n", (ProcPtr)MR(x->rgnProc)));
+        iprintf((o_fp, "bitsProc    %p;\n", (ProcPtr)MR(x->bitsProc)));
+        iprintf((o_fp, "commentProc %p;\n", (ProcPtr)MR(x->commentProc)));
+        iprintf((o_fp, "txMeasProc  %p;\n", (ProcPtr)MR(x->txMeasProc)));
+        iprintf((o_fp, "getPicProc  %p;\n", (ProcPtr)MR(x->getPicProc)));
+        iprintf((o_fp, "putPicProc  %p;\n", (ProcPtr)MR(x->putPicProc)));
     }
     else
         iprintf((o_fp, "<default grafprocs used>\n"));
@@ -598,25 +598,25 @@ void Executor::dump_cqdprocs(CQDProcsPtr x)
     indent += 2;
     if(x != NULL)
     {
-        iprintf((o_fp, "textProc     %p;\n", MR(x->textProc)));
-        iprintf((o_fp, "lineProc     %p;\n", MR(x->lineProc)));
-        iprintf((o_fp, "rectProc     %p;\n", MR(x->rectProc)));
-        iprintf((o_fp, "rRectProc    %p;\n", MR(x->rRectProc)));
-        iprintf((o_fp, "ovalProc     %p;\n", MR(x->ovalProc)));
-        iprintf((o_fp, "arcProc      %p;\n", MR(x->arcProc)));
-        iprintf((o_fp, "polyProc     %p;\n", MR(x->polyProc)));
-        iprintf((o_fp, "rgnProc      %p;\n", MR(x->rgnProc)));
-        iprintf((o_fp, "bitsProc     %p;\n", MR(x->bitsProc)));
-        iprintf((o_fp, "commentProc  %p;\n", MR(x->commentProc)));
-        iprintf((o_fp, "txMeasProc   %p;\n", MR(x->txMeasProc)));
-        iprintf((o_fp, "getPicProc   %p;\n", MR(x->getPicProc)));
-        iprintf((o_fp, "putPicProc   %p;\n", MR(x->putPicProc)));
-        iprintf((o_fp, "newProc1Proc %p;\n", MR(x->newProc1Proc)));
-        iprintf((o_fp, "newProc2Proc %p;\n", MR(x->newProc2Proc)));
-        iprintf((o_fp, "newProc3Proc %p;\n", MR(x->newProc3Proc)));
-        iprintf((o_fp, "newProc4Proc %p;\n", MR(x->newProc4Proc)));
-        iprintf((o_fp, "newProc5Proc %p;\n", MR(x->newProc5Proc)));
-        iprintf((o_fp, "newProc6Proc %p;\n", MR(x->newProc6Proc)));
+        iprintf((o_fp, "textProc     %p;\n", (ProcPtr)MR(x->textProc)));
+        iprintf((o_fp, "lineProc     %p;\n", (ProcPtr)MR(x->lineProc)));
+        iprintf((o_fp, "rectProc     %p;\n", (ProcPtr)MR(x->rectProc)));
+        iprintf((o_fp, "rRectProc    %p;\n", (ProcPtr)MR(x->rRectProc)));
+        iprintf((o_fp, "ovalProc     %p;\n", (ProcPtr)MR(x->ovalProc)));
+        iprintf((o_fp, "arcProc      %p;\n", (ProcPtr)MR(x->arcProc)));
+        iprintf((o_fp, "polyProc     %p;\n", (ProcPtr)MR(x->polyProc)));
+        iprintf((o_fp, "rgnProc      %p;\n", (ProcPtr)MR(x->rgnProc)));
+        iprintf((o_fp, "bitsProc     %p;\n", (ProcPtr)MR(x->bitsProc)));
+        iprintf((o_fp, "commentProc  %p;\n", (ProcPtr)MR(x->commentProc)));
+        iprintf((o_fp, "txMeasProc   %p;\n", (ProcPtr)MR(x->txMeasProc)));
+        iprintf((o_fp, "getPicProc   %p;\n", (ProcPtr)MR(x->getPicProc)));
+        iprintf((o_fp, "putPicProc   %p;\n", (ProcPtr)MR(x->putPicProc)));
+        iprintf((o_fp, "newProc1Proc %p;\n", (ProcPtr)MR(x->newProc1Proc)));
+        iprintf((o_fp, "newProc2Proc %p;\n", (ProcPtr)MR(x->newProc2Proc)));
+        iprintf((o_fp, "newProc3Proc %p;\n", (ProcPtr)MR(x->newProc3Proc)));
+        iprintf((o_fp, "newProc4Proc %p;\n", (ProcPtr)MR(x->newProc4Proc)));
+        iprintf((o_fp, "newProc5Proc %p;\n", (ProcPtr)MR(x->newProc5Proc)));
+        iprintf((o_fp, "newProc6Proc %p;\n", (ProcPtr)MR(x->newProc6Proc)));
     }
     else
         iprintf((o_fp, "<default grafprocs used>\n"));
@@ -1066,7 +1066,7 @@ void dump_control(ControlHandle x)
     dump_field(dump_handle, CTL_DEFPROC(x), "contrlDefProc");
     dump_field(dump_ptr, CTL_DATA(x), "contrlData");
 
-    iprintf((o_fp, "contrlAction %p\n", CTL_ACTION(x)));
+    iprintf((o_fp, "contrlAction %p\n", (ProcPtr)CTL_ACTION(x)));
     iprintf((o_fp, "contrlRfCon %d\n", (int)CTL_REF_CON(x)));
     dump_field(dump_string, CTL_TITLE(x), "contrlTitle");
     indent -= 2;

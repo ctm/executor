@@ -61,7 +61,7 @@ init(ControlHandle ctl)
 
     CTL_DATA_X(ctl) = RM((Handle)data);
 
-    CTL_ACTION_X(ctl) = guest_cast<ProcPtr>(CLC(-1));
+    CTL_ACTION_X(ctl) = guest_cast<ControlActionUPP>(CLC(-1));
     CTL_VALUE_X(ctl) = CWC(1);
     CTL_MIN_X(ctl) = CWC(1);
     CTL_MAX_X(ctl) = CW(CountMItems(mh));

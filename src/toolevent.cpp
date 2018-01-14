@@ -836,7 +836,7 @@ static void dopreferences(void)
                 ROMlib_circledefault(dp);
                 do
                 {
-                    ModalDialog((ProcPtr)0, &ihit_s);
+                    ModalDialog(nullptr, &ihit_s);
                     ihit = CW(ihit_s);
                     switch(ihit)
                     {

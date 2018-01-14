@@ -24,9 +24,9 @@ extern void ROMlib_bogo_stdbits(BitMap *src_bogo_map, BitMap *dst_bogo_map,
                                 const Rect *src_rect, const Rect *dst_rect,
                                 short mode, RgnHandle mask);
 
-extern void canonicalize_bogo_map_cleanup(BitMap *bogo_map,
+extern void canonicalize_bogo_map_cleanup(const BitMap *bogo_map,
                                           struct cleanup_info *info);
-extern void canonicalize_bogo_map(BitMap *bogo_map, PixMap **canonical_addr,
+extern void canonicalize_bogo_map(const BitMap *bogo_map, PixMap **canonical_addr,
                                   struct cleanup_info *info);
 }
 #endif /* !_STDBITS_H_ */

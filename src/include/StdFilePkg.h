@@ -104,7 +104,7 @@ enum
 };
 
 extern void C_ROMlib_filebox(DialogPeek dp, INTEGER which);
-extern void P_ROMlib_filebox(DialogPeek dp, INTEGER which);
+PASCAL_FUNCTION(ROMlib_filebox);
 
 extern void C_SFPPutFile(Point p, StringPtr prompt,
                                      StringPtr name, DlgHookProcPtr dh, SFReply *rep, INTEGER dig, ModalFilterProcPtr fp);

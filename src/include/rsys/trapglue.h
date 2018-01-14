@@ -41,6 +41,7 @@ extern unsigned short mostrecenttrap;
 
 extern uintptr_t CToPascalCall(void *, uint64_t, ...);
 extern toolstuff_t toolstuff[NTOOLENTRIES];
+extern osstuff_t osstuff[];
 }
 
 #endif

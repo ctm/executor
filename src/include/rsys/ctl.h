@@ -58,10 +58,13 @@ extern GUEST<AuxCtlHandle> *lookup_aux_ctl(ControlHandle ctl);
 
 extern int32_t C_cdef0(int16_t var, ControlHandle ctl, int16_t mess,
                        int32_t param);
+PASCAL_FUNCTION(cdef0);
 extern int32_t C_cdef16(int16_t var, ControlHandle ctl, int16_t mess,
                         int32_t param);
+PASCAL_FUNCTION(cdef16);
 extern int32_t C_cdef1008(int16_t var, ControlHandle ctl, int16_t mess,
                           int32_t param);
+PASCAL_FUNCTION(cdef1008);
 
 #define VAR(w) (GetCVariant((w)))
 
@@ -69,7 +72,7 @@ extern BOOLEAN ROMlib_dirtyvariant;
 
 extern void sb_ctl_init(void);
 
-typedef LONGINT (*ctlfuncp)(INTEGER var, ControlHandle ctl, INTEGER mess, LONGINT param);
+using ctlfuncp = UPP<LONGINT (INTEGER var, ControlHandle ctl, INTEGER mess, LONGINT param)>;
 
 extern LONGINT ROMlib_ctlcall(ControlHandle c, INTEGER i, LONGINT l);
 #define CTLCALL(c, i, l) ROMlib_ctlcall((c), (i), (l))
@@ -162,8 +165,11 @@ extern void image_apple_init(void);
 
 extern void C_new_draw_scroll(INTEGER depth, INTEGER flags, GDHandle target,
                               LONGINT l);
+PASCAL_FUNCTION(new_draw_scroll);
 
 extern void C_new_pos_ctl(INTEGER depth, INTEGER flags, GDHandle target,
                           LONGINT l);
+PASCAL_FUNCTION(new_pos_ctl);
+
 }
 #endif /* !_CTL_H_ */

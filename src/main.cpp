@@ -1432,6 +1432,7 @@ int main(int argc, char **argv)
     }
 
     filltables();
+    Executor::functions::InitAction::execute();
 
     l = ostraptable[0x0FC];
     ((unsigned char *)jmpl_to_ResourceStub)[2] = l >> 24;
@@ -1640,7 +1641,7 @@ int main(int argc, char **argv)
         ROMlib_Fsetenv(&env, 0);
     }
 
-    LM(TEDoText) = RM((ProcPtr)P_ROMlib_dotext); /* where should this go ? */
+    LM(TEDoText) = RM((ProcPtr)&ROMlib_dotext); /* where should this go ? */
 
     {
         LONGINT save58;

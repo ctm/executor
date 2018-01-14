@@ -20,6 +20,7 @@ extern void date_to_swapped_fields(long long mactime, GUEST<INTEGER> *yearp,
                                    GUEST<INTEGER> *dayofyearp, GUEST<INTEGER> *weekofyearp);
 
 extern void C_ROMlib_wakeup(void);
+PASCAL_FUNCTION(ROMlib_wakeup);
 
 #define PARAMRAMMACNAME "\010ParamRAM"
 

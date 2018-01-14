@@ -15,14 +15,14 @@ struct ADBDataBlock
     GUEST_STRUCT;
     GUEST<SignedByte> devType;
     GUEST<SignedByte> origADBAddr;
-    GUEST<Ptr> dbServiceRtPtr;
+    GUEST<ProcPtr> dbServiceRtPtr;
     GUEST<Ptr> dbDataAreaAddr;
 };
 
 struct ADBSetInfoBlock
 {
     GUEST_STRUCT;
-    GUEST<Ptr> siServiceRtPtr;
+    GUEST<ProcPtr> siServiceRtPtr;
     GUEST<Ptr> siDataAreaAddr;
 };
 

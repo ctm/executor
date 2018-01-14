@@ -136,6 +136,7 @@ extern void C_LActivate(BOOLEAN act,
                                     ListHandle list);
 PASCAL_SUBTRAP(LActivate, 0xA9E7, Pack0);
 extern void C_ROMlib_mytrack(ControlHandle ch, INTEGER part);
+PASCAL_FUNCTION(ROMlib_mytrack);
 
 extern BOOLEAN C_LClick(Point pt,
                                     INTEGER mods, ListHandle list);

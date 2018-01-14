@@ -38,7 +38,7 @@ using namespace Executor;
  */
 
 static unsigned char *nextbytep;
-static void (*procp)(Ptr, INTEGER);
+static UPP<void(Ptr, INTEGER)> procp;
 
 typedef void (*pfv)();
 
@@ -1648,7 +1648,7 @@ void Executor::C_DrawPicture(PicHandle pic, Rect *destrp)
     if(grafprocp)
     {
         procp = MR(grafprocp->getPicProc);
-        if(procp == P_StdGetPic)
+        if(procp == &StdGetPic)
             procp = 0;
     }
     else

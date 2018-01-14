@@ -35,7 +35,7 @@ void Executor::C_InitDialogs(ProcPtr rp) /* IMI-411 */
 
     LM(DlgFont) = CWC(systemFont);
     LM(ResumeProc) = RM(rp);
-    ErrorSound((ProcPtr)P_ROMlib_mysound);
+    ErrorSound((ProcPtr)&ROMlib_mysound);
     Handle tmp;
     PtrToHand(nothing, &tmp, (LONGINT)1);
     LM(DAStrings)[0] = RM(tmp);

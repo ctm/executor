@@ -34,9 +34,10 @@
 
 using namespace Executor;
 
-BOOLEAN Executor::C_ROMlib_myfilt(DialogPeek dp, EventRecord *evt,
+BOOLEAN Executor::C_ROMlib_myfilt(DialogPtr dlg, EventRecord *evt,
                                   GUEST<INTEGER> *ith) /* IMI-415 */
 {
+    DialogPeek dp = (DialogPeek)dlg;
     itmp ip;
     ControlHandle c;
     WriteWhenType when;
@@ -68,8 +69,8 @@ BOOLEAN Executor::C_ROMlib_myfilt(DialogPeek dp, EventRecord *evt,
 #define DIALOGEVTS \
     (mDownMask | mUpMask | keyDownMask | autoKeyMask | updateMask | activMask)
 
-typedef BOOLEAN (*modalprocp)(DialogPtr dial, EventRecord *evtp,
-                                     GUEST<INTEGER> *iht);
+using modalprocp = UPP<BOOLEAN (DialogPtr dial, EventRecord *evtp,
+                                     GUEST<INTEGER> *iht)>;
 
 #define CALLMODALPROC(dp, evtp, ip, fp2) \
     ROMlib_CALLMODALPROC((dp), (evtp), (ip), (modalprocp)(fp2))
@@ -78,25 +79,11 @@ static inline BOOLEAN
 ROMlib_CALLMODALPROC(DialogPtr dp,
                      EventRecord *evtp, GUEST<INTEGER> *ip, modalprocp fp)
 {
-    BOOLEAN retval;
-
-    if(fp == (modalprocp)P_ROMlib_myfilt)
-        retval = C_ROMlib_myfilt((DialogPeek)dp, evtp, ip);
-    else if(fp == (modalprocp)P_ROMlib_stdffilt)
-        retval = C_ROMlib_stdffilt((DialogPeek)dp, evtp, ip);
-    else if(fp == (modalprocp)P_ROMlib_numsonlyfilterproc)
-        retval = C_ROMlib_numsonlyfilterproc((DialogPeek)dp, evtp, ip);
-    else if(fp == (modalprocp)P_ROMlib_stlfilterproc)
-        retval = C_ROMlib_stlfilterproc((DialogPeek)dp, evtp, ip);
-    else
-    {
-        ROMlib_hook(dial_modalnumber);
-        retval = CToPascalCall((void *)fp, ctop(&C_ROMlib_myfilt), dp, evtp, ip);
-    }
-    return retval;
+    ROMlib_hook(dial_modalnumber);
+    return fp(dp, evtp, ip);
 }
 
-typedef void (*useritemp)(WindowPtr wp, INTEGER item);
+using useritemp = UPP<void (WindowPtr wp, INTEGER item)>;
 
 #define CALLUSERITEM(dp, inum, temph) \
     ROMlib_CALLUSERITEM(dp, inum, (useritemp)(temph))
@@ -105,17 +92,8 @@ static inline void
 ROMlib_CALLUSERITEM(DialogPtr dp,
                     INTEGER inum, useritemp temph)
 {
-    if(temph == (useritemp)P_ROMlib_filebox)
-        C_ROMlib_filebox((DialogPeek)dp, inum);
-    else if(temph == (useritemp)P_ROMlib_circle_ok)
-        C_ROMlib_circle_ok((DialogPeek)dp, inum);
-    else if(temph == (useritemp)P_ROMlib_orientation)
-        C_ROMlib_orientation((DialogPeek)dp, inum);
-    else
-    {
-        ROMlib_hook(dial_usernumber);
-        CToPascalCall((void *)temph, ctop(&C_ROMlib_filebox), dp, inum);
-    }
+    ROMlib_hook(dial_usernumber);
+    temph(dp, inum);
 }
 
 #define _FindWindow(pt, wp)             \
@@ -138,7 +116,7 @@ ROMlib_CALLUSERITEM(DialogPtr dp,
    small, but THEGDEVICE_SAVE_EXCURSION prevents us from using #if, so
    we have a lot of replicated code.  This is scary and should be fixed. */
 
-void Executor::C_ModalDialog(ProcPtr fp, GUEST<INTEGER> *item) /* IMI-415 */
+void Executor::C_ModalDialog(ModalFilterProcPtr fp, GUEST<INTEGER> *item) /* IMI-415 */
 {
     /*
    * The code used to save thePort and restore it at the end of the
@@ -152,7 +130,7 @@ void Executor::C_ModalDialog(ProcPtr fp, GUEST<INTEGER> *item) /* IMI-415 */
     DialogPeek dp;
     GUEST<DialogPtr> ndp;
     TEHandle idle;
-    ProcPtr fp2;
+    ModalFilterProcPtr fp2;
     Point whereunswapped;
     bool done;
 
@@ -165,7 +143,7 @@ void Executor::C_ModalDialog(ProcPtr fp, GUEST<INTEGER> *item) /* IMI-415 */
         if(fp)
             fp2 = fp;
         else
-            fp2 = (ProcPtr)P_ROMlib_myfilt;
+            fp2 = &ROMlib_myfilt;
         for(done = false; !done;)
         {
             WindowPtr temp_wp;
@@ -211,7 +189,7 @@ void Executor::C_ModalDialog(ProcPtr fp, GUEST<INTEGER> *item) /* IMI-415 */
 
 #else /* defined (ALLOW_MOVABLE_MODAL) */
 
-void Executor::C_ModalDialog(ProcPtr fp, GUEST<INTEGER> *item) /* IMI-415 */
+void Executor::C_ModalDialog(ModalFilterProcPtr fp, GUEST<INTEGER> *item) /* IMI-415 */
 {
     /*
    * The code used to save thePort and restore it at the end of the
@@ -226,7 +204,7 @@ void Executor::C_ModalDialog(ProcPtr fp, GUEST<INTEGER> *item) /* IMI-415 */
     DialogPeek dp;
     GUEST<DialogPtr> ndp;
     TEHandle idle;
-    ProcPtr fp2;
+    ModalFilterProcPtr fp2;
     Point whereunswapped;
     bool done;
 
@@ -239,7 +217,7 @@ void Executor::C_ModalDialog(ProcPtr fp, GUEST<INTEGER> *item) /* IMI-415 */
         if(fp)
             fp2 = fp;
         else
-            fp2 = (ProcPtr)P_ROMlib_myfilt;
+            fp2 = &ROMlib_myfilt;
         for(done = false; !done;)
         {
             WindowPtr temp_wp;
@@ -688,7 +666,7 @@ void Executor::BEEPER(INTEGER n)
 {
     if(LM(DABeeper))
     {
-        if((void (*)(INTEGER))MR(LM(DABeeper)) == P_ROMlib_mysound)
+        if(MR(LM(DABeeper)) == (ProcPtr)&ROMlib_mysound)
             C_ROMlib_mysound((n));
         else
         {

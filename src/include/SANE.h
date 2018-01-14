@@ -144,8 +144,6 @@ enum
 
 extern void C_ROMlib_Fcomp2X(comp sp, extended80 *
                                                  dp);
-extern void P_ROMlib_Fcomp2X(comp sp, extended80 *
-                                                 dp);
 extern void C_ROMlib_Fsetenv(INTEGER *dp,
                                          INTEGER sel);
 PASCAL_SUBTRAP(ROMlib_Fsetenv, 0xA9EB, Pack4);

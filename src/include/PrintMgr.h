@@ -166,8 +166,8 @@ typedef struct TPrDlg
 {
     GUEST_STRUCT;
     GUEST<DialogRecord> dlg;
-    GUEST<ProcPtr> pFltrProc;
-    GUEST<ProcPtr> pItemProc;
+    GUEST<ModalFilterProcPtr> pFltrProc;
+    GUEST<UserItemProcPtr> pItemProc;
     GUEST<THPrint> hPrintUsr;
     GUEST<BOOLEAN> fDoIt;
     GUEST<BOOLEAN> fDone;
@@ -201,14 +201,18 @@ PASCAL_SUBTRAP(PrDrvrDCE, 0xA8FD, _PrGlue);
 extern INTEGER C_PrDrvrVers(void);
 PASCAL_SUBTRAP(PrDrvrVers, 0xA8FD, _PrGlue);
 extern void C_ROMlib_myjobproc(DialogPtr dp, INTEGER itemno);
-extern BOOLEAN C_ROMlib_stlfilterproc(DialogPeek dp,
+PASCAL_FUNCTION(ROMlib_myjobproc);
+extern BOOLEAN C_ROMlib_stlfilterproc(DialogPtr dp,
                                              EventRecord *evt, GUEST<INTEGER> *ith);
-
-extern BOOLEAN C_ROMlib_numsonlyfilterproc(DialogPeek dp,
+PASCAL_FUNCTION(ROMlib_stlfilterproc);
+extern BOOLEAN C_ROMlib_numsonlyfilterproc(DialogPtr dp,
                                                   EventRecord *evt,
                                                   GUEST<INTEGER> *ith);
+PASCAL_FUNCTION(ROMlib_numsonlyfilterproc);
 
 extern void C_ROMlib_mystlproc(DialogPtr dp, INTEGER itemno);
+PASCAL_FUNCTION(ROMlib_mystlproc);
+
 extern TPPrDlg C_PrJobInit(THPrint hPrint);
 PASCAL_SUBTRAP(PrJobInit, 0xA8FD, _PrGlue);
 extern TPPrDlg C_PrStlInit(THPrint hPrint);
@@ -223,12 +227,12 @@ PASCAL_FUNCTION(donotPrArc);
 extern void C_PrArc(GrafVerb verb, Rect *r, INTEGER starta,
                                 INTEGER arca);
 PASCAL_FUNCTION(PrArc);
-extern void C_donotPrBits(BitMap *srcbmp, Rect *srcrp,
-                                      Rect *dstrp, INTEGER mode,
+extern void C_donotPrBits(const BitMap *srcbmp, const Rect *srcrp,
+                                      const Rect *dstrp, INTEGER mode,
                                       RgnHandle mask);
 PASCAL_FUNCTION(donotPrBits);
-extern void C_PrBits(BitMap *srcbmp, Rect *srcrp,
-                                 Rect *dstrp, INTEGER mode, RgnHandle mask);
+extern void C_PrBits(const BitMap *srcbmp, const Rect *srcrp,
+                                 const Rect *dstrp, INTEGER mode, RgnHandle mask);
 PASCAL_FUNCTION(PrBits);
 extern void C_donotPrLine(Point p);
 PASCAL_FUNCTION(donotPrLine);

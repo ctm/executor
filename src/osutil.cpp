@@ -855,7 +855,7 @@ void Executor::Delay(LONGINT n, LONGINT *ftp) /* IMII-384 */
         TMTask tm;
         shouldbeawake = false;
 
-        tm.tmAddr = RM((ProcPtr)P_ROMlib_wakeup);
+        tm.tmAddr = RM((ProcPtr)&ROMlib_wakeup);
         InsTime((QElemPtr)&tm);
 
         //      fprintf (stderr, "p");

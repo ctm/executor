@@ -1359,7 +1359,7 @@ num_image_bytes(int numbytes, int pixelsize, int direct_color_p)
 #define ROWMASK 0x1FFF
 #endif
 
-void Executor::NeXTPrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp,
+void Executor::NeXTPrBits(const BitMap *srcbmp, const Rect *srcrp, const Rect *dstrp,
                           LONGINT mode, RgnHandle mask, GrafPtr thePortp)
 {
     float scalex, scaley;

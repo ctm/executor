@@ -48,7 +48,7 @@ dy_zero_p(const Rect *srcr, const Rect *dstr,
     return (CW(srcr->top) + dv) == CW(dstr->top);
 }
 
-void Executor::canonicalize_bogo_map_cleanup(BitMap *bogo_map,
+void Executor::canonicalize_bogo_map_cleanup(const BitMap *bogo_map,
                                              struct cleanup_info *info)
 {
     switch(info->cleanup_type)
@@ -80,7 +80,7 @@ void Executor::canonicalize_bogo_map_cleanup(BitMap *bogo_map,
     }
 }
 
-void Executor::canonicalize_bogo_map(BitMap *bogo_map, PixMap **canonical_addr,
+void Executor::canonicalize_bogo_map(const BitMap *bogo_map, PixMap **canonical_addr,
                                      struct cleanup_info *info)
 {
     int high_bits = ((unsigned short)CW(bogo_map->rowBytes)) >> 14;
@@ -434,7 +434,7 @@ void Executor::ROMlib_bogo_stdbits(BitMap *src_bogo_map, BitMap *dst_bogo_map,
     canonicalize_bogo_map_cleanup(dst_bogo_map, &cleanup_info[1]);
 }
 
-void Executor::StdBitsPicSaveFlag(BitMap *src_bogo_map,
+void Executor::StdBitsPicSaveFlag(const BitMap *src_bogo_map,
                                   const Rect *src_rect, const Rect *dst_rect,
                                   INTEGER mode, RgnHandle mask,
                                   BOOLEAN savepic)
@@ -488,7 +488,7 @@ void Executor::StdBitsPicSaveFlag(BitMap *src_bogo_map,
     canonicalize_bogo_map_cleanup(dst_bogo_map, &cleanup_info[1]);
 }
 
-void Executor::C_StdBits(BitMap *src_bogo_map, const Rect *src_rect,
+void Executor::C_StdBits(const BitMap *src_bogo_map, const Rect *src_rect,
                          const Rect *dst_rect, INTEGER mode,
                          RgnHandle mask) /* destination is alawys the current port */
 {

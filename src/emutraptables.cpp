@@ -60,7 +60,7 @@ syn68k_addr_t Executor::ostraptable[0x100]; /* Gets filled in at run time */
 #define _GetMaskTable _Unimplemented
 #define _Debugger _Unimplemented
 
-void C_unknown574(void)
+void Executor::C_unknown574(void)
 {
 }
 
@@ -1101,7 +1101,7 @@ toolstuff_t Executor::toolstuff[0x400] = {
     unimplemented_toolstuff,
     { { (void *)&C_DebugStr, ptoc(&C_DebugStr) }, 0 },
 };
-
+#if 0
 pstuff_t Executor::pstuff[] = {
     { { (void *)&C_ROMlib_mytrack, ptoc(&C_ROMlib_mytrack) }, 0 },
     { { (void *)&C_ROMlib_stdftrack, ptoc(&C_ROMlib_stdftrack) }, 0 },
@@ -1210,7 +1210,7 @@ pstuff_t Executor::pstuff[] = {
     { { (void *)&C_new_draw_scroll, ptoc(&C_new_draw_scroll) }, 0 },
     { { (void *)&C_new_pos_ctl, ptoc(&C_new_pos_ctl) }, 0 },
 };
-
+#endif
 static void *fsroutines[][2] = {
     { /* 0xA000 */ (void *)PBOpen, (void *)PBHOpen /*  0 */ },
 #define OPENTRAP 0
@@ -1606,7 +1606,7 @@ void Executor::filltables(void)
                                                                                                        : callback_install((callback_handler_t)(toolstuff[i].ptoc.magic != (ULONGINT)-1 ? (void *)PascalToCCall
                                                                                                                                                                                        : toolstuff[i].ptoc.wheretogo),
                                                                                                                           &toolstuff[i].ptoc);
-
+#if 0
     for(i = 0; i < (int)NELEM(pstuff); ++i)
         pstuff[i].orig = (pstuff[i].ptoc.wheretogo == (void *)_Unimplemented)
             ? SYN68K_TO_US(unimpl)
@@ -1615,7 +1615,7 @@ void Executor::filltables(void)
                                                                      ? (void *)PascalToCCall
                                                                      : pstuff[i].ptoc.wheretogo),
                                             &pstuff[i].ptoc));
-
+#endif
     for(i = 0; i < (int)NELEM(ostraptable); ++i)
     {
         switch(i)

@@ -599,7 +599,7 @@ int16_t Executor::ROMlib_call_TEDoText(TEPtr tp, int16_t first, int16_t last, in
 {
     int16_t myd0;
 
-    if(MR(LM(TEDoText)) == (ProcPtr)P_ROMlib_dotext)
+    if(MR(LM(TEDoText)) == (ProcPtr)&ROMlib_dotext)
         myd0 = C_ROMlib_dotext(tp, first, last, what);
     else
     {

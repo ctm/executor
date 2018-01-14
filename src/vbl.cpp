@@ -137,7 +137,7 @@ void Executor::C_ROMlib_vcatch()
 static void
 startclock(void)
 {
-    vbltm.tmAddr = RM((ProcPtr)P_ROMlib_vcatch);
+    vbltm.tmAddr = RM((ProcPtr)&ROMlib_vcatch);
     InsTime((QElemPtr)&vbltm);
     PrimeTime((QElemPtr)&vbltm, 17);
     /* don't adjust ROMlib_clock; it could be temporary */

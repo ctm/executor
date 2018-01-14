@@ -59,6 +59,7 @@ struct initzonehiddenargs_t
 extern void ROMlib_GetTrapAddress_helper(uint32_t *d0p, uint32_t d1, uint32_t *a0p);
 extern void ROMlib_reset_bad_trap_addresses(void);
 extern void C_pack8_unknown_selector(void);
+PASCAL_FUNCTION(pack8_unknown_selector);
 
 extern syn68k_addr_t _Unimplemented(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _SwapMMUMode(syn68k_addr_t ignoreme, void **ignoreme2);
@@ -183,8 +184,11 @@ extern syn68k_addr_t _AliasDispatch(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _WriteParam(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _InitUtil(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _flushcache(syn68k_addr_t ignoreme, void **ignoreme2);
+RAW_68K_FUNCTION(flushcache);
 extern syn68k_addr_t _Key1Trans(syn68k_addr_t ignoreme, void **ignoreme2);
+RAW_68K_FUNCTION(Key1Trans);
 extern syn68k_addr_t _Key2Trans(syn68k_addr_t ignoreme, void **ignoreme2);
+RAW_68K_FUNCTION(Key2Trans);
 extern syn68k_addr_t _Fix2X(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _Frac2X(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _SCSIDispatch(syn68k_addr_t ignoreme, void **ignoreme2);
@@ -200,7 +204,7 @@ extern syn68k_addr_t _GetOSDefault(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _SetOSDefault(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _IMVI_ReadXPRam(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _bad_trap_unimplemented(syn68k_addr_t ignoreme, void **ignoreme2);
-extern syn68k_addr_t _PhysicalGestalt(syn68k_addr_t ignoreme, void **ignoreme2);
+RAW_68K_FUNCTION(bad_trap_unimplemented);
 extern syn68k_addr_t _IMVI_PPC(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _HFSRoutines(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _CodeFragment(syn68k_addr_t ignoreme, void **ignoreme2);

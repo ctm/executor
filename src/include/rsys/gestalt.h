@@ -55,6 +55,7 @@ enum
 };
 
 extern OSErrRET C_PhysicalGestalt(OSType selector, GUEST<LONGINT> *responsep);
+PASCAL_FUNCTION(PhysicalGestalt);
 
 extern void gestalt_set_system_version(uint32_t version);
 extern void gestalt_set_memory_size(uint32_t size);

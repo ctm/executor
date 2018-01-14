@@ -371,7 +371,7 @@ void
 gestalt_set_physical_gestalt_callback(void)
 {
     REPLACE_SELECTOR_IN_TABLE(gestaltPHYSICAL,
-                              (long)US_TO_SYN68K(P_PhysicalGestalt), gtable);
+                              (long)US_TO_SYN68K((ProcPtr)&PhysicalGestalt), gtable);
 }
 
 #if defined(powerpc) || defined(__ppc__)
@@ -646,7 +646,7 @@ OSErrRET Executor::ReplaceGestalt(OSType selector, ProcPtr selFunc,
             retval = gestaltUndefSelectorErr;
         else
         {
-            *oldSelFuncp = (ProcPtr)P_GestaltTablesOnly;
+            *oldSelFuncp = (ProcPtr)&GestaltTablesOnly;
             retval = new_link(selector, selFunc);
         }
     }

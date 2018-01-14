@@ -161,16 +161,16 @@ const LowMemGlobal<Handle[4]> DAStrings { 0xAA0 }; // DialogMgr IMI-421 (true);
 const LowMemGlobal<INTEGER> DlgFont { 0xAFA }; // DialogMgr IMI-412 (true);
 
 extern INTEGER C_Alert(INTEGER id,
-                                   ProcPtr fp);
+                                   ModalFilterProcPtr fp);
 PASCAL_TRAP(Alert, 0xA985);
 extern INTEGER C_StopAlert(INTEGER id,
-                                       ProcPtr fp);
+                                       ModalFilterProcPtr fp);
 PASCAL_TRAP(StopAlert, 0xA986);
 extern INTEGER C_NoteAlert(INTEGER id,
-                                       ProcPtr fp);
+                                       ModalFilterProcPtr fp);
 PASCAL_TRAP(NoteAlert, 0xA987);
 extern INTEGER C_CautionAlert(INTEGER id,
-                                          ProcPtr fp);
+                                          ModalFilterProcPtr fp);
 PASCAL_TRAP(CautionAlert, 0xA988);
 extern void C_CouldAlert(INTEGER id);
 PASCAL_TRAP(CouldAlert, 0xA989);
@@ -191,10 +191,11 @@ extern void C_CloseDialog(DialogPtr dp);
 PASCAL_TRAP(CloseDialog, 0xA982);
 extern void C_DisposDialog(DialogPtr dp);
 PASCAL_TRAP(DisposDialog, 0xA983);
-extern BOOLEAN C_ROMlib_myfilt(DialogPeek dp, EventRecord *evt,
+extern BOOLEAN C_ROMlib_myfilt(DialogPtr dlg, EventRecord *evt,
                                       GUEST<INTEGER> *ith);
+PASCAL_FUNCTION(ROMlib_myfilt);
 
-extern void C_ModalDialog(ProcPtr fp,
+extern void C_ModalDialog(ModalFilterProcPtr fp,
                                       GUEST<INTEGER> *item);
 PASCAL_TRAP(ModalDialog, 0xA991);
 extern BOOLEAN C_IsDialogEvent(
@@ -216,6 +217,7 @@ extern void DlgCopy(DialogPtr dp);
 extern void DlgPaste(DialogPtr dp);
 extern void DlgDelete(DialogPtr dp);
 extern void C_ROMlib_mysound(INTEGER i);
+PASCAL_FUNCTION(ROMlib_mysound);
 extern void C_ErrorSound(ProcPtr sp);
 PASCAL_TRAP(ErrorSound, 0xA98C);
 extern void C_InitDialogs(ProcPtr rp);

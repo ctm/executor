@@ -71,16 +71,16 @@ typedef void (*actionp)(ControlHandle c, INTEGER part);
 static inline void CALLACTION(ControlHandle ch, INTEGER inpart, ProcPtr a)
 {
     ROMlib_hook(ctl_cdefnumber);
-    if(a == (ProcPtr)P_ROMlib_mytrack)
-        C_ROMlib_mytrack(ch, inpart);
-    else if(a == (ProcPtr)P_ROMlib_stdftrack)
-        C_ROMlib_stdftrack(ch, inpart);
+    if(a == (ProcPtr)&ROMlib_mytrack)
+        ROMlib_mytrack(ch, inpart);
+    else if(a == (ProcPtr)&ROMlib_stdftrack)
+        ROMlib_stdftrack(ch, inpart);
     else
         CToPascalCall((void *)a, ctop(&C_ROMlib_mytrack), ch, inpart);
 }
 
 INTEGER Executor::C_TrackControl(ControlHandle c, Point p,
-                                 ProcPtr a) /* IMI-323 */
+                                 ControlActionUPP a) /* IMI-323 */
 {
     INTEGER partstart, inpart;
     EventRecord ev;
@@ -120,12 +120,12 @@ INTEGER Executor::C_TrackControl(ControlHandle c, Point p,
         goto done;
     }
 
-    if(a == (ProcPtr)-1L)
+    if(a == (ControlActionUPP)-1)
         a = CTL_ACTION(c);
 
     /* #if 0 reading the above code suggests that
    it's impossible to get here */
-    if(0 && a == (ProcPtr)-1L)
+    if(0 && a == (ControlActionUPP)-1)
     {
         /* totally custom */
         while(!GetOSEvent(mUpMask, &ev))
@@ -159,7 +159,7 @@ INTEGER Executor::C_TrackControl(ControlHandle c, Point p,
 
             PATASSIGN(LM(DragPattern), ltGray);
             l = DragTheRgn(rh, p, &thumb._tlimit, &thumb._tslop,
-                           CW(thumb._taxis), a);
+                           CW(thumb._taxis), (ProcPtr)a);
             if((uint32_t)l != 0x80008000)
             {
                 CTLCALL(c, posCntl, l);
@@ -189,7 +189,7 @@ INTEGER Executor::C_TrackControl(ControlHandle c, Point p,
                 CTLCALL(c, drawCntl, partstart);
             }
             if(a && inpart)
-                CALLACTION(c, inpart, a);
+                CALLACTION(c, inpart, (ProcPtr)a);
         }
         GetOSEvent(mUpMask, &ev);
         GlobalToLocal(&ev.where);

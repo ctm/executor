@@ -133,14 +133,14 @@ syn68k_addr_t Executor::catchalarm(syn68k_addr_t interrupt_pc, void *unused)
                     ROMlib_hook(time_number);
 
                     tm_addr = MR(qp->tmAddr);
-                    if(tm_addr == (ProcPtr)P_ROMlib_wakeup)
-                        C_ROMlib_wakeup();
-                    else if(tm_addr == (ProcPtr)P_ROMlib_vcatch)
-                        C_ROMlib_vcatch();
-                    else if(tm_addr == (ProcPtr)P_handle_refresh)
-                        C_handle_refresh();
-                    else if(tm_addr == (ProcPtr)P_sound_timer_handler)
-                        C_sound_timer_handler();
+                    if(tm_addr == (ProcPtr)&ROMlib_wakeup)
+                        ROMlib_wakeup();
+                    else if(tm_addr == (ProcPtr)&ROMlib_vcatch)
+                        ROMlib_vcatch();
+                    else if(tm_addr == (ProcPtr)&handle_refresh)
+                        handle_refresh();
+                    else if(tm_addr == (ProcPtr)&sound_timer_handler)
+                        sound_timer_handler();
                     else if(tm_addr)
                     {
                         /* No need to save and restore regs here; we

@@ -75,7 +75,7 @@ void Executor::C_CopyBits(BitMap *src_bitmap, BitMap *dst_bitmap,
 	      been patched out */
         gp = PORT_GRAF_PROCS(thePort);
         if(gp
-           && MR(gp->bitsProc) != P_StdBits)
+           && MR(gp->bitsProc) != &StdBits)
             warning_unexpected("thePort bitsProc patched out!");
 
         if(tooltraptable[StdBits_TOOLTRAP_NUMBER]

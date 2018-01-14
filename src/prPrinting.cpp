@@ -79,12 +79,12 @@ void Executor::C_PrArc(GrafVerb verb, Rect *r, INTEGER starta, INTEGER arca)
         NeXTPrArc(verb, r, starta, arca, thePort);
 }
 
-void Executor::C_donotPrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp,
+void Executor::C_donotPrBits(const BitMap *srcbmp, const Rect *srcrp, const Rect *dstrp,
                              INTEGER mode, RgnHandle mask)
 {
 }
 
-void Executor::C_PrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp, INTEGER mode,
+void Executor::C_PrBits(const BitMap *srcbmp, const Rect *srcrp, const Rect *dstrp, INTEGER mode,
                         RgnHandle mask)
 {
     if(pageno >= pagewanted && pageno <= lastpagewanted)
@@ -285,7 +285,7 @@ void Executor::C_PrComment(INTEGER kind, INTEGER size, Handle hand)
             case postscripttextis:
                 if(ROMlib_passpostscript)
                     (PORT_GRAF_PROCS(thePort))->textProc
-                        = RM((textProc_t)P_textasPS);
+                        = RM(&textasPS);
                 break;
             case postscripthandle:
                 if(pageno >= pagewanted && pageno <= lastpagewanted && ROMlib_passpostscript)
@@ -325,41 +325,41 @@ ourinit(TPPrPort port, BOOLEAN preserve_font)
     printport.pnLoc.h = CWC(-32768);
     printport.pnLoc.v = CWC(-32768);
     OpenPort(&port->gPort);
-    sendpsprocs.textProc = RM((textProc_t)P_donotPrText);
-    sendpsprocs.lineProc = RM((lineProc_t)P_donotPrLine);
-    sendpsprocs.rectProc = RM((rectProc_t)P_donotPrRect);
-    sendpsprocs.rRectProc = RM((rRectProc_t)P_donotPrRRect);
-    sendpsprocs.ovalProc = RM((ovalProc_t)P_donotPrOval);
-    sendpsprocs.arcProc = RM((arcProc_t)P_donotPrArc);
-    sendpsprocs.polyProc = RM((polyProc_t)P_donotPrPoly);
-    sendpsprocs.rgnProc = RM((rgnProc_t)P_donotPrRgn);
-    sendpsprocs.bitsProc = RM((bitsProc_t)P_donotPrBits);
-    sendpsprocs.commentProc = RM((commentProc_t)P_PrComment);
-    sendpsprocs.txMeasProc = RM((txMeasProc_t)P_PrTxMeas);
+    sendpsprocs.textProc = RM(&donotPrText);
+    sendpsprocs.lineProc = RM(&donotPrLine);
+    sendpsprocs.rectProc = RM(&donotPrRect);
+    sendpsprocs.rRectProc = RM(&donotPrRRect);
+    sendpsprocs.ovalProc = RM(&donotPrOval);
+    sendpsprocs.arcProc = RM(&donotPrArc);
+    sendpsprocs.polyProc = RM(&donotPrPoly);
+    sendpsprocs.rgnProc = RM(&donotPrRgn);
+    sendpsprocs.bitsProc = RM(&donotPrBits);
+    sendpsprocs.commentProc = RM(&PrComment);
+    sendpsprocs.txMeasProc = RM(&PrTxMeas);
 #if 0
-  sendpsprocs.getPicProc = RM((getPicProc_t)P_donotPrGetPic);
-  sendpsprocs.putPicProc = RM((putPicProc_t)P_donotPrPutPic);
+  sendpsprocs.getPicProc = RM(&donotPrGetPic);
+  sendpsprocs.putPicProc = RM(&donotPrPutPic);
 #else
-    sendpsprocs.getPicProc = RM((getPicProc_t)P_StdGetPic);
-    sendpsprocs.putPicProc = RM((putPicProc_t)P_StdPutPic);
+    sendpsprocs.getPicProc = RM(&StdGetPic);
+    sendpsprocs.putPicProc = RM(&StdPutPic);
 #endif
-    prprocs.textProc = RM((textProc_t)P_PrText);
-    prprocs.lineProc = RM((lineProc_t)P_PrLine);
-    prprocs.rectProc = RM((rectProc_t)P_PrRect);
-    prprocs.rRectProc = RM((rRectProc_t)P_PrRRect);
-    prprocs.ovalProc = RM((ovalProc_t)P_PrOval);
-    prprocs.arcProc = RM((arcProc_t)P_PrArc);
-    prprocs.polyProc = RM((polyProc_t)P_PrPoly);
-    prprocs.rgnProc = RM((rgnProc_t)P_PrRgn);
-    prprocs.bitsProc = RM((bitsProc_t)P_PrBits);
-    prprocs.commentProc = RM((commentProc_t)P_PrComment);
-    prprocs.txMeasProc = RM((txMeasProc_t)P_PrTxMeas);
+    prprocs.textProc = RM(&PrText);
+    prprocs.lineProc = RM(&PrLine);
+    prprocs.rectProc = RM(&PrRect);
+    prprocs.rRectProc = RM(&PrRRect);
+    prprocs.ovalProc = RM(&PrOval);
+    prprocs.arcProc = RM(&PrArc);
+    prprocs.polyProc = RM(&PrPoly);
+    prprocs.rgnProc = RM(&PrRgn);
+    prprocs.bitsProc = RM(&PrBits);
+    prprocs.commentProc = RM(&PrComment);
+    prprocs.txMeasProc = RM(&PrTxMeas);
 #if 0
-  prprocs.getPicProc = RM((getPicProc_t)P_PrGetPic);
-  prprocs.putPicProc = RM((putPicProc_t)P_PrPutPic);
+  prprocs.getPicProc = RM(&PrGetPic);
+  prprocs.putPicProc = RM(&PrPutPic);
 #else
-    prprocs.getPicProc = RM((getPicProc_t)P_StdGetPic);
-    prprocs.putPicProc = RM((putPicProc_t)P_StdPutPic);
+    prprocs.getPicProc = RM(&StdGetPic);
+    prprocs.putPicProc = RM(&StdPutPic);
 #endif
     port->saveprocs = prprocs;
 #if 1

@@ -12,17 +12,17 @@ using namespace Executor;
 
 void Executor::C_SetStdProcs(QDProcs *procs)
 {
-    procs->textProc = RM((textProc_t)P_StdText);
-    procs->lineProc = RM((lineProc_t)P_StdLine);
-    procs->rectProc = RM((rectProc_t)P_StdRect);
-    procs->rRectProc = RM((rRectProc_t)P_StdRRect);
-    procs->ovalProc = RM((ovalProc_t)P_StdOval);
-    procs->arcProc = RM((arcProc_t)P_StdArc);
-    procs->polyProc = RM((polyProc_t)P_StdPoly);
-    procs->rgnProc = RM((rgnProc_t)P_StdRgn);
-    procs->bitsProc = RM((bitsProc_t)P_StdBits);
-    procs->commentProc = RM((commentProc_t)P_StdComment);
-    procs->txMeasProc = RM((txMeasProc_t)P_StdTxMeas);
-    procs->getPicProc = RM((getPicProc_t)P_StdGetPic);
-    procs->putPicProc = RM((putPicProc_t)P_StdPutPic);
+    procs->textProc = RM(&StdText);
+    procs->lineProc = RM(&StdLine);
+    procs->rectProc = RM(&StdRect);
+    procs->rRectProc = RM(&StdRRect);
+    procs->ovalProc = RM(&StdOval);
+    procs->arcProc = RM(&StdArc);
+    procs->polyProc = RM(&StdPoly);
+    procs->rgnProc = RM(&StdRgn);
+    procs->bitsProc = RM(&StdBits);
+    procs->commentProc = RM(&StdComment);
+    procs->txMeasProc = RM(&StdTxMeas);
+    procs->getPicProc = RM(&StdGetPic);
+    procs->putPicProc = RM(&StdPutPic);
 }

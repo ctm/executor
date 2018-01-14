@@ -525,10 +525,10 @@ int32_t Executor::ROMlib_windcall(WindowPtr wind, int16_t mess, int32_t param)
 
     wp = (windprocp)STARH(defproc);
 
-    if(wp == P_wdef0)
-        retval = C_wdef0(var(wind), wind, mess, param);
-    else if(wp == P_wdef16)
-        retval = C_wdef16(var(wind), wind, mess, param);
+    if(wp == &wdef0)
+        retval = wdef0(var(wind), wind, mess, param);
+    else if(wp == &wdef16)
+        retval = wdef16(var(wind), wind, mess, param);
     else
     {
 #if defined EVIL_ILLUSTRATOR_7_HACK

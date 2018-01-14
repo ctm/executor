@@ -32,8 +32,10 @@ struct windrestype
     GUEST<Byte> _wtitle;
 };
 
-extern LONGINT C_wdef0(INTEGER, WindowPtr, INTEGER, LONGINT),
-    C_wdef16(INTEGER, WindowPtr, INTEGER, LONGINT);
+extern LONGINT C_wdef0(INTEGER, WindowPtr, INTEGER, LONGINT);
+PASCAL_FUNCTION(wdef0);
+extern LONGINT C_wdef16(INTEGER, WindowPtr, INTEGER, LONGINT);
+PASCAL_FUNCTION(wdef16);
 
 extern WindowPeek ROMlib_firstvisible(WindowPtr w);
 
@@ -52,8 +54,8 @@ typedef void (*draghookp)(void);
 
 extern BOOLEAN ROMlib_dirtyvariant;
 
-typedef LONGINT (*windprocp)(INTEGER var, WindowPtr wind, INTEGER mess,
-                                    LONGINT param);
+using windprocp = UPP<LONGINT(INTEGER var, WindowPtr wind, INTEGER mess,
+                                    LONGINT param)>;
 
 extern void CALLDRAGHOOK(void);
 extern void WINDCALLDESKHOOK(void);

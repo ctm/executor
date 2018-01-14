@@ -25,26 +25,26 @@ void Executor::C_CharExtra(Fixed Extra) /* IMV-77 */
 
 void Executor::C_SetStdCProcs(CQDProcs *cProcs) /* IMV-77 */
 {
-    cProcs->textProc = RM((Ptr)P_StdText);
-    cProcs->lineProc = RM((Ptr)P_StdLine);
-    cProcs->rectProc = RM((Ptr)P_StdRect);
-    cProcs->rRectProc = RM((Ptr)P_StdRRect);
-    cProcs->ovalProc = RM((Ptr)P_StdOval);
-    cProcs->arcProc = RM((Ptr)P_StdArc);
-    cProcs->polyProc = RM((Ptr)P_StdPoly);
-    cProcs->rgnProc = RM((Ptr)P_StdRgn);
-    cProcs->bitsProc = RM((Ptr)P_StdBits);
-    cProcs->commentProc = RM((Ptr)P_StdComment);
-    cProcs->txMeasProc = RM((Ptr)P_StdTxMeas);
-    cProcs->getPicProc = RM((Ptr)P_StdGetPic);
-    cProcs->putPicProc = RM((Ptr)P_StdPutPic);
-    cProcs->opcodeProc = RM((Ptr)0) /* ??? */;
-    cProcs->newProc1Proc = RM((Ptr)0) /* ??? */;
-    cProcs->newProc2Proc = RM((Ptr)0) /* ??? */;
-    cProcs->newProc3Proc = RM((Ptr)0) /* ??? */;
-    cProcs->newProc4Proc = RM((Ptr)0) /* ??? */;
-    cProcs->newProc5Proc = RM((Ptr)0) /* ??? */;
-    cProcs->newProc6Proc = RM((Ptr)0) /* ??? */;
+    cProcs->textProc = RM(&StdText);
+    cProcs->lineProc = RM(&StdLine);
+    cProcs->rectProc = RM(&StdRect);
+    cProcs->rRectProc = RM(&StdRRect);
+    cProcs->ovalProc = RM(&StdOval);
+    cProcs->arcProc = RM(&StdArc);
+    cProcs->polyProc = RM(&StdPoly);
+    cProcs->rgnProc = RM(&StdRgn);
+    cProcs->bitsProc = RM(&StdBits);
+    cProcs->commentProc = RM(&StdComment);
+    cProcs->txMeasProc = RM(&StdTxMeas);
+    cProcs->getPicProc = RM(&StdGetPic);
+    cProcs->putPicProc = RM(&StdPutPic);
+    cProcs->opcodeProc = RM(nullptr) /* ??? */;
+    cProcs->newProc1Proc = RM(nullptr) /* ??? */;
+    cProcs->newProc2Proc = RM(nullptr) /* ??? */;
+    cProcs->newProc3Proc = RM(nullptr) /* ??? */;
+    cProcs->newProc4Proc = RM(nullptr) /* ??? */;
+    cProcs->newProc5Proc = RM(nullptr) /* ??? */;
+    cProcs->newProc6Proc = RM(nullptr) /* ??? */;
 }
 
 void Executor::C_GetCPixel(INTEGER h, INTEGER v, RGBColor *pixelp)
