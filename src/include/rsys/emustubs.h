@@ -148,7 +148,6 @@ extern syn68k_addr_t _ScriptUtil(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _PrGlue(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _Dequeue(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _Enqueue(syn68k_addr_t ignoreme, void **ignoreme2);
-extern syn68k_addr_t __GetResource(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _Secs2Date(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _Date2Secs(syn68k_addr_t ignoreme, void **ignoreme2);
 extern syn68k_addr_t _HandToHand(syn68k_addr_t ignoreme, void **ignoreme2);

@@ -2476,7 +2476,7 @@
 0xA99D	GetIndResource
 0xA99E	CountTypes
 0xA99F	GetIndType
-0xA9A0	__GetResource
+0xA9A0	GetResource
 0xA9A1	GetNamedResource
 0xA9A2	LoadResource
 0xA9A3	ReleaseResource

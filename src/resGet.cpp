@@ -317,6 +317,9 @@ Handle Executor::C_GetResource(ResType typ, INTEGER id)
         ROMlib_init_xdefs();
     }
 
+    EM_D0 = 0; // apparently, somebody is relying on D0 being reset to 0 on exit from GetResource...
+               // (this used to be in emustubs.cpp)
+
     retval = pseudo_get_rom_resource(typ, id);
     if(retval)
         /*-->*/ return retval;

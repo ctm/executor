@@ -261,21 +261,6 @@ STUB(SetADBInfo)
     RTS();
 }
 
-STUB(_GetResource)
-{
-    syn68k_addr_t retaddr;
-    short arg0;
-    void *retval;
-
-    retaddr = POPADDR();
-    arg0 = POPUW();
-    retval = C_GetResource(POPUL(), arg0);
-    WRITEUL(EM_A7, US_TO_SYN68K_CHECK0(retval));
-    PUSHADDR(retaddr);
-    EM_D0 = 0;
-    RTS();
-}
-
 static void
 do_selector_error(uint32_t selector,
                   const char *trap_name,

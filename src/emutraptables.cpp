@@ -483,7 +483,7 @@ toolstuff_t Executor::toolstuff[0x400] = {
     { { (void *)&C_GetIndResource, ptoc(&C_GetIndResource) }, 0 },
     { { (void *)&C_CountTypes, ptoc(&C_CountTypes) }, 0 },
     { { (void *)&C_GetIndType, ptoc(&C_GetIndType) }, 0 },
-    { { (void *)&__GetResource, static_cast<ULONGINT>(-1) }, 0 },
+    { { (void *)&C_GetResource, ptoc(&C_GetResource) }, 0 },
     { { (void *)&C_GetNamedResource, ptoc(&C_GetNamedResource) }, 0 },
     { { (void *)&C_LoadResource, ptoc(&C_LoadResource) }, 0 },
     { { (void *)&C_ReleaseResource, ptoc(&C_ReleaseResource) }, 0 },
