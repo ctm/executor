@@ -485,7 +485,7 @@ makestr(StringPtr sp)
     int len;
 
     len = sp[0] + 1;
-    retval = (StringPtr)malloc(len);
+    retval = (StringPtr)NewPtr(len);
     memcpy(retval, sp, len);
     return retval;
 }
@@ -533,7 +533,7 @@ end_assoc(void)
     for(p = assoc_headp; p; p = nextp)
     {
         nextp = p->nextp;
-        free(p->str);
+        DisposPtr((Ptr)p->str);
         free(p);
     }
     assoc_headp = 0;
