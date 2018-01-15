@@ -24,8 +24,10 @@ void Executor::ROMlib_rootless_update(RgnHandle extra)
         }
     }
     RgnHandle tmp = NewRgn();
-    for(Rect& r : rootlessMenus)
-    {
+    for(Rect r : rootlessMenus)
+    {   // N.B: do not declare "r" as Rect&,
+        // as we aren't allowed to pass pointers into vectors(host heap)
+        // as parameters to toolbox functions
         RectRgn(tmp, &r);
         UnionRgn(rgn, tmp, rgn);
     }
