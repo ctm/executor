@@ -27,8 +27,16 @@ open(OUT, ">temp.h");
 while($l = <INCLUDE>) {
     if($l =~ /^RAW_68K_FUNCTION\(([A-Za-z0-9_]+)\)/) {
         $name = $1;
+        $trapnum = 0;
         if(exists $traps{$name}) {
             $trapnum = $traps{$name};
+        } elsif(exists $traps{"_$name"}) {
+            $trapnum = $traps{"_$name"};
+        } elsif(exists $traps{"R_$name"}) {
+            $trapnum = $traps{"R_$name"};
+        }
+        
+        if($trapnum) {
             print OUT "RAW_68K_TRAP($name, $trapnum);\n";
         } else {
             print OUT $l;
