@@ -319,7 +319,7 @@ syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
         togoto = tooltraptable[trapno];
         if(trapword & POPBIT)
             retval = POPADDR();
-#if 1
+#if defined(SHORTCIRCUIT_TRAPS)
         if(togoto == toolstuff[trapno].orig)
         {
             if(toolstuff[trapno].ptoc.magic == (ULONGINT)-1)
@@ -348,7 +348,7 @@ syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
     {
         trapno = trapword & OSMASK;
         togoto = ostraptable[trapno];
-#if 1        
+#if defined(SHORTCIRCUIT_TRAPS)        
         if(togoto == osstuff[trapno].orig)
         {
             saved1 = EM_D1;

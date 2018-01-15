@@ -122,7 +122,7 @@ public:
 
     void init();
 protected:
-    ProcPtr guestFP;
+    static ProcPtr guestFP;
 };
 
 template<syn68k_addr_t (*fptr)(syn68k_addr_t, void **), int trapno>
@@ -150,11 +150,11 @@ public:
         return guestFP;
     }
 
-    syn68k_addr_t invokeFrom68K(syn68k_addr_t, void **);
+    static syn68k_addr_t invokeFrom68K(syn68k_addr_t, void **);
 
     void init();
 protected:
-    UPP<Ret (Args...)> guestFP;
+    static UPP<Ret (Args...)> guestFP;
 };
 
 template<typename F, F* fptr, int trapno>

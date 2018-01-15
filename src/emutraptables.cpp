@@ -1491,12 +1491,7 @@ void Executor::filltables(void)
 
     unimpl = callback_install((callback_handler_t)(void *)_Unimplemented,
                               nullptr);
-
-    for(i = 0; i < (int)NELEM(tooltraptable); ++i)
-        tooltraptable[i] = toolstuff[i].orig = (toolstuff[i].ptoc.wheretogo == (void *)_Unimplemented) ? unimpl
-                                                                                                       : callback_install((callback_handler_t)(toolstuff[i].ptoc.magic != (ULONGINT)-1 ? (void *)PascalToCCall
-                                                                                                                                                                                       : toolstuff[i].ptoc.wheretogo),
-                                                                                                                          &toolstuff[i].ptoc);
+    
     for(i = 0; i < (int)NELEM(ostraptable); ++i)
     {
         switch(i)
