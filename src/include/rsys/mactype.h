@@ -13,6 +13,8 @@
 #include <type_traits>
 #include <syn68k_public.h> /* for ROMlib_offset */
 
+#include "rsys/functions.h"
+
 #ifndef __cplusplus
 #error C++ required
 #endif
@@ -476,9 +478,62 @@ GUEST<TO> guest_cast(GuestWrapper<FROM> p)
     return result;
 }
 
-#define PACKED_MEMBER(typ, name) typ name
-// Roadmap:
-// 1. remove
+
+template<typename Ret, typename... Args>
+struct GuestWrapperBase<UPP<Ret(Args...)>>
+{
+private:
+    HiddenValue<uint32_t> p;
+
+public:
+    using WrappedType = UPP<Ret(Args...)>;
+    using RawGuestType = uint32_t;
+
+    WrappedType get() const
+    {
+        uint32_t rawp = this->raw();
+        if(rawp)
+            return WrappedType(SYN68K_TO_US((uint32_t)swap32(rawp)));
+        else
+            return nullptr;
+    }
+
+    void set(WrappedType ptr)
+    {
+        if(ptr)
+            this->raw(swap32(US_TO_SYN68K(ptr.ptr)));
+        else
+            this->raw(0);
+    }
+
+    RawGuestType raw() const
+    {
+        return p.raw();
+    }
+
+    void raw(RawGuestType x)
+    {
+        p.raw(x);
+    }
+
+    Ret operator()(Args... args)
+    {
+        return (this->get())(args...);
+    }
+};
+
+template<typename TT>
+GUEST<UPP<TT>> RM(UPP<TT> p)
+{
+    return GUEST<UPP<TT>>::fromHost(p);
+}
+
+template<typename TT>
+UPP<TT> MR(GuestWrapper<UPP<TT>> p)
+{
+    return p.get();
+}
+
 }
 
 #endif /* _MACTYPE_H_ */

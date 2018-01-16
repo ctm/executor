@@ -16,12 +16,12 @@
 
 #include "rsys/macros.h"
 #include "rsys/types.h"
+#include "rsys/functions.h"
 #include "rsys/mactype.h"
 #include "rsys/byteswap.h"
 
 #include <syn68k_public.h>
 
-#include "rsys/functions.h"
 #include "ExMacTypes.h"
 #include "rsys/slash.h"
 #include "rsys/error.h"
