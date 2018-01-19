@@ -66,9 +66,6 @@ extern bool ROMlib_memnomove_p;
 #define PURGEBIT (1 << 6)
 #define RSRCBIT (1 << 5)
 
-#define SYSBIT (1 << 10)
-#define CLRBIT (1 << 9)
-
 /*
  * The to_look_for stuff below is a guess, but I couldn't get ThinkC to
  * compile my test case on Brute.  The problem is that when running
