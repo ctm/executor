@@ -122,6 +122,8 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
     LONGINT l;
     int drawn;
 
+    bool onDesktop = (thePortX == LM(WMgrPort)) || (thePortX == guest_cast<GrafPtr>(LM(WMgrCPort)));
+
     rh = NewRgn();
     CopyRgn(rgn, rh);
     InsetRgn(rh, 1, 1);
@@ -134,7 +136,8 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
     if((drawn = PtInRect(p, slop)))
     {
         PaintRgn(rgn); /* was Frame */
-        ROMlib_rootless_update(rgn);
+        if(onDesktop)
+            ROMlib_rootless_update(rgn);
     }
     while(!GetOSEvent(mUpMask, &ev))
     {
@@ -158,7 +161,8 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
                 drawn = true;
                 OffsetRgn(rgn, ep.h - p.h, ep.v - p.v);
                 PaintRgn(rgn);
-                ROMlib_rootless_update(rgn);
+                if(onDesktop)
+                    ROMlib_rootless_update(rgn);
                 p.h = ep.h;
                 p.v = ep.v;
             }
@@ -168,7 +172,8 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
             if(drawn)
             {
                 PaintRgn(rgn);
-                ROMlib_rootless_update(nullptr);
+                if(onDesktop)
+                    ROMlib_rootless_update(nullptr);
             }
             drawn = false;
         }
@@ -201,7 +206,8 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
     if(drawn)
     {
         PaintRgn(rgn);
-        ROMlib_rootless_update(nullptr);
+        if(onDesktop)
+            ROMlib_rootless_update(nullptr);
     }
     SetPenState(&ps);
     DisposeRgn(rh);
