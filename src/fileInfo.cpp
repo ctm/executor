@@ -533,7 +533,8 @@ OSErr Executor::ROMlib_PBGetSetFInfoD(ParmBlkPtr pb, BOOLEAN a,
         pb->fileParam.ioFlStBlk = CW(-1); /* NOT SUPPORTED */
         pb->fileParam.ioFlRStBlk = CW(-1); /* NOT SUPPORTED */
         pb->fileParam.ioFlMdDat = CL(UNIXTIMETOMACTIME(
-            MAX(resourcesbuf.st_mtime, datasbuf.st_mtime)));
+            datasbuf.st_mtime));    // FIXME: take mod date of resources into account
+            //std::max(resourcesbuf.st_mtime, datasbuf.st_mtime)));
         if(dodirs)
             ((CInfoPBPtr)pb)->hFileInfo.ioFlBkDat = 0;
     }
