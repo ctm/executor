@@ -42,7 +42,7 @@ bool osflags[0x100];
 template<typename F, F* fptr>
 struct LoggedFunction;
 
-static thread_local int nestingLevel = 0;
+static int nestingLevel = 0;
 
 void functions::resetNestingLevel()
 {
@@ -251,7 +251,7 @@ void logTrapCall(const char* trapname, Args... args)
 {
     if(!loggingActive())
         return;
-    printf("Hello, world.\n");
+    std::cout.clear();
     indent();
     std::cout << trapname << "(";
     logList(args...);
@@ -313,12 +313,12 @@ struct LoggedFunction<Ret (Args...), fptr>
 
 void dumpRegsAndStack()
 {
-    std::cout << std::hex << std::showbase << std::setfill('0');
-    std::cout << "D0=" << std::setw(8) << EM_A0 << " ";
-    std::cout << "D1=" << std::setw(8) << EM_A0 << " ";
+    std::cout << std::hex << /*std::showbase <<*/ std::setfill('0');
+    std::cout << "D0=" << std::setw(8) << EM_D0 << " ";
+    std::cout << "D1=" << std::setw(8) << EM_D1 << " ";
     std::cout << "A0=" << std::setw(8) << EM_A0 << " ";
-    std::cout << "A1=" << std::setw(8) << EM_A0 << " ";
-    std::cout << std::noshowbase;
+    std::cout << "A1=" << std::setw(8) << EM_A1 << " ";
+    //std::cout << std::noshowbase;
     std::cout << "Stack: ";
     uint8_t *p = (uint8_t*)SYN68K_TO_US(EM_A7);
     for(int i = 0; i < 12; i++)
@@ -332,6 +332,7 @@ syn68k_addr_t untypedLoggedFunction(syn68k_addr_t addr, void * param)
     const char *fname = NamedThing<syn68k_addr_t (*)(syn68k_addr_t, void *), fptr>::name;
     if(loggingActive())
     {
+        std::cout.clear();
         indent();
         std::cout << fname << " ";
         dumpRegsAndStack();
@@ -359,6 +360,38 @@ void Raw68KFunction<fptr>::init()
     guestFP = (ProcPtr)SYN68K_TO_US(callback_install(&untypedLoggedFunction<fptr>, nullptr));    
 }
 
+namespace Executor::callconv
+{
+template<int n> struct A
+{
+    template<typename T>
+    operator T() { return EM_AREG(n); }
+    template<typename T>
+    operator T*() { return ptr_from_longint<T*>(EM_AREG(n)); }
+    static void set(uint32_t x) { EM_AREG(n) = x; }
+    static void set(void *x) { EM_AREG(n) = ptr_to_longint(x); }
+
+    void afterwards() {}
+};
+
+template<int n> struct D
+{
+    template<typename T>
+    operator T() { return EM_DREG(n); }
+    static void set(uint32_t x) { EM_DREG(n) = x; }
+
+    void afterwards() {}
+};
+
+
+template<int mask> struct TrapBit
+{
+    operator bool() { return !!(EM_D1 & mask); }
+
+    void afterwards() {}
+};
+}
+
 template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
 UPP<Ret (Args...)> WrappedFunction<Ret (Args...), fptr, CallConv>::guestFP;
 
@@ -375,13 +408,64 @@ struct Invoker<Ret (Args...), fptr, callconv::Pascal>
         return PascalToCCall(addr, &ptocblock);
     }
 };
+template<typename... Xs> struct List;
 
-template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename RetConv, typename ArgConvs>
+template<typename F, F *fptr, typename DoneArgs, typename ToDoArgs, typename ToDoCC>
+struct InvokerRec;
+
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename... DoneArgs>
+struct InvokerRec<Ret (Args...), fptr, List<DoneArgs...>, List<>, List<>>
+{
+    static Ret invokeFrom68K(syn68k_addr_t addr, void *refcon, DoneArgs... args)
+    {
+        return fptr(args...);
+    }
+};
+
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename... DoneArgs, typename Arg, typename... TodoArgs, typename CC, typename... TodoCC>
+struct InvokerRec<Ret (Args...), fptr, List<DoneArgs...>, List<Arg, TodoArgs...>, List<CC, TodoCC...>>
+{
+    static Ret invokeFrom68K(syn68k_addr_t addr, void *refcon, DoneArgs... args)
+    {
+        CC newarg;
+        Ret retval = InvokerRec<Ret (Args...),fptr,List<DoneArgs...,Arg>,List<TodoArgs...>,List<TodoCC...>>
+            ::invokeFrom68K(addr, refcon, args..., newarg);
+        newarg.afterwards();
+        return retval;
+    }
+};
+
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename RetConv, typename... ArgConvs>
 struct Invoker<Ret (Args...), fptr, callconv::Register<RetConv (ArgConvs...)>>
 {
-    static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *)
+    static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *refcon)
     {
-        return 0;
+        syn68k_addr_t retaddr = POPADDR();
+        Ret retval = InvokerRec<Ret (Args...), fptr, List<>, List<Args...>, List<ArgConvs...>>::invokeFrom68K(addr, refcon);
+        RetConv::set(retval);  // ### double conversion?
+        return retaddr;
+    }
+};
+template<typename... Args, void (*fptr)(Args...), typename RetConv, typename... ArgConvs>
+struct Invoker<void (Args...), fptr, callconv::Register<RetConv (ArgConvs...)>>
+{
+    static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *refcon)
+    {
+        syn68k_addr_t retaddr = POPADDR();
+        InvokerRec<void (Args...), fptr, List<>, List<Args...>, List<ArgConvs...>>::invokeFrom68K(addr, refcon);
+        return retaddr;
+    }
+};
+
+
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename RetConv, typename ArgConvs, typename Extra1, typename Extras>
+struct Invoker<Ret (Args...), fptr, callconv::Register<RetConv (ArgConvs...), Extra1, Extras>>
+{
+    static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *refcon)
+    {
+        Extra1 state;
+        syn68k_addr_t retval = Invoker<Ret(Args...), fptr, callconv::Register<RetConv (ArgConvs...), Extras>>::invokeFrom68K(addr,refcon);
+        return state.afterwards(retval);
     }
 };
 
@@ -417,14 +501,17 @@ template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno, typen
 void
 PascalTrap<Ret (Args...), fptr, trapno, CallConv>::init()
 {
-    WrappedFunction<Ret (Args...), fptr>::init();
+    WrappedFunction<Ret (Args...), fptr, CallConv>::init();
     if(trapno & TOOLBIT)
     {
         toolflags[trapno & 0x3FF] = true;
         tooltraptable[trapno & 0x3FF] = US_TO_SYN68K((void*)this->guestFP);
     }
     else
+    {
         osflags[trapno & 0xFF] = true;
+        ostraptable[trapno & 0xFF] = US_TO_SYN68K((void*)this->guestFP);
+    }
 }
 
 

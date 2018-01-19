@@ -16,26 +16,17 @@ namespace callconv
 {
 class Pascal { };
 
-template<typename T>
+template<typename T, typename... Extras>
 class Register { };
+template <int n> struct A;
+template <int n> struct D;
+template <int mask> struct TrapBit;
+template<typename loc> struct Out;
+template<typename loc> struct InOut;
 
-template<int n> struct A
-{
-    static uint32_t get() { return EM_AREG(n); }
-    static void set(uint32_t x) { EM_AREG(n) = x; }
-};
+template<typename Loc> struct ReturnMemErr;
+struct CCFromD0;
 
-template<int n> struct D
-{
-    static uint32_t get() { return EM_DREG(n); }
-    static void set(uint32_t x) { EM_DREG(n) = x; }
-};
-
-
-template<int mask> struct TrapBit
-{
-    static uint32_t get() { return !!(EM_D1 & mask); }
-};
 }
 
 
