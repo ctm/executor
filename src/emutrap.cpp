@@ -42,22 +42,6 @@ using namespace Executor;
  *
  */
 
-#define SYN68K_TO_US_CHECK0_CHECKNEG1(addr)                                     \
-    ({                                                                          \
-        syn68k_addr_t __t;                                                      \
-                                                                                \
-        __t = addr;                                                             \
-        (__t == (syn68k_addr_t)-1) ? (uint16_t *)-1 : SYN68K_TO_US_CHECK0(__t); \
-    })
-
-#define US_TO_SYN68K_CHECK0_CHECKNEG1(addr)                                 \
-    ({                                                                      \
-        void *__t;                                                          \
-                                                                            \
-        __t = addr;                                                         \
-        (__t == (void *)-1) ? (syn68k_addr_t)-1 : US_TO_SYN68K_CHECK0(__t); \
-    })
-
 syn68k_addr_t Executor::PascalToCCall(syn68k_addr_t ignoreme,
                                       ptocblock_t *infop)
 {

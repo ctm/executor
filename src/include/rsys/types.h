@@ -40,4 +40,13 @@ typedef uint64_t uint64_t;
 #define UINT32_MAX ((uint32_t)0xFFFFFFFF)
 #endif
 
+namespace Executor
+{
+struct Point
+{
+    int16_t v;
+    int16_t h;
+};
+}
+
 #endif /* !_RSYS_TYPES_H_ */

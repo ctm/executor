@@ -31,6 +31,7 @@ struct NamedThing
 
 #include <iostream>
 #include <cctype>
+#include <iomanip>
 
 using namespace Executor;
 using namespace Executor::functions;
@@ -41,13 +42,21 @@ bool osflags[0x100];
 template<typename F, F* fptr>
 struct LoggedFunction;
 
-struct Nest
+static thread_local int nestingLevel = 0;
+
+void functions::resetNestingLevel()
 {
-    Nest() { ++level; }
-    ~Nest() { --level; }
-    static thread_local int level;
-};
-thread_local int Nest::level = 0;
+    nestingLevel  = 0;
+}
+static void indent()
+{
+    for(int i = 0; i < nestingLevel; i++)
+        std::cout << "  ";
+}
+static bool loggingActive()
+{
+    return nestingLevel == 0;
+}
 
 void logEscapedChar(unsigned char c)
 {
@@ -59,10 +68,69 @@ void logEscapedChar(unsigned char c)
         std::cout << "\\0" << std::oct << (unsigned)c << std::dec;
 }
 
+bool canConvertBack(const void* p)
+{
+    if(!p || p == (const void*) -1)
+        return true;
+#if SIZEOF_VOID_P == 4
+    bool valid = true;
+#else
+    bool valid = false;
+    for(int i = 0; i < 4; i++)
+    {
+        if((uintptr_t)p >= ROMlib_offsets[i] &&
+            (uintptr_t)p < ROMlib_offsets[i] + ROMlib_sizes[i])
+            valid = true;
+    }
+#endif
+    return valid;
+}
+
+bool validAddress(const void* p)
+{
+    if(!p)
+        return false;
+    if( (uintptr_t)p & 1 )
+        return false;
+#if SIZEOF_VOID_P == 4
+    bool valid = true;
+#else
+    bool valid = false;
+    for(int i = 0; i < 4; i++)
+    {
+        if((uintptr_t)p >= ROMlib_offsets[i] &&
+            (uintptr_t)p < ROMlib_offsets[i] + ROMlib_sizes[i])
+            valid = true;
+    }
+#endif
+    if(!valid)
+        return false;
+
+    return true;
+}
+
+bool validAddress(syn68k_addr_t p)
+{
+    if(p == 0 || (p & 1))
+        return false;
+    return validAddress(SYN68K_TO_US(p));
+}
+
+template<class T>
+bool validAddress(GUEST<T*> p)
+{
+    return validAddress(p.raw_host_order());
+}
+
 template<typename T>
-void logValue(T arg)
+void logValue(const T& arg)
 {
     std::cout << "?";
+}
+template<class T>
+void logValue(const GuestWrapper<T>& p)
+{
+    logValue(p.get());
 }
 
 void logValue(char x)
@@ -106,13 +174,58 @@ void logValue(uint32_t x)
 }
 void logValue(unsigned char* p)
 {
-    std::cout << "0x" << std::hex << US_TO_SYN68K(p) << std::dec;
-    if(p && p != (unsigned char*)-1)
+    std::cout << "0x" << std::hex << US_TO_SYN68K_CHECK0_CHECKNEG1(p) << std::dec;
+    if(validAddress(p) && validAddress(p+256))
     {
         std::cout << " = \"\\p";
         for(int i = 1; i <= p[0]; i++)
             logEscapedChar(p[i]);
         std::cout << '"';
+    }
+}
+void logValue(const void* p)
+{
+    if(canConvertBack(p))
+        std::cout << "0x" << std::hex << US_TO_SYN68K_CHECK0_CHECKNEG1(p) << std::dec;
+    else
+        std::cout << "?";
+}
+void logValue(void* p)
+{
+    if(canConvertBack(p))
+        std::cout << "0x" << std::hex << US_TO_SYN68K_CHECK0_CHECKNEG1(p) << std::dec;
+    else
+        std::cout << "?";
+}
+void logValue(ProcPtr p)
+{
+    if(canConvertBack(p))
+        std::cout << "0x" << std::hex << US_TO_SYN68K_CHECK0_CHECKNEG1(p) << std::dec;
+    else
+        std::cout << "?";
+}
+
+template<class T>
+void logValue(T* p)
+{
+    if(canConvertBack(p))
+        std::cout << "0x" << std::hex << US_TO_SYN68K_CHECK0_CHECKNEG1(p) << std::dec;
+    else
+        std::cout << "?";
+    if(validAddress(p))
+    {
+        std::cout << " => ";
+        logValue(*p);
+    }
+}
+template<class T>
+void logValue(GuestWrapper<T*> p)
+{
+    std::cout << "0x" << std::hex << p.raw() << std::dec;
+    if(validAddress(p.raw_host_order()))
+    {
+        std::cout << " => ";
+        logValue(*(p.get()));
     }
 }
 
@@ -136,38 +249,36 @@ void logList(Arg1 a, Arg2 b, Args... args)
 template<typename... Args>
 void logTrapCall(const char* trapname, Args... args)
 {
-    if(Nest::level > 2)
+    if(!loggingActive())
         return;
-    for(int i = 1; i < Nest::level; i++)
-        std::cout << "  ";
+    printf("Hello, world.\n");
+    indent();
     std::cout << trapname << "(";
     logList(args...);
-    std::cout << ")\n";
+    std::cout << ")\n" << std::flush;
 }
 
 template<typename Ret, typename... Args>
 void logTrapValReturn(const char* trapname, Ret ret, Args... args)
 {
-    if(Nest::level > 2)
+    if(!loggingActive())
         return;
-    for(int i = 1; i < Nest::level; i++)
-        std::cout << "  ";
+    indent();
     std::cout << "returning: " << trapname << "(";
     logList(args...);
     std::cout << ") => ";
     logValue(ret);
-    std::cout << std::endl;
+    std::cout << std::endl << std::flush;
 }
 template<typename... Args>
 void logTrapVoidReturn(const char* trapname, Args... args)
 {
-    if(Nest::level > 2)
+    if(!loggingActive())
         return;
-    for(int i = 1; i < Nest::level; i++)
-        std::cout << "  ";
+    indent();
     std::cout << "returning: " << trapname << "(";
     logList(args...);
-    std::cout << ")\n";
+    std::cout << ")\n" << std::flush;
 }
 
 
@@ -178,7 +289,9 @@ struct LoggedFunction<void (Args...), fptr>
     {
         const char *fname = NamedThing<void (*)(Args...), fptr>::name;
         logTrapCall(fname, args...);
+        nestingLevel++;
         fptr(args...);
+        nestingLevel--;
         logTrapVoidReturn(fname, args...);
     }
 };
@@ -190,50 +303,99 @@ struct LoggedFunction<Ret (Args...), fptr>
     {
         const char *fname = NamedThing<Ret (*)(Args...), fptr>::name;
         logTrapCall(fname, args...);
+        nestingLevel++;
         Ret retval = fptr(args...);
+        nestingLevel--;
         logTrapValReturn(fname, retval, args...);
         return retval;
     }
 };
 
+void dumpRegsAndStack()
+{
+    std::cout << std::hex << std::showbase << std::setfill('0');
+    std::cout << "D0=" << std::setw(8) << EM_A0 << " ";
+    std::cout << "D1=" << std::setw(8) << EM_A0 << " ";
+    std::cout << "A0=" << std::setw(8) << EM_A0 << " ";
+    std::cout << "A1=" << std::setw(8) << EM_A0 << " ";
+    std::cout << std::noshowbase;
+    std::cout << "Stack: ";
+    uint8_t *p = (uint8_t*)SYN68K_TO_US(EM_A7);
+    for(int i = 0; i < 12; i++)
+        std::cout << std::setfill('0') << std::setw(2) << (unsigned)p[i] << " ";
+    std::cout << std::dec;
+}
 
-template<syn68k_addr_t (*fptr)(syn68k_addr_t, void **)>
+template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *)>
+syn68k_addr_t untypedLoggedFunction(syn68k_addr_t addr, void * param)
+{
+    const char *fname = NamedThing<syn68k_addr_t (*)(syn68k_addr_t, void *), fptr>::name;
+    if(loggingActive())
+    {
+        indent();
+        std::cout << fname << " ";
+        dumpRegsAndStack();
+        std::cout << std::endl;
+    }
+    nestingLevel++;
+    syn68k_addr_t retaddr = (*fptr)(addr, param);
+    nestingLevel--;
+    if(loggingActive())
+    {
+        indent();
+        std::cout << "returning: " << fname << " ";
+        dumpRegsAndStack();
+        std::cout << std::endl << std::flush;
+    }
+    return retaddr;
+}
+
+template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *)>
 ProcPtr Raw68KFunction<fptr>::guestFP;
 
-template<syn68k_addr_t (*fptr)(syn68k_addr_t, void **)>
+template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *)>
 void Raw68KFunction<fptr>::init()
 {
-    guestFP = (ProcPtr)SYN68K_TO_US(callback_install((callback_handler_t)fptr, nullptr));    
+    guestFP = (ProcPtr)SYN68K_TO_US(callback_install(&untypedLoggedFunction<fptr>, nullptr));    
 }
 
-template<typename Ret, typename... Args, Ret (*fptr)(Args...)>
-UPP<Ret (Args...)> WrappedFunction<Ret (Args...), fptr>::guestFP;
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
+UPP<Ret (Args...)> WrappedFunction<Ret (Args...), fptr, CallConv>::guestFP;
+
+
+template<typename F, F *fptr, typename CallConv>
+struct Invoker;
 
 template<typename Ret, typename... Args, Ret (*fptr)(Args...)>
+struct Invoker<Ret (Args...), fptr, callconv::Pascal>
+{
+    static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *)
+    {
+        static ptocblock_t ptocblock { (void*)fptr, ptoc(fptr) };
+        return PascalToCCall(addr, &ptocblock);
+    }
+};
+
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename RetConv, typename ArgConvs>
+struct Invoker<Ret (Args...), fptr, callconv::Register<RetConv (ArgConvs...)>>
+{
+    static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *)
+    {
+        return 0;
+    }
+};
+
+
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
 void
-WrappedFunction<Ret (Args...), fptr>::init()
+WrappedFunction<Ret (Args...), fptr, CallConv>::init()
 {
-//    static ptocblock_t ptocblock { (void*)fptr, ptoc(fptr) };
-//    guestFP = (UPP<Ret (Args...)>)SYN68K_TO_US(callback_install((callback_handler_t)&PascalToCCall, &ptocblock));    
     guestFP = (UPP<Ret (Args...)>)SYN68K_TO_US(callback_install(
-        (callback_handler_t)WrappedFunction<Ret (Args...), fptr>::invokeFrom68K, nullptr));    
+        Invoker<Ret (Args...), LoggedFunction<Ret (Args...),fptr>::call, CallConv>
+            ::invokeFrom68K, nullptr));    
 }
 
-template<typename Ret, typename... Args, Ret (*fptr)(Args...)>
-syn68k_addr_t
-WrappedFunction<Ret (Args...), fptr>::invokeFrom68K(syn68k_addr_t addr, void **)
-{
-    Nest nest;
-    Ret (*fptr2)(Args...);
-    fptr2 = LoggedFunction<Ret (Args...),fptr>::call;
-    static ptocblock_t ptocblock { (void*)fptr2, ptoc(fptr) };
-    return PascalToCCall(addr, &ptocblock);
-}
-
-
-
-
-template<syn68k_addr_t (*fptr)(syn68k_addr_t, void **), int trapno>
+template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *), int trapno>
 void
 Raw68KTrap<fptr, trapno>::init()
 {
@@ -251,9 +413,9 @@ Raw68KTrap<fptr, trapno>::init()
 }
 
 
-template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno>
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno, typename CallConv>
 void
-PascalTrap<Ret (Args...), fptr, trapno>::init()
+PascalTrap<Ret (Args...), fptr, trapno, CallConv>::init()
 {
     WrappedFunction<Ret (Args...), fptr>::init();
     if(trapno & TOOLBIT)
@@ -266,9 +428,9 @@ PascalTrap<Ret (Args...), fptr, trapno>::init()
 }
 
 
-template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno>
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno, typename CallConv>
 Ret
-PascalTrap<Ret (Args...), fptr, trapno>::operator()(Args... args) const
+PascalTrap<Ret (Args...), fptr, trapno, CallConv>::operator()(Args... args) const
 {
     if((trapno & TOOLBIT) == 0)
         return (*fptr)(args...);

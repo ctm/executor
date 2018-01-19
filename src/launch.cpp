@@ -1294,6 +1294,7 @@ Executor::NewLaunch(StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockRe
         }
         else
             longjmp(buf, 1);
+        functions::resetNestingLevel();
 
         retval = noErr;
         reset_adb_vector();

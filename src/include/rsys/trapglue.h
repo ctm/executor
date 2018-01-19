@@ -1,5 +1,6 @@
 #if !defined(__TRAPGLUE__)
 #define __TRAPGLUE__
+#include <syn68k_public.h>
 
 namespace Executor
 {

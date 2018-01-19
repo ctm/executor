@@ -80,6 +80,22 @@ inline uint32_t SwapTyped(uint32_t x) { return swap32(x); }
 inline int32_t SwapTyped(int32_t x) { return swap32((uint32_t)x); }
 #endif
 
+inline uint16_t *SYN68K_TO_US_CHECK0_CHECKNEG1(syn68k_addr_t addr)
+{
+    if(addr == (syn68k_addr_t)-1)
+        return (uint16_t*) -1;
+    else
+        return SYN68K_TO_US_CHECK0(addr);
+}
+
+inline syn68k_addr_t US_TO_SYN68K_CHECK0_CHECKNEG1(const void* addr)
+{
+    if(addr == (void*)-1)
+        return (syn68k_addr_t) -1;
+    else
+        return US_TO_SYN68K_CHECK0(addr);
+}
+
 // USE_PACKED_HIDDENVALUE - control which one of two versions
 // of template struct/union HiddenValue to use.
 
@@ -153,6 +169,16 @@ struct GuestWrapperBase
         hidden.raw(x);
     }
 
+    uint32_t raw_host_order() const
+    {
+        return get();
+    }
+    void raw_host_order(uint32_t x)
+    {
+        return set(x);
+    }
+
+
     void raw_and(RawGuestType x)
     {
         hidden.raw(hidden.raw() & x);
@@ -189,18 +215,12 @@ public:
     WrappedType get() const
     {
         uint32_t rawp = this->raw();
-        if(rawp)
-            return (TT *)(SYN68K_TO_US((uint32_t)swap32(rawp)));
-        else
-            return nullptr;
+        return (TT *)(SYN68K_TO_US_CHECK0_CHECKNEG1((uint32_t)swap32(rawp)));
     }
 
     void set(TT *ptr)
     {
-        if(ptr)
-            this->raw(swap32(US_TO_SYN68K(ptr)));
-        else
-            this->raw(0);
+        this->raw(swap32(US_TO_SYN68K_CHECK0_CHECKNEG1(ptr)));
     }
 
     RawGuestType raw() const
@@ -212,6 +232,16 @@ public:
     {
         p.raw(x);
     }
+
+    uint32_t raw_host_order() const
+    {
+        return swap32(this->raw());
+    }
+    void raw_host_order(uint32_t x)
+    {
+        this->raw(swap32(x));
+    }
+
 };
 
 template<typename TT>
@@ -335,12 +365,6 @@ bool operator!=(GuestWrapper<TT *> a, std::nullptr_t)
     struct is_guest_struct \
     {                      \
     }
-
-struct Point
-{
-    INTEGER v;
-    INTEGER h;
-};
 
 template<>
 struct GuestWrapper<Point>
@@ -492,18 +516,12 @@ public:
     WrappedType get() const
     {
         uint32_t rawp = this->raw();
-        if(rawp)
-            return WrappedType(SYN68K_TO_US((uint32_t)swap32(rawp)));
-        else
-            return nullptr;
+        return WrappedType(SYN68K_TO_US_CHECK0_CHECKNEG1((uint32_t)swap32(rawp)));
     }
 
     void set(WrappedType ptr)
     {
-        if(ptr)
-            this->raw(swap32(US_TO_SYN68K(ptr.ptr)));
-        else
-            this->raw(0);
+        this->raw(swap32(US_TO_SYN68K_CHECK0_CHECKNEG1(ptr.ptr)));
     }
 
     RawGuestType raw() const
@@ -514,6 +532,15 @@ public:
     void raw(RawGuestType x)
     {
         p.raw(x);
+    }
+
+    uint32_t raw_host_order() const
+    {
+        return swap32(this->raw());
+    }
+    void raw_host_order(uint32_t x)
+    {
+        this->raw(swap32(x));
     }
 
     Ret operator()(Args... args)
