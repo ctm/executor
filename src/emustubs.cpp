@@ -1808,7 +1808,7 @@ STUB(Delay)
 {
     LONGINT tempp;
 
-    // FIXME: #warning is a0 really the argument to delay?  That sounds weird
+    // Yes, a0 is really the argument to Delay.  Weird, but true.
     Delay(EM_A0, &tempp);
     EM_D0 = tempp;
     RTS();
