@@ -502,15 +502,18 @@ void
 PascalTrap<Ret (Args...), fptr, trapno, CallConv>::init()
 {
     WrappedFunction<Ret (Args...), fptr, CallConv>::init();
-    if(trapno & TOOLBIT)
+    if(trapno)
     {
-        toolflags[trapno & 0x3FF] = true;
-        tooltraptable[trapno & 0x3FF] = US_TO_SYN68K((void*)this->guestFP);
-    }
-    else
-    {
-        osflags[trapno & 0xFF] = true;
-        ostraptable[trapno & 0xFF] = US_TO_SYN68K((void*)this->guestFP);
+        if(trapno & TOOLBIT)
+        {
+            toolflags[trapno & 0x3FF] = true;
+            tooltraptable[trapno & 0x3FF] = US_TO_SYN68K((void*)this->guestFP);
+        }
+        else
+        {
+            osflags[trapno & 0xFF] = true;
+            ostraptable[trapno & 0xFF] = US_TO_SYN68K((void*)this->guestFP);
+        }
     }
 }
 
