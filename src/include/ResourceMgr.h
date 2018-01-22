@@ -214,13 +214,13 @@ PASCAL_TRAP(UseResFile, 0xA998);
 extern void C_ReadPartialResource(Handle resource,
                                               int32_t offset,
                                               Ptr buffer, int32_t count);
-PASCAL_SUBTRAP(ReadPartialResource, 0xA822, ResourceDispatch);
+PASCAL_SUBTRAP(ReadPartialResource, 0xA822, 0x0001, ResourceDispatch);
 extern void C_WritePartialResource(Handle resource,
                                                int32_t offset,
                                                Ptr buffer, int32_t count);
-PASCAL_SUBTRAP(WritePartialResource, 0xA822, ResourceDispatch);
+PASCAL_SUBTRAP(WritePartialResource, 0xA822, 0x0002, ResourceDispatch);
 extern void C_SetResourceSize(Handle resource, int32_t size);
-PASCAL_SUBTRAP(SetResourceSize, 0xA822, ResourceDispatch);
+PASCAL_SUBTRAP(SetResourceSize, 0xA822, 0x0003, ResourceDispatch);
 
 extern Handle C_GetNextFOND(Handle fondHandle);
 }

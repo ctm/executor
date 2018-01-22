@@ -51,19 +51,19 @@ enum
 };
 
 extern BOOLEAN C_HMGetBalloons(void);
-PASCAL_SUBTRAP(HMGetBalloons, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMGetBalloons, 0xA830, 0x0003, Pack14);
 
 extern OSErr C_HMSetBalloons(BOOLEAN flag);
-PASCAL_SUBTRAP(HMSetBalloons, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMSetBalloons, 0xA830, 0x0104, Pack14);
 
 extern BOOLEAN C_HMIsBalloon(void);
-PASCAL_SUBTRAP(HMIsBalloon, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMIsBalloon, 0xA830, 0x0007, Pack14);
 
 extern OSErr C_HMShowBalloon(HMMessageRecord *msgp, Point tip,
                                   RectPtr alternaterectp, Ptr tipprocptr,
                                   INTEGER proc, INTEGER variant,
                                   INTEGER method);
-PASCAL_SUBTRAP(HMShowBalloon, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMShowBalloon, 0xA830, 0x0B01, Pack14);
 
 extern OSErr C_HMShowMenuBalloon(INTEGER item, INTEGER menuid,
                                       LONGINT flags,
@@ -71,57 +71,57 @@ extern OSErr C_HMShowMenuBalloon(INTEGER item, INTEGER menuid,
                                       RectPtr alternaterectp,
                                       Ptr tipproc, INTEGER proc,
                                       INTEGER variant);
-PASCAL_SUBTRAP(HMShowMenuBalloon, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMShowMenuBalloon, 0xA830, 0x0E05, Pack14);
 
 extern OSErr C_HMRemoveBalloon(void);
-PASCAL_SUBTRAP(HMRemoveBalloon, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMRemoveBalloon, 0xA830, 0x0002, Pack14);
 
 extern OSErr C_HMGetHelpMenuHandle(GUEST<MenuHandle> *mhp);
-PASCAL_SUBTRAP(HMGetHelpMenuHandle, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMGetHelpMenuHandle, 0xA830, 0x0200, Pack14);
 
 extern OSErr C_HMGetFont(GUEST<INTEGER> *fontp);
-PASCAL_SUBTRAP(HMGetFont, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMGetFont, 0xA830, 0x020A, Pack14);
 
 extern OSErr C_HMGetFontSize(GUEST<INTEGER> *sizep);
-PASCAL_SUBTRAP(HMGetFontSize, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMGetFontSize, 0xA830, 0x020B, Pack14);
 
 extern OSErr C_HMSetFont(INTEGER font);
-PASCAL_SUBTRAP(HMSetFont, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMSetFont, 0xA830, 0x0108, Pack14);
 
 extern OSErr C_HMSetFontSize(INTEGER size);
-PASCAL_SUBTRAP(HMSetFontSize, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMSetFontSize, 0xA830, 0x0109, Pack14);
 
 extern OSErr C_HMSetDialogResID(INTEGER resid);
-PASCAL_SUBTRAP(HMSetDialogResID, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMSetDialogResID, 0xA830, 0x010C, Pack14);
 
 extern OSErr C_HMGetDialogResID(GUEST<INTEGER> *residp);
-PASCAL_SUBTRAP(HMGetDialogResID, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMGetDialogResID, 0xA830, 0x0213, Pack14);
 
 extern OSErr C_HMSetMenuResID(INTEGER menuid, INTEGER resid);
-PASCAL_SUBTRAP(HMSetMenuResID, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMSetMenuResID, 0xA830, 0x020D, Pack14);
 
 extern OSErr C_HMGetMenuResID(GUEST<INTEGER> *menuidp, GUEST<INTEGER> *residp);
-PASCAL_SUBTRAP(HMGetMenuResID, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMGetMenuResID, 0xA830, 0x0314, Pack14);
 
 extern OSErr C_HMScanTemplateItems(INTEGER whichid,
                                         INTEGER whicresfile,
                                         ResType whictype);
-PASCAL_SUBTRAP(HMScanTemplateItems, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMScanTemplateItems, 0xA830, 0x0410, Pack14);
 
 extern OSErr C_HMBalloonRect(HMMessageRecord *messp, Rect *rectp);
-PASCAL_SUBTRAP(HMBalloonRect, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMBalloonRect, 0xA830, 0x040E, Pack14);
 
 extern OSErr C_HMBalloonPict(HMMessageRecord *messp,
                                   GUEST<PicHandle> *pictp);
-PASCAL_SUBTRAP(HMBalloonPict, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMBalloonPict, 0xA830, 0x040F, Pack14);
 
 extern OSErr C_HMGetBalloonWindow(GUEST<WindowPtr> *windowpp);
-PASCAL_SUBTRAP(HMGetBalloonWindow, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMGetBalloonWindow, 0xA830, 0x0215, Pack14);
 
 extern OSErr C_HMExtractHelpMsg(ResType type, INTEGER resid,
                                      INTEGER msg, INTEGER state,
                                      HMMessageRecord *helpmsgp);
-PASCAL_SUBTRAP(HMExtractHelpMsg, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMExtractHelpMsg, 0xA830, 0x0711, Pack14);
 
 extern OSErr C_HMGetIndHelpMsg(ResType type, INTEGER resid,
                                INTEGER msg, INTEGER state,
@@ -131,7 +131,7 @@ extern OSErr C_HMGetIndHelpMsg(ResType type, INTEGER resid,
                                HMMessageRecord *helpmsgp,
                                GUEST<INTEGER> *count);
 
-PASCAL_SUBTRAP(HMGetIndHelpMsg, 0xA830, Pack14);
+PASCAL_SUBTRAP(HMGetIndHelpMsg, 0xA830, 0x1306, Pack14);
 }
 
 #endif /* !_HELPMGR_H_ */

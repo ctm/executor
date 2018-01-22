@@ -193,18 +193,18 @@ extern Size StackSpace(void);
 
 /* temporary memory functions; see tempmem.c */
 extern int32_t C_TempFreeMem(void);
-PASCAL_SUBTRAP(TempFreeMem, 0xA88F, OSDispatch);
+PASCAL_SUBTRAP(TempFreeMem, 0xA88F, 0x0018, OSDispatch);
 extern Size C_TempMaxMem(GUEST<Size> *grow);
-PASCAL_SUBTRAP(TempMaxMem, 0xA88F, OSDispatch);
+PASCAL_SUBTRAP(TempMaxMem, 0xA88F, 0x0015, OSDispatch);
 extern Ptr C_TempTopMem(void);
-PASCAL_SUBTRAP(TempTopMem, 0xA88F, OSDispatch);
+PASCAL_SUBTRAP(TempTopMem, 0xA88F, 0x0016, OSDispatch);
 extern Handle C_TempNewHandle(Size logical_size, GUEST<OSErr> *result_code);
-PASCAL_SUBTRAP(TempNewHandle, 0xA88F, OSDispatch);
+PASCAL_SUBTRAP(TempNewHandle, 0xA88F, 0x001D, OSDispatch);
 extern void C_TempHLock(Handle h, GUEST<OSErr> *result_code);
-PASCAL_SUBTRAP(TempHLock, 0xA88F, OSDispatch);
+PASCAL_SUBTRAP(TempHLock, 0xA88F, 0x001E, OSDispatch);
 extern void C_TempHUnlock(Handle h, GUEST<OSErr> *result_code);
-PASCAL_SUBTRAP(TempHUnlock, 0xA88F, OSDispatch);
+PASCAL_SUBTRAP(TempHUnlock, 0xA88F, 0x001F, OSDispatch);
 extern void C_TempDisposeHandle(Handle h, GUEST<OSErr> *result_code);
-PASCAL_SUBTRAP(TempDisposeHandle, 0xA88F, OSDispatch);
+PASCAL_SUBTRAP(TempDisposeHandle, 0xA88F, 0x0020, OSDispatch);
 }
 #endif /* _MEMORY_MGR_H_ */

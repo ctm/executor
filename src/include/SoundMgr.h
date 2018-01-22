@@ -216,172 +216,172 @@ typedef uint32_t UnsignedFixed;
 typedef Ptr CompressionInfoPtr;
 
 extern void C_SndGetSysBeepState(GUEST<INTEGER> *statep);
-PASCAL_SUBTRAP(SndGetSysBeepState, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SndGetSysBeepState, 0xA800, 0x02180008, SoundDispatch);
 
 extern OSErr C_SndSetSysBeepState(INTEGER state);
-PASCAL_SUBTRAP(SndSetSysBeepState, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SndSetSysBeepState, 0xA800, 0x011C0008, SoundDispatch);
 
 extern OSErr C_SndChannelStatus(SndChannelPtr chanp, INTEGER length,
                                      SCStatusPtr statusp);
-PASCAL_SUBTRAP(SndChannelStatus, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SndChannelStatus, 0xA800, 0x05100008, SoundDispatch);
 
 extern OSErr C_SndManagerStatus(INTEGER length, SMStatusPtr statusp);
-PASCAL_SUBTRAP(SndManagerStatus, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SndManagerStatus, 0xA800, 0x03140008, SoundDispatch);
 
 extern NumVersion C_SndSoundManagerVersion(void);
-PASCAL_SUBTRAP(SndSoundManagerVersion, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SndSoundManagerVersion, 0xA800, 0x000C0008, SoundDispatch);
 
 extern NumVersion C_MACEVersion(void);
-PASCAL_SUBTRAP(MACEVersion, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(MACEVersion, 0xA800, 0x00000010, SoundDispatch);
 
 extern NumVersion C_SPBVersion(void);
-PASCAL_SUBTRAP(SPBVersion, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBVersion, 0xA800, 0x00000014, SoundDispatch);
 
 extern OSErr C_SndStartFilePlay(SndChannelPtr chanp,
                                      INTEGER refnum, INTEGER resnum, LONGINT buffersize, Ptr bufferp,
                                      AudioSelectionPtr theselectionp, ProcPtr completionp, BOOLEAN async);
-PASCAL_SUBTRAP(SndStartFilePlay, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SndStartFilePlay, 0xA800, 0x0D000008, SoundDispatch);
 
 extern OSErr C_SndPauseFilePlay(SndChannelPtr chanp);
-PASCAL_SUBTRAP(SndPauseFilePlay, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SndPauseFilePlay, 0xA800, 0x02040008, SoundDispatch);
 
 extern OSErr C_SndStopFilePlay(SndChannelPtr chanp, BOOLEAN async);
-PASCAL_SUBTRAP(SndStopFilePlay, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SndStopFilePlay, 0xA800, 0x03080008, SoundDispatch);
 
 extern OSErr C_SndPlayDoubleBuffer(SndChannelPtr chanp,
                                         SndDoubleBufferHeaderPtr paramp);
-PASCAL_SUBTRAP(SndPlayDoubleBuffer, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SndPlayDoubleBuffer, 0xA800, 0x04200008, SoundDispatch);
 
 extern void C_Comp3to1(Ptr inp, Ptr outp, LONGINT cnt,
                             Ptr instatep, Ptr outstatep, LONGINT numchannels, LONGINT whichchannel);
-PASCAL_SUBTRAP(Comp3to1, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(Comp3to1, 0xA800, 0x00040010, SoundDispatch);
 
 extern void C_Comp6to1(Ptr inp, Ptr outp, LONGINT cnt,
                             Ptr instatep, Ptr outstatep, LONGINT numchannels, LONGINT whichchannel);
-PASCAL_SUBTRAP(Comp6to1, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(Comp6to1, 0xA800, 0x000C0010, SoundDispatch);
 
 extern void C_Exp1to3(Ptr inp, Ptr outp, LONGINT cnt, Ptr instatep,
                            Ptr outstatep, LONGINT numchannels, LONGINT whichchannel);
-PASCAL_SUBTRAP(Exp1to3, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(Exp1to3, 0xA800, 0x00080010, SoundDispatch);
 
 extern void C_Exp1to6(Ptr inp, Ptr outp, LONGINT cnt, Ptr instatep,
                            Ptr outstatep, LONGINT numchannels, LONGINT whichchannel);
-PASCAL_SUBTRAP(Exp1to6, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(Exp1to6, 0xA800, 0x00100010, SoundDispatch);
 
 extern OSErr C_SndRecord(ProcPtr filterp, Point corner,
                               OSType quality, GUEST<Handle> *sndhandlep);
-PASCAL_SUBTRAP(SndRecord, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SndRecord, 0xA800, 0x08040014, SoundDispatch);
 
 extern OSErr C_SndRecordToFile(ProcPtr filterp, Point corner,
                                     OSType quality, INTEGER refnum);
-PASCAL_SUBTRAP(SndRecordToFile, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SndRecordToFile, 0xA800, 0x07080014, SoundDispatch);
 
 extern OSErr C_SPBOpenDevice(Str255 name, INTEGER permission,
                                   GUEST<LONGINT> *inrefnump);
-PASCAL_SUBTRAP(SPBOpenDevice, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBOpenDevice, 0xA800, 0x05180014, SoundDispatch);
 
 extern OSErr C_SPBCloseDevice(LONGINT inrefnum);
-PASCAL_SUBTRAP(SPBCloseDevice, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBCloseDevice, 0xA800, 0x021C0014, SoundDispatch);
 
 extern OSErr C_SPBRecord(SPBPtr inparamp, BOOLEAN async);
-PASCAL_SUBTRAP(SPBRecord, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBRecord, 0xA800, 0x03200014, SoundDispatch);
 
 extern OSErr C_SPBRecordToFile(INTEGER refnum, SPBPtr inparamp,
                                     BOOLEAN async);
-PASCAL_SUBTRAP(SPBRecordToFile, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBRecordToFile, 0xA800, 0x04240014, SoundDispatch);
 
 extern OSErr C_SPBPauseRecording(LONGINT refnum);
-PASCAL_SUBTRAP(SPBPauseRecording, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBPauseRecording, 0xA800, 0x02280014, SoundDispatch);
 
 extern OSErr C_SPBResumeRecording(LONGINT refnum);
-PASCAL_SUBTRAP(SPBResumeRecording, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBResumeRecording, 0xA800, 0x022C0014, SoundDispatch);
 
 extern OSErr C_SPBStopRecording(LONGINT refnum);
-PASCAL_SUBTRAP(SPBStopRecording, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBStopRecording, 0xA800, 0x02300014, SoundDispatch);
 
 extern OSErr C_SPBGetRecordingStatus(LONGINT refnum,
                                           GUEST<INTEGER> *recordingstatus, GUEST<INTEGER> *meterlevel,
                                           GUEST<LONGINT> *totalsampstorecord, GUEST<LONGINT> *numsampsrecorded,
                                           GUEST<LONGINT> *totalmsecstorecord, GUEST<LONGINT> *numbermsecsrecorded);
-PASCAL_SUBTRAP(SPBGetRecordingStatus, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBGetRecordingStatus, 0xA800, 0x0E340014, SoundDispatch);
 
 extern OSErr C_SPBGetDeviceInfo(LONGINT refnum, OSType info,
                                      Ptr infop);
-PASCAL_SUBTRAP(SPBGetDeviceInfo, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBGetDeviceInfo, 0xA800, 0x06380014, SoundDispatch);
 
 extern OSErr C_SPBSetDeviceInfo(LONGINT refnum, OSType info,
                                      Ptr infop);
-PASCAL_SUBTRAP(SPBSetDeviceInfo, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBSetDeviceInfo, 0xA800, 0x063C0014, SoundDispatch);
 
 extern OSErr C_SetupSndHeader(Handle sndhandle, INTEGER numchannels,
                                    Fixed rate, INTEGER size, OSType compresion, INTEGER basefreq,
                                    LONGINT numbytes, GUEST<INTEGER> *headerlenp);
-PASCAL_SUBTRAP(SetupSndHeader, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SetupSndHeader, 0xA800, 0x0D480014, SoundDispatch);
 
 extern OSErr C_SetupAIFFHeader(INTEGER refnum, INTEGER numchannels,
                                     Fixed samplerate, INTEGER samplesize, OSType compression,
                                     LONGINT numbytes, LONGINT numframes);
-PASCAL_SUBTRAP(SetupAIFFHeader, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SetupAIFFHeader, 0xA800, 0x0B4C0014, SoundDispatch);
 
 extern OSErr C_SPBSignInDevice(INTEGER refnum, Str255 name);
-PASCAL_SUBTRAP(SPBSignInDevice, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBSignInDevice, 0xA800, 0x030C0014, SoundDispatch);
 
 extern OSErr C_SPBSignOutDevice(INTEGER refnum);
-PASCAL_SUBTRAP(SPBSignOutDevice, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBSignOutDevice, 0xA800, 0x01100014, SoundDispatch);
 
 extern OSErr C_SPBGetIndexedDevice(INTEGER count, Str255 name,
                                         GUEST<Handle> *deviceiconhandlep);
-PASCAL_SUBTRAP(SPBGetIndexedDevice, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBGetIndexedDevice, 0xA800, 0x05140014, SoundDispatch);
 
 extern OSErr C_SPBMillisecondsToBytes(LONGINT refnum,
                                            GUEST<LONGINT> *millip);
-PASCAL_SUBTRAP(SPBMillisecondsToBytes, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBMillisecondsToBytes, 0xA800, 0x04400014, SoundDispatch);
 
 extern OSErr C_SPBBytesToMilliseconds(LONGINT refnum,
                                            GUEST<LONGINT> *bytecountp);
-PASCAL_SUBTRAP(SPBBytesToMilliseconds, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SPBBytesToMilliseconds, 0xA800, 0x04440014, SoundDispatch);
 
 extern OSErr C_GetSysBeepVolume(GUEST<LONGINT> *levelp);
-PASCAL_SUBTRAP(GetSysBeepVolume, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(GetSysBeepVolume, 0xA800, 0x02240018, SoundDispatch);
 
 extern OSErr C_SetSysBeepVolume(LONGINT level);
-PASCAL_SUBTRAP(SetSysBeepVolume, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SetSysBeepVolume, 0xA800, 0x02280018, SoundDispatch);
 
 extern OSErr C_GetDefaultOutputVolume(GUEST<LONGINT> *levelp);
-PASCAL_SUBTRAP(GetDefaultOutputVolume, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(GetDefaultOutputVolume, 0xA800, 0x022C0018, SoundDispatch);
 
 extern OSErr C_SetDefaultOutputVolume(LONGINT level);
-PASCAL_SUBTRAP(SetDefaultOutputVolume, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SetDefaultOutputVolume, 0xA800, 0x02300018, SoundDispatch);
 
 extern OSErr C_GetSoundHeaderOffset(Handle sndHandle, GUEST<LONGINT> *offset);
-PASCAL_SUBTRAP(GetSoundHeaderOffset, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(GetSoundHeaderOffset, 0xA800, 0x04040018, SoundDispatch);
 
 extern UnsignedFixed C_UnsignedFixedMulDiv(UnsignedFixed value,
                                                 UnsignedFixed multiplier,
                                                 UnsignedFixed divisor);
-PASCAL_SUBTRAP(UnsignedFixedMulDiv, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(UnsignedFixedMulDiv, 0xA800, 0x060C0018, SoundDispatch);
 
 extern OSErr C_GetCompressionInfo(INTEGER compressionID, OSType format,
                                        INTEGER numChannels,
                                        INTEGER sampleSize,
                                        CompressionInfoPtr cp);
-PASCAL_SUBTRAP(GetCompressionInfo, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(GetCompressionInfo, 0xA800, 0x07100018, SoundDispatch);
 
 extern OSErr C_SetSoundPreference(OSType theType, Str255 name,
                                        Handle settings);
-PASCAL_SUBTRAP(SetSoundPreference, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SetSoundPreference, 0xA800, 0x06340018, SoundDispatch);
 
 extern OSErr C_GetSoundPreference(OSType theType, Str255 name,
                                        Handle settings);
-PASCAL_SUBTRAP(GetSoundPreference, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(GetSoundPreference, 0xA800, 0x06380018, SoundDispatch);
 
 extern OSErr C_SndGetInfo(SndChannelPtr chan, OSType selector,
                                void *infoPtr);
-PASCAL_SUBTRAP(SndGetInfo, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SndGetInfo, 0xA800, 0x063C0018, SoundDispatch);
 
 extern OSErr C_SndSetInfo(SndChannelPtr chan, OSType selector,
                                void *infoPtr);
-PASCAL_SUBTRAP(SndSetInfo, 0xA800, SoundDispatch);
+PASCAL_SUBTRAP(SndSetInfo, 0xA800, 0x06400018, SoundDispatch);
 
 extern void StartSound(Ptr srec, LONGINT nb, ProcPtr comp);
 extern void StopSound(void);

@@ -584,49 +584,49 @@ PASCAL_TRAP(TEStylNew, 0xA83E);
 
 extern void C_SetStylHandle(TEStyleHandle theHandle,
                                         TEHandle teh);
-PASCAL_SUBTRAP(SetStylHandle, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(SetStylHandle, 0xA83D, 0x0005, TEDispatch);
 extern TEStyleHandle C_GetStylHandle(TEHandle teh);
-PASCAL_SUBTRAP(GetStylHandle, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(GetStylHandle, 0xA83D, 0x0004, TEDispatch);
 
 extern StScrpHandle C_GetStylScrap(TEHandle teh);
-PASCAL_SUBTRAP(GetStylScrap, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(GetStylScrap, 0xA83D, 0x0006, TEDispatch);
 
 extern void C_TEStylInsert(Ptr text, LONGINT length,
                                        StScrpHandle hST, TEHandle teh);
-PASCAL_SUBTRAP(TEStylInsert, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(TEStylInsert, 0xA83D, 0x0007, TEDispatch);
 extern INTEGER C_TEGetOffset(Point pt, TEHandle teh);
 PASCAL_TRAP(TEGetOffset, 0xA83C);
 
 extern LONGINT C_TEGetPoint(INTEGER offset, TEHandle teh);
-PASCAL_SUBTRAP(TEGetPoint, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(TEGetPoint, 0xA83D, 0x0008, TEDispatch);
 
 extern int32_t C_TEGetHeight(LONGINT endLine, LONGINT startLine, TEHandle teh);
-PASCAL_SUBTRAP(TEGetHeight, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(TEGetHeight, 0xA83D, 0x0009, TEDispatch);
 extern void C_TEGetStyle(INTEGER offset,
                                      TextStyle *theStyle, GUEST<INTEGER> *lineHeight, GUEST<INTEGER> *fontAscent,
                                      TEHandle teh);
-PASCAL_SUBTRAP(TEGetStyle, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(TEGetStyle, 0xA83D, 0x0003, TEDispatch);
 extern void C_TEStylPaste(TEHandle teh);
-PASCAL_SUBTRAP(TEStylPaste, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(TEStylPaste, 0xA83D, 0x0000, TEDispatch);
 
 extern void C_TESetStyle(INTEGER mode, TextStyle *newStyle,
                                      BOOLEAN redraw, TEHandle teh);
-PASCAL_SUBTRAP(TESetStyle, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(TESetStyle, 0xA83D, 0x0001, TEDispatch);
 extern void C_TEReplaceStyle(INTEGER mode,
                                          TextStyle *oldStyle, TextStyle *newStyle, BOOLEAN redraw, TEHandle teh);
-PASCAL_SUBTRAP(TEReplaceStyle, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(TEReplaceStyle, 0xA83D, 0x0002, TEDispatch);
 extern BOOLEAN C_TEContinuousStyle(GUEST<INTEGER> *modep,
                                                TextStyle *thestyle, TEHandle teh);
-PASCAL_SUBTRAP(TEContinuousStyle, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(TEContinuousStyle, 0xA83D, 0x000A, TEDispatch);
 extern void C_SetStylScrap(LONGINT start, LONGINT stop,
                                        StScrpHandle newstyles, BOOLEAN redraw, TEHandle teh);
-PASCAL_SUBTRAP(SetStylScrap, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(SetStylScrap, 0xA83D, 0x000B, TEDispatch);
 extern void C_TECustomHook(INTEGER sel, GUEST<ProcPtr> *addr,
                                        TEHandle teh);
-PASCAL_SUBTRAP(TECustomHook, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(TECustomHook, 0xA83D, 0x000C, TEDispatch);
 extern LONGINT C_TENumStyles(LONGINT start, LONGINT stop,
                                          TEHandle teh);
-PASCAL_SUBTRAP(TENumStyles, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(TENumStyles, 0xA83D, 0x000D, TEDispatch);
 extern void C_TEInit(void);
 PASCAL_TRAP(TEInit, 0xA9CC);
 
@@ -663,6 +663,6 @@ extern LONGINT TEGetScrapLen(void);
 extern void TESetScrapLen(LONGINT ln);
 extern int16_t C_TEFeatureFlag(int16_t feature, int16_t action,
                                            TEHandle te);
-PASCAL_SUBTRAP(TEFeatureFlag, 0xA83D, TEDispatch);
+PASCAL_SUBTRAP(TEFeatureFlag, 0xA83D, 0x000E, TEDispatch);
 }
 #endif /* _TEXTEDIT_H_ */

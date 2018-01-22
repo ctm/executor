@@ -4820,7 +4820,7 @@ static map_entry_t
             "TestControl", TestControl_PC,
         },
         {
-            "InitEditionPackVersion", C_InitEditionPack,
+            "InitEditionPackVersion", C_InitEditionPackVersion,
         },
         {
             "InvertRoundRect", C_InvertRoundRect,
