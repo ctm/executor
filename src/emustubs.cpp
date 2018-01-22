@@ -1070,7 +1070,7 @@ static selector_table_entry_t pack8_table[] = {
     { 0x0500, PTOCBLOCK(AEInstallSpecialHandler) },
     { 0x0501, PTOCBLOCK(AERemoveSpecialHandler) },
     { 0x052D, PTOCBLOCK(AEGetSpecialHandler) },
-    { 0x0536, PTOCBLOCK(AEREesolve) },
+    { 0x0536, PTOCBLOCK(AEResolve) },
     { 0x0603, PTOCBLOCK(AECoerceDesc) },
     { 0x0609, PTOCBLOCK(AEPutDesc) },
     /* AEPutParamDesc */
@@ -1188,7 +1188,7 @@ STUB(Pack12)
 static ptocblock_t palette_dispatch_ptoc_1[] = {
     PTOCBLOCK(Entry2Index), /* 0x00 */
     ZERO_PTOCBLOCK, /* 0x01 */
-    PTOCBLOCK(RestoreClutDevice), /* 0x02 */
+    PTOCBLOCK(RestoreDeviceClut), /* 0x02 */
     PTOCBLOCK(ResizePalette), /* 0x03 */
 };
 
@@ -1418,7 +1418,7 @@ STUB(Pack7)
 }
 
 static ptocblock_t pack11_ptoc0[] = {
-    PTOCBLOCK(InitEditionPack), /* 0x0100 */
+    PTOCBLOCK(InitEditionPackVersion), /* 0x0100 */
 };
 
 static ptocblock_t pack11_ptoc1[] = {

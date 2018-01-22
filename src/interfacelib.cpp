@@ -6049,7 +6049,7 @@ static map_entry_t
             "AllocCursor", C_AllocCursor,
         },
         {
-            "RestoreClutDevice", C_RestoreClutDevice,
+            "RestoreDeviceClut", C_RestoreDeviceClut,
         },
         {
             "ResizePalette", C_ResizePalette,

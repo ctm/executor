@@ -183,8 +183,8 @@ enum
     notThePublisherWrn = (-463),
 };
 
-extern OSErr C_InitEditionPack(INTEGER unused);
-PASCAL_SUBTRAP(InitEditionPack, 0xA82D, Pack11);
+extern OSErr C_InitEditionPackVersion(INTEGER unused);
+PASCAL_SUBTRAP(InitEditionPackVersion, 0xA82D, Pack11);
 extern OSErr C_NewSection(EditionContainerSpecPtr container,
                                       FSSpecPtr section_doc,
                                       SectionType kind, int32_t section_id,

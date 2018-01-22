@@ -501,8 +501,8 @@ PASCAL_TRAP(DisposCCursor, 0xAA26);
 extern void C_AllocCursor(void);
 PASCAL_TRAP(AllocCursor, 0xAA1D);
 
-extern void C_RestoreClutDevice(GDHandle);
-PASCAL_SUBTRAP(RestoreClutDevice, 0xAAA2, PaletteDispatch);
+extern void C_RestoreDeviceClut(GDHandle);
+PASCAL_SUBTRAP(RestoreDeviceClut, 0xAAA2, PaletteDispatch);
 extern void C_ResizePalette(PaletteHandle, INTEGER);
 PASCAL_SUBTRAP(ResizePalette, 0xAAA2, PaletteDispatch);
 extern INTEGER C_PMgrVersion();

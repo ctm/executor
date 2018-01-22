@@ -523,10 +523,10 @@ PASCAL_SUBTRAP(AEManagerInfo, 0xA816, Pack8);
 
 extern OSErr C_AEDisposeToken(AEDesc *theToken);
 PASCAL_SUBTRAP(AEDisposeToken, 0xA816, Pack8);
-extern OSErr C_AEREesolve(AEDesc *objectSpecifier,
+extern OSErr C_AEResolve(AEDesc *objectSpecifier,
                                       INTEGER callbackFlags,
                                       AEDesc *theToken);
-PASCAL_SUBTRAP(AEREesolve, 0xA816, Pack8);
+PASCAL_SUBTRAP(AEResolve, 0xA816, Pack8);
 extern OSErr C_AERemoveObjectAccessor(DescType desiredClass,
                                                   DescType containerType,
                                                   ProcPtr theAccessor,

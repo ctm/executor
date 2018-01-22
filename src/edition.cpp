@@ -8,7 +8,7 @@
 
 using namespace Executor;
 
-OSErr Executor::C_InitEditionPack(INTEGER unused)
+OSErr Executor::C_InitEditionPackVersion(INTEGER unused)
 {
     warning_unimplemented("someone is calling the edition manager");
     return noErr;
