@@ -111,6 +111,7 @@ typedef struct CIcon
 typedef GUEST<CIconPtr> *CIconHandle;
 
 /* icon utility function prototypes */
+DISPATCHER_TRAP(IconDispatch, 0xABC9, D0W);
 
 extern OSErr C_PlotIconID(const Rect *rect,
                                       IconAlignmentType align,

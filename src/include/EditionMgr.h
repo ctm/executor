@@ -183,6 +183,8 @@ enum
     notThePublisherWrn = (-463),
 };
 
+DISPATCHER_TRAP(Pack11, 0xA82D, D0W);
+
 extern OSErr C_InitEditionPackVersion(INTEGER unused);
 PASCAL_SUBTRAP(InitEditionPackVersion, 0xA82D, 0x0100, Pack11);
 extern OSErr C_NewSection(EditionContainerSpecPtr container,

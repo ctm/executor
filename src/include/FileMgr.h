@@ -681,6 +681,8 @@ extern OSErrRET PBDeleteFileIDRef(ParmBlkPtr pb, BOOLEAN async);
 extern OSErrRET PBResolveFileIDRef(ParmBlkPtr pb, BOOLEAN async);
 
 /* prototypes for the high level filesystem dispatch traps */
+DISPATCHER_TRAP(HighLevelFSDispatch, 0xAA52, D0W);
+
 extern OSErr C_FSMakeFSSpec(int16_t vRefNum, int32_t dir_id,
                                         Str255 file_name, FSSpecPtr spec);
 PASCAL_SUBTRAP(FSMakeFSSpec, 0xAA52, 0x0001, HighLevelFSDispatch);

@@ -26,6 +26,8 @@ enum
     kFontFolderType = FOURCC('f', 'o', 'n', 't'),
 };
 
+DISPATCHER_TRAP(AliasDispatch, 0xA823, D0W);
+
 extern OSErr C_FindFolder(int16_t vRefNum, OSType folderType,
                                       Boolean createFolder,
                                       GUEST<int16_t> *foundVRefNum,

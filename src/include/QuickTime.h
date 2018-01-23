@@ -23,6 +23,8 @@ typedef MovieRecord *Movie;
 
 typedef LONGINT TimeValue;
 
+DISPATCHER_TRAP(QuickTime, 0xAAAA, D0W);
+
 extern OSErr C_EnterMovies(void);
 PASCAL_SUBTRAP(EnterMovies, 0xAAAA, 0x0001, QuickTime);
 extern void C_ExitMovies(void);

@@ -87,6 +87,8 @@ enum
     lCloseMsg = 3,
 };
 
+DISPATCHER_TRAP(Pack0, 0xA9E7, StackW);
+
 extern void C_LFind(GUEST<INTEGER> *offsetp,
                                 GUEST<INTEGER> *lenp, Cell cell, ListHandle list);
 PASCAL_SUBTRAP(LFind, 0xA9E7, 0x0034, Pack0);

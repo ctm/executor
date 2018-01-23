@@ -312,6 +312,8 @@ const LowMemGlobal<AE_info_ptr> AE_info { 0x2B6 }; // AppleEvents AEGizmo (true)
 
 /* prototypes go here */
 
+DISPATCHER_TRAP(Pack8, 0xA816, D0W);
+
 extern OSErr C_AEGetCoercionHandler(DescType from_type, DescType to_type,
                                                 GUEST<CoerceDescProcPtr> *hdlr_out, GUEST<int32_t> *refcon_out,
                                                 GUEST<Boolean> *from_type_is_desc_p_out, Boolean system_handler_p);

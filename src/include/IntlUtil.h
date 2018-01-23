@@ -138,8 +138,7 @@ enum
     abbrevDate = 2,
 };
 
-
-/* DO NOT DELETE THIS LINE */
+DISPATCHER_TRAP(Pack6, 0xA9ED, StackW);
 
 extern void C_IUDatePString(LONGINT date,
                                         DateForm form, StringPtr p, Handle h);

@@ -213,6 +213,8 @@ const LowMemGlobal<INTEGER> fondid { 0xBC6 }; // FontMgr ToolEqu.a (true-b);
 const LowMemGlobal<Byte> FractEnable { 0xBF4 }; // FontMgr IMIV-32 (true);
 const LowMemGlobal<Handle> SynListHandle { 0xD32 }; // FontMgr IMV-182 (false);
 
+DISPATCHER_TRAP(FontDispatch, 0xA854, D0W);
+
 extern void C_InitFonts(void);
 PASCAL_TRAP(InitFonts, 0xA8FE);
 

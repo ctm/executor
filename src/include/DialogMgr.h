@@ -160,6 +160,8 @@ const LowMemGlobal<SoundProcPtr> DABeeper { 0xA9C }; // DialogMgr IMI-411 (true)
 const LowMemGlobal<Handle[4]> DAStrings { 0xAA0 }; // DialogMgr IMI-421 (true);
 const LowMemGlobal<INTEGER> DlgFont { 0xAFA }; // DialogMgr IMI-412 (true);
 
+DISPATCHER_TRAP(DialogDispatch, 0xAA68, D0W);
+
 extern INTEGER C_Alert(INTEGER id,
                                    ModalFilterProcPtr fp);
 PASCAL_TRAP(Alert, 0xA985);

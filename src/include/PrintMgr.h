@@ -181,6 +181,8 @@ typedef struct TPrDlg
 
 const LowMemGlobal<INTEGER> PrintErr { 0x944 }; // PrintMgr IMII-161 (true-b);
 
+DISPATCHER_TRAP(_PrGlue, 0xA8FD, StackL);
+
 extern INTEGER C_PrError(void);
 PASCAL_SUBTRAP(PrError, 0xA8FD, 0xBA000000, _PrGlue);
 extern void C_PrSetError(INTEGER iErr);
