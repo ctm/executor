@@ -1431,7 +1431,7 @@ int main(int argc, char **argv)
     }
 
     filltables();
-    Executor::functions::InitAction::execute();
+    Executor::functions::init();
 
     l = ostraptable[0x0FC];
     ((unsigned char *)jmpl_to_ResourceStub)[2] = l >> 24;

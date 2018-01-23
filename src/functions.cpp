@@ -355,9 +355,11 @@ template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *)>
 ProcPtr Raw68KFunction<fptr>::guestFP;
 
 template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *)>
-void Raw68KFunction<fptr>::init()
+Raw68KFunction<fptr>::Raw68KFunction()
 {
-    guestFP = (ProcPtr)SYN68K_TO_US(callback_install(&untypedLoggedFunction<fptr>, nullptr));    
+    initFunctions.push_back([]{
+        guestFP = (ProcPtr)SYN68K_TO_US(callback_install(&untypedLoggedFunction<fptr>, nullptr));    
+    });
 }
 
 namespace Executor::callconv
@@ -471,49 +473,53 @@ struct Invoker<Ret (Args...), fptr, callconv::Register<RetConv (ArgConvs...), Ex
 
 
 template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
-void
-WrappedFunction<Ret (Args...), fptr, CallConv>::init()
+WrappedFunction<Ret (Args...), fptr, CallConv>::WrappedFunction()
 {
-    guestFP = (UPP<Ret (Args...)>)SYN68K_TO_US(callback_install(
-        Invoker<Ret (Args...), LoggedFunction<Ret (Args...),fptr>::call, CallConv>
-            ::invokeFrom68K, nullptr));    
+    initFunctions.push_back([]{
+        guestFP = (UPP<Ret (Args...)>)SYN68K_TO_US(callback_install(
+            Invoker<Ret (Args...), LoggedFunction<Ret (Args...),fptr>::call, CallConv>
+                ::invokeFrom68K, nullptr));    
+    });
 }
 
 template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *), int trapno>
-void
-Raw68KTrap<fptr, trapno>::init()
+Raw68KTrap<fptr, trapno>::Raw68KTrap()
 {
-    Raw68KFunction<fptr>::init();
-    if(trapno & TOOLBIT)
+    if(trapno)
     {
-        toolflags[trapno & 0x3FF] = true;
-        tooltraptable[trapno & 0x3FF] = US_TO_SYN68K((void*)this->guestFP);
-    }
-    else
-    {
-        osflags[trapno & 0xFF] = true;
-        ostraptable[trapno & 0xFF] = US_TO_SYN68K((void*)this->guestFP);
+        initFunctions.push_back([]{
+            if(trapno & TOOLBIT)
+            {
+                toolflags[trapno & 0x3FF] = true;
+                tooltraptable[trapno & 0x3FF] = US_TO_SYN68K((void*)Raw68KFunction<fptr>::guestFP);
+            }
+            else
+            {
+                osflags[trapno & 0xFF] = true;
+                ostraptable[trapno & 0xFF] = US_TO_SYN68K((void*)Raw68KFunction<fptr>::guestFP);
+            }
+        });
     }
 }
 
 
 template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno, typename CallConv>
-void
-PascalTrap<Ret (Args...), fptr, trapno, CallConv>::init()
+PascalTrap<Ret (Args...), fptr, trapno, CallConv>::PascalTrap()
 {
-    WrappedFunction<Ret (Args...), fptr, CallConv>::init();
     if(trapno)
     {
-        if(trapno & TOOLBIT)
-        {
-            toolflags[trapno & 0x3FF] = true;
-            tooltraptable[trapno & 0x3FF] = US_TO_SYN68K((void*)this->guestFP);
-        }
-        else
-        {
-            osflags[trapno & 0xFF] = true;
-            ostraptable[trapno & 0xFF] = US_TO_SYN68K((void*)this->guestFP);
-        }
+        initFunctions.push_back([]{
+            if(trapno & TOOLBIT)
+            {
+                toolflags[trapno & 0x3FF] = true;
+                tooltraptable[trapno & 0x3FF] = US_TO_SYN68K(((void*)WrappedFunction<Ret(Args...),fptr,CallConv>::guestFP));
+            }
+            else
+            {
+                osflags[trapno & 0xFF] = true;
+                ostraptable[trapno & 0xFF] = US_TO_SYN68K(((void*)WrappedFunction<Ret(Args...),fptr,CallConv>::guestFP));
+            }
+        });
     }
 }
 
@@ -537,12 +543,7 @@ PascalTrap<Ret (Args...), fptr, trapno, CallConv>::operator()(Args... args) cons
 }
 
 
-InitAction::InitAction(void (*f)())
-{
-    initFunctions.push_back(f);
-}
-
-void InitAction::execute()
+void functions::init()
 {
     for(auto f : initFunctions)
         (*f)();

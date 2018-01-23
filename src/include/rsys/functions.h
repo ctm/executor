@@ -75,6 +75,27 @@ struct UPP<Ret(Args...)>
 namespace functions
 {
 
+namespace selectors
+{
+    class D0W;
+    class D0L;
+    class StackW;
+    class StackL;
+    class StackWLookahead;
+}
+
+template<class SelectorConvention>
+class DispatcherTrap
+{
+    //std::unordered_map<uint32_t, callback_handler_t> selectors;
+
+    syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void* extra);
+public:
+    void addSelector(uint32_t sel, callback_handler_t handler);
+
+    void init();
+};
+
 template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *)>
 class Raw68KFunction
 {
@@ -84,7 +105,7 @@ public:
         return guestFP;
     }
 
-    void init();
+    Raw68KFunction();
 protected:
     static ProcPtr guestFP;
 };
@@ -93,7 +114,7 @@ template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *), int trapno>
 class Raw68KTrap : public Raw68KFunction<fptr>
 {
 public:
-    void init();
+    Raw68KTrap();
 };
 
 
@@ -114,7 +135,7 @@ public:
         return guestFP;
     }
 
-    void init();
+    WrappedFunction();    
 protected:
     static UPP<Ret (Args...)> guestFP;
     static const char *name;
@@ -128,23 +149,27 @@ class PascalTrap<Ret (Args...), fptr, trapno, CallConv> : public WrappedFunction
 {
 public:
     Ret operator()(Args... args) const;
-    void init();
+    
+    PascalTrap();
 };
 
 #if !defined(FUNCTION_WRAPPER_IMPLEMENTATION) /* defined in functions.cpp */
 
 #define CREATE_FUNCTION_WRAPPER(TYPE, NAME, FPTR, DISPLAYNAME) \
-    extern Executor::functions::TYPE NAME;   \
-    extern template class Executor::functions::TYPE
+    extern Executor::functions::TYPE NAME
+
+#define DISPATCHER_TRAP(NAME, TRAP, SELECTOR) \
+    extern Executor::functions::DispatcherTrap<Executor::functions::selectors::SELECTOR> NAME
 
 #else
 
 #define CREATE_FUNCTION_WRAPPER(TYPE, NAME, FPTR, DISPLAYNAME) \
     Executor::functions::TYPE NAME;   \
     template class Executor::functions::TYPE; \
-    Executor::functions::InitAction init_##NAME([]{NAME.init();}); \
     template<> const char * NamedThing<decltype(FPTR),FPTR>::name = DISPLAYNAME
 
+#define DISPATCHER_TRAP(NAME, TRAP, SELECTOR) \
+    Executor::functions::DispatcherTrap<Executor::functions::selectors::SELECTOR> NAME
 
 #endif
 
@@ -164,15 +189,9 @@ public:
     syn68k_addr_t _##NAME(syn68k_addr_t, void *); \
     CREATE_FUNCTION_WRAPPER(Raw68KTrap<&_##NAME COMMA TRAP>, stub_##NAME, &_##NAME, #NAME)
 
-class InitAction
-{
-public:
-    InitAction(void (*f)());
-    static void execute();
-};
-
-
+    
 void resetNestingLevel();
+void init();
 
 }
 
