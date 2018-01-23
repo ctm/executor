@@ -120,24 +120,25 @@ while($f = <include/*.h>) {
     open(INCLUDE, $f);
     open(OUT, ">temp.h");
     while($l = <INCLUDE>) {
-        if($l =~ /^PASCAL_SUBTRAP\(([A-Za-z0-9_]+), (0x[0-9A-Z]+), ([A-Za-z0-9_]+)\)/) {
+        if($l =~ /^PASCAL_SUBTRAP\(([A-Za-z0-9_]+), 0x([0-9A-Z]+), (0x[0-9A-Z]+), ([A-Za-z0-9_]+)\)/) {
             $name = $1;
+            $trapname = $4;
+            $trapnum = $2;
+            $selector = $3;
             $origname = $name;
-            $trapname = $3;
-            $oldtrapnum = $2;
             $name = $newnames{$name} if(exists $newnames{$name});
-            if(exists $selectors{$name}) {
-                $selector = "0x$selectors{$name}";
-                $trapnum = "0x$traps{$name}";
-                print OUT "PASCAL_SUBTRAP($origname, $trapnum, $selector, $trapname);\n";
-                print $name, " ", $trapnum, " ", $selector, "\n";
+
+            if(exists $headerfile{$trapname}) {
+                if($headerfile{$trapname} ne $f) {
+                    print "Trap in more than one header file: $trapname in $headerfile{$trapname} and $f\n"
+                }
             } else {
-                print $name, ": unknown\n";
-                print OUT "PASCAL_SUBTRAP_UNKNOWN($origname, $oldtrapnum, $trapname);\n";
+                print "$f:\n";
+                print "DISPATCHER_TRAP($trapname, 0x$trapnum, $kinds{$trapnum});\n";
             }
-        } else {
-            print OUT $l;
+            $headerfile{$trapname} = $f;
         }
+        print OUT $l;
     }
     close(OUT);
     close(INCLUDE);
