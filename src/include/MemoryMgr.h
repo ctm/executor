@@ -112,13 +112,13 @@ extern Handle _RecoverHandle_flags(Ptr p, bool sys_p);
 #define NewPtrClear(size) (_NewPtr_flags(size, false, true))
 #define NewPtrSysClear(size) (_NewPtr_flags(size, true, true))
 extern Ptr _NewPtr_flags(Size size, bool sys_p, bool clear_p);
-
+/*
 CREATE_FUNCTION_WRAPPER(
     PascalTrap<
         decltype(_NewPtr_flags) COMMA &_NewPtr_flags COMMA 0xA11E COMMA
         callconv::Register<callconv::A<0> (callconv::D<0> COMMA callconv::TrapBit<SYSBIT> COMMA callconv::TrapBit<CLRBIT>)>
     >, 
-    stub_NewPtr, &_NewPtr_flags, "NewPtr");
+    stub_NewPtr, &_NewPtr_flags, "NewPtr");*/
 
 #define FreeMem() (_FreeMem_flags(false))
 #define FreeMemSys() (_FreeMem_flags(true))

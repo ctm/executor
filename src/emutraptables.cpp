@@ -1256,7 +1256,7 @@ osstuff_t Executor::osstuff[0x100] = {
     { 0, (void *)_SetZone },
     { 0, (void *)_FreeMem },
     { 0, (void *)_MaxMem },
-    {0,0},//{ 0, (void *)_NewPtr },
+    { 0, (void *)_NewPtr },
     { 0, (void *)_DisposPtr },
     { 0, (void *)_SetPtrSize },
     { 0, (void *)_GetPtrSize },
