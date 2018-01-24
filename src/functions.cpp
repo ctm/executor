@@ -392,6 +392,28 @@ template<int mask> struct TrapBit
 
     void afterwards() {}
 };
+
+template<typename Loc> struct ReturnMemErr
+{
+    syn68k_addr_t afterwards(syn68k_addr_t ret)
+    {
+        Loc::set(CW(LM(MemErr)));
+        return ret;
+    }
+};
+struct CCFromD0
+{
+    syn68k_addr_t afterwards(syn68k_addr_t ret)
+    {
+        cpu_state.ccc = 0;
+        cpu_state.ccn = (cpu_state.regs[0].sw.n < 0);
+        cpu_state.ccv = 0;
+        cpu_state.ccx = cpu_state.ccx; /* unchanged */
+        cpu_state.ccnz = (cpu_state.regs[0].sw.n != 0);
+        return ret;
+    }
+};
+
 }
 
 template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
@@ -460,17 +482,16 @@ struct Invoker<void (Args...), fptr, callconv::Register<RetConv (ArgConvs...)>>
 };
 
 
-template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename RetConv, typename ArgConvs, typename Extra1, typename Extras>
-struct Invoker<Ret (Args...), fptr, callconv::Register<RetConv (ArgConvs...), Extra1, Extras>>
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename RetConv, typename ArgConvs, typename Extra1, typename... Extras>
+struct Invoker<Ret (Args...), fptr, callconv::Register<RetConv (ArgConvs...), Extra1, Extras...>>
 {
     static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *refcon)
     {
         Extra1 state;
-        syn68k_addr_t retval = Invoker<Ret(Args...), fptr, callconv::Register<RetConv (ArgConvs...), Extras>>::invokeFrom68K(addr,refcon);
+        syn68k_addr_t retval = Invoker<Ret(Args...), fptr, callconv::Register<RetConv (ArgConvs...), Extras...>>::invokeFrom68K(addr,refcon);
         return state.afterwards(retval);
     }
 };
-
 
 template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
 void WrappedFunction<Ret (Args...), fptr, CallConv>::init()
