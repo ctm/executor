@@ -1,34 +1,17 @@
 #include <vector>
+#include <unordered_map>
 #include <syn68k_public.h>
 
 #define FUNCTION_WRAPPER_IMPLEMENTATION
 #include <rsys/functions.h>
+#include <rsys/mactype.h>
+#include <rsys/byteswap.h>
+
 namespace
 {
     std::vector<Executor::functions::internal::DeferredInit*> initObjects;
+    std::unordered_map<void*, const char*> namedThings;
 }
-
-template<typename F, F thing>
-struct NamedThing
-{
-    static const char* name;
-};
-
-#include "rsys/everything.h"
-#include "rsys/emustubs.h"
-#include "rsys/ctl.h"
-#include "rsys/list.h"
-#include "rsys/menu.h"
-#include "rsys/wind.h"
-#include "rsys/print.h"
-#include "rsys/vbl.h"
-#include "rsys/stdfile.h"
-#include "rsys/tesave.h"
-#include "rsys/osutil.h"
-#include "rsys/refresh.h"
-#include "rsys/gestalt.h"
-
-#include "rsys/ctop_ptoc.h"
 
 #include <iostream>
 #include <cctype>
@@ -288,7 +271,7 @@ struct LoggedFunction<void (Args...), fptr>
 {
     static void call(Args... args)
     {
-        const char *fname = NamedThing<void (*)(Args...), fptr>::name;
+        const char *fname = namedThings.at((void*)fptr);
         logTrapCall(fname, args...);
         nestingLevel++;
         fptr(args...);
@@ -302,7 +285,7 @@ struct LoggedFunction<Ret (Args...), fptr>
 {
     static Ret call(Args... args)
     {
-        const char *fname = NamedThing<Ret (*)(Args...), fptr>::name;
+        const char *fname = namedThings.at((void*)fptr);
         logTrapCall(fname, args...);
         nestingLevel++;
         Ret retval = fptr(args...);
@@ -330,7 +313,7 @@ void dumpRegsAndStack()
 template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *)>
 syn68k_addr_t untypedLoggedFunction(syn68k_addr_t addr, void * param)
 {
-    const char *fname = NamedThing<syn68k_addr_t (*)(syn68k_addr_t, void *), fptr>::name;
+    const char *fname = namedThings.at((void*)fptr);
     if(loggingActive())
     {
         std::cout.clear();
@@ -352,17 +335,9 @@ syn68k_addr_t untypedLoggedFunction(syn68k_addr_t addr, void * param)
     return retaddr;
 }
 
-template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *)>
-ProcPtr Raw68KFunction<fptr>::guestFP;
-
-template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *)>
-void Raw68KFunction<fptr>::init()
+namespace Executor
 {
-    std::cout << "init: " << NamedThing<syn68k_addr_t (*)(syn68k_addr_t, void *), fptr>::name << std::endl;
-    guestFP = (ProcPtr)SYN68K_TO_US(callback_install(&untypedLoggedFunction<fptr>, nullptr));
-}
-
-namespace Executor::callconv
+namespace callconv
 {
 template<int n> struct A
 {
@@ -392,7 +367,7 @@ template<int mask> struct TrapBit
 
     void afterwards() {}
 };
-
+/*
 template<typename Loc> struct ReturnMemErr
 {
     syn68k_addr_t afterwards(syn68k_addr_t ret)
@@ -400,7 +375,7 @@ template<typename Loc> struct ReturnMemErr
         Loc::set(CW(LM(MemErr)));
         return ret;
     }
-};
+};*/
 struct CCFromD0
 {
     syn68k_addr_t afterwards(syn68k_addr_t ret)
@@ -413,12 +388,8 @@ struct CCFromD0
         return ret;
     }
 };
-
 }
-
-template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
-UPP<Ret (Args...)> WrappedFunction<Ret (Args...), fptr, CallConv>::guestFP;
-
+}
 
 template<typename F, F *fptr, typename CallConv>
 struct Invoker;
@@ -430,6 +401,16 @@ struct Invoker<Ret (Args...), fptr, callconv::Pascal>
     {
         static ptocblock_t ptocblock { (void*)fptr, ptoc(fptr) };
         return PascalToCCall(addr, &ptocblock);
+    }
+};
+
+
+template<syn68k_addr_t (*fptr)(syn68k_addr_t, void*)>
+struct Invoker<syn68k_addr_t (syn68k_addr_t addr, void *), fptr, callconv::Raw>
+{
+    static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void * refcon)
+    {
+        return fptr(addr, refcon);
     }
 };
 template<typename... Xs> struct List;
@@ -494,6 +475,13 @@ struct Invoker<Ret (Args...), fptr, callconv::Register<RetConv (ArgConvs...), Ex
 };
 
 template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
+WrappedFunction<Ret (Args...), fptr, CallConv>::WrappedFunction(const char* name)
+    : name(name)
+{
+    namedThings[(void*) fptr] = name;
+}
+
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
 void WrappedFunction<Ret (Args...), fptr, CallConv>::init()
 {
     guestFP = (UPP<Ret (Args...)>)SYN68K_TO_US(callback_install(
@@ -501,68 +489,165 @@ void WrappedFunction<Ret (Args...), fptr, CallConv>::init()
             ::invokeFrom68K, nullptr));    
 }
 
-template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *), int trapno>
-void Raw68KTrap<fptr, trapno>::init()
+template<syn68k_addr_t (*fptr)(syn68k_addr_t,void*)>
+WrappedFunction<syn68k_addr_t (syn68k_addr_t,void*), fptr, callconv::Raw>::WrappedFunction(const char* name)
+    : name(name)
 {
-    Raw68KFunction<fptr>::init();
-    if(trapno)
-    {
-        if(trapno & TOOLBIT)
-        {
-            toolflags[trapno & 0x3FF] = true;
-            tooltraptable[trapno & 0x3FF] = US_TO_SYN68K((void*)this->guestFP);
-        }
-        else
-        {
-            osflags[trapno & 0xFF] = true;
-            ostraptable[trapno & 0xFF] = US_TO_SYN68K((void*)this->guestFP);
-        }
-    }
+    namedThings[(void*) fptr] = name;
+}
+
+template<syn68k_addr_t (*fptr)(syn68k_addr_t,void*)>
+void WrappedFunction<syn68k_addr_t (syn68k_addr_t,void*), fptr, callconv::Raw>::init()
+{
+    guestFP = (ProcPtr)SYN68K_TO_US(callback_install(&untypedLoggedFunction<fptr>, nullptr));
 }
 
 
+
 template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno, typename CallConv>
-void PascalTrap<Ret (Args...), fptr, trapno, CallConv>::init()
+void TrapFunction<Ret (Args...), fptr, trapno, CallConv>::init()
 {
     WrappedFunction<Ret (Args...), fptr, CallConv>::init();
     if(trapno)
     {
         if(trapno & TOOLBIT)
         {
+            if(!toolflags[trapno & 0x3FF])
+            {
+                toolflags[trapno & 0x3FF] = true;
+                tooltraptable[trapno & 0x3FF] = US_TO_SYN68K(((void*)this->guestFP));
+            }
+            else
+                std::cout << "Not replacing " << std::hex << trapno << " : " << this->name << std::endl;
+        }
+        else
+        {
+            if(!osflags[trapno & 0xFF])
+            {
+                osflags[trapno & 0xFF] = true;
+                ostraptable[trapno & 0xFF] = US_TO_SYN68K(((void*)this->guestFP));
+            }
+            else
+                std::cout << "Not replacing " << std::hex << trapno << " : " << this->name << std::endl;
+        }
+    }
+}
+
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno, uint32_t selector, typename CallConv>
+SubTrapFunction<Ret (Args...), fptr, trapno, selector, CallConv>::SubTrapFunction(const char* name, GenericDispatcherTrap& dispatcher)
+    : WrappedFunction<Ret(Args...),fptr,CallConv>(name), dispatcher(dispatcher)
+{
+    dispatcher.addSelector(selector, Invoker<Ret (Args...), LoggedFunction<Ret (Args...),fptr>::call, CallConv>
+            ::invokeFrom68K);
+}
+
+void GenericDispatcherTrap::addSelector(uint32_t sel, callback_handler_t handler)
+{
+    selectors[sel] = handler;
+}
+
+template<class SelectorConvention>
+syn68k_addr_t DispatcherTrap<SelectorConvention>::invokeFrom68K(syn68k_addr_t addr, void* extra)
+{
+    DispatcherTrap<SelectorConvention>* self = (DispatcherTrap<SelectorConvention>*)extra;
+    uint32 sel = SelectorConvention::get();
+    auto it = self->selectors.find(sel);
+    if(it != self->selectors.end())
+        return it->second(addr, nullptr);
+    else
+    {
+        std::cerr << "Unknown selector " << std::hex << sel << " for trap " << self->name << std::endl;
+        std::abort();
+    }
+}
+template<class SelectorConvention>
+void DispatcherTrap<SelectorConvention>::init()
+{
+    if(trapno)
+    {
+        ProcPtr guestFP = (ProcPtr)SYN68K_TO_US(callback_install(&invokeFrom68K, this));
+        if(trapno & TOOLBIT)
+        {
             toolflags[trapno & 0x3FF] = true;
-            tooltraptable[trapno & 0x3FF] = US_TO_SYN68K(((void*)this->guestFP));
+            tooltraptable[trapno & 0x3FF] = US_TO_SYN68K(((void*)guestFP));
         }
         else
         {
             osflags[trapno & 0xFF] = true;
-            ostraptable[trapno & 0xFF] = US_TO_SYN68K(((void*)this->guestFP));
+            ostraptable[trapno & 0xFF] = US_TO_SYN68K(((void*)guestFP));
         }
     }
 }
 
-
-template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno, typename CallConv>
-Ret
-PascalTrap<Ret (Args...), fptr, trapno, CallConv>::operator()(Args... args) const
-{
-    if((trapno & TOOLBIT) == 0)
-        return (*fptr)(args...);
-    else
-    {
-        // TODO
-        syn68k_addr_t new_addr = tooltraptable[trapno & (NTOOLENTRIES - 1)];
-
-        if(new_addr == toolstuff[trapno & (NTOOLENTRIES - 1)].orig)
-            return (*fptr)(args...);
-        else
-            return UPP<Ret(Args...)>(SYN68K_TO_US(new_addr))(args...);
-    }
-}
 
 functions::internal::DeferredInit::DeferredInit()
 {
     initObjects.push_back(this);
 }
+
+namespace Executor
+{
+namespace functions
+{
+namespace selectors
+{
+
+struct D0W
+{
+    static uint32_t get() { return EM_D0 & 0xFFFF; }
+};
+struct D0L
+{
+    static uint32_t get() { return EM_D0; }
+};
+
+struct StackW
+{
+    static uint32_t get()
+    {
+        auto ret = POPADDR();
+        auto sel = POPUW();
+        PUSHADDR(ret);
+        return sel;
+    }
+};
+
+struct StackL
+{
+    static uint32_t get()
+    {
+        auto ret = POPADDR();
+        auto sel = POPUL();
+        PUSHADDR(ret);
+        return sel;
+    }
+};
+
+struct StackWLookahead
+{
+    static uint32_t get()
+    {
+        return READUW(EM_A7 + 4);
+    }
+};
+
+}
+}
+}
+
+#include "rsys/everything.h"
+#include "rsys/emustubs.h"
+#include "rsys/ctl.h"
+#include "rsys/list.h"
+#include "rsys/menu.h"
+#include "rsys/wind.h"
+#include "rsys/print.h"
+#include "rsys/vbl.h"
+#include "rsys/stdfile.h"
+#include "rsys/tesave.h"
+#include "rsys/osutil.h"
+#include "rsys/refresh.h"
+#include "rsys/gestalt.h"
 
 void functions::init()
 {
@@ -573,7 +658,7 @@ void functions::init()
         if(tooltraptable[i] == 0)
             tooltraptable[i] = US_TO_SYN68K((void*)&stub_Unimplemented);
 
-    /*for(int i = 0; i < 0x400; i++)
+    for(int i = 0; i < 0x400; i++)
     {
         bool shouldhave = toolstuff[i].ptoc.wheretogo != (void*)&_Unimplemented;
         if(toolflags[i] != shouldhave)
@@ -583,7 +668,7 @@ void functions::init()
             else
                 std::cout << "Surprising " << std::hex << (0xA800 | i) << std::endl;
         }
-    }*/
+    }
     for(int i = 0; i < 0x100; i++)
     {
         bool shouldhave = osstuff[i].func != (void*)&_Unimplemented;

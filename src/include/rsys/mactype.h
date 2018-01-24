@@ -7,7 +7,7 @@
  *
 
  */
-
+#include "host-arch-config.h"
 #include "rsys/macros.h"
 #include "rsys/types.h"
 #include <type_traits>
