@@ -6,6 +6,8 @@ namespace Executor
 template<typename F>
 struct UPP;
 
+struct Point;
+
 using CTOPCode = uint64_t;
 
 namespace ptoc_internal

@@ -84,6 +84,16 @@ namespace selectors
     class StackWLookahead;
 }
 
+namespace internal
+{
+    class DeferredInit
+    {
+    public:
+        DeferredInit();
+        virtual void init() = 0;
+    };
+}
+
 template<class SelectorConvention>
 class DispatcherTrap
 {
@@ -97,7 +107,7 @@ public:
 };
 
 template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *)>
-class Raw68KFunction
+class Raw68KFunction : public internal::DeferredInit
 {
 public:
     ProcPtr operator&() const
@@ -105,7 +115,7 @@ public:
         return guestFP;
     }
 
-    Raw68KFunction();
+    virtual void init() override;
 protected:
     static ProcPtr guestFP;
 };
@@ -114,7 +124,7 @@ template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *), int trapno>
 class Raw68KTrap : public Raw68KFunction<fptr>
 {
 public:
-    Raw68KTrap();
+    virtual void init() override;
 };
 
 
@@ -122,7 +132,7 @@ template<typename F, F* fptr, typename CallConv = callconv::Pascal>
 class WrappedFunction {};
 
 template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
-class WrappedFunction<Ret (Args...), fptr, CallConv>
+class WrappedFunction<Ret (Args...), fptr, CallConv> : public internal::DeferredInit
 {
 public:
     Ret operator()(Args... args) const
@@ -135,7 +145,7 @@ public:
         return guestFP;
     }
 
-    WrappedFunction();    
+    virtual void init() override;
 protected:
     static UPP<Ret (Args...)> guestFP;
     static const char *name;
@@ -150,7 +160,7 @@ class PascalTrap<Ret (Args...), fptr, trapno, CallConv> : public WrappedFunction
 public:
     Ret operator()(Args... args) const;
     
-    PascalTrap();
+    virtual void init() override;
 };
 
 #if !defined(FUNCTION_WRAPPER_IMPLEMENTATION) /* defined in functions.cpp */
