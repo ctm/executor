@@ -533,6 +533,8 @@ const LowMemGlobal<ProcPtr> TERecal { 0xA74 }; // TextEdit IMI-391 (false);
 const LowMemGlobal<INTEGER> TEScrpLength { 0xAB0 }; // TextEdit IMI-389 (true);
 const LowMemGlobal<Handle> TEScrpHandle { 0xAB4 }; // TextEdit IMI-389 (true);
 
+DISPATCHER_TRAP(TEDispatch, 0xA83D, StackW);
+
 extern void C_TESetText(Ptr p, LONGINT ln, TEHandle teh);
 PASCAL_TRAP(TESetText, 0xA9CF);
 

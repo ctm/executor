@@ -191,6 +191,8 @@ extern THz SystemZone(void);
 extern THz ApplicZone(void);
 extern Size StackSpace(void);
 
+DISPATCHER_TRAP(OSDispatch, 0xA88F, StackW);
+
 /* temporary memory functions; see tempmem.c */
 extern int32_t C_TempFreeMem(void);
 PASCAL_SUBTRAP(TempFreeMem, 0xA88F, 0x0018, OSDispatch);

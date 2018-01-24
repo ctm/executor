@@ -228,6 +228,8 @@ enum
 
 const LowMemGlobal<INTEGER> TESysJust { 0xBAC }; // ScriptMgr ToolEqu.a (true-b);
 
+DISPATCHER_TRAP(ScriptUtil, 0xA8B5, StackL);
+
 extern LONGINT C_VisibleLength(Ptr textp, LONGINT len);
 PASCAL_SUBTRAP(VisibleLength, 0xA8B5, 0x84080028, ScriptUtil);
 

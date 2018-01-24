@@ -12,6 +12,8 @@ enum
     sdOnRestartOrPower = (sdOnPowerOff + sdOnRestart),
 };
 
+DISPATCHER_TRAP(ShutDown, 0xA895, StackW);
+
 extern void C_ShutDwnPower(void);
 PASCAL_SUBTRAP(ShutDwnPower, 0xA895, 0x0001, ShutDown);
 extern void C_ShutDwnStart(void);

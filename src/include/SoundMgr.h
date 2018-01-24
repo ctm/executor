@@ -215,6 +215,8 @@ typedef void *SPBPtr;
 typedef uint32_t UnsignedFixed;
 typedef Ptr CompressionInfoPtr;
 
+DISPATCHER_TRAP(SoundDispatch, 0xA800, D0L);
+
 extern void C_SndGetSysBeepState(GUEST<INTEGER> *statep);
 PASCAL_SUBTRAP(SndGetSysBeepState, 0xA800, 0x02180008, SoundDispatch);
 

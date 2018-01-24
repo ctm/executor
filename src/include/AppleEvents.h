@@ -217,6 +217,9 @@ typedef struct
 
 typedef AE_info_t *AE_info_ptr;
 
+
+DISPATCHER_TRAP(Pack8, 0xA816, D0W);
+
     // "internal". TODO: verify if they really exist as entry points.
 extern OSErr C__AE_hdlr_table_alloc(int32_t, int32_t, int32_t, int8,
                                                 GUEST<AE_hdlr_table_h> *);
@@ -311,8 +314,6 @@ extern syn68k_addr_t /*ProcPtr*/ AE_OSL_select_fn;
 const LowMemGlobal<AE_info_ptr> AE_info { 0x2B6 }; // AppleEvents AEGizmo (true);
 
 /* prototypes go here */
-
-DISPATCHER_TRAP(Pack8, 0xA816, D0W);
 
 extern OSErr C_AEGetCoercionHandler(DescType from_type, DescType to_type,
                                                 GUEST<CoerceDescProcPtr> *hdlr_out, GUEST<int32_t> *refcon_out,

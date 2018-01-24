@@ -103,6 +103,8 @@ enum
     sfGetDialogID = -6042
 };
 
+DISPATCHER_TRAP(Pack3, 0xA9EA, StackW);
+
 extern void C_ROMlib_filebox(DialogPeek dp, INTEGER which);
 PASCAL_FUNCTION(ROMlib_filebox);
 
