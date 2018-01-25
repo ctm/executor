@@ -157,31 +157,31 @@ const LowMemGlobal<Byte> MMU32Bit { 0xCB2 }; // OSUtil IMV-592 (true-b);
 const LowMemGlobal<QHdr> DTQueue { 0xD92 }; // OSUtil IMV-466 (false);
 const LowMemGlobal<ProcPtr> JDTInstall { 0xD9C }; // OSUtil IMV (false);
 
-extern OSErrRET HandToHand(Handle *h);
-extern OSErrRET PtrToHand(Ptr p, Handle *h, LONGINT s);
-extern OSErrRET PtrToXHand(Ptr p, Handle h, LONGINT s);
-extern OSErrRET HandAndHand(Handle h1, Handle h2);
-extern OSErrRET PtrAndHand(Ptr p, Handle h, LONGINT s1);
+extern OSErr HandToHand(Handle *h);
+extern OSErr PtrToHand(Ptr p, Handle *h, LONGINT s);
+extern OSErr PtrToXHand(Ptr p, Handle h, LONGINT s);
+extern OSErr HandAndHand(Handle h1, Handle h2);
+extern OSErr PtrAndHand(Ptr p, Handle h, LONGINT s1);
 extern LONGINT ROMlib_RelString(unsigned char *s1, unsigned char *s2,
                                 BOOLEAN casesig, BOOLEAN diacsig, LONGINT d0);
-extern INTEGERRET RelString(StringPtr s1, StringPtr s2,
+extern INTEGER RelString(StringPtr s1, StringPtr s2,
                                  BOOLEAN casesig, BOOLEAN diacsig);
-extern BOOLEANRET EqualString(StringPtr s1, StringPtr s2,
+extern BOOLEAN EqualString(StringPtr s1, StringPtr s2,
                                    BOOLEAN casesig, BOOLEAN diacsig);
 extern void ROMlib_UprString(StringPtr s, BOOLEAN diac, INTEGER len);
 extern void UprString(StringPtr s, BOOLEAN diac);
 extern void GetDateTime(GUEST<ULONGINT> *mactimepointer);
-extern OSErrRET ReadDateTime(GUEST<ULONGINT> *secs);
-extern OSErrRET SetDateTime(ULONGINT mactime);
+extern OSErr ReadDateTime(GUEST<ULONGINT> *secs);
+extern OSErr SetDateTime(ULONGINT mactime);
 extern void Date2Secs(DateTimeRec *d, ULONGINT *s);
 extern void Secs2Date(ULONGINT mactime, DateTimeRec *d);
 extern void GetTime(DateTimeRec *d);
 extern void SetTime(DateTimeRec *d);
-extern OSErrRET InitUtil(void);
+extern OSErr InitUtil(void);
 extern SysPPtr GetSysPPtr(void);
-extern OSErrRET WriteParam(void);
+extern OSErr WriteParam(void);
 extern void Enqueue(QElemPtr e, QHdrPtr h);
-extern OSErrRET Dequeue(QElemPtr e, QHdrPtr h);
+extern OSErr Dequeue(QElemPtr e, QHdrPtr h);
 extern LONGINT GetTrapAddress(INTEGER n);
 extern LONGINT NGetTrapAddress(INTEGER n, INTEGER ttype);
 extern void SetTrapAddress(LONGINT addr,
@@ -191,7 +191,7 @@ extern void C_SysBeep(INTEGER i);
 PASCAL_TRAP(SysBeep, 0xA9C8);
 
 extern void Environs(GUEST<INTEGER> *rom, GUEST<INTEGER> *machine);
-extern OSErrRET SysEnvirons(INTEGER vers, SysEnvRecPtr p);
+extern OSErr SysEnvirons(INTEGER vers, SysEnvRecPtr p);
 extern void Restart(void);
 extern void SetUpA5(void);
 extern void RestoreA5(void);

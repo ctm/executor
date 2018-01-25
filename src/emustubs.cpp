@@ -1908,7 +1908,7 @@ STUB(PrGlue)
     return do_selector_block(prglueblock, ul >> 27, PrGlue);
 }
 
-typedef OSErrRET (*fsprocp_t)(void *, BOOLEAN);
+typedef OSErr (*fsprocp_t)(void *, BOOLEAN);
 
 fsprocp_t hfstab[] = {
     (fsprocp_t)apparent_nop, /* 0 */

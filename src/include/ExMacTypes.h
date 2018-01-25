@@ -58,11 +58,6 @@ typedef INTEGER OSErr;
 typedef LONGINT OSType;
 typedef LONGINT ResType;
 
-typedef LONGINT OSErrRET; /* for smashing d0 just like the Mac */
-typedef LONGINT INTEGERRET;
-typedef LONGINT BOOLEANRET;
-typedef LONGINT SignedByteRET;
-
 struct QHdr
 {
     GUEST_STRUCT;

@@ -28,7 +28,7 @@ typedef struct NMRec
     GUEST<LONGINT> nmRefCon;
 } * NMRecPtr;
 
-extern OSErrRET NMInstall(NMRecPtr nmptr);
-extern OSErrRET NMRemove(NMRecPtr nmptr);
+extern OSErr NMInstall(NMRecPtr nmptr);
+extern OSErr NMRemove(NMRecPtr nmptr);
 }
 #endif /* __NOTIFYMGR__ */

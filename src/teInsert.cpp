@@ -805,9 +805,9 @@ int16_t Executor::C_ROMlib_dotext(TEPtr tep, int16_t start, int16_t end,
     return 0;
 }
 
-INTEGERRET ROMlib_dotext(void)
+INTEGER ROMlib_dotext(void)
 {
-    INTEGERRET retval;
+    INTEGER retval;
     TEPtr tep;
     INTEGER first, last, what;
 

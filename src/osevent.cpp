@@ -206,7 +206,7 @@ void Executor::ROMlib_eventinit(bool graphics_valid_p) /* INTERNAL */
 }
 
 static void dropevent(EvQEl *);
-static OSErrRET _PPostEvent(INTEGER evcode, LONGINT evmsg,
+static OSErr _PPostEvent(INTEGER evcode, LONGINT evmsg,
                             GUEST<EvQElPtr> *qelpp);
 static BOOLEAN OSEventCommon(INTEGER evmask, EventRecord *eventp,
                              BOOLEAN dropit);
@@ -278,7 +278,7 @@ key_down(uint8 loc)
     return retval;
 }
 
-OSErrRET Executor::PPostEvent(INTEGER evcode, LONGINT evmsg,
+OSErr Executor::PPostEvent(INTEGER evcode, LONGINT evmsg,
                               GUEST<EvQElPtr> *qelp) /* IMIV-85 */
 {
     EvQEl *qp;
@@ -341,10 +341,10 @@ OSErrRET Executor::PPostEvent(INTEGER evcode, LONGINT evmsg,
     return noErr;
 }
 
-static OSErrRET _PPostEvent(INTEGER evcode, LONGINT evmsg,
+static OSErr _PPostEvent(INTEGER evcode, LONGINT evmsg,
                             GUEST<EvQElPtr> *qelpp)
 {
-    OSErrRET ret;
+    OSErr ret;
     syn68k_addr_t proc;
     GUEST<EvQElPtr> retquelp;
 
@@ -369,7 +369,7 @@ static OSErrRET _PPostEvent(INTEGER evcode, LONGINT evmsg,
     return ret;
 }
 
-OSErrRET Executor::ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg,
+OSErr Executor::ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg,
                                      GUEST<EvQElPtr> *qelp, LONGINT when,
                                      Point where, INTEGER butmods)
 {
@@ -380,7 +380,7 @@ OSErrRET Executor::ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg,
     return _PPostEvent(evcode, evmsg, qelp);
 }
 
-OSErrRET Executor::PostEvent(INTEGER evcode, LONGINT evmsg)
+OSErr Executor::PostEvent(INTEGER evcode, LONGINT evmsg)
 {
     return _PPostEvent(evcode, evmsg, (GUEST<EvQElPtr> *)0);
 }
@@ -604,12 +604,12 @@ static BOOLEAN OSEventCommon(INTEGER evmask, EventRecord *eventp,
     return retval;
 }
 
-BOOLEANRET Executor::GetOSEvent(INTEGER evmask, EventRecord *eventp)
+BOOLEAN Executor::GetOSEvent(INTEGER evmask, EventRecord *eventp)
 {
     return OSEventCommon(evmask, eventp, true);
 }
 
-BOOLEANRET Executor::OSEventAvail(INTEGER evmask, EventRecord *eventp)
+BOOLEAN Executor::OSEventAvail(INTEGER evmask, EventRecord *eventp)
 {
     return OSEventCommon(evmask, eventp, false);
 }

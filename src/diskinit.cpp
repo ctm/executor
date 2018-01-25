@@ -62,7 +62,7 @@ typedef struct
     LONGINT pos;
 } our_file_info_t;
 
-typedef OSErrRET (*func_t)(ParmBlkPtr pb, BOOLEAN async);
+typedef OSErr (*func_t)(ParmBlkPtr pb, BOOLEAN async);
 
 static OSErr
 raw_read_write(func_t func, our_file_info_t *op, LONGINT *lengthp,

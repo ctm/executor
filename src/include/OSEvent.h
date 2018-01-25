@@ -99,15 +99,15 @@ const LowMemGlobal<Point> MouseLocation2 { 0x830 }; // QuickDraw MacAttack (true
 extern void ROMlib_eventdep(void);
 extern void insertcommonevent(char *xeventp, commonevent *comevtp);
 extern void ROMlib_zapmap(LONGINT loc, LONGINT val);
-extern OSErrRET PPostEvent(INTEGER evcode,
+extern OSErr PPostEvent(INTEGER evcode,
                                 LONGINT evmsg, GUEST<EvQElPtr> *qelp);
-extern OSErrRET ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg,
+extern OSErr ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg,
                                   GUEST<EvQElPtr> *qelp, LONGINT when, Point where, INTEGER butmods);
-extern OSErrRET PostEvent(INTEGER evcode, LONGINT evmsg);
+extern OSErr PostEvent(INTEGER evcode, LONGINT evmsg);
 extern void FlushEvents(INTEGER evmask,
                              INTEGER stopmask);
-extern BOOLEANRET GetOSEvent(INTEGER evmask, EventRecord *eventp);
-extern BOOLEANRET OSEventAvail(INTEGER evmask,
+extern BOOLEAN GetOSEvent(INTEGER evmask, EventRecord *eventp);
+extern BOOLEAN OSEventAvail(INTEGER evmask,
                                     EventRecord *eventp);
 extern void SetEventMask(INTEGER evmask);
 extern QHdrPtr GetEvQHdr(void);

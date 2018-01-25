@@ -32,10 +32,10 @@ const LowMemGlobal<QHdr> VBLQueue { 0x160 }; // VRetraceMgr IMII-352 (true);
 const LowMemGlobal<ProcPtr> JVBLTask { 0xD28 }; // VRetraceMgr IMV (false);
 
 extern void ROMlib_clockonoff(LONGINT onoroff);
-extern OSErrRET VInstall(VBLTaskPtr vtaskp);
-extern OSErrRET VRemove(VBLTaskPtr vtaskp);
+extern OSErr VInstall(VBLTaskPtr vtaskp);
+extern OSErr VRemove(VBLTaskPtr vtaskp);
 extern QHdrPtr GetVBLQHdr(void);
-extern OSErrRET SlotVInstall(VBLTaskPtr vtaskp, INTEGER slot);
-extern OSErrRET SlotVRemove(VBLTaskPtr vtaskp, INTEGER slot);
+extern OSErr SlotVInstall(VBLTaskPtr vtaskp, INTEGER slot);
+extern OSErr SlotVRemove(VBLTaskPtr vtaskp, INTEGER slot);
 }
 #endif /* __VRETRACE__ */
