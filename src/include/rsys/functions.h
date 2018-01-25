@@ -23,14 +23,20 @@ class Register { };
 template <int n> struct A;
 template <int n> struct D;
 template <int mask> struct TrapBit;
-template<typename loc> struct Out;
-template<typename loc> struct InOut;
+template<typename loc, typename T> struct Out;
+template<typename loc, typename T> struct InOut;
 
 template<typename Loc> struct ReturnMemErr;
 struct CCFromD0;
 
+using A0 = A<0>;
+using A1 = A<1>;
+using A2 = A<2>;
+using D0 = D<0>;
+using D1 = D<1>;
+using D2 = D<2>;
 }
-
+using namespace callconv;
 
 template<typename F>
 struct UPP;
@@ -213,6 +219,9 @@ private:
     CREATE_FUNCTION_WRAPPER(TrapFunction<decltype(C_##NAME) COMMA &C_##NAME COMMA TRAP>, NAME, &C_##NAME, #NAME)
 #define PASCAL_SUBTRAP(NAME, TRAP, SELECTOR, TRAPNAME) \
     CREATE_FUNCTION_WRAPPER(SubTrapFunction<decltype(C_##NAME) COMMA &C_##NAME COMMA TRAP COMMA SELECTOR>, NAME, &C_##NAME, #NAME, TRAPNAME)
+#define REGISTER_SUBTRAP(NAME, TRAP, SELECTOR, TRAPNAME, ...) \
+    CREATE_FUNCTION_WRAPPER(SubTrapFunction<decltype(C_##NAME) COMMA &C_##NAME COMMA TRAP COMMA SELECTOR COMMA callconv::Register<__VA_ARGS__>>, NAME, &C_##NAME, #NAME, TRAPNAME)
+
 #define NOTRAP_FUNCTION(NAME) \
     CREATE_FUNCTION_WRAPPER(WrappedFunction<decltype(C_##NAME) COMMA &C_##NAME>, NAME, &C_##NAME, #NAME)
 #define PASCAL_FUNCTION(NAME) \

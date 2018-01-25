@@ -41,6 +41,7 @@
 #include "Iconutil.h"
 #include "PPC.h"
 #include "QuickTime.h"
+#include "BinaryDecimal.h"
 
 #include "rsys/file.h"
 #include "rsys/adb.h"

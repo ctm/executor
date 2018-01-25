@@ -347,8 +347,6 @@ template<int n> struct A
     operator T*() { return ptr_from_longint<T*>(EM_AREG(n)); }
     static void set(uint32_t x) { EM_AREG(n) = x; }
     static void set(void *x) { EM_AREG(n) = ptr_to_longint(x); }
-
-    void afterwards() {}
 };
 
 template<int n> struct D
@@ -356,16 +354,31 @@ template<int n> struct D
     template<typename T>
     operator T() { return EM_DREG(n); }
     static void set(uint32_t x) { EM_DREG(n) = x; }
+};
 
-    void afterwards() {}
+template<typename Loc, typename T> struct Out
+{
+    T temp;
+
+    operator T*() { return &temp; }
+
+    ~Out() { Loc::set(temp); }
+};
+
+template<typename Loc, typename T> struct InOut
+{
+    T temp;
+
+    operator T*() { return &temp; }
+
+    InOut() { temp = Loc(); }
+    ~InOut() { Loc::set(temp); }
 };
 
 
 template<int mask> struct TrapBit
 {
     operator bool() { return !!(EM_D1 & mask); }
-
-    void afterwards() {}
 };
 /*
 template<typename Loc> struct ReturnMemErr
@@ -433,10 +446,8 @@ struct InvokerRec<Ret (Args...), fptr, List<DoneArgs...>, List<Arg, TodoArgs...>
     static Ret invokeFrom68K(syn68k_addr_t addr, void *refcon, DoneArgs... args)
     {
         CC newarg;
-        Ret retval = InvokerRec<Ret (Args...),fptr,List<DoneArgs...,Arg>,List<TodoArgs...>,List<TodoCC...>>
+        return InvokerRec<Ret (Args...),fptr,List<DoneArgs...,Arg>,List<TodoArgs...>,List<TodoCC...>>
             ::invokeFrom68K(addr, refcon, args..., newarg);
-        newarg.afterwards();
-        return retval;
     }
 };
 
@@ -680,5 +691,4 @@ void functions::init()
                 std::cout << "Surprising " << std::hex << (0xA000 | i) << std::endl;
         }
     }
-
 }
