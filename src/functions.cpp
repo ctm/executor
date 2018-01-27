@@ -27,6 +27,7 @@ template<typename F, F* fptr>
 struct LoggedFunction;
 
 static int nestingLevel = 0;
+static bool loggingEnabled = false;
 
 void functions::resetNestingLevel()
 {
@@ -495,8 +496,13 @@ WrappedFunction<Ret (Args...), fptr, CallConv>::WrappedFunction(const char* name
 template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
 void WrappedFunction<Ret (Args...), fptr, CallConv>::init()
 {
+    if(loggingEnabled)
+        guestFP = (UPP<Ret (Args...)>)SYN68K_TO_US(callback_install(
+            Invoker<Ret (Args...), &LoggedFunction<Ret (Args...),fptr>::call, CallConv>
+                ::invokeFrom68K, nullptr));    
+    else
     guestFP = (UPP<Ret (Args...)>)SYN68K_TO_US(callback_install(
-        Invoker<Ret (Args...), LoggedFunction<Ret (Args...),fptr>::call, CallConv>
+            Invoker<Ret (Args...), fptr, CallConv>
             ::invokeFrom68K, nullptr));    
 }
 
@@ -510,7 +516,10 @@ WrappedFunction<syn68k_addr_t (syn68k_addr_t,void*), fptr, callconv::Raw>::Wrapp
 template<syn68k_addr_t (*fptr)(syn68k_addr_t,void*)>
 void WrappedFunction<syn68k_addr_t (syn68k_addr_t,void*), fptr, callconv::Raw>::init()
 {
+    if(loggingEnabled)
     guestFP = (ProcPtr)SYN68K_TO_US(callback_install(&untypedLoggedFunction<fptr>, nullptr));
+    else
+        guestFP = (ProcPtr)SYN68K_TO_US(callback_install(fptr, nullptr));
 }
 
 
@@ -548,7 +557,11 @@ template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno, uint3
 SubTrapFunction<Ret (Args...), fptr, trapno, selector, CallConv>::SubTrapFunction(const char* name, GenericDispatcherTrap& dispatcher)
     : WrappedFunction<Ret(Args...),fptr,CallConv>(name), dispatcher(dispatcher)
 {
-    dispatcher.addSelector(selector, Invoker<Ret (Args...), LoggedFunction<Ret (Args...),fptr>::call, CallConv>
+    if(loggingEnabled)
+        dispatcher.addSelector(selector, Invoker<Ret (Args...), &LoggedFunction<Ret (Args...),fptr>::call, CallConv>
+                ::invokeFrom68K);
+    else
+        dispatcher.addSelector(selector, Invoker<Ret (Args...), fptr, CallConv>
             ::invokeFrom68K);
 }
 
