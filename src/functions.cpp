@@ -381,15 +381,7 @@ template<int mask> struct TrapBit
 {
     operator bool() { return !!(EM_D1 & mask); }
 };
-/*
-template<typename Loc> struct ReturnMemErr
-{
-    syn68k_addr_t afterwards(syn68k_addr_t ret)
-    {
-        Loc::set(CW(LM(MemErr)));
-        return ret;
-    }
-};*/
+
 struct CCFromD0
 {
     syn68k_addr_t afterwards(syn68k_addr_t ret)
@@ -474,14 +466,13 @@ struct Invoker<void (Args...), fptr, callconv::Register<RetConv (ArgConvs...)>>
     }
 };
 
-
-template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename RetConv, typename ArgConvs, typename Extra1, typename... Extras>
-struct Invoker<Ret (Args...), fptr, callconv::Register<RetConv (ArgConvs...), Extra1, Extras...>>
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename RetArgConv, typename Extra1, typename... Extras>
+struct Invoker<Ret (Args...), fptr, callconv::Register<RetArgConv, Extra1, Extras...>>
 {
     static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *refcon)
     {
         Extra1 state;
-        syn68k_addr_t retval = Invoker<Ret(Args...), fptr, callconv::Register<RetConv (ArgConvs...), Extras...>>::invokeFrom68K(addr,refcon);
+        syn68k_addr_t retval = Invoker<Ret(Args...), fptr, callconv::Register<RetArgConv, Extras...>>::invokeFrom68K(addr,refcon);
         return state.afterwards(retval);
     }
 };
@@ -501,9 +492,9 @@ void WrappedFunction<Ret (Args...), fptr, CallConv>::init()
             Invoker<Ret (Args...), &LoggedFunction<Ret (Args...),fptr>::call, CallConv>
                 ::invokeFrom68K, nullptr));    
     else
-    guestFP = (UPP<Ret (Args...)>)SYN68K_TO_US(callback_install(
+        guestFP = (UPP<Ret (Args...)>)SYN68K_TO_US(callback_install(
             Invoker<Ret (Args...), fptr, CallConv>
-            ::invokeFrom68K, nullptr));    
+                ::invokeFrom68K, nullptr));    
 }
 
 template<syn68k_addr_t (*fptr)(syn68k_addr_t,void*)>
@@ -517,7 +508,7 @@ template<syn68k_addr_t (*fptr)(syn68k_addr_t,void*)>
 void WrappedFunction<syn68k_addr_t (syn68k_addr_t,void*), fptr, callconv::Raw>::init()
 {
     if(loggingEnabled)
-    guestFP = (ProcPtr)SYN68K_TO_US(callback_install(&untypedLoggedFunction<fptr>, nullptr));
+        guestFP = (ProcPtr)SYN68K_TO_US(callback_install(&untypedLoggedFunction<fptr>, nullptr));
     else
         guestFP = (ProcPtr)SYN68K_TO_US(callback_install(fptr, nullptr));
 }
@@ -562,7 +553,7 @@ SubTrapFunction<Ret (Args...), fptr, trapno, selector, CallConv>::SubTrapFunctio
                 ::invokeFrom68K);
     else
         dispatcher.addSelector(selector, Invoker<Ret (Args...), fptr, CallConv>
-            ::invokeFrom68K);
+                ::invokeFrom68K);
 }
 
 template<class SelectorConvention>

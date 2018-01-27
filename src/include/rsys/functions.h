@@ -199,17 +199,17 @@ private:
 
 #if !defined(FUNCTION_WRAPPER_IMPLEMENTATION) /* defined in functions.cpp */
 
-#define CREATE_FUNCTION_WRAPPER(TYPE, NAME, FPTR, ...) \
-    extern Executor::functions::TYPE NAME
+#define CREATE_FUNCTION_WRAPPER(NAME, FPTR, INIT, ...) \
+    extern Executor::functions::__VA_ARGS__ NAME
 
 #define DISPATCHER_TRAP(NAME, TRAP, SELECTOR) \
     extern Executor::functions::DispatcherTrap<Executor::functions::selectors::SELECTOR> NAME
 
 #else
 
-#define CREATE_FUNCTION_WRAPPER(TYPE, NAME, FPTR, ...) \
-    Executor::functions::TYPE NAME(__VA_ARGS__);   \
-    template class Executor::functions::TYPE;
+#define CREATE_FUNCTION_WRAPPER(NAME, FPTR, INIT, ...) \
+    Executor::functions::__VA_ARGS__ NAME INIT;   \
+    template class Executor::functions::__VA_ARGS__;
 
 #define DISPATCHER_TRAP(NAME, TRAP, SELECTOR) \
     Executor::functions::DispatcherTrap<Executor::functions::selectors::SELECTOR> NAME { #NAME, TRAP }
@@ -222,22 +222,27 @@ private:
 
 #define COMMA ,
 #define PASCAL_TRAP(NAME, TRAP) \
-    CREATE_FUNCTION_WRAPPER(TrapFunction<decltype(C_##NAME) COMMA &C_##NAME COMMA TRAP>, NAME, &C_##NAME, #NAME)
+    CREATE_FUNCTION_WRAPPER(NAME, &C_##NAME, (#NAME), TrapFunction<decltype(C_##NAME) COMMA &C_##NAME COMMA TRAP>)
+#define REGISTER_TRAP(NAME, TRAP, ...) \
+    CREATE_FUNCTION_WRAPPER(NAME, &C_##NAME, (#NAME), TrapFunction<decltype(C_##NAME) COMMA &C_##NAME COMMA TRAP COMMA callconv::Register<__VA_ARGS__>>)
+#define REGISTER_TRAP2(NAME, TRAP, ...) \
+    CREATE_FUNCTION_WRAPPER(stub_##NAME, &NAME, (#NAME), TrapFunction<decltype(NAME) COMMA &NAME COMMA TRAP COMMA callconv::Register<__VA_ARGS__>>)
+
 #define PASCAL_SUBTRAP(NAME, TRAP, SELECTOR, TRAPNAME) \
-    CREATE_FUNCTION_WRAPPER(SubTrapFunction<decltype(C_##NAME) COMMA &C_##NAME COMMA TRAP COMMA SELECTOR>, NAME, &C_##NAME, #NAME, TRAPNAME)
+    CREATE_FUNCTION_WRAPPER(NAME, &C_##NAME, (#NAME, TRAPNAME), SubTrapFunction<decltype(C_##NAME) COMMA &C_##NAME COMMA TRAP COMMA SELECTOR>)
 #define REGISTER_SUBTRAP(NAME, TRAP, SELECTOR, TRAPNAME, ...) \
-    CREATE_FUNCTION_WRAPPER(SubTrapFunction<decltype(C_##NAME) COMMA &C_##NAME COMMA TRAP COMMA SELECTOR COMMA callconv::Register<__VA_ARGS__>>, NAME, &C_##NAME, #NAME, TRAPNAME)
+    CREATE_FUNCTION_WRAPPER(NAME, &C_##NAME, (#NAME, TRAPNAME), SubTrapFunction<decltype(C_##NAME) COMMA &C_##NAME COMMA TRAP COMMA SELECTOR COMMA callconv::Register<__VA_ARGS__>>)
 
 #define NOTRAP_FUNCTION(NAME) \
-    CREATE_FUNCTION_WRAPPER(WrappedFunction<decltype(C_##NAME) COMMA &C_##NAME>, NAME, &C_##NAME, #NAME)
+    CREATE_FUNCTION_WRAPPER(NAME, &C_##NAME, (#NAME), WrappedFunction<decltype(C_##NAME) COMMA &C_##NAME>)
 #define PASCAL_FUNCTION(NAME) \
-    CREATE_FUNCTION_WRAPPER(WrappedFunction<decltype(C_##NAME) COMMA &C_##NAME>, NAME, &C_##NAME, #NAME)
+    CREATE_FUNCTION_WRAPPER(NAME, &C_##NAME, (#NAME), WrappedFunction<decltype(C_##NAME) COMMA &C_##NAME>)
 #define RAW_68K_FUNCTION(NAME) \
     syn68k_addr_t _##NAME(syn68k_addr_t, void *); \
-    CREATE_FUNCTION_WRAPPER(WrappedFunction<decltype(_##NAME) COMMA &_##NAME COMMA callconv::Raw>, stub_##NAME, &_##NAME, #NAME)
+    CREATE_FUNCTION_WRAPPER(stub_##NAME, &_##NAME, (#NAME), WrappedFunction<decltype(_##NAME) COMMA &_##NAME COMMA callconv::Raw>)
 #define RAW_68K_TRAP(NAME, TRAP) \
     syn68k_addr_t _##NAME(syn68k_addr_t, void *); \
-    CREATE_FUNCTION_WRAPPER(TrapFunction<decltype(_##NAME) COMMA &_##NAME COMMA TRAP COMMA callconv::Raw>, stub_##NAME, &_##NAME, #NAME)
+    CREATE_FUNCTION_WRAPPER(stub_##NAME, &_##NAME, (#NAME), TrapFunction<decltype(_##NAME) COMMA &_##NAME COMMA TRAP COMMA callconv::Raw>)
 
     
 void resetNestingLevel();
