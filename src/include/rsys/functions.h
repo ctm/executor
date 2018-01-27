@@ -88,9 +88,11 @@ namespace selectors
     template <uint32_t mask> struct D0;
     using D0W = D0<0xFFFF>;
     using D0L = D0<0xFFFFFFFF>;
-    struct StackW;
-    struct StackL;
-    template <uint32_t mask> struct StackWLookahead;
+    template <uint32_t mask = 0xFFFF> struct StackWMasked;
+    template <uint32_t mask = 0xFFFFFFFF> struct StackLMasked;
+    using StackW = StackWMasked<>;
+    using StackL = StackLMasked<>;
+    template <uint32_t mask = 0xFFFF> struct StackWLookahead;
 }
 
 namespace internal

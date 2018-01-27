@@ -143,7 +143,7 @@ enum
 #define FCMP_RETURN_TYPE void
 
 DISPATCHER_TRAP(Pack4, 0xA9EB, StackWLookahead<0xFF>);
-DISPATCHER_TRAP(Pack5, 0xA9EC, StackW);
+DISPATCHER_TRAP(Pack5, 0xA9EC, StackWMasked<0xFF>);
 DISPATCHER_TRAP(Pack7, 0xA9EE, StackW);
 
 extern void C_ROMlib_Fcomp2X(comp sp, extended80 *

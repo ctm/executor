@@ -612,27 +612,29 @@ struct D0
     static uint32_t get() { return EM_D0 & mask; }
 };
 
-struct StackW
+template <uint32_t mask>
+struct StackWMasked
 {
-    static const uint32_t selectorMask = 0xFFFF;
+    static const uint32_t selectorMask = mask;
     static uint32_t get()
     {
         auto ret = POPADDR();
         auto sel = POPUW();
         PUSHADDR(ret);
-        return sel;
+        return sel & mask;
     }
 };
 
-struct StackL
+template <uint32_t mask>
+struct StackLMasked
 {
-    static const uint32_t selectorMask = 0xFFFFFFFF;
+    static const uint32_t selectorMask = mask;
     static uint32_t get()
     {
         auto ret = POPADDR();
         auto sel = POPUL();
         PUSHADDR(ret);
-        return sel;
+        return sel & mask;
     }
 };
 template <uint32_t mask>

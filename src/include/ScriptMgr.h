@@ -418,14 +418,26 @@ extern void C_UppercaseStripDiacritics(
     ScriptCode script);
 PASCAL_FUNCTION(UppercaseStripDiacritics); //, 0xA8B5, ScriptUtil);
 
+    // the above four functions are actually one entry point on 68K:
+extern void C_TextUtilFunctions(
+    short selector,
+    Ptr textp,
+    INTEGER len,
+    ScriptCode script);
+PASCAL_SUBTRAP(TextUtilFunctions, 0xA8B5, 0x800AFFB6, ScriptUtil);
+
 extern INTEGER C_CharacterByteType(Ptr textBuf, INTEGER textOffset,
                                    ScriptCode script);
+PASCAL_SUBTRAP(CharacterByteType, 0xA8B5, 0xC2060010, ScriptUtil);
 
 extern INTEGER C_CharacterType(Ptr textbufp, INTEGER offset,
                                ScriptCode script);
+PASCAL_SUBTRAP(CharacterType, 0xA8B5, 0xC2060012, ScriptUtil);
 
 extern INTEGER C_TransliterateText(Handle srch, Handle dsth, INTEGER target,
                                    LONGINT srcmask, ScriptCode script);
+PASCAL_SUBTRAP(TransliterateText, 0xA8B5, 0xC20E0018, ScriptUtil);
+
 }
 
 #endif /* _SCRIPTMGR_H_ */
