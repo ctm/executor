@@ -552,11 +552,6 @@ SubTrapFunction<Ret (Args...), fptr, trapno, selector, CallConv>::SubTrapFunctio
             ::invokeFrom68K);
 }
 
-void GenericDispatcherTrap::addSelector(uint32_t sel, callback_handler_t handler)
-{
-    selectors[sel] = handler;
-}
-
 template<class SelectorConvention>
 syn68k_addr_t DispatcherTrap<SelectorConvention>::invokeFrom68K(syn68k_addr_t addr, void* extra)
 {
@@ -571,6 +566,14 @@ syn68k_addr_t DispatcherTrap<SelectorConvention>::invokeFrom68K(syn68k_addr_t ad
         std::abort();
     }
 }
+template<class SelectorConvention>
+void DispatcherTrap<SelectorConvention>::addSelector(uint32_t sel, callback_handler_t handler)
+{
+    selectors[sel & SelectorConvention::selectorMask] = handler;
+}
+
+
+
 template<class SelectorConvention>
 void DispatcherTrap<SelectorConvention>::init()
 {
@@ -602,18 +605,16 @@ namespace functions
 {
 namespace selectors
 {
-
-struct D0W
+template <uint32_t mask>
+struct D0
 {
-    static uint32_t get() { return EM_D0 & 0xFFFF; }
-};
-struct D0L
-{
-    static uint32_t get() { return EM_D0; }
+    static const uint32_t selectorMask = mask;
+    static uint32_t get() { return EM_D0 & mask; }
 };
 
 struct StackW
 {
+    static const uint32_t selectorMask = 0xFFFF;
     static uint32_t get()
     {
         auto ret = POPADDR();
@@ -625,6 +626,7 @@ struct StackW
 
 struct StackL
 {
+    static const uint32_t selectorMask = 0xFFFFFFFF;
     static uint32_t get()
     {
         auto ret = POPADDR();
@@ -633,12 +635,13 @@ struct StackL
         return sel;
     }
 };
-
+template <uint32_t mask>
 struct StackWLookahead
 {
+    static const uint32_t selectorMask = mask;
     static uint32_t get()
     {
-        return READUW(EM_A7 + 4);
+        return READUW(EM_A7 + 4) & mask;
     }
 };
 

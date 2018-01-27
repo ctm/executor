@@ -50,7 +50,7 @@ enum
     hmCloseViewActive = -863
 };
 
-DISPATCHER_TRAP(Pack14, 0xA830, D0W);
+DISPATCHER_TRAP(Pack14, 0xA830, D0W);   // & 0xFF ? ###
 
 extern BOOLEAN C_HMGetBalloons(void);
 PASCAL_SUBTRAP(HMGetBalloons, 0xA830, 0x0003, Pack14);

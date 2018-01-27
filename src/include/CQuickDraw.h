@@ -297,10 +297,10 @@ const LowMemGlobal<GDHandle> MainDevice { 0x8A4 }; // QuickDraw IMV (true);
 const LowMemGlobal<GDHandle> DeviceList { 0x8A8 }; // QuickDraw IMV (true);
 const LowMemGlobal<RGBColor> HiliteRGB { 0xDA0 }; // QuickDraw IMV-62 (true);
 
-DISPATCHER_TRAP(PaletteDispatch, 0xAAA2, D0W);
+DISPATCHER_TRAP(PaletteDispatch, 0xAAA2, D0W);  // D0<0xFF> ###
 DISPATCHER_TRAP(Pack12, 0xA82E, StackW);
 DISPATCHER_TRAP(QDExtensions, 0xAB1D, D0L);
-DISPATCHER_TRAP(Pack15, 0xA831, D0W);
+DISPATCHER_TRAP(Pack15, 0xA831, D0W);   // D0<0xFF>? ###
 
 extern void C_SetStdCProcs(CQDProcs *cProcs);
 PASCAL_TRAP(SetStdCProcs, 0xAA4E);

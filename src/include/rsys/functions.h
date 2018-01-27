@@ -85,11 +85,12 @@ namespace functions
 
 namespace selectors
 {
-    struct D0W;
-    struct D0L;
+    template <uint32_t mask> struct D0;
+    using D0W = D0<0xFFFF>;
+    using D0L = D0<0xFFFFFFFF>;
     struct StackW;
     struct StackL;
-    struct StackWLookahead;
+    template <uint32_t mask> struct StackWLookahead;
 }
 
 namespace internal
@@ -105,7 +106,7 @@ namespace internal
 class GenericDispatcherTrap : public internal::DeferredInit
 {
 public:
-    void addSelector(uint32_t sel, callback_handler_t handler);
+    virtual void addSelector(uint32_t sel, callback_handler_t handler) = 0;
 protected:
     std::unordered_map<uint32_t, callback_handler_t> selectors;
 };
@@ -117,7 +118,8 @@ class DispatcherTrap : public GenericDispatcherTrap
     const char *name;
     uint16_t trapno;
 public:
-    void init();
+    virtual void init() override;
+    virtual void addSelector(uint32_t sel, callback_handler_t handler) override;
     DispatcherTrap(const char* name, uint16_t trapno) : name(name), trapno(trapno) {}
 };
 
@@ -175,6 +177,8 @@ public:
     virtual void init() override;
 
     TrapFunction(const char* name) : WrappedFunction<Ret(Args...),fptr,CallConv>(name) {}
+
+    bool isPatched() const { return false; }
 };
 
 template<typename F, F* fptr, int trapno, uint32_t selector, typename CallConv = callconv::Pascal>

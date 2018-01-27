@@ -76,7 +76,7 @@ const LowMemGlobal<Byte[20]> SysResName { 0xAD8 }; // ResourceMgr IMI-114 (true)
 const LowMemGlobal<Byte> RomMapInsert { 0xB9E }; // ResourceMgr IMIV-19 (false);
 const LowMemGlobal<Byte> TmpResLoad { 0xB9F }; // ResourceMgr IMIV-19 (false);
 
-DISPATCHER_TRAP(ResourceDispatch, 0xA822, D0W);
+DISPATCHER_TRAP(ResourceDispatch, 0xA822, D0<0xF>);
 
 extern void C_SetResLoad(BOOLEAN load);
 PASCAL_TRAP(SetResLoad, 0xA99B);
