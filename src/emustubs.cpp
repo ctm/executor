@@ -270,14 +270,14 @@ do_selector_error(uint32_t selector,
     char buf[256];
 
     /* search for the trap fp in the trap tables */
-
+/*
     for(i = 0; i < 0x400; i++)
         if(toolstuff[i].ptoc.wheretogo == trap_fp)
         {
             trapno = i + 0xA800;
             found_trapno_p = true;
             break;
-        }
+        }*/
     if(!found_trapno_p)
         for(i = 0; i < 0x100; i++)
             if(osstuff[i].func == trap_fp)

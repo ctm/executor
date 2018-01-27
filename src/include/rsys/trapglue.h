@@ -13,12 +13,6 @@ typedef struct
 
 typedef struct
 {
-    ptocblock_t ptoc;
-    syn68k_addr_t orig;
-} toolstuff_t;
-
-typedef struct
-{
     syn68k_addr_t orig;
     void *func;
 } osstuff_t;
@@ -35,7 +29,6 @@ extern syn68k_addr_t PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop);
 extern unsigned short mostrecenttrap;
 
 extern uintptr_t CToPascalCall(void *, uint64_t, ...);
-extern toolstuff_t toolstuff[NTOOLENTRIES];
 extern osstuff_t osstuff[];
 }
 
