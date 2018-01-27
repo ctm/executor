@@ -144,7 +144,6 @@ RAW_68K_TRAP(HWPriv, 0xA198);
 RAW_68K_TRAP(Microseconds, 0xA193);
 RAW_68K_TRAP(Gestalt, 0xA1AD);
 RAW_68K_TRAP(ResourceStub, 0xA0FC);
-RAW_68K_TRAP(ScriptUtil, 0xA8B5);
 RAW_68K_TRAP(Dequeue, 0xA96E);
 RAW_68K_TRAP(Enqueue, 0xA96F);
 RAW_68K_TRAP(Secs2Date, 0xA9C6);
