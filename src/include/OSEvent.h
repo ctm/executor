@@ -96,6 +96,17 @@ const LowMemGlobal<Point> MTemp { 0x828 }; // QuickDraw PegLeg (True-b);
 const LowMemGlobal<Point> MouseLocation { 0x82C }; // QuickDraw Vamp (true);
 const LowMemGlobal<Point> MouseLocation2 { 0x830 }; // QuickDraw MacAttack (true);
 
+namespace callconv
+{
+struct D0Minus1Boolean
+{
+    static void set(bool b)
+    {
+        EM_D0 = b ? 0 : -1;
+    }
+};
+}
+
 extern void ROMlib_eventdep(void);
 extern void insertcommonevent(char *xeventp, commonevent *comevtp);
 extern void ROMlib_zapmap(LONGINT loc, LONGINT val);
@@ -106,9 +117,12 @@ extern OSErr ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg,
 extern OSErr PostEvent(INTEGER evcode, LONGINT evmsg);
 extern void FlushEvents(INTEGER evmask,
                              INTEGER stopmask);
+REGISTER_TRAP2(FlushEvents, 0xA032, void(D0,D0HighWord), ClearD0);
 extern BOOLEAN GetOSEvent(INTEGER evmask, EventRecord *eventp);
+REGISTER_TRAP2(GetOSEvent, 0xA031, D0Minus1Boolean (D0,A0));
 extern BOOLEAN OSEventAvail(INTEGER evmask,
                                     EventRecord *eventp);
+REGISTER_TRAP2(OSEventAvail, 0xA030, D0Minus1Boolean (D0,A0));
 extern void SetEventMask(INTEGER evmask);
 extern QHdrPtr GetEvQHdr(void);
 

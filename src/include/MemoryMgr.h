@@ -92,6 +92,28 @@ const LowMemGlobal<Byte[12]> ApplScratch { 0xA78 }; // MemoryMgr IMI-85 (true);
 #define SYSBIT (1 << 10)
 #define CLRBIT (1 << 9)
 
+namespace callconv
+{
+    template<typename Loc> struct ReturnMemErr
+    {
+        syn68k_addr_t afterwards(syn68k_addr_t ret)
+        {
+            Loc::set(CW(LM(MemErr)));
+            return ret;
+        }
+    };
+    template<typename Loc> struct ReturnMemErrConditional
+    {
+        syn68k_addr_t afterwards(syn68k_addr_t ret)
+        {
+            auto err = CW(LM(MemErr));
+            if(err < 0)
+                Loc::set(err);
+            return ret;
+        }
+    };
+
+}
 
 #define NewEmptyHandle() (_NewEmptyHandle_flags(false))
 #define NewEmptyHandleSys() (_NewEmptyHandle_flags(true))
@@ -112,13 +134,7 @@ extern Handle _RecoverHandle_flags(Ptr p, bool sys_p);
 #define NewPtrClear(size) (_NewPtr_flags(size, false, true))
 #define NewPtrSysClear(size) (_NewPtr_flags(size, true, true))
 extern Ptr _NewPtr_flags(Size size, bool sys_p, bool clear_p);
-/*
-CREATE_FUNCTION_WRAPPER(
-    PascalTrap<
-        decltype(_NewPtr_flags) COMMA &_NewPtr_flags COMMA 0xA11E COMMA
-        callconv::Register<callconv::A<0> (callconv::D<0> COMMA callconv::TrapBit<SYSBIT> COMMA callconv::TrapBit<CLRBIT>)>
-    >, 
-    stub_NewPtr, &_NewPtr_flags, "NewPtr");*/
+REGISTER_TRAP2(_NewPtr_flags, 0xA11E, A0 (D0, TrapBit<SYSBIT>, TrapBit<CLRBIT>) , callconv::ReturnMemErr<D0> );
 
 #define FreeMem() (_FreeMem_flags(false))
 #define FreeMemSys() (_FreeMem_flags(true))
@@ -157,39 +173,73 @@ extern void ROMlib_InitZones();
 extern OSErr MemError(void);
 
 extern SignedByte HGetState(Handle h);
+REGISTER_TRAP2(HGetState, 0xA069, D0(A0));
 extern void HSetState(Handle h, SignedByte flags);
+REGISTER_TRAP2(HSetState, 0xA06A, void(A0,D0), ReturnMemErr<D0>);
 extern void HLock(Handle h);
+REGISTER_TRAP2(HLock, 0xA029, void(A0), ReturnMemErr<D0>);
 extern void HUnlock(Handle h);
+REGISTER_TRAP2(HUnlock, 0xA02A, void(A0), ReturnMemErr<D0>);
 extern void HPurge(Handle h);
+REGISTER_TRAP2(HPurge, 0xA049, void(A0), ReturnMemErr<D0>);
 extern void HNoPurge(Handle h);
+REGISTER_TRAP2(HNoPurge, 0xA04A, void(A0), ReturnMemErr<D0>);
 extern void HSetRBit(Handle h);
+REGISTER_TRAP2(HSetRBit, 0xA067, void(A0), ReturnMemErr<D0>);
 extern void HClrRBit(Handle h);
+REGISTER_TRAP2(HClrRBit, 0xA068, void(A0), ReturnMemErr<D0>);
 extern void InitApplZone(void);
+REGISTER_TRAP2(InitApplZone, 0xA02C, void (), ReturnMemErr<D0>);
 extern void SetApplBase(Ptr newbase);
+REGISTER_TRAP2(SetApplBase, 0xA057, void (A0), ReturnMemErr<D0>);
 extern void MoreMasters(void);
+REGISTER_TRAP2(MoreMasters, 0xA036, void (), ReturnMemErr<D0>);
+
 extern void InitZone(GrowZoneProcPtr pGrowZone, int16_t cMoreMasters,
                      Ptr limitPtr, THz startPtr);
+
 extern THz GetZone(void);
+REGISTER_TRAP2(GetZone, 0xA11A, A0 (), ReturnMemErr<D0>);
 extern void SetZone(THz hz);
+REGISTER_TRAP2(SetZone, 0xA01B, void (A0), ReturnMemErr<D0>);
 extern void DisposHandle(Handle h);
+REGISTER_TRAP2(DisposHandle, 0xA023, void (A0), ReturnMemErr<D0>);
 extern Size GetHandleSize(Handle h);
+REGISTER_TRAP2(GetHandleSize, 0xA025, D0 (A0), ReturnMemErrConditional<D0>);
 extern void SetHandleSize(Handle h, Size newsize);
+REGISTER_TRAP2(SetHandleSize, 0xA024, void (A0, D0), ReturnMemErr<D0>);
 extern THz HandleZone(Handle h);
+REGISTER_TRAP2(HandleZone, 0xA126, A0 (A0), ReturnMemErr<D0>);
 extern void ReallocHandle(Handle h, Size size);
+REGISTER_TRAP2(ReallocHandle, 0xA027, void (A0, D0), ReturnMemErr<D0>);
 extern void DisposPtr(Ptr p);
+REGISTER_TRAP2(DisposPtr, 0xA01F, void (A0), ReturnMemErr<D0>);
 extern Size GetPtrSize(Ptr p);
+REGISTER_TRAP2(GetPtrSize, 0xA021, D0 (A0), ReturnMemErrConditional<D0>);
 extern void SetPtrSize(Ptr p, Size newsize);
+REGISTER_TRAP2(SetPtrSize, 0xA020, void (A0, D0), ReturnMemErr<D0>);
 extern THz PtrZone(Ptr p);
+REGISTER_TRAP2(PtrZone, 0xA148, A0 (A0), ReturnMemErr<D0>);
+
 extern void BlockMove(Ptr src, Ptr dst, Size cnt);
 extern void BlockMoveData(Ptr src, Ptr dst, Size cnt);
+
 extern void MaxApplZone(void);
+REGISTER_TRAP2(MaxApplZone, 0xA063, void (), ReturnMemErr<D0>);
 extern void MoveHHi(Handle h);
+REGISTER_TRAP2(MoveHHi, 0xA064, void (A0), ReturnMemErr<D0>);
 extern void SetApplLimit(Ptr newlimit);
+REGISTER_TRAP2(SetApplLimit, 0xA02D, void (A0), ReturnMemErr<D0>);
 extern void SetGrowZone(GrowZoneProcPtr newgz);
+REGISTER_TRAP2(SetGrowZone, 0xA04B, void (A0), ReturnMemErr<D0>);
 extern void EmptyHandle(Handle h);
+REGISTER_TRAP2(EmptyHandle, 0xA02B, void (A0), ReturnMemErr<D0>);
+
 extern THz SystemZone(void);
 extern THz ApplicZone(void);
+
 extern Size StackSpace(void);
+REGISTER_TRAP2(StackSpace, 0xA065, D0 ());
 
 DISPATCHER_TRAP(OSDispatch, 0xA88F, StackW);
 

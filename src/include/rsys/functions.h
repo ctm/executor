@@ -22,12 +22,6 @@ template<typename T, typename... Extras>
 class Register { };
 template <int n> struct A;
 template <int n> struct D;
-template <int mask> struct TrapBit;
-template<typename loc, typename T> struct Out;
-template<typename loc, typename T> struct InOut;
-
-template<typename Loc> struct ReturnMemErr;
-struct CCFromD0;
 
 using A0 = A<0>;
 using A1 = A<1>;
@@ -35,6 +29,20 @@ using A2 = A<2>;
 using D0 = D<0>;
 using D1 = D<1>;
 using D2 = D<2>;
+
+struct D0HighWord;
+
+template <int mask> struct TrapBit;
+template<typename loc, typename T> struct Out;
+template<typename loc, typename T> struct InOut;
+
+template<typename Loc> struct ReturnMemErr;
+struct CCFromD0;
+
+struct ClearD0;
+struct SaveA1D1D2;
+struct MoveA1ToA0;
+struct D0HighWord;
 }
 using namespace callconv;
 

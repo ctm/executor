@@ -158,10 +158,16 @@ const LowMemGlobal<QHdr> DTQueue { 0xD92 }; // OSUtil IMV-466 (false);
 const LowMemGlobal<ProcPtr> JDTInstall { 0xD9C }; // OSUtil IMV (false);
 
 extern OSErr HandToHand(Handle *h);
+REGISTER_TRAP2(HandToHand, 0xA9E1, D0(InOut<A0,Handle>), SaveA1D1D2, CCFromD0);
 extern OSErr PtrToHand(Ptr p, Handle *h, LONGINT s);
+REGISTER_TRAP2(PtrToHand, 0xA9E3, D0(A0, Out<A0,Handle>, D0), SaveA1D1D2, CCFromD0);
 extern OSErr PtrToXHand(Ptr p, Handle h, LONGINT s);
+REGISTER_TRAP2(PtrToXHand, 0xA9E2, D0(A0,A1,D0), MoveA1ToA0, SaveA1D1D2, CCFromD0);
 extern OSErr HandAndHand(Handle h1, Handle h2);
+REGISTER_TRAP2(HandAndHand, 0xA9E4, D0(A0,A1), MoveA1ToA0, SaveA1D1D2, CCFromD0);
 extern OSErr PtrAndHand(Ptr p, Handle h, LONGINT s1);
+REGISTER_TRAP2(PtrAndHand, 0xA9EF, D0(A0,A1,D0), MoveA1ToA0, SaveA1D1D2, CCFromD0);
+
 extern LONGINT ROMlib_RelString(unsigned char *s1, unsigned char *s2,
                                 BOOLEAN casesig, BOOLEAN diacsig, LONGINT d0);
 extern INTEGER RelString(StringPtr s1, StringPtr s2,
@@ -171,27 +177,43 @@ extern BOOLEAN EqualString(StringPtr s1, StringPtr s2,
 extern void ROMlib_UprString(StringPtr s, BOOLEAN diac, INTEGER len);
 extern void UprString(StringPtr s, BOOLEAN diac);
 extern void GetDateTime(GUEST<ULONGINT> *mactimepointer);
+
 extern OSErr ReadDateTime(GUEST<ULONGINT> *secs);
+REGISTER_TRAP2(ReadDateTime, 0xA039, D0(A0));
 extern OSErr SetDateTime(ULONGINT mactime);
+REGISTER_TRAP2(SetDateTime, 0xA03A, D0(D0));
 extern void Date2Secs(DateTimeRec *d, ULONGINT *s);
+REGISTER_TRAP2(Date2Secs, 0xA9C7, void(A0, Out<D0, ULONGINT>), SaveA1D1D2);
 extern void Secs2Date(ULONGINT mactime, DateTimeRec *d);
+REGISTER_TRAP2(Secs2Date, 0xA9C6, void(D0,A0), SaveA1D1D2);
+
 extern void GetTime(DateTimeRec *d);
 extern void SetTime(DateTimeRec *d);
 extern OSErr InitUtil(void);
 extern SysPPtr GetSysPPtr(void);
+
 extern OSErr WriteParam(void);
+REGISTER_TRAP2(WriteParam, 0xA038, D0());
 extern void Enqueue(QElemPtr e, QHdrPtr h);
+REGISTER_TRAP2(Enqueue, 0xA96F, D0(A0,A1), SaveA1D1D2);
 extern OSErr Dequeue(QElemPtr e, QHdrPtr h);
+REGISTER_TRAP2(Dequeue, 0xA96E, D0(A0,A1), SaveA1D1D2);
+
 extern LONGINT GetTrapAddress(INTEGER n);
 extern LONGINT NGetTrapAddress(INTEGER n, INTEGER ttype);
 extern void SetTrapAddress(LONGINT addr,
                            INTEGER n);
+
 extern void Delay(LONGINT n, LONGINT *ftp);
+REGISTER_TRAP2(Delay, 0xA03B, void(A0,Out<D0,LONGINT>));
+
 extern void C_SysBeep(INTEGER i);
 PASCAL_TRAP(SysBeep, 0xA9C8);
 
 extern void Environs(GUEST<INTEGER> *rom, GUEST<INTEGER> *machine);
 extern OSErr SysEnvirons(INTEGER vers, SysEnvRecPtr p);
+REGISTER_TRAP2(SysEnvirons, 0xA090, D0(D0,A0));
+
 extern void Restart(void);
 extern void SetUpA5(void);
 extern void RestoreA5(void);

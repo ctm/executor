@@ -61,9 +61,9 @@ const LowMemGlobal<INTEGER> MCLKPCmiss2 { 0x3A6 }; // MacLinkPC badaccess (true-
 /*
  * JFLUSH is a guess from disassembling some of Excel 3.0
  */
-const LowMemGlobal<ProcPtr> JFLUSH { 0x6F4 }; // idunno guess (true-b);
-const LowMemGlobal<ProcPtr> JResUnknown1 { 0x700 }; // idunno resedit (true-b);
-const LowMemGlobal<ProcPtr> JResUnknown2 { 0x714 }; // idunno resedit (true-b);
+const LowMemGlobal<UPP<void()>> JFLUSH { 0x6F4 }; // idunno guess (true-b);
+const LowMemGlobal<UPP<void()>> JResUnknown1 { 0x700 }; // idunno resedit (true-b);
+const LowMemGlobal<UPP<void()>> JResUnknown2 { 0x714 }; // idunno resedit (true-b);
 
 /*
  * NOTE: The graphing program looks for a -1 in 0x952

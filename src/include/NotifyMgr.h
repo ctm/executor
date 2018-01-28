@@ -29,6 +29,8 @@ typedef struct NMRec
 } * NMRecPtr;
 
 extern OSErr NMInstall(NMRecPtr nmptr);
+REGISTER_TRAP2(NMInstall, 0xA05E, D0(A0));
 extern OSErr NMRemove(NMRecPtr nmptr);
+REGISTER_TRAP2(NMRemove, 0xA05F, D0(A0));
 }
 #endif /* __NOTIFYMGR__ */

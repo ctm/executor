@@ -346,6 +346,9 @@ template<int n> struct A
     operator T() { return EM_AREG(n); }
     template<typename T>
     operator T*() { return ptr_from_longint<T*>(EM_AREG(n)); }
+    template<typename T>
+    operator UPP<T>() { return UPP<T>(ptr_from_longint<ProcPtr>(EM_AREG(n))); }
+
     static void set(uint32_t x) { EM_AREG(n) = x; }
     static void set(void *x) { EM_AREG(n) = ptr_to_longint(x); }
 };
@@ -355,6 +358,11 @@ template<int n> struct D
     template<typename T>
     operator T() { return EM_DREG(n); }
     static void set(uint32_t x) { EM_DREG(n) = x; }
+};
+
+struct D0HighWord
+{
+    operator uint16_t() { return EM_D0 >> 16; }
 };
 
 template<typename Loc, typename T> struct Out
@@ -394,6 +402,48 @@ struct CCFromD0
         return ret;
     }
 };
+
+struct ClearD0
+{
+    syn68k_addr_t afterwards(syn68k_addr_t ret)
+    {
+        EM_D0 = 0;
+        return ret;
+    }  
+};
+
+struct SaveA1D1D2
+{
+    syn68k_addr_t a1, d1, d2;
+    SaveA1D1D2()
+    {
+        a1 = EM_A1;
+        d1 = EM_D1;
+        d2 = EM_D2;
+    }
+    syn68k_addr_t afterwards(syn68k_addr_t ret)
+    {
+        EM_A1 = a1;
+        EM_D1 = d1;
+        EM_D2 = d2;
+        return ret;
+    }  
+};
+
+struct MoveA1ToA0
+{
+    syn68k_addr_t a1;
+    MoveA1ToA0()
+    {
+        a1 = EM_A1;
+    }
+    syn68k_addr_t afterwards(syn68k_addr_t ret)
+    {
+        EM_A0 = a1;
+        return ret;
+    }
+};
+
 }
 }
 
