@@ -18,8 +18,6 @@ namespace Executor
 extern SignedByte hlock_return_orig_state(Handle h);
 extern Size zone_size(THz zone);
 
-extern void BlockMove_the_trap(Ptr src, Ptr dst, Size cnt, bool flush_p);
-
 /* Helper function that prints a useful error message when out of memory. */
 extern void print_mem_full_message(void);
 

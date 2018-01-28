@@ -68,27 +68,6 @@ namespace Executor
 #define STUB(x) syn68k_addr_t _##x(syn68k_addr_t ignoreme, \
                                           void *ignoreme2)
 
-#define ADJUST_CC_BASED_ON_D0()                         \
-    do                                                  \
-    {                                                   \
-        cpu_state.ccc = 0;                              \
-        cpu_state.ccn = (cpu_state.regs[0].sw.n < 0);   \
-        cpu_state.ccv = 0;                              \
-        cpu_state.ccx = cpu_state.ccx; /* unchanged */  \
-        cpu_state.ccnz = (cpu_state.regs[0].sw.n != 0); \
-    } while(0)
-
-#define STUB_NEG1_D0(x)          \
-    STUB(x)                      \
-    {                            \
-        EM_D0 = -1;              \
-        ADJUST_CC_BASED_ON_D0(); \
-        RTS();                   \
-    }
-
-#define STUB_RTS(x) \
-    STUB(x) { RTS(); }
-
 STUB(GetDefaultStartup)
 {
     (SYN68K_TO_US(EM_A0))[0] = -1;
@@ -192,9 +171,17 @@ STUB(ResourceStub)
     RTS();
 }
 
-STUB_NEG1_D0(DrvrInstall)
+STUB(DrvrInstall)
+{
+    EM_D0 = -1;
+    RTS();
+}
 
-STUB_NEG1_D0(DrvrRemove)
+STUB(DrvrRemove)
+{
+    EM_D0 = -1;
+    RTS();    
+}
 
 STUB(ADBOp)
 {
@@ -390,17 +377,6 @@ STUB(Frac2X)
     return retaddr;
 }
 
-#define SAVE_A1_D1_D2()              \
-    uint32_t savea1, saved1, saved2; \
-    savea1 = EM_A1;                  \
-    saved1 = EM_D1;                  \
-    saved2 = EM_D2
-
-#define RESTORE_A1_D1_D2() \
-    EM_A1 = savea1;        \
-    EM_D1 = saved1;        \
-    EM_D2 = saved2
-
 
 /*
  * NOTE: The LM(Key1Trans) and LM(Key2Trans) implementations are just transcriptions
@@ -427,217 +403,6 @@ STUB(Key1Trans)
 STUB(Key2Trans)
 {
     KEYTRANSMACRO();
-}
-
-static selector_table_entry_t pack8_table[] = {
-    { 0x011E, PTOCBLOCK(AESetInteractionAllowed) },
-    { 0x0204, PTOCBLOCK(AEDisposeDesc) },
-    { 0x0219, PTOCBLOCK(AEResetTimer) },
-    { 0x021A, PTOCBLOCK(AEGetTheCurrentEvent) },
-    { 0x021B, PTOCBLOCK(AEProcessAppleEvent) },
-    { 0x021D, PTOCBLOCK(AEGetInteractionAllowed) },
-    { 0x022B, PTOCBLOCK(AESuspendTheCurrentEvent) },
-    { 0x022C, PTOCBLOCK(AESetTheCurrentEvent) },
-    { 0x023A, PTOCBLOCK(AEDisposeToken) },
-    { 0x0405, PTOCBLOCK(AEDuplicateDesc) },
-    { 0x0407, PTOCBLOCK(AECountItems) },
-    { 0x040E, PTOCBLOCK(AEDeleteItem) },
-    /* AEDeleteParam */
-    { 0x0413, PTOCBLOCK(AEDeleteKeyDesc) },
-    { 0x0441, PTOCBLOCK(AEManagerInfo) },
-    { 0x0500, PTOCBLOCK(AEInstallSpecialHandler) },
-    { 0x0501, PTOCBLOCK(AERemoveSpecialHandler) },
-    { 0x052D, PTOCBLOCK(AEGetSpecialHandler) },
-    { 0x0536, PTOCBLOCK(AEResolve) },
-    { 0x0603, PTOCBLOCK(AECoerceDesc) },
-    { 0x0609, PTOCBLOCK(AEPutDesc) },
-    /* AEPutParamDesc */
-    { 0x0610, PTOCBLOCK(AEPutKeyDesc) },
-    { 0x061C, PTOCBLOCK(AEInteractWithUser) },
-    { 0x0627, PTOCBLOCK(AEPutAttributeDesc) },
-    { 0x0632, PTOCBLOCK(_AE_hdlr_delete) }, /* internal */
-    { 0x0706, PTOCBLOCK(AECreateList) },
-    { 0x0720, PTOCBLOCK(AERemoveEventHandler) },
-    { 0x0723, PTOCBLOCK(AERemoveCoercionHandler) },
-    { 0x0738, PTOCBLOCK(AERemoveObjectAccessor) },
-    { 0x0812, PTOCBLOCK(AEGetKeyDesc) },
-    { 0x0818, PTOCBLOCK(AEResumeTheCurrentEvent) },
-    { 0x0825, PTOCBLOCK(AECreateDesc) },
-    { 0x0826, PTOCBLOCK(AEGetAttributeDesc) },
-    { 0x0828, PTOCBLOCK(AESizeOfAttribute) },
-    { 0x0829, PTOCBLOCK(AESizeOfKeyDesc) },
-    { 0x082A, PTOCBLOCK(AESizeOfNthItem) },
-    { 0x0831, PTOCBLOCK(_AE_hdlr_install) }, /* internal */
-    { 0x0833, PTOCBLOCK(_AE_hdlr_lookup) }, /* internal */
-    { 0x091F, PTOCBLOCK(AEInstallEventHandler) },
-    { 0x0921, PTOCBLOCK(AEGetEventHandler) },
-    { 0x092E, PTOCBLOCK(_AE_hdlr_table_alloc) }, /* internal */
-    { 0x0937, PTOCBLOCK(AEInstallObjectAccessor) },
-    { 0x0939, PTOCBLOCK(AEGetObjectAccessor) },
-    { 0x0A02, PTOCBLOCK(AECoercePtr) },
-    { 0x0A08, PTOCBLOCK(AEPutPtr) },
-    { 0x0A0B, PTOCBLOCK(AEGetNthDesc) },
-    { 0x0A0F, PTOCBLOCK(AEPutKeyPtr) },
-    { 0x0A16, PTOCBLOCK(AEPutAttributePtr) },
-    { 0x0A22, PTOCBLOCK(AEInstallCoercionHandler) },
-    { 0x0B0D, PTOCBLOCK(AEPutArray) },
-    { 0x0B14, PTOCBLOCK(AECreateAppleEvent) },
-    { 0x0B24, PTOCBLOCK(AEGetCoercionHandler) },
-    { 0x0C3B, PTOCBLOCK(AECallObjectAccessor) },
-    { 0x0D0C, PTOCBLOCK(AEGetArray) },
-    { 0x0D17, PTOCBLOCK(AESend) },
-    /* AEGetParamPtr */
-    { 0x0E11, PTOCBLOCK(AEGetKeyPtr) },
-    { 0x0E15, PTOCBLOCK(AEGetAttributePtr) },
-    { 0x0E35, PTOCBLOCK(AESetObjectCallbacks) },
-    { 0x100A, PTOCBLOCK(AEGetNthPtr) },
-};
-
-static syn68k_addr_t
-pack8_fail_fn()
-{
-    syn68k_addr_t retaddr;
-
-    if(AE_OSL_select_fn == 0)
-        C_pack8_unknown_selector();
-
-    warning_unexpected("calling OSL 'selh' special handler");
-
-    retaddr = POPADDR();
-
-    /* #### just clobber a1? */
-    EM_A1 = US_TO_SYN68K_CHECK0((ProcPtr)&pack8_unknown_selector);
-
-    CALL_EMULATOR(AE_OSL_select_fn);
-
-    return retaddr;
-}
-
-STUB(Pack8)
-{
-    return do_selector_table(EM_D0 & 0xFFFF,
-                             pack8_table, NELEM(pack8_table),
-                             pack8_fail_fn,
-                             Pack8);
-}
-}
-
-void Executor::C_pack8_unknown_selector()
-{
-    do_selector_error(EM_D0 & 0xFFFF, "Pack8", _Pack8);
-}
-
-namespace Executor
-{
-
-/*
- * NOTE: We only look at the last two bytes as the Palette selector.  Some
- *	 Apps don't load the other bytes "properly".
- */
-
-static ptocblock_t palette_dispatch_ptoc_1[] = {
-    PTOCBLOCK(Entry2Index), /* 0x00 */
-    ZERO_PTOCBLOCK, /* 0x01 */
-    PTOCBLOCK(RestoreDeviceClut), /* 0x02 */
-    PTOCBLOCK(ResizePalette), /* 0x03 */
-};
-
-static ptocblock_t palette_dispatch_ptoc_2[] = {
-    PTOCBLOCK(SaveFore), /* 0x40D */
-    PTOCBLOCK(SaveBack), /* 0x40E */
-    PTOCBLOCK(RestoreFore), /* 0x40F */
-    PTOCBLOCK(RestoreBack), /* 0x410 */
-    ZERO_PTOCBLOCK, /* 0x11 */
-    ZERO_PTOCBLOCK, /* 0x12 */
-    PTOCBLOCK(SetDepth), /* 0xA13 */
-    PTOCBLOCK(HasDepth), /* 0xA14 */
-    PTOCBLOCK(PMgrVersion), /* 0x15 */
-    PTOCBLOCK(SetPaletteUpdates), /* 0x616 */
-    PTOCBLOCK(GetPaletteUpdates), /* 0x417 */
-    ZERO_PTOCBLOCK, /* 0x18 */
-    PTOCBLOCK(GetGray), /* 0x1219 */
-};
-
-static selectorblock_t palette_dispatch_block[] = {
-    { 0x00, 0x03, 1, palette_dispatch_ptoc_1 },
-    { 0x0D, 0x19, 1, palette_dispatch_ptoc_2 },
-    { 0, 0, 0, 0 },
-};
-
-STUB(PaletteDispatch)
-{
-    /* FIXME: inspection of the register contents seems to indicate the
-     selector is passed in d0, more reliable sources should verify
-     this */
-    return do_selector_block(palette_dispatch_block,
-                             EM_D0 & 0xFF, PaletteDispatch);
-}
-
-static ptocblock_t QDExtensions_ptoc[] = {
-    PTOCBLOCK(NewGWorld), /* 0 */
-    PTOCBLOCK(LockPixels), /* 1 */
-    PTOCBLOCK(UnlockPixels), /* 2 */
-    PTOCBLOCK(UpdateGWorld), /* 3 */
-    PTOCBLOCK(DisposeGWorld), /* 4 */
-    PTOCBLOCK(GetGWorld), /* 5 */
-    PTOCBLOCK(SetGWorld), /* 6 */
-    PTOCBLOCK(CTabChanged), /* 7 */
-    PTOCBLOCK(PixPatChanged), /* 8 */
-    PTOCBLOCK(PortChanged), /* 9 */
-    PTOCBLOCK(GDeviceChanged), /* 10 */
-    PTOCBLOCK(AllowPurgePixels), /* 11 */
-    PTOCBLOCK(NoPurgePixels), /* 12 */
-    PTOCBLOCK(GetPixelsState), /* 13 */
-    PTOCBLOCK(SetPixelsState), /* 14 */
-    PTOCBLOCK(GetPixBaseAddr), /* 15 */
-    PTOCBLOCK(NewScreenBuffer),
-    PTOCBLOCK(DisposeScreenBuffer),
-    PTOCBLOCK(GetGWorldDevice),
-    PTOCBLOCK(QDDone),
-    PTOCBLOCK(OffscreenVersion),
-    PTOCBLOCK(NewTempScreenBuffer),
-    PTOCBLOCK(PixMap32Bit),
-    PTOCBLOCK(GetGWorldPixMap),
-};
-
-static selectorblock_t QDExtensions_block[] = {
-    { 0x0, 0x17, 1, QDExtensions_ptoc },
-    { 0, 0, 0, 0 },
-};
-
-STUB(QDExtensions)
-{
-    unsigned long selector;
-
-    /* i don't think this should have the `&' rewrite the selector
-     blocks to handle the actual selector values */
-    selector = EM_D0 & 0xFFFF;
-    return do_selector_block(QDExtensions_block, selector, QDExtensions);
-}
-
-static ptocblock_t pack2ptoc[] = {
-    PTOCBLOCK(DIBadMount), /* 0 */
-    PTOCBLOCK(DILoad), /* 2 */
-    PTOCBLOCK(DIUnload), /* 4 */
-    PTOCBLOCK(DIFormat), /* 6 */
-    PTOCBLOCK(DIVerify), /* 8 */
-    PTOCBLOCK(DIZero), /* 10 */
-};
-
-static selectorblock_t pack2block[] = {
-    { 0, 10, 2, pack2ptoc },
-    { 0, 0, 0, 0 },
-};
-
-STUB(Pack2)
-{
-    syn68k_addr_t retaddr;
-    unsigned short uw;
-
-    retaddr = POPADDR();
-    uw = POPUW();
-    PUSHADDR(retaddr);
-    return do_selector_block(pack2block, uw, Pack2);
 }
 
 STUB(IMVI_PPC)
@@ -1251,97 +1016,6 @@ STUB(InitZone)
     InitZone(MR(ip->pGrowZone), CW(ip->cMoreMasters),
              (Ptr)MR(ip->limitPtr), (THz)MR(ip->startPtr));
     EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(FreeMem)
-{
-    EM_D0 = _FreeMem_flags(SYS_P(EM_D1, 0xA01C));
-    RTS();
-}
-
-STUB(CompactMem)
-{
-    EM_D0 = _CompactMem_flags(EM_D0, SYS_P(EM_D1, 0xA04C));
-    RTS();
-}
-
-STUB(ResrvMem)
-{
-    _ResrvMem_flags(EM_D0, SYS_P(EM_D1, 0xA040));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(PurgeMem)
-{
-    _PurgeMem_flags(EM_D0, SYS_P(EM_D1, 0xA04D));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(BlockMove)
-{
-    BlockMove_the_trap((Ptr)SYN68K_TO_US_CHECK0(EM_A0),
-                       (Ptr)SYN68K_TO_US_CHECK0(EM_A1), EM_D0,
-                       !(EM_D1 & 0x200));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(MaxBlock)
-{
-    EM_D0 = _MaxBlock_flags(SYS_P(EM_D1, 0xA061));
-    RTS();
-}
-
-STUB(NewEmptyHandle)
-{
-    EM_A0 = US_TO_SYN68K_CHECK0(_NewEmptyHandle_flags(SYS_P(EM_D1, 0xA166)));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(NewHandle)
-{
-    /* #### d1 options */
-
-    EM_A0 = (uint32_t)US_TO_SYN68K_CHECK0(_NewHandle_flags(EM_D0, SYS_P(EM_D1, 0xA122),
-                                                           CLEAR_P(EM_D1, 0xA122)));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(RecoverHandle)
-{
-    EM_A0 = US_TO_SYN68K_CHECK0(
-        _RecoverHandle_flags((Ptr)SYN68K_TO_US_CHECK0(EM_A0),
-                             SYS_P(EM_D1, 0xA128)));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(NewPtr)
-{
-    EM_A0 = US_TO_SYN68K_CHECK0(_NewPtr_flags(EM_D0, SYS_P(EM_D1, 0xA11E),
-                                              CLEAR_P(EM_D1, 0xA11E)));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(MaxMem)
-{
-    EM_D0 = _MaxMem_flags((Size *)&EM_A0, SYS_P(EM_D1, 0xA11D));
-    RTS();
-}
-
-STUB(PurgeSpace)
-{
-    int32_t total, contig;
-
-    _PurgeSpace_flags(&total, &contig, SYS_P(EM_D1, 0xA062));
-    EM_D0 = total;
-    EM_A0 = contig;
     RTS();
 }
 

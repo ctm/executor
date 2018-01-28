@@ -42,6 +42,7 @@
 #include "PPC.h"
 #include "QuickTime.h"
 #include "BinaryDecimal.h"
+#include "DiskInit.h"
 
 #include "rsys/file.h"
 #include "rsys/adb.h"

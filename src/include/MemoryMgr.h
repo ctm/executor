@@ -118,53 +118,63 @@ namespace callconv
 #define NewEmptyHandle() (_NewEmptyHandle_flags(false))
 #define NewEmptyHandleSys() (_NewEmptyHandle_flags(true))
 extern Handle _NewEmptyHandle_flags(bool sys_p);
+REGISTER_TRAP2(_NewEmptyHandle_flags, 0xA166, A0 (TrapBit<SYSBIT>), callconv::ReturnMemErr<D0>);
 
 #define NewHandle(size) (_NewHandle_flags(size, false, false))
 #define NewHandleSys(size) (_NewHandle_flags(size, true, false))
 #define NewHandleClear(size) (_NewHandle_flags(size, false, true))
 #define NewHandleSysClear(size) (_NewHandle_flags(size, true, true))
 extern Handle _NewHandle_flags(Size size, bool sys_p, bool clear_p);
+REGISTER_TRAP2(_NewHandle_flags, 0xA122, A0 (D0, TrapBit<SYSBIT>, TrapBit<CLRBIT>), callconv::ReturnMemErr<D0>);
 
 #define RecoverHandle(ptr) (_RecoverHandle_flags(ptr, false))
 #define RecoverHandleSys(ptr) (_RecoverHandle_flags(ptr, true))
 extern Handle _RecoverHandle_flags(Ptr p, bool sys_p);
+REGISTER_TRAP2(_RecoverHandle_flags, 0xA128, A0 (A0, TrapBit<SYSBIT>), callconv::ReturnMemErr<D0>);
 
 #define NewPtr(size) (_NewPtr_flags(size, false, false))
 #define NewPtrSys(size) (_NewPtr_flags(size, true, false))
 #define NewPtrClear(size) (_NewPtr_flags(size, false, true))
 #define NewPtrSysClear(size) (_NewPtr_flags(size, true, true))
 extern Ptr _NewPtr_flags(Size size, bool sys_p, bool clear_p);
-REGISTER_TRAP2(_NewPtr_flags, 0xA11E, A0 (D0, TrapBit<SYSBIT>, TrapBit<CLRBIT>) , callconv::ReturnMemErr<D0> );
+REGISTER_TRAP2(_NewPtr_flags, 0xA11E, A0 (D0, TrapBit<SYSBIT>, TrapBit<CLRBIT>), callconv::ReturnMemErr<D0>);
 
 #define FreeMem() (_FreeMem_flags(false))
 #define FreeMemSys() (_FreeMem_flags(true))
 extern int32_t _FreeMem_flags(bool sys_p);
+REGISTER_TRAP2(_FreeMem_flags, 0xA01C, D0 (TrapBit<SYSBIT>));
 
 #define MaxMem(growp) (_MaxMem_flags(growp, false))
 #define MaxMemSys(growp) (_MaxMem_flags(growp, true))
 extern Size _MaxMem_flags(Size *growp, bool sys_p);
+REGISTER_TRAP2(_MaxMem_flags, 0xA11D, D0 (Out<A0,Size>, TrapBit<SYSBIT>));
 
 #define CompactMem(needed) (_CompactMem_flags(needed, false))
 #define CompactMemSys(needed) (_CompactMem_flags(needed, true))
 extern Size _CompactMem_flags(Size sizeneeded, bool sys_p);
+REGISTER_TRAP2(_CompactMem_flags, 0xA04C, D0 (D0, TrapBit<SYSBIT>));
 
 #define ResrvMem(needed) (_ResrvMem_flags(needed, false))
 #define ResrvMemSys(needed) (_ResrvMem_flags(needed, true))
 extern void _ResrvMem_flags(Size needed, bool sys_p);
+REGISTER_TRAP2(_ResrvMem_flags, 0xA040, D0 (D0, TrapBit<SYSBIT>));
 
 #define PurgeMem(needed) (_PurgeMem_flags(needed, false))
 #define PurgeMemSys(needed) (_PurgeMem_flags(needed, true))
 extern void _PurgeMem_flags(Size needed, bool sys_p);
+REGISTER_TRAP2(_PurgeMem_flags, 0xA04D, D0 (D0, TrapBit<SYSBIT>));
 
 #define MaxBlock() (_MaxBlock_flags(false))
 #define MaxBlockSys() (_MaxBlock_flags(true))
 extern Size _MaxBlock_flags(bool sys_p);
+REGISTER_TRAP2(_MaxBlock_flags, 0xA061, D0 (TrapBit<SYSBIT>));
 
 #define PurgeSpace(totalp, congtigp) \
     (_PurgeSpace_flags(totalp, contigp, false))
 #define PurgeSpaceSys(totalp, congtigp) \
     (_PurgeSpace_flags(totalp, contigp, true))
 extern void _PurgeSpace_flags(Size *totalp, Size *contigp, bool sys_p);
+REGISTER_TRAP2(_PurgeSpace_flags, 0xA062, void (Out<D0,int32_t>, Out<A0,int32_t>, TrapBit<SYSBIT>));
 
 /* ### cliff bogofunc; should go away */
 extern void ROMlib_installhandle(Handle sh, Handle dh);
@@ -221,8 +231,11 @@ REGISTER_TRAP2(SetPtrSize, 0xA020, void (A0, D0), ReturnMemErr<D0>);
 extern THz PtrZone(Ptr p);
 REGISTER_TRAP2(PtrZone, 0xA148, A0 (A0), ReturnMemErr<D0>);
 
+
+extern void BlockMove_the_trap(Ptr src, Ptr dst, Size cnt, bool flush_p);
 extern void BlockMove(Ptr src, Ptr dst, Size cnt);
 extern void BlockMoveData(Ptr src, Ptr dst, Size cnt);
+REGISTER_TRAP2(BlockMove_the_trap, 0xA02E, void(A0,A1,D0,TrapBit<0x200>), ReturnMemErr<D0>);
 
 extern void MaxApplZone(void);
 REGISTER_TRAP2(MaxApplZone, 0xA063, void (), ReturnMemErr<D0>);

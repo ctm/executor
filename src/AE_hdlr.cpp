@@ -424,6 +424,7 @@ OSErr Executor::C_AEInstallSpecialHandler(
     if(function_class == keySelectProc)
     {
         AE_OSL_select_fn = US_TO_SYN68K((void *)hdlr_fn);
+        warning_unimplemented("AEInstallSpecialHandler: keySelectProc set");
         AE_RETURN_ERROR(noErr);
     }
 
