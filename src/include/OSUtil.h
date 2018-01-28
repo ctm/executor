@@ -190,6 +190,8 @@ REGISTER_TRAP2(Secs2Date, 0xA9C6, void(D0,A0), SaveA1D1D2);
 extern void GetTime(DateTimeRec *d);
 extern void SetTime(DateTimeRec *d);
 extern OSErr InitUtil(void);
+REGISTER_TRAP2(InitUtil, 0xA03F, D0());
+
 extern SysPPtr GetSysPPtr(void);
 
 extern OSErr WriteParam(void);

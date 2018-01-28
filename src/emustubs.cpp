@@ -184,15 +184,6 @@ STUB(LoadSeg)
     RTS();
 }
 
-STUB(HWPriv)
-{
-    HWPriv(EM_D0, EM_A0); /* NOTE: A0 shouldn't be convered from SYN to US
-			       here because it's often used as a long.  See
-			       the implementation of HWPriv in segment.c 
-			       for details */
-    RTS();
-}
-
 STUB(ResourceStub)
 {
     EM_A0 = US_TO_SYN68K_CHECK0(ROMlib_mgetres2(
@@ -205,12 +196,6 @@ STUB_NEG1_D0(DrvrInstall)
 
 STUB_NEG1_D0(DrvrRemove)
 
-STUB(ADBReInit)
-{
-    ADBReInit();
-    RTS();
-}
-
 STUB(ADBOp)
 {
     adbop_t *p;
@@ -219,30 +204,6 @@ STUB(ADBOp)
 
     cpu_state.regs[0].sw.n
         = ADBOp(MR(p->data), MR(p->proc), MR(p->buffer), EM_D0);
-    RTS();
-}
-
-STUB(CountADBs)
-{
-    cpu_state.regs[0].sw.n = CountADBs();
-    RTS();
-}
-
-STUB(GetIndADB)
-{
-    cpu_state.regs[0].sw.n = GetIndADB((ADBDataBlock *)SYN68K_TO_US_CHECK0(EM_A0), (char)EM_D0);
-    RTS();
-}
-
-STUB(GetADBInfo)
-{
-    cpu_state.regs[0].sw.n = GetADBInfo((ADBDataBlock *)SYN68K_TO_US_CHECK0(EM_A0), (char)EM_D0);
-    RTS();
-}
-
-STUB(SetADBInfo)
-{
-    cpu_state.regs[0].sw.n = SetADBInfo((ADBSetInfoBlock *)SYN68K_TO_US_CHECK0(EM_A0), (char)EM_D0);
     RTS();
 }
 
@@ -440,112 +401,6 @@ STUB(Frac2X)
     EM_D1 = saved1;        \
     EM_D2 = saved2
 
-STUB(HandToHand)
-{
-    Handle vp;
-
-    SAVE_A1_D1_D2();
-    vp = (Handle)SYN68K_TO_US_CHECK0(EM_A0);
-    EM_D0 = HandToHand(&vp);
-    EM_A0 = US_TO_SYN68K_CHECK0(vp);
-    RESTORE_A1_D1_D2();
-    ADJUST_CC_BASED_ON_D0();
-    RTS();
-}
-
-STUB(PtrToHand)
-{
-    Handle dsthand;
-
-    SAVE_A1_D1_D2();
-    EM_D0 = PtrToHand((Ptr)SYN68K_TO_US_CHECK0(EM_A0),
-                      &dsthand, EM_D0);
-    EM_A0 = US_TO_SYN68K_CHECK0(dsthand);
-    RESTORE_A1_D1_D2();
-    ADJUST_CC_BASED_ON_D0();
-    RTS();
-}
-
-STUB(PtrToXHand)
-{
-    long save_a1;
-
-    SAVE_A1_D1_D2();
-    save_a1 = EM_A1;
-    EM_D0 = PtrToXHand((Ptr)SYN68K_TO_US_CHECK0(EM_A0),
-                       (Handle)SYN68K_TO_US_CHECK0(EM_A1), EM_D0);
-    EM_A0 = save_a1; /* a1 == dsthand, which goes into a0 at end */
-    RESTORE_A1_D1_D2();
-    ADJUST_CC_BASED_ON_D0();
-    RTS();
-}
-
-STUB(HandAndHand)
-{
-    long savehand;
-
-    SAVE_A1_D1_D2();
-    savehand = EM_A1;
-    EM_D0 = HandAndHand((Handle)SYN68K_TO_US_CHECK0(EM_A0),
-                        (Handle)SYN68K_TO_US_CHECK0(EM_A1));
-    EM_A0 = savehand;
-    RESTORE_A1_D1_D2();
-    ADJUST_CC_BASED_ON_D0();
-    RTS();
-}
-
-STUB(PtrAndHand)
-{
-    long savehand;
-
-    SAVE_A1_D1_D2();
-    savehand = EM_A1;
-    EM_D0 = PtrAndHand((Ptr)SYN68K_TO_US_CHECK0(EM_A0),
-                       (Handle)SYN68K_TO_US_CHECK0(EM_A1), EM_D0);
-    EM_A0 = savehand;
-    RESTORE_A1_D1_D2();
-    ADJUST_CC_BASED_ON_D0();
-    RTS();
-}
-
-STUB(Date2Secs)
-{
-    ULONGINT l;
-
-    SAVE_A1_D1_D2();
-    Date2Secs((DateTimeRec *)SYN68K_TO_US_CHECK0(EM_A0), &l);
-    EM_D0 = l;
-    RESTORE_A1_D1_D2();
-    RTS();
-}
-
-STUB(Secs2Date)
-{
-    SAVE_A1_D1_D2();
-    Secs2Date(EM_D0, (DateTimeRec *)SYN68K_TO_US_CHECK0(EM_A0));
-    RESTORE_A1_D1_D2();
-    RTS();
-}
-
-STUB(Enqueue)
-{
-    SAVE_A1_D1_D2();
-    Enqueue((QElemPtr)SYN68K_TO_US_CHECK0(EM_A0),
-            (QHdrPtr)SYN68K_TO_US_CHECK0(EM_A1)); /* TODO: check to see if Mac
-					       alters D0 */
-    RESTORE_A1_D1_D2();
-    RTS();
-}
-
-STUB(Dequeue)
-{
-    SAVE_A1_D1_D2();
-    EM_D0 = Dequeue((QElemPtr)SYN68K_TO_US_CHECK0(EM_A0),
-                    (QHdrPtr)SYN68K_TO_US_CHECK0(EM_A1));
-    RESTORE_A1_D1_D2();
-    ADJUST_CC_BASED_ON_D0();
-    RTS();
-}
 
 /*
  * NOTE: The LM(Key1Trans) and LM(Key2Trans) implementations are just transcriptions
@@ -572,18 +427,6 @@ STUB(Key1Trans)
 STUB(Key2Trans)
 {
     KEYTRANSMACRO();
-}
-
-STUB(NMInstall)
-{
-    EM_D0 = NMInstall((NMRecPtr)SYN68K_TO_US_CHECK0(EM_A0));
-    RTS();
-}
-
-STUB(NMRemove)
-{
-    EM_D0 = NMRemove((NMRecPtr)SYN68K_TO_US_CHECK0(EM_A0));
-    RTS();
 }
 
 static selector_table_entry_t pack8_table[] = {
@@ -876,12 +719,6 @@ STUB(CommToolboxDispatch)
     RTS();
 }
 
-STUB(SysEnvirons)
-{
-    EM_D0 = SysEnvirons(EM_D0, (SysEnvRecPtr)SYN68K_TO_US_CHECK0(EM_A0));
-    RTS();
-}
-
 STUB(PostEvent)
 {
     GUEST<EvQElPtr> qelemp;
@@ -893,94 +730,6 @@ STUB(PostEvent)
     RTS();
 }
 
-STUB(FlushEvents)
-{
-    FlushEvents(EM_D0, EM_D0 >> 16);
-    EM_D0 = 0; /* LIE? */
-    RTS();
-}
-
-STUB(GetOSEvent)
-{
-    EM_D0 = GetOSEvent(EM_D0, (EventRecord *)SYN68K_TO_US_CHECK0(EM_A0)) ? 0 : -1;
-    RTS();
-}
-
-STUB(OSEventAvail)
-{
-    EM_D0 = OSEventAvail(EM_D0, (EventRecord *)SYN68K_TO_US_CHECK0(EM_A0)) ? 0 : -1;
-    RTS();
-}
-
-STUB(SlotVInstall)
-{
-    /* FIXME: for now, ignore the slot argument */
-    EM_D0 = SlotVInstall((VBLTaskPtr)SYN68K_TO_US_CHECK0(EM_A0),
-                         (INTEGER)EM_D0);
-    RTS();
-}
-
-STUB(VInstall)
-{
-    EM_D0 = VInstall((VBLTaskPtr)SYN68K_TO_US_CHECK0(EM_A0));
-    RTS();
-}
-
-STUB(SlotVRemove)
-{
-    EM_D0 = SlotVRemove((VBLTaskPtr)SYN68K_TO_US_CHECK0(EM_A0),
-                        (INTEGER)EM_D0);
-    RTS();
-}
-
-STUB(VRemove)
-{
-    EM_D0 = VRemove((VBLTaskPtr)SYN68K_TO_US_CHECK0(EM_A0));
-    RTS();
-}
-
-STUB(InsTime)
-{
-    InsTime((QElemPtr)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = 0;
-    RTS();
-}
-
-STUB(RmvTime)
-{
-    RmvTime((QElemPtr)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = 0;
-    RTS();
-}
-
-STUB(PrimeTime)
-{
-    PrimeTime((QElemPtr)SYN68K_TO_US_CHECK0(EM_A0), EM_D0);
-    EM_D0 = 0;
-    RTS();
-}
-
-STUB(ReadDateTime)
-{
-    EM_D0 = ReadDateTime((GUEST<ULONGINT> *)SYN68K_TO_US_CHECK0(EM_A0));
-    RTS();
-}
-
-STUB(SetDateTime)
-{
-    EM_D0 = SetDateTime(EM_D0);
-    RTS();
-}
-
-STUB(Delay)
-{
-    LONGINT tempp;
-
-    // Yes, a0 is really the argument to Delay.  Weird, but true.
-    Delay(EM_A0, &tempp);
-    EM_D0 = tempp;
-    RTS();
-}
 
 #define DIACBIT (1 << 9)
 #define CASEBIT (1 << 10)
@@ -1494,82 +1243,6 @@ STUB(WackyQD32Trap)
     gui_fatal("This trap shouldn't be called");
 }
 
-STUB(HGetState)
-{
-    EM_D0 = HGetState((Handle)SYN68K_TO_US_CHECK0(EM_A0));
-    RTS();
-}
-
-STUB(HSetState)
-{
-    HSetState((Handle)SYN68K_TO_US_CHECK0(EM_A0), EM_D0);
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(HLock)
-{
-    HLock((Handle)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(HUnlock)
-{
-    HUnlock((Handle)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(HPurge)
-{
-    HPurge((Handle)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(HNoPurge)
-{
-    HNoPurge((Handle)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(HSetRBit)
-{
-    HSetRBit((Handle)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(HClrRBit)
-{
-    HClrRBit((Handle)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(InitApplZone)
-{
-    InitApplZone();
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(SetApplBase)
-{
-    SetApplBase((Ptr)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(MoreMasters)
-{
-    MoreMasters();
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
 STUB(InitZone)
 {
     initzonehiddenargs_t *ip;
@@ -1577,64 +1250,6 @@ STUB(InitZone)
     ip = (initzonehiddenargs_t *)SYN68K_TO_US(EM_A0);
     InitZone(MR(ip->pGrowZone), CW(ip->cMoreMasters),
              (Ptr)MR(ip->limitPtr), (THz)MR(ip->startPtr));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(SetZone)
-{
-    SetZone((THz)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(DisposHandle)
-{
-    DisposHandle((Handle)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(GetHandleSize)
-{
-    EM_D0 = GetHandleSize((Handle)SYN68K_TO_US_CHECK0(EM_A0));
-    if(CW(LM(MemErr)) < 0)
-        EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(SetHandleSize)
-{
-    SetHandleSize((Handle)SYN68K_TO_US_CHECK0(EM_A0), EM_D0);
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(ReallocHandle)
-{
-    ReallocHandle((Handle)SYN68K_TO_US_CHECK0(EM_A0), EM_D0);
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(DisposPtr)
-{
-    DisposPtr((Ptr)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(GetPtrSize)
-{
-    EM_D0 = GetPtrSize((Ptr)SYN68K_TO_US_CHECK0(EM_A0));
-    if(CW(LM(MemErr)) < 0)
-        EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(SetPtrSize)
-{
-    SetPtrSize((Ptr)SYN68K_TO_US_CHECK0(EM_A0), EM_D0);
     EM_D0 = CW(LM(MemErr));
     RTS();
 }
@@ -1674,50 +1289,9 @@ STUB(BlockMove)
     RTS();
 }
 
-STUB(MaxApplZone)
-{
-    MaxApplZone();
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(MoveHHi)
-{
-    MoveHHi((Handle)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
 STUB(MaxBlock)
 {
     EM_D0 = _MaxBlock_flags(SYS_P(EM_D1, 0xA061));
-    RTS();
-}
-
-STUB(StackSpace)
-{
-    EM_D0 = StackSpace();
-    RTS();
-}
-
-STUB(SetApplLimit)
-{
-    SetApplLimit((Ptr)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(SetGrowZone)
-{
-    SetGrowZone((GrowZoneProcPtr)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(GetZone)
-{
-    EM_A0 = US_TO_SYN68K_CHECK0(GetZone());
-    EM_D0 = CW(LM(MemErr));
     RTS();
 }
 
@@ -1734,14 +1308,6 @@ STUB(NewHandle)
 
     EM_A0 = (uint32_t)US_TO_SYN68K_CHECK0(_NewHandle_flags(EM_D0, SYS_P(EM_D1, 0xA122),
                                                            CLEAR_P(EM_D1, 0xA122)));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(HandleZone)
-{
-    EM_A0 = (uint32_t)
-        US_TO_SYN68K_CHECK0(HandleZone((Handle)SYN68K_TO_US_CHECK0(EM_A0)));
     EM_D0 = CW(LM(MemErr));
     RTS();
 }
@@ -1763,13 +1329,6 @@ STUB(NewPtr)
     RTS();
 }
 
-STUB(PtrZone)
-{
-    EM_A0 = US_TO_SYN68K_CHECK0(PtrZone((Ptr)SYN68K_TO_US_CHECK0(EM_A0)));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
 STUB(MaxMem)
 {
     EM_D0 = _MaxMem_flags((Size *)&EM_A0, SYS_P(EM_D1, 0xA11D));
@@ -1783,31 +1342,6 @@ STUB(PurgeSpace)
     _PurgeSpace_flags(&total, &contig, SYS_P(EM_D1, 0xA062));
     EM_D0 = total;
     EM_A0 = contig;
-    RTS();
-}
-
-STUB(EmptyHandle)
-{
-    EmptyHandle((Handle)SYN68K_TO_US_CHECK0(EM_A0));
-    EM_D0 = CW(LM(MemErr));
-    RTS();
-}
-
-STUB(WriteParam)
-{
-    EM_D0 = WriteParam();
-    RTS();
-}
-
-STUB(InitUtil)
-{
-    EM_D0 = InitUtil();
-    RTS();
-}
-
-STUB(flushcache)
-{
-    flushcache();
     RTS();
 }
 

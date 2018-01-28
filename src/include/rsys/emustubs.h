@@ -162,7 +162,7 @@ RAW_68K_TRAP(WackyQD32Trap, 0xAB03);
 RAW_68K_TRAP(PaletteDispatch, 0xAAA2);
 RAW_68K_TRAP(QDExtensions, 0xAB1D);
 //RAW_68K_TRAP(WriteParam, 0xA038);
-RAW_68K_TRAP(InitUtil, 0xA03F);
+//RAW_68K_TRAP(InitUtil, 0xA03F);
 //RAW_68K_TRAP(flushcache, 0xA0BD);
 RAW_68K_FUNCTION(Key1Trans);
 RAW_68K_FUNCTION(Key2Trans);
