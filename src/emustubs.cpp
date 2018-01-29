@@ -286,39 +286,6 @@ _do_selector_block(const selectorblock_t *sbp, unsigned long sel,
     abort();
 }
 
-typedef struct selector_table_entry
-{
-    uint32_t selector;
-    ptocblock_t ptoc;
-} selector_table_entry_t;
-
-#define do_selector_table(selector, table, table_size, fail_fn, trap) \
-    ({ _do_selector_table(selector, table, table_size, fail_fn,       \
-                          #trap, _##trap); })
-
-static syn68k_addr_t
-_do_selector_table(uint32_t selector,
-                   selector_table_entry_t *table, int table_size,
-                   syn68k_addr_t (*fail_fn)(void),
-                   const char *trap_name,
-                   syn68k_addr_t (*trap_fp)(syn68k_addr_t, void *))
-{
-    int i;
-
-    for(i = 0; i < table_size; i++)
-    {
-        if(table[i].selector == selector)
-            return PascalToCCall(0, &table[i].ptoc);
-    }
-
-    if(fail_fn)
-        return (*fail_fn)();
-    else
-        do_selector_error(selector, trap_name, trap_fp);
-
-    /* quiet gcc */
-    abort();
-}
 
 #define PTOCBLOCK(name)                   \
     {                                     \
