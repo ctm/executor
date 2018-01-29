@@ -8,10 +8,21 @@
 
 #include <Carbon/Carbon.h>
 #import <Cocoa/Cocoa.h>
+#define BOOL BOOL_EXEC
+#undef YES
+#undef NO
+#define YES YES_EXEC
+#define NO NO_EXEC
 #include "rsys/common.h"
 #include "rsys/hfs.h"
 #include "MemoryMgr.h"
+#include "rsys/byteswap.h"
 #include "SpeechManager-MacBridge.h"
+#undef BOOL
+#undef YES
+#undef NO
+#define YES 1
+#define NO 0
 
 #include <vector>
 #include <map>
@@ -73,8 +84,10 @@ int16_t MacBridge::SpeechBusy (void)
   BeginSpeech();
   @autoreleasepool {
     SInt16 toRet = internalSynthesizer.speaking;
+    GuestWrapper<int16_t> toRet2 = GuestWrapper<int16_t>();
+    toRet2 = toRet2.fromHost(toRet);
     
-    return BigEndianValue(toRet);
+    return CW(toRet).get();
   }
 }
 
@@ -82,8 +95,8 @@ int16_t MacBridge::SpeechBusySystemWide(void)
 {
   @autoreleasepool {
     SInt16 toRet = [NSSpeechSynthesizer isAnyApplicationSpeaking];
-    
-    return BigEndianValue(toRet);
+
+    return CW(toRet).get();
   }
 }
 
@@ -91,13 +104,13 @@ Executor::OSErr MacBridge::CountVoices (int16_t *numVoices)
 {
   @autoreleasepool {
     if (!numVoices) {
-      return paramErr;
+      return ::paramErr;
     }
     
     BeginSpeech();
     SInt16 voiceCount = [NSSpeechSynthesizer availableVoices].count;
     
-    *numVoices = BigEndianValue(voiceCount);
+    *numVoices = CW(voiceCount).get();
     return Executor::noErr;
   }
 }
@@ -112,7 +125,7 @@ Executor::OSErr MacBridge::DisposeSpeechChannel(Executor::SpeechChannel chan)
   Executor::OSErr toRet = Executor::noErr;
   synthesizerMap.erase(ourDat);
 
-  return BigEndianValue(toRet);
+  return CW(toRet).get();
 }
 
 Executor::OSErr MacBridge::SpeakString (Executor::Str255 textToBeSpoken)
@@ -123,7 +136,7 @@ Executor::OSErr MacBridge::SpeakString (Executor::Str255 textToBeSpoken)
     BOOL isBegin = [internalSynthesizer startSpeakingString:ourStr];
     Executor::OSErr toRet = isBegin ? Executor::noErr : -1;
     
-    return BigEndianValue(toRet);
+    return CW(toRet).get();
   }
 }
 
@@ -136,7 +149,7 @@ Executor::OSErr MacBridge::StopSpeech (Executor::SpeechChannel chan)
   }
   Executor::OSErr toRet = Executor::noErr;
   
-  return BigEndianValue(toRet);
+  return CW(toRet).get();
 }
 
 Executor::OSErr MacBridge::ContinueSpeech (Executor::SpeechChannel chan)
@@ -147,7 +160,7 @@ Executor::OSErr MacBridge::ContinueSpeech (Executor::SpeechChannel chan)
     [synth continueSpeaking];
     Executor::OSErr toRet = Executor::noErr;
     
-    return BigEndianValue(toRet);
+    return CW(toRet).get();
   }
 }
 
@@ -162,12 +175,12 @@ Executor::OSErr MacBridge::GetIndVoice (int16_t index, Executor::VoiceSpec *voic
   @autoreleasepool {
     BeginSpeech();
     if (!voice) {
-      return paramErr;
+      return Executor::paramErr;
     }
-    NSInteger voiceIndex = BigEndianValue(index);
+    NSInteger voiceIndex = CW(index).get();
     NSArray *voices = [NSSpeechSynthesizer availableVoices];
     if (voiceIndex >= voices.count) {
-      return (Executor::OSErr)(-244);
+      return CW((Executor::OSErr)(-244)).get();
     }
     NSDictionary *voiceDict = [NSSpeechSynthesizer attributesForVoice:voices[voiceIndex]];
     
@@ -241,7 +254,7 @@ Executor::OSErr MacBridge::StopSpeechAt (Executor::SpeechChannel chan, int32_t w
       break;
       
     default:
-      return paramErr;
+      return Executor::paramErr;
       break;
   }
   
@@ -271,7 +284,7 @@ Executor::OSErr MacBridge::PauseSpeechAt (Executor::SpeechChannel chan, int32_t 
       break;
       
     default:
-      return paramErr;
+      return Executor::paramErr;
       break;
   }
   
@@ -288,7 +301,7 @@ Executor::OSErr MacBridge::SetSpeechRate(Executor::SpeechChannel chan, Executor:
     NSSpeechSynthesizer *synth = synthesizerMap[chan->data[0]];
     
     
-    synth.rate = FixedToFloat(rate);
+    synth.rate = FixedToFloat(CL(rate).get());
   }
   
   return Executor::noErr;
@@ -297,14 +310,14 @@ Executor::OSErr MacBridge::SetSpeechRate(Executor::SpeechChannel chan, Executor:
 Executor::OSErr MacBridge::GetSpeechRate (Executor::SpeechChannel chan, Executor::Fixed *rate)
 {
   if (!rate) {
-    return paramErr;
+    return Executor::paramErr;
   }
   @autoreleasepool {
     NSSpeechSynthesizer *synth = synthesizerMap[chan->data[0]];
     
     ::Fixed ourRate = FloatToFixed(synth.rate);
     
-    *rate = ourRate;
+    *rate = CL(ourRate).get();
   }
   
   return Executor::noErr;
@@ -316,18 +329,18 @@ Executor::OSErr MacBridge::SetSpeechPitch (Executor::SpeechChannel chan, Executo
   @autoreleasepool {
     NSSpeechSynthesizer *synth = synthesizerMap[chan->data[0]];
     
-    float ourFloatPitch = FixedToFloat(pitch);
+    float ourFloatPitch = FixedToFloat(CL(pitch).get());
     
     wasSuccess = [synth setObject:@(ourFloatPitch) forProperty:NSSpeechPitchModProperty error:NULL] ? Executor::noErr : -1;
   }
   
-  return wasSuccess;
+  return CW(wasSuccess).get();
 }
 
 Executor::OSErr MacBridge::GetSpeechPitch (Executor::SpeechChannel chan, Executor::Fixed *pitch)
 {
   if (!pitch) {
-    return paramErr;
+    return Executor::paramErr;
   }
   ::OSErr toRet = Executor::noErr;
   @autoreleasepool {
@@ -338,11 +351,11 @@ Executor::OSErr MacBridge::GetSpeechPitch (Executor::SpeechChannel chan, Executo
       toRet = -1;
     } else {
       Executor::Fixed ourPitch = FloatToFixed(ourNum.floatValue);
-      *pitch = ourPitch;
+      *pitch = CL(ourPitch).get();
     }
   }
   
-  return BigEndianValue(toRet);
+  return CW(toRet).get();
 }
 
 #undef NewHandle
@@ -357,19 +370,19 @@ Executor::OSErr MacBridge::UseDictionary (Executor::SpeechChannel chan, Executor
   }
 #endif
   warning_unimplemented (NULL_STRING);
-  return paramErr;
+  return CWC(Executor::paramErr).get();
 }
 
 Executor::OSErr MacBridge::MakeVoiceSpec (Executor::OSType creator, Executor::OSType identifier, Executor::VoiceSpec *voice)
 {
   if (!voice) {
-    return paramErr;
+    return Executor::paramErr;
   }
   ::VoiceSpec nativeSpec = {0};
-  ::OSErr toRet = ::MakeVoiceSpec(BigEndianValue(creator), BigEndianValue(identifier), &nativeSpec);
+  ::OSErr toRet = ::MakeVoiceSpec(CL(creator).get(), CL(identifier).get(), &nativeSpec);
   MacVoiceSpecToExecutorVoiceSpec(*voice, nativeSpec);
   
-  return toRet;
+  return CW(toRet).get();
 }
 
 Executor::OSErr MacBridge::GetVoiceDescription (
@@ -377,11 +390,11 @@ Executor::OSErr MacBridge::GetVoiceDescription (
 											Executor::VoiceDescription *info,
 											Executor::LONGINT infoLength)
 {
-  if (BigEndianValue(infoLength) != 362) {
-    return paramErr;
+  if (CL(infoLength).get() != 362) {
+    return Executor::paramErr;
   }
   if (voice == NULL || info == NULL) {
-    return paramErr;
+    return Executor::paramErr;
   }
   
   @autoreleasepool {
@@ -473,11 +486,11 @@ Executor::OSErr MacBridge::GetVoiceInfo (const Executor::VoiceSpec *voice, Execu
   ::OSErr toRet = ::noErr;
   //::OSErr toRet = ::GetVoiceInfo((const ::VoiceSpec*)voice, BigEndianValue(selector), voiceInfo);
   
-  switch (selector) {
+  switch (CLC(selector).get()) {
     case soVoiceFile:
       //TODO: implement?
       warning_unimplemented (NULL_STRING);
-      return fnfErr;
+	  toRet = Executor::fnfErr;
       break;
       
     case soVoiceDescription:
@@ -487,7 +500,7 @@ Executor::OSErr MacBridge::GetVoiceInfo (const Executor::VoiceSpec *voice, Execu
     default:
       break;
   }
-  return toRet;
+  return CW(toRet).get();
 }
 
 Executor::OSErr MacBridge::SpeakText (Executor::SpeechChannel chan, const void *textBuf, Executor::ULONGINT textBytes)
@@ -496,13 +509,13 @@ Executor::OSErr MacBridge::SpeakText (Executor::SpeechChannel chan, const void *
   @autoreleasepool {
     NSSpeechSynthesizer *synth = synthesizerMap[chan->data[0]];
     
-    NSString *ourStr = [[NSString alloc] initWithBytes:textBuf length:BigEndianValue(textBytes) encoding:NSMacOSRomanStringEncoding];
+    NSString *ourStr = [[NSString alloc] initWithBytes:textBuf length:CL(textBytes).get() encoding:NSMacOSRomanStringEncoding];
     
     if (![synth startSpeakingString:ourStr]) {
       theErr = -1;
     }
   }
-  return BigEndianValue(theErr);
+  return CW(theErr).get();
 }
 
 Executor::OSErr MacBridge::SetSpeechInfo (
@@ -529,7 +542,7 @@ Executor::OSErr MacBridge::GetSpeechInfo (
   ::OSErr toRet = ::noErr;
 
   warning_unimplemented (NULL_STRING);
-  return BigEndianValue(toRet);
+  return CW(toRet).get();
 }
 
 namespace MacBridge {
@@ -550,7 +563,7 @@ Executor::OSErr MacBridge::SpeakBuffer (
   ::OSErr toRet = ::noErr;
   @autoreleasepool {
     //TODO: handle flags
-    ::Size textSize = BigEndianValue(textBytes);
+    Executor::ULONGINT textSize = CL(textBytes).get();
     NSSpeechSynthesizer *synth = synthesizerMap[chan->data[0]];
     NSString *aStr = [[NSString alloc] initWithBytes:textBuf length:textSize encoding:NSMacOSRomanStringEncoding];
     if (![synth startSpeakingString:aStr]) {
@@ -558,30 +571,30 @@ Executor::OSErr MacBridge::SpeakBuffer (
     }
   }
   
-  return BigEndianValue(toRet);
+	return CW(toRet).get();
 }
 
 Executor::OSErr MacBridge::TextToPhonemes (Executor::SpeechChannel chan, const void *textBuf, Executor::ULONGINT textBytes, Executor::Handle phonemeBuf, GUEST<Executor::LONGINT> *phonemeBytes)
 {
-  ::Size ExecSize = BigEndianValue(Executor::GetHandleSize(phonemeBuf));
-  ::Size textSize = BigEndianValue(textBytes);
+  Executor::ULONGINT ExecSize = CL(Executor::GetHandleSize(phonemeBuf)).get();
+  Executor::ULONGINT textSize = CL(textBytes).get();
   ::OSErr toRet = ::noErr;
   @autoreleasepool {
     NSSpeechSynthesizer *synth = synthesizerMap[chan->data[0]];
     NSString *aStr = [[NSString alloc] initWithBytes:textBuf length:textSize encoding:NSMacOSRomanStringEncoding];
     NSString *phonemes = [synth phonemesFromText:aStr];
     [aStr release];
-    Executor::LONGINT lengthInMacRoman = [phonemes lengthOfBytesUsingEncoding:NSMacOSRomanStringEncoding];
+    Executor::LONGINT lengthInMacRoman = (Executor::LONGINT)[phonemes lengthOfBytesUsingEncoding:NSMacOSRomanStringEncoding];
     
     if (lengthInMacRoman == 0) {
       return -224;
     }
     if (lengthInMacRoman > ExecSize) {
-      Executor::SetHandleSize(phonemeBuf, BigEndianValue(lengthInMacRoman));
+      Executor::SetHandleSize(phonemeBuf, CL(lengthInMacRoman).get());
     }
     strcpy((char*)MR(*phonemeBuf), [phonemes cStringUsingEncoding:NSMacOSRomanStringEncoding]);
     *phonemeBytes = CL(lengthInMacRoman);
   }
   
-  return BigEndianValue(toRet);
+	return CW(toRet).get();
 }
