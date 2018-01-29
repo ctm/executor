@@ -719,28 +719,17 @@ struct StackWLookahead
 #include "rsys/refresh.h"
 #include "rsys/gestalt.h"
 
+syn68k_addr_t Executor::tooltraptable[0x400]; /* Gets filled in at run time */
+syn68k_addr_t Executor::ostraptable[0x100]; /* Gets filled in at run time */
+
 
 void functions::init()
 {
     for(auto init : initObjects)
         init->init();
-    stub_Unimplemented.init();
     for(int i = 0; i < NTOOLENTRIES; i++)
     {
         if(tooltraptable[i] == 0)
             tooltraptable[i] = US_TO_SYN68K((void*)&stub_Unimplemented);
-    }
-
-
-    for(int i = 0; i < 0x100; i++)
-    {
-        bool shouldhave = osstuff[i].func != (void*)&_Unimplemented;
-        if(osflags[i] != shouldhave)
-        {
-            if(shouldhave)
-                std::cout << "Missing " << std::hex << (0xA000 | i) << std::endl;
-            else
-                std::cout << "Surprising " << std::hex << (0xA000 | i) << std::endl;
-        }
     }
 }

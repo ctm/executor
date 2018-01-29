@@ -170,6 +170,8 @@ public:
     virtual void init() override;
 
     WrappedFunction(const char* name);
+
+    bool isPatched() const { return false; }
 protected:
     ProcPtr guestFP;
     const char *name;

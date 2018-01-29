@@ -67,6 +67,9 @@ namespace Executor
 
 #define STUB(x) syn68k_addr_t _##x(syn68k_addr_t ignoreme, \
                                           void *ignoreme2)
+void C_unknown574()
+{
+}
 
 STUB(GetDefaultStartup)
 {

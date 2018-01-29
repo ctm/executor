@@ -1430,7 +1430,6 @@ int main(int argc, char **argv)
         }
     }
 
-    filltables();
     Executor::functions::init();
 
     l = ostraptable[0x0FC];
@@ -1439,7 +1438,7 @@ int main(int argc, char **argv)
     ((unsigned char *)jmpl_to_ResourceStub)[4] = l >> 8;
     ((unsigned char *)jmpl_to_ResourceStub)[5] = l;
     ostraptable[0xFC] = US_TO_SYN68K(jmpl_to_ResourceStub);
-    osstuff[0xFC].orig = US_TO_SYN68K(jmpl_to_ResourceStub);
+    //osstuff[0xFC].orig = US_TO_SYN68K(jmpl_to_ResourceStub);
 
     saveSysZone = LM(SysZone);
     saveApplZone = LM(ApplZone);

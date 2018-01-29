@@ -75,7 +75,7 @@ Handle Executor::ROMlib_mgetres(resmaphand map, resref *rr)
 {
     Handle retval;
 
-    if(ostraptable[0xFC] == osstuff[0xFC].orig)
+    if(!stub_ResourceStub.isPatched())
         retval = ROMlib_mgetres2(map, rr);
     else
     {
