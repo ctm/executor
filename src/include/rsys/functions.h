@@ -252,7 +252,24 @@ private:
     syn68k_addr_t _##NAME(syn68k_addr_t, void *); \
     CREATE_FUNCTION_WRAPPER(stub_##NAME, &_##NAME, (#NAME), TrapFunction<decltype(_##NAME) COMMA &_##NAME COMMA TRAP COMMA callconv::Raw>)
 
-    
+
+#define ASYNCBIT (1 << 10)
+#define HFSBIT (1 << 9)
+
+#define FILE_TRAP(NAME, TRAP) \
+    REGISTER_TRAP2(NAME, TRAP, D0 (A0, TrapBit<ASYNCBIT>))
+
+#define HFS_TRAP(NAME, HNAME, PBTYPE, TRAP) \
+    inline OSErr NAME##_##HNAME(ParmBlkPtr pb, Boolean async, Boolean hfs) \
+    { \
+        return hfs ? HNAME((PBTYPE)pb, async) : NAME(pb, async); \
+    } \
+    CREATE_FUNCTION_WRAPPER(stub_##NAME, &NAME##_##HNAME, \
+        (#NAME "/" #HNAME), \
+        TrapFunction<decltype(NAME##_##HNAME), \
+            &NAME##_##HNAME, TRAP, \
+            callconv::Register<D0 (A0, TrapBit<ASYNCBIT>, TrapBit<HFSBIT>)>>)
+
 void resetNestingLevel();
 void init();
 

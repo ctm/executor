@@ -621,64 +621,119 @@ extern OSErr SetVol(StringPtr voln, INTEGER vrn);
 extern OSErr FlushVol(StringPtr voln, INTEGER vrn);
 extern OSErr UnmountVol(StringPtr voln, INTEGER vrn);
 extern OSErr Eject(StringPtr voln, INTEGER vrn);
-extern OSErr PBHRename(HParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBHCreate(HParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBDirCreate(HParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBHDelete(HParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBRead(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBWrite(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBClose(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBHOpen(HParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBOpenDF(HParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBHOpenRF(HParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBGetCatInfo(CInfoPBPtr pb, BOOLEAN async);
 extern OSErr PBSetCatInfo(CInfoPBPtr pb, BOOLEAN async);
 extern OSErr PBCatMove(CMovePBPtr pb, BOOLEAN async);
-extern OSErr PBGetVInfo(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBUnmountVol(ParmBlkPtr pb);
-extern OSErr PBEject(ParmBlkPtr pb);
-extern OSErr PBAllocate(ParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBAllocContig(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBHGetFInfo(HParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBSetEOF(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBOpen(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBOpenRF(ParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBLockRange(ParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBUnlockRange(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBGetFPos(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBSetFPos(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBGetEOF(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBFlushFile(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBCreate(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBDelete(ParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBOpenWD(WDPBPtr pb, BOOLEAN async);
 extern OSErr PBCloseWD(WDPBPtr pb, BOOLEAN async);
 extern OSErr PBGetWDInfo(WDPBPtr pb, BOOLEAN async);
-extern OSErr PBGetFInfo(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBSetFInfo(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBHSetFInfo(HParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBSetFLock(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBHSetFLock(HParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBRstFLock(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBHRstFLock(HParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBSetFVers(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBRename(ParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBGetFCBInfo(FCBPBPtr pb, BOOLEAN async);
-extern OSErr PBMountVol(ParmBlkPtr pb);
-extern OSErr PBHGetVInfo(HParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBHGetVolParms(HParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBSetVInfo(HParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBGetVol(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBHGetVol(WDPBPtr pb, BOOLEAN async);
-extern OSErr PBSetVol(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBHSetVol(WDPBPtr pb, BOOLEAN async);
-extern OSErr PBFlushVol(ParmBlkPtr pb, BOOLEAN async);
-extern OSErr PBOffLine(ParmBlkPtr pb);
 extern OSErr PBExchangeFiles(ParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBCatSearch(ParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBCreateFileIDRef(ParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBDeleteFileIDRef(ParmBlkPtr pb, BOOLEAN async);
 extern OSErr PBResolveFileIDRef(ParmBlkPtr pb, BOOLEAN async);
+
+extern OSErr PBOpen(ParmBlkPtr pb, BOOLEAN async);
+extern OSErr PBHOpen(HParmBlkPtr pb, BOOLEAN async);
+HFS_TRAP(PBOpen, PBHOpen, HParmBlkPtr, 0xA000);
+
+extern OSErr PBClose(ParmBlkPtr pb, BOOLEAN async);
+FILE_TRAP(PBClose, 0xA001);
+
+extern OSErr PBRead(ParmBlkPtr pb, BOOLEAN async);
+FILE_TRAP(PBRead, 0xA002);
+
+extern OSErr PBWrite(ParmBlkPtr pb, BOOLEAN async);
+FILE_TRAP(PBWrite, 0xA003);
+
+extern OSErr PBGetVInfo(ParmBlkPtr pb, BOOLEAN async);
+extern OSErr PBHGetVInfo(HParmBlkPtr pb, BOOLEAN async);
+HFS_TRAP(PBGetVInfo, PBHGetVInfo, HParmBlkPtr, 0xA007);
+
+extern OSErr PBCreate(ParmBlkPtr pb, BOOLEAN async);
+extern OSErr PBHCreate(HParmBlkPtr pb, BOOLEAN async);
+HFS_TRAP(PBCreate, PBHCreate, HParmBlkPtr, 0xA008);
+
+extern OSErr PBDelete(ParmBlkPtr pb, BOOLEAN async);
+extern OSErr PBHDelete(HParmBlkPtr pb, BOOLEAN async);
+HFS_TRAP(PBDelete, PBHDelete, HParmBlkPtr, 0xA009);
+
+extern OSErr PBOpenRF(ParmBlkPtr pb, BOOLEAN async);
+extern OSErr PBHOpenRF(HParmBlkPtr pb, BOOLEAN async);
+HFS_TRAP(PBOpenRF, PBHOpenRF, HParmBlkPtr, 0xA00A);
+
+extern OSErr PBRename(ParmBlkPtr pb, BOOLEAN async);
+extern OSErr PBHRename(HParmBlkPtr pb, BOOLEAN async);
+HFS_TRAP(PBRename, PBHRename, HParmBlkPtr, 0xA00B);
+
+extern OSErr PBGetFInfo(ParmBlkPtr pb, BOOLEAN async);
+extern OSErr PBHGetFInfo(HParmBlkPtr pb, BOOLEAN async);
+HFS_TRAP(PBGetFInfo, PBHGetFInfo, HParmBlkPtr, 0xA00C);
+
+extern OSErr PBSetFInfo(ParmBlkPtr pb, BOOLEAN async);
+extern OSErr PBHSetFInfo(HParmBlkPtr pb, BOOLEAN async);
+HFS_TRAP(PBSetFInfo, PBHSetFInfo, HParmBlkPtr, 0xA00D);
+
+extern OSErr PBUnmountVol(ParmBlkPtr pb);
+REGISTER_TRAP2(PBUnmountVol, 0xA00E, D0(A0));
+
+extern OSErr PBMountVol(ParmBlkPtr pb);
+REGISTER_TRAP2(PBMountVol, 0xA00F, D0(A0));
+
+extern OSErr PBAllocate(ParmBlkPtr pb, BOOLEAN async);
+FILE_TRAP(PBAllocate, 0xA010);
+
+extern OSErr PBGetEOF(ParmBlkPtr pb, BOOLEAN async);
+FILE_TRAP(PBGetEOF, 0xA011);
+
+extern OSErr PBSetEOF(ParmBlkPtr pb, BOOLEAN async);
+FILE_TRAP(PBSetEOF, 0xA012);
+
+extern OSErr PBFlushVol(ParmBlkPtr pb, BOOLEAN async);
+FILE_TRAP(PBFlushVol, 0xA013);
+
+extern OSErr PBGetVol(ParmBlkPtr pb, BOOLEAN async);
+extern OSErr PBHGetVol(WDPBPtr pb, BOOLEAN async);
+HFS_TRAP(PBGetVol, PBHGetVol, WDPBPtr, 0xA014);
+
+extern OSErr PBSetVol(ParmBlkPtr pb, BOOLEAN async);
+extern OSErr PBHSetVol(WDPBPtr pb, BOOLEAN async);
+HFS_TRAP(PBSetVol, PBHSetVol, WDPBPtr, 0xA015);
+
+extern OSErr PBEject(ParmBlkPtr pb);
+REGISTER_TRAP2(PBEject, 0xA017, D0(A0));
+
+extern OSErr PBGetFPos(ParmBlkPtr pb, BOOLEAN async);
+FILE_TRAP(PBGetFPos, 0xA018);
+
+extern OSErr PBOffLine(ParmBlkPtr pb);
+REGISTER_TRAP2(PBOffLine, 0xA035, D0(A0));
+
+extern OSErr PBSetFLock(ParmBlkPtr pb, BOOLEAN async);
+extern OSErr PBHSetFLock(HParmBlkPtr pb, BOOLEAN async);
+HFS_TRAP(PBSetFLock, PBHSetFLock, HParmBlkPtr, 0xA041);
+
+extern OSErr PBRstFLock(ParmBlkPtr pb, BOOLEAN async);
+extern OSErr PBHRstFLock(HParmBlkPtr pb, BOOLEAN async);
+HFS_TRAP(PBRstFLock, PBHRstFLock, HParmBlkPtr, 0xA042);
+
+extern OSErr PBSetFVers(ParmBlkPtr pb, BOOLEAN async);
+FILE_TRAP(PBSetFVers, 0xA043);
+
+extern OSErr PBSetFPos(ParmBlkPtr pb, BOOLEAN async);
+FILE_TRAP(PBSetFPos, 0xA044);
+
+extern OSErr PBFlushFile(ParmBlkPtr pb, BOOLEAN async);
+FILE_TRAP(PBFlushFile, 0xA045);
+
 
 /* prototypes for the high level filesystem dispatch traps */
 DISPATCHER_TRAP(HighLevelFSDispatch, 0xAA52, D0<0xF>);
