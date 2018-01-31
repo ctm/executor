@@ -137,17 +137,25 @@ extern long
 CallUniversalProc_from_native_common(va_list ap, where_args_t where,
                                      ProcPtr proc, ProcInfoType info);
 
+DISPATCHER_TRAP(MixedModeDispatch, 0xAA59, D0W);
+
 extern UniversalProcPtr C_NewRoutineDescriptor(ProcPtr proc,
                                                ProcInfoType info,
                                                ISAType isa);
+PASCAL_SUBTRAP(NewRoutineDescriptor, 0xAA59, 0x0000, MixedModeDispatch);
 
 extern void C_DisposeRoutineDescriptor(UniversalProcPtr ptr);
+PASCAL_SUBTRAP(DisposeRoutineDescriptor, 0xAA59, 0x0001, MixedModeDispatch);
 
 extern UniversalProcPtr C_NewFatRoutineDescriptor(ProcPtr m68k, ProcPtr ppc,
                                                   ProcInfoType info);
+PASCAL_SUBTRAP(NewFatRoutineDescriptor, 0xAA59, 0x0002, MixedModeDispatch);
 
 extern OSErr C_SaveMixedModeState(void *statep, uint32_t vers);
+PASCAL_SUBTRAP(SaveMixedModeState, 0xAA59, 0x0003, MixedModeDispatch);
 
 extern OSErr C_RestoreMixedModeState(void *statep, uint32_t vers);
+PASCAL_SUBTRAP(RestoreMixedModeState, 0xAA59, 0x0004, MixedModeDispatch);
+
 }
 #endif

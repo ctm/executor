@@ -1048,12 +1048,6 @@ STUB(IMVI_ReadXPRam)
 }
 
 
-#if defined(__ppc__)
-
-// FIXME: #warning "Need to get CFM going before we can enable this glue."
-
-#elif defined(powerpc)
-
 /*
  * modeswitch is special; we don't return to from where we came.
  * instead we pick up the return address from the stack
@@ -1071,7 +1065,7 @@ STUB(modeswitch)
 
     EM_A7 += 4;
     retaddr = POPADDR();
-    rp = (RoutineDescriptor *)((char *)ignoreme); /* UGH! */
+    rp = (RoutineDescriptor *)(SYN68K_TO_US(ignoreme)); /* UGH! */
 
     n_routines = CW(rp->routineCount) + 1;
     for(i = 0;
@@ -1096,9 +1090,13 @@ STUB(modeswitch)
 
         warning_trace_info("calling universal from mixed mode using "
                            "register conventions");
+#if 0
         retval = CallUniversalProc_from_native_common(unused, args_via_68k_regs,
                                                       MR(rp->routineRecords[i].procDescriptor),
                                                       procinfo);
+#else
+        retval = 0;
+#endif
         retwidth = (procinfo >> 4) & 3;
         ret_reg = (procinfo >> 6) & 31;
         switch(retwidth)
@@ -1169,9 +1167,13 @@ STUB(modeswitch)
         uint32_t retval;
 
         warning_trace_info("calling universal from mixed mode");
+#if 0
         retval = CallUniversalProc_from_native_common(unused, args_via_68k_stack,
                                                       MR(rp->routineRecords[i].procDescriptor),
                                                       procinfo);
+#else
+        retval = 0;
+#endif
         warning_trace_info("just got back from calling universal from mixed mode");
         rettype = (procinfo >> kCallingConventionWidth)
             & ((1 << kResultSizeWidth) - 1);
@@ -1192,51 +1194,4 @@ STUB(modeswitch)
     return retaddr;
 }
 
-static ptocblock_t codefrag_ptoc[] = {
-    PTOCBLOCK(GetSharedLibrary),
-    PTOCBLOCK(GetDiskFragment),
-    PTOCBLOCK(GetMemFragment),
-    PTOCBLOCK(CloseConnection),
-    PTOCBLOCK(FindSymbol),
-    PTOCBLOCK(CountSymbols),
-    PTOCBLOCK(GetIndSymbol),
-};
-
-static selectorblock_t codefrag_block[] = {
-    {
-        1, 7, 1, codefrag_ptoc,
-    },
-    { 0, 0, 0, 0 },
-};
-
-STUB(CodeFragment)
-{
-    syn68k_addr_t retaddr;
-    unsigned short uw;
-
-    retaddr = POPADDR();
-    uw = POPUW();
-    PUSHADDR(retaddr);
-    return do_selector_block(codefrag_block, uw, CodeFragment);
-}
-
-static ptocblock_t mixed_modedispatch_ptoc[] = {
-    PTOCBLOCK(NewRoutineDescriptor), /* 0x0 */
-    PTOCBLOCK(DisposeRoutineDescriptor), /* 0x1 */
-    PTOCBLOCK(NewFatRoutineDescriptor), /* 0x2 */
-    PTOCBLOCK(SaveMixedModeState), /* 0x3 */
-    PTOCBLOCK(RestoreMixedModeState), /* 0x4 */
-};
-
-static selectorblock_t mixed_modedispatch_block[] = {
-    { 0x0, 0xC, 1, mixed_modedispatch_ptoc },
-    { 0, 0, 0, 0 },
-};
-
-STUB(MixedMode)
-{
-    return do_selector_block(mixed_modedispatch_block, EM_D0 & 0xF, MixedMode);
-}
-
-#endif
 }
