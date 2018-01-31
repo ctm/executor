@@ -197,122 +197,6 @@ STUB(ADBOp)
     RTS();
 }
 
-static void
-do_selector_error(uint32_t selector,
-                  const char *trap_name,
-                  syn68k_addr_t (*trap_fp)(syn68k_addr_t, void *))
-{
-    bool found_trapno_p = false;
-    int trapno = /* dummy */ -1, i;
-    char buf[256];
-
-    /* search for the trap fp in the trap tables */
-/*
-    for(i = 0; i < 0x400; i++)
-        if(toolstuff[i].ptoc.wheretogo == trap_fp)
-        {
-            trapno = i + 0xA800;
-            found_trapno_p = true;
-            break;
-        }*/
-    if(!found_trapno_p)
-        for(i = 0; i < 0x100; i++)
-            if(osstuff[i].func == trap_fp)
-            {
-                trapno = i + 0xA000;
-                found_trapno_p = true;
-                break;
-            }
-
-    if(found_trapno_p)
-        sprintf(buf,
-                "Fatal error.\r"
-                "unknown trap selector `%ld' in trap `%s' trapno `%X'.",
-                (long)selector, trap_name, trapno);
-    else
-        sprintf(buf,
-                "Fatal error.\r"
-                "unknown trap selector `%ld' in trap `%s'.",
-                (long)selector, trap_name);
-
-    system_error(buf, 0,
-                 "Restart", NULL, NULL,
-                 NULL, NULL, NULL);
-
-    ExitToShell();
-}
-
-typedef struct
-{
-    unsigned long first;
-    unsigned long last;
-    unsigned long divide;
-    ptocblock_t *descriptorp;
-} selectorblock_t;
-
-#define do_selector_block(sbp, sel, trap) \
-    ({ _do_selector_block(sbp, sel, #trap, _##trap); })
-
-typedef syn68k_addr_t (*trap_stuff)(syn68k_addr_t, void *);
-
-static syn68k_addr_t
-_do_selector_block(const selectorblock_t *sbp, unsigned long sel,
-                   const char *trap_name,
-                   trap_stuff trap_fp)
-{
-    char done;
-    ptocblock_t *ptocp;
-    const selectorblock_t *orig_sbp;
-
-    orig_sbp = sbp;
-    for(done = false;
-        (!(sbp->first == 0
-           && sbp->last == 0)
-         && !done);
-        ++sbp)
-    {
-        if(sel >= sbp->first && sel <= sbp->last)
-        {
-            ptocp = &sbp->descriptorp[(sel - sbp->first) / sbp->divide];
-            if(ptocp->wheretogo)
-                return PascalToCCall(0, ptocp);
-            done = true;
-        }
-    }
-
-    do_selector_error(sel, trap_name, trap_fp);
-
-    /* quiet gcc */
-    abort();
-}
-
-
-#define PTOCBLOCK(name)                   \
-    {                                     \
-        (void *)C_##name, ptoc(&C_##name) \
-    }
-
-#define ZERO_PTOCBLOCK \
-    {                  \
-        nullptr, 0     \
-    }
-
-#if defined(NEWSTUBS)
-{
-    BOn 0 AOn 4 AOnIgnoreModem 5 BOff 80 AOff 84
-}
-#endif
-
-#if defined(NEWSTUBS)
-{
-    InitDBPack 100 DBKill 20e DBDisposeQuery 210 DBRemoveResultHandler 215 DBGetNewQuery 30f DBEnd 403 DBExec 408 DBState 409 DBUnGetItem 40d DBResultsToText 413 DBBreak 50b DBInstallResultHandler 514 DBGetResultHandler 516 DBGetSessionNum 605 DBSend 706 DBStartQuery 811 DBGetQueryResults a12
-        DBSendItem b07
-            DBInit e02
-                DBGetErr e0a
-                    DBGetItem 100c DBGetConnInfo 1704
-}
-#endif
-
 STUB(Fix2X)
 {
     syn68k_addr_t retaddr;
@@ -544,11 +428,7 @@ fsprocp_t hfstab[] = {
     (fsprocp_t)PBCatSearch, /* 0x18 */
     (fsprocp_t)0, /* 0x19 */
     (fsprocp_t)PBOpenDF, /* 0x1A */
-#if !defined(NEWSTUBS)
     (fsprocp_t)0, /* 0x1B */
-#else
-    (fsprocp_t)PBMakeFSSpec, /* 0x1B */
-#endif
     (fsprocp_t)0, /* 0x1C */
     (fsprocp_t)0, /* 0x1D */
     (fsprocp_t)0, /* 0x1E */
@@ -578,49 +458,6 @@ fsprocp_t hfstab[] = {
     (fsprocp_t)PBHCopyFile, /* 0x36 */
     (fsprocp_t)PBHMoveRename, /* 0x37 */
     (fsprocp_t)OpenDeny, /* 0x38 */
-#if 0
-    (fsprocp_t) OpenRFDeny,  /* 0x39 */
-    (fsprocp_t) 0, /* 0x3A */
-    (fsprocp_t) 0, /* 0x3b */
-    (fsprocp_t) 0, /* 0x3c */
-    (fsprocp_t) 0, /* 0x3d */
-    (fsprocp_t) 0, /* 0x3e */
-    (fsprocp_t) PBGetVolMountInfoSize, /* 0x3f */
-    (fsprocp_t) PBGetVolMountInfo, /* 0x40 */
-    (fsprocp_t) 0, /* 0x41 */
-    (fsprocp_t) 0, /* 0x42 */
-    (fsprocp_t) 0, /* 0x43 */
-    (fsprocp_t) 0, /* 0x44 */
-    (fsprocp_t) 0, /* 0x45 */
-    (fsprocp_t) 0, /* 0x46 */
-    (fsprocp_t) 0, /* 0x47 */
-    (fsprocp_t) 0, /* 0x48 */
-    (fsprocp_t) 0, /* 0x49 */
-    (fsprocp_t) 0, /* 0x4a */
-    (fsprocp_t) 0, /* 0x4b */
-    (fsprocp_t) 0, /* 0x4c */
-    (fsprocp_t) 0, /* 0x4d */
-    (fsprocp_t) 0, /* 0x4e */
-    (fsprocp_t) 0, /* 0x4f */
-    (fsprocp_t) 0, /* 0x50 */
-    (fsprocp_t) 0, /* 0x51 */
-    (fsprocp_t) 0, /* 0x52 */
-    (fsprocp_t) 0, /* 0x53 */
-    (fsprocp_t) 0, /* 0x54 */
-    (fsprocp_t) 0, /* 0x55 */
-    (fsprocp_t) 0, /* 0x56 */
-    (fsprocp_t) 0, /* 0x57 */
-    (fsprocp_t) 0, /* 0x58 */
-    (fsprocp_t) 0, /* 0x59 */
-    (fsprocp_t) 0, /* 0x5a */
-    (fsprocp_t) 0, /* 0x5b */
-    (fsprocp_t) 0, /* 0x5c */
-    (fsprocp_t) 0, /* 0x5d */
-    (fsprocp_t) 0, /* 0x5e */
-    (fsprocp_t) 0, /* 0x5f */
-    (fsprocp_t) PBGetForeignPrivs, /* 0x60 */
-    (fsprocp_t) PBSetForeignPrivs, /* 0x61 */
-#endif
 };
 
 #define ASYNCBIT (1 << 10)
@@ -652,41 +489,6 @@ STUB(HFSDispatch)
     }
     RTS();
 }
-
-#if defined(NEWSTUBS)
-{
-  AppendDITL, /* 0x402 */
-  CountDITL, /* 0x403 */
-  ShortenDITL, /* 0x404 */
-};
-
-{
-  DebuggerGetMax, /* 0x0 */
-  DebuggerEnter, /* 0x1 */
-  DebuggerExit, /* 0x2 */
-  DebuggerPoll, /* 0x3 */
-  GetPageState, /* 0x4 */
-  PageFaultFatal, /* 0x5 */
-  DebuggerLockMemory, /* 0x6 */
-  DebuggerUnlockMemory, /* 0x7 */
-  EnterSupervisorMode, /* 0x8 */
-};
-
-{
-  GetCPUSpeed, /* 0xffff */
-  EnableIdle, /* 0x0000 */
-  DisableIdle, /* 0x0001 */
-};
-
-{
-  HoldMemory, /* 0 */
-  UnholdMemory, /* 1 */
-  LockMemory, /* 2 */
-  UnlockMemory, /* 3 */
-  LockMemoryCongiguous, /* 4 */
-  GetPhysical, /* 5 */
-};
-#endif
 
 STUB(FInitQueue)
 {
@@ -996,42 +798,6 @@ STUB(Microseconds)
     EM_A0 = ((uint64_t)ms * 1000) >> 32;
     RTS();
 }
-
-// FIXME: #warning should include speech manager selectors
-/*
- * NOTE: IM Sound p. 4-109 has a table of speech manager selectors:
- * 
- * 0x0000000c SpeechManagerVersion
- * 0x003c000c SpeechBusy
- * 0x0040000c SpeechBusySystemWide
- * 0x0108000c CountVoices
- * 0x021c000c DisposeSpeechChannel
- * 0x0220000c SpeakString
- * 0x022c000c StopSpeech
- * 0x0238000c ContinueSpeech
- * 0x030c000c GetIndVoice
- * 0x0418000c NewSpeechChannel
- * 0x0430000c StopSpeechAt
- * 0x0434000c PauseSpeechAt
- * 0x0444000c SetSpeechRate
- * 0x0448000c GetSpeechRate
- * 0x044c000c SetSpeechPitch
- * 0x0450000c GetSpeechPitch
- * 0x0460000c UseDictionary
- * 0x0604000c MakeVoiceSpec
- * 0x0610000c GetVoiceDescription
- * 0x0614000c GetVoiceInfo
- * 0x0624000c SpeakText
- * 0x0654000c SetSpeechInfo
- * 0x0658000c GetSpeechInfo
- * 0x0828000c SpeakBuffer
- * 0x0a5c000c TextToPhonemes
-
-static selector_table_entry_t speech_table[] = {
-    { 0x0000000c, PTOCBLOCK(SpeechManagerVersion) },
-    { 0x003c000c, PTOCBLOCK(SpeechBusy) },
-    { 0x0040000c, PTOCBLOCK(SpeechBusySystemWide) }
-}; */
 
 STUB(IMVI_ReadXPRam)
 {
