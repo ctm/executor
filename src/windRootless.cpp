@@ -9,9 +9,13 @@ using namespace Executor;
 
 static std::vector<Rect> rootlessMenus;
 
+// #define LOG_ROOTLESS
+
 void Executor::ROMlib_rootless_update(RgnHandle extra)
 {
+#ifdef LOG_ROOTLESS
     std::cout << "ROMlib_rootless_update\n";
+#endif
 #ifdef VDRIVER_ROOTLESS
     RgnHandle rgn = NewRgn();
     SetRectRgn(rgn, 0,0, CW(screenBitsX.bounds.right), CW(LM(MBarHeight)));
@@ -42,7 +46,9 @@ void Executor::ROMlib_rootless_update(RgnHandle extra)
 
 void Executor::ROMlib_rootless_openmenu(Rect r)
 {
+#ifdef LOG_ROOTLESS
     std::cout << "ROMlib_rootless_openmenu\n";
+#endif
 #ifdef VDRIVER_ROOTLESS
     r.left   = CW(CW(r.left  ) - 1);
     r.top    = CW(CW(r.top   ) - 1);
@@ -54,7 +60,9 @@ void Executor::ROMlib_rootless_openmenu(Rect r)
 }
 void Executor::ROMlib_rootless_closemenu()
 {
+#ifdef LOG_ROOTLESS
     std::cout << "ROMlib_rootless_closemenu\n";
+#endif
 #ifdef VDRIVER_ROOTLESS
     if(rootlessMenus.empty())
         return;

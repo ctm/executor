@@ -318,11 +318,9 @@ public:
         switch(ev->type())
         {
             case QEvent::FocusIn:
-                std::cout << "focusin\n";
                 sendresumeevent(true);
                 break;
             case QEvent::FocusOut:
-                std::cout << "focusout\n";
                 sendsuspendevent();
                 break;
 
