@@ -50,8 +50,8 @@ const LowMemGlobal<INTEGER> CurJTOffset { 0x934 }; // SegmentLdr IMII-62 (true-b
 const LowMemGlobal<INTEGER> CurPageOption { 0x936 }; // SegmentLdr IMII-60 (true);
 const LowMemGlobal<Handle> AppParmHandle { 0xAEC }; // SegmentLdr IMII-57 (true);
 
-extern void flushcache(void);
-REGISTER_TRAP2(flushcache, 0xA0BD, void());
+extern void C_FlushCodeCache(void);
+PASCAL_TRAP(FlushCodeCache, 0xA0BD);
 
 extern void HWPriv(LONGINT d0, LONGINT a0);
 REGISTER_TRAP2(HWPriv, 0xA198, void(D0,A0));

@@ -16,7 +16,6 @@ struct finderinfo
 };
 
 extern int ROMlib_print;
-extern void flushcache(void);
 extern void SFSaveDisk_Update(INTEGER vrefnum, Str255 filename);
 
 extern char *ROMlib_undotdot(char *origp);

@@ -1050,7 +1050,7 @@ static void reset_low_globals(void)
 
     LM(Key1Trans) = RM((Ptr)&stub_Key1Trans);
     LM(Key2Trans) = RM((Ptr)&stub_Key2Trans);
-    LM(JFLUSH) = RM(&stub_flushcache);
+    LM(JFLUSH) = RM(&FlushCodeCache);
     LM(JResUnknown1) = LM(JFLUSH); /* I don't know what these are supposed to */
     LM(JResUnknown2) = LM(JFLUSH); /* do, but they're not called enough for
 				   us to worry about the cache flushing

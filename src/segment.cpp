@@ -64,7 +64,7 @@ using namespace Executor;
 
 int Executor::ROMlib_cacheheuristic = false;
 
-void Executor::flushcache()
+void Executor::C_FlushCodeCache()
 {
     ROMlib_destroy_blocks((syn68k_addr_t)0, (uint32_t)~0, true);
 }
@@ -83,7 +83,7 @@ void Executor::HWPriv(LONGINT d0, LONGINT a0)
             i_cache_enabled = new_state;
             break;
         case 1: /* Flush Instr cache */
-            flushcache();
+            FlushCodeCache();
             break;
         case 2: /* Dis/Ena Data cache */
             warning_unimplemented("Dis/Ena data cache");
@@ -93,7 +93,7 @@ void Executor::HWPriv(LONGINT d0, LONGINT a0)
             break;
         case 3: /* Flush Data cache */
 #if 0
-	flushcache();
+	FlushCodeCache();
 #endif
             break;
         case 4: /* Enable external cache */
@@ -103,7 +103,7 @@ void Executor::HWPriv(LONGINT d0, LONGINT a0)
             warning_unimplemented("Disable external cache");
             break;
         case 6: /* Flush external cache */
-            flushcache();
+            FlushCodeCache();
             break;
         case 9: /* Flush cache range */
             ROMlib_destroy_blocks((syn68k_addr_t)a0, EM_A1, true);
