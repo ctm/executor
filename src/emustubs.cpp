@@ -265,31 +265,6 @@ STUB(IMVI_PPC)
     RTS();
 }
 
-#if defined(NEWSTUBS)
-{
-  PPCBrowser, /* 0x0d00 */
-}
-
-{
-    PPCInit, /* 0x0 */
-        PPCOpen, /* 0x1 */
-        PPCStart, /* 0x2 */
-        PPCInform, /* 0x3 */
-        PPCAccept, /* 0x4 */
-        PPCReject, /* 0x5 */
-        PPCWrite, /* 0x6 */
-        PPCRead, /* 0x7 */
-        PPCEnd, /* 0x8 */
-        PPCClose, /* 0x9 */
-        IPCListPorts, /* 0xa */
-        DeleteUserIdentity, /* 0xc */
-        GetDefaultUser, /* 0xd */
-        StartSecureSession, /* 0xe */
-}
-
-#endif
-
-
 STUB(CommToolboxDispatch)
 {
     comm_toolbox_dispatch_args_t *arg_block;
@@ -387,120 +362,8 @@ STUB(StripAddress)
     RTS();
 }
 
-static long
-apparent_nop(long unused1, long unused2)
-{
-    long retval;
-
-    retval = 0;
-
-    warning_unexpected("d0 = 0x%lx", (unsigned long)EM_D0);
-    return retval;
-}
-
-typedef OSErr (*fsprocp_t)(void *, BOOLEAN);
-
-fsprocp_t hfstab[] = {
-    (fsprocp_t)apparent_nop, /* 0 */
-    (fsprocp_t)PBOpenWD, /* 1 */
-    (fsprocp_t)PBCloseWD, /* 2 */
-    (fsprocp_t)apparent_nop, /* 3 */
-    (fsprocp_t)apparent_nop, /* 4 */
-    (fsprocp_t)PBCatMove, /* 5 */
-    (fsprocp_t)PBDirCreate, /* 6 */
-    (fsprocp_t)PBGetWDInfo, /* 7 */
-    (fsprocp_t)PBGetFCBInfo, /* 8 */
-    (fsprocp_t)PBGetCatInfo, /* 9 */
-    (fsprocp_t)PBSetCatInfo, /* 10 */
-    (fsprocp_t)PBSetVInfo, /* 11 */
-    (fsprocp_t)apparent_nop, /* 12 */
-    (fsprocp_t)apparent_nop, /* 13 */
-    (fsprocp_t)apparent_nop, /* 14 */
-    (fsprocp_t)apparent_nop, /* 15 */
-    (fsprocp_t)PBLockRange, /* 0x10 */
-    (fsprocp_t)PBUnlockRange, /* 0x11 */
-    (fsprocp_t)apparent_nop, /* 0x12 */
-    (fsprocp_t)apparent_nop, /* 0x13 */
-    (fsprocp_t)PBCreateFileIDRef, /* 0x14 */
-    (fsprocp_t)PBDeleteFileIDRef, /* 0x15 */
-    (fsprocp_t)PBResolveFileIDRef, /* 0x16 */
-    (fsprocp_t)PBExchangeFiles, /* 0x17 */
-    (fsprocp_t)PBCatSearch, /* 0x18 */
-    (fsprocp_t)0, /* 0x19 */
-    (fsprocp_t)PBOpenDF, /* 0x1A */
-    (fsprocp_t)0, /* 0x1B */
-    (fsprocp_t)0, /* 0x1C */
-    (fsprocp_t)0, /* 0x1D */
-    (fsprocp_t)0, /* 0x1E */
-    (fsprocp_t)0, /* 0x1F */
-    (fsprocp_t)PBDTGetPath, /* 0x20 */
-    (fsprocp_t)PBDTCloseDown, /* 0x21 */
-    (fsprocp_t)PBDTAddIcon, /* 0x22 */
-    (fsprocp_t)PBDTGetIcon, /* 0x23 */
-    (fsprocp_t)PBDTGetIconInfo, /* 0x24 */
-    (fsprocp_t)PBDTAddAPPL, /* 0x25 */
-    (fsprocp_t)PBDTRemoveAPPL, /* 0x26 */
-    (fsprocp_t)PBDTGetAPPL, /* 0x27 */
-    (fsprocp_t)PBDTSetComment, /* 0x28 */
-    (fsprocp_t)PBDTRemoveComment, /* 0x29 */
-    (fsprocp_t)PBDTGetComment, /* 0x2A */
-    (fsprocp_t)PBDTFlush, /* 0x2B */
-    (fsprocp_t)PBDTReset, /* 0x2C */
-    (fsprocp_t)PBDTGetInfo, /* 0x2D */
-    (fsprocp_t)PBDTOpenInform, /* 0x2E */
-    (fsprocp_t)PBDTDelete, /* 0x2F */
-    (fsprocp_t)PBHGetVolParms, /* 0x30 */
-    (fsprocp_t)PBHGetLogInInfo, /* 0x31 */
-    (fsprocp_t)PBHGetDirAccess, /* 0x32 */
-    (fsprocp_t)PBHSetDirAccess, /* 0x33 */
-    (fsprocp_t)PBHMapID, /* 0x34 */
-    (fsprocp_t)PBHMapName, /* 0x35 */
-    (fsprocp_t)PBHCopyFile, /* 0x36 */
-    (fsprocp_t)PBHMoveRename, /* 0x37 */
-    (fsprocp_t)OpenDeny, /* 0x38 */
-};
-
-#define ASYNCBIT (1 << 10)
-#define HFSBIT (1 << 9)
-
-STUB(HFSDispatch)
-{
-    fsprocp_t vp;
-
-    if((EM_D0 & 0xFFFF) >= NELEM(hfstab))
-    {
-        warning_unexpected("d0 = 0x%lx", (unsigned long)EM_D0);
-        EM_D0 = paramErr;
-    }
-    else
-    {
-        if(((EM_D0 & 0xFFFF) == 0x1A) && (EM_D1 & 0x200) == 0)
-            vp = (fsprocp_t)PBOpen;
-        else
-            vp = hfstab[(EM_D0 & 0xFFFF)];
-        if(vp)
-            EM_D0 = (*vp)(SYN68K_TO_US_CHECK0(EM_A0),
-                          !!(EM_D1 & ASYNCBIT));
-        else
-        {
-            warning_unexpected("d0 = 0x%lx", (unsigned long)EM_D0);
-            EM_D0 = paramErr;
-        }
-    }
-    RTS();
-}
-
 STUB(FInitQueue)
 {
-    RTS();
-}
-
-STUB(HFSRoutines)
-{
-    fsprocp_t vp;
-    void **hfsroutine = (void **)ignoreme2;
-    vp = (fsprocp_t)((EM_D1 & HFSBIT) ? hfsroutine[1] : hfsroutine[0]);
-    EM_D0 = (*vp)(SYN68K_TO_US_CHECK0(EM_A0), !!(EM_D1 & ASYNCBIT));
     RTS();
 }
 
@@ -606,7 +469,7 @@ add_to_bad_trap_addresses(bool tool_p, unsigned short index)
     if(tool_p)
         aline_trap += 0x800;
 
-    for(i = 0; i < n_bad_traps && bad_traps[i] != aline_trap; ++i)
+    for(i = 0; i < n_bad_traps && i < NELEM(bad_traps) && bad_traps[i] != aline_trap; ++i)
         ;
     if(i >= n_bad_traps)
     {

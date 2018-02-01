@@ -75,13 +75,12 @@ RAW_68K_TRAP(SetTrapAddress, 0xA047);
 RAW_68K_TRAP(RelString, 0xA050);
 RAW_68K_TRAP(UprString, 0xA054);
 RAW_68K_TRAP(StripAddress, 0xA055);
-RAW_68K_TRAP(HFSDispatch, 0xA260);
 RAW_68K_TRAP(ADBOp, 0xA07C);
 RAW_68K_TRAP(Microseconds, 0xA193);
 RAW_68K_TRAP(Gestalt, 0xA1AD);
 RAW_68K_TRAP(LoadSeg, 0xA9F0);
 RAW_68K_TRAP(CommToolboxDispatch, 0xA08B);
-//RAW_68K_FUNCTION(modeswitch);
+RAW_68K_FUNCTION(modeswitch);
 RAW_68K_TRAP(WackyQD32Trap, 0xAB03);
 RAW_68K_FUNCTION(Key1Trans);
 RAW_68K_FUNCTION(Key2Trans);
@@ -98,8 +97,5 @@ RAW_68K_TRAP(SetOSDefault, 0xA083);
 RAW_68K_TRAP(IMVI_ReadXPRam, 0xA051);
 RAW_68K_FUNCTION(bad_trap_unimplemented);
 RAW_68K_TRAP(IMVI_PPC, 0xA0DD);
-RAW_68K_FUNCTION(HFSRoutines);
-//RAW_68K_FUNCTION(CodeFragment);
-//RAW_68K_FUNCTION(MixedMode);
 }
 #endif
