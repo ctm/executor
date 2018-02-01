@@ -514,7 +514,6 @@ void Executor::ROMlib_seginit(LONGINT argc, char **argv) /* INTERNAL */
         ++argv;
         if(argv_to_appfile(argv[0], &app))
         {
-            ROMlib_startupscreen = false;
             ROMlib_exit = true;
             newcount = Hx(fh, count) + 1;
             HxX(fh, count) = CW(newcount);

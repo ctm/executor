@@ -723,8 +723,9 @@ syn68k_addr_t Executor::tooltraptable[0x400]; /* Gets filled in at run time */
 syn68k_addr_t Executor::ostraptable[0x100]; /* Gets filled in at run time */
 
 
-void functions::init()
+void functions::init(bool log)
 {
+    loggingEnabled = log;
     for(auto init : initObjects)
         init->init();
     for(int i = 0; i < NTOOLENTRIES; i++)

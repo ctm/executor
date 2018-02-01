@@ -179,7 +179,7 @@ set(misc_sources functions.cpp desk.cpp device.cpp disk.cpp diskinit.cpp dump.cp
   osevent.cpp osutil.cpp pack.cpp scrap.cpp script.cpp segment.cpp serial.cpp
   slash.cpp stdfile.cpp romlib_stubs.cpp syserr.cpp toolevent.cpp toolutil.cpp time.cpp
   vbl.cpp syncint.cpp virtualint.cpp refresh.cpp autorefresh.cpp aboutbox.cpp
-  option.cpp parseopt.cpp parsenum.cpp desperate.cpp
+  option.cpp parseopt.cpp parsenum.cpp
   version.cpp shutdown.cpp uniquefile.cpp screen-dump.cpp
   process.cpp alias.cpp string.cpp tempmem.cpp edition.cpp fontIMVI.cpp balloon.cpp
   error.cpp adb.cpp color_wheel_bits.cpp finder.cpp system_error.cpp ibm_keycodes.cpp
@@ -252,7 +252,6 @@ set(include_sources hintemplate.h
                   include/rsys/dcache.h
                   include/rsys/depthconv.h
                   include/rsys/desk.h
-                  include/rsys/desperate.h
                   include/rsys/device.h
                   include/rsys/dial.h
                   include/rsys/dirtyrect.h

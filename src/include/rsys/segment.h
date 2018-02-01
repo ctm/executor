@@ -25,7 +25,6 @@ extern LONGINT ROMlib_appbit, ROMlib_whichapps;
 
 extern void ROMlib_seginit(LONGINT argc, char **argv);
 extern void empty_timer_queues(void);
-extern BOOLEAN ROMlib_startupscreen;
 }
 
 #endif /* !_SEGMENT_H_ */
