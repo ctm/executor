@@ -197,7 +197,7 @@ extern SysPPtr GetSysPPtr(void);
 extern OSErr WriteParam(void);
 REGISTER_TRAP2(WriteParam, 0xA038, D0());
 extern void Enqueue(QElemPtr e, QHdrPtr h);
-REGISTER_TRAP2(Enqueue, 0xA96F, D0(A0,A1), SaveA1D1D2);
+REGISTER_TRAP2(Enqueue, 0xA96F, void(A0,A1), SaveA1D1D2);
 extern OSErr Dequeue(QElemPtr e, QHdrPtr h);
 REGISTER_TRAP2(Dequeue, 0xA96E, D0(A0,A1), SaveA1D1D2);
 

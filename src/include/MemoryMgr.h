@@ -157,12 +157,12 @@ REGISTER_TRAP2(_CompactMem_flags, 0xA04C, D0 (D0, TrapBit<SYSBIT>));
 #define ResrvMem(needed) (_ResrvMem_flags(needed, false))
 #define ResrvMemSys(needed) (_ResrvMem_flags(needed, true))
 extern void _ResrvMem_flags(Size needed, bool sys_p);
-REGISTER_TRAP2(_ResrvMem_flags, 0xA040, D0 (D0, TrapBit<SYSBIT>));
+REGISTER_TRAP2(_ResrvMem_flags, 0xA040, void (D0, TrapBit<SYSBIT>), callconv::ReturnMemErr<D0>);
 
 #define PurgeMem(needed) (_PurgeMem_flags(needed, false))
 #define PurgeMemSys(needed) (_PurgeMem_flags(needed, true))
 extern void _PurgeMem_flags(Size needed, bool sys_p);
-REGISTER_TRAP2(_PurgeMem_flags, 0xA04D, D0 (D0, TrapBit<SYSBIT>));
+REGISTER_TRAP2(_PurgeMem_flags, 0xA04D, void (D0, TrapBit<SYSBIT>), callconv::ReturnMemErr<D0>);
 
 #define MaxBlock() (_MaxBlock_flags(false))
 #define MaxBlockSys() (_MaxBlock_flags(true))
