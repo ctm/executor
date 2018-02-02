@@ -42,7 +42,7 @@ extern AuxCtlHandle default_aux_ctl;
 #define CTL_NEXT_CONTROL(ctl) (MR(CTL_NEXT_CONTROL_X(ctl)))
 #define CTL_OWNER(ctl) (MR(CTL_OWNER_X(ctl)))
 #define CTL_VIS(ctl) (CTL_VIS_X(ctl))
-#define CTL_HILITE(ctl) ((uint8)CTL_HILITE_X(ctl))
+#define CTL_HILITE(ctl) ((uint8_t)CTL_HILITE_X(ctl))
 #define CTL_VALUE(ctl) (CW(CTL_VALUE_X(ctl)))
 #define CTL_MIN(ctl) (CW(CTL_MIN_X(ctl)))
 #define CTL_MAX(ctl) (CW(CTL_MAX_X(ctl)))

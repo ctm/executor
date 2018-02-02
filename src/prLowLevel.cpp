@@ -233,7 +233,7 @@ Executor::cstring_from_str255(Str255 text)
     int len;
     char *retval;
 
-    len = (uint8)text[0];
+    len = (uint8_t)text[0];
     retval = (char *)malloc(len + 1);
     if(retval)
     {

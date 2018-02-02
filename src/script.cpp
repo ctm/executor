@@ -217,7 +217,7 @@ void Executor::C_NMeasureJust(Ptr text, int32_t length, Fixed slop,
     denomx.v = CW(denom.v);
     denomx.h = CW(denom.h);
 
-    xStdTxMeas(length, (uint8 *)text, &numerx, &denomx,
+    xStdTxMeas(length, (uint8_t *)text, &numerx, &denomx,
                NULL, (GUEST<int16_t> *)charLocs);
 }
 

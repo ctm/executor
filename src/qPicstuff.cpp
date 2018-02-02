@@ -1192,7 +1192,7 @@ static Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
     }
     else
     {
-        uint8 *temp_scanline, *scanline, *ep;
+        uint8_t *temp_scanline, *scanline, *ep;
 
         h = NewHandle(final_data_size);
         if(h == NULL)
@@ -1204,8 +1204,8 @@ static Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
         HLock(h);
         pixmap->baseAddr = *h; /* can't use STARH 'cause we don't */
         /* want to byte swap the result */
-        temp_scanline = (uint8 *)alloca(rowb);
-        for(scanline = (uint8 *)BITMAP_BASEADDR(pixmap),
+        temp_scanline = (uint8_t *)alloca(rowb);
+        for(scanline = (uint8_t *)BITMAP_BASEADDR(pixmap),
         ep = scanline + final_data_size;
             scanline < ep;
             scanline += rowb)
@@ -1268,9 +1268,9 @@ static Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
 
     if(pixmap->packType == CWC(2))
     {
-        uint8 *start, *src, *dst;
+        uint8_t *start, *src, *dst;
 
-        start = (uint8 *)BITMAP_BASEADDR(pixmap);
+        start = (uint8_t *)BITMAP_BASEADDR(pixmap);
 
         src = start + height * comp_bytes * 3;
         dst = start + height * rowb;

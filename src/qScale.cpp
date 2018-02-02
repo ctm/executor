@@ -24,8 +24,8 @@ void Executor::scale_blt_bitmap(const blt_bitmap_t *src_bitmap, blt_bitmap_t *ds
     long old_width, new_width, old_height, new_height;
     long y, dx, dy, left_x, src_rowbytes, dst_rowbytes, dst_byte_width, old_v;
     long rows_left;
-    const uint8 *src_base;
-    uint8 *dst_row_base;
+    const uint8_t *src_base;
+    uint8_t *dst_row_base;
 
     /* Fetch the sizes of the two bitmaps. */
     old_width = RECT_WIDTH(old_rect);
@@ -51,8 +51,8 @@ void Executor::scale_blt_bitmap(const blt_bitmap_t *src_bitmap, blt_bitmap_t *ds
     dst_byte_width = ((new_width << log2_bits_per_pixel) + 7) / 8;
     dst_rowbytes = (dst_byte_width + 3) & ~3; /* Divisible by 4. */
     src_rowbytes = BITMAP_ROWBYTES(src_bitmap);
-    dst_row_base = (uint8 *)MR(dst_bitmap->baseAddr);
-    src_base = (uint8 *)(MR(src_bitmap->baseAddr)
+    dst_row_base = (uint8_t *)MR(dst_bitmap->baseAddr);
+    src_base = (uint8_t *)(MR(src_bitmap->baseAddr)
                          + ((CW(old_rect->top) - CW(src_bitmap->bounds.top)) * src_rowbytes));
     left_x = (CW(old_rect->left) - CW(src_bitmap->bounds.left)) << 16;
     old_v = -1;

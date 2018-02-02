@@ -74,7 +74,7 @@ PASCAL_SUBTRAP(NewMovieController, 0xAAAA, 0x018A, QuickTime);
 extern void C_DisposeMovieController(ComponentInstance cntrller);
 PASCAL_SUBTRAP(DisposeMovieController, 0xAAAA, 0x018B, QuickTime);
 extern OSErr C_OpenMovieFile(const FSSpec *filespecp,
-                                         INTEGER *refnump, uint8 perm);
+                                         INTEGER *refnump, uint8_t perm);
 PASCAL_SUBTRAP(OpenMovieFile, 0xAAAA, 0x0192, QuickTime);
 }
 #endif

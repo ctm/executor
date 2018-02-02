@@ -49,6 +49,6 @@ extern void maybe_wait_for_keyup(void);
 extern uint16_t ROMlib_right_to_left_key_map(uint16_t what);
 
 extern bool ROMlib_get_index_and_bit(LONGINT loc, int *indexp,
-                                     uint8 *bitp);
+                                     uint8_t *bitp);
 }
 #endif

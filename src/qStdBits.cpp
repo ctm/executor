@@ -320,9 +320,9 @@ write_copybits_picdata(PixMap *src, PixMap *dst,
     {
         if(pack_type == CWC(2))
         {
-            uint8 *current, *end;
+            uint8_t *current, *end;
 
-            current = (uint8 *)MR(src->baseAddr) + 1;
+            current = (uint8_t *)MR(src->baseAddr) + 1;
             end = current + row_bytes * height;
 
             while(current < end)
@@ -341,36 +341,36 @@ write_copybits_picdata(PixMap *src, PixMap *dst,
         Ptr ip;
 
         int parity;
-        uint8 *packed_line;
-        int8 *countloc;
+        uint8_t *packed_line;
+        int8_t *countloc;
         int16_t count, countsize;
         GUEST<int16_t> swappedcount;
-        uint8 *baseaddr;
+        uint8_t *baseaddr;
 
         /* i copied the code below from the executor 1.2 implementation
          of StdBits pic recording.  i can't say i fully understand it */
 
         /* #### why the extra 5 bytes? */
-        packed_line = (uint8 *)alloca(row_bytes + 5);
-        baseaddr = (uint8 *)MR(src->baseAddr);
+        packed_line = (uint8_t *)alloca(row_bytes + 5);
+        baseaddr = (uint8_t *)MR(src->baseAddr);
         ip = (Ptr)baseaddr;
         parity = 0;
 
         if(row_bytes > 250)
         {
-            countloc = (int8 *)&swappedcount;
+            countloc = (int8_t *)&swappedcount;
             countsize = 2;
         }
         else
         {
-            countloc = (int8 *)&swappedcount + 1;
+            countloc = (int8_t *)&swappedcount + 1;
             countsize = 1;
         }
 
         for(i = 0; i < height; i++)
         {
             GUEST<Ptr> op = RM((Ptr)packed_line);
-            gui_assert((uint8 *)ip == &baseaddr[row_bytes * i]);
+            gui_assert((uint8_t *)ip == &baseaddr[row_bytes * i]);
             GUEST<Ptr> ip2 = RM(ip);
             PackBits(&ip2, &op, row_bytes);
             ip = MR(ip2);

@@ -150,7 +150,7 @@ bool vdriver_acceptable_mode_p(int width, int height, int bpp,
 bool vdriver_set_mode(int width, int height, int bpp, bool grayscale_p)
 {
     HDC hdc;
-    uint8 *dummy_fbuf;
+    uint8_t *dummy_fbuf;
 
     if(!vdriver_acceptable_mode_p(width, height, bpp, grayscale_p, false))
         return (false);

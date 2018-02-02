@@ -376,7 +376,7 @@ void Executor::convert_pixmap(const PixMap *src, PixMap *dst,
     GUEST<int32_t> dst_seed_x, src_seed_x;
     const rgb_spec_t *src_rgb_spec, *dst_rgb_spec;
 
-    uint8 *src_base, *dst_base;
+    uint8_t *src_base, *dst_base;
     int16_t src_row_bytes, dst_row_bytes;
 
     write_back_data_t write_back;
@@ -569,12 +569,12 @@ void Executor::convert_pixmap(const PixMap *src, PixMap *dst,
 
     /* using BITMAP_... on a PixMap * is slimy */
     src_row_bytes = BITMAP_ROWBYTES(src);
-    src_base = (uint8 *)(MR(src->baseAddr)
+    src_base = (uint8_t *)(MR(src->baseAddr)
                          + (CW(rect->top) - CW(src->bounds.top)) * src_row_bytes
                          + (CW(rect->left) - CW(src->bounds.left)) * src_bpp / 8);
 
     dst_row_bytes = BITMAP_ROWBYTES(dst);
-    dst_base = (uint8 *)MR(dst->baseAddr);
+    dst_base = (uint8_t *)MR(dst->baseAddr);
 
     (*conversion_func)(depth_table_space,
                        src_base, src_row_bytes, dst_base, dst_row_bytes,

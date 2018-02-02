@@ -134,7 +134,7 @@ hdlr_table_elt(AE_hdlr_table_h table,
 }
 
 OSErr Executor::C__AE_hdlr_table_alloc(int32_t unknown_1, int32_t unknown_2,
-                                       int32_t unknown_3, int8 unknown_p,
+                                       int32_t unknown_3, int8_t unknown_p,
                                        GUEST<AE_hdlr_table_h> *table_return)
 {
     AE_hdlr_table_h table;

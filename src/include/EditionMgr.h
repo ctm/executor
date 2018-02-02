@@ -85,7 +85,7 @@ struct NewPublisherReply
     GUEST<Boolean> canceled;
     GUEST<Boolean> replacing;
     GUEST<Boolean> usePart;
-    GUEST<uint8> _filler;
+    GUEST<uint8_t> _filler;
     GUEST<Handle> preview;
     GUEST<FormatType> previewFormat;
     GUEST<EditionContainerSpec> container;
@@ -117,7 +117,7 @@ struct SectionOptionsReply
 typedef struct SectionOptionsReply SectionOptionsReply;
 typedef SectionOptionsReply *SectionOptionsReplyPtr;
 
-typedef uint8 EditionOpenerVerb;
+typedef uint8_t EditionOpenerVerb;
 
 enum
 {
@@ -144,7 +144,7 @@ struct EditionOpenerParamBlock
 typedef struct EditionOpenerParamBlock EditionOpenerParamBlock;
 typedef EditionOpenerParamBlock *EditionOpenerParamBlockPtr;
 
-typedef uint8 FormatIOVerb;
+typedef uint8_t FormatIOVerb;
 
 enum
 {

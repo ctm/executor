@@ -178,7 +178,7 @@ ROMlib_compare_fcw_fsw(uint32_t fcwfsw, const char *func, int line)
  * exception.  Eventually this needs to be changed so we *do* get
  * a real exception, and signal appropriately.
  */
-static uint8 halts_enabled;
+static uint8_t halts_enabled;
 
 void Executor::C_ROMlib_Fsetenv(INTEGER *dp, INTEGER sel)
 {
@@ -1093,7 +1093,7 @@ void Executor::C_ROMlib_Fdec2x(Decimal *sp, void *dp, unsigned short sel)
 
     warning_floating_point("Fdec2x(%s%.*s * 10**%d) == " IEEE_T_FORMAT "",
                            sp->sgn ? "-" : "",
-                           (uint8)sp->sig[0], &sp->sig[1],
+                           (uint8_t)sp->sig[0], &sp->sig[1],
                            CW(sp->exp), (IEEE_T_PRINT_CAST)in);
 }
 

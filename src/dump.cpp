@@ -1076,15 +1076,15 @@ void dump_control(ControlHandle x)
 void dump_memlocs(uint32_t to_look_for, int size, const void *start_addr,
                   const void *end_addr)
 {
-    const uint8 *ucp;
+    const uint8_t *ucp;
     const uint16_t *usp;
     const uint32_t *ulp;
 
     switch(size)
     {
         case 1:
-            for(ucp = (const uint8 *)start_addr; ucp < (uint8 *)end_addr; ++ucp)
-                if(*ucp == (uint8)to_look_for)
+            for(ucp = (const uint8_t *)start_addr; ucp < (uint8_t *)end_addr; ++ucp)
+                if(*ucp == (uint8_t)to_look_for)
                     iprintf((o_fp, "%p\n", ucp));
             break;
         case 2:

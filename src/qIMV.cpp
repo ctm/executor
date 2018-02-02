@@ -49,7 +49,7 @@ void Executor::C_SetStdCProcs(CQDProcs *cProcs) /* IMV-77 */
 void Executor::C_GetCPixel(INTEGER h, INTEGER v, RGBColor *pixelp)
 {
     PixMap temp_pm;
-    uint8 temp_fbuf[4];
+    uint8_t temp_fbuf[4];
     Rect src_rect, dst_rect;
     GrafPtr port = thePort;
     CTabHandle ctab;
@@ -156,7 +156,7 @@ void Executor::C_SetCPixel(INTEGER h, INTEGER v, RGBColor *pixelp)
         CPORT_RGB_FG_COLOR(port) = save_fg_rgb;
 }
 
-static int8
+static int8_t
 default_search_proc(RGBColor *rgb, GUEST<int32_t> *pixel)
 {
     MatchRec *mr;
@@ -177,7 +177,7 @@ default_search_proc_stub(syn68k_addr_t dummy_addr, void *dummy)
 {
     void *arg1, *arg2;
     syn68k_addr_t retval;
-    int8 result;
+    int8_t result;
 
     retval = POPADDR();
 

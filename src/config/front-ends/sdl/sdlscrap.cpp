@@ -163,17 +163,17 @@ surface_from_dib(void *lp)
 
             typedef struct
             {
-                uint8 zero PACKED;
-                uint8 red PACKED;
-                uint8 green PACKED;
-                uint8 blue PACKED;
+                uint8_t zero PACKED;
+                uint8_t red PACKED;
+                uint8_t green PACKED;
+                uint8_t blue PACKED;
             } sdl_pixel;
 
             typedef struct
             {
-                uint8 blue PACKED;
-                uint8 red PACKED;
-                uint8 green PACKED;
+                uint8_t blue PACKED;
+                uint8_t red PACKED;
+                uint8_t green PACKED;
             } dib_pixel;
             int pixels_per_line;
             bool inverted_p;

@@ -235,7 +235,7 @@ Executor::geteventelem(void)
 }
 
 bool
-Executor::ROMlib_get_index_and_bit(LONGINT loc, int *indexp, uint8 *bitp)
+Executor::ROMlib_get_index_and_bit(LONGINT loc, int *indexp, uint8_t *bitp)
 {
     bool retval;
 
@@ -253,7 +253,7 @@ Executor::ROMlib_get_index_and_bit(LONGINT loc, int *indexp, uint8 *bitp)
 void Executor::ROMlib_zapmap(LONGINT loc, LONGINT val)
 {
     int i;
-    uint8 bit;
+    uint8_t bit;
 
     if(ROMlib_get_index_and_bit(loc, &i, &bit))
     {
@@ -265,11 +265,11 @@ void Executor::ROMlib_zapmap(LONGINT loc, LONGINT val)
 }
 
 static bool
-key_down(uint8 loc)
+key_down(uint8_t loc)
 {
     bool retval;
     int i;
-    uint8 bit;
+    uint8_t bit;
 
     if(!ROMlib_get_index_and_bit(loc, &i, &bit))
         retval = false;

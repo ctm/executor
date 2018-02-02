@@ -13,7 +13,6 @@
 #endif
 
 #include "rsys/macros.h"
-#include "rsys/types.h"
 #include "rsys/functions.h"
 #include "rsys/mactype.h"
 #include "rsys/byteswap.h"
@@ -27,11 +26,8 @@
 #include "rsys/lowglobals.h"
 #endif
 
-#include "rsys/trapglue.h"
 
-#if !defined(COMPILE_FOR_BUILD)
 #include "front-end-config.h"
-#endif
 
 namespace Executor
 {

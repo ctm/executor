@@ -11,12 +11,6 @@ typedef struct
     uint64_t magic;
 } ptocblock_t;
 
-typedef struct
-{
-    syn68k_addr_t orig;
-    void *func;
-} osstuff_t;
-
 #define TOOLBIT (0x0800)
 #define NTOOLENTRIES (0x400)
 #define NOSENTRIES (0x100)
@@ -29,7 +23,6 @@ extern syn68k_addr_t PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop);
 extern unsigned short mostrecenttrap;
 
 extern uintptr_t CToPascalCall(void *, uint64_t, ...);
-extern osstuff_t osstuff[];
 }
 
 #endif

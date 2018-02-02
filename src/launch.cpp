@@ -367,7 +367,7 @@ void Executor::SFSaveDisk_Update(INTEGER vrefnum, Str255 filename)
 uint32_t Executor::ROMlib_version_long;
 
 static bool
-cfrg_match(const cfir_t *cfirp, GUEST<OSType> arch_x, uint8 type_x, Str255 name)
+cfrg_match(const cfir_t *cfirp, GUEST<OSType> arch_x, uint8_t type_x, Str255 name)
 {
     bool retval;
 
@@ -377,13 +377,13 @@ cfrg_match(const cfir_t *cfirp, GUEST<OSType> arch_x, uint8 type_x, Str255 name)
 }
 
 cfir_t *
-Executor::ROMlib_find_cfrg(Handle cfrg, OSType arch, uint8 type, Str255 name)
+Executor::ROMlib_find_cfrg(Handle cfrg, OSType arch, uint8_t type, Str255 name)
 {
     cfrg_resource_t *cfrgp;
     int n_descripts;
     cfir_t *cfirp;
     GUEST<OSType> desired_arch_x;
-    uint8 type_x;
+    uint8_t type_x;
     cfir_t *retval;
 
     cfrgp = (cfrg_resource_t *)STARH(cfrg);

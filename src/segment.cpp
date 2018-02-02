@@ -217,10 +217,10 @@ full_pathname_p(char *uname)
     return retval;
 }
 
-static uint8
+static uint8_t
 hexval(char c)
 {
-    uint8 retval;
+    uint8_t retval;
 
     if(c >= '0' && c <= '9')
         retval = c - '0';

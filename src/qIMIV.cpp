@@ -245,14 +245,14 @@ static void xSeedFill(unsigned char *srcp, unsigned char *dstp, INTEGER srcr,
 
 #if defined(VDRIVER_SUPPORTS_REAL_SCREEN_BLITS)
 static bool
-create_scratch_bitmap_if_necessary(uint8 **_fbuf,
+create_scratch_bitmap_if_necessary(uint8_t **_fbuf,
                                    /* dummy */ int row_words,
                                    int height, int word_width,
                                    write_back_data_t *write_back_data)
 {
     PixMapHandle gd_pmap;
 
-    uint8 *screen_fbuf, *fbuf;
+    uint8_t *screen_fbuf, *fbuf;
     int screen_row_bytes;
     int screen_height;
 
@@ -296,7 +296,7 @@ create_scratch_bitmap_if_necessary(uint8 **_fbuf,
 }
 
 static void
-SeedFill_handle_direct_screen_access(uint8 *srcp, uint8 *dstp,
+SeedFill_handle_direct_screen_access(uint8_t *srcp, uint8_t *dstp,
                                      int src_row_words, int dst_row_words,
                                      int height, int word_width,
                                      bool use_seed_pt_p,
@@ -333,7 +333,7 @@ void Executor::C_SeedFill(Ptr srcp, Ptr dstp, INTEGER srcr, INTEGER dstr,
                           INTEGER height, INTEGER width, INTEGER seedh,
                           INTEGER seedv) /* IMIV-24 */
 {
-    SeedFill_handle_direct_screen_access((uint8 *)srcp, (uint8 *)dstp,
+    SeedFill_handle_direct_screen_access((uint8_t *)srcp, (uint8_t *)dstp,
                                          srcr, dstr,
                                          height, width, true, seedh, seedv);
 }
@@ -341,7 +341,7 @@ void Executor::C_SeedFill(Ptr srcp, Ptr dstp, INTEGER srcr, INTEGER dstr,
 void Executor::C_CalcMask(Ptr srcp, Ptr dstp, INTEGER srcr, INTEGER dstr,
                           INTEGER height, INTEGER width) /* IMIV-24 */
 {
-    SeedFill_handle_direct_screen_access((uint8 *)srcp, (uint8 *)dstp,
+    SeedFill_handle_direct_screen_access((uint8_t *)srcp, (uint8_t *)dstp,
                                          srcr, dstr,
                                          height, width, false, 0, 0);
 }

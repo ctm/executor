@@ -302,7 +302,7 @@ PASCAL_SUBTRAP(ROMlib_Fsethv, 0xA9EB, 0x05, Pack4);
 extern void C_ROMlib_Fgethv(LONGINT *hvp, unsigned short sel);
 PASCAL_SUBTRAP(ROMlib_Fgethv, 0xA9EB, 0x07, Pack4);
 
-extern void C_ROMlib_FnextX(uint8 *x, uint8 *y,
+extern void C_ROMlib_FnextX(uint8_t *x, uint8_t *y,
                                         unsigned short sel);
 PASCAL_SUBTRAP(ROMlib_FnextX, 0xA9EB, 0x13, Pack4);
 }

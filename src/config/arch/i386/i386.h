@@ -22,7 +22,7 @@
 #define ALWAYS_ON_I486
 #endif
 
-#include "rsys/types.h"
+#include <stdint.h>
 #include "i386_djgpp_version.h"
 
 #define SWAP16_FUNC_DEFN            \

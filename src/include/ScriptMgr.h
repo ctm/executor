@@ -135,7 +135,7 @@ enum
     TruncErr = (-1),
 };
 
-typedef uint8 StyledLineBreakCode;
+typedef uint8_t StyledLineBreakCode;
 
 typedef struct DateCacheRec
 {
@@ -165,7 +165,7 @@ typedef struct LongDateRec
 typedef INTEGER TruncCode;
 typedef int16_t JustStyleCode;
 
-typedef int8 CharByteTable[256];
+typedef int8_t CharByteTable[256];
 
 typedef int16_t ScriptRunStatus; /* Not sure this is correct, since in IM
 				  ScriptRunStatus is a record with two

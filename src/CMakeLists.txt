@@ -352,7 +352,6 @@ set(include_sources hintemplate.h
                   include/rsys/toolutil.h
                   include/rsys/trapglue.h
                   include/rsys/trapname.h
-                  include/rsys/types.h
                   include/rsys/uniquefile.h
                   include/rsys/vbl.h
                   include/rsys/vdriver.h

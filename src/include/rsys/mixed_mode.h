@@ -4,7 +4,7 @@
 #include <stdarg.h>
 namespace Executor
 {
-typedef uint8 ISAType;
+typedef uint8_t ISAType;
 typedef uint16_t CallingConventionType;
 typedef uint32_t ProcInfoType;
 typedef uint16_t RegisterSelectorType;
@@ -29,13 +29,13 @@ enum
     kSpecialCase,
 };
 
-typedef uint8 RDFlagsType;
+typedef uint8_t RDFlagsType;
 
 struct RoutineRecord
 {
     GUEST_STRUCT;
     GUEST<ProcInfoType> procInfo;
-    GUEST<uint8> reserved1;
+    GUEST<uint8_t> reserved1;
     GUEST<ISAType> ISA;
     GUEST<RoutineFlagsType> routineFlags;
     GUEST<ProcPtr> procDescriptor;
@@ -47,11 +47,11 @@ struct RoutineDescriptor
 {
     GUEST_STRUCT;
     GUEST<uint16_t> goMixedModeTrap;
-    GUEST<uint8> version;
+    GUEST<uint8_t> version;
     GUEST<RDFlagsType> routineDescriptorFlags;
     GUEST<uint32_t> reserved1;
-    GUEST<uint8> reserved2;
-    GUEST<uint8> selectorInfo;
+    GUEST<uint8_t> reserved2;
+    GUEST<uint8_t> selectorInfo;
     GUEST<uint16_t> routineCount;
     GUEST<RoutineRecord[1]> routineRecords;
 };

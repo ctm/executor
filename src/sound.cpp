@@ -142,7 +142,7 @@ snd_fixed_mul(snd_time x, snd_time y)
 /* This table is used to add two sound values together and pin
  * the value to avoid overflow.
  */
-static const uint8 mix8[] = {
+static const uint8_t mix8[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -197,21 +197,21 @@ static const uint8 mix8[] = {
    will simply be lost. */
 
 static bool
-resample(uint8 *inbuf, uint8 *orig_outbuf, unsigned int insize,
+resample(uint8_t *inbuf, uint8_t *orig_outbuf, unsigned int insize,
          unsigned int outsize, uint32_t infreq, uint32_t outfreq,
-         snd_time *current_start, uint8 *prev_samp,
+         snd_time *current_start, uint8_t *prev_samp,
          snd_time *chan_time, snd_time until)
 
 {
     snd_time step;
     snd_time in_t, out_t;
-    uint8 *outbuf;
+    uint8_t *outbuf;
 
     /* FIXME - this does lots of pointless work when we're going to
    * ignore the resampled waveform anyway, but it makes the "real"
    * sound and "dummy" sound cases more similar.  Is it worth it?
    */
-    outbuf = orig_outbuf ?: (uint8 *)alloca(outsize);
+    outbuf = orig_outbuf ?: (uint8_t *)alloca(outsize);
 
     step = snd_fixed_div(infreq, outfreq);
 

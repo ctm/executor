@@ -42,8 +42,8 @@ struct cfir_t
     GUEST<uint32_t> oldest_definition_version;
     GUEST<uint32_t> stack_size;
     GUEST<int16_t> appl_library_dir;
-    GUEST<uint8> fragment_type;
-    GUEST<uint8> fragment_location;
+    GUEST<uint8_t> fragment_type;
+    GUEST<uint8_t> fragment_location;
     GUEST<int32_t> offset_to_fragment;
     GUEST<int32_t> fragment_length;
     GUEST<uint32_t> reserved0;
@@ -166,7 +166,7 @@ extern OSErr C_GetDiskFragment(FSSpecPtr fsp, LONGINT offset, LONGINT length,
                                Str255 errname);
 PASCAL_SUBTRAP(GetDiskFragment, 0xAA5A, 0x0002, CodeFragmentDispatch);
 
-typedef uint8 SymClass;
+typedef uint8_t SymClass;
 
 extern OSErr C_FindSymbol(ConnectionID connID, Str255 symName, GUEST<Ptr> *symAddr,
                           SymClass *symClass);
@@ -184,8 +184,8 @@ struct section_info_t
     GUEST<syn68k_addr_t> start;
     GUEST<uint32_t> length;
     GUEST<uint32_t> ref_count;
-    GUEST<uint8> perms;
-    GUEST<uint8> pad[3];/* TODO: verifying that it works this way on a Mac. */
+    GUEST<uint8_t> perms;
+    GUEST<uint8_t> pad[3];/* TODO: verifying that it works this way on a Mac. */
 };
 
 typedef struct CFragConnection
@@ -241,7 +241,7 @@ struct map_entry_t
     void *value;
 };
 
-extern cfir_t *ROMlib_find_cfrg(Handle cfrg, OSType arch, uint8 type,
+extern cfir_t *ROMlib_find_cfrg(Handle cfrg, OSType arch, uint8_t type,
                                 Str255 name);
 
 extern OSErr C_CloseConnection(ConnectionID *cidp);

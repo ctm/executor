@@ -37,10 +37,10 @@ using namespace Executor;
 using namespace Executor;
 
 static void
-cursor_debug(const uint8 *datap, const uint8 *maskp, int hot_x, int hot_y)
+cursor_debug(const uint8_t *datap, const uint8_t *maskp, int hot_x, int hot_y)
 {
     int y;
-    uint8 *pixel;
+    uint8_t *pixel;
     int offset;
 
     pixel = vdriver_fbuf;

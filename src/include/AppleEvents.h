@@ -87,9 +87,9 @@ enum
 
 typedef int16_t AESendPriority;
 
-typedef uint8 AEEventSource;
-typedef uint8 AEInteractionAllowed;
-typedef uint8 AEArrayType;
+typedef uint8_t AEEventSource;
+typedef uint8_t AEInteractionAllowed;
+typedef uint8_t AEArrayType;
 
 enum
 {
@@ -118,7 +118,7 @@ enum
 
 typedef union AEArrayData {
     GUEST<int16_t> AEDataArray[1];
-    int8 AEPackedArray[1];
+    int8_t AEPackedArray[1];
     GUEST<Handle> AEHandleArray[1];
     AEDesc AEDescArray[1];
     AEKeyDesc AEKeyDescArray[1];
@@ -221,7 +221,7 @@ typedef AE_info_t *AE_info_ptr;
 DISPATCHER_TRAP(Pack8, 0xA816, D0W);
 
     // "internal". TODO: verify if they really exist as entry points.
-extern OSErr C__AE_hdlr_table_alloc(int32_t, int32_t, int32_t, int8,
+extern OSErr C__AE_hdlr_table_alloc(int32_t, int32_t, int32_t, int8_t,
                                                 GUEST<AE_hdlr_table_h> *);
 PASCAL_SUBTRAP(_AE_hdlr_table_alloc, 0xA816, 0x092E, Pack8);
 extern OSErr C__AE_hdlr_delete(AE_hdlr_table_h, int32_t,

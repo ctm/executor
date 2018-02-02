@@ -71,7 +71,7 @@ struct ModifierStub
     SignedByte hState;
     snd_time current_start;
     snd_time time;
-    GUEST<uint8> prev_samp;
+    GUEST<uint8_t> prev_samp;
     SndDoubleBufferHeader *dbhp;
     int current_db;
 };

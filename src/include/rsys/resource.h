@@ -206,8 +206,8 @@ struct dcomp_info_t
     GUEST<LONGINT> compressedResourceTag;
     GUEST<LONGINT> typeFlags;
     GUEST<LONGINT> uncompressedSize;
-    GUEST<uint8> workingBufferFractionalRatio;
-    GUEST<uint8> expansionBufferSize;
+    GUEST<uint8_t> workingBufferFractionalRatio;
+    GUEST<uint8_t> expansionBufferSize;
     GUEST<INTEGER> dcmpID;
 };
 

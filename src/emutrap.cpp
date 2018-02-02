@@ -312,7 +312,7 @@ CToRoutineDescriptorCall(const RoutineDescriptor *p, unsigned long long magic,
         {
             case 1:
             {
-                arg = (uint8)va_arg(ap, unsigned long);
+                arg = (uint8_t)va_arg(ap, unsigned long);
                 arg = CB(arg);
                 procinfo |= STACK_ROUTINE_PARAMETER(n_args, kOneByteCode);
             }

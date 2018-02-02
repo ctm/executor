@@ -9,7 +9,7 @@
  */
 #include "host-arch-config.h"
 #include "rsys/macros.h"
-#include "rsys/types.h"
+#include <stdint.h>
 #include <type_traits>
 #include <syn68k_public.h> /* for ROMlib_offset */
 
@@ -27,10 +27,17 @@ typedef int32_t LONGINT;
 typedef uint32_t ULONGINT;
 
 #if !defined(WIN32) || !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
-typedef int8 BOOLEAN;
+typedef int8_t BOOLEAN;
 #endif
 
 typedef int16_t CharParameter; /* very important not to use this as char */
+
+struct Point
+{
+    int16_t v;
+    int16_t h;
+};
+
 
 // Define alignment.
 
