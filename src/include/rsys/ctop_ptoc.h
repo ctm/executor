@@ -2,8 +2,7 @@
 
 namespace Executor
 {
-
-template<typename F>
+template<typename F, typename CallConv>
 struct UPP;
 
 struct Point;
@@ -33,8 +32,8 @@ namespace ptoc_internal
         constexpr static CTOPCode value = 5;
     };
 
-    template<typename T>
-    struct CTOP<UPP<T>>
+    template<typename T,typename CC>
+    struct CTOP<UPP<T,CC>>
     {
         constexpr static CTOPCode value = 5;
     };

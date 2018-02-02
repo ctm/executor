@@ -22,7 +22,6 @@ using namespace Executor;
 static void findcell(GUEST<Cell> *, ListHandle);
 static void setselectnilflag(BOOLEAN setit, Cell cell, ListHandle list,
                              BOOLEAN hiliteempty);
-static inline BOOLEAN ROMlib_CALLCLICK(ListClickLoopUPP);
 static void scrollbyvalues(ListHandle);
 static void rect2value(Rect *in, Rect *butnotin, INTEGER value,
                        ListHandle list, BOOLEAN hiliteempty);

@@ -542,7 +542,7 @@ ROMlib_GetTrapAddress_helper(uint32_t *d0p, uint32_t d1, uint32_t *a0p)
     if(*a0p == (uint32_t)tooltraptable[UNIMPLEMENTEDINDEX])
     {
         add_to_bad_trap_addresses(tool_p, *d0p);
-        *a0p = US_TO_SYN68K_CHECK0(&stub_bad_trap_unimplemented);
+        *a0p = US_TO_SYN68K_CHECK0((Ptr)&stub_bad_trap_unimplemented);
     }
     *d0p = 0;
 }

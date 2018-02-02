@@ -503,14 +503,14 @@ GUEST<TO> guest_cast(GuestWrapper<FROM> p)
 }
 
 
-template<typename Ret, typename... Args>
-struct GuestWrapperBase<UPP<Ret(Args...)>>
+template<typename Ret, typename... Args, typename CallConv>
+struct GuestWrapperBase<UPP<Ret(Args...),CallConv>>
 {
 private:
     HiddenValue<uint32_t> p;
 
 public:
-    using WrappedType = UPP<Ret(Args...)>;
+    using WrappedType = UPP<Ret(Args...),CallConv>;
     using RawGuestType = uint32_t;
 
     WrappedType get() const
@@ -549,14 +549,14 @@ public:
     }
 };
 
-template<typename TT>
-GUEST<UPP<TT>> RM(UPP<TT> p)
+template<typename TT, typename CallConv>
+GUEST<UPP<TT>> RM(UPP<TT,CallConv> p)
 {
-    return GUEST<UPP<TT>>::fromHost(p);
+    return GUEST<UPP<TT,CallConv>>::fromHost(p);
 }
 
-template<typename TT>
-UPP<TT> MR(GuestWrapper<UPP<TT>> p)
+template<typename TT, typename CallConv>
+UPP<TT> MR(GuestWrapper<UPP<TT, CallConv>> p)
 {
     return p.get();
 }

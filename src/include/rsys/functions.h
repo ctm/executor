@@ -31,6 +31,7 @@ using D1 = D<1>;
 using D2 = D<2>;
 
 struct D0HighWord;
+struct D0LowWord;
 
 template <int mask> struct TrapBit;
 template<typename loc, typename T> struct Out;
@@ -42,21 +43,180 @@ struct CCFromD0;
 struct ClearD0;
 struct SaveA1D1D2;
 struct MoveA1ToA0;
-struct D0HighWord;
+
+
 }
 using namespace callconv;
 
-template<typename F>
-struct UPP;
+namespace callfrom68K
+{
+    template<typename F, F *fptr, typename CallConv>
+    struct Invoker;
+
+    template<typename Ret, typename... Args, Ret (*fptr)(Args...)>
+    struct Invoker<Ret (Args...), fptr, callconv::Pascal>
+    {
+        static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *)
+        {
+            static ptocblock_t ptocblock { (void*)fptr, ptoc(fptr) };
+            return PascalToCCall(addr, &ptocblock);
+        }
+    };
+
+
+    template<syn68k_addr_t (*fptr)(syn68k_addr_t, void*)>
+    struct Invoker<syn68k_addr_t (syn68k_addr_t addr, void *), fptr, callconv::Raw>
+    {
+        static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void * refcon)
+        {
+            return fptr(addr, refcon);
+        }
+    };
+    template<typename... Xs> struct List;
+
+    template<typename F, F *fptr, typename DoneArgs, typename ToDoArgs, typename ToDoCC>
+    struct InvokerRec;
+
+    template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename... DoneArgs>
+    struct InvokerRec<Ret (Args...), fptr, List<DoneArgs...>, List<>, List<>>
+    {
+        static Ret invokeFrom68K(syn68k_addr_t addr, void *refcon, DoneArgs... args)
+        {
+            return fptr(args...);
+        }
+    };
+
+    template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename... DoneArgs, typename Arg, typename... TodoArgs, typename CC, typename... TodoCC>
+    struct InvokerRec<Ret (Args...), fptr, List<DoneArgs...>, List<Arg, TodoArgs...>, List<CC, TodoCC...>>
+    {
+        static Ret invokeFrom68K(syn68k_addr_t addr, void *refcon, DoneArgs... args)
+        {
+            CC newarg;
+            return InvokerRec<Ret (Args...),fptr,List<DoneArgs...,Arg>,List<TodoArgs...>,List<TodoCC...>>
+                ::invokeFrom68K(addr, refcon, args..., newarg);
+        }
+    };
+
+    template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename RetConv, typename... ArgConvs>
+    struct Invoker<Ret (Args...), fptr, callconv::Register<RetConv (ArgConvs...)>>
+    {
+        static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *refcon)
+        {
+            syn68k_addr_t retaddr = POPADDR();
+            Ret retval = InvokerRec<Ret (Args...), fptr, List<>, List<Args...>, List<ArgConvs...>>::invokeFrom68K(addr, refcon);
+            RetConv::set(retval);  // ### double conversion?
+            return retaddr;
+        }
+    };
+    template<typename... Args, void (*fptr)(Args...), typename RetConv, typename... ArgConvs>
+    struct Invoker<void (Args...), fptr, callconv::Register<RetConv (ArgConvs...)>>
+    {
+        static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *refcon)
+        {
+            syn68k_addr_t retaddr = POPADDR();
+            InvokerRec<void (Args...), fptr, List<>, List<Args...>, List<ArgConvs...>>::invokeFrom68K(addr, refcon);
+            return retaddr;
+        }
+    };
+
+    template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename RetArgConv, typename Extra1, typename... Extras>
+    struct Invoker<Ret (Args...), fptr, callconv::Register<RetArgConv, Extra1, Extras...>>
+    {
+        static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *refcon)
+        {
+            Extra1 state;
+            syn68k_addr_t retval = Invoker<Ret(Args...), fptr, callconv::Register<RetArgConv, Extras...>>::invokeFrom68K(addr,refcon);
+            return state.afterwards(retval);
+        }
+    };
+}
+
+namespace callto68K
+{
+    template<typename F, typename CallConv>
+    struct Invoker;
+
+    template<typename F, typename... Args>
+    struct InvokerRec;
+
+    template<>
+    struct InvokerRec<void ()>
+    {
+        static void invoke68K(void *ptr)
+        {
+            CALL_EMULATOR(US_TO_SYN68K(ptr));
+        }
+    };
+
+    template<typename Arg, typename... Args, typename ArgConv, typename... ArgConvs>
+    struct InvokerRec<void (Arg, Args...), ArgConv, ArgConvs...>
+    {
+        static void invoke68K(void *ptr, Arg arg, Args... args)
+        {
+            ArgConv::set(arg);
+            InvokerRec<void (Args...), ArgConvs...>::invoke68K(ptr, args...);
+            ArgConv::afterCall(arg);
+        }
+    };
+   
+    template<typename Ret, typename... Args, typename RetConv, typename... ArgConvs, typename... Extras>
+    struct Invoker<Ret (Args...), callconv::Register<RetConv(ArgConvs...), Extras...>>
+    {
+        static Ret invoke68K(void *ptr, Args... args)
+        {
+            InvokerRec<void (Args...), ArgConvs...>::invoke68K(ptr, args...);
+            return RetConv();
+        }
+    };
+
+    template<typename... Args, typename... ArgConvs, typename... Extras>
+    struct Invoker<void (Args...), callconv::Register<void(ArgConvs...), Extras...>>
+    {
+        static void invoke68K(void *ptr, Args... args)
+        {
+            InvokerRec<void (Args...), ArgConvs...>::invoke68K(ptr, args...);
+        }
+    };
+
+
+    template<typename Ret, typename... Args, typename RetArgConv, typename... Extras>
+    struct Invoker<Ret (Args...), callconv::Register<RetArgConv, Extras...>>
+    {
+        static Ret invoke68K(void *ptr, Args... args)
+        {
+            return (Ret)CToPascalCall(ptr, ctop<Ret(Args...)>(), args...);
+        }
+    };
+
+    template<typename Ret, typename... Args>
+    struct Invoker<Ret (Args...), callconv::Pascal>
+    {
+        static Ret invoke68K(void *ptr, Args... args)
+        {
+            return (Ret)CToPascalCall(ptr, ctop<Ret(Args...)>(), args...);
+        }
+    };
+
+    template<>
+    struct Invoker<syn68k_addr_t (syn68k_addr_t, void*), callconv::Raw>
+    {
+        static syn68k_addr_t invoke68K(void *ptr, syn68k_addr_t, void *)
+        {
+            CALL_EMULATOR(US_TO_SYN68K(ptr));
+            return POPADDR();   // ###
+        }
+    };
+
+}
 
 struct OpaqueUntyped68KProc;
 typedef OpaqueUntyped68KProc* ProcPtr;
 
-template<typename F>
-struct UPP;
+template<typename F, typename CallConv = callconv::Pascal>
+struct UPP {};
 
-template<typename Ret, typename... Args>
-struct UPP<Ret(Args...)>
+template<typename Ret, typename... Args, typename CallConv>
+struct UPP<Ret(Args...), CallConv>
 {
     void *ptr;
 
@@ -74,7 +234,8 @@ struct UPP<Ret(Args...)>
     {
     }
 
-    explicit operator void *() const { return ptr; }
+    template<class T>   
+    explicit operator T *() const { return (T*)ptr; }
     explicit operator ProcPtr() const { return (ProcPtr)ptr; }
 
     explicit operator bool() const { return ptr != nullptr; }
@@ -83,7 +244,7 @@ struct UPP<Ret(Args...)>
 
     Ret operator()(Args... args) const
     {
-        return (Ret)CToPascalCall(ptr, ctop<Ret(Args...)>(), args...);
+        return callto68K::Invoker<Ret(Args...), CallConv>::invoke68K(ptr, args...);
     }
 };
 
@@ -145,24 +306,7 @@ public:
         return (*fptr)(args...);
     }
 
-    UPP<Ret (Args...)> operator&() const
-    {
-        return guestFP;
-    }
-
-    virtual void init() override;
-
-    WrappedFunction(const char* name);
-protected:
-    UPP<Ret (Args...)> guestFP;
-    const char *name;
-};
-
-template<syn68k_addr_t (*fptr)(syn68k_addr_t, void*)>
-class WrappedFunction<syn68k_addr_t (syn68k_addr_t,void*), fptr, callconv::Raw> : public internal::DeferredInit
-{
-public:
-    ProcPtr operator&() const
+    UPP<Ret (Args...), CallConv> operator&() const
     {
         return guestFP;
     }
@@ -171,9 +315,9 @@ public:
 
     WrappedFunction(const char* name);
 
-    bool isPatched() const { return false; }
+    using UPPType = UPP<Ret (Args...), CallConv>;
 protected:
-    ProcPtr guestFP;
+    UPPType guestFP;
     const char *name;
 };
 
@@ -184,13 +328,32 @@ template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno, typen
 class TrapFunction<Ret (Args...), fptr, trapno, CallConv> : public WrappedFunction<Ret (Args...), fptr, CallConv>
 {
 public:
-    Ret operator()(Args... args) const { return fptr(args...); }
+    using UPPType = typename WrappedFunction<Ret (Args...), fptr, CallConv>::UPPType;
+
+    Ret operator()(Args... args) const
+    {
+        if(isPatched())
+            return invokeViaTrapTable(args...);
+        else
+            return fptr(args...);
+    }
     
     virtual void init() override;
 
     TrapFunction(const char* name) : WrappedFunction<Ret(Args...),fptr,CallConv>(name) {}
 
-    bool isPatched() const { return false; }
+    bool isPatched() const { return tableEntry() != originalFunction; }
+    Ret invokeViaTrapTable(Args...) const;
+private:
+    syn68k_addr_t originalFunction;
+
+    syn68k_addr_t& tableEntry() const
+    {
+        if(trapno & TOOLBIT)
+            return tooltraptable[trapno & 0x3FF];
+        else
+            return ostraptable[trapno & 0xFF];
+    }
 };
 
 template<typename F, F* fptr, int trapno, uint32_t selector, typename CallConv = callconv::Pascal>

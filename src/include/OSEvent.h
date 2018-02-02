@@ -100,10 +100,16 @@ namespace callconv
 {
 struct D0Minus1Boolean
 {
+    operator bool() { return EM_D0 != 0; }
+
     static void set(bool b)
     {
         EM_D0 = b ? 0 : -1;
     }
+
+    template<class T>
+    static void afterCall(T) {}
+
 };
 }
 
@@ -117,7 +123,7 @@ extern OSErr ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg,
 extern OSErr PostEvent(INTEGER evcode, LONGINT evmsg);
 extern void FlushEvents(INTEGER evmask,
                              INTEGER stopmask);
-REGISTER_TRAP2(FlushEvents, 0xA032, void(D0,D0HighWord), ClearD0);
+REGISTER_TRAP2(FlushEvents, 0xA032, void(D0LowWord,D0HighWord), ClearD0);
 extern BOOLEAN GetOSEvent(INTEGER evmask, EventRecord *eventp);
 REGISTER_TRAP2(GetOSEvent, 0xA031, D0Minus1Boolean (D0,A0));
 extern BOOLEAN OSEventAvail(INTEGER evmask,
