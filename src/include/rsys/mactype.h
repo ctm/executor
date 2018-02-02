@@ -8,10 +8,9 @@
 
  */
 #include "host-arch-config.h"
-#include "rsys/macros.h"
 #include <stdint.h>
 #include <type_traits>
-#include <syn68k_public.h> /* for ROMlib_offset */
+#include <syn68k_public.h>
 
 #include "rsys/functions.h"
 
@@ -65,10 +64,6 @@ struct Aligner<signed char>
     uint8_t align;
 };
 
-// For now, SwapTyped is exactly the same as Cx.
-// However, Cx is used all over Executor, should learn to handle GUEST<> types,
-// and eventually go away. SwapTyped is used internally here, and nowhere else.
-
 #if defined(BIGENDIAN)
 #define SwapTyped(x) (x)
 #else
@@ -103,24 +98,11 @@ inline syn68k_addr_t US_TO_SYN68K_CHECK0_CHECKNEG1(const void* addr)
         return US_TO_SYN68K_CHECK0(addr);
 }
 
-// USE_PACKED_HIDDENVALUE - control which one of two versions
-// of template struct/union HiddenValue to use.
-
-//#define USE_PACKED_HIDDENVALUE
-
 template<typename ActualType>
-#ifdef USE_PACKED_HIDDENVALUE
-struct __attribute__((packed, align(2))) HiddenValue
-#else
 union HiddenValue
-#endif
 {
-#ifdef USE_PACKED_HIDDENVALUE
-    ActualType packed;
-#else
     uint8_t data[sizeof(ActualType)];
     Aligner<ActualType> align;
-#endif
 public:
     HiddenValue() = default;
     HiddenValue(const HiddenValue<ActualType> &y) = default;
@@ -128,20 +110,12 @@ public:
 
     ActualType raw() const
     {
-#ifdef USE_PACKED_HIDDENVALUE
-        return packed;
-#else
         return *(const ActualType *)data;
-#endif
     }
 
     void raw(ActualType x)
     {
-#ifdef USE_PACKED_HIDDENVALUE
-        packed = x;
-#else
         *(ActualType *)data = x;
-#endif
     }
 };
 
