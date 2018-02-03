@@ -15,6 +15,7 @@
 #include "rsys/hook.h"
 #include "rsys/system_error.h"
 #include "rsys/vdriver.h"
+#include "rsys/functions.impl.h"
 
 #include <stdarg.h>
 

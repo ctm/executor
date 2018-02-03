@@ -545,11 +545,7 @@ public:
     {
         this->raw(swap32(x));
     }
-
-    Ret operator()(Args... args)
-    {
-        return (this->get())(args...);
-    }
+    Ret operator()(Args... args); // definition in rsys/functions.impl.h to reduce dependencies
 };
 
 template<typename TT, typename CallConv>

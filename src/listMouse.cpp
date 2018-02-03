@@ -15,6 +15,7 @@
 #include "rsys/cquick.h"
 #include "rsys/list.h"
 #include "rsys/hook.h"
+#include <rsys/functions.impl.h>
 
 using namespace Executor;
 

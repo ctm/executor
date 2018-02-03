@@ -18,6 +18,7 @@
 #include "rsys/wind.h"
 #include "rsys/stdfile.h"
 #include "rsys/hook.h"
+#include <rsys/functions.impl.h>
 
 /*
  * Loser suggests that controls are tested in the opposite order that

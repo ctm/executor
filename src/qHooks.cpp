@@ -8,6 +8,7 @@
 #include "rsys/hook.h"
 #include "rsys/print.h"
 #include "rsys/options.h"
+#include <rsys/functions.impl.h>
 
 using namespace Executor;
 

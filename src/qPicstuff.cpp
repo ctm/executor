@@ -22,6 +22,7 @@
 #include "rsys/tempalloc.h"
 #include "rsys/print.h"
 #include "rsys/executor.h"
+#include <rsys/functions.impl.h>
 
 using namespace Executor;
 

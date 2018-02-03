@@ -30,6 +30,7 @@
 #include "rsys/hook.h"
 #include "rsys/executor.h"
 #include "rsys/osevent.h"
+#include <rsys/functions.impl.h>
 
 using namespace Executor;
 
