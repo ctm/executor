@@ -36,6 +36,7 @@
 #include "rsys/vdriver.h"
 #include "rsys/notmac.h"
 #include "rsys/version.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 

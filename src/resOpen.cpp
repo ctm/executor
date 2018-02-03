@@ -15,6 +15,7 @@
 #include "rsys/file.h"
 #include "rsys/osevent.h"
 #include "rsys/prefs.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 

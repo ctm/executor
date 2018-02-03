@@ -14,6 +14,7 @@
 #include "rsys/gestalt.h"
 #include "rsys/version.h"
 #include "rsys/vdriver.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 

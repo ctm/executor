@@ -14,6 +14,7 @@
 #include "rsys/ctl.h"
 #include "rsys/resource.h"
 #include "rsys/hook.h"
+#include "rsys/functions.impl.h"
 
 /* cheat, and make this a plain ctab, so we can use our old accessor
    macros */

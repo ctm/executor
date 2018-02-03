@@ -27,6 +27,8 @@
 #include "rsys/options.h"
 #include "rsys/string.h"
 #include "rsys/osevent.h"
+#include "rsys/functions.impl.h"
+
 #ifdef MACOSX_
 //#include "contextswitch.h"
 #endif

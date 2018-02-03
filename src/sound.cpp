@@ -13,6 +13,7 @@
 #include "rsys/sounddriver.h"
 #include "rsys/blockinterrupts.h"
 #include "rsys/mman.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 

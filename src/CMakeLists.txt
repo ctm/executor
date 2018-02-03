@@ -270,6 +270,8 @@ set(include_sources hintemplate.h
                   include/rsys/float_fcw.h
                   include/rsys/floatconv.h
                   include/rsys/font.h
+                  include/rsys/functions.h
+                  include/rsys/functions.impl.h
                   include/rsys/gestalt.h
                   include/rsys/glue.h
                   include/rsys/gworld.h
@@ -352,6 +354,7 @@ set(include_sources hintemplate.h
                   include/rsys/toolutil.h
                   include/rsys/trapglue.h
                   include/rsys/trapname.h
+                  include/rsys/traps.h
                   include/rsys/uniquefile.h
                   include/rsys/vbl.h
                   include/rsys/vdriver.h

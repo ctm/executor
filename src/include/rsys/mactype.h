@@ -13,6 +13,7 @@
 #include <syn68k_public.h>
 
 #include "rsys/functions.h"
+#include "rsys/traps.h"
 
 #ifndef __cplusplus
 #error C++ required
@@ -342,10 +343,7 @@ bool operator!=(GuestWrapper<TT *> a, std::nullptr_t)
     return a;
 }
 
-#define GUEST_STRUCT       \
-    struct is_guest_struct \
-    {                      \
-    }
+#define GUEST_STRUCT    struct is_guest_struct {}
 
 template<>
 struct GuestWrapper<Point>
@@ -378,17 +376,20 @@ struct GuestWrapper<Point>
         v.raw(x.v);
         h.raw(x.h);
     }
+
+    static GuestWrapper<Point> fromHost(Point x)
+    {
+        GuestWrapper<Point> w;
+        w.set(x);
+        return w;
+    }
+
 };
 
 template<typename TT, typename SFINAE = void>
 struct GuestType
 {
     using type = GuestWrapper<TT>;
-    /* typename std::conditional<
-            std::is_base_of<GuestStruct, TT>::value,
-            TT,
-            GuestWrapper<TT>
-        >::type;*/
 };
 
 namespace internal
@@ -467,6 +468,27 @@ struct GuestType<TT[0]>
 {
     using type = GUEST<TT>[0];
 };
+
+
+template<typename TT>
+GUEST<TT> RM(TT p)
+{
+    return GUEST<TT>::fromHost(p);
+}
+
+template<typename TT>
+TT MR(GuestWrapper<TT> p)
+{
+    return p.get();
+}
+
+inline char RM(char c) { return c; }
+inline unsigned char RM(unsigned char c) { return c; }
+inline signed char RM(signed char c) { return c; }
+inline char MR(char c) { return c; }
+inline unsigned char MR(unsigned char c) { return c; }
+inline signed char MR(signed char c) { return c; }
+
 
 /*
 template<typename TO, typename FROM>

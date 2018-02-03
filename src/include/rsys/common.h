@@ -14,6 +14,7 @@
 
 #include "rsys/macros.h"
 #include "rsys/functions.h"
+#include "rsys/traps.h"
 #include "rsys/mactype.h"
 #include "rsys/byteswap.h"
 

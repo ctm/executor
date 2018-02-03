@@ -10,6 +10,8 @@ typedef struct
     void *wheretogo;
     uint64_t magic;
 } ptocblock_t;
+extern syn68k_addr_t PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop);
+extern uintptr_t CToPascalCall(void *, uint64_t, ...);
 
 #define TOOLBIT (0x0800)
 #define NTOOLENTRIES (0x400)
@@ -18,11 +20,7 @@ typedef struct
 extern syn68k_addr_t tooltraptable[NTOOLENTRIES];
 extern syn68k_addr_t ostraptable[NOSENTRIES];
 
-extern syn68k_addr_t PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop);
-
 extern unsigned short mostrecenttrap;
-
-extern uintptr_t CToPascalCall(void *, uint64_t, ...);
 }
 
 #endif

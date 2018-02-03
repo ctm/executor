@@ -400,7 +400,7 @@ blt_pixpat_to_pixmap_simple_mode(RgnHandle rh, INTEGER mode,
             {
                 warning_unexpected("xdata handle NULL_STRING");
                 xh = (xdata_handle_t)NewHandle(sizeof(xdata_t));
-                HxX(xh, raw_pat_bits_mem) = (Ptr)RM(NULL);
+                HxX(xh, raw_pat_bits_mem) = nullptr;
                 src->patXData = RM((Handle)xh);
                 xdata_valid_p = false;
                 handle_size_wrong_p = false;

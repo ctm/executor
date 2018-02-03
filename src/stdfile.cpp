@@ -70,6 +70,8 @@ int Executor::nodrivesearch_p = false;
 #include "rsys/print.h"
 #include "rsys/system_error.h"
 
+#include "rsys/functions.impl.h"
+
 using namespace Executor;
 
 typedef union {

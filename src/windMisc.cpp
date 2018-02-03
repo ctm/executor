@@ -19,6 +19,7 @@
 
 #include "rsys/evil.h"
 #include "rsys/executor.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 

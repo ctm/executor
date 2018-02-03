@@ -16,6 +16,7 @@
 #include "rsys/blockinterrupts.h"
 #include "rsys/prefs.h"
 #include "rsys/soundopts.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 

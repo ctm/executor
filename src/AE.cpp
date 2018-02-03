@@ -18,6 +18,7 @@
 
 #include "rsys/mman.h"
 #include "rsys/flags.h"
+#include "rsys/functions.impl.h"
 
 namespace Executor
 {

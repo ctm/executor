@@ -19,6 +19,7 @@
 #include "rsys/autorefresh.h"
 #include "rsys/redrawscreen.h"
 #include "rsys/executor.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 
