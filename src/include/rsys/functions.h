@@ -6,7 +6,6 @@
 #include <vector>
 #include <unordered_map>
 #include "rsys/trapglue.h"
-#include "rsys/ctop_ptoc.h"
 #include <syn68k_public.h>
 
 namespace Executor
