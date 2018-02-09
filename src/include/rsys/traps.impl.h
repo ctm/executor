@@ -1,27 +1,62 @@
-#include <vector>
-#include <unordered_map>
-#include <syn68k_public.h>
+#pragma once
 
-#define FUNCTION_WRAPPER_IMPLEMENTATION
-#include <rsys/functions.h>
-#include <rsys/mactype.h>
-#include <rsys/byteswap.h>
+#include <rsys/traps.h>
 #include <rsys/functions.impl.h>
 #include <rsys/logging.h>
 
-namespace
-{
-    std::vector<Executor::functions::internal::DeferredInit*> initObjects;
-}
-
+#include <cassert>
 #include <iostream>
-#include <cctype>
-#include <iomanip>
 
-#include <assert.h>
+namespace Executor
+{
+namespace functions
+{
 
-using namespace Executor;
-using namespace Executor::functions;
+namespace selectors
+{
+template <uint32_t mask>
+struct D0
+{
+    static const uint32_t selectorMask = mask;
+    static uint32_t get() { return EM_D0 & mask; }
+};
+
+template <uint32_t mask>
+struct StackWMasked
+{
+    static const uint32_t selectorMask = mask;
+    static uint32_t get()
+    {
+        auto ret = POPADDR();
+        auto sel = POPUW();
+        PUSHADDR(ret);
+        return sel & mask;
+    }
+};
+
+template <uint32_t mask>
+struct StackLMasked
+{
+    static const uint32_t selectorMask = mask;
+    static uint32_t get()
+    {
+        auto ret = POPADDR();
+        auto sel = POPUL();
+        PUSHADDR(ret);
+        return sel & mask;
+    }
+};
+template <uint32_t mask>
+struct StackWLookahead
+{
+    static const uint32_t selectorMask = mask;
+    static uint32_t get()
+    {
+        return READUW(EM_A7 + 4) & mask;
+    }
+};
+
+} /* end namespace selectors */
 
 template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
 WrappedFunction<Ret (Args...), fptr, CallConv>::WrappedFunction(const char* name)
@@ -109,94 +144,5 @@ void DispatcherTrap<SelectorConvention>::init()
     }
 }
 
-functions::internal::DeferredInit::DeferredInit()
-{
-    initObjects.push_back(this);
 }
-
-namespace Executor
-{
-namespace functions
-{
-namespace selectors
-{
-template <uint32_t mask>
-struct D0
-{
-    static const uint32_t selectorMask = mask;
-    static uint32_t get() { return EM_D0 & mask; }
-};
-
-template <uint32_t mask>
-struct StackWMasked
-{
-    static const uint32_t selectorMask = mask;
-    static uint32_t get()
-    {
-        auto ret = POPADDR();
-        auto sel = POPUW();
-        PUSHADDR(ret);
-        return sel & mask;
-    }
-};
-
-template <uint32_t mask>
-struct StackLMasked
-{
-    static const uint32_t selectorMask = mask;
-    static uint32_t get()
-    {
-        auto ret = POPADDR();
-        auto sel = POPUL();
-        PUSHADDR(ret);
-        return sel & mask;
-    }
-};
-template <uint32_t mask>
-struct StackWLookahead
-{
-    static const uint32_t selectorMask = mask;
-    static uint32_t get()
-    {
-        return READUW(EM_A7 + 4) & mask;
-    }
-};
-
-}
-}
-}
-
-#include "rsys/everything.h"
-#include "rsys/emustubs.h"
-#include "rsys/ctl.h"
-#include "rsys/list.h"
-#include "rsys/menu.h"
-#include "rsys/wind.h"
-#include "rsys/print.h"
-#include "rsys/vbl.h"
-#include "rsys/stdfile.h"
-#include "rsys/tesave.h"
-#include "rsys/osutil.h"
-#include "rsys/refresh.h"
-#include "rsys/gestalt.h"
-
-syn68k_addr_t Executor::tooltraptable[NTOOLENTRIES]; /* Gets filled in at run time */
-syn68k_addr_t Executor::ostraptable[NOSENTRIES]; /* Gets filled in at run time */
-
-
-void functions::init(bool log)
-{
-    logging::setEnabled(log);
-    for(auto init : initObjects)
-        init->init();
-    for(int i = 0; i < NTOOLENTRIES; i++)
-    {
-        if(tooltraptable[i] == 0)
-            tooltraptable[i] = US_TO_SYN68K((void*)&stub_Unimplemented);
-    }
-    for(int i = 0; i < NOSENTRIES; i++)
-    {
-        if(ostraptable[i] == 0)
-            ostraptable[i] = US_TO_SYN68K((void*)&stub_Unimplemented);
-    }
 }

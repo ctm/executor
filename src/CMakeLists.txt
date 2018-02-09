@@ -175,7 +175,7 @@ set(num_sources bindec.cpp float4.cpp float5.cpp float7.cpp floatnext.cpp toolma
 source_group(Numerics FILES ${num_sources})
 
 set(misc_sources
-  functions.cpp logging.cpp
+  traps.cpp logging.cpp traps.instances.cpp
   desk.cpp device.cpp disk.cpp diskinit.cpp dump.cpp trapname.cpp font.cpp
   gestalt.cpp globals.cpp iu.cpp launch.cpp main.cpp mman.cpp mmansubr.cpp notify.cpp hle.cpp
   osevent.cpp osutil.cpp pack.cpp scrap.cpp script.cpp segment.cpp serial.cpp
@@ -292,6 +292,7 @@ set(include_sources hintemplate.h
                   include/rsys/launch.h
                   include/rsys/list.h
                   include/rsys/lockunlock.h
+                  include/rsys/logging.h
                   include/rsys/lowglobals.h
                   include/rsys/m68kint.h
                   include/rsys/macros.h
@@ -357,6 +358,7 @@ set(include_sources hintemplate.h
                   include/rsys/trapglue.h
                   include/rsys/trapname.h
                   include/rsys/traps.h
+                  include/rsys/traps.impl.h
                   include/rsys/uniquefile.h
                   include/rsys/vbl.h
                   include/rsys/vdriver.h

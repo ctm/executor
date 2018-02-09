@@ -25,6 +25,10 @@ namespace internal
     public:
         DeferredInit();
         virtual void init() = 0;
+        static void initAll();
+    private:
+        DeferredInit *next;
+        static DeferredInit *first, *last;
     };
 }
 

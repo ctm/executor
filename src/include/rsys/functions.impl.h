@@ -2,6 +2,9 @@
 #pragma once
 
 #include <rsys/functions.h>
+#include <rsys/mactype.h>
+#include <rsys/byteswap.h>
+
 #include <string.h>
 
 //#define USE_DYNAMIC_CTOP_PTOC
@@ -195,10 +198,8 @@ namespace callfrom68K
     {
         static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *)
         {
-            printf("---> %x\n", EM_A7);
             static ptocblock_t ptocblock { (void*)fptr, ptoc(fptr) };
             syn68k_addr_t ret = PascalToCCall(addr, &ptocblock);
-            printf("|--> %x\n", EM_A7);
             return ret;
         }
     };
