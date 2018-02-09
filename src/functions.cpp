@@ -7,11 +7,11 @@
 #include <rsys/mactype.h>
 #include <rsys/byteswap.h>
 #include <rsys/functions.impl.h>
+#include <rsys/logging.h>
 
 namespace
 {
     std::vector<Executor::functions::internal::DeferredInit*> initObjects;
-    std::unordered_map<void*, const char*> namedThings;
 }
 
 #include <iostream>
@@ -23,353 +23,19 @@ namespace
 using namespace Executor;
 using namespace Executor::functions;
 
-template<typename F, F* fptr>
-struct LoggedFunction;
-
-static int nestingLevel = 0;
-static bool loggingEnabled = false;
-
-void functions::resetNestingLevel()
-{
-    nestingLevel  = 0;
-}
-static void indent()
-{
-    for(int i = 0; i < nestingLevel; i++)
-        std::cout << "  ";
-}
-static bool loggingActive()
-{
-    return nestingLevel == 0;
-}
-
-void logEscapedChar(unsigned char c)
-{
-    if(c == '\'' || c == '\"' || c == '\\')
-        std::cout << '\\' << c;
-    else if(std::isprint(c))
-        std::cout << c;
-    else
-        std::cout << "\\0" << std::oct << (unsigned)c << std::dec;
-}
-
-bool canConvertBack(const void* p)
-{
-    if(!p || p == (const void*) -1)
-        return true;
-#if SIZEOF_VOID_P == 4
-    bool valid = true;
-#else
-    bool valid = false;
-    for(int i = 0; i < 4; i++)
-    {
-        if((uintptr_t)p >= ROMlib_offsets[i] &&
-            (uintptr_t)p < ROMlib_offsets[i] + ROMlib_sizes[i])
-            valid = true;
-    }
-#endif
-    return valid;
-}
-
-bool validAddress(const void* p)
-{
-    if(!p)
-        return false;
-    if( (uintptr_t)p & 1 )
-        return false;
-#if SIZEOF_VOID_P == 4
-    bool valid = true;
-#else
-    bool valid = false;
-    for(int i = 0; i < 4; i++)
-    {
-        if((uintptr_t)p >= ROMlib_offsets[i] &&
-            (uintptr_t)p < ROMlib_offsets[i] + ROMlib_sizes[i])
-            valid = true;
-    }
-#endif
-    if(!valid)
-        return false;
-
-    return true;
-}
-
-bool validAddress(syn68k_addr_t p)
-{
-    if(p == 0 || (p & 1))
-        return false;
-    return validAddress(SYN68K_TO_US(p));
-}
-
-template<class T>
-bool validAddress(GUEST<T*> p)
-{
-    return validAddress(p.raw_host_order());
-}
-
-template<typename T>
-void logValue(const T& arg)
-{
-    std::cout << "?";
-}
-template<class T>
-void logValue(const GuestWrapper<T>& p)
-{
-    logValue(p.get());
-}
-
-void logValue(char x)
-{
-    std::cout << (int)x;
-    std::cout << " = '";
-    logEscapedChar(x);
-    std::cout << '\'';
-}
-void logValue(unsigned char x)
-{
-    std::cout << (int)x;
-    if(std::isprint(x))
-        std::cout << " = '" << x << '\'';
-}
-void logValue(signed char x)
-{
-    std::cout << (int)x;
-    if(std::isprint(x))
-        std::cout << " = '" << x << '\'';
-}
-void logValue(int16_t x) { std::cout << x; }
-void logValue(uint16_t x) { std::cout << x; }
-void logValue(int32_t x)
-{
-    std::cout << x << " = '";
-    logEscapedChar((x >> 24) & 0xFF);
-    logEscapedChar((x >> 16) & 0xFF);
-    logEscapedChar((x >> 8) & 0xFF);
-    logEscapedChar(x & 0xFF);
-    std::cout << "'";
-}
-void logValue(uint32_t x)
-{
-    std::cout << x << " = '";
-    logEscapedChar((x >> 24) & 0xFF);
-    logEscapedChar((x >> 16) & 0xFF);
-    logEscapedChar((x >> 8) & 0xFF);
-    logEscapedChar(x & 0xFF);
-    std::cout << "'";
-}
-void logValue(unsigned char* p)
-{
-    std::cout << "0x" << std::hex << US_TO_SYN68K_CHECK0_CHECKNEG1(p) << std::dec;
-    if(validAddress(p) && validAddress(p+256))
-    {
-        std::cout << " = \"\\p";
-        for(int i = 1; i <= p[0]; i++)
-            logEscapedChar(p[i]);
-        std::cout << '"';
-    }
-}
-void logValue(const void* p)
-{
-    if(canConvertBack(p))
-        std::cout << "0x" << std::hex << US_TO_SYN68K_CHECK0_CHECKNEG1(p) << std::dec;
-    else
-        std::cout << "?";
-}
-void logValue(void* p)
-{
-    if(canConvertBack(p))
-        std::cout << "0x" << std::hex << US_TO_SYN68K_CHECK0_CHECKNEG1(p) << std::dec;
-    else
-        std::cout << "?";
-}
-void logValue(ProcPtr p)
-{
-    if(canConvertBack(p))
-        std::cout << "0x" << std::hex << US_TO_SYN68K_CHECK0_CHECKNEG1(p) << std::dec;
-    else
-        std::cout << "?";
-}
-
-template<class T>
-void logValue(T* p)
-{
-    if(canConvertBack(p))
-        std::cout << "0x" << std::hex << US_TO_SYN68K_CHECK0_CHECKNEG1(p) << std::dec;
-    else
-        std::cout << "?";
-    if(validAddress(p))
-    {
-        std::cout << " => ";
-        logValue(*p);
-    }
-}
-template<class T>
-void logValue(GuestWrapper<T*> p)
-{
-    std::cout << "0x" << std::hex << p.raw() << std::dec;
-    if(validAddress(p.raw_host_order()))
-    {
-        std::cout << " => ";
-        logValue(*(p.get()));
-    }
-}
-
-template<typename Arg>
-void logList(Arg a)
-{
-    logValue(a);
-}
-void logList()
-{
-}
-template<typename Arg1, typename Arg2, typename... Args>
-void logList(Arg1 a, Arg2 b, Args... args)
-{
-    logValue(a);
-    std::cout << ", ";
-    logList(b,args...);
-}
-
-
-template<typename... Args>
-void logTrapCall(const char* trapname, Args... args)
-{
-    if(!loggingActive())
-        return;
-    std::cout.clear();
-    indent();
-    std::cout << trapname << "(";
-    logList(args...);
-    std::cout << ")\n" << std::flush;
-}
-
-template<typename Ret, typename... Args>
-void logTrapValReturn(const char* trapname, Ret ret, Args... args)
-{
-    if(!loggingActive())
-        return;
-    indent();
-    std::cout << "returning: " << trapname << "(";
-    logList(args...);
-    std::cout << ") => ";
-    logValue(ret);
-    std::cout << std::endl << std::flush;
-}
-template<typename... Args>
-void logTrapVoidReturn(const char* trapname, Args... args)
-{
-    if(!loggingActive())
-        return;
-    indent();
-    std::cout << "returning: " << trapname << "(";
-    logList(args...);
-    std::cout << ")\n" << std::flush;
-}
-
-
-template<typename... Args, void (*fptr)(Args...)> 
-struct LoggedFunction<void (Args...), fptr>
-{
-    static void call(Args... args)
-    {
-        const char *fname = namedThings.at((void*)fptr);
-        logTrapCall(fname, args...);
-        nestingLevel++;
-        fptr(args...);
-        nestingLevel--;
-        logTrapVoidReturn(fname, args...);
-    }
-};
-
-template<typename Ret, typename... Args, Ret (*fptr)(Args...)> 
-struct LoggedFunction<Ret (Args...), fptr>
-{
-    static Ret call(Args... args)
-    {
-        const char *fname = namedThings.at((void*)fptr);
-        logTrapCall(fname, args...);
-        nestingLevel++;
-        Ret retval = fptr(args...);
-        nestingLevel--;
-        logTrapValReturn(fname, retval, args...);
-        return retval;
-    }
-};
-
-void dumpRegsAndStack()
-{
-    std::cout << std::hex << /*std::showbase <<*/ std::setfill('0');
-    std::cout << "D0=" << std::setw(8) << EM_D0 << " ";
-    std::cout << "D1=" << std::setw(8) << EM_D1 << " ";
-    std::cout << "A0=" << std::setw(8) << EM_A0 << " ";
-    std::cout << "A1=" << std::setw(8) << EM_A1 << " ";
-    //std::cout << std::noshowbase;
-    std::cout << "Stack: ";
-    uint8_t *p = (uint8_t*)SYN68K_TO_US(EM_A7);
-    for(int i = 0; i < 12; i++)
-        std::cout << std::setfill('0') << std::setw(2) << (unsigned)p[i] << " ";
-    std::cout << std::dec;
-}
-
-template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *)>
-syn68k_addr_t untypedLoggedFunction(syn68k_addr_t addr, void * param)
-{
-    const char *fname = namedThings.at((void*)fptr);
-    if(loggingActive())
-    {
-        std::cout.clear();
-        indent();
-        std::cout << fname << " ";
-        dumpRegsAndStack();
-        std::cout << std::endl;
-    }
-    nestingLevel++;
-    syn68k_addr_t retaddr = (*fptr)(addr, param);
-    nestingLevel--;
-    if(loggingActive())
-    {
-        indent();
-        std::cout << "returning: " << fname << " ";
-        dumpRegsAndStack();
-        std::cout << std::endl << std::flush;
-    }
-    return retaddr;
-}
-
-template<typename F, F* fptr, typename CallConv>
-struct LoggedFunctionCC;
-
-template<syn68k_addr_t (*fptr)(syn68k_addr_t, void *)> 
-struct LoggedFunctionCC<syn68k_addr_t (syn68k_addr_t, void *), fptr, callconv::Raw>
-{
-    static syn68k_addr_t call(syn68k_addr_t addr, void * param)
-    {
-        return untypedLoggedFunction<fptr>(addr, param);
-    }
-};
-
-template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv> 
-struct LoggedFunctionCC<Ret (Args...), fptr, CallConv>
-{
-    static Ret call(Args... args)
-    {
-        return LoggedFunction<Ret(Args...),fptr>::call(args...);
-    }
-};
-
 template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
 WrappedFunction<Ret (Args...), fptr, CallConv>::WrappedFunction(const char* name)
     : name(name)
 {
-    namedThings[(void*) fptr] = name;
 }
 
 template<typename Ret, typename... Args, Ret (*fptr)(Args...), typename CallConv>
 void WrappedFunction<Ret (Args...), fptr, CallConv>::init()
 {
-    if(loggingEnabled)
+    logging::namedThings[(void*) fptr] = name;
+    if(logging::enabled())
         guestFP = (UPP<Ret (Args...),CallConv>)SYN68K_TO_US(callback_install(
-            callfrom68K::Invoker<Ret (Args...), &LoggedFunctionCC<Ret (Args...),fptr,CallConv>::call, CallConv>
+            callfrom68K::Invoker<Ret (Args...), &logging::LoggedFunction<Ret (Args...),fptr,CallConv>::call, CallConv>
                 ::invokeFrom68K, nullptr));    
     else
         guestFP = (UPP<Ret (Args...),CallConv>)SYN68K_TO_US(callback_install(
@@ -397,8 +63,8 @@ template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno, uint3
 SubTrapFunction<Ret (Args...), fptr, trapno, selector, CallConv>::SubTrapFunction(const char* name, GenericDispatcherTrap& dispatcher)
     : WrappedFunction<Ret(Args...),fptr,CallConv>(name), dispatcher(dispatcher)
 {
-    if(loggingEnabled)
-        dispatcher.addSelector(selector, callfrom68K::Invoker<Ret (Args...), &LoggedFunction<Ret (Args...),fptr>::call, CallConv>
+    if(logging::enabled())
+        dispatcher.addSelector(selector, callfrom68K::Invoker<Ret (Args...), &logging::LoggedFunction<Ret (Args...),fptr,CallConv>::call, CallConv>
                 ::invokeFrom68K);
     else
         dispatcher.addSelector(selector, callfrom68K::Invoker<Ret (Args...), fptr, CallConv>
@@ -520,7 +186,7 @@ syn68k_addr_t Executor::ostraptable[NOSENTRIES]; /* Gets filled in at run time *
 
 void functions::init(bool log)
 {
-    loggingEnabled = log;
+    logging::setEnabled(log);
     for(auto init : initObjects)
         init->init();
     for(int i = 0; i < NTOOLENTRIES; i++)

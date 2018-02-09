@@ -174,7 +174,9 @@ set(num_sources bindec.cpp float4.cpp float5.cpp float7.cpp floatnext.cpp toolma
     mathlib.cpp)
 source_group(Numerics FILES ${num_sources})
 
-set(misc_sources functions.cpp desk.cpp device.cpp disk.cpp diskinit.cpp dump.cpp trapname.cpp font.cpp
+set(misc_sources
+  functions.cpp logging.cpp
+  desk.cpp device.cpp disk.cpp diskinit.cpp dump.cpp trapname.cpp font.cpp
   gestalt.cpp globals.cpp iu.cpp launch.cpp main.cpp mman.cpp mmansubr.cpp notify.cpp hle.cpp
   osevent.cpp osutil.cpp pack.cpp scrap.cpp script.cpp segment.cpp serial.cpp
   slash.cpp stdfile.cpp romlib_stubs.cpp syserr.cpp toolevent.cpp toolutil.cpp time.cpp

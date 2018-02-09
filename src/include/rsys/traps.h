@@ -194,7 +194,6 @@ private:
             &NAME##_##HNAME, TRAP, \
             callconv::Register<D0 (A0, TrapBit<ASYNCBIT>, TrapBit<HFSBIT>)>>)
 
-void resetNestingLevel();
 void init(bool enableLogging);
 
 }

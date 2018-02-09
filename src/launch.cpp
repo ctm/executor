@@ -77,6 +77,8 @@
 #include "rsys/version.h"
 #include "rsys/appearance.h"
 
+#include "rsys/logging.h"
+
 using namespace Executor;
 
 static bool ppc_launch_p = false;
@@ -1294,7 +1296,7 @@ Executor::NewLaunch(StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockRe
         }
         else
             longjmp(buf, 1);
-        functions::resetNestingLevel();
+        logging::resetNestingLevel();
 
         retval = noErr;
         reset_adb_vector();
