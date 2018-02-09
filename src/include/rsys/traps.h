@@ -3,7 +3,7 @@
 namespace Executor
 {
 
-namespace functions
+namespace traps
 {
 
 namespace selectors
@@ -131,24 +131,24 @@ private:
 #if !defined(FUNCTION_WRAPPER_IMPLEMENTATION) /* defined in functions.cpp */
 
 #define CREATE_FUNCTION_WRAPPER(NAME, FPTR, INIT, ...) \
-    extern Executor::functions::__VA_ARGS__ NAME
+    extern Executor::traps::__VA_ARGS__ NAME
 
 #define DISPATCHER_TRAP(NAME, TRAP, SELECTOR) \
-    extern Executor::functions::DispatcherTrap<Executor::functions::selectors::SELECTOR> NAME
+    extern Executor::traps::DispatcherTrap<Executor::traps::selectors::SELECTOR> NAME
 
 #else
 
 #define CREATE_FUNCTION_WRAPPER(NAME, FPTR, INIT, ...) \
-    Executor::functions::__VA_ARGS__ NAME INIT;   \
-    template class Executor::functions::__VA_ARGS__;
+    Executor::traps::__VA_ARGS__ NAME INIT;   \
+    template class Executor::traps::__VA_ARGS__;
 
 #define DISPATCHER_TRAP(NAME, TRAP, SELECTOR) \
-    Executor::functions::DispatcherTrap<Executor::functions::selectors::SELECTOR> NAME { #NAME, TRAP }
+    Executor::traps::DispatcherTrap<Executor::traps::selectors::SELECTOR> NAME { #NAME, TRAP }
 
 #endif
 
 #define EXTERN_DISPATCHER_TRAP(NAME, TRAP, SELECTOR) \
-    extern Executor::functions::DispatcherTrap<Executor::functions::selectors::SELECTOR> NAME
+    extern Executor::traps::DispatcherTrap<Executor::traps::selectors::SELECTOR> NAME
 
 
 #define COMMA ,

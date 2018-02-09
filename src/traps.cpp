@@ -10,11 +10,11 @@
 #include <assert.h>
 
 using namespace Executor;
-using namespace Executor::functions;
-Executor::functions::internal::DeferredInit *Executor::functions::internal::DeferredInit::first = nullptr;
-Executor::functions::internal::DeferredInit *Executor::functions::internal::DeferredInit::last = nullptr;
 
-functions::internal::DeferredInit::DeferredInit()
+Executor::traps::internal::DeferredInit *Executor::traps::internal::DeferredInit::first = nullptr;
+Executor::traps::internal::DeferredInit *Executor::traps::internal::DeferredInit::last = nullptr;
+
+traps::internal::DeferredInit::DeferredInit()
     : next(nullptr)
 {
     if(!first)
@@ -26,7 +26,7 @@ functions::internal::DeferredInit::DeferredInit()
     }
 }
 
-void functions::internal::DeferredInit::initAll()
+void traps::internal::DeferredInit::initAll()
 {
     for(DeferredInit *p = first; p; p = p->next)
         p->init();
@@ -40,7 +40,7 @@ namespace Executor
 RAW_68K_TRAP(Unimplemented, 0xA89F);
 }
 
-void functions::init(bool log)
+void traps::init(bool log)
 {
     logging::setEnabled(log);
     internal::DeferredInit::initAll();

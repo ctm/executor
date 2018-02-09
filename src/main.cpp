@@ -1407,9 +1407,9 @@ int main(int argc, char **argv)
     }
 
     if(opt_val(common_db, "logtraps", NULL))
-        Executor::functions::init(true);
+        Executor::traps::init(true);
     else
-        Executor::functions::init(false);
+        Executor::traps::init(false);
 
     l = ostraptable[0x0FC];
     ((unsigned char *)jmpl_to_ResourceStub)[2] = l >> 24;

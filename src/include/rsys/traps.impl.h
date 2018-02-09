@@ -9,7 +9,7 @@
 
 namespace Executor
 {
-namespace functions
+namespace traps
 {
 
 namespace selectors
