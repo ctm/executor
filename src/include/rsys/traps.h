@@ -127,29 +127,28 @@ private:
     GenericDispatcherTrap& dispatcher;
 };
 
-
-#if !defined(FUNCTION_WRAPPER_IMPLEMENTATION) /* defined in functions.cpp */
-
-#define CREATE_FUNCTION_WRAPPER(NAME, FPTR, INIT, ...) \
+#define EXTERN_FUNCTION_WRAPPER(NAME, FPTR, INIT, ...) \
     extern Executor::traps::__VA_ARGS__ NAME
-
-#define DISPATCHER_TRAP(NAME, TRAP, SELECTOR) \
-    extern Executor::traps::DispatcherTrap<Executor::traps::selectors::SELECTOR> NAME
-
-#else
-
-#define CREATE_FUNCTION_WRAPPER(NAME, FPTR, INIT, ...) \
-    Executor::traps::__VA_ARGS__ NAME INIT;   \
-    template class Executor::traps::__VA_ARGS__;
-
-#define DISPATCHER_TRAP(NAME, TRAP, SELECTOR) \
-    Executor::traps::DispatcherTrap<Executor::traps::selectors::SELECTOR> NAME { #NAME, TRAP }
-
-#endif
-
 #define EXTERN_DISPATCHER_TRAP(NAME, TRAP, SELECTOR) \
     extern Executor::traps::DispatcherTrap<Executor::traps::selectors::SELECTOR> NAME
+#define DEFINE_FUNCTION_WRAPPER(NAME, FPTR, INIT, ...) \
+    Executor::traps::__VA_ARGS__ NAME INIT;   \
+    template class Executor::traps::__VA_ARGS__;
+#define DEFINE_DISPATCHER_TRAP(NAME, TRAP, SELECTOR) \
+    Executor::traps::DispatcherTrap<Executor::traps::selectors::SELECTOR> NAME { #NAME, TRAP }
 
+#ifndef TRAP_INSTANTIATION
+#ifdef FUNCTION_WRAPPER_IMPLEMENTATION
+#define TRAP_INSTANTIATION DEFINE
+#else
+#define TRAP_INSTANTIATION EXTERN
+#endif
+#endif
+
+#define PREPROCESSOR_CONCAT1(A,B) A##B
+#define PREPROCESSOR_CONCAT(A,B) PREPROCESSOR_CONCAT1(A,B)
+#define CREATE_FUNCTION_WRAPPER PREPROCESSOR_CONCAT(TRAP_INSTANTIATION, _FUNCTION_WRAPPER)
+#define DISPATCHER_TRAP PREPROCESSOR_CONCAT(TRAP_INSTANTIATION, _DISPATCHER_TRAP)
 
 #define COMMA ,
 #define PASCAL_TRAP(NAME, TRAP) \
