@@ -4,8 +4,13 @@
 /* Copyright 1986-1996 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include "ExMacTypes.h"
+#include "QuickDraw.h"
+
+#define MODULE_NAME Iconutil
+#include <rsys/api-module.h>
 
 #define large1BitMask (FOURCC('I', 'C', 'N', '#'))
 #define large4BitData (FOURCC('i', 'c', 'l', '4'))

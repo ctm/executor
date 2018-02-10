@@ -5,6 +5,9 @@
 /* to get extern for `ROMlib_PretendSound' */
 #include "rsys/prefs.h"
 
+#define MODULE_NAME rsys_soundopts
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 typedef enum {

@@ -12,6 +12,9 @@
 #include "FileMgr.h"
 #include "OSEvent.h"
 
+#define MODULE_NAME OSUtil
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 enum

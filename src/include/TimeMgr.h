@@ -5,8 +5,12 @@
  * Copyright 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include "ExMacTypes.h"
+
+#define MODULE_NAME TimeMgr
+#include <rsys/api-module.h>
 
 namespace Executor
 {

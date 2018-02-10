@@ -13,6 +13,9 @@
 #include "ResourceMgr.h"
 #include "rsys/mman.h"
 
+#define MODULE_NAME rsys_menu
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 #define MI_ID_X(mi) (HxX(mi, menuID))

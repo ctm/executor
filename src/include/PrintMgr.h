@@ -3,6 +3,9 @@
 
 #include "DialogMgr.h"
 
+#define MODULE_NAME PrintMgr
+#include <rsys/api-module.h>
+
 /*
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.

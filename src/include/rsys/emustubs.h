@@ -5,8 +5,15 @@
  * Copyright 1995, 1998 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include "ExMacTypes.h"
+#include "DialogMgr.h"
+#include "MemoryMgr.h"
+
+#define MODULE_NAME rsys_emustubs
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 struct adbop_t

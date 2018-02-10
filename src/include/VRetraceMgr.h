@@ -5,8 +5,13 @@
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include "ExMacTypes.h"
+#include <rsys/lowglobals.h>
+
+#define MODULE_NAME VRetraceMgr
+#include <rsys/api-module.h>
 
 namespace Executor
 {

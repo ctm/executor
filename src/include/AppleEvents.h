@@ -11,6 +11,9 @@
 #include "EventMgr.h"
 #include "NotifyMgr.h"
 
+#define MODULE_NAME AppleEvents
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 typedef int32_t AEEventClass;

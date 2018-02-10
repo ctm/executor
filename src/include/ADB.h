@@ -5,8 +5,13 @@
  * Copyright 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include <rsys/lowglobals.h>
+#include "ExMacTypes.h"
+
+#define MODULE_NAME ADB
+#include <rsys/api-module.h>
 
 namespace Executor
 {

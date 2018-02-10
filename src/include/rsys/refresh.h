@@ -1,5 +1,11 @@
 #if !defined(_refresh_h_)
 #define _refresh_h_
+
+#include "ExMacTypes.h"
+
+#define MODULE_NAME rsys_refresh
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 extern void set_refresh_rate(int new1);

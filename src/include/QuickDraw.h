@@ -11,6 +11,9 @@
 #include <rsys/common.h>
 #include "ExMacTypes.h"
 
+#define MODULE_NAME QuickDraw
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 

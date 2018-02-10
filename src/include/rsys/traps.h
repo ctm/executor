@@ -1,5 +1,11 @@
 #pragma once
 
+#include <stdint.h>
+#include <syn68k_public.h>
+#include <unordered_map>
+
+#include <rsys/functions.h>
+
 namespace Executor
 {
 
@@ -123,6 +129,7 @@ class SubTrapFunction<Ret (Args...), fptr, trapno, selector, CallConv> : public 
 public:
     Ret operator()(Args... args) const { return fptr(args...); }
     SubTrapFunction(const char* name, GenericDispatcherTrap& dispatcher);
+    virtual void init() override;
 private:
     GenericDispatcherTrap& dispatcher;
 };
@@ -138,11 +145,7 @@ private:
     Executor::traps::DispatcherTrap<Executor::traps::selectors::SELECTOR> NAME { #NAME, TRAP }
 
 #ifndef TRAP_INSTANTIATION
-#ifdef FUNCTION_WRAPPER_IMPLEMENTATION
-#define TRAP_INSTANTIATION DEFINE
-#else
 #define TRAP_INSTANTIATION EXTERN
-#endif
 #endif
 
 #define PREPROCESSOR_CONCAT1(A,B) A##B

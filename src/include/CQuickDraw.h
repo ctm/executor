@@ -4,6 +4,9 @@
 
 #include "WindowMgr.h"
 
+#define MODULE_NAME CQuickDraw
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 #define theCPort (STARH(STARH((GUEST<GUEST<CGrafPtr> *> *)SYN68K_TO_US(EM_A5))))

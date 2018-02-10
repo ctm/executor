@@ -5,8 +5,13 @@
  * Copyright 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include <rsys/lowglobals.h>
+#include <rsys/traps.h>
+
+#define MODULE_NAME SysErr
+#include <rsys/api-module.h>
 
 namespace Executor
 {

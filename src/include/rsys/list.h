@@ -13,6 +13,9 @@
 #include "ResourceMgr.h"
 #include "rsys/mman.h"
 
+#define MODULE_NAME rsys_list
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 extern void

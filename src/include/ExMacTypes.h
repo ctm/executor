@@ -9,6 +9,7 @@
  */
 
 #include "rsys/mactype.h"
+#include "rsys/byteswap.h"
 
 namespace Executor
 {

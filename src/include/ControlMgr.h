@@ -11,6 +11,9 @@
 #include "QuickDraw.h"
 #include "WindowMgr.h"
 
+#define MODULE_NAME ControlMgr
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 enum

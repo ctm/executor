@@ -10,6 +10,10 @@
 
 #include "QuickDraw.h"
 #include "SANE.h"
+
+#define MODULE_NAME SoundMgr
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 struct SndCommand

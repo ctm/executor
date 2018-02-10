@@ -6,6 +6,9 @@
 
 #include "rsys/commonevt.h"
 
+#define MODULE_NAME OSEvent
+#include <rsys/api-module.h>
+
 /*
  * Copyright 1986, 1989, 1990, 1996 by Abacus Research and Development, Inc.
  * All rights reserved.
@@ -162,6 +165,8 @@ enum
     noOutstandingHLE = (-607),
     bufferIsSmall = (-608),
 };
+
+EXTERN_DISPATCHER_TRAP(OSDispatch, 0xA88F, StackW);
 
 extern OSErr C_AcceptHighLevelEvent(TargetID *sender_id_return, GUEST<int32_t> *refcon_return, Ptr msg_buf, GUEST<int32_t> *msg_length_return);
 PASCAL_SUBTRAP(AcceptHighLevelEvent, 0xA88F, 0x0033, OSDispatch);

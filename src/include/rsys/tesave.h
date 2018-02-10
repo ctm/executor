@@ -5,8 +5,14 @@
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include "ExMacTypes.h"
+#include "QuickDraw.h"
+#include "TextEdit.h"
+
+#define MODULE_NAME rsys_tesave
+#include <rsys/api-module.h>
 
 namespace Executor
 {

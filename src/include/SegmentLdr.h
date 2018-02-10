@@ -8,7 +8,11 @@
 
  */
 
-#include "rsys/noreturn.h"
+#include "ExMacTypes.h"
+#include <rsys/lowglobals.h>
+
+#define MODULE_NAME SegmentLdr
+#include <rsys/api-module.h>
 
 namespace Executor
 {

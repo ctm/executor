@@ -11,6 +11,9 @@
 #include "WindowMgr.h"
 #include "TextEdit.h"
 
+#define MODULE_NAME DialogMgr
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 enum

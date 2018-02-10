@@ -2,6 +2,12 @@
 #define _mixed_mode_h_
 
 #include <stdarg.h>
+#include <stdint.h>
+#include "ExMacTypes.h"
+
+#define MODULE_NAME rsys_mixed_mode
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 typedef uint8_t ISAType;

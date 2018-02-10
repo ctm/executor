@@ -16,6 +16,9 @@
 
 #include "rsys/mman.h"
 
+#define MODULE_NAME rsys_wind
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 struct windrestype

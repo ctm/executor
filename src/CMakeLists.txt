@@ -50,7 +50,6 @@ add_subdirectory(config/arch/generic_le)
 add_subdirectory(config/os/win32)
 add_subdirectory(config/os/macosx)
 
-
 function(linkheader from to variant)
     if(DEFINED ARGV3)
         set(input ${ARGV3})
@@ -175,7 +174,7 @@ set(num_sources bindec.cpp float4.cpp float5.cpp float7.cpp floatnext.cpp toolma
 source_group(Numerics FILES ${num_sources})
 
 set(misc_sources
-  traps.cpp logging.cpp traps.instances.cpp
+  traps.cpp logging.cpp
   desk.cpp device.cpp disk.cpp diskinit.cpp dump.cpp trapname.cpp font.cpp
   gestalt.cpp globals.cpp iu.cpp launch.cpp main.cpp mman.cpp mmansubr.cpp notify.cpp hle.cpp
   osevent.cpp osutil.cpp pack.cpp scrap.cpp script.cpp segment.cpp serial.cpp
@@ -387,12 +386,15 @@ set(include_sources hintemplate.h
                   mkvol/mkvol.h
                   mkvol/mkvol_internal.h)
 
+include(trap_instances/trap_instances.cmake)
+
 set(sources ${ctl_sources} ${dial_sources} 
     ${list_sources} ${menu_sources}
     ${print_sources} ${qd_sources} ${res_sources}
     ${te_sources} ${wind_sources} ${ae_sources}
     ${sound_sources} ${num_sources} ${misc_sources}
     ${file_sources} ${hfs_sources}
+    ${trap_instance_sources}
     ${include_sources})
 
 add_executable(executor ${sources}
@@ -408,3 +410,4 @@ else()
 endif()
 
 target_link_libraries(executor Threads::Threads syn68k)
+

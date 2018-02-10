@@ -5,8 +5,12 @@
  * Copyright 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include <rsys/traps.h>
+
+#define MODULE_NAME rsys_adb
+#include <rsys/api-module.h>
 
 namespace Executor
 {

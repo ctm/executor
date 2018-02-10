@@ -10,6 +10,9 @@
 
 #include "ControlMgr.h"
 
+#define MODULE_NAME ListMgr
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 typedef Point Cell;

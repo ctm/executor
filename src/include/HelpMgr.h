@@ -12,6 +12,9 @@
 #include "MenuMgr.h"
 #include "WindowMgr.h"
 
+#define MODULE_NAME HelpMgr
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 struct HMStringResType

@@ -11,6 +11,9 @@
 #include "WindowMgr.h"
 #include "FileMgr.h"
 
+#define MODULE_NAME DeviceMgr
+#include <rsys/api-module.h>
+
 /*
  * Note the structure below is similar to that presented on IM-188,
  * but I don't use offsets to the routines, but pointers to the routines

@@ -5,8 +5,13 @@
  * Copyright 1990, 1991 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include "ExMacTypes.h"
+#include "rsys/macros.h"
+
+#define MODULE_NAME SANE
+#include <rsys/api-module.h>
 
 namespace Executor
 {

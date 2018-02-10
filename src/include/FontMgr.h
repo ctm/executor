@@ -9,6 +9,10 @@
  */
 
 #include "QuickDraw.h"
+
+#define MODULE_NAME FontMgr
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 enum

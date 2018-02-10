@@ -4,8 +4,12 @@
  * Copyright 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include "ExMacTypes.h"
+
+#define MODULE_NAME BinaryDecimal
+#include <rsys/api-module.h>
 
 namespace Executor
 {

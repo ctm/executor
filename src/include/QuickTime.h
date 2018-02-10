@@ -12,6 +12,9 @@
 #include "CQuickDraw.h"
 #include "FileMgr.h"
 
+#define MODULE_NAME QuickTime
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 typedef struct MovieRecord

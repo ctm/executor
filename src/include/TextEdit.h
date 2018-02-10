@@ -10,6 +10,9 @@
 
 #include "QuickDraw.h"
 
+#define MODULE_NAME TextEdit
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 /* new justification defines, accepted by `TESetAlignment ()' and

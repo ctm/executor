@@ -1,6 +1,12 @@
 #if !defined(_RSYS_GESTALT_H_)
 #define _RSYS_GESTALT_H_
 
+#include "ExMacTypes.h"
+#include <rsys/macros.h>
+
+#define MODULE_NAME rsys_gestalt
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 #if defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)

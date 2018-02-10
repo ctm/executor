@@ -4,6 +4,9 @@
 #include "FileMgr.h"
 #include "PPC.h"
 
+#define MODULE_NAME ProcessMgr
+#include <rsys/api-module.h>
+
 /*
  * Copyright 1995, 1996 by Abacus Research and Development, Inc.
  * All rights reserved.
@@ -156,6 +159,8 @@ enum
 {
     procNotFound = (-600),
 };
+
+EXTERN_DISPATCHER_TRAP(OSDispatch, 0xA88F, StackW);
 
 extern void process_create(bool desk_accessory_p,
                            uint32_t type, uint32_t signature);

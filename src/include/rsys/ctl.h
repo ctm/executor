@@ -16,6 +16,9 @@
 #include "rsys/mman.h"
 #include "rsys/cquick.h"
 
+#define MODULE_NAME rsys_ctl
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 extern const ColorSpec default_ctl_colors[];

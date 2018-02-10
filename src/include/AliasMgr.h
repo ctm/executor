@@ -3,6 +3,10 @@
 #define _ALIASMGR_H_
 
 #include "FileMgr.h"
+#include <rsys/macros.h>
+
+#define MODULE_NAME AliasMgr
+#include <rsys/api-module.h>
 
 namespace Executor
 {

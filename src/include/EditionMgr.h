@@ -12,6 +12,9 @@
 #include "IntlUtil.h"
 #include "AliasMgr.h"
 
+#define MODULE_NAME EditionMgr
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 #define declare_subtypes(type)                \

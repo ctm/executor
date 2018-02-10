@@ -5,8 +5,15 @@
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include <rsys/lowglobals.h>
+#include "ExMacTypes.h"
+#include "EventMgr.h"
+#include "WindowMgr.h"
+
+#define MODULE_NAME DeskMgr
+#include <rsys/api-module.h>
 
 namespace Executor
 {

@@ -1,5 +1,11 @@
+#pragma once
 
 /* shutdown manager define/routines */
+
+#include "ExMacTypes.h"
+
+#define MODULE_NAME ShutDown
+#include <rsys/api-module.h>
 
 namespace Executor
 {

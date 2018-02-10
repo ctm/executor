@@ -5,8 +5,12 @@
  * Copyright 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+#include "ExMacTypes.h"
+
+#define MODULE_NAME rsys_osutil
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 extern long long ROMlib_long_long_secs(Executor::INTEGER year, Executor::INTEGER month,

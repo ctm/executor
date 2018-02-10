@@ -98,6 +98,11 @@ template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno, uint3
 SubTrapFunction<Ret (Args...), fptr, trapno, selector, CallConv>::SubTrapFunction(const char* name, GenericDispatcherTrap& dispatcher)
     : WrappedFunction<Ret(Args...),fptr,CallConv>(name), dispatcher(dispatcher)
 {
+}
+
+template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno, uint32_t selector, typename CallConv>
+void SubTrapFunction<Ret (Args...), fptr, trapno, selector, CallConv>::init()
+{
     if(logging::enabled())
         dispatcher.addSelector(selector, callfrom68K::Invoker<Ret (Args...), &logging::LoggedFunction<Ret (Args...),fptr,CallConv>::call, CallConv>
                 ::invokeFrom68K);

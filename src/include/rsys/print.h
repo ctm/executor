@@ -18,6 +18,10 @@
 
 extern win_printp_t ROMlib_wp;
 #endif
+
+#define MODULE_NAME rsys_print
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 enum
