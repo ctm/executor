@@ -7,12 +7,6 @@
 
 #include <string.h>
 
-//#define USE_DYNAMIC_CTOP_PTOC
-
-#ifdef USE_DYNAMIC_CTOP_PTOC
-#include <rsys/ctop_ptoc.h>
-#endif
-
 namespace Executor
 {
 
@@ -192,19 +186,6 @@ namespace callfrom68K
 
     template<typename... Xs> struct List;
 
-#ifdef USE_DYNAMIC_CTOP_PTOC
-    template<typename Ret, typename... Args, Ret (*fptr)(Args...)>
-    struct Invoker<Ret (Args...), fptr, callconv::Pascal>
-    {
-        static syn68k_addr_t invokeFrom68K(syn68k_addr_t addr, void *)
-        {
-            static ptocblock_t ptocblock { (void*)fptr, ptoc(fptr) };
-            syn68k_addr_t ret = PascalToCCall(addr, &ptocblock);
-            return ret;
-        }
-    };
-#else
-
     template<typename F, typename Args, typename ToDoArgs>
     struct PascalInvoker;
 
@@ -262,7 +243,6 @@ namespace callfrom68K
             return retaddr;
         }
     };
-#endif
 
     template<syn68k_addr_t (*fptr)(syn68k_addr_t, void*)>
     struct Invoker<syn68k_addr_t (syn68k_addr_t addr, void *), fptr, callconv::Raw>
@@ -377,16 +357,6 @@ namespace callto68K
         }
     };
 
-#ifdef USE_DYNAMIC_CTOP_PTOC
-    template<typename Ret, typename... Args>
-    struct Invoker<Ret (Args...), callconv::Pascal>
-    {
-        static Ret invoke68K(void *ptr, Args... args)
-        {
-            return (Ret)CToPascalCall(ptr, ctop<Ret(Args...)>(), args...);
-        }
-    };
-#else
     template<>
     struct Invoker<void (), callconv::Pascal>
     {
@@ -417,7 +387,7 @@ namespace callto68K
             return callconv::stack::pop<Ret>();
         }
     };
-#endif
+
     template<>
     struct Invoker<syn68k_addr_t (syn68k_addr_t, void*), callconv::Raw>
     {
@@ -427,7 +397,6 @@ namespace callto68K
             return POPADDR();   // ###
         }
     };
-
 }
 
 template<typename Ret, typename... Args, typename CallConv>

@@ -5,14 +5,6 @@
 namespace Executor
 {
 
-typedef struct
-{
-    void *wheretogo;
-    uint64_t magic;
-} ptocblock_t;
-extern syn68k_addr_t PascalToCCall(syn68k_addr_t ignoreme, ptocblock_t *infop);
-extern uintptr_t CToPascalCall(void *, uint64_t, ...);
-
 #define TOOLBIT (0x0800)
 #define NTOOLENTRIES (0x400)
 #define NOSENTRIES (0x100)
