@@ -101,7 +101,7 @@ static void eject_floppy_notify(void)
  */
 
     if(LM(WWExist) == EXIST_YES && GetResource(TICK("ALRT"), EJECTALERTID))
-        Alert(EJECTALERTID, (ProcPtr)0);
+        Alert(EJECTALERTID, nullptr);
 }
 
 OSErr Executor::ROMlib_ejectfloppy(LONGINT floppyfd)

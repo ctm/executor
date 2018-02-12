@@ -46,7 +46,7 @@ enum
 static struct
 {
     int val; /* 0 = COM1, 1 = COM2 ... */
-    uint8 key;
+    uint8_t key;
 } serial_port_map[] = {
     { 0, 0 },
     { 1, 1 },
@@ -267,7 +267,7 @@ enum
 #define COM_TEMPLATE "COM1"
 
 static HANDLE
-port_to_handle(uint8 port)
+port_to_handle(uint8_t port)
 {
     HANDLE retval;
     int com_minus_1;
@@ -315,7 +315,7 @@ port_to_handle(uint8 port)
  */
 
 static int
-dos_serial_bios_init_port(uint8 port,
+dos_serial_bios_init_port(uint8_t port,
                           uint32_t baud,
                           uint32_t parity,
                           uint32_t stop_bits,

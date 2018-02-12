@@ -11,6 +11,9 @@
 #include "QuickDraw.h"
 #include "SANE.h"
 
+#define MODULE_NAME ToolboxUtil
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 enum

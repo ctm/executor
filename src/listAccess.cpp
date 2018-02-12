@@ -10,6 +10,7 @@
 #include "IntlUtil.h"
 #include "rsys/list.h"
 #include "rsys/hook.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 
@@ -89,7 +90,7 @@ void Executor::C_LRect(Rect *cellrect, Cell cell, ListHandle list) /* IMIV-274 *
     }
 }
 
-typedef INTEGER (*cmpf)(Ptr p1, Ptr p2, INTEGER len1, INTEGER len2);
+using cmpf = UPP<INTEGER(Ptr p1, Ptr p2, INTEGER len1, INTEGER len2)>;
 
 
 #define CALLCMP(a1, a2, a3, a4, fp) \
@@ -104,14 +105,12 @@ static inline INTEGER Executor::ROMlib_CALLCMP(Ptr p1, Ptr p2, INTEGER l1, INTEG
 {
     INTEGER retval;
 
-    if(fp == (cmpf)P_IUMagString)
+    if(fp == &IUMagString)
         retval = C_IUMagString(p1, p2, l1, l2);
     else
     {
         ROMlib_hook(list_cmpnumber);
-        HOOKSAVEREGS();
-        retval = CToPascalCall((void *)fp, ctop(&C_IUMagString), p1, p2, l1, l2);
-        HOOKRESTOREREGS();
+        retval = fp(p1, p2, l1, l2);
     }
     return retval;
 }
@@ -130,7 +129,7 @@ BOOLEAN Executor::C_LSearch(Ptr dp, INTEGER dl, Ptr proc, GUEST<Cell> *cellp,
     HLock((Handle)list);
     HLock((Handle)HxP(list, cells));
 
-    fp = proc ? (cmpf)proc : (cmpf)P_IUMagString;
+    fp = proc ? (cmpf)proc : &IUMagString;
     cell.h = CW(cellp->h);
     cell.v = CW(cellp->v);
     swappedcell = *cellp;

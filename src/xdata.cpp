@@ -269,12 +269,12 @@ narrow_p(const uint32_t *bits, int row_longs, int height)
 static inline bool
 short_p(const uint32_t *bits, int row_longs, int height)
 {
-    const uint8 *p, *end;
+    const uint8_t *p, *end;
     int row_bytes;
 
     row_bytes = row_longs * sizeof(uint32_t);
-    end = ((const uint8 *)bits) + row_bytes * height;
-    for(p = ((const uint8 *)bits) + row_bytes; p != end; p += row_bytes)
+    end = ((const uint8_t *)bits) + row_bytes * height;
+    for(p = ((const uint8_t *)bits) + row_bytes; p != end; p += row_bytes)
     {
         if(memcmp(bits, p, row_bytes))
             return false;
@@ -310,7 +310,7 @@ xdata_for_raw_data(PixMap *target, xdata_t *x, uint32_t *raw_bits,
         if(row_bytes == 1)
         {
             for(y = height - 1; y >= 0; y--)
-                raw_bits[y] = (((const uint8 *)raw_bits)[y]) * 0x01010101U;
+                raw_bits[y] = (((const uint8_t *)raw_bits)[y]) * 0x01010101U;
         }
         else if(row_bytes == 2)
         {

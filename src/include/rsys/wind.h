@@ -15,7 +15,9 @@
 #include <OSUtil.h>
 
 #include "rsys/mman.h"
-#include "rsys/pstuff.h"
+
+#define MODULE_NAME rsys_wind
+#include <rsys/api-module.h>
 
 namespace Executor
 {
@@ -32,17 +34,20 @@ struct windrestype
     GUEST<Byte> _wtitle;
 };
 
-extern LONGINT C_wdef0(INTEGER, WindowPtr, INTEGER, LONGINT),
-    C_wdef16(INTEGER, WindowPtr, INTEGER, LONGINT);
+extern LONGINT C_wdef0(INTEGER, WindowPtr, INTEGER, LONGINT);
+PASCAL_FUNCTION(wdef0);
+extern LONGINT C_wdef16(INTEGER, WindowPtr, INTEGER, LONGINT);
+PASCAL_FUNCTION(wdef16);
 
 extern WindowPeek ROMlib_firstvisible(WindowPtr w);
 
 extern BOOLEAN ROMlib_window_zoomed(WindowPeek wp);
 extern void wind_color_init(void);
 
-void ROMlib_rootless_update();
+void ROMlib_rootless_update(RgnHandle extra = nullptr);
 void ROMlib_rootless_openmenu(Rect r);
 void ROMlib_rootless_closemenu();
+bool ROMlib_rootless_drawdesk(RgnHandle desk);
 
 
 typedef void (*draghookp)(void);
@@ -51,8 +56,8 @@ typedef void (*draghookp)(void);
 
 extern BOOLEAN ROMlib_dirtyvariant;
 
-typedef LONGINT (*windprocp)(INTEGER var, WindowPtr wind, INTEGER mess,
-                                    LONGINT param);
+using windprocp = UPP<LONGINT(INTEGER var, WindowPtr wind, INTEGER mess,
+                                    LONGINT param)>;
 
 extern void CALLDRAGHOOK(void);
 extern void WINDCALLDESKHOOK(void);

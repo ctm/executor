@@ -402,7 +402,7 @@ typedef BitMap blt_bitmap_t;
 #define CTAB_PENDING_BIT (0x1000)
 
 /* accessor macro to avoid byte swap. */
-#define COLORSPEC_VALUE_LOW_BYTE(cspec) (((uint8 *)&((cspec)->value))[1])
+#define COLORSPEC_VALUE_LOW_BYTE(cspec) (((uint8_t *)&((cspec)->value))[1])
 
 /* inverse color table accessors */
 #define ITAB_TABLE(itab) (HxX((itab), iTTable))
@@ -712,7 +712,7 @@ extern int average_color(GDHandle gdev,
                          RGBColor *c1, RGBColor *c2, int ratio,
                          RGBColor *out);
 
-extern int16_t xStdTxMeas(int16_t n, uint8 *p, GUEST<Point> *nump, GUEST<Point> *denp,
+extern int16_t xStdTxMeas(int16_t n, uint8_t *p, GUEST<Point> *nump, GUEST<Point> *denp,
                           FontInfo *finfop, GUEST<int16_t> *charlocp);
 
 extern void ROMlib_fg_bk(uint32_t *fg_pixel_out, uint32_t *bk_pixel_out,

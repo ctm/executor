@@ -881,7 +881,7 @@ event_loop(void)
                 control_p = _FindControl(local_pt, color_picker_window, &c);
                 if(control_p)
                 {
-                    release_part = TrackControl(c, local_pt, (ProcPtr)-1);
+                    release_part = TrackControl(c, local_pt, (ControlActionUPP)-1);
                     if(release_part == inButton && c == ok_button)
                         return true;
                     if(release_part == inButton && c == cancel_button)

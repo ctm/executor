@@ -28,12 +28,12 @@
 using namespace Executor;
 
 #define _PtrToHand(ptr, hand, len)                  \
-    ((void)({                                       \
+    do {                                            \
         Handle __temp_handle;                       \
                                                     \
         PtrToHand((Ptr)(ptr), &__temp_handle, len); \
         *(hand) = RM(__temp_handle);                \
-    }))
+    } while(0)
 
 void Executor::dialog_create_item(DialogPeek dp, itmp dst, itmp src,
                                   int item_no, Point base_pt)

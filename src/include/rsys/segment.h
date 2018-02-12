@@ -16,7 +16,6 @@ struct finderinfo
 };
 
 extern int ROMlib_print;
-extern void flushcache(void);
 extern void SFSaveDisk_Update(INTEGER vrefnum, Str255 filename);
 
 extern char *ROMlib_undotdot(char *origp);
@@ -25,7 +24,6 @@ extern LONGINT ROMlib_appbit, ROMlib_whichapps;
 
 extern void ROMlib_seginit(LONGINT argc, char **argv);
 extern void empty_timer_queues(void);
-extern BOOLEAN ROMlib_startupscreen;
 }
 
 #endif /* !_SEGMENT_H_ */

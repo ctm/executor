@@ -8,7 +8,6 @@
 #include "ADB.h"
 #include "rsys/adb.h"
 #include "rsys/osevent.h"
-#include "rsys/pstuff.h"
 
 #include <stdarg.h>
 /*
@@ -64,7 +63,7 @@ enum
     SPOOFED_MOUSE_ADDR = 3
 };
 
-static GUEST<Ptr> adb_service_procp = nullptr; /* stored as though in lowglobal */
+static GUEST<ProcPtr> adb_service_procp = nullptr; /* stored as though in lowglobal */
 static Ptr adb_data_ptr = (Ptr)0x90ABCDEF;
 
 void
@@ -91,7 +90,7 @@ Executor::GetIndADB(ADBDataBlock *adbp, INTEGER index)
         adbp->devType = CB(0); /* should check on Mac to see what mouse is */
         adbp->origADBAddr = CB(SPOOFED_MOUSE_ADDR);
         if(!adb_service_procp)
-            adb_service_procp = RM((Ptr)P_adb_service_stub);
+            adb_service_procp = RM((ProcPtr)&adb_service_stub);
         adbp->dbServiceRtPtr = adb_service_procp;
         adbp->dbDataAreaAddr = RM(adb_data_ptr);
         retval = SPOOFED_MOUSE_ADDR;
@@ -132,7 +131,7 @@ Executor::SetADBInfo(ADBSetInfoBlock *adbp, INTEGER address)
 static bool
 adb_vector_is_not_our_own(void)
 {
-    return adb_service_procp && adb_service_procp != RM((Ptr)P_adb_service_stub);
+    return adb_service_procp && adb_service_procp != RM((ProcPtr)&adb_service_stub);
 }
 
 static void

@@ -1,12 +1,14 @@
 #if !defined(__RSYS_STDFILE__)
 #define __RSYS_STDFILE__
 
-#include "rsys/pstuff.h"
 #include "FileMgr.h"
 #include "EventMgr.h"
 #include "ControlMgr.h"
 #include "DialogMgr.h"
 #include "rsys/file.h"
+
+#define MODULE_NAME rsys_stdfile
+#include <rsys/api-module.h>
 
 namespace Executor
 {
@@ -38,7 +40,9 @@ namespace Executor
 extern int ROMlib_strcmp(const Byte *s1, const Byte *s2);
 extern void futzwithdosdisks(void);
 extern void C_ROMlib_stdftrack(ControlHandle, INTEGER);
-extern INTEGER C_ROMlib_stdffilt(DialogPeek, EventRecord *, GUEST<INTEGER> *);
+PASCAL_FUNCTION(ROMlib_stdftrack);
+extern Boolean C_ROMlib_stdffilt(DialogPtr, EventRecord *, GUEST<INTEGER> *);
+PASCAL_FUNCTION(ROMlib_stdffilt);
 extern void ROMlib_init_stdfile(void);
 
 #if defined(LINUX)
@@ -56,5 +60,6 @@ enum
 extern int nodrivesearch_p;
 
 OSErr C_unixmount(CInfoPBRec *cbp);
+PASCAL_FUNCTION(unixmount);
 }
 #endif /* !defined(__RSYS_STDFILE__) */

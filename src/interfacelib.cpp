@@ -174,7 +174,7 @@ LMGetAtMenuBottom(void)
     return CW(LM(AtMenuBottom));
 }
 
-static uint8
+static uint8_t
 LMGetSdVolume(void)
 {
     warning_trace_info(NULL_STRING);
@@ -241,7 +241,7 @@ LMGetROM85(void)
     return CW(LM(ROM85));
 }
 
-static uint8
+static uint8_t
 LMGetKbdType(void)
 {
     warning_trace_info(NULL_STRING);
@@ -304,7 +304,7 @@ LMGetTicks(void)
     return CL(LM(Ticks));
 }
 
-static uint8
+static uint8_t
 LMGetResLoad(void)
 {
     warning_trace_info(NULL_STRING);
@@ -396,7 +396,7 @@ LMSetApplZone(THz val)
 }
 
 static void
-LMSetResLoad(uint8 val)
+LMSetResLoad(uint8_t val)
 {
     warning_trace_info(NULL_STRING);
     LM(ResLoad) = CB(val);
@@ -444,7 +444,7 @@ LMGetCurDirStore(void)
     return CL(LM(CurDirStore));
 }
 
-static uint8
+static uint8_t
 LMGetCrsrBusy(void)
 {
     warning_trace_info(NULL_STRING);
@@ -1026,7 +1026,7 @@ HDelete(INTEGER vrefnum, LONGINT dirid, Str255 filename)
 }
 
 static OSErr
-HOpenDF(INTEGER vref, LONGINT dirid, Str255 file, int8 perm, INTEGER *refp)
+HOpenDF(INTEGER vref, LONGINT dirid, Str255 file, int8_t perm, INTEGER *refp)
 {
     OSErr retval;
     HParamBlockRec pb;
@@ -1850,7 +1850,7 @@ extract_stack_parameters(ProcInfoType info, va_list ap,
         {
             case kOneByteCode:
                 if(where == args_via_stdarg)
-                    *argp = (uint8)va_arg(ap, uint32_t);
+                    *argp = (uint8_t)va_arg(ap, uint32_t);
                 else
                     *argp = POPUB();
                 *widp = 1;
@@ -2024,7 +2024,7 @@ Call68KProc_from_native(void *addr, ProcInfoType info, va_list ap)
                 break;
             case kOneByteCode:
             {
-                uint8 b;
+                uint8_t b;
 
                 b = *argp;
                 PUSHUB(b);
@@ -2059,7 +2059,7 @@ Call68KProc_from_native(void *addr, ProcInfoType info, va_list ap)
                 retval = 0;
                 break;
             case 1:
-                retval = (uint8)EM_D0;
+                retval = (uint8_t)EM_D0;
                 break;
             case 2:
                 retval = (uint16_t)EM_D0;
@@ -4820,7 +4820,7 @@ static map_entry_t
             "TestControl", TestControl_PC,
         },
         {
-            "InitEditionPackVersion", C_InitEditionPack,
+            "InitEditionPackVersion", C_InitEditionPackVersion,
         },
         {
             "InvertRoundRect", C_InvertRoundRect,
@@ -6049,7 +6049,7 @@ static map_entry_t
             "AllocCursor", C_AllocCursor,
         },
         {
-            "RestoreClutDevice", C_RestoreClutDevice,
+            "RestoreDeviceClut", C_RestoreDeviceClut,
         },
         {
             "ResizePalette", C_ResizePalette,

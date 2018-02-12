@@ -16,6 +16,7 @@
 #include "rsys/blockinterrupts.h"
 #include "rsys/prefs.h"
 #include "rsys/soundopts.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 
@@ -154,7 +155,7 @@ start_playing(SndChannelPtr chanp, SndDoubleBufferHeaderPtr paramp,
             if(!task_inserted)
             {
                 call_back_info.task.tmAddr
-                    = RM((ProcPtr)P_sound_timer_handler);
+                    = RM((ProcPtr)&sound_timer_handler);
                 InsTime((QElemPtr)&call_back_info.task);
                 task_inserted = true;
             }

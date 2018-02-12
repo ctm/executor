@@ -35,7 +35,7 @@ typedef enum {
 
 extern void NeXTPrArc(LONGINT verb, Rect *r, LONGINT starta, LONGINT arca,
                       GrafPtr gp);
-extern void NeXTPrBits(BitMap *srcbmp, Rect *srcrp, Rect *dstrp,
+extern void NeXTPrBits(const BitMap *srcbmp, const Rect *srcrp, const Rect *dstrp,
                        LONGINT mode, RgnHandle mask, GrafPtr gp);
 extern void NeXTPrLine(Point to, GrafPtr gp);
 extern void NeXTPrOval(LONGINT v, Rect *rp, GrafPtr gp);

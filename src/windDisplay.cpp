@@ -18,7 +18,7 @@ using namespace Executor;
 
 void Executor::C_SetWTitle(WindowPtr w, StringPtr t)
 {
-    if(!w)
+    if(!w || !t)
         return;
     PtrToXHand((Ptr)t, (Handle)WINDOW_TITLE(w), (LONGINT)t[0] + 1);
 
@@ -35,7 +35,7 @@ void Executor::C_SetWTitle(WindowPtr w, StringPtr t)
 
 void Executor::C_GetWTitle(WindowPtr w, StringPtr t)
 {
-    if(!w)
+    if(!w || !t)
         /*-->*/ return;
     str255assign(t, STARH(WINDOW_TITLE(w)));
 }

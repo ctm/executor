@@ -7,11 +7,13 @@
  *
 
  */
-
-#include "rsys/macros.h"
-#include "rsys/types.h"
+#include "host-arch-config.h"
+#include <stdint.h>
 #include <type_traits>
-#include <syn68k_public.h> /* for ROMlib_offset */
+#include <syn68k_public.h>
+
+#include "rsys/functions.h"
+#include "rsys/traps.h"
 
 #ifndef __cplusplus
 #error C++ required
@@ -25,10 +27,17 @@ typedef int32_t LONGINT;
 typedef uint32_t ULONGINT;
 
 #if !defined(WIN32) || !defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
-typedef int8 BOOLEAN;
+typedef int8_t BOOLEAN;
 #endif
 
 typedef int16_t CharParameter; /* very important not to use this as char */
+
+struct Point
+{
+    int16_t v;
+    int16_t h;
+};
+
 
 // Define alignment.
 
@@ -56,10 +65,6 @@ struct Aligner<signed char>
     uint8_t align;
 };
 
-// For now, SwapTyped is exactly the same as Cx.
-// However, Cx is used all over Executor, should learn to handle GUEST<> types,
-// and eventually go away. SwapTyped is used internally here, and nowhere else.
-
 #if defined(BIGENDIAN)
 #define SwapTyped(x) (x)
 #else
@@ -78,24 +83,27 @@ inline uint32_t SwapTyped(uint32_t x) { return swap32(x); }
 inline int32_t SwapTyped(int32_t x) { return swap32((uint32_t)x); }
 #endif
 
-// USE_PACKED_HIDDENVALUE - control which one of two versions
-// of template struct/union HiddenValue to use.
+inline uint16_t *SYN68K_TO_US_CHECK0_CHECKNEG1(syn68k_addr_t addr)
+{
+    if(addr == (syn68k_addr_t)-1)
+        return (uint16_t*) -1;
+    else
+        return SYN68K_TO_US_CHECK0(addr);
+}
 
-//#define USE_PACKED_HIDDENVALUE
+inline syn68k_addr_t US_TO_SYN68K_CHECK0_CHECKNEG1(const void* addr)
+{
+    if(addr == (void*)-1)
+        return (syn68k_addr_t) -1;
+    else
+        return US_TO_SYN68K_CHECK0(addr);
+}
 
 template<typename ActualType>
-#ifdef USE_PACKED_HIDDENVALUE
-struct __attribute__((packed, align(2))) HiddenValue
-#else
 union HiddenValue
-#endif
 {
-#ifdef USE_PACKED_HIDDENVALUE
-    ActualType packed;
-#else
     uint8_t data[sizeof(ActualType)];
     Aligner<ActualType> align;
-#endif
 public:
     HiddenValue() = default;
     HiddenValue(const HiddenValue<ActualType> &y) = default;
@@ -103,20 +111,12 @@ public:
 
     ActualType raw() const
     {
-#ifdef USE_PACKED_HIDDENVALUE
-        return packed;
-#else
         return *(const ActualType *)data;
-#endif
     }
 
     void raw(ActualType x)
     {
-#ifdef USE_PACKED_HIDDENVALUE
-        packed = x;
-#else
         *(ActualType *)data = x;
-#endif
     }
 };
 
@@ -150,6 +150,16 @@ struct GuestWrapperBase
     {
         hidden.raw(x);
     }
+
+    uint32_t raw_host_order() const
+    {
+        return get();
+    }
+    void raw_host_order(uint32_t x)
+    {
+        return set(x);
+    }
+
 
     void raw_and(RawGuestType x)
     {
@@ -187,18 +197,12 @@ public:
     WrappedType get() const
     {
         uint32_t rawp = this->raw();
-        if(rawp)
-            return (TT *)(SYN68K_TO_US((uint32_t)swap32(rawp)));
-        else
-            return nullptr;
+        return (TT *)(SYN68K_TO_US_CHECK0_CHECKNEG1((uint32_t)swap32(rawp)));
     }
 
     void set(TT *ptr)
     {
-        if(ptr)
-            this->raw(swap32(US_TO_SYN68K(ptr)));
-        else
-            this->raw(0);
+        this->raw(swap32(US_TO_SYN68K_CHECK0_CHECKNEG1(ptr)));
     }
 
     RawGuestType raw() const
@@ -210,6 +214,16 @@ public:
     {
         p.raw(x);
     }
+
+    uint32_t raw_host_order() const
+    {
+        return swap32(this->raw());
+    }
+    void raw_host_order(uint32_t x)
+    {
+        this->raw(swap32(x));
+    }
+
 };
 
 template<typename TT>
@@ -329,16 +343,7 @@ bool operator!=(GuestWrapper<TT *> a, std::nullptr_t)
     return a;
 }
 
-#define GUEST_STRUCT       \
-    struct is_guest_struct \
-    {                      \
-    }
-
-struct Point
-{
-    INTEGER v;
-    INTEGER h;
-};
+#define GUEST_STRUCT    struct is_guest_struct {}
 
 template<>
 struct GuestWrapper<Point>
@@ -371,17 +376,20 @@ struct GuestWrapper<Point>
         v.raw(x.v);
         h.raw(x.h);
     }
+
+    static GuestWrapper<Point> fromHost(Point x)
+    {
+        GuestWrapper<Point> w;
+        w.set(x);
+        return w;
+    }
+
 };
 
 template<typename TT, typename SFINAE = void>
 struct GuestType
 {
     using type = GuestWrapper<TT>;
-    /* typename std::conditional<
-            std::is_base_of<GuestStruct, TT>::value,
-            TT,
-            GuestWrapper<TT>
-        >::type;*/
 };
 
 namespace internal
@@ -461,6 +469,27 @@ struct GuestType<TT[0]>
     using type = GUEST<TT>[0];
 };
 
+
+template<typename TT>
+GUEST<TT> RM(TT p)
+{
+    return GUEST<TT>::fromHost(p);
+}
+
+template<typename TT>
+TT MR(GuestWrapper<TT> p)
+{
+    return p.get();
+}
+
+inline char RM(char c) { return c; }
+inline unsigned char RM(unsigned char c) { return c; }
+inline signed char RM(signed char c) { return c; }
+inline char MR(char c) { return c; }
+inline unsigned char MR(unsigned char c) { return c; }
+inline signed char MR(signed char c) { return c; }
+
+
 /*
 template<typename TO, typename FROM>
 GUEST<TO*> guest_ptr_cast(GUEST<FROM*> p)
@@ -476,9 +505,61 @@ GUEST<TO> guest_cast(GuestWrapper<FROM> p)
     return result;
 }
 
-#define PACKED_MEMBER(typ, name) typ name
-// Roadmap:
-// 1. remove
+
+template<typename Ret, typename... Args, typename CallConv>
+struct GuestWrapperBase<UPP<Ret(Args...),CallConv>>
+{
+private:
+    HiddenValue<uint32_t> p;
+
+public:
+    using WrappedType = UPP<Ret(Args...),CallConv>;
+    using RawGuestType = uint32_t;
+
+    WrappedType get() const
+    {
+        uint32_t rawp = this->raw();
+        return WrappedType(SYN68K_TO_US_CHECK0_CHECKNEG1((uint32_t)swap32(rawp)));
+    }
+
+    void set(WrappedType ptr)
+    {
+        this->raw(swap32(US_TO_SYN68K_CHECK0_CHECKNEG1(ptr.ptr)));
+    }
+
+    RawGuestType raw() const
+    {
+        return p.raw();
+    }
+
+    void raw(RawGuestType x)
+    {
+        p.raw(x);
+    }
+
+    uint32_t raw_host_order() const
+    {
+        return swap32(this->raw());
+    }
+    void raw_host_order(uint32_t x)
+    {
+        this->raw(swap32(x));
+    }
+    Ret operator()(Args... args); // definition in rsys/functions.impl.h to reduce dependencies
+};
+
+template<typename TT, typename CallConv>
+GUEST<UPP<TT>> RM(UPP<TT,CallConv> p)
+{
+    return GUEST<UPP<TT,CallConv>>::fromHost(p);
+}
+
+template<typename TT, typename CallConv>
+UPP<TT> MR(GuestWrapper<UPP<TT, CallConv>> p)
+{
+    return p.get();
+}
+
 }
 
 #endif /* _MACTYPE_H_ */

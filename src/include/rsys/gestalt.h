@@ -1,6 +1,12 @@
 #if !defined(_RSYS_GESTALT_H_)
 #define _RSYS_GESTALT_H_
 
+#include "ExMacTypes.h"
+#include <rsys/macros.h>
+
+#define MODULE_NAME rsys_gestalt
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 #if defined(USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES)
@@ -54,7 +60,8 @@ enum
     physicalUndefSelectorErr = -15551
 };
 
-extern OSErrRET C_PhysicalGestalt(OSType selector, GUEST<LONGINT> *responsep);
+extern OSErr C_PhysicalGestalt(OSType selector, GUEST<LONGINT> *responsep);
+PASCAL_FUNCTION(PhysicalGestalt);
 
 extern void gestalt_set_system_version(uint32_t version);
 extern void gestalt_set_memory_size(uint32_t size);

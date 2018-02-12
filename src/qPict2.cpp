@@ -128,7 +128,7 @@ OSErr Executor::C_GetPixMapInfo(PixMapHandle pixmap, PictInfo *pict_info,
                                 int16_t color_pick_method, int16_t version)
 {
     CTabHandle pixmap_color_table;
-    uint8 *row_base;
+    uint8_t *row_base;
     int row_bytes, bpp;
     const rgb_spec_t *rgb_spec;
     uint16_t *bank;
@@ -142,7 +142,7 @@ OSErr Executor::C_GetPixMapInfo(PixMapHandle pixmap, PictInfo *pict_info,
 
     /* suck out the relevent pixmap bits */
     row_bytes = PIXMAP_ROWBYTES(pixmap);
-    row_base = (uint8 *)PIXMAP_BASEADDR(pixmap);
+    row_base = (uint8_t *)PIXMAP_BASEADDR(pixmap);
 
     bpp = PIXMAP_PIXEL_SIZE(pixmap);
 

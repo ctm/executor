@@ -14,7 +14,7 @@
 HWND Win_Window;
 
 /* Variables required by the vdriver interface */
-uint8 *vdriver_fbuf = NULL;
+uint8_t *vdriver_fbuf = NULL;
 int vdriver_row_bytes;
 int vdriver_width = VDRIVER_DEFAULT_SCREEN_WIDTH;
 int vdriver_height = VDRIVER_DEFAULT_SCREEN_HEIGHT;

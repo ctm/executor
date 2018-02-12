@@ -8,7 +8,6 @@
 
  */
 
-#include "rsys/pstuff.h"
 namespace Executor
 {
 struct itmstr
@@ -131,12 +130,11 @@ extern void dialog_draw_item(DialogPtr dp, itmp itemp, int itemno);
 #define ITEM_DATA(itemp) \
     ((GUEST<INTEGER> *)((itemp) + 1))
 
-#define BUMPIP(ip)                                  \
-    ((void)({                                       \
-        (ip) = (itmp)((char *)(ip) + ITEM_LEN(ip)); \
-    }))
+inline void BUMPIP(itmp& ip)
+{
+    ip = (itmp)((char *)(ip) + ITEM_LEN(ip));
+}
 
-typedef void (*soundprocp)(INTEGER sound);
 
 extern void BEEPER(INTEGER n);
 #define BEEP(n) BEEPER(n)

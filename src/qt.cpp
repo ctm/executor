@@ -240,7 +240,7 @@ void Executor::C_DisposeMovieController(ComponentInstance controller)
 }
 
 OSErr Executor::C_OpenMovieFile(const FSSpec *filespecp, INTEGER *refnump,
-                                uint8 perm)
+                                uint8_t perm)
 {
     OSErr retval;
 

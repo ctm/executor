@@ -64,7 +64,7 @@ using namespace Executor;
 
 int Executor::ROMlib_cacheheuristic = false;
 
-void Executor::flushcache()
+void Executor::C_FlushCodeCache()
 {
     ROMlib_destroy_blocks((syn68k_addr_t)0, (uint32_t)~0, true);
 }
@@ -83,7 +83,7 @@ void Executor::HWPriv(LONGINT d0, LONGINT a0)
             i_cache_enabled = new_state;
             break;
         case 1: /* Flush Instr cache */
-            flushcache();
+            FlushCodeCache();
             break;
         case 2: /* Dis/Ena Data cache */
             warning_unimplemented("Dis/Ena data cache");
@@ -93,7 +93,7 @@ void Executor::HWPriv(LONGINT d0, LONGINT a0)
             break;
         case 3: /* Flush Data cache */
 #if 0
-	flushcache();
+	FlushCodeCache();
 #endif
             break;
         case 4: /* Enable external cache */
@@ -103,7 +103,7 @@ void Executor::HWPriv(LONGINT d0, LONGINT a0)
             warning_unimplemented("Disable external cache");
             break;
         case 6: /* Flush external cache */
-            flushcache();
+            FlushCodeCache();
             break;
         case 9: /* Flush cache range */
             ROMlib_destroy_blocks((syn68k_addr_t)a0, EM_A1, true);
@@ -217,10 +217,10 @@ full_pathname_p(char *uname)
     return retval;
 }
 
-static uint8
+static uint8_t
 hexval(char c)
 {
-    uint8 retval;
+    uint8_t retval;
 
     if(c >= '0' && c <= '9')
         retval = c - '0';
@@ -514,7 +514,6 @@ void Executor::ROMlib_seginit(LONGINT argc, char **argv) /* INTERNAL */
         ++argv;
         if(argv_to_appfile(argv[0], &app))
         {
-            ROMlib_startupscreen = false;
             ROMlib_exit = true;
             newcount = Hx(fh, count) + 1;
             HxX(fh, count) = CW(newcount);

@@ -6,6 +6,7 @@
 
 #include "OSEvent.h"
 #include "MemoryMgr.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 

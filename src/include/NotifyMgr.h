@@ -5,8 +5,12 @@
  * Copyright 1993 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include "ExMacTypes.h"
+
+#define MODULE_NAME NotifyMgr
+#include <rsys/api-module.h>
 
 namespace Executor
 {
@@ -28,7 +32,9 @@ typedef struct NMRec
     GUEST<LONGINT> nmRefCon;
 } * NMRecPtr;
 
-extern OSErrRET NMInstall(NMRecPtr nmptr);
-extern OSErrRET NMRemove(NMRecPtr nmptr);
+extern OSErr NMInstall(NMRecPtr nmptr);
+REGISTER_TRAP2(NMInstall, 0xA05E, D0(A0));
+extern OSErr NMRemove(NMRecPtr nmptr);
+REGISTER_TRAP2(NMRemove, 0xA05F, D0(A0));
 }
 #endif /* __NOTIFYMGR__ */

@@ -5,8 +5,9 @@
  * Copyright 1998 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include "ExMacTypes.h"
 
 namespace Executor
 {

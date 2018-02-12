@@ -20,12 +20,12 @@ typedef void nmfunc(NMRecPtr nmptr);
  * D0: result code
  */
 
-OSErrRET Executor::NMRemove(NMRecPtr nmptr)
+OSErr Executor::NMRemove(NMRecPtr nmptr)
 {
     return noErr;
 }
 
-OSErrRET Executor::NMInstall(NMRecPtr nmptr)
+OSErr Executor::NMInstall(NMRecPtr nmptr)
 {
     /* The multiple beeps and delays that used to be here make OpenProlog
    * really irritating to use.

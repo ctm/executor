@@ -368,7 +368,7 @@ OSErr Executor::C_FSpExchangeFiles(FSSpecPtr src, FSSpecPtr dst)
 #endif
 }
 
-typedef OSErrRET (*open_procp)(HParmBlkPtr pb, BOOLEAN sync);
+typedef OSErr (*open_procp)(HParmBlkPtr pb, BOOLEAN sync);
 
 static OSErr
 open_helper(FSSpecPtr spec, SignedByte perms, GUEST<int16_t> *refoutp,
@@ -477,7 +477,7 @@ OSErr Executor::C_FSpSetFInfo(FSSpecPtr spec, FInfo *fndr_info)
     return retval;
 }
 
-typedef OSErrRET (*lock_procp)(HParmBlkPtr pb, BOOLEAN async);
+typedef OSErr (*lock_procp)(HParmBlkPtr pb, BOOLEAN async);
 
 static OSErr
 lock_helper(FSSpecPtr spec, lock_procp procp)

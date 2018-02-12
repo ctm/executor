@@ -15,7 +15,9 @@
 
 #include "rsys/mman.h"
 #include "rsys/cquick.h"
-#include "rsys/pstuff.h"
+
+#define MODULE_NAME rsys_ctl
+#include <rsys/api-module.h>
 
 namespace Executor
 {
@@ -43,7 +45,7 @@ extern AuxCtlHandle default_aux_ctl;
 #define CTL_NEXT_CONTROL(ctl) (MR(CTL_NEXT_CONTROL_X(ctl)))
 #define CTL_OWNER(ctl) (MR(CTL_OWNER_X(ctl)))
 #define CTL_VIS(ctl) (CTL_VIS_X(ctl))
-#define CTL_HILITE(ctl) ((uint8)CTL_HILITE_X(ctl))
+#define CTL_HILITE(ctl) ((uint8_t)CTL_HILITE_X(ctl))
 #define CTL_VALUE(ctl) (CW(CTL_VALUE_X(ctl)))
 #define CTL_MIN(ctl) (CW(CTL_MIN_X(ctl)))
 #define CTL_MAX(ctl) (CW(CTL_MAX_X(ctl)))
@@ -58,10 +60,13 @@ extern GUEST<AuxCtlHandle> *lookup_aux_ctl(ControlHandle ctl);
 
 extern int32_t C_cdef0(int16_t var, ControlHandle ctl, int16_t mess,
                        int32_t param);
+PASCAL_FUNCTION(cdef0);
 extern int32_t C_cdef16(int16_t var, ControlHandle ctl, int16_t mess,
                         int32_t param);
+PASCAL_FUNCTION(cdef16);
 extern int32_t C_cdef1008(int16_t var, ControlHandle ctl, int16_t mess,
                           int32_t param);
+PASCAL_FUNCTION(cdef1008);
 
 #define VAR(w) (GetCVariant((w)))
 
@@ -69,7 +74,7 @@ extern BOOLEAN ROMlib_dirtyvariant;
 
 extern void sb_ctl_init(void);
 
-typedef LONGINT (*ctlfuncp)(INTEGER var, ControlHandle ctl, INTEGER mess, LONGINT param);
+using ctlfuncp = UPP<LONGINT (INTEGER var, ControlHandle ctl, INTEGER mess, LONGINT param)>;
 
 extern LONGINT ROMlib_ctlcall(ControlHandle c, INTEGER i, LONGINT l);
 #define CTLCALL(c, i, l) ROMlib_ctlcall((c), (i), (l))
@@ -162,8 +167,11 @@ extern void image_apple_init(void);
 
 extern void C_new_draw_scroll(INTEGER depth, INTEGER flags, GDHandle target,
                               LONGINT l);
+PASCAL_FUNCTION(new_draw_scroll);
 
 extern void C_new_pos_ctl(INTEGER depth, INTEGER flags, GDHandle target,
                           LONGINT l);
+PASCAL_FUNCTION(new_pos_ctl);
+
 }
 #endif /* !_CTL_H_ */

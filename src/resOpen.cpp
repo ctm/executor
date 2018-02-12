@@ -13,9 +13,9 @@
 #include "rsys/glue.h"
 #include "rsys/mman.h"
 #include "rsys/file.h"
-#include "rsys/pstuff.h"
 #include "rsys/osevent.h"
 #include "rsys/prefs.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 
@@ -76,7 +76,7 @@ Handle Executor::ROMlib_mgetres(resmaphand map, resref *rr)
 {
     Handle retval;
 
-    if(ostraptable[0xFC] == osstuff[0xFC].orig)
+    if(!stub_ResourceStub.isPatched())
         retval = ROMlib_mgetres2(map, rr);
     else
     {
@@ -113,15 +113,7 @@ Handle Executor::ROMlib_mgetres(resmaphand map, resref *rr)
     return retval;
 }
 
-
-namespace Executor
-{
-void C_dcmp_template(Ptr, Ptr, Ptr, Size);
-}
-
-void Executor::C_dcmp_template(Ptr source, Ptr dest, Ptr working, Size len)
-{
-}
+using dcmpProcPtr = UPP<void(Ptr source, Ptr dest, Ptr working, Size len)>;
 
 /* TODO: decompress_setup also has to pass back the decompressed size
    we need to adjust down the size of "dlen" down below where we read
@@ -288,15 +280,13 @@ static Handle mgetres_helper(resmaphand map, resref *rr, int32_t dlen,
         {
             if(dcmp_handle)
             {
-                ProcPtr dcmp;
+                dcmpProcPtr dcmp;
                 SignedByte state;
 
                 state = hlock_return_orig_state(dcmp_handle);
-                dcmp = (decltype(dcmp))STARH(dcmp_handle);
+                dcmp = (dcmpProcPtr)STARH(dcmp_handle);
                 HLock(retval);
-                CToPascalCall((void *)dcmp, ctop(&C_dcmp_template),
-                              xxx,
-                              STARH(retval), dcmp_workspace, dlen);
+                dcmp(xxx, STARH(retval), dcmp_workspace, dlen);
                 HUnlock(retval);
                 SetHandleSize(retval, uncompressed_size);
                 HSetState(dcmp_handle, state);

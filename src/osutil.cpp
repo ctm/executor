@@ -21,7 +21,6 @@
 #include "rsys/mman.h"
 #include "rsys/blockinterrupts.h"
 #include "rsys/trapglue.h"
-#include "rsys/pstuff.h"
 #include "rsys/osutil.h"
 #include "rsys/host.h"
 #include "rsys/time.h"
@@ -36,7 +35,7 @@ using namespace Executor;
  *	 Hence, the handle that hp points to is not swapped.
  */
 
-OSErrRET Executor::HandToHand(Handle *hp)
+OSErr Executor::HandToHand(Handle *hp)
 {
     Handle nh;
     Size s;
@@ -66,7 +65,7 @@ OSErrRET Executor::HandToHand(Handle *hp)
  *	 h points to isn't swapped.
  */
 
-OSErrRET Executor::PtrToHand(Ptr p, Handle *h, LONGINT s)
+OSErr Executor::PtrToHand(Ptr p, Handle *h, LONGINT s)
 {
     Handle nh;
     OSErr err;
@@ -81,7 +80,7 @@ OSErrRET Executor::PtrToHand(Ptr p, Handle *h, LONGINT s)
     return (noErr);
 }
 
-OSErrRET Executor::PtrToXHand(Ptr p, Handle h, LONGINT s)
+OSErr Executor::PtrToXHand(Ptr p, Handle h, LONGINT s)
 {
     OSErr err;
 
@@ -97,7 +96,7 @@ OSErrRET Executor::PtrToXHand(Ptr p, Handle h, LONGINT s)
     return (noErr);
 }
 
-OSErrRET Executor::HandAndHand(Handle h1, Handle h2)
+OSErr Executor::HandAndHand(Handle h1, Handle h2)
 {
     Size s1 = GetHandleSize(h1), s2 = GetHandleSize(h2);
     OSErr err;
@@ -111,7 +110,7 @@ OSErrRET Executor::HandAndHand(Handle h1, Handle h2)
     return (noErr);
 }
 
-OSErrRET Executor::PtrAndHand(Ptr p, Handle h, LONGINT s1)
+OSErr Executor::PtrAndHand(Ptr p, Handle h, LONGINT s1)
 {
     Size s2 = GetHandleSize(h);
     OSErr err;
@@ -272,7 +271,7 @@ LONGINT Executor::ROMlib_RelString(unsigned char *s1, unsigned char *s2,
     return 0;
 }
 
-INTEGERRET Executor::RelString(StringPtr s1, StringPtr s2, BOOLEAN casesig,
+INTEGER Executor::RelString(StringPtr s1, StringPtr s2, BOOLEAN casesig,
                                BOOLEAN diacsig)
 {
     return ROMlib_RelString((unsigned char *)s1 + 1, (unsigned char *)s2 + 1,
@@ -280,7 +279,7 @@ INTEGERRET Executor::RelString(StringPtr s1, StringPtr s2, BOOLEAN casesig,
                             (LONGINT)(unsigned char)s1[0] << 16 | (unsigned char)s2[0]);
 }
 
-BOOLEANRET Executor::EqualString(StringPtr s1, StringPtr s2, BOOLEAN casesig,
+BOOLEAN Executor::EqualString(StringPtr s1, StringPtr s2, BOOLEAN casesig,
                                  BOOLEAN diacsig)
 {
     return RelString(s1, s2, casesig, diacsig) ? false : true;
@@ -342,13 +341,13 @@ void Executor::GetDateTime(GUEST<ULONGINT> *mactimepointer)
     }
 }
 
-OSErrRET Executor::ReadDateTime(GUEST<ULONGINT> *secs)
+OSErr Executor::ReadDateTime(GUEST<ULONGINT> *secs)
 {
     GetDateTime(secs);
     return (noErr);
 }
 
-OSErrRET Executor::SetDateTime(ULONGINT mactime)
+OSErr Executor::SetDateTime(ULONGINT mactime)
 {
 #if !defined(SYSV) && !defined(WIN32)
     struct timeval thetime;
@@ -702,7 +701,7 @@ static void deriveglobals()
     LM(DoubleTime) = CL((short)(LM(SPClikCaret) & 0xF0) / 4);
 }
 
-OSErrRET Executor::InitUtil() /* IMII-380 */
+OSErr Executor::InitUtil() /* IMII-380 */
 {
     INTEGER rn;
     SysParmType sp;
@@ -751,7 +750,7 @@ SysPPtr Executor::GetSysPPtr() /* IMII-381 */
     return (SysPPtr)&LM(SPValid);
 }
 
-OSErrRET Executor::WriteParam() /* IMII-382 */
+OSErr Executor::WriteParam() /* IMII-382 */
 {
     INTEGER rn;
     SysParmType sp;
@@ -805,7 +804,7 @@ void Executor::Enqueue(QElemPtr e, QHdrPtr h)
     restore_virtual_ints(block);
 }
 
-OSErrRET Executor::Dequeue(QElemPtr e, QHdrPtr h)
+OSErr Executor::Dequeue(QElemPtr e, QHdrPtr h)
 {
     GUEST<QElemPtr> *qpp;
     OSErr retval;
@@ -855,7 +854,7 @@ void Executor::Delay(LONGINT n, LONGINT *ftp) /* IMII-384 */
         TMTask tm;
         shouldbeawake = false;
 
-        tm.tmAddr = RM((ProcPtr)P_ROMlib_wakeup);
+        tm.tmAddr = RM((ProcPtr)&ROMlib_wakeup);
         InsTime((QElemPtr)&tm);
 
         //      fprintf (stderr, "p");
@@ -902,7 +901,7 @@ void Executor::Environs(GUEST<INTEGER> *rom, GUEST<INTEGER> *machine)
 
 INTEGER ROMlib_processor = env68040;
 
-OSErrRET Executor::SysEnvirons(INTEGER vers, SysEnvRecPtr p)
+OSErr Executor::SysEnvirons(INTEGER vers, SysEnvRecPtr p)
 {
     if(vers <= 0)
         /*-->*/ return envBadVers;

@@ -10,7 +10,6 @@
 #include "ResourceMgr.h"
 
 #include "rsys/nextprint.h"
-#include "rsys/pstuff.h"
 #include "rsys/print.h"
 
 using namespace Executor;
@@ -119,14 +118,14 @@ BOOLEAN Executor::C_PrStlDialog(THPrint hPrint)
 {
     BOOLEAN retval;
 
-    retval = C_PrDlgMain(hPrint, (ProcPtr)P_PrStlInit);
+    retval = C_PrDlgMain(hPrint, (ProcPtr)&PrStlInit);
     return retval;
 }
 
 BOOLEAN Executor::C_PrJobDialog(THPrint hPrint)
 {
     ROMlib_acknowledge_job_dialog(hPrint);
-    return C_PrDlgMain(hPrint, (ProcPtr)P_PrJobInit);
+    return C_PrDlgMain(hPrint, (ProcPtr)&PrJobInit);
 }
 
 void Executor::C_PrJobMerge(THPrint hPrintSrc, THPrint hPrintDst) /* TODO */

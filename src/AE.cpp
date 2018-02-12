@@ -18,6 +18,7 @@
 
 #include "rsys/mman.h"
 #include "rsys/flags.h"
+#include "rsys/functions.impl.h"
 
 namespace Executor
 {
@@ -555,7 +556,7 @@ OSErr Executor::C_AEDisposeToken(AEDesc *theToken)
     return noErr;
 }
 
-OSErr Executor::C_AEREesolve(AEDesc *objectSpecifier, INTEGER callbackFlags,
+OSErr Executor::C_AEResolve(AEDesc *objectSpecifier, INTEGER callbackFlags,
                              AEDesc *theToken)
 {
     warning_unimplemented(NULL_STRING);

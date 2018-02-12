@@ -5,8 +5,12 @@
  * Copyright 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+#include "ExMacTypes.h"
+
+#define MODULE_NAME rsys_osutil
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 extern long long ROMlib_long_long_secs(Executor::INTEGER year, Executor::INTEGER month,
@@ -20,6 +24,7 @@ extern void date_to_swapped_fields(long long mactime, GUEST<INTEGER> *yearp,
                                    GUEST<INTEGER> *dayofyearp, GUEST<INTEGER> *weekofyearp);
 
 extern void C_ROMlib_wakeup(void);
+PASCAL_FUNCTION(ROMlib_wakeup);
 
 #define PARAMRAMMACNAME "\010ParamRAM"
 

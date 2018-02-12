@@ -22,6 +22,7 @@
 #include "rsys/tempalloc.h"
 #include "rsys/print.h"
 #include "rsys/executor.h"
+#include <rsys/functions.impl.h>
 
 using namespace Executor;
 
@@ -38,7 +39,7 @@ using namespace Executor;
  */
 
 static unsigned char *nextbytep;
-static void (*procp)(Ptr, INTEGER);
+static getPicProc_t procp;
 
 typedef void (*pfv)();
 
@@ -485,7 +486,7 @@ makestr(StringPtr sp)
     int len;
 
     len = sp[0] + 1;
-    retval = (StringPtr)malloc(len);
+    retval = (StringPtr)NewPtr(len);
     memcpy(retval, sp, len);
     return retval;
 }
@@ -533,7 +534,7 @@ end_assoc(void)
     for(p = assoc_headp; p; p = nextp)
     {
         nextp = p->nextp;
-        free(p->str);
+        DisposPtr((Ptr)p->str);
         free(p);
     }
     assoc_headp = 0;
@@ -994,7 +995,7 @@ static Byte eatByte()
     Byte retval;
 
     if(procp)
-        CToPascalCall((void *)procp, ctop(&C_StdGetPic), &retval, sizeof(Byte));
+        procp(&retval, sizeof(Byte));
     else
         retval = *nextbytep;
     ++nextbytep;
@@ -1006,7 +1007,7 @@ static GUEST<INTEGER> eatINTEGERX()
     GUEST<INTEGER> retval;
 
     if(procp)
-        CToPascalCall((void *)procp, ctop(&C_StdGetPic), &retval, sizeof(GUEST<INTEGER>));
+        procp(&retval, sizeof(GUEST<INTEGER>));
     else
         retval = *(GUEST<INTEGER> *)nextbytep;
     nextbytep += sizeof(GUEST<INTEGER>);
@@ -1026,7 +1027,7 @@ static GUEST<LONGINT> eatLONGINTX()
     GUEST<LONGINT> retval;
 
     if(procp)
-        CToPascalCall((void *)procp, ctop(&C_StdGetPic), &retval, sizeof(GUEST<LONGINT>));
+        procp(&retval, sizeof(GUEST<LONGINT>));
     else
         retval = *(GUEST<LONGINT> *)nextbytep;
     nextbytep += sizeof(GUEST<LONGINT>);
@@ -1045,7 +1046,7 @@ static void eatString(Str255 str)
 {
     str[0] = eatByte();
     if(procp)
-        CToPascalCall((void *)procp, ctop(&C_StdGetPic), str + 1, str[0]);
+        procp(str + 1, str[0]);
     else
         BlockMoveData((Ptr)nextbytep, (Ptr)str + 1, str[0]);
     nextbytep += str[0];
@@ -1059,7 +1060,7 @@ static void eatNBytes(LONGINT n)
     {
         TEMP_ALLOC_DECL(temp_alloc_space);
         TEMP_ALLOC_ALLOCATE(bufp, temp_alloc_space, n);
-        CToPascalCall((void *)procp, ctop(&C_StdGetPic), bufp, n);
+        procp(bufp, n);
         TEMP_ALLOC_FREE(temp_alloc_space);
     }
     nextbytep += n;
@@ -1074,7 +1075,7 @@ static void eatRegion(RgnHandle rh, Size hs)
     {
         state = HGetState((Handle)rh);
         HLock((Handle)rh);
-        CToPascalCall((void *)procp, ctop(&C_StdGetPic), (Ptr)STARH(rh) + sizeof(INTEGER),
+        procp((Ptr)STARH(rh) + sizeof(INTEGER),
                       hs - sizeof(INTEGER));
         HSetState((Handle)rh, state);
     }
@@ -1174,7 +1175,7 @@ static Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
             HLock(h);
 
             if(procp)
-                CToPascalCall((void *)procp, ctop(&C_StdGetPic), STARH(h), pic_data_size);
+                procp(STARH(h), pic_data_size);
             else if(pixmap->packType == CWC(2))
                 memcpy(STARH(h), nextbytep, pic_data_size);
 
@@ -1192,7 +1193,7 @@ static Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
     }
     else
     {
-        uint8 *temp_scanline, *scanline, *ep;
+        uint8_t *temp_scanline, *scanline, *ep;
 
         h = NewHandle(final_data_size);
         if(h == NULL)
@@ -1204,8 +1205,8 @@ static Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
         HLock(h);
         pixmap->baseAddr = *h; /* can't use STARH 'cause we don't */
         /* want to byte swap the result */
-        temp_scanline = (uint8 *)alloca(rowb);
-        for(scanline = (uint8 *)BITMAP_BASEADDR(pixmap),
+        temp_scanline = (uint8_t *)alloca(rowb);
+        for(scanline = (uint8_t *)BITMAP_BASEADDR(pixmap),
         ep = scanline + final_data_size;
             scanline < ep;
             scanline += rowb)
@@ -1217,7 +1218,7 @@ static Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
             {
                 temph = NewHandle(length);
                 HLock(temph);
-                CToPascalCall((void *)procp, ctop(&C_StdGetPic), STARH(temph), length);
+                procp(STARH(temph), length);
                 inp = (Byte *)STARH(temph);
             }
             else
@@ -1268,9 +1269,9 @@ static Size eatpixdata(PixMapPtr pixmap, BOOLEAN *freep)
 
     if(pixmap->packType == CWC(2))
     {
-        uint8 *start, *src, *dst;
+        uint8_t *start, *src, *dst;
 
-        start = (uint8 *)BITMAP_BASEADDR(pixmap);
+        start = (uint8_t *)BITMAP_BASEADDR(pixmap);
 
         src = start + height * comp_bytes * 3;
         dst = start + height * rowb;
@@ -1318,7 +1319,7 @@ static void eatbitdata(BitMap *bp, BOOLEAN packed)
                 LM(TheZone) = savezone;
             }
             HLock(h);
-            CToPascalCall((void *)procp, ctop(&C_StdGetPic), STARH(h), datasize);
+            procp(STARH(h), datasize);
             bp->baseAddr = *h;
         }
         else
@@ -1346,7 +1347,7 @@ static void eatbitdata(BitMap *bp, BOOLEAN packed)
             {
                 temph = NewHandle(length);
                 HLock(temph);
-                CToPascalCall((void *)procp, ctop(&C_StdGetPic), STARH(temph), length);
+                procp(STARH(temph), length);
                 inp = (Byte *)STARH(temph);
             }
             else
@@ -1648,7 +1649,7 @@ void Executor::C_DrawPicture(PicHandle pic, Rect *destrp)
     if(grafprocp)
     {
         procp = MR(grafprocp->getPicProc);
-        if(procp == P_StdGetPic)
+        if(procp == &StdGetPic)
             procp = 0;
     }
     else
@@ -1750,8 +1751,7 @@ void Executor::C_DrawPicture(PicHandle pic, Rect *destrp)
                             {
                                 state2 = HGetState(hand);
                                 HLock(hand);
-                                CToPascalCall((void *)procp, ctop(&C_StdGetPic), STARH(hand),
-                                              hsize);
+                                procp(STARH(hand), hsize);
                                 HSetState(hand, state2);
                             }
                             else

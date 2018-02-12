@@ -8,7 +8,11 @@
 
  */
 
-#include "rsys/noreturn.h"
+#include "ExMacTypes.h"
+#include <rsys/lowglobals.h>
+
+#define MODULE_NAME SegmentLdr
+#include <rsys/api-module.h>
 
 namespace Executor
 {
@@ -50,9 +54,12 @@ const LowMemGlobal<INTEGER> CurJTOffset { 0x934 }; // SegmentLdr IMII-62 (true-b
 const LowMemGlobal<INTEGER> CurPageOption { 0x936 }; // SegmentLdr IMII-60 (true);
 const LowMemGlobal<Handle> AppParmHandle { 0xAEC }; // SegmentLdr IMII-57 (true);
 
-extern void flushcache(void);
+extern void C_FlushCodeCache(void);
+PASCAL_TRAP(FlushCodeCache, 0xA0BD);
 
 extern void HWPriv(LONGINT d0, LONGINT a0);
+REGISTER_TRAP2(HWPriv, 0xA198, void(D0,A0));
+
 extern char *ROMlib_undotdot(char *origp);
 extern void CountAppFiles(GUEST<INTEGER> *messagep,
                           GUEST<INTEGER> *countp);
@@ -69,7 +76,6 @@ extern void C_UnloadSeg(Ptr addr);
 PASCAL_TRAP(UnloadSeg, 0xA9F1);
 
 extern void C_LoadSeg(INTEGER volatile segno);
-PASCAL_FUNCTION(LoadSeg);
 
 #endif
 }

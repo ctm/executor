@@ -2,9 +2,15 @@
 #define _mixed_mode_h_
 
 #include <stdarg.h>
+#include <stdint.h>
+#include "ExMacTypes.h"
+
+#define MODULE_NAME rsys_mixed_mode
+#include <rsys/api-module.h>
+
 namespace Executor
 {
-typedef uint8 ISAType;
+typedef uint8_t ISAType;
 typedef uint16_t CallingConventionType;
 typedef uint32_t ProcInfoType;
 typedef uint16_t RegisterSelectorType;
@@ -29,13 +35,13 @@ enum
     kSpecialCase,
 };
 
-typedef uint8 RDFlagsType;
+typedef uint8_t RDFlagsType;
 
 struct RoutineRecord
 {
     GUEST_STRUCT;
     GUEST<ProcInfoType> procInfo;
-    GUEST<uint8> reserved1;
+    GUEST<uint8_t> reserved1;
     GUEST<ISAType> ISA;
     GUEST<RoutineFlagsType> routineFlags;
     GUEST<ProcPtr> procDescriptor;
@@ -47,11 +53,11 @@ struct RoutineDescriptor
 {
     GUEST_STRUCT;
     GUEST<uint16_t> goMixedModeTrap;
-    GUEST<uint8> version;
+    GUEST<uint8_t> version;
     GUEST<RDFlagsType> routineDescriptorFlags;
     GUEST<uint32_t> reserved1;
-    GUEST<uint8> reserved2;
-    GUEST<uint8> selectorInfo;
+    GUEST<uint8_t> reserved2;
+    GUEST<uint8_t> selectorInfo;
     GUEST<uint16_t> routineCount;
     GUEST<RoutineRecord[1]> routineRecords;
 };
@@ -137,17 +143,25 @@ extern long
 CallUniversalProc_from_native_common(va_list ap, where_args_t where,
                                      ProcPtr proc, ProcInfoType info);
 
+DISPATCHER_TRAP(MixedModeDispatch, 0xAA59, D0W);
+
 extern UniversalProcPtr C_NewRoutineDescriptor(ProcPtr proc,
                                                ProcInfoType info,
                                                ISAType isa);
+PASCAL_SUBTRAP(NewRoutineDescriptor, 0xAA59, 0x0000, MixedModeDispatch);
 
 extern void C_DisposeRoutineDescriptor(UniversalProcPtr ptr);
+PASCAL_SUBTRAP(DisposeRoutineDescriptor, 0xAA59, 0x0001, MixedModeDispatch);
 
 extern UniversalProcPtr C_NewFatRoutineDescriptor(ProcPtr m68k, ProcPtr ppc,
                                                   ProcInfoType info);
+PASCAL_SUBTRAP(NewFatRoutineDescriptor, 0xAA59, 0x0002, MixedModeDispatch);
 
 extern OSErr C_SaveMixedModeState(void *statep, uint32_t vers);
+PASCAL_SUBTRAP(SaveMixedModeState, 0xAA59, 0x0003, MixedModeDispatch);
 
 extern OSErr C_RestoreMixedModeState(void *statep, uint32_t vers);
+PASCAL_SUBTRAP(RestoreMixedModeState, 0xAA59, 0x0004, MixedModeDispatch);
+
 }
 #endif

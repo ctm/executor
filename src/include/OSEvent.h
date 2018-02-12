@@ -6,6 +6,9 @@
 
 #include "rsys/commonevt.h"
 
+#define MODULE_NAME OSEvent
+#include <rsys/api-module.h>
+
 /*
  * Copyright 1986, 1989, 1990, 1996 by Abacus Research and Development, Inc.
  * All rights reserved.
@@ -76,9 +79,8 @@ struct SIZEResource
     GUEST<int32_t> minimum_size;
 };
 
-typedef struct size_info
+typedef struct size_info    /* executor-only struct */
 {
-    GUEST_STRUCT;
     int16_t size_flags;
     int32_t preferred_size;
     int32_t minimum_size;
@@ -97,19 +99,39 @@ const LowMemGlobal<Point> MTemp { 0x828 }; // QuickDraw PegLeg (True-b);
 const LowMemGlobal<Point> MouseLocation { 0x82C }; // QuickDraw Vamp (true);
 const LowMemGlobal<Point> MouseLocation2 { 0x830 }; // QuickDraw MacAttack (true);
 
+namespace callconv
+{
+struct D0Minus1Boolean
+{
+    operator bool() { return EM_D0 != 0; }
+
+    static void set(bool b)
+    {
+        EM_D0 = b ? 0 : -1;
+    }
+
+    template<class T>
+    static void afterCall(T) {}
+
+};
+}
+
 extern void ROMlib_eventdep(void);
 extern void insertcommonevent(char *xeventp, commonevent *comevtp);
 extern void ROMlib_zapmap(LONGINT loc, LONGINT val);
-extern OSErrRET PPostEvent(INTEGER evcode,
+extern OSErr PPostEvent(INTEGER evcode,
                                 LONGINT evmsg, GUEST<EvQElPtr> *qelp);
-extern OSErrRET ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg,
+extern OSErr ROMlib_PPostEvent(INTEGER evcode, LONGINT evmsg,
                                   GUEST<EvQElPtr> *qelp, LONGINT when, Point where, INTEGER butmods);
-extern OSErrRET PostEvent(INTEGER evcode, LONGINT evmsg);
+extern OSErr PostEvent(INTEGER evcode, LONGINT evmsg);
 extern void FlushEvents(INTEGER evmask,
                              INTEGER stopmask);
-extern BOOLEANRET GetOSEvent(INTEGER evmask, EventRecord *eventp);
-extern BOOLEANRET OSEventAvail(INTEGER evmask,
+REGISTER_TRAP2(FlushEvents, 0xA032, void(D0LowWord,D0HighWord), ClearD0);
+extern BOOLEAN GetOSEvent(INTEGER evmask, EventRecord *eventp);
+REGISTER_TRAP2(GetOSEvent, 0xA031, D0Minus1Boolean (D0,A0));
+extern BOOLEAN OSEventAvail(INTEGER evmask,
                                     EventRecord *eventp);
+REGISTER_TRAP2(OSEventAvail, 0xA030, D0Minus1Boolean (D0,A0));
 extern void SetEventMask(INTEGER evmask);
 extern QHdrPtr GetEvQHdr(void);
 
@@ -144,12 +166,14 @@ enum
     bufferIsSmall = (-608),
 };
 
+EXTERN_DISPATCHER_TRAP(OSDispatch, 0xA88F, StackW);
+
 extern OSErr C_AcceptHighLevelEvent(TargetID *sender_id_return, GUEST<int32_t> *refcon_return, Ptr msg_buf, GUEST<int32_t> *msg_length_return);
-PASCAL_FUNCTION(AcceptHighLevelEvent);
+PASCAL_SUBTRAP(AcceptHighLevelEvent, 0xA88F, 0x0033, OSDispatch);
 extern Boolean C_GetSpecificHighLevelEvent(GetSpecificFilterProcPtr fn, Ptr data, OSErr *err_return);
-PASCAL_FUNCTION(GetSpecificHighLevelEvent);
+PASCAL_SUBTRAP(GetSpecificHighLevelEvent, 0xA88F, 0x0045, OSDispatch);
 extern OSErr C_PostHighLevelEvent(EventRecord *evt, Ptr receiver_id, int32_t refcon, Ptr msg_buf, int32_t msg_length, int32_t post_options);
-PASCAL_FUNCTION(PostHighLevelEvent);
+PASCAL_SUBTRAP(PostHighLevelEvent, 0xA88F, 0x0034, OSDispatch);
 
 /* #### move to rsys/foo.h */
 extern bool hle_get_event(EventRecord *evt, bool remflag);

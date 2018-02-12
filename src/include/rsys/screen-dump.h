@@ -10,7 +10,7 @@ struct header
     int32_t ifd_offset;
 };
 
-struct directory_entry
+struct __attribute__((packed)) directory_entry
 {
     int16_t tag;
     int16_t type;
@@ -18,7 +18,7 @@ struct directory_entry
     int32_t value_offset;
 };
 
-struct ifd
+struct __attribute__((packed)) ifd 
 {
     int16_t count;
     struct directory_entry entries[1];

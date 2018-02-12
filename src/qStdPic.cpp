@@ -54,12 +54,12 @@ void Executor::C_StdComment(INTEGER kind, INTEGER size, Handle hand)
     }
 }
 
-void Executor::C_StdGetPic(Ptr dp, INTEGER bc) /* TODO */
+void Executor::C_StdGetPic(void *dp, INTEGER bc) /* TODO */
 {
     warning_unimplemented(NULL_STRING);
 }
 
-void Executor::C_StdPutPic(Ptr sp, INTEGER bc)
+void Executor::C_StdPutPic(const void  *sp, INTEGER bc)
 {
     piccachehand pch;
     PicHandle ph;

@@ -44,7 +44,6 @@
 #include "rsys/arrowkeys.h"
 #include "rsys/glue.h"
 #include "rsys/resource.h"
-#include "rsys/pstuff.h"
 #include "rsys/hfs.h"
 #include "rsys/time.h"
 #include "rsys/flags.h"
@@ -70,6 +69,8 @@ int Executor::nodrivesearch_p = false;
 
 #include "rsys/print.h"
 #include "rsys/system_error.h"
+
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 
@@ -170,7 +171,7 @@ static INTEGER movealert(INTEGER id)
     rp->top = CWC(30);
     rp->right = CW(150 + dh);
     rp->bottom = CW(30 + dv);
-    return (Alert(id, (ProcPtr)0));
+    return (Alert(id, nullptr));
 }
 
 #define SICONS -15744
@@ -1070,9 +1071,10 @@ call_magicfp(fltype *fl, DialogPtr dp, EventRecord *evt, GUEST<INTEGER> *ith)
 
 #define keydownbit 0x1000
 
-INTEGER Executor::C_ROMlib_stdffilt(DialogPeek dp, EventRecord *evt,
+Boolean Executor::C_ROMlib_stdffilt(DialogPtr dlg, EventRecord *evt,
                                     GUEST<INTEGER> *ith) /* handle disk insert */
 {
+    DialogPeek dp = (DialogPeek)dlg;
     LONGINT ticks;
     GUEST<INTEGER> i;
     INTEGER from;
@@ -1210,11 +1212,11 @@ INTEGER Executor::C_ROMlib_stdffilt(DialogPeek dp, EventRecord *evt,
                 if(t == inThumb)
                 {
                     from = GetCtlValue(fl->flsh);
-                    TrackControl(fl->flsh, p, (ProcPtr)0);
+                    TrackControl(fl->flsh, p, nullptr);
                     flscroll(fl, from, GetCtlValue(fl->flsh));
                 }
                 else
-                    TrackControl(fl->flsh, p, (ProcPtr)P_ROMlib_stdftrack);
+                    TrackControl(fl->flsh, p, &ROMlib_stdftrack);
             }
             else if(PtInRect(p, &fl->flcurdirrect))
             {
@@ -1226,7 +1228,7 @@ INTEGER Executor::C_ROMlib_stdffilt(DialogPeek dp, EventRecord *evt,
                 GUEST<Handle> h_s;
                 GetDItem((DialogPtr)dp, getOpen, &i, &h_s, &r);
                 h = (ControlHandle)MR(h_s);
-                if((part = TestControl(h, p)) && TrackControl(h, p, (ProcPtr)0))
+                if((part = TestControl(h, p)) && TrackControl(h, p, nullptr))
                 {
                     prefix[0] = 0;
                     oldticks = -1000;
@@ -2191,7 +2193,7 @@ report_new_folder_failure(OSErr err)
     }
     str255_from_c_string(str, message);
     ParamText(str, 0, 0, 0);
-    NoteAlert(GENERIC_COMPLAINT_ID, (ProcPtr)0);
+    NoteAlert(GENERIC_COMPLAINT_ID, nullptr);
 }
 
 static bool
@@ -2461,7 +2463,7 @@ void spfcommon(Point p, StringPtr prompt, StringPtr name, dialog_hook_u dh,
                 transform = CW(r.right) - CW(r.left) == 16;
                 GetDItem(dp, getDotted, &i, &tmpH, &r);
                 h = MR(tmpH);
-                SetDItem(dp, getDotted, userItem, (Handle)P_ROMlib_filebox, &r);
+                SetDItem(dp, getDotted, userItem, (Handle)(void*)&ROMlib_filebox, &r);
             }
             else
                 transform = false;
@@ -2470,11 +2472,11 @@ void spfcommon(Point p, StringPtr prompt, StringPtr name, dialog_hook_u dh,
         if(transform)
             transformsfpdialog(dp, &p, &scrollrect, getorput == get);
 
-        SetDItem(dp, nmlistitem, userItem, (Handle)P_ROMlib_filebox, &scrollrect);
+        SetDItem(dp, nmlistitem, userItem, (Handle)(void*)&ROMlib_filebox, &scrollrect);
 
         GetDItem(dp, diskname, &i, &tmpH, &r);
         h = MR(tmpH);
-        SetDItem(dp, diskname, userItem, (Handle)P_ROMlib_filebox, &r);
+        SetDItem(dp, diskname, userItem, (Handle)(void*)&ROMlib_filebox, &r);
 
         r.left = CW(CW(scrollrect.left) + 1);
         r.right = CW(CW(scrollrect.right) - 16);
@@ -2521,7 +2523,7 @@ void spfcommon(Point p, StringPtr prompt, StringPtr name, dialog_hook_u dh,
         SelectWindow((WindowPtr)dp);
         while(!done)
         {
-            ModalDialog((ProcPtr)P_ROMlib_stdffilt, &ihit_s);
+            ModalDialog(&ROMlib_stdffilt, &ihit_s);
             ihit = CW(ihit_s);
             if(getorput == put)
                 GetIText(pnhand, SF_NAME(&f));

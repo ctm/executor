@@ -6,8 +6,13 @@
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include "ExMacTypes.h"
+#include <rsys/lowglobals.h>
+
+#define MODULE_NAME ResourceMgr
+#include <rsys/api-module.h>
 
 namespace Executor
 {
@@ -76,8 +81,10 @@ const LowMemGlobal<Byte[20]> SysResName { 0xAD8 }; // ResourceMgr IMI-114 (true)
 const LowMemGlobal<Byte> RomMapInsert { 0xB9E }; // ResourceMgr IMIV-19 (false);
 const LowMemGlobal<Byte> TmpResLoad { 0xB9F }; // ResourceMgr IMIV-19 (false);
 
-extern BOOLEAN ROMlib_InstallxDEF(ProcPtr thedef, ResType typ,
-                                  INTEGER id);
+DISPATCHER_TRAP(ResourceDispatch, 0xA822, D0<0xF>);
+
+RAW_68K_TRAP(ResourceStub, 0xA0FC); // defined in emustubs.cpp
+
 extern void C_SetResLoad(BOOLEAN load);
 PASCAL_TRAP(SetResLoad, 0xA99B);
 
@@ -94,7 +101,7 @@ extern Handle C_Get1IndResource(ResType typ,
                                             INTEGER i);
 PASCAL_TRAP(Get1IndResource, 0xA80E);
 extern Handle C_GetResource(ResType typ, INTEGER id);
-PASCAL_FUNCTION(GetResource);
+PASCAL_TRAP(GetResource, 0xA9A0);
 
 extern Handle C_Get1Resource(ResType typ,
                                          INTEGER id);
@@ -214,15 +221,16 @@ PASCAL_TRAP(UseResFile, 0xA998);
 extern void C_ReadPartialResource(Handle resource,
                                               int32_t offset,
                                               Ptr buffer, int32_t count);
-PASCAL_FUNCTION(ReadPartialResource);
+PASCAL_SUBTRAP(ReadPartialResource, 0xA822, 0x0001, ResourceDispatch);
 extern void C_WritePartialResource(Handle resource,
                                                int32_t offset,
                                                Ptr buffer, int32_t count);
-PASCAL_FUNCTION(WritePartialResource);
+PASCAL_SUBTRAP(WritePartialResource, 0xA822, 0x0002, ResourceDispatch);
 extern void C_SetResourceSize(Handle resource, int32_t size);
-PASCAL_FUNCTION(SetResourceSize);
+PASCAL_SUBTRAP(SetResourceSize, 0xA822, 0x0003, ResourceDispatch);
 
 extern Handle C_GetNextFOND(Handle fondHandle);
+PASCAL_SUBTRAP(GetNextFOND, 0xA822, 0x000A, ResourceDispatch);
 }
 
 #endif /* _RESOURCE_H_ */

@@ -15,6 +15,7 @@
 #include "rsys/hook.h"
 #include "rsys/system_error.h"
 #include "rsys/vdriver.h"
+#include "rsys/functions.impl.h"
 
 #include <stdarg.h>
 
@@ -970,9 +971,7 @@ retry:
 
         ZONE_ALLOC_PTR_X(current_zone) = CLC_NULL;
         ROMlib_hook(memory_gznumber);
-        HOOKSAVEREGS();
         retval = current_zone->gzProc(size);
-        HOOKRESTOREREGS();
 
         if(retval)
             ZONE_ALLOC_PTR_X(current_zone) = CLC_NULL;

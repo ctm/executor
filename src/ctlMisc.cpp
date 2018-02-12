@@ -14,6 +14,7 @@
 #include "rsys/ctl.h"
 #include "rsys/resource.h"
 #include "rsys/hook.h"
+#include "rsys/functions.impl.h"
 
 /* cheat, and make this a plain ctab, so we can use our old accessor
    macros */
@@ -125,15 +126,15 @@ LONGINT Executor::C_GetCRefCon(ControlHandle c) /* IMI-327 */
     return Hx(c, contrlRfCon);
 }
 
-void Executor::C_SetCtlAction(ControlHandle c, ProcPtr a) /* IMI-328 */
+void Executor::C_SetCtlAction(ControlHandle c, ControlActionUPP a) /* IMI-328 */
 {
-    if(a != (ProcPtr)-1)
+    if(a != (ControlActionUPP)-1)
         HxX(c, contrlAction) = RM(a);
     else
-        HxX(c, contrlAction) = guest_cast<ProcPtr>(CLC(-1));
+        HxX(c, contrlAction) = guest_cast<ControlActionUPP>(CLC(-1));
 }
 
-ProcPtr Executor::C_GetCtlAction(ControlHandle c) /* IMI-328 */
+ControlActionUPP Executor::C_GetCtlAction(ControlHandle c) /* IMI-328 */
 {
     return HxP(c, contrlAction);
 }
@@ -194,18 +195,17 @@ int32_t Executor::ROMlib_ctlcall(ControlHandle c, int16_t i, int32_t l)
 
     cp = (ctlfuncp)STARH(defproc);
 
-    if(cp == P_cdef0)
-        retval = C_cdef0(VAR(c), c, i, l);
-    else if(cp == P_cdef16)
-        retval = C_cdef16(VAR(c), c, i, l);
-    else if(cp == P_cdef1008)
-        retval = C_cdef1008(VAR(c), c, i, l);
+    if(cp == &cdef0)
+        retval = cdef0(VAR(c), c, i, l);
+    else if(cp == &cdef16)
+        retval = cdef16(VAR(c), c, i, l);
+    else if(cp == &cdef1008)
+        retval = cdef1008(VAR(c), c, i, l);
     else
     {
         ROMlib_hook(ctl_cdefnumber);
         HLockGuard guard(defproc);
-        retval = CToPascalCall((void *)(ctlfuncp)STARH(defproc),
-                               ctop(&C_cdef0), VAR(c), c, i, l);
+        retval = cp(VAR(c), c, i, l);
     }
 
     return retval;

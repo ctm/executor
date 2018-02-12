@@ -13,19 +13,12 @@
 
 using namespace Executor;
 
-#define hdlr_table(system_p, class)                       \
-    ({                                                    \
-        AE_info_t *info;                                  \
-        AE_zone_tables_h zone_tables;                     \
-                                                          \
-        info = MR(LM(AE_info));                           \
-                                                          \
-        zone_tables = ((system_p)                         \
-                           ? MR(info->system_zone_tables) \
-                           : MR(info->appl_zone_tables)); \
-                                                          \
-        HxP(zone_tables, class##_hdlr_table);             \
-    })
+inline AE_zone_tables_h get_zone_tables(bool system_p)
+{
+    auto info = MR(LM(AE_info));
+    return system_p ? MR(info->system_zone_tables) : MR(info->appl_zone_tables);
+}
+#define hdlr_table(system_p, class) HxP(get_zone_tables(system_p), class##_hdlr_table)
 
 void Executor::AE_init(void)
 {
@@ -141,7 +134,7 @@ hdlr_table_elt(AE_hdlr_table_h table,
 }
 
 OSErr Executor::C__AE_hdlr_table_alloc(int32_t unknown_1, int32_t unknown_2,
-                                       int32_t unknown_3, int8 unknown_p,
+                                       int32_t unknown_3, int8_t unknown_p,
                                        GUEST<AE_hdlr_table_h> *table_return)
 {
     AE_hdlr_table_h table;
@@ -431,6 +424,7 @@ OSErr Executor::C_AEInstallSpecialHandler(
     if(function_class == keySelectProc)
     {
         AE_OSL_select_fn = US_TO_SYN68K((void *)hdlr_fn);
+        warning_unimplemented("AEInstallSpecialHandler: keySelectProc set");
         AE_RETURN_ERROR(noErr);
     }
 

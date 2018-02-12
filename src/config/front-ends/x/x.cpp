@@ -73,7 +73,7 @@ ROMlib_set_use_scancodes(bool val)
 
 namespace Executor
 {
-uint8 *vdriver_fbuf;
+uint8_t *vdriver_fbuf;
 
 int vdriver_row_bytes;
 
@@ -405,7 +405,7 @@ void alloc_x_image(int bpp, int width, int height,
 #define R9 0x88
 #define NOTKEY 0x89
 
-static uint8 latin_one_table_data[] = {
+static uint8_t latin_one_table_data[] = {
     MKV_PRINT_SCREEN,
     NOTKEY, /* 1 */
     NOTKEY, /* 2 */
@@ -531,7 +531,7 @@ static uint8 latin_one_table_data[] = {
     MKV_z, /* z */
 };
 
-static uint8 misc_table_data[] = {
+static uint8_t misc_table_data[] = {
     MKV_BACKSPACE, /* 8 back space */
     MKV_TAB, /* 9 tab */
     LINEFD, /* 10 line feed */
@@ -791,10 +791,10 @@ static uint8 misc_table_data[] = {
 
 typedef struct key_table_data
 {
-    uint8 high_byte;
+    uint8_t high_byte;
     int min;
     int size;
-    uint8 *data;
+    uint8_t *data;
 } key_table_t;
 
 key_table_t key_tables[] = {
@@ -814,7 +814,7 @@ x_keysym_to_mac_keywhat(unsigned int keysym, int16_t button_state,
                         unsigned char *virt_out)
 {
     key_table_t *table;
-    uint8 keysym_high_byte, keysym_low_byte;
+    uint8_t keysym_high_byte, keysym_low_byte;
     int16_t keywhat;
     int i;
 
@@ -859,11 +859,11 @@ x_keysym_to_mac_keywhat(unsigned int keysym, int16_t button_state,
 }
 
 static bool
-keydown(uint8 key)
+keydown(uint8_t key)
 {
     bool retval;
     int i;
-    uint8 bit;
+    uint8_t bit;
 
     retval = false;
 
@@ -1052,7 +1052,7 @@ post_pending_x_events(syn68k_addr_t interrupt_addr, void *unused)
                 modifier = 0;
                 if(use_scan_codes)
                 {
-                    uint8 keycode;
+                    uint8_t keycode;
 
                     keycode = evt.xkey.keycode;
                     if(keycode < NELEM(x_keycode_to_mac_virt))
@@ -1992,7 +1992,7 @@ void init_x_cmap(void)
 }
 
 static ColorSpec cmap[256];
-static uint8 depth_table_space[DEPTHCONV_MAX_TABLE_SIZE];
+static uint8_t depth_table_space[DEPTHCONV_MAX_TABLE_SIZE];
 
 void Executor::vdriver_get_colors(int first_color, int num_colors,
                                   ColorSpec *colors)

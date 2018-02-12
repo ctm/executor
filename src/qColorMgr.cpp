@@ -162,12 +162,12 @@ ROMlib_search_proc(RGBColor *rgb)
             if(memcmp(rgb, &cspecp[retval].rgb, sizeof *rgb) != 0)
             {
                 int i;
-                uint8 *hash_table;
+                uint8_t *hash_table;
                 uint32_t candidate;
                 uint32_t cur_diff, new_diff;
                 bool done_zero;
 
-                hash_table = ((uint8 *)STARH(inverse_table)
+                hash_table = ((uint8_t *)STARH(inverse_table)
                               + itab_base_size(resolution));
                 i = itable_hash(rgb, resolution);
 
@@ -569,10 +569,10 @@ add_hash_table(CTabHandle color_table, ITabHandle inverse_table,
                int resolution)
 {
     int ctab_size;
-    uint8 *hash_tablep;
+    uint8_t *hash_tablep;
     int i;
 
-    hash_tablep = ((uint8 *)STARH(inverse_table)
+    hash_tablep = ((uint8_t *)STARH(inverse_table)
                    + itab_base_size(resolution));
     memset(hash_tablep, 0, ITABLE_HASH_SIZE);
     ctab_size = CTAB_SIZE(color_table);

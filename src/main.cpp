@@ -37,7 +37,6 @@
 #include "rsys/tesave.h"
 #include "rsys/mman.h"
 #include "rsys/menu.h"
-#include "rsys/pstuff.h"
 #include "rsys/prefs.h"
 #include "rsys/flags.h"
 #include "rsys/option.h"
@@ -65,7 +64,6 @@
 #include "rsys/stdfile.h"
 #include "rsys/autorefresh.h"
 #include "rsys/sounddriver.h"
-#include "rsys/desperate.h"
 #include "rsys/dcache.h"
 #include "rsys/system_error.h"
 #include "rsys/filedouble.h"
@@ -113,10 +111,6 @@ using namespace std;
 
 int Executor::ROMlib_noclock = 0;
 
-#if defined(NOMOUSE_COMMAND_LINE_OPTION)
-int ROMlib_no_mouse = 1;
-#endif
-
 /* optional resolution other than 72dpix72dpi for printing */
 INTEGER Executor::ROMlib_optional_res_x, Executor::ROMlib_optional_res_y;
 
@@ -140,8 +134,6 @@ INTEGER Executor::flag_width = 0, Executor::flag_height = 0; /* 0 means "use def
 int Executor::flag_bpp = 0; /* 0 means "use default". */
 
 INTEGER Executor::ROMlib_shadow_screen_p = true;
-
-INTEGER Executor::ROMlib_no_windows;
 
 #if defined(MSDOS) || defined(CYGWIN32)
 int ROMlib_drive_check = 0;
@@ -355,13 +347,6 @@ capable of color.",
       opt_no_arg, "" },
 #endif
 
-    { "desperate", /* Handled specially; here for documentation purposes only. */
-      "run in \"desperation mode\".  This will cause Executor "
-      "to use as few system features as possible, which is handy for "
-      "troubleshooting if Executor is having serious problems with "
-      "your system.",
-      opt_no_arg, "" },
-
 #if defined(powerpc) || defined(__ppc__)
     { "ppc", "try to execute the PPC native code if possible (UNSUPPORTED)", opt_no_arg, "" },
 #endif
@@ -376,6 +361,8 @@ capable of color.",
       opt_sep, "" },
 
     { "hfsplusro", "unsupported -- do not use", opt_no_arg, "" },
+
+    { "logtraps", "print every operating system and toolbox calls and their arguments", opt_no_arg, "" }
 };
 
 opt_database_t Executor::common_db;
@@ -555,8 +542,6 @@ static void setstartdir(char *argv0)
     ROMlib_startdirlen = strlen(ROMlib_startdir);
 #endif /* defined(MSDOS) */
 }
-
-BOOLEAN Executor::ROMlib_startupscreen = true;
 
 char *Executor::program_name;
 
@@ -959,8 +944,7 @@ win_drive_to_bit(const char *drive_namep)
 }
 #endif
 
-#if defined(LINUX)
-#define PERSONALITY_HACK
+#if defined(LINUX) && defined(PERSONALITY_HACK)
 #include <sys/personality.h>
 #define READ_IMPLIES_EXEC 0x0400000
 #endif
@@ -989,9 +973,12 @@ int main(int argc, char **argv)
     };
     string arg;
 
-#if defined(PERSONALITY_HACK)
+#if defined(LINUX) && defined(PERSONALITY_HACK)
     int pers;
 
+    // TODO: figure out how much of this is still necessary.
+    // MMAP_PAGE_ZERO should be unnecessary now,
+    // but the 32-bit optimized assembly stuff might need READ_IMPLIES_EXEC.
     pers = personality(0xffffffff);
     if((pers & MMAP_PAGE_ZERO) == 0)
     {
@@ -1041,12 +1028,6 @@ int main(int argc, char **argv)
     read_args_from_file(CHECKPOINT_FILE, &argc, &argv);
     checkpointp = checkpoint_init();
 #endif
-
-    /* Replace "-desperate" switch with what it implies.  We must do
-   * this before normal command line processing.
-   */
-    if(!handle_desperate_switch(&argc, &argv))
-        exit(-1);
 
     opt_init();
     common_db = opt_alloc_db();
@@ -1355,10 +1336,6 @@ int main(int argc, char **argv)
     opt_int_val(common_db, "nodotfiles", &ROMlib_no_dot_files, &bad_arg_p);
 #endif
 
-#if defined(NOMOUSE_COMMAND_LINE_OPTION)
-    opt_int_val(common_db, "nomouse", &ROMlib_no_mouse, &bad_arg_p);
-#endif
-
 #if 0
   opt_int_val (common_db, "noclock",     &ROMlib_noclock,   &bad_arg_p);
 #endif
@@ -1429,7 +1406,10 @@ int main(int argc, char **argv)
         }
     }
 
-    filltables();
+    if(opt_val(common_db, "logtraps", NULL))
+        Executor::traps::init(true);
+    else
+        Executor::traps::init(false);
 
     l = ostraptable[0x0FC];
     ((unsigned char *)jmpl_to_ResourceStub)[2] = l >> 24;
@@ -1437,7 +1417,7 @@ int main(int argc, char **argv)
     ((unsigned char *)jmpl_to_ResourceStub)[4] = l >> 8;
     ((unsigned char *)jmpl_to_ResourceStub)[5] = l;
     ostraptable[0xFC] = US_TO_SYN68K(jmpl_to_ResourceStub);
-    osstuff[0xFC].orig = US_TO_SYN68K(jmpl_to_ResourceStub);
+    //osstuff[0xFC].orig = US_TO_SYN68K(jmpl_to_ResourceStub);
 
     saveSysZone = LM(SysZone);
     saveApplZone = LM(ApplZone);
@@ -1638,7 +1618,7 @@ int main(int argc, char **argv)
         ROMlib_Fsetenv(&env, 0);
     }
 
-    LM(TEDoText) = RM((ProcPtr)P_ROMlib_dotext); /* where should this go ? */
+    LM(TEDoText) = RM((ProcPtr)&ROMlib_dotext); /* where should this go ? */
 
     {
         LONGINT save58;
@@ -1673,16 +1653,9 @@ int main(int argc, char **argv)
     complain_if_no_ghostscript();
 #endif
 
-#ifdef MACOSX_
-    NeXTMain();
-#endif
-
     executor_main();
 
-    if(!ROMlib_no_windows)
-        ExitToShell();
-    else
-        exit(0);
+    ExitToShell();
     /* NOT REACHED */
     return 0;
 }

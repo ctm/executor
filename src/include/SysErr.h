@@ -5,8 +5,13 @@
  * Copyright 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include <rsys/lowglobals.h>
+#include <rsys/traps.h>
+
+#define MODULE_NAME SysErr
+#include <rsys/api-module.h>
 
 namespace Executor
 {
@@ -21,6 +26,7 @@ const LowMemGlobal<Byte> QDExist { 0x8F3 }; // SysError SysEqu.a (true);
 extern char syserr_msg[];
 
 extern void C_SysError(short errorcode);
+PASCAL_TRAP(SysError, 0xA9C9);
 }
 
 #endif /* !_SYSERR_H_ */

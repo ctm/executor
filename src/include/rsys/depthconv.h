@@ -8,8 +8,8 @@ namespace Executor
 {
 /* Public API */
 typedef void (*depthconv_func_t)(const void *table,
-                                 const uint8 *src_base, int src_row_bytes,
-                                 uint8 *dst_base, int dst_row_bytes,
+                                 const uint8_t *src_base, int src_row_bytes,
+                                 uint8_t *dst_base, int dst_row_bytes,
                                  int top, int left, int bottom, int right);
 
 /* Each of these functions fills in TABLE_SPACE with some private tables,
@@ -59,10 +59,10 @@ depthconv_make_rgb_to_rgb_table(void *table_space, uint32_t *table_size,
 /* Private data, shared between dcmaketables.c and dcconvert.c. */
 
 /* These are INTERNAL types used to store lookup tables used for conversion. */
-typedef uint8 depthconv_8_1_data_t[8][256];
-typedef uint8 depthconv_4_1_data_t[4][256];
-typedef uint8 depthconv_2_1_data_t[2][256];
-typedef uint8 depthconv_1_1_data_t[256];
+typedef uint8_t depthconv_8_1_data_t[8][256];
+typedef uint8_t depthconv_4_1_data_t[4][256];
+typedef uint8_t depthconv_2_1_data_t[2][256];
+typedef uint8_t depthconv_1_1_data_t[256];
 typedef uint16_t depthconv_1_2_data_t[256][4];
 typedef uint32_t depthconv_1_4_data_t[256];
 typedef uint32_t depthconv_1_8_data_t[256][2];
@@ -95,8 +95,8 @@ extern const int depthconv_ind_src_table_alignment[];
 
 #define DEPTHCONV_DECL(func_name)                                   \
     extern void func_name(const void *raw_table,                    \
-                          const uint8 *src_base, int src_row_bytes, \
-                          uint8 *dst_base, int dst_row_bytes,       \
+                          const uint8_t *src_base, int src_row_bytes, \
+                          uint8_t *dst_base, int dst_row_bytes,       \
                           int top, int left, int bottom, int right)
 
 DEPTHCONV_DECL(depthconv_copy);

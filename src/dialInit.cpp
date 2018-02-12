@@ -22,7 +22,7 @@ void Executor::C_ROMlib_mysound(INTEGER i)
         SysBeep(5);
 }
 
-void Executor::C_ErrorSound(ProcPtr sp) /* IMI-411 */
+void Executor::C_ErrorSound(SoundProcPtr sp) /* IMI-411 */
 {
     LM(DABeeper) = RM(sp);
 }
@@ -35,7 +35,7 @@ void Executor::C_InitDialogs(ProcPtr rp) /* IMI-411 */
 
     LM(DlgFont) = CWC(systemFont);
     LM(ResumeProc) = RM(rp);
-    ErrorSound((ProcPtr)P_ROMlib_mysound);
+    ErrorSound(&ROMlib_mysound);
     Handle tmp;
     PtrToHand(nothing, &tmp, (LONGINT)1);
     LM(DAStrings)[0] = RM(tmp);

@@ -11,15 +11,15 @@ using namespace Executor;
 
 /* Subtracts one from the given multi-byte big endian unsigned number. */
 static void
-mp_decrement_big_endian(uint8 *bytes, int num_bytes)
+mp_decrement_big_endian(uint8_t *bytes, int num_bytes)
 {
     bool borrow_p;
-    uint8 *b;
+    uint8_t *b;
 
     borrow_p = true;
     for(b = bytes + num_bytes; borrow_p && b > bytes;)
     {
-        const uint8 v = *--b;
+        const uint8_t v = *--b;
         borrow_p = (v == 0);
         *b = v - 1;
     }
@@ -27,16 +27,16 @@ mp_decrement_big_endian(uint8 *bytes, int num_bytes)
 
 /* Adds one to the given multi-byte big endian unsigned number. */
 static void
-mp_increment_big_endian(uint8 *bytes, int num_bytes)
+mp_increment_big_endian(uint8_t *bytes, int num_bytes)
 {
     bool carry_p;
-    uint8 *b;
+    uint8_t *b;
 
     carry_p = true;
     for(b = bytes + num_bytes; carry_p && b > bytes;)
     {
         /* Equivalent to "carry_p = !++*--b;"  Heh. */
-        const uint8 v = *--b + 1;
+        const uint8_t v = *--b + 1;
         carry_p = (v == 0);
         *b = v;
     }
@@ -51,7 +51,7 @@ mp_increment_big_endian(uint8 *bytes, int num_bytes)
  * Note that most SANE traps replace the dst operand with the
  * result.  This one replaces the src operand (really!)
  */
-void Executor::C_ROMlib_FnextX(uint8 *x, uint8 *y, unsigned short sel)
+void Executor::C_ROMlib_FnextX(uint8_t *x, uint8_t *y, unsigned short sel)
 {
     CCRElement saved_ccc, saved_ccn, saved_ccv, saved_ccnz, saved_ccx;
     INTEGER x_class, y_class, x_class_swapped, y_class_swapped;

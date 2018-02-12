@@ -14,17 +14,15 @@
 
 #include "rsys/cquick.h"
 #include "rsys/list.h"
-#include "rsys/pstuff.h"
 #include "rsys/hook.h"
+#include <rsys/functions.impl.h>
 
 using namespace Executor;
 
-typedef BOOLEAN (*clickproc)(void);
 
 static void findcell(GUEST<Cell> *, ListHandle);
 static void setselectnilflag(BOOLEAN setit, Cell cell, ListHandle list,
                              BOOLEAN hiliteempty);
-static inline BOOLEAN ROMlib_CALLCLICK(clickproc);
 static void scrollbyvalues(ListHandle);
 static void rect2value(Rect *in, Rect *butnotin, INTEGER value,
                        ListHandle list, BOOLEAN hiliteempty);
@@ -176,16 +174,12 @@ void Executor::C_ROMlib_mytrack(ControlHandle ch, INTEGER part)
     scrollbyvalues(MR(guest_cast<ListHandle>(HxX(ch, contrlRfCon))));
 }
 
-#define CALLCLICK(f) ROMlib_CALLCLICK((clickproc)(f))
-
-static inline BOOLEAN ROMlib_CALLCLICK(clickproc fp)
+static inline BOOLEAN CALLCLICK(ListClickLoopUPP fp)
 {
     BOOLEAN retval;
 
     ROMlib_hook(list_clicknumber);
-    HOOKSAVEREGS();
-    retval = CToPascalCall((void *)fp, ctop(&C_Button));
-    HOOKRESTOREREGS();
+    retval = fp();
     return retval;
 }
 
@@ -449,11 +443,11 @@ BOOLEAN Executor::C_LClick(Point pt, INTEGER mods,
     {
         if(TestControl(ch, pt) == inThumb)
         {
-            TrackControl(ch, pt, (ProcPtr)0);
+            TrackControl(ch, pt, nullptr);
             scrollbyvalues(list);
         }
         else
-            TrackControl(ch, pt, (ProcPtr)P_ROMlib_mytrack);
+            TrackControl(ch, pt, &ROMlib_mytrack);
     }
     return doubleclick;
     return 0;

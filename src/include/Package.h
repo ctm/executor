@@ -5,8 +5,12 @@
  * Copyright 1986, 1989, 1990, 1996 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include <rsys/lowglobals.h>
+
+#define MODULE_NAME Package
+#include <rsys/api-module.h>
 
 namespace Executor
 {

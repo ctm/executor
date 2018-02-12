@@ -11,6 +11,9 @@
 #include "QuickDraw.h"
 #include "WindowMgr.h"
 
+#define MODULE_NAME ControlMgr
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 enum
@@ -104,6 +107,8 @@ enum
 
 namespace Executor
 {
+using ControlActionUPP = UPP<void(ControlHandle, int16_t)>;
+
 struct __cr
 {
     GUEST_STRUCT;
@@ -117,7 +122,7 @@ struct __cr
     GUEST<INTEGER> contrlMax;
     GUEST<Handle> contrlDefProc;
     GUEST<Handle> contrlData;
-    GUEST<ProcPtr> contrlAction;
+    GUEST<ControlActionUPP> contrlAction;
     GUEST<LONGINT> contrlRfCon;
     GUEST<Str255> contrlTitle;
 };
@@ -194,9 +199,9 @@ extern LONGINT C_GetCRefCon(ControlHandle c);
 PASCAL_TRAP(GetCRefCon, 0xA95A);
 
 extern void C_SetCtlAction(ControlHandle c,
-                                       ProcPtr a);
+                                       ControlActionUPP a);
 PASCAL_TRAP(SetCtlAction, 0xA96B);
-extern ProcPtr C_GetCtlAction(ControlHandle c);
+extern ControlActionUPP C_GetCtlAction(ControlHandle c);
 PASCAL_TRAP(GetCtlAction, 0xA96A);
 
 extern INTEGER C_GetCVariant(ControlHandle c);
@@ -209,7 +214,7 @@ extern INTEGER C_FindControl(Point p,
                                          WindowPtr w, GUEST<ControlHandle> *cp);
 PASCAL_TRAP(FindControl, 0xA96C);
 extern INTEGER C_TrackControl(
-    ControlHandle c, Point p, ProcPtr a);
+    ControlHandle c, Point p, ControlActionUPP a);
 PASCAL_TRAP(TrackControl, 0xA968);
 extern INTEGER C_TestControl(
     ControlHandle c, Point p);

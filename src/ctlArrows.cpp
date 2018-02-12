@@ -731,7 +731,7 @@ LONGINT Executor::C_cdef16(INTEGER var, ControlHandle c, INTEGER mess,
                     RectRgn(rh, &HxX(c, contrlRect));
                     dlp.ctl = c;
                     dlp.param = param;
-                    DeviceLoop(rh, (DeviceLoopDrawingProcPtr)P_new_draw_scroll, ptr_to_longint(&dlp), 0);
+                    DeviceLoop(rh, &new_draw_scroll, ptr_to_longint(&dlp), 0);
                     DisposeRgn(rh);
                 }
                 SetPenState(&ps);
@@ -789,7 +789,7 @@ LONGINT Executor::C_cdef16(INTEGER var, ControlHandle c, INTEGER mess,
                 RectRgn(rh, &HxX(c, contrlRect));
                 dlp.ctl = c;
                 dlp.param = param;
-                DeviceLoop(rh, (DeviceLoopDrawingProcPtr)P_new_pos_ctl, ptr_to_longint(&dlp), 0);
+                DeviceLoop(rh, &new_pos_ctl, ptr_to_longint(&dlp), 0);
                 DisposeRgn(rh);
             }
             break;

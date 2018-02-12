@@ -61,7 +61,7 @@ floor_log2(double d)
 }
 #endif
 
-static uint8
+static uint8_t
 PEFComputeHashTableExponent(int32_t count)
 {
     int retval;

@@ -394,7 +394,7 @@ rotate_and_flip_xdata(xdata_t *x, int xrot, uint32_t flip_mask)
         }
         else
         {
-            uint8 *scratch, *s, *p, *e;
+            uint8_t *scratch, *s, *p, *e;
             int rs, bs;
 
             /* The following code rotates the pattern array right by
@@ -402,8 +402,8 @@ rotate_and_flip_xdata(xdata_t *x, int xrot, uint32_t flip_mask)
 	   * byte order.
 	   */
 
-            scratch = (uint8 *)alloca(x->byte_size);
-            e = (uint8 *)xdblt_pattern_end;
+            scratch = (uint8_t *)alloca(x->byte_size);
+            e = (uint8_t *)xdblt_pattern_end;
 
             bs = xrot >> 3;
             rs = xrot & 7;
@@ -420,17 +420,17 @@ rotate_and_flip_xdata(xdata_t *x, int xrot, uint32_t flip_mask)
 	       * rotating by an integral number of bytes.
 	       */
 
-                for(p = (uint8 *)xdblt_pattern_baseaddr, s = scratch;
+                for(p = (uint8_t *)xdblt_pattern_baseaddr, s = scratch;
                     p != e;
                     p += row_bytes, s += row_bytes)
                 {
-                    uint8 next;
+                    uint8_t next;
                     int i;
 
                     next = p[0];
                     for(i = xmask; i >= 0; i--)
                     {
-                        uint8 v = p[i];
+                        uint8_t v = p[i];
                         s[(i + bs) & xmask] = ((v >> rs) | (next << ls));
                         next = v;
                     }
@@ -443,7 +443,7 @@ rotate_and_flip_xdata(xdata_t *x, int xrot, uint32_t flip_mask)
                 /* Special case for when we are rotating an integral number
 	       * of bytes.
 	       */
-                p = (uint8 *)xdblt_pattern_baseaddr;
+                p = (uint8_t *)xdblt_pattern_baseaddr;
                 memcpy(scratch, p, x->byte_size);
                 for(s = scratch; p != e; p += row_bytes, s += row_bytes)
                 {

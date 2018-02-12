@@ -11,6 +11,9 @@
 #include "WindowMgr.h"
 #include "FileMgr.h"
 
+#define MODULE_NAME DeviceMgr
+#include <rsys/api-module.h>
+
 /*
  * Note the structure below is similar to that presented on IM-188,
  * but I don't use offsets to the routines, but pointers to the routines
@@ -153,6 +156,11 @@ extern driverinfo *__ROMlib_otherdrivers;
 extern OSErr PBControl(ParmBlkPtr pbp, BOOLEAN a);
 extern OSErr PBStatus(ParmBlkPtr pbp, BOOLEAN a);
 extern OSErr PBKillIO(ParmBlkPtr pbp, BOOLEAN a);
+
+FILE_TRAP(PBControl, 0xA004);
+FILE_TRAP(PBStatus, 0xA005);
+FILE_TRAP(PBKillIO, 0xA006);
+
 extern OSErr OpenDriver(StringPtr name, GUEST<INTEGER> *rnp);
 extern OSErr CloseDriver(INTEGER rn);
 extern OSErr Control(INTEGER rn, INTEGER code,

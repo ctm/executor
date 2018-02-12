@@ -81,9 +81,9 @@ bool Executor::blockdev_read(blockdev_t *b, uint32_t offset, void *buf, uint32_t
 
         for(n = 0; n < num_bytes;)
         {
-            uint8 *p;
+            uint8_t *p;
 
-            p = (uint8 *)buf + n;
+            p = (uint8_t *)buf + n;
 
             /* First try to read from the cache. */
             if(dcache_read(b->dcache_tag, p, offset + n, b->block_size))
@@ -144,9 +144,9 @@ bool Executor::blockdev_write(blockdev_t *b, uint32_t offset, const void *buf,
         for(n = 0; n < num_bytes;)
         {
             uint32_t bytes_to_write;
-            uint8 *p;
+            uint8_t *p;
 
-            p = (uint8 *)buf + n;
+            p = (uint8_t *)buf + n;
 
             /* Seek if necessary. */
             if(offset + n != b->fpos)

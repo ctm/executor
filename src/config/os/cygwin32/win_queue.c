@@ -11,7 +11,7 @@
 static bool timer_driven_events_p = true;
 
 PUBLIC void
-win_queue(volatile uint8 *pendingp)
+win_queue(volatile uint8_t *pendingp)
 {
     if(timer_driven_events_p)
         *pendingp = true;

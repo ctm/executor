@@ -33,7 +33,7 @@ namespace Executor
  * You can also use the DEPTHCONV_MAX_TABLE_SIZE macro, which is
  * guaranteed to always be "big enough":
  *
- *   static uint8 table[DEPTHCONV_MAX_TABLE_SIZE];
+ *   static uint8_t table[DEPTHCONV_MAX_TABLE_SIZE];
  *
  *   depthconv_make_ind_to_ind_table (table, 1, 8, &size, cspec_array);
  *
@@ -194,25 +194,25 @@ DEPTH_INCREASING_BY_FACTOR_OF_2(8, 16)
         }                                                                       \
     }
 
-DEPTH_NONDECREASING(1, 1, uint8)
+DEPTH_NONDECREASING(1, 1, uint8_t)
 /* 1 -> 2 handled above by `DEPTH_INCREASING_BY_FACTOR_OF_2'. */
 DEPTH_NONDECREASING(1, 4, uint32_t)
 DEPTH_NONDECREASING(1, 8, uint32_t)
 DEPTH_NONDECREASING(1, 16, uint32_t)
 DEPTH_NONDECREASING(1, 32, uint32_t)
 
-DEPTH_NONDECREASING(2, 2, uint8)
+DEPTH_NONDECREASING(2, 2, uint8_t)
 /* 2 -> 4 handled above by `DEPTH_INCREASING_BY_FACTOR_OF_2'. */
 DEPTH_NONDECREASING(2, 8, uint32_t)
 DEPTH_NONDECREASING(2, 16, uint32_t)
 DEPTH_NONDECREASING(2, 32, uint32_t)
 
-DEPTH_NONDECREASING(4, 4, uint8)
+DEPTH_NONDECREASING(4, 4, uint8_t)
 /* 4 -> 8 handled above by `DEPTH_INCREASING_BY_FACTOR_OF_2'. */
 DEPTH_NONDECREASING(4, 16, uint32_t)
 DEPTH_NONDECREASING(4, 32, uint32_t)
 
-DEPTH_NONDECREASING(8, 8, uint8)
+DEPTH_NONDECREASING(8, 8, uint8_t)
 /* 8 -> 16 handled above by `DEPTH_INCREASING_BY_FACTOR_OF_2'. */
 DEPTH_NONDECREASING(8, 32, uint32_t)
 
@@ -221,13 +221,13 @@ DEPTH_NONDECREASING(8, 32, uint32_t)
         maketable_##bpp1##_##bpp2(void *d, const uint32_t *map)                 \
     {                                                                           \
         int c;                                                                  \
-        uint8 *dst;                                                             \
+        uint8_t *dst;                                                             \
                                                                                 \
-        for(c = 0, dst = (uint8 *)d; c < 256; c++)                              \
+        for(c = 0, dst = (uint8_t *)d; c < 256; c++)                              \
         {                                                                       \
             long offset;                                                        \
             int r, l;                                                           \
-            uint8 new1;                                                         \
+            uint8_t new1;                                                         \
                                                                                 \
             /* Loop over all input pixels and create the lookup table entry. */ \
             for(r = 8 - bpp1, l = (8 * bpp2 / bpp1) - bpp2, new1 = 0;           \
