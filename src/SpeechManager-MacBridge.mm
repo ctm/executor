@@ -13,6 +13,7 @@
 #undef NO
 #define YES YES_EXEC
 #define NO NO_EXEC
+#undef SIGDIGLEN
 #include "rsys/common.h"
 #include "rsys/hfs.h"
 #include "MemoryMgr.h"
