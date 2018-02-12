@@ -230,6 +230,7 @@ extern void C_SetResourceSize(Handle resource, int32_t size);
 PASCAL_SUBTRAP(SetResourceSize, 0xA822, 0x0003, ResourceDispatch);
 
 extern Handle C_GetNextFOND(Handle fondHandle);
+PASCAL_SUBTRAP(GetNextFOND, 0xA822, 0x000A, ResourceDispatch);
 }
 
 #endif /* _RESOURCE_H_ */

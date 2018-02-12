@@ -34,6 +34,7 @@ set(trap_instance_sources
 		trap_instances/SegmentLdr.cpp
 		trap_instances/ShutDown.cpp
 		trap_instances/SoundMgr.cpp
+		trap_instances/SpeechManager.cpp
 		trap_instances/StdFilePkg.cpp
 		trap_instances/SysErr.cpp
 		trap_instances/TextEdit.cpp
