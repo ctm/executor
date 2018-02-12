@@ -12,7 +12,7 @@ print ("\#define JUMP_TO_NEXT                        \\\n" .
        "  const void *next = s\[1\].label;            \\\n" .
        "  NEXT_ROW;				    \\\n" .
        "  arg = s\[1\].arg;                           \\\n" .
-       "  s = (const blt_section_t *) ((const uint8 *) s + sec_size); \\\n" .
+       "  s = (const blt_section_t *) ((const uint8_t *) s + sec_size); \\\n" .
        "  goto *next;                               \\\n" .
        "} while (0)\n" .
        "\n" .
@@ -102,9 +102,9 @@ sub output_func {
 	   "$prefix" . "_func_$func_number (const blt_section_t *section,\n");
 
     if ($patblt) {
-	print "uint8 *row_base, long num_rows, long y)\n";
+	print "uint8_t *row_base, long num_rows, long y)\n";
     } else {
-	print ("const uint8 *src_row_base, uint8 *dst_row_base, " .
+	print ("const uint8_t *src_row_base, uint8_t *dst_row_base, " .
 	       "long num_rows)\n");
     }
 	   

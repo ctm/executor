@@ -277,12 +277,12 @@ void Executor::C_PackBits(GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
 #define UNPACK_BITS_BODY(out_type)                                           \
     do                                                                       \
     {                                                                        \
-        const int8 *ip;                                                      \
+        const int8_t *ip;                                                      \
         out_type *op, *ep;                                                   \
                                                                              \
-        ip = (const int8 *)MR(*sp);                                          \
+        ip = (const int8_t *)MR(*sp);                                          \
         op = (out_type *)MR(*dp);                                            \
-        ep = (out_type *)((int8 *)op + len);                                 \
+        ep = (out_type *)((int8_t *)op + len);                                 \
                                                                              \
         while(op < ep)                                                       \
         {                                                                    \
@@ -315,7 +315,7 @@ void Executor::unpack_int16_t_bits(GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
 
 void Executor::C_UnpackBits(GUEST<Ptr> *sp, GUEST<Ptr> *dp, INTEGER len)
 {
-    UNPACK_BITS_BODY(int8);
+    UNPACK_BITS_BODY(int8_t);
 }
 
 BOOLEAN Executor::C_BitTst(Ptr bp, LONGINT bn)

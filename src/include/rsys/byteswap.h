@@ -84,17 +84,6 @@ inline int32_t Cx_RAW(int32_t x) { return CL_RAW(x); }
 template<class TT>
 TT Cx_RAW(TT x); // no definition. Make sure we get a linker error if an unexpected version of Cx is used.
 
-template<typename TT>
-GUEST<TT *> RM(TT *p)
-{
-    return GUEST<TT *>::fromHost(p);
-}
-
-template<typename TT>
-TT *MR(GuestWrapper<TT *> p)
-{
-    return p.get();
-}
 
 inline std::nullptr_t RM(std::nullptr_t p) { return nullptr; }
 

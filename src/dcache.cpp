@@ -14,7 +14,7 @@ typedef struct _dcache_entry_t
     uint32_t fd; /* tag */
     uint32_t offset; /* block's offset */
     uint32_t when_last_accessed; /* the smaller the older; 0 means invalid */
-    uint8 data[DCACHE_BLOCK_SIZE]; /* actual cached data */
+    uint8_t data[DCACHE_BLOCK_SIZE]; /* actual cached data */
     write_callback_funcp_t dirty_callback; /* callback to write dirty data
 					   (only set if the data is indeed
 					   dirty) */
@@ -121,7 +121,7 @@ fill_run(dcache_entry_t *dps[], int nelems, int *indexp, int offset_increment,
 }
 
 static void
-copy_buffer(uint8 **bufpp, dcache_entry_t *d)
+copy_buffer(uint8_t **bufpp, dcache_entry_t *d)
 {
     memcpy(*bufpp, d->data, sizeof d->data);
     *bufpp += DCACHE_BLOCK_SIZE;
@@ -129,7 +129,7 @@ copy_buffer(uint8 **bufpp, dcache_entry_t *d)
 }
 
 static void
-coalesce_writes(uint32_t fd, uint8 **bufpp, uint32_t *lengthp, uint32_t *offsetp)
+coalesce_writes(uint32_t fd, uint8_t **bufpp, uint32_t *lengthp, uint32_t *offsetp)
 {
     dcache_entry_t *backwards_dps[MAX_BACKWARDS];
     int backwards_index;
@@ -148,8 +148,8 @@ coalesce_writes(uint32_t fd, uint8 **bufpp, uint32_t *lengthp, uint32_t *offsetp
     if(backwards_index > 0 || forwards_index > 0)
     {
         int n_bufs;
-        uint8 *bufp;
-        uint8 *outbufp;
+        uint8_t *bufp;
+        uint8_t *outbufp;
         uint32_t length;
         dcache_entry_t *d;
         int i;
@@ -158,7 +158,7 @@ coalesce_writes(uint32_t fd, uint8 **bufpp, uint32_t *lengthp, uint32_t *offsetp
 
         /* allocate space for run */
         length = n_bufs * DCACHE_BLOCK_SIZE;
-        bufp = (uint8 *)malloc(length);
+        bufp = (uint8_t *)malloc(length);
         outbufp = bufp;
 
         for(i = backwards_index - 1; i >= 0; --i)
@@ -186,7 +186,7 @@ dcache_flush_entry(dcache_entry_t *dp)
         retval = true;
     else
     {
-        uint8 *bufp;
+        uint8_t *bufp;
         uint32_t length;
         uint32_t offset;
         write_callback_funcp_t dirty_callback;
@@ -272,7 +272,7 @@ static dcache_entry_t *
 read_cylinder(uint32_t fd, uint32_t offset, read_callback_funcp_t read_callback)
 {
     uint32_t nread;
-    uint8 buf[SECTORS_PER_FLOPPY_CYLINDER * 512], *bufp;
+    uint8_t buf[SECTORS_PER_FLOPPY_CYLINDER * 512], *bufp;
     dcache_entry_t *retval;
     uint32_t new_offset;
 
@@ -360,7 +360,7 @@ Executor::dcache_read(uint32_t fd, void *buf, uint32_t offset, uint32_t count,
                 uint32_t n_to_copy;
 
                 n_to_copy = MIN((uint32_t)DCACHE_BLOCK_SIZE, count - n);
-                memcpy((uint8 *)buf + n, d->data, n_to_copy);
+                memcpy((uint8_t *)buf + n, d->data, n_to_copy);
                 retval += n_to_copy;
             }
             offset += DCACHE_BLOCK_SIZE;
@@ -401,7 +401,7 @@ Executor::dcache_write(uint32_t fd, const void *buf, uint32_t offset, uint32_t c
                 }
             }
             d->dirty_callback = dirty_callback;
-            memcpy(d->data, (const uint8 *)buf + n, DCACHE_BLOCK_SIZE);
+            memcpy(d->data, (const uint8_t *)buf + n, DCACHE_BLOCK_SIZE);
             d->when_last_accessed = now;
             retval += DCACHE_BLOCK_SIZE;
         }

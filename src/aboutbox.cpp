@@ -117,7 +117,7 @@ static struct
 static WindowPtr about_box;
 static ControlHandle about_scrollbar;
 static TEHandle about_te;
-static ProcPtr scroll_bar_callback;
+static ControlActionUPP scroll_bar_callback;
 
 enum
 {
@@ -649,7 +649,7 @@ event_loop(bool executor_p)
 
                         if(TrackControl(c, local_pt,
                                         (part == inThumb
-                                             ? (ProcPtr)-1
+                                             ? (ControlActionUPP)-1
                                              : scroll_bar_callback))
                            == inThumb)
                         {
@@ -664,7 +664,7 @@ event_loop(bool executor_p)
 
                         old_scroll_bar_value = GetCtlValue(about_scrollbar);
                     }
-                    else if(TrackControl(c, local_pt, (ProcPtr)-1)
+                    else if(TrackControl(c, local_pt, (ControlActionUPP)-1)
                             == inButton)
                     {
                         int new_text;
@@ -702,8 +702,8 @@ void Executor::do_about_box(void)
     {
         busy_p = true; /* Only allow one about box at a time. */
 
-        if(scroll_bar_callback == 0)
-            scroll_bar_callback = (ProcPtr)SYN68K_TO_US(callback_install(scroll_stub, NULL));
+        if(scroll_bar_callback == nullptr)
+            scroll_bar_callback = (ControlActionUPP)SYN68K_TO_US(callback_install(scroll_stub, NULL));
 
         {
             TheZoneGuard guard(LM(SysZone));

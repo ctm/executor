@@ -12,7 +12,7 @@
 
 namespace Executor
 {
-typedef uint8 virtual_int_state_t;
+typedef uint8_t virtual_int_state_t;
 extern virtual_int_state_t _virtual_interrupts_blocked;
 
 /* A virtual_int_state_t is a four bit value.  The low bit controls

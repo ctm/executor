@@ -41,8 +41,8 @@ namespace Executor
                      compute_add, table_type)                                       \
     void                                                                            \
     func_name(const void *raw_table,                                                \
-              const uint8 *src_base, int src_row_bytes,                             \
-              uint8 *dst_base, int dst_row_bytes,                                   \
+              const uint8_t *src_base, int src_row_bytes,                             \
+              uint8_t *dst_base, int dst_row_bytes,                                   \
               int top, int left, int bottom, int right)                             \
     {                                                                               \
         int byte_width, height;                                                     \
@@ -119,8 +119,8 @@ namespace Executor
  */
 
 #define INP_OUTP_DECL                     \
-    register const uint8 *inp asm("%si"); \
-    register uint8 *outp asm("%di")
+    register const uint8_t *inp asm("%si"); \
+    register uint8_t *outp asm("%di")
 
 /* This can do unaligned movsl's, but it's not clear who would ever
  * call this anyway, so I'm not going to worry about it.
@@ -452,8 +452,8 @@ namespace Executor
 
 #if !defined(INP_OUTP_DECL)
 #define INP_OUTP_DECL \
-    const uint8 *inp; \
-    uint8 *outp
+    const uint8_t *inp; \
+    uint8_t *outp
 #endif /* !defined (INP_OUTP_DECL) */
 
 #if !defined(CONVERT_COPY)
@@ -603,7 +603,7 @@ namespace Executor
     do                                                                 \
     {                                                                  \
         int w, shift;                                                  \
-        uint8 v;                                                       \
+        uint8_t v;                                                       \
                                                                        \
         shift = 8 - (out_bpp);                                         \
         v = 0;                                                         \

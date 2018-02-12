@@ -2,8 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if defined(powerpc) || defined(__ppc__)
-
 #include "rsys/common.h"
 
 #include "FileMgr.h"
@@ -75,4 +73,3 @@ OSErr Executor::C_RestoreMixedModeState(void *statep, uint32_t vers)
     return paramErr;
 }
 
-#endif

@@ -97,7 +97,7 @@ event_loop(void)
                 {
                     int release_part;
 
-                    release_part = TrackControl(c, local_pt, (ProcPtr)-1);
+                    release_part = TrackControl(c, local_pt, (ControlActionUPP)-1);
 
                     if(release_part == inButton)
                     {

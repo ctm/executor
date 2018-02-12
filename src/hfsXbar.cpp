@@ -98,7 +98,7 @@ static BOOLEAN hfsfil(IOParam *pb)
         return false;
 }
 
-OSErrRET Executor::PBHRename(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBHRename(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -109,7 +109,7 @@ OSErrRET Executor::PBHRename(HParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBHCreate(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBHCreate(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -120,7 +120,7 @@ OSErrRET Executor::PBHCreate(HParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBDirCreate(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBDirCreate(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -131,7 +131,7 @@ OSErrRET Executor::PBDirCreate(HParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBHDelete(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBHDelete(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -158,7 +158,7 @@ try_to_reopen(DrvQExtra *dqp)
 
 int Executor::ROMlib_directdiskaccess = false;
 
-OSErrRET Executor::PBRead(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBRead(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
     DrvQExtra *dqp;
@@ -281,7 +281,7 @@ OSErrRET Executor::PBRead(ParmBlkPtr pb, BOOLEAN async)
 #define SOUND_DRIVER_REF (-4)
 #define ffMode 0
 
-OSErrRET Executor::PBWrite(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBWrite(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
     HVCB *vcbp;
@@ -338,7 +338,7 @@ OSErrRET Executor::PBWrite(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBClose(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBClose(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -360,7 +360,7 @@ OSErrRET Executor::PBClose(ParmBlkPtr pb, BOOLEAN async)
  * PBOpen doesn't require ioBuffer to be 0 in order to open a driver.
  */
 
-OSErrRET Executor::PBHOpen(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBHOpen(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -374,7 +374,7 @@ OSErrRET Executor::PBHOpen(HParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBOpenDF(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBOpenDF(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -385,7 +385,7 @@ OSErrRET Executor::PBOpenDF(HParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBHOpenRF(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBHOpenRF(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -417,7 +417,7 @@ swappedstr255print (const char *prefix, Str255 sp)
 }
 #endif
 
-OSErrRET Executor::PBGetCatInfo(CInfoPBPtr pb, BOOLEAN async)
+OSErr Executor::PBGetCatInfo(CInfoPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
     BOOLEAN ishfs;
@@ -442,7 +442,7 @@ OSErrRET Executor::PBGetCatInfo(CInfoPBPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBSetCatInfo(CInfoPBPtr pb, BOOLEAN async)
+OSErr Executor::PBSetCatInfo(CInfoPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -453,7 +453,7 @@ OSErrRET Executor::PBSetCatInfo(CInfoPBPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBCatMove(CMovePBPtr pb, BOOLEAN async)
+OSErr Executor::PBCatMove(CMovePBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -464,7 +464,7 @@ OSErrRET Executor::PBCatMove(CMovePBPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBGetVInfo(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBGetVInfo(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -475,7 +475,7 @@ OSErrRET Executor::PBGetVInfo(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBUnmountVol(ParmBlkPtr pb)
+OSErr Executor::PBUnmountVol(ParmBlkPtr pb)
 {
     OSErr retval;
 
@@ -486,7 +486,7 @@ OSErrRET Executor::PBUnmountVol(ParmBlkPtr pb)
     PBRETURN(pb, retval);
 }
 
-OSErrRET Executor::PBEject(ParmBlkPtr pb)
+OSErr Executor::PBEject(ParmBlkPtr pb)
 {
     OSErr retval;
 
@@ -497,7 +497,7 @@ OSErrRET Executor::PBEject(ParmBlkPtr pb)
     PBRETURN(pb, retval);
 }
 
-OSErrRET Executor::PBAllocate(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBAllocate(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -508,7 +508,7 @@ OSErrRET Executor::PBAllocate(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBAllocContig(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBAllocContig(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -519,7 +519,7 @@ OSErrRET Executor::PBAllocContig(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBHGetFInfo(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBHGetFInfo(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
     BOOLEAN ishfs;
@@ -538,7 +538,7 @@ OSErrRET Executor::PBHGetFInfo(HParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBSetEOF(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBSetEOF(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -549,7 +549,7 @@ OSErrRET Executor::PBSetEOF(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBOpen(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBOpen(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -582,7 +582,7 @@ void test_serial(void)
 }
 #endif
 
-OSErrRET Executor::PBOpenRF(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBOpenRF(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -593,7 +593,7 @@ OSErrRET Executor::PBOpenRF(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBLockRange(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBLockRange(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -604,7 +604,7 @@ OSErrRET Executor::PBLockRange(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBUnlockRange(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBUnlockRange(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -615,7 +615,7 @@ OSErrRET Executor::PBUnlockRange(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBGetFPos(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBGetFPos(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -626,7 +626,7 @@ OSErrRET Executor::PBGetFPos(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBSetFPos(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBSetFPos(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -637,7 +637,7 @@ OSErrRET Executor::PBSetFPos(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBGetEOF(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBGetEOF(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -648,7 +648,7 @@ OSErrRET Executor::PBGetEOF(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBFlushFile(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBFlushFile(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -659,7 +659,7 @@ OSErrRET Executor::PBFlushFile(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBCreate(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBCreate(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -670,7 +670,7 @@ OSErrRET Executor::PBCreate(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBDelete(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBDelete(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -681,7 +681,7 @@ OSErrRET Executor::PBDelete(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBOpenWD(WDPBPtr pb, BOOLEAN async)
+OSErr Executor::PBOpenWD(WDPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -692,7 +692,7 @@ OSErrRET Executor::PBOpenWD(WDPBPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBCloseWD(WDPBPtr pb, BOOLEAN async)
+OSErr Executor::PBCloseWD(WDPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -700,7 +700,7 @@ OSErrRET Executor::PBCloseWD(WDPBPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBGetWDInfo(WDPBPtr pb, BOOLEAN async)
+OSErr Executor::PBGetWDInfo(WDPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -708,7 +708,7 @@ OSErrRET Executor::PBGetWDInfo(WDPBPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBGetFInfo(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBGetFInfo(ParmBlkPtr pb, BOOLEAN async)
 {
     BOOLEAN ishfs;
     GUEST<StringPtr> savep;
@@ -727,7 +727,7 @@ OSErrRET Executor::PBGetFInfo(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBSetFInfo(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBSetFInfo(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -738,7 +738,7 @@ OSErrRET Executor::PBSetFInfo(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBHSetFInfo(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBHSetFInfo(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -749,7 +749,7 @@ OSErrRET Executor::PBHSetFInfo(HParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBSetFLock(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBSetFLock(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -760,7 +760,7 @@ OSErrRET Executor::PBSetFLock(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBHSetFLock(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBHSetFLock(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -771,7 +771,7 @@ OSErrRET Executor::PBHSetFLock(HParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBRstFLock(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBRstFLock(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -782,7 +782,7 @@ OSErrRET Executor::PBRstFLock(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBHRstFLock(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBHRstFLock(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -793,7 +793,7 @@ OSErrRET Executor::PBHRstFLock(HParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBSetFVers(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBSetFVers(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -804,7 +804,7 @@ OSErrRET Executor::PBSetFVers(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBRename(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBRename(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -856,7 +856,7 @@ OSErr Executor::PBMountVol(ParmBlkPtr pb)
 #endif
 }
 
-OSErrRET Executor::PBHGetVInfo(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBHGetVInfo(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -882,7 +882,7 @@ enum
                 | (1L << bNoMiniFndr))
 };
 
-OSErrRET Executor::PBHGetVolParms(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBHGetVolParms(HParmBlkPtr pb, BOOLEAN async)
 {
     LONGINT dir;
     HVCB *vcbp;
@@ -937,7 +937,7 @@ OSErrRET Executor::PBHGetVolParms(HParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, err);
 }
 
-OSErrRET Executor::PBSetVInfo(HParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBSetVInfo(HParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -948,7 +948,7 @@ OSErrRET Executor::PBSetVInfo(HParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBGetVol(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBGetVol(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -956,7 +956,7 @@ OSErrRET Executor::PBGetVol(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBHGetVol(WDPBPtr pb, BOOLEAN async)
+OSErr Executor::PBHGetVol(WDPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -964,7 +964,7 @@ OSErrRET Executor::PBHGetVol(WDPBPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBSetVol(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBSetVol(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -972,7 +972,7 @@ OSErrRET Executor::PBSetVol(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBHSetVol(WDPBPtr pb, BOOLEAN async)
+OSErr Executor::PBHSetVol(WDPBPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -980,7 +980,7 @@ OSErrRET Executor::PBHSetVol(WDPBPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBFlushVol(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBFlushVol(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -991,7 +991,7 @@ OSErrRET Executor::PBFlushVol(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBOffLine(ParmBlkPtr pb)
+OSErr Executor::PBOffLine(ParmBlkPtr pb)
 {
     OSErr retval;
 
@@ -1002,7 +1002,7 @@ OSErrRET Executor::PBOffLine(ParmBlkPtr pb)
     PBRETURN(pb, retval);
 }
 
-OSErrRET Executor::PBExchangeFiles(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBExchangeFiles(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -1011,7 +1011,7 @@ OSErrRET Executor::PBExchangeFiles(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBCatSearch(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBCatSearch(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -1020,7 +1020,7 @@ OSErrRET Executor::PBCatSearch(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBCreateFileIDRef(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBCreateFileIDRef(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -1029,7 +1029,7 @@ OSErrRET Executor::PBCreateFileIDRef(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBDeleteFileIDRef(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBDeleteFileIDRef(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 
@@ -1038,7 +1038,7 @@ OSErrRET Executor::PBDeleteFileIDRef(ParmBlkPtr pb, BOOLEAN async)
     FAKEASYNC(pb, async, retval);
 }
 
-OSErrRET Executor::PBResolveFileIDRef(ParmBlkPtr pb, BOOLEAN async)
+OSErr Executor::PBResolveFileIDRef(ParmBlkPtr pb, BOOLEAN async)
 {
     OSErr retval;
 

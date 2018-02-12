@@ -41,12 +41,10 @@
 #include "rsys/trapglue.h"
 #include "rsys/file.h"
 #include "rsys/sounddriver.h"
-#include "rsys/pstuff.h"
 #include "rsys/prefs.h"
 #include "rsys/flags.h"
 #include "rsys/aboutpanel.h"
 #include "rsys/segment.h"
-#include "rsys/pstuff.h"
 #include "rsys/tesave.h"
 #include "rsys/blockinterrupts.h"
 #include "rsys/resource.h"
@@ -78,6 +76,8 @@
 #include "rsys/launch.h"
 #include "rsys/version.h"
 #include "rsys/appearance.h"
+
+#include "rsys/logging.h"
 
 using namespace Executor;
 
@@ -369,7 +369,7 @@ void Executor::SFSaveDisk_Update(INTEGER vrefnum, Str255 filename)
 uint32_t Executor::ROMlib_version_long;
 
 static bool
-cfrg_match(const cfir_t *cfirp, GUEST<OSType> arch_x, uint8 type_x, Str255 name)
+cfrg_match(const cfir_t *cfirp, GUEST<OSType> arch_x, uint8_t type_x, Str255 name)
 {
     bool retval;
 
@@ -379,13 +379,13 @@ cfrg_match(const cfir_t *cfirp, GUEST<OSType> arch_x, uint8 type_x, Str255 name)
 }
 
 cfir_t *
-Executor::ROMlib_find_cfrg(Handle cfrg, OSType arch, uint8 type, Str255 name)
+Executor::ROMlib_find_cfrg(Handle cfrg, OSType arch, uint8_t type, Str255 name)
 {
     cfrg_resource_t *cfrgp;
     int n_descripts;
     cfir_t *cfirp;
     GUEST<OSType> desired_arch_x;
-    uint8 type_x;
+    uint8_t type_x;
     cfir_t *retval;
 
     cfrgp = (cfrg_resource_t *)STARH(cfrg);
@@ -729,7 +729,7 @@ static void reset_low_globals(void)
  * globals beforehand
  */
 
-    GUEST<ProcPtr> saveDABeeper;
+    GUEST<SoundProcPtr> saveDABeeper;
     GUEST<THz> saveSysZone;
     GUEST<uint32_t> saveTicks;
     GUEST<INTEGER> saveBootDrive;
@@ -1012,7 +1012,7 @@ static void reset_low_globals(void)
         ROMlib_Fsetenv(&env, 0);
     }
 
-    LM(TEDoText) = RM((ProcPtr)P_ROMlib_dotext); /* where should this go ? */
+    LM(TEDoText) = RM((ProcPtr)&ROMlib_dotext); /* where should this go ? */
 
     LM(WWExist) = LM(QDExist) = EXIST_NO; /* TODO:  LOOK HERE! */
     LM(SCSIFlags) = CWC(0xEC00); /* scsi+clock+xparam+mmu+adb
@@ -1039,24 +1039,20 @@ static void reset_low_globals(void)
     LM(MinStack) = CLC(0x400); /* values ... */
     LM(IAZNotify) = 0;
     LM(CurPitch) = 0;
-    LM(JSwapFont) = RM((ProcPtr)P_FMSwapFont);
-    LM(JInitCrsr) = RM((ProcPtr)P_InitCursor);
+    LM(JSwapFont) = RM((ProcPtr)&FMSwapFont);
+    LM(JInitCrsr) = RM((ProcPtr)&InitCursor);
 
-    LM(JHideCursor) = RM((ProcPtr)P_HideCursor);
-    LM(JShowCursor) = RM((ProcPtr)P_ShowCursor);
-    LM(JShieldCursor) = RM((ProcPtr)P_ShieldCursor);
-    LM(JSetCrsr) = RM((ProcPtr)P_SetCursor);
-    LM(JCrsrObscure) = RM((ProcPtr)P_ObscureCursor);
+    LM(JHideCursor) = RM((ProcPtr)&HideCursor);
+    LM(JShowCursor) = RM((ProcPtr)&ShowCursor);
+    LM(JShieldCursor) = RM((ProcPtr)&ShieldCursor);
+    LM(JSetCrsr) = RM((ProcPtr)&SetCursor);
+    LM(JCrsrObscure) = RM((ProcPtr)&ObscureCursor);
 
-#if 0
-    JUnknown574 = RM ((ProcPtr)P_Unknown574);
-#else
-    *(GUEST<void *> *)(0x574 + ROMlib_offset) = RM(P_Unknown574);
-#endif
+    LM(JUnknown574) = RM ((ProcPtr)&unknown574);
 
-    LM(Key1Trans) = RM((Ptr)P_Key1Trans);
-    LM(Key2Trans) = RM((Ptr)P_Key2Trans);
-    LM(JFLUSH) = RM((ProcPtr)P_flushcache);
+    LM(Key1Trans) = RM((Ptr)&stub_Key1Trans);
+    LM(Key2Trans) = RM((Ptr)&stub_Key2Trans);
+    LM(JFLUSH) = RM(&FlushCodeCache);
     LM(JResUnknown1) = LM(JFLUSH); /* I don't know what these are supposed to */
     LM(JResUnknown2) = LM(JFLUSH); /* do, but they're not called enough for
 				   us to worry about the cache flushing
@@ -1300,6 +1296,7 @@ Executor::NewLaunch(StringPtr fName_arg, INTEGER vRefNum_arg, LaunchParamBlockRe
         }
         else
             longjmp(buf, 1);
+        logging::resetNestingLevel();
 
         retval = noErr;
         reset_adb_vector();

@@ -36,6 +36,7 @@
 #include "rsys/vdriver.h"
 #include "rsys/notmac.h"
 #include "rsys/version.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 
@@ -1645,16 +1646,15 @@ void Executor::ROMlib_menucall(INTEGER mess, MenuHandle themenu, Rect *menrect, 
 
         mp = (menuprocp)STARH(defproc);
 
-        if(mp == P_mdef0)
+        if(mp == &mdef0)
         {
-            C_mdef0(mess, themenu, menrect, hit, which);
+            mdef0(mess, themenu, menrect, hit, which);
         }
         else
         {
             ROMlib_hook(menu_mdefnumber);
             HLockGuard guard(defproc);
-            CToPascalCall(STARH(defproc),
-                          ctop(&C_mdef0), mess, themenu, menrect, hit, which);
+            mp(mess, themenu, menrect, hit, which);
         }
     }
 }
@@ -1673,16 +1673,14 @@ Executor::ROMlib_mbdfcall(INTEGER msg, INTEGER param1, LONGINT param2)
 
     mp = (mbdfprocp)STARH(defproc);
 
-    if(mp == P_mbdf0)
-        retval = C_mbdf0((Hx(MENULIST, mufu) & 7), msg, param1, param2);
+    if(mp == &mbdf0)
+        retval = mbdf0((Hx(MENULIST, mufu) & 7), msg, param1, param2);
     else
     {
         ROMlib_hook(menu_mbdfnumber);
         HLockGuard guard(defproc);
 
-        retval = CToPascalCall(STARH(defproc),
-                               ctop(&C_mbdf0), (Hx(MENULIST, mufu) & 7), msg,
-                               param1, param2);
+        retval = mp(Hx(MENULIST, mufu) & 7, msg, param1, param2);
     }
 
     return retval;

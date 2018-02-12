@@ -11,6 +11,9 @@
 #include <rsys/common.h>
 #include "ExMacTypes.h"
 
+#define MODULE_NAME QuickDraw
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 
@@ -148,23 +151,19 @@ struct FontInfo
     GUEST<INTEGER> leading;
 };
 
-typedef void (*textProc_t)(INTEGER bc, Ptr textb, Point num, Point den);
-typedef void (*lineProc_t)(Point drawto);
-typedef void (*rectProc_t)(GrafVerb verb, Rect *rp);
-typedef void (*rRectProc_t)(GrafVerb verb, Rect *rp, INTEGER ow,
-                                        INTEGER oh);
-typedef void (*ovalProc_t)(GrafVerb verb, Rect *rp);
-typedef void (*arcProc_t)(GrafVerb verb, Rect *rp, INTEGER ang,
-                                      INTEGER arc);
-typedef void (*polyProc_t)(GrafVerb verb, PolyHandle poly);
-typedef void (*rgnProc_t)(GrafVerb verb, RgnHandle rgn);
-typedef void (*bitsProc_t)(BitMap *srcb, Rect *srcr, Rect *dstr,
-                                       INTEGER mod, RgnHandle mask);
-typedef void (*commentProc_t)(INTEGER kind, INTEGER size, Handle data);
-typedef INTEGER (*txMeasProc_t)(INTEGER bc, Ptr texta, GUEST<Point> *numer,
-                                            GUEST<Point> *denom, FontInfo *info);
-typedef void (*getPicProc_t)(Ptr data, INTEGER bc);
-typedef void (*putPicProc_t)(Ptr data, INTEGER bc);
+using textProc_t = UPP<void(INTEGER bc, Ptr textb, Point num, Point den)>;
+using lineProc_t = UPP<void(Point drawto)>;
+using rectProc_t = UPP<void(GrafVerb verb, Rect *rp)>;
+using rRectProc_t = UPP<void(GrafVerb verb, Rect *rp, INTEGER ow, INTEGER oh)>;
+using ovalProc_t = UPP<void(GrafVerb verb, Rect *rp)>;
+using arcProc_t = UPP<void(GrafVerb verb, Rect *rp, INTEGER ang, INTEGER arc)>;
+using polyProc_t = UPP<void(GrafVerb verb, PolyHandle poly)>;
+using rgnProc_t = UPP<void(GrafVerb verb, RgnHandle rgn)>;
+using bitsProc_t = UPP<void(const BitMap *srcb, const Rect *srcr, const Rect *dstr, INTEGER mod, RgnHandle mask)>;
+using commentProc_t = UPP<void(INTEGER kind, INTEGER size, Handle data)>;
+using txMeasProc_t = UPP<INTEGER(INTEGER bc, Ptr texta, GUEST<Point> *numer, GUEST<Point> *denom, FontInfo *info)>;
+using getPicProc_t = UPP<void(void * data, INTEGER bc)>;
+using putPicProc_t = UPP<void(const void * data, INTEGER bc)>;
 
 struct QDProcs
 {
@@ -329,19 +328,19 @@ typedef GUEST<CTabPtr> *CTabHandle;
 typedef struct CQDProcs
 {
     GUEST_STRUCT;
-    GUEST<Ptr> textProc;
-    GUEST<Ptr> lineProc;
-    GUEST<Ptr> rectProc;
-    GUEST<Ptr> rRectProc;
-    GUEST<Ptr> ovalProc;
-    GUEST<Ptr> arcProc;
-    GUEST<Ptr> polyProc;
-    GUEST<Ptr> rgnProc;
-    GUEST<Ptr> bitsProc;
-    GUEST<Ptr> commentProc;
-    GUEST<Ptr> txMeasProc;
-    GUEST<Ptr> getPicProc;
-    GUEST<Ptr> putPicProc;
+    GUEST<textProc_t> textProc;
+    GUEST<lineProc_t> lineProc;
+    GUEST<rectProc_t> rectProc;
+    GUEST<rRectProc_t> rRectProc;
+    GUEST<ovalProc_t> ovalProc;
+    GUEST<arcProc_t> arcProc;
+    GUEST<polyProc_t> polyProc;
+    GUEST<rgnProc_t> rgnProc;
+    GUEST<bitsProc_t> bitsProc;
+    GUEST<commentProc_t> commentProc;
+    GUEST<txMeasProc_t> txMeasProc;
+    GUEST<getPicProc_t> getPicProc;
+    GUEST<putPicProc_t> putPicProc;
     GUEST<Ptr> opcodeProc;
     GUEST<Ptr> newProc1Proc;
     GUEST<Ptr> newProc2Proc;
@@ -515,6 +514,9 @@ const LowMemGlobal<ProcPtr> JCrsrTask { 0x8EE }; //   (true);
 const LowMemGlobal<Byte> HiliteMode { 0x938 }; // QuickDraw IMV (true-b);
 
 
+extern void C_unknown574();
+PASCAL_FUNCTION(unknown574);
+
 extern void C_CopyBits(BitMap *src_bitmap, BitMap *dst_bitmap,
                             const Rect *src_rect, const Rect *dst_rect,
                             INTEGER mode, RgnHandle mask);
@@ -644,7 +646,7 @@ extern void C_PicComment(INTEGER kind, INTEGER size,
 PASCAL_TRAP(PicComment, 0xA8F2);
 extern void C_ReadComment(INTEGER kind, INTEGER size,
                                       Handle hand);
-PASCAL_FUNCTION(ReadComment);
+
 extern void C_KillPicture(PicHandle pic);
 PASCAL_TRAP(KillPicture, 0xA8F5);
 extern void C_AddPt(Point src, GUEST<Point> *dst);
@@ -811,11 +813,11 @@ extern void C_StdArc(GrafVerb verb, Rect *r,
                                  INTEGER starta, INTEGER arca);
 PASCAL_TRAP(StdArc, 0xA8BD);
 
-extern void C_StdBits(BitMap *srcbmp,
+extern void C_StdBits(const BitMap *srcbmp,
                                   const Rect *srcrp, const Rect *dstrp,
                                   INTEGER mode, RgnHandle mask);
 PASCAL_TRAP(StdBits, 0xA8EB);
-extern void StdBitsPicSaveFlag(BitMap *srcbmp,
+extern void StdBitsPicSaveFlag(const BitMap *srcbmp,
                                const Rect *srcrp, const Rect *dstrp,
                                INTEGER mode, RgnHandle mask, BOOLEAN savepic);
 
@@ -827,9 +829,9 @@ PASCAL_TRAP(StdOval, 0xA8B6);
 extern void C_StdComment(INTEGER kind, INTEGER size,
                                      Handle hand);
 PASCAL_TRAP(StdComment, 0xA8F1);
-extern void C_StdGetPic(Ptr dp, INTEGER bc);
+extern void C_StdGetPic(void *dp, INTEGER bc);
 PASCAL_TRAP(StdGetPic, 0xA8EE);
-extern void C_StdPutPic(Ptr sp, INTEGER bc);
+extern void C_StdPutPic(const void *sp, INTEGER bc);
 PASCAL_TRAP(StdPutPic, 0xA8F0);
 extern void C_StdPoly(GrafVerb verb, PolyHandle ph);
 PASCAL_TRAP(StdPoly, 0xA8C5);

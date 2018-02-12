@@ -412,17 +412,17 @@ SDL_colors(const SDL_Surface *surfp)
 
 typedef struct
 {
-    uint8 blue PACKED;
-    uint8 red PACKED;
-    uint8 green PACKED;
+    uint8_t blue PACKED;
+    uint8_t red PACKED;
+    uint8_t green PACKED;
 } sdl_pixel24;
 
 typedef struct
 {
-    uint8 zero PACKED;
-    uint8 red PACKED;
-    uint8 green PACKED;
-    uint8 blue PACKED;
+    uint8_t zero PACKED;
+    uint8_t red PACKED;
+    uint8_t green PACKED;
+    uint8_t blue PACKED;
 } mac_pixel32;
 
 #define advance_n_bytes(ptrp, n_bytes)                             \
@@ -438,7 +438,7 @@ typedef struct
         decltype(x) _x;                    \
                                            \
         _x = (x);                          \
-        (_x << 8) | (uint8)_x;             \
+        (_x << 8) | (uint8_t)_x;             \
     })
 
 static CTabHandle
@@ -536,8 +536,8 @@ gworld_from_surface(SDL_Surface *surfp)
                 {
                     case 8:
                     {
-                        uint8 *ip, *eip;
-                        uint8 *op;
+                        uint8_t *ip, *eip;
+                        uint8_t *op;
                         int rowbytes;
                         int pitch;
 

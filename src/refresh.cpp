@@ -9,7 +9,6 @@
 #include "rsys/prefs.h"
 #include "rsys/dirtyrect.h"
 #include "rsys/host.h"
-#include "rsys/pstuff.h"
 #include "rsys/flags.h"
 #include "rsys/autorefresh.h"
 #include "TimeMgr.h"
@@ -91,7 +90,7 @@ void Executor::set_refresh_rate(int new1)
 
     if(!refresh_tm_task_installed_p)
     {
-        refresh_tm_task.tmAddr = RM((ProcPtr)P_handle_refresh);
+        refresh_tm_task.tmAddr = RM((ProcPtr)&handle_refresh);
         InsTime((QElemPtr)&refresh_tm_task);
 
         /* We PrimeTime with 400 to "get the ball rolling".  The handler

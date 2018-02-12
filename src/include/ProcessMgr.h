@@ -4,6 +4,9 @@
 #include "FileMgr.h"
 #include "PPC.h"
 
+#define MODULE_NAME ProcessMgr
+#include <rsys/api-module.h>
+
 /*
  * Copyright 1995, 1996 by Abacus Research and Development, Inc.
  * All rights reserved.
@@ -157,39 +160,41 @@ enum
     procNotFound = (-600),
 };
 
+EXTERN_DISPATCHER_TRAP(OSDispatch, 0xA88F, StackW);
+
 extern void process_create(bool desk_accessory_p,
                            uint32_t type, uint32_t signature);
 
 extern OSErr C_GetCurrentProcess(ProcessSerialNumber *serial_number);
-PASCAL_FUNCTION(GetCurrentProcess);
+PASCAL_SUBTRAP(GetCurrentProcess, 0xA88F, 0x0037, OSDispatch);
 
 extern OSErr C_GetNextProcess(ProcessSerialNumber *serial_number);
-PASCAL_FUNCTION(GetNextProcess);
+PASCAL_SUBTRAP(GetNextProcess, 0xA88F, 0x0038, OSDispatch);
 
 extern OSErr C_GetProcessInformation(ProcessSerialNumber *serial_number,
                                                  ProcessInfoPtr info);
-PASCAL_FUNCTION(GetProcessInformation);
+PASCAL_SUBTRAP(GetProcessInformation, 0xA88F, 0x003A, OSDispatch);
 
 extern OSErr C_SameProcess(ProcessSerialNumber *serial_number0,
                                        ProcessSerialNumber *serial_number1,
                                        Boolean *same_out);
-PASCAL_FUNCTION(SameProcess);
-extern OSErr C_GetFrontProcess(ProcessSerialNumber *serial_number, void *dummy);
-PASCAL_FUNCTION(GetFrontProcess);
+PASCAL_SUBTRAP(SameProcess, 0xA88F, 0x003D, OSDispatch);
+extern OSErr C_GetFrontProcess(int32_t dummy, ProcessSerialNumber *serial_number);
+PASCAL_SUBTRAP(GetFrontProcess, 0xA88F, 0x0039, OSDispatch);
 
 extern OSErr C_SetFrontProcess(ProcessSerialNumber *serial_number);
-PASCAL_FUNCTION(SetFrontProcess);
+PASCAL_SUBTRAP(SetFrontProcess, 0xA88F, 0x003B, OSDispatch);
 
 extern OSErr C_WakeUpProcess(ProcessSerialNumber *serial_number);
-PASCAL_FUNCTION(WakeUpProcess);
+PASCAL_SUBTRAP(WakeUpProcess, 0xA88F, 0x003C, OSDispatch);
 
 extern OSErr C_GetProcessSerialNumberFromPortName(PPCPortPtr port_name,
                                                               ProcessSerialNumber *serial_number);
-PASCAL_FUNCTION(GetProcessSerialNumberFromPortName);
+PASCAL_SUBTRAP(GetProcessSerialNumberFromPortName, 0xA88F, 0x0035, OSDispatch);
 
 extern OSErr C_GetPortNameFromProcessSerialNumber(PPCPortPtr port_name,
                                                               ProcessSerialNumber *serial_number);
-PASCAL_FUNCTION(GetPortNameFromProcessSerialNumber);
+PASCAL_SUBTRAP(GetPortNameFromProcessSerialNumber, 0xA88F, 0x0046, OSDispatch);
 
 extern OSErr NewLaunch(StringPtr appl, INTEGER vrefnum,
                        LaunchParamBlockRec *lpbp);

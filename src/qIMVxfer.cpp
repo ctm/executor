@@ -282,7 +282,7 @@ void Executor::convert_transparent(const PixMap *src1, const PixMap *src2,
 #define WRITE_INDIRECT_PIXEL(v, b, x, bpp)                                              \
     ((void)((bpp) == 8 ? b[x] = (v)                                                     \
                        : ({                                                             \
-                             uint8 *p;                                                  \
+                             uint8_t *p;                                                  \
                              p = &b[(x) * (bpp) / 8];                                   \
                              *p &= ~(((1 << (bpp)) - 1) << SHIFT_COUNT(x, bpp));        \
                              *p |= (((v) & ((1 << (bpp)) - 1)) << SHIFT_COUNT(x, bpp)); \
@@ -358,11 +358,11 @@ void Executor::convert_pixmap_with_IMV_mode(const PixMap *src1, const PixMap *sr
 {
     CTabPtr src1_ctab, src2_ctab;
     unsigned max_color;
-    uint8 *src1_row_base, *src2_row_base, *dst_row_base;
+    uint8_t *src1_row_base, *src2_row_base, *dst_row_base;
     int src1_rowbytes, src2_rowbytes, dst_rowbytes, src1_deltax, src2_deltax;
     int width, height, s1_width, s1_height;
     int itab_res, itab_res_mask;
-    const uint8 *itab_array;
+    const uint8_t *itab_array;
     uint32_t op_red, op_green, op_blue;
 
     const rgb_spec_t *rgb_spec;
@@ -598,7 +598,7 @@ void Executor::convert_pixmap_with_IMV_mode(const PixMap *src1, const PixMap *sr
 #define WRITE_INDIRECT_PIXEL(v, b, x, bpp)                                              \
     ((void)((bpp) == 8 ? b[x] = (v)                                                     \
                        : ({                                                             \
-                             uint8 *p;                                                  \
+                             uint8_t *p;                                                  \
                              p = &b[(x) * (bpp) / 8];                                   \
                              *p &= ~(((1 << (bpp)) - 1) << SHIFT_COUNT(x, bpp));        \
                              *p |= (((v) & ((1 << (bpp)) - 1)) << SHIFT_COUNT(x, bpp)); \

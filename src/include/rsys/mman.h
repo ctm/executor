@@ -18,8 +18,6 @@ namespace Executor
 extern SignedByte hlock_return_orig_state(Handle h);
 extern Size zone_size(THz zone);
 
-extern void BlockMove_the_trap(Ptr src, Ptr dst, Size cnt, bool flush_p);
-
 /* Helper function that prints a useful error message when out of memory. */
 extern void print_mem_full_message(void);
 
@@ -65,9 +63,6 @@ extern bool ROMlib_memnomove_p;
 #define LOCKBIT (1 << 7)
 #define PURGEBIT (1 << 6)
 #define RSRCBIT (1 << 5)
-
-#define SYSBIT (1 << 10)
-#define CLRBIT (1 << 9)
 
 /*
  * The to_look_for stuff below is a guess, but I couldn't get ThinkC to

@@ -30,7 +30,6 @@
 #include "rsys/cquick.h"
 #include "rsys/file.h"
 #include "rsys/soundopts.h"
-#include "rsys/pstuff.h"
 #include "rsys/prefs.h"
 #include "rsys/aboutpanel.h"
 #include "rsys/segment.h"
@@ -45,6 +44,7 @@
 #include "rsys/suffix_maps.h"
 #include "rsys/string.h"
 
+#include "rsys/emustubs.h"
 
 #define static
 
@@ -319,6 +319,7 @@ syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
         togoto = tooltraptable[trapno];
         if(trapword & POPBIT)
             retval = POPADDR();
+#if defined(SHORTCIRCUIT_TRAPS)
         if(togoto == toolstuff[trapno].orig)
         {
             if(toolstuff[trapno].ptoc.magic == (ULONGINT)-1)
@@ -336,6 +337,7 @@ syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
                 FAKEPascalToCCall(&toolstuff[trapno].ptoc);
         }
         else
+#endif
         {
             PUSHADDR(retval); /* Where they'll return to */
             retval = (syn68k_addr_t)togoto; /* Where they have patched */
@@ -346,6 +348,7 @@ syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
     {
         trapno = trapword & OSMASK;
         togoto = ostraptable[trapno];
+#if defined(SHORTCIRCUIT_TRAPS)        
         if(togoto == osstuff[trapno].orig)
         {
             saved1 = EM_D1;
@@ -367,6 +370,7 @@ syn68k_addr_t Executor::alinehandler(syn68k_addr_t pc, void *ignored)
             EM_A2 = savea2;
         }
         else
+#endif
         {
             PUSHADDR(retval);
             PUSHUW(status);
@@ -454,12 +458,12 @@ void Executor::executor_main(void)
     LM(MinStack) = CLC(0x400); /* values ... */
     LM(IAZNotify) = 0;
     LM(CurPitch) = 0;
-    LM(JSwapFont) = RM((ProcPtr)P_FMSwapFont);
-    LM(JInitCrsr) = RM((ProcPtr)P_InitCursor);
+    LM(JSwapFont) = RM((ProcPtr)&FMSwapFont);
+    LM(JInitCrsr) = RM((ProcPtr)&InitCursor);
 
-    LM(Key1Trans) = RM((Ptr)P_Key1Trans);
-    LM(Key2Trans) = RM((Ptr)P_Key2Trans);
-    LM(JFLUSH) = RM((ProcPtr)P_flushcache);
+    LM(Key1Trans) = RM((Ptr)&stub_Key1Trans);
+    LM(Key2Trans) = RM((Ptr)&stub_Key2Trans);
+    LM(JFLUSH) = RM(&FlushCodeCache);
     LM(JResUnknown1) = LM(JFLUSH); /* I don't know what these are supposed to */
     LM(JResUnknown2) = LM(JFLUSH); /* do, but they're not called enough for
 				   us to worry about the cache flushing

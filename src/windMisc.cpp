@@ -19,6 +19,7 @@
 
 #include "rsys/evil.h"
 #include "rsys/executor.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 
@@ -122,6 +123,8 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
     LONGINT l;
     int drawn;
 
+    bool onDesktop = (thePortX == LM(WMgrPort)) || (thePortX == guest_cast<GrafPtr>(LM(WMgrCPort)));
+
     rh = NewRgn();
     CopyRgn(rgn, rh);
     InsetRgn(rh, 1, 1);
@@ -134,7 +137,8 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
     if((drawn = PtInRect(p, slop)))
     {
         PaintRgn(rgn); /* was Frame */
-        ROMlib_rootless_update(rgn);
+        if(onDesktop)
+            ROMlib_rootless_update(rgn);
     }
     while(!GetOSEvent(mUpMask, &ev))
     {
@@ -158,7 +162,8 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
                 drawn = true;
                 OffsetRgn(rgn, ep.h - p.h, ep.v - p.v);
                 PaintRgn(rgn);
-                ROMlib_rootless_update(rgn);
+                if(onDesktop)
+                    ROMlib_rootless_update(rgn);
                 p.h = ep.h;
                 p.v = ep.v;
             }
@@ -168,7 +173,8 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
             if(drawn)
             {
                 PaintRgn(rgn);
-                ROMlib_rootless_update(nullptr);
+                if(onDesktop)
+                    ROMlib_rootless_update(nullptr);
             }
             drawn = false;
         }
@@ -201,7 +207,8 @@ LONGINT Executor::C_DragTheRgn(RgnHandle rgn, Point startp, Rect *limit,
     if(drawn)
     {
         PaintRgn(rgn);
-        ROMlib_rootless_update(nullptr);
+        if(onDesktop)
+            ROMlib_rootless_update(nullptr);
     }
     SetPenState(&ps);
     DisposeRgn(rh);
@@ -525,10 +532,10 @@ int32_t Executor::ROMlib_windcall(WindowPtr wind, int16_t mess, int32_t param)
 
     wp = (windprocp)STARH(defproc);
 
-    if(wp == P_wdef0)
-        retval = C_wdef0(var(wind), wind, mess, param);
-    else if(wp == P_wdef16)
-        retval = C_wdef16(var(wind), wind, mess, param);
+    if(wp == &wdef0)
+        retval = wdef0(var(wind), wind, mess, param);
+    else if(wp == &wdef16)
+        retval = wdef16(var(wind), wind, mess, param);
     else
     {
 #if defined EVIL_ILLUSTRATOR_7_HACK
@@ -539,8 +546,7 @@ int32_t Executor::ROMlib_windcall(WindowPtr wind, int16_t mess, int32_t param)
 #endif
         ROMlib_hook(wind_wdefnumber);
         HLockGuard guard(defproc);
-        retval = CToPascalCall(STARH(defproc),
-                               ctop(&C_wdef0), var(wind), wind, mess, param);
+        retval = wp(var(wind), wind, mess, param);
 #if defined EVIL_ILLUSTRATOR_7_HACK
         ROMlib_evil_illustrator_7_hack = save_hack;
 #endif

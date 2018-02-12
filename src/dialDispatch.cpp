@@ -4,7 +4,6 @@
 
 #include "rsys/common.h"
 #include "EventMgr.h"
-#include "rsys/pstuff.h"
 
 #include "DialogMgr.h"
 
@@ -14,7 +13,7 @@ using namespace Executor;
 
 OSErr Executor::C_GetStdFilterProc(GUEST<ProcPtr> *proc)
 {
-    *proc = RM((ProcPtr)P_ROMlib_myfilt);
+    *proc = RM((ProcPtr)&ROMlib_myfilt);
     warning_unimplemented("no specs"); /* i.e. no documentation on how this
 					 routine is *supposed* to work, so
 					 we may be blowing off something

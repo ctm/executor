@@ -37,7 +37,7 @@
 #endif
 
 #if !defined(U)
-#define U(c) ((uint8)(c))
+#define U(c) ((uint8_t)(c))
 #endif
 
 #if !defined(ALLOCABEGIN)
@@ -57,10 +57,10 @@
     (((const uint32_t *)(p1))[0] == ((const uint32_t *)(p2))[0] \
      && ((const uint32_t *)(p1))[1] == ((const uint32_t *)(p2))[1])
 
-#define FOURCC(a, b, c, d) ((((uint32_t)(uint8)(a)) << 24)   \
-                       | (((uint32_t)(uint8)(b)) << 16) \
-                       | (((uint32_t)(uint8)(c)) << 8)  \
-                       | (((uint32_t)(uint8)(d)) << 0))
+#define FOURCC(a, b, c, d) ((((uint32_t)(uint8_t)(a)) << 24)   \
+                       | (((uint32_t)(uint8_t)(b)) << 16) \
+                       | (((uint32_t)(uint8_t)(c)) << 8)  \
+                       | (((uint32_t)(uint8_t)(d)) << 0))
 
 #define TICK(str) (((LONGINT)(unsigned char)str[0] << 24) | ((LONGINT)(unsigned char)str[1] << 16) | ((LONGINT)(unsigned char)str[2] << 8) | ((LONGINT)(unsigned char)str[3] << 0))
 

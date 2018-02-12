@@ -1097,7 +1097,7 @@ OSErr Executor::ufsPBHOpen(HParmBlkPtr pb,
     return err;
 }
 
-OSErrRET Executor::OpenDeny(HParmBlkPtr pb, BOOLEAN a) /* IMV-397 */
+OSErr Executor::OpenDeny(HParmBlkPtr pb, BOOLEAN a) /* IMV-397 */
 { /* HACK */
     HParamBlockRec block;
     OSErr retval;
@@ -1618,63 +1618,63 @@ OSErr Executor::ufsPBClose(ParmBlkPtr pb, BOOLEAN a) /* INTERNAL */
     return err;
 }
 
-OSErrRET Executor::PBHGetLogInInfo(HParmBlkPtr pb, BOOLEAN a)
+OSErr Executor::PBHGetLogInInfo(HParmBlkPtr pb, BOOLEAN a)
 {
-    OSErrRET retval;
+    OSErr retval;
 
     warning_unimplemented(NULL_STRING);
     retval = paramErr;
     return retval;
 }
 
-OSErrRET Executor::PBHGetDirAccess(HParmBlkPtr pb, BOOLEAN a)
+OSErr Executor::PBHGetDirAccess(HParmBlkPtr pb, BOOLEAN a)
 {
-    OSErrRET retval;
+    OSErr retval;
 
     warning_unimplemented(NULL_STRING);
     retval = paramErr;
     return retval;
 }
 
-OSErrRET Executor::PBHCopyFile(HParmBlkPtr pb, BOOLEAN a)
+OSErr Executor::PBHCopyFile(HParmBlkPtr pb, BOOLEAN a)
 {
-    OSErrRET retval;
+    OSErr retval;
 
     warning_unimplemented(NULL_STRING);
     retval = paramErr;
     return retval;
 }
 
-OSErrRET Executor::PBHMapName(HParmBlkPtr pb, BOOLEAN a)
+OSErr Executor::PBHMapName(HParmBlkPtr pb, BOOLEAN a)
 {
-    OSErrRET retval;
+    OSErr retval;
 
     warning_unimplemented(NULL_STRING);
     retval = paramErr;
     return retval;
 }
 
-OSErrRET Executor::PBHMapID(HParmBlkPtr pb, BOOLEAN a)
+OSErr Executor::PBHMapID(HParmBlkPtr pb, BOOLEAN a)
 {
-    OSErrRET retval;
+    OSErr retval;
 
     warning_unimplemented(NULL_STRING);
     retval = paramErr;
     return retval;
 }
 
-OSErrRET Executor::PBHSetDirAccess(HParmBlkPtr pb, BOOLEAN a)
+OSErr Executor::PBHSetDirAccess(HParmBlkPtr pb, BOOLEAN a)
 {
-    OSErrRET retval;
+    OSErr retval;
 
     warning_unimplemented(NULL_STRING);
     retval = paramErr;
     return retval;
 }
 
-OSErrRET Executor::PBHMoveRename(HParmBlkPtr pb, BOOLEAN a)
+OSErr Executor::PBHMoveRename(HParmBlkPtr pb, BOOLEAN a)
 {
-    OSErrRET retval;
+    OSErr retval;
 
     warning_unimplemented(NULL_STRING);
     retval = paramErr;

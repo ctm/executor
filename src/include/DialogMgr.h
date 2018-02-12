@@ -11,6 +11,9 @@
 #include "WindowMgr.h"
 #include "TextEdit.h"
 
+#define MODULE_NAME DialogMgr
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 enum
@@ -156,21 +159,23 @@ typedef UPP<void(DialogPtr theDialog, INTEGER itemNo)> UserItemProcPtr;
 const LowMemGlobal<ProcPtr> ResumeProc { 0xA8C }; // DialogMgr IMI-411 (true);
 const LowMemGlobal<INTEGER> ANumber { 0xA98 }; // DialogMgr IMI-423 (true);
 const LowMemGlobal<INTEGER> ACount { 0xA9A }; // DialogMgr IMI-423 (true);
-const LowMemGlobal<ProcPtr> DABeeper { 0xA9C }; // DialogMgr IMI-411 (true);
+const LowMemGlobal<SoundProcPtr> DABeeper { 0xA9C }; // DialogMgr IMI-411 (true);
 const LowMemGlobal<Handle[4]> DAStrings { 0xAA0 }; // DialogMgr IMI-421 (true);
 const LowMemGlobal<INTEGER> DlgFont { 0xAFA }; // DialogMgr IMI-412 (true);
 
+DISPATCHER_TRAP(DialogDispatch, 0xAA68, D0W);
+
 extern INTEGER C_Alert(INTEGER id,
-                                   ProcPtr fp);
+                                   ModalFilterProcPtr fp);
 PASCAL_TRAP(Alert, 0xA985);
 extern INTEGER C_StopAlert(INTEGER id,
-                                       ProcPtr fp);
+                                       ModalFilterProcPtr fp);
 PASCAL_TRAP(StopAlert, 0xA986);
 extern INTEGER C_NoteAlert(INTEGER id,
-                                       ProcPtr fp);
+                                       ModalFilterProcPtr fp);
 PASCAL_TRAP(NoteAlert, 0xA987);
 extern INTEGER C_CautionAlert(INTEGER id,
-                                          ProcPtr fp);
+                                          ModalFilterProcPtr fp);
 PASCAL_TRAP(CautionAlert, 0xA988);
 extern void C_CouldAlert(INTEGER id);
 PASCAL_TRAP(CouldAlert, 0xA989);
@@ -191,10 +196,11 @@ extern void C_CloseDialog(DialogPtr dp);
 PASCAL_TRAP(CloseDialog, 0xA982);
 extern void C_DisposDialog(DialogPtr dp);
 PASCAL_TRAP(DisposDialog, 0xA983);
-extern BOOLEAN C_ROMlib_myfilt(DialogPeek dp, EventRecord *evt,
+extern BOOLEAN C_ROMlib_myfilt(DialogPtr dlg, EventRecord *evt,
                                       GUEST<INTEGER> *ith);
+PASCAL_FUNCTION(ROMlib_myfilt);
 
-extern void C_ModalDialog(ProcPtr fp,
+extern void C_ModalDialog(ModalFilterProcPtr fp,
                                       GUEST<INTEGER> *item);
 PASCAL_TRAP(ModalDialog, 0xA991);
 extern BOOLEAN C_IsDialogEvent(
@@ -216,7 +222,8 @@ extern void DlgCopy(DialogPtr dp);
 extern void DlgPaste(DialogPtr dp);
 extern void DlgDelete(DialogPtr dp);
 extern void C_ROMlib_mysound(INTEGER i);
-extern void C_ErrorSound(ProcPtr sp);
+PASCAL_FUNCTION(ROMlib_mysound);
+extern void C_ErrorSound(SoundProcPtr sp);
 PASCAL_TRAP(ErrorSound, 0xA98C);
 extern void C_InitDialogs(ProcPtr rp);
 PASCAL_TRAP(InitDialogs, 0xA97B);
@@ -252,16 +259,16 @@ extern CDialogPtr C_NewCDialog(Ptr, Rect *, StringPtr, BOOLEAN, INTEGER, WindowP
 PASCAL_TRAP(NewCDialog, 0xAA4B);
 
 extern OSErr C_GetStdFilterProc(GUEST<ProcPtr> *proc);
-PASCAL_FUNCTION(GetStdFilterProc);
+PASCAL_SUBTRAP(GetStdFilterProc, 0xAA68, 0x0203, DialogDispatch);
 extern OSErr C_SetDialogDefaultItem(DialogPtr dialog,
                                                 int16_t new_item);
-PASCAL_FUNCTION(SetDialogDefaultItem);
+PASCAL_SUBTRAP(SetDialogDefaultItem, 0xAA68, 0x0304, DialogDispatch);
 extern OSErr C_SetDialogCancelItem(DialogPtr dialog,
                                                int16_t new_item);
-PASCAL_FUNCTION(SetDialogCancelItem);
+PASCAL_SUBTRAP(SetDialogCancelItem, 0xAA68, 0x0305, DialogDispatch);
 extern OSErr C_SetDialogTracksCursor(DialogPtr dialog,
                                                  Boolean tracks);
-PASCAL_FUNCTION(SetDialogTracksCursor);
+PASCAL_SUBTRAP(SetDialogTracksCursor, 0xAA68, 0x0306, DialogDispatch);
 
 extern void AppendDITL(DialogPtr, Handle, DITLMethod);
 extern void ShortenDITL(DialogPtr, int16_t);

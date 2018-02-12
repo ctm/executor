@@ -64,7 +64,7 @@ QHdrPtr myGetVCBQHdr(void)
  *	  we're looking at hfs or ufs stuff.
  */
 
-OSErrRET Executor::PBGetFCBInfo(FCBPBPtr pb, BOOLEAN async)
+OSErr Executor::PBGetFCBInfo(FCBPBPtr pb, BOOLEAN async)
 {
     filecontrolblock *fcbp, *efcbp;
     INTEGER i;

@@ -338,7 +338,7 @@ void _gui_fatal(const char *file, int line, const char *fn,
 
         /* Make sure the screen is sane. */
         SetGDevice(MR(LM(MainDevice)));
-        RestoreClutDevice(MR(LM(MainDevice)));
+        RestoreDeviceClut(MR(LM(MainDevice)));
 
         sprintf(buf,
                 "Fatal error.\r"

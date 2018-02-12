@@ -4,8 +4,13 @@
 /* Copyright 1986-1996 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#include "ExMacTypes.h"
+#include "QuickDraw.h"
+
+#define MODULE_NAME Iconutil
+#include <rsys/api-module.h>
 
 #define large1BitMask (FOURCC('I', 'C', 'N', '#'))
 #define large4BitData (FOURCC('i', 'c', 'l', '4'))
@@ -111,19 +116,20 @@ typedef struct CIcon
 typedef GUEST<CIconPtr> *CIconHandle;
 
 /* icon utility function prototypes */
+DISPATCHER_TRAP(IconDispatch, 0xABC9, D0W);
 
 extern OSErr C_PlotIconID(const Rect *rect,
                                       IconAlignmentType align,
                                       IconTransformType tranform,
                                       short res_id);
-PASCAL_FUNCTION(PlotIconID);
+PASCAL_SUBTRAP(PlotIconID, 0xABC9, 0x0500, IconDispatch);
 
 extern OSErr C_PlotIconMethod(const Rect *rect,
                                           IconAlignmentType align,
                                           IconTransformType transform,
                                           IconGetterProcPtr method,
                                           void *data);
-PASCAL_FUNCTION(PlotIconMethod);
+PASCAL_SUBTRAP(PlotIconMethod, 0xABC9, 0x0805, IconDispatch);
 extern void C_PlotCIcon(const Rect *rect, CIconHandle icon);
 PASCAL_TRAP(PlotCIcon, 0xAA1F);
 extern void C_PlotIcon(const Rect *rect, Handle icon);
@@ -132,17 +138,17 @@ extern OSErr C_PlotIconHandle(const Rect *rect,
                                           IconAlignmentType align,
                                           IconTransformType transform,
                                           Handle icon);
-PASCAL_FUNCTION(PlotIconHandle);
+PASCAL_SUBTRAP(PlotIconHandle, 0xABC9, 0x061D, IconDispatch);
 extern OSErr C_PlotCIconHandle(const Rect *rect,
                                            IconAlignmentType align,
                                            IconTransformType transform,
                                            CIconHandle icon);
-PASCAL_FUNCTION(PlotCIconHandle);
+PASCAL_SUBTRAP(PlotCIconHandle, 0xABC9, 0x061F, IconDispatch);
 extern OSErr C_PlotSICNHandle(const Rect *rect,
                                           IconAlignmentType align,
                                           IconTransformType transform,
                                           Handle icon);
-PASCAL_FUNCTION(PlotSICNHandle);
+PASCAL_SUBTRAP(PlotSICNHandle, 0xABC9, 0x061E, IconDispatch);
 
 extern Handle C_GetIcon(short icon_id);
 PASCAL_TRAP(GetIcon, 0xA9BB);
@@ -154,100 +160,100 @@ PASCAL_TRAP(DisposeCIcon, 0xAA25);
 
 extern OSErr C_GetIconSuite(GUEST<Handle> *suite, short res_id,
                                         IconSelectorValue selector);
-PASCAL_FUNCTION(GetIconSuite);
+PASCAL_SUBTRAP(GetIconSuite, 0xABC9, 0x0501, IconDispatch);
 extern OSErr C_NewIconSuite(GUEST<Handle> *suite);
-PASCAL_FUNCTION(NewIconSuite);
+PASCAL_SUBTRAP(NewIconSuite, 0xABC9, 0x0207, IconDispatch);
 
 extern OSErr C_AddIconToSuite(Handle icon_data, Handle suite,
                                           ResType type);
-PASCAL_FUNCTION(AddIconToSuite);
+PASCAL_SUBTRAP(AddIconToSuite, 0xABC9, 0x0608, IconDispatch);
 extern OSErr C_GetIconFromSuite(GUEST<Handle> *icon_data,
                                             Handle suite, ResType type);
-PASCAL_FUNCTION(GetIconFromSuite);
+PASCAL_SUBTRAP(GetIconFromSuite, 0xABC9, 0x0609, IconDispatch);
 extern OSErr C_PlotIconSuite(const Rect *rect,
                                          IconAlignmentType align,
                                          IconTransformType transform,
                                          Handle suite);
-PASCAL_FUNCTION(PlotIconSuite);
+PASCAL_SUBTRAP(PlotIconSuite, 0xABC9, 0x0603, IconDispatch);
 extern OSErr C_ForEachIconDo(Handle suite,
                                          IconSelectorValue selector,
                                          IconActionProcPtr action,
                                          void *data);
-PASCAL_FUNCTION(ForEachIconDo);
+PASCAL_SUBTRAP(ForEachIconDo, 0xABC9, 0x080A, IconDispatch);
 extern short C_GetSuiteLabel(Handle suite);
-PASCAL_FUNCTION(GetSuiteLabel);
+PASCAL_SUBTRAP(GetSuiteLabel, 0xABC9, 0x0217, IconDispatch);
 extern OSErr C_SetSuiteLabel(Handle suite, short label);
-PASCAL_FUNCTION(SetSuiteLabel);
+PASCAL_SUBTRAP(SetSuiteLabel, 0xABC9, 0x0316, IconDispatch);
 extern OSErr C_GetLabel(short label, RGBColor *label_color,
                                     Str255 label_string);
-PASCAL_FUNCTION(GetLabel);
+PASCAL_SUBTRAP(GetLabel, 0xABC9, 0x050B, IconDispatch);
 extern OSErr C_DisposeIconSuite(Handle suite,
                                             Boolean dispose_data_p);
-PASCAL_FUNCTION(DisposeIconSuite);
+PASCAL_SUBTRAP(DisposeIconSuite, 0xABC9, 0x0302, IconDispatch);
 
 extern OSErr C_IconSuiteToRgn(RgnHandle rgn, const Rect *rect,
                                           IconAlignmentType align,
                                           Handle suite);
-PASCAL_FUNCTION(IconSuiteToRgn);
+PASCAL_SUBTRAP(IconSuiteToRgn, 0xABC9, 0x0714, IconDispatch);
 extern OSErr C_IconIDToRgn(RgnHandle rgn, const Rect *rect,
                                        IconAlignmentType align,
                                        short icon_id);
-PASCAL_FUNCTION(IconIDToRgn);
+PASCAL_SUBTRAP(IconIDToRgn, 0xABC9, 0x0613, IconDispatch);
 extern OSErr C_IconMethodToRgn(RgnHandle rgn, const Rect *rect,
                                            IconAlignmentType align,
                                            IconGetterProcPtr method,
                                            void *data);
-PASCAL_FUNCTION(IconMethodToRgn);
+PASCAL_SUBTRAP(IconMethodToRgn, 0xABC9, 0x0915, IconDispatch);
 
 extern Boolean C_PtInIconSuite(Point test_pt,
                                            const Rect *rect,
                                            IconAlignmentType align,
                                            Handle suite);
-PASCAL_FUNCTION(PtInIconSuite);
+PASCAL_SUBTRAP(PtInIconSuite, 0xABC9, 0x070E, IconDispatch);
 extern Boolean C_PtInIconID(Point test_pt, const Rect *rect,
                                         IconAlignmentType align,
                                         short icon_id);
-PASCAL_FUNCTION(PtInIconID);
+PASCAL_SUBTRAP(PtInIconID, 0xABC9, 0x060D, IconDispatch);
 extern Boolean C_PtInIconMethod(Point test_pt, const Rect *rect,
                                             IconAlignmentType align,
                                             IconGetterProcPtr method,
                                             void *data);
-PASCAL_FUNCTION(PtInIconMethod);
+PASCAL_SUBTRAP(PtInIconMethod, 0xABC9, 0x090F, IconDispatch);
 extern Boolean C_RectInIconSuite(const Rect *test_rect,
                                              const Rect *rect,
                                              IconAlignmentType align,
                                              Handle suite);
-PASCAL_FUNCTION(RectInIconSuite);
+PASCAL_SUBTRAP(RectInIconSuite, 0xABC9, 0x0711, IconDispatch);
 extern Boolean C_RectInIconID(const Rect *test_rect,
                                           const Rect *rect,
                                           IconAlignmentType align,
                                           short icon_id);
-PASCAL_FUNCTION(RectInIconID);
+PASCAL_SUBTRAP(RectInIconID, 0xABC9, 0x0610, IconDispatch);
 extern Boolean C_RectInIconMethod(const Rect *test_rect,
                                               const Rect *rect,
                                               IconAlignmentType align,
                                               IconGetterProcPtr method,
                                               void *data);
-PASCAL_FUNCTION(RectInIconMethod);
+PASCAL_SUBTRAP(RectInIconMethod, 0xABC9, 0x0912, IconDispatch);
 extern OSErr C_MakeIconCache(Handle *cache,
                                          IconGetterProcPtr make_icon,
                                          void *data);
-PASCAL_FUNCTION(MakeIconCache);
+PASCAL_SUBTRAP(MakeIconCache, 0xABC9, 0x0604, IconDispatch);
 extern OSErr C_LoadIconCache(const Rect *rect,
                                          IconAlignmentType align,
                                          IconTransformType transform,
                                          Handle cache);
-PASCAL_FUNCTION(LoadIconCache);
+PASCAL_SUBTRAP(LoadIconCache, 0xABC9, 0x0606, IconDispatch);
 extern OSErr C_GetIconCacheData(Handle cache, void **data);
-PASCAL_FUNCTION(GetIconCacheData);
+PASCAL_SUBTRAP(GetIconCacheData, 0xABC9, 0x0419, IconDispatch);
 extern OSErr C_SetIconCacheData(Handle cache, void *data);
-PASCAL_FUNCTION(SetIconCacheData);
+PASCAL_SUBTRAP(SetIconCacheData, 0xABC9, 0x041A, IconDispatch);
 extern OSErr C_GetIconCacheProc(Handle cache,
                                             IconGetterProcPtr *proc);
-PASCAL_FUNCTION(GetIconCacheProc);
+PASCAL_SUBTRAP(GetIconCacheProc, 0xABC9, 0x041B, IconDispatch);
 extern OSErr C_SetIconCacheProc(Handle cache,
                                             IconGetterProcPtr proc);
-PASCAL_FUNCTION(SetIconCacheProc);
+PASCAL_SUBTRAP(SetIconCacheProc, 0xABC9, 0x041C, IconDispatch);
 }
 
 #endif /* !_ICON_UTIL_H */

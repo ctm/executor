@@ -9,6 +9,10 @@
  */
 
 #include "EventMgr.h"
+
+#define MODULE_NAME ToolboxEvent
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 const LowMemGlobal<INTEGER> KeyThresh { 0x18E }; // ToolboxEvent IMI-246 (true);

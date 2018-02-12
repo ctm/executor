@@ -29,7 +29,7 @@ static SDL_Surface *screen;
 namespace Executor
 {
 /* These variables are required by the vdriver interface. */
-uint8 *vdriver_fbuf;
+uint8_t *vdriver_fbuf;
 int vdriver_row_bytes;
 int vdriver_width = 0;
 int vdriver_height = 0;
@@ -170,12 +170,12 @@ bool Executor::vdriver_set_mode(int width, int height, int bpp, bool grayscale_p
         /* WARNING!  This results in surface memory that is unsafe to access! */
         if(SDL_LockSurface(screen) < 0)
             return (false);
-        vdriver_fbuf = (uint8 *)screen->pixels;
+        vdriver_fbuf = (uint8_t *)screen->pixels;
         SDL_UnlockSurface(screen);
         fprintf(stderr, "Warning: Executor performing unsafe video access\n");
     }
     else
-        vdriver_fbuf = (uint8 *)screen->pixels;
+        vdriver_fbuf = (uint8_t *)screen->pixels;
 
     sdl_syswm_init();
 

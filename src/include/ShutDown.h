@@ -1,5 +1,11 @@
+#pragma once
 
 /* shutdown manager define/routines */
+
+#include "ExMacTypes.h"
+
+#define MODULE_NAME ShutDown
+#include <rsys/api-module.h>
 
 namespace Executor
 {
@@ -12,13 +18,15 @@ enum
     sdOnRestartOrPower = (sdOnPowerOff + sdOnRestart),
 };
 
+DISPATCHER_TRAP(ShutDown, 0xA895, StackW);
+
 extern void C_ShutDwnPower(void);
-PASCAL_FUNCTION(ShutDwnPower);
+PASCAL_SUBTRAP(ShutDwnPower, 0xA895, 0x0001, ShutDown);
 extern void C_ShutDwnStart(void);
-PASCAL_FUNCTION(ShutDwnStart);
+PASCAL_SUBTRAP(ShutDwnStart, 0xA895, 0x0002, ShutDown);
 extern void C_ShutDwnInstall(ProcPtr shutdown_proc,
                                          int16_t flags);
-PASCAL_FUNCTION(ShutDwnInstall);
+PASCAL_SUBTRAP(ShutDwnInstall, 0xA895, 0x0003, ShutDown);
 extern void C_ShutDwnRemove(ProcPtr shutdown_proc);
-PASCAL_FUNCTION(ShutDwnRemove);
+PASCAL_SUBTRAP(ShutDwnRemove, 0xA895, 0x0004, ShutDown);
 }

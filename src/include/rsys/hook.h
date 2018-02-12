@@ -64,7 +64,5 @@ extern void ROMlib_hook(LONGINT hn);
 #define ROMlib_hook(hn)
 #endif
 
-#define HOOKSAVEREGS()
-#define HOOKRESTOREREGS()
 }
 #endif /* !_HOOK_H_ */

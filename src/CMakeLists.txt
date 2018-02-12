@@ -50,7 +50,6 @@ add_subdirectory(config/arch/generic_le)
 add_subdirectory(config/os/win32)
 add_subdirectory(config/os/macosx)
 
-
 function(linkheader from to variant)
     if(DEFINED ARGV3)
         set(input ${ARGV3})
@@ -177,19 +176,21 @@ set(num_sources bindec.cpp float4.cpp float5.cpp float7.cpp floatnext.cpp toolma
     mathlib.cpp)
 source_group(Numerics FILES ${num_sources})
 
-set(misc_sources desk.cpp device.cpp disk.cpp diskinit.cpp dump.cpp trapname.cpp font.cpp
+set(misc_sources
+  traps.cpp logging.cpp
+  desk.cpp device.cpp disk.cpp diskinit.cpp dump.cpp trapname.cpp font.cpp
   gestalt.cpp globals.cpp iu.cpp launch.cpp main.cpp mman.cpp mmansubr.cpp notify.cpp hle.cpp
   osevent.cpp osutil.cpp pack.cpp scrap.cpp script.cpp segment.cpp serial.cpp
   slash.cpp stdfile.cpp romlib_stubs.cpp syserr.cpp toolevent.cpp toolutil.cpp time.cpp
   vbl.cpp syncint.cpp virtualint.cpp refresh.cpp autorefresh.cpp aboutbox.cpp
-  option.cpp parseopt.cpp parsenum.cpp desperate.cpp
+  option.cpp parseopt.cpp parsenum.cpp
   version.cpp shutdown.cpp uniquefile.cpp screen-dump.cpp
   process.cpp alias.cpp string.cpp tempmem.cpp edition.cpp fontIMVI.cpp balloon.cpp
   error.cpp adb.cpp color_wheel_bits.cpp finder.cpp system_error.cpp ibm_keycodes.cpp
   icon.cpp redrawscreen.cpp ini.cpp checkpoint.cpp qt.cpp
   paramline.c fauxdbm.cpp commtool.cpp cfm.cpp pef_hash.cpp
   interfacelib.cpp mixed_mode.cpp suffix_maps.cpp appearance.cpp lockrange.cpp
-  emutrap.cpp emutraptables.cpp emustubs.cpp unix_like.cpp parse.ypp check_structs.cpp
+  emutrap.cpp emustubs.cpp unix_like.cpp parse.ypp check_structs.cpp
   executor.cpp  crc.cpp)
 
 set(include_sources hintemplate.h
@@ -255,7 +256,6 @@ set(include_sources hintemplate.h
                   include/rsys/dcache.h
                   include/rsys/depthconv.h
                   include/rsys/desk.h
-                  include/rsys/desperate.h
                   include/rsys/device.h
                   include/rsys/dial.h
                   include/rsys/dirtyrect.h
@@ -274,6 +274,8 @@ set(include_sources hintemplate.h
                   include/rsys/float_fcw.h
                   include/rsys/floatconv.h
                   include/rsys/font.h
+                  include/rsys/functions.h
+                  include/rsys/functions.impl.h
                   include/rsys/gestalt.h
                   include/rsys/glue.h
                   include/rsys/gworld.h
@@ -292,6 +294,7 @@ set(include_sources hintemplate.h
                   include/rsys/launch.h
                   include/rsys/list.h
                   include/rsys/lockunlock.h
+                  include/rsys/logging.h
                   include/rsys/lowglobals.h
                   include/rsys/m68kint.h
                   include/rsys/macros.h
@@ -322,7 +325,6 @@ set(include_sources hintemplate.h
                   include/rsys/print.h
                   include/rsys/process.h
                   include/rsys/PSstrings.h
-                  include/rsys/pstuff.h
                   include/rsys/qcolor.h
                   include/rsys/quick.h
                   include/rsys/rawblt.h
@@ -357,7 +359,8 @@ set(include_sources hintemplate.h
                   include/rsys/toolutil.h
                   include/rsys/trapglue.h
                   include/rsys/trapname.h
-                  include/rsys/types.h
+                  include/rsys/traps.h
+                  include/rsys/traps.impl.h
                   include/rsys/uniquefile.h
                   include/rsys/vbl.h
                   include/rsys/vdriver.h
@@ -387,12 +390,15 @@ set(include_sources hintemplate.h
                   mkvol/mkvol.h
                   mkvol/mkvol_internal.h)
 
+include(trap_instances/trap_instances.cmake)
+
 set(sources ${ctl_sources} ${dial_sources} 
     ${list_sources} ${menu_sources}
     ${print_sources} ${qd_sources} ${res_sources}
     ${te_sources} ${wind_sources} ${ae_sources}
     ${sound_sources} ${num_sources} ${misc_sources}
     ${file_sources} ${hfs_sources}
+    ${trap_instance_sources}
     ${include_sources})
 
 add_executable(executor ${sources}
@@ -408,3 +414,4 @@ else()
 endif()
 
 target_link_libraries(executor Threads::Threads syn68k)
+

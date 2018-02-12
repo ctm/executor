@@ -4,6 +4,9 @@
 
 #include "WindowMgr.h"
 
+#define MODULE_NAME CQuickDraw
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 #define theCPort (STARH(STARH((GUEST<GUEST<CGrafPtr> *> *)SYN68K_TO_US(EM_A5))))
@@ -297,6 +300,11 @@ const LowMemGlobal<GDHandle> MainDevice { 0x8A4 }; // QuickDraw IMV (true);
 const LowMemGlobal<GDHandle> DeviceList { 0x8A8 }; // QuickDraw IMV (true);
 const LowMemGlobal<RGBColor> HiliteRGB { 0xDA0 }; // QuickDraw IMV-62 (true);
 
+DISPATCHER_TRAP(PaletteDispatch, 0xAAA2, D0W);  // D0<0xFF> ###
+DISPATCHER_TRAP(Pack12, 0xA82E, StackW);
+DISPATCHER_TRAP(QDExtensions, 0xAB1D, D0L);
+DISPATCHER_TRAP(Pack15, 0xA831, D0W);   // D0<0xFF>? ###
+
 extern void C_SetStdCProcs(CQDProcs *cProcs);
 PASCAL_TRAP(SetStdCProcs, 0xAA4E);
 
@@ -364,11 +372,11 @@ PASCAL_TRAP(DeviceLoop, 0xABCA);
 extern BOOLEAN C_TestDeviceAttribute(GDHandle, INTEGER);
 PASCAL_TRAP(TestDeviceAttribute, 0xAA2C);
 extern void C_ScreenRes(GUEST<INTEGER> *, GUEST<INTEGER> *);
-PASCAL_FUNCTION(ScreenRes);
+NOTRAP_FUNCTION(ScreenRes);
 extern INTEGER C_HasDepth(GDHandle, INTEGER, INTEGER, INTEGER);
-PASCAL_FUNCTION(HasDepth);
+PASCAL_SUBTRAP(HasDepth, 0xAAA2, 0x0A14, PaletteDispatch);
 extern OSErr C_SetDepth(GDHandle, INTEGER, INTEGER, INTEGER);
-PASCAL_FUNCTION(SetDepth);
+PASCAL_SUBTRAP(SetDepth, 0xAAA2, 0x0A13, PaletteDispatch);
 
 extern void C_MakeITable(CTabHandle, ITabHandle, INTEGER);
 PASCAL_TRAP(MakeITable, 0xAA39);
@@ -417,7 +425,7 @@ extern void C_SetClientID(INTEGER);
 PASCAL_TRAP(SetClientID, 0xAA3C);
 
 extern BOOLEAN C_GetGray(GDHandle, RGBColor *, RGBColor *);
-PASCAL_FUNCTION(GetGray);
+PASCAL_SUBTRAP(GetGray, 0xAAA2, 0x0C19, PaletteDispatch);
 
 extern PixPatHandle C_GetPixPat(INTEGER);
 PASCAL_TRAP(GetPixPat, 0xAA0C);
@@ -431,23 +439,23 @@ extern CWindowPtr C_GetNewCWindow(INTEGER, Ptr, CWindowPtr);
 PASCAL_TRAP(GetNewCWindow, 0xAA46);
 
 extern void C_CMY2RGB(CMYColor *, RGBColor *);
-PASCAL_FUNCTION(CMY2RGB);
+PASCAL_SUBTRAP(CMY2RGB, 0xA82E, 0x0003, Pack12);
 extern void C_RGB2CMY(RGBColor *, CMYColor *);
-PASCAL_FUNCTION(RGB2CMY);
+PASCAL_SUBTRAP(RGB2CMY, 0xA82E, 0x0004, Pack12);
 extern void C_HSL2RGB(HSLColor *, RGBColor *);
-PASCAL_FUNCTION(HSL2RGB);
+PASCAL_SUBTRAP(HSL2RGB, 0xA82E, 0x0005, Pack12);
 extern void C_RGB2HSL(RGBColor *, HSLColor *);
-PASCAL_FUNCTION(RGB2HSL);
+PASCAL_SUBTRAP(RGB2HSL, 0xA82E, 0x0006, Pack12);
 extern void C_HSV2RGB(HSVColor *, RGBColor *);
-PASCAL_FUNCTION(HSV2RGB);
+PASCAL_SUBTRAP(HSV2RGB, 0xA82E, 0x0007, Pack12);
 extern void C_RGB2HSV(RGBColor *, HSVColor *);
-PASCAL_FUNCTION(RGB2HSV);
+PASCAL_SUBTRAP(RGB2HSV, 0xA82E, 0x0008, Pack12);
 extern SmallFract C_Fix2SmallFract(Fixed);
-PASCAL_FUNCTION(Fix2SmallFract);
+PASCAL_SUBTRAP(Fix2SmallFract, 0xA82E, 0x0001, Pack12);
 extern Fixed C_SmallFract2Fix(SmallFract);
-PASCAL_FUNCTION(SmallFract2Fix);
+PASCAL_SUBTRAP(SmallFract2Fix, 0xA82E, 0x0002, Pack12);
 extern BOOLEAN C_GetColor(Point, Str255, RGBColor *, RGBColor *);
-PASCAL_FUNCTION(GetColor);
+PASCAL_SUBTRAP(GetColor, 0xA82E, 0x0009, Pack12);
 
 extern CTabHandle C_GetCTable(INTEGER);
 PASCAL_TRAP(GetCTable, 0xAA18);
@@ -465,7 +473,7 @@ PASCAL_TRAP(DisposePalette, 0xAA93);
 extern void C_ActivatePalette(WindowPtr);
 PASCAL_TRAP(ActivatePalette, 0xAA94);
 extern void C_SetPalette(WindowPtr, PaletteHandle, BOOLEAN);
-PASCAL_FUNCTION(SetPalette);
+NOTRAP_FUNCTION(SetPalette);
 extern void C_NSetPalette(WindowPtr, PaletteHandle, INTEGER updates);
 PASCAL_TRAP(NSetPalette, 0xAA95);
 extern PaletteHandle C_GetPalette(WindowPtr);
@@ -501,24 +509,24 @@ PASCAL_TRAP(DisposCCursor, 0xAA26);
 extern void C_AllocCursor(void);
 PASCAL_TRAP(AllocCursor, 0xAA1D);
 
-extern void C_RestoreClutDevice(GDHandle);
-PASCAL_FUNCTION(RestoreClutDevice);
+extern void C_RestoreDeviceClut(GDHandle);
+PASCAL_SUBTRAP(RestoreDeviceClut, 0xAAA2, 0x0002, PaletteDispatch);
 extern void C_ResizePalette(PaletteHandle, INTEGER);
-PASCAL_FUNCTION(ResizePalette);
+PASCAL_SUBTRAP(ResizePalette, 0xAAA2, 0x0003, PaletteDispatch);
 extern INTEGER C_PMgrVersion();
-PASCAL_FUNCTION(PMgrVersion);
+PASCAL_SUBTRAP(PMgrVersion, 0xAAA2, 0x0015, PaletteDispatch);
 extern void C_SaveFore(ColorSpec *);
-PASCAL_FUNCTION(SaveFore);
+PASCAL_SUBTRAP(SaveFore, 0xAAA2, 0x040D, PaletteDispatch);
 extern void C_RestoreFore(ColorSpec *);
-PASCAL_FUNCTION(RestoreFore);
+PASCAL_SUBTRAP(RestoreFore, 0xAAA2, 0x040F, PaletteDispatch);
 extern void C_SaveBack(ColorSpec *);
-PASCAL_FUNCTION(SaveBack);
+PASCAL_SUBTRAP(SaveBack, 0xAAA2, 0x040E, PaletteDispatch);
 extern void C_RestoreBack(ColorSpec *);
-PASCAL_FUNCTION(RestoreBack);
+PASCAL_SUBTRAP(RestoreBack, 0xAAA2, 0x0410, PaletteDispatch);
 extern void C_SetPaletteUpdates(PaletteHandle, INTEGER);
-PASCAL_FUNCTION(SetPaletteUpdates);
+PASCAL_SUBTRAP(SetPaletteUpdates, 0xAAA2, 0x0616, PaletteDispatch);
 extern INTEGER C_GetPaletteUpdates(PaletteHandle);
-PASCAL_FUNCTION(GetPaletteUpdates);
+PASCAL_SUBTRAP(GetPaletteUpdates, 0xAAA2, 0x0417, PaletteDispatch);
 extern void C_CopyPalette(PaletteHandle src_palette,
                                       PaletteHandle dst_palette,
                                       int16_t src_start, int16_t dst_start,
@@ -530,79 +538,79 @@ PASCAL_TRAP(GetCWMgrPort, 0xAA48);
 
 /* QDExtensions trap */
 extern QDErr C_NewGWorld(GUEST<GWorldPtr> *, INTEGER, Rect *, CTabHandle, GDHandle, GWorldFlags);
-PASCAL_FUNCTION(NewGWorld);
+PASCAL_SUBTRAP(NewGWorld, 0xAB1D, 0x00160000, QDExtensions);
 extern Boolean C_LockPixels(PixMapHandle);
-PASCAL_FUNCTION(LockPixels);
+PASCAL_SUBTRAP(LockPixels, 0xAB1D, 0x00040001, QDExtensions);
 extern void C_UnlockPixels(PixMapHandle);
-PASCAL_FUNCTION(UnlockPixels);
+PASCAL_SUBTRAP(UnlockPixels, 0xAB1D, 0x00040002, QDExtensions);
 extern GWorldFlags C_UpdateGWorld(GUEST<GWorldPtr> *, INTEGER, Rect *, CTabHandle, GDHandle, GWorldFlags);
-PASCAL_FUNCTION(UpdateGWorld);
+PASCAL_SUBTRAP(UpdateGWorld, 0xAB1D, 0x00160003, QDExtensions);
 extern void C_DisposeGWorld(GWorldPtr);
-PASCAL_FUNCTION(DisposeGWorld);
+PASCAL_SUBTRAP(DisposeGWorld, 0xAB1D, 0x00040004, QDExtensions);
 extern void C_GetGWorld(GUEST<CGrafPtr> *, GUEST<GDHandle> *);
-PASCAL_FUNCTION(GetGWorld);
+PASCAL_SUBTRAP(GetGWorld, 0xAB1D, 0x00080005, QDExtensions);
 extern void C_SetGWorld(CGrafPtr, GDHandle);
-PASCAL_FUNCTION(SetGWorld);
+PASCAL_SUBTRAP(SetGWorld, 0xAB1D, 0x00080006, QDExtensions);
 extern void C_AllowPurgePixels(PixMapHandle);
-PASCAL_FUNCTION(AllowPurgePixels);
+PASCAL_SUBTRAP(AllowPurgePixels, 0xAB1D, 0x0004000B, QDExtensions);
 extern void C_NoPurgePixels(PixMapHandle);
-PASCAL_FUNCTION(NoPurgePixels);
+PASCAL_SUBTRAP(NoPurgePixels, 0xAB1D, 0x0004000C, QDExtensions);
 extern GWorldFlags C_GetPixelsState(PixMapHandle);
-PASCAL_FUNCTION(GetPixelsState);
+PASCAL_SUBTRAP(GetPixelsState, 0xAB1D, 0x0004000D, QDExtensions);
 extern void C_SetPixelsState(PixMapHandle, GWorldFlags);
-PASCAL_FUNCTION(SetPixelsState);
+PASCAL_SUBTRAP(SetPixelsState, 0xAB1D, 0x0008000E, QDExtensions);
 extern Ptr C_GetPixBaseAddr(PixMapHandle);
-PASCAL_FUNCTION(GetPixBaseAddr);
+PASCAL_SUBTRAP(GetPixBaseAddr, 0xAB1D, 0x0004000F, QDExtensions);
 extern QDErr C_NewScreenBuffer(Rect *, Boolean, GUEST<GDHandle> *, GUEST<PixMapHandle> *);
-PASCAL_FUNCTION(NewScreenBuffer);
+PASCAL_SUBTRAP(NewScreenBuffer, 0xAB1D, 0x000E0010, QDExtensions);
 extern void C_DisposeScreenBuffer(PixMapHandle);
-PASCAL_FUNCTION(DisposeScreenBuffer);
+PASCAL_SUBTRAP(DisposeScreenBuffer, 0xAB1D, 0x00040011, QDExtensions);
 extern GDHandle C_GetGWorldDevice(GWorldPtr);
-PASCAL_FUNCTION(GetGWorldDevice);
+PASCAL_SUBTRAP(GetGWorldDevice, 0xAB1D, 0x00040012, QDExtensions);
 extern Boolean C_PixMap32Bit(PixMapHandle);
-PASCAL_FUNCTION(PixMap32Bit);
+PASCAL_SUBTRAP(PixMap32Bit, 0xAB1D, 0x00040016, QDExtensions);
 extern PixMapHandle C_GetGWorldPixMap(GWorldPtr);
-PASCAL_FUNCTION(GetGWorldPixMap);
+PASCAL_SUBTRAP(GetGWorldPixMap, 0xAB1D, 0x00040017, QDExtensions);
 extern QDErr C_NewTempScreenBuffer(Rect *, Boolean, GUEST<GDHandle> *, GUEST<PixMapHandle> *);
-PASCAL_FUNCTION(NewTempScreenBuffer);
+PASCAL_SUBTRAP(NewTempScreenBuffer, 0xAB1D, 0x000E0015, QDExtensions);
 extern void C_GDeviceChanged(GDHandle);
-PASCAL_FUNCTION(GDeviceChanged);
+PASCAL_SUBTRAP(GDeviceChanged, 0xAB1D, 0x0004000A, QDExtensions);
 extern void C_PortChanged(GrafPtr);
-PASCAL_FUNCTION(PortChanged);
+PASCAL_SUBTRAP(PortChanged, 0xAB1D, 0x00040009, QDExtensions);
 extern void C_PixPatChanged(PixPatHandle);
-PASCAL_FUNCTION(PixPatChanged);
+PASCAL_SUBTRAP(PixPatChanged, 0xAB1D, 0x00040008, QDExtensions);
 extern void C_CTabChanged(CTabHandle);
-PASCAL_FUNCTION(CTabChanged);
+PASCAL_SUBTRAP(CTabChanged, 0xAB1D, 0x00040007, QDExtensions);
 extern Boolean C_QDDone(GrafPtr);
-PASCAL_FUNCTION(QDDone);
+PASCAL_SUBTRAP(QDDone, 0xAB1D, 0x00040013, QDExtensions);
 
 extern LONGINT C_OffscreenVersion();
-PASCAL_FUNCTION(OffscreenVersion);
+PASCAL_SUBTRAP(OffscreenVersion, 0xAB1D, 0x0014, QDExtensions);
 
 extern OSErr C_BitMapToRegion(RgnHandle, const BitMap *);
 PASCAL_TRAP(BitMapToRegion, 0xA8D7);
 
 extern LONGINT C_Entry2Index(INTEGER);
-PASCAL_FUNCTION(Entry2Index);
+PASCAL_SUBTRAP(Entry2Index, 0xAAA2, 0x0000, PaletteDispatch);
 extern void C_SaveEntries(CTabHandle, CTabHandle, ReqListRec *);
 PASCAL_TRAP(SaveEntries, 0xAA49);
 extern void C_RestoreEntries(CTabHandle, CTabHandle, ReqListRec *);
 PASCAL_TRAP(RestoreEntries, 0xAA4A);
 
 extern OSErr C_DisposePictInfo(PictInfoID);
-PASCAL_FUNCTION(DisposePictInfo);
+PASCAL_SUBTRAP(DisposePictInfo, 0xA831, 0x0206, Pack15);
 extern OSErr C_RecordPictInfo(PictInfoID, PicHandle);
-PASCAL_FUNCTION(RecordPictInfo);
+PASCAL_SUBTRAP(RecordPictInfo, 0xA831, 0x0403, Pack15);
 extern OSErr C_RecordPixMapInfo(PictInfoID, PixMapHandle);
-PASCAL_FUNCTION(RecordPixMapInfo);
+PASCAL_SUBTRAP(RecordPixMapInfo, 0xA831, 0x0404, Pack15);
 extern OSErr C_RetrievePictInfo(PictInfoID, PictInfo *, int16_t);
-PASCAL_FUNCTION(RetrievePictInfo);
+PASCAL_SUBTRAP(RetrievePictInfo, 0xA831, 0x0505, Pack15);
 extern OSErr C_NewPictInfo(GUEST<PictInfoID> *, int16_t, int16_t, int16_t, int16_t);
-PASCAL_FUNCTION(NewPictInfo);
+PASCAL_SUBTRAP(NewPictInfo, 0xA831, 0x0602, Pack15);
 extern OSErr C_GetPictInfo(PicHandle, PictInfo *, int16_t, int16_t, int16_t, int16_t);
-PASCAL_FUNCTION(GetPictInfo);
+PASCAL_SUBTRAP(GetPictInfo, 0xA831, 0x0800, Pack15);
 extern OSErr C_GetPixMapInfo(PixMapHandle, PictInfo *, int16_t, int16_t, int16_t, int16_t);
-PASCAL_FUNCTION(GetPixMapInfo);
+PASCAL_SUBTRAP(GetPixMapInfo, 0xA831, 0x0801, Pack15);
 
 extern PicHandle C_OpenCPicture(OpenCPicParams *newheaderp);
 PASCAL_TRAP(OpenCPicture, 0xAA20);

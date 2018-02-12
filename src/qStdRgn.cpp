@@ -58,7 +58,7 @@ void Executor::ROMlib_blt_rgn_update_dirty_rect(RgnHandle rh,
         {
             PixMap *new_src_pm = (PixMap *)alloca(sizeof *new_src_pm);
             int baseaddr_size, height, row_bytes;
-            uint8 *new_bits, *s, *d;
+            uint8_t *new_bits, *s, *d;
             int y;
 
             /* Make a copy of the source bitmap, so we can dither it. */
@@ -69,7 +69,7 @@ void Executor::ROMlib_blt_rgn_update_dirty_rect(RgnHandle rh,
             TEMP_ALLOC_ALLOCATE(new_bits, temp_alloc_space, baseaddr_size);
             new_src_pm->baseAddr = RM((Ptr)new_bits);
 
-            s = (uint8 *)MR(src_pm->baseAddr);
+            s = (uint8_t *)MR(src_pm->baseAddr);
             d = new_bits;
             for(y = 0; y < height; y++)
             {
@@ -400,7 +400,7 @@ blt_pixpat_to_pixmap_simple_mode(RgnHandle rh, INTEGER mode,
             {
                 warning_unexpected("xdata handle NULL_STRING");
                 xh = (xdata_handle_t)NewHandle(sizeof(xdata_t));
-                HxX(xh, raw_pat_bits_mem) = (Ptr)RM(NULL);
+                HxX(xh, raw_pat_bits_mem) = nullptr;
                 src->patXData = RM((Handle)xh);
                 xdata_valid_p = false;
                 handle_size_wrong_p = false;
@@ -652,7 +652,7 @@ Executor::ROMlib_blt_pn(RgnHandle rh, INTEGER mode)
         /* I have no idea where this table came from.  It's just been
        * passed down from the old black and white blitter.
        */
-        static const uint8 imvxfer_pat_mode_lookup[8] = { patCopy, patBic, patXor, patOr, patOr, patBic, patXor, patOr };
+        static const uint8_t imvxfer_pat_mode_lookup[8] = { patCopy, patBic, patXor, patOr, patOr, patBic, patXor, patOr };
 
         if(mode >= 0x20 && mode <= 0x2F)
             mode = imvxfer_pat_mode_lookup[mode & 7];

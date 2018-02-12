@@ -836,7 +836,7 @@ static void dopreferences(void)
                 ROMlib_circledefault(dp);
                 do
                 {
-                    ModalDialog((ProcPtr)0, &ihit_s);
+                    ModalDialog(nullptr, &ihit_s);
                     ihit = CW(ihit_s);
                     switch(ihit)
                     {
@@ -1381,7 +1381,7 @@ sendpaste(void)
  */
 
 static void
-post_helper(INTEGER code, uint8 raw, uint8 mapped, INTEGER mods)
+post_helper(INTEGER code, uint8_t raw, uint8_t mapped, INTEGER mods)
 {
     Point p;
 

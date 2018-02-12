@@ -7,6 +7,12 @@
 #if !defined(__GESTALT__)
 #define __GESTALT__
 
+#include "ExMacTypes.h"
+#include <rsys/macros.h>
+
+#define MODULE_NAME Gestalt
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 
@@ -194,13 +200,15 @@ enum
     gestaltLocationErr = -5553,
 };
 
-extern OSErrRET Gestalt(OSType selector, GUEST<LONGINT> *responsep);
-extern OSErrRET NewGestalt(OSType selector, ProcPtr selFunc);
-extern OSErrRET ReplaceGestalt(OSType selector, ProcPtr selFunc,
-                                    ProcPtr *oldSelFuncp);
+using SelectorFunctionUPP = UPP<OSErr(OSType, GUEST<LONGINT> *)>;
 
-extern OSErrRET C_GestaltTablesOnly(OSType selector,
+extern OSErr Gestalt(OSType selector, GUEST<LONGINT> *responsep);
+extern OSErr NewGestalt(OSType selector, SelectorFunctionUPP selFunc);
+extern OSErr ReplaceGestalt(OSType selector, SelectorFunctionUPP selFunc,
+                                    SelectorFunctionUPP *oldSelFuncp);
+
+extern OSErr C_GestaltTablesOnly(OSType selector,
                                          GUEST<LONGINT> *responsep);
-PASCAL_FUNCTION(GestaltTablesOnly);
+NOTRAP_FUNCTION(GestaltTablesOnly);
 }
 #endif

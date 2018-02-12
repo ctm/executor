@@ -13,7 +13,7 @@ bool Executor::arch_init(void)
 {
 #if !defined(ALWAYS_ON_I486)
     uint32_t scratch1, scratch2;
-    uint8 i486_p;
+    uint8_t i486_p;
 
     /* Adapted from _Assembly Language: For Real Programmers Only_ p. 561.
    * This code determines if we are on an i486 or higher.  We care because

@@ -14,7 +14,6 @@
 #include "ControlMgr.h"
 #include "ResourceMgr.h"
 #include "rsys/nextprint.h"
-#include "rsys/pstuff.h"
 #include "rsys/print.h"
 #include "rsys/hook.h"
 #include "rsys/ctl.h"
@@ -28,6 +27,8 @@
 #include "rsys/options.h"
 #include "rsys/string.h"
 #include "rsys/osevent.h"
+#include "rsys/functions.impl.h"
+
 #ifdef MACOSX_
 //#include "contextswitch.h"
 #endif
@@ -234,7 +235,7 @@ Executor::cstring_from_str255(Str255 text)
     int len;
     char *retval;
 
-    len = (uint8)text[0];
+    len = (uint8_t)text[0];
     retval = (char *)malloc(len + 1);
     if(retval)
     {
@@ -503,9 +504,9 @@ void Executor::C_ROMlib_mystlproc(DialogPtr dp, INTEGER itemno)
     }
 }
 
-typedef TPPrDlg (*prinitprocp)(THPrint hPrint);
+using prinitprocp = UPP<TPPrDlg(THPrint hPrint)>;
 
-typedef void (*pritemprocp)(TPPrDlg prrecptr, INTEGER item);
+using pritemprocp = UPP<void(DialogPtr prrecptr, INTEGER item)>;
 
 
 #define CALLPRINITPROC(hPrint, fp) \
@@ -521,15 +522,13 @@ static inline TPPrDlg Executor::ROMlib_CALLPRINITPROC(THPrint hPrint, prinitproc
 {
     TPPrDlg retval;
     ROMlib_hook(pr_initnumber);
-    if(fp == P_PrStlInit)
+    if(fp == &PrStlInit)
         retval = C_PrStlInit(hPrint);
-    else if(fp == P_PrJobInit)
+    else if(fp == &PrJobInit)
         retval = C_PrJobInit(hPrint);
     else
     {
-        HOOKSAVEREGS();
-        retval = (TPPrDlg)CToPascalCall((void *)fp, ctop(&C_PrStlInit), hPrint);
-        HOOKRESTOREREGS();
+        retval = fp(hPrint);
     }
     return retval;
 }
@@ -540,20 +539,18 @@ static inline TPPrDlg Executor::ROMlib_CALLPRINITPROC(THPrint hPrint, prinitproc
 static inline void Executor::ROMlib_CALLPRITEMPROC(TPPrDlg prrecptr, INTEGER item, pritemprocp fp)
 {
     ROMlib_hook(pr_itemnumber);
-    if(fp == (pritemprocp)P_ROMlib_myjobproc)
+    if(fp == &ROMlib_myjobproc)
         C_ROMlib_myjobproc((DialogPtr)prrecptr, item);
-    else if(fp == (pritemprocp)P_ROMlib_mystlproc)
+    else if(fp == &ROMlib_mystlproc)
         C_ROMlib_mystlproc((DialogPtr)prrecptr, item);
     else
     {
-        HOOKSAVEREGS();
-        CToPascalCall((void *)fp, ctop(&C_ROMlib_myjobproc), prrecptr, item);
-        HOOKRESTOREREGS();
+        fp((GrafPtr)prrecptr, item);
     }
 }
 
 BOOLEAN Executor::C_ROMlib_stlfilterproc(
-    DialogPeek dp, EventRecord *evt, GUEST<INTEGER> *ith)
+    DialogPtr dlg, EventRecord *evt, GUEST<INTEGER> *ith)
 {
     BOOLEAN retval;
     char *keyp;
@@ -586,11 +583,11 @@ BOOLEAN Executor::C_ROMlib_stlfilterproc(
 
             glocalp = evt->where;
             gp = thePort;
-            SetPort((GrafPtr)dp);
+            SetPort(dlg);
             GlobalToLocal(&glocalp);
             localp = glocalp.get();
             SetPort(gp);
-            GetDItem((DialogPtr)dp, OK, &unused, &h, &r);
+            GetDItem(dlg, OK, &unused, &h, &r);
             if(PtInRect(localp, &r))
             {
                 ControlHandle ch;
@@ -608,7 +605,7 @@ BOOLEAN Executor::C_ROMlib_stlfilterproc(
             break;
     }
 
-    keyp = strdup(find_item_key((DialogPtr)dp, LAYOUT_PRINTER_TYPE_NO).c_str());
+    keyp = strdup(find_item_key(dlg, LAYOUT_PRINTER_TYPE_NO).c_str());
     if(retval && *ith == CWC(OK) && (strcmp(keyp, "PostScript File") == 0))
     {
         struct stat sbuf;
@@ -616,7 +613,7 @@ BOOLEAN Executor::C_ROMlib_stlfilterproc(
         char *filename;
         int len;
 
-        h = GetDIText((DialogPtr)dp, LAYOUT_FILENAME_NO);
+        h = GetDIText(dlg, LAYOUT_FILENAME_NO);
         len = GetHandleSize(h);
         filename = (char *)alloca(len + 1);
         memcpy(filename, STARH(h), len);
@@ -647,7 +644,7 @@ BOOLEAN Executor::C_ROMlib_stlfilterproc(
 }
 
 BOOLEAN Executor::C_ROMlib_numsonlyfilterproc(
-    DialogPeek dp, EventRecord *evt, GUEST<INTEGER> *ith)
+    DialogPtr dlg, EventRecord *evt, GUEST<INTEGER> *ith)
 {
     char c;
 
@@ -671,13 +668,13 @@ BOOLEAN Executor::C_ROMlib_numsonlyfilterproc(
 }
 
 static void
-set_userItem(DialogPtr dp, INTEGER itemno, void *funcp)
+set_userItem(DialogPtr dp, INTEGER itemno, UserItemProcPtr funcp)
 {
     Rect r;
     GUEST<INTEGER> unused;
 
     GetDItem(dp, itemno, &unused, NULL, &r);
-    SetDItem(dp, itemno, userItem, (Handle)funcp, &r);
+    SetDItem(dp, itemno, userItem, (Handle)(void*)funcp, &r);
 }
 
 static void
@@ -809,7 +806,7 @@ TPPrDlg Executor::C_PrJobInit(THPrint hPrint)
 	     the spool file name */
 
             set_userItem((DialogPtr)retval, PRINT_CIRCLE_OK_NO,
-                         P_ROMlib_circle_ok);
+                         &ROMlib_circle_ok);
 
             adjust_num_copies(retval, hPrint);
 
@@ -817,9 +814,9 @@ TPPrDlg Executor::C_PrJobInit(THPrint hPrint)
 
             adjust_print_name((DialogPtr)retval);
 
-            retval->pFltrProc = RM((ProcPtr)P_ROMlib_numsonlyfilterproc);
+            retval->pFltrProc = RM(&ROMlib_numsonlyfilterproc);
             /* TODO: Get this from the right place */
-            retval->pItemProc = RM((ProcPtr)P_ROMlib_myjobproc);
+            retval->pItemProc = RM(&ROMlib_myjobproc);
             /* TODO: Get this from the right place */
             retval->hPrintUsr = RM(hPrint);
         }
@@ -834,12 +831,12 @@ TPPrDlg Executor::C_PrJobInit(THPrint hPrint)
     return retval;
 }
 
-void Executor::C_ROMlib_circle_ok(DialogPeek dp, INTEGER which)
+void Executor::C_ROMlib_circle_ok(DialogPtr dp, INTEGER which)
 {
     Rect r;
     GUEST<INTEGER> unused;
 
-    GetDItem((DialogPtr)dp, which, &unused, NULL, &r);
+    GetDItem(dp, which, &unused, NULL, &r);
     PenNormal();
     PenSize(3, 3);
     InsetRect(&r, -4, -4);
@@ -849,12 +846,12 @@ void Executor::C_ROMlib_circle_ok(DialogPeek dp, INTEGER which)
         FrameRect(&r);
 }
 
-void Executor::C_ROMlib_orientation(DialogPeek dp, INTEGER which)
+void Executor::C_ROMlib_orientation(DialogPtr dp, INTEGER which)
 {
     Rect r;
     GUEST<INTEGER> unused;
 
-    GetDItem((DialogPtr)dp, which, &unused, NULL, &r);
+    GetDItem(dp, which, &unused, NULL, &r);
     PenNormal();
     PenSize(1, 1);
     InsetRect(&r, 1, 1);
@@ -1013,13 +1010,13 @@ TPPrDlg Executor::C_PrStlInit(THPrint hPrint)
             HideDItem((DialogPtr)retval, LAYOUT_FILENAME_NO);
 
             set_userItem((DialogPtr)retval, LAYOUT_CIRCLE_OK_NO,
-                         P_ROMlib_circle_ok);
+                         &ROMlib_circle_ok);
 
             set_userItem((DialogPtr)retval, LAYOUT_PORTRAIT_NO,
-                         P_ROMlib_orientation);
+                         &ROMlib_orientation);
 
             set_userItem((DialogPtr)retval, LAYOUT_LANDSCAPE_NO,
-                         P_ROMlib_orientation);
+                         &ROMlib_orientation);
 
             {
                 Str255 appname;
@@ -1102,8 +1099,8 @@ TPPrDlg Executor::C_PrStlInit(THPrint hPrint)
             set_default_orientation(retval); /* must be called after paper
 					       menu is adjusted */
 
-            retval->pFltrProc = RM((ProcPtr)P_ROMlib_stlfilterproc);
-            retval->pItemProc = RM((ProcPtr)P_ROMlib_mystlproc);
+            retval->pFltrProc = RM(&ROMlib_stlfilterproc);
+            retval->pItemProc = RM(&ROMlib_mystlproc);
             retval->hPrintUsr = RM(hPrint);
         }
         else
@@ -1135,10 +1132,10 @@ BOOLEAN Executor::C_PrDlgMain(THPrint hPrint, ProcPtr initfptr)
  */
     ROMlib_updatenextpagerect(&Hx(hPrint, rPaper));
 #endif /* defined(MACOSX_) */
-    if((prrecptr = CALLPRINITPROC(hPrint, initfptr)))
+    if((prrecptr = CALLPRINITPROC(hPrint, (prinitprocp) initfptr)))
     {
         if(!SUNPATH_HACK || (((pritemprocp)MR(prrecptr->pItemProc)
-                              != (pritemprocp)P_ROMlib_myjobproc)
+                              != (pritemprocp)&ROMlib_myjobproc)
                              || ROMlib_printer != std::string(WIN32_TOKEN)))
         {
             ShowWindow((WindowPtr)prrecptr);
@@ -1147,12 +1144,12 @@ BOOLEAN Executor::C_PrDlgMain(THPrint hPrint, ProcPtr initfptr)
         do
         {
             if(SUNPATH_HACK && (((pritemprocp)MR(prrecptr->pItemProc)
-                                 == (pritemprocp)P_ROMlib_myjobproc)
+                                 == (pritemprocp)&ROMlib_myjobproc)
                                 && ROMlib_printer == std::string(WIN32_TOKEN)))
                 item = 1;
             else
             {
-                ModalDialog((ProcPtr)MR(prrecptr->pFltrProc), &item_swapped);
+                ModalDialog(MR(prrecptr->pFltrProc), &item_swapped);
                 item = CW(item_swapped);
             }
             CALLPRITEMPROC(prrecptr, item, MR(prrecptr->pItemProc));
@@ -1161,7 +1158,7 @@ BOOLEAN Executor::C_PrDlgMain(THPrint hPrint, ProcPtr initfptr)
             /* Don't allow them to continue Win32 stuff if we can't
 	       initialize the Win32 subsystem */
             if(((pritemprocp)MR(prrecptr->pItemProc)
-                == (pritemprocp)P_ROMlib_myjobproc)
+                == (pritemprocp)&ROMlib_myjobproc)
                && item == 1
                && strcmp(ROMlib_printer, WIN32_TOKEN) == 0
                && !ROMlib_wp)

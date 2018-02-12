@@ -13,7 +13,6 @@
 #include "OSEvent.h"
 #include "ToolboxEvent.h"
 
-#include "rsys/pstuff.h"
 #include "rsys/vbl.h"
 #include "rsys/time.h"
 #include "rsys/hook.h"
@@ -137,7 +136,7 @@ void Executor::C_ROMlib_vcatch()
 static void
 startclock(void)
 {
-    vbltm.tmAddr = RM((ProcPtr)P_ROMlib_vcatch);
+    vbltm.tmAddr = RM((ProcPtr)&ROMlib_vcatch);
     InsTime((QElemPtr)&vbltm);
     PrimeTime((QElemPtr)&vbltm, 17);
     /* don't adjust ROMlib_clock; it could be temporary */
@@ -167,12 +166,12 @@ void Executor::ROMlib_clockonoff(LONGINT onoroff)
         stopclock();
 }
 
-OSErrRET Executor::SlotVInstall(VBLTaskPtr vtaskp, INTEGER slot)
+OSErr Executor::SlotVInstall(VBLTaskPtr vtaskp, INTEGER slot)
 {
     return VInstall(vtaskp);
 }
 
-OSErrRET Executor::VInstall(VBLTaskPtr vtaskp)
+OSErr Executor::VInstall(VBLTaskPtr vtaskp)
 {
     static GUEST<uint16_t> m68k_rts = CWC(0x4E75); /* RTS */
 
@@ -196,12 +195,12 @@ OSErrRET Executor::VInstall(VBLTaskPtr vtaskp)
         return vTypErr;
 }
 
-OSErrRET Executor::SlotVRemove(VBLTaskPtr vtaskp, INTEGER slot)
+OSErr Executor::SlotVRemove(VBLTaskPtr vtaskp, INTEGER slot)
 {
     return VRemove(vtaskp);
 }
 
-OSErrRET Executor::VRemove(VBLTaskPtr vtaskp)
+OSErr Executor::VRemove(VBLTaskPtr vtaskp)
 {
     if(vtaskp->qType == CWC((INTEGER)vType))
     {

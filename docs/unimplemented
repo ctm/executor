@@ -65,4 +65,4 @@ with System 7.0
 
 GDeviceChanged, PortChanged, PixPatChanged and CTabChanged are poorly
 implemented.  GetCPixel doesn't work for bpp > 8.  OpenCPicture just
-calls OpenPicture.  RestoreClutDevice's implementation is shakey.
+calls OpenPicture.  RestoreDeviceClut's implementation is shakey.

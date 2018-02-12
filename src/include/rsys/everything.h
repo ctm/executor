@@ -41,6 +41,10 @@
 #include <Iconutil.h>
 #include <PPC.h>
 #include <QuickTime.h>
+#include <BinaryDecimal.h>
+#include <DiskInit.h>
+#include <TimeMgr.h>
+#include <ADB.h>
 
 #include <rsys/file.h>
 #include <rsys/adb.h>

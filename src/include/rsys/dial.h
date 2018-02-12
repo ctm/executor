@@ -8,8 +8,8 @@ struct icon_item_template_t
     GUEST<int16_t> count;
     GUEST<Handle> h;
     GUEST<Rect> r;
-    GUEST<uint8> type;
-    GUEST<uint8> len;
+    GUEST<uint8_t> type;
+    GUEST<uint8_t> len;
     GUEST<int16_t> res_id;
 };
 }

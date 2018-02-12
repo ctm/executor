@@ -109,7 +109,7 @@ dump_indirect_pm(PixMap *pm)
     struct ifd *ifd;
     int ifd_size;
 
-    int8 *tif;
+    int8_t *tif;
     int tif_size;
 
     int32_t *strip_offsets;

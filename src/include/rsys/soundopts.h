@@ -2,9 +2,11 @@
 #define __RSYS_SOUNDOPTS__
 
 #include "SoundMgr.h"
-#include "rsys/pstuff.h"
 /* to get extern for `ROMlib_PretendSound' */
 #include "rsys/prefs.h"
+
+#define MODULE_NAME rsys_soundopts
+#include <rsys/api-module.h>
 
 namespace Executor
 {
@@ -40,6 +42,7 @@ extern void ROMlib_CONDITION_WAIT(LONGINT lp);
 extern void ROMlib_MUTEX_CONDITION_DESTROY(LONGINT lp);
 
 extern void C_sound_timer_handler(void);
+PASCAL_FUNCTION(sound_timer_handler);
 extern void clear_pending_sounds(void);
 
 /* patl stuff */
@@ -55,10 +58,15 @@ typedef LONGINT TimeL;
 
 // ###autc04 TODO: snd_time? 64 bit values on the mac?
 //                 is this an internal executor-only struct?
-typedef struct _ModifierStub
+
+struct ModifierStub;
+typedef ModifierStub *ModifierStubPtr;
+
+using snthfp = UPP<BOOLEAN(SndChannelPtr, SndCommand *, ModifierStubPtr)>;
+struct ModifierStub
 {
     GUEST<struct _ModifierStub *> nextStub;
-    GUEST<ProcPtr> code;
+    GUEST<snthfp> code;
     LONGINT userInfo;
     TimeL count;
     TimeL every;
@@ -66,10 +74,10 @@ typedef struct _ModifierStub
     SignedByte hState;
     snd_time current_start;
     snd_time time;
-    GUEST<uint8> prev_samp;
+    GUEST<uint8_t> prev_samp;
     SndDoubleBufferHeader *dbhp;
     int current_db;
-} ModifierStub, *ModifierStubPtr;
+};
 
 #define SND_CHAN_FIRSTMOD(c) ((ModifierStubPtr)MR(c->firstMod))
 #define SND_CHAN_CURRENT_START(c) (SND_CHAN_FIRSTMOD(c)->current_start)
@@ -102,6 +110,7 @@ extern bool sound_disabled_p;
 extern int ROMlib_get_snd_cmds(Handle sndh, SndCommand **cmdsp);
 
 BOOLEAN C_snth5(SndChannelPtr, SndCommand *, ModifierStubPtr);
+PASCAL_FUNCTION(snth5);
 }
 
 #endif /* !defined(__RSYS_SOUNDOPTS__) */

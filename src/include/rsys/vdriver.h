@@ -125,7 +125,7 @@ extern void vdriver_accel_wait(void);
 #endif
 
 #if !defined(vdriver_fbuf)
-extern uint8 *vdriver_fbuf;
+extern uint8_t *vdriver_fbuf;
 #endif
 
 #if !defined(vdriver_row_bytes)
@@ -175,7 +175,7 @@ extern int vdriver_real_screen_row_bytes;
 #endif
 
 #if !defined(vdriver_real_screen_baseaddr)
-extern uint8 *vdriver_real_screen_baseaddr;
+extern uint8_t *vdriver_real_screen_baseaddr;
 #endif
 
 #if !defined(vdriver_set_up_internal_screen)

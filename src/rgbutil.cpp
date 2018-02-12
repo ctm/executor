@@ -156,11 +156,11 @@ rgbcolor_to_pixel(const rgb_spec_t *spec,
                   const RGBColor *color,
                   bool big_endian_rgbcolor_p)
 {
-    const uint8 *values;
+    const uint8_t *values;
     uint32_t v;
 
     /* Treat RGBColor as an array of bytes, so we can easily grab MSB's. */
-    values = (const uint8 *)color;
+    values = (const uint8_t *)color;
 #if defined(LITTLEENDIAN)
     if(!big_endian_rgbcolor_p)
         ++values;

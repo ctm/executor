@@ -12,7 +12,9 @@
 #include "MenuMgr.h"
 #include "ResourceMgr.h"
 #include "rsys/mman.h"
-#include "rsys/pstuff.h"
+
+#define MODULE_NAME rsys_menu
+#include <rsys/api-module.h>
 
 namespace Executor
 {
@@ -42,7 +44,9 @@ typedef struct mext
 } * mextp;
 
 extern void C_mdef0(INTEGER, MenuHandle, Rect *, Point, GUEST<INTEGER> *);
+PASCAL_FUNCTION(mdef0);
 extern int32_t C_mbdf0(int16_t, int16_t, int16_t, int32_t);
+PASCAL_FUNCTION(mbdf0);
 
 #define SIZEOFMEXT 5
 #define SIZEOFMINFO (sizeof(MenuInfo) - sizeof(Str255) + 1)
@@ -208,10 +212,10 @@ extern GUEST<Handle> MBDFHndl_H;
 
 #define SLOP 13
 
-typedef void (*menuprocp)(INTEGER mess, MenuHandle themenu,
-                                 Rect *menrect, Point hit, INTEGER *which);
-typedef LONGINT (*mbdfprocp)(INTEGER variant, INTEGER msg,
-                                    INTEGER param1, intptr_t param2);
+using menuprocp = UPP<void(INTEGER mess, MenuHandle themenu,
+                                 Rect *menrect, Point hit, GUEST<INTEGER> *which)>;
+using mbdfprocp = UPP<LONGINT(INTEGER variant, INTEGER msg,
+                                    INTEGER param1, LONGINT param2)>;
 
 extern void ROMlib_menucall(INTEGER mess, MenuHandle themenu, Rect *menrect,
                             Point hit, GUEST<INTEGER> *which);

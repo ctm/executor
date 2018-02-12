@@ -61,7 +61,7 @@ init(ControlHandle ctl)
 
     CTL_DATA_X(ctl) = RM((Handle)data);
 
-    CTL_ACTION_X(ctl) = guest_cast<ProcPtr>(CLC(-1));
+    CTL_ACTION_X(ctl) = guest_cast<ControlActionUPP>(CLC(-1));
     CTL_VALUE_X(ctl) = CWC(1);
     CTL_MIN_X(ctl) = CWC(1);
     CTL_MAX_X(ctl) = CW(CountMItems(mh));
@@ -338,7 +338,7 @@ draw(ControlHandle ctl, draw_state_t draw_state,
      appropriate */
     {
         int title_left, title_right;
-        uint8 title_length;
+        uint8_t title_length;
 
         set_text_face(true, flags, item_info);
 
@@ -353,7 +353,7 @@ draw(ControlHandle ctl, draw_state_t draw_state,
 
             title_right -= StringWidth((StringPtr)ellipsis);
 
-            title_length = *(uint8 *)item_title;
+            title_length = *(uint8_t *)item_title;
             for(i = 1, width = 0; i <= title_length; i++)
             {
                 width += CharWidth(item_title[i]);
@@ -368,11 +368,11 @@ draw(ControlHandle ctl, draw_state_t draw_state,
             MoveTo(title_right, baseline);
             DrawString((StringPtr)ellipsis);
 
-            *(uint8 *)item_title = i;
+            *(uint8_t *)item_title = i;
             MoveTo(item_left + icon_info.width,
                    baseline);
             DrawString(item_title);
-            *(uint8 *)item_title = title_length;
+            *(uint8_t *)item_title = title_length;
         }
         else
         {

@@ -9,21 +9,15 @@
  */
 
 #include "rsys/mactype.h"
+#include "rsys/byteswap.h"
 
 namespace Executor
 {
 
-#if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef int8_t SignedByte;
-#endif
 typedef uint8_t Byte;
-#if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef int8_t *Ptr;
-#endif
-
-#if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef GUEST<Ptr> *Handle;
-#endif
 
 typedef int8_t Boolean;
 
@@ -32,19 +26,13 @@ typedef Byte Str31[32];
 typedef Byte Str32[33];
 typedef Byte Str63[64];
 typedef Byte Str255[256];
-#if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef Byte *StringPtr;
-#endif
 
 typedef GUEST<StringPtr> *StringHandle;
-#if !defined(__MACTYPES__) || defined(__cplusplus)
 
-typedef int (*ProcPtr)();
-#endif
 
-#if !defined(__MACTYPES__) || defined(__cplusplus)
 typedef LONGINT Fixed, Fract;
-#endif
+
 /* SmallFract represnts values between 0 and 65535 */
 typedef unsigned short SmallFract;
 
@@ -60,11 +48,6 @@ typedef LONGINT Size;
 typedef INTEGER OSErr;
 typedef LONGINT OSType;
 typedef LONGINT ResType;
-
-typedef LONGINT OSErrRET; /* for smashing d0 just like the Mac */
-typedef LONGINT INTEGERRET;
-typedef LONGINT BOOLEANRET;
-typedef LONGINT SignedByteRET;
 
 struct QHdr
 {

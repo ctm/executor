@@ -66,10 +66,10 @@ typedef struct PEFSectionHeader
     GUEST<uint32_t> unpackedSize;
     GUEST<uint32_t> packedSize;
     GUEST<uint32_t> containerOffset;
-    GUEST<uint8> sectionKind;
-    GUEST<uint8> shareKind;
-    GUEST<uint8> alignment;
-    GUEST<uint8> reservedA;
+    GUEST<uint8_t> sectionKind;
+    GUEST<uint8_t> shareKind;
+    GUEST<uint8_t> alignment;
+    GUEST<uint8_t> reservedA;
 } PEFSectionHeader_t;
 
 #define PEFSH_DEFAULT_ADDRESS_X(p) ((p)->defaultAddress)
@@ -160,8 +160,8 @@ typedef struct PEFImportedLibrary
     GUEST<uint32_t> currentVersion;
     GUEST<uint32_t> importedSymbolCount;
     GUEST<uint32_t> firstImportedSymbol;
-    GUEST<uint8> options;
-    GUEST<uint8> reservedA;
+    GUEST<uint8_t> options;
+    GUEST<uint8_t> reservedA;
     GUEST<uint16_t> reservedB;
 } PEFImportedLibrary_t;
 

@@ -706,7 +706,7 @@ void Executor::C_ActivatePalette(WindowPtr src_window)
         PALETTE_SEED_X(palette) = CTAB_SEED_X(gd_ctab);
 }
 
-void Executor::C_RestoreClutDevice(GDHandle gd)
+void Executor::C_RestoreDeviceClut(GDHandle gd)
 {
     bool gd_ctab_changed_p = false;
     pm_resource_holder_t *holders;
@@ -714,7 +714,7 @@ void Executor::C_RestoreClutDevice(GDHandle gd)
     CTabHandle gd_ctab;
     int i;
 
-    warning_unimplemented("RestoreClutDevice implementation may be shaky.");
+    warning_unimplemented("RestoreDeviceClut implementation may be shaky.");
 
     if(gd == NULL)
         gd = MR(LM(MainDevice));

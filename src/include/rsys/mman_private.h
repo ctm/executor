@@ -27,12 +27,12 @@ typedef struct block_header
 {
     GUEST_STRUCT;
 #if defined(MM_BLOCK_HEADER_SENTINEL)
-    GUEST<uint8[SENTINEL_SIZE]> pre_sentinel;
+    GUEST<uint8_t[SENTINEL_SIZE]> pre_sentinel;
 #endif
-    GUEST<uint8> flags;
-    GUEST<uint8> master_ptr_flags;
-    GUEST<uint8> reserved;
-    GUEST<uint8> size_correction;
+    GUEST<uint8_t> flags;
+    GUEST<uint8_t> master_ptr_flags;
+    GUEST<uint8_t> reserved;
+    GUEST<uint8_t> size_correction;
     GUEST<uint32_t> size;
     GUEST<uint32_t> location_u; /* sometimes it's a pointer (the zone),
 					   sometimes it's an offset */
@@ -41,7 +41,7 @@ typedef struct block_header
     GUEST<void * [MM_MAX_STACK_TRACE_DEPTH]> alloc_pcs;
 #endif
 #if defined(MM_BLOCK_HEADER_SENTINEL)
-    GUEST<uint8[SENTINEL_SIZE]> post_sentinel;
+    GUEST<uint8_t[SENTINEL_SIZE]> post_sentinel;
 #endif
     GUEST<uint32_t> data[0];
 } block_header_t;

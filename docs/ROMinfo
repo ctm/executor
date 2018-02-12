@@ -103,7 +103,7 @@ Minor work that needs to be done
 
 	OpenCPicture just calls OpenPicture.
 
-	RestoreClutDevice needs work
+	RestoreDeviceClut needs work
 
 	inverse color table routines don't do a good job of discriminating
 	between colors that are close to each other.

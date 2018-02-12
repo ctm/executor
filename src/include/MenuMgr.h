@@ -11,6 +11,9 @@
 #include "QuickDraw.h"
 #include "ResourceMgr.h"
 
+#define MODULE_NAME MenuMgr
+#include <rsys/api-module.h>
+
 namespace Executor
 {
 enum

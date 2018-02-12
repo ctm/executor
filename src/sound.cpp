@@ -13,6 +13,7 @@
 #include "rsys/sounddriver.h"
 #include "rsys/blockinterrupts.h"
 #include "rsys/mman.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 
@@ -142,7 +143,7 @@ snd_fixed_mul(snd_time x, snd_time y)
 /* This table is used to add two sound values together and pin
  * the value to avoid overflow.
  */
-static const uint8 mix8[] = {
+static const uint8_t mix8[] = {
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -197,21 +198,21 @@ static const uint8 mix8[] = {
    will simply be lost. */
 
 static bool
-resample(uint8 *inbuf, uint8 *orig_outbuf, unsigned int insize,
+resample(uint8_t *inbuf, uint8_t *orig_outbuf, unsigned int insize,
          unsigned int outsize, uint32_t infreq, uint32_t outfreq,
-         snd_time *current_start, uint8 *prev_samp,
+         snd_time *current_start, uint8_t *prev_samp,
          snd_time *chan_time, snd_time until)
 
 {
     snd_time step;
     snd_time in_t, out_t;
-    uint8 *outbuf;
+    uint8_t *outbuf;
 
     /* FIXME - this does lots of pointless work when we're going to
    * ignore the resampled waveform anyway, but it makes the "real"
    * sound and "dummy" sound cases more similar.  Is it worth it?
    */
-    outbuf = orig_outbuf ?: (uint8 *)alloca(outsize);
+    outbuf = orig_outbuf ?: (uint8_t *)alloca(outsize);
 
     step = snd_fixed_div(infreq, outfreq);
 
@@ -479,7 +480,7 @@ OSErr Executor::C_SndAddModifier(SndChannelPtr chanp, ProcPtr mod, INTEGER id,
                 else
                 {
                     h = GetResource(TICK("snth"), id);
-                    if(STARH(h) != (Ptr)P_snth5)
+                    if(STARH(h) != (Ptr)&snth5)
                     { /* ACK; phone handle stuff */
                         LoadResource(h);
                         modp->flags = MOD_SYNTH_FLAG;
@@ -514,7 +515,6 @@ static void dumpcmd(SndCommand *cmdp)
 }
 #endif
 
-typedef BOOLEAN (*snthfp)(SndChannelPtr, SndCommand *, ModifierStubPtr);
 
 BOOLEAN callasynth(SndChannelPtr chanp, SndCommand *cmdp, ModifierStubPtr mp)
 {
@@ -522,7 +522,7 @@ BOOLEAN callasynth(SndChannelPtr chanp, SndCommand *cmdp, ModifierStubPtr mp)
  * NOTE: when we support sound, we'll have to check for known P_routines
  *	 to avoid invoking syn68k on our own stuff.
  */
-    return CToPascalCall((void *)MR(mp->code), ctop(&C_SectRect), chanp, cmdp, mp);
+    return mp->code(chanp, cmdp, mp);
 }
 
 #if defined(OLD_BROKEN_NEXTSTEP_SOUND)
@@ -972,14 +972,14 @@ OSErr Executor::C_SndControl(INTEGER id, SndCommand *cmdp)
             else
             {
                 LoadResource(h);
-                if(STARH(h) != (Ptr)P_snth5)
+                if(STARH(h) != (Ptr)&snth5)
                     state = HGetState(h);
 #if !defined(LETGCCWAIL)
                 else
                     state = 0;
 #endif
                 callasynth((SndChannelPtr)0, cmdp, (ModifierStubPtr)0);
-                if(STARH(h) != (Ptr)P_snth5)
+                if(STARH(h) != (Ptr)&snth5)
                     HSetState(h, state);
                 retval = noErr;
             }

@@ -10,6 +10,7 @@
 #include "rsys/cquick.h"
 #include "rsys/list.h"
 #include "rsys/hook.h"
+#include "rsys/functions.impl.h"
 
 using namespace Executor;
 
@@ -264,14 +265,12 @@ void Executor::ROMlib_listcall(INTEGER mess, BOOLEAN sel, Rect *rp, Cell cell, I
             LoadResource(HxP(lhand, listDefProc));
             lp = MR(*(GUEST<listprocp> *)HxP(lhand, listDefProc));
         }
-        if(lp == P_ldef0)
-            C_ldef0(mess, sel, rp, cell, off, len, lhand);
+        if(lp == &ldef0)
+            ldef0(mess, sel, rp, cell, off, len, lhand);
         else
         {
             ROMlib_hook(list_ldefnumber);
-            HOOKSAVEREGS();
-            CToPascalCall((void *)lp, ctop(&C_ldef0), mess, sel, rp, cell, off, len, lhand);
-            HOOKRESTOREREGS();
+            lp(mess, sel, rp, cell, off, len, lhand);
         }
     }
 }

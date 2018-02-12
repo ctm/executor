@@ -2,20 +2,20 @@
 #define _cfm_h_
 
 #include "FileMgr.h"
+#include <rsys/macros.h>
 
 /*
  * Copyright 2000 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
-
  */
+
+#define MODULE_NAME rsys_cfm
+#include <rsys/api-module.h>
 
 namespace Executor
 {
-enum
-{
-    kUnresolvedCFragSymbolAddress = 0
-};
+const std::nullptr_t kUnresolvedCFragSymbolAddress = nullptr;
 
 struct cfrg_resource_t
 {
@@ -45,8 +45,8 @@ struct cfir_t
     GUEST<uint32_t> oldest_definition_version;
     GUEST<uint32_t> stack_size;
     GUEST<int16_t> appl_library_dir;
-    GUEST<uint8> fragment_type;
-    GUEST<uint8> fragment_location;
+    GUEST<uint8_t> fragment_type;
+    GUEST<uint8_t> fragment_location;
     GUEST<int32_t> offset_to_fragment;
     GUEST<int32_t> fragment_length;
     GUEST<uint32_t> reserved0;
@@ -102,12 +102,13 @@ enum
     kMotorola68KArch = FOURCC('m', '6', '8', 'k'),
 };
 
-typedef enum {
+enum {
     kLoadLib = 1, /* deprecated */
     kReferenceCFrag = 1,
     kFindLib = 2,
     kLoadNewCopy = 5,
-} LoadFlags;
+};
+typedef uint32_t LoadFlags;
 
 struct MemFragment
 {
@@ -160,15 +161,19 @@ struct InitBlock
 
 typedef struct CFragConnection *ConnectionID;
 
+DISPATCHER_TRAP(CodeFragmentDispatch, 0xAA5A, StackW);
+
 extern OSErr C_GetDiskFragment(FSSpecPtr fsp, LONGINT offset, LONGINT length,
                                Str63 fragname, LoadFlags flags,
                                GUEST<ConnectionID> *connp, GUEST<Ptr> *mainAddrp,
                                Str255 errname);
+PASCAL_SUBTRAP(GetDiskFragment, 0xAA5A, 0x0002, CodeFragmentDispatch);
 
-typedef uint8 SymClass;
+typedef uint8_t SymClass;
 
 extern OSErr C_FindSymbol(ConnectionID connID, Str255 symName, GUEST<Ptr> *symAddr,
                           SymClass *symClass);
+PASCAL_SUBTRAP(FindSymbol, 0xAA5A, 0x0005, CodeFragmentDispatch);
 
 extern char *ROMlib_p2cstr(StringPtr str);
 
@@ -182,8 +187,8 @@ struct section_info_t
     GUEST<syn68k_addr_t> start;
     GUEST<uint32_t> length;
     GUEST<uint32_t> ref_count;
-    GUEST<uint8> perms;
-    GUEST<uint8> pad[3];/* TODO: verifying that it works this way on a Mac. */
+    GUEST<uint8_t> perms;
+    GUEST<uint8_t> pad[3];/* TODO: verifying that it works this way on a Mac. */
 };
 
 typedef struct CFragConnection
@@ -239,25 +244,30 @@ struct map_entry_t
     void *value;
 };
 
-extern cfir_t *ROMlib_find_cfrg(Handle cfrg, OSType arch, uint8 type,
+extern cfir_t *ROMlib_find_cfrg(Handle cfrg, OSType arch, uint8_t type,
                                 Str255 name);
 
 extern OSErr C_CloseConnection(ConnectionID *cidp);
+PASCAL_SUBTRAP(CloseConnection, 0xAA5A, 0x0004, CodeFragmentDispatch);
 
 extern OSErr C_GetSharedLibrary(Str63 library, OSType arch,
                                 LoadFlags loadflags,
                                 GUEST<ConnectionID> *cidp, GUEST<Ptr> *mainaddrp,
                                 Str255 errName);
+PASCAL_SUBTRAP(GetSharedLibrary, 0xAA5A, 0x0001, CodeFragmentDispatch);
 
 extern OSErr C_GetMemFragment(void *addr, uint32_t length, Str63 fragname,
                               LoadFlags flags, GUEST<ConnectionID> *connp,
                               GUEST<Ptr> *mainAddrp, Str255 errname);
+PASCAL_SUBTRAP(GetMemFragment, 0xAA5A, 0x0003, CodeFragmentDispatch);
 
 extern OSErr C_CountSymbols(ConnectionID id, GUEST<LONGINT> *countp);
+PASCAL_SUBTRAP(CountSymbols, 0xAA5A, 0x0006, CodeFragmentDispatch);
 
 extern OSErr C_GetIndSymbol(ConnectionID id, LONGINT index,
                             Str255 name, GUEST<Ptr> *addrp,
                             SymClass *classp);
+PASCAL_SUBTRAP(GetIndSymbol, 0xAA5A, 0x0007, CodeFragmentDispatch);
 
 extern ConnectionID ROMlib_new_connection(uint32_t n_sects);
 extern void ROMlib_release_tracking_values(void);

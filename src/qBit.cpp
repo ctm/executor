@@ -75,11 +75,10 @@ void Executor::C_CopyBits(BitMap *src_bitmap, BitMap *dst_bitmap,
 	      been patched out */
         gp = PORT_GRAF_PROCS(thePort);
         if(gp
-           && MR(gp->bitsProc) != P_StdBits)
+           && MR(gp->bitsProc) != &StdBits)
             warning_unexpected("thePort bitsProc patched out!");
 
-        if(tooltraptable[StdBits_TOOLTRAP_NUMBER]
-           != toolstuff[StdBits_TOOLTRAP_NUMBER].orig)
+        if(StdBits.isPatched())
             warning_unexpected("_StdBits patched out!");
 
         ROMlib_bogo_stdbits(src_bitmap, dst_bitmap,

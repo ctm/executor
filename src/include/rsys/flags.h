@@ -12,13 +12,6 @@ extern INTEGER ROMlib_bltrgn_save_cursor_p;
 /* do not check for diskette when under dos */
 extern int ROMlib_drive_check;
 
-#if defined(NOMOUSE_COMMAND_LINE_OPTION)
-/* no mouse is installed; keyboard only */
-extern int ROMlib_no_mouse;
-#endif
-
-extern INTEGER ROMlib_no_windows;
-
 /* 0 means "use default". */
 extern INTEGER flag_width, flag_height;
 

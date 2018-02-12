@@ -10,7 +10,7 @@
 
 using namespace Executor;
 
-void Executor::NumToString(LONGINT l, StringPtr s)
+void Executor::C_NumToString(LONGINT l, StringPtr s)
 {
     Byte *p = s + 1;
     LONGINT d;
@@ -49,7 +49,7 @@ void Executor::NumToString(LONGINT l, StringPtr s)
     s[0] = p - (s + 1);
 }
 
-void Executor::StringToNum(StringPtr s, LONGINT *lp)
+void Executor::C_StringToNum(StringPtr s, LONGINT *lp)
 {
     char *p = (char *)s + 1;
     char *ep = p + s[0];

@@ -217,7 +217,7 @@ void Executor::C_NMeasureJust(Ptr text, int32_t length, Fixed slop,
     denomx.v = CW(denom.v);
     denomx.h = CW(denom.h);
 
-    xStdTxMeas(length, (uint8 *)text, &numerx, &denomx,
+    xStdTxMeas(length, (uint8_t *)text, &numerx, &denomx,
                NULL, (GUEST<int16_t> *)charLocs);
 }
 
@@ -879,3 +879,27 @@ void Executor::C_UppercaseStripDiacritics(
 {
     ROMlib_UprString((StringPtr)textp, true, len);
 }
+
+void Executor::C_TextUtilFunctions(
+    short selector,
+    Ptr textp,
+    INTEGER len,
+    ScriptCode script)
+{
+    switch(selector)
+    {
+        case 0x0000:
+            C_LowercaseText(textp, len, script);
+            break;
+        case 0x0200:
+            C_StripDiacritics(textp, len, script);
+            break;
+        case 0x0400:
+            C_UppercaseText(textp, len, script);
+            break;
+        case 0x0600:
+            C_UppercaseStripDiacritics(textp, len, script);
+            break;
+    }
+}
+

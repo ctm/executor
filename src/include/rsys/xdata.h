@@ -10,7 +10,7 @@ typedef struct
 {
     uint16_t x_rot_count; /* Number of pixels x-rotated.		     */
     uint16_t y_rot_count; /* Number of rows y-rotated.		     */
-    uint8 src_flipped_p; /* Are the mode_bits already flipped?	     */
+    uint8_t src_flipped_p; /* Are the mode_bits already flipped?	     */
 } xdata_xfer_spec_t;
 
 #define XDATA_INVALID_XFER_SPEC (-1)
