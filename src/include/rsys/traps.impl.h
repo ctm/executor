@@ -103,6 +103,7 @@ SubTrapFunction<Ret (Args...), fptr, trapno, selector, CallConv>::SubTrapFunctio
 template<typename Ret, typename... Args, Ret (*fptr)(Args...), int trapno, uint32_t selector, typename CallConv>
 void SubTrapFunction<Ret (Args...), fptr, trapno, selector, CallConv>::init()
 {
+    logging::namedThings[(void*) fptr] = this->name;
     if(logging::enabled())
         dispatcher.addSelector(selector, callfrom68K::Invoker<Ret (Args...), &logging::LoggedFunction<Ret (Args...),fptr,CallConv>::call, CallConv>
                 ::invokeFrom68K);
