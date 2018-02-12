@@ -85,6 +85,9 @@ static gestaltentry_t gtable[] = {
     {
         gestaltSoundAttr, 0x0C00,
     },
+    {
+        gestaltSpeechAttr, 0x0001
+    },
 /*  gestaltStdNBPAttr,		0,	*/
 /*  gestaltTermMgrAttr,		0,	*/
 /*  gestaltParityAttr,		0,	*/
