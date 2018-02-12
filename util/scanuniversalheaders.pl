@@ -118,27 +118,53 @@ foreach $trap (keys %kinds) {
 
 while($f = <include/*.h>) {
     open(INCLUDE, $f);
+    while($l = <INCLUDE>) {
+        if($l =~ /^(PASCAL|REGISTER)_(TRAP|SUBTRAP)\(([A-Za-z0-9_]+),.*/) {
+            $handled{$3} = 1;
+        }
+        if($l =~ /^(PASCAL|NOTRAP)_FUNCTION\(([A-Za-z0-9_]+)\b.*/) {
+            $handled{$2} = 1;
+        }
+        if($l =~ /^DISPATCHER_TRAP\(([A-Za-z0-9_]+), 0x([0-9A-F]+),.*/) {
+            $dispatcher{$2} = $1;
+        }
+    }
+    close(INCLUDE);
+}
+
+while($f = <include/*.h>) {
+    open(INCLUDE, $f);
     open(OUT, ">temp.h");
     while($l = <INCLUDE>) {
-        if($l =~ /^PASCAL_SUBTRAP\(([A-Za-z0-9_]+), 0x([0-9A-Z]+), (0x[0-9A-Z]+), ([A-Za-z0-9_]+)\)/) {
-            $name = $1;
-            $trapname = $4;
-            $trapnum = $2;
-            $selector = $3;
-            $origname = $name;
-            $name = $newnames{$name} if(exists $newnames{$name});
-
-            if(exists $headerfile{$trapname}) {
-                if($headerfile{$trapname} ne $f) {
-                    print "Trap in more than one header file: $trapname in $headerfile{$trapname} and $f\n"
-                }
-            } else {
-                print "$f:\n";
-                print "DISPATCHER_TRAP($trapname, 0x$trapnum, $kinds{$trapnum});\n";
-            }
-            $headerfile{$trapname} = $f;
-        }
         print OUT $l;
+        if($l =~ /^.*\bC_([A-Za-z0-9]+)\b\(.*;/) {
+            $name = $1;
+            if(! exists $handled{$name}) {
+                if(! exists $traps{$name}) {
+                    print "unknown $name\n";
+                } else {
+                    print "unhandled $name\n";
+                    $trap = $traps{$name};
+                    $kind = $kinds{$trap};
+                    print $kind, "\n";
+
+                    if($kind eq 'simple') {
+                        print OUT "PASCAL_TRAP($name, $trap);\n";
+                    } elsif($kind eq 'complicated') {
+                    } else {
+                        $selector = $selectors{$name};
+                        $disp = "dispatcher$trap";
+                        if(!exists $dispatcher{$trap}) {
+                            $dispatcher{$trap} = $disp;
+                            print OUT "DISPATCHER_TRAP($disp, 0x$trap, $kind);\n";
+                        }
+                        $disp = $dispatcher{$trap};
+                        print OUT "PASCAL_SUBTRAP($name, 0x$trap, 0x$selector, $disp);\n";
+                    }
+                 }
+                
+            }
+        }
     }
     close(OUT);
     close(INCLUDE);
