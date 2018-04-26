@@ -1,47 +1,61 @@
-#if !defined (__DESKMGR__)
+#if !defined(__DESKMGR__)
 #define __DESKMGR__
 
 /*
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: DeskMgr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-#define undoCmd		0
-#define cutCmd		2
-#define copyCmd		3
-#define pasteCmd	4
-#define clearCmd	5
+#include <rsys/lowglobals.h>
+#include "ExMacTypes.h"
+#include "EventMgr.h"
+#include "WindowMgr.h"
 
-#define accEvent	64
-#define accRun		65
-#define accMenu		67
-#define accUndo		68
+#define MODULE_NAME DeskMgr
+#include <rsys/api-module.h>
 
-#if !defined (SEvtEnb)
-extern Byte SEvtEnb;
-#endif
+namespace Executor
+{
+enum
+{
+    undoCmd = 0,
+    cutCmd = 2,
+    copyCmd = 3,
+    pasteCmd = 4,
+    clearCmd = 5,
+};
 
+enum
+{
+    accEvent = 64,
+    accRun = 65,
+    accMenu = 67,
+    accUndo = 68,
+};
+
+const LowMemGlobal<Byte> SEvtEnb { 0x15C }; // DeskMgr IMI-443 (false);
 
 /* DO NOT DELETE THIS LINE */
-#if !defined (__STDC__)
-extern INTEGER OpenDeskAcc(); 
-extern void CloseDeskAcc(); 
-extern void SystemClick(); 
-extern BOOLEAN SystemEdit(); 
-extern void SystemTask(); 
-extern BOOLEAN SystemEvent(); 
-extern void SystemMenu(); 
-#else /* __STDC__ */
-extern pascal trap INTEGER C_OpenDeskAcc( 
- Str255 acc ); extern pascal trap INTEGER P_OpenDeskAcc( 
- Str255 acc ); 
-extern pascal trap void C_CloseDeskAcc( INTEGER rn ); extern pascal trap void P_CloseDeskAcc( INTEGER rn); 
-extern pascal trap void C_SystemClick( EventRecord *evp, WindowPtr wp ); extern pascal trap void P_SystemClick( EventRecord *evp, WindowPtr wp); 
-extern pascal trap BOOLEAN C_SystemEdit( INTEGER editcmd ); extern pascal trap BOOLEAN P_SystemEdit( INTEGER editcmd); 
-extern pascal trap void C_SystemTask( void  ); extern pascal trap void P_SystemTask( void ); 
-extern pascal trap BOOLEAN C_SystemEvent( EventRecord *evp ); extern pascal trap BOOLEAN P_SystemEvent( EventRecord *evp); 
-extern pascal trap void C_SystemMenu( LONGINT menu ); extern pascal trap void P_SystemMenu( LONGINT menu); 
-#endif /* __STDC__ */
+extern INTEGER C_OpenDeskAcc(
+    Str255 acc);
+PASCAL_TRAP(OpenDeskAcc, 0xA9B6);
+extern void C_CloseDeskAcc(INTEGER rn);
+PASCAL_TRAP(CloseDeskAcc, 0xA9B7);
+
+extern void C_SystemClick(EventRecord *evp, WindowPtr wp);
+PASCAL_TRAP(SystemClick, 0xA9B3);
+
+extern BOOLEAN C_SystemEdit(INTEGER editcmd);
+PASCAL_TRAP(SystemEdit, 0xA9C2);
+
+extern void C_SystemTask(void);
+PASCAL_TRAP(SystemTask, 0xA9B4);
+
+extern BOOLEAN C_SystemEvent(EventRecord *evp);
+PASCAL_TRAP(SystemEvent, 0xA9B2);
+
+extern void C_SystemMenu(LONGINT menu);
+PASCAL_TRAP(SystemMenu, 0xA9B5);
+}
 #endif /* __DESKMGR__ */

@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/53495421.ecf) was built by Executor
-Comments = "Stuffit Lite 3.x will get confused if System 7 is turned on.";
-// WindowName = "StuffIt Lite%AA";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, PretendSound, PassPostscript, NewLineToCR};

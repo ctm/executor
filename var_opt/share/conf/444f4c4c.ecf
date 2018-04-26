@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/444f4c4c.ecf) was built by Executor
-Comments = "Doll's House is Black and White";
-// WindowName = "Dollshouse";
-BitsPerPixel = 1;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, PretendSound, PassPostscript, NewLineToCR, NoWarn32};

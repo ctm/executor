@@ -1,4 +1,4 @@
-#if !defined (__WIN_EXCEPT_H__)
+#if !defined(__WIN_EXCEPT_H__)
 #define __WIN_EXCEPT_H__
 
 /*
@@ -6,7 +6,7 @@
  * All rights reserved.
  */
 
-extern void install_exception_handler (void);
-extern void uninstall_exception_handler (void);
+extern void install_exception_handler(void);
+extern void uninstall_exception_handler(void);
 
 #endif

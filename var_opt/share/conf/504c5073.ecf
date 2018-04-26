@@ -1,8 +1,0 @@
-// This Configuration file was built by Executor
-WindowName = "Lemmings";
-ScreenSize = { 512, 342 };
-MacSize = { 512, 342 };
-ScreenLocation = { 369, 177 };
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR, FlushOften};

@@ -5,28 +5,26 @@
  * Copyright 2000 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: suffix_maps.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
+extern void ROMlib_add_suffix_quad(const char *suffixp,
+                                   const char *creator_hexp,
+                                   const char *type_hexp,
+                                   const char *applicationp);
 
-extern void ROMlib_add_suffix_quad (const char *suffixp,
-				    const char *creator_hexp,
-				    const char *type_hexp,
-				    const char *applicationp);
+extern bool ROMlib_creator_and_type_from_suffix(const char *suffix,
+                                                uint32_t *creatorp,
+                                                uint32_t *typep);
 
-extern boolean_t ROMlib_creator_and_type_from_suffix (const char *suffix,
-						      uint32 *creatorp,
-						      uint32 *typep);
+extern bool ROMlib_creator_and_type_from_filename(int len,
+                                                  const char *filename,
+                                                  uint32_t *creatorp,
+                                                  uint32_t *typep);
 
-extern boolean_t ROMlib_creator_and_type_from_filename (int len,
-							const char *filename,
-							uint32 *creatorp,
-							uint32 *typep);
+extern bool ROMlib_delete_suffix(const char *suffix);
 
-extern boolean_t ROMlib_delete_suffix (const char *suffix);
-
-extern const char *ROMlib_find_best_creator_type_match (uint32 creator,
-							uint32 type);
-
+extern const char *ROMlib_find_best_creator_type_match(uint32_t creator,
+                                                       uint32_t type);
 
 #endif

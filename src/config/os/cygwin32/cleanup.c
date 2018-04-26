@@ -13,20 +13,20 @@
 
 int STDCALL WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
 {
-  int retval;
-  int argc;
-  char **argv;
+    int retval;
+    int argc;
+    char **argv;
 
-  paramline_to_argcv (GetCommandLine (), &argc, &argv);
+    paramline_to_argcv(GetCommandLine(), &argc, &argv);
 
-  if (!SetFileAttributes (argv[2], FILE_ATTRIBUTE_NORMAL))
-    retval = 1;
-  else
+    if(!SetFileAttributes(argv[2], FILE_ATTRIBUTE_NORMAL))
+        retval = 1;
+    else
     {
-      while (!DeleteFile (argv[2]))
-	;
-      retval = MoveFile (argv[1], argv[2]) ? 0 : 1;
+        while(!DeleteFile(argv[2]))
+            ;
+        retval = MoveFile(argv[1], argv[2]) ? 0 : 1;
     }
 
-  return retval;
+    return retval;
 }

@@ -1,47 +1,68 @@
-#if !defined (_PPC_H_)
+#if !defined(_PPC_H_)
 #define _PPC_H_
 
 /* Copyright 1996 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: PPC.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
-typedef int16 PPCPortKinds;
-typedef int16 PPCLocationKind;
+namespace Executor
+{
+
+typedef int16_t PPCPortKinds;
+typedef int16_t PPCLocationKind;
 
 typedef struct EntityName
 {
-  /* #### bogus */
+  Str32 objStr;
+  Str32 typeStr;
+  Str32 zoneStr;
 } EntityName;
 
-typedef struct PACKED LocationNameRec
+struct PPCXTIAddress
 {
-  PPCLocationKind locationKindSelector;
-  
-  union
-    {
-      EntityName npbEntity;
-      Str32 npbType;
-  } u;
-} LocationNameRec;
+    GUEST_STRUCT;
+    int16_t fAddressType;
+    uint8_t fAddress[96];
+};
+struct PPCAddrRec
+{
+    GUEST_STRUCT;
+    uint8_t Reserved[3];
+    uint8_t xtiAddrLen;
+    PPCXTIAddress xtiAddr;
+};
 
-typedef struct PACKED PPCPortRec
+struct LocationNameRec
 {
-  ScriptCode nameScript;
-  Str32 name;
-  
-  PPCPortKinds portKindsSelector;
-  
-  union
-  {
-    Str32 portTypeStr;
-    struct PACKED
-    {
-      OSType creator;
-      OSType type;
-    } port;
-  } u;
-} PPCPortRec, *PPCPortPtr;
+    GUEST_STRUCT;
+    GUEST<PPCLocationKind> locationKindSelector;
+
+    union {
+        GUEST<EntityName> npbEntity;
+        GUEST<Str32> npbType;
+        GUEST<PPCAddrRec> xtiType;
+    } u;
+};
+
+typedef struct PPCPortRec
+{
+    GUEST_STRUCT;
+    GUEST<ScriptCode> nameScript;
+    GUEST<Str32> name;
+
+    GUEST<PPCPortKinds> portKindsSelector;
+
+    union {
+        GUEST<Str32> portTypeStr;
+        struct
+        {
+            GUEST<OSType> creator;
+            GUEST<OSType> type;
+        } port;
+    } u;
+} * PPCPortPtr;
+}
 
 #endif /* !_PPC_H_ */

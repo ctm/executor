@@ -1,4 +1,4 @@
-#if !defined (_M68KINT_H_)
+#if !defined(_M68KINT_H_)
 #define _M68KINT_H_
 
 /* These are the m68k interrupts we "patch into" to get asynchronous
@@ -17,7 +17,7 @@
 #define M68K_SOUND_PRIORITY 5
 #define M68K_SOUND_VECTOR (24 + M68K_SOUND_PRIORITY)
 
-#define M68K_WATCHDOG_PRIORITY 7  /* unmaskable */
+#define M68K_WATCHDOG_PRIORITY 7 /* unmaskable */
 #define M68K_WATCHDOG_VECTOR (24 + M68K_WATCHDOG_PRIORITY)
 
 #endif /* !_M68KINT_H_ */

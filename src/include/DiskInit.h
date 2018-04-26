@@ -1,43 +1,40 @@
-#if !defined (__DISKINIT__)
+#if !defined(__DISKINIT__)
 #define __DISKINIT__
 
 #include "QuickDraw.h"
+
+#define MODULE_NAME DiskInit
+#include <rsys/api-module.h>
 
 /*
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: DiskInit.h 63 2004-12-24 18:19:43Z ctm $
+
  */
+namespace Executor
+{
+DISPATCHER_TRAP(Pack2, 0xA9E9, StackW);
 
-#define badMDBErr	(-60)
-#define extFSErr	(-58)
-#define firstDskErr	(-84)
-#define ioErr		(-36)
-#define lastDskErr	(-64)
-#define memFullErr	(-108)
-#define noMacDskErr	(-57)
-#define nsDrvErr	(-56)
-#define paramErr	(-50)
-#define volOnLinErr	(-55)
+extern void C_DILoad(void);
+PASCAL_SUBTRAP(DILoad, 0xA9E9, 0x0002, Pack2);
 
+extern void C_DIUnload(void);
+PASCAL_SUBTRAP(DIUnload, 0xA9E9, 0x0004, Pack2);
 
-/* DO NOT DELETE THIS LINE */
-#if !defined (__STDC__)
-extern void DILoad(); 
-extern void DIUnload(); 
-extern INTEGER DIBadMount(); 
-extern INTEGER dibadmount(); 
-extern OSErr DIFormat(); 
-extern OSErr DIVerify(); 
-extern OSErr DIZero(); 
-#else /* __STDC__ */
-extern void C_DILoad( void  ); 
-extern void C_DIUnload( void  ); 
-extern INTEGER C_DIBadMount( Point pt, LONGINT evtmess ); 
-extern INTEGER C_dibadmount( Point *ptp, LONGINT evtmess ); 
-extern OSErr C_DIFormat( INTEGER dn ); 
-extern OSErr C_DIVerify( INTEGER dn ); 
-extern OSErr C_DIZero( INTEGER dn, StringPtr vname ); 
-#endif /* __STDC__ */
+extern INTEGER C_DIBadMount(Point pt, LONGINT evtmess);
+PASCAL_SUBTRAP(DIBadMount, 0xA9E9, 0x0000, Pack2);
+
+extern INTEGER C_dibadmount(Point *ptp, LONGINT evtmess);
+
+extern OSErr C_DIFormat(INTEGER dn);
+PASCAL_SUBTRAP(DIFormat, 0xA9E9, 0x0006, Pack2);
+
+extern OSErr C_DIVerify(INTEGER dn);
+PASCAL_SUBTRAP(DIVerify, 0xA9E9, 0x0008, Pack2);
+
+extern OSErr C_DIZero(INTEGER dn, StringPtr vname);
+PASCAL_SUBTRAP(DIZero, 0xA9E9, 0x000A, Pack2);
+
+}
 #endif /* __DISKINIT__ */

@@ -1,472 +1,618 @@
 
-#if !defined (_CQUICKDRAW_H_)
+#if !defined(_CQUICKDRAW_H_)
 #define _CQUICKDRAW_H_
 
 #include "WindowMgr.h"
 
-typedef HIDDEN_CGrafPtr *HIDDEN_CGrafPtr_Ptr;
-MAKE_HIDDEN(HIDDEN_CGrafPtr_Ptr);
+#define MODULE_NAME CQuickDraw
+#include <rsys/api-module.h>
 
-
-#define theCPort	(STARH (STARH ((HIDDEN_HIDDEN_CGrafPtr_Ptr *) SYN68K_TO_US(a5))))
-#define theCPortX	((*STARH ((HIDDEN_HIDDEN_CGrafPtr_Ptr *) SYN68K_TO_US(a5))).p)
-
-#define minSeed 1024
-
-typedef struct PACKED
+namespace Executor
 {
-  LONGINT iTabSeed;
-  INTEGER iTabRes;
-  /* can't use [0];
+#define theCPort (STARH(STARH((GUEST<GUEST<CGrafPtr> *> *)SYN68K_TO_US(EM_A5))))
+#define theCPortX ((*STARH((GUEST<GUEST<CGrafPtr> *> *)SYN68K_TO_US(EM_A5))))
+
+enum
+{
+    minSeed = 1024,
+};
+
+/* can't use [0];
      make this an unsigned char even tho the mac has SignedByte;
      it is treated as unsigned */
-  unsigned char iTTable[1];
-} ITab, *ITabPtr;
+typedef struct ITab
+{
+    GUEST_STRUCT;
+    GUEST<LONGINT> iTabSeed;
+    GUEST<INTEGER> iTabRes;
+    GUEST<unsigned char[1]> iTTable;
+} * ITabPtr;
 
-MAKE_HIDDEN(ITabPtr);
-typedef HIDDEN_ITabPtr *ITabHandle;
+typedef GUEST<ITabPtr> *ITabHandle;
 
 typedef struct GDevice *GDPtr;
 typedef GDPtr GDevicePtr;
-MAKE_HIDDEN(GDevicePtr);
-typedef HIDDEN_GDevicePtr *GDHandle;
-MAKE_HIDDEN(GDHandle);
 
-typedef struct PACKED SProcRec *SProcPtr;
-MAKE_HIDDEN(SProcPtr);
-typedef HIDDEN_SProcPtr *SProcHndl;
-typedef struct PACKED SProcRec
+typedef GUEST<GDevicePtr> *GDHandle;
+
+typedef struct SProcRec *SProcPtr;
+
+typedef GUEST<SProcPtr> *SProcHndl;
+struct SProcRec
 {
-  PACKED_MEMBER(SProcHndl, nxtSrch);
-  PACKED_MEMBER(ProcPtr, srchProc);
-} SProcRec;
+    GUEST_STRUCT;
+    GUEST<SProcHndl> nxtSrch;
+    GUEST<ProcPtr> srchProc;
+};
 
-typedef struct PACKED CProcRec *CProcPtr;
-MAKE_HIDDEN(CProcPtr);
+typedef struct CProcRec *CProcPtr;
 
-typedef HIDDEN_CProcPtr *CProcHndl;
-typedef struct PACKED CProcRec
+typedef GUEST<CProcPtr> *CProcHndl;
+struct CProcRec
 {
-  PACKED_MEMBER(CProcHndl, nxtComp);
-  PACKED_MEMBER(ProcPtr, compProc);
-} CProcRec;
+    GUEST_STRUCT;
+    GUEST<CProcHndl> nxtComp;
+    GUEST<ProcPtr> compProc;
+};
 
-typedef void *DeviceLoopDrawingProcPtr;
+typedef UPP<void(INTEGER depth, INTEGER deviceFlags, GDHandle targetDevice, LONGINT userData)>
+    DeviceLoopDrawingProcPtr;
 
-typedef struct PACKED GDevice
+struct GDevice
 {
-  INTEGER gdRefNum;
-  INTEGER gdID;
-  INTEGER gdType;
-  PACKED_MEMBER(ITabHandle, gdITable);
-  INTEGER gdResPref;
-  PACKED_MEMBER(SProcHndl, gdSearchProc);
-  PACKED_MEMBER(CProcHndl, gdCompProc);
-  INTEGER gdFlags;
-  PACKED_MEMBER(PixMapHandle, gdPMap);
-  LONGINT gdRefCon;
-  PACKED_MEMBER(GDHandle, gdNextGD);
-  Rect gdRect;
-  LONGINT gdMode;
-  INTEGER gdCCBytes;
-  INTEGER gdCCDepth;
-  PACKED_MEMBER(Handle, gdCCXData);
-  PACKED_MEMBER(Handle, gdCCXMask);
-  LONGINT gdReserved;
-} GDevice;
+    GUEST_STRUCT;
+    GUEST<INTEGER> gdRefNum;
+    GUEST<INTEGER> gdID;
+    GUEST<INTEGER> gdType;
+    GUEST<ITabHandle> gdITable;
+    GUEST<INTEGER> gdResPref;
+    GUEST<SProcHndl> gdSearchProc;
+    GUEST<CProcHndl> gdCompProc;
+    GUEST<INTEGER> gdFlags;
+    GUEST<PixMapHandle> gdPMap;
+    GUEST<LONGINT> gdRefCon;
+    GUEST<GDHandle> gdNextGD;
+    GUEST<Rect> gdRect;
+    GUEST<LONGINT> gdMode;
+    GUEST<INTEGER> gdCCBytes;
+    GUEST<INTEGER> gdCCDepth;
+    GUEST<Handle> gdCCXData;
+    GUEST<Handle> gdCCXMask;
+    GUEST<LONGINT> gdReserved;
+};
 
-typedef uint32 DeviceLoopFlags;
+typedef uint32_t DeviceLoopFlags;
 
 /* DeviceLoop flags. */
-#define singleDevices	(1 << 0)
-#define dontMatchSeeds	(1 << 1)
-#define allDevices	(1 << 2)
-
-typedef struct PACKED ColorInfo
+enum
 {
-  RGBColor ciRGB;
-  INTEGER ciUsage;
-  INTEGER ciTolerance;
-  INTEGER ciFlags;
-  LONGINT ciPrivate;
-} ColorInfo;
+    singleDevices = (1 << 0),
+    dontMatchSeeds = (1 << 1),
+    allDevices = (1 << 2),
+};
 
-typedef struct PACKED Palette
+struct ColorInfo
 {
-  INTEGER pmEntries;
-  PACKED_MEMBER(GrafPtr, pmWindow);
-  INTEGER pmPrivate;
-  LONGINT /* Handle? */ pmDevices;
-  PACKED_MEMBER(Handle,pmSeeds);
-  ColorInfo pmInfo[1];
-} Palette, *PalettePtr;
+    GUEST_STRUCT;
+    GUEST<RGBColor> ciRGB;
+    GUEST<INTEGER> ciUsage;
+    GUEST<INTEGER> ciTolerance;
+    GUEST<INTEGER> ciFlags;
+    GUEST<LONGINT> ciPrivate;
+};
 
-typedef enum 
+typedef struct Palette
 {
-#define CI_USAGE_TYPE_BITS_X  (CWC (0xF))
-#define CI_USAGE_TYPE_BITS    (0xF)
-  pmCourteous = 0,
-  pmDithered = 1,
-  pmTolerant = 2,
-  pmAnimated = 4,
-  pmExplicit = 8,
+    GUEST_STRUCT;
+    GUEST<INTEGER> pmEntries;
+    GUEST<GrafPtr> pmWindow;
+    GUEST<INTEGER> pmPrivate;
+    GUEST<LONGINT> pmDevices; /* Handle? */
+    GUEST<Handle> pmSeeds;
+    GUEST<ColorInfo[1]> pmInfo;
+} * PalettePtr;
 
-  pmInhibitG2 = 0x0100,
-  pmInhibitC2 = 0x0200,
-  pmInhibitG4 = 0x0400,
-  pmInhibitC4 = 0x0800,
-  pmInhibitG8 = 0x1000,
-  pmInhibitC8 = 0x2000,
+#define CI_USAGE_TYPE_BITS_X (CWC(0xF))
+enum
+{
+    CI_USAGE_TYPE_BITS = (0xF),
+};
+
+typedef enum {
+    pmCourteous = 0,
+    pmDithered = 1,
+    pmTolerant = 2,
+    pmAnimated = 4,
+    pmExplicit = 8,
+
+    pmInhibitG2 = 0x0100,
+    pmInhibitC2 = 0x0200,
+    pmInhibitG4 = 0x0400,
+    pmInhibitC4 = 0x0800,
+    pmInhibitG8 = 0x1000,
+    pmInhibitC8 = 0x2000,
 } pmColorUsage;
 
-typedef enum
-{
-  pmNoUpdates_enum = 0x8000,
-  pmBkUpdates_enum = 0xA000,
-  pmFgUpdates_enum = 0xC000,
-  pmAllUpdates_enum = 0xE000,
+typedef enum {
+    pmNoUpdates = 0x8000,
+    pmBkUpdates = 0xA000,
+    pmFgUpdates = 0xC000,
+    pmAllUpdates = 0xE000,
 } pmUpdates;
 
-#define pmNoUpdates ((INTEGER) pmNoUpdates_enum)
-#define pmBkUpdates ((INTEGER) pmBkUpdates_enum)
-#define pmFgUpdates ((INTEGER) pmFgUpdates_enum)
-#define pmAllUpdates ((INTEGER) pmAllUpdates_enum)
+typedef GUEST<PalettePtr> *PaletteHandle;
 
-MAKE_HIDDEN(PalettePtr);
-typedef HIDDEN_PalettePtr *PaletteHandle;
-
-/* return TRUE if `maybe_graphics_world' points to a graphics world,
+/* return true if `maybe_graphics_world' points to a graphics world,
    and not a graf port or cgraf port */
-#define GRAPHICS_WORLD_P(maybe_graphics_world)			\
-  (CGrafPort_p(maybe_graphics_world)				\
-   && CPORT_VERSION_X (maybe_graphics_world) & GW_FLAG_BIT_X)
+#define GRAPHICS_WORLD_P(maybe_graphics_world) \
+    (CGrafPort_p(maybe_graphics_world)         \
+     && CPORT_VERSION_X(maybe_graphics_world) & GW_FLAG_BIT_X)
 
-#define GW_CPORT(graphics_world)	((CGrafPtr) (graphics_world))
+#define GW_CPORT(graphics_world) ((CGrafPtr)(graphics_world))
 
 typedef LONGINT GWorldFlags;
 
 typedef CGrafPort GWorld, *GWorldPtr;
 
-typedef struct PACKED ReqListRec
+struct ReqListRec
 {
-  INTEGER reqLSize;
-  INTEGER reqLData[1];
-} ReqListRec;
+    GUEST_STRUCT;
+    GUEST<INTEGER> reqLSize;
+    GUEST<INTEGER[1]> reqLData;
+};
 
 /* extended version 2 picture datastructures */
 
-typedef struct PACKED OpenCPicParams
+struct OpenCPicParams
 {
-  Rect srcRect;
-  Fixed hRes;
-  Fixed vRes;
-  int16 version;
-  int16 reserved1;
-  int32 reserved2;
-} OpenCPicParams;
+    GUEST_STRUCT;
+    GUEST<Rect> srcRect;
+    GUEST<Fixed> hRes;
+    GUEST<Fixed> vRes;
+    GUEST<int16_t> version;
+    GUEST<int16_t> reserved1;
+    GUEST<int32_t> reserved2;
+};
 
-typedef struct PACKED CommonSpec
+typedef struct CommonSpec
 {
-  int16 count;
-  int16 ID;
+    GUEST_STRUCT;
+    GUEST<int16_t> count;
+    GUEST<int16_t> ID;
 } CommentSpec;
 
 typedef CommentSpec *CommentSpecPtr;
-MAKE_HIDDEN(CommentSpecPtr);
-typedef HIDDEN_CommentSpecPtr *CommentSpecHandle;
 
-typedef struct PACKED FontSpec
+typedef GUEST<CommentSpecPtr> *CommentSpecHandle;
+
+struct FontSpec
 {
-  int16 pictFontID;
-  int16 sysFontID;
-  int32 size[4];
-  int16 style;
-  int32 nameOffset;
-} FontSpec;
+    GUEST_STRUCT;
+    GUEST<int16_t> pictFontID;
+    GUEST<int16_t> sysFontID;
+    GUEST<int32_t[4]> size;
+    GUEST<int16_t> style;
+    GUEST<int32_t> nameOffset;
+};
 
 typedef FontSpec *FontSpecPtr;
-MAKE_HIDDEN(FontSpecPtr);
-typedef HIDDEN_FontSpecPtr *FontSpecHandle;
 
-typedef struct PACKED PictInfo
+typedef GUEST<FontSpecPtr> *FontSpecHandle;
+
+struct PictInfo
 {
-  int16 version; /* 0 */
-  int32 uniqueColors; /* 2 */
-  PACKED_MEMBER(PaletteHandle, thePalette); /* 6 */
-  PACKED_MEMBER(CTabHandle, theColorTable); /* 10 */
-  Fixed hRes; /* 14 */
-  Fixed vRes; /* 18 */
-  INTEGER depth; /* 22 */
-  Rect sourceRect; /* top24, left26, bottom28, right30 */
-  int32 textCount; /* 32 */
-  int32 lineCount;
-  int32 rectCount;
-  int32 rRectCount;
-  int32 ovalCount;
-  int32 arcCount;
-  int32 polyCount;
-  int32 regionCount;
-  int32 bitMapCount;
-  int32 pixMapCount;
-  int32 commentCount;
-  
-  int32 uniqueComments;
-  PACKED_MEMBER(CommentSpecHandle, commentHandle);
-  
-  int32 uniqueFonts;
-  PACKED_MEMBER(FontSpecHandle, fontHandle);
-
-  PACKED_MEMBER(Handle, fontNamesHandle);
-
-  int32 reserved1;
-  int32 reserved2;
-} PictInfo;
+    GUEST_STRUCT;
+    GUEST<int16_t> version; /* 0 */
+    GUEST<int32_t> uniqueColors; /* 2 */
+    GUEST<PaletteHandle> thePalette; /* 6 */
+    GUEST<CTabHandle> theColorTable; /* 10 */
+    GUEST<Fixed> hRes; /* 14 */
+    GUEST<Fixed> vRes; /* 18 */
+    GUEST<INTEGER> depth; /* 22 */
+    GUEST<Rect> sourceRect; /* top24, left26, bottom28, right30 */
+    GUEST<int32_t> textCount; /* 32 */
+    GUEST<int32_t> lineCount;
+    GUEST<int32_t> rectCount;
+    GUEST<int32_t> rRectCount;
+    GUEST<int32_t> ovalCount;
+    GUEST<int32_t> arcCount;
+    GUEST<int32_t> polyCount;
+    GUEST<int32_t> regionCount;
+    GUEST<int32_t> bitMapCount;
+    GUEST<int32_t> pixMapCount;
+    GUEST<int32_t> commentCount;
+    GUEST<int32_t> uniqueComments;
+    GUEST<CommentSpecHandle> commentHandle;
+    GUEST<int32_t> uniqueFonts;
+    GUEST<FontSpecHandle> fontHandle;
+    GUEST<Handle> fontNamesHandle;
+    GUEST<int32_t> reserved1;
+    GUEST<int32_t> reserved2;
+};
 
 typedef PictInfo *PictInfoPtr;
-MAKE_HIDDEN(PictInfoPtr);
-typedef HIDDEN_PictInfoPtr *PictInfoHandle;
 
-typedef int32 PictInfoID;
+typedef GUEST<PictInfoPtr> *PictInfoHandle;
 
-#define RGBDirect (0x10)
-#define Indirect  (0)
+typedef int32_t PictInfoID;
+
+enum
+{
+    RGBDirect = (0x10),
+    Indirect = (0),
+};
 /* a pixmap pixelType of `native_rgb_pixel_type' means that the format
    of the pixmap is the same as that of the screen */
-#define vdriver_rgb_pixel_type (0xB9)
+enum
+{
+    vdriver_rgb_pixel_type = (0xB9),
+};
 
-#define pixPurge	(1 << 0)
-#define noNewDevice	(1 << 1)
-#define useTempMem	(1 << 2)
-#define keepLocal	(1 << 3)
-#define pixelsPurgeable	(1 << 6)
-#define pixelsLocked	(1 << 7)
-#define mapPix		(1 << 16)
-#define newDepth	(1 << 17)
-#define alignPix	(1 << 18)
-#define newRowBytes	(1 << 19)
-#define reallocPix	(1 << 20)
-#define clipPix		(1 << 28)
-#define stretchPix	(1 << 29)
-#define ditherPix	(1 << 30)
-#define gwFlagErr	(1 << 31)
+enum
+{
+    pixPurge = (1 << 0),
+    noNewDevice = (1 << 1),
+    useTempMem = (1 << 2),
+    keepLocal = (1 << 3),
+    pixelsPurgeable = (1 << 6),
+    pixelsLocked = (1 << 7),
+    mapPix = (1 << 16),
+    newDepth = (1 << 17),
+    alignPix = (1 << 18),
+    newRowBytes = (1 << 19),
+    reallocPix = (1 << 20),
+    clipPix = (1 << 28),
+    stretchPix = (1 << 29),
+    ditherPix = (1 << 30),
+    gwFlagErr = (1 << 31),
+};
 
-typedef int16 QDErr;
+typedef int16_t QDErr;
 
 /* error codes returned by QDError */
-#define noErr			0
-#define paramErr		(-50)
-#define noMemForPictPlaybackErr	(-145)
-#define regionTooBigErr		(-147)
-#define pixmapTooDeepErr	(-148)
-#define nsStackErr		(-149)
-#define cMatchErr		(-150)
-#define cTempMemErr		(-151)
-#define cNoMemErr		(-152)
-#define cRangeErr		(-153)
-#define cProtectErr		(-154)
-#define cDevErr			(-155)
-#define cResErr			(-156)
-#define cDepthErr		(-157)
-#define rgnTooBigErr		(-500)
+enum
+{
+    noMemForPictPlaybackErr = (-145),
+    regionTooBigErr = (-147),
+    pixmapTooDeepErr = (-148),
+    nsStackErr = (-149),
+    cMatchErr = (-150),
+    cTempMemErr = (-151),
+    cNoMemErr = (-152),
+    cRangeErr = (-153),
+    cProtectErr = (-154),
+    cDevErr = (-155),
+    cResErr = (-156),
+    cDepthErr = (-157),
+    rgnTooBigErr = (-500),
+};
 
 /* TODO:  FIXME -- #warning find out correct value for colReqErr */
 /*	  -158 is just a guess */
 
-#define colReqErr		(-158)
+enum
+{
+    colReqErr = (-158),
+};
 
-extern pascal trap void C_SetStdCProcs(CQDProcs *cProcs);
+const LowMemGlobal<GDHandle> TheGDevice { 0xCC8 }; // QuickDraw IMV (true);
+const LowMemGlobal<GDHandle> MainDevice { 0x8A4 }; // QuickDraw IMV (true);
+const LowMemGlobal<GDHandle> DeviceList { 0x8A8 }; // QuickDraw IMV (true);
+const LowMemGlobal<RGBColor> HiliteRGB { 0xDA0 }; // QuickDraw IMV-62 (true);
 
-extern pascal trap void C_OpenCPort (CGrafPtr);
-extern pascal trap void C_InitCPort (CGrafPtr);
-extern pascal trap void C_CloseCPort (CGrafPtr);
-extern pascal trap void C_RGBForeColor (RGBColor *);
-extern pascal trap void C_RGBBackColor (RGBColor *);
-extern pascal trap void C_GetForeColor (RGBColor *);
-extern pascal trap void C_GetBackColor (RGBColor *);
-extern pascal trap void C_PenPixPat (PixPatHandle);
-extern pascal trap void C_BackPixPat (PixPatHandle);
-extern pascal trap void C_OpColor (RGBColor *);
-extern pascal trap void C_HiliteColor (RGBColor *);
-extern pascal trap PixMapHandle C_NewPixMap ();
-extern pascal trap void C_DisposPixMap (PixMapHandle);
-extern pascal trap void C_CopyPixMap (PixMapHandle, PixMapHandle);
-extern pascal trap PixPatHandle C_NewPixPat ();
-extern pascal trap void C_DisposPixPat (PixPatHandle);
-extern pascal trap void C_CopyPixPat (PixPatHandle, PixPatHandle);
+DISPATCHER_TRAP(PaletteDispatch, 0xAAA2, D0W);  // D0<0xFF> ###
+DISPATCHER_TRAP(Pack12, 0xA82E, StackW);
+DISPATCHER_TRAP(QDExtensions, 0xAB1D, D0L);
+DISPATCHER_TRAP(Pack15, 0xA831, D0W);   // D0<0xFF>? ###
 
-extern pascal trap void C_SetPortPix (PixMapHandle);
+extern void C_SetStdCProcs(CQDProcs *cProcs);
+PASCAL_TRAP(SetStdCProcs, 0xAA4E);
 
-extern pascal trap GDHandle C_NewGDevice (INTEGER, LONGINT);
-extern pascal trap void C_InitGDevice (INTEGER, LONGINT, GDHandle);
-extern pascal trap void C_SetDeviceAttribute (GDHandle, INTEGER, BOOLEAN);
-extern pascal trap void C_SetGDevice (GDHandle);
+extern void C_OpenCPort(CGrafPtr);
+PASCAL_TRAP(OpenCPort, 0xAA00);
+extern void C_InitCPort(CGrafPtr);
+PASCAL_TRAP(InitCPort, 0xAA01);
+extern void C_CloseCPort(CGrafPtr);
+PASCAL_TRAP(CloseCPort, 0xAA02);
+extern void C_RGBForeColor(RGBColor *);
+PASCAL_TRAP(RGBForeColor, 0xAA14);
+extern void C_RGBBackColor(RGBColor *);
+PASCAL_TRAP(RGBBackColor, 0xAA15);
+extern void C_GetForeColor(RGBColor *);
+PASCAL_TRAP(GetForeColor, 0xAA19);
+extern void C_GetBackColor(RGBColor *);
+PASCAL_TRAP(GetBackColor, 0xAA1A);
+extern void C_PenPixPat(PixPatHandle);
+PASCAL_TRAP(PenPixPat, 0xAA0A);
+extern void C_BackPixPat(PixPatHandle);
+PASCAL_TRAP(BackPixPat, 0xAA0B);
+extern void C_OpColor(RGBColor *);
+PASCAL_TRAP(OpColor, 0xAA21);
+extern void C_HiliteColor(RGBColor *);
+PASCAL_TRAP(HiliteColor, 0xAA22);
+extern PixMapHandle C_NewPixMap();
+PASCAL_TRAP(NewPixMap, 0xAA03);
+extern void C_DisposPixMap(PixMapHandle);
+PASCAL_TRAP(DisposPixMap, 0xAA04);
+extern void C_CopyPixMap(PixMapHandle, PixMapHandle);
+PASCAL_TRAP(CopyPixMap, 0xAA05);
+extern PixPatHandle C_NewPixPat();
+PASCAL_TRAP(NewPixPat, 0xAA07);
+extern void C_DisposPixPat(PixPatHandle);
+PASCAL_TRAP(DisposPixPat, 0xAA08);
+extern void C_CopyPixPat(PixPatHandle, PixPatHandle);
+PASCAL_TRAP(CopyPixPat, 0xAA09);
 
-extern pascal trap void C_DisposeGDevice (GDHandle);
-extern pascal trap GDHandle C_GetGDevice ();
-extern pascal trap GDHandle C_GetDeviceList ();
-extern pascal trap GDHandle C_GetMainDevice ();
-extern pascal trap GDHandle C_GetMaxDevice (Rect *);
-extern pascal trap GDHandle C_GetNextDevice (GDHandle);
-extern pascal trap void C_DeviceLoop (RgnHandle, DeviceLoopDrawingProcPtr, LONGINT, DeviceLoopFlags);
-extern pascal trap BOOLEAN C_TestDeviceAttribute (GDHandle, INTEGER);
-extern pascal trap void C_ScreenRes (INTEGER *, INTEGER *);
-extern pascal trap INTEGER C_HasDepth (GDHandle, INTEGER, INTEGER, INTEGER);
-extern pascal trap OSErr C_SetDepth (GDHandle, INTEGER, INTEGER, INTEGER);
+extern void C_SetPortPix(PixMapHandle);
+PASCAL_TRAP(SetPortPix, 0xAA06);
 
-extern pascal trap void C_MakeITable (CTabHandle, ITabHandle, INTEGER);
+extern GDHandle C_NewGDevice(INTEGER, LONGINT);
+PASCAL_TRAP(NewGDevice, 0xAA2F);
+extern void C_InitGDevice(INTEGER, LONGINT, GDHandle);
+PASCAL_TRAP(InitGDevice, 0xAA2E);
+extern void C_SetDeviceAttribute(GDHandle, INTEGER, BOOLEAN);
+PASCAL_TRAP(SetDeviceAttribute, 0xAA2D);
+extern void C_SetGDevice(GDHandle);
+PASCAL_TRAP(SetGDevice, 0xAA31);
 
-extern pascal trap LONGINT C_Color2Index (RGBColor *);
-extern pascal trap void C_Index2Color (LONGINT, RGBColor *);
-extern pascal trap LONGINT C_GetCTSeed ();
-extern pascal trap void C_GetSubTable (CTabHandle, INTEGER, CTabHandle);
+extern void C_DisposeGDevice(GDHandle);
+PASCAL_TRAP(DisposeGDevice, 0xAA30);
+extern GDHandle C_GetGDevice();
+PASCAL_TRAP(GetGDevice, 0xAA32);
+extern GDHandle C_GetDeviceList();
+PASCAL_TRAP(GetDeviceList, 0xAA29);
+extern GDHandle C_GetMainDevice();
+PASCAL_TRAP(GetMainDevice, 0xAA2A);
+extern GDHandle C_GetMaxDevice(Rect *);
+PASCAL_TRAP(GetMaxDevice, 0xAA27);
+extern GDHandle C_GetNextDevice(GDHandle);
+PASCAL_TRAP(GetNextDevice, 0xAA2B);
+extern void C_DeviceLoop(RgnHandle, DeviceLoopDrawingProcPtr, LONGINT, DeviceLoopFlags);
+PASCAL_TRAP(DeviceLoop, 0xABCA);
+extern BOOLEAN C_TestDeviceAttribute(GDHandle, INTEGER);
+PASCAL_TRAP(TestDeviceAttribute, 0xAA2C);
+extern void C_ScreenRes(GUEST<INTEGER> *, GUEST<INTEGER> *);
+NOTRAP_FUNCTION(ScreenRes);
+extern INTEGER C_HasDepth(GDHandle, INTEGER, INTEGER, INTEGER);
+PASCAL_SUBTRAP(HasDepth, 0xAAA2, 0x0A14, PaletteDispatch);
+extern OSErr C_SetDepth(GDHandle, INTEGER, INTEGER, INTEGER);
+PASCAL_SUBTRAP(SetDepth, 0xAAA2, 0x0A13, PaletteDispatch);
 
-extern pascal trap void C_FillCRoundRect (const Rect *, short, short, PixPatHandle);
-extern pascal trap void C_FillCRect (Rect *, PixPatHandle);
-extern pascal trap void C_FillCOval (const Rect *, PixPatHandle);
-extern pascal trap void C_FillCArc (const Rect *, short, short, PixPatHandle);
-extern pascal trap void C_FillCPoly (PolyHandle, PixPatHandle);
-extern pascal trap void C_FillCRgn (RgnHandle, PixPatHandle);
+extern void C_MakeITable(CTabHandle, ITabHandle, INTEGER);
+PASCAL_TRAP(MakeITable, 0xAA39);
 
-extern pascal trap void C_InvertColor (RGBColor *);
-extern pascal trap BOOLEAN C_RealColor (RGBColor *);
-extern pascal trap void C_ProtectEntry (INTEGER, BOOLEAN);
-extern pascal trap void C_ReserveEntry (INTEGER, BOOLEAN);
-extern pascal trap void C_SetEntries (INTEGER, INTEGER, ColorSpec * /* cSpecArray */);
-extern pascal trap void C_AddSearch (ProcPtr);
-extern pascal trap void C_AddComp (ProcPtr);
-extern pascal trap void C_DelSearch (ProcPtr);
-extern pascal trap void C_DelComp (ProcPtr);
-extern pascal trap void C_SetClientID (INTEGER);
+extern LONGINT C_Color2Index(RGBColor *);
+PASCAL_TRAP(Color2Index, 0xAA33);
+extern void C_Index2Color(LONGINT, RGBColor *);
+PASCAL_TRAP(Index2Color, 0xAA34);
+extern LONGINT C_GetCTSeed();
+PASCAL_TRAP(GetCTSeed, 0xAA28);
+extern void C_GetSubTable(CTabHandle, INTEGER, CTabHandle);
+PASCAL_TRAP(GetSubTable, 0xAA37);
 
-extern pascal trap BOOLEAN C_GetGray (GDHandle, RGBColor *, RGBColor *);
+extern void C_FillCRoundRect(const Rect *, short, short, PixPatHandle);
+PASCAL_TRAP(FillCRoundRect, 0xAA10);
+extern void C_FillCRect(Rect *, PixPatHandle);
+PASCAL_TRAP(FillCRect, 0xAA0E);
+extern void C_FillCOval(const Rect *, PixPatHandle);
+PASCAL_TRAP(FillCOval, 0xAA0F);
+extern void C_FillCArc(const Rect *, short, short, PixPatHandle);
+PASCAL_TRAP(FillCArc, 0xAA11);
+extern void C_FillCPoly(PolyHandle, PixPatHandle);
+PASCAL_TRAP(FillCPoly, 0xAA13);
+extern void C_FillCRgn(RgnHandle, PixPatHandle);
+PASCAL_TRAP(FillCRgn, 0xAA12);
 
-extern pascal trap PixPatHandle C_GetPixPat (INTEGER);
+extern void C_InvertColor(RGBColor *);
+PASCAL_TRAP(InvertColor, 0xAA35);
+extern BOOLEAN C_RealColor(RGBColor *);
+PASCAL_TRAP(RealColor, 0xAA36);
+extern void C_ProtectEntry(INTEGER, BOOLEAN);
+PASCAL_TRAP(ProtectEntry, 0xAA3D);
+extern void C_ReserveEntry(INTEGER, BOOLEAN);
+PASCAL_TRAP(ReserveEntry, 0xAA3E);
+extern void C_SetEntries(INTEGER, INTEGER, ColorSpec * /* cSpecArray */);
+PASCAL_TRAP(SetEntries, 0xAA3F);
+extern void C_AddSearch(ProcPtr);
+PASCAL_TRAP(AddSearch, 0xAA3A);
+extern void C_AddComp(ProcPtr);
+PASCAL_TRAP(AddComp, 0xAA3B);
+extern void C_DelSearch(ProcPtr);
+PASCAL_TRAP(DelSearch, 0xAA4C);
+extern void C_DelComp(ProcPtr);
+PASCAL_TRAP(DelComp, 0xAA4D);
+extern void C_SetClientID(INTEGER);
+PASCAL_TRAP(SetClientID, 0xAA3C);
 
-extern pascal trap INTEGER C_QDError ();
+extern BOOLEAN C_GetGray(GDHandle, RGBColor *, RGBColor *);
+PASCAL_SUBTRAP(GetGray, 0xAAA2, 0x0C19, PaletteDispatch);
 
-extern pascal trap CWindowPtr C_NewCWindow (Ptr, Rect *, StringPtr, BOOLEAN, INTEGER, CWindowPtr, BOOLEAN, LONGINT);
-extern pascal trap CWindowPtr C_GetNewCWindow (INTEGER, Ptr, CWindowPtr);
+extern PixPatHandle C_GetPixPat(INTEGER);
+PASCAL_TRAP(GetPixPat, 0xAA0C);
 
-extern pascal trap void C_CMY2RGB (CMYColor *, RGBColor *);
-extern pascal trap void C_RGB2CMY (RGBColor *, CMYColor *);
-extern pascal trap void C_HSL2RGB (HSLColor *, RGBColor *);
-extern pascal trap void C_RGB2HSL (RGBColor *, HSLColor *);
-extern pascal trap void C_HSV2RGB (HSVColor *, RGBColor *);
-extern pascal trap void C_RGB2HSV (RGBColor *, HSVColor *);
-extern pascal trap SmallFract C_Fix2SmallFract (Fixed);
-extern pascal trap Fixed C_SmallFract2Fix (SmallFract);
-extern pascal trap BOOLEAN C_GetColor (Point, Str255, RGBColor *, RGBColor *);
+extern INTEGER C_QDError();
+PASCAL_TRAP(QDError, 0xAA40);
 
-extern pascal trap CTabHandle C_GetCTable (INTEGER);
-extern pascal trap void C_DisposCTable (CTabHandle);
+extern CWindowPtr C_NewCWindow(Ptr, Rect *, StringPtr, BOOLEAN, INTEGER, CWindowPtr, BOOLEAN, LONGINT);
+PASCAL_TRAP(NewCWindow, 0xAA45);
+extern CWindowPtr C_GetNewCWindow(INTEGER, Ptr, CWindowPtr);
+PASCAL_TRAP(GetNewCWindow, 0xAA46);
 
-extern pascal trap void C_InitPalettes ();
-extern pascal trap PaletteHandle C_NewPalette (INTEGER, CTabHandle, INTEGER, INTEGER);
-extern pascal trap PaletteHandle C_GetNewPalette (INTEGER);
-extern pascal trap void C_DisposePalette (PaletteHandle);
-extern pascal trap void C_ActivatePalette (WindowPtr);
-extern pascal trap void C_SetPalette (WindowPtr, PaletteHandle, BOOLEAN);
-extern pascal trap void C_NSetPalette (WindowPtr, PaletteHandle, INTEGER updates);
-extern pascal trap PaletteHandle C_GetPalette (WindowPtr);
+extern void C_CMY2RGB(CMYColor *, RGBColor *);
+PASCAL_SUBTRAP(CMY2RGB, 0xA82E, 0x0003, Pack12);
+extern void C_RGB2CMY(RGBColor *, CMYColor *);
+PASCAL_SUBTRAP(RGB2CMY, 0xA82E, 0x0004, Pack12);
+extern void C_HSL2RGB(HSLColor *, RGBColor *);
+PASCAL_SUBTRAP(HSL2RGB, 0xA82E, 0x0005, Pack12);
+extern void C_RGB2HSL(RGBColor *, HSLColor *);
+PASCAL_SUBTRAP(RGB2HSL, 0xA82E, 0x0006, Pack12);
+extern void C_HSV2RGB(HSVColor *, RGBColor *);
+PASCAL_SUBTRAP(HSV2RGB, 0xA82E, 0x0007, Pack12);
+extern void C_RGB2HSV(RGBColor *, HSVColor *);
+PASCAL_SUBTRAP(RGB2HSV, 0xA82E, 0x0008, Pack12);
+extern SmallFract C_Fix2SmallFract(Fixed);
+PASCAL_SUBTRAP(Fix2SmallFract, 0xA82E, 0x0001, Pack12);
+extern Fixed C_SmallFract2Fix(SmallFract);
+PASCAL_SUBTRAP(SmallFract2Fix, 0xA82E, 0x0002, Pack12);
+extern BOOLEAN C_GetColor(Point, Str255, RGBColor *, RGBColor *);
+PASCAL_SUBTRAP(GetColor, 0xA82E, 0x0009, Pack12);
 
-extern pascal trap void C_PmForeColor (INTEGER);
-extern pascal trap void C_PmBackColor (INTEGER);
-extern pascal trap void C_AnimateEntry (WindowPtr, INTEGER, RGBColor *);
-extern pascal trap void C_AnimatePalette (WindowPtr, CTabHandle, INTEGER, INTEGER, INTEGER);
-extern pascal trap void C_GetEntryColor (PaletteHandle, INTEGER,  RGBColor *);
-extern pascal trap void C_SetEntryColor (PaletteHandle, INTEGER, RGBColor *);
-extern pascal trap void C_GetEntryUsage (PaletteHandle, INTEGER, INTEGER *, INTEGER *);
-extern pascal trap void C_SetEntryUsage (PaletteHandle, INTEGER, INTEGER, INTEGER);
-extern pascal trap void C_CTab2Palette (CTabHandle, PaletteHandle, INTEGER, INTEGER);
-extern pascal trap void C_Palette2CTab (PaletteHandle, CTabHandle);
+extern CTabHandle C_GetCTable(INTEGER);
+PASCAL_TRAP(GetCTable, 0xAA18);
+extern void C_DisposCTable(CTabHandle);
+PASCAL_TRAP(DisposCTable, 0xAA24);
 
-extern pascal trap CCrsrHandle C_GetCCursor (INTEGER);
-extern pascal trap void C_SetCCursor (CCrsrHandle);
-extern pascal trap void C_DisposCCursor (CCrsrHandle);
-extern pascal trap void C_AllocCursor (void);
+extern void C_InitPalettes();
+PASCAL_TRAP(InitPalettes, 0xAA90);
+extern PaletteHandle C_NewPalette(INTEGER, CTabHandle, INTEGER, INTEGER);
+PASCAL_TRAP(NewPalette, 0xAA91);
+extern PaletteHandle C_GetNewPalette(INTEGER);
+PASCAL_TRAP(GetNewPalette, 0xAA92);
+extern void C_DisposePalette(PaletteHandle);
+PASCAL_TRAP(DisposePalette, 0xAA93);
+extern void C_ActivatePalette(WindowPtr);
+PASCAL_TRAP(ActivatePalette, 0xAA94);
+extern void C_SetPalette(WindowPtr, PaletteHandle, BOOLEAN);
+NOTRAP_FUNCTION(SetPalette);
+extern void C_NSetPalette(WindowPtr, PaletteHandle, INTEGER updates);
+PASCAL_TRAP(NSetPalette, 0xAA95);
+extern PaletteHandle C_GetPalette(WindowPtr);
+PASCAL_TRAP(GetPalette, 0xAA96);
 
-extern pascal trap void C_RestoreClutDevice (GDHandle);
-extern pascal trap void C_ResizePalette (PaletteHandle, INTEGER);
-extern pascal trap INTEGER C_PMgrVersion ();
-extern pascal trap void C_SaveFore (ColorSpec *);
-extern pascal trap void C_RestoreFore (ColorSpec *);
-extern pascal trap void C_SaveBack (ColorSpec *);
-extern pascal trap void C_RestoreBack (ColorSpec *);
-extern pascal trap void C_SetPaletteUpdates (PaletteHandle, INTEGER);
-extern pascal trap INTEGER C_GetPaletteUpdates (PaletteHandle);
-extern pascal trap void C_CopyPalette (PaletteHandle src_palette,
-				       PaletteHandle dst_palette,
-				       int16 src_start, int16 dst_start,
-				       int16 n_entries);
+extern void C_PmForeColor(INTEGER);
+PASCAL_TRAP(PmForeColor, 0xAA97);
+extern void C_PmBackColor(INTEGER);
+PASCAL_TRAP(PmBackColor, 0xAA98);
+extern void C_AnimateEntry(WindowPtr, INTEGER, RGBColor *);
+PASCAL_TRAP(AnimateEntry, 0xAA99);
+extern void C_AnimatePalette(WindowPtr, CTabHandle, INTEGER, INTEGER, INTEGER);
+PASCAL_TRAP(AnimatePalette, 0xAA9A);
+extern void C_GetEntryColor(PaletteHandle, INTEGER, RGBColor *);
+PASCAL_TRAP(GetEntryColor, 0xAA9B);
+extern void C_SetEntryColor(PaletteHandle, INTEGER, RGBColor *);
+PASCAL_TRAP(SetEntryColor, 0xAA9C);
+extern void C_GetEntryUsage(PaletteHandle, INTEGER, GUEST<INTEGER> *, GUEST<INTEGER> *);
+PASCAL_TRAP(GetEntryUsage, 0xAA9D);
+extern void C_SetEntryUsage(PaletteHandle, INTEGER, INTEGER, INTEGER);
+PASCAL_TRAP(SetEntryUsage, 0xAA9E);
+extern void C_CTab2Palette(CTabHandle, PaletteHandle, INTEGER, INTEGER);
+PASCAL_TRAP(CTab2Palette, 0xAA9F);
+extern void C_Palette2CTab(PaletteHandle, CTabHandle);
+PASCAL_TRAP(Palette2CTab, 0xAAA0);
 
-extern pascal trap void C_SetWinColor (WindowPtr, CTabHandle);
-extern pascal trap BOOLEAN C_GetAuxWin (WindowPtr, HIDDEN_AuxWinHandle *);
+extern CCrsrHandle C_GetCCursor(INTEGER);
+PASCAL_TRAP(GetCCursor, 0xAA1B);
+extern void C_SetCCursor(CCrsrHandle);
+PASCAL_TRAP(SetCCursor, 0xAA1C);
+extern void C_DisposCCursor(CCrsrHandle);
+PASCAL_TRAP(DisposCCursor, 0xAA26);
+extern void C_AllocCursor(void);
+PASCAL_TRAP(AllocCursor, 0xAA1D);
 
-extern pascal trap void C_GetCWMgrPort (HIDDEN_CGrafPtr *);
+extern void C_RestoreDeviceClut(GDHandle);
+PASCAL_SUBTRAP(RestoreDeviceClut, 0xAAA2, 0x0002, PaletteDispatch);
+extern void C_ResizePalette(PaletteHandle, INTEGER);
+PASCAL_SUBTRAP(ResizePalette, 0xAAA2, 0x0003, PaletteDispatch);
+extern INTEGER C_PMgrVersion();
+PASCAL_SUBTRAP(PMgrVersion, 0xAAA2, 0x0015, PaletteDispatch);
+extern void C_SaveFore(ColorSpec *);
+PASCAL_SUBTRAP(SaveFore, 0xAAA2, 0x040D, PaletteDispatch);
+extern void C_RestoreFore(ColorSpec *);
+PASCAL_SUBTRAP(RestoreFore, 0xAAA2, 0x040F, PaletteDispatch);
+extern void C_SaveBack(ColorSpec *);
+PASCAL_SUBTRAP(SaveBack, 0xAAA2, 0x040E, PaletteDispatch);
+extern void C_RestoreBack(ColorSpec *);
+PASCAL_SUBTRAP(RestoreBack, 0xAAA2, 0x0410, PaletteDispatch);
+extern void C_SetPaletteUpdates(PaletteHandle, INTEGER);
+PASCAL_SUBTRAP(SetPaletteUpdates, 0xAAA2, 0x0616, PaletteDispatch);
+extern INTEGER C_GetPaletteUpdates(PaletteHandle);
+PASCAL_SUBTRAP(GetPaletteUpdates, 0xAAA2, 0x0417, PaletteDispatch);
+extern void C_CopyPalette(PaletteHandle src_palette,
+                                      PaletteHandle dst_palette,
+                                      int16_t src_start, int16_t dst_start,
+                                      int16_t n_entries);
+PASCAL_TRAP(CopyPalette, 0xAAA1);
+
+extern void C_GetCWMgrPort(GUEST<CGrafPtr> *);
+PASCAL_TRAP(GetCWMgrPort, 0xAA48);
 
 /* QDExtensions trap */
-extern pascal trap QDErr C_NewGWorld (GWorldPtr *, INTEGER, Rect *, CTabHandle, GDHandle, GWorldFlags);
-extern pascal trap Boolean C_LockPixels (PixMapHandle);
-extern pascal trap void C_UnlockPixels (PixMapHandle);
-extern pascal trap GWorldFlags C_UpdateGWorld (GWorldPtr *, INTEGER, Rect *, CTabHandle, GDHandle, GWorldFlags);
-extern pascal trap void C_DisposeGWorld (GWorldPtr);
-extern pascal trap void C_GetGWorld (CGrafPtr *, GDHandle *);
-extern pascal trap void C_SetGWorld (CGrafPtr, GDHandle);
-extern pascal trap void C_AllowPurgePixels (PixMapHandle);
-extern pascal trap void C_NoPurgePixels (PixMapHandle);
-extern pascal trap GWorldFlags C_GetPixelsState (PixMapHandle);
-extern pascal trap void C_SetPixelsState (PixMapHandle, GWorldFlags);
-extern pascal trap Ptr C_GetPixBaseAddr (PixMapHandle);
-extern pascal trap QDErr C_NewScreenBuffer (Rect *, Boolean, GDHandle *, PixMapHandle *);
-extern pascal trap void C_DisposeScreenBuffer (PixMapHandle);
-extern pascal trap GDHandle C_GetGWorldDevice (GWorldPtr);
-extern pascal trap Boolean C_PixMap32Bit (PixMapHandle);
-extern pascal trap PixMapHandle C_GetGWorldPixMap (GWorldPtr);
-extern pascal trap QDErr C_NewTempScreenBuffer (Rect *, Boolean, GDHandle *, PixMapHandle *);
-extern pascal trap void C_GDeviceChanged (GDHandle);
-extern pascal trap void C_PortChanged (GrafPtr);
-extern pascal trap void C_PixPatChanged (PixPatHandle);
-extern pascal trap void C_CTabChanged (CTabHandle);
-extern pascal trap Boolean C_QDDone (GrafPtr);
+extern QDErr C_NewGWorld(GUEST<GWorldPtr> *, INTEGER, Rect *, CTabHandle, GDHandle, GWorldFlags);
+PASCAL_SUBTRAP(NewGWorld, 0xAB1D, 0x00160000, QDExtensions);
+extern Boolean C_LockPixels(PixMapHandle);
+PASCAL_SUBTRAP(LockPixels, 0xAB1D, 0x00040001, QDExtensions);
+extern void C_UnlockPixels(PixMapHandle);
+PASCAL_SUBTRAP(UnlockPixels, 0xAB1D, 0x00040002, QDExtensions);
+extern GWorldFlags C_UpdateGWorld(GUEST<GWorldPtr> *, INTEGER, Rect *, CTabHandle, GDHandle, GWorldFlags);
+PASCAL_SUBTRAP(UpdateGWorld, 0xAB1D, 0x00160003, QDExtensions);
+extern void C_DisposeGWorld(GWorldPtr);
+PASCAL_SUBTRAP(DisposeGWorld, 0xAB1D, 0x00040004, QDExtensions);
+extern void C_GetGWorld(GUEST<CGrafPtr> *, GUEST<GDHandle> *);
+PASCAL_SUBTRAP(GetGWorld, 0xAB1D, 0x00080005, QDExtensions);
+extern void C_SetGWorld(CGrafPtr, GDHandle);
+PASCAL_SUBTRAP(SetGWorld, 0xAB1D, 0x00080006, QDExtensions);
+extern void C_AllowPurgePixels(PixMapHandle);
+PASCAL_SUBTRAP(AllowPurgePixels, 0xAB1D, 0x0004000B, QDExtensions);
+extern void C_NoPurgePixels(PixMapHandle);
+PASCAL_SUBTRAP(NoPurgePixels, 0xAB1D, 0x0004000C, QDExtensions);
+extern GWorldFlags C_GetPixelsState(PixMapHandle);
+PASCAL_SUBTRAP(GetPixelsState, 0xAB1D, 0x0004000D, QDExtensions);
+extern void C_SetPixelsState(PixMapHandle, GWorldFlags);
+PASCAL_SUBTRAP(SetPixelsState, 0xAB1D, 0x0008000E, QDExtensions);
+extern Ptr C_GetPixBaseAddr(PixMapHandle);
+PASCAL_SUBTRAP(GetPixBaseAddr, 0xAB1D, 0x0004000F, QDExtensions);
+extern QDErr C_NewScreenBuffer(Rect *, Boolean, GUEST<GDHandle> *, GUEST<PixMapHandle> *);
+PASCAL_SUBTRAP(NewScreenBuffer, 0xAB1D, 0x000E0010, QDExtensions);
+extern void C_DisposeScreenBuffer(PixMapHandle);
+PASCAL_SUBTRAP(DisposeScreenBuffer, 0xAB1D, 0x00040011, QDExtensions);
+extern GDHandle C_GetGWorldDevice(GWorldPtr);
+PASCAL_SUBTRAP(GetGWorldDevice, 0xAB1D, 0x00040012, QDExtensions);
+extern Boolean C_PixMap32Bit(PixMapHandle);
+PASCAL_SUBTRAP(PixMap32Bit, 0xAB1D, 0x00040016, QDExtensions);
+extern PixMapHandle C_GetGWorldPixMap(GWorldPtr);
+PASCAL_SUBTRAP(GetGWorldPixMap, 0xAB1D, 0x00040017, QDExtensions);
+extern QDErr C_NewTempScreenBuffer(Rect *, Boolean, GUEST<GDHandle> *, GUEST<PixMapHandle> *);
+PASCAL_SUBTRAP(NewTempScreenBuffer, 0xAB1D, 0x000E0015, QDExtensions);
+extern void C_GDeviceChanged(GDHandle);
+PASCAL_SUBTRAP(GDeviceChanged, 0xAB1D, 0x0004000A, QDExtensions);
+extern void C_PortChanged(GrafPtr);
+PASCAL_SUBTRAP(PortChanged, 0xAB1D, 0x00040009, QDExtensions);
+extern void C_PixPatChanged(PixPatHandle);
+PASCAL_SUBTRAP(PixPatChanged, 0xAB1D, 0x00040008, QDExtensions);
+extern void C_CTabChanged(CTabHandle);
+PASCAL_SUBTRAP(CTabChanged, 0xAB1D, 0x00040007, QDExtensions);
+extern Boolean C_QDDone(GrafPtr);
+PASCAL_SUBTRAP(QDDone, 0xAB1D, 0x00040013, QDExtensions);
 
-extern pascal trap LONGINT C_OffscreenVersion ();
+extern LONGINT C_OffscreenVersion();
+PASCAL_SUBTRAP(OffscreenVersion, 0xAB1D, 0x0014, QDExtensions);
 
-extern pascal trap OSErr C_BitMapToRegion(RgnHandle, const BitMap *);
+extern OSErr C_BitMapToRegion(RgnHandle, const BitMap *);
+PASCAL_TRAP(BitMapToRegion, 0xA8D7);
 
-extern pascal trap LONGINT C_Entry2Index(INTEGER);
-extern pascal trap void C_SaveEntries (CTabHandle, CTabHandle, ReqListRec *);
-extern pascal trap void C_RestoreEntries (CTabHandle, CTabHandle, ReqListRec *);
+extern LONGINT C_Entry2Index(INTEGER);
+PASCAL_SUBTRAP(Entry2Index, 0xAAA2, 0x0000, PaletteDispatch);
+extern void C_SaveEntries(CTabHandle, CTabHandle, ReqListRec *);
+PASCAL_TRAP(SaveEntries, 0xAA49);
+extern void C_RestoreEntries(CTabHandle, CTabHandle, ReqListRec *);
+PASCAL_TRAP(RestoreEntries, 0xAA4A);
 
-extern pascal trap void C_DisposGDevice(GDHandle gdh);
+extern OSErr C_DisposePictInfo(PictInfoID);
+PASCAL_SUBTRAP(DisposePictInfo, 0xA831, 0x0206, Pack15);
+extern OSErr C_RecordPictInfo(PictInfoID, PicHandle);
+PASCAL_SUBTRAP(RecordPictInfo, 0xA831, 0x0403, Pack15);
+extern OSErr C_RecordPixMapInfo(PictInfoID, PixMapHandle);
+PASCAL_SUBTRAP(RecordPixMapInfo, 0xA831, 0x0404, Pack15);
+extern OSErr C_RetrievePictInfo(PictInfoID, PictInfo *, int16_t);
+PASCAL_SUBTRAP(RetrievePictInfo, 0xA831, 0x0505, Pack15);
+extern OSErr C_NewPictInfo(GUEST<PictInfoID> *, int16_t, int16_t, int16_t, int16_t);
+PASCAL_SUBTRAP(NewPictInfo, 0xA831, 0x0602, Pack15);
+extern OSErr C_GetPictInfo(PicHandle, PictInfo *, int16_t, int16_t, int16_t, int16_t);
+PASCAL_SUBTRAP(GetPictInfo, 0xA831, 0x0800, Pack15);
+extern OSErr C_GetPixMapInfo(PixMapHandle, PictInfo *, int16_t, int16_t, int16_t, int16_t);
+PASCAL_SUBTRAP(GetPixMapInfo, 0xA831, 0x0801, Pack15);
 
-extern pascal trap OSErr C_DisposePictInfo (PictInfoID);
-extern pascal trap OSErr C_RecordPictInfo (PictInfoID, PicHandle);
-extern pascal trap OSErr C_RecordPixMapInfo (PictInfoID, PixMapHandle);
-extern pascal trap OSErr C_RetrievePictInfo (PictInfoID, PictInfo *, int16);
-extern pascal trap OSErr C_NewPictInfo (PictInfoID *, int16, int16, int16, int16);
-extern pascal trap OSErr C_GetPictInfo (PicHandle, PictInfo *, int16, int16, int16, int16);
-extern pascal trap OSErr C_GetPixMapInfo (PixMapHandle, PictInfo *, int16, int16, int16, int16);
-
-extern pascal trap PicHandle C_OpenCPicture (OpenCPicParams *newheaderp);
-
-#if !defined (TheGDevice_H)
-extern HIDDEN_GDHandle	TheGDevice_H;
-extern HIDDEN_GDHandle	MainDevice_H;
-extern HIDDEN_GDHandle	DeviceList_H;
-#endif
-
-#if SIZEOF_CHAR_P == 4 && !FORCE_EXPERIMENTAL_PACKED_MACROS
-
-#  define TheGDevice	(TheGDevice_H.p)
-#  define MainDevice	(MainDevice_H.p)
-#  define DeviceList	(DeviceList_H.p)
-
-#else
-
-#  define TheGDevice	((typeof (TheGDevice_H.type[0]))(TheGDevice_H.pp))
-#  define MainDevice	((typeof MainDevice_H.type[0])(MainDevice_H.p))
-#  define DeviceList	((typeof DeviceList_H.type[0])(DeviceList_H.p))
-
-#endif
-
+extern PicHandle C_OpenCPicture(OpenCPicParams *newheaderp);
+PASCAL_TRAP(OpenCPicture, 0xAA20);
+}
 #endif /* _CQUICKDRAW_H_ */

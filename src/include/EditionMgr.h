@@ -1,32 +1,35 @@
 
-#if !defined (_EDITIONMGR_H_)
+#if !defined(_EDITIONMGR_H_)
 #define _EDITIONMGR_H_
 
 /*
  * Copyright 1986, 1989, 1990, 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: EditionMgr.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
 #include "IntlUtil.h"
 #include "AliasMgr.h"
 
-#define declare_subtypes(type)						\
-typedef struct type ## Record type ## Record;				\
-typedef type ## Record *type ## Ptr;					\
-MAKE_HIDDEN(type ## Ptr);                                               \
-typedef HIDDEN_ ## type ## Ptr * type ## Handle
+#define MODULE_NAME EditionMgr
+#include <rsys/api-module.h>
 
-#define declare_record_subtypes(type)					\
-typedef struct type type;						\
-typedef type *type ## Ptr;						\
-MAKE_HIDDEN(type ## Ptr);                                               \
-typedef HIDDEN_ ## type ## Ptr * type ## Handle
+namespace Executor
+{
+#define declare_subtypes(type)                \
+    typedef struct type##Record type##Record; \
+    typedef type##Record *type##Ptr;          \
+    typedef GUEST<type##Ptr> *type##Handle
 
-typedef int32 TimeStamp;
+#define declare_record_subtypes(type) \
+    typedef struct type type;         \
+    typedef type *type##Ptr;          \
+    typedef GUEST<type##Ptr> *type##Handle
+
+typedef int32_t TimeStamp;
 typedef Handle EditionRefNum;
-typedef int16 UpdateMode;
+typedef int16_t UpdateMode;
 typedef SignedByte SectionType;
 typedef char FormatType[4];
 
@@ -35,243 +38,275 @@ typedef ProcPtr ExpModalFilterProcPtr;
 typedef ProcPtr FormatIOProcPtr;
 typedef ProcPtr EditionOpenerProcPtr;
 
-struct PACKED SectionRecord
+struct SectionRecord
 {
-  SignedByte version;
-  SectionType kind;
-  UpdateMode mode;
-  TimeStamp mdDate;
-  int32 sectionID;
-  int32 refCon;
-  PACKED_MEMBER(AliasHandle, alias);
-
-  int32 subPart;
-  PACKED_MEMBER(/* ### Section */ Handle, nextSection);
-  PACKED_MEMBER(Handle, controlBlock);
-  EditionRefNum refNum;
+    GUEST_STRUCT;
+    GUEST<SignedByte> version;
+    GUEST<SectionType> kind;
+    GUEST<UpdateMode> mode;
+    GUEST<TimeStamp> mdDate;
+    GUEST<int32_t> sectionID;
+    GUEST<int32_t> refCon;
+    GUEST<AliasHandle> alias;
+    GUEST<int32_t> subPart;
+    GUEST<Handle> nextSection; /* ### Section */
+    GUEST<Handle> controlBlock;
+    GUEST<EditionRefNum> refNum;
 };
 
-declare_record_subtypes (Section);
+declare_record_subtypes(Section);
 
-struct PACKED EditionContainerSpec
+struct EditionContainerSpec
 {
-  FSSpec theFile;
-  ScriptCode theFileScript;
-  int32 thePart;
-  Str31 thePartName;
-  ScriptCode thePartScript;
+    GUEST_STRUCT;
+    GUEST<FSSpec> theFile;
+    GUEST<ScriptCode> theFileScript;
+    GUEST<int32_t> thePart;
+    GUEST<Str31> thePartName;
+    GUEST<ScriptCode> thePartScript;
 };
 
 typedef struct EditionContainerSpec EditionContainerSpec;
 typedef EditionContainerSpec *EditionContainerSpecPtr;
 
-struct PACKED EditionInfoRecord
+struct EditionInfoRecord
 {
-  TimeStamp crDate;
-  TimeStamp mdDate;
-  OSType fdCreator;
-  OSType fdType;
-  EditionContainerSpec container;
+    GUEST_STRUCT;
+    GUEST<TimeStamp> crDate;
+    GUEST<TimeStamp> mdDate;
+    GUEST<OSType> fdCreator;
+    GUEST<OSType> fdType;
+    GUEST<EditionContainerSpec> container;
 };
 
 typedef struct EditionInfoRecord EditionInfoRecord;
 typedef EditionInfoRecord *EditionInfoPtr;
 
-struct PACKED NewPublisherReply
+struct NewPublisherReply
 {
-  Boolean canceled;
-  Boolean replacing;
-  Boolean usePart;
-  uint8 _filler;
-  PACKED_MEMBER(Handle, preview);
-  FormatType previewFormat;
-  EditionContainerSpec container;
+    GUEST_STRUCT;
+    GUEST<Boolean> canceled;
+    GUEST<Boolean> replacing;
+    GUEST<Boolean> usePart;
+    GUEST<uint8_t> _filler;
+    GUEST<Handle> preview;
+    GUEST<FormatType> previewFormat;
+    GUEST<EditionContainerSpec> container;
 };
 
 typedef struct NewPublisherReply NewPublisherReply;
 typedef NewPublisherReply *NewPublisherReplyPtr;
 
-struct PACKED NewSubscriberReply
+struct NewSubscriberReply
 {
-  Boolean canceled;
-  SignedByte formatsMask;
-  EditionContainerSpec container;
+    GUEST_STRUCT;
+    GUEST<Boolean> canceled;
+    GUEST<SignedByte> formatsMask;
+    GUEST<EditionContainerSpec> container;
 };
 
 typedef struct NewSubscriberReply NewSubscriberReply;
 typedef NewSubscriberReply *NewSubscriberReplyPtr;
 
-struct PACKED SectionOptionsReply
+struct SectionOptionsReply
 {
-  Boolean canceled;
-  Boolean changed;
-  PACKED_MEMBER(SectionHandle, sectionH);
-  ResType action;
+    GUEST_STRUCT;
+    GUEST<Boolean> canceled;
+    GUEST<Boolean> changed;
+    GUEST<SectionHandle> sectionH;
+    GUEST<ResType> action;
 };
 
 typedef struct SectionOptionsReply SectionOptionsReply;
 typedef SectionOptionsReply *SectionOptionsReplyPtr;
 
-typedef uint8 EditionOpenerVerb;
+typedef uint8_t EditionOpenerVerb;
 
-#define eoOpen		(0)
-#define eoClose		(1)
-#define eoOpenNew	(2)
-#define eoCloseNew	(3)
-#define eoCanSubscribe	(4)
-
-struct PACKED EditionOpenerParamBlock
+enum
 {
-  EditionInfoRecord info;
-  PACKED_MEMBER(SectionHandle, sectionH);
-  PACKED_MEMBER(FSSpecPtr, document);
-  OSType fdCreator;
-  int32 ioRefNum;
-  PACKED_MEMBER(FormatIOProcPtr, ioProc);
-  Boolean success;
-  SignedByte formatsMask;
+    eoOpen = (0),
+    eoClose = (1),
+    eoOpenNew = (2),
+    eoCloseNew = (3),
+    eoCanSubscribe = (4),
+};
+
+struct EditionOpenerParamBlock
+{
+    GUEST_STRUCT;
+    GUEST<EditionInfoRecord> info;
+    GUEST<SectionHandle> sectionH;
+    GUEST<FSSpecPtr> document;
+    GUEST<OSType> fdCreator;
+    GUEST<int32_t> ioRefNum;
+    GUEST<FormatIOProcPtr> ioProc;
+    GUEST<Boolean> success;
+    GUEST<SignedByte> formatsMask;
 };
 
 typedef struct EditionOpenerParamBlock EditionOpenerParamBlock;
 typedef EditionOpenerParamBlock *EditionOpenerParamBlockPtr;
 
-typedef uint8 FormatIOVerb;
+typedef uint8_t FormatIOVerb;
 
-#define ioHasFormat	(0)
-#define ioReadFormat	(1)
-#define ioNewFormat	(2)
-#define ioWtriteFormat	(3)
-
-struct PACKED FormatIOParamBlock
+enum
 {
-  int32 ioRefNum;
-  FormatType format;
-  int32 formatIndex;
-  int32 offset;
-  PACKED_MEMBER(Ptr, buffPtr);
-  int32 buffLen;
+    ioHasFormat = (0),
+    ioReadFormat = (1),
+    ioNewFormat = (2),
+    ioWtriteFormat = (3),
+};
+
+struct FormatIOParamBlock
+{
+    GUEST_STRUCT;
+    GUEST<int32_t> ioRefNum;
+    GUEST<FormatType> format;
+    GUEST<int32_t> formatIndex;
+    GUEST<int32_t> offset;
+    GUEST<Ptr> buffPtr;
+    GUEST<int32_t> buffLen;
 };
 
 typedef struct FormatIOParamBlock FormatIOParamBlock;
 typedef FormatIOParamBlock *FormatIOParamBlockPtr;
 
-#define noErr			0
-#define abortErr		(-27)
-#define eofErr			(-39)
-#define fnfErr			(-43)
-#define flLckedErr		(-45)
-#define fBusyErr		(-47)
-#define paramErr		(-50)
-#define rfNumErr		(-51)
-#define permErr			(-54)
-#define wrPermErr		(-61)
-#define noTypeErr		(-102)
-#define memFullErr		(-108)
-#define userCanceledErr		(-128)
-#define editionMgrInitErr	(-450)
-#define badSectionErr		(-451)
-#define notRegisteredSectionErr	(-452)
-#define badSubPartErr		(-454)
-#define multiplePubliserWrn	(-460)
-#define containerNotFoundWrn	(-461)
-#define notThePublisherWrn	(-463)
+enum
+{
+    flLckedErr = (-45),
+    fBusyErr = (-47),
+    noTypeErr = (-102),
+    userCanceledErr = (-128),
+    editionMgrInitErr = (-450),
+    badSectionErr = (-451),
+    notRegisteredSectionErr = (-452),
+    badSubPartErr = (-454),
+    multiplePubliserWrn = (-460),
+    containerNotFoundWrn = (-461),
+    notThePublisherWrn = (-463),
+};
 
-extern pascal trap OSErr C_InitEditionPack (INTEGER unused);
-extern pascal trap OSErr C_NewSection (EditionContainerSpecPtr container,
-				       FSSpecPtr section_doc,
-				       SectionType kind,  int32 section_id,
-				       UpdateMode initial_mode,
-				       SectionHandle *section_out);
-extern pascal trap OSErr C_RegisterSection (FSSpecPtr section_doc,
-					    SectionHandle section,
-					    Boolean *alias_was_updated_p_out);
-extern pascal trap OSErr C_UnRegisterSection (SectionHandle section);
-extern pascal trap OSErr C_IsRegisteredSection (SectionHandle section);
-extern pascal trap OSErr C_AssociateSection (SectionHandle section,
-					     FSSpecPtr new_section_doc);
-extern pascal trap OSErr C_CreateEditionContainerFile
-  (FSSpecPtr edition_file, OSType creator,
-   ScriptCode edition_file_name_script);
-extern pascal trap OSErr C_DeleteEditionContainerFile (FSSpecPtr edition_file);
+DISPATCHER_TRAP(Pack11, 0xA82D, D0W);
 
-extern pascal trap OSErr C_SetEditionFormatMark (EditionRefNum edition,
-						 FormatType format,
-						 int32 mark);
+extern OSErr C_InitEditionPackVersion(INTEGER unused);
+PASCAL_SUBTRAP(InitEditionPackVersion, 0xA82D, 0x0100, Pack11);
+extern OSErr C_NewSection(EditionContainerSpecPtr container,
+                                      FSSpecPtr section_doc,
+                                      SectionType kind, int32_t section_id,
+                                      UpdateMode initial_mode,
+                                      SectionHandle *section_out);
+PASCAL_SUBTRAP(NewSection, 0xA82D, 0x0A02, Pack11);
+extern OSErr C_RegisterSection(FSSpecPtr section_doc,
+                                           SectionHandle section,
+                                           Boolean *alias_was_updated_p_out);
+PASCAL_SUBTRAP(RegisterSection, 0xA82D, 0x0604, Pack11);
+extern OSErr C_UnRegisterSection(SectionHandle section);
+PASCAL_SUBTRAP(UnRegisterSection, 0xA82D, 0x0206, Pack11);
+extern OSErr C_IsRegisteredSection(SectionHandle section);
+PASCAL_SUBTRAP(IsRegisteredSection, 0xA82D, 0x0208, Pack11);
+extern OSErr C_AssociateSection(SectionHandle section,
+                                            FSSpecPtr new_section_doc);
+PASCAL_SUBTRAP(AssociateSection, 0xA82D, 0x040C, Pack11);
+extern OSErr C_CreateEditionContainerFile(FSSpecPtr edition_file, OSType creator,
+                                                      ScriptCode edition_file_name_script);
+PASCAL_SUBTRAP(CreateEditionContainerFile, 0xA82D, 0x050E, Pack11);
+extern OSErr C_DeleteEditionContainerFile(FSSpecPtr edition_file);
+PASCAL_SUBTRAP(DeleteEditionContainerFile, 0xA82D, 0x0210, Pack11);
 
-extern pascal trap OSErr C_GetEditionFormatMark (EditionRefNum edition,
-						 FormatType format,
-						 int32 *currentMark);
+extern OSErr C_SetEditionFormatMark(EditionRefNum edition,
+                                                FormatType format,
+                                                int32_t mark);
+PASCAL_SUBTRAP(SetEditionFormatMark, 0xA82D, 0x0620, Pack11);
 
-extern pascal trap OSErr C_OpenEdition (SectionHandle subscriber_section,
-					EditionRefNum *ref_num);
+extern OSErr C_GetEditionFormatMark(EditionRefNum edition,
+                                                FormatType format,
+                                                int32_t *currentMark);
+PASCAL_SUBTRAP(GetEditionFormatMark, 0xA82D, 0x061E, Pack11);
 
-extern pascal trap OSErr C_EditionHasFormat (EditionRefNum edition,
-					     FormatType format,
-					     Size *format_size);
-extern pascal trap OSErr C_ReadEdition (EditionRefNum edition,
-					FormatType format,
-					Ptr buffer, Size buffer_size);
+extern OSErr C_OpenEdition(SectionHandle subscriber_section,
+                                       EditionRefNum *ref_num);
+PASCAL_SUBTRAP(OpenEdition, 0xA82D, 0x0412, Pack11);
 
-extern pascal trap OSErr C_OpenNewEdition (SectionHandle publisher_section,
-					   OSType creator,
-					   FSSpecPtr publisher_section_doc,
-					   EditionRefNum *ref_num);
+extern OSErr C_EditionHasFormat(EditionRefNum edition,
+                                            FormatType format,
+                                            Size *format_size);
+PASCAL_SUBTRAP(EditionHasFormat, 0xA82D, 0x0618, Pack11);
+extern OSErr C_ReadEdition(EditionRefNum edition,
+                                       FormatType format,
+                                       Ptr buffer, Size buffer_size);
+PASCAL_SUBTRAP(ReadEdition, 0xA82D, 0x081A, Pack11);
 
-extern pascal trap OSErr C_WriteEdition (EditionRefNum edition, FormatType format,
-					 Ptr buffer, Size buffer_size);
+extern OSErr C_OpenNewEdition(SectionHandle publisher_section,
+                                          OSType creator,
+                                          FSSpecPtr publisher_section_doc,
+                                          EditionRefNum *ref_num);
+PASCAL_SUBTRAP(OpenNewEdition, 0xA82D, 0x0814, Pack11);
 
-extern pascal trap OSErr C_CloseEdition (EditionRefNum edition, Boolean success_p);
+extern OSErr C_WriteEdition(EditionRefNum edition, FormatType format,
+                                        Ptr buffer, Size buffer_size);
+PASCAL_SUBTRAP(WriteEdition, 0xA82D, 0x081C, Pack11);
 
-extern pascal trap OSErr C_GetLastEditionContainerUsed
-  (EditionContainerSpecPtr container);
+extern OSErr C_CloseEdition(EditionRefNum edition, Boolean success_p);
+PASCAL_SUBTRAP(CloseEdition, 0xA82D, 0x0316, Pack11);
 
-extern pascal trap OSErr C_NewSubscriberDialog (NewSubscriberReplyPtr reply);
-extern pascal trap OSErr C_NewPublisherDialog (NewSubscriberReplyPtr reply);
-extern pascal trap OSErr C_SectionOptionsDialog (SectionOptionsReply *reply);
+extern OSErr C_GetLastEditionContainerUsed(EditionContainerSpecPtr container);
+PASCAL_SUBTRAP(GetLastEditionContainerUsed, 0xA82D, 0x0226, Pack11);
 
-extern pascal trap OSErr C_NewSubscriberExpDialog
-  (NewSubscriberReplyPtr reply, Point where,
-   int16 expnasion_ditl_res_id,
-   ExpDialogHookProcPtr dialog_hook,
-   ExpModalFilterProcPtr filter_hook,
-   Ptr data);
+extern OSErr C_NewSubscriberDialog(NewSubscriberReplyPtr reply);
+PASCAL_SUBTRAP(NewSubscriberDialog, 0xA82D, 0x0232, Pack11);
+extern OSErr C_NewPublisherDialog(NewSubscriberReplyPtr reply);
+PASCAL_SUBTRAP(NewPublisherDialog, 0xA82D, 0x0236, Pack11);
+extern OSErr C_SectionOptionsDialog(SectionOptionsReply *reply);
+PASCAL_SUBTRAP(SectionOptionsDialog, 0xA82D, 0x023A, Pack11);
 
-extern pascal trap OSErr C_NewPublisherExpDialog
-  (NewPublisherReplyPtr reply, Point where,
-   int16 expnasion_ditl_res_id,
-   ExpDialogHookProcPtr dialog_hook,
-   ExpModalFilterProcPtr filter_hook,
-   Ptr data);
+extern OSErr C_NewSubscriberExpDialog(NewSubscriberReplyPtr reply, Point where,
+                                                  int16_t expnasion_ditl_res_id,
+                                                  ExpDialogHookProcPtr dialog_hook,
+                                                  ExpModalFilterProcPtr filter_hook,
+                                                  Ptr data);
+PASCAL_SUBTRAP(NewSubscriberExpDialog, 0xA82D, 0x0B34, Pack11);
 
-extern pascal trap OSErr C_SectionOptionsExpDialog
-  (SectionOptionsReply *reply,
-   Point where, int16 expnasion_ditl_res_id,
-   ExpDialogHookProcPtr dialog_hook,
-   ExpModalFilterProcPtr filter_hook,
-   Ptr data);
+extern OSErr C_NewPublisherExpDialog(NewPublisherReplyPtr reply, Point where,
+                                                 int16_t expnasion_ditl_res_id,
+                                                 ExpDialogHookProcPtr dialog_hook,
+                                                 ExpModalFilterProcPtr filter_hook,
+                                                 Ptr data);
+PASCAL_SUBTRAP(NewPublisherExpDialog, 0xA82D, 0x0B38, Pack11);
 
-extern pascal trap OSErr C_GetEditionInfo (SectionHandle section,
-					   EditionInfoPtr edition_info);
+extern OSErr C_SectionOptionsExpDialog(SectionOptionsReply *reply,
+                                                   Point where, int16_t expnasion_ditl_res_id,
+                                                   ExpDialogHookProcPtr dialog_hook,
+                                                   ExpModalFilterProcPtr filter_hook,
+                                                   Ptr data);
+PASCAL_SUBTRAP(SectionOptionsExpDialog, 0xA82D, 0x0B3C, Pack11);
 
-extern pascal trap OSErr C_GoToPublisherSection
-  (EditionContainerSpecPtr container);
+extern OSErr C_GetEditionInfo(SectionHandle section,
+                                          EditionInfoPtr edition_info);
+PASCAL_SUBTRAP(GetEditionInfo, 0xA82D, 0x0422, Pack11);
 
-extern pascal trap OSErr C_GetStandardFormats (EditionContainerSpecPtr container,
-					       FormatType *preview_format,
-					       Handle preview,
-					       Handle publisher_alias,
-					       Handle formats);
-extern pascal trap OSErr C_GetEditionOpenerProc (EditionOpenerProcPtr *opener);
-extern pascal trap OSErr C_SetEditionOpenerProc (EditionOpenerProcPtr opener);
+extern OSErr C_GoToPublisherSection(EditionContainerSpecPtr container);
+PASCAL_SUBTRAP(GoToPublisherSection, 0xA82D, 0x0224, Pack11);
 
-extern pascal trap OSErr C_CallEditionOpenerProc
-  (EditionOpenerVerb selector,
-   EditionOpenerParamBlock *param_block,
-   EditionOpenerProcPtr opener);
+extern OSErr C_GetStandardFormats(EditionContainerSpecPtr container,
+                                              FormatType *preview_format,
+                                              Handle preview,
+                                              Handle publisher_alias,
+                                              Handle formats);
+PASCAL_SUBTRAP(GetStandardFormats, 0xA82D, 0x0A28, Pack11);
+extern OSErr C_GetEditionOpenerProc(EditionOpenerProcPtr *opener);
+PASCAL_SUBTRAP(GetEditionOpenerProc, 0xA82D, 0x022A, Pack11);
+extern OSErr C_SetEditionOpenerProc(EditionOpenerProcPtr opener);
+PASCAL_SUBTRAP(SetEditionOpenerProc, 0xA82D, 0x022C, Pack11);
 
-extern pascal trap OSErr C_CallFormatIOProc
-  (FormatIOVerb selector,
-   FormatIOParamBlock *param_block,
-   FormatIOProcPtr proc);
+extern OSErr C_CallEditionOpenerProc(EditionOpenerVerb selector,
+                                                 EditionOpenerParamBlock *param_block,
+                                                 EditionOpenerProcPtr opener);
+PASCAL_SUBTRAP(CallEditionOpenerProc, 0xA82D, 0x052E, Pack11);
+
+extern OSErr C_CallFormatIOProc(FormatIOVerb selector,
+                                            FormatIOParamBlock *param_block,
+                                            FormatIOProcPtr proc);
+PASCAL_SUBTRAP(CallFormatIOProc, 0xA82D, 0x0530, Pack11);
+}
 
 #endif /* _EDITIONMGR_H_ */

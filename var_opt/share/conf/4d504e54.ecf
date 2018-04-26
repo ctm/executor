@@ -1,8 +1,0 @@
-// This Configuration file was built by Executor
-WindowName = "MacPaint";
-ScreenSize = { 512, 342 };
-MacSize = { 512, 342 };
-ScreenLocation = { 128, 36 };
-RefreshNumber = 20;
-Delay = 0;
-Options = {BlitOften, SoundOff, PassPostscript, NewLineToCR, NoClock};

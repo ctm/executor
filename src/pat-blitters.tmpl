@@ -1,8 +1,8 @@
-# $Id: pat-blitters.tmpl,v 1.4 1995/10/30 17:23:33 mat Exp $
+
 
 # Short narrow copy/or/and/xor
 begin_pat_func
- init	uint32 v = xdblt_pattern_value;
+ init	uint32_t v = xdblt_pattern_value;
 end_func
 
 begin_mode copy_short_narrow max_unwrap
@@ -44,8 +44,8 @@ end_mode
 
 # Short narrow insert
 begin_pat_func
- init	uint32 not_insert_bits = xdblt_insert_bits;
- init	uint32 v = xdblt_pattern_value & not_insert_bits;
+ init	uint32_t not_insert_bits = xdblt_insert_bits;
+ init	uint32_t v = xdblt_pattern_value & not_insert_bits;
  init	not_insert_bits ^= ~0;
 end_func
 
@@ -59,7 +59,7 @@ end_mode
 # Tall narrow copy/or/and/xor
 begin_pat_func
  init	y += xdblt_pattern_row_0;
- inloop	uint32 v = xdblt_pattern_baseaddr[y++ & xdblt_pattern_height_minus_1];
+ inloop	uint32_t v = xdblt_pattern_baseaddr[y++ & xdblt_pattern_height_minus_1];
 end_func
 
 begin_mode copy_tall_narrow max_unwrap
@@ -86,10 +86,10 @@ end_mode
 
 # Tall narrow insert
 begin_pat_func
- init	uint32 insert_bits = xdblt_insert_bits;
- init	uint32 not_insert_bits = ~insert_bits;
+ init	uint32_t insert_bits = xdblt_insert_bits;
+ init	uint32_t not_insert_bits = ~insert_bits;
  init	y += xdblt_pattern_row_0;
- inloop	uint32 v = xdblt_pattern_baseaddr[y++ & xdblt_pattern_height_minus_1] & insert_bits;
+ inloop	uint32_t v = xdblt_pattern_baseaddr[y++ & xdblt_pattern_height_minus_1] & insert_bits;
 end_func
 
 begin_mode insert_tall_narrow max_unwrap
@@ -101,90 +101,90 @@ end_mode
 
 # Short wide copy/or/and/xor
 begin_pat_func
- init   uint32 pattern_row_bytes_minus_1 = (1 << xdblt_log2_pattern_row_bytes) - 1;
- inloop	int32 x_offset = -((long) row_base);
- inloop	const uint8 *base = (const uint8 *) xdblt_pattern_baseaddr;
+ init   uint32_t pattern_row_bytes_minus_1 = (1 << xdblt_log2_pattern_row_bytes) - 1;
+ inloop	intptr_t x_offset = -((intptr_t) row_base);
+ inloop	const uint8_t *base = (const uint8_t *) xdblt_pattern_baseaddr;
 end_func
 
 begin_mode copy_short_wide max_unwrap
- repeat	@dst@ = *(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
- mask	@dst@ = (@dst@ & ~arg) | ((*(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])) & arg);
+ repeat	@dst@ = *(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
+ mask	@dst@ = (@dst@ & ~arg) | ((*(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])) & arg);
 end_mode
 
 begin_mode or_short_wide max_unwrap
- repeat	@dst@ |= *(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
- mask	@dst@ |= (arg & (*(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])));
+ repeat	@dst@ |= *(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
+ mask	@dst@ |= (arg & (*(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])));
 end_mode
 
 begin_mode xor_short_wide max_unwrap
- repeat	@dst@ ^= *(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
- mask	@dst@ ^= (arg & (*(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])));
+ repeat	@dst@ ^= *(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
+ mask	@dst@ ^= (arg & (*(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])));
 end_mode
 
 begin_mode and_short_wide max_unwrap
- repeat	@dst@ &= *(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
- mask	@dst@ &= ((~arg) | (*(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])));
+ repeat	@dst@ &= *(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
+ mask	@dst@ &= ((~arg) | (*(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])));
 end_mode
 
 
 
 # Short wide insert
 begin_pat_func
- init	uint32 insert_bits = xdblt_insert_bits;
- init	uint32 not_insert_bits = ~insert_bits;
- init   uint32 pattern_row_bytes_minus_1 = (1 << xdblt_log2_pattern_row_bytes) - 1;
- inloop	int32 x_offset = -((long) row_base);
- inloop	const uint8 *base = (const uint8 *) xdblt_pattern_baseaddr;
+ init	uint32_t insert_bits = xdblt_insert_bits;
+ init	uint32_t not_insert_bits = ~insert_bits;
+ init   uint32_t pattern_row_bytes_minus_1 = (1 << xdblt_log2_pattern_row_bytes) - 1;
+ inloop	intptr_t x_offset = -((intptr_t) row_base);
+ inloop	const uint8_t *base = (const uint8_t *) xdblt_pattern_baseaddr;
 end_func
 
 begin_mode insert_short_wide max_unwrap
- repeat	@dst@ = (@dst@ & not_insert_bits) | (*(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]) & insert_bits);
- mask	@dst@ = (@dst@ & ~(insert_bits & arg)) | ((*(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])) & arg & insert_bits);
+ repeat	@dst@ = (@dst@ & not_insert_bits) | (*(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]) & insert_bits);
+ mask	@dst@ = (@dst@ & ~(insert_bits & arg)) | ((*(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])) & arg & insert_bits);
 end_mode
 
 
 
 # Tall wide copy/or/and/xor
 begin_pat_func
- init   uint32 pattern_row_bytes_minus_1 = (1 << xdblt_log2_pattern_row_bytes) - 1;
+ init   uint32_t pattern_row_bytes_minus_1 = (1 << xdblt_log2_pattern_row_bytes) - 1;
  init	y += xdblt_pattern_row_0;
- inloop	int32 x_offset = -((long) row_base);
- inloop	const uint8 *base = ((const uint8 *) xdblt_pattern_baseaddr) + ((y++ & xdblt_pattern_height_minus_1) << xdblt_log2_pattern_row_bytes);
+ inloop	intptr_t x_offset = -((intptr_t) row_base);
+ inloop	const uint8_t *base = ((const uint8_t *) xdblt_pattern_baseaddr) + ((y++ & xdblt_pattern_height_minus_1) << xdblt_log2_pattern_row_bytes);
 end_func
 
 begin_mode copy_tall_wide max_unwrap
- repeat	@dst@ = *(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
- mask	@dst@ = (@dst@ & ~arg) | ((*(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])) & arg);
+ repeat	@dst@ = *(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
+ mask	@dst@ = (@dst@ & ~arg) | ((*(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])) & arg);
 end_mode
 
 begin_mode or_tall_wide max_unwrap
- repeat	@dst@ |= *(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
- mask	@dst@ |= (arg & (*(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])));
+ repeat	@dst@ |= *(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
+ mask	@dst@ |= (arg & (*(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])));
 end_mode
 
 begin_mode xor_tall_wide max_unwrap
- repeat	@dst@ ^= *(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
- mask	@dst@ ^= (arg & (*(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])));
+ repeat	@dst@ ^= *(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
+ mask	@dst@ ^= (arg & (*(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])));
 end_mode
 
 begin_mode and_tall_wide max_unwrap
- repeat	@dst@ &= *(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
- mask	@dst@ &= ((~arg) | (*(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])));
+ repeat	@dst@ &= *(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]);
+ mask	@dst@ &= ((~arg) | (*(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])));
 end_mode
 
 
 
 # Tall wide insert
 begin_pat_func
- init	uint32 insert_bits = xdblt_insert_bits;
- init	uint32 not_insert_bits = ~insert_bits;
- init   uint32 pattern_row_bytes_minus_1 = (1 << xdblt_log2_pattern_row_bytes) - 1;
+ init	uint32_t insert_bits = xdblt_insert_bits;
+ init	uint32_t not_insert_bits = ~insert_bits;
+ init   uint32_t pattern_row_bytes_minus_1 = (1 << xdblt_log2_pattern_row_bytes) - 1;
  init	y += xdblt_pattern_row_0;
- inloop	int32 x_offset = -((long) row_base);
- inloop	const uint8 *base = ((const uint8 *) xdblt_pattern_baseaddr) + ((y++ & xdblt_pattern_height_minus_1) << xdblt_log2_pattern_row_bytes);
+ inloop	intptr_t x_offset = -((intptr_t) row_base);
+ inloop	const uint8_t *base = ((const uint8_t *) xdblt_pattern_baseaddr) + ((y++ & xdblt_pattern_height_minus_1) << xdblt_log2_pattern_row_bytes);
 end_func
 
 begin_mode insert_tall_wide max_unwrap
- repeat	@dst@ = (@dst@ & not_insert_bits) | (*(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]) & insert_bits);
- mask	@dst@ = (@dst@ & (not_insert_bits | ~arg)) | ((*(const uint32 *) (&base[(((long) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])) & arg & insert_bits);
+ repeat	@dst@ = (@dst@ & not_insert_bits) | (*(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1]) & insert_bits);
+ mask	@dst@ = (@dst@ & (not_insert_bits | ~arg)) | ((*(const uint32_t *) (&base[(((intptr_t) &(@dst@)) + x_offset) & pattern_row_bytes_minus_1])) & arg & insert_bits);
 end_mode

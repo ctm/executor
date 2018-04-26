@@ -1,25 +1,28 @@
-#if !defined (__rsys_screen_dump_h__)
-#  define __rsys_screen_dump_h__
+#if !defined(__rsys_screen_dump_h__)
+#define __rsys_screen_dump_h__
 
-struct PACKED header
+namespace Executor
 {
-  int16 byte_order;
-  int16 magic_number;
-  int32 ifd_offset;
+struct header
+{
+    int16_t byte_order;
+    int16_t magic_number;
+    int32_t ifd_offset;
 };
 
-struct PACKED directory_entry
+struct __attribute__((packed)) directory_entry
 {
-  int16 tag;
-  int16 type;
-  int32 count;
-  int32 value_offset;
+    int16_t tag;
+    int16_t type;
+    int32_t count;
+    int32_t value_offset;
 };
 
-struct PACKED ifd
+struct __attribute__((packed)) ifd 
 {
-  int16 count;
-  struct directory_entry entries[1];
+    int16_t count;
+    struct directory_entry entries[1];
 };
+}
 
 #endif /* !defined (__rsys_screen_dump_h__) */

@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/524c4d5a.ecf) was built by Executor
-Comments = "Sound must be Off for Realmz to work under Executor.  NOTE:  some fonts will look ugly under Executor.";
-// WindowName = "Realmz 2.5";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR, NoWarn32};

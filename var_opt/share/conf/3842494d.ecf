@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/3842494d.ecf) was built by Executor
-Comments = "Photoshop needs Pretend{Help,Edition,Script,Alias} + System 7";
-// WindowName = "Adobe Photoshop%AA 3.0";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 7.0.0;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR, PretendHelp, PretendEdition, PretendScript, PretendAlias};

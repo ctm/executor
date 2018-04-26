@@ -1,680 +1,899 @@
-#if !defined (_QUICKDRAW_H_)
+#if !defined(_QUICKDRAW_H_)
 #define _QUICKDRAW_H_
 
 /*
  * Copyright 1986 - 2000 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: QuickDraw.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
+#include <rsys/common.h>
+#include "ExMacTypes.h"
 
-enum { grafSize = 206 }; /* number of bytes InitGraf needs */
+#define MODULE_NAME QuickDraw
+#include <rsys/api-module.h>
 
-#define srcCopy	0
-#define srcOr	1
-#define srcXor	2
-#define srcBic	3
-#define notSrcCopy	4
-#define notSrcOr	5
-#define notSrcXor	6
-#define notSrcBic	7
+namespace Executor
+{
 
-#define patCopy	8
-#define patOr	9
-#define patXor	10
-#define patBic	11
-#define notPatCopy	12
-#define notPatOr	13
-#define notPatXor	14
-#define notPatBic	15
+enum
+{
+    grafSize = 206
+}; /* number of bytes InitGraf needs */
 
-#define grayishTextOr	49
+enum
+{
+    srcCopy = 0,
+    srcOr = 1,
+    srcXor = 2,
+    srcBic = 3,
+    notSrcCopy = 4,
+    notSrcOr = 5,
+    notSrcXor = 6,
+    notSrcBic = 7,
+};
 
-#define hilite		50
+enum
+{
+    patCopy = 8,
+    patOr = 9,
+    patXor = 10,
+    patBic = 11,
+    notPatCopy = 12,
+    notPatOr = 13,
+    notPatXor = 14,
+    notPatBic = 15,
+};
 
-#define blackColor	33
-#define whiteColor	30
-#define redColor	205
-#define greenColor	341
-#define blueColor	409
-#define cyanColor	273
-#define magentaColor	137
-#define yellowColor	69
+enum
+{
+    grayishTextOr = 49,
+};
 
-#define picLParen	0
-#define picRParen	1
+enum
+{
+    hilite = 50,
+};
 
-typedef enum { bold=1,    italic=2,    underline=4, outline=8,
-	       shadow=16, condense=32, extend=64 } StyleItem;
+enum
+{
+    blackColor = 33,
+    whiteColor = 30,
+    redColor = 205,
+    greenColor = 341,
+    blueColor = 409,
+    cyanColor = 273,
+    magentaColor = 137,
+    yellowColor = 69
+};
 
-#if 0
-/*
- * The enum doesn't suffice since some compilers will complain if you
- * try do bitwise arithmetic with the members of an enum
- *
- * Unfortunately, we can't do the #defines below because there are structures
- * that have fields named "bold".
- */
+enum
+{
+    picLParen = 0,
+    picRParen = 1,
+};
 
-#define bold		1
-#define italic		2
-#define underline	4
-#define outline		8
-#define shadow		16
-#define condense	32
-#define extend		64
-#endif /* 0 */
+typedef enum {
+    bold = 1,
+    italic = 2,
+    underline = 4,
+    outline = 8,
+    shadow = 16,
+    condense = 32,
+    extend = 64
+} StyleItem;
 
 typedef SignedByte Style;
 
-typedef struct PACKED {
-  INTEGER rgnSize;
-  Rect rgnBBox;
-} Region;
+struct Region
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> rgnSize;
+    GUEST<Rect> rgnBBox;
+};
 
 typedef Region *RgnPtr;
-MAKE_HIDDEN(RgnPtr);
-typedef HIDDEN_RgnPtr *RgnHandle;
-MAKE_HIDDEN(RgnHandle);
 
-typedef struct PACKED {
-  PACKED_MEMBER(Ptr, baseAddr);
-  INTEGER rowBytes;
-  Rect bounds;
-} BitMap;
+typedef GUEST<RgnPtr> *RgnHandle;
+
+struct BitMap
+{
+    GUEST_STRUCT;
+    GUEST<Ptr> baseAddr;
+    GUEST<INTEGER> rowBytes;
+    GUEST<Rect> bounds;
+};
 
 typedef Byte Pattern[8];
 typedef INTEGER Bits16[16];
 
-typedef struct PACKED {
-  Bits16 data;
-  Bits16 mask;
-  Point hotSpot;
-} Cursor;
+struct Cursor
+{
+    GUEST_STRUCT;
+    GUEST<Bits16> data;
+    GUEST<Bits16> mask;
+    GUEST<Point> hotSpot;
+};
 
 typedef Cursor *CursPtr;
-MAKE_HIDDEN(CursPtr);
-typedef HIDDEN_CursPtr *CursHandle;
+
+typedef GUEST<CursPtr> *CursHandle;
 
 typedef SignedByte GrafVerb;
-#define frame	0
-#define paint	1
-#define erase	2
-#define invert	3
-#define fill	4
+enum
+{
+    frame = 0,
+    paint = 1,
+    erase = 2,
+    invert = 3,
+    fill = 4
+};
 
-typedef struct PACKED {
-  INTEGER polySize;
-  Rect polyBBox;
-  Point polyPoints[1];
-} Polygon;
+struct Polygon
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> polySize;
+    GUEST<Rect> polyBBox;
+    GUEST<Point[1]> polyPoints;
+};
 
 typedef Polygon *PolyPtr;
-MAKE_HIDDEN(PolyPtr);
-typedef HIDDEN_PolyPtr *PolyHandle;
 
-typedef struct PACKED {
-  INTEGER ascent;
-  INTEGER descent;
-  INTEGER widMax;
-  INTEGER leading;
-} FontInfo;
+typedef GUEST<PolyPtr> *PolyHandle;
 
-typedef pascal trap void (*textProc_t)(INTEGER bc, Ptr textb, Point num, Point den);
-typedef pascal trap void (*lineProc_t)(Point drawto);
-typedef pascal trap void (*rectProc_t)(GrafVerb verb, Rect *rp);
-typedef pascal trap void (*rRectProc_t)(GrafVerb verb, Rect *rp, INTEGER ow,
-                                      INTEGER oh);
-typedef pascal trap void (*ovalProc_t)(GrafVerb verb, Rect *rp);
-typedef pascal trap void (*arcProc_t)(GrafVerb verb, Rect *rp, INTEGER ang,
-                                    INTEGER arc);
-typedef pascal trap void (*polyProc_t)(GrafVerb verb, PolyHandle poly);
-typedef pascal trap void (*rgnProc_t)(GrafVerb verb, RgnHandle rgn);
-typedef pascal trap void (*bitsProc_t)(BitMap *srcb, Rect *srcr, Rect *dstr,
-                                     INTEGER mod, RgnHandle mask);
-typedef pascal trap void (*commentProc_t)(INTEGER kind, INTEGER size, Handle data);
-typedef pascal trap INTEGER  (*txMeasProc_t)(INTEGER bc, Ptr texta, Point *numer,
-                                           Point *denom, FontInfo *info);
-typedef pascal trap void (*getPicProc_t)(Ptr data, INTEGER bc);
-typedef pascal trap void (*putPicProc_t)(Ptr data, INTEGER bc);
+struct FontInfo
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> ascent;
+    GUEST<INTEGER> descent;
+    GUEST<INTEGER> widMax;
+    GUEST<INTEGER> leading;
+};
 
-typedef struct PACKED {
-  PACKED_MEMBER(textProc_t, textProc);
-  PACKED_MEMBER(lineProc_t, lineProc);
-  PACKED_MEMBER(rectProc_t, rectProc);
-  PACKED_MEMBER(rRectProc_t, rRectProc);
-  PACKED_MEMBER(ovalProc_t, ovalProc);
-  PACKED_MEMBER(arcProc_t, arcProc);
-  PACKED_MEMBER(polyProc_t, polyProc);
-  PACKED_MEMBER(rgnProc_t, rgnProc);
-  PACKED_MEMBER(bitsProc_t, bitsProc);
-  PACKED_MEMBER(commentProc_t, commentProc);
-  PACKED_MEMBER(txMeasProc_t, txMeasProc);
-  PACKED_MEMBER(getPicProc_t, getPicProc);
-  PACKED_MEMBER(putPicProc_t, putPicProc);
-} QDProcs;
+using textProc_t = UPP<void(INTEGER bc, Ptr textb, Point num, Point den)>;
+using lineProc_t = UPP<void(Point drawto)>;
+using rectProc_t = UPP<void(GrafVerb verb, Rect *rp)>;
+using rRectProc_t = UPP<void(GrafVerb verb, Rect *rp, INTEGER ow, INTEGER oh)>;
+using ovalProc_t = UPP<void(GrafVerb verb, Rect *rp)>;
+using arcProc_t = UPP<void(GrafVerb verb, Rect *rp, INTEGER ang, INTEGER arc)>;
+using polyProc_t = UPP<void(GrafVerb verb, PolyHandle poly)>;
+using rgnProc_t = UPP<void(GrafVerb verb, RgnHandle rgn)>;
+using bitsProc_t = UPP<void(const BitMap *srcb, const Rect *srcr, const Rect *dstr, INTEGER mod, RgnHandle mask)>;
+using commentProc_t = UPP<void(INTEGER kind, INTEGER size, Handle data)>;
+using txMeasProc_t = UPP<INTEGER(INTEGER bc, Ptr texta, GUEST<Point> *numer, GUEST<Point> *denom, FontInfo *info)>;
+using getPicProc_t = UPP<void(void * data, INTEGER bc)>;
+using putPicProc_t = UPP<void(const void * data, INTEGER bc)>;
+
+struct QDProcs
+{
+    GUEST_STRUCT;
+    GUEST<textProc_t> textProc;
+    GUEST<lineProc_t> lineProc;
+    GUEST<rectProc_t> rectProc;
+    GUEST<rRectProc_t> rRectProc;
+    GUEST<ovalProc_t> ovalProc;
+    GUEST<arcProc_t> arcProc;
+    GUEST<polyProc_t> polyProc;
+    GUEST<rgnProc_t> rgnProc;
+    GUEST<bitsProc_t> bitsProc;
+    GUEST<commentProc_t> commentProc;
+    GUEST<txMeasProc_t> txMeasProc;
+    GUEST<getPicProc_t> getPicProc;
+    GUEST<putPicProc_t> putPicProc;
+};
 
 typedef QDProcs *QDProcsPtr;
 
-typedef struct PACKED {
-  INTEGER device;
-  BitMap portBits;
-  Rect portRect;
-  PACKED_MEMBER(RgnHandle, visRgn);
-  PACKED_MEMBER(RgnHandle,clipRgn);
-  Pattern bkPat;
-  Pattern fillPat;
-  Point pnLoc;
-  Point pnSize;
-  INTEGER pnMode;
-  Pattern pnPat;
-  INTEGER pnVis;
-  INTEGER txFont;
-  Style txFace;
-  Byte filler;
-  INTEGER txMode;
-  INTEGER txSize;
-  Fixed spExtra;
-  LONGINT fgColor;
-  LONGINT bkColor;
-  INTEGER colrBit;
-  INTEGER patStretch;
-  PACKED_MEMBER(Handle, picSave);
-  PACKED_MEMBER(Handle, rgnSave);
-  PACKED_MEMBER(Handle, polySave);
-  PACKED_MEMBER(QDProcsPtr, grafProcs);
-} GrafPort;
+struct GrafPort
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> device;
+    GUEST<BitMap> portBits;
+    GUEST<Rect> portRect;
+    GUEST<RgnHandle> visRgn;
+    GUEST<RgnHandle> clipRgn;
+    GUEST<Pattern> bkPat;
+    GUEST<Pattern> fillPat;
+    GUEST<Point> pnLoc;
+    GUEST<Point> pnSize;
+    GUEST<INTEGER> pnMode;
+    GUEST<Pattern> pnPat;
+    GUEST<INTEGER> pnVis;
+    GUEST<INTEGER> txFont;
+    GUEST<Style> txFace;
+    GUEST<Byte> filler;
+    GUEST<INTEGER> txMode;
+    GUEST<INTEGER> txSize;
+    GUEST<Fixed> spExtra;
+    GUEST<LONGINT> fgColor;
+    GUEST<LONGINT> bkColor;
+    GUEST<INTEGER> colrBit;
+    GUEST<INTEGER> patStretch;
+    GUEST<Handle> picSave;
+    GUEST<Handle> rgnSave;
+    GUEST<Handle> polySave;
+    GUEST<QDProcsPtr> grafProcs;
+};
 
 typedef GrafPort *GrafPtr;
-MAKE_HIDDEN(GrafPtr);
 
-typedef struct PACKED {
-  INTEGER picSize;
-  Rect picFrame;
-} Picture;
+struct Picture
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> picSize;
+    GUEST<Rect> picFrame;
+};
 
 typedef Picture *PicPtr;
-MAKE_HIDDEN(PicPtr);
-typedef HIDDEN_PicPtr *PicHandle;
 
-typedef struct PACKED {
-  Point pnLoc;
-  Point pnSize;
-  INTEGER pnMode;
-  Pattern pnPat;
-} PenState;
+typedef GUEST<PicPtr> *PicHandle;
+
+struct PenState
+{
+    GUEST_STRUCT;
+    GUEST<Point> pnLoc;
+    GUEST<Point> pnSize;
+    GUEST<INTEGER> pnMode;
+    GUEST<Pattern> pnPat;
+};
 
 /* IMV stuff is used when we parse Version 2 pictures, but the IMV calls
    are not supported in V1.0 */
 
-typedef enum { blend=32,    addPin, addOver, subPin,
-	       transparent, adMax,  subOver, adMin,
-	       mask=64 } colormodes;
+typedef enum { blend = 32,
+               addPin,
+               addOver,
+               subPin,
+               transparent,
+               adMax,
+               subOver,
+               adMin,
+               mask = 64 } colormodes;
 
-#define pHiliteBit	 0
-
-#define defQDColors	127
-
-typedef struct PACKED {
-  unsigned short red;
-  unsigned short green;
-  unsigned short blue;
-} RGBColor;
-
-typedef struct PACKED {
-  SmallFract hue;
-  SmallFract saturation;
-  SmallFract value;
-} HSVColor;
-
-typedef struct PACKED {
-  SmallFract hue;
-  SmallFract saturation;
-  SmallFract lightness;
-} HSLColor;
-
-typedef struct PACKED { 
-  SmallFract cyan;
-  SmallFract magenta;
-  SmallFract yellow;
-} CMYColor;
-
-typedef struct PACKED ColorSpec
+enum
 {
-  INTEGER	value;
-  RGBColor	rgb;
-} ColorSpec;
+    pHiliteBit = 0,
+};
 
-typedef ColorSpec cSpecArray[1];	/* can't use 0 */
+enum
+{
+    defQDColors = 127,
+};
 
-typedef struct PACKED {
-  LONGINT    ctSeed;
-  unsigned short    ctFlags;
-  INTEGER    ctSize;
-  cSpecArray ctTable;
-} ColorTable, *CTabPtr;
+struct RGBColor
+{
+    GUEST_STRUCT;
+    GUEST<unsigned short> red;
+    GUEST<unsigned short> green;
+    GUEST<unsigned short> blue;
+};
 
-MAKE_HIDDEN(CTabPtr);
-typedef HIDDEN_CTabPtr *CTabHandle;
-MAKE_HIDDEN(CTabHandle);
+struct HSVColor
+{
+    GUEST_STRUCT;
+    GUEST<SmallFract> hue;
+    GUEST<SmallFract> saturation;
+    GUEST<SmallFract> value;
+};
 
-typedef struct PACKED {
-  PACKED_MEMBER(Ptr, textProc);
-  PACKED_MEMBER(Ptr, lineProc);
-  PACKED_MEMBER(Ptr, rectProc);
-  PACKED_MEMBER(Ptr, rRectProc);
-  PACKED_MEMBER(Ptr, ovalProc);
-  PACKED_MEMBER(Ptr, arcProc);
-  PACKED_MEMBER(Ptr, polyProc);
-  PACKED_MEMBER(Ptr, rgnProc);
-  PACKED_MEMBER(Ptr, bitsProc);
-  PACKED_MEMBER(Ptr, commentProc);
-  PACKED_MEMBER(Ptr, txMeasProc);
-  PACKED_MEMBER(Ptr, getPicProc);
-  PACKED_MEMBER(Ptr, putPicProc);
-  PACKED_MEMBER(Ptr, opcodeProc);
-  PACKED_MEMBER(Ptr, newProc1Proc);
-  PACKED_MEMBER(Ptr, newProc2Proc);
-  PACKED_MEMBER(Ptr, newProc3Proc);
-  PACKED_MEMBER(Ptr, newProc4Proc);
-  PACKED_MEMBER(Ptr, newProc5Proc);
-  PACKED_MEMBER(Ptr, newProc6Proc);
-} CQDProcs, *CQDProcsPtr;
+struct HSLColor
+{
+    GUEST_STRUCT;
+    GUEST<SmallFract> hue;
+    GUEST<SmallFract> saturation;
+    GUEST<SmallFract> lightness;
+};
 
-typedef struct PACKED {
-  PACKED_MEMBER(Ptr, baseAddr);
-  INTEGER rowBytes;
-  Rect bounds;
-  INTEGER pmVersion;
-  INTEGER packType;
-  LONGINT packSize;
-  Fixed hRes;
-  Fixed vRes;
-  INTEGER pixelType;
-  INTEGER pixelSize;
-  INTEGER cmpCount;
-  INTEGER cmpSize;
-  LONGINT planeBytes;
-  PACKED_MEMBER(CTabHandle, pmTable);
-  LONGINT pmReserved;
-} PixMap, *PixMapPtr;
-MAKE_HIDDEN(PixMapPtr);
-typedef HIDDEN_PixMapPtr *PixMapHandle;
-MAKE_HIDDEN(PixMapHandle);
+struct CMYColor
+{
+    GUEST_STRUCT;
+    GUEST<SmallFract> cyan;
+    GUEST<SmallFract> magenta;
+    GUEST<SmallFract> yellow;
+};
+
+struct ColorSpec
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> value;
+    GUEST<RGBColor> rgb;
+};
+
+struct NativeRGBColor
+{
+    unsigned short red;
+    unsigned short green;
+    unsigned short blue;
+};
+struct NativeColorSpec
+{
+    INTEGER value;
+    NativeRGBColor rgb;
+};
+
+typedef ColorSpec cSpecArray[1]; /* can't use 0 */
+
+typedef struct ColorTable
+{
+    GUEST_STRUCT;
+    GUEST<LONGINT> ctSeed;
+    GUEST<unsigned short> ctFlags;
+    GUEST<INTEGER> ctSize;
+    GUEST<cSpecArray> ctTable;
+} * CTabPtr;
+
+typedef GUEST<CTabPtr> *CTabHandle;
+
+typedef struct CQDProcs
+{
+    GUEST_STRUCT;
+    GUEST<textProc_t> textProc;
+    GUEST<lineProc_t> lineProc;
+    GUEST<rectProc_t> rectProc;
+    GUEST<rRectProc_t> rRectProc;
+    GUEST<ovalProc_t> ovalProc;
+    GUEST<arcProc_t> arcProc;
+    GUEST<polyProc_t> polyProc;
+    GUEST<rgnProc_t> rgnProc;
+    GUEST<bitsProc_t> bitsProc;
+    GUEST<commentProc_t> commentProc;
+    GUEST<txMeasProc_t> txMeasProc;
+    GUEST<getPicProc_t> getPicProc;
+    GUEST<putPicProc_t> putPicProc;
+    GUEST<Ptr> opcodeProc;
+    GUEST<Ptr> newProc1Proc;
+    GUEST<Ptr> newProc2Proc;
+    GUEST<Ptr> newProc3Proc;
+    GUEST<Ptr> newProc4Proc;
+    GUEST<Ptr> newProc5Proc;
+    GUEST<Ptr> newProc6Proc;
+} * CQDProcsPtr;
+
+typedef struct PixMap
+{
+    GUEST_STRUCT;
+    GUEST<Ptr> baseAddr;
+    GUEST<INTEGER> rowBytes;
+    GUEST<Rect> bounds;
+    GUEST<INTEGER> pmVersion;
+    GUEST<INTEGER> packType;
+    GUEST<LONGINT> packSize;
+    GUEST<Fixed> hRes;
+    GUEST<Fixed> vRes;
+    GUEST<INTEGER> pixelType;
+    GUEST<INTEGER> pixelSize;
+    GUEST<INTEGER> cmpCount;
+    GUEST<INTEGER> cmpSize;
+    GUEST<LONGINT> planeBytes;
+    GUEST<CTabHandle> pmTable;
+    GUEST<LONGINT> pmReserved;
+} * PixMapPtr;
+
+typedef GUEST<PixMapPtr> *PixMapHandle;
 
 enum pixmap_pixel_types
 {
-  chunky_pixel_type,
-  chunky_planar_pixel_type,
-  planar_pixel_type,
+    chunky_pixel_type,
+    chunky_planar_pixel_type,
+    planar_pixel_type,
 };
 
-#define ROWMASK	0x1FFF
+enum
+{
+    ROWMASK = 0x1FFF,
+};
 
-typedef struct PACKED {
-  INTEGER patType;
-  PACKED_MEMBER(PixMapHandle, patMap);
-  PACKED_MEMBER(Handle, patData);
-  PACKED_MEMBER(Handle, patXData);
-  INTEGER patXValid;
-  PACKED_MEMBER(Handle, patXMap);
-  Pattern pat1Data;
-} PixPat, *PixPatPtr;
-MAKE_HIDDEN(PixPatPtr);
-typedef HIDDEN_PixPatPtr *PixPatHandle;
-MAKE_HIDDEN(PixPatHandle);
+typedef struct PixPat
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> patType;
+    GUEST<PixMapHandle> patMap;
+    GUEST<Handle> patData;
+    GUEST<Handle> patXData;
+    GUEST<INTEGER> patXValid;
+    GUEST<Handle> patXMap;
+    GUEST<Pattern> pat1Data;
+} * PixPatPtr;
 
-typedef struct PACKED {
-  INTEGER device;
-  PACKED_MEMBER(PixMapHandle, portPixMap);
-  INTEGER portVersion;
-  PACKED_MEMBER(Handle, grafVars);
-  INTEGER chExtra;
-  INTEGER pnLocHFrac;
-  Rect portRect;
-  PACKED_MEMBER(RgnHandle, visRgn);
-  PACKED_MEMBER(RgnHandle, clipRgn);
-  PACKED_MEMBER(PixPatHandle, bkPixPat);
-  RGBColor rgbFgColor;
-  RGBColor rgbBkColor;
-  Point pnLoc;
-  Point pnSize;
-  INTEGER pnMode;
-  PACKED_MEMBER(PixPatHandle, pnPixPat);
-  PACKED_MEMBER(PixPatHandle, fillPixPat);
-  INTEGER pnVis;
-  INTEGER txFont;
-  Style txFace;
-  Byte filler;
-  INTEGER txMode;
-  INTEGER txSize;
-  Fixed spExtra;
-  LONGINT fgColor;
-  LONGINT bkColor;
-  INTEGER colrBit;
-  INTEGER patStretch;
-  PACKED_MEMBER(Handle, picSave);
-  PACKED_MEMBER(Handle, rgnSave);
-  PACKED_MEMBER(Handle, polySave);
-  PACKED_MEMBER(CQDProcsPtr, grafProcs);
-} CGrafPort, *CGrafPtr;
+typedef GUEST<PixPatPtr> *PixPatHandle;
 
-MAKE_HIDDEN(CGrafPtr);
+typedef struct CGrafPort
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> device;
+    GUEST<PixMapHandle> portPixMap;
+    GUEST<INTEGER> portVersion;
+    GUEST<Handle> grafVars;
+    GUEST<INTEGER> chExtra;
+    GUEST<INTEGER> pnLocHFrac;
+    GUEST<Rect> portRect;
+    GUEST<RgnHandle> visRgn;
+    GUEST<RgnHandle> clipRgn;
+    GUEST<PixPatHandle> bkPixPat;
+    GUEST<RGBColor> rgbFgColor;
+    GUEST<RGBColor> rgbBkColor;
+    GUEST<Point> pnLoc;
+    GUEST<Point> pnSize;
+    GUEST<INTEGER> pnMode;
+    GUEST<PixPatHandle> pnPixPat;
+    GUEST<PixPatHandle> fillPixPat;
+    GUEST<INTEGER> pnVis;
+    GUEST<INTEGER> txFont;
+    GUEST<Style> txFace;
+    GUEST<Byte> filler;
+    GUEST<INTEGER> txMode;
+    GUEST<INTEGER> txSize;
+    GUEST<Fixed> spExtra;
+    GUEST<LONGINT> fgColor;
+    GUEST<LONGINT> bkColor;
+    GUEST<INTEGER> colrBit;
+    GUEST<INTEGER> patStretch;
+    GUEST<Handle> picSave;
+    GUEST<Handle> rgnSave;
+    GUEST<Handle> polySave;
+    GUEST<CQDProcsPtr> grafProcs;
+} * CGrafPtr;
 
-typedef struct PACKED {
-  INTEGER crsrType;
-  PACKED_MEMBER(PixMapHandle, crsrMap);
-  PACKED_MEMBER(Handle, crsrData);
-  PACKED_MEMBER(Handle, crsrXData);
-  INTEGER crsrXValid;
-  PACKED_MEMBER(Handle, crsrXHandle);
-  Bits16 crsr1Data;
-  Bits16 crsrMask;
-  Point crsrHotSpot;
-  LONGINT crsrXTable;
-  LONGINT crsrID;
-} CCrsr, *CCrsrPtr;
-MAKE_HIDDEN(CCrsrPtr);
-typedef HIDDEN_CCrsrPtr *CCrsrHandle;
+typedef struct CCrsr
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> crsrType;
+    GUEST<PixMapHandle> crsrMap;
+    GUEST<Handle> crsrData;
+    GUEST<Handle> crsrXData;
+    GUEST<INTEGER> crsrXValid;
+    GUEST<Handle> crsrXHandle;
+    GUEST<Bits16> crsr1Data;
+    GUEST<Bits16> crsrMask;
+    GUEST<Point> crsrHotSpot;
+    GUEST<LONGINT> crsrXTable;
+    GUEST<LONGINT> crsrID;
+} * CCrsrPtr;
 
-typedef struct PACKED {
-  uint16 red;
-  uint16 green;
-  uint16 blue;
-  int32 matchData;
-} MatchRec;
+typedef GUEST<CCrsrPtr> *CCrsrHandle;
 
-typedef HIDDEN_GrafPtr *HIDDEN_GrafPtr_Ptr;
-MAKE_HIDDEN(HIDDEN_GrafPtr_Ptr);
+struct MatchRec
+{
+    GUEST_STRUCT;
+    GUEST<uint16_t> red;
+    GUEST<uint16_t> green;
+    GUEST<uint16_t> blue;
+    GUEST<int32_t> matchData;
+};
 
 typedef Byte *BytePtr;
-MAKE_HIDDEN(BytePtr);
 
-#define thePort		(STARH(STARH((HIDDEN_HIDDEN_GrafPtr_Ptr *) (long) SYN68K_TO_US(a5))))
-#define thePortX	((*STARH((HIDDEN_HIDDEN_GrafPtr_Ptr *) (long) SYN68K_TO_US(a5))).p)
-#define white		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -8)
-#define black		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -16)
-#define gray		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -24)
-#define ltGray		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -32)
-#define dkGray		(STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5)) -40)
-#define arrowX		(* (Cursor  *) (STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5))-108))
-#define screenBitsX	(* (BitMap  *) (STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5))-122))
-#define randSeed	CL(* (LONGINT *) (STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5))-126))
-#define randSeedX	((* (LONGINT *) (STARH((HIDDEN_BytePtr *)(long) SYN68K_TO_US(a5))-126)))
+#define thePort (STARH(STARH((GUEST<GUEST<GrafPtr> *> *)SYN68K_TO_US(EM_A5))))
+#define thePortX ((*STARH((GUEST<GUEST<GrafPtr> *> *)SYN68K_TO_US(EM_A5))))
+#define white (STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 8)
+#define black (STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 16)
+#define gray (STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 24)
+#define ltGray (STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 32)
+#define dkGray (STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 40)
+#define arrowX (*(Cursor *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 108))
+#define screenBitsX (*(BitMap *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 122))
+#define randSeed CL(*(GUEST<LONGINT> *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 126))
+#define randSeedX ((*(GUEST<LONGINT> *)(STARH((GUEST<BytePtr> *)SYN68K_TO_US(EM_A5)) - 126)))
 
-#if !defined (RndSeed_L)
-extern HIDDEN_LONGINT RndSeed_L;
-extern Byte HiliteMode;	/* not really supported in ROMlib-V1.0 */
-extern RGBColor HiliteRGB;	/* not really supported in ROMlib-V1.0 */
-extern HIDDEN_ProcPtr 	JInitCrsr_H;
-
-extern HIDDEN_ProcPtr JHideCursor_H;
-extern HIDDEN_ProcPtr JShowCursor_H;
-extern HIDDEN_ProcPtr JShieldCursor_H;
-extern HIDDEN_ProcPtr JSetCrsr_H;
-extern HIDDEN_ProcPtr JCrsrObscure_H;
-extern HIDDEN_ProcPtr JUnknown574_H;
-
-extern HIDDEN_Ptr 	ScrnBase_H;
-extern HIDDEN_ProcPtr	JCrsrTask_H;
-extern HIDDEN_Ptr	Key1Trans_H;
-extern HIDDEN_Ptr	Key2Trans_H;
-extern INTEGER 	ScrVRes;
-extern INTEGER 	ScrHRes;
-extern INTEGER 	ScreenRow;
-extern Point 	MouseLocation;
-extern Point	MouseLocation2;
-extern BOOLEAN 	CrsrVis;
-extern Byte 	CrsrBusy;
-extern INTEGER 	CrsrState;
-extern LONGINT 	mousemask;
-extern LONGINT 	mouseoffset;
-extern Byte 	HiliteMode;
-#endif
-
-#define RndSeed	(RndSeed_L.l)
-#define JInitCrsr	(JInitCrsr_H.p)
-#define JHideCursor	(JHideCursor_H.p)
-#define JShowCursor	(JShowCursor_H.p)
-#define JShieldCursor	(JShieldCursor_H.p)
-#define JSetCrsr	(JSetCrsr_H.p)
-#define JCrsrObscure	(JCrsrObscure_H.p)
-#define JUnknown574	(JUnknown574_H.p)
-#define JCrsrTask	(JCrsrTask_H.p)
-#define ScrnBase	(ScrnBase_H.p)
-#define Key1Trans	(Key1Trans_H.p)
-#define Key2Trans	(Key2Trans_H.p)
-
-extern trap void C_CopyBits (BitMap *src_bitmap, BitMap *dst_bitmap,
-				    const Rect *src_rect, const Rect *dst_rect,
-				    INTEGER mode, RgnHandle mask);
-
-extern trap void C_ScrollRect( Rect *rp, INTEGER dh, INTEGER dv, 
- RgnHandle updatergn );
-extern pascal trap void C_ForeColor( LONGINT c ); 
-extern pascal trap void C_BackColor( LONGINT c ); 
-extern pascal trap void C_ColorBit( INTEGER b ); 
-extern pascal trap void C_SetCursor( Cursor *cp ); 
-extern pascal trap void C_InitCursor( void  ); 
-extern pascal trap void C_HideCursor( void  ); 
-extern pascal trap void C_ShowCursor( void  ); 
-extern pascal trap void C_ObscureCursor( void  ); 
-extern pascal trap void C_ShieldCursor( Rect *rp, Point p ); 
-extern pascal trap void C_InitGraf( Ptr gp ); 
-extern pascal trap void C_SetPort( GrafPtr p ); 
-extern pascal trap void C_InitPort( GrafPtr p ); 
-extern pascal trap void C_OpenPort( GrafPtr p ); 
-extern pascal trap void C_ClosePort( GrafPtr p ); 
-extern pascal trap void C_GetPort( HIDDEN_GrafPtr *pp ); 
-extern pascal trap void C_GrafDevice( INTEGER d ); 
-extern pascal trap void C_SetPortBits( BitMap *bm ); 
-extern pascal trap void C_PortSize( INTEGER w, INTEGER h ); 
-extern pascal trap void C_MovePortTo( INTEGER lg, INTEGER tg ); 
-extern pascal trap void C_SetOrigin( INTEGER h, INTEGER v ); 
-extern pascal trap void C_SetClip( RgnHandle r ); 
-extern pascal trap void C_GetClip( RgnHandle r ); 
-extern pascal trap void C_ClipRect( Rect *r ); 
-extern pascal trap void C_BackPat( Pattern pp ); 
-extern pascal trap void C_SeedFill( Ptr srcp, Ptr dstp, 
- INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width, 
- INTEGER seedh, INTEGER seedv );
-extern pascal trap void C_CalcMask( Ptr srcp, Ptr dstp, 
- INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width ); 
-extern pascal trap void C_CopyMask( BitMap *srcbp, 
- BitMap *mskbp, BitMap *dstbp, Rect *srcrp, Rect *
- mskrp, Rect *dstrp ); 
-extern a0trap INTEGER *GetMaskTable( void  ); 
-extern pascal trap void C_OpColor( RGBColor *colorp ); 
-extern pascal trap void C_RGBBackColor( RGBColor *colorp ); 
-extern pascal trap void C_PenPixPat( PixPatHandle ph ); 
-extern pascal trap void C_HiliteColor( RGBColor *colorp ); 
-extern pascal trap void C_CharExtra( Fixed Extra ); 
-extern pascal trap void C_BackPixPat( PixPatHandle ph ); 
-extern pascal trap void C_RGBForeColor( RGBColor *colorp ); 
-extern pascal trap void C_MakeRGBPat( PixPatHandle ph, 
- RGBColor *colorp ); 
-extern pascal trap void C_DisposPixPat( PixPatHandle pph ); 
-extern pascal trap INTEGER C_Random( void  ); 
-extern pascal trap BOOLEAN C_GetPixel( INTEGER h, INTEGER v ); 
-extern pascal trap void C_StuffHex( register Ptr p, StringPtr s ); 
-extern pascal trap void C_ScalePt( Point *pt, Rect *srcr, Rect *dstr ); 
-extern pascal trap void C_MapPt( Point *pt, Rect *srcr, Rect *dstr ); 
-extern pascal trap void C_MapRect( Rect *r, Rect *srcr, Rect *dstr ); 
-extern pascal trap void C_MapRgn( RgnHandle rh, Rect *srcr, Rect *dstr ); 
-extern pascal trap void C_MapPoly( PolyHandle poly, Rect *srcr, 
- Rect *dstr ); 
-extern pascal trap void C_HidePen( void  ); 
-extern pascal trap void C_ShowPen( void  ); 
-extern pascal trap void C_GetPen( Point *ptp ); 
-extern pascal trap void C_GetPenState( PenState *ps ); 
-extern pascal trap void C_SetPenState( PenState *ps ); 
-extern pascal trap void C_PenSize( INTEGER w, INTEGER h ); 
-extern pascal trap void C_PenMode( INTEGER m ); 
-extern pascal trap void C_PenPat( Pattern pp ); 
-extern pascal trap void C_PenNormal( void  ); 
-extern pascal trap void C_MoveTo( INTEGER h, INTEGER v ); 
-extern pascal trap void C_Move( INTEGER dh, INTEGER dv ); 
-extern pascal trap void C_LineTo( INTEGER h, INTEGER v ); 
-extern pascal trap void C_Line( INTEGER dh, INTEGER dv ); 
-extern pascal trap void C_DrawPicture( PicHandle pic, Rect *destrp ); 
-extern pascal trap PicHandle C_OpenPicture( Rect *pf ); 
-extern pascal trap void C_ClosePicture( void  ); 
-extern pascal trap void C_PicComment( INTEGER kind, INTEGER size, 
- Handle hand ); 
-extern pascal trap void C_ReadComment( INTEGER kind, INTEGER size, 
- Handle hand ); 
-extern pascal trap void C_KillPicture( PicHandle pic ); 
-extern pascal trap void C_AddPt( Point src, Point *dst ); 
-extern pascal trap void C_SubPt( Point src, Point *dst ); 
-extern pascal trap void C_SetPt( Point *pt, INTEGER h, INTEGER v ); 
-extern pascal trap BOOLEAN C_EqualPt( Point p1, Point p2 ); 
-extern pascal trap void C_LocalToGlobal( Point *pt ); 
-extern pascal trap void C_GlobalToLocal( Point *pt ); 
-extern pascal trap PolyHandle C_OpenPoly( void  ); 
-extern pascal trap void C_ClosePoly( void  ); 
-extern pascal trap void C_KillPoly( PolyHandle poly ); 
-extern pascal trap void C_OffsetPoly( PolyHandle poly, 
- INTEGER dh, INTEGER dv ); 
-extern pascal trap void C_SetRect( Rect *r, INTEGER left, INTEGER top, 
- INTEGER right, INTEGER bottom ); 
-extern pascal trap void C_OffsetRect( Rect *r, INTEGER dh, INTEGER dv ); 
-extern pascal trap void C_InsetRect( Rect *r, INTEGER dh, INTEGER dv ); 
+const LowMemGlobal<INTEGER> ScrVRes { 0x102 }; // QuickDraw IMI-473 (true);
+const LowMemGlobal<INTEGER> ScrHRes { 0x104 }; // QuickDraw IMI-473 (true);
+const LowMemGlobal<INTEGER> ScreenRow { 0x106 }; // QuickDraw ThinkC (true);
+const LowMemGlobal<LONGINT> RndSeed { 0x156 }; // QuickDraw IMI-195 (true);
+const LowMemGlobal<Byte[8]> ScreenVars { 0x292 }; // QuickDraw MPW (false);
+/*
+ * NOTE: Key1Trans in the keyboard translator procedure, and Key2Trans in the
+ * numeric keypad translator procedure (MPW).
+ */
+const LowMemGlobal<Ptr> Key1Trans { 0x29E }; // QuickDraw MPW (false);
+const LowMemGlobal<Ptr> Key2Trans { 0x2A2 }; // QuickDraw MPW (false);
+const LowMemGlobal<ProcPtr> JUnknown574 { 0x574 }; // QuickDraw IMV (true-b);
+const LowMemGlobal<ProcPtr> JADBProc { 0x6B8 }; // QuickDraw IMV (false);
+const LowMemGlobal<ProcPtr> JHideCursor { 0x800 }; // QuickDraw Private.a (true-b);
+const LowMemGlobal<ProcPtr> JShowCursor { 0x804 }; // QuickDraw Private.a (true-b);
+const LowMemGlobal<ProcPtr> JShieldCursor { 0x808 }; // QuickDraw Private.a (true-b);
+const LowMemGlobal<ProcPtr> JScrnAddr { 0x80C }; // QuickDraw Private.a (false);
+const LowMemGlobal<ProcPtr> JScrnSize { 0x810 }; // QuickDraw Private.a (false);
+const LowMemGlobal<ProcPtr> JInitCrsr { 0x814 }; // QuickDraw Private.a (true-b);
+const LowMemGlobal<ProcPtr> JSetCrsr { 0x818 }; // QuickDraw Private.a (true-b);
+const LowMemGlobal<ProcPtr> JCrsrObscure { 0x81C }; // QuickDraw Private.a (true-b);
+const LowMemGlobal<ProcPtr> JUpdateProc { 0x820 }; // QuickDraw Private.a (false);
+const LowMemGlobal<Ptr> ScrnBase { 0x824 }; // QuickDraw IMII-19 (true);
+/*
+ * MouseLocation used to be 0x830, but that doesn't jibe with what I've
+ * seen of Crystal Quest --ctm
+ */
+const LowMemGlobal<Rect> CrsrPin { 0x834 }; // QuickDraw ThinkC (false);
+const LowMemGlobal<Byte> QDColors { 0x8B0 }; // QuickDraw IMV (false);
+const LowMemGlobal<BOOLEAN> CrsrVis { 0x8CC }; // QuickDraw SysEqu.a (true);
+const LowMemGlobal<Byte> CrsrBusy { 0x8CD }; // QuickDraw SysEqu.a (true);
+const LowMemGlobal<INTEGER> CrsrState { 0x8D0 }; // QuickDraw SysEqu.a (true);
+const LowMemGlobal<LONGINT> mousemask { 0x8D6 }; // QuickDraw .a (true-b);
+const LowMemGlobal<LONGINT> mouseoffset { 0x8DA }; // QuickDraw SysEqu.a (true-b);
+const LowMemGlobal<ProcPtr> JCrsrTask { 0x8EE }; //   (true);
+const LowMemGlobal<Byte> HiliteMode { 0x938 }; // QuickDraw IMV (true-b);
 
 
+extern void C_unknown574();
+PASCAL_FUNCTION(unknown574);
 
+extern void C_CopyBits(BitMap *src_bitmap, BitMap *dst_bitmap,
+                            const Rect *src_rect, const Rect *dst_rect,
+                            INTEGER mode, RgnHandle mask);
+PASCAL_TRAP(CopyBits, 0xA8EC);
 
-extern pascal trap BOOLEAN C_EmptyRect( Rect *r ); 
-extern pascal trap BOOLEAN C_SectRect (const Rect *s1, const Rect *s2, Rect *dest);
-extern pascal trap void C_UnionRect( Rect *s1, Rect *s2, Rect *dest ); 
-extern pascal trap BOOLEAN C_PtInRect( Point p, Rect *r ); 
-extern pascal trap void C_Pt2Rect( Point p1, Point p2, Rect *dest ); 
-extern pascal trap void C_PtToAngle( Rect *rp, Point p, INTEGER *angle ); 
-extern pascal trap BOOLEAN C_EqualRect( const Rect *r1, const Rect *r2 ); 
-extern pascal trap RgnHandle C_NewRgn( void  ); 
-extern pascal trap void C_OpenRgn( void  ); 
-extern pascal trap void C_CopyRgn( RgnHandle s, RgnHandle d ); 
-extern pascal trap void C_CloseRgn( RgnHandle rh ); 
-extern pascal trap void C_DisposeRgn( RgnHandle rh ); 
-extern pascal trap void C_SetEmptyRgn( RgnHandle rh ); 
-extern pascal trap void C_SetRectRgn( RgnHandle rh, INTEGER left, 
- INTEGER top, INTEGER right, INTEGER bottom ); 
-extern pascal trap void C_RectRgn( RgnHandle rh, Rect *rect ); 
-extern pascal trap void C_OffsetRgn( RgnHandle rh, INTEGER dh, 
- INTEGER dv ); 
-extern pascal trap BOOLEAN C_PtInRgn( Point p, RgnHandle rh ); 
-extern pascal trap void C_InsetRgn( RgnHandle rh, INTEGER dh, INTEGER dv ); 
-extern pascal trap void C_SectRgn( RgnHandle s1, RgnHandle s2, 
- RgnHandle dest ); 
-extern pascal trap void C_UnionRgn( RgnHandle s1, RgnHandle s2, 
- RgnHandle dest ); 
-extern pascal trap void C_DiffRgn( RgnHandle s1, RgnHandle s2, 
- RgnHandle dest ); 
-extern pascal trap void C_XorRgn( RgnHandle s1, RgnHandle s2, 
- RgnHandle dest ); 
-extern pascal trap BOOLEAN C_RectInRgn( Rect *rp, 
- RgnHandle rh ); 
-extern pascal trap BOOLEAN C_EqualRgn( RgnHandle r1, RgnHandle r2 ); 
-extern pascal trap BOOLEAN C_EmptyRgn( RgnHandle rh ); 
-extern void ROMlib_printrgn( RgnHandle h ); 
-extern void ROMlib_printpairs( INTEGER *p, LONGINT n ); 
-extern pascal trap void C_FrameRect( Rect *r ); 
-extern pascal trap void C_PaintRect( Rect *r ); 
-extern pascal trap void C_EraseRect( Rect *r ); 
-extern pascal trap void C_InvertRect( Rect *r ); 
-extern pascal trap void C_FillRect( Rect *r, Pattern pat ); 
-extern pascal trap void C_FrameOval( Rect *r ); 
-extern pascal trap void C_PaintOval( Rect *r ); 
-extern pascal trap void C_EraseOval( Rect *r ); 
-extern pascal trap void C_InvertOval( Rect *r ); 
-extern pascal trap void C_FillOval( Rect *r, Pattern pat ); 
-extern pascal trap void C_FrameRoundRect( Rect *r, INTEGER ow, 
- INTEGER oh ); 
-extern pascal trap void C_PaintRoundRect( Rect *r, INTEGER ow, 
- INTEGER oh ); 
-extern pascal trap void C_EraseRoundRect( Rect *r, INTEGER ow, 
- INTEGER oh ); 
-extern pascal trap void C_InvertRoundRect( Rect *r, INTEGER ow, 
- INTEGER oh ); 
-extern pascal trap void C_FillRoundRect( Rect *r, INTEGER ow, 
- INTEGER oh, Pattern pat ); 
-extern pascal trap void C_FrameArc( Rect *r, INTEGER start, 
- INTEGER angle ); 
-extern pascal trap void C_PaintArc( Rect *r, INTEGER start, 
- INTEGER angle ); 
-extern pascal trap void C_EraseArc( Rect *r, INTEGER start, 
- INTEGER angle ); 
-extern pascal trap void C_InvertArc( Rect *r, INTEGER start, 
- INTEGER angle ); 
-extern pascal trap void C_FillArc( Rect *r, INTEGER start, 
- INTEGER angle, Pattern pat ); 
-extern pascal trap void C_FrameRgn( RgnHandle rh ); 
-extern pascal trap void C_PaintRgn( RgnHandle rh ); 
-extern pascal trap void C_EraseRgn( RgnHandle rh ); 
-extern pascal trap void C_InvertRgn( RgnHandle rh ); 
-extern pascal trap void C_FillRgn( RgnHandle rh, Pattern pat ); 
-extern pascal trap void C_FramePoly( PolyHandle poly ); 
-extern pascal trap void C_PaintPoly( PolyHandle poly ); 
-extern pascal trap void C_ErasePoly( PolyHandle poly ); 
-extern pascal trap void C_InvertPoly( PolyHandle poly ); 
-extern pascal trap void C_FillPoly( PolyHandle poly, Pattern pat ); 
-extern pascal trap void C_SetStdProcs( QDProcs *procs ); 
-extern pascal trap void C_StdArc( GrafVerb verb, Rect *r, 
- INTEGER starta, INTEGER arca ); 
+extern void C_ScrollRect(Rect *rp, INTEGER dh, INTEGER dv,
+                              RgnHandle updatergn);
+PASCAL_TRAP(ScrollRect, 0xA8EF);
 
-extern pascal trap void C_StdBits (BitMap *srcbmp,
-				   const Rect *srcrp, const Rect *dstrp,
-				   INTEGER mode, RgnHandle mask);
-extern void StdBitsPicSaveFlag (BitMap *srcbmp,
-				const Rect *srcrp, const Rect *dstrp,
-				INTEGER mode, RgnHandle mask, BOOLEAN savepic);
+extern void C_ForeColor(LONGINT c);
+PASCAL_TRAP(ForeColor, 0xA862);
+extern void C_BackColor(LONGINT c);
+PASCAL_TRAP(BackColor, 0xA863);
+extern void C_ColorBit(INTEGER b);
+PASCAL_TRAP(ColorBit, 0xA864);
+extern void C_SetCursor(Cursor *cp);
+PASCAL_TRAP(SetCursor, 0xA851);
+extern void C_InitCursor(void);
+PASCAL_TRAP(InitCursor, 0xA850);
+extern void C_HideCursor(void);
+PASCAL_TRAP(HideCursor, 0xA852);
+extern void C_ShowCursor(void);
+PASCAL_TRAP(ShowCursor, 0xA853);
+extern void C_ObscureCursor(void);
+PASCAL_TRAP(ObscureCursor, 0xA856);
+extern void C_ShieldCursor(Rect *rp, Point p);
+PASCAL_TRAP(ShieldCursor, 0xA855);
+extern void C_InitGraf(Ptr gp);
+PASCAL_TRAP(InitGraf, 0xA86E);
+extern void C_SetPort(GrafPtr p);
+PASCAL_TRAP(SetPort, 0xA873);
+extern void C_InitPort(GrafPtr p);
+PASCAL_TRAP(InitPort, 0xA86D);
+extern void C_OpenPort(GrafPtr p);
+PASCAL_TRAP(OpenPort, 0xA86F);
+extern void C_ClosePort(GrafPtr p);
+PASCAL_TRAP(ClosePort, 0xA87D);
+extern void C_GetPort(GUEST<GrafPtr> *pp);
+PASCAL_TRAP(GetPort, 0xA874);
+extern void C_GrafDevice(INTEGER d);
+PASCAL_TRAP(GrafDevice, 0xA872);
+extern void C_SetPortBits(BitMap *bm);
+PASCAL_TRAP(SetPortBits, 0xA875);
+extern void C_PortSize(INTEGER w, INTEGER h);
+PASCAL_TRAP(PortSize, 0xA876);
+extern void C_MovePortTo(INTEGER lg, INTEGER tg);
+PASCAL_TRAP(MovePortTo, 0xA877);
+extern void C_SetOrigin(INTEGER h, INTEGER v);
+PASCAL_TRAP(SetOrigin, 0xA878);
+extern void C_SetClip(RgnHandle r);
+PASCAL_TRAP(SetClip, 0xA879);
+extern void C_GetClip(RgnHandle r);
+PASCAL_TRAP(GetClip, 0xA87A);
+extern void C_ClipRect(Rect *r);
+PASCAL_TRAP(ClipRect, 0xA87B);
+extern void C_BackPat(Pattern pp);
+PASCAL_TRAP(BackPat, 0xA87C);
+extern void C_SeedFill(Ptr srcp, Ptr dstp,
+                                   INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width,
+                                   INTEGER seedh, INTEGER seedv);
+PASCAL_TRAP(SeedFill, 0xA839);
+extern void C_CalcMask(Ptr srcp, Ptr dstp,
+                                   INTEGER srcr, INTEGER dstr, INTEGER height, INTEGER width);
+PASCAL_TRAP(CalcMask, 0xA838);
+extern void C_CopyMask(BitMap *srcbp,
+                                   BitMap *mskbp, BitMap *dstbp, Rect *srcrp, Rect *
+                                                                                  mskrp,
+                                   Rect *dstrp);
+PASCAL_TRAP(CopyMask, 0xA817);
+extern INTEGER *GetMaskTable(void);
+extern void C_CharExtra(Fixed Extra);
+PASCAL_TRAP(CharExtra, 0xAA23);
+extern void C_MakeRGBPat(PixPatHandle ph,
+                                     RGBColor *colorp);
+PASCAL_TRAP(MakeRGBPat, 0xAA0D);
+extern INTEGER C_Random(void);
+PASCAL_TRAP(Random, 0xA861);
+extern BOOLEAN C_GetPixel(INTEGER h, INTEGER v);
+PASCAL_TRAP(GetPixel, 0xA865);
+extern void C_StuffHex(Ptr p, StringPtr s);
+PASCAL_TRAP(StuffHex, 0xA866);
+extern void C_ScalePt(GUEST<Point> *pt, Rect *srcr, Rect *dstr);
+PASCAL_TRAP(ScalePt, 0xA8F8);
+extern void C_MapPt(GUEST<Point> *pt, Rect *srcr, Rect *dstr);
+PASCAL_TRAP(MapPt, 0xA8F9);
+extern void C_MapRect(Rect *r, Rect *srcr, Rect *dstr);
+PASCAL_TRAP(MapRect, 0xA8FA);
+extern void C_MapRgn(RgnHandle rh, Rect *srcr, Rect *dstr);
+PASCAL_TRAP(MapRgn, 0xA8FB);
+extern void C_MapPoly(PolyHandle poly, Rect *srcr,
+                                  Rect *dstr);
+PASCAL_TRAP(MapPoly, 0xA8FC);
+extern void C_HidePen(void);
+PASCAL_TRAP(HidePen, 0xA896);
+extern void C_ShowPen(void);
+PASCAL_TRAP(ShowPen, 0xA897);
+extern void C_GetPen(GUEST<Point> *ptp);
+PASCAL_TRAP(GetPen, 0xA89A);
+extern void C_GetPenState(PenState *ps);
+PASCAL_TRAP(GetPenState, 0xA898);
+extern void C_SetPenState(PenState *ps);
+PASCAL_TRAP(SetPenState, 0xA899);
+extern void C_PenSize(INTEGER w, INTEGER h);
+PASCAL_TRAP(PenSize, 0xA89B);
+extern void C_PenMode(INTEGER m);
+PASCAL_TRAP(PenMode, 0xA89C);
+extern void C_PenPat(Pattern pp);
+PASCAL_TRAP(PenPat, 0xA89D);
+extern void C_PenNormal(void);
+PASCAL_TRAP(PenNormal, 0xA89E);
+extern void C_MoveTo(INTEGER h, INTEGER v);
+PASCAL_TRAP(MoveTo, 0xA893);
+extern void C_Move(INTEGER dh, INTEGER dv);
+PASCAL_TRAP(Move, 0xA894);
+extern void C_LineTo(INTEGER h, INTEGER v);
+PASCAL_TRAP(LineTo, 0xA891);
+extern void C_Line(INTEGER dh, INTEGER dv);
+PASCAL_TRAP(Line, 0xA892);
+extern void C_DrawPicture(PicHandle pic, Rect *destrp);
+PASCAL_TRAP(DrawPicture, 0xA8F6);
+extern PicHandle C_OpenPicture(Rect *pf);
+PASCAL_TRAP(OpenPicture, 0xA8F3);
+extern void C_ClosePicture(void);
+PASCAL_TRAP(ClosePicture, 0xA8F4);
+extern void C_PicComment(INTEGER kind, INTEGER size,
+                                     Handle hand);
+PASCAL_TRAP(PicComment, 0xA8F2);
+extern void C_ReadComment(INTEGER kind, INTEGER size,
+                                      Handle hand);
 
+extern void C_KillPicture(PicHandle pic);
+PASCAL_TRAP(KillPicture, 0xA8F5);
+extern void C_AddPt(Point src, GUEST<Point> *dst);
+PASCAL_TRAP(AddPt, 0xA87E);
+extern void C_SubPt(Point src, GUEST<Point> *dst);
+PASCAL_TRAP(SubPt, 0xA87F);
+extern void C_SetPt(GUEST<Point> *pt, INTEGER h, INTEGER v);
+PASCAL_TRAP(SetPt, 0xA880);
+extern BOOLEAN C_EqualPt(Point p1, Point p2);
+PASCAL_TRAP(EqualPt, 0xA881);
+extern void C_LocalToGlobal(GUEST<Point> *pt);
+PASCAL_TRAP(LocalToGlobal, 0xA870);
+extern void C_GlobalToLocal(GUEST<Point> *pt);
+PASCAL_TRAP(GlobalToLocal, 0xA871);
+extern PolyHandle C_OpenPoly(void);
+PASCAL_TRAP(OpenPoly, 0xA8CB);
+extern void C_ClosePoly(void);
+PASCAL_TRAP(ClosePoly, 0xA8CC);
+extern void C_KillPoly(PolyHandle poly);
+PASCAL_TRAP(KillPoly, 0xA8CD);
+extern void C_OffsetPoly(PolyHandle poly,
+                                     INTEGER dh, INTEGER dv);
+PASCAL_TRAP(OffsetPoly, 0xA8CE);
+extern void C_SetRect(Rect *r, INTEGER left, INTEGER top,
+                                  INTEGER right, INTEGER bottom);
+PASCAL_TRAP(SetRect, 0xA8A7);
+extern void C_OffsetRect(Rect *r, INTEGER dh, INTEGER dv);
+PASCAL_TRAP(OffsetRect, 0xA8A8);
+extern void C_InsetRect(Rect *r, INTEGER dh, INTEGER dv);
+PASCAL_TRAP(InsetRect, 0xA8A9);
 
-extern void ROMlib_printsegs( INTEGER *ip ); 
-extern pascal trap void C_StdLine( Point p ); 
-extern pascal trap void C_StdOval( GrafVerb v, Rect *rp ); 
-extern pascal trap void C_StdComment( INTEGER kind, INTEGER size, 
- Handle hand ); 
-extern pascal trap void C_StdGetPic( Ptr dp, INTEGER bc ); 
-extern pascal trap void C_StdPutPic( Ptr sp, INTEGER bc ); 
-extern pascal trap void C_StdPoly( GrafVerb verb, PolyHandle ph ); 
-extern pascal trap void C_StdRRect( GrafVerb verb, Rect *r, 
- INTEGER width, INTEGER height ); 
-extern pascal trap void C_StdRect( GrafVerb v, Rect *rp ); 
-extern pascal trap void C_StdRgn( GrafVerb verb, RgnHandle rgn ); 
-extern pascal trap void C_StdText( INTEGER n, Ptr textbufp, 
- Point num, Point den ); 
-extern pascal trap INTEGER C_StdTxMeas( INTEGER n, Ptr p, 
- Point *nump, Point *denp, FontInfo *finfop ); 
-extern INTEGER ROMlib_StdTxMeas( LONGINT n, Ptr p, 
- Point *nump, Point *denp, FontInfo *finfop ); 
-extern pascal trap void C_MeasureText( INTEGER n, Ptr text, 
- Ptr chars ); 
-extern pascal trap void C_TextFont( INTEGER f ); 
-extern pascal trap void C_TextFace( INTEGER thef ); 
-extern pascal trap void C_TextMode( INTEGER m ); 
-extern pascal trap void C_TextSize( INTEGER s ); 
-extern pascal trap void C_SpaceExtra( Fixed e ); 
-extern pascal trap void C_DrawChar( CHAR thec ); 
-extern pascal trap void C_DrawString( StringPtr s ); 
-extern pascal trap void C_DrawText( Ptr tb, INTEGER fb, INTEGER bc ); 
-extern pascal trap INTEGER C_CharWidth( CHAR thec ); 
-extern pascal trap INTEGER C_StringWidth( StringPtr s ); 
-extern pascal trap INTEGER C_TextWidth( Ptr tb, INTEGER fb, INTEGER bc ); 
-extern pascal trap void C_GetFontInfo( FontInfo *ip ); 
+extern BOOLEAN C_EmptyRect(Rect *r);
+PASCAL_TRAP(EmptyRect, 0xA8AE);
+extern BOOLEAN C_SectRect(const Rect *s1, const Rect *s2, Rect *dest);
+PASCAL_TRAP(SectRect, 0xA8AA);
+extern void C_UnionRect(Rect *s1, Rect *s2, Rect *dest);
+PASCAL_TRAP(UnionRect, 0xA8AB);
+extern BOOLEAN C_PtInRect(Point p, Rect *r);
+PASCAL_TRAP(PtInRect, 0xA8AD);
+extern void C_Pt2Rect(Point p1, Point p2, Rect *dest);
+PASCAL_TRAP(Pt2Rect, 0xA8AC);
+extern void C_PtToAngle(Rect *rp, Point p, GUEST<INTEGER> *angle);
+PASCAL_TRAP(PtToAngle, 0xA8C3);
+extern BOOLEAN C_EqualRect(const Rect *r1, const Rect *r2);
+PASCAL_TRAP(EqualRect, 0xA8A6);
+extern RgnHandle C_NewRgn(void);
+PASCAL_TRAP(NewRgn, 0xA8D8);
+extern void C_OpenRgn(void);
+PASCAL_TRAP(OpenRgn, 0xA8DA);
+extern void C_CopyRgn(RgnHandle s, RgnHandle d);
+PASCAL_TRAP(CopyRgn, 0xA8DC);
+extern void C_CloseRgn(RgnHandle rh);
+PASCAL_TRAP(CloseRgn, 0xA8DB);
+extern void C_DisposeRgn(RgnHandle rh);
+PASCAL_TRAP(DisposeRgn, 0xA8D9);
+extern void C_SetEmptyRgn(RgnHandle rh);
+PASCAL_TRAP(SetEmptyRgn, 0xA8DD);
+extern void C_SetRectRgn(RgnHandle rh, INTEGER left,
+                                     INTEGER top, INTEGER right, INTEGER bottom);
+PASCAL_TRAP(SetRectRgn, 0xA8DE);
+extern void C_RectRgn(RgnHandle rh, Rect *rect);
+PASCAL_TRAP(RectRgn, 0xA8DF);
+extern void C_OffsetRgn(RgnHandle rh, INTEGER dh,
+                                    INTEGER dv);
+PASCAL_TRAP(OffsetRgn, 0xA8E0);
+extern BOOLEAN C_PtInRgn(Point p, RgnHandle rh);
+PASCAL_TRAP(PtInRgn, 0xA8E8);
+extern void C_InsetRgn(RgnHandle rh, INTEGER dh, INTEGER dv);
+PASCAL_TRAP(InsetRgn, 0xA8E1);
+extern void C_SectRgn(RgnHandle s1, RgnHandle s2,
+                                  RgnHandle dest);
+PASCAL_TRAP(SectRgn, 0xA8E4);
+extern void C_UnionRgn(RgnHandle s1, RgnHandle s2,
+                                   RgnHandle dest);
+PASCAL_TRAP(UnionRgn, 0xA8E5);
+extern void C_DiffRgn(RgnHandle s1, RgnHandle s2,
+                                  RgnHandle dest);
+PASCAL_TRAP(DiffRgn, 0xA8E6);
+extern void C_XorRgn(RgnHandle s1, RgnHandle s2,
+                                 RgnHandle dest);
+PASCAL_TRAP(XorRgn, 0xA8E7);
+extern BOOLEAN C_RectInRgn(Rect *rp,
+                                       RgnHandle rh);
+PASCAL_TRAP(RectInRgn, 0xA8E9);
+extern BOOLEAN C_EqualRgn(RgnHandle r1, RgnHandle r2);
+PASCAL_TRAP(EqualRgn, 0xA8E3);
+extern BOOLEAN C_EmptyRgn(RgnHandle rh);
+PASCAL_TRAP(EmptyRgn, 0xA8E2);
+extern void ROMlib_printrgn(RgnHandle h);
+extern void ROMlib_printpairs(INTEGER *p, LONGINT n);
+extern void C_FrameRect(Rect *r);
+PASCAL_TRAP(FrameRect, 0xA8A1);
+extern void C_PaintRect(Rect *r);
+PASCAL_TRAP(PaintRect, 0xA8A2);
+extern void C_EraseRect(Rect *r);
+PASCAL_TRAP(EraseRect, 0xA8A3);
+extern void C_InvertRect(Rect *r);
+PASCAL_TRAP(InvertRect, 0xA8A4);
+extern void C_FillRect(Rect *r, Pattern pat);
+PASCAL_TRAP(FillRect, 0xA8A5);
+extern void C_FrameOval(Rect *r);
+PASCAL_TRAP(FrameOval, 0xA8B7);
+extern void C_PaintOval(Rect *r);
+PASCAL_TRAP(PaintOval, 0xA8B8);
+extern void C_EraseOval(Rect *r);
+PASCAL_TRAP(EraseOval, 0xA8B9);
+extern void C_InvertOval(Rect *r);
+PASCAL_TRAP(InvertOval, 0xA8BA);
+extern void C_FillOval(Rect *r, Pattern pat);
+PASCAL_TRAP(FillOval, 0xA8BB);
+extern void C_FrameRoundRect(Rect *r, INTEGER ow,
+                                         INTEGER oh);
+PASCAL_TRAP(FrameRoundRect, 0xA8B0);
+extern void C_PaintRoundRect(Rect *r, INTEGER ow,
+                                         INTEGER oh);
+PASCAL_TRAP(PaintRoundRect, 0xA8B1);
+extern void C_EraseRoundRect(Rect *r, INTEGER ow,
+                                         INTEGER oh);
+PASCAL_TRAP(EraseRoundRect, 0xA8B2);
+extern void C_InvertRoundRect(Rect *r, INTEGER ow,
+                                          INTEGER oh);
+PASCAL_TRAP(InvertRoundRect, 0xA8B3);
+extern void C_FillRoundRect(Rect *r, INTEGER ow,
+                                        INTEGER oh, Pattern pat);
+PASCAL_TRAP(FillRoundRect, 0xA8B4);
+extern void C_FrameArc(Rect *r, INTEGER start,
+                                   INTEGER angle);
+PASCAL_TRAP(FrameArc, 0xA8BE);
+extern void C_PaintArc(Rect *r, INTEGER start,
+                                   INTEGER angle);
+PASCAL_TRAP(PaintArc, 0xA8BF);
+extern void C_EraseArc(Rect *r, INTEGER start,
+                                   INTEGER angle);
+PASCAL_TRAP(EraseArc, 0xA8C0);
+extern void C_InvertArc(Rect *r, INTEGER start,
+                                    INTEGER angle);
+PASCAL_TRAP(InvertArc, 0xA8C1);
+extern void C_FillArc(Rect *r, INTEGER start,
+                                  INTEGER angle, Pattern pat);
+PASCAL_TRAP(FillArc, 0xA8C2);
+extern void C_FrameRgn(RgnHandle rh);
+PASCAL_TRAP(FrameRgn, 0xA8D2);
+extern void C_PaintRgn(RgnHandle rh);
+PASCAL_TRAP(PaintRgn, 0xA8D3);
+extern void C_EraseRgn(RgnHandle rh);
+PASCAL_TRAP(EraseRgn, 0xA8D4);
+extern void C_InvertRgn(RgnHandle rh);
+PASCAL_TRAP(InvertRgn, 0xA8D5);
+extern void C_FillRgn(RgnHandle rh, Pattern pat);
+PASCAL_TRAP(FillRgn, 0xA8D6);
+extern void C_FramePoly(PolyHandle poly);
+PASCAL_TRAP(FramePoly, 0xA8C6);
+extern void C_PaintPoly(PolyHandle poly);
+PASCAL_TRAP(PaintPoly, 0xA8C7);
+extern void C_ErasePoly(PolyHandle poly);
+PASCAL_TRAP(ErasePoly, 0xA8C8);
+extern void C_InvertPoly(PolyHandle poly);
+PASCAL_TRAP(InvertPoly, 0xA8C9);
+extern void C_FillPoly(PolyHandle poly, Pattern pat);
+PASCAL_TRAP(FillPoly, 0xA8CA);
+extern void C_SetStdProcs(QDProcs *procs);
+PASCAL_TRAP(SetStdProcs, 0xA8EA);
+extern void C_StdArc(GrafVerb verb, Rect *r,
+                                 INTEGER starta, INTEGER arca);
+PASCAL_TRAP(StdArc, 0xA8BD);
 
-extern pascal trap void C_GetCPixel( INTEGER h, INTEGER v, RGBColor *colorp ); 
-extern pascal trap void C_SetCPixel( INTEGER h, INTEGER v,
-						       RGBColor *colorp);
+extern void C_StdBits(const BitMap *srcbmp,
+                                  const Rect *srcrp, const Rect *dstrp,
+                                  INTEGER mode, RgnHandle mask);
+PASCAL_TRAP(StdBits, 0xA8EB);
+extern void StdBitsPicSaveFlag(const BitMap *srcbmp,
+                               const Rect *srcrp, const Rect *dstrp,
+                               INTEGER mode, RgnHandle mask, BOOLEAN savepic);
 
-extern pascal trap void C_SeedCFill( BitMap *srcbp, BitMap *dstbp,
-                Rect *srcrp, Rect *dstrp, INTEGER seedh, INTEGER seedv,
-				       ProcPtr matchprocp, LONGINT matchdata);
+extern void ROMlib_printsegs(INTEGER *ip);
+extern void C_StdLine(Point p);
+PASCAL_TRAP(StdLine, 0xA890);
+extern void C_StdOval(GrafVerb v, Rect *rp);
+PASCAL_TRAP(StdOval, 0xA8B6);
+extern void C_StdComment(INTEGER kind, INTEGER size,
+                                     Handle hand);
+PASCAL_TRAP(StdComment, 0xA8F1);
+extern void C_StdGetPic(void *dp, INTEGER bc);
+PASCAL_TRAP(StdGetPic, 0xA8EE);
+extern void C_StdPutPic(const void *sp, INTEGER bc);
+PASCAL_TRAP(StdPutPic, 0xA8F0);
+extern void C_StdPoly(GrafVerb verb, PolyHandle ph);
+PASCAL_TRAP(StdPoly, 0xA8C5);
+extern void C_StdRRect(GrafVerb verb, Rect *r,
+                                   INTEGER width, INTEGER height);
+PASCAL_TRAP(StdRRect, 0xA8AF);
+extern void C_StdRect(GrafVerb v, Rect *rp);
+PASCAL_TRAP(StdRect, 0xA8A0);
+extern void C_StdRgn(GrafVerb verb, RgnHandle rgn);
+PASCAL_TRAP(StdRgn, 0xA8D1);
+extern void C_StdText(INTEGER n, Ptr textbufp,
+                                  Point num, Point den);
+PASCAL_TRAP(StdText, 0xA882);
+extern INTEGER C_StdTxMeas(INTEGER n, Ptr p,
+                                       GUEST<Point> *nump, GUEST<Point> *denp, FontInfo *finfop);
+PASCAL_TRAP(StdTxMeas, 0xA8ED);
+extern INTEGER ROMlib_StdTxMeas(LONGINT n, Ptr p,
+                                GUEST<Point> *nump, GUEST<Point> *denp, FontInfo *finfop);
+extern void C_MeasureText(INTEGER n, Ptr text,
+                                      Ptr chars);
+PASCAL_TRAP(MeasureText, 0xA837);
+extern void C_TextFont(INTEGER f);
+PASCAL_TRAP(TextFont, 0xA887);
+extern void C_TextFace(INTEGER thef);
+PASCAL_TRAP(TextFace, 0xA888);
+extern void C_TextMode(INTEGER m);
+PASCAL_TRAP(TextMode, 0xA889);
+extern void C_TextSize(INTEGER s);
+PASCAL_TRAP(TextSize, 0xA88A);
+extern void C_SpaceExtra(Fixed e);
+PASCAL_TRAP(SpaceExtra, 0xA88E);
+extern void C_DrawChar(CharParameter thec);
+PASCAL_TRAP(DrawChar, 0xA883);
+extern void C_DrawString(StringPtr s);
+PASCAL_TRAP(DrawString, 0xA884);
+extern void C_DrawText(Ptr tb, INTEGER fb, INTEGER bc);
+PASCAL_TRAP(DrawText, 0xA885);
+extern INTEGER C_CharWidth(CharParameter thec);
+PASCAL_TRAP(CharWidth, 0xA88D);
+extern INTEGER C_StringWidth(StringPtr s);
+PASCAL_TRAP(StringWidth, 0xA88C);
+extern INTEGER C_TextWidth(Ptr tb, INTEGER fb, INTEGER bc);
+PASCAL_TRAP(TextWidth, 0xA886);
+extern void C_GetFontInfo(FontInfo *ip);
+PASCAL_TRAP(GetFontInfo, 0xA88B);
 
-extern pascal trap void C_CalcCMask( BitMap *srcbp, BitMap *dstbp,
-    Rect *srcrp, Rect *dstrp, RGBColor *seedrgbp, ProcPtr matchprocp,
-							    LONGINT matchdata);
-extern pascal trap void C_IMVI_CopyDeepMask (
+extern void C_GetCPixel(INTEGER h, INTEGER v, RGBColor *colorp);
+PASCAL_TRAP(GetCPixel, 0xAA17);
+extern void C_SetCPixel(INTEGER h, INTEGER v,
+                                    RGBColor *colorp);
+PASCAL_TRAP(SetCPixel, 0xAA16);
+
+extern void C_SeedCFill(BitMap *srcbp, BitMap *dstbp,
+                                    Rect *srcrp, Rect *dstrp, INTEGER seedh, INTEGER seedv,
+                                    ProcPtr matchprocp, LONGINT matchdata);
+PASCAL_TRAP(SeedCFill, 0xAA50);
+
+extern void C_CalcCMask(BitMap *srcbp, BitMap *dstbp,
+                                    Rect *srcrp, Rect *dstrp, RGBColor *seedrgbp, ProcPtr matchprocp,
+                                    LONGINT matchdata);
+PASCAL_TRAP(CalcCMask, 0xAA4F);
+extern void C_IMVI_CopyDeepMask(
     BitMap *srcBits,
     BitMap *maskBits,
     BitMap *dstBits,
@@ -683,5 +902,6 @@ extern pascal trap void C_IMVI_CopyDeepMask (
     Rect *dstRect,
     INTEGER mode,
     RgnHandle maskRgn);
-
+PASCAL_TRAP(IMVI_CopyDeepMask, 0xAA51);
+}
 #endif /* _QUICKDRAW_H_ */

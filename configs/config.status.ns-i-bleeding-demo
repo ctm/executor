@@ -1,3 +1,0 @@
-#!/bin/sh
-
-/ardi/executor/util/configure.sh  '--target=i486-next-mach3' '--host=i486-next-mach3' '--front-end=nextstep' '--cflags=-O2 -DNDEBUG -Wall -Wno-import -DRELEASE_DEMO' '--root=/ardi/executor' '--sound=dummy'

@@ -1,5 +1,0 @@
-// This Configuration file was built by Executor
-// TechnoManiac
-RefreshNumber = 10;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

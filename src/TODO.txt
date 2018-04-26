@@ -1,0 +1,30 @@
+decide where to put default directory: home? next to app?
+initialize system folder
+
+move from %Foo conventions to ._Foo for AppleDouble
+optionally be BasiliskII compatible (.rsrc/ .finf/)
+use UTF-8 filenames on unix platforms
+
+use std::filesystem for file access
+    -> better windows compatibility, including unicode
+    -> shorten a lot of string manipulation code
+
+fix/re-enable mkvol
+
+SDL2 sound driver
+make Linux sound driver C++ compatible, or delete it (obsolete /dev/dsp interface)
+
+inode/dirID code is fundamentally incompatible with 64-bit inodes
+
+SDL2: handle dirty rectangles instead of doing full-screen blits
+
+revitalize genstubs and related stuff, or replace it by something better
+(at least CTOPFlags can be done using templates)
+
+investigate/fix 16bpp/32bpp bugs (hilite mode, icons, some other things)
+
+get windows port to work, remove outdated #if defined(CYGWIN32)
+
+find a powerpc cpu core (SheepShaver?)
+
+multi-screen support, rootless windows

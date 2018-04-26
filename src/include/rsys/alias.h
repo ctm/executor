@@ -1,60 +1,62 @@
-#if !defined (__rsys_alias_h__)
-#  define __rsys_alias_h__
+#if !defined(__rsys_alias_h__)
+#define __rsys_alias_h__
 
+namespace Executor
+{
 typedef unsigned char Str27[28];
 
-typedef struct PACKED
+struct alias_head_t
 {
-  OSType type;
-  INTEGER length;
-  INTEGER usually_2;
-  INTEGER usually_0;
-  Str27 volumeName;
-  LONGINT ioVCrDate;
-  INTEGER ioVSigWord;
-  INTEGER zero_or_one;
-  LONGINT zero_or_neg_one;
-  Str63 fileName;
-  LONGINT ioDirID; /* -1 full */
-  LONGINT ioFlCrDat;
-  OSType type_info;
-  OSType creator;
-  INTEGER mystery_words[10];
-}
-alias_head_t;
+    GUEST_STRUCT;
+    GUEST<OSType> type;
+    GUEST<INTEGER> length;
+    GUEST<INTEGER> usually_2;
+    GUEST<INTEGER> usually_0;
+    GUEST<Str27> volumeName;
+    GUEST<LONGINT> ioVCrDate;
+    GUEST<INTEGER> ioVSigWord;
+    GUEST<INTEGER> zero_or_one;
+    GUEST<LONGINT> zero_or_neg_one;
+    GUEST<Str63> fileName;
+    GUEST<LONGINT> ioDirID; /* -1 full */
+    GUEST<LONGINT> ioFlCrDat;
+    GUEST<OSType> type_info;
+    GUEST<OSType> creator;
+    GUEST<INTEGER[10]> mystery_words;
+};
 
-typedef struct PACKED /* 0x0000 */
+struct alias_parent_t
 {
-  INTEGER parent_length;
-  unsigned char parent_bytes[1];
-}
-alias_parent_t;
+    GUEST_STRUCT;
+    GUEST<INTEGER> parent_length;
+    GUEST<unsigned char[1]> parent_bytes;
+};
 
-typedef struct PACKED /* 0x0001 */
+struct alias_unknown_000100_t
 {
-  INTEGER eight;
-  LONGINT mystery_longs[2];
-}
-alias_unknown_000100_t;
+    GUEST_STRUCT;
+    GUEST<INTEGER> eight;
+    GUEST<LONGINT[2]> mystery_longs;
+};
 
-typedef struct PACKED /* 0x0002 */
+struct alias_fullpath_t
 {
-  INTEGER fullpath_length;
-  unsigned char fullpath_bytes[1];
-}
-alias_fullpath_t;
+    GUEST_STRUCT;
+    GUEST<INTEGER> fullpath_length;
+    GUEST<unsigned char[1]> fullpath_bytes;
+};
 
-typedef struct PACKED /* 0x0009 */
+struct alias_tail_t
 {
-  INTEGER length;
-  INTEGER weird_info[12];
-  Str32 zone;
-  Str31 server;
-  Str27 volumeName;
-  Str32 network_identity_owner_name;
-  char filler_zeros[18];
-}
-alias_tail_t;
+    GUEST_STRUCT;
+    GUEST<INTEGER> length;
+    GUEST<INTEGER[12]> weird_info;
+    GUEST<Str32> zone;
+    GUEST<Str31> server;
+    GUEST<Str27> volumeName;
+    GUEST<Str32> network_identity_owner_name;
+    GUEST<char[18]> filler_zeros;
+};
 
 typedef alias_head_t *alias_head_ptr;
 typedef alias_parent_t *alias_parent_ptr;
@@ -62,15 +64,15 @@ typedef alias_unknown_000100_t *alias_unknown_000100_ptr;
 typedef alias_fullpath_t *alias_fullpath_ptr;
 typedef alias_tail_t *alias_tail_ptr;
 
-typedef struct PACKED
+struct alias_parsed_t
 {
-  PACKED_MEMBER(alias_head_ptr, headp);
-  PACKED_MEMBER(alias_parent_ptr, parentp);
-  PACKED_MEMBER(alias_unknown_000100_ptr, unknownp);
-  PACKED_MEMBER(alias_fullpath_ptr, fullpathp);
-  PACKED_MEMBER(alias_tail_ptr, tailp);
+    GUEST_STRUCT;
+    GUEST<alias_head_ptr> headp;
+    GUEST<alias_parent_ptr> parentp;
+    GUEST<alias_unknown_000100_ptr> unknownp;
+    GUEST<alias_fullpath_ptr> fullpathp;
+    GUEST<alias_tail_ptr> tailp;
+};
 }
-alias_parsed_t;
-
 
 #endif /* !defined (__rsys_alias_h__) */

@@ -1,4 +1,4 @@
-#if !defined (__x_keycodes_h__)
+#if !defined(__x_keycodes_h__)
 
 #define __x_keycodes_h__
 

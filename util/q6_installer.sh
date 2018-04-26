@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# $Id: q6_installer.sh,v 1.8 1999/05/19 02:35:38 ctm Exp $
+
 
 # This installer installs Quicken 6 from the Quicken 6 Deluxe CD.
 #

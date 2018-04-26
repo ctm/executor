@@ -1,0 +1,86 @@
+pointless declarations of non-existant P_blah functions
+ROMlib_destroyblocks (cache fluching) is in file.cpp?
+
+there is a function called futzwithdosdisks, which seems to check for mountable hfs volumes and is in stdfile.cpp
+
+serial.c: setbaud
+    INTEGER rates[] = { ... 38400 ... };
+        // this can't work
+
+=====
+rename "futzwithdosdisks" to something sensible and move it out of stdfile.cpp
+
+
+region: mixed endianness, CWC_RAW
+hfs: some CWC_RAW
+blitting, colors: some CWC_RAW
+
+=========
+suspicious things and fixes that are only guesses:
+
+
+hfsVolume.cpp:528
+dqp->dq.qType = 1;      // endian?
+
+hfsVolume.cpp:645
+function getnmfls: local variable key is filled but never used
+(endianness also shaky)
+
+hfsWorkingDir.cpp:172
+	    pb->ioWDDirID   = CL((vcbp == MR(DefVCBPtr)) ? DefDirID : 2);
+should probably be
+	    pb->ioWDDirID   = (vcbp == MR(DefVCBPtr)) ? DefDirID : CLC(2);
+
+qGDevice.cpp:197:
+  GD_TYPE_X (gd) = (bpp > 8
+ 		    ? directType
+ 		    : (fixed_p ? CWC (fixedType) : CWC (clutType)));
+should be
+  GD_TYPE_X (gd) = (bpp > 8
+ 		    ? CWC(directType)
+ 		    : (fixed_p ? CWC (fixedType) : CWC (clutType)));
+
+
+qPict2.cpp:316ff
+      {
+	struct link *t;
+	
+	for (i = 0, t = head; i < colors_requested && t; i ++, t = t->next)
+	  {
+	    table[i].value     = CW (i);
+	    
+#define TILE(x) (((uint32_t) (x) * 0x8421UL) >> 4)
+	  
+	    table[i].rgb.red   = TILE (t->bank_index >> 10);
+	    table[i].rgb.green = TILE (t->bank_index >> 5);
+	    table[i].rgb.blue  = TILE (t->bank_index >> 0);
+	  }
+	gui_assert (t == NULL && i == colors_requested);
+      }
+WTF?
+my version:
+#define TILE(x) CW(((uint32_t) (x & 0x1F) * 0x8421UL) >> 4)
+
+teIMV.cpp:491:
+  LH_HEIGHT_X (lh) = font_height;
+should be
+  LH_HEIGHT_X (lh) = CW(font_height);
+
+osutil.cpp:772
+#if !defined (BIGENDIAN)
+	sp.misc     = SPMisc2;
+#else
+	sp.misc     = SPMisc2 << 8;
+#endif
+my version:
+        sp.misc = CW(SPMisc2), this matches InitUtil
+
+script.cpp:800
+      *widthRemainingp = pixelWidth - (CW(locs[textLen]) << 16);
+missing CL:
+      *widthRemainingp = CL( pixelWidth - (CW(locs[textLen]) << 16) );
+
+
+alias.cpp:633
+      headp->length = CW(n_bytes_needed);
+(CW was missing)

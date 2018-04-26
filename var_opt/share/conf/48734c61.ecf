@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/48734c61.ecf) was built by Executor
-Comments = "Lightning Paint";
-// WindowName = "LightningPaint 1.1";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR, NoWarn32};

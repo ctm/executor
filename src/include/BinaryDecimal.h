@@ -1,19 +1,25 @@
-#if !defined (__BINDEC__)
+#if !defined(__BINDEC__)
 #define __BINDEC__
 /*
  * Copyright 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: BinaryDecimal.h 63 2004-12-24 18:19:43Z ctm $
  */
 
+#include "ExMacTypes.h"
 
-/* DO NOT DELETE THIS LINE */
-#if !defined (__STDC__)
-extern void NumToString(); 
-extern void StringToNum(); 
-#else /* __STDC__ */
-extern trap void NumToString( LONGINT l, StringPtr s ); 
-extern trap void StringToNum( StringPtr s, LONGINT *lp ); 
-#endif /* __STDC__ */
+#define MODULE_NAME BinaryDecimal
+#include <rsys/api-module.h>
+
+namespace Executor
+{
+EXTERN_DISPATCHER_TRAP(Pack7, 0xA9EE, StackW);
+
+extern void C_NumToString(LONGINT l, StringPtr s);
+REGISTER_SUBTRAP(NumToString, 0xA9EE, 0x0000, Pack7, void (D0, A0));
+
+extern void C_StringToNum(StringPtr s, LONGINT *lp);
+REGISTER_SUBTRAP(StringToNum, 0xA9EE, 0x0001, Pack7, void (A0, Out<D0, LONGINT>));
+
+}
 #endif /* __BINDEC__ */

@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/526a3031.ecf) was built by Executor
-Comments = "Jewlbox wants Sound On";
-// WindowName = "Jewelbox 1.0";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitOften, SoundOn, PassPostscript, NewLineToCR};

@@ -1,6 +1,0 @@
-splash /ardi/executor/splash/splash.1bp.pbm
-button /ardi/executor/splash/empty_button.ppm
-out /ardi/executor/splash/splash.1bp
-bpp 1
-n_buttons 0
-bk_color 0 0 0

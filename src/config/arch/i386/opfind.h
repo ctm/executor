@@ -1,14 +1,13 @@
 typedef struct
 {
-  unsigned char *start, *end;
-  const char *code;
+    unsigned char *start, *end;
+    const char *code;
 } asm_code_t;
 
-#if !defined (FALSE)
-#define FALSE 0
+#if !defined(false)
+#define false 0
 #endif
 
-#if !defined (TRUE)
-#define TRUE 1
+#if !defined(true)
+#define true 1
 #endif
-

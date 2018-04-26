@@ -2,10 +2,6 @@
  * Development, Inc.  All rights reserved.
  */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_win_disk[] = "$Id: win_disk.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #define USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 
 #include "rsys/common.h"
@@ -59,749 +55,747 @@ win32_log_end (void)
 }
 #endif
 
-PRIVATE HMODULE hB2Win32 = 0;
-PRIVATE boolean_t cdrom_realmode_p = FALSE;
+static HMODULE hB2Win32 = 0;
+static bool cdrom_realmode_p = false;
 
 PUBLIC int
-ROMlib_set_realmodecd (int value)
+ROMlib_set_realmodecd(int value)
 {
-  int retval;
+    int retval;
 
-  retval = cdrom_realmode_p;
-  cdrom_realmode_p = value;
-  return retval;
+    retval = cdrom_realmode_p;
+    cdrom_realmode_p = value;
+    return retval;
 }
 
-enum { MAX_OPEN_DISKS = 30 }; /* arbitrary */
+enum
+{
+    MAX_OPEN_DISKS = 30
+}; /* arbitrary */
 
 typedef struct
 {
-  uint32 fpos;
-  uint32 sector_size;
-  uint32 num_sectors;
-  boolean_t open_p;
-  boolean_t floppy_p;
-  boolean_t cdrom_p;
-  boolean_t volume_locked_p;
-  HANDLE win_nt_handle;
-}
-dosdisk_info_t;
+    uint32_t fpos;
+    uint32_t sector_size;
+    uint32_t num_sectors;
+    bool open_p;
+    bool floppy_p;
+    bool cdrom_p;
+    bool volume_locked_p;
+    HANDLE win_nt_handle;
+} dosdisk_info_t;
 
-PRIVATE dosdisk_info_t disks[MAX_OPEN_DISKS];
+static dosdisk_info_t disks[MAX_OPEN_DISKS];
 
-PRIVATE which_win32_t which = WIN32_UNKNOWN;
-PRIVATE HANDLE vwin32_handle;
+static which_win32_t which = WIN32_UNKNOWN;
+static HANDLE vwin32_handle;
 
 /*
  * Maps a disk number to the dosdisk_info_t for that disk, iff there exists
  * one.  Returns NULL if there isn't one.
  */
 
-PRIVATE dosdisk_info_t *
-disk_number_to_disk_info (int number)
+static dosdisk_info_t *
+disk_number_to_disk_info(int number)
 {
-  dosdisk_info_t *retval;
+    dosdisk_info_t *retval;
 
-  number &= ~DOSFDBIT;
-  retval = (number < (int) NELEM (disks) && disks[number].open_p)
-    ? &disks[number] : NULL;
+    number &= ~DOSFDBIT;
+    retval = (number < (int)NELEM(disks) && disks[number].open_p)
+        ? &disks[number]
+        : NULL;
 
-  return retval;
+    return retval;
 }
 
-PRIVATE void
-shutdown (void)
+static void
+shutdown(void)
 {
-  VxdFinal ();
-  if (hB2Win32)
+    VxdFinal();
+    if(hB2Win32)
     {
-      FreeLibrary (hB2Win32);
-      hB2Win32 = 0;
+        FreeLibrary(hB2Win32);
+        hB2Win32 = 0;
     }
 }
 
-PRIVATE void
-init_vwin32 (void)
+static void
+init_vwin32(void)
 {
-  if (which == WIN32_UNKNOWN)
-    { 
-      OSVERSIONINFO info;
+    if(which == WIN32_UNKNOWN)
+    {
+        OSVERSIONINFO info;
 
-      info.dwOSVersionInfoSize = sizeof info;
-      if (GetVersionEx (&info) && info.dwPlatformId >= VER_PLATFORM_WIN32_NT)
-	{
-	  which = WIN32_NT;
-	  CdenableSysInstallStart ();
-	}
-      else
-	{
-	  which = WIN32_95;
-	  if (!VxdInit ())
-	    {
-	      warning_unexpected ("VxdInit failed");
-	      cdrom_realmode_p = FALSE;
-	    }
-	  else
-	    {
-	      VxdPatch (1);
-	      atexit (shutdown);
-	    }
-	  vwin32_handle = CreateFile (VWIN32_VXD_NAME,
-				      GENERIC_READ|GENERIC_WRITE, 0, NULL,
-				      CREATE_NEW,
-				      FILE_FLAG_DELETE_ON_CLOSE, NULL);
-  
-
-	}
+        info.dwOSVersionInfoSize = sizeof info;
+        if(GetVersionEx(&info) && info.dwPlatformId >= VER_PLATFORM_WIN32_NT)
+        {
+            which = WIN32_NT;
+            CdenableSysInstallStart();
+        }
+        else
+        {
+            which = WIN32_95;
+            if(!VxdInit())
+            {
+                warning_unexpected("VxdInit failed");
+                cdrom_realmode_p = false;
+            }
+            else
+            {
+                VxdPatch(1);
+                atexit(shutdown);
+            }
+            vwin32_handle = CreateFile(VWIN32_VXD_NAME,
+                                       GENERIC_READ | GENERIC_WRITE, 0, NULL,
+                                       CREATE_NEW,
+                                       FILE_FLAG_DELETE_ON_CLOSE, NULL);
+        }
     }
 }
 
 #define DRIVE_TEMPLATE "a:\\"
 
-PRIVATE char *
-drive_num_to_string (disk)
+static char *
+    drive_num_to_string(disk)
 {
-  char *retval;
+    char *retval;
 
-  retval = malloc (sizeof DRIVE_TEMPLATE);
-  if (disk < 0 || disk > 26)
-    *retval = '\0';
-  else
+    retval = malloc(sizeof DRIVE_TEMPLATE);
+    if(disk < 0 || disk > 26)
+        *retval = '\0';
+    else
     {
-      memcpy (retval, DRIVE_TEMPLATE, sizeof DRIVE_TEMPLATE);
-      *retval += disk;
+        memcpy(retval, DRIVE_TEMPLATE, sizeof DRIVE_TEMPLATE);
+        *retval += disk;
     }
-  return retval;
+    return retval;
 }
 
-PRIVATE UINT
-drive_type (int disk)
+static UINT
+drive_type(int disk)
 {
-  char *drive_string;
-  UINT retval;
-  UINT old_err_mode;
+    char *drive_string;
+    UINT retval;
+    UINT old_err_mode;
 
-  old_err_mode = SetErrorMode (SEM_FAILCRITICALERRORS);
+    old_err_mode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
-  drive_string = drive_num_to_string (disk);
-  retval = GetDriveType (drive_string);
-  free (drive_string);
+    drive_string = drive_num_to_string(disk);
+    retval = GetDriveType(drive_string);
+    free(drive_string);
 
-  SetErrorMode (old_err_mode);
-  return retval;
+    SetErrorMode(old_err_mode);
+    return retval;
 }
 
-#define WIN_NT_PARTITION_TEMPLATE "\\\\.\\A:" /* 'A' must be 2nd to last
-						 non-NUL character.
-						 See Below. */
+#define WIN_NT_PARTITION_TEMPLATE "\\\\.\\A:" /* 'A' must be 2nd to last \
+                         non-NUL character.                              \
+                         See Below. */
 
-#define WIN_NT_DRIVE_TEMPLATE "\\\\.\\PHYSICALDRIVE0" /* '0' must be last
-							 non-NUL character.
-							 See Below. */
+#define WIN_NT_DRIVE_TEMPLATE "\\\\.\\PHYSICALDRIVE0" /* '0' must be last \
+                             non-NUL character.                           \
+                             See Below. */
 
-PRIVATE boolean_t
-win_nt_open_common (int disk, HANDLE *handlep, const char *str,
-		    int str_len, int offset, char expect_char,
-		    drive_flags_t *flagsp)
+static bool
+win_nt_open_common(int disk, HANDLE *handlep, const char *str,
+                   int str_len, int offset, char expect_char,
+                   drive_flags_t *flagsp)
 {
-  boolean_t retval;
-  char *file_name;
+    bool retval;
+    char *file_name;
 
-  file_name = alloca (str_len);
-  memcpy (file_name, str, str_len);
-  assert (file_name[str_len-offset] == expect_char); /* See above. */
-  file_name[str_len-offset] += disk;
+    file_name = alloca(str_len);
+    memcpy(file_name, str, str_len);
+    assert(file_name[str_len - offset] == expect_char); /* See above. */
+    file_name[str_len - offset] += disk;
 
-  *handlep = CreateFile (file_name, GENERIC_READ|GENERIC_WRITE,
-			 0, NULL, OPEN_EXISTING,
-			 FILE_FLAG_WRITE_THROUGH|FILE_FLAG_RANDOM_ACCESS,
-			 NULL);
+    *handlep = CreateFile(file_name, GENERIC_READ | GENERIC_WRITE,
+                          0, NULL, OPEN_EXISTING,
+                          FILE_FLAG_WRITE_THROUGH | FILE_FLAG_RANDOM_ACCESS,
+                          NULL);
 
-  if (*handlep == INVALID_HANDLE_VALUE)
+    if(*handlep == INVALID_HANDLE_VALUE)
     {
-      *handlep = CreateFile (file_name, GENERIC_READ,
-			     0, NULL,
-			     OPEN_EXISTING, FILE_FLAG_RANDOM_ACCESS, NULL);
-      if (*handlep != INVALID_HANDLE_VALUE)
-	*flagsp |= DRIVE_FLAGS_LOCKED;
+        *handlep = CreateFile(file_name, GENERIC_READ,
+                              0, NULL,
+                              OPEN_EXISTING, FILE_FLAG_RANDOM_ACCESS, NULL);
+        if(*handlep != INVALID_HANDLE_VALUE)
+            *flagsp |= DRIVE_FLAGS_LOCKED;
     }
 
-  retval = *handlep != INVALID_HANDLE_VALUE;
+    retval = *handlep != INVALID_HANDLE_VALUE;
 
-  return retval;
+    return retval;
 }
 
-PRIVATE boolean_t
-win_nt_open (int disk, HANDLE *handlep, drive_flags_t *flagsp)
+static bool
+win_nt_open(int disk, HANDLE *handlep, drive_flags_t *flagsp)
 {
-  boolean_t retval;
+    bool retval;
 
-  retval = win_nt_open_common (disk, handlep, WIN_NT_PARTITION_TEMPLATE,
-			       sizeof WIN_NT_PARTITION_TEMPLATE, 3, 'A',
-			       flagsp);
+    retval = win_nt_open_common(disk, handlep, WIN_NT_PARTITION_TEMPLATE,
+                                sizeof WIN_NT_PARTITION_TEMPLATE, 3, 'A',
+                                flagsp);
 
-  if (!retval && disk >= 2) /* hard disk C starts at 0 */
-    retval = win_nt_open_common (disk-2, handlep, WIN_NT_DRIVE_TEMPLATE,
-				 sizeof WIN_NT_DRIVE_TEMPLATE, 2, '0', flagsp);
-  return retval;
+    if(!retval && disk >= 2) /* hard disk C starts at 0 */
+        retval = win_nt_open_common(disk - 2, handlep, WIN_NT_DRIVE_TEMPLATE,
+                                    sizeof WIN_NT_DRIVE_TEMPLATE, 2, '0', flagsp);
+    return retval;
 }
 
 PUBLIC int
-dosdisk_open (int disk, LONGINT *bsizep, drive_flags_t *flagsp)
+dosdisk_open(int disk, LONGINT *bsizep, drive_flags_t *flagsp)
 {
-  int retval;
-  dosdisk_info_t *d;
-  UINT old_err_mode;
+    int retval;
+    dosdisk_info_t *d;
+    UINT old_err_mode;
 
-  *flagsp = 0;
-  *bsizep = 0;
-  old_err_mode = SetErrorMode (SEM_FAILCRITICALERRORS);
+    *flagsp = 0;
+    *bsizep = 0;
+    old_err_mode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
-  init_vwin32 ();
+    init_vwin32();
 
-  d = disk_number_to_disk_info (disk);
-  if (d != NULL && !d->floppy_p)
+    d = disk_number_to_disk_info(disk);
+    if(d != NULL && !d->floppy_p)
     {
-      *bsizep = d->sector_size;
-      retval = -1;
+        *bsizep = d->sector_size;
+        retval = -1;
     }
-  else if (disk >= (int) NELEM (disks))
+    else if(disk >= (int)NELEM(disks))
     {
-      *bsizep = 0;
-      retval = -1;
+        *bsizep = 0;
+        retval = -1;
     }
-  else
+    else
     {
-      if (d)
-	dosdisk_close (disk, FALSE);
+        if(d)
+            dosdisk_close(disk, false);
 
-      d = &disks[disk];
-      {
-	boolean_t saved_lock;
+        d = &disks[disk];
+        {
+            bool saved_lock;
 
-	saved_lock = d->volume_locked_p;
-	memset (d, 0, sizeof *d);
-	d->volume_locked_p = saved_lock;
-      }
-      d->win_nt_handle = INVALID_HANDLE_VALUE;
-      *flagsp = 0;
-      switch (which)
-	{
-	case WIN32_95:
-	  d->open_p = TRUE;
-	  break;
-	case WIN32_NT:
-	  d->open_p = win_nt_open (disk, &d->win_nt_handle, flagsp);
-	  break;
-	default:
-	  warning_unexpected (NULL_STRING);
-	  d->open_p = FALSE;
-	  break;
-	}
-      {
-	char buf[MAX_BYTES_PER_SECTOR];
-	int nread;
-	UINT dt;
+            saved_lock = d->volume_locked_p;
+            memset(d, 0, sizeof *d);
+            d->volume_locked_p = saved_lock;
+        }
+        d->win_nt_handle = INVALID_HANDLE_VALUE;
+        *flagsp = 0;
+        switch(which)
+        {
+            case WIN32_95:
+                d->open_p = true;
+                break;
+            case WIN32_NT:
+                d->open_p = win_nt_open(disk, &d->win_nt_handle, flagsp);
+                break;
+            default:
+                warning_unexpected(NULL_STRING);
+                d->open_p = false;
+                break;
+        }
+        {
+            char buf[MAX_BYTES_PER_SECTOR];
+            int nread;
+            UINT dt;
 
-	dt = drive_type (disk);
-	switch (dt)
-	  {
-	  case DRIVE_REMOVABLE:
-	    d->sector_size = *bsizep = BYTES_PER_SECTOR;
-	    if (disk < 2)
-	      {
-		*flagsp |= DRIVE_FLAGS_FLOPPY;
-		d->floppy_p = TRUE;
-	      }
-	    break;
-	  case DRIVE_FIXED:
-	    d->sector_size = *bsizep = BYTES_PER_SECTOR;
-	    *flagsp |= DRIVE_FLAGS_FIXED;
-	    break;
-	  case DRIVE_CDROM:
-	    d->sector_size = *bsizep = CDROM_BYTES_PER_SECTOR;
-	    *flagsp |= DRIVE_FLAGS_LOCKED;
-	    d->cdrom_p = TRUE;
-	    break;
-	  case DRIVE_REMOTE:
-	  case DRIVE_RAMDISK:
-	  default:
-	    /* probably won't work */
-	    warning_unexpected ("dt = %d", dt);
-	    d->sector_size = *bsizep = BYTES_PER_SECTOR;
-	    break;
-	  }
-	dosdisk_seek (disk, 0, 0);
-	nread = dosdisk_read (disk, buf, *bsizep);
-	if (nread == *bsizep || d->floppy_p)
-	  retval = disk;
-	else
-	  {
-	    dosdisk_close (disk, FALSE);
-	    retval = -1;
-	  }
-      }
+            dt = drive_type(disk);
+            switch(dt)
+            {
+                case DRIVE_REMOVABLE:
+                    d->sector_size = *bsizep = BYTES_PER_SECTOR;
+                    if(disk < 2)
+                    {
+                        *flagsp |= DRIVE_FLAGS_FLOPPY;
+                        d->floppy_p = true;
+                    }
+                    break;
+                case DRIVE_FIXED:
+                    d->sector_size = *bsizep = BYTES_PER_SECTOR;
+                    *flagsp |= DRIVE_FLAGS_FIXED;
+                    break;
+                case DRIVE_CDROM:
+                    d->sector_size = *bsizep = CDROM_BYTES_PER_SECTOR;
+                    *flagsp |= DRIVE_FLAGS_LOCKED;
+                    d->cdrom_p = true;
+                    break;
+                case DRIVE_REMOTE:
+                case DRIVE_RAMDISK:
+                default:
+                    /* probably won't work */
+                    warning_unexpected("dt = %d", dt);
+                    d->sector_size = *bsizep = BYTES_PER_SECTOR;
+                    break;
+            }
+            dosdisk_seek(disk, 0, 0);
+            nread = dosdisk_read(disk, buf, *bsizep);
+            if(nread == *bsizep || d->floppy_p)
+                retval = disk;
+            else
+            {
+                dosdisk_close(disk, false);
+                retval = -1;
+            }
+        }
     }
 
-  dcache_invalidate (disk | DOSFDBIT, FALSE);
+    dcache_invalidate(disk | DOSFDBIT, false);
 
-  SetErrorMode (old_err_mode);
+    SetErrorMode(old_err_mode);
 
-  return retval;
+    return retval;
 }
 
 #define NEW_LOCK
 
-#if !defined (NEW_LOCK)
+#if !defined(NEW_LOCK)
 
-PRIVATE int
-disk_to_volume (int disk)
+static int
+disk_to_volume(int disk)
 {
-  int retval;
+    int retval;
 
-  retval = disk < 2 ? disk : (0x80 | (disk-2));
-  return retval;
+    retval = disk < 2 ? disk : (0x80 | (disk - 2));
+    return retval;
 }
 
-PRIVATE boolean_t
-win_95_lock (int disk)
+static bool
+win_95_lock(int disk)
 {
-  boolean_t retval;
-  vwin32_regs regs;
-  int volume;
-  DWORD byte_count;
-  BOOL result;
+    bool retval;
+    vwin32_regs regs;
+    int volume;
+    DWORD byte_count;
+    BOOL result;
 
-  volume = disk_to_volume (disk);
-  memset (&regs, 0, sizeof regs);
-  regs.ebx = (1 << 8) | volume;
-  regs.edx = 1;
-  regs.ecx = 0x084b;
-  regs.eax = 0x440d;
-  regs.flags = 1;
+    volume = disk_to_volume(disk);
+    memset(&regs, 0, sizeof regs);
+    regs.ebx = (1 << 8) | volume;
+    regs.edx = 1;
+    regs.ecx = 0x084b;
+    regs.eax = 0x440d;
+    regs.flags = 1;
 
-  result = DeviceIoControl (vwin32_handle, VWIN32_IOCTL, &regs, sizeof regs,
-			    &regs, sizeof regs, &byte_count, 0);
+    result = DeviceIoControl(vwin32_handle, VWIN32_IOCTL, &regs, sizeof regs,
+                             &regs, sizeof regs, &byte_count, 0);
 
-  retval = result && !(regs.flags & 1);
-  return retval;
+    retval = result && !(regs.flags & 1);
+    return retval;
 }
 
-PRIVATE boolean_t
-win_95_unlock (int disk)
+static bool
+win_95_unlock(int disk)
 {
-  boolean_t retval;
-  vwin32_regs regs;
-  int volume;
-  DWORD byte_count;
-  BOOL result;
+    bool retval;
+    vwin32_regs regs;
+    int volume;
+    DWORD byte_count;
+    BOOL result;
 
-  volume = disk_to_volume (disk);
-  memset (&regs, 0, sizeof regs);
-  regs.ebx = volume;
-  regs.ecx = 0x086b;
-  regs.eax = 0x440d;
-  regs.flags = 1;
+    volume = disk_to_volume(disk);
+    memset(&regs, 0, sizeof regs);
+    regs.ebx = volume;
+    regs.ecx = 0x086b;
+    regs.eax = 0x440d;
+    regs.flags = 1;
 
-  result = DeviceIoControl (vwin32_handle, VWIN32_IOCTL, &regs, sizeof regs,
-			    &regs, sizeof regs, &byte_count, 0);
+    result = DeviceIoControl(vwin32_handle, VWIN32_IOCTL, &regs, sizeof regs,
+                             &regs, sizeof regs, &byte_count, 0);
 
-  retval = result && !(regs.flags & 1);
-  return retval;
+    retval = result && !(regs.flags & 1);
+    return retval;
 }
 #else
-PRIVATE  int cat_list[] = { 0x48, 0x08 };
+static int cat_list[] = { 0x48, 0x08 };
 
-PRIVATE boolean_t
-win_95_lock (int disk)
+static bool
+win_95_lock(int disk)
 {
-  boolean_t retval;
-  vwin32_regs regs;
-  int volume;
-  DWORD byte_count;
-  BOOL result;
-  int i;
-  
-  volume = disk + 1; /* woo hoo */
+    bool retval;
+    vwin32_regs regs;
+    int volume;
+    DWORD byte_count;
+    BOOL result;
+    int i;
 
-  retval = FALSE;
-  for (i = 0; !retval && i < (int) NELEM (cat_list); ++i)
+    volume = disk + 1; /* woo hoo */
+
+    retval = false;
+    for(i = 0; !retval && i < (int)NELEM(cat_list); ++i)
     {
-      memset (&regs, 0, sizeof regs);
-      regs.ebx = (0 << 8) | volume; /* level 0 lock */
-      regs.edx = 0; /* permission */
-      regs.ecx = (cat_list[i] << 8)| 0x4a;
-      regs.eax = 0x440d;
-      regs.flags = 1;
+        memset(&regs, 0, sizeof regs);
+        regs.ebx = (0 << 8) | volume; /* level 0 lock */
+        regs.edx = 0; /* permission */
+        regs.ecx = (cat_list[i] << 8) | 0x4a;
+        regs.eax = 0x440d;
+        regs.flags = 1;
 
-      result = DeviceIoControl (vwin32_handle, VWIN32_IOCTL, &regs, sizeof regs,
-				&regs, sizeof regs, &byte_count, 0);
+        result = DeviceIoControl(vwin32_handle, VWIN32_IOCTL, &regs, sizeof regs,
+                                 &regs, sizeof regs, &byte_count, 0);
 
-      retval = result && !(regs.flags & 1);
+        retval = result && !(regs.flags & 1);
     }
 
-  warning_fs_log ("disk = %d, retval = %d", disk, retval);
+    warning_fs_log("disk = %d, retval = %d", disk, retval);
 
-  return retval;
+    return retval;
 }
 
-PRIVATE boolean_t
-win_95_unlock (int disk)
+static bool
+win_95_unlock(int disk)
 {
-  boolean_t retval;
-  vwin32_regs regs;
-  int volume;
-  DWORD byte_count;
-  BOOL result;
-  int i;
-  
-  volume = disk + 1;
-  retval = FALSE;
-  for (i = 0; !retval && i < (int) NELEM (cat_list); ++i)
+    bool retval;
+    vwin32_regs regs;
+    int volume;
+    DWORD byte_count;
+    BOOL result;
+    int i;
+
+    volume = disk + 1;
+    retval = false;
+    for(i = 0; !retval && i < (int)NELEM(cat_list); ++i)
     {
-      memset (&regs, 0, sizeof regs);
-      regs.ebx = volume;
-      regs.ecx = (cat_list[i] << 8)|0x6a;
-      regs.eax = 0x440d;
-      regs.flags = 1;
+        memset(&regs, 0, sizeof regs);
+        regs.ebx = volume;
+        regs.ecx = (cat_list[i] << 8) | 0x6a;
+        regs.eax = 0x440d;
+        regs.flags = 1;
 
-      result = DeviceIoControl (vwin32_handle, VWIN32_IOCTL, &regs,
-				sizeof regs, &regs, sizeof regs,
-				&byte_count, 0);
+        result = DeviceIoControl(vwin32_handle, VWIN32_IOCTL, &regs,
+                                 sizeof regs, &regs, sizeof regs,
+                                 &byte_count, 0);
 
-      retval = result && !(regs.flags & 1);
+        retval = result && !(regs.flags & 1);
     }
 
-  warning_fs_log ("disk = %d, retval = %d", disk, retval);
+    warning_fs_log("disk = %d, retval = %d", disk, retval);
 
-  return retval;
+    return retval;
 }
 #endif
 
-int
-dosdisk_close (int disk, boolean_t eject_p)
+int dosdisk_close(int disk, bool eject_p)
 {
-  int retval;
-  dosdisk_info_t *d;
+    int retval;
+    dosdisk_info_t *d;
 
-  d = disk_number_to_disk_info (disk);
-  if (d == NULL)
-    retval = -1;
-  else
+    d = disk_number_to_disk_info(disk);
+    if(d == NULL)
+        retval = -1;
+    else
     {
-      dcache_invalidate (disk | DOSFDBIT, TRUE);
+        dcache_invalidate(disk | DOSFDBIT, true);
 
-      if (d->volume_locked_p)
-	{
-	  win_95_unlock (disk);
-	  d->volume_locked_p = FALSE;
-	}
-      d->open_p = FALSE;
-      if (d->win_nt_handle != INVALID_HANDLE_VALUE)
-	{
-	  CloseHandle (d->win_nt_handle);
-	  d->win_nt_handle = INVALID_HANDLE_VALUE;
-	}
-      retval = 0;
+        if(d->volume_locked_p)
+        {
+            win_95_unlock(disk);
+            d->volume_locked_p = false;
+        }
+        d->open_p = false;
+        if(d->win_nt_handle != INVALID_HANDLE_VALUE)
+        {
+            CloseHandle(d->win_nt_handle);
+            d->win_nt_handle = INVALID_HANDLE_VALUE;
+        }
+        retval = 0;
     }
 
-  return retval;
+    return retval;
 }
 
 PUBLIC off_t
-dosdisk_seek (int disk, off_t pos, int unused)
+dosdisk_seek(int disk, off_t pos, int unused)
 {
-  off_t retval;
-  dosdisk_info_t *d;
+    off_t retval;
+    dosdisk_info_t *d;
 
-  d = disk_number_to_disk_info (disk);
+    d = disk_number_to_disk_info(disk);
 #warning need to detect seeks past end of device
-  if (d == NULL || pos % d->sector_size)
-    retval = -1;
-  else
+    if(d == NULL || pos % d->sector_size)
+        retval = -1;
+    else
     {
-      d->fpos = pos;
-      retval = 0;
+        d->fpos = pos;
+        retval = 0;
     }
 
-  return retval;
+    return retval;
 }
 
-PRIVATE int
-win_nt_dosdisk_xfer (int disk, dosdisk_info_t *d, void *buf, uint32 offset,
-		     int num_bytes, DeviceIoControl_function_t func)
+static int
+win_nt_dosdisk_xfer(int disk, dosdisk_info_t *d, void *buf, uint32_t offset,
+                    int num_bytes, DeviceIoControl_function_t func)
 {
-  int retval;
+    int retval;
 
-  if (d->cdrom_p && func == VWIN32_SECTOR_READ)
+    if(d->cdrom_p && func == VWIN32_SECTOR_READ)
     {
-      retval = CdenableSysReadCdBytes (d->win_nt_handle, offset, num_bytes,
-				       buf);
+        retval = CdenableSysReadCdBytes(d->win_nt_handle, offset, num_bytes,
+                                        buf);
     }
-  else
+    else
     {
-      if (SetFilePointer (d->win_nt_handle, offset, NULL, FILE_BEGIN)
-	  == 0xFFFFFFFF)
-	{
-	  retval = 0;
-	}
-      else
-	{
-	  DWORD count;
+        if(SetFilePointer(d->win_nt_handle, offset, NULL, FILE_BEGIN)
+           == 0xFFFFFFFF)
+        {
+            retval = 0;
+        }
+        else
+        {
+            DWORD count;
 
-	  if (func == VWIN32_SECTOR_WRITE)
-	    {
-	      WriteFile (d->win_nt_handle, buf, num_bytes, &count, NULL);
-	    }
-	  else
-	    {
-	      ReadFile (d->win_nt_handle, buf, num_bytes, &count, NULL);
-	    }
-	  retval = count;
-	}
+            if(func == VWIN32_SECTOR_WRITE)
+            {
+                WriteFile(d->win_nt_handle, buf, num_bytes, &count, NULL);
+            }
+            else
+            {
+                ReadFile(d->win_nt_handle, buf, num_bytes, &count, NULL);
+            }
+            retval = count;
+        }
     }
-  return retval;
+    return retval;
 }
 
-PRIVATE int
-win_95_dosdisk_disk_xfer (int disk, dosdisk_info_t *d, void *buf,
-			  uint32 offset, int num_bytes,
-			  DeviceIoControl_function_t func)
+static int
+win_95_dosdisk_disk_xfer(int disk, dosdisk_info_t *d, void *buf,
+                         uint32_t offset, int num_bytes,
+                         DeviceIoControl_function_t func)
 {
-  int retval;
-  disk_io_t disk_io;
-  xfer_sector_t xfer_sector;
-  DWORD byte_count;
-  BOOL result;
+    int retval;
+    disk_io_t disk_io;
+    xfer_sector_t xfer_sector;
+    DWORD byte_count;
+    BOOL result;
 
-  if (!d->volume_locked_p)
-    d->volume_locked_p = win_95_lock (disk);
+    if(!d->volume_locked_p)
+        d->volume_locked_p = win_95_lock(disk);
 
-  if (!d->volume_locked_p)
-    retval = 0;
-  else
+    if(!d->volume_locked_p)
+        retval = 0;
+    else
     {
-      disk_io.diStartSector = offset / d->sector_size;
-      disk_io.diSectors = num_bytes / d->sector_size;
-      disk_io.diBuffer = buf;
-      memset (&xfer_sector, 0, sizeof xfer_sector);
-      xfer_sector.disk_iop = &disk_io;
-      xfer_sector.magic = SECTOR_XFER_MAGIC;
-      xfer_sector.drive_number_0based = disk;
-      xfer_sector.success_flag = 1;
+        disk_io.diStartSector = offset / d->sector_size;
+        disk_io.diSectors = num_bytes / d->sector_size;
+        disk_io.diBuffer = buf;
+        memset(&xfer_sector, 0, sizeof xfer_sector);
+        xfer_sector.disk_iop = &disk_io;
+        xfer_sector.magic = SECTOR_XFER_MAGIC;
+        xfer_sector.drive_number_0based = disk;
+        xfer_sector.success_flag = 1;
 
-      result = DeviceIoControl (vwin32_handle, func, &xfer_sector,
-				sizeof xfer_sector, &xfer_sector,
-				sizeof xfer_sector, &byte_count, 0);
-      retval = !(xfer_sector.success_flag & 1)
-	? num_bytes / d->sector_size * d->sector_size : 0;
+        result = DeviceIoControl(vwin32_handle, func, &xfer_sector,
+                                 sizeof xfer_sector, &xfer_sector,
+                                 sizeof xfer_sector, &byte_count, 0);
+        retval = !(xfer_sector.success_flag & 1)
+            ? num_bytes / d->sector_size * d->sector_size
+            : 0;
 
-      warning_fs_log ("result = %d, xfer_sector.success_flag = %d, retval = %d",
-		      result, xfer_sector.success_flag, retval);
-
+        warning_fs_log("result = %d, xfer_sector.success_flag = %d, retval = %d",
+                       result, xfer_sector.success_flag, retval);
     }
-  return retval;
+    return retval;
 }
 
-PRIVATE int
-win_95_dosdisk_cdrom_xfer (int disk, dosdisk_info_t *d, void *buf,
-			   uint32 offset, int num_bytes,
-			   DeviceIoControl_function_t func)
+static int
+win_95_dosdisk_cdrom_xfer(int disk, dosdisk_info_t *d, void *buf,
+                          uint32_t offset, int num_bytes,
+                          DeviceIoControl_function_t func)
 {
-  int retval;
-  static BOOL (WINAPI *GetSectors) (BYTE drive, DWORD start_sector,
-				    WORD nsectors, LPBYTE buf);
+    int retval;
+    static BOOL(WINAPI * GetSectors)(BYTE drive, DWORD start_sector,
+                                     WORD nsectors, LPBYTE buf);
 
-  if (cdrom_realmode_p && !GetSectors)
+    if(cdrom_realmode_p && !GetSectors)
     {
-      hB2Win32 = LoadLibrary( "B2Win32.dll" );
-      if(hB2Win32)
-	GetSectors = (void *) GetProcAddress (hB2Win32, "GETCDSECTORS" );
-      if (!GetSectors)
-	cdrom_realmode_p = FALSE;
+        hB2Win32 = LoadLibrary("B2Win32.dll");
+        if(hB2Win32)
+            GetSectors = (void *)GetProcAddress(hB2Win32, "GETCDSECTORS");
+        if(!GetSectors)
+            cdrom_realmode_p = false;
     }
 
-  if (!cdrom_realmode_p)
-    retval = VxdReadCdSectors (disk, offset, num_bytes, buf);
-  else
+    if(!cdrom_realmode_p)
+        retval = VxdReadCdSectors(disk, offset, num_bytes, buf);
+    else
     {
-      char disk_char;
+        char disk_char;
 
-      disk_char = 'a' + disk;
-      if (func == VWIN32_SECTOR_READ
-	  && GetSectors (disk_char, offset / d->sector_size,
-			 num_bytes / d->sector_size, buf))
-	retval = num_bytes;
-      else
-	retval = 0;
+        disk_char = 'a' + disk;
+        if(func == VWIN32_SECTOR_READ
+           && GetSectors(disk_char, offset / d->sector_size,
+                         num_bytes / d->sector_size, buf))
+            retval = num_bytes;
+        else
+            retval = 0;
     }
-  return retval;
+    return retval;
 }
 
-PRIVATE int
-win_95_dosdisk_xfer (int disk, dosdisk_info_t *d, void *buf, uint32 offset,
-			   int num_bytes, DeviceIoControl_function_t func)
+static int
+win_95_dosdisk_xfer(int disk, dosdisk_info_t *d, void *buf, uint32_t offset,
+                    int num_bytes, DeviceIoControl_function_t func)
 {
-  int retval;
+    int retval;
 
-  retval = d->cdrom_p ? 
-    win_95_dosdisk_cdrom_xfer (disk, d, buf, offset, num_bytes, func)
-    :
-    win_95_dosdisk_disk_xfer (disk, d, buf, offset, num_bytes, func);
-    
-  return retval;
+    retval = d->cdrom_p ? win_95_dosdisk_cdrom_xfer(disk, d, buf, offset, num_bytes, func)
+                        : win_95_dosdisk_disk_xfer(disk, d, buf, offset, num_bytes, func);
+
+    return retval;
 }
 
-PRIVATE int
-dosdisk_xfer (int disk, void *buf, uint32 offset, int num_bytes,
-	      DeviceIoControl_function_t func)
+static int
+dosdisk_xfer(int disk, void *buf, uint32_t offset, int num_bytes,
+             DeviceIoControl_function_t func)
 {
-  int retval;
-  dosdisk_info_t *d;
-  UINT old_err_mode;
+    int retval;
+    dosdisk_info_t *d;
+    UINT old_err_mode;
 
-  old_err_mode = SetErrorMode (SEM_FAILCRITICALERRORS);
-  d = disk_number_to_disk_info (disk);
-  if (!d)
-    retval = -1;
-  else
+    old_err_mode = SetErrorMode(SEM_FAILCRITICALERRORS);
+    d = disk_number_to_disk_info(disk);
+    if(!d)
+        retval = -1;
+    else
     {
-      switch (which)
-	{
-	case WIN32_95:
-	  retval = win_95_dosdisk_xfer (disk, d, buf, offset, num_bytes, func);
-	  break;
-	case WIN32_NT:
-	  retval = win_nt_dosdisk_xfer (disk, d, buf, offset, num_bytes, func);
-	  break;
-	default:
-	  warning_unexpected (NULL_STRING);
-	  retval = 0;
-	  break;
-	}
+        switch(which)
+        {
+            case WIN32_95:
+                retval = win_95_dosdisk_xfer(disk, d, buf, offset, num_bytes, func);
+                break;
+            case WIN32_NT:
+                retval = win_nt_dosdisk_xfer(disk, d, buf, offset, num_bytes, func);
+                break;
+            default:
+                warning_unexpected(NULL_STRING);
+                retval = 0;
+                break;
+        }
     }
 
-  SetErrorMode (old_err_mode);
-  return retval;
+    SetErrorMode(old_err_mode);
+    return retval;
 }
 
-PRIVATE uint32
-read_in (uint32 fd, void *buf, uint32 offset, uint32 count)
+static uint32_t
+read_in(uint32_t fd, void *buf, uint32_t offset, uint32_t count)
 {
-  uint32 retval;
+    uint32_t retval;
 
-  fd &= ~DOSFDBIT;
-  retval = dosdisk_xfer (fd, buf, offset, count, VWIN32_SECTOR_READ);
-  return retval;
+    fd &= ~DOSFDBIT;
+    retval = dosdisk_xfer(fd, buf, offset, count, VWIN32_SECTOR_READ);
+    return retval;
 }
 
 PUBLIC int
-dosdisk_read (int disk, void *buf, int num_bytes)
+dosdisk_read(int disk, void *buf, int num_bytes)
 {
-  int retval;
-  dosdisk_info_t *d;
+    int retval;
+    dosdisk_info_t *d;
 
-  d = disk_number_to_disk_info (disk);
-  if (!d)
-    retval = -1;
-  else
+    d = disk_number_to_disk_info(disk);
+    if(!d)
+        retval = -1;
+    else
     {
-      retval = dcache_read (disk|DOSFDBIT, buf, d->fpos, num_bytes, read_in);
-      if (retval > 0)
-	d->fpos += retval;
+        retval = dcache_read(disk | DOSFDBIT, buf, d->fpos, num_bytes, read_in);
+        if(retval > 0)
+            d->fpos += retval;
     }
-  return retval;
+    return retval;
 }
 
-PRIVATE uint32
-write_back (uint32 fd, const void *buf, uint32 offset, uint32 count)
+static uint32_t
+write_back(uint32_t fd, const void *buf, uint32_t offset, uint32_t count)
 {
-  uint32 retval;
+    uint32_t retval;
 
-  fd &= ~DOSFDBIT;
-  retval = dosdisk_xfer (fd, (void *) buf, offset, count, VWIN32_SECTOR_WRITE);
-  return retval;
+    fd &= ~DOSFDBIT;
+    retval = dosdisk_xfer(fd, (void *)buf, offset, count, VWIN32_SECTOR_WRITE);
+    return retval;
 }
 
 PUBLIC int
-dosdisk_write (int disk, const void *buf, int num_bytes)
+dosdisk_write(int disk, const void *buf, int num_bytes)
 {
-  int retval;
-  dosdisk_info_t *d;
+    int retval;
+    dosdisk_info_t *d;
 
-  d = disk_number_to_disk_info (disk);
-  if (!d)
-    retval = -1;
-  else
+    d = disk_number_to_disk_info(disk);
+    if(!d)
+        retval = -1;
+    else
     {
-      retval = dcache_write (disk|DOSFDBIT, buf, d->fpos, num_bytes,
-			     write_back);
-      if (retval > 0)
-	d->fpos += retval;
+        retval = dcache_write(disk | DOSFDBIT, buf, d->fpos, num_bytes,
+                              write_back);
+        if(retval > 0)
+            d->fpos += retval;
     }
-  return retval;
+    return retval;
 }
 
-PUBLIC boolean_t
-is_win_nt (void)
+PUBLIC bool
+is_win_nt(void)
 {
-  boolean_t retval;
+    bool retval;
 
-  init_vwin32 ();
-  retval = which == WIN32_NT;
-  return retval;
+    init_vwin32();
+    retval = which == WIN32_NT;
+    return retval;
 }
 
-PUBLIC uint32
-win_GetLogicalDriveStrings (size_t size, char *buf)
+PUBLIC uint32_t
+win_GetLogicalDriveStrings(size_t size, char *buf)
 {
-  uint32 retval;
+    uint32_t retval;
 
-  retval = GetLogicalDriveStrings (size, buf);
-  return retval;
+    retval = GetLogicalDriveStrings(size, buf);
+    return retval;
 }
 
-PUBLIC boolean_t
-win_direct_accessible_disk (const char *p)
+PUBLIC bool
+win_direct_accessible_disk(const char *p)
 {
-  boolean_t retval;
-  UINT dt;
-  UINT old_err_mode;
+    bool retval;
+    UINT dt;
+    UINT old_err_mode;
 
-  old_err_mode = SetErrorMode (SEM_FAILCRITICALERRORS);
+    old_err_mode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
-  dt = GetDriveType (p);
-  switch (dt)
+    dt = GetDriveType(p);
+    switch(dt)
     {
-    case 0:
-    case 1:
-    case DRIVE_REMOVABLE:
-    case DRIVE_FIXED:
-    case DRIVE_CDROM:
-      retval = TRUE;
-      break;
-    case DRIVE_REMOTE:
-    case DRIVE_RAMDISK:
-    default:
-      retval = FALSE;
-      break;
+        case 0:
+        case 1:
+        case DRIVE_REMOVABLE:
+        case DRIVE_FIXED:
+        case DRIVE_CDROM:
+            retval = true;
+            break;
+        case DRIVE_REMOTE:
+        case DRIVE_RAMDISK:
+        default:
+            retval = false;
+            break;
     }
 
-  SetErrorMode (old_err_mode);
-  return retval;
+    SetErrorMode(old_err_mode);
+    return retval;
 }
 
-PUBLIC boolean_t
-win_access (const char *drive_to_mount)
+PUBLIC bool
+win_access(const char *drive_to_mount)
 {
-  boolean_t retval;
+    bool retval;
 
-  UINT old_err_mode;
+    UINT old_err_mode;
 
-  old_err_mode = SetErrorMode (SEM_FAILCRITICALERRORS);
-  retval = access (drive_to_mount, 0) == 0;
-  SetErrorMode (old_err_mode);
-  return retval;
+    old_err_mode = SetErrorMode(SEM_FAILCRITICALERRORS);
+    retval = access(drive_to_mount, 0) == 0;
+    SetErrorMode(old_err_mode);
+    return retval;
 }
 
 #if 0
@@ -827,7 +821,7 @@ WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
       read_sector_t read_sector;
       disk_io_t disk_io;
       char buf[2048]; /* how can we tell the sector size if there's no FAT? */
-      uint32 byte_count;
+      uint32_t byte_count;
       BOOL result;
 
       printf ("vxd success\n");
@@ -873,8 +867,6 @@ WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
 
       CloseHandle (h);
     }
-
-
 
 #if 1
 #define FILE_NAME "\\\\.\\A:"

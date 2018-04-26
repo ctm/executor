@@ -1,5 +1,0 @@
-// This Configuration file was built by Executor
-// Citadel of Dead Demo
-RefreshNumber = 10;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR};

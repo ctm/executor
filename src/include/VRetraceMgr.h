@@ -1,34 +1,52 @@
-#if !defined (__VRETRACE__)
+#if !defined(__VRETRACE__)
 #define __VRETRACE__
 
 /*
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: VRetraceMgr.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-#define qErr	(-1)
-#define vTypErr	(-2)
+#include "ExMacTypes.h"
+#include <rsys/lowglobals.h>
 
-typedef struct PACKED {
-  PACKED_MEMBER(QElemPtr, qLink);
-  INTEGER qType;
-  PACKED_MEMBER(ProcPtr, vblAddr);
-  INTEGER vblCount;
-  INTEGER vblPhase;
-} VBLTask;
+#define MODULE_NAME VRetraceMgr
+#include <rsys/api-module.h>
+
+namespace Executor
+{
+
+enum
+{
+    qErr = (-1),
+    vTypErr = (-2),
+};
+
+struct VBLTask
+{
+    GUEST_STRUCT;
+    GUEST<QElemPtr> qLink;
+    GUEST<INTEGER> qType;
+    GUEST<ProcPtr> vblAddr;
+    GUEST<INTEGER> vblCount;
+    GUEST<INTEGER> vblPhase;
+};
 typedef VBLTask *VBLTaskPtr;
 
-#if !defined (VBLQueue)
-extern QHdr 	VBLQueue;
-#endif
+const LowMemGlobal<QHdr> VBLQueue { 0x160 }; // VRetraceMgr IMII-352 (true);
+const LowMemGlobal<ProcPtr> JVBLTask { 0xD28 }; // VRetraceMgr IMV (false);
 
-extern void ROMlib_clockonoff( LONGINT onoroff ); 
-extern trap OSErrRET VInstall( VBLTaskPtr vtaskp ); 
-extern trap OSErrRET VRemove( VBLTaskPtr vtaskp ); 
-extern QHdrPtr GetVBLQHdr( void  ); 
-extern trap OSErrRET SlotVInstall( VBLTaskPtr vtaskp, INTEGER slot );
-extern trap OSErrRET SlotVRemove( VBLTaskPtr vtaskp, INTEGER slot );
+extern void ROMlib_clockonoff(LONGINT onoroff);
 
+extern OSErr VInstall(VBLTaskPtr vtaskp);
+REGISTER_TRAP2(VInstall, 0xA033, D0(A0));
+extern OSErr VRemove(VBLTaskPtr vtaskp);
+REGISTER_TRAP2(VRemove, 0xA034, D0(A0));
+
+extern QHdrPtr GetVBLQHdr(void);
+extern OSErr SlotVInstall(VBLTaskPtr vtaskp, INTEGER slot);
+REGISTER_TRAP2(SlotVInstall, 0xA06F, D0(A0,D0));
+extern OSErr SlotVRemove(VBLTaskPtr vtaskp, INTEGER slot);
+REGISTER_TRAP2(SlotVRemove, 0xA070, D0(A0,D0));
+}
 #endif /* __VRETRACE__ */

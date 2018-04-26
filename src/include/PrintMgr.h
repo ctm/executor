@@ -1,274 +1,315 @@
-#if !defined (__PRINTING__)
+#if !defined(__PRINTING__)
 #define __PRINTING__
 
 #include "DialogMgr.h"
+
+#define MODULE_NAME PrintMgr
+#include <rsys/api-module.h>
 
 /*
  * Copyright 1986, 1989, 1990 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: PrintMgr.h 63 2004-12-24 18:19:43Z ctm $
+
  */
 
-#define bDraftLoop	0
-#define bSpoolLoop	1
+namespace Executor
+{
+enum
+{
+    bDraftLoop = 0,
+    bSpoolLoop = 1,
+};
 
-#define bDevCItoh	1
-#define bDevLaser	3
+enum
+{
+    bDevCItoh = 1,
+    bDevLaser = 3,
+};
 
-#define iPFMaxPgs	128
+enum
+{
+    iPFMaxPgs = 128,
+};
 
-#define iPrSavPFil	(-1)
-#define controlErr	(-17)
-#define iIOAbort	(-27)
-#define MemFullErr	(-108)
-#define iPrAbort	128
+enum
+{
+    iPrSavPFil = (-1),
+    iIOAbort = (-27),
+    MemFullErr = (-108),
+    iPrAbort = 128,
+};
 
-#define iPrDevCtl	7
-#define lPrReset	0x10000
-#define lPrLineFeed	0x30000
-#define lPrLFSixth	0x3FFFF
-#define lPrPageEnd	0x20000
-#define iPrBitsCtl	4
-#define lScreenBits	0
-#define lPaintBits	1
-#define iPrIOCtl	5
+enum
+{
+    iPrDevCtl = 7,
+    lPrReset = 0x10000,
+    lPrLineFeed = 0x30000,
+    lPrLFSixth = 0x3FFFF,
+    lPrPageEnd = 0x20000,
+    iPrBitsCtl = 4,
+    lScreenBits = 0,
+    lPaintBits = 1,
+    iPrIOCtl = 5,
+};
 
-#define sPrDrvr		".Print"
-#define iPrDrvrRef	(-3)
+const char *const sPrDrvr = ".Print";
+enum
+{
+    iPrDrvrRef = (-3),
+};
 
-typedef struct PACKED {
-  GrafPort gPort;
-  QDProcs saveprocs;
-  LONGINT spare[4];
-  BOOLEAN fOurPtr;
-  BOOLEAN fOurBits;
-} TPrPort;
+struct TPrPort
+{
+    GUEST_STRUCT;
+    GUEST<GrafPort> gPort;
+    GUEST<QDProcs> saveprocs;
+    GUEST<LONGINT[4]> spare;
+    GUEST<BOOLEAN> fOurPtr;
+    GUEST<BOOLEAN> fOurBits;
+};
 typedef TPrPort *TPPrPort;
 
-typedef struct PACKED {
-  INTEGER iDev;
-  INTEGER iVRes;
-  INTEGER iHRes;
-  Rect rPage;
-} TPrInfo;
+struct TPrInfo
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> iDev;
+    GUEST<INTEGER> iVRes;
+    GUEST<INTEGER> iHRes;
+    GUEST<Rect> rPage;
+};
 
-typedef enum {feedCut, feedFanFold, feedMechCut, feedOther} TFeed;
+typedef enum { feedCut,
+               feedFanFold,
+               feedMechCut,
+               feedOther } TFeed;
 
-typedef struct PACKED {
-  INTEGER wDev;
-  INTEGER iPageV;
-  INTEGER iPageH;
-  SignedByte bPort;
-  char feed;
-} TPrStl;
+struct TPrStl
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> wDev;
+    GUEST<INTEGER> iPageV;
+    GUEST<INTEGER> iPageH;
+    GUEST<SignedByte> bPort;
+    GUEST<char> feed;
+};
 
-typedef enum { scanTB,  scanBL,  scanLR,  scanRL } TScan;
-typedef struct PACKED {
-  INTEGER iRowBytes;
-  INTEGER iBandV;
-  INTEGER iBandH;
-  INTEGER iDevBytes;
-  INTEGER iBands;
-  SignedByte bPatScale;
-  SignedByte bULThick;
-  SignedByte bULOffset;
-  SignedByte bULShadow;
-  char scan;
-  SignedByte bXInfoX;
-} TPrXInfo;
+typedef enum { scanTB,
+               scanBL,
+               scanLR,
+               scanRL } TScan;
+struct TPrXInfo
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> iRowBytes;
+    GUEST<INTEGER> iBandV;
+    GUEST<INTEGER> iBandH;
+    GUEST<INTEGER> iDevBytes;
+    GUEST<INTEGER> iBands;
+    GUEST<SignedByte> bPatScale;
+    GUEST<SignedByte> bULThick;
+    GUEST<SignedByte> bULOffset;
+    GUEST<SignedByte> bULShadow;
+    GUEST<char> scan;
+    GUEST<SignedByte> bXInfoX;
+};
 
-typedef struct PACKED {
-  INTEGER iFstPage;
-  INTEGER iLstPage;
-  INTEGER iCopies;
-  SignedByte bJDocLoop;
-  BOOLEAN fFromUsr;
-  PACKED_MEMBER(ProcPtr, pIdleProc);
-  PACKED_MEMBER(StringPtr, pFileName);
-  INTEGER iFileVol;
-  SignedByte bFileVers;
-  SignedByte bJobX;
-} TPrJob;
+struct TPrJob
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> iFstPage;
+    GUEST<INTEGER> iLstPage;
+    GUEST<INTEGER> iCopies;
+    GUEST<SignedByte> bJDocLoop;
+    GUEST<BOOLEAN> fFromUsr;
+    GUEST<ProcPtr> pIdleProc;
+    GUEST<StringPtr> pFileName;
+    GUEST<INTEGER> iFileVol;
+    GUEST<SignedByte> bFileVers;
+    GUEST<SignedByte> bJobX;
+};
 
-typedef struct PACKED {
-  INTEGER iPrVersion;
-  TPrInfo prInfo;
-  Rect rPaper;
-  TPrStl prStl;
-  TPrInfo prInfoPT;
-  TPrXInfo prXInfo;
-  TPrJob prJob;
-  INTEGER printX[19];
-} TPrint;
+struct TPrint
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> iPrVersion;
+    GUEST<TPrInfo> prInfo;
+    GUEST<Rect> rPaper;
+    GUEST<TPrStl> prStl;
+    GUEST<TPrInfo> prInfoPT;
+    GUEST<TPrXInfo> prXInfo;
+    GUEST<TPrJob> prJob;
+    GUEST<INTEGER[19]> printX;
+};
 typedef TPrint *TPPrint;
-MAKE_HIDDEN(TPPrint);
-typedef HIDDEN_TPPrint *THPrint;
+
+typedef GUEST<TPPrint> *THPrint;
 
 typedef Rect *TPRect;
 
-typedef struct PACKED {
-  INTEGER iTotPages;
-  INTEGER iCurPage;
-  INTEGER iTotCopies;
-  INTEGER iCurCopy;
-  INTEGER iTotBands;
-  INTEGER iCurBand;
-  BOOLEAN fPgDirty;
-  BOOLEAN fImaging;
-  PACKED_MEMBER(THPrint, hPrint);
-  PACKED_MEMBER(TPPrPort, pPRPort);
-  PACKED_MEMBER(PicHandle, hPic);
-} TPrStatus;
+struct TPrStatus
+{
+    GUEST_STRUCT;
+    GUEST<INTEGER> iTotPages;
+    GUEST<INTEGER> iCurPage;
+    GUEST<INTEGER> iTotCopies;
+    GUEST<INTEGER> iCurCopy;
+    GUEST<INTEGER> iTotBands;
+    GUEST<INTEGER> iCurBand;
+    GUEST<BOOLEAN> fPgDirty;
+    GUEST<BOOLEAN> fImaging;
+    GUEST<THPrint> hPrint;
+    GUEST<TPPrPort> pPRPort;
+    GUEST<PicHandle> hPic;
+};
 
-typedef struct PACKED {
 /* From Technote 095 */
-  DialogRecord dlg;
-  PACKED_MEMBER(ProcPtr, pFltrProc);
-  PACKED_MEMBER(ProcPtr, pItemProc);
-  PACKED_MEMBER(THPrint, hPrintUsr);
-  BOOLEAN fDoIt;
-  BOOLEAN fDone;
-  LONGINT lUser1;
-  LONGINT lUser2;
-  LONGINT lUser3;
-  LONGINT lUser4;
-  INTEGER iNumFst;
-  INTEGER iNumLst;
-    /* more stuff may be here */
-} TPrDlg, *TPPrDlg;
+/* more stuff may be here */
+typedef struct TPrDlg
+{
+    GUEST_STRUCT;
+    GUEST<DialogRecord> dlg;
+    GUEST<ModalFilterProcPtr> pFltrProc;
+    GUEST<UserItemProcPtr> pItemProc;
+    GUEST<THPrint> hPrintUsr;
+    GUEST<BOOLEAN> fDoIt;
+    GUEST<BOOLEAN> fDone;
+    GUEST<LONGINT> lUser1;
+    GUEST<LONGINT> lUser2;
+    GUEST<LONGINT> lUser3;
+    GUEST<LONGINT> lUser4;
+    GUEST<INTEGER> iNumFst;
+    GUEST<INTEGER> iNumLst;
+} * TPPrDlg;
 
+const LowMemGlobal<INTEGER> PrintErr { 0x944 }; // PrintMgr IMII-161 (true-b);
 
-#if !defined (PrintErr)
-extern INTEGER 	PrintErr;
-#endif
+DISPATCHER_TRAP(PrGlue, 0xA8FD, StackL);
 
-#if !defined (__STDC__)
-extern INTEGER PrError(); 
-extern void PrSetError(); 
-extern void PrOpen(); 
-extern void PrClose(); 
-extern void PrDrvrOpen(); 
-extern void PrDrvrClose(); 
-extern void PrCtlCall(); 
-extern Handle PrDrvrDCE(); 
-extern INTEGER PrDrvrVers(); 
-extern void C_ROMlib_myjobproc(); 
-extern pascal BOOLEAN C_ROMlib_stlfilterproc(); 
-extern pascal BOOLEAN C_ROMlib_numsonlyfilterproc(); 
-extern void C_ROMlib_mystlproc(); 
-extern TPPrDlg PrJobInit(); 
-extern TPPrDlg PrStlInit(); 
-extern BOOLEAN PrDlgMain(); 
-extern void PrGeneral(); 
-extern void donotPrArc(); 
-extern void PrArc(); 
-extern void donotPrBits(); 
-extern void PrBits(); 
-extern void donotPrLine(); 
-extern void PrLine(); 
-extern void donotPrOval(); 
-extern void PrOval(); 
-extern void textasPS(); 
-extern void donotPrGetPic(); 
-extern void PrGetPic(); 
-extern void donotPrPutPic(); 
-extern void PrPutPic(); 
-extern void donotPrPoly(); 
-extern void PrPoly(); 
-extern void donotPrRRect(); 
-extern void PrRRect(); 
-extern void donotPrRect(); 
-extern void PrRect(); 
-extern void donotPrRgn(); 
-extern void PrRgn(); 
-extern INTEGER PrTxMeas(); 
-extern void donotPrText(); 
-extern void PrText(); 
-extern void PrComment(); 
-extern TPPrPort PrOpenDoc(); 
-extern void PrOpenPage(); 
-extern void PrClosePage(); 
-extern void PrCloseDoc(); 
-extern void PrPicFile(); 
-extern void PrintDefault(); 
-extern BOOLEAN PrValidate(); 
-extern BOOLEAN PrStlDialog(); 
-extern BOOLEAN PrJobDialog(); 
-extern void PrJobMerge(); 
-#else /* __STDC__ */
-extern pascal trap INTEGER C_PrError( void  );
-extern pascal trap void C_PrSetError( INTEGER iErr );
-extern pascal trap void C_PrOpen( void  );
-extern pascal trap void C_PrClose( void  );
-extern pascal trap void C_PrDrvrOpen( void  );
-extern pascal trap void C_PrDrvrClose( void  );
-extern pascal trap void C_PrCtlCall( INTEGER iWhichCtl, LONGINT lParam1, 
-				    LONGINT lParam2, LONGINT lParam3 ); 
-extern pascal trap Handle C_PrDrvrDCE( void  );
-extern pascal trap INTEGER C_PrDrvrVers( void  );
-extern pascal void C_ROMlib_myjobproc( DialogPtr dp, INTEGER itemno );
-extern pascal BOOLEAN C_ROMlib_stlfilterproc( DialogPeek dp, 
-					     EventRecord *evt, INTEGER *ith );
+extern INTEGER C_PrError(void);
+PASCAL_SUBTRAP(PrError, 0xA8FD, 0xBA000000, PrGlue);
+extern void C_PrSetError(INTEGER iErr);
+PASCAL_SUBTRAP(PrSetError, 0xA8FD, 0xC0000200, PrGlue);
+extern void C_PrOpen(void);
+PASCAL_SUBTRAP(PrOpen, 0xA8FD, 0xC8000000, PrGlue);
+extern void C_PrClose(void);
+PASCAL_SUBTRAP(PrClose, 0xA8FD, 0xD0000000, PrGlue);
+extern void C_PrDrvrOpen(void);
+PASCAL_SUBTRAP(PrDrvrOpen, 0xA8FD, 0x80000000, PrGlue);
+extern void C_PrDrvrClose(void);
+PASCAL_SUBTRAP(PrDrvrClose, 0xA8FD, 0x88000000, PrGlue);
+extern void C_PrCtlCall(INTEGER iWhichCtl, LONGINT lParam1,
+                                    LONGINT lParam2, LONGINT lParam3);
+PASCAL_SUBTRAP(PrCtlCall, 0xA000, 0xA0000E00, PrGlue);
+extern Handle C_PrDrvrDCE(void);
+PASCAL_SUBTRAP(PrDrvrDCE, 0xA8FD, 0x94000000, PrGlue);
+extern INTEGER C_PrDrvrVers(void);
+PASCAL_SUBTRAP(PrDrvrVers, 0xA8FD, 0x9A000000, PrGlue);
+extern void C_ROMlib_myjobproc(DialogPtr dp, INTEGER itemno);
+PASCAL_FUNCTION(ROMlib_myjobproc);
+extern BOOLEAN C_ROMlib_stlfilterproc(DialogPtr dp,
+                                             EventRecord *evt, GUEST<INTEGER> *ith);
+PASCAL_FUNCTION(ROMlib_stlfilterproc);
+extern BOOLEAN C_ROMlib_numsonlyfilterproc(DialogPtr dp,
+                                                  EventRecord *evt,
+                                                  GUEST<INTEGER> *ith);
+PASCAL_FUNCTION(ROMlib_numsonlyfilterproc);
 
-extern pascal BOOLEAN C_ROMlib_numsonlyfilterproc( DialogPeek dp,
-						  EventRecord *evt,
-						  INTEGER *ith );
+extern void C_ROMlib_mystlproc(DialogPtr dp, INTEGER itemno);
+PASCAL_FUNCTION(ROMlib_mystlproc);
 
-extern pascal void C_ROMlib_mystlproc( DialogPtr dp, INTEGER itemno );
-extern pascal trap TPPrDlg C_PrJobInit( THPrint hPrint );
-extern pascal trap TPPrDlg C_PrStlInit( THPrint hPrint );
-extern pascal trap BOOLEAN C_PrDlgMain( THPrint hPrint, ProcPtr initfptr );
-extern pascal trap void C_PrGeneral( Ptr pData );
-extern pascal trap void C_donotPrArc( GrafVerb verb, Rect *r,
-				     INTEGER starta, INTEGER arca );
-extern pascal trap void C_PrArc( GrafVerb verb, Rect *r, INTEGER starta,
-				INTEGER arca );
-extern pascal trap void C_donotPrBits( BitMap *srcbmp, Rect *srcrp,
-				      Rect *dstrp, INTEGER mode,
-				      RgnHandle mask );
-extern pascal trap void C_PrBits( BitMap *srcbmp, Rect *srcrp,
-				 Rect *dstrp, INTEGER mode, RgnHandle mask );
-extern pascal trap void C_donotPrLine( Point p );
-extern pascal trap void C_PrLine( Point p );
-extern pascal trap void C_donotPrOval( GrafVerb v, Rect *rp );
-extern pascal trap void C_PrOval( GrafVerb v, Rect *rp );
-extern pascal trap void C_textasPS( INTEGER n, Ptr textbufp,
-				   Point num, Point den );
-extern pascal trap void C_donotPrGetPic( Ptr dp, INTEGER bc );
-extern pascal trap void C_PrGetPic( Ptr dp, INTEGER bc );
-extern pascal trap void C_donotPrPutPic( Ptr sp, INTEGER bc );
-extern pascal trap void C_PrPutPic( Ptr sp, INTEGER bc );
-extern pascal trap void C_donotPrPoly( GrafVerb verb, PolyHandle ph );
-extern pascal trap void C_PrPoly( GrafVerb verb, PolyHandle ph );
-extern pascal trap void C_donotPrRRect( GrafVerb verb, Rect *r,
-				       INTEGER width, INTEGER height );
-extern pascal trap void C_PrRRect( GrafVerb verb, Rect *r, INTEGER width,
-				  INTEGER height );
+extern TPPrDlg C_PrJobInit(THPrint hPrint);
+PASCAL_SUBTRAP(PrJobInit, 0xA8FD, 0x44040410, PrGlue);
+extern TPPrDlg C_PrStlInit(THPrint hPrint);
+PASCAL_SUBTRAP(PrStlInit, 0xA8FD, 0x3C04040C, PrGlue);
+extern BOOLEAN C_PrDlgMain(THPrint hPrint, ProcPtr initfptr);
+PASCAL_SUBTRAP(PrDlgMain, 0xA8FD, 0x4A040894, PrGlue);
+extern void C_PrGeneral(Ptr pData);
+PASCAL_SUBTRAP(PrGeneral, 0xA8FD, 0x70070480, PrGlue);
+extern void C_donotPrArc(GrafVerb verb, Rect *r,
+                                     INTEGER starta, INTEGER arca);
+PASCAL_FUNCTION(donotPrArc);
+extern void C_PrArc(GrafVerb verb, Rect *r, INTEGER starta,
+                                INTEGER arca);
+PASCAL_FUNCTION(PrArc);
+extern void C_donotPrBits(const BitMap *srcbmp, const Rect *srcrp,
+                                      const Rect *dstrp, INTEGER mode,
+                                      RgnHandle mask);
+PASCAL_FUNCTION(donotPrBits);
+extern void C_PrBits(const BitMap *srcbmp, const Rect *srcrp,
+                                 const Rect *dstrp, INTEGER mode, RgnHandle mask);
+PASCAL_FUNCTION(PrBits);
+extern void C_donotPrLine(Point p);
+PASCAL_FUNCTION(donotPrLine);
+extern void C_PrLine(Point p);
+PASCAL_FUNCTION(PrLine);
+extern void C_donotPrOval(GrafVerb v, Rect *rp);
+PASCAL_FUNCTION(donotPrOval);
+extern void C_PrOval(GrafVerb v, Rect *rp);
+PASCAL_FUNCTION(PrOval);
+extern void C_textasPS(INTEGER n, Ptr textbufp,
+                                   Point num, Point den);
+PASCAL_FUNCTION(textasPS);
+extern void C_donotPrGetPic(Ptr dp, INTEGER bc);
+PASCAL_FUNCTION(donotPrGetPic);
+extern void C_PrGetPic(Ptr dp, INTEGER bc);
+PASCAL_FUNCTION(PrGetPic);
+extern void C_donotPrPutPic(Ptr sp, INTEGER bc);
+PASCAL_FUNCTION(donotPrPutPic);
+extern void C_PrPutPic(Ptr sp, INTEGER bc);
+PASCAL_FUNCTION(PrPutPic);
+extern void C_donotPrPoly(GrafVerb verb, PolyHandle ph);
+PASCAL_FUNCTION(donotPrPoly);
+extern void C_PrPoly(GrafVerb verb, PolyHandle ph);
+PASCAL_FUNCTION(PrPoly);
+extern void C_donotPrRRect(GrafVerb verb, Rect *r,
+                                       INTEGER width, INTEGER height);
+PASCAL_FUNCTION(donotPrRRect);
+extern void C_PrRRect(GrafVerb verb, Rect *r, INTEGER width,
+                                  INTEGER height);
+PASCAL_FUNCTION(PrRRect);
 
-extern pascal trap void C_donotPrRect( GrafVerb v, Rect *rp );
-extern pascal trap void C_PrRect( GrafVerb v, Rect *rp );
-extern pascal trap void C_donotPrRgn( GrafVerb verb, RgnHandle rgn );
-extern pascal trap void C_PrRgn( GrafVerb verb, RgnHandle rgn );
-extern pascal trap INTEGER C_PrTxMeas( INTEGER n, Ptr p, Point *nump,
-				      Point *denp, FontInfo *finfop );
-extern pascal trap void C_donotPrText( INTEGER n, Ptr textbufp, Point num,
-				      Point den );
-extern pascal trap void C_PrText( INTEGER n, Ptr textbufp, Point num,
-				 Point den );
-extern pascal trap void C_PrComment( INTEGER kind, INTEGER size, Handle hand );
-extern pascal trap TPPrPort C_PrOpenDoc( THPrint hPrint, TPPrPort port,
-					Ptr pIOBuf );
-extern pascal trap void C_PrOpenPage( TPPrPort port, TPRect pPageFrame );
-extern pascal trap void C_PrClosePage( TPPrPort pPrPort );
-extern pascal trap void C_PrCloseDoc( TPPrPort port );
-extern pascal trap void C_PrPicFile( THPrint hPrint, TPPrPort pPrPort,
-				    Ptr pIOBuf, Ptr pDevBuf,
-				    TPrStatus *prStatus ); 
-extern pascal trap void C_PrintDefault( THPrint hPrint );
-extern pascal trap BOOLEAN C_PrValidate( THPrint hPrint );
-extern pascal trap BOOLEAN C_PrStlDialog( THPrint hPrint );
-extern pascal trap BOOLEAN C_PrJobDialog( THPrint hPrint );
-extern pascal trap void C_PrJobMerge( THPrint hPrintSrc, THPrint hPrintDst );
-#endif /* __STDC__ */
+extern void C_donotPrRect(GrafVerb v, Rect *rp);
+PASCAL_FUNCTION(donotPrRect);
+extern void C_PrRect(GrafVerb v, Rect *rp);
+PASCAL_FUNCTION(PrRect);
+extern void C_donotPrRgn(GrafVerb verb, RgnHandle rgn);
+PASCAL_FUNCTION(donotPrRgn);
+extern void C_PrRgn(GrafVerb verb, RgnHandle rgn);
+PASCAL_FUNCTION(PrRgn);
+extern INTEGER C_PrTxMeas(INTEGER n, Ptr p, GUEST<Point> *nump,
+                                      GUEST<Point> *denp, FontInfo *finfop);
+PASCAL_FUNCTION(PrTxMeas);
+extern void C_donotPrText(INTEGER n, Ptr textbufp, Point num,
+                                      Point den);
+PASCAL_FUNCTION(donotPrText);
+extern void C_PrText(INTEGER n, Ptr textbufp, Point num,
+                                 Point den);
+PASCAL_FUNCTION(PrText);
+extern void C_PrComment(INTEGER kind, INTEGER size, Handle hand);
+PASCAL_FUNCTION(PrComment);
+extern TPPrPort C_PrOpenDoc(THPrint hPrint, TPPrPort port,
+                                        Ptr pIOBuf);
+PASCAL_SUBTRAP(PrOpenDoc, 0xA8FD, 0x04000C00, PrGlue);
+extern void C_PrOpenPage(TPPrPort port, TPRect pPageFrame);
+PASCAL_SUBTRAP(PrOpenPage, 0xA8FD, 0x10000808, PrGlue);
+extern void C_PrClosePage(TPPrPort pPrPort);
+PASCAL_SUBTRAP(PrClosePage, 0xA8FD, 0x1800040C, PrGlue);
+extern void C_PrCloseDoc(TPPrPort port);
+PASCAL_SUBTRAP(PrCloseDoc, 0xA8FD, 0x08000484, PrGlue);
+extern void C_PrPicFile(THPrint hPrint, TPPrPort pPrPort,
+                                    Ptr pIOBuf, Ptr pDevBuf,
+                                    TPrStatus *prStatus);
+PASCAL_SUBTRAP(PrPicFile, 0xA8FD, 0x60051480, PrGlue);
+extern void C_PrintDefault(THPrint hPrint);
+PASCAL_SUBTRAP(PrintDefault, 0xA8FD, 0x20040480, PrGlue);
+extern BOOLEAN C_PrValidate(THPrint hPrint);
+PASCAL_SUBTRAP(PrValidate, 0xA8FD, 0x52040498, PrGlue);
+extern BOOLEAN C_PrStlDialog(THPrint hPrint);
+PASCAL_SUBTRAP(PrStlDialog, 0xA8FD, 0x2A040484, PrGlue);
+extern BOOLEAN C_PrJobDialog(THPrint hPrint);
+PASCAL_SUBTRAP(PrJobDialog, 0xA8FD, 0x32040488, PrGlue);
+extern void C_PrJobMerge(THPrint hPrintSrc, THPrint hPrintDst);
+PASCAL_SUBTRAP(PrJobMerge, 0xA8FD, 0x5804089C, PrGlue);
+}
 #endif /* __PRINTING__ */

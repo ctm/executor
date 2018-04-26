@@ -6,10 +6,6 @@
    avoid collisions.  Unfortunately, it didn't have the property that
    the same directory would have the same name between runs of Executor */
 
-#if !defined (OMIT_RCSID_STRINGS)
-char ROMlib_rcsid_win_stat[] = "$Id: win_stat.c 63 2004-12-24 18:19:43Z ctm $";
-#endif
-
 #define USE_WINDOWS_NOT_MAC_TYPEDEFS_AND_DEFINES
 
 #include "rsys/common.h"
@@ -28,15 +24,15 @@ char ROMlib_rcsid_win_stat[] = "$Id: win_stat.c 63 2004-12-24 18:19:43Z ctm $";
  * fold lower to uppper and fold slash to back-slash
  */
 
-PRIVATE uint32
-char_val (int c)
+static uint32_t
+char_val(int c)
 {
-  uint32 retval;
+    uint32_t retval;
 
-  retval = toupper (c);
-  if (c == '/')
-    retval = '\\';
-  return retval;
+    retval = toupper(c);
+    if(c == '/')
+        retval = '\\';
+    return retval;
 }
 
 /*
@@ -50,64 +46,64 @@ char_val (int c)
  * is what you see now, and it's been tested on 27,483 different files.
  */
 
-PRIVATE uint32
-hash_func (const char *p)
+static uint32_t
+hash_func(const char *p)
 {
-  uint32 retval, u;
-  int c;
-  const char *orig_p;
- 
-  orig_p = p;
-  retval = 0;
-  u = 0;
-  while ((c = *p++))
+    uint32_t retval, u;
+    int c;
+    const char *orig_p;
+
+    orig_p = p;
+    retval = 0;
+    u = 0;
+    while((c = *p++))
     {
-      int cv;
-      int rotate;
+        int cv;
+        int rotate;
 
-      cv = char_val (c);
+        cv = char_val(c);
 
-      retval = ((retval<<5)|(retval >> 27)) ^ cv;
-      rotate = cv % 31;
-      u = u ^ ((retval << rotate)|(retval >> (32 - rotate)));
+        retval = ((retval << 5) | (retval >> 27)) ^ cv;
+        rotate = cv % 31;
+        u = u ^ ((retval << rotate) | (retval >> (32 - rotate)));
     }
-  
-  retval ^= u;
-  retval %= 2147482949; /* strip the top bit w/o ignoring it */
+
+    retval ^= u;
+    retval %= 2147482949; /* strip the top bit w/o ignoring it */
 
 #if 0
   warning_trace_info ("p = '%s', retval = 0x%08x", orig_p, retval);
 #endif
-  
-  return retval;
+
+    return retval;
 }
 
-PUBLIC uint32
-ino_from_name (const char *name)
+PUBLIC uint32_t
+ino_from_name(const char *name)
 {
-  char fullname[2048];
-  char *filenamep;
-  uint32 len;
-  char *p;
-  uint32 retval;
+    char fullname[2048];
+    char *filenamep;
+    uint32_t len;
+    char *p;
+    uint32_t retval;
 
-  len = GetFullPathName (name, sizeof fullname, fullname, &filenamep);
-  if (len <= sizeof fullname - 1)
-    p = fullname;
-  else
+    len = GetFullPathName(name, sizeof fullname, fullname, &filenamep);
+    if(len <= sizeof fullname - 1)
+        p = fullname;
+    else
     {
-      uint32 len2;
+        uint32_t len2;
 
-      ++len;
-      p = alloca (len);
-      len2 = GetFullPathName (name, len, p, &filenamep);
-      if (len2 >= len)
-	p = (char *) name;
+        ++len;
+        p = alloca(len);
+        len2 = GetFullPathName(name, len, p, &filenamep);
+        if(len2 >= len)
+            p = (char *)name;
     }
 
-  if (p[1] == ':' && p[2] == '\\' && !p[3])
-    retval = 2;
-  else
-    retval = hash_func (p);
-  return retval;
+    if(p[1] == ':' && p[2] == '\\' && !p[3])
+        retval = 2;
+    else
+        retval = hash_func(p);
+    return retval;
 }

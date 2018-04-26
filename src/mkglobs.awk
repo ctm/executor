@@ -1,7 +1,7 @@
 #! /bin/awk -f
 BEGIN {
   FS=",";
-  print "extern uint32 ROMlib_offset;";
+  print "extern uint32_t ROMlib_offset;";
 }
 
 $1 ~/^DATA/ {

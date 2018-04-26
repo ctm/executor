@@ -1,6 +1,0 @@
-// This Configuration file (/usr/local/lib/executor//Configuration/455544c6.ecf) was built by Executor
-Comments = "Eric's Ultimate Solitaire prefers Sound On";
-SystemVersion = 6.0.7;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitOften, SoundOn, PassPostscript, NewLineToCR};

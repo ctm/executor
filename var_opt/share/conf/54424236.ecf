@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/54424236.ecf) was built by Executor
-Comments = "Tex-Edit Plus needs System 7";
-// WindowName = "Tex-Edit Plus";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 7.0.0;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOn, PassPostscript, NewLineToCR};

@@ -17,7 +17,7 @@
 #undef ReplaceText
 /* Do not use the windows BOOLEAN or CHAR types */
 #define BOOLEAN MAC_BOOLEAN
-#define CHAR    MAC_CHAR
+#define CHAR MAC_CHAR
 #define Polygon MAC_Polygon
 
 #include "rsys/common.h"
@@ -29,12 +29,12 @@
 
 /* Global Variables */
 extern const char *Win_AppName;
-extern HINSTANCE   Win_Instance;
-extern HWND        Win_Window;
+extern HINSTANCE Win_Instance;
+extern HWND Win_Window;
 extern unsigned char *vdriver_shadow_fbuf;
 
 /* Functions required for proper handling of windows event messages */
-extern int  Win_RubberBand(int *width, int *height);
+extern int Win_RubberBand(int *width, int *height);
 extern void Win_Focus(int on);
 extern void Win_NewPal(void);
 extern void Win_PAINT(void);

@@ -1,9 +1,0 @@
-// This Configuration file (/us2/mac/Configuration/52415a5a.ecf) was built by Executor
-Comments = "Dr. Razz requires System 7";
-// WindowName = "Dr Razz 0.9b8";
-BitsPerPixel = 8;
-ScreenLocation = { 0, 0 };
-SystemVersion = 7.0.0;
-RefreshNumber = 0;
-Delay = 0;
-Options = {BlitInOSEvent, SoundOff, PassPostscript, NewLineToCR};

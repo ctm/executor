@@ -5,13 +5,18 @@
  * Copyright 1995 by Abacus Research and Development, Inc.
  * All rights reserved.
  *
- * $Id: adb.h 63 2004-12-24 18:19:43Z ctm $
  */
 
-#include "ADB.h"
+#include <rsys/traps.h>
 
-extern void C_adb_service_stub (void);
-extern void adb_apeiron_hack (boolean_t deltas_p, ...);
-extern void reset_adb_vector (void);
+#define MODULE_NAME rsys_adb
+#include <rsys/api-module.h>
 
+namespace Executor
+{
+extern void C_adb_service_stub(void);
+PASCAL_FUNCTION(adb_service_stub);
+extern void adb_apeiron_hack(int /*bool*/ deltas_p, ...);
+extern void reset_adb_vector(void);
+}
 #endif
